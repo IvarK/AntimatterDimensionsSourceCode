@@ -1,6 +1,5 @@
 "use strict";
 
-
 let ui = {
   view: {
     modal: {
@@ -12,30 +11,12 @@ let ui = {
       glyphSelection: false,
     },
     tabs: {
-      current: undefined,
       dimensions: {
-        subtab: "",
         normal: {
           floatingText: Array.from({length: 9}, () => [])
         },
       },
-      statistics: {
-        subtab: ""
-      },
-      achievements: {
-        subtab: ""
-      },
-      challenges: {
-        subtab: ""
-      },
-      infinity: {
-        subtab: ""
-      },
-      eternity: {
-        subtab: ""
-      },
       reality: {
-        subtab: "",
         openGlyphWeights: false,
         currentGlyphTooltip: -1,
         automator: {
@@ -44,9 +25,6 @@ let ui = {
           // TODO: enum
           mode: true
         }
-      },
-      celestials: {
-        subtab: ""
       }
     },
     shiftDown: false,
@@ -55,8 +33,11 @@ let ui = {
     scrollWindow: 0,
     draggingUIID: -1,
     currentContextMenu: null,
-    page: "normal-dim-tab",
-    newUI: false
+    tab: "dimensions",
+    subtab: "normal",
+    newUI: false,
+    newsHidden: false
   },
   notationName: "",
+  formatPreBreak: false
 };

@@ -33,7 +33,7 @@ Vue.component("normal-dim-tab", {
     }
   },
   template:
-    `<div class="l-normal-dim-tab">
+    `<div class="l-old-ui-normal-dim-tab">
       <normal-dim-tab-header />
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
       <div class="l-normal-dim-tab__row-container l-normal-dim-row-container">
@@ -51,6 +51,7 @@ Vue.component("normal-dim-tab", {
         class="o-primary-btn--quick-reset"
         @click="quickReset"
       >Lose a reset, returning to the start of the reset</primary-button>
+      <div style="flex: 1 0" />
       <normal-dim-tab-progress-bar class="l-normal-dim-tab__progress_bar" />
     </div>`
 });

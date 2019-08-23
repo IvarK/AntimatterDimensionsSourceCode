@@ -242,15 +242,6 @@ Vue.component("time-studies-tab", {
         case TimeStudyType.DILATION: return "dilation-time-study";
       }
       throw "Unknown study type";
-    },
-    importClicked() {
-      const input = prompt();
-      if (!input || input === "") return;
-      if (sha512_256(input) === "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608") {
-        SecretAchievement(37).unlock();
-        return;
-      }
-      importStudyTree(input);
     }
   },
   template:
@@ -266,7 +257,7 @@ Vue.component("time-studies-tab", {
         >Respec time studies on next Eternity</primary-button>
         <primary-button
           class="o-primary-btn--time-study-options"
-          @click="importClicked"
+          onclick="Modal.importTree.show()"
         >Import tree</primary-button>
       </div>
       <div class="l-time-study-tree l-time-studies-tab__tree" :style="treeStyleObject">

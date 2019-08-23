@@ -40,14 +40,14 @@ Vue.component("automator-docs", {
           @click="fullScreen = !fullScreen"
         />
       </div>
-      <div v-if="this.mode" class="c-automator-docs l-automator-pane__content">
+      <automator-blocks v-if="!this.mode" />
+      <div class="c-automator-docs l-automator-pane__content">
         <automator-docs-main-page
           v-if="command === undefined"
           @select="changeCommand"
         />
         <automator-man-page v-else :command="command" />
       </div>
-      <automator-blocks v-else/>
     </div>
   `
 });

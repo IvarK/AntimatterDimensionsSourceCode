@@ -49,72 +49,53 @@ function showspoilers() {
 }
 
 function updateSpoilers() {
-	var displayed = 0;
 	if (spoilers === 0) {
     for (let i = 1; i < 25; i++) {
-			displayed = 0;
-			if (i === 5 && (player.resets >= 4 || player.infinitied.gte(1) || player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+			let displayed = 0;
+			if (i < 5) {
+				displayed = 1 - displayed;
 			}
-			if (i === 6 && (player.galaxies >= 1 || player.infinitied.gte(1) || player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+			if (i === 5 && (DimBoost.totalBoosts >= 4 || player.infinitied.gte(1) || PlayerProgress.eternityUnlocked())) {
+				displayed = 1 - displayed;
 			}
-			if (i === 8 && (player.infinitied.gte(1) || player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+			if (i === 7 && (player.galaxies >= 1 || player.infinitied.gte(1) || PlayerProgress.eternityUnlocked())) {
+				displayed = 1 - displayed;
 			}
-			if (i === 9 && (player.infinitied.gte(1) || player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+			if ((i >= 8 && i <= 10) && (player.infinitied.gte(1) || PlayerProgress.eternityUnlocked())) {
+				displayed = 1 - displayed;
 			}
-			if (i === 10 && (player.infinitied.gte(1) || player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+			if (i === 11 && (player.auto.bigCrunch.interval > 100 || PlayerProgress.eternityUnlocked())) {
+				displayed = 1 - displayed;
 			}
-			if (i === 11 && (player.autobuyers[11].interval>100 || player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+			if (i === 12 && (player.infDimensionsUnlocked[0] || PlayerProgress.eternityUnlocked())) {
+				displayed = 1 - displayed;
 			}
-			if (i === 12 && (player.infDimensionsUnlocked[0] == true || player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+			if (i === 13 && (player.postChallUnlocked >= 5 || PlayerProgress.eternityUnlocked())) {
+				displayed = 1 - displayed;
 			}
-			if (i === 13 && (player.postChallUnlocked >= 5 || player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+			if ((i >= 14 && i <= 17) && (player.replicanti.unl || PlayerProgress.eternityUnlocked())) {
+				displayed = 1 - displayed;
 			}
-			if (i === 14 && (player.replicanti.unl || player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
-			}
-			if (i === 15 && (player.replicanti.unl || player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
-			}
-			if (i === 16 && (player.replicanti.unl || player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
-			}
-			if (i === 17 && (player.replicanti.unl || player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
-			}
-			if (i === 18 && (player.eternities >= 1)) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+			if (i === 18 && (PlayerProgress.eternityUnlocked())) {
+				displayed = 1 - displayed;
 				 }
 			if (i === 19 && player.eternityChalls.eterc11 === 5 || player.eternityChalls.eterc12 === 5) { 
-				(displayed === 0) ? displayed = 1 : displayed = 0; 
+				displayed = 1 - displayed;
 			} 
 			if (i === 20 && player.dilation.studies.length === 5) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+				displayed = 1 - displayed;
 			}
-			if (i === 21 && player.realities >= 1) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
-			}
-			if (i === 22 && player.realities >= 1) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+			if ((i === 21 || i === 22) && player.realities >= 1) {
+				displayed = 1 - displayed;
 			}
 			if (i === 23 && player.realities >= 4) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+				displayed = 1 - displayed;
 			}
 			if (i === 24 && player.reality.realityMachines >= 50 || player.reality.blackHole[0].unlocked) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+				displayed = 1 - displayed;
 			}
 			if (i === 25 && RealityUpgrades.allBought) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
-			}
-			if (i < 5 || i === 7) {
-				(displayed === 0) ? displayed = 1 : displayed = 0;
+				displayed = 1 - displayed;
 			}
 
 			if (displayed === 1) {

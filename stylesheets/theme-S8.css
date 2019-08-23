@@ -38,10 +38,6 @@ body.t-s8 {
     border: 1px solid black;
 }
 
-.t-s8 #game {
-    border: 1px solid black;
-}
-
 .t-s8 .secondarytabbtn {
     background: #EEEEEE;
     border: 1px solid #2196F3;
@@ -122,7 +118,6 @@ body.t-s8 {
 .t-s8 .realitytabbtn {
     background: white;
     border: 1px solid #0b600e;
-    display: none;
 }
 
 .t-s8 .realitytabbtn:hover {

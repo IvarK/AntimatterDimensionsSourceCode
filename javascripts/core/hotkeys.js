@@ -27,9 +27,16 @@ GameKeyboard.bindRepeatableHotkey("e", () => eternity());
   for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);
 }());
 
-GameKeyboard.bindHotkey("a", () => toggleAutobuyers());
+GameKeyboard.bindHotkey("a", () => Autobuyers.toggle());
 GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
-GameKeyboard.bindHotkey("u", () => automatorOnOff());
+GameKeyboard.bindHotkey("u", () => {
+  if (AutomatorBackend.isRunning) {
+    AutomatorBackend.pause();
+  }
+  else if (AutomatorBackend.isOn) {
+    AutomatorBackend.mode = AutomatorMode.RUN;
+  }
+});
 
 GameKeyboard.bindHotkey("esc", () => {
   if (Modal.isOpen) {
@@ -69,8 +76,8 @@ GameKeyboard.bind(
 
 GameKeyboard.bind("up up down down left right left right b a", () => {
   SecretAchievement(17).unlock();
-  if (player.money.lt(30)) {
-    player.money = new Decimal(30);
+  if (player.antimatter.lt(30)) {
+    player.antimatter = new Decimal(30);
   }
 });
 

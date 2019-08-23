@@ -23,8 +23,8 @@ const TimeTheorems = {
   },
 
   buyWithAntimatter() {
-    if (player.money.lt(player.timestudy.amcost)) return false;
-    player.money = player.money.minus(player.timestudy.amcost);
+    if (player.antimatter.lt(player.timestudy.amcost)) return false;
+    player.antimatter = player.antimatter.minus(player.timestudy.amcost);
     player.timestudy.amcost = player.timestudy.amcost.times(TimeTheorems.costMultipliers.AM);
     player.timestudy.theorem = player.timestudy.theorem.plus(1);
     player.noTheoremPurchases = false;
@@ -55,10 +55,11 @@ const TimeTheorems = {
 
   buyMax() {
     const AMowned = player.timestudy.amcost.e / 20000 - 1;
-    if (player.money.gte(player.timestudy.amcost)) {
-      player.timestudy.amcost.e = Math.floor(player.money.e / 20000 + 1) * 20000;
-      player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.money.e / 20000) - AMowned);
-      player.money = player.money.minus(Decimal.fromMantissaExponent(1, Math.floor(player.money.e / 20000) * 20000));
+    if (player.antimatter.gte(player.timestudy.amcost)) {
+      player.timestudy.amcost.e = Math.floor(player.antimatter.e / 20000 + 1) * 20000;
+      player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.antimatter.e / 20000) - AMowned);
+      player.antimatter =
+        player.antimatter.minus(Decimal.fromMantissaExponent(1, Math.floor(player.antimatter.e / 20000) * 20000));
       player.noTheoremPurchases = false;
     }
     const IPowned = player.timestudy.ipcost.e / 100;
@@ -373,7 +374,7 @@ function respecTimeStudies(auto) {
     player.challenge.eternity.unlocked = 0;
   }
   if (!auto) {
-    Tab.eternity.timeStudies.show();
+    Tab.eternity.studies.show();
   }
 }
 
@@ -643,7 +644,7 @@ class DilationTimeStudyState extends TimeStudyState {
     if (this.isBought || !this.canBeBought) return false;
     if (this.id === 1) unlockDilation(quiet);
     if (this.id === 6 && !Perk.autounlockReality.isBought) {
-      showRealityTab("glyphstab");
+      Tab.reality.glyphs.show();
     }
     player.dilation.studies.push(this.id);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);

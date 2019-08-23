@@ -25,15 +25,6 @@ input.t-dark {
     border: 1px solid black;
 }
 
-.t-dark #news {
-    color: #E0E0E0;
-}
-
-.t-dark #game {
-    border: 1px solid #546E7A;
-    background-color: #455A64;
-}
-
 .t-dark .container {
     color: #888888;
 }

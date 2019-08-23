@@ -3,32 +3,21 @@
 Vue.component("autobuyer-toggles", {
   data() {
     return {
-      options: player.options,
-      hasAdditionalCrunchModes: false,
-      autoCrunchMode: AutoCrunchMode.AMOUNT,
-      hasAdditionalEternityModes: false,
-      autoEternityMode: AutoEternityMode.AMOUNT,
+      autobuyersOn: false,
+      bulkOn: false,
       isAutoRealityUnlocked: false,
       autoRealityMode: AutoRealityMode.RM,
     };
   },
+  watch: {
+    autobuyersOn(newValue) {
+      player.options.autobuyersOn = newValue;
+    },
+    bulkOn(newValue) {
+      player.options.bulkOn = newValue;
+    }
+  },
   computed: {
-    autoCrunchModeDisplay() {
-      switch (this.autoCrunchMode) {
-        case AutoCrunchMode.AMOUNT: return "amount";
-        case AutoCrunchMode.TIME: return "time";
-        case AutoCrunchMode.RELATIVE: return "X times last crunch";
-      }
-      throw "Unknown auto crunch mode";
-    },
-    autoEternityModeDisplay() {
-      switch (this.autoEternityMode) {
-        case AutoEternityMode.AMOUNT: return "amount";
-        case AutoEternityMode.TIME: return "time";
-        case AutoEternityMode.RELATIVE: return "X times last eternity";
-      }
-      throw "Unknown auto eternity mode";
-    },
     autoRealityModeDisplay() {
       switch (this.autoRealityMode) {
         case AutoRealityMode.RM: return "reality machines";
@@ -36,41 +25,31 @@ Vue.component("autobuyer-toggles", {
         case AutoRealityMode.EITHER: return "either";
         case AutoRealityMode.BOTH: return "both";
       }
-      throw "Unknown auto reality mode";
+      throw crash("Unknown auto reality mode");
     }
   },
   methods: {
     update() {
-      this.hasAdditionalCrunchModes = Autobuyer.infinity.hasAdditionalModes;
-      this.autoCrunchMode = Autobuyer.infinity.mode;
-      this.hasAdditionalEternityModes = Autobuyer.eternity.hasAdditionalModes;
-      this.autoEternityMode = Autobuyer.eternity.mode;
+      this.autobuyersOn = player.options.autobuyersOn;
+      this.bulkOn = player.options.bulkOn;
       this.isAutoRealityUnlocked = Autobuyer.reality.isUnlocked;
       this.autoRealityMode = Autobuyer.reality.mode;
     }
   },
   template:
     `<div class="l-autobuyer-toggles">
-      <primary-button
-        class="o-primary-btn--autobuyer-toggle"
-        onclick="toggleAutobuyers()"
-      >Enable/disable autobuyers</primary-button>
       <primary-button-on-off-custom
-        v-model="options.bulkOn"
+        v-model="autobuyersOn"
+        on="Disable autobuyers"
+        off="Enable autobuyers"
+        class="o-primary-btn--autobuyer-toggle"
+      />
+      <primary-button-on-off-custom
+        v-model="bulkOn"
         on="Disable bulk buy"
         off="Enable bulk buy"
         class="o-primary-btn--autobuyer-toggle"
       />
-      <primary-button
-        v-if="hasAdditionalCrunchModes"
-        class="o-primary-btn--autobuyer-toggle"
-        onclick="Autobuyer.infinity.toggleMode();"
-      >Auto crunch mode: {{autoCrunchModeDisplay}}</primary-button>
-      <primary-button
-        v-if="hasAdditionalEternityModes"
-        class="o-primary-btn--autobuyer-toggle"
-        onclick="Autobuyer.eternity.toggleMode();"
-      >Auto eternity mode: {{autoEternityModeDisplay}}</primary-button>
       <primary-button
         v-if="isAutoRealityUnlocked"
         class="o-primary-btn--autobuyer-toggle"

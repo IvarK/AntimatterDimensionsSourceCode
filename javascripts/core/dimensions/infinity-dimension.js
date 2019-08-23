@@ -137,7 +137,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get isAutobuyerUnlocked() {
-    return player.eternities >= 10 + this.tier;
+    return player.eternities.gte(10 + this.tier);
   }
 
   get isAvailableForPuchase() {
@@ -161,7 +161,7 @@ class InfinityDimensionState extends DimensionState {
       toGain = InfinityDimension(tier + 1).productionPerSecond;
     }
     const current = Decimal.max(this.amount, 1);
-    return toGain.times(10).dividedBy(current).times(getGameSpeedupFactor());
+    return toGain.times(10).dividedBy(current).times(getGameSpeedupForDisplay());
   }
 
   get productionPerSecond() {
@@ -199,7 +199,7 @@ class InfinityDimensionState extends DimensionState {
 
     mult = mult.clampMin(0);
 
-    if (player.dilation.active) {
+    if (player.dilation.active || TimeCompression.isActive) {
       mult = dilatedValueOf(mult);
     }
 
@@ -240,10 +240,11 @@ class InfinityDimensionState extends DimensionState {
     if (Enslaved.isRunning) {
       return 1;
     }
-    if (Enslaved.isCompleted) {
-      return this._purchaseCap + Math.floor(player.totalTickGained / 1000) * 1000;
-    }
-    return this._purchaseCap;
+    const enslavedBoost = Enslaved.isCompleted
+      ? Math.floor(player.totalTickGained / 1000) * 1000
+      : 0;
+    const compressionBoost = Effects.max(0, CompressionUpgrade.infDimSoftcap);
+    return this._purchaseCap + enslavedBoost + compressionBoost;
   }
 
   get baseAmountCap() {
@@ -288,7 +289,7 @@ const InfinityDimensions = {
   unlockNext() {
     if (InfinityDimension(8).isUnlocked) return;
     const next = InfinityDimensions.next();
-    if (!Perk.bypassIDAntimatter.isBought && player.money.lt(next.requirement)) return;
+    if (!Perk.bypassIDAntimatter.isBought && player.antimatter.lt(next.requirement)) return;
     next.isUnlocked = true;
     EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, next.tier);
   },
@@ -311,11 +312,11 @@ const InfinityDimensions = {
 };
 
 function tryUnlockInfinityDimensions() {
-  if (player.eternities < 25 || InfinityDimension(8).isUnlocked) return;
+  if (player.eternities.lt(25) || InfinityDimension(8).isUnlocked) return;
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;
     // If we cannot unlock this one, we can't unlock the rest, either
-    if (!Perk.bypassIDAntimatter.isBought && InfinityDimension(tier).requirement.gt(player.money)) break;
+    if (!Perk.bypassIDAntimatter.isBought && InfinityDimension(tier).requirement.gt(player.antimatter)) break;
     InfinityDimension(tier).isUnlocked = true;
     EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, tier);
     if (player.infDimBuyers[tier - 1] &&
@@ -323,4 +324,9 @@ function tryUnlockInfinityDimensions() {
       buyMaxInfDims(tier);
     }
   }
+}
+
+function getInfinityConversionRate() {
+  const laitelaBoost = Laitela.has(LAITELA_UNLOCKS.ID) ? Laitela.idConversionEffect : 0;
+  return 7 + getAdjustedGlyphEffect("infinityrate") + laitelaBoost;
 }

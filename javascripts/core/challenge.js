@@ -13,26 +13,12 @@ function askChallengeConfirmation(goal) {
   return confirm(message);
 }
 
-function setChallengeTime(id, time) {
-  // Use splice so Vue could track changes
-  player.challenge.normal.bestTimes.splice(id, 1, time);
-  GameCache.challengeTimeSum.invalidate();
-  GameCache.worstChallengeTime.invalidate();
-}
-
-function setInfChallengeTime(id, time) {
-  // Use splice so Vue could track changes
-  player.challenge.infinity.bestTimes.splice(id, 1, time);
-  GameCache.infinityChallengeTimeSum.invalidate();
-}
-
 function tryUnlockInfinityChallenges() {
   while (player.postChallUnlocked < 8 &&
-    player.money.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
+    player.antimatter.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
     ++player.postChallUnlocked;
-    if (player.eternities > 6) {
+    if (player.eternities.gte(7)) {
       InfinityChallenge(player.postChallUnlocked).complete();
-      Autobuyer.tryUnlockAny();
     }
   }
 }
@@ -41,16 +27,14 @@ function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
     if (NormalDimension(2).amount.neq(0)) {
       player.matter = player.matter
-        .times(Decimal.pow((1.03 + player.resets / 200 + player.galaxies / 100), diff / 100));
+        .times(Decimal.pow((1.03 + DimBoost.totalBoosts / 200 + player.galaxies / 100), diff / 100));
     }
-    if (player.matter.gt(player.money) && NormalChallenge(11).isRunning) {
-      Modal.message.show(`Your ${shorten(player.money, 2, 2)} antimatter was annhiliated by ` +
+    if (player.matter.gt(player.antimatter) && NormalChallenge(11).isRunning) {
+      Modal.message.show(`Your ${shorten(player.antimatter, 2, 2)} antimatter was annhiliated by ` +
         `${shorten(player.matter, 2, 2)} matter.`);
       softReset(0);
     }
   }
-
-  if (InfinityChallenge(8).isRunning) postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff / 100));
 
   if (NormalChallenge(3).isRunning) {
     player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)).clampMax(Decimal.MAX_NUMBER);
@@ -102,7 +86,6 @@ class NormalChallengeState extends GameMechanicState {
   complete() {
     // eslint-disable-next-line no-bitwise
     player.challenge.normal.completedBits |= 1 << this.id;
-    Autobuyer.tryUnlockAny();
   }
 
   get goal() {
@@ -113,9 +96,14 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   updateChallengeTime() {
-    if (player.challenge.normal.bestTimes[this.id - 2] > player.thisInfinityTime) {
-      setChallengeTime(this.id - 2, player.thisInfinityTime);
+    const bestTimes = player.challenge.normal.bestTimes;
+    if (bestTimes[this.id - 2] <= player.thisInfinityTime) {
+      return;
     }
+    // TODO: remove splice once player.challenge.infinity.bestTimes is not reactive
+    bestTimes.splice(this.id - 2, 1, player.thisInfinityTime);
+    GameCache.challengeTimeSum.invalidate();
+    GameCache.worstChallengeTime.invalidate();
   }
 
   exit() {
@@ -151,12 +139,6 @@ const NormalChallenges = {
    * @type {NormalChallengeState[]}
    */
   all: NormalChallengeState.index.compact(),
-  /**
-   * @returns {NormalChallengeState[]}
-   */
-  get completed() {
-    return NormalChallenges.all.filter(c => c.isCompleted);
-  },
   completeAll() {
     for (const challenge of NormalChallenges.all) challenge.complete();
   },
@@ -232,9 +214,13 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   updateChallengeTime() {
-    if (player.challenge.infinity.bestTimes[this.id - 1] > player.thisInfinityTime) {
-      setInfChallengeTime(this.id - 1, player.thisInfinityTime);
+    const bestTimes = player.challenge.infinity.bestTimes;
+    if (bestTimes[this.id - 1] <= player.thisInfinityTime) {
+      return;
     }
+    // TODO: remove splice once player.challenge.infinity.bestTimes is not reactive
+    bestTimes.splice(this.id - 1, 1, player.thisInfinityTime);
+    GameCache.infinityChallengeTimeSum.invalidate();
   }
 
   exit() {

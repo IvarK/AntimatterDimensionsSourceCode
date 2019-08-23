@@ -91,9 +91,8 @@ const GlyphSelection = {
 
 function confirmReality() {
   return !player.options.confirmations.reality ||
-    confirm("Reality will reset everything except challenge records, and will lock your achievements," +
-      " which you will regain over the course of " +
-      `${timeDisplay(Achievements.totalDisabledTime * 0.9)}. ` +
+    confirm("Reality will reset everything except challenge records, and will lock your achievements, " +
+      `which you will regain over the course of ${Achievements.nextTotalDisabledTime}. ` +
       "You will also gain reality machines based on your EP, a glyph with a power level " +
       "based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of " +
       "life upgrades, and unlock various upgrades.");
@@ -244,6 +243,7 @@ function completeReality(force, reset, auto = false) {
       player.bestReality = player.thisReality;
     }
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
+    player.bestRMmin = player.bestRMmin.max(gainedRealityMachines().dividedBy(Time.thisRealityRealTime.totalMinutes));
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained;
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
@@ -261,8 +261,6 @@ function completeReality(force, reset, auto = false) {
   recalculateAllGlyphs()
 
   //reset global values to avoid a tick of unupdated production
-  postc8Mult = new Decimal(0);
-  mult18 = new Decimal(1);
 
   player.sacrificed = new Decimal(0);
 
@@ -278,14 +276,11 @@ function completeReality(force, reset, auto = false) {
   player.infinitiedBank = new Decimal(0);
   player.bestInfinityTime = 999999999999;
   player.thisInfinityTime = 0;
+  player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;
-  player.resets = isRUPG10Bought ? 4 : 0;
+  player.dimensionBoosts = isRUPG10Bought ? 4 : 0;
   player.galaxies = isRUPG10Bought ? 1 : 0;
-  player.tickDecrease = 0.9;
   player.interval = null;
-  if (!isRUPG10Bought) {
-    Autobuyer.resetUnlockables();
-  }
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.break = isRUPG10Bought ? player.break : false;
@@ -310,7 +305,7 @@ function completeReality(force, reset, auto = false) {
   // This has to be reset before player.eternities to make the bumpLimit logic work
   // correctly
   EternityUpgrade.epMult.reset();
-  player.eternities = 0;
+  player.eternities = new Decimal(0);
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.bestEternity = 999999999999;
@@ -318,18 +313,12 @@ function completeReality(force, reset, auto = false) {
   player.totalTickGained = 0;
   player.offlineProd = isRUPG10Bought ? player.offlineProd : 0;
   player.offlineProdCost = isRUPG10Bought ? player.offlineProdCost : 1e7;
-  if (!isRUPG10Bought) {
-    player.autoSacrifice = 1;
-  }
   player.eternityChalls = {};
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;
   player.etercreq = 0;
   player.infMultBuyer = isRUPG10Bought ? player.infMultBuyer : false;
-  if (!isRUPG10Bought) {
-    player.autoCrunchMode = AutoCrunchMode.AMOUNT;
-  }
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
@@ -348,9 +337,6 @@ function completeReality(force, reset, auto = false) {
   player.timestudy.epcost = new Decimal(1);
   player.timestudy.studies = [];
   player.celestials.v.additionalStudies = 0;
-  if (!RealityUpgrade(10).isBought) {
-    player.eternityBuyer.isOn = false;
-  }
   player.dilation.studies = [];
   player.dilation.active = false;
   player.dilation.tachyonParticles = new Decimal(0);
@@ -364,12 +350,13 @@ function completeReality(force, reset, auto = false) {
     2: 0,
     3: 0
   };
-  player.money = Effects.max(
+  player.antimatter = Effects.max(
     10,
     Perk.startAM1,
     Perk.startAM2
   ).toDecimal();
   Enslaved.autoReleaseTick = 0;
+  player.celestials.ra.compression.freeDimboosts = 0;
 
   resetInfinityRuns();
   resetEternityRuns();
@@ -380,9 +367,10 @@ function completeReality(force, reset, auto = false) {
   NormalDimensions.reset();
   secondSoftReset();
   if (player.celestials.ra.disCharge) disChargeAll();
+  if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
   player.celestials.ra.peakGamespeed = 1;
   if (isRUPG10Bought) {
-    player.eternities = 100;
+    player.eternities = new Decimal(100);
     if (Achievements.totalDisabledTime === 0) {
       initializeChallengeCompletions();
     }
@@ -391,25 +379,23 @@ function completeReality(force, reset, auto = false) {
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
   }
-  Autobuyer.tryUnlockAny()
-  if (player.realities === 4) player.reality.automatorCommands = new Set([12, 24, 25]);
   player.reality.upgReqChecks = [true];
   InfinityDimensions.resetAmount();
-  IPminpeak = new Decimal(0);
-  EPminpeak = new Decimal(0);
+  player.bestIPminThisInfinity = new Decimal(0);
+  player.bestIPminThisEternity = new Decimal(0);
+  player.bestEPminThisEternity = new Decimal(0);
+  player.bestEPminThisReality = new Decimal(0);
   resetTimeDimensions();
-  kong.submitStats('Eternities', player.eternities);
-  if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
+  // FIXME: Eternity count is now a Decimal so this needs to be addressed
+  // kong.submitStats('Eternities', player.eternities);
+  if (player.eternities.gt(2) && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
-  if (player.eternities <= 1) {
+  if (player.eternities.lte(1)) {
     Tab.dimensions.normal.show();
   }
   AchievementTimers.marathon2.reset();
-  drawPerkNetwork();
-
   resetInfinityPoints();
-
 
   function resetReplicanti() {
     player.replicanti.amount = isRUPG10Bought ? new Decimal(1) : new Decimal(0);
@@ -451,7 +437,9 @@ function completeReality(force, reset, auto = false) {
 function handleCelestialRuns(force) {
   if (Teresa.isRunning) {
     player.celestials.teresa.run = false;
-    if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) player.celestials.teresa.bestRunAM = player.money
+    if (!force && player.celestials.teresa.bestRunAM.lt(player.antimatter)) {
+      player.celestials.teresa.bestRunAM = player.antimatter;
+    }
   }
   if (Effarig.isRunning) {
     player.celestials.effarig.run = false;
@@ -474,8 +462,15 @@ function handleCelestialRuns(force) {
     player.celestials.ra.run = false;
   }
 
+  if (TimeCompression.isActive) {
+    TimeCompression.isActive = false;
+  }
+
   if (Laitela.isRunning) {
     player.celestials.laitela.run = false;
+    if (!force && player.antimatter.gte(player.celestials.laitela.maxAmGained)) {
+      player.celestials.laitela.maxAmGained = player.antimatter;
+    }
   }
 }
 

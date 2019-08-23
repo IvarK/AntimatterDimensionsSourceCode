@@ -11,7 +11,7 @@ function bigCrunchAnimation() {
 function canCrunch() {
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
-  if (player.money.lt(goal)) return false;
+  if (player.antimatter.lt(goal)) return false;
   return true;
 }
 
@@ -21,10 +21,7 @@ function handleChallengeCompletion() {
   }
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   if (!challenge) return;
-  if (!challenge.isCompleted) {
-    challenge.complete();
-    Autobuyer.tryUnlockAny();
-  }
+  challenge.complete();
   challenge.updateChallengeTime();
   if (NormalChallenge(9).isRunning) {
     kong.submitStats("NormalChallenge 9 time record (ms)", Math.floor(player.thisInfinityTime));
@@ -47,12 +44,16 @@ function bigCrunchResetRequest(disableAnimation = false) {
 
 function bigCrunchReset() {
   if (!canCrunch()) return;
+  player.bestIPminThisEternity = player.bestIPminThisEternity.clampMin(player.bestIPminThisInfinity);
+  player.bestIPminThisInfinity = new Decimal(0);
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
   handleChallengeCompletion();
 
-  if (earlyGame || (challenge && !player.options.retryChallenge)) showTab("dimensions");
+  if (earlyGame || (challenge && !player.options.retryChallenge)) {
+    Tab.dimensions.normal.show();
+  }
   let infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
   addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
@@ -68,7 +69,7 @@ function bigCrunchReset() {
 
   const currentReplicanti = player.replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
-  secondSoftReset();
+  secondSoftReset(true);
 
   if (Achievement(95).isEnabled) {
     player.replicanti.amount = currentReplicanti;
@@ -77,8 +78,11 @@ function bigCrunchReset() {
     player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
   }
 
-  if (player.eternities > 10 && !EternityChallenge(8).isRunning && !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning) {
-    for (let i = 1; i < player.eternities - 9 && i < 9; i++) {
+  if (player.eternities.gt(10) &&
+      !EternityChallenge(8).isRunning &&
+      !EternityChallenge(2).isRunning &&
+      !EternityChallenge(10).isRunning) {
+    for (let i = 1; i <= player.eternities.sub(10).clampMax(8).toNumber(); i++) {
       if (player.infDimBuyers[i - 1]) {
         buyMaxInfDims(i);
         buyManyInfinityDimension(i)
@@ -96,25 +100,22 @@ function bigCrunchReset() {
 
 }
 
-function secondSoftReset() {
-    player.resets = 0;
+function secondSoftReset(forcedNDReset = false) {
+    player.dimensionBoosts = 0;
     player.galaxies = 0;
-    player.tickDecrease = 0.9;
-    resetMoney();
-    softReset(0);
+    resetAntimatter();
+    softReset(0, forcedNDReset);
     InfinityDimensions.resetAmount();
-    IPminpeak = new Decimal(0);
     if (player.replicanti.unl)
         player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
     player.thisInfinityTime = 0;
+    player.thisInfinityLastBuyTime = 0;
     player.thisInfinityRealTime = 0;
     player.noEighthDimensions = true;
     player.noSacrifices = true;
     AchievementTimers.marathon2.reset();
 }
-
-document.getElementById("bigcrunch").onclick = bigCrunchResetRequest;
 
 function totalIPMult() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {
@@ -295,7 +296,9 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     const costIncrease = this.costIncrease;
     const mult = Decimal.pow(2, amount);
     player.infMult = player.infMult.times(mult);
-    Autobuyer.infinity.bumpLimit(mult);
+    if (!TimeStudy(181).isBought) {
+      Autobuyer.bigCrunch.bumpAmount(mult);
+    }
     player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
     player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
     this.adjustToCap();

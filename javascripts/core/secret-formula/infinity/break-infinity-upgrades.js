@@ -10,7 +10,8 @@ GameDatabase.infinity.breakUpgrades = (function() {
       description: config.description,
       effect: () => player.infinityRebuyables[config.id],
       formatEffect: value => (value === maxUpgrades ? `10x ➜ ${10 - value}x` : `10x ➜ ${10 - value - 1}x`),
-      staticEffect: true
+      staticEffect: true,
+      formatCost: value => shorten(value, 2, 0)
     };
   }
 
@@ -19,14 +20,14 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "totalMult",
       cost: 1e4,
       description: "Normal dimensions gain a multiplier based on total antimatter produced",
-      effect: () => Math.pow(player.totalmoney.exponent + 1, 0.5),
+      effect: () => Math.pow(player.totalAntimatter.exponent + 1, 0.5),
       formatEffect: value => formatX(value, 2, 2)
     },
     currentAMMult: {
       id: "currentMult",
       cost: 5e4,
       description: "Normal dimensions gain a multiplier based on current antimatter",
-      effect: () => Math.pow(player.money.exponent + 1, 0.5),
+      effect: () => Math.pow(player.antimatter.exponent + 1, 0.5),
       formatEffect: value => formatX(value, 2, 2)
     },
     galaxyBoost: {

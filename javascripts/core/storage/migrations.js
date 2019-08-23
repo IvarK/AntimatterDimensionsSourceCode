@@ -58,7 +58,7 @@ GameStorage.migrations = {
       const timeDimCostMults = [null, 3, 9, 27, 81];
       // Updates TD costs to harsher scaling
       for (let i = 1; i < 5; i++) {
-        if (player[`timeDimension${i}`].cost.gte("1e1300")) {
+        if (new Decimal("1e300").lt(player[`timeDimension${i}`].cost)) {
           player[`timeDimension${i}`].cost = Decimal.pow(
             timeDimCostMults[i] * 2.2,
             player[`timeDimension${i}`].bought
@@ -83,9 +83,10 @@ GameStorage.migrations = {
 
       player.realTimePlayed = player.totalTimePlayed;
       player.thisReality = player.totalTimePlayed;
-      player.thisInfinityRealTime = player.thisInfinityTime;
-      player.thisEternityRealTime = player.thisEternity;
-      player.thisRealityRealTime = player.thisReality;
+      player.thisInfinityRealTime = player.thisInfinityTime * 100;
+      player.thisEternityRealTime = player.thisEternity * 100;
+      player.thisRealityRealTime = player.thisReality * 100;
+      player.thisInfinityLastBuyTime = player.thisInfinityTime * 100;
       for (let i = 0; i < 10; i++) {
         player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
         player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
@@ -113,6 +114,12 @@ GameStorage.migrations = {
       GameStorage.migrations.clearNewsArray(player);
       GameStorage.migrations.removeTickspeed(player);
       GameStorage.migrations.removePostC3Reward(player);
+      GameStorage.migrations.renameMoney(player);
+      GameStorage.migrations.moveAutobuyers(player);
+      GameStorage.migrations.convertNewsToSet(player);
+      GameStorage.migrations.convertEternityCountToDecimal(player);
+      GameStorage.migrations.renameDimboosts(player);
+      GameStorage.migrations.migrateConfirmations(player);
     }
   },
 
@@ -395,6 +402,13 @@ GameStorage.migrations = {
     delete player.postC3Reward;
   },
 
+  renameMoney(player) {
+    player.antimatter = new Decimal(player.money);
+    player.totalAntimatter = new Decimal(player.totalmoney);
+    delete player.money;
+    delete player.totalmoney;
+  },
+
   uniformDimensions(player) {
     for (let tier = 1; tier <= 8; tier++) {
       const name = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"][tier];
@@ -435,18 +449,153 @@ GameStorage.migrations = {
       const dimension = player.dimensions.time[tier - 1];
       const oldName = `timeDimension${tier}`;
       const old = player[oldName];
-      dimension.cost = new Decimal(old.cost);
-      dimension.amount = new Decimal(old.amount);
-      dimension.power = new Decimal(old.power);
-      dimension.bought = old.bought;
-      delete player[oldName];
+      if (old !== undefined) {
+        dimension.cost = new Decimal(old.cost);
+        dimension.amount = new Decimal(old.amount);
+        dimension.power = new Decimal(old.power);
+        dimension.bought = old.bought;
+        delete player[oldName];
+      }
     }
+  },
+
+  moveAutobuyers(player) {
+    if (
+      player.autobuyers[11] % 1 !== 0 &&
+      player.autobuyers[11].priority !== undefined &&
+      player.autobuyers[11].priority !== null &&
+      player.autobuyers[11].priority !== "undefined"
+    ) {
+      player.autobuyers[11].priority = new Decimal(player.autobuyers[11].priority);
+    }
+
+    for (let i = 0; i < 8; i++) {
+      const old = player.autobuyers[i];
+      if (old % 1 === 0) continue;
+      const autobuyer = player.auto.dimensions[i];
+      autobuyer.cost = old.cost;
+      autobuyer.interval = old.interval;
+      autobuyer.bulk = old.bulk;
+      autobuyer.mode = old.target;
+      autobuyer.priority = old.priority;
+      autobuyer.isActive = old.isOn;
+      autobuyer.lastTick = player.realTimePlayed;
+    }
+
+    if (player.autobuyers[8] % 1 !== 0) {
+      const old = player.autobuyers[8];
+      const autobuyer = player.auto.tickspeed;
+      autobuyer.cost = old.cost;
+      autobuyer.interval = old.interval;
+      autobuyer.mode = old.target;
+      autobuyer.priority = old.priority;
+      autobuyer.isActive = old.isOn;
+      autobuyer.lastTick = player.realTimePlayed;
+    }
+
+    if (player.autobuyers[9] % 1 !== 0) {
+      const old = player.autobuyers[9];
+      const autobuyer = player.auto.dimBoost;
+      autobuyer.cost = old.cost;
+      autobuyer.interval = old.interval;
+      autobuyer.maxDimBoosts = old.priority;
+      autobuyer.galaxies = player.overXGalaxies;
+      autobuyer.bulk = old.bulk;
+      autobuyer.buyMaxInterval = old.bulk;
+      autobuyer.isActive = old.isOn;
+      autobuyer.lastTick = player.realTimePlayed;
+    }
+
+    delete player.overXGalaxies;
+
+    if (player.autobuyers[10] % 1 !== 0) {
+      const old = player.autobuyers[10];
+      const autobuyer = player.auto.galaxy;
+      autobuyer.cost = old.cost;
+      autobuyer.interval = old.interval;
+      autobuyer.maxGalaxies = old.priority;
+      autobuyer.buyMaxInterval = old.bulk;
+      autobuyer.buyMax = old.bulk > 0;
+      autobuyer.isActive = old.isOn;
+      autobuyer.lastTick = player.realTimePlayed;
+    }
+
+    if (player.autobuyers[11] % 1 !== 0) {
+      const old = player.autobuyers[11];
+      const autobuyer = player.auto.bigCrunch;
+      autobuyer.cost = old.cost;
+      autobuyer.interval = old.interval;
+      autobuyer.mode = ["amount", "time", "relative"].indexOf(player.autoCrunchMode);
+      const condition = new Decimal(old.priority);
+      switch (player.autoCrunchMode) {
+        case "amount":
+          autobuyer.amount = condition;
+          break;
+        case "time":
+          autobuyer.time = condition.lt(Decimal.MAX_NUMBER) ? condition.toNumber() : autobuyer.time;
+          break;
+        case "relative":
+          autobuyer.xLast = condition;
+          break;
+      }
+      autobuyer.isActive = old.isOn;
+      autobuyer.lastTick = player.realTimePlayed;
+    }
+
+    delete player.autoCrunchMode;
+    delete player.autobuyers;
+
+    if (player.autoSacrifice % 1 !== 0) {
+      const old = player.autoSacrifice;
+      const autobuyer = player.auto.sacrifice;
+      autobuyer.multiplier = old.priority;
+      autobuyer.isActive = old.isOn;
+    }
+
+    delete player.autoSacrifice;
+
+    if (player.eternityBuyer !== undefined) {
+      const old = player.eternityBuyer;
+      const autobuyer = player.auto.eternity;
+      // Development saves have additional modes
+      if (player.autoEternityMode === undefined) {
+        autobuyer.time = Number(old.limit);
+      }
+      autobuyer.isActive = old.isOn;
+    }
+
+    delete player.eternityBuyer;
+  },
+
+  convertNewsToSet(player) {
+    player.news = new Set(player.newsArray);
+    delete player.newsArray;
+  },
+
+  convertEternityCountToDecimal(player) {
+    player.eternities = new Decimal(player.eternities);
+    player.reality.partEternitied = new Decimal(player.reality.partEternitied);
+  },
+
+  renameDimboosts(player) {
+    player.dimensionBoosts = player.resets;
+    delete player.resets;
+  },
+
+  migrateConfirmations(player) {
+    player.options.confirmations.challenges = !player.options.challConf;
+    delete player.options.challConf;
+    player.options.confirmations.eternity = player.options.eternityconfirm;
+    delete player.options.eternityconfirm;
+    
+    // This did nothing on live and continues to do nothing...?
+    delete player.tickDecrease;
   },
 
   prePatch(saveData) {
     // Initialize all possibly undefined properties that were not present in
     // previous versions and which could be overwritten by deepmerge
-    saveData.totalmoney = saveData.totalmoney || saveData.money;
+    saveData.totalAntimatter = saveData.totalAntimatter || saveData.totalmoney || saveData.money;
     saveData.thisEternity = saveData.thisEternity || saveData.totalTimePlayed;
     saveData.version = saveData.version || 0;
   },

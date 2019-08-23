@@ -11,16 +11,18 @@ GameDatabase.eternity.upgrades = {
   idMultEternities: {
     id: 2,
     cost: 10,
-    description: "Infinity Dimension multiplier based on Eternities ((x/200)^log4(2x))",
+    description: () => `Infinity Dimension multiplier based on Eternities ((x/200)^log4(2x), softcap at ${shorten(1e5)})`,
     effect() {
       const log4 = Math.log4;
-      const eternities = Math.min(player.eternities, 100000);
-      const base = eternities / 200 + 1;
-      const pow = Math.log(eternities * 2 + 1) / log4;
-      const mult1 = new Decimal((player.eternities - 100000) / 200 + 1);
-      const mult2 = Math.log((player.eternities - 100000) * 2 + 1) / log4;
-      const totalMult = mult1.times(mult2).clampMin(1);
-      return Decimal.pow(base, pow).times(totalMult);
+      const eterPreCap = player.eternities.clampMax(1e5).toNumber();
+      const base = eterPreCap / 200 + 1;
+      const pow = Math.log(eterPreCap * 2 + 1) / log4;
+      const multPreCap = Math.pow(base, pow);
+      const eterPostCap = player.eternities.sub(1e5);
+      const mult1 = eterPostCap.divide(200).plus(1);
+      const mult2 = eterPostCap.times(2).plus(1).log(Math.E) / log4;
+      const multPostCap = mult1.times(mult2).clampMin(1);
+      return multPostCap.times(multPreCap);
     },
     formatEffect: value => `${shortenMoney(value)}x`
   },

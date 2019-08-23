@@ -48,7 +48,7 @@ class EffarigUnlockState extends GameMechanicState {
     player.celestials.effarig.relicShards -= this.cost;
     if (this === EffarigUnlock.adjuster) {
       ui.view.tabs.reality.openGlyphWeights = true;
-      showRealityTab("glyphstab");
+      Tab.reality.glyphs.show();
     }
   }
 }
@@ -69,9 +69,9 @@ const EffarigUnlock = (function() {
 const Effarig = {
   startRun() {
     if (!startRealityOver()) return;
-    player.celestials.effarig.run = true
-    recalculateAllGlyphs()
-    showRealityTab("glyphstab");
+    player.celestials.effarig.run = true;
+    recalculateAllGlyphs();
+    Tab.reality.glyphs.show();
     Modal.message.show(`Your glyph levels have been limited to ${Effarig.glyphLevelCap}. ` +
       "Infinity power reduces the nerf to multipliers and game speed, and time shards reduce the nerf to tickspeed.");
   },
@@ -137,7 +137,7 @@ const Effarig = {
     return 3 * (1 - c / (c + Math.sqrt(power.pLog10())));
   },
   get tickspeed() {
-    const base = 3 + Tickspeed.current.reciprocal().log10();
+    const base = 3 + Tickspeed.baseValue.reciprocal().log10();
     const pow = 0.7 + 0.1 * this.nerfFactor(player.timeShards);
     return Decimal.pow10(Math.pow(base, pow)).reciprocal();
   },

@@ -198,7 +198,8 @@ GameDatabase.infinity.upgrades = (function() {
       description: "Multiply Infinity Points from all sources by 2",
       effect: () => player.infMult,
       cap: () => Effarig.eternityCap || new Decimal("1e1000000"),
-      formatEffect: value => formatX(value, 2, 2)
+      formatEffect: value => formatX(value, 2, 2),
+      bannedFromCharging: true
     }
   };
 }());

@@ -1,155 +1,62 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-    <title>Antimatter Dimensions</title>
-    <link rel="icon" type="image/png" href="icon.png">
-    <meta name="Antimatter Dimensions" content="A game about huge numbers and watching them go up." charset="utf-8"/>
-    <h1 id="hiddenheader" style="display: none">Antimatter Dimensions</h1>
-    <script type="text/javascript" src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>
-    <script type="text/javascript" src="javascripts/lib/jquery-3.2.1.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/codemirror.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/show-hint.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/lint.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/panda-syntax.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/liquibyte.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/components.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/ad-slider-component.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/glyphs.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
-    <link rel="stylesheet" type="text/css" href="stylesheets/automator.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/time-studies.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/tooltips.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/vis.css">
-    <script>
-        (function(i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function() {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+  <title>Antimatter Dimensions</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <meta name="Antimatter Dimensions" content="A game about huge numbers and watching them go up." charset="utf-8"/>
+  <script type="text/javascript" src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>
+  <script type="text/javascript" src="javascripts/lib/jquery-3.2.1.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/codemirror.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/show-hint.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/lint.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/panda-syntax.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/liquibyte.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/components.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/ad-slider-component.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/glyphs.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
+  <link rel="stylesheet" type="text/css" href="stylesheets/automator.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/time-studies.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/tooltips.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/vis-network.css">
+  <script>
+    (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-        ga('create', 'UA-77268961-1', 'auto');
-        ga('send', 'pageview');
-
-    </script>
+    ga('create', 'UA-77268961-1', 'auto');
+    ga('send', 'pageview');
+  </script>
 </head>
-<img id="loading" src="images/Loading.png">
-<body>
-<div id="ui" style="height: 100%; width: 100%;">
-    <link :disabled="!$viewModel.newUI" id="new-ui" rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
-    <new-ui v-show="newUI"></new-ui>
-    <div v-show="!newUI" id="container" class="container" style="display:none; flex-direction: column; min-height: 100%; padding: 9px 15px; box-sizing: border-box;">
-        <div id='game' style="flex: 0 0 auto">
-            <div id='news'>.</div>
-        </div>
-        <game-header></game-header>
-        <div style="position:absolute; left: 0; right: 0; margin-left: auto; margin-right: auto; width: 360px; top: 19px">
-            <button id="bigcrunch" style="font-family: Typewriter; font-size: 50px; width: 360px; height: 100px;" class="tabbtn">Big Crunch</button>
-        </div>
-        <div>
-            <button id="dimensionsbtn" class="tabbtn">Dimensions</button>
-            <button id="optionsbtn" class="tabbtn">Options</button>
-            <button id="statisticsbtn" class="tabbtn">Statistics</button>
-            <button id="achievementsbtn" class="tabbtn">Achievements</button>
-            <button id="challengesbtn" class="tabbtn">Challenges</button>
-            <button id="infinitybtn" class="tabbtn infinitytabbtn">Infinity</button>
-            <button id="eternitystorebtn" class="tabbtn eternitytabbtn">Eternity</button>
-            <button id="realitybtn" class="tabbtn realitytabbtn">Reality</button>
-            <button id="celestialsbtn" class="tabbtn celestialtabbtn">Celestials</button>
-            <button id="shopbtn" class="tabbtn">Shop</button>
-        </div>
-        <div id="emptiness" class="tab" style="font-size: 150%">
-            <br> The world has collapsed on itself due to excess of antimatter.
-            <br>
-            <br>
-        </div>
-        <div id="shop" class="tab" style="font-size: 15px" >
-            <div align="center">
-                <br>
-                <span id="kongip"> Double your IP gain from all sources. Forever. </span><br>
-                <button class="greedbtn" onclick="kong.purchaseIP()">40 Kreds</button>
-                <br><br><br>
-                <span id="kongep"> Double your EP gain from all sources. Forever. </span><br>
-                <button class="greedbtn" onclick="kong.purchaseEP()">50 Kreds</button>
-                <br><br><br>
-                <span id="kongdim"> Double all your dimension multipliers (dimensions 1-8). Forever. </span><br>
-                <button class="greedbtn" onclick="kong.purchaseDimMult()">30 Kreds</button>
-                <br><br><br>
-                <span id="kongalldim"> Double ALL the dimension multipliers (Normal, Infinity and Time). Forever. </span><br>
-                <button class="greedbtn" onclick="kong.purchaseAllDimMult()">60 Kreds</button>
-                <br><br><br>
-                <span>Get 6 hours worth of offline production. (Doesn't work for autobuyers)</span><br>
-                <button class="greedbtn" onclick="kong.purchaseTimeSkip()">10 Kreds</button>
-                <br><br><br>
-                <span style="font-size: 12px"><b>Disclaimer: These are not required to progress in the game, they are just to help and support the developer.</b></span>
-            </div>
-        </div>
-        <game-tab v-show="view.tabs.current && view.tabs.current !== 'reality-tab'" style="flex: 1 0">
-            <component :is="view.tabs.current"></component>
-        </game-tab>
-        <div id="reality" class="tab" align="center" style="margin-top: 10px;">
-            <br>
-            <div class="l-rm-amount__desc c-rm-amount__desc">
-              You have <span id="rm-amount" class="c-rm-amount">x</span> Reality Machines.
-            </div>
-            <br>
-            <table class="table" align="center" style="margin: auto">
-                <tr>
-                    <td><button class="secondarytabbtn" onclick="showRealityTab('glyphstab')">Glyphs</button></td>
-                    <td><button class="secondarytabbtn" onclick="showRealityTab('upgrades')">Upgrades</button></td>
-                    <td><button class="secondarytabbtn" onclick="showRealityTab('perks')">Perks</button></td>
-                    <td><button class="secondarytabbtn" onclick="showRealityTab('automation')">Automation</button></td>
-                    <td><button class="secondarytabbtn" onclick="showRealityTab('blackhole')">Black Hole</button></td>
-                </tr>
-            </table>
-            <div id="glyphstab" class="realitytab">
-              <glyphs-tab></glyphs-tab>
-            </div>
-            <div id="upgrades" class="realitytab" style="display: none;">
-              <reality-upgrades-tab v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'upgrades'"></reality-upgrades-tab>
-            </div>
-            <div id="automation" class="realitytab" style="display: none;">
-              <automator-tab v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'automation'"></automator-tab>
-            </div>
-            <div id="blackhole" class="realitytab" style="display: none;">
-              <black-hole-tab v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'blackhole'"></black-hole-tab>
-            </div>
-            <div id="perks" class="realitytab" style="display: none;">
-                <pp-label></pp-label>
-                <div class="vis-network" tabindex="900" style="position: relative; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;">
-                    <canvas width="800" height="800" style="position: relative; touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-    <modal-popup v-if="view.modal.current"></modal-popup>
-    <modal-glyph-selection v-if="view.modal.glyphSelection"></modal-glyph-selection>
-    <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
-</div>
-<div v-if="!newUI" id="notification-container" class="l-notification-container"></div>
-</body>
-<div id="background-animations">
-  <div class="videocontainer">
-      <video autoplay muted loop id="stars">
-          <source src="images/s6-bg.webm" type="video/webm">
-      </video>
-  </div>
-  <div id="snow" style="display: none; "></div>
-</div>
-<div class="videocontainer">
-    <video preload muted id="realityanimbg" style="opacity: 0; display: none; ">
-        <source src="images/realityanimbg.webm" type="video/webm">
-    </video>
-</div>
 
-<div id="performance-stats" class="c-performance-stats" style="display: none;"></div>
+<body>
+  <img id="loading" src="images/Loading.png">
+  <div id="ui"></div>
+  <div id="background-animations">
+    <div class="videocontainer">
+      <video autoplay muted loop id="stars">
+        <source src="images/s6-bg.webm" type="video/webm">
+      </video>
+    </div>
+    <div id="snow" style="display: none; "></div>
+  </div>
+  <div class="videocontainer">
+    <video preload muted id="realityanimbg" style="opacity: 0; display: none; ">
+      <source src="images/realityanimbg.webm" type="video/webm">
+    </video>
+  </div>
+  <div id="performance-stats" class="c-performance-stats" style="display: none;"></div>
+</body>
 
 <script type="text/javascript" src="javascripts/lib/vue.js"></script>
 <script type="text/javascript" src="javascripts/lib/v-tooltip.min.js"></script>
@@ -157,7 +64,7 @@
 <script type="text/javascript" src="javascripts/lib/break_infinity.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/chart.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/lz-string.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/vis.min.js"></script>
+<script type="text/javascript" src="javascripts/lib/vis-network.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/sha512.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/deepmerge.js"></script>
 <script type="text/javascript" src="javascripts/lib/Sortable.min.js"></script>
@@ -171,6 +78,8 @@
 <script type="text/javascript" src="javascripts/lib/show-hint.js"></script>
 <script type="text/javascript" src="javascripts/lib/lint.js"></script>
 <script type="text/javascript" src="javascripts/lib/active-line.js"></script>
+<script type="text/javascript" src="javascripts/lib/ad-notations.min.js"></script>
+
 <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
 <script type="text/javascript" src="javascripts/DragDropTouch.js"></script>
 <script type="text/javascript" src="javascripts/longpress.js"></script>
@@ -188,7 +97,6 @@
 <script type="text/javascript" src="javascripts/core/secret-formula/game-database.js"></script>
 <script type="text/javascript" src="javascripts/core/glyph-effects.js"></script>
 <script type="text/javascript" src="javascripts/core/player.js"></script>
-<script type="text/javascript" src="javascripts/core/autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/core/performance-stats.js"></script>
 <script type="text/javascript" src="javascripts/core/currency.js"></script>
 <script type="text/javascript" src="javascripts/core/game-mechanic.js"></script>
@@ -199,31 +107,25 @@
 <script type="text/javascript" src="javascripts/core/hotkeys.js"></script>
 <script type="text/javascript" src="javascripts/core/galaxy.js"></script>
 
+<script type="text/javascript" src="javascripts/core/autobuyers/autobuyer.js"></script>
+<script type="text/javascript" src="javascripts/core/autobuyers/dimension-autobuyer.js"></script>
+<script type="text/javascript" src="javascripts/core/autobuyers/tickspeed-autobuyer.js"></script>
+<script type="text/javascript" src="javascripts/core/autobuyers/dimboost-autobuyer.js"></script>
+<script type="text/javascript" src="javascripts/core/autobuyers/galaxy-autobuyer.js"></script>
+<script type="text/javascript" src="javascripts/core/autobuyers/big-crunch-autobuyer.js"></script>
+<script type="text/javascript" src="javascripts/core/autobuyers/sacrifice-autobuyer.js"></script>
+<script type="text/javascript" src="javascripts/core/autobuyers/eternity-autobuyer.js"></script>
+<script type="text/javascript" src="javascripts/core/autobuyers/reality-autobuyer.js"></script>
+<script type="text/javascript" src="javascripts/core/autobuyers/autobuyers.js"></script>
+
 <script type="text/javascript" src="javascripts/core/storage/serializer.js"></script>
 <script type="text/javascript" src="javascripts/core/storage/storage.js"></script>
 <script type="text/javascript" src="javascripts/core/storage/migrations.js"></script>
 <script type="text/javascript" src="javascripts/core/storage/dev-migrations.js"></script>
 
-<script type="text/javascript" src="javascripts/core/notations/notation.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/scientific.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/engineering.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/standard.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/mixed.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/infinity.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/logarithm.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/brackets.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/letters.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/roman.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/dots.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/zalgo.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/hex.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/imperial.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/clock.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/prime.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/bar.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/shi.js"></script>
-<script type="text/javascript" src="javascripts/core/notations/list.js"></script>
+<script type="text/javascript" src="javascripts/core/notations.js"></script>
 
+<script type="text/javascript" src="javascripts/core/secret-formula/tabs.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/news.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/achievements/normal-achievements.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/achievements/secret-achievements.js"></script>
@@ -242,37 +144,37 @@
 <script type="text/javascript" src="javascripts/core/secret-formula/reality/perks.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/reality/automator.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/reality/glyph-sacrifices.js"></script>
+<script type="text/javascript" src="javascripts/core/secret-formula/celestials/perk-shop.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/celestials/effarig.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/celestials/v.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/celestials/alchemy.js"></script>
+<script type="text/javascript" src="javascripts/core/secret-formula/celestials/compression.js"></script>
 
-
-<script type="text/javascript" src="javascripts/components/primary-button.js"></script>
-<script type="text/javascript" src="javascripts/components/secondary-tab-button.js"></script>
-<script type="text/javascript" src="javascripts/components/description-display.js"></script>
-<script type="text/javascript" src="javascripts/components/effect-display.js"></script>
-<script type="text/javascript" src="javascripts/components/cost-display.js"></script>
-<script type="text/javascript" src="javascripts/components/game-tab.js"></script>
-<script type="text/javascript" src="javascripts/components/game-tab-with-subtabs.js"></script>
-<script type="text/javascript" src="javascripts/components/hint-text.js"></script>
-<script type="text/javascript" src="javascripts/components/footer-links.js"></script>
+<script type="text/javascript" src="javascripts/components/common/primary-button.js"></script>
+<script type="text/javascript" src="javascripts/components/common/description-display.js"></script>
+<script type="text/javascript" src="javascripts/components/common/effect-display.js"></script>
+<script type="text/javascript" src="javascripts/components/common/cost-display.js"></script>
+<script type="text/javascript" src="javascripts/components/common/hint-text.js"></script>
+<script type="text/javascript" src="javascripts/components/common/footer-links.js"></script>
 <script type="text/javascript" src="javascripts/components/tt-shop.js"></script>
-<script type="text/javascript" src="javascripts/components/automator-buttons.js"></script>
-<script type="text/javascript" src="javascripts/components/plus-minus-button.js"></script>
-<script type="text/javascript" src="javascripts/components/ad-slider-component.js"></script>
-<script type="text/javascript" src="javascripts/components/expanding-control-box.js"></script>
+<script type="text/javascript" src="javascripts/components/common/plus-minus-button.js"></script>
+<script type="text/javascript" src="javascripts/components/common/ad-slider-component.js"></script>
+<script type="text/javascript" src="javascripts/components/common/expanding-control-box.js"></script>
 <script type="text/javascript" src="javascripts/components/hover-menu.js"></script>
-<script type="text/javascript" src="javascripts/components/new-ui.js"></script>
 
-<script type="text/javascript" src="javascripts/components/header/game-header.js"></script>
-<script type="text/javascript" src="javascripts/components/header/game-header-amounts-line.js"></script>
-<script type="text/javascript" src="javascripts/components/header/game-header-tickspeed-row.js"></script>
-<script type="text/javascript" src="javascripts/components/header/game-header-gamma-display.js"></script>
-<script type="text/javascript" src="javascripts/components/header/game-header-big-crunch-button.js"></script>
-<script type="text/javascript" src="javascripts/components/header/game-header-new-dim-button.js"></script>
-<script type="text/javascript" src="javascripts/components/header/game-header-eternity-button.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/header/game-header.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/header/game-header-amounts-line.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/header/game-header-tickspeed-row.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/header/game-header-gamma-display.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/header/game-header-big-crunch-button.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/header/game-header-new-dim-button.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/header/game-header-eternity-button.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/old-ui-tab-bar.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/old-ui-tab-button.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/old-ui-subtab-bar.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/old-ui-subtab-button.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/old-ui.js"></script>
 
-<script type="text/javascript" src="javascripts/components/dimensions/dimensions-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-tab-header.js"></script>
 <script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-row.js"></script>
 <script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-shift-row.js"></script>
@@ -290,7 +192,6 @@
 <script type="text/javascript" src="javascripts/components/options/select-notation.js"></script>
 <script type="text/javascript" src="javascripts/components/options/select-theme.js"></script>
 
-<script type="text/javascript" src="javascripts/components/statistics/stats-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/statistics/statistics-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/statistics/challenges/challenge-records-list.js"></script>
 <script type="text/javascript" src="javascripts/components/statistics/challenges/challenge-records-tab.js"></script>
@@ -299,7 +200,6 @@
 <script type="text/javascript" src="javascripts/components/statistics/runs/past-eternities-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/statistics/runs/past-realities-tab.js"></script>
 
-<script type="text/javascript" src="javascripts/components/achievements/achievements-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/achievements/normal/normal-achievement.js"></script>
 <script type="text/javascript" src="javascripts/components/achievements/normal/normal-achievement-row.js"></script>
 <script type="text/javascript" src="javascripts/components/achievements/normal/normal-achievements-tab.js"></script>
@@ -307,14 +207,16 @@
 <script type="text/javascript" src="javascripts/components/achievements/secret/secret-achievements-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/achievements/secret/secret-achievement-row.js"></script>
 
-<script type="text/javascript" src="javascripts/components/celestials/celestials-tab.js"></script>
-<script type="text/javascript" src="javascripts/components/celestials/subtabs/teresa-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/teresa/teresa-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/teresa/perk-shop-upgrade.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/effarig/effarig-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/effarig/effarig-unlock-button.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/v-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/enslaved-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/ra/ra-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/ra/ra-pet.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/ra/ra-pet-level-bar.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/ra/ra-level-chevron.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/ra/alchemy-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/ra/alchemy-resource-info.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/ra/alchemy-circle-node.js"></script>
@@ -330,16 +232,16 @@
 <script type="text/javascript" src="javascripts/core/celestials/V.js"></script>
 <script type="text/javascript" src="javascripts/core/celestials/ra/ra.js"></script>
 <script type="text/javascript" src="javascripts/core/celestials/ra/alchemy.js"></script>
+<script type="text/javascript" src="javascripts/core/celestials/ra/compression.js"></script>
 <script type="text/javascript" src="javascripts/core/celestials/laitela.js"></script>
 
-<script type="text/javascript" src="javascripts/components/challenges/challenges-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/challenges/challenge-box.js"></script>
 <script type="text/javascript" src="javascripts/components/challenges/challenge-grid.js"></script>
 <script type="text/javascript" src="javascripts/components/challenges/normal-challenges-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/challenges/infinity-challenges-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/challenges/eternity-challenges-tab.js"></script>
 
-<script type="text/javascript" src="javascripts/components/infinity/infinity-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/infinity/infinity-points-header.js"></script>
 <script type="text/javascript" src="javascripts/components/infinity/infinity-upgrade-button.js"></script>
 <script type="text/javascript" src="javascripts/components/infinity/upgrades/infinity-upgrades-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/infinity/upgrades/ip-multiplier-button.js"></script>
@@ -351,7 +253,7 @@
 <script type="text/javascript" src="javascripts/components/infinity/autobuyers/eternity-autobuyer-box.js"></script>
 <script type="text/javascript" src="javascripts/components/infinity/autobuyers/dimboost-autobuyer-box.js"></script>
 <script type="text/javascript" src="javascripts/components/infinity/autobuyers/galaxy-autobuyer-box.js"></script>
-<script type="text/javascript" src="javascripts/components/infinity/autobuyers/dim-autobuyer-box.js"></script>
+<script type="text/javascript" src="javascripts/components/infinity/autobuyers/dimension-autobuyer-box.js"></script>
 <script type="text/javascript" src="javascripts/components/infinity/autobuyers/tickspeed-autobuyer-box.js"></script>
 <script type="text/javascript" src="javascripts/components/infinity/autobuyers/sacrifice-autobuyer-box.js"></script>
 <script type="text/javascript" src="javascripts/components/infinity/autobuyers/big-crunch-autobuyer-box.js"></script>
@@ -364,7 +266,6 @@
 <script type="text/javascript" src="javascripts/components/infinity/replicanti/replicanti-gain-text.js"></script>
 <script type="text/javascript" src="javascripts/components/infinity/replicanti/replicanti-galaxy-button.js"></script>
 
-<script type="text/javascript" src="javascripts/components/eternity/eternity-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/eternity/time-studies/rem.js"></script>
 <script type="text/javascript" src="javascripts/components/eternity/time-studies/time-study.js"></script>
 <script type="text/javascript" src="javascripts/components/eternity/time-studies/secret-time-study.js"></script>
@@ -382,9 +283,13 @@
 <script type="text/javascript" src="javascripts/components/eternity/dilation/dilation-button.js"></script>
 <script type="text/javascript" src="javascripts/components/eternity/dilation/dilation-upgrade.js"></script>
 <script type="text/javascript" src="javascripts/components/eternity/dilation/tachyon-particles.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/ra/time-compression-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/ra/compression-upgrade.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/ra/compression-button.js"></script>
 
-<script type="text/javascript" src="javascripts/components/reality/reality-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/reality-machines-header.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/pp-label.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/perks-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/upgrades/reality-upgrades-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/upgrades/reality-upgrade-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyphs-tab.js"></script>
@@ -408,7 +313,9 @@
 
 <script type="text/javascript" src="javascripts/components/reality/automator/automator-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/automator/automator-button.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-controls.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/automator/automator-editor.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-text-editor.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/automator/docs/automator-docs.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/automator/docs/automator-docs-main-page.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/automator/docs/automator-man-page.js"></script>
@@ -421,6 +328,7 @@
 <script type="text/javascript" src="javascripts/components/modals/modal-shortcuts.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-message.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-import.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-import-tree.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-load-game.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/options/modal-options.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/options/modal-animation-options.js"></script>
@@ -431,16 +339,24 @@
 
 <script type="text/javascript" src="javascripts/components/new-ui/sidebar.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/tab-button.js"></script>
-<script type="text/javascript" src="javascripts/components/new-ui/challenges-header.js"></script>
+<script type="text/javascript" src="javascripts/components/challenges/challenges-header.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-dimensions-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-dimension-row.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-tickspeed-row.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-dim-shift-row.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/infinity-dimensions-tab/new-inf-dimension-row.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/infinity-dimensions-tab/new-inf-dimensions-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/time-dimensions-tab/new-time-dimension-row.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/time-dimensions-tab/new-time-dimensions-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-galaxy-row.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/sidebar-resources/sidebar-am.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/sidebar-resources/sidebar-ip.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/sidebar-resources/sidebar-ep.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/sidebar-resources/sidebar-rm.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/new-ui.js"></script>
+
+<script type="text/javascript" src="javascripts/components/common/news-ticker.js"></script>
+<script type="text/javascript" src="javascripts/components/game-ui.js"></script>
 
 <script type="text/javascript" src="javascripts/core/automator/automator-codemirror.js"></script>
 <script type="text/javascript" src="javascripts/core/automator/lexer.js"></script>
@@ -449,12 +365,12 @@
 <script type="text/javascript" src="javascripts/core/automator/compiler.js"></script>
 
 <script type="text/javascript" src="javascripts/core/app/ui.init.js"></script>
+<script type="text/javascript" src="javascripts/core/ui/tabs.js"></script>
 <script type="text/javascript" src="javascripts/core/app/player-progress.js"></script>
 <script type="text/javascript" src="javascripts/core/app/modal.js"></script>
 <script type="text/javascript" src="javascripts/core/app/themes.js"></script>
 <script type="text/javascript" src="javascripts/core/app/options.js"></script>
 <script type="text/javascript" src="javascripts/core/app/ui.js"></script>
-<script type="text/javascript" src="javascripts/core/app/tabs.js"></script>
 <script type="text/javascript" src="javascripts/core/app/notify.js"></script>
 
 <script type="text/javascript" src="javascripts/core/time.js"></script>
@@ -477,11 +393,9 @@
 <script type="text/javascript" src="javascripts/core/timestudies.js"></script>
 <script type="text/javascript" src="javascripts/core/rm.js"></script>
 <script type="text/javascript" src="javascripts/core/perks.js"></script>
-<script type="text/javascript" src="javascripts/core/canvases.js"></script>
 <script type="text/javascript" src="javascripts/core/dilation.js"></script>
 <script type="text/javascript" src="javascripts/core/black_hole.js"></script>
 <script type="text/javascript" src="javascripts/core/devtools.js"></script>
-<script type="text/javascript" src="javascripts/core/newsticker.js"></script>
 <script type="text/javascript" src="javascripts/core/kong.js"></script>
 <script type="text/javascript" src="javascripts/core/playfab.js"></script>
 <script type="text/javascript" src="javascripts/game.js?85"></script>

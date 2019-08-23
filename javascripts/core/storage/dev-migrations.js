@@ -81,15 +81,6 @@ GameStorage.devMigrations = {
       player.reality.upgReqs.push(false, false, false, false, false);
     },
     player => {
-      const newCommands = new Set();
-      for (let commandId of player.reality.automatorCommands) {
-        if (Math.floor(commandId / 10) === 2 || Math.floor(commandId / 10) === 3) commandId += 1;
-        newCommands.add(commandId);
-      }
-      player.reality.automatorCommands = newCommands;
-      if (!player.reality.automatorCommands.has(24)) player.reality.automatorCommands.add(24);
-      if (!player.reality.automatorCommands.has(25)) player.reality.automatorCommands.add(25);
-      if (!player.reality.automatorCommands.has(12)) player.reality.automatorCommands.add(12);
       player.reality.realityMachines = new Decimal(player.reality.realityMachines);
     },
     player => {
@@ -142,8 +133,8 @@ GameStorage.devMigrations = {
       player.reality.epmultbuyer = false;
     },
     player => {
-      if (!Object.values(AutoRealityMode).includes(player.autoRealityMode)) {
-        player.autoRealityMode = AutoRealityMode.RM;
+      if (!["rm", "glyph", "either", "both"].includes(player.autoRealityMode)) {
+        player.autoRealityMode = "rm";
       }
     },
     GameStorage.migrations.convertAutobuyerMode,
@@ -174,6 +165,9 @@ GameStorage.devMigrations = {
       //   player.lastTenEternities[i][2] = undefined;
       //   player.lastTenRealities[i][3] = undefined;
       // }
+
+      // For anyone who is looking at this part of the code for debugging purposes, note that GameSpeedEffect.EC12
+      // has been replaced by GameSpeedEffect.FIXEDSPEED since EC12 is no longer the only fixed-speed effect
     },
     GameStorage.migrations.fixChallengeIds,
     GameStorage.migrations.adjustMultCosts,
@@ -389,7 +383,57 @@ GameStorage.devMigrations = {
         pet.exp = Math.clampMin(oldExp, 0);
       }
       player.celestials.ra.unlocks = [];
-    }
+    },
+    GameStorage.migrations.renameMoney,
+    player => {
+      GameStorage.migrations.moveAutobuyers(player);
+      const old = player.realityBuyer;
+      const realityAutobuyer = player.auto.reality;
+      realityAutobuyer.mode = ["rm", "glyph", "either", "both"].indexOf(player.autoRealityMode);
+      realityAutobuyer.rm = old.rm;
+      realityAutobuyer.glyph = old.glyph;
+      realityAutobuyer.isActive = old.isOn;
+
+      const eternityAutobuyer = player.auto.eternity;
+      eternityAutobuyer.mode = ["amount", "time", "relative"].indexOf(player.autoEternityMode);
+      const condition = new Decimal(old.limit);
+      switch (player.autoEternityMode) {
+        case "amount":
+          eternityAutobuyer.amount = condition;
+          break;
+        case "time":
+          eternityAutobuyer.time = condition.lt(Decimal.MAX_NUMBER) ? condition.toNumber() : eternityAutobuyer.time;
+          break;
+        case "relative":
+          eternityAutobuyer.xLast = condition;
+          break;
+      }
+
+      delete player.realityBuyer;
+      delete player.autoRealityMode;
+      delete player.autoEternityMode;
+    },
+    GameStorage.migrations.convertNewsToSet,
+    GameStorage.migrations.convertEternityCountToDecimal,
+    GameStorage.migrations.renameDimboosts,
+    player => {
+      // Reset reality autobuyer mode, since AutoRealityMode was incorrectly starting from 1 and not from 0.
+      // Disable it also to not wreck people's long runs or smth
+      player.auto.reality.mode = 0;
+      player.auto.reality.isActive = false;
+    },
+    player => {
+      // Perk shop refactor
+      player.celestials.teresa.perkShop = [
+        Math.floor(Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05)),
+        Math.floor(Math.log(player.celestials.teresa.rmMult) / Math.log(2)),
+        Math.floor(Math.log(player.celestials.teresa.dtBulk) / Math.log(2)),
+        0];
+      delete player.celestials.teresa.glyphLevelMult;
+      delete player.celestials.teresa.rmMult;
+      delete player.celestials.teresa.dtBulk;
+    },
+    GameStorage.migrations.migrateConfirmations,
   ],
 
   patch(player) {

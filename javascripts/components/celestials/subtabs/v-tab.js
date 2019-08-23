@@ -9,9 +9,10 @@ Vue.component("v-tab", {
       achievementsPerAdditionalStudy: 0,
       realities: 0,
       infinities: new Decimal(0),
-      eternities: 0,
+      eternities: new Decimal(0),
       dilatedTime: new Decimal(0),
       replicanti: new Decimal(0),
+      rm: new Decimal(0)
     };
   },
   methods: {
@@ -22,9 +23,10 @@ Vue.component("v-tab", {
       this.achievementsPerAdditionalStudy = V.achievementsPerAdditionalStudy;
       this.realities = player.realities;
       this.infinities.copyFrom(player.infinitied);
-      this.eternities = player.eternities;
+      this.eternities.copyFrom(player.eternities);
       this.dilatedTime.copyFrom(player.dilation.dilatedTime);
       this.replicanti.copyFrom(player.replicanti.amount);
+      this.rm.copyFrom(player.reality.realityMachines);
     },
     startRun() {
       V.startRun();
@@ -55,7 +57,8 @@ Vue.component("v-tab", {
         {{ shorten(db.mainUnlock.eternities, 2, 0) }} eternities (currently {{ shorten(eternities, 2, 0) }}),<br>
         {{ shorten(db.mainUnlock.infinities, 2, 0) }} infinities (currently {{ shorten(infinities, 2, 0) }}),<br>
         {{ shorten(db.mainUnlock.dilatedTime, 2, 0) }} dilated time (currently {{ shorten(dilatedTime, 2, 0) }}),<br>
-        and {{ shorten(db.mainUnlock.replicanti, 2, 0) }} replicanti (currently {{ shorten(replicanti, 2, 0) }})
+        {{ shorten(db.mainUnlock.replicanti, 2, 0) }} replicanti (currently {{ shorten(replicanti, 2, 0) }}),<br>
+        and {{ shorten(db.mainUnlock.rm, 2, 0) }} RM (currently {{ shorten(rm, 2, 0) }})
         to unlock V, The Celestial of Achievements
       </div>
       <div v-else>

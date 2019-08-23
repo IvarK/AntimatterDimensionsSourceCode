@@ -7,7 +7,6 @@ Vue.component("new-dimensions-tab", {
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
       sacrificeBoost: new Decimal(0),
-      options: player.options,
       currCelestial: "",
       challengeDisplay: "",
       isInAnyChallenge: false,
@@ -61,11 +60,11 @@ Vue.component("new-dimensions-tab", {
       this.updateCelestial();
       this.updateChallengeDisplay();
 
-      const isSacrificeUnlocked = Sacrifice.isUnlocked && player.resets > 4;
+      const isSacrificeUnlocked = Sacrifice.isVisible;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
 
       if (!isSacrificeUnlocked) return;
-      this.isSacrificeAffordable = Sacrifice.isAffordable;
+      this.isSacrificeAffordable = Sacrifice.canSacrifice;
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
     },
     updateCelestial() {
@@ -103,7 +102,7 @@ Vue.component("new-dimensions-tab", {
   },
   template:
   `<div class="l-normal-dim-tab">
-    <div class="information-header" ><span v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</span> <span v-if="isChallengePowerVisible">{{challengePower}}</span></div>
+    <div class="information-header" ><span v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</span><br><span v-if="isChallengePowerVisible">{{challengePower}}</span></div>
     <div class="modes-container">
       <button class="storebtn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">{{ getUntil10Display() }}</button>
       <primary-button

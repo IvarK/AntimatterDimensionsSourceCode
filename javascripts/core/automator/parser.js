@@ -10,6 +10,7 @@ const AutomatorGrammar = (function() {
       super(AutomatorLexer.tokens, {
         recoveryEnabled: true,
         outputCst: true,
+        nodeLocationTracking: "full",
       });
 
       // eslint-disable-next-line consistent-this
@@ -121,6 +122,17 @@ const AutomatorGrammar = (function() {
         $.CONSUME(T.NumberLiteral, { LABEL: "firstStudy" });
         $.CONSUME(T.Dash);
         $.CONSUME1(T.NumberLiteral, { LABEL: "lastStudy" });
+      });
+
+      $.RULE("xLast", () => {
+        $.CONSUME(T.NumberLiteral);
+        $.CONSUME(T.CharX);
+        $.CONSUME(T.Last);
+      });
+
+      $.RULE("currencyAmount", () => {
+        $.CONSUME(T.NumberLiteral);
+        $.CONSUME(T.Currency);
       });
 
       // Very important to call this after all the rules have been setup.

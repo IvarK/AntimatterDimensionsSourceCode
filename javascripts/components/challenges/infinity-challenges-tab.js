@@ -77,8 +77,8 @@ Vue.component("infinity-challenges-tab", {
     }
   },
   template:
-    `<div class="l-infinity-challenge-tab">
-    <challenges-header/>
+    `<div class="l-challenges-tab">
+      <challenges-header/>
       <div>{{nextAtDisplay}}</div>
       <challenge-grid :count="8" :isChallengeVisible="isChallengeVisible">
         <infinity-challenge-box slot-scope="slotProps" :challengeId="slotProps.challengeId" />

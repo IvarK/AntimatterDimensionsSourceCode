@@ -110,7 +110,7 @@ class Galaxy {
   static get canBeBought() {
     if (EternityChallenge(6).isRunning && !Enslaved.isRunning) return false;
     if (NormalChallenge(8).isRunning || InfinityChallenge(7).isRunning) return false;
-    return player.break || player.money.lt(Decimal.MAX_NUMBER);
+    return player.break || player.antimatter.lt(Decimal.MAX_NUMBER);
   }
 
   static get costScalingStart() {
@@ -140,29 +140,28 @@ class Galaxy {
 function galaxyReset() {
   EventHub.dispatch(GameEvent.GALAXY_RESET_BEFORE);
   player.galaxies++;
-  player.tickDecrease -= 0.03;
-  player.resets = 0;
+  player.dimensionBoosts = 0;
   softReset(0);
-  if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
+  if (Notations.current === Notation.cancer) player.spreadingCancer += 1;
   player.noSacrifices = true;
   EventHub.dispatch(GameEvent.GALAXY_RESET_AFTER);
 }
 
 function galaxyResetBtnClick() {
-  if (player.eternities >= 7 && !shiftDown) return maxBuyGalaxies(true);
+  if (player.eternities.gte(9) && !shiftDown) return maxBuyGalaxies(true);
   if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   galaxyReset();
   return true;
 }
 
 function maxBuyGalaxies(manual) {
-  const limit = manual ? Number.MAX_VALUE : Autobuyer.galaxy.limit;
+  const limit = !manual && Autobuyer.galaxy.limitGalaxies ? Autobuyer.galaxy.maxGalaxies : Number.MAX_VALUE;
   if (player.galaxies >= limit || !Galaxy.canBeBought) return false;
   // Check for ability to buy one galaxy (which is pretty efficient)
   const req = Galaxy.requirement;
   if (!req.isSatisfied) return false;
   const newGalaxies = Math.min(limit, Galaxy.buyableGalaxies(Math.round(NormalDimension(req.tier).amount.toNumber())));
-  if (Notation.current === Notation.cancer) player.spreadingCancer += newGalaxies - player.galaxies;
+  if (Notations.current === Notation.cancer) player.spreadingCancer += newGalaxies - player.galaxies;
   // galaxyReset increments galaxies, so we add one less than we should:
   player.galaxies = newGalaxies - 1;
   galaxyReset();

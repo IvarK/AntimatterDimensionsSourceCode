@@ -109,7 +109,7 @@ Vue.component("glyph-levels-and-weights", {
     },
     formatFactor(x) {
       // Not applied to + perks since it's always whole
-      return x.toFixed(3);
+      return x.toPrecision(5);
     },
     makeRowStyle(r) {
       return {

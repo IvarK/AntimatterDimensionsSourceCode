@@ -35,18 +35,6 @@ const TERESA_UNLOCKS = {
   },
 };
 
-const PERK_SHOP = {
-  GLYPH_LEVEL: {
-    id: 0
-  },
-  RM_MULT: {
-    id: 1
-  },
-  DILATION_BULK: {
-    id: 2
-  }
-}
-
 const Teresa = {
   timePoured: 0,
   unlockInfo: TERESA_UNLOCKS,
@@ -75,44 +63,8 @@ const Teresa = {
   startRun() {
     player.celestials.teresa.run = startRealityOver() || player.celestials.teresa.run;
   },
-  buyGlyphLevelPower() {
-    const cost = Math.pow(2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05));
-    if (cost > Teresa.perkShopCap(PERK_SHOP.GLYPH_LEVEL)) return false;
-    if (player.reality.pp < cost) return false;
-    player.celestials.teresa.glyphLevelMult *= 1.05;
-    player.reality.pp -= cost;
-    return true;
-  },
-  buyRmMult() {
-    const cost = player.celestials.teresa.rmMult;
-    if (cost > Teresa.perkShopCap(PERK_SHOP.RM_MULT)) return false;
-    if (player.reality.pp < cost) return false;
-    player.celestials.teresa.rmMult *= 2;
-    player.reality.pp -= cost;
-    return true;
-  },
-  buyDtBulk() {
-    const cost = player.celestials.teresa.dtBulk * 100;
-    if (cost > Teresa.perkShopCap(PERK_SHOP.DILATION_BULK)) return false;
-    if (player.reality.pp < cost) return false;
-    player.celestials.teresa.dtBulk *= 2;
-    player.reality.pp -= cost;
-    return true;
-  },
   rewardMultiplier(antimatter) {
-    return Decimal.max(Decimal.pow(antimatter.log10() / 1.5e8, 12), 1).toNumber();
-  },
-  perkShopCap(upgrade) {
-    switch (upgrade.id) {
-      case PERK_SHOP.GLYPH_LEVEL.id:
-        return Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048;
-      case PERK_SHOP.RM_MULT.id:
-        return Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048;
-      case PERK_SHOP.DILATION_BULK.id:
-        return Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 812900 : 1600;
-      default:
-        return 0;
-    }
+    return Decimal.max(Decimal.pow(antimatter.plus(1).log10() / 1.5e8, 12), 1).toNumber();
   },
   get rmStore() {
     return player.celestials.teresa.rmStore;
@@ -140,24 +92,43 @@ const Teresa = {
   get isRunning() {
     return player.celestials.teresa.run;
   },
-  checkPPShopValidity() {
-    let totalPPSpent = 0;
-    if (Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05) > 12) {
-      totalPPSpent += Math.pow(2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05)) - 4096;
-      player.celestials.teresa.glyphLevelMult = Math.pow(1.05, 12);
-    }
-    if (player.celestials.teresa.rmMult > 2096) {
-      totalPPSpent += player.celestials.teresa.rmMult - 4096;
-      player.celestials.teresa.rmMult = 4096;
-    }
-    if (player.celestials.teresa.dtBulk > 32) {
-      totalPPSpent += player.celestials.teresa.rdtBulk * 100 - 3200;
-      player.celestials.teresa.dtBulk = 32;
-    }
-    if (totalPPSpent > 0) {
-      player.reality.pp += totalPPSpent;
-      Modal.message.show("You had too many PP shop purchases, " +
-        "your PP shop purchases have been capped and your perk points refunded.");
+};
+
+class PerkShopUpgradeState extends RebuyableMechanicState {
+  get currency() {
+    return Currency.perkPoints;
+  }
+
+  get boughtAmount() {
+    return player.celestials.teresa.perkShop[this.id];
+  }
+
+  set boughtAmount(value) {
+    player.celestials.teresa.perkShop[this.id] = value;
+  }
+  
+  get cap() {
+    return this.config.cap();
+  }
+
+  get isAvailable() {
+    return this.cost < this.cap;
+  }
+
+  purchase() {
+    if (!super.purchase()) return;
+    if (this.id === 3) {
+      dev.giveMusicGlyph();
     }
   }
-};
+}
+
+const PerkShopUpgrade = (function() {
+  const db = GameDatabase.celestials.perkShop;
+  return {
+    glyphLevel: new PerkShopUpgradeState(db.glyphLevel),
+    rmMult: new PerkShopUpgradeState(db.rmMult),
+    bulkDilation: new PerkShopUpgradeState(db.bulkDilation),
+    musicGlyph: new PerkShopUpgradeState(db.musicGlyph),
+  };
+})();

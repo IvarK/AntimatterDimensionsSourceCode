@@ -1,30 +1,19 @@
 "use strict";
 
 function startDilatedEternity(auto) {
-  if (!TimeStudy.dilation.isBought) return false
-  GameIntervals.gameLoop.stop();
+  if (!TimeStudy.dilation.isBought) return false;
   if (player.dilation.active) {
       eternity(false, auto, { switchingDilation: true });
-      setTimeout(function() {
-        GameIntervals.gameLoop.start();
-      }, 250)
-      return false
+      return false;
   }
   if (player.options.confirmations.dilation && !confirm("Dilating time will start a new eternity, and all of your Dimension/Infinity Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) {
-      setTimeout(function() {
-        GameIntervals.gameLoop.start();
-      }, 250)
-      return false
+      return false;
   }
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
-  postc8Mult = new Decimal(0)
-  mult18 = new Decimal(1)
-  setTimeout(function() {
-    GameIntervals.gameLoop.start();
-  }, 250)
-  return true
+  TimeCompression.isActive = false;
+  return true;
 }
 
 
@@ -61,7 +50,7 @@ function buyDilationUpgrade(id, bulk) {
 
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
       DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
-    buying = Math.min(buying, player.celestials.teresa.dtBulk);
+    buying = Math.min(buying, Effects.max(1, PerkShopUpgrade.rmMult));
     if (!bulk) {
       buying = Math.min(buying, 1);
     }
@@ -89,11 +78,17 @@ function buyDilationUpgrade(id, bulk) {
   return true
 }
 
-function getFreeGalaxyMult() {
+// This two are separate to avoid an infinite loop as the compression unlock condition checks the free galaxy mult
+function getFreeGalaxyMultBeforeCompression() {
   const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.35;
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
-  return thresholdMult * glyphReduction + 1;
+  return 1 + thresholdMult * glyphReduction;
+}
+
+function getFreeGalaxyMult() {
+  const compressionReduction = Effects.max(0, CompressionUpgrade.freeGalaxyScaling);
+  return getFreeGalaxyMultBeforeCompression() - compressionReduction;
 }
 
 function getDilationGainPerSecond() {
@@ -119,6 +114,7 @@ function tachyonGainMultiplier() {
   return new Decimal(1).timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,
+    Achievement(132),
     RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15)
@@ -132,7 +128,7 @@ function rewardTP() {
 // Returns the TP that would be gained this run
 function getTP() {
   let tachyon = Decimal
-    .pow(Decimal.log10(player.money) / 400, 1.5)
+    .pow(Decimal.log10(player.antimatter) / 400, 1.5)
     .times(tachyonGainMultiplier());
   if (Enslaved.isRunning) tachyon = tachyon.pow(0.25);
   return tachyon;
@@ -156,12 +152,28 @@ function getTachyonReq() {
   );
 }
 
-function dilatedValueOf(value) {
+function dilatedValueOf(value, depth) {
+  if (depth !== undefined) {
+    return recursiveDilation(value, depth);
+  }
+  if (player.dilation.active || Enslaved.isRunning) {
+    return recursiveDilation(value, 1);
+  }
+  if (TimeCompression.isActive) {
+    return recursiveDilation(value, TimeCompression.compressionDepth);
+  }
+  throw crash("Invald dilation depth");
+}
+
+function recursiveDilation(value, depth) {
+  if (depth === 0) {
+    return value;
+  }
   const log10 = value.log10();
   const basePenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
   const alchemyReduction = (player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
   const dilationPenalty = Math.min(1, basePenalty + (1 - basePenalty) * alchemyReduction);
-  return Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty));
+  return recursiveDilation(Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty)), depth - 1);
 }
 
 class DilationUpgradeState extends SetPurchasableMechanicState {

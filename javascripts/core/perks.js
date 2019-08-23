@@ -43,7 +43,6 @@ class PerkState extends SetPurchasableMechanicState {
     if (!super.purchase()) return;
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
-    drawPerkNetwork();
     EventHub.dispatch(GameEvent.PERK_BOUGHT);
   }
 }
@@ -66,8 +65,8 @@ const Perk = (function() {
     glyphRarityIncrease: new PerkState(db.glyphRarityIncrease),
     glyphUncommonGuarantee: new PerkState(db.glyphUncommonGuarantee),
     realityMachineGain: new PerkState(db.realityMachineGain),
-    automatorRowIncrease1: new PerkState(db.automatorRowIncrease1),
-    automatorRowIncrease2: new PerkState(db.automatorRowIncrease2),
+    dimboostNonReset: new PerkState(db.dimboostNonReset),
+    studyPassive: new PerkState(db.studyPassive),
     automatorRowScaling: new PerkState(db.automatorRowScaling),
     autounlockEU1: new PerkState(db.autounlockEU1),
     autounlockEU2: new PerkState(db.autounlockEU2),

@@ -58,7 +58,7 @@ GameDatabase.achievements.normal = [
     id: 22,
     name: "Fake News",
     tooltip: "Encounter 50 different news messages.",
-    checkRequirement: () => player.newsArray.length >= 50
+    checkRequirement: () => player.news.size >= 50
   },
   {
     id: 23,
@@ -72,14 +72,14 @@ GameDatabase.achievements.normal = [
     id: 24,
     name: "Antimatter Apocalypse",
     tooltip: () => `Get over ${shorten(1e80, 0, 0)} antimatter.`,
-    checkRequirement: () => player.money.exponent >= 80,
+    checkRequirement: () => player.antimatter.exponent >= 80,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 25,
     name: "Boosting to the max",
     tooltip: "Buy 10 Dimension Boosts.",
-    checkRequirement: () => player.resets >= 10,
+    checkRequirement: () => DimBoost.purchasedBoosts >= 10,
     checkEvent: GameEvent.DIMBOOST_AFTER
   },
   {
@@ -182,15 +182,15 @@ GameDatabase.achievements.normal = [
     name: "Supersanic",
     tooltip: () => `Have antimatter/sec exceed your current antimatter above ${shorten(1e63, 0, 0)}`,
     checkRequirement: () =>
-      player.money.exponent >= 63 &&
-      getDimensionProductionPerSecond(1).gt(player.money),
+      player.antimatter.exponent >= 63 &&
+      getDimensionProductionPerSecond(1).gt(player.antimatter),
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 43,
     name: "Zero Deaths",
     tooltip: "Get to Infinity without Dimension shifts, boosts or Antimatter Galaxies in a challenge.",
-    checkRequirement: () => player.galaxies === 0 && player.resets === 0,
+    checkRequirement: () => player.galaxies === 0 && DimBoost.purchasedBoosts === 0,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: "Dimensions 1-4 are 25% stronger.",
     effect: 1.25
@@ -200,7 +200,7 @@ GameDatabase.achievements.normal = [
     name: "Over in 30 seconds",
     tooltip: "Have antimatter/sec exceed your current antimatter for 30 consecutive seconds.",
     checkRequirement: () => AchievementTimers.marathon1
-      .check(getDimensionProductionPerSecond(1).gt(player.money), 30),
+      .check(getDimensionProductionPerSecond(1).gt(player.antimatter), 30),
     checkEvent: GameEvent.GAME_TICK_AFTER,
   },
   {
@@ -222,15 +222,15 @@ GameDatabase.achievements.normal = [
   {
     id: 47,
     name: "Daredevil",
-    tooltip: "Complete 2 challenges.",
-    checkRequirement: () => NormalChallenges.completed.length === 2,
+    tooltip: "Complete 2 challenges (not including the first one).",
+    checkRequirement: () => NormalChallenges.all.slice(1).countWhere(c => c.isCompleted) === 2,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
     id: 48,
     name: "AntiChallenged",
     tooltip: "Complete all the challenges.",
-    checkRequirement: () => NormalChallenges.completed.length === 12,
+    checkRequirement: () => NormalChallenges.all.countWhere(c => !c.isCompleted) === 0,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "All Dimensions are 10% stronger.",
     effect: 1.1
@@ -246,15 +246,15 @@ GameDatabase.achievements.normal = [
     id: 52,
     name: "Age of Automation",
     tooltip: "Max any 9 autobuyers.",
-    checkRequirement: () => Autobuyer.unlockables
-      .countWhere(a => a.hasMaxedInterval) >= 9
+    checkRequirement: () => Autobuyers.upgradeable
+      .countWhere(a => a.hasMaxedInterval) === 9
   },
   {
     id: 53,
     name: "Definitely not worth it",
     tooltip: "Max all the autobuyers.",
-    checkRequirement: () => Autobuyer.unlockables
-      .countWhere(a => a.hasMaxedInterval) >= 12
+    checkRequirement: () => Autobuyers.upgradeable
+      .countWhere(a => !a.hasMaxedInterval) === 0
   },
   {
     id: 54,
@@ -306,8 +306,7 @@ GameDatabase.achievements.normal = [
     id: 61,
     name: "Bulked up",
     tooltip: "Get all of your Dimension bulk buyers to 512 or higher.",
-    checkRequirement: () => Autobuyer.allDims
-        .countWhere(a => a.isUnlocked && a.bulk >= 512) === DIMENSION_COUNT
+    checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0
   },
   {
     id: 62,
@@ -374,7 +373,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () =>
       NormalChallenge(11).isRunning &&
       NormalDimension(1).amount.eq(1) &&
-      player.resets === 0 &&
+      DimBoost.purchasedBoosts === 0 &&
       player.galaxies === 0,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: "1st Dimensions are 3 times stronger.",
@@ -394,10 +393,10 @@ GameDatabase.achievements.normal = [
     id: 73,
     name: "This achievement doesn't exist",
     tooltip: "Get 9.9999e9999 antimatter.",
-    checkRequirement: () => player.money.gte("9.9999e9999"),
+    checkRequirement: () => player.antimatter.gte("9.9999e9999"),
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Dimensions are more powerful the more unspent antimatter you have.",
-    effect: () => player.money.pow(0.00002).plus(1)
+    effect: () => player.antimatter.pow(0.00002).plus(1)
   },
   {
     id: 74,
@@ -447,11 +446,11 @@ GameDatabase.achievements.normal = [
     tooltip: "Get to Infinity in under 200 milliseconds.",
     checkRequirement: () => Time.thisInfinity.totalMilliseconds <= 200,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
-    reward: () => `Start with ${shorten(1e25, 0, 0)} antimatter ` +
+    reward: () => `Start with ${shorten(2e25, 0, 0)} antimatter ` +
       "and all Dimensions are stronger in the first 300ms of Infinities.",
     effect: () => 330 / (Time.thisInfinity.totalMilliseconds + 30),
     effectCondition: () => Time.thisInfinity.totalMilliseconds < 300,
-    secondaryEffect: () => 1e25
+    secondaryEffect: () => 2e25
   },
   {
     id: 81,
@@ -480,10 +479,10 @@ GameDatabase.achievements.normal = [
     id: 84,
     name: "I got a few to spare",
     tooltip: () => `Reach ${shorten("1e35000", 0, 0)} antimatter.`,
-    checkRequirement: () => player.money.exponent >= 35000,
+    checkRequirement: () => player.antimatter.exponent >= 35000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Dimensions are more powerful the more unspent antimatter you have.",
-    effect: () => player.money.pow(0.00002).plus(1)
+    effect: () => player.antimatter.pow(0.00002).plus(1)
   },
   {
     id: 85,
@@ -580,6 +579,8 @@ GameDatabase.achievements.normal = [
   {
     id: 97,
     name: "Yes. This is hell.",
+    checkRequirement: () => Time.infinityChallengeSum.totalSeconds < 6.66,
+    checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     tooltip: "Get the sum of Infinity Challenge times under 6.66 seconds."
   },
   {
@@ -602,7 +603,7 @@ GameDatabase.achievements.normal = [
     id: 102,
     name: "This mile took an Eternity",
     tooltip: "Get all Eternity milestones.",
-    checkRequirement: () => player.eternities >= 100,
+    checkRequirement: () => player.eternities.gte(100),
     checkEvent: GameEvent.ETERNITY_RESET_AFTER
   },
   {
@@ -765,7 +766,7 @@ GameDatabase.achievements.normal = [
       player.infinityPoints.exponent >= 100 &&
       NormalDimension(1).amount.eq(0) &&
       player.infinitied.eq(0) &&
-      player.resets <= 4 &&
+      DimBoost.purchasedBoosts <= 4 &&
       player.galaxies <= 1 &&
       player.replicanti.galaxies === 0,
     checkEvent: GameEvent.GAME_TICK_AFTER,
@@ -816,7 +817,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Have 630 Antimatter Galaxies without having any Replicanti Galaxies.",
     checkRequirement: () => player.galaxies >= 630 && player.replicanti.galaxies === 0,
     checkEvent: GameEvent.GALAXY_RESET_AFTER,
-    reward: "Gain a multiplier to Dilated Time gain based on Antimatter Galaxies.",
+    reward: "Gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies.",
     effect: () => Math.max(Math.pow(player.galaxies, 0.04), 1)
   },
   {
@@ -869,7 +870,7 @@ GameDatabase.achievements.normal = [
       player.dilation.active &&
       player.infinityPoints.exponent >= 28000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
-    reward: "The active time study path doesn't disable your Replicanti autobuyer."
+    reward: "Removes the downsides from the active and idle time study paths."
   },
   {
     id: 141,

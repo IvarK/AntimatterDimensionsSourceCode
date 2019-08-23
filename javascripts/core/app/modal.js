@@ -30,6 +30,7 @@ Modal.animationOptions = new Modal("modal-animation-options");
 Modal.confirmationOptions = new Modal("modal-confirmation-options");
 Modal.loadGame = new Modal("modal-load-game");
 Modal.import = new Modal("modal-import");
+Modal.importTree = new Modal("modal-import-tree");
 
 Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");
 Modal.cloudLoadConflict = new Modal("modal-cloud-load-conflict");
@@ -57,4 +58,8 @@ Modal.message.show = function(text, callback, closeButton = false) {
   ui.view.modal.callback = callback;
   ui.view.modal.closeButton = closeButton;
   ui.view.modal.current = "modal-message";
+  // Sometimes we have stacked messages that get lost, since we don't have stacking modal system.
+  // TODO: remove this console.log
+  // eslint-disable-next-line no-console
+  console.log(`Modal mesasge: ${text}`);
 };

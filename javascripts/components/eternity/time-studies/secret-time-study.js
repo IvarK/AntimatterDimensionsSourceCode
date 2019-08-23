@@ -16,7 +16,7 @@ Vue.component("secret-time-study", {
     enslavedTT: () => 100,
     description() {
       return this.isEnslaved
-        ? "... your infinities ... have great potential ..."
+        ? "... you ... have great potential ..."
         : "Unlock a secret achievement";
     },
     hide() {

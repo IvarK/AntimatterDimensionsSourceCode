@@ -28,11 +28,20 @@
     addLexerErrors(errors, input) {
       for (const err of errors) {
         this.errors.push({
+          startLine: err.line,
           startOffset: err.offset,
           endOffset: err.offset + err.length,
           info: `Unexpected characters "${input.substr(err.offset, err.length)}"`,
         });
       }
+    }
+
+    static combinePositionRanges(r1, r2) {
+      return {
+        startLine: Math.min(r1.startLine, r2.startLine),
+        startOffset: Math.min(r1.startOffset, r2.startOffset),
+        endOffset: Math.max(r1.endOffset, r2.endOffset),
+      };
     }
 
     addParserErrors(errors, tokens) {
@@ -58,26 +67,22 @@
       }
     }
 
-    static combinePositionRanges(r1, r2) {
-      return {
-        startOffset: Math.min(r1.startOffset, r2.startOffset),
-        endOffset: Math.max(r1.endOffset, r2.endOffset),
-      };
-    }
-
-    // Chevrotain doesn't provide position ranges for higher level grammar constructs yet
-    // We have to recursively figure out the range so we can highlight an error
     static getPositionRange(ctx) {
       let pos = {
+        startLine: Number.MAX_VALUE,
         startOffset: Number.MAX_VALUE,
         endOffset: 0,
       };
       if (ctx === undefined || ctx === null) return pos;
       if (ctx.startOffset !== undefined) {
         return {
+          startLine: ctx.startLine,
           startOffset: ctx.startOffset,
           endOffset: ctx.endOffset,
         };
+      }
+      if (ctx.location !== undefined && ctx.location.startOffset !== undefined) {
+        return ctx.location;
       }
       if (ctx.children && !Array.isArray(ctx.children)) return Validator.getPositionRange(ctx.children);
       if (Array.isArray(ctx)) {
@@ -146,10 +151,30 @@
       }
       const value = parseFloat(ctx.NumberLiteral[0].image) * ctx.TimeUnit[0].tokenType.$scale;
       if (isNaN(value)) {
-        this.addError(ctx, "Error parsing time unit");
+        this.addError(ctx, "Error parsing duration");
         return undefined;
       }
       ctx.$value = value;
+      return ctx.$value;
+    }
+
+    xLast(ctx) {
+      if (ctx.$value) return ctx.$value;
+      if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
+        this.addError(ctx, "Missing multiplier");
+        return undefined;
+      }
+      ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
+      return ctx.$value;
+    }
+
+    currencyAmount(ctx) {
+      if (ctx.$value) return ctx.$value;
+      if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
+        this.addError(ctx, "Missing amount");
+        return undefined;
+      }
+      ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       return ctx.$value;
     }
 
@@ -241,7 +266,7 @@
           this.addError(ctx.Pipe[0], "Missing eternity challenge number");
         }
         const ecNumber = parseFloat(ctx.ECNumber[0].image);
-        if (!Number.isInteger(ecNumber) || ecNumber < 1 || ecNumber > 12) {
+        if (!Number.isInteger(ecNumber) || ecNumber < 0 || ecNumber > 12) {
           this.addError(ctx.ECNumber, `Invalid eternity challenge ID ${ecNumber}`);
         }
         ctx.$cached.ec = ecNumber;
@@ -253,7 +278,8 @@
       if (ctx.NumberLiteral) {
         ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       } else if (ctx.Identifier) {
-        ctx.$value = this.lookupVar(ctx.Identifier[0], AutomatorVarTypes.NUMBER).value;
+        const varLookup = this.lookupVar(ctx.Identifier[0], AutomatorVarTypes.NUMBER);
+        if (varLookup) ctx.$value = varLookup.value;
       }
     }
 
@@ -422,7 +448,7 @@
   function compile(input, validateOnly = false) {
     const lexResult = AutomatorLexer.lexer.tokenize(input);
     const tokens = lexResult.tokens;
-    parser.input = tokens;    const t1 = Date.now();
+    parser.input = tokens;
     const parseResult = parser.script();
     const validator = new Validator();
     validator.visit(parseResult, input);
@@ -441,7 +467,7 @@
 
   function blockifyTextAutomator() {
     const validator = new Validator();
-    const input = AutomatorUI.documents[ui.view.tabs.reality.automator.editorScriptID].getValue()
+    const input = AutomatorTextUI.documents[ui.view.tabs.reality.automator.editorScriptID].getValue()
     const lexResult = AutomatorLexer.lexer.tokenize(input);
     const tokens = lexResult.tokens;
 

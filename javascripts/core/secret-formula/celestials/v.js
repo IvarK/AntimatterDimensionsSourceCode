@@ -6,7 +6,8 @@ GameDatabase.celestials.v = {
     eternities: 1e70,
     infinities: 1e160,
     dilatedTime: new Decimal("1e320"),
-    replicanti: new Decimal("1e320000")
+    replicanti: new Decimal("1e320000"),
+    rm: new Decimal("1e60")
   },
   runUnlocks: [
     {
@@ -35,7 +36,7 @@ GameDatabase.celestials.v = {
       name: "Young Boy",
       description: value => `Get ${shorten(value)} Antimatter in Eternity Challenge 12.`,
       values: [2e9, 2.2e9, 2.4e9, 2.6e9, 2.8e9, 3e9].map(Decimal.pow10),
-      condition: x => EternityChallenge(12).isRunning && player.money.gte(x)
+      condition: x => EternityChallenge(12).isRunning && player.antimatter.gte(x)
     },
     {
       id: 4,
@@ -49,7 +50,7 @@ GameDatabase.celestials.v = {
       name: "Matterception",
       description: value => `Get ${value} Dimensional Boosts while dilating time, inside EC5.`,
       values: [50, 52, 54, 56, 58, 60],
-      condition: x => player.dilation.active && EternityChallenge(5).isRunning && player.resets >= x
+      condition: x => player.dilation.active && EternityChallenge(5).isRunning && DimBoost.purchasedBoosts >= x
     }
   ]
 };

@@ -20,8 +20,10 @@ GameDatabase.eternity.dilation = (function() {
       id: 1,
       initialCost: 1e5,
       increment: 10,
-      description: "Double Dilated Time gain.",
-      effect: bought => Decimal.pow(2, bought),
+      description: () => (CompressionUpgrade.improvedDTMult.canBeApplied
+       ? "Multiply Dilated Time gain by 2.2x"
+       : "Double Dilated Time gain."),
+      effect: bought => Decimal.pow(Effects.max(2, CompressionUpgrade.improvedDTMult), bought),
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => shorten(value, 2, 0)
     }),
@@ -49,17 +51,24 @@ GameDatabase.eternity.dilation = (function() {
     doubleGalaxies: {
       id: 4,
       cost: 5e6,
-      description: "Gain twice as many free galaxies.",
+      description: () => (CompressionUpgrade.freeGalaxySoftcap.canBeApplied
+        ? `Gain twice as many free galaxies, up to ${shortenSmallInteger(10000)}.`
+        : `Gain twice as many free galaxies, up to ${shortenSmallInteger(1000)}.`),
       effect: 2
     },
     tdMultReplicanti: {
       id: 5,
       cost: 1e9,
       description: () => {
-        const mult = replicantiMult().pLog10();
-        const ratio = DilationUpgrade.tdMultReplicanti.effectValue.pLog10() / mult;
-        const out = ratio > 0.095 ? "0.1" : ratio.toFixed(2);
-        return `Time Dimensions are affected by Replicanti multiplier ^${out}.`;
+        const rep10 = replicantiMult().pLog10();
+        let multiplier = "0.1";
+        if (rep10 > 9000) {
+          const ratio = DilationUpgrade.tdMultReplicanti.effectValue.pLog10() / rep10;
+          if (ratio < 0.095) {
+            multiplier = ratio.toFixed(2);
+          }
+        }
+        return `Time Dimensions are affected by Replicanti multiplier ^${multiplier}.`;
       },
       effect: () => {
         let rep10 = replicantiMult().pLog10() * 0.1;

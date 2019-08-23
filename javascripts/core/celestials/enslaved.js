@@ -42,7 +42,10 @@ const Enslaved = {
   lockedInShardsGained: 0,
   IMPOSSIBLE_CHALLENGE_EXEMPTIONS: [1, 6, 9],
   ec6c10hintGiven: false,
+  nextTickDiff: 50,
+  isReleaseTick: false,
   autoReleaseTick: 0,
+  autoReleaseSpeed: 0,
   toggleStoreBlackHole() {
     if (this.maxQuoteIdx === 6) player.celestials.enslaved.maxQuotes += 3;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
@@ -97,14 +100,17 @@ const Enslaved = {
   },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
+    if (EternityChallenge(12).isRunning || TimeCompression.isActive) return;
     if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);
     if (autoRelease) release *= 0.01;
-    gameLoop(0, { gameDiff: release });
+    this.nextTickDiff = release;
+    this.isReleaseTick = true;
     // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
     const effectiveGamespeed = release / 50;
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, effectiveGamespeed);
+    this.autoReleaseSpeed = release / player.options.updateRate / 5;
     player.celestials.enslaved.stored *= autoRelease ? 0.99 : 0;
   },
   has(info) {

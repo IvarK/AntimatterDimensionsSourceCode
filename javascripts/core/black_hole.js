@@ -5,7 +5,14 @@ class BlackHoleUpgradeState {
     const { getAmount, setAmount, calculateValue, initialCost, costMult } = config;
     this.incrementAmount = () => setAmount(getAmount() + 1);
     this._lazyValue = new Lazy(() => calculateValue(getAmount()));
-    this._lazyCost = new Lazy(() => getCostWithLinearCostScaling(getAmount(), 1e30, initialCost, costMult, 0.2));
+    this._lazyCost = new Lazy(() => getHybridCostScaling(getAmount(),
+      1e30,
+      initialCost,
+      costMult,
+      0.2,
+      new Decimal("1e310"),
+      1e5,
+      10));
   }
 
   get value() {
@@ -33,7 +40,7 @@ class BlackHoleUpgradeState {
 class BlackHoleState {
   constructor(id) {
     this.id = id + 1;
-    const wormholeCostMultipliers = [1, 1000, 1e35];
+    const wormholeCostMultipliers = [1, 1000];
     // Interval: starts at 3600, x0.8 per upgrade, upgrade cost goes x3.5, starts at 15
     this.intervalUpgrade = new BlackHoleUpgradeState({
       getAmount: () => this._data.intervalUpgrades,
@@ -323,7 +330,8 @@ const BlackHoles = {
    * starting from black hole 1 and black hole 0 being normal game.
    */
   calculateSpeedups() {
-    const effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE];
+    const effectsToConsider = [GameSpeedEffect.FIXEDSPEED, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE, 
+      GameSpeedEffect.MOMENTUM];
     const speedupWithoutBlackHole = getGameSpeedupFactor(effectsToConsider, 1);
     const speedups = [1];
     for (const blackHole of this.list) {

@@ -100,11 +100,12 @@ const AutomatorLexer = (() => {
   createInCategory(Currency, "AM", /am/i, {
     extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyWithAntimatter(),
-    $getter: () => player.money
+    $getter: () => player.antimatter
   });
   createInCategory(Currency, "DT", /dt/i, { $getter: () => player.dilation.dilatedTime });
   createInCategory(Currency, "TP", /tp/i, { $getter: () => player.dilation.tachyonParticles });
   createInCategory(Currency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
+  createInCategory(Currency, "RM", /rm/i, { $getter: () => player.reality.realityMachines });
   createInCategory(Currency, "Rep", /rep(licanti)?/i, {
     $autocomplete: "rep",
     $getter: () => player.replicanti.amount,
@@ -126,24 +127,32 @@ const AutomatorLexer = (() => {
   // eternity will be triggered by something waiting for reality, for example.
   createInCategory(PrestigeEvent, "Infinity", /infinity/i, {
     extraCategories: [StudyPath],
-    $autobuyer: Autobuyer.infinity,
+    $autobuyer: Autobuyer.bigCrunch,
     $autobuyerDurationMode: AutoCrunchMode.TIME,
+    $autobuyerXLastMode: AutoCrunchMode.X_LAST,
+    $autobuyerCurrencyMode: AutoCrunchMode.AMOUNT,
     $prestigeAvailable: () => canCrunch(),
     $prestige: () => bigCrunchResetRequest(true),
     $prestigeLevel: 1,
+    $prestigeCurrency: "IP",
     $studyPath: TimeStudyPath.INFINITY_DIM,
   });
   createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
     $autobuyer: Autobuyer.eternity,
     $autobuyerDurationMode: AutoEternityMode.TIME,
+    $autobuyerXLastMode: AutoEternityMode.X_LAST,
+    $autobuyerCurrencyMode: AutoEternityMode.AMOUNT,
     $prestigeAvailable: () => canEternity(),
     $prestigeLevel: 2,
+    $prestigeCurrency: "EP",
     $prestige: () => eternity(false, true),
   });
   createInCategory(PrestigeEvent, "Reality", /reality/i, {
     $autobuyer: Autobuyer.reality,
+    $autobuyerCurrencyMode: AutoRealityMode.RM,
     $prestigeAvailable: () => isRealityAvailable(),
     $prestigeLevel: 3,
+    $prestigeCurrency: "RM",
     $prestige: () => autoReality(),
   });
 
@@ -227,6 +236,9 @@ const AutomatorLexer = (() => {
 
   createKeyword("Dilation", /dilation/i);
   createKeyword("EC", /ec/i);
+  createKeyword("CharX", /x/i);
+  createKeyword("Last", /last/i);
+
   // We allow ECLiteral to consume lots of digits because that makes error reporting more
   // clear (it's nice to say ec123 is an invalid ec)
   const ECLiteral = createToken({

@@ -3,12 +3,6 @@
   src: url('MonospaceTypewriter.ttf');
 }
 
-* {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 *:focus {
   outline: none;
 }
@@ -163,7 +157,8 @@ body.t-dark {
 
 .resource-information {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   color: var(--color-text);
   justify-content: space-between;
   padding: 0 5px;
@@ -172,8 +167,7 @@ body.t-dark {
 
 .resource-per-second {
   font-size: 0.7em;
-  color: var(--color-text);;
-  padding-left: 10px;
+  color: var(--color-text);
 }
 
 .resource-name {
@@ -185,13 +179,15 @@ body.t-dark {
 #ep { color: var(--color-eternity) }
 #rm { color: var(--color-reality) }
 
-.resource-infinity-canreset {
+.resource-infinity-canreset,
+.resource-eternity-canreset {
   background-color: black;
   cursor: pointer;
   transition-duration: 0.12s;
 }
 
-.resource-infinity-canreset:hover {
+.resource-infinity-canreset:hover,
+.resource-eternity-canreset:hover {
   background-color: rgb(49, 49, 49)
 }
 
@@ -403,7 +399,7 @@ body.t-dark {
   justify-content: center;
 }
 
-.tab-container > div{
+.tab-container > .l-normal-dim-tab {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -417,30 +413,14 @@ body.t-dark {
   width: 100%;
 }
 
-.quote {
-  display: flex;
+.c-news-ticker {
   width: 100%;
-  border-bottom: 1px solid var(--color-accent-1);
-  color: var(--color-text);;
-  text-align: center;
-  padding: 8px 0;
+  border-bottom: .1rem solid var(--color-accent-1);
+  padding: .8rem 0;
 }
 
-.quote > #news {
-  color: var(--color-text);;
-}
-
-#newNews {
-  position: relative;
-  display: inline-block;
-  font-family: Typewriter;
-  font-size: 15px;
-  white-space: nowrap;
-  font-weight: bold
-}
-
-#newNews a {
-  text-decoration: underline;
+.c-news-line {
+  color: var(--color-text);
 }
 
 .subtabs {
@@ -599,7 +579,7 @@ body.t-dark {
   background-color: var(--color-dark);
   border: 1px solid var(--color-good);
   padding: 10px;
-  color: var(--color-text);;
+  color: var(--color-text);
   font-family: Typewriter, serif;
   border-radius: 5px;
   position: relative;
@@ -775,10 +755,12 @@ body.t-dark {
 
 /* FIXING OLD TABS */
 
+.l-achievement-grid__cell {
+  margin: -0.5rem -0.5rem;
+}
+
 .o-achievement {
-  height: 8.6rem;
-  width: 8.6rem;
-  background-size: contain;
+  transform:scale(0.8)
 }
 
 .o-infinity-upgrade-btn--unavailable {
@@ -804,8 +786,24 @@ body.t-dark {
   border: 1px solid var(--color-good);
 }
 
+.o-primary-btn {
+  background-color: var(--color-dark);
+  border: 1px solid var(--color-good);
+  color: var(--color-text);
+}
+
 .o-primary-btn:hover {
   background: #414141;
+}
+
+.o-primary-btn--disabled {
+  background: #752626;
+  border-color: var(--color-bad) !important;
+  cursor: default;
+}
+
+.o-primary-btn--disabled:hover {
+  background: var(--color-bad) !important;
 }
 
 .c-challenge-box--normal {
@@ -826,4 +824,95 @@ body.t-dark {
   background-color: black;
   border: .3rem solid var(--color-eternity);
   border-radius: 1rem;
+}
+
+.c-stats-tab {
+  color: white;
+}
+
+.o-autobuyer-input,
+.l-autobuyer-grid select {
+  background: #1c1d1d;
+  border: 0.1rem solid var(--color-accent-1);
+  color: var(--color-accent-1);
+}
+
+.o-autobuyer-btn {
+  border: 0.1rem solid var(--color-accent-1);
+}
+
+
+.c-replicanti-description__accent {
+  color: #2196f3
+}
+
+.c-infinity-dim-description__accent {
+  color: var(--color-infinity);
+}
+
+.l-infinity-dim-tab {
+  padding: 1rem 6rem;
+}
+
+.c-infinity-dim-row {
+  padding-left: 1rem;
+  border-radius: .5rem;
+}
+
+.c-infinity-dim-row:nth-child(even) {
+  background: #5f441e;
+}
+
+.c-infinity-dim-row__name {
+  font-size: 2rem;
+}
+
+.c-infinity-dim-row__multiplier {
+  font-size: 1.4rem
+}
+
+.c-time-dim-description__accent {
+  color: var(--color-eternity);
+}
+
+.l-time-dim-tab {
+  padding: 2rem 0;
+}
+
+.c-time-dim-row {
+  padding-left: 1rem;
+  border-radius: .5rem;
+}
+
+.c-time-dim-row:nth-child(even) {
+  background: #63217d
+}
+
+.c-time-dim-row__name {
+  font-size: 2rem;
+}
+
+.c-time-dim-row__multiplier {
+  font-size: 1.4rem
+}
+
+.l-reality-upgrade-grid__row > * {
+  margin: 0.5rem;
+}
+
+.c-reality-upgrade-btn {
+  width: 15.6rem;
+}
+
+.resource-eternity-canreset > div {
+  height: 100%;
+}
+
+.o-eternity-button__eternity-text {
+  color: var(--color-eternity);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 10px;
 }

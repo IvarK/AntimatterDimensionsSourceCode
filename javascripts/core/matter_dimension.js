@@ -23,12 +23,16 @@ class MatterDimensionState {
 
   // In percents
   get chance() {
-    return 5 - this._tier + this.dimension.chanceUpgrades + AlchemyResource.unpredictability.effectValue / 100;
+    return 5 - this._tier + this.dimension.chanceUpgrades +
+      Math.floor(100 * AlchemyResource.unpredictability.effectValue);
   }
 
   // In milliseconds
   get interval() {
-    return Decimal.pow(0.89, this.dimension.intervalUpgrades).times(Decimal.pow(2, this._tier)).times(1000);
+    return Decimal.pow(0.89, this.dimension.intervalUpgrades)
+      .times(Decimal.pow(2, this._tier))
+      .times(1000)
+      .divide(Effects.max(1, CompressionUpgrade.matterBoost));
   }
 
   get power() {

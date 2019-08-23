@@ -34,7 +34,7 @@ Vue.component("break-infinity-tab", {
   },
   methods: {
     update() {
-      this.isUnlocked = Autobuyer.infinity.isUnlocked && Autobuyer.infinity.hasMaxedInterval;
+      this.isUnlocked = Autobuyer.bigCrunch.hasMaxedInterval;
     },
     btnClassObject(column) {
       return {

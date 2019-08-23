@@ -3,7 +3,7 @@
 Vue.component("eternity-milestones-tab", {
   data() {
     return {
-      eternityCount: 0,
+      eternityCount: new Decimal(0),
     };
   },
   computed: {
@@ -18,7 +18,7 @@ Vue.component("eternity-milestones-tab", {
   },
   methods: {
     update() {
-      this.eternityCount = player.eternities;
+      this.eternityCount.copyFrom(player.eternities);
     },
     getMilestone(row, column) {
       return () => this.milestones[(row - 1) * 3 + column - 1];

@@ -14,7 +14,7 @@ Vue.component("challenge-records-tab", {
     }
   },
   template:
-    `<div class="l-challenge-records-tab">
+    `<div class="l-challenge-records-tab c-stats-tab">
         <challenge-records-list
             :start="2"
             :times="normalChallenges"

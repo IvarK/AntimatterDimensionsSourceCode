@@ -10,7 +10,8 @@ Vue.component("normal-achievement", {
       isEnabled: false,
       remainingTime: 0,
       isMouseOver: false,
-      mouseOverInterval: 0
+      mouseOverInterval: 0,
+      isCancer: false
     };
   },
   computed: {
@@ -19,7 +20,7 @@ Vue.component("normal-achievement", {
     },
     styleObject() {
       return {
-        "background-image": `url(images/r${this.id}.png)`,
+        "background-position": `-${(this.achievement.column - 1) * 104}px -${(this.achievement.row - 1) * 104}px`
       };
     },
     classObject() {
@@ -28,7 +29,9 @@ Vue.component("normal-achievement", {
         "o-achievement--locked": !this.isUnlocked,
         "o-achievement--unlocked": this.isUnlocked && this.isEnabled,
         "o-achievement--disabled": this.isUnlocked && !this.isEnabled,
-        "o-achievement--blink": this.id === 78 && !this.isUnlocked
+        "o-achievement--blink": this.id === 78 && !this.isUnlocked,
+        "o-achievement--normal": !this.isCancer,
+        "o-achievement--cancer": this.isCancer
       };
     },
     detailsTooltip() {
@@ -68,6 +71,7 @@ Vue.component("normal-achievement", {
       this.remainingTime = this.achievement.remainingDisabledTime;
       this.isUnlocked = this.achievement.isUnlocked;
       this.isEnabled = this.achievement.isEnabled;
+      this.isCancer = Theme.current().name === "S4";
     },
     onMouseEnter() {
       clearTimeout(this.mouseOverInterval);

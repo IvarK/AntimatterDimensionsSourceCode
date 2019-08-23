@@ -17,10 +17,15 @@ Vue.component("infinity-dim-row", {
       isAvailableForPuchase: false,
       isCapped: false,
       capIP: new Decimal(0),
-      autobuyers: player.infDimBuyers,
+      isAutobuyerOn: false,
       isEC8Running: false,
       hardcap: HARDCAP_ID_PURCHASES,
     };
+  },
+  watch: {
+    isAutobuyerOn(newValue) {
+      player.infDimBuyers[this.tier - 1] = newValue;
+    }
   },
   computed: {
     name() {
@@ -35,7 +40,7 @@ Vue.component("infinity-dim-row", {
       return this.isCapped ? "Capped!" : `Cost: ${this.shortenCosts(this.cost)} IP`;
     },
     hardcapPurchases() {
-      return this.shortenCosts(this.hardcap);
+      return this.shorten(this.hardcap, 1, 1);
     },
     capTooltip() {
       return this.isCapped
@@ -65,6 +70,7 @@ Vue.component("infinity-dim-row", {
         this.hardcap = dimension.purchaseCap;
       }
       this.isEC8Running = EternityChallenge(8).isRunning;
+      this.isAutobuyerOn = player.infDimBuyers[this.tier - 1];
     },
     buyManyInfinityDimension() {
       buyManyInfinityDimension(this.tier);
@@ -80,7 +86,7 @@ Vue.component("infinity-dim-row", {
       >{{shortenDimensions(amount)}} ({{bought}}){{rateOfChangeDisplay}}</div>
       <primary-button-on-off
         v-if="isAutobuyerUnlocked && !isEC8Running"
-        v-model="autobuyers[tier - 1]"
+        v-model="isAutobuyerOn"
         class="o-primary-btn--id-autobuyer c-infinity-dim-row__button"
         text="Auto:"
       />

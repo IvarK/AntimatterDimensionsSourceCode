@@ -4,7 +4,7 @@ var shiftDown = false;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
 let player = {
-  money: new Decimal(10),
+  antimatter: new Decimal(10),
   tickSpeedCost: new Decimal(1000),
   dimensions: {
     normal: Array.range(0, 8).map(tier => ({
@@ -53,6 +53,74 @@ let player = {
   infinity: {
     upgradeBits: 0
   },
+  auto: {
+    dimensions: Array.range(0, 8).map(tier => ({
+      isUnlocked: false,
+      cost: 1,
+      interval: [1500, 2000, 2500, 3000, 4000, 5000, 6000, 7500][tier],
+      bulk: 1,
+      mode: AutobuyerMode.BUY_10,
+      priority: 1,
+      isActive: false,
+      lastTick: 0
+    })),
+    tickspeed: {
+      isUnlocked: false,
+      cost: 1,
+      interval: 2500,
+      mode: AutobuyerMode.BUY_SINGLE,
+      priority: 1,
+      isActive: false,
+      lastTick: 0
+    },
+    dimBoost: {
+      cost: 1,
+      interval: 8000,
+      maxDimBoosts: 1,
+      galaxies: 10,
+      bulk: 1,
+      buyMaxInterval: 0,
+      isActive: false,
+      lastTick: 0
+    },
+    galaxy: {
+      cost: 1,
+      interval: 75000,
+      limitGalaxies: true,
+      maxGalaxies: 1,
+      buyMax: false,
+      buyMaxInterval: 0,
+      isActive: false,
+      lastTick: 0
+    },
+    bigCrunch: {
+      cost: 1,
+      interval: 150000,
+      mode: 0,
+      amount: new Decimal(1),
+      time: 1,
+      xLast: new Decimal(1),
+      isActive: false,
+      lastTick: 0
+    },
+    sacrifice: {
+      multiplier: 5,
+      isActive: false
+    },
+    eternity: {
+      mode: 0,
+      amount: new Decimal(1),
+      time: 1,
+      xLast: new Decimal(1),
+      isActive: false
+    },
+    reality: {
+      mode: 0,
+      rm: new Decimal(1),
+      glyph: 0,
+      isActive: false
+    }
+  },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
   infinitiedBank: new Decimal(0),
@@ -62,16 +130,15 @@ let player = {
   bestInfinityTime: 999999999999,
   thisInfinityTime: 0,
   thisInfinityRealTime: 0,
-  resets: 0,
+  thisInfinityLastBuyTime: 0,
+  dimensionBoosts: 0,
   galaxies: 0,
-  tickDecrease: 0.9,
-  totalmoney: new Decimal(0),
+  totalAntimatter: new Decimal(0),
   achPow: new Decimal(1),
-  newsArray: [],
+  news: new Set(),
   // TODO: Not used, remove
   interval: null,
   lastUpdate: new Date().getTime(),
-  autobuyers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   tickspeedMultiplier: new Decimal(10),
   chall2Pow: 1,
   chall3Pow: new Decimal(0.01),
@@ -90,16 +157,20 @@ let player = {
   lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenRealities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 0]),
+  bestIPminThisInfinity: new Decimal(0),
+  bestIPminThisEternity: new Decimal(0),
+  bestEPminThisEternity: new Decimal(0),
+  bestEPminThisReality: new Decimal(0),
+  bestRMmin: new Decimal(0),
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
-  overXGalaxies: 10,
   version: 13,
   infinityPower: new Decimal(1),
   spreadingCancer: 0,
   postChallUnlocked: 0,
   postC4Tier: 0,
   eternityPoints: new Decimal(0),
-  eternities: 0,
+  eternities: new Decimal(0),
   thisEternity: 0,
   thisEternityRealTime: 0,
   bestEternity: 999999999999,
@@ -112,7 +183,6 @@ let player = {
   totalTickBought: 0,
   offlineProd: 0,
   offlineProdCost: 1e7,
-  autoSacrifice: 1,
   replicanti: {
     amount: new Decimal(0),
     unl: false,
@@ -140,20 +210,13 @@ let player = {
   eternityChalls: {},
   etercreq: 0,
   infMultBuyer: false,
-  autoCrunchMode: AutoCrunchMode.AMOUNT,
-  autoEternityMode: AutoEternityMode.AMOUNT,
-  autoRealityMode: AutoRealityMode.RM,
   respec: false,
-  eternityBuyer: {
-    limit: new Decimal(0),
-    isOn: false
-  },
   eterc8ids: 50,
   eterc8repl: 40,
   noSacrifices: true,
   onlyEighthDimensons: true,
   onlyFirstDimensions: true,
-  noEighthDimensions: true,
+  noEighthDimensions: false,
   noTheoremPurchases: true,
   dilation: {
     studies: [],
@@ -161,6 +224,7 @@ let player = {
     tachyonParticles: new Decimal(0),
     dilatedTime: new Decimal(0),
     nextThreshold: new Decimal(1000),
+    baseFreeGalaxies: 0,
     freeGalaxies: 0,
     upgrades: new Set(),
     rebuyables: {
@@ -175,11 +239,6 @@ let player = {
   thisReality: 0,
   thisRealityRealTime: 0,
   bestReality: 999999999999,
-  realityBuyer: {
-    rm: new Decimal(0),
-    glyph: 0,
-    isOn: false
-  },
   reality: {
     realityMachines: new Decimal(0),
     glyphs: {
@@ -213,10 +272,6 @@ let player = {
               false, false, false, false, false,
               false, false, false, false, false],
     upgReqChecks: [false],
-    automatorOn: false,
-    automatorCurrentRow: 0,
-    automatorRows: 0,
-    automatorCommands: new Set(),
     perks: new Set(),
     respec: false,
     tdbuyers: [false, false, false, false, false, false, false, false],
@@ -224,7 +279,7 @@ let player = {
     pp: 0,
     autoEC: true,
     lastAutoEC: 0,
-    partEternitied: 0,
+    partEternitied: new Decimal(0),
     automator: {
       state: {
         mode: AutomatorMode.STOP,
@@ -256,10 +311,8 @@ let player = {
       quoteIdx: 0,
       unlocks: [],
       run: false,
-      bestRunAM: new Decimal(0),
-      glyphLevelMult: 1,
-      rmMult: 1,
-      dtBulk: 1
+      bestRunAM: new Decimal(1),
+      perkShop: Array.repeat(0, 4)
     },
     effarig: {
       relicShards: 0,
@@ -339,6 +392,12 @@ let player = {
       quoteIdx: 0,
       disCharge: false,
       peakGamespeed: 1,
+      compression: {
+        active: false,
+        entanglement: 0,
+        upgradeBits: 0,
+        respec: false
+      },
     },
     laitela: {
       matter: new Decimal(0),
@@ -352,7 +411,7 @@ let player = {
         powerUpgrades: 0,
         timeSinceLastUpdate: 0
       })),
-      maxAmGained: new Decimal(0)
+      maxAmGained: new Decimal(1)
     }
   },
   autoEcIsOn: true,
@@ -362,11 +421,12 @@ let player = {
     retryChallenge: false,
     showAllChallenges: false,
     bulkOn: true,
+    autobuyersOn: true,
     cloud: true,
     hotkeys: true,
     theme: "Normal",
     commas: true,
-    updateRate: 50,
+    updateRate: 33,
     newUI: true,
     chart: {
       updateRate: 1000,
@@ -401,7 +461,7 @@ const Player = {
   },
 
   get gainedEternities() {
-    return RealityUpgrade(10).isBought ? player.eternities - 100 : player.eternities;
+    return RealityUpgrade(10).isBought ? player.eternities.sub(100) : player.eternities;
   },
 
   get isInMatterChallenge() {
@@ -426,7 +486,7 @@ const Player = {
     if (NormalChallenge(12).isRunning) {
       return basePerSecond.plus(getDimensionProductionPerSecond(2));
     }
-    return basePerSecond.times(getGameSpeedupFactor());
+    return basePerSecond.times(getGameSpeedupForDisplay());
   },
 
   get bestRunIPPM() {
@@ -454,6 +514,11 @@ const Player = {
     return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
   },
 
+  get infinityGoal() {
+    const challenge = NormalChallenge.current || InfinityChallenge.current;
+    return challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
+  },
+
   get eternityGoal() {
     return EternityChallenge.isRunning
       ? EternityChallenge.current.currentGoal
@@ -469,8 +534,8 @@ function guardFromNaNValues(obj) {
   for (let key in obj) {
     if (!obj.hasOwnProperty(key)) continue;
 
-    //TODO: rework autobuyer saving
-    if (key === "autobuyers" || key === "autoSacrifice" || key === "automator") continue;
+    // TODO: rework autobuyer saving
+    if (key === "automator") continue;
 
     let value = obj[key];
     if (isObject(value)) {

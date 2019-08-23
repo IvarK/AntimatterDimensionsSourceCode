@@ -324,12 +324,13 @@ GameDatabase.tabs = [
     key: "shop",
     name: "Shop",
     newUIClass: "shop",
+    condition: () => player.IAP.totalSTD > 0,
     subtabs: [
       {
         key: "shop",
         name: "Shop",
-        symbol: "ASS",
-        component: "achievements-tab"
+        symbol: "$",
+        component: "shop-tab"
       }
     ]
   }

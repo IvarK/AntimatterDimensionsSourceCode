@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("modal-std-store", {
   computed: {
     modal() {
@@ -20,6 +22,8 @@ Vue.component("modal-std-store", {
         <std-store-btn-row :amount="20" :cost="20"/>
         <std-store-btn-row :amount="60" :cost="50"/>
         <std-store-btn-row :amount="140" :cost="100"/>
+        <std-store-btn-row :amount="300" :cost="200"/>
+        <std-store-btn-row :amount="1000" :cost="500"/>
       </div>
     </div>
   </div>
@@ -33,13 +37,15 @@ Vue.component("std-store-btn-row", {
   },
   methods: {
     purchase() {
-      kong.buyMoreSTD(this.amount, this.cost)
+      kong.buyMoreSTD(this.amount, this.cost);
     }
   },
   template:
   `<div class="c-modal-store-btn-container">
     <div class="o-modal-store-label">{{ amount }} STDs</div>
-    <button class="o-modal-store-btn" @click="purchase()"><span>{{ cost }}</span><img src="images/kred_single.png"/></button>
+    <button class="o-modal-store-btn" @click="purchase()">
+      <span>{{ cost }}</span><img src="images/kred_single.png"/>
+    </button>
   </div>
   `
-})
+});

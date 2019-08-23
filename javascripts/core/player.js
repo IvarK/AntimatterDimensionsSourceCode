@@ -452,11 +452,13 @@ let player = {
     }
   },
   IAP: {
-    STD: 0,
+    totalSTD: 0,
+    spentSTD: 0,
     IPMult: 1,
     EPMult: 1,
     dimMult: 1,
-    allDimMult: 1
+    allDimMult: 1,
+    allDimMultPurchased: 0
   }
 };
 

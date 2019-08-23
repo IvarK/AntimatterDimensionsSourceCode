@@ -4946,10 +4946,11 @@ screen and (max-width: 480px) {
 
 .l-modal-store-content {
   display: flex;
+  align-items: center;
 }
 
 .l-modal-store-content > img {
-  height: 30rem;
+  height: 25rem;
 }
 
 .c-modal-store-buttons {
@@ -4973,7 +4974,7 @@ screen and (max-width: 480px) {
 }
 
 .o-modal-store-btn {
-  padding: 1.5rem;
+  padding: 0.8rem;
   border: none;
   background: burlywood;
   border-radius: .5rem;

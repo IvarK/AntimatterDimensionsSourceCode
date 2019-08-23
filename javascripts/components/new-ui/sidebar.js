@@ -25,7 +25,8 @@ Vue.component("sidebar", {
       Tab.celestials,
       Tab.achievements,
       Tab.statistics,
-      Tab.options
+      Tab.options,
+      Tab.shop
     ]
   },
   template:

@@ -6935,26 +6935,6 @@ input.o-automator-block-input {
   flex-direction: column;
 }
 
-.o-h2p-return {
-  cursor: pointer;
-  transform: translateY(-20%);
-}
-
-.o-h2p-return::before {
-  content: "⬅";
-  font-size: 4rem;
-}
-
-.o-h2p-exit {
-  cursor: pointer;
-  transform: translateY(-25%) rotate(45deg);
-}
-
-.o-h2p-exit::before {
-  content: "✚";
-  font-size: 4rem;
-}
-
 .c-h2p-title {
   user-select: none;
   font-size: 3rem;

@@ -12,7 +12,7 @@
  * }
  */
 
-const H2P_TABS = [
+GameDatabase.h2p = [
   {
     name: "Dimensions",
     id: 0,
@@ -661,17 +661,7 @@ const H2P_TABS = [
   }
 ];
 
-H2P_TABS.forEach((tab, index) => {
+GameDatabase.h2p.forEach((tab, index) => {
   tab.id = index;
   if (tab.alias === undefined) tab.alias = tab.name;
 });
-
-// eslint-disable-next-line multiline-comment-style
-/*
-    name: "",
-    id: i,
-    info: () => ``,
-    unlock: () => true,
-    tags: [],
-    tab: ""
-*/

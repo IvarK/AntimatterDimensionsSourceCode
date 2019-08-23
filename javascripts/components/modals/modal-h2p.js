@@ -2,18 +2,26 @@
 Vue.component("modal-h2p", {
   data() {
     return {
-      activeTab: {},
+      tabId: 0,
       searchValue: "",
     };
   },
-  created() {
+  mounted() {
     this.activeTab = this.unlockedTabs.find(
       h2pTab =>
         h2pTab.tab === `${this.$viewModel.tab}/${this.$viewModel.subtab}` || h2pTab.tab === this.$viewModel.tab
     ) || this.unlockedTabs[0];
   },
   computed: {
-    allTabs: () => H2P_TABS,
+    allTabs: () => GameDatabase.h2p,
+    activeTab: {
+      get() {
+        return this.allTabs[this.tabId];
+      },
+      set(tab) {
+        this.tabId = tab.id;
+      }
+    },
     unlockedTabs() {
       return this.allTabs.filter(tab => tab.unlock());
     },
@@ -68,18 +76,11 @@ Vue.component("modal-h2p", {
     }
   },
   methods: {
-    goBack() {
-      if (this.activeTab === this.menuObject) {
-        if (this.searchValue === "") this.exit();
-        this.searchValue = "";
-      }
-      this.activeTab = this.menuObject;
-    },
     exit() {
       Modal.hide();
     },
-    setActiveTab(id) {
-      this.activeTab = this.allTabs[id];
+    setActiveTab(tab) {
+      this.activeTab = tab;
     }
   },
   template: `
@@ -98,7 +99,7 @@ Vue.component("modal-h2p", {
             :key="tab.name"
             class="o-h2p-tab-button"
             :class="tab === activeTab ? 'o-h2p-tab-button--selected' : ''"
-            @click="setActiveTab(tab.id)">
+            @click="setActiveTab(tab)">
             {{tab.alias}}
           </div>
         </div>

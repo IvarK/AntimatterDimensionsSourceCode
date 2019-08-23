@@ -46,6 +46,10 @@ class AchievementState extends GameMechanicState {
     this.unlock();
   }
 
+  lock() {
+    player.achievements.delete(this.id);
+  }
+
   unlock() {
     if (this.isUnlocked) return;
     player.achievements.add(this.id);

@@ -243,8 +243,10 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 9,
       requirement: () => TimeStudy(111).isBought && !TimeStudy(121).isBought && !TimeStudy(123).isBought,
       requirementV: () => TimeStudy(111).isBought && (TimeStudy(121).isBought || TimeStudy(123).isBought),
-      description: "You gain 35x more EP",
-      effect: 35
+      description: () => (Perk.studyPassive.isBought
+        ? "You gain 100x more EP"
+        : "You gain 35x more EP"),
+      effect: () => (Perk.studyPassive.isBought ? 100 : 35)
     },
     {
       id: 123,
@@ -275,9 +277,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(122).isBought && (TimeStudy(131).isBought || TimeStudy(133).isBought),
       description: () => (Perk.studyPassive.isBought
-        ? "Replicanti galaxies are 50% more effective"
+        ? "Replicanti galaxies are 40% more effective and replicanti are 10x faster"
         : "Replicanti galaxies are 40% more effective"),
-      effect: () => (Perk.studyPassive.isBought ? 0.5 : 0.4)
+      effect: 0.4
     },
     {
       id: 133,
@@ -307,8 +309,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 4,
       requirement: () => TimeStudy(132).isBought && !TimeStudy(141).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(132).isBought && (TimeStudy(141).isBought || TimeStudy(143).isBought),
-      description: () => `You gain ${shorten(Perk.studyPassive.isBought ? 1e60 : 1e25, 0, 0)}x more IP`,
-      effect: () => (Perk.studyPassive.isBought ? 1e60 : 1e25)
+      description: () => `You gain ${shorten(Perk.studyPassive.isBought ? 1e100 : 1e25, 0, 0)}x more IP`,
+      effect: () => (Perk.studyPassive.isBought ? 1e100 : 1e25)
     },
     {
       id: 143,

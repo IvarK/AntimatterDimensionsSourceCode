@@ -123,7 +123,7 @@ GameDatabase.reality.perks = {
     id: 31,
     label: "PASS",
     family: PerkFamily.ETERNITY,
-    description: "Improve passive path to 50% stronger RG and 1e60 IP"
+    description: "Improve passive path IP/EP multipliers and add replicanti speed to study 132"
   },
   automatorRowScaling: {
     id: 32,
@@ -189,7 +189,7 @@ GameDatabase.reality.perks = {
     id: 53,
     label: "DIL-REQ",
     family: PerkFamily.DILATION,
-    description: "Remove the EC11/EC12 and TT requirement for Time Dilation."
+    description: "Remove the EC11/EC12 and total TT requirement for Time Dilation."
   },
   bypassEC1Lock: {
     id: 54,

@@ -191,7 +191,7 @@ const AutomatorBackend = {
       case AutomatorMode.PAUSE:
         return;
       case AutomatorMode.SINGLE_STEP:
-        this.step();
+        this.singleStep();
         this.state.mode = AutomatorMode.PAUSE;
         return;
       case AutomatorMode.RUN:
@@ -219,6 +219,16 @@ const AutomatorBackend = {
         return false;
     }
     throw crash("Unrecognized return code from command");
+  },
+
+  singleStep() {
+    if (this.stack.isEmpty) return;
+    // SAME_INSTRUCTION is used to enter blocks; this means we've successfully
+    // advanced a line. Otherwise, we always advance a line, regardless of return
+    // state.
+    if (this.runCurrentCommand() !== AutomatorCommandStatus.SAME_INSTRUCTION) {
+      this.nextCommand();
+    }
   },
 
   runCurrentCommand() {
@@ -257,12 +267,17 @@ const AutomatorBackend = {
     return this._scripts.find(e => e.id === id);
   },
 
+  _createDefaultScript() {
+    const defaultScript = AutomatorScript.create("Untitled");
+    this._scripts = [defaultScript];
+    this.state.topLevelScript = defaultScript.id;
+    return defaultScript.id;
+  },
+
   initializeFromSave() {
     const scriptIds = Object.keys(player.reality.automator.scripts);
     if (scriptIds.length === 0) {
-      const defaultScript = AutomatorScript.create("Untitled");
-      this._scripts = [defaultScript];
-      scriptIds.push(defaultScript.id);
+      scriptIds.push(this._createDefaultScript());
     } else {
       this._scripts = scriptIds.map(s => new AutomatorScript(s));
     }
@@ -285,6 +300,19 @@ const AutomatorBackend = {
     const newScript = AutomatorScript.create("Untitled");
     this._scripts.push(newScript);
     return newScript;
+  },
+
+  deleteScript(id) {
+    const idx = this._scripts.findIndex(e => e.id === id);
+    this._scripts.splice(idx, 1);
+    delete player.reality.automator.scripts[id];
+    if (this._scripts.length === 0) {
+      this._createDefaultScript();
+    }
+    if (id === this.state.topLevelScript) {
+      this.stop();
+      this.state.topLevelScript = this._scripts[0].id;
+    }
   },
 
   toggleRepeat() {

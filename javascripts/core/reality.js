@@ -264,6 +264,8 @@ function completeReality(force, reset, auto = false) {
 
   player.sacrificed = new Decimal(0);
 
+  lockAchievementsOnReality();
+
   NormalChallenges.clearCompletions();
   InfinityChallenges.clearCompletions();
   const isRUPG10Bought = RealityUpgrade(10).isBought;
@@ -479,3 +481,12 @@ function startRealityOver() {
   }
   return false;
 }
+
+function lockAchievementsOnReality() {
+  const startRow = GameCache.achSkipPerkCount.value + 1;
+  const lastRow = 13;
+  for (let r = startRow; r <= lastRow; ++r) {
+    Achievements.row(r).forEach(a => a.lock());
+  }
+}
+

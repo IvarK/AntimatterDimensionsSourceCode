@@ -239,9 +239,7 @@ function clearDimensions(maxTier) {
 }
 
 function onBuyDimension(tier) {
-  if (!player.break) {
-    Achievement(10 + tier).unlock();
-  }
+  Achievement(10 + tier).unlock();
   Achievement(23).tryUnlock();
 
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;

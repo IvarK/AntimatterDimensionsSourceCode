@@ -123,10 +123,10 @@ const AutomatorLexer = (() => {
     }
   });
 
-  for(var i = 1; i <= 12; ++i) {
+  for (let i = 1; i <= 12; ++i) {
     const ec = EternityChallenge(i);
-    createInCategory(Currency, "EC"+i, new RegExp('ec'+i+' completions', 'i'), {
-      $autocomplete: "ec"+ i +" completions",
+    createInCategory(Currency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {
+      $autocomplete: `ec${i} completions`,
       $getter: () => ec.completions
     });
   }

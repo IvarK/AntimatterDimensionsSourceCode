@@ -757,7 +757,9 @@ function getTTPerSecond() {
     : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
   
   // Dilation TT generation
-  const dilationTT = DilationUpgrade.ttGenerator.effectValue.times(ttMult);
+  const dilationTT = DilationUpgrade.ttGenerator.isBought
+    ? DilationUpgrade.ttGenerator.effectValue.times(ttMult)
+    : new Decimal(0);
 
   return dilationTT.add(glyphTT);
 }

@@ -191,7 +191,7 @@ Vue.component("enslaved-tab", {
           @click="buyUnlock(unlock)"> 
             {{ unlock.description }} <br> 
             Costs: {{ timeDisplayShort(unlock.price) }}<br>
-            <span v-if="isStoringBlackHole && !hasUnlock(unlock)">Time left to obtain: {{ timeDisplayShort(Math.max((unlock.price - storedBlackHole)  / currentSpeedUp), 0) }}</span>
+            <span v-if="isStoringBlackHole && !hasUnlock(unlock)">Time left to obtain: {{ timeDisplayShort(Math.max((unlock.price - storedBlackHole)  / currentSpeedUp, 0)) }}</span>
           </button>
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">

@@ -257,8 +257,8 @@ function getInfinitiedMilestoneReward(ms) {
   // infinitied stat per second for last 10 infinities) infinitied stat
   // if he has 1000 eternities milestone and turned on infinity autobuyer with 1 minute or less per crunch
 
-  function eternitiesReduce(acc, curr) {
-    // So curr[3] is eternities gained, if it's not recorded yet, just return accumulator
+  function infinitiesReduce(acc, curr) {
+    // So curr[3] is infinities gained, if it's not recorded yet, just return accumulator
     // curr[2] is real time spent, so divide eternities by real time spent and
     // add it to the accumulator
     return curr.length > 3 ? curr[3].dividedBy(curr[2]).plus(acc) : acc;
@@ -271,7 +271,7 @@ function getInfinitiedMilestoneReward(ms) {
 
   let infinitiedTotal = 0;
   if (autoInfinitiesAvailable) {
-    const averageInfinities = player.lastTenRuns.reduce(eternitiesReduce, new Decimal(0)).dividedBy(10);
+    const averageInfinities = player.lastTenRuns.reduce(infinitiesReduce, new Decimal(0)).dividedBy(10);
     infinitiedTotal = Decimal.floor(averageInfinities.times(ms).dividedBy(2));
   }
   return infinitiedTotal;
@@ -310,11 +310,7 @@ function getEternitiedMilestoneReward(ms) {
 
 function getOfflineEPGain(ms) {
   if (EternityMilestone.autoEP.isReached) return new Decimal(0);
-  const bestRun = player.lastTenEternities.reduce(
-    (acc, curr) => Decimal.max(acc, curr[1].dividedBy(curr[0]))
-  );
-
-  return bestRun.times(ms / 4);
+  return player.bestEPminThisEternity.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 
 function addRealityTime(time, realTime, rm, level) {

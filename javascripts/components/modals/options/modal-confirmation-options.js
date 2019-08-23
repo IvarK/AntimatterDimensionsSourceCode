@@ -4,15 +4,46 @@ Vue.component("modal-confirmation-options", {
   mixins: [modalOptionsMixin],
   data() {
     return {
-      options: player.options.confirmations
+      sacrifice: false,
+      challenges: false,
+      eternity: false,
+      dilation: false,
+      reality: false
     };
+  },
+  watch: {
+    sacrifice(newValue) {
+      player.options.confirmations.sacrifice = newValue;
+    },
+    challenges(newValue) {
+      player.options.confirmations.challenges = newValue;
+    },
+    eternity(newValue) {
+      player.options.confirmations.eternity = newValue;
+    },
+    dilation(newValue) {
+      player.options.confirmations.dilation = newValue;
+    },
+    reality(newValue) {
+      player.options.confirmations.reality = newValue;
+    }
+  },
+  methods: {
+    update() {
+      const options = player.options.confirmations;
+      this.sacrifice = options.sacrifice;
+      this.challenges = options.challenges;
+      this.eternity = options.eternity;
+      this.dilation = options.dilation;
+      this.reality = options.reality;
+    }
   },
   template:
     `<modal-options @close="emitClose">
-      <on-off-button v-model="options.sacrifice" text="Sacrifice:"/>
-      <on-off-button v-model="options.challenges" text="Challenges:"/>
-      <on-off-button v-if="eternityUnlocked" v-model="options.eternity" text="Eternity:"/>
-      <on-off-button v-if="dilationUnlocked" v-model="options.dilation" text="Dilation:"/>
-      <on-off-button v-if="realityUnlocked" v-model="options.reality" text="Reality:"/>
+      <on-off-button v-model="sacrifice" text="Sacrifice:"/>
+      <on-off-button v-model="challenges" text="Challenges:"/>
+      <on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:"/>
+      <on-off-button v-if="dilationUnlocked" v-model="dilation" text="Dilation:"/>
+      <on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:"/>
     </modal-options>`
 });

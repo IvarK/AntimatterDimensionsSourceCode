@@ -11,8 +11,8 @@ function startEternityChallenge() {
   player.replicanti.galaxies = 0;
   resetInfinityPointsOnEternity();
   InfinityDimensions.resetAmount();
-  IPminpeak = new Decimal(0);
-  EPminpeak = new Decimal(0);
+  player.bestIPminThisInfinity = new Decimal(0);
+  player.bestEPminThisEternity = new Decimal(0);
   resetTimeDimensions();
   // FIXME: Eternity count is now a Decimal, also why is this submitted twice?
   // kong.submitStats("Eternities", player.eternities);
@@ -162,7 +162,7 @@ class EternityChallengeState extends GameMechanicState {
 
   start(auto) {
     if (!this.isUnlocked) return false;
-    if (player.options.confirmations.challenges) {
+    if (!auto && player.options.confirmations.challenges) {
       const confirmation =
         "You will start over with just your time studies, " +
         "eternity upgrades and achievements. " +

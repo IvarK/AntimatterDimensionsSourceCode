@@ -60,7 +60,7 @@ Vue.component("sidebar-ep", {
         ? EPButtonDisplayType.NORMAL_EXPLORE_NEW_CONTENT
         : EPButtonDisplayType.NORMAL;
       this.currentEPPM.copyFrom(gainedEP.dividedBy(Time.thisEternity.totalMinutes));
-      this.peakEPPM.copyFrom(EPminpeak);
+      this.peakEPPM.copyFrom(player.bestEPminThisEternity);
     },
     updateChallengeWithRUPG() {
       const ec = EternityChallenge.current;

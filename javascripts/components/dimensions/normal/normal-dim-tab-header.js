@@ -5,8 +5,7 @@ Vue.component("normal-dim-tab-header", {
     return {
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
-      sacrificeBoost: new Decimal(0),
-      options: player.options
+      sacrificeBoost: new Decimal(0)
     };
   },
   computed: {
@@ -19,10 +18,10 @@ Vue.component("normal-dim-tab-header", {
   },
   methods: {
     update() {
-      const isSacrificeUnlocked = Sacrifice.isUnlocked;
+      const isSacrificeUnlocked = Sacrifice.isVisible;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
       if (!isSacrificeUnlocked) return;
-      this.isSacrificeAffordable = Sacrifice.isAffordable;
+      this.isSacrificeAffordable = Sacrifice.canSacrifice;
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
     },
     sacrifice() {

@@ -50,7 +50,7 @@ function buyDilationUpgrade(id, bulk) {
 
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
       DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
-    buying = Math.min(buying, player.celestials.teresa.dtBulk);
+    buying = Math.min(buying, Effects.max(1, PerkShopUpgrade.rmMult));
     if (!bulk) {
       buying = Math.min(buying, 1);
     }
@@ -114,6 +114,7 @@ function tachyonGainMultiplier() {
   return new Decimal(1).timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,
+    Achievement(132),
     RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15)
@@ -155,7 +156,7 @@ function dilatedValueOf(value, depth) {
   if (depth !== undefined) {
     return recursiveDilation(value, depth);
   }
-  if (player.dilation.active) {
+  if (player.dilation.active || Enslaved.isRunning) {
     return recursiveDilation(value, 1);
   }
   if (TimeCompression.isActive) {

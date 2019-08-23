@@ -102,9 +102,6 @@ const GameStorage = {
   loadPlayerObject(playerObject) {
     this.saved = 0;
 
-    IPminpeak = new Decimal(0);
-    EPminpeak = new Decimal(0);
-
     if (
       playerObject === Player.defaultStart ||
       !this.verifyPlayerObject(playerObject)
@@ -133,7 +130,6 @@ const GameStorage = {
 
     recalculateAllGlyphs();
     checkPerkValidity();
-    Teresa.checkPPShopValidity();
     V.updateTotalRunUnlocks();
     Enslaved.boostReality = false;
     Theme.set(player.options.theme);
@@ -150,7 +146,7 @@ const GameStorage = {
     if (diff > 1000 * 1000) {
       simulateTime(diff / 1000);
     }
-    nextTickDiff = player.options.updateRate;
+    Enslaved.nextTickDiff = player.options.updateRate;
     GameUI.update();
     if (GameIntervals.gameLoop.isStarted) {
       GameIntervals.gameLoop.restart();

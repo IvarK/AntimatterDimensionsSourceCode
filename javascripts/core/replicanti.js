@@ -34,9 +34,7 @@ function replicantiGalaxy() {
     player.replicanti.amount = new Decimal(1);
   }
   player.replicanti.galaxies += galaxyGain;
-  // Galaxy count will be increased inside galaxyReset
-  player.galaxies -= 1;
-  galaxyReset();
+  softReset(0);
 }
 
 // Produces replicanti quickly below e308, will auto-bulk-RG if production is fast enough
@@ -81,6 +79,9 @@ function getReplicantiInterval(noMod, intervalIn) {
   interval = Decimal.divide(interval, preCelestialEffects);
   if ((TimeStudy(133).isBought && !Achievement(138).isEnabled) || (amount.gt(replicantiCap()) || noMod)) {
     interval = interval.times(10);
+  }
+  if (TimeStudy(132).isBought && Perk.studyPassive.isBought) {
+    interval = interval.divide(10);
   }
   if (amount.lte(replicantiCap()) || noMod) {
     if (Achievement(134).isEnabled) interval = interval.divide(2);

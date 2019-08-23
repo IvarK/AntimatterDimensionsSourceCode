@@ -243,6 +243,7 @@ function completeReality(force, reset, auto = false) {
       player.bestReality = player.thisReality;
     }
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
+    player.bestRMmin = player.bestRMmin.max(gainedRealityMachines().dividedBy(Time.thisRealityRealTime.totalMinutes));
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained;
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
@@ -279,7 +280,6 @@ function completeReality(force, reset, auto = false) {
   player.thisInfinityRealTime = 0;
   player.dimensionBoosts = isRUPG10Bought ? 4 : 0;
   player.galaxies = isRUPG10Bought ? 1 : 0;
-  player.tickDecrease = 0.9;
   player.interval = null;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
@@ -379,11 +379,12 @@ function completeReality(force, reset, auto = false) {
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
   }
-  if (player.realities === 4) player.reality.automatorCommands = new Set([12, 24, 25]);
   player.reality.upgReqChecks = [true];
   InfinityDimensions.resetAmount();
-  IPminpeak = new Decimal(0);
-  EPminpeak = new Decimal(0);
+  player.bestIPminThisInfinity = new Decimal(0);
+  player.bestIPminThisEternity = new Decimal(0);
+  player.bestEPminThisEternity = new Decimal(0);
+  player.bestEPminThisReality = new Decimal(0);
   resetTimeDimensions();
   // FIXME: Eternity count is now a Decimal so this needs to be addressed
   // kong.submitStats('Eternities', player.eternities);

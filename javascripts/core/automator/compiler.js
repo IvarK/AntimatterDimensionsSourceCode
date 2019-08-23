@@ -275,7 +275,8 @@
       if (ctx.NumberLiteral) {
         ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       } else if (ctx.Identifier) {
-        ctx.$value = this.lookupVar(ctx.Identifier[0], AutomatorVarTypes.NUMBER).value;
+        const varLookup = this.lookupVar(ctx.Identifier[0], AutomatorVarTypes.NUMBER);
+        if (varLookup) ctx.$value = varLookup.value;
       }
     }
 

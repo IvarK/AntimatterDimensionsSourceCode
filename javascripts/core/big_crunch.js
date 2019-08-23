@@ -44,6 +44,8 @@ function bigCrunchResetRequest(disableAnimation = false) {
 
 function bigCrunchReset() {
   if (!canCrunch()) return;
+  player.bestIPminThisEternity = player.bestIPminThisEternity.clampMin(player.bestIPminThisInfinity);
+  player.bestIPminThisInfinity = new Decimal(0);
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
@@ -67,7 +69,7 @@ function bigCrunchReset() {
 
   const currentReplicanti = player.replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
-  secondSoftReset();
+  secondSoftReset(true);
 
   if (Achievement(95).isEnabled) {
     player.replicanti.amount = currentReplicanti;
@@ -98,14 +100,12 @@ function bigCrunchReset() {
 
 }
 
-function secondSoftReset() {
+function secondSoftReset(forcedNDReset = false) {
     player.dimensionBoosts = 0;
     player.galaxies = 0;
-    player.tickDecrease = 0.9;
     resetAntimatter();
-    softReset(0);
+    softReset(0, forcedNDReset);
     InfinityDimensions.resetAmount();
-    IPminpeak = new Decimal(0);
     if (player.replicanti.unl)
         player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;

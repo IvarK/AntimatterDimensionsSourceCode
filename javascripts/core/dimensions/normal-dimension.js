@@ -629,7 +629,7 @@ class NormalDimensionState extends DimensionState {
   get rateOfChange() {
     const tier = this.tier;
     if (tier === 8 ||
-      (tier > 4 && EternityChallenge(3).isRunning) ||
+      (tier > 3 && EternityChallenge(3).isRunning) ||
       (tier > 6 && NormalChallenge(12).isRunning)) {
       return new Decimal(0);
     }

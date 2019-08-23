@@ -146,7 +146,7 @@ GameDatabase.tabs = [
     name: "Infinity",
     oldUIClass: "infinitytabbtn",
     newUIClass: "infinity",
-    condition: () => player.eternities.gt(0) || player.infinitied.gt(0),
+    condition: () => player.eternities.gt(0) || player.infinitied.gt(0) || player.infinityPoints.gt(0),
     before: "infinity-points-header",
     subtabs: [
       {

@@ -255,7 +255,7 @@ function resetInfinityRuns() {
 function getInfinitiedMilestoneReward(ms) {
   // Player gains 50% of (timeOffline / average gain of 
   // infinitied stat per second for last 10 infinities) infinitied stat
-  // if he has 1000 eternities milestone and turned on infinity autobuyer with 1 minute or less per crunch
+  // if he has 1000 infinities milestone and turned on infinity autobuyer with 1 minute or less per crunch
 
   function infinitiesReduce(acc, curr) {
     // So curr[3] is infinities gained, if it's not recorded yet, just return accumulator
@@ -295,6 +295,9 @@ function getEternitiedMilestoneReward(ms) {
   // Player gains 50% of (timeOffline / average of last 10 eternity times) eternities
   // If he has 100 eternities milestone and turned on eternity autobuyer with 0 EP
   function eternitiesReduce(acc, curr) {
+    // So curr[3] is eternities gained, if it's not recorded yet, just return accumulator
+    // curr[2] is real time spent, so divide eternities by real time spent and
+    // add it to the accumulator
     return (curr.length > 3 ? acc + curr[3] / curr[2] : acc);
   }
 

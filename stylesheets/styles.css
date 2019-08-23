@@ -2701,11 +2701,6 @@ screen and (max-width: 480px) {
   border-color: #127a20;
 }
 
-.o-achievement--disabled {
-  background-color: #c45a5a;
-  border-color: #781212;
-}
-
 .o-achievement--hidden {
   background-image: url("../images/achhidden.png");
   background-color: #555;

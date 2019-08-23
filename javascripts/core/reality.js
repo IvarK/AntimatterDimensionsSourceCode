@@ -371,10 +371,8 @@ function completeReality(force, reset, auto = false) {
   player.celestials.ra.peakGamespeed = 1;
   if (isRUPG10Bought) {
     player.eternities = new Decimal(100);
-    if (Achievements.totalDisabledTime === 0) {
-      initializeChallengeCompletions();
-    }
   }
+  initializeChallengeCompletions();
   if (!reset) player.reality.pp++;
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();

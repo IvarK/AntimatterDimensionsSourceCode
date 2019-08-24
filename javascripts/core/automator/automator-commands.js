@@ -98,9 +98,22 @@ const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => {
-        const duration = ctx.duration ? ctx.duration[0].children.$value : undefined;
+        console.log(ctx)
+        const duration = ctx.duration 
+        ? `${ctx.duration[0].children.NumberLiteral[0].image} ${ctx.duration[0].children.TimeUnit[0].image}`
+        : undefined;
+        const xLast = ctx.xLast ? ctx.xLast[0].children.$value : undefined;
+        const fixedAmount = ctx.currencyAmount 
+        ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image} ${ctx.currencyAmount[0].children.Currency[0].image}`
+        : undefined;
         const on = Boolean(ctx.On);
-        const input = (duration !== undefined) ? duration : (on ? "ON" : "OFF")
+        let input = "";
+
+        if (duration) input = duration;
+        else if (xLast) input = `${xLast} x last`;
+        else if (fixedAmount) input = `${fixedAmount}`;
+        else input = (on ? "ON" : "OFF");
+
         return {
           target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
           inputValue: input,

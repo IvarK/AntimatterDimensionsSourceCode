@@ -39,7 +39,7 @@ const automator_blocks = [
     targetsWithoutInput: ['DILATION']
   }, {
     cmd: 'AUTO',
-    targets: ['INFINITY', 'ETERNITY'],
+    targets: ['INFINITY', 'ETERNITY', 'REALITY'],
     hasInput: true
   }, {
     cmd: 'TT',

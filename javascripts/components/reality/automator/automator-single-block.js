@@ -51,12 +51,12 @@ Vue.component("automator-single-block", {
       this.currentBlockId = BlockAutomator.currentBlockId;
     },
     validateInput(value) {
+      if (this.b.cmd !== "STUDIES") return;
       const validator = AutomatorGrammar.validateStudyList(value);
       this.validatorErrors = {
         errors: validator.errors,
         line: value
       };
-      console.log(this.validatorErrors);
     }
   },
   computed: {
@@ -79,10 +79,17 @@ Vue.component("automator-single-block", {
       const span = "<span class='o-automator-error-underline'>";
       const content = this.validatorErrors.line
         .splice(this.validatorErrors.errors[0].startOffset, 0, span)
-        .splice(this.validatorErrors.errors[0].endOffset + span.length, 0, "</span>");
+        .splice(this.validatorErrors.errors[0].endOffset + span.length + 1, 0, "</span>");
       return {
-        line: content,
-        error: this.validatorErrors.errors[0].info,
+        content: 
+        `<div class="c-block-automator-error">
+          <div>${content}</div>
+          <div>${this.validatorErrors.errors[0].info}</div>
+        </div>`,
+        html: true,
+        trigger: "manual",
+        show: true,
+        classes: ["c-block-automator-error-container", "general-tooltip"]
       };
     }
   },
@@ -100,19 +107,13 @@ Vue.component("automator-single-block", {
           class="o-automator-block-input">
           <option v-for="target in b.secondaryTargets" :value="target">{{ target }}</option>
         </select>
-        <v-popover trigger="manual" :open="hasError">
-          <input 
-            v-if="hasInput" 
-            v-model="b.inputValue" 
-            @change="updateBlock(b, b.id)" 
-            @keyup="validateInput(b.inputValue)" 
-            class="o-automator-block-input"/>
-
-            <div slot="popover" v-if="hasError">
-              <div v-html="errorTooltip.line"></div>
-              <div>{{ errorTooltip.error }}</div>
-            </div>
-        </v-popover>
+        <input 
+          v-if="hasInput" 
+          v-model="b.inputValue" 
+          @change="updateBlock(b, b.id)" 
+          @keyup="validateInput(b.inputValue)" 
+          class="o-automator-block-input"
+          v-tooltip="errorTooltip"/>
         
         <div @click="deleteBlock(b.id)" class="o-automator-block-delete">X</div>
       </div>

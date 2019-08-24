@@ -134,3 +134,7 @@
   opacity: 1;
   transition: opacity 0.3s;
 }
+
+.c-block-automator-error-container .tooltip-inner {
+  width: auto; 
+}

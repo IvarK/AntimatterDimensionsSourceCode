@@ -44,7 +44,7 @@ Vue.component("normal-dim-row", {
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
       const dimension = NormalDimension(tier);
-      this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 10;
+      this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 1;
       this.multiplier.copyFrom(getDimensionFinalMultiplier(tier));
       this.amount.copyFrom(dimension.amount);
       this.boughtBefore10 = dimension.boughtBefore10;

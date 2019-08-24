@@ -1,7 +1,7 @@
 "use strict";
 
 function startChallenge() {
-  secondSoftReset();
+  secondSoftReset(true);
   if (!Enslaved.isRunning) Tab.dimensions.normal.show();
 }
 

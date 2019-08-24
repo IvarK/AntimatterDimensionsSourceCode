@@ -1,11 +1,34 @@
 "use strict";
 
+// This is needed here, don't know where it should go
+if (!String.prototype.splice) {
+  /**
+   * {JSDoc}
+   *
+   * The splice() method changes the content of a string by removing a range of
+   * characters and/or adding new characters.
+   *
+   * @this {String}
+   * @param {number} start Index at which to start changing the string.
+   * @param {number} delCount An integer indicating the number of old chars to remove.
+   * @param {string} newSubStr The String that is spliced in.
+   * @return {string} A new string with the spliced substring.
+   */
+  String.prototype.splice = function(start, delCount, newSubStr) {
+      return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
+  };
+}
+
 Vue.component("automator-single-block", {
   data() {
     return {
       b: {},
-      currentBlockId: -1
-    }
+      currentBlockId: -1,
+      validatorErrors: {
+        errors: [],
+        line: ""
+      }
+    };
   },
   props: {
     block: Object,
@@ -14,30 +37,54 @@ Vue.component("automator-single-block", {
     lineNumber: Number,
   },
   mounted() {
-    this.b = this.block
+    this.b = this.block;
   },
   methods: {
     deleteBlockFromNest(id) {
-      let idx = this.b.nest.findIndex( x => x.id == id)
+      const idx = this.b.nest.findIndex(x => x.id === id)
       this.b.nest.splice(idx, 1)
     },
     updateBlockFromNest(block, id) {
-      this.$set(this.b.nest, this.b.nest.findIndex( x => x.id == id), block)
+      this.$set(this.b.nest, this.b.nest.findIndex(x => x.id === id), block);
     },
     update() {
-      this.currentBlockId = BlockAutomator.currentBlockId
+      this.currentBlockId = BlockAutomator.currentBlockId;
+    },
+    validateInput(value) {
+      const validator = AutomatorGrammar.validateStudyList(value);
+      this.validatorErrors = {
+        errors: validator.errors,
+        line: value
+      };
+      console.log(this.validatorErrors);
     }
   },
   computed: {
     hasInput() {
-      return this.b.hasInput && ( this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true )
+      return this.b.hasInput && 
+      (this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true)
     },
     hasSecondaryTargets() {
-      return this.b.secondaryTargets && ( this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true )
+      return this.b.secondaryTargets && 
+      (this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true)
     },
     isCurrentLine() {
-      return this.b.id == this.currentBlockId;
+      return this.b.id === this.currentBlockId;
     },
+    hasError() {
+      return this.validatorErrors.errors.length > 0;
+    },
+    errorTooltip() {
+      if (!this.hasError) return undefined;
+      const span = "<span class='o-automator-error-underline'>";
+      const content = this.validatorErrors.line
+        .splice(this.validatorErrors.errors[0].startOffset, 0, span)
+        .splice(this.validatorErrors.errors[0].endOffset + span.length, 0, "</span>");
+      return {
+        line: content,
+        error: this.validatorErrors.errors[0].info,
+      };
+    }
   },
   template:
     `<div>
@@ -46,10 +93,27 @@ Vue.component("automator-single-block", {
         <select v-if="b.targets" @change="updateBlock(block, b.id)" v-model="b.target" class="o-automator-block-input">
           <option v-for="target in b.targets" :value="target">{{ target }}</option>
         </select>
-        <select v-if="hasSecondaryTargets" @change="updateBlock(block, b.id)" v-model="b.secondaryTarget" class="o-automator-block-input">
+        <select 
+          v-if="hasSecondaryTargets" 
+          @change="updateBlock(block, b.id)" 
+          v-model="b.secondaryTarget" 
+          class="o-automator-block-input">
           <option v-for="target in b.secondaryTargets" :value="target">{{ target }}</option>
         </select>
-        <input v-if="hasInput" v-model="b.inputValue" @change="updateBlock(b, b.id)" class="o-automator-block-input"/>
+        <v-popover trigger="manual" :open="hasError">
+          <input 
+            v-if="hasInput" 
+            v-model="b.inputValue" 
+            @change="updateBlock(b, b.id)" 
+            @keyup="validateInput(b.inputValue)" 
+            class="o-automator-block-input"/>
+
+            <div slot="popover" v-if="hasError">
+              <div v-html="errorTooltip.line"></div>
+              <div>{{ errorTooltip.error }}</div>
+            </div>
+        </v-popover>
+        
         <div @click="deleteBlock(b.id)" class="o-automator-block-delete">X</div>
       </div>
       <draggable v-if="block.nested" class="l-automator-nested-block" v-model="block.nest" group="code-blocks">

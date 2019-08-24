@@ -483,5 +483,19 @@
 
     return false;
   }
-  AutomatorGrammar.blockifyTextAutomator = blockifyTextAutomator
+  AutomatorGrammar.blockifyTextAutomator = blockifyTextAutomator;
+
+  function validateStudyList(input) {
+    const lexResult = AutomatorLexer.lexer.tokenize(input);
+    const tokens = lexResult.tokens;
+    AutomatorGrammar.parser.input = tokens;
+    const parseResult = AutomatorGrammar.parser.studyList();
+    const validator = new Validator();
+    validator.visit(parseResult);
+    validator.addLexerErrors(lexResult.errors, input);
+    validator.addParserErrors(parser.errors, tokens);
+    return validator
+  }
+
+  AutomatorGrammar.validateStudyList = validateStudyList;
 }());

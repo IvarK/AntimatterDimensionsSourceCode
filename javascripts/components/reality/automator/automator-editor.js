@@ -148,7 +148,7 @@ Vue.component("automator-editor", {
   template:
     `<div class="l-automator-pane">
       <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
-        <automator-controls />
+        <automator-controls @automatorplay="parseTextFromBlocks()"/>
         <div class="l-automator__script-names">
           <template v-if="!editingName">
             <select class="l-automator__scripts-dropdown"
@@ -178,6 +178,6 @@ Vue.component("automator-editor", {
       <automator-text-editor :currentScriptID="currentScriptID"
                              :activeLine="activeLine"
                              v-show="mode"/>
-      <automator-block-editor v-show="!mode" />
+      <automator-block-editor v-show="!mode"/>
     </div>`
 });

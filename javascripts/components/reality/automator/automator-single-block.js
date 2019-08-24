@@ -43,11 +43,9 @@ Vue.component("automator-single-block", {
     deleteBlockFromNest(id) {
       const idx = this.b.nest.findIndex(x => x.id === id);
       this.b.nest.splice(idx, 1);
-      this.$emit("automatorchanged");
     },
     updateBlockFromNest(block, id) {
       this.$set(this.b.nest, this.b.nest.findIndex(x => x.id === id), block);
-      this.$emit("automatorchanged");
     },
     update() {
       this.currentBlockId = BlockAutomator.currentBlockId;

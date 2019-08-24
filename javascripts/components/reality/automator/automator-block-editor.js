@@ -39,7 +39,7 @@ const BlockAutomator = {
       lines.push(this.parseBlock(l[i], indentation));
       if (l[i].cmd === "IF" || l[i].cmd === "WHILE" || l[i].cmd === "UNTIL") {
         lines.push(...this.parseLines(l[i].nest, indentation + 1));
-        lines.push(`${"\t".repeat(indentation)}`);
+        lines.push(`${"\t".repeat(indentation)}}`);
       }
     }
   
@@ -76,28 +76,24 @@ Vue.component("automator-block-editor", {
     updateBlock(block, id) {
       this.$set(this.lines, this.lines.findIndex(x => x.id === id), block);
       BlockAutomator.lines = this.lines;
-      this.$emit("automatorchanged");
     },
     deleteBlock(id) {
       const idx = this.lines.findIndex(x => x.id === id);
       this.lines.splice(idx, 1);
       BlockAutomator.lines = this.lines;
-      this.$emit("automatorchanged");
     },
     parseLines() {
-      console.log("parsed")
       $("#automator").val(BlockAutomator.parseLines(this.lines).join("\n"));
     },
     onUpdate() {
       BlockAutomator.lines = this.lines;
-      this.$emit("automatorchanged");
     },
     update() {
       this.lines = BlockAutomator.lines;
     },
   },
   template:
-    `<div class="c-automator-block-editor" @automatorchanged="parseLines()">
+    `<div class="c-automator-block-editor">
       <draggable 
         v-model="lines" 
         group="code-blocks" 

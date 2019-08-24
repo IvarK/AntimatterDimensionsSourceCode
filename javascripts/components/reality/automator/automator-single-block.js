@@ -27,7 +27,9 @@ Vue.component("automator-single-block", {
       validatorErrors: {
         errors: [],
         line: ""
-      }
+      },
+      // For errors
+      idxOffset: 0,
     };
   },
   props: {
@@ -51,8 +53,20 @@ Vue.component("automator-single-block", {
       this.currentBlockId = BlockAutomator.currentBlockId;
     },
     validateInput(value) {
-      if (this.b.cmd !== "STUDIES") return;
-      const validator = AutomatorGrammar.validateStudyList(value);
+      let validator, lines;
+
+      if (this.b.nest) {
+        const clone = Object.assign({}, this.b);
+        clone.nest = [];
+        lines = BlockAutomator.parseLines([clone]);
+        validator = AutomatorGrammar.validateLine(lines.join("\n"));
+      } else {
+        lines = BlockAutomator.parseLines([this.b]);
+        validator = AutomatorGrammar.validateLine(lines[0]);
+      }
+
+      this.idxOffset = lines[0].indexOf(value);
+
       this.validatorErrors = {
         errors: validator.errors,
         line: value
@@ -62,11 +76,11 @@ Vue.component("automator-single-block", {
   computed: {
     hasInput() {
       return this.b.hasInput && 
-      (this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true)
+      (this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true);
     },
     hasSecondaryTargets() {
       return this.b.secondaryTargets && 
-      (this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true)
+      (this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true);
     },
     isCurrentLine() {
       return this.b.id === this.currentBlockId;
@@ -78,8 +92,8 @@ Vue.component("automator-single-block", {
       if (!this.hasError) return undefined;
       const span = "<span class='o-automator-error-underline'>";
       const content = this.validatorErrors.line
-        .splice(this.validatorErrors.errors[0].startOffset, 0, span)
-        .splice(this.validatorErrors.errors[0].endOffset + span.length + 1, 0, "</span>");
+        .splice(this.validatorErrors.errors[0].startOffset - this.idxOffset, 0, span)
+        .splice(this.validatorErrors.errors[0].endOffset + span.length + 1 - this.idxOffset, 0, "</span>");
       return {
         content: 
         `<div class="c-block-automator-error">

@@ -485,11 +485,11 @@
   }
   AutomatorGrammar.blockifyTextAutomator = blockifyTextAutomator;
 
-  function validateStudyList(input) {
+  function validateLine(input) {
     const lexResult = AutomatorLexer.lexer.tokenize(input);
     const tokens = lexResult.tokens;
     AutomatorGrammar.parser.input = tokens;
-    const parseResult = AutomatorGrammar.parser.studyList();
+    const parseResult = AutomatorGrammar.parser.script();
     const validator = new Validator();
     validator.visit(parseResult);
     validator.addLexerErrors(lexResult.errors, input);
@@ -497,5 +497,5 @@
     return validator
   }
 
-  AutomatorGrammar.validateStudyList = validateStudyList;
+  AutomatorGrammar.validateLine = validateLine;
 }());

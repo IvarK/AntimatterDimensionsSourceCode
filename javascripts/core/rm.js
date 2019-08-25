@@ -564,6 +564,12 @@ function getGlyphEffectsFromBitmask(bitmask, level, strength) {
     }));
 }
 
+function getAdjustedGlyphLevel(level) {
+  if (Enslaved.isRunning) return Enslaved.glyphLevelFix;
+  if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
+  return level;
+}
+
 // Pulls out a single effect value from a glyph's bitmask, returning just the value (nothing for missing effects)
 function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   const glyphEffect = GameDatabase.reality.glyphEffects[effectName];
@@ -571,8 +577,7 @@ function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   if ((glyph.effects & (1 << glyphEffect.bitmaskIndex)) === 0) {
     return undefined;
   }
-  const level = Effarig.isRunning ? Math.min(glyph.level, Effarig.glyphLevelCap) : glyph.level;
-  return glyphEffect.effect(level, glyph.strength);
+  return glyphEffect.effect(getAdjustedGlyphLevel(glyph.level), glyph.strength);
 }
 
 function countEffectsFromBitmask(bitmask) {

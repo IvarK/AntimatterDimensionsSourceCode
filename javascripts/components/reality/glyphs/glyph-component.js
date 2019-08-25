@@ -52,17 +52,20 @@ const GlyphTooltipComponent = {
       type: Number,
       default: 0,
     },
-    levelCap: {
+    levelOverride: {
       type: Number,
-      default: Number.MAX_VALUE,
+      default: 0,
     }
   },
   computed: {
     onTouchDevice() {
       return GameUI.touchDevice;
     },
+    effectiveLevel() {
+      return this.levelOverride ? this.levelOverride : this.level;
+    },
     sortedEffects() {
-      return getGlyphEffectsFromBitmask(this.effects, Math.min(this.level, this.levelCap), this.strength);
+      return getGlyphEffectsFromBitmask(this.effects, this.effectiveLevel, this.strength);
     },
     rarityInfo() {
       return getRarity(this.strength);
@@ -82,15 +85,20 @@ const GlyphTooltipComponent = {
       return `${this.rarityInfo.name} glyph of ${this.type} (${this.roundedRarity.toFixed(1)}%)`;
     },
     isLevelCapped() {
-      return this.levelCap < this.level;
+      return this.levelOverride && this.levelOverride < this.level;
+    },
+    isLevelBoosted() {
+      return this.levelOverride && this.levelOverride > this.level;
     },
     levelText() {
-      return this.isLevelCapped
-        ? `Level: ▼${shortenSmallInteger(this.levelCap)}▼`
-        : `Level: ${shortenSmallInteger(this.level)}`;
+      // eslint-disable-next-line no-nested-ternary
+      const arrow = this.isLevelCapped ? "▼" : (this.isLevelBoosted ? "⯅" : "");
+      return `Level: ${arrow}${shortenSmallInteger(this.effectiveLevel)}${arrow}`;
     },
     levelStyle() {
-      return { color: this.isLevelCapped ? "#FF1111" : "#FFFFFF" };
+      // eslint-disable-next-line no-nested-ternary
+      const color = this.isLevelCapped ? "$FF1111" : (this.isLevelBoosted ? "#44FF44" : "");
+      return { color };
     },
     sacrificeText() {
       if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && this.type !== "reality") {
@@ -209,7 +217,7 @@ Vue.component("glyph-component", {
       suppressTooltip: false,
       isTouched: false,
       sacrificeReward: 0,
-      levelCap: Number.MAX_VALUE,
+      levelOverride: 0,
     };
   },
   computed: {
@@ -294,7 +302,10 @@ Vue.component("glyph-component", {
       this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
         ? glyphRefinementGain(this.glyph)
         : glyphSacrificeGain(this.glyph);
-      this.levelCap = Effarig.isRunning ? Effarig.glyphLevelCap : Number.MAX_VALUE;
+      // eslint-disable-next-line no-nested-ternary
+      this.levelOverride = Effarig.isRunning
+        ? Effarig.glyphLevelCap
+        : (Enslaved.isRunning ? Enslaved.glyphLevelFix : 0);
     },
     moveTooltipTo(x, y) {
       const tooltipEl = this.$refs.tooltip.$el;
@@ -398,7 +409,7 @@ Vue.component("glyph-component", {
                        ref="tooltip"
                        v-bind="glyph"
                        :sacrificeReward="sacrificeReward"
-                       :levelCap="levelCap"
+                       :levelOverride="levelOverride"
                        :visible="isCurrentTooltip"/>
       </div>
       <div ref="over"

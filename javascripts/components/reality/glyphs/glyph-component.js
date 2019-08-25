@@ -62,7 +62,7 @@ const GlyphTooltipComponent = {
       return GameUI.touchDevice;
     },
     effectiveLevel() {
-      return this.levelOverride ? this.levelOverride : this.level;
+      return this.levelOverride;
     },
     sortedEffects() {
       return getGlyphEffectsFromBitmask(this.effects, this.effectiveLevel, this.strength);
@@ -85,10 +85,10 @@ const GlyphTooltipComponent = {
       return `${this.rarityInfo.name} glyph of ${this.type} (${this.roundedRarity.toFixed(1)}%)`;
     },
     isLevelCapped() {
-      return this.levelOverride && this.levelOverride < this.level;
+      return this.levelOverride < this.level;
     },
     isLevelBoosted() {
-      return this.levelOverride && this.levelOverride > this.level;
+      return this.levelOverride > this.level;
     },
     levelText() {
       // eslint-disable-next-line no-nested-ternary
@@ -97,7 +97,7 @@ const GlyphTooltipComponent = {
     },
     levelStyle() {
       // eslint-disable-next-line no-nested-ternary
-      const color = this.isLevelCapped ? "$FF1111" : (this.isLevelBoosted ? "#44FF44" : "");
+      const color = this.isLevelCapped ? "#FF1111" : (this.isLevelBoosted ? "#44FF44" : "");
       return { color };
     },
     sacrificeText() {
@@ -303,9 +303,7 @@ Vue.component("glyph-component", {
         ? glyphRefinementGain(this.glyph)
         : glyphSacrificeGain(this.glyph);
       // eslint-disable-next-line no-nested-ternary
-      this.levelOverride = Effarig.isRunning
-        ? Effarig.glyphLevelCap
-        : (Enslaved.isRunning ? Enslaved.glyphLevelFix : 0);
+      this.levelOverride = getAdjustedGlyphLevel(this.glyph.level);
     },
     moveTooltipTo(x, y) {
       const tooltipEl = this.$refs.tooltip.$el;

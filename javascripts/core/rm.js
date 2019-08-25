@@ -565,7 +565,7 @@ function getGlyphEffectsFromBitmask(bitmask, level, strength) {
 }
 
 function getAdjustedGlyphLevel(level) {
-  if (Enslaved.isRunning) return Enslaved.glyphLevelFix;
+  if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
   if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
   return level;
 }

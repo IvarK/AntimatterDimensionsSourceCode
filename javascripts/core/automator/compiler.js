@@ -9,11 +9,10 @@
   const BaseVisitor = parser.getBaseCstVisitorConstructorWithDefaults();
 
   class Validator extends BaseVisitor {
-    constructor() {
+    constructor(rawText) {
       super();
       this.validateVisitor();
-      this.reset();
-      this.rawText = "";
+      this.reset(rawText);
       // Commands can provide validation hooks; we might also have some here
       for (const cmd of AutomatorCommands) {
         if (!cmd.validate) continue;
@@ -25,13 +24,13 @@
       }
     }
 
-    addLexerErrors(errors, input) {
+    addLexerErrors(errors) {
       for (const err of errors) {
         this.errors.push({
           startLine: err.line,
           startOffset: err.offset,
           endOffset: err.offset + err.length,
-          info: `Unexpected characters "${input.substr(err.offset, err.length)}"`,
+          info: `Unexpected characters "${this.rawText.substr(err.offset, err.length)}"`,
         });
       }
     }
@@ -101,7 +100,8 @@
       this.errors.push(pos);
     }
 
-    reset() {
+    reset(rawText) {
+      this.rawText = rawText;
       this.variables = {};
       this.errors = [];
     }
@@ -333,9 +333,7 @@
       return !hadError;
     }
 
-    script(ctx, rawText) {
-      this.reset();
-      this.rawText = rawText;
+    script(ctx) {
       if (ctx.block) this.visit(ctx.block);
       ctx.variables = this.variables;
     }
@@ -450,9 +448,9 @@
     const tokens = lexResult.tokens;
     parser.input = tokens;
     const parseResult = parser.script();
-    const validator = new Validator();
-    validator.visit(parseResult, input);
-    validator.addLexerErrors(lexResult.errors, input);
+    const validator = new Validator(input);
+    validator.visit(parseResult);
+    validator.addLexerErrors(lexResult.errors);
     validator.addParserErrors(parser.errors, tokens);
     let compiled;
     if (validator.errors.length === 0 && !validateOnly) {
@@ -466,14 +464,14 @@
   AutomatorGrammar.compile = compile;
 
   function blockifyTextAutomator() {
-    const validator = new Validator();
     const input = AutomatorTextUI.documents[ui.view.tabs.reality.automator.editorScriptID].getValue()
     const lexResult = AutomatorLexer.lexer.tokenize(input);
     const tokens = lexResult.tokens;
 
     AutomatorGrammar.parser.input = tokens;
     const parseResult = AutomatorGrammar.parser.script()
-    validator.visit(parseResult, input)
+    const validator = new Validator(input);
+    validator.visit(parseResult)
     if (lexResult.errors.length == 0 && AutomatorGrammar.parser.errors.length == 0 && validator.errors.length == 0) {
       const b = new Blockifier()
       let blocks = b.visit(parseResult)
@@ -490,9 +488,9 @@
     const tokens = lexResult.tokens;
     AutomatorGrammar.parser.input = tokens;
     const parseResult = AutomatorGrammar.parser.script();
-    const validator = new Validator();
+    const validator = new Validator(input);
     validator.visit(parseResult);
-    validator.addLexerErrors(lexResult.errors, input);
+    validator.addLexerErrors(lexResult.errors);
     validator.addParserErrors(parser.errors, tokens);
     return validator
   }

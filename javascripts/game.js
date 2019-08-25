@@ -706,7 +706,7 @@ function gameLoop(diff, options = {}) {
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
   V.checkForUnlocks();
-  AutomatorBackend.update();
+  AutomatorBackend.update(realDiff);
 
   EventHub.dispatch(GameEvent.GAME_TICK_AFTER);
   GameUI.update();

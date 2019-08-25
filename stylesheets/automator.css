@@ -7,6 +7,11 @@
   width: 94rem;
 }
 
+.c-automator-tab > div {
+  height: 35rem;
+  width: 94rem;
+}
+
 .c-automator-tab--full-screen {
   height: auto;
   width: auto;

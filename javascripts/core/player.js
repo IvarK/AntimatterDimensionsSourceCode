@@ -291,6 +291,7 @@ let player = {
       scripts: {
       },
       lastID: 0,
+      execTimer: 0
     }
   },
   blackHole: Array.range(0, 2).map(id => ({

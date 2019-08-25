@@ -189,7 +189,11 @@ const AutomatorBackend = {
     return this.stack.top.lineNumber;
   },
 
-  update() {
+  get currentInterval() {
+    return Math.max(Math.pow(0.994, player.realities) * 500, 1);
+  },
+
+  update(diff) {
     if (!this.isOn) return;
     switch (this.mode) {
       case AutomatorMode.PAUSE:
@@ -204,7 +208,14 @@ const AutomatorBackend = {
         this.stop();
         return;
     }
-    for (let count = 0; count < AutomatorBackend.MAX_COMMANDS_PER_UPDATE && this.isRunning; ++count) {
+
+    player.reality.automator.execTimer += diff;
+    const commandsThisUpdate = Math.min(
+      Math.floor(player.reality.automator.execTimer / this.currentInterval), this.MAX_COMMANDS_PER_UPDATE
+    );
+    player.reality.automator.execTimer -= commandsThisUpdate * this.currentInterval;
+
+    for (let count = 0; count < commandsThisUpdate && this.isRunning; ++count) {
       if (!this.step()) break;
     }
   },

@@ -241,7 +241,7 @@ const AutomatorCommands = ((() => {
           if (S.commandState === null) {
             S.commandState = { timeMs: 0 };
           } else {
-            S.commandState.timeMs += Time.unscaledDeltaTime.milliseconds;
+            S.commandState.timeMs += Math.max(Time.unscaledDeltaTime.milliseconds, AutomatorBackend.currentInterval);
           }
           return S.commandState.timeMs >= duration
             ? AutomatorCommandStatus.NEXT_INSTRUCTION

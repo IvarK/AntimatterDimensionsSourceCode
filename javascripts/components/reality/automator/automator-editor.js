@@ -79,7 +79,7 @@ Vue.component("automator-editor", {
       return id === this.currentScriptID ? { selected: "selected" } : {};
     },
     createNewScript() {
-      const newScript = AutomatorBackend.newScript();
+      AutomatorBackend.newScript();
       this.rename();
     },
     deleteScript() {

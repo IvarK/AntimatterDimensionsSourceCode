@@ -69,7 +69,7 @@ const automator_blocks = [
 ]
 
 function findAutomatorBlockByName(name) {
-  return automator_blocks.find( b => b.cmd == name)
+  return automator_blocks.find( b => b.cmd === name)
 }
 
 

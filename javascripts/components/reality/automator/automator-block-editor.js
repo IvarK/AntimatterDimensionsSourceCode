@@ -57,7 +57,7 @@ const BlockAutomator = {
   },
 
   updateIdArray() {
-    this._idArray = this.blockIdArray(this._lines)
+    this._idArray = this.blockIdArray(this._lines);
   }
 };
 
@@ -98,7 +98,7 @@ Vue.component("automator-block-editor", {
         v-model="lines" 
         group="code-blocks" 
         class="c-automator-blocks" 
-        ghost-class="c-automaotr-block-row-ghost">
+        ghost-class="c-automator-block-row-ghost">
         <automator-single-block 
           v-for="(block, index) in lines" 
           :key="block.id"

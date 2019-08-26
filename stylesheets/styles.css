@@ -6696,11 +6696,11 @@ kbd {
 
 .c-automator-blocks {
   width: 100%;
-  padding-bottom: 50px;
+  padding-bottom: 5rem;
 }
 
 .o-automator-command {
-  border: 1px solid #353535;
+  border: .1rem solid #353535;
   padding: .5rem;
   display: inline-block;
   background: #000115;
@@ -6712,8 +6712,8 @@ kbd {
 }
 
 .c-automator-docs .o-automator-command {
-  margin-bottom: 5px;
-  margin-right: 5px;
+  margin-bottom: .5rem;
+  margin-right: .5rem;
 }
 
 .o-automator-command--ghost {
@@ -6740,7 +6740,7 @@ kbd {
   background: #50316f;
 }
 
-.c-automaotr-block-row-ghost {
+.c-automator-block-row-ghost {
   display: block;
   margin: auto;
   margin-left: 0;
@@ -6760,7 +6760,7 @@ kbd {
 }
 
 .o-automator-block-input {
-  border: 1px solid #353535;
+  border: .1rem solid #353535;
   padding: .5rem;
   display: inline-block;
   background: #000115;

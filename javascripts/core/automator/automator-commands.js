@@ -98,7 +98,6 @@ const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => {
-        console.log(ctx)
         const duration = ctx.duration 
         ? `${ctx.duration[0].children.NumberLiteral[0].image} ${ctx.duration[0].children.TimeUnit[0].image}`
         : undefined;

@@ -1,26 +1,26 @@
 "use strict";
 
-var kong = {};
+const kong = {};
 
 kong.enabled = false;
 
 kong.init = function() {
-    if (document.referrer.indexOf("kongregate") === -1)
-        return;
-    kong.enabled = true;
-    try {
-        kongregateAPI.loadAPI(function () {
-            window.kongregate = kongregateAPI.getAPI();
-            kong.updatePurchases();
-        });
-    } catch (err) { console.log("Couldn't load Kongregate API") }
+  if (document.referrer.indexOf("kongregate") === -1)
+    return;
+  kong.enabled = true;
+  try {
+    kongregateAPI.loadAPI(() => {
+      window.kongregate = kongregateAPI.getAPI();
+      kong.updatePurchases();
+    });
+  } catch (err) { console.log("Couldn't load Kongregate API"); }
 };
 
 kong.submitStats = function(name, value) {
-    if (!kong.enabled) return;
-    try {
-        kongregate.stats.submit(name, value);
-    } catch (e) { console.log(e); }
+  if (!kong.enabled) return;
+  try {
+    kongregate.stats.submit(name, value);
+  } catch (e) { console.log(e); }
 };
 
 kong.purchaseIP = function(cost) {
@@ -28,7 +28,6 @@ kong.purchaseIP = function(cost) {
   player.IAP.spentSTD += cost;
   if (player.IAP.IPMult === 1) player.IAP.IPMult = 2;
   else player.IAP.IPMult += 2;
-  //kongregate.mtx.purchaseItems(['doubleip'], kong.onPurchaseResult);
 };
 
 kong.submitAchievements = function() {
@@ -39,7 +38,6 @@ kong.purchaseDimMult = function(cost) {
   if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
   player.IAP.spentSTD += cost;
   player.IAP.dimMult *= 2;
-  //kongregate.mtx.purchaseItems(['doublemult'], kong.onPurchaseResult);
 };
 
 kong.purchaseAllDimMult = function(cost) {
@@ -48,14 +46,12 @@ kong.purchaseAllDimMult = function(cost) {
   player.IAP.allDimMultPurchased++;
   if (player.IAP.allDimMult < 32) player.IAP.allDimMult *= 2;
   else player.IAP.allDimMult += 16;
-  //kongregate.mtx.purchaseItems(['alldimboost'], kong.onPurchaseResult);
 };
 
 kong.purchaseTimeSkip = function(cost) {
   if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
   player.IAP.spentSTD += cost;
   simulateTime(21600);
-  //kongregate.mtx.purchaseItems(['timeskip'], kong.onPurchaseTimeSkip);
 };
 
 kong.purchaseEP = function(cost) {
@@ -63,7 +59,6 @@ kong.purchaseEP = function(cost) {
   player.IAP.spentSTD += cost;
   if (player.IAP.EPMult === 1) player.IAP.EPMult = 3;
   else player.IAP.EPMult += 3;
-  //kongregate.mtx.purchaseItems(['tripleep'], kong.onPurchaseResult);
 };
 
 kong.buyMoreSTD = function(STD, kreds) {
@@ -74,28 +69,14 @@ kong.buyMoreSTD = function(STD, kreds) {
   });
 };
 
-kong.onPurchaseResult = function(result) {
-    console.log("purchasing...");
-    if (result.success) {
-        console.log("purchase successfull!");
-        kong.updatePurchases();
-    }
-};
-
-kong.onPurchaseTimeSkip = function(result) {
-    if (result.success) {
-        simulateTime(21600);
-    }
-};
-
 kong.updatePurchases = function() {
   if (!kong.enabled) return;
   try {
       kongregate.mtx.requestUserItemList("", items);
-  } catch (e) { console.log(e); }
+  } catch (e) { console.error(e); }
 
   function items(result) {
-    let totalSTD = 0;
+    let totalSTD = player.IAP.totalSTD;
     for (let i = 0; i < result.data.length; i++) {
       const item = result.data[i];
       switch (item.identifier) {
@@ -138,7 +119,7 @@ kong.updatePurchases = function() {
       }
     }
     if (player.IAP.totalSTD !== totalSTD) {
-      console.log(`STD amounts don't match! ${player.IAP.totalSTD} in save, ${totalSTD} in kong`);
+      console.warn(`STD amounts don't match! ${player.IAP.totalSTD} in save, ${totalSTD} in kong`);
     }
   }
 
@@ -155,8 +136,7 @@ kong.migratePurchases = function() {
       let dimmult = 1;
       let epmult = 0;
       let alldimmult = 1;
-      for (let i = 0; i < result.data.length; i++) {
-          const item = result.data[i];
+      for (const item of result.data) {
           if (item.identifier === "doublemult") {
             player.IAP.totalSTD += 30;
             dimmult *= 2;
@@ -182,4 +162,4 @@ kong.migratePurchases = function() {
 
       if (epmult > 0) player.IAP.EPMult = epmult;
   }
-}
+};

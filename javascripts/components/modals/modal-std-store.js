@@ -28,7 +28,7 @@ Vue.component("modal-std-store", {
     </div>
   </div>
   `
-})
+});
 
 Vue.component("std-store-btn-row", {
   props: {

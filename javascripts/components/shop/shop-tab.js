@@ -19,20 +19,8 @@ Vue.component("shop-tab", {
       this.allDimMult = player.IAP.allDimMult;
       
     },
-    buyIP(cost) {
-      kong.purchaseIP(cost);
-    },
-    buyEP(cost) {
-      kong.purchaseEP(cost);
-    },
-    buyDimMult(cost) {
-      kong.purchaseDimMult(cost);
-    },
-    buyAllDimMult(cost) {
-      kong.purchaseAllDimMult(cost);
-    },
-    buyTimeSkip(cost) {
-      kong.purchaseTimeSkip(cost);
+    purchase(type, cost) {
+      kong[`purchase${type}`](cost);
     },
     getAdditiveNext(x, inc) {
       return (x === 1) ? x + inc - 1 : x + inc;
@@ -55,23 +43,23 @@ Vue.component("shop-tab", {
       <button class="o-shop-buy-more" @click="showStore()">Buy More</button>
     </div>
     <div class="l-shop-buttons-container">
-      <shop-button :cost="40" :buyFn="buyIP">
+      <shop-button :cost="40" type="IP" :buyFn="purchase">
         Double your IP gain from all sources. (additive) 
         <br>Currently {{ IPMult }}x, next: {{ getAdditiveNext(IPMult, 2) }}x
       </shop-button>
-      <shop-button :cost="50" :buyFn="buyEP">
+      <shop-button :cost="50" type="EP" :buyFn="purchase">
         Triple your EP gain from all sources. (additive) 
         <br>Currently {{ EPMult }}x, next: {{ getAdditiveNext(EPMult, 3) }}x
       </shop-button>
-      <shop-button :cost="30" :buyFn="buyDimMult">
+      <shop-button :cost="30" type="DimMult" :buyFn="purchase">
         Double all your normal dimension multipliers (dimensions 1-8). Forever. 
         <br>Currently {{ shorten(dimMult) }}x, next: {{ shorten(dimMult*2, 2, 0) }}x
       </shop-button>
-      <shop-button :cost="60" :buyFn="buyAllDimMult">
+      <shop-button :cost="60" type="AllDimMult" :buyFn="purchase">
         Double ALL the dimension multipliers (Normal, Infinity, Time) (multiplicative until 32x). Forever. 
         <br>Currently {{ allDimMult }}x, next: {{ getNextAllDimMult() }}x
       </shop-button>
-      <shop-button :cost="10" :buyFn="buyTimeSkip">
+      <shop-button :cost="10" type="TimeSkip" :buyFn="purchase">
         Get 6 hours worth of offline production. (Doesn't work for autobuyers)
       </shop-button>
     </div>
@@ -80,4 +68,4 @@ Vue.component("shop-tab", {
     </b></span>
   </div>
   `
-})
+});

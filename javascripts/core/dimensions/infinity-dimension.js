@@ -1,7 +1,7 @@
 "use strict";
 
 function infinityDimensionCommonMultiplier() {
-  let mult = new Decimal(kongAllDimMult)
+  let mult = new Decimal(player.IAP.allDimMult)
     .timesEffectsOf(
       Achievement(75),
       TimeStudy(82),

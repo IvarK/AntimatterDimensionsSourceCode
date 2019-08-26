@@ -30,7 +30,7 @@ Modal.animationOptions = new Modal("modal-animation-options");
 Modal.confirmationOptions = new Modal("modal-confirmation-options");
 Modal.loadGame = new Modal("modal-load-game");
 Modal.import = new Modal("modal-import");
-Modal.shop = new Modal("modal-std-store")
+Modal.shop = new Modal("modal-std-store");
 Modal.importTree = new Modal("modal-import-tree");
 
 Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");

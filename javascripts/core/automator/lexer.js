@@ -122,6 +122,18 @@ const AutomatorLexer = (() => {
       return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
     }
   });
+  createInCategory(Currency, "Total_TT", /total tt/i, {
+    $autocomplete: "total tt",
+    $getter: () => TimeTheorems.totalPurchased()
+  });
+  for (let i = 1; i <= 12; ++i) {
+    const id = i;
+    createInCategory(Currency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {
+      $autocomplete: `ec${i} completions`,
+      // eslint-disable-next-line no-loop-func
+      $getter: () => EternityChallenge(id).completions
+    });
+  }
 
   // $prestigeLevel is used by things that wait for a prestige event. Something waiting for
   // eternity will be triggered by something waiting for reality, for example.
@@ -260,11 +272,11 @@ const AutomatorLexer = (() => {
     LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
     NumberLiteral,
+    Currency, ...tokenLists.Currency,
     ECLiteral,
     Keyword, ...keywordTokens,
     PrestigeEvent, ...tokenLists.PrestigeEvent,
     StudyPath, ...tokenLists.StudyPath,
-    Currency, ...tokenLists.Currency,
     TTCurrency,
     TimeUnit, ...tokenLists.TimeUnit,
     Identifier,

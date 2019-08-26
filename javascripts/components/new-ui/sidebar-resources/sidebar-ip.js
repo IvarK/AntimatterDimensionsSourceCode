@@ -4,6 +4,8 @@ Vue.component("sidebar-ip", {
   data() {
     return {
       ip: new Decimal(0),
+      showCrunch: false,
+      gained: new Decimal(0),
     };
   },
   props: {
@@ -12,13 +14,10 @@ Vue.component("sidebar-ip", {
   methods: {
     update() {
       this.ip.copyFrom(player.infinityPoints);
-      this.showCrunch = player.break && player.antimatter.gte(Decimal.MAX_NUMBER) &&
-      !NormalChallenge.isRunning && !InfinityChallenge.isRunning;
+      this.showCrunch = player.break && player.antimatter.gte(Decimal.MAX_NUMBER);
       if (!this.showCrunch) return;
       const gainedIP = gainedInfinityPoints();
       this.gained.copyFrom(gainedIP);
-      this.peakIPPM.copyFrom(player.bestIPminThisInfinity);
-      this.currentIPPM.copyFrom(gainedIP.dividedBy(Time.thisInfinity.totalMinutes));
     },
     infinity() {
       if (this.showCrunch) {
@@ -37,6 +36,7 @@ Vue.component("sidebar-ip", {
       <h2 class="o-sidebar-infinity-button">{{ shorten(ip, 2, 0) }}</h2>
       <div class="resource-information">
         <span class="resource-name">Infinity Points</span>
+        <span class="resource-gain" v-if="showCrunch">+{{shorten(gained, 2, 0)}}</span>
       </div>
     </div>
   </div>`

@@ -1,6 +1,7 @@
 "use strict";
 
 Vue.component("game-header-eternity-button", {
+  mixins: [textColorMixin],
   data() {
     return {
       isVisible: false,
@@ -25,17 +26,6 @@ Vue.component("game-header-eternity-button", {
     peakEPPMThreshold: () => new Decimal("1e100"),
     isPeakEPPMVisible() {
       return this.currentEPPM.lte(this.peakEPPMThreshold);
-    },
-    amountStyle() {
-      if (this.currentEP.lt(1e50)) return undefined;
-      const ratio = this.gainedEP.log10() / this.currentEP.log10();
-      const rgb = [
-        Math.round(255 - (ratio - 1) * 10 * 255),
-        Math.round(255 - (1 - ratio) * 10 * 255),
-        ratio > 1 ? Math.round(255 - (ratio - 1) * 10 * 255)
-        : Math.round(255 - (1 - ratio) * 10 * 255)
-      ];
-      return { color: `rgb(${rgb.join(",")})` };
     },
     buttonTypeClass() {
       return this.isDilation
@@ -117,7 +107,7 @@ Vue.component("game-header-eternity-button", {
           <b>I need to become Eternal.</b>
           <br>
         </template>
-        Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 0)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <b :style="amountStyle(currentEP, gainedEP)">{{shorten(gainedEP, 2, 0)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
         <template v-if="isPeakEPPMVisible">
           {{shorten(currentEPPM, 2, 2)}} EP/min
@@ -133,7 +123,7 @@ Vue.component("game-header-eternity-button", {
       
       <!-- Dilation -->
       <template v-else-if="type === 3">
-        Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <b :style="amountStyle(currentEP, gainedEP)">{{shorten(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
         +{{shortenMoney(gainedTachyons)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}.
       </template>
@@ -141,7 +131,7 @@ Vue.component("game-header-eternity-button", {
       <!-- New content available -->
       <template v-else-if="type === 4 || type === 5">
         <template v-if="type === 4">
-          Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 2)}}</b> EP
+          Gain <b :style="amountStyle(currentEP, gainedEP)">{{shorten(gainedEP, 2, 2)}}</b> EP
         </template>
         <template v-else>
           Gain <b>{{shortenMoney(gainedTachyons)}}</b> Tachyon {{ "particle" | pluralize(gainedTachyons) }}

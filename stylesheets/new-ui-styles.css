@@ -165,7 +165,7 @@ body.t-dark {
   font-size: 1.5em;
 }
 
-.resource-per-second {
+.resource-gain {
   font-size: 0.7em;
   color: var(--color-text);
 }

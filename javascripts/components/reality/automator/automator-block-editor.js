@@ -1,21 +1,29 @@
 "use strict";
 
 const BlockAutomator = {
-  _lines: [],
   _idArray: [],
 
   get lines() {
-    return this._lines;
+    return ui.view.tabs.reality.automator.lines;
   },
 
   set lines(arr) {
-    this._lines = arr;
-    this.updateIdArray();
+    ui.view.tabs.reality.automator.lines = arr;
   },
 
   get currentBlockId() {
     if (AutomatorBackend.stack.isEmpty) return false;
     return this._idArray[AutomatorBackend.currentLineNumber - 1];
+  },
+
+  fromText(scriptText) {
+    const lines = AutomatorGrammar.blockifyTextAutomator(scriptText);
+    if (lines) {
+      this.lines = AutomatorGrammar.blockifyTextAutomator(scriptText);
+      return true;
+    }
+
+    return false;
   },
 
   generateText(block, indentation = 0) {
@@ -57,36 +65,31 @@ const BlockAutomator = {
   },
 
   updateIdArray() {
-    this._idArray = this.blockIdArray(this._lines);
+    this._idArray = this.blockIdArray(this.lines);
   }
 };
 
 Vue.component("automator-block-editor", {
-  data() {
-    return {
-      lines: []
-    };
-  },
   computed: {
     lineNumbersCount() {
       return Math.max(this.lines.length, 1);
+    },
+    lines: {
+      get() {
+        return this.$viewModel.tabs.reality.automator.lines;
+      },
+      set(value) {
+        this.$viewModel.tabs.reality.automator.lines = value;
+      }
     }
   },
   methods: {
     updateBlock(block, id) {
-      this.$set(this.lines, this.lines.findIndex(x => x.id === id), block);
-      BlockAutomator.lines = this.lines;
+      this.lines[this.lines.findIndex(x => x.id === id)] = block;
     },
     deleteBlock(id) {
       const idx = this.lines.findIndex(x => x.id === id);
       this.lines.splice(idx, 1);
-      BlockAutomator.lines = this.lines;
-    },
-    onUpdate() {
-      BlockAutomator.lines = this.lines;
-    },
-    update() {
-      this.lines = BlockAutomator.lines;
     },
   },
   template:
@@ -103,7 +106,6 @@ Vue.component("automator-block-editor", {
           :block="block"
           :updateBlock="updateBlock"
           :deleteBlock="deleteBlock"
-          :move="onUpdate()"
           ></automator-single-block>
       </draggable>
     </div>`

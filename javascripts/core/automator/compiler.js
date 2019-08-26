@@ -463,8 +463,7 @@
   }
   AutomatorGrammar.compile = compile;
 
-  function blockifyTextAutomator() {
-    const input = AutomatorTextUI.documents[ui.view.tabs.reality.automator.editorScriptID].getValue()
+  function blockifyTextAutomator(input) {
     const lexResult = AutomatorLexer.lexer.tokenize(input);
     const tokens = lexResult.tokens;
 
@@ -475,11 +474,10 @@
     if (lexResult.errors.length == 0 && AutomatorGrammar.parser.errors.length == 0 && validator.errors.length == 0) {
       const b = new Blockifier()
       let blocks = b.visit(parseResult)
-      BlockAutomator.lines = blocks
-      return true
+      return blocks
     }
 
-    return false;
+    return null;
   }
   AutomatorGrammar.blockifyTextAutomator = blockifyTextAutomator;
 

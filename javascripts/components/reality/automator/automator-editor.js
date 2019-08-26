@@ -24,6 +24,9 @@ Vue.component("automator-editor", {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
       }
     },
+    currentScript() {
+      return AutomatorTextUI.documents[this.currentScriptID].getValue()
+    },
     playTooltip() {
       if (this.isRunning) return undefined;
       if (this.isPaused) return "Resume automator execution";
@@ -67,7 +70,7 @@ Vue.component("automator-editor", {
         this.currentScriptID = Object.keys(storedScripts)[0];
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
-      this.$nextTick(() => AutomatorGrammar.blockifyTextAutomator());
+      this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     rename() {
       this.editingName = true;
@@ -131,7 +134,7 @@ Vue.component("automator-editor", {
       if (this.automatorType === AutomatorType.BLOCK) { 
         this.parseTextFromBlocks();
         player.reality.automator.type = AutomatorType.TEXT;
-      } else if (AutomatorGrammar.blockifyTextAutomator()) {
+      } else if (BlockAutomator.fromText(this.currentScript)) {
         player.reality.automator.type = AutomatorType.BLOCK;
       } else {
         alert("Automator script has errors, cannot convert to blocks.");

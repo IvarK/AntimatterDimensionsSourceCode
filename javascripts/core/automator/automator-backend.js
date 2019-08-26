@@ -39,6 +39,11 @@ const AutomatorVarTypes = {
   UNKNOWN: { id: -1, name: "unknown" },
 };
 
+const AutomatorType = Object.freeze({
+  TEXT: 0,
+  BLOCK: 1
+});
+
 /**
  * This object represents a single entry on the execution stack. It's a combination
  * of transient and persistent values -- we don't store the compiled script or indices

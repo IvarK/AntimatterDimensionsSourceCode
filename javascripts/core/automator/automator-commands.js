@@ -117,7 +117,7 @@ const AutomatorCommands = ((() => {
         return {
           target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
           inputValue: input,
-          ...findAutomatorBlockByName('AUTO')
+          ...automatorBlocksMap['AUTO']
         }
       }
     },
@@ -148,7 +148,7 @@ const AutomatorCommands = ((() => {
       blockify: ctx => {
         return {
           target: Boolean(ctx.On) ? 'ON' : 'OFF',
-          ...findAutomatorBlockByName('BLACK HOLE')
+          ...automatorBlocksMap['BLACK HOLE']
         }
       }
     },
@@ -212,7 +212,7 @@ const AutomatorCommands = ((() => {
         const comparison = B.visit(ctx.comparison);
         return {
           nest: commands,
-          ...findAutomatorBlockByName('IF'),
+          ...automatorBlocksMap['IF'],
           ...comparison,
           target: comparison.target.toUpperCase()
         }
@@ -251,7 +251,7 @@ const AutomatorCommands = ((() => {
       blockify: ctx => {
         const c = ctx.duration[0].children
         return {
-          ...findAutomatorBlockByName('PAUSE'),
+          ...automatorBlocksMap['PAUSE'],
           inputValue: c.NumberLiteral[0].image + c.TimeUnit[0].image
         }
       }
@@ -281,9 +281,9 @@ const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => {
-        return findAutomatorBlockByName(
+        return automatorBlocksMap[
           ctx.PrestigeEvent[0].tokenType.name.toUpperCase()
-        )
+        ]
       }
     },
     {
@@ -302,7 +302,7 @@ const AutomatorCommands = ((() => {
         return AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
       }, 
       blockify: ctx => {
-        return { target: 'DILATION', ...findAutomatorBlockByName('START') }
+        return { target: 'DILATION', ...automatorBlocksMap['START'] }
       }
     },
     {
@@ -333,7 +333,7 @@ const AutomatorCommands = ((() => {
         return { 
           target: 'EC',
           inputValue: ctx.eternityChallenge[0].children.$ecNumber,
-          ...findAutomatorBlockByName('START') 
+          ...automatorBlocksMap['START']
         }
       }
     },
@@ -369,7 +369,7 @@ const AutomatorCommands = ((() => {
       blockify: ctx => {
         return {
           target: ctx.Use ? "USE" : ( Boolean(ctx.On) ? 'ON' : 'OFF'),
-          ...findAutomatorBlockByName("STORE TIME")
+          ...automatorBlocksMap["STORE TIME"]
         }
       }
     },
@@ -422,7 +422,7 @@ const AutomatorCommands = ((() => {
       blockify: ctx => {
         return {
           inputValue: ctx.$studies.image,
-          ...findAutomatorBlockByName("STUDIES")
+          ...automatorBlocksMap["STUDIES"]
         }
       }
     },
@@ -470,7 +470,7 @@ const AutomatorCommands = ((() => {
       blockify: ctx => {
         return {
           inputValue: ctx.$presetIndex,
-          ...findAutomatorBlockByName("LOAD")
+          ...automatorBlocksMap["LOAD"]
         }
       }
     },
@@ -488,7 +488,7 @@ const AutomatorCommands = ((() => {
         player.respec = true;
         return AutomatorCommandStatus.NEXT_INSTRUCTION;
       },
-      blockify: ctx => findAutomatorBlockByName("RESPEC")
+      blockify: ctx => automatorBlocksMap["RESPEC"]
     },
     {
       id: "tt",
@@ -510,7 +510,7 @@ const AutomatorCommands = ((() => {
       blockify: ctx => {
         return {
           target: ctx.TTCurrency[0].tokenType.name.toUpperCase(),
-          ...findAutomatorBlockByName("TT")
+          ...automatorBlocksMap["TT"]
         }
       }
     },
@@ -533,7 +533,7 @@ const AutomatorCommands = ((() => {
       blockify: ctx => {
         return { 
           target: 'DILATION',
-          ...findAutomatorBlockByName('UNLOCK') 
+          ...automatorBlocksMap['UNLOCK']
         }
       }
     },
@@ -560,7 +560,7 @@ const AutomatorCommands = ((() => {
         return { 
           target: 'EC',
           inputValue: ctx.eternityChallenge[0].children.$ecNumber,
-          ...findAutomatorBlockByName('UNLOCK') 
+          ...automatorBlocksMap['UNLOCK']
         }
       }
     },
@@ -607,7 +607,7 @@ const AutomatorCommands = ((() => {
         if (ctx.comparison) {
           return {
             nest: commands,
-            ...findAutomatorBlockByName('UNTIL'),
+            ...automatorBlocksMap['UNTIL'],
             ...comparison,
             target: comparison.target.toUpperCase()
           }
@@ -615,7 +615,7 @@ const AutomatorCommands = ((() => {
         return {
           target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
           nest: commands,
-          ...findAutomatorBlockByName('UNTIL')
+          ...automatorBlocksMap['UNTIL']
         }
       }
     },
@@ -641,7 +641,7 @@ const AutomatorCommands = ((() => {
         const comparison = B.visit(ctx.comparison);
         return {
           nest: commands,
-          ...findAutomatorBlockByName('WAIT'),
+          ...automatorBlocksMap['WAIT'],
           ...comparison,
           target: comparison.target.toUpperCase()
         }
@@ -671,7 +671,7 @@ const AutomatorCommands = ((() => {
       blockify: (ctx, B) => {
         return {
           target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
-          ...findAutomatorBlockByName('WAIT')
+          ...automatorBlocksMap['WAIT']
         }
       }
     },
@@ -695,7 +695,7 @@ const AutomatorCommands = ((() => {
         B.visit(ctx.block, commands)
         return {
           nest: commands,
-          ...findAutomatorBlockByName('WHILE'),
+          ...automatorBlocksMap['WHILE'],
           ...B.visit(ctx.comparison)
         }
       }

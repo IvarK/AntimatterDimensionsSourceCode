@@ -1,28 +1,32 @@
+const AUTOMATOR_BLOCKS_COMPARISON_OPERATORS = ['<', '>', '>=', '<=', '!='];
+const AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES = ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT', 'DT', 'COMPLETIONS', 'TP'];
+const AUTOMATOR_BLOCKS_RESETS = ['INFINITY', 'ETERNITY', 'REALITY'];
+
 const automator_blocks = [
   { 
     cmd: 'WAIT',
-    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT', 'DT', 'COMPLETIONS', 'TP', 'INFINITY', 'ETERNITY', 'REALITY'],
-    secondaryTargets: ['=', '<', '>', '>=', '<=', '!='],
-    targetsWithoutInput: ['INFINITY', 'ETERNITY', 'REALITY'],
+    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS],
+    secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
+    targetsWithoutInput: AUTOMATOR_BLOCKS_RESETS,
     hasInput: true
   }, {
     cmd: 'IF',
-    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT', 'DT', 'COMPLETIONS', 'TP'],
-    secondaryTargets: ['=', '<', '>', '>=', '<=', '!='],
+    targets: AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES,
+    secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     hasInput: true,
     nested: true
   }, {
     cmd: 'WHILE',
-    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT', 'DT', 'COMPLETIONS', 'TP'],
-    secondaryTargets: ['=', '<', '>', '>=', '<=', '!='],
+    targets: AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES,
+    secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     hasInput: true,
     nested: true
   }, {
     cmd: 'UNTIL',
-    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT', 'DT', 'COMPLETIONS', 'TP', 'INFINITY', 'ETERNITY', 'REALITY'],
-    secondaryTargets: ['=', '<', '>', '>=', '<=', '!='],
+    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS],
+    secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     hasInput: true,
-    targetsWithoutInput: ['INFINITY', 'ETERNITY', 'REALITY'],
+    targetsWithoutInput: AUTOMATOR_BLOCKS_RESETS,
     nested: true
   }, {
     cmd: "STUDIES",
@@ -39,7 +43,7 @@ const automator_blocks = [
     targetsWithoutInput: ['DILATION']
   }, {
     cmd: 'AUTO',
-    targets: ['INFINITY', 'ETERNITY', 'REALITY'],
+    targets: AUTOMATOR_BLOCKS_RESETS,
     hasInput: true
   }, {
     cmd: 'TT',
@@ -66,7 +70,9 @@ const automator_blocks = [
     hasInput: true
   }
 
-]
+];
+
+const automatorBlocksMap = automator_blocks.mapToObject(b => b.cmd, b => b);
 
 function findAutomatorBlockByName(name) {
   return automator_blocks.find( b => b.cmd === name)

@@ -18,7 +18,7 @@ const BlockAutomator = {
     return this._idArray[AutomatorBackend.currentLineNumber - 1];
   },
 
-  parseBlock(block, indentation = 0) {
+  generateText(block, indentation = 0) {
     let parsed = "\t".repeat(indentation) + block.cmd;
   
     parsed = parsed
@@ -36,7 +36,7 @@ const BlockAutomator = {
   parseLines(l, indentation = 0) {
     const lines = [];
     for (let i = 0; i < l.length; i++) {
-      lines.push(this.parseBlock(l[i], indentation));
+      lines.push(this.generateText(l[i], indentation));
       if (l[i].cmd === "IF" || l[i].cmd === "WHILE" || l[i].cmd === "UNTIL") {
         lines.push(...this.parseLines(l[i].nest, indentation + 1));
         lines.push(`${"\t".repeat(indentation)}}`);
@@ -81,9 +81,6 @@ Vue.component("automator-block-editor", {
       const idx = this.lines.findIndex(x => x.id === id);
       this.lines.splice(idx, 1);
       BlockAutomator.lines = this.lines;
-    },
-    parseLines() {
-      $("#automator").val(BlockAutomator.parseLines(this.lines).join("\n"));
     },
     onUpdate() {
       BlockAutomator.lines = this.lines;

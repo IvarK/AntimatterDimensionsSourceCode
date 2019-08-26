@@ -7,6 +7,7 @@ Vue.component("automator-editor", {
       isRunning: false,
       isPaused: false,
       editingName: false,
+      automatorType: 0,
       runningScriptID: 0,
       scripts: [],
     };
@@ -23,26 +24,25 @@ Vue.component("automator-editor", {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
       }
     },
-    mode: {
-      get() {
-        return this.$viewModel.tabs.reality.automator.mode;
-      },
-      set(value) {
-        this.$viewModel.tabs.reality.automator.mode = value;
-      }
-    },
     playTooltip() {
       if (this.isRunning) return undefined;
       if (this.isPaused) return "Resume automator execution";
       return "Start automator";
     },
-    modeIconClass() { return this.mode ? "fa-cubes" : "fa-code"; },
+    modeIconClass() { return this.automatorType === AutomatorType.BLOCK ? "fa-cubes" : "fa-code"; },
+    isTextAutomator() {
+      return this.automatorType === AutomatorType.TEXT;
+    },
+    isBlockAutomator() {
+      return this.automatorType === AutomatorType.BLOCK;
+    }
   },
   methods: {
     update() {
       this.isRunning = AutomatorBackend.isRunning;
       this.isPaused = AutomatorBackend.isOn && !this.isRunning;
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
+      this.automatorType = player.reality.automator.type;
       if (AutomatorBackend.state.topLevelScript !== this.currentScriptID || !AutomatorBackend.isOn) {
         this.activeLine = 0;
         return;
@@ -67,6 +67,7 @@ Vue.component("automator-editor", {
         this.currentScriptID = Object.keys(storedScripts)[0];
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
+      this.$nextTick(() => AutomatorGrammar.blockifyTextAutomator());
     },
     rename() {
       this.editingName = true;
@@ -124,15 +125,15 @@ Vue.component("automator-editor", {
       const automatorID = ui.view.tabs.reality.automator.editorScriptID;
       AutomatorBackend.saveScript(automatorID, content);
       AutomatorTextUI.documents[automatorID].setValue(content);
-      setTimeout(() => AutomatorTextUI.editor.refresh(), 10);
+      this.$nextTick(() => AutomatorTextUI.editor.refresh());
     },
     toggleAutomatorMode() {
-      this.mode = !this.mode;
-      // Switched to text
-      if (this.mode) { 
+      if (this.automatorType === AutomatorType.BLOCK) { 
         this.parseTextFromBlocks();
-      } else if (!AutomatorGrammar.blockifyTextAutomator()) {
-        this.mode = !this.mode;
+        player.reality.automator.type = AutomatorType.TEXT;
+      } else if (AutomatorGrammar.blockifyTextAutomator()) {
+        player.reality.automator.type = AutomatorType.BLOCK;
+      } else {
         alert("Automator script has errors, cannot convert to blocks.");
       }
     }
@@ -177,7 +178,7 @@ Vue.component("automator-editor", {
       </div>
       <automator-text-editor :currentScriptID="currentScriptID"
                              :activeLine="activeLine"
-                             v-show="mode"/>
-      <automator-block-editor v-show="!mode"/>
+                             v-show="isTextAutomator"/>
+      <automator-block-editor v-show="isBlockAutomator"/>
     </div>`
 });

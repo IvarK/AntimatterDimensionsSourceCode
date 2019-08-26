@@ -829,7 +829,7 @@ function simulateTime(seconds, real, fast) {
   const playerStart = deepmerge.all([{}, player]);
 
   player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * 1000));
-  player.eternities += getEternitiedMilestoneReward(seconds * 1000);
+  player.eternities = player.eternities.plus(getEternitiedMilestoneReward(seconds *1000));
   player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
 
   if (InfinityUpgrade.ipOffline.isBought) {

@@ -116,5 +116,10 @@ GameDatabase.eternity.milestones = {
       return `Only while offline, 
       gain infinities based on the last 10 infinities. Currently ${shorten(infinities, 2, 2)}/hour`;
     },
+  },
+  // To make it even for 3 columns
+  emptyStudy: {
+    eternities: 1001,
+    invisible: true
   }
 };

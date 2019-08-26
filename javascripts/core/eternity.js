@@ -41,6 +41,10 @@ function eternity(force, auto, specialConditions = {}) {
     respecTimeStudies(auto);
   }
 
+  player.bestEternitiesPerMs = player.bestEternitiesPerMs.clampMin(
+    Effects.product(RealityUpgrade(3)) / player.thisEternityRealTime
+  );
+
   player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
     Achievement(131),
     TimeStudy(191)
@@ -90,6 +94,7 @@ function eternity(force, auto, specialConditions = {}) {
   player.bestEPminThisEternity = new Decimal(0);
   player.bestIPminThisInfinity = new Decimal(0);
   player.bestIPminThisEternity = new Decimal(0);
+  player.bestInfinitiesPerMs = new Decimal(0);
   resetTimeDimensions();
   try {
     // FIXME: Eternity count is a Decimal and also why is this submitted in so many places?
@@ -144,7 +149,7 @@ function initializeResourcesAfterEternity() {
   player.offlineProdCost = EternityMilestone.keepBreakUpgrades.isReached ? player.offlineProdCost : 1e7;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  if (EternityMilestone.keepBreakUpgrades.isReached) {
+  if (!EternityMilestone.keepBreakUpgrades.isReached) {
     player.infinityRebuyables = [0, 0];
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();

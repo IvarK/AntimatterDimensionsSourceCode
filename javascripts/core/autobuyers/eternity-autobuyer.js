@@ -45,6 +45,12 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
     return RealityUpgrade(13).isBought;
   }
 
+  get autoEternitiesAvailable() {
+    return EternityMilestone.autobuyerEternity.isReached && 
+      this.data.isActive && 
+      this.amount.equals(0);
+  }
+
   bumpAmount(mult) {
     if (this.isUnlocked) {
       this.amount = this.amount.times(mult);

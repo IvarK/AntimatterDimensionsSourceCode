@@ -163,6 +163,8 @@ let player = {
   bestIPminThisEternity: new Decimal(0),
   bestEPminThisEternity: new Decimal(0),
   bestEPminThisReality: new Decimal(0),
+  bestInfinitiesPerMs: new Decimal(0),
+  bestEternitiesPerMs: new Decimal(0),
   bestRMmin: new Decimal(0),
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),

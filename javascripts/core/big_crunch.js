@@ -46,6 +46,11 @@ function bigCrunchReset() {
   if (!canCrunch()) return;
   player.bestIPminThisEternity = player.bestIPminThisEternity.clampMin(player.bestIPminThisInfinity);
   player.bestIPminThisInfinity = new Decimal(0);
+
+  player.bestInfinitiesPerMs = player.bestInfinitiesPerMs.clampMin(
+    gainedInfinities().round().dividedBy(player.thisInfinityRealTime)
+  );
+  
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);

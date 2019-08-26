@@ -49,6 +49,13 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
     this.data.xLast = value;
   }
 
+  get autoInfinitiesAvailable() {
+    return EternityMilestone.autoInfinities.isReached && 
+      this.data.isActive && 
+      this.mode === AutoCrunchMode.TIME && 
+      this.time < 60;
+  }
+
   bumpAmount(mult) {
     if (this.isUnlocked) {
       this.amount = this.amount.times(mult);

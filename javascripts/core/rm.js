@@ -770,8 +770,6 @@ function getGlyphLevelInputs() {
 }
 
 function handleRUpg10() {
-
-  // Handle all the autobuyers
   player.auto.dimensions = player.auto.dimensions.map(d => ({
     isUnlocked: true,
     cost: 1e100,
@@ -796,7 +794,6 @@ function handleRUpg10() {
   player.auto.bigCrunch.cost = 8192;
   player.auto.bigCrunch.interval = 100;
 
-  // Handle infinity upgrades
   player.infinityUpgrades = new Set(
     "timeMult", "dimMult", "timeMult2", 
     "skipReset1", "skipReset2", "unspentBonus", 
@@ -809,11 +806,13 @@ function handleRUpg10() {
     "ipOffline"
   );
 
-  // Handle replicanti autobuyers
+  player.infinityRebuyables = [8, 7];
+  GameCache.tickSpeedMultDecrease.invalidate();
+  GameCache.dimensionMultDecrease.invalidate();
+
   player.replicanti.auto = [true, true, true];
   player.replicanti.unl = true;
 
-  // Handle inf dim buyers
   player.infDimBuyers = [true, true, true, true, true, true, true, true];
 }
 

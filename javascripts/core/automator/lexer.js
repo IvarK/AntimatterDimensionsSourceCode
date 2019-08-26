@@ -124,10 +124,11 @@ const AutomatorLexer = (() => {
   });
 
   for (let i = 1; i <= 12; ++i) {
-    const ec = EternityChallenge(i);
+    const id = i;
     createInCategory(Currency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {
       $autocomplete: `ec${i} completions`,
-      $getter: () => ec.completions
+      // eslint-disable-next-line no-loop-func
+      $getter: () => EternityChallenge(id).completions
     });
   }
 

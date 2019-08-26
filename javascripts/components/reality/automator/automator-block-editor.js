@@ -9,6 +9,7 @@ const BlockAutomator = {
 
   set lines(arr) {
     ui.view.tabs.reality.automator.lines = arr;
+    this.updateIdArray();
   },
 
   get currentBlockId() {

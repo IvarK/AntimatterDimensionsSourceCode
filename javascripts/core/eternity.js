@@ -20,7 +20,12 @@ function eternity(force, auto, specialConditions = {}) {
     EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
     player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
-    addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
+    addEternityTime(
+      player.thisEternity, 
+      player.thisEternityRealTime, 
+      gainedEternityPoints(), 
+      Effects.product(RealityUpgrade(3))
+    );
     player.eternities = player.eternities.add(Effects.product(RealityUpgrade(3)));
   }
 
@@ -35,6 +40,10 @@ function eternity(force, auto, specialConditions = {}) {
     player.etercreq = 0;
     respecTimeStudies(auto);
   }
+
+  player.bestEternitiesPerMs = player.bestEternitiesPerMs.clampMin(
+    Effects.product(RealityUpgrade(3)) / player.thisEternityRealTime
+  );
 
   player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
     Achievement(131),
@@ -85,6 +94,7 @@ function eternity(force, auto, specialConditions = {}) {
   player.bestEPminThisEternity = new Decimal(0);
   player.bestIPminThisInfinity = new Decimal(0);
   player.bestIPminThisEternity = new Decimal(0);
+  player.bestInfinitiesPerMs = new Decimal(0);
   resetTimeDimensions();
   try {
     // FIXME: Eternity count is a Decimal and also why is this submitted in so many places?
@@ -122,8 +132,9 @@ function initializeResourcesAfterEternity() {
   player.thisInfinityTime = 0;
   player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;
-  player.dimensionBoosts = player.eternities.gte(4) ? 4 : 0;
-  player.galaxies = player.eternities.gte(4) ? 1 : 0;
+  player.resets = (EternityMilestone.keepInfinityUpgrades.isReached) ? 4 : 0;
+  player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
+  player.tickDecrease = 0.9;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.infMult = new Decimal(1);
@@ -134,11 +145,11 @@ function initializeResourcesAfterEternity() {
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.totalTickGained = 0;
-  player.offlineProd = player.eternities.gte(20) ? player.offlineProd : 0;
-  player.offlineProdCost = player.eternities.gte(20) ? player.offlineProdCost : 1e7;
+  player.offlineProd = EternityMilestone.keepBreakUpgrades.isReached ? player.offlineProd : 0;
+  player.offlineProdCost = EternityMilestone.keepBreakUpgrades.isReached ? player.offlineProdCost : 1e7;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  if (player.eternities.lt(20)) {
+  if (!EternityMilestone.keepBreakUpgrades.isReached) {
     player.infinityRebuyables = [0, 0];
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();
@@ -168,7 +179,7 @@ function applyRealityUpgrades() {
 }
 
 function eternityResetReplicanti() {
-  player.replicanti.unl = player.eternities.gte(50);
+  player.replicanti.unl = EternityMilestone.unlockReplicanti.isReached;
   player.replicanti.amount = player.replicanti.unl ? new Decimal(1) : new Decimal(0);
   player.replicanti.chance = 0.01;
   player.replicanti.chanceCost = new Decimal(1e150);
@@ -177,7 +188,8 @@ function eternityResetReplicanti() {
   player.replicanti.gal = 0;
   player.replicanti.galaxies = 0;
   player.replicanti.galCost = new Decimal(1e170);
-  if (player.eternities.gte(3) && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
+  if (EternityMilestone.autobuyerReplicantiGalaxy.isReached && 
+    player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
 }
 
 function askEternityConfirmation() {
@@ -212,7 +224,7 @@ class EternityMilestoneState {
   }
 }
 
-const EternityMilestone = function() {
+const EternityMilestone = (function() {
   const db = GameDatabase.eternity.milestones;
   const infinityDims = Array.dimensionTiers
     .map(tier => new EternityMilestoneState(db["autobuyerID" + tier]));
@@ -222,6 +234,7 @@ const EternityMilestone = function() {
     autobuyerReplicantiGalaxy: new EternityMilestoneState(db.autobuyerReplicantiGalaxy),
     keepInfinityUpgrades: new EternityMilestoneState(db.keepInfinityUpgrades),
     bigCrunchModes: new EternityMilestoneState(db.bigCrunchModes),
+    autoEP: new EternityMilestoneState(db.autoEP),
     autoIC: new EternityMilestoneState(db.autoIC),
     autobuyMaxGalaxies: new EternityMilestoneState(db.autobuyMaxGalaxies),
     autobuyMaxDimboosts: new EternityMilestoneState(db.autobuyMaxDimboosts),
@@ -234,8 +247,9 @@ const EternityMilestone = function() {
     autobuyerReplicantiInterval: new EternityMilestoneState(db.autobuyerReplicantiInterval),
     autobuyerReplicantiMaxGalaxies: new EternityMilestoneState(db.autobuyerReplicantiMaxGalaxies),
     autobuyerEternity: new EternityMilestoneState(db.autobuyerEternity),
+    autoInfinities: new EternityMilestoneState(db.autoInfinities),
   };
-}();
+}());
 
 class EternityUpgradeState extends SetPurchasableMechanicState {
   get currency() {

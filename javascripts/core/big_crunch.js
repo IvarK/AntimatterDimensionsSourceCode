@@ -46,6 +46,11 @@ function bigCrunchReset() {
   if (!canCrunch()) return;
   player.bestIPminThisEternity = player.bestIPminThisEternity.clampMin(player.bestIPminThisInfinity);
   player.bestIPminThisInfinity = new Decimal(0);
+
+  player.bestInfinitiesPerMs = player.bestInfinitiesPerMs.clampMin(
+    gainedInfinities().round().dividedBy(player.thisInfinityRealTime)
+  );
+  
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
@@ -56,10 +61,16 @@ function bigCrunchReset() {
   }
   let infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
-  addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
+  addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints, gainedInfinities().round());
 
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
+
+  if (!player.usedMaxAll) {
+    const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(player.thisInfinityRealTime);
+    player.bestIpPerMsWithoutMaxAll = Decimal.max(bestIpPerMsWithoutMaxAll, player.bestIpPerMsWithoutMaxAll);
+  }
+  player.usedMaxAll = false;
 
   if (EternityChallenge(4).tryFail()) return;
 
@@ -78,7 +89,7 @@ function bigCrunchReset() {
     player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
   }
 
-  if (player.eternities.gt(10) &&
+  if (EternityMilestone.autobuyerID(1).isReached &&
       !EternityChallenge(8).isRunning &&
       !EternityChallenge(2).isRunning &&
       !EternityChallenge(10).isRunning) {
@@ -254,6 +265,8 @@ function disChargeAll() {
   InfinityUpgrade.skipReset2 = upgrade(db.skipReset2, InfinityUpgrade.skipReset1);
   InfinityUpgrade.skipReset3 = upgrade(db.skipReset3, InfinityUpgrade.skipReset2);
   InfinityUpgrade.skipResetGalaxy = upgrade(db.skipResetGalaxy, InfinityUpgrade.skipReset3);
+
+  InfinityUpgrade.ipOffline = upgrade(db.ipOffline, InfinityUpgrade.totalTimeMult);
 }());
 
 class InfinityIPMultUpgrade extends GameMechanicState {

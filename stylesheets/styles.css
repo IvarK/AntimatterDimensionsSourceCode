@@ -3364,7 +3364,7 @@ screen and (max-width: 480px) {
 }
 
 .l-infinity-upgrades-tab__mult-btn {
-  margin: 1.5rem 0;
+  margin: .5rem .8rem;
 }
 
 /*#endregion l-infinity-upgrades-tab*/
@@ -3386,6 +3386,11 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion l-infinity-upgrade-grid*/
+
+.l-infinity-upgrades-bottom-row {
+  display: flex;
+  margin-top: 1rem;
+}
 
 /*#region o-infinity-upgrade-btn*/
 

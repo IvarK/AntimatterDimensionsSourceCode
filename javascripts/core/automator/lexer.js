@@ -122,7 +122,10 @@ const AutomatorLexer = (() => {
       return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
     }
   });
-
+  createInCategory(Currency, "Total_TT", /total tt/i, {
+    $autocomplete: "total tt",
+    $getter: () => TimeTheorems.totalPurchased()
+  });
   for (let i = 1; i <= 12; ++i) {
     const id = i;
     createInCategory(Currency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {

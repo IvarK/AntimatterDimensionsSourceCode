@@ -140,7 +140,7 @@ class EternityChallengeState extends GameMechanicState {
 
   goalAtCompletions(completions) {
     return completions > 0
-      ? this.initialGoal.times(this.goalIncrease.pow(completions))
+      ? this.initialGoal.times(this.goalIncrease.pow(Math.min(completions, this.maxCompletions - 1)))
       : this.initialGoal;
   }
 

@@ -43,8 +43,8 @@ Vue.mixin({
     shortenSmallInteger(value) {
       return shortenSmallInteger(value);
     },
-    formatX(value) {
-      return formatX(value);
+    formatX(value, places, placesUnder1000) {
+      return formatX(value, places, placesUnder1000);
     }
   },
   created() {

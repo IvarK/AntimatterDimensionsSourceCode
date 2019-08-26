@@ -5795,13 +5795,10 @@ kbd {
 
 .c-ra-pet-header {
   width: 35rem;
-  height: 6rem;
   padding: 1rem;
   margin: 2rem auto;
-  text-shadow: -0.5px -0.5px 0 #000,
-    0.5px -0.5px 0 #000,
-    -0.5px 0.5px 0 #000,
-    0.5px 0.5px 0 #000;
+  background: linear-gradient(#2f2f2f, #464646);
+  border-radius: 15px;
 }
 
 .c-ra-pet-title {

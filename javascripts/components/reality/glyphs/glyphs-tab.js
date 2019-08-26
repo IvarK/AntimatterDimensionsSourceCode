@@ -2,15 +2,28 @@
 
 Vue.component("glyphs-tab", {
   data: () => ({
-    showEnslavedHint: false,
+    enslavedHint: "",
   }),
+  computed: {
+    showEnslavedHint() {
+      return this.enslavedHint !== "";
+    }
+  },
   methods: {
     update() {
-      if (!Enslaved.isRunning) {
-        this.showEnslavedHint = false;
-        return;
+      this.enslavedHint = "";
+      if (!Enslaved.isRunning) return;
+      const haveEffarig = Glyphs.activeList.find(e => e.type === "effarig") !== undefined;
+      const haveBoost = Glyphs.activeList.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
+      if (haveBoost) {
+        if (haveEffarig) {
+          this.enslavedHint = "done... what little... I can... but...<br>why did you bring... that thing... here...";
+        } else {
+          this.enslavedHint = "done... what little... I can...";
+        }
+      } else if (haveEffarig) {
+        this.enslavedHint = "Why did you bring... that thing... here...";
       }
-      this.showEnslavedHint = Glyphs.activeList.find(e => e.type === "effarig") !== undefined;
     }
   },
   template:
@@ -28,9 +41,7 @@ Vue.component("glyphs-tab", {
       <sacrificed-glyphs />
     </div>
     <div class="l-player-glyphs-column">
-      <div v-if="showEnslavedHint" class="o-teresa-quotes">
-        Why did you bring... that thing... here...
-      </div>
+      <div v-if="showEnslavedHint" class="o-teresa-quotes" v-html="enslavedHint" />
       <div class="l-equipped-glyphs-wrapper">
         <equipped-glyphs />
         <current-glyph-effects />

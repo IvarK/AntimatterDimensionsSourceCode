@@ -1,27 +1,35 @@
+const AUTOMATOR_BLOCKS_COMPARISON_OPERATORS = ['<', '>', '>=', '<=', '!='];
+const AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES = ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT', 'DT', 'COMPLETIONS', 'TP'];
+const AUTOMATOR_BLOCKS_RESETS = ['INFINITY', 'ETERNITY', 'REALITY'];
+
 const automator_blocks = [
   { 
     cmd: 'WAIT',
-    targets: ['IP', 'EP', 'AM', 'TIME', 'REPLICANTI', 'RG', 'TT'],
+    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS],
+    secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
+    targetsWithoutInput: AUTOMATOR_BLOCKS_RESETS,
     hasInput: true
-  } , { 
-    cmd: 'BUY',
-    targets: ['STUDY', 'STUDYUNTIL', 'TTIP', 'TTEP', 'TTAM', 'TTMAX'],
-    hasInput: true,
-    targetsWithoutInput: ['TTMAX']
   }, {
     cmd: 'IF',
-    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT'],
-    secondaryTargets: ['=', '<', '>', '>=', '<=', '!='],
+    targets: AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES,
+    secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     hasInput: true,
     nested: true
   }, {
     cmd: 'WHILE',
-    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT'],
-    secondaryTargets: ['=', '<', '>', '>=', '<=', '!='],
+    targets: AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES,
+    secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
     hasInput: true,
     nested: true
   }, {
-    cmd: 'GOTO',
+    cmd: 'UNTIL',
+    targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS],
+    secondaryTargets: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
+    hasInput: true,
+    targetsWithoutInput: AUTOMATOR_BLOCKS_RESETS,
+    nested: true
+  }, {
+    cmd: "STUDIES",
     hasInput: true
   }, {
     cmd: 'UNLOCK',
@@ -34,25 +42,41 @@ const automator_blocks = [
     hasInput: true,
     targetsWithoutInput: ['DILATION']
   }, {
-    cmd: 'CHANGE',
-    targets: ['IP-autobuyer', 'EP-autobuyer'],
+    cmd: 'AUTO',
+    targets: AUTOMATOR_BLOCKS_RESETS,
+    hasInput: true
+  }, {
+    cmd: 'TT',
+    targets: ['AM', 'IP', 'EP', 'MAX'],
+  }, {
+    cmd: 'BLACK HOLE',
+    targets: ['ON', 'OFF'],
+  }, {
+    cmd: 'STORE TIME',
+    targets: ['ON', 'OFF', 'USE'],
+  }, {
+    cmd: 'PAUSE',
     hasInput: true
   }, {
     cmd: 'RESPEC'
   }, {
+    cmd: 'INFINITY'
+  }, {
     cmd: 'ETERNITY'
   }, {
-    cmd: 'STOP'
+    cmd: 'REALITY'
   }, {
     cmd: 'LOAD',
     hasInput: true
-  }, {
-    cmd: 'BLOCK',
-    getTargets: () => [], // TODO
-    targets: []
-  },
+  }
 
-]
+];
+
+const automatorBlocksMap = automator_blocks.mapToObject(b => b.cmd, b => b);
+
+function findAutomatorBlockByName(name) {
+  return automator_blocks.find( b => b.cmd === name)
+}
 
 
 Vue.component("automator-blocks", {
@@ -68,7 +92,7 @@ Vue.component("automator-blocks", {
         id: UIID.next()
       }
 
-      if (block.nested) b.nest = []
+      if (block.nested && !block.nest) b.nest = []
       if (block.targets) b.target = ""
       if (block.hasInput) b.inputValue = ""
       if (block.secondaryTargets) b.secondaryTarget = ""

@@ -26,6 +26,7 @@ Vue.component("automator-controls", {
     },
     rewind: () => AutomatorBackend.restart(),
     play() {
+      if (player.reality.automator.type === AutomatorType.BLOCK) this.$emit("automatorplay");
       if (AutomatorBackend.isOn) AutomatorBackend.mode = AutomatorMode.RUN;
       else AutomatorBackend.start(this.currentScriptID);
     },

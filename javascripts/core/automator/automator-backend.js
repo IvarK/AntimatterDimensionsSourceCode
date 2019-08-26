@@ -39,6 +39,11 @@ const AutomatorVarTypes = {
   UNKNOWN: { id: -1, name: "unknown" },
 };
 
+const AutomatorType = Object.freeze({
+  TEXT: 0,
+  BLOCK: 1
+});
+
 /**
  * This object represents a single entry on the execution stack. It's a combination
  * of transient and persistent values -- we don't store the compiled script or indices
@@ -185,7 +190,15 @@ const AutomatorBackend = {
     return this.isOn && this.mode === AutomatorMode.RUN;
   },
 
-  update() {
+  get currentLineNumber() {
+    return this.stack.top.lineNumber;
+  },
+
+  get currentInterval() {
+    return Math.max(Math.pow(0.994, player.realities) * 500, 1);
+  },
+
+  update(diff) {
     if (!this.isOn) return;
     switch (this.mode) {
       case AutomatorMode.PAUSE:
@@ -200,7 +213,14 @@ const AutomatorBackend = {
         this.stop();
         return;
     }
-    for (let count = 0; count < AutomatorBackend.MAX_COMMANDS_PER_UPDATE && this.isRunning; ++count) {
+
+    player.reality.automator.execTimer += diff;
+    const commandsThisUpdate = Math.min(
+      Math.floor(player.reality.automator.execTimer / this.currentInterval), this.MAX_COMMANDS_PER_UPDATE
+    );
+    player.reality.automator.execTimer -= commandsThisUpdate * this.currentInterval;
+
+    for (let count = 0; count < commandsThisUpdate && this.isRunning; ++count) {
       if (!this.step()) break;
     }
   },

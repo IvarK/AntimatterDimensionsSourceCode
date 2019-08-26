@@ -403,10 +403,6 @@
       this.validateVisitor();
     }
   
-    defaultBlockify(ctx) {
-  
-    }
-  
     comparison(ctx) {
       const flipped = ctx.Currency[0].startOffset > ctx.ComparisonOperator[0].startOffset;
       const valueChildren = ctx.compareValue[0].children

@@ -23,7 +23,7 @@ let ui = {
           fullScreen: false,
           editorScriptID: "",
           // TODO: enum
-          mode: true
+          lines: []
         }
       }
     },

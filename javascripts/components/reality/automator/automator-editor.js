@@ -7,6 +7,7 @@ Vue.component("automator-editor", {
       isRunning: false,
       isPaused: false,
       editingName: false,
+      automatorType: 0,
       runningScriptID: 0,
       scripts: [],
     };
@@ -23,10 +24,20 @@ Vue.component("automator-editor", {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
       }
     },
+    currentScript() {
+      return AutomatorTextUI.documents[this.currentScriptID].getValue()
+    },
     playTooltip() {
       if (this.isRunning) return undefined;
       if (this.isPaused) return "Resume automator execution";
       return "Start automator";
+    },
+    modeIconClass() { return this.automatorType === AutomatorType.BLOCK ? "fa-cubes" : "fa-code"; },
+    isTextAutomator() {
+      return this.automatorType === AutomatorType.TEXT;
+    },
+    isBlockAutomator() {
+      return this.automatorType === AutomatorType.BLOCK;
     }
   },
   methods: {
@@ -34,6 +45,7 @@ Vue.component("automator-editor", {
       this.isRunning = AutomatorBackend.isRunning;
       this.isPaused = AutomatorBackend.isOn && !this.isRunning;
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
+      this.automatorType = player.reality.automator.type;
       if (AutomatorBackend.state.topLevelScript !== this.currentScriptID || !AutomatorBackend.isOn) {
         this.activeLine = 0;
         return;
@@ -58,6 +70,7 @@ Vue.component("automator-editor", {
         this.currentScriptID = Object.keys(storedScripts)[0];
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
+      this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     rename() {
       this.editingName = true;
@@ -70,9 +83,7 @@ Vue.component("automator-editor", {
       return id === this.currentScriptID ? { selected: "selected" } : {};
     },
     createNewScript() {
-      const newScript = AutomatorBackend.newScript();
-      player.reality.automator.state.editorScript = newScript.id;
-      this.updateScriptList();
+      AutomatorBackend.newScript();
       this.rename();
     },
     deleteScript() {
@@ -111,6 +122,23 @@ Vue.component("automator-editor", {
         else if (this.isPaused) label += " (Paused)";
       }
       return label;
+    },
+    parseTextFromBlocks() {
+      const content = BlockAutomator.parseLines(BlockAutomator.lines).join("\n");
+      const automatorID = ui.view.tabs.reality.automator.editorScriptID;
+      AutomatorBackend.saveScript(automatorID, content);
+      AutomatorTextUI.documents[automatorID].setValue(content);
+      this.$nextTick(() => AutomatorTextUI.editor.refresh());
+    },
+    toggleAutomatorMode() {
+      if (this.automatorType === AutomatorType.BLOCK) { 
+        this.parseTextFromBlocks();
+        player.reality.automator.type = AutomatorType.TEXT;
+      } else if (BlockAutomator.fromText(this.currentScript)) {
+        player.reality.automator.type = AutomatorType.BLOCK;
+      } else {
+        alert("Automator script has errors, cannot convert to blocks.");
+      }
     }
   },
   created() {
@@ -124,7 +152,7 @@ Vue.component("automator-editor", {
   template:
     `<div class="l-automator-pane">
       <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
-        <automator-controls />
+        <automator-controls @automatorplay="parseTextFromBlocks()"/>
         <div class="l-automator__script-names">
           <template v-if="!editingName">
             <select class="l-automator__scripts-dropdown"
@@ -142,11 +170,18 @@ Vue.component("automator-editor", {
                         @blur="nameEdited"
                         @keyup.enter="$refs.renameInput.blur()"/>
         </div>
-        <automator-button class="fas fa-trash"
-                          @click="deleteScript"
-                          v-tooltip="'Delete this script'"/>
+          <automator-button class="fas fa-trash"
+          @click="deleteScript"
+          v-tooltip="'Delete this script'"/>
+
+          <automator-button
+          :class="modeIconClass"
+          @click="toggleAutomatorMode()"
+          />
       </div>
       <automator-text-editor :currentScriptID="currentScriptID"
-                             :activeLine="activeLine"/>
+                             :activeLine="activeLine"
+                             v-show="isTextAutomator"/>
+      <automator-block-editor v-show="isBlockAutomator"/>
     </div>`
 });

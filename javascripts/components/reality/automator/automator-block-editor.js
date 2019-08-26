@@ -1,69 +1,112 @@
 "use strict";
 
-function parseBlock(block, indentation = 0) {
-  let ret = "\t".repeat(indentation) + block.cmd
+const BlockAutomator = {
+  _idArray: [],
 
-  if (block.target) ret += " " + block.target
-  if (block.secondaryTarget) ret += " " + block.secondaryTarget
-  if (block.inputValue) ret += " " + block.inputValue
-  if (block.cmd == "IF" || block.cmd == "WHILE") ret += " " + "{"
+  get lines() {
+    return ui.view.tabs.reality.automator.lines;
+  },
 
-  return ret
-}
+  set lines(arr) {
+    ui.view.tabs.reality.automator.lines = arr;
+  },
 
-function parseLines(l, indentation = 0) {
-  let lines = []
-  for (let i = 0; i < l.length; i++) {
-    lines.push(parseBlock(l[i], indentation))
-    if (l[i].cmd == "IF" || l[i].cmd == "WHILE") {
-      lines.push( ...parseLines(l[i].nest, indentation + 1) )
-      lines.push("\t".repeat(indentation) + "}")
+  get currentBlockId() {
+    if (AutomatorBackend.stack.isEmpty) return false;
+    return this._idArray[AutomatorBackend.currentLineNumber - 1];
+  },
+
+  fromText(scriptText) {
+    const lines = AutomatorGrammar.blockifyTextAutomator(scriptText);
+    if (lines) {
+      this.lines = AutomatorGrammar.blockifyTextAutomator(scriptText);
+      return true;
     }
-  }
 
-  return lines
-}
+    return false;
+  },
+
+  generateText(block, indentation = 0) {
+    let parsed = "\t".repeat(indentation) + block.cmd;
+  
+    parsed = parsed
+      .replace("LOAD", "STUDIES LOAD PRESET")
+      .replace("RESPEC", "STUDIES RESPEC");
+  
+    if (block.target) parsed += ` ${block.target}`;
+    if (block.secondaryTarget) parsed += ` ${block.secondaryTarget}`;
+    if (block.inputValue) parsed += ` ${block.inputValue}`;
+    if (block.cmd === "IF" || block.cmd === "WHILE" || block.cmd === "UNTIL") parsed += " {";
+  
+    return parsed;
+  },
+
+  parseLines(l, indentation = 0) {
+    const lines = [];
+    for (let i = 0; i < l.length; i++) {
+      lines.push(this.generateText(l[i], indentation));
+      if (l[i].cmd === "IF" || l[i].cmd === "WHILE" || l[i].cmd === "UNTIL") {
+        lines.push(...this.parseLines(l[i].nest, indentation + 1));
+        lines.push(`${"\t".repeat(indentation)}}`);
+      }
+    }
+  
+    return lines;
+  },
+
+  blockIdArray(blocks) {
+    const output = [];
+    for (let i = 0; i < blocks.length; i++) {
+      const b = blocks[i];
+      output.push(b.id);
+      if (b.nested) output.push(...this.blockIdArray(b.nest), undefined);
+    }
+    return output;
+  },
+
+  updateIdArray() {
+    this._idArray = this.blockIdArray(this.lines);
+  }
+};
 
 Vue.component("automator-block-editor", {
-  data() {
-    return {
-      lines: []
-    }
-  },
   computed: {
     lineNumbersCount() {
       return Math.max(this.lines.length, 1);
+    },
+    lines: {
+      get() {
+        return this.$viewModel.tabs.reality.automator.lines;
+      },
+      set(value) {
+        this.$viewModel.tabs.reality.automator.lines = value;
+      }
     }
-  },
-  updated() {
-    
   },
   methods: {
     updateBlock(block, id) {
-      this.lines[this.lines.findIndex( x => x.id == id)] = block
-      console.log(this.lines)
+      this.lines[this.lines.findIndex(x => x.id === id)] = block;
     },
     deleteBlock(id) {
-      let idx = this.lines.findIndex( x => x.id == id)
-      this.lines.splice(idx, 1)
+      const idx = this.lines.findIndex(x => x.id === id);
+      this.lines.splice(idx, 1);
     },
-    parseLines() {
-      $("#automator").val( parseLines(this.lines).join("\n") )
-      updateState()
-      console.log(parseLines(this.lines))
-    }
   },
   template:
-    `<div class="c-automator-block-editor l-automator-editor">
-      <button @click="parseLines">Parse <br>into <br>automator</button>
-      <draggable v-model="lines" group="code-blocks" class="c-automator-blocks">
+    `<div class="c-automator-block-editor">
+      <draggable 
+        v-model="lines" 
+        group="code-blocks" 
+        class="c-automator-blocks" 
+        ghost-class="c-automator-block-row-ghost">
         <automator-single-block 
           v-for="(block, index) in lines" 
           :key="block.id"
           :lineNumber="index"
           :block="block"
           :updateBlock="updateBlock"
-          :deleteBlock="deleteBlock"></automator-single-block>
+          :deleteBlock="deleteBlock"
+          ></automator-single-block>
       </draggable>
     </div>`
 });

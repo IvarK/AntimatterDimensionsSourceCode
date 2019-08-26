@@ -106,6 +106,10 @@ String.prototype.capitalize = function() {
   return this.toLowerCase().replace(/^\w/, c => c.toUpperCase());
 };
 
+String.prototype.splice = function(start, delCount, newSubStr) {
+  return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
+};
+
 /**
  * @param {number} start
  * @param {number} count

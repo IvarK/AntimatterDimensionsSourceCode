@@ -276,7 +276,7 @@ const RA_UNLOCKS = {
   TERESA_XP: {
     id: 1,
     description: "Get Teresa to level 3",
-    reward: "Unlock Ra's Reality, boost Teresa memory gain based on EP reached",
+    reward: "Unlock Ra's Reality, boost Teresa memory gain based on EP reached in Ra's Reality",
     pet: Ra.pets.teresa,
     level: 3
   },

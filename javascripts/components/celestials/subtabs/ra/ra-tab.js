@@ -52,14 +52,20 @@ Vue.component("ra-tab", {
             <p> Rules: you can't dimension boost and tick reduction is forced to be 11%. </p>
             <br>
             <br>
-            <h2> Rewards: </h2>
+            <h2> Memory multipliers: </h2>
             <div class="c-ra-rewards">
               <span class="c-ra-rewards-inner"> Teresa: {{formatX(expMultis[0], 2, 2)}} </span>
-              <span class="c-ra-rewards-inner"> Effarig: {{formatX(expMultis[1], 2, 2)}} </span>
+              <span 
+                class="c-ra-rewards-inner" 
+                v-if="pets[1].pet.isUnlocked"> Effarig: {{formatX(expMultis[1], 2, 2)}} </span>
             </div>
             <div class="c-ra-rewards">
-              <span class="c-ra-rewards-inner"> Enslaved: {{formatX(expMultis[2], 2, 2)}} </span>
-              <span class="c-ra-rewards-inner"> V: {{formatX(expMultis[3], 2, 2)}} </span>
+              <span 
+                class="c-ra-rewards-inner" 
+                v-if="pets[2].pet.isUnlocked"> Enslaved: {{formatX(expMultis[2], 2, 2)}} </span>
+              <span 
+                class="c-ra-rewards-inner" 
+                v-if="pets[3].pet.isUnlocked"> V: {{formatX(expMultis[3], 2, 2)}} </span>
             </div>
           </div>
         </button>

@@ -5905,6 +5905,7 @@ kbd {
   flex: none none 50rem;
   width: 50rem;
   margin: 2.5rem 5rem;
+  cursor: pointer;
 }
 
 .l-ra-reality-inner {

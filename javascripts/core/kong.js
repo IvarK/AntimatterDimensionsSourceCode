@@ -62,6 +62,7 @@ kong.purchaseEP = function(cost) {
 };
 
 kong.buyMoreSTD = function(STD, kreds) {
+  if (!kong.enabled) return;
   kongregate.mtx.purchaseItems([`${kreds}worthofstd`], result => {
       if (result.success) {
         player.IAP.totalSTD += STD;

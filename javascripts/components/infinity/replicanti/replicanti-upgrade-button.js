@@ -12,7 +12,6 @@ Vue.component("replicanti-upgrade-button", {
       isCapped: false,
       isAutoUnlocked: false,
       isAutobuyerOn: false,
-      auto: player.replicanti.auto,
       isEC8Running: false
     };
   },

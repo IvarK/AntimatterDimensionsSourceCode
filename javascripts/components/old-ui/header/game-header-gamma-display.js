@@ -34,6 +34,9 @@ Vue.component("game-header-gamma-display", {
       if (Enslaved.isAutoReleasing) {
         storedTimeText = ` (auto-releasing)`;
       }
+      if (EternityChallenge(12).isRunning || TimeCompression.isActive) {
+        storedTimeText = ` (fixed)`;
+      }
       if (speedMod < 10000 && speedMod !== 1) {
         return `${speedMod.toFixed(3)}${storedTimeText}`;
       }

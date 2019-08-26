@@ -302,7 +302,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply IP gain by {value}",
     totalDesc: "IP gain ×{value}",
     genericDesc: "IP gain multiplier",
-    effect: (level, strength) => Math.pow(level * strength, 5) * 100,
+    effect: (level, strength) => Math.pow(level * (strength + 1), 6) * 10000,
     formatEffect: x => shorten(x, 2, 0),
     combine: GlyphCombiner.multiply,
     // eslint-disable-next-line no-negated-condition
@@ -330,7 +330,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 17,
     glyphTypes: ["power", "reality"],
     singleDesc: "Normal Dimension multipliers ×{value}",
-    effect: (level, strength) => Decimal.pow(level * strength * 10, level * strength * 9.5),
+    effect: (level, strength) => Decimal.pow(level * strength * 10, level * strength * 10),
     formatEffect: x => shorten(x, 2, 0),
     combine: effects => ({ value: effects.reduce(Decimal.prodReducer, new Decimal(1)), capped: false }),
   }, {
@@ -382,7 +382,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["effarig"],
     singleDesc: "All achievement related effects ^{value}",
     genericDesc: "Achievement effects power",
-    effect: (level, strength) => 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50,
+    effect: (level, strength) => 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 100,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {

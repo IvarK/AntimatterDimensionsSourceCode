@@ -133,7 +133,6 @@ let player = {
   thisInfinityLastBuyTime: 0,
   dimensionBoosts: 0,
   galaxies: 0,
-  tickDecrease: 0.9,
   totalAntimatter: new Decimal(0),
   achPow: new Decimal(1),
   news: new Set(),
@@ -158,6 +157,11 @@ let player = {
   lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenRealities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 0]),
+  bestIPminThisInfinity: new Decimal(0),
+  bestIPminThisEternity: new Decimal(0),
+  bestEPminThisEternity: new Decimal(0),
+  bestEPminThisReality: new Decimal(0),
+  bestRMmin: new Decimal(0),
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
   version: 13,
@@ -212,7 +216,7 @@ let player = {
   noSacrifices: true,
   onlyEighthDimensons: true,
   onlyFirstDimensions: true,
-  noEighthDimensions: true,
+  noEighthDimensions: false,
   noTheoremPurchases: true,
   dilation: {
     studies: [],
@@ -220,6 +224,7 @@ let player = {
     tachyonParticles: new Decimal(0),
     dilatedTime: new Decimal(0),
     nextThreshold: new Decimal(1000),
+    baseFreeGalaxies: 0,
     freeGalaxies: 0,
     upgrades: new Set(),
     rebuyables: {
@@ -267,10 +272,6 @@ let player = {
               false, false, false, false, false,
               false, false, false, false, false],
     upgReqChecks: [false],
-    automatorOn: false,
-    automatorCurrentRow: 0,
-    automatorRows: 0,
-    automatorCommands: new Set(),
     perks: new Set(),
     respec: false,
     tdbuyers: [false, false, false, false, false, false, false, false],
@@ -311,9 +312,7 @@ let player = {
       unlocks: [],
       run: false,
       bestRunAM: new Decimal(1),
-      glyphLevelMult: 1,
-      rmMult: 1,
-      dtBulk: 1
+      perkShop: Array.repeat(0, 4)
     },
     effarig: {
       relicShards: 0,

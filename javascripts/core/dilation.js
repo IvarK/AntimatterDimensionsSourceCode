@@ -6,8 +6,12 @@ function startDilatedEternity(auto) {
       eternity(false, auto, { switchingDilation: true });
       return false;
   }
-  if (player.options.confirmations.dilation && !confirm("Dilating time will start a new eternity, and all of your Dimension/Infinity Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) {
-      return false;
+  if (!auto && player.options.confirmations.dilation) {
+    const confirmationMessage = "Dilating time will start a new eternity, and all of your Dimension/Infinity" +
+      " Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to" +
+      " ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your" +
+      " antimatter and tachyon particles.";
+    if (!confirm(confirmationMessage)) return false;
   }
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
@@ -50,7 +54,7 @@ function buyDilationUpgrade(id, bulk) {
 
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
       DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
-    buying = Math.min(buying, player.celestials.teresa.dtBulk);
+    buying = Math.min(buying, Effects.max(1, PerkShopUpgrade.rmMult));
     if (!bulk) {
       buying = Math.min(buying, 1);
     }
@@ -114,6 +118,7 @@ function tachyonGainMultiplier() {
   return new Decimal(1).timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,
+    Achievement(132),
     RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15)
@@ -155,7 +160,7 @@ function dilatedValueOf(value, depth) {
   if (depth !== undefined) {
     return recursiveDilation(value, depth);
   }
-  if (player.dilation.active) {
+  if (player.dilation.active || Enslaved.isRunning) {
     return recursiveDilation(value, 1);
   }
   if (TimeCompression.isActive) {

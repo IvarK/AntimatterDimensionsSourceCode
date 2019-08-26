@@ -65,7 +65,7 @@ Vue.component("enslaved-tab", {
       this.storedReal = player.celestials.enslaved.storedReal;
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
       this.storedRealCap = Enslaved.storedRealTimeCap;
-      this.unlocks = player.celestials.enslaved.unlocks;
+      this.unlocks = Array.from(player.celestials.enslaved.unlocks);
       this.quote = Enslaved.quote;
       this.quoteIdx = player.celestials.enslaved.quoteIdx;
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
@@ -107,7 +107,7 @@ Vue.component("enslaved-tab", {
     },
     unlockClassObject(info) {
       return {
-        "o-enslaved-shop-button--bought": this.hasUnlock(info), 
+        "o-enslaved-shop-button--bought": this.hasUnlock(info),
         "o-enslaved-shop-button--available": this.canBuyUnlock(info)
       };
     },
@@ -197,7 +197,8 @@ Vue.component("enslaved-tab", {
             <div v-for="x in 25" class="o-enslaved-run-button__glitch"
                                 :style="glitchStyle(x)"/>
           </div>
-          <p>ID, TD, and 8th dimension purchases are limited to 1 each.</p>
+          <p>Glyph levels will be boosted to a minimum of 5000</p>
+          <p>Infinity, time, and 8th dimension purchases are limited to 1 each.</p>
           <p>Normal dimension multipliers are always dilated (the glyph effect still only
              applies in actual dilation)</p>
           <p>Time study 192 is locked</p>
@@ -206,7 +207,7 @@ Vue.component("enslaved-tab", {
           <p>Time theorem generation from dilation glyphs is much slower</p>
           <p>Certain challenge goals have been increased</p>
           <p>Stored time is much less effective</p>
-          <b>Reward: ID purchase caps are increased by 1000 for every 1000 free tickspeed upgrades you get</b>
+          <b>Reward: ID purchase caps are increased by 1000 for every 1000 free tickspeed upgrades you have</b>
         </div>
       </div>
     </div>`

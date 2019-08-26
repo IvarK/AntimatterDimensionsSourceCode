@@ -35,7 +35,7 @@ Vue.component("game-header-big-crunch-button", {
       const gainedIP = gainedInfinityPoints();
       this.currentIP.copyFrom(player.infinityPoints);
       this.gainedIP.copyFrom(gainedIP);
-      this.peakIPPM.copyFrom(IPminpeak);
+      this.peakIPPM.copyFrom(player.bestIPminThisInfinity);
       if (this.isPeakIPPMVisible) {
         this.currentIPPM.copyFrom(gainedIP.dividedBy(Time.thisInfinity.totalMinutes));
       }

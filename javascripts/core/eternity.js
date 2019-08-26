@@ -3,7 +3,7 @@
 function canEternity() {
   return EternityChallenge.isRunning
     ? EternityChallenge.current.canBeCompleted
-    : player.infinityPoints.gte(Decimal.MAX_NUMBER);
+    : player.infinityPoints.gte(Decimal.MAX_NUMBER) && InfinityDimension(8).isUnlocked;
 }
 
 function eternity(force, auto, specialConditions = {}) {
@@ -41,7 +41,7 @@ function eternity(force, auto, specialConditions = {}) {
     TimeStudy(191)
   );
 
-  if (player.dilation.active && !force) {
+  if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
     rewardTP();
   }
 
@@ -81,8 +81,10 @@ function eternity(force, auto, specialConditions = {}) {
   
   resetInfinityPointsOnEternity();
   InfinityDimensions.resetAmount();
-  IPminpeak = new Decimal(0);
-  EPminpeak = new Decimal(0);
+  player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
+  player.bestEPminThisEternity = new Decimal(0);
+  player.bestIPminThisInfinity = new Decimal(0);
+  player.bestIPminThisEternity = new Decimal(0);
   resetTimeDimensions();
   try {
     // FIXME: Eternity count is a Decimal and also why is this submitted in so many places?
@@ -122,7 +124,6 @@ function initializeResourcesAfterEternity() {
   player.thisInfinityRealTime = 0;
   player.dimensionBoosts = player.eternities.gte(4) ? 4 : 0;
   player.galaxies = player.eternities.gte(4) ? 1 : 0;
-  player.tickDecrease = 0.9;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.infMult = new Decimal(1);

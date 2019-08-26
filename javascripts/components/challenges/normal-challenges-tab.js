@@ -27,9 +27,9 @@ Vue.component("normal-challenges-tab", {
       methods: {
         update() {
           this.isRunning = this.challenge.isRunning;
-          this.isCompleted = this.challenge.isCompleted;
           this.isImpossible = Enslaved.isRunning &&
             !Enslaved.IMPOSSIBLE_CHALLENGE_EXEMPTIONS.includes(this.challengeId);
+          this.isCompleted = this.challenge.isCompleted && !this.isImpossible;
         }
       },
       template:

@@ -1904,6 +1904,12 @@ screen and (max-width: 480px) {
   border-color: #b341e0;
 }
 
+.o-prestige-btn--dilation {
+  color: #64dd17;
+  background-color: black;
+  border-color: #64dd17;
+}
+
 .o-prestige-btn--eternity:hover {
   color: #511568;
   background-color: white;
@@ -3650,6 +3656,11 @@ screen and (max-width: 480px) {
 
 /*#endregion o-infinity-upgrade-btn--bought*/
 
+.o-infinity-upgrade-btn--chargeable {
+  background-color: #25e8e6;
+  animation: a-compression-btn-glow 2s infinite;
+}
+
 .o-infinity-upgrade-btn--charged {
   background-color: #25e8e6;
 }
@@ -4553,7 +4564,7 @@ screen and (max-width: 480px) {
   font-size: 1.05rem;
   border: .1rem solid;
   width: 17rem;
-  height: 8rem;
+  height: 9rem;
   transition-duration: 0.2s;
   border-radius: .4rem;
   font-family: Typewriter, serif;
@@ -5610,7 +5621,7 @@ kbd {
 }
 
 .o-enslaved-run-box {
-  width: 35rem;
+  width: 40rem;
   padding: 2rem;
   border-radius: .5rem;
   border: 2px solid #cd945c;

@@ -23,7 +23,7 @@ const perkColors = {
     primary: "#0b600e",
     secondary: "#063207"
   },
-  [PerkFamily.AUTOMATOR]: {
+  [PerkFamily.AUTOMATION]: {
     primary: "#ff0000",
     secondary: "#b30000"
   },

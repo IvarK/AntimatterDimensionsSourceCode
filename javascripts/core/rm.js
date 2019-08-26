@@ -564,6 +564,12 @@ function getGlyphEffectsFromBitmask(bitmask, level, strength) {
     }));
 }
 
+function getAdjustedGlyphLevel(level) {
+  if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
+  if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
+  return level;
+}
+
 // Pulls out a single effect value from a glyph's bitmask, returning just the value (nothing for missing effects)
 function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   const glyphEffect = GameDatabase.reality.glyphEffects[effectName];
@@ -571,8 +577,7 @@ function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   if ((glyph.effects & (1 << glyphEffect.bitmaskIndex)) === 0) {
     return undefined;
   }
-  const level = Effarig.isRunning ? Math.min(glyph.level, Effarig.glyphLevelCap) : glyph.level;
-  return glyphEffect.effect(level, glyph.strength);
+  return glyphEffect.effect(getAdjustedGlyphLevel(glyph.level), glyph.strength);
 }
 
 function countEffectsFromBitmask(bitmask) {
@@ -618,7 +623,9 @@ function canSacrifice() {
 function glyphSacrificeGain(glyph) {
   if (!canSacrifice()) return 0;
   if (glyph.type === "reality") return 0.01 * glyph.level;
-  return Math.pow(glyph.level + 10, 2.5) * glyph.strength * Teresa.runRewardMultiplier;
+  const pre10kFactor = Math.pow(Math.min(glyph.level, 10000) + 10, 2.5);
+  const post10kFactor = 1 + Math.max(glyph.level - 10000, 0) / 100;
+  return pre10kFactor * post10kFactor * glyph.strength * Teresa.runRewardMultiplier;
 }
 
 function glyphAlchemyResource(glyph) {
@@ -718,7 +725,8 @@ function getGlyphLevelInputs() {
   const replEffect = adjustFactor(replBase, weights.repl / 100);
   const dtEffect = adjustFactor(dtBase, weights.dt / 100);
   const eterEffect = adjustFactor(eterBase, weights.eternities / 100);
-  let baseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult;
+  const perkShopEffect = Effects.max(1, PerkShopUpgrade.glyphLevel);
+  let baseLevel = epEffect * replEffect * dtEffect * eterEffect * perkShopEffect;
   let scaledLevel = baseLevel;
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
   const scaleDelay = getAdjustedGlyphEffect("effarigglyph");
@@ -751,7 +759,7 @@ function getGlyphLevelInputs() {
     replEffect: replEffect,
     dtEffect: dtEffect,
     eterEffect: eterEffect,
-    perkShop: player.celestials.teresa.glyphLevelMult,
+    perkShop: perkShopEffect,
     scalePenalty: scalePenalty,
     perkFactor: perkFactor,
     shardFactor: shardFactor,

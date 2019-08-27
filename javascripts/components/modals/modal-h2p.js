@@ -1,4 +1,5 @@
 "use strict";
+
 Vue.component("modal-h2p", {
   data() {
     return {
@@ -6,7 +7,7 @@ Vue.component("modal-h2p", {
       searchValue: "",
     };
   },
-  mounted() {
+  created() {
     this.activeTab = this.unlockedTabs.find(
       h2pTab =>
         h2pTab.tab === `${this.$viewModel.tab}/${this.$viewModel.subtab}` || h2pTab.tab === this.$viewModel.tab
@@ -23,7 +24,7 @@ Vue.component("modal-h2p", {
       }
     },
     unlockedTabs() {
-      return this.allTabs.filter(tab => tab.unlock());
+      return this.allTabs.filter(tab => tab.isUnlocked());
     },
     searchTerm() {
       return this.searchValue.toLowerCase();

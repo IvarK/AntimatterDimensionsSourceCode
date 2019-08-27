@@ -85,7 +85,8 @@ const GlyphSelection = {
     ui.view.modal.glyphSelection = false;
     Glyphs.addToInventory(this.glyphs[index]);
     this.glyphs = [];
-    manualReality();
+    runRealityAnimation();
+    completeReality(false, false);
   }
 };
 
@@ -126,12 +127,13 @@ function requestManualReality() {
     alert("Inventory is full. Delete/sacrifice (shift-click) some glyphs.");
     return;
   }
+  runRealityAnimation();
+  completeReality(false, false);
   const level = gainedGlyphLevel();
   if (simulatedRealityCount(false) > 0) {
     Enslaved.lockedInGlyphLevel = level;
     Enslaved.lockedInRealityMachines = gainedRealityMachines();
     Enslaved.lockedInShardsGained = Effarig.shardsGained;
-    manualReality();
     return;
   }
   // If there is no glyph selection, proceed with reality immediately. Otherwise,
@@ -143,15 +145,14 @@ function requestManualReality() {
       ? GlyphGenerator.startingGlyph(level)
       : GlyphGenerator.randomGlyph(level);
     Glyphs.addToInventory(newGlyph);
-    manualReality();
     return;
   }
   GlyphSelection.generate(choiceCount, level);
 }
 
-function manualReality() {
+function runRealityAnimation() {
   if (player.options.animations.reality) {
-    document.getElementById("container").style.animation = "realize 10s 1";
+    document.getElementById("ui").style.animation = "realize 10s 1";
     document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
     document.getElementById("realityanimbg").style.display = "block";
     setTimeout(() => {
@@ -160,13 +161,10 @@ function manualReality() {
       document.getElementById("realityanimbg").play();
     }, 2000);
     setTimeout(() => {
-      document.getElementById("container").style.animation = "";
+      document.getElementById("ui").style.animation = "";
       document.getElementById("realityanimbg").style.animation = "";
       document.getElementById("realityanimbg").style.display = "none";
     }, 10000);
-    setTimeout(() => completeReality(false, false), 3000);
-  } else {
-    completeReality(false, false);
   }
 }
 

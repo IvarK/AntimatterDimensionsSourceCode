@@ -1407,7 +1407,7 @@ GameDatabase.news = [
   {
     id: "j3",
     text: "Person with money likes to support this game.",
-    condition: () => player.IAP.dimMult > 1 || player.IAP.IPMult > 1
+    condition: () => player.IAP.totalSTD > 1
   },
   {
     id: "j4",

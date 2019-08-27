@@ -3,37 +3,24 @@
 Vue.component("shop-tab", {
   data() {
     return {
+      purchases: [],
       STD: 0,
-      IPMult: 0,
-      EPMult: 0,
-      dimMult: 0,
-      allDimMult: 0
     };
   },
   methods: {
     update() {
       this.STD = player.IAP.totalSTD - player.IAP.spentSTD;
-      this.IPMult = player.IAP.IPMult;
-      this.EPMult = player.IAP.EPMult;
-      this.dimMult = player.IAP.dimMult;
-      this.allDimMult = player.IAP.allDimMult;
-      
-    },
-    purchase(type, cost) {
-      kong[`purchase${type}`](cost);
-    },
-    getAdditiveNext(x, inc) {
-      return (x === 1) ? x + inc - 1 : x + inc;
-    },
-    getNextAllDimMult() {
-      if (this.allDimMult < 32) return this.allDimMult * 2;
-      
-      return this.allDimMult + 16;
     },
     showStore() {
       Modal.shop.show();
       this.$viewModel.modal.closeButton = true;
+    },
+    buyTimeSkip() {
+      kong.purchaseTimeSkip();
     }
+  },
+  created() {
+    this.purchases = ShopPurchase.all;
   },
   template: 
   `<div id="shop" class="tab">
@@ -43,25 +30,15 @@ Vue.component("shop-tab", {
       <button class="o-shop-buy-more" @click="showStore()">Buy More</button>
     </div>
     <div class="l-shop-buttons-container">
-      <shop-button :cost="40" type="IP" :buyFn="purchase">
-        Double your IP gain from all sources. (additive) 
-        <br>Currently {{ IPMult }}x, next: {{ getAdditiveNext(IPMult, 2) }}x
-      </shop-button>
-      <shop-button :cost="50" type="EP" :buyFn="purchase">
-        Triple your EP gain from all sources. (additive) 
-        <br>Currently {{ EPMult }}x, next: {{ getAdditiveNext(EPMult, 3) }}x
-      </shop-button>
-      <shop-button :cost="30" type="DimMult" :buyFn="purchase">
-        Double all your normal dimension multipliers (dimensions 1-8). Forever. 
-        <br>Currently {{ shorten(dimMult) }}x, next: {{ shorten(dimMult*2, 2, 0) }}x
-      </shop-button>
-      <shop-button :cost="60" type="AllDimMult" :buyFn="purchase">
-        Double ALL the dimension multipliers (Normal, Infinity, Time) (multiplicative until 32x). Forever. 
-        <br>Currently {{ allDimMult }}x, next: {{ getNextAllDimMult() }}x
-      </shop-button>
-      <shop-button :cost="10" type="TimeSkip" :buyFn="purchase">
-        Get 6 hours worth of offline production. (Doesn't work for autobuyers)
-      </shop-button>
+      <shop-button v-for="purchase in purchases" :purchase="purchase" :key="purchase.key"></shop-button>
+      <div class="c-shop-button-container">
+        <div class="o-shop-button-description">
+          Get 6 hours worth of offline production. (Doesn't work for autobuyers)
+        </div>
+        <button 
+          @click="buyTimeSkip()" 
+          class="o-shop-button-button">Cost: 10 <img src="images/std_coin.png" height="40"></button>
+      </div>
     </div>
     <span style="font-size: 12px"><b>
       Disclaimer: These are not required to progress in the game, they are just to help and support the developer.

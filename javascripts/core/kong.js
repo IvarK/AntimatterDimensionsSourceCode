@@ -23,42 +23,62 @@ kong.submitStats = function(name, value) {
   } catch (e) { console.log(e); }
 };
 
-kong.purchaseIP = function(cost) {
-  if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
-  player.IAP.spentSTD += cost;
-  if (player.IAP.IPMult === 1) player.IAP.IPMult = 2;
-  else player.IAP.IPMult += 2;
-};
+class ShopPurchaseState extends RebuyableMechanicState {
+  
+  get currency() {
+    return player.IAP.totalSTD - player.IAP.spentSTD;
+  }
+
+  get description() {
+    return this.config.description;
+  }
+
+  get cost() {
+    return this.config.cost;
+  }
+
+  get currentMult() {
+    return player.IAP[this.config.key];
+  }
+
+  set currentMult(value) {
+    player.IAP[this.config.key] = value;
+  }
+
+  get nextMult() {
+    return this.config.multFn(this.currentMult);
+  }
+
+  get purchase() {
+    if (!this.canBeBought) return false;
+    player.IAP.spentSTD += this.cost;
+    this.currentMult = this.nextMult;
+    GameUI.update();
+    return true;
+  }
+}
+
+const ShopPurchase = (function() {
+  const db = GameDatabase.shopPurchases;
+  return {
+    dimMult: new ShopPurchaseState(db.dimMult),
+    IPMult: new ShopPurchaseState(db.IPMult),
+    EPMult: new ShopPurchaseState(db.EPMult),
+    allDimMult: new ShopPurchaseState(db.allDimMult)
+  };
+}());
+
+ShopPurchase.all = Object.values(ShopPurchase);
 
 kong.submitAchievements = function() {
   kong.submitStats("Achievements", Achievements.effectiveCount + player.secretAchievements.size);
 };
 
-kong.purchaseDimMult = function(cost) {
-  if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
-  player.IAP.spentSTD += cost;
-  player.IAP.dimMult *= 2;
-};
-
-kong.purchaseAllDimMult = function(cost) {
-  if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
-  player.IAP.spentSTD += cost;
-  player.IAP.allDimMultPurchased++;
-  if (player.IAP.allDimMult < 32) player.IAP.allDimMult *= 2;
-  else player.IAP.allDimMult += 16;
-};
 
 kong.purchaseTimeSkip = function(cost) {
   if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
   player.IAP.spentSTD += cost;
   simulateTime(21600);
-};
-
-kong.purchaseEP = function(cost) {
-  if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
-  player.IAP.spentSTD += cost;
-  if (player.IAP.EPMult === 1) player.IAP.EPMult = 3;
-  else player.IAP.EPMult += 3;
 };
 
 kong.buyMoreSTD = function(STD, kreds) {

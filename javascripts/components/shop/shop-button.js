@@ -2,16 +2,17 @@
 
 Vue.component("shop-button", {
   props: {
-    cost: Number,
-    type: String,
-    buyFn: Function
+    purchase: Object,
   },
   template:
   `<div class="c-shop-button-container">
-    <div class="o-shop-button-description"><slot></slot></div>
+    <div class="o-shop-button-description">
+      {{ purchase.description }}
+      <br>Currently {{ purchase.currentMult }}x, next: {{ purchase.nextMult }}x
+    </div>
     <button 
-      @click="buyFn(type, cost)" 
-      class="o-shop-button-button">Cost: {{ cost }} <img src="images/std_coin.png" height="40"></button>
+      @click="purchase.purchase()" 
+      class="o-shop-button-button">Cost: {{ purchase.cost }} <img src="images/std_coin.png" height="40"></button>
   </div>
   `
 });

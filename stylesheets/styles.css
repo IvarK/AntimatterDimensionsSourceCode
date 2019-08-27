@@ -5896,6 +5896,12 @@ kbd {
   margin: 0 0 -5rem 0;
 }
 
+.c-ra-memory-header {
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+  font-weight: bold;
+}
+
 .l-ra-non-pets {
   flex: 0.2 0 25rem;
   justify-content: center;

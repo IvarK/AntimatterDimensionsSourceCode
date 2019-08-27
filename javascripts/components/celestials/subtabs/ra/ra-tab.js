@@ -4,12 +4,18 @@ Vue.component("ra-tab", {
   data() {
     return {
       expMultis: [0, 0, 0, 0],
+      currentExpGain: 0,
+      showReality: false,
+      showLaitela: false
     };
   },
   methods: {
     update() {
       this.unlocks = player.celestials.ra.unlocks;
       this.expMultis = this.pets.map(obj => obj.pet.expBoost);
+      this.currentExpGain = Ra.pets.teresa.baseExp;
+      this.showReality = Ra.pets.teresa.level > 2;
+      this.showLaitela = Ra.pets.v.isUnlocked;
     },
     startRun() {
       Ra.startRun();
@@ -42,11 +48,15 @@ Vue.component("ra-tab", {
   },
   template:
     `<div class="l-ra-celestial-tab">
+      <div class="c-ra-memory-header">
+        You will gain {{ shorten(this.currentExpGain, 2, 2) }}{{ showReality ? " base" : ""}} 
+        memories on Reality, based on glyph level.
+      </div>
       <div class="l-ra-all-pets-container">
         <ra-pet v-for="(pet, i) in pets" :key="i" :petConfig="pet" />
       </div>
       <div class="l-ra-non-pets">
-        <button @click="startRun" class="l-ra-reality-container">
+        <button @click="startRun" class="l-ra-reality-container" v-if="showReality">
           <div class="l-ra-reality-inner">
             <h1> Start Ra's Reality</h1>
             <p> Rules: you can't dimension boost and tick reduction is forced to be 11%. </p>
@@ -69,7 +79,7 @@ Vue.component("ra-tab", {
             </div>
           </div>
         </button>
-        <button class="l-ra-laitela-unlock">
+        <button class="l-ra-laitela-unlock" v-if="showLaitela">
           <div class="l-ra-laitela-unlock-inner">
             <h1> Lai'tela: </h1>
             <h2> The Celestial of Matter </h2>

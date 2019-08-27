@@ -1,11 +1,13 @@
 "use strict";
 
 Vue.component("game-header-eternity-button", {
+  mixins: [textColorMixin],
   data() {
     return {
       isVisible: false,
       type: EPButtonDisplayType.FIRST_TIME,
       gainedEP: new Decimal(0),
+      currentEP: new Decimal(0),
       currentEPPM: new Decimal(0),
       peakEPPM: new Decimal(0),
       gainedTachyons: new Decimal(0),
@@ -55,6 +57,7 @@ Vue.component("game-header-eternity-button", {
       }
 
       const gainedEP = gainedEternityPoints();
+      this.currentEP.copyFrom(player.eternityPoints);
       this.gainedEP.copyFrom(gainedEP);
       const hasNewContent = player.realities === 0 &&
         player.eternityPoints.exponent >= 4000 &&
@@ -104,7 +107,7 @@ Vue.component("game-header-eternity-button", {
           <b>I need to become Eternal.</b>
           <br>
         </template>
-        Gain <b>{{shorten(gainedEP, 2, 0)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <b :style="amountStyle(currentEP, gainedEP)">{{shorten(gainedEP, 2, 0)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
         <template v-if="isPeakEPPMVisible">
           {{shorten(currentEPPM, 2, 2)}} EP/min
@@ -120,7 +123,7 @@ Vue.component("game-header-eternity-button", {
       
       <!-- Dilation -->
       <template v-else-if="type === 3">
-        Gain <b>{{shorten(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <b :style="amountStyle(currentEP, gainedEP)">{{shorten(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
         +{{shortenMoney(gainedTachyons)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}.
       </template>
@@ -128,7 +131,7 @@ Vue.component("game-header-eternity-button", {
       <!-- New content available -->
       <template v-else-if="type === 4 || type === 5">
         <template v-if="type === 4">
-          Gain <b>{{shorten(gainedEP, 2, 2)}}</b> EP
+          Gain <b :style="amountStyle(currentEP, gainedEP)">{{shorten(gainedEP, 2, 2)}}</b> EP
         </template>
         <template v-else>
           Gain <b>{{shortenMoney(gainedTachyons)}}</b> Tachyon {{ "particle" | pluralize(gainedTachyons) }}

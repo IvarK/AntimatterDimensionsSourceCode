@@ -18,7 +18,7 @@ Vue.component("sidebar-am", {
     <h2 id="antimatter">{{ shorten(am, 2, 1) }}</h2>
     <div class="resource-information">
       <span class="resource-name">Antimatter</span>
-      <span class="resource-per-second"> +{{ shorten(perSecond, 2, 0) }}/s</span>
+      <span class="resource-gain"> +{{ shorten(perSecond, 2, 0) }}/s</span>
     </div>
   </div>`
 });

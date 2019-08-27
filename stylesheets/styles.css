@@ -2030,7 +2030,7 @@ screen and (max-width: 480px) {
 }
 
 .l-hint-text--alchemy-node {
-  top: 100%;
+  top: 2.3rem;
   left: 50%;
   transform: translate(-50%);
 }
@@ -6048,18 +6048,18 @@ kbd {
 
 .o-alchemy-node {
   position: absolute;
-  width: 2rem;
-  height: 2rem;
-  margin-left: -1rem;
-  margin-top: -1rem;
+  width: 3rem;
+  height: 3rem;
+  margin-left: -1.5rem;
+  margin-top: -1.5rem;
   user-select: none;
-  font-size: 1.4rem;
+  font-size: 2.1rem;
   border: 0.1rem solid black;
   border-radius: 50%;
   background-color: white;
   transition: all 0.2s, z-index 0s;
   z-index: 1;
-  line-height: 2rem;
+  line-height: 2.4rem;
 }
 
 .o-alchemy-node--unfocused {

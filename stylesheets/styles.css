@@ -2835,6 +2835,8 @@ screen and (max-width: 480px) {
 
 .c-achievements-tab__header {
   font-size: 1.6rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.6rem;
 }
 
 .c-achievements-tab__timer {

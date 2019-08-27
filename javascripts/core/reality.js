@@ -491,6 +491,7 @@ function lockAchievementsOnReality() {
   for (let r = startRow; r <= lastRow; ++r) {
     Achievements.row(r).forEach(a => a.lock());
   }
+  player.reality.achTimer = 0;
 }
 
 function tryUnlockAchievementsOnReality() {

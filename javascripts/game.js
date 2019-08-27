@@ -555,7 +555,8 @@ function gameLoop(diff, options = {}) {
         const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
           ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
           : 1;
-        player.celestials.enslaved.stored += diff * Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
+        Enslaved.currentBlackHoleStoreAmountPerMs = Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
+        player.celestials.enslaved.stored += diff * Enslaved.currentBlackHoleStoreAmountPerMs;
         speedFactor = reducedTimeFactor;
       }
       diff *= speedFactor;
@@ -794,7 +795,9 @@ function getTTPerSecond() {
     : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
   
   // Dilation TT generation
-  const dilationTT = DilationUpgrade.ttGenerator.effectValue.times(ttMult);
+  const dilationTT = DilationUpgrade.ttGenerator.isBought
+    ? DilationUpgrade.ttGenerator.effectValue.times(ttMult)
+    : new Decimal(0);
 
   return dilationTT.add(glyphTT);
 }

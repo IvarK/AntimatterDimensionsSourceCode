@@ -72,7 +72,7 @@ Vue.component("enslaved-tab", {
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
       this.autoRelease = player.celestials.enslaved.isAutoReleasing;
       this.autoReleaseSpeed = Enslaved.isAutoReleasing ? Enslaved.autoReleaseSpeed : 0;
-      this.currentSpeedUp = currentBlackHoleStoreAmountPerMs;
+      this.currentSpeedUp = Enslaved.currentBlackHoleStoreAmountPerMs;
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();

@@ -443,7 +443,6 @@ function getGameSpeedupForDisplay() {
 }
 
 let autobuyerOnGameLoop = true;
-let currentBlackHoleStoreAmountPerMs = 0;
 
 // "diff" is in ms.  When unspecified, it just uses the game update rate.
 function gameLoop(diff, options = {}) {
@@ -517,8 +516,8 @@ function gameLoop(diff, options = {}) {
         const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
           ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
           : 1;
-        currentBlackHoleStoreAmountPerMs = Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
-        player.celestials.enslaved.stored += diff * currentBlackHoleStoreAmountPerMs;
+        Enslaved.currentBlackHoleStoreAmountPerMs = Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
+        player.celestials.enslaved.stored += diff * Enslaved.currentBlackHoleStoreAmountPerMs;
         speedFactor = reducedTimeFactor;
       }
       diff *= speedFactor;

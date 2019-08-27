@@ -47,6 +47,7 @@ const Enslaved = {
   autoReleaseTick: 0,
   autoReleaseSpeed: 0,
   glyphLevelMin: 5000,
+  currentBlackHoleStoreAmountPerMs: 0,
   toggleStoreBlackHole() {
     if (this.maxQuoteIdx === 6) player.celestials.enslaved.maxQuotes += 3;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;

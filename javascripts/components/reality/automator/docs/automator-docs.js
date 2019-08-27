@@ -3,7 +3,8 @@
 Vue.component("automator-docs", {
   data() {
     return {
-      commandID: -1
+      commandID: -1,
+      isBlockAutomator: false
     };
   },
   computed: {
@@ -25,6 +26,9 @@ Vue.component("automator-docs", {
   methods: {
     changeCommand(event) {
       this.commandID = event;
+    },
+    update() {
+      this.isBlockAutomator = player.reality.automator.type === AutomatorType.BLOCK;
     }
   },
   template: `
@@ -37,6 +41,7 @@ Vue.component("automator-docs", {
           @click="fullScreen = !fullScreen"
         />
       </div>
+      <automator-blocks v-if="isBlockAutomator" />
       <div class="c-automator-docs l-automator-pane__content">
         <automator-docs-main-page
           v-if="command === undefined"

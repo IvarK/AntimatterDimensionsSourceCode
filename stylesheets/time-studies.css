@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   position: relative;
+  padding-bottom: 10rem;
 }
 
 .l-time-studies-tab__tree {

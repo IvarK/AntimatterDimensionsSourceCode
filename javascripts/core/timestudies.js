@@ -84,7 +84,8 @@ const TimeTheorems = {
   },
 
   totalPurchased() {
-    return Math.floor(player.timestudy.amcost.e / 20000) + Math.floor(player.timestudy.ipcost.e / 100 + 1) +
+    return player.timestudy.amcost.e / 20000 - 1 +
+      player.timestudy.ipcost.e / 100 +
       Math.round(player.timestudy.epcost.log2());
   }
 };

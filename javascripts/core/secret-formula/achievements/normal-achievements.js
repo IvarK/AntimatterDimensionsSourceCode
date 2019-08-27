@@ -886,7 +886,7 @@ GameDatabase.achievements.normal = [
     id: 142,
     name: "How does this work?",
     tooltip: "Unlock the automator.",
-    checkRequirement: () => player.realities >= 4,
+    checkRequirement: () => player.realities >= 5,
     checkEvent: GameEvent.REALITY_RESET_AFTER,
     reward: "Dimension Boosts are 50% more effective.",
     effect: 1.5,

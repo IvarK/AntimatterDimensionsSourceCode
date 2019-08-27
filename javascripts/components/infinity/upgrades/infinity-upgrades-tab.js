@@ -47,7 +47,8 @@ Vue.component("infinity-upgrades-tab", {
         "o-primary-btn--respec-options": true,
         "o-primary-btn--respec-active": this.disCharge
       };
-    }
+    },
+    offlineIpUpgrade: () => InfinityUpgrade.ipOffline
   },
   methods: {
     update() {
@@ -85,6 +86,12 @@ Vue.component("infinity-upgrades-tab", {
           />
         </div>
       </div>
-      <ip-multiplier-button class="l-infinity-upgrades-tab__mult-btn" />
+      <div class="l-infinity-upgrades-bottom-row">
+        <ip-multiplier-button class="l-infinity-upgrades-tab__mult-btn" />
+        <infinity-upgrade-button
+          :upgrade="offlineIpUpgrade"
+          :class="btnClassObject(1)"
+        />
+      </div>
     </div>`
 });

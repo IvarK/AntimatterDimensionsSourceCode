@@ -13,7 +13,7 @@ Vue.component("eternity-milestones-tab", {
         .map(config => new EternityMilestoneState(config));
     },
     rows() {
-      return this.milestones.length / 3;
+      return Math.ceil(this.milestones.length / 3);
     }
   },
   methods: {

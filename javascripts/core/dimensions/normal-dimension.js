@@ -701,6 +701,10 @@ class NormalDimensionState extends DimensionState {
       : this._baseCostMultiplier;
     this.costMultiplier = new Decimal(costMultiplier);
   }
+
+  get multiplier() {
+    return getDimensionFinalMultiplier(this.tier);
+  }
 }
 
 NormalDimensionState.createIndex();

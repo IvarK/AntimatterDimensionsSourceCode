@@ -105,6 +105,10 @@ const GameEvent = {
   BLACK_HOLE_UPGRADE_BOUGHT: "BLACK_HOLE_UPGRADE_BOUGHT",
   GAME_LOAD: "GAME_LOAD",
 
+  // Used by events to signify that they are triggered by a particular
+  // event, not handled by the event hub
+  ACHIEVEMENT_EVENT_OTHER: "ACHIEVEMENT_EVENT_OTHER",
+
   // UI Events
   UPDATE: "UPDATE",
   TAB_CHANGED: "TAB_CHANGED",

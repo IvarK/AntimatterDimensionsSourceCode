@@ -434,6 +434,7 @@ function completeReality(force, reset, auto = false) {
       reaction.combineReagents();
     }
   }
+  tryUnlockAchievementsOnReality();
 }
 
 function handleCelestialRuns(force) {
@@ -492,3 +493,15 @@ function lockAchievementsOnReality() {
   }
 }
 
+function tryUnlockAchievementsOnReality() {
+  const startRow = GameCache.achSkipPerkCount.value + 1;
+  const lastRow = 13;
+  for (let r = startRow; r <= lastRow; ++r) {
+    // If the achievement has a checkEvent set, that means that it
+    // can't be checked out of context:
+    for (const a of Achievements.row(r)) {
+      console.log(a);
+      if (a.config.checkEvent === undefined) a.tryUnlock();
+    }
+  }
+}

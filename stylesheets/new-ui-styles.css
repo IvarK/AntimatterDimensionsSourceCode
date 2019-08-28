@@ -981,3 +981,7 @@ body.t-dark {
   background-color: #5ac467;
   color: white;
 }
+
+.l-equipped-glyphs {
+  justify-content: flex-end;
+}

@@ -738,7 +738,7 @@ body.t-dark {
 
 .btn-big-crunch {
   padding: 20px;
-  font-size: 3em;
+  font-size: 5rem;
   border-radius: 5px;
   border: 2px solid var(--color-infinity);
   background-color: black;

@@ -748,6 +748,13 @@ body.t-dark {
   cursor: pointer;
 }
 
+.btn-big-crunch--small {
+  position: absolute;
+  top: 4.3rem;
+  left: calc(50% - .6rem);
+  font-size: 3rem;
+}
+
 .btn-big-crunch:hover {
   background-color: var(--color-infinity);
   color: black;

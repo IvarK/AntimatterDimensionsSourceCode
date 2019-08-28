@@ -113,7 +113,7 @@ class EternityChallengeState extends GameMechanicState {
     }
     status.totalCompletions = totalCompletions;
     status.gainedCompletions = totalCompletions - this.completions;
-    status.hasMoreCompletions = status.gainedCompletions < this.maxCompletions;
+    status.hasMoreCompletions = this.completions + status.gainedCompletions < this.maxCompletions;
     status.nextGoalAt = this.goalAtCompletions(status.totalCompletions);
     return status;
   }

@@ -184,7 +184,7 @@ GameDatabase.achievements.normal = [
     name: "Spreading Cancer",
     tooltip: "Buy ten Antimatter Galaxies in total while using cancer notation.",
     checkRequirement: () => player.spreadingCancer >= 10,
-    checkEvent: GameEvent.GALAXY_RESET_AFTER
+    checkEvent: [GameEvent.GALAXY_RESET_AFTER, GameEvent.REALITY_RESET_AFTER]
   },
   {
     id: 42,
@@ -343,7 +343,7 @@ GameDatabase.achievements.normal = [
     name: "Not-so-challenging",
     tooltip: "Get the sum of all of your challenge times under 3 minutes.",
     checkRequirement: () => Time.challengeSum.totalMinutes < 3,
-    checkEvent: GameEvent.BIG_CRUNCH_AFTER,
+    checkEvent: [GameEvent.BIG_CRUNCH_AFTER, GameEvent.REALITY_RESET_AFTER],
     reward: "All Dimensions are stronger in the first 3 minutes of infinities, but only in challenges.",
     effect: () => Math.max(4 / (Time.thisInfinity.totalMinutes + 1), 1),
     effectCondition: () => (NormalChallenge.isRunning || InfinityChallenge.isRunning) &&
@@ -412,7 +412,7 @@ GameDatabase.achievements.normal = [
     name: "End me",
     tooltip: "Get the sum of all best challenge times under 5 seconds.",
     checkRequirement: () => Time.challengeSum.totalSeconds < 5,
-    checkEvent: GameEvent.BIG_CRUNCH_AFTER,
+    checkEvent: [GameEvent.BIG_CRUNCH_AFTER, GameEvent.REALITY_RESET_AFTER],
     reward: "All Dimensions are 40% stronger, but only in challenges.",
     effect: 1.4,
     effectCondition: () => NormalChallenge.isRunning || InfinityChallenge.isRunning

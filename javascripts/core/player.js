@@ -33,6 +33,8 @@ let player = {
   achievements: new Set(),
   secretAchievements: new Set(),
   infinityUpgrades: new Set(),
+  usedMaxAll: false,
+  bestIpPerMsWithoutMaxAll: new Decimal(0),
   infinityRebuyables: [0, 0],
   challenge: {
     normal: {
@@ -154,13 +156,15 @@ let player = {
     themes: new Set(),
     secretTS: 0,    // incremented every time secret time study toggles
   },
-  lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
-  lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
+  lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, new Decimal(1)]),
+  lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 1]),
   lastTenRealities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 0]),
   bestIPminThisInfinity: new Decimal(0),
   bestIPminThisEternity: new Decimal(0),
   bestEPminThisEternity: new Decimal(0),
   bestEPminThisReality: new Decimal(0),
+  bestInfinitiesPerMs: new Decimal(0),
+  bestEternitiesPerMs: new Decimal(0),
   bestRMmin: new Decimal(0),
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
@@ -291,7 +295,10 @@ let player = {
       scripts: {
       },
       lastID: 0,
-    }
+      execTimer: 0,
+      type: AutomatorType.TEXT
+    },
+    achTimer: 0,
   },
   blackHole: Array.range(0, 2).map(id => ({
     id,

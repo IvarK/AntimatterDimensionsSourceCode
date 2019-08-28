@@ -165,7 +165,7 @@ body.t-dark {
   font-size: 1.5em;
 }
 
-.resource-per-second {
+.resource-gain {
   font-size: 0.7em;
   color: var(--color-text);
 }
@@ -175,9 +175,9 @@ body.t-dark {
 }
 
 .t-dark #antimatter {animation: a-game-header__antimatter--glow 25s infinite;}
-#ip { color: var(--color-infinity) }
-#ep { color: var(--color-eternity) }
-#rm { color: var(--color-reality) }
+.o-sidebar-infinity-button  { color: var(--color-infinity) !important }
+.o-sidebar-eternity-button  { color: var(--color-eternity) !important }
+.o-sidebar-reality-button { color: var(--color-reality) !important }
 
 .resource-infinity-canreset,
 .resource-eternity-canreset {
@@ -394,9 +394,15 @@ body.t-dark {
   color: var(--color-text);;
 }
 
+.l-reset-buttons-container {
+  position: relative;
+  min-height: 8rem;
+}
+
 .tab-container {
   display: flex;
   justify-content: center;
+  flex-direction: column;
 }
 
 .tab-container > .l-normal-dim-tab {
@@ -915,4 +921,30 @@ body.t-dark {
   align-items: center;
   height: 100%;
   padding: 0 10px;
+}
+
+.l-game-header__big-crunch-btn {
+  top: 15%;
+  left: 72%;
+} 
+.l-game-header__eternity-btn {
+  top: 15%;
+  right: 72%;
+}
+
+.l-reset-buttons-container__reality-button {
+  margin-top: 1.7rem;
+  margin-bottom: 0;
+}
+
+.c-achievements-tab__timer {
+  color: white;
+}
+
+.c-dilation-tab__tachyons,
+.c-dilation-tab__dilated-time,
+.c-dilation-tab__dilated-time-income,
+.c-dilation-tab__galaxy-threshold,
+.c-dilation-tab__galaxies {
+  color: #64dd17;
 }

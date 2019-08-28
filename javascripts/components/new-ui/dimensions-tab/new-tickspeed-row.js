@@ -73,7 +73,7 @@ Vue.component("new-tickspeed-row", {
   template:
   `<div class="tickspeed-container" v-show="isVisible">
       <div class="tickspeed-labels">
-        <div v-tooltip="tooltip">{{ tickspeedDisplay }} <game-header-gamma-display v-if="!isGameSpeedNormal"/></div>
+        <span v-tooltip="tooltip">{{ tickspeedDisplay }} <game-header-gamma-display v-if="!isGameSpeedNormal"/></span>
         <span>{{ multiplierDisplay }}</span>
       </div>
       <div class="tickspeed-buttons">

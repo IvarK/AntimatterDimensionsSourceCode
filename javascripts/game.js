@@ -20,6 +20,9 @@ function floatText(tier, text) {
 
 function maxAll() {
   if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
+
+  player.usedMaxAll = true;
+
   buyMaxTickSpeed();
 
   for (let tier = 1; tier < 9; tier++) {
@@ -109,11 +112,11 @@ function buyUntilTen(tier) {
 }
 
 function playerInfinityUpgradesOnEternity() {
-  if (player.eternities.lt(4)) player.infinityUpgrades.clear();
-  else if (player.eternities.lt(20)) {
+  if (!EternityMilestone.keepInfinityUpgrades.isReached) player.infinityUpgrades.clear();
+  else if (!EternityMilestone.keepBreakUpgrades.isReached) {
     player.infinityUpgrades = new Set(["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2",
       "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "skipReset3", "passiveGen",
-      "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy"]);
+      "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy", "ipOffline"]);
   }
 }
 
@@ -235,26 +238,62 @@ function averageRun(runs) {
     ];
 }
 
-function addInfinityTime(time, realTime, ip) {
+function addInfinityTime(time, realTime, ip, infinities) {
   player.lastTenRuns.pop();
-  player.lastTenRuns.unshift([time, ip, realTime]);
+  player.lastTenRuns.unshift([time, ip, realTime, infinities]);
   GameCache.bestRunIPPM.invalidate();
 }
 
 function resetInfinityRuns() {
-  player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
+  player.lastTenRuns = Array.from(
+    { length: 10 }, 
+    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, new Decimal(1)]
+  );
   GameCache.bestRunIPPM.invalidate();
 }
 
-function addEternityTime(time, realTime, ep) {
+function getInfinitiedMilestoneReward(ms) {
+  // Player gains 50% of (timeOffline / average gain of 
+  // infinitied stat per second for last 10 infinities) infinitied stat
+  // if he has 1000 infinities milestone and turned on infinity autobuyer with 1 minute or less per crunch
+
+  const autoInfinitiesAvailable = Autobuyer.bigCrunch.autoInfinitiesAvailable;
+
+  let infinitiedTotal = 0;
+  if (autoInfinitiesAvailable) {
+    infinitiedTotal = Decimal.floor(player.bestInfinitiesPerMs.times(ms).dividedBy(2));
+  }
+  return infinitiedTotal;
+}
+
+function addEternityTime(time, realTime, ep, eternities) {
   player.lastTenEternities.pop();
-  player.lastTenEternities.unshift([time, ep, realTime]);
+  player.lastTenEternities.unshift([time, ep, realTime, eternities]);
   GameCache.averageEPPerRun.invalidate();
 }
 
 function resetEternityRuns() {
-  player.lastTenEternities = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
+  player.lastTenEternities = Array.from(
+    { length: 10 }, 
+    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, 1]
+  );
   GameCache.averageEPPerRun.invalidate();
+}
+
+function getEternitiedMilestoneReward(ms) {
+  // Player gains 50% of (timeOffline / average of last 10 eternity times) eternities
+  // If he has 100 eternities milestone and turned on eternity autobuyer with 0 EP
+
+  let eternitiedTotal = 0;
+  if (Autobuyer.eternity.autoEternitiesAvailable) {
+    eternitiedTotal = Decimal.floor(player.bestEternitiesPerMs.times(ms).dividedBy(2));
+  }
+  return eternitiedTotal;
+}
+
+function getOfflineEPGain(ms) {
+  if (EternityMilestone.autoEP.isReached) return new Decimal(0);
+  return player.bestEPminThisEternity.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 
 function addRealityTime(time, realTime, rm, level) {
@@ -516,7 +555,8 @@ function gameLoop(diff, options = {}) {
         const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
           ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
           : 1;
-        player.celestials.enslaved.stored += diff * Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
+        Enslaved.currentBlackHoleStoreAmountPerMs = Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
+        player.celestials.enslaved.stored += diff * Enslaved.currentBlackHoleStoreAmountPerMs;
         speedFactor = reducedTimeFactor;
       }
       diff *= speedFactor;
@@ -705,8 +745,9 @@ function gameLoop(diff, options = {}) {
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
+  Achievements.autoAchieveUpdate(realDiff);
   V.checkForUnlocks();
-  AutomatorBackend.update();
+  AutomatorBackend.update(realDiff);
 
   EventHub.dispatch(GameEvent.GAME_TICK_AFTER);
   GameUI.update();
@@ -755,7 +796,9 @@ function getTTPerSecond() {
     : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
   
   // Dilation TT generation
-  const dilationTT = DilationUpgrade.ttGenerator.effectValue.times(ttMult);
+  const dilationTT = DilationUpgrade.ttGenerator.isBought
+    ? DilationUpgrade.ttGenerator.effectValue.times(ttMult)
+    : new Decimal(0);
 
   return dilationTT.add(glyphTT);
 }
@@ -787,8 +830,18 @@ function simulateTime(seconds, real, fast) {
   }
   const largeDiff = (1000 * seconds) / ticks;
 
-  // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
   const playerStart = deepmerge.all([{}, player]);
+
+  player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * 1000));
+  player.eternities = player.eternities.plus(getEternitiedMilestoneReward(seconds *1000));
+  player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
+
+  if (InfinityUpgrade.ipOffline.isBought) {
+    player.infinityPoints = player.infinityPoints.plus(player.bestIpPerMsWithoutMaxAll.times(seconds * 1000 / 2));
+  }
+
+
+  // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
     let remainingRealSeconds = seconds;
     for (let numberOfTicksRemaining = ticks; numberOfTicksRemaining > 0; numberOfTicksRemaining--) {
@@ -878,7 +931,7 @@ function autoBuyDilationUpgrades() {
 }
 
 function autoBuyInfDims() {
-  if (player.eternities.gt(10) && !EternityChallenge(8).isRunning) {
+  if (EternityMilestone.autobuyerID(1).isReached && !EternityChallenge(8).isRunning) {
     for (let i = 1; i <= player.eternities.sub(10).clampMax(8).toNumber(); i++) {
       if (player.infDimBuyers[i - 1]) {
         buyMaxInfDims(i)

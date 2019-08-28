@@ -30,7 +30,7 @@ class Sacrifice {
       Achievement(32),
       Achievement(57)
     );
-    return Decimal.pow(nd1Amount.log10() / Math.max(sacrificed.log10(), 1), sacrificePow).clampMin(1);
+    return Decimal.pow((nd1Amount.log10() / 10) / Math.max(sacrificed.log10() / 10, 1), sacrificePow).clampMin(1);
   }
 
   static get totalBoost() {

@@ -191,6 +191,14 @@ GameDatabase.infinity.upgrades = (function() {
       description: "You start with the 8th Dimension unlocked, and an Antimatter Galaxy",
       bannedFromCharging: true
     },
+    ipOffline: {
+      id: "ipOffline",
+      cost: 1000,
+      description: "Only while offline, gain 50% of your best IP/min without using Max All",
+      effect: () => player.bestIpPerMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
+      formatEffect: value => `${shorten(value, 2, 2)} IP/min`,
+      bannedFromCharging: true
+    },
     ipMult: {
       cost: () => player.infMultCost,
       costCap: new Decimal("1e6000000"),

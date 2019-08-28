@@ -564,6 +564,12 @@ function getGlyphEffectsFromBitmask(bitmask, level, strength) {
     }));
 }
 
+function getAdjustedGlyphLevel(level) {
+  if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
+  if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
+  return level;
+}
+
 // Pulls out a single effect value from a glyph's bitmask, returning just the value (nothing for missing effects)
 function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   const glyphEffect = GameDatabase.reality.glyphEffects[effectName];
@@ -571,8 +577,7 @@ function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   if ((glyph.effects & (1 << glyphEffect.bitmaskIndex)) === 0) {
     return undefined;
   }
-  const level = Effarig.isRunning ? Math.min(glyph.level, Effarig.glyphLevelCap) : glyph.level;
-  return glyphEffect.effect(level, glyph.strength);
+  return glyphEffect.effect(getAdjustedGlyphLevel(glyph.level), glyph.strength);
 }
 
 function countEffectsFromBitmask(bitmask) {
@@ -764,6 +769,53 @@ function getGlyphLevelInputs() {
   };
 }
 
+function handleRUpg10() {
+  player.auto.dimensions = player.auto.dimensions.map(d => ({
+    isUnlocked: true,
+    cost: 1e100,
+    interval: 100,
+    bulk: 1e100,
+    mode: d.mode,
+    priority: d.priority,
+    isActive: d.isActive,
+    lastTick: d.lastTick
+  }));
+
+  player.auto.tickspeed.isUnlocked = true;
+  player.auto.tickspeed.cost = 32;
+  player.auto.tickspeed.interval = 100;
+
+  player.auto.dimBoost.cost = 256;
+  player.auto.dimBoost.interval = 100;
+
+  player.auto.galaxy.cost = 4096;
+  player.auto.galaxy.interval = 100;
+
+  player.auto.bigCrunch.cost = 8192;
+  player.auto.bigCrunch.interval = 100;
+
+  player.infinityUpgrades = new Set(
+    "timeMult", "dimMult", "timeMult2", 
+    "skipReset1", "skipReset2", "unspentBonus", 
+    "27Mult", "18Mult", "36Mult", "resetMult", 
+    "skipReset3", "passiveGen", "45Mult", 
+    "resetBoost", "galaxyBoost", "skipResetGalaxy", 
+    "totalMult", "currentMult", "postGalaxy", 
+    "challengeMult", "achievementMult", "infinitiedMult", 
+    "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost", 
+    "ipOffline"
+  );
+
+  player.infinityRebuyables = [8, 7];
+  GameCache.tickSpeedMultDecrease.invalidate();
+  GameCache.dimensionMultDecrease.invalidate();
+
+  player.replicanti.auto = [true, true, true];
+  player.replicanti.unl = true;
+
+  player.infDimBuyers = [true, true, true, true, true, true, true, true];
+}
+
 class GlyphEffectState {
   constructor(id, props) {
     this._id = id;
@@ -826,6 +878,9 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     const id = this.id;
     if (id === 9 || id === 24) {
       Glyphs.refreshActive();
+    }
+    if (id === 10) {
+      handleRUpg10();
     }
     if (id === 20) {
       if (!player.blackHole[0].unlocked) return true;

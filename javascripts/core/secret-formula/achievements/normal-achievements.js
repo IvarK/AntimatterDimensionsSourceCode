@@ -4,53 +4,61 @@ GameDatabase.achievements.normal = [
   {
     id: 11,
     name: "You gotta start somewhere",
-    tooltip: "Buy a single 1st Dimension."
+    tooltip: "Buy a single 1st Dimension.",
+    checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 12,
     name: "100 antimatter is a lot",
-    tooltip: "Buy a single 2nd Dimension."
+    tooltip: "Buy a single 2nd Dimension.",
+    checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 13,
     name: "Half life 3 confirmed",
-    tooltip: "Buy a single 3rd Dimension."
+    tooltip: "Buy a single 3rd Dimension.",
+    checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 14,
     name: "L4D: Left 4 Dimensions",
-    tooltip: "Buy a single 4th Dimension."
+    tooltip: "Buy a single 4th Dimension.",
+    checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 15,
     name: "5 Dimension Antimatter Punch",
-    tooltip: "Buy a single 5th Dimension."
+    tooltip: "Buy a single 5th Dimension.",
+    checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 16,
     name: "We couldn't afford 9",
     tooltip: () => (Enslaved.isRunning
       ? "Buy a single 6th Dimension (they never amount to anything)"
-      : "Buy a single 6th Dimension.")
-  },
+      : "Buy a single 6th Dimension."),
+      checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
+    },
   {
     id: 17,
     name: "Not a luck related achievement",
-    tooltip: "Buy a single 7th Dimension."
+    tooltip: "Buy a single 7th Dimension.",
+    checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 18,
     name: "90 degrees to infinity",
     tooltip: () => (Enslaved.isRunning
       ? "Buy a single 8th Dimension (don't get used to it)"
-      : "Buy a single 8th Dimension.")
-  },
+      : "Buy a single 8th Dimension."),
+      checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
+    },
   {
     id: 21,
     name: "To infinity!",
     tooltip: "Reach Infinite antimatter.",
-    checkRequirement: () => true,
-    checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
+    checkRequirement: () => player.antimatter.gt(Decimal.MAX_NUMBER),
+    checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Start with 100 antimatter.",
     effect: 100
   },
@@ -101,6 +109,7 @@ GameDatabase.achievements.normal = [
     name: "There's no point in doing that",
     tooltip: () => `Buy a single 1st Dimension when you have over ${shorten(1e150, 0, 0)} of them.`,
     checkRequirement: () => NormalDimension(1).amount.exponent >= 150,
+    checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
     reward: "1st Dimensions are 10% stronger.",
     effect: 1.1
   },
@@ -108,7 +117,7 @@ GameDatabase.achievements.normal = [
     id: 31,
     name: "I forgot to nerf that",
     tooltip: () => `Get any Dimension multiplier over ${shorten(1e31, 0, 0)}`,
-    checkRequirement: () => NormalDimension(1).power.exponent >= 31,
+    checkRequirement: () => NormalDimensions.all.countWhere(x => x.multiplier.exponent >= 31),
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "1st Dimensions are 5% stronger.",
     effect: 1.05
@@ -239,15 +248,15 @@ GameDatabase.achievements.normal = [
     id: 51,
     name: "Limit Break",
     tooltip: "Break Infinity.",
-    checkRequirement: () => true,
-    checkEvent: GameEvent.BREAK_INFINITY
+    checkRequirement: () => player.break,
+    checkEvent: [GameEvent.BREAK_INFINITY, GameEvent.REALITY_RESET_AFTER],
   },
   {
     id: 52,
     name: "Age of Automation",
     tooltip: "Max any 9 autobuyers.",
     checkRequirement: () => Autobuyers.upgradeable
-      .countWhere(a => a.hasMaxedInterval) === 9
+      .countWhere(a => a.hasMaxedInterval) >= 9
   },
   {
     id: 53,
@@ -412,7 +421,7 @@ GameDatabase.achievements.normal = [
     id: 75,
     name: "NEW DIMENSIONS???",
     tooltip: "Unlock the 4th Infinity Dimension.",
-    checkRequirement: tier => tier >= 4,
+    checkRequirement: tier => tier >= 4 || InfinityDimension(4).isUnlocked,
     checkEvent: GameEvent.INFINITY_DIMENSION_UNLOCKED,
     reward: "Your achievement bonus affects Infinity Dimensions.",
     effect: () => Player.achievementPower
@@ -464,7 +473,7 @@ GameDatabase.achievements.normal = [
     name: "Anti-antichallenged",
     tooltip: "Complete 8 Infinity Challenges.",
     checkRequirement: () => InfinityChallenges.completed.length === 8,
-    checkEvent: GameEvent.BIG_CRUNCH_AFTER
+    checkEvent: [GameEvent.BIG_CRUNCH_AFTER, GameEvent.REALITY_RESET_AFTER],
   },
   {
     id: 83,
@@ -587,7 +596,7 @@ GameDatabase.achievements.normal = [
     id: 98,
     name: "0 degrees from infinity",
     tooltip: "Unlock the 8th Infinity Dimension.",
-    checkRequirement: tier => tier >= 8,
+    checkRequirement: tier => tier >= 8 || InfinityDimension(8).isUnlocked,
     checkEvent: GameEvent.INFINITY_DIMENSION_UNLOCKED
   },
   {
@@ -703,7 +712,8 @@ GameDatabase.achievements.normal = [
   {
     id: 115,
     name: "I wish I had gotten 7 eternities",
-    tooltip: "Start an Infinity Challenge inside an Eternity Challenge."
+    tooltip: "Start an Infinity Challenge inside an Eternity Challenge.",
+    checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 116,
@@ -849,7 +859,8 @@ GameDatabase.achievements.normal = [
   {
     id: 136,
     name: "I told you already, time is relative",
-    tooltip: "Dilate time."
+    tooltip: "Dilate time.",
+    checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 137,
@@ -886,7 +897,7 @@ GameDatabase.achievements.normal = [
     id: 142,
     name: "How does this work?",
     tooltip: "Unlock the automator.",
-    checkRequirement: () => player.realities >= 4,
+    checkRequirement: () => player.realities >= 5,
     checkEvent: GameEvent.REALITY_RESET_AFTER,
     reward: "Dimension Boosts are 50% more effective.",
     effect: 1.5,

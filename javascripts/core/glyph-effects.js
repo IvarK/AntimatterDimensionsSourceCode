@@ -330,7 +330,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 17,
     glyphTypes: ["power", "reality"],
     singleDesc: "Normal Dimension multipliers ×{value}",
-    effect: (level, strength) => Decimal.pow(level * strength * 10, level * strength * 9.5),
+    effect: (level, strength) => Decimal.pow(level * strength * 10, level * strength * 10),
     formatEffect: x => shorten(x, 2, 0),
     combine: effects => ({ value: effects.reduce(Decimal.prodReducer, new Decimal(1)), capped: false }),
   }, {

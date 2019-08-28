@@ -1,19 +1,6 @@
 "use strict";
 
 Vue.component("automator-block-tab", {
-  data: function() {
-    return {
-      lines: []
-    }
-  },
-  methods: {
-    update() {
-      //console.log(this.lines.length)
-    },
-    updateBlocks(lines) {
-      this.lines = lines;
-    }
-  },
   template:
   // TODO: fix css classes - they were adjusted for text editor tab
     `<div class="c-automator l-automator l-automator-tab">

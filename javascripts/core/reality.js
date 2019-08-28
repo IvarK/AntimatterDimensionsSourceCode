@@ -385,10 +385,12 @@ function completeReality(force, reset, auto = false) {
   player.bestIPminThisEternity = new Decimal(0);
   player.bestEPminThisEternity = new Decimal(0);
   player.bestEPminThisReality = new Decimal(0);
+  player.bestInfinitiesPerMs = new Decimal(0);
+  player.bestEternitiesPerMs = new Decimal(0);
   resetTimeDimensions();
   // FIXME: Eternity count is now a Decimal so this needs to be addressed
   // kong.submitStats('Eternities', player.eternities);
-  if (player.eternities.gt(2) && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
+  if (!EternityMilestone.autobuyerReplicantiGalaxy.isReached && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   if (player.eternities.lte(1)) {
@@ -432,6 +434,7 @@ function completeReality(force, reset, auto = false) {
       reaction.combineReagents();
     }
   }
+  tryUnlockAchievementsOnReality();
 }
 
 function handleCelestialRuns(force) {
@@ -488,5 +491,18 @@ function lockAchievementsOnReality() {
   for (let r = startRow; r <= lastRow; ++r) {
     Achievements.row(r).forEach(a => a.lock());
   }
+  player.reality.achTimer = 0;
 }
 
+function tryUnlockAchievementsOnReality() {
+  const startRow = GameCache.achSkipPerkCount.value + 1;
+  const lastRow = 13;
+  for (let r = startRow; r <= lastRow; ++r) {
+    // If the achievement has a checkEvent set, that means that it
+    // can't be checked out of context:
+    for (const a of Achievements.row(r)) {
+      console.log(a);
+      if (a.config.checkEvent === undefined) a.tryUnlock();
+    }
+  }
+}

@@ -182,6 +182,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: 82,
       description: "Infinity dimensions gain a multiplier based on fastest eternity time",
       effect: () => Decimal.pow(2, 60 / Math.max(Time.bestEternity.totalSeconds, 2)),
+      cap: Decimal.pow(2, 30),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -196,7 +197,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 101,
       cost: 4,
       requirement: 91,
-      description: "Replicanti give a multiplier to normal dims equal to their amount.",
+      description: "Normal dimensions gain a multiplier equal to replicanti amount",
       effect: () => Decimal.max(player.replicanti.amount, 1),
       formatEffect: value => formatX(value, 2, 1)
     },

@@ -1915,6 +1915,10 @@ screen and (max-width: 480px) {
   background-color: white;
 }
 
+.o-prestige-btn--eternity:hover b {
+  color: #511568 !important;
+}
+
 .t-dark .o-prestige-btn--eternity {
   background-color: black;
 }
@@ -2030,7 +2034,7 @@ screen and (max-width: 480px) {
 }
 
 .l-hint-text--alchemy-node {
-  top: 100%;
+  top: 2.3rem;
   left: 50%;
   transform: translate(-50%);
 }
@@ -2831,6 +2835,8 @@ screen and (max-width: 480px) {
 
 .c-achievements-tab__header {
   font-size: 1.6rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.6rem;
 }
 
 .c-achievements-tab__timer {
@@ -3359,7 +3365,7 @@ screen and (max-width: 480px) {
 }
 
 .l-infinity-upgrades-tab__mult-btn {
-  margin: 1.5rem 0;
+  margin: .5rem .8rem;
 }
 
 /*#endregion l-infinity-upgrades-tab*/
@@ -3381,6 +3387,11 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion l-infinity-upgrade-grid*/
+
+.l-infinity-upgrades-bottom-row {
+  display: flex;
+  margin-top: 1rem;
+}
 
 /*#region o-infinity-upgrade-btn*/
 
@@ -5612,7 +5623,7 @@ kbd {
 }
 
 .o-enslaved-run-box {
-  width: 35rem;
+  width: 40rem;
   padding: 2rem;
   border-radius: .5rem;
   border: 2px solid #cd945c;
@@ -6038,18 +6049,18 @@ kbd {
 
 .o-alchemy-node {
   position: absolute;
-  width: 2rem;
-  height: 2rem;
-  margin-left: -1rem;
-  margin-top: -1rem;
+  width: 3rem;
+  height: 3rem;
+  margin-left: -1.5rem;
+  margin-top: -1.5rem;
   user-select: none;
-  font-size: 1.4rem;
+  font-size: 2.1rem;
   border: 0.1rem solid black;
   border-radius: 50%;
   background-color: white;
   transition: all 0.2s, z-index 0s;
   z-index: 1;
-  line-height: 2rem;
+  line-height: 2.4rem;
 }
 
 .o-alchemy-node--unfocused {
@@ -6691,23 +6702,34 @@ kbd {
 
 .c-automator-blocks {
   width: 100%;
+  padding-bottom: 5rem;
 }
 
 .o-automator-command {
-  border: 1px solid gainsboro;
+  border: .1rem solid #353535;
   padding: .5rem;
   display: inline-block;
-  background: #de8787;
+  background: #000115;
+  color: #c080ff;
   border-radius: .5rem;
-  width: 6rem;
+  width: 8.5rem;
   user-select: none;
   cursor: grab;
 }
 
+.c-automator-docs .o-automator-command {
+  margin-bottom: .5rem;
+  margin-right: .5rem;
+}
+
+.o-automator-command--ghost {
+  color: red;
+}
+
 .c-automator-command-list {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .c-automator-block-row {
@@ -6718,6 +6740,17 @@ kbd {
 
 .c-automator-block-row > * {
   margin-right: .5rem
+}
+
+.c-automator-block-row-active {
+  background: #50316f;
+}
+
+.c-automator-block-row-ghost {
+  display: block;
+  margin: auto;
+  margin-left: 0;
+  margin-bottom: .5rem;
 }
 
 .c-automator-block-editor {
@@ -6733,14 +6766,18 @@ kbd {
 }
 
 .o-automator-block-input {
-  border: 1px solid gainsboro;
+  border: .1rem solid #353535;
   padding: .5rem;
   display: inline-block;
-  background: burlywood;
+  background: #000115;
+  color: #007f7f;
   border-radius: .5rem;
-  color: #4F5957;
   font-size: 1.1rem;
   font-family: Typewriter, serif;
+}
+
+input.o-automator-block-input {
+  color: #0f0;
 }
 
 .o-automator-linenumber {

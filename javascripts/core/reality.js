@@ -85,14 +85,14 @@ const GlyphSelection = {
     ui.view.modal.glyphSelection = false;
     Glyphs.addToInventory(this.glyphs[index]);
     this.glyphs = [];
-    manualReality();
+    triggerManualReality();
   }
 };
 
 function confirmReality() {
   return !player.options.confirmations.reality ||
-    confirm("Reality will reset everything except challenge records, and will lock your achievements, " +
-      `which you will regain over the course of ${Achievements.nextTotalDisabledTime}. ` +
+    confirm("Reality will reset everything except challenge records. Your achievements are also reset, " +
+      "but you will automatically get one back every 30 minutes. " +
       "You will also gain reality machines based on your EP, a glyph with a power level " +
       "based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of " +
       "life upgrades, and unlock various upgrades.");
@@ -131,43 +131,45 @@ function requestManualReality() {
     Enslaved.lockedInGlyphLevel = level;
     Enslaved.lockedInRealityMachines = gainedRealityMachines();
     Enslaved.lockedInShardsGained = Effarig.shardsGained;
-    manualReality();
+    triggerManualReality();
     return;
   }
-  // If there is no glyph selection, proceed with reality immediately. Otherwise,
-  // we generate a glyph selection, and keep the game going while the user dithers over it.
-  const choiceCount = GlyphSelection.choiceCount;
-  if (choiceCount === 1) {
-    // First reality gets a specially generated glyph:
+  if (GlyphSelection.choiceCount === 1) {
     const newGlyph = player.realities === 0
       ? GlyphGenerator.startingGlyph(level)
       : GlyphGenerator.randomGlyph(level);
     Glyphs.addToInventory(newGlyph);
-    manualReality();
+    triggerManualReality();
     return;
   }
-  GlyphSelection.generate(choiceCount, level);
+  GlyphSelection.generate(GlyphSelection.choiceCount, level);
 }
 
-function manualReality() {
+function triggerManualReality() {
   if (player.options.animations.reality) {
-    document.getElementById("container").style.animation = "realize 10s 1";
-    document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
-    document.getElementById("realityanimbg").style.display = "block";
-    setTimeout(() => {
-      document.getElementById("realityanimbg").play();
-      document.getElementById("realityanimbg").currentTime = 0;
-      document.getElementById("realityanimbg").play();
-    }, 2000);
-    setTimeout(() => {
-      document.getElementById("container").style.animation = "";
-      document.getElementById("realityanimbg").style.animation = "";
-      document.getElementById("realityanimbg").style.display = "none";
-    }, 10000);
-    setTimeout(() => completeReality(false, false), 3000);
+    runRealityAnimation();
+    setTimeout(completeReality, 3000, false, false);
   } else {
-    completeReality(false, false);
+    completeReality();
   }
+}
+
+function runRealityAnimation() {
+  document.getElementById("ui").style.userSelect = "none";
+  document.getElementById("ui").style.animation = "realize 10s 1";
+  document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
+  document.getElementById("realityanimbg").style.display = "block";
+  setTimeout(() => {
+    document.getElementById("realityanimbg").play();
+    document.getElementById("realityanimbg").currentTime = 0;
+    document.getElementById("realityanimbg").play();
+  }, 2000);
+  setTimeout(() => {
+    document.getElementById("ui").style.userSelect = "auto";
+    document.getElementById("ui").style.animation = "";
+    document.getElementById("realityanimbg").style.animation = "";
+    document.getElementById("realityanimbg").style.display = "none";
+  }, 10000);
 }
 
 function processAutoGlyph(gainedLevel) {
@@ -263,6 +265,8 @@ function completeReality(force, reset, auto = false) {
   //reset global values to avoid a tick of unupdated production
 
   player.sacrificed = new Decimal(0);
+
+  lockAchievementsOnReality();
 
   NormalChallenges.clearCompletions();
   InfinityChallenges.clearCompletions();
@@ -371,10 +375,8 @@ function completeReality(force, reset, auto = false) {
   player.celestials.ra.peakGamespeed = 1;
   if (isRUPG10Bought) {
     player.eternities = new Decimal(100);
-    if (Achievements.totalDisabledTime === 0) {
-      initializeChallengeCompletions();
-    }
   }
+  initializeChallengeCompletions();
   if (!reset) player.reality.pp++;
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
@@ -435,6 +437,10 @@ function completeReality(force, reset, auto = false) {
       reaction.combineReagents();
     }
   }
+
+  player.reality.gainedAutoAchievements = false;
+
+  tryUnlockAchievementsOnReality();
 }
 
 function handleCelestialRuns(force) {
@@ -483,4 +489,29 @@ function startRealityOver() {
     return true;
   }
   return false;
+}
+
+function lockAchievementsOnReality() {
+  const startRow = GameCache.achSkipPerkCount.value + 1;
+  const lastRow = 13;
+  if (startRow > lastRow) return;
+  const lockedRows = lastRow - startRow + 1;
+  for (const row of Achievements.rows(startRow, lockedRows)) {
+    for (const achievement of row) {
+      achievement.lock();
+    }
+  }
+  player.reality.achTimer = 0;
+}
+
+function tryUnlockAchievementsOnReality() {
+  const startRow = GameCache.achSkipPerkCount.value + 1;
+  const lastRow = 13;
+  for (let r = startRow; r <= lastRow; ++r) {
+    // If the achievement has a checkEvent set, that means that it
+    // can't be checked out of context:
+    for (const a of Achievements.row(r)) {
+      if (a.config.checkEvent === undefined) a.tryUnlock();
+    }
+  }
 }

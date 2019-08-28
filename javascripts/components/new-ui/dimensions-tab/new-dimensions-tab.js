@@ -130,5 +130,6 @@ Vue.component("new-dimensions-tab", {
         >Lose a reset, returning to the start of the reset</primary-button>
       <new-galaxy-row></new-galaxy-row>
     </div>
+    <normal-dim-tab-progress-bar/>
   </div>`
 });

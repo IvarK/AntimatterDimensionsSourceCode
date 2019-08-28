@@ -284,6 +284,8 @@ let player = {
     autoEC: true,
     lastAutoEC: 0,
     partEternitied: new Decimal(0),
+    disableAutoAchieve: false,
+    gainedAutoAchievements: false,
     automator: {
       state: {
         mode: AutomatorMode.STOP,

@@ -437,6 +437,9 @@ function completeReality(force, reset, auto = false) {
       reaction.combineReagents();
     }
   }
+
+  player.reality.gainedAutoAchievements = false;
+
   tryUnlockAchievementsOnReality();
 }
 

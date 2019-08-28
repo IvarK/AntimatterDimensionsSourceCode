@@ -79,9 +79,9 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 8,
       cost: 15,
-      requirement: "Have the first 13 rows of achievements when you first Infinity",
-      checkRequirement: () => isFirstInfinity() && Achievements.timeUntilNext === 0,
-      checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
+      requirement: () => `Get ${shorten(1e6)} IP without any automatic achievements`,
+      checkRequirement: () => player.infinityPoints.gte(1e6) && !player.reality.gainedAutoAchievements,
+      checkEvent: GameEvent.BIG_CRUNCH_AFTER,
       description: "Tachyon Particle gain is multiplied based on achievement multiplier",
       effect: () => Player.achievementPower.sqrt(),
       formatEffect: value => formatX(value, 2, 2)

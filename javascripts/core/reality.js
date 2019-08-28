@@ -85,7 +85,7 @@ const GlyphSelection = {
     ui.view.modal.glyphSelection = false;
     Glyphs.addToInventory(this.glyphs[index]);
     this.glyphs = [];
-    manualReality();
+    triggerManualReality();
   }
 };
 
@@ -131,43 +131,45 @@ function requestManualReality() {
     Enslaved.lockedInGlyphLevel = level;
     Enslaved.lockedInRealityMachines = gainedRealityMachines();
     Enslaved.lockedInShardsGained = Effarig.shardsGained;
-    manualReality();
+    triggerManualReality();
     return;
   }
-  // If there is no glyph selection, proceed with reality immediately. Otherwise,
-  // we generate a glyph selection, and keep the game going while the user dithers over it.
-  const choiceCount = GlyphSelection.choiceCount;
-  if (choiceCount === 1) {
-    // First reality gets a specially generated glyph:
+  if (GlyphSelection.choiceCount === 1) {
     const newGlyph = player.realities === 0
       ? GlyphGenerator.startingGlyph(level)
       : GlyphGenerator.randomGlyph(level);
     Glyphs.addToInventory(newGlyph);
-    manualReality();
+    triggerManualReality();
     return;
   }
-  GlyphSelection.generate(choiceCount, level);
+  GlyphSelection.generate(GlyphSelection.choiceCount, level);
 }
 
-function manualReality() {
+function triggerManualReality() {
   if (player.options.animations.reality) {
-    document.getElementById("container").style.animation = "realize 10s 1";
-    document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
-    document.getElementById("realityanimbg").style.display = "block";
-    setTimeout(() => {
-      document.getElementById("realityanimbg").play();
-      document.getElementById("realityanimbg").currentTime = 0;
-      document.getElementById("realityanimbg").play();
-    }, 2000);
-    setTimeout(() => {
-      document.getElementById("container").style.animation = "";
-      document.getElementById("realityanimbg").style.animation = "";
-      document.getElementById("realityanimbg").style.display = "none";
-    }, 10000);
-    setTimeout(() => completeReality(false, false), 3000);
+    runRealityAnimation();
+    setTimeout(completeReality, 3000, false, false);
   } else {
-    completeReality(false, false);
+    completeReality();
   }
+}
+
+function runRealityAnimation() {
+  document.getElementById("ui").style.userSelect = "none";
+  document.getElementById("ui").style.animation = "realize 10s 1";
+  document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
+  document.getElementById("realityanimbg").style.display = "block";
+  setTimeout(() => {
+    document.getElementById("realityanimbg").play();
+    document.getElementById("realityanimbg").currentTime = 0;
+    document.getElementById("realityanimbg").play();
+  }, 2000);
+  setTimeout(() => {
+    document.getElementById("ui").style.userSelect = "auto";
+    document.getElementById("ui").style.animation = "";
+    document.getElementById("realityanimbg").style.animation = "";
+    document.getElementById("realityanimbg").style.display = "none";
+  }, 10000);
 }
 
 function processAutoGlyph(gainedLevel) {

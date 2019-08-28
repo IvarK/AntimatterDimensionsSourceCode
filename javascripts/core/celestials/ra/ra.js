@@ -325,7 +325,7 @@ const RA_UNLOCKS = {
   EFFARIG_XP: {
     id: 7,
     description: "Get Effarig to level 3",
-    reward: "Boost Effarig memory gain based on glyph count in Ra's Reality",
+    reward: "Boost Effarig memory gain based on glyph count in Ra's Reality, less glyphs means higher boost",
     pet: Ra.pets.effarig,
     level: 3
   },
@@ -373,7 +373,7 @@ const RA_UNLOCKS = {
   ENSLAVED_XP: {
     id: 13,
     description: "Get Enslaved to level 3",
-    reward: "Boost Enslaved memory gain based on game time in Ra's Reality",
+    reward: "Boost Enslaved memory gain based on game time in Ra's Reality, lower time means higher boost",
     pet: Ra.pets.enslaved,
     level: 3
   },

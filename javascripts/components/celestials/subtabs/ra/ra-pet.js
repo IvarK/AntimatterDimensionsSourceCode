@@ -28,7 +28,7 @@ Vue.component("ra-pet", {
       };
     },
     expPerMin() {
-      const avgLvl = this.lastTenGlyphLevls.reduce((acc, value) => acc + value, 0) / 10;
+      const avgLvl = this.lastTenGlyphLevels.reduce((acc, value) => acc + value, 0) / 10;
       const avgTimeMs = this.lastTenRunTimers.reduce((acc, value) => acc + value, 0) / 10;
       const expGain = Math.pow(2, avgLvl / 500 - 10) * this.expBoost;
       return Math.round(expGain / (avgTimeMs / 60000));
@@ -47,7 +47,7 @@ Vue.component("ra-pet", {
       this.expBoost = pet.expBoost;
       this.exp = pet.exp;
       this.requiredExp = pet.requiredExp;
-      this.lastTenGlyphLevls = player.lastTenRealities.map(([, , , lvl]) => lvl);
+      this.lastTenGlyphLevels = player.lastTenRealities.map(([, , , lvl]) => lvl);
       this.lastTenRunTimers = player.lastTenRealities.map(([, , time]) => time);
     },
   },

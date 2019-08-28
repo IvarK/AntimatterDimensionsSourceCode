@@ -511,7 +511,6 @@ function tryUnlockAchievementsOnReality() {
     // If the achievement has a checkEvent set, that means that it
     // can't be checked out of context:
     for (const a of Achievements.row(r)) {
-      console.log(a);
       if (a.config.checkEvent === undefined) a.tryUnlock();
     }
   }

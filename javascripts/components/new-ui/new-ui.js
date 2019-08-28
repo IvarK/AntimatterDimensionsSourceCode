@@ -23,7 +23,7 @@ Vue.component("new-ui", {
       }
       this.smallCrunch = true;
       const endOfChallenge = challenge !== undefined && !player.options.retryChallenge;
-      this.bigCrunch = endOfChallenge || Time.bestInfinity.totalMinutes > 1;
+      this.bigCrunch = endOfChallenge || Time.thisInfinityRealTime.totalMinutes > 1;
     }
   },
   template:

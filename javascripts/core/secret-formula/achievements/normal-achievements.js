@@ -976,8 +976,8 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 154,
-    name: "I didn't even realize how fast you are",
-    tooltip: "Reality in under 5 seconds.",
+    name: "I am speed",
+    tooltip: "Reality in under 5 seconds (game time).",
     checkRequirement: () => Time.thisReality.totalSeconds <= 5,
     checkEvent: GameEvent.REALITY_RESET_BEFORE
   },

@@ -1,11 +1,6 @@
 "use strict";
 
 Vue.component("news-ticker", {
-  computed: {
-    isHidden() {
-      return this.$viewModel.newsHidden;
-    }
-  },
   watch: {
     isHidden() {
       this.restart();
@@ -73,7 +68,7 @@ Vue.component("news-ticker", {
     }
   },
   template: `
-    <div ref="ticker" v-if="!isHidden" class="c-news-ticker">
+    <div ref="ticker" class="c-news-ticker">
       <span ref="line" class="c-news-line c-news-ticker__line" @click="onLineClick" />
     </div>
   `

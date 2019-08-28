@@ -117,7 +117,9 @@ body.t-dark {
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: 200px;
+  width: 20rem;
+  position: fixed;
+  z-index: 3;
 }
 
 .sidebar:hover .subtabs,
@@ -380,9 +382,10 @@ body.t-dark {
 }
 
 .game-container {
-  width: 100%;
+  width: calc(100% - 20rem);
   overflow-x: hidden;
   overflow-y: hidden;
+  margin-left: 20rem;
 }
 
 .game-container h1, 
@@ -738,7 +741,7 @@ body.t-dark {
 
 .btn-big-crunch {
   padding: 20px;
-  font-size: 3em;
+  font-size: 5rem;
   border-radius: 5px;
   border: 2px solid var(--color-infinity);
   background-color: black;
@@ -748,9 +751,20 @@ body.t-dark {
   cursor: pointer;
 }
 
+.btn-big-crunch--small {
+  position: absolute;
+  top: 4.3rem;
+  left: calc(50% - .6rem);
+  font-size: 3rem;
+}
+
 .btn-big-crunch:hover {
   background-color: var(--color-infinity);
   color: black;
+}
+
+.l-new-ui-big-crunch__container {
+  margin-top: 2rem;
 }
 
 .information-header {
@@ -932,6 +946,11 @@ body.t-dark {
   right: 72%;
 }
 
+.l-game-header__new-dim-btn {
+  top: 15%;
+  right: 72%;
+}
+
 .l-reset-buttons-container__reality-button {
   margin-top: 1.7rem;
   margin-bottom: 0;
@@ -947,4 +966,22 @@ body.t-dark {
 .c-dilation-tab__galaxy-threshold,
 .c-dilation-tab__galaxies {
   color: #64dd17;
+}
+
+.c-progress-bar {
+  width: 80%;
+  margin: 2rem 10%;
+}
+
+.o-primary-btn--respec-active {
+  background-color: #5ac467;
+}
+
+.o-primary-btn--respec-active:hover {
+  background-color: #5ac467;
+  color: white;
+}
+
+.l-equipped-glyphs {
+  justify-content: flex-end;
 }

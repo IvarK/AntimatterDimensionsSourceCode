@@ -39,6 +39,7 @@ Vue.component("ra-level-chevron", {
   },
   methods: {
     onMouseEnter() {
+      if (this.$viewModel.shiftDown) return;
       clearTimeout(this.mouseOverInterval);
       this.isMouseOver = true;
     },

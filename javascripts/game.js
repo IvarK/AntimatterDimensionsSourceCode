@@ -121,8 +121,8 @@ function playerInfinityUpgradesOnEternity() {
 function breakInfinity() {
   if (!Autobuyer.bigCrunch.hasMaxedInterval) return false;
   if (InfinityChallenge.isRunning) return false;
-  player.break = !player.break;
   EventHub.dispatch(player.break ? GameEvent.FIX_INFINITY : GameEvent.BREAK_INFINITY);
+  player.break = !player.break;
   GameUI.update();
 }
 
@@ -743,6 +743,7 @@ function gameLoop(diff, options = {}) {
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
+  Achievements.autoAchieveUpdate(diff);
   V.checkForUnlocks();
   AutomatorBackend.update(realDiff);
 

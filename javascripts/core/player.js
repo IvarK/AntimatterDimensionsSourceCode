@@ -285,6 +285,8 @@ let player = {
     autoEC: true,
     lastAutoEC: 0,
     partEternitied: new Decimal(0),
+    disableAutoAchieve: false,
+    gainedAutoAchievements: false,
     automator: {
       state: {
         mode: AutomatorMode.STOP,
@@ -298,7 +300,8 @@ let player = {
       lastID: 0,
       execTimer: 0,
       type: AutomatorType.TEXT
-    }
+    },
+    achTimer: 0,
   },
   blackHole: Array.range(0, 2).map(id => ({
     id,

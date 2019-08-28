@@ -136,9 +136,10 @@ function skipResetsIfPossible() {
 
 function softResetBtnClick() {
   if ((!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) || !DimBoost.requirement.isSatisfied) return;
+  if (disallowOtherResets()) return;
   if (Ra.isRunning) return;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
-  else softReset(1)
+  else softReset(1);
   
   for (let tier = 1; tier < 9; tier++) {
     const mult = DimBoost.power.pow(DimBoost.totalBoosts + 1 - tier);

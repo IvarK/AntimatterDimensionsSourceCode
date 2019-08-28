@@ -30,7 +30,7 @@ Vue.component("dilation-time-study", {
       this.requirement = "Requirement: 5 EC11 and EC12 completions and 13,000 total theorems";
     }
     if (this.id === 6) {
-      this.requirement = "Requirement: 1e4000 EP";
+      this.requirement = "Requirement: 1e4000 EP and 13 rows of achievements";
       this.showRequirement = true;
     }
   },

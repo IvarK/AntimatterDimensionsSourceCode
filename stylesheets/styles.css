@@ -1077,13 +1077,17 @@ br {
 
 .videocontainer {
     position: fixed;
-    z-index: -1000;
     top: 0;
     bottom: 0;
     width: 100%;
     height: 100%;
+    z-index: 1;
     overflow: hidden;
     pointer-events: none;
+}
+
+.videocontainer--background {
+  z-index: -1000;
 }
 
 #realityanimbg {
@@ -2705,11 +2709,6 @@ screen and (max-width: 480px) {
   border-color: #127a20;
 }
 
-.o-achievement--disabled {
-  background-color: #c45a5a;
-  border-color: #781212;
-}
-
 .o-achievement--hidden {
   background-image: url("../images/achhidden.png");
   background-color: #555;
@@ -2840,6 +2839,8 @@ screen and (max-width: 480px) {
 
 .c-achievements-tab__header {
   font-size: 1.6rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.6rem;
 }
 
 .c-achievements-tab__timer {
@@ -5804,13 +5805,10 @@ kbd {
 
 .c-ra-pet-header {
   width: 35rem;
-  height: 6rem;
   padding: 1rem;
   margin: 2rem auto;
-  text-shadow: -0.5px -0.5px 0 #000,
-    0.5px -0.5px 0 #000,
-    -0.5px 0.5px 0 #000,
-    0.5px 0.5px 0 #000;
+  background: linear-gradient(#2f2f2f, #464646);
+  border-radius: 1.5rem;
 }
 
 .c-ra-pet-title {
@@ -5903,6 +5901,12 @@ kbd {
   margin: 0 0 -5rem 0;
 }
 
+.c-ra-memory-header {
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+  font-weight: bold;
+}
+
 .l-ra-non-pets {
   flex: 0.2 0 25rem;
   justify-content: center;
@@ -5917,6 +5921,7 @@ kbd {
   flex: none none 50rem;
   width: 50rem;
   margin: 2.5rem 5rem;
+  cursor: pointer;
 }
 
 .l-ra-reality-inner {

@@ -387,6 +387,7 @@ function completeReality(force, reset, auto = false) {
   player.bestEPminThisReality = new Decimal(0);
   player.bestInfinitiesPerMs = new Decimal(0);
   player.bestEternitiesPerMs = new Decimal(0);
+  player.bestIpPerMsWithoutMaxAll = new Decimal(0);
   resetTimeDimensions();
   // FIXME: Eternity count is now a Decimal so this needs to be addressed
   // kong.submitStats('Eternities', player.eternities);

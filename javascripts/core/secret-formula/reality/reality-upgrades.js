@@ -79,9 +79,9 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 8,
       cost: 15,
-      requirement: () => `Get ${shorten(1e6)} IP without any automatic achievements`,
-      checkRequirement: () => player.infinityPoints.gte(1e6) && !player.reality.gainedAutoAchievements,
-      checkEvent: GameEvent.BIG_CRUNCH_AFTER,
+      requirement: "Get to Eternity without any automatic achievements",
+      checkRequirement: () => !player.reality.gainedAutoAchievements,
+      checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
       description: "Tachyon Particle gain is multiplied based on achievement multiplier",
       effect: () => Player.achievementPower.sqrt(),
       formatEffect: value => formatX(value, 2, 2)

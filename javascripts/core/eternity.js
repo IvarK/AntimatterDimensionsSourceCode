@@ -95,6 +95,7 @@ function eternity(force, auto, specialConditions = {}) {
   player.bestIPminThisInfinity = new Decimal(0);
   player.bestIPminThisEternity = new Decimal(0);
   player.bestInfinitiesPerMs = new Decimal(0);
+  player.bestIpPerMsWithoutMaxAll = new Decimal(0);
   resetTimeDimensions();
   try {
     // FIXME: Eternity count is a Decimal and also why is this submitted in so many places?

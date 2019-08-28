@@ -356,36 +356,36 @@ GameDatabase.reality.perks = {
     id: 201,
     label: "ACH1",
     family: PerkFamily.ACHIEVEMENT,
-    description: "Start with the first 2 achievement rows after Reality.",
-    effect: () => 2
+    description: "Start with the first 3 achievement rows after Reality.",
+    effect: () => 3
   },
   achievementRowGroup2: {
     id: 202,
     label: "ACH2",
     family: PerkFamily.ACHIEVEMENT,
-    description: "Start with the first 4 achievement rows after Reality.",
-    effect: () => 4
+    description: "Start with the first 6 achievement rows after Reality.",
+    effect: () => 6
   },
   achievementRowGroup3: {
     id: 203,
     label: "ACH3",
     family: PerkFamily.ACHIEVEMENT,
-    description: "Start with the first 6 achievement rows after Reality.",
-    effect: () => 6
+    description: "Start with the first 8 achievement rows after Reality.",
+    effect: () => 8
   },
   achievementRowGroup4: {
     id: 204,
     label: "ACH4",
     family: PerkFamily.ACHIEVEMENT,
-    description: "Start with the first 8 achievement rows after Reality.",
-    effect: () => 8
+    description: "Start with the first 10 achievement rows after Reality.",
+    effect: () => 10
   },
   achievementRowGroup5: {
     id: 205,
     label: "ACH5",
     family: PerkFamily.ACHIEVEMENT,
-    description: "Start with the first 10 achievement rows after Reality.",
-    effect: () => 10
+    description: "Start with the first 12 achievement rows after Reality.",
+    effect: () => 12
   },
   achievementRowGroup6: {
     id: 206,

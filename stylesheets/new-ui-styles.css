@@ -972,3 +972,12 @@ body.t-dark {
   width: 80%;
   margin: 2rem 10%;
 }
+
+.o-primary-btn--respec-active {
+  background-color: #5ac467;
+}
+
+.o-primary-btn--respec-active:hover {
+  background-color: #5ac467;
+  color: white;
+}

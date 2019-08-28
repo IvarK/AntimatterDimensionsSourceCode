@@ -25,6 +25,7 @@ Vue.component("new-ui", {
       <div class="tab-container">
         <div class="l-reset-buttons-container" v-if="breakInfinity">
           <game-header-eternity-button/>
+          <game-header-new-dim-button/>
           <reality-button v-if="realities > 0" class="l-reset-buttons-container__reality-button"/>
           <game-header-big-crunch-button/>
         </div>

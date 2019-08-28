@@ -932,6 +932,11 @@ body.t-dark {
   right: 72%;
 }
 
+.l-game-header__new-dim-btn {
+  top: 15%;
+  right: 72%;
+}
+
 .l-reset-buttons-container__reality-button {
   margin-top: 1.7rem;
   margin-bottom: 0;

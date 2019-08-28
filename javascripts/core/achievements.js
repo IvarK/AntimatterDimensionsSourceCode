@@ -12,17 +12,6 @@ class AchievementState extends GameMechanicState {
     }
     this._row = Math.floor(this.id / 10);
     this._column = this.id % 10;
-    this._totalDisabledTime = new Lazy(() => {
-      if (!this.hasLockedTime) return 0;
-      const perkAdjustedRow = Math.clamp(this.row - GameCache.achSkipPerkCount.value, 1, this.row);
-      const currentRowAchTime = Achievements.rowDisabledTime(perkAdjustedRow) / 8;
-      if (this.id === 11) return currentRowAchTime;
-      return currentRowAchTime + this.previousAchievement.totalDisabledTime;
-      })
-      .invalidateOn(
-        GameEvent.REALITY_RESET_AFTER,
-        GameEvent.PERK_BOUGHT
-      );
   }
 
   get name() {
@@ -50,11 +39,15 @@ class AchievementState extends GameMechanicState {
   get isPreReality() {
     return this.row < 14;
   }
-  
+
   tryUnlock(a1, a2, a3) {
     if (this.isUnlocked) return;
     if (!this.config.checkRequirement(a1, a2, a3)) return;
     this.unlock();
+  }
+
+  lock() {
+    player.achievements.delete(this.id);
   }
 
   unlock() {
@@ -70,25 +63,7 @@ class AchievementState extends GameMechanicState {
   }
 
   get isEnabled() {
-    if (!this.isUnlocked) return false;
-    if (!this.hasLockedTime) return true;
-    // Keep player.thisReality instead of Time.thisReality here because this is a hot path
-    return this.totalDisabledTime <= player.thisReality;
-  }
-
-  get remainingDisabledTime() {
-    if (!this.isUnlocked || !this.hasLockedTime) return NaN;
-    return Math.clampMin(this.totalDisabledTime - player.thisReality, 0);
-  }
-
-  get hasLockedTime() {
-    return player.realities !== 0 &&
-      this.isPreReality &&
-      this.row > GameCache.achSkipPerkCount.value;
-  }
-
-  get totalDisabledTime() {
-    return this._totalDisabledTime.value;
+    return this.isUnlocked;
   }
 
   get isEffectConditionSatisfied() {
@@ -126,42 +101,36 @@ const Achievements = {
     return enabledAchievements + additionalAchievements;
   },
 
+  get period() {
+    return 1800 * 1000;
+  },
+
   row: row => Array.range(row * 10 + 1, 8).map(Achievement),
 
   rows: (start, count) => Array.range(start, count).map(Achievements.row),
 
-  get defaultDisabledTime() {
-    return TimeSpan.fromDays(2);
-  },
-
-  get totalDisabledTime() {
-    return Achievement(138).totalDisabledTime;
-  },
-
-  get nextTotalDisabledTime() {
-    if (player.realities === 0) {
-      return Achievements.defaultDisabledTime;
+  autoAchieveUpdate(diff) {
+    if (player.realities === 0) return;
+    if (GameCache.achSkipPerkCount.value >= 13) return;
+    if (player.reality.disableAutoAchieve) return;
+    player.reality.achTimer += diff;
+    // Don't bother making the disabled list if we don't need it
+    if (player.reality.achTimer < this.period) return;
+    const disabled = Achievements.all.filter(a => !a.isEnabled);
+    while (disabled.length > 0 && disabled[0].row <= 13 && player.reality.achTimer >= this.period) {
+      player.reality.achTimer -= this.period;
+      disabled.shift().unlock();
+      player.reality.gainedAutoAchievements = true;
     }
-    return GameCache.baseTimeForAllAchs.value.times(0.9);
   },
 
-  get remainingDisabledTime() {
-    return Achievement(138).remainingDisabledTime;
+  timeToNextAutoAchieve() {
+    if (player.realities === 0) return 0;
+    if (GameCache.achSkipPerkCount.value >= 13) return 0;
+    const disabled = Achievements.all.filter(a => !a.isEnabled);
+    if (disabled.length === 0 || disabled[0].row > 13) return 0;
+    return Math.max(this.period - player.reality.achTimer, 1);
   },
-
-  get timeUntilNext() {
-    const firstDisabled = Achievements.all.find(a => a.hasLockedTime && !a.isEnabled);
-    return firstDisabled === undefined ? 0 : firstDisabled.remainingDisabledTime;
-  },
-
-  rowDisabledTime(row) {
-    const baseTimeForAllAchs = GameCache.baseTimeForAllAchs.value.totalMilliseconds;
-    const PRE_REALITY_ACH_ROWS = 13;
-    const baseRowTime = baseTimeForAllAchs / PRE_REALITY_ACH_ROWS;
-    const realityModifier = GameCache.realityAchTimeModifier.value;
-    const rowModifier = realityModifier * TimeSpan.fromSeconds(1600).totalMilliseconds;
-    return Math.clampMin(baseRowTime + (row - 7) * rowModifier, 0);
-  }
 };
 
 EventHub.registerStateCollectionEvents(

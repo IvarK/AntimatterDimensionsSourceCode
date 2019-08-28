@@ -239,9 +239,7 @@ function clearDimensions(maxTier) {
 }
 
 function onBuyDimension(tier) {
-  if (!player.break) {
-    Achievement(10 + tier).unlock();
-  }
+  Achievement(10 + tier).unlock();
   Achievement(23).tryUnlock();
 
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
@@ -702,6 +700,10 @@ class NormalDimensionState extends DimensionState {
       ? this._c6BaseCostMultiplier
       : this._baseCostMultiplier;
     this.costMultiplier = new Decimal(costMultiplier);
+  }
+
+  get multiplier() {
+    return getDimensionFinalMultiplier(this.tier);
   }
 }
 

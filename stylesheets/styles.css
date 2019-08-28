@@ -2709,11 +2709,6 @@ screen and (max-width: 480px) {
   border-color: #127a20;
 }
 
-.o-achievement--disabled {
-  background-color: #c45a5a;
-  border-color: #781212;
-}
-
 .o-achievement--hidden {
   background-image: url("../images/achhidden.png");
   background-color: #555;
@@ -2844,6 +2839,8 @@ screen and (max-width: 480px) {
 
 .c-achievements-tab__header {
   font-size: 1.6rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.6rem;
 }
 
 .c-achievements-tab__timer {

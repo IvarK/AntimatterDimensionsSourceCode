@@ -413,7 +413,7 @@ const Replicanti = {
     },
     autobuyer: {
       get isUnlocked() {
-        return player.replicanti.galaxybuyer !== undefined;
+        return EternityMilestone.autobuyerReplicantiGalaxy.isReached;
       },
       get isOn() {
         return player.replicanti.galaxybuyer;

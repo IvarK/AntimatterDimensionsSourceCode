@@ -117,7 +117,9 @@ body.t-dark {
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: 200px;
+  width: 20rem;
+  position: fixed;
+  z-index: 3;
 }
 
 .sidebar:hover .subtabs,
@@ -380,9 +382,10 @@ body.t-dark {
 }
 
 .game-container {
-  width: 100%;
+  width: calc(100% - 20rem);
   overflow-x: hidden;
   overflow-y: hidden;
+  margin-left: 20rem;
 }
 
 .game-container h1, 

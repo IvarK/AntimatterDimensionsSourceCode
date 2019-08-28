@@ -101,20 +101,23 @@ const Achievements = {
     return enabledAchievements + additionalAchievements;
   },
 
+  get period() {
+    return 1800 * 1000;
+  }
+
   row: row => Array.range(row * 10 + 1, 8).map(Achievement),
 
   rows: (start, count) => Array.range(start, count).map(Achievements.row),
 
-  autoAchieveUpdate(realDiff) {
+  autoAchieveUpdate(diff) {
     if (player.realities === 0) return;
     if (GameCache.achSkipPerkCount.value >= 13) return;
-    player.reality.achTimer += realDiff;
-    const period = 1800 * 1000;
+    player.reality.achTimer += diff;
     // Don't bother making the disabled list if we don't need it
-    if (player.reality.achTimer < period) return;
+    if (player.reality.achTimer < this.period) return;
     const disabled = Achievements.all.filter(a => !a.isEnabled);
-    while (disabled.length > 0 && disabled[0].row <= 13 && player.reality.achTimer >= period) {
-      player.reality.achTimer -= period;
+    while (disabled.length > 0 && disabled[0].row <= 13 && player.reality.achTimer >= this.period) {
+      player.reality.achTimer -= this.period;
       disabled.shift().unlock();
     }
   },
@@ -124,8 +127,7 @@ const Achievements = {
     if (GameCache.achSkipPerkCount.value >= 13) return 0;
     const disabled = Achievements.all.filter(a => !a.isEnabled);
     if (disabled.length === 0 || disabled[0].row > 13) return 0;
-    const period = 1800 * 1000;
-    return Math.max(period - player.reality.achTimer, 1);
+    return Math.max(this.period - player.reality.achTimer, 1);
   },
 };
 

@@ -745,7 +745,7 @@ function gameLoop(diff, options = {}) {
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
-  Achievements.autoAchieveUpdate(realDiff);
+  Achievements.autoAchieveUpdate(diff);
   V.checkForUnlocks();
   AutomatorBackend.update(realDiff);
 

@@ -117,7 +117,7 @@ GameDatabase.achievements.normal = [
     id: 31,
     name: "I forgot to nerf that",
     tooltip: () => `Get any Dimension multiplier over ${shorten(1e31, 0, 0)}`,
-    checkRequirement: () => NormalDimensions.all.countWhere(x => x.multiplier.exponent >= 31),
+    checkRequirement: () => NormalDimensions.all.find(x => x.multiplier.exponent >= 31) !== undefined,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "1st Dimensions are 5% stronger.",
     effect: 1.05
@@ -421,8 +421,8 @@ GameDatabase.achievements.normal = [
     id: 75,
     name: "NEW DIMENSIONS???",
     tooltip: "Unlock the 4th Infinity Dimension.",
-    checkRequirement: tier => tier >= 4 || InfinityDimension(4).isUnlocked,
-    checkEvent: GameEvent.INFINITY_DIMENSION_UNLOCKED,
+    checkRequirement: () => InfinityDimension(4).isUnlocked,
+    checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Your achievement bonus affects Infinity Dimensions.",
     effect: () => Player.achievementPower
   },

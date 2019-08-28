@@ -491,6 +491,7 @@ function startRealityOver() {
 function lockAchievementsOnReality() {
   const startRow = GameCache.achSkipPerkCount.value + 1;
   const lastRow = 13;
+  if (startRow > lastRow) return;
   const lockedRows = lastRow - startRow;
   for (const row of Achievements.rows(startRow, lockedRows)) {
     for (const achievement of row) {

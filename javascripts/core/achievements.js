@@ -103,7 +103,7 @@ const Achievements = {
 
   get period() {
     return 1800 * 1000;
-  }
+  },
 
   row: row => Array.range(row * 10 + 1, 8).map(Achievement),
 

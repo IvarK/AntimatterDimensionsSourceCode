@@ -46,7 +46,9 @@ GameDatabase.eternity.timeStudies.dilation = [
     id: 6,
     description: "Unlock reality",
     cost: () => (player.realities > 0 ? 0 : 5000000000),
-    requirement: () => TimeStudy.timeDimension(8).isBought && player.eternityPoints.exponent >= 4000,
+    requirement: () => TimeStudy.timeDimension(8).isBought && 
+      player.eternityPoints.exponent >= 4000 && 
+      Achievements.all.filter(a => a.isUnlocked) >= 104,
     formatCost: shortenSmallInteger
   }
 ];

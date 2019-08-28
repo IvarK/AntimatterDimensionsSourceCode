@@ -86,7 +86,7 @@ Vue.component("game-header-eternity-button", {
       this.type = hasNewContent
         ? EPButtonDisplayType.NORMAL_EXPLORE_NEW_CONTENT
         : EPButtonDisplayType.NORMAL;
-      this.currentEPPM.copyFrom(gainedEP.dividedBy(Time.thisEternity.totalMinutes));
+      this.currentEPPM.copyFrom(gainedEP.dividedBy(TimeSpan.fromMilliseconds(player.thisEternityRealTime).totalMinutes));
       this.peakEPPM.copyFrom(player.bestEPminThisEternity);
     },
     updateChallengeWithRUPG() {

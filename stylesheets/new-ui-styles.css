@@ -760,6 +760,10 @@ body.t-dark {
   color: black;
 }
 
+.l-new-ui-big-crunch__container {
+  margin-top: 2rem;
+}
+
 .information-header {
   margin-top: 10px;
   font-weight: bold;

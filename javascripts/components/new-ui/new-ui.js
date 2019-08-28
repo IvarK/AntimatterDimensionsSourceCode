@@ -32,7 +32,11 @@ Vue.component("new-ui", {
     <sidebar />
     <div class="game-container">
       <news-ticker />
-      <div class="tab-container">
+      <div v-if="bigCrunch" class="l-new-ui-big-crunch__container">
+        <h3>The world has collapsed due to excess antimatter.</h3>
+        <button class="btn-big-crunch" onclick="bigCrunchResetRequest()">Big Crunch</button>
+      </div>
+      <div class="tab-container" v-else>
         <div class="l-reset-buttons-container" v-if="breakInfinity">
           <game-header-eternity-button/>
           <game-header-new-dim-button/>
@@ -43,11 +47,7 @@ Vue.component("new-ui", {
         class="btn-big-crunch btn-big-crunch--small"
         onclick="bigCrunchResetRequest()"
         v-if="smallCrunch && !bigCrunch">Big Crunch</button>
-        <div v-if="bigCrunch">
-          <h3>The world has collapsed due to excess antimatter.</h3>
-          <button class="btn-big-crunch" onclick="bigCrunchResetRequest()">Big Crunch</button>
-        </div>
-        <slot v-else />
+        <slot />
       </div>
     </div>
   </div>`

@@ -596,8 +596,8 @@ GameDatabase.achievements.normal = [
     id: 98,
     name: "0 degrees from infinity",
     tooltip: "Unlock the 8th Infinity Dimension.",
-    checkRequirement: tier => tier >= 8 || InfinityDimension(8).isUnlocked,
-    checkEvent: GameEvent.INFINITY_DIMENSION_UNLOCKED
+    checkRequirement: () => InfinityDimension(8).isUnlocked,
+    checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 101,

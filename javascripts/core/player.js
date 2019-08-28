@@ -29,6 +29,7 @@ let player = {
       bought: 0
     }))
   },
+  buyUntil10: true,
   sacrificed: new Decimal(0),
   achievements: new Set(),
   secretAchievements: new Set(),

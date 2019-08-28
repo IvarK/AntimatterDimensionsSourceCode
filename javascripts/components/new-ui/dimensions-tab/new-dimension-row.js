@@ -17,6 +17,7 @@ Vue.component("new-dimension-row", {
       isAffordable: false,
       isAffordableUntil10: false,
       remainingUntil10: 0,
+      buyUntil10: true,
       howManyCanBuy: 0
     };
   },
@@ -24,13 +25,11 @@ Vue.component("new-dimension-row", {
     name() {
       return SHORT_DISPLAY_NAMES[this.tier];
     },
+    costDisplay() {
+      return this.buyUntil10 ? shortenCosts(this.until10Cost) : shortenCosts(this.singleCost);
+    },
     amountDisplay() {
       return this.tier < 8 ? this.shortenDimensions(this.amount) : shortenSmallInteger(this.amount);
-    },
-    rateOfChangeDisplay() {
-      return this.tier < 8
-        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
-        : "";
     },
     cappedTooltip() {
       return this.isCapped
@@ -44,21 +43,23 @@ Vue.component("new-dimension-row", {
       const isUnlocked = NormalDimension(tier).isAvailable;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
+      const buyUntil10 = player.buyUntil10;
       const dimension = NormalDimension(tier);
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 10;
       this.multiplier.copyFrom(getDimensionFinalMultiplier(tier));
       this.amount.copyFrom(dimension.amount);
       this.boughtBefore10 = dimension.boughtBefore10;
+      this.howManyCanBuy = buyUntil10 ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1);
       this.singleCost.copyFrom(dimension.cost);
-      this.until10Cost.copyFrom(dimension.costUntil10.times(dimension.howManyCanBuy));
+      this.until10Cost.copyFrom(dimension.cost.times(Math.max(dimension.howManyCanBuy, 1)));
       this.isAffordable = dimension.isAffordable;
       this.isAffordableUntil10 = dimension.isAffordableUntil10;
       this.remainingUntil10 = dimension.remainingUntil10;
-      this.howManyCanBuy = until10Setting ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1);
+      this.buyUntil10 = buyUntil10;
     },
     buy() {
       // TODO: Buy Until is on
-      if (until10Setting) {
+      if (this.buyUntil10) {
         buyAsManyAsYouCanBuyBtnClick(this.tier);
       } else {
         buyOneDimensionBtnClick(this.tier);
@@ -77,7 +78,7 @@ Vue.component("new-dimension-row", {
         class="button-content"
         :enabled="isAffordable"
         :ach-tooltip="cappedTooltip"
-        >Buy {{ howManyCanBuy }}<br>Cost: {{ shortenCosts(singleCost) }}</div>
+        >Buy {{ howManyCanBuy }}<br>Cost: {{ costDisplay }}</div>
       <div class="fill">
         <div class="fill1" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
         <div class="fill2" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>

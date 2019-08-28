@@ -9,8 +9,6 @@ let kongDimMult = 1
 let kongAllDimMult = 1
 let kongEPMult = 1
 
-let until10Setting = true;
-
 function floatText(tier, text) {
   if (!player.options.animations.floatingText) return;
   const floatingText = ui.view.tabs.dimensions.normal.floatingText[tier];

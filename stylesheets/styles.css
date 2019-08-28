@@ -5808,13 +5808,10 @@ kbd {
 
 .c-ra-pet-header {
   width: 35rem;
-  height: 6rem;
   padding: 1rem;
   margin: 2rem auto;
-  text-shadow: -0.5px -0.5px 0 #000,
-    0.5px -0.5px 0 #000,
-    -0.5px 0.5px 0 #000,
-    0.5px 0.5px 0 #000;
+  background: linear-gradient(#2f2f2f, #464646);
+  border-radius: 1.5rem;
 }
 
 .c-ra-pet-title {
@@ -5907,6 +5904,12 @@ kbd {
   margin: 0 0 -5rem 0;
 }
 
+.c-ra-memory-header {
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+  font-weight: bold;
+}
+
 .l-ra-non-pets {
   flex: 0.2 0 25rem;
   justify-content: center;
@@ -5921,6 +5924,7 @@ kbd {
   flex: none none 50rem;
   width: 50rem;
   margin: 2.5rem 5rem;
+  cursor: pointer;
 }
 
 .l-ra-reality-inner {

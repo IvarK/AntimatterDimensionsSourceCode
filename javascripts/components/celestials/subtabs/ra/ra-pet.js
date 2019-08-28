@@ -28,9 +28,10 @@ Vue.component("ra-pet", {
       };
     },
     expPerMin() {
-      const avgLvl = this.lastTenGlyphLevels.reduce((acc, value) => acc + value, 0) / 10;
+      const expGain = this.lastTenGlyphLevels.reduce((acc, value) => 
+        acc + Math.pow(2, value / 500 - 10), 0
+      ) * this.expBoost / 10;
       const avgTimeMs = this.lastTenRunTimers.reduce((acc, value) => acc + value, 0) / 10;
-      const expGain = Math.pow(2, avgLvl / 500 - 10) * this.expBoost;
       return Math.round(expGain / (avgTimeMs / 60000));
     },
     experienceInformation() {

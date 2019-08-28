@@ -964,3 +964,8 @@ body.t-dark {
 .c-dilation-tab__galaxies {
   color: #64dd17;
 }
+
+.c-progress-bar {
+  width: 80%;
+  margin: 2rem 10%;
+}

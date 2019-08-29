@@ -63,7 +63,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
   }
 
   tick() {
-    super.tick();
+    if (canCrunch()) super.tick();
     if (!player.antimatter.gte(Decimal.MAX_NUMBER)) return;
     let proc = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
     if (!proc) {

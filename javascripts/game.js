@@ -226,16 +226,20 @@ function ratePerMinute(amount, time) {
 }
 
 function averageRun(runs) {
-    let totalTime = runs
-        .map(run => run[0])
-        .reduce(Number.sumReducer);
-    let totalAmount = runs
-        .map(run => run[1])
-        .reduce(Decimal.sumReducer);
-    return [
-        totalTime / runs.length,
-        totalAmount.dividedBy(runs.length)
-    ];
+  const totalTime = runs
+    .map(run => run[0])
+    .reduce(Number.sumReducer);
+  const totalAmount = runs
+    .map(run => run[1])
+    .reduce(Decimal.sumReducer);
+  const realTime = runs
+    .map(run => run[2])
+    .reduce(Number.sumReducer);
+  return [
+    totalTime / runs.length,
+    totalAmount.dividedBy(runs.length),
+    realTime / runs.length
+  ];
 }
 
 function addInfinityTime(time, realTime, ip, infinities) {

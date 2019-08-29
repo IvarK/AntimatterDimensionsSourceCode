@@ -29,7 +29,7 @@ GameDatabase.achievements.secret = [
   {
     id: 16,
     name: "Do you enjoy pain?",
-    tooltip: "Use a \"painful\" notation for 10 minutes with more than 1 eternity.",
+    tooltip: "Use a \"painful\" notation for 10 real-time minutes with more than 1 eternity.",
     checkRequirement: () => AchievementTimers.pain
       .check(player.eternities.gte(1) && Notations.current.isPainful, 600),
     checkEvent: GameEvent.GAME_TICK_AFTER
@@ -162,7 +162,7 @@ GameDatabase.achievements.secret = [
   {
     id: 44,
     name: "Are you statisfied now?",
-    tooltip: "Stare intently at the statistics tab for 15 minutes.",
+    tooltip: "Stare intently at the statistics tab for 15 real-time minutes.",
     checkRequirement: () => AchievementTimers.stats.check(Tab.statistics.isOpen, 900),
     checkEvent: GameEvent.GAME_TICK_AFTER
   },

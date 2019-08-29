@@ -245,7 +245,7 @@ body.t-dark {
   transition-delay: 0.2s;
 }
 
-.tab-button:hover::after {
+.tab-button-subtabs:hover::after {
   border-left-width: 23px;
 }
 
@@ -447,17 +447,19 @@ body.t-dark {
 .subtab {
   height: 47px;
   width: 47px;
-  display: flex;
-  flex-direction: column;
   background-color: var(--color-dark);
   border: 1px solid var(--color-accent-1);
-  justify-content: center;
-  align-items: center;
   color: var(--color-text);;
   font-size: 1.6em;
+  font-weight: bold;
   margin-left: -1px;
+  line-height: 4.5rem;
   cursor: pointer;
   transition-duration: 0.15s;
+}
+
+.subtab .fa-link {
+  transform: rotate(45deg)
 }
 
 .subtab:hover {
@@ -480,10 +482,6 @@ body.t-dark {
 .t-dark-metro .subtab:hover {
   color: white;
   background-color: var(--color-accent-1);
-}
-
-.subtab:not(:first-child) {
-  border-top: none;
 }
 
 .subtab.infinity {

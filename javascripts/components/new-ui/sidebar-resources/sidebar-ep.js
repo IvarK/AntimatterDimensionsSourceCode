@@ -8,9 +8,6 @@ Vue.component("sidebar-ep", {
       gainedEP: new Decimal(0),
     };
   },
-  props: {
-    cond: Boolean
-  },
   methods: {
     update() {
       this.ep.copyFrom(player.eternityPoints);
@@ -21,12 +18,10 @@ Vue.component("sidebar-ep", {
   },
   template:
   `<div class="resource">
-    <div v-if="cond">
-      <h2 class="o-sidebar-eternity-button">{{ shorten(ep, 2, 0) }}</h2>
-      <div class="resource-information">
-        <span class="resource-name">Eternity {{ "point" | pluralize(ep) }}</span>
-        <span class="resource-gain" v-if="showEternity">+{{shorten(gainedEP, 2, 0)}}</span>
-      </div>
+    <h2 class="o-sidebar-eternity-button">{{ shorten(ep, 2, 0) }}</h2>
+    <div class="resource-information">
+      <span class="resource-name">Eternity {{ "point" | pluralize(ep) }}</span>
+      <span class="resource-gain" v-if="showEternity">+{{shorten(gainedEP, 2, 0)}}</span>
     </div>
   </div>`
 });

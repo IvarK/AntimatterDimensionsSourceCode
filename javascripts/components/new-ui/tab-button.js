@@ -10,6 +10,14 @@ Vue.component("tab-button", {
       subtabVisibilities: []
     };
   },
+  computed: {
+    classObject() {
+      return {
+        "tab-button": true,
+        "tab-button-subtabs": this.isAvailable && this.subtabVisibilities.filter(x => x).length > 1,
+      };
+    },
+  },
   methods: {
     update() {
       this.isAvailable = this.tab.isAvailable;
@@ -17,7 +25,7 @@ Vue.component("tab-button", {
     }
   },
   template:
-  `<div class="tab-button" :class="tab.config.newUIClass">
+  `<div :class="[classObject, tab.config.newUIClass]">
     <div 
       v-if="isAvailable"
       class="tab-button-inner"
@@ -27,12 +35,11 @@ Vue.component("tab-button", {
     </div>
     <div v-else class="tab-button-inner"><h3>???</h3></div>
     <div class="subtabs" v-if="isAvailable && subtabVisibilities.filter(x => x).length > 1">
-      <div v-for="(subtab, index) in tab.subtabs">
-        <div
+      <div v-for="(subtab, index) in tab.subtabs"
           v-if="subtabVisibilities[index]"
           class="subtab"
           :class="tab.config.newUIClass"
-          @click="subtab.show()">{{ subtab.symbol }}</div>
+          @click="subtab.show()"><span v-html="subtab.symbol"></span>
       </div>
     </div>
   </div>`

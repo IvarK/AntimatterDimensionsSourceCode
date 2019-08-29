@@ -8,9 +8,6 @@ Vue.component("sidebar-ip", {
       gained: new Decimal(0),
     };
   },
-  props: {
-    cond: Boolean
-  },
   methods: {
     update() {
       this.ip.copyFrom(player.infinityPoints);
@@ -32,12 +29,10 @@ Vue.component("sidebar-ip", {
   },
   template:
   `<div class="resource">
-    <div v-if="cond">
-      <h2 class="o-sidebar-infinity-button">{{ shorten(ip, 2, 0) }}</h2>
-      <div class="resource-information">
-        <span class="resource-name">Infinity {{ "point" | pluralize(ip) }}</span>
-        <span class="resource-gain" v-if="showCrunch">+{{shorten(gained, 2, 0)}}</span>
-      </div>
+    <h2 class="o-sidebar-infinity-button">{{ shorten(ip, 2, 0) }}</h2>
+    <div class="resource-information">
+      <span class="resource-name">Infinity {{ "point" | pluralize(ip) }}</span>
+      <span class="resource-gain" v-if="showCrunch">+{{shorten(gained, 2, 0)}}</span>
     </div>
   </div>`
 });

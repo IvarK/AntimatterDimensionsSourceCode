@@ -36,7 +36,7 @@ class PlayerProgress {
     return PlayerProgress.current.isEternityUnlocked;
   }
 
-  static get realityUnlocked() {
+  static realityUnlocked() {
     return PlayerProgress.current.isRealityUnlocked;
   }
 }

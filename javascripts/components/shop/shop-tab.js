@@ -3,7 +3,6 @@
 Vue.component("shop-tab", {
   data() {
     return {
-      purchases: [],
       STD: 0,
     };
   },
@@ -19,8 +18,10 @@ Vue.component("shop-tab", {
       kong.purchaseTimeSkip();
     }
   },
-  created() {
-    this.purchases = ShopPurchase.all;
+  computed: {
+    purchases() {
+      return ShopPurchase.all;
+    }
   },
   template: 
   `<div id="shop" class="tab">

@@ -4,11 +4,23 @@ Vue.component("shop-button", {
   props: {
     purchase: Object,
   },
+  data() {
+    return {
+      currentMult: 0,
+      nextMult: 0
+    }
+  },
+  methods: {
+    update() {
+      this.currentMult = this.purchase.currentMult;
+      this.nextMult = this.purchase.nextMult;
+    }
+  },
   template:
   `<div class="c-shop-button-container">
     <div class="o-shop-button-description">
       {{ purchase.description }}
-      <br>Currently {{ purchase.currentMult }}x, next: {{ purchase.nextMult }}x
+      <br>Currently {{ currentMult }}x, next: {{ nextMult }}x
     </div>
     <button 
       @click="purchase.purchase()" 

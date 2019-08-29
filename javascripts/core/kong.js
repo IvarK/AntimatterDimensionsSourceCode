@@ -29,6 +29,10 @@ class ShopPurchaseState extends RebuyableMechanicState {
     return player.IAP.totalSTD - player.IAP.spentSTD;
   }
 
+  get isAffordable() {
+    return this.currency >= this.cost;
+  }
+
   get description() {
     return this.config.description;
   }
@@ -49,7 +53,7 @@ class ShopPurchaseState extends RebuyableMechanicState {
     return this.config.multFn(this.currentMult);
   }
 
-  get purchase() {
+  purchase() {
     if (!this.canBeBought) return false;
     player.IAP.spentSTD += this.cost;
     this.currentMult = this.nextMult;

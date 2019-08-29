@@ -434,6 +434,7 @@ GameStorage.devMigrations = {
       delete player.celestials.teresa.dtBulk;
     },
     GameStorage.migrations.migrateConfirmations,
+    GameStorage.migrations.removeOtherTickspeedProps
   ],
 
   patch(player) {

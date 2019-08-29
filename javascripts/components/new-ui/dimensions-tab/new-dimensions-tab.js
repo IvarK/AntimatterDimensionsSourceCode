@@ -3,7 +3,7 @@
 Vue.component("new-dimensions-tab", {
   data() {
     return {
-      until10Setting: true,
+      buyUntil10: true,
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
       sacrificeBoost: new Decimal(0),
@@ -31,13 +31,13 @@ Vue.component("new-dimensions-tab", {
       sacrificeBtnClick();
     },
     toggleUntil10() {
-      until10Setting = !until10Setting;
+      player.buyUntil10 = !player.buyUntil10;
     },
     getUntil10Display() {
-      return this.until10Setting ? "Until 10" : "Buy 1";
+      return this.buyUntil10 ? "Until 10" : "Buy 1";
     },
     update() {
-      this.until10Setting = until10Setting;
+      this.buyUntil10 = player.buyUntil10;
       this.isInAnyChallenge = this.challengeDisplay.length !== 0;
       const isC2Running = NormalChallenge(2).isRunning;
       const isC3Running = NormalChallenge(3).isRunning;

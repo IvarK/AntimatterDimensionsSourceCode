@@ -191,8 +191,9 @@ EventHub.registerStateCollectionEvents(
 );
 
 class AchievementTimer {
-  constructor() {
+  constructor(isRealTime) {
     this.time = 0;
+    this.realTime = isRealTime;
   }
   
   reset() {
@@ -200,7 +201,10 @@ class AchievementTimer {
   }
   
   advance() {
-    this.time += Time.deltaTime;
+    const addedTime = this.realTime
+      ? Time.unscaledDeltaTime.totalSeconds
+      : Time.deltaTime;
+    this.time += addedTime;
   }
   
   check(condition, duration) {
@@ -214,8 +218,8 @@ class AchievementTimer {
 }
 
 const AchievementTimers = {
-  marathon1: new AchievementTimer(),
-  marathon2: new AchievementTimer(),
-  pain: new AchievementTimer(),
-  stats: new AchievementTimer()
+  marathon1: new AchievementTimer(false),
+  marathon2: new AchievementTimer(false),
+  pain: new AchievementTimer(true),
+  stats: new AchievementTimer(true)
 };

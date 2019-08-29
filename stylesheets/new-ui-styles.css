@@ -99,18 +99,6 @@ body.t-dark {
   margin: auto;
   display: flex;
   font-family: Typewriter, serif;
-  background-color: #111014;
-}
-
-.t-metro #page {
-  background-color: white;
-}
-
-.t-dark #page,
-.t-s1 #page,
-.t-s5 #page,
-.t-s6 #page,
-.t-s8 #page {
   background: none;
 }
 

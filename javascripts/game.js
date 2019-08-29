@@ -294,7 +294,7 @@ function getEternitiedMilestoneReward(ms) {
 }
 
 function getOfflineEPGain(ms) {
-  if (EternityMilestone.autoEP.isReached) return new Decimal(0);
+  if (!EternityMilestone.autoEP.isReached) return new Decimal(0);
   return player.bestEPminThisEternity.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 

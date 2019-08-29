@@ -63,8 +63,8 @@ Vue.component("game-header-tickspeed-row", {
       this.isVisible = Tickspeed.isUnlocked || isEC9Running;
       if (!this.isVisible) return;
       this.mult.copyFrom(Tickspeed.multiplier);
-      this.cost.copyFrom(player.tickSpeedCost);
-      this.isAffordable = !isEC9Running && canAfford(player.tickSpeedCost);
+      this.cost.copyFrom(Tickspeed.cost);
+      this.isAffordable = !isEC9Running && canAfford(Tickspeed.cost);
       this.tickspeed.copyFrom(Tickspeed.current);
       this.gameSpeedMult = getGameSpeedupForDisplay();
     }

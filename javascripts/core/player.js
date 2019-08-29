@@ -5,7 +5,6 @@ const defaultMaxTime = 60000 * 60 * 24 * 31;
 
 let player = {
   antimatter: new Decimal(10),
-  tickSpeedCost: new Decimal(1000),
   dimensions: {
     normal: Array.range(0, 8).map(tier => ({
       bought: 0,
@@ -142,10 +141,10 @@ let player = {
   // TODO: Not used, remove
   interval: null,
   lastUpdate: new Date().getTime(),
-  tickspeedMultiplier: new Decimal(10),
   chall2Pow: 1,
   chall3Pow: new Decimal(0.01),
   matter: new Decimal(0),
+  chall9TickspeedPurchaseBumps: 0,
   chall11Pow: new Decimal(1),
   partInfinityPoint: 0,
   partInfinitied: 0,

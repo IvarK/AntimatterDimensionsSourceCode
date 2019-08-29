@@ -120,6 +120,7 @@ GameStorage.migrations = {
       GameStorage.migrations.convertEternityCountToDecimal(player);
       GameStorage.migrations.renameDimboosts(player);
       GameStorage.migrations.migrateConfirmations(player);
+      GameStorage.migrations.removeOtherTickspeedProps(player);
     }
   },
 
@@ -396,6 +397,11 @@ GameStorage.migrations = {
     delete player.tickspeed;
     player.tickSpeedCost = new Decimal(1000);
     player.tickspeedMultiplier = new Decimal(10);
+  },
+
+  removeOtherTickspeedProps(player) {
+    delete player.tickSpeedCost;
+    delete player.tickspeedMultiplier;
   },
 
   removePostC3Reward(player) {

@@ -735,6 +735,7 @@ body.t-dark {
   font-family: Typewriter;
   transition-duration: 0.15s;
   cursor: pointer;
+  z-index: 1;
 }
 
 .btn-big-crunch--small {

@@ -16,7 +16,7 @@ Vue.component("new-ui", {
       this.realities = player.realities;
       const canCrunch = player.antimatter.gte(Player.infinityGoal);
       const challenge = NormalChallenge.current || InfinityChallenge.current;
-      if (!canCrunch || Tabs.current.name !== "Dimensions" || (player.break && challenge === undefined)) {
+      if (!canCrunch || Tabs.current !== Tab.dimensions || (player.break && challenge === undefined)) {
         this.bigCrunch = false;
         this.smallCrunch = false;
         return;

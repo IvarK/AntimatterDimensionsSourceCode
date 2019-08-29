@@ -71,13 +71,11 @@ function buyTickSpeed() {
   player.thisInfinityLastBuyTime = player.thisInfinityTime;
   player.secretUnlocks.why++;
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
-    const costScale = new ExponentialCostScaling({
-      baseCost: 1000,
-      baseIncrease: 10,
-      costScale: Player.tickSpeedMultDecrease,
-      scalingCostThreshold: Number.MAX_VALUE
-    });
-    multiplySameCosts(costScale.calculateCost(player.totalTickBought + player.chall9TickspeedPurchaseBumps - 1));
+    multiplySameCosts(
+      Tickspeed.costScale.calculateCost(player.totalTickBought +
+      player.chall9TickspeedPurchaseBumps -
+      1)
+    );
   }
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
   GameUI.update();
@@ -87,7 +85,6 @@ function buyTickSpeed() {
 function buyMaxTickSpeed() {
   if (!canBuyTickSpeed()) return;
   let antimatter = new Decimal(player.antimatter);
-  const tickSpeedMultDecrease = Player.tickSpeedMultDecrease;
   let totalTickBought = player.totalTickBought;
   const purchaseBumps = player.chall9TickspeedPurchaseBumps;
   function flushValues() {
@@ -96,12 +93,7 @@ function buyMaxTickSpeed() {
   }
   const inCostScalingChallenge = NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning;
   const tickspeedMultDecreaseMaxed = BreakInfinityUpgrade.tickspeedCostMult.isMaxed;
-  const costScale = new ExponentialCostScaling({
-    baseCost: 1000,
-    baseIncrease: 10,
-    costScale: tickSpeedMultDecrease,
-    scalingCostThreshold: Number.MAX_VALUE
-  });
+  const costScale = Tickspeed.costScale;
 
   if (
     costScale.calculateCost(totalTickBought + purchaseBumps).lt(Decimal.MAX_NUMBER) ||
@@ -161,13 +153,16 @@ const Tickspeed = {
   },
 
   get cost() {
-    const costScale = new ExponentialCostScaling({
+    return this.costScale.calculateCost(player.totalTickBought + player.chall9TickspeedPurchaseBumps);
+  },
+
+  get costScale() {
+    return new ExponentialCostScaling({
       baseCost: 1000,
       baseIncrease: 10,
       costScale: Player.tickSpeedMultDecrease,
       scalingCostThreshold: Number.MAX_VALUE
     });
-    return costScale.calculateCost(player.totalTickBought + player.chall9TickspeedPurchaseBumps);
   },
 
   get baseValue() {

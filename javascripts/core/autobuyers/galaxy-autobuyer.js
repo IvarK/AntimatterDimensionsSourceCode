@@ -60,8 +60,8 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends IntervaledAutobuyerSta
   }
 
   tick() {
-    if (Galaxy.requirement.isSatisfied) super.tick();
-    else return;
+    if (!Galaxy.requirement.isSatisfied) return;
+    super.tick();
     if (this.limitGalaxies && player.galaxies >= this.maxGalaxies) return;
     if (this.isBuyMaxActive) {
       maxBuyGalaxies();

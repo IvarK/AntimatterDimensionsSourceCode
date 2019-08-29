@@ -202,7 +202,7 @@ class AchievementTimer {
   
   advance() {
     const addedTime = this.realTime
-      ? Time.unscaledDeltaTime.milliseconds / 1000
+      ? Time.unscaledDeltaTime.totalSeconds
       : Time.deltaTime;
     this.time += addedTime;
   }

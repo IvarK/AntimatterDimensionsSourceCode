@@ -382,7 +382,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["effarig"],
     singleDesc: "All achievement related effects ^{value}",
     genericDesc: "Achievement effects power",
-    effect: (level, strength) => 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 100,
+    effect: (level, strength) => 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 60,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {

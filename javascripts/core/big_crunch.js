@@ -18,9 +18,8 @@ function canCrunch() {
 // Used to prevent galaxies and dimboosts when you can crunch (pre-break and in challenges only)
 function disallowOtherResets() {
   const challenge = NormalChallenge.current || InfinityChallenge.current;
-  if (challenge !== undefined) return true;
   const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
-  if (!player.break && player.antimatter.gte(goal)) return true;
+  if ((!player.break || challenge !== undefined) && player.antimatter.gte(goal)) return true;
 
   return false;
 }

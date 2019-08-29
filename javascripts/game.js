@@ -119,10 +119,10 @@ function playerInfinityUpgradesOnEternity() {
 }
 
 function breakInfinity() {
-  if (!Autobuyer.bigCrunch.hasMaxedInterval) return false;
-  if (InfinityChallenge.isRunning) return false;
-  EventHub.dispatch(player.break ? GameEvent.FIX_INFINITY : GameEvent.BREAK_INFINITY);
+  if (!Autobuyer.bigCrunch.hasMaxedInterval) return;
+  if (InfinityChallenge.isRunning) return;
   player.break = !player.break;
+  EventHub.dispatch(player.break ? GameEvent.BREAK_INFINITY : GameEvent.FIX_INFINITY);
   GameUI.update();
 }
 

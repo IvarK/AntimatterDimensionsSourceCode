@@ -221,7 +221,7 @@ const Ra = {
     }
     if (this.petList.every(pet => pet.level >= 20) && !this.has(RA_LAITELA_UNLOCK)) {
       player.celestials.ra.unlocks.push(24);
-      MatterDimensions(1).amount = new Decimal(1);
+      MatterDimension(1).amount = new Decimal(1);
     }
   },
   has(info) {

@@ -71,11 +71,9 @@ function buyTickSpeed() {
   player.thisInfinityLastBuyTime = player.thisInfinityTime;
   player.secretUnlocks.why++;
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
-    multiplySameCosts(
-      Tickspeed.costScale.calculateCost(player.totalTickBought +
-      player.chall9TickspeedPurchaseBumps -
-      1)
-    );
+    const lastCost =
+      Tickspeed.costScale.calculateCost(player.totalTickBought + player.chall9TickspeedPurchaseBumps - 1);
+    multiplySameCosts(lastCost);
   }
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
   GameUI.update();

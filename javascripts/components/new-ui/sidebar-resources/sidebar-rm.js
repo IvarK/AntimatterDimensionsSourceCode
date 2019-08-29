@@ -15,7 +15,7 @@ Vue.component("sidebar-rm", {
   `<div class="resource">
     <h2 class="o-sidebar-reality-button">{{ shorten(rm, 2, 0) }}</h2>
     <div class="resource-information">
-      <span class="resource-name">Reality Machines</span>
+      <span class="resource-name">Reality {{ "Machine" | pluralize(rm) }}</span>
     </div>
   </div>`
 });

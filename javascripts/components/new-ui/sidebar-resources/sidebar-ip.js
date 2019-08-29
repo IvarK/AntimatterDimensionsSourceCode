@@ -31,7 +31,7 @@ Vue.component("sidebar-ip", {
   `<div class="resource">
     <h2 class="o-sidebar-infinity-button">{{ shorten(ip, 2, 0) }}</h2>
     <div class="resource-information">
-      <span class="resource-name">Infinity {{ "point" | pluralize(ip) }}</span>
+      <span class="resource-name">Infinity {{ "Point" | pluralize(ip) }}</span>
       <span class="resource-gain" v-if="showCrunch">+{{shorten(gained, 2, 0)}}</span>
     </div>
   </div>`

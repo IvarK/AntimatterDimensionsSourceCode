@@ -77,11 +77,8 @@ class IntervaledAutobuyerState extends AutobuyerState {
     if (this.hasMaxedInterval) return;
     if (!Currency.infinityPoints.isAffordable(this.cost)) return;
     Currency.infinityPoints.subtract(this.cost);
+    this.data.cost *= 2;
     this.data.interval = Math.clampMin(this.data.interval * 0.6, 100);
-    if (this.data.interval > 120) {
-      // If your last purchase wont be very strong, dont double the cost
-      this.data.cost *= 2;
-    }
     Achievement(52).tryUnlock();
     Achievement(53).tryUnlock();
     GameUI.update();

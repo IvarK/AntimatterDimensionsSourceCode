@@ -181,29 +181,21 @@ function multiplySameCosts(cost) {
 
   for (let i = 1; i <= 8; ++i) {
     const dimension = NormalDimension(i);
-    if (dimension.cost.e === cost.e) dimension.cost = dimension.cost.times(tierCosts[i])
-
+    if (dimension.cost.e === cost.e) dimension.cost = dimension.cost.times(tierCosts[i]);
   }
-  if (player.tickSpeedCost.e === cost.e) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
+  if (Tickspeed.cost.e === cost.e) player.chall9TickspeedPurchaseBumps++;
 }
 
 
 function multiplyPC5Costs(cost, tier) {
-  if (tier < 5) {
-    for (let i = 1; i < 9; i++) {
-      const dimension = NormalDimension(i);
-      if (dimension.cost.e <= cost.e) {
-        dimension.cost = dimension.cost.times(dimension.costMultiplier);
-        if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(10)
-      }
-    }
-  } else {
-    for (let i = 1; i < 9; i++) {
-      const dimension = NormalDimension(i);
-      if (dimension.cost.e >= cost.e) {
-        dimension.cost = dimension.cost.times(dimension.costMultiplier);
-        if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(10)
-      }
+  for (let i = 1; i < 9; i++) {
+    const dimension = NormalDimension(i);
+    if (tier <= 4 && dimension.cost.e <= cost.e) {
+      dimension.cost = dimension.cost.times(dimension.costMultiplier);
+      if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(10);
+    } else if (tier >= 5 && dimension.cost.e >= cost.e) {
+      dimension.cost = dimension.cost.times(dimension.costMultiplier);
+      if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(10);
     }
   }
 }

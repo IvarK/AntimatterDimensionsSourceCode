@@ -52,9 +52,9 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 5,
-    description: "When buying dimensions 1-4, everything with costs smaller or equal increases. " +
-      "When buying dimensions 5-8, everything with costs bigger or equal increases. " +
-      "When buying tickspeed, everything with the same cost increases.",
+    description: "When buying dimensions 1-4, dimensions with costs smaller or equal increase in cost. " +
+      "When buying dimensions 5-8, dimensions with costs larger or equal increase in cost. " +
+      "When buying tickspeed, dimensions with the same cost increase.",
     goal: new Decimal("1e11111"),
     isQuickResettable: true,
     reward: {

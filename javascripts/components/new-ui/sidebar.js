@@ -3,16 +3,16 @@
 Vue.component("sidebar", {
   data() {
     return {
-      ipVisible: false,
-      epVisible: false,
-      rmVisible: false
+      IPVisible: false,
+      EPVisible: false,
+      RMVisible: false
     };
   },
   methods: {
     update() {
-      this.ipVisible = player.infinitied.gt(0);
-      this.epVisible = player.eternities.gt(0);
-      this.rmVisible = player.realities > 0;
+      this.IPVisible = PlayerProgress.infinityUnlocked();
+      this.EPVisible = PlayerProgress.eternityUnlocked();
+      this.RMVisible = PlayerProgress.realityUnlocked();
     }
   },
   computed: {
@@ -31,9 +31,9 @@ Vue.component("sidebar", {
   template:
   `<div class="sidebar">
     <sidebar-am />
-    <sidebar-ip :cond="ipVisible" />
-    <sidebar-ep :cond="epVisible" />
-    <sidebar-rm :cond="rmVisible" />
+    <sidebar-ip v-if="IPVisible" />
+    <sidebar-ep v-if="EPVisible" />
+    <sidebar-rm v-if="RMVisible" />
     <tab-button 
       v-for="tab in tabs"
       :key="tab.name"

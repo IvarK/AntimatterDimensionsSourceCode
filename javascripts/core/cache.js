@@ -117,7 +117,7 @@ const GameCache = {
   totalIPMult: new Lazy(() => totalIPMult()),
 
   achievementPower: new Lazy(() => Decimal.pow(
-    1.5,
+    1.25,
     Array.range(1, 14)
       .map(Achievements.row)
       .countWhere(row => row.every(ach => ach.isEnabled))

@@ -9,8 +9,6 @@ let kongDimMult = 1
 let kongAllDimMult = 1
 let kongEPMult = 1
 
-let until10Setting = true;
-
 function floatText(tier, text) {
   if (!player.options.animations.floatingText) return;
   const floatingText = ui.view.tabs.dimensions.normal.floatingText[tier];
@@ -121,10 +119,10 @@ function playerInfinityUpgradesOnEternity() {
 }
 
 function breakInfinity() {
-  if (!Autobuyer.bigCrunch.hasMaxedInterval) return false;
-  if (InfinityChallenge.isRunning) return false;
-  EventHub.dispatch(player.break ? GameEvent.FIX_INFINITY : GameEvent.BREAK_INFINITY);
+  if (!Autobuyer.bigCrunch.hasMaxedInterval) return;
+  if (InfinityChallenge.isRunning) return;
   player.break = !player.break;
+  EventHub.dispatch(player.break ? GameEvent.BREAK_INFINITY : GameEvent.FIX_INFINITY);
   GameUI.update();
 }
 
@@ -226,16 +224,20 @@ function ratePerMinute(amount, time) {
 }
 
 function averageRun(runs) {
-    let totalTime = runs
-        .map(run => run[0])
-        .reduce(Number.sumReducer);
-    let totalAmount = runs
-        .map(run => run[1])
-        .reduce(Decimal.sumReducer);
-    return [
-        totalTime / runs.length,
-        totalAmount.dividedBy(runs.length)
-    ];
+  const totalTime = runs
+    .map(run => run[0])
+    .reduce(Number.sumReducer);
+  const totalAmount = runs
+    .map(run => run[1])
+    .reduce(Decimal.sumReducer);
+  const realTime = runs
+    .map(run => run[2])
+    .reduce(Number.sumReducer);
+  return [
+    totalTime / runs.length,
+    totalAmount.dividedBy(runs.length),
+    realTime / runs.length
+  ];
 }
 
 function addInfinityTime(time, realTime, ip, infinities) {
@@ -292,7 +294,7 @@ function getEternitiedMilestoneReward(ms) {
 }
 
 function getOfflineEPGain(ms) {
-  if (EternityMilestone.autoEP.isReached) return new Decimal(0);
+  if (!EternityMilestone.autoEP.isReached) return new Decimal(0);
   return player.bestEPminThisEternity.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 
@@ -483,7 +485,9 @@ function getGameSpeedupForDisplay() {
 
 let autobuyerOnGameLoop = true;
 
-// "diff" is in ms.  When unspecified, it just uses the game update rate.
+// "diff" is in ms.  It is only unspecified when it's being called normally and not due to simulating time, in which
+// case it uses the gap between now and the last time the function was called.  This is on average equal to the update
+// rate.
 function gameLoop(diff, options = {}) {
   PerformanceStats.start("Frame Time");
   PerformanceStats.start("Game Update");
@@ -493,17 +497,16 @@ function gameLoop(diff, options = {}) {
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
     : diff;
 
-  player.realTimePlayed += realDiff;
-  player.thisInfinityRealTime += realDiff;
-  player.thisEternityRealTime += realDiff;
-  player.thisRealityRealTime += realDiff;
-
   // Matter dimensions bypass any kind of stored time mechanics
   Laitela.handleMatterDimensionUnlocks();
   matterDimensionLoop(realDiff);
 
   // When storing real time, skip everything else having to do with production once stats are updated
   if (Enslaved.isStoringRealTime) {
+    player.realTimePlayed += realDiff;
+    player.thisInfinityRealTime += realDiff;
+    player.thisEternityRealTime += realDiff;
+    player.thisRealityRealTime += realDiff;
     Enslaved.storeRealTime();
     GameUI.update();
     return;
@@ -518,7 +521,7 @@ function gameLoop(diff, options = {}) {
     Enslaved.useStoredTime(true);
     Enslaved.isReleaseTick = true;
   } else if (!Enslaved.isReleaseTick) {
-    Enslaved.nextTickDiff = player.options.updateRate;
+    Enslaved.nextTickDiff = realDiff;
   }
   if (diff === undefined) {
     diff = Enslaved.nextTickDiff;
@@ -565,6 +568,18 @@ function gameLoop(diff, options = {}) {
     }
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
     Enslaved.isReleaseTick = false;
+
+  // These need to all be done consecutively in order to minimize the chance of a reset occurring between real time
+  // updating and game time updating.  This is only particularly noticeable when game speed is 1 and the player
+  // expects to see identical numbers.
+  player.realTimePlayed += realDiff;
+  player.totalTimePlayed += diff;
+  player.thisInfinityRealTime += realDiff;
+  player.thisInfinityTime += diff;
+  player.thisEternityRealTime += realDiff;
+  player.thisEternity += diff;
+  player.thisRealityRealTime += realDiff;
+  player.thisReality += diff;
     
     DeltaTimeState.update(realDiff, diff);
 
@@ -653,10 +668,6 @@ function gameLoop(diff, options = {}) {
     }
 
     if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
-    player.totalTimePlayed += diff;
-    player.thisInfinityTime += diff;
-    player.thisEternity += diff;
-    player.thisReality += diff;
 
     EternityChallenge(12).tryFail();
 

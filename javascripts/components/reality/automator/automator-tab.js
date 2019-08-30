@@ -36,7 +36,7 @@ Vue.component("automator-tab", {
       <div v-if="automatorUnlocked">
         <div class="c-automator-tab__interval-info">{{ intervalText }}</div>
         <split-pane 
-          :min-percent="20" 
+          :min-percent="40" 
           :default-percent="50" 
           split="vertical" 
           class="_-automator-split-pane-fix" >

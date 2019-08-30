@@ -104,7 +104,7 @@ const Laitela = {
     return Math.min(1, Decimal.pLog10(this.matter) / LOG10_MAX_VALUE);
   },
   get realityReward() {
-    return this.rewardMultiplier(player.celestials.laitela.maxAmGained);
+    return this.rewardMultiplier(player.celestials.laitela.maxAmGained.clampMin(1));
   },
   rewardMultiplier(num) {
     const realityRewardExponent = Math.clamp(Math.log(num.log10() / 1e6), 1, Math.sqrt(num.log10() / 1e7));

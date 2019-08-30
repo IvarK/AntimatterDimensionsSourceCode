@@ -41,17 +41,20 @@ class MatterDimensionState {
 
   get chanceCost() {
     return Decimal.pow(CHANCE_COST_MULT, this.dimension.chanceUpgrades).times(
-      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(CHANCE_START_COST);
+      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(CHANCE_START_COST)
+      .times(Decimal.pow(CHANCE_COST_MULT, Math.max(this.dimension.chanceUpgrades - 15, 0)));
   }
 
   get intervalCost() {
     return Decimal.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades).times(
-      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST);
+      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST)
+      .times(Decimal.pow(INTERVAL_COST_MULT, Math.max(this.dimension.intervalUpgrades - 9, 0)));
   }
 
   get powerCost() {
     return Decimal.pow(POWER_COST_MULT, this.dimension.powerUpgrades).times(
-      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_START_COST);
+      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_START_COST)
+      .times(Decimal.pow(POWER_COST_MULT, Math.max(this.dimension.powerUpgrades - 8, 0)));
   }
 
 
@@ -114,7 +117,7 @@ function getMatterDimensionProduction(tier, ticks) {
   const d = MatterDimension(tier);
   // The multiple ticks act just like more binomial samples
   const produced = binomialDistribution(d.amount.times(ticks), d.chance / 100);
-  return Decimal.round(produced.times(d.power));
+  return produced.times(d.power);
 }
 
 function matterDimensionLoop(realDiff) {

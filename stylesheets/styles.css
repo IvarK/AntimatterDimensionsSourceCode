@@ -6306,7 +6306,7 @@ kbd {
   margin-bottom: 1rem;
 }
 
-.c-matter-dimension-buttons button {
+.o-matter-dimension-button {
   padding: 1rem;
   width: 12rem;
   font-family: Typewriter;

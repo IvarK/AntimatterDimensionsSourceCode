@@ -193,7 +193,7 @@ function multiplyPC5Costs(cost, tier) {
     if (tier <= 4 && dimension.cost.e <= cost.e) {
       dimension.cost = dimension.cost.times(dimension.costMultiplier);
       if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(10);
-    } else if (tier >= 8 && dimension.cost.e >= cost.e) {
+    } else if (tier >= 5 && dimension.cost.e >= cost.e) {
       dimension.cost = dimension.cost.times(dimension.costMultiplier);
       if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(10);
     }

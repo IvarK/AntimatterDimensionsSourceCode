@@ -308,19 +308,22 @@ const BlackHoles = {
    * The only unusual thing is tolerance, which is a bound on
    * Math.abs(evaluationFunction(result) - target).
    */
+  // eslint-disable-next-line max-params
   binarySearch(start, end, evaluationFunction, target, tolerance) {
-    while (true) {
-      const median = (start + end) / 2;
-      const error = evaluationFunction(median) - target;
-      if (Math.abs(error) < tolerance) {
-        return median;
-      }
+    let middle;
+    for (let iter = 0; iter < 100; ++iter) {
+      middle = (start + end) / 2;
+      const error = evaluationFunction(middle) - target;
+      if (Math.abs(error) < tolerance) break;
       if (error < 0) {
-        start = median;
+        // eslint-disable-next-line no-param-reassign
+        start = middle;
       } else {
-        end = median;
+        // eslint-disable-next-line no-param-reassign
+        end = middle;
       }
     }
+    return middle;
   },
 
   /**

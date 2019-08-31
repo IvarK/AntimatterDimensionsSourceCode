@@ -111,14 +111,15 @@ const Achievements = {
 
   autoAchieveUpdate(diff) {
     if (player.realities === 0) return;
-    if (player.reality.disableAutoAchieve) return;
     if (Achievements.rows(1, 13).every(row => row.every(a => a.isUnlocked))) return;
-    player.reality.achTimer += diff;
 
     const disabled = Achievements.all.filter(a => !a.isEnabled);    
     while (disabled[0].row <= GameCache.achSkipPerkCount.value) {
       disabled.shift().unlock();
     }
+
+    if (player.reality.disableAutoAchieve) return;
+    player.reality.achTimer += diff;
     
     // Don't bother making the disabled list if we don't need it
     if (player.reality.achTimer < this.period) return;

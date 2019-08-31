@@ -121,7 +121,7 @@ const Laitela = {
     return Decimal.floor(Decimal.pow(this.matter.dividedBy(1e8), 0.3));
   },
   get darkEnergyChance() {
-    return this.celestial.higgs.plus(1).log10() / 4000;
+    return this.celestial.higgs.plus(1).log10() / 10000;
   },
 
   annihilate() {
@@ -139,6 +139,7 @@ const Laitela = {
     );
     this.celestial.dimensions[0].amount = new Decimal(1);
     this.celestial.matter = new Decimal(0);
+    this.celestial.annihilated = true;
   }
 
 };

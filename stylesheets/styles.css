@@ -6323,19 +6323,27 @@ kbd {
 }
 
 .l-laitela-unlocks-container {
-  width: 70rem;
-  margin: auto;
+  width: 52rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.l-laitela-mechanics-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .o-laitela-shop-button {
-  width: 30rem;
+  width: 22rem;
   padding: 1rem;
   background: white;
   border: .2rem solid black;
   border-radius: .5rem;
   margin-left: 1rem;
-  margin-top: 2rem;
+  margin-bottom: 2rem;
   font-family: Typewriter;
+  min-height: 15rem;
 }
 
 .o-laitela-shop-button--available {
@@ -6390,9 +6398,10 @@ kbd {
   border: .2rem solid black;
   border-radius: .5rem;
   font-family: Typewriter, serif;
-  margin: 2rem;
+  margin: 2rem auto;
   cursor: pointer;
   transition-duration: 0.3s;
+  display: block
 }
 
 .c-laitela-annihilation-button h2 {

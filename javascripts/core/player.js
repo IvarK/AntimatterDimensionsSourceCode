@@ -421,9 +421,11 @@ let player = {
         timeSinceLastUpdate: 0
       })),
       maxAmGained: new Decimal(1),
+      annihilated: false,
       higgs: new Decimal(0),
       upgrades: {},
-      darkEnergy: 0
+      darkEnergy: 0,
+      darkEnergyUpgrades: new Set()
     }
   },
   autoEcIsOn: true,

@@ -68,3 +68,42 @@ const AnnihilationUpgrade = (function() {
 }());
 
 AnnihilationUpgrade.all = Object.values(AnnihilationUpgrade);
+
+class DarkEnergyUpgradeState extends SetPurchasableMechanicState {
+
+  get set() {
+    return player.celestials.laitela.darkEnergyUpgrades;
+  }
+
+  get currency() {
+    return player.celestials.laitela.darkEnergy;
+  }
+
+  set currency(value) {
+    player.celestials.laitela.darkEnergy = value;
+  }
+
+  get description() {
+    return this.config.description;
+  }
+
+  get canBeBought() {
+    return this.currency > this.cost;
+  }
+
+  get effect() {
+    return this.config.effect();
+  }
+
+  get formattedEffect() {
+    if (this.config.effectFormat === undefined) return `${shorten(this.effect, 2, 2)}x`;
+
+    return this.config.effectFormat(this.effect);
+  }
+
+  purchase() {
+    if (!this.canBeBought) return;
+    this.currency -= this.cost;
+    this.isBought(true);
+  }
+}

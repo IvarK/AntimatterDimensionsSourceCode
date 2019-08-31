@@ -123,8 +123,11 @@ function getMatterDimensionProduction(tier, ticks) {
 function getDarkEnergyProduction(tier, ticks) {
   const d = MatterDimension(tier);
   // The multiple ticks act just like more binomial samples
-  const produced = binomialDistribution(d.amount.log10() * ticks.toNumber(), Laitela.darkEnergyChance);
-  return produced * AnnihilationUpgrade.darkEnergyMult.effect;
+  const produced = binomialDistribution(ticks.times(d.amount.log10()), Laitela.darkEnergyChance);
+
+  // Idk why but for some reason binomialDistribution sometimes returns Decimal and sometimes a number.
+  if (typeof produced === "number") return produced * AnnihilationUpgrade.darkEnergyMult.effect;
+  return produced.times(AnnihilationUpgrade.darkEnergyMult.effect).toNumber();
 }
 
 function matterDimensionLoop(realDiff) {

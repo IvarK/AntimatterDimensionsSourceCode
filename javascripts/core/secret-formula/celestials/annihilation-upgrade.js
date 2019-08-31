@@ -50,3 +50,18 @@ GameDatabase.annihilationUpgrades = {
     effectFormat: x => `${((1 - x) * 100).toFixed(2)}%`
   }
 };
+
+GameDatabase.darkEnergyUpgrade = [
+  {
+    id: 1,
+    description: "Multiply Dark Matter Dimension production based on Dark Energy",
+    cost: 30,
+    effect: () => Math.log10(player.celestials.laitela.darkEnergy + 1) * 1.5
+  },
+  {
+    id: 2,
+    description: "Divide all Higgs Boson upgrade costs by 3",
+    cost: 70,
+    effect: () => 3
+  }
+];

@@ -12,7 +12,8 @@ Vue.component("laitela-tab", {
       higgsGain: new Decimal(0),
       showReset: false,
       darkEnergyChance: 0,
-      darkEnergy: 0
+      darkEnergy: 0,
+      annihilated: false,
     };
   },
   methods: {
@@ -25,7 +26,8 @@ Vue.component("laitela-tab", {
       this.activeDimensions = Array.range(0, 4).filter(i => MatterDimension(i + 1).amount.neq(0));
       this.higgs.copyFrom(player.celestials.laitela.higgs);
       this.higgsGain.copyFrom(Laitela.higgsGain);
-      this.showReset = this.higgs.gt(0) || this.higgsGain.gt(0);
+      this.annihilated = player.celestials.laitela.annihilated;
+      this.showReset = this.annihilated || this.higgsGain.gt(0);
       this.darkEnergyChance = Laitela.darkEnergyChance;
       this.darkEnergy = player.celestials.laitela.darkEnergy;
     },
@@ -68,14 +70,6 @@ Vue.component("laitela-tab", {
         Multiply all dark matter dimensions based on highest AM reached, 
         Currently: <b>{{ shorten(realityReward, 2, 3)}}x</b>
       </button>
-      <div class="o-laitela-matter-amount">You have {{ shorten(matter, 2, 0) }} Dark Matter</div>
-      <div>Dark Matter causes your dimension cost multipliers to increase {{ matterEffectPercentage }} slower</div>
-      <matter-dimension-row
-        v-for="i in activeDimensions"
-        :key="i"
-        :dimension="dimensions[i]"
-      />
-      <div>{{ nextUnlock }}</div>
       <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
         <h2>Annihilation</h2>
         <p>
@@ -83,19 +77,30 @@ Vue.component("laitela-tab", {
           Higgs {{"Boson" | pluralize(higgsGain)}}
         </p>
       </button>
-      <div>You have {{ shorten(higgs, 2, 0)}} Higgs {{"Boson" | pluralize(higgs)}}</div>
-      <div>Which cause you to have a {{ (darkEnergyChance * 100).toFixed(2) }}% chance of generating dark energy each dimension interval</div>
-      <div>You have {{ shorten(darkEnergy, 2, 0)}} Dark Energy</div>
-      <div class="l-laitela-unlocks-container" v-if="showReset">
-        <button 
-          v-for="upgrade in upgrades" 
-          :key="upgrade.id" 
-          class="o-laitela-shop-button"
-          :class="{'o-laitela-shop-button--available': upgrade.canBeBought }"
-          @click="upgrade.purchase()"> 
-            {{ upgrade.description }} <br/> Costs: <b>{{ shorten(upgrade.cost, 2, 0) }}</b> Higgs Bosons 
-            <br/>Currently: {{ upgrade.formattedEffect }}, Next: {{ upgrade.formattedNextEffect }}
-        </button>
+      <div class="o-laitela-matter-amount">You have {{ shorten(matter, 2, 0) }} Dark Matter</div>
+      <div v-if="annihilated">You have {{ shorten(higgs, 2, 0)}} Higgs {{"Boson" | pluralize(higgs)}}</div>
+      <div v-if="higgs.gt(0)">Which cause you to have a {{ (darkEnergyChance * 100).toFixed(2) }}% chance of generating dark energy each dimension interval</div>
+      <div v-if="darkEnergy > 0">You have {{ shorten(darkEnergy, 2, 0)}} Dark Energy</div>
+      <div class="l-laitela-mechanics-container">
+        <div>
+          <matter-dimension-row
+            v-for="i in activeDimensions"
+            :key="i"
+            :dimension="dimensions[i]"
+            />
+          <div>{{ nextUnlock }}</div>
+        </div>
+        <div class="l-laitela-unlocks-container" v-if="showReset">
+          <button 
+            v-for="upgrade in upgrades" 
+            :key="upgrade.id" 
+            class="o-laitela-shop-button"
+            :class="{'o-laitela-shop-button--available': upgrade.canBeBought }"
+            @click="upgrade.purchase()"> 
+              {{ upgrade.description }} <br/> Costs: <b>{{ shorten(upgrade.cost, 2, 0) }}</b> Higgs Bosons 
+              <br/>Currently: {{ upgrade.formattedEffect }}, Next: {{ upgrade.formattedNextEffect }}
+          </button>
+        </div>
       </div>
     </div>`
 });

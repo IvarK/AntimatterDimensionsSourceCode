@@ -116,7 +116,7 @@ Vue.component("new-dimensions-tab", {
     </div>
     <new-tickspeed-row></new-tickspeed-row>
     <div class="dimensions-container">
-      <new-dimension-row 
+      <new-dimension-row
         v-for="tier in 8"
         :key="tier"
         :tier="tier"></new-dimension-row>
@@ -126,7 +126,7 @@ Vue.component("new-dimensions-tab", {
       <primary-button
           v-if="isQuickResetAvailable"
           class="o-primary-btn--quick-reset"
-          onclick="softReset(0)"
+          onclick="softReset(-1, true, true)"
         >Lose a reset, returning to the start of the reset</primary-button>
       <new-galaxy-row></new-galaxy-row>
     </div>

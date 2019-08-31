@@ -97,10 +97,10 @@ function applyDimensionBoost() {
     }
 }
 
-function softReset(bulk, forcedNDReset = false) {
+function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
     if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
     EventHub.dispatch(GameEvent.DIMBOOST_BEFORE, bulk);
-    player.dimensionBoosts += bulk;
+    player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
 
     /**
      * All reset stuff are in these functions now. (Hope this works)
@@ -115,7 +115,7 @@ function softReset(bulk, forcedNDReset = false) {
     resetTickspeed();
     const currentAntimatter = player.antimatter;
     resetAntimatter();
-    if (Achievement(111).isEnabled || Perk.dimboostNonReset.isBought) {
+    if (!forcedAMReset && (Achievement(111).isEnabled || Perk.dimboostNonReset.isBought)) {
         player.antimatter = player.antimatter.max(currentAntimatter);
     }
     EventHub.dispatch(GameEvent.DIMBOOST_AFTER, bulk);

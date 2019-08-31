@@ -10,7 +10,11 @@ class AnnihilationUpgradeState extends RebuyableMechanicState {
   }
   
   get cost() {
-    return Decimal.pow(this.config.costMult, this.boughtAmount).times(this.config.startCost);
+    const base = Decimal.pow(this.config.costMult, this.boughtAmount).times(this.config.startCost);
+    if (DarkEnergyUpgrade.annihilationUpgradeCostReduction.isBought) {
+      return base.dividedBy(DarkEnergyUpgrade.annihilationUpgradeCostReduction.effect);
+    }
+    return base;
   }
 
   get description() {
@@ -88,6 +92,7 @@ class DarkEnergyUpgradeState extends SetPurchasableMechanicState {
   }
 
   get canBeBought() {
+    if (this.isBought) return false;
     return this.currency > this.cost;
   }
 
@@ -107,3 +112,15 @@ class DarkEnergyUpgradeState extends SetPurchasableMechanicState {
     this.isBought(true);
   }
 }
+
+const DarkEnergyUpgrade = (function() {
+  const db = GameDatabase.darkEnergyUpgrade;
+  return {
+    matterDimensionMult: new DarkEnergyUpgradeState(db.matterDimensionMult),
+    annihilationUpgradeCostReduction: new DarkEnergyUpgradeState(db.annihilationUpgradeCostReduction),
+    bosonMult: new DarkEnergyUpgradeState(db.bosonMult),
+    realityPenaltyReduction: new DarkEnergyUpgradeState(db.realityPenaltyReduction),
+  };
+}());
+
+DarkEnergyUpgrade.all = Object.values(DarkEnergyUpgrade);

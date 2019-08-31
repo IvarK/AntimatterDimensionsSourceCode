@@ -51,17 +51,33 @@ GameDatabase.annihilationUpgrades = {
   }
 };
 
-GameDatabase.darkEnergyUpgrade = [
-  {
+GameDatabase.darkEnergyUpgrade = {
+  matterDimensionMult: {
     id: 1,
     description: "Multiply Dark Matter Dimension production based on Dark Energy",
     cost: 30,
-    effect: () => Math.log10(player.celestials.laitela.darkEnergy + 1) * 1.5
+    effect: () => Math.log10(player.celestials.laitela.darkEnergy + 1) * 1.5 + 1,
+    effectFormat: x => `Currently: ${shorten(x, 2, 2)}x`
   },
-  {
+  annihilationUpgradeCostReduction: {
     id: 2,
     description: "Divide all Higgs Boson upgrade costs by 3",
     cost: 70,
-    effect: () => 3
+    effect: () => 3,
+    effectFormat: () => ""
+  },
+  bosonMult: {
+    id: 3,
+    description: "Gain more Higgs Bosons based on current amount",
+    cost: 400,
+    effect: () => player.celestials.laitela.higgs.plus(1).log10() * 1.5 + 1,
+    effectFormat: x => `Currently: ${shorten(x, 2, 2)}x`
+  },
+  realityPenaltyReduction: {
+    id: 3,
+    description: "Reduce the Laitela Reality penalty",
+    cost: 400,
+    effect: () => 3,
+    effectFormat: () => ""
   }
-];
+};

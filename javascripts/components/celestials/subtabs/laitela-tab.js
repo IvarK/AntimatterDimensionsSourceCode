@@ -57,7 +57,8 @@ Vue.component("laitela-tab", {
     dimensions: () => MatterDimensionState.list,
     runUnlockThresholds: () => laitelaRunUnlockThresholds,
     unlocksInfo: () => LAITELA_UNLOCKS,
-    upgrades: () => AnnihilationUpgrade.all
+    upgrades: () => AnnihilationUpgrade.all,
+    darkEnergyUpgrades: () => DarkEnergyUpgrade.all
   },
   template:
     `<div class="l-laitela-celestial-tab">
@@ -107,13 +108,13 @@ Vue.component("laitela-tab", {
         </div>
         <div class="l-laitela-dark-energy-upgrades">
           <button 
-            v-for="upgrade in upgrades" 
+            v-for="upgrade in darkEnergyUpgrades" 
             :key="upgrade.id" 
             class="o-laitela-shop-button--dark-energy"
             :class="{'o-laitela-shop-button--available': upgrade.canBeBought }"
             @click="upgrade.purchase()"> 
-              {{ upgrade.description }} <br/> Costs: <b>{{ shorten(upgrade.cost, 2, 0) }}</b> Higgs Bosons 
-              <br/>Currently: {{ upgrade.formattedEffect }}, Next: {{ upgrade.formattedNextEffect }}
+              {{ upgrade.description }} <br/> Costs: <b>{{ shorten(upgrade.cost, 2, 0) }}</b> Dark Energy
+              <br/>{{ upgrade.formattedEffect }}
           </button>
         </div>
       </div>

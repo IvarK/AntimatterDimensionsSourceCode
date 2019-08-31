@@ -116,8 +116,9 @@ function MatterDimension(tier) {
 function getMatterDimensionProduction(tier, ticks) {
   const d = MatterDimension(tier);
   // The multiple ticks act just like more binomial samples
-  const produced = binomialDistribution(d.amount.times(ticks), (d.chance / 100));
-  return produced.times(d.power);
+  const produced = binomialDistribution(d.amount.times(ticks), (d.chance / 100)).times(d.power);
+  if (DarkEnergyUpgrade.matterDimensionMult.isBought) return produced.times(DarkEnergyUpgrade.matterDimensionMult.effect);
+  return produced;
 }
 
 function getDarkEnergyProduction(tier, ticks) {

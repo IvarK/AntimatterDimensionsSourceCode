@@ -100,7 +100,11 @@ const Laitela = {
     return 1 + Decimal.pLog10(this.matter) / 5000;
   },
   get dimMultNerf() {
-    return Math.min(1, Decimal.pLog10(this.matter) / LOG10_MAX_VALUE);
+    const base = Math.min(1, Decimal.pLog10(this.matter) / LOG10_MAX_VALUE);
+    if (DarkEnergyUpgrade.realityPenaltyReduction.isBought) {
+      return base * DarkEnergyUpgrade.realityPenaltyReduction.isBought;
+    }
+    return base;
   },
   get realityReward() {
     return this.rewardMultiplier(this.celestial.maxAmGained.clampMin(1));

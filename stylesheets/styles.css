@@ -6274,7 +6274,7 @@ kbd {
 /* #startregion laitela tab*/
 
 .o-laitela-run-button {
-  width: 25rem;
+  width: 50%;
   padding: 2rem;
   border-radius: .5rem;
   border: .2rem solid black;
@@ -6282,7 +6282,6 @@ kbd {
   font-family: Typewriter;
   font-size: 1.2rem;
   cursor: pointer;
-  margin-bottom: 2rem;
 }
 
 .o-laitela-matter-amount {
@@ -6334,6 +6333,22 @@ kbd {
   justify-content: center;
 }
 
+.l-laitela-mechanics-lower {
+  display: flex;
+  justify-content: center;
+}
+
+.l-laitela-buttons-container {
+  display: flex;
+  width: 52rem;
+}
+
+.l-laitela-dark-energy-upgrades {
+  width: 52rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .o-laitela-shop-button {
   width: 22rem;
   padding: 1rem;
@@ -6343,7 +6358,25 @@ kbd {
   margin-left: 1rem;
   margin-bottom: 2rem;
   font-family: Typewriter;
-  min-height: 15rem;
+  min-height: 17.8rem;
+}
+
+@keyframes darkEnergyGlow {
+  0% { box-shadow: 0px 0px 0px rgb(53, 10, 53); }
+  50% { box-shadow: 0px 0px 5px rgb(53, 10, 53); }
+  100% { box-shadow: 0px 0px 0px rgb(53, 10, 53); }
+}
+
+.o-laitela-shop-button--dark-energy {
+  width: 22rem;
+  padding: 1rem;
+  background: white;
+  border: .2rem solid black;
+  border-radius: .5rem;
+  margin-left: 1rem;
+  margin-bottom: 2rem;
+  font-family: Typewriter;
+  animation: 5s darkEnergyGlow infinite;
 }
 
 .o-laitela-shop-button--available {
@@ -6393,12 +6426,11 @@ kbd {
 
 .c-laitela-annihilation-button {
   padding: 2rem;
-  width: 30rem;
+  width: 50%;
   background: white;
   border: .2rem solid black;
   border-radius: .5rem;
   font-family: Typewriter, serif;
-  margin: 2rem auto;
   cursor: pointer;
   transition-duration: 0.3s;
   display: block

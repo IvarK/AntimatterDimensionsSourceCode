@@ -61,22 +61,6 @@ Vue.component("laitela-tab", {
   },
   template:
     `<div class="l-laitela-celestial-tab">
-      <button class="o-laitela-run-button" @click="startRun">
-        <b>Start Lai'tela's Reality</b>
-        <div class="o-laitela-run-button__icon">ᛝ</div>
-        Tickspeed is disabled and all dimension multipliers are decreased based on matter, 
-        currently <b>x^{{ shorten(dimMultNerf, 3, 4) }}</b>
-        <br>
-        Multiply all dark matter dimensions based on highest AM reached, 
-        Currently: <b>{{ shorten(realityReward, 2, 3)}}x</b>
-      </button>
-      <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
-        <h2>Annihilation</h2>
-        <p>
-          Resets your dark matter dimensions and Dark Matter, but gain <b>{{ shorten(higgsGain, 2, 0) }}</b> 
-          Higgs {{"Boson" | pluralize(higgsGain)}}
-        </p>
-      </button>
       <div class="o-laitela-matter-amount">You have {{ shorten(matter, 2, 0) }} Dark Matter</div>
       <div v-if="annihilated">You have {{ shorten(higgs, 2, 0)}} Higgs {{"Boson" | pluralize(higgs)}}</div>
       <div v-if="higgs.gt(0)">Which cause you to have a {{ (darkEnergyChance * 100).toFixed(2) }}% chance of generating dark energy each dimension interval</div>
@@ -95,6 +79,37 @@ Vue.component("laitela-tab", {
             v-for="upgrade in upgrades" 
             :key="upgrade.id" 
             class="o-laitela-shop-button"
+            :class="{'o-laitela-shop-button--available': upgrade.canBeBought }"
+            @click="upgrade.purchase()"> 
+              {{ upgrade.description }} <br/> Costs: <b>{{ shorten(upgrade.cost, 2, 0) }}</b> Higgs Bosons 
+              <br/>Currently: {{ upgrade.formattedEffect }}, Next: {{ upgrade.formattedNextEffect }}
+          </button>
+        </div>
+      </div>
+      <div class="l-laitela-mechanics-lower">
+        <div class="l-laitela-buttons-container">
+          <button class="o-laitela-run-button" @click="startRun">
+            <b>Start Lai'tela's Reality</b>
+            <div class="o-laitela-run-button__icon">ᛝ</div>
+            Tickspeed is disabled and all dimension multipliers are decreased based on matter, 
+            currently <b>x^{{ shorten(dimMultNerf, 3, 4) }}</b>
+            <br>
+            Multiply all dark matter dimensions based on highest AM reached, 
+            Currently: <b>{{ shorten(realityReward, 2, 3)}}x</b>
+          </button>
+          <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
+            <h2>Annihilation</h2>
+            <p>
+              Resets your dark matter dimensions and Dark Matter, but gain <b>{{ shorten(higgsGain, 2, 0) }}</b> 
+              Higgs {{"Boson" | pluralize(higgsGain)}}
+            </p>
+          </button>
+        </div>
+        <div class="l-laitela-dark-energy-upgrades">
+          <button 
+            v-for="upgrade in upgrades" 
+            :key="upgrade.id" 
+            class="o-laitela-shop-button--dark-energy"
             :class="{'o-laitela-shop-button--available': upgrade.canBeBought }"
             @click="upgrade.purchase()"> 
               {{ upgrade.description }} <br/> Costs: <b>{{ shorten(upgrade.cost, 2, 0) }}</b> Higgs Bosons 

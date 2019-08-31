@@ -5,7 +5,6 @@ function bigCrunchAnimation() {
   setTimeout(() => {
       document.body.style.animation = "";
   }, 2000);
-  setTimeout(bigCrunchReset(), 1000);
 }
 
 function canCrunch() {
@@ -46,6 +45,7 @@ function bigCrunchResetRequest(disableAnimation = false) {
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   if (earlyGame && !disableAnimation && player.options.animations.bigCrunch) {
     bigCrunchAnimation();
+    setTimeout(bigCrunchReset(), 1000);
   } else {
     bigCrunchReset();
   }

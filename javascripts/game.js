@@ -423,6 +423,9 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
 
   if (effects.includes(GameSpeedEffect.FIXEDSPEED)) {
     if (TimeCompression.isActive) {
+      if (DarkEnergyUpgrade.compressionBoost.isBought) {
+        return DarkEnergyUpgrade.compressionBoost.effect * 1e-100;
+      }
       return 1e-100;
     }
     if (EternityChallenge(12).isRunning) {

@@ -80,7 +80,8 @@ class AlchemyReaction {
   // Reactions are per-10 products because that avoids decimals in the UI for reagents, but efficiency losses can make
   // products have decimal coefficients.
   get baseProduction() {
-    return this.isReality ? 1 : 5 * Effects.sum(GlyphSacrifice.reality);
+    const multiplier = DarkEnergyUpgrade.reactionPower.isBought ? DarkEnergyUpgrade.reactionPower.effect : 1;
+    return this.isReality ? multiplier : 5 * Effects.sum(GlyphSacrifice.reality) * multiplier;
   }
 
   get reactionEfficiency() {

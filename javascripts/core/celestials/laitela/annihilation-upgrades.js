@@ -120,6 +120,8 @@ const DarkEnergyUpgrade = (function() {
     annihilationUpgradeCostReduction: new DarkEnergyUpgradeState(db.annihilationUpgradeCostReduction),
     bosonMult: new DarkEnergyUpgradeState(db.bosonMult),
     realityPenaltyReduction: new DarkEnergyUpgradeState(db.realityPenaltyReduction),
+    reactionPower: new DarkEnergyUpgradeState(db.reactionPower),
+    compressionBoost: new DarkEnergyUpgradeState(db.compressionBoost),
   };
 }());
 

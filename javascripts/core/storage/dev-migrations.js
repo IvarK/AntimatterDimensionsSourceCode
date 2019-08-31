@@ -434,7 +434,12 @@ GameStorage.devMigrations = {
       delete player.celestials.teresa.dtBulk;
     },
     GameStorage.migrations.migrateConfirmations,
-    GameStorage.migrations.removeOtherTickspeedProps
+    GameStorage.migrations.removeOtherTickspeedProps,
+    player => {
+      // These were accidentally added back in due to a bad merge conflict resolution
+      delete player.resets;
+      delete player.tickDecrease;
+    }
   ],
 
   patch(player) {

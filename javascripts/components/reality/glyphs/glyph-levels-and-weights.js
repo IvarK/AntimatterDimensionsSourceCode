@@ -25,7 +25,7 @@ Vue.component("glyph-levels-and-weights", {
   },
   computed: {
     gridStyle() {
-      const columns = this.adjustVisible ? "7.5em 1em 7em 20rem 1rem" : "auto 1em 6em";
+      const columns = this.adjustVisible ? "7.5em 1.2em 7em 20rem 1rem" : "auto 1.2em 6em";
       return {
         "-ms-grid-columns": columns,
         "grid-template-columns": columns,

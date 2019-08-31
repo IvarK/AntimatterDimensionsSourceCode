@@ -61,7 +61,7 @@ Vue.component("glyph-levels-and-weights", {
         this.perkVisible);
     },
     formatPerkShop() {
-      return (100 * (this.factors.perkShop - 1)).toFixed(1) + "%";
+      return `${(100 * (this.factors.perkShop - 1)).toFixed(1)}%`;
     },
     sliderProps() {
       return {
@@ -108,8 +108,9 @@ Vue.component("glyph-levels-and-weights", {
       _GLYPH_WEIGHT_FIELDS.forEach(e => this.weights[e] = player.celestials.effarig.glyphWeights[e]);
     },
     formatFactor(x) {
-      // Not applied to + perks since it's always whole
-      return x.toPrecision(5);
+      // Not applied to + perks since it's always whole; for factors < 1, the slice makes the
+      // factor be fixed point.
+      return x.toPrecision(5).slice(0, 6);
     },
     makeRowStyle(r) {
       return {

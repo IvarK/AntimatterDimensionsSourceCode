@@ -420,7 +420,9 @@ let player = {
         powerUpgrades: 0,
         timeSinceLastUpdate: 0
       })),
-      maxAmGained: new Decimal(1)
+      maxAmGained: new Decimal(1),
+      higgs: new Decimal(0),
+      upgrades: {}
     }
   },
   autoEcIsOn: true,

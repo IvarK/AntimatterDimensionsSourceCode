@@ -29,7 +29,7 @@ class MatterDimensionState {
 
   // In milliseconds
   get interval() {
-    return Decimal.pow(0.89, this.dimension.intervalUpgrades)
+    return Decimal.pow(0.89 - AnnihilationUpgrade.intervalPower.effect, this.dimension.intervalUpgrades)
       .times(Decimal.pow(2, this._tier))
       .times(1000)
       .divide(Effects.max(1, CompressionUpgrade.matterBoost));
@@ -40,21 +40,21 @@ class MatterDimensionState {
   }
 
   get chanceCost() {
-    return Decimal.pow(CHANCE_COST_MULT, this.dimension.chanceUpgrades).times(
-      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(CHANCE_START_COST)
-      .times(Decimal.pow(CHANCE_COST_MULT, Math.max(this.dimension.chanceUpgrades - 15, 0)));
+    return Decimal.pow(CHANCE_COST_MULT, 
+      this.dimension.chanceUpgrades + Math.max((this.dimension.chanceUpgrades - 15) * 2, 0))
+      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(CHANCE_START_COST);
   }
 
   get intervalCost() {
-    return Decimal.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades).times(
-      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST)
-      .times(Decimal.pow(INTERVAL_COST_MULT, Math.max(this.dimension.intervalUpgrades - 9, 0)));
+    return Decimal.pow(INTERVAL_COST_MULT, 
+      this.dimension.intervalUpgrades + Math.max((this.dimension.intervalUpgrades - 9) * 2, 0))
+      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST);
   }
 
   get powerCost() {
-    return Decimal.pow(POWER_COST_MULT, this.dimension.powerUpgrades).times(
-      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_START_COST)
-      .times(Decimal.pow(POWER_COST_MULT, Math.max(this.dimension.powerUpgrades - 8, 0)));
+    return Decimal.pow(POWER_COST_MULT, 
+      this.dimension.powerUpgrades + Math.max((this.dimension.powerUpgrades - 8) * 2, 0))
+      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_START_COST);
   }
 
 
@@ -116,7 +116,7 @@ function MatterDimension(tier) {
 function getMatterDimensionProduction(tier, ticks) {
   const d = MatterDimension(tier);
   // The multiple ticks act just like more binomial samples
-  const produced = binomialDistribution(d.amount.times(ticks), d.chance / 100);
+  const produced = binomialDistribution(d.amount.times(ticks), (d.chance / 100));
   return produced.times(d.power);
 }
 

@@ -42,6 +42,11 @@ const COST_MULT_PER_TIER = 100;
 const laitelaMatterUnlockThresholds = [1, 2, 3].map(x => 10 * Math.pow(COST_MULT_PER_TIER, x));
 
 const Laitela = {
+  
+  get celestial() {
+    return player.celestials.laitela;
+  },
+
   handleMatterDimensionUnlocks() {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);
@@ -53,7 +58,7 @@ const Laitela = {
   },
 
   has(info) {
-    return player.celestials.laitela.unlocks.includes(info.id);
+    return this.celestial.unlocks.includes(info.id);
   },
   canBuyUnlock(info) {
     if (this.matter.lt(info.price)) return false;
@@ -62,14 +67,14 @@ const Laitela = {
   buyUnlock(info) {
     if (!this.canBuyUnlock) return false;
     this.matter = this.matter.minus(info.price);
-    player.celestials.laitela.unlocks.push(info.id);
+    this.celestial.unlocks.push(info.id);
     return true;
   },
   startRun() {
-    player.celestials.laitela.run = startRealityOver() || player.celestials.laitela.run;
+    this.celestial.run = startRealityOver() || this.celestial.run;
   },
   get isRunning() {
-    return player.celestials.laitela.run;
+    return this.celestial.run;
   },
   get nextMatterDimensionThreshold() {
     for (let i = 1; i <= 3; i++) {
@@ -88,9 +93,6 @@ const Laitela = {
   get matterEffectPercentage() {
     return `${((1 - this.matterEffectToDimensionMultDecrease) * 100).toFixed(2)}%`;
   },
-  get rmRewardPowEffect() {
-    return 1 + Math.max(0, Math.log(Decimal.pLog10(player.reality.realityMachines) / LOG10_MAX_VALUE));
-  },
   get idConversionEffect() {
     return Math.sqrt(Decimal.pLog10(this.matter)) / 50;
   },
@@ -104,20 +106,42 @@ const Laitela = {
     return Math.min(1, Decimal.pLog10(this.matter) / LOG10_MAX_VALUE);
   },
   get realityReward() {
-    return this.rewardMultiplier(player.celestials.laitela.maxAmGained.clampMin(1));
+    return this.rewardMultiplier(this.celestial.maxAmGained.clampMin(1));
   },
   rewardMultiplier(num) {
     const realityRewardExponent = Math.clamp(Math.log(num.log10() / 1e6), 1, Math.sqrt(num.log10() / 1e7));
     let matterDimMult = Math.pow(2, realityRewardExponent);
-    if (this.has(LAITELA_UNLOCKS.RM_POW)) {
-      matterDimMult = Math.pow(matterDimMult, this.rmRewardPowEffect);
-    }
+    matterDimMult = Math.pow(matterDimMult, AnnihilationUpgrade.realityReward.effect);
     return matterDimMult;
   },
   get matter() {
-    return player.celestials.laitela.matter;
+    return this.celestial.matter;
   },
   set matter(x) {
-    player.celestials.laitela.matter = x;
+    this.celestial.matter = x;
+  },
+  get higgsGain() {
+    return Decimal.floor(Decimal.pow(this.matter.dividedBy(1e8), 0.3));
+  },
+  get darkEnergyChance() {
+    return this.celestial.higgs.plus(1).log10() / 1000;
+  },
+
+  annihilate() {
+    this.celestial.higgs = this.celestial.higgs.plus(this.higgsGain);
+    this.celestial.dimensions = this.celestial.dimensions.map(
+      () => (
+        { 
+          amount: new Decimal(0),
+          chanceUpgrades: 0,
+          intervalUpgrades: 0,
+          powerUpgrades: 0,
+          timeSinceLastUpdate: 0
+        }
+      )
+    );
+    this.celestial.dimensions[0].amount = new Decimal(1);
+    this.celestial.matter = new Decimal(0);
   }
+
 };

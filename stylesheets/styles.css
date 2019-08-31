@@ -6277,8 +6277,8 @@ kbd {
   width: 25rem;
   padding: 2rem;
   border-radius: .5rem;
-  border: .2rem solid indianred;
-  background: #f1857f;
+  border: .2rem solid black;
+  background: white;
   font-family: Typewriter;
   font-size: 1.2rem;
   cursor: pointer;
@@ -6293,7 +6293,7 @@ kbd {
 .c-matter-dimension-container {
   border: .2rem solid gainsboro;
   background: whitesmoke;
-  width: 45rem;
+  width: 52rem;
   margin: auto;
   padding: 2rem;
   border-radius: .5rem;
@@ -6308,15 +6308,17 @@ kbd {
 
 .o-matter-dimension-button {
   padding: 1rem;
-  width: 12rem;
+  width: 15rem;
   font-family: Typewriter;
-  background: antiquewhite;
+  background: white;
   border: .1rem solid grey;
   border-radius: .5rem;
+  transition-duration: 0.12s;
 }
 
 .o-matter-dimension-button--available {
-  background: aquamarine;
+  background: black;
+  color: white;
   cursor: pointer;
 }
 
@@ -6328,8 +6330,8 @@ kbd {
 .o-laitela-shop-button {
   width: 30rem;
   padding: 1rem;
-  background: antiquewhite;
-  border: .1rem solid gray;
+  background: white;
+  border: .2rem solid black;
   border-radius: .5rem;
   margin-left: 1rem;
   margin-top: 2rem;
@@ -6337,12 +6339,73 @@ kbd {
 }
 
 .o-laitela-shop-button--available {
-  background: aquamarine;
+  background: black;
+  color: white;
   cursor: pointer;
 }
 
 .o-laitela-shop-button--bought {
   background: #16c55e;
+}
+
+.o-laitela-run-button__icon {
+  height: 12rem;
+  width: 12rem;
+  border-radius: 50%;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 11rem;
+  margin: 1.5rem auto;
+  border: 4px solid black;
+  color: white;
+  text-shadow: 1px 1px 10px black;
+}
+
+@keyframes laitelaGlitch {
+  0% {
+    color: black;
+    background: white;
+  }
+
+  95% {
+    color: black;
+    background: white;
+  }
+  96% {
+    color: white;
+    background: black;
+  }
+}
+
+.o-laitela-run-button__icon:hover {
+  animation: laitelaGlitch 2s infinite;
+}
+
+.c-laitela-annihilation-button {
+  padding: 2rem;
+  width: 30rem;
+  background: white;
+  border: .2rem solid black;
+  border-radius: .5rem;
+  font-family: Typewriter, serif;
+  margin: 2rem;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+
+.c-laitela-annihilation-button h2 {
+  color: inherit;
+}
+
+.c-laitela-annihilation-button b {
+  color: inherit;
+}
+
+.c-laitela-annihilation-button:hover {
+  background: black;
+  color: white !important; /* h2 color overrides this */
 }
 
 /* #endregion laitela tab*/

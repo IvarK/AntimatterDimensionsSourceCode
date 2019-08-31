@@ -30,9 +30,11 @@ Vue.component("laitela-tab", {
       this.showReset = this.annihilated || this.higgsGain.gt(0);
       this.darkEnergyChance = Laitela.darkEnergyChance;
       this.darkEnergy = player.celestials.laitela.darkEnergy;
+      this.isRunning = Laitela.isRunning;
     },
     startRun() {
-      Laitela.startRun();
+      if (this.isRunning) startRealityOver();
+      else Laitela.startRun();
     },
     buyUnlock(info) {
       Laitela.buyUnlock(info);
@@ -42,6 +44,12 @@ Vue.component("laitela-tab", {
     },
     canBuyUnlock(info) {
       return Laitela.canBuyUnlock(info);
+    },
+    runButtonClassObject() {
+      return {
+        "o-laitela-run-button__icon": true, 
+        "o-laitela-run-button__icon--running": this.isRunning,
+      };
     },
     unlockClassObject(info) {
       return {
@@ -90,7 +98,7 @@ Vue.component("laitela-tab", {
         <div class="l-laitela-buttons-container">
           <button class="o-laitela-run-button" @click="startRun">
             <b>Start Lai'tela's Reality</b>
-            <div class="o-laitela-run-button__icon">ᛝ</div>
+            <div v-bind:class="runButtonClassObject()"></div>
             Tickspeed is disabled and all dimension multipliers are decreased based on matter, 
             currently <b>x^{{ shorten(dimMultNerf, 3, 4) }}</b>
             <br>

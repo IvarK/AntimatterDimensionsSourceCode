@@ -841,7 +841,7 @@ GameDatabase.news = [
     id: "a172",
     text:
       "If you notice any issues with a news ticker message, please report them on the " +
-      "<a href='https://discord.gg/Z628PkM' target='_blank'>Discord</a> by clicking that link right there."
+      "<a href='https://discord.gg/ST9NaXa' target='_blank'>Discord</a> by clicking that link right there."
   },
   {
     id: "a173",

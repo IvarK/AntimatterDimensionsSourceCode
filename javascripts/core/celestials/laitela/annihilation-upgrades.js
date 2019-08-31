@@ -60,9 +60,10 @@ const AnnihilationUpgrade = (function() {
   return {
     realityReward: new AnnihilationUpgradeState(db.realityReward),
     intervalPower: new AnnihilationUpgradeState(db.intervalPower),
+    darkEnergyMult: new AnnihilationUpgradeState(db.darkEnergyMult),
     infConversion: new AnnihilationUpgradeState(db.infConversion),
     freeTickDecrease: new AnnihilationUpgradeState(db.freeTickDecrease),
-    dimPow: new AnnihilationUpgradeState(db.dimPow),
+    dimCostMult: new AnnihilationUpgradeState(db.dimCostMult),
   };
 }());
 

@@ -422,7 +422,8 @@ let player = {
       })),
       maxAmGained: new Decimal(1),
       higgs: new Decimal(0),
-      upgrades: {}
+      upgrades: {},
+      darkEnergy: 0
     }
   },
   autoEcIsOn: true,
@@ -513,8 +514,8 @@ const Player = {
   },
 
   get dimensionMultDecrease() {
-    const base = GameCache.dimensionMultDecrease.value - 1
-    return 1 + base * Laitela.matterEffectToDimensionMultDecrease
+    const base = GameCache.dimensionMultDecrease.value - 1;
+    return 1 + base * AnnihilationUpgrade.dimCostMult.effect;
   },
 
   get hasFreeInventorySpace() {

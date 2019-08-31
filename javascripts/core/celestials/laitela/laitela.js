@@ -93,9 +93,6 @@ const Laitela = {
   get matterEffectPercentage() {
     return `${((1 - this.matterEffectToDimensionMultDecrease) * 100).toFixed(2)}%`;
   },
-  get idConversionEffect() {
-    return Math.sqrt(Decimal.pLog10(this.matter)) / 50;
-  },
   get freeTickspeedMultEffect() {
     return 1 / (1 + Math.sqrt(Decimal.pLog10(this.matter)) / 100);
   },
@@ -124,7 +121,7 @@ const Laitela = {
     return Decimal.floor(Decimal.pow(this.matter.dividedBy(1e8), 0.3));
   },
   get darkEnergyChance() {
-    return this.celestial.higgs.plus(1).log10() / 1000;
+    return this.celestial.higgs.plus(1).log10() / 4000;
   },
 
   annihilate() {

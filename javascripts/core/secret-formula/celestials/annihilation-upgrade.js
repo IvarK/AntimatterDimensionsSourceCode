@@ -17,6 +17,14 @@ GameDatabase.annihilationUpgrades = {
     effect: x => x * 0.01,
     effectFormat: x => `${11 + x * 100}%`
   },
+  darkEnergyMult: {
+    id: "darkEnergyMult",
+    description: "You gain more Dark Energy",
+    startCost: 160,
+    costMult: 8,
+    effect: x => Math.pow(1.20, x),
+    effectFormat: x => `${shorten(x, 2, 2)}x`
+  },
   infConversion: {
     id: "infConversion",
     description: "Increase Infinity Dimensions conversion amount",
@@ -33,12 +41,12 @@ GameDatabase.annihilationUpgrades = {
     effect: x => Math.pow(0.99, x),
     effectFormat: x => `x${x.toFixed(2)}`
   },
-  dimPow: {
-    id: "dimPow",
-    description: "Power all dimension multipliers",
+  dimCostMult: {
+    id: "dimCostMult",
+    description: "Dimension cost multipliers increase slower",
     startCost: 50000,
     costMult: 8,
-    effect: x => 1 + x * 0.05,
-    effectFormat: x => `x^${x}`
+    effect: x => Math.pow(0.985, x),
+    effectFormat: x => `${((1 - x) * 100).toFixed(2)}%`
   }
 };

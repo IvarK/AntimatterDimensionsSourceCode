@@ -199,7 +199,7 @@ const FreeTickspeed = {
       nextShards: new Decimal(1),
     };
     let freeTickspeedMultiplier = getAdjustedGlyphEffect("timefreeTickMult");
-    if (Laitela.has(LAITELA_UNLOCKS.TD)) freeTickspeedMultiplier *= Laitela.freeTickspeedMultEffect;
+    freeTickspeedMultiplier *= AnnihilationUpgrade.freeTickDecrease.effect;
     const tickmult = 1 + (Effects.min(1.33, TimeStudy(171)) - 1) * freeTickspeedMultiplier;
     const logTickmult = Math.log(tickmult);
     const logShards = shards.ln();

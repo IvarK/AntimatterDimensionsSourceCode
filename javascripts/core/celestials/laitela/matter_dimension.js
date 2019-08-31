@@ -120,6 +120,13 @@ function getMatterDimensionProduction(tier, ticks) {
   return produced.times(d.power);
 }
 
+function getDarkEnergyProduction(tier, ticks) {
+  const d = MatterDimension(tier);
+  // The multiple ticks act just like more binomial samples
+  const produced = binomialDistribution(d.amount.log10() * ticks.toNumber(), Laitela.darkEnergyChance);
+  return produced * AnnihilationUpgrade.darkEnergyMult.effect;
+}
+
 function matterDimensionLoop(realDiff) {
   for (let i = 1; i <= 4; i++) {
     const d = MatterDimension(i);
@@ -129,6 +136,9 @@ function matterDimensionLoop(realDiff) {
       const production = getMatterDimensionProduction(i, ticks);
       if (i === 1) player.celestials.laitela.matter = player.celestials.laitela.matter.plus(production);
       else MatterDimension(i - 1).amount = MatterDimension(i - 1).amount.plus(production);
+
+      player.celestials.laitela.darkEnergy += getDarkEnergyProduction(i, ticks);
+
       d.timeSinceLastUpdate = Decimal.minus(d.timeSinceLastUpdate, d.interval.times(ticks)).toNumber();
     }
   }

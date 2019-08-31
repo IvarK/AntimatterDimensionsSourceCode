@@ -10,7 +10,9 @@ Vue.component("laitela-tab", {
       activeDimensions: [],
       higgs: new Decimal(0),
       higgsGain: new Decimal(0),
-      showReset: false
+      showReset: false,
+      darkEnergyChance: 0,
+      darkEnergy: 0
     };
   },
   methods: {
@@ -24,6 +26,8 @@ Vue.component("laitela-tab", {
       this.higgs.copyFrom(player.celestials.laitela.higgs);
       this.higgsGain.copyFrom(Laitela.higgsGain);
       this.showReset = this.higgs.gt(0) || this.higgsGain.gt(0);
+      this.darkEnergyChance = Laitela.darkEnergyChance;
+      this.darkEnergy = player.celestials.laitela.darkEnergy;
     },
     startRun() {
       Laitela.startRun();
@@ -80,6 +84,8 @@ Vue.component("laitela-tab", {
         </p>
       </button>
       <div>You have {{ shorten(higgs, 2, 0)}} Higgs {{"Boson" | pluralize(higgs)}}</div>
+      <div>Which cause you to have a {{ (darkEnergyChance * 100).toFixed(2) }}% chance of generating dark energy each dimension interval</div>
+      <div>You have {{ shorten(darkEnergy, 2, 0)}} Dark Energy</div>
       <div class="l-laitela-unlocks-container" v-if="showReset">
         <button 
           v-for="upgrade in upgrades" 

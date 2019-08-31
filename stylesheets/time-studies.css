@@ -52,7 +52,7 @@
   transition-duration: 0.2s;
   cursor: pointer;
   border-radius: .4rem;
-  font-size: 1.05rem;
+  font-size: 1.0rem;
   animation: a-time-study 7s infinite;
 }
 
@@ -80,6 +80,8 @@
 .o-time-study--small {
   width: 12rem;
   font-size: 0.9rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .o-time-study--normal {

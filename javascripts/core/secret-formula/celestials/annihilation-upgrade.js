@@ -74,7 +74,7 @@ GameDatabase.darkEnergyUpgrade = {
     effectFormat: x => `Currently: ${shorten(x, 2, 2)}x`
   },
   realityPenaltyReduction: {
-    id: 3,
+    id: 4,
     description: "Reduce the Laitela Reality penalty",
     cost: 400,
     effect: () => 3,

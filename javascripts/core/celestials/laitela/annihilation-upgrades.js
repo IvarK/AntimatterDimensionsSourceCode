@@ -109,7 +109,7 @@ class DarkEnergyUpgradeState extends SetPurchasableMechanicState {
   purchase() {
     if (!this.canBeBought) return;
     this.currency -= this.cost;
-    this.isBought(true);
+    this.isBought = true;
   }
 }
 

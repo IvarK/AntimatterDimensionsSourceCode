@@ -76,7 +76,7 @@ GameDatabase.darkEnergyUpgrade = {
   realityPenaltyReduction: {
     id: 4,
     description: "Reduce the Laitela Reality penalty",
-    cost: 400,
+    cost: 600,
     effect: () => 3,
     effectFormat: () => ""
   },

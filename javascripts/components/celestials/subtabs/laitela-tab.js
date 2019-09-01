@@ -51,10 +51,10 @@ Vue.component("laitela-tab", {
         "o-laitela-run-button__icon--running": this.isRunning,
       };
     },
-    unlockClassObject(info) {
+    unlockClassObject(upgrade) {
       return {
-        "o-laitela-shop-button--bought": this.hasUnlock(info), 
-        "o-laitela-shop-button--available": this.canBuyUnlock(info)
+        "o-laitela-shop-button--bought": upgrade.isBought, 
+        "o-laitela-shop-button--available": upgrade.canBeBought
       };
     },
     annihilate() {
@@ -119,7 +119,7 @@ Vue.component("laitela-tab", {
             v-for="upgrade in darkEnergyUpgrades" 
             :key="upgrade.id" 
             class="o-laitela-shop-button--dark-energy"
-            :class="{'o-laitela-shop-button--available': upgrade.canBeBought }"
+            :class="unlockClassObject(upgrade)"
             @click="upgrade.purchase()"> 
               {{ upgrade.description }} <br/> Costs: <b>{{ shorten(upgrade.cost, 2, 0) }}</b> Dark Energy
               <br/>{{ upgrade.formattedEffect }}

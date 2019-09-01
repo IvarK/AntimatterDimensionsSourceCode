@@ -36,7 +36,12 @@ class MatterDimensionState {
   }
 
   get power() {
-    return Decimal.pow(1.1, this.dimension.powerUpgrades).times(Laitela.realityReward);
+    let base = Decimal.pow(1.1, this.dimension.powerUpgrades).times(Laitela.realityReward);
+    if (DarkEnergyUpgrade.matterDimensionMult.isBought) {
+      base = base.times(DarkEnergyUpgrade.matterDimensionMult.effect);
+    }
+
+    return base;
   }
 
   get chanceCost() {
@@ -117,7 +122,6 @@ function getMatterDimensionProduction(tier, ticks) {
   const d = MatterDimension(tier);
   // The multiple ticks act just like more binomial samples
   const produced = binomialDistribution(d.amount.times(ticks), (d.chance / 100)).times(d.power);
-  if (DarkEnergyUpgrade.matterDimensionMult.isBought) return produced.times(DarkEnergyUpgrade.matterDimensionMult.effect);
   return produced;
 }
 

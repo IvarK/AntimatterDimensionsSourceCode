@@ -122,7 +122,7 @@ const Laitela = {
     this.celestial.matter = x;
   },
   get higgsGain() {
-    const base = Decimal.floor(Decimal.pow(this.matter.dividedBy(1e8), 0.3))
+    const base = Decimal.floor(Decimal.pow(1.5, this.matter.log10()));
     if (DarkEnergyUpgrade.bosonMult.isBought) {
       return base.times(DarkEnergyUpgrade.bosonMult.effect);
     }

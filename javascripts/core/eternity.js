@@ -6,7 +6,7 @@ function canEternity() {
     : player.infinityPoints.gte(Decimal.MAX_NUMBER) && InfinityDimension(8).isUnlocked;
 }
 
-function giveEternityRewards() {
+function giveEternityRewards(auto) {
   player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
   player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
   addEternityTime(
@@ -63,7 +63,7 @@ function eternity(force, auto, specialConditions = {}) {
     if (!canEternity()) return false;
     if (!auto && !askEternityConfirmation()) return false;
     EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
-    giveEternityRewards();
+    giveEternityRewards(auto);
   }
 
   if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {

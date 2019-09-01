@@ -84,6 +84,10 @@ class MatterDimensionState {
     this.dimension.timeSinceLastUpdate = ms;
   }
 
+  get canBuyChance() {
+    return this.chanceCost.lte(player.celestials.laitela.matter) && this.chance !== 100;
+  }
+
   buyChance() {
     if (this.chanceCost.gt(player.celestials.laitela.matter) || this.chance === 100) return false;
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.chanceCost);

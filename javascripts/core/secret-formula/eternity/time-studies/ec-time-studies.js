@@ -15,7 +15,7 @@ GameDatabase.eternity.timeStudies.ec = [
     id: 2,
     cost: 35,
     requirement: {
-      resource: "Tickspeed upgrades gained from time dimensions",
+      resource: "Tickspeed upgrades from time dimensions",
       current: () => player.totalTickGained,
       required: completions => 1300 + completions * 150,
       formatValue: value => value.toString()

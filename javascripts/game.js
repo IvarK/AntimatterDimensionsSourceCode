@@ -530,9 +530,11 @@ function gameLoop(diff, options = {}) {
     diff = Enslaved.nextTickDiff;
   }
 
-    if (autobuyerOnGameLoop) {
+  slowerAutobuyers(realDiff);
+  if (autobuyerOnGameLoop) {
       Autobuyers.tick();
-    }
+  }
+
     // We do these after autobuyers, since it's possible something there might
     // change a multiplier.
     GameCache.normalDimensionCommonMultiplier.invalidate();
@@ -971,21 +973,34 @@ function autoBuyExtraTimeDims() {
   }
 }
 
-var slowerAutobuyerTimer = 0
-setInterval(function() {
-  slowerAutobuyerTimer += 1/3
-  if (Perk.autobuyerFasterID.isBought) autoBuyInfDims()
-  if (Perk.autobuyerFasterReplicanti.isBought) autoBuyReplicantiUpgrades()
-  if (Perk.autobuyerFasterDilation.isBought) autoBuyDilationUpgrades()
-
-  if (slowerAutobuyerTimer > 1) {
-    slowerAutobuyerTimer -= 1
-    if (!Perk.autobuyerFasterID.isBought) autoBuyInfDims()
-    if (!Perk.autobuyerFasterReplicanti.isBought) autoBuyReplicantiUpgrades()
-    if (!Perk.autobuyerFasterDilation.isBought) autoBuyDilationUpgrades()
-    autoBuyTimeDims()
+function slowerAutobuyers(realDiff) {
+  player.auto.infDimTimer += realDiff;
+  const infDimPeriod = 1000 * Effects.product(Perk.autobuyerFasterID);
+  if (player.auto.infDimTimer >= infDimPeriod) {
+    // Note: we need to reset to a low number here, because we don't want a pile of these accumulating during offline
+    // time and then releasing normally.
+    player.auto.infDimTimer = Math.min(player.auto.infDimTimer - infDimPeriod, infDimPeriod);
+    autoBuyInfDims();
   }
-}, 333)
+  player.auto.timeDimTimer += realDiff;
+  const timeDimPeriod = 1000;
+  if (player.auto.timeDimTimer >= timeDimPeriod) {
+    player.auto.timeDimTimer = Math.min(player.auto.timeDimTimer - timeDimPeriod, timeDimPeriod);
+    autoBuyTimeDims();
+  } 
+  player.auto.repUpgradeTimer += realDiff;
+  const repUpgradePeriod = 1000 * Effects.product(Perk.autobuyerFasterReplicanti);
+  if (player.auto.repUpgradeTimer >= repUpgradePeriod) {
+    player.auto.repUpgradeTimer = Math.min(player.auto.repUpgradeTimer - repUpgradePeriod, repUpgradePeriod);
+    autoBuyReplicantiUpgrades();
+  }
+  player.auto.dilUpgradeTimer += realDiff;
+  const dilUpgradePeriod = 1000 * Effects.product(Perk.autobuyerFasterDilation);
+  if (player.auto.dilUpgradeTimer >= dilUpgradePeriod) {
+    player.auto.dilUpgradeTimer = Math.min(player.auto.dilUpgradeTimer - dilUpgradePeriod, dilUpgradePeriod);
+    autoBuyDilationUpgrades();
+  }
+}
 
 setInterval(function () {
     if (playFabId != -1 && player.options.cloud) playFabSaveCheck();

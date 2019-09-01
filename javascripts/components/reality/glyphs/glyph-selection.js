@@ -28,6 +28,7 @@ Vue.component("modal-glyph-selection", {
                        class="l-modal-glyph-selection__glyph"
                        :key="index"
                        :glyph="glyph"
+                       :noLevelOverride="true"
                        @click.native="select(index)"/>
     </div>
   </div>`,

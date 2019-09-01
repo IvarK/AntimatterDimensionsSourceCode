@@ -6,28 +6,21 @@ function canEternity() {
     : player.infinityPoints.gte(Decimal.MAX_NUMBER) && InfinityDimension(8).isUnlocked;
 }
 
-function eternity(force, auto, specialConditions = {}) {
-  if (specialConditions.switchingDilation && !canEternity()) {
-    force = true;
+function giveEternityRewards(auto) {
+  player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
+  player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
+  addEternityTime(
+    player.thisEternity,
+    player.thisEternityRealTime,
+    gainedEternityPoints(),
+    Effects.product(RealityUpgrade(3))
+  );
+  const newEternities = Effects.product(RealityUpgrade(3));
+  if (player.eternities.eq(0) && newEternities.lte(10)) {
+    Tab.dimensions.time.show();
   }
-  
-  if (force) {
-    player.challenge.eternity.current = 0;
-  }
-  else {
-    if (!canEternity()) return false;
-    if (!auto && !askEternityConfirmation()) return false;
-    EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
-    player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
-    player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
-    addEternityTime(
-      player.thisEternity, 
-      player.thisEternityRealTime, 
-      gainedEternityPoints(), 
-      Effects.product(RealityUpgrade(3))
-    );
-    player.eternities = player.eternities.add(Effects.product(RealityUpgrade(3)));
-  }
+
+  player.eternities = player.eternities.add(newEternities);
 
   if (EternityChallenge.isRunning) {
     const challenge = EternityChallenge.current;
@@ -44,11 +37,34 @@ function eternity(force, auto, specialConditions = {}) {
   player.bestEternitiesPerMs = player.bestEternitiesPerMs.clampMin(
     Effects.product(RealityUpgrade(3)) / player.thisEternityRealTime
   );
+  player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
 
   player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
     Achievement(131),
     TimeStudy(191)
   );
+
+  if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked && player.infinityPoints.gt(Decimal.MAX_NUMBER)) {
+    EffarigUnlock.eternity.unlock();
+    Modal.message.show(`Effarig Eternity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} ` +
+      "and IP multipliers apply with full effect; eternity count generates infinities " +
+      "and The Enslaved Ones have been unlocked.");
+  }
+}
+
+function eternity(force, auto, specialConditions = {}) {
+  if (specialConditions.switchingDilation && !canEternity()) {
+    // eslint-disable-next-line no-param-reassign
+    force = true;
+  }
+  if (force) {
+    player.challenge.eternity.current = 0;
+  } else {
+    if (!canEternity()) return false;
+    if (!auto && !askEternityConfirmation()) return false;
+    EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
+    giveEternityRewards(auto);
+  }
 
   if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
     rewardTP();
@@ -61,7 +77,7 @@ function eternity(force, auto, specialConditions = {}) {
     // Fix infinity because it can only break after big crunch autobuyer interval is maxed
     player.break = false;
   }
-  
+
   player.challenge.eternity.current = 0;
   if (!specialConditions.enteringEC) {
     player.dilation.active = false;
@@ -74,23 +90,9 @@ function eternity(force, auto, specialConditions = {}) {
 
   if (player.respec) respecTimeStudies(auto);
   player.respec = false;
-  if (player.eternities.eq(1) ||
-        (player.reality.rebuyables[3] > 0 &&
-        player.eternities.eq(RealityUpgrade(3).effectValue) &&
-        player.eternityPoints.lte(10))) {
-    Tab.dimensions.time.show();
-  }
-  
-  if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked && player.infinityPoints.gt(Decimal.MAX_NUMBER)) {
-    EffarigUnlock.eternity.unlock();
-    Modal.message.show(`Effarig Eternity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} ` + 
-      "and IP multipliers apply with full effect; eternity count generates infinities " + 
-      "and The Enslaved Ones have been unlocked.");
-  }
-  
+
   resetInfinityPointsOnEternity();
   InfinityDimensions.resetAmount();
-  player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
   player.bestEPminThisEternity = new Decimal(0);
   player.bestIPminThisInfinity = new Decimal(0);
   player.bestIPminThisEternity = new Decimal(0);
@@ -133,9 +135,8 @@ function initializeResourcesAfterEternity() {
   player.thisInfinityTime = 0;
   player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;
-  player.resets = (EternityMilestone.keepInfinityUpgrades.isReached) ? 4 : 0;
+  player.dimensionBoosts = (EternityMilestone.keepInfinityUpgrades.isReached) ? 4 : 0;
   player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
-  player.tickDecrease = 0.9;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.infMult = new Decimal(1);

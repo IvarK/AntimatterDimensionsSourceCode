@@ -314,19 +314,22 @@ GameDatabase.reality.perks = {
     id: 101,
     label: "A-ID",
     family: PerkFamily.AUTOMATION,
-    description: "Infinity Dimension autobuyers work 3 times faster."
+    description: "Infinity Dimension autobuyers work 3 times faster.",
+    effect: () => 1 / 3,
   },
   autobuyerFasterReplicanti: {
     id: 102,
     label: "A-REP",
     family: PerkFamily.AUTOMATION,
-    description: "Replicanti autobuyers work 3 times faster."
+    description: "Replicanti autobuyers work 3 times faster.",
+    effect: () => 1 / 3,
   },
   autobuyerFasterDilation: {
     id: 103,
     label: "A-DIL2",
     family: PerkFamily.AUTOMATION,
-    description: "Dilation autobuyers work 3 times faster."
+    description: "Dilation autobuyers work 3 times faster.",
+    effect: () => 1 / 3,
   },
   autobuyerTT1: {
     id: 104,

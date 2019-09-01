@@ -121,7 +121,11 @@ let player = {
       rm: new Decimal(1),
       glyph: 0,
       isActive: false
-    }
+    },
+    timeDimTimer: 0,
+    infDimTimer: 0,
+    repUpgradeTimer: 0,
+    dilUpgradeTimer: 0,
   },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),

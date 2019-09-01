@@ -203,7 +203,7 @@ function studiesUntil(id) {
   if (DilationUpgrade.timeStudySplit.isBought ||
     (dimPaths.length === 2 && TimeStudy(201).isBought) ||
     (dimPaths.length === 1 && !TimeStudy(201).isBought)) {
-    buyTimeStudyRange(71, Math.min(lastInPrevRow, 120));
+    buyTimeStudyRange(71, Math.min(id, 120));
   } else if (id > 103) {
     // If we haven't chosen dimension paths, and shift clicked something below
     // them, we don't buy anything until the player makes their selection

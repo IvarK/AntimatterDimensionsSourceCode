@@ -162,7 +162,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 83,
       cost: 5,
       requirement: 73,
-      description: "Dimension Boosts gain a multiplier based on tick upgrades gained from TDs",
+      description: "Dimension Boost multiplier based on tick upgrades gained from TDs",
       effect: () => Decimal.pow(1.0004, player.totalTickGained),
       cap: new Decimal(1e30),
       formatEffect: value => formatX(value, 2, 1)
@@ -171,7 +171,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 91,
       cost: 4,
       requirement: 81,
-      description: "Normal dimensions gain a multiplier based on time spent this eternity",
+      description: "Normal dimension multiplier based on time spent in this eternity",
       effect: () => Decimal.pow10(Math.min(Time.thisEternity.totalMinutes, 30) * 10),
       cap: new Decimal("1e300"),
       formatEffect: value => formatX(value, 2, 1)
@@ -180,7 +180,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 92,
       cost: 5,
       requirement: 82,
-      description: "Infinity dimensions gain a multiplier based on fastest eternity time",
+      description: "Infinity dimension multiplier based on fastest eternity time",
       effect: () => Decimal.pow(2, 60 / Math.max(Time.bestEternity.totalSeconds, 2)),
       cap: Decimal.pow(2, 30),
       formatEffect: value => formatX(value, 2, 1)
@@ -189,7 +189,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 93,
       cost: 7,
       requirement: 83,
-      description: "Time dimensions gain a multiplier based on tick upgrades gained",
+      description: "Time dimension multiplier based on tick upgrades gained",
       effect: () => Decimal.pow(player.totalTickGained, 0.25).clampMin(1),
       formatEffect: value => formatX(value, 2, 1)
     },
@@ -197,7 +197,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 101,
       cost: 4,
       requirement: 91,
-      description: "Normal dimensions gain a multiplier equal to replicanti amount",
+      description: "Normal dimension multiplier equal to replicanti amount",
       effect: () => Decimal.max(player.replicanti.amount, 1),
       formatEffect: value => formatX(value, 2, 1)
     },
@@ -213,7 +213,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 103,
       cost: 6,
       requirement: 93,
-      description: "Time dimensions gain a multiplier equal to replicanti galaxy amount",
+      description: "Time dimension multiplier equal to replicanti galaxy amount",
       effect: () => Math.max(player.replicanti.galaxies, 1),
       formatEffect: value => formatX(value, 2, 0)
     },
@@ -379,7 +379,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       description: () => (Enslaved.isRunning
         ? "There is not enough space in this reality"
         : `Replicanti can go beyond ${shorten(replicantiCap(), 2, 1)}, ` +
-        "but growth slows down at higher replicanti amounts.")
+        "but growth slows down at higher amounts.")
       },
     {
       id: 193,
@@ -443,7 +443,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 900,
       requirement: () => TimeStudy(211).isBought && !TimeStudy(222).isBought,
       requirementV: () => TimeStudy(211).isBought && TimeStudy(222).isBought,
-      description: "Time Dimensions gain a multiplier based on Dimension Boosts",
+      description: "Time Dimension multiplier based on Dimension Boosts",
       effect: () => Decimal.pow(1 + 0.0025, DimBoost.totalBoosts),
       formatEffect: value => formatX(value, 2, 1)
     },

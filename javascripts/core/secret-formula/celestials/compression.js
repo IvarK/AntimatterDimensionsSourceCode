@@ -10,7 +10,8 @@ GameDatabase.celestials.compression = {
     threshold: () => 10000,
     currentDisplay: () => shortenSmallInteger(player.dilation.freeGalaxies),
     invertedCondition: false,
-    effect: () => Math.pow(Math.clampMin(player.dilation.freeGalaxies - 10000, 0), 1.6) + 50000
+    effect: () => Math.pow(Math.clampMin(player.dilation.freeGalaxies - 10000, 0), 1.6) + 50000,
+    effectDisplay: x => `${Math.floor(x)} additional dimboosts`
   },
   improvedDTMult: {
     id: 1,
@@ -32,7 +33,8 @@ GameDatabase.celestials.compression = {
     threshold: () => new Decimal("1e1500000"),
     currentDisplay: () => shorten(player.replicanti.amount),
     invertedCondition: false,
-    effect: () => Math.pow(DimBoost.freeBoosts, 25)
+    effect: () => Math.pow(DimBoost.freeBoosts, 25),
+    effectDisplay: x => `${shorten(x, 2, 2)}x`
   },
   strongerDilationGalaxies: {
     id: 3,
@@ -78,7 +80,8 @@ GameDatabase.celestials.compression = {
     threshold: () => 7.3,
     currentDisplay: () => shorten(getInfinityConversionRate(), 2, 3),
     invertedCondition: false,
-    effect: () => 100 * Math.clampMin(player.dilation.freeGalaxies - 10000, 0)
+    effect: () => 100 * Math.clampMin(player.dilation.freeGalaxies - 10000, 0),
+    effectDisplay: x => `${Math.floor(x)} higher softcap`  
   },
   moreEntanglement: {
     id: 7,
@@ -100,6 +103,7 @@ GameDatabase.celestials.compression = {
     threshold: () => 10,
     currentDisplay: () => shorten(Laitela.matter, 2, 1),
     invertedCondition: false,
-    effect: () => Math.clampMin(player.dilation.dilatedTime.log10() / 1000, 1)
+    effect: () => Math.clampMin(player.dilation.dilatedTime.log10() / 1000, 1),
+    effectDisplay: x => `${shorten(x, 2, 2)}x`  
   },
 };

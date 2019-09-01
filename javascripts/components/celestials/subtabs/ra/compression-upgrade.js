@@ -9,6 +9,7 @@ Vue.component("compression-upgrade", {
       isBought: false,
       isActive: false,
       isAffordable: false,
+      currentDisplay: ""
     };
   },
   computed: {
@@ -27,6 +28,8 @@ Vue.component("compression-upgrade", {
       this.isBought = this.upgrade.isBought;
       this.isActive = this.upgrade.canBeApplied;
       this.isAffordable = this.upgrade.isAffordable;
+      this.currentDisplay = this.upgrade.config.currentDisplay();
+      this.effectDisplay = this.upgrade.effectDisplay;
     }
   },
   template:
@@ -37,10 +40,11 @@ Vue.component("compression-upgrade", {
           :length="70"
           name="o-compression-upgrade__description"
         />
+        <span v-if="isBought && effectDisplay !== undefined"><br><br>Currently: {{ effectDisplay }}</span>
         <br><br>
         <span>To activate: {{ upgrade.config.secondary() }}</span>
         <br>
-        <span>(Currently {{ upgrade.config.currentDisplay() }})</span>
+        <span>(Currently {{ currentDisplay }})</span>
         <br><br>
         <effect-display :config="upgrade.config" />
         <cost-display

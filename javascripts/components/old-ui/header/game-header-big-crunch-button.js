@@ -51,7 +51,7 @@ Vue.component("game-header-big-crunch-button", {
       this.gainedIP.copyFrom(gainedIP);
       this.peakIPPM.copyFrom(player.bestIPminThisInfinity);
       if (this.isPeakIPPMVisible) {
-        this.currentIPPM.copyFrom(gainedIP.dividedBy(Time.thisInfinity.totalMinutes));
+        this.currentIPPM.copyFrom(gainedIP.dividedBy(Time.thisInfinityRealTime.totalMinutes));
       }
     }
   },

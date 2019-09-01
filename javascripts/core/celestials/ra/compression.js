@@ -68,6 +68,11 @@ class CompressionUpgradeState extends BitPurchasableMechanicState {
     player.celestials.ra.compression.upgradeBits = value;
   }
 
+  get effectDisplay() {
+    if (this.config.effectDisplay === undefined) return undefined;
+    return this.config.effectDisplay(this.config.effect());
+  }
+
   get canBeApplied() {
     // eslint-disable-next-line no-bitwise
     const requirementFulfilled = new Decimal(this.config.resource()).gte(this.config.threshold()) ^
@@ -89,7 +94,7 @@ const CompressionUpgrade = (function() {
     moreEntanglement: new CompressionUpgradeState(db.moreEntanglement),
     matterBoost: new CompressionUpgradeState(db.matterBoost)
   };
-})();
+}());
 
 const CompressionUpgrades = {
   all: Object.values(CompressionUpgrade),

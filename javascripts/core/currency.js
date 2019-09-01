@@ -7,36 +7,36 @@ class Currency {
   /**
    * @abstract
    */
-  get value() { throw NotImplementedCrash(); }
+  get value() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  set value(value) { throw NotImplementedCrash(); }
-
-  /**
-   * @abstract
-   */
-  // eslint-disable-next-line no-unused-vars
-  add(amount) { throw NotImplementedCrash(); }
+  set value(value) { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
   // eslint-disable-next-line no-unused-vars
-  integrate(perSecond, deltaTime) { throw NotImplementedCrash(); }
+  add(amount) { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
   // eslint-disable-next-line no-unused-vars
-  subtract(amount) { throw NotImplementedCrash(); }
+  integrate(perSecond, deltaTime) { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
   // eslint-disable-next-line no-unused-vars
-  isAffordable(cost) { throw NotImplementedCrash(); }
+  subtract(amount) { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  isAffordable(cost) { throw new NotImplementedError(); }
 }
 
 /**

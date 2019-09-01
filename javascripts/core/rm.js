@@ -51,7 +51,7 @@ const AutoGlyphSacrifice = {
       case AutoGlyphSacMode.ADVANCED:
         return this.comparedToThreshold(glyph) < 0;
     }
-    throw crash("Unknown auto glyph sacrifice mode");
+    throw new Error("Unknown auto glyph sacrifice mode");
   },
 };
 
@@ -77,7 +77,7 @@ const AutoGlyphPicker = {
         }
         return comparedToThreshold;
     }
-    throw crash("Unknown auto glyph picker mode");
+    throw new Error("Unknown auto glyph picker mode");
   },
   pick(glyphs) {
     return glyphs
@@ -283,7 +283,7 @@ const Glyphs = {
     this.active = new Array(this.activeSlotCount).fill(null);
     for (let g of player.reality.glyphs.active) {
       if (this.active[g.idx]) {
-        throw crash("Stacked active glyphs?")
+        throw new Error("Stacked active glyphs?");
       }
       this.active[g.idx] = g;
     }
@@ -329,7 +329,7 @@ const Glyphs = {
   equip(glyph, targetSlot) {
     this.validate();
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {
-      throw crash("Inconsistent inventory indexing");
+      throw new Error("Inconsistent inventory indexing");
     }
     if (this.active[targetSlot] !== null) return;
     if (glyph.type === 'effarig' && this.active.some(x => x && x.type === 'effarig')) return;
@@ -357,7 +357,7 @@ const Glyphs = {
   moveToEmpty(glyph, targetSlot) {
     this.validate();
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {
-      throw crash("Inconsistent inventory indexing");
+      throw new Error("Inconsistent inventory indexing");
     }
     if (this.inventory[targetSlot] === null) {
       this.inventory[glyph.idx] = null;
@@ -403,12 +403,12 @@ const Glyphs = {
   validate() {
     for (const glyph of player.reality.glyphs.inventory) {
       if (this.inventory[glyph.idx] !== glyph) {
-        throw crash("validation error");
+        throw new Error("validation error");
       }
     }
     for (let i = 0; i < this.inventory.length; ++i) {
       if (this.inventory[i] && this.inventory[i].idx !== i) {
-        throw crash("backwards validation error");
+        throw new Error("backwards validation error");
       }
     }
   },
@@ -491,7 +491,7 @@ function getAdjustedGlyphEffect(effectKey) {
  */
 function getGlyphEffectValues(effectKey) {
   if (orderedEffectList.filter(effect => effect === effectKey).length === 0) {
-    throw crash(`Unknown glyph effect requested "${effectKey}"'`);
+    throw new Error(`Unknown glyph effect requested "${effectKey}"'`);
   }
   return player.reality.glyphs.active
   // eslint-disable-next-line no-bitwise

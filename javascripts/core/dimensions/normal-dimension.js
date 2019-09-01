@@ -51,7 +51,7 @@ function getDimensionFinalMultiplier(tier) {
 }
 
 function getDimensionFinalMultiplierUncached(tier) {
-  if (tier < 1 || tier > 8) throw crash(`Invalid tier ${tier}`);
+  if (tier < 1 || tier > 8) throw new Error(`Invalid tier ${tier}`);
   if (NormalChallenge(10).isRunning && tier > 6) return new Decimal(1);
 
   let multiplier = new Decimal(NormalDimension(tier).power);

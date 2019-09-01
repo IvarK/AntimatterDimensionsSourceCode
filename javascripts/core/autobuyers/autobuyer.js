@@ -7,12 +7,12 @@ class AutobuyerState {
   /**
    * @abstract
    */
-  get data() { throw NotImplementedCrash(); }
+  get data() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get isUnlocked() { throw NotImplementedCrash(); }
+  get isUnlocked() { throw new NotImplementedError(); }
 
   get canTick() {
     return this.isActive && player.options.autobuyersOn && this.isUnlocked;
@@ -33,7 +33,7 @@ class AutobuyerState {
   /**
    * @abstract
    */
-  tick() { throw NotImplementedCrash(); }
+  tick() { throw new NotImplementedError(); }
 
   // eslint-disable-next-line no-empty-function
   reset() { }
@@ -46,7 +46,7 @@ class IntervaledAutobuyerState extends AutobuyerState {
   /**
    * @abstract
    */
-  get baseInterval() { throw NotImplementedCrash(); }
+  get baseInterval() { throw new NotImplementedError(); }
 
   get cost() {
     return this.data.cost;

@@ -43,7 +43,7 @@ class Galaxy {
           costFunction: x => Math.floor((x * linearTerm + constantTerm) * Math.pow(1.002, x - 800)) - finalOffset,
           cumulative: false,
         }, 800);
-        if (!bulk) throw crash("Unexpected failure to calculate galaxy purchase");
+        if (!bulk) throw new Error("Unexpected failure to calculate galaxy purchase");
         // The formula we are using is the formula for the price of the *next* galaxy, given
         // a quantity. So we add 1 when we return
         return bulk.quantity + 800 + 1;
@@ -67,7 +67,7 @@ class Galaxy {
         costFunction: x => Math.floor((x * x + x * linearTerm + constantTerm) * Math.pow(1.002, x - 800)) - finalOffset,
         cumulative: false,
       }, 800);
-      if (!bulk) throw crash("Unexpected failure to calculate galaxy purchase");
+      if (!bulk) throw new Error("Unexpected failure to calculate galaxy purchase");
       return bulk.quantity + 800 + 1;
     }
     return quantity + 1;

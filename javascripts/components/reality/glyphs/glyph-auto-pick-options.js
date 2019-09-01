@@ -5,6 +5,7 @@ Vue.component("glyph-auto-pick-options", {
     return {
       unlocked: false,
       mode: AutoGlyphPickMode.RANDOM,
+      alchemyUnlocked: false,
     };
   },
   computed: {
@@ -25,6 +26,7 @@ Vue.component("glyph-auto-pick-options", {
     update() {
       this.unlocked = EffarigUnlock.autopicker.isUnlocked;
       this.mode = AutoGlyphPicker.mode;
+      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     },
     setMode(m) {
       AutoGlyphPicker.mode = m;
@@ -40,6 +42,12 @@ Vue.component("glyph-auto-pick-options", {
     </div>
     <div :class="optionClass(modes.ABOVE_SACRIFICE_THRESHOLD)" @click="setMode(modes.ABOVE_SACRIFICE_THRESHOLD)">
       Auto pick farthest above threshold
+    </div>
+    <div 
+      v-if="alchemyUnlocked"
+      :class="optionClass(modes.LOWEST_ALCHEMY_RESOURCE)" 
+      @click="setMode(modes.LOWEST_ALCHEMY_RESOURCE)">
+      Auto pick lowest alchemy resource
     </div>
   </div>
   `

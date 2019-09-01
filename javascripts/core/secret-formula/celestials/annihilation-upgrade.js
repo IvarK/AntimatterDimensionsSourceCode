@@ -84,7 +84,7 @@ GameDatabase.darkEnergyUpgrade = {
     id: 5,
     description: "Glyph Alchemy reactions are more efficient based on Dark Energy",
     cost: 10000,
-    effect: () => Math.log10(player.celestials.laitela.darkEnergy + 1) * 1.5 + 1,
+    effect: () => Math.log10(player.celestials.laitela.darkEnergy + 1) * 0.75 + 1,
     effectFormat: x => `Currently: ${shorten(x, 2, 2)}x`
   },
   compressionBoost: {

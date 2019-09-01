@@ -72,7 +72,7 @@ Vue.component("laitela-tab", {
     `<div class="l-laitela-celestial-tab">
       <div class="o-laitela-matter-amount">You have {{ shorten(matter, 2, 0) }} Dark Matter</div>
       <div v-if="annihilated">You have {{ shorten(higgs, 2, 0)}} Higgs {{"Boson" | pluralize(higgs)}}</div>
-      <div v-if="higgs.gt(0)">Which cause you to have a {{ (darkEnergyChance * 100).toFixed(2) }}% chance of generating dark energy each dimension interval</div>
+      <div v-if="higgs.gt(0)">Which cause you to have a {{ (darkEnergyChance * 100).toFixed(3) }}% chance of generating dark energy each dimension interval</div>
       <div v-if="darkEnergy > 0">You have {{ shorten(darkEnergy, 2, 0)}} Dark Energy</div>
       <div class="l-laitela-mechanics-container">
         <div>

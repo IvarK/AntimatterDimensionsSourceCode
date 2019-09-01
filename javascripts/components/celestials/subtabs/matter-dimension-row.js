@@ -40,13 +40,13 @@ Vue.component("matter-dimension-row", {
         @click="dimension.buyChance()" 
         class="o-matter-dimension-button" 
         :class="{ 'o-matter-dimension-button--available': canBuyChance }"> 
-        {{ chance }}% <br>Cost: {{ shorten(chanceCost, 2, 0) }}
+        {{ chance }}% <span v-if="chance !== 100"><br>Cost: {{ shorten(chanceCost, 2, 0) }}</span>
       </button>
       <button 
         @click="dimension.buyInterval()" 
         class="o-matter-dimension-button" 
         :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> 
-        {{ interval.toFixed(2) }}ms <br>Cost: {{ shorten(intervalCost, 2, 0) }}
+        {{ interval.toFixed(2) }}ms <span v-if="!interval.eq(50)"><br>Cost: {{ shorten(intervalCost, 2, 0) }}</span>
       </button>
       <button 
         @click="dimension.buyPower()" 

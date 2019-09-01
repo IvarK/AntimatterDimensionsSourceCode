@@ -23,15 +23,20 @@ class MatterDimensionState {
 
   // In percents
   get chance() {
-    return 5 - this._tier + this.dimension.chanceUpgrades +
-      Math.floor(100 * AlchemyResource.unpredictability.effectValue);
+    return Math.min(5 - this._tier + this.dimension.chanceUpgrades +
+      Math.floor(100 * AlchemyResource.unpredictability.effectValue), 100);
+  }
+
+  // If this is 50 then you can no longer buy it, but it can get lower with other upgrades
+  get baseInterval() {
+    return Decimal.pow(0.89 - AnnihilationUpgrade.intervalPower.effect, this.dimension.intervalUpgrades)
+     .times(Decimal.pow(2, this._tier))
+     .times(1000);
   }
 
   // In milliseconds
   get interval() {
-    return Decimal.pow(0.89 - AnnihilationUpgrade.intervalPower.effect, this.dimension.intervalUpgrades)
-      .times(Decimal.pow(2, this._tier))
-      .times(1000)
+    return this.baseInterval.clampMin(50)
       .divide(Effects.max(1, CompressionUpgrade.matterBoost));
   }
 
@@ -80,14 +85,14 @@ class MatterDimensionState {
   }
 
   buyChance() {
-    if (this.chanceCost.gt(player.celestials.laitela.matter)) return false;
+    if (this.chanceCost.gt(player.celestials.laitela.matter) || this.chance === 100) return false;
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.chanceCost);
     this.dimension.chanceUpgrades++;
     return true;
   }
 
   buyInterval() {
-    if (this.intervalCost.gt(player.celestials.laitela.matter)) return false;
+    if (this.intervalCost.gt(player.celestials.laitela.matter) || this.baseInterval === 50) return false;
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.intervalCost);
     this.dimension.intervalUpgrades++;
     return true;

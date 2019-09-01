@@ -979,6 +979,12 @@ function slowerAutobuyers(realDiff) {
     player.auto.infDimTimer = Math.min(player.auto.infDimTimer - infDimPeriod, infDimPeriod);
     autoBuyInfDims();
   }
+  player.auto.timeDimTimer += realDiff;
+  const timeDimPeriod = 1000;
+  if (player.auto.timeDimTimer >= timeDimPeriod) {
+    player.auto.timeDimTimer = Math.min(player.auto.timeDimTimer - timeDimPeriod, timeDimPeriod);
+    autoBuyTimeDims();
+  } 
   player.auto.repUpgradeTimer += realDiff;
   const repUpgradePeriod = 1000 * Effects.product(Perk.autobuyerFasterReplicanti);
   if (player.auto.repUpgradeTimer >= repUpgradePeriod) {

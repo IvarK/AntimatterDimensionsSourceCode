@@ -122,6 +122,7 @@ let player = {
       glyph: 0,
       isActive: false
     },
+    timeDimTimer: 0,
     infDimTimer: 0,
     repUpgradeTimer: 0,
     dilUpgradeTimer: 0,

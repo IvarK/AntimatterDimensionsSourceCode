@@ -102,7 +102,7 @@ const Laitela = {
   get dimMultNerf() {
     const base = Math.min(1, Decimal.pLog10(this.matter) / LOG10_MAX_VALUE);
     if (DarkEnergyUpgrade.realityPenaltyReduction.isBought) {
-      return base * DarkEnergyUpgrade.realityPenaltyReduction.isBought;
+      return base * DarkEnergyUpgrade.realityPenaltyReduction.effect;
     }
     return base;
   },

@@ -88,22 +88,30 @@ class MatterDimensionState {
     return this.chanceCost.lte(player.celestials.laitela.matter) && this.chance !== 100;
   }
 
+  get canBuyInterval() {
+    return this.intervalCost.lte(player.celestials.laitela.matter) && !this.interval.eq(50);
+  }
+
+  get canBuyPower() {
+    return this.powerCost.lte(player.celestials.laitela.matter);
+  }
+
   buyChance() {
-    if (this.chanceCost.gt(player.celestials.laitela.matter) || this.chance === 100) return false;
+    if (!this.canBuyChance) return false;
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.chanceCost);
     this.dimension.chanceUpgrades++;
     return true;
   }
 
   buyInterval() {
-    if (this.intervalCost.gt(player.celestials.laitela.matter) || this.baseInterval === 50) return false;
+    if (!this.canBuyInterval) return false;
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.intervalCost);
     this.dimension.intervalUpgrades++;
     return true;
   }
 
   buyPower() {
-    if (this.powerCost.gt(player.celestials.laitela.matter)) return false;
+    if (!this.canBuyPower) return false;
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.powerCost);
     this.dimension.powerUpgrades++;
     return true;

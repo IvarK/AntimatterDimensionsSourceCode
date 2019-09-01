@@ -27,9 +27,9 @@ Vue.component("matter-dimension-row", {
       this.intervalCost = this.dimension.intervalCost;
       this.powerCost = this.dimension.powerCost;
       this.amount.copyFrom(this.dimension.amount);
-      this.canBuyChance = player.celestials.laitela.matter.gte(this.chanceCost);
-      this.canBuyInterval = player.celestials.laitela.matter.gte(this.intervalCost);
-      this.canBuyPower = player.celestials.laitela.matter.gte(this.powerCost);
+      this.canBuyChance = this.dimension.canBuyChance;
+      this.canBuyInterval = this.dimension.canBuyInterval;
+      this.canBuyPower = this.dimension.canBuyPower;
     }
   },
   template:

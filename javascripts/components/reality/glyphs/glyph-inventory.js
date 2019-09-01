@@ -44,7 +44,7 @@ Vue.component("glyph-inventory", {
     },
     sort() {
       Glyphs.sort();
-    }
+    },
   },
   template: `
   <div class="l-glyph-inventory">

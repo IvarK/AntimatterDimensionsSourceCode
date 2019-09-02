@@ -102,7 +102,9 @@ Vue.component('effarig-tab', {
     `<div class="l-effarig-celestial-tab">
       <div class="o-teresa-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="hasNextQuote()">→</button>
       <div class="c-effarig-relics">You have {{ shortenRateOfChange(relicShards) }} Relic Shards.</div>
-      <div class="c-effarig-relic-description">You will gain {{ shortenRateOfChange(shardsGained) }} Shards next reality, based on different kinds of glyph effects you have equipped and EP.</div>
+      <div class="c-effarig-relic-description">
+        You will gain {{ shortenRateOfChange(shardsGained) }} Relic Shards next reality. More EP slightly increases <br>
+        shards gained and more distinct glyph effects significantly increases shards gained.</div>
       <div class="l-effarig-shop-and-run">
         <div class="l-effarig-shop">
           <effarig-unlock-button

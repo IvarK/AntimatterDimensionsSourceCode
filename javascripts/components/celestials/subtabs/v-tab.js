@@ -81,7 +81,11 @@ Vue.component("v-tab", {
           </li>
         </div>
         <div>
-          You have {{ totalUnlocks }} V-achievements done. You can pick
+          V-achievements can only be completed within V's reality, but are permanent and do not reset upon leaving
+          and re-entering the reality.  
+        </div>
+        <div>
+          You have {{ totalUnlocks }} V-achievements done.  You can pick
           {{ totalAdditionalStudies }} {{ "study" | pluralize(totalAdditionalStudies, "studies") }}
           on other paths you normally can't buy.
         </div>

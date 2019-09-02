@@ -307,7 +307,7 @@ const RA_UNLOCKS = {
   LATER_DILATION: {
     id: 5,
     description: "Get Teresa to level 25",
-    reward: "Unlock more dilation upgrades [unimplemented]",
+    reward: "Unlock altered glyphs",
     pet: Ra.pets.teresa,
     level: 25
   },

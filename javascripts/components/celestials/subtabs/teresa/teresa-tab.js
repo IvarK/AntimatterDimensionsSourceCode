@@ -12,6 +12,7 @@ Vue.component("teresa-tab", {
       quote: "",
       quoteIdx: 0,
       unlocks: [],
+      bestAM: new Decimal(0),
       runReward: 0,
       pp: 0,
       leakRate: 0
@@ -43,6 +44,7 @@ Vue.component("teresa-tab", {
       this.quote = Teresa.quote;
       this.quoteIdx = player.celestials.teresa.quoteIdx;
       this.unlocks = Object.values(TERESA_UNLOCKS).map(info => Teresa.has(info)).filter(x => x);
+      this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.runReward = Teresa.runRewardMultiplier;
       this.pp = player.reality.pp;
       this.rm.copyFrom(player.reality.realityMachines);
@@ -68,7 +70,14 @@ Vue.component("teresa-tab", {
       <div>You have {{shortenRateOfChange(rm)}} {{"Reality Machine" | pluralize(rm)}}.</div>
       <div class="l-mechanics-container">
         <div class="l-teresa-unlocks l-teresa-mechanic-container">
-          <div class="c-teresa-unlock c-teresa-run-button" v-if="unlocks[0]" @click="startRun()">Start Teresa's Reality. Glyph TT generation is disabled and you gain less IP and EP (x^0.6). The more antimatter you reach, the better the reward.<br><br>Multiplies power gained from glyph sacrifice by {{ shortenRateOfChange(runReward) }}x.</div>
+          <div class="c-teresa-unlock c-teresa-run-button" v-if="unlocks[0]" @click="startRun()">
+            Start Teresa's Reality. Glyph TT generation is disabled and you gain less IP and EP (x^0.6).
+            <br><br>
+            Highest antimatter in Teresa's Reality: {{ shorten(bestAM, 2, 0) }}
+          </div>
+          <div class="c-teresa-unlock" v-if="unlocks[0]">
+            Teresa Reality reward: Glyph sacrifice power {{ formatX(runReward, 2, 2) }}
+          </div>
           <div class="c-teresa-unlock" v-if="unlocks[1]">You gain 1% of your peaked EP/min every second.</div>
           <div class="c-teresa-unlock" v-if="unlocks[2]">The container no longer leaks.</div>
           <div class="c-teresa-shop" v-if="unlocks[3]">

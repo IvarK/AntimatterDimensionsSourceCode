@@ -161,7 +161,9 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply game speed by {value}",
     totalDesc: "Game runs × {value} faster ",
     genericDesc: "Game speed multiplier",
-    effect: (level, strength) => 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100,
+    effect: (level, strength) => (GlyphAlteration.isEmpowered("time")
+      ? 1 + Math.pow(level, 0.55)
+      : 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) / 20),
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
@@ -196,7 +198,9 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["dilation", "reality"],
     singleDesc: "Multiply Dilated Time gain by {value}",
     totalDesc: "DT gain ×{value}",
-    effect: (level, strength) => Math.pow(level * strength, 1.5) * 2,
+    effect: (level, strength) => (GlyphAlteration.isEmpowered("dilation")
+      ? Math.pow(1.005, level) * 15
+      : Math.pow(level * strength, 1.5) * 2),
     formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.multiply,
   }, {
@@ -238,7 +242,9 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply replication speed by {value}",
     totalDesc: "Replication speed ×{value}",
     genericDesc: "Replication speed multiplier",
-    effect: (level, strength) => level * strength * 3,
+    effect: (level, strength) => (GlyphAlteration.isEmpowered("replication")
+      ? Math.pow(1.007, level) * 10
+      : level * strength * 3),
     formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.multiply,
   }, {
@@ -314,7 +320,9 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply infinitied stat gain by {value}",
     totalDesc: "Infinitied stat gain ×{value}",
     genericDesc: "Infinitied stat gain multiplier",
-    effect: (level, strength) => Math.pow(level * strength, 1.5) * 2,
+    effect: (level, strength) => (GlyphAlteration.isEmpowered("infinity")
+      ? Math.pow(1.012, level)
+      : Math.pow(level * strength, 1.5) * 2),
     formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.multiply,
   }, {
@@ -330,7 +338,9 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 17,
     glyphTypes: ["power", "reality"],
     singleDesc: "Normal Dimension multipliers ×{value}",
-    effect: (level, strength) => Decimal.pow(level * strength * 10, level * strength * 10),
+    effect: (level, strength) => (GlyphAlteration.isEmpowered("power")
+      ? Decimal.pow(11111, level * 220)
+      : Decimal.pow(level * strength * 10, level * strength * 10)),
     formatEffect: x => shorten(x, 2, 0),
     combine: effects => ({ value: effects.reduce(Decimal.prodReducer, new Decimal(1)), capped: false }),
   }, {
@@ -365,7 +375,9 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 21,
     glyphTypes: ["effarig"],
     singleDesc: "Reality Machine multiplier x{value}",
-    effect: (level, strength) => Math.pow(level, 0.6) * strength,
+    effect: (level, strength) => (GlyphAlteration.isEmpowered("effarig")
+      ? Math.pow(level, 0.95) * 5
+      : Math.pow(level, 0.6) * strength),
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
   }, {

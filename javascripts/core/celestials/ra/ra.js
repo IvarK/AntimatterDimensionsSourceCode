@@ -263,6 +263,36 @@ const Ra = {
   }
 };
 
+const GlyphAlteration = {
+  get replacementThreshold() {
+    return 1e40;
+  },
+  // One-time massive boost
+  get empowermentThreshold() {
+    return 1e50;
+  },
+  // Scaling boost from sacrifice quantity
+  get boostingThreshold() {
+    return 1e60;
+  },
+  getSacrificePower(type) {
+    const sacPower = player.reality.glyphs.sac[type];
+    if (sacPower === undefined) {
+      throw crash("Unknown sacrifice type");
+    }
+    return sacPower;
+  },
+  isReplaced(type) {
+    return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS) && this.getSacrificePower(type) >= this.replacementThreshold;
+  },
+  isEmpowered(type) {
+    return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS) && this.getSacrificePower(type) >= this.empowermentThreshold;
+  },
+  isBoosted(type) {
+    return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS) && this.getSacrificePower(type) >= this.boostingThreshold;
+  }
+};
+
 /**
  * @type {RaPetState[]}
  */
@@ -304,7 +334,7 @@ const RA_UNLOCKS = {
     pet: Ra.pets.teresa,
     level: 15
   },
-  LATER_DILATION: {
+  ALTERED_GLYPHS: {
     id: 5,
     description: "Get Teresa to level 25",
     reward: "Unlock altered glyphs",

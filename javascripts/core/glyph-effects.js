@@ -172,7 +172,8 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["time", "reality"],
     singleDesc: "Free tickspeed threshold multiplier ×{value}",
     genericDesc: "Free tickspeed cost multiplier",
-    effect: (level, strength) => 1 - Math.pow(level, 0.35) * Math.pow(strength, 0.7) / 200,
+    effect: (level, strength) => 1 - Math.pow(level, 0.35) * Math.pow(strength, 0.7) / 200 -
+      GlyphAlteration.sacrificeBoost("time") / 100,
     // Accurately represent what the multiplier actually does in code, assuming TS171
     // The multiplier is applied only to the part of the multiplier > 1, which means it has less effect
     // than the description implies.
@@ -214,11 +215,12 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["dilation", "reality"],
     singleDesc: "Free galaxy threshold multiplier ×{value}",
     genericDesc: "Free galaxy cost multiplier",
-    effect: (level, strength) => 1 - Math.pow(level, 0.17) * Math.pow(strength, 0.35) / 100,
+    effect: (level, strength) => 1 - Math.pow(level, 0.17) * Math.pow(strength, 0.35) / 100 -
+      GlyphAlteration.sacrificeBoost("dilation") / 100,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
-    // TTgen generates slowly TT, value amount is per second, displayed per hour
+    // TTgen slowly generates TT, value amount is per second, displayed per hour
     id: "dilationTTgen",
     bitmaskIndex: 6,
     glyphTypes: ["dilation", "reality"],
@@ -233,7 +235,7 @@ GameDatabase.reality.glyphEffects = [
     /** @type {function(number): string} */
     formatEffect: x => shorten(3600 * x, 2, 2),
     combine: GlyphCombiner.add,
-    conversion: x => Math.pow(50 * x, 1.6),
+    conversion: x => Math.max(1, Math.pow(50 * x, 1.6)),
   }, {
     id: "dilationpow",
     bitmaskIndex: 7,
@@ -262,7 +264,8 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 9,
     glyphTypes: ["replication", "reality"],
     singleDesc: "Replicanti multiplier ^{value}",
-    effect: (level, strength) => 1.1 + Math.pow(level, 0.5) * strength / 25,
+    effect: (level, strength) => 1.1 + Math.pow(level, 0.5) * strength / 25 +
+      GlyphAlteration.sacrificeBoost("replication"),
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.addExponents,
   }, {
@@ -301,7 +304,8 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 12,
     glyphTypes: ["infinity", "reality"],
     singleDesc: "Infinity Dimension multipliers ^{value}",
-    effect: (level, strength) => 1.007 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75,
+    effect: (level, strength) => 1.007 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75 +
+      GlyphAlteration.sacrificeBoost("infinity") / 100,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
@@ -373,7 +377,8 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["power", "reality"],
     singleDesc: "Dimension Boost multiplier ×{value}",
     genericDesc: "Dimension Boost multiplier",
-    effect: (level, strength) => Math.pow(level * strength, 0.5),
+    effect: (level, strength) => Math.pow(level * strength, 0.5) *
+      Math.pow(1 + GlyphAlteration.sacrificeBoost("power"), 3),
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
   }, {
@@ -420,7 +425,8 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["effarig"],
     singleDesc: "All achievement related effects ^{value}",
     genericDesc: "Achievement effects ^x",
-    effect: (level, strength) => 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 60,
+    effect: (level, strength) => 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 60 +
+      GlyphAlteration.sacrificeBoost("effarig") / 10,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {

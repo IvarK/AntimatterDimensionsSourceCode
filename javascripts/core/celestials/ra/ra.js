@@ -270,11 +270,11 @@ const GlyphAlteration = {
   },
   // One-time massive boost of a single effect
   get empowermentThreshold() {
-    return 1e50;
+    return 1e45;
   },
   // Scaling boost from sacrifice quantity
   get boostingThreshold() {
-    return 1e60;
+    return 1e50;
   },
   getSacrificePower(type) {
     const sacPower = player.reality.glyphs.sac[type];
@@ -291,6 +291,9 @@ const GlyphAlteration = {
   },
   isBoosted(type) {
     return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS) && this.getSacrificePower(type) >= this.boostingThreshold;
+  },
+  sacrificeBoost(type) {
+    return Math.log10(Math.max(this.getSacrificePower(type) / this.boostingThreshold, 1));
   }
 };
 

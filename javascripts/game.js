@@ -142,6 +142,9 @@ function gainedInfinityPoints() {
   } else if (V.isRunning) {
     ip = ip.pow(0.5);
   }
+  if (GlyphAlteration.isAdded("infinity")) {
+    ip = ip.pow(getSecondaryGlyphEffect("infinityipgain"));
+  }
   return ip.floor();
 }
 
@@ -163,6 +166,9 @@ function gainedEternityPoints() {
     ep = ep.pow(0.55);
   } else if (V.isRunning) {
     ep = ep.pow(0.5);
+  }
+  if (GlyphAlteration.isAdded("time")) {
+    ep = ep.pow(getSecondaryGlyphEffect("timeeternity"));
   }
   return ep.floor();
 }
@@ -802,6 +808,7 @@ function getTTPerSecond() {
   let ttMult = RA_UNLOCKS.TT_BOOST.effect.ttGen();
   if (Enslaved.isRunning) ttMult *= 1e-3;
   if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttMult *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
+  if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation
   const glyphTT = Teresa.isRunning

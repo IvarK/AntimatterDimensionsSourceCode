@@ -71,7 +71,7 @@ Vue.component("teresa-tab", {
       <div class="l-mechanics-container">
         <div class="l-teresa-unlocks l-teresa-mechanic-container">
           <div class="c-teresa-unlock c-teresa-run-button" v-if="unlocks[0]" @click="startRun()">
-            Start Teresa's Reality. Glyph TT generation is disabled and you gain less IP and EP (x^0.6).
+            Start Teresa's Reality. Glyph TT generation is disabled and you gain less IP and EP (x^0.55).
             <br><br>
             Highest antimatter in Teresa's Reality: {{ shorten(bestAM, 2, 0) }}
           </div>

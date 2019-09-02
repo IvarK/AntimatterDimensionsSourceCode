@@ -485,6 +485,16 @@ function getAdjustedGlyphEffect(effectKey) {
 }
 
 /**
+ * Takes the glyph effect value and feeds it through the conversion function that gives the value of the secondary
+ * effect from glyph alteration.
+ * @param {string} effectKey
+ * @return {number | Decimal}
+ */
+function getSecondaryGlyphEffect(effectKey) {
+  return GameDatabase.reality.glyphEffects[effectKey].conversion(getAdjustedGlyphEffect(effectKey));
+}
+
+/**
  * Finds all equipped glyphs with the specified effect and returns an array of effect values.
  * @param {string} effectKey
  * @returns {number[]}

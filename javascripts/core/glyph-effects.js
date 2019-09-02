@@ -77,14 +77,14 @@ class GlyphEffectConfig {
     this.combine = GlyphEffectConfig.setupCombine(setup);
     /** @member {string[]} Split up single effect description (prefix and suffix to formatted value)*/
     this.singleDescSplit = GlyphEffectConfig.splitOnFormat(this.singleDesc);
-    /** @member {string[]} Split up total effect description (prefix and suffix to formatted value)*/
-    this.totalDescSplit = GlyphEffectConfig.splitOnFormat(this.totalDesc);
+    /** @member{string[]} conversion function to produce altered glyph effect */
+    this.conversion = setup.conversion;
   }
 
   /** @private */
   static checkInputs(setup) {
     const KNOWN_KEYS = ["id", "bitmaskIndex", "glyphTypes", "singleDesc", "totalDesc", "genericDesc",
-      "effect", "formatEffect", "combine", "softcap"];
+      "effect", "formatEffect", "combine", "softcap", "conversion"];
     const unknownField = Object.keys(setup).find(k => !KNOWN_KEYS.includes(k));
     if (unknownField !== undefined) {
       throw new Error(`Glyph effect "${setup.id}" includes unrecognized field "${unknownField}"`);
@@ -159,7 +159,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 1,
     glyphTypes: ["time", "reality"],
     singleDesc: "Multiply game speed by {value}",
-    totalDesc: "Game runs × {value} faster ",
+    totalDesc: "Game runs ×{value} faster",
     genericDesc: "Game speed multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("time")
       ? 1 + Math.pow(level, 0.55)
@@ -187,11 +187,16 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 3,
     glyphTypes: ["time", "reality"],
     singleDesc: "Multiply EP gain by {value}",
-    totalDesc: "EP gain ×{value}",
-    genericDesc: "EP gain multiplier",
+    totalDesc: () => (GlyphAlteration.isAdded("time")
+      ? "EP gain ×{value} and ^{value2}"
+      : "EP gain ×{value}"),
+    genericDesc: () => (GlyphAlteration.isAdded("time")
+      ? "EP gain multiplier and power"
+      : "EP gain multiplier"),
     effect: (level, strength) => Math.pow(level * strength, 3) * 100,
-    formatEffect: x => shorten(x, 2, 0),
+    formatEffect: x => shorten(x, 2, 3),
     combine: GlyphCombiner.multiply,
+    conversion: x => Math.max(1, Math.pow(Math.log10(x), 2) / 240),
   }, {
     id: "dilationdilationMult",
     bitmaskIndex: 4,
@@ -218,12 +223,17 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 6,
     glyphTypes: ["dilation", "reality"],
     singleDesc: "Generates {value} TT per hour",
-    totalDesc: "Generating {value} TT per hour",
-    genericDesc: "TT generation",
+    totalDesc: () => (GlyphAlteration.isAdded("dilation")
+      ? "Generating {value} TT/hour and TT generation x{value2}"
+      : "Generating {value} TT per hour"),
+    genericDesc: () => (GlyphAlteration.isAdded("dilation")
+      ? "TT generation and multiplier"
+      : "TT generation"),
     effect: (level, strength) => Math.pow(level * strength, 0.5) / 10000,
     /** @type {function(number): string} */
     formatEffect: x => shorten(3600 * x, 2, 2),
     combine: GlyphCombiner.add,
+    conversion: x => Math.pow(50 * x, 1.6),
   }, {
     id: "dilationpow",
     bitmaskIndex: 7,
@@ -260,11 +270,16 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 10,
     glyphTypes: ["replication", "reality"],
     singleDesc: "Multiply DT gain by \nlog₁₀(replicanti)×{value}",
-    totalDesc: "DT gain from log₁₀(replicanti)×{value}",
-    genericDesc: "DT gain multiplier (log₁₀(replicanti))",
+    totalDesc: () => (GlyphAlteration.isAdded("replication")
+      ? "DT gain and replication speed from log₁₀(replicanti)×{value}"
+      : "DT gain from log₁₀(replicanti)×{value}"),
+    genericDesc: () => (GlyphAlteration.isAdded("replication")
+      ? "DT+replicanti mult (log₁₀(replicanti))"
+      : "DT gain multiplier (log₁₀(replicanti))"),
     effect: (level, strength) => 0.0003 * Math.pow(level, 0.3) * Math.pow(strength, 0.65),
     formatEffect: x => shorten(x, 5, 5),
     combine: GlyphCombiner.add,
+    conversion: x => x,
   }, {
     id: "replicationglyphlevel",
     bitmaskIndex: 11,
@@ -306,13 +321,18 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 14,
     glyphTypes: ["infinity", "reality"],
     singleDesc: "Multiply IP gain by {value}",
-    totalDesc: "IP gain ×{value}",
-    genericDesc: "IP gain multiplier",
+    totalDesc: () => (GlyphAlteration.isAdded("infinity")
+      ? "IP gain ×{value} and ^{value2}"
+      : "IP gain ×{value}"),
+    genericDesc: () => (GlyphAlteration.isAdded("infinity")
+      ? "IP gain multiplier and power"
+      : "IP gain multiplier"),
     effect: (level, strength) => Math.pow(level * (strength + 1), 6) * 10000,
-    formatEffect: x => shorten(x, 2, 0),
+    formatEffect: x => shorten(x, 2, 3),
     combine: GlyphCombiner.multiply,
     // eslint-disable-next-line no-negated-condition
-    softcap: value => ((Effarig.eternityCap !== undefined) ? Math.min(value, Effarig.eternityCap.toNumber()) : value)
+    softcap: value => ((Effarig.eternityCap !== undefined) ? Math.min(value, Effarig.eternityCap.toNumber()) : value),
+    conversion: x => Math.max(1, Math.pow(Math.log10(x), 2) / 1000),
   }, {
     id: "infinityinfmult",
     bitmaskIndex: 15,
@@ -330,9 +350,13 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 16,
     glyphTypes: ["power", "reality"],
     singleDesc: "Normal Dimension multipliers ^{value}",
+    genericDesc: () => (GlyphAlteration.isAdded("power")
+      ? "ND multipliers ^x and MD multiplier"
+      : "Normal Dimension multipliers ^x"),
     effect: (level, strength) => 1.015 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
+    conversion: x => x,
   }, {
     id: "powermult",
     bitmaskIndex: 17,
@@ -375,6 +399,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 21,
     glyphTypes: ["effarig"],
     singleDesc: "Reality Machine multiplier x{value}",
+    genericDesc: "Reality Machine multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("effarig")
       ? Math.pow(level, 0.95) * 5
       : Math.pow(level, 0.6) * strength),
@@ -385,6 +410,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 22,
     glyphTypes: ["effarig"],
     singleDesc: "Instability starting glyph level +{value}",
+    genericDesc: "Instability starting level",
     effect: (level, strength) => Math.floor(10 * Math.pow(level * strength, 0.5)),
     formatEffect: x => shortenSmallInteger(x),
     combine: GlyphCombiner.add,
@@ -393,7 +419,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 23,
     glyphTypes: ["effarig"],
     singleDesc: "All achievement related effects ^{value}",
-    genericDesc: "Achievement effects power",
+    genericDesc: "Achievement effects ^x",
     effect: (level, strength) => 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 60,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
@@ -402,11 +428,16 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 24,
     glyphTypes: ["effarig"],
     singleDesc: "Raise the bonus gained from buying 10 Dimensions to a power of ^{value}",
-    totalDesc: "Multiplier from \"Buy 10\" ^{value}",
-    genericDesc: "\"Buy 10\" bonus multiplier ^x",
+    totalDesc: () => (GlyphAlteration.isAdded("effarig")
+      ? "Multiplier from \"Buy 10\" ^{value} and dimboosts ^{value2}"
+      : "Multiplier from \"Buy 10\" ^{value}"),
+    genericDesc: () => (GlyphAlteration.isAdded("power")
+      ? "\"Buy 10\" and dimboost multipliers ^x"
+      : "\"Buy 10\" multiplier ^x"),
     effect: (level, strength) => 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4),
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
+    conversion: x => Math.sqrt(x),
   }, {
     id: "effarigdimensions",
     bitmaskIndex: 25,

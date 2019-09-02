@@ -264,10 +264,11 @@ const Ra = {
 };
 
 const GlyphAlteration = {
-  get replacementThreshold() {
+  // Adding a secondary effect to some effects
+  get additionThreshold() {
     return 1e40;
   },
-  // One-time massive boost
+  // One-time massive boost of a single effect
   get empowermentThreshold() {
     return 1e50;
   },
@@ -282,8 +283,8 @@ const GlyphAlteration = {
     }
     return sacPower;
   },
-  isReplaced(type) {
-    return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS) && this.getSacrificePower(type) >= this.replacementThreshold;
+  isAdded(type) {
+    return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS) && this.getSacrificePower(type) >= this.additionThreshold;
   },
   isEmpowered(type) {
     return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS) && this.getSacrificePower(type) >= this.empowermentThreshold;

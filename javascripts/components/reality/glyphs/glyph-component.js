@@ -4,21 +4,46 @@ const GlyphTooltipEffect = {
   props: {
     effect: String,
     value: [Number, Object],
-    boostColor: String,
   },
   computed: {
     effectConfig() {
       return GameDatabase.reality.glyphEffects[this.effect];
     },
-    prefix() {
-      return this.effectConfig.singleDescSplit[0].replace("\n", "<br>");
+    boostColor() {
+      return this.effectConfig.boostColor === undefined
+        ? undefined
+        : this.effectConfig.boostColor();
     },
-    suffix() {
-      return this.effectConfig.singleDescSplit[1].replace("\n", "<br>");
+    effectStringTemplate() {
+      return typeof this.effectConfig.singleDesc === "function"
+        ? this.effectConfig.singleDesc()
+        : this.effectConfig.singleDesc;
     },
-    displayValue() {
+    primaryEffectText() {
       const value = this.effectConfig.formatEffect(this.value);
       return this.boostColor ? `⯅${value}⯅` : value;
+    },
+    secondaryEffectText() {
+      const value = this.effectConfig.formatEffect(this.effectConfig.conversion(this.value));
+      return this.boostColor ? `⯅${value}⯅` : value;
+    },
+    textSplits() {
+      const firstSplit = this.effectStringTemplate.split("{value}");
+      const secondSplit = firstSplit[1].split("{value2}");
+      if (secondSplit.length !== 1) return [firstSplit[0]].concat(secondSplit);
+      return firstSplit;
+    },
+    hasSecondaryValue() {
+      return this.textSplits[2] !== undefined;
+    },
+    part1() {
+      return this.textSplits[0].replace("\n", "<br>");
+    },
+    part2() {
+      return this.textSplits[1].replace("\n", "<br>");
+    },
+    part3() {
+      return this.textSplits[2].replace("\n", "<br>");
     },
     valueStyle() {
       return this.boostColor ? {
@@ -31,9 +56,11 @@ const GlyphTooltipEffect = {
   },
   template: `
     <div class="c-glyph-tooltip__effect">
-      <span v-html="prefix"/>
-      <span :style="valueStyle">{{displayValue}}</span>
-      <span v-html="suffix"/>
+      <span v-html="part1"/>
+      <span :style="valueStyle">{{primaryEffectText}}</span>
+      <span v-html="part2"/>
+      <span v-if="hasSecondaryValue" :style="valueStyle">{{secondaryEffectText}}</span>
+      <span v-if="hasSecondaryValue" v-html="part3"/>
     </div>
     `
 };

@@ -761,7 +761,7 @@ function getGlyphLevelInputs() {
   const postInstabilityFactors = perkFactor + shardFactor;
   baseLevel += postInstabilityFactors;
   scaledLevel += postInstabilityFactors;
-  const levelHardcap = 10000 + AlchemyResource.boundless.effectValue;
+  const levelHardcap = glyphLevelCap();
   const levelCapped = scaledLevel > levelHardcap;
   scaledLevel = Math.min(scaledLevel, levelHardcap);
   return {
@@ -777,6 +777,10 @@ function getGlyphLevelInputs() {
     actualLevel: scaledLevel,
     capped: levelCapped
   };
+}
+
+function glyphLevelCap() {
+  return 10000 + AlchemyResource.boundless.effectValue;
 }
 
 function handleRUpg10() {

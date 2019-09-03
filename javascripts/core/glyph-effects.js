@@ -163,7 +163,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Free tickspeed threshold multiplier ×{value}",
     genericDesc: "Free tickspeed cost multiplier",
     effect: (level, strength) => 1 - Math.pow(level, 0.35) * Math.pow(strength, 0.7) / 200 -
-      GlyphAlteration.sacrificeBoost("time") / 100,
+      GlyphAlteration.sacrificeBoost("time") / 50,
     // Accurately represent what the multiplier actually does in code, assuming TS171
     // The multiplier is applied only to the part of the multiplier > 1, which means it has less effect
     // than the description implies.
@@ -192,7 +192,7 @@ GameDatabase.reality.glyphEffects = [
     effect: (level, strength) => Math.pow(level * strength, 3) * 100,
     formatEffect: x => shorten(x, 2, 3),
     combine: GlyphCombiner.multiply,
-    conversion: x => Math.max(1, Math.pow(Math.log10(x), 2) / 240),
+    conversion: x => 1 + Math.log10(x) / 1000,
   }, {
     id: "dilationdilationMult",
     bitmaskIndex: 4,
@@ -214,7 +214,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Free galaxy threshold multiplier ×{value}",
     genericDesc: "Free galaxy cost multiplier",
     effect: (level, strength) => 1 - Math.pow(level, 0.17) * Math.pow(strength, 0.35) / 100 -
-      GlyphAlteration.sacrificeBoost("dilation") / 100,
+      GlyphAlteration.sacrificeBoost("dilation") / 50,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
     boostColor: () => (GlyphAlteration.isBoosted("dilation")
@@ -270,7 +270,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["replication", "reality"],
     singleDesc: "Replicanti multiplier ^{value}",
     effect: (level, strength) => 1.1 + Math.pow(level, 0.5) * strength / 25 +
-      GlyphAlteration.sacrificeBoost("replication"),
+      GlyphAlteration.sacrificeBoost("replication") * 3,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.addExponents,
     boostColor: () => (GlyphAlteration.isBoosted("replication")
@@ -292,7 +292,7 @@ GameDatabase.reality.glyphEffects = [
     effect: (level, strength) => 0.0003 * Math.pow(level, 0.3) * Math.pow(strength, 0.65),
     formatEffect: x => shorten(x, 5, 5),
     combine: GlyphCombiner.add,
-    conversion: x => x,
+    conversion: x => Math.max(x, 1),
   }, {
     id: "replicationglyphlevel",
     bitmaskIndex: 11,
@@ -315,7 +315,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["infinity", "reality"],
     singleDesc: "Infinity Dimension multipliers ^{value}",
     effect: (level, strength) => 1.007 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75 +
-      GlyphAlteration.sacrificeBoost("infinity") / 100,
+      GlyphAlteration.sacrificeBoost("infinity") / 50,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
     boostColor: () => (GlyphAlteration.isBoosted("infinity")
@@ -351,7 +351,7 @@ GameDatabase.reality.glyphEffects = [
     combine: GlyphCombiner.multiply,
     // eslint-disable-next-line no-negated-condition
     softcap: value => ((Effarig.eternityCap !== undefined) ? Math.min(value, Effarig.eternityCap.toNumber()) : value),
-    conversion: x => Math.max(1, Math.pow(Math.log10(x), 2) / 1000),
+    conversion: x => 1 + Math.log10(x) / 1800,
   }, {
     id: "infinityinfmult",
     bitmaskIndex: 15,

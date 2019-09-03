@@ -33,7 +33,7 @@ GameDatabase.celestials.compression = {
     threshold: () => new Decimal("1e1500000"),
     currentDisplay: () => shorten(player.replicanti.amount),
     invertedCondition: false,
-    effect: () => Math.pow(DimBoost.freeBoosts, 25),
+    effect: () => Math.pow(1 + DimBoost.freeBoosts, 25),
     effectDisplay: x => `${shorten(x, 2, 2)}x`
   },
   strongerDilationGalaxies: {

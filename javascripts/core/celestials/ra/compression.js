@@ -38,7 +38,7 @@ const TimeCompression = {
       return 0;
     }
     const entanglementMult = Effects.max(1, CompressionUpgrade.moreEntanglement);
-    return 308 * Math.clamp((Math.pow(player.antimatter.log10() / 2e5, 0.4) - 1) / 10 * entanglementMult, 0, 1);
+    return 308 * Math.clamp((Math.pow(player.antimatter.log10() / 1.8e5, 0.4) - 1) / 10 * entanglementMult, 0, 1);
   },
   get compressionDepth() {
     return 2;

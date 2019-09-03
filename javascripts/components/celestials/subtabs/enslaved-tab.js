@@ -138,9 +138,9 @@ Vue.component("enslaved-tab", {
       <button class="o-quote-button" @click="nextQuote()" v-if="hasNextQuote()">→</button>
       <div class="l-enslaved-top-container">
         <div class="l-enslaved-top-container__half">
-          Storing black hole time
+          Charging your black hole 
           {{ canAdjustStoredTime ? "reduces your black hole speed" : "sets your game speed to 1" }}.  You can use
-          stored black hole time to unlock Enslaved upgrades.  You can also release it all in a single "supertick"
+          time from charging to unlock Enslaved upgrades.  You can also discharge it all in a single "supertick"
           which acts as if it was the duration of all of your stored time.
           <button :class="['o-enslaved-mechanic-button',
                            {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
@@ -198,7 +198,8 @@ Vue.component("enslaved-tab", {
           @click="buyUnlock(unlock)"> 
             {{ unlock.description }} <br> 
             Costs: {{ timeDisplayShort(unlock.price) }}<br>
-            <span v-if="isStoringBlackHole && !hasUnlock(unlock)">Time left to obtain: {{ timeDisplayShort(Math.max((unlock.price - storedBlackHole)  / currentSpeedUp, 0)) }}</span>
+            <span v-if="isStoringBlackHole && !hasUnlock(unlock)">Time left to obtain:
+            {{ timeDisplayShort(Math.max((unlock.price - storedBlackHole)  / currentSpeedUp, 0)) }}</span>
           </button>
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">

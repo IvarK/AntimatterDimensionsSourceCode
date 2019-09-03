@@ -562,7 +562,7 @@ class GlyphType {
   randomEffect(rng, blacklist = []) {
     const available = this.effects
       .map(e => e.id)
-      .filter(id => !blacklist.includes(id) && this.isEffectUnlocked(id))
+      .filter(id => !blacklist.includes(id) && this.isEffectUnlocked(id));
     if (available.length === 0) return null;
     return available[Math.floor(rng() * available.length)];
   }

@@ -71,7 +71,7 @@ Vue.component("reality-glyph-creation", {
       const effectTemplate = typeof config.singleDesc === "function"
         ? config.singleDesc()
         : config.singleDesc;
-      let effectText = effectTemplate.replace("{value}", config.formatEffect(value));
+      const effectText = effectTemplate.replace("{value}", config.formatEffect(value));
       if (config.conversion === undefined) return effectText;
       return effectText.replace("{value2}", config.formatEffect(config.conversion(value)));
     }

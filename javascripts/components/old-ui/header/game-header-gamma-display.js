@@ -37,8 +37,11 @@ Vue.component("game-header-gamma-display", {
       if (EternityChallenge(12).isRunning || TimeCompression.isActive) {
         storedTimeText = ` (fixed)`;
       }
-      if (speedMod < 10000 && speedMod !== 1) {
+      if (speedMod >= 0.001 && speedMod < 10000 && speedMod !== 1) {
         return `${speedMod.toFixed(3)}${storedTimeText}`;
+      }
+      if (speedMod < 0.001) {
+        return `${shortenSmallInteger(1)} / ${shorten(1 / speedMod, 2)}${storedTimeText}`;
       }
       return `${shorten(speedMod, 2)}${storedTimeText}`;
     }

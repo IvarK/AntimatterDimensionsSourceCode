@@ -58,7 +58,7 @@ function bulkBuyBinarySearch(money, costInfo, alreadyBought) {
   // The amount we can actually buy is in the interval [canBuy/2, canBuy), we do a binary search
   // to find the exact value:
   let canBuy = cantBuy / 2;
-  if (cantBuy > Number.MAX_SAFE_INTEGER) throw crash("Overflow in binary search");
+  if (cantBuy > Number.MAX_SAFE_INTEGER) throw new Error("Overflow in binary search");
   while (cantBuy - canBuy > 1) {
     const middle = Math.floor((canBuy + cantBuy) / 2);
     if (money.gt(costFunction(alreadyBought + middle - 1))) {
@@ -79,7 +79,7 @@ function bulkBuyBinarySearch(money, costInfo, alreadyBought) {
     const newCost = otherCost.plus(costFunction(alreadyBought + i - 1));
     if (newCost.eq(otherCost)) break;
     otherCost = newCost;
-    if (++count > 1000) throw crash("unexpected long loop (buggy cost function?)");
+    if (++count > 1000) throw new Error("unexpected long loop (buggy cost function?)");
   }
   let totalCost = baseCost.plus(otherCost);
   // Check the purchase price again
@@ -160,7 +160,7 @@ class LinearMultiplierScaling {
    * @param {number} logMult natural logarithm of combined multiplier
    */
   purchasesForLogTotalMultiplier(logMult) {
-    if (this.baseRatio < 1.01) throw crash("Ratio is too small for good calculations");
+    if (this.baseRatio < 1.01) throw new Error("Ratio is too small for good calculations");
     const Lb = Math.log(this.baseRatio);
     const k = this.growth / this.baseRatio;
     // Final refinement step, applying 2nd order iteration directly to the formula of
@@ -195,7 +195,7 @@ class LinearMultiplierScaling {
     const h1 = (1 + h0 + rhs) / Math.log1p(h0);
 
     // At this point we should have a pretty solid guess -- enough that this calcuolation
-    // should be pretty accurate; the final refinement 
+    // should be pretty accurate; the final refinement
     const g1 = (h1 - this.baseRatio) / this.growth;
     return refineFinal(refineFinal(g1));
   }
@@ -250,7 +250,7 @@ function findFirstInfiniteCostPurchase(costScalingStart, initialCost, costMult, 
  * @property {number} quantity The new amount that can be bought
  * @property {number} logPrice The logarithm (base 10) of the price
  */
- 
+
 /**
  * This is a a helper class to deal with the more common case of a cost that
  * grows exponentially (past some threshold). NOTE: this assumes that you only
@@ -275,9 +275,9 @@ class ExponentialCostScaling {
   constructor(param) {
     this._baseCost = new Decimal(param.baseCost);
     this._baseIncrease = param.baseIncrease;
-    if (typeof this._baseIncrease !== "number") throw crash("baseIncrease must be a number");
+    if (typeof this._baseIncrease !== "number") throw new Error("baseIncrease must be a number");
     this._costScale = param.costScale;
-    if (typeof this._costScale !== "number") throw crash("costScale must be a number");
+    if (typeof this._costScale !== "number") throw new Error("costScale must be a number");
     this._logBaseCost = ExponentialCostScaling.log10(param.baseCost);
     this._logBaseIncrease = ExponentialCostScaling.log10(param.baseIncrease);
     this._logCostScale = ExponentialCostScaling.log10(param.costScale);
@@ -286,14 +286,14 @@ class ExponentialCostScaling {
     } else if (param.scalingCostThreshold !== undefined) {
       this._purchasesBeforeScaling = Math.ceil(
         (ExponentialCostScaling.log10(param.scalingCostThreshold) - this._logBaseCost) / this._logBaseIncrease);
-    } else throw crash("Must specify either scalingCostThreshold or purchasesBeforeScaling");
+    } else throw new Error("Must specify either scalingCostThreshold or purchasesBeforeScaling");
     this.updateCostScale();
   }
- 
+
   get costScale() {
     return this._costScale;
   }
- 
+
   /**
    * @param {number} value
    */
@@ -302,13 +302,13 @@ class ExponentialCostScaling {
     this._costScale = value;
     this.updateCostScale();
   }
- 
+
   updateCostScale() {
     this._precalcDiscriminant = Math.pow((2 * this._logBaseIncrease + this._logCostScale), 2) -
       8 * this._logCostScale * (this._purchasesBeforeScaling * this._logBaseIncrease + this._logBaseCost);
     this._precalcCenter = -this._logBaseIncrease / this._logCostScale + this._purchasesBeforeScaling + 0.5;
   }
- 
+
   /**
    * Calculates the cost of the next purchase
    * @param {number} currentPurchases
@@ -322,7 +322,7 @@ class ExponentialCostScaling {
       : currentPurchases * logMult + logBase;
     return Decimal.pow(10, logCost);
   }
- 
+
   /**
    * Figure out how much of this can be bought.
    * This returns the maximum new number of this thing; If you have 51 and can
@@ -362,7 +362,7 @@ class ExponentialCostScaling {
     }
     return { quantity: newPurchases - currentPurchases, logPrice };
   }
- 
+
   static log10(value) {
     if (value instanceof Decimal) return value.log10();
     return Math.log10(value);

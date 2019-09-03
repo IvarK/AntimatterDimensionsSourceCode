@@ -8,7 +8,7 @@ class AutomatorCommandInterface {
 
   /** @abstract */
   // eslint-disable-next-line no-unused-vars
-  run(command) { throw NotImplementedCrash(); }
+  run(command) { throw new NotImplementedError(); }
 }
 
 AutomatorCommandInterface.all = [];
@@ -113,7 +113,7 @@ class AutomatorStackEntry {
 
 class AutomatorScript {
   constructor(id) {
-    if (!id) throw crash("Invalid script ID");
+    if (!id) throw new Error("Invalid Automator script ID");
     this._id = id;
     this.compile();
   }
@@ -238,7 +238,7 @@ const AutomatorBackend = {
         this.nextCommand();
         return false;
     }
-    throw crash("Unrecognized return code from command");
+    throw new Error("Unrecognized return code from command");
   },
 
   singleStep() {
@@ -413,7 +413,9 @@ const AutomatorBackend = {
       return this._data[this.length - 1];
     },
     get length() {
-      if (this._data.length !== player.reality.automator.state.stack.length) throw crash("inconsistent stack length");
+      if (this._data.length !== player.reality.automator.state.stack.length) {
+        throw new Error("Inconsistent stack length");
+      }
       return this._data.length;
     },
     get isEmpty() {

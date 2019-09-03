@@ -67,7 +67,7 @@ class GlyphEffectConfig {
     this.effect = setup.effect;
     /**
     * @member {NumericToString<number | Decimal>} formatEffect formatting function for the effect
-    * (just the number conversion). Combined with the description strings to make descriptions 
+    * (just the number conversion). Combined with the description strings to make descriptions
     */
     this.formatEffect = setup.formatEffect || (x => x.toFixed(3));
     /**
@@ -87,18 +87,18 @@ class GlyphEffectConfig {
       "effect", "formatEffect", "combine", "softcap"];
     const unknownField = Object.keys(setup).find(k => !KNOWN_KEYS.includes(k));
     if (unknownField !== undefined) {
-      throw crash(`Glyph effect "${setup.id}" includes unrecognized field "${unknownField}"`);
+      throw new Error(`Glyph effect "${setup.id}" includes unrecognized field "${unknownField}"`);
     }
 
     const unknownGlyphType = setup.glyphTypes.find(e => !GLYPH_TYPES.includes(e));
     if (unknownGlyphType !== undefined) {
-      throw crash(`Glyph effect "${setup.id}" references unknown glyphType "${unknownGlyphType}"`);
+      throw new Error(`Glyph effect "${setup.id}" references unknown glyphType "${unknownGlyphType}"`);
     }
 
     const emptyCombine = setup.combine([]);
     if (typeof emptyCombine !== "number") {
       if (emptyCombine.value === undefined || emptyCombine.capped === undefined) {
-        throw crash(`combine function for glyph effect "${setup.id}" has invalid return type`);
+        throw new Error(`combine function for glyph effect "${setup.id}" has invalid return type`);
       }
     }
   }
@@ -449,7 +449,7 @@ class GlyphType {
     this.effectUnlockedFn = setup.effectUnlockedFn;
     this.alchemyResource = setup.alchemyResource;
     if (!GLYPH_TYPES.includes(this.id)) {
-      crash(`Id ${this.id} not found in GLYPH_TYPES`)
+      throw new Error(`Id ${this.id} not found in GLYPH_TYPES`);
     }
   }
 

@@ -5,7 +5,7 @@
  */
 class GameMechanicState {
   constructor(config) {
-    if (!config) throw crash("Must specify config for GameMechanicState");
+    if (!config) throw new Error("Must specify config for GameMechanicState");
     this.config = config;
     if (typeof this.config.effect === "number" || this.config.effect instanceof Decimal) {
       Object.defineProperty(this, "effectValue", {
@@ -57,7 +57,7 @@ class PurchasableMechanicState extends GameMechanicState {
   /**
    * @abstract
    */
-  get currency() { throw NotImplementedCrash(); }
+  get currency() { throw new NotImplementedError(); }
 
   get isAffordable() {
     return this.currency.isAffordable(this.cost);
@@ -78,12 +78,12 @@ class PurchasableMechanicState extends GameMechanicState {
   /**
    * @abstract
    */
-  get isBought() { throw NotImplementedCrash(); }
+  get isBought() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  set isBought(value) { throw NotImplementedCrash(); }
+  set isBought(value) { throw new NotImplementedError(); }
 
   get canBeBought() {
     return !this.isBought && this.isAffordable && this.isAvailable;
@@ -109,7 +109,7 @@ class SetPurchasableMechanicState extends PurchasableMechanicState {
   /**
    * @abstract
    */
-  get set() { throw NotImplementedCrash(); }
+  get set() { throw new NotImplementedError(); }
 
   get isBought() {
     return this.set.has(this.id);
@@ -131,17 +131,17 @@ class BitPurchasableMechanicState extends PurchasableMechanicState {
   /**
    * @abstract
    */
-  get bits() { throw NotImplementedCrash(); }
+  get bits() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  set bits(value) { throw NotImplementedCrash(); }
+  set bits(value) { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get bitIndex() { throw NotImplementedCrash(); }
+  get bitIndex() { throw new NotImplementedError(); }
 
   get isBought() {
     // eslint-disable-next-line no-bitwise
@@ -166,7 +166,7 @@ class RebuyableMechanicState extends GameMechanicState {
   /**
    * @abstract
    */
-  get currency() { throw NotImplementedCrash(); }
+  get currency() { throw new NotImplementedError(); }
 
   get isAffordable() {
     return this.currency.isAffordable(this.cost);
@@ -187,12 +187,12 @@ class RebuyableMechanicState extends GameMechanicState {
   /**
    * @abstract
    */
-  get boughtAmount() { throw NotImplementedCrash(); }
+  get boughtAmount() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  set boughtAmount(value) { throw NotImplementedCrash(); }
+  set boughtAmount(value) { throw new NotImplementedError(); }
 
   get canBeApplied() {
     return this.boughtAmount > 0;

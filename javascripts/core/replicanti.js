@@ -140,7 +140,7 @@ function replicantiLoop(diff) {
   if (player.replicanti.amount !== 0) {
     replicantiTicks += player.options.updateRate;
   }
-  
+
   if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Decimal.MAX_NUMBER)) {
     replicantiGalaxy();
   }
@@ -165,33 +165,33 @@ function autoBuyReplicantiUpgrades() {
 /** @abstract */
 class ReplicantiUpgradeState {
   /** @abstract */
-  get value() { throw NotImplementedCrash(); }
+  get value() { throw new NotImplementedError(); }
 
   /** @abstract */
-  set value(value) { throw NotImplementedCrash(); }
+  set value(value) { throw new NotImplementedError(); }
 
   /** @abstract */
-  get nextValue() { throw NotImplementedCrash(); }
+  get nextValue() { throw new NotImplementedError(); }
 
   /** @abstract */
-  get cost() { throw NotImplementedCrash(); }
+  get cost() { throw new NotImplementedError(); }
   /** @abstract */
-  set cost(value) { throw crash("Use baseCost to set cost"); }
+  set cost(value) { throw new Error("Use baseCost to set cost"); }
 
   /** @abstract */
-  get costIncrease() { throw NotImplementedCrash(); }
+  get costIncrease() { throw new NotImplementedError(); }
 
   get baseCost() { return this.cost; }
   /** @abstract */
-  set baseCost(value) { throw NotImplementedCrash(); }
+  set baseCost(value) { throw new NotImplementedError(); }
 
   get cap() { return undefined; }
   get isCapped() { return false; }
 
   /** @abstract */
-  get autobuyerMilestone() { throw NotImplementedCrash(); }
+  get autobuyerMilestone() { throw new NotImplementedError(); }
   /** @abstract */
-  get autobuyerId() { throw NotImplementedCrash(); }
+  get autobuyerId() { throw new NotImplementedError(); }
 
   get isAutobuyerUnlocked() { return this.autobuyerMilestone.isReached; }
 

@@ -2,7 +2,7 @@
 
 (function() {
   if (AutomatorGrammar === undefined) {
-    throw crash("AutomatorGrammar must be defined here");
+    throw new Error("AutomatorGrammar must be defined here");
   }
 
   const parser = AutomatorGrammar.parser;
@@ -139,7 +139,7 @@
         this.addError(identifier, `Variable ${varName} is not a ${type.name}${inferenceMessage}`);
         return undefined;
       }
-      if (varInfo.value === undefined) throw crash("Unexpected undefined variable value");
+      if (varInfo.value === undefined) throw new Error("Unexpected undefined Automator variable value");
       return varInfo;
     }
 
@@ -378,7 +378,7 @@
 
     script(ctx) {
       if (ctx.variables === undefined) {
-        throw crash("Compiler called before Validator");
+        throw new Error("Compiler called before Validator");
       }
       return ctx.block ? this.visit(ctx.block) : [];
     }
@@ -402,7 +402,7 @@
       }
       this.validateVisitor();
     }
-  
+
     comparison(ctx) {
       const flipped = ctx.Currency[0].startOffset > ctx.ComparisonOperator[0].startOffset;
       const valueChildren = ctx.compareValue[0].children
@@ -423,13 +423,13 @@
         inputValue: value,
       }
     }
-  
+
     script(ctx) {
       const output = [];
       if (ctx.block) this.visit(ctx.block, output);
       return output;
     }
-  
+
     block(ctx, output) {
       if (ctx.command) {
         for (const cmd of ctx.command) {

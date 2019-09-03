@@ -166,7 +166,7 @@ function dilatedValueOf(value, depth) {
   if (TimeCompression.isActive) {
     return recursiveDilation(value, TimeCompression.compressionDepth);
   }
-  throw crash("Invald dilation depth");
+  throw new Error("Invald dilation depth");
 }
 
 function recursiveDilation(value, depth) {

@@ -86,7 +86,7 @@ const ReactivityComplainer = {
       return;
     }
     if (obj.__ob__ !== undefined) {
-      throw crash(`Boi you fukked up - ${path} became REACTIVE (oh shite)`);
+      throw new Error(`Boi you fukked up - ${path} became REACTIVE (oh shite)`);
     }
     for (const key in obj) {
       if (!obj.hasOwnProperty(key)) continue;

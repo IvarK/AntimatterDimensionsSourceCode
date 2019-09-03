@@ -4,17 +4,17 @@ class RaPetState {
   /**
    * @abstract
    */
-  get data() { throw NotImplementedCrash(); }
+  get data() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get name() { throw NotImplementedCrash(); }
+  get name() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get requiredUnlock() { throw NotImplementedCrash(); }
+  get requiredUnlock() { throw new NotImplementedError(); }
 
   get isUnlocked() {
     return this.requiredUnlock === undefined || Ra.has(this.requiredUnlock);
@@ -78,33 +78,33 @@ class RaPetState {
   /**
    * @abstract
    */
-  get expBoostFactor() { throw NotImplementedCrash(); }
+  get expBoostFactor() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  set expBoostFactor(value) { throw NotImplementedCrash(); }
+  set expBoostFactor(value) { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get defaultBoostFactor() { throw NotImplementedCrash(); }
+  get defaultBoostFactor() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get nextExpBoostFactor() { throw NotImplementedCrash(); }
+  get nextExpBoostFactor() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get color() { throw NotImplementedCrash(); }
+  get color() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
   // eslint-disable-next-line no-unused-vars
-  expFormula(factor) { throw NotImplementedCrash(); }
+  expFormula(factor) { throw new NotImplementedError(); }
 
   updateExpBoost() {
     if (this.level < 3) return;

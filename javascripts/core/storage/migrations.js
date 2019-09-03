@@ -210,15 +210,15 @@ GameStorage.migrations = {
         continue;
       }
       const newId = parseInt(oldId.slice(1), 10);
-      if (isNaN(newId)) throw crash(`Could not parse achievement id ${oldId}`);
+      if (isNaN(newId)) throw new Error(`Could not parse achievement id ${oldId}`);
       if (oldId.startsWith("r")) {
         if (GameDatabase.achievements.normal.find(a => a.id === newId) === undefined) {
-          throw crash(`Unrecognized achievement ${oldId}`);
+          throw new Error(`Unrecognized achievement ${oldId}`);
         }
         player.achievements.add(newId);
       } else if (oldId.startsWith("s")) {
         if (GameDatabase.achievements.secret.find(a => a.id === newId) === undefined) {
-          throw crash(`Unrecognized secret achievement ${newId}`);
+          throw new Error(`Unrecognized secret achievement ${newId}`);
         }
         player.secretAchievements.add(newId);
       }
@@ -257,7 +257,7 @@ GameStorage.migrations = {
       if (name.startsWith("postc")) {
         return { type: "infinity", id: parseInt(name.slice(5), 10) };
       }
-      if (name !== "") throw crash(`Unrecognized challenge ID ${name}`);
+      if (name !== "") throw new Error(`Unrecognized challenge ID ${name}`);
       return null;
     }
     if (player.challengeTimes) {
@@ -294,7 +294,7 @@ GameStorage.migrations = {
       delete player.currentEternityChall;
       if (saved.startsWith("eterc")) {
         player.challenge.eternity.current = parseInt(saved.slice(5), 10);
-      } else if (saved !== "") throw crash(`Unrecognized eternity challenge ${saved}`);
+      } else if (saved !== "") throw new Error(`Unrecognized eternity challenge ${saved}`);
     }
     if (player.eternityChallUnlocked !== undefined) {
       player.challenge.eternity.unlocked = player.eternityChallUnlocked;
@@ -593,7 +593,7 @@ GameStorage.migrations = {
     delete player.options.challConf;
     player.options.confirmations.eternity = player.options.eternityconfirm;
     delete player.options.eternityconfirm;
-    
+
     // This did nothing on live and continues to do nothing...?
     delete player.tickDecrease;
   },

@@ -139,7 +139,7 @@
         this.addError(identifier, `Variable ${varName} is not a ${type.name}${inferenceMessage}`);
         return undefined;
       }
-      if (varInfo.value === undefined) throw new Error("Unexpected undefined variable value");
+      if (varInfo.value === undefined) throw new Error("Unexpected undefined Automator variable value");
       return varInfo;
     }
 

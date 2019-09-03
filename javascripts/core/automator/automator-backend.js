@@ -113,7 +113,7 @@ class AutomatorStackEntry {
 
 class AutomatorScript {
   constructor(id) {
-    if (!id) throw new Error("Invalid script ID");
+    if (!id) throw new Error("Invalid Automator script ID");
     this._id = id;
     this.compile();
   }

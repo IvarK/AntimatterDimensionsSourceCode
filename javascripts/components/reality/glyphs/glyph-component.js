@@ -10,9 +10,14 @@ const GlyphTooltipEffect = {
       return GameDatabase.reality.glyphEffects[this.effect];
     },
     boostColor() {
-      return this.effectConfig.boostColor === undefined
-        ? undefined
-        : this.effectConfig.boostColor();
+      return (this.effectConfig.alterationType !== undefined && this.effectConfig.alterationType !== "addition")
+        ? this.effectConfig.alteredColor()
+        : undefined;
+    },
+    additionColor() {
+      return this.effectConfig.alterationType === "addition"
+        ? this.effectConfig.alteredColor()
+        : undefined;
     },
     effectStringTemplate() {
       return typeof this.effectConfig.singleDesc === "function"
@@ -36,14 +41,10 @@ const GlyphTooltipEffect = {
     hasSecondaryValue() {
       return this.textSplits[2] !== undefined;
     },
-    part1() {
-      return this.textSplits[0].replace("\n", "<br>");
-    },
-    part2() {
-      return this.textSplits[1].replace("\n", "<br>");
-    },
-    part3() {
-      return this.textSplits[2].replace("\n", "<br>");
+    convertedParts() {
+      const parts = [];
+      for (const text of this.textSplits) parts.push(this.convertToHTML(text));
+      return parts;
     },
     valueStyle() {
       return this.boostColor ? {
@@ -51,16 +52,24 @@ const GlyphTooltipEffect = {
         "text-shadow": `0 0 0.4rem ${this.boostColor}`
       } : {
           color: "#76EE76",
-        };
+      };
+    },
+  },
+  methods: {
+    convertToHTML(string) {
+      return string
+        .replace("\n", "<br>")
+        .replace("]", "</span>")
+        .replace("[", `<span style="color:${this.additionColor}; text-shadow:#FFFFFF 0px 0px 0.6rem;">`);
     }
   },
   template: `
     <div class="c-glyph-tooltip__effect">
-      <span v-html="part1"/>
+      <span v-html="convertedParts[0]"/>
       <span :style="valueStyle">{{primaryEffectText}}</span>
-      <span v-html="part2"/>
+      <span v-html="convertedParts[1]"/>
       <span v-if="hasSecondaryValue" :style="valueStyle">{{secondaryEffectText}}</span>
-      <span v-if="hasSecondaryValue" v-html="part3"/>
+      <span v-if="hasSecondaryValue" v-html="convertedParts[2]"/>
     </div>
     `
 };

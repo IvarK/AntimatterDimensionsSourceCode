@@ -77,9 +77,9 @@ Vue.component("alchemy-tab", {
   template:
     `<div class="l-ra-alchemy-tab">
       You can now refine glyphs using "Alchemy Mode" in the glyph auto-sacrifice settings.<br>
-      Refined glyphs will give 1% of their level in alchemy resources.  Alchemy reactions can<br>
+      Refined glyphs will give 1% of their level in alchemy resources. Alchemy reactions can<br>
       be toggled on and off by clicking the respective nodes, and each resource gives its own<br>
-      boost to various resources in the game.  Basic resource totals are limited to the level of<br>
+      boost to various resources in the game. Basic resource totals are limited to the level of<br>
       the refined glyph, and compound resource totals are limited to the amount of the reactants.<br>
       All active alchemy reactions are applied once per reality, unaffected by amplification.
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />

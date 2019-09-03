@@ -139,8 +139,8 @@ Vue.component("enslaved-tab", {
       <div class="l-enslaved-top-container">
         <div class="l-enslaved-top-container__half">
           Charging your black hole 
-          {{ canAdjustStoredTime ? "reduces your black hole speed" : "sets your game speed to 1" }}.  You can use
-          time from charging to unlock Enslaved upgrades.  You can also discharge it all in a single "supertick"
+          {{ canAdjustStoredTime ? "reduces your black hole speed" : "sets your game speed to 1" }}. You can use
+          time from charging to unlock Enslaved upgrades. You can also discharge it all in a single "supertick"
           which acts as if it was the duration of all of your stored time.
           <button :class="['o-enslaved-mechanic-button',
                            {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
@@ -156,7 +156,7 @@ Vue.component("enslaved-tab", {
         </div>
         <div class="l-enslaved-top-container__half">
           Storing real time completely halts all production, setting game speed to 0. You can use stored real time to
-          "amplify" a reality, simulating repeated runs of it.  Amplified realities give all the rewards that normal
+          "amplify" a reality, simulating repeated runs of it. Amplified realities give all the rewards that normal
           realities do.
           <button :class="['o-enslaved-mechanic-button',
                            {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"

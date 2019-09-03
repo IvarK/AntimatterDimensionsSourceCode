@@ -294,7 +294,22 @@ const GlyphAlteration = {
   },
   sacrificeBoost(type) {
     return Math.log10(Math.max(this.getSacrificePower(type) / this.boostingThreshold, 1));
-  }
+  },
+  getAdditionColor(type) {
+    return this.isAdded(type)
+      ? "#CCCCCC"
+      : undefined;
+  },
+  getEmpowermentColor(type) {
+    return this.isEmpowered(type)
+      ? "#EEEE30"
+      : undefined;
+  },
+  getBoostColor(type) {
+    return this.isBoosted(type)
+      ? "#60DDDD"
+      : undefined;
+  },
 };
 
 /**

@@ -640,8 +640,8 @@ function glyphRefinementGain(glyph) {
   return Math.clamp(glyphMaxValue - alchemyResource.amount, 0, 0.01 * glyphMaxValue);
 }
 
-function sacrificeGlyph(glyph, force = false) {
-  if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && glyph.type !== "reality") {
+function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
+  if (!noAlchemy && AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && glyph.type !== "reality") {
     const resource = glyphAlchemyResource(glyph);
     const refinementGain = glyphRefinementGain(glyph);
     resource.amount += refinementGain;

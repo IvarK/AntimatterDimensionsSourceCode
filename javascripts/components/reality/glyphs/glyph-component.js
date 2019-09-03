@@ -340,9 +340,13 @@ Vue.component("glyph-component", {
       this.suppressTooltip = true;
       ev.dataTransfer.setData(GLYPH_MIME_TYPE, this.glyph.id.toString());
       ev.dataTransfer.dropEffect = "move";
-      this.$viewModel.draggingUIID = this.componentID;
       const rect = this.$refs.over.getBoundingClientRect();
       ev.dataTransfer.setDragImage(this.$refs.over, ev.clientX - rect.left, ev.clientY - rect.top);
+      this.$viewModel.draggingUIID = this.componentID;
+      const dragInfo = this.$viewModel.tabs.reality.draggingGlyphInfo;
+      dragInfo.id = this.glyph.id;
+      dragInfo.type = this.glyph.type;
+      dragInfo.sacrificeValue = glyphSacrificeGain(this.glyph);
     },
     dragEnd() {
       this.isDragging = false;

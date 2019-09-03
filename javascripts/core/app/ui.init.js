@@ -19,6 +19,11 @@ let ui = {
       reality: {
         openGlyphWeights: false,
         currentGlyphTooltip: -1,
+        draggingGlyphInfo: {
+          id: 0,
+          type: "",
+          sacrificeValue: 0,
+        },
         automator: {
           fullScreen: false,
           editorScriptID: "",

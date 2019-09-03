@@ -451,6 +451,18 @@
   padding-bottom: 1rem;
 }
 
+.c-sacrificed-glyphs--dragover {
+  border-color: rgb(0, 0, 0);
+  box-shadow: 0 0 0.1rem 0.1rem  rgb(0, 0, 0);
+}
+
+.t-dark .c-sacrificed-glyphs--dragover,
+.t-dark-metro .c-sacrificed-glyphs--dragover,
+.t-s6 .c-sacrificed-glyphs--dragover {
+  border-color: rgb(255, 255, 255);
+  box-shadow: 0 0 0.1rem 0.1rem  rgb(255, 255, 255);
+}
+
 .c-sacrificed-glyphs__header {
   font-size: 1.2rem;
   font-weight: bold;
@@ -473,6 +485,14 @@
 .c-sacrificed-glyphs__type-amount {
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.c-sacrificed-glyphs__type-new-amount {
+  color: rgb(0, 180, 0);
+}
+
+.t-s8 .c-sacrificed-glyphs__type-new-amount {
+  color: rgb(0, 80, 0);
 }
 
 .l-glyph-inventory {

@@ -121,6 +121,7 @@ GameStorage.migrations = {
       GameStorage.migrations.renameDimboosts(player);
       GameStorage.migrations.migrateConfirmations(player);
       GameStorage.migrations.removeOtherTickspeedProps(player);
+      GameStorage.migrations.renameNewsOption(player);
     }
   },
 
@@ -402,6 +403,11 @@ GameStorage.migrations = {
   removeOtherTickspeedProps(player) {
     delete player.tickSpeedCost;
     delete player.tickspeedMultiplier;
+  },
+
+  renameNewsOption(player) {
+    player.options.news = !player.options.newsHidden;
+    delete player.options.newsHidden;
   },
 
   removePostC3Reward(player) {

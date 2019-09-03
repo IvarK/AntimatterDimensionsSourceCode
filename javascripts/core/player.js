@@ -429,7 +429,7 @@ let player = {
   },
   autoEcIsOn: true,
   options: {
-    newsHidden: false,
+    news: true,
     notation: "Mixed scientific",
     retryChallenge: false,
     showAllChallenges: false,

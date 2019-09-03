@@ -125,7 +125,7 @@ const GameStorage = {
       NormalChallenge(1).complete();
     }
 
-    ui.view.newsHidden = player.options.newsHidden;
+    ui.view.news = player.options.news;
     ui.view.newUI = player.options.newUI;
 
     recalculateAllGlyphs();

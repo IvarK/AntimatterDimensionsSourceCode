@@ -178,19 +178,22 @@ function getRealityMachineMultiplier() {
 }
 
 function gainedRealityMachines() {
-    let rmGain = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e / 4000 - 1);
-    rmGain = rmGain.times(getRealityMachineMultiplier());
-    rmGain = rmGain.plusEffectOf(Perk.realityMachineGain);
-    // This happens around ee10 and is necessary to reach e9e15 antimatter without having to deal with the various
-    // potential problems associated with having ee9 RM, of which there are lots (both balance-wise and design-wise).
-    // The softcap here squishes every additional OoM in the exponent into another factor of e1000 RM, putting e9e15
-    // antimatter around e7000 RM instead of e1000000000 RM.
-    const softcapRM = new Decimal("1e1000");
-    if (rmGain.gt(softcapRM)) {
-      const exponentOOMAboveCap = Math.log10(rmGain.log10() / softcapRM.log10());
-      rmGain = softcapRM.pow(1 + exponentOOMAboveCap);
-    }
-    return Decimal.floor(rmGain);
+  const log10FinalEP = player.eternityPoints.plus(gainedEternityPoints()).log10();
+  let rmGain = Decimal.pow(1000, log10FinalEP / 4000 - 1);
+  // Increase base RM gain if <10 RM
+  if (rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
+  rmGain = rmGain.times(getRealityMachineMultiplier());
+  rmGain = rmGain.plusEffectOf(Perk.realityMachineGain);
+  // This happens around ee10 and is necessary to reach e9e15 antimatter without having to deal with the various
+  // potential problems associated with having ee9 RM, of which there are lots (both balance-wise and design-wise).
+  // The softcap here squishes every additional OoM in the exponent into another factor of e1000 RM, putting e9e15
+  // antimatter around e7000 RM instead of e1000000000 RM.
+  const softcapRM = new Decimal("1e1000");
+  if (rmGain.gt(softcapRM)) {
+    const exponentOOMAboveCap = Math.log10(rmGain.log10() / softcapRM.log10());
+    rmGain = softcapRM.pow(1 + exponentOOMAboveCap);
+  }
+  return Decimal.floor(rmGain);
 }
 
 function gainedGlyphLevel() {

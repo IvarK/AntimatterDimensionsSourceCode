@@ -31,7 +31,7 @@ Vue.component("reality-button", {
     },
     formatMachineStats() {
       if (this.machinesGained.lt(100)) {
-        return `Next at ${shorten(this.nextMachineEP, 0)} EP`;
+        return `Next at ${shorten(this.nextMachineEP, 2)} EP`;
       }
       if (this.machinesGained.lt(1e100)) {
         return `${shorten(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;
@@ -70,7 +70,8 @@ Vue.component("reality-button", {
       function EPforRM(rm) {
         const adjusted = Decimal.divide(rm.minusEffectOf(Perk.realityMachineGain), getRealityMachineMultiplier());
         if (adjusted.lte(1)) return Decimal.pow10(4000);
-        return Decimal.pow10(Math.ceil(4000 * (adjusted.log10() / 3 + 1)));
+        if (adjusted.lte(10)) return Decimal.pow10(4000 / 27 * (adjusted.toNumber() + 26));
+        return Decimal.pow10(4000 * (adjusted.log10() / 3 + 1));
       }
       this.canReality = true;
 

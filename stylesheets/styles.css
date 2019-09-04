@@ -2678,12 +2678,16 @@ screen and (max-width: 480px) {
   color: #888888;
 }
 
-.t-s6 .c-stats-tab {
-  color: #e0e0e0;
-}
-
 .t-dark-metro .c-stats-tab {
   color: #757575;
+}
+
+.t-s2 .c-stats-tab {
+  color: white;
+}
+
+.t-s6 .c-stats-tab {
+  color: #e0e0e0;
 }
 
 /*#endregion c-stats-tab*/
@@ -3094,6 +3098,14 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion t-s1*/
+
+/*#region t-s2*/
+
+.t-s2 .c-challenge-box--normal {
+  color: white;
+}
+
+/*#endregion t-s2*/
 
 /*#region t-s6*/
 
@@ -3655,13 +3667,13 @@ screen and (max-width: 480px) {
   background-color: #c5ba26;
 }
 
-.t-s6 .o-infinity-upgrade-btn--unavailable:hover {
+.t-s6 .o-infinity-upgrade-btn--unavailable {
   color: grey;
   background-color: black;
   border-color: grey;
 }
 
-.t-s6 .o-infinity-upgrade-btn--unavailable:hover:hover {
+.t-s6 .o-infinity-upgrade-btn--unavailable:hover {
   background-color: #222;
 }
 

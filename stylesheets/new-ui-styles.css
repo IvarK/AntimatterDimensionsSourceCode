@@ -864,6 +864,11 @@ body.t-dark {
   color: black;
 }
 
+.t-s6 .l-autobuyer-grid select {
+  border: 0.1rem solid white;
+  color: white;
+}
+
 .o-autobuyer-btn {
   border: 0.1rem solid var(--color-accent-1);
 }

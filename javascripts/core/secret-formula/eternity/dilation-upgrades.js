@@ -68,7 +68,7 @@ GameDatabase.eternity.dilation = (function() {
             multiplier = ratio.toFixed(2);
           }
         }
-        return `Time Dimensions are affected by Replicanti multiplier ^${multiplier}.`;
+        return `Time Dimensions are affected by Replicanti multiplier ^${shorten(multiplier, 1, 2)}.`;
       },
       effect: () => {
         let rep10 = replicantiMult().pLog10() * 0.1;

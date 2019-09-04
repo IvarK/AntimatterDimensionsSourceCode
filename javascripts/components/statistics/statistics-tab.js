@@ -83,7 +83,7 @@ Vue.component("statistics-tab", {
       this.matterScale = MatterScale.estimate(player.antimatter);
     },
     formatAmount(value) { 
-      return value > 1e18 ? shorten(value, 3, 0) : formatWithCommas(value);
+      return value > 1e18 ? shorten(value, 3, 0) : shortenSmallInteger(value);
     },
     formatResetAmount(value) {
       return this.formatAmount(value) + ((value === 1) ? " time" : " times");
@@ -100,8 +100,14 @@ Vue.component("statistics-tab", {
         <br>
         <h3>General</h3>
         <div>You have made a total of {{ shortenMoney(totalAntimatter) }} antimatter.</div>
-        <div>You have purchased {{ boosts }} Dimension {{"Boost/Shift" | pluralize(boosts, "Boosts/Shifts")}}.</div>
-        <div>You have {{ galaxies }} Antimatter {{"Galaxy" | pluralize(galaxies, "Galaxies")}}.</div>
+        <div>
+          You have purchased {{ shortenSmallInteger(boosts) }}
+          Dimension {{"Boost/Shift" | pluralize(boosts, "Boosts/Shifts")}}.
+        </div>
+        <div>
+          You have {{ shortenSmallInteger(galaxies) }}
+          Antimatter {{"Galaxy" | pluralize(galaxies, "Galaxies")}}.
+        </div>
         <div>You have played for {{ realTimePlayed }}.</div>
         <div v-if="reality.isUnlocked">
           Your existence has spanned {{ reality.totalTimePlayed }} of time.
@@ -123,7 +129,7 @@ Vue.component("statistics-tab", {
             <div v-if="infinity.banked.gt(0)">
               You have {{ formatDecimalAmount(infinity.banked) }} banked infinities.
             </div>
-            <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best }}.</div>
+            <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best.toStringShort() }}.</div>
             <div v-else>You have no fastest Infinity<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
             <div>You have spent {{ infinity.this }} in this Infinity.
               <span v-if="reality.isUnlocked">
@@ -144,7 +150,7 @@ Vue.component("statistics-tab", {
               {{ formatDecimalResetAmount(eternity.count) }}<span v-if="reality.isUnlocked"> this Reality</span>.
             </div>
             <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
-            <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best }}.</div>
+            <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toStringShort() }}.</div>
             <div v-else>You have no fastest eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div>You have spent {{ eternity.this }} in this Eternity.
               <span v-if="reality.isUnlocked">
@@ -161,7 +167,7 @@ Vue.component("statistics-tab", {
         <div v-if="reality.isUnlocked">
             <h3>Reality</h3>
             <div>You have Realitied {{ formatResetAmount(reality.count) }}.</div>
-            <div>Your fastest Reality was {{ reality.best }}.</div>
+            <div>Your fastest Reality was {{ reality.best.toStringShort() }}.</div>
             <div>
               You have spent
               {{ reality.this }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)
@@ -181,7 +187,7 @@ const MatterScale = {
     if (!matter) return ["There is no antimatter yet."];
     if (matter.gt(Decimal.fromMantissaExponent(1, 100000))) {
       return [
-        "If you wrote 3 numbers a second, it would take you",
+        `If you wrote ${shortenSmallInteger(3)} numbers a second, it would take you`,
         TimeSpan.fromSeconds(matter.log10() / 3).toString(),
         "to write down your antimatter amount."
       ];
@@ -191,12 +197,12 @@ const MatterScale = {
     if (planckedMatter.gt(this.proton)) {
       const scale = this.macroScale(planckedMatter);
       const amount = shortenMoney(planckedMatter.dividedBy(scale.amount));
-      return ["If every antimatter were a planck volume, " +
-        "you would have enough to " + scale.verb + " " + amount + " " + scale.name];
+      return [`If every antimatter were a planck volume, you would have
+        enough to ${scale.verb} ${amount} ${scale.name}`];
     }
     const scale = this.microScale(matter);
-    return ["If every antimatter were " + shortenMoney(this.proton / scale.amount / matter.toNumber()) + " " +
-      scale.name + ", you would have enough to make a proton."];
+    return [`If every antimatter were ${shortenMoney(this.proton / scale.amount / matter.toNumber())} ${scale.name},
+      you would have enough to make a proton.`];
   },
 
   microScale(matter) {

@@ -47,7 +47,7 @@ function formatPow(value, places, placesUnder1000) {
 }
 
 function formatPercents(value, places) {
-  return `${(value * 100).toFixed(places)}%`;
+  return `${shorten(value * 100, 2, places)}%`;
 }
 
 function timeDisplay(ms) {

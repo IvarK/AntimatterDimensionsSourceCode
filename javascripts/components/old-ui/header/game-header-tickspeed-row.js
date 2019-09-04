@@ -34,7 +34,7 @@ Vue.component("game-header-tickspeed-row", {
         displayValue = tickspeed.toFixed(0);
       } else {
         const oom = Decimal.divide(100, Decimal.pow10(tickspeed.exponent));
-        displayValue = `${tickspeed.times(oom).toFixed(0)} / ${shorten(oom, 2, 2)}`;
+        displayValue = `${shorten(tickspeed.times(oom), 0, 1)} / ${shorten(oom, 2, 2)}`;
       }
       return `Tickspeed: ${displayValue}`;
     },

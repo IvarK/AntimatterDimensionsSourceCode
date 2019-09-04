@@ -73,7 +73,7 @@ Vue.component("normal-dim-row", {
       >{{name}} Dimension x{{shortenMultiplier(multiplier)}}</div>
       <div
         class="c-normal-dim-row__label c-normal-dim-row__label--growable"
-      >{{amountDisplay}} ({{boughtBefore10}}){{rateOfChangeDisplay}}</div>
+      >{{amountDisplay}} ({{shortenSmallInteger(boughtBefore10)}}){{rateOfChangeDisplay}}</div>
       <primary-button
         :enabled="isAffordable"
         class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd c-normal-dim-row__buy-button"
@@ -91,7 +91,8 @@ Vue.component("normal-dim-row", {
         @click="buyUntil10">
         <span v-if="isCapped">Capped!</span>
         <template v-else>
-          Until 10, <span v-if="showCostTitle(until10Cost)">Cost: </span>{{shortenCosts(until10Cost)}}
+          Until {{shortenSmallInteger(10)}}, <span v-if="showCostTitle(until10Cost)">
+          Cost: </span>{{shortenCosts(until10Cost)}}
         </template>
       </primary-button>
       <div

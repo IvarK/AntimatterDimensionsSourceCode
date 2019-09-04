@@ -42,14 +42,14 @@ Vue.component("replicanti-tab", {
       const upgrade = ReplicantiUpgrade.galaxies;
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => {
-          let description = `Max Replicanti galaxies: ${value}`;
+          let description = `Max Replicanti galaxies: ${shortenSmallInteger(value)}`;
           const extra = upgrade.extra;
           if (extra > 0) {
-            description += `+${extra}`;
+            description += `+${shortenSmallInteger(extra)}`;
           }
           return description;
         },
-        cost => `+1 Costs: ${this.shortenCosts(cost)} IP`
+        cost => `+${shortenSmallInteger(1)} Costs: ${this.shortenCosts(cost)} IP`
       );
     }
   },
@@ -85,7 +85,7 @@ Vue.component("replicanti-tab", {
         <div v-if="isInEC8">You have {{ec8Purchases}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
         <div v-if="hasRaisedCap">
           Your replicanti cap without study 192 has been raised to {{shorten(replicantiCap, 2)}}
-          and is giving you {{effarigInfinityBonusRG}} extra RG due to Effarig Infinity.
+          and is giving you {{shortenSmallInteger(effarigInfinityBonusRG)}} extra RG due to Effarig Infinity.
           (Next RG at {{shorten(nextEffarigRGThreshold, 2)}})
         </div>
         <p class="c-replicanti-description">

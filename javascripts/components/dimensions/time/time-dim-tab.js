@@ -13,11 +13,8 @@ Vue.component("time-dim-tab", {
     };
   },
   computed: {
-    totalUpgradesDisplay() {
-      return formatWithCommas(this.totalUpgrades);
-    },
     e6000Tooltip() {
-      return "TD costs start increasing faster after " + shortenDimensions(new Decimal("1e6000"));
+      return `TD costs start increasing faster after ${shorten(new Decimal("1e6000"))}`;
     },
     costScaleTooltip() {
       return this.showCostScaleTooltip ? this.e6000Tooltip : undefined;
@@ -43,7 +40,7 @@ Vue.component("time-dim-tab", {
   template:
     `<div class="l-time-dim-tab l-centered-vertical-tab">
       <div>
-        <p>You've gained {{totalUpgradesDisplay}} tickspeed upgrades.</p>
+        <p>You've gained {{shortenSmallInteger(totalUpgrades)}} tickspeed upgrades.</p>
         <p>
           You have
           <span class="c-time-dim-description__accent">{{shortenMoney(timeShards)}}</span> time shards.

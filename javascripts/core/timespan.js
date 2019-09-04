@@ -218,7 +218,7 @@ class TimeSpan {
       addComponent(value, name);
     }
     function addComponent(value, name) {
-      parts.push(value === 1 ? `${value} ${name}` : `${value} ${name}s`);
+      parts.push(value === 1 ? `${shortenSmallInteger(value)} ${name}` : `${shortenSmallInteger(value)} ${name}s`);
     }
     addCheckedComponent(this.years, "year");
     addCheckedComponent(this.days, "day");
@@ -236,24 +236,24 @@ class TimeSpan {
   toStringShort(useHMS = true) {
     const totalSeconds = this.totalSeconds;
     if (totalSeconds <= 10) {
-      return `${totalSeconds.toFixed(3)} seconds`;
+      return `${shorten(totalSeconds, 0, 3)} seconds`;
     }
     if (totalSeconds <= 60) {
-      return `${totalSeconds.toFixed(2)} seconds`;
+      return `${shorten(totalSeconds, 0, 2)} seconds`;
     }
     if (this.totalHours < 100) {
-      if (useHMS) {
+      if (useHMS && !Notations.current.isPainful) {
         return `${format(Math.floor(this.totalHours))}:${format(this.minutes)}:${format(this.seconds)}`;
       }
       if (this.totalMinutes < 60) {
-        return `${this.totalMinutes.toFixed(2)} minutes`;
+        return `${shorten(this.totalMinutes, 0, 2)} minutes`;
       }
       if (this.totalHours < 24) {
-        return `${this.totalHours.toFixed(2)} hours`;
+        return `${shorten(this.totalHours, 0, 2)} hours`;
       }
     }
     if (this.totalDays < 500) {
-      return `${this.totalDays.toFixed(2)} days`;
+      return `${shorten(this.totalDays, 0, 2)} days`;
     }
     return `${shorten(this.totalYears, 3, 2)} years`;
     

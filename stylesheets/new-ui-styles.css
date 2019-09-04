@@ -764,11 +764,7 @@ body.t-dark {
 /* FIXING OLD TABS */
 
 .l-achievement-grid__cell {
-  margin: -0.5rem -0.5rem;
-}
-
-.o-achievement {
-  transform:scale(0.8)
+  margin: -0.1rem -0.1rem;
 }
 
 .o-infinity-upgrade-btn--unavailable {

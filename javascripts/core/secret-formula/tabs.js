@@ -317,7 +317,7 @@ GameDatabase.tabs = [
       {
         key: "laitela",
         name: "Lai'tela",
-        symbol: "<i class='fas fa-atom'></i>",
+        symbol: "ᛝ",
         component: "laitela-tab",
         condition: () => Ra.has(RA_LAITELA_UNLOCK)
       },

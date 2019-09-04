@@ -66,15 +66,13 @@ function buyTickSpeed() {
       return false;
   }
 
+  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
+    Tickspeed.multiplySameCosts();
+  }
   player.antimatter = player.antimatter.minus(Tickspeed.cost);
   player.totalTickBought++;
   player.thisInfinityLastBuyTime = player.thisInfinityTime;
   player.secretUnlocks.why++;
-  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
-    const lastCost =
-      Tickspeed.costScale.calculateCost(player.totalTickBought + player.chall9TickspeedPurchaseBumps - 1);
-    multiplySameCosts(lastCost);
-  }
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
   GameUI.update();
   return true;
@@ -101,12 +99,12 @@ function buyMaxTickSpeed() {
 
     let shouldContinue = true;
     while (antimatter.gt(costScale.calculateCost(totalTickBought + purchaseBumps)) && shouldContinue) {
+      if (inCostScalingChallenge) {
+        Tickspeed.multiplySameCosts();
+      }
       antimatter = antimatter.minus(costScale.calculateCost(totalTickBought + purchaseBumps));
       totalTickBought++;
       player.thisInfinityLastBuyTime = player.thisInfinityTime;
-      if (inCostScalingChallenge) {
-        multiplySameCosts(costScale.calculateCost(totalTickBought + purchaseBumps - 1));
-      }
       if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
       if (costScale.calculateCost(totalTickBought + purchaseBumps).gte(Decimal.MAX_NUMBER) &&
         !inCostScalingChallenge &&
@@ -172,7 +170,14 @@ const Tickspeed = {
         Achievement(83)
       )
       .times(getTickSpeedMultiplier().pow(player.totalTickBought + player.totalTickGained));
+  },
+
+  multiplySameCosts() {
+    for (const dimension of NormalDimensions.all) {
+      if (dimension.cost.e === this.cost.e) dimension.purchaseBumps++;
+    }
   }
+
 };
 
 

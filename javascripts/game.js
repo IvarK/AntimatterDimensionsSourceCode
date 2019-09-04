@@ -13,8 +13,8 @@ let kongEPMult = 1
 function floatText(tier, text) {
   if (!player.options.animations.floatingText) return;
   const floatingText = ui.view.tabs.dimensions.normal.floatingText[tier];
-  floatingText.push({ text: text, key: UIID.next() });
-  setTimeout(() => floatingText.shift(), 1000)
+  floatingText.push({ text, key: UIID.next() });
+  setTimeout(() => floatingText.shift(), 1000);
 }
 
 function maxAll() {
@@ -32,7 +32,7 @@ function maxAll() {
 function maxDimension(tier) {
   const dimension = NormalDimension(tier);
   if (!dimension.isAvailable || !dimension.isAffordableUntil10) return;
-  const cost = dimension.cost.times(dimension.remainingUntil10);
+  const cost = dimension.costUntil10;
   const multBefore = dimension.power;
 
   if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
@@ -53,38 +53,23 @@ function maxDimension(tier) {
     }
 
     // Buy in a while loop in order to properly trigger abnormal price increases
-    const hasAbnormalCostIncrease = NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning;
-    // eslint-disable-next-line no-unmodified-loop-condition
-    while (player.antimatter.gte(dimension.cost.times(10)) && (hasAbnormalCostIncrease ||
-            dimension.cost.lte(Decimal.MAX_NUMBER))) {
-      player.antimatter = player.antimatter.minus(dimension.cost.times(10));
-      buyUntilTen(tier);
+    if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
+      while (dimension.isAffordableUntil10 && (hasAbnormalCostIncrease ||
+        dimension.cost.lte(Decimal.MAX_NUMBER))) {
+        player.antimatter = player.antimatter.minus(dimension.costUntil10);
+        buyUntilTen(tier);
+      }
     }
 
-    // This blob is the post-e308 bulk-buy math, explicitly ignored if abnormal cost increases are active
-    if (dimension.cost.gte(Decimal.MAX_NUMBER) &&
-        BreakInfinityUpgrade.dimCostMult.isMaxed && !hasAbnormalCostIncrease) {
-      const a = Math.log10(Math.sqrt(Player.dimensionMultDecrease));
-      const b = dimension.costMultiplier.dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10();
-      const c = dimension.cost.dividedBy(player.antimatter).log10();
-      const discriminant = Math.pow(b, 2) - (c * a * 4);
-      if (discriminant < 0) return;
-      const buying = Math.floor((Math.sqrt(discriminant) - b) / (2 * a)) + 1;
-      if (buying <= 0) return;
-      dimension.amount = Decimal.round(dimension.amount.plus(10 * buying));
-      const preInfBuy = Math.floor(1 + (308 - dimension.baseCost.log10()) / dimension.baseCostMultiplier.log10());
-      const postInfBuy = dimension.bought / 10 + buying - preInfBuy - 1;
-      const postInfInitCost = dimension.baseCost.times(Decimal.pow(dimension.baseCostMultiplier, preInfBuy));
-      dimension.bought += 10 * buying;
-      dimension.power = dimension.power.times(Decimal.pow(getBuyTenMultiplier(), buying));
-      const newCost = postInfInitCost.times(Decimal.pow(dimension.baseCostMultiplier, postInfBuy))
-        .times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
-      const newMult = dimension.baseCostMultiplier.times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1));
-      dimension.cost = newCost;
-      dimension.costMultiplier = newMult;
-      if (player.antimatter.gte(dimension.cost)) player.antimatter = player.antimatter.minus(dimension.cost);
-      dimension.cost = dimension.cost.times(dimension.costMultiplier);
-      dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
+    // This is the post-e308 bulk-buy math, explicitly ignored if abnormal cost increases are active
+    if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
+      const buying = dimension.costScale.getMaxBought(Math.floor(dimension.bought / 10) + dimension.purchaseBumps, antimatter).quantity;
+      if (buying > 0) {
+        dimension.amount = dimension.amount.plus(10 * buying).round();
+        dimension.bought += 10 * buying;
+        dimension.pow = dimension.pow.times(Decimal.pow(buyTenMultiplier, buying));
+        player.antimatter = player.antimatter.minus(dimension.cost).max(0);
+      }
     }
   }
   if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) {
@@ -97,17 +82,11 @@ function maxDimension(tier) {
 // This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
 function buyUntilTen(tier) {
   const dimension = NormalDimension(tier);
-  dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
+  if (InfinityChallenge(5).isRunning) dimension.multiplyIC5Costs();
+  else if (NormalChallenge(9).isRunning) dimension.multiplySameCosts();
+  dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10));
   dimension.bought += dimension.remainingUntil10;
-  dimension.power = dimension.power.times(getBuyTenMultiplier())
-
-  if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
-  else if (NormalChallenge(9).isRunning) multiplySameCosts(dimension.cost);
-  else dimension.cost = dimension.cost.times(dimension.costMultiplier);
-
-  if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
-    dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
-  }
+  dimension.power = dimension.power.times(getBuyTenMultiplier());
 }
 
 function playerInfinityUpgradesOnEternity() {

@@ -51,7 +51,7 @@ Vue.component("enslaved-tab", {
         width: "60rem",
         tooltip: false
       };
-    },
+    }
   },
   methods: {
     update() {
@@ -88,6 +88,9 @@ Vue.component("enslaved-tab", {
     },
     timeDisplayShort(ms) {
       return timeDisplayShort(ms);
+    },
+    timeUntilBuy(price) {
+      return Math.max((price - this.storedBlackHole) / this.currentSpeedUp, 0);
     },
     buyUnlock(info) {
       Enslaved.buyUnlock(info);
@@ -138,19 +141,26 @@ Vue.component("enslaved-tab", {
       <button class="o-quote-button" @click="nextQuote()" v-if="hasNextQuote()">→</button>
       <div class="l-enslaved-top-container">
         <div class="l-enslaved-top-container__half">
+          Charging your black hole 
+          {{ canAdjustStoredTime ? "reduces your black hole speed" : "sets your game speed to 1" }}. You can use
+          time from charging to unlock Enslaved upgrades. You can also discharge it all in a single "supertick"
+          which acts as if it was the duration of all of your stored time.
           <button :class="['o-enslaved-mechanic-button',
                            {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
                   @click="toggleStoreBlackHole">
             <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedBlackHole) }}</div>
-            <div>{{ isStoringBlackHole ? "Storing black hole time": "Store black hole time" }}</div>
+            <div>{{ isStoringBlackHole ? "Charging black hole": "Charge black hole" }}</div>
           </button>
           <button class="o-enslaved-mechanic-button" @click="useStored">
-            Use stored black hole time
+            Discharge black hole
             <p v-if="inEnslaved">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
           </button>
           <div v-if="hasAmplifyStoredReal"> Amplified: {{ amplifiedGameDesc }} </div>
         </div>
         <div class="l-enslaved-top-container__half">
+          Storing real time completely halts all production, setting game speed to 0. You can use stored real time to
+          "amplify" a reality, simulating repeated runs of it. Amplified realities give all the rewards that normal
+          realities do.
           <button :class="['o-enslaved-mechanic-button',
                            {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
                   @click="toggleStoreReal">
@@ -180,7 +190,7 @@ Vue.component("enslaved-tab", {
           v-model="autoRelease"
           :value="autoRelease"
           @input="toggleAutoRelease()">
-        <label for="autoReleaseBox">Use 1% of stored time every 5 ticks</label>
+        <label for="autoReleaseBox">Pulse black hole (uses 1% every 5 ticks)</label>
       </div>
       <div class="l-enslaved-shop-container">
         <button
@@ -191,7 +201,8 @@ Vue.component("enslaved-tab", {
           @click="buyUnlock(unlock)"> 
             {{ unlock.description }} <br> 
             Costs: {{ timeDisplayShort(unlock.price) }}<br>
-            <span v-if="isStoringBlackHole && !hasUnlock(unlock)">Time left to obtain: {{ timeDisplayShort(Math.max((unlock.price - storedBlackHole)  / currentSpeedUp, 0)) }}</span>
+            <span v-if="isStoringBlackHole && !hasUnlock(unlock)">Time to obtain:
+            {{ timeDisplayShort(timeUntilBuy(unlock.price)) }}</span>
           </button>
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">

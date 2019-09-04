@@ -1,7 +1,5 @@
 "use strict";
 
-var repMs = 0;
-
 // Slowdown parameters for replicanti growth, interval will increase by scaleFactor for every scaleLog10
 // OoM past the cap(default is 308, 1.2, Number.MAX_VALUE)
 const ReplicantiGrowth = {
@@ -90,6 +88,7 @@ function getReplicantiInterval(noMod, intervalIn) {
     interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
   }
   interval = interval.divide(getAdjustedGlyphEffect("replicationspeed"));
+  if (GlyphAlteration.isAdded("replication")) interval = interval.divide(getSecondaryGlyphEffect("replicationdtgain"));
   interval = interval.divide(RA_UNLOCKS.TT_BOOST.effect.replicanti());
   interval = interval.dividedByEffectOf(AlchemyResource.replication);
   interval = interval.divide(Effects.max(1, CompressionUpgrade.replicantiSpeedFromDB));

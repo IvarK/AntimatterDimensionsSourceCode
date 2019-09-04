@@ -50,7 +50,7 @@ Vue.component("game-header-tickspeed-row", {
     },
     tooltip() {
       if (this.isGameSpeedNormal) return undefined;
-      const displayValue = this.isGameSpeedSlow ? (1 / this.gameSpeedMult).toFixed(0) : this.formattedFastSpeed;
+      const displayValue = this.isGameSpeedSlow ? shorten(1 / this.gameSpeedMult, 2, 3) : this.formattedFastSpeed;
       return `The game is running ${displayValue}x ${this.isGameSpeedSlow ? "slower." : "faster."}`;
     },
     showCostTitle() {

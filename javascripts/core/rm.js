@@ -446,6 +446,9 @@ const Glyphs = {
       outIndex += t.padding;
     }
   },
+  get levelCap() {
+    return 10000 + AlchemyResource.boundless.effectValue;
+  },
 };
 
 class GlyphSacrificeState extends GameMechanicState {
@@ -482,6 +485,16 @@ function getAdjustedGlyphEffectUncached(effectKey) {
  */
 function getAdjustedGlyphEffect(effectKey) {
   return GameCache.glyphEffects.value[effectKey];
+}
+
+/**
+ * Takes the glyph effect value and feeds it through the conversion function that gives the value of the secondary
+ * effect from glyph alteration.
+ * @param {string} effectKey
+ * @return {number | Decimal}
+ */
+function getSecondaryGlyphEffect(effectKey) {
+  return GameDatabase.reality.glyphEffects[effectKey].conversion(getAdjustedGlyphEffect(effectKey));
 }
 
 /**
@@ -720,7 +733,8 @@ function getGlyphLevelInputs() {
   // For display purposes, each term is divided independently by s.
   const preScale = 5;
   const weights = player.celestials.effarig.glyphWeights;
-  const adjustFactor = (input, weight) => (input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0);
+  const adjustFactor = (input, weight) =>
+    (input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0);
   const epEffect = adjustFactor(epBase, weights.ep / 100);
   const replEffect = adjustFactor(replBase, weights.repl / 100);
   const dtEffect = adjustFactor(dtBase, weights.dt / 100);
@@ -751,7 +765,7 @@ function getGlyphLevelInputs() {
   const postInstabilityFactors = perkFactor + shardFactor;
   baseLevel += postInstabilityFactors;
   scaledLevel += postInstabilityFactors;
-  const levelHardcap = 10000 + AlchemyResource.boundless.effectValue;
+  const levelHardcap = Glyphs.levelCap;
   const levelCapped = scaledLevel > levelHardcap;
   scaledLevel = Math.min(scaledLevel, levelHardcap);
   return {

@@ -36,7 +36,9 @@ class MatterDimensionState {
   }
 
   get power() {
-    return Decimal.pow(1.1, this.dimension.powerUpgrades).times(Laitela.realityReward);
+    let power = Decimal.pow(1.1, this.dimension.powerUpgrades).times(Laitela.realityReward);
+    if (GlyphAlteration.isAdded("power")) power = power.times(getSecondaryGlyphEffect("powerpow"));
+    return power;
   }
 
   get chanceCost() {

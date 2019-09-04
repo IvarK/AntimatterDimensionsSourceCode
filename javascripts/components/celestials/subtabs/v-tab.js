@@ -64,10 +64,12 @@ Vue.component("v-tab", {
       <div v-else>
         <div class="l-v-unlocks-container">
           <li v-for="hex in hexGrid">
-            <div v-if="hex.config" class="l-v-hexagon c-v-unlock" :class="{ 'c-v-unlock-completed': hex.completions == 6 }">
-              <h2>{{ hex.config.name }}</h2>
-              <p class="o-v-unlock-desc">{{ hex.formattedDescription }}</p>
-              <p class="o-v-unlock-amount">{{ hex.completions }}/{{hex.config.values.length}} done</p>
+            <div v-if="hex.config"
+              class="l-v-hexagon c-v-unlock"
+              :class="{ 'c-v-unlock-completed': hex.completions == 6 }">
+                <h2>{{ hex.config.name }}</h2>
+                <p class="o-v-unlock-desc">{{ hex.formattedDescription }}</p>
+                <p class="o-v-unlock-amount">{{ hex.completions }}/{{hex.config.values.length}} done</p>
             </div>
             <div v-else-if="hex.isRunButton" @click="startRun()" class="l-v-hexagon o-v-run-button">
               <p>
@@ -81,6 +83,10 @@ Vue.component("v-tab", {
           </li>
         </div>
         <div>
+          V-achievements can only be completed within V's reality, but are permanent and do not reset upon leaving
+          and re-entering the reality.
+        </div>
+        <div>
           You have {{ totalUnlocks }} V-achievements done. You can pick
           {{ totalAdditionalStudies }} {{ "study" | pluralize(totalAdditionalStudies, "studies") }}
           on other paths you normally can't buy.
@@ -88,10 +94,13 @@ Vue.component("v-tab", {
         <div>(You get one additional study per {{ achievementsPerAdditionalStudy }} V-achievements, rounded down.)</div>
         <br>
         <div class="l-v-milestones-container">
-          <div class="o-v-milestone" v-for="milestone in runMilestones" :class="{'o-v-milestone-unlocked': has(milestone)}">
-            <p>{{ milestone.description }}</p>
-            <p>Reward: {{ milestone.reward }}</p>
-            <p v-if="milestone.effect">Currently: <b>{{ milestone.format(milestone.effect()) }}</b></p>
+          <div class="o-v-milestone"
+            v-for="milestone in runMilestones"
+            :class="{'o-v-milestone-unlocked':
+            has(milestone)}">
+              <p>{{ milestone.description }}</p>
+              <p>Reward: {{ milestone.reward }}</p>
+              <p v-if="milestone.effect">Currently: <b>{{ milestone.format(milestone.effect()) }}</b></p>
           </div>
         </div>
       </div>

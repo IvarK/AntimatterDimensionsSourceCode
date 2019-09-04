@@ -25,20 +25,23 @@ Vue.component("game-header-gamma-display", {
         if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
           const storedTimeWeight = player.celestials.enslaved.storedFraction;
           if (storedTimeWeight !== 0) {
-            storedTimeText = ` (storing ${formatPercents(storedTimeWeight)})`;
+            storedTimeText = ` (charging ${formatPercents(storedTimeWeight)})`;
           }
         } else {
-          storedTimeText = ` (storing all game time)`;
+          storedTimeText = ` (charging black hole)`;
         }
       }
       if (Enslaved.isAutoReleasing) {
-        storedTimeText = ` (auto-releasing)`;
+        storedTimeText = ` (pulsing black hole)`;
       }
       if (EternityChallenge(12).isRunning || TimeCompression.isActive) {
         storedTimeText = ` (fixed)`;
       }
-      if (speedMod < 10000 && speedMod !== 1) {
+      if (speedMod >= 0.001 && speedMod < 10000 && speedMod !== 1) {
         return `${speedMod.toFixed(3)}${storedTimeText}`;
+      }
+      if (speedMod < 0.001) {
+        return `${shortenSmallInteger(1)} / ${shorten(1 / speedMod, 2)}${storedTimeText}`;
       }
       return `${shorten(speedMod, 2)}${storedTimeText}`;
     }

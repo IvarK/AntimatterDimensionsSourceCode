@@ -17,8 +17,7 @@ class DimBoost {
       return new Decimal(1);
     }
 
-    return Effects
-      .max(
+    let boost = Effects.max(
         2,
         InfinityUpgrade.dimboostMult,
         InfinityChallenge(7).reward,
@@ -33,6 +32,8 @@ class DimBoost {
         Achievement(142),
         GlyphEffect.dimBoostPower
       ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);
+    if (GlyphAlteration.isAdded("effarig")) boost = boost.pow(getSecondaryGlyphEffect("effarigforgotten"));
+    return boost;
   }
 
   static get maxShiftTier() {

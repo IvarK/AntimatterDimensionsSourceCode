@@ -75,7 +75,7 @@ const AutoSacTypeTab = {
       </div>
       <div v-for="effect in effects" class="l-auto-sac-type-tab__row-wrapper">
         <div class="c-auto-sac-type-tab__effect-desc l-auto-sac-type-tab__effect-desc" :style="descStyle">
-          {{effect.genericDesc}}
+          {{ typeof effect.genericDesc === "function" ? effect.genericDesc() : effect.genericDesc }}
         </div>
         <input type="number" min="0" max="999" :value="effectScores[effect.id]"
                @blur="setEffectScore(effect.id, $event)"

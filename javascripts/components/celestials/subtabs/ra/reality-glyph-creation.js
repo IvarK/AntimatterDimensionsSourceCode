@@ -68,9 +68,12 @@ Vue.component("reality-glyph-creation", {
     formatGlyphEffect(effect) {
       const config = GameDatabase.reality.glyphEffects[effect];
       const value = config.effect(this.realityGlyphLevel, rarityToStrength(100));
-      return config.singleDesc
-        .replace("{value}", config.formatEffect(value))
-        .replace("<br>", "");
+      const effectTemplate = typeof config.singleDesc === "function"
+        ? config.singleDesc()
+        : config.singleDesc;
+      const effectText = effectTemplate.replace("{value}", config.formatEffect(value));
+      if (config.conversion === undefined) return effectText;
+      return effectText.replace("{value2}", config.formatEffect(config.conversion(value)));
     }
   },
   template: `

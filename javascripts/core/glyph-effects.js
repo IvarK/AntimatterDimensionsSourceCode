@@ -4,8 +4,10 @@
 
 // The last glyph type you can only get if you got effarig reality
 const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig", "reality"];
-const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω", effarig: "Ϙ", reality: "Ϟ" };
-const CANCER_GLYPH_SYMBOLS = { time: "🕟", dilation: "☎", replication: "⚤", infinity: "8", power: "⚡", effarig: "🦒", reality: "⛧" };
+const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω",
+  effarig: "Ϙ", reality: "Ϟ" };
+const CANCER_GLYPH_SYMBOLS = { time: "🕟", dilation: "☎", replication: "⚤", infinity: "8", power: "⚡",
+  effarig: "🦒", reality: "⛧" };
 
 const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),
@@ -75,11 +77,11 @@ class GlyphEffectConfig {
     * multiple glyph effects into one value (adds up, applies softcaps, etc)
     */
     this.combine = GlyphEffectConfig.setupCombine(setup);
-    /** @member{string[]} conversion function to produce altered glyph effect */
+    /** @member{function(number)} conversion function to produce altered glyph effect */
     this.conversion = setup.conversion;
-    /** @member{string[]} color to show numbers in glyph tooltips if boosted */
+    /** @member{string} color to show numbers in glyph tooltips if boosted */
     this.alteredColor = setup.alteredColor;
-    /** @member{string[]} string passed along to tooltip code to ensure proper formatting */
+    /** @member{number} string passed along to tooltip code to ensure proper formatting */
     this.alterationType = setup.alterationType;
   }
 
@@ -131,6 +133,12 @@ class GlyphEffectConfig {
   }
 }
 
+const ALTERATION_TYPES = {
+  ADDITION: 1,
+  EMPOWER: 2,
+  BOOST: 3
+};
+
 GameDatabase.reality.glyphEffects = [
   {
     id: "timepow",
@@ -155,7 +163,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("time"),
-    alterationType: "empower"
+    alterationType: ALTERATION_TYPES.EMPOWER
   }, {
     id: "timefreeTickMult",
     bitmaskIndex: 2,
@@ -175,7 +183,7 @@ GameDatabase.reality.glyphEffects = [
     // Cap it at "effectively zero", but this effect only ever reduces the threshold by 20%
     softcap: value => Math.max(1e-5, value),
     alteredColor: () => GlyphAlteration.getBoostColor("time"),
-    alterationType: "boost"
+    alterationType: ALTERATION_TYPES.BOOST
   }, {
     id: "timeeternity",
     bitmaskIndex: 3,
@@ -194,7 +202,7 @@ GameDatabase.reality.glyphEffects = [
     combine: GlyphCombiner.multiply,
     conversion: x => 1 + Math.log10(x) / 1000,
     alteredColor: () => GlyphAlteration.getAdditionColor("time"),
-    alterationType: "addition"
+    alterationType: ALTERATION_TYPES.ADDITION
   }, {
     id: "dilationdilationMult",
     bitmaskIndex: 4,
@@ -207,7 +215,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("dilation"),
-    alterationType: "empower"
+    alterationType: ALTERATION_TYPES.EMPOWER
   }, {
     id: "dilationgalaxyThreshold",
     bitmaskIndex: 5,
@@ -219,7 +227,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getBoostColor("dilation"),
-    alterationType: "boost"
+    alterationType: ALTERATION_TYPES.BOOST
   }, {
     // TTgen slowly generates TT, value amount is per second, displayed per hour
     id: "dilationTTgen",
@@ -240,7 +248,7 @@ GameDatabase.reality.glyphEffects = [
     combine: GlyphCombiner.add,
     conversion: x => Math.max(1, Math.pow(50 * x, 1.6)),
     alteredColor: () => GlyphAlteration.getAdditionColor("dilation"),
-    alterationType: "addition"
+    alterationType: ALTERATION_TYPES.ADDITION
   }, {
     id: "dilationpow",
     bitmaskIndex: 7,
@@ -264,7 +272,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("replication"),
-    alterationType: "empower"
+    alterationType: ALTERATION_TYPES.EMPOWER
   }, {
     id: "replicationpow",
     bitmaskIndex: 9,
@@ -275,7 +283,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.addExponents,
     alteredColor: () => GlyphAlteration.getBoostColor("replication"),
-    alterationType: "boost"
+    alterationType: ALTERATION_TYPES.BOOST
   }, {
     id: "replicationdtgain",
     bitmaskIndex: 10,
@@ -294,7 +302,7 @@ GameDatabase.reality.glyphEffects = [
     combine: GlyphCombiner.add,
     conversion: x => Math.max(x, 1),
     alteredColor: () => GlyphAlteration.getAdditionColor("replication"),
-    alterationType: "addition"
+    alterationType: ALTERATION_TYPES.ADDITION
   }, {
     id: "replicationglyphlevel",
     bitmaskIndex: 11,
@@ -321,7 +329,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getBoostColor("infinity"),
-    alterationType: "boost"
+    alterationType: ALTERATION_TYPES.BOOST
   }, {
     id: "infinityrate",
     bitmaskIndex: 13,
@@ -354,7 +362,7 @@ GameDatabase.reality.glyphEffects = [
     softcap: value => ((Effarig.eternityCap !== undefined) ? Math.min(value, Effarig.eternityCap.toNumber()) : value),
     conversion: x => 1 + Math.log10(x) / 1800,
     alteredColor: () => GlyphAlteration.getAdditionColor("infinity"),
-    alterationType: "addition"
+    alterationType: ALTERATION_TYPES.ADDITION
   }, {
     id: "infinityinfmult",
     bitmaskIndex: 15,
@@ -368,7 +376,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("infinity"),
-    alterationType: "empower"
+    alterationType: ALTERATION_TYPES.EMPOWER
   }, {
     id: "powerpow",
     bitmaskIndex: 16,
@@ -387,7 +395,7 @@ GameDatabase.reality.glyphEffects = [
     combine: GlyphCombiner.multiply,
     conversion: x => Math.pow(x, 1.2),
     alteredColor: () => GlyphAlteration.getAdditionColor("power"),
-    alterationType: "addition"
+    alterationType: ALTERATION_TYPES.ADDITION
   }, {
     id: "powermult",
     bitmaskIndex: 17,
@@ -399,7 +407,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 2, 0),
     combine: effects => ({ value: effects.reduce(Decimal.prodReducer, new Decimal(1)), capped: false }),
     alteredColor: () => GlyphAlteration.getEmpowermentColor("power"),
-    alterationType: "empower"
+    alterationType: ALTERATION_TYPES.EMPOWER
   }, {
     id: "powerdimboost",
     bitmaskIndex: 18,
@@ -411,7 +419,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getBoostColor("power"),
-    alterationType: "boost"
+    alterationType: ALTERATION_TYPES.BOOST
   }, {
     id: "powerbuy10",
     bitmaskIndex: 19,
@@ -442,7 +450,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("effarig"),
-    alterationType: "empower"
+    alterationType: ALTERATION_TYPES.EMPOWER
   }, {
     id: "effarigglyph",
     bitmaskIndex: 22,
@@ -463,7 +471,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getBoostColor("effarig"),
-    alterationType: "boost"
+    alterationType: ALTERATION_TYPES.BOOST
   }, {
     id: "effarigforgotten",
     bitmaskIndex: 24,
@@ -482,7 +490,7 @@ GameDatabase.reality.glyphEffects = [
     combine: GlyphCombiner.multiply,
     conversion: x => Math.sqrt(x),
     alteredColor: () => GlyphAlteration.getAdditionColor("effarig"),
-    alterationType: "addition"
+    alterationType: ALTERATION_TYPES.ADDITION
   }, {
     id: "effarigdimensions",
     bitmaskIndex: 25,

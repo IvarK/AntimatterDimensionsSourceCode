@@ -12,7 +12,7 @@ Vue.component("reality-autobuyer-box", {
   },
   methods: {
     update() {
-      this.levelCap = glyphLevelCap();
+      this.levelCap = Glyphs.glyphLevelCap;
       this.isOverCap = this.autobuyer.glyph > this.levelCap;
     }
   },

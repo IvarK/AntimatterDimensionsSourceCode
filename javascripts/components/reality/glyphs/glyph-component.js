@@ -10,12 +10,13 @@ const GlyphTooltipEffect = {
       return GameDatabase.reality.glyphEffects[this.effect];
     },
     boostColor() {
-      return (this.effectConfig.alterationType !== undefined && this.effectConfig.alterationType !== "addition")
-        ? this.effectConfig.alteredColor()
-        : undefined;
+      return (this.effectConfig.alterationType !== undefined &&
+        this.effectConfig.alterationType !== ALTERATION_TYPES.ADDITION)
+          ? this.effectConfig.alteredColor()
+          : undefined;
     },
     additionColor() {
-      return this.effectConfig.alterationType === "addition"
+      return this.effectConfig.alterationType === ALTERATION_TYPES.ADDITION
         ? this.effectConfig.alteredColor()
         : undefined;
     },

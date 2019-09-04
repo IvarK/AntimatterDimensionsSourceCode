@@ -279,18 +279,21 @@ const GlyphAlteration = {
   getSacrificePower(type) {
     const sacPower = player.reality.glyphs.sac[type];
     if (sacPower === undefined) {
-      throw crash("Unknown sacrifice type");
+      throw new Error("Unknown sacrifice type");
     }
     return sacPower;
   },
+  get isUnlocked() {
+    return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS);
+  },
   isAdded(type) {
-    return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS) && this.getSacrificePower(type) >= this.additionThreshold;
+    return this.isUnlocked && this.getSacrificePower(type) >= this.additionThreshold;
   },
   isEmpowered(type) {
-    return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS) && this.getSacrificePower(type) >= this.empowermentThreshold;
+    return this.isUnlocked && this.getSacrificePower(type) >= this.empowermentThreshold;
   },
   isBoosted(type) {
-    return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS) && this.getSacrificePower(type) >= this.boostingThreshold;
+    return this.isUnlocked && this.getSacrificePower(type) >= this.boostingThreshold;
   },
   sacrificeBoost(type) {
     return Math.log10(Math.max(this.getSacrificePower(type) / this.boostingThreshold, 1));

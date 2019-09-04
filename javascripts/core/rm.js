@@ -446,6 +446,9 @@ const Glyphs = {
       outIndex += t.padding;
     }
   },
+  get glyphLevelCap() {
+    return 10000 + AlchemyResource.boundless.effectValue;
+  },
 };
 
 class GlyphSacrificeState extends GameMechanicState {
@@ -730,7 +733,8 @@ function getGlyphLevelInputs() {
   // For display purposes, each term is divided independently by s.
   const preScale = 5;
   const weights = player.celestials.effarig.glyphWeights;
-  const adjustFactor = (input, weight) => (input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0);
+  const adjustFactor = (input, weight) =>
+    (input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0);
   const epEffect = adjustFactor(epBase, weights.ep / 100);
   const replEffect = adjustFactor(replBase, weights.repl / 100);
   const dtEffect = adjustFactor(dtBase, weights.dt / 100);
@@ -761,7 +765,7 @@ function getGlyphLevelInputs() {
   const postInstabilityFactors = perkFactor + shardFactor;
   baseLevel += postInstabilityFactors;
   scaledLevel += postInstabilityFactors;
-  const levelHardcap = glyphLevelCap();
+  const levelHardcap = Glyphs.glyphLevelCap;
   const levelCapped = scaledLevel > levelHardcap;
   scaledLevel = Math.min(scaledLevel, levelHardcap);
   return {
@@ -777,10 +781,6 @@ function getGlyphLevelInputs() {
     actualLevel: scaledLevel,
     capped: levelCapped
   };
-}
-
-function glyphLevelCap() {
-  return 10000 + AlchemyResource.boundless.effectValue;
 }
 
 function handleRUpg10() {

@@ -51,7 +51,7 @@ Vue.component("enslaved-tab", {
         width: "60rem",
         tooltip: false
       };
-    },
+    }
   },
   methods: {
     update() {
@@ -88,6 +88,9 @@ Vue.component("enslaved-tab", {
     },
     timeDisplayShort(ms) {
       return timeDisplayShort(ms);
+    },
+    timeUntilBuy(price) {
+      return Math.max((price - this.storedBlackHole) / this.currentSpeedUp, 0);
     },
     buyUnlock(info) {
       Enslaved.buyUnlock(info);
@@ -198,8 +201,8 @@ Vue.component("enslaved-tab", {
           @click="buyUnlock(unlock)"> 
             {{ unlock.description }} <br> 
             Costs: {{ timeDisplayShort(unlock.price) }}<br>
-            <span v-if="isStoringBlackHole && !hasUnlock(unlock)">Time left to obtain:
-            {{ timeDisplayShort(Math.max((unlock.price - storedBlackHole)  / currentSpeedUp, 0)) }}</span>
+            <span v-if="isStoringBlackHole && !hasUnlock(unlock)">Time to obtain:
+            {{ timeDisplayShort(timeUntilBuy(unlock.price)) }}</span>
           </button>
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">

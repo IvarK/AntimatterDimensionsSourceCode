@@ -414,6 +414,7 @@ body.t-dark {
   width: 100%;
   border-bottom: .1rem solid var(--color-accent-1);
   padding: .8rem 0;
+  height: 3.9rem;
 }
 
 .c-news-line {

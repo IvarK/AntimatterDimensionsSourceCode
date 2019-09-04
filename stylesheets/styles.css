@@ -318,7 +318,7 @@ body {
   align-items: center;
 }
 
-#theorembuybackground {
+.ttshop-background {
   background: #E0E0E0;
   border: 2px solid black;
   border-bottom: none;
@@ -327,12 +327,46 @@ body {
   z-index: 1;
 }
 
+.t-dark .ttshop-background,
+.t-dark-metro .ttshop-background {
+  background: #455A64;
+}
+
+.t-metro .ttshop-background,
+.t-inverted-metro .ttshop-background,
+.t-s8 .ttshop-background {
+  background: #EEEEEE;
+}
+
+.t-metro .ttshop-background,
+.t-dark-metro .ttshop-background,
+.t-inverted-metro .ttshop-background,
+.t-s8 .ttshop-background {
+  border-width: 1px;
+  border-radius: 0;
+}
+
+.t-inverted .ttshop-background {
+  border-color: #fff;
+  background-color: #1f1f1f;
+}
+
+.t-s1 .ttshop-background {
+  background: #dbd242;
+}
+
+.t-s6 .ttshop-background {
+  border: 1px solid #3AACD6;
+  background: black;
+}
+
 .ttshop-container {
-  padding: 0 10px 5px 10px;
-  width: 555px;
+  padding: 0 1rem 0.5rem 1rem;
+  width: 55.5rem;
   display: flex;
   flex-direction: column;
   transition: all 0.25s ease-out;
+  min-height: 3.8rem;
 }
 
 .ttshop-minimize-btn {

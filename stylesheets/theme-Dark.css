@@ -100,10 +100,6 @@ input.t-dark {
   border: 1px solid #B84B5F;
 }
 
-.t-dark #theorembuybackground {
-    background: #455A64;
-}
-
 .t-dark .greedbtn {
     background-color: #f2d729;
     color: black;

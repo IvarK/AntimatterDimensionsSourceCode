@@ -1002,6 +1002,63 @@ GameDatabase.news = [
     text: "<a href='https://www.youtube.com/watch?v=agxG5K38g1c' target='_blank'>THIS LINK IS NOT A RICK ROLL.</a></a>"
   },
   {
+    id: "a195",
+    text:
+      "Clowns are unique in that there is no such thing as an anti-clown, " +
+      "it's just another clown. Clowns are their own opposite."
+  },
+  {
+    id: "a196",
+    text: "Disco Time! (click me!)"
+  },
+  {
+    id: "a197",
+    text: "In order to reach Reality in half an R press, we have to first talk about parallel dimensions."
+  },
+  {
+    id: "a198",
+    text:
+      "Hey there! Just to let you know, there a speck of dust on your screen. Can you help wipe it off? " +
+      "It bothers me when l’m not clean. Thanks a lot!"
+  },
+  {
+    id: "a199",
+    text: "The real update is the friends we made along the way."
+  },
+  {
+    id: "a200",
+    text:
+      "This former message has been revealed to be a duplicate of another message and has thus been removed. " +
+      "We apologize for the inconvenience."
+  },
+  {
+    id: "a201",
+    text: "No wait stop don't click that hide news ticker button!"
+  },
+  {
+    id: "a202",
+    text:
+      "This is so sad. Alexa, please play a sad song so I can relate to its emotional mood, as I currently have poor " +
+      "mental health and listen to music like this so I can feel bad about myself. I realize this is unhealthy, but " +
+      "you are a robot incapable of sentient thought, so you're unable to make a choice to avoid contributing to my " +
+      "self destructive behavior, and you'll play a sad song anyway. " +
+      "<i>Now playing \"Despacito\" by \"Luis Fonsi\".</i>"
+  },
+  {
+    id: "a203",
+    text:
+      "3/4 of the news messages are fake and gotten off of the discord server without permission or credit given " +
+      "to the original writer - anonymous discord server member"
+  },
+  {
+    id: "a204",
+    text: "What kind of tea is hard to swallow? Reali-tea."
+  },
+  {
+    id: "a205",
+    text: "Shoutouts to Simpleflips."
+  },
+  {
     id: "c1",
     text: "You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken",
     condition: () => player.antimatter.e === 15

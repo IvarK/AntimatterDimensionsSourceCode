@@ -34,47 +34,45 @@ function maxDimension(tier) {
   if (!dimension.isAvailable || !dimension.isAffordableUntil10) return;
   const cost = dimension.costUntil10;
   const multBefore = dimension.power;
+  let goal;
+  if (InfinityChallenge.isRunning) goal = InfinityChallenge.current.goal;
+  else if (NormalChallenge.isRunning) goal = NormalChallenge.current.goal;
+  if (goal !== undefined && dimension.cost.gt(goal)) return;
 
-  if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
+  if (tier === 8 && Enslaved.isRunning) {
+    buyOneDimension(8);
+    return;
+  }
 
+  // Buy any remaining until 10 before attempting to bulk-buy
+  if (cost.lt(player.antimatter)) {
+    player.antimatter = player.antimatter.minus(cost);
+    buyUntilTen(tier);
+  }
+
+  // Buy in a while loop in order to properly trigger abnormal price increases
+  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
+    while (dimension.isAffordableUntil10 && dimension.cost.lt(goal)) {
+      player.antimatter = player.antimatter.minus(dimension.costUntil10);
+      buyUntilTen(tier);
+    }
+  }
+
+  // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
+  const maxBought = dimension.costScale.getMaxBought(
+    Math.floor(dimension.bought / 10) + dimension.purchaseBumps, player.antimatter
+  );
+  if (maxBought === null) {
+    return;
+  }
+  const buying = maxBought.quantity;
+  dimension.amount = dimension.amount.plus(10 * buying).round();
+  dimension.bought += 10 * buying;
+  dimension.power = dimension.power.times(Decimal.pow(getBuyTenMultiplier(), buying));
   // Challenge 6: Dimensions 3+ cost the dimension two tiers down instead of antimatter
   if (tier >= 3 && NormalChallenge(6).isRunning) {
-    const lowerTier = NormalDimension(tier - 2);
-    if (lowerTier.amount.lt(cost)) return;
-    while (lowerTier.amount.gt(dimension.cost)) {
-      lowerTier.amount = lowerTier.amount.minus(dimension.cost);
-      buyUntilTen(tier);
-    }
-  } else {
-    // Buy any remaining until 10 before attempting to bulk-buy
-    if (cost.lt(player.antimatter)) {
-      player.antimatter = player.antimatter.minus(cost);
-      buyUntilTen(tier);
-    }
-
-    // Buy in a while loop in order to properly trigger abnormal price increases
-    if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
-      while (dimension.isAffordableUntil10 && (hasAbnormalCostIncrease ||
-        dimension.cost.lte(Decimal.MAX_NUMBER))) {
-        player.antimatter = player.antimatter.minus(dimension.costUntil10);
-        buyUntilTen(tier);
-      }
-    }
-
-    // This is the post-e308 bulk-buy math, explicitly ignored if abnormal cost increases are active
-    if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
-      const buying = dimension.costScale.getMaxBought(Math.floor(dimension.bought / 10) + dimension.purchaseBumps, antimatter).quantity;
-      if (buying > 0) {
-        dimension.amount = dimension.amount.plus(10 * buying).round();
-        dimension.bought += 10 * buying;
-        dimension.pow = dimension.pow.times(Decimal.pow(buyTenMultiplier, buying));
-        player.antimatter = player.antimatter.minus(dimension.cost).max(0);
-      }
-    }
-  }
-  if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) {
-    player.matter = new Decimal(1);
-  }
+    NormalDimension(tier - 2).amount = NormalDimension(tier - 2).amount.minus(Decimal.pow10(buying.logPrice)).max(0);
+  } else player.antimatter = player.antimatter.minus(Decimal.pow10(buying.logPrice)).max(0);
   onBuyDimension(tier);
   if (dimension.power.neq(multBefore)) floatText(tier, `x${shortenMoney(dimension.power.dividedBy(multBefore))}`);
 }
@@ -180,10 +178,10 @@ function gainedGlyphLevel() {
 
 function resetChallengeStuff() {
     player.chall2Pow = 1;
-    player.chall3Pow = new Decimal(0.01)
-    player.matter = new Decimal(0)
-    player.chall11Pow = new Decimal(1)
-    player.postC4Tier = 1
+    player.chall3Pow = new Decimal(0.01);
+    player.matter = new Decimal(1);
+    player.chall11Pow = new Decimal(1);
+    player.postC4Tier = 1;
 }
 
 function resetAntimatter() {

@@ -146,7 +146,7 @@ let player = {
   lastUpdate: new Date().getTime(),
   chall2Pow: 1,
   chall3Pow: new Decimal(0.01),
-  matter: new Decimal(0),
+  matter: new Decimal(1),
   chall9TickspeedPurchaseBumps: 0,
   chall11Pow: new Decimal(1),
   partInfinityPoint: 0,

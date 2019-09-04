@@ -25,11 +25,6 @@ class DimensionState {
   /** @param {number} value */
   set bought(value) { this.data.bought = value; }
 
-  /** @returns {number} */
-  get purchaseBumps() { return this.data.purchaseBumps; }
-  /** @param {number} value */
-  set purchaseBumps(value) { this.data.purchaseBumps = value; }
-
   static createIndex() {
     this.index = Array.range(1, 8).map(tier => new this(tier));
     this.index.unshift(null);

@@ -504,6 +504,11 @@ class NormalDimensionState extends DimensionState {
     return this.costScale.calculateCost(Math.floor(this.bought / 10) + this.purchaseBumps);
   }
 
+  /** @returns {number} */
+  get purchaseBumps() { return this.data.purchaseBumps; }
+  /** @param {number} value */
+  set purchaseBumps(value) { this.data.purchaseBumps = value; }
+
   /**
    * @returns {number}
    */

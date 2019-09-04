@@ -512,7 +512,9 @@ body.t-dark {
   border-color: var(--color-celestials-accent);
 }
 
-.t-metro .subtab.celestials {
+.t-metro .subtab.celestials,
+.t-inverted-metro .subtab.celestials,
+.t-s8 .subtab.celestials {
   color: white;
 }
 
@@ -521,7 +523,9 @@ body.t-dark {
   background-color: var(--color-celestials-accent);
 }
 
-.t-metro .subtab.celestials:hover {
+.t-metro .subtab.celestials:hover,
+.t-inverted-metro .subtab.celestials:hover,
+.t-s8 .subtab.celestials:hover {
   color: var(--color-celestials);
   background-color: white;
 }
@@ -548,7 +552,9 @@ body.t-dark {
   background-color: rgba(223, 80, 80, 0.3);
 }
 
-.t-metro .dimension-row:nth-child(even) {
+.t-metro .dimension-row:nth-child(even),
+.t-inverted-metro .dimension-row:nth-child(even),
+.t-s8 .dimension-row:nth-child(even) {
   background-color: rgba(33, 150, 243, 0.3);
 }
 
@@ -831,14 +837,31 @@ body.t-dark {
 }
 
 .c-stats-tab {
-  color: white;
+  color: var(--color-text);
 }
 
 .o-autobuyer-input,
 .l-autobuyer-grid select {
-  background: #1c1d1d;
+  background: var(--color-dark);
   border: 0.1rem solid var(--color-accent-1);
   color: var(--color-accent-1);
+}
+
+.t-dark .o-autobuyer-input,
+.t-dark-metro .o-autobuyer-input,
+.t-dark .l-autobuyer-grid select,
+.t-dark-metro .l-autobuyer-grid select {
+  border: 0.1rem solid black;
+  color: black;
+}
+
+.t-metro .o-autobuyer-input,
+.t-inverted-metro .o-autobuyer-input,
+.t-s8 .o-autobuyer-input,
+.t-metro .l-autobuyer-grid select,
+.t-inverted-metro .l-autobuyer-grid select,
+.t-s8 .l-autobuyer-grid select {
+  color: black;
 }
 
 .o-autobuyer-btn {
@@ -864,7 +887,14 @@ body.t-dark {
 }
 
 .c-infinity-dim-row:nth-child(even) {
-  background: #5f441e;
+  background: rgba(182, 127, 51, 0.3);
+}
+
+.t-metro .c-infinity-dim-row:nth-child(even),
+.t-dark-metro .c-infinity-dim-row:nth-child(even),
+.t-inverted-metro .c-infinity-dim-row:nth-child(even),
+.t-s8 .c-infinity-dim-row:nth-child(even) {
+  background: rgba(255, 152, 0, 0.3);
 }
 
 .c-infinity-dim-row__name {
@@ -889,7 +919,14 @@ body.t-dark {
 }
 
 .c-time-dim-row:nth-child(even) {
-  background: #63217d
+  background: rgba(179, 65, 224, 0.3);
+}
+
+.t-metro .c-time-dim-row:nth-child(even),
+.t-dark-metro .c-time-dim-row:nth-child(even),
+.t-inverted-metro .c-time-dim-row:nth-child(even),
+.t-s8 .c-time-dim-row:nth-child(even) {
+  background: rgba(103, 58, 183, 0.3);
 }
 
 .c-time-dim-row__name {

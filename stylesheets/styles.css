@@ -6090,6 +6090,7 @@ kbd {
 }
 
 .o-alchemy-node {
+  color: black;
   position: absolute;
   width: 3rem;
   height: 3rem;
@@ -6115,12 +6116,26 @@ kbd {
   background-color: lightblue;
 }
 
+.t-metro .o-alchemy-node--base,
+.t-dark-metro .o-alchemy-node--base,
+.t-inverted-metro .o-alchemy-node--base,
+.t-s8 .o-alchemy-node--base {
+  background-color: #80d8ff;
+}
+
 .o-alchemy-node--unfocused.o-alchemy-node--base {
   background-color: #ebf6f9;
 }
 
 .o-alchemy-node--active {
   background-color: lightgreen;
+}
+
+.t-metro .o-alchemy-node--active,
+.t-dark-metro .o-alchemy-node--active,
+.t-inverted-metro .o-alchemy-node--active,
+.t-s8 .o-alchemy-node--active {
+  background-color: #ccff90;
 }
 
 .o-alchemy-node--unfocused.o-alchemy-node--active {
@@ -6723,6 +6738,11 @@ kbd {
 
 .c-black-hole-canvas {
   border: .1rem solid black;
+}
+
+.t-s1 .c-black-hole-canvas {
+  background: black;
+  border-radius: 50%;
 }
 
 .c-pp-label {

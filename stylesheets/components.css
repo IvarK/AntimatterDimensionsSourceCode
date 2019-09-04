@@ -6,7 +6,7 @@ This file is for styles that are part of Vue components.
 
 .l-expanding-control-box {
   position: relative;
-  z-index: 3;
+  z-index: 2;
 }
 
 .l-expanding-control-box__container {

@@ -446,7 +446,7 @@ const Glyphs = {
       outIndex += t.padding;
     }
   },
-  get glyphLevelCap() {
+  get levelCap() {
     return 10000 + AlchemyResource.boundless.effectValue;
   },
 };
@@ -765,7 +765,7 @@ function getGlyphLevelInputs() {
   const postInstabilityFactors = perkFactor + shardFactor;
   baseLevel += postInstabilityFactors;
   scaledLevel += postInstabilityFactors;
-  const levelHardcap = Glyphs.glyphLevelCap;
+  const levelHardcap = Glyphs.levelCap;
   const levelCapped = scaledLevel > levelHardcap;
   scaledLevel = Math.min(scaledLevel, levelHardcap);
   return {

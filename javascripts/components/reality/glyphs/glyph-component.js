@@ -11,12 +11,12 @@ const GlyphTooltipEffect = {
     },
     boostColor() {
       return (this.effectConfig.alterationType !== undefined &&
-        this.effectConfig.alterationType !== ALTERATION_TYPES.ADDITION)
+        this.effectConfig.alterationType !== ALTERATION_TYPE.ADDITION)
           ? this.effectConfig.alteredColor()
           : undefined;
     },
     additionColor() {
-      return this.effectConfig.alterationType === ALTERATION_TYPES.ADDITION
+      return this.effectConfig.alterationType === ALTERATION_TYPE.ADDITION
         ? this.effectConfig.alteredColor()
         : undefined;
     },

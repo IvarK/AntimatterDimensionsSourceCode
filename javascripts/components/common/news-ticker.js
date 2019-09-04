@@ -31,6 +31,8 @@ Vue.component("news-ticker", {
       clearTimeout(this.scrollTimeout);
     },
     prepareNextMessage() {
+      if (player.options.newsHidden) return;
+
       const line = this.$refs.line;
 
       const isUnlocked = news => news.condition === undefined || news.condition();

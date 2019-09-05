@@ -307,8 +307,10 @@ GameDatabase.reality.glyphEffects = [
     id: "replicationglyphlevel",
     bitmaskIndex: 11,
     glyphTypes: ["replication", "reality"],
-    singleDesc: "Replicanti scaling for next glyph level: \n^0.4 ➜ ^(0.4 + {value})",
-    totalDesc: "Replicanti scaling for next glyph level: ^0.4 ➜ ^(0.4 + {value})",
+    singleDesc: () => `Replicanti scaling for next glyph level: \n^${shorten(0.4, 1, 1)}
+      ➜ ^(${shorten(0.4, 1, 1)} + {value})`,
+    totalDesc: () => `Replicanti scaling for next glyph level: ^${shorten(0.4, 1, 1)}
+      ➜ ^(${shorten(0.4, 1, 1)} + {value})`,
     genericDesc: "Replicanti scaling for glyph level",
     effect: (level, strength) => Math.pow(Math.pow(level, 0.25) * Math.pow(strength, 0.4), 0.5) / 50,
     formatEffect: x => shorten(x, 3, 3),
@@ -334,8 +336,10 @@ GameDatabase.reality.glyphEffects = [
     id: "infinityrate",
     bitmaskIndex: 13,
     glyphTypes: ["infinity", "reality"],
-    singleDesc: "Infinity power conversion rate: \n^7 ➜ ^(7 + {value})",
-    totalDesc: "Infinity power conversion rate: ^7 ➜ ^(7 + {value})",
+    singleDesc: () => `Infinity power conversion rate: \n^${shortenSmallInteger(7)}
+      ➜ ^(${shortenSmallInteger(7)} + {value})`,
+    totalDesc: () => `Infinity power conversion rate: ^${shortenSmallInteger(7)}
+      ➜ ^(${shortenSmallInteger(7)} + {value})`,
     genericDesc: "Infinity power conversion rate",
     effect: (level, strength) => Math.pow(level, 0.2) * Math.pow(strength, 0.4) * 0.1,
     formatEffect: x => shorten(x, 2, 2),
@@ -424,9 +428,9 @@ GameDatabase.reality.glyphEffects = [
     id: "powerbuy10",
     bitmaskIndex: 19,
     glyphTypes: ["power", "reality"],
-    singleDesc: "Increase the bonus from buying 10 dimensions by ×{value}",
-    totalDesc: "Multiplier from \"Buy 10\" ×{value}",
-    genericDesc: "\"Buy 10\" bonus increase",
+    singleDesc: () => `Increase the bonus from buying ${shortenSmallInteger(10)} dimensions by ×{value}`,
+    totalDesc: () => `Multiplier from "Buy ${shortenSmallInteger(10)}" ×{value}`,
+    genericDesc: () => `"Buy ${shortenSmallInteger(10)}" bonus increase`,
     effect: (level, strength) => 1 + level * strength / 12,
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.addExponents,
@@ -477,14 +481,14 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 24,
     glyphTypes: ["effarig"],
     singleDesc: () => (GlyphAlteration.isAdded("effarig")
-      ? "Buy 10 multiplier ^{value} [and\nDimension Boost multiplier ^]{value2}"
-      : "Bonus from buying 10 Dimensions ^{value}"),
+      ? `Buy ${shortenSmallInteger(10)} multiplier ^{value} [and\nDimension Boost multiplier ^]{value2}`
+      : `Bonus from buying ${shortenSmallInteger(10)} Dimensions ^{value}`),
     totalDesc: () => (GlyphAlteration.isAdded("effarig")
-      ? "Multiplier from \"Buy 10\" ^{value} and dimboosts ^{value2}"
-      : "Multiplier from \"Buy 10\" ^{value}"),
+      ? `Multiplier from "Buy ${shortenSmallInteger(10)}" ^{value} and dimboosts ^{value2}`
+      : `Multiplier from "Buy ${shortenSmallInteger(10)}" ^{value}`),
     genericDesc: () => (GlyphAlteration.isAdded("power")
-      ? "\"Buy 10\" and dimboost multipliers ^x"
-      : "\"Buy 10\" multiplier ^x"),
+      ? `"Buy ${shortenSmallInteger(10)}" and dimboost multipliers ^x`
+      : `"Buy ${shortenSmallInteger(10)}" multiplier ^x`),
     effect: (level, strength) => 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4),
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
@@ -503,7 +507,7 @@ GameDatabase.reality.glyphEffects = [
     id: "effarigantimatter",
     bitmaskIndex: 26,
     glyphTypes: ["effarig"],
-    singleDesc: "Antimatter production: 10^x -> 10^(x^{value})",
+    singleDesc: () => `Antimatter production: ${shortenSmallInteger(10)}^x -> ${shortenSmallInteger(10)}^(x^{value})`,
     genericDesc: "Antimatter production exponent",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 5000,
     formatEffect: x => shorten(x, 4, 4),

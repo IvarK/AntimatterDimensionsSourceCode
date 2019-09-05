@@ -25,35 +25,35 @@ GameDatabase.reality.upgrades = (function() {
       id: 1,
       initialCost: 1,
       costMult: 30,
-      description: "You gain Dilated Time 3 times faster",
+      description: () => `You gain Dilated Time ${shortenSmallInteger(3)} times faster`,
       effect: 3
     }),
     rebuyable({
       id: 2,
       initialCost: 2,
       costMult: 30,
-      description: "You gain Replicanti 3 times faster",
+      description: () => `You gain Replicanti ${shortenSmallInteger(3)} times faster`,
       effect: 3
     }),
     rebuyable({
       id: 3,
       initialCost: 2,
       costMult: 30,
-      description: "You gain 3 times more Eternities",
+      description: () => `You gain ${shortenSmallInteger(3)} times more Eternities`,
       effect: 3
     }),
     rebuyable({
       id: 4,
       initialCost: 3,
       costMult: 30,
-      description: "You gain 3 times more Tachyon Particles",
+      description: () => `You gain ${shortenSmallInteger(3)} times more Tachyon Particles`,
       effect: 3
     }),
     rebuyable({
       id: 5,
       initialCost: 4,
       costMult: 50,
-      description: "You gain 5 times more Infinities",
+      description: () => `You gain ${shortenSmallInteger(5)} times more Infinities`,
       effect: 5
     }),
     {

@@ -39,7 +39,7 @@ Vue.component("reality-button", {
       return "";
     },
     formatGlyphLevel() {
-      return `Glyph level: ${this.glyphLevel}  (${this.nextGlyphPercent})`;
+      return `Glyph level: ${shortenSmallInteger(this.glyphLevel)}  (${this.nextGlyphPercent})`;
     },
     shardsGainedText() {
       return `${this.shorten(this.shardsGained, 2)} Relic ${pluralize("Shard", this.shardsGained)}`;

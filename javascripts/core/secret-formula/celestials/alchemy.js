@@ -219,7 +219,7 @@ GameDatabase.celestials.alchemy = {
       tier: 3,
       uiOrder: 4,
       formatEffect: value => `Refined glyphs also give ${formatPercents(value, 2)} of their value ` +
-        "to all other base resources",
+        "to other base resources",
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,

@@ -20,7 +20,7 @@ GameDatabase.celestials.v = {
     {
       id: 1,
       name: "AntiStellar",
-      description: value => `Have ${value} total galaxies from all types.`,
+      description: value => `Have ${shortenSmallInteger(value)} total galaxies from all types.`,
       values: [4000, 4200, 4400, 4600, 4800, 5000],
       condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= x
     },
@@ -48,7 +48,7 @@ GameDatabase.celestials.v = {
     {
       id: 5,
       name: "Matterception",
-      description: value => `Get ${value} Dimensional Boosts while dilating time, inside EC5.`,
+      description: value => `Get ${shortenSmallInteger(value)} Dimensional Boosts while dilating time, inside EC5.`,
       values: [50, 52, 54, 56, 58, 60],
       condition: x => player.dilation.active && EternityChallenge(5).isRunning && DimBoost.purchasedBoosts >= x
     }

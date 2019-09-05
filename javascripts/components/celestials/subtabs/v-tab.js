@@ -87,11 +87,14 @@ Vue.component("v-tab", {
           and re-entering the reality.
         </div>
         <div>
-          You have {{ totalUnlocks }} V-achievements done. You can pick
-          {{ totalAdditionalStudies }} {{ "study" | pluralize(totalAdditionalStudies, "studies") }}
-          on other paths you normally can't buy.
+          You have {{ shortenSmallInteger(totalUnlocks) }} V-achievements done. You can pick
+          {{ shortenSmallInteger(totalAdditionalStudies) }}
+          {{ "study" | pluralize(totalAdditionalStudies, "studies") }} on other paths you normally can't buy.
         </div>
-        <div>(You get one additional study per {{ achievementsPerAdditionalStudy }} V-achievements, rounded down.)</div>
+        <div>
+          (You get one additional study per {{ shortenSmallInteger(achievementsPerAdditionalStudy) }}
+          V-achievements, rounded down.)
+        </div>
         <br>
         <div class="l-v-milestones-container">
           <div class="o-v-milestone"

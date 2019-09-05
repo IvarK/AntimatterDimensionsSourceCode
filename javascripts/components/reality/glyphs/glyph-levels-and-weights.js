@@ -110,7 +110,9 @@ Vue.component("glyph-levels-and-weights", {
     formatFactor(x) {
       // Not applied to + perks since it's always whole; for factors < 1, the slice makes the
       // factor be fixed point.
-      return x.toPrecision(5).slice(0, 6);
+      return Notations.current.isPainful
+        ? shorten(x, 2, 2)
+        : x.toPrecision(5).slice(0, 6);
     },
     makeRowStyle(r) {
       return {

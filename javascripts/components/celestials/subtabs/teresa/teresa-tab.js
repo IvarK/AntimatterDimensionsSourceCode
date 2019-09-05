@@ -60,7 +60,7 @@ Vue.component("teresa-tab", {
       const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
       const pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice);
       return {
-         bottom: formatPercents(pos, 2),
+         bottom: `${(100 * pos).toFixed(2)}%`,
       };
     },
   },
@@ -71,7 +71,7 @@ Vue.component("teresa-tab", {
       <div class="l-mechanics-container">
         <div class="l-teresa-unlocks l-teresa-mechanic-container">
           <div class="c-teresa-unlock c-teresa-run-button" v-if="unlocks[0]" @click="startRun()">
-            Start Teresa's Reality. Glyph TT generation is disabled and you gain less IP and EP (x^0.55).
+            Start Teresa's Reality. Glyph TT generation is disabled and you gain less IP and EP (x^{{shorten(0.55, 2, 2)}}).
             <br><br>
             Highest antimatter in Teresa's Reality: {{ shorten(bestAM, 2, 0) }}
           </div>

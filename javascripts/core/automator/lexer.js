@@ -89,17 +89,17 @@ const AutomatorLexer = (() => {
 
   createInCategory(Currency, "EP", /ep/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithEP(),
+    $buyTT: () => TimeTheorems.buyWithEP(true),
     $getter: () => player.eternityPoints
   });
   createInCategory(Currency, "IP", /ip/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithIP(),
+    $buyTT: () => TimeTheorems.buyWithIP(true),
     $getter: () => player.infinityPoints
   });
   createInCategory(Currency, "AM", /am/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithAntimatter(),
+    $buyTT: () => TimeTheorems.buyWithAntimatter(true),
     $getter: () => player.antimatter
   });
   createInCategory(Currency, "DT", /dt/i, { $getter: () => player.dilation.dilatedTime });
@@ -220,7 +220,7 @@ const AutomatorLexer = (() => {
   createKeyword("Load", /load/i);
   createKeyword("Max", /max/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyMax(),
+    $buyTT: () => TimeTheorems.buyMax(true),
   });
   createKeyword("Nowait", /nowait/i);
   createKeyword("Off", /off/i);

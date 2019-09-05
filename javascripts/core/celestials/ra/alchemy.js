@@ -57,8 +57,8 @@ class AlchemyReaction {
   // product. This allows resources to be created quickly when its reaction is initially turned on with saved reagents.
   get reactionYield() {
     const forcingFactor = (this._reagents
-    .map(r => r.resource.amount)
-    .min() - this._product.amount) / 1000;
+      .map(r => r.resource.amount)
+      .min() - this._product.amount) / 1000;
     const totalYield = this._reagents
       .map(r => r.resource.amount / r.cost)
       .min();

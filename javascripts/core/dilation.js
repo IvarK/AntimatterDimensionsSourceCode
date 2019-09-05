@@ -92,7 +92,7 @@ function getFreeGalaxyMultBeforeCompression() {
 
 function getFreeGalaxyMult() {
   const compressionReduction = Effects.max(0, CompressionUpgrade.freeGalaxyScaling);
-  return getFreeGalaxyMultBeforeCompression() - compressionReduction;
+  return 1 + (getFreeGalaxyMultBeforeCompression() - 1) / (1 + compressionReduction);
 }
 
 function getDilationGainPerSecond() {

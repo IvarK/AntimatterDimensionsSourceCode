@@ -21,7 +21,7 @@ Vue.component("alchemy-resource-info", {
     reactionText() {
       if (this.resource === AlchemyResource.reality) return this.realityReactionText;
       const reagents = this.reaction.reagents
-        .map(r => `${shorten(r.cost, 2, 2)}${r.resource.symbol}`)
+        .map(r => `${shorten(r.cost)}${r.resource.symbol}`)
         .join(" + ");
       return `${reagents} ➜ ${shorten(this.reaction.reactionProduction, 2, 2)}${this.resource.symbol}`;
     },

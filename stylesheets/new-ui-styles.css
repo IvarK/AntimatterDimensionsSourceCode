@@ -535,7 +535,7 @@ body.t-dark {
 }
 
 .dimensions-container {
-  padding: 5px 50px 5px 90px; /* TOP RIGHT BOTTOM LEFT */
+  padding: 0.5rem 5rem 0.5rem 9rem; /* TOP RIGHT BOTTOM LEFT */
 }
 
 .dimension-row {
@@ -543,8 +543,7 @@ body.t-dark {
   color: var(--color-text);;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
-  padding-left: 10px;
+  padding: 0.5rem 0 0.5rem 1rem;
   border-radius: 5px;
 }
 
@@ -559,7 +558,7 @@ body.t-dark {
 }
 
 .dimension-row h3 {
-  font-size: 2em;
+  font-size: 2rem;
   display: flex;
   align-items: center;
   margin: 0;
@@ -689,7 +688,7 @@ body.t-dark {
 .tickspeed-container {
   display: flex;
   justify-content: space-between;
-  padding: 10px 50px 5px 90px;
+  padding: 10px 50px 0px 90px;
 }
 
 .tickspeed-labels {
@@ -883,11 +882,16 @@ body.t-dark {
 }
 
 .l-infinity-dim-tab {
-  padding: 1rem 6rem;
+  padding: 1rem 0;
+}
+
+.l-infinity-dim-tab__row-container {
+  padding: 0.5rem 5rem 0.5rem 9rem;
 }
 
 .c-infinity-dim-row {
-  padding-left: 1rem;
+  margin: 0;
+  padding: 0.5rem 0 0.5rem 1rem;
   border-radius: .5rem;
 }
 
@@ -918,8 +922,13 @@ body.t-dark {
   padding: 2rem 0;
 }
 
+.l-time-dim-tab__row-container {
+  padding: 0.5rem 5rem 0.5rem 9rem;
+}
+
 .c-time-dim-row {
-  padding-left: 1rem;
+  margin: 0;
+  padding: 0.5rem 0 0.5rem 1rem;
   border-radius: .5rem;
 }
 

@@ -112,6 +112,7 @@ Vue.component("reality-button", {
     },
     handleClick() {
       if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {
+        if (player.realities === 0) return;
         startRealityOver();
       } else {
         requestManualReality();

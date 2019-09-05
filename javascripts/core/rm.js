@@ -779,7 +779,7 @@ function getGlyphLevelInputs() {
     perkFactor: perkFactor,
     shardFactor: shardFactor,
     rawLevel: baseLevel,
-    actualLevel: scaledLevel,
+    actualLevel: Math.max(1, scaledLevel),
     capped: levelCapped
   };
 }

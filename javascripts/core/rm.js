@@ -664,9 +664,8 @@ function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
       .filter(t => t !== GlyphTypes[glyph.type]);
     for (const glyphType of otherGlyphTypes) {
       if (glyphType.id !== "reality") {
-        const currAmount = AlchemyResources.all[glyphType.alchemyResource].amount;
-        const gainedResource = Math.clamp(decoherenceGain - currAmount, 0, 100 * refinementGain);
-        AlchemyResources.all[glyphType.alchemyResource].amount += gainedResource;
+        const otherResource = AlchemyResources.all[glyphType.alchemyResource];
+        otherResource.amount = Math.min(otherResource.amount + decoherenceGain, 100 * refinementGain);
       }
     }
     Glyphs.removeFromInventory(glyph);

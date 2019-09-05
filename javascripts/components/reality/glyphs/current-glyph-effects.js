@@ -11,7 +11,18 @@ Vue.component("current-glyph-effects", {
           return GameDatabase.reality.glyphEffects[this.effect.id];
         },
         formatValue() {
-          return this.effectConfig.formatEffect(this.effect.value.value);
+          const baseValue = this.effect.value.value;
+          const value1 = this.effectConfig.formatEffect(baseValue);
+          const value2 = this.effectConfig.conversion === undefined
+            ? ""
+            : this.effectConfig.formatEffect(this.effectConfig.conversion(baseValue));
+          const desc = typeof this.effectConfig.totalDesc === "function"
+            ? this.effectConfig.totalDesc()
+            : this.effectConfig.totalDesc;
+          return desc
+            .replace("\n", "<br>")
+            .replace("{value}", value1)
+            .replace("{value2}", value2);
         },
         valueClass() {
           return this.effect.value.capped ? "c-current-glyph-effects__effect--capped" : "";
@@ -19,9 +30,7 @@ Vue.component("current-glyph-effects", {
       },
       template: `
         <div>
-          {{effectConfig.totalDescSplit[0]}}
           <span :class="valueClass">{{formatValue}}</span>
-          {{effectConfig.totalDescSplit[1]}}
         </div>`
     }
   },
@@ -53,7 +62,8 @@ Vue.component("current-glyph-effects", {
       Currently active glyph effects:
     </div>
     <div v-if="isSoftcapActive" class="l-current-glyph-effects__capped-header">
-      <span class="c-current-glyph-effects__effect--capped">Colored</span> numbers have a reduced effect
+      <span class="c-current-glyph-effects__effect--capped">Colored</span> effects have been slightly reduced
+      due to a softcap
     </div>
     <div v-if="noEffects">
       None (equip glyphs to get their effects)

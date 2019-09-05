@@ -109,7 +109,7 @@ function getDilationGainPerSecond() {
   if (Enslaved.isRunning) {
     dtRate = dilatedValueOf(dtRate).dividedBy(player.dilation.dilatedTime.plus(1).log10() + 1);
   }
-  dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime())
+  dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime());
   if (V.isRunning) dtRate = dtRate.pow(0.5);
   return dtRate;
 }
@@ -166,7 +166,7 @@ function dilatedValueOf(value, depth) {
   if (TimeCompression.isActive) {
     return recursiveDilation(value, TimeCompression.compressionDepth);
   }
-  throw crash("Invald dilation depth");
+  throw new Error("Invald dilation depth");
 }
 
 function recursiveDilation(value, depth) {

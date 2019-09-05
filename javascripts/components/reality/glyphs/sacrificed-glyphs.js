@@ -5,6 +5,7 @@ Vue.component("sacrificed-glyphs", {
     "type-sacrifice": {
       props: {
         type: String,
+        hasDragover: Boolean,
       },
       data() {
         return {
@@ -28,6 +29,15 @@ Vue.component("sacrificed-glyphs", {
         description() {
           return this.sacConfig.description(this.effectValue);
         },
+        currentSacrifice() {
+          return this.$viewModel.tabs.reality.draggingGlyphInfo;
+        },
+        showNewSacrifice() {
+          return this.hasDragover && this.currentSacrifice.type === this.type;
+        },
+        formatNewAmount() {
+          return this.shorten(this.currentSacrifice.sacrificeValue, 2, 2);
+        }
       },
       methods: {
         update() {
@@ -44,6 +54,10 @@ Vue.component("sacrificed-glyphs", {
             </div>
             <div class="l-sacrificed-glyphs__type-amount c-sacrificed-glyphs__type-amount">
               {{formatAmount}}
+              <span v-if="showNewSacrifice"
+                    class="c-sacrificed-glyphs__type-new-amount">
+                + {{formatNewAmount}}
+              </span>
             </div>
           </div>
           {{description}}
@@ -53,6 +67,11 @@ Vue.component("sacrificed-glyphs", {
   data() {
     return {
       anySacrifices: false,
+      hasDragover: false,
+      hasAlteration: false,
+      addThreshold: 0,
+      empowerThreshold: 0,
+      boostThreshold: 0,
     };
   },
   computed: {
@@ -61,14 +80,48 @@ Vue.component("sacrificed-glyphs", {
   methods: {
     update() {
       this.anySacrifices = GLYPH_TYPES.some(e => player.reality.glyphs.sac[e] !== 0);
-    }
+      this.hasAlteration = Ra.has(RA_UNLOCKS.ALTERED_GLYPHS);
+      this.addThreshold = GlyphAlteration.additionThreshold;
+      this.empowerThreshold = GlyphAlteration.empowermentThreshold;
+      this.boostThreshold = GlyphAlteration.boostingThreshold;
+    },
+    dragover(event) {
+      if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
+      event.preventDefault();
+      this.hasDragover = true;
+    },
+    dragleave() {
+      this.hasDragover = false;
+    },
+    drop(event) {
+      if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
+      const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE), 10);
+      if (isNaN(id)) return;
+      const glyph = Glyphs.findById(id);
+      if (!glyph) return;
+      sacrificeGlyph(glyph, false, true);
+      this.hasDragover = false;
+    },
   },
   template: `
   <div v-show="anySacrifices"
-       class="c-sacrificed-glyphs l-sacrificed-glyphs">
+       class="c-sacrificed-glyphs l-sacrificed-glyphs"
+       :class="{'c-sacrificed-glyphs--dragover': hasDragover}"
+       @dragover="dragover"
+       @dragleave="dragleave"
+       @drop="drop">
+    <div v-if="hasAlteration">
+      Glyph types will have one of their effects<br>
+      improved when their sacrifice values are above:
+      <br><br>
+      {{ shorten(addThreshold) }} - an additional secondary effect<br>
+      {{ shorten(empowerThreshold) }} - formula drastically improved<br>
+      {{ shorten(boostThreshold) }} - a boost depending on glyph sacrifice
+      <br><br>
+    </div>
     <div class="c-sacrificed-glyphs__header">Sacrifices:</div>
     <template v-for="type in types">
-      <type-sacrifice :type="type"/>
+      <type-sacrifice :type="type" :hasDragover="hasDragover"/>
     </template>
   </div>`,
 });

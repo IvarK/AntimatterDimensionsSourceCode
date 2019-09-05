@@ -15,7 +15,7 @@ function giveEternityRewards(auto) {
     gainedEternityPoints(),
     Effects.product(RealityUpgrade(3))
   );
-  const newEternities = Effects.product(RealityUpgrade(3));
+  const newEternities = new Decimal(Effects.product(RealityUpgrade(3)));
   if (player.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
   }

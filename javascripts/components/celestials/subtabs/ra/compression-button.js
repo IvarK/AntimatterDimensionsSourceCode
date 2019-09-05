@@ -30,7 +30,7 @@ Vue.component("compression-button", {
         return Decimal.pow10(9e15);
       }
       const entanglementMult = Effects.max(1, CompressionUpgrade.moreEntanglement);
-      return Decimal.pow10(2e5 * Math.pow(1 + TimeCompression.totalEntanglement / (30.8 * entanglementMult), 2.5));
+      return Decimal.pow10(1.8e5 * Math.pow(1 + TimeCompression.totalEntanglement / (30.8 * entanglementMult), 2.5));
     },
     gainedEntanglement() {
       return Math.max(0, TimeCompression.entanglementThisRun - TimeCompression.totalEntanglement);

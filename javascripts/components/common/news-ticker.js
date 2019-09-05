@@ -32,6 +32,7 @@ Vue.component("news-ticker", {
     },
     prepareNextMessage() {
       const line = this.$refs.line;
+      if (line === undefined) return;
 
       const isUnlocked = news => news.condition === undefined || news.condition();
       do {

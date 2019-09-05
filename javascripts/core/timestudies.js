@@ -62,6 +62,10 @@ const TimeTheorems = {
   },
 
   buyMax() {
+    if (TimeDimension(1).bought < 1) {
+      alert("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
+      return;
+    }
     const AMowned = player.timestudy.amcost.e / 20000 - 1;
     if (player.antimatter.gte(player.timestudy.amcost)) {
       player.timestudy.amcost.e = Math.floor(player.antimatter.e / 20000 + 1) * 20000;

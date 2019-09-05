@@ -83,6 +83,7 @@ const AutoGlyphPickMode = {
   RANDOM: 0,
   RARITY: 1,
   ABOVE_SACRIFICE_THRESHOLD: 2,
+  LOWEST_ALCHEMY_RESOURCE: 3
 };
 
 const TimeStudyPath = {

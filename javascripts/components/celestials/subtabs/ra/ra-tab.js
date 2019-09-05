@@ -52,6 +52,9 @@ Vue.component("ra-tab", {
         You will gain {{ shorten(this.currentExpGain, 2, 2) }}{{ showReality ? " base" : ""}} 
         memories on Reality, based on glyph level.
       </div>
+      <div>
+        Mouse-over bolded numbers to see descriptions of upgrades you have already unlocked.
+      </div>
       <div class="l-ra-all-pets-container">
         <ra-pet v-for="(pet, i) in pets" :key="i" :petConfig="pet" />
       </div>

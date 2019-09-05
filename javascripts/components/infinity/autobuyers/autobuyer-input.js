@@ -20,7 +20,7 @@ Vue.component("autobuyer-input", {
     typeFunctions() {
       const functions = AutobuyerInputFunctions[this.type];
       if (functions === undefined) {
-        throw crash("Unknown autobuyer input type");
+        throw new Error("Unknown autobuyer input type");
       }
       return functions;
     },

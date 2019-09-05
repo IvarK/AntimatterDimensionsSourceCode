@@ -42,6 +42,7 @@ class MatterDimensionState {
 
   get power() {
     let base = Decimal.pow(1.1, this.dimension.powerUpgrades).times(Laitela.realityReward);
+    if (GlyphAlteration.isAdded("power")) base = base.times(getSecondaryGlyphEffect("powerpow"));
     if (DarkEnergyUpgrade.matterDimensionMult.isBought) {
       base = base.times(DarkEnergyUpgrade.matterDimensionMult.effect);
     }

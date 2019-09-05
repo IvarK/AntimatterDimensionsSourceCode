@@ -1,12 +1,12 @@
 "use strict";
 
-Vue.component('effarig-tab', {
+Vue.component("effarig-tab", {
   components: {
     "run-unlock-reward": {
       props: {
         unlock: Object
       },
-      data: function() {
+      data() {
         return {
           isUnlocked: false
         };
@@ -22,8 +22,8 @@ Vue.component('effarig-tab', {
           this.isUnlocked = this.unlock.isUnlocked;
         }
       },
-      template: /*html*/`
-        <div class="l-effarig-tab__reward">
+      template:
+        `<div class="l-effarig-tab__reward">
           <div class="c-effarig-tab__reward-label">{{ unlock.config.label }}: </div>
           <div v-if="isUnlocked" class="l-effarig-tab__reward-descriptions">
             <div v-for="description in descriptionLines">
@@ -35,7 +35,7 @@ Vue.component('effarig-tab', {
       `
     }
   },
-  data: function() {
+  data() {
     return {
       relicShards: 0,
       shardsGained: 0,
@@ -88,21 +88,25 @@ Vue.component('effarig-tab', {
       this.isRunning = Effarig.isRunning;
     },
     startRun() {
-      if (!this.isRunning) Effarig.startRun();
-      else startRealityOver();
+      if (this.isRunning) startRealityOver();
+      else Effarig.startRun();
     },
     nextQuote() {
-      Effarig.nextQuote()
+      Effarig.nextQuote();
     },
     hasNextQuote() {
-      return this.quoteIdx < Effarig.maxQuoteIdx
+      return this.quoteIdx < Effarig.maxQuoteIdx;
     }
   },
   template:
     `<div class="l-effarig-celestial-tab">
-      <div class="o-teresa-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="hasNextQuote()">→</button>
-      <div class="c-effarig-relics">You have {{ shortenRateOfChange(relicShards) }} Relic Shards.</div>
-      <div class="c-effarig-relic-description">You will gain {{ shortenRateOfChange(shardsGained) }} Shards next reality, based on different kinds of glyph effects you have equipped and EP.</div>
+      <div class="o-teresa-quotes"> {{ quote }}</div>
+      <button class="o-quote-button" @click="nextQuote()" v-if="hasNextQuote()">→</button>
+      <div class="c-effarig-relics">You have {{ shorten(relicShards, 2, 0) }} Relic Shards.</div>
+      <div class="c-effarig-relic-description">
+        You will gain {{ shorten(shardsGained, 2, 0) }} Relic Shards next reality. More EP slightly increases <br>
+        shards gained. More distinct glyph effects significantly increases shards gained.
+      </div>
       <div class="l-effarig-shop-and-run">
         <div class="l-effarig-shop">
           <effarig-unlock-button

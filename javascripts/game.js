@@ -1,8 +1,9 @@
 "use strict";
 
-if (crashed) {
-  throw "Initialization failed";
+if (GlobalErrorHandler.handled) {
+  throw new Error("Initialization failed");
 }
+GlobalErrorHandler.cleanStart = true;
 
 let kongIPMult = 1
 let kongDimMult = 1
@@ -59,7 +60,7 @@ function maxDimension(tier) {
       player.antimatter = player.antimatter.minus(dimension.cost.times(10));
       buyUntilTen(tier);
     }
-      
+
     // This blob is the post-e308 bulk-buy math, explicitly ignored if abnormal cost increases are active
     if (dimension.cost.gte(Decimal.MAX_NUMBER) &&
         BreakInfinityUpgrade.dimCostMult.isMaxed && !hasAbnormalCostIncrease) {
@@ -141,6 +142,9 @@ function gainedInfinityPoints() {
   } else if (V.isRunning) {
     ip = ip.pow(0.5);
   }
+  if (GlyphAlteration.isAdded("infinity")) {
+    ip = ip.pow(getSecondaryGlyphEffect("infinityipgain"));
+  }
   return ip.floor();
 }
 
@@ -162,6 +166,9 @@ function gainedEternityPoints() {
     ep = ep.pow(0.55);
   } else if (V.isRunning) {
     ep = ep.pow(0.5);
+  }
+  if (GlyphAlteration.isAdded("time")) {
+    ep = ep.pow(getSecondaryGlyphEffect("timeeternity"));
   }
   return ep.floor();
 }
@@ -248,14 +255,14 @@ function addInfinityTime(time, realTime, ip, infinities) {
 
 function resetInfinityRuns() {
   player.lastTenRuns = Array.from(
-    { length: 10 }, 
+    { length: 10 },
     () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, new Decimal(1)]
   );
   GameCache.bestRunIPPM.invalidate();
 }
 
 function getInfinitiedMilestoneReward(ms) {
-  // Player gains 50% of (timeOffline / average gain of 
+  // Player gains 50% of (timeOffline / average gain of
   // infinitied stat per second for last 10 infinities) infinitied stat
   // if he has 1000 infinities milestone and turned on infinity autobuyer with 1 minute or less per crunch
 
@@ -276,7 +283,7 @@ function addEternityTime(time, realTime, ep, eternities) {
 
 function resetEternityRuns() {
   player.lastTenEternities = Array.from(
-    { length: 10 }, 
+    { length: 10 },
     () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, 1]
   );
   GameCache.averageEPPerRun.invalidate();
@@ -295,7 +302,7 @@ function getEternitiedMilestoneReward(ms) {
 
 function getOfflineEPGain(ms) {
   if (!EternityMilestone.autoEP.isReached) return new Decimal(0);
-  return player.bestEPminThisEternity.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
+  return player.bestEPminThisReality.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 
 function addRealityTime(time, realTime, rm, level) {
@@ -573,8 +580,7 @@ function gameLoop(diff, options = {}) {
     }
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
     Enslaved.isReleaseTick = false;
-
-  // These need to all be done consecutively in order to minimize the chance of a reset occurring between real time
+// These need to all be done consecutively in order to minimize the chance of a reset occurring between real time
   // updating and game time updating.  This is only particularly noticeable when game speed is 1 and the player
   // expects to see identical numbers.
   player.realTimePlayed += realDiff;
@@ -585,7 +591,7 @@ function gameLoop(diff, options = {}) {
   player.thisEternity += diff;
   player.thisRealityRealTime += realDiff;
   player.thisReality += diff;
-    
+
     DeltaTimeState.update(realDiff, diff);
 
     updateNormalAndInfinityChallenges(diff);
@@ -616,7 +622,7 @@ function gameLoop(diff, options = {}) {
       player.infinitied = player.infinitied.plus(infGen.floor());
       player.partInfinitied = infGen.minus(infGen.floor()).toNumber();
     }
-    
+
     if (RealityUpgrade(14).isBought) {
       player.reality.partEternitied = player.reality.partEternitied.plus(
         new Decimal(Time.deltaTime)
@@ -805,12 +811,13 @@ function getTTPerSecond() {
   let ttMult = RA_UNLOCKS.TT_BOOST.effect.ttGen();
   if (Enslaved.isRunning) ttMult *= 1e-3;
   if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttMult *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
+  if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation
   const glyphTT = Teresa.isRunning
     ? 0
     : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
-  
+
   // Dilation TT generation
   const dilationTT = DilationUpgrade.ttGenerator.isBought
     ? DilationUpgrade.ttGenerator.effectValue.times(ttMult)
@@ -987,7 +994,7 @@ function slowerAutobuyers(realDiff) {
   if (player.auto.timeDimTimer >= timeDimPeriod) {
     player.auto.timeDimTimer = Math.min(player.auto.timeDimTimer - timeDimPeriod, timeDimPeriod);
     autoBuyTimeDims();
-  } 
+  }
   player.auto.repUpgradeTimer += realDiff;
   const repUpgradePeriod = 1000 * Effects.product(Perk.autobuyerFasterReplicanti);
   if (player.auto.repUpgradeTimer >= repUpgradePeriod) {

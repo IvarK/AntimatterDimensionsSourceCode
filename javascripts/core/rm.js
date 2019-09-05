@@ -51,7 +51,7 @@ const AutoGlyphSacrifice = {
       case AutoGlyphSacMode.ADVANCED:
         return this.comparedToThreshold(glyph) < 0;
     }
-    throw crash("Unknown auto glyph sacrifice mode");
+    throw new Error("Unknown auto glyph sacrifice mode");
   },
 };
 
@@ -76,8 +76,9 @@ const AutoGlyphPicker = {
           return strengthToRarity(glyph.strength) - 1000;
         }
         return comparedToThreshold;
+      case AutoGlyphPickMode.LOWEST_ALCHEMY_RESOURCE: return -AlchemyResource[glyph.type].amount;
     }
-    throw crash("Unknown auto glyph picker mode");
+    throw new Error("Unknown auto glyph picker mode");
   },
   pick(glyphs) {
     return glyphs
@@ -283,7 +284,7 @@ const Glyphs = {
     this.active = new Array(this.activeSlotCount).fill(null);
     for (let g of player.reality.glyphs.active) {
       if (this.active[g.idx]) {
-        throw crash("Stacked active glyphs?")
+        throw new Error("Stacked active glyphs?");
       }
       this.active[g.idx] = g;
     }
@@ -329,7 +330,7 @@ const Glyphs = {
   equip(glyph, targetSlot) {
     this.validate();
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {
-      throw crash("Inconsistent inventory indexing");
+      throw new Error("Inconsistent inventory indexing");
     }
     if (this.active[targetSlot] !== null) return;
     if (glyph.type === 'effarig' && this.active.some(x => x && x.type === 'effarig')) return;
@@ -357,7 +358,7 @@ const Glyphs = {
   moveToEmpty(glyph, targetSlot) {
     this.validate();
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {
-      throw crash("Inconsistent inventory indexing");
+      throw new Error("Inconsistent inventory indexing");
     }
     if (this.inventory[targetSlot] === null) {
       this.inventory[glyph.idx] = null;
@@ -403,12 +404,12 @@ const Glyphs = {
   validate() {
     for (const glyph of player.reality.glyphs.inventory) {
       if (this.inventory[glyph.idx] !== glyph) {
-        throw crash("validation error");
+        throw new Error("validation error");
       }
     }
     for (let i = 0; i < this.inventory.length; ++i) {
       if (this.inventory[i] && this.inventory[i].idx !== i) {
-        throw crash("backwards validation error");
+        throw new Error("backwards validation error");
       }
     }
   },
@@ -445,6 +446,9 @@ const Glyphs = {
       }
       outIndex += t.padding;
     }
+  },
+  get levelCap() {
+    return 10000 + AlchemyResource.boundless.effectValue;
   },
 };
 
@@ -485,13 +489,23 @@ function getAdjustedGlyphEffect(effectKey) {
 }
 
 /**
+ * Takes the glyph effect value and feeds it through the conversion function that gives the value of the secondary
+ * effect from glyph alteration.
+ * @param {string} effectKey
+ * @return {number | Decimal}
+ */
+function getSecondaryGlyphEffect(effectKey) {
+  return GameDatabase.reality.glyphEffects[effectKey].conversion(getAdjustedGlyphEffect(effectKey));
+}
+
+/**
  * Finds all equipped glyphs with the specified effect and returns an array of effect values.
  * @param {string} effectKey
  * @returns {number[]}
  */
 function getGlyphEffectValues(effectKey) {
   if (orderedEffectList.filter(effect => effect === effectKey).length === 0) {
-    throw crash(`Unknown glyph effect requested "${effectKey}"'`);
+    throw new Error(`Unknown glyph effect requested "${effectKey}"'`);
   }
   return player.reality.glyphs.active
   // eslint-disable-next-line no-bitwise
@@ -640,8 +654,8 @@ function glyphRefinementGain(glyph) {
   return Math.clamp(glyphMaxValue - alchemyResource.amount, 0, 0.01 * glyphMaxValue);
 }
 
-function sacrificeGlyph(glyph, force = false) {
-  if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && glyph.type !== "reality") {
+function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
+  if (!noAlchemy && AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && glyph.type !== "reality") {
     const resource = glyphAlchemyResource(glyph);
     const refinementGain = glyphRefinementGain(glyph);
     resource.amount += refinementGain;
@@ -720,7 +734,8 @@ function getGlyphLevelInputs() {
   // For display purposes, each term is divided independently by s.
   const preScale = 5;
   const weights = player.celestials.effarig.glyphWeights;
-  const adjustFactor = (input, weight) => (input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0);
+  const adjustFactor = (input, weight) =>
+    (input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0);
   const epEffect = adjustFactor(epBase, weights.ep / 100);
   const replEffect = adjustFactor(replBase, weights.repl / 100);
   const dtEffect = adjustFactor(dtBase, weights.dt / 100);
@@ -751,7 +766,7 @@ function getGlyphLevelInputs() {
   const postInstabilityFactors = perkFactor + shardFactor;
   baseLevel += postInstabilityFactors;
   scaledLevel += postInstabilityFactors;
-  const levelHardcap = 10000 + AlchemyResource.boundless.effectValue;
+  const levelHardcap = Glyphs.levelCap;
   const levelCapped = scaledLevel > levelHardcap;
   scaledLevel = Math.min(scaledLevel, levelHardcap);
   return {

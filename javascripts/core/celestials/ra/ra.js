@@ -4,17 +4,17 @@ class RaPetState {
   /**
    * @abstract
    */
-  get data() { throw NotImplementedCrash(); }
+  get data() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get name() { throw NotImplementedCrash(); }
+  get name() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get requiredUnlock() { throw NotImplementedCrash(); }
+  get requiredUnlock() { throw new NotImplementedError(); }
 
   get isUnlocked() {
     return this.requiredUnlock === undefined || Ra.has(this.requiredUnlock);
@@ -78,33 +78,33 @@ class RaPetState {
   /**
    * @abstract
    */
-  get expBoostFactor() { throw NotImplementedCrash(); }
+  get expBoostFactor() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  set expBoostFactor(value) { throw NotImplementedCrash(); }
+  set expBoostFactor(value) { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get defaultBoostFactor() { throw NotImplementedCrash(); }
+  get defaultBoostFactor() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get nextExpBoostFactor() { throw NotImplementedCrash(); }
+  get nextExpBoostFactor() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get color() { throw NotImplementedCrash(); }
+  get color() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
   // eslint-disable-next-line no-unused-vars
-  expFormula(factor) { throw NotImplementedCrash(); }
+  expFormula(factor) { throw new NotImplementedError(); }
 
   updateExpBoost() {
     if (this.level < 3) return;
@@ -263,6 +263,58 @@ const Ra = {
   }
 };
 
+const GlyphAlteration = {
+  // Adding a secondary effect to some effects
+  get additionThreshold() {
+    return 1e40;
+  },
+  // One-time massive boost of a single effect
+  get empowermentThreshold() {
+    return 1e45;
+  },
+  // Scaling boost from sacrifice quantity
+  get boostingThreshold() {
+    return 1e50;
+  },
+  getSacrificePower(type) {
+    const sacPower = player.reality.glyphs.sac[type];
+    if (sacPower === undefined) {
+      throw new Error("Unknown sacrifice type");
+    }
+    return sacPower;
+  },
+  get isUnlocked() {
+    return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS);
+  },
+  isAdded(type) {
+    return this.isUnlocked && this.getSacrificePower(type) >= this.additionThreshold;
+  },
+  isEmpowered(type) {
+    return this.isUnlocked && this.getSacrificePower(type) >= this.empowermentThreshold;
+  },
+  isBoosted(type) {
+    return this.isUnlocked && this.getSacrificePower(type) >= this.boostingThreshold;
+  },
+  sacrificeBoost(type) {
+    return Math.log10(Math.max(this.getSacrificePower(type) / this.boostingThreshold, 1));
+  },
+  getAdditionColor(type) {
+    return this.isAdded(type)
+      ? "#CCCCCC"
+      : undefined;
+  },
+  getEmpowermentColor(type) {
+    return this.isEmpowered(type)
+      ? "#EEEE30"
+      : undefined;
+  },
+  getBoostColor(type) {
+    return this.isBoosted(type)
+      ? "#60DDDD"
+      : undefined;
+  },
+};
+
 /**
  * @type {RaPetState[]}
  */
@@ -304,10 +356,10 @@ const RA_UNLOCKS = {
     pet: Ra.pets.teresa,
     level: 15
   },
-  LATER_DILATION: {
+  ALTERED_GLYPHS: {
     id: 5,
     description: "Get Teresa to level 25",
-    reward: "Unlock more dilation upgrades [unimplemented]",
+    reward: "Unlock altered glyphs",
     pet: Ra.pets.teresa,
     level: 25
   },

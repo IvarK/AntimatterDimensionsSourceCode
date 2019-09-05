@@ -240,7 +240,7 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 10 * Math.pow(amount / 10000, 2),
       tier: 4,
       uiOrder: 2,
-      formatEffect: value => `IP multiplied by replicanti${formatPow(value, 2, 2)}`,
+      formatEffect: value => `IP multiplied by replicanti${formatPow(value, 2, 3)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.INFLATION,
@@ -321,7 +321,7 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 5 * Math.pow(amount / 10000, 2),
       tier: 4,
       uiOrder: 5,
-      formatEffect: value => `Each reality simulates ${shorten(value, 2, 2)} additional realities`,
+      formatEffect: value => `Each reality simulates ${shorten(value, 2, 3)} additional realities`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.ALTERNATION,

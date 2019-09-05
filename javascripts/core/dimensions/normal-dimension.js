@@ -51,7 +51,7 @@ function getDimensionFinalMultiplier(tier) {
 }
 
 function getDimensionFinalMultiplierUncached(tier) {
-  if (tier < 1 || tier > 8) throw crash(`Invalid tier ${tier}`);
+  if (tier < 1 || tier > 8) throw new Error(`Invalid Normal Dimension tier ${tier}`);
   if (NormalChallenge(10).isRunning && tier > 6) return new Decimal(1);
 
   let multiplier = new Decimal(NormalDimension(tier).power);
@@ -666,8 +666,8 @@ class NormalDimensionState extends DimensionState {
   get isAvailable() {
     if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return false;
     if (this.tier > DimBoost.totalBoosts + 4) return false;
-    if (this.tier > 1 && 
-      NormalDimension(this.tier - 1).amount.eq(0) && 
+    if (this.tier > 1 &&
+      NormalDimension(this.tier - 1).amount.eq(0) &&
       !EternityMilestone.unlockAllND.isReached) return false;
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }

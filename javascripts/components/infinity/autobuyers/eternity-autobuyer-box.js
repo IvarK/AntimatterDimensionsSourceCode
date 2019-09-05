@@ -44,7 +44,7 @@ Vue.component("eternity-autobuyer-box", {
           },
         };
       }
-      throw crash("Unknown auto eternity mode");
+      throw new Error("Unknown auto eternity mode");
     },
     changeMode(event) {
       const mode = parseInt(event.target.value, 10);

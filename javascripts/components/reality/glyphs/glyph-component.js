@@ -4,21 +4,48 @@ const GlyphTooltipEffect = {
   props: {
     effect: String,
     value: [Number, Object],
-    boostColor: String,
   },
   computed: {
     effectConfig() {
       return GameDatabase.reality.glyphEffects[this.effect];
     },
-    prefix() {
-      return this.effectConfig.singleDescSplit[0].replace("\n", "<br>");
+    boostColor() {
+      return (this.effectConfig.alterationType !== undefined &&
+        this.effectConfig.alterationType !== ALTERATION_TYPE.ADDITION)
+          ? this.effectConfig.alteredColor()
+          : undefined;
     },
-    suffix() {
-      return this.effectConfig.singleDescSplit[1].replace("\n", "<br>");
+    additionColor() {
+      return this.effectConfig.alterationType === ALTERATION_TYPE.ADDITION
+        ? this.effectConfig.alteredColor()
+        : undefined;
     },
-    displayValue() {
+    effectStringTemplate() {
+      return typeof this.effectConfig.singleDesc === "function"
+        ? this.effectConfig.singleDesc()
+        : this.effectConfig.singleDesc;
+    },
+    primaryEffectText() {
       const value = this.effectConfig.formatEffect(this.value);
       return this.boostColor ? `⯅${value}⯅` : value;
+    },
+    secondaryEffectText() {
+      const value = this.effectConfig.formatEffect(this.effectConfig.conversion(this.value));
+      return this.boostColor ? `⯅${value}⯅` : value;
+    },
+    textSplits() {
+      const firstSplit = this.effectStringTemplate.split("{value}");
+      const secondSplit = firstSplit[1].split("{value2}");
+      if (secondSplit.length !== 1) return [firstSplit[0]].concat(secondSplit);
+      return firstSplit;
+    },
+    hasSecondaryValue() {
+      return this.textSplits[2] !== undefined;
+    },
+    convertedParts() {
+      const parts = [];
+      for (const text of this.textSplits) parts.push(this.convertToHTML(text));
+      return parts;
     },
     valueStyle() {
       return this.boostColor ? {
@@ -26,14 +53,24 @@ const GlyphTooltipEffect = {
         "text-shadow": `0 0 0.4rem ${this.boostColor}`
       } : {
           color: "#76EE76",
-        };
+      };
+    },
+  },
+  methods: {
+    convertToHTML(string) {
+      return string
+        .replace("\n", "<br>")
+        .replace("]", "</span>")
+        .replace("[", `<span style="color:${this.additionColor}; text-shadow:#FFFFFF 0px 0px 0.6rem;">`);
     }
   },
   template: `
     <div class="c-glyph-tooltip__effect">
-      <span v-html="prefix"/>
-      <span :style="valueStyle">{{displayValue}}</span>
-      <span v-html="suffix"/>
+      <span v-html="convertedParts[0]"/>
+      <span :style="valueStyle">{{primaryEffectText}}</span>
+      <span v-html="convertedParts[1]"/>
+      <span v-if="hasSecondaryValue" :style="valueStyle">{{secondaryEffectText}}</span>
+      <span v-if="hasSecondaryValue" v-html="convertedParts[2]"/>
     </div>
     `
 };
@@ -340,9 +377,13 @@ Vue.component("glyph-component", {
       this.suppressTooltip = true;
       ev.dataTransfer.setData(GLYPH_MIME_TYPE, this.glyph.id.toString());
       ev.dataTransfer.dropEffect = "move";
-      this.$viewModel.draggingUIID = this.componentID;
       const rect = this.$refs.over.getBoundingClientRect();
       ev.dataTransfer.setDragImage(this.$refs.over, ev.clientX - rect.left, ev.clientY - rect.top);
+      this.$viewModel.draggingUIID = this.componentID;
+      const dragInfo = this.$viewModel.tabs.reality.draggingGlyphInfo;
+      dragInfo.id = this.glyph.id;
+      dragInfo.type = this.glyph.type;
+      dragInfo.sacrificeValue = glyphSacrificeGain(this.glyph);
     },
     dragEnd() {
       this.isDragging = false;

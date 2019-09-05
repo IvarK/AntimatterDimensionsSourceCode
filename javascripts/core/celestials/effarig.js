@@ -25,7 +25,7 @@ const EFFARIG_STAGES = {
   INFINITY: 1,
   ETERNITY: 2,
   REALITY: 3
-}
+};
 
 class EffarigUnlockState extends GameMechanicState {
   get cost() {

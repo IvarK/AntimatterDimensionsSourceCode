@@ -76,7 +76,7 @@ const AutoGlyphPicker = {
           return strengthToRarity(glyph.strength) - 1000;
         }
         return comparedToThreshold;
-      case AutoGlyphPickMode.LOWEST_ALCHEMY_RESOURCE: return 10000 - AlchemyResource[glyph.type].amount;
+      case AutoGlyphPickMode.LOWEST_ALCHEMY_RESOURCE: return -AlchemyResource[glyph.type].amount;
     }
     throw crash("Unknown auto glyph picker mode");
   },

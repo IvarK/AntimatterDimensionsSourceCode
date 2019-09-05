@@ -41,9 +41,9 @@ Vue.component("reality-glyph-creation", {
           value: sumOfOtherAlchemyResources >= 150000
         },
         {
-          desc: `${shorten(1e40, 0, 0)} relic shards (Currently ` +
+          desc: `${shorten(1e50, 0, 0)} relic shards (Currently ` +
             `${shorten(player.celestials.effarig.relicShards, 2, 2)})`,
-          value: player.celestials.effarig.relicShards >= 1e40
+          value: player.celestials.effarig.relicShards >= 1e50
         },
         {
           desc: `A glyph with a level of at least ${shortenSmallInteger(12000)}, which is not consumed (highest: ` +
@@ -61,8 +61,8 @@ Vue.component("reality-glyph-creation", {
         { actualLevel: this.realityGlyphLevel, rawLevel: this.realityGlyphLevel }, this.selectedEffects));
       AlchemyResources.resetAmount();
       // If the player leaves a choice open, don't spend shards
-      if (player.celestials.effarig.relicShards >= 1e40 && (this.selectedEffects === this.calculateMaxEffects())) {
-        player.celestials.effarig.relicShards -= 1e40;
+      if (player.celestials.effarig.relicShards >= 1e50 && (this.selectedEffects === this.calculateMaxEffects())) {
+        player.celestials.effarig.relicShards -= 1e50;
       }
     },
     formatGlyphEffect(effect) {
@@ -71,7 +71,10 @@ Vue.component("reality-glyph-creation", {
       const effectTemplate = typeof config.singleDesc === "function"
         ? config.singleDesc()
         : config.singleDesc;
-      const effectText = effectTemplate.replace("{value}", config.formatEffect(value));
+      const effectText = effectTemplate
+        .replace("{value}", config.formatEffect(value))
+        .replace("[", "")
+        .replace("]", "");
       if (config.conversion === undefined) return effectText;
       return effectText.replace("{value2}", config.formatEffect(config.conversion(value)));
     }

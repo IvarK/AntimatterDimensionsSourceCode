@@ -108,7 +108,7 @@ function autoBuyMaxTheorems() {
     (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) ||
     (Perk.autobuyerTT2.isBought && ttMaxTimer >= 5) ||
     (Perk.autobuyerTT1.isBought && ttMaxTimer >= 10)) {
-    TimeTheorems.buyMax();
+    TimeTheorems.buyMax(true);
     return true;
   }
   return false;

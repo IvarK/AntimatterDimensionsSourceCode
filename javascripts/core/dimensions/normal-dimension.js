@@ -212,6 +212,13 @@ function onBuyDimension(tier) {
   if (tier === 8) player.noEighthDimensions = false;
 }
 
+function floatText(tier, text) {
+  if (!player.options.animations.floatingText) return;
+  const floatingText = ui.view.tabs.dimensions.normal.floatingText[tier];
+  floatingText.push({ text, key: UIID.next() });
+  setTimeout(() => floatingText.shift(), 1000);
+}
+
 function getCostIncreaseThreshold() {
   return Decimal.MAX_NUMBER;
 }
@@ -294,7 +301,29 @@ function buyAsManyAsYouCanBuy(tier) {
   return true;
 }
 
-function buyManyDimensionAutobuyer(tier, bulk) {
+// This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
+function buyUntilTen(tier) {
+  const dimension = NormalDimension(tier);
+  if (InfinityChallenge(5).isRunning) dimension.multiplyIC5Costs();
+  else if (NormalChallenge(9).isRunning) dimension.multiplySameCosts();
+  dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10));
+  dimension.bought += dimension.remainingUntil10;
+  dimension.power = dimension.power.times(getBuyTenMultiplier());
+}
+
+function maxAll() {
+  if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
+
+  player.usedMaxAll = true;
+
+  buyMaxTickSpeed();
+
+  for (let tier = 1; tier < 9; tier++) {
+    buyMaxDimension(tier);
+  }
+}
+
+function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   const dimension = NormalDimension(tier);
   if (!dimension.isAvailable || !dimension.isAffordableUntil10) return;
   const cost = dimension.costUntil10;
@@ -306,6 +335,8 @@ function buyManyDimensionAutobuyer(tier, bulk) {
     buyOneDimension(8);
     return;
   }
+
+  const multBefore = dimension.power;
 
   // Buy any remaining until 10 before attempting to bulk-buy
   if (cost.lt(player.antimatter)) {
@@ -340,6 +371,9 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   // Challenge 6: Dimensions 3+ cost the dimension two tiers down instead of antimatter
   dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
   onBuyDimension(tier);
+  if (dimension.power.neq(multBefore) && auto === false) {
+    floatText(tier, `x${shortenMoney(dimension.power.dividedBy(multBefore))}`);
+  }
 }
 
 

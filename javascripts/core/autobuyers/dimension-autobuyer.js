@@ -59,7 +59,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
         buyOneDimension(tier);
         break;
       case AutobuyerMode.BUY_10:
-        buyManyDimensionAutobuyer(tier, player.options.bulkOn ? this.bulk : 1);
+        buyMaxDimension(tier, player.options.bulkOn ? this.bulk : 1, true);
         break;
     }
   }

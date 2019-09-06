@@ -234,8 +234,7 @@ function buyOneDimension(tier) {
   dimension.currencyAmount = dimension.currencyAmount.minus(cost);
 
   if (dimension.boughtBefore10 === 9) {
-    if (InfinityChallenge(5).isRunning) dimension.multiplyIC5Costs();
-    else if (NormalChallenge(9).isRunning) dimension.multiplySameCosts();
+    dimension.challengeCostBump();
   }
 
   dimension.amount = dimension.amount.plus(1);
@@ -243,7 +242,7 @@ function buyOneDimension(tier) {
 
   if (dimension.boughtBefore10 === 0) {
     dimension.power = dimension.power.times(getBuyTenMultiplier());
-    floatText(tier, `x${shortenMoney(getBuyTenMultiplier())}`);
+    floatText(tier, `x${shorten(getBuyTenMultiplier(), 2, 1)}`);
   }
 
   onBuyDimension(tier);
@@ -259,15 +258,12 @@ function buyManyDimension(tier) {
   if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
 
   dimension.currencyAmount = dimension.currencyAmount.minus(cost);
-
-  if (InfinityChallenge(5).isRunning) dimension.multiplyIC5Costs();
-  else if (NormalChallenge(9).isRunning) dimension.multiplySameCosts();
-
+  dimension.challengeCostBump();
   dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
   dimension.bought += dimension.remainingUntil10;
   dimension.power = dimension.power.times(getBuyTenMultiplier());
 
-  floatText(tier, `x${shortenMoney(getBuyTenMultiplier())}`);
+  floatText(tier, `x${shorten(getBuyTenMultiplier(), 2, 1)}`);
   onBuyDimension(tier);
 
   return true;
@@ -282,18 +278,13 @@ function buyAsManyAsYouCanBuy(tier) {
   if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 1) return buyOneDimension(8);
 
   dimension.currencyAmount = dimension.currencyAmount.minus(cost);
-
-  if (dimension.boughtBefore10 === 9) {
-    if (InfinityChallenge(5).isRunning) dimension.multiplyIC5Costs();
-    else if (NormalChallenge(9).isRunning) dimension.multiplySameCosts();
-  }
-
+  dimension.challengeCostBump();
   dimension.amount = dimension.amount.plus(howMany);
   dimension.bought += howMany;
 
   if (dimension.boughtBefore10 === 0) {
     dimension.power = dimension.power.times(getBuyTenMultiplier());
-    floatText(tier, `x${shortenMoney(getBuyTenMultiplier())}`);
+    floatText(tier, `x${shorten(getBuyTenMultiplier(), 2, 1)}`);
   }
 
   onBuyDimension(tier);
@@ -304,8 +295,7 @@ function buyAsManyAsYouCanBuy(tier) {
 // This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
 function buyUntilTen(tier) {
   const dimension = NormalDimension(tier);
-  if (InfinityChallenge(5).isRunning) dimension.multiplyIC5Costs();
-  else if (NormalChallenge(9).isRunning) dimension.multiplySameCosts();
+  dimension.challengeCostBump();
   dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10));
   dimension.bought += dimension.remainingUntil10;
   dimension.power = dimension.power.times(getBuyTenMultiplier());
@@ -368,11 +358,10 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   dimension.amount = dimension.amount.plus(10 * buying).round();
   dimension.bought += 10 * buying;
   dimension.power = dimension.power.times(Decimal.pow(getBuyTenMultiplier(), buying));
-  // Challenge 6: Dimensions 3+ cost the dimension two tiers down instead of antimatter
   dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
   onBuyDimension(tier);
   if (dimension.power.neq(multBefore) && auto === false) {
-    floatText(tier, `x${shortenMoney(dimension.power.dividedBy(multBefore))}`);
+    floatText(tier, `x${shorten(dimension.power.dividedBy(multBefore), 2, 1)}`);
   }
 }
 
@@ -533,7 +522,6 @@ class NormalDimensionState extends DimensionState {
   /**
    * @returns {Decimal}
    */
-
   get currencyAmount() {
     return this.tier >= 3 && NormalChallenge(6).isRunning
       ? NormalDimension(this.tier - 2).amount
@@ -541,9 +529,8 @@ class NormalDimensionState extends DimensionState {
   }
 
   /**
-    * @param {Decimal} value
-    */
-
+   * @param {Decimal} value
+   */
   set currencyAmount(value) {
     return this.tier >= 3 && NormalChallenge(6).isRunning
       ? NormalDimension(this.tier - 2).amount = value
@@ -551,8 +538,8 @@ class NormalDimensionState extends DimensionState {
   }
 
    /**
-   * @returns {boolean}
-   */
+    * @returns {boolean}
+    */
   get isAffordable() {
     if (!player.break && this.cost.gt(Decimal.MAX_NUMBER)) return false;
     return this.cost.lte(this.currencyAmount);
@@ -582,9 +569,14 @@ class NormalDimensionState extends DimensionState {
     this.costBumps = 0;
   }
 
+  challengeCostBump() {
+    if (InfinityChallenge(5).isRunning) this.multiplyIC5Costs();
+    else if (NormalChallenge(9).isRunning) this.multiplySameCosts();
+  }
+
   multiplySameCosts() {
-    for (const dimension of NormalDimensions.all) {
-      if (dimension.cost.e === this.cost.e && dimension.tier !== this.tier) {
+    for (const dimension of NormalDimensions.all.filter(dim => dim.tier !== this.tier)) {
+      if (dimension.cost.e === this.cost.e) {
         dimension.costBumps++;
       }
     }
@@ -592,10 +584,10 @@ class NormalDimensionState extends DimensionState {
   }
 
   multiplyIC5Costs() {
-    for (const dimension of NormalDimensions.all) {
-      if (this.tier <= 4 && dimension.cost.e <= this.cost.e && dimension.tier !== this.tier) {
+    for (const dimension of NormalDimensions.all.filter(dim => dim.tier !== this.tier)) {
+      if (this.tier <= 4 && dimension.cost.e <= this.cost.e) {
         dimension.costBumps++;
-      } else if (this.tier >= 5 && dimension.cost.e >= this.cost.e && dimension.tier !== this.tier) {
+      } else if (this.tier >= 5 && dimension.cost.e >= this.cost.e) {
         dimension.costBumps++;
       }
     }

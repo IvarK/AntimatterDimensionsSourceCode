@@ -219,7 +219,7 @@ GameDatabase.celestials.alchemy = {
       tier: 3,
       uiOrder: 4,
       formatEffect: value => `Refined glyphs also give ${formatPercents(value, 2)} of their value ` +
-        "to all other base resources",
+        "to other base resources",
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -342,7 +342,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 4,
       formatEffect: value => (player.celestials.laitela.matter === 0
         ? "?????"
-        : `Boost matter dimension generation chance by +${formatPercents(value, 2, 2)}`),
+        : `Boost dark matter dimension generation chance by +${formatPercents(value, 2, 2)}`),
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,

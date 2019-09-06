@@ -20,9 +20,9 @@ Vue.component("automator-tab", {
     },
     intervalText() {
       return this.interval === 1 
-        ? `The automator is running ${(1000 / this.interval).toFixed(2)} 
+        ? `The automator is running ${shorten(1000 / this.interval, 2, 2)} 
           commands per second, each reality makes it run 0.6% faster`
-        : `The automator is running ${(1000 / this.interval).toFixed(2)} commands per second`;
+        : `The automator is running ${shorten(1000 / this.interval, 2, 2)} commands per second`;
     }
   },
   methods: {

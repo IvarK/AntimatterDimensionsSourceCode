@@ -46,7 +46,7 @@ Vue.component("infinity-dim-tab", {
           <span class="c-infinity-dim-description__accent">{{shortenMoney(infinityPower)}}</span> infinity power,
           translated to
           <span class="c-infinity-dim-description__accent">{{shortenMoney(dimMultiplier)}}</span>x
-          multiplier on all dimensions (^{{ conversionRate.toFixed(3) }}).
+          multiplier on all dimensions (^{{ shorten(conversionRate, 2, 3) }}).
         </p>
       </div>
       <div>You are getting {{shortenDimensions(powerPerSecond)}} {{incomeType}} per second.</div>

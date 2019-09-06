@@ -52,7 +52,8 @@ GameDatabase.eternity.dilation = (function() {
       id: 4,
       cost: 5e6,
       description: () => (CompressionUpgrade.freeGalaxySoftcap.canBeApplied
-        ? `Gain twice as many free galaxies, up to ${shortenSmallInteger(10000)}.`
+        ? `Gain twice as many free galaxies, up to
+          ${shortenSmallInteger(CompressionUpgrade.freeGalaxySoftcap.effectValue)}.`
         : `Gain twice as many free galaxies, up to ${shortenSmallInteger(1000)}.`),
       effect: 2
     },
@@ -68,7 +69,7 @@ GameDatabase.eternity.dilation = (function() {
             multiplier = ratio.toFixed(2);
           }
         }
-        return `Time Dimensions are affected by Replicanti multiplier ^${multiplier}.`;
+        return `Time Dimensions are affected by Replicanti multiplier ^${shorten(multiplier, 1, 2)}.`;
       },
       effect: () => {
         let rep10 = replicantiMult().pLog10() * 0.1;

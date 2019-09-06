@@ -274,7 +274,7 @@ const GlyphAlteration = {
   },
   // Scaling boost from sacrifice quantity
   get boostingThreshold() {
-    return 1e50;
+    return 1e60;
   },
   getSacrificePower(type) {
     const sacPower = player.reality.glyphs.sac[type];
@@ -296,7 +296,7 @@ const GlyphAlteration = {
     return this.isUnlocked && this.getSacrificePower(type) >= this.boostingThreshold;
   },
   sacrificeBoost(type) {
-    return Math.log10(Math.max(this.getSacrificePower(type) / this.boostingThreshold, 1));
+    return Math.log10(Math.max(this.getSacrificePower(type) / this.boostingThreshold, 1)) / 2;
   },
   getAdditionColor(type) {
     return this.isAdded(type)
@@ -359,7 +359,7 @@ const RA_UNLOCKS = {
   ALTERED_GLYPHS: {
     id: 5,
     description: "Get Teresa to level 25",
-    reward: "Unlock altered glyphs",
+    reward: "Unlock Altered Glyphs",
     pet: Ra.pets.teresa,
     level: 25
   },

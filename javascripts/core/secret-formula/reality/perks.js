@@ -110,7 +110,7 @@ GameDatabase.reality.perks = {
     id: 25,
     label: "RM",
     family: PerkFamily.REALITY,
-    description: "Gain additional RM equal to twice your current reality count.",
+    description: "Every reality, gain additional RM equal to twice your current reality count.",
     effect: () => 2 * player.realities
   },
   dimboostNonReset: {
@@ -159,7 +159,7 @@ GameDatabase.reality.perks = {
     id: 44,
     label: "DIL3",
     family: PerkFamily.DILATION,
-    description: "Auto-unlock Dilation TT generation when you have 1e15 DT."
+    description: "Auto-unlock TT generation once you can afford it."
   },
   autounlockTD: {
     id: 45,

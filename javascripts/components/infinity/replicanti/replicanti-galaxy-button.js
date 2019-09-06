@@ -14,7 +14,9 @@ Vue.component("replicanti-galaxy-button", {
   },
   computed: {
     resetActionDisplay() {
-      return this.isDivideUnlocked ? "Divide Replicanti by e308" : "Reset Replicanti amount";
+      return this.isDivideUnlocked
+        ? `Divide Replicanti by ${shorten(Number.MAX_VALUE, 0, 1)}`
+        : "Reset Replicanti amount";
     },
     galaxyCountDisplay() {
       const bought = this.boughtGalaxies;

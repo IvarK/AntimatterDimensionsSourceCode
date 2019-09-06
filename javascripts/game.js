@@ -78,19 +78,22 @@ function getRealityMachineMultiplier() {
 }
 
 function gainedRealityMachines() {
-    let rmGain = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e / 4000 - 1);
-    rmGain = rmGain.times(getRealityMachineMultiplier());
-    rmGain = rmGain.plusEffectOf(Perk.realityMachineGain);
-    // This happens around ee10 and is necessary to reach e9e15 antimatter without having to deal with the various
-    // potential problems associated with having ee9 RM, of which there are lots (both balance-wise and design-wise).
-    // The softcap here squishes every additional OoM in the exponent into another factor of e1000 RM, putting e9e15
-    // antimatter around e7000 RM instead of e1000000000 RM.
-    const softcapRM = new Decimal("1e1000");
-    if (rmGain.gt(softcapRM)) {
-      const exponentOOMAboveCap = Math.log10(rmGain.log10() / softcapRM.log10());
-      rmGain = softcapRM.pow(1 + exponentOOMAboveCap);
-    }
-    return Decimal.floor(rmGain);
+  const log10FinalEP = player.eternityPoints.plus(gainedEternityPoints()).log10();
+  let rmGain = Decimal.pow(1000, log10FinalEP / 4000 - 1);
+  // Increase base RM gain if <10 RM
+  if (rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
+  rmGain = rmGain.times(getRealityMachineMultiplier());
+  rmGain = rmGain.plusEffectOf(Perk.realityMachineGain);
+  // This happens around ee10 and is necessary to reach e9e15 antimatter without having to deal with the various
+  // potential problems associated with having ee9 RM, of which there are lots (both balance-wise and design-wise).
+  // The softcap here squishes every additional OoM in the exponent into another factor of e1000 RM, putting e9e15
+  // antimatter around e7000 RM instead of e1000000000 RM.
+  const softcapRM = new Decimal("1e1000");
+  if (rmGain.gt(softcapRM)) {
+    const exponentOOMAboveCap = Math.log10(rmGain.log10() / softcapRM.log10());
+    rmGain = softcapRM.pow(1 + exponentOOMAboveCap);
+  }
+  return Decimal.floor(rmGain);
 }
 
 function gainedGlyphLevel() {
@@ -420,7 +423,7 @@ function gameLoop(diff, options = {}) {
   }
 
   // Ra-Enslaved auto-release stored time (once every 5 ticks)
-  if (Enslaved.isAutoReleasing) {
+  if (Enslaved.isAutoReleasing && !Enslaved.isRunning) {
     Enslaved.autoReleaseTick++;
   }
   if (Enslaved.autoReleaseTick >= 5) {
@@ -657,7 +660,9 @@ function gameLoop(diff, options = {}) {
 
   // TD5-8/Reality unlock and TTgen perk autobuy
   autoBuyExtraTimeDims();
-  if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
+  if (Perk.autounlockDilation3.isBought) {
+    buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
+  }
   if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
 
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
@@ -706,6 +711,7 @@ function updateFreeGalaxies() {
 function getTTPerSecond() {
   // All TT multipliers (note that this is equal to 1 pre-Ra)
   let ttMult = RA_UNLOCKS.TT_BOOST.effect.ttGen();
+  ttMult *= Achievement(137).effectValue;
   if (Enslaved.isRunning) ttMult *= 1e-3;
   if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttMult *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");

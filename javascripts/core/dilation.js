@@ -92,7 +92,7 @@ function getFreeGalaxyMultBeforeCompression() {
 
 function getFreeGalaxyMult() {
   const compressionReduction = Effects.max(0, CompressionUpgrade.freeGalaxyScaling);
-  return getFreeGalaxyMultBeforeCompression() - compressionReduction;
+  return 1 + (getFreeGalaxyMultBeforeCompression() - 1) / (1 + compressionReduction);
 }
 
 function getDilationGainPerSecond() {
@@ -100,6 +100,7 @@ function getDilationGainPerSecond() {
     .timesEffectsOf(
       DilationUpgrade.dtGain,
       Achievement(132),
+      Achievement(137),
       RealityUpgrade(1),
       AlchemyResource.dilation
     );
@@ -239,6 +240,6 @@ const DilationUpgrade = (function() {
     ipMultDT: new DilationUpgradeState(db.ipMultDT),
     timeStudySplit: new DilationUpgradeState(db.timeStudySplit),
     dilationPenalty: new DilationUpgradeState(db.dilationPenalty),
-    ttGenerator: new DilationUpgradeState(db.ttGenerator)
+    ttGenerator: new DilationUpgradeState(db.ttGenerator),
   };
-})();
+}());

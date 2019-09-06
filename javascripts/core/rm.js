@@ -664,9 +664,9 @@ function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
       .filter(t => t !== GlyphTypes[glyph.type]);
     for (const glyphType of otherGlyphTypes) {
       if (glyphType.id !== "reality") {
-        const currAmount = AlchemyResources.all[glyphType.alchemyResource].amount;
-        const gainedResource = Math.clamp(decoherenceGain - currAmount, 0, 100 * refinementGain);
-        AlchemyResources.all[glyphType.alchemyResource].amount += gainedResource;
+        const otherResource = AlchemyResources.all[glyphType.alchemyResource];
+        const maxResouce = Math.max(100 * refinementGain, otherResource.amount);
+        otherResource.amount = Math.min(otherResource.amount + decoherenceGain, maxResouce);
       }
     }
     Glyphs.removeFromInventory(glyph);
@@ -779,7 +779,7 @@ function getGlyphLevelInputs() {
     perkFactor: perkFactor,
     shardFactor: shardFactor,
     rawLevel: baseLevel,
-    actualLevel: scaledLevel,
+    actualLevel: Math.max(1, scaledLevel),
     capped: levelCapped
   };
 }

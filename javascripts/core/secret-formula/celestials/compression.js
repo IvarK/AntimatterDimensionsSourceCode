@@ -11,11 +11,11 @@ GameDatabase.celestials.compression = {
     currentDisplay: () => shortenSmallInteger(player.dilation.freeGalaxies),
     invertedCondition: false,
     effect: () => Math.pow(Math.clampMin(player.dilation.freeGalaxies - 10000, 0), 1.6) + 50000,
-    effectDisplay: x => `${Math.floor(x)} additional dimboosts`
+    effectDisplay: x => `${shortenSmallInteger(Math.floor(x))} additional dimboosts`
   },
   improvedDTMult: {
     id: 1,
-    description: "Improve the rebuyable DT multiplier to 2.2x",
+    description: () => `Improve the rebuyable DT multiplier to ${shorten(2.2, 1, 1)}x`,
     secondary: () => `${shorten(new Decimal("1e1400"))} Dilated Time`,
     cost: 21,
     resource: () => player.dilation.dilatedTime,
@@ -51,7 +51,8 @@ GameDatabase.celestials.compression = {
   },
   freeGalaxySoftcap: {
     id: 4,
-    description: "Increase the 2x free galaxy cap to 10,000 galaxies",
+    description: () => `Increase the ${shortenSmallInteger(2)}x free galaxy cap
+      to ${shortenSmallInteger(10000)} galaxies`,
     secondary: () => `${shorten(Decimal.pow10(5e11), 2, 2)} Antimatter`,
     cost: 100,
     resource: () => player.antimatter,
@@ -63,7 +64,7 @@ GameDatabase.celestials.compression = {
   freeGalaxyScaling: {
     id: 5,
     description: "Improve the free galaxy threshold scaling",
-    secondary: () => "Free galaxy threshold below 1.325",
+    secondary: () => `Free galaxy threshold below ${shorten(1.325, 3, 3)}`,
     cost: 45,
     resource: () => getFreeGalaxyMultBeforeCompression(),
     threshold: () => 1.325,
@@ -73,8 +74,8 @@ GameDatabase.celestials.compression = {
   },
   infDimSoftcap: {
     id: 6,
-    description: "ID softcap increases based on free galaxies past 10,000",
-    secondary: () => "^7.3 Infinity power conversion",
+    description: () => `ID softcap increases based on free galaxies past ${shortenSmallInteger(10000)}`,
+    secondary: () => `^${shorten(7.3, 1, 1)} Infinity power conversion`,
     cost: 24,
     resource: () => getInfinityConversionRate(),
     threshold: () => 7.3,
@@ -96,8 +97,8 @@ GameDatabase.celestials.compression = {
   },
   matterBoost: {
     id: 8,
-    description: "Dilated time improves matter dimension production speed",
-    secondary: () => "10 Matter",
+    description: "Dilated time improves dark matter dimension production speed",
+    secondary: () => `${shortenSmallInteger(10)} dark matter`,
     cost: 33,
     resource: () => Laitela.matter,
     threshold: () => 10,

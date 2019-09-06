@@ -29,20 +29,22 @@ Vue.component("ra-tab", {
     pets: () => [
       {
         pet: Ra.pets.teresa,
-        scalingUpgradeText: level => `You can charge ${Math.clampMax(Math.floor(level / 2), 12)} Infinity Upgrades.`,
+        scalingUpgradeText: level => `You can charge ${shortenSmallInteger(Math.clampMax(Math.floor(level / 2), 12))}
+          Infinity Upgrades.`,
       },
       {
         pet: Ra.pets.effarig,
-        scalingUpgradeText: level => `Glyph rarity +${level}% and +${Math.floor(level / 5)} additional choices.`,
+        scalingUpgradeText: level => `Glyph rarity +${level}% and +${shortenSmallInteger(Math.floor(level / 5))}
+          additional choices.`,
       },
       {
         pet: Ra.pets.enslaved,
         scalingUpgradeText: level => `Stored game time ^${(1 + 0.01 * Math.floor(level)).toFixed(2)}, ` +
-          `stored real time efficiency +${level}% and +${level / 2} hours maximum.`,
+          `stored real time efficiency +${level}% and +${shorten(level / 2, 1, 1)} hours maximum.`,
       },
       {
         pet: Ra.pets.v,
-        scalingUpgradeText: level => `+${Math.floor(level)} free achievements.`,
+        scalingUpgradeText: level => `+${shortenSmallInteger(level)} free achievements.`,
       }
     ]
   },
@@ -86,7 +88,7 @@ Vue.component("ra-tab", {
           <div class="l-ra-laitela-unlock-inner">
             <h1> Lai'tela: </h1>
             <h2> The Celestial of Matter </h2>
-            <p> Unlocked getting all four celestials to level 20 </p>
+            <p> Unlocked getting all four celestials to level {{ shortenSmallInteger(20) }} </p>
           </div>
         </button>
       </div>

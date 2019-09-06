@@ -121,6 +121,8 @@ GameStorage.migrations = {
       GameStorage.migrations.renameDimboosts(player);
       GameStorage.migrations.migrateConfirmations(player);
       GameStorage.migrations.removeOtherTickspeedProps(player);
+      GameStorage.migrations.renameNewsOption(player);
+      GameStorage.migrations.removeDimensionCosts(player);
     }
   },
 
@@ -402,6 +404,23 @@ GameStorage.migrations = {
   removeOtherTickspeedProps(player) {
     delete player.tickSpeedCost;
     delete player.tickspeedMultiplier;
+  },
+
+  renameNewsOption(player) {
+    player.options.news = !player.options.newsHidden;
+    delete player.options.newsHidden;
+  },
+
+  removeDimensionCosts(player) {
+    for (const dimension of player.dimensions.normal) {
+      delete dimension.cost;
+      delete dimension.costMultiplier;
+    }
+  },
+
+  renameTickspeedPurchaseBumps(player) {
+    player.chall9TickspeedCostBumps = player.chall9TickspeedPurchaseBumps;
+    delete player.chall9TickspeedPurchaseBumps;
   },
 
   removePostC3Reward(player) {

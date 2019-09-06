@@ -63,7 +63,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   }
   if (NormalChallenge(12).isRunning) {
     if (tier === 4) multiplier = multiplier.pow(1.4);
-    if (tier === 2) multiplier = multiplier.pow(1.7)
+    if (tier === 2) multiplier = multiplier.pow(1.7);
   }
 
   multiplier = applyNDMultipliers(multiplier, tier);
@@ -168,38 +168,6 @@ function applyNDPowers(mult, tier) {
   return multiplier;
 }
 
-function multiplySameCosts(cost) {
-  const tierCosts = [null,
-    new Decimal(1e3),
-    new Decimal(1e4),
-    new Decimal(1e5),
-    new Decimal(1e6),
-    new Decimal(1e8),
-    new Decimal(1e10),
-    new Decimal(1e12),
-    new Decimal(1e15)];
-
-  for (let i = 1; i <= 8; ++i) {
-    const dimension = NormalDimension(i);
-    if (dimension.cost.e === cost.e) dimension.cost = dimension.cost.times(tierCosts[i]);
-  }
-  if (Tickspeed.cost.e === cost.e) player.chall9TickspeedPurchaseBumps++;
-}
-
-
-function multiplyPC5Costs(cost, tier) {
-  for (let i = 1; i < 9; i++) {
-    const dimension = NormalDimension(i);
-    if (tier <= 4 && dimension.cost.e <= cost.e) {
-      dimension.cost = dimension.cost.times(dimension.costMultiplier);
-      if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(10);
-    } else if (tier >= 5 && dimension.cost.e >= cost.e) {
-      dimension.cost = dimension.cost.times(dimension.costMultiplier);
-      if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(10);
-    }
-  }
-}
-
 function getBuyTenMultiplier() {
   let dimMult = 2;
 
@@ -217,9 +185,9 @@ function getBuyTenMultiplier() {
 
   dimMult *= getAdjustedGlyphEffect("powerbuy10");
 
-  dimMult = Decimal.pow(dimMult, getAdjustedGlyphEffect("effarigforgotten"))
+  dimMult = Decimal.pow(dimMult, getAdjustedGlyphEffect("effarigforgotten"));
 
-  dimMult = dimMult.powEffectsOf(InfinityUpgrade.buy10Mult.chargedEffect)
+  dimMult = dimMult.powEffectsOf(InfinityUpgrade.buy10Mult.chargedEffect);
 
   return dimMult;
 }
@@ -235,13 +203,20 @@ function onBuyDimension(tier) {
   Achievement(23).tryUnlock();
 
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
-  if (NormalChallenge(4).isRunning) clearDimensions(tier - 1)
+  if (NormalChallenge(4).isRunning || InfinityChallenge(1).isRunning) clearDimensions(tier - 1);
 
   player.postC4Tier = tier;
   player.thisInfinityLastBuyTime = player.thisInfinityTime;
   if (tier !== 8) player.onlyEighthDimensons = false;
   if (tier !== 1) player.onlyFirstDimensions = false;
   if (tier === 8) player.noEighthDimensions = false;
+}
+
+function floatText(tier, text) {
+  if (!player.options.animations.floatingText) return;
+  const floatingText = ui.view.tabs.dimensions.normal.floatingText[tier];
+  floatingText.push({ text, key: UIID.next() });
+  setTimeout(() => floatingText.shift(), 1000);
 }
 
 function getCostIncreaseThreshold() {
@@ -256,10 +231,10 @@ function buyOneDimension(tier) {
 
   if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 1) return false;
 
-  if (tier < 3 || !NormalChallenge(6).isRunning) {
-    player.antimatter = player.antimatter.minus(cost);
-  } else {
-    NormalDimension(tier - 2).amount = NormalDimension(tier - 2).amount.minus(cost)
+  dimension.currencyAmount = dimension.currencyAmount.minus(cost);
+
+  if (dimension.boughtBefore10 === 9) {
+    dimension.challengeCostBump();
   }
 
   dimension.amount = dimension.amount.plus(1);
@@ -267,15 +242,10 @@ function buyOneDimension(tier) {
 
   if (dimension.boughtBefore10 === 0) {
     dimension.power = dimension.power.times(getBuyTenMultiplier());
-    if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(dimension.costMultiplier);
-    else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
-    else multiplySameCosts(cost);
-    if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
-    floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()))
+    floatText(tier, `x${shorten(getBuyTenMultiplier(), 2, 1)}`);
   }
 
   onBuyDimension(tier);
-
 
   return true;
 }
@@ -287,21 +257,13 @@ function buyManyDimension(tier) {
 
   if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
 
-  if (tier < 3 || !NormalChallenge(6).isRunning) {
-    player.antimatter = player.antimatter.minus(cost);
-  } else {
-    NormalDimension(tier - 2).amount = NormalDimension(tier - 2).amount.minus(cost)
-  }
-
+  dimension.currencyAmount = dimension.currencyAmount.minus(cost);
+  dimension.challengeCostBump();
   dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
   dimension.bought += dimension.remainingUntil10;
   dimension.power = dimension.power.times(getBuyTenMultiplier());
-  if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(dimension.costMultiplier);
-  else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
-  else multiplySameCosts(dimension.cost);
-  if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
 
-  floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()));
+  floatText(tier, `x${shorten(getBuyTenMultiplier(), 2, 1)}`);
   onBuyDimension(tier);
 
   return true;
@@ -315,23 +277,14 @@ function buyAsManyAsYouCanBuy(tier) {
 
   if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 1) return buyOneDimension(8);
 
-  if (tier < 3 || !NormalChallenge(6).isRunning) {
-    player.antimatter = player.antimatter.minus(cost);
-  } else {
-    NormalDimension(tier - 2).amount = NormalDimension(tier - 2).amount.minus(cost)
-  }
-
+  dimension.currencyAmount = dimension.currencyAmount.minus(cost);
+  dimension.challengeCostBump();
   dimension.amount = dimension.amount.plus(howMany);
   dimension.bought += howMany;
 
   if (dimension.boughtBefore10 === 0) {
     dimension.power = dimension.power.times(getBuyTenMultiplier());
-    if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(dimension.costMultiplier);
-    else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
-    else multiplySameCosts(dimension.cost);
-    if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
-
-    floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()));
+    floatText(tier, `x${shorten(getBuyTenMultiplier(), 2, 1)}`);
   }
 
   onBuyDimension(tier);
@@ -339,139 +292,77 @@ function buyAsManyAsYouCanBuy(tier) {
   return true;
 }
 
-function buyManyDimensionAutobuyer(tier, bulk) {
+// This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
+function buyUntilTen(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailable) return false;
-  let antimatter = new Decimal(player.antimatter);
-  if (antimatter.eq(0)) return false;
-  if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
-  const boughtBefore10 = dimension.boughtBefore10;
-  const remainingUntil10 = 10 - boughtBefore10;
-  const costMultiplier = dimension.costMultiplier;
-  const buyTenMultiplier = getBuyTenMultiplier();
-  const dimensionMultDecrease = Player.dimensionMultDecrease;
-  const costUntil10 = dimension.cost.times(remainingUntil10);
+  dimension.challengeCostBump();
+  dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10));
+  dimension.bought += dimension.remainingUntil10;
+  dimension.power = dimension.power.times(getBuyTenMultiplier());
+}
 
-  if (tier >= 3 && NormalChallenge(6).isRunning) {
-    let lowerDimension = NormalDimension(tier - 2);
-    if (lowerDimension.amount.lt(costUntil10)) return false;
-    if (costUntil10.lt(lowerDimension.amount) && boughtBefore10 !== 0) {
-      lowerDimension.amount = lowerDimension.amount.minus(costUntil10);
-      dimension.amount = Decimal.round(dimension.amount.plus(remainingUntil10));
-      dimension.bought += remainingUntil10;
-      dimension.power = dimension.power.times(buyTenMultiplier);
-      dimension.cost = dimension.cost.times(costMultiplier)
-    }
-    let x = bulk;
-    while (lowerDimension.amount.gt(dimension.cost.times(10)) && x > 0) {
-      lowerDimension.amount = lowerDimension.amount.minus(dimension.cost.times(10));
-      dimension.cost = dimension.cost.times(costMultiplier);
-      dimension.amount = Decimal.round(dimension.amount.plus(10));
-      dimension.bought += 10;
-      dimension.power = dimension.power.times(buyTenMultiplier);
-      if (dimension.cost.gte(getCostIncreaseThreshold())) costMultiplier.fromDecimal(costMultiplier.times(dimensionMultDecrease));
-      x--;
+function maxAll() {
+  if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
+
+  player.usedMaxAll = true;
+
+  buyMaxTickSpeed();
+
+  for (let tier = 1; tier < 9; tier++) {
+    buyMaxDimension(tier);
+  }
+}
+
+function buyMaxDimension(tier, bulk = Infinity, auto = false) {
+  const dimension = NormalDimension(tier);
+  if (!dimension.isAvailable || !dimension.isAffordableUntil10) return;
+  const cost = dimension.costUntil10;
+  let bulkLeft = bulk;
+  const goal = Player.infinityGoal;
+  if (dimension.cost.gt(goal) && (NormalChallenge.isRunning || InfinityChallenge.isRunning)) return;
+
+  if (tier === 8 && Enslaved.isRunning) {
+    buyOneDimension(8);
+    return;
+  }
+
+  const multBefore = dimension.power;
+
+  // Buy any remaining until 10 before attempting to bulk-buy
+  if (cost.lt(player.antimatter)) {
+    player.antimatter = player.antimatter.minus(cost);
+    buyUntilTen(tier);
+    bulkLeft--;
+  }
+
+  // Buy in a while loop in order to properly trigger abnormal price increases
+  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
+    while (dimension.isAffordableUntil10 && dimension.cost.lt(goal) && bulkLeft > 0) {
+      player.antimatter = player.antimatter.minus(dimension.costUntil10);
+      buyUntilTen(tier);
+      bulkLeft--;
     }
     onBuyDimension(tier);
-    return true;
+    return;
   }
-  if (costUntil10.lt(player.antimatter) && boughtBefore10 !== 0) {
-    player.antimatter = player.antimatter.minus(costUntil10);
-    dimension.amount = Decimal.round(dimension.amount.plus(remainingUntil10));
-    dimension.bought += remainingUntil10;
-    dimension.power = dimension.power.times(buyTenMultiplier);
-    dimension.cost = dimension.cost.times(costMultiplier)
+
+  // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
+  const maxBought = dimension.costScale.getMaxBought(
+    Math.floor(dimension.bought / 10) + dimension.costBumps, dimension.currencyAmount
+  );
+  if (maxBought === null) {
+    return;
   }
-  if (player.antimatter.lt(dimension.cost.times(10))) return false;
-  let x = bulk;
-
-  if ((!BreakInfinityUpgrade.dimCostMult.isMaxed || InfinityChallenge(5).isRunning || NormalChallenge(9).isRunning)) {
-    while (player.antimatter.gte(dimension.cost.times(10)) && x > 0) {
-      player.antimatter = player.antimatter.minus(dimension.cost.times(10));
-      if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
-      else if (NormalChallenge(9).isRunning) multiplySameCosts(dimension.cost);
-      else dimension.cost = dimension.cost.times(costMultiplier);
-      dimension.amount = Decimal.round(dimension.amount.plus(10));
-      dimension.bought += 10;
-      dimension.power = dimension.power.times(buyTenMultiplier);
-      if (dimension.cost.gte(getCostIncreaseThreshold())) costMultiplier.fromDecimal(costMultiplier.times(dimensionMultDecrease));
-      if (NormalChallenge(4).isRunning) clearDimensions(tier - 1);
-      x--;
-    }
-  } else {
-    let cost = new Decimal(dimension.cost);
-    let amount = new Decimal(dimension.amount);
-    let bought = dimension.bought;
-    let pow = new Decimal(dimension.power);
-    function flushValues() {
-      player.antimatter.fromDecimal(antimatter);
-      dimension.cost.fromDecimal(cost);
-      dimension.amount.fromDecimal(amount);
-      dimension.bought = bought;
-      dimension.power.fromDecimal(pow);
-    }
-    if (dimension.cost.lt(getCostIncreaseThreshold())) {
-      let failsafe = 0;
-      while (antimatter.gte(cost.times(10)) && x > 0 && cost.lte(getCostIncreaseThreshold()) && failsafe < 150) {
-        antimatter = antimatter.minus(cost.times(10));
-        if (InfinityChallenge(5).isRunning) multiplyPC5Costs(cost, tier);
-        else if (NormalChallenge(9).isRunning) multiplySameCosts(cost);
-        else cost = cost.times(costMultiplier);
-        amount = amount.plus(10).round();
-        bought += 10;
-        pow.fromDecimal(pow.times(buyTenMultiplier));
-        if (cost.gte(getCostIncreaseThreshold())) costMultiplier.fromDecimal(costMultiplier.times(dimensionMultDecrease));
-        if (NormalChallenge(4).isRunning) clearDimensions(tier - 1);
-        x--;
-        failsafe++;
-      }
-    }
-    if (cost.gte(getCostIncreaseThreshold())) {
-      const a = Math.log10(Math.sqrt(dimensionMultDecrease));
-      const b = costMultiplier.dividedBy(Math.sqrt(dimensionMultDecrease)).log10();
-      const c = cost.dividedBy(antimatter).log10();
-      const discriminant = Math.pow(b, 2) - (c * a * 4);
-      if (discriminant < 0) {
-        flushValues();
-        return false;
-      }
-      let buying = Math.floor((Math.sqrt(Math.pow(b, 2) - (c * a * 4)) - b) / (2 * a)) + 1;
-      if (buying <= 0) {
-        flushValues();
-        return false;
-      }
-      if (buying > bulk) buying = bulk;
-      amount = amount.plus(10 * buying).round();
-      let preInfBuy = Math.floor(1 + (getCostIncreaseThreshold().e - dimension.baseCost.log10()) / dimension.baseCostMultiplier.log10());
-      let postInfBuy = bought / 10 + buying - preInfBuy - 1;
-      let postInfInitCost = dimension.baseCost.times(Decimal.pow(dimension.baseCostMultiplier, preInfBuy));
-      bought += 10 * buying;
-      pow = pow.times(Decimal.pow(buyTenMultiplier, buying));
-
-      let newCost = null;
-      let postInfBuyOriginal = postInfBuy;
-      postInfBuy++;
-
-      do {
-        postInfBuy--;
-        newCost = postInfInitCost.times(Decimal.pow(dimension.baseCostMultiplier, postInfBuy)).times(Decimal.pow(dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
-      }
-      while (newCost.gt(antimatter) && postInfBuy >= 0);
-
-      if (postInfBuyOriginal < postInfBuy) {
-        console.log("Had to decrease postInfBuy. Tier = " + tier + ", a = " + a + ", b = " + b + ", c = " + c + ", discriminant = " + discriminant + ", buying = " + buying + ", amount = " + amount + ", preInfBuy = " + preInfBuy + ", postInfBuy = " + postInfBuy + ", postInfBuyOriginal = " + postInfBuyOriginal + ", postInfInitCost = ", + postInfInitCost.toString() + " , bought = " + bought + ", newCost = " + newCost.toString() + ", antimatter = " + antimatter.toString() + ".");
-      }
-
-      costMultiplier.fromDecimal(dimension.baseCostMultiplier.times(Decimal.pow(dimensionMultDecrease, postInfBuy + 1)));
-      antimatter = antimatter.minus(newCost).max(0);
-      cost = newCost.times(costMultiplier);
-      costMultiplier.fromDecimal(costMultiplier.times(dimensionMultDecrease));
-    }
-    flushValues();
-  }
-  if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) player.matter = new Decimal(1);
-  if (InfinityChallenge(1).isRunning) clearDimensions(tier - 1);
+  let buying = maxBought.quantity;
+  if (buying > bulkLeft) buying = bulkLeft; 
+  dimension.amount = dimension.amount.plus(10 * buying).round();
+  dimension.bought += 10 * buying;
+  dimension.power = dimension.power.times(Decimal.pow(getBuyTenMultiplier(), buying));
+  dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
   onBuyDimension(tier);
+  if (dimension.power.neq(multBefore) && auto === false) {
+    floatText(tier, `x${shorten(dimension.power.dividedBy(multBefore), 2, 1)}`);
+  }
 }
 
 
@@ -480,19 +371,10 @@ function canAfford(cost) {
 }
 
 function buyOneDimensionBtnClick(tier) {
-  resetMatterOnBuy(tier);
   if (tier === 1) {
     if (buyOneDimension(1)) {
       // This achievement is granted only if the buy one button is pressed
       Achievement(28).tryUnlock();
-    }
-    let dimension = NormalDimension(1);
-    if (dimension.amount.lt(1)) {
-      // Edge case in the very beginning of the game
-      player.antimatter = new Decimal(0);
-      dimension.amount = dimension.amount.plus(1);
-      dimension.bought++;
-      Achievement(11).unlock();
     }
     return;
   }
@@ -500,19 +382,11 @@ function buyOneDimensionBtnClick(tier) {
 }
 
 function buyManyDimensionsBtnClick(tier) {
-  resetMatterOnBuy(tier);
   buyManyDimension(tier);
 }
 
 function buyAsManyAsYouCanBuyBtnClick(tier) {
-  resetMatterOnBuy(tier);
-  buyAsManyAsYouCanBuy(tier)
-}
-
-function resetMatterOnBuy(tier) {
-  if (tier < 5 && Player.isInMatterChallenge && player.matter.equals(0)) {
-    player.matter = new Decimal(1);
-  }
+  buyAsManyAsYouCanBuy(tier);
 }
 
 function getDimensionProductionPerSecond(tier) {
@@ -543,28 +417,38 @@ class NormalDimensionState extends DimensionState {
   constructor(tier) {
     super(() => player.dimensions.normal, tier);
     const BASE_COSTS = [null, 10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24];
-    this._baseCost = new Decimal(BASE_COSTS[tier]);
+    this._baseCost = BASE_COSTS[tier];
     const BASE_COST_MULTIPLIERS = [null, 1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15];
-    this._baseCostMultiplier = new Decimal(BASE_COST_MULTIPLIERS[tier]);
+    this._baseCostMultiplier = BASE_COST_MULTIPLIERS[tier];
     const C6_BASE_COSTS = [null, 10, 100, 100, 500, 2500, 2e4, 2e5, 4e6];
-    this._c6BaseCost = new Decimal(C6_BASE_COSTS[tier]);
+    this._c6BaseCost = C6_BASE_COSTS[tier];
     const C6_BASE_COST_MULTIPLIERS = [null, 1e3, 5e3, 1e4, 1.2e4, 1.8e4, 2.6e4, 3.2e4, 4.2e4];
-    this._c6BaseCostMultiplier = new Decimal(C6_BASE_COST_MULTIPLIERS[tier]);
+    this._c6BaseCostMultiplier = C6_BASE_COST_MULTIPLIERS[tier];
   }
 
   /**
    * @returns {Decimal}
    */
-  get costMultiplier() {
-    return this.data.costMultiplier;
+  get costScale() {
+    return new ExponentialCostScaling({
+      baseCost: NormalChallenge(6).isRunning ? this._c6BaseCost : this._baseCost,
+      baseIncrease: NormalChallenge(6).isRunning ? this._c6BaseCostMultiplier : this._baseCostMultiplier,
+      costScale: Player.dimensionMultDecrease,
+      scalingCostThreshold: Number.MAX_VALUE
+    });
   }
 
   /**
-   * @param {Decimal} value
+   * @returns {Decimal}
    */
-  set costMultiplier(value) {
-    this.data.costMultiplier = value;
+  get cost() {
+    return this.costScale.calculateCost(Math.floor(this.bought / 10) + this.costBumps);
   }
+
+  /** @returns {number} */
+  get costBumps() { return this.data.costBumps; }
+  /** @param {number} value */
+  set costBumps(value) { this.data.costBumps = value; }
 
   /**
    * @returns {number}
@@ -588,9 +472,8 @@ class NormalDimensionState extends DimensionState {
   }
 
   get howManyCanBuy() {
-    let ratio = this.currencyAmount.dividedBy(this.cost)
-
-    return Decimal.floor(Decimal.max(Decimal.min(ratio, 10 - this.boughtBefore10), 0)).toNumber()
+    const ratio = this.currencyAmount.dividedBy(this.cost);
+    return Decimal.floor(Decimal.max(Decimal.min(ratio, 10 - this.boughtBefore10), 0)).toNumber();
   }
 
   /**
@@ -611,6 +494,7 @@ class NormalDimensionState extends DimensionState {
       case 5:
         return InfinityUpgrade.dim45mult;
     }
+    return false;
   }
 
   /**
@@ -627,11 +511,9 @@ class NormalDimensionState extends DimensionState {
     let toGain;
     if (tier === 7 && EternityChallenge(7).isRunning) {
       toGain = InfinityDimension(1).productionPerSecond.times(10);
-    }
-    else if (NormalChallenge(12).isRunning) {
+    } else if (NormalChallenge(12).isRunning) {
       toGain = getDimensionProductionPerSecond(tier + 2);
-    }
-    else {
+    } else {
       toGain = getDimensionProductionPerSecond(tier + 1);
     }
     return toGain.times(10).dividedBy(this.amount.max(1)).times(getGameSpeedupForDisplay());
@@ -640,16 +522,24 @@ class NormalDimensionState extends DimensionState {
   /**
    * @returns {Decimal}
    */
-
   get currencyAmount() {
     return this.tier >= 3 && NormalChallenge(6).isRunning
       ? NormalDimension(this.tier - 2).amount
       : player.antimatter;
   }
 
-   /**
-   * @returns {boolean}
+  /**
+   * @param {Decimal} value
    */
+  set currencyAmount(value) {
+    return this.tier >= 3 && NormalChallenge(6).isRunning
+      ? NormalDimension(this.tier - 2).amount = value
+      : player.antimatter = value;
+  }
+
+   /**
+    * @returns {boolean}
+    */
   get isAffordable() {
     if (!player.break && this.cost.gt(Decimal.MAX_NUMBER)) return false;
     return this.cost.lte(this.currencyAmount);
@@ -672,26 +562,35 @@ class NormalDimensionState extends DimensionState {
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }
 
-  get baseCost() {
-    return this._baseCost;
-  }
-
-  get baseCostMultiplier() {
-    return this._baseCostMultiplier;
-  }
-
   reset() {
     this.amount = new Decimal(0);
     this.power = new Decimal(1);
     this.bought = 0;
-    const cost = NormalChallenge(6).isRunning
-      ? this._c6BaseCost
-      : this._baseCost;
-    this.cost = new Decimal(cost);
-    const costMultiplier = NormalChallenge(6).isRunning
-      ? this._c6BaseCostMultiplier
-      : this._baseCostMultiplier;
-    this.costMultiplier = new Decimal(costMultiplier);
+    this.costBumps = 0;
+  }
+
+  challengeCostBump() {
+    if (InfinityChallenge(5).isRunning) this.multiplyIC5Costs();
+    else if (NormalChallenge(9).isRunning) this.multiplySameCosts();
+  }
+
+  multiplySameCosts() {
+    for (const dimension of NormalDimensions.all.filter(dim => dim.tier !== this.tier)) {
+      if (dimension.cost.e === this.cost.e) {
+        dimension.costBumps++;
+      }
+    }
+    if (Tickspeed.cost.e === this.cost.e) player.chall9TickspeedCostBumps++;
+  }
+
+  multiplyIC5Costs() {
+    for (const dimension of NormalDimensions.all.filter(dim => dim.tier !== this.tier)) {
+      if (this.tier <= 4 && dimension.cost.e <= this.cost.e) {
+        dimension.costBumps++;
+      } else if (this.tier >= 5 && dimension.cost.e >= this.cost.e) {
+        dimension.costBumps++;
+      }
+    }
   }
 
   get multiplier() {

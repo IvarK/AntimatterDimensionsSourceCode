@@ -14,8 +14,8 @@ Vue.component("old-ui", {
   },
   computed: {
     tab: () => Tabs.current,
-    newsTickerIsHidden() {
-      return this.$viewModel.newsHidden;
+    news() {
+      return this.$viewModel.news;
     }
   },
   methods: {
@@ -42,7 +42,7 @@ Vue.component("old-ui", {
         </div>
       </template>
       <template v-else>
-        <news-ticker class="l-old-ui__news-bar" v-if="!newsTickerIsHidden"/>
+        <news-ticker class="l-old-ui__news-bar" v-if="news"/>
         <game-header class="l-old-ui__header" />
         <old-ui-tab-bar />
         <component v-if="tab.config.before" :is="tab.config.before" />

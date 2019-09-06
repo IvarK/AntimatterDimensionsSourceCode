@@ -111,11 +111,6 @@ body.t-dark-metro {
     background: #E53935;
 }
 
-.t-dark-metro #theorembuybackground {
-    background: #455A64;
-    border-width: 1px;
-}
-
 .t-dark-metro .realitytabbtn {
     background-color: white;
     border: 1px solid #0b600e;

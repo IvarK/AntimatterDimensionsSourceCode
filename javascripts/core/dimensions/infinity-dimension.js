@@ -116,6 +116,11 @@ class InfinityDimensionState extends DimensionState {
     this._baseCost = new Decimal(BASE_COSTS[tier]);
   }
 
+  /** @returns {Decimal} */
+  get cost() { return this.data.cost; }
+  /** @param {Decimal} value */
+  set cost(value) { this.data.cost = value; }
+
   get baseAmount() {
     return this.data.baseAmount;
   }

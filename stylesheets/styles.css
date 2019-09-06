@@ -318,7 +318,7 @@ body {
   align-items: center;
 }
 
-#theorembuybackground {
+.ttshop-background {
   background: #E0E0E0;
   border: 2px solid black;
   border-bottom: none;
@@ -327,12 +327,46 @@ body {
   z-index: 1;
 }
 
+.t-dark .ttshop-background,
+.t-dark-metro .ttshop-background {
+  background: #455A64;
+}
+
+.t-metro .ttshop-background,
+.t-inverted-metro .ttshop-background,
+.t-s8 .ttshop-background {
+  background: #EEEEEE;
+}
+
+.t-metro .ttshop-background,
+.t-dark-metro .ttshop-background,
+.t-inverted-metro .ttshop-background,
+.t-s8 .ttshop-background {
+  border-width: 1px;
+  border-radius: 0;
+}
+
+.t-inverted .ttshop-background {
+  border-color: #fff;
+  background-color: #1f1f1f;
+}
+
+.t-s1 .ttshop-background {
+  background: #dbd242;
+}
+
+.t-s6 .ttshop-background {
+  border: 1px solid #3AACD6;
+  background: black;
+}
+
 .ttshop-container {
-  padding: 0 10px 5px 10px;
-  width: 555px;
+  padding: 0 1rem 0.5rem 1rem;
+  width: 55.5rem;
   display: flex;
   flex-direction: column;
   transition: all 0.25s ease-out;
+  min-height: 3.8rem;
 }
 
 .ttshop-minimize-btn {
@@ -2644,12 +2678,16 @@ screen and (max-width: 480px) {
   color: #888888;
 }
 
-.t-s6 .c-stats-tab {
-  color: #e0e0e0;
-}
-
 .t-dark-metro .c-stats-tab {
   color: #757575;
+}
+
+.t-s2 .c-stats-tab {
+  color: white;
+}
+
+.t-s6 .c-stats-tab {
+  color: #e0e0e0;
 }
 
 /*#endregion c-stats-tab*/
@@ -3060,6 +3098,14 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion t-s1*/
+
+/*#region t-s2*/
+
+.t-s2 .c-challenge-box--normal {
+  color: white;
+}
+
+/*#endregion t-s2*/
 
 /*#region t-s6*/
 
@@ -3621,13 +3667,13 @@ screen and (max-width: 480px) {
   background-color: #c5ba26;
 }
 
-.t-s6 .o-infinity-upgrade-btn--unavailable:hover {
+.t-s6 .o-infinity-upgrade-btn--unavailable {
   color: grey;
   background-color: black;
   border-color: grey;
 }
 
-.t-s6 .o-infinity-upgrade-btn--unavailable:hover:hover {
+.t-s6 .o-infinity-upgrade-btn--unavailable:hover {
   background-color: #222;
 }
 
@@ -6056,6 +6102,7 @@ kbd {
 }
 
 .o-alchemy-node {
+  color: black;
   position: absolute;
   width: 3rem;
   height: 3rem;
@@ -6081,12 +6128,26 @@ kbd {
   background-color: lightblue;
 }
 
+.t-metro .o-alchemy-node--base,
+.t-dark-metro .o-alchemy-node--base,
+.t-inverted-metro .o-alchemy-node--base,
+.t-s8 .o-alchemy-node--base {
+  background-color: #80d8ff;
+}
+
 .o-alchemy-node--unfocused.o-alchemy-node--base {
   background-color: #ebf6f9;
 }
 
 .o-alchemy-node--active {
   background-color: lightgreen;
+}
+
+.t-metro .o-alchemy-node--active,
+.t-dark-metro .o-alchemy-node--active,
+.t-inverted-metro .o-alchemy-node--active,
+.t-s8 .o-alchemy-node--active {
+  background-color: #ccff90;
 }
 
 .o-alchemy-node--unfocused.o-alchemy-node--active {
@@ -6689,6 +6750,11 @@ kbd {
 
 .c-black-hole-canvas {
   border: .1rem solid black;
+}
+
+.t-s1 .c-black-hole-canvas {
+  background: black;
+  border-radius: 50%;
 }
 
 .c-pp-label {

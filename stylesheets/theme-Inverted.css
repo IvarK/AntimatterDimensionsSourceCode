@@ -14,11 +14,6 @@ body.t-inverted {
     filter: invert(1);
 }
 
-.t-inverted #theorembuybackground {
-    border-color: #fff;
-    background-color: #1f1f1f;
-}
-
 .t-inverted #timetheorems,
 .t-inverted .c-ttshop__save-load-text,
 .t-inverted #minimizeArrow {

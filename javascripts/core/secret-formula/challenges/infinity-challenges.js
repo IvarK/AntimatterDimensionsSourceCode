@@ -55,7 +55,7 @@ GameDatabase.challenges.infinity = [
     description: "When buying dimensions 1-4, dimensions with costs smaller or equal increase in cost. " +
       "When buying dimensions 5-8, dimensions with costs larger or equal increase in cost. " +
       "When buying tickspeed, dimensions with the same cost increase.",
-    goal: new Decimal("1e11111"),
+    goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {
       description: "Galaxies are 10% more powerful and reduce the requirements for them and Dimension Boosts by 1",

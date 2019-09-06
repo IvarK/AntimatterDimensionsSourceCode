@@ -11,11 +11,6 @@ class DimensionState {
   get data() { return this._getData()[this.tier - 1]; }
 
   /** @returns {Decimal} */
-  get cost() { return this.data.cost; }
-  /** @param {Decimal} value */
-  set cost(value) { this.data.cost = value; }
-
-  /** @returns {Decimal} */
   get amount() { return this.data.amount; }
   /** @param {Decimal} value */
   set amount(value) { this.data.amount = value; }

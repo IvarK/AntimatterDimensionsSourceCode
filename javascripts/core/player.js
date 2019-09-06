@@ -6,12 +6,11 @@ const defaultMaxTime = 60000 * 60 * 24 * 31;
 let player = {
   antimatter: new Decimal(10),
   dimensions: {
-    normal: Array.range(0, 8).map(tier => ({
+    normal: Array.range(0, 8).map(() => ({
       bought: 0,
+      costBumps: 0,
       amount: new Decimal(0),
-      power: new Decimal(1),
-      cost: new Decimal([10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24][tier]),
-      costMultiplier: new Decimal([1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15][tier])
+      power: new Decimal(1)
     })),
     infinity: Array.range(0, 8).map(tier => ({
       isUnlocked: false,
@@ -147,8 +146,8 @@ let player = {
   lastUpdate: new Date().getTime(),
   chall2Pow: 1,
   chall3Pow: new Decimal(0.01),
-  matter: new Decimal(0),
-  chall9TickspeedPurchaseBumps: 0,
+  matter: new Decimal(1),
+  chall9TickspeedCostBumps: 0,
   chall11Pow: new Decimal(1),
   partInfinityPoint: 0,
   partInfinitied: 0,
@@ -429,7 +428,7 @@ let player = {
   },
   autoEcIsOn: true,
   options: {
-    newsHidden: false,
+    news: true,
     notation: "Mixed scientific",
     retryChallenge: false,
     showAllChallenges: false,

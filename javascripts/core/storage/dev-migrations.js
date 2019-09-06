@@ -439,7 +439,10 @@ GameStorage.devMigrations = {
       // These were accidentally added back in due to a bad merge conflict resolution
       delete player.resets;
       delete player.tickDecrease;
-    }
+    },
+    GameStorage.migrations.renameNewsOption,
+    GameStorage.migrations.removeDimensionCosts,
+    GameStorage.migrations.renameTickspeedPurchaseBumps
   ],
 
   patch(player) {

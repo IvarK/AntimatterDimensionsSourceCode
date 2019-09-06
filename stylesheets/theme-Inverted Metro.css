@@ -103,11 +103,6 @@ body.t-inverted-metro {
   background: #EF5350;
 }
 
-.t-inverted-metro #theorembuybackground {
-    background: #EEEEEE;
-    border-width: 1px;
-}
-
 .t-inverted-metro .realitytabbtn {
     background: white;
     border: 1px solid #0b600e;

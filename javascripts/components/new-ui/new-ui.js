@@ -10,6 +10,11 @@ Vue.component("new-ui", {
       realities: 0
     };
   },
+  computed: {
+    news() {
+      return this.$viewModel.news;
+    }
+  },
   methods: {
     update() {
       this.breakInfinity = player.break;
@@ -31,7 +36,7 @@ Vue.component("new-ui", {
     <link rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
     <sidebar />
     <div class="game-container">
-      <news-ticker />
+      <news-ticker v-if="news"/>
       <div v-if="bigCrunch" class="l-new-ui-big-crunch__container">
         <h3>The world has collapsed due to excess antimatter.</h3>
         <button class="btn-big-crunch" onclick="bigCrunchResetRequest()">Big Crunch</button>

@@ -41,7 +41,7 @@ let ui = {
     tab: "dimensions",
     subtab: "normal",
     newUI: false,
-    newsHidden: false
+    news: false
   },
   notationName: "",
   formatPreBreak: false

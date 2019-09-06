@@ -60,7 +60,7 @@ function maxDimension(tier) {
 
   // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
   const maxBought = dimension.costScale.getMaxBought(
-    Math.floor(dimension.bought / 10) + dimension.purchaseBumps, dimension.currencyAmount
+    Math.floor(dimension.bought / 10) + dimension.costBumps, dimension.currencyAmount
   );
   if (maxBought === null) {
     return;

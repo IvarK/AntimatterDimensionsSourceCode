@@ -8,7 +8,7 @@ let player = {
   dimensions: {
     normal: Array.range(0, 8).map(() => ({
       bought: 0,
-      purchaseBumps: 0,
+      costBumps: 0,
       amount: new Decimal(0),
       power: new Decimal(1)
     })),
@@ -147,7 +147,7 @@ let player = {
   chall2Pow: 1,
   chall3Pow: new Decimal(0.01),
   matter: new Decimal(1),
-  chall9TickspeedPurchaseBumps: 0,
+  chall9TickspeedCostBumps: 0,
   chall11Pow: new Decimal(1),
   partInfinityPoint: 0,
   partInfinitied: 0,

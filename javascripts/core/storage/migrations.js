@@ -418,6 +418,11 @@ GameStorage.migrations = {
     }
   },
 
+  renameTickspeedPurchaseBumps(player) {
+    player.chall9TickspeedCostBumps = player.chall9TickspeedPurchaseBumps;
+    delete player.chall9TickspeedPurchaseBumps;
+  },
+
   removePostC3Reward(player) {
     delete player.postC3Reward;
   },

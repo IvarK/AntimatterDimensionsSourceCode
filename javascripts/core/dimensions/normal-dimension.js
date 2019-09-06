@@ -327,7 +327,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
 
   // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
   const maxBought = dimension.costScale.getMaxBought(
-    Math.floor(dimension.bought / 10) + dimension.purchaseBumps, dimension.currencyAmount
+    Math.floor(dimension.bought / 10) + dimension.costBumps, dimension.currencyAmount
   );
   if (maxBought === null) {
     return;
@@ -419,13 +419,13 @@ class NormalDimensionState extends DimensionState {
    * @returns {Decimal}
    */
   get cost() {
-    return this.costScale.calculateCost(Math.floor(this.bought / 10) + this.purchaseBumps);
+    return this.costScale.calculateCost(Math.floor(this.bought / 10) + this.costBumps);
   }
 
   /** @returns {number} */
-  get purchaseBumps() { return this.data.purchaseBumps; }
+  get costBumps() { return this.data.costBumps; }
   /** @param {number} value */
-  set purchaseBumps(value) { this.data.purchaseBumps = value; }
+  set costBumps(value) { this.data.costBumps = value; }
 
   /**
    * @returns {number}
@@ -545,24 +545,24 @@ class NormalDimensionState extends DimensionState {
     this.amount = new Decimal(0);
     this.power = new Decimal(1);
     this.bought = 0;
-    this.purchaseBumps = 0;
+    this.costBumps = 0;
   }
 
   multiplySameCosts() {
     for (const dimension of NormalDimensions.all) {
       if (dimension.cost.e === this.cost.e && dimension.tier !== this.tier) {
-        dimension.purchaseBumps++;
+        dimension.costBumps++;
       }
     }
-    if (Tickspeed.cost.e === this.cost.e) player.chall9TickspeedPurchaseBumps++;
+    if (Tickspeed.cost.e === this.cost.e) player.chall9TickspeedCostBumps++;
   }
 
   multiplyIC5Costs() {
     for (const dimension of NormalDimensions.all) {
       if (this.tier <= 4 && dimension.cost.e <= this.cost.e && dimension.tier !== this.tier) {
-        dimension.purchaseBumps++;
+        dimension.costBumps++;
       } else if (this.tier >= 5 && dimension.cost.e >= this.cost.e && dimension.tier !== this.tier) {
-        dimension.purchaseBumps++;
+        dimension.costBumps++;
       }
     }
   }

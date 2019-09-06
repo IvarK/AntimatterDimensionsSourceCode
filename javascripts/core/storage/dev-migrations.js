@@ -441,7 +441,8 @@ GameStorage.devMigrations = {
       delete player.tickDecrease;
     },
     GameStorage.migrations.renameNewsOption,
-    GameStorage.migrations.removeDimensionCosts
+    GameStorage.migrations.removeDimensionCosts,
+    GameStorage.migrations.renameTickspeedPurchaseBumps
   ],
 
   patch(player) {

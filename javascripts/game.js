@@ -34,10 +34,8 @@ function maxDimension(tier) {
   if (!dimension.isAvailable || !dimension.isAffordableUntil10) return;
   const cost = dimension.costUntil10;
   const multBefore = dimension.power;
-  let goal;
-  if (InfinityChallenge.isRunning) goal = InfinityChallenge.current.goal;
-  else if (NormalChallenge.isRunning) goal = NormalChallenge.current.goal;
-  if (goal !== undefined && dimension.cost.gt(goal)) return;
+  const goal = Player.infinityGoal;
+  if (dimension.cost.gt(goal) && (NormalChallenge.isRunning || InfinityChallenge.isRunning)) return;
 
   if (tier === 8 && Enslaved.isRunning) {
     buyOneDimension(8);
@@ -56,11 +54,13 @@ function maxDimension(tier) {
       player.antimatter = player.antimatter.minus(dimension.costUntil10);
       buyUntilTen(tier);
     }
+    onBuyDimension(tier);
+    return;
   }
 
   // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
   const maxBought = dimension.costScale.getMaxBought(
-    Math.floor(dimension.bought / 10) + dimension.purchaseBumps, player.antimatter
+    Math.floor(dimension.bought / 10) + dimension.purchaseBumps, dimension.currencyAmount
   );
   if (maxBought === null) {
     return;
@@ -70,9 +70,7 @@ function maxDimension(tier) {
   dimension.bought += 10 * buying;
   dimension.power = dimension.power.times(Decimal.pow(getBuyTenMultiplier(), buying));
   // Challenge 6: Dimensions 3+ cost the dimension two tiers down instead of antimatter
-  if (tier >= 3 && NormalChallenge(6).isRunning) {
-    NormalDimension(tier - 2).amount = NormalDimension(tier - 2).amount.minus(Decimal.pow10(buying.logPrice)).max(0);
-  } else player.antimatter = player.antimatter.minus(Decimal.pow10(buying.logPrice)).max(0);
+  dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
   onBuyDimension(tier);
   if (dimension.power.neq(multBefore)) floatText(tier, `x${shortenMoney(dimension.power.dividedBy(multBefore))}`);
 }

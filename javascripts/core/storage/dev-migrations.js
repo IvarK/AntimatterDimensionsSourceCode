@@ -440,10 +440,8 @@ GameStorage.devMigrations = {
       delete player.resets;
       delete player.tickDecrease;
     },
-    player => {
-      GameStorage.migrations.renameNewsOption(player);
-      GameStorage.migrations.removeDimensionCosts(player);
-    }
+    GameStorage.migrations.renameNewsOption,
+    GameStorage.migrations.removeDimensionCosts
   ],
 
   patch(player) {

@@ -224,11 +224,7 @@ function buyOneDimension(tier) {
 
   if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 1) return false;
 
-  if (tier < 3 || !NormalChallenge(6).isRunning) {
-    player.antimatter = player.antimatter.minus(cost);
-  } else {
-    NormalDimension(tier - 2).amount = NormalDimension(tier - 2).amount.minus(cost);
-  }
+  dimension.currencyAmount = dimension.currencyAmount.minus(cost);
 
   if (dimension.boughtBefore10 === 9) {
     if (InfinityChallenge(5).isRunning) dimension.multiplyIC5Costs();
@@ -255,11 +251,7 @@ function buyManyDimension(tier) {
 
   if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
 
-  if (tier < 3 || !NormalChallenge(6).isRunning) {
-    player.antimatter = player.antimatter.minus(cost);
-  } else {
-    NormalDimension(tier - 2).amount = NormalDimension(tier - 2).amount.minus(cost);
-  }
+  dimension.currencyAmount = dimension.currencyAmount.minus(cost);
 
   if (InfinityChallenge(5).isRunning) dimension.multiplyIC5Costs();
   else if (NormalChallenge(9).isRunning) dimension.multiplySameCosts();
@@ -282,11 +274,7 @@ function buyAsManyAsYouCanBuy(tier) {
 
   if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 1) return buyOneDimension(8);
 
-  if (tier < 3 || !NormalChallenge(6).isRunning) {
-    player.antimatter = player.antimatter.minus(cost);
-  } else {
-    NormalDimension(tier - 2).amount = NormalDimension(tier - 2).amount.minus(cost);
-  }
+  dimension.currencyAmount = dimension.currencyAmount.minus(cost);
 
   if (dimension.boughtBefore10 === 9) {
     if (InfinityChallenge(5).isRunning) dimension.multiplyIC5Costs();
@@ -311,10 +299,8 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   if (!dimension.isAvailable || !dimension.isAffordableUntil10) return;
   const cost = dimension.costUntil10;
   let bulkLeft = bulk;
-  let goal;
-  if (InfinityChallenge.isRunning) goal = InfinityChallenge.current.goal;
-  else if (NormalChallenge.isRunning) goal = NormalChallenge.current.goal;
-  if (goal !== undefined && dimension.cost.gt(goal)) return;
+  const goal = Player.infinityGoal;
+  if (dimension.cost.gt(goal) && (NormalChallenge.isRunning || InfinityChallenge.isRunning)) return;
 
   if (tier === 8 && Enslaved.isRunning) {
     buyOneDimension(8);
@@ -335,6 +321,8 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       buyUntilTen(tier);
       bulkLeft--;
     }
+    onBuyDimension(tier);
+    return;
   }
 
   // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
@@ -350,9 +338,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   dimension.bought += 10 * buying;
   dimension.power = dimension.power.times(Decimal.pow(getBuyTenMultiplier(), buying));
   // Challenge 6: Dimensions 3+ cost the dimension two tiers down instead of antimatter
-  if (tier >= 3 && NormalChallenge(6).isRunning) {
-    NormalDimension(tier - 2).amount = NormalDimension(tier - 2).amount.minus(Decimal.pow10(buying.logPrice)).max(0);
-  } else player.antimatter = player.antimatter.minus(Decimal.pow10(buying.logPrice)).max(0);
+  dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
   onBuyDimension(tier);
 }
 
@@ -518,6 +504,16 @@ class NormalDimensionState extends DimensionState {
     return this.tier >= 3 && NormalChallenge(6).isRunning
       ? NormalDimension(this.tier - 2).amount
       : player.antimatter;
+  }
+
+  /**
+    * @param {Decimal} value
+    */
+
+  set currencyAmount(value) {
+    return this.tier >= 3 && NormalChallenge(6).isRunning
+      ? NormalDimension(this.tier - 2).amount = value
+      : player.antimatter = value;
   }
 
    /**

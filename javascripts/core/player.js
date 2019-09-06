@@ -461,7 +461,8 @@ let player = {
       challenges: true,
       eternity: true,
       dilation: true,
-      reality: true
+      reality: true,
+      glyphSacrifice: true,
     }
   }
 };

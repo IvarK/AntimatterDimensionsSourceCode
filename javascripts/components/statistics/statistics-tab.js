@@ -99,7 +99,7 @@ Vue.component("statistics-tab", {
     `<div class="c-stats-tab">
         <br>
         <h3>General</h3>
-        <div>You have made a total of {{ shortenMoney(totalAntimatter) }} antimatter.</div>
+        <div>You have made a total of {{ shorten(totalAntimatter, 2, 1) }} antimatter.</div>
         <div>
           You have purchased {{ shortenSmallInteger(boosts) }}
           Dimension {{"Boost/Shift" | pluralize(boosts, "Boosts/Shifts")}}.
@@ -196,12 +196,12 @@ const MatterScale = {
     const planckedMatter = matter.times(planck);
     if (planckedMatter.gt(this.proton)) {
       const scale = this.macroScale(planckedMatter);
-      const amount = shortenMoney(planckedMatter.dividedBy(scale.amount));
+      const amount = shorten(planckedMatter.dividedBy(scale.amount), 2, 1);
       return [`If every antimatter were a planck volume, you would have
         enough to ${scale.verb} ${amount} ${scale.name}`];
     }
     const scale = this.microScale(matter);
-    return [`If every antimatter were ${shortenMoney(this.proton / scale.amount / matter.toNumber())} ${scale.name},
+    return [`If every antimatter were ${shorten(this.proton / scale.amount / matter.toNumber(), 2, 1)} ${scale.name},
       you would have enough to make a proton.`];
   },
 

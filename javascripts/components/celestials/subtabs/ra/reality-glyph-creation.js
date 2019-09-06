@@ -82,13 +82,13 @@ Vue.component("reality-glyph-creation", {
   template: `
     <div class="c-alchemy-resource-info">
       <div>  
-        Create a level {{ shortenSmallInteger(realityGlyphLevel) }} reality glyph.  Rarity will always be 100% and level
-        is unaffected by the glyph level cap.  This will reset all alchemy resources.
+        Create a level {{ shortenSmallInteger(realityGlyphLevel) }} reality glyph. Rarity will always be 100% and level
+        is unaffected by the glyph level cap. This will reset all alchemy resources.
       </div><br>
       <div>
         Reality glyphs always have {{ shortenSmallInteger(4) }} effects picked from any of the
         {{ shortenSmallInteger(5) }} basic glyph types; you can choose up to {{ shortenSmallInteger(maxEffects) }},
-        based on how many of the below requirements you meet.  The rest of the effects, if any, are chosen randomly.
+        based on how many of the below requirements you meet. The rest of the effects, if any, are chosen randomly.
         <div v-for="criterion in effectCriteria">
           <span v-if="criterion.value">+</span>
           <span v-else>-</span>

@@ -24,11 +24,11 @@ Vue.component("normal-dim-row", {
       return DISPLAY_NAMES[this.tier];
     },
     amountDisplay() {
-      return this.tier < 8 ? this.shortenDimensions(this.amount) : shortenSmallInteger(this.amount);
+      return this.tier < 8 ? shorten(this.amount, 2, 0) : shortenSmallInteger(this.amount);
     },
     rateOfChangeDisplay() {
       return this.tier < 8
-        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        ? ` (+${shorten(this.rateOfChange, 2, 2)}%/s)`
         : "";
     },
     cappedTooltip() {
@@ -70,7 +70,7 @@ Vue.component("normal-dim-row", {
     `<div v-show="isUnlocked" class="c-normal-dim-row">
       <div
         class="c-normal-dim-row__name c-normal-dim-row__label"
-      >{{name}} Dimension x{{shortenMultiplier(multiplier)}}</div>
+      >{{name}} Dimension x{{shorten(multiplier, 1, 1)}}</div>
       <div
         class="c-normal-dim-row__label c-normal-dim-row__label--growable"
       >{{amountDisplay}} ({{shortenSmallInteger(boughtBefore10)}}){{rateOfChangeDisplay}}</div>
@@ -81,7 +81,7 @@ Vue.component("normal-dim-row", {
         @click="buySingle">
         <span v-if="isCapped">Capped!</span>
         <template v-else>
-          <span v-if="showCostTitle(singleCost)">Cost: </span>{{shortenCosts(singleCost)}}
+          <span v-if="showCostTitle(singleCost)">Cost: </span>{{shorten(singleCost)}}
         </template>
       </primary-button>
       <primary-button
@@ -92,7 +92,7 @@ Vue.component("normal-dim-row", {
         <span v-if="isCapped">Capped!</span>
         <template v-else>
           Until {{shortenSmallInteger(10)}}, <span v-if="showCostTitle(until10Cost)">
-          Cost: </span>{{shortenCosts(until10Cost)}}
+          Cost: </span>{{shorten(until10Cost)}}
         </template>
       </primary-button>
       <div

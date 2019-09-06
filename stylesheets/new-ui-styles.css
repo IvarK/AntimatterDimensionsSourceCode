@@ -688,7 +688,7 @@ body.t-dark {
 .tickspeed-container {
   display: flex;
   justify-content: space-between;
-  padding: 10px 50px 0px 90px;
+  padding: 1rem 5rem 0 9rem;
 }
 
 .tickspeed-labels {

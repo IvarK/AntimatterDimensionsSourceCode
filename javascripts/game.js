@@ -760,7 +760,11 @@ function gameLoop(diff, options = {}) {
 
   // TD5-8/Reality unlock and TTgen perk autobuy
   autoBuyExtraTimeDims();
-  if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
+  if (Perk.autounlockDilation3.isBought) {
+    buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
+    buyDilationUpgrade(DilationUpgrade.lowReplicantiMult.id);
+    buyDilationUpgrade(DilationUpgrade.bankedIncrease.id);
+  }
   if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
 
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());

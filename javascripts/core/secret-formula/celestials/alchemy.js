@@ -342,7 +342,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 4,
       formatEffect: value => (player.celestials.laitela.matter === 0
         ? "?????"
-        : `Boost matter dimension generation chance by +${formatPercents(value, 2, 2)}`),
+        : `Boost dark matter dimension generation chance by +${formatPercents(value, 2, 2)}`),
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,

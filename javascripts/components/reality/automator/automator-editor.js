@@ -83,7 +83,9 @@ Vue.component("automator-editor", {
       return id === this.currentScriptID ? { selected: "selected" } : {};
     },
     createNewScript() {
-      AutomatorBackend.newScript();
+      const newScript = AutomatorBackend.newScript();
+      player.reality.automator.state.editorScript = newScript.id;
+      this.updateCurrentScriptID();
       this.rename();
     },
     deleteScript() {

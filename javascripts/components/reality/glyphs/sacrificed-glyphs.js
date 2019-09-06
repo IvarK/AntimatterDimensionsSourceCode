@@ -131,7 +131,7 @@ Vue.component("sacrificed-glyphs", {
     <div class="l-sacrificed-glyphs__help">
       <div>Drag glyphs here or shift-click to sacrifice.</div>
       <div>Ctrl-shift-click to sacrifice without confirmation</div>
-      <div @click="toggleConfirm">
+      <div @click="toggleConfirm" class="c-sacrificed-glyphs__confirm">
         <input :checked="confirmSacrifice" type="checkbox" />
         Ask for confirmation when sacrificing
       </div>

@@ -14,7 +14,7 @@ GameDatabase.reality.upgrades = (function() {
     );
     const { effect } = props;
     props.effect = () => Math.pow(effect, player.reality.rebuyables[props.id]);
-    props.formatEffect = value => formatX(value, 2, 2);
+    props.formatEffect = value => formatX(value, 2, 0);
     props.formatCost = value => shorten(value, 2, 0);
     return props;
   };

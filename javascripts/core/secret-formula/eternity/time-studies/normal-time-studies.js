@@ -70,7 +70,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 42,
       cost: 6,
       requirement: 32,
-      description: () => `Galaxy requirement goes up ${shortenSmallInteger(52)} 8ths instead of ${shortenSmallInteger(60)}.`,
+      description: () => `Galaxy requirement goes up ${shortenSmallInteger(52)}
+        8ths instead of ${shortenSmallInteger(60)}.`,
       effect: 52
     },
     {

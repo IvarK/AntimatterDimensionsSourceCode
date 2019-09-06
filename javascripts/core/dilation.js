@@ -241,7 +241,5 @@ const DilationUpgrade = (function() {
     timeStudySplit: new DilationUpgradeState(db.timeStudySplit),
     dilationPenalty: new DilationUpgradeState(db.dilationPenalty),
     ttGenerator: new DilationUpgradeState(db.ttGenerator),
-    lowReplicantiMult: new DilationUpgradeState(db.lowReplicantiMult),
-    bankedIncrease: new DilationUpgradeState(db.bankedIncrease),
   };
 }());

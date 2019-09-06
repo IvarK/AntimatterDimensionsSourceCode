@@ -87,10 +87,6 @@ function getReplicantiInterval(noMod, intervalIn) {
     const increases = (amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
     interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
   }
-  if (DilationUpgrade.lowReplicantiMult.isBought &&
-      player.replicanti.amount.lt(DilationUpgrade.lowReplicantiMult.effectValue)) {
-    interval = interval.divide(5);
-  }
   interval = interval.divide(getAdjustedGlyphEffect("replicationspeed"));
   if (GlyphAlteration.isAdded("replication")) interval = interval.divide(getSecondaryGlyphEffect("replicationdtgain"));
   interval = interval.divide(RA_UNLOCKS.TT_BOOST.effect.replicanti());

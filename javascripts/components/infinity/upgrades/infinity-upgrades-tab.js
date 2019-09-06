@@ -70,7 +70,9 @@ Vue.component("infinity-upgrades-tab", {
   template:
     `<div class="l-infinity-upgrades-tab">
       <div v-if="chargeUnlocked">
-          <div>You can charge {{ shortenSmallInteger(chargesLeft) }} more {{ "upgrade" | pluralize(chargesLeft) }}.</div>
+          <div>
+            You can charge {{ shortenSmallInteger(chargesLeft) }} more {{ "upgrade" | pluralize(chargesLeft) }}.
+          </div>
           <primary-button
           :class="disChargeClassObject"
           @click="disCharge = !disCharge"

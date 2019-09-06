@@ -39,12 +39,10 @@ function giveEternityRewards(auto) {
   );
   player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
 
-  let addToBank = new Decimal(0).plusEffectsOf(
+  player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
     Achievement(131),
-    TimeStudy(191)
+    TimeStudy(191),
   );
-  if (DilationUpgrade.bankedIncrease.isBought) addToBank = addToBank.timesEffectsOf(DilationUpgrade.bankedIncrease);
-  player.infinitiedBank = player.infinitiedBank.add(addToBank);
 
   if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked && player.infinityPoints.gt(Decimal.MAX_NUMBER)) {
     EffarigUnlock.eternity.unlock();

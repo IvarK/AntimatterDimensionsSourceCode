@@ -109,19 +109,6 @@ GameDatabase.eternity.dilation = (function() {
       description: "Generate Time Theorems based on Tachyon Particles.",
       effect: () => player.dilation.tachyonParticles.div(20000),
       formatEffect: value => formatX(value, 2, 1)
-    },
-    lowReplicantiMult: {
-      id: 11,
-      cost: 3e16,
-      description: () => `Replicanti is ${shortenSmallInteger(5)}x faster below a threshold based on Dilated Time.`,
-      effect: () => player.dilation.dilatedTime.pow(1111).clampMin(1),
-      formatEffect: value => shorten(value, 2, 1)
-    },
-    bankedIncrease: {
-      id: 12,
-      cost: 6e18,
-      description: () => `Bank ${shortenSmallInteger(3)}x as many infinities`,
-      effect: () => 3,
     }
   };
 }());

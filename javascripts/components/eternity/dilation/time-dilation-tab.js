@@ -31,13 +31,11 @@ Vue.component("time-dilation-tab", {
           DilationUpgrade.timeStudySplit,
           DilationUpgrade.dilationPenalty
         ],
-        [
-          DilationUpgrade.bankedIncrease,
-          DilationUpgrade.ttGenerator,
-          DilationUpgrade.lowReplicantiMult
-        ],
       ];
     },
+    ttGenerator() {
+      return DilationUpgrade.ttGenerator;
+    }
   },
   methods: {
     update() {
@@ -85,6 +83,12 @@ Vue.component("time-dilation-tab", {
             v-for="upgrade in row"
             :key="upgrade.id"
             :upgrade="upgrade"
+            class="l-dilation-upgrades-grid__cell"
+          />
+        </div>
+        <div class="l-dilation-upgrades-grid__row">
+          <dilation-upgrade
+            :upgrade="ttGenerator"
             class="l-dilation-upgrades-grid__cell"
           />
         </div>

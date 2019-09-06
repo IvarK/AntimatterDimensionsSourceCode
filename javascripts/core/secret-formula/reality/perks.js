@@ -159,7 +159,7 @@ GameDatabase.reality.perks = {
     id: 44,
     label: "DIL3",
     family: PerkFamily.DILATION,
-    description: "Auto-unlock the last row of Dilation upgrades as you can afford them."
+    description: "Auto-unlock TT generation once you can afford it."
   },
   autounlockTD: {
     id: 45,

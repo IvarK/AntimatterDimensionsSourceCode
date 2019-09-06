@@ -523,7 +523,7 @@ function gameLoop(diff, options = {}) {
   }
 
   // Ra-Enslaved auto-release stored time (once every 5 ticks)
-  if (Enslaved.isAutoReleasing) {
+  if (Enslaved.isAutoReleasing && !Enslaved.isRunning) {
     Enslaved.autoReleaseTick++;
   }
   if (Enslaved.autoReleaseTick >= 5) {
@@ -762,8 +762,6 @@ function gameLoop(diff, options = {}) {
   autoBuyExtraTimeDims();
   if (Perk.autounlockDilation3.isBought) {
     buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
-    buyDilationUpgrade(DilationUpgrade.lowReplicantiMult.id);
-    buyDilationUpgrade(DilationUpgrade.bankedIncrease.id);
   }
   if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
 

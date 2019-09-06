@@ -66,12 +66,14 @@ Vue.component("teresa-tab", {
   },
   template:
     `<div class="l-teresa-celestial-tab">
-      <div class="o-teresa-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="quoteIdx < 4 + unlocks.length">→</button>
+      <div class="o-teresa-quotes"> {{ quote }}</div>
+      <button class="o-quote-button" @click="nextQuote()" v-if="quoteIdx < 4 + unlocks.length">→</button>
       <div>You have {{shortenRateOfChange(rm)}} {{"Reality Machine" | pluralize(rm)}}.</div>
       <div class="l-mechanics-container">
         <div class="l-teresa-unlocks l-teresa-mechanic-container">
           <div class="c-teresa-unlock c-teresa-run-button" v-if="unlocks[0]" @click="startRun()">
-            Start Teresa's Reality. Glyph TT generation is disabled and you gain less IP and EP (x^{{shorten(0.55, 2, 2)}}).
+            Start Teresa's Reality. Glyph TT generation is disabled and
+            you gain less IP and EP (x^{{shorten(0.55, 2, 2)}}).
             <br><br>
             Highest antimatter in Teresa's Reality: {{ shorten(bestAM, 2, 0) }}
           </div>
@@ -103,8 +105,11 @@ Vue.component("teresa-tab", {
                 <br>{{ shortenRateOfChange(rmStore) }}/{{ shortenRateOfChange(rmStoreMax) }}
                 <br v-if="leakRate > 0">Leaking {{ shorten(leakRate, 2, 2) }} RM/s</div>
             </div>
-            <div v-for="unlockInfo in unlockInfo" class="c-teresa-unlock-description" :style="unlockDescriptionStyle(unlockInfo)" :id="unlockInfo.id">
-              {{ shortenRateOfChange(unlockInfo.price) }}: {{ unlockInfo.description }}
+            <div v-for="unlockInfo in unlockInfo"
+              class="c-teresa-unlock-description"
+              :style="unlockDescriptionStyle(unlockInfo)"
+              :id="unlockInfo.id">
+                {{ shortenRateOfChange(unlockInfo.price) }}: {{ unlockInfo.description }}
             </div>
           </div>
         </div>

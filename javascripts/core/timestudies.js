@@ -22,11 +22,20 @@ const TimeTheorems = {
     EP: 2,
   },
 
-  buyWithAntimatter(auto = false) {
-    if (TimeDimension(1).bought < 1) {
+  checkForBuying(auto) {
+    if (player.realities === 0 && TimeDimension(1).bought < 1) {
       if (!auto) alert("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
       return false;
     }
+    if (player.eternities.lt(1)) {
+      if (!auto) alert("You need to eternity at least once before you can purchase Time Theorems.");
+      return false;
+    }
+    return true;
+  },
+
+  buyWithAntimatter(auto = false) {
+    if (!this.checkForBuying(auto)) return false;
     if (player.antimatter.lt(player.timestudy.amcost)) return false;
     player.antimatter = player.antimatter.minus(player.timestudy.amcost);
     player.timestudy.amcost = player.timestudy.amcost.times(TimeTheorems.costMultipliers.AM);
@@ -36,10 +45,7 @@ const TimeTheorems = {
   },
 
   buyWithIP(auto = false) {
-    if (TimeDimension(1).bought < 1) {
-      if (!auto) alert("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
-      return false;
-    }
+    if (!this.checkForBuying(auto)) return false;
     if (player.infinityPoints.lt(player.timestudy.ipcost)) return false;
     player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost);
     player.timestudy.ipcost = player.timestudy.ipcost.times(TimeTheorems.costMultipliers.IP);
@@ -49,10 +55,7 @@ const TimeTheorems = {
   },
 
   buyWithEP(auto = false) {
-    if (TimeDimension(1).bought < 1) {
-      if (!auto) alert("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
-      return false;
-    }
+    if (!this.checkForBuying(auto)) return false;
     if (player.eternityPoints.lt(player.timestudy.epcost)) return false;
     player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost);
     player.timestudy.epcost = player.timestudy.epcost.times(TimeTheorems.costMultipliers.EP);
@@ -62,10 +65,7 @@ const TimeTheorems = {
   },
 
   buyMax(auto = false) {
-    if (TimeDimension(1).bought < 1) {
-      if (!auto) alert("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
-      return;
-    }
+    if (!this.checkForBuying(auto)) return;
     const AMowned = player.timestudy.amcost.e / 20000 - 1;
     if (player.antimatter.gte(player.timestudy.amcost)) {
       player.timestudy.amcost.e = Math.floor(player.antimatter.e / 20000 + 1) * 20000;

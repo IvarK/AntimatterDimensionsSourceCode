@@ -764,7 +764,7 @@ GameDatabase.achievements.normal = [
   {
     id: 123,
     name: "5 more eternities until the update",
-    tooltip: () => `Complete ${shortenSmallInteger(99)} unique Eternity Challenge tiers.`,
+    tooltip: () => `Complete ${shortenSmallInteger(50)} unique Eternity Challenge tiers.`,
     checkRequirement: () => EternityChallenges.completions >= 50,
     checkEvent: GameEvent.ETERNITY_RESET_AFTER
   },

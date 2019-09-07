@@ -65,7 +65,7 @@ class DimBoost {
       amount += Math.ceil((targetResets - 5) * mult);
     }
     if (EternityChallenge(5).isRunning) {
-      amount += Math.pow(targetResets - 1, 3) + targetResets;
+      amount += Math.pow(targetResets - 1, 3) + targetResets - 1;
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);

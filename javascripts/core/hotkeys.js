@@ -20,24 +20,24 @@ GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
 GameKeyboard.bindRepeatableHotkey("e", () => eternity());
 
 // Toggle autobuyers
-function toggleAutobuyer(id){
-  if (!player.options.autobuyersOn){
+function toggleAutobuyer(id) {
+  if (!player.options.autobuyersOn) {
     return;
   }
   
-  let buyer = Autobuyers.all[id];
-  if (buyer.isUnlocked){
+  const buyer = Autobuyers.all[id];
+  if (buyer.isUnlocked) {
     buyer.toggle();
   }
 }
 
-function toggleBuySingles(id){
-  if (!player.options.autobuyersOn){
+function toggleBuySingles(id) {
+  if (!player.options.autobuyersOn) {
     return;
   }
   
-  let buyer = Autobuyers.all[id];
-  if (buyer.isUnlocked && buyer.toggleMode !== null){
+  const buyer = Autobuyers.all[id];
+  if (buyer.isUnlocked && buyer.toggleMode !== null) {
     buyer.toggleMode();
   }
 }

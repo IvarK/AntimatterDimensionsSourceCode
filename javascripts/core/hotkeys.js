@@ -16,28 +16,47 @@ GameKeyboard.bindRepeatableHotkey("s", () => sacrificeBtnClick());
 GameKeyboard.bindRepeatableHotkey("r", () => replicantiGalaxy());
 GameKeyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());
 GameKeyboard.bindRepeatableHotkey("shift+t", () => buyTickSpeed());
+GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
+GameKeyboard.bindRepeatableHotkey("e", () => eternity());
 
+// Toggle autobuyers
 function toggleAutobuyer(id)
 {
   if (!player.options.autobuyersOn)
     return;
   
-  buyer = Autobuyers.all[id];
+  var buyer = Autobuyers.all[id];
   if (buyer.isUnlocked)
     buyer.toggle();
   
 }
-// Toggle autobuyers
+function toggleBuySingles(id)
+{
+  if (!player.options.autobuyersOn)
+    return;
+  
+  var buyer = Autobuyers.all[id];
+  if (buyer.isUnlocked && buyer.toggleMode != null)
+    buyer.toggleMode();
+  
+}
+
 GameKeyboard.bindHotkey("z+t", () => toggleAutobuyer(8));
-
-
-GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
-GameKeyboard.bindRepeatableHotkey("e", () => eternity());
+GameKeyboard.bindHotkey("shift+z+t", () => toggleBuySingles(8));
+GameKeyboard.bindHotkey("z+d", () => toggleAutobuyer(9));
+GameKeyboard.bindHotkey("z+g", () => toggleAutobuyer(10));
+GameKeyboard.bindHotkey("z+c", () => toggleAutobuyer(11));
+GameKeyboard.bindHotkey("z+s", () => toggleAutobuyer(12));
+GameKeyboard.bindHotkey("z+e", () => toggleAutobuyer(13));
+GameKeyboard.bindHotkey("z+r", () => Replicanti.galaxies.autobuyer.toggle());
 
 (function() {
   function bindDimensionHotkeys(tier) {
     GameKeyboard.bindRepeatableHotkey(`${tier}`, () => buyManyDimension(tier));
     GameKeyboard.bindRepeatableHotkey(`shift+${tier}`, () => buyOneDimension(tier));
+    GameKeyboard.bindHotkey(`z+${tier}`, () => toggleAutobuyer(tier-1));
+    GameKeyboard.bindHotkey(`shift+z+${tier}`, () => toggleBuySingles(tier-1));
+
   }
   for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);
 }());

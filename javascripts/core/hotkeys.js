@@ -16,6 +16,21 @@ GameKeyboard.bindRepeatableHotkey("s", () => sacrificeBtnClick());
 GameKeyboard.bindRepeatableHotkey("r", () => replicantiGalaxy());
 GameKeyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());
 GameKeyboard.bindRepeatableHotkey("shift+t", () => buyTickSpeed());
+
+function toggleAutobuyer(id)
+{
+  if (!player.options.autobuyersOn)
+    return;
+  
+  buyer = Autobuyers.all[id];
+  if (buyer.isUnlocked)
+    buyer.toggle();
+  
+}
+// Toggle autobuyers
+GameKeyboard.bindHotkey("z+t", () => toggleTickspeedAutobuyer(8));
+
+
 GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
 GameKeyboard.bindRepeatableHotkey("e", () => eternity());
 

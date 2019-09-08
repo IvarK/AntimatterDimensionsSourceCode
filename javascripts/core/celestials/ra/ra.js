@@ -260,6 +260,15 @@ const Ra = {
   },
   get chargeUnlocked() {
     return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]) && Ra.pets.teresa.level > 1;
+  },
+  applyAlchemyReactions() {
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return;
+    const sortedReactions = AlchemyReactions.all
+      .compact()
+      .sort((r1, r2) => r2.priority - r1.priority);
+    for (const reaction of sortedReactions) {
+      reaction.combineReagents();
+    }
   }
 };
 

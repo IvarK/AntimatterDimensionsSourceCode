@@ -65,6 +65,35 @@ class AlchemyReaction {
     return Math.min(totalYield, Math.max(forcingFactor, 1));
   }
 
+  // Check each reagent for if a full reaction would drop it below the product amount.  If so, reduce reaction yield
+  get actualYield() {
+    // Assume a full reaction to see what the maximum possible product is
+    const maxFromReaction = this.baseProduction * this.reactionYield * this.reactionEfficiency;
+    const prodBefore = this._product.amount;
+    const prodAfter = prodBefore + maxFromReaction;
+    let cappedYield = this.reactionYield;
+    for (const reagent of this._reagents) {
+      const reagentBefore = reagent.resource.amount;
+      const reagentAfter = reagent.resource.amount - this.reactionYield * reagent.cost;
+      const diffBefore = reagentBefore - prodBefore;
+      const diffAfter = reagentAfter - prodAfter;
+      cappedYield = Math.min(cappedYield, this.reactionYield * diffBefore / (diffBefore - diffAfter));
+    }
+    return Math.clampMin(cappedYield, 0);
+  }
+
+  // Assign reactions priority in descending order based on the largest product total after the reaction.  The logic
+  // is that if we assume that all the reactions are cap-limited, then by assigning priority in this way, reactions
+  // get applied so that earlier reactions are less likely to reduce the yield of later reactions.
+  get priority() {
+    let maxReagent = 11110;
+    for (const reagent of this._reagents) {
+      const afterReaction = reagent.resource.amount - reagent.cost * this.actualYield;
+      maxReagent = Math.min(maxReagent, afterReaction);
+    }
+    return maxReagent;
+  }
+
   get isActive() {
     return this._product.data.reaction;
   }
@@ -95,28 +124,11 @@ class AlchemyReaction {
   // ω above 200.  In fact, since some Ξ will be used during the reaction, the actual cap will be a bit lower.
   combineReagents() {
     if (!this.isActive || this.reactionYield === 0) return;
-
-    // Assume a full reaction to see what the maximum possible product is
-    const maxFromReaction = this.baseProduction * this.reactionYield * this.reactionEfficiency;
-    const prodBefore = this._product.amount;
-    const prodAfter = prodBefore + maxFromReaction;
-
-    // Check each reagent for if a full reaction would drop it below the product amount.  If so, reduce reaction yield
-    let cappedYield = this.reactionYield;
+    const reactionYield = this.actualYield;
     for (const reagent of this._reagents) {
-      const reagentBefore = reagent.resource.amount;
-      const reagentAfter = reagent.resource.amount - this.reactionYield * reagent.cost;
-      const diffBefore = reagentBefore - prodBefore;
-      const diffAfter = reagentAfter - prodAfter;
-      cappedYield = Math.min(cappedYield, this.reactionYield * diffBefore / (diffBefore - diffAfter));
+      reagent.resource.amount -= reactionYield * reagent.cost;
     }
-    cappedYield = Math.clampMin(cappedYield, 0);
-
-    // Perform the reaction with potentially reduced yield due to the cap
-    for (const reagent of this._reagents) {
-      reagent.resource.amount -= cappedYield * reagent.cost;
-    }
-    this._product.amount += cappedYield * this.reactionProduction;
+    this._product.amount += reactionYield * this.reactionProduction;
   }
 }
 

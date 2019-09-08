@@ -102,16 +102,19 @@ const TimeTheorems = {
   }
 };
 
-function autoBuyMaxTheorems() {
-  if (!player.ttbuyer) return false;
-  if (Perk.autobuyerTT4.isBought ||
-    (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) ||
-    (Perk.autobuyerTT2.isBought && ttMaxTimer >= 5) ||
-    (Perk.autobuyerTT1.isBought && ttMaxTimer >= 10)) {
+function autoBuyMaxTheorems(realDiff) {
+  if (!player.ttbuyer) return;
+  player.auto.ttTimer += realDiff;
+  const period = Effects.min(
+    Number.POSITIVE_INFINITY,
+    Perk.autobuyerTT1,
+    Perk.autobuyerTT2,
+    Perk.autobuyerTT3,
+    Perk.autobuyerTT4);
+  if (player.auto.ttTimer > period) {
     TimeTheorems.buyMax(true);
-    return true;
+    player.auto.ttTimer = Math.min(player.auto.ttTimer - period, period);
   }
-  return false;
 }
 
 function calculateTimeStudiesCost() {

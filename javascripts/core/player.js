@@ -125,6 +125,7 @@ let player = {
     infDimTimer: 0,
     repUpgradeTimer: 0,
     dilUpgradeTimer: 0,
+    ttTimer: 0,
   },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),

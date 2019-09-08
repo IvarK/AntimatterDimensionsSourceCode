@@ -28,7 +28,7 @@ function toggleAutobuyer(id)
   
 }
 // Toggle autobuyers
-GameKeyboard.bindHotkey("z+t", () => toggleTickspeedAutobuyer(8));
+GameKeyboard.bindHotkey("z+t", () => toggleAutobuyer(8));
 
 
 GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());

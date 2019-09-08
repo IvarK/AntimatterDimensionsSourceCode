@@ -674,9 +674,12 @@ function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
   }
 
   const toGain = glyphSacrificeGain(glyph);
-  if (!force && !confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type}` +
-                          `glyphs will increase to ${(player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2)}`)) {
-    return;
+  const askConfirmation = !force && player.options.confirmations.glyphSacrifice;
+  if (askConfirmation) {
+    if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type}` +
+      `glyphs will increase to ${(player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2)}`)) {
+      return;
+    }
   }
   player.reality.glyphs.sac[glyph.type] += toGain;
   if (glyph.type === "time") {

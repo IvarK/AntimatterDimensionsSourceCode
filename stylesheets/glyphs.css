@@ -495,6 +495,15 @@
   color: rgb(0, 80, 0);
 }
 
+.l-sacrificed-glyphs__help {
+  margin-top: 1rem;
+}
+
+.c-sacrificed-glyphs__confirm {
+  cursor: pointer;
+  user-select: none;
+}
+
 .l-glyph-inventory {
   display: flex;
   flex-direction: column;

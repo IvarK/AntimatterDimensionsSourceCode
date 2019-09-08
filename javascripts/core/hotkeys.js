@@ -42,21 +42,21 @@ function toggleBuySingles(id) {
   }
 }
 
-GameKeyboard.bindHotkey("z+t", () => toggleAutobuyer(8));
-GameKeyboard.bindHotkey("shift+z+t", () => toggleBuySingles(8));
-GameKeyboard.bindHotkey("z+d", () => toggleAutobuyer(9));
-GameKeyboard.bindHotkey("z+g", () => toggleAutobuyer(10));
-GameKeyboard.bindHotkey("z+c", () => toggleAutobuyer(11));
-GameKeyboard.bindHotkey("z+s", () => toggleAutobuyer(12));
-GameKeyboard.bindHotkey("z+e", () => toggleAutobuyer(13));
-GameKeyboard.bindHotkey("z+r", () => Replicanti.galaxies.autobuyer.toggle());
+GameKeyboard.bindHotkey("alt+t", () => toggleAutobuyer(8));
+GameKeyboard.bindHotkey("shift+alt+t", () => toggleBuySingles(8));
+GameKeyboard.bindHotkey("alt+d", () => toggleAutobuyer(9));
+GameKeyboard.bindHotkey("alt+g", () => toggleAutobuyer(10));
+GameKeyboard.bindHotkey("alt+c", () => toggleAutobuyer(11));
+GameKeyboard.bindHotkey("alt+s", () => toggleAutobuyer(12));
+GameKeyboard.bindHotkey("alt+e", () => toggleAutobuyer(13));
+GameKeyboard.bindHotkey("alt+r", () => Replicanti.galaxies.autobuyer.toggle());
 
 (function() {
   function bindDimensionHotkeys(tier) {
     GameKeyboard.bindRepeatableHotkey(`${tier}`, () => buyManyDimension(tier));
     GameKeyboard.bindRepeatableHotkey(`shift+${tier}`, () => buyOneDimension(tier));
-    GameKeyboard.bindHotkey(`z+${tier}`, () => toggleAutobuyer(tier - 1));
-    GameKeyboard.bindHotkey(`shift+z+${tier}`, () => toggleBuySingles(tier - 1));
+    GameKeyboard.bindHotkey(`alt+${tier}`, () => toggleAutobuyer(tier - 1));
+    GameKeyboard.bindHotkey(`shift+alt+${tier}`, () => toggleBuySingles(tier - 1));
 
   }
   for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);

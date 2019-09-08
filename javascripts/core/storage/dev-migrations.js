@@ -442,7 +442,19 @@ GameStorage.devMigrations = {
     },
     GameStorage.migrations.renameNewsOption,
     GameStorage.migrations.removeDimensionCosts,
-    GameStorage.migrations.renameTickspeedPurchaseBumps
+    GameStorage.migrations.renameTickspeedPurchaseBumps,
+    player => {
+      for (const id of player.celestials.ra.unlocks) {
+        // eslint-disable-next-line no-bitwise
+        player.celestials.ra.unlockBits |= (1 << id);
+      }
+      delete player.celestials.ra.unlocks;
+      for (const id of player.celestials.effarig.unlocks) {
+        // eslint-disable-next-line no-bitwise
+        player.celestials.effarig.unlockBits |= (1 << id);
+      }
+      delete player.celestials.effarig.unlocks;
+    },
   ],
 
   patch(player) {

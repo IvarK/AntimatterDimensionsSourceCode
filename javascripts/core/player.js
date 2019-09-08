@@ -328,7 +328,7 @@ let player = {
     },
     effarig: {
       relicShards: 0,
-      unlocks: [],
+      unlocksBits: 0,
       run: false,
       quoteIdx: 0,
       glyphWeights: {
@@ -398,7 +398,7 @@ let player = {
           amount: 0,
           reaction: false
         })),
-      unlocks: [],
+      unlocksBits: 0,
       run: false,
       charged: new Set(),
       quoteIdx: 0,

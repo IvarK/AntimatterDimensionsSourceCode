@@ -20,25 +20,26 @@ GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
 GameKeyboard.bindRepeatableHotkey("e", () => eternity());
 
 // Toggle autobuyers
-function toggleAutobuyer(id)
-{
-  if (!player.options.autobuyersOn)
+function toggleAutobuyer(id){
+  if (!player.options.autobuyersOn){
     return;
+  }
   
-  var buyer = Autobuyers.all[id];
-  if (buyer.isUnlocked)
+  let buyer = Autobuyers.all[id];
+  if (buyer.isUnlocked){
     buyer.toggle();
-  
+  }
 }
-function toggleBuySingles(id)
-{
-  if (!player.options.autobuyersOn)
+
+function toggleBuySingles(id){
+  if (!player.options.autobuyersOn){
     return;
+  }
   
-  var buyer = Autobuyers.all[id];
-  if (buyer.isUnlocked && buyer.toggleMode != null)
+  let buyer = Autobuyers.all[id];
+  if (buyer.isUnlocked && buyer.toggleMode !== null){
     buyer.toggleMode();
-  
+  }
 }
 
 GameKeyboard.bindHotkey("z+t", () => toggleAutobuyer(8));
@@ -54,8 +55,8 @@ GameKeyboard.bindHotkey("z+r", () => Replicanti.galaxies.autobuyer.toggle());
   function bindDimensionHotkeys(tier) {
     GameKeyboard.bindRepeatableHotkey(`${tier}`, () => buyManyDimension(tier));
     GameKeyboard.bindRepeatableHotkey(`shift+${tier}`, () => buyOneDimension(tier));
-    GameKeyboard.bindHotkey(`z+${tier}`, () => toggleAutobuyer(tier-1));
-    GameKeyboard.bindHotkey(`shift+z+${tier}`, () => toggleBuySingles(tier-1));
+    GameKeyboard.bindHotkey(`z+${tier}`, () => toggleAutobuyer(tier - 1));
+    GameKeyboard.bindHotkey(`shift+z+${tier}`, () => toggleBuySingles(tier - 1));
 
   }
   for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);

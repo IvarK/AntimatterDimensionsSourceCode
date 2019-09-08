@@ -239,13 +239,7 @@ const GlyphGenerator = {
   },
 
   random() {
-    let state = player.reality.seed;
-    // eslint-disable-next-line no-bitwise
-    state ^= state << 13;
-    // eslint-disable-next-line no-bitwise
-    state ^= state >>> 17;
-    // eslint-disable-next-line no-bitwise
-    state ^= state << 5;
+    const state = xorshift32Update(player.reality.seed);
     player.reality.seed = state;
     return state * 2.3283064365386963e-10 + 0.5;
   },

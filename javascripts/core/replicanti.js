@@ -79,7 +79,7 @@ function getReplicantiInterval(noMod, intervalIn) {
     interval = interval.times(10);
   }
   if (TimeStudy(132).isBought && Perk.studyPassive.isBought) {
-    interval = interval.divide(10);
+    interval = interval.divide(5);
   }
   if (amount.lte(replicantiCap()) || noMod) {
     if (Achievement(134).isEnabled) interval = interval.divide(2);

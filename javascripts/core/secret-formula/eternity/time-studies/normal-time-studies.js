@@ -281,7 +281,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(122).isBought && (TimeStudy(131).isBought || TimeStudy(133).isBought),
       description: () => (Perk.studyPassive.isBought
-        ? `Replicanti galaxies are 40% more effective and replicanti are ${shortenSmallInteger(10)}x faster`
+        ? `Replicanti galaxies are 40% more effective and replicanti are ${shortenSmallInteger(5)}x faster`
         : "Replicanti galaxies are 40% more effective"),
       effect: 0.4
     },

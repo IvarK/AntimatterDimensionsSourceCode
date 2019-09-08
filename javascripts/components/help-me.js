@@ -1,10 +1,5 @@
 "use strict";
 
 Vue.component("help-me", {
-  methods: {
-    openH2p() {
-      Modal.h2p.show();
-    }
-  },
-  template: `<div @click="openH2p" class="o-btn l-help-me">?</div>`
+  template: `<div onclick="Modal.h2p.show()" class="o-btn l-help-me">?</div>`
 });

@@ -455,6 +455,9 @@ GameStorage.devMigrations = {
       }
       delete player.celestials.effarig.unlocks;
     },
+    player => {
+      player.reality.seed = Math.floor(Math.abs(player.reality.seed)) % 0xFFFFFFFF;
+    }
   ],
 
   patch(player) {

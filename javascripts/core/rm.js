@@ -239,8 +239,15 @@ const GlyphGenerator = {
   },
 
   random() {
-    const x = Math.sin(player.reality.seed++) * 10000;
-    return x - Math.floor(x);
+    let state = player.reality.seed;
+    // eslint-disable-next-line no-bitwise
+    state ^= state << 13;
+    // eslint-disable-next-line no-bitwise
+    state ^= state >>> 17;
+    // eslint-disable-next-line no-bitwise
+    state ^= state << 5;
+    player.reality.seed = state;
+    return state * 2.3283064365386963e-10 + 0.5;
   },
 
   /**

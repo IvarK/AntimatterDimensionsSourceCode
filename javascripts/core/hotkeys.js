@@ -55,6 +55,16 @@ GameKeyboard.bindHotkey("?", () => {
   Modal.shortcuts.show();
 });
 
+GameKeyboard.bindHotkey("h", () => {
+  if (Modal.h2p.isOpen) {
+    Modal.hide();
+    return;
+  }
+  if (Modal.isOpen) return;
+  Modal.h2p.show();
+  ui.view.h2pActive = true;
+});
+
 GameKeyboard.bindHotkey(["ctrl+s", "meta+s"], () => {
   GameStorage.save();
   return false;

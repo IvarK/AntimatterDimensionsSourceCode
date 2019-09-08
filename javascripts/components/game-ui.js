@@ -29,6 +29,7 @@ Vue.component("game-ui", {
       <modal-glyph-selection v-if="view.modal.glyphSelection" />
       <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
       <div id="notification-container" class="l-notification-container" />
+      <help-me />
     </div>
   `
 });

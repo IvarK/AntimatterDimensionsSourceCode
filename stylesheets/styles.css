@@ -6901,3 +6901,120 @@ input.o-automator-block-input {
   width: 100%;
   height: 100%;
 }
+
+/* #startregion h2p tab*/
+
+.l-h2p-modal {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  width: calc(100vw - 20vh);
+  height: calc(100vh - 20vh);
+}
+
+.l-h2p-container {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 50rem;
+  margin: 2rem 0 2rem 0;
+}
+
+.l-h2p-header {
+  flex: 0 0.2 5rem;
+  text-align: center;
+}
+
+.l-h2p-search-tab {
+  flex: 0.1 0 10rem;
+  display: flex;
+  flex-direction: column;
+}
+.l-h2p-info {
+  flex: 1 1 50rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.c-h2p-title {
+  user-select: none;
+  font-size: 3rem;
+}
+
+.c-h2p-body {
+  text-align: left;
+  font-size: 1.6rem;
+}
+
+.l-h2p-body {
+  flex: 0.8 0.8 30rem;
+  overflow-y: scroll;
+  margin: 1rem;
+  padding: 0.5rem;
+}
+
+.l-h2p-body::-webkit-scrollbar {
+  width: 1rem;
+}
+
+.l-h2p-body::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 0.5rem;
+}
+
+.c-h2p-body--title {
+  font-size: 2.5rem;
+}
+
+.c-h2p-search-bar {
+  font-size: 2rem;
+  width: calc(100% - 1rem);
+  padding: 0.2rem;
+}
+
+.l-h2p-tab-list {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  overflow-y: scroll;
+  margin: 0.5rem;
+  flex: 1 0.8 40rem;
+}
+
+.l-h2p-tab-list::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.l-h2p-tab-list::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 0.5rem;
+}
+
+.o-h2p-tab-button {
+  font-size: 1.25rem;
+  cursor: pointer;
+  border-bottom: 0.1rem solid black;
+  padding: 0.3rem 0.5rem 0.3rem 0;
+}
+
+.t-dark .o-h2p-tab-button,
+.t-dark-metro .o-h2p-tab-button,
+.t-s6 .o-h2p-tab-button{
+  border-bottom: 0.1rem solid white;
+}
+
+.o-h2p-tab-button--selected {
+  color: aqua;
+}
+
+.l-help-me {
+  position: absolute;
+  top: 1rem;
+  width: 2rem;
+  right: 1rem;
+  height: 2rem;
+  border-radius: 50%;
+  line-height: 1.9rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  font-weight: 500;
+}

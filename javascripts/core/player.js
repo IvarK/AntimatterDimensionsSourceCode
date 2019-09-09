@@ -322,7 +322,7 @@ let player = {
     teresa: {
       rmStore: 0,
       quoteIdx: 0,
-      unlocks: [],
+      unlockBits: 0,
       run: false,
       bestRunAM: new Decimal(1),
       perkShop: Array.repeat(0, 4)
@@ -365,7 +365,7 @@ let player = {
       maxQuotes: 6
     },
     v: {
-      unlocks: [],
+      unlockBits: 0,
       quoteIdx: 0,
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0],
@@ -415,7 +415,7 @@ let player = {
     laitela: {
       matter: new Decimal(0),
       run: false,
-      unlocks: [],
+      unlockBits: 0,
       dimensions: Array.range(0, 4).map(() =>
       ({
         amount: new Decimal(0),

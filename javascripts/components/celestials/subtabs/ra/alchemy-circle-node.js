@@ -8,7 +8,8 @@ Vue.component("alchemy-circle-node", {
   data() {
     return {
       isReactionActive: false,
-      amount: 0
+      amount: 0,
+      flow: 0
     };
   },
   computed: {
@@ -22,6 +23,10 @@ Vue.component("alchemy-circle-node", {
       return {
         left: `${this.node.x}%`,
         top: `${this.node.y}%`,
+        "box-shadow": `0px 0px 3px 3px
+          rgb(${this.flow > 0 ? 255 - Math.floor(Math.clamp(100 * Math.sqrt(this.flow), 0, 255)) : 255},
+          ${255 - Math.floor(Math.clamp(100 * Math.sqrt(Math.abs(this.flow)), 0, 255))},
+          ${this.flow < 0 ? 255 - Math.floor(Math.clamp(100 * Math.sqrt(-this.flow), 0, 255)) : 255})`
       };
     },
     classObject() {
@@ -39,6 +44,7 @@ Vue.component("alchemy-circle-node", {
     update() {
       this.isReactionActive = !this.isBaseResource && this.node.resource.reaction.isActive;
       this.amount = this.resource.amount;
+      this.flow = this.resource.flow;
     }
   },
   template: `
@@ -47,12 +53,11 @@ Vue.component("alchemy-circle-node", {
       :style="layoutStyle"
       @mouseenter="$emit('mouseenter')"
       @mouseleave="$emit('mouseleave')"
-      @click="emitClick"
-    >{{resource.symbol}}
+      @click="emitClick">
+    {{resource.symbol}}
     <hint-text
       :class="hintClassObject"
-      class="o-hint-text--alchemy-node l-hint-text--alchemy-node"
-    >
+      class="o-hint-text--alchemy-node l-hint-text--alchemy-node">
       {{ amount.toFixed(1) }}
     </hint-text>
     </div>

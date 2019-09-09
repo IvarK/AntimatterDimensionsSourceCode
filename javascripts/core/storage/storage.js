@@ -152,5 +152,9 @@ const GameStorage = {
     if (GameIntervals.gameLoop.isStarted) {
       GameIntervals.gameLoop.restart();
     }
+
+    for (const resource of AlchemyResources.all) {
+      resource.before = resource.amount;
+    }
   }
 };

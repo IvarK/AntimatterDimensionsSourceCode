@@ -269,6 +269,10 @@ const Ra = {
     for (const reaction of sortedReactions) {
       reaction.combineReagents();
     }
+    for (const resource of AlchemyResources.all) {
+      resource.flow = 0.95 * resource.flow + 0.05 * (resource.amount - resource.before);
+      resource.before = resource.amount;
+    }
   }
 };
 

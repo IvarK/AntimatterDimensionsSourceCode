@@ -25,6 +25,22 @@ class AlchemyResourceState extends GameMechanicState {
     this.data.amount = value;
   }
 
+  get before() {
+    return this.config.before;
+  }
+
+  set before(value) {
+    this.config.before = value;
+  }
+
+  get flow() {
+    return this.config.flow;
+  }
+
+  set flow(value) {
+    this.config.flow = value;
+  }
+
   get canBeApplied() {
     return true;
   }
@@ -136,6 +152,8 @@ const AlchemyResource = (function() {
   function createResource(resource) {
     const config = GameDatabase.celestials.alchemy.resources[resource];
     config.id = resource;
+    config.before = 0;
+    config.flow = 0;
     return new AlchemyResourceState(config);
   }
 

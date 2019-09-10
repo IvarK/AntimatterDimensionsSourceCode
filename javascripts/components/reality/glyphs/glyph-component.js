@@ -259,6 +259,7 @@ Vue.component("glyph-component", {
       isTouched: false,
       sacrificeReward: 0,
       levelOverride: 0,
+      isRealityGlyph: false,
     };
   },
   computed: {
@@ -295,6 +296,7 @@ Vue.component("glyph-component", {
         "background-color": this.borderColor,
         "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
         "border-radius": this.circular ? "50%" : "0",
+        animation: this.isRealityGlyph ? "c-reality-glyph-outer-cycle 10s infinite" : undefined,
       };
     },
     innerStyle() {
@@ -307,6 +309,7 @@ Vue.component("glyph-component", {
         color: rarityColor,
         "text-shadow": `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
+        animation: this.isRealityGlyph ? "c-reality-glyph-inner-cycle 10s infinite" : undefined,
       };
     },
     mouseEventHandlers() {
@@ -335,6 +338,9 @@ Vue.component("glyph-component", {
     if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
   },
   methods: {
+    update() {
+      this.isRealityGlyph = this.glyph.type === "reality";
+    },
     hideTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },

@@ -6654,6 +6654,54 @@ kbd {
   justify-content: center;
 }
 
+@keyframes c-reality-glyph-outer-cycle {
+  0% {
+    background-color: #b67f33;
+    box-shadow: #b67f33 0px 0px 1rem 0.2rem;
+  }
+  20% {
+    background-color: #64dd17;
+    box-shadow: #64dd17 0px 0px 1rem 0.2rem;
+  }
+  40% {
+    background-color: #22aa48;
+    box-shadow: #22aa48 0px 0px 1rem 0.2rem;
+  }
+  60% {
+    background-color: #03a9f4;
+    box-shadow: #03a9f4 0px 0px 1rem 0.2rem;
+  }
+  80% {
+    background-color: #b241e3;
+    box-shadow: #b241e3 0px 0px 1rem 0.2rem;
+  }
+  100% {
+    background-color: #b67f33;
+    box-shadow: #b67f33 0px 0px 1rem 0.2rem;
+  }
+}
+
+@keyframes c-reality-glyph-inner-cycle {
+  0% {
+    box-shadow: #b67f33 0px 0px 1rem calc(0.3rem) inset;
+  }
+  20% {
+    box-shadow: #64dd17 0px 0px 1rem calc(0.3rem) inset;
+  }
+  40% {
+    box-shadow: #22aa48 0px 0px 1rem calc(0.3rem) inset;
+  }
+  60% {
+    box-shadow: #03a9f4 0px 0px 1rem calc(0.3rem) inset;
+  }
+  80% {
+    box-shadow: #b241e3 0px 0px 1rem calc(0.3rem) inset;
+  }
+  100% {
+    box-shadow: #b67f33 0px 0px 1rem calc(0.3rem) inset;
+  }
+}
+
 .l-reality-button-column {
   display: flex;
   flex-direction: column;

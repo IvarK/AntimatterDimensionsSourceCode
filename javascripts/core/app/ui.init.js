@@ -9,6 +9,7 @@ let ui = {
       callback: undefined,
       closeButton: false,
       glyphSelection: false,
+      progressBar: undefined,
     },
     tabs: {
       dimensions: {

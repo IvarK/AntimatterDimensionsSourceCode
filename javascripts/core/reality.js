@@ -148,9 +148,9 @@ function requestManualReality() {
 function triggerManualReality() {
   if (player.options.animations.reality) {
     runRealityAnimation();
-    setTimeout(completeReality, 3000, false, false);
+    setTimeout(beginProcessReality, 3000, false, false);
   } else {
-    completeReality();
+    beginProcessReality();
   }
 }
 
@@ -199,21 +199,17 @@ function autoReality() {
     Enslaved.lockedInGlyphLevel = gainedLevel;
     Enslaved.lockedInRealityMachines = gainedRealityMachines();
     Enslaved.lockedInShardsGained = Effarig.shardsGained;
-    completeReality(false, false, true);
+    beginProcessReality(false, false);
     return;
   }
   processAutoGlyph(gainedLevel);
-  completeReality(false, false, true);
+  beginProcessReality(false, false);
 }
 
 // The ratio is the amount on top of the regular reality amount.
 function boostedRealityRewards(ratio) {
   player.reality.realityMachines = player.reality.realityMachines
     .plus(Enslaved.lockedInRealityMachines.times(ratio));
-  // No glyph reward was given earlier
-  for (let glyphCount = 0; glyphCount < ratio + 1; ++glyphCount) {
-    processAutoGlyph(Enslaved.lockedInGlyphLevel);
-  }
   player.realities += ratio;
   player.reality.pp += ratio;
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
@@ -234,13 +230,46 @@ function boostedRealityRewards(ratio) {
   }
 }
 
-function completeReality(force, reset, auto = false) {
-  if (!reset) {
-    EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
-    const simulatedRealities = simulatedRealityCount(true);
-    if (simulatedRealities > 0) {
+// Due to simulated realities taking a long time in late game, this function might not immediately
+// reality, but start an update loop that shows a progress bar.
+function beginProcessReality(force, reset) {
+  if (reset) {
+    finishProcessReality(force, reset);
+    return;
+  }
+  EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
+  const simulatedRealities = simulatedRealityCount(true);
+  // No glyph reward was given earlier
+  const glyphsToProcess = simulatedRealities + 1;
+  Async.run(() => processAutoGlyph(Enslaved.lockedInGlyphLevel),
+    glyphsToProcess,
+    {
+      batchSize: 100,
+      maxTime: 33,
+      sleepTime: 1,
+      asyncEntry: doneSoFar => {
+        GameIntervals.stop();
+        ui.$viewModel.modal.progressBar = {
+          label: "Processing new glyphs...",
+          current: doneSoFar,
+          max: glyphsToProcess,
+        };
+      },
+      asyncProgress: doneSoFar => {
+        ui.$viewModel.modal.progressBar.current = doneSoFar;
+      },
+      asyncExit: () => {
+        ui.$viewModel.modal.progressBar = undefined;
+        GameIntervals.start();
+      }
+    }).then(() => {
       boostedRealityRewards(simulatedRealities);
-    }
+      finishProcessReality(force, reset);
+    });
+}
+
+function finishProcessReality(force, reset) {
+  if (!reset) {
     if (player.thisReality < player.bestReality) {
       player.bestReality = player.thisReality;
     }
@@ -485,7 +514,7 @@ function handleCelestialRuns(force) {
 
 function startRealityOver() {
   if (confirm("This will put you at the start of your reality and reset your progress in this reality. Are you sure you want to do this?")) {
-    completeReality(true, true);
+    beginProcessReality(true, true);
     return true;
   }
   return false;

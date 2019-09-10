@@ -635,7 +635,7 @@ Once you complete the perk tree, you are awarded an achievement.
     }, {
       name: "Automator",
       info: () => `
-The Automator is unlocked upon reaching 4 Realities and grants you an achievement.
+The Automator is unlocked upon reaching 5 Realities and grants you an achievement.
 It is like a scripting language inside the game that allows you to nearly automate the entire game.
 <br>
 A good place to start when beginning to use the automator is by reading the documents on the side.

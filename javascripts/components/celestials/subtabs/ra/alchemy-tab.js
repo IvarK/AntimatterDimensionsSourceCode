@@ -77,7 +77,8 @@ Vue.component("alchemy-tab", {
     return {
       infoResourceId: 0,
       focusedResourceId: -1,
-      realityCreationAvailable: false
+      realityCreationAvailable: false,
+      alwaysShowResource: false
     };
   },
   computed: {
@@ -101,6 +102,7 @@ Vue.component("alchemy-tab", {
   methods: {
     update() {
       this.realityCreationAvailable = AlchemyResource.reality.amount !== 0;
+      this.alwaysShowResource = player.options.showAlchemyResources;
     },
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
@@ -144,7 +146,10 @@ Vue.component("alchemy-tab", {
       return reactionArrow.reaction.product.id === this.focusedResourceId
         ? undefined
         : "o-alchemy-reaction-arrow--unfocused";
-    }
+    },
+    toggleResourceVisibility() {
+      player.options.showAlchemyResources = !player.options.showAlchemyResources;
+    },
   },
   template:
     `<div class="l-ra-alchemy-tab">
@@ -155,6 +160,14 @@ Vue.component("alchemy-tab", {
       the refined glyph, and compound resource totals are limited to the amount of the reactants.<br>
       All active alchemy reactions are applied once per reality, unaffected by amplification.
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
+      <div>
+        <input type="checkbox"
+          id="alwaysShowResourceBox"
+          v-model="alwaysShowResource"
+          :value="alwaysShowResource"
+          @input="toggleResourceVisibility()">
+        <label for="alwaysShowResourceBox">Always show resource totals (normally requires holding shift)</label>
+      </div>
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">
           <circle

@@ -6109,23 +6109,87 @@ kbd {
   margin-left: -1.5rem;
   margin-top: -1.5rem;
   user-select: none;
-  font-size: 2.1rem;
+  font-size: 2rem;
   border: 0.1rem solid black;
   border-radius: 50%;
   background-color: white;
   transition: all 0.2s, z-index 0s;
   z-index: 1;
-  line-height: 2.4rem;
+  line-height: 1.9rem;
+}
+
+.o-alchemy-node-mask {
+  position: absolute;
+  width: 2.4rem;
+  height: 2.4rem;
+  left: 50%;
+  top: 50%;
+  margin-left: -1.2rem;
+  margin-top: -1.2rem;
+  background-color: #bbb;
+  border: 0.1rem solid black;
+  border-radius: 50%;
+  background-color: white;
+  z-index: 4;
+}
+
+.o-alchemy-resource-arc-wrapper {
+  width: 2.8rem;
+  height: 2.8rem;
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+}
+
+.o-alchemy-resource-arc-circle {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  background: #0CF;
+}
+
+.o-alchemy-resource-arc-spinner {
+  border-radius: 1.4rem 0 0 1.4rem;
+  z-index: 2;
+  transform-origin: 100% 50%;
+}
+
+.o-alchemy-resource-arc-filler {
+  border-radius: 0 1.4rem 1.4rem 0;
+  z-index: 1;
+  left: 50%;
+  opacity: 0;
+}
+
+.o-alchemy-resource-arc-mask {
+  width: 50%;
+  height: 100%;
+  border-radius: 1.4rem 0 0 1.4rem;
+  position: absolute;
+  z-index: 3;
+  opacity: 1;
+  background: inherit;
 }
 
 .o-alchemy-node--unfocused {
   color: lightgray;
   border-color: lightgray;
-  z-index: 0;
+  z-index: 4;
 }
 
 .o-alchemy-node--base {
   background-color: lightblue;
+}
+
+.o-alchemy-node-resource--always-visible {
+  position: absolute;
+  color: #4f5957;
+  text-shadow: none;
+  font-size: 1.2rem;
+  transition: opacity 0.2s;
+  left: 50%;
+  top: 90%;
+  transform: translate(-50%);
 }
 
 .t-metro .o-alchemy-node--base,

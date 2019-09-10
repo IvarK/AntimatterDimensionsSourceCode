@@ -269,8 +269,11 @@ const Ra = {
     for (const reaction of sortedReactions) {
       reaction.combineReagents();
     }
+  },
+  updateAlchemyFlow() {
+    const expAvgFactor = player.options.updateRate / 1000;
     for (const resource of AlchemyResources.all) {
-      resource.flow = 0.95 * resource.flow + 0.05 * (resource.amount - resource.before);
+      resource.flow = (1 - expAvgFactor) * resource.flow + expAvgFactor * (resource.amount - resource.before);
       resource.before = resource.amount;
     }
   }

@@ -88,8 +88,10 @@ function eternity(force, auto, specialConditions = {}) {
   resetChallengeStuff();
   NormalDimensions.reset();
 
-  if (player.respec) respecTimeStudies(auto);
-  player.respec = false;
+  if (!specialConditions.enteringEC && player.respec) {
+    respecTimeStudies(auto);
+    player.respec = false;
+  }
 
   resetInfinityPointsOnEternity();
   InfinityDimensions.resetAmount();

@@ -581,7 +581,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Gain Infinite replicanti in ${shortenSmallInteger(30)} minutes.`,
     reward: "Infinity doesn't reset your Replicanti amount.",
     checkRequirement: () =>
-      player.replicanti.amount.eq(Decimal.MAX_NUMBER) &&
+      (player.replicanti.amount.eq(Decimal.MAX_NUMBER) || player.replicanti.galaxies > 0) &&
       Time.thisInfinityRealTime.totalMinutes <= 30,
     checkEvent: GameEvent.REPLICANTI_TICK_AFTER
   },

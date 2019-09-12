@@ -176,27 +176,36 @@ Vue.component("alchemy-tab", {
       return {
         "o-alchemy-reaction-path": true,
         "o-alchemy-reaction-path--limited": this.isCapped(reactionArrow) && this.isDisplayed(reactionArrow),
-        "o-alchemy-reaction-line--focused": this.isFocusedReaction(reactionArrow),
+        "o-alchemy-reaction-path--focused": this.isFocusedReaction(reactionArrow),
       };
     },
     reactionArrowClass(reactionArrow) {
       return {
         "o-alchemy-reaction-arrow": !this.isCapped(reactionArrow) && this.isDisplayed(reactionArrow),
-        "o-alchemy-reaction-line--focused": this.isFocusedReaction(reactionArrow),
+        "o-alchemy-reaction-arrow--focused": this.isFocusedReaction(reactionArrow),
       };
     },
     toggleResourceVisibility() {
       player.options.showAlchemyResources = !player.options.showAlchemyResources;
     },
+    showAlchemyHowTo() {
+      Modal.message.show("You can now refine glyphs using \"Alchemy Mode\" in the glyph auto-sacrifice settings. " +
+        "Refined glyphs will give 1% of their level in alchemy resources. Alchemy reactions can be toggled on " +
+        "and off by clicking the respective nodes, and each resource gives its own boost to various resources " +
+        "in the game. Basic resource totals are limited to the level of the refined glyph, and compound resource " +
+        "totals are limited to the amount of the reactants. All active alchemy reactions are applied once per " +
+        "reality, unaffected by amplification. Toggle reactions on or off by clicking the nodes. You can show the " +
+        "current totals of all alchemy resources by holding shift.");
+    },
+    setAllReactions(value) {
+      for (const reaction of AlchemyReactions.all.compact()) {
+        reaction.isActive = value;
+      }
+    }
   },
   template:
     `<div class="l-ra-alchemy-tab">
-      You can now refine glyphs using "Alchemy Mode" in the glyph auto-sacrifice settings.<br>
-      Refined glyphs will give 1% of their level in alchemy resources. Alchemy reactions can<br>
-      be toggled on and off by clicking the respective nodes, and each resource gives its own<br>
-      boost to various resources in the game. Basic resource totals are limited to the level of<br>
-      the refined glyph, and compound resource totals are limited to the amount of the reactants.<br>
-      All active alchemy reactions are applied once per reality, unaffected by amplification.
+      <div @click="showAlchemyHowTo()" class="o-btn">Click for alchemy info</div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
       <div>
         <input type="checkbox"
@@ -204,7 +213,7 @@ Vue.component("alchemy-tab", {
           v-model="alwaysShowResource"
           :value="alwaysShowResource"
           @input="toggleResourceVisibility()">
-        <label for="alwaysShowResourceBox">Always show resource totals (normally requires holding shift)</label>
+        <label for="alwaysShowResourceBox">Always show resource totals</label>
       </div>
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">
@@ -239,6 +248,11 @@ Vue.component("alchemy-tab", {
           />
         </svg> 
       </div>
-      <reality-glyph-creation v-if="realityCreationAvailable" />
+      <button class="o-primary-btn" @click="setAllReactions(true)">Turn on all reactions</button>
+      <button class="o-primary-btn" @click="setAllReactions(false)">Turn off all reactions</button>
+      <primary-button
+        v-if="realityCreationAvailable"
+        class="o-primary-btn"
+        onclick="Modal.realityGlyph.show()">Create a Reality glyph</primary-button>
     </div>`
 });

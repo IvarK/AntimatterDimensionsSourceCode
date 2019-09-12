@@ -6060,6 +6060,15 @@ kbd {
   text-align: left;
 }
 
+.c-reality-glyph-creation {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 1rem;
+  width: 60rem;
+  font-size: 1.2rem;
+  text-align: left;
+}
+
 .l-alchemy-orbit-canvas {
   position: absolute;
   overflow: visible;
@@ -6099,7 +6108,7 @@ kbd {
   transition-duration: 0.2s;
 }
 
-.o-alchemy-reaction-line--focused {
+.o-alchemy-reaction-arrow--focused {
   stroke-width: 3;
   opacity: 1;
   transition-duration: 0.2s;
@@ -6108,6 +6117,13 @@ kbd {
 .o-alchemy-reaction-path {
   stroke: gray;
   opacity: 0.1;
+  transition-duration: 0.2s;
+}
+
+.o-alchemy-reaction-path--focused {
+  stroke: red;
+  stroke-width: 2;
+  opacity: 1;
   transition-duration: 0.2s;
 }
 

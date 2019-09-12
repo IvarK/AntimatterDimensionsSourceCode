@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("reality-glyph-creation", {
+Vue.component("modal-reality-glyph-creation", {
   data() {
     return {
       realityGlyphLevel: 0,
@@ -64,6 +64,10 @@ Vue.component("reality-glyph-creation", {
       if (player.celestials.effarig.relicShards >= 1e60 && (this.selectedEffects === this.calculateMaxEffects())) {
         player.celestials.effarig.relicShards -= 1e60;
       }
+      for (const reaction of AlchemyReactions.all.compact()) {
+        reaction.isActive = false;
+      }
+      this.emitClose();
     },
     formatGlyphEffect(effect) {
       const config = GameDatabase.reality.glyphEffects[effect];
@@ -80,7 +84,8 @@ Vue.component("reality-glyph-creation", {
     }
   },
   template: `
-    <div class="c-alchemy-resource-info">
+    <div class="c-reality-glyph-creation">
+      <modal-close-button @click="emitClose"/>
       <div>  
         Create a level {{ shortenSmallInteger(realityGlyphLevel) }} reality glyph. Rarity will always be 100% and level
         is unaffected by the glyph level cap. This will reset all alchemy resources.
@@ -105,8 +110,6 @@ Vue.component("reality-glyph-creation", {
           v-model="selectedEffects">
         {{ formatGlyphEffect(effect) }}
       </div><br>
-      <div id="example-1">
-        <button v-on:click="createRealityGlyph()">Create a Reality glyph!</button>
-      </div>
+        <button class="o-primary-btn" v-on:click="createRealityGlyph()">Create a Reality glyph!</button>
     </div>`,
 });

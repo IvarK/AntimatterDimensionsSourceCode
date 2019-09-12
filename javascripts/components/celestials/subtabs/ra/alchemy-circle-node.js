@@ -40,23 +40,6 @@ Vue.component("alchemy-circle-node", {
         "o-alchemy-node--unfocused": !this.isFocused,
       };
     },
-    spinnerTransform() {
-      return {
-        transform: `rotate(${this.amount / 11110 * 360}deg)`,
-        background: this.amount > 11109.95 ? "rgb(255, 127, 0)" : undefined
-      };
-    },
-    fillerTransform() {
-      return {
-        opacity: this.amount / 11110 > 0.5 ? 1 : 0,
-        background: this.amount > 11109.95 ? "rgb(255, 127, 0)" : undefined
-      };
-    },
-    maskTransform() {
-      return {
-        opacity: this.amount / 11110 > 0.5 ? 0 : 1
-      };
-    },
     hintClassObject() {
       return this.isFocused ? undefined : "o-hint-text--alchemy-node--unfocused";
     }
@@ -77,16 +60,10 @@ Vue.component("alchemy-circle-node", {
       @mouseleave="$emit('mouseleave')"
       @click="emitClick"
     >
-      <div class="o-alchemy-resource-arc-wrapper">
-        <div class="o-alchemy-resource-arc-spinner o-alchemy-resource-arc-circle" :style="spinnerTransform"></div>
-        <div class="o-alchemy-resource-arc-filler o-alchemy-resource-arc-circle" :style="fillerTransform"></div>
-        <div class="o-alchemy-resource-arc-mask" :style="maskTransform"></div>
-        <div class="o-alchemy-node-mask"
-          :class="classObject"
-        >
-          {{resource.symbol}}
-        </div>
-      </div>
+      <alchemy-resource-arc
+        :resource="resource"
+        :classObject="classObject"
+      />
       <div v-if="alwaysShowResource"
         class="o-alchemy-node-resource--always-visible">
         {{ amount.toFixed(1) }}
@@ -98,4 +75,49 @@ Vue.component("alchemy-circle-node", {
       </hint-text>
     </div>
   `
+});
+
+Vue.component("alchemy-resource-arc", {
+  props: {
+    resource: Object,
+    classObject: Object
+  },
+  data() {
+    return {
+      amount: 0,
+    };
+  },
+  computed: {
+    spinnerTransform() {
+      return {
+        transform: `rotate(${this.amount / 11110 * 360}deg)`,
+        background: this.amount > 11109.95 ? "rgb(255, 127, 0)" : undefined
+      };
+    },
+    fillerTransform() {
+      return {
+        opacity: this.amount / 11110 > 0.5 ? 1 : 0,
+        background: this.amount > 11109.95 ? "rgb(255, 127, 0)" : undefined
+      };
+    },
+    maskTransform() {
+      return {
+        opacity: this.amount / 11110 > 0.5 ? 0 : 1
+      };
+    }
+  },
+  methods: {
+    update() {
+      this.amount = this.resource.amount;
+    }
+  },
+  template: `
+      <div class="o-alchemy-resource-arc-wrapper">
+        <div class="o-alchemy-resource-arc-spinner o-alchemy-resource-arc-circle" :style="spinnerTransform"></div>
+        <div class="o-alchemy-resource-arc-filler o-alchemy-resource-arc-circle" :style="fillerTransform"></div>
+        <div class="o-alchemy-resource-arc-mask" :style="maskTransform"></div>
+        <div class="o-alchemy-node-mask" :class="classObject">
+          {{ resource.symbol }}
+        </div>
+      </div>`
 });

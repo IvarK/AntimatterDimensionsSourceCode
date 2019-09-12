@@ -59,10 +59,8 @@ class AlchemyCircleLayout {
       for (const reagentNode of reagentNodes) {
         reactionArrows.push({
           reaction,
-          x1: reagentNode.x,
-          y1: reagentNode.y,
-          x2: productNode.x,
-          y2: productNode.y,
+          reagent: reagentNode,
+          product: productNode,
         });
       }
     }
@@ -78,7 +76,8 @@ Vue.component("alchemy-tab", {
       infoResourceId: 0,
       focusedResourceId: -1,
       realityCreationAvailable: false,
-      alwaysShowResource: false
+      alwaysShowResource: false,
+      reactionProgress: 0,
     };
   },
   computed: {
@@ -103,6 +102,8 @@ Vue.component("alchemy-tab", {
     update() {
       this.realityCreationAvailable = AlchemyResource.reality.amount !== 0;
       this.alwaysShowResource = player.options.showAlchemyResources;
+      const animationTime = 800;
+      this.reactionProgress = (player.realTimePlayed % animationTime) / animationTime;
     },
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
@@ -126,7 +127,20 @@ Vue.component("alchemy-tab", {
       resource.reaction.isActive = !resource.reaction.isActive;
       GameUI.update();
     },
-    isFocused(node) {
+    // 0.05 allows for some buffer room in the display since they will never be exactly equal
+    isCapped(reactionArrow) {
+      return reactionArrow.product.resource.amount > reactionArrow.reagent.resource.amount - 0.05;
+    },
+    isActiveReaction(reactionArrow) {
+      return reactionArrow.reaction.isActive;
+    },
+    isFocusedReaction(reactionArrow) {
+      return reactionArrow.reaction.product.id === this.focusedResourceId;
+    },
+    isDisplayed(reactionArrow) {
+      return this.isActiveReaction(reactionArrow) || this.isFocusedReaction(reactionArrow);
+    },
+    isFocusedNode(node) {
       if (this.focusedResourceId === -1) return true;
       const focusedResource = this.resources[this.focusedResourceId];
       if (focusedResource === node.resource) return true;
@@ -135,17 +149,41 @@ Vue.component("alchemy-tab", {
         .some(r => r.resource === node.resource);
     },
     reactionArrowPositions(reactionArrow) {
+      if (!this.isDisplayed(reactionArrow)) return undefined;
+      const xStart = reactionArrow.reagent.x;
+      const yStart = reactionArrow.reagent.y;
+      const xEnd = reactionArrow.product.x;
+      const yEnd = reactionArrow.product.y;
+      const pathLength = Math.sqrt(Math.pow(xEnd - xStart, 2) + Math.pow(yEnd - yStart, 2));
+      const leadPoint = Math.max(0, this.reactionProgress - 3 / pathLength);
+      const trailPoint = Math.min(1, this.reactionProgress + 3 / pathLength);
       return {
-        x1: `${reactionArrow.x1}%`,
-        y1: `${reactionArrow.y1}%`,
-        x2: `${reactionArrow.x2}%`,
-        y2: `${reactionArrow.y2}%`,
+        x1: `${xStart * (1 - leadPoint) + xEnd * leadPoint}%`,
+        y1: `${yStart * (1 - leadPoint) + yEnd * leadPoint}%`,
+        x2: `${xStart * (1 - trailPoint) + xEnd * trailPoint}%`,
+        y2: `${yStart * (1 - trailPoint) + yEnd * trailPoint}%`,
+      };
+    },
+    reactionArrowPaths(reactionArrow) {
+      return {
+        x1: `${reactionArrow.reagent.x}%`,
+        y1: `${reactionArrow.reagent.y}%`,
+        x2: `${reactionArrow.product.x}%`,
+        y2: `${reactionArrow.product.y}%`,
+      };
+    },
+    reactionPathClass(reactionArrow) {
+      return {
+        "o-alchemy-reaction-path": true,
+        "o-alchemy-reaction-path--limited": this.isCapped(reactionArrow) && this.isDisplayed(reactionArrow),
+        "o-alchemy-reaction-line--focused": this.isFocusedReaction(reactionArrow),
       };
     },
     reactionArrowClass(reactionArrow) {
-      return reactionArrow.reaction.product.id === this.focusedResourceId
-        ? undefined
-        : "o-alchemy-reaction-arrow--unfocused";
+      return {
+        "o-alchemy-reaction-arrow": !this.isCapped(reactionArrow) && this.isDisplayed(reactionArrow),
+        "o-alchemy-reaction-line--focused": this.isFocusedReaction(reactionArrow),
+      };
     },
     toggleResourceVisibility() {
       player.options.showAlchemyResources = !player.options.showAlchemyResources;
@@ -183,7 +221,7 @@ Vue.component("alchemy-tab", {
           v-for="(node, i) in layout.nodes"
           :key="i"
           :node="node"
-          :isFocused="isFocused(node)"
+          :isFocused="isFocusedNode(node)"
           @mouseenter="handleMouseEnter(node)"
           @mouseleave="handleMouseLeave"
           @click="handleClick(node)"
@@ -191,9 +229,13 @@ Vue.component("alchemy-tab", {
         <svg class="l-alchemy-arrow-canvas">
           <line
             v-for="reactionArrow in layout.reactionArrows"
+            v-bind="reactionArrowPaths(reactionArrow)"
+            :class="reactionPathClass(reactionArrow)"
+          />
+          <line
+            v-for="reactionArrow in layout.reactionArrows"
             v-bind="reactionArrowPositions(reactionArrow)"
             :class="reactionArrowClass(reactionArrow)"
-            class="o-alchemy-reaction-arrow"
           />
         </svg> 
       </div>

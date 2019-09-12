@@ -42,12 +42,14 @@ Vue.component("alchemy-circle-node", {
     },
     spinnerTransform() {
       return {
-        transform: `rotate(${this.amount / 11110 * 360}deg)`
+        transform: `rotate(${this.amount / 11110 * 360}deg)`,
+        background: this.amount > 11109.95 ? "rgb(255, 127, 0)" : undefined
       };
     },
     fillerTransform() {
       return {
-        opacity: this.amount / 11110 > 0.5 ? 1 : 0
+        opacity: this.amount / 11110 > 0.5 ? 1 : 0,
+        background: this.amount > 11109.95 ? "rgb(255, 127, 0)" : undefined
       };
     },
     maskTransform() {

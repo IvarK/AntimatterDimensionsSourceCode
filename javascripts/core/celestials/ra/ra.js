@@ -208,7 +208,7 @@ const Ra = {
       .map(g => g.level)
       .max();
     for (const resource of AlchemyResources.base) {
-      resource.amount = maxLevel;
+      resource.amount = Math.min(11110, maxLevel);
     }
   },
   giveExp() {
@@ -244,7 +244,6 @@ const Ra = {
   // production", which in this case is infinities, eternities, replicanti, dilated time, and time theorem generation.
   // It also includes the 1% IP time study, Teresa's 1% EP upgrade, and the charged RM generation upgrade. Note that
   // removing the hardcap of 10 may cause runaways.
-  // It's almost certainly going to need to be rebalanced here after testing earlier Ra.
   theoremBoostFactor() {
     if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
     return Math.min(10, Math.max(0, player.timestudy.theorem.pLog10() - 350) / 50);

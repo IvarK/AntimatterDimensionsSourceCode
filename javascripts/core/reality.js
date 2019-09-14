@@ -239,6 +239,11 @@ function beginProcessReality(force, reset) {
   }
   EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
   const simulatedRealities = simulatedRealityCount(true);
+  if (simulatedRealities === 0) {
+    // In this case, the glyph reward was already given
+    finishProcessReality(force, reset);
+    return;
+  }
   // No glyph reward was given earlier
   const glyphsToProcess = simulatedRealities + 1;
   Async.run(() => processAutoGlyph(Enslaved.lockedInGlyphLevel),

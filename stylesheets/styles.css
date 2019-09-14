@@ -2061,7 +2061,7 @@ screen and (max-width: 480px) {
 }
 
 .o-hint-text--alchemy-node {
-  color: #4f5957;
+  color: #aaaaaa;
   text-shadow: none;
   font-size: 1.2rem;
   transition: opacity 0.2s;
@@ -2072,7 +2072,7 @@ screen and (max-width: 480px) {
 }
 
 .l-hint-text--alchemy-node {
-  top: 2.3rem;
+  top: 2.6rem;
   left: 50%;
   transform: translate(-50%);
 }

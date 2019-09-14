@@ -21,16 +21,15 @@ Vue.component("alchemy-circle-node", {
       return this.resource.isBaseResource;
     },
     layoutStyle() {
-      // TODO Figure out how to properly get theme-dependent background colors
-      const bgColors = [255, 255, 255];
+      const bgBrightness = Theme.current().isDark ? 0 : 255;
       const scaledFlow = Math.clamp(0.4 * Math.sqrt(Math.abs(this.flow)), 0, 1);
       return {
         left: `${this.node.x}%`,
         top: `${this.node.y}%`,
         "box-shadow": `0px 0px 3px 3px
-          rgb(${this.flow < 0 ? bgColors[0] * (1 - scaledFlow) + 255 * scaledFlow : bgColors[0] * (1 - scaledFlow)},
-              ${this.flow > 0 ? bgColors[1] * (1 - scaledFlow) + 180 * scaledFlow : bgColors[1] * (1 - scaledFlow)},
-              ${bgColors[2] * (1 - scaledFlow)})`
+          rgb(${this.flow < 0 ? bgBrightness * (1 - scaledFlow) + 255 * scaledFlow : bgBrightness * (1 - scaledFlow)},
+              ${this.flow > 0 ? bgBrightness * (1 - scaledFlow) + 180 * scaledFlow : bgBrightness * (1 - scaledFlow)},
+              ${bgBrightness * (1 - scaledFlow)})`
       };
     },
     classObject() {

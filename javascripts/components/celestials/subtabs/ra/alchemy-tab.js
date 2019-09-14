@@ -176,7 +176,7 @@ Vue.component("alchemy-tab", {
       return {
         "o-alchemy-reaction-path": true,
         "o-alchemy-reaction-path--limited": this.isCapped(reactionArrow) && this.isDisplayed(reactionArrow),
-        "o-alchemy-reaction-path--focused": this.isFocusedReaction(reactionArrow),
+        "o-alchemy-reaction-path--focused": !this.isCapped(reactionArrow) && this.isFocusedReaction(reactionArrow),
       };
     },
     reactionArrowClass(reactionArrow) {

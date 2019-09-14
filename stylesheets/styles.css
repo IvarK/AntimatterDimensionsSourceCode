@@ -6102,7 +6102,7 @@ kbd {
 }
 
 .o-alchemy-reaction-arrow {
-  stroke: blue;
+  stroke: rgb(0, 190, 255);
   stroke-width: 2;
   stroke-linecap: round;
   transition-duration: 0.2s;
@@ -6121,8 +6121,9 @@ kbd {
 }
 
 .o-alchemy-reaction-path--focused {
-  stroke: red;
+  stroke: rgb(255, 100, 100);
   stroke-width: 2;
+  stroke-dasharray: 0.2rem;
   opacity: 1;
   transition-duration: 0.2s;
 }

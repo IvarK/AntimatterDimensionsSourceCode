@@ -293,6 +293,11 @@
       }
       if (!ctx.ComparisonOperator || ctx.ComparisonOperator[0].isInsertedInRecovery) {
         this.addError(ctx, "Missing comparison operator (<, >, <=, >=)");
+        return;
+      }
+      const T = AutomatorLexer.tokenMap;
+      if (ctx.ComparisonOperator[0].tokenType === T.OpEQ || ctx.ComparisonOperator[0].tokenType === T.EqualSign) {
+        this.addError(ctx, "Please use an inequality comparison (>,<,>=,<=)");
       }
     }
 

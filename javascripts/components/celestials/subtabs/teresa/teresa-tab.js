@@ -15,7 +15,6 @@ Vue.component("teresa-tab", {
       bestAM: new Decimal(0),
       runReward: 0,
       pp: 0,
-      leakRate: 0
     };
   },
   computed: {
@@ -48,7 +47,6 @@ Vue.component("teresa-tab", {
       this.runReward = Teresa.runRewardMultiplier;
       this.pp = player.reality.pp;
       this.rm.copyFrom(player.reality.realityMachines);
-      this.leakRate = this.unlocks[2] ? 0 : this.rmStore * (1 - Math.pow(0.98, 1 / 60));
     },
     nextQuote() {
       Teresa.nextQuote();
@@ -81,7 +79,6 @@ Vue.component("teresa-tab", {
             Teresa Reality reward: Glyph sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
           <div class="c-teresa-unlock" v-if="unlocks[1]">You gain 1% of your peaked EP/min every second.</div>
-          <div class="c-teresa-unlock" v-if="unlocks[2]">The container no longer leaks.</div>
           <div class="c-teresa-shop" v-if="unlocks[3]">
             <span class="o-teresa-pp"> You have {{ shorten(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}}.</span>
             <perk-shop-upgrade
@@ -103,7 +100,7 @@ Vue.component("teresa-tab", {
             <div class="c-rm-store-inner" :style="{ height: percentage}">
               <div class="c-rm-store-label"> {{ shorten(rmMult, 2, 2) }}x RM gain
                 <br>{{ shorten(rmStore, 2, 2) }}/{{ shorten(rmStoreMax, 2, 2) }}
-                <br v-if="leakRate > 0">Leaking {{ shorten(leakRate, 2, 2) }} RM/s</div>
+              </div>
             </div>
             <div v-for="unlockInfo in unlockInfo"
               class="c-teresa-unlock-description"

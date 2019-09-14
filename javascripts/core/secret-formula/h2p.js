@@ -728,7 +728,6 @@ At ${format(1e18)} RM, you unlock Teresa's Eternity Point generator.
 This works like Time Study 181, in the sense that you gain 1% of your peaked EP/Min per second.
 <br>
 Once you are at ${format(1e21)} RM in the container, you unlock Effarig, the second Celestial.
-Additionally at ${format(1e21)} Teresa's container stops leaking RM.
 <br>
 Teresa's final unlock is at ${format(1e24)} RM, at which point you unlock the Perk Shop,
 where you can spend spare Perk points on upgrades to glyph level, rm multipliers and Dilation Autobuyer Bulk buy.

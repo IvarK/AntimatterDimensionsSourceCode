@@ -405,17 +405,24 @@ const logFactorial = (function() {
 }());
 
 /** 32 bit XORSHIFT generator */
+function xorshift32Update(state) {
+  /* eslint-disable no-bitwise */
+  /* eslint-disable no-param-reassign */
+  state ^= state << 13;
+  state ^= state >>> 17;
+  state ^= state << 5;
+  /* eslint-enable no-param-reassign */
+  /* eslint-enable no-bitwise */
+  return state;
+}
+
 const fastRandom = (function() {
   let state = Math.floor(Date.now()) % Math.pow(2, 32);
   const scale = 1 / (Math.pow(2, 32));
-  /* eslint-disable no-bitwise */
   return () => {
-    state ^= state << 13;
-    state ^= state >>> 17;
-    state ^= state << 5;
+    state = xorshift32Update(state);
     return state * scale + 0.5;
   };
-  /* eslint-enable no-bitwise */
 }());
 
 // Normal distribution with specified mean and standard deviation

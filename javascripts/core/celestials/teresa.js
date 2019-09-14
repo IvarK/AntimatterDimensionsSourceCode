@@ -52,13 +52,15 @@ const Teresa = {
   checkForUnlocks() {
     for (const info of Object.values(Teresa.unlockInfo)) {
       if (!this.has(info) && this.rmStore >= info.price) {
-        player.celestials.teresa.unlocks.push(info.id);
+        // eslint-disable-next-line no-bitwise
+        player.celestials.teresa.unlockBits |= (1 << info.id);
       }
     }
   },
   has(info) {
     if (!info.hasOwnProperty("id")) throw "Pass in the whole TERESA UNLOCK object";
-    return player.celestials.teresa.unlocks.includes(info.id);
+    // eslint-disable-next-line no-bitwise
+    return Boolean(player.celestials.teresa.unlockBits & (1 << info.id));
   },
   startRun() {
     player.celestials.teresa.run = startRealityOver() || player.celestials.teresa.run;
@@ -85,9 +87,10 @@ const Teresa = {
     return teresaQuotes[player.celestials.teresa.quoteIdx];
   },
   nextQuote() {
-    if (player.celestials.teresa.quoteIdx < 4 + player.celestials.teresa.unlocks.length) {
+    //if (player.celestials.teresa.quoteIdx < 4 + player.celestials.teresa.unlocks.length) {
+    // FIXME: redo quote system
       player.celestials.teresa.quoteIdx++;
-    }
+    //}
   },
   get isRunning() {
     return player.celestials.teresa.run;

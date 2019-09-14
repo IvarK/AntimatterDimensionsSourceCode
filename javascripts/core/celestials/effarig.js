@@ -28,18 +28,23 @@ const EFFARIG_STAGES = {
 };
 
 class EffarigUnlockState extends GameMechanicState {
-  get cost() {
-    return this.config.cost;
+  constructor(config) {
+    super(config);
+    if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
   }
 
+  get cost() {
+    return this.config.cost;
+}
+
   get isUnlocked() {
-    return player.celestials.effarig.unlocks.includes(this.id);
+    // eslint-disable-next-line no-bitwise
+    return Boolean(player.celestials.effarig.unlockBits & (1 << this.id));
   }
 
   unlock() {
-    if (!this.isUnlocked) {
-      player.celestials.effarig.unlocks.push(this.id);
-    }
+    // eslint-disable-next-line no-bitwise
+    player.celestials.effarig.unlockBits |= (1 << this.id);
   }
 
   purchase() {

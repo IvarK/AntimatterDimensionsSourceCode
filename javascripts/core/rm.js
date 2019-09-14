@@ -239,8 +239,9 @@ const GlyphGenerator = {
   },
 
   random() {
-    const x = Math.sin(player.reality.seed++) * 10000;
-    return x - Math.floor(x);
+    const state = xorshift32Update(player.reality.seed);
+    player.reality.seed = state;
+    return state * 2.3283064365386963e-10 + 0.5;
   },
 
   /**

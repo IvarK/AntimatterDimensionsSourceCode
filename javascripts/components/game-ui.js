@@ -27,6 +27,7 @@ Vue.component("game-ui", {
       </component>
       <modal-popup v-if="view.modal.current" />
       <modal-glyph-selection v-if="view.modal.glyphSelection" />
+      <modal-progress-bar v-if="view.modal.progressBar" />
       <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
       <div id="notification-container" class="l-notification-container" />
       <help-me />

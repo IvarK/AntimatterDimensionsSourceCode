@@ -193,7 +193,7 @@ const Ra = {
   // Dev/debug function for easier testing
   reset() {
     const data = player.celestials.ra;
-    data.unlocks = [];
+    data.unlockBits = 0;
     data.run = false;
     data.charged = new Set();
     data.quoteIdx = 0;
@@ -217,15 +217,18 @@ const Ra = {
   },
   checkForUnlocks() {
     for (const unl of Object.values(RA_UNLOCKS)) {
-      if (unl.pet.level >= unl.level && !this.has(unl)) player.celestials.ra.unlocks.push(unl.id);
+      // eslint-disable-next-line no-bitwise
+      if (unl.pet.level >= unl.level && !this.has(unl)) player.celestials.ra.unlockBits |= (1 << unl.id);
     }
     if (this.petList.every(pet => pet.level >= 20) && !this.has(RA_LAITELA_UNLOCK)) {
-      player.celestials.ra.unlocks.push(24);
+      // eslint-disable-next-line no-bitwise
+      player.celestials.ra.unlockBits |= (1 << 24);
       MatterDimension(1).amount = new Decimal(1);
     }
   },
   has(info) {
-    return player.celestials.ra.unlocks.includes(info.id);
+    // eslint-disable-next-line no-bitwise
+    return Boolean(player.celestials.ra.unlockBits & (1 << info.id));
   },
   startRun() {
     player.celestials.ra.run = startRealityOver() || player.celestials.ra.run;

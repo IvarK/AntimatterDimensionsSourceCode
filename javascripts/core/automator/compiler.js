@@ -393,7 +393,8 @@
     constructor() {
       super();
       for (const cmd of AutomatorCommands) {
-        const blockify = cmd.blockify ? cmd.blockify : ctx => this.defaultBlockify(ctx);
+        const blockify = cmd.blockify;
+        if (!blockify) continue;
         const ownMethod = this[cmd.id];
         // eslint-disable-next-line no-loop-func
         this[cmd.id] = (ctx, output) => {

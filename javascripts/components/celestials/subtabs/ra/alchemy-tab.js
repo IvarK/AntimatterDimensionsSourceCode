@@ -149,7 +149,7 @@ Vue.component("alchemy-tab", {
         .some(r => r.resource === node.resource);
     },
     reactionArrowPositions(reactionArrow) {
-      if (!this.isDisplayed(reactionArrow)) return undefined;
+      if (!this.isDisplayed(reactionArrow) || this.isCapped(reactionArrow)) return undefined;
       const xStart = reactionArrow.reagent.x;
       const yStart = reactionArrow.reagent.y;
       const xEnd = reactionArrow.product.x;

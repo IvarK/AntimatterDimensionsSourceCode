@@ -21,15 +21,12 @@ Vue.component("alchemy-circle-node", {
       return this.resource.isBaseResource;
     },
     layoutStyle() {
-      const bgBrightness = Theme.current().isDark ? 0 : 255;
       const scaledFlow = Math.clamp(0.4 * Math.sqrt(Math.abs(this.flow)), 0, 1);
       return {
         left: `${this.node.x}%`,
         top: `${this.node.y}%`,
         "box-shadow": `0px 0px 3px 3px
-          rgb(${this.flow < 0 ? bgBrightness * (1 - scaledFlow) + 255 * scaledFlow : bgBrightness * (1 - scaledFlow)},
-              ${this.flow > 0 ? bgBrightness * (1 - scaledFlow) + 180 * scaledFlow : bgBrightness * (1 - scaledFlow)},
-              ${bgBrightness * (1 - scaledFlow)})`
+          rgba(${this.flow > 0 ? "156, 204, 101" : "204, 102, 102"}, ${scaledFlow})`
       };
     },
     classObject() {
@@ -90,13 +87,13 @@ Vue.component("alchemy-resource-arc", {
     spinnerTransform() {
       return {
         transform: `rotate(${this.amount / 11110 * 360}deg)`,
-        background: this.amount > 11109.95 ? "rgb(255, 127, 0)" : undefined
+        background: this.amount > 11109.95 ? "#ff9800" : undefined
       };
     },
     fillerTransform() {
       return {
         opacity: this.amount / 11110 > 0.5 ? 1 : 0,
-        background: this.amount > 11109.95 ? "rgb(255, 127, 0)" : undefined
+        background: this.amount > 11109.95 ? "#ff9800" : undefined
       };
     },
     maskTransform() {

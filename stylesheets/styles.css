@@ -6102,10 +6102,25 @@ kbd {
 }
 
 .o-alchemy-reaction-arrow {
-  stroke: rgb(0, 190, 255);
+  stroke: #29b6f6;
   stroke-width: 2;
   stroke-linecap: round;
   transition-duration: 0.2s;
+}
+
+.t-s4 .o-alchemy-reaction-arrow {
+  animation: rainbowStroke 2s infinite;
+}
+
+@keyframes rainbowStroke {
+  0% {stroke: red}
+  14.2% {stroke: orange}
+  28.4% {stroke: yellow}
+  42.6% {stroke: green}
+  56.8% {stroke: blue}
+  71% {stroke: indigo}
+  85.2% {stroke: violet}
+  100% {stroke: red}
 }
 
 .o-alchemy-reaction-arrow--focused {
@@ -6121,7 +6136,7 @@ kbd {
 }
 
 .o-alchemy-reaction-path--focused {
-  stroke: rgb(255, 100, 100);
+  stroke: rgb(204, 102, 102);
   stroke-width: 2;
   stroke-dasharray: 0.2rem;
   opacity: 1;
@@ -6129,7 +6144,7 @@ kbd {
 }
 
 .o-alchemy-reaction-path--limited {
-  stroke: orange;
+  stroke: #ff9800;
   stroke-width: 2;
   opacity: 1;
   transition-duration: 0.2s;
@@ -6178,7 +6193,7 @@ kbd {
   width: 50%;
   height: 100%;
   position: absolute;
-  background: #0CF;
+  background: #29b6f6;
 }
 
 .o-alchemy-resource-arc-spinner {
@@ -6205,13 +6220,12 @@ kbd {
 }
 
 .o-alchemy-node--unfocused {
-  color: lightgray;
-  border-color: lightgray;
+  opacity: 0.5;
   z-index: 4;
 }
 
 .o-alchemy-node--base {
-  background-color: lightblue;
+  background-color: #81d4fa;
 }
 
 .o-alchemy-node-resource--always-visible {
@@ -6225,30 +6239,8 @@ kbd {
   transform: translate(-50%);
 }
 
-.t-metro .o-alchemy-node--base,
-.t-dark-metro .o-alchemy-node--base,
-.t-inverted-metro .o-alchemy-node--base,
-.t-s8 .o-alchemy-node--base {
-  background-color: #80d8ff;
-}
-
-.o-alchemy-node--unfocused.o-alchemy-node--base {
-  background-color: #ebf6f9;
-}
-
 .o-alchemy-node--active {
-  background-color: lightgreen;
-}
-
-.t-metro .o-alchemy-node--active,
-.t-dark-metro .o-alchemy-node--active,
-.t-inverted-metro .o-alchemy-node--active,
-.t-s8 .o-alchemy-node--active {
-  background-color: #ccff90;
-}
-
-.o-alchemy-node--unfocused.o-alchemy-node--active {
-  background-color: #e9fce9;
+  background-color: #9ccc65;
 }
 
 .c-ra-unlock-unlocked {

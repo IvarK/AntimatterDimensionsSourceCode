@@ -208,7 +208,7 @@ const Ra = {
       .map(g => g.level)
       .max();
     for (const resource of AlchemyResources.base) {
-      resource.amount = Math.min(11110, maxLevel);
+      resource.amount = Math.min(this.alchemyResourceCap, maxLevel);
     }
   },
   giveExp() {
@@ -275,6 +275,9 @@ const Ra = {
       resource.flow = (1 - expAvgFactor) * resource.flow + expAvgFactor * (resource.amount - resource.before);
       resource.before = resource.amount;
     }
+  },
+  get alchemyResourceCap() {
+    return 11111;
   }
 };
 

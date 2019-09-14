@@ -25,7 +25,7 @@ Vue.component("alchemy-circle-node", {
       return {
         left: `${this.node.x}%`,
         top: `${this.node.y}%`,
-        "box-shadow": `0px 0px 3px 3px
+        "box-shadow": `0 0 0.3rem 0.3rem
           rgba(${this.flow > 0 ? "156, 204, 101" : "204, 102, 102"}, ${scaledFlow})`
       };
     },
@@ -86,19 +86,19 @@ Vue.component("alchemy-resource-arc", {
   computed: {
     spinnerTransform() {
       return {
-        transform: `rotate(${this.amount / 11110 * 360}deg)`,
-        background: this.amount > 11109.95 ? "#ff9800" : undefined
+        transform: `rotate(${this.amount / Ra.alchemyResourceCap * 360}deg)`,
+        background: this.amount === Ra.alchemyResourceCap ? "#ff9800" : undefined
       };
     },
     fillerTransform() {
       return {
-        opacity: this.amount / 11110 > 0.5 ? 1 : 0,
-        background: this.amount > 11109.95 ? "#ff9800" : undefined
+        opacity: this.amount / Ra.alchemyResourceCap > 0.5 ? 1 : 0,
+        background: this.amount === Ra.alchemyResourceCap ? "#ff9800" : undefined
       };
     },
     maskTransform() {
       return {
-        opacity: this.amount / 11110 > 0.5 ? 0 : 1
+        opacity: this.amount / Ra.alchemyResourceCap > 0.5 ? 0 : 1
       };
     }
   },

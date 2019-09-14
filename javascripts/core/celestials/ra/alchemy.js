@@ -98,7 +98,7 @@ class AlchemyReaction {
     return Math.clampMin(cappedYield, 0);
   }
 
-  // Assign reactions priority in descending order based on the largest product total after the reaction.  The logic
+  // Assign reactions priority in descending order based on the largest reagent total after the reaction.  The logic
   // is that if we assume that all the reactions are cap-limited, then by assigning priority in this way, reactions
   // get applied so that earlier reactions are less likely to reduce the yield of later reactions.
   get priority() {
@@ -145,6 +145,8 @@ class AlchemyReaction {
       reagent.resource.amount -= reactionYield * reagent.cost;
     }
     this._product.amount += reactionYield * this.reactionProduction;
+    // Within a certain amount of the cap, just give the last bit for free so the cap is actually reached
+    if (Ra.alchemyResourceCap - this._product.amount < 0.05) this._product.amount = Ra.alchemyResourceCap;
   }
 }
 

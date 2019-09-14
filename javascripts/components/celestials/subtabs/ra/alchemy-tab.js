@@ -127,9 +127,8 @@ Vue.component("alchemy-tab", {
       resource.reaction.isActive = !resource.reaction.isActive;
       GameUI.update();
     },
-    // 0.05 allows for some buffer room in the display since they will never be exactly equal
     isCapped(reactionArrow) {
-      return reactionArrow.product.resource.amount > reactionArrow.reagent.resource.amount - 0.05;
+      return reactionArrow.product.resource.amount >= reactionArrow.reagent.resource.amount;
     },
     isActiveReaction(reactionArrow) {
       return reactionArrow.reaction.isActive;

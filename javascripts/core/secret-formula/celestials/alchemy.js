@@ -298,7 +298,7 @@ GameDatabase.celestials.alchemy = {
       name: "Boundless",
       symbol: "Π",
       isBaseResource: false,
-      effect: amount => Math.floor(amount / 10),
+      effect: amount => Math.clampMax(Math.ceil(amount / 10), 1111),
       tier: 4,
       uiOrder: 1,
       formatEffect: value => `Basic glyph level cap increased by ${shortenSmallInteger(value)} ` +

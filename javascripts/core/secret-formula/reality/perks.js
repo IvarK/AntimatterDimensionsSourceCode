@@ -127,7 +127,7 @@ GameDatabase.reality.perks = {
     id: 31,
     label: "PASS1",
     family: PerkFamily.ETERNITY,
-    description: "Improve passive path IP/EP multipliers to 100x and 1e100x"
+    description: "Improve passive path EP to 100x and IP to 1e100x"
   },
   studyPassive2: {
     id: 32,
@@ -398,7 +398,7 @@ GameDatabase.reality.perks = {
     id: 206,
     label: "ACH6",
     family: PerkFamily.ACHIEVEMENT,
-    description: "Your achievements are no longer lost after Reality.",
+    description: "Reality no longer resets your achievements.",
     effect: () => 13
   }
 };

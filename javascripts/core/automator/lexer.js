@@ -124,7 +124,7 @@ const AutomatorLexer = (() => {
   });
   createInCategory(Currency, "Total_TT", /total tt/i, {
     $autocomplete: "total tt",
-    $getter: () => TimeTheorems.totalPurchased()
+    $getter: () => player.timestudy.theorem.plus(calculateTimeStudiesCost()),
   });
   for (let i = 1; i <= 12; ++i) {
     const id = i;

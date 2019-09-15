@@ -688,10 +688,10 @@ GameDatabase.achievements.normal = [
   {
     id: 112,
     name: "Never again",
-    tooltip: "Max out your third Eternity upgrade.",
+    tooltip: () => `Get the sum of infinty challenge times below ${shortenSmallInteger(750)}ms`,
     checkRequirement: () => Time.infinityChallengeSum.totalMilliseconds < 750,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
-    reward: "The limit for it is a bit higher.",
+    reward: "The limit for your third eternity upgrade is a bit higher.",
     effect: 610
   },
   {
@@ -953,7 +953,8 @@ GameDatabase.achievements.normal = [
     name: "Master of Reality",
     tooltip: "Have all Reality upgrades bought.",
     checkRequirement: () => RealityUpgrades.allBought,
-    checkEvent: GameEvent.REALITY_UPGRADE_BOUGHT
+    checkEvent: GameEvent.REALITY_UPGRADE_BOUGHT,
+    reward: "Unlock Teresa, the Celestial of Reality."
   },
   {
     id: 148,

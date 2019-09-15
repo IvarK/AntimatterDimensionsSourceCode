@@ -173,7 +173,7 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Infinity Dimension cost multipliers are reduced",
       effect: completions => 1 - completions * 0.008,
-      formatEffect: value => `x^${shorten(value, 2, 2)}`
+      formatEffect: value => `x^${shorten(value, 3, 3)}`
     }
   }
 ];

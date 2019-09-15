@@ -224,7 +224,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 111,
       cost: 12,
       requirement: () => TimeStudy(101).isBought || TimeStudy(102).isBought || TimeStudy(103).isBought,
-      description: "Make the IP formula better",
+      description: () => (Achievement(103).canBeApplied
+        ? `Make the IP formula better log(x/${shorten(307.8, 0, 1)}) ➜ log(x/${shortenSmallInteger(285)})`
+        : `Make the IP formula better log(x/${shortenSmallInteger(308)}) ➜ log(x/${shortenSmallInteger(285)})`),
       effect: 285
     },
     {
@@ -355,7 +357,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 171,
       cost: 15,
       requirement: () => TimeStudy(161).isBought || TimeStudy(162).isBought,
-      description: "Time shard requirement for the next tickspeed upgrade goes up slower",
+      description: () => `Time shard requirement for the next free tickspeed upgrade goes up slower,
+        ${formatX(1.33, 0, 2)} ➜ ${formatX(1.25, 0, 2)}`,
       effect: () => TS171_MULTIPLIER
     },
     {
@@ -437,7 +440,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
         const secondPart = totalBoost.pow(1.05).clampMaxExponent(120000);
         return firstPart.times(secondPart);
       },
-      cap: new Decimal("1e171000"),
+      cap: new Decimal("1e164000"),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -510,7 +513,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 900,
       requirement: () => TimeStudy(214).isBought && !TimeStudy(227).isBought,
       requirementV: () => TimeStudy(214).isBought && TimeStudy(227).isBought,
-      description: "Sacrifice scales better",
+      description: () => `Sacrifice formula scales better, x^${shorten(0.011, 0, 3)} ➜ x^${shorten(0.013, 0, 3)}`,
       effect: 0.013
     },
     {
@@ -536,8 +539,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 500,
       requirement: () => (TimeStudy(225).isBought || TimeStudy(226).isBought) && !TimeStudy(234).isBought,
       requirementV: () => (TimeStudy(225).isBought || TimeStudy(226).isBought) && TimeStudy(234).isBought,
-      description: "Max Replicanti galaxy upgrade cost is reduced based on your Replicanti amount",
-      effect: () => Replicanti.amount.pow(0.3)
+      description: "Max Replicanti galaxy upgrade is cheaper based on current Replicanti",
+      effect: () => Replicanti.amount.pow(0.3),
+      formatEffect: value => `/ ${shorten(value, 1, 2)}`
     },
     {
       id: 234,

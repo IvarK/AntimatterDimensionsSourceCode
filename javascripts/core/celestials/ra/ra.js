@@ -199,7 +199,7 @@ const Ra = {
     data.quoteIdx = 0;
     data.disCharge = false;
     data.peakGamespeed = 1;
-    for (const pet of Ra.petList) pet.reset();
+    for (const pet of Ra.pets.all) pet.reset();
   },
   // Scans through all glyphs and fills base resources to the maximum allowed by the cap
   fillAlchemyResources() {
@@ -212,7 +212,7 @@ const Ra = {
     }
   },
   giveExp(multiplier) {
-    for (const pet of Ra.petList) pet.addGainedExp(multiplier);
+    for (const pet of Ra.pets.all) pet.addGainedExp(multiplier);
     this.checkForUnlocks();
   },
   checkForUnlocks() {
@@ -220,7 +220,7 @@ const Ra = {
       // eslint-disable-next-line no-bitwise
       if (unl.pet.level >= unl.level && !this.has(unl)) player.celestials.ra.unlockBits |= (1 << unl.id);
     }
-    if (this.petList.every(pet => pet.level >= 20) && !this.has(RA_LAITELA_UNLOCK)) {
+    if (this.pets.all.every(pet => pet.level >= 20) && !this.has(RA_LAITELA_UNLOCK)) {
       // eslint-disable-next-line no-bitwise
       player.celestials.ra.unlockBits |= (1 << 24);
       MatterDimension(1).amount = new Decimal(1);
@@ -237,7 +237,7 @@ const Ra = {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;
   },
   updateExpBoosts() {
-    for (const pet of Ra.petList) pet.updateExpBoost();
+    for (const pet of Ra.pets.all) pet.updateExpBoost();
   },
   gamespeedDTMult() {
     if (!Ra.has(RA_UNLOCKS.PEAK_GAMESPEED)) return 1;
@@ -265,8 +265,6 @@ const Ra = {
     return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]) && Ra.pets.teresa.level > 1;
   }
 };
-
-Ra.pets.all = [Ra.pets.teresa, Ra.pets.effarig, Ra.pets.enslaved, Ra.pets.v];
 
 const GlyphAlteration = {
   // Adding a secondary effect to some effects
@@ -323,7 +321,7 @@ const GlyphAlteration = {
 /**
  * @type {RaPetState[]}
  */
-Ra.petList = Object.values(Ra.pets);
+Ra.pets.all = Object.values(Ra.pets);
 
 const RA_UNLOCKS = {
   CHARGE: {

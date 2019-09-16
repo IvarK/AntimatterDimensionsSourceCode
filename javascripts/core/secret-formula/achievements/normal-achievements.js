@@ -619,7 +619,7 @@ GameDatabase.achievements.normal = [
     id: 102,
     name: "This mile took an Eternity",
     tooltip: "Get all Eternity milestones.",
-    checkRequirement: () => player.eternities.gte(100),
+    checkRequirement: () => player.eternities.gte(1000),
     checkEvent: GameEvent.ETERNITY_RESET_AFTER
   },
   {

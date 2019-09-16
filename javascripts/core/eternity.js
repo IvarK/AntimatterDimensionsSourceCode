@@ -251,6 +251,7 @@ const EternityMilestone = (function() {
     autobuyerReplicantiInterval: new EternityMilestoneState(db.autobuyerReplicantiInterval),
     autobuyerReplicantiMaxGalaxies: new EternityMilestoneState(db.autobuyerReplicantiMaxGalaxies),
     autobuyerEternity: new EternityMilestoneState(db.autobuyerEternity),
+    autoEternities: new EternityMilestoneState(db.autoEternities),
     autoInfinities: new EternityMilestoneState(db.autoInfinities),
   };
 }());

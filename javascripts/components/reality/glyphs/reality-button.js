@@ -46,12 +46,6 @@ Vue.component("reality-button", {
     }
   },
   methods: {
-    boostedGain: x => {
-      if (simulatedRealityCount(false) > 0) {
-        return Decimal.times(x, simulatedRealityCount(false) + 1);
-      }
-      return x;
-    },
     percentToNextGlyphLevelText() {
       const glyphState = getGlyphLevelInputs();
       let level = glyphState.actualLevel;
@@ -74,18 +68,15 @@ Vue.component("reality-button", {
         return Decimal.pow10(4000 * (adjusted.log10() / 3 + 1));
       }
       this.canReality = true;
-
-      this.machinesGained = this.boostedGain(gainedRealityMachines());
+      const multiplier = simulatedRealityCount(false) + 1;
+      this.machinesGained = gainedRealityMachines().times(multiplier);
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = this.percentToNextGlyphLevelText();
       this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
-      this.ppGained = this.boostedGain(1);
-      this.shardsGained = this.boostedGain(Effarig.shardsGained);
-      this.expGained = [this.boostedGain(Ra.pets.teresa.gainedExp),
-        this.boostedGain(Ra.pets.effarig.gainedExp),
-        this.boostedGain(Ra.pets.enslaved.gainedExp),
-        this.boostedGain(Ra.pets.v.gainedExp)];
+      this.ppGained = multiplier;
+      this.shardsGained = Effarig.shardsGained * multiplier;
+      this.expGained = Ra.pets.all.map(p => p.gainedExp * multiplier);
       this.raUnlocks = [V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]),
         Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK),
         Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),

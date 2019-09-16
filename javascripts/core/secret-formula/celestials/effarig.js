@@ -28,7 +28,7 @@ GameDatabase.celestials.effarig = {
       description:
         "Infinitied stat raises the replicanti cap\n" +
         "Infinitied stat increases your max RG\n" +
-        "IP mults are capped at 1e50 in Effarig Reality"
+        "Each type of IP multiplier is capped at 1e50 in Effarig Reality"
     },
     eternity: {
       id: 5,

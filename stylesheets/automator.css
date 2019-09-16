@@ -149,7 +149,8 @@
   font-family: Typewriter, serif;
 }
 
-.cm-s-liquibyte.CodeMirror {
+.cm-s-liquibyte.CodeMirror,
+.cm-s-panda-syntax.CodeMirror {
   font-size: 1.4rem;
   font-family: Typewriter, serif;
   line-height: 1.6rem;

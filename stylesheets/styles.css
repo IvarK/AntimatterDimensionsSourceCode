@@ -6891,6 +6891,7 @@ kbd {
   align-items: center;
   flex-direction: column;
   position: relative;
+  width: 25rem;
 }
 
 .c-reality-upgrade-btn {
@@ -6903,7 +6904,6 @@ kbd {
   text-align: center;
   font-size: 1rem;
   font-family: Typewriter, serif;
-  width: 25rem;
 }
 
 .c-reality-upgrade-btn__requirement {

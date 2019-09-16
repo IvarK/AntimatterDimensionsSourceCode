@@ -336,21 +336,32 @@ const Glyphs = {
     if (this.active[targetSlot] !== null) return;
     if (glyph.type === "effarig" && this.active.some(x => x && x.type === "effarig")) return;
     if (glyph.type === "reality" && this.active.some(x => x && x.type === "reality")) return;
+    const oldIndex = glyph.idx;
     this.removeFromInventory(glyph);
     player.reality.glyphs.active.push(glyph);
     glyph.idx = targetSlot;
     this.active[targetSlot] = glyph;
+    this.saveUndo(oldIndex, targetSlot);
     EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
   unequipAll() {
     while (player.reality.glyphs.active.length) {
-      let freeIndex = this.findFreeIndex();
+      const freeIndex = this.findFreeIndex();
       if (freeIndex < 0) break;
-      let glyph = player.reality.glyphs.active.pop();
+      const glyph = player.reality.glyphs.active.pop();
       this.active[glyph.idx] = null;
       Glyphs.addToInventory(glyph);
     }
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+  },
+  unequip(activeIndex, requestedInventoryIndex) {
+    if (this.active[activeIndex] === null) return;
+    const storedIndex = player.reality.glyphs.active.findIndex(glyph => glyph.idx === activeIndex);
+    if (storedIndex < 0) return;
+    const glyph = player.reality.glyphs.active.splice(storedIndex, 1)[0];
+    this.active[activeIndex] = null;
+    Glyphs.addToInventory(glyph, requestedInventoryIndex);
     EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
   },
   moveToSlot(glyph, targetSlot) {
@@ -383,10 +394,13 @@ const Glyphs = {
     this.validate();
     EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
   },
-  addToInventory(glyph) {
+  addToInventory(glyph, requestedInventoryIndex) {
     this.validate();
     let index = this.findFreeIndex();
     if (index < 0) return;
+    if (requestedInventoryIndex !== undefined) {
+      if (this.inventory[requestedInventoryIndex] === null) index = requestedInventoryIndex;
+    }
     this.inventory[index] = glyph;
     glyph.idx = index;
     player.reality.glyphs.inventory.push(glyph);
@@ -396,7 +410,7 @@ const Glyphs = {
   removeFromInventory(glyph) {
     this.validate();
     // This can get called on a glyph not in inventory, during auto sacrifice.
-    let index = player.reality.glyphs.inventory.indexOf(glyph);
+    const index = player.reality.glyphs.inventory.indexOf(glyph);
     if (index < 0) return;
     this.inventory[glyph.idx] = null;
     player.reality.glyphs.inventory.splice(index, 1);
@@ -452,6 +466,33 @@ const Glyphs = {
   get levelCap() {
     return 10000 + AlchemyResource.boundless.effectValue;
   },
+  clearUndo() {
+    player.reality.glyphs.undo = [];
+  },
+  saveUndo(oldIndex, targetSlot) {
+    const undoData = {
+      oldIndex,
+      targetSlot,
+      ep: new Decimal(player.eternityPoints),
+      ecs: EternityChallenges.all.map(e => e.completions),
+      thisReality: player.thisReality,
+      thisRealityRealTime: player.thisRealityRealTime
+    };
+    player.reality.glyphs.undo.push(undoData);
+  },
+  undo() {
+    if (player.reality.glyphs.undo.length === 0) return;
+    const undoData = player.reality.glyphs.undo.pop();
+    this.unequip(undoData.targetSlot, undoData.oldIndex);
+    finishProcessReality({
+      reset: true,
+      glyphUndo: true,
+    });
+    player.eternityPoints.copyFrom(undoData.ep);
+    EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
+    player.thisReality = undoData.thisReality;
+    player.thisRealityRealTime = undoData.thisRealityRealTime;
+  }
 };
 
 class GlyphSacrificeState extends GameMechanicState {

@@ -263,6 +263,7 @@ let player = {
         effarig: 0,
         reality: 0
       },
+      undo: [],
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
     rebuyables: {

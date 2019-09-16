@@ -6,6 +6,7 @@ Vue.component("equipped-glyphs", {
       glyphs: [],
       dragoverIndex: -1,
       respec: player.reality.respec,
+      undoAvailable: false,
     };
   },
   computed: {
@@ -22,6 +23,11 @@ Vue.component("equipped-glyphs", {
         ? "Respec is active and will place your currently - equipped glyphs into your inventory after reality."
         : "Your currently-equipped glyphs will stay equipped on reality.";
     },
+    undoTooltip() {
+      return this.undoAvailable
+        ? "Unequip the last equipped glyph and rewind reality to when you equipped it"
+        : "Undo is only available for glyphs equipped during this reality";
+    }
   },
   created() {
     this.on$(GameEvent.GLYPHS_CHANGED, this.glyphsChanged);
@@ -63,10 +69,17 @@ Vue.component("equipped-glyphs", {
     },
     update() {
       this.respec = player.reality.respec;
+      this.undoAvailable = Glyphs.activeSlotCount >= 5 && player.reality.glyphs.undo.length > 0;
     },
     glyphsChanged() {
       this.glyphs = Glyphs.active.map(GlyphGenerator.copy);
     },
+    undo() {
+      if (!this.undoAvailable) return;
+      if (!confirm("The last equipped glyph will be removed. Reality will be reset, but you will get " +
+        "the eternity points and eternity challenge completions that you had when it was first equipped.")) return;
+      Glyphs.undo();
+    }
   },
   template: `
   <div class="l-equipped-glyphs">
@@ -89,11 +102,19 @@ Vue.component("equipped-glyphs", {
         </div>
       </template>
     </div>
-    <button :class="['l-equipped-glyphs__respec', 'c-reality-upgrade-btn', {'c-reality-upgrade-btn--bought': respec}]"
-            :ach-tooltip="respecTooltip"
-            @click="toggleRespec">
-      Clear glyph slots on Reality
-    </button>
+    <div class="l-equipped-glyphs__buttons">
+      <button :class="['l-equipped-glyphs__respec', 'c-reality-upgrade-btn', {'c-reality-upgrade-btn--bought': respec}]"
+              :ach-tooltip="respecTooltip"
+              @click="toggleRespec">
+        Clear glyph slots on Reality
+      </button>
+      <button :class="['l-equipped-glyphs__undo', 'c-reality-upgrade-btn',
+                       {'c-reality-upgrade-btn--unavailable': !undoAvailable}]"
+              :ach-tooltip="undoTooltip"
+              @click="undo">
+        Undo
+      </button>
+    </div>
   </div>
   `,
 });

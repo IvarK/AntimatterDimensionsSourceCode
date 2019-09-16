@@ -107,7 +107,7 @@ body.t-dark {
   flex-direction: column;
   width: 20rem;
   position: fixed;
-  z-index: 3;
+  z-index: 4;
 }
 
 .sidebar:hover .subtabs,

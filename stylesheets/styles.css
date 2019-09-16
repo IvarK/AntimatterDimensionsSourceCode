@@ -58,7 +58,7 @@ body {
 @font-face {
 	font-family: Noto Sans;
 	src: url('MonospaceTypewriter.ttf');
-	unicode-range: U+F420-F430;
+	unicode-range: U+F420-F430, U+2BC5-2BC6;
 }
 
 @font-face {

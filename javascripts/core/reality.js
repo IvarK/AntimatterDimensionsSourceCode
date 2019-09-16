@@ -148,9 +148,9 @@ function requestManualReality() {
 function triggerManualReality() {
   if (player.options.animations.reality) {
     runRealityAnimation();
-    setTimeout(beginProcessReality, 3000, false, false);
+    setTimeout(beginProcessReality, 3000, false);
   } else {
-    beginProcessReality();
+    beginProcessReality(false);
   }
 }
 
@@ -199,11 +199,11 @@ function autoReality() {
     Enslaved.lockedInGlyphLevel = gainedLevel;
     Enslaved.lockedInRealityMachines = gainedRealityMachines();
     Enslaved.lockedInShardsGained = Effarig.shardsGained;
-    beginProcessReality(false, false);
+    beginProcessReality(false);
     return;
   }
   processAutoGlyph(gainedLevel);
-  beginProcessReality(false, false);
+  beginProcessReality(false);
 }
 
 // The ratio is the amount on top of the regular reality amount.
@@ -232,16 +232,19 @@ function boostedRealityRewards(ratio) {
 
 // Due to simulated realities taking a long time in late game, this function might not immediately
 // reality, but start an update loop that shows a progress bar.
-function beginProcessReality(force, reset) {
-  if (reset) {
-    finishProcessReality(force, reset);
+function beginProcessReality(isReset) {
+  const realityProps = {
+    reset: isReset,
+  };
+  if (isReset) {
+    finishProcessReality(realityProps);
     return;
   }
   EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
   const simulatedRealities = simulatedRealityCount(true);
   if (simulatedRealities === 0) {
     // In this case, the glyph reward was already given
-    finishProcessReality(force, reset);
+    finishProcessReality(realityProps);
     return;
   }
   // No glyph reward was given earlier
@@ -269,12 +272,13 @@ function beginProcessReality(force, reset) {
       }
     }).then(() => {
       boostedRealityRewards(simulatedRealities);
-      finishProcessReality(force, reset);
+      finishProcessReality(realityProps);
     });
 }
 
-function finishProcessReality(force, reset) {
-  if (!reset) {
+function finishProcessReality(realityProps) {
+  const isReset = realityProps.reset;
+  if (!isReset) {
     if (player.thisReality < player.bestReality) {
       player.bestReality = player.thisReality;
     }
@@ -293,7 +297,7 @@ function finishProcessReality(force, reset) {
   if (player.reality.respec) {
     respecGlyphs();
   }
-  handleCelestialRuns(force)
+  handleCelestialRuns(isReset)
   recalculateAllGlyphs()
 
   //reset global values to avoid a tick of unupdated production
@@ -365,8 +369,8 @@ function finishProcessReality(force, reset) {
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
   player.noTheoremPurchases = true;
-  if (!reset) player.realities = player.realities + 1;
-  if (!reset) player.bestReality = Math.min(player.thisReality, player.bestReality);
+  if (!isReset) player.realities = player.realities + 1;
+  if (!isReset) player.bestReality = Math.min(player.thisReality, player.bestReality);
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
   player.timestudy.theorem = new Decimal(0);
@@ -411,7 +415,7 @@ function finishProcessReality(force, reset) {
     player.eternities = new Decimal(100);
   }
   initializeChallengeCompletions();
-  if (!reset) player.reality.pp++;
+  if (!isReset) player.reality.pp++;
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
   }
@@ -477,22 +481,22 @@ function finishProcessReality(force, reset) {
   tryUnlockAchievementsOnReality();
 }
 
-function handleCelestialRuns(force) {
+function handleCelestialRuns(isReset) {
   if (Teresa.isRunning) {
     player.celestials.teresa.run = false;
-    if (!force && player.celestials.teresa.bestRunAM.lt(player.antimatter)) {
+    if (!isReset && player.celestials.teresa.bestRunAM.lt(player.antimatter)) {
       player.celestials.teresa.bestRunAM = player.antimatter;
     }
   }
   if (Effarig.isRunning) {
     player.celestials.effarig.run = false;
-    if (!force && !EffarigUnlock.reality.isUnlocked) {
+    if (!isReset && !EffarigUnlock.reality.isUnlocked) {
       EffarigUnlock.reality.unlock();
     }
   }
   if (Enslaved.isRunning) {
     player.celestials.enslaved.run = false;
-    if (!force) {
+    if (!isReset) {
       Enslaved.completeRun();
     }
   }
@@ -511,15 +515,16 @@ function handleCelestialRuns(force) {
 
   if (Laitela.isRunning) {
     player.celestials.laitela.run = false;
-    if (!force && player.antimatter.gte(player.celestials.laitela.maxAmGained)) {
+    if (!isReset && player.antimatter.gte(player.celestials.laitela.maxAmGained)) {
       player.celestials.laitela.maxAmGained = player.antimatter;
     }
   }
 }
 
 function startRealityOver() {
-  if (confirm("This will put you at the start of your reality and reset your progress in this reality. Are you sure you want to do this?")) {
-    beginProcessReality(true, true);
+  if (confirm("This will put you at the start of your reality and reset your progress in this reality." +
+    "Are you sure you want to do this?")) {
+    beginProcessReality(true);
     return true;
   }
   return false;

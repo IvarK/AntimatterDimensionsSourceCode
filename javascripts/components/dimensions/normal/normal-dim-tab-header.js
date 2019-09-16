@@ -6,7 +6,8 @@ Vue.component("normal-dim-tab-header", {
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
       currentSacrifice: new Decimal(0),
-      sacrificeBoost: new Decimal(0)
+      sacrificeBoost: new Decimal(0),
+      disabledCondition: ""
     };
   },
   computed: {
@@ -22,6 +23,7 @@ Vue.component("normal-dim-tab-header", {
       this.isSacrificeAffordable = Sacrifice.canSacrifice;
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
+      this.disabledCondition = Sacrifice.disabledCondition;
     },
     sacrifice() {
       sacrificeBtnClick();
@@ -32,14 +34,16 @@ Vue.component("normal-dim-tab-header", {
   },
   template:
     `<div class="l-normal-dim-tab__header">
-      Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}
       <primary-button
         v-show="isSacrificeUnlocked"
         v-tooltip="sacrificeTooltip"
         :enabled="isSacrificeAffordable"
         class="o-primary-btn--sacrifice"
         @click="sacrifice"
-      >Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</primary-button>
+      >
+        <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
+        <span v-else>Sacrifice Disabled ({{ disabledCondition }})</span>
+      </primary-button>
       <primary-button
         class="o-primary-btn--buy-max"
         @click="maxAll"

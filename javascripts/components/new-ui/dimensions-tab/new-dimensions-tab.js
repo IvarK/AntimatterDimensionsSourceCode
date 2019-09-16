@@ -8,6 +8,7 @@ Vue.component("new-dimensions-tab", {
       isSacrificeAffordable: false,
       currentSacrifice: new Decimal(0),
       sacrificeBoost: new Decimal(0),
+      disabledCondition: "",
       currCelestial: "",
       challengeDisplay: "",
       isInAnyChallenge: false,
@@ -65,6 +66,7 @@ Vue.component("new-dimensions-tab", {
       this.isSacrificeAffordable = Sacrifice.canSacrifice;
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
+      this.disabledCondition = Sacrifice.disabledCondition;
     },
     updateCelestial() {
       if (Teresa.isRunning) this.currCelestial = "Teresa's";
@@ -115,10 +117,13 @@ Vue.component("new-dimensions-tab", {
           :enabled="isSacrificeAffordable"
           class="storebtn sacrifice-btn"
           @click="sacrifice"
-        >Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</primary-button>
-        Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}
+        >
+        <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
+        <span v-else>Sacrifice Disabled ({{ disabledCondition }})</span>
+      </primary-button>
       <button class="storebtn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">Max All (M)</button>
     </div>
+    <span v-if="isSacrificeUnlocked">Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
     <new-tickspeed-row></new-tickspeed-row>
     <div class="dimensions-container">
       <new-dimension-row

@@ -123,6 +123,7 @@ GameStorage.migrations = {
       GameStorage.migrations.removeOtherTickspeedProps(player);
       GameStorage.migrations.renameNewsOption(player);
       GameStorage.migrations.removeDimensionCosts(player);
+      GameStorage.migrations.changeC8Handling(player);
     }
   },
 
@@ -615,6 +616,11 @@ GameStorage.migrations = {
 
     // This did nothing on live and continues to do nothing...?
     delete player.tickDecrease;
+  },
+
+  changeC8Handling(player) {
+    player.chall8TotalSacrifice = player.chall11Pow.pow(2);
+    delete player.chall11Pow;
   },
 
   prePatch(saveData) {

@@ -1,12 +1,21 @@
 "use strict";
 
 class Sacrifice {
+  // This is tied to the "buying an 8th dimension" achievement in order to hide it from new players before they reach
+  // sacrifice for the first time. It has the side-effect of hiding it in really early reality, which is probably fine.
   static get isVisible() {
-    return DimBoost.totalBoosts > 4;
+    return Achievement(18).isUnlocked;
   }
 
   static get canSacrifice() {
-    return this.isVisible && NormalDimension(8).amount.gt(0) && !EternityChallenge(3).isRunning;
+    return DimBoost.totalBoosts > 4 && NormalDimension(8).amount.gt(0) && !EternityChallenge(3).isRunning;
+  }
+
+  static get disabledCondition() {
+    if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
+    if (DimBoost.totalBoosts <= 4) return "Requires a boost";
+    if (NormalDimension(8).amount.eq(0)) return "No 8th dimensions";
+    return "";
   }
 
   static get nextBoost() {
@@ -22,8 +31,13 @@ class Sacrifice {
       return nd1Amount.dividedBy(sacrificed).pow(sacrificePow).clampMin(1);
     }
 
+    // Pre-reality update C8 works really weirdly - every sacrifice, the current sacrifice multiplier gets applied to
+    // ND8, then sacrificed amount is updated, and then the updated sacrifice multiplier then gets applied to a
+    // different variable that is only applied during C8. However since sacrifice only depends on sacrificed ND1, this
+    // can actually be done in a single calculation in order to handle C8 in a less hacky way.
     if (NormalChallenge(8).isRunning) {
-      return nd1Amount.pow(0.05).dividedBy(sacrificed.pow(0.04)).clampMin(1);
+      return nd1Amount.pow(0.05).dividedBy(sacrificed.pow(0.04)).clampMin(1)
+        .times(nd1Amount.pow(0.05).dividedBy(sacrificed.plus(nd1Amount).pow(0.04)).clampMin(1));
     }
 
     const sacrificePow = 2 + Effects.sum(
@@ -45,8 +59,10 @@ class Sacrifice {
       return player.sacrificed.pow(scale).clampMin(1);
     }
 
+    // C8 uses a variable that keeps track of a sacrifice boost that persists across sacrifice-resets and isn't
+    // used anywhere else
     if (NormalChallenge(8).isRunning) {
-      return player.sacrificed.pow(0.05);
+      return player.chall8TotalSacrifice;
     }
 
     const sacrificePow = 2 + Effects.sum(
@@ -64,7 +80,7 @@ function sacrificeReset(auto) {
   if (
     !Enslaved.isRunning &&
     NormalChallenge(8).isRunning &&
-    (Sacrifice.totalBoost.gte(Decimal.MAX_NUMBER) || player.chall11Pow.gte(Decimal.MAX_NUMBER))
+    (Sacrifice.totalBoost.gte(Decimal.MAX_NUMBER))
   ) {
     return false;
   }
@@ -72,11 +88,14 @@ function sacrificeReset(auto) {
   const nextBoost = Sacrifice.nextBoost;
   if (!auto) floatText(8, `x${shorten(nextBoost, 2, 1)}`);
   NormalDimension(8).power = NormalDimension(8).power.times(nextBoost);
+  player.chall8TotalSacrifice = player.chall8TotalSacrifice.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(NormalDimension(1).amount);
   const isAch118Enabled = Achievement(118).isEnabled;
   if (NormalChallenge(8).isRunning) {
-    player.chall11Pow = player.chall11Pow.times(nextBoost);
-    if (!isAch118Enabled) NormalDimensions.reset();
+    if (!isAch118Enabled) {
+      NormalDimensions.reset();
+      NormalDimension(8).power = player.chall8TotalSacrifice;
+    }
     player.antimatter = new Decimal(100);
   } else if (!isAch118Enabled) {
     clearDimensions(NormalChallenge(12).isRunning ? 6 : 7);

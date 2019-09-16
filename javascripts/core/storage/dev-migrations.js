@@ -461,7 +461,11 @@ GameStorage.devMigrations = {
     },
     player => {
       player.reality.seed = Math.floor(Math.abs(player.reality.seed)) % 0xFFFFFFFF;
-    }
+    },
+    player => {
+      player.auto.sacrifice.multiplier = new Decimal(player.auto.sacrifice.multiplier);
+    },
+    GameStorage.migrations.changeC8Handling,
   ],
 
   patch(player) {

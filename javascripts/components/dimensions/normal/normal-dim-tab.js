@@ -5,7 +5,9 @@ Vue.component("normal-dim-tab", {
     return {
       isChallengePowerVisible: false,
       challengePower: "",
-      isQuickResetAvailable: false
+      isQuickResetAvailable: false,
+      isSacrificeUnlocked: false,
+      currentSacrifice: new Decimal(0),
     };
   },
   methods: {
@@ -27,6 +29,8 @@ Vue.component("normal-dim-tab", {
       }
       const challenge = NormalChallenge.current || InfinityChallenge.current;
       this.isQuickResetAvailable = challenge && challenge.isQuickResettable;
+      this.isSacrificeUnlocked = Sacrifice.isVisible;
+      this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
     },
     quickReset() {
       softReset(-1, true, true);
@@ -34,6 +38,7 @@ Vue.component("normal-dim-tab", {
   },
   template:
     `<div class="l-old-ui-normal-dim-tab">
+      <span v-if="isSacrificeUnlocked">Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
       <normal-dim-tab-header />
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
       <div class="l-normal-dim-tab__row-container l-normal-dim-row-container">

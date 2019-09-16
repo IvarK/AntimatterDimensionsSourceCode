@@ -105,7 +105,7 @@ let player = {
       lastTick: 0
     },
     sacrifice: {
-      multiplier: 5,
+      multiplier: new Decimal(5),
       isActive: false
     },
     eternity: {
@@ -149,7 +149,7 @@ let player = {
   chall3Pow: new Decimal(0.01),
   matter: new Decimal(1),
   chall9TickspeedCostBumps: 0,
-  chall11Pow: new Decimal(1),
+  chall8TotalSacrifice: new Decimal(1),
   partInfinityPoint: 0,
   partInfinitied: 0,
   break: false,

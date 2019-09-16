@@ -615,7 +615,6 @@ const NormalDimensions = {
     for (const dimension of NormalDimensions.all) {
       dimension.reset();
     }
-    NormalDimension(8).power = new Decimal(player.chall11Pow);
     GameCache.dimensionMultDecrease.invalidate();
   }
 };

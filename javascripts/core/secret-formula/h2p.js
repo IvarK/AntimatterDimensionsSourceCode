@@ -246,7 +246,7 @@ The rightmost row of Infinity Upgrades does not work in challenges.
 Autobuyers (awarded by completing challenges) allow the
 automatic purchase of dimensions, dimension shifts/boosts, galaxies,
 tickspeed interval decreases, Big Crunches, and Dimensional Sacrifice (later).
-They are located under the infinty tab in "Autobuyers".
+They are located under the Infinity tab in "Autobuyers".
 <br>
 <br>
 <b>Priority:</b> Priorities tell the game which autobuyer will buy

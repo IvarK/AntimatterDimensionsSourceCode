@@ -125,8 +125,8 @@ GameDatabase.achievements.normal = [
   {
     id: 32,
     name: "The Gods are pleased",
-    tooltip: () => `Get over ${shortenSmallInteger(600)}x from Dimensional Sacrifice in total.`,
-    checkRequirement: () => Sacrifice.totalBoost.gte(600),
+    tooltip: () => `Get over ${shortenSmallInteger(600)}x from Dimensional Sacrifice outside of Challenge 8.`,
+    checkRequirement: () => !NormalChallenge(8).isRunning && Sacrifice.totalBoost.gte(600),
     checkEvent: GameEvent.SACRIFICE_RESET_AFTER,
     reward: "Sacrifice is slightly stronger.",
     effect: 0.2
@@ -688,10 +688,10 @@ GameDatabase.achievements.normal = [
   {
     id: 112,
     name: "Never again",
-    tooltip: "Max out your third Eternity upgrade.",
+    tooltip: () => `Get the sum of Infinity Challenge times below ${shortenSmallInteger(750)}ms`,
     checkRequirement: () => Time.infinityChallengeSum.totalMilliseconds < 750,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
-    reward: "The limit for it is a bit higher.",
+    reward: "The limit for your third eternity upgrade is a bit higher.",
     effect: 610
   },
   {
@@ -953,7 +953,8 @@ GameDatabase.achievements.normal = [
     name: "Master of Reality",
     tooltip: "Have all Reality upgrades bought.",
     checkRequirement: () => RealityUpgrades.allBought,
-    checkEvent: GameEvent.REALITY_UPGRADE_BOUGHT
+    checkEvent: GameEvent.REALITY_UPGRADE_BOUGHT,
+    reward: "Unlock Teresa, the Celestial of Reality."
   },
   {
     id: 148,

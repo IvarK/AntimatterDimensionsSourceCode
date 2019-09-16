@@ -321,7 +321,7 @@ let player = {
   celestials: {
     teresa: {
       rmStore: 0,
-      quoteIdx: 0,
+      quotes: [],
       unlockBits: 0,
       run: false,
       bestRunAM: new Decimal(1),

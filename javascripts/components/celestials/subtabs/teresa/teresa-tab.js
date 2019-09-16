@@ -9,8 +9,6 @@ Vue.component("teresa-tab", {
       rm: new Decimal(0),
       percentage: "",
       rmMult: 0,
-      quote: "",
-      quoteIdx: 0,
       unlocks: [],
       bestAM: new Decimal(0),
       runReward: 0,
@@ -40,16 +38,11 @@ Vue.component("teresa-tab", {
       this.rmStore = player.celestials.teresa.rmStore;
       this.percentage = formatPercents(Teresa.fill, 2);
       this.rmMult = Teresa.rmMultiplier;
-      this.quote = Teresa.quote;
-      this.quoteIdx = player.celestials.teresa.quoteIdx;
       this.unlocks = Object.values(TERESA_UNLOCKS).map(info => Teresa.has(info)).filter(x => x);
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.runReward = Teresa.runRewardMultiplier;
       this.pp = player.reality.pp;
       this.rm.copyFrom(player.reality.realityMachines);
-    },
-    nextQuote() {
-      Teresa.nextQuote();
     },
     startRun() {
       Teresa.startRun();
@@ -64,8 +57,7 @@ Vue.component("teresa-tab", {
   },
   template:
     `<div class="l-teresa-celestial-tab">
-      <div class="o-teresa-quotes"> {{ quote }}</div>
-      <button class="o-quote-button" @click="nextQuote()" v-if="quoteIdx < 4 + unlocks.length">→</button>
+      <celestial-quote-history celestial="teresa"/>
       <div>You have {{shorten(rm, 2, 2)}} {{"Reality Machine" | pluralize(rm)}}.</div>
       <div class="l-mechanics-container">
         <div class="l-teresa-unlocks l-teresa-mechanic-container">

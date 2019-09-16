@@ -5,9 +5,6 @@ let ui = {
     modal: {
       current: undefined,
       cloudConflicts: [],
-      message: "",
-      callback: undefined,
-      closeButton: false,
       glyphSelection: false,
       progressBar: undefined,
     },

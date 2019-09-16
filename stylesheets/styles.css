@@ -5106,6 +5106,33 @@ kbd {
   background: blue;
 }
 
+.l-modal-celestial-quote {
+  position: fixed;
+  z-index: 3;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  left: 50vw;
+  top: 50vh;
+  width: 40rem;
+  height: 10rem;
+  transform: translate(-50%, -50%);
+}
+
+.c-modal-celestial-quote__arrow {
+  font-size: 150%;
+  margin: 0.5rem;
+  color: #444;
+}
+
+.l-modal-celestial-quote__buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
 /*#endregion Modals*/
 
 .l-notification-container {
@@ -5216,7 +5243,57 @@ kbd {
 /*#region component*/
 /*#endregion component*/
 
+.o-celestial-quote-history {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-evenly;
+  margin: 1.5rem 0 1.5rem 0;
+  width: 80rem;
+}
+
+.l-celestial-quote-history__lines {
+  font-size: 1.9rem;
+  line-height: 1.6em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.c-celestial-quote-history__line {
+  font-weight: bold;
+  font-style: italic;
+}
+
+.l-celestial-quote-history__buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0 0.5rem 1.5rem;
+}
+
+.c-celestial-quote-history__button {
+  font-size: 1.5rem;
+}
+
+.c-celestial-quote-history__button--enabled {
+  cursor: pointer;
+}
+
+.c-celestial-quote-history__button--disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 /*#region Teresa tab*/
+.l-teresa-celestial-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .l-mechanics-container {
   display: flex;
   justify-content: center;

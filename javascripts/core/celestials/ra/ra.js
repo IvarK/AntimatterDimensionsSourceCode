@@ -52,9 +52,9 @@ class RaPetState {
     return Math.floor(4000 * Math.pow(1.18, 7 * this.level - 120));
   }
 
-  addGainedExp() {
+  addGainedExp(multiplier) {
     if (!this.isUnlocked) return;
-    this.addExp(this.gainedExp * (1 + simulatedRealityCount(false)));
+    this.addExp(this.gainedExp * multiplier);
   }
 
   get baseExp() {
@@ -188,7 +188,7 @@ const Ra = {
       expFormula(theoremCount) {
         return Math.max(1, Math.pow(theoremCount / 50000, 0.9));
       }
-    }()
+    }(),
   },
   // Dev/debug function for easier testing
   reset() {
@@ -211,8 +211,8 @@ const Ra = {
       resource.amount = maxLevel;
     }
   },
-  giveExp() {
-    for (const pet of Ra.petList) pet.addGainedExp();
+  giveExp(multiplier) {
+    for (const pet of Ra.petList) pet.addGainedExp(multiplier);
     this.checkForUnlocks();
   },
   checkForUnlocks() {
@@ -265,6 +265,8 @@ const Ra = {
     return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]) && Ra.pets.teresa.level > 1;
   }
 };
+
+Ra.pets.all = [Ra.pets.teresa, Ra.pets.effarig, Ra.pets.enslaved, Ra.pets.v];
 
 const GlyphAlteration = {
   // Adding a secondary effect to some effects

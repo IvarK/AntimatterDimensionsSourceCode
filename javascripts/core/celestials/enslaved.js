@@ -37,9 +37,6 @@ const ENSLAVED_UNLOCKS = {
 
 const Enslaved = {
   boostReality: false,
-  lockedInGlyphLevel: 0,
-  lockedInRealityMachines: new Decimal(0),
-  lockedInShardsGained: 0,
   IMPOSSIBLE_CHALLENGE_EXEMPTIONS: [1, 6, 9],
   ec6c10hintGiven: false,
   nextTickDiff: 50,

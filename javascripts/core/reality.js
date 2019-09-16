@@ -349,12 +349,7 @@ function finishProcessReality(realityProps) {
   player.timeShards = new Decimal(0);
   player.tickThreshold = new Decimal(1);
 
-  player.eternityPoints = Effects.max(
-    0,
-    Perk.startEP1,
-    Perk.startEP2,
-    Perk.startEP3
-  ).toDecimal();
+  player.eternityPoints = Player.defaultEP;
 
   // This has to be reset before player.eternities to make the bumpLimit logic work
   // correctly
@@ -402,11 +397,7 @@ function finishProcessReality(realityProps) {
     2: 0,
     3: 0
   };
-  player.antimatter = Effects.max(
-    10,
-    Perk.startAM1,
-    Perk.startAM2
-  ).toDecimal();
+  player.antimatter = Player.defaultAntimatter;
   Enslaved.autoReleaseTick = 0;
   player.celestials.ra.compression.freeDimboosts = 0;
 
@@ -446,7 +437,7 @@ function finishProcessReality(realityProps) {
     Tab.dimensions.normal.show();
   }
   AchievementTimers.marathon2.reset();
-  resetInfinityPoints();
+  player.infinityPoints = Player.defaultIP;
 
   function resetReplicanti() {
     player.replicanti.amount = isRUPG10Bought ? new Decimal(1) : new Decimal(0);

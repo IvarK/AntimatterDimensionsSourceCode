@@ -93,7 +93,7 @@ function eternity(force, auto, specialConditions = {}) {
     player.respec = false;
   }
 
-  resetInfinityPointsOnEternity();
+  player.infinityPoints = Player.defaultIP;
   InfinityDimensions.resetAmount();
   player.bestEPminThisEternity = new Decimal(0);
   player.bestIPminThisInfinity = new Decimal(0);
@@ -111,7 +111,7 @@ function eternity(force, auto, specialConditions = {}) {
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
   applyRealityUpgrades();
-  resetAntimatter();
+  player.antimatter = Player.defaultAntimatter;
 
   EventHub.dispatch(GameEvent.ETERNITY_RESET_AFTER);
   return true;
@@ -203,19 +203,6 @@ function askEternityConfirmation() {
     let message = "Eternity will reset everything except achievements and challenge records. " +
         "You will also gain an Eternity point and unlock various upgrades.";
     return confirm(message);
-}
-
-function resetInfinityPointsOnEternity() {
-  resetInfinityPoints();
-  Achievement(104).applyEffect(v => player.infinityPoints = player.infinityPoints.max(v));
-}
-
-function resetInfinityPoints() {
-  player.infinityPoints = Effects.max(
-    0,
-    Perk.startIP1,
-    Perk.startIP2
-  ).toDecimal();
 }
 
 class EternityMilestoneState {

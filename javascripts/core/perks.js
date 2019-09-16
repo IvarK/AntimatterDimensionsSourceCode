@@ -41,6 +41,9 @@ class PerkState extends SetPurchasableMechanicState {
 
   purchase() {
     if (!super.purchase()) return;
+    if (this.config.label.startsWith("AM")) player.antimatter = player.antimatter.clampMin(Player.defaultAntimatter);
+    if (this.config.label.startsWith("IP")) player.infinityPoints = player.infinityPoints.clampMin(Player.defaultIP);
+    if (this.config.label.startsWith("EP")) player.eternityPoints = player.eternityPoints.clampMin(Player.defaultEP);
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
     EventHub.dispatch(GameEvent.PERK_BOUGHT);

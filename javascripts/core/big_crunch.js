@@ -124,7 +124,7 @@ function bigCrunchReset() {
 function secondSoftReset(forcedNDReset = false) {
     player.dimensionBoosts = 0;
     player.galaxies = 0;
-    resetAntimatter();
+    player.antimatter = Player.defaultAntimatter;
     softReset(0, forcedNDReset);
     InfinityDimensions.resetAmount();
     if (player.replicanti.unl)

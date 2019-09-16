@@ -115,7 +115,7 @@ function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
     skipResetsIfPossible();
     resetTickspeed();
     const currentAntimatter = player.antimatter;
-    resetAntimatter();
+    player.antimatter = Player.defaultAntimatter;
     if (!forcedAMReset && (Achievement(111).isEnabled || Perk.dimboostNonReset.isBought)) {
         player.antimatter = player.antimatter.max(currentAntimatter);
     }

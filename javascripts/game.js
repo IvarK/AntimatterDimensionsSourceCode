@@ -116,19 +116,6 @@ function resetChallengeStuff() {
     player.postC4Tier = 1;
 }
 
-function resetAntimatter() {
-    player.antimatter = Effects.max(
-      10,
-      Perk.startAM1,
-      Achievement(21),
-      Achievement(37),
-      Achievement(54),
-      Achievement(55),
-      Achievement(78).secondaryEffect,
-      Perk.startAM2
-    ).toDecimal();
-}
-
 function ratePerMinute(amount, time) {
     return Decimal.divide(amount, time / (60 * 1000));
 }

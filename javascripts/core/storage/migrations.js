@@ -619,7 +619,7 @@ GameStorage.migrations = {
   },
 
   changeC8Handling(player) {
-    player.chall8TotalSacrifice = player.chall11Pow.pow(2);
+    player.chall8TotalSacrifice = Decimal.pow(player.chall11Pow, 2);
     delete player.chall11Pow;
   },
 

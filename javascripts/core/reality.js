@@ -142,8 +142,8 @@ function requestManualReality() {
   realityProps.alreadyGotGlyph = true;
   if (GlyphSelection.choiceCount === 1) {
     const newGlyph = player.realities === 0
-      ? GlyphGenerator.startingGlyph(level)
-      : GlyphGenerator.randomGlyph(level);
+      ? GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel)
+      : GlyphGenerator.randomGlyph(realityProps.gainedGlyphLevel);
     Glyphs.addToInventory(newGlyph);
     triggerManualReality(realityProps);
     return;

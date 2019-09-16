@@ -314,7 +314,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(132).isBought && !TimeStudy(141).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(132).isBought && (TimeStudy(141).isBought || TimeStudy(143).isBought),
       description: () => `You gain ${shorten(Perk.studyPassive.isBought ? 1e100 : 1e25, 0, 0)}x more IP`,
-      effect: () => (Perk.studyPassive.isBought ? 1e100 : 1e25)
+      effect: () => (Perk.studyPassive.isBought ? 1e100 : 1e25),
+      cap: () => Effarig.eternityCap
     },
     {
       id: 143,

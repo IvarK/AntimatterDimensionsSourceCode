@@ -321,7 +321,7 @@ const GlyphAlteration = {
 /**
  * @type {RaPetState[]}
  */
-Ra.pets.all = Object.values(Ra.pets);
+Ra.pets.all = [Ra.pets.teresa, Ra.pets.effarig, Ra.pets.enslaved, Ra.pets.v];
 
 const RA_UNLOCKS = {
   CHARGE: {

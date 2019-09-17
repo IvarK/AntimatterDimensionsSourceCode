@@ -444,4 +444,12 @@ dev.printResourceTotals = function() {
   console.log(`TT: e${Math.round(player.timestudy.theorem.log10())}`);
   console.log(`DT: e${Math.round(player.dilation.dilatedTime.log10())}`);
   console.log(`TP: e${Math.round(player.dilation.tachyonParticles.log10())}`);
-}
+};
+
+dev.unlockCelestialQuotes = function(celestial) {
+  const quotes = Celestials[celestial].quotes;
+  for (const q of quotes.quotesById) {
+    if (q === undefined) continue;
+    quotes.show(q);
+  }
+};

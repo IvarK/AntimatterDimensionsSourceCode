@@ -420,8 +420,10 @@ GameStorage.migrations = {
   },
 
   renameTickspeedPurchaseBumps(player) {
-    player.chall9TickspeedCostBumps = player.chall9TickspeedPurchaseBumps;
-    delete player.chall9TickspeedPurchaseBumps;
+    if (player.chall9TickspeedPurchaseBumps !== undefined) {
+      player.chall9TickspeedCostBumps = player.chall9TickspeedPurchaseBumps;
+      delete player.chall9TickspeedPurchaseBumps;
+    }
   },
 
   removePostC3Reward(player) {

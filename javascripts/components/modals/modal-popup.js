@@ -7,9 +7,10 @@ Vue.component("modal-popup", {
     }
   },
   template:
-    `<div class="c-modal l-modal">
-      <component :is="$viewModel.modal.current" @close="hide" />
-    </div>`
+    `<div v-if="!$viewModel.modal.current.isBare" class="c-modal l-modal">
+      <component :is="$viewModel.modal.current.component" @close="hide" />
+    </div>
+    <component v-else :is="$viewModel.modal.current.component" />`
 });
 
 Vue.component("modal-close-button", {

@@ -44,9 +44,18 @@ Modal.importTree = new Modal("modal-import-tree");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;
+    const newLines = lines.map(l => ({
+      celestial,
+      line: l,
+    }));
+    if (ui.view.modal.current === this) {
+      // This shouldn't come up often, but in case we do have a pile of quotes
+      // being shown in a row:
+      this.lines = this.lines.concat(newLines);
+      return;
+    }
     ui.view.modal.current = this;
-    this.lines = lines;
-    this.celestial = celestial;
+    this.lines = newLines;
   }
 }("modal-celestial-quote", true);
 

@@ -8,8 +8,11 @@ Vue.component("modal-celestial-quote", {
     quotes() {
       return this.$viewModel.modal.current.lines;
     },
-    celestialName() {
-      return Celestials[this.$viewModel.modal.current.celestial].displayName;
+    currentQuote() {
+      return this.quotes[this.index];
+    },
+    currentCelestialName() {
+      return Celestials[this.currentQuote.celestial].displayName;
     },
     isLastQuote() {
       return this.index >= this.quotes.length - 1;
@@ -43,8 +46,8 @@ Vue.component("modal-celestial-quote", {
          class="c-modal-celestial-quote__arrow fas fa-chevron-circle-left"
          @click="prevQuote"/>
       <div class="l-modal-celestial-quote__text">
-        <div><b>{{celestialName}}:</b></div>
-        {{quotes[index]}}
+        <div><b>{{currentCelestialName}}:</b></div>
+        {{currentQuote.line}}
       </div>
       <i class="c-modal-celestial-quote__arrow fas"
          :class="nextClass"

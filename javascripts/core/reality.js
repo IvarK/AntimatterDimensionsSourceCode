@@ -342,6 +342,17 @@ function finishProcessReality(realityProps) {
   player.infDimBuyers = Array.repeat(false, 8);
   player.timeShards = new Decimal(0);
   player.tickThreshold = new Decimal(1);
+  player.replicanti.amount = new Decimal(0);
+  player.replicanti.unl = false;
+  player.replicanti.chance = 0.01;
+  player.replicanti.chanceCost = new Decimal(1e150);
+  player.replicanti.interval = 1000;
+  player.replicanti.intervalCost = new Decimal(1e140);
+  player.replicanti.gal = 0;
+  player.replicanti.galaxies = 0;
+  player.replicanti.galCost = new Decimal(1e170);
+  player.replicanti.galaxybuyer = false;
+  player.replicanti.auto = Array.repeat(false, 3);
 
   player.eternityPoints = Player.defaultEP;
 
@@ -398,13 +409,10 @@ function finishProcessReality(realityProps) {
   resetEternityRuns();
   InfinityDimensions.fullReset();
   fullResetTimeDimensions();
-  resetReplicanti(false);
   resetChallengeStuff();
   NormalDimensions.reset();
   secondSoftReset();
   player.celestials.ra.peakGamespeed = 1;
-  if (RealityUpgrade(10).isBought) applyRUPG10();
-  initializeChallengeCompletions();
 
   player.reality.upgReqChecks = [true];
   InfinityDimensions.resetAmount();
@@ -421,7 +429,8 @@ function finishProcessReality(realityProps) {
   AchievementTimers.marathon2.reset();
   player.infinityPoints = Player.defaultIP;
 
-  if (!RealityUpgrade(10).isBought) Tab.dimensions.normal.show();
+  if (RealityUpgrade(10).isBought) applyRUPG10();
+  else Tab.dimensions.normal.show();
 
   if (RealityUpgrade(13).isBought) {
     if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
@@ -445,7 +454,12 @@ function finishProcessReality(realityProps) {
   player.reality.gainedAutoAchievements = false;
 
   tryUnlockAchievementsOnReality();
+<<<<<<< HEAD
   if (realityProps.restoreCelestialState) restoreCelestialRuns(celestialRunState);
+=======
+  if (realityProps.glyphUndo) restoreCelestialRuns(celestialRunState);
+  initializeChallengeCompletions();
+>>>>>>> Address PR comments
 }
 
 function restoreCelestialRuns(celestialRunState) {
@@ -464,26 +478,21 @@ function restoreCelestialRuns(celestialRunState) {
 function applyRUPG10() {
   NormalChallenges.completeAll();
   
-  // Only completely max bulk if the relevant secret achievement has already been unlocked
-  player.auto.dimensions = player.auto.dimensions.map(d => ({
+  player.auto.dimensions = player.auto.dimensions.map(() => ({
     isUnlocked: true,
-    cost: 1e100,
+    // These costs are approximately right; if bought manually all dimensions are slightly different from one another
+    cost: player.secretAchievements.has(38) ? 2e126 : 5e133,
     interval: 100,
+    // Only completely max bulk if the relevant secret achievement has already been unlocked
     bulk: player.secretAchievements.has(38) ? 1e100 : 1e90,
-    mode: d.mode,
-    priority: d.priority,
-    isActive: d.isActive,
-    lastTick: d.lastTick
+    mode: AutobuyerMode.BUY_10,
+    priority: 1,
+    isActive: true,
+    lastTick: player.realTimePlayed
   }));
-  player.auto.tickspeed.isUnlocked = true;
-  player.auto.tickspeed.cost = 32;
-  player.auto.tickspeed.interval = 100;
-  player.auto.dimBoost.cost = 256;
-  player.auto.dimBoost.interval = 100;
-  player.auto.galaxy.cost = 4096;
-  player.auto.galaxy.interval = 100;
-  player.auto.bigCrunch.cost = 8192;
-  player.auto.bigCrunch.interval = 100;
+  for (const autobuyer of Autobuyers.all) {
+    if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
+  }
   player.infinityUpgrades = new Set(
     ["timeMult", "dimMult", "timeMult2", 
     "skipReset1", "skipReset2", "unspentBonus", 
@@ -506,21 +515,10 @@ function applyRUPG10() {
   player.offlineProdCost = 1e17;
   player.infMultBuyer = true;
   player.eternities = player.eternities.plus(100);
-  resetReplicanti(true);
-}
-
-function resetReplicanti(isRUPG10Bought) {
-  player.replicanti.amount = isRUPG10Bought ? new Decimal(1) : new Decimal(0);
-  player.replicanti.unl = isRUPG10Bought;
-  player.replicanti.chance = 0.01;
-  player.replicanti.chanceCost = new Decimal(1e150);
-  player.replicanti.interval = 1000;
-  player.replicanti.intervalCost = new Decimal(1e140);
-  player.replicanti.gal = 0;
-  player.replicanti.galaxies = 0;
-  player.replicanti.galCost = new Decimal(1e170);
-  player.replicanti.galaxybuyer = isRUPG10Bought;
-  player.replicanti.auto = Array.repeat(isRUPG10Bought, 3);
+  player.replicanti.amount = player.replicanti.amount.clampMin(1);
+  player.replicanti.unl = true;
+  player.replicanti.galaxybuyer = true;
+  player.replicanti.auto = Array.repeat(true, 3);
 }
 
 function clearCelestialRuns() {

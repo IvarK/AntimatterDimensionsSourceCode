@@ -23,6 +23,7 @@ GameDatabase.reality.perks = {
     label: "AM1",
     family: PerkFamily.NORMAL,
     description: "Start with 1e15 antimatter after every reset.",
+    bumpResource: () => player.antimatter = player.antimatter.clampMin(1e15),
     effect: () => 1e15
   },
   startAM2: {
@@ -30,6 +31,7 @@ GameDatabase.reality.perks = {
     label: "AM2",
     family: PerkFamily.NORMAL,
     description: "Start with 1e130 antimatter after every reset.",
+    bumpResource: () => player.antimatter = player.antimatter.clampMin(1e130),
     effect: () => 1e130
   },
   startIP1: {
@@ -37,6 +39,7 @@ GameDatabase.reality.perks = {
     label: "IP1",
     family: PerkFamily.INFINITY,
     description: "Start with 2e15 IP after every Eternity and Reality.",
+    bumpResource: () => player.infinityPoints = player.infinityPoints.clampMin(2e15),
     effect: () => 2e15
   },
   startIP2: {
@@ -44,6 +47,7 @@ GameDatabase.reality.perks = {
     label: "IP2",
     family: PerkFamily.INFINITY,
     description: "Start with 2e130 IP after every Eternity and Reality.",
+    bumpResource: () => player.infinityPoints = player.infinityPoints.clampMin(2e130),
     effect: () => 2e130
   },
   startEP1: {
@@ -51,6 +55,7 @@ GameDatabase.reality.perks = {
     label: "EP1",
     family: PerkFamily.ETERNITY,
     description: "Start with 10 EP after every Reality.",
+    bumpResource: () => player.eternityPoints = player.eternityPoints.clampMin(10),
     effect: () => 10
   },
   startEP2: {
@@ -58,6 +63,7 @@ GameDatabase.reality.perks = {
     label: "EP2",
     family: PerkFamily.ETERNITY,
     description: "Start with 2000 EP after every Reality.",
+    bumpResource: () => player.eternityPoints = player.eternityPoints.clampMin(2000),
     effect: () => 2000
   },
   startEP3: {
@@ -65,6 +71,7 @@ GameDatabase.reality.perks = {
     label: "EP3",
     family: PerkFamily.ETERNITY,
     description: "Start with 1e9 EP after every Reality.",
+    bumpResource: () => player.eternityPoints = player.eternityPoints.clampMin(1e9),
     effect: () => 1e9
   },
   startTP: {

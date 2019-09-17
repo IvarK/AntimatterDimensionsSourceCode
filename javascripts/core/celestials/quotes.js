@@ -4,8 +4,8 @@ class CelestialQuotes {
   constructor(celestialName, quoteData) {
     this.quotesById = [];
     for (const quoteKey of Object.keys(quoteData)) {
-      if (quoteKey.toUpperCase() !== quoteKey) {
-        throw new Error(`Celestial quote keys should be upper case (${quoteKey})`);
+      if (this[quoteKey] !== undefined) {
+        throw new Error(`Celestial quote keys should not replace existing properties (${quoteKey})`);
       }
       const quote = quoteData[quoteKey];
       this[quoteKey] = quote;
@@ -36,6 +36,6 @@ class CelestialQuotes {
   show(data) {
     if (this.seen(data)) return;
     this.seenArray.push(data.id);
-    Modal.celestialQuote.show(data.lines);
+    Modal.celestialQuote.show(this._celestial, data.lines);
   }
 }

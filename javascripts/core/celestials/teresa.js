@@ -28,6 +28,7 @@ const Teresa = {
   unlockInfo: TERESA_UNLOCKS,
   lastUnlock: "SHOP",
   rmStoreMax: 1e24,
+  displayName: "Teresa",
   pourRM(diff) {
     if (this.rmStore >= Teresa.rmStoreMax) return;
     this.timePoured += diff;
@@ -134,7 +135,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
   }
 }
 
-const PerkShopUpgrade = (function () {
+const PerkShopUpgrade = (function() {
   const db = GameDatabase.celestials.perkShop;
   return {
     glyphLevel: new PerkShopUpgradeState(db.glyphLevel),

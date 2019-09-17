@@ -42,10 +42,11 @@ Modal.loadGame = new Modal("modal-load-game");
 Modal.import = new Modal("modal-import");
 Modal.importTree = new Modal("modal-import-tree");
 Modal.celestialQuote = new class extends Modal {
-  show(lines) {
+  show(celestial, lines) {
     if (!GameUI.initialized) return;
     ui.view.modal.current = this;
     this.lines = lines;
+    this.celestial = celestial;
   }
 }("modal-celestial-quote", true);
 

@@ -5126,6 +5126,13 @@ kbd {
   color: #444;
 }
 
+.l-modal-celestial-quote__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
 .l-modal-celestial-quote__buttons {
   display: flex;
   flex-direction: column;

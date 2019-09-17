@@ -495,7 +495,6 @@ const RA_UNLOCKS = {
   INSTANT_AUTOEC: {
     id: 20,
     description: "Get V to level 5",
-    // This upgrade also starts the player off with Eternity upgrades immediately instead of after one eternity
     reward: "Auto-EC happens instantly and dilation is auto-unlocked at 17000 TT",
     pet: Ra.pets.v,
     level: 5

@@ -128,6 +128,12 @@ function calculateTimeStudiesCost() {
   return totalCost;
 }
 
+function calculateDilationStudiesCost() {
+  return TimeStudy.boughtDilationTS()
+    .map(ts => ts.cost)
+    .reduce(Number.sumReducer, 0);
+}
+
 function unlockDilation(quiet) {
   if (!quiet) {
     Tab.eternity.dilation.show();
@@ -690,6 +696,11 @@ TimeStudy.timeDimension = function(tier) {
  * @type {DilationTimeStudyState}
  */
 TimeStudy.reality = DilationTimeStudyState.studies[6];
+
+TimeStudy.boughtDilationTS = function() {
+  return player.dilation.studies.map(id => DilationTimeStudyState.studies[id]);
+};
+
 
 class TimeStudyConnection {
   constructor(from, to, override) {

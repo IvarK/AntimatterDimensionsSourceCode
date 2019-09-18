@@ -303,6 +303,8 @@ function finishProcessReality(realityProps) {
   if (!realityProps.glyphUndo) {
     Glyphs.clearUndo();
     if (player.reality.respec) respecGlyphs();
+    if (player.celestials.ra.disCharge) disChargeAll();
+    if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
   }
   TimeCompression.isActive = false;
   const celestialRunState = clearCelestialRuns();
@@ -414,8 +416,6 @@ function finishProcessReality(realityProps) {
   resetChallengeStuff();
   NormalDimensions.reset();
   secondSoftReset();
-  if (player.celestials.ra.disCharge) disChargeAll();
-  if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
   player.celestials.ra.peakGamespeed = 1;
   if (isRUPG10Bought) {
     player.eternities = new Decimal(100);

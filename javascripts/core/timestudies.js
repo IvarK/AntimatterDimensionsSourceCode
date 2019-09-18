@@ -128,6 +128,12 @@ function calculateTimeStudiesCost() {
   return totalCost;
 }
 
+function calculateDilationStudiesCost() {
+  return TimeStudy.boughtDilationTS()
+    .map(ts => ts.cost)
+    .reduce(Number.sumReducer, 0);
+}
+
 function unlockDilation(quiet) {
   if (!quiet) {
     Tab.eternity.dilation.show();
@@ -258,121 +264,6 @@ function studiesUntil(id) {
     study.purchase();
   }
 }
-
-function studyPath(mode, args, auto) {
-    if (!(mode === 'none' || mode === 'all')) return false;
-    if (args === undefined) args = [];
-    args = args.map(function (x) { if (!isNaN(x)) return parseInt(x); else return x; });
-    let row = 0;
-    let master = [];
-    let locks = [0, 0, 0];
-    main: while (row < 24) {
-        row++;
-        if (mode === 'none') {
-            if (row >= 2 && row <= 4) {
-                for (let i = 20; i <= 40; i += 10) {
-                    if (args.includes(i + 1) && !master.includes(row*10 + 1)) master.push(row*10 + 1);
-                    if (args.includes(i + 2) && !master.includes(row*10 + 2)) master.push(row*10 + 2);
-                }
-                if (row === 3 && args.includes(33)) master.push(33);
-                continue main;
-            }
-            if (row === 6) {
-                if (args.includes(62)) master.push(61, 62);
-                else master.push(61);
-                continue main;
-            }
-            if (row === 16) {
-                if (args.includes(161)) master.push(161);
-                if (args.includes(162)) master.push(162);
-                continue main;
-            }
-            if (row === 19) {
-                if (args.includes(191)) master.push(191);
-                if (args.includes(192) || args.includes(201)) master.push(192);
-                if (args.includes(193)) master.push(193);
-                continue main;
-            }
-            if (row === 21) {
-                for (let i = 0; i < args.length; i++) {
-                    if (!isNaN(args[i])) {
-                        if (Math.floor(args[i] / 10) === 21 && args[i] % 10 < 5 && args[i] % 10 > 0) {
-                            master.push(args[i]);
-                        }
-                    }
-
-                }
-                continue main;
-            }
-        }
-        if (row >= 7 && row <= 10) {
-            if (mode === 'all' && DilationUpgrade.timeStudySplit.isBought) {
-                master.push(row*10 + 1, row*10 + 2, row*10 + 3);
-                continue main;
-            }
-            if (locks[0] === 0) {
-                let temp = [];
-                let options = ['nd', 'id', 'td', 'normal', 'infinity', 'time'];
-                for (let k = 0; k < args.length; k++) {
-                    for (let i = 70; i <= 100; i += 10) {
-                        for (let j = 1; j <= 3; j++) {
-                            if (args[k] === i + j || args[k] === options[j - 1] || args[k] === options[j+3]) temp.push(j);
-                        }
-                    }
-                }
-                if (temp.length === 0) break main;
-                locks[0] = temp[0];
-                temp = temp.filter(function (x) { if (x !== locks[0]) return x;});
-                if (temp.length > 0) locks[2] = temp[0];
-            }
-            master.push(row*10 + locks[0]);
-            continue main;
-        }
-        if (row >= 12 && row <= 14) {
-            if (locks[1] === 0) {
-                let temp = [];
-                let options = ['active', 'passive', 'idle'];
-                for (let k = 0; k < args.length; k++) {
-                    for (let i = 120; i <= 140; i += 10) {
-                        for (let j = 1; j <= 3; j++) {
-                            if (args[k] === i + j || args[k] === options[j - 1]) temp.push(j);
-                        }
-                    }
-                }
-                if (temp.length === 0) break main;
-                locks[1] = temp[0];
-            }
-            master.push(row*10 + locks[1]);
-            continue main;
-        }
-        if (row === 22 || row === 23) {
-            col: for (let i = 1; i <= 8 / (row - 21); i += 2) {
-                for (let j = 0; j < args.length; j++) {
-                    for (let k = 0; k < 2; k++) {
-                        if (args[j] === row*10 + i + k) {
-                            master.push(args[j]);
-                            continue col;
-                        }
-                    }
-                }
-            }
-            continue main;
-        }
-      for (let i = 1; TimeStudy(row * 10 + i) !== undefined; i++) {
-        master.push(row * 10 + i);
-      }
-    }
-    if (locks[2] > 0) {
-        master.push(70 + locks[2], 80 + locks[2], 90 + locks[2], 100 + locks[2]);
-    }
-    let string = master.reduce(function (acc, x) {
-        return acc += x + ',';
-    }, '');
-    string = string.slice(0, -1);
-    string += '|0';
-    importStudyTree(string, auto);
-}
-
 
 function respecTimeStudies(auto) {
   for (const study of TimeStudy.boughtNormalTS()) {
@@ -690,6 +581,11 @@ TimeStudy.timeDimension = function(tier) {
  * @type {DilationTimeStudyState}
  */
 TimeStudy.reality = DilationTimeStudyState.studies[6];
+
+TimeStudy.boughtDilationTS = function() {
+  return player.dilation.studies.map(id => DilationTimeStudyState.studies[id]);
+};
+
 
 class TimeStudyConnection {
   constructor(from, to, override) {

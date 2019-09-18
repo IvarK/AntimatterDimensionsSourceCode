@@ -201,6 +201,7 @@ function processAutoGlyph(gainedLevel) {
 function getRealityProps(isReset, alreadyGotGlyph = false) {
   if (isReset) return {
     reset: true,
+    glyphUndo: false,
   };
   return {
     reset: false,
@@ -209,6 +210,7 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
     gainedShards: Effarig.shardsGained,
     simulatedRealities: simulatedRealityCount(true),
     alreadyGotGlyph,
+    glyphUndo: false,
   };
 }
 
@@ -298,11 +300,14 @@ function beginProcessReality(realityProps) {
 function finishProcessReality(realityProps) {
   const isReset = realityProps.reset;
   if (!isReset) giveRealityRewards(realityProps);
-
-  if (player.reality.respec) {
-    respecGlyphs();
+  if (!realityProps.glyphUndo) {
+    Glyphs.clearUndo();
+    if (player.reality.respec) respecGlyphs();
+    if (player.celestials.ra.disCharge) disChargeAll();
+    if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
   }
-  clearCelestialRuns();
+  TimeCompression.isActive = false;
+  const celestialRunState = clearCelestialRuns();
   recalculateAllGlyphs()
 
   //reset global values to avoid a tick of unupdated production
@@ -411,8 +416,6 @@ function finishProcessReality(realityProps) {
   resetChallengeStuff();
   NormalDimensions.reset();
   secondSoftReset();
-  if (player.celestials.ra.disCharge) disChargeAll();
-  if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
   player.celestials.ra.peakGamespeed = 1;
   if (isRUPG10Bought) {
     player.eternities = new Decimal(100);
@@ -478,16 +481,36 @@ function finishProcessReality(realityProps) {
   player.reality.gainedAutoAchievements = false;
 
   tryUnlockAchievementsOnReality();
+  if (realityProps.glyphUndo) restoreCelestialRuns(celestialRunState);
+}
+
+function restoreCelestialRuns(celestialRunState) {
+  player.celestials.teresa.run = celestialRunState.teresa;
+  player.celestials.effarig.run = celestialRunState.effarig;
+  player.celestials.enslaved.run = celestialRunState.enslaved;
+  player.celestials.v.run = celestialRunState.v;
+  player.celestials.ra.run = celestialRunState.ra;
+  player.celestials.laitela.run = celestialRunState.laitela;
+  // For effarig, in order to make sure glyph effects are correctly capped
+  recalculateAllGlyphs();
 }
 
 function clearCelestialRuns() {
+  const saved = {
+    teresa: player.celestials.teresa.run,
+    effarig: player.celestials.effarig.run,
+    enslaved: player.celestials.enslaved.run,
+    v: player.celestials.v.run,
+    ra: player.celestials.ra.run,
+    laitela: player.celestials.laitela.run,
+  };
   player.celestials.teresa.run = false;
   player.celestials.effarig.run = false;
   player.celestials.enslaved.run = false;
   player.celestials.v.run = false;
   player.celestials.ra.run = false;
-  TimeCompression.isActive = false;
   player.celestials.laitela.run = false;
+  return saved;
 }
 
 function startRealityOver() {

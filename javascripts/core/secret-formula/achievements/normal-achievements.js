@@ -718,7 +718,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 115,
-    name: () => `I wish I had gotten 7 eternities`,
+    name: "I wish I had gotten 7 eternities",
     tooltip: "Start an Infinity Challenge inside an Eternity Challenge.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },

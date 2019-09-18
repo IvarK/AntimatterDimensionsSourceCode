@@ -441,6 +441,7 @@ let player = {
     commas: true,
     updateRate: 33,
     newUI: true,
+    showAlchemyResources: false,
     chart: {
       updateRate: 1000,
       duration: 10,

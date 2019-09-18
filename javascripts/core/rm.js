@@ -334,7 +334,8 @@ const Glyphs = {
       throw new Error("Inconsistent inventory indexing");
     }
     if (this.active[targetSlot] !== null) return;
-    if (glyph.type === 'effarig' && this.active.some(x => x && x.type === 'effarig')) return;
+    if (glyph.type === "effarig" && this.active.some(x => x && x.type === "effarig")) return;
+    if (glyph.type === "reality" && this.active.some(x => x && x.type === "reality")) return;
     this.removeFromInventory(glyph);
     player.reality.glyphs.active.push(glyph);
     glyph.idx = targetSlot;

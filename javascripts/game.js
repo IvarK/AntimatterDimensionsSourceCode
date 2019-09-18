@@ -655,6 +655,7 @@ function gameLoop(diff, options = {}) {
 
   Achievements.autoAchieveUpdate(diff);
   V.checkForUnlocks();
+  Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
 
   EventHub.dispatch(GameEvent.GAME_TICK_AFTER);

@@ -208,7 +208,7 @@ const Ra = {
       .map(g => g.level)
       .max();
     for (const resource of AlchemyResources.base) {
-      resource.amount = maxLevel;
+      resource.amount = Math.min(this.alchemyResourceCap, maxLevel);
     }
   },
   giveExp(multiplier) {
@@ -247,7 +247,6 @@ const Ra = {
   // production", which in this case is infinities, eternities, replicanti, dilated time, and time theorem generation.
   // It also includes the 1% IP time study, Teresa's 1% EP upgrade, and the charged RM generation upgrade. Note that
   // removing the hardcap of 10 may cause runaways.
-  // It's almost certainly going to need to be rebalanced here after testing earlier Ra.
   theoremBoostFactor() {
     if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
     return Math.min(10, Math.max(0, player.timestudy.theorem.pLog10() - 350) / 50);
@@ -263,6 +262,25 @@ const Ra = {
   },
   get chargeUnlocked() {
     return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]) && Ra.pets.teresa.level > 1;
+  },
+  applyAlchemyReactions() {
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return;
+    const sortedReactions = AlchemyReactions.all
+      .compact()
+      .sort((r1, r2) => r2.priority - r1.priority);
+    for (const reaction of sortedReactions) {
+      reaction.combineReagents();
+    }
+  },
+  updateAlchemyFlow() {
+    const expAvgFactor = player.options.updateRate / 1000;
+    for (const resource of AlchemyResources.all) {
+      resource.flow = (1 - expAvgFactor) * resource.flow + expAvgFactor * (resource.amount - resource.before);
+      resource.before = resource.amount;
+    }
+  },
+  get alchemyResourceCap() {
+    return 11111;
   }
 };
 

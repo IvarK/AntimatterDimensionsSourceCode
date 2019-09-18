@@ -51,7 +51,7 @@ Vue.component("past-runs-tab", {
           The {{ singular }} {{ shortenSmallInteger(index + 1) }}
           {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }}
         </span>
-        <span v-if="isRealityUnlocked"> ( {{ realRunTime(run) }} real time ) </span>
+        <span v-if="isRealityUnlocked"> ({{ realRunTime(run) }} real time) </span>
         <span>and gave {{ reward(runGain(run), run) }}. {{ averageRunGain(run) }}</span>
       </div>
       <br>

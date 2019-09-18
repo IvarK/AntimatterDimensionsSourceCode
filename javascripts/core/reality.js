@@ -473,11 +473,7 @@ function finishProcessReality(realityProps) {
     applyRealityUpgrades();
   }
 
-  if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) {
-    for (const reaction of AlchemyReactions.all.compact()) {
-      reaction.combineReagents();
-    }
-  }
+  if (!isReset) Ra.applyAlchemyReactions();
 
   player.reality.gainedAutoAchievements = false;
 

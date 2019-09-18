@@ -249,10 +249,10 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 9,
       requirement: () => TimeStudy(111).isBought && !TimeStudy(121).isBought && !TimeStudy(123).isBought,
       requirementV: () => TimeStudy(111).isBought && (TimeStudy(121).isBought || TimeStudy(123).isBought),
-      description: () => (Perk.studyPassive.isBought
+      description: () => (Perk.studyPassive1.isBought
         ? `You gain ${shortenSmallInteger(100)}x more EP`
         : `You gain ${shortenSmallInteger(35)}x more EP`),
-      effect: () => (Perk.studyPassive.isBought ? 100 : 35)
+      effect: () => (Perk.studyPassive1.isBought ? 100 : 35)
     },
     {
       id: 123,
@@ -282,8 +282,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 5,
       requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(122).isBought && (TimeStudy(131).isBought || TimeStudy(133).isBought),
-      description: () => (Perk.studyPassive.isBought
-        ? `Replicanti galaxies are 40% more effective and replicanti are ${shortenSmallInteger(10)}x faster`
+      description: () => (Perk.studyPassive2.isBought
+        ? `Replicanti galaxies are 40% more effective and replicanti are ${shortenSmallInteger(5)}x faster`
         : "Replicanti galaxies are 40% more effective"),
       effect: 0.4
     },
@@ -315,8 +315,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 4,
       requirement: () => TimeStudy(132).isBought && !TimeStudy(141).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(132).isBought && (TimeStudy(141).isBought || TimeStudy(143).isBought),
-      description: () => `You gain ${shorten(Perk.studyPassive.isBought ? 1e100 : 1e25, 0, 0)}x more IP`,
-      effect: () => (Perk.studyPassive.isBought ? 1e100 : 1e25),
+      description: () => `You gain ${shorten(Perk.studyPassive1.isBought ? 1e100 : 1e25, 0, 0)}x more IP`,
+      effect: () => (Perk.studyPassive1.isBought ? 1e100 : 1e25),
       cap: () => Effarig.eternityCap
     },
     {

@@ -465,6 +465,7 @@ let player = {
       dilation: true,
       reality: true,
       glyphSacrifice: true,
+      glyphUndo: true,
     }
   }
 };

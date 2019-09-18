@@ -36,7 +36,7 @@ class GameMechanicState {
          ? this.config.cap()
          : this.config.cap;
         if (cap !== undefined) {
-          effectValue = typeof effectValue === "number"
+          effectValue = (typeof effectValue === "number" && typeof cap === "number")
             ? Math.min(effectValue, cap)
             : Decimal.min(effectValue, cap);
         }

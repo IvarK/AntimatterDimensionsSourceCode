@@ -91,23 +91,21 @@ Vue.component("equipped-glyphs", {
   template: `
   <div class="l-equipped-glyphs">
     <div class="l-equipped-glyphs__slots">
-      <template v-for="(glyph, idx) in glyphs">
+      <div v-for="(glyph, idx) in glyphs"
+           :style="glyphPositionStyle(idx)">
         <glyph-component v-if="glyph"
                          :key="idx"
                          :glyph="glyph"
-                         :style="glyphPositionStyle(idx)"
                          :circular="true"/>
         <div v-else
              :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
-                      {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]"
-             :style=glyphPositionStyle(idx)>
-          <!-- the drop zone is a bit larger than the glyph itself. -->
-          <div class="l-equipped-glyphs__dropzone"
-               @dragover="dragover($event, idx)"
-               @dragleave="dragleave(idx)"
-               @drop="drop($event, idx)"/>
-        </div>
-      </template>
+                      {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]" />
+        <!-- the drop zone is a bit larger than the glyph itself. -->
+        <div class="l-equipped-glyphs__dropzone"
+             @dragover="dragover($event, idx)"
+             @dragleave="dragleave(idx)"
+             @drop="drop($event, idx)"/>
+      </div>
     </div>
     <div class="l-equipped-glyphs__buttons">
       <button :class="['l-equipped-glyphs__respec', 'c-reality-upgrade-btn', {'c-reality-upgrade-btn--bought': respec}]"

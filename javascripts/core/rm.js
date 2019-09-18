@@ -473,7 +473,10 @@ const Glyphs = {
     const undoData = {
       oldIndex,
       targetSlot,
+      am: new Decimal(player.antimatter),
+      ip: new Decimal(player.infinityPoints),
       ep: new Decimal(player.eternityPoints),
+      tt: player.timestudy.theorem.plus(calculateTimeStudiesCost()),
       ecs: EternityChallenges.all.map(e => e.completions),
       thisReality: player.thisReality,
       thisRealityRealTime: player.thisRealityRealTime
@@ -488,7 +491,10 @@ const Glyphs = {
       reset: true,
       glyphUndo: true,
     });
+    player.antimatter.copyFrom(undoData.am);
+    player.infinityPoints.copyFrom(undoData.ip);
     player.eternityPoints.copyFrom(undoData.ep);
+    player.timestudy.theorem.copyFrom(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
     player.thisReality = undoData.thisReality;
     player.thisRealityRealTime = undoData.thisRealityRealTime;

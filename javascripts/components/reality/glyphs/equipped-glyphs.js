@@ -25,7 +25,8 @@ Vue.component("equipped-glyphs", {
     },
     undoTooltip() {
       return this.undoAvailable
-        ? "Unequip the last equipped glyph and rewind reality to when you equipped it"
+        ? ("Unequip the last equipped glyph and rewind reality to when you equipped it." +
+          " (Most resources will be fully reset)")
         : "Undo is only available for glyphs equipped during this reality";
     }
   },
@@ -76,8 +77,11 @@ Vue.component("equipped-glyphs", {
     },
     undo() {
       if (!this.undoAvailable) return;
-      if (!confirm("The last equipped glyph will be removed. Reality will be reset, but you will get " +
-        "the eternity points and eternity challenge completions that you had when it was first equipped.")) return;
+      if (!confirm("The last equipped glyph will be removed. Reality will be reset, but you will get the antimatter," +
+        " infinity points, eternity points, time theorems, and eternity challenge completions that you had when it " +
+        "was equipped.")) {
+        return;
+      }
       Glyphs.undo();
     }
   },

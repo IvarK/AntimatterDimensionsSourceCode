@@ -137,6 +137,7 @@ function averageRun(runs) {
   ];
 }
 
+// eslint-disable-next-line max-params
 function addInfinityTime(time, realTime, ip, infinities) {
   player.lastTenRuns.pop();
   player.lastTenRuns.unshift([time, ip, realTime, infinities]);
@@ -151,20 +152,15 @@ function resetInfinityRuns() {
   GameCache.bestRunIPPM.invalidate();
 }
 
+// Player gains 50% of infinitied stat they would get based on their best infinitied/hour crunch if they have the
+// milestone and turned on infinity autobuyer with 1 minute or less per crunch
 function getInfinitiedMilestoneReward(ms) {
-  // Player gains 50% of (timeOffline / average gain of
-  // infinitied stat per second for last 10 infinities) infinitied stat
-  // if he has 1000 infinities milestone and turned on infinity autobuyer with 1 minute or less per crunch
-
-  const autoInfinitiesAvailable = Autobuyer.bigCrunch.autoInfinitiesAvailable;
-
-  let infinitiedTotal = 0;
-  if (autoInfinitiesAvailable) {
-    infinitiedTotal = Decimal.floor(player.bestInfinitiesPerMs.times(ms).dividedBy(2));
-  }
-  return infinitiedTotal;
+  return Autobuyer.bigCrunch.autoInfinitiesAvailable
+    ? Decimal.floor(player.bestInfinitiesPerMs.times(ms).dividedBy(2))
+    : 0;
 }
 
+// eslint-disable-next-line max-params
 function addEternityTime(time, realTime, ep, eternities) {
   player.lastTenEternities.pop();
   player.lastTenEternities.unshift([time, ep, realTime, eternities]);
@@ -179,15 +175,12 @@ function resetEternityRuns() {
   GameCache.averageEPPerRun.invalidate();
 }
 
+// Player gains 50% of the eternities they would get if they continuously repeated their fastest eternity, if they
+// have the auto-eternity milestone and turned on eternity autobuyer with 0 EP
 function getEternitiedMilestoneReward(ms) {
-  // Player gains 50% of (timeOffline / average of last 10 eternity times) eternities
-  // If he has 100 eternities milestone and turned on eternity autobuyer with 0 EP
-
-  let eternitiedTotal = 0;
-  if (Autobuyer.eternity.autoEternitiesAvailable) {
-    eternitiedTotal = Decimal.floor(player.bestEternitiesPerMs.times(ms).dividedBy(2));
-  }
-  return eternitiedTotal;
+  return Autobuyer.eternity.autoEternitiesAvailable
+    ? Decimal.floor(player.bestEternitiesPerMs.times(ms).dividedBy(2))
+    : 0;
 }
 
 function getOfflineEPGain(ms) {
@@ -195,6 +188,7 @@ function getOfflineEPGain(ms) {
   return player.bestEPminThisReality.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 
+// eslint-disable-next-line max-params
 function addRealityTime(time, realTime, rm, level) {
   player.lastTenRealities.pop();
   player.lastTenRealities.unshift([time, rm, realTime, level]);

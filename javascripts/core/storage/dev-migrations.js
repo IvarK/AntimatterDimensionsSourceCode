@@ -1,5 +1,12 @@
 "use strict";
 
+function arrayToBits(array) {
+  let bits = 0;
+  // eslint-disable-next-line no-bitwise
+  for (const id of array) bits |= (1 << id);
+  return bits;
+}
+
 // WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term
 GameStorage.devMigrations = {
   patches: [
@@ -275,10 +282,7 @@ GameStorage.devMigrations = {
         player.celestials.teresa.rmStore = Teresa.rmStoreMax;
       }
       if (player.reality.upg) {
-        for (const upg of player.reality.upg) {
-          // eslint-disable-next-line no-bitwise
-          player.reality.upgradeBits |= (1 << upg);
-        }
+        player.reality.upgradeBits = arrayToBits(player.reality.upg);
         delete player.reality.upg;
       }
       // eslint-disable-next-line no-bitwise
@@ -442,7 +446,26 @@ GameStorage.devMigrations = {
     },
     GameStorage.migrations.renameNewsOption,
     GameStorage.migrations.removeDimensionCosts,
-    GameStorage.migrations.renameTickspeedPurchaseBumps
+    GameStorage.migrations.renameTickspeedPurchaseBumps,
+    player => {
+      player.celestials.teresa.unlockBits = arrayToBits(player.celestials.teresa.unlocks);
+      delete player.celestials.teresa.unlocks;
+      player.celestials.effarig.unlockBits = arrayToBits(player.celestials.effarig.unlocks);
+      delete player.celestials.effarig.unlocks;
+      player.celestials.v.unlockBits = arrayToBits(player.celestials.v.unlocks);
+      delete player.celestials.v.unlocks;
+      player.celestials.ra.unlockBits = arrayToBits(player.celestials.ra.unlocks);
+      delete player.celestials.ra.unlocks;
+      player.celestials.laitela.unlockBits = arrayToBits(player.celestials.laitela.unlocks);
+      delete player.celestials.laitela.unlocks;
+    },
+    player => {
+      player.reality.seed = Math.floor(Math.abs(player.reality.seed)) % 0xFFFFFFFF;
+    },
+    player => {
+      player.auto.sacrifice.multiplier = new Decimal(player.auto.sacrifice.multiplier);
+    },
+    GameStorage.migrations.changeC8Handling,
   ],
 
   patch(player) {

@@ -5,6 +5,7 @@
  */
 const GlyphSelection = {
   glyphs: [],
+  realityProps: undefined,
 
   get active() {
     return ui.view.modal.glyphSelection;
@@ -45,8 +46,10 @@ const GlyphSelection = {
     return true;
   },
 
-  generate(count, level) {
+  generate(count, realityProps) {
     this.glyphs = [];
+    this.realityProps = realityProps;
+    const level = realityProps.gainedGlyphLevel;
     for (let out = 0; out < count; ++out) {
       let glyph;
       // Attempt to generate a unique glyph, but give up after 100 tries so the game doesn't
@@ -72,12 +75,16 @@ const GlyphSelection = {
   },
 
   update(level) {
-    for (const glyph of this.glyphs.filter(g => g.rawLevel < level.rawLevel)) {
-      glyph.rawLevel = level.rawLevel;
+    if (level.rawLevel > this.realityProps.gainedGlyphLevel.rawLevel) {
+      this.realityProps.gainedGlyphLevel.rawLevel = level.rawLevel;
+      for (const glyph of this.glyphs) glyph.rawLevel = level.rawLevel;
     }
-    for (const glyph of this.glyphs.filter(g => g.level < level.actualLevel)) {
-      glyph.level = level.actualLevel;
-      calculateGlyph(glyph);
+    if (level.actualLevel > this.realityProps.gainedGlyphLevel.actualLevel) {
+      this.realityProps.gainedGlyphLevel.actualLevel = level.actualLevel;
+      for (const glyph of this.glyphs) {
+        glyph.level = level.actualLevel;
+        calculateGlyph(glyph);
+      }
     }
   },
 
@@ -85,7 +92,8 @@ const GlyphSelection = {
     ui.view.modal.glyphSelection = false;
     Glyphs.addToInventory(this.glyphs[index]);
     this.glyphs = [];
-    triggerManualReality();
+    triggerManualReality(this.realityProps);
+    this.realityProps = undefined;
   }
 };
 
@@ -105,7 +113,7 @@ function isRealityAvailable() {
 // Returns the number of "extra" realities from stored real time or Multiversal effects, should be called
 // with false for checking and true for actual usage, and only "used" once per reality.
 function simulatedRealityCount(advancePartSimCounters) {
-  const amplifiedSim = Enslaved.boostReality ? Enslaved.realityBoostRatio : 0;
+  const amplifiedSim = Enslaved.boostReality ? Enslaved.realityBoostRatio - 1 : 0;
   const multiversalSim = AlchemyResource.multiversal.effectValue;
   const simCount = (multiversalSim + 1) * (amplifiedSim + 1) + player.partSimulatedReality - 1;
   if (advancePartSimCounters) {
@@ -126,31 +134,29 @@ function requestManualReality() {
     alert("Inventory is full. Delete/sacrifice (shift-click) some glyphs.");
     return;
   }
-  const level = gainedGlyphLevel();
+  const realityProps = getRealityProps(false, false);
   if (simulatedRealityCount(false) > 0) {
-    Enslaved.lockedInGlyphLevel = level;
-    Enslaved.lockedInRealityMachines = gainedRealityMachines();
-    Enslaved.lockedInShardsGained = Effarig.shardsGained;
-    triggerManualReality();
+    triggerManualReality(realityProps);
     return;
   }
+  realityProps.alreadyGotGlyph = true;
   if (GlyphSelection.choiceCount === 1) {
     const newGlyph = player.realities === 0
-      ? GlyphGenerator.startingGlyph(level)
-      : GlyphGenerator.randomGlyph(level);
+      ? GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel)
+      : GlyphGenerator.randomGlyph(realityProps.gainedGlyphLevel);
     Glyphs.addToInventory(newGlyph);
-    triggerManualReality();
+    triggerManualReality(realityProps);
     return;
   }
-  GlyphSelection.generate(GlyphSelection.choiceCount, level);
+  GlyphSelection.generate(GlyphSelection.choiceCount, realityProps);
 }
 
-function triggerManualReality() {
+function triggerManualReality(realityProps) {
   if (player.options.animations.reality) {
     runRealityAnimation();
-    setTimeout(completeReality, 3000, false, false);
+    setTimeout(beginProcessReality, 3000, realityProps);
   } else {
-    completeReality();
+    beginProcessReality(realityProps);
   }
 }
 
@@ -192,37 +198,41 @@ function processAutoGlyph(gainedLevel) {
   }
 }
 
-function autoReality() {
-  if (GlyphSelection.active || !isRealityAvailable()) return;
-  const gainedLevel = gainedGlyphLevel();
-  if (simulatedRealityCount(false) > 0) {
-    Enslaved.lockedInGlyphLevel = gainedLevel;
-    Enslaved.lockedInRealityMachines = gainedRealityMachines();
-    Enslaved.lockedInShardsGained = Effarig.shardsGained;
-    completeReality(false, false, true);
-    return;
-  }
-  processAutoGlyph(gainedLevel);
-  completeReality(false, false, true);
+function getRealityProps(isReset, alreadyGotGlyph = false) {
+  if (isReset) return {
+    reset: true,
+  };
+  return {
+    reset: false,
+    gainedRM: gainedRealityMachines(),
+    gainedGlyphLevel: gainedGlyphLevel(),
+    gainedShards: Effarig.shardsGained,
+    simulatedRealities: simulatedRealityCount(true),
+    alreadyGotGlyph,
+  };
 }
 
-// The ratio is the amount on top of the regular reality amount.
-function boostedRealityRewards(ratio) {
-  player.reality.realityMachines = player.reality.realityMachines
-    .plus(Enslaved.lockedInRealityMachines.times(ratio));
-  // No glyph reward was given earlier
-  for (let glyphCount = 0; glyphCount < ratio + 1; ++glyphCount) {
-    processAutoGlyph(Enslaved.lockedInGlyphLevel);
-  }
-  player.realities += ratio;
-  player.reality.pp += ratio;
+function autoReality() {
+  if (GlyphSelection.active || !isRealityAvailable()) return;
+  beginProcessReality(getRealityProps(false, false));
+}
+
+function giveRealityRewards(realityProps) {
+  const multiplier = realityProps.simulatedRealities + 1;
+  const gainedRM = realityProps.gainedRM;
+  player.bestReality = Math.min(player.bestReality, player.thisReality);
+  player.reality.realityMachines = player.reality.realityMachines.plus(gainedRM.times(multiplier));
+  player.bestRMmin = player.bestRMmin.max(gainedRM.dividedBy(Time.thisRealityRealTime.totalMinutes));
+  addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRM, realityProps.gainedGlyphLevel.actualLevel);
+  player.realities += multiplier;
+  player.reality.pp += multiplier;
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
-    player.celestials.effarig.relicShards += Enslaved.lockedInShardsGained * ratio;
+    player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
   }
   if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-    Ra.giveExp();
+    Ra.giveExp(multiplier);
   }
-  if (Enslaved.boostReality) {
+  if (multiplier > 1 && Enslaved.boostReality) {
     // Real time amplification is capped at 1 second of reality time; if it's faster then using all time at once would
     // be wasteful. Being faster than 1 second will only use as much time as needed to get the 1-second factor instead.
     if (Time.thisRealityRealTime.totalSeconds < 1) {
@@ -232,34 +242,67 @@ function boostedRealityRewards(ratio) {
     }
     Enslaved.boostReality = false;
   }
+
+  if (Teresa.isRunning) {
+    player.celestials.teresa.bestRunAM = Decimal.max(player.celestials.teresa.bestRunAM, player.antimatter);
+  }
+
+  if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) {
+    EffarigUnlock.reality.unlock();
+  }
+
+  if (Enslaved.isRunning) Enslaved.completeRun();
+
+  if (Ra.isRunning) Ra.updateExpBoosts();
+
+  if (Laitela.isRunning) {
+    player.celestials.laitela.maxAmGained = Decimal.max(player.celestials.laitela.maxAmGained, player.antimatter);
+  }
 }
 
-function completeReality(force, reset, auto = false) {
-  if (!reset) {
-    EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
-    const simulatedRealities = simulatedRealityCount(true);
-    if (simulatedRealities > 0) {
-      boostedRealityRewards(simulatedRealities);
-    }
-    if (player.thisReality < player.bestReality) {
-      player.bestReality = player.thisReality;
-    }
-    player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
-    player.bestRMmin = player.bestRMmin.max(gainedRealityMachines().dividedBy(Time.thisRealityRealTime.totalMinutes));
-    addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
-    if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained;
-    if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-      Ra.giveExp();
-    }
-    if (Ra.isRunning) {
-      Ra.updateExpBoosts();
-    }
+// Due to simulated realities taking a long time in late game, this function might not immediately
+// reality, but start an update loop that shows a progress bar.
+function beginProcessReality(realityProps) {
+  if (realityProps.reset) {
+    finishProcessReality(realityProps);
+    return;
   }
+  EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
+  const glyphsToProcess = realityProps.simulatedRealities + (realityProps.alreadyGotGlyph ? 0 : 1);
+  Async.run(() => processAutoGlyph(realityProps.gainedGlyphLevel),
+    glyphsToProcess,
+    {
+      batchSize: 100,
+      maxTime: 33,
+      sleepTime: 1,
+      asyncEntry: doneSoFar => {
+        GameIntervals.stop();
+        ui.$viewModel.modal.progressBar = {
+          label: "Processing new glyphs...",
+          current: doneSoFar,
+          max: glyphsToProcess,
+        };
+      },
+      asyncProgress: doneSoFar => {
+        ui.$viewModel.modal.progressBar.current = doneSoFar;
+      },
+      asyncExit: () => {
+        ui.$viewModel.modal.progressBar = undefined;
+        GameIntervals.start();
+      }
+    }).then(() => {
+      finishProcessReality(realityProps);
+    });
+}
+
+function finishProcessReality(realityProps) {
+  const isReset = realityProps.reset;
+  if (!isReset) giveRealityRewards(realityProps);
 
   if (player.reality.respec) {
     respecGlyphs();
   }
-  handleCelestialRuns(force)
+  clearCelestialRuns();
   recalculateAllGlyphs()
 
   //reset global values to avoid a tick of unupdated production
@@ -331,8 +374,6 @@ function completeReality(force, reset, auto = false) {
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
   player.noTheoremPurchases = true;
-  if (!reset) player.realities = player.realities + 1;
-  if (!reset) player.bestReality = Math.min(player.thisReality, player.bestReality);
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
   player.timestudy.theorem = new Decimal(0);
@@ -377,7 +418,7 @@ function completeReality(force, reset, auto = false) {
     player.eternities = new Decimal(100);
   }
   initializeChallengeCompletions();
-  if (!reset) player.reality.pp++;
+
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
   }
@@ -439,49 +480,20 @@ function completeReality(force, reset, auto = false) {
   tryUnlockAchievementsOnReality();
 }
 
-function handleCelestialRuns(force) {
-  if (Teresa.isRunning) {
-    player.celestials.teresa.run = false;
-    if (!force && player.celestials.teresa.bestRunAM.lt(player.antimatter)) {
-      player.celestials.teresa.bestRunAM = player.antimatter;
-    }
-  }
-  if (Effarig.isRunning) {
-    player.celestials.effarig.run = false;
-    if (!force && !EffarigUnlock.reality.isUnlocked) {
-      EffarigUnlock.reality.unlock();
-    }
-  }
-  if (Enslaved.isRunning) {
-    player.celestials.enslaved.run = false;
-    if (!force) {
-      Enslaved.completeRun();
-    }
-  }
-
-  if (V.isRunning) {
-    player.celestials.v.run = false;
-  }
-
-  if (Ra.isRunning) {
-    player.celestials.ra.run = false;
-  }
-
-  if (TimeCompression.isActive) {
-    TimeCompression.isActive = false;
-  }
-
-  if (Laitela.isRunning) {
-    player.celestials.laitela.run = false;
-    if (!force && player.antimatter.gte(player.celestials.laitela.maxAmGained)) {
-      player.celestials.laitela.maxAmGained = player.antimatter;
-    }
-  }
+function clearCelestialRuns() {
+  player.celestials.teresa.run = false;
+  player.celestials.effarig.run = false;
+  player.celestials.enslaved.run = false;
+  player.celestials.v.run = false;
+  player.celestials.ra.run = false;
+  TimeCompression.isActive = false;
+  player.celestials.laitela.run = false;
 }
 
 function startRealityOver() {
-  if (confirm("This will put you at the start of your reality and reset your progress in this reality. Are you sure you want to do this?")) {
-    completeReality(true, true);
+  if (confirm("This will put you at the start of your reality and reset your progress in this reality." +
+    "Are you sure you want to do this?")) {
+    beginProcessReality(getRealityProps(true));
     return true;
   }
   return false;

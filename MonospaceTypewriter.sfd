@@ -22,7 +22,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 0
 CreationTime: 1074936349
-ModificationTime: 1567039732
+ModificationTime: 1568640933
 PfmFamily: 17
 TTFWeight: 500
 TTFWidth: 5
@@ -81,7 +81,7 @@ NameList: AGL For New Fonts
 DisplaySize: -96
 AntiAlias: 1
 FitToEm: 0
-WinInfo: 8984 8 7
+WinInfo: 11168 8 6
 BeginPrivate: 0
 EndPrivate
 Grid
@@ -112,7 +112,7 @@ Grid
 294 -700 m 1024
   Named: "v293"
 EndSplineSet
-BeginChars: 65537 275
+BeginChars: 65537 277
 
 StartChar: .notdef
 Encoding: 65536 -1 0
@@ -8949,7 +8949,7 @@ EndChar
 StartChar: uni232C
 Encoding: 9004 9004 274
 Width: 624
-Flags: WO
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -8983,6 +8983,29 @@ SplineSet
  330 765 l 1,23,-1
  0 574 l 25,18,-1
 EndSplineSet
+EndChar
+
+StartChar: uni2BC5
+Encoding: 11205 11205 275
+Width: 587
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+293 765 m 1,0,-1
+ 537 1 l 1,1,-1
+ 50 1 l 1,2,-1
+ 293 765 l 1,0,-1
+EndSplineSet
+EndChar
+
+StartChar: uni2BC6
+Encoding: 11206 11206 276
+Width: 587
+Flags: WO
+LayerCount: 2
+Fore
+Refer: 275 11205 N 1 0 0 -1 0 766 2
 EndChar
 EndChars
 EndSplineFont

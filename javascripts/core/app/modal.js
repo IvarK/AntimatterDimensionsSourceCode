@@ -1,17 +1,26 @@
 "use strict";
 
 class Modal {
-  constructor(component) {
+  constructor(component, bare = false) {
     this._component = component;
+    this._bare = bare;
   }
 
   show() {
     if (!GameUI.initialized) return;
-    ui.view.modal.current = this._component;
+    ui.view.modal.current = this;
   }
 
   get isOpen() {
-    return ui.view.modal.current === this._component;
+    return ui.view.modal.current === this;
+  }
+
+  get component() {
+    return this._component;
+  }
+
+  get isBare() {
+    return this._bare;
   }
 
   static hide() {
@@ -33,6 +42,23 @@ Modal.loadGame = new Modal("modal-load-game");
 Modal.import = new Modal("modal-import");
 Modal.importTree = new Modal("modal-import-tree");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
+Modal.celestialQuote = new class extends Modal {
+  show(celestial, lines) {
+    if (!GameUI.initialized) return;
+    const newLines = lines.map(l => ({
+      celestial,
+      line: l,
+    }));
+    if (ui.view.modal.current === this) {
+      // This shouldn't come up often, but in case we do have a pile of quotes
+      // being shown in a row:
+      this.lines = this.lines.concat(newLines);
+      return;
+    }
+    ui.view.modal.current = this;
+    this.lines = newLines;
+  }
+}("modal-celestial-quote", true);
 
 Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");
 Modal.cloudLoadConflict = new Modal("modal-cloud-load-conflict");
@@ -53,15 +79,16 @@ Modal.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLast
   }
 };
 
-Modal.message = new Modal("modal-message");
-Modal.message.show = function(text, callback, closeButton = false) {
-  if (!GameUI.initialized) return;
-  ui.view.modal.message = text;
-  ui.view.modal.callback = callback;
-  ui.view.modal.closeButton = closeButton;
-  ui.view.modal.current = "modal-message";
-  // Sometimes we have stacked messages that get lost, since we don't have stacking modal system.
-  // TODO: remove this console.log
-  // eslint-disable-next-line no-console
-  console.log(`Modal mesasge: ${text}`);
-};
+Modal.message = new class extends Modal {
+  show(text, callback, closeButton = false) {
+    if (!GameUI.initialized) return;
+    ui.view.modal.current = this;
+    this.message = text;
+    this.callback = callback;
+    this.closeButton = closeButton;
+    // Sometimes we have stacked messages that get lost, since we don't have stacking modal system.
+    // TODO: remove this console.log
+    // eslint-disable-next-line no-console
+    console.log(`Modal mesasge: ${text}`);
+  }
+}("modal-message");

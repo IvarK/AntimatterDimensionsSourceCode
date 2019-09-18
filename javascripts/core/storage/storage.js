@@ -78,7 +78,7 @@ const GameStorage = {
   },
 
   save(silent = false) {
-    if (GlyphSelection.active) return;
+    if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
     if (++this.saved > 99) SecretAchievement(12).unlock();
     const root = {
       current: this.currentSlot,

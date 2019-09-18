@@ -3,7 +3,7 @@
 Vue.component("modal-message", {
   computed: {
     modal() {
-      return this.$viewModel.modal;
+      return this.$viewModel.modal.current;
     }
   },
   methods: {

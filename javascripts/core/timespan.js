@@ -235,6 +235,9 @@ class TimeSpan {
    */
   toStringShort(useHMS = true) {
     const totalSeconds = this.totalSeconds;
+    if (totalSeconds <= 1) {
+      return `${shorten(1000 * totalSeconds)} ms`;
+    }
     if (totalSeconds <= 10) {
       return `${shorten(totalSeconds, 0, 3)} seconds`;
     }

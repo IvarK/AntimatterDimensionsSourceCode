@@ -11,7 +11,6 @@ Vue.component("ra-tab", {
   },
   methods: {
     update() {
-      this.unlocks = player.celestials.ra.unlocks;
       this.expMults = this.pets.map(obj => obj.pet.expBoost);
       this.currentExpGain = Ra.pets.teresa.baseExp;
       this.showReality = Ra.pets.teresa.level > 2;

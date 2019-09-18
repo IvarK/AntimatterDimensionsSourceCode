@@ -246,7 +246,7 @@ The rightmost row of Infinity Upgrades does not work in challenges.
 Autobuyers (awarded by completing challenges) allow the
 automatic purchase of dimensions, dimension shifts/boosts, galaxies,
 tickspeed interval decreases, Big Crunches, and Dimensional Sacrifice (later).
-They are located under the infinty tab in "Autobuyers".
+They are located under the Infinity tab in "Autobuyers".
 <br>
 <br>
 <b>Priority:</b> Priorities tell the game which autobuyer will buy
@@ -728,7 +728,6 @@ At ${format(1e18)} RM, you unlock Teresa's Eternity Point generator.
 This works like Time Study 181, in the sense that you gain 1% of your peaked EP/Min per second.
 <br>
 Once you are at ${format(1e21)} RM in the container, you unlock Effarig, the second Celestial.
-Additionally at ${format(1e21)} Teresa's container stops leaking RM.
 <br>
 Teresa's final unlock is at ${format(1e24)} RM, at which point you unlock the Perk Shop,
 where you can spend spare Perk points on upgrades to glyph level, rm multipliers and Dilation Autobuyer Bulk buy.

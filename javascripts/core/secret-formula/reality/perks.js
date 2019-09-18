@@ -339,25 +339,29 @@ GameDatabase.reality.perks = {
     id: 104,
     label: "TT1",
     family: PerkFamily.AUTOMATION,
-    description: "Autobuy max TT every 10 seconds."
+    description: "Autobuy max TT every 10 seconds.",
+    effect: () => 10000,
   },
   autobuyerTT2: {
     id: 105,
     label: "TT2",
     family: PerkFamily.AUTOMATION,
-    description: "Autobuy max TT every 5 seconds."
+    description: "Autobuy max TT every 5 seconds.",
+    effect: () => 5000,
   },
   autobuyerTT3: {
     id: 106,
     label: "TT3",
     family: PerkFamily.AUTOMATION,
-    description: "Autobuy max TT every 3 seconds."
+    description: "Autobuy max TT every 3 seconds.",
+    effect: () => 3000,
   },
   autobuyerTT4: {
     id: 107,
     label: "TT4",
     family: PerkFamily.AUTOMATION,
-    description: "Autobuy max TT every second."
+    description: "Autobuy max TT every second.",
+    effect: () => 1000,
   },
   achievementRowGroup1: {
     id: 201,

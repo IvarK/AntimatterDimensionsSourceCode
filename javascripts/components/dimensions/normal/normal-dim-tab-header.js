@@ -5,15 +5,14 @@ Vue.component("normal-dim-tab-header", {
     return {
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
-      sacrificeBoost: new Decimal(0)
+      currentSacrifice: new Decimal(0),
+      sacrificeBoost: new Decimal(0),
+      disabledCondition: ""
     };
   },
   computed: {
-    sacrificeBoostDisplay() {
-      return this.shortenRateOfChange(this.sacrificeBoost);
-    },
     sacrificeTooltip() {
-      return `Boosts 8th Dimension by ${this.sacrificeBoostDisplay}x`;
+      return `Boosts 8th Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
     },
   },
   methods: {
@@ -22,7 +21,9 @@ Vue.component("normal-dim-tab-header", {
       this.isSacrificeUnlocked = isSacrificeUnlocked;
       if (!isSacrificeUnlocked) return;
       this.isSacrificeAffordable = Sacrifice.canSacrifice;
+      this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
+      this.disabledCondition = Sacrifice.disabledCondition;
     },
     sacrifice() {
       sacrificeBtnClick();
@@ -39,7 +40,10 @@ Vue.component("normal-dim-tab-header", {
         :enabled="isSacrificeAffordable"
         class="o-primary-btn--sacrifice"
         @click="sacrifice"
-      >Dimensional Sacrifice ({{sacrificeBoostDisplay}}x)</primary-button>
+      >
+        <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
+        <span v-else>Sacrifice Disabled ({{ disabledCondition }})</span>
+      </primary-button>
       <primary-button
         class="o-primary-btn--buy-max"
         @click="maxAll"

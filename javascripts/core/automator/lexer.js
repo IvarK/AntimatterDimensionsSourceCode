@@ -86,6 +86,18 @@ const AutomatorLexer = (() => {
     $autocomplete: "<",
     $compare: (a, b) => Decimal.lt(a, b),
   });
+  const OpEQ = createInCategory(ComparisonOperator, "OpEQ", /==/, {
+    $compare: (a, b) => Decimal.eq(a, b),
+  });
+  // EqualSign is a single = which is defined for both comparisons and define
+  const EqualSign = createToken({
+    name: "EqualSign",
+    pattern: /=/,
+    categories: ComparisonOperator,
+    label: "=",
+    longer_alt: OpEQ,
+  });
+  EqualSign.$compare = (a, b) => Decimal.eq(a, b);
 
   createInCategory(Currency, "EP", /ep/i, {
     extraCategories: [TTCurrency],
@@ -124,7 +136,7 @@ const AutomatorLexer = (() => {
   });
   createInCategory(Currency, "Total_TT", /total tt/i, {
     $autocomplete: "total tt",
-    $getter: () => TimeTheorems.totalPurchased()
+    $getter: () => player.timestudy.theorem.plus(calculateTimeStudiesCost()),
   });
   for (let i = 1; i <= 12; ++i) {
     const id = i;
@@ -262,15 +274,14 @@ const AutomatorLexer = (() => {
   const LCurly = createToken({ name: "LCurly", pattern: /[ \t]*{/ });
   const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*}/ });
   const Comma = createToken({ name: "Comma", pattern: /,/ });
-  const EqualSign = createToken({ name: "EqualSign", pattern: /=/, label: "=" });
   const Pipe = createToken({ name: "Pipe", pattern: /\|/, label: "|" });
   const Dash = createToken({ name: "Dash", pattern: /-/, label: "-" });
 
   // The order here is the order the lexer looks for tokens in.
   const automatorTokens = [
     HSpace, Comment, EOL,
-    LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
+    LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     NumberLiteral,
     Currency, ...tokenLists.Currency,
     ECLiteral,

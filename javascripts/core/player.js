@@ -105,7 +105,7 @@ let player = {
       lastTick: 0
     },
     sacrifice: {
-      multiplier: 5,
+      multiplier: new Decimal(5),
       isActive: false
     },
     eternity: {
@@ -125,6 +125,7 @@ let player = {
     infDimTimer: 0,
     repUpgradeTimer: 0,
     dilUpgradeTimer: 0,
+    ttTimer: 0,
   },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
@@ -148,7 +149,7 @@ let player = {
   chall3Pow: new Decimal(0.01),
   matter: new Decimal(1),
   chall9TickspeedCostBumps: 0,
-  chall11Pow: new Decimal(1),
+  chall8TotalSacrifice: new Decimal(1),
   partInfinityPoint: 0,
   partInfinitied: 0,
   break: false,
@@ -320,15 +321,15 @@ let player = {
   celestials: {
     teresa: {
       rmStore: 0,
-      quoteIdx: 0,
-      unlocks: [],
+      quotes: [],
+      unlockBits: 0,
       run: false,
       bestRunAM: new Decimal(1),
       perkShop: Array.repeat(0, 4)
     },
     effarig: {
       relicShards: 0,
-      unlocks: [],
+      unlocksBits: 0,
       run: false,
       quoteIdx: 0,
       glyphWeights: {
@@ -364,7 +365,7 @@ let player = {
       maxQuotes: 6
     },
     v: {
-      unlocks: [],
+      unlockBits: 0,
       quoteIdx: 0,
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0],
@@ -398,7 +399,7 @@ let player = {
           amount: 0,
           reaction: false
         })),
-      unlocks: [],
+      unlocksBits: 0,
       run: false,
       charged: new Set(),
       quoteIdx: 0,
@@ -414,7 +415,7 @@ let player = {
     laitela: {
       matter: new Decimal(0),
       run: false,
-      unlocks: [],
+      unlockBits: 0,
       dimensions: Array.range(0, 4).map(() =>
       ({
         amount: new Decimal(0),

@@ -21,6 +21,11 @@ const TERESA_UNLOCKS = {
     price: 1e24,
     description: "unlock Perk Point Shop.",
   },
+  UNDO: {
+    id: 4,
+    price: 1e10,
+    description: 'unlock "Undo" of equipping a glyph.',
+  }
 };
 
 const Teresa = {
@@ -160,3 +165,5 @@ EventHub.logic.on(GameEvent.REALITY_RESET_BEFORE, () => {
   if (!Teresa.isRunning) return;
   Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
 });
+
+EventHub.logic.on(GameEvent.GAME_LOAD, () => Teresa.checkForUnlocks());

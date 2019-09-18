@@ -7,6 +7,7 @@ Vue.component("equipped-glyphs", {
       dragoverIndex: -1,
       respec: player.reality.respec,
       undoAvailable: false,
+      undoVisible: false,
     };
   },
   computed: {
@@ -70,7 +71,8 @@ Vue.component("equipped-glyphs", {
     },
     update() {
       this.respec = player.reality.respec;
-      this.undoAvailable = Glyphs.activeSlotCount >= 5 && player.reality.glyphs.undo.length > 0;
+      this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
+      this.undoAvailable = this.undoVisible && player.reality.glyphs.undo.length > 0;
     },
     glyphsChanged() {
       this.glyphs = Glyphs.active.map(GlyphGenerator.copy);
@@ -112,8 +114,9 @@ Vue.component("equipped-glyphs", {
               @click="toggleRespec">
         Clear glyph slots on Reality
       </button>
-      <button :class="['l-equipped-glyphs__undo', 'c-reality-upgrade-btn',
-                       {'c-reality-upgrade-btn--unavailable': !undoAvailable}]"
+      <button v-if="undoVisible"
+              class="l-equipped-glyphs__undo c-reality-upgrade-btn"
+              :class="{'c-reality-upgrade-btn--unavailable': !undoAvailable}"
               :ach-tooltip="undoTooltip"
               @click="undo">
         Undo

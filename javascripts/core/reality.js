@@ -473,7 +473,7 @@ function finishProcessReality(realityProps) {
     applyRealityUpgrades();
   }
 
-  Ra.applyAlchemyReactions();
+  if (!isReset) Ra.applyAlchemyReactions();
 
   player.reality.gainedAutoAchievements = false;
 

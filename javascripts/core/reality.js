@@ -199,19 +199,21 @@ function processAutoGlyph(gainedLevel) {
 }
 
 function getRealityProps(isReset, alreadyGotGlyph = false) {
-  if (isReset) return {
-    reset: true,
+  const defaults = {
     glyphUndo: false,
+    restoreCelestialState: false,
   };
-  return {
+  if (isReset) return Object.assign(defaults, {
+    reset: true,
+  });
+  return Object.assign(defaults, {
     reset: false,
     gainedRM: gainedRealityMachines(),
     gainedGlyphLevel: gainedGlyphLevel(),
     gainedShards: Effarig.shardsGained,
     simulatedRealities: simulatedRealityCount(true),
     alreadyGotGlyph,
-    glyphUndo: false,
-  };
+  });
 }
 
 function autoReality() {
@@ -481,7 +483,7 @@ function finishProcessReality(realityProps) {
   player.reality.gainedAutoAchievements = false;
 
   tryUnlockAchievementsOnReality();
-  if (realityProps.glyphUndo) restoreCelestialRuns(celestialRunState);
+  if (realityProps.restoreCelestialState) restoreCelestialRuns(celestialRunState);
 }
 
 function restoreCelestialRuns(celestialRunState) {

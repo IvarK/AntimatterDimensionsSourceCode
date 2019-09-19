@@ -466,6 +466,7 @@ let player = {
       reality: true,
       glyphSacrifice: true,
       glyphUndo: true,
+      glyphReplace: true,
     }
   }
 };

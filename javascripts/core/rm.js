@@ -335,15 +335,35 @@ const Glyphs = {
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {
       throw new Error("Inconsistent inventory indexing");
     }
-    if (this.active[targetSlot] !== null) return;
-    if (glyph.type === "effarig" && this.active.some(x => x && x.type === "effarig")) return;
-    if (glyph.type === "reality" && this.active.some(x => x && x.type === "reality")) return;
-    const oldIndex = glyph.idx;
-    this.removeFromInventory(glyph);
+    let sameSpecialTypeIndex = -1;
+    if (glyph.type === "effarig" || glyph.type === "reality") {
+      sameSpecialTypeIndex = this.active.findIndex(x => x && x.type === glyph.type);
+    }
+    const inventoryIndex = glyph.idx;
+    if (this.active[targetSlot] === null) {
+      if (sameSpecialTypeIndex >= 0) return;
+      this.removeFromInventory(glyph);
+      this.saveUndo(inventoryIndex, targetSlot);
+    } else {
+      // We can only replace effarig/reality glyph
+      if (sameSpecialTypeIndex >= 0 && sameSpecialTypeIndex !== targetSlot) {
+        alert(`You may only have one ${glyph.type} glyph equipped`);
+        return;
+      }
+      if (player.options.confirmations.glyphReplace &&
+        !confirm("Replacing a glyph will restart reality. Proceed?")) return;
+      // Remove from inventory first so that there's room to unequip to the same inventory slot
+      this.removeFromInventory(glyph);
+      this.unequip(targetSlot, inventoryIndex);
+      finishProcessReality({
+        reset: true,
+        glyphUndo: false,
+        restoreCelestialState: true,
+      });
+    }
     player.reality.glyphs.active.push(glyph);
     glyph.idx = targetSlot;
     this.active[targetSlot] = glyph;
-    this.saveUndo(oldIndex, targetSlot);
     EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
@@ -493,6 +513,7 @@ const Glyphs = {
     finishProcessReality({
       reset: true,
       glyphUndo: true,
+      restoreCelestialState: true,
     });
     player.antimatter.copyFrom(undoData.am);
     player.infinityPoints.copyFrom(undoData.ip);

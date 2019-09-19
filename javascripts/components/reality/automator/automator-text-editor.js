@@ -8,6 +8,12 @@ const AutomatorTextUI = {
     lint: "automato",
     lineNumbers: true,
     theme: "liquibyte",
+    tabSize: 2,
+    extraKeys: {
+      Tab: cm => cm.execCommand("indentMore"),
+      "Shift-Tab": cm => cm.execCommand("indentLess"),
+    },
+    autoCloseBrackets: true,
   },
   documents: {},
   initialize() {

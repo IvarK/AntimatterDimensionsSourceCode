@@ -544,7 +544,7 @@ const Player = {
       : Decimal.MAX_NUMBER;
   },
 
-  get defaultAntimatter() {
+  get startingAM() {
     return Effects.max(
       10,
       Perk.startAM1,
@@ -557,7 +557,7 @@ const Player = {
     ).toDecimal();
   },
 
-  get defaultIP() {
+  get startingIP() {
     return Effects.max(
       0,
       Perk.startIP1,
@@ -566,7 +566,7 @@ const Player = {
     ).toDecimal();
   },
 
-  get defaultEP() {
+  get startingEP() {
     return Effects.max(
       0,
       Perk.startEP1,

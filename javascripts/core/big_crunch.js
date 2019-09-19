@@ -84,7 +84,7 @@ function bigCrunchReset() {
   if (EternityChallenge(4).tryFail()) return;
 
   // FIXME: Infinitified is now Decimal so decide what happens here!
-  //kong.submitStats('Infinitied', Player.totalInfinitied);
+  // kong.submitStats('Infinitied', Player.totalInfinitied);
   kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime));
 
   const currentReplicanti = player.replicanti.amount;
@@ -105,7 +105,7 @@ function bigCrunchReset() {
     for (let i = 1; i <= player.eternities.sub(10).clampMax(8).toNumber(); i++) {
       if (player.infDimBuyers[i - 1]) {
         buyMaxInfDims(i);
-        buyManyInfinityDimension(i)
+        buyManyInfinityDimension(i);
       }
     }
   }
@@ -124,7 +124,7 @@ function bigCrunchReset() {
 function secondSoftReset(forcedNDReset = false) {
     player.dimensionBoosts = 0;
     player.galaxies = 0;
-    player.antimatter = Player.defaultAntimatter;
+    player.antimatter = Player.startingAM;
     softReset(0, forcedNDReset);
     InfinityDimensions.resetAmount();
     if (player.replicanti.unl)
@@ -136,31 +136,6 @@ function secondSoftReset(forcedNDReset = false) {
     player.noEighthDimensions = true;
     player.noSacrifices = true;
     AchievementTimers.marathon2.reset();
-}
-
-function totalIPMult() {
-  if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {
-    return new Decimal(1);
-  }
-  let ipMult = new Decimal(1)
-    .times(kongIPMult)
-    .timesEffectsOf(
-      TimeStudy(41),
-      TimeStudy(51),
-      TimeStudy(141),
-      TimeStudy(142),
-      TimeStudy(143),
-      Achievement(85),
-      Achievement(93),
-      Achievement(116),
-      Achievement(125),
-      Achievement(141),
-      InfinityUpgrade.ipMult,
-      DilationUpgrade.ipMultDT,
-      GlyphEffect.ipMult
-    );
-  ipMult = ipMult.times(player.replicanti.amount.powEffectOf(AlchemyResource.exponential));
-  return ipMult;
 }
 
 class ChargedInfinityUpgradeState extends GameMechanicState {
@@ -227,6 +202,31 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
   disCharge() {
     player.celestials.ra.charged.delete(this.id);
   }
+}
+
+function totalIPMult() {
+  if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {
+    return new Decimal(1);
+  }
+  let ipMult = new Decimal(1)
+    .times(kongIPMult)
+    .timesEffectsOf(
+      TimeStudy(41),
+      TimeStudy(51),
+      TimeStudy(141),
+      TimeStudy(142),
+      TimeStudy(143),
+      Achievement(85),
+      Achievement(93),
+      Achievement(116),
+      Achievement(125),
+      Achievement(141),
+      InfinityUpgrade.ipMult,
+      DilationUpgrade.ipMultDT,
+      GlyphEffect.ipMult
+    );
+  ipMult = ipMult.times(player.replicanti.amount.powEffectOf(AlchemyResource.exponential));
+  return ipMult;
 }
 
 function disChargeAll() {
@@ -343,7 +343,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
       if (purchases <= 0) return;
       this.purchase(purchases);
     }
-    // do not replace it with `if else` - it's specifically designed to process two sides of threshold separately
+    // Do not replace it with `if else` - it's specifically designed to process two sides of threshold separately
     // (for example, we have 1e4000000 IP and no mult - first it will go to 1e3000000 and then it will go in this part)
     if (this.hasIncreasedCost) {
       const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costCap.exponent);
@@ -380,7 +380,7 @@ class BreakInfinityUpgrade extends SetPurchasableMechanicState {
   BreakInfinityUpgrade.infinitiedGen = upgrade(db.infinitiedGen);
   BreakInfinityUpgrade.bulkDimBoost = upgrade(db.bulkDimBoost);
   BreakInfinityUpgrade.autobuyerSpeed = upgrade(db.autobuyerSpeed);
-})();
+}());
 
 class BreakInfinityMultiplierCostUpgrade extends RebuyableMechanicState {
   get currency() {

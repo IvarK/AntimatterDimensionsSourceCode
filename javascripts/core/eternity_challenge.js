@@ -9,7 +9,7 @@ function startEternityChallenge() {
   resetChallengeStuff();
   NormalDimensions.reset();
   player.replicanti.galaxies = 0;
-  player.infinityPoints = Player.defaultIP;
+  player.infinityPoints = Player.startingIP;
   InfinityDimensions.resetAmount();
   player.bestIPminThisInfinity = new Decimal(0);
   player.bestEPminThisEternity = new Decimal(0);
@@ -17,7 +17,7 @@ function startEternityChallenge() {
   // FIXME: Eternity count is now a Decimal, also why is this submitted twice?
   // kong.submitStats("Eternities", player.eternities);
   resetTickspeed();
-  player.antimatter = Player.defaultAntimatter;
+  player.antimatter = Player.startingAM;
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
   return true;

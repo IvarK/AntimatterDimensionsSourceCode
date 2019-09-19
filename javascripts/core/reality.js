@@ -354,7 +354,7 @@ function finishProcessReality(realityProps) {
   player.replicanti.galaxybuyer = false;
   player.replicanti.auto = Array.repeat(false, 3);
 
-  player.eternityPoints = Player.defaultEP;
+  player.eternityPoints = Player.startingEP;
 
   // This has to be reset before player.eternities to make the bumpLimit logic work correctly
   EternityUpgrade.epMult.reset();
@@ -401,7 +401,7 @@ function finishProcessReality(realityProps) {
     2: 0,
     3: 0
   };
-  player.antimatter = Player.defaultAntimatter;
+  player.antimatter = Player.startingAM;
   Enslaved.autoReleaseTick = 0;
   player.celestials.ra.compression.freeDimboosts = 0;
 
@@ -427,7 +427,7 @@ function finishProcessReality(realityProps) {
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
-  player.infinityPoints = Player.defaultIP;
+  player.infinityPoints = Player.startingIP;
 
   if (RealityUpgrade(10).isBought) applyRUPG10();
   else Tab.dimensions.normal.show();
@@ -478,13 +478,14 @@ function restoreCelestialRuns(celestialRunState) {
 function applyRUPG10() {
   NormalChallenges.completeAll();
   
+  const hasMaxBulkSecretAch = SecretAchievement(38).isUnlocked;
   player.auto.dimensions = player.auto.dimensions.map(() => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
-    cost: player.secretAchievements.has(38) ? 2e126 : 5e133,
+    cost: hasMaxBulkSecretAch ? 5e133 : 2e126,
     interval: 100,
     // Only completely max bulk if the relevant secret achievement has already been unlocked
-    bulk: player.secretAchievements.has(38) ? 1e100 : 1e90,
+    bulk: hasMaxBulkSecretAch ? 1e100 : 1e90,
     mode: AutobuyerMode.BUY_10,
     priority: 1,
     isActive: true,
@@ -508,8 +509,6 @@ function applyRUPG10() {
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
   player.infinityRebuyables = [8, 7];
-  GameCache.tickSpeedMultDecrease.invalidate();
-  GameCache.dimensionMultDecrease.invalidate();
   player.infDimBuyers = Array.repeat(true, 8);
   player.offlineProd = 50;
   player.offlineProdCost = 1e17;
@@ -519,6 +518,8 @@ function applyRUPG10() {
   player.replicanti.unl = true;
   player.replicanti.galaxybuyer = true;
   player.replicanti.auto = Array.repeat(true, 3);
+  GameCache.tickSpeedMultDecrease.invalidate();
+  GameCache.dimensionMultDecrease.invalidate();
 }
 
 function clearCelestialRuns() {

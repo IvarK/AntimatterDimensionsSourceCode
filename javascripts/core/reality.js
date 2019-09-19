@@ -454,12 +454,7 @@ function finishProcessReality(realityProps) {
   player.reality.gainedAutoAchievements = false;
 
   tryUnlockAchievementsOnReality();
-<<<<<<< HEAD
   if (realityProps.restoreCelestialState) restoreCelestialRuns(celestialRunState);
-=======
-  if (realityProps.glyphUndo) restoreCelestialRuns(celestialRunState);
-  initializeChallengeCompletions();
->>>>>>> Address PR comments
 }
 
 function restoreCelestialRuns(celestialRunState) {

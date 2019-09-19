@@ -29,7 +29,7 @@ Vue.component("equipped-glyphs", {
         ? ("Unequip the last equipped glyph and rewind reality to when you equipped it." +
           " (Most resources will be fully reset)")
         : "Undo is only available for glyphs equipped during this reality";
-    }
+    },
   },
   created() {
     this.on$(GameEvent.GLYPHS_CHANGED, this.glyphsChanged);
@@ -86,13 +86,24 @@ Vue.component("equipped-glyphs", {
         return;
       }
       Glyphs.undo();
-    }
+    },
+    dragEvents(idx) {
+      return {
+        dragover: $event => this.dragover($event, idx),
+        dragleave: () => this.dragleave(idx),
+        drop: $event => this.drop($event, idx),
+      };
+    },
   },
   template: `
   <div class="l-equipped-glyphs">
     <div class="l-equipped-glyphs__slots">
       <div v-for="(glyph, idx) in glyphs"
-           :style="glyphPositionStyle(idx)">
+           :style="glyphPositionStyle(idx)"
+           v-on="dragEvents(idx)">
+        <!-- the drop zone is a bit larger than the glyph itself. -->
+        <div class="l-equipped-glyphs__dropzone"
+             v-on="dragEvents(idx)" />
         <glyph-component v-if="glyph"
                          :key="idx"
                          :glyph="glyph"
@@ -100,11 +111,6 @@ Vue.component("equipped-glyphs", {
         <div v-else
              :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
                       {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]" />
-        <!-- the drop zone is a bit larger than the glyph itself. -->
-        <div class="l-equipped-glyphs__dropzone"
-             @dragover="dragover($event, idx)"
-             @dragleave="dragleave(idx)"
-             @drop="drop($event, idx)"/>
       </div>
     </div>
     <div class="l-equipped-glyphs__buttons">

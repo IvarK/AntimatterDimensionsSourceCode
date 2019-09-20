@@ -69,13 +69,16 @@ function buyDilationUpgrade(id, bulk) {
     }
 
     if (id === 3) {
-      const retroactiveTPFactor = Effects.max(
+      let retroactiveTPFactor = Effects.max(
         1,
         Perk.retroactiveTP1,
         Perk.retroactiveTP2,
         Perk.retroactiveTP3,
         Perk.retroactiveTP4
       );
+      if (Enslaved.isRunning) {
+        retroactiveTPFactor = Math.pow(retroactiveTPFactor, Enslaved.tachyonNerf);
+      }
       player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
     }
   }
@@ -135,7 +138,7 @@ function getTP() {
   let tachyon = Decimal
     .pow(Decimal.log10(player.antimatter) / 400, 1.5)
     .times(tachyonGainMultiplier());
-  if (Enslaved.isRunning) tachyon = tachyon.pow(0.25);
+  if (Enslaved.isRunning) tachyon = tachyon.pow(Enslaved.tachyonNerf);
   return tachyon;
 }
 

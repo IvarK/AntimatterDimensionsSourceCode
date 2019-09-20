@@ -20,7 +20,6 @@ Vue.component("current-glyph-effects", {
             ? this.effectConfig.totalDesc()
             : this.effectConfig.totalDesc;
           return desc
-            .replace("\n", "<br>")
             .replace("{value}", value1)
             .replace("{value2}", value2);
         },

@@ -10,106 +10,6 @@ let kongDimMult = 1
 let kongAllDimMult = 1
 let kongEPMult = 1
 
-function floatText(tier, text) {
-  if (!player.options.animations.floatingText) return;
-  const floatingText = ui.view.tabs.dimensions.normal.floatingText[tier];
-  floatingText.push({ text: text, key: UIID.next() });
-  setTimeout(() => floatingText.shift(), 1000)
-}
-
-function maxAll() {
-  if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
-
-  player.usedMaxAll = true;
-
-  buyMaxTickSpeed();
-
-  for (let tier = 1; tier < 9; tier++) {
-    maxDimension(tier);
-  }
-}
-
-function maxDimension(tier) {
-  const dimension = NormalDimension(tier);
-  if (!dimension.isAvailable || !dimension.isAffordableUntil10) return;
-  const cost = dimension.cost.times(dimension.remainingUntil10);
-  const multBefore = dimension.power;
-
-  if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
-
-  // Challenge 6: Dimensions 3+ cost the dimension two tiers down instead of antimatter
-  if (tier >= 3 && NormalChallenge(6).isRunning) {
-    const lowerTier = NormalDimension(tier - 2);
-    if (lowerTier.amount.lt(cost)) return;
-    while (lowerTier.amount.gt(dimension.cost)) {
-      lowerTier.amount = lowerTier.amount.minus(dimension.cost);
-      buyUntilTen(tier);
-    }
-  } else {
-    // Buy any remaining until 10 before attempting to bulk-buy
-    if (cost.lt(player.antimatter)) {
-      player.antimatter = player.antimatter.minus(cost);
-      buyUntilTen(tier);
-    }
-
-    // Buy in a while loop in order to properly trigger abnormal price increases
-    const hasAbnormalCostIncrease = NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning;
-    // eslint-disable-next-line no-unmodified-loop-condition
-    while (player.antimatter.gte(dimension.cost.times(10)) && (hasAbnormalCostIncrease ||
-            dimension.cost.lte(Decimal.MAX_NUMBER))) {
-      player.antimatter = player.antimatter.minus(dimension.cost.times(10));
-      buyUntilTen(tier);
-    }
-
-    // This blob is the post-e308 bulk-buy math, explicitly ignored if abnormal cost increases are active
-    if (dimension.cost.gte(Decimal.MAX_NUMBER) &&
-        BreakInfinityUpgrade.dimCostMult.isMaxed && !hasAbnormalCostIncrease) {
-      const a = Math.log10(Math.sqrt(Player.dimensionMultDecrease));
-      const b = dimension.costMultiplier.dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10();
-      const c = dimension.cost.dividedBy(player.antimatter).log10();
-      const discriminant = Math.pow(b, 2) - (c * a * 4);
-      if (discriminant < 0) return;
-      const buying = Math.floor((Math.sqrt(discriminant) - b) / (2 * a)) + 1;
-      if (buying <= 0) return;
-      dimension.amount = Decimal.round(dimension.amount.plus(10 * buying));
-      const preInfBuy = Math.floor(1 + (308 - dimension.baseCost.log10()) / dimension.baseCostMultiplier.log10());
-      const postInfBuy = dimension.bought / 10 + buying - preInfBuy - 1;
-      const postInfInitCost = dimension.baseCost.times(Decimal.pow(dimension.baseCostMultiplier, preInfBuy));
-      dimension.bought += 10 * buying;
-      dimension.power = dimension.power.times(Decimal.pow(getBuyTenMultiplier(), buying));
-      const newCost = postInfInitCost.times(Decimal.pow(dimension.baseCostMultiplier, postInfBuy))
-        .times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
-      const newMult = dimension.baseCostMultiplier.times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1));
-      dimension.cost = newCost;
-      dimension.costMultiplier = newMult;
-      if (player.antimatter.gte(dimension.cost)) player.antimatter = player.antimatter.minus(dimension.cost);
-      dimension.cost = dimension.cost.times(dimension.costMultiplier);
-      dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
-    }
-  }
-  if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) {
-    player.matter = new Decimal(1);
-  }
-  onBuyDimension(tier);
-  if (dimension.power.neq(multBefore)) floatText(tier, `x${shortenMoney(dimension.power.dividedBy(multBefore))}`);
-}
-
-// This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
-function buyUntilTen(tier) {
-  const dimension = NormalDimension(tier);
-  dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
-  dimension.bought += dimension.remainingUntil10;
-  dimension.power = dimension.power.times(getBuyTenMultiplier())
-
-  if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
-  else if (NormalChallenge(9).isRunning) multiplySameCosts(dimension.cost);
-  else dimension.cost = dimension.cost.times(dimension.costMultiplier);
-
-  if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
-    dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
-  }
-}
-
 function playerInfinityUpgradesOnEternity() {
   if (!EternityMilestone.keepInfinityUpgrades.isReached) player.infinityUpgrades.clear();
   else if (!EternityMilestone.keepBreakUpgrades.isReached) {
@@ -178,19 +78,22 @@ function getRealityMachineMultiplier() {
 }
 
 function gainedRealityMachines() {
-    let rmGain = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e / 4000 - 1);
-    rmGain = rmGain.times(getRealityMachineMultiplier());
-    rmGain = rmGain.plusEffectOf(Perk.realityMachineGain);
-    // This happens around ee10 and is necessary to reach e9e15 antimatter without having to deal with the various
-    // potential problems associated with having ee9 RM, of which there are lots (both balance-wise and design-wise).
-    // The softcap here squishes every additional OoM in the exponent into another factor of e1000 RM, putting e9e15
-    // antimatter around e7000 RM instead of e1000000000 RM.
-    const softcapRM = new Decimal("1e1000");
-    if (rmGain.gt(softcapRM)) {
-      const exponentOOMAboveCap = Math.log10(rmGain.log10() / softcapRM.log10());
-      rmGain = softcapRM.pow(1 + exponentOOMAboveCap);
-    }
-    return Decimal.floor(rmGain);
+  const log10FinalEP = player.eternityPoints.plus(gainedEternityPoints()).log10();
+  let rmGain = Decimal.pow(1000, log10FinalEP / 4000 - 1);
+  // Increase base RM gain if <10 RM
+  if (rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
+  rmGain = rmGain.times(getRealityMachineMultiplier());
+  rmGain = rmGain.plusEffectOf(Perk.realityMachineGain);
+  // This happens around ee10 and is necessary to reach e9e15 antimatter without having to deal with the various
+  // potential problems associated with having ee9 RM, of which there are lots (both balance-wise and design-wise).
+  // The softcap here squishes every additional OoM in the exponent into another factor of e1000 RM, putting e9e15
+  // antimatter around e7000 RM instead of e1000000000 RM.
+  const softcapRM = new Decimal("1e1000");
+  if (rmGain.gt(softcapRM)) {
+    const exponentOOMAboveCap = Math.log10(rmGain.log10() / softcapRM.log10());
+    rmGain = softcapRM.pow(1 + exponentOOMAboveCap);
+  }
+  return Decimal.floor(rmGain);
 }
 
 function gainedGlyphLevel() {
@@ -207,10 +110,10 @@ function gainedGlyphLevel() {
 
 function resetChallengeStuff() {
     player.chall2Pow = 1;
-    player.chall3Pow = new Decimal(0.01)
-    player.matter = new Decimal(0)
-    player.chall11Pow = new Decimal(1)
-    player.postC4Tier = 1
+    player.chall3Pow = new Decimal(0.01);
+    player.matter = new Decimal(1);
+    player.chall8TotalSacrifice = new Decimal(1);
+    player.postC4Tier = 1;
 }
 
 function resetAntimatter() {
@@ -390,22 +293,6 @@ function kongLog10StatSubmission() {
 
 setInterval(kongLog10StatSubmission, 10000)
 
-var ttMaxTimer = 0;
-
-function randomStuffThatShouldBeRefactored() {
-  // document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
-  // document.getElementById("kongep").textContent = "Triple your EP gain from all sources (additive). Forever. Currently: x"+kongEPMult+", next: x"+(kongEPMult==1? 3: kongEPMult+3)
-  // document.getElementById("kongdim").textContent = "Double all your normal dimension multipliers (multiplicative). Forever. Currently: x"+kongDimMult+", next: x"+(kongDimMult*2)
-  // document.getElementById("kongalldim").textContent = "Double ALL the dimension multipliers (Normal, Infinity, Time) (multiplicative until 32x). Forever. Currently: x"+kongAllDimMult+", next: x"+((kongAllDimMult < 32) ? kongAllDimMult * 2 : kongAllDimMult + 32)
-
-  ttMaxTimer++;
-  if (autoBuyMaxTheorems()) ttMaxTimer = 0;
-
-  if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.teresa.rmStore *= Math.pow(0.98, 1/60) // Teresa container leak, 2% every minute, only works online.
-}
-
-setInterval(randomStuffThatShouldBeRefactored, 1000);
-
 var postC2Count = 0;
 var replicantiTicks = 0
 
@@ -523,7 +410,7 @@ function gameLoop(diff, options = {}) {
   }
 
   // Ra-Enslaved auto-release stored time (once every 5 ticks)
-  if (Enslaved.isAutoReleasing) {
+  if (Enslaved.isAutoReleasing && !Enslaved.isRunning) {
     Enslaved.autoReleaseTick++;
   }
   if (Enslaved.autoReleaseTick >= 5) {
@@ -760,7 +647,9 @@ function gameLoop(diff, options = {}) {
 
   // TD5-8/Reality unlock and TTgen perk autobuy
   autoBuyExtraTimeDims();
-  if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
+  if (Perk.autounlockDilation3.isBought) {
+    buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
+  }
   if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
 
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
@@ -769,6 +658,7 @@ function gameLoop(diff, options = {}) {
 
   Achievements.autoAchieveUpdate(diff);
   V.checkForUnlocks();
+  Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
 
   EventHub.dispatch(GameEvent.GAME_TICK_AFTER);
@@ -809,6 +699,7 @@ function updateFreeGalaxies() {
 function getTTPerSecond() {
   // All TT multipliers (note that this is equal to 1 pre-Ra)
   let ttMult = RA_UNLOCKS.TT_BOOST.effect.ttGen();
+  ttMult *= Achievement(137).effectValue;
   if (Enslaved.isRunning) ttMult *= 1e-3;
   if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttMult *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
@@ -1007,6 +898,7 @@ function slowerAutobuyers(realDiff) {
     player.auto.dilUpgradeTimer = Math.min(player.auto.dilUpgradeTimer - dilUpgradePeriod, dilUpgradePeriod);
     autoBuyDilationUpgrades();
   }
+  autoBuyMaxTheorems(realDiff);
 }
 
 setInterval(function () {

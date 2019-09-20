@@ -104,6 +104,7 @@ const GameEvent = {
   PERK_BOUGHT: "PERK_BOUGHT",
   BLACK_HOLE_UPGRADE_BOUGHT: "BLACK_HOLE_UPGRADE_BOUGHT",
   GAME_LOAD: "GAME_LOAD",
+  CELESTIAL_UPGRADE_UNLOCKED: "CELESTIAL_UPGRADE_UNLOCKED",
 
   // Used by events to signify that they are triggered by a particular
   // event, not handled by the event hub

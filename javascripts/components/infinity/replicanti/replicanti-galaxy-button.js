@@ -14,14 +14,15 @@ Vue.component("replicanti-galaxy-button", {
   },
   computed: {
     resetActionDisplay() {
-      return this.isDivideUnlocked ? "Divide Replicanti by e308" : "Reset Replicanti amount";
+      return this.isDivideUnlocked
+        ? `Divide Replicanti by ${shorten(Number.MAX_VALUE, 1, 1)}`
+        : "Reset Replicanti amount";
     },
     galaxyCountDisplay() {
       const bought = this.boughtGalaxies;
       const extra = this.extraGalaxies;
-      const galaxyNoun = (extra + bought === 1) ? "galaxy" : "galaxies";
       const galaxyCount = extra > 0 ? `${shortenSmallInteger(bought)}+${shortenSmallInteger(extra)}` : bought;
-      return `${galaxyCount} replicated ${galaxyNoun} created.`;
+      return `Currently: ${galaxyCount}`;
     },
     autobuyer() {
       return Replicanti.galaxies.autobuyer;
@@ -55,7 +56,7 @@ Vue.component("replicanti-galaxy-button", {
         class="o-primary-btn--replicanti-galaxy"
         onclick="replicantiGalaxy()"
       >
-        {{resetActionDisplay}}, but get a free galaxy
+        {{resetActionDisplay}} for a free galaxy
         <br>
         {{galaxyCountDisplay}}
       </primary-button>

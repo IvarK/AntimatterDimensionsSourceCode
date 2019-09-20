@@ -110,8 +110,12 @@ GameDatabase.reality.perks = {
     id: 25,
     label: "RM",
     family: PerkFamily.REALITY,
-    description: "Gain additional RM equal to twice your current reality count.",
-    effect: () => 2 * player.realities
+    description: "Every reality, gain additional RM equal to your current reality count multiplied" +
+      " by your highest glyph level.",
+    effect: () => player.realities * player.reality.glyphs.active
+      .concat(player.reality.glyphs.inventory)
+      .map(glyph => glyph.level)
+      .max()
   },
   dimboostNonReset: {
     id: 30,
@@ -119,17 +123,17 @@ GameDatabase.reality.perks = {
     family: PerkFamily.INFINITY,
     description: "Dimboosts and RG no longer reset normal dimensions"
   },
-  studyPassive: {
+  studyPassive1: {
     id: 31,
-    label: "PASS",
+    label: "PASS1",
     family: PerkFamily.ETERNITY,
-    description: "Improve passive path IP/EP multipliers and add replicanti speed to study 132"
+    description: "Improve passive path EP to 100x and IP to 1e100x"
   },
-  automatorRowScaling: {
+  studyPassive2: {
     id: 32,
-    label: "??????",
-    family: PerkFamily.AUTOMATION,
-    description: "PLACEHOLDER PERK. (Right now this does nothing)"
+    label: "PASS2",
+    family: PerkFamily.ETERNITY,
+    description: "Passive path RG study gains 5x replicanti speed"
   },
   autounlockEU1: {
     id: 40,
@@ -159,7 +163,7 @@ GameDatabase.reality.perks = {
     id: 44,
     label: "DIL3",
     family: PerkFamily.DILATION,
-    description: "Auto-unlock Dilation TT generation when you have 1e15 DT."
+    description: "Auto-unlock TT generation once you can afford it."
   },
   autounlockTD: {
     id: 45,
@@ -335,25 +339,29 @@ GameDatabase.reality.perks = {
     id: 104,
     label: "TT1",
     family: PerkFamily.AUTOMATION,
-    description: "Autobuy max TT every 10 seconds."
+    description: "Autobuy max TT every 10 seconds.",
+    effect: () => 10000,
   },
   autobuyerTT2: {
     id: 105,
     label: "TT2",
     family: PerkFamily.AUTOMATION,
-    description: "Autobuy max TT every 5 seconds."
+    description: "Autobuy max TT every 5 seconds.",
+    effect: () => 5000,
   },
   autobuyerTT3: {
     id: 106,
     label: "TT3",
     family: PerkFamily.AUTOMATION,
-    description: "Autobuy max TT every 3 seconds."
+    description: "Autobuy max TT every 3 seconds.",
+    effect: () => 3000,
   },
   autobuyerTT4: {
     id: 107,
     label: "TT4",
     family: PerkFamily.AUTOMATION,
-    description: "Autobuy max TT every second."
+    description: "Autobuy max TT every second.",
+    effect: () => 1000,
   },
   achievementRowGroup1: {
     id: 201,
@@ -394,7 +402,7 @@ GameDatabase.reality.perks = {
     id: 206,
     label: "ACH6",
     family: PerkFamily.ACHIEVEMENT,
-    description: "Start with the first 13 achievement rows after Reality.",
+    description: "Reality no longer resets your achievements.",
     effect: () => 13
   }
 };
@@ -407,6 +415,7 @@ GameDatabase.reality.perkConnections = (function() {
       p.achievementRowGroup1, p.startAM1, p.glyphLevelIncrease1, p.glyphLevelIncrease2,
       p.autounlockEU1, p.bypassEC5Lock],
     [p.startAM1, p.startAM2, p.startIP1],
+    [p.startAM2, p.startEP1],
     [p.startIP1, p.startIP2, p.startEP1, p.autobuyerFasterID],
     [p.startIP2, p.bypassIDAntimatter, p.dimboostNonReset],
     [p.startEP1, p.startEP2, p.startTP],
@@ -417,7 +426,6 @@ GameDatabase.reality.perkConnections = (function() {
     [p.glyphChoice4, p.glyphLevelIncrease1, p.glyphUncommonGuarantee],
     [p.glyphRarityIncrease, p.glyphLevelIncrease2, p.glyphUncommonGuarantee],
     [p.glyphUncommonGuarantee, p.glyphRarityIncrease, p.glyphChoice4, p.realityMachineGain],
-    [p.automatorRowScaling, p.autobuyerTT1],
     [p.autounlockEU1, p.autounlockEU2],
     [p.autounlockEU2, p.autounlockEU1, p.autobuyerDilation],
     [p.autounlockDilation1, p.autounlockDilation2],
@@ -428,7 +436,9 @@ GameDatabase.reality.perkConnections = (function() {
     [p.bypassEC1Lock, p.bypassEC2Lock, p.bypassEC3Lock, p.autocompleteEC1],
     [p.bypassEC2Lock, p.studyActiveEP, p.bypassEC1Lock],
     [p.bypassEC3Lock, p.studyIdleEP, p.bypassEC1Lock],
-    [p.bypassEC5Lock, p.studyActiveEP, p.studyIdleEP, p.studyPassive],
+    [p.bypassEC5Lock, p.studyActiveEP, p.studyIdleEP, p.studyPassive1],
+    [p.studyPassive1, p.studyPassive2],
+    [p.studyPassive2, p.bypassEC1Lock],
     [p.autocompleteEC1, p.autocompleteEC2],
     [p.autocompleteEC2, p.autocompleteEC3],
     [p.autocompleteEC3, p.autocompleteEC4],
@@ -441,7 +451,7 @@ GameDatabase.reality.perkConnections = (function() {
     [p.retroactiveTP3, p.retroactiveTP4],
     [p.autobuyerDilation, p.autounlockEU2, p.autounlockDilation1, p.bypassECDilation, p.bypassDGReset],
     [p.autobuyerFasterID, p.autobuyerFasterReplicanti],
-    [p.autobuyerTT1, p.autobuyerTT2, p.automatorRowScaling],
+    [p.autobuyerTT1, p.autobuyerTT2],
     [p.autobuyerTT2, p.autobuyerTT3],
     [p.autobuyerTT3, p.autobuyerTT4],
     [p.achievementRowGroup1, p.achievementRowGroup2],

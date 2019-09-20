@@ -105,7 +105,7 @@ GameDatabase.eternity.milestones = {
     reward: () => {
       const eternities = getEternitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
       return `Unlock autobuyer for Eternities. 
-      Only while offline, gain eternities based on the last 10 eternities. 
+      Only while offline, gain eternities based on the last ${shortenSmallInteger(10)} eternities. 
       Currently ${shorten(eternities, 2, 2)}/hour`;
     },
   },
@@ -113,8 +113,8 @@ GameDatabase.eternity.milestones = {
     eternities: 1000,
     reward: () => {
       const infinities = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
-      return `Only while offline, 
-      gain infinities based on the last 10 infinities. Currently ${shorten(infinities, 2, 2)}/hour`;
+      return `Only while offline, gain infinities based on the last ${shortenSmallInteger(10)} infinities.
+        Currently ${shorten(infinities, 2, 2)}/hour`;
     },
   },
   // To make it even for 3 columns

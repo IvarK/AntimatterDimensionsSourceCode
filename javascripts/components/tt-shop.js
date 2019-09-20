@@ -39,12 +39,6 @@ Vue.component("tt-shop", {
         transform: this.minimized ? "rotateX(180deg)" : "",
       };
     },
-    containerStyle() {
-      return {
-        // Transform: this.minimized ? "translateY(73px)" : "",
-        width: this.minimized ? "440px" : "555px"
-      };
-    },
     saveLoadText() {
       return this.$viewModel.shiftDown ? "save:" : "load:";
     },
@@ -98,7 +92,7 @@ Vue.component("tt-shop", {
   },
   template: `
     <div id="TTbuttons">
-      <div id="theorembuybackground" class="ttshop-container" :style="containerStyle">
+      <div class="ttshop-container ttshop-background">
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
           <p id="timetheorems">
             <span class="c-tt-amount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}
@@ -124,7 +118,7 @@ Vue.component("tt-shop", {
           </div>
         </div>
       </div>
-      <button v-if="minimizeAvailable" id="theorembuybackground" class="ttshop-minimize-btn" @click="minimize">
+      <button v-if="minimizeAvailable" class="ttshop-minimize-btn ttshop-background" @click="minimize">
         <span id="minimizeArrow" :style="minimizeArrowStyle">▼</span>
       </button>
     </div>`

@@ -10,7 +10,7 @@ Vue.component("sacrifice-autobuyer-box", {
         <span>Sacrifice at X multiplier:</span>
         <autobuyer-input
          :autobuyer="autobuyer"
-         type="float"
+         type="decimal"
          property="multiplier"
         />
       </div>

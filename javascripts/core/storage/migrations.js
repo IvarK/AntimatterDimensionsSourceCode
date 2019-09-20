@@ -121,6 +121,9 @@ GameStorage.migrations = {
       GameStorage.migrations.renameDimboosts(player);
       GameStorage.migrations.migrateConfirmations(player);
       GameStorage.migrations.removeOtherTickspeedProps(player);
+      GameStorage.migrations.renameNewsOption(player);
+      GameStorage.migrations.removeDimensionCosts(player);
+      GameStorage.migrations.changeC8Handling(player);
     }
   },
 
@@ -404,6 +407,25 @@ GameStorage.migrations = {
     delete player.tickspeedMultiplier;
   },
 
+  renameNewsOption(player) {
+    player.options.news = !player.options.newsHidden;
+    delete player.options.newsHidden;
+  },
+
+  removeDimensionCosts(player) {
+    for (const dimension of player.dimensions.normal) {
+      delete dimension.cost;
+      delete dimension.costMultiplier;
+    }
+  },
+
+  renameTickspeedPurchaseBumps(player) {
+    if (player.chall9TickspeedPurchaseBumps !== undefined) {
+      player.chall9TickspeedCostBumps = player.chall9TickspeedPurchaseBumps;
+      delete player.chall9TickspeedPurchaseBumps;
+    }
+  },
+
   removePostC3Reward(player) {
     delete player.postC3Reward;
   },
@@ -596,6 +618,11 @@ GameStorage.migrations = {
 
     // This did nothing on live and continues to do nothing...?
     delete player.tickDecrease;
+  },
+
+  changeC8Handling(player) {
+    player.chall8TotalSacrifice = Decimal.pow(player.chall11Pow, 2);
+    delete player.chall11Pow;
   },
 
   prePatch(saveData) {

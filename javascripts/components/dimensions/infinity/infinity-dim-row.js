@@ -9,7 +9,6 @@ Vue.component("infinity-dim-row", {
       isUnlocked: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
-      bought: 0,
       hasRateOfChange: false,
       rateOfChange: new Decimal(0),
       isAutobuyerUnlocked: false,
@@ -56,7 +55,6 @@ Vue.component("infinity-dim-row", {
       if (!this.isUnlocked) return;
       this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.amount);
-      this.bought = dimension.bought;
       this.hasRateOfChange = dimension.hasRateOfChange;
       if (this.hasRateOfChange) {
         this.rateOfChange.copyFrom(dimension.rateOfChange);
@@ -83,7 +81,7 @@ Vue.component("infinity-dim-row", {
       >{{name}} Infinity Dimension x{{shortenMoney(multiplier)}}</div>
       <div
         class="c-infinity-dim-row__label c-infinity-dim-row__label--growable"
-      >{{shortenDimensions(amount)}} ({{bought}}){{rateOfChangeDisplay}}</div>
+      >{{shortenDimensions(amount)}} {{rateOfChangeDisplay}}</div>
       <primary-button-on-off
         v-if="isAutobuyerUnlocked && !isEC8Running"
         v-model="isAutobuyerOn"

@@ -41,7 +41,7 @@ function giveEternityRewards(auto) {
 
   player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
     Achievement(131),
-    TimeStudy(191)
+    TimeStudy(191),
   );
 
   if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked && player.infinityPoints.gt(Decimal.MAX_NUMBER)) {
@@ -88,8 +88,10 @@ function eternity(force, auto, specialConditions = {}) {
   resetChallengeStuff();
   NormalDimensions.reset();
 
-  if (player.respec) respecTimeStudies(auto);
-  player.respec = false;
+  if (!specialConditions.enteringEC && player.respec) {
+    respecTimeStudies(auto);
+    player.respec = false;
+  }
 
   resetInfinityPointsOnEternity();
   InfinityDimensions.resetAmount();

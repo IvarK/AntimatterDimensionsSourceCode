@@ -148,6 +148,11 @@ class TimeDimensionState extends DimensionState {
     this._e6000ScalingAmount = E6000_SCALING_AMOUNTS[tier];
   }
 
+  /** @returns {Decimal} */
+  get cost() { return this.data.cost; }
+  /** @param {Decimal} value */
+  set cost(value) { this.data.cost = value; }
+
   get isUnlocked() {
     return this._tier < 5 || TimeStudy.timeDimension(this._tier).isBought;
   }

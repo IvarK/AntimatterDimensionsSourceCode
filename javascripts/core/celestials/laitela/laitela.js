@@ -54,11 +54,12 @@ const Laitela = {
         d.amount = new Decimal(1);
         d.timeSinceLastUpdate = 0;
       }
-    } 
+    }
   },
 
   has(info) {
-    return this.celestial.unlocks.includes(info.id);
+    // eslint-disable-next-line no-bitwise
+    return Boolean(player.celestials.laitela.unlockBits & (1 << info.id));
   },
   canBuyUnlock(info) {
     if (this.matter.lt(info.price)) return false;
@@ -67,7 +68,8 @@ const Laitela = {
   buyUnlock(info) {
     if (!this.canBuyUnlock) return false;
     this.matter = this.matter.minus(info.price);
-    this.celestial.unlocks.push(info.id);
+    // eslint-disable-next-line no-bitwise
+    player.celestials.laitela.unlockBits |= (1 << info.id);
     return true;
   },
   startRun() {

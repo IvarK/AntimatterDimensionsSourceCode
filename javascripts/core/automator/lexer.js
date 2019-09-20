@@ -86,20 +86,32 @@ const AutomatorLexer = (() => {
     $autocomplete: "<",
     $compare: (a, b) => Decimal.lt(a, b),
   });
+  const OpEQ = createInCategory(ComparisonOperator, "OpEQ", /==/, {
+    $compare: (a, b) => Decimal.eq(a, b),
+  });
+  // EqualSign is a single = which is defined for both comparisons and define
+  const EqualSign = createToken({
+    name: "EqualSign",
+    pattern: /=/,
+    categories: ComparisonOperator,
+    label: "=",
+    longer_alt: OpEQ,
+  });
+  EqualSign.$compare = (a, b) => Decimal.eq(a, b);
 
   createInCategory(Currency, "EP", /ep/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithEP(),
+    $buyTT: () => TimeTheorems.buyWithEP(true),
     $getter: () => player.eternityPoints
   });
   createInCategory(Currency, "IP", /ip/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithIP(),
+    $buyTT: () => TimeTheorems.buyWithIP(true),
     $getter: () => player.infinityPoints
   });
   createInCategory(Currency, "AM", /am/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithAntimatter(),
+    $buyTT: () => TimeTheorems.buyWithAntimatter(true),
     $getter: () => player.antimatter
   });
   createInCategory(Currency, "DT", /dt/i, { $getter: () => player.dilation.dilatedTime });
@@ -124,7 +136,7 @@ const AutomatorLexer = (() => {
   });
   createInCategory(Currency, "Total_TT", /total tt/i, {
     $autocomplete: "total tt",
-    $getter: () => TimeTheorems.totalPurchased()
+    $getter: () => player.timestudy.theorem.plus(calculateTimeStudiesCost()),
   });
   for (let i = 1; i <= 12; ++i) {
     const id = i;
@@ -220,7 +232,7 @@ const AutomatorLexer = (() => {
   createKeyword("Load", /load/i);
   createKeyword("Max", /max/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyMax(),
+    $buyTT: () => TimeTheorems.buyMax(true),
   });
   createKeyword("Nowait", /nowait/i);
   createKeyword("Off", /off/i);
@@ -262,15 +274,14 @@ const AutomatorLexer = (() => {
   const LCurly = createToken({ name: "LCurly", pattern: /[ \t]*{/ });
   const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*}/ });
   const Comma = createToken({ name: "Comma", pattern: /,/ });
-  const EqualSign = createToken({ name: "EqualSign", pattern: /=/, label: "=" });
   const Pipe = createToken({ name: "Pipe", pattern: /\|/, label: "|" });
   const Dash = createToken({ name: "Dash", pattern: /-/, label: "-" });
 
   // The order here is the order the lexer looks for tokens in.
   const automatorTokens = [
     HSpace, Comment, EOL,
-    LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
+    LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     NumberLiteral,
     Currency, ...tokenLists.Currency,
     ECLiteral,

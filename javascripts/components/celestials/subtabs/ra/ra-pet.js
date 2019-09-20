@@ -55,7 +55,7 @@ Vue.component("ra-pet", {
   template: `
     <div class="l-ra-pet-container" v-if="isUnlocked">
       <div class="c-ra-pet-header" :style="petStyle">
-        <div class="c-ra-pet-title">{{ pet.name }} Lvl. {{ level }}</div>
+        <div class="c-ra-pet-title">{{ pet.name }} Lvl. {{ shortenSmallInteger(level) }}</div>
         <div v-if="level >= 2">{{ scalingUpgradeText }}</div>
         <div>{{ experienceInformation }}</div>
       </div>

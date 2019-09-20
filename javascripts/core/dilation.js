@@ -69,13 +69,16 @@ function buyDilationUpgrade(id, bulk) {
     }
 
     if (id === 3) {
-      const retroactiveTPFactor = Effects.max(
+      let retroactiveTPFactor = Effects.max(
         1,
         Perk.retroactiveTP1,
         Perk.retroactiveTP2,
         Perk.retroactiveTP3,
         Perk.retroactiveTP4
       );
+      if (Enslaved.isRunning) {
+        retroactiveTPFactor = Math.pow(retroactiveTPFactor, Enslaved.tachyonNerf);
+      }
       player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
     }
   }
@@ -92,7 +95,7 @@ function getFreeGalaxyMultBeforeCompression() {
 
 function getFreeGalaxyMult() {
   const compressionReduction = Effects.max(0, CompressionUpgrade.freeGalaxyScaling);
-  return getFreeGalaxyMultBeforeCompression() - compressionReduction;
+  return 1 + (getFreeGalaxyMultBeforeCompression() - 1) / (1 + compressionReduction);
 }
 
 function getDilationGainPerSecond() {
@@ -100,6 +103,7 @@ function getDilationGainPerSecond() {
     .timesEffectsOf(
       DilationUpgrade.dtGain,
       Achievement(132),
+      Achievement(137),
       RealityUpgrade(1),
       AlchemyResource.dilation
     );
@@ -134,7 +138,7 @@ function getTP() {
   let tachyon = Decimal
     .pow(Decimal.log10(player.antimatter) / 400, 1.5)
     .times(tachyonGainMultiplier());
-  if (Enslaved.isRunning) tachyon = tachyon.pow(0.25);
+  if (Enslaved.isRunning) tachyon = tachyon.pow(Enslaved.tachyonNerf);
   return tachyon;
 }
 
@@ -239,6 +243,6 @@ const DilationUpgrade = (function() {
     ipMultDT: new DilationUpgradeState(db.ipMultDT),
     timeStudySplit: new DilationUpgradeState(db.timeStudySplit),
     dilationPenalty: new DilationUpgradeState(db.dilationPenalty),
-    ttGenerator: new DilationUpgradeState(db.ttGenerator)
+    ttGenerator: new DilationUpgradeState(db.ttGenerator),
   };
-})();
+}());

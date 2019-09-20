@@ -78,7 +78,7 @@ const GameStorage = {
   },
 
   save(silent = false) {
-    if (GlyphSelection.active) return;
+    if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
     if (++this.saved > 99) SecretAchievement(12).unlock();
     const root = {
       current: this.currentSlot,
@@ -125,7 +125,7 @@ const GameStorage = {
       NormalChallenge(1).complete();
     }
 
-    ui.view.newsHidden = player.options.newsHidden;
+    ui.view.news = player.options.news;
     ui.view.newUI = player.options.newUI;
 
     recalculateAllGlyphs();
@@ -151,6 +151,10 @@ const GameStorage = {
     GameUI.update();
     if (GameIntervals.gameLoop.isStarted) {
       GameIntervals.gameLoop.restart();
+    }
+
+    for (const resource of AlchemyResources.all) {
+      resource.before = resource.amount;
     }
   }
 };

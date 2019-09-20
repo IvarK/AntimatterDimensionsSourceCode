@@ -38,6 +38,10 @@ function shortenPostBreak(value, places, placesUnder1000) {
   return shortened;
 }
 
+function format(value, places, placesUnder1000) {
+  return shorten(value, places, placesUnder1000);
+}
+
 function formatX(value, places, placesUnder1000) {
   return `${shorten(value, places, placesUnder1000)}x`;
 }
@@ -47,7 +51,7 @@ function formatPow(value, places, placesUnder1000) {
 }
 
 function formatPercents(value, places) {
-  return `${(value * 100).toFixed(places)}%`;
+  return `${shorten(value * 100, 2, places)}%`;
 }
 
 function timeDisplay(ms) {

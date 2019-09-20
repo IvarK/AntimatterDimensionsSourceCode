@@ -22,11 +22,20 @@ const TimeTheorems = {
     EP: 2,
   },
 
-  buyWithAntimatter() {
-    if (TimeDimension(1).bought < 1) {
-      alert("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
+  checkForBuying(auto) {
+    if (player.realities === 0 && TimeDimension(1).bought < 1) {
+      if (!auto) alert("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
       return false;
     }
+    if (player.eternities.lt(1)) {
+      if (!auto) alert("You need to eternity at least once before you can purchase Time Theorems.");
+      return false;
+    }
+    return true;
+  },
+
+  buyWithAntimatter(auto = false) {
+    if (!this.checkForBuying(auto)) return false;
     if (player.antimatter.lt(player.timestudy.amcost)) return false;
     player.antimatter = player.antimatter.minus(player.timestudy.amcost);
     player.timestudy.amcost = player.timestudy.amcost.times(TimeTheorems.costMultipliers.AM);
@@ -35,11 +44,8 @@ const TimeTheorems = {
     return true;
   },
 
-  buyWithIP() {
-    if (TimeDimension(1).bought < 1) {
-      alert("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
-      return false;
-    }
+  buyWithIP(auto = false) {
+    if (!this.checkForBuying(auto)) return false;
     if (player.infinityPoints.lt(player.timestudy.ipcost)) return false;
     player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost);
     player.timestudy.ipcost = player.timestudy.ipcost.times(TimeTheorems.costMultipliers.IP);
@@ -48,11 +54,8 @@ const TimeTheorems = {
     return true;
   },
 
-  buyWithEP() {
-    if (TimeDimension(1).bought < 1) {
-      alert("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
-      return false;
-    }
+  buyWithEP(auto = false) {
+    if (!this.checkForBuying(auto)) return false;
     if (player.eternityPoints.lt(player.timestudy.epcost)) return false;
     player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost);
     player.timestudy.epcost = player.timestudy.epcost.times(TimeTheorems.costMultipliers.EP);
@@ -61,11 +64,8 @@ const TimeTheorems = {
     return true;
   },
 
-  buyMax() {
-    if (TimeDimension(1).bought < 1) {
-      alert("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
-      return;
-    }
+  buyMax(auto = false) {
+    if (!this.checkForBuying(auto)) return;
     const AMowned = player.timestudy.amcost.e / 20000 - 1;
     if (player.antimatter.gte(player.timestudy.amcost)) {
       player.timestudy.amcost.e = Math.floor(player.antimatter.e / 20000 + 1) * 20000;
@@ -102,16 +102,19 @@ const TimeTheorems = {
   }
 };
 
-function autoBuyMaxTheorems() {
-  if (!player.ttbuyer) return false;
-  if (Perk.autobuyerTT4.isBought ||
-    (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) ||
-    (Perk.autobuyerTT2.isBought && ttMaxTimer >= 5) ||
-    (Perk.autobuyerTT1.isBought && ttMaxTimer >= 10)) {
-    TimeTheorems.buyMax();
-    return true;
+function autoBuyMaxTheorems(realDiff) {
+  if (!player.ttbuyer) return;
+  player.auto.ttTimer += realDiff;
+  const period = Effects.min(
+    Number.POSITIVE_INFINITY,
+    Perk.autobuyerTT1,
+    Perk.autobuyerTT2,
+    Perk.autobuyerTT3,
+    Perk.autobuyerTT4);
+  if (player.auto.ttTimer > period) {
+    TimeTheorems.buyMax(true);
+    player.auto.ttTimer = Math.min(player.auto.ttTimer - period, period);
   }
-  return false;
 }
 
 function calculateTimeStudiesCost() {
@@ -123,6 +126,12 @@ function calculateTimeStudiesCost() {
     totalCost += ecStudy.cost;
   }
   return totalCost;
+}
+
+function calculateDilationStudiesCost() {
+  return TimeStudy.boughtDilationTS()
+    .map(ts => ts.cost)
+    .reduce(Number.sumReducer, 0);
 }
 
 function unlockDilation(quiet) {
@@ -255,121 +264,6 @@ function studiesUntil(id) {
     study.purchase();
   }
 }
-
-function studyPath(mode, args, auto) {
-    if (!(mode === 'none' || mode === 'all')) return false;
-    if (args === undefined) args = [];
-    args = args.map(function (x) { if (!isNaN(x)) return parseInt(x); else return x; });
-    let row = 0;
-    let master = [];
-    let locks = [0, 0, 0];
-    main: while (row < 24) {
-        row++;
-        if (mode === 'none') {
-            if (row >= 2 && row <= 4) {
-                for (let i = 20; i <= 40; i += 10) {
-                    if (args.includes(i + 1) && !master.includes(row*10 + 1)) master.push(row*10 + 1);
-                    if (args.includes(i + 2) && !master.includes(row*10 + 2)) master.push(row*10 + 2);
-                }
-                if (row === 3 && args.includes(33)) master.push(33);
-                continue main;
-            }
-            if (row === 6) {
-                if (args.includes(62)) master.push(61, 62);
-                else master.push(61);
-                continue main;
-            }
-            if (row === 16) {
-                if (args.includes(161)) master.push(161);
-                if (args.includes(162)) master.push(162);
-                continue main;
-            }
-            if (row === 19) {
-                if (args.includes(191)) master.push(191);
-                if (args.includes(192) || args.includes(201)) master.push(192);
-                if (args.includes(193)) master.push(193);
-                continue main;
-            }
-            if (row === 21) {
-                for (let i = 0; i < args.length; i++) {
-                    if (!isNaN(args[i])) {
-                        if (Math.floor(args[i] / 10) === 21 && args[i] % 10 < 5 && args[i] % 10 > 0) {
-                            master.push(args[i]);
-                        }
-                    }
-
-                }
-                continue main;
-            }
-        }
-        if (row >= 7 && row <= 10) {
-            if (mode === 'all' && DilationUpgrade.timeStudySplit.isBought) {
-                master.push(row*10 + 1, row*10 + 2, row*10 + 3);
-                continue main;
-            }
-            if (locks[0] === 0) {
-                let temp = [];
-                let options = ['nd', 'id', 'td', 'normal', 'infinity', 'time'];
-                for (let k = 0; k < args.length; k++) {
-                    for (let i = 70; i <= 100; i += 10) {
-                        for (let j = 1; j <= 3; j++) {
-                            if (args[k] === i + j || args[k] === options[j - 1] || args[k] === options[j+3]) temp.push(j);
-                        }
-                    }
-                }
-                if (temp.length === 0) break main;
-                locks[0] = temp[0];
-                temp = temp.filter(function (x) { if (x !== locks[0]) return x;});
-                if (temp.length > 0) locks[2] = temp[0];
-            }
-            master.push(row*10 + locks[0]);
-            continue main;
-        }
-        if (row >= 12 && row <= 14) {
-            if (locks[1] === 0) {
-                let temp = [];
-                let options = ['active', 'passive', 'idle'];
-                for (let k = 0; k < args.length; k++) {
-                    for (let i = 120; i <= 140; i += 10) {
-                        for (let j = 1; j <= 3; j++) {
-                            if (args[k] === i + j || args[k] === options[j - 1]) temp.push(j);
-                        }
-                    }
-                }
-                if (temp.length === 0) break main;
-                locks[1] = temp[0];
-            }
-            master.push(row*10 + locks[1]);
-            continue main;
-        }
-        if (row === 22 || row === 23) {
-            col: for (let i = 1; i <= 8 / (row - 21); i += 2) {
-                for (let j = 0; j < args.length; j++) {
-                    for (let k = 0; k < 2; k++) {
-                        if (args[j] === row*10 + i + k) {
-                            master.push(args[j]);
-                            continue col;
-                        }
-                    }
-                }
-            }
-            continue main;
-        }
-      for (let i = 1; TimeStudy(row * 10 + i) !== undefined; i++) {
-        master.push(row * 10 + i);
-      }
-    }
-    if (locks[2] > 0) {
-        master.push(70 + locks[2], 80 + locks[2], 90 + locks[2], 100 + locks[2]);
-    }
-    let string = master.reduce(function (acc, x) {
-        return acc += x + ',';
-    }, '');
-    string = string.slice(0, -1);
-    string += '|0';
-    importStudyTree(string, auto);
-}
-
 
 function respecTimeStudies(auto) {
   for (const study of TimeStudy.boughtNormalTS()) {
@@ -687,6 +581,11 @@ TimeStudy.timeDimension = function(tier) {
  * @type {DilationTimeStudyState}
  */
 TimeStudy.reality = DilationTimeStudyState.studies[6];
+
+TimeStudy.boughtDilationTS = function() {
+  return player.dilation.studies.map(id => DilationTimeStudyState.studies[id]);
+};
+
 
 class TimeStudyConnection {
   constructor(from, to, override) {

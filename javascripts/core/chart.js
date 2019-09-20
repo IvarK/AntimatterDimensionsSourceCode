@@ -1,23 +1,23 @@
 "use strict";
 
-Chart.defaults.global.defaultFontColor = 'black';
-Chart.defaults.global.defaultFontFamily = 'Typewriter';
-let dimChartEl = document.createElement("canvas");
+Chart.defaults.global.defaultFontColor = "black";
+Chart.defaults.global.defaultFontFamily = "Typewriter";
+const dimChartEl = document.createElement("canvas");
 dimChartEl.setAttribute("width", "1500");
 dimChartEl.setAttribute("height", "500");
 dimChartEl.setAttribute("style", "user-select: none;");
 const normalDimChart = new Chart(dimChartEl.getContext("2d"), {
-    type: 'line',
+    type: "line",
     data: {
         labels: [],
         datasets: [{
-            label: ['Exponents of antimatter per second'],
+            label: ["Exponents of antimatter per second"],
             data: [],
             backgroundColor: [
-                'rgba(0,0,0,1)'
+                "rgba(0,0,0,1)"
             ],
             borderColor: [
-                'rgba(0,0,0,1)'
+                "rgba(0,0,0,1)"
             ],
             fill: false,
             lineTension: 0.1,
@@ -28,8 +28,8 @@ const normalDimChart = new Chart(dimChartEl.getContext("2d"), {
         }]
     },
     options: {
-        tooltips: {enabled: false},
-        hover: {mode: null},
+        tooltips: { enabled: false },
+        hover: { mode: null },
         legend: {
             display: false,
             labels: {
@@ -63,56 +63,59 @@ const normalDimChart = new Chart(dimChartEl.getContext("2d"), {
 
 function addChartData(data) {
     const chart = normalDimChart;
-    var points = Math.ceil(player.options.chart.duration / player.options.chart.updateRate * 1000 - 1);
+    const points = Math.ceil(player.options.chart.duration / player.options.chart.updateRate * 1000 - 1);
     if (chart.data.datasets[0].data.length > points) {
         chart.data.labels.shift();
         chart.data.datasets[0].data.shift();
     }
-    data = Math.max(data.log(10), 0.1);
-    comp1 = Array.max(chart.data.datasets[0].data);
-    comp2 = Array.min(chart.data.datasets[0].data);
-    if (data > comp1) {
-        chart.options.scales.yAxes[0].ticks.max = data;
+    const chartData = Math.max(data.log(10), 0.1);
+    const comp1 = Array.max(chart.data.datasets[0].data);
+    const comp2 = Array.min(chart.data.datasets[0].data);
+    if (chartData > comp1) {
+        chart.options.scales.yAxes[0].ticks.max = chartData;
     }
-    if (chart.options.scales.yAxes[0].ticks.min < comp2 || chart.options.scales.yAxes[0].ticks.min == Infinity) {
+    if (chart.options.scales.yAxes[0].ticks.min < comp2 || chart.options.scales.yAxes[0].ticks.min === Infinity) {
         chart.options.scales.yAxes[0].ticks.min = comp2;
     }
-    if (data < chart.options.scales.yAxes[0].ticks.min && player.options.chart.dips) {
-        chart.options.scales.yAxes[0].ticks.min = data;
+    if (chartData < chart.options.scales.yAxes[0].ticks.min && player.options.chart.dips) {
+        chart.options.scales.yAxes[0].ticks.min = chartData;
     }
-    var preservedChartValues = false;
+    let preservedChartValues = false;
     let failSafe = 0;
+    let temp1;
+    let temp2;
     while (chart.data.datasets[0].data.length < points) {
         if (preservedChartValues) {
             chart.data.labels.push(undefined);
-            chart.data.datasets.forEach( function(dataset) {
-                dataset.data.push(data);
+            chart.data.datasets.forEach(dataset => {
+                dataset.data.push(chartData);
             });
         } else {
-            var temp = chart.data.datasets[0].data.slice();
-            var tempData = data;
+            temp1 = chart.data.datasets[0].data.slice();
             preservedChartValues = true;
         }
         if (chart.data.datasets[0].data.length >= points) {
-            var temp2 = chart.data.datasets[0].data.slice();
-          for (let i = 0; i < temp.length; i++) {
-                temp2[chart.data.datasets[0].data.length - temp.length + i] = temp[i];
-                temp2[i] = data;
+            temp2 = chart.data.datasets[0].data.slice();
+          for (let i = 0; i < temp1.length; i++) {
+                temp2[chart.data.datasets[0].data.length - temp1.length + i] = temp1[i];
+                temp2[i] = chartData;
             }
             chart.data.datasets[0].data = temp2;
         }
     }
     while (chart.data.datasets[0].data.length > points && failSafe < 1000) {
         chart.data.labels.pop();
-        chart.data.datasets.forEach( function(dataset) {
-            dataset.data.pop(data);
+        chart.data.datasets.forEach(dataset => {
+            dataset.data.pop(chartData);
         });
         failSafe++;
     }
     chart.data.labels.push(undefined);
-    chart.data.datasets.forEach( function(dataset) {
-        if (data < chart.data.datasets[0].data[chart.data.datasets[0].data.length-1] && !player.options.chart.dips) dataset.data.push(chart.data.datasets[0].data[chart.data.datasets[0].data.length-1]);
-        else dataset.data.push(data);
+    chart.data.datasets.forEach(dataset => {
+        if (chartData < chart.data.datasets[0].data[chart.data.datasets[0].data.length - 1] &&
+            !player.options.chart.dips) {
+            dataset.data.push(chart.data.datasets[0].data[chart.data.datasets[0].data.length - 1]);
+        } else dataset.data.push(chartData);
     });
     chart.update(100);
 }

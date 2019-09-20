@@ -53,14 +53,14 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 5,
-    description: "Galaxy cost increase scaling starts instantly (normally at 100 galaxies). " +
-      "Dimension Boost costs scaling is massively increased.",
+    description: () => `Galaxy cost increase scaling starts instantly (normally at ${shortenSmallInteger(100)}
+      galaxies). Dimension Boost costs scaling is massively increased.`,
     goal: new Decimal("1e750"),
     goalIncrease: new Decimal("1e400"),
     reward: {
       description: "Galaxy cost scaling starts later",
       effect: completions => completions * 5,
-      formatEffect: value => `${value} galaxies later`
+      formatEffect: value => `${shortenSmallInteger(value)} galaxies later`
     }
   },
   {
@@ -78,7 +78,7 @@ GameDatabase.challenges.eternity = [
       formatEffect: value => {
         const base = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward));
         const applied = base - value;
-        return `${base}x ➜ ${Number.isInteger(applied) ? applied : applied.toFixed(1)}x`;
+        return `${shorten(base, 2, 1)}x ➜ ${shorten(applied, 2, 1)}x`;
       }
     }
   },
@@ -96,8 +96,8 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 8,
-    description: "You can only upgrade Infinity Dimensions 50 times and Replicanti upgrades 40 times. " +
-      "Infinity Dimension and Replicanti upgrade autobuyers are disabled.",
+    description: () => `You can only upgrade Infinity Dimensions ${shortenSmallInteger(50)} times and Replicanti
+      upgrades ${shortenSmallInteger(40)} times. Infinity Dimension and Replicanti upgrade autobuyers are disabled.`,
     goal: new Decimal("1e1300"),
     goalIncrease: new Decimal("1e900"),
     reward: {
@@ -125,8 +125,8 @@ GameDatabase.challenges.eternity = [
   {
     id: 10,
     description: () => {
-      let description = "Time Dimensions and Infinity Dimensions are disabled. " +
-        "You gain an immense boost from infinitied stat to normal dimensions (infinitied^950).";
+      let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
+        infinitied stat to normal dimensions (infinitied^${shortenSmallInteger(950)}).`;
       EternityChallenge(10).applyEffect(v => description += ` Currently: ${shorten(v, 2, 1)}x`);
       return description;
     },
@@ -154,25 +154,26 @@ GameDatabase.challenges.eternity = [
       formatEffect: value => {
         const base = Math.round(Player.tickSpeedMultDecrease + Effects.sum(EternityChallenge(11).reward));
         const applied = base - value;
-        return `${base}x ➜ ${Number.isInteger(applied) ? applied : applied.toFixed(2)}x`;
+        return `${shorten(base, 2, 2)}x ➜ ${shorten(applied, 2, 2)}x`;
       }
     }
   },
   {
     id: 12,
     description: () => (player.realities > 0
-      ? "The game runs 1000x slower; all other gamespeed effects are disabled."
-      : "The game runs 1000x slower."),
+      ? `The game runs ${shortenSmallInteger(1000)}x slower; all other gamespeed effects are disabled.`
+      : `The game runs ${shortenSmallInteger(1000)}x slower.`),
     goal: new Decimal("1e110000"),
     goalIncrease: new Decimal("1e12000"),
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,
     checkRestriction: restriction => Time.thisEternity.totalSeconds < restriction,
-    formatRestriction: restriction => `in ${restriction} in-game ${restriction === 1 ? "second" : "seconds"} or less.`,
+    formatRestriction: restriction => `in ${shorten(restriction, 0, 1)} in-game
+      ${restriction === 1 ? "second" : "seconds"} or less.`,
     failedRestriction: "(Too slow for more)",
     reward: {
       description: "Infinity Dimension cost multipliers are reduced",
       effect: completions => 1 - completions * 0.008,
-      formatEffect: value => `x^${value}`
+      formatEffect: value => `x^${shorten(value, 3, 3)}`
     }
   }
 ];

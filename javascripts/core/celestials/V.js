@@ -28,12 +28,12 @@ class VRunUnlockState extends GameMechanicState {
   set completions(value) {
     player.celestials.v.runUnlocks[this.id] = value;
   }
-  
+
   tryComplete() {
     if (this.completions === 6 || !this.config.condition(this.conditionValue)) return;
     this.completions++;
     GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
-    V.updateTotalRunUnlocks()
+    V.updateTotalRunUnlocks();
   }
 }
 
@@ -64,7 +64,6 @@ const V_UNLOCKS = {
       if (player.dilation.dilatedTime.lt(db.dilatedTime)) return false;
       if (player.replicanti.amount.lt(db.replicanti)) return false;
       if (player.reality.realityMachines.lt(db.rm)) return false;
-  
       return true;
     }
   },
@@ -99,14 +98,16 @@ const V = {
   checkForUnlocks() {
 
     if (!V.has(V_UNLOCKS.MAIN_UNLOCK) && V_UNLOCKS.MAIN_UNLOCK.requirement()) {
-      player.celestials.v.unlocks.push(V_UNLOCKS.MAIN_UNLOCK.id);
+      // eslint-disable-next-line no-bitwise
+      player.celestials.v.unlockBits |= (1 << V_UNLOCKS.MAIN_UNLOCK.id);
       GameUI.notify.success(V_UNLOCKS.MAIN_UNLOCK.description);
     }
 
     for (let i = 0; i<V_UNLOCKS.RUN_UNLOCK_THRESHOLDS.length; i++) {
       const unl = V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[i];
       if (unl.requirement() && !this.has(unl)) {
-        player.celestials.v.unlocks.push(unl.id);
+        // eslint-disable-next-line no-bitwise
+        player.celestials.v.unlockBits |= (1 << unl.id);
         GameUI.notify.success(unl.description);
       }
     }
@@ -118,7 +119,8 @@ const V = {
     }
   },
   has(info) {
-    return player.celestials.v.unlocks.includes(info.id);
+    // eslint-disable-next-line no-bitwise
+    return Boolean(player.celestials.v.unlockBits & (1 << info.id));
   },
   startRun() {
     player.celestials.v.run = startRealityOver() || player.celestials.v.run;

@@ -173,6 +173,7 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   start() {
+    if (!this.isUnlocked) return;
     if (!askChallengeConfirmation("a set goal")) return;
 
     player.challenge.normal.current = 0;

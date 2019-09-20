@@ -384,12 +384,28 @@
   box-shadow: 0 0 0.5rem 0.25rem #444;
 }
 
+.l-equipped-glyphs__buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .l-equipped-glyphs__respec {
   width: 15rem;
   height: 4rem;
   margin: auto;
   margin-top: 2rem;
   margin-bottom: 1rem;
+}
+
+.l-equipped-glyphs__undo {
+  width: 5em;
+  height: 4rem;
+  margin: auto;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  margin-left: 0.2rem;
 }
 
 .c-current-glyph-effects__effect--capped {
@@ -493,6 +509,15 @@
 
 .t-s8 .c-sacrificed-glyphs__type-new-amount {
   color: rgb(0, 80, 0);
+}
+
+.l-sacrificed-glyphs__help {
+  margin-top: 1rem;
+}
+
+.c-sacrificed-glyphs__confirm {
+  cursor: pointer;
+  user-select: none;
 }
 
 .l-glyph-inventory {

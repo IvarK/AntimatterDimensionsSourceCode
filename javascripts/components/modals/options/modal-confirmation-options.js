@@ -8,7 +8,10 @@ Vue.component("modal-confirmation-options", {
       challenges: false,
       eternity: false,
       dilation: false,
-      reality: false
+      reality: false,
+      glyphReplace: false,
+      glyphUndo: false,
+      glyphUndoUnlocked: false,
     };
   },
   watch: {
@@ -26,7 +29,13 @@ Vue.component("modal-confirmation-options", {
     },
     reality(newValue) {
       player.options.confirmations.reality = newValue;
-    }
+    },
+    glyphReplace(newValue) {
+      player.options.confirmations.glyphReplace = newValue;
+    },
+    glyphUndo(newValue) {
+      player.options.confirmations.glyphUndo = newValue;
+    },
   },
   methods: {
     update() {
@@ -36,6 +45,9 @@ Vue.component("modal-confirmation-options", {
       this.eternity = options.eternity;
       this.dilation = options.dilation;
       this.reality = options.reality;
+      this.glyphReplace = options.glyphReplace;
+      this.glyphUndo = options.glyphUndo;
+      this.glyphUndoUnlocked = Teresa.has(TERESA_UNLOCKS.UNDO);
     }
   },
   template:
@@ -45,5 +57,7 @@ Vue.component("modal-confirmation-options", {
       <on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:"/>
       <on-off-button v-if="dilationUnlocked" v-model="dilation" text="Dilation:"/>
       <on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:"/>
+      <on-off-button v-if="realityUnlocked" v-model="glyphReplace" text="Glyph replace:"/>
+      <on-off-button v-if="glyphUndoUnlocked" v-model="glyphUndo" text="Glyph undo:"/>
     </modal-options>`
 });

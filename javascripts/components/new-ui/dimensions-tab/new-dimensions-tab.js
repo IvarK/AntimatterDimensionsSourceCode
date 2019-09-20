@@ -6,7 +6,9 @@ Vue.component("new-dimensions-tab", {
       buyUntil10: true,
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
+      currentSacrifice: new Decimal(0),
       sacrificeBoost: new Decimal(0),
+      disabledCondition: "",
       currCelestial: "",
       challengeDisplay: "",
       isInAnyChallenge: false,
@@ -16,11 +18,8 @@ Vue.component("new-dimensions-tab", {
     };
   },
   computed: {
-    sacrificeBoostDisplay() {
-      return this.shortenRateOfChange(this.sacrificeBoost);
-    },
     sacrificeTooltip() {
-      return `Boosts 8th Dimension by ${this.sacrificeBoostDisplay}x`;
+      return `Boosts 8th Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
     },
   },
   methods: {
@@ -65,7 +64,9 @@ Vue.component("new-dimensions-tab", {
 
       if (!isSacrificeUnlocked) return;
       this.isSacrificeAffordable = Sacrifice.canSacrifice;
+      this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
+      this.disabledCondition = Sacrifice.disabledCondition;
     },
     updateCelestial() {
       if (Teresa.isRunning) this.currCelestial = "Teresa's";
@@ -77,7 +78,6 @@ Vue.component("new-dimensions-tab", {
       else this.currCelestial = "";
     },
     updateChallengeDisplay() {
-      // Pls don't hate me Razen
       let displayValue = "";
 
       const inCelestialReality = this.currCelestial.length !== 0;
@@ -96,24 +96,34 @@ Vue.component("new-dimensions-tab", {
       if (eternityChallenge !== undefined) displayValue += ` + Eternity Challenge ${eternityChallenge.id}`;
 
       if (displayValue.length !== 0) this.challengeDisplay = displayValue.substring(3);
-      else if (PlayerProgress.infinityUnlocked()) this.challengeDisplay = "the Antimatter Universe (no active challenges)";
-      else this.challengeDisplay = "";
+      else if (PlayerProgress.infinityUnlocked()) {
+        this.challengeDisplay = "the Antimatter Universe (no active challenges)";
+      } else this.challengeDisplay = "";
     }
   },
   template:
   `<div class="l-normal-dim-tab">
-    <div class="information-header" ><span v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</span><br><span v-if="isChallengePowerVisible">{{challengePower}}</span></div>
+    <div class="information-header" >
+      <span v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</span>
+      <br><span v-if="isChallengePowerVisible">{{challengePower}}</span>
+    </div>
     <div class="modes-container">
-      <button class="storebtn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">{{ getUntil10Display() }}</button>
+      <button class="storebtn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">
+        {{ getUntil10Display() }}
+      </button>
       <primary-button
           v-show="isSacrificeUnlocked"
           v-tooltip="sacrificeTooltip"
           :enabled="isSacrificeAffordable"
           class="storebtn sacrifice-btn"
           @click="sacrifice"
-        >Dimensional Sacrifice ({{sacrificeBoostDisplay}}x)</primary-button>
+        >
+        <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
+        <span v-else>Sacrifice Disabled ({{ disabledCondition }})</span>
+      </primary-button>
       <button class="storebtn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">Max All (M)</button>
     </div>
+    <span v-if="isSacrificeUnlocked">Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
     <new-tickspeed-row></new-tickspeed-row>
     <div class="dimensions-container">
       <new-dimension-row

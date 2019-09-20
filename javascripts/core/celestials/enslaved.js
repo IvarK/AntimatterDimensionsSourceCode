@@ -37,9 +37,6 @@ const ENSLAVED_UNLOCKS = {
 
 const Enslaved = {
   boostReality: false,
-  lockedInGlyphLevel: 0,
-  lockedInRealityMachines: new Decimal(0),
-  lockedInShardsGained: 0,
   IMPOSSIBLE_CHALLENGE_EXEMPTIONS: [1, 6, 9],
   ec6c10hintGiven: false,
   nextTickDiff: 50,
@@ -48,6 +45,7 @@ const Enslaved = {
   autoReleaseSpeed: 0,
   glyphLevelMin: 5000,
   currentBlackHoleStoreAmountPerMs: 0,
+  tachyonNerf: 0.3,
   toggleStoreBlackHole() {
     if (this.maxQuoteIdx === 6) player.celestials.enslaved.maxQuotes += 3;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
@@ -161,7 +159,7 @@ const Enslaved = {
       Math.max(1000, Time.thisRealityRealTime.totalMilliseconds)));
   },
   storedTimeInsideEnslaved(stored) {
-    if (stored <= 1) return stored;
+    if (stored <= 1e3) return stored;
     return Math.pow(10, Math.sqrt(Math.log10(stored / 1e3))) * 1e3;
   },
   showEC10C6Hint() {

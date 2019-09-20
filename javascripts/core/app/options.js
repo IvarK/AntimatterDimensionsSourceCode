@@ -3,8 +3,8 @@
 class GameOptions {
 
   static toggleNews() {
-    player.options.newsHidden = !player.options.newsHidden;
-    ui.view.newsHidden = player.options.newsHidden;
+    player.options.news = !player.options.news;
+    ui.view.news = player.options.news;
     GameStorage.save(true);
   }
 

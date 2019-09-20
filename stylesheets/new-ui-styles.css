@@ -107,7 +107,7 @@ body.t-dark {
   flex-direction: column;
   width: 20rem;
   position: fixed;
-  z-index: 3;
+  z-index: 4;
 }
 
 .sidebar:hover .subtabs,
@@ -414,6 +414,7 @@ body.t-dark {
   width: 100%;
   border-bottom: .1rem solid var(--color-accent-1);
   padding: .8rem 0;
+  height: 3.9rem;
 }
 
 .c-news-line {
@@ -511,7 +512,9 @@ body.t-dark {
   border-color: var(--color-celestials-accent);
 }
 
-.t-metro .subtab.celestials {
+.t-metro .subtab.celestials,
+.t-inverted-metro .subtab.celestials,
+.t-s8 .subtab.celestials {
   color: white;
 }
 
@@ -520,7 +523,9 @@ body.t-dark {
   background-color: var(--color-celestials-accent);
 }
 
-.t-metro .subtab.celestials:hover {
+.t-metro .subtab.celestials:hover,
+.t-inverted-metro .subtab.celestials:hover,
+.t-s8 .subtab.celestials:hover {
   color: var(--color-celestials);
   background-color: white;
 }
@@ -530,7 +535,7 @@ body.t-dark {
 }
 
 .dimensions-container {
-  padding: 5px 50px 5px 90px; /* TOP RIGHT BOTTOM LEFT */
+  padding: 0.5rem 5rem 0.5rem 9rem; /* TOP RIGHT BOTTOM LEFT */
 }
 
 .dimension-row {
@@ -538,8 +543,7 @@ body.t-dark {
   color: var(--color-text);;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
-  padding-left: 10px;
+  padding: 0.5rem 0 0.5rem 1rem;
   border-radius: 5px;
 }
 
@@ -547,12 +551,14 @@ body.t-dark {
   background-color: rgba(223, 80, 80, 0.3);
 }
 
-.t-metro .dimension-row:nth-child(even) {
+.t-metro .dimension-row:nth-child(even),
+.t-inverted-metro .dimension-row:nth-child(even),
+.t-s8 .dimension-row:nth-child(even) {
   background-color: rgba(33, 150, 243, 0.3);
 }
 
 .dimension-row h3 {
-  font-size: 2em;
+  font-size: 2rem;
   display: flex;
   align-items: center;
   margin: 0;
@@ -682,7 +688,7 @@ body.t-dark {
 .tickspeed-container {
   display: flex;
   justify-content: space-between;
-  padding: 10px 50px 5px 90px;
+  padding: 1rem 5rem 0 9rem;
 }
 
 .tickspeed-labels {
@@ -763,11 +769,7 @@ body.t-dark {
 /* FIXING OLD TABS */
 
 .l-achievement-grid__cell {
-  margin: -0.5rem -0.5rem;
-}
-
-.o-achievement {
-  transform:scale(0.8)
+  margin: -0.1rem -0.1rem;
 }
 
 .o-infinity-upgrade-btn--unavailable {
@@ -834,14 +836,36 @@ body.t-dark {
 }
 
 .c-stats-tab {
-  color: white;
+  color: var(--color-text);
 }
 
 .o-autobuyer-input,
 .l-autobuyer-grid select {
-  background: #1c1d1d;
+  background: var(--color-dark);
   border: 0.1rem solid var(--color-accent-1);
   color: var(--color-accent-1);
+}
+
+.t-dark .o-autobuyer-input,
+.t-dark-metro .o-autobuyer-input,
+.t-dark .l-autobuyer-grid select,
+.t-dark-metro .l-autobuyer-grid select {
+  border: 0.1rem solid black;
+  color: black;
+}
+
+.t-metro .o-autobuyer-input,
+.t-inverted-metro .o-autobuyer-input,
+.t-s8 .o-autobuyer-input,
+.t-metro .l-autobuyer-grid select,
+.t-inverted-metro .l-autobuyer-grid select,
+.t-s8 .l-autobuyer-grid select {
+  color: black;
+}
+
+.t-s6 .l-autobuyer-grid select {
+  border: 0.1rem solid white;
+  color: white;
 }
 
 .o-autobuyer-btn {
@@ -858,16 +882,28 @@ body.t-dark {
 }
 
 .l-infinity-dim-tab {
-  padding: 1rem 6rem;
+  padding: 1rem 0;
+}
+
+.l-infinity-dim-tab__row-container {
+  padding: 0.5rem 5rem 0.5rem 9rem;
 }
 
 .c-infinity-dim-row {
-  padding-left: 1rem;
+  margin: 0;
+  padding: 0.5rem 0 0.5rem 1rem;
   border-radius: .5rem;
 }
 
 .c-infinity-dim-row:nth-child(even) {
-  background: #5f441e;
+  background: rgba(182, 127, 51, 0.3);
+}
+
+.t-metro .c-infinity-dim-row:nth-child(even),
+.t-dark-metro .c-infinity-dim-row:nth-child(even),
+.t-inverted-metro .c-infinity-dim-row:nth-child(even),
+.t-s8 .c-infinity-dim-row:nth-child(even) {
+  background: rgba(255, 152, 0, 0.3);
 }
 
 .c-infinity-dim-row__name {
@@ -886,13 +922,25 @@ body.t-dark {
   padding: 2rem 0;
 }
 
+.l-time-dim-tab__row-container {
+  padding: 0.5rem 5rem 0.5rem 9rem;
+}
+
 .c-time-dim-row {
-  padding-left: 1rem;
+  margin: 0;
+  padding: 0.5rem 0 0.5rem 1rem;
   border-radius: .5rem;
 }
 
 .c-time-dim-row:nth-child(even) {
-  background: #63217d
+  background: rgba(179, 65, 224, 0.3);
+}
+
+.t-metro .c-time-dim-row:nth-child(even),
+.t-dark-metro .c-time-dim-row:nth-child(even),
+.t-inverted-metro .c-time-dim-row:nth-child(even),
+.t-s8 .c-time-dim-row:nth-child(even) {
+  background: rgba(103, 58, 183, 0.3);
 }
 
 .c-time-dim-row__name {
@@ -907,7 +955,7 @@ body.t-dark {
   margin: 0.5rem;
 }
 
-.c-reality-upgrade-btn {
+.l-reality-upgrade-btn {
   width: 15.6rem;
 }
 

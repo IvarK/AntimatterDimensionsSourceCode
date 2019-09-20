@@ -4,7 +4,8 @@ Vue.component("past-realities-tab", {
   data() {
     return {
       getRuns: () => player.lastTenRealities,
-      reward: (runGain, run) => `${runGain} ${pluralize("reality machine", run[1])} and a level ${run[3]} glyph`
+      reward: (runGain, run) =>
+        `${runGain} ${pluralize("reality machine", run[1])} and a level ${shortenSmallInteger(run[3])} glyph`
     };
   },
   template:

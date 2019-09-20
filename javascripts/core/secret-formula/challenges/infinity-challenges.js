@@ -15,7 +15,7 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 2,
-    description: "Automatically sacrifice every 8 ticks once you have an 8th Dimension.",
+    description: () => `Automatically sacrifice every ${shortenSmallInteger(8)} ticks once you have an 8th Dimension.`,
     goal: new Decimal("1e10500"),
     isQuickResettable: false,
     reward: {
@@ -40,7 +40,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 4,
-    description: "Only latest bought dimension production is normal, all other dimensions produce less (^0.25)",
+    description: () => `Only latest bought dimension production is normal, all other dimensions produce less
+      (^${shorten(0.25, 2, 2)})`,
     goal: new Decimal("1e13000"),
     isQuickResettable: true,
     effect: 0.25,
@@ -55,7 +56,7 @@ GameDatabase.challenges.infinity = [
     description: "When buying dimensions 1-4, dimensions with costs smaller or equal increase in cost. " +
       "When buying dimensions 5-8, dimensions with costs larger or equal increase in cost. " +
       "When buying tickspeed, dimensions with the same cost increase.",
-    goal: new Decimal("1e11111"),
+    goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {
       description: "Galaxies are 10% more powerful and reduce the requirements for them and Dimension Boosts by 1",
@@ -65,8 +66,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 6,
-    description: "Once you have at least 1 2nd Dimension, there's an exponentially rising matter " +
-      "that divides the multiplier on all of your dimensions.",
+    description: () => `Once you have at least ${shortenSmallInteger(1)} 2nd Dimension, there's an exponentially rising
+      matter that divides the multiplier on all of your dimensions.`,
     goal: new Decimal("2e22222"),
     isQuickResettable: true,
     effect: () => player.matter.clampMin(1),
@@ -80,7 +81,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 7,
-    description: "You can't get Antimatter Galaxies, but Dimension Boost multiplier 2.5x ➜ 10x",
+    description: () => `You can't get Antimatter Galaxies, but Dimension Boost multiplier
+      ${shorten(2.5, 1, 1)}x ➜ ${shortenSmallInteger(10)}x`,
     goal: new Decimal("1e10000"),
     isQuickResettable: false,
     effect: 10,

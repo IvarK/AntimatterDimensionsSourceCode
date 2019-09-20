@@ -6,12 +6,11 @@ const defaultMaxTime = 60000 * 60 * 24 * 31;
 let player = {
   antimatter: new Decimal(10),
   dimensions: {
-    normal: Array.range(0, 8).map(tier => ({
+    normal: Array.range(0, 8).map(() => ({
       bought: 0,
+      costBumps: 0,
       amount: new Decimal(0),
-      power: new Decimal(1),
-      cost: new Decimal([10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24][tier]),
-      costMultiplier: new Decimal([1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15][tier])
+      power: new Decimal(1)
     })),
     infinity: Array.range(0, 8).map(tier => ({
       isUnlocked: false,
@@ -106,7 +105,7 @@ let player = {
       lastTick: 0
     },
     sacrifice: {
-      multiplier: 5,
+      multiplier: new Decimal(5),
       isActive: false
     },
     eternity: {
@@ -126,6 +125,7 @@ let player = {
     infDimTimer: 0,
     repUpgradeTimer: 0,
     dilUpgradeTimer: 0,
+    ttTimer: 0,
   },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
@@ -147,9 +147,9 @@ let player = {
   lastUpdate: new Date().getTime(),
   chall2Pow: 1,
   chall3Pow: new Decimal(0.01),
-  matter: new Decimal(0),
-  chall9TickspeedPurchaseBumps: 0,
-  chall11Pow: new Decimal(1),
+  matter: new Decimal(1),
+  chall9TickspeedCostBumps: 0,
+  chall8TotalSacrifice: new Decimal(1),
   partInfinityPoint: 0,
   partInfinitied: 0,
   break: false,
@@ -263,6 +263,7 @@ let player = {
         effarig: 0,
         reality: 0
       },
+      undo: [],
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
     rebuyables: {
@@ -321,15 +322,15 @@ let player = {
   celestials: {
     teresa: {
       rmStore: 0,
-      quoteIdx: 0,
-      unlocks: [],
+      quotes: [],
+      unlockBits: 0,
       run: false,
       bestRunAM: new Decimal(1),
       perkShop: Array.repeat(0, 4)
     },
     effarig: {
       relicShards: 0,
-      unlocks: [],
+      unlocksBits: 0,
       run: false,
       quoteIdx: 0,
       glyphWeights: {
@@ -365,7 +366,7 @@ let player = {
       maxQuotes: 6
     },
     v: {
-      unlocks: [],
+      unlockBits: 0,
       quoteIdx: 0,
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0],
@@ -399,7 +400,7 @@ let player = {
           amount: 0,
           reaction: false
         })),
-      unlocks: [],
+      unlocksBits: 0,
       run: false,
       charged: new Set(),
       quoteIdx: 0,
@@ -415,7 +416,7 @@ let player = {
     laitela: {
       matter: new Decimal(0),
       run: false,
-      unlocks: [],
+      unlockBits: 0,
       dimensions: Array.range(0, 4).map(() =>
       ({
         amount: new Decimal(0),
@@ -434,7 +435,7 @@ let player = {
   },
   autoEcIsOn: true,
   options: {
-    newsHidden: false,
+    news: true,
     notation: "Mixed scientific",
     retryChallenge: false,
     showAllChallenges: false,
@@ -446,6 +447,7 @@ let player = {
     commas: true,
     updateRate: 33,
     newUI: true,
+    showAlchemyResources: false,
     chart: {
       updateRate: 1000,
       duration: 10,
@@ -466,7 +468,10 @@ let player = {
       challenges: true,
       eternity: true,
       dilation: true,
-      reality: true
+      reality: true,
+      glyphSacrifice: true,
+      glyphUndo: true,
+      glyphReplace: true,
     }
   }
 };

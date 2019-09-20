@@ -219,7 +219,7 @@ GameDatabase.celestials.alchemy = {
       tier: 3,
       uiOrder: 4,
       formatEffect: value => `Refined glyphs also give ${formatPercents(value, 2)} of their value ` +
-        "to all other base resources",
+        "to other base resources",
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -298,7 +298,7 @@ GameDatabase.celestials.alchemy = {
       name: "Boundless",
       symbol: "Π",
       isBaseResource: false,
-      effect: amount => Math.floor(amount / 10),
+      effect: amount => Math.clampMax(Math.ceil(amount / 10), 1111),
       tier: 4,
       uiOrder: 1,
       formatEffect: value => `Basic glyph level cap increased by ${shortenSmallInteger(value)} ` +
@@ -342,7 +342,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 4,
       formatEffect: value => (player.celestials.laitela.matter === 0
         ? "?????"
-        : `Boost matter dimension generation chance by +${formatPercents(value, 2, 2)}`),
+        : `Boost dark matter dimension generation chance by +${formatPercents(value, 2, 2)}`),
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,

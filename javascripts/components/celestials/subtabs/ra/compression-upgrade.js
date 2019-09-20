@@ -53,8 +53,8 @@ Vue.component("compression-upgrade", {
           singular="Entanglement"
           plural="Entanglement"
         />
-        <div v-else-if="isActive">Active! (Cost: {{ upgrade.config.cost }})</div>
-        <div v-else>Inactive (Cost: {{ upgrade.config.cost }})</div>
+        <div v-else-if="isActive">Active! (Cost: {{ shortenSmallInteger(upgrade.config.cost) }})</div>
+        <div v-else>Inactive (Cost: {{ shortenSmallInteger(upgrade.config.cost) }})</div>
       </button>
     </div>`
 });

@@ -80,9 +80,13 @@ Vue.component("equipped-glyphs", {
     undo() {
       if (!this.undoAvailable) return;
       if (player.options.confirmations.glyphUndo &&
-        !confirm("The last equipped glyph will be removed. Reality will be reset, but you will get the antimatter," +
-          " infinity points, eternity points, time theorems, and eternity challenge completions that you had when it " +
-          "was equipped.")) {
+        // eslint-disable-next-line prefer-template
+        !confirm("The last equipped glyph will be removed. Reality will be reset, but some things will" +
+          " be restored to what they were when it equipped:\n" +
+          " - antimmatter, infinity points, and eternity points;\n" +
+          " - time theorems and EC completions;\n" +
+          " - time in current reality" +
+          (Enslaved.isUnlocked ? ";\n - stored game time" : ""))) {
         return;
       }
       Glyphs.undo();

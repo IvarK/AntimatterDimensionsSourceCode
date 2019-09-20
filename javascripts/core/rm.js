@@ -502,7 +502,8 @@ const Glyphs = {
         TimeTheorems.totalPurchased()),
       ecs: EternityChallenges.all.map(e => e.completions),
       thisReality: player.thisReality,
-      thisRealityRealTime: player.thisRealityRealTime
+      thisRealityRealTime: player.thisRealityRealTime,
+      storedTime: player.celestials.enslaved.stored,
     };
     player.reality.glyphs.undo.push(undoData);
   },
@@ -522,6 +523,7 @@ const Glyphs = {
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
     player.thisReality = undoData.thisReality;
     player.thisRealityRealTime = undoData.thisRealityRealTime;
+    player.celestials.enslaved.stored = undoData.storedTime;
   }
 };
 

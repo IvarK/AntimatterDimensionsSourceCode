@@ -100,7 +100,7 @@ Vue.component("laitela-tab", {
           <button class="o-laitela-run-button" @click="startRun">
             <b>Start Lai'tela's Reality</b>
             <div v-bind:class="runButtonClassObject()"></div>
-            Tickspeed is disabled and all dimension multipliers are decreased based on matter, 
+            Tickspeed is disabled and all dimension multipliers are decreased based on dark matter, 
             currently <b>x^{{ shorten(dimMultNerf, 3, 4) }}</b>
             <br>
             Multiply all dark matter dimensions based on highest AM reached, 

@@ -523,7 +523,7 @@ const Glyphs = {
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
     player.thisReality = undoData.thisReality;
     player.thisRealityRealTime = undoData.thisRealityRealTime;
-    player.celestials.enslaved.stored = undoData.storedTime;
+    player.celestials.enslaved.stored = undoData.storedTime || 0;
   }
 };
 

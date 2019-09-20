@@ -158,7 +158,7 @@ const Enslaved = {
       Math.max(1000, Time.thisRealityRealTime.totalMilliseconds)));
   },
   storedTimeInsideEnslaved(stored) {
-    if (stored <= 1) return stored;
+    if (stored <= 1e3) return stored;
     return Math.pow(10, Math.sqrt(Math.log10(stored / 1e3))) * 1e3;
   },
   showEC10C6Hint() {

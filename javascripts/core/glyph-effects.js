@@ -583,7 +583,7 @@ class GlyphType {
       .map(e => e.id)
       .filter(id => !blacklist.includes(id) && this.isEffectUnlocked(id));
     if (available.length === 0) return null;
-    return available[Math.floor(rng() * available.length)];
+    return available[Math.floor(rng.uniform() * available.length)];
   }
 }
 
@@ -653,10 +653,10 @@ const GlyphTypes = {
     const types = ["time", "dilation", "replication", "infinity", "power", "effarig"];
     if (!blacklisted) {
       const available = EffarigUnlock.reality.isUnlocked ? types.length : types.length - 1;
-      return types[Math.floor(rng() * available)];
+      return types[Math.floor(rng.uniform() * available)];
     }
     const available = EffarigUnlock.reality.isUnlocked ? types.length - 1 : types.length - 2;
-    const typeIndex = Math.floor(rng() * available);
+    const typeIndex = Math.floor(rng.uniform() * available);
     if (types[typeIndex] === blacklisted) return types[typeIndex + 1];
     return types[typeIndex];
   },

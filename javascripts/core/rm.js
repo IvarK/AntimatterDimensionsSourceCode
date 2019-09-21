@@ -90,8 +90,70 @@ const AutoGlyphPicker = {
   }
 };
 
+/**
+ * It turns out reading and writing the RNG state from player is really slow, for
+ * some reason. Thus, it's very advantageous to get an RNG as a local variable, and only
+ * write the state back out to player when we are done with it.
+ * So, this interface is implemented by a real and fake RNG class; after creating one and
+ * using it, call finalize on it to write the seed out.
+ */
+class GlyphRNG {
+  constructor(seed) {
+    this.seed = seed;
+    this.secondGaussian = undefined;
+  }
+
+  uniform() {
+    const state = xorshift32Update(this.seed);
+    this.seed = state;
+    return state * 2.3283064365386963e-10 + 0.5;
+  }
+
+  normal() {
+    if (this.secondGaussian !== undefined) {
+      const toReturn = this.secondGaussian;
+      this.secondGaussian = undefined;
+      return toReturn;
+    }
+    let u = 0, v = 0, s = 0;
+    do {
+      u = this.uniform() * 2 - 1;
+      v = this.uniform() * 2 - 1;
+      s = u * u + v * v;
+    } while (s >= 1 || s === 0);
+    s = Math.sqrt(-2 * Math.log(s) / s);
+    this.secondGaussian = v * s;
+    return u * s;
+  }
+
+  /**
+   * Write the seed out to where it can be restored
+   * @abstract
+   */
+  finalize() { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  get fake() { throw new NotImplementedError(); }
+}
+
 const GlyphGenerator = {
   lastFake: "power",
+  fakeSeed: Date.now() % Math.pow(2, 32),
+  /* eslint-disable lines-between-class-members */
+  RealGlyphRNG: class extends GlyphRNG {
+    constructor() { super(player.reality.seed); }
+    finalize() { player.reality.seed = this.seed; }
+    get fake() { return false; }
+  },
+
+  FakeGlyphRNG: class extends GlyphRNG {
+    constructor() { super(GlyphGenerator.fakeSeed); }
+    finalize() { GlyphGenerator.fakeSeed = this.seed; }
+    get fake() { return true; }
+  },
+  /* eslint-enable lines-between-class-members */
 
   startingGlyph(level) {
     player.reality.glyphs.last = "power";
@@ -108,12 +170,14 @@ const GlyphGenerator = {
     };
   },
 
-  randomGlyph(level, fake) {
-    const strength = this.randomStrength(fake);
-    const type = this.randomType(fake);
-    let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
+  randomGlyph(level, rngIn) {
+    const rng = rngIn || new GlyphGenerator.RealGlyphRNG();
+    const strength = this.randomStrength(rng);
+    const type = this.randomType(rng);
+    let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, rng);
     if (type !== "effarig" && numEffects > 4) numEffects = 4;
-    const effectBitmask = this.generateEffects(type, numEffects, fake);
+    const effectBitmask = this.generateEffects(type, numEffects, rng);
+    if (rngIn === undefined) rng.finalize();
     return {
       id: undefined,
       idx: null,
@@ -156,13 +220,13 @@ const GlyphGenerator = {
     return Effects.max(1, RealityUpgrade(16));
   },
 
-  randomStrength(fake) {
+  randomStrength(rng) {
     let result;
     // Divide the extra minimum rarity by the strength multiplier
     // since we'll multiply by the strength multiplier later.
     const minimumValue = 1 + (Perk.glyphRarityIncrease.isBought ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
     do {
-      result = GlyphGenerator.gaussianBellCurve(this.getRNG(fake));
+      result = GlyphGenerator.gaussianBellCurve(rng);
     } while (result <= minimumValue);
     result *= GlyphGenerator.strengthMultiplier;
     const increasedRarity = Effects.sum(GlyphSacrifice.effarig) +
@@ -172,11 +236,12 @@ const GlyphGenerator = {
     return Math.min(result, rarityToStrength(100));
   },
 
-  randomNumberOfEffects(strength, level, fake) {
-    const rng = this.getRNG(fake);
+  randomNumberOfEffects(strength, level, rng) {
     const maxEffects = Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT) ? 7 : 4;
-    let num = Math.min(Math.floor(Math.pow(rng(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1), maxEffects);
-    if (RealityUpgrade(17).isBought && rng() > 0.5) num = Math.min(num + 1, maxEffects);
+    let num = Math.min(
+      maxEffects,
+      Math.floor(Math.pow(rng.uniform(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1));
+    if (RealityUpgrade(17).isBought && rng.uniform() > 0.5) num = Math.min(num + 1, maxEffects);
     if (Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) num = Math.max(num, 4);
     return num;
   },
@@ -236,16 +301,14 @@ const GlyphGenerator = {
         });
   }()),
 
-  generateEffects(type, count, fake) {
-    const rng = this.getRNG(fake);
+  generateEffects(type, count, rng) {
     const effectTables = GlyphGenerator.randomEffectTables[type];
     const table = effectTables[Math.min(count, effectTables.length - 1)];
-    return table.length === 1 ? table[0] : table[Math.floor(rng() * table.length)];
+    return table.length === 1 ? table[0] : table[Math.floor(rng.uniform() * table.length)];
   },
 
-  randomType(fake) {
-    const rng = this.getRNG(fake);
-    if (fake) {
+  randomType(rng) {
+    if (rng.fake) {
       GlyphGenerator.lastFake = GlyphTypes.random(rng, GlyphGenerator.lastFake);
       return GlyphGenerator.lastFake;
     }
@@ -254,13 +317,7 @@ const GlyphGenerator = {
   },
 
   getRNG(fake) {
-    return fake ? Math.random : GlyphGenerator.random;
-  },
-
-  random() {
-    const state = xorshift32Update(player.reality.seed);
-    player.reality.seed = state;
-    return state * 2.3283064365386963e-10 + 0.5;
+    return fake ? new GlyphGenerator.FakeGlyphRNG() : new GlyphGenerator.RealGlyphRNG();
   },
 
   /**
@@ -269,10 +326,8 @@ const GlyphGenerator = {
    * More than 2 approx 6%
    * More than 1.5 approx 38.43%
    */
-  gaussianBellCurve(rng = GlyphGenerator.random) {
-    const u = Math.max(rng(), Number.MIN_VALUE);
-    const v = rng();
-    return Math.pow(Math.max(Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v) + 1, 1), 0.65);
+  gaussianBellCurve(rng) {
+    return Math.pow(Math.max(rng.normal() + 1, 1), 0.65);
   },
 
   copy(glyph) {

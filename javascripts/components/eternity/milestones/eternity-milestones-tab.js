@@ -35,5 +35,13 @@ Vue.component("eternity-milestones-tab", {
           class="l-eternity-milestone-grid__cell"
         />
       </div>
+      <div>
+        Offline eternities only generate when your eternity autobuyer is on and set to zero EP.
+      </div>
+      <div>
+        Offline infinities only generate when your infinity autobuyer is on and set to time mode with
+        less than 60 seconds.
+      </div>
+
     </div>`
 });

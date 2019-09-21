@@ -41,6 +41,7 @@ class PerkState extends SetPurchasableMechanicState {
 
   purchase() {
     if (!super.purchase()) return;
+    if (this.config.bumpResource !== undefined) this.config.bumpResource();
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
     EventHub.dispatch(GameEvent.PERK_BOUGHT);

@@ -310,9 +310,7 @@ function finishProcessReality(realityProps) {
   }
   TimeCompression.isActive = false;
   const celestialRunState = clearCelestialRuns();
-  recalculateAllGlyphs()
-
-  //reset global values to avoid a tick of unupdated production
+  recalculateAllGlyphs();
 
   player.sacrificed = new Decimal(0);
 
@@ -320,44 +318,45 @@ function finishProcessReality(realityProps) {
 
   NormalChallenges.clearCompletions();
   InfinityChallenges.clearCompletions();
-  const isRUPG10Bought = RealityUpgrade(10).isBought;
-  if (isRUPG10Bought) NormalChallenges.completeAll();
 
   player.challenge.normal.current = 0;
   player.challenge.infinity.current = 0;
-  if (!isRUPG10Bought) player.infinityUpgrades.clear();
+  player.infinityUpgrades.clear();
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
   player.bestInfinityTime = 999999999999;
   player.thisInfinityTime = 0;
   player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;
-  player.dimensionBoosts = isRUPG10Bought ? 4 : 0;
-  player.galaxies = isRUPG10Bought ? 1 : 0;
+  player.dimensionBoosts = 0;
+  player.galaxies = 0;
   player.interval = null;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  player.break = isRUPG10Bought ? player.break : false;
+  player.break = false;
   player.infMult = new Decimal(1);
   player.infMultCost = new Decimal(10);
-  if (!isRUPG10Bought) {
-    player.infinityRebuyables = [0, 0];
-  }
+  player.infinityRebuyables = [0, 0];
   player.postChallUnlocked = 0;
   player.infinityPower = new Decimal(1);
-  player.infDimBuyers = isRUPG10Bought ? player.infDimBuyers : [false, false, false, false, false, false, false, false];
+  player.infDimBuyers = Array.repeat(false, 8);
   player.timeShards = new Decimal(0);
   player.tickThreshold = new Decimal(1);
+  player.replicanti.amount = new Decimal(0);
+  player.replicanti.unl = false;
+  player.replicanti.chance = 0.01;
+  player.replicanti.chanceCost = new Decimal(1e150);
+  player.replicanti.interval = 1000;
+  player.replicanti.intervalCost = new Decimal(1e140);
+  player.replicanti.gal = 0;
+  player.replicanti.galaxies = 0;
+  player.replicanti.galCost = new Decimal(1e170);
+  player.replicanti.galaxybuyer = false;
+  player.replicanti.auto = Array.repeat(false, 3);
 
-  player.eternityPoints = Effects.max(
-    0,
-    Perk.startEP1,
-    Perk.startEP2,
-    Perk.startEP3
-  ).toDecimal();
+  player.eternityPoints = Player.startingEP;
 
-  // This has to be reset before player.eternities to make the bumpLimit logic work
-  // correctly
+  // This has to be reset before player.eternities to make the bumpLimit logic work correctly
   EternityUpgrade.epMult.reset();
   player.eternities = new Decimal(0);
   player.thisEternity = 0;
@@ -365,14 +364,14 @@ function finishProcessReality(realityProps) {
   player.bestEternity = 999999999999;
   player.eternityUpgrades.clear();
   player.totalTickGained = 0;
-  player.offlineProd = isRUPG10Bought ? player.offlineProd : 0;
-  player.offlineProdCost = isRUPG10Bought ? player.offlineProdCost : 1e7;
+  player.offlineProd = 0;
+  player.offlineProdCost = 1e7;
   player.eternityChalls = {};
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;
   player.etercreq = 0;
-  player.infMultBuyer = isRUPG10Bought ? player.infMultBuyer : false;
+  player.infMultBuyer = false;
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
@@ -402,11 +401,7 @@ function finishProcessReality(realityProps) {
     2: 0,
     3: 0
   };
-  player.antimatter = Effects.max(
-    10,
-    Perk.startAM1,
-    Perk.startAM2
-  ).toDecimal();
+  player.antimatter = Player.startingAM;
   Enslaved.autoReleaseTick = 0;
   player.celestials.ra.compression.freeDimboosts = 0;
 
@@ -414,19 +409,11 @@ function finishProcessReality(realityProps) {
   resetEternityRuns();
   InfinityDimensions.fullReset();
   fullResetTimeDimensions();
-  resetReplicanti();
   resetChallengeStuff();
   NormalDimensions.reset();
   secondSoftReset();
   player.celestials.ra.peakGamespeed = 1;
-  if (isRUPG10Bought) {
-    player.eternities = new Decimal(100);
-  }
-  initializeChallengeCompletions();
 
-  if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
-    NormalChallenge(1).complete();
-  }
   player.reality.upgReqChecks = [true];
   InfinityDimensions.resetAmount();
   player.bestIPminThisInfinity = new Decimal(0);
@@ -437,33 +424,17 @@ function finishProcessReality(realityProps) {
   player.bestEternitiesPerMs = new Decimal(0);
   player.bestIpPerMsWithoutMaxAll = new Decimal(0);
   resetTimeDimensions();
-  // FIXME: Eternity count is now a Decimal so this needs to be addressed
-  // kong.submitStats('Eternities', player.eternities);
-  if (!EternityMilestone.autobuyerReplicantiGalaxy.isReached && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
-  if (player.eternities.lte(1)) {
-    Tab.dimensions.normal.show();
-  }
   AchievementTimers.marathon2.reset();
-  resetInfinityPoints();
+  player.infinityPoints = Player.startingIP;
 
-  function resetReplicanti() {
-    player.replicanti.amount = isRUPG10Bought ? new Decimal(1) : new Decimal(0);
-    player.replicanti.unl = isRUPG10Bought;
-    player.replicanti.chance = 0.01;
-    player.replicanti.chanceCost = new Decimal(1e150);
-    player.replicanti.interval = 1000;
-    player.replicanti.intervalCost = new Decimal(1e140);
-    player.replicanti.gal = 0;
-    player.replicanti.galaxies = 0;
-    player.replicanti.galCost = new Decimal(1e170);
-    player.replicanti.galaxybuyer = isRUPG10Bought ? player.replicanti.galaxybuyer : undefined;
-    player.replicanti.auto = [isRUPG10Bought ? player.replicanti.auto[0] : false, isRUPG10Bought ? player.replicanti.auto[1] : false, isRUPG10Bought ? player.replicanti.auto[2] : false];
-  }
+  if (RealityUpgrade(10).isBought) applyRUPG10();
+  else Tab.dimensions.normal.show();
+
   if (RealityUpgrade(13).isBought) {
     if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
-    for (var i = 1; i < 9; i++) {
+    for (let i = 1; i < 9; i++) {
       if (player.reality.tdbuyers[i - 1]) {
         buyMaxTimeDimTier(i);
       }
@@ -473,8 +444,8 @@ function finishProcessReality(realityProps) {
   Lazy.invalidateAll();
   EventHub.dispatch(GameEvent.REALITY_RESET_AFTER);
 
-  // This immediately gives eternity upgrades and autobuys TDs/5xEP
-  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
+  // This immediately gives eternity upgrades instead of after the first eternity
+  if (RealityUpgrades.allBought) {
     applyRealityUpgrades();
   }
 
@@ -495,6 +466,55 @@ function restoreCelestialRuns(celestialRunState) {
   player.celestials.laitela.run = celestialRunState.laitela;
   // For effarig, in order to make sure glyph effects are correctly capped
   recalculateAllGlyphs();
+}
+
+// This is also called when the upgrade is purchased, be aware of potentially having "default" values overwrite values
+// which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
+function applyRUPG10() {
+  NormalChallenges.completeAll();
+  
+  const hasMaxBulkSecretAch = SecretAchievement(38).isUnlocked;
+  player.auto.dimensions = player.auto.dimensions.map(() => ({
+    isUnlocked: true,
+    // These costs are approximately right; if bought manually all dimensions are slightly different from one another
+    cost: hasMaxBulkSecretAch ? 5e133 : 2e126,
+    interval: 100,
+    // Only completely max bulk if the relevant secret achievement has already been unlocked
+    bulk: hasMaxBulkSecretAch ? 1e100 : 1e90,
+    mode: AutobuyerMode.BUY_10,
+    priority: 1,
+    isActive: true,
+    lastTick: player.realTimePlayed
+  }));
+  for (const autobuyer of Autobuyers.all) {
+    if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
+  }
+  player.infinityUpgrades = new Set(
+    ["timeMult", "dimMult", "timeMult2", 
+    "skipReset1", "skipReset2", "unspentBonus", 
+    "27Mult", "18Mult", "36Mult", "resetMult", 
+    "skipReset3", "passiveGen", "45Mult", 
+    "resetBoost", "galaxyBoost", "skipResetGalaxy", 
+    "totalMult", "currentMult", "postGalaxy", 
+    "challengeMult", "achievementMult", "infinitiedMult", 
+    "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost", 
+    "ipOffline"]
+  );
+  player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
+  player.galaxies = Math.max(1, player.galaxies);
+  player.break = true;
+  player.infinityRebuyables = [8, 7];
+  player.infDimBuyers = Array.repeat(true, 8);
+  player.offlineProd = 50;
+  player.offlineProdCost = 1e17;
+  player.infMultBuyer = true;
+  player.eternities = player.eternities.plus(100);
+  player.replicanti.amount = player.replicanti.amount.clampMin(1);
+  player.replicanti.unl = true;
+  player.replicanti.galaxybuyer = true;
+  player.replicanti.auto = Array.repeat(true, 3);
+  GameCache.tickSpeedMultDecrease.invalidate();
+  GameCache.dimensionMultDecrease.invalidate();
 }
 
 function clearCelestialRuns() {

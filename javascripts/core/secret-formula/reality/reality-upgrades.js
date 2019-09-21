@@ -101,7 +101,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: () => `Do your first Eternity with ${shorten("1e400")} IP`,
       checkRequirement: () => player.infinityPoints.exponent >= 400 && isFirstEternity(),
       checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
-      description: "Start with 100 Eternities"
+      description: "Start every reality with 100 Eternities (also applies to current reality)"
     },
     {
       id: 11,

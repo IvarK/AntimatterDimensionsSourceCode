@@ -174,7 +174,7 @@ const GlyphGenerator = {
     const rng = rngIn || new GlyphGenerator.RealGlyphRNG();
     const strength = this.randomStrength(rng);
     const type = this.randomType(rng);
-    let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, rng);
+    let numEffects = this.randomNumberOfEffects(type, strength, level.actualLevel, rng);
     if (type !== "effarig" && numEffects > 4) numEffects = 4;
     const effectBitmask = this.generateEffects(type, numEffects, rng);
     if (rngIn === undefined) rng.finalize();
@@ -229,14 +229,16 @@ const GlyphGenerator = {
       result = GlyphGenerator.gaussianBellCurve(rng);
     } while (result <= minimumValue);
     result *= GlyphGenerator.strengthMultiplier;
-    const increasedRarity = Effects.sum(GlyphSacrifice.effarig) +
+    const increasedRarity = GlyphSacrifice.effarig.effectValue +
       (Ra.has(RA_UNLOCKS.IMPROVED_GLYPHS) ? RA_UNLOCKS.IMPROVED_GLYPHS.effect.rarity() : 0);
     // Each rarity% is 0.025 strength.
     result += increasedRarity / 40;
     return Math.min(result, rarityToStrength(100));
   },
 
-  randomNumberOfEffects(strength, level, rng) {
+  // eslint-disable-next-line max-params
+  randomNumberOfEffects(type, strength, level, rng) {
+    if (type !== "effarig" && Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) return 4;
     const maxEffects = Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT) ? 7 : 4;
     let num = Math.min(
       maxEffects,

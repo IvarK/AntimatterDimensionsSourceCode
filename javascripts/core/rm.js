@@ -135,7 +135,7 @@ class GlyphRNG {
   /**
    * @abstract
    */
-  get fake() { throw new NotImplementedError(); }
+  get isFake() { throw new NotImplementedError(); }
 }
 
 const GlyphGenerator = {
@@ -145,13 +145,13 @@ const GlyphGenerator = {
   RealGlyphRNG: class extends GlyphRNG {
     constructor() { super(player.reality.seed); }
     finalize() { player.reality.seed = this.seed; }
-    get fake() { return false; }
+    get isFake() { return false; }
   },
 
   FakeGlyphRNG: class extends GlyphRNG {
     constructor() { super(GlyphGenerator.fakeSeed); }
     finalize() { GlyphGenerator.fakeSeed = this.seed; }
-    get fake() { return true; }
+    get isFake() { return true; }
   },
   /* eslint-enable lines-between-class-members */
 
@@ -310,7 +310,7 @@ const GlyphGenerator = {
   },
 
   randomType(rng) {
-    if (rng.fake) {
+    if (rng.isFake) {
       GlyphGenerator.lastFake = GlyphTypes.random(rng, GlyphGenerator.lastFake);
       return GlyphGenerator.lastFake;
     }

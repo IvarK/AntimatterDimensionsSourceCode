@@ -198,32 +198,42 @@ const GlyphGenerator = {
     return randomEffects.concat(chosenEffects);
   },
 
+  /**
+    Since we have bitmasks representing effect types, we can randomly select a bitmask to
+    select effects. This is a table -- first by glyph type, then by effect count -- of valid
+    effect bitmasks.
+  */
   randomEffectTables: (function() {
     return GlyphTypes.list
       .filter(typeObj => typeObj !== GlyphTypes.reality)
       .mapToObject(
         typeObj => typeObj.id,
         typeObj => {
-        const effects = typeObj.effects;
-        let allCombos = [];
-        function populateCombos(baseSet = [], effectStartIndex = 0) {
-          if (effectStartIndex === effects.length) {
-            allCombos.push(baseSet);
-            return;
+          const effects = typeObj.effects;
+          let allCombos = [];
+          // Recursively generate all possible combinations of effects. This fills allCombos
+          // with first, all combos that don't have the effect at effectStartIndex, then with
+          // all the combos that do.
+          function populateCombos(baseSet = [], effectStartIndex = 0) {
+            if (effectStartIndex === effects.length) {
+              allCombos.push(baseSet);
+              return;
+            }
+            populateCombos(baseSet, effectStartIndex + 1);
+            populateCombos([...baseSet, effects[effectStartIndex].id], effectStartIndex + 1);
           }
-          populateCombos(baseSet, effectStartIndex + 1);
-          populateCombos([...baseSet, effects[effectStartIndex].id], effectStartIndex + 1);
-        }
-        populateCombos();
-        if (typeObj.primaryEffect)
-          allCombos = allCombos.filter(e => e.includes(typeObj.primaryEffect));
-        if (typeObj === GlyphTypes.effarig) {
-          allCombos = allCombos.filter(e => e.length > 4 || !e.includes("effarigrm") || !e.includes("effarigglyph"));
-        }
-        const maskArrays = Array.range(0, effects.length + 1).map(() => []);
-        allCombos.map(combo => maskArrays[combo.length].push(makeGlyphEffectBitmask(combo)));
-        return allCombos;
-      });
+          populateCombos();
+          // Filter out invalid effect combinations -- those that don't have the "primary" effect, if specified,
+          // and those effarig glyphs that have both RM and glyph instability (pre-Ra upgrade)
+          if (typeObj.primaryEffect) allCombos = allCombos.filter(e => e.includes(typeObj.primaryEffect));
+          if (typeObj === GlyphTypes.effarig) {
+            allCombos = allCombos.filter(e => e.length > 4 || !e.includes("effarigrm") || !e.includes("effarigglyph"));
+          }
+          // Divide up the combo list by number of effects, and turn the effect arrays into masks
+          const maskArrays = Array.range(0, effects.length + 1).map(() => []);
+          allCombos.map(combo => maskArrays[combo.length].push(makeGlyphEffectBitmask(combo)));
+          return allCombos;
+        });
   }()),
 
   generateEffects(type, count, fake) {

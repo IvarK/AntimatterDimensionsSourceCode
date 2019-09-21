@@ -113,8 +113,7 @@ const GlyphGenerator = {
     const type = this.randomType(fake);
     let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
     if (type !== "effarig" && numEffects > 4) numEffects = 4;
-    const effects = this.generateEffects(type, numEffects, fake);
-    const effectBitmask = makeGlyphEffectBitmask(effects);
+    const effectBitmask = this.generateEffects(type, numEffects, fake);
     return {
       id: undefined,
       idx: null,
@@ -199,31 +198,39 @@ const GlyphGenerator = {
     return randomEffects.concat(chosenEffects);
   },
 
+  randomEffectTables: (function() {
+    return GlyphTypes.list
+      .filter(typeObj => typeObj !== GlyphTypes.reality)
+      .mapToObject(
+        typeObj => typeObj.id,
+        typeObj => {
+        const effects = typeObj.effects;
+        let allCombos = [];
+        function populateCombos(baseSet = [], effectStartIndex = 0) {
+          if (effectStartIndex === effects.length) {
+            allCombos.push(baseSet);
+            return;
+          }
+          populateCombos(baseSet, effectStartIndex + 1);
+          populateCombos([...baseSet, effects[effectStartIndex].id], effectStartIndex + 1);
+        }
+        populateCombos();
+        if (typeObj.primaryEffect)
+          allCombos = allCombos.filter(e => e.includes(typeObj.primaryEffect));
+        if (typeObj === GlyphTypes.effarig) {
+          allCombos = allCombos.filter(e => e.length > 4 || !e.includes("effarigrm") || !e.includes("effarigglyph"));
+        }
+        const maskArrays = Array.range(0, effects.length + 1).map(() => []);
+        allCombos.map(combo => maskArrays[combo.length].push(makeGlyphEffectBitmask(combo)));
+        return allCombos;
+      });
+  }()),
+
   generateEffects(type, count, fake) {
     const rng = this.getRNG(fake);
-    const effects = [];
-    const blacklist = [];
-    if (GlyphTypes[type].primaryEffect) {
-      effects.push(GlyphTypes[type].primaryEffect);
-      blacklist.push(GlyphTypes[type].primaryEffect);
-    }
-    for (let i = effects.length; i < count; ++i) {
-      const effect = GlyphTypes[type].randomEffect(rng, blacklist);
-      if (!effect) break;
-      effects.push(effect);
-      blacklist.push(effect);
-      // Ensure RM/instability are mutually exclusive until more than 4 effects
-      if (type === "effarig" && count <= 4) {
-        if (effect === "effarigrm") blacklist.push("effarigglyph");
-        if (effect === "effarigglyph") blacklist.push("effarigrm");
-      }
-    }
-    return effects;
-  },
-
-  makeEffectBitmask(effectList) {
-    // eslint-disable-next-line no-bitwise
-    return effectList.reduce((mask, eff) => mask + (1 << GameDatabase.reality.glyphEffects[eff].bitmaskIndex), 0);
+    const effectTables = GlyphGenerator.randomEffectTables[type];
+    const table = effectTables[Math.min(count, effectTables.length - 1)];
+    return table.length === 1 ? table[0] : table[Math.floor(rng() * table.length)];
   },
 
   randomType(fake) {

@@ -299,7 +299,7 @@ const GlyphGenerator = {
           // Divide up the combo list by number of effects, and turn the effect arrays into masks
           const maskArrays = Array.range(0, effects.length + 1).map(() => []);
           allCombos.map(combo => maskArrays[combo.length].push(makeGlyphEffectBitmask(combo)));
-          return allCombos;
+          return maskArrays;
         });
   }()),
 

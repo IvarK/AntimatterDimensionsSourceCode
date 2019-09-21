@@ -97,14 +97,14 @@ const GlyphGenerator = {
     player.reality.glyphs.last = "power";
     const initialStrength = 1.5;
     return {
-      id: Date.now(),
+      id: undefined,
       idx: null,
       type: "power",
       // The initial strength is very slightly above average.
       strength: initialStrength,
       level: level.actualLevel,
       rawLevel: level.rawLevel,
-      effects: this.makeEffectBitmask(["powerpow"]),
+      effects: makeGlyphEffectBitmask(["powerpow"]),
     };
   },
 
@@ -114,9 +114,9 @@ const GlyphGenerator = {
     let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
     if (type !== "effarig" && numEffects > 4) numEffects = 4;
     const effects = this.generateEffects(type, numEffects, fake);
-    const effectBitmask = this.makeEffectBitmask(effects);
+    const effectBitmask = makeGlyphEffectBitmask(effects);
     return {
-      id: this.makeID(),
+      id: undefined,
       idx: null,
       type,
       strength,
@@ -130,9 +130,9 @@ const GlyphGenerator = {
     const str = rarityToStrength(100);
     const maxEffects = 4;
     const effects = this.generateRealityEffects(maxEffects, chosenEffects);
-    const effectBitmask = this.makeEffectBitmask(effects);
+    const effectBitmask = makeGlyphEffectBitmask(effects);
     return {
-      id: this.makeID(),
+      id: undefined,
       idx: null,
       type: "reality",
       strength: str,
@@ -418,6 +418,7 @@ const Glyphs = {
   },
   addToInventory(glyph, requestedInventoryIndex) {
     this.validate();
+    glyph.id = GlyphGenerator.makeID();
     let index = this.findFreeIndex();
     if (index < 0) return;
     if (requestedInventoryIndex !== undefined) {
@@ -430,8 +431,9 @@ const Glyphs = {
     this.validate();
   },
   removeFromInventory(glyph) {
-    this.validate();
     // This can get called on a glyph not in inventory, during auto sacrifice.
+    if (glyph.idx === null) return;
+    this.validate();
     const index = player.reality.glyphs.inventory.indexOf(glyph);
     if (index < 0) return;
     this.inventory[glyph.idx] = null;
@@ -616,7 +618,8 @@ function calculateGlyph(glyph) {
       glyph.rawLevel = glyph.level < 1000 ? glyph.level : (Math.pow(0.004 * glyph.level - 3, 2) - 1) * 125 + 1000;
     }
 
-    if (glyph.strength === 1) glyph.strength = gaussianBellCurve();
+    // Used to randomly generate strength in this case; I don't think we actually care.
+    if (glyph.strength === 1) glyph.strength = 1.5;
     glyph.strength = Math.min(rarityToStrength(100), glyph.strength);
   }
 }
@@ -738,10 +741,8 @@ function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
     const refinementGain = glyphRefinementGain(glyph);
     resource.amount += refinementGain;
     const decoherenceGain = refinementGain * AlchemyResource.decoherence.effectValue;
-    const otherGlyphTypes = GlyphTypes.list
-      .filter(t => t !== GlyphTypes[glyph.type]);
-    for (const glyphType of otherGlyphTypes) {
-      if (glyphType.id !== "reality") {
+    for (const glyphType of GlyphTypes.list) {
+      if (glyphType !== GlyphTypes[glyph.type] && glyphType !== GlyphTypes.reality) {
         const otherResource = AlchemyResources.all[glyphType.alchemyResource];
         const maxResouce = Math.max(100 * refinementGain, otherResource.amount);
         otherResource.amount = Math.min(otherResource.amount + decoherenceGain, maxResouce);

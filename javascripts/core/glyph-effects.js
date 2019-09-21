@@ -519,6 +519,11 @@ function findGlyphTypeEffects(glyphType) {
   return Object.values(GameDatabase.reality.glyphEffects).filter(e => e.glyphTypes.includes(glyphType));
 }
 
+function makeGlyphEffectBitmask(effectList) {
+  // eslint-disable-next-line no-bitwise
+  return effectList.reduce((mask, eff) => mask + (1 << GameDatabase.reality.glyphEffects[eff].bitmaskIndex), 0);
+}
+
 class GlyphType {
   /**
    * @param {Object} setup

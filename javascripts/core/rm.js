@@ -229,10 +229,10 @@ const GlyphGenerator = {
   randomType(fake) {
     const rng = this.getRNG(fake);
     if (fake) {
-      GlyphGenerator.lastFake = GlyphTypes.random(rng, [GlyphGenerator.lastFake]);
+      GlyphGenerator.lastFake = GlyphTypes.random(rng, GlyphGenerator.lastFake);
       return GlyphGenerator.lastFake;
     }
-    player.reality.glyphs.last = GlyphTypes.random(rng, [player.reality.glyphs.last]);
+    player.reality.glyphs.last = GlyphTypes.random(rng, player.reality.glyphs.last);
     return player.reality.glyphs.last;
   },
 

@@ -646,13 +646,19 @@ const GlyphTypes = {
   }),
   /**
     * @param {function(): number} rng Random number source (0..1)
-    * @param {string[]} [blacklist] Do not return the specified types
+    * @param {string} [blacklisted] Do not return the specified type
     * @returns {string | null}
     */
-  random(rng, blacklist = []) {
-    const available = GLYPH_TYPES.filter(id => !blacklist.includes(id) && GlyphTypes[id].isUnlocked);
-    if (available.length === 0) return null;
-    return available[Math.floor(rng() * available.length)];
+  random(rng, blacklisted = "") {
+    const types = ["time", "dilation", "replication", "infinity", "power", "effarig"];
+    if (!blacklisted) {
+      const available = EffarigUnlock.reality.isUnlocked ? types.length : types.length - 1;
+      return types[Math.floor(rng() * available)];
+    }
+    const available = EffarigUnlock.reality.isUnlocked ? types.length - 1 : types.length - 2;
+    const typeIndex = Math.floor(rng() * available);
+    if (types[typeIndex] === blacklisted) return types[typeIndex + 1];
+    return types[typeIndex];
   },
   get list() {
     return GLYPH_TYPES.map(e => GlyphTypes[e]);

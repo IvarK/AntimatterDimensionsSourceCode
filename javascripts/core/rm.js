@@ -90,33 +90,96 @@ const AutoGlyphPicker = {
   }
 };
 
+/**
+ * It turns out reading and writing the RNG state from player is really slow, for
+ * some reason. Thus, it's very advantageous to get an RNG as a local variable, and only
+ * write the state back out to player when we are done with it.
+ * So, this interface is implemented by a real and fake RNG class; after creating one and
+ * using it, call finalize on it to write the seed out.
+ */
+class GlyphRNG {
+  constructor(seed) {
+    this.seed = seed;
+    this.secondGaussian = undefined;
+  }
+
+  uniform() {
+    const state = xorshift32Update(this.seed);
+    this.seed = state;
+    return state * 2.3283064365386963e-10 + 0.5;
+  }
+
+  normal() {
+    if (this.secondGaussian !== undefined) {
+      const toReturn = this.secondGaussian;
+      this.secondGaussian = undefined;
+      return toReturn;
+    }
+    let u = 0, v = 0, s = 0;
+    do {
+      u = this.uniform() * 2 - 1;
+      v = this.uniform() * 2 - 1;
+      s = u * u + v * v;
+    } while (s >= 1 || s === 0);
+    s = Math.sqrt(-2 * Math.log(s) / s);
+    this.secondGaussian = v * s;
+    return u * s;
+  }
+
+  /**
+   * Write the seed out to where it can be restored
+   * @abstract
+   */
+  finalize() { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  get isFake() { throw new NotImplementedError(); }
+}
+
 const GlyphGenerator = {
   lastFake: "power",
+  fakeSeed: Date.now() % Math.pow(2, 32),
+  /* eslint-disable lines-between-class-members */
+  RealGlyphRNG: class extends GlyphRNG {
+    constructor() { super(player.reality.seed); }
+    finalize() { player.reality.seed = this.seed; }
+    get isFake() { return false; }
+  },
+
+  FakeGlyphRNG: class extends GlyphRNG {
+    constructor() { super(GlyphGenerator.fakeSeed); }
+    finalize() { GlyphGenerator.fakeSeed = this.seed; }
+    get isFake() { return true; }
+  },
+  /* eslint-enable lines-between-class-members */
 
   startingGlyph(level) {
     player.reality.glyphs.last = "power";
     const initialStrength = 1.5;
     return {
-      id: Date.now(),
+      id: undefined,
       idx: null,
       type: "power",
       // The initial strength is very slightly above average.
       strength: initialStrength,
       level: level.actualLevel,
       rawLevel: level.rawLevel,
-      effects: this.makeEffectBitmask(["powerpow"]),
+      effects: makeGlyphEffectBitmask(["powerpow"]),
     };
   },
 
-  randomGlyph(level, fake) {
-    const strength = this.randomStrength(fake);
-    const type = this.randomType(fake);
-    let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
+  randomGlyph(level, rngIn) {
+    const rng = rngIn || new GlyphGenerator.RealGlyphRNG();
+    const strength = this.randomStrength(rng);
+    const type = this.randomType(rng);
+    let numEffects = this.randomNumberOfEffects(type, strength, level.actualLevel, rng);
     if (type !== "effarig" && numEffects > 4) numEffects = 4;
-    const effects = this.generateEffects(type, numEffects, fake);
-    const effectBitmask = this.makeEffectBitmask(effects);
+    const effectBitmask = this.generateEffects(type, numEffects, rng);
+    if (rngIn === undefined) rng.finalize();
     return {
-      id: this.makeID(),
+      id: undefined,
       idx: null,
       type,
       strength,
@@ -130,9 +193,9 @@ const GlyphGenerator = {
     const str = rarityToStrength(100);
     const maxEffects = 4;
     const effects = this.generateRealityEffects(maxEffects, chosenEffects);
-    const effectBitmask = this.makeEffectBitmask(effects);
+    const effectBitmask = makeGlyphEffectBitmask(effects);
     return {
-      id: this.makeID(),
+      id: undefined,
       idx: null,
       type: "reality",
       strength: str,
@@ -157,27 +220,30 @@ const GlyphGenerator = {
     return Effects.max(1, RealityUpgrade(16));
   },
 
-  randomStrength(fake) {
+  randomStrength(rng) {
     let result;
     // Divide the extra minimum rarity by the strength multiplier
     // since we'll multiply by the strength multiplier later.
     const minimumValue = 1 + (Perk.glyphRarityIncrease.isBought ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
     do {
-      result = GlyphGenerator.gaussianBellCurve(this.getRNG(fake));
+      result = GlyphGenerator.gaussianBellCurve(rng);
     } while (result <= minimumValue);
     result *= GlyphGenerator.strengthMultiplier;
-    const increasedRarity = Effects.sum(GlyphSacrifice.effarig) +
+    const increasedRarity = GlyphSacrifice.effarig.effectValue +
       (Ra.has(RA_UNLOCKS.IMPROVED_GLYPHS) ? RA_UNLOCKS.IMPROVED_GLYPHS.effect.rarity() : 0);
     // Each rarity% is 0.025 strength.
     result += increasedRarity / 40;
     return Math.min(result, rarityToStrength(100));
   },
 
-  randomNumberOfEffects(strength, level, fake) {
-    const rng = this.getRNG(fake);
+  // eslint-disable-next-line max-params
+  randomNumberOfEffects(type, strength, level, rng) {
+    if (type !== "effarig" && Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) return 4;
     const maxEffects = Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT) ? 7 : 4;
-    let num = Math.min(Math.floor(Math.pow(rng(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1), maxEffects);
-    if (RealityUpgrade(17).isBought && rng() > 0.5) num = Math.min(num + 1, maxEffects);
+    let num = Math.min(
+      maxEffects,
+      Math.floor(Math.pow(rng.uniform(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1));
+    if (RealityUpgrade(17).isBought && rng.uniform() > 0.5) num = Math.min(num + 1, maxEffects);
     if (Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) num = Math.max(num, 4);
     return num;
   },
@@ -199,51 +265,61 @@ const GlyphGenerator = {
     return randomEffects.concat(chosenEffects);
   },
 
-  generateEffects(type, count, fake) {
-    const rng = this.getRNG(fake);
-    const effects = [];
-    const blacklist = [];
-    if (GlyphTypes[type].primaryEffect) {
-      effects.push(GlyphTypes[type].primaryEffect);
-      blacklist.push(GlyphTypes[type].primaryEffect);
-    }
-    for (let i = effects.length; i < count; ++i) {
-      const effect = GlyphTypes[type].randomEffect(rng, blacklist);
-      if (!effect) break;
-      effects.push(effect);
-      blacklist.push(effect);
-      // Ensure RM/instability are mutually exclusive until more than 4 effects
-      if (type === "effarig" && count <= 4) {
-        if (effect === "effarigrm") blacklist.push("effarigglyph");
-        if (effect === "effarigglyph") blacklist.push("effarigrm");
-      }
-    }
-    return effects;
+  /**
+    Since we have bitmasks representing effect types, we can randomly select a bitmask to
+    select effects. This is a table -- first by glyph type, then by effect count -- of valid
+    effect bitmasks.
+  */
+  randomEffectTables: (function() {
+    return GlyphTypes.list
+      .filter(typeObj => typeObj !== GlyphTypes.reality)
+      .mapToObject(
+        typeObj => typeObj.id,
+        typeObj => {
+          const effects = typeObj.effects;
+          let allCombos = [];
+          // Recursively generate all possible combinations of effects. This fills allCombos
+          // with first, all combos that don't have the effect at effectStartIndex, then with
+          // all the combos that do.
+          function populateCombos(baseSet = [], effectStartIndex = 0) {
+            if (effectStartIndex === effects.length) {
+              allCombos.push(baseSet);
+              return;
+            }
+            populateCombos(baseSet, effectStartIndex + 1);
+            populateCombos([...baseSet, effects[effectStartIndex].id], effectStartIndex + 1);
+          }
+          populateCombos();
+          // Filter out invalid effect combinations -- those that don't have the "primary" effect, if specified,
+          // and those effarig glyphs that have both RM and glyph instability (pre-Ra upgrade)
+          if (typeObj.primaryEffect) allCombos = allCombos.filter(e => e.includes(typeObj.primaryEffect));
+          if (typeObj === GlyphTypes.effarig) {
+            allCombos = allCombos.filter(e => e.length > 4 || !e.includes("effarigrm") || !e.includes("effarigglyph"));
+          }
+          // Divide up the combo list by number of effects, and turn the effect arrays into masks
+          const maskArrays = Array.range(0, effects.length + 1).map(() => []);
+          allCombos.map(combo => maskArrays[combo.length].push(makeGlyphEffectBitmask(combo)));
+          return maskArrays;
+        });
+  }()),
+
+  generateEffects(type, count, rng) {
+    const effectTables = GlyphGenerator.randomEffectTables[type];
+    const table = effectTables[Math.min(count, effectTables.length - 1)];
+    return table.length === 1 ? table[0] : table[Math.floor(rng.uniform() * table.length)];
   },
 
-  makeEffectBitmask(effectList) {
-    // eslint-disable-next-line no-bitwise
-    return effectList.reduce((mask, eff) => mask + (1 << GameDatabase.reality.glyphEffects[eff].bitmaskIndex), 0);
-  },
-
-  randomType(fake) {
-    const rng = this.getRNG(fake);
-    if (fake) {
-      GlyphGenerator.lastFake = GlyphTypes.random(rng, [GlyphGenerator.lastFake]);
+  randomType(rng) {
+    if (rng.isFake) {
+      GlyphGenerator.lastFake = GlyphTypes.random(rng, GlyphGenerator.lastFake);
       return GlyphGenerator.lastFake;
     }
-    player.reality.glyphs.last = GlyphTypes.random(rng, [player.reality.glyphs.last]);
+    player.reality.glyphs.last = GlyphTypes.random(rng, player.reality.glyphs.last);
     return player.reality.glyphs.last;
   },
 
   getRNG(fake) {
-    return fake ? Math.random : GlyphGenerator.random;
-  },
-
-  random() {
-    const state = xorshift32Update(player.reality.seed);
-    player.reality.seed = state;
-    return state * 2.3283064365386963e-10 + 0.5;
+    return fake ? new GlyphGenerator.FakeGlyphRNG() : new GlyphGenerator.RealGlyphRNG();
   },
 
   /**
@@ -252,10 +328,13 @@ const GlyphGenerator = {
    * More than 2 approx 6%
    * More than 1.5 approx 38.43%
    */
-  gaussianBellCurve(rng = GlyphGenerator.random) {
-    const u = Math.max(rng(), Number.MIN_VALUE);
-    const v = rng();
-    return Math.pow(Math.max(Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v) + 1, 1), 0.65);
+  gaussianBellCurve(rng) {
+    // Old code used max, instead of abs -- but we rejected any samples that were
+    // at the boundary anyways. Might as well use abs, and not cycle as many times.
+    // The function here is an approximation of ^0.65, here is the old code:
+    //     return Math.pow(Math.max(rng.normal() + 1, 1), 0.65);
+    const x = Math.sqrt(Math.abs(rng.normal(), 0) + 1);
+    return -0.111749606737000 + x * (0.900603878243551 + x * (0.229108274476697 + x * -0.017962545983249));
   },
 
   copy(glyph) {
@@ -418,6 +497,7 @@ const Glyphs = {
   },
   addToInventory(glyph, requestedInventoryIndex) {
     this.validate();
+    glyph.id = GlyphGenerator.makeID();
     let index = this.findFreeIndex();
     if (index < 0) return;
     if (requestedInventoryIndex !== undefined) {
@@ -430,8 +510,9 @@ const Glyphs = {
     this.validate();
   },
   removeFromInventory(glyph) {
-    this.validate();
     // This can get called on a glyph not in inventory, during auto sacrifice.
+    if (glyph.idx === null) return;
+    this.validate();
     const index = player.reality.glyphs.inventory.indexOf(glyph);
     if (index < 0) return;
     this.inventory[glyph.idx] = null;
@@ -616,7 +697,8 @@ function calculateGlyph(glyph) {
       glyph.rawLevel = glyph.level < 1000 ? glyph.level : (Math.pow(0.004 * glyph.level - 3, 2) - 1) * 125 + 1000;
     }
 
-    if (glyph.strength === 1) glyph.strength = gaussianBellCurve();
+    // Used to randomly generate strength in this case; I don't think we actually care.
+    if (glyph.strength === 1) glyph.strength = 1.5;
     glyph.strength = Math.min(rarityToStrength(100), glyph.strength);
   }
 }
@@ -738,10 +820,8 @@ function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
     const refinementGain = glyphRefinementGain(glyph);
     resource.amount += refinementGain;
     const decoherenceGain = refinementGain * AlchemyResource.decoherence.effectValue;
-    const otherGlyphTypes = GlyphTypes.list
-      .filter(t => t !== GlyphTypes[glyph.type]);
-    for (const glyphType of otherGlyphTypes) {
-      if (glyphType.id !== "reality") {
+    for (const glyphType of GlyphTypes.list) {
+      if (glyphType !== GlyphTypes[glyph.type] && glyphType !== GlyphTypes.reality) {
         const otherResource = AlchemyResources.all[glyphType.alchemyResource];
         const maxResouce = Math.max(100 * refinementGain, otherResource.amount);
         otherResource.amount = Math.min(otherResource.amount + decoherenceGain, maxResouce);

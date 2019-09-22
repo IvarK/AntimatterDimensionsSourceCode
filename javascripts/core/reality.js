@@ -46,32 +46,37 @@ const GlyphSelection = {
     return true;
   },
 
-  generate(count, realityProps) {
-    this.glyphs = [];
-    this.realityProps = realityProps;
-    const level = realityProps.gainedGlyphLevel;
-    for (let out = 0; out < count; ++out) {
-      let glyph;
-      // Attempt to generate a unique glyph, but give up after 100 tries so the game doesn't
-      // get stuck in an infinite loop if we decide to increase the number of glyph choices
-      // for some reason and forget about the uniqueness check
-      for (let tries = 0; tries < 100; ++tries) {
-        glyph = GlyphGenerator.randomGlyph(level, false);
-        if (this.checkUniqueGlyph(glyph)) break;
-      }
-      this.glyphs.push(glyph);
-    }
-    ui.view.modal.glyphSelection = true;
-    if (!Perk.glyphUncommonGuarantee.isBought) return;
+  glyphUncommonGuarantee(rng) {
     // If no choices are rare enough and the player has the uncommon glyph perk, randomly generate
     // rarities until the threshold is passed and then assign that rarity to a random glyph
     const strengthThreshold = 1.5;
     if (this.glyphs.some(e => e.strength >= strengthThreshold)) return;
     let newStrength;
     do {
-      newStrength = GlyphGenerator.randomStrength(false);
+      newStrength = GlyphGenerator.randomStrength(rng);
     } while (newStrength < strengthThreshold);
     this.glyphs.randomElement().strength = newStrength;
+  },
+
+  generate(count, realityProps) {
+    this.glyphs = [];
+    this.realityProps = realityProps;
+    const level = realityProps.gainedGlyphLevel;
+    const rng = new GlyphGenerator.RealGlyphRNG();
+    for (let out = 0; out < count; ++out) {
+      let glyph;
+      // Attempt to generate a unique glyph, but give up after 100 tries so the game doesn't
+      // get stuck in an infinite loop if we decide to increase the number of glyph choices
+      // for some reason and forget about the uniqueness check
+      for (let tries = 0; tries < 100; ++tries) {
+        glyph = GlyphGenerator.randomGlyph(level, rng);
+        if (this.checkUniqueGlyph(glyph)) break;
+      }
+      this.glyphs.push(glyph);
+    }
+    ui.view.modal.glyphSelection = true;
+    if (Perk.glyphUncommonGuarantee.isBought) this.glyphUncommonGuarantee(rng);
+    rng.finalize();
   },
 
   update(level) {
@@ -178,14 +183,14 @@ function runRealityAnimation() {
   }, 10000);
 }
 
-function processAutoGlyph(gainedLevel) {
+function processAutoGlyph(gainedLevel, rng) {
   let newGlyph;
   if (EffarigUnlock.autopicker.isUnlocked) {
     const glyphs = Array.range(0, GlyphSelection.choiceCount)
-      .map(() => GlyphGenerator.randomGlyph(gainedLevel));
+      .map(() => GlyphGenerator.randomGlyph(gainedLevel, rng));
     newGlyph = AutoGlyphPicker.pick(glyphs);
   } else {
-    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, false);
+    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, rng);
   }
   if (EffarigUnlock.autosacrifice.isUnlocked) {
     if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Player.hasFreeInventorySpace) {
@@ -273,7 +278,8 @@ function beginProcessReality(realityProps) {
   }
   EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
   const glyphsToProcess = realityProps.simulatedRealities + (realityProps.alreadyGotGlyph ? 0 : 1);
-  Async.run(() => processAutoGlyph(realityProps.gainedGlyphLevel),
+  const rng = GlyphGenerator.getRNG(false);
+  Async.run(() => processAutoGlyph(realityProps.gainedGlyphLevel, rng),
     glyphsToProcess,
     {
       batchSize: 100,
@@ -295,6 +301,7 @@ function beginProcessReality(realityProps) {
         GameIntervals.start();
       }
     }).then(() => {
+      rng.finalize();
       finishProcessReality(realityProps);
     });
 }

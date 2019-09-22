@@ -145,7 +145,7 @@ dev.resetDilation = function() {
 dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
   if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
   if (!Player.hasFreeInventorySpace) return;
-  const glyph = GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }, false);
+  const glyph = GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel });
   glyph.symbol = symbol;
   glyph.color = color;
   Glyphs.addToInventory(glyph);
@@ -157,7 +157,7 @@ dev.giveMusicGlyph = function() {
 
 dev.giveGlyph = function(level, rawLevel = level) {
   if (!Player.hasFreeInventorySpace) return;
-  Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }, false));
+  Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }));
 };
 
 dev.giveRealityGlyph = function(level, rawLevel = level) {

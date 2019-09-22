@@ -233,7 +233,7 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
 
 const DilationUpgrade = (function() {
   const db = GameDatabase.eternity.dilation;
-  const upgrades = {
+  return {
     dtGain: new RebuyableDilationUpgradeState(db.dtGain),
     galaxyThreshold: new RebuyableDilationUpgradeState(db.galaxyThreshold),
     tachyonGain: new RebuyableDilationUpgradeState(db.tachyonGain),
@@ -245,12 +245,6 @@ const DilationUpgrade = (function() {
     dilationPenalty: new DilationUpgradeState(db.dilationPenalty),
     ttGenerator: new DilationUpgradeState(db.ttGenerator),
   };
-  const upgradesById = [];
-  for (const upgrade of Object.values(upgrades)) {
-    upgradesById[upgrade.id] = upgrade;
-  }
-  upgrades.fromId = id => upgradesById[id];
-  return upgrades;
 }());
 
 const DilationUpgrades = {
@@ -259,4 +253,11 @@ const DilationUpgrades = {
     DilationUpgrade.galaxyThreshold,
     DilationUpgrade.tachyonGain,
   ],
+  fromId: (function() {
+    const upgradesById = [];
+    for (const upgrade of Object.values(DilationUpgrade)) {
+      upgradesById[upgrade.id] = upgrade;
+    }
+    return id => upgradesById[id];
+  }()),
 };

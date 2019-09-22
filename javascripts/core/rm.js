@@ -507,7 +507,7 @@ const Glyphs = {
       dilationStudies: player.dilation.studies.toBitmask(),
       dilationUpgrades: player.dilation.upgrades.toBitmask(),
       dilationRebuyables: DilationUpgrades.rebuyable.mapToObject(d => d.id, d => d.boughtAmount),
-      tp: player.dilation.tachyonParticles,
+      tp: new Decimal(player.dilation.tachyonParticles),
       dt: new Decimal(player.dilation.dilatedTime),
     };
     player.reality.glyphs.undo.push(undoData);
@@ -521,10 +521,10 @@ const Glyphs = {
       glyphUndo: true,
       restoreCelestialState: true,
     });
-    player.antimatter.copyFrom(undoData.am);
-    player.infinityPoints.copyFrom(undoData.ip);
-    player.eternityPoints.copyFrom(undoData.ep);
-    player.timestudy.theorem.copyFrom(undoData.tt);
+    player.antimatter.fromValue(undoData.am);
+    player.infinityPoints.fromValue(undoData.ip);
+    player.eternityPoints.fromValue(undoData.ep);
+    player.timestudy.theorem.fromValue(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
     player.thisReality = undoData.thisReality;
     player.thisRealityRealTime = undoData.thisRealityRealTime;
@@ -533,10 +533,10 @@ const Glyphs = {
       player.dilation.studies = Array.fromBitmask(undoData.dilationStudies);
       player.dilation.upgrades = new Set(Array.fromBitmask(undoData.dilationUpgrades));
       for (const id of Object.keys(undoData.dilationRebuyables)) {
-        DilationUpgrade.fromId(id).boughtAmount = undoData.dilationRebuyables[id];
+        DilationUpgrades.fromId(id).boughtAmount = undoData.dilationRebuyables[id];
       }
-      player.dilation.tachyonParticles = undoData.tp;
-      player.dilation.dilatedTime.copyFrom(undoData.dt);
+      player.dilation.tachyonParticles.fromValue(undoData.tp);
+      player.dilation.dilatedTime.fromValue(undoData.dt);
     }
   }
 };

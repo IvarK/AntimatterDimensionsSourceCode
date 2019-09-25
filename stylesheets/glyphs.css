@@ -544,6 +544,10 @@
   margin: 0.5rem 0.5rem 0.5rem 0.5rem;
 }
 
+.c-glyph-inventory__protected-slot {
+  background-color: rgb(110, 110, 110);
+}
+
 .c-glyph-inventory__slot {
   background-color: gainsboro;
 }

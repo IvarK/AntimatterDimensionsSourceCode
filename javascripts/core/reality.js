@@ -136,7 +136,7 @@ function requestManualReality() {
     return;
   }
   if (!Player.hasFreeInventorySpace) {
-    alert("Inventory is full. Delete/sacrifice (shift-click) some glyphs.");
+    Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
     return;
   }
   const realityProps = getRealityProps(false, false);

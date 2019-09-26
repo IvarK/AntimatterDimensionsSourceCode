@@ -353,11 +353,11 @@ const Glyphs = {
   },
   findFreeIndex() {
     this.validate();
-    return this.inventory.slice(this.protectedSlots).indexOf(null) + this.protectedSlots;
+    return this.inventory.findIndex((slot, index) => slot === null && index >= this.protectedSlots);
   },
   get freeInventorySpace() {
     this.validate();
-    return this.inventory.filter(e => e === null).length - this.protectedSlots;
+    return this.inventory.filter((e, idx) => e === null && idx >= this.protectedSlots).length;
   },
   get activeSlotCount() {
     return 3 + Effects.sum(RealityUpgrade(9), RealityUpgrade(24));

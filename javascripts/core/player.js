@@ -531,10 +531,6 @@ const Player = {
     return 1 + base * AnnihilationUpgrade.dimCostMult.effect;
   },
 
-  get hasFreeInventorySpace() {
-    return Glyphs.freeInventorySpace > 0;
-  },
-
   get achievementPower() {
     return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
   },

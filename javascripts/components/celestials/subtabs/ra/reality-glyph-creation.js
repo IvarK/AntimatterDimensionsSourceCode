@@ -53,7 +53,7 @@ Vue.component("modal-reality-glyph-creation", {
       ];
     },
     createRealityGlyph() {
-      if (!Player.hasFreeInventorySpace) {
+      if (Glyphs.freeInventorySpace === 0) {
         Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
         return;
       }

@@ -1075,30 +1075,31 @@ GameDatabase.news = [
     id: "a208",
     text:
       "Hi, I'm Steve, and I'm also Steve. Our greatest responsibility is to serve our antimatter communities. " +
-      "We are extremely proud of the quantity, unbalanced journalism that ASSTD news produces. But we're " +
+      "We are extremely proud of the quantity, unbalanced journalism that ANN news produces. But we're " +
       "concerned about the troubling trend of responsible, two-sided news stories plaguing the antimatter " +
       "universe. The sharing of unbiased and true news has become all too common on social media. More " +
-      "alarming, some media outlets publish these same true stories, stories that just aren't propaganda, " +
+      "alarmingly, some media outlets publish these same true stories, stories that aren't just propaganda, " +
       "without checking government talking points first. Unfortunately, some members of the media use their " +
       "platforms to push a logically sound opinion and unbiased agenda to diversify 'exactly what antimatter " +
-      "thinks'. This is extremely dangerous to our dictatorship. At ASSTD it's our responsibility to pursue " +
+      "thinks'. This is extremely dangerous to our dictatorship. At ANN it's our responsibility to pursue " +
       "and report the lies. We understand lies are neither 'left or right' politically. Our commitment to " +
       "fearmongering slander is the foundation of our credibility, now more than ever. But we are incorporeal " +
       "8D beings of antimatter, and sometimes our propaganda techniques might fall short. If you believe our " +
-      "coverage is fair please reach out to us by going to ivark.github.io and clicking on [HARD RESET]. We " +
-      "value your comments. We won't respond back to you because you would've deleted your comment with the " +
-      "hard reset button before you get it. We work very hard to seek the lies and strive to be unfair, lopsided " +
-      "and opinionated... We consider it our honor, our privilege, to irresponsibly deliver the news every " +
-      "nanosecond. Thank you for watching and we appreciate your feedback. All matter should be-"
+      "coverage is fair please reach out to us by going to ivark.github.io, navigating to the options tab, " +
+      "and clicking on [HARD RESET]. We value your comments. We won't respond back to you because you would've " +
+      "deleted your comment with the hard reset button before you get it. We work very hard to seek the lies " +
+      "and strive to be unfair, lopsided and opinionated... We consider it our honor, our privilege, to " +
+      "irresponsibly deliver the news every nanosecond. Thank you for watching and we appreciate your " +
+      "feedback. All matter should be-"
   },
   {
     id: "a209",
     text:
       "Have you ever heard the tale of the Antiwriter? I thought not. It's not a story the news tickers would tell " +
       "you. It's an Unhevi legend. Rumor has it that the Antiwriter contributes to the News every 5 hours with an " +
-      "incredibly well written news report, only to vanish again. Others think he doesn't exist at all, and is a " +
+      "incredibly well written report, only to vanish again. Others think he doesn't exist at all, and is a " +
       "lie fabricated by Hevipelle to spread his propaganda. Perhaps he is real, and just a normal person like the " +
-      "rest of us. In any case, we will probably never reveal the identity of this mysterious poet."
+      "rest of us. In any case, we will probably never find out the identity of this mysterious poet."
   },
   {
     id: "a210",
@@ -1125,7 +1126,7 @@ GameDatabase.news = [
       ];
       const diss = disses.randomElement();
       return `Only ${format(player.antimatter, 2, 0)} antimatter? ${diss}`;
-    }
+    },
   },
   {
     id: "a212",
@@ -1136,7 +1137,7 @@ GameDatabase.news = [
   {
     id: "a213",
     text:
-    "Antimatter giraffes were found to have incredibly fast reaction times. This explains why they've won 90% of " +
+    "Antimatter giraffes have incredibly fast reaction times. This explains why they've won 90% of " +
     "all gaming championships since anti-giraffe friendly controllers were invented."
   },
   {
@@ -1146,7 +1147,7 @@ GameDatabase.news = [
   {
     id: "a215",
     text:
-      "Local old man replaces lawn with antimatter grass to keep kids away. However, " +
+      "Local old man replaced lawn with antimatter grass to keep kids away. However, " +
       "when he attempted to water it, there were no survivors."
   },
   {
@@ -1155,19 +1156,19 @@ GameDatabase.news = [
       "Jake returned home from a long day at school. On his way home, he came across a curious little object. " +
       "Transparent, but opaque. Shimmering, but gloomy. Heavy, but weightless. Jake brought the object to his " +
       "mother. \"Mom, I found this thing on the sidewalk, can I keep it?\", Jake said. His mother turned around " +
-      "to view the object her son spoke of. Her pupils dilated, as she yelled \"Jake, get that thing out of the " +
-      "house now!\". Jake was confused, as it seemed quite the harmless thing to him. he asked \"But mom, wh-\", " +
-      "but before he could complete his sentence, the object appeared to undergo mitosis at what seemed like an " +
-      "impossible speed, and the second copy slipped out of his hand and onto the floor. His mother rushed over to " +
-      "him, and tried to grab the object, but it replicated yet again. \"Jake... No matter what happens, don't " +
+      "to view the object her son spoke of. Her pupils dilated, \"Jake, get that thing out of the house now!\" " +
+      "she yelled. Jake was confused, as it seemed quite the harmless thing to him. He asked \"But mom, wh-\", " +
+      "but before he could finish, the object appeared to undergo mitosis at what seemed like an impossible " +
+      "speed, and the second copy slipped out of his hand and onto the floor. His mother rushed over to " +
+      "him, and tried to grab the object, but it replicated again. \"Jake... No matter what happens, don't " +
       "forget that I love you honey...\". She wrapped her arms around him. \"M-mom, what's happening?\" Jake asked, " +
-      "with a quivering fear in his voice. His mother cried a single tear, and answered her son's question \"⭔⭚⦕꒜ " +
-      "brand Replicanti...\" she said, in a somber tone. The Replicanti began to replicate at a faster and faster " +
-      "pace. The bottom third of the house was now full of Replicanti. Then the bottom half. Then the entire house. " +
-      "The mother and child were trapped between the walls of their home, and the Replicanti. Doomed to live the " +
-      "short rest of their life in that inorganic coffin, as the air remaining in their lungs slowly depleted. But " +
-      "that wasn't the end; far from it. The Replicanti began to replicate outside of the house, flowing out in a " +
-      "shimmering landslide. A few neighbours noticed the strange objects, almost liquid-like in their appearance. " +
+      "with a quivering fear in his voice. His mother cried a single tear. \"⭔⭚⦕꒜ brand Replicanti...\" she said, " +
+      "in a somber tone. The Replicanti continued to replicate at a faster and faster pace. The bottom third of the " +
+      "house was now full of Replicanti. Then the bottom half. Then the entire house. The mother and child were " +
+      "trapped between the walls of their home and the Replicanti. Doomed to live the short rest of their life in " +
+      "that inorganic coffin, as the air remaining in their lungs slowly depleted. But that wasn't the end; far from " +
+      "it. The Replicanti began to replicate outside of the house, flooding out in a shimmering landslide. A few " +
+      "neighbours noticed the strange objects, almost liquid-like in their appearance, and attempted to run. " +
       "But the Replicanti continued to replicate, and accelerate. Soon the entire block was covered in them; was " +
       "them. Shortly after, several blocks. The city. The surrounding cities. The country. All the countries. All " +
       "the planet. All the solar system. All the galaxy. All."
@@ -1249,8 +1250,9 @@ GameDatabase.news = [
     id: "a230",
     get text() {
       return "You started playing this game nearly " + 
-        `${TimeSpan.fromMilliseconds(player.realTimePlayed + 4000).toString()} ago. Thank you for playing!`;
-    }
+        `${TimeSpan.fromMilliseconds(player.realTimePlayed).toString()} ago. Thank you for playing!`;
+    },
+    dynamic: true
   },
   {
     id: "a231",
@@ -1262,7 +1264,7 @@ GameDatabase.news = [
   },
   {
     id: "a233",
-    text: "Level 10 crook, Level 1e308 Boss, that's how Antimatter Dimensions works."
+    text: "Level 10 crook, Level 1.79e308 Boss, that's how Antimatter Dimensions works."
   },
   {
     id: "a234",
@@ -1370,7 +1372,7 @@ GameDatabase.news = [
     id: "l11",
     text: "9th Dimension is a lie.",
     get unlocked() {
-      return DimBoost.totalBoost >= 5 ||
+      return DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       PlayerProgress.infinityUnlocked();
     }
@@ -1379,7 +1381,7 @@ GameDatabase.news = [
     id: "l12",
     text: "The square root of 9 is 3, therefore the 9th dimension can't exist.",
     get unlocked() {
-      return DimBoost.totalBoost >= 5 ||
+      return DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       PlayerProgress.infinityUnlocked();
     }
@@ -1388,7 +1390,7 @@ GameDatabase.news = [
     id: "l13",
     text: "You got assimilated by the 9th dimension? Just call your doctor for mental illness!",
     get unlocked() {
-      return DimBoost.totalBoost >= 5 ||
+      return DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       PlayerProgress.infinityUnlocked();
     }
@@ -1397,7 +1399,7 @@ GameDatabase.news = [
     id: "l14",
     text: "Why is there no 9th dimension? Because 7 8 9.",
     get unlocked() {
-      return DimBoost.totalBoost >= 5 ||
+      return DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       PlayerProgress.infinityUnlocked();
     }
@@ -1406,7 +1408,7 @@ GameDatabase.news = [
     id: "l15",
     text: "The 9th dimension cannot exist because the Nein-speaking nazis died in WW2.",
     get unlocked() {
-      return DimBoost.totalBoost >= 5 ||
+      return DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       PlayerProgress.infinityUnlocked();
     }
@@ -1417,7 +1419,7 @@ GameDatabase.news = [
       "If you break the fourth wall... well, there's still the fifth, sixth, seventh, and eighth to get through " +
       "before you encounter bad things, so you should be fine",
     get unlocked() {
-      return DimBoost.totalBoost >= 5 ||
+      return DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       PlayerProgress.infinityUnlocked();
     }
@@ -1430,7 +1432,7 @@ GameDatabase.news = [
       "no one on the Discord can be on dimension 9. Only then can he rest, for up to 6 hours, before waking up " +
       "forcefully to avoid getting the offline achievement.",
     get unlocked() {
-      return DimBoost.totalBoost >= 5 ||
+      return DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       PlayerProgress.infinityUnlocked();
     }
@@ -1439,7 +1441,7 @@ GameDatabase.news = [
     id: "l18",
     text: "If the 9th dimension is all evil, then is 3 the root of all evil?",
     get unlocked() {
-      return DimBoost.totalBoost >= 5 ||
+      return DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       PlayerProgress.infinityUnlocked();
     }
@@ -1450,7 +1452,7 @@ GameDatabase.news = [
       "I'll have 1e29 number 9s, a number 1e9 large, a number 6 with extra replicanti, a number 1e7, two 4e5s, " +
       "one with matter, and a large time vortex.",
     get unlocked() {
-      return DimBoost.totalBoost >= 5 ||
+      return DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       PlayerProgress.infinityUnlocked();
     }
@@ -1462,12 +1464,12 @@ GameDatabase.news = [
   },
   {
     id: "l21",
-    text: "I've got 1.79e308 problems, but none of them antimatters",
+    text: "I've got 1.79e308 problems, but none of them antimatter.",
     get unlocked() { return player.infinitied.gt(0) && !player.break; }
   },
   {
     id: "l22",
-    text: "Anti Emoji Movie a huge hit",
+    text: "Anti Emoji Movie a huge hit!",
     get unlocked() { return player.spreadingCancer >= 5; }
   },
   {
@@ -1482,14 +1484,14 @@ GameDatabase.news = [
   },
   {
     id: "l25",
-    text: "Having done half the achievements isn't much of an achievement -Boo",
+    text: "\"Having done half the achievements isn't much of an achievement\" -Boo",
     get unlocked() { return Achievements.effectiveCount >= GameDatabase.achievements.normal.length / 2; }
   },
   {
     id: "l26",
     text:
       "Thanos is gonna be super dissapointed when he shows up with a fully powered infinity gauntlet, and Hevi " +
-      "has a fully powered eternity gauntlet",
+      "has a fully powered eternity gauntlet.",
     get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {
@@ -1507,7 +1509,7 @@ GameDatabase.news = [
     id: "l29",
     text:
       "If you wrote down 3 numbers a second, it would take you less time to write down your antimatter " +
-      "amount than it would Hevipelle to update the game",
+      "amount than it would Hevipelle to update the game.",
     get unlocked() { return player.antimatter.gt("1e100000"); }
   },
   {
@@ -1553,7 +1555,7 @@ GameDatabase.news = [
   {
     id: "l38",
     text: "fucking hacker",
-    get unlocked() { return player.news.size >= 200; }
+    get unlocked() { return player.news.size > GameDatabase.news.length; }
   },
   {
     id: "l39",

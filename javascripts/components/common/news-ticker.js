@@ -14,6 +14,9 @@ Vue.component("news-ticker", {
     this.clearTimeouts();
   },
   methods: {
+    update() {
+      if (this.currentNews && this.currentNews.dynamic) this.$refs.line.innerHTML = this.currentNews.text;
+    },
     restart() {
       // TODO: Proper delay before ui is initialized
       if (!GameUI.initialized) {
@@ -34,10 +37,14 @@ Vue.component("news-ticker", {
       const line = this.$refs.line;
       if (line === undefined) return;
 
-      const isUnlocked = news => news.unlocked;
-      do {
-        this.currentNews = GameDatabase.news.randomElement();
-      } while (!isUnlocked(this.currentNews));
+      if (this.currentNews && this.currentNews.id === "a236") {
+        this.currentNews = GameDatabase.news.find(message => message.id === "a216");
+      } else {
+        const isUnlocked = news => news.unlocked || news.unlocked === undefined;
+        do {
+          this.currentNews = GameDatabase.news.randomElement();
+        } while (!isUnlocked(this.currentNews));
+      }
 
       line.innerHTML = this.currentNews.text;
 
@@ -79,7 +86,7 @@ Vue.component("news-ticker", {
       }
       if (this.currentNews.id === "a210") {
         player.secretUnlocks.uselessNewsClicks++;
-        this.$refs.line.innerHTML = GameDatabase.news.find(message => message.id === "a210").text;
+        this.$refs.line.innerHTML = this.currentNews.text;
       }
     }
   },

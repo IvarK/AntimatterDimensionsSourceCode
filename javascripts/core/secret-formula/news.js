@@ -651,7 +651,6 @@ GameDatabase.news = [
   {
     id: "a135",
     text: "Ahhh I love the smell of particle annihilation in the morning."
-    // Get text() { return `You have ${player.antimatter} antimatter.`; }
   },
   {
     id: "a136",

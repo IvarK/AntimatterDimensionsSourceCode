@@ -319,6 +319,7 @@ let player = {
     activations: 0
   })),
   blackHolePause: false,
+  blackHolePauseTime: 0,
   ttbuyer: false,
   celestials: {
     teresa: {

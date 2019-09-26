@@ -232,7 +232,13 @@ const BlackHoles = {
   togglePause: () => {
     if (!BlackHoles.areUnlocked) return;
     player.blackHolePause = !player.blackHolePause;
+    player.blackHolePauseTime = player.realTimePlayed;
     GameUI.notify.blackHole(player.blackHolePause ? "Black Hole paused" : "Black Hole unpaused");
+  },
+
+  get unpauseAccelerationFactor() {
+    const accelerationTimeInSeconds = 5;
+    return Math.clamp((player.realTimePlayed - player.blackHolePauseTime) / (1000 * accelerationTimeInSeconds), 0, 1);
   },
 
   get arePaused() {

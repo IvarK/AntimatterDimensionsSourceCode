@@ -13,6 +13,13 @@ class GameMechanicState {
         writable: false,
         value: this.config.effect,
       });
+      if (this.config.cap === undefined) {
+        Object.defineProperty(this, "cappedEffectValue", {
+          configurable: false,
+          writable: false,
+          value: this.config.effect,
+        });
+      }
     }
   }
 
@@ -24,25 +31,28 @@ class GameMechanicState {
     return this.config.effect();
   }
 
+  get cappedEffectValue() {
+    const effectValue = this.effectValue;
+    if (this.config.cap === undefined) return effectValue;
+    const cap = typeof this.config.cap === "function"
+      ? this.config.cap()
+      : this.config.cap;
+    if (cap === undefined) return effectValue;
+    return typeof effectValue === "number"
+      ? Math.min(effectValue, cap)
+      : Decimal.min(effectValue, cap);
+  }
+
+  effectOrDefault(defaultValue) {
+    return this.canBeApplied ? this.cappedEffectValue : defaultValue;
+  }
+
   get canBeApplied() {
     return false;
   }
 
   applyEffect(applyFn) {
-    if (this.canBeApplied) {
-      let effectValue = this.effectValue;
-      if (this.config.cap !== undefined) {
-        const cap = typeof this.config.cap === "function"
-         ? this.config.cap()
-         : this.config.cap;
-        if (cap !== undefined) {
-          effectValue = typeof effectValue === "number"
-            ? Math.min(effectValue, cap)
-            : Decimal.min(effectValue, cap);
-        }
-      }
-      applyFn(effectValue);
-    }
+    if (this.canBeApplied) applyFn(this.cappedEffectValue);
   }
 
   static createIndex(gameData) {

@@ -41,7 +41,7 @@ function giveEternityRewards(auto) {
 
   player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
     Achievement(131),
-    TimeStudy(191),
+    TimeStudy(191)
   );
 
   if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked && player.infinityPoints.gt(Decimal.MAX_NUMBER)) {
@@ -93,7 +93,7 @@ function eternity(force, auto, specialConditions = {}) {
     player.respec = false;
   }
 
-  resetInfinityPointsOnEternity();
+  player.infinityPoints = Player.startingIP;
   InfinityDimensions.resetAmount();
   player.bestEPminThisEternity = new Decimal(0);
   player.bestIPminThisInfinity = new Decimal(0);
@@ -111,7 +111,7 @@ function eternity(force, auto, specialConditions = {}) {
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
   applyRealityUpgrades();
-  resetAntimatter();
+  player.antimatter = Player.startingAM;
 
   EventHub.dispatch(GameEvent.ETERNITY_RESET_AFTER);
   return true;
@@ -200,22 +200,9 @@ function askEternityConfirmation() {
     if (!player.options.confirmations.eternity) {
         return true;
     }
-    let message = "Eternity will reset everything except achievements and challenge records. " +
+    const message = "Eternity will reset everything except achievements and challenge records. " +
         "You will also gain an Eternity point and unlock various upgrades.";
     return confirm(message);
-}
-
-function resetInfinityPointsOnEternity() {
-  resetInfinityPoints();
-  Achievement(104).applyEffect(v => player.infinityPoints = player.infinityPoints.max(v));
-}
-
-function resetInfinityPoints() {
-  player.infinityPoints = Effects.max(
-    0,
-    Perk.startIP1,
-    Perk.startIP2
-  ).toDecimal();
 }
 
 class EternityMilestoneState {
@@ -231,7 +218,7 @@ class EternityMilestoneState {
 const EternityMilestone = (function() {
   const db = GameDatabase.eternity.milestones;
   const infinityDims = Array.dimensionTiers
-    .map(tier => new EternityMilestoneState(db["autobuyerID" + tier]));
+    .map(tier => new EternityMilestoneState(db[`autobuyerID${tier}`]));
   return {
     autobuyerIPMult: new EternityMilestoneState(db.autobuyerIPMult),
     keepAutobuyers: new EternityMilestoneState(db.keepAutobuyers),
@@ -251,9 +238,20 @@ const EternityMilestone = (function() {
     autobuyerReplicantiInterval: new EternityMilestoneState(db.autobuyerReplicantiInterval),
     autobuyerReplicantiMaxGalaxies: new EternityMilestoneState(db.autobuyerReplicantiMaxGalaxies),
     autobuyerEternity: new EternityMilestoneState(db.autobuyerEternity),
+    autoEternities: new EternityMilestoneState(db.autoEternities),
     autoInfinities: new EternityMilestoneState(db.autoInfinities),
   };
 }());
+
+const EternityMilestones = {
+  // This is a bit of a hack because autobuyerID is a function that returns EternityMilestoneState objects instead of a
+  // EternityMilestoneState object itself
+  all: Object.values(EternityMilestone)
+    .filter(m => typeof m !== "function")
+    .concat(Array.dimensionTiers
+      .map(tier => new EternityMilestoneState(GameDatabase.eternity.milestones[`autobuyerID${tier}`]))
+    )
+};
 
 class EternityUpgradeState extends SetPurchasableMechanicState {
   get currency() {

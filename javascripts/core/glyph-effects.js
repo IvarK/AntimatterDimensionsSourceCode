@@ -519,6 +519,11 @@ function findGlyphTypeEffects(glyphType) {
   return Object.values(GameDatabase.reality.glyphEffects).filter(e => e.glyphTypes.includes(glyphType));
 }
 
+function makeGlyphEffectBitmask(effectList) {
+  // eslint-disable-next-line no-bitwise
+  return effectList.reduce((mask, eff) => mask + (1 << GameDatabase.reality.glyphEffects[eff].bitmaskIndex), 0);
+}
+
 class GlyphType {
   /**
    * @param {Object} setup
@@ -578,7 +583,7 @@ class GlyphType {
       .map(e => e.id)
       .filter(id => !blacklist.includes(id) && this.isEffectUnlocked(id));
     if (available.length === 0) return null;
-    return available[Math.floor(rng() * available.length)];
+    return available[Math.floor(rng.uniform() * available.length)];
   }
 }
 
@@ -641,13 +646,19 @@ const GlyphTypes = {
   }),
   /**
     * @param {function(): number} rng Random number source (0..1)
-    * @param {string[]} [blacklist] Do not return the specified types
+    * @param {string} [blacklisted] Do not return the specified type
     * @returns {string | null}
     */
-  random(rng, blacklist = []) {
-    const available = GLYPH_TYPES.filter(id => !blacklist.includes(id) && GlyphTypes[id].isUnlocked);
-    if (available.length === 0) return null;
-    return available[Math.floor(rng() * available.length)];
+  random(rng, blacklisted = "") {
+    const types = ["time", "dilation", "replication", "infinity", "power", "effarig"];
+    if (!blacklisted) {
+      const available = EffarigUnlock.reality.isUnlocked ? types.length : types.length - 1;
+      return types[Math.floor(rng.uniform() * available)];
+    }
+    const available = EffarigUnlock.reality.isUnlocked ? types.length - 1 : types.length - 2;
+    const typeIndex = Math.floor(rng.uniform() * available);
+    if (types[typeIndex] === blacklisted) return types[typeIndex + 1];
+    return types[typeIndex];
   },
   get list() {
     return GLYPH_TYPES.map(e => GlyphTypes[e]);

@@ -678,12 +678,11 @@ function getTTPerSecond() {
   // All TT multipliers (note that this is equal to 1 pre-Ra)
   let ttMult = RA_UNLOCKS.TT_BOOST.effect.ttGen();
   ttMult *= Achievement(137).effectValue;
-  if (Enslaved.isRunning) ttMult *= 1e-3;
   if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttMult *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation
-  const glyphTT = Teresa.isRunning
+  const glyphTT = Teresa.isRunning || Enslaved.isRunning
     ? 0
     : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
 

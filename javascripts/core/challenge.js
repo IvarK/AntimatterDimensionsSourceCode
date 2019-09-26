@@ -89,7 +89,7 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   get goal() {
-    if (Enslaved.isRunning && !Enslaved.IMPOSSIBLE_CHALLENGE_EXEMPTIONS.includes(this.id)) {
+    if (Enslaved.isRunning && !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(this.id)) {
       return Decimal.pow10(1e15);
     }
     return Decimal.MAX_NUMBER;

@@ -165,6 +165,6 @@ const Enslaved = {
   showEC10C6Hint() {
     if (this.ec6c10hintGiven) return;
     this.ec6c10hintGiven = true;
-    alert("... did not ... underestimate you ...");
+    Modal.message.show("... did not ... underestimate you ...");
   },
 };

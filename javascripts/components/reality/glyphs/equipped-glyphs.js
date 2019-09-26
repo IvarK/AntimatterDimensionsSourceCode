@@ -84,7 +84,9 @@ Vue.component("equipped-glyphs", {
         !confirm("The last equipped glyph will be removed. Reality will be reset, but some things will" +
           " be restored to what they were when it equipped:\n" +
           " - antimmatter, infinity points, and eternity points;\n" +
+          " - dilation upgrades, tachyon particles, and dilated time;\n" +
           " - time theorems and EC completions;\n" +
+          " - time dimension and reality unlocks;\n" +
           " - time in current reality" +
           (Enslaved.isUnlocked ? ";\n - stored game time" : ""))) {
         return;

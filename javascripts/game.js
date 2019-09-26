@@ -103,15 +103,15 @@ function gainedGlyphLevel() {
   let actualLevel = Math.floor(glyphState.actualLevel);
   if (!isFinite(actualLevel)) actualLevel = 0;
   return {
-    rawLevel: rawLevel,
-    actualLevel: actualLevel
+    rawLevel,
+    actualLevel
   };
 }
 
 function resetChallengeStuff() {
     player.chall2Pow = 1;
     player.chall3Pow = new Decimal(0.01);
-    player.matter = new Decimal(1);
+    player.matter = new Decimal(0);
     player.chall8TotalSacrifice = new Decimal(1);
     player.postC4Tier = 1;
 }

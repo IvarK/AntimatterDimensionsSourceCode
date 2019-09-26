@@ -221,7 +221,7 @@ Vue.component("enslaved-tab", {
           <p>Time study 192 is locked</p>
           <p>The black hole is disabled</p>
           <p>Tachyon production and dilated time production are severely reduced</p>
-          <p>Time theorem generation from dilation glyphs is much slower</p>
+          <p>Time theorem generation from dilation glyphs is disabled</p>
           <p>Certain challenge goals have been increased</p>
           <p>Stored time is much less effective</p>
           <b>Reward: ID purchase caps are increased by 1000 for every 1000 free tickspeed upgrades you have</b>

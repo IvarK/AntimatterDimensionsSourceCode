@@ -65,11 +65,16 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 6,
-    description: () => (Enslaved.isRunning
-      ? "You c㏰'퐚 gai鸭 Ant꟢matterﻪﶓa⁍axie㮾랜䂇rma㦂l the cost of upgrading your max Replicanti" +
-      " galaxies is massively reduced"
-      : "You can't gain Antimatter Galaxies normally, but the cost of upgrading your max Replicanti" +
-      " galaxies is massively reduced."),
+    description: () => {
+      if (Enslaved.isRunning) {
+        return Notations.current === Notation.shi
+          ? "The cost of upgrading your max Replicanti galaxies is massively reduced."
+          : "You c㏰'퐚 gai鸭 Ant꟢matterﻪﶓa⁍axie㮾랜䂇rma㦂l the cost of upgrading your max Replicanti" +
+            " galaxies is massively reduced";
+      }
+      return "You can't gain Antimatter Galaxies normally, but the cost of upgrading your max Replicanti" +
+              " galaxies is massively reduced.";
+    },
     goal: new Decimal("1e850"),
     goalIncrease: new Decimal("1e250"),
     reward: {

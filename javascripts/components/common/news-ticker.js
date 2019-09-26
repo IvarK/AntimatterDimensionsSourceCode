@@ -34,7 +34,7 @@ Vue.component("news-ticker", {
       const line = this.$refs.line;
       if (line === undefined) return;
 
-      const isUnlocked = news => news.condition === undefined || news.condition();
+      const isUnlocked = news => news.unlocked;
       do {
         this.currentNews = GameDatabase.news.randomElement();
       } while (!isUnlocked(this.currentNews));
@@ -65,6 +65,21 @@ Vue.component("news-ticker", {
     onLineClick() {
       if (this.currentNews.id === "a130") {
         SecretAchievement(24).unlock();
+      }
+      if (this.currentNews.id === "a196") {
+        let random = Math.random();
+        // Golden ratio
+        random += 0.618033988749895;
+        random %= 1;
+        random *= 255;
+        const color = `hsl(${random}, 90%, 60%)`;
+          this.$refs.line.innerHTML =
+            `<span style='color: ${color}; text-shadow: 0 0 0.5rem ${color}; animation: text-grow 0.4s infinite;'>
+            Disco Time!</span>`;
+      }
+      if (this.currentNews.id === "a210") {
+        player.secretUnlocks.uselessNewsClicks++;
+        this.$refs.line.innerHTML = GameDatabase.news.find(message => message.id === "a210").text;
       }
     }
   },

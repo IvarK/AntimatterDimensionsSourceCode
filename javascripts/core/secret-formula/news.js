@@ -1,8 +1,9 @@
 "use strict";
 
 // A = always there
-// C = conditional
+// L = locked
 // J = joke/unreasonable condition
+// R = random chance condition
 // P = patreon
 GameDatabase.news = [
   {
@@ -650,6 +651,7 @@ GameDatabase.news = [
   {
     id: "a135",
     text: "Ahhh I love the smell of particle annihilation in the morning."
+    // Get text() { return `You have ${player.antimatter} antimatter.`; }
   },
   {
     id: "a136",
@@ -1059,427 +1061,687 @@ GameDatabase.news = [
     text: "Shoutouts to Simpleflips."
   },
   {
-    id: "c1",
+    id: "a206",
+    text:
+      "I visited the discord server of the game to have some friendly chat. At that point I got trolled by " +
+      "the user called Cubic Frog."
+  },
+  {
+    id: "a207",
+    text:
+      "Hello, this is Josh, with today's forecast for your galaxy. We'll be hitting temperatures in the low " +
+      "e10s today, and by this afternoon, it'll be cloudy with a chance of antimatter."
+  },
+  {
+    id: "a208",
+    text:
+      "Hi, I'm Steve, and I'm also Steve. Our greatest responsibility is to serve our antimatter communities. " +
+      "We are extremely proud of the quantity, unbalanced journalism that ASSTD news produces. But we're " +
+      "concerned about the troubling trend of responsible, two-sided news stories plaguing the antimatter " +
+      "universe. The sharing of unbiased and true news has become all too common on social media. More " +
+      "alarming, some media outlets publish these same true stories, stories that just aren't propaganda, " +
+      "without checking government talking points first. Unfortunately, some members of the media use their " +
+      "platforms to push a logically sound opinion and unbiased agenda to diversify 'exactly what antimatter " +
+      "thinks'. This is extremely dangerous to our dictatorship. At ASSTD it's our responsibility to pursue " +
+      "and report the lies. We understand lies are neither 'left or right' politically. Our commitment to " +
+      "fearmongering slander is the foundation of our credibility, now more than ever. But we are incorporeal " +
+      "8D beings of antimatter, and sometimes our propaganda techniques might fall short. If you believe our " +
+      "coverage is fair please reach out to us by going to ivark.github.io and clicking on [HARD RESET]. We " +
+      "value your comments. We won't respond back to you because you would've deleted your comment with the " +
+      "hard reset button before you get it. We work very hard to seek the lies and strive to be unfair, lopsided " +
+      "and opinionated... We consider it our honor, our privilege, to irresponsibly deliver the news every " +
+      "nanosecond. Thank you for watching and we appreciate your feedback. All matter should be-"
+  },
+  {
+    id: "a209",
+    text:
+      "Have you ever heard the tale of the Antiwriter? I thought not. It's not a story the news tickers would tell " +
+      "you. It's an Unhevi legend. Rumor has it that the Antiwriter contributes to the News every 5 hours with an " +
+      "incredibly well written news report, only to vanish again. Others think he doesn't exist at all, and is a " +
+      "lie fabricated by Hevipelle to spread his propaganda. Perhaps he is real, and just a normal person like the " +
+      "rest of us. In any case, we will probably never reveal the identity of this mysterious poet."
+  },
+  {
+    id: "a210",
+    get text() {
+      const clicks = player.secretUnlocks.uselessNewsClicks;
+      const plural = pluralize("time", clicks, "times");
+      if (clicks === 1) {
+        return `Nothing happens when you click this text. And yet, you've clicked it.`;
+      }
+      if (clicks > 1) {
+        return `Nothing happens when you click this text. And yet, you've clicked it ${clicks} ${plural}.`;
+      }
+      return "Nothing happens when you click this text. And you understand that.";
+    }
+  },
+  {
+    id: "a211",
+    get text() {
+      const disses = [
+        "That's basically a rounding error.",
+        "That might as well be zero.",
+        "Did you forget an exponent somewhere?",
+        "Please, that's nothing."
+      ];
+      const diss = disses.randomElement();
+      return `Only ${format(player.antimatter, 2, 0)} antimatter? ${diss}`;
+    }
+  },
+  {
+    id: "a212",
+    text:
+      "Hey, you. You're finally awake. You were trying to get the 9th dimension, right? Walked right into that " +
+      "Infinity, same as us, and that thief over there."
+  },
+  {
+    id: "a213",
+    text:
+    "Antimatter giraffes were found to have incredibly fast reaction times. This explains why they've won 90% of " +
+    "all gaming championships since anti-giraffe friendly controllers were invented."
+  },
+  {
+    id: "a214",
+    text: "Barack Obamantimatter"
+  },
+  {
+    id: "a215",
+    text:
+      "Local old man replaces lawn with antimatter grass to keep kids away. However, " +
+      "when he attempted to water it, there were no survivors."
+  },
+  {
+    id: "a216",
+    text:
+      "Jake returned home from a long day at school. On his way home, he came across a curious little object. " +
+      "Transparent, but opaque. Shimmering, but gloomy. Heavy, but weightless. Jake brought the object to his " +
+      "mother. \"Mom, I found this thing on the sidewalk, can I keep it?\", Jake said. His mother turned around " +
+      "to view the object her son spoke of. Her pupils dilated, as she yelled \"Jake, get that thing out of the " +
+      "house now!\". Jake was confused, as it seemed quite the harmless thing to him. he asked \"But mom, wh-\", " +
+      "but before he could complete his sentence, the object appeared to undergo mitosis at what seemed like an " +
+      "impossible speed, and the second copy slipped out of his hand and onto the floor. His mother rushed over to " +
+      "him, and tried to grab the object, but it replicated yet again. \"Jake... No matter what happens, don't " +
+      "forget that I love you honey...\". She wrapped her arms around him. \"M-mom, what's happening?\" Jake asked, " +
+      "with a quivering fear in his voice. His mother cried a single tear, and answered her son's question \"⭔⭚⦕꒜ " +
+      "brand Replicanti...\" she said, in a somber tone. The Replicanti began to replicate at a faster and faster " +
+      "pace. The bottom third of the house was now full of Replicanti. Then the bottom half. Then the entire house. " +
+      "The mother and child were trapped between the walls of their home, and the Replicanti. Doomed to live the " +
+      "short rest of their life in that inorganic coffin, as the air remaining in their lungs slowly depleted. But " +
+      "that wasn't the end; far from it. The Replicanti began to replicate outside of the house, flowing out in a " +
+      "shimmering landslide. A few neighbours noticed the strange objects, almost liquid-like in their appearance. " +
+      "But the Replicanti continued to replicate, and accelerate. Soon the entire block was covered in them; was " +
+      "them. Shortly after, several blocks. The city. The surrounding cities. The country. All the countries. All " +
+      "the planet. All the solar system. All the galaxy. All."
+  },
+  {
+    id: "a217",
+    text: "The virgin matter vs the chad antimatter."
+  },
+  {
+    id: "a218",
+    text:
+      "After numerous catastrophic annihilation events, antimatter is " +
+      "now classified as a controlled substance by the ADEA."
+  },
+  {
+    id: "a219",
+    text:
+      "Hello, Vsauce, Michael here. We all know that the 9th dimension doesn't exist, but what is 9? You know it's " +
+      "the number after 8... right? What if... there's a number in between? And no I'm not talking about numbers " +
+      "like 8.5 or 8.76, I'm taking about an integer between 8 and 9. Now all this may sound crazy to you, and it " +
+      "kinda is, but what if, we've missed a number? We've all been taught that 2 comes after 1 and 3 comes after " +
+      "2, but what if the number that comes after 8 isn't 9? After years of research and experimentation, we've " +
+      "finally found the number. It is dangerous, even knowing its existence will let it consume your mind, but " + 
+      "fortunately, we've developed a reverse-containment cell, meaning it's everywhere except here. Our brain has " +
+      "a protection system, that specifically filters out any information regarding this number, that's how we've " +
+      "been able to survive for this long, and why others like us went extinct in the past, but the number has been " +
+      "getting stronger, slowly getting closer to breaking our protection. We've temporary stopped the number from " +
+      "slipping into our memory by using the world-wide memory manipulator located in this room to keep making " +
+      "everyone think that 9 comes after 8 with a side effect that makes everyone think that 9 is evil, but this " +
+      "won't last forever, as the number will keep getting stronger, and will eventually overpower the memory " +
+      "manipulator. That's why you're here, you're one of the most intelligent person here, and we hope you can " +
+      "help us on our journey to defeat that number. Our enemy is not 9, it is the hidden number between 8 and 9, " +
+      "the missing number."
+  },
+  {
+    id: "a220",
+    text: "antioop-"
+  },
+  {
+    id: "a221",
+    text: "Error 404: News message not found."
+  },
+  {
+    id: "a222",
+    text: "I love you 1e3000."
+  },
+  {
+    id: "a223",
+    text: "If you find your infinity lasting longer than 5 hours please contact a medical professional."
+  },
+  {
+    id: "a224",
+    text:
+      "We've just gotten reports about an inaccuracy in the previous news message. We at ANN would like to formally " +
+      "retract the story, and apologize to our loyal viewers."
+  },
+  {
+    id: "a225",
+    text: "If you see this, you saw this."
+  },
+  {
+    id: "a226",
+    text: "Good mornging. That was not a typo. The inventors of English made the typo."
+  },
+  {
+    id: "a227",
+    text: "What if... we touched... antimatter? Haha just kidding... Unless..?"
+  },
+  {
+    id: "a228",
+    text:
+      "Roses are blue, violets are red, those statements weren't peer reviewed, and my name is Fred. Nice to meet you!"
+  },
+  {
+    id: "a229",
+    text: "🚗                         🚓 🚓"
+  },
+  {
+    id: "a230",
+    get text() {
+      return "You started playing this game nearly " + 
+        `${TimeSpan.fromMilliseconds(player.realTimePlayed + 4000).toString()} ago. Thank you for playing!`;
+    }
+  },
+  {
+    id: "a231",
+    text: "One, two, skip a few, 99, 1.79e308!"
+  },
+  {
+    id: "a232",
+    text: "getNextNewsMessage();"
+  },
+  {
+    id: "a233",
+    text: "Level 10 crook, Level 1e308 Boss, that's how Antimatter Dimensions works."
+  },
+  {
+    id: "a234",
+    text: "Antimatter will never threaten to stab you. And, in fact, cannot speak."
+  },
+  {
+    id: "a235",
+    text: "New antimatter on pizza recipe sparks outrage among traditional Italian chefs."
+  },
+  {
+    id: "a236",
+    text: "We'll be right back after this short word from our sponsors."
+  },
+  {
+    id: "a237",
+    text: "Want to trade candy? I'll give you my Big Crunch for two Milky Ways."
+  },
+  {
+    id: "a238",
+    text:
+      "AD Player: \"How many orders of magnitude are you on?\" Normal person: \"Like, maybe 5 or 6 right now, my " +
+      "dude.\" AD Player: \"You are like a little baby. Watch this: <span style='animation: text-crunch 22s " +
+      "1; font-size: 0rem;'>C R O N C H</span>\""
+  },
+  {
+    id: "a239",
+    text: "Oh gosh, would you look at the time! Only left 5 hours until the update!"
+  },
+  {
+    id: "a240",
+    text: "Hi, my name is Max, and I would like it if people stopped trying to buy me."
+  },
+  {
+    id: "a241",
+    text:
+      "Breaking news: the government is reporting the first ever official alien contact. These aliens appear to be " +
+      "cats, but with highly sophisticated technology. They're capable of space travel and colonization to a far " +
+      "greater degree than us, and they even have their own cryptocurrency, called \"Blackcoin\"."
+  },
+  {
+    id: "a242",
+    text:
+      "\"You can come up with the stupidest quote, credit it to some famous " +
+      "person, and people will believe it.\" -Barack Obama"
+  },
+  {
+    id: "a243",
+    text: "\"I can't breathe. Please move your finger.\" -M"
+  },
+  {
+    id: "l1",
     text: "You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken",
-    condition: () => player.antimatter.e === 15
+    get unlocked() { return player.antimatter.e === 15; }
   },
   {
-    id: "c2",
+    id: "l2",
     text: "Nerf the galaxies please.",
-    condition: () => player.galaxies === 2 || player.infinitied.gt(0)
+    get unlocked() { return player.galaxies === 2 || player.infinitied.gt(0); }
   },
   {
-    id: "c3",
+    id: "l3",
     text: "What do you mean, more than two dimensions??? We're on a screen, clearly there are only 2 dimensions.",
-    condition: () => NormalDimension(3).amount.gt(0) || DimBoost.totalBoosts > 0
+    get unlocked() { return NormalDimension(3).amount.gt(0) || DimBoost.totalBoosts > 0; }
   },
   {
-    id: "c4",
+    id: "l4",
     text: "How much is Infinity? -literally everyone at least once",
-    condition: () => NormalDimension(8).amount.eq(190) || player.infinitied.gt(0)
+    get unlocked() { return NormalDimension(8).amount.eq(190) || player.infinitied.gt(0); }
   },
   {
-    id: "c5",
+    id: "l5",
     text: "Eh, the Fourth Dimension is alright...",
-    condition: () => NormalDimension(4).amount.gt(0) && NormalDimension(5).amount.eq(0) 
+    get unlocked() { return NormalDimension(4).amount.gt(0) && NormalDimension(5).amount.eq(0); }
   },
   {
-    id: "c6",
+    id: "l6",
     text:
       "Antimatter people seem to be even more afraid of 13 then we are. They destroyed entire galaxies just to " +
       "remove 13 from their percents.",
-    condition: () => player.galaxies > 0 || player.infinitied.gt(0)
+    get unlocked() { return player.galaxies > 0 || player.infinitied.gt(0); }
   },
   {
-    id: "c7",
+    id: "l7",
     text: "To understand dimensional sacrifice, you do actually need a PhD in theoretical physics. Sorry!",
-    condition: () => player.sacrificed.e >= 10 || DimBoost.totalBoosts >= 6
+    get unlocked() { return player.sacrificed.e >= 10 || DimBoost.totalBoosts >= 6; }
   },
   {
-    id: "c8",
+    id: "l8",
     text: "A new group for the standardisation of numbers have come forward with a novel new format involving emoji's.",
-    condition: () => player.spreadingCancer > 0
+    get unlocked() { return player.spreadingCancer > 0; }
   },
   {
-    id: "c9",
+    id: "l9",
     text: "Antimatter ice cream stand has recently opened- they have octillions of flavors!",
-    condition: () => player.totalAntimatter.e >= 27
+    get unlocked() { return player.totalAntimatter.e >= 27; }
   },
   {
-    id: "c10",
+    id: "l10",
     text:
       "The Heavenly Pelle has generated too much antimatter and needed to create another galaxy. " +
       "This one can be seen in the southwestern sky.",
-    condition: () => player.galaxies > 0 || player.infinitied.gt(0)
+    get unlocked() { return player.galaxies > 0 || player.infinitied.gt(0); }
   },
   {
-    id: "c11",
+    id: "l11",
     text: "9th Dimension is a lie.",
-    condition: () =>
-      DimBoost.totalBoost >= 5 ||
+    get unlocked() {
+      return DimBoost.totalBoost >= 5 ||
       player.galaxies > 0 ||
-      player.infinitied.gt(0) ||
-      PlayerProgress.eternityUnlocked() ||
-      player.realities > 0
+      PlayerProgress.infinityUnlocked();
+    }
   },
   {
-    id: "c12",
+    id: "l12",
     text: "The square root of 9 is 3, therefore the 9th dimension can't exist.",
-    condition: () =>
-      DimBoost.totalBoosts >= 5 ||
+    get unlocked() {
+      return DimBoost.totalBoost >= 5 ||
       player.galaxies > 0 ||
-      player.infinitied.gt(0) ||
-      PlayerProgress.eternityUnlocked() ||
-      player.realities > 0
+      PlayerProgress.infinityUnlocked();
+    }
   },
   {
-    id: "c13",
+    id: "l13",
     text: "You got assimilated by the 9th dimension? Just call your doctor for mental illness!",
-    condition: () =>
-      DimBoost.totalBoosts >= 5 ||
+    get unlocked() {
+      return DimBoost.totalBoost >= 5 ||
       player.galaxies > 0 ||
-      player.infinitied.gt(0) ||
-      PlayerProgress.eternityUnlocked() ||
-      player.realities > 0
+      PlayerProgress.infinityUnlocked();
+    }
   },
   {
-    id: "c14",
+    id: "l14",
     text: "Why is there no 9th dimension? Because 7 8 9.",
-    condition: () =>
-      DimBoost.totalBoosts >= 5 ||
+    get unlocked() {
+      return DimBoost.totalBoost >= 5 ||
       player.galaxies > 0 ||
-      player.infinitied.gt(0) ||
-      PlayerProgress.eternityUnlocked() ||
-      player.realities > 0
+      PlayerProgress.infinityUnlocked();
+    }
   },
   {
-    id: "c15",
+    id: "l15",
     text: "The 9th dimension cannot exist because the Nein-speaking nazis died in WW2.",
-    condition: () =>
-      DimBoost.totalBoosts >= 5 ||
+    get unlocked() {
+      return DimBoost.totalBoost >= 5 ||
       player.galaxies > 0 ||
-      player.infinitied.gt(0) ||
-      PlayerProgress.eternityUnlocked() ||
-      player.realities > 0
+      PlayerProgress.infinityUnlocked();
+    }
   },
   {
-    id: "c16",
+    id: "l16",
     text:
       "If you break the fourth wall... well, there's still the fifth, sixth, seventh, and eighth to get through " +
       "before you encounter bad things, so you should be fine",
-    condition: () =>
-      DimBoost.totalBoosts >= 5 ||
+    get unlocked() {
+      return DimBoost.totalBoost >= 5 ||
       player.galaxies > 0 ||
-      player.infinitied.gt(0) ||
-      PlayerProgress.eternityUnlocked() ||
-      player.realities > 0
+      PlayerProgress.infinityUnlocked();
+    }
   },
   {
-    id: "c17",
+    id: "l17",
     text:
       "Conditions must be met for Hevipelle to sleep. First, it needs to be a blue moon. Second, a specific town " +
       "in the arctic must have not seen light for a month. Third, he needs to release an AD update. And finally, " +
       "no one on the Discord can be on dimension 9. Only then can he rest, for up to 6 hours, before waking up " +
       "forcefully to avoid getting the offline achievement.",
-    condition: () =>
-      DimBoost.totalBoosts >= 5 ||
+    get unlocked() {
+      return DimBoost.totalBoost >= 5 ||
       player.galaxies > 0 ||
-      player.infinitied.gt(0) ||
-      PlayerProgress.eternityUnlocked() ||
-      player.realities > 0
+      PlayerProgress.infinityUnlocked();
+    }
   },
   {
-    id: "c18",
+    id: "l18",
     text: "If the 9th dimension is all evil, then is 3 the root of all evil?",
-    condition: () =>
-      DimBoost.totalBoosts >= 5 ||
+    get unlocked() {
+      return DimBoost.totalBoost >= 5 ||
       player.galaxies > 0 ||
-      player.infinitied.gt(0) ||
-      PlayerProgress.eternityUnlocked() ||
-      player.realities > 0
+      PlayerProgress.infinityUnlocked();
+    }
   },
   {
-    id: "c19",
+    id: "l19",
     text:
       "I'll have 1e29 number 9s, a number 1e9 large, a number 6 with extra replicanti, a number 1e7, two 4e5s, " +
       "one with matter, and a large time vortex.",
-    condition: () =>
-      player.infinitied.gt(0) ||
-      PlayerProgress.eternityUnlocked() ||
-      player.realities > 0
+    get unlocked() {
+      return DimBoost.totalBoost >= 5 ||
+      player.galaxies > 0 ||
+      PlayerProgress.infinityUnlocked();
+    }
   },
   {
-    id: "c20",
+    id: "l20",
     text: "Infinity: the one thing that's supposed to break.",
-    condition: () => player.infinitied.gt(0) || PlayerProgress.eternityUnlocked() || player.realities > 0
+    get unlocked() { return PlayerProgress.infinityUnlocked(); }
   },
   {
-    id: "c21",
+    id: "l21",
     text: "I've got 1.79e308 problems, but none of them antimatters",
-    condition: () => player.infinitied.gt(0) && !player.break
+    get unlocked() { return player.infinitied.gt(0) && !player.break; }
   },
   {
-    id: "c22",
+    id: "l22",
     text: "Anti Emoji Movie a huge hit",
-    condition: () => player.spreadingCancer >= 5
+    get unlocked() { return player.spreadingCancer >= 5; }
   },
   {
-    id: "c23",
+    id: "l23",
     text: "If this game was made by Valve, Zero Deaths would be impossible.",
-    condition: () => Achievement(43).isUnlocked
+    get unlocked() { return Achievement(43).isUnlocked; }
   },
   {
-    id: "c24",
+    id: "l24",
     text: "Florida man attempts to get Zero Deaths on first run, is stopped by heat death of the universe.",
-    condition: () => Achievement(43).isUnlocked
+    get unlocked() { return Achievement(43).isUnlocked; }
   },
   {
-    id: "c25",
+    id: "l25",
     text: "Having done half the achievements isn't much of an achievement -Boo",
-    condition: () => Achievements.effectiveCount >= GameDatabase.achievements.normal.length / 2
+    get unlocked() { return Achievements.effectiveCount >= GameDatabase.achievements.normal.length / 2; }
   },
   {
-    id: "c26",
+    id: "l26",
     text:
       "Thanos is gonna be super dissapointed when he shows up with a fully powered infinity gauntlet, and Hevi " +
       "has a fully powered eternity gauntlet",
-    condition: () => PlayerProgress.eternityUnlocked() || player.realities > 0 
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {
-    id: "c27",
+    id: "l27",
     text:
       "New strange material was been found. It seems to grow exponentially, but only helps with antimatter production.",
-    condition: () => player.replicanti.unl && player.replicanti.chance === 0.01
+    get unlocked() { return player.replicanti.unl && player.replicanti.chance === 0.01; }
   },
   {
-    id: "c28",
+    id: "l28",
     text: "It seems this \"replicanti\" stuff won't be growing any faster now.",
-    condition: () => player.replicanti.chance === 1 && player.replicanti.interval === 1
+    get unlocked() { return player.replicanti.chance === 1 && player.replicanti.interval === 1; }
   },
   {
-    id: "c29",
+    id: "l29",
     text:
       "If you wrote down 3 numbers a second, it would take you less time to write down your antimatter " +
       "amount than it would Hevipelle to update the game",
-    condition: () => player.antimatter.gt("1e100000")
+    get unlocked() { return player.antimatter.gt("1e100000"); }
   },
   {
-    id: "c30",
+    id: "l30",
     text: "Does Hevi just pick quotes to put into the game?",
-    condition: () => player.news.size >= 30
+    get unlocked() { return player.news.size >= 30; }
   },
   {
-    id: "c31",
+    id: "l31",
     text: "New news company has become rivals with us. They are made entirely of antimatter.",
-    condition: () => player.news.size >= 80
+    get unlocked() { return player.news.size >= 80; }
   },
   {
-    id: "c32",
+    id: "l32",
     text: "How many times can we use \"Anti\" in a row before people stop listening?",
-    condition: () => player.news.size >= 100
+    get unlocked() { return player.news.size >= 100; }
   },
   {
-    id: "c33",
+    id: "l33",
     text: "Does Hevi even check #news-ticker-suggestions anymore?",
-    condition: () => player.news.size >= 120
+    get unlocked() { return player.news.size >= 120; }
   },
   {
-    id: "c34",
+    id: "l34",
     text: "Need more quotes! -hevipelle",
-    condition: () => player.news.size >= 135
+    get unlocked() { return player.news.size >= 135; }
   },
   {
-    id: "c35",
+    id: "l35",
     text: "Man destroys known universe with antimatter, writes news tickers to keep from feeling lonely.",
-    condition: () => player.news.size >= 150
+    get unlocked() { return player.news.size >= 150; }
   },
   {
-    id: "c36",
+    id: "l36",
     text: "You're almost there!",
-    condition: () => player.news.size >= 160
+    get unlocked() { return player.news.size >= 160; }
   },
   {
-    id: "c37",
+    id: "l37",
     text: "You can stop now",
-    condition: () => player.news.size >= 165
+    get unlocked() { return player.news.size >= 165; }
   },
   {
-    id: "c38",
+    id: "l38",
     text: "fucking hacker",
-    condition: () => player.news.size >= 200
+    get unlocked() { return player.news.size >= 200; }
   },
   {
-    id: "c39",
+    id: "l39",
     text: "Asian man trys to steal the trophy of fastest infinity of -1 seconds, AND HE DOES IT!",
-    condition: () => player.news.has("c1")
+    get unlocked() { return player.news.has("c1"); }
   },
   {
-    id: "c40",
+    id: "l40",
     text:
       "I broke the 8th wall, there is only chaos, Slabdrill is ritually sacrificing antimatter to the 9th " +
       "dimension. This will be my last entry, may Hevipelle have mercy on our souls, we didn't listen, " +
       "We should have listened.",
-    condition: () => player.news.has("b22")
+    get unlocked() { return player.news.has("b22"); }
   },
   {
-    id: "c41",
+    id: "l41",
     text: "I thought the update was 5 hours away... -new players after more than 5 hours of gameplay",
-    condition: () => Time.totalTimePlayed.totalHours >= 5
+    get unlocked() { return Time.totalTimePlayed.totalHours >= 5; }
   },
   {
-    id: "c42",
+    id: "l42",
     text:
       "Somebody told me to wait five hours for the update yesterday but it's today " +
       "and it still hasn't come! What do I do?",
-    condition: () => Time.totalTimePlayed.totalHours >= 5
+    get unlocked() { return Time.totalTimePlayed.totalHours >= 5; }
   },
   {
-    id: "c43",
+    id: "l43",
     text: "You do know that you won't reach Infinity in -1 seconds, right?",
-    condition: () => player.bestInfinityTime === 0.1
+    get unlocked() { return player.bestInfinityTime === 0.1; }
   },
   {
-    id: "c44",
+    id: "l44",
     text: "Where does Antimatter Nemo live? In a NNnNeMI-NNnNe.",
-    condition: () => player.totalAntimatter.e >= 3e6 
+    get unlocked() { return player.totalAntimatter.e >= 3e6; }
   },
   {
-    id: "c45",
+    id: "l45",
     text: "Anti Emoji Movie MMMCMXCIX is a major hit!",
-    condition: () => player.spreadingCancer >= 3999
+    get unlocked() { return player.spreadingCancer >= 3999; }
   },
   {
-    id: "c46",
+    id: "l46",
     text: "Achievement Unlocked!",
-    condition: () => Achievements.effectiveCount >= GameDatabase.achievements.normal.length
+    get unlocked() { return Achievements.effectiveCount >= GameDatabase.achievements.normal.length; }
   },
   {
-    id: "c47",
+    id: "l47",
     text: "The achievement is for two million, not two billion...",
-    condition: () => player.infinitied.gt(2e9)
+    get unlocked() { return player.infinitied.gt(2e9); }
   },
   {
-    id: "c48",
+    id: "l48",
     text: "Keep up the quick pace!",
-    condition: () => AchievementTimers.marathon1.time > 1200 
+    get unlocked() { return AchievementTimers.marathon1.time > 1200; }
   },
   {
-    id: "c49",
+    id: "l49",
     text: "One day you will stop your incessant grind.",
-    condition: () => player.eternities.gt(50000)
+    get unlocked() { return player.eternities.gt(50000); }
   },
   {
-    id: "c50",
+    id: "l50",
     text: "You can probably stop farming for eternities now...",
-    condition: () => player.eternities.gt(2000000)
+    get unlocked() { return player.eternities.gt(2000000); }
   },
   {
-    id: "c51",
+    id: "l51",
     text: "Are you serious?",
-    condition: () => Time.worstChallenge.totalSeconds <= 1 
+    get unlocked() { return Time.worstChallenge.totalSeconds <= 1; }
   },
   {
-    id: "c52",
-    text: "The amazing speedster",
-    condition: () => Time.infinityChallengeSum.totalMilliseconds <= 80
-  },
-  {
-    id: "c53",
+    id: "l52",
     text: "Timing is key.",
-    condition: () => player.thisEternity < 1
+    get unlocked() { return player.thisEternity < 10; }
   },
   {
-    id: "c54",
+    id: "l53",
     text: "If you want to farm infinitied, why don't you just get the time study?",
-    condition: () => !TimeStudy(32).isBought && player.infinitied.gt(72000 * 168)
+    get unlocked() { return !TimeStudy(32).isBought && player.infinitied.gt(72000 * 168); }
   },
   {
-    id: "c55",
-    text: "This news message is 1000x rarer than all the others.",
-    condition: () => Math.random() < 0.001
-  },
-  {
-    id: "c56",
-    text: "You just won a small prize in the lottery.",
-    condition: () => Math.random() < 1e-4
-  },
-  {
-    id: "c57",
-    text: "You just won a moderate prize in the lottery.",
-    condition: () => Math.random() < 1e-5
-  },
-  {
-    id: "c58",
-    text: "You just won a large prize in the lottery.",
-    condition: () => Math.random() < 1e-6
-  },
-  {
-    id: "c59",
-    text: "You just won a huge prize in the lottery.",
-    condition: () => Math.random() < 1e-7
-  },
-  {
-    id: "c60",
-    text: "You just won a massive prize in the lottery.",
-    condition: () => Math.random() < 1e-8
-  },
-  {
-    id: "c61",
-    text: "You just won a very massive prize in the lottery.",
-    condition: () => Math.random() < 1e-9
-  },
-  {
-    id: "c62",
-    text: "You just won the lottery.",
-    condition: () => Math.random() < 1e-10
-  },
-  {
-    id: "c63",
-    text: "Just how lucky are you?",
-    condition: () => Math.random() < 1e-11
-  },
-  {
-    id: "c64",
-    text: "This news message is 1000000000000x rarer than all the others.",
-    condition: () => Math.random() < 1e-12
+    id: "l54",
+    get text() {
+      const names = [];
+      if (PlayerProgress.infinityUnlocked()) names.push("Infinity");
+      if (PlayerProgress.eternityUnlocked()) names.push("Eternity");
+      if (TimeStudy.dilation.isBought) names.push("Dilation");
+      if (PlayerProgress.realityUnlocked()) names.push("Reality");
+
+      const game1Name = names.randomElement();
+      let game2Name = names.randomElement();
+      while (game2Name === game1Name) {
+        game2Name = names.randomElement();
+      }
+      return `Pokemon ${game1Name} and ${game2Name} were just released! This new generation brings the total number ` +
+        "of Pokemon up to 1e151. Good luck catching 'em all!";
+    },
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {
     id: "j1",
     text: "How dare you actually get zero deaths on a first run?",
-    condition: () =>
-      Achievement(43).isUnlocked &&
+    get unlocked() {
+      return Achievement(43).isUnlocked &&
       player.infinitied.eq(1) &&
-      !PlayerProgress.eternityUnlocked() &&
-      player.realities === 0
+      !PlayerProgress.eternityUnlocked();
+    }
   },
   {
     id: "j2",
     text: "Legend says the ninth dimension is supposed to be found here, but I don't see anything.",
-    condition: () =>
-      player.antimatter.e >= 41900 &&
+    get unlocked() {
+      return player.antimatter.e >= 41900 &&
       !player.replicanti.unl &&
-      !PlayerProgress.eternityUnlocked() &&
-      player.realities === 0
+      !PlayerProgress.eternityUnlocked();
+    }
   },
   {
     id: "j3",
     text: "Person with money likes to support this game.",
-    condition: () => kongDimMult > 1 || kongIPMult > 1
+    get unlocked() { return kongDimMult > 1 || kongIPMult > 1; }
   },
   {
     id: "j4",
     text: "Whale is bad at making smart purchases.",
-    condition: () => kongIPMult > 500 && kongDimMult < 5e307
+    get unlocked() { return kongIPMult > 500 && kongDimMult < 5e307; }
   },
   {
     id: "j5",
     text: "Whale complains that the game broke.",
-    condition: () => kongDimMult > 5e307
+    get unlocked() { return kongDimMult > 5e307; }
   },
   {
     id: "j6",
     text: "Whale complains that their buying isn't doing anything.",
-    condition: () => kongIPMult > 1.8e16
+    get unlocked() { return kongIPMult > 1.8e16; }
+  },
+  {
+    id: "r1",
+    text: "This news message is 1000x rarer than all the others.",
+    get unlocked() { return Math.random() < 0.001; }
+  },
+  {
+    id: "r2",
+    text: "You just won a small prize in the lottery.",
+    get unlocked() { return Math.random() < 1e-4; }
+  },
+  {
+    id: "r3",
+    text: "You just won a moderate prize in the lottery.",
+    get unlocked() { return Math.random() < 1e-5; }
+  },
+  {
+    id: "r4",
+    text: "You just won a large prize in the lottery.",
+    get unlocked() { return Math.random() < 1e-6; }
+  },
+  {
+    id: "r5",
+    text: "You just won a huge prize in the lottery.",
+    get unlocked() { return Math.random() < 1e-7; }
+  },
+  {
+    id: "r6",
+    text: "You just won a massive prize in the lottery.",
+    get unlocked() { return Math.random() < 1e-8; }
+  },
+  {
+    id: "r7",
+    text: "You just won a very massive prize in the lottery.",
+    get unlocked() { return Math.random() < 1e-9; }
+  },
+  {
+    id: "r8",
+    text: "You just won the lottery.",
+    get unlocked() { return Math.random() < 1e-10; }
+  },
+  {
+    id: "r9",
+    text: "Just how lucky are you?",
+    get unlocked() { return Math.random() < 1e-11; }
+  },
+  {
+    id: "r10",
+    text: "This news message is 1000000000000x rarer than all the others.",
+    get unlocked() { return Math.random() < 1e-12; }
   },
   {
     id: "p1",

@@ -159,6 +159,7 @@ let player = {
     dragging: 0,
     themes: new Set(),
     secretTS: 0,    // incremented every time secret time study toggles
+    uselessNewsClicks: 0
   },
   lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, new Decimal(1)]),
   lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 1]),

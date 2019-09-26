@@ -409,6 +409,7 @@ body {
   white-space: nowrap;
   font-weight: bold;
   text-align: left;
+  user-select: none;
 }
 
 .c-news-line a {
@@ -1266,6 +1267,12 @@ screen and (max-width: 480px) {
   0% {font-size: 1.8rem;}
   50% {font-size: 1.3rem;}
   100% {font-size: 1.8rem;}
+}
+
+@keyframes text-crunch {
+  0% {font-size: 1.5rem;}
+  90% {font-size: 1.5rem;}
+  100% {font-size: 0rem;}
 }
 
 @keyframes text-flash {

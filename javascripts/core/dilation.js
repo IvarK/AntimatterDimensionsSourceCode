@@ -246,3 +246,18 @@ const DilationUpgrade = (function() {
     ttGenerator: new DilationUpgradeState(db.ttGenerator),
   };
 }());
+
+const DilationUpgrades = {
+  rebuyable: [
+    DilationUpgrade.dtGain,
+    DilationUpgrade.galaxyThreshold,
+    DilationUpgrade.tachyonGain,
+  ],
+  fromId: (function() {
+    const upgradesById = [];
+    for (const upgrade of Object.values(DilationUpgrade)) {
+      upgradesById[upgrade.id] = upgrade;
+    }
+    return id => upgradesById[id];
+  }()),
+};

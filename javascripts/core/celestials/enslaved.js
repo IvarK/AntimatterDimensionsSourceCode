@@ -37,7 +37,7 @@ const ENSLAVED_UNLOCKS = {
 
 const Enslaved = {
   boostReality: false,
-  IMPOSSIBLE_CHALLENGE_EXEMPTIONS: [1, 6, 9],
+  BROKEN_CHALLENGE_EXEMPTIONS: [1, 6, 9],
   ec6c10hintGiven: false,
   nextTickDiff: 50,
   isReleaseTick: false,

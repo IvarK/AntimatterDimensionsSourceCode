@@ -158,7 +158,8 @@ let player = {
     fixed: "notyetfixed",
     dragging: 0,
     themes: new Set(),
-    secretTS: 0,    // incremented every time secret time study toggles
+    // Incremented every time secret time study toggles
+    secretTS: 0,
     uselessNewsClicks: 0
   },
   lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, new Decimal(1)]),
@@ -547,15 +548,46 @@ const Player = {
     return EternityChallenge.isRunning
       ? EternityChallenge.current.currentGoal
       : Decimal.MAX_NUMBER;
-  }
+  },
+
+  get startingAM() {
+    return Effects.max(
+      10,
+      Perk.startAM1,
+      Perk.startAM2,
+      Achievement(21),
+      Achievement(37),
+      Achievement(54),
+      Achievement(55),
+      Achievement(78).secondaryEffect
+    ).toDecimal();
+  },
+
+  get startingIP() {
+    return Effects.max(
+      0,
+      Perk.startIP1,
+      Perk.startIP2,
+      Achievement(104)
+    ).toDecimal();
+  },
+
+  get startingEP() {
+    return Effects.max(
+      0,
+      Perk.startEP1,
+      Perk.startEP2,
+      Perk.startEP3
+    ).toDecimal();
+  },
 };
 
 function guardFromNaNValues(obj) {
-  function isObject (obj) {
-    return obj !== null && typeof obj === "object" && !(obj instanceof Decimal);
+  function isObject(ob) {
+    return ob !== null && typeof ob === "object" && !(ob instanceof Decimal);
   }
 
-  for (let key in obj) {
+  for (const key in obj) {
     if (!obj.hasOwnProperty(key)) continue;
 
     // TODO: rework autobuyer saving

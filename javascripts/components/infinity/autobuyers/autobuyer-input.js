@@ -89,7 +89,7 @@ Vue.component("autobuyer-input", {
 const AutobuyerInputFunctions = {
   decimal: {
     areEqual: (value, other) => Decimal.eq(value, other),
-    formatValue: value => Notation.scientific.format(value, 2, 0),
+    formatValue: value => Notation.scientific.format(value, 2, 2),
     copyValue: value => new Decimal(value),
     tryParse: input => {
       try {

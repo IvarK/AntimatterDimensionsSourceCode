@@ -207,6 +207,8 @@ function BlackHole(id) {
 }
 
 const BlackHoles = {
+  // In seconds
+  ACCELERATION_TIME: 5,
   /**
    * @return {BlackHoleState[]}
    */
@@ -232,7 +234,12 @@ const BlackHoles = {
   togglePause: () => {
     if (!BlackHoles.areUnlocked) return;
     player.blackHolePause = !player.blackHolePause;
+    player.blackHolePauseTime = player.realTimePlayed;
     GameUI.notify.blackHole(player.blackHolePause ? "Black Hole paused" : "Black Hole unpaused");
+  },
+
+  get unpauseAccelerationFactor() {
+    return Math.clamp((player.realTimePlayed - player.blackHolePauseTime) / (1000 * this.ACCELERATION_TIME), 0, 1);
   },
 
   get arePaused() {

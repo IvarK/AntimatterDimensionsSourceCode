@@ -4,8 +4,6 @@ Vue.component("statistics-tab", {
   data() {
     return {
       totalAntimatter: new Decimal(0),
-      boosts: 0,
-      galaxies: 0,
       realTimePlayed: TimeSpan.zero,
       infinity: {
         isUnlocked: false,
@@ -41,8 +39,6 @@ Vue.component("statistics-tab", {
   methods: {
     update() {
       this.totalAntimatter.copyFrom(player.totalAntimatter);
-      this.boosts = DimBoost.purchasedBoosts;
-      this.galaxies = Math.round(player.galaxies);
       this.realTimePlayed.setFrom(Date.now() - player.gameCreatedTime);
       const progress = PlayerProgress.current;
       const isInfinityUnlocked = progress.isInfinityUnlocked;
@@ -82,17 +78,8 @@ Vue.component("statistics-tab", {
       }
       this.matterScale = MatterScale.estimate(player.antimatter);
     },
-    formatAmount(value) { 
-      return value > 1e18 ? shorten(value, 3, 0) : shortenSmallInteger(value);
-    },
-    formatResetAmount(value) {
-      return this.formatAmount(value) + ((value === 1) ? " time" : " times");
-    },
     formatDecimalAmount(value) {
       return value.gt(1e9) ? shorten(value, 3, 0) : shortenSmallInteger(value.toNumber());
-    },
-    formatDecimalResetAmount(value) {
-      return this.formatDecimalAmount(value) + ((value.eq(1)) ? " time" : " times");
     }
   },
   template:
@@ -100,14 +87,6 @@ Vue.component("statistics-tab", {
         <br>
         <h3>General</h3>
         <div>You have made a total of {{ shorten(totalAntimatter, 2, 1) }} antimatter.</div>
-        <div>
-          You have purchased {{ shortenSmallInteger(boosts) }}
-          Dimension {{"Boost/Shift" | pluralize(boosts, "Boosts/Shifts")}}.
-        </div>
-        <div>
-          You have {{ shortenSmallInteger(galaxies) }}
-          Antimatter {{"Galaxy" | pluralize(galaxies, "Galaxies")}}.
-        </div>
         <div>You have played for {{ realTimePlayed }}.</div>
         <div v-if="reality.isUnlocked">
           Your existence has spanned {{ reality.totalTimePlayed }} of time.
@@ -123,7 +102,8 @@ Vue.component("statistics-tab", {
             <h3>Infinity</h3>
             <div v-if="infinity.count.gt(0)">
               You have infinitied
-              {{ formatDecimalResetAmount(infinity.count) }}<span v-if="eternity.isUnlocked"> this Eternity</span>.
+              {{ formatDecimalAmount(infinity.count) }}
+              {{"time" | pluralize(infinity.count)}}<span v-if="eternity.isUnlocked"> this Eternity</span>.
             </div>
             <div v-else>You haven't infinitied<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
             <div v-if="infinity.banked.gt(0)">
@@ -147,7 +127,8 @@ Vue.component("statistics-tab", {
             <h3>Eternity</h3>
             <div v-if="eternity.count.gt(0)">
               You have Eternitied
-              {{ formatDecimalResetAmount(eternity.count) }}<span v-if="reality.isUnlocked"> this Reality</span>.
+              {{ formatDecimalAmount(eternity.count) }}
+              {{"time" | pluralize(eternity.count)}}<span v-if="reality.isUnlocked"> this Reality</span>.
             </div>
             <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toStringShort() }}.</div>
@@ -166,7 +147,7 @@ Vue.component("statistics-tab", {
         </div>
         <div v-if="reality.isUnlocked">
             <h3>Reality</h3>
-            <div>You have Realitied {{ formatResetAmount(reality.count) }}.</div>
+            <div>You have Realitied {{shortenSmallInteger(reality.count)}} {{"time" | pluralize(reality.count)}}.</div>
             <div>Your fastest Reality was {{ reality.best.toStringShort() }}.</div>
             <div>
               You have spent

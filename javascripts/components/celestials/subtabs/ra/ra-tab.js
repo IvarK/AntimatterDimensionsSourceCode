@@ -28,8 +28,7 @@ Vue.component("ra-tab", {
     pets: () => [
       {
         pet: Ra.pets.teresa,
-        scalingUpgradeText: level => `You can charge ${shortenSmallInteger(Math.clampMax(Math.floor(level / 2), 12))}
-          Infinity Upgrades.`,
+        scalingUpgradeText: () => `You can charge ${shortenSmallInteger(Ra.totalCharges)} Infinity Upgrades.`,
       },
       {
         pet: Ra.pets.effarig,
@@ -38,8 +37,10 @@ Vue.component("ra-tab", {
       },
       {
         pet: Ra.pets.enslaved,
-        scalingUpgradeText: level => `Stored game time ^${(1 + 0.01 * Math.floor(level)).toFixed(2)}, ` +
-          `stored real time efficiency +${level}% and +${shorten(level / 2, 1, 1)} hours maximum.`,
+        scalingUpgradeText: () => `Stored game time ^
+          ${shorten(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)}, stored real time efficiency 
+          +${formatPercents(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency(), 0, 2)} and 
+          +${shorten(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / 1000 / 3600, 0, 1)} hours maximum.`,
       },
       {
         pet: Ra.pets.v,

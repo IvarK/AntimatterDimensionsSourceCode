@@ -139,7 +139,7 @@ Vue.component("automator-editor", {
       } else if (BlockAutomator.fromText(this.currentScript)) {
         player.reality.automator.type = AutomatorType.BLOCK;
       } else {
-        alert("Automator script has errors, cannot convert to blocks.");
+        Modal.message.show("Automator script has errors, cannot convert to blocks.");
       }
     }
   },

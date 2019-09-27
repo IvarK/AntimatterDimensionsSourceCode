@@ -160,7 +160,8 @@ let player = {
     themes: new Set(),
     // Incremented every time secret time study toggles
     secretTS: 0,
-    uselessNewsClicks: 0
+    uselessNewsClicks: 0,
+    cancerAchievements: false
   },
   lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, new Decimal(1)]),
   lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 1]),
@@ -320,6 +321,7 @@ let player = {
     activations: 0
   })),
   blackHolePause: false,
+  blackHolePauseTime: 0,
   ttbuyer: false,
   celestials: {
     teresa: {
@@ -529,10 +531,6 @@ const Player = {
   get dimensionMultDecrease() {
     const base = GameCache.dimensionMultDecrease.value - 1;
     return 1 + base * AnnihilationUpgrade.dimCostMult.effect;
-  },
-
-  get hasFreeInventorySpace() {
-    return Glyphs.freeInventorySpace > 0;
   },
 
   get achievementPower() {

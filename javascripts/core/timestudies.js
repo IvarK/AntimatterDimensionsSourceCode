@@ -24,11 +24,11 @@ const TimeTheorems = {
 
   checkForBuying(auto) {
     if (player.realities === 0 && TimeDimension(1).bought < 1) {
-      if (!auto) alert("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
+      if (!auto) Modal.message.show("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
       return false;
     }
     if (player.eternities.lt(1)) {
-      if (!auto) alert("You need to eternity at least once before you can purchase Time Theorems.");
+      if (!auto) Modal.message.show("You need to eternity at least once before you can purchase Time Theorems.");
       return false;
     }
     return true;

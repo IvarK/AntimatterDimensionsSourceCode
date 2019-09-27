@@ -133,7 +133,7 @@ function loadFromPlayFabCallback(callback, data, error) {
       }
       try {
         PlayFab.ClientApi.UpdateUserData(requestData, function(_, error) {
-          if (error) alert("Error migrating cloud saves, please report this.");
+          if (error) Modal.message.show("Error migrating cloud saves, please report this.");
 
           var newRoot = {
             current: 0,

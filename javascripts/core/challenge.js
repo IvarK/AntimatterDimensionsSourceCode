@@ -26,6 +26,7 @@ function tryUnlockInfinityChallenges() {
 function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
     if (NormalDimension(2).amount.neq(0)) {
+      if (player.matter.eq(0)) player.matter = new Decimal(1);
       player.matter = player.matter
         .times(Decimal.pow((1.03 + DimBoost.totalBoosts / 200 + player.galaxies / 100), diff / 100));
     }

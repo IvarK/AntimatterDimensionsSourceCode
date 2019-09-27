@@ -45,12 +45,16 @@ Vue.component("glyph-inventory", {
     sort() {
       Glyphs.sort();
     },
+    slotClass(index) {
+      return index < Glyphs.protectedSlots ? "c-glyph-inventory__protected-slot" : "c-glyph-inventory__slot";
+    }
   },
   template: `
   <div class="l-glyph-inventory">
     <div v-for="row in rowCount" class="l-glyph-inventory__row">
       <div v-for="col in colCount"
-           class="l-glyph-inventory__slot c-glyph-inventory__slot"
+           class="l-glyph-inventory__slot"
+           :class="slotClass(toIndex(row, col))"
            @dragover="allowDrag"
            @drop="drop(toIndex(row, col), $event)">
         <glyph-component v-if="inventory[toIndex(row, col)]"

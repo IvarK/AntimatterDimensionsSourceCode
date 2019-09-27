@@ -86,9 +86,8 @@ GameDatabase.infinity.upgrades = (function() {
       id: "dimMult",
       cost: 1,
       description: "Increase the multiplier for buying 10 Dimensions",
-      effect: 1.1,
-      formatEffect: () => "2x ➜ 2.2x",
-      staticEffect: true,
+      effect: () => 1.1,
+      formatEffect: () => `${formatX(2, 0, 1)} ➜ ${formatX(2.2, 0, 1)}`,
       charged: {
         description: "Multiplier for buying 10 Dimensions gains a power effect based on Teresa level",
         effect: () => 1 + Ra.pets.teresa.level / 200,
@@ -136,9 +135,8 @@ GameDatabase.infinity.upgrades = (function() {
       id: "resetMult",
       cost: 7,
       description: "Increase Dimension Boost multiplier",
-      effect: 2.5,
-      formatEffect: () => "2x ➜ 2.5x",
-      staticEffect: true,
+      effect: () => 2.5,
+      formatEffect: () => `${formatX(2, 0, 1)} ➜ ${formatX(2.5, 0, 1)}`,
       charged: {
         description: "Dimension Boost multiplier gains a power effect based on Teresa level",
         effect: () => 1 + Ra.pets.teresa.level / 200,

@@ -158,7 +158,7 @@ Vue.component("tt-save-load-button", {
       if (this.preset.studies) {
         importStudyTree(this.preset.studies);
       } else {
-        alert("This time study list currently contains no studies.");
+        Modal.message.show("This time study list currently contains no studies.");
       }
     },
     handleExport() {

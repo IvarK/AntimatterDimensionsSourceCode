@@ -135,8 +135,8 @@ function requestManualReality() {
   if (GlyphSelection.active || !isRealityAvailable() || !confirmReality()) {
     return;
   }
-  if (!Player.hasFreeInventorySpace) {
-    alert("Inventory is full. Delete/sacrifice (shift-click) some glyphs.");
+  if (Glyphs.freeInventorySpace === 0) {
+    Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
     return;
   }
   const realityProps = getRealityProps(false, false);
@@ -193,12 +193,12 @@ function processAutoGlyph(gainedLevel, rng) {
     newGlyph = GlyphGenerator.randomGlyph(gainedLevel, rng);
   }
   if (EffarigUnlock.autosacrifice.isUnlocked) {
-    if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Player.hasFreeInventorySpace) {
+    if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || Glyphs.freeInventorySpace === 0) {
       sacrificeGlyph(newGlyph, true);
       newGlyph = null;
     }
   }
-  if (newGlyph && Player.hasFreeInventorySpace) {
+  if (newGlyph && Glyphs.freeInventorySpace > 0) {
     Glyphs.addToInventory(newGlyph);
   }
 }

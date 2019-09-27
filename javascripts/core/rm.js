@@ -40,7 +40,7 @@ const AutoGlyphSacrifice = {
         effectList.map(e => typeCfg.effectScores[e]).sum();
       return glyphScore - typeCfg.scoreThreshold;
     }
-    return strengthToRarity(glyph.strength)
+    return strengthToRarity(glyph.strength);
   },
   wouldSacrifice(glyph) {
     switch (AutoGlyphSacrifice.mode) {
@@ -84,7 +84,7 @@ const AutoGlyphPicker = {
   },
   pick(glyphs) {
     return glyphs
-      .map(g => ({glyph: g, score: this.getPickScore(g)}))
+      .map(g => ({ glyph: g, score: this.getPickScore(g) }))
       .reduce((x, y) => (x.score > y.score ? x : y))
       .glyph;
   }
@@ -258,7 +258,7 @@ const GlyphGenerator = {
     }
     const randomEffects = [];
     for (let i = chosenEffects.length; i < count && possibleEffects.length > 0; i++) {
-      const nextEffect = possibleEffects[Math.floor(rng() * possibleEffects.length)];
+      const nextEffect = possibleEffects[Math.floor(rng.uniform() * possibleEffects.length)];
       possibleEffects = possibleEffects.filter(effect => !effect.match(nextEffect));
       randomEffects.push(nextEffect);
     }
@@ -353,14 +353,20 @@ const Glyphs = {
   },
   findFreeIndex() {
     this.validate();
-    return this.inventory.indexOf(null);
+    return this.inventory.findIndex((slot, index) => slot === null && index >= this.protectedSlots);
   },
   get freeInventorySpace() {
     this.validate();
-    return this.inventory.filter(e => e === null).length;
+    return this.inventory.filter((e, idx) => e === null && idx >= this.protectedSlots).length;
   },
   get activeSlotCount() {
     return 3 + Effects.sum(RealityUpgrade(9), RealityUpgrade(24));
+  },
+  get protectedSlots() {
+    return 10;
+  },
+  get totalSlots() {
+    return player.reality.glyphs.inventorySize;
   },
   refreshActive() {
     this.active = new Array(this.activeSlotCount).fill(null);
@@ -373,7 +379,7 @@ const Glyphs = {
   },
   refresh() {
     this.refreshActive();
-    this.inventory = new Array(player.reality.glyphs.inventorySize).fill(null);
+    this.inventory = new Array(this.totalSlots).fill(null);
     // Glyphs could previously end up occupying the same inventory slot (Stacking)
     const stacked = [];
     for (const g of player.reality.glyphs.inventory) {
@@ -426,7 +432,7 @@ const Glyphs = {
     } else {
       // We can only replace effarig/reality glyph
       if (sameSpecialTypeIndex >= 0 && sameSpecialTypeIndex !== targetSlot) {
-        alert(`You may only have one ${glyph.type} glyph equipped`);
+        Modal.message.show(`You may only have one ${glyph.type} glyph equipped`);
         return;
       }
       if (player.options.confirmations.glyphReplace &&
@@ -480,7 +486,7 @@ const Glyphs = {
       glyph.idx = targetSlot;
       EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     } else {
-      console.log("inventory slot full")
+      console.log("inventory slot full");
     }
     this.validate();
   },
@@ -533,9 +539,11 @@ const Glyphs = {
     }
   },
   sort() {
+    const glyphsToSort = player.reality.glyphs.inventory.filter(g => g.idx >= this.protectedSlots);
     const freeSpace = this.freeInventorySpace;
-    const byType = GLYPH_TYPES.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
-    for (const g of player.reality.glyphs.inventory) byType[g.type].glyphs.push(g);
+    const sortOrder = ["power", "infinity", "time", "replication", "dilation", "effarig", "reality"];
+    const byType = sortOrder.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
+    for (const g of glyphsToSort) byType[g.type].glyphs.push(g);
     const compareGlyphs = (a, b) => -a.level * a.strength + b.level * b.strength;
     let totalDesiredPadding = 0;
     for (const t of Object.values(byType)) {
@@ -547,8 +555,8 @@ const Glyphs = {
     }
     while (totalDesiredPadding > freeSpace) {
       // Try to remove padding 5 at a time if possible
-      let biggestPadding = GLYPH_TYPES[0];
-      for (const t of GLYPH_TYPES) {
+      let biggestPadding = sortOrder[0];
+      for (const t of sortOrder) {
         if (byType[t].padding > byType[biggestPadding].padding) biggestPadding = t;
       }
       let delta = byType[biggestPadding].padding > 5 ? 5 : 1;
@@ -556,7 +564,7 @@ const Glyphs = {
       totalDesiredPadding -= delta;
       byType[biggestPadding].padding -= delta;
     }
-    let outIndex = 0;
+    let outIndex = this.protectedSlots;
     for (const t of Object.values(byType)) {
       for (const g of t.glyphs) {
         if (this.inventory[outIndex]) this.swap(this.inventory[outIndex], g);
@@ -694,7 +702,7 @@ function recalculateAllGlyphs() {
   }
   // Delete any glyphs that are in overflow spots:
   player.reality.glyphs.inventory = player.reality.glyphs.inventory.filter(
-    glyph => glyph.idx < player.reality.glyphs.inventorySize);
+    glyph => glyph.idx < Glyphs.totalSlots);
   for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
     calculateGlyph(player.reality.glyphs.inventory[i]);
   }

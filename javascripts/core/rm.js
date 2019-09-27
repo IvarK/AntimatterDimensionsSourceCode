@@ -258,7 +258,7 @@ const GlyphGenerator = {
     }
     const randomEffects = [];
     for (let i = chosenEffects.length; i < count && possibleEffects.length > 0; i++) {
-      const nextEffect = possibleEffects[Math.floor(rng() * possibleEffects.length)];
+      const nextEffect = possibleEffects[Math.floor(rng.uniform() * possibleEffects.length)];
       possibleEffects = possibleEffects.filter(effect => !effect.match(nextEffect));
       randomEffects.push(nextEffect);
     }

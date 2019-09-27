@@ -207,6 +207,8 @@ function BlackHole(id) {
 }
 
 const BlackHoles = {
+  // In seconds
+  ACCELERATION_TIME: 5,
   /**
    * @return {BlackHoleState[]}
    */
@@ -237,8 +239,7 @@ const BlackHoles = {
   },
 
   get unpauseAccelerationFactor() {
-    const accelerationTimeInSeconds = 5;
-    return Math.clamp((player.realTimePlayed - player.blackHolePauseTime) / (1000 * accelerationTimeInSeconds), 0, 1);
+    return Math.clamp((player.realTimePlayed - player.blackHolePauseTime) / (1000 * this.ACCELERATION_TIME), 0, 1);
   },
 
   get arePaused() {

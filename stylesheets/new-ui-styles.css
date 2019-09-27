@@ -191,6 +191,7 @@ body.t-dark {
   position: relative;
   transition-duration: 0.15s;
   transition-delay: 0.2s;
+  user-select: none;
 }
 
 .tab-button-inner {
@@ -449,6 +450,7 @@ body.t-dark {
   line-height: 4.5rem;
   cursor: pointer;
   transition-duration: 0.15s;
+  user-select: none;
 }
 
 .subtab .fa-link {

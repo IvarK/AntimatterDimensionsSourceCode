@@ -39,6 +39,7 @@ const Enslaved = {
   boostReality: false,
   BROKEN_CHALLENGE_EXEMPTIONS: [1, 6, 9],
   ec6c10hintGiven: false,
+  ec6c10timeHint: false,
   nextTickDiff: 50,
   isReleaseTick: false,
   autoReleaseTick: 0,
@@ -131,6 +132,8 @@ const Enslaved = {
     player.celestials.enslaved.run = startRealityOver() || player.celestials.enslaved.run;
     // Round to the nearest multiple of 2 to make the secret study hide
     player.secretUnlocks.secretTS += player.secretUnlocks.secretTS % 2;
+    this.ec6c10hintGiven = false;
+    this.ec6c10timeHint = false;
   },
   get isRunning() {
     return player.celestials.enslaved.run;
@@ -165,6 +168,6 @@ const Enslaved = {
   showEC10C6Hint() {
     if (this.ec6c10hintGiven) return;
     this.ec6c10hintGiven = true;
-    alert("... did not ... underestimate you ...");
+    Modal.message.show("... did not ... underestimate you ...");
   },
 };

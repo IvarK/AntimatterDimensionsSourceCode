@@ -103,15 +103,15 @@ function gainedGlyphLevel() {
   let actualLevel = Math.floor(glyphState.actualLevel);
   if (!isFinite(actualLevel)) actualLevel = 0;
   return {
-    rawLevel: rawLevel,
-    actualLevel: actualLevel
+    rawLevel,
+    actualLevel
   };
 }
 
 function resetChallengeStuff() {
     player.chall2Pow = 1;
     player.chall3Pow = new Decimal(0.01);
-    player.matter = new Decimal(1);
+    player.matter = new Decimal(0);
     player.chall8TotalSacrifice = new Decimal(1);
     player.postC4Tier = 1;
 }
@@ -319,7 +319,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
           ? blackHole.isActive
           : blackHole.id <= blackHolesActiveOverride;
         if (!isActive) break;
-        factor *= blackHole.power;
+        factor *= Math.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor);
         if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
           factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect();
         }
@@ -636,6 +636,11 @@ function gameLoop(diff, options = {}) {
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
+
+  if (Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000 && !Enslaved.ec6c10timeHint) {
+    Enslaved.ec6c10timeHint = true;
+    Modal.message.show("... you need ... to look harder ...");
+  }
 
   Achievements.autoAchieveUpdate(diff);
   V.checkForUnlocks();

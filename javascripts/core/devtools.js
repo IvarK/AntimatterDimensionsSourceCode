@@ -87,7 +87,7 @@ dev.fixSave = function() {
   const fixed = save.replace(/NaN/gui, "10");
   const saveData = JSON.parse(fixed);
   if (!saveData || !GameStorage.verifyPlayerObject(saveData)) {
-    alert("Could not fix the save..");
+    Modal.message.show("Could not fix the save..");
     return;
   }
   GameStorage.loadPlayerObject(saveData);
@@ -144,7 +144,7 @@ dev.resetDilation = function() {
 // eslint-disable-next-line max-params
 dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
   if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
-  if (!Player.hasFreeInventorySpace) return;
+  if (Glyphs.freeInventorySpace === 0) return;
   const glyph = GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel });
   glyph.symbol = symbol;
   glyph.color = color;
@@ -152,16 +152,20 @@ dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
 };
 
 dev.giveMusicGlyph = function() {
-  dev.giveSpecialGlyph("#FF80AB", "key266b", 1, 1);
+  const highestLevel = player.reality.glyphs.active
+    .concat(player.reality.glyphs.inventory)
+    .map(glyph => glyph.level)
+    .max();
+  dev.giveSpecialGlyph("#FF80AB", "key266b", Math.floor(0.8 * highestLevel), 1);
 };
 
 dev.giveGlyph = function(level, rawLevel = level) {
-  if (!Player.hasFreeInventorySpace) return;
+  if (Glyphs.freeInventorySpace === 0) return;
   Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }));
 };
 
 dev.giveRealityGlyph = function(level, rawLevel = level) {
-  if (!Player.hasFreeInventorySpace) return;
+  if (Glyphs.freeInventorySpace === 0) return;
   Glyphs.addToInventory(GlyphGenerator.realityGlyph({ actualLevel: level, rawLevel }, []));
 };
 

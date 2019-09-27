@@ -73,11 +73,11 @@ Vue.component("dim-production-tab", {
       const updateRate = options.updateRate;
       const duration = options.duration;
       if (updateRate <= 200 && duration >= 30 && options.warning === 0) {
-        alert("Warning: setting the duration and update rate too high can cause performance issues.");
+        Modal.message.show("Warning: setting the duration and update rate too high can cause performance issues.");
         options.warning = 1;
       }
       if (duration / updateRate * 1000 >= 1000 && options.warning !== 2) {
-        alert("Warning: you have set the duration and update rate quite high, " +
+        Modal.message.show("Warning: you have set the duration and update rate quite high, " +
           "make sure you know what you're doing or have a good computer");
         options.warning = 2;
       }
@@ -86,7 +86,8 @@ Vue.component("dim-production-tab", {
       const options = player.options.chart;
       if (options.on) return;
       if (options.warning < 1) {
-        alert("Warning: the chart can cause performance issues. Please disable it if you're experiencing lag.");
+        Modal.message.show("Warning: the chart can cause performance issues. " +
+          "Please disable it if you're experiencing lag.");
       }
     }
   },

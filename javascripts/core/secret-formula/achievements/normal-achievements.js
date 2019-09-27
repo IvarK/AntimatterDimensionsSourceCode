@@ -468,8 +468,8 @@ GameDatabase.achievements.normal = [
   {
     id: 81,
     name: "Hevipelle did nothing wrong",
-    tooltip: () => `Beat Infinity Challenge 5 in ${shortenSmallInteger(10)} seconds or less.`,
-    checkRequirement: () => InfinityChallenge(5).isRunning && Time.thisInfinityRealTime.totalSeconds <= 10,
+    tooltip: () => `Beat Infinity Challenge 5 in ${shortenSmallInteger(15)} seconds or less.`,
+    checkRequirement: () => InfinityChallenge(5).isRunning && Time.thisInfinityRealTime.totalSeconds <= 15,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE
   },
   {

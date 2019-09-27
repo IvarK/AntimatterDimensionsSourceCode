@@ -319,6 +319,7 @@ let player = {
     activations: 0
   })),
   blackHolePause: false,
+  blackHolePauseTime: 0,
   ttbuyer: false,
   celestials: {
     teresa: {
@@ -528,10 +529,6 @@ const Player = {
   get dimensionMultDecrease() {
     const base = GameCache.dimensionMultDecrease.value - 1;
     return 1 + base * AnnihilationUpgrade.dimCostMult.effect;
-  },
-
-  get hasFreeInventorySpace() {
-    return Glyphs.freeInventorySpace > 0;
   },
 
   get achievementPower() {

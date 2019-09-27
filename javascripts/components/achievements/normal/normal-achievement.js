@@ -49,7 +49,7 @@ Vue.component("normal-achievement", {
   methods: {
     update() {
       this.isUnlocked = this.achievement.isUnlocked;
-      this.isCancer = Theme.current().name === "S4";
+      this.isCancer = Theme.current().name === "S4" || player.secretUnlocks.cancerAchievements;
     },
     onMouseEnter() {
       clearTimeout(this.mouseOverInterval);

@@ -743,7 +743,7 @@ GameDatabase.achievements.normal = [
     id: 118,
     name: "IT'S OVER 9000",
     tooltip: () => `Get a total sacrifice multiplier of ${shorten("1e9000", 0, 0)}.`,
-    checkRequirement: () => Sacrifice.totalBoost.gte("1e9000"),
+    checkRequirement: () => Sacrifice.totalBoost.exponent >= 9000,
     checkEvent: GameEvent.SACRIFICE_RESET_AFTER,
     reward: "Sacrifice doesn't reset your Dimensions.",
   },

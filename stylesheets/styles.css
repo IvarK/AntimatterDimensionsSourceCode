@@ -2879,6 +2879,19 @@ screen and (max-width: 480px) {
   font-size: 1.6rem;
   margin-top: 0.6rem;
   margin-bottom: 0.6rem;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  user-select: none;
+}
+
+.t-s4 .c-achievements-tab__header::after {
+  content: "you can click the period at the end of this in any other theme to turn on these achievement images";
+  font-size: 0.8rem;
+  position: absolute;
+  margin-left: 32.5rem;
+  width: 19rem;
 }
 
 .c-achievements-tab__timer {
@@ -7383,4 +7396,9 @@ input.o-automator-block-input {
   font-size: 1.5rem;
   cursor: pointer;
   font-weight: 500;
+}
+
+/* Prevent any themes overriding font awesome */
+.fa, .far, .fas {
+  font-family: "Font Awesome 5 Free" !important;
 }

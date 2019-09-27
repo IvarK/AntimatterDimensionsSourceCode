@@ -29,9 +29,9 @@ GameDatabase.achievements.secret = [
   {
     id: 16,
     name: "Do you enjoy pain?",
-    tooltip: "Use a \"painful\" notation for 10 real-time minutes with more than 1 eternity.",
+    tooltip: "Use a \"painful\" notation for 10 real-time minutes after having eternitied at least once.",
     checkRequirement: () => AchievementTimers.pain
-      .check(player.eternities.gte(1) && Notations.current.isPainful, 600),
+      .check(PlayerProgress.eternityUnlocked() && Notations.current.isPainful, 600),
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
@@ -53,7 +53,7 @@ GameDatabase.achievements.secret = [
     id: 22,
     name: "Cancer = Spread",
     tooltip: "Buy 100,000 Antimatter Galaxies in total while using cancer notation.",
-    checkRequirement: () => player.spreadingCancer >= 100000,
+    checkRequirement: () => player.spreadingCancer >= 1e5,
     checkEvent: GameEvent.GALAXY_RESET_AFTER
   },
   {
@@ -170,7 +170,7 @@ GameDatabase.achievements.secret = [
     id: 45,
     name: "This dragging is dragging on",
     tooltip: "Drag the perks around for a minute.",
-    checkRequirement: () => ++player.secretUnlocks.dragging / 100 >= 60
+    checkRequirement: () => player.secretUnlocks.dragging++ / 100 >= 60
   },
   {
     id: 46,

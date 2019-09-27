@@ -376,6 +376,10 @@ body.t-dark {
   margin-left: 20rem;
 }
 
+.t-s4 .game-container {
+  border-radius: 0 !important;
+}
+
 .game-container h1, 
 .game-container h2, 
 .game-container h3, 

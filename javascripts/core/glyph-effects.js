@@ -657,7 +657,7 @@ const GlyphTypes = {
     }
     const available = EffarigUnlock.reality.isUnlocked ? types.length - 1 : types.length - 2;
     const typeIndex = Math.floor(rng.uniform() * available);
-    if (types[typeIndex] === blacklisted) return types[typeIndex + 1];
+    if (types[typeIndex] >= blacklisted) return types[typeIndex + 1];
     return types[typeIndex];
   },
   get list() {

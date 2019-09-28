@@ -147,6 +147,7 @@ const PerkShopUpgrade = (function() {
     rmMult: new PerkShopUpgradeState(db.rmMult),
     bulkDilation: new PerkShopUpgradeState(db.bulkDilation),
     musicGlyph: new PerkShopUpgradeState(db.musicGlyph),
+    autoSpeed: new PerkShopUpgradeState(db.autoSpeed),
   };
 }());
 

@@ -55,6 +55,16 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Decimal.pow(3, bought),
       formatCost: value => shorten(value, 2, 0),
       cap: () => Number.MAX_VALUE
-    })
+    }),
+    autoSpeed: rebuyable({
+      id: 4,
+      initialCost: 1000,
+      increment: 2,
+      description: "ID, TD, TT, dilation, and replicanti autobuyers are 2x faster.",
+      effect: bought => Math.pow(2, bought),
+      formatEffect: value => formatX(value, 2, 0),
+      formatCost: value => shorten(value, 2, 0),
+      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 2048000 : 4000)
+    }),
   };
 }());

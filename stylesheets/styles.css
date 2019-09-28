@@ -632,6 +632,7 @@ body {
     -moz-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     /* Required to make elements draggable in old WebKit */
     -khtml-user-drag: element;
@@ -1260,6 +1261,7 @@ screen and (max-width: 480px) {
 .o-primary-btn--sacrifice {
   font-size: 1.2rem;
   width: 32rem;
+  margin-right: 0.8rem;
 }
 
 .o-primary-btn--buy-nd {
@@ -2028,11 +2030,6 @@ screen and (max-width: 480px) {
   flex-direction: row;
   justify-content: center;
   align-items: center
-}
-
-.l-normal-dim-tab__header > * {
-  margin-right: .4rem;
-  margin-left: .4rem;
 }
 
 /*#endregion l-normal-dim-tab-header*/
@@ -6962,6 +6959,7 @@ kbd {
   padding: .5rem;
   tab-size: 1.5em;
   -moz-tab-size: 1.5em;
+  -o-tab-size: 1.5em;
 }
 
 .o-automator-block-input {

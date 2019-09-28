@@ -68,12 +68,12 @@ Vue.component("normal-dim-row", {
   },
   template:
     `<div v-show="isUnlocked" class="c-normal-dim-row">
-      <div
-        class="c-normal-dim-row__name c-normal-dim-row__label"
-      >{{name}} Dimension x{{shorten(multiplier, 1, 1)}}</div>
-      <div
-        class="c-normal-dim-row__label c-normal-dim-row__label--growable"
-      >{{amountDisplay}} ({{shortenSmallInteger(boughtBefore10)}}){{rateOfChangeDisplay}}</div>
+      <div class="c-normal-dim-row__name c-normal-dim-row__label">
+        {{name}} Dimension x{{shorten(multiplier, 1, 1)}}
+      </div>
+      <div class="c-normal-dim-row__label c-normal-dim-row__label--growable">
+        {{amountDisplay}} ({{shortenSmallInteger(boughtBefore10)}}){{rateOfChangeDisplay}}
+      </div>
       <primary-button
         :enabled="isAffordable"
         class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd c-normal-dim-row__buy-button"

@@ -9,14 +9,10 @@ html {
   background: white;
 }
 
-* {
+* { /* csslint allow: universal-selector */
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-*:focus {
-  outline: none;
 }
 
 body {

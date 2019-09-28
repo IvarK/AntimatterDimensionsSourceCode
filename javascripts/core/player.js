@@ -160,6 +160,7 @@ let player = {
     themes: new Set(),
     // Incremented every time secret time study toggles
     secretTS: 0,
+    uselessNewsClicks: 0,
     cancerAchievements: false
   },
   lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, new Decimal(1)]),

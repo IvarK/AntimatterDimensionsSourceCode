@@ -187,6 +187,11 @@ const GlyphTooltipComponent = {
       sacrificeGlyph(Glyphs.findById(this.id), false);
     },
   },
+  mounted() {
+    // By attaching the tooltip to the body element, we make sure it ends up on top of anything
+    // else, with no z order shenanigans
+    document.body.appendChild(this.$el);
+  },
   template: `
   <div class="l-glyph-tooltip c-glyph-tooltip"
        :style="pointerEventStyle"
@@ -346,22 +351,27 @@ Vue.component("glyph-component", {
     },
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
-        ? glyphRefinementGain(this.glyph)
-        : glyphSacrificeGain(this.glyph);
+      if (this.showSacrifice) {
+        this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
+          ? glyphRefinementGain(this.glyph)
+          : glyphSacrificeGain(this.glyph);
+      } else {
+        this.sacrificeReward = 0;
+      }
       // eslint-disable-next-line no-nested-ternary
       this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph.level);
     },
     moveTooltipTo(x, y) {
       const tooltipEl = this.$refs.tooltip.$el;
       if (tooltipEl) {
-        const rect = this.$el.getBoundingClientRect();
+        const rect = document.body.getBoundingClientRect();
         tooltipEl.style.left = `${x - rect.left}px`;
         tooltipEl.style.top = `${y - rect.top}px`;
       }
     },
-    mouseEnter() {
+    mouseEnter(ev) {
       if (this.$viewModel.draggingUIID !== -1) return;
+      this.moveTooltipTo(ev.clientX, ev.clientY);
       this.showTooltip();
     },
     mouseLeave() {

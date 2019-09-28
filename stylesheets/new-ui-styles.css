@@ -957,12 +957,9 @@ body.t-dark {
   font-size: 1.4rem
 }
 
-.l-reality-upgrade-grid__row > * {
-  margin: 0.5rem;
-}
-
 .l-reality-upgrade-btn {
   width: 15.6rem;
+  margin: 0.5rem;
 }
 
 .resource-eternity-canreset > div {

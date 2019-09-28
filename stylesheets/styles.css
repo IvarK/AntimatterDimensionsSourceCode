@@ -6766,27 +6766,27 @@ kbd {
   display: flex;
   flex-direction: column;
   margin-top: 1.2rem;
+  width: 100%;
+  align-items: center;
 }
 
 .l-reality-upgrade-grid__row {
   display: flex;
   flex-direction: row;
-}
-
-.l-reality-upgrade-grid__row > * {
-  margin: 1.2rem;
-  flex: 1 1 0;
+  max-width: 120rem;
 }
 
 .l-reality-upgrade-btn {
   height: 10rem;
-  padding: 0;
+  padding: 0 1rem 0 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   position: relative;
   width: 25rem;
+  margin: 1.2rem;
+  flex: 1 1 0;
 }
 
 .c-reality-upgrade-btn {

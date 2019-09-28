@@ -25,10 +25,6 @@ body {
     border: 1px solid white !important;
 }
 
-.unavailablebtn {
-    background-color: #ff0000 !important;
-}
-
 .storebtn {
     background-color: #ff00e0 !important;
     cursor: url(cursor2.cur),  auto !important;

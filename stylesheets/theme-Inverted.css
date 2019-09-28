@@ -6,10 +6,6 @@ body.t-inverted {
     filter: invert(100%);
 }
 
-.t-inverted .popup {
-    filter: invert(100%);
-}
-
 .t-inverted #realityanimbg {
     filter: invert(1);
 }

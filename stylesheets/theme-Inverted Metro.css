@@ -6,32 +6,8 @@ body.t-inverted-metro {
     filter: invert(100%);
 }
 
-.t-inverted-metro .popup {
-    filter: invert(100%);
-}
-
 .t-inverted-metro #realityanimbg {
     filter: invert(1);
-}
-
-.radial-progress, .circle, .mask full, .fill, .fill fix, .inset{
-    border-radius: 50%;
-}
-
-.t-inverted-metro .popup {
-    border: 1px solid black;
-}
-
-.t-inverted-metro .secondarytabbtn {
-    background: #EEEEEE;
-    border: 1px solid #2196F3;
-    border-radius: 0;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.t-inverted-metro .secondarytabbtn:hover {
-    background: #2196F3;
-    border: 1px solid #2196F3;
 }
 
 .t-inverted-metro .storebtn {
@@ -43,16 +19,6 @@ body.t-inverted-metro {
 
 .t-inverted-metro .storebtn:hover {
     background: #66BB6A;
-}
-
-.t-inverted-metro .unavailablebtn {
-    background: #9E9E9E;
-    border: 1px solid #EF5350;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.t-inverted-metro .unavailablebtn:hover {
-    background: #EF5350;
 }
 
 .t-inverted-metro .infinitytabbtn {

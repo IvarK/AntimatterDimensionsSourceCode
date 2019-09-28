@@ -1,35 +1,5 @@
-.radial-progress, .circle, .mask full, .fill, .fill fix, .inset{
-    border-radius: 50% !important;
-}
-
 .t-metro input, .t-metro select {
     border: 1px solid #A9A9A9;
-}
-
-.t-metro .popup {
-    border: 1px solid black !important;
-}
-
-.t-metro .secondarytabbtn {
-    background: #EEEEEE;
-    border: 1px solid #2196F3;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-    border-radius: 0;
-}
-
-.t-metro .secondarytabbtn:hover {
-    background: #2196F3;
-    border: 1px solid #2196F3;
-}
-
-.t-metro .unavailablebtn {
-    background: #9E9E9E;
-    border: 1px solid #EF5350;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.t-metro .unavailablebtn:hover {
-    background: #EF5350;
 }
 
 .t-metro .infinitytabbtn {

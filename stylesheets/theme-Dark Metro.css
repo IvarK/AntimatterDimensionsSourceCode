@@ -3,34 +3,13 @@ body.t-dark-metro {
     background-position: center;
 }
 
-.t-dark-metro .radial-progress, .circle, .mask full, .fill, .fill fix, .inset{
-    border-radius: 50%;
-}
-
 .t-dark-metro .container {
     color: #757575;
-}
-
-.t-dark-metro .popup {
-    background-color: #455A64;
-    box-shadow: 0 0 10px 0 black;
 }
 
 .t-dark-metro input {
     background-color: #455A64;
     border: 1px solid black;
-}
-
-.t-dark-metro .secondarytabbtn {
-    color: #E0E0E0;
-    background: #455A64;
-    border: 1px solid #1E88E5;
-    box-shadow: 1px 1px 1px 0 black;
-    border-radius: 0;
-}
-
-.t-dark-metro .secondarytabbtn:hover {
-    background: #1E88E5;
 }
 
 .t-dark-metro .storebtn {
@@ -41,16 +20,6 @@ body.t-dark-metro {
 
 .t-dark-metro .storebtn:hover {
     background: #43A047;
-}
-
-.t-dark-metro .unavailablebtn {
-    background: #37474F;
-    border: 1px solid #E53935;
-    box-shadow: 1px 1px 1px 0 black;
-}
-
-.t-dark-metro .unavailablebtn:hover {
-    background: #E53935;
 }
 
 .t-dark-metro .infinitytabbtn {

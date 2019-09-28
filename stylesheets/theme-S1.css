@@ -13,28 +13,13 @@ body {
     background: none !important;
 }
 
-.popup {
-    background-color: #dbd242 !important;
-}
-
 .tabbtn {
     color: black !important;
     background: #dbd242 !important;
     border-color: black !important;
 }
 
-.secondarytabbtn {
-    color: black !important;
-    background: #dbd242 !important;
-    border-color: black !important;
-}
-
 .tabbtn:hover {
-    color: #dbd242 !important;
-    background: black !important;
-}
-
-.secondarytabbtn:hover {
     color: #dbd242 !important;
     background: black !important;
 }
@@ -47,16 +32,6 @@ body {
 .storebtn:hover {
     background-color: #4baf4e !important;
     border-color: black !important;
-}
-
-.unavailablebtn {
-    background: #9a921d !important;
-    border-color: black !important;
-}
-
-.unavailablebtn:hover {
-    background: #d72621 !important;
-    border: 1px solid black !important;
 }
 
 #container.container {
@@ -98,17 +73,6 @@ input {
 .t-s1 .c-tt-buy-button--locked:hover {
   background: #d72621;
   border-color: black;
-}
-
-.greedbtn {
-    color: black !important;
-    background: #dbd242 !important;
-    border-color: black !important;
-}
-
-.greedbtn:hover {
-    color: #dbd242 !important;
-    background: black !important;
 }
 
 #snow {

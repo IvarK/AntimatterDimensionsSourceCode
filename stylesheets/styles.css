@@ -101,49 +101,7 @@ body {
   background: #66BB6A;
 }
 
-.unavailablebtn {
-  color: #000000;
-  background: #A3A3A3;
-  font-weight: bold;
-  font-family: Typewriter;
-  border: 1px solid #B84B5F;
-  width: 120px;
-  height: 25px;
-  transition-duration: 0.2s;
-  border-radius: 4px;
-  font-size: 13px;
-  vertical-align: top;
-}
-
-.unavailablebtn:hover {
-  color: #000000;
-  background: #B84B5F;
-}
-
 /*#endregion Store button*/
-
-/*#region Secondary tab button*/
-
-.secondarytabbtn {
-  background: #E0E0E0;
-  font-weight: bold;
-  border: 2px solid #4980CC;
-  border-radius: 4px;
-  transition-duration: 0.2s;
-  cursor: pointer;
-  width: 175px;
-  height: 25px;
-  font-family: Typewriter;
-  font-size: 1.3rem;
-}
-
-.secondarytabbtn:hover {
-  color: #FFFFFF;
-  background: #4980CC;
-  font-weight: bold;
-  border: 2px solid #4980CC;
-  border-radius: 4px;
-}
 
 /*#endregion Secondary tab button*/
 
@@ -561,63 +519,6 @@ body {
   color: #5151ec;
 }
 
-.crunchbtn {
-    background: #E0E0E0;
-    font-weight: bold;
-    border: 2px solid #4980CC;
-    border-radius: 4px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    position: relative;
-    top: 50%;
-    left: 40%;
-
-}
-
-.crunchbtn:hover {
-    color: #FFFFFF;
-    background: #4980CC;
-    font-weight: bold;
-    border: 2px solid #4980CC;
-    border-radius: 4px;
-
-}
-
-.popup {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translateX(-50%) translateY(-50%);
-    border: 3px solid black;
-    width: 300px;
-    height: 120px;
-    background-color: #E0E0E0;
-    border-radius: 6px;
-    text-align:center;
-    z-index: 2;
-    color: black;
-    font-family: Typewriter;
-    padding: 10px;
-    padding-bottom: 15px;
-    display: none;
-}
-
-.greedbtn {
-    height: 40px;
-    width: 100px;
-    background-color: #f2d729;
-    border: 1px solid red;
-    border-radius: 5px;
-    font-family: TypeWriter;
-    transition-duration: 0.2s;
-}
-
-.greedbtn:hover {
-    cursor: pointer;
-    background-color: #9E913A;
-
-}
-
 #loading {
     position: absolute;
     top: 50%;
@@ -737,75 +638,6 @@ body {
     -webkit-user-drag: element;
   }
 
-.glyphcontainer {
-    display: flex;
-    justify-content: center;
-}
-
-.glyph {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    width: 50px;
-    background: black;
-    font-size: 2.4rem;
-    transition-duration: 0.2s;
-    cursor: move;
-    font-family: Typewriter;
-    box-sizing: border-box;
-
-}
-
-#reality * {
-    user-select: none;
-}
-
-.blackhole-upgrades {
-    display: flex;
-    justify-content: space-around;
-    width: 80%;
-}
-
-.radial-progress {
-    /* @circle-size: 120px; */
-    background-color: #d6dadc;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    margin: 50px
-  }
-
-.circle .fill {
-    background-color: #97a71d;
-    /* rect(<top>, <right>, <bottom>, <left>) */
-    clip: rect(0px, 60px, 120px, 0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-
-.circle .mask {
-    /* rect(<top>, <right>, <bottom>, <left>) */
-    clip: rect(0px, 120px, 120px, 60px);
-}
-
-.circle .mask, .circle .fill {
-    width:    120px;
-    height:   120px;
-    position: absolute;
-    border-radius: 50%;
-}
-
-.inset {
-    width:       90px;
-    height:      90px;
-    position:    absolute;
-    margin-left: 15px;
-    margin-top:  15px;
-    background-color: #fbfbfb;
-    border-radius: 50%;
-}
-
 @keyframes glow {
     20% { text-shadow: 0 0 10px green; }
     100% { text-shadow: 0 0 10px white; }
@@ -816,45 +648,6 @@ body {
   50% { text-shadow: 1px 1px 8px black; }
   100% { text-shadow: 1px 1px 2px black; }
 }
-
-.tooltip {
-    width: 275px;
-    background-color: #4a4a4a;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 3;
-    left: 50%;
-    transition: opacity 0.3s;
-    font-size: 1.4rem;
-    font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: normal;
-    padding: 12px;
-    pointer-events: none;
-    display: none;
-    text-shadow: none;
-  }
-
-.tooltip h3 {
-    color:white
-}
-
-  .tooltip br:last-child {
-      display: none;
-  }
-
-  .tooltip::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #4a4a4a transparent transparent transparent;
-  }
 
 [ach-tooltip] {
     position: relative;
@@ -1130,14 +923,6 @@ br {
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-}
-
-.glyphDescriptions {
-  width: 32%;
-  border: 1px solid rgb(184, 184, 184);
-  border-radius: 5px;
-  margin: 24px;
-  padding: 12px;
 }
 
 @media print, screen and (max-width: 960px) {
@@ -3356,9 +3141,6 @@ screen and (max-width: 480px) {
   color: black;
   font-size: 1.5rem;
   margin: 1.5rem 0;
-}
-
-.c-infinity-tab__infinity-points {
 }
 
 /*#region themes*/
@@ -7227,11 +7009,6 @@ kbd {
 
 input.o-automator-block-input {
   color: #0f0;
-}
-
-.o-automator-linenumber {
-  color: #55ff55;
-  font-size: 1.4rem;
 }
 
 .l-automator-nested-block {

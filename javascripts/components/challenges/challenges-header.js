@@ -1,7 +1,7 @@
 "use strict";
 
-Vue.component('challenges-header', {
-  data: function() {
+Vue.component("challenges-header", {
+  data() {
     return {
       isICTabUnlocked: false,
       isECTabUnlocked: false,
@@ -53,36 +53,37 @@ Vue.component('challenges-header', {
       if (current !== undefined) {
         current.exit();
       }
+    },
+    toggleShowAll() {
+      this.showAllChallenges = !this.showAllChallenges;
+    },
+    toggleAutoEC() {
+      this.autoEC = !this.autoEC;
     }
   },
   template:
   `<div v-if="isInChallenge || isShowAllVisible" class="l-challenges-tab__header">
-    <primary-button
-      v-if="isInChallenge"
-      class="o-primary-btn--exit-challenge l-challenges-tab__exit-btn"
-      @click="exitChallenge"
-    >Exit Challenge</primary-button>
-    <template v-if="isShowAllVisible">
-      <b>Show all:</b>
-      <input
-        v-model="showAllChallenges"
-        type="checkbox"
-        class="o-big-checkbox"
-      />
-    </template>
-    <template v-if="isAutoECVisible">
-      <b>Auto EC completion:</b>
-      <input
-        v-model="autoEC"
-        type="checkbox"
-        class="o-big-checkbox"
-      >
-    </template>
-    <div
-      v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
-      class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info"
-    >
-      <span>Until</span>
+    <primary-button v-if="isInChallenge"
+                    class="o-primary-btn--exit-challenge l-challenges-tab__exit-btn"
+                    @click="exitChallenge">
+      Exit Challenge
+    </primary-button>
+    <div>
+      <div v-if="isShowAllVisible"
+           class="o-challenges-tab__header-toggle"
+           @click="toggleShowAll">
+        <input :checked="showAllChallenges" type="checkbox" class="o-big-checkbox" />
+        <b>Show all</b>
+      </div>
+      <div v-if="isAutoECVisible"
+           class="o-challenges-tab__header-toggle"
+           @click="toggleAutoEC">
+        <input :checked="autoEC" type="checkbox" class="o-big-checkbox" />
+        <b>Auto EC completion</b>
+      </div>
+    </div>
+    <div v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
+         class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info">
       <div class="l-challenges-tab__auto-ec-timers">
         <span v-if="remainingECTiers > 1">next auto EC completion: {{untilNextEC}}</span>
         <span>all auto EC completions: {{untilAllEC}}</span>

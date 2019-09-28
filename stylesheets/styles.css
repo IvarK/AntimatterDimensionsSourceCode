@@ -1374,6 +1374,7 @@ screen and (max-width: 480px) {
   font-size: 1.1rem;
   width: 16rem;
   height: 4rem;
+  margin: 0 .3rem;
 }
 
 .o-primary-btn--replicanti-unlock {
@@ -2745,18 +2746,19 @@ screen and (max-width: 480px) {
 .l-challenges-tab__header {
   margin: .5rem 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;
 }
 
-.l-challenges-tab__header > * {
-  margin-left: .3rem;
-}
-
-.l-challenges-tab__header > *:first-child {
-  margin-left: 0;
+.o-challenges-tab__header-toggle {
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 1rem 0 1rem;
 }
 
 .l-challenges-tab__exit-btn {
@@ -2765,7 +2767,6 @@ screen and (max-width: 480px) {
 }
 
 .l-challenges-tab__auto-ec-info {
-  position: absolute;
   left: 100%;
   display: flex;
   flex-direction: row;
@@ -3535,10 +3536,6 @@ screen and (max-width: 480px) {
   flex-direction: row;
 }
 
-.l-autobuyer-toggles > * {
-  margin: 0 .3rem;
-}
-
 /*#endregion l-autobuyer-toggles*/
 
 /*#region l-autobuyer-grid*/
@@ -3552,10 +3549,6 @@ screen and (max-width: 480px) {
   display: flex;
   flex-direction: row;
   justify-content: center;
-}
-
-.l-autobuyer-grid__row > * {
-  margin: .5rem .8rem;
 }
 
 /*#endregion l-autobuyer-grid*/
@@ -3746,6 +3739,7 @@ screen and (max-width: 480px) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: .5rem .8rem;
 }
 
 .l-autobuyer-box__header {

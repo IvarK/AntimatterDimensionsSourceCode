@@ -89,7 +89,7 @@ body {
 .t-metro .storebtn {
   background: #EEEEEE;
   border: 1px solid #66BB6A;
-  box-shadow: 1px 1px 1px 0px #9E9E9E;
+  box-shadow: 1px 1px 1px 0 #9E9E9E;
 }
 
 .storebtn:hover {
@@ -1016,9 +1016,9 @@ screen and (max-width: 480px) {
 }
 
 @keyframes implode {
-    0% {transform:scale(1); filter:blur(0px)}
+    0% {transform:scale(1); filter:blur(0)}
     50% {transform:scale(0); filter:blur(5px)}
-    100% {transform:scale(1); filter:blur(0px)}
+    100% {transform:scale(1); filter:blur(0)}
 }
 
 @keyframes realize {
@@ -2717,7 +2717,7 @@ screen and (max-width: 480px) {
 .t-inverted-metro .c-achievement-grid__row--completed,
 .t-s8 .c-achievement-grid__row--completed {
   background-color: #1b5e20;
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 .t-s1 .c-achievement-grid__row--completed {
@@ -5902,7 +5902,7 @@ kbd {
   justify-content: center;
 }
 .c-ra-rewards-inner {
-  margin: 0rem 1rem;
+  margin: 0 1rem;
 }
 
 .l-ra-laitela-unlock {
@@ -6428,9 +6428,9 @@ kbd {
 }
 
 @keyframes darkEnergyGlow {
-  0% { box-shadow: 0px 0px 0px rgb(53, 10, 53); }
-  50% { box-shadow: 0px 0px 5px rgb(53, 10, 53); }
-  100% { box-shadow: 0px 0px 0px rgb(53, 10, 53); }
+  0% { box-shadow: 0 0 0 rgb(53, 10, 53); }
+  50% { box-shadow: 0 0 5px rgb(53, 10, 53); }
+  100% { box-shadow: 0 0 0 rgb(53, 10, 53); }
 }
 
 .o-laitela-shop-button--dark-energy {
@@ -6486,7 +6486,7 @@ kbd {
 }
 
 @keyframes o-laitela-run-button__icon--scroll {
-  0% {background-position-y: 0rem}
+  0% {background-position-y: 0}
   100% {background-position-y: 24rem}
 }
 

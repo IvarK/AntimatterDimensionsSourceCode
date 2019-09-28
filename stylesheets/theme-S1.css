@@ -90,7 +90,7 @@ input {
 }
 
 @keyframes snow {
-  0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+  0% {background-position: 0 0, 0 0, 0 0;}
   50% {background-position: 500px 500px, 100px 200px, -100px 150px;}
   100% {background-position: 1000px 1000px, 200px 400px, -200px 300px;}
 }

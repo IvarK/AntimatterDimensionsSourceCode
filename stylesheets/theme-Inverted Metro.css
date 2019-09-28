@@ -14,7 +14,7 @@ body.t-inverted-metro {
     background: #EEEEEE;
     border: 1px solid #66BB6A;
     border-radius: 0;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
+    box-shadow: 1px 1px 1px 0 #9E9E9E;
 }
 
 .t-inverted-metro .storebtn:hover {
@@ -24,7 +24,7 @@ body.t-inverted-metro {
 .t-inverted-metro .infinitytabbtn {
     border: 1px solid #FF9800;
     background: #1F1F1F;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
+    box-shadow: 1px 1px 1px 0 #9E9E9E;
 }
 
 .t-inverted-metro .infinitytabbtn:hover {
@@ -36,7 +36,7 @@ body.t-inverted-metro {
     color: #673AB7;
     background: #000;
     border: 1px solid #673AB7;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
+    box-shadow: 1px 1px 1px 0 #9E9E9E;
 }
 
 .t-inverted-metro .eternitytabbtn:hover {
@@ -62,7 +62,7 @@ body.t-inverted-metro {
 .t-inverted-metro .c-tt-buy-button--locked {
   background: #9E9E9E;
   border: none;
-  box-shadow: 1px 1px 1px 0px #000;
+  box-shadow: 1px 1px 1px 0 #000;
 }
 
 .t-inverted-metro .c-tt-buy-button--locked:hover {

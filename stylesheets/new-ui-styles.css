@@ -142,7 +142,7 @@ body.t-dark {
 
 .t-dark .resource h2,
 .t-dark-metro .resource h2 {
-  text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.5), -1px 1px 1px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5), -1px 1px 1px rgba(0, 0, 0, 0.8);
 }
 
 .resource-information {
@@ -227,7 +227,7 @@ body.t-dark {
   width: 0;
   height: 0;
   border-bottom: 23px solid transparent;
-  border-left: 0px solid var(--color-accent-1);
+  border-left: 0 solid var(--color-accent-1);
   border-top: 23px solid transparent;
   z-index: 4;
   transition-duration: 0.15s;

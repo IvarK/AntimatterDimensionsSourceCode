@@ -72,7 +72,7 @@ body.t-s8 {
 .t-s8 .c-tt-buy-button--locked {
   background: #9E9E9E;
   border: none;
-  box-shadow: 1px 1px 1px 0px #000;
+  box-shadow: 1px 1px 1px 0 #000;
 }
 
 .t-s8 .c-tt-buy-button--locked:hover {

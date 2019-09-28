@@ -64,7 +64,7 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => shorten(value, 2, 0),
-      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 2048000 : 4000)
+      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 64000 : 4000)
     }),
   };
 }());

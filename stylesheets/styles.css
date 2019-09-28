@@ -3830,7 +3830,7 @@ screen and (max-width: 480px) {
   flex-direction: row;
 }
 
-.l-replicanti-upgrade-row > * {
+.l-replicanti-upgrade-button {
   margin: .3rem;
 }
 
@@ -4720,7 +4720,7 @@ screen and (max-width: 480px) {
   width: 47.5rem;
 }
 
-.c-modal-import__save-info > * {
+.c-modal-import__save-info > div {
   margin-top: .2rem;
 }
 
@@ -4744,7 +4744,7 @@ screen and (max-width: 480px) {
   width: 47.5rem;
 }
 
-.c-modal-import-tree__tree-info > * {
+.l-modal-import-tree__tree-info-line {
   margin-top: .2rem;
 }
 
@@ -6898,11 +6898,6 @@ kbd {
 .l-black-hole-upgrade-grid__row {
   display: flex;
   flex-direction: row;
-}
-
-.l-black-hole-upgrade-grid__row > * {
-  margin: 1.2rem;
-  flex: 1 1 0;
 }
 
 .c-black-hole-canvas {

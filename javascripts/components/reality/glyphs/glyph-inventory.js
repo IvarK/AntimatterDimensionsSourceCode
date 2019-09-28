@@ -45,6 +45,9 @@ Vue.component("glyph-inventory", {
     sort() {
       Glyphs.sort();
     },
+    autoClean() {
+      Glyphs.autoClean();
+    },
     slotClass(index) {
       return index < Glyphs.protectedSlots ? "c-glyph-inventory__protected-slot" : "c-glyph-inventory__slot";
     }
@@ -66,11 +69,18 @@ Vue.component("glyph-inventory", {
                          @clicked="clickGlyph(col, $event)"/>
       </div>
     </div>
-    <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-            ach-tooltip="Sort by type and level * rarity"
-            @click="sort">
-      Sort
-    </button>
+    <div>
+      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+              ach-tooltip="Sort by type and level * rarity"
+              @click="sort">
+        Sort
+      </button>
+      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+             ach-tooltip="Sacrifice glyphs that are worse in every way than enough other glyphs"
+             @click="autoClean">
+       Auto clean
+      </button>
+    </div>
   </div>
   `,
 });

@@ -574,6 +574,40 @@ const Glyphs = {
       outIndex += t.padding;
     }
   },
+  // If there are enough glyphs that are better than the specified glyph, in every way, then
+  // the glyph is objectively a useless piece of garbage.
+  isObjectivelyUseless(glyph) {
+    function hasSomeBetterEffects(glyphA, glyphB, comparedEffects) {
+      for (const effect of comparedEffects) {
+        const c = effect.compareValues(
+          effect.effect(glyphA.level, glyphA.strength),
+          effect.effect(glyphB.level, glyphB.strength));
+        // If the glyph in question is better in even one effect, it passes this comparison
+        if (c > 0) return true;
+      }
+      return false;
+    }
+    const toCompare = this.inventory.concat(this.active)
+      .filter(g => g !== null &&
+        g.type === glyph.type &&
+        g.id !== glyph.id &&
+        (g.level >= glyph.level || g.strength >= glyph.strength) &&
+        // eslint-disable-next-line no-bitwise
+        ((g.effects & glyph.effects) === glyph.effects));
+    const compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
+    if (toCompare.length < compareThreshold) return false;
+    const comparedEffects = glyphEffectsFromBitmask(glyph.effects);
+    const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
+    return betterCount >= compareThreshold;
+  },
+  autoClean() {
+    // We look in backwards order so that later glyphs get cleaned up first
+    for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
+      const glyph = this.inventory[inventoryIndex];
+      if (glyph === null) continue;
+      if (this.isObjectivelyUseless(glyph)) sacrificeGlyph(glyph, true);
+    }
+  },
   get levelCap() {
     return 10000 + AlchemyResource.boundless.effectValue;
   },

@@ -317,3 +317,78 @@ dev.unlockCelestialQuotes = function(celestial) {
     quotes.show(q);
   }
 };
+
+dev.testGlyphs = function() {
+  const glyphLevel = 6500;
+  let glyphId = Date.now();
+  const save = GameSaveSerializer.serialize(player);
+  const makeGlyph = (type, effects) => ({
+    type,
+    level: glyphLevel,
+    strength: 3.5,
+    rawLevel: glyphLevel,
+    idx: null,
+    id: glyphId++,
+    effects: makeGlyphEffectBitmask(effects),
+  });
+  const makeAllEffectGlyph = type => makeGlyph(type, GlyphTypes[type].effects.map(e => e.id));
+  const effarigGlyphs = [
+    makeGlyph("effarig", ["effarigantimatter", "effarigdimensions", "effarigforgotten", "effarigblackhole"]),
+    makeGlyph("effarig", ["effarigantimatter", "effarigdimensions", "effarigforgotten", "effarigachievement"]),
+  ];
+  function makeCombinationsWithRepeats(count, elements) {
+    if (elements.length === 0) return [];
+    if (count === 0) return [[]];
+    const withoutFirst = makeCombinationsWithRepeats(count, elements.slice(1));
+    const withFirst = makeCombinationsWithRepeats(count - 1, elements);
+    withFirst.forEach(e => e.push(elements[0]));
+    return withFirst.concat(withoutFirst);
+  }
+  const sets5 = makeCombinationsWithRepeats(5, GLYPH_TYPES.slice(0, 5))
+    .map(s => s.map(t => makeAllEffectGlyph(t)));
+  const sets4 = makeCombinationsWithRepeats(4, GLYPH_TYPES.slice(0, 5))
+    .map(s => s.map(t => makeAllEffectGlyph(t)));
+  const effarigSets = effarigGlyphs.map(g => sets4.map(s => [g].concat(s)));
+  const glyphSets = sets5.concat(...effarigSets);
+  function equipSet(index) {
+    player.reality.glyphs.active = glyphSets[index].map((g, idx) => {
+      g.idx = idx;
+      return g;
+    });
+    Glyphs.active = Array.from(player.reality.glyphs.active);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+  }
+  function glyphToShortString(glyph) {
+    if (glyph.type === "effarig") {
+      return effarigGlyphs.findIndex(e => e.id === glyph.id).toString();
+    }
+    return GLYPH_SYMBOLS[glyph.type];
+  }
+  function padString(s, length, before = false) {
+    if (s.length >= length) return s;
+    return before ? (" ").repeat(length - s.length) + s : s + (" ").repeat(length - s.length);
+  }
+  function finishTrial(index) {
+    const done = padString(`${Math.floor(100 * (index + 1) / glyphSets.length)}%`, 4, true);
+    const rm = padString(gainedRealityMachines().toPrecision(2), 9);
+    const gl = padString(gainedGlyphLevel().actualLevel, 4);
+    const ep = padString(player.eternityPoints.exponent.toString(), 6);
+    const ip = padString(player.infinityPoints.exponent.toString(), 8);
+    const am = padString(player.antimatter.exponent.toString(), 12);
+    const dimboosts = DimBoost.purchasedBoosts;
+    const galaxies = Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies;
+    const glyphData = glyphSets[index].map(glyphToShortString).sum();
+    console.log(`${done} ${glyphData} rm=${rm} gl=${gl} ep=${ep} ip=${ip} am=${am} ` +
+      `dimboosts=${dimboosts} galaxies=${galaxies}`);
+    GameStorage.import(save, Date.now());
+    if (index < glyphSets.length - 1) {
+      setTimeout(runTrial, 100, index + 1);
+    }
+  }
+  function runTrial(index) {
+    equipSet(index);
+    AutomatorBackend.start();
+    setTimeout(finishTrial, 4000, index);
+  }
+  runTrial(0);
+}

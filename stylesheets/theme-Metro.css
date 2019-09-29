@@ -2,29 +2,6 @@
     border: 1px solid #A9A9A9;
 }
 
-.t-metro .infinitytabbtn {
-    border: 1px solid #FF9800;
-    background: #1F1F1F;
-    box-shadow: 1px 1px 1px 0 #9E9E9E;
-}
-
-.t-metro .infinitytabbtn:hover {
-    background: #FF9800;
-    border: 1px solid #FF9800;
-}
-
-.t-metro .eternitytabbtn {
-    color: #673AB7;
-    background: #000;
-    border: 1px solid #673AB7;
-    box-shadow: 1px 1px 1px 0 #9E9E9E;
-}
-
-.t-metro .eternitytabbtn:hover {
-    background: #FFF;
-    border: 1px solid #673AB7;
-}
-
 .t-metro .c-rm-amount {
   color: #0b600e;
 }
@@ -48,17 +25,6 @@
 
 .t-metro .c-tt-buy-button--locked:hover {
   background: #EF5350;
-}
-
-.t-metro .realitytabbtn {
-    background: white !important;
-    border: 1px solid #0b600e !important;
-}
-
-.t-metro .realitytabbtn:hover {
-    background-color: #0b600e !important;
-    border: 1px solid #0b600e !important;
-    color: white;
 }
 
 @keyframes metroStudyGlowIn {

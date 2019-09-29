@@ -86,8 +86,8 @@ Vue.component("new-galaxy-row", {
     <span>Requires: {{shortenSmallInteger(requirement.amount)}} {{dimName}} D</span>
     <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
     <button 
-      class="storebtn" style="height: 56px; font-size: 1rem;"
-      :class="{ 'storebtn-unavailable': !canBeBought }"
+      class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
+      :class="{ 'o-primary-btn--disabled': !canBeBought }"
       onclick="galaxyResetBtnClick()"
       :enabled="canBeBought"
     >{{buttonText}}</button>

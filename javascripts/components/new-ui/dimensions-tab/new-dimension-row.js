@@ -73,7 +73,7 @@ Vue.component("new-dimension-row", {
   `<div v-show="isUnlocked" class="dimension-row">
     <h3>{{name}} D<span class="mult">x{{ shortenMultiplier(multiplier) }}</span></h3>
     <span>{{amountDisplay}}</span>
-    <button class="storebtn" @click="buy" :class="{ 'storebtn-unavailable': !isAffordable }">
+    <button class="o-primary-btn o-primary-btn--new" @click="buy" :class="{ 'o-primary-btn--disabled': !isAffordable }">
       <div 
         class="button-content"
         :enabled="isAffordable"

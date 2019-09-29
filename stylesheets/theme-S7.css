@@ -7,11 +7,7 @@
     animation: none !important;
 }
 
-#container {
-    filter: saturate(0) !important;
-}
-
-#notification-container {
+#ui {
     filter: saturate(0) !important;
 }
 

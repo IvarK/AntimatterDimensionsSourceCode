@@ -72,7 +72,7 @@ Vue.component("new-time-dimension-row", {
       />
       <primary-button
         :enabled="isAffordable"
-        class="o-primary-btn--buy-td c-time-dim-row__button storebtn"
+        class="o-primary-btn--buy-td c-time-dim-row__button o-primary-btn o-primary-btn--new"
         @click="buyTimeDimension"
       >{{buttonContents}}</primary-button>
     </div>`,

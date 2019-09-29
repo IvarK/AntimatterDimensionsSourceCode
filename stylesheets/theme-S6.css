@@ -24,21 +24,6 @@ body.t-s6 {
     background-position: center;
 }
 
-/*
-strong {
-    color: #E0E0E0;
-}
-*/
-.t-s6 .storebtn {
-    color: #FFF;
-    background-color: black;
-    box-shadow: 0 0 7px 2px #111111;
-}
-
-.t-s6 .storebtn:hover {
-    background: #1B5E20;
-}
-
 .t-s6 input {
     color: white;
     background-color: black;
@@ -47,21 +32,6 @@ strong {
 
 .t-s6 .container {
     color: #999;
-}
-
-.t-s6 .storebtn:hover {
-    color: #FFF;
-}
-
-.t-s6 .eternitytabbtn {
-    color: #b341e0;
-    background: black;
-    border: 2px solid #b341e0;
-}
-
-.t-s6 .eternitytabbtn:hover {
-    color: #511568;
-    background: white;
 }
 
 .t-s6 .c-tt-amount {

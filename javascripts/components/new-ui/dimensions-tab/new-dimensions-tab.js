@@ -108,20 +108,20 @@ Vue.component("new-dimensions-tab", {
       <br><span v-if="isChallengePowerVisible">{{challengePower}}</span>
     </div>
     <div class="modes-container">
-      <button class="storebtn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">
+      <button class="o-primary-btn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">
         {{ getUntil10Display() }}
       </button>
       <primary-button
           v-show="isSacrificeUnlocked"
           v-tooltip="sacrificeTooltip"
           :enabled="isSacrificeAffordable"
-          class="storebtn sacrifice-btn"
+          class="o-primary-btn sacrifice-btn"
           @click="sacrifice"
         >
         <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
         <span v-else>Sacrifice Disabled ({{ disabledCondition }})</span>
       </primary-button>
-      <button class="storebtn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">Max All (M)</button>
+      <button class="o-primary-btn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">Max All (M)</button>
     </div>
     <span v-if="isSacrificeUnlocked">Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
     <new-tickspeed-row></new-tickspeed-row>

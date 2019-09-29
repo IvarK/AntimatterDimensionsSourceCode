@@ -3,7 +3,7 @@
 Vue.component("old-ui", {
   components: {
     "big-crunch-button": {
-      template: `<button class="tabbtn o-big-crunch-btn" onclick="bigCrunchResetRequest()">Big Crunch</button>`
+      template: `<button class="o-tab-btn o-big-crunch-btn" onclick="bigCrunchResetRequest()">Big Crunch</button>`
     }
   },
   data() {

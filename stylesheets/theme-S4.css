@@ -25,16 +25,6 @@ body {
     border: 1px solid white !important;
 }
 
-.storebtn {
-    background-color: #ff00e0 !important;
-    cursor: url(cursor2.cur),  auto !important;
-}
-
-.tabbtn, .secondarytabbtn {
-    background-color: #1b00ff !important;
-    cursor: url(cursor2.cur), auto !important;
-}
-
 .o-achievement {
     border-radius: .8rem !important;
 }

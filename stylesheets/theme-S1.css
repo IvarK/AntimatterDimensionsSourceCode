@@ -13,41 +13,8 @@ body {
     background: none !important;
 }
 
-.tabbtn {
-    color: black !important;
-    background: #dbd242 !important;
-    border-color: black !important;
-}
-
-.tabbtn:hover {
-    color: #dbd242 !important;
-    background: black !important;
-}
-
-.storebtn {
-    background: #dbd242 !important;
-    border-color: black !important;
-}
-
-.storebtn:hover {
-    background-color: #4baf4e !important;
-    border-color: black !important;
-}
-
 #container.container {
     color: black !important;
-}
-
-.eternitytabbtn {
-    color: #639565 !important;
-    background: black !important;
-    border-color: #639565 !important;
-}
-
-.eternitytabbtn:hover {
-    color: black !important;
-    background: #639565 !important;
-    border-color: black !important;
 }
 
 input {

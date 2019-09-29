@@ -12,53 +12,6 @@ body.t-dark-metro {
     border: 1px solid black;
 }
 
-.t-dark-metro .storebtn {
-    background: #455A64;
-    border: 1px solid #43A047;
-    box-shadow: 1px 1px 1px 0 black;
-}
-
-.t-dark-metro .storebtn:hover {
-    background: #43A047;
-}
-
-.t-dark-metro .infinitytabbtn {
-    color: black;
-    background: white;
-    border: 1px solid #FF9800;
-    box-shadow: 1px 1px 1px 0 black;
-}
-
-.t-dark-metro .infinitytabbtn:hover {
-    background: #FF9800;
-    border-color: #FF9800;
-}
-
-.t-dark-metro .eternitytabbtn {
-    color: #673AB7;
-    background: black;
-    border: 1px solid #673AB7;
-    box-shadow: 1px 1px 1px 0 black;
-}
-
-.t-dark-metro .eternitytabbtn:hover {
-    background: white;
-    border-color: #673AB7;
-    box-shadow: 1px 1px 1px 0 black;
-}
-
-.t-dark-metro .celestialtabbtn {
-    background-color: #00bcd4;
-    border-color: #00838f;
-    color: white;
-}
-      
-.t-dark-metro .celestialtabbtn:hover {
-    background-color: white;
-    color: #00bcd4;
-    border-color: #00838f;
-}
-
 .t-dark-metro .c-tt-buy-button--unlocked {
     background: #212121;
     color: #00BCD4;
@@ -78,18 +31,6 @@ body.t-dark-metro {
 
 .t-dark-metro .c-tt-buy-button--locked:hover {
     background: #E53935;
-}
-
-.t-dark-metro .realitytabbtn {
-    background-color: white;
-    border: 1px solid #0b600e;
-    color: #0b600e;
-}
-
-.t-dark-metro .realitytabbtn:hover {
-    color: white;
-    background-color: #0b600e;
-    border-color: #0b600e;
 }
 
 .t-dark-metro .c-rm-amount__desc {

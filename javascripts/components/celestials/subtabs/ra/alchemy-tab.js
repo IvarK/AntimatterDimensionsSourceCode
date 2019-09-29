@@ -204,7 +204,7 @@ Vue.component("alchemy-tab", {
   },
   template:
     `<div class="l-ra-alchemy-tab">
-      <div @click="showAlchemyHowTo()" class="o-btn">Click for alchemy info</div>
+      <div @click="showAlchemyHowTo()" class="o-primary-btn">Click for alchemy info</div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
       <div>
         <input type="checkbox"

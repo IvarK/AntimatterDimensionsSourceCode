@@ -93,7 +93,7 @@ Vue.component("new-inf-dimension-row", {
       <primary-button
         v-tooltip="capTooltip"
         :enabled="isAvailableForPuchase"
-        class="o-primary-btn--buy-id c-infinity-dim-row__button storebtn"
+        class="o-primary-btn--buy-id c-infinity-dim-row__button o-primary-btn o-primary-btn--new"
         @click="buyManyInfinityDimension"
       >{{costDisplay}}</primary-button>
     </div>`,

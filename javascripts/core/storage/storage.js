@@ -50,7 +50,7 @@ const GameStorage = {
     GameUI.notify.info("Game loaded");
   },
 
-  import(saveData) {
+  import(saveData, overrideLastUpdate = undefined) {
     if (tryImportSecret(saveData) || Theme.tryUnlock(saveData)) {
       return;
     }
@@ -59,7 +59,7 @@ const GameStorage = {
       Modal.message.show("Could not load the save");
       return;
     }
-    this.loadPlayerObject(player);
+    this.loadPlayerObject(player, overrideLastUpdate);
     this.save(true);
     GameUI.notify.info("Game imported");
   },
@@ -99,7 +99,7 @@ const GameStorage = {
     Tab.dimensions.normal.show();
   },
 
-  loadPlayerObject(playerObject) {
+  loadPlayerObject(playerObject, overrideLastUpdate = undefined) {
     this.saved = 0;
 
     if (
@@ -139,6 +139,9 @@ const GameStorage = {
     AutomatorBackend.initializeFromSave();
     Lazy.invalidateAll();
 
+    if (overrideLastUpdate) {
+      player.lastUpdate = overrideLastUpdate;
+    }
     let diff = Date.now() - player.lastUpdate;
     if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
       diff = Enslaved.autoStoreRealTime(diff);

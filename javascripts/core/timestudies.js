@@ -197,6 +197,7 @@ function buyTimeStudyListUntilID(list, maxId) {
   }
 }
 
+// eslint-disable-next-line complexity
 function studiesUntil(id) {
   const row = Math.floor(id / 10);
   const col = id % 10;
@@ -238,16 +239,24 @@ function studiesUntil(id) {
   if (id <= 143) {
     buyTimeStudyListUntilID(NormalTimeStudies.paths[requestedPath], id);
   }
-  // If V rewards are available, brute force purchase studies:
-  if (V.canBuyLockedPath()) {
+  // If we've maxed out V rewards, we can brute force buy studies. Otherwise,
+  // we don't assume we know which locked studies the player wants, if any.
+  if (V.totalAdditionalStudies >= 12) {
     buyTimeStudyRange(121, Math.min(lastInPrevRow, 214));
   }
   const pacePaths = getSelectedPacePaths();
   // If we don't have a middle path chosen at this point, we either can't decide
   // or can't afford any more studies
   if (pacePaths.length === 0) return;
-  // Buy as much of the rest of the selected middle path as we need
-  buyTimeStudyListUntilID(NormalTimeStudies.paths[pacePaths[0]], id);
+  // If we have V, and have started on more than one pace path, but haven't finished
+  // it, we don't know how to proceed. If only one path is selected, we'll assume that
+  // it's the path the player wants
+  if (pacePaths.length > 1) {
+    if (!TimeStudy(141).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought) return;
+  } else {
+    // Buy as much of the rest of the selected middle path as we need
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[pacePaths[0]], id);
+  }
   buyTimeStudyRange(151, Math.min(lastInPrevRow, 214));
   // If the user clicked on a study in rows 19-22, we've tried to buy up to the previous
   // row. Try to buy that study now:
@@ -256,7 +265,8 @@ function studiesUntil(id) {
   // If the user clicked on a study in row 23, then either a) the above purchase call bought it (in
   // which case, they must have had one of the prerequisites) or b) it didn't, but the user has V
   // rewards so will be able to buy both prerequisites or c) they can't buy it
-  if (V.canBuyLockedPath()) {
+  // We only buy both if the player has maxed out V.
+  if (V.totalAdditionalStudies >= 12) {
     TimeStudy(220 + col * 2 - 1).purchase();
     TimeStudy(220 + col * 2).purchase();
     // Try to buy the rest of the row 22 studies

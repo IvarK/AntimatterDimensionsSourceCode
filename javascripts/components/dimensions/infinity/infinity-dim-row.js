@@ -76,22 +76,22 @@ Vue.component("infinity-dim-row", {
   },
   template:
     `<div v-show="isUnlocked" class="c-infinity-dim-row">
-      <div
-        class="c-infinity-dim-row__label c-infinity-dim-row__name"
-      >{{name}} Infinity Dimension x{{shortenMoney(multiplier)}}</div>
-      <div
-        class="c-infinity-dim-row__label c-infinity-dim-row__label--growable"
-      >{{shortenDimensions(amount)}} {{rateOfChangeDisplay}}</div>
+      <div class="c-infinity-dim-row__label c-infinity-dim-row__name">
+        {{name}} Infinity Dimension x{{shortenMoney(multiplier)}}
+      </div>
+      <div class="c-infinity-dim-row__label c-infinity-dim-row__label--growable">
+        {{shortenDimensions(amount)}} {{rateOfChangeDisplay}}
+      </div>
       <primary-button-on-off
         v-if="isAutobuyerUnlocked && !isEC8Running"
         v-model="isAutobuyerOn"
-        class="o-primary-btn--id-autobuyer c-infinity-dim-row__button"
+        class="o-primary-btn--id-autobuyer l-infinity-dim-row__button"
         text="Auto:"
       />
       <primary-button
         v-tooltip="capTooltip"
         :enabled="isAvailableForPuchase"
-        class="o-primary-btn--buy-id c-infinity-dim-row__button"
+        class="o-primary-btn--buy-id l-infinity-dim-row__button"
         @click="buyManyInfinityDimension"
       >{{costDisplay}}</primary-button>
     </div>`,

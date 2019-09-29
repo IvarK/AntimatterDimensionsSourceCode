@@ -442,6 +442,7 @@ body {
     -moz-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     /* Required to make elements draggable in old WebKit */
     -khtml-user-drag: element;
@@ -950,6 +951,7 @@ screen and (max-width: 480px) {
 .o-primary-btn--sacrifice {
   font-size: 1.2rem;
   width: 32rem;
+  margin-right: 0.8rem;
 }
 
 .o-primary-btn--buy-nd {
@@ -1721,11 +1723,6 @@ screen and (max-width: 480px) {
   align-items: center
 }
 
-.l-normal-dim-tab__header > * {
-  margin-right: .4rem;
-  margin-left: .4rem;
-}
-
 /*#endregion l-normal-dim-tab-header*/
 
 .l-normal-dim-row-container {
@@ -1745,14 +1742,6 @@ screen and (max-width: 480px) {
   margin-top: 1rem;
 }
 
-.c-normal-dim-row > * {
-  margin-left: 1.6rem;
-}
-
-.c-normal-dim-row > *:first-child {
-  margin-left: 0;
-}
-
 .c-normal-dim-row__label {
   text-align: left;
 }
@@ -1767,6 +1756,7 @@ screen and (max-width: 480px) {
 
 .c-normal-dim-row__buy-button {
   flex-shrink: 0;
+  margin-left: 1.6rem;
 }
 
 .c-normal-dim-row__buy-button--right-offset {
@@ -1915,14 +1905,6 @@ screen and (max-width: 480px) {
   font-size: 1.6rem;
 }
 
-.c-infinity-dim-row > * {
-  margin-left: 1.6rem;
-}
-
-.c-infinity-dim-row > *:first-child {
-  margin-left: 0;
-}
-
 .c-infinity-dim-row__label {
   text-align: left;
 }
@@ -1935,8 +1917,9 @@ screen and (max-width: 480px) {
   width: 41%;
 }
 
-.c-infinity-dim-row__button {
+.l-infinity-dim-row__button {
   flex-shrink: 0;
+  margin-left: 1.6rem;
 }
 
 /*#endregion c-infinity-dim-row*/
@@ -2004,14 +1987,6 @@ screen and (max-width: 480px) {
   font-size: 1.6rem;
 }
 
-.c-time-dim-row > * {
-  margin-left: 1.6rem;
-}
-
-.c-time-dim-row > *:first-child {
-  margin-left: 0;
-}
-
 .c-time-dim-row__label {
   text-align: left;
 }
@@ -2024,8 +1999,9 @@ screen and (max-width: 480px) {
   width: 43%;
 }
 
-.c-time-dim-row__button {
+.l-time-dim-row__button {
   flex-shrink: 0;
+  margin-left: 1.6rem;
 }
 
 /*#endregion c-time-dim-row*/
@@ -6674,6 +6650,7 @@ kbd {
   padding: .5rem;
   tab-size: 1.5em;
   -moz-tab-size: 1.5em;
+  -o-tab-size: 1.5em;
 }
 
 .o-automator-block-input {

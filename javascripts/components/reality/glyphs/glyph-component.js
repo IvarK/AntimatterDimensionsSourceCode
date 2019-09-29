@@ -89,6 +89,10 @@ const GlyphTooltipComponent = {
       type: Number,
       default: 0,
     },
+    showDeletionText: {
+      type: Boolean,
+      default: true,
+    },
     levelOverride: {
       type: Number,
       default: 0,
@@ -151,9 +155,6 @@ const GlyphTooltipComponent = {
       return this.onTouchDevice
         ? `Sacrifice for ${powerText}`
         : `Can be sacrificed for ${powerText}`;
-    },
-    showDeletionText() {
-      return (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY) || this.sacrificeReward > 0;
     },
     eventHandlers() {
       return GameUI.touchDevice ? {
@@ -351,13 +352,9 @@ Vue.component("glyph-component", {
     },
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      if (this.showSacrifice) {
-        this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
-          ? glyphRefinementGain(this.glyph)
-          : glyphSacrificeGain(this.glyph);
-      } else {
-        this.sacrificeReward = 0;
-      }
+      this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
+        ? glyphRefinementGain(this.glyph)
+        : glyphSacrificeGain(this.glyph);
       // eslint-disable-next-line no-nested-ternary
       this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph.level);
     },
@@ -468,6 +465,7 @@ Vue.component("glyph-component", {
                        ref="tooltip"
                        v-bind="glyph"
                        :sacrificeReward="sacrificeReward"
+                       :showDeletionText="showSacrifice"
                        :levelOverride="levelOverride"
                        :visible="isCurrentTooltip"/>
       </div>

@@ -9,10 +9,12 @@ Vue.component("teresa-tab", {
       rm: new Decimal(0),
       percentage: "",
       rmMult: 0,
-      unlocks: [],
       bestAM: new Decimal(0),
       runReward: 0,
       pp: 0,
+      hasReality: false,
+      hasEPGen: false,
+      hasPerkShop: false,
     };
   },
   computed: {
@@ -38,7 +40,9 @@ Vue.component("teresa-tab", {
       this.rmStore = player.celestials.teresa.rmStore;
       this.percentage = formatPercents(Teresa.fill, 2);
       this.rmMult = Teresa.rmMultiplier;
-      this.unlocks = Object.values(TERESA_UNLOCKS).map(info => Teresa.has(info)).filter(x => x);
+      this.hasReality = Teresa.has(TERESA_UNLOCKS.RUN);
+      this.hasEPGen = Teresa.has(TERESA_UNLOCKS.EPGEN);
+      this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.runReward = Teresa.runRewardMultiplier;
       this.pp = player.reality.pp;
@@ -61,17 +65,17 @@ Vue.component("teresa-tab", {
       <div>You have {{shorten(rm, 2, 2)}} {{"Reality Machine" | pluralize(rm)}}.</div>
       <div class="l-mechanics-container">
         <div class="l-teresa-unlocks l-teresa-mechanic-container">
-          <div class="c-teresa-unlock c-teresa-run-button" v-if="unlocks[0]" @click="startRun()">
+          <div class="c-teresa-unlock c-teresa-run-button" v-if="hasReality" @click="startRun()">
             Start Teresa's Reality. Glyph TT generation is disabled and
             you gain less IP and EP (x^{{shorten(0.55, 2, 2)}}).
             <br><br>
             Highest antimatter in Teresa's Reality: {{ shorten(bestAM, 2, 0) }}
           </div>
-          <div class="c-teresa-unlock" v-if="unlocks[0]">
+          <div class="c-teresa-unlock" v-if="hasReality">
             Teresa Reality reward: Glyph sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
-          <div class="c-teresa-unlock" v-if="unlocks[1]">You gain 1% of your peaked EP/min every second.</div>
-          <div class="c-teresa-shop" v-if="unlocks[3]">
+          <div class="c-teresa-unlock" v-if="hasEPGen">You gain 1% of your peaked EP/min every second.</div>
+          <div class="c-teresa-shop" v-if="hasPerkShop">
             <span class="o-teresa-pp"> You have {{ shorten(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}}.</span>
             <perk-shop-upgrade
               v-for="upgrade in upgrades"

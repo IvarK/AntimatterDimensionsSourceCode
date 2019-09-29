@@ -149,7 +149,7 @@ GameDatabase.tabs = [
   {
     key: "infinity",
     name: "Infinity",
-    oldUIClass: "infinitytabbtn",
+    oldUIClass: "o-tab-btn--infinity",
     newUIClass: "infinity",
     condition: () =>
       PlayerProgress.realityUnlocked() ||
@@ -186,7 +186,7 @@ GameDatabase.tabs = [
   {
     key: "eternity",
     name: "Eternity",
-    oldUIClass: "eternitytabbtn",
+    oldUIClass: "o-tab-btn--eternity",
     newUIClass: "eternity",
     condition: () =>
       PlayerProgress.realityUnlocked() ||
@@ -230,7 +230,7 @@ GameDatabase.tabs = [
     key: "reality",
     name: "Reality",
     before: "reality-machines-header",
-    oldUIClass: "realitytabbtn",
+    oldUIClass: "o-tab-btn--reality",
     newUIClass: "reality",
     condition: () => PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
     subtabs: [
@@ -276,7 +276,7 @@ GameDatabase.tabs = [
   {
     key: "celestials",
     name: "Celestials",
-    oldUIClass: "celestialtabbtn",
+    oldUIClass: "o-tab-btn--celestial",
     newUIClass: "celestials",
     condition: () => RealityUpgrades.allBought,
     subtabs: [

@@ -115,11 +115,16 @@ const GlyphTooltipComponent = {
         color: this.rarityInfo.color,
         "text-shadow": `-1px 1px 1px black, 1px 1px 1px black,
                         -1px -1px 1px black, 1px -1px 1px black, 0 0 3px ${this.rarityInfo.color}`,
-        float: "left"
+        float: "left",
+        animation: this.type === "reality" ? "c-reality-glyph-description-cycle 10s infinite" : undefined,
+        "margin-top": this.type === "reality" ? "0.7rem" : undefined,
+        "margin-left": this.type === "reality" ? "0.7rem" : undefined
       };
     },
     description() {
-      return `${this.rarityInfo.name} glyph of ${this.type} (${this.roundedRarity.toFixed(1)}%)`;
+      const name = this.type === "reality" ? "Pure" : this.rarityInfo.name;
+      const rarity = this.type === "reality" ? "" : `(${this.roundedRarity.toFixed(1)}%)`;
+      return `${name} glyph of ${this.type} ${rarity}`;
     },
     isLevelCapped() {
       return this.levelOverride && this.levelOverride < this.level;
@@ -287,6 +292,7 @@ Vue.component("glyph-component", {
         "background-color": "rgba(0, 0, 0, 0)",
         "box-shadow": `0 0 ${this.glowBlur} calc(${this.glowSpread} + 0.1rem) ${this.borderColor} inset`,
         "border-radius": this.circular ? "50%" : "0",
+        animation: this.isRealityGlyph ? "c-reality-glyph-over-cycle 10s infinite" : undefined,
       };
     },
     outerStyle() {
@@ -300,8 +306,7 @@ Vue.component("glyph-component", {
       };
     },
     innerStyle() {
-      const rarityColor = this.glyph.color ||
-        GlyphRarities.find(e => this.glyph.strength >= e.minStrength).color;
+      const rarityColor = this.glyph.color || getRarity(this.glyph.strength).color;
       return {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
@@ -309,7 +314,7 @@ Vue.component("glyph-component", {
         color: rarityColor,
         "text-shadow": `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
-        animation: this.isRealityGlyph ? "c-reality-glyph-inner-cycle 10s infinite" : undefined,
+        animation: this.isRealityGlyph ? "c-reality-glyph-icon-cycle 10s infinite" : undefined,
       };
     },
     mouseEventHandlers() {

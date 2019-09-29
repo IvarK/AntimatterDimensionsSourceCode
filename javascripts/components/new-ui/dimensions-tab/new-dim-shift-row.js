@@ -54,8 +54,8 @@ Vue.component("new-dim-shift-row", {
     <h4>Dimensional {{name}} ({{boostCountText}})</h4>
     <span>Requires: {{shortenSmallInteger(requirement.amount)}} {{dimName}} D</span>
     <button 
-      class="storebtn" style="height: 56px;"
-      :class="{ 'storebtn-unavailable': !isBuyable }"
+      class="o-primary-btn o-primary-btn--new" style="height: 56px;"
+      :class="{ 'o-primary-btn--disabled': !isBuyable }"
       :enabled="isBuyable"
       @click="softReset"
       >{{buttonText}}</button>

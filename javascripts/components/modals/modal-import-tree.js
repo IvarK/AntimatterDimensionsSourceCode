@@ -110,23 +110,25 @@ Vue.component("modal-import-tree", {
       <div class="c-modal-import-tree__tree-info">
         <div v-if="inputIsSecret">???</div>
         <template v-else-if="inputIsValidTree">
-          <div>
+          <div class="l-modal-import-tree__tree-info-line">
             Total tree cost: 
             {{ formatCost(tree.totalCost) }} {{ "Time Theorem" | pluralize(tree.totalCost, "Time Theorems") }}
           </div>
-          <div>
+          <div class="l-modal-import-tree__tree-info-line">
             Cost of missing studies: 
             {{ formatCost(tree.currentCost) }} {{ "Time Theorem" | pluralize(tree.currentCost, "Time Theorems") }}
           </div>
-          <div v-if="tree.hasFirstSplit">
+          <div v-if="tree.hasFirstSplit" class="l-modal-import-tree__tree-info-line">
             {{ "First split path:" | pluralize(tree.firstSplitPaths.size, "First split paths:") }} 
             {{ formatPaths(tree.firstSplitPaths) }}
           </div>
-          <div v-if="tree.hasSecondSplit">
+          <div v-if="tree.hasSecondSplit" class="l-modal-import-tree__tree-info-line">
             {{ "Second split path:" | pluralize(tree.secondSplitPaths.size, "Second split paths:") }} 
             {{ formatPaths(tree.secondSplitPaths) }}
             </div>
-          <div v-if="tree.hasEternityChallenge">Eternity challenge: {{ tree.eternityChallenge.id }}</div>
+          <div v-if="tree.hasEternityChallenge" class="l-modal-import-tree__tree-info-line">
+            Eternity challenge: {{ tree.eternityChallenge.id }}
+          </div>
         </template>
         <div v-else-if="hasInput">Not a valid tree</div>
       </div>

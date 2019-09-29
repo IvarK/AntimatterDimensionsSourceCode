@@ -3,23 +3,6 @@ body.t-dark {
     background-position: center;
 }
 
-.t-dark .popup {
-    background-color: #455A64;
-    box-shadow: 0 0 15px 0 black;
-}
-
-.t-dark .storebtn {
-    color: #E0E0E0;
-    background-color: #455A64;
-    border: 1px solid black;
-    box-shadow: 0 0 7px 2px #111111;
-}
-
-.t-dark .storebtn:hover {
-  color: #FFF;
-  background: #1B5E20;
-}
-
 input.t-dark {
     background-color: #455A64;
     border: 1px solid black;
@@ -29,49 +12,9 @@ input.t-dark {
     color: #888888;
 }
 
-.t-dark .secondarytabbtn {
-  color: #E0E0E0;
-  border: 2px solid #1565C0;
-  background-color: #455A64;
-}
-
-.t-dark .secondarytabbtn:hover {
-    background: #1565C0;
-    color: black;
-}
-
-.t-dark .infinitytabbtn {
-    color: #000;
-    background: #F5F5F5;
-    border: 2px solid #FF9800;
-}
-
-.t-dark .infinitytabbtn:hover {
-    background: #FF9800;
-}
-
 .t-dark .c-rm-amount {
     color: #0b600e;
     text-shadow: 0 0 7px #0b600e;
-}
-
-.t-dark .unavailablebtn {
-    background: #37474F;
-}
-
-.t-dark .unavailablebtn:hover {
-    background: #B84B5F;
-}
-
-.t-dark .eternitytabbtn {
-    color: #b341e0;
-    background: black;
-    border: 2px solid #b341e0;
-}
-
-.t-dark .eternitytabbtn:hover {
-    color: #511568;
-    background: white;
 }
 
 .t-dark .c-tt-amount {
@@ -98,26 +41,6 @@ input.t-dark {
 .t-dark .c-tt-buy-button--locked:hover {
   background: #B84B5F;
   border: 1px solid #B84B5F;
-}
-
-.t-dark .greedbtn {
-    background-color: #f2d729;
-    color: black;
-}
-
-.t-dark .greedbtn:hover {
-    background-color: #9E913A;
-}
-
-.t-dark .realitytabbtn {
-  color: #0b600e;
-  background-color: white;
-  border: 2px solid #0b600e;
-}
-
-.t-dark .realitytabbtn:hover {
-    background-color: #0b600e;
-    color: white;
 }
 
 .t-dark .c-rm-amount__desc {

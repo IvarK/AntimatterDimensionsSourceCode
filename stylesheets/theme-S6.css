@@ -24,28 +24,6 @@ body.t-s6 {
     background-position: center;
 }
 
-.t-s6 .popup {
-    color: #E0E0E0;
-    background-color: black!important;
-    border: 1px solid #1B5E20;
-    box-shadow: 0 0 15px 0 black;
-}
-
-/*
-strong {
-    color: #E0E0E0;
-}
-*/
-.t-s6 .storebtn {
-    color: #FFF;
-    background-color: black;
-    box-shadow: 0 0 7px 2px #111111;
-}
-
-.t-s6 .storebtn:hover {
-    background: #1B5E20;
-}
-
 .t-s6 input {
     color: white;
     background-color: black;
@@ -54,43 +32,6 @@ strong {
 
 .t-s6 .container {
     color: #999;
-}
-
-.t-s6 .secondarytabbtn {
-    color: #E0E0E0;
-    background: black;
-    border: 2px solid #1565C0;
-    text-shadow: 0 0 10px white;
-}
-
-.t-s6 .secondarytabbtn:hover {
-    background: #1565C0;
-    color: black;
-}
-
-.t-s6 .unavailablebtn {
-    color: grey;
-    background-color: black;
-}
-
-.t-s6 .unavailablebtn:hover {
-    color: black;
-    background: #B84B5F;
-}
-
-.t-s6 .storebtn:hover {
-    color: #FFF;
-}
-
-.t-s6 .eternitytabbtn {
-    color: #b341e0;
-    background: black;
-    border: 2px solid #b341e0;
-}
-
-.t-s6 .eternitytabbtn:hover {
-    color: #511568;
-    background: white;
 }
 
 .t-s6 .c-tt-amount {
@@ -123,15 +64,6 @@ strong {
   color: black;
   background: #B84B5F;
   border: 1px solid #B84B5F;
-}
-
-.t-s6 .greedbtn {
-    background-color: #f2d729;
-    color: black;
-}
-
-.t-s6 .greedbtn:hover {
-    background-color: #9E913A;
 }
 
 .t-s6 .realitytabbtn {

@@ -58,21 +58,21 @@ Vue.component("new-time-dimension-row", {
   },
   template:
     `<div v-show="isUnlocked" class="c-time-dim-row">
-      <div
-        class="c-time-dim-row__label c-time-dim-row__name"
-      >{{name}} Time D <span class="c-time-dim-row__multiplier">x{{shortenMoney(multiplier)}}</span></div>
-      <div
-        class="c-time-dim-row__label c-time-dim-row__label--growable"
-      >{{shortenDimensions(amount)}}</div>
+      <div class="c-time-dim-row__label c-time-dim-row__name">
+        {{name}} Time D <span class="c-time-dim-row__multiplier">x{{shortenMoney(multiplier)}}</span>
+      </div>
+      <div class="c-time-dim-row__label c-time-dim-row__label--growable">
+        {{shortenDimensions(amount)}}
+      </div>
       <primary-button-on-off
         v-if="areAutobuyersUnlocked"
         v-model="isAutobuyerOn"
-        class="o-primary-btn--td-autobuyer c-time-dim-row__button"
+        class="o-primary-btn--td-autobuyer l-time-dim-row__button"
         text="Auto:"
       />
       <primary-button
         :enabled="isAffordable"
-        class="o-primary-btn--buy-td c-time-dim-row__button storebtn"
+        class="o-primary-btn--buy-td l-time-dim-row__button o-primary-btn o-primary-btn--new"
         @click="buyTimeDimension"
       >{{buttonContents}}</primary-button>
     </div>`,

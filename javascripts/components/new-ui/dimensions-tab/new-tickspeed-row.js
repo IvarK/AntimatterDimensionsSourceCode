@@ -78,14 +78,14 @@ Vue.component("new-tickspeed-row", {
       </div>
       <div class="tickspeed-buttons">
         <button
-          class="storebtn tickspeed-btn"
-          :class="{ 'storebtn-unavailable': !isAffordable }"
+          class="o-primary-btn tickspeed-btn"
+          :class="{ 'o-primary-btn--disabled': !isAffordable }"
           :enabled="isAffordable"
           onclick="buyTickSpeed()"
           >Cost: {{shortenCosts(cost)}}</button>
         <button 
-          class="storebtn tickspeed-max-btn"
-          :class="{ 'storebtn-unavailable': !isAffordable }"
+          class="o-primary-btn tickspeed-max-btn"
+          :class="{ 'o-primary-btn--disabled': !isAffordable }"
           :enabled="isAffordable"
           onclick="buyMaxTickSpeed()"
           >Buy Max</button>

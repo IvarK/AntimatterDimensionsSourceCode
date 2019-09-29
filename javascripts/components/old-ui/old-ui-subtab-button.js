@@ -15,8 +15,8 @@ Vue.component("old-ui-subtab-button", {
     }
   },
   template: `
-    <button v-if="isAvailable" @click="subtab.show()" style="margin: .5rem .8rem" class="o-btn o-btn--secondary-tab">
-      {{subtab.name}}
-    </button>
+  <button v-if="isAvailable" @click="subtab.show()" style="margin: .5rem .8rem" class="o-tab-btn o-tab-btn--secondary">
+    {{subtab.name}}
+  </button>
   `
 });

@@ -41,7 +41,7 @@ Vue.component("modal-h2p", {
       <div class="c-h2p-title">
         How To Play
       </div>
-      <div class="c-modal__close-btn o-primary-btn .o-primary-btn--modal-close" @click="exit">×</div>
+      <div class="c-modal__close-btn o-primary-btn o-primary-btn--modal-close" @click="exit">×</div>
     </div>
     <div class="l-h2p-container">
       <div class="l-h2p-search-tab">

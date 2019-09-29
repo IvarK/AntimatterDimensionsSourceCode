@@ -20,10 +20,11 @@ Vue.component("teresa-tab", {
     rmStoreMax: () => Teresa.rmStoreMax,
     upgrades() {
       return [
-          PerkShopUpgrade.glyphLevel,
-          PerkShopUpgrade.rmMult,
-          PerkShopUpgrade.bulkDilation,
-          PerkShopUpgrade.musicGlyph
+        PerkShopUpgrade.glyphLevel,
+        PerkShopUpgrade.rmMult,
+        PerkShopUpgrade.bulkDilation,
+        PerkShopUpgrade.musicGlyph,
+        PerkShopUpgrade.autoSpeed,
       ];
     }
   },

@@ -857,7 +857,8 @@ function autoBuyExtraTimeDims() {
 }
 
 function slowerAutobuyers(realDiff) {
-  player.auto.infDimTimer += realDiff;
+  const ampDiff = realDiff * Effects.product(PerkShopUpgrade.autoSpeed);
+  player.auto.infDimTimer += ampDiff;
   const infDimPeriod = 1000 * Effects.product(Perk.autobuyerFasterID);
   if (player.auto.infDimTimer >= infDimPeriod) {
     // Note: we need to reset to a low number here, because we don't want a pile of these accumulating during offline
@@ -865,25 +866,25 @@ function slowerAutobuyers(realDiff) {
     player.auto.infDimTimer = Math.min(player.auto.infDimTimer - infDimPeriod, infDimPeriod);
     autoBuyInfDims();
   }
-  player.auto.timeDimTimer += realDiff;
+  player.auto.timeDimTimer += ampDiff;
   const timeDimPeriod = 1000;
   if (player.auto.timeDimTimer >= timeDimPeriod) {
     player.auto.timeDimTimer = Math.min(player.auto.timeDimTimer - timeDimPeriod, timeDimPeriod);
     autoBuyTimeDims();
   }
-  player.auto.repUpgradeTimer += realDiff;
+  player.auto.repUpgradeTimer += ampDiff;
   const repUpgradePeriod = 1000 * Effects.product(Perk.autobuyerFasterReplicanti);
   if (player.auto.repUpgradeTimer >= repUpgradePeriod) {
     player.auto.repUpgradeTimer = Math.min(player.auto.repUpgradeTimer - repUpgradePeriod, repUpgradePeriod);
     autoBuyReplicantiUpgrades();
   }
-  player.auto.dilUpgradeTimer += realDiff;
+  player.auto.dilUpgradeTimer += ampDiff;
   const dilUpgradePeriod = 1000 * Effects.product(Perk.autobuyerFasterDilation);
   if (player.auto.dilUpgradeTimer >= dilUpgradePeriod) {
     player.auto.dilUpgradeTimer = Math.min(player.auto.dilUpgradeTimer - dilUpgradePeriod, dilUpgradePeriod);
     autoBuyDilationUpgrades();
   }
-  autoBuyMaxTheorems(realDiff);
+  autoBuyMaxTheorems(ampDiff);
 }
 
 setInterval(function () {

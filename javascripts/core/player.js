@@ -330,7 +330,7 @@ let player = {
       unlockBits: 0,
       run: false,
       bestRunAM: new Decimal(1),
-      perkShop: Array.repeat(0, 4)
+      perkShop: Array.repeat(0, 5)
     },
     effarig: {
       relicShards: 0,

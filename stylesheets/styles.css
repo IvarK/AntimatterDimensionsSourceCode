@@ -67,6 +67,10 @@ body {
   display: none;
 }
 
+button:focus {
+  outline: none;
+}
+
 /*#region TT shop*/
 
 #TTbuttons {
@@ -6387,7 +6391,7 @@ kbd {
   }
 }
 
-@keyframes c-reality-glyph-inner-cycle {
+@keyframes c-reality-glyph-over-cycle {
   0% {
     box-shadow: #b67f33 0 0 1rem calc(0.3rem) inset;
   }
@@ -6405,6 +6409,60 @@ kbd {
   }
   100% {
     box-shadow: #b67f33 0 0 1rem calc(0.3rem) inset;
+  }
+}
+
+@keyframes c-reality-glyph-icon-cycle {
+  0% {
+    color: #b67f33;
+    text-shadow: #b67f33 -0.04em 0.04em 0.08em;
+  }
+  20% {
+    color: #64dd17;
+    text-shadow: #64dd17 -0.04em 0.04em 0.08em;
+  }
+  40% {
+    color: #22aa48;
+    text-shadow: #22aa48 -0.04em 0.04em 0.08em;
+  }
+  60% {
+    color: #03a9f4;
+    text-shadow: #03a9f4 -0.04em 0.04em 0.08em;
+  }
+  80% {
+    color: #b241e3;
+    text-shadow: #b241e3 -0.04em 0.04em 0.08em;
+  }
+  100% {
+    color: #b67f33;
+    text-shadow: #b67f33 -0.04em 0.04em 0.08em;
+  }
+}
+
+@keyframes c-reality-glyph-description-cycle {
+  0% {
+    color: #b67f33;
+    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b67f33 0px 0px 3px
+  }
+  20% {
+    color: #64dd17;
+    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #64dd17 0px 0px 3px
+  }
+  40% {
+    color: #22aa48;
+    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #22aa48 0px 0px 3px
+  }
+  60% {
+    color: #03a9f4;
+    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #03a9f4 0px 0px 3px
+  }
+  80% {
+    color: #b241e3;
+    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b241e3 0px 0px 3px
+  }
+  100% {
+    color: #b67f33;
+    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b67f33 0px 0px 3px
   }
 }
 

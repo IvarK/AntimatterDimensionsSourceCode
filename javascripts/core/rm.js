@@ -604,7 +604,7 @@ const Glyphs = {
     // We look in backwards order so that later glyphs get cleaned up first
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
-      if (glyph === null) continue;
+      if (glyph === null || glyph.color !== undefined) continue;
       if (this.isObjectivelyUseless(glyph)) sacrificeGlyph(glyph, true);
     }
   },

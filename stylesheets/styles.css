@@ -5323,7 +5323,7 @@ kbd {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 65rem;
+  max-width: 81.25rem;
   margin: auto;
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -5334,9 +5334,8 @@ kbd {
 
 .l-v-unlocks-container li {
   position: relative;
-  float: left;
-  width: 18rem;
-  padding: 0 0 20.8rem 0;
+  width: 22.5rem;
+  padding: 0 0 26rem 0;
   list-style-type: none;
   transform: rotate(-60deg) skewY(30deg);
   overflow: hidden;
@@ -5371,6 +5370,11 @@ kbd {
 
 .c-v-unlock-completed {
   background: lightgreen;
+}
+
+.o-v-unlock-name {
+  font-weight: bold;
+  font-size: 1.6rem;
 }
 
 .o-v-unlock-amount {

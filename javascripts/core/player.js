@@ -374,7 +374,11 @@ let player = {
       quoteIdx: 0,
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0],
-      additionalStudies: 0
+      additionalStudies: 0,
+      runGlyphs: [[], [], [], [], [], []],
+      // The number of glyphs for reality goes down with tier, so 6 - num instead (6 means reality
+      // has not been completed)
+      runRecords: [0, 0, 0, 0, 0, 0],
     },
     ra: {
       pets: {

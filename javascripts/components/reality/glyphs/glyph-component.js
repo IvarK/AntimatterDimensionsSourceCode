@@ -89,6 +89,10 @@ const GlyphTooltipComponent = {
       type: Number,
       default: 0,
     },
+    showDeletionText: {
+      type: Boolean,
+      default: true,
+    },
     levelOverride: {
       type: Number,
       default: 0,
@@ -157,9 +161,6 @@ const GlyphTooltipComponent = {
         ? `Sacrifice for ${powerText}`
         : `Can be sacrificed for ${powerText}`;
     },
-    showDeletionText() {
-      return (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY) || this.sacrificeReward > 0;
-    },
     eventHandlers() {
       return GameUI.touchDevice ? {
         touchstart: this.touchStart,
@@ -191,6 +192,11 @@ const GlyphTooltipComponent = {
     sacrificeGlyph() {
       sacrificeGlyph(Glyphs.findById(this.id), false);
     },
+  },
+  mounted() {
+    // By attaching the tooltip to the body element, we make sure it ends up on top of anything
+    // else, with no z order shenanigans
+    document.body.appendChild(this.$el);
   },
   template: `
   <div class="l-glyph-tooltip c-glyph-tooltip"
@@ -360,13 +366,14 @@ Vue.component("glyph-component", {
     moveTooltipTo(x, y) {
       const tooltipEl = this.$refs.tooltip.$el;
       if (tooltipEl) {
-        const rect = this.$el.getBoundingClientRect();
+        const rect = document.body.getBoundingClientRect();
         tooltipEl.style.left = `${x - rect.left}px`;
         tooltipEl.style.top = `${y - rect.top}px`;
       }
     },
-    mouseEnter() {
+    mouseEnter(ev) {
       if (this.$viewModel.draggingUIID !== -1) return;
+      this.moveTooltipTo(ev.clientX, ev.clientY);
       this.showTooltip();
     },
     mouseLeave() {
@@ -463,6 +470,7 @@ Vue.component("glyph-component", {
                        ref="tooltip"
                        v-bind="glyph"
                        :sacrificeReward="sacrificeReward"
+                       :showDeletionText="showSacrifice"
                        :levelOverride="levelOverride"
                        :visible="isCurrentTooltip"/>
       </div>

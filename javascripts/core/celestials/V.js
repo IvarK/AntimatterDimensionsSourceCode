@@ -30,6 +30,19 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   tryComplete() {
+    const playerData = player.celestials.v;
+    const value = this.config.currentValue();
+    // If we haven't set a record, we haven't completed any new tiers, either
+    if (value <= playerData.runRecords[this.id]) return;
+    playerData.runRecords[this.id] = value;
+    playerData.runGlyphs[this.id] = Glyphs.active
+      .filter(g => g !== null)
+      .map(g => ({
+        type: g.type,
+        level: g.level,
+        strength: g.strength,
+        effects: g.effects,
+      }));
     if (this.completions === 6 || !this.config.condition(this.conditionValue)) return;
     this.completions++;
     GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
@@ -103,7 +116,7 @@ const V = {
       GameUI.notify.success(V_UNLOCKS.MAIN_UNLOCK.description);
     }
 
-    for (let i = 0; i<V_UNLOCKS.RUN_UNLOCK_THRESHOLDS.length; i++) {
+    for (let i = 0; i < V_UNLOCKS.RUN_UNLOCK_THRESHOLDS.length; i++) {
       const unl = V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[i];
       if (unl.requirement() && !this.has(unl)) {
         // eslint-disable-next-line no-bitwise

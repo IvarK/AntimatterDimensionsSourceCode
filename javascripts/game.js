@@ -713,6 +713,9 @@ function gameLoopWithAutobuyers(seconds, ticks, real) {
 }
 
 function simulateTime(seconds, real, fast) {
+  // Don't do asynchronous processing loops nested in simulateTime
+  Async.enabled = false;
+
   // The game is simulated at a base 50ms update rate, with a max of 1000 ticks. additional ticks are converted
   // into a higher diff per tick
   // warning: do not call this function with real unless you know what you're doing
@@ -801,6 +804,7 @@ function simulateTime(seconds, real, fast) {
   Modal.message.show(popupString);
   autobuyerOnGameLoop = true;
   GameUI.notify.showBlackHoles = true;
+  Async.enabled = true;
 }
 
 function updateChart(first) {

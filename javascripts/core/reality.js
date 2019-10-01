@@ -299,10 +299,11 @@ function beginProcessReality(realityProps) {
       asyncExit: () => {
         ui.$viewModel.modal.progressBar = undefined;
         GameIntervals.start();
+      },
+      then: () => {
+        rng.finalize();
+        finishProcessReality(realityProps);
       }
-    }).then(() => {
-      rng.finalize();
-      finishProcessReality(realityProps);
     });
 }
 

@@ -6,6 +6,13 @@
  * run() is the nominal entry point.
  */
 const Async = {
+  _enabled: true,
+  get enabled() {
+    return this._enabled;
+  },
+  set enabled(val) {
+    this._enabled = val;
+  },
   runForTime(fun, maxIter, config) {
     const batchSize = config.batchSize || 1;
     const maxTime = config.maxTime;
@@ -39,9 +46,23 @@ const Async = {
    *    total number of iterations done thus far
    * @param {function} [config.asyncExit] If more than one batch was done, this will be called. For example, can
    *    be used to hide a progress bar.
-   * @returns {Promise}
+   * @param {function} [config.then] Run after everything is done
+   * @returns {Promise|undefined}
    */
-  async run(fun, maxIter, config) {
+  run(fun, maxIter, config) {
+    if (this.enabled) {
+      const runResult = this._run(fun, maxIter, config);
+      return config.then ? runResult.then(config.then) : runResult;
+    }
+    for (let i = 0; i < maxIter; ++i) {
+      fun();
+    }
+    if (config.then) config.then();
+  },
+  /**
+   * @private
+   */
+  async _run(fun, maxIter, config) {
     let remaining = this.runForTime(fun, maxIter, config);
     const sleepTime = config.sleepTime || 1;
     if (!remaining) return;

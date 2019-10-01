@@ -51,7 +51,8 @@ const Async = {
    */
   run(fun, maxIter, config) {
     if (this.enabled) {
-      return this._run(fun, maxIter, config).then(config.then);
+      const runResult = this._run(fun, maxIter, config);
+      return config.then ? runResult.then(config.then) : runResult;
     }
     for (let i = 0; i < maxIter; ++i) {
       fun();

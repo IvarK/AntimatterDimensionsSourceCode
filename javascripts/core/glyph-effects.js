@@ -83,6 +83,31 @@ class GlyphEffectConfig {
     this.alteredColor = setup.alteredColor;
     /** @member{number} string passed along to tooltip code to ensure proper formatting */
     this.alterationType = setup.alterationType;
+    /** @member{Boolean} Indicates whether the effect grows with level or shrinks */
+    this._biggerIsBetter = undefined;
+  }
+
+  /**
+   * @returns{Boolean}
+   */
+  get biggerIsBetter() {
+    if (this._biggerIsBetter === undefined) this._biggerIsBetter = this.checkBiggerIsBetter();
+    return this._biggerIsBetter;
+  }
+
+  /**
+   * @returns{Number}
+   */
+  compareValues(effectValueA, effectValueB) {
+    const result = Decimal.compare(effectValueA, effectValueB);
+    return this.biggerIsBetter ? result : -result;
+  }
+
+  /** @private */
+  checkBiggerIsBetter() {
+    const baseEffect = new Decimal(this.effect(1, 1.01));
+    const biggerEffect = new Decimal(this.effect(100, 2));
+    return biggerEffect.gt(baseEffect);
   }
 
   /** @private */
@@ -523,6 +548,12 @@ function makeGlyphEffectBitmask(effectList) {
   // eslint-disable-next-line no-bitwise
   return effectList.reduce((mask, eff) => mask + (1 << GameDatabase.reality.glyphEffects[eff].bitmaskIndex), 0);
 }
+
+const glyphEffectsFromBitmask = (function() {
+  const table = Object.values(GameDatabase.reality.glyphEffects)
+    .mapToObject(effect => effect.bitmaskIndex, effect => effect);
+  return mask => Array.fromBitmask(mask).map(id => table[id]);
+}());
 
 class GlyphType {
   /**

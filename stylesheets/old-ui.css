@@ -264,18 +264,14 @@
 }
 
 .t-dark .o-tab-btn--reality,
-.t-s6 .o-tab-btn--reality {
-  background: white;
-  border-color: #0b600e;
-  color: #0b600e;
-}
-
 .t-metro .o-tab-btn--reality,
 .t-dark-metro .o-tab-btn--reality,
 .t-inverted-metro .o-tab-btn--reality,
+.t-s6 .o-tab-btn--reality,
 .t-s8 .o-tab-btn--reality {
   background: white;
   border-color: #0b600e;
+  color: #0b600e;
 }
 
 .o-tab-btn--reality:hover {

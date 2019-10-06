@@ -5,10 +5,10 @@ if (GlobalErrorHandler.handled) {
 }
 GlobalErrorHandler.cleanStart = true;
 
-let kongIPMult = 1
-let kongDimMult = 1
-let kongAllDimMult = 1
-let kongEPMult = 1
+const kongIPMult = 1;
+const kongDimMult = 1;
+const kongAllDimMult = 1;
+const kongEPMult = 1;
 
 function playerInfinityUpgradesOnEternity() {
   if (!EternityMilestone.keepInfinityUpgrades.isReached) player.infinityUpgrades.clear();
@@ -22,6 +22,9 @@ function playerInfinityUpgradesOnEternity() {
 function breakInfinity() {
   if (!Autobuyer.bigCrunch.hasMaxedInterval) return;
   if (InfinityChallenge.isRunning) return;
+  for (const autobuyer of Autobuyers.all) {
+    if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
+  }
   player.break = !player.break;
   EventHub.dispatch(player.break ? GameEvent.BREAK_INFINITY : GameEvent.FIX_INFINITY);
   GameUI.update();

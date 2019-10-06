@@ -362,7 +362,7 @@ let player = {
       autoStoreReal: false,
       isAutoReleasing: false,
       storedFraction: 1,
-      quoteIdx: 0,
+      quotes: [],
       unlocks: [],
       run: false,
       completed: false,

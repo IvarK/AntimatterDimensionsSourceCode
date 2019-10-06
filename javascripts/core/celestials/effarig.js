@@ -173,10 +173,16 @@ class EffarigUnlockState extends GameMechanicState {
     }
     switch (this.id) {
       case EffarigUnlock.adjuster.id:
+        Effarig.quotes.show(Effarig.quotes.UNLOCK_WEIGHTS);
+        break;
       case EffarigUnlock.autosacrifice.id:
+        Effarig.quotes.show(Effarig.quotes.UNLOCK_AUTOSACRIFICE);
+        break;
       case EffarigUnlock.autopicker.id:
+        Effarig.quotes.show(Effarig.quotes.UNLOCK_AUTOPICK);
+        break;
       case EffarigUnlock.run.id:
-        EventHub.dispatch(GameEvent.CELESTIAL_UPGRADE_UNLOCKED, Effarig, this);
+        Effarig.quotes.show(Effarig.quotes.UNLOCK_RUN);
         break;
       default:
         throw new Error("Unknown Effarig upgrade");
@@ -205,9 +211,4 @@ EventHub.logic.on(GameEvent.BIG_CRUNCH_BEFORE, () => {
 EventHub.logic.on(GameEvent.ETERNITY_RESET_BEFORE, () => {
   if (!Effarig.isRunning) return;
   Effarig.quotes.show(Effarig.quotes.COMPLETE_ETERNITY);
-});
-
-EventHub.logic.on(GameEvent.REALITY_RESET_BEFORE, () => {
-  if (!Effarig.isRunning) return;
-  Effarig.quotes.show(Effarig.quotes.COMPLETE_REALITY);
 });

@@ -17,12 +17,13 @@ Vue.component("glyphs-tab", {
       const haveBoost = Glyphs.activeList.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
       if (haveBoost) {
         if (haveEffarig) {
-          this.enslavedHint = "done... what little... I can... but...<br>why did you bring... that thing... here...";
+          this.enslavedHint = "done... what little... I can... but...<br>" +
+            "why did you bring... that thing... here... it will not help...";
         } else {
           this.enslavedHint = "done... what little... I can...";
         }
       } else if (haveEffarig) {
-        this.enslavedHint = "Why did you bring... that thing... here...";
+        this.enslavedHint = "Why did you bring... that thing... here... it will not help...";
       }
     }
   },

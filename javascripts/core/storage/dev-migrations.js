@@ -474,6 +474,7 @@ GameStorage.devMigrations = {
     },
     player => {
       delete player.celestials.effarig.quoteIdx;
+      delete player.celestials.enslaved.quoteIdx;
     },
   ],
 

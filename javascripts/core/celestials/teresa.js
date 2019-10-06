@@ -152,14 +152,21 @@ const PerkShopUpgrade = (function() {
 }());
 
 EventHub.logic.on(GameEvent.TAB_CHANGED, (tab, subtab) => {
-  if (tab !== "celestials" || subtab !== "teresa") return;
-  Teresa.quotes.show(Teresa.quotes.INITIAL);
+  if (tab !== "celestials") return;
+  if (subtab === "teresa") Teresa.quotes.show(Teresa.quotes.INITIAL);
+  if (subtab === "effarig") Effarig.quotes.show(Effarig.quotes.INITIAL);
 });
 
 EventHub.logic.on(GameEvent.CELESTIAL_UPGRADE_UNLOCKED, (celestial, upgradeInfo) => {
-  if (celestial !== Teresa) return;
-  if (upgradeInfo === TERESA_UNLOCKS.RUN) Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY);
-  if (upgradeInfo === TERESA_UNLOCKS.EFFARIG) Teresa.quotes.show(Teresa.quotes.EFFARIG);
+  if (celestial === Teresa) {
+    if (upgradeInfo === TERESA_UNLOCKS.RUN) Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY);
+    if (upgradeInfo === TERESA_UNLOCKS.EFFARIG) Teresa.quotes.show(Teresa.quotes.EFFARIG);
+  } else if (celestial === Effarig) {
+    if (upgradeInfo === EffarigUnlock.adjuster) Effarig.quotes.show(Effarig.quotes.UNLOCK_WEIGHTS);
+    if (upgradeInfo === EffarigUnlock.autosacrifice) Effarig.quotes.show(Effarig.quotes.UNLOCK_AUTOSACRIFICE);
+    if (upgradeInfo === EffarigUnlock.autopicker) Effarig.quotes.show(Effarig.quotes.UNLOCK_AUTOPICK);
+    if (upgradeInfo === EffarigUnlock.run) Effarig.quotes.show(Effarig.quotes.UNLOCK_RUN);
+  }
 });
 
 EventHub.logic.on(GameEvent.REALITY_RESET_BEFORE, () => {

@@ -335,7 +335,7 @@ let player = {
       relicShards: 0,
       unlocksBits: 0,
       run: false,
-      quoteIdx: 0,
+      quotes: [],
       glyphWeights: {
         ep: 25,
         repl: 25,

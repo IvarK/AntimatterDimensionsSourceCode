@@ -2,4 +2,5 @@
 
 const Celestials = {
   teresa: Teresa,
+  effarig: Effarig,
 };

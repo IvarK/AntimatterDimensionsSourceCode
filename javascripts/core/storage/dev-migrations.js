@@ -472,6 +472,9 @@ GameStorage.devMigrations = {
     player => {
       delete player.secretUnlocks.fixed;
     },
+    player => {
+      delete player.celestials.effarig.quoteIdx;
+    },
   ],
 
   patch(player) {

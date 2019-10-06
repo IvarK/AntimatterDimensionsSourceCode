@@ -29,15 +29,7 @@ Vue.component("new-tickspeed-row", {
       return `-${((1 - asNumber) * 100).toFixed(places)}% / upgrade`;
     },
     tickspeedDisplay() {
-      const tickspeed = this.tickspeed;
-      let displayValue;
-      if (tickspeed.exponent > 1) {
-        displayValue = tickspeed.toFixed(0);
-      } else {
-        const oom = Decimal.divide(100, Decimal.pow10(tickspeed.exponent));
-        displayValue = `${tickspeed.times(oom).toFixed(0)} / ${shorten(oom, 2, 2)}`;
-      }
-      return `Tickspeed: ${displayValue}`;
+      return `Tickspeed: ${shorten(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
     },
     isGameSpeedNormal() {
       return this.gameSpeedMult === 1;

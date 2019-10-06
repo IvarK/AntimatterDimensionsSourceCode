@@ -468,7 +468,10 @@ GameStorage.devMigrations = {
     GameStorage.migrations.changeC8Handling,
     player => {
       while (player.celestials.teresa.perkShop.length < 5) player.celestials.teresa.perkShop.push(0);
-    }
+    },
+    player => {
+      delete player.secretUnlocks.fixed;
+    },
   ],
 
   patch(player) {

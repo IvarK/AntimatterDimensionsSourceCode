@@ -174,7 +174,10 @@ class EternityChallengeState extends GameMechanicState {
     // this causes TP to still be gained.
     if (canEternity()) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
-    if (this.id === 12) TimeCompression.isActive = false;
+    if (this.id === 12) {
+      if (TimeCompression.isActive) SecretAchievement(42).unlock();
+      TimeCompression.isActive = false;
+    }
     return startEternityChallenge();
   }
 

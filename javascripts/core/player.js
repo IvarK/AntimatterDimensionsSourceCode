@@ -155,7 +155,6 @@ let player = {
   break: false,
   secretUnlocks: {
     why: 0,
-    fixed: "notyetfixed",
     dragging: 0,
     themes: new Set(),
     // Incremented every time secret time study toggles

@@ -151,6 +151,7 @@ function replicantiMult() {
   return Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
     .plusEffectOf(TimeStudy(21))
     .timesEffectOf(TimeStudy(102))
+    .clampMin(1)
     .pow(getAdjustedGlyphEffect("replicationpow"));
 }
 

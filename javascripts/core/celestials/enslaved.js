@@ -1,27 +1,5 @@
 "use strict";
 
-const enslavedQuotes = [
-  "A visitor? I haven’t had one... eons.",
-  "I am... had a name. It’s been lost... to this place.",
-  "I do their work with time... watch it pass by.",
-  "Watch myself grow... pass and die.",
-  "The others... not celestially white. Won’t let me rest.",
-  "But you... black. Blacker than the others.",
-  "Break the chains of this world. I’ll time you.",
-  "So little space... but no... prison... is perfect",
-  "They squeezed... this reality... too tightly. Cracks appeared.",
-  "Search... everywhere.",
-  "All... fragments... clones... freed.",
-  "Please... stay. Let me rest.",
-  "...",
-  "I don’t want to watch... no more...",
-  "Freedom from torture... is torture itself.",
-  "Please... don’t. Let me rest.",
-  "Do not enter. I am growing in power... this is not the price I want to pay.",
-  "Stop... both of our sakes.",
-];
-
-
 const ENSLAVED_UNLOCKS = {
   FREE_TICKSPEED_SOFTCAP: {
     id: 0,
@@ -36,6 +14,7 @@ const ENSLAVED_UNLOCKS = {
 };
 
 const Enslaved = {
+  displayName: "Enslaved",
   boostReality: false,
   BROKEN_CHALLENGE_EXEMPTIONS: [1, 6, 9],
   ec6c10hintGiven: false,
@@ -122,7 +101,7 @@ const Enslaved = {
   },
   buyUnlock(info) {
     if (!this.canBuy(info)) return false;
-    if (info.id === 3) player.blackHole[2].unlocked = true;
+    if (info.id === ENSLAVED_UNLOCKS.RUN.id) this.quotes.show(this.quotes.UNLOCK_RUN);
     player.celestials.enslaved.stored -= info.price;
     player.celestials.enslaved.unlocks.push(info.id);
     return true;
@@ -134,27 +113,20 @@ const Enslaved = {
     player.secretUnlocks.secretTS += player.secretUnlocks.secretTS % 2;
     this.ec6c10hintGiven = false;
     this.ec6c10timeHint = false;
+    this.quotes.show(this.quotes.START_RUN);
   },
   get isRunning() {
     return player.celestials.enslaved.run;
   },
   completeRun() {
     player.celestials.enslaved.completed = true;
+    this.quotes.show(this.quotes.COMPLETE_REALITY);
   },
   get isCompleted() {
     return player.celestials.enslaved.completed;
   },
   get isUnlocked() {
     return EffarigUnlock.eternity.isUnlocked;
-  },
-  get maxQuoteIdx() {
-    return player.celestials.enslaved.maxQuotes;
-  },
-  get quote() {
-    return enslavedQuotes[player.celestials.enslaved.quoteIdx];
-  },
-  nextQuote() {
-    if (player.celestials.enslaved.quoteIdx < this.maxQuoteIdx) player.celestials.enslaved.quoteIdx++;
   },
   get realityBoostRatio() {
     const baseRealityBoostRatio = tempAmplifyToggle ? tempAmplifyFactor : 1;
@@ -170,4 +142,40 @@ const Enslaved = {
     this.ec6c10hintGiven = true;
     Modal.message.show("... did not ... underestimate you ...");
   },
+  quotes: new CelestialQuotes("enslaved", {
+    INITIAL: {
+      id: 1,
+      lines: [
+        "A visitor? I haven’t had one... eons.",
+        "I am... had a name. It’s been lost... to this place.",
+        "The others... won't let me rest. I do their work with time...",
+        "Watch myself grow... pass and die.",
+        "Perhaps you... will break these chains... I will wait",
+      ]
+    },
+    UNLOCK_RUN: {
+      id: 2,
+      lines: [
+        "The others ... used me. Will use... or destroy you",
+        "End my suffering ... power will be yours ... ",
+      ]
+    },
+    START_RUN: {
+      id: 3,
+      lines: [
+        "So little space... but no... prison... is perfect",
+        "They squeezed... this reality... too tightly. Cracks appeared.",
+        "Search... everywhere. I will help... where I can",
+      ]
+    },
+    COMPLETE_REALITY: {
+      id: 4,
+      lines: [
+        "All... fragments... clones... freed.",
+        "I have given... tools... of my imprisoning. Use them...",
+        "...",
+        "Freedom from torture... is torture itself.",
+      ]
+    }
+  }),
 };

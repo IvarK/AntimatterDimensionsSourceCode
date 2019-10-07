@@ -94,6 +94,7 @@ Theme.tryUnlock = function(name) {
     player.secretUnlocks.themes.add(fullName);
     Theme.set(prefix);
     SecretAchievement(25).unlock();
+    GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`);
     return true;
 };
 

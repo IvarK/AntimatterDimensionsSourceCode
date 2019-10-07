@@ -147,10 +147,8 @@ GameDatabase.achievements.secret = [
   },
   {
     id: 42,
-    name: "Was it even broken?",
-    tooltip: '"Fix" your save.',
-    checkRequirement: () => player.secretUnlocks.fixed === "hasbeenfixed",
-    checkEvent: GameEvent.GAME_LOAD
+    name: "SHAME ON ME",
+    tooltip: "Try to enter EC12 within Time Compression."
   },
   {
     id: 43,

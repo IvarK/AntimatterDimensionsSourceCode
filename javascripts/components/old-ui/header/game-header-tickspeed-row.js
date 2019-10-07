@@ -28,15 +28,7 @@ Vue.component("game-header-tickspeed-row", {
       return `Reduce the tick interval by ${formatPercents(1 - asNumber, places)}.`;
     },
     tickspeedDisplay() {
-      const tickspeed = this.tickspeed;
-      let displayValue;
-      if (tickspeed.exponent > 1) {
-        displayValue = tickspeed.toFixed(0);
-      } else {
-        const oom = Decimal.divide(100, Decimal.pow10(tickspeed.exponent));
-        displayValue = `${shorten(tickspeed.times(oom), 0, 1)} / ${shorten(oom, 2, 2)}`;
-      }
-      return `Tickspeed: ${displayValue}`;
+      return `Tickspeed: ${shorten(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
     },
     isGameSpeedNormal() {
       return this.gameSpeedMult === 1;

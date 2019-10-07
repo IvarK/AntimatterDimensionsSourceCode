@@ -18,12 +18,12 @@ Vue.component("glyphs-tab", {
       if (haveBoost) {
         if (haveEffarig) {
           this.enslavedHint = "done... what little... I can... but...<br>" +
-            "why did you bring... that thing... here... it will not help...";
+            "why did you bring... that useless thing... here...";
         } else {
           this.enslavedHint = "done... what little... I can...";
         }
       } else if (haveEffarig) {
-        this.enslavedHint = "Why did you bring... that thing... here... it will not help...";
+        this.enslavedHint = "Why did you bring... that useless thing... here...";
       }
     }
   },

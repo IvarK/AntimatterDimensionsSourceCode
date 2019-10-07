@@ -170,4 +170,49 @@ const Enslaved = {
     this.ec6c10hintGiven = true;
     Modal.message.show("... did not ... underestimate you ...");
   },
+  get tesseractCost() {
+    return Tesseracts.costs[player.celestials.enslaved.tesseracts];
+  },
+  get nextDimCapIncrease() {
+    return Tesseracts.increases[player.celestials.enslaved.tesseracts];
+  },
+  get canBuyTesseract() {
+    return player.infinityPoints.gte(this.tesseractCost);
+  },
+  buyTesseract() {
+    if (!this.canBuyTesseract) return;
+
+    player.celestials.enslaved.totalDimCapIncrease += this.nextDimCapIncrease;
+    player.celestials.enslaved.tesseracts++;
+  }
+};
+
+
+const Tesseracts = {
+  costs: (function() {
+    const costs = [Decimal.pow10(20e6), Decimal.pow10(40e6), Decimal.pow10(60e6), Decimal.pow10(120e6)];
+
+    for (let i = 4; i < 31; i++) {
+      // Array.reduce can't be used just for 4 elements
+      const next = costs[i - 4]
+                    .times(costs[i - 3])
+                    .times(costs[i - 2])
+                    .times(costs[i - 1])
+      costs.push(next);
+    }
+
+    return costs;
+  }()),
+
+  increases: (function() {
+    const increases = [500e3, 500e3, 1e6];
+
+    for (let i = 3; i < 31; i++) {
+      // Array.reduce can't be used just for 4 elements
+      const next = increases[i - 3] + increases[i - 2] + increases[i - 1];
+      increases.push(next);
+    }
+
+    return increases;
+  }())
 };

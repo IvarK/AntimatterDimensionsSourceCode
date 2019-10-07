@@ -1878,6 +1878,33 @@ screen and (max-width: 480px) {
   margin-top: 1rem;
 }
 
+.c-infinity-dim-tab__enslaved-reward-button {
+  padding: 2rem;
+  font-family: TypeWriter, serif;
+  background: #111117;
+  color: #2ebce6;
+  border: none;
+  cursor: pointer;
+  transition-duration: 0.12s;
+}
+
+.c-infinity-dim-tab__enslaved-reward-button:hover {
+  background: black;
+  color: #00c5ff
+}
+
+.c-infinity-dim-tab__enslaved-reward-button--disabled {
+  background: #444040;
+  color: #bfdde8;
+  cursor: default;
+}
+
+.c-infinity-dim-tab__enslaved-reward-button--disabled:hover {
+  background: #444040;
+  color: #bfdde8;
+}
+
+
 /*#endregion l-infinity-dim-tab*/
 
 /*#region c-infinity-dim-description__accent*/

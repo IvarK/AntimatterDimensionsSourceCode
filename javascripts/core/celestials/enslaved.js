@@ -197,7 +197,7 @@ const Tesseracts = {
       const next = costs[i - 4]
                     .times(costs[i - 3])
                     .times(costs[i - 2])
-                    .times(costs[i - 1])
+                    .times(costs[i - 1]);
       costs.push(next);
     }
 

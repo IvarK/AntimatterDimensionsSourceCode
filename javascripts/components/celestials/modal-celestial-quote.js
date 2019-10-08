@@ -46,8 +46,8 @@ Vue.component("modal-celestial-quote", {
          class="c-modal-celestial-quote__arrow fas fa-chevron-circle-left"
          @click="prevQuote"/>
       <div class="l-modal-celestial-quote__text">
-        <div><b>{{currentCelestialName}}:</b></div>
-        {{currentQuote.line}}
+        <div v-if="currentQuote.showName"><b>{{currentCelestialName}}:</b></div>
+        {{currentQuote.line.replace("*", "")}}
       </div>
       <i class="c-modal-celestial-quote__arrow fas"
          :class="nextClass"

@@ -254,10 +254,12 @@ function giveRealityRewards(realityProps) {
 
   if (Teresa.isRunning) {
     player.celestials.teresa.bestRunAM = Decimal.max(player.celestials.teresa.bestRunAM, player.antimatter);
+    Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
   }
 
   if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) {
     EffarigUnlock.reality.unlock();
+    Effarig.quotes.show(Effarig.quotes.COMPLETE_REALITY);
   }
 
   if (Enslaved.isRunning) Enslaved.completeRun();

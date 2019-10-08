@@ -99,9 +99,8 @@ Vue.component("effarig-tab", {
     }
   },
   template:
-    `<div class="l-effarig-celestial-tab">
-      <div class="o-teresa-quotes"> {{ quote }}</div>
-      <button class="o-quote-button" @click="nextQuote()" v-if="hasNextQuote()">→</button>
+    `<div class="l-teresa-celestial-tab">
+      <celestial-quote-history celestial="effarig"/>
       <div class="c-effarig-relics">You have {{ shorten(relicShards, 2, 0) }} Relic Shards.</div>
       <div class="c-effarig-relic-description">
         You will gain {{ shorten(shardsGained, 2, 0) }} Relic Shards next reality. More EP slightly increases <br>

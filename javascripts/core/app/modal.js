@@ -48,6 +48,7 @@ Modal.celestialQuote = new class extends Modal {
     const newLines = lines.map(l => ({
       celestial,
       line: l,
+      showName: !l.startsWith("*")
     }));
     if (ui.view.modal.current === this) {
       // This shouldn't come up often, but in case we do have a pile of quotes
@@ -62,13 +63,14 @@ Modal.celestialQuote = new class extends Modal {
 
 Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");
 Modal.cloudLoadConflict = new Modal("modal-cloud-load-conflict");
+// eslint-disable-next-line max-params
 Modal.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLastConflict) {
   ui.view.modal.cloudConflicts.push({
-    saveId: saveId,
+    saveId,
     cloud: getSaveInfo(cloudSave),
     local: getSaveInfo(localSave),
-    onAccept: onAccept,
-    onLastConflict: onLastConflict
+    onAccept,
+    onLastConflict
   });
 
   function getSaveInfo(save) {

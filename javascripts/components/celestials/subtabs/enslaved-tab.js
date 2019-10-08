@@ -137,8 +137,7 @@ Vue.component("enslaved-tab", {
   },
   template:
     `<div class="l-enslaved-celestial-tab">
-      <div class="o-teresa-quotes"> {{ quote }}</div>
-      <button class="o-quote-button" @click="nextQuote()" v-if="hasNextQuote()">→</button>
+      <celestial-quote-history celestial="enslaved"/>
       <div class="l-enslaved-top-container">
         <div class="l-enslaved-top-container__half">
           Charging your black hole 

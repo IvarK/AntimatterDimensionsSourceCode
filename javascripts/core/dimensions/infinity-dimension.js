@@ -245,9 +245,7 @@ class InfinityDimensionState extends DimensionState {
     if (Enslaved.isRunning) {
       return 1;
     }
-    const enslavedBoost = Enslaved.isCompleted
-      ? Math.floor(player.totalTickGained / 1000) * 1000
-      : 0;
+    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease;
     const compressionBoost = Effects.max(0, CompressionUpgrade.infDimSoftcap);
     return this._purchaseCap + enslavedBoost + compressionBoost;
   }

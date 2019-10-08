@@ -223,7 +223,7 @@ Vue.component("enslaved-tab", {
           <p>Time theorem generation from dilation glyphs is disabled</p>
           <p>Certain challenge goals have been increased</p>
           <p>Stored time is effectively dilated (exponent^0.5)</p>
-          <b>Reward: ID purchase caps are increased by 1000 for every 1000 free tickspeed upgrades you have</b>
+          <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps</b>
         </div>
       </div>
     </div>`

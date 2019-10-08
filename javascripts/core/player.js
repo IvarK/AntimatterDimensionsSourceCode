@@ -366,7 +366,9 @@ let player = {
       unlocks: [],
       run: false,
       completed: false,
-      maxQuotes: 6
+      maxQuotes: 6,
+      tesseracts: 0,
+      totalDimCapIncrease: 0
     },
     v: {
       unlockBits: 0,

@@ -116,7 +116,7 @@ GameDatabase.achievements.normal = [
   {
     id: 31,
     name: "I forgot to nerf that",
-    tooltip: () => `Get any Dimension multiplier over ${shorten(1e31)}`,
+    tooltip: () => `Get any Dimension multiplier over ${shorten(1e31)}.`,
     checkRequirement: () => NormalDimensions.all.find(x => x.multiplier.exponent >= 31) !== undefined,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "1st Dimensions are 5% stronger.",
@@ -189,7 +189,7 @@ GameDatabase.achievements.normal = [
   {
     id: 42,
     name: "Supersanic",
-    tooltip: () => `Have antimatter/sec exceed your current antimatter above ${shorten(1e63, 0, 0)}`,
+    tooltip: () => `Have antimatter/sec exceed your current antimatter above ${shorten(1e63, 0, 0)}.`,
     checkRequirement: () =>
       player.antimatter.exponent >= 63 &&
       getDimensionProductionPerSecond(1).gt(player.antimatter),
@@ -688,7 +688,7 @@ GameDatabase.achievements.normal = [
   {
     id: 112,
     name: "Never again",
-    tooltip: () => `Get the sum of Infinity Challenge times below ${shortenSmallInteger(750)}ms`,
+    tooltip: () => `Get the sum of Infinity Challenge times below ${shortenSmallInteger(750)}ms.`,
     checkRequirement: () => Time.infinityChallengeSum.totalMilliseconds < 750,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "The limit for your third eternity upgrade is a bit higher.",
@@ -1022,7 +1022,7 @@ GameDatabase.achievements.normal = [
   {
     id: 158,
     name: "Bruh, are you like, inside the hole?",
-    tooltip: () => `Spend ${shortenSmallInteger(24)} hours with black hole active in a row`,
+    tooltip: () => `Spend ${shortenSmallInteger(24)} hours with black hole active in a row.`,
     checkRequirement: () => TimeSpan.fromSeconds(BlackHole(1).phase).totalHours >= 24,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },

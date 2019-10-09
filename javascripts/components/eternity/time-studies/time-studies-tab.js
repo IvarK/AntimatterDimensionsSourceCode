@@ -49,6 +49,7 @@ class TimeStudyTreeLayout {
 
     const TS = id => TimeStudy(id);
     const EC = id => TimeStudy.eternityChallenge(id);
+    const TrS = id => TriadStudy(id)
 
     /**
      * @type {TimeStudyRow[]}
@@ -106,6 +107,7 @@ class TimeStudyTreeLayout {
       normalRow(                               TS(201)                                ),
       normalRow(    TS(211),          TS(212),          TS(213),          TS(214)     ),
       wideRow  (TS(221), TS(222), TS(223), TS(224), TS(225), TS(226), TS(227), TS(228)),
+      normalRow(    TrS(1),           TrS(2),           TrS(3),           TrS(4)      ),
       normalRow(    TS(231),          TS(232),          TS(233),          TS(234)     ),
       normalRow(              EC(11),                             EC(12)              ),
       normalRow(                          TimeStudy.dilation                          ),
@@ -240,6 +242,7 @@ Vue.component("time-studies-tab", {
         case TimeStudyType.NORMAL: return "normal-time-study";
         case TimeStudyType.ETERNITY_CHALLENGE: return "ec-time-study";
         case TimeStudyType.DILATION: return "dilation-time-study";
+        case TimeStudyType.TRIAD: return "triad-time-study";
       }
       throw "Unknown study type";
     }

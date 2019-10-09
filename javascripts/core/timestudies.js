@@ -323,7 +323,8 @@ function importStudyTree(input, auto) {
 const TimeStudyType = {
   NORMAL: 0,
   ETERNITY_CHALLENGE: 1,
-  DILATION: 2
+  DILATION: 2,
+  TRIAD: 3
 };
 
 class TimeStudyState extends GameMechanicState {
@@ -619,6 +620,38 @@ class TimeStudyConnection {
   get isSatisfied() {
     return this.isOverridden || this._from.isBought;
   }
+}
+
+
+class TriadStudyState extends TimeStudyState {
+  constructor(config) {
+    super(config, TimeStudyType.TRIAD);
+  }
+
+  get isUnlocked() {
+    return this.config.requirement.every(s => player.timestudy.studies.includes(s));
+  }
+
+  get isBought() {
+    return this.isUnlocked;
+  }
+
+  get description() {
+    return this.config.description;
+  }
+
+  purchase() {
+    return true;
+  }
+}
+
+TriadStudyState.studies = mapGameData(
+  GameDatabase.celestials.v.triadStudies,
+  config => new TriadStudyState(config)
+);
+
+function TriadStudy(id) {
+  return TriadStudyState.studies[id]
 }
 
 /**

@@ -64,5 +64,35 @@ GameDatabase.celestials.v = {
       currentValue: () => (player.dilation.active && EternityChallenge(5).isRunning ? DimBoost.purchasedBoosts : 0),
       formatRecord: x => shortenSmallInteger(x),
     }
+  ],
+  triadStudies: [
+    {
+      id: 1,
+      requirement: [221, 222, 231],
+      description: "Study 231 powers up the effect of study 221",
+      effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue),
+      formatEffect: value => `Replace study 221 effect with ${formatX(value, 2, 1)}`
+    },
+    {
+      id: 2,
+      requirement: [223, 224, 232],
+      description: "222 and 223 multiply",
+      effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue),
+      formatEffect: value => formatX(value, 2, 1)
+    },
+    {
+      id: 3,
+      requirement: [225, 226, 233],
+      description: "bonus extra RGs",
+      effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue),
+      formatEffect: value => formatX(value, 2, 1)
+    },
+    {
+      id: 4,
+      requirement: [227, 228, 234],
+      description: "Sacrifice boosts all dimensions",
+      effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue),
+      formatEffect: value => formatX(value, 2, 1)
+    }
   ]
 };

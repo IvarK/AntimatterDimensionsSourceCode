@@ -23,7 +23,7 @@ GameDatabase.celestials.v = {
       id: 1,
       name: "AntiStellar",
       description: value => `Have ${shortenSmallInteger(value)} total galaxies from all types.`,
-      values: [4000, 4200, 4400, 4600, 4800, 5000],
+      values: [4000, 4300, 4600, 4900, 5200, 5500],
       condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= x,
       currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies,
       formatRecord: x => shortenSmallInteger(x),
@@ -40,9 +40,9 @@ GameDatabase.celestials.v = {
     {
       id: 3,
       name: "Young Boy",
-      description: value => `Get ${shorten(value)} Antimatter in Eternity Challenge 12.`,
-      values: [2e9, 2.2e9, 2.4e9, 2.6e9, 2.8e9, 3e9].map(Decimal.pow10),
-      condition: x => EternityChallenge(12).isRunning && player.antimatter.gte(x),
+      description: value => `Get ${shorten(value)} Antimatter in Eternity Challenge 12 without unlocking Time Dilation.`,
+      values: [850e6, 900e6, 950e6, 1e9, 1.05e9, 1.1e9].map(Decimal.pow10),
+      condition: x => EternityChallenge(12).isRunning && player.antimatter.gte(x) && !TimeStudy.dilation.isBought,
       currentValue: () => (EternityChallenge(12).isRunning ? player.antimatter.exponent : 0),
       formatRecord: x => (x === 0 ? shortenSmallInteger(0) : shorten(Decimal.pow10(x))),
     },
@@ -50,7 +50,7 @@ GameDatabase.celestials.v = {
       id: 4,
       name: "Eternal Sunshine",
       description: value => `Get ${shorten(value)} EP.`,
-      values: ["1e6000", "1e6600", "1e7200", "1e7800", "1e8400", "1e9000"].map(v => new Decimal(v)),
+      values: ["1e7000", "1e7600", "1e8200", "1e8800", "1e9400", "1e10000"].map(v => new Decimal(v)),
       condition: x => player.eternityPoints.gte(x),
       currentValue: () => player.eternityPoints.exponent,
       formatRecord: x => (x === 0 ? shortenSmallInteger(0) : shorten(Decimal.pow10(x))),
@@ -76,23 +76,19 @@ GameDatabase.celestials.v = {
     {
       id: 2,
       requirement: [223, 224, 232],
-      description: "222 and 223 multiply",
-      effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue),
-      formatEffect: value => formatX(value, 2, 1)
+      description: "Galaxies cost scaling goes up 40 8ths instead of 52",
+      effect: 40,
     },
     {
       id: 3,
       requirement: [225, 226, 233],
-      description: "bonus extra RGs",
-      effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue),
-      formatEffect: value => formatX(value, 2, 1)
+      description: "Your extra RGs are multiplied by 1.5x",
+      effect: 1.5,
     },
     {
       id: 4,
       requirement: [227, 228, 234],
-      description: "Sacrifice boosts all dimensions",
-      effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue),
-      formatEffect: value => formatX(value, 2, 1)
+      description: "Sacrifice boosts all infinity dimensions by x^0.01 and all time dimensions by x^0.001",
     }
   ]
 };

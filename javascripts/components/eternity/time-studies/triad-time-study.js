@@ -19,7 +19,11 @@ Vue.component("triad-time-study", {
     config() {
       return this.study.config;
     },
+    showEffect() {
+      return typeof this.config.effect === "function";
+    },
     formattedEffect() {
+      if (!this.showEffect) return "";
       return this.config.formatEffect(this.study.effectValue);
     }
   },
@@ -31,7 +35,7 @@ Vue.component("triad-time-study", {
       <template>
         <span>
         {{ config.description }}<br>
-        Currently: {{ formattedEffect }}
+        <span v-if="showEffect">Currently: {{ formattedEffect }}</span>
         </span>
       </template>
     </time-study>`

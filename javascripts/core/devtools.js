@@ -318,8 +318,9 @@ dev.unlockCelestialQuotes = function(celestial) {
   }
 };
 
-dev.testGlyphs = function() {
-  const glyphLevel = 6500;
+dev.testGlyphs = function(config) {
+  const glyphLevel = config.glyphLevel || 6500;
+  const duration = config.duration || 4000;
   let glyphId = Date.now();
   const save = GameSaveSerializer.serialize(player);
   const makeGlyph = (type, effects) => ({
@@ -388,7 +389,7 @@ dev.testGlyphs = function() {
   function runTrial(index) {
     equipSet(index);
     AutomatorBackend.start();
-    setTimeout(finishTrial, 4000, index);
+    setTimeout(finishTrial, duration, index);
   }
   runTrial(0);
 }

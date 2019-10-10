@@ -122,6 +122,7 @@ function timeDimensionCommonMultiplier() {
       TimeStudy(103),
       TimeStudy(151),
       TimeStudy(221),
+      TriadStudy(1),
       EternityChallenge(1).reward,
       EternityChallenge(10).reward,
       EternityUpgrade.tdMultAchs,
@@ -173,6 +174,8 @@ class TimeDimensionState extends DimensionState {
         tier === 3 ? TimeStudy(73) : null,
         tier === 4 ? TimeStudy(227) : null
       );
+      
+    if (TriadStudy(4).canBeApplied) mult = mult.times(Sacrifice.totalBoost.pow(0.001));
 
     mult = mult.clampMin(0).pow(getAdjustedGlyphEffect("timepow"));
 

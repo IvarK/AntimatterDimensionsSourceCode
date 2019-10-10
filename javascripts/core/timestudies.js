@@ -640,6 +640,10 @@ class TriadStudyState extends TimeStudyState {
     return this.config.description;
   }
 
+  get canBeApplied() {
+    return this.isUnlocked;
+  }
+
   purchase() {
     return true;
   }

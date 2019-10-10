@@ -202,6 +202,8 @@ class InfinityDimensionState extends DimensionState {
         tier === 1 ? EternityChallenge(2).reward : null
       );
 
+    if (TriadStudy(4).canBeApplied) mult = mult.times(Sacrifice.totalBoost.pow(0.01));
+
     mult = mult.clampMin(0);
 
     if (player.dilation.active || TimeCompression.isActive) {

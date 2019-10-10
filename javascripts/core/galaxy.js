@@ -96,7 +96,7 @@ class Galaxy {
   }
 
   static get costMult() {
-    return NormalChallenge(10).isRunning ? 90 : Effects.min(60, TimeStudy(42));
+    return NormalChallenge(10).isRunning ? 90 : Effects.min(60, TimeStudy(42), TriadStudy(2));
   }
 
   static get baseCost() {

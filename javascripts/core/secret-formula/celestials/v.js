@@ -70,8 +70,8 @@ GameDatabase.celestials.v = {
       id: 1,
       requirement: [221, 222, 231],
       description: "Study 231 powers up the effect of study 221",
-      effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue),
-      formatEffect: value => `Replace study 221 effect with ${formatX(value, 2, 1)}`
+      effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue.minus(1)).clampMin(1),
+      formatEffect: value => formatX(value, 2, 1)
     },
     {
       id: 2,

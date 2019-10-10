@@ -586,7 +586,7 @@ The eight rarities are as follows:
 <font color="white",
 span style="text-shadow: black -1px 1px 1px,
 black 1px 1px 1px, black -1px -1px 1px,
-black 1px -1px 1px, rgb(255, 255, 255) 0px 0px 3px;">Common</font>,
+black 1px -1px 1px, rgb(255, 255, 255) 0 0 3px;">Common</font>,
 <font color="#43a047">Uncommon</font>,
 <font color="#2196f3">Rare</font>,
 <font color="#9c27b0">Epic</font>,

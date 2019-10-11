@@ -354,8 +354,6 @@ function getGameSpeedupForDisplay() {
   return speedFactor;
 }
 
-let autobuyerOnGameLoop = true;
-
 // "diff" is in ms.  It is only unspecified when it's being called normally and not due to simulating time, in which
 // case it uses the gap between now and the last time the function was called.  This is on average equal to the update
 // rate.
@@ -399,9 +397,7 @@ function gameLoop(diff, options = {}) {
   }
 
   slowerAutobuyers(realDiff);
-  if (autobuyerOnGameLoop) {
-      Autobuyers.tick();
-  }
+  Autobuyers.tick();
 
     // We do these after autobuyers, since it's possible something there might
     // change a multiplier.
@@ -661,16 +657,6 @@ function getTTPerSecond() {
   return dilationTT.add(glyphTT);
 }
 
-function gameLoopWithAutobuyers(seconds, ticks, real) {
-  for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
-    gameLoop(1000 * seconds);
-    Autobuyers.tick();
-    if (real) {
-      console.log(ticksDone);
-    }
-  }
-}
-
 function simulateTime(seconds, real, fast) {
   // Don't do asynchronous processing loops nested in simulateTime
   Async.enabled = false;
@@ -680,7 +666,6 @@ function simulateTime(seconds, real, fast) {
   // warning: do not call this function with real unless you know what you're doing
   // calling it with fast will only simulate it with a max of 50 ticks
   let ticks = seconds * 20;
-  autobuyerOnGameLoop = false;
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)
@@ -710,10 +695,14 @@ function simulateTime(seconds, real, fast) {
         numberOfTicksRemaining, 0.0001);
       remainingRealSeconds -= realTickTime;
       gameLoop(1000 * realTickTime, { blackHoleSpeedup: blackHoleSpeedup });
-      Autobuyers.tick();
     }
   } else {
-    gameLoopWithAutobuyers(largeDiff / 1000, ticks, real);
+    for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
+      gameLoop(largeDiff);
+      if (real) {
+        console.log(ticksDone);
+      }
+    }
   }
 
   const offlineIncreases = ["While you were away"];
@@ -761,7 +750,6 @@ function simulateTime(seconds, real, fast) {
   }
 
   Modal.message.show(popupString);
-  autobuyerOnGameLoop = true;
   GameUI.notify.showBlackHoles = true;
   Async.enabled = true;
 }

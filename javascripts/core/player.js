@@ -1,6 +1,5 @@
 "use strict";
 
-var shiftDown = false;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
 let player = {

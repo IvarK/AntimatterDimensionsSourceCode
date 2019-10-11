@@ -874,7 +874,6 @@ window.onblur = function() {
 };
 
 function setShiftKey(isDown) {
-  shiftDown = isDown;
   ui.view.shiftDown = isDown;
 }
 

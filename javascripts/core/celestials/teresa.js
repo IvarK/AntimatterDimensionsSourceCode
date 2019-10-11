@@ -139,7 +139,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
       Autobuyer.reality.bumpAmount(2);
     }
     if (this.id === 4) {
-      dev.giveMusicGlyph();
+      Glyphs.addToInventory(GlyphGenerator.musicGlyph());
     }
   }
 }

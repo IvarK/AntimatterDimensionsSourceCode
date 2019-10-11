@@ -205,6 +205,17 @@ const GlyphGenerator = {
     };
   },
 
+  musicGlyph() {
+      const highestLevel = player.reality.glyphs.active
+        .concat(player.reality.glyphs.inventory)
+        .map(glyph => glyph.level)
+        .max();
+      const glyph = this.randomGlyph({ actualLevel: Math.floor(highestLevel * 0.8), rawLevel: 1 });
+      glyph.symbol = "key266b";
+      glyph.color = "#FF80AB";
+      return glyph;
+  },
+
   // Generates a unique ID for glyphs, used for deletion and drag-and-drop.  Non-unique IDs can cause buggy behavior.
   makeID() {
     return this.maxID + 1;

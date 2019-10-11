@@ -33,14 +33,6 @@ body.t-dark-metro {
     background: #E53935;
 }
 
-.t-dark-metro .c-rm-amount__desc {
-    color: #757575;
-}
-
-.t-dark-metro .c-rm-amount {
-  color: #0b600e;
-}
-
 .t-dark-metro #realityanimbg {
     filter: invert(1);
 }

@@ -11,17 +11,13 @@
   margin-bottom: 1rem;
 }
 
-.l-time-studies-tab__tt-shop {
-  margin-bottom: -1rem;
-}
-
 .l-time-study-options {
   display: flex;
   flex-direction: row;
 }
 
 .l-time-study-options > * {
-  margin: .2rem;
+  margin: 0.2rem;
 }
 
 .l-time-study-tree {
@@ -43,7 +39,7 @@
 /*#region o-time-study*/
 
 .o-time-study {
-  border: .1rem solid;
+  border: 0.1rem solid;
   background-color: black;
   font-weight: bold;
   font-family: Typewriter, serif;
@@ -51,7 +47,7 @@
   height: 8rem;
   transition-duration: 0.2s;
   cursor: pointer;
-  border-radius: .4rem;
+  border-radius: 0.4rem;
   font-size: 1.0rem;
   animation: a-time-study 7s infinite;
 }
@@ -72,9 +68,9 @@
 }
 
 @keyframes a-time-study {
-  0%   { box-shadow: inset 0 0 .3rem 0 }
-  50%  { box-shadow: inset 0 0  2rem 0 }
-  100% { box-shadow: inset 0 0 .3rem 0 }
+  0%   { box-shadow: inset 0 0 0.3rem 0 }
+  50%  { box-shadow: inset 0 0 2rem 0 }
+  100% { box-shadow: inset 0 0 0.3rem 0 }
 }
 
 .o-time-study--small {
@@ -99,7 +95,7 @@
 .t-inverted-metro .o-time-study--normal,
 .t-s8 .o-time-study--normal {
   color: #673ab7;
-  border-color: #4527a0;
+  border-color: #673ab7;
 }
 
 .t-metro .o-time-study--normal:hover,
@@ -107,7 +103,7 @@
 .t-inverted-metro .o-time-study--normal:hover,
 .t-s8 .o-time-study--normal:hover {
   color: #eeeeee;
-  background-color: #512da8;
+  background-color: #673ab7
 }
 
 .t-dark .o-time-study--normal,
@@ -255,9 +251,9 @@
 }
 
 .o-time-study--reality {
-  color: #0b600e;
+  color: var(--color-reality);
   background-color: white;
-  border-color: #0b600e;
+  border-color: var(--color-reality);
 }
 
 .t-dark .o-time-study--reality,
@@ -267,7 +263,7 @@
 
 .o-time-study--reality:hover {
   color: white;
-  background-color: #0b600e;
+  background-color: var(--color-reality);
 }
 
 @keyframes a-time-study--dilation {
@@ -331,7 +327,7 @@
 
 .t-dark .o-time-study--reality:hover,
 .t-s6 .o-time-study--reality:hover {
-  background-color: #0b600e;
+  background-color: var(--color-reality);
 }
 
 .o-time-study--unavailable {
@@ -357,7 +353,7 @@
 .t-inverted-metro .o-time-study--unavailable,
 .t-s1 .o-time-study--unavailable,
 .t-s8 .o-time-study--unavailable {
-  box-shadow: .1rem .1rem .1rem 0 black;
+  box-shadow: 0.1rem 0.1rem 0.1rem 0 black;
 }
 
 .t-metro .o-time-study--unavailable,
@@ -444,8 +440,8 @@
 
 .t-dark .o-time-study--unavailable:hover,
 .t-s6 .o-time-study--unavailable:hover {
-  background-color: #b84b5f;
-  border-color: #b84b5f;
+  background-color: var(--color-bad);
+  border-color: var(--color-bad);
 }
 
 .t-dark .o-time-study--unavailable:hover,
@@ -473,6 +469,13 @@
   color: black;
   background-color: #673ab7;
   border-color: black;
+}
+
+.t-metro .o-time-study--bought:hover,
+.t-dark-metro .o-time-study--bought:hover,
+.t-inverted-metro .o-time-study--bought:hover,
+.t-s8 .o-time-study--bought:hover {
+  color: black;
 }
 
 .t-dark .o-time-study--bought,
@@ -544,8 +547,8 @@
 
 .o-time-study--bought.o-time-study--reality {
   color: white;
-  background-color: #0b600e;
-  border-color: #0b600e;
+  background-color: var(--color-reality);
+  border-color: var(--color-reality);
 }
 
 .t-metro .o-time-study--bought.o-time-study--eternity-challenge,
@@ -616,7 +619,7 @@
 
 .t-dark .o-time-study--bought.o-time-study--reality,
 .t-s6 .o-time-study--bought.o-time-study--reality {
-  background-color: #0b600e;
+  background-color: var(--color-reality);
 }
 
 .o-time-study--secret {

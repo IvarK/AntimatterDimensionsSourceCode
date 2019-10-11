@@ -63,88 +63,29 @@
   align-items: center;
 }
 
-.o-tab-btn {
-  background: #E0E0E0;
-  font-weight: bold;
-  border: 0.2rem solid #4980CC;
-  border-radius: 0.4rem;
-  transition-duration: 0.2s;
-  cursor: pointer;
-  font-family: Typewriter;
-  font-size: 1.8rem;
-}
-
-.o-tab-btn:hover {
-  color: #FFFFFF;
-  background: #4980CC;
-}
-
-.t-dark .o-tab-btn {
-  color: #E0E0E0;
-  border: .2rem solid #1565C0;
-  background-color: #455A64;
-}
-
-.t-dark .o-tab-btn:hover {
-  background: #1565C0;
-  color: black;
-}
-
 .t-metro .o-tab-btn,
+.t-dark-metro .o-tab-btn,
 .t-inverted-metro .o-tab-btn,
 .t-s8 .o-tab-btn {
-  background: #eeeeee;
-  border: .1rem solid #2196F3;
-  box-shadow: .1rem .1rem .1rem 0 #9E9E9E;
+  border-width: 0.1rem;
+  box-shadow: 0.1rem 0.1rem 0.1rem 0 #9E9E9E;
   border-radius: 0;
 }
 
 .t-dark-metro .o-tab-btn {
-  color: #e0e0e0;
-  background-color: #455a64;
-  border: .1rem solid #1e88e5;
   box-shadow: 0.1rem 0.1rem 0.1rem 0 black;
-  border-radius: 0;
-}
-
-.t-s1 .o-tab-btn {
-  color: black;
-  background: #dbd242;
-  border-color: black;
-}
-
-.t-s1 .o-tab-btn:hover {
-  color: #dbd242;
-  background: black;
 }
 
 .t-s4 .o-tab-btn {
-  background-color: #1b00ff !important;
   cursor: url(cursor2.cur), auto;
 }
 
 .t-s6 .o-tab-btn {
-  color: #E0E0E0;
-  background: black;
-  border: .2rem solid #1565C0;
   text-shadow: 0 0 1rem white;
-}
-
-.t-s6 .o-tab-btn:hover {
-  background: #1565C0;
-  color: black;
 }
 
 .t-s8 .o-tab-btn {
   box-shadow: none;
-}
-
-.t-metro .o-tab-btn:hover,
-.t-dark-metro .o-tab-btn:hover,
-.t-inverted-metro .o-tab-btn:hover,
-.t-s8 .o-tab-btn:hover {
-  background: #2196F3;
-  border: .1rem solid #2196F3;
 }
 
 .o-tab-btn--secondary {
@@ -153,203 +94,19 @@
   height: 2.5rem;
 }
 
-.o-tab-btn--infinity {
-  color: #FFFFFF;
-  background: #1F1F1F;
-  border-color: #B67F33;
-}
-
-.t-dark .o-tab-btn--infinity,
-.t-s6 .o-tab-btn--infinity {
-  color: #000;
-  background: #F5F5F5;
-  border-color: #FF9800;
-}
-
-.t-metro .o-tab-btn--infinity,
-.t-inverted-metro .o-tab-btn--infinity,
-.t-s8 .o-tab-btn--infinity {
-  border-color: #FF9800;
-  background: #1F1F1F;
-}
-
-.t-dark-metro .o-tab-btn--infinity {
-  color: black;
-  background: white;
-  border-color: #FF9800;
-  box-shadow: 1px 1px 1px 0 black;
-}
-
-
-.o-tab-btn--infinity:hover {
-  color: #000000;
-  background: #B67F33;
-}
-
-.t-dark .o-tab-btn--infinity:hover,
-.t-s6 .o-tab-btn--infinity:hover {
-  background: #FF9800;
-}
-
-.t-metro .o-tab-btn--infinity:hover,
-.t-dark-metro .o-tab-btn--infinity:hover,
-.t-inverted-metro .o-tab-btn--infinity:hover,
-.t-s8 .o-tab-btn--infinity:hover {
-  background: #FF9800;
-  border-color: #FF9800;
-}
-
-.o-tab-btn--eternity {
-  color: #b341e0;
-  background: black;
-  border-color: #b341e0;
-}
-
-.t-dark .o-tab-btn--eternity,
-.t-s6 .o-tab-btn--eternity {
-  color: #b341e0;
-  background: black;
-  border-color: #b341e0;
-}
-
-.t-metro .o-tab-btn--eternity,
-.t-dark-metro .o-tab-btn--eternity,
-.t-inverted-metro .o-tab-btn--eternity,
-.t-s8 .o-tab-btn--eternity {
-  color: #673AB7;
-  background: black;
-  border-color: #673AB7;
-}
-
-.t-s1 .o-tab-btn--eternity {
-  color: #639565;
-  background: black;
-  border-color: #639565;
-}
-
-.o-tab-btn--eternity:hover {
-  color: #511568;
-  background: white;
-}
-
-.t-dark .o-tab-btn--eternity:hover,
-.t-s6 .o-tab-btn--eternity:hover {
-  color: #511568;
-  background: white;
-}
-
-.t-metro .o-tab-btn--eternity:hover,
-.t-dark-metro .o-tab-btn--eternity:hover,
-.t-inverted-metro .o-tab-btn--eternity:hover,
-.t-s8 .o-tab-btn--eternity:hover {
-  background: white;
-  border-color: #673AB7;
-}
-
-.t-s1 .o-tab-btn--eternity:hover {
-  color: black;
-  background: #639565;
-  border-color: black;
-}
-
-.t-s6 .eternitytabbtn:hover {
-  color: #511568;
-  background: white;
-}
-
-.o-tab-btn--reality {
-  background: white;
-  border-color: #0b600e;
-  color: #0b600e;
-}
-
-.t-dark .o-tab-btn--reality,
-.t-metro .o-tab-btn--reality,
-.t-dark-metro .o-tab-btn--reality,
-.t-inverted-metro .o-tab-btn--reality,
-.t-s6 .o-tab-btn--reality,
-.t-s8 .o-tab-btn--reality {
-  background: white;
-  border-color: #0b600e;
-  color: #0b600e;
-}
-
-.o-tab-btn--reality:hover {
-  background: #0b600e;
-  color: white;
-}
-
-.t-dark .o-tab-btn--reality:hover,
-.t-s6 .o-tab-btn--reality:hover {
-  background: #0b600e;
-  color: white;
-}
-
-.t-metro .o-tab-btn--reality:hover,
-.t-dark-metro .o-tab-btn--reality:hover,
-.t-inverted-metro .o-tab-btn--reality:hover,
-.t-s8 .o-tab-btn--reality:hover {
-  background: #0b600e;
-  color: white;
-  border-color: #0b600e;
-}
-
-.o-tab-btn--celestial {
-  background: #5151ec;
-  border-color: #d0d0d0;
-  color: #d0d0d0;
-}
-
-.t-metro .o-tab-btn--celestial,
-.t-dark-metro .o-tab-btn--celestial,
-.t-inverted-metro .o-tab-btn--celestial,
-.t-s8 .o-tab-btn--celestial {
-  background: #00bcd4;
-  border-color: #00838f;
-  color: white;
-}
-
-.o-tab-btn--celestial:hover {
-  background: #d0d0d0;
-  color: #5151ec;
-}
-
-.t-metro .o-tab-btn--celestial:hover,
-.t-dark-metro .o-tab-btn--celestial:hover,
-.t-inverted-metro .o-tab-btn--celestial:hover,
-.t-s8 .o-tab-btn--celestial:hover {
-  background: white;
-  color: #00bcd4;
-  border-color: #00838f;
-}
-
-.t-dark .o-tab-btn--celestial,
-.t-s6 .o-tab-btn--celestial {
-  background: #5151ec;
-  border-color: #d0d0d0;
-  color: white;
-}
-
-.t-dark .o-tab-btn--celestial:hover,
-.t-s6 .o-tab-btn--celestial:hover {
-  background: #d0d0d0;
-  color: #5151ec;
-}
-
 .c-news-ticker {
-  border: .2rem solid black;
-  border-radius: .4rem;
-  padding: .2rem 0;
+  border: 0.2rem solid black;
+  border-radius: 0.4rem;
+  padding: 0.2rem 0;
   height: 3rem;
 }
 
-.t-dark .c-news-ticker,
 .t-metro .c-news-ticker,
 .t-inverted-metro .c-news-ticker,
 .t-dark-metro .c-news-ticker,
 .t-s6 .c-news-ticker,
 .t-s8 .c-news-ticker {
-  border-width: .1rem;
+  border-width: 0.1rem;
 }
 
 .t-dark .c-news-ticker {
@@ -370,15 +127,5 @@
 }
 
 .c-news-line {
-  color: black;
-}
-
-.t-dark .c-news-line,
-.t-dark-metro .c-news-line,
-.t-s6 .c-news-line {
-  color: #e0e0e0;
-}
-
-.t-s2 .c-news-line {
-  color: white;
+  color: var(--color-text);
 }

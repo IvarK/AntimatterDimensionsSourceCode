@@ -47,6 +47,7 @@ let player = {
       current: 0,
       bestTimes: Array.repeat(defaultMaxTime, 8),
       completedBits: 0,
+      ic2Count: 0,
     },
     eternity: {
       current: 0,

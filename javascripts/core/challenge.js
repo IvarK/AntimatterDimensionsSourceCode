@@ -46,13 +46,13 @@ function updateNormalAndInfinityChallenges(diff) {
   }
 
   if (InfinityChallenge(2).isRunning) {
-    if (postC2Count >= 8 || diff > 8000) {
+    if (player.challenge.infinity.ic2Count >= 8 || diff > 8000) {
       if (NormalDimension(8).amount.gt(0)) {
         sacrificeReset();
       }
-      postC2Count = 0;
+      player.challenge.infinity.ic2Count = 0;
     } else {
-      postC2Count++;
+      player.challenge.infinity.ic2Count++;
     }
   }
 }

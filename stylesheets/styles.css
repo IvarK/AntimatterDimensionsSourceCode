@@ -4966,18 +4966,8 @@ kbd {
 .t-dark-metro .c-teresa-run-button, .t-dark-metro .c-teresa-unlock,  .t-dark-metro .o-teresa-shop-button,
 .t-inverted-metro .c-teresa-run-button, .t-inverted-metro .c-teresa-unlock,  .t-inverted-metro .o-teresa-shop-button,
 .t-s8 .c-teresa-run-button, .t-s8 .c-teresa-unlock, .t-s8 .o-teresa-shop-button {
-  color: white;
-  background-color: #00bcd4;
-  border: 1px solid #2196F3;
   border-radius: 0;
-}
-
-.t-metro .c-teresa-run-button:hover, .t-metro .o-teresa-shop-button:hover,
-.t-dark-metro .c-teresa-run-button:hover, .t-dark-metro .o-teresa-shop-button:hover,
-.t-inverted-metro .c-teresa-run-button:hover, .t-inverted-metro .o-teresa-shop-button:hover,
-.t-s8 .c-teresa-run-button:hover, .t-s8 .o-teresa-shop-button:hover {
-  color: #00bcd4;
-  background-color: white;
+  border-width: 0.1rem;
 }
 
 .c-effarig-relics {

@@ -204,7 +204,8 @@ let player = {
     gal: 0,
     galaxies: 0,
     galCost: new Decimal(1e170),
-    auto: [false, false, false]
+    auto: [false, false, false],
+    timer: 0,
   },
   timestudy: {
     theorem: new Decimal(0),

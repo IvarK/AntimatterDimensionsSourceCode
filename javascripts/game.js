@@ -216,21 +216,14 @@ function gainedInfinities() {
     return infGain;
 }
 
-setInterval(function() {
+setInterval(() => {
   if (isLocalEnvironment()) return;
-    $.getJSON('version.txt', function(data){
-        //data is actual content of version.txt, so
-        //do whatever you need with it
-        //I'd compare it with last result and if it's different
-        //show the message received and nag for attention
-        //like this:
-        if (data.version > player.version) {
-            player.version = data.version
-            Modal.message.show(data.message, updateRefresh);
-            //or some more resilient method
-            //like forced news bar with message running over and over
-        }
-    })
+  $.getJSON("version.txt", data => {
+    if (data.version > player.version) {
+      player.version = data.version;
+      Modal.message.show(data.message, updateRefresh);
+    }
+  });
 }, 60000);
 
 // TODO: remove before release
@@ -278,7 +271,6 @@ function kongLog10StatSubmission() {
 setInterval(kongLog10StatSubmission, 10000)
 
 var postC2Count = 0;
-var replicantiTicks = 0
 
 const GameSpeedEffect = { FIXEDSPEED: 1, TIMEGLYPH: 2, BLACKHOLE: 3, TIMESTORAGE: 4, MOMENTUM: 5 };
 

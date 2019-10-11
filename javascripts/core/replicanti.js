@@ -128,16 +128,16 @@ function replicantiLoop(diff) {
     } else {
       fastReplicantiBelow308(logGainFactorPerTick.times(LOG10_E), isRGAutobuyerEnabled);
     }
-    replicantiTicks = 0;
-  } else if (interval.lte(replicantiTicks)) {
+    player.replicanti.timer = 0;
+  } else if (interval.lte(player.replicanti.timer)) {
     const reproduced = binomialDistribution(player.replicanti.amount, player.replicanti.chance);
      player.replicanti.amount = player.replicanti.amount.plus(reproduced);
     if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount);
-    replicantiTicks -= interval.toNumber();
+    player.replicanti.timer -= interval.toNumber();
   }
 
   if (player.replicanti.amount !== 0) {
-    replicantiTicks += player.options.updateRate;
+    player.replicanti.timer += diff;
   }
 
   if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Decimal.MAX_NUMBER)) {

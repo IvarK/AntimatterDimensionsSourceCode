@@ -1949,8 +1949,9 @@ screen and (max-width: 480px) {
   margin-bottom: 1rem;
 }
 
-.c-infinity-dim-tab__enslaved-reward-button {
+.c-infinity-dim-tab__tesseract-button {
   padding: 1rem;
+  margin-bottom: 1.2rem;
   font-family: TypeWriter, serif;
   background: #111117;
   color: #2ebce6;
@@ -1960,19 +1961,48 @@ screen and (max-width: 480px) {
   animation: a-tesseract-shift 5s infinite;
 }
 
-.c-infinity-dim-tab__enslaved-reward-button:hover {
+.t-dark .c-infinity-dim-tab__tesseract-button,
+.t-dark-metro .c-infinity-dim-tab__tesseract-button,
+.t-s6 .c-infinity-dim-tab__tesseract-button {
+  background: #EEEEEE;
+  animation: a-tesseract-shift-dark 5s infinite;
+}
+
+.c-infinity-dim-tab__tesseract-button:hover {
   background: black;
   color: #00c5ff;
 }
 
-.c-infinity-dim-tab__enslaved-reward-button--disabled {
+.t-dark .c-infinity-dim-tab__tesseract-button:hover,
+.t-dark-metro .c-infinity-dim-tab__tesseract-button:hover,
+.t-s6 .c-infinity-dim-tab__tesseract-button:hover {
+  background: white;
+}
+
+.c-infinity-dim-tab__tesseract-button--disabled {
   background: #444040;
   color: #bfdde8;
   cursor: default;
   animation: none;
 }
 
-.c-infinity-dim-tab__enslaved-reward-button--disabled:hover {
+.t-dark .c-infinity-dim-tab__tesseract-button--disabled,
+.t-dark-metro .c-infinity-dim-tab__tesseract-button--disabled,
+.t-s6 .c-infinity-dim-tab__tesseract-button--disabled {
+  background: #444040;
+  color: #bfdde8;
+  cursor: default;
+  animation: none;
+}
+
+.c-infinity-dim-tab__tesseract-button--disabled:hover {
+  background: #444040;
+  color: #bfdde8;
+}
+
+.t-dark .c-infinity-dim-tab__tesseract-button--disabled:hover,
+.t-dark-metro .c-infinity-dim-tab__tesseract-button--disabled:hover,
+.t-s6 .c-infinity-dim-tab__tesseract-button--disabled:hover {
   background: #444040;
   color: #bfdde8;
 }
@@ -1981,6 +2011,12 @@ screen and (max-width: 480px) {
   0% {box-shadow: 1.5rem 1.5rem 0.5rem black, -1.5rem -1.5rem 0.5rem black;}
   50% {box-shadow: 1.5rem -1.5rem 0.5rem black, -1.5rem 1.5rem 0.5rem black;}
   100% {box-shadow: -1.5rem -1.5rem 0.5rem black, 1.5rem 1.5rem 0.5rem black;}
+}
+
+@keyframes a-tesseract-shift-dark {
+  0% {box-shadow: 1.5rem 1.5rem 0.5rem white, -1.5rem -1.5rem 0.5rem white;}
+  50% {box-shadow: 1.5rem -1.5rem 0.5rem white, -1.5rem 1.5rem 0.5rem white;}
+  100% {box-shadow: -1.5rem -1.5rem 0.5rem white, 1.5rem 1.5rem 0.5rem white;}
 }
 
 /*#endregion l-infinity-dim-tab*/

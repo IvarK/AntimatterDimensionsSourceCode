@@ -4000,31 +4000,41 @@ screen and (max-width: 480px) {
 /*#region o-dilation-btn*/
 
 .o-dilation-btn {
-  color: #64dd17;
-  background-color: black;
   font-weight: bold;
   font-size: 1.12rem;
   border: 0.2rem solid #64dd17;
   width: 19rem;
   height: 9rem;
   transition-duration: 0.2s;
-  cursor: pointer;
   border-radius: 0.4rem;
   font-family: Typewriter, serif;
+  padding: 1rem;
+}
+
+.o-dilation-btn--locked {
+  color: #181818;
+  background-color: #5f5f5f;
+  border-color: #3e8a0f;
+}
+
+.o-dilation-btn--unlocked {
+  color: #64dd17;
+  background-color: black;
+  cursor: pointer;
   animation: a-dilation-btn-glow 10s infinite;
 }
 
-.o-dilation-btn:hover {
+.o-dilation-btn--unlocked:hover {
   background-color: white;
 }
 
-.t-dark .o-dilation-btn {
+.t-dark .o-dilation-btn--unlocked {
   color: #64dd17;
   background-color: black;
 }
 
-.t-dark .o-dilation-btn:hover,
-.t-s6 .o-dilation-btn:hover {
+.t-dark .o-dilation-btn--unlocked:hover,
+.t-s6 .o-dilation-btn--unlocked:hover {
   color: #64dd17;
   background-color: white;
 }
@@ -4039,6 +4049,50 @@ screen and (max-width: 480px) {
 .t-s8 .o-dilation-btn {
   border-radius: 0;
   border-width: 0.1rem;
+}
+
+.o-dilation-btn--locked:hover {
+  color: #1d1d1d;
+  background-color: #660000;
+}
+
+.t-metro .o-dilation-btn--locked,
+.t-dark-metro .o-dilation-btn--locked,
+.t-inverted-metro .o-dilation-btn--locked,
+.t-s1 .o-dilation-btn--locked,
+.t-s8 .o-dilation-btn--locked {
+  color: black;
+  background-color: #9e9e9e;
+  box-shadow: .1rem .1rem .1rem 0 black;
+  border: none;
+}
+
+.t-metro .o-dilation-btn--locked:hover,
+.t-dark-metro .o-dilation-btn--locked:hover,
+.t-inverted-metro .o-dilation-btn--locked:hover,
+.t-s8 .o-dilation-btn--locked:hover {
+  background-color: #ef5350;
+}
+
+.t-s1 .o-dilation-btn--locked:hover {
+  background-color: #d72621;
+}
+
+.t-s6 .o-dilation-btn--locked {
+  color: gray;
+  background-color: black;
+}
+
+.t-dark .o-dilation-btn--locked {
+  color: black;
+  background-color: #23292a;
+}
+
+.t-dark .o-dilation-btn--locked:hover,
+.t-s6 .o-dilation-btn--locked:hover {
+  color: black;
+  border-color: #b84b5f;
+  background-color: #b84b5f;
 }
 
 @keyframes a-dilation-btn-glow {

@@ -213,7 +213,7 @@ GameDatabase.tabs = [
         name: "Time dilation",
         symbol: "Ψ",
         component: "time-dilation-tab",
-        condition: () => TimeStudy.dilation.isBought
+        condition: () => TimeStudy.dilation.isBought || PlayerProgress.realityUnlocked()
       },
       {
         key: "compression",

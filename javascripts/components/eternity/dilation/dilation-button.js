@@ -3,6 +3,7 @@
 Vue.component("dilation-button", {
   data() {
     return {
+      isUnlocked: false,
       isRunning: false,
       hasGain: false,
       requiredForGain: new Decimal(0),
@@ -13,6 +14,7 @@ Vue.component("dilation-button", {
   },
   methods: {
     update() {
+      this.isUnlocked = TimeStudy.dilation.isBought;
       this.isRunning = player.dilation.active;
       if (!this.isRunning) return;
       this.canEternity = player.infinityPoints.gte(Player.eternityGoal);
@@ -27,8 +29,11 @@ Vue.component("dilation-button", {
     }
   },
   template:
-    `<button class="o-dilation-btn" onclick="startDilatedEternity()">
-      <span v-if="!isRunning">Dilate time.</span>
+    `<button class="o-dilation-btn"
+             :class="isUnlocked ? 'o-dilation-btn--unlocked' : 'o-dilation-btn--locked'"
+             onclick="startDilatedEternity()">
+      <span v-if="!isUnlocked">Purchase the dilation time study to unlock.</span>
+      <span v-else-if="!isRunning">Dilate time.</span>
       <span v-else-if="canEternity && hasGain">
         Disable dilation.
         <br>

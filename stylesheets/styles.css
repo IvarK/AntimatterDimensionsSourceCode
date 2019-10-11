@@ -1306,7 +1306,7 @@ screen and (max-width: 480px) {
 /*#region t-metro t-dark-metro t-inverted-metro t-s8*/
 
 .t-metro .o-primary-btn,
-.t-dark-metro .o-primary-btn
+.t-dark-metro .o-primary-btn,
 .t-inverted-metro .o-primary-btn,
 .t-s8 .o-primary-btn {
   border-radius: 0;

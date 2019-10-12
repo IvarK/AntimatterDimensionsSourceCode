@@ -37,7 +37,8 @@ function normalDimensionCommonMultiplier() {
     InfinityChallenge(3),
     InfinityChallenge(3).reward,
     InfinityChallenge(8),
-    EternityChallenge(10)
+    EternityChallenge(10),
+    TriadStudy(4)
   );
 
   multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));

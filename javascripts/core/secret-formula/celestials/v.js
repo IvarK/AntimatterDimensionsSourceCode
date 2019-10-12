@@ -92,7 +92,9 @@ GameDatabase.celestials.v = {
       id: 4,
       STCost: 16,
       requirement: [227, 228, 234],
-      description: "Sacrifice boosts all infinity dimensions by x^0.001 and all time dimensions by x^0.0001",
+      description: "Sacrifice boosts all normal dimensions.",
+      effect: () => Sacrifice.totalBoost,
+      formatEffect: value => formatX(value, 2, 1)
     }
   ]
 };

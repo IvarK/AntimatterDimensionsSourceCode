@@ -31,11 +31,11 @@ Vue.component("triad-time-study", {
 
   },
   template:
-    `<time-study :setup="setup" class="o-time-study--eternity-challenge">
+    `<time-study :setup="setup" class="o-time-study--eternity-challenge" :showSTCost="true">
       <template>
         <span>
-        {{ config.description }}<br>
-        <span v-if="showEffect">Currently: {{ formattedEffect }}</span>
+          {{ config.description }}<br>
+          <span v-if="showEffect">Currently: {{ formattedEffect }}</span>
         </span>
       </template>
     </time-study>`

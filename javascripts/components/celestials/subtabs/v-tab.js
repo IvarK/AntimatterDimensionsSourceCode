@@ -5,7 +5,6 @@ Vue.component("v-tab", {
     return {
       mainUnlock: false,
       totalUnlocks: 0,
-      totalAdditionalStudies: 0,
       achievementsPerAdditionalStudy: 0,
       realities: 0,
       infinities: new Decimal(0),
@@ -21,7 +20,6 @@ Vue.component("v-tab", {
     update() {
       this.mainUnlock = V.has(V_UNLOCKS.MAIN_UNLOCK);
       this.totalUnlocks = V.totalRunUnlocks;
-      this.totalAdditionalStudies = V.totalAdditionalStudies;
       this.achievementsPerAdditionalStudy = V.achievementsPerAdditionalStudy;
       this.realities = player.realities;
       this.infinities.copyFrom(player.infinitied);
@@ -115,9 +113,8 @@ Vue.component("v-tab", {
           and re-entering the reality.
         </div>
         <div>
-          You have {{ shortenSmallInteger(totalUnlocks) }} V-achievements done. You can pick
-          {{ shortenSmallInteger(totalAdditionalStudies) }}
-          {{ "study" | pluralize(totalAdditionalStudies, "studies") }} on other paths you normally can't buy.
+          You have {{ shortenSmallInteger(totalUnlocks) }} V-achievements done. 
+          You gain 1 Space Theorem for each completion.
         </div>
         <div>
           (You get one additional study per {{ shortenSmallInteger(achievementsPerAdditionalStudy) }}

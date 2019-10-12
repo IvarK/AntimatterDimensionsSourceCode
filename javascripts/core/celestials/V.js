@@ -43,10 +43,13 @@ class VRunUnlockState extends GameMechanicState {
         strength: g.strength,
         effects: g.effects,
       }));
-    if (this.completions === 6 || !this.config.condition(this.conditionValue)) return;
-    this.completions++;
-    GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
-    V.updateTotalRunUnlocks();
+
+    while (true) {
+      if (this.completions === 6 || !this.config.condition(this.conditionValue)) break;
+      this.completions++;
+      GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
+      V.updateTotalRunUnlocks();
+    }
   }
 }
 
@@ -107,7 +110,7 @@ const V_UNLOCKS = {
 };
 
 const V = {
-  totalRunUnlocks: 0,
+  spaceTheorems: 0,
   checkForUnlocks() {
 
     if (!V.has(V_UNLOCKS.MAIN_UNLOCK) && V_UNLOCKS.MAIN_UNLOCK.requirement()) {
@@ -138,11 +141,11 @@ const V = {
   startRun() {
     player.celestials.v.run = startRealityOver() || player.celestials.v.run;
   },
-  canBuyLockedPath() {
-    return player.celestials.v.additionalStudies < this.totalAdditionalStudies;
-  },
   updateTotalRunUnlocks() {
-    this.totalRunUnlocks = player.celestials.v.runUnlocks.sum();
+    this.spaceTheorems = player.celestials.v.runUnlocks.sum();
+  },
+  get availableST() {
+    return V.spaceTheorems - player.celestials.v.STSpent;
   },
   get isRunning() {
     return player.celestials.v.run;
@@ -151,6 +154,6 @@ const V = {
     return this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2]) ? 3 : 6;
   },
   get totalAdditionalStudies() {
-    return Math.floor(this.totalRunUnlocks / this.achievementsPerAdditionalStudy);
+    return Math.floor(this.spaceTheorems / this.achievementsPerAdditionalStudy);
   }
 };

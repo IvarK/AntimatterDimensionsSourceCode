@@ -41,7 +41,7 @@ GameDatabase.celestials.v = {
       id: 3,
       name: "Young Boy",
       description: value => `Get ${shorten(value)} Antimatter in Eternity Challenge 12 without unlocking Time Dilation.`,
-      values: [850e6, 900e6, 950e6, 1e9, 1.05e9, 1.1e9].map(Decimal.pow10),
+      values: [850e6, 900e6, 1e9, 1.1e9, 1.2e9, 1.3e9].map(Decimal.pow10),
       condition: x => EternityChallenge(12).isRunning && player.antimatter.gte(x) && !TimeStudy.dilation.isBought,
       currentValue: () => (EternityChallenge(12).isRunning ? player.antimatter.exponent : 0),
       formatRecord: x => (x === 0 ? shortenSmallInteger(0) : shorten(Decimal.pow10(x))),
@@ -68,6 +68,7 @@ GameDatabase.celestials.v = {
   triadStudies: [
     {
       id: 1,
+      STCost: 7,
       requirement: [221, 222, 231],
       description: "Study 231 powers up the effect of study 221",
       effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue.minus(1)).clampMin(1),
@@ -75,18 +76,21 @@ GameDatabase.celestials.v = {
     },
     {
       id: 2,
+      STCost: 7,
       requirement: [223, 224, 232],
       description: "Galaxies cost scaling goes up 40 8ths instead of 52",
       effect: 40,
     },
     {
       id: 3,
+      STCost: 7,
       requirement: [225, 226, 233],
       description: "Your extra RGs are multiplied by 1.5x",
       effect: 1.5,
     },
     {
       id: 4,
+      STCost: 7,
       requirement: [227, 228, 234],
       description: "Sacrifice boosts all infinity dimensions by x^0.01 and all time dimensions by x^0.001",
     }

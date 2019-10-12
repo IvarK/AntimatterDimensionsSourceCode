@@ -397,7 +397,7 @@ function finishProcessReality(realityProps) {
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);
   player.timestudy.studies = [];
-  player.celestials.v.additionalStudies = 0;
+  player.celestials.v.STSpent = 0;
   player.dilation.studies = [];
   player.dilation.active = false;
   player.dilation.tachyonParticles = new Decimal(0);

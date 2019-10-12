@@ -165,7 +165,9 @@ function canBuyStudy(id) {
 }
 
 function canBuyLocked(id) {
-  return V.canBuyLockedPath() && TimeStudy(id) && TimeStudy(id).checkVRequirement();
+  return V.availableST >= TimeStudy(id).config.STCost && 
+         TimeStudy(id) && 
+         TimeStudy(id).checkVRequirement();
 }
 
 function getSelectedDimensionStudyPaths() {
@@ -241,9 +243,11 @@ function studiesUntil(id) {
   }
   // If we've maxed out V rewards, we can brute force buy studies. Otherwise,
   // we don't assume we know which locked studies the player wants, if any.
+  /* TODO: modify this block to work with the flipped achievements as well
   if (V.totalAdditionalStudies >= 12) {
     buyTimeStudyRange(121, Math.min(lastInPrevRow, 214));
   }
+  */
   const pacePaths = getSelectedPacePaths();
   // If we don't have a middle path chosen at this point, we either can't decide
   // or can't afford any more studies
@@ -266,6 +270,7 @@ function studiesUntil(id) {
   // which case, they must have had one of the prerequisites) or b) it didn't, but the user has V
   // rewards so will be able to buy both prerequisites or c) they can't buy it
   // We only buy both if the player has maxed out V.
+  /* TODO: modify this block to work with the flipped achievements as well
   if (V.totalAdditionalStudies >= 12) {
     TimeStudy(220 + col * 2 - 1).purchase();
     TimeStudy(220 + col * 2).purchase();
@@ -273,6 +278,7 @@ function studiesUntil(id) {
     for (let i = 221; i <= 228; ++i) TimeStudy(i).purchase();
     study.purchase();
   }
+  */
 }
 
 function respecTimeStudies(auto) {
@@ -284,7 +290,8 @@ function respecTimeStudies(auto) {
   }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
-  player.celestials.v.additionalStudies = 0;
+  player.celestials.v.STSpent = 0;
+  player.celestials.v.triadStudies = [];
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();
@@ -387,7 +394,7 @@ class NormalTimeStudyState extends TimeStudyState {
     if (this.isBought || !this.isAffordable) return false;
     if (!canBuyStudy(this.id)) {
       if (!canBuyLocked(this.id)) return false;
-      player.celestials.v.additionalStudies++;
+      player.celestials.v.STSpent += this.config.STCost;
     }
     player.timestudy.studies.push(this.id);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
@@ -628,12 +635,13 @@ class TriadStudyState extends TimeStudyState {
     super(config, TimeStudyType.TRIAD);
   }
 
-  get isUnlocked() {
-    return this.config.requirement.every(s => player.timestudy.studies.includes(s));
+  get canBeBought() {
+    return this.config.requirement.every(s => player.timestudy.studies.includes(s)) &&
+           V.availableST >= this.config.STCost;
   }
 
   get isBought() {
-    return this.isUnlocked;
+    return player.celestials.v.triadStudies.includes(this.config.id);
   }
 
   get description() {
@@ -641,11 +649,13 @@ class TriadStudyState extends TimeStudyState {
   }
 
   get canBeApplied() {
-    return this.isUnlocked;
+    return this.isBought;
   }
 
   purchase() {
-    return true;
+    if (!this.canBeBought) return;
+    player.celestials.v.triadStudies.push(this.config.id);
+    player.celestials.v.STSpent += this.config.STCost;
   }
 }
 

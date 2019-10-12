@@ -2,10 +2,6 @@
     border: 1px solid #A9A9A9;
 }
 
-.t-metro .c-rm-amount {
-  color: #0b600e;
-}
-
 .t-metro .c-tt-buy-button--unlocked {
   background: #212121;
   color: #00BCD4;
@@ -25,10 +21,4 @@
 
 .t-metro .c-tt-buy-button--locked:hover {
   background: #EF5350;
-}
-
-@keyframes metroStudyGlowIn {
-    0%  {box-shadow: inset 0 0 3px 0 #673AB7;}
-    50% {box-shadow: inset 0 0 20px 0 #673AB7;}
-    100%  {box-shadow: inset 0 0 3px 0 #673AB7;}
 }

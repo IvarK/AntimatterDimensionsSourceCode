@@ -818,7 +818,7 @@ GameDatabase.news = [
   {
     id: "a167",
     text:
-      "Oh, I appear to have run out of <span style='animation: existenceGlow 3s " +
+      "Oh, I appear to have run out of <span style='animation: a-existence-glow 3s " +
       "infinite; font-size: 1.8rem; color: white; line-height: 0;'>Existence</span>."
   },
   {

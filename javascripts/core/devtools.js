@@ -151,14 +151,6 @@ dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
   Glyphs.addToInventory(glyph);
 };
 
-dev.giveMusicGlyph = function() {
-  const highestLevel = player.reality.glyphs.active
-    .concat(player.reality.glyphs.inventory)
-    .map(glyph => glyph.level)
-    .max();
-  dev.giveSpecialGlyph("#FF80AB", "key266b", Math.floor(0.8 * highestLevel), 1);
-};
-
 dev.giveGlyph = function(level, rawLevel = level) {
   if (Glyphs.freeInventorySpace === 0) return;
   Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }));

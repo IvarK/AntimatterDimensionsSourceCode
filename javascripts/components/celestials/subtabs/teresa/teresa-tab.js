@@ -25,8 +25,8 @@ Vue.component("teresa-tab", {
         PerkShopUpgrade.glyphLevel,
         PerkShopUpgrade.rmMult,
         PerkShopUpgrade.bulkDilation,
-        PerkShopUpgrade.musicGlyph,
         PerkShopUpgrade.autoSpeed,
+        PerkShopUpgrade.musicGlyph,
       ];
     }
   },

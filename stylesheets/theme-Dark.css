@@ -12,11 +12,6 @@ input.t-dark {
     color: #888888;
 }
 
-.t-dark .c-rm-amount {
-    color: #0b600e;
-    text-shadow: 0 0 7px #0b600e;
-}
-
 .t-dark .c-tt-amount {
     color: #64DD17;
     text-shadow: 0 0 7px #64DD17;
@@ -39,14 +34,14 @@ input.t-dark {
 }
 
 .t-dark .c-tt-buy-button--locked:hover {
-  background: #B84B5F;
-  border: 1px solid #B84B5F;
+  background: var(--color-bad);
+  border: 1px solid var(--color-bad);
 }
 
 .t-dark .c-rm-amount__desc {
-    color: #757575;
+  color: #757575;
 }
 
 .t-dark #realityanimbg {
-    filter: invert(1);
+  filter: invert(1);
 }

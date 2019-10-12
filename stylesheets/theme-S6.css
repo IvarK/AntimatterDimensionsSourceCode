@@ -1,6 +1,5 @@
 .t-s6 #stars {
     display: block;
-    position: fixed;
     /* Make video to at least 100% wide and tall */
     min-width: 100%;
     min-height: 100%;
@@ -39,10 +38,6 @@ body.t-s6 {
     text-shadow: 0 0 7px #64DD17;
 }
 
-.t-s6 #timetheorems, .t-s6 .c-ttshop__save-load-text, .t-s6 #minimizeArrow {
-    color: grey;
-}
-
 .t-s6 .c-tt-buy-button--unlocked {
   color: #3AACD6;
   background: black;
@@ -62,29 +57,12 @@ body.t-s6 {
 
 .t-s6 .c-tt-buy-button--locked:hover {
   color: black;
-  background: #B84B5F;
-  border: 1px solid #B84B5F;
-}
-
-.t-s6 .realitytabbtn {
-  color: #0b600e;
-  background-color: white;
-  border: 2px solid #0b600e;
-}
-
-.t-s6 .realitytabbtn:hover {
-    color: white ;
-    background-color: #0b600e;
-    border: 2px solid #0b600e;
+  background: var(--color-bad);
+  border: 1px solid var(--color-bad);
 }
 
 .t-s6 .c-rm-amount__desc {
     color: #999;
-}
-
-.t-s6 .c-rm-amount {
-  color: #0b600e;
-  text-shadow: 0 0 7px #0b600e;
 }
 
 .t-s6 #realityanimbg {

@@ -190,6 +190,10 @@ class RebuyableMechanicState extends GameMechanicState {
     return true;
   }
 
+  get isCapped() {
+    return false;
+  }
+
   get isRebuyable() {
     return true;
   }
@@ -209,7 +213,7 @@ class RebuyableMechanicState extends GameMechanicState {
   }
 
   get canBeBought() {
-    return this.isAffordable && this.isAvailable;
+    return this.isAffordable && this.isAvailable && !this.isCapped;
   }
 
   purchase() {

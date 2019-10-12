@@ -17,9 +17,9 @@ Vue.component("old-ui-tab-button", {
   template: `
     <button
       v-if="isAvailable"
-      :class="tab.config.oldUIClass"
+      :class="tab.config.UIClass"
       class="o-tab-btn"
-      style="margin: .2rem"
+      style="margin: 0.2rem"
       @click="tab.show()"
     >{{tab.name}}</button>
   `

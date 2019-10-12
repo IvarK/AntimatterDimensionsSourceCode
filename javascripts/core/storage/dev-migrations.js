@@ -476,6 +476,12 @@ GameStorage.devMigrations = {
       delete player.celestials.effarig.quoteIdx;
       delete player.celestials.enslaved.quoteIdx;
     },
+    player => {
+      const tempAuto = player.celestials.teresa.perkShop[4];
+      const tempMusic = player.celestials.teresa.perkShop[3];
+      player.celestials.teresa.perkShop[3] = tempAuto;
+      player.celestials.teresa.perkShop[4] = tempMusic;
+    },
   ],
 
   patch(player) {

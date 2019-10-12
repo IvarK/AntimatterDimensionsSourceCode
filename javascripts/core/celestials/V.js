@@ -90,21 +90,21 @@ const V_UNLOCKS = {
     description: "Have 10 V-achievements",
     effect: () => Player.achievementPower.toNumber(),
     format: x => formatX(x, 2, 2),
-    requirement: () => V.totalRunUnlocks >= 10
+    requirement: () => V.spaceTheorems >= 10
     },
     {
     id: 2,
-    reward: "Achievement count affects black hole power, Unlock Ra, Celestial of the Forgotten.",
+    reward: "Achievement count affects black hole power.",
     description: "Have 30 V-achievements",
     effect: () => Player.achievementPower.toNumber(),
     format: x => formatX(x, 2, 0),
-    requirement: () => V.totalRunUnlocks >= 30
+    requirement: () => V.spaceTheorems >= 30
     },
     {
     id: 3,
-    reward: "Double the amount of locked studies you can buy.",
+    reward: "Divide the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
     description: "Have 36 V-achievements",
-    requirement: () => V.totalRunUnlocks >= 36
+    requirement: () => V.spaceTheorems >= 36
     }
   ]
 };

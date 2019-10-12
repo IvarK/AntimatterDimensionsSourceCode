@@ -5,7 +5,6 @@ Vue.component("v-tab", {
     return {
       mainUnlock: false,
       totalUnlocks: 0,
-      achievementsPerAdditionalStudy: 0,
       realities: 0,
       infinities: new Decimal(0),
       eternities: new Decimal(0),
@@ -20,7 +19,6 @@ Vue.component("v-tab", {
     update() {
       this.mainUnlock = V.has(V_UNLOCKS.MAIN_UNLOCK);
       this.totalUnlocks = V.spaceTheorems;
-      this.achievementsPerAdditionalStudy = V.achievementsPerAdditionalStudy;
       this.realities = player.realities;
       this.infinities.copyFrom(player.infinitied);
       this.eternities.copyFrom(player.eternities);
@@ -115,10 +113,6 @@ Vue.component("v-tab", {
         <div>
           You have {{ shortenSmallInteger(totalUnlocks) }} V-achievements done. 
           You gain 1 Space Theorem for each completion.
-        </div>
-        <div>
-          (You get one additional study per {{ shortenSmallInteger(achievementsPerAdditionalStudy) }}
-          V-achievements, rounded down.)
         </div>
         <br>
         <div class="l-v-milestones-container">

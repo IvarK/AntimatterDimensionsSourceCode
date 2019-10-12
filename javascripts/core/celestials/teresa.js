@@ -125,8 +125,12 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     return this.config.cap();
   }
 
+  get isCapped() {
+    return this.cost === this.cap;
+  }
+
   get isAvailable() {
-    return this.cost < this.cap;
+    return this.cost < this.currency.value;
   }
 
   purchase() {
@@ -134,8 +138,8 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     if (this.id === 1) {
       Autobuyer.reality.bumpAmount(2);
     }
-    if (this.id === 3) {
-      dev.giveMusicGlyph();
+    if (this.id === 4) {
+      Glyphs.addToInventory(GlyphGenerator.musicGlyph());
     }
   }
 }
@@ -146,7 +150,7 @@ const PerkShopUpgrade = (function() {
     glyphLevel: new PerkShopUpgradeState(db.glyphLevel),
     rmMult: new PerkShopUpgradeState(db.rmMult),
     bulkDilation: new PerkShopUpgradeState(db.bulkDilation),
-    musicGlyph: new PerkShopUpgradeState(db.musicGlyph),
     autoSpeed: new PerkShopUpgradeState(db.autoSpeed),
+    musicGlyph: new PerkShopUpgradeState(db.musicGlyph),
   };
 }());

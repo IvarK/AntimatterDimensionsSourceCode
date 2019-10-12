@@ -10,10 +10,6 @@ body.t-inverted-metro {
     filter: invert(1);
 }
 
-.t-inverted-metro .c-rm-amount {
-    color: #0b600e;
-}
-
 .t-inverted-metro .c-tt-buy-button--unlocked {
   background: #212121;
   color: #00BCD4;

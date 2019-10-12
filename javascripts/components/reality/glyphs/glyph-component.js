@@ -61,7 +61,7 @@ const GlyphTooltipEffect = {
       return string
         .replace("\n", "<br>")
         .replace("]", "</span>")
-        .replace("[", `<span style="color:${this.additionColor}; text-shadow:#FFFFFF 0px 0px 0.6rem;">`);
+        .replace("[", `<span style="color:${this.additionColor}; text-shadow:#FFFFFF 0 0 0.6rem;">`);
     }
   },
   template: `
@@ -120,7 +120,7 @@ const GlyphTooltipComponent = {
         "text-shadow": `-1px 1px 1px black, 1px 1px 1px black,
                         -1px -1px 1px black, 1px -1px 1px black, 0 0 3px ${this.rarityInfo.color}`,
         float: "left",
-        animation: this.type === "reality" ? "c-reality-glyph-description-cycle 10s infinite" : undefined,
+        animation: this.type === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
         "margin-top": this.type === "reality" ? "0.7rem" : undefined,
         "margin-left": this.type === "reality" ? "0.7rem" : undefined
       };
@@ -298,7 +298,7 @@ Vue.component("glyph-component", {
         "background-color": "rgba(0, 0, 0, 0)",
         "box-shadow": `0 0 ${this.glowBlur} calc(${this.glowSpread} + 0.1rem) ${this.borderColor} inset`,
         "border-radius": this.circular ? "50%" : "0",
-        animation: this.isRealityGlyph ? "c-reality-glyph-over-cycle 10s infinite" : undefined,
+        animation: this.isRealityGlyph ? "a-reality-glyph-over-cycle 10s infinite" : undefined,
       };
     },
     outerStyle() {
@@ -308,7 +308,7 @@ Vue.component("glyph-component", {
         "background-color": this.borderColor,
         "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
         "border-radius": this.circular ? "50%" : "0",
-        animation: this.isRealityGlyph ? "c-reality-glyph-outer-cycle 10s infinite" : undefined,
+        animation: this.isRealityGlyph ? "a-reality-glyph-outer-cycle 10s infinite" : undefined,
       };
     },
     innerStyle() {
@@ -320,7 +320,7 @@ Vue.component("glyph-component", {
         color: rarityColor,
         "text-shadow": `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
-        animation: this.isRealityGlyph ? "c-reality-glyph-icon-cycle 10s infinite" : undefined,
+        animation: this.isRealityGlyph ? "a-reality-glyph-icon-cycle 10s infinite" : undefined,
       };
     },
     mouseEventHandlers() {

@@ -8191,7 +8191,7 @@
 
   function hiddenTextarea() {
     var te = elt("textarea", null, null, "position: absolute; bottom: -1em; padding: 0; width: 1px; height: 1em; outline: none");
-    var div = elt("div", [te], null, "overflow: hidden; position: relative; width: 3px; height: 0px;");
+    var div = elt("div", [te], null, "overflow: hidden; position: relative; width: 3px; height: 0;");
     // The textarea is kept positioned near the cursor to prevent the
     // fact that it'll be scrolled into view on input from scrolling
     // our fake cursor out of view. On webkit, when wrap=off, paste is

@@ -19,7 +19,7 @@ Vue.component("v-tab", {
   methods: {
     update() {
       this.mainUnlock = V.has(V_UNLOCKS.MAIN_UNLOCK);
-      this.totalUnlocks = V.totalRunUnlocks;
+      this.totalUnlocks = V.spaceTheorems;
       this.achievementsPerAdditionalStudy = V.achievementsPerAdditionalStudy;
       this.realities = player.realities;
       this.infinities.copyFrom(player.infinitied);

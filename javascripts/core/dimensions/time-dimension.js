@@ -175,7 +175,7 @@ class TimeDimensionState extends DimensionState {
         tier === 4 ? TimeStudy(227) : null
       );
       
-    if (TriadStudy(4).canBeApplied) mult = mult.times(Sacrifice.totalBoost.pow(0.001));
+    if (TriadStudy(4).canBeApplied) mult = mult.times(Sacrifice.totalBoost.pow(0.0001));
 
     mult = mult.clampMin(0).pow(getAdjustedGlyphEffect("timepow"));
 

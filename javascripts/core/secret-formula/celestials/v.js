@@ -68,7 +68,7 @@ GameDatabase.celestials.v = {
   triadStudies: [
     {
       id: 1,
-      STCost: 7,
+      STCost: 16,
       requirement: [221, 222, 231],
       description: "Study 231 powers up the effect of study 221",
       effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue.minus(1)).clampMin(1),
@@ -76,23 +76,23 @@ GameDatabase.celestials.v = {
     },
     {
       id: 2,
-      STCost: 7,
+      STCost: 16,
       requirement: [223, 224, 232],
-      description: "Galaxies cost scaling goes up 40 8ths instead of 52",
-      effect: 40,
+      description: "Multiply the distant galaxy scaling threshold by 2x",
+      effect: 2,
     },
     {
       id: 3,
-      STCost: 7,
+      STCost: 16,
       requirement: [225, 226, 233],
       description: "Your extra RGs are multiplied by 1.5x",
       effect: 1.5,
     },
     {
       id: 4,
-      STCost: 7,
+      STCost: 16,
       requirement: [227, 228, 234],
-      description: "Sacrifice boosts all infinity dimensions by x^0.01 and all time dimensions by x^0.001",
+      description: "Sacrifice boosts all infinity dimensions by x^0.001 and all time dimensions by x^0.0001",
     }
   ]
 };

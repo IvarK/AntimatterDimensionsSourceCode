@@ -96,7 +96,7 @@ class Galaxy {
   }
 
   static get costMult() {
-    return NormalChallenge(10).isRunning ? 90 : Effects.min(60, TimeStudy(42), TriadStudy(2));
+    return NormalChallenge(10).isRunning ? 90 : Effects.min(60, TimeStudy(42));
   }
 
   static get baseCost() {
@@ -114,12 +114,12 @@ class Galaxy {
   }
 
   static get costScalingStart() {
-    return 100 + Effects.sum(
+    return (100 + Effects.sum(
       TimeStudy(223),
       TimeStudy(224),
       EternityChallenge(5).reward,
       GlyphSacrifice.power
-    );
+    )) * TriadStudy(2).effectOrDefault(1);
   }
 
   static get type() {

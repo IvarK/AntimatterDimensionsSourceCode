@@ -55,7 +55,7 @@ Vue.component("normal-time-study", {
       this.showSTCost = !canBeBought && 
                         this.study.config.requirementV !== undefined &&
                         this.study.config.requirementV() && 
-                        this.study.config.STCost !== undefined;
+                        this.study.STCost !== undefined;
     },
   },
   template:

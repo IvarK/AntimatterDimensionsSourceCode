@@ -51,7 +51,7 @@ Vue.component("time-study", {
         this.isAvailable = study.canBeBought && study.isAffordable;
       }
 
-      this.STCost = this.study.config.STCost;
+      this.STCost = this.study.STCost;
     },
     handleClick() {
       this.study.purchase();

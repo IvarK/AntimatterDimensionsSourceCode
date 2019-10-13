@@ -121,20 +121,21 @@ function bigCrunchReset() {
 }
 
 function secondSoftReset(forcedNDReset = false) {
-    player.dimensionBoosts = 0;
-    player.galaxies = 0;
-    player.antimatter = Player.startingAM;
-    softReset(0, forcedNDReset);
-    InfinityDimensions.resetAmount();
-    if (player.replicanti.unl)
-        player.replicanti.amount = new Decimal(1);
-    player.replicanti.galaxies = 0;
-    player.thisInfinityTime = 0;
-    player.thisInfinityLastBuyTime = 0;
-    player.thisInfinityRealTime = 0;
-    player.noEighthDimensions = true;
-    player.noSacrifices = true;
-    AchievementTimers.marathon2.reset();
+  player.dimensionBoosts = 0;
+  player.galaxies = 0;
+  player.antimatter = Player.startingAM;
+  player.thisInfinityMaxAM = Player.startingAM;
+  softReset(0, forcedNDReset);
+  InfinityDimensions.resetAmount();
+  if (player.replicanti.unl)
+    player.replicanti.amount = new Decimal(1);
+  player.replicanti.galaxies = 0;
+  player.thisInfinityTime = 0;
+  player.thisInfinityLastBuyTime = 0;
+  player.thisInfinityRealTime = 0;
+  player.noEighthDimensions = true;
+  player.noSacrifices = true;
+  AchievementTimers.marathon2.reset();
 }
 
 class ChargedInfinityUpgradeState extends GameMechanicState {

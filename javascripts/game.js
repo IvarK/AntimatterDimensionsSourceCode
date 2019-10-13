@@ -37,7 +37,7 @@ function gainedInfinityPoints() {
     TimeStudy(111)
   );
   let ip = player.break
-    ? Decimal.pow10(player.antimatter.e / div - 0.75)
+    ? Decimal.pow10(player.thisInfinityMaxAM.e / div - 0.75)
     : new Decimal(308 / div);
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
@@ -509,45 +509,11 @@ function gameLoop(diff, options = {}) {
 
   applyAutoprestige(realDiff);
 
-    const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
-    player.realities += uncountabilityGain;
-    player.reality.pp += uncountabilityGain;
+  const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
+  player.realities += uncountabilityGain;
+  player.reality.pp += uncountabilityGain;
 
-    const challenge = NormalChallenge.current || InfinityChallenge.current;
-    if (player.antimatter.lte(Decimal.MAX_NUMBER) ||
-        (player.break && !challenge) || (challenge && player.antimatter.lte(challenge.goal))) {
-
-        let maxTierProduced = 7;
-        if (NormalChallenge(12).isRunning) {
-          maxTierProduced = Math.min(maxTierProduced, 6);
-        }
-        if (EternityChallenge(3).isRunning) {
-          maxTierProduced = Math.min(maxTierProduced, 3);
-        }
-        if (NormalChallenge(12).isRunning) {
-          for (let tier = maxTierProduced; tier >= 1; --tier) {
-            const dimension = NormalDimension(tier);
-            dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 2).times(diff / 10000));
-          }
-        } else {
-          for (let tier = maxTierProduced; tier >= 1; --tier) {
-            const dimension = NormalDimension(tier);
-            dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 1).times(diff / 10000));
-          }
-        }
-
-        if (NormalChallenge(3).isRunning) {
-            player.antimatter = player.antimatter.plus(getDimensionProductionPerSecond(1).times(diff/1000).times(player.chall3Pow));
-            player.totalAntimatter = player.totalAntimatter.plus(getDimensionProductionPerSecond(1).times(diff/1000).times(player.chall3Pow));
-        } else {
-            player.antimatter = player.antimatter.plus(getDimensionProductionPerSecond(1).times(diff/1000));
-            player.totalAntimatter = player.totalAntimatter.plus(getDimensionProductionPerSecond(1).times(diff/1000));
-        }
-        if (NormalChallenge(12).isRunning) {
-            player.antimatter = player.antimatter.plus(getDimensionProductionPerSecond(2).times(diff/1000));
-            player.totalAntimatter = player.totalAntimatter.plus(getDimensionProductionPerSecond(2).times(diff/1000))
-        }
-    }
+  produceAntimatter(diff);
 
     if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
 

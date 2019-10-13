@@ -62,6 +62,7 @@ class TabState {
     if (subtab !== undefined) {
       this._currentSubtab = subtab;
     }
+    if (!this._currentSubtab.isAvailable) this.resetCurrentSubtab();
     ui.view.subtab = this._currentSubtab.key;
     Modal.hide();
     EventHub.dispatch(GameEvent.TAB_CHANGED, ui.view.tab, ui.view.subtab);

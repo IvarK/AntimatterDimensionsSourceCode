@@ -19,7 +19,8 @@ class AchievementState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return player.achievements.has(this.id);
+    // eslint-disable-next-line no-bitwise
+    return (player.achievements[this.row - 1] & (1 << (this.column - 1))) !== 0;
   }
 
   get previousAchievement() {
@@ -47,12 +48,14 @@ class AchievementState extends GameMechanicState {
   }
 
   lock() {
-    player.achievements.delete(this.id);
+    // eslint-disable-next-line no-bitwise
+    player.achievements[this.row - 1] &= ~(1 << (this.column - 1));
   }
 
   unlock() {
     if (this.isUnlocked) return;
-    player.achievements.add(this.id);
+    // eslint-disable-next-line no-bitwise
+    player.achievements[this.row - 1] |= (1 << (this.column - 1));
     if (this.id === 85 || this.id === 93) {
       Autobuyer.bigCrunch.bumpAmount(4);
     }
@@ -149,12 +152,27 @@ EventHub.registerStateCollectionEvents(
 );
 
 class SecretAchievementState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    this._row = Math.floor(this.id / 10);
+    this._column = this.id % 10;
+  }
+
   get name() {
     return this.config.name;
   }
 
+  get row() {
+    return this._row;
+  }
+
+  get column() {
+    return this._column;
+  }
+
   get isUnlocked() {
-    return player.secretAchievements.has(this.id);
+    // eslint-disable-next-line no-bitwise
+    return (player.secretAchievements[this.row - 1] & (1 << (this.column - 1))) !== 0;
   }
 
   tryUnlock(a1, a2, a3) {
@@ -165,10 +183,16 @@ class SecretAchievementState extends GameMechanicState {
 
   unlock() {
     if (this.isUnlocked) return;
-    player.secretAchievements.add(this.id);
+    // eslint-disable-next-line no-bitwise
+    player.secretAchievements[this.row - 1] |= (1 << (this.column - 1));
     GameUI.notify.success(this.name);
     kong.submitAchievements();
     EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+  }
+
+  lock() {
+    // eslint-disable-next-line no-bitwise
+    player.secretAchievements[this.row - 1] &= ~(1 << (this.column - 1));
   }
 }
 
@@ -184,7 +208,11 @@ const SecretAchievements = {
   /**
    * @type {SecretAchievementState[]}
    */
-  all: SecretAchievementState.index.compact()
+  all: SecretAchievementState.index.compact(),
+
+  get count() {
+    return SecretAchievements.all.filter(a => a.isEnabled).length;
+  },
 };
 
 setInterval(() => {

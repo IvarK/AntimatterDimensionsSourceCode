@@ -78,8 +78,8 @@ GameStorage.migrations = {
       // Last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards,
       // change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
       // And all other kinds of stuff
-      if (player.achievements.has("r85")) player.infMult = player.infMult.div(4);
-      if (player.achievements.has("r93")) player.infMult = player.infMult.div(4);
+      if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
+      if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
 
       player.realTimePlayed = player.totalTimePlayed;
       player.thisReality = player.totalTimePlayed;
@@ -124,6 +124,7 @@ GameStorage.migrations = {
       GameStorage.migrations.renameNewsOption(player);
       GameStorage.migrations.removeDimensionCosts(player);
       GameStorage.migrations.changeC8Handling(player);
+      GameStorage.migrations.convertAchievementsToBits(player);
     }
   },
 
@@ -201,10 +202,11 @@ GameStorage.migrations = {
   },
 
   convertAchivementsToNumbers(player) {
-    if (player.achievements.countWhere(e => typeof e !== "number") === 0) return;
+    if (player.achievements instanceof Array && player.achievements.countWhere(e => typeof e !== "number") === 0) return;
     const old = player.achievements;
     // In this case, player.secretAchievements should be an empty set
     player.achievements = new Set();
+    player.secretAchievements = new Set();
     for (const oldId of old) {
       const achByName = GameDatabase.achievements.normal.find(a => a.name === oldId);
       if (achByName !== undefined) {
@@ -623,6 +625,40 @@ GameStorage.migrations = {
   changeC8Handling(player) {
     player.chall8TotalSacrifice = Decimal.pow(player.chall11Pow, 2);
     delete player.chall11Pow;
+  },
+
+  convertAchievementsToBits(player) {
+    const isAchievementId = (id, secret) => {
+      const row = Math.floor(id / 10);
+      const column = id % 10;
+      return row >= 1 && row <= (secret ? 4 : 15) && column >= 1 && column <= 8;
+    };
+    const isNormalAchievementId = id => isAchievementId(id, false);
+    const isSecretAchievementId = id => isAchievementId(id, true);
+
+    const convertAchievementArray = (achievements, old) => {
+      for (const oldId of old) {
+        const row = Math.floor(oldId / 10);
+        const column = oldId % 10;
+        // eslint-disable-next-line no-bitwise
+        achievements[row - 1] |= (1 << (column - 1));
+      }
+    };
+
+    if (player.achievements instanceof Array || player.achievements instanceof Set) {
+      if (player.achievements.length !== 15 || player.achievements.every(isNormalAchievementId)) {
+        const old = player.achievements;
+        player.achievements = new Array(15).fill(0);
+        convertAchievementArray(player.achievements, old);
+      }
+    }
+    if (player.secretAchievements instanceof Array || player.secretAchievements instanceof Set) {
+      if (player.secretAchievements.length !== 4 || player.secretAchievements.every(isSecretAchievementId)) {
+        const old = player.secretAchievements;
+        player.secretAchievements = new Array(4).fill(0);
+        convertAchievementArray(player.secretAchievements, old);
+      }
+    }
   },
 
   prePatch(saveData) {

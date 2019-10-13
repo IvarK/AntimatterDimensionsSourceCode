@@ -162,7 +162,7 @@ dev.giveRealityGlyph = function(level, rawLevel = level) {
 };
 
 dev.decriminalize = function() {
-  player.secretAchievements.delete(23);
+  SecretAchievement(23).lock();
   EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 };
 

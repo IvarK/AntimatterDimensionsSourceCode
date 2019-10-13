@@ -46,7 +46,6 @@ let player = {
       current: 0,
       bestTimes: Array.repeat(defaultMaxTime, 8),
       completedBits: 0,
-      ic2Count: 0,
     },
     eternity: {
       current: 0,
@@ -151,6 +150,7 @@ let player = {
   matter: new Decimal(1),
   chall9TickspeedCostBumps: 0,
   chall8TotalSacrifice: new Decimal(1),
+  ic2Count: 0,
   partInfinityPoint: 0,
   partInfinitied: 0,
   break: false,

@@ -46,7 +46,7 @@ function updateNormalAndInfinityChallenges(diff) {
   }
 
   if (InfinityChallenge(2).isRunning) {
-    if (player.challenge.infinity.ic2Count >= 8 || diff > 8000) {
+    if (player.challenge.infinity.ic2Count >= 8) {
       if (NormalDimension(8).amount.gt(0)) {
         sacrificeReset();
       }

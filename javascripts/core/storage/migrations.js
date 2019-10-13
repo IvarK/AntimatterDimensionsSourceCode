@@ -202,7 +202,8 @@ GameStorage.migrations = {
   },
 
   convertAchivementsToNumbers(player) {
-    if (player.achievements instanceof Array && player.achievements.countWhere(e => typeof e !== "number") === 0) return;
+    if (player.achievements instanceof Array &&
+       player.achievements.countWhere(e => typeof e !== "number") === 0) return;
     const old = player.achievements;
     // In this case, player.secretAchievements should be an empty set
     player.achievements = new Set();

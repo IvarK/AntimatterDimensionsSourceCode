@@ -5,6 +5,8 @@ const defaultMaxTime = 60000 * 60 * 24 * 31;
 
 let player = {
   antimatter: new Decimal(10),
+  totalAntimatter: new Decimal(0),
+  thisInfinityMaxAM: new Decimal(0),
   dimensions: {
     normal: Array.range(0, 8).map(() => ({
       bought: 0,
@@ -139,7 +141,6 @@ let player = {
   thisInfinityLastBuyTime: 0,
   dimensionBoosts: 0,
   galaxies: 0,
-  totalAntimatter: new Decimal(0),
   achPow: new Decimal(1),
   news: new Set(),
   // TODO: Not used, remove

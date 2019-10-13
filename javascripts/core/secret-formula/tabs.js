@@ -18,7 +18,7 @@ GameDatabase.tabs = [
         symbol: "∞",
         component: "infinity-dim-tab",
         newUIComponent: "new-inf-dimensions-tab",
-        condition: () => 
+        condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
           InfinityDimension(1).isUnlocked
@@ -67,7 +67,10 @@ GameDatabase.tabs = [
         name: "Challenge records",
         symbol: "<i class='fas fa-stopwatch'></i>",
         component: "challenge-records-tab",
-        condition: () => PlayerProgress.infinityUnlocked()
+        condition: () =>
+          PlayerProgress.realityUnlocked() ||
+          PlayerProgress.eternityUnlocked() ||
+          PlayerProgress.infinityUnlocked()
       },
       {
         key: "infinities",
@@ -130,7 +133,8 @@ GameDatabase.tabs = [
         symbol: "∞",
         component: "infinity-challenges-tab",
         condition: () =>
-          Tab.challenges.eternity.isAvailable ||
+          PlayerProgress.realityUnlocked() ||
+          PlayerProgress.eternityUnlocked() ||
           player.antimatter.e >= 2000 ||
           player.postChallUnlocked > 0
       },
@@ -140,9 +144,9 @@ GameDatabase.tabs = [
         symbol: "Δ",
         component: "eternity-challenges-tab",
         condition: () =>
+          PlayerProgress.realityUnlocked() ||
           player.challenge.eternity.unlocked !== 0 ||
-          EternityChallenges.all.some(ec => ec.completions > 0) ||
-          (player.reality.autoEC && player.realities > 0)
+          EternityChallenges.all.some(ec => ec.completions > 0)
       }
     ],
   },

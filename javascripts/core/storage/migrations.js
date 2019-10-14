@@ -629,36 +629,25 @@ GameStorage.migrations = {
   },
 
   convertAchievementsToBits(player) {
-    const isAchievementId = (id, secret) => {
-      const row = Math.floor(id / 10);
-      const column = id % 10;
-      return row >= 1 && row <= (secret ? 4 : 15) && column >= 1 && column <= 8;
-    };
-    const isNormalAchievementId = id => isAchievementId(id, false);
-    const isSecretAchievementId = id => isAchievementId(id, true);
-
-    const convertAchievementArray = (achievements, old) => {
-      for (const oldId of old) {
+    const convertAchievementArray = (newAchievements, oldAchievements) => {
+      for (const oldId of oldAchievements) {
         const row = Math.floor(oldId / 10);
         const column = oldId % 10;
         // eslint-disable-next-line no-bitwise
-        achievements[row - 1] |= (1 << (column - 1));
+        newAchievements[row - 1] |= (1 << (column - 1));
       }
     };
 
-    if (player.achievements instanceof Array || player.achievements instanceof Set) {
-      if (player.achievements.length !== 15 || player.achievements.every(isNormalAchievementId)) {
-        const old = player.achievements;
-        player.achievements = new Array(15).fill(0);
-        convertAchievementArray(player.achievements, old);
-      }
+    if (player.achievements !== undefined) {
+      player.achievementBits = new Array(15).fill(0);
+      convertAchievementArray(player.achievementBits, player.achievements);
+      delete player.achievements;
     }
-    if (player.secretAchievements instanceof Array || player.secretAchievements instanceof Set) {
-      if (player.secretAchievements.length !== 4 || player.secretAchievements.every(isSecretAchievementId)) {
-        const old = player.secretAchievements;
-        player.secretAchievements = new Array(4).fill(0);
-        convertAchievementArray(player.secretAchievements, old);
-      }
+
+    if (player.secretAchievements !== undefined) {
+      player.secretAchievementBits = new Array(4).fill(0);
+      convertAchievementArray(player.secretAchievementBits, player.secretAchievements);
+      delete player.secretAchievements;
     }
   },
 

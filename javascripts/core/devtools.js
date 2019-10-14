@@ -167,9 +167,9 @@ dev.decriminalize = function() {
 };
 
 dev.removeAch = function(name) {
-  if (typeof (name) === "number") return player.achievements.delete(name);
-  if (name.startsWith("r")) return player.achievements.delete(parseInt(name.slice(1), 10));
-  if (name.startsWith("s")) return player.achievements.delete(parseInt(name.slice(1), 10));
+  if (typeof (name) === "number") return Achievement(name).lock();
+  if (name.startsWith("r")) return Achievement(parseInt(name.slice(1), 10)).lock();
+  if (name.startsWith("s")) return SecretAchievement(parseInt(name.slice(1), 10)).lock();
   return "failed to delete achievement";
 };
 

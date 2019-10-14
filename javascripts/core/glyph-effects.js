@@ -172,9 +172,9 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Time Dimension multipliers ^{value}",
     effect: (level, strength) => 1.01 + Math.pow(level, 0.32) * Math.pow(strength, 0.45) / 75,
     formatEffect: x => shorten(x, 3, 3),
-    combine: GlyphCombiner.multiply,
+    combine: GlyphCombiner.addExponents,
     /** @type {function(number):number} */
-    softcap: value => (value > 4 ? 4 + 0.1 * (value - 4) : value),
+    softcap: value => (value > 2 ? 4 - 4 / value : value),
   }, {
     id: "timespeed",
     bitmaskIndex: 1,
@@ -351,10 +351,12 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 12,
     glyphTypes: ["infinity", "reality"],
     singleDesc: "Infinity Dimension multipliers ^{value}",
-    effect: (level, strength) => 1.007 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75 +
+    effect: (level, strength) => 1.007 + Math.pow(level, 0.21) * Math.pow(strength, 0.4) / 75 +
       GlyphAlteration.sacrificeBoost("infinity") / 50,
     formatEffect: x => shorten(x, 3, 3),
-    combine: GlyphCombiner.multiply,
+    combine: GlyphCombiner.addExponents,
+    /** @type {function(number):number} */
+    softcap: value => (value > 2 ? 4 - 4 / value : value),
     alteredColor: () => GlyphAlteration.getBoostColor("infinity"),
     alterationType: ALTERATION_TYPE.BOOST
   }, {
@@ -421,7 +423,9 @@ GameDatabase.reality.glyphEffects = [
       : "Normal Dimension multipliers ^x"),
     effect: (level, strength) => 1.015 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75,
     formatEffect: x => shorten(x, 3, 3),
-    combine: GlyphCombiner.multiply,
+    combine: GlyphCombiner.addExponents,
+    /** @type {function(number):number} */
+    softcap: value => (value > 2 ? 4 - 4 / value : value),
     conversion: x => Math.pow(x, 1.2),
     alteredColor: () => GlyphAlteration.getAdditionColor("power"),
     alterationType: ALTERATION_TYPE.ADDITION

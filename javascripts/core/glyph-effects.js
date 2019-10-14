@@ -194,23 +194,16 @@ GameDatabase.reality.glyphEffects = [
     alteredColor: () => GlyphAlteration.getEmpowermentColor("time"),
     alterationType: ALTERATION_TYPE.EMPOWER
   }, {
-    id: "timefreeTickMult",
+    id: "timeetermult",
     bitmaskIndex: 2,
     glyphTypes: ["time", "reality"],
-    singleDesc: "Free tickspeed threshold\nmultiplier ×{value}",
-    totalDesc: "Free tickspeed threshold multiplier ×{value}",
-    genericDesc: "Free tickspeed cost multiplier",
-    effect: (level, strength) => 1 - Math.pow(level, 0.35) * Math.pow(strength, 0.7) / 200 -
-      GlyphAlteration.sacrificeBoost("time") / 50,
-    // Accurately represent what the multiplier actually does in code, assuming TS171
-    // The multiplier is applied only to the part of the multiplier > 1, which means it has less effect
-    // than the description implies.
-    /** @type{function(number): string} */
-    formatEffect: x => shorten(x + (1 - x) / TS171_MULTIPLIER, 3, 3),
+    singleDesc: "Multiply eternitied stat gain by {value}",
+    totalDesc: "Eternitied stat gain ×{value}",
+    genericDesc: "Eternitied stat gain multiplier",
+    effect: (level, strength) => Math.pow((strength + 3) * level, 0.6) *
+     Math.pow(3, GlyphAlteration.sacrificeBoost("time")),
+    formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
-    /** @type{function(number): number} */
-    // Cap it at "effectively zero", but this effect only ever reduces the threshold by 20%
-    softcap: value => Math.max(1e-5, value),
     alteredColor: () => GlyphAlteration.getBoostColor("time"),
     alterationType: ALTERATION_TYPE.BOOST
   }, {
@@ -382,11 +375,9 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: () => `Infinity power conversion rate: ^${shortenSmallInteger(7)}
       ➜ ^(${shortenSmallInteger(7)} + {value})`,
     genericDesc: "Infinity power conversion rate",
-    effect: (level, strength) => Math.pow(level, 0.2) * Math.pow(strength, 0.4) * 0.1,
+    effect: (level, strength) => Math.pow(level, 0.2) * Math.pow(strength, 0.4) * 0.04,
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.add,
-    /** @type {function(number):number} */
-    softcap: value => (value > 0.7 ? 0.7 + 0.2 * (value - 0.7) : value),
   }, {
     id: "infinityIP",
     bitmaskIndex: 14,

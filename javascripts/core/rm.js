@@ -4,7 +4,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "dilationpow", "powermult", "powerdimboost", "powerbuy10",
   "dilationTTgen", "infinityinfmult", "infinityIP", "timeEP",
   "dilationDT", "replicationdtgain", "replicationspeed", "timespeed",
-  "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
+  "timeetermult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter"];
 
@@ -497,7 +497,7 @@ const Glyphs = {
       glyph.idx = targetSlot;
       EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     } else {
-      console.log("inventory slot full");
+      throw new Error("Attempted glyph move into non-empty slot");
     }
     this.validate();
   },

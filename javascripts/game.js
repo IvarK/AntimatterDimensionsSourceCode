@@ -495,14 +495,14 @@ function gameLoop(diff, options = {}) {
     }
 
     if (RealityUpgrade(14).isBought) {
-      player.reality.partEternitied = player.reality.partEternitied.plus(
-        new Decimal(Time.deltaTime)
-          .times(Effects.product(
-            RealityUpgrade(3),
-            RealityUpgrade(14)
-            )
-          )
-        );
+      let eternitiedGain = Effects.product(
+        RealityUpgrade(3),
+        RealityUpgrade(14)
+      );
+      eternitiedGain *= getAdjustedGlyphEffect("timeetermult");
+      player.reality.partEternitied = player.reality.partEternitied
+        .plus(new Decimal(Time.deltaTime).times(Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue))
+      );
       player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
       player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
     }

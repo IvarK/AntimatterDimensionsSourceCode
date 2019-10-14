@@ -203,9 +203,7 @@ const FreeTickspeed = {
       newAmount: 0,
       nextShards: new Decimal(1),
     };
-    let freeTickspeedMultiplier = getAdjustedGlyphEffect("timefreeTickMult");
-    freeTickspeedMultiplier *= AnnihilationUpgrade.freeTickDecrease.effect;
-    const tickmult = 1 + (Effects.min(1.33, TimeStudy(171)) - 1) * freeTickspeedMultiplier;
+    const tickmult = 1 + (Effects.min(1.33, TimeStudy(171)) - 1) * AnnihilationUpgrade.freeTickDecrease.effect;
     const logTickmult = Math.log(tickmult);
     const logShards = shards.ln();
     const uncapped = logShards / logTickmult;

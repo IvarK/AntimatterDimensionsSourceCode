@@ -107,7 +107,7 @@ function getDilationGainPerSecond() {
       RealityUpgrade(1),
       AlchemyResource.dilation
     );
-  dtRate = dtRate.times(getAdjustedGlyphEffect("dilationdilationMult"));
+  dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
   dtRate = dtRate.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
   dtRate = dtRate.times(Ra.gamespeedDTMult());
   if (Enslaved.isRunning) {

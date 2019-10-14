@@ -2,8 +2,8 @@
 
 const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
   "dilationpow", "powermult", "powerdimboost", "powerbuy10",
-  "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
-  "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
+  "dilationTTgen", "infinityinfmult", "infinityIP", "timeEP",
+  "dilationDT", "replicationdtgain", "replicationspeed", "timespeed",
   "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter"];
@@ -1032,10 +1032,10 @@ const GlyphEffect = {
   dimBoostPower: new GlyphEffectState("powerdimboost", {
     adjustApply: value => Math.max(1, value)
   }),
-  ipMult: new GlyphEffectState("infinityipgain", {
+  ipMult: new GlyphEffectState("infinityIP", {
     adjustApply: value => Decimal.max(1, value)
   }),
-  epMult: new GlyphEffectState("timeeternity", {
+  epMult: new GlyphEffectState("timeEP", {
     adjustApply: value => Decimal.max(1, value)
   })
 };

@@ -179,8 +179,6 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 3, 3),
     formatSingleEffect: x => shorten(x - 1, 3, 3),
     combine: GlyphCombiner.addExponents,
-    /** @type {function(number):number} */
-    softcap: value => (value > 2 ? 4 - 4 / value : value),
   }, {
     id: "timespeed",
     bitmaskIndex: 1,
@@ -216,7 +214,7 @@ GameDatabase.reality.glyphEffects = [
     alteredColor: () => GlyphAlteration.getBoostColor("time"),
     alterationType: ALTERATION_TYPE.BOOST
   }, {
-    id: "timeeternity",
+    id: "timeEP",
     bitmaskIndex: 3,
     glyphTypes: ["time", "reality"],
     singleDesc: () => (GlyphAlteration.isAdded("time")
@@ -235,7 +233,7 @@ GameDatabase.reality.glyphEffects = [
     alteredColor: () => GlyphAlteration.getAdditionColor("time"),
     alterationType: ALTERATION_TYPE.ADDITION
   }, {
-    id: "dilationdilationMult",
+    id: "dilationDT",
     bitmaskIndex: 4,
     glyphTypes: ["dilation", "reality"],
     singleDesc: "Multiply Dilated Time gain by {value}",
@@ -373,8 +371,6 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 3, 3),
     formatSingleEffect: x => shorten(x - 1, 3, 3),
     combine: GlyphCombiner.addExponents,
-    /** @type {function(number):number} */
-    softcap: value => (value > 2 ? 4 - 4 / value : value),
     alteredColor: () => GlyphAlteration.getBoostColor("infinity"),
     alterationType: ALTERATION_TYPE.BOOST
   }, {
@@ -392,7 +388,7 @@ GameDatabase.reality.glyphEffects = [
     /** @type {function(number):number} */
     softcap: value => (value > 0.7 ? 0.7 + 0.2 * (value - 0.7) : value),
   }, {
-    id: "infinityipgain",
+    id: "infinityIP",
     bitmaskIndex: 14,
     glyphTypes: ["infinity", "reality"],
     singleDesc: () => (GlyphAlteration.isAdded("infinity")
@@ -443,8 +439,6 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => shorten(x, 3, 3),
     formatSingleEffect: x => shorten(x - 1, 3, 3),
     combine: GlyphCombiner.addExponents,
-    /** @type {function(number):number} */
-    softcap: value => (value > 2 ? 4 - 4 / value : value),
     conversion: x => Math.pow(x, 1.2),
     alteredColor: () => GlyphAlteration.getAdditionColor("power"),
     alterationType: ALTERATION_TYPE.ADDITION

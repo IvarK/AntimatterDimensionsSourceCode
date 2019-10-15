@@ -161,7 +161,7 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   start(auto) {
-    if (!this.isUnlocked) return false;
+    if (!this.isUnlocked || player.challenge.eternity.current > 0) return false;
     if (!auto && player.options.confirmations.challenges) {
       const confirmation =
         "You will start over with just your time studies, " +

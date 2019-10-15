@@ -12,6 +12,10 @@ class AchievementState extends GameMechanicState {
     }
     this._row = Math.floor(this.id / 10);
     this._column = this.id % 10;
+    // eslint-disable-next-line no-bitwise
+    this._bitmask = 1 << (this.column - 1);
+    // eslint-disable-next-line no-bitwise
+    this._inverseBitmask = ~this._bitmask;
   }
 
   get name() {
@@ -20,7 +24,7 @@ class AchievementState extends GameMechanicState {
 
   get isUnlocked() {
     // eslint-disable-next-line no-bitwise
-    return (player.achievementBits[this.row - 1] & (1 << (this.column - 1))) !== 0;
+    return (player.achievementBits[this.row - 1] & this._bitmask) !== 0;
   }
 
   get previousAchievement() {
@@ -49,13 +53,13 @@ class AchievementState extends GameMechanicState {
 
   lock() {
     // eslint-disable-next-line no-bitwise
-    player.achievementBits[this.row - 1] &= ~(1 << (this.column - 1));
+    player.achievementBits[this.row - 1] &= this._inverseBitmask;
   }
 
   unlock() {
     if (this.isUnlocked) return;
     // eslint-disable-next-line no-bitwise
-    player.achievementBits[this.row - 1] |= (1 << (this.column - 1));
+    player.achievementBits[this.row - 1] |= this._bitmask;
     if (this.id === 85 || this.id === 93) {
       Autobuyer.bigCrunch.bumpAmount(4);
     }
@@ -156,6 +160,10 @@ class SecretAchievementState extends GameMechanicState {
     super(config);
     this._row = Math.floor(this.id / 10);
     this._column = this.id % 10;
+    // eslint-disable-next-line no-bitwise
+    this._bitmask = 1 << (this.column - 1);
+    // eslint-disable-next-line no-bitwise
+    this._inverseBitmask = ~this._bitmask;
   }
 
   get name() {
@@ -172,7 +180,7 @@ class SecretAchievementState extends GameMechanicState {
 
   get isUnlocked() {
     // eslint-disable-next-line no-bitwise
-    return (player.secretAchievementBits[this.row - 1] & (1 << (this.column - 1))) !== 0;
+    return (player.secretAchievementBits[this.row - 1] & this._bitmask) !== 0;
   }
 
   tryUnlock(a1, a2, a3) {
@@ -184,7 +192,7 @@ class SecretAchievementState extends GameMechanicState {
   unlock() {
     if (this.isUnlocked) return;
     // eslint-disable-next-line no-bitwise
-    player.secretAchievementBits[this.row - 1] |= (1 << (this.column - 1));
+    player.secretAchievementBits[this.row - 1] |= this._bitmask;
     GameUI.notify.success(this.name);
     kong.submitAchievements();
     EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
@@ -192,7 +200,7 @@ class SecretAchievementState extends GameMechanicState {
 
   lock() {
     // eslint-disable-next-line no-bitwise
-    player.secretAchievementBits[this.row - 1] &= ~(1 << (this.column - 1));
+    player.secretAchievementBits[this.row - 1] &= this._inverseBitmask;
   }
 }
 
@@ -210,7 +218,7 @@ const SecretAchievements = {
    */
   all: SecretAchievementState.index.compact(),
 
-  get count() {
+  get enabledCount() {
     return SecretAchievements.all.filter(a => a.isEnabled).length;
   },
 };

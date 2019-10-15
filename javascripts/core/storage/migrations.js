@@ -202,8 +202,7 @@ GameStorage.migrations = {
   },
 
   convertAchivementsToNumbers(player) {
-    if (player.achievements instanceof Array &&
-       player.achievements.countWhere(e => typeof e !== "number") === 0) return;
+    if (player.achievements.countWhere(e => typeof e !== "number") === 0) return;
     const old = player.achievements;
     // In this case, player.secretAchievements should be an empty set
     player.achievements = new Set();
@@ -638,17 +637,13 @@ GameStorage.migrations = {
       }
     };
 
-    if (player.achievements !== undefined) {
-      player.achievementBits = new Array(15).fill(0);
-      convertAchievementArray(player.achievementBits, player.achievements);
-      delete player.achievements;
-    }
+    player.achievementBits = Array.repeat(0, 15);
+    convertAchievementArray(player.achievementBits, player.achievements);
+    delete player.achievements;
 
-    if (player.secretAchievements !== undefined) {
-      player.secretAchievementBits = new Array(4).fill(0);
-      convertAchievementArray(player.secretAchievementBits, player.secretAchievements);
-      delete player.secretAchievements;
-    }
+    player.secretAchievementBits = Array.repeat(0, 4);
+    convertAchievementArray(player.secretAchievementBits, player.secretAchievements);
+    delete player.secretAchievements;
   },
 
   prePatch(saveData) {

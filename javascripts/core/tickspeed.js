@@ -22,9 +22,11 @@ function getTickSpeedMultiplier() {
   replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
   let galaxies = player.galaxies + player.dilation.freeGalaxies + replicantiGalaxies;
   if (TimeCompression.isActive) {
+    // This is 4x stronger
     galaxies *= Math.pow(Effects.max(1, CompressionUpgrade.strongerDilationGalaxies), TimeCompression.compressionDepth);
   } else if (player.dilation.active) {
-    galaxies *= Effects.max(1, CompressionUpgrade.strongerDilationGalaxies);
+    // This is 1.2x stronger
+    galaxies *= 0.8 + 0.2 * Effects.max(1, CompressionUpgrade.strongerDilationGalaxies);
   }
   if (galaxies < 3) {
       let baseMultiplier = 0.9;

@@ -69,7 +69,9 @@ Vue.component("effarig-tab", {
     },
     runDescription() {
       return this.isRunning
-        ? "You are in Effarig's Reality - give up?"
+        ? `All production, gamespeed, and tickspeed are severely lowered, infinity power reduces the production and 
+          gamespeed penalties and time shards reduce the tickspeed penalty. Glyph levels are temporarily capped to
+          ${Effarig.glyphLevelCap}.`
         : `Start Effarig's Reality; all production, gamespeed, and tickspeed are severely lowered,
           infinity power reduces the production and gamespeed penalties and time shards reduce the 
           tickspeed penalty. Glyph levels are temporarily capped.`;
@@ -115,7 +117,12 @@ Vue.component("effarig-tab", {
           <effarig-unlock-button v-if="!runUnlocked" :unlock="runUnlock" />
         </div>
         <div v-if="runUnlocked" class="l-effarig-run">
-          <div class="c-effarig-run-description">{{runDescription}}</div>
+          <div class="c-effarig-run-description">
+            <div v-if="isRunning">
+              You are in Effarig's Reality - give up?
+            </div><br>
+          {{runDescription}}
+          </div>
           <div :class="['l-effarig-run-button', 'c-effarig-run-button', runButtonOuterClass]"
                @click="startRun">
             <div :class="runButtonInnerClass" :button-symbol="symbol">{{symbol}}</div>

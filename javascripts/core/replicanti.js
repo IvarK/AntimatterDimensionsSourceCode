@@ -11,11 +11,6 @@ const ReplicantiGrowth = {
   }
 };
 
-// Rounding errors suck
-function nearestPercent(x) {
-  return Math.round(100 * x) / 100;
-}
-
 function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
   player.reality.upgReqChecks[0] = false;
@@ -225,7 +220,7 @@ const ReplicantiUpgrade = {
     set value(value) { player.replicanti.chance = value; }
 
     get nextValue() {
-      return nearestPercent(this.value + 0.01);
+      return this.nearestPercent(this.value + 0.01);
     }
 
     get cost() { return player.replicanti.chanceCost; }
@@ -241,7 +236,7 @@ const ReplicantiUpgrade = {
     }
 
     get isCapped() {
-      return nearestPercent(this.value) >= this.cap;
+      return this.nearestPercent(this.value) >= this.cap;
     }
 
     get autobuyerMilestone() {
@@ -261,7 +256,12 @@ const ReplicantiUpgrade = {
       const totalCost = this.cost.times(Decimal.pow(this.costIncrease, N).minus(1).dividedBy(this.costIncrease - 1));
       player.infinityPoints = player.infinityPoints.minus(totalCost);
       this.baseCost = this.baseCost.times(Decimal.pow(this.costIncrease, N));
-      this.value = nearestPercent(this.value + 0.01 * N);
+      this.value = this.nearestPercent(this.value + 0.01 * N);
+    }
+ 
+    // Rounding errors suck
+    nearestPercent(x) {
+      return Math.round(100 * x) / 100;
     }
   }(),
   interval: new class ReplicantiIntervalUpgrade extends ReplicantiUpgradeState {

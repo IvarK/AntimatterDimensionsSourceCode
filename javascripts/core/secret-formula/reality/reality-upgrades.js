@@ -137,8 +137,8 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 14,
       cost: 50,
-      requirement: () => `${shorten(2e6)} Eternities`,
-      checkRequirement: () => player.eternities.gte(2e6),
+      requirement: () => `${shorten(1e7)} Eternities`,
+      checkRequirement: () => player.eternities.gte(1e7),
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "Gain Eternities per second equal to your Realities",
       effect: () => player.realities * RA_UNLOCKS.TT_BOOST.effect.eternity(),

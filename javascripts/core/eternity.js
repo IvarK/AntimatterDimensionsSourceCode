@@ -6,7 +6,7 @@ function canEternity() {
     : player.infinityPoints.gte(Decimal.MAX_NUMBER) && InfinityDimension(8).isUnlocked;
 }
 
-function giveEternityRewards(auto) {
+function giveEternityRewards(auto, enteringEC = false) {
   player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
   player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
   addEternityTime(
@@ -30,8 +30,10 @@ function giveEternityRewards(auto) {
         challenge.addCompletion();
       }
     }
-    player.etercreq = 0;
-    respecTimeStudies(auto);
+    if (!enteringEC) {
+      player.etercreq = 0;
+      respecTimeStudies(auto);
+    }
   }
 
   player.bestEternitiesPerMs = player.bestEternitiesPerMs.clampMin(
@@ -61,7 +63,7 @@ function eternity(force, auto, specialConditions = {}) {
     if (!canEternity()) return false;
     if (!auto && !askEternityConfirmation()) return false;
     EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
-    giveEternityRewards(auto);
+    giveEternityRewards(auto, specialConditions.enteringEC);
   }
 
   if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {

@@ -18,6 +18,7 @@ function startEternityChallenge() {
   // kong.submitStats("Eternities", player.eternities);
   resetTickspeed();
   player.antimatter = Player.startingAM;
+  player.thisInfinityMaxAM = Player.startingAM;
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
   return true;

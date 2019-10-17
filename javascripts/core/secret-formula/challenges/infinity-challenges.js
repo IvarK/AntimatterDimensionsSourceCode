@@ -25,8 +25,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 3,
-    description: "Tickspeed interval decrease is always at 0%, but for every tickspeed purchase, " +
-      "you get a static multiplier on all dimensions (increases with Antimatter Galaxies).",
+    description: "Tickspeed interval decrease is always 0%. For every tickspeed purchase, you instead get a static " +
+      "multiplier on all normal dimensions which increases with Antimatter Galaxies.",
     goal: new Decimal("1e5000"),
     isQuickResettable: false,
     effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
@@ -40,8 +40,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 4,
-    description: () => `Only latest bought dimension production is normal, all other dimensions produce less
-      (^${shorten(0.25, 2, 2)})`,
+    description: () => `Only the latest bought dimension's production is normal, all other dimensions produce less
+      (${formatPow(0.25, 2, 2)})`,
     goal: new Decimal("1e13000"),
     isQuickResettable: true,
     effect: 0.25,
@@ -66,8 +66,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 6,
-    description: () => `Once you have at least ${shortenSmallInteger(1)} 2nd Dimension, there's an exponentially rising
-      matter that divides the multiplier on all of your dimensions.`,
+    description: () => `Once you have at least ${shortenSmallInteger(1)} 2nd Dimension, exponentially rising matter
+      divides the multiplier on all of your dimensions.`,
     goal: new Decimal("2e22222"),
     isQuickResettable: true,
     effect: () => player.matter.clampMin(1),
@@ -98,7 +98,7 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e27000"),
     isQuickResettable: true,
     effect: () => Decimal.pow(0.8446303389034288,
-      Math.max(0, player.thisInfinityLastBuyTime - player.thisInfinityTime)),
+      Math.max(0, player.thisInfinityTime - player.thisInfinityLastBuyTime)),
     reward: {
       description: "You get a multiplier to dimensions 2-7 based on 1st and 8th dimension multipliers.",
       effect: () => getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02),

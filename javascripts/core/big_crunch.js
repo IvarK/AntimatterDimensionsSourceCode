@@ -10,17 +10,8 @@ function bigCrunchAnimation() {
 function canCrunch() {
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
-  if (player.antimatter.lt(goal)) return false;
+  if (player.thisInfinityMaxAM.lt(goal)) return false;
   return true;
-}
-
-// Used to prevent galaxies and dimboosts when you can crunch (pre-break and in challenges only)
-function disallowOtherResets() {
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
-  const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
-  if ((!player.break || challenge !== undefined) && player.antimatter.gte(goal)) return true;
-
-  return false;
 }
 
 function handleChallengeCompletion() {

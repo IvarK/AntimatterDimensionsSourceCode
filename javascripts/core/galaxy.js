@@ -148,7 +148,6 @@ function galaxyReset() {
 }
 
 function galaxyResetBtnClick() {
-  if (disallowOtherResets()) return false;
   if (EternityMilestone.autobuyMaxGalaxies.isReached && !shiftDown) return maxBuyGalaxies(true);
   if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   galaxyReset();

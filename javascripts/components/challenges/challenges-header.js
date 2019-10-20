@@ -70,7 +70,7 @@ Vue.component("challenges-header", {
     },
   },
   template:
-  `<div v-if="isInChallenge || isShowAllVisible" class="l-challenges-tab__header">
+  `<div class="l-challenges-tab__header">
     <primary-button v-if="isInChallenge"
                     class="o-primary-btn--exit-challenge l-challenges-tab__exit-btn"
                     @click="exitChallenge">

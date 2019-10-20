@@ -13,6 +13,7 @@ Vue.component("challenges-header", {
       remainingECTiers: 0,
       untilNextEC: TimeSpan.zero,
       untilAllEC: TimeSpan.zero,
+      newEC10: false,
     };
   },
   watch: {
@@ -21,6 +22,9 @@ Vue.component("challenges-header", {
     },
     showAllChallenges(newValue) {
       player.options.showAllChallenges = newValue;
+    },
+    newEC10(newValue) {
+      player.newEC10Test = newValue;
     }
   },
   methods: {
@@ -45,6 +49,7 @@ Vue.component("challenges-header", {
         this.untilNextEC.setFrom(untilNextEC);
         this.untilAllEC.setFrom(untilNextEC + (autoECInterval * (remainingCompletions - 1)));
       }
+      this.newEC10 = player.newEC10Test;
     },
     exitChallenge() {
       const current = NormalChallenge.current ||
@@ -59,7 +64,10 @@ Vue.component("challenges-header", {
     },
     toggleAutoEC() {
       this.autoEC = !this.autoEC;
-    }
+    },
+    toggleNewEC10() {
+      this.newEC10 = !this.newEC10;
+    },
   },
   template:
   `<div v-if="isInChallenge || isShowAllVisible" class="l-challenges-tab__header">
@@ -69,6 +77,11 @@ Vue.component("challenges-header", {
       Exit Challenge
     </primary-button>
     <div>
+      <div class="o-challenges-tab__header-toggle"
+           @click="toggleNewEC10">
+        <input :checked="newEC10" type="checkbox" class="o-big-checkbox" />
+        <b>EC10 Reward Test</b>
+      </div>
       <div v-if="isShowAllVisible"
            class="o-challenges-tab__header-toggle"
            @click="toggleShowAll">

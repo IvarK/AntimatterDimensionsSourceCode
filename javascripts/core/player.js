@@ -483,7 +483,9 @@ let player = {
       glyphUndo: true,
       glyphReplace: true,
     }
-  }
+  },
+  // Remove later
+  newEC10Test: false,
 };
 
 const Player = {

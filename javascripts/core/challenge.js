@@ -109,7 +109,7 @@ class NormalChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.normal.current = 0;
-    secondSoftReset();
+    secondSoftReset(true);
     if (!Enslaved.isRunning) Tab.dimensions.normal.show();
   }
 }
@@ -227,7 +227,7 @@ class InfinityChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.infinity.current = 0;
-    secondSoftReset();
+    secondSoftReset(true);
     if (!Enslaved.isRunning) Tab.dimensions.normal.show();
   }
 }

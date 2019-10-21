@@ -142,7 +142,9 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Time Dimension multiplier based on infinitied stat",
       effect: completions => {
-        const mult = Player.totalInfinitied.pow(0.9).times(completions * 0.000002).clampMin(1);
+        const mult = player.newEC10Test
+          ? Player.totalInfinitied.times(2.783e-6).pow(0.4 + 0.1 * completions).clampMin(1)
+          : Player.totalInfinitied.pow(0.9).times(completions * 2e-6).clampMin(1);
         return mult.powEffectOf(TimeStudy(31));
       },
       formatEffect: value => formatX(value, 2, 1)

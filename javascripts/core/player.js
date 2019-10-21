@@ -369,7 +369,8 @@ let player = {
       completed: false,
       maxQuotes: 6,
       tesseracts: 0,
-      totalDimCapIncrease: 0
+      totalDimCapIncrease: 0,
+      feltEternity: false,
     },
     v: {
       unlockBits: 0,

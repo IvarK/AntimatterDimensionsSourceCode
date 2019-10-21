@@ -142,6 +142,18 @@ const Enslaved = {
     this.ec6c10hintGiven = true;
     Modal.message.show("... did not ... underestimate you ...");
   },
+  feelEternity() {
+    if (!this.feltEternity) {
+      this.feltEternity = true;
+    Modal.message.show("Time in eternity will be scaled by number of eternities");
+    }
+  },
+  get feltEternity() {
+    return player.celestials.enslaved.feltEternity;
+  },
+  set feltEternity(value) {
+    player.celestials.enslaved.feltEternity = value;
+  },
   get tesseractCost() {
     return Tesseracts.costs[player.celestials.enslaved.tesseracts];
   },

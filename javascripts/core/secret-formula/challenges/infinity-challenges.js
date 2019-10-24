@@ -41,7 +41,7 @@ GameDatabase.challenges.infinity = [
   {
     id: 4,
     description: () => `Only the latest bought dimension's production is normal, all other dimensions produce less
-      (${formatPow(0.25, 2, 2)})`,
+      (${formatPow(0.25, 2, 2)}).`,
     goal: new Decimal("1e13000"),
     isQuickResettable: true,
     effect: 0.25,

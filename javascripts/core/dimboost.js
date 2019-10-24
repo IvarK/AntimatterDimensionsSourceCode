@@ -36,6 +36,10 @@ class DimBoost {
     return boost;
   }
 
+  static multiplierToNDTier(tier) {
+    return DimBoost.power.pow(this.totalBoosts + 1 - tier).clampMin(1);
+  }
+
   static get maxShiftTier() {
     return NormalChallenge(10).isRunning ? 6 : 8;
   }
@@ -133,7 +137,7 @@ function softResetBtnClick() {
   else softReset(1);
   
   for (let tier = 1; tier < 9; tier++) {
-    const mult = DimBoost.power.pow(DimBoost.totalBoosts + 1 - tier);
+    const mult = DimBoost.multiplierToNDTier(tier);
     if (mult.gt(1)) floatText(tier, formatX(mult));
   }
 }

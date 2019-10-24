@@ -58,7 +58,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   if (EternityChallenge(11).isRunning) {
     return player.infinityPower.pow(
       getInfinityConversionRate()
-      ).max(1).times(DimBoost.power.pow(DimBoost.totalBoosts + 1 - tier).max(1));
+      ).max(1).times(DimBoost.multiplierToNDTier(tier));
   }
 
   let multiplier = new Decimal(1);
@@ -101,7 +101,7 @@ function applyNDMultipliers(mult, tier) {
   multiplier = multiplier.times(Decimal.pow(
     NormalDimensions.buyTenMultiplier, Math.floor(NormalDimension(tier).bought / 10)
     ));
-  multiplier = multiplier.times(DimBoost.power.pow(DimBoost.totalBoosts + 1 - tier).max(1));
+  multiplier = multiplier.times(DimBoost.multiplierToNDTier(tier));
 
   let infinitiedMult = new Decimal(1).timesEffectsOf(
     NormalDimension(tier).infinityUpgrade,
@@ -591,26 +591,21 @@ const NormalDimensions = {
     GameCache.dimensionMultDecrease.invalidate();
   },
   get buyTenMultiplier() {
-    if (NormalChallenge(7).isRunning) return Math.min(1 + DimBoost.totalBoosts / 5, 2);
-    let dimMult = 2;
+    if (NormalChallenge(7).isRunning) return new Decimal(2).min(1 + DimBoost.totalBoosts / 5);
   
-    dimMult += Effects.sum(
+    let mult = new Decimal(2).plusEffectsOf(
       Achievement(141).secondaryEffect,
       EternityChallenge(3).reward
     );
-  
-    dimMult *= Effects.product(
+
+    mult = mult.timesEffectsOf(
       InfinityUpgrade.buy10Mult,
       Achievement(58)
-    );
+    ).times(getAdjustedGlyphEffect("powerbuy10"));
   
-    dimMult *= getAdjustedGlyphEffect("powerbuy10");
+    mult = mult.pow(getAdjustedGlyphEffect("effarigforgotten")).powEffectOf(InfinityUpgrade.buy10Mult.chargedEffect);
   
-    dimMult = Decimal.pow(dimMult, getAdjustedGlyphEffect("effarigforgotten"));
-  
-    dimMult = dimMult.powEffectsOf(InfinityUpgrade.buy10Mult.chargedEffect);
-  
-    return dimMult;
+    return mult;
   }
 };
 

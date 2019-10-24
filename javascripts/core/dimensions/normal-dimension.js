@@ -37,11 +37,13 @@ function normalDimensionCommonMultiplier() {
     InfinityChallenge(3),
     InfinityChallenge(3).reward,
     InfinityChallenge(8),
-    EternityChallenge(10)
+    EternityChallenge(10),
+    AlchemyResource.dimensionality
   );
 
   multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
   multiplier = multiplier.times(getAdjustedGlyphEffect("powermult"));
+  multiplier = multiplier.times(player.reality.realityMachines.powEffectOf(AlchemyResource.force));
 
   return multiplier;
 }
@@ -53,18 +55,13 @@ function getDimensionFinalMultiplier(tier) {
 function getDimensionFinalMultiplierUncached(tier) {
   if (tier < 1 || tier > 8) throw new Error(`Invalid Normal Dimension tier ${tier}`);
   if (NormalChallenge(10).isRunning && tier > 6) return new Decimal(1);
-
-  let multiplier = new Decimal(NormalDimension(tier).power);
-
   if (EternityChallenge(11).isRunning) {
-    return player.infinityPower.pow(getInfinityConversionRate())
-      .max(1)
-      .times(DimBoost.power.pow(DimBoost.totalBoosts - tier + 1).max(1));
+    return player.infinityPower.pow(
+      getInfinityConversionRate()
+      ).max(1).times(DimBoost.power.pow(DimBoost.totalBoosts + 1 - tier).max(1));
   }
-  if (NormalChallenge(12).isRunning) {
-    if (tier === 4) multiplier = multiplier.pow(1.4);
-    if (tier === 2) multiplier = multiplier.pow(1.7);
-  }
+
+  let multiplier = new Decimal(1);
 
   multiplier = applyNDMultipliers(multiplier, tier);
   multiplier = applyNDPowers(multiplier, tier);
@@ -101,6 +98,11 @@ function getDimensionFinalMultiplierUncached(tier) {
 function applyNDMultipliers(mult, tier) {
   let multiplier = mult.times(GameCache.normalDimensionCommonMultiplier.value);
 
+  multiplier = multiplier.times(Decimal.pow(
+    NormalDimensions.buyTenMultiplier, Math.floor(NormalDimension(tier).bought / 10)
+    ));
+  multiplier = multiplier.times(DimBoost.power.pow(DimBoost.totalBoosts + 1 - tier).max(1));
+
   let infinitiedMult = new Decimal(1).timesEffectsOf(
     NormalDimension(tier).infinityUpgrade,
     BreakInfinityUpgrade.infinitiedMult
@@ -120,6 +122,9 @@ function applyNDMultipliers(mult, tier) {
         TimeStudy(234)
       );
   }
+  if (tier === 8) {
+    multiplier = multiplier.times(Sacrifice.totalBoost);
+  }
 
   multiplier = multiplier.timesEffectsOf(
     tier === 8 ? Achievement(23) : null,
@@ -127,15 +132,12 @@ function applyNDMultipliers(mult, tier) {
     tier <= 4 ? Achievement(43) : null,
     tier < 8 ? TimeStudy(71) : null,
     tier === 8 ? TimeStudy(214) : null,
-    tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null,
-    AlchemyResource.dimensionality
+    tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
   );
   if (Achievement(77).isEnabled) {
     // Welp, this effect is too complex for Effects system
     multiplier = multiplier.times(1 + tier / 100);
   }
-
-  multiplier = multiplier.times(player.reality.realityMachines.powEffectOf(AlchemyResource.force));
 
   multiplier = multiplier.clampMin(1);
 
@@ -166,30 +168,6 @@ function applyNDPowers(mult, tier) {
     );
 
   return multiplier;
-}
-
-function getBuyTenMultiplier() {
-  let dimMult = 2;
-
-  if (NormalChallenge(7).isRunning) dimMult = Math.pow(10 / 0.30, Math.random()) * 0.30;
-
-  dimMult += Effects.sum(
-    Achievement(141).secondaryEffect,
-    EternityChallenge(3).reward
-  );
-
-  dimMult *= Effects.product(
-    InfinityUpgrade.buy10Mult,
-    Achievement(58)
-  );
-
-  dimMult *= getAdjustedGlyphEffect("powerbuy10");
-
-  dimMult = Decimal.pow(dimMult, getAdjustedGlyphEffect("effarigforgotten"));
-
-  dimMult = dimMult.powEffectsOf(InfinityUpgrade.buy10Mult.chargedEffect);
-
-  return dimMult;
 }
 
 function clearDimensions(maxTier) {
@@ -241,8 +219,7 @@ function buyOneDimension(tier) {
   dimension.bought++;
 
   if (dimension.boughtBefore10 === 0) {
-    dimension.power = dimension.power.times(getBuyTenMultiplier());
-    floatText(tier, `x${shorten(getBuyTenMultiplier(), 2, 1)}`);
+    floatText(tier, `x${shorten(NormalDimensions.buyTenMultiplier, 2, 1)}`);
   }
 
   onBuyDimension(tier);
@@ -261,9 +238,8 @@ function buyManyDimension(tier) {
   dimension.challengeCostBump();
   dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
   dimension.bought += dimension.remainingUntil10;
-  dimension.power = dimension.power.times(getBuyTenMultiplier());
 
-  floatText(tier, `x${shorten(getBuyTenMultiplier(), 2, 1)}`);
+  floatText(tier, `x${shorten(NormalDimensions.buyTenMultiplier, 2, 1)}`);
   onBuyDimension(tier);
 
   return true;
@@ -283,8 +259,7 @@ function buyAsManyAsYouCanBuy(tier) {
   dimension.bought += howMany;
 
   if (dimension.boughtBefore10 === 0) {
-    dimension.power = dimension.power.times(getBuyTenMultiplier());
-    floatText(tier, `x${shorten(getBuyTenMultiplier(), 2, 1)}`);
+    floatText(tier, `x${shorten(NormalDimensions.buyTenMultiplier, 2, 1)}`);
   }
 
   onBuyDimension(tier);
@@ -298,7 +273,6 @@ function buyUntilTen(tier) {
   dimension.challengeCostBump();
   dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10));
   dimension.bought += dimension.remainingUntil10;
-  dimension.power = dimension.power.times(getBuyTenMultiplier());
 }
 
 function maxAll() {
@@ -326,7 +300,7 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
     return;
   }
 
-  const multBefore = dimension.power;
+  const multBefore = Decimal.pow(NormalDimensions.buyTenMultiplier, dimension.bought / 10);
 
   // Buy any remaining until 10 before attempting to bulk-buy
   if (cost.lt(player.antimatter)) {
@@ -357,11 +331,11 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   if (buying > bulkLeft) buying = bulkLeft; 
   dimension.amount = dimension.amount.plus(10 * buying).round();
   dimension.bought += 10 * buying;
-  dimension.power = dimension.power.times(Decimal.pow(getBuyTenMultiplier(), buying));
   dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
   onBuyDimension(tier);
-  if (dimension.power.neq(multBefore) && auto === false) {
-    floatText(tier, `x${shorten(dimension.power.dividedBy(multBefore), 2, 1)}`);
+  const multAfter = Decimal.pow(NormalDimensions.buyTenMultiplier, dimension.bought / 10);
+  if (multBefore.neq(multAfter) && auto === false) {
+    floatText(tier, `x${shorten(multAfter.dividedBy(multBefore), 2, 1)}`);
   }
 }
 
@@ -564,7 +538,6 @@ class NormalDimensionState extends DimensionState {
 
   reset() {
     this.amount = new Decimal(0);
-    this.power = new Decimal(1);
     this.bought = 0;
     this.costBumps = 0;
   }
@@ -616,6 +589,28 @@ const NormalDimensions = {
       dimension.reset();
     }
     GameCache.dimensionMultDecrease.invalidate();
+  },
+  get buyTenMultiplier() {
+    if (NormalChallenge(7).isRunning) return Math.min(1 + DimBoost.totalBoosts / 5, 2);
+    let dimMult = 2;
+  
+    dimMult += Effects.sum(
+      Achievement(141).secondaryEffect,
+      EternityChallenge(3).reward
+    );
+  
+    dimMult *= Effects.product(
+      InfinityUpgrade.buy10Mult,
+      Achievement(58)
+    );
+  
+    dimMult *= getAdjustedGlyphEffect("powerbuy10");
+  
+    dimMult = Decimal.pow(dimMult, getAdjustedGlyphEffect("effarigforgotten"));
+  
+    dimMult = dimMult.powEffectsOf(InfinityUpgrade.buy10Mult.chargedEffect);
+  
+    return dimMult;
   }
 };
 

@@ -91,13 +91,6 @@ class DimBoost {
   }
 }
 
-function applyDimensionBoost() {
-    const power = DimBoost.power;
-    for (let tier = 1; tier <= 8; tier++) {
-      NormalDimension(tier).power = power.pow(DimBoost.totalBoosts + 1 - tier).max(1);
-    }
-}
-
 function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
     if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
     EventHub.dispatch(GameEvent.DIMBOOST_BEFORE, bulk);
@@ -111,7 +104,6 @@ function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
     if (forcedNDReset || !Perk.dimboostNonReset.isBought) {
       NormalDimensions.reset();
     }
-    applyDimensionBoost();
     skipResetsIfPossible();
     resetTickspeed();
     const currentAntimatter = player.antimatter;

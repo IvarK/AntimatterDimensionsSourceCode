@@ -124,6 +124,7 @@ GameStorage.migrations = {
       GameStorage.migrations.renameNewsOption(player);
       GameStorage.migrations.removeDimensionCosts(player);
       GameStorage.migrations.changeC8Handling(player);
+      GameStorage.migrations.removePower(player);
     }
   },
 
@@ -623,6 +624,18 @@ GameStorage.migrations = {
   changeC8Handling(player) {
     player.chall8TotalSacrifice = Decimal.pow(player.chall11Pow, 2);
     delete player.chall11Pow;
+  },
+
+  removePower(player) {
+    for (const dimension of player.dimensions.normal) {
+      delete dimension.power;
+    }
+    for (const dimension of player.dimensions.infinity) {
+      delete dimension.power;
+    }
+    for (const dimension of player.dimensions.time) {
+      delete dimension.power;
+    }
   },
 
   prePatch(saveData) {

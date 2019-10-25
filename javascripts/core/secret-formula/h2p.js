@@ -17,7 +17,7 @@ GameDatabase.h2p = {
     {
       name: "Dimensions",
       info: () => `
-Dimensions are your production units in game. The first Dimension produces your Antimatter.
+Dimensions are your production units in game. The first Dimension produces your antimatter.
 Each consecutive Dimension produces the previous one, allowing you to have steady growth.
 There are eight Dimensions total.
 <br>
@@ -85,7 +85,7 @@ boosting production as if part of a game tick has passed.
 <br>
 <br>
 <b>Buy Max:</b> This will buy the maximum amount of tickspeed upgrades available
-with your current amount of Antimatter.
+with your current amount of antimatter.
 <br>
 <br>
 <b>Hotkeys: T</b> will purchase as many tickspeed upgrades as possible, or <b>Shift+T</b> to buy a single upgrade.
@@ -183,9 +183,9 @@ rewards.
     }, {
       name: "Infinity",
       info: () => `
-Once you have too much Antimatter for the world to handle (2<sup>1024</sup> or about 1.7976931348623159e308, sometimes 
-called "Infinity"), you’ll be forced to do a “Big Crunch”. This will reset your antimatter, Dimensions, Shifts/Boosts, 
-and your Galaxies. Doing a Big Crunch is also sometimes referred to as "Infinitying".
+Once you have too much antimatter for the world to handle (2<sup>1024</sup> or about ${format(Number.MAX_VALUE, 6)}, 
+sometimes called "Infinity"), you’ll be forced to do a “Big Crunch”. This will reset your antimatter, Dimensions, 
+Shifts/Boosts, and your Galaxies. Doing a Big Crunch is also sometimes referred to as "Infinitying".
 <br>
 <br>
 Each Infinity completed will give an Infinity Point, which can be spent on upgrades in the new Infinity tab.
@@ -219,7 +219,7 @@ and they can be exited at any time via the “Exit Challenge” button on the ch
 Your first Infinity is considered "Challenge 1" and is thus automatically completed once you unlock challenges.
 <br>
 <br>
-The rightmost row of Infinity Upgrades does not work in challenges.
+The rightmost row of Infinity upgrades does not work in challenges.
 `,
       isUnlocked: () => PlayerProgress.infinityUnlocked,
       tags: ["infinity", "autobuyer", "earlygame"],
@@ -244,7 +244,7 @@ buying order randomly.
 <b>Autobuyer Speed:</b>The cooloff period before the autobuyer attempts to make another puchase.
 <br>
 <br>
-<b>Bulk Buy:</b> Once the Speed of an Autobuyer is maxed (at 100ms), all future upgrades will double the maximum 
+<b>Bulk Buy:</b> Once the Speed of an autobuyer is maxed (at 100ms), all future upgrades will double the maximum 
 amount the autobuyer can purchase per tick. This can be disabled.
 <br>
 <br>
@@ -335,8 +335,8 @@ of Infinity Dimensions doesn't carry between crunches, all the multipliers you g
   .join(", ")}
 <br>
 <br>
-Instead of antimatter, the First Infinity dimension produces Infinity Power, which translates to a multiplier applied 
-to all Normal Dimensions. This multiplier is equal to (power<sup>7</sup>). Infinity dimensions are not affected by 
+Instead of antimatter, the First Infinity Dimension produces Infinity Power, which translates to a multiplier applied 
+to all Normal Dimensions. This multiplier is equal to (power<sup>7</sup>). Infinity Dimensions are not affected by 
 tickspeed upgrades.
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked,
@@ -377,7 +377,7 @@ but it will not make your next Antimatter Galaxy more expensive.
 <br>
 <b>Hotkey: R</b> will buy a Replicanti Galaxy.
 <br>
-Replicanti give a multiplier to all Infinity dimensions, which will reach a maximum of 
+Replicanti give a multiplier to all Infinity Dimensions, which will reach a maximum of 
 ${formatX(Math.pow(2, 20), 2, 2)} at ${format(Number.MAX_VALUE, 2)} replicanti.
 <br>
 <br>
@@ -406,7 +406,7 @@ reached ${format(Number.MAX_VALUE, 2)} antimatter. You will recieve more Eternit
 had before going Eternal. You will also gain one "eternitied stat" for completing an Eternity.
 <br>
 <br>
-Eternity point gain scales similarly to Infinity Point gain, but scaling off of Infinity Points instead of antimatter. 
+Eternity Point gain scales similarly to Infinity Point gain, but scaling off of Infinity Points instead of antimatter. 
 The base amount of EP gained at ${format(Number.MAX_VALUE, 2)} IP is ~1.62 EP, multiplied by 5 for every factor of 
 ${format(Number.MAX_VALUE, 2)} more IP you have. This is always rounded down, which means that you will get 1 EP at 
 ${format(Number.MAX_VALUE, 2)} IP but will not reach 2 EP until ${format(new Decimal("1e349"))}.
@@ -429,7 +429,7 @@ the Eternity, effectively letting you have them permanently.
 <br>
 All of the new autobuyers will have toggles next to their respective manual buttons (for example, Infinity Dimension 
 autobuyers can be found on the Infinity Dimension tab). The exceptions are the improvements to the Dimboost, Galaxy, 
-and Crunch autobuyers, as well as the new Eternity autobuyer, which will be on the Autobuyers page.
+and Crunch autobuyers, as well as the new Eternity autobuyer, which will be on the autobuyers page.
 <br>
 <br>
 The passive generation milestones only work offline by design and may need certain autobuyer settings to work 
@@ -702,7 +702,7 @@ Power - How much faster the game runs during the temporary speed bursts, increas
 Duration - How long each speed burst lasts before going back to normal speed, increased by 30% per upgrade.
 <br>
 <br>
-Once you reach 2 years of game playtime, you unlock a Reality Upgrade that allows you to have two Black Holes. This 
+Once you reach 2 years of game playtime, you unlock a Reality upgrade that allows you to have two Black Holes. This 
 requirement is itself boosted by the Black Holes, so it takes much less than 2 real-time years.
 <br>
 <br>
@@ -727,7 +727,7 @@ speed boost was active.
     }, {
       name: "Celestials",
       info: () => `
-Once you get all of the Reality Upgrades, the first Celestial is unlocked.
+Once you get all of the Reality upgrades, the first Celestial is unlocked.
 This opens up a new tab to the right of Reality.
 <br>
 <br>
@@ -744,7 +744,7 @@ All Celestials have their own Celestial Reality, but how the Reality is relevant
       name: "Teresa, Celestial of Reality",
       alias: "Teresa",
       info: () => `
-Teresa is the first Celestial. It is unlocked by obtaining all of the Reality Upgrades.
+Teresa is the first Celestial. It is unlocked by obtaining all of the Reality upgrades.
 <br>
 On the main screen, there is a bar with a button above it that says "Pour RM". This allows you to put your RM into the 
 container for a Reality Machine multiplier. RM which has been poured into the container can't be retrieved.
@@ -766,7 +766,7 @@ Effarig is the second Celestial you encounter.
 It is unlocked by pouring at least ${format(TERESA_UNLOCKS.EFFARIG.price)} RM into Teresa's container.
 <br>
 Effarig introduces a currency called Relic Shards, which are obtained by using different kinds of Glyph effects during 
-a Reality. The number of distinct effects active during the Reality very strongly affects relic shard gain, and EP 
+a Reality. The number of distinct effects active during the Reality very strongly affects Relic Shard gain, and EP 
 affects it to a much lesser degree. Relic Shards are the currency for Effarig unlocks, and will be gained from every 
 Reality from now on.
 <br>
@@ -839,7 +839,7 @@ The Enslaved Ones are the third Celestial, unlocked by completing Effarig's Eter
 <br>
 <br>
 When unlocking The Enslaved Ones, you immediately gain access to two new mechanics related to time. You can store 
-"game time" by charging your black hole, and you can store "real time" by intentionally halting your production. 
+"game time" by charging your Black Hole, and you can store "real time" by intentionally halting your production. 
 Stored game time is also used as a currency for purchasing unlocks from The Enslaved Ones.
 <br>
 <br>
@@ -880,7 +880,7 @@ directly unlock the next Celestial.
 Tesseracts are a new resource you unlock for completing The Enslaved Ones' Reality.
 <br>
 <br>
-Infinity dimensions are normally capped at ${format(HARDCAP_ID_PURCHASES)} total purchases, which limits how large 
+Infinity Dimensions are normally capped at ${format(HARDCAP_ID_PURCHASES)} total purchases, which limits how large 
 their multipliers can grow since eventually you can't upgrade them any more. Tesseracts allow you to raise this cap 
 by spending Infinity Points.
 <br>

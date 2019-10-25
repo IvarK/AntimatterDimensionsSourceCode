@@ -117,7 +117,7 @@ GameDatabase.eternity.milestones = {
     eternities: 1000,
     reward: () => {
       const infinities = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
-      return `While offline, gain infinities equal to 50% your best infinitied stat/hour this eternity.
+      return `While offline, gain Infinitied stat equal to 50% your best Infinitied stat/hour this eternity.
         (Currently ${shorten(infinities, 2, 2)}/hour)`;
     },
   }

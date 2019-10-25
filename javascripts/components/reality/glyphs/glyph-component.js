@@ -128,7 +128,7 @@ const GlyphTooltipComponent = {
     description() {
       const name = this.type === "reality" ? "Pure" : this.rarityInfo.name;
       const rarity = this.type === "reality" ? "" : `(${this.roundedRarity.toFixed(1)}%)`;
-      return `${name} glyph of ${this.type} ${rarity}`;
+      return `${name} Glyph of ${this.type.charAt(0).toUpperCase()}${this.type.slice(1)} ${rarity}`;
     },
     isLevelCapped() {
       return this.levelOverride && this.levelOverride < this.level;

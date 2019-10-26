@@ -656,6 +656,7 @@ GameStorage.migrations = {
     }
     for (const dimension of player.dimensions.time) {
       delete dimension.power;
+    }
   },
 
   prePatch(saveData) {

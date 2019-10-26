@@ -483,6 +483,7 @@ GameStorage.devMigrations = {
       player.celestials.teresa.perkShop[4] = tempMusic;
     },
     GameStorage.migrations.convertAchievementsToBits,
+    GameStorage.migrations.removePower,
   ],
 
   patch(player) {

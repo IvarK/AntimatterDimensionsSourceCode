@@ -907,18 +907,6 @@ function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
     }
   }
   player.reality.glyphs.sac[glyph.type] += toGain;
-  if (glyph.type === "time") {
-    TimeDimension(8).power = Decimal.pow(
-      2 * Effects.product(GlyphSacrifice.time),
-      TimeDimension(8).bought
-    );
-  }
-  if (glyph.type === "infinity") {
-    InfinityDimension(8).power = Decimal.pow(
-      5 * Effects.product(GlyphSacrifice.infinity),
-      IDAmountToIDPurchases(InfinityDimension(8).baseAmount)
-    );
-  }
   Glyphs.removeFromInventory(glyph);
   EventHub.dispatch(GameEvent.GLYPH_SACRIFICED, glyph);
 }

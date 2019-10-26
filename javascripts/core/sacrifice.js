@@ -87,14 +87,12 @@ function sacrificeReset(auto) {
   EventHub.dispatch(GameEvent.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
   if (!auto) floatText(8, `x${shorten(nextBoost, 2, 1)}`);
-  NormalDimension(8).power = NormalDimension(8).power.times(nextBoost);
   player.chall8TotalSacrifice = player.chall8TotalSacrifice.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(NormalDimension(1).amount);
   const isAch118Enabled = Achievement(118).isEnabled;
   if (NormalChallenge(8).isRunning) {
     if (!isAch118Enabled) {
       NormalDimensions.reset();
-      NormalDimension(8).power = player.chall8TotalSacrifice;
     }
     player.antimatter = new Decimal(100);
   } else if (!isAch118Enabled) {

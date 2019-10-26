@@ -125,6 +125,7 @@ GameStorage.migrations = {
       GameStorage.migrations.removeDimensionCosts(player);
       GameStorage.migrations.changeC8Handling(player);
       GameStorage.migrations.convertAchievementsToBits(player);
+      GameStorage.migrations.removePower(player);
     }
   },
 
@@ -644,6 +645,17 @@ GameStorage.migrations = {
     player.secretAchievementBits = Array.repeat(0, 4);
     convertAchievementArray(player.secretAchievementBits, player.secretAchievements);
     delete player.secretAchievements;
+  },
+    
+  removePower(player) {
+    for (const dimension of player.dimensions.normal) {
+      delete dimension.power;
+    }
+    for (const dimension of player.dimensions.infinity) {
+      delete dimension.power;
+    }
+    for (const dimension of player.dimensions.time) {
+      delete dimension.power;
   },
 
   prePatch(saveData) {

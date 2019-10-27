@@ -8,6 +8,10 @@ function bigCrunchAnimation() {
 }
 
 function canCrunch() {
+  if (Enslaved.isRunning && NormalChallenge.isRunning &&
+    !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(NormalChallenge.current.id)) {
+    return true;
+  }
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
   if (player.thisInfinityMaxAM.lt(goal)) return false;

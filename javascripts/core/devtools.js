@@ -107,7 +107,7 @@ dev.updateTDCosts = function() {
 };
 
 dev.refundTimeDims = function() {
-    for (const dimension of TimeDImensions.all) {
+    for (const dimension of TimeDimensions.all) {
         dimension.bought = 0;
     }
     dev.updateTDCosts();

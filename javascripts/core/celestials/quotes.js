@@ -38,6 +38,11 @@ class CelestialQuotes {
     this.seenArray.push(data.id);
     Modal.celestialQuote.show(this._celestial, data.lines);
   }
+
+  forget(data) {
+    const index = this.seenArray.indexOf(data.id);
+    if (index >= 0) this.seenArray.splice(index, 1);
+  }
 }
 
 EventHub.logic.on(GameEvent.TAB_CHANGED, (tab, subtab) => {

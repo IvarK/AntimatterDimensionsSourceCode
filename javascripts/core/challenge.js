@@ -74,7 +74,7 @@ class NormalChallengeState extends GameMechanicState {
     player.challenge.normal.current = this.id;
     player.challenge.infinity.current = 0;
 
-    if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) Enslaved.showEC10C6Hint();
+    if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) Enslaved.showEC6C10Hint();
 
     startChallenge();
   }

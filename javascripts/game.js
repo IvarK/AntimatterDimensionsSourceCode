@@ -220,7 +220,6 @@ setInterval(() => {
   if (isLocalEnvironment()) return;
   $.getJSON("version.txt", data => {
     if (data.version > player.version) {
-      player.version = data.version;
       Modal.message.show(data.message, updateRefresh);
     }
   });

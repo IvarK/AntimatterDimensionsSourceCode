@@ -200,7 +200,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply eternitied stat gain by {value}",
     totalDesc: "Eternitied stat gain ×{value}",
     genericDesc: "Eternitied stat gain multiplier",
-    effect: (level, strength) => Math.pow((strength + 3) * level, 0.6) *
+    effect: (level, strength) => Math.pow((strength + 3) * level, 0.9) *
      Math.pow(3, GlyphAlteration.sacrificeBoost("time")),
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,

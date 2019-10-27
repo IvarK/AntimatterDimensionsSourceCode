@@ -78,7 +78,8 @@ Vue.component("new-galaxy-row", {
       if (InfinityChallenge(7).isRunning) return "Locked (Infinity Challenge 7)";
       if (NormalChallenge(8).isRunning) return "Locked (8th Dimension Autobuyer Challenge)";
       return null;
-    }
+    },
+    buyGalaxy: bulk => galaxyResetBtnClick(bulk),
   },
   template:
   `<div class="reset-container galaxy">
@@ -88,7 +89,8 @@ Vue.component("new-galaxy-row", {
     <button 
       class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
       :class="{ 'o-primary-btn--disabled': !canBeBought }"
-      onclick="galaxyResetBtnClick()"
+      @click.exact="buyGalaxy(true)"
+      @click.shift.exact="buyGalaxy(false)"
       :enabled="canBeBought"
     >{{buttonText}}</button>
   </div>`

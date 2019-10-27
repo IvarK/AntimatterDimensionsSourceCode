@@ -67,6 +67,6 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends IntervaledAutobuyerSta
       maxBuyGalaxies();
       return;
     }
-    galaxyResetBtnClick();
+    galaxyResetBtnClick(true);
   }
 }();

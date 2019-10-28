@@ -846,14 +846,16 @@ setInterval(function () {
 }, 1000*60*5)
 
 window.onload = function() {
-    GameIntervals.start();
-    setTimeout(() => {
-        if (kong.enabled) {
-            playFabLogin();
-            kong.updatePurchases();
-        }
-        document.getElementById("loading").style.display = "none";
-    }, 1000);
+  GameUI.initialized = true;
+  ui.view.initialized = true;
+  GameIntervals.start();
+  setTimeout(() => {
+    if (kong.enabled) {
+      playFabLogin();
+      kong.updatePurchases();
+    }
+    document.getElementById("loading").style.display = "none";
+  }, 1000);
 };
 
 window.onfocus = function() {

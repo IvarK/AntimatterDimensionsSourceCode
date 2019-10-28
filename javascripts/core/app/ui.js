@@ -220,4 +220,3 @@ ui = new Vue({
   template: "<game-ui />"
 });
 
-GameUI.initialized = true;

@@ -67,7 +67,6 @@ function saveToPlayFab(root) {
   var requestData = {
     TitleId: titleId,
     PlayFabId: playFabId,
-    // convert array into object with numbers as keys
     Data: chunks.mapToObject((_, index) => index, value => value)
   }
   try {

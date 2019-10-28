@@ -134,7 +134,7 @@ const Enslaved = {
   },
   storedTimeInsideEnslaved(stored) {
     if (stored <= 1e3) return stored;
-    return Math.pow(10, Math.sqrt(Math.log10(stored / 1e3))) * 1e3;
+    return Math.pow(10, Math.pow(Math.log10(stored / 1e3), 0.55)) * 1e3;
   },
   showEC6C10Hint() {
     Enslaved.quotes.show(this.quotes.EC6C10);

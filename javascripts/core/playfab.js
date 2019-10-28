@@ -68,7 +68,7 @@ function saveToPlayFab(root) {
     TitleId: titleId,
     PlayFabId: playFabId,
     // convert array into object with numbers as keys
-    Data: $.extend({}, chunks)
+    Data: chunks.mapToObject((_, index) => index, value => value)
   }
   try {
     PlayFab.ClientApi.UpdateUserData(requestData, saveToPlayFabCallback);

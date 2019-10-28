@@ -218,11 +218,13 @@ function gainedInfinities() {
 
 setInterval(() => {
   if (isLocalEnvironment()) return;
-  $.getJSON("version.txt", data => {
-    if (data.version > player.version) {
-      Modal.message.show(data.message, updateRefresh);
-    }
-  });
+  fetch("version.txt")
+    .then(response => response.json())
+    .then(json => {
+      if (json.version > player.version) {
+        Modal.message.show(json.message, updateRefresh);
+      }
+    });
 }, 60000);
 
 // TODO: remove before release

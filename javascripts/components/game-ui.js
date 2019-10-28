@@ -21,7 +21,7 @@ Vue.component("game-ui", {
     }
   },
   template: `
-    <div id="ui" class="c-game-ui">
+    <div v-if="view.initialized" id="ui" class="c-game-ui">
       <component :is="uiLayout">
         <component :is="page" />
       </component>

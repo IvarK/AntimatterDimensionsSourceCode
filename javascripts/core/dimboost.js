@@ -58,15 +58,14 @@ class DimBoost {
     const targetResets = DimBoost.purchasedBoosts + bulk;
     const tier = Math.min(targetResets + 3, this.maxShiftTier);
     let amount = 20;
-
+    const discount = Effects.sum(
+      TimeStudy(211),
+      TimeStudy(222)
+    );
     if (tier === 6 && NormalChallenge(10).isRunning) {
-      amount += Math.ceil((targetResets - 3) * 20);
+      amount += Math.ceil((targetResets - 3) * (20 - discount));
     } else if (tier === 8) {
-      const mult = 15 - Effects.sum(
-        TimeStudy(211),
-        TimeStudy(222)
-      );
-      amount += Math.ceil((targetResets - 5) * mult);
+      amount += Math.ceil((targetResets - 5) * (15 - discount));
     }
     if (EternityChallenge(5).isRunning) {
       amount += Math.pow(targetResets - 1, 3) + targetResets - 1;

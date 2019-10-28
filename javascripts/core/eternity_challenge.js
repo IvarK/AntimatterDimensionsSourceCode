@@ -21,6 +21,7 @@ function startEternityChallenge() {
   player.thisInfinityMaxAM = Player.startingAM;
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
+  if (Enslaved.isRunning && Enslaved.foundEC6C10) Tab.challenges.normal.show();
   return true;
 }
 

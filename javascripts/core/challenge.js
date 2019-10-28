@@ -74,7 +74,7 @@ class NormalChallengeState extends GameMechanicState {
     player.challenge.normal.current = this.id;
     player.challenge.infinity.current = 0;
 
-    if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) Enslaved.showEC10C6Hint();
+    if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) Enslaved.showEC6C10Hint();
 
     startChallenge();
   }
@@ -109,7 +109,7 @@ class NormalChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.normal.current = 0;
-    secondSoftReset();
+    secondSoftReset(true);
     if (!Enslaved.isRunning) Tab.dimensions.normal.show();
   }
 }
@@ -227,7 +227,7 @@ class InfinityChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.infinity.current = 0;
-    secondSoftReset();
+    secondSoftReset(true);
     if (!Enslaved.isRunning) Tab.dimensions.normal.show();
   }
 }

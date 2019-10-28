@@ -150,7 +150,7 @@ function getTachyonGain() {
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
 function getTachyonReq() {
   let effectiveTP = player.dilation.tachyonParticles;
-  if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(4);
+  if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
   return Decimal.pow10(
     effectiveTP
       .times(Math.pow(400, 1.5))

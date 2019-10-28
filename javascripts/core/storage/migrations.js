@@ -579,7 +579,7 @@ GameStorage.migrations = {
     if (player.autoSacrifice % 1 !== 0) {
       const old = player.autoSacrifice;
       const autobuyer = player.auto.sacrifice;
-      autobuyer.multiplier = old.priority;
+      autobuyer.multiplier = new Decimal(old.priority);
       autobuyer.isActive = old.isOn;
     }
 
@@ -646,7 +646,7 @@ GameStorage.migrations = {
     convertAchievementArray(player.secretAchievementBits, player.secretAchievements);
     delete player.secretAchievements;
   },
-    
+
   removePower(player) {
     for (const dimension of player.dimensions.normal) {
       delete dimension.power;

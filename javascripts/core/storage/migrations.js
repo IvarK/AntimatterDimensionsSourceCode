@@ -78,8 +78,8 @@ GameStorage.migrations = {
       // Last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards,
       // change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
       // And all other kinds of stuff
-      if (player.achievements.has("r85")) player.infMult = player.infMult.div(4);
-      if (player.achievements.has("r93")) player.infMult = player.infMult.div(4);
+      if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
+      if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
 
       player.realTimePlayed = player.totalTimePlayed;
       player.thisReality = player.totalTimePlayed;
@@ -124,6 +124,8 @@ GameStorage.migrations = {
       GameStorage.migrations.renameNewsOption(player);
       GameStorage.migrations.removeDimensionCosts(player);
       GameStorage.migrations.changeC8Handling(player);
+      GameStorage.migrations.convertAchievementsToBits(player);
+      GameStorage.migrations.removePower(player);
     }
   },
 
@@ -205,6 +207,7 @@ GameStorage.migrations = {
     const old = player.achievements;
     // In this case, player.secretAchievements should be an empty set
     player.achievements = new Set();
+    player.secretAchievements = new Set();
     for (const oldId of old) {
       const achByName = GameDatabase.achievements.normal.find(a => a.name === oldId);
       if (achByName !== undefined) {
@@ -623,6 +626,37 @@ GameStorage.migrations = {
   changeC8Handling(player) {
     player.chall8TotalSacrifice = Decimal.pow(player.chall11Pow, 2);
     delete player.chall11Pow;
+  },
+
+  convertAchievementsToBits(player) {
+    const convertAchievementArray = (newAchievements, oldAchievements) => {
+      for (const oldId of oldAchievements) {
+        const row = Math.floor(oldId / 10);
+        const column = oldId % 10;
+        // eslint-disable-next-line no-bitwise
+        newAchievements[row - 1] |= (1 << (column - 1));
+      }
+    };
+
+    player.achievementBits = Array.repeat(0, 15);
+    convertAchievementArray(player.achievementBits, player.achievements);
+    delete player.achievements;
+
+    player.secretAchievementBits = Array.repeat(0, 4);
+    convertAchievementArray(player.secretAchievementBits, player.secretAchievements);
+    delete player.secretAchievements;
+  },
+    
+  removePower(player) {
+    for (const dimension of player.dimensions.normal) {
+      delete dimension.power;
+    }
+    for (const dimension of player.dimensions.infinity) {
+      delete dimension.power;
+    }
+    for (const dimension of player.dimensions.time) {
+      delete dimension.power;
+    }
   },
 
   prePatch(saveData) {

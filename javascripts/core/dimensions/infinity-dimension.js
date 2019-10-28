@@ -40,14 +40,12 @@ function buyManyInfinityDimension(tier) {
   player.infinityPoints = player.infinityPoints.minus(dim.cost)
   dim.amount = dim.amount.plus(10);
   dim.cost = Decimal.round(dim.cost.times(dim.costMultiplier));
-  dim.power = dim.power.times(dim.powerMultiplier);
-  dim.power = dim.power.timesEffectsOf(tier === 8 ? GlyphSacrifice.infinity : null);
-  dim.baseAmount += IDPurchasesToIDAmount(1)
+  dim.baseAmount += IDPurchasesToIDAmount(1);
 
   if (EternityChallenge(8).isRunning) {
     player.eterc8ids -= 1;
   }
-  return true
+  return true;
 }
 
 function buyMaxInfDims(tier) {
@@ -63,10 +61,6 @@ function buyMaxInfDims(tier) {
   player.infinityPoints = player.infinityPoints.minus(dim.cost);
   dim.cost = dim.cost.times(costMult);
   dim.amount = dim.amount.plus(10 * toBuy);
-  if (toBuy > 0) {
-    const base = dim.powerMultiplier * Effects.product(tier === 8 ? GlyphSacrifice.infinity : null);
-    dim.power = dim.power.times(Decimal.pow(base, toBuy));
-  }
   dim.baseAmount += IDPurchasesToIDAmount(toBuy);
   buyManyInfinityDimension(tier);
   return true;
@@ -194,13 +188,13 @@ class InfinityDimensionState extends DimensionState {
     if (EternityChallenge(11).isRunning) {
       return new Decimal(1);
     }
-    let mult = this.power
-      .times(GameCache.infinityDimensionCommonMultiplier.value)
+    let mult = GameCache.infinityDimensionCommonMultiplier.value
       .timesEffectsOf(
         tier === 1 ? Achievement(94) : null,
         tier === 4 ? TimeStudy(72) : null,
         tier === 1 ? EternityChallenge(2).reward : null
       );
+    mult = mult.times(Decimal.pow(this.powerMultiplier, Math.floor(this.baseAmount / 10)));
 
     mult = mult.clampMin(0);
 
@@ -269,7 +263,6 @@ class InfinityDimensionState extends DimensionState {
   fullReset() {
     this.cost = new Decimal(this.baseCost);
     this.amount = new Decimal(0);
-    this.power = new Decimal(1);
     this.bought = 0;
     this.baseAmount = 0;
     this.isUnlocked = false;

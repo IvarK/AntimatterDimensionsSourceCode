@@ -27,22 +27,18 @@ function timeDimensionCost(tier, bought) {
   return cost;
 }
 
-function buyTimeDimension(tier, upd) {
-  if (upd === undefined) upd = true
+function buyTimeDimension(tier) {
 
   const dim = TimeDimension(tier);
-  if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false
-  if (player.eternityPoints.lt(dim.cost)) return false
+  if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
+  if (player.eternityPoints.lt(dim.cost)) return false;
   if (Enslaved.isRunning && dim.bought > 0) return false;
 
-  player.eternityPoints = player.eternityPoints.minus(dim.cost)
+  player.eternityPoints = player.eternityPoints.minus(dim.cost);
   dim.amount = dim.amount.plus(1);
-  dim.bought += 1
+  dim.bought += 1;
   dim.cost = timeDimensionCost(tier, dim.bought);
-  dim.power = dim.power
-    .times(2)
-    .timesEffectsOf(tier === 8 ? GlyphSacrifice.time : null);
-  return true
+  return true;
 }
 
 function resetTimeDimensions() {
@@ -54,7 +50,6 @@ function fullResetTimeDimensions() {
     dim.cost = new Decimal(dim.baseCost);
     dim.amount = new Decimal(0);
     dim.bought = 0;
-    dim.power = new Decimal(1);
   }
 }
 
@@ -79,8 +74,6 @@ function buyMaxTimeDimTier(tier) {
   dim.amount = dim.amount.plus(bulk.quantity);
   dim.bought += bulk.quantity;
   dim.cost = timeDimensionCost(tier, dim.bought);
-  const basePower = 2 * Effects.product(tier === 8 ? GlyphSacrifice.time : null);
-  dim.power = Decimal.pow(basePower, dim.bought);
   return true
 }
 
@@ -92,7 +85,7 @@ function buyMaxTimeDimensions() {
   } else {
     // Low EP behavior: Try to buy the highest affordable new dimension, then loop buying the cheapest possible
     for (let i = 4; i > 0 && TimeDimension(i).bought === 0; i--)
-      buyTimeDimension(i, false);
+      buyTimeDimension(i);
 
     // Should never take more than like 50 iterations; explicit infinite loops make me nervous
     for (let stop = 0; stop < 1000; stop++) {
@@ -106,7 +99,7 @@ function buyMaxTimeDimensions() {
       }
       let bought = false;
       if (player.eternityPoints.gte(cheapestCost))
-        bought = buyTimeDimension(cheapestDim, false);
+        bought = buyTimeDimension(cheapestDim);
       if (!bought)
         break;
     }
@@ -165,15 +158,15 @@ class TimeDimensionState extends DimensionState {
     const tier = this._tier;
 
     if (EternityChallenge(11).isRunning) return new Decimal(1);
-    let mult = this.power
-      .pow(2)
-      .times(GameCache.timeDimensionCommonMultiplier.value)
+    let mult = GameCache.timeDimensionCommonMultiplier.value
       .timesEffectsOf(
         tier === 1 ? TimeStudy(11) : null,
         tier === 3 ? TimeStudy(73) : null,
         tier === 4 ? TimeStudy(227) : null
       );
 
+    const dim = TimeDimension(tier);
+    mult = mult.times(Decimal.pow(dim.powerMultiplier, dim.bought));
     mult = mult.clampMin(0).pow(getAdjustedGlyphEffect("timepow"));
 
     if (Laitela.has(LAITELA_UNLOCKS.DIM_POW)) mult = mult.pow(Laitela.dimensionMultPowerEffect);
@@ -228,6 +221,10 @@ class TimeDimensionState extends DimensionState {
 
   get costMultiplier() {
     return this._costMultiplier;
+  }
+
+  get powerMultiplier() {
+    return new Decimal(4).timesEffectsOf(this._tier === 8 ? GlyphSacrifice.time : null);
   }
 
   get e6000ScalingAmount() {

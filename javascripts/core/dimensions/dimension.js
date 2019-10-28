@@ -15,11 +15,6 @@ class DimensionState {
   /** @param {Decimal} value */
   set amount(value) { this.data.amount = value; }
 
-  /** @returns {Decimal} */
-  get power() { return this.data.power; }
-  /** @param {Decimal} value */
-  set power(value) { this.data.power = value; }
-
   /** @returns {number} */
   get bought() { return this.data.bought; }
   /** @param {number} value */

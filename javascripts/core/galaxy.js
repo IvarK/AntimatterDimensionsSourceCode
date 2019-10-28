@@ -147,8 +147,8 @@ function galaxyReset() {
   EventHub.dispatch(GameEvent.GALAXY_RESET_AFTER);
 }
 
-function galaxyResetBtnClick() {
-  if (EternityMilestone.autobuyMaxGalaxies.isReached && !shiftDown) return maxBuyGalaxies(true);
+function galaxyResetBtnClick(bulk) {
+  if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(true);
   if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   galaxyReset();
   return true;

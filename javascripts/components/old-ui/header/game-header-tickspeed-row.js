@@ -8,7 +8,8 @@ Vue.component("game-header-tickspeed-row", {
       cost: new Decimal(0),
       isAffordable: false,
       tickspeed: new Decimal(0),
-      gameSpeedMult: 1
+      gameSpeedMult: 1,
+      galaxyCount: 0,
     };
   },
   computed: {
@@ -19,12 +20,14 @@ Vue.component("game-header-tickspeed-row", {
       };
     },
     multiplierDisplay() {
+      if (InfinityChallenge(3).isRunning) return `Multiply all Normal Dimensions by 
+        ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)}`;
       const tickmult = this.mult;
       if (tickmult.lte(1e-9)) return `Divide the tick interval by ${this.shorten(tickmult.reciprocal(), 2, 0)}.`;
 
       const asNumber = tickmult.toNumber();
       let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
-      if (player.galaxies === 1) places = Math.max(places, 1);
+      if (this.galaxyCount === 1) places = Math.max(places, 1);
       return `Reduce the tick interval by ${formatPercents(1 - asNumber, places)}.`;
     },
     tickspeedDisplay() {
@@ -59,6 +62,7 @@ Vue.component("game-header-tickspeed-row", {
       this.isAffordable = !isEC9Running && canAfford(Tickspeed.cost);
       this.tickspeed.copyFrom(Tickspeed.current);
       this.gameSpeedMult = getGameSpeedupForDisplay();
+      this.galaxyCount = player.galaxies;
     }
   },
   template:

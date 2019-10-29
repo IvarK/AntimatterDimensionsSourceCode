@@ -134,13 +134,25 @@ const Enslaved = {
   },
   storedTimeInsideEnslaved(stored) {
     if (stored <= 1e3) return stored;
-    return Math.pow(10, Math.sqrt(Math.log10(stored / 1e3))) * 1e3;
+    return Math.pow(10, Math.pow(Math.log10(stored / 1e3), 0.55)) * 1e3;
   },
   showEC6C10Hint() {
     Enslaved.quotes.show(this.quotes.EC6C10);
   },
   get foundEC6C10() {
     return Enslaved.quotes.seen(this.quotes.EC6C10);
+  },
+  feelEternity() {
+    if (!this.feltEternity) {
+      this.feltEternity = true;
+    Modal.message.show("Time in eternity will be scaled by number of eternities");
+    }
+  },
+  get feltEternity() {
+    return player.celestials.enslaved.feltEternity;
+  },
+  set feltEternity(value) {
+    player.celestials.enslaved.feltEternity = value;
   },
   get tesseractCost() {
     return Tesseracts.costs[player.celestials.enslaved.tesseracts];

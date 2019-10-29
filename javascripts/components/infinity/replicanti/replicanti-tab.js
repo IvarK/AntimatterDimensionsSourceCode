@@ -29,7 +29,7 @@ Vue.component("replicanti-tab", {
         const intervalNum = actualInterval.toNumber();
         if (Number.isFinite(intervalNum) && intervalNum > 1 && upgrade.isCapped) {
           // Checking isCapped() prevents text overflow when formatted as "__ ➜ __"
-          return TimeSpan.fromMilliseconds(intervalNum).toString();
+          return TimeSpan.fromMilliseconds(intervalNum).toStringShort(false);
         }
         return `${shorten(actualInterval, 2, 2)}ms`;
       }

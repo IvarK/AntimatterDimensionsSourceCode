@@ -46,7 +46,7 @@ function gainedInfinityPoints() {
     ip = ip.pow(0.5);
   }
   if (GlyphAlteration.isAdded("infinity")) {
-    ip = ip.pow(getSecondaryGlyphEffect("infinityipgain"));
+    ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
   return ip.floor();
 }
@@ -71,7 +71,7 @@ function gainedEternityPoints() {
     ep = ep.pow(0.5);
   }
   if (GlyphAlteration.isAdded("time")) {
-    ep = ep.pow(getSecondaryGlyphEffect("timeeternity"));
+    ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
   return ep.floor();
 }
@@ -446,7 +446,11 @@ function gameLoop(diff, options = {}) {
   player.thisInfinityRealTime += realDiff;
   player.thisInfinityTime += diff;
   player.thisEternityRealTime += realDiff;
-  player.thisEternity += diff;
+  if (Enslaved.isRunning && Enslaved.feltEternity) {
+      player.thisEternity += diff * (1 + player.eternities.clampMax(1e66).toNumber());
+  } else {
+    player.thisEternity += diff;
+   }
   player.thisRealityRealTime += realDiff;
   player.thisReality += diff;
 
@@ -482,14 +486,14 @@ function gameLoop(diff, options = {}) {
     }
 
     if (RealityUpgrade(14).isBought) {
-      player.reality.partEternitied = player.reality.partEternitied.plus(
-        new Decimal(Time.deltaTime)
-          .times(Effects.product(
-            RealityUpgrade(3),
-            RealityUpgrade(14)
-            )
-          )
-        );
+      let eternitiedGain = Effects.product(
+        RealityUpgrade(3),
+        RealityUpgrade(14)
+      );
+      eternitiedGain *= getAdjustedGlyphEffect("timeetermult");
+      player.reality.partEternitied = player.reality.partEternitied
+        .plus(new Decimal(Time.deltaTime).times(Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue))
+      );
       player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
       player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
     }

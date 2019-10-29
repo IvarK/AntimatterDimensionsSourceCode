@@ -2,9 +2,9 @@
 
 const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
   "dilationpow", "powermult", "powerdimboost", "powerbuy10",
-  "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
-  "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
-  "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
+  "dilationTTgen", "infinityinfmult", "infinityIP", "timeEP",
+  "dilationDT", "replicationdtgain", "replicationspeed", "timespeed",
+  "timeetermult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter"];
 
@@ -497,7 +497,7 @@ const Glyphs = {
       glyph.idx = targetSlot;
       EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     } else {
-      console.log("inventory slot full");
+      throw new Error("Attempted glyph move into non-empty slot");
     }
     this.validate();
   },
@@ -1020,10 +1020,10 @@ const GlyphEffect = {
   dimBoostPower: new GlyphEffectState("powerdimboost", {
     adjustApply: value => Math.max(1, value)
   }),
-  ipMult: new GlyphEffectState("infinityipgain", {
+  ipMult: new GlyphEffectState("infinityIP", {
     adjustApply: value => Decimal.max(1, value)
   }),
-  epMult: new GlyphEffectState("timeeternity", {
+  epMult: new GlyphEffectState("timeEP", {
     adjustApply: value => Decimal.max(1, value)
   })
 };

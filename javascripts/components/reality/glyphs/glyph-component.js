@@ -26,7 +26,7 @@ const GlyphTooltipEffect = {
         : this.effectConfig.singleDesc;
     },
     primaryEffectText() {
-      const value = this.effectConfig.formatEffect(this.value);
+      const value = this.effectConfig.formatSingleEffect(this.value);
       return this.boostColor ? `⯅${value}⯅` : value;
     },
     secondaryEffectText() {

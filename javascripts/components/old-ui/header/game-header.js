@@ -89,6 +89,9 @@ Vue.component("game-header", {
     return {
       isInMatterChallenge: false,
       matter: new Decimal(0),
+      inEffarig: false,
+      effarigMultNerfText: 0,
+      effarigTickNerfText: 0,
       antimatter: new Decimal(0),
       antimatterPerSec: new Decimal(0)
     };
@@ -99,6 +102,11 @@ Vue.component("game-header", {
       if (this.isInMatterChallenge) {
         this.matter.copyFrom(Player.effectiveMatterAmount);
       }
+      this.inEffarig = Effarig.isRunning;
+      if (this.inEffarig) {
+        this.effarigMultNerfText = `^${shorten(0.25 + 0.25 * Effarig.nerfFactor(player.infinityPower), 0, 5)}`;
+        this.effarigTickNerfText = `^${shorten(0.7 + 0.1 * Effarig.nerfFactor(player.timeShards), 0, 5)}`;
+      }
       this.antimatter.copyFrom(player.antimatter);
       this.antimatterPerSec.copyFrom(Player.antimatterPerSecond);
     }
@@ -106,6 +114,10 @@ Vue.component("game-header", {
   template:
     `<div>
       <challenge-display />
+      <div v-if="inEffarig">
+        Gamespeed and multipliers dilated {{effarigMultNerfText}}<br>
+        Tickspeed dilated {{effarigTickNerfText}}
+      </div>
       <div v-if="isInMatterChallenge">There is {{shortenMoney(matter)}} matter.</div>
       <game-header-amounts-line />
       <div>

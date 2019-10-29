@@ -94,7 +94,7 @@ Vue.component("statistics-tab", {
         <div>
           <br>
           <div
-            v-if="eternity.thisReal.seconds > 1 && infinity.thisReal.seconds > 1"
+            v-if="eternity.thisReal.totalSeconds > 1 && infinity.thisReal.totalSeconds > 1"
             v-for="line in matterScale">{{line}}</div>
         </div>
         <br>
@@ -111,7 +111,7 @@ Vue.component("statistics-tab", {
             </div>
             <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best.toStringShort() }}.</div>
             <div v-else>You have no fastest Infinity<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
-            <div>You have spent {{ infinity.this }} in this Infinity.
+            <div>You have spent {{ infinity.this.toStringShort() }} in this Infinity.
               <span v-if="reality.isUnlocked">
                 ({{infinity.thisReal.toStringShort()}} real time)
               </span>
@@ -133,7 +133,7 @@ Vue.component("statistics-tab", {
             <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toStringShort() }}.</div>
             <div v-else>You have no fastest eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
-            <div>You have spent {{ eternity.this }} in this Eternity.
+            <div>You have spent {{ eternity.this.toStringShort() }} in this Eternity.
               <span v-if="reality.isUnlocked">
                 ({{eternity.thisReal.toStringShort()}} real time)
               </span>
@@ -151,7 +151,7 @@ Vue.component("statistics-tab", {
             <div>Your fastest Reality was {{ reality.best.toStringShort() }}.</div>
             <div>
               You have spent
-              {{ reality.this }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)
+              {{ reality.this.toStringShort() }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)
             </div>
             <div>
               Your best RM/min is {{ shorten(reality.bestRate, 2, 2) }}.

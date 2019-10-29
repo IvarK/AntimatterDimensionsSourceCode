@@ -38,8 +38,7 @@ GameDatabase.celestials.compression = {
   },
   strongerDilationGalaxies: {
     id: 3,
-    // Note that this actually applies per level of dilation applied in compression
-    description: "Galaxies are twice as strong when dilated",
+    description: "Galaxies are stronger when dilated (1.2x) or compressed (4x)",
     secondary: () => `${shortenSmallInteger(13000)} total galaxies`,
     cost: 15,
     resource: () => player.galaxies + Replicanti.galaxies.total + player.dilation.freeGalaxies,

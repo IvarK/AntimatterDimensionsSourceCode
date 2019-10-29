@@ -40,6 +40,8 @@ class GlyphEffectConfig {
   *  value from level and strength
   * @param {NumericToString<number | Decimal>} [setup.formatEffect] Format the effect's value into a string. Defaults
   *  to toFixed(3)
+  * @param {NumericToString<number | Decimal>} [setup.formatSingleEffect] Format the effect's value into a string, used
+  *  for effects which need to display different values in single values versus combined values (eg. power effects)
   * @param {NumericFunction<number | Decimal>} [setup.softcap] An optional softcap to be applied after glyph
   *  effects are combined.
   * @param {((function(number[]): GlyphEffectConfig__combine_result) | function(number[]): number)} setup.combine
@@ -72,6 +74,8 @@ class GlyphEffectConfig {
     * (just the number conversion). Combined with the description strings to make descriptions
     */
     this.formatEffect = setup.formatEffect || (x => x.toFixed(3));
+    /** @member{string} See info about setup, above*/
+    this.formatSingleEffect = setup.formatSingleEffect || setup.formatEffect;
     /**
     *  @member {function(number[]): GlyphEffectConfig__combine_result} combine Function that combines
     * multiple glyph effects into one value (adds up, applies softcaps, etc)
@@ -112,8 +116,8 @@ class GlyphEffectConfig {
 
   /** @private */
   static checkInputs(setup) {
-    const KNOWN_KEYS = ["id", "bitmaskIndex", "glyphTypes", "singleDesc", "totalDesc", "genericDesc",
-      "effect", "formatEffect", "combine", "softcap", "conversion", "alteredColor", "alterationType"];
+    const KNOWN_KEYS = ["id", "bitmaskIndex", "glyphTypes", "singleDesc", "totalDesc", "genericDesc", "effect",
+      "formatEffect", "formatSingleEffect", "combine", "softcap", "conversion", "alteredColor", "alterationType"];
     const unknownField = Object.keys(setup).find(k => !KNOWN_KEYS.includes(k));
     if (unknownField !== undefined) {
       throw new Error(`Glyph effect "${setup.id}" includes unrecognized field "${unknownField}"`);
@@ -169,12 +173,12 @@ GameDatabase.reality.glyphEffects = [
     id: "timepow",
     bitmaskIndex: 0,
     glyphTypes: ["time", "reality"],
-    singleDesc: "Time Dimension multipliers ^{value}",
+    singleDesc: "Time Dimension power boost +{value}",
+    totalDesc: "Time Dimension multipliers ^{value}",
     effect: (level, strength) => 1.01 + Math.pow(level, 0.32) * Math.pow(strength, 0.45) / 75,
     formatEffect: x => shorten(x, 3, 3),
-    combine: GlyphCombiner.multiply,
-    /** @type {function(number):number} */
-    softcap: value => (value > 4 ? 4 + 0.1 * (value - 4) : value),
+    formatSingleEffect: x => shorten(x - 1, 3, 3),
+    combine: GlyphCombiner.addExponents,
   }, {
     id: "timespeed",
     bitmaskIndex: 1,
@@ -190,27 +194,20 @@ GameDatabase.reality.glyphEffects = [
     alteredColor: () => GlyphAlteration.getEmpowermentColor("time"),
     alterationType: ALTERATION_TYPE.EMPOWER
   }, {
-    id: "timefreeTickMult",
+    id: "timeetermult",
     bitmaskIndex: 2,
     glyphTypes: ["time", "reality"],
-    singleDesc: "Free tickspeed threshold\nmultiplier ×{value}",
-    totalDesc: "Free tickspeed threshold multiplier ×{value}",
-    genericDesc: "Free tickspeed cost multiplier",
-    effect: (level, strength) => 1 - Math.pow(level, 0.35) * Math.pow(strength, 0.7) / 200 -
-      GlyphAlteration.sacrificeBoost("time") / 50,
-    // Accurately represent what the multiplier actually does in code, assuming TS171
-    // The multiplier is applied only to the part of the multiplier > 1, which means it has less effect
-    // than the description implies.
-    /** @type{function(number): string} */
-    formatEffect: x => shorten(x + (1 - x) / TS171_MULTIPLIER, 3, 3),
+    singleDesc: "Multiply eternitied stat gain by {value}",
+    totalDesc: "Eternitied stat gain ×{value}",
+    genericDesc: "Eternitied stat gain multiplier",
+    effect: (level, strength) => Math.pow((strength + 3) * level, 0.9) *
+     Math.pow(3, GlyphAlteration.sacrificeBoost("time")),
+    formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
-    /** @type{function(number): number} */
-    // Cap it at "effectively zero", but this effect only ever reduces the threshold by 20%
-    softcap: value => Math.max(1e-5, value),
     alteredColor: () => GlyphAlteration.getBoostColor("time"),
     alterationType: ALTERATION_TYPE.BOOST
   }, {
-    id: "timeeternity",
+    id: "timeEP",
     bitmaskIndex: 3,
     glyphTypes: ["time", "reality"],
     singleDesc: () => (GlyphAlteration.isAdded("time")
@@ -229,7 +226,7 @@ GameDatabase.reality.glyphEffects = [
     alteredColor: () => GlyphAlteration.getAdditionColor("time"),
     alterationType: ALTERATION_TYPE.ADDITION
   }, {
-    id: "dilationdilationMult",
+    id: "dilationDT",
     bitmaskIndex: 4,
     glyphTypes: ["dilation", "reality"],
     singleDesc: "Multiply Dilated Time gain by {value}",
@@ -278,11 +275,12 @@ GameDatabase.reality.glyphEffects = [
     id: "dilationpow",
     bitmaskIndex: 7,
     glyphTypes: ["dilation", "reality"],
-    singleDesc: "Normal Dimension multipliers\n^{value} while dilated",
+    singleDesc: "Normal Dimension power boost +{value} while dilated",
     totalDesc: "Normal Dimension multipliers ^{value} while dilated",
     genericDesc: "Normal Dimensions ^x while dilated",
     effect: (level, strength) => 1.1 + Math.pow(level, 0.7) * Math.pow(strength, 0.7) / 25,
-    formatEffect: x => shorten(x, 2, 1),
+    formatEffect: x => shorten(x, 2, 2),
+    formatSingleEffect: x => shorten(x - 1, 2, 2),
     combine: GlyphCombiner.addExponents,
   }, {
     id: "replicationspeed",
@@ -302,10 +300,12 @@ GameDatabase.reality.glyphEffects = [
     id: "replicationpow",
     bitmaskIndex: 9,
     glyphTypes: ["replication", "reality"],
-    singleDesc: "Replicanti multiplier ^{value}",
+    singleDesc: "Replicanti multiplier power boost +{value}",
+    totalDesc: "Replicanti multiplier ^{value}",
     effect: (level, strength) => 1.1 + Math.pow(level, 0.5) * strength / 25 +
       GlyphAlteration.sacrificeBoost("replication") * 3,
-    formatEffect: x => shorten(x, 3, 3),
+    formatEffect: x => shorten(x, 2, 2),
+    formatSingleEffect: x => shorten(x - 1, 2, 2),
     combine: GlyphCombiner.addExponents,
     alteredColor: () => GlyphAlteration.getBoostColor("replication"),
     alterationType: ALTERATION_TYPE.BOOST
@@ -323,8 +323,15 @@ GameDatabase.reality.glyphEffects = [
       ? "DT+replicanti mult (log₁₀(replicanti))"
       : "DT gain multiplier (log₁₀(replicanti))"),
     effect: (level, strength) => 0.0003 * Math.pow(level, 0.3) * Math.pow(strength, 0.65),
-    formatEffect: x => shorten(x, 5, 5),
-    combine: GlyphCombiner.add,
+    formatEffect: x => shorten(x, 2, 3),
+    formatSingleEffect: x => shorten(x, 5, 5),
+    // It's bad to stack this one additively (N glyphs acts as a DT mult of N) or multiplicatively (the raw number is
+    // less than 1), so instead we do a multiplicative stacking relative to the "base" effect of a level 1, 0% glyph.
+    // This is still just a flat DT mult when stacking multiple glyphs, but at least it's bigger than 2 or 3.
+    combine: effects => ({
+      value: effects.reduce(Number.prodReducer, Math.pow(0.0003, 1 - effects.length)),
+      capped: false
+    }),
     conversion: x => Math.max(x, 1),
     alteredColor: () => GlyphAlteration.getAdditionColor("replication"),
     alterationType: ALTERATION_TYPE.ADDITION
@@ -350,11 +357,13 @@ GameDatabase.reality.glyphEffects = [
     id: "infinitypow",
     bitmaskIndex: 12,
     glyphTypes: ["infinity", "reality"],
-    singleDesc: "Infinity Dimension multipliers ^{value}",
-    effect: (level, strength) => 1.007 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75 +
+    singleDesc: "Infinity Dimension power boost +{value}",
+    totalDesc: "Infinity Dimension multipliers ^{value}",
+    effect: (level, strength) => 1.007 + Math.pow(level, 0.21) * Math.pow(strength, 0.4) / 75 +
       GlyphAlteration.sacrificeBoost("infinity") / 50,
     formatEffect: x => shorten(x, 3, 3),
-    combine: GlyphCombiner.multiply,
+    formatSingleEffect: x => shorten(x - 1, 3, 3),
+    combine: GlyphCombiner.addExponents,
     alteredColor: () => GlyphAlteration.getBoostColor("infinity"),
     alterationType: ALTERATION_TYPE.BOOST
   }, {
@@ -366,13 +375,11 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: () => `Infinity power conversion rate: ^${shortenSmallInteger(7)}
       ➜ ^(${shortenSmallInteger(7)} + {value})`,
     genericDesc: "Infinity power conversion rate",
-    effect: (level, strength) => Math.pow(level, 0.2) * Math.pow(strength, 0.4) * 0.1,
+    effect: (level, strength) => Math.pow(level, 0.2) * Math.pow(strength, 0.4) * 0.04,
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.add,
-    /** @type {function(number):number} */
-    softcap: value => (value > 0.7 ? 0.7 + 0.2 * (value - 0.7) : value),
   }, {
-    id: "infinityipgain",
+    id: "infinityIP",
     bitmaskIndex: 14,
     glyphTypes: ["infinity", "reality"],
     singleDesc: () => (GlyphAlteration.isAdded("infinity")
@@ -400,7 +407,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Infinitied stat gain ×{value}",
     genericDesc: "Infinitied stat gain multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("infinity")
-      ? Math.pow(1.012, level)
+      ? Math.pow(1.02, level)
       : Math.pow(level * strength, 1.5) * 2),
     formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.multiply,
@@ -411,8 +418,8 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 16,
     glyphTypes: ["power", "reality"],
     singleDesc: () => (GlyphAlteration.isAdded("power")
-      ? "Normal Dimension multipliers ^{value}\n[and Dark Matter dimensions x]{value2}"
-      : "Normal Dimension multipliers ^{value}"),
+      ? "Normal Dimension power boost +{value}\n[and Dark Matter dimensions x]{value2}"
+      : "Normal Dimension power boost +{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("power")
       ? "ND multipliers ^{value} and Dark Matter dimensions x{value2}"
       : "Normal Dimension multipliers ^{value}"),
@@ -421,7 +428,8 @@ GameDatabase.reality.glyphEffects = [
       : "Normal Dimension multipliers ^x"),
     effect: (level, strength) => 1.015 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75,
     formatEffect: x => shorten(x, 3, 3),
-    combine: GlyphCombiner.multiply,
+    formatSingleEffect: x => shorten(x - 1, 3, 3),
+    combine: GlyphCombiner.addExponents,
     conversion: x => Math.pow(x, 1.2),
     alteredColor: () => GlyphAlteration.getAdditionColor("power"),
     alterationType: ALTERATION_TYPE.ADDITION
@@ -474,7 +482,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Reality Machine multiplier x{value}",
     genericDesc: "Reality Machine multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("effarig")
-      ? Math.pow(level, 0.95) * 5
+      ? Math.pow(level, 1.5)
       : Math.pow(level, 0.6) * strength),
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,

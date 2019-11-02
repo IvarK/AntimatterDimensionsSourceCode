@@ -37,7 +37,7 @@ function gainedInfinityPoints() {
     TimeStudy(111)
   );
   let ip = player.break
-    ? Decimal.pow10(player.antimatter.e / div - 0.75)
+    ? Decimal.pow10(player.thisInfinityMaxAM.e / div - 0.75)
     : new Decimal(308 / div);
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
@@ -46,7 +46,7 @@ function gainedInfinityPoints() {
     ip = ip.pow(0.5);
   }
   if (GlyphAlteration.isAdded("infinity")) {
-    ip = ip.pow(getSecondaryGlyphEffect("infinityipgain"));
+    ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
   return ip.floor();
 }
@@ -71,7 +71,7 @@ function gainedEternityPoints() {
     ep = ep.pow(0.5);
   }
   if (GlyphAlteration.isAdded("time")) {
-    ep = ep.pow(getSecondaryGlyphEffect("timeeternity"));
+    ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
   return ep.floor();
 }
@@ -216,21 +216,15 @@ function gainedInfinities() {
     return infGain;
 }
 
-setInterval(function() {
+setInterval(() => {
   if (isLocalEnvironment()) return;
-    $.getJSON('version.txt', function(data){
-        //data is actual content of version.txt, so
-        //do whatever you need with it
-        //I'd compare it with last result and if it's different
-        //show the message received and nag for attention
-        //like this:
-        if (data.version > player.version) {
-            player.version = data.version
-            Modal.message.show(data.message, updateRefresh);
-            //or some more resilient method
-            //like forced news bar with message running over and over
-        }
-    })
+  fetch("version.txt")
+    .then(response => response.json())
+    .then(json => {
+      if (json.version > player.version) {
+        Modal.message.show(json.message, updateRefresh);
+      }
+    });
 }, 60000);
 
 // TODO: remove before release
@@ -276,9 +270,6 @@ function kongLog10StatSubmission() {
 }
 
 setInterval(kongLog10StatSubmission, 10000)
-
-var postC2Count = 0;
-var replicantiTicks = 0
 
 const GameSpeedEffect = { FIXEDSPEED: 1, TIMEGLYPH: 2, BLACKHOLE: 3, TIMESTORAGE: 4, MOMENTUM: 5 };
 
@@ -364,8 +355,6 @@ function getGameSpeedupForDisplay() {
   return speedFactor;
 }
 
-let autobuyerOnGameLoop = true;
-
 // "diff" is in ms.  It is only unspecified when it's being called normally and not due to simulating time, in which
 // case it uses the gap between now and the last time the function was called.  This is on average equal to the update
 // rate.
@@ -409,9 +398,7 @@ function gameLoop(diff, options = {}) {
   }
 
   slowerAutobuyers(realDiff);
-  if (autobuyerOnGameLoop) {
-      Autobuyers.tick();
-  }
+  Autobuyers.tick();
 
     // We do these after autobuyers, since it's possible something there might
     // change a multiplier.
@@ -459,7 +446,11 @@ function gameLoop(diff, options = {}) {
   player.thisInfinityRealTime += realDiff;
   player.thisInfinityTime += diff;
   player.thisEternityRealTime += realDiff;
-  player.thisEternity += diff;
+  if (Enslaved.isRunning && Enslaved.feltEternity) {
+      player.thisEternity += diff * (1 + player.eternities.clampMax(1e66).toNumber());
+  } else {
+    player.thisEternity += diff;
+   }
   player.thisRealityRealTime += realDiff;
   player.thisReality += diff;
 
@@ -495,59 +486,25 @@ function gameLoop(diff, options = {}) {
     }
 
     if (RealityUpgrade(14).isBought) {
-      player.reality.partEternitied = player.reality.partEternitied.plus(
-        new Decimal(Time.deltaTime)
-          .times(Effects.product(
-            RealityUpgrade(3),
-            RealityUpgrade(14)
-            )
-          )
-        );
+      let eternitiedGain = Effects.product(
+        RealityUpgrade(3),
+        RealityUpgrade(14)
+      );
+      eternitiedGain *= getAdjustedGlyphEffect("timeetermult");
+      player.reality.partEternitied = player.reality.partEternitied
+        .plus(new Decimal(Time.deltaTime).times(Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue))
+      );
       player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
       player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
     }
 
   applyAutoprestige(realDiff);
 
-    const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
-    player.realities += uncountabilityGain;
-    player.reality.pp += uncountabilityGain;
+  const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
+  player.realities += uncountabilityGain;
+  player.reality.pp += uncountabilityGain;
 
-    const challenge = NormalChallenge.current || InfinityChallenge.current;
-    if (player.antimatter.lte(Decimal.MAX_NUMBER) ||
-        (player.break && !challenge) || (challenge && player.antimatter.lte(challenge.goal))) {
-
-        let maxTierProduced = 7;
-        if (NormalChallenge(12).isRunning) {
-          maxTierProduced = Math.min(maxTierProduced, 6);
-        }
-        if (EternityChallenge(3).isRunning) {
-          maxTierProduced = Math.min(maxTierProduced, 3);
-        }
-        if (NormalChallenge(12).isRunning) {
-          for (let tier = maxTierProduced; tier >= 1; --tier) {
-            const dimension = NormalDimension(tier);
-            dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 2).times(diff / 10000));
-          }
-        } else {
-          for (let tier = maxTierProduced; tier >= 1; --tier) {
-            const dimension = NormalDimension(tier);
-            dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 1).times(diff / 10000));
-          }
-        }
-
-        if (NormalChallenge(3).isRunning) {
-            player.antimatter = player.antimatter.plus(getDimensionProductionPerSecond(1).times(diff/1000).times(player.chall3Pow));
-            player.totalAntimatter = player.totalAntimatter.plus(getDimensionProductionPerSecond(1).times(diff/1000).times(player.chall3Pow));
-        } else {
-            player.antimatter = player.antimatter.plus(getDimensionProductionPerSecond(1).times(diff/1000));
-            player.totalAntimatter = player.totalAntimatter.plus(getDimensionProductionPerSecond(1).times(diff/1000));
-        }
-        if (NormalChallenge(12).isRunning) {
-            player.antimatter = player.antimatter.plus(getDimensionProductionPerSecond(2).times(diff/1000));
-            player.totalAntimatter = player.totalAntimatter.plus(getDimensionProductionPerSecond(2).times(diff/1000))
-        }
-    }
+  produceAntimatter(diff);
 
     if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
 
@@ -705,16 +662,6 @@ function getTTPerSecond() {
   return dilationTT.add(glyphTT);
 }
 
-function gameLoopWithAutobuyers(seconds, ticks, real) {
-  for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
-    gameLoop(1000 * seconds);
-    Autobuyers.tick();
-    if (real) {
-      console.log(ticksDone);
-    }
-  }
-}
-
 function simulateTime(seconds, real, fast) {
   // Don't do asynchronous processing loops nested in simulateTime
   Async.enabled = false;
@@ -724,7 +671,6 @@ function simulateTime(seconds, real, fast) {
   // warning: do not call this function with real unless you know what you're doing
   // calling it with fast will only simulate it with a max of 50 ticks
   let ticks = seconds * 20;
-  autobuyerOnGameLoop = false;
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)
@@ -754,10 +700,14 @@ function simulateTime(seconds, real, fast) {
         numberOfTicksRemaining, 0.0001);
       remainingRealSeconds -= realTickTime;
       gameLoop(1000 * realTickTime, { blackHoleSpeedup: blackHoleSpeedup });
-      Autobuyers.tick();
     }
   } else {
-    gameLoopWithAutobuyers(largeDiff / 1000, ticks, real);
+    for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
+      gameLoop(largeDiff);
+      if (real) {
+        console.log(ticksDone);
+      }
+    }
   }
 
   const offlineIncreases = ["While you were away"];
@@ -805,7 +755,6 @@ function simulateTime(seconds, real, fast) {
   }
 
   Modal.message.show(popupString);
-  autobuyerOnGameLoop = true;
   GameUI.notify.showBlackHoles = true;
   Async.enabled = true;
 }
@@ -899,14 +848,16 @@ setInterval(function () {
 }, 1000*60*5)
 
 window.onload = function() {
-    GameIntervals.start();
-    setTimeout(() => {
-        if (kong.enabled) {
-            playFabLogin();
-            kong.updatePurchases();
-        }
-        document.getElementById("loading").style.display = "none";
-    }, 1000);
+  GameUI.initialized = true;
+  ui.view.initialized = true;
+  GameIntervals.start();
+  setTimeout(() => {
+    if (kong.enabled) {
+      playFabLogin();
+      kong.updatePurchases();
+    }
+    document.getElementById("loading").style.display = "none";
+  }, 1000);
 };
 
 window.onfocus = function() {
@@ -918,7 +869,6 @@ window.onblur = function() {
 };
 
 function setShiftKey(isDown) {
-  shiftDown = isDown;
   ui.view.shiftDown = isDown;
 }
 

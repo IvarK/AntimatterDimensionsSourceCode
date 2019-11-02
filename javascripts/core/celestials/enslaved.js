@@ -17,7 +17,6 @@ const Enslaved = {
   displayName: "Enslaved",
   boostReality: false,
   BROKEN_CHALLENGE_EXEMPTIONS: [1, 6, 9],
-  ec6c10hintGiven: false,
   ec6c10timeHint: false,
   nextTickDiff: 50,
   isReleaseTick: false,
@@ -111,7 +110,7 @@ const Enslaved = {
     player.celestials.enslaved.run = startRealityOver() || player.celestials.enslaved.run;
     // Round to the nearest multiple of 2 to make the secret study hide
     player.secretUnlocks.secretTS += player.secretUnlocks.secretTS % 2;
-    this.ec6c10hintGiven = false;
+    this.quotes.forget(this.quotes.EC6C10);
     this.ec6c10timeHint = false;
     this.quotes.show(this.quotes.START_RUN);
   },
@@ -135,12 +134,25 @@ const Enslaved = {
   },
   storedTimeInsideEnslaved(stored) {
     if (stored <= 1e3) return stored;
-    return Math.pow(10, Math.sqrt(Math.log10(stored / 1e3))) * 1e3;
+    return Math.pow(10, Math.pow(Math.log10(stored / 1e3), 0.55)) * 1e3;
   },
-  showEC10C6Hint() {
-    if (this.ec6c10hintGiven) return;
-    this.ec6c10hintGiven = true;
-    Modal.message.show("... did not ... underestimate you ...");
+  showEC6C10Hint() {
+    Enslaved.quotes.show(this.quotes.EC6C10);
+  },
+  get foundEC6C10() {
+    return Enslaved.quotes.seen(this.quotes.EC6C10);
+  },
+  feelEternity() {
+    if (!this.feltEternity) {
+      this.feltEternity = true;
+    Modal.message.show("Time in eternity will be scaled by number of eternities");
+    }
+  },
+  get feltEternity() {
+    return player.celestials.enslaved.feltEternity;
+  },
+  set feltEternity(value) {
+    player.celestials.enslaved.feltEternity = value;
   },
   get tesseractCost() {
     return Tesseracts.costs[player.celestials.enslaved.tesseracts];
@@ -191,7 +203,10 @@ const Enslaved = {
         "...",
         "Freedom from torture... is torture itself.",
       ]
-    }
+    },
+    EC6C10: CelestialQuotes.singleLine(
+      5, "... did not ... underestimate you ..."
+    ),
   }),
 };
 

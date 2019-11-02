@@ -1,10 +1,11 @@
 "use strict";
 
-var shiftDown = false;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
 let player = {
   antimatter: new Decimal(10),
+  totalAntimatter: new Decimal(0),
+  thisInfinityMaxAM: new Decimal(0),
   dimensions: {
     normal: Array.range(0, 8).map(() => ({
       bought: 0,
@@ -29,8 +30,8 @@ let player = {
   },
   buyUntil10: true,
   sacrificed: new Decimal(0),
-  achievements: new Set(),
-  secretAchievements: new Set(),
+  achievementBits: Array.repeat(0, 15),
+  secretAchievementBits: Array.repeat(0, 4),
   infinityUpgrades: new Set(),
   usedMaxAll: false,
   bestIpPerMsWithoutMaxAll: new Decimal(0),
@@ -139,7 +140,6 @@ let player = {
   thisInfinityLastBuyTime: 0,
   dimensionBoosts: 0,
   galaxies: 0,
-  totalAntimatter: new Decimal(0),
   achPow: new Decimal(1),
   news: new Set(),
   // TODO: Not used, remove
@@ -150,6 +150,7 @@ let player = {
   matter: new Decimal(1),
   chall9TickspeedCostBumps: 0,
   chall8TotalSacrifice: new Decimal(1),
+  ic2Count: 0,
   partInfinityPoint: 0,
   partInfinitied: 0,
   break: false,
@@ -203,7 +204,8 @@ let player = {
     gal: 0,
     galaxies: 0,
     galCost: new Decimal(1e170),
-    auto: [false, false, false]
+    auto: [false, false, false],
+    timer: 0,
   },
   timestudy: {
     theorem: new Decimal(0),
@@ -368,7 +370,8 @@ let player = {
       completed: false,
       maxQuotes: 6,
       tesseracts: 0,
-      totalDimCapIncrease: 0
+      totalDimCapIncrease: 0,
+      feltEternity: false,
     },
     v: {
       unlockBits: 0,
@@ -482,7 +485,9 @@ let player = {
       glyphUndo: true,
       glyphReplace: true,
     }
-  }
+  },
+  // Remove later
+  newEC10Test: false,
 };
 
 const Player = {

@@ -8,19 +8,14 @@ function bigCrunchAnimation() {
 }
 
 function canCrunch() {
+  if (Enslaved.isRunning && NormalChallenge.isRunning &&
+    !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(NormalChallenge.current.id)) {
+    return true;
+  }
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
-  if (player.antimatter.lt(goal)) return false;
+  if (player.thisInfinityMaxAM.lt(goal)) return false;
   return true;
-}
-
-// Used to prevent galaxies and dimboosts when you can crunch (pre-break and in challenges only)
-function disallowOtherResets() {
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
-  const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
-  if ((!player.break || challenge !== undefined) && player.antimatter.gte(goal)) return true;
-
-  return false;
 }
 
 function handleChallengeCompletion() {
@@ -121,20 +116,21 @@ function bigCrunchReset() {
 }
 
 function secondSoftReset(forcedNDReset = false) {
-    player.dimensionBoosts = 0;
-    player.galaxies = 0;
-    player.antimatter = Player.startingAM;
-    softReset(0, forcedNDReset);
-    InfinityDimensions.resetAmount();
-    if (player.replicanti.unl)
-        player.replicanti.amount = new Decimal(1);
-    player.replicanti.galaxies = 0;
-    player.thisInfinityTime = 0;
-    player.thisInfinityLastBuyTime = 0;
-    player.thisInfinityRealTime = 0;
-    player.noEighthDimensions = true;
-    player.noSacrifices = true;
-    AchievementTimers.marathon2.reset();
+  player.dimensionBoosts = 0;
+  player.galaxies = 0;
+  player.antimatter = Player.startingAM;
+  player.thisInfinityMaxAM = Player.startingAM;
+  softReset(0, forcedNDReset);
+  InfinityDimensions.resetAmount();
+  if (player.replicanti.unl)
+    player.replicanti.amount = new Decimal(1);
+  player.replicanti.galaxies = 0;
+  player.thisInfinityTime = 0;
+  player.thisInfinityLastBuyTime = 0;
+  player.thisInfinityRealTime = 0;
+  player.noEighthDimensions = true;
+  player.noSacrifices = true;
+  AchievementTimers.marathon2.reset();
 }
 
 class ChargedInfinityUpgradeState extends GameMechanicState {

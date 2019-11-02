@@ -15,7 +15,8 @@ function giveEternityRewards(auto) {
     gainedEternityPoints(),
     Effects.product(RealityUpgrade(3))
   );
-  const newEternities = new Decimal(Effects.product(RealityUpgrade(3)));
+  const newEternities = new Decimal(Effects.product(RealityUpgrade(3)))
+    .times(getAdjustedGlyphEffect("timeetermult"));
   if (player.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
   }
@@ -110,6 +111,7 @@ function eternity(force, auto, specialConditions = {}) {
   AchievementTimers.marathon2.reset();
   applyRealityUpgrades();
   player.antimatter = Player.startingAM;
+  player.thisInfinityMaxAM = Player.startingAM;
 
   EventHub.dispatch(GameEvent.ETERNITY_RESET_AFTER);
   return true;

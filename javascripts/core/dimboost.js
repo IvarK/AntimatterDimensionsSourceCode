@@ -36,6 +36,10 @@ class DimBoost {
     return boost;
   }
 
+  static multiplierToNDTier(tier) {
+    return DimBoost.power.pow(this.totalBoosts + 1 - tier).clampMin(1);
+  }
+
   static get maxShiftTier() {
     return NormalChallenge(10).isRunning ? 6 : 8;
   }
@@ -54,15 +58,14 @@ class DimBoost {
     const targetResets = DimBoost.purchasedBoosts + bulk;
     const tier = Math.min(targetResets + 3, this.maxShiftTier);
     let amount = 20;
-
+    const discount = Effects.sum(
+      TimeStudy(211),
+      TimeStudy(222)
+    );
     if (tier === 6 && NormalChallenge(10).isRunning) {
-      amount += Math.ceil((targetResets - 3) * 20);
+      amount += Math.ceil((targetResets - 3) * (20 - discount));
     } else if (tier === 8) {
-      const mult = 15 - Effects.sum(
-        TimeStudy(211),
-        TimeStudy(222)
-      );
-      amount += Math.ceil((targetResets - 5) * mult);
+      amount += Math.ceil((targetResets - 5) * (15 - discount));
     }
     if (EternityChallenge(5).isRunning) {
       amount += Math.pow(targetResets - 1, 3) + targetResets - 1;
@@ -91,13 +94,6 @@ class DimBoost {
   }
 }
 
-function applyDimensionBoost() {
-    const power = DimBoost.power;
-    for (let tier = 1; tier <= 8; tier++) {
-      NormalDimension(tier).power = power.pow(DimBoost.totalBoosts + 1 - tier).max(1);
-    }
-}
-
 function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
     if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
     EventHub.dispatch(GameEvent.DIMBOOST_BEFORE, bulk);
@@ -111,7 +107,6 @@ function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
     if (forcedNDReset || !Perk.dimboostNonReset.isBought) {
       NormalDimensions.reset();
     }
-    applyDimensionBoost();
     skipResetsIfPossible();
     resetTickspeed();
     const currentAntimatter = player.antimatter;
@@ -136,13 +131,12 @@ function skipResetsIfPossible() {
 
 function softResetBtnClick() {
   if ((!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) || !DimBoost.requirement.isSatisfied) return;
-  if (disallowOtherResets()) return;
   if (Ra.isRunning) return;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
   else softReset(1);
   
   for (let tier = 1; tier < 9; tier++) {
-    const mult = DimBoost.power.pow(DimBoost.totalBoosts + 1 - tier);
+    const mult = DimBoost.multiplierToNDTier(tier);
     if (mult.gt(1)) floatText(tier, formatX(mult));
   }
 }

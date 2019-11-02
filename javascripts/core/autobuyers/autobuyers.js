@@ -35,8 +35,8 @@ const Autobuyers = (function() {
 
       const autobuyers = [
         Autobuyer.reality,
-        Autobuyer.eternity,
         Autobuyer.bigCrunch,
+        Autobuyer.eternity,
         Autobuyer.galaxy,
         Autobuyer.dimboost,
         Autobuyer.sacrifice

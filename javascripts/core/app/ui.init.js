@@ -1,5 +1,6 @@
 "use strict";
 
+// eslint-disable-next-line prefer-const
 let ui = {
   view: {
     modal: {
@@ -39,7 +40,8 @@ let ui = {
     tab: "dimensions",
     subtab: "normal",
     newUI: false,
-    news: false
+    news: false,
+    initialized: false,
   },
   notationName: "",
   formatPreBreak: false

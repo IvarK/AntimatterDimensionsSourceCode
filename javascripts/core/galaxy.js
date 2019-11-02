@@ -96,7 +96,7 @@ class Galaxy {
   }
 
   static get costMult() {
-    return NormalChallenge(10).isRunning ? 90 : Effects.min(60, TimeStudy(42));
+    return Effects.min(NormalChallenge(10).isRunning ? 90 : 60, TimeStudy(42));
   }
 
   static get baseCost() {
@@ -147,9 +147,8 @@ function galaxyReset() {
   EventHub.dispatch(GameEvent.GALAXY_RESET_AFTER);
 }
 
-function galaxyResetBtnClick() {
-  if (disallowOtherResets()) return false;
-  if (EternityMilestone.autobuyMaxGalaxies.isReached && !shiftDown) return maxBuyGalaxies(true);
+function galaxyResetBtnClick(bulk) {
+  if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(true);
   if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   galaxyReset();
   return true;

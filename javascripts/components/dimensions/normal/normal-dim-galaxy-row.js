@@ -79,7 +79,8 @@ Vue.component("normal-dim-galaxy-row", {
       if (InfinityChallenge(7).isRunning) return "Locked (Infinity Challenge 7)";
       if (NormalChallenge(8).isRunning) return "Locked (8th Dimension Autobuyer Challenge)";
       return null;
-    }
+    },
+    buyGalaxy: bulk => galaxyResetBtnClick(bulk),
   },
   template:
     `<div class="c-normal-dim-row">
@@ -92,7 +93,8 @@ Vue.component("normal-dim-galaxy-row", {
       <primary-button
         :enabled="canBeBought"
         class="o-primary-btn--galaxy c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
-        onclick="galaxyResetBtnClick()"
+        @click.exact="buyGalaxy(true)"
+        @click.shift.exact="buyGalaxy(false)"
       >{{buttonText}}</primary-button>
     </div>`
 });

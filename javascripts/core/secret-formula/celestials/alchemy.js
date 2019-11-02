@@ -74,7 +74,7 @@ GameDatabase.celestials.alchemy = {
       name: "Eternity",
       symbol: "τ",
       isBaseResource: false,
-      effect: amount => 1 + amount / 5000,
+      effect: amount => 1 + amount / 15000,
       tier: 2,
       uiOrder: 2,
       formatEffect: value => `Eternitied stat generation ${formatPow(value, 4, 4)}`,

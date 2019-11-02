@@ -107,11 +107,11 @@ function getDilationGainPerSecond() {
       RealityUpgrade(1),
       AlchemyResource.dilation
     );
-  dtRate = dtRate.times(getAdjustedGlyphEffect("dilationdilationMult"));
+  dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
   dtRate = dtRate.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
   dtRate = dtRate.times(Ra.gamespeedDTMult());
   if (Enslaved.isRunning) {
-    dtRate = dilatedValueOf(dtRate).dividedBy(player.dilation.dilatedTime.plus(1).log10() + 1);
+    dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
   }
   dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime());
   if (V.isRunning) dtRate = dtRate.pow(0.5);
@@ -150,7 +150,7 @@ function getTachyonGain() {
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
 function getTachyonReq() {
   let effectiveTP = player.dilation.tachyonParticles;
-  if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(4);
+  if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
   return Decimal.pow10(
     effectiveTP
       .times(Math.pow(400, 1.5))

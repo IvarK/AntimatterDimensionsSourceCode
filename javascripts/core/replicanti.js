@@ -11,11 +11,6 @@ const ReplicantiGrowth = {
   }
 };
 
-// Rounding errors suck
-function nearestPercent(x) {
-  return Math.round(100 * x) / 100;
-}
-
 function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
   player.reality.upgReqChecks[0] = false;
@@ -128,16 +123,16 @@ function replicantiLoop(diff) {
     } else {
       fastReplicantiBelow308(logGainFactorPerTick.times(LOG10_E), isRGAutobuyerEnabled);
     }
-    replicantiTicks = 0;
-  } else if (interval.lte(replicantiTicks)) {
+    player.replicanti.timer = 0;
+  } else if (interval.lte(player.replicanti.timer)) {
     const reproduced = binomialDistribution(player.replicanti.amount, player.replicanti.chance);
      player.replicanti.amount = player.replicanti.amount.plus(reproduced);
     if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount);
-    replicantiTicks -= interval.toNumber();
+    player.replicanti.timer -= interval.toNumber();
   }
 
   if (player.replicanti.amount !== 0) {
-    replicantiTicks += player.options.updateRate;
+    player.replicanti.timer += diff;
   }
 
   if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Decimal.MAX_NUMBER)) {
@@ -225,7 +220,7 @@ const ReplicantiUpgrade = {
     set value(value) { player.replicanti.chance = value; }
 
     get nextValue() {
-      return nearestPercent(this.value + 0.01);
+      return this.nearestPercent(this.value + 0.01);
     }
 
     get cost() { return player.replicanti.chanceCost; }
@@ -241,7 +236,7 @@ const ReplicantiUpgrade = {
     }
 
     get isCapped() {
-      return nearestPercent(this.value) >= this.cap;
+      return this.nearestPercent(this.value) >= this.cap;
     }
 
     get autobuyerMilestone() {
@@ -261,7 +256,12 @@ const ReplicantiUpgrade = {
       const totalCost = this.cost.times(Decimal.pow(this.costIncrease, N).minus(1).dividedBy(this.costIncrease - 1));
       player.infinityPoints = player.infinityPoints.minus(totalCost);
       this.baseCost = this.baseCost.times(Decimal.pow(this.costIncrease, N));
-      this.value = nearestPercent(this.value + 0.01 * N);
+      this.value = this.nearestPercent(this.value + 0.01 * N);
+    }
+ 
+    // Rounding errors suck
+    nearestPercent(x) {
+      return Math.round(100 * x) / 100;
     }
   }(),
   interval: new class ReplicantiIntervalUpgrade extends ReplicantiUpgradeState {

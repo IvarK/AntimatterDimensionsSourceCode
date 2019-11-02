@@ -412,6 +412,7 @@ function finishProcessReality(realityProps) {
     3: 0
   };
   player.antimatter = Player.startingAM;
+  player.thisInfinityMaxAM = Player.startingAM;
   Enslaved.autoReleaseTick = 0;
   player.celestials.ra.compression.freeDimboosts = 0;
 

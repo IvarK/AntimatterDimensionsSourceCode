@@ -2,9 +2,9 @@
 
 const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
   "dilationpow", "powermult", "powerdimboost", "powerbuy10",
-  "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
-  "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
-  "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
+  "dilationTTgen", "infinityinfmult", "infinityIP", "timeEP",
+  "dilationDT", "replicationdtgain", "replicationspeed", "timespeed",
+  "timeetermult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter"];
 
@@ -497,7 +497,7 @@ const Glyphs = {
       glyph.idx = targetSlot;
       EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     } else {
-      console.log("inventory slot full");
+      throw new Error("Attempted glyph move into non-empty slot");
     }
     this.validate();
   },
@@ -908,18 +908,6 @@ function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
     }
   }
   player.reality.glyphs.sac[glyph.type] += toGain;
-  if (glyph.type === "time") {
-    TimeDimension(8).power = Decimal.pow(
-      2 * Effects.product(GlyphSacrifice.time),
-      TimeDimension(8).bought
-    );
-  }
-  if (glyph.type === "infinity") {
-    InfinityDimension(8).power = Decimal.pow(
-      5 * Effects.product(GlyphSacrifice.infinity),
-      IDAmountToIDPurchases(InfinityDimension(8).baseAmount)
-    );
-  }
   Glyphs.removeFromInventory(glyph);
   EventHub.dispatch(GameEvent.GLYPH_SACRIFICED, glyph);
 }
@@ -1033,10 +1021,10 @@ const GlyphEffect = {
   dimBoostPower: new GlyphEffectState("powerdimboost", {
     adjustApply: value => Math.max(1, value)
   }),
-  ipMult: new GlyphEffectState("infinityipgain", {
+  ipMult: new GlyphEffectState("infinityIP", {
     adjustApply: value => Decimal.max(1, value)
   }),
-  epMult: new GlyphEffectState("timeeternity", {
+  epMult: new GlyphEffectState("timeEP", {
     adjustApply: value => Decimal.max(1, value)
   })
 };

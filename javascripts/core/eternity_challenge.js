@@ -18,8 +18,10 @@ function startEternityChallenge() {
   // kong.submitStats("Eternities", player.eternities);
   resetTickspeed();
   player.antimatter = Player.startingAM;
+  player.thisInfinityMaxAM = Player.startingAM;
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
+  if (Enslaved.isRunning && Enslaved.foundEC6C10) Tab.challenges.normal.show();
   return true;
 }
 
@@ -161,7 +163,7 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   start(auto) {
-    if (!this.isUnlocked) return false;
+    if (!this.isUnlocked || EternityChallenge.isRunning) return false;
     if (!auto && player.options.confirmations.challenges) {
       const confirmation =
         "You will start over with just your time studies, " +

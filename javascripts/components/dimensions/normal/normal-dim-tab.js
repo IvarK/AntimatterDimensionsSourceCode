@@ -15,7 +15,8 @@ Vue.component("normal-dim-tab", {
       const isC2Running = NormalChallenge(2).isRunning;
       const isC3Running = NormalChallenge(3).isRunning;
       const isIC6Running = InfinityChallenge(6).isRunning;
-      const isChallengePowerVisible = isC2Running || isC3Running || isIC6Running;
+      const isIC8Running = InfinityChallenge(8).isRunning;
+      const isChallengePowerVisible = isC2Running || isC3Running || isIC6Running || isIC8Running;
       this.isChallengePowerVisible = isChallengePowerVisible;
       if (isChallengePowerVisible) {
         const powerArray = [];
@@ -23,6 +24,8 @@ Vue.component("normal-dim-tab", {
         if (isC3Running) powerArray.push(`First dimension: ${formatX(player.chall3Pow, 2, 2)}`);
         if (isIC6Running) powerArray.push(`Matter: / 
           ${shorten(new Decimal(1).timesEffectOf(InfinityChallenge(6)), 2, 2)}`);
+        if (isIC8Running) powerArray.push(`Production: / 
+          ${shorten(new Decimal(1).timesEffectOf(InfinityChallenge(8)).reciprocal(), 2, 2)}`);
         this.challengePower = powerArray.join(", ");
       }
       const challenge = NormalChallenge.current || InfinityChallenge.current;

@@ -689,6 +689,7 @@ const GlyphSacrifice = (function() {
     power: new GlyphSacrificeState(db.power),
     effarig: new GlyphSacrificeState(db.effarig),
     reality: new GlyphSacrificeState(db.reality),
+    cursed: new GlyphSacrificeState(db.cursed),
   };
 }());
 

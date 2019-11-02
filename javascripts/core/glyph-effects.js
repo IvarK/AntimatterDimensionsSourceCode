@@ -3,11 +3,11 @@
 // There is a little too much stuff about glyph effects to put in constants.
 
 // The last glyph type you can only get if you got effarig reality
-const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig", "reality"];
+const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig", "reality", "cursed"];
 const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω",
-  effarig: "Ϙ", reality: "Ϟ" };
+  effarig: "Ϙ", reality: "Ϟ", cursed: "⸸" };
 const CANCER_GLYPH_SYMBOLS = { time: "🕟", dilation: "☎", replication: "⚤", infinity: "8", power: "⚡",
-  effarig: "🦒", reality: "⛧" };
+  effarig: "🦒", reality: "⛧", cursed: "☠" };
 
 const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),
@@ -525,6 +525,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 25,
     glyphTypes: ["effarig"],
     singleDesc: "All dimension multipliers ^{value}",
+    genericDesc: "All dimension multipliers ^x",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 500,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
@@ -537,7 +538,46 @@ GameDatabase.reality.glyphEffects = [
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 5000,
     formatEffect: x => shorten(x, 4, 4),
     combine: GlyphCombiner.multiply,
+  }, {
+    id: "cursedgalaxies",
+    bitmaskIndex: 27,
+    glyphTypes: ["cursed"],
+    singleDesc: `Galaxies are {value}% less effective`,
+    genericDesc: "Galaxies are less effective",
+    effect: (level, strength) => 3.5 / (strength * Math.pow(level, 0.02)),
+    formatEffect: x => formatPercents(x, 2),
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "curseddimensions",
+    bitmaskIndex: 28,
+    glyphTypes: ["cursed"],
+    singleDesc: "All dimension multipliers ^{value}",
+    genericDesc: "All dimension multipliers are reduced",
+    // Effect at 1000 is 0.697 and at 5000 at 0.548
+    effect: (level, strength) => 1 / (1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 50),
+    formatEffect: x => shorten(x, 3, 3),
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "cursedtickspeed",
+    bitmaskIndex: 29,
+    glyphTypes: ["cursed"],
+    singleDesc: "Multiply free tickspeed threshold increase by {value}x",
+    genericDesc: "Multiply free tickspeed threshold increase",
+    // Effect at 1000 is 1 and at 5000 at 5
+    effect: (level, strength) => level * strength / 3500,
+    formatEffect: x => shorten(x, 3, 3),
+    combine: GlyphCombiner.add,
+  }, {
+    id: "cursedchallenges",
+    bitmaskIndex: 30,
+    glyphTypes: ["cursed"],
+    singleDesc: "You have {value} negative EC completions",
+    genericDesc: "You have negative EC completions",
+    effect: () => 1,
+    formatEffect: x => shortenSmallInteger(x),
+    combine: GlyphCombiner.add,
   }
+
 ].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));
 
 function findGlyphTypeEffects(glyphType) {
@@ -674,6 +714,14 @@ const GlyphTypes = {
     unlockedFn: () => false,
     alchemyResource: ALCHEMY_RESOURCE.REALITY
     // Refining a reality glyph is pretty wasteful anyway, but might as well have this here
+  }),
+  cursed: new GlyphType({
+    id: "cursed",
+    symbol: GLYPH_SYMBOLS.cursed,
+    effects: findGlyphTypeEffects("cursed"),
+    color: "red",
+    unlockedFn: () => false,
+    alchemyResource: ALCHEMY_RESOURCE.CURSED
   }),
   /**
     * @param {function(): number} rng Random number source (0..1)

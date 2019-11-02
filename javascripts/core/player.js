@@ -443,7 +443,6 @@ let player = {
       darkEnergyUpgrades: new Set()
     }
   },
-  autoEcIsOn: true,
   options: {
     news: true,
     notation: "Mixed scientific",

@@ -374,12 +374,14 @@ GameDatabase.celestials.alchemy = {
       name: "Unpredictability",
       symbol: "Λ",
       isBaseResource: false,
-      effect: amount => amount / 50000,
+      effect: amount => Math.pow(amount / 10000, 1.5),
       tier: 4,
       uiOrder: 4,
       isUnlocked: () => Ra.pets.effarig.level >= 21 && player.celestials.laitela.matter.neq(0),
       lockText: "Effarig Level 21 and Lai'tela unlocked",
-      formatEffect: value => `Boost dark matter dimension generation chance by +${formatPercents(value, 2, 2)}`,
+      formatEffect: value => (player.celestials.laitela.matter === 0
+        ? "?????"
+        : `Boost dark dimension generation chance by ${formatX(value + 1, 3, 3)}`),
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,

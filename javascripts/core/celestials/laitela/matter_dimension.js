@@ -25,7 +25,7 @@ class MatterDimensionState {
   get chance() {
     const fromUpgrades = 1 + this.dimension.chanceUpgrades * (this.dimension.chanceUpgrades + 1) / 2;
     const tierFactor = Math.pow(2, this._tier);
-    const otherBoosts = Math.floor(100 * AlchemyResource.unpredictability.effectValue);
+    const otherBoosts = 1 + AlchemyResource.unpredictability.effectValue;
     return Math.min(fromUpgrades * otherBoosts / tierFactor, 100);
   }
 
@@ -51,17 +51,17 @@ class MatterDimensionState {
 
   get chanceCost() {
     return Decimal.pow(CHANCE_COST_MULT, this.dimension.chanceUpgrades)
-      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(CHANCE_START_COST);
+      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(CHANCE_START_COST).floor();
   }
 
   get intervalCost() {
     return Decimal.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades)
-      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST);
+      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST).floor();
   }
 
   get powerCost() {
     return Decimal.pow(POWER_COST_MULT, this.dimension.powerUpgrades)
-      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_START_COST);
+      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_START_COST).floor();
   }
 
   get amount() {
@@ -112,7 +112,6 @@ class MatterDimensionState {
     this.dimension.powerUpgrades++;
     return true;
   }
-
 }
 
 MatterDimensionState.list = Array.range(1, 4).map(tier => new MatterDimensionState(tier - 1));

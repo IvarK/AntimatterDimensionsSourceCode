@@ -6,6 +6,7 @@ Vue.component("matter-dimension-row", {
   },
   data() {
     return {
+      tier: 0,
       chance: 0,
       interval: new Decimal(0),
       power: new Decimal(0),
@@ -16,11 +17,29 @@ Vue.component("matter-dimension-row", {
       canBuyChance: false,
       canBuyInterval: false,
       canBuyPower: false,
-      isIntervalCapped: false,
+      timer: 0
     };
+  },
+  computed: {
+    name() {
+      const suffix = " Dark Dimension";
+      switch (this.tier) {
+        case 0:
+          return `First ${suffix}`;
+        case 1:
+          return `Second ${suffix}`;
+        case 2:
+          return `Third ${suffix}`;
+        case 3:
+          return `Fourth ${suffix}`;
+        default:
+          throw new Error("Invalid Dark Dimension index");
+      }
+    }
   },
   methods: {
     update() {
+      this.tier = this.dimension._tier;
       this.chance = this.dimension.chance;
       this.interval.copyFrom(this.dimension.interval);
       this.power.copyFrom(this.dimension.power);
@@ -31,24 +50,24 @@ Vue.component("matter-dimension-row", {
       this.canBuyChance = this.dimension.canBuyChance;
       this.canBuyInterval = this.dimension.canBuyInterval;
       this.canBuyPower = this.dimension.canBuyPower;
-      this.isIntervalCapped = this.dimension.isIntervalCapped;
+      this.timer = this.dimension.timeSinceLastUpdate;
     }
   },
   template:
   `<div class="c-matter-dimension-container">
-    <div class="o-matter-dimension-amount"> {{ format(amount, 2, 0) }}</div>
+    <div class="o-matter-dimension-amount"> {{ name }} : {{ shorten(amount, 2, 0) }}</div>
     <div class="c-matter-dimension-buttons">
-      <button
-        @click="dimension.buyChance()"
-        class="o-matter-dimension-button"
-        :class="{ 'o-matter-dimension-button--available': canBuyChance }">
-        {{ chance }}% <span v-if="chance !== 100"><br>Cost: {{ format(chanceCost, 2, 0) }}</span>
+      <button 
+        @click="dimension.buyChance()" 
+        class="o-matter-dimension-button" 
+        :class="{ 'o-matter-dimension-button--available': canBuyChance }"> 
+        {{ shorten(chance, 2, 2) }}% <span v-if="chance !== 100"><br>Cost: {{ shorten(chanceCost, 2, 0) }}</span>
       </button>
-      <button
-        @click="dimension.buyInterval()"
-        class="o-matter-dimension-button"
-        :class="{ 'o-matter-dimension-button--available': canBuyInterval }">
-        {{ interval.toFixed(2) }}ms <span v-if="!isIntervalCapped"><br>Cost: {{ format(intervalCost, 2, 0) }}</span>
+      <button 
+        @click="dimension.buyInterval()" 
+        class="o-matter-dimension-button" 
+        :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> 
+        {{ interval.toFixed(2) }}ms <span v-if="interval.gt(50)"><br>Cost: {{ shorten(intervalCost, 2, 0) }}</span>
       </button>
       <button
         @click="dimension.buyPower()"
@@ -57,6 +76,7 @@ Vue.component("matter-dimension-row", {
         {{ format(power, 2, 2) }}x <br>Cost: {{ format(powerCost, 2, 0) }}
       </button>
     </div>
+    <span v-if="interval.gt(200)">Tick: {{ timer.toFixed(0) }} ms</span>
   </div>
 
   `

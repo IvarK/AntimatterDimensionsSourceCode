@@ -4,12 +4,12 @@
  * Constants for easily adjusting values
  */
 
-const CHANCE_COST_MULT = 1.5;
-const INTERVAL_COST_MULT = 2.5;
-const POWER_COST_MULT = 3;
+const CHANCE_COST_MULT = 1.6;
+const INTERVAL_COST_MULT = 2.1;
+const POWER_COST_MULT = 1.4;
 
-const CHANCE_START_COST = 20;
-const INTERVAL_START_COST = 5;
+const CHANCE_START_COST = 10;
+const INTERVAL_START_COST = 10;
 const POWER_START_COST = 10;
 
 class MatterDimensionState {
@@ -23,54 +23,46 @@ class MatterDimensionState {
 
   // In percents
   get chance() {
-    return Math.min(5 - this._tier + this.dimension.chanceUpgrades +
-      Math.floor(100 * AlchemyResource.unpredictability.effectValue), 100);
+    const fromUpgrades = 1 + this.dimension.chanceUpgrades * (this.dimension.chanceUpgrades + 1) / 2;
+    const tierFactor = Math.pow(2, this._tier);
+    const otherBoosts = Math.floor(100 * AlchemyResource.unpredictability.effectValue);
+    return Math.min(fromUpgrades * otherBoosts / tierFactor, 100);
   }
 
-  // If this is 50 then you can no longer buy it, but it can get lower with other upgrades
-  get baseInterval() {
-    return Decimal.pow(0.89 - AnnihilationUpgrade.intervalPower.effect, this.dimension.intervalUpgrades)
-     .times(Decimal.pow(2, this._tier))
-     .times(1000);
-  }
-  
-  get isIntervalCapped() {
-    return this.baseInterval.lte(50);
-  }
-
-  // In milliseconds
+  // In milliseconds; if this is 50 then you can no longer buy it, but it can get lower with other upgrades
   get interval() {
-    return this.baseInterval.clampMin(50)
-      .divide(Effects.max(1, CompressionUpgrade.matterBoost));
+    const perUpgrade = 0.89 - AnnihilationUpgrade.intervalPower.effect;
+    const tierFactor = Math.pow(4, this._tier);
+    const postCapBoosts = Effects.max(1, CompressionUpgrade.matterBoost);
+    return Decimal.pow(perUpgrade, this.dimension.intervalUpgrades)
+      .times(tierFactor)
+      .times(1000)
+      .clampMin(50)
+      .divide(postCapBoosts);
   }
 
   get power() {
-    let base = Decimal.pow(1.1, this.dimension.powerUpgrades).times(Laitela.realityReward);
+    let base = Decimal.pow(1.1, this.dimension.powerUpgrades).times(Laitela.realityReward).times(2);
     if (DarkEnergyUpgrade.matterDimensionMult.isBought) {
       base = base.times(DarkEnergyUpgrade.matterDimensionMult.effect);
     }
-
     return base;
   }
 
   get chanceCost() {
-    return Decimal.pow(CHANCE_COST_MULT, 
-      this.dimension.chanceUpgrades + Math.max((this.dimension.chanceUpgrades - 15) * 2, 0))
+    return Decimal.pow(CHANCE_COST_MULT, this.dimension.chanceUpgrades)
       .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(CHANCE_START_COST);
   }
 
   get intervalCost() {
-    return Decimal.pow(INTERVAL_COST_MULT, 
-      this.dimension.intervalUpgrades + Math.max((this.dimension.intervalUpgrades - 9) * 2, 0))
+    return Decimal.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades)
       .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST);
   }
 
   get powerCost() {
-    return Decimal.pow(POWER_COST_MULT, 
-      this.dimension.powerUpgrades + Math.max((this.dimension.powerUpgrades - 8) * 2, 0))
+    return Decimal.pow(POWER_COST_MULT, this.dimension.powerUpgrades)
       .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_START_COST);
   }
-
 
   get amount() {
     return this.dimension.amount;
@@ -89,11 +81,11 @@ class MatterDimensionState {
   }
 
   get canBuyChance() {
-    return this.chanceCost.lte(player.celestials.laitela.matter) && this.chance !== 100;
+    return this.chanceCost.lte(player.celestials.laitela.matter) && this.chance < 100;
   }
 
   get canBuyInterval() {
-    return this.intervalCost.lte(player.celestials.laitela.matter) && !this.isIntervalCapped;
+    return this.intervalCost.lte(player.celestials.laitela.matter) && this.interval.gt(50);
   }
 
   get canBuyPower() {

@@ -37,7 +37,7 @@ const LAITELA_UNLOCKS = {
 };
 
 // How much the starting matter dimension costs increase per tier
-const COST_MULT_PER_TIER = 100;
+const COST_MULT_PER_TIER = 1e5;
 
 const laitelaMatterUnlockThresholds = [1, 2, 3].map(x => 10 * Math.pow(COST_MULT_PER_TIER, x));
 

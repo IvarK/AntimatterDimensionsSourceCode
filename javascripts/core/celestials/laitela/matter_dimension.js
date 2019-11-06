@@ -5,7 +5,7 @@
  */
 
 const CHANCE_COST_MULT = 1.6;
-const INTERVAL_COST_MULT = 2.1;
+const INTERVAL_COST_MULT = 3.2;
 const POWER_COST_MULT = 1.4;
 
 const CHANCE_START_COST = 10;
@@ -21,6 +21,10 @@ class MatterDimensionState {
     return player.celestials.laitela.dimensions[this._tier];
   }
 
+  get intervalPurchaseCap() {
+    return 10;
+  }
+
   // In percents
   get chance() {
     const fromUpgrades = 1 + this.dimension.chanceUpgrades * (this.dimension.chanceUpgrades + 1) / 2;
@@ -29,20 +33,20 @@ class MatterDimensionState {
     return Math.min(fromUpgrades * otherBoosts / tierFactor, 100);
   }
 
-  // In milliseconds; if this is 50 then you can no longer buy it, but it can get lower with other upgrades
+  // In milliseconds; if this is 10 then you can no longer buy it, but it can get lower with other upgrades
   get interval() {
-    const perUpgrade = 0.89 - AnnihilationUpgrade.intervalPower.effect;
+    const perUpgrade = 0.92 - AnnihilationUpgrade.intervalPower.effect;
     const tierFactor = Math.pow(4, this._tier);
     const postCapBoosts = Effects.max(1, CompressionUpgrade.matterBoost);
     return Decimal.pow(perUpgrade, this.dimension.intervalUpgrades)
       .times(tierFactor)
       .times(1000)
-      .clampMin(50)
+      .clampMin(this.intervalPurchaseCap)
       .divide(postCapBoosts);
   }
 
   get power() {
-    let base = Decimal.pow(1.1, this.dimension.powerUpgrades).times(Laitela.realityReward).times(2);
+    let base = new Decimal(1 + Math.pow(1.05, this.dimension.powerUpgrades)).times(Laitela.realityReward);
     if (DarkEnergyUpgrade.matterDimensionMult.isBought) {
       base = base.times(DarkEnergyUpgrade.matterDimensionMult.effect);
     }
@@ -85,7 +89,7 @@ class MatterDimensionState {
   }
 
   get canBuyInterval() {
-    return this.intervalCost.lte(player.celestials.laitela.matter) && this.interval.gt(50);
+    return this.intervalCost.lte(player.celestials.laitela.matter) && this.interval.gt(this.intervalPurchaseCap);
   }
 
   get canBuyPower() {

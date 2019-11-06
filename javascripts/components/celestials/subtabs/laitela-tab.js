@@ -59,7 +59,37 @@ Vue.component("laitela-tab", {
     },
     annihilate() {
       Laitela.annihilate();
-    }
+    },
+    // Greedily buys the cheapest available upgrade until none are affordable
+    maxAll() {
+      let cheapestPrice = new Decimal(0);
+      const unlockedDimensions = MatterDimensionState.list.filter(d => d.amount.gt(0));
+      while (player.celestials.laitela.matter.gte(cheapestPrice)) {
+        const sortedUpgradeInfo = unlockedDimensions
+          .map(d => [
+            [d.chanceCost, d.canBuyChance, "chance", d._tier],
+            [d.intervalCost, d.canBuyInterval, "interval", d._tier],
+            [d.powerCost, d.canBuyPower, "power", d._tier]])
+          .flat(1)
+          .filter(a => a[1])
+          .sort((a, b) => a[0].div(b[0]).log10())
+          .map(d => [d[0], d[2], d[3]]);
+        const cheapestUpgrade = sortedUpgradeInfo[0];
+        if (cheapestUpgrade === undefined) break;
+        cheapestPrice = cheapestUpgrade[0];
+        switch (cheapestUpgrade[1]) {
+          case "chance":
+            MatterDimensionState.list[cheapestUpgrade[2]].buyChance();
+            break;
+          case "interval":
+            MatterDimensionState.list[cheapestUpgrade[2]].buyInterval();
+            break;
+          case "power":
+            MatterDimensionState.list[cheapestUpgrade[2]].buyPower();
+            break;
+        }
+      }
+    },
   },
   computed: {
     dimensions: () => MatterDimensionState.list,
@@ -77,6 +107,10 @@ Vue.component("laitela-tab", {
       <div v-if="anomalies.gt(0)">You to have a {{ formatPercents(darkEnergyChance, 1) }}% chance of first dimensions
         generating dark energy each dimension interval, based on your Anomaly count</div>
       <div v-if="darkEnergy > 0">You have {{ shorten(darkEnergy, 2, 0)}} Dark Energy</div>
+      <primary-button
+        class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
+        @click="maxAll"
+      >Max all (DM)</primary-button>
       <div class="l-laitela-mechanics-container">
         <div>
           <matter-dimension-row

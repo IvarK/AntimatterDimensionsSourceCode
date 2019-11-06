@@ -124,7 +124,7 @@ const Laitela = {
   set matter(x) {
     this.celestial.matter = x;
   },
-  get higgsGain() {
+  get anomalyGain() {
     const base = Decimal.floor(Decimal.pow(this.matter.dividedBy(1e8), 0.2));
     if (DarkEnergyUpgrade.bosonMult.isBought) {
       return base.times(DarkEnergyUpgrade.bosonMult.effect);
@@ -132,11 +132,11 @@ const Laitela = {
     return base;
   },
   get darkEnergyChance() {
-    return this.celestial.higgs.plus(1).log10() / 10000;
+    return this.celestial.anomalies.plus(1).log10() / 10000;
   },
 
   annihilate() {
-    this.celestial.higgs = this.celestial.higgs.plus(this.higgsGain);
+    this.celestial.anomalies = this.celestial.anomalies.plus(this.anomalyGain);
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
         {

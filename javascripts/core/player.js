@@ -467,7 +467,7 @@ let player = {
       })),
       maxAmGained: new Decimal(1),
       annihilated: false,
-      higgs: new Decimal(0),
+      anomalies: new Decimal(0),
       upgrades: {},
       darkEnergy: 0,
       darkEnergyUpgrades: new Set()

@@ -2,11 +2,11 @@
 
 class AnnihilationUpgradeState extends RebuyableMechanicState {
   get currency() {
-    return player.celestials.laitela.higgs;
+    return player.celestials.laitela.anomalies;
   }
 
   set currency(value) {
-     player.celestials.laitela.higgs = value;
+     player.celestials.laitela.anomalies = value;
   }
 
   get cost() {

@@ -8,8 +8,8 @@ Vue.component("laitela-tab", {
       matterEffectPercentage: "",
       dimMultNerf: 0,
       activeDimensions: [],
-      higgs: new Decimal(0),
-      higgsGain: new Decimal(0),
+      anomalies: new Decimal(0),
+      anomalyGain: new Decimal(0),
       showReset: false,
       darkEnergyChance: 0,
       darkEnergy: 0,
@@ -24,10 +24,10 @@ Vue.component("laitela-tab", {
       this.dimMultNerf = Laitela.dimMultNerf;
       this.realityReward = Laitela.realityReward;
       this.activeDimensions = Array.range(0, 4).filter(i => MatterDimension(i + 1).amount.neq(0));
-      this.higgs.copyFrom(player.celestials.laitela.higgs);
-      this.higgsGain.copyFrom(Laitela.higgsGain);
+      this.anomalies.copyFrom(player.celestials.laitela.anomalies);
+      this.anomalyGain.copyFrom(Laitela.anomalyGain);
       this.annihilated = player.celestials.laitela.annihilated;
-      this.showReset = this.annihilated || this.higgsGain.gt(0);
+      this.showReset = this.annihilated || this.anomalyGain.gt(0);
       this.darkEnergyChance = Laitela.darkEnergyChance;
       this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.isRunning = Laitela.isRunning;
@@ -71,9 +71,11 @@ Vue.component("laitela-tab", {
   template:
     `<div class="l-laitela-celestial-tab">
       <div class="o-laitela-matter-amount">You have {{ shorten(matter.floor(), 2, 0) }} Dark Matter</div>
-      <div v-if="annihilated">You have {{ shorten(higgs, 2, 0)}} Higgs {{"Boson" | pluralize(higgs)}}</div>
-      <div v-if="higgs.gt(0)">You to have a {{ formatPercents(darkEnergyChance, 1) }}% chance of first dimensions
-        generating dark energy each dimension interval, based on your Higgs count</div>
+      <div v-if="annihilated">
+        You have {{ shorten(anomalies, 2, 0)}} {{"Anomaly" | pluralize(anomalies, "Anomalies")}}
+      </div>
+      <div v-if="anomalies.gt(0)">You to have a {{ formatPercents(darkEnergyChance, 1) }}% chance of first dimensions
+        generating dark energy each dimension interval, based on your Anomaly count</div>
       <div v-if="darkEnergy > 0">You have {{ shorten(darkEnergy, 2, 0)}} Dark Energy</div>
       <div class="l-laitela-mechanics-container">
         <div>
@@ -90,8 +92,8 @@ Vue.component("laitela-tab", {
             :key="upgrade.id"
             class="o-laitela-shop-button"
             :class="{'o-laitela-shop-button--available': upgrade.canBeBought }"
-            @click="upgrade.purchase()">
-              {{ upgrade.description }} <br/> Costs: <b>{{ format(upgrade.cost, 2, 0) }}</b> Higgs Bosons
+            @click="upgrade.purchase()"> 
+              {{ upgrade.description }} <br/> Costs: <b>{{ format(upgrade.cost, 2, 0) }}</b> Anomalies 
               <br/>Currently: {{ upgrade.formattedEffect }}, Next: {{ upgrade.formattedNextEffect }}
           </button>
         </div>
@@ -110,11 +112,11 @@ Vue.component("laitela-tab", {
           <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
             <h2>Annihilation</h2>
             <p>
-              Resets your dark matter dimensions and Dark Matter, but gain <b>{{ shorten(higgsGain, 2, 0) }}</b> 
-              Higgs {{"Boson" | pluralize(higgsGain)}}.
+              Resets your dark matter dimensions and Dark Matter, but gain <b>{{ shorten(anomalyGain, 2, 0) }}</b> 
+              {{"Anomaly" | pluralize(anomalyGain, "Anomalies")}}.
             </p>
             <p>
-              Higgs Bosons give your 1st Dark Dimensions a chance to produce Dark Energy.
+              Anomalies give your 1st Dark Dimensions a chance to produce Dark Energy.
             </p>
           </button>
         </div>

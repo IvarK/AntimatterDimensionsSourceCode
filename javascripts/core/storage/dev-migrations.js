@@ -562,6 +562,10 @@ GameStorage.devMigrations = {
       delete player.celestials.effarig.autoGlyphSac;
       delete player.celestials.effarig.autoGlyphPick;
     },
+    player => {
+      player.celestials.laitela.anomalies = new Decimal(player.celestials.laitela.higgs);
+      delete player.celestials.laitela.higgs;
+    }
   ],
 
   patch(player) {

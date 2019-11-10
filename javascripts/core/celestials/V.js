@@ -140,6 +140,7 @@ const V = {
   },
   startRun() {
     player.celestials.v.run = startRealityOver() || player.celestials.v.run;
+    player.celestials.v.cursedThisRun = Glyphs.active.filter(x => x.type === "cursed").length;
   },
   updateTotalRunUnlocks() {
     this.spaceTheorems = player.celestials.v.runUnlocks.sum();

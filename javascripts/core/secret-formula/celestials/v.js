@@ -70,18 +70,18 @@ GameDatabase.celestials.v = {
       description: value => 
         `Unlock reality with at least ${shortenSmallInteger(value)} cursed ${pluralize("glyph", value)}`,
       values: [1, 2, 3, 4, 5],
-      condition: x => TimeStudy.reality.isBought && Glyphs.activeList.filter(g => g.type === "cursed").length >= x,
-      currentValue: () => (TimeStudy.reality.isBought
-         ? 6 - Glyphs.activeList.filter(g => g.type === "cursed").length : 0),
+      condition: x => TimeStudy.reality.isBought && player.celestials.v.cursedThisRun >= x,
+      currentValue: () => player.celestials.v.cursedThisRun,
       formatRecord: x => shortenSmallInteger(x)
     },
     {
       id: 7,
       name: "Post-destination",
       description: value => 
-        `Get ${value} TT with a 1e-${value} black hole`,
-      values: [100, 500, 2500, 10000, 50000],
-      condition: x => player.timestudy.theorem.gt(x),
+        `Get ${Math.pow(value, 2)} TT with a 1e-${value} black hole`,
+      values: [50, 100, 150, 200, 300],
+      condition: x => player.timestudy.theorem.gt(Math.pow(x, 2)) && 
+        Decimal.pow10(x).reciprocate().gte(player.minNegativeBlackHoleThisReality),
       currentValue: () => player.timestudy.theorem.exponent,
       formatRecord: x => shorten(x)
     }

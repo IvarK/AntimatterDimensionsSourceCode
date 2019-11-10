@@ -550,10 +550,11 @@ GameDatabase.reality.glyphEffects = [
     id: "cursedgalaxies",
     bitmaskIndex: 27,
     glyphTypes: ["cursed"],
-    singleDesc: `Galaxies are {value}% less effective`,
+    singleDesc: `Galaxies are {value} less effective`,
     genericDesc: "Galaxies are less effective",
+    // Effect at 1000 is 0.697 and at 5000 is 0.548
     effect: (level, strength) => 3.5 / (strength * Math.pow(level, 0.02)),
-    formatEffect: x => formatPercents(x, 2),
+    formatEffect: x => formatPercents(1 - x, 2),
     combine: GlyphCombiner.multiply,
   }, {
     id: "curseddimensions",
@@ -561,8 +562,8 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["cursed"],
     singleDesc: "All dimension multipliers ^{value}",
     genericDesc: "All dimension multipliers are reduced",
-    // Effect at 1000 is 0.697 and at 5000 at 0.548
-    effect: (level, strength) => 1 / (1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 50),
+    // Effect at 1000 is 0.730 and at 5000 is 0.606
+    effect: (level, strength) => 1 / (1 + Math.pow(level, 0.35) * Math.pow(strength, 0.4) / 50),
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
@@ -571,19 +572,20 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["cursed"],
     singleDesc: "Multiply free tickspeed threshold increase by {value}x",
     genericDesc: "Multiply free tickspeed threshold increase",
-    // Effect at 1000 is 1 and at 5000 at 5
-    effect: (level, strength) => level * strength / 3500,
+    // Effect at 1000 is 2 and at 5000 is 6
+    effect: (level, strength) => 1 + level * strength / 3500,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.add,
   }, {
-    id: "cursedchallenges",
+    id: "cursedeternity",
     bitmaskIndex: 30,
     glyphTypes: ["cursed"],
-    singleDesc: "You have {value} negative EC completions",
-    genericDesc: "You have negative EC completions",
-    effect: () => 1,
-    formatEffect: x => shortenSmallInteger(x),
-    combine: GlyphCombiner.add,
+    singleDesc: "Divide EP gain by {value} ",
+    genericDesc: "Divide EP gain by",
+    // Effect at 1000 is 500 and at 5000 is 2500
+    effect: (level, strength) => Decimal.pow10(level * strength / 3.5 / 2),
+    formatEffect: x => shorten(x),
+    combine: effects => ({ value: effects.reduce(Decimal.prodReducer, new Decimal(1)), capped: false }),
   }
 
 ].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));
@@ -727,7 +729,7 @@ const GlyphTypes = {
     id: "cursed",
     symbol: GLYPH_SYMBOLS.cursed,
     effects: findGlyphTypeEffects("cursed"),
-    color: "red",
+    color: "black",
     unlockedFn: () => false,
     alchemyResource: ALCHEMY_RESOURCE.CURSED
   }),

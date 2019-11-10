@@ -168,6 +168,8 @@ function applyNDPowers(mult, tier) {
       AlchemyResource.power
     );
 
+  multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));
+
   return multiplier;
 }
 

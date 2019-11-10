@@ -173,6 +173,8 @@ class TimeDimensionState extends DimensionState {
     if (Laitela.has(LAITELA_UNLOCKS.DIM_POW)) mult = mult.pow(Laitela.dimensionMultPowerEffect);
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
+    
+    mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
 
     mult = mult.powEffectOf(AlchemyResource.time);
 

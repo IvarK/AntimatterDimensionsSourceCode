@@ -13,6 +13,7 @@ Vue.component("v-tab", {
       rm: new Decimal(0),
       runRecords: Array.from(player.celestials.v.runRecords),
       runGlyphs: player.celestials.v.runGlyphs.map(g => this.copyGlyphs(g)),
+      isFlipped: false
     };
   },
   methods: {
@@ -27,6 +28,7 @@ Vue.component("v-tab", {
       this.rm.copyFrom(player.reality.realityMachines);
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(g => this.copyGlyphs(g));
+      this.isFlipped = V.isFlipped;
     },
     copyGlyphs(glyphList) {
       return glyphList.map(g => ({
@@ -44,17 +46,31 @@ Vue.component("v-tab", {
     }
   },
   computed: {
-    hexGrid: () => [
-      VRunUnlocks.all[0],
-      VRunUnlocks.all[1],
-      {},
-      VRunUnlocks.all[2],
-      { isRunButton: true },
-      VRunUnlocks.all[3],
-      VRunUnlocks.all[4],
-      VRunUnlocks.all[5],
-      {}
-    ],
+    // If V is flipped, change the layout of the grid
+    hexGrid() {
+      return this.isFlipped ? [
+        VRunUnlocks.all[6],
+        {},
+        {},
+        {},
+        { isRunButton: true },
+        VRunUnlocks.all[7],
+        VRunUnlocks.all[4],
+        {},
+        {}
+      ]
+      : [
+        VRunUnlocks.all[0],
+        VRunUnlocks.all[1],
+        {},
+        VRunUnlocks.all[2],
+        { isRunButton: true },
+        VRunUnlocks.all[3],
+        VRunUnlocks.all[4],
+        VRunUnlocks.all[5],
+        {}
+      ];
+    },
     runMilestones: () => V_UNLOCKS.RUN_UNLOCK_THRESHOLDS,
     db: () => GameDatabase.celestials.v,
   },

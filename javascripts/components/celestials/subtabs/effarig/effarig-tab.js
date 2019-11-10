@@ -46,6 +46,7 @@ Vue.component("effarig-tab", {
       quote: "",
       quoteIdx: 0,
       isRunning: false,
+      vIsFlipped: false
     };
   },
   computed: {
@@ -88,6 +89,7 @@ Vue.component("effarig-tab", {
       this.adjusterUnlocked = EffarigUnlock.adjuster.isUnlocked;
       this.autopickerUnlocked = EffarigUnlock.autopicker.isUnlocked;
       this.isRunning = Effarig.isRunning;
+      this.vIsFlipped = V.isFlipped;
     },
     startRun() {
       if (this.isRunning) startRealityOver();
@@ -98,6 +100,15 @@ Vue.component("effarig-tab", {
     },
     hasNextQuote() {
       return this.quoteIdx < Effarig.maxQuoteIdx;
+    },
+    createCursedGlyph() {
+      if (Glyphs.freeInventorySpace === 0) {
+        Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
+        return;
+      }
+      Glyphs.addToInventory(GlyphGenerator.cursedGlyph());
+      GameUI.notify.error("Created a cursed glyph")
+      this.emitClose();
     }
   },
   template:
@@ -115,6 +126,9 @@ Vue.component("effarig-tab", {
            :key="i"
            :unlock="unlock" />
           <effarig-unlock-button v-if="!runUnlocked" :unlock="runUnlock" />
+          <button class="o-effarig-shop-button" @click="createCursedGlyph" v-if="vIsFlipped">
+            Get a cursed glyph...
+          </button>
         </div>
         <div v-if="runUnlocked" class="l-effarig-run">
           <div class="c-effarig-run-description">

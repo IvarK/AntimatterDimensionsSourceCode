@@ -155,5 +155,8 @@ const V = {
   },
   get totalAdditionalStudies() {
     return Math.floor(this.spaceTheorems / this.achievementsPerAdditionalStudy);
+  },
+  get isFlipped() {
+    return this.spaceTheorems >= 36;
   }
 };

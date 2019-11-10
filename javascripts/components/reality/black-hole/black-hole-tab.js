@@ -6,10 +6,26 @@ Vue.component("black-hole-tab", {
       isUnlocked: false,
       isPaused: false,
       isEnslaved: false,
+      vIsFlipped: false,
+      currentNegative: Math.log10(1 / player.blackHoleNegative),
+      maxNegativeBlackHole: 300
     };
   },
   computed: {
-    blackHoles: () => BlackHoles.list
+    blackHoles: () => BlackHoles.list,
+    sliderProps() {
+      return {
+        min: 0,
+        max: this.maxNegativeBlackHole,
+        interval: 1,
+        show: true,
+        width: "60rem",
+        tooltip: false
+      };
+    },
+    negativeBlackHoleLabel() {
+      return `Negative black hole gives 1e-${this.currentNegative} game speed, only works when black hole is paused.`;
+    }
   },
   mounted() {
     if (this.$refs.canvas) {
@@ -24,11 +40,16 @@ Vue.component("black-hole-tab", {
       this.isUnlocked = BlackHoles.areUnlocked;
       this.isPaused = BlackHoles.arePaused;
       this.isEnslaved = Enslaved.isRunning;
+      this.vIsFlipped = V.isFlipped;
     },
     togglePause() {
       BlackHoles.togglePause();
       this.update();
-    }
+    },
+    adjustSlider(value) {
+      this.currentNegative = value;
+      player.blackHoleNegative = 1 / Math.pow(10, value);
+    },
   },
   template: `
     <div class="l-black-hole-tab">
@@ -55,6 +76,14 @@ Vue.component("black-hole-tab", {
           >
             {{ isPaused ? "Resume" : "Pause" }}
           </button>
+          <div v-if="vIsFlipped" class="l-enslaved-shop-container">
+            {{ negativeBlackHoleLabel }}
+            <ad-slider-component
+                v-bind="sliderProps"
+                :value="currentNegative"
+                @input="adjustSlider($event)"
+              />
+          </div>
         </div>
       </template>
     </div>

@@ -63,6 +63,27 @@ GameDatabase.celestials.v = {
       condition: x => player.dilation.active && EternityChallenge(5).isRunning && DimBoost.purchasedBoosts >= x,
       currentValue: () => (player.dilation.active && EternityChallenge(5).isRunning ? DimBoost.purchasedBoosts : 0),
       formatRecord: x => shortenSmallInteger(x),
+    },
+    {
+      id: 6,
+      name: "Glyph War",
+      description: value => 
+        `Unlock reality with at least ${shortenSmallInteger(value)} cursed ${pluralize("glyph", value)}`,
+      values: [1, 2, 3, 4, 5],
+      condition: x => TimeStudy.reality.isBought && Glyphs.activeList.filter(g => g.type === "cursed").length >= x,
+      currentValue: () => (TimeStudy.reality.isBought
+         ? 6 - Glyphs.activeList.filter(g => g.type === "cursed").length : 0),
+      formatRecord: x => shortenSmallInteger(x)
+    },
+    {
+      id: 7,
+      name: "Post-destination",
+      description: value => 
+        `Get ${value} TT with a 1e-${value} black hole`,
+      values: [100, 500, 2500, 10000, 50000],
+      condition: x => player.timestudy.theorem.gt(x),
+      currentValue: () => player.timestudy.theorem.exponent,
+      formatRecord: x => shorten(x)
     }
   ],
   triadStudies: [

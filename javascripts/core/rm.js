@@ -6,7 +6,8 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "dilationDT", "replicationdtgain", "replicationspeed", "timespeed",
   "timeetermult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
-  "effarigforgotten", "effarigdimensions", "effarigantimatter"];
+  "effarigforgotten", "effarigdimensions", "effarigantimatter",
+  "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedeternity"];
 
 // eslint-disable-next-line no-unused-vars
 const GlyphEffectOrder = orderedEffectList.mapToObject(e => e, (e, idx) => idx);
@@ -201,6 +202,25 @@ const GlyphGenerator = {
       strength: str,
       level: level.actualLevel,
       rawLevel: level.rawLevel,
+      effects: effectBitmask,
+    };
+  },
+
+  cursedGlyph() {
+    const str = rarityToStrength(100);
+    const effectBitmask = makeGlyphEffectBitmask(
+      orderedEffectList.filter(effect => effect.match("cursed*"))
+    );
+    // Each cursed glyph owned increases the level by 1000
+    const level = (1 + Glyphs.inventory.filter(g => g !== null && g.type === "cursed").length +
+      Glyphs.active.filter(g => g !== null && g.type === "cursed").length) * 1000;
+    return {
+      id: undefined,
+      idx: null,
+      type: "cursed",
+      strength: str,
+      level,
+      rawLevel: level,
       effects: effectBitmask,
     };
   },

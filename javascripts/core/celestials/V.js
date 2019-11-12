@@ -86,7 +86,7 @@ const V_UNLOCKS = {
   RUN_UNLOCK_THRESHOLDS: [
     {
     id: 1,
-    reward: "Achievement multiplier affects auto EC completion time.",
+    reward: "Achievement multiplier affects auto EC completion time. Unlock Triad studies.",
     description: "Have 10 V-achievements",
     effect: () => Player.achievementPower.toNumber(),
     format: x => formatX(x, 2, 2),
@@ -143,7 +143,12 @@ const V = {
     player.celestials.v.cursedThisRun = Glyphs.active.filter(x => x.type === "cursed").length;
   },
   updateTotalRunUnlocks() {
-    this.spaceTheorems = player.celestials.v.runUnlocks.sum();
+    let sum = 0;
+    for (let i = 0; i < player.celestials.v.runUnlocks.length; i++) {
+      if (i < 6) sum += player.celestials.v.runUnlocks[i];
+      else sum += player.celestials.v.runUnlocks[i] * 3;
+    }
+    this.spaceTheorems = sum;
   },
   get availableST() {
     return V.spaceTheorems - player.celestials.v.STSpent;

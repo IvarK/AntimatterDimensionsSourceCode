@@ -726,3 +726,43 @@
   transition-delay: 1.5s;
   opacity: 1;
 }
+
+.o-time-study--triad {
+  width: 17em;
+  height: 8em;
+  border: none;
+  border-radius: 0;
+}
+
+.o-time-study--triad:before {
+  content: "";
+  position: absolute;
+  top: -3.6rem;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 8.5rem solid transparent;
+  border-right: 8.5rem solid transparent;
+  border-bottom: 3.6rem solid red;
+}
+
+.o-time-study--triad:after {
+  content: "";
+  position: absolute;
+  bottom: -3.6rem;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 8.5rem solid transparent;
+  border-right: 8.5rem solid transparent;
+  border-top: 3.6rem solid red;
+}
+
+
+.o-time-study--unavailable.o-time-study--triad:hover:before {
+  border-bottom: 3.6rem solid #660000;
+}
+
+.o-time-study--unavailable.o-time-study--triad:hover:before {
+  border-bottom: 3.6rem solid #660000;
+}

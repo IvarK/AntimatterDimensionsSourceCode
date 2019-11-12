@@ -61,7 +61,8 @@ class TimeStudyTreeLayout {
       normalRow(                   TS(33), TS(31), TS(32), null                       )
     ];
 
-    if (type === StudyTreeLayoutType.ALTERNATIVE_62 || type === StudyTreeLayoutType.ALTERNATIVE_62_181) {
+    if (type === StudyTreeLayoutType.ALTERNATIVE_62 || type === StudyTreeLayoutType.ALTERNATIVE_62_181 ||
+      type === StudyTreeLayoutType.ALTERNATIVE_TRIAD_STUDIES) {
       this.rows.push(
         normalRow(                     null, TS(41), TS(42), EC(5)                      ),
         normalRow(                       null,   TS(51),  TS(62)                        ),
@@ -88,7 +89,8 @@ class TimeStudyTreeLayout {
       normalRow(                          TS(161), TS(162)                            )
     );
 
-    if (type === StudyTreeLayoutType.ALTERNATIVE_181 || type === StudyTreeLayoutType.ALTERNATIVE_62_181) {
+    if (type === StudyTreeLayoutType.ALTERNATIVE_181 || type === StudyTreeLayoutType.ALTERNATIVE_62_181 ||
+        type === StudyTreeLayoutType.ALTERNATIVE_TRIAD_STUDIES) {
       this.rows.push(
         normalRow(                         null, TS(171),  EC(2)                        ),
         normalRow(                        EC(1), TS(181),  EC(3)                        )
@@ -106,8 +108,16 @@ class TimeStudyTreeLayout {
       normalRow(             TS(191),          TS(192),          TS(193)              ),
       normalRow(                               TS(201)                                ),
       normalRow(    TS(211),          TS(212),          TS(213),          TS(214)     ),
-      wideRow  (TS(221), TS(222), TS(223), TS(224), TS(225), TS(226), TS(227), TS(228)),
-      normalRow(    TrS(1),           TrS(2),           TrS(3),           TrS(4)      ),
+      wideRow  (TS(221), TS(222), TS(223), TS(224), TS(225), TS(226), TS(227), TS(228))
+    );
+
+    if (type === StudyTreeLayoutType.ALTERNATIVE_TRIAD_STUDIES) {
+      this.rows.push(
+        normalRow(    TrS(1),           TrS(2),           TrS(3),           TrS(4)      )
+      );
+    }
+
+    this.rows.push(
       normalRow(    TS(231),          TS(232),          TS(233),          TS(234)     ),
       normalRow(              EC(11),                             EC(12)              ),
       normalRow(                          TimeStudy.dilation                          ),
@@ -192,9 +202,11 @@ const StudyTreeLayoutType = {
   ALTERNATIVE_62: 1,
   ALTERNATIVE_181: 2,
   ALTERNATIVE_62_181: 3,
+  ALTERNATIVE_TRIAD_STUDIES: 4,
   get current() {
     const alt62 = Perk.bypassEC5Lock.isBought;
     const alt181 = Perk.bypassEC1Lock.isBought && Perk.bypassEC2Lock.isBought && Perk.bypassEC3Lock.isBought;
+    if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0])) return this.ALTERNATIVE_TRIAD_STUDIES;
     if (alt62 && alt181) return this.ALTERNATIVE_62_181;
     if (alt62) return this.ALTERNATIVE_62;
     if (alt181) return this.ALTERNATIVE_181;

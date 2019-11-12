@@ -31,7 +31,7 @@ Vue.component("triad-time-study", {
 
   },
   template:
-    `<time-study :setup="setup" class="o-time-study--eternity-challenge" :showSTCost="true">
+    `<time-study :setup="setup" class="o-time-study--triad" :showSTCost="true">
       <template>
         <span>
           {{ config.description }}<br>

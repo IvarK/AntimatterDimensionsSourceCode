@@ -165,7 +165,7 @@ function canBuyStudy(id) {
 }
 
 function canBuyLocked(id) {
-  return V.availableST >= TimeStudy(id).config.STCost && 
+  return V.availableST >= TimeStudy(id).STCost && 
          TimeStudy(id) && 
          TimeStudy(id).checkVRequirement();
 }
@@ -400,7 +400,7 @@ class NormalTimeStudyState extends TimeStudyState {
     if (this.isBought || !this.isAffordable) return false;
     if (!canBuyStudy(this.id)) {
       if (!canBuyLocked(this.id)) return false;
-      player.celestials.v.STSpent += this.config.STCost;
+      player.celestials.v.STSpent += this.STCost;
     }
     player.timestudy.studies.push(this.id);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
@@ -643,7 +643,7 @@ class TriadStudyState extends TimeStudyState {
 
   get canBeBought() {
     return this.config.requirement.every(s => player.timestudy.studies.includes(s)) &&
-           V.availableST >= this.config.STCost;
+           V.availableST >= this.STCost;
   }
 
   get isBought() {
@@ -661,7 +661,7 @@ class TriadStudyState extends TimeStudyState {
   purchase() {
     if (!this.canBeBought) return;
     player.celestials.v.triadStudies.push(this.config.id);
-    player.celestials.v.STSpent += this.config.STCost;
+    player.celestials.v.STSpent += this.STCost;
   }
 }
 

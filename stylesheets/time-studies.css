@@ -728,41 +728,18 @@
 }
 
 .o-time-study--triad {
-  width: 17em;
-  height: 8em;
+  width: 17rem;
+  height: 8rem;
   border: none;
   border-radius: 0;
+  background: #f1aa7f;
 }
 
-.o-time-study--triad:before {
-  content: "";
-  position: absolute;
-  top: -3.6rem;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-left: 8.5rem solid transparent;
-  border-right: 8.5rem solid transparent;
-  border-bottom: 3.6rem solid red;
+.o-time-study--unavailable.o-time-study--triad {
+  background: #29180e;
+  color: white;
 }
 
-.o-time-study--triad:after {
-  content: "";
-  position: absolute;
-  bottom: -3.6rem;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-left: 8.5rem solid transparent;
-  border-right: 8.5rem solid transparent;
-  border-top: 3.6rem solid red;
-}
-
-
-.o-time-study--unavailable.o-time-study--triad:hover:before {
-  border-bottom: 3.6rem solid #660000;
-}
-
-.o-time-study--unavailable.o-time-study--triad:hover:before {
-  border-bottom: 3.6rem solid #660000;
+.o-time-study--bought.o-time-study--triad {
+  box-shadow: inset 0px 0px 20px black; 
 }

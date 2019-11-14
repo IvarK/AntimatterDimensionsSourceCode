@@ -140,7 +140,7 @@ const V = {
   },
   startRun() {
     player.celestials.v.run = startRealityOver() || player.celestials.v.run;
-    player.celestials.v.cursedThisRun = Glyphs.active.filter(x => x.type === "cursed").length;
+    player.celestials.v.cursedThisRun = Glyphs.active.filter(x => x && x.type === "cursed").length;
   },
   updateTotalRunUnlocks() {
     let sum = 0;

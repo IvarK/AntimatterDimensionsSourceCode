@@ -1386,7 +1386,7 @@ GameDatabase.news = [
         for (let i = 0; i < 3; i++) {
           if (Math.random() > 0.5 || !scene.includes(chaser)) scene += chaser;
         }
-        scene += " ";
+        scene += "&nbsp;&nbsp;&nbsp;";
       }
       return scene;
     }
@@ -1570,7 +1570,7 @@ GameDatabase.news = [
   },
   {
     id: "a280",
-    text: "I hate Antimatter. It's rough, coarse, irritating, and it gets everywhere."
+    text: "I hate antimatter. It's rough, coarse, irritating, and it gets everywhere."
   },
   {
     id: "a281",
@@ -2002,8 +2002,8 @@ GameDatabase.news = [
       const recipes = [
         "a Replicanti cake: Gather some Replicanti, place in oven, and watch rise. And rise. And rise.",
         "an antimatter cake: Gather some antimatter, place in oven, and <b>BOOM<b>.",
-        "an Eternity cake: Gather some Eternity points, place in oven, and wait...",
-        "an Infinity cake: Gather some Infinity points, place in oven, and watch them shatter spacetime."
+        "an Eternity cake: Gather some Eternity Points, place in oven, and wait...",
+        "an Infinity cake: Gather some Infinity Points, place in oven, and watch them shatter spacetime."
       ];
       const recipe = recipes.randomElement();
       return `How to bake ${recipe}`;

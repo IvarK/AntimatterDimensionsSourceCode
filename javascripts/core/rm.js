@@ -572,7 +572,7 @@ const Glyphs = {
   sort() {
     const glyphsToSort = player.reality.glyphs.inventory.filter(g => g.idx >= this.protectedSlots);
     const freeSpace = this.freeInventorySpace;
-    const sortOrder = ["power", "infinity", "time", "replication", "dilation", "effarig", "reality"];
+    const sortOrder = ["power", "infinity", "time", "replication", "dilation", "effarig", "reality", "cursed"];
     const byType = sortOrder.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
     for (const g of glyphsToSort) byType[g.type].glyphs.push(g);
     const compareGlyphs = (a, b) => -a.level * a.strength + b.level * b.strength;

@@ -987,7 +987,7 @@ screen and (max-width: 480px) {
 @keyframes text-crunch {
   0% {font-size: 1.5rem;}
   90% {font-size: 1.5rem;}
-  100% {font-size: 0rem;}
+  100% {font-size: 0;}
 }
 
 @keyframes text-flash {
@@ -1002,7 +1002,7 @@ screen and (max-width: 480px) {
 }
 
 @keyframes text-stretch {
-  0% {letter-spacing: 0rem;}
+  0% {letter-spacing: 0;}
   100% {letter-spacing: 30rem;}
 }
 

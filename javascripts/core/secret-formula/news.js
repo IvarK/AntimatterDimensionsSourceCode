@@ -1287,7 +1287,7 @@ GameDatabase.news = [
     text:
       "AD Player: \"How many orders of magnitude are you on?\" Normal person: \"Like, maybe 5 or 6 right now, my " +
       "dude.\" AD Player: \"You are like a little baby. Watch this: <span style='animation: text-crunch 22s " +
-      "1; font-size: 0rem;'>C R O N C H</span>\""
+      "1; font-size: 0;'>C R O N C H</span>\""
   },
   {
     id: "a239",

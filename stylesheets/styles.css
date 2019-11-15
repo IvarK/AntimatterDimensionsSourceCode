@@ -995,6 +995,17 @@ screen and (max-width: 480px) {
   50% {color: red;}
 }
 
+@keyframes fade-out {
+  0% {opacity: 1;}
+  50% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+@keyframes text-stretch {
+  0% {letter-spacing: 0rem;}
+  100% {letter-spacing: 30rem;}
+}
+
 .infotooltip {
     position: relative;
     display: inline-block;

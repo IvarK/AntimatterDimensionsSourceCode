@@ -49,7 +49,11 @@ Vue.component("news-ticker", {
       line.innerHTML = this.currentNews.text;
 
       line.style["transition-duration"] = "0ms";
-      line.style.transform = "translateX(0)";
+      if (this.currentNews && this.currentNews.id === "a244") {
+        line.style.transform = "translateX(-100%)";
+      } else {
+        line.style.transform = "translateX(0)";
+      }
 
       const DELAY = 1000;
       this.delayTimeout = setTimeout(this.scrollMessage.bind(this), DELAY);
@@ -62,7 +66,11 @@ Vue.component("news-ticker", {
       const scrollDuration = (this.$refs.ticker.clientWidth + line.clientWidth) / SCROLL_SPEED;
 
       line.style["transition-duration"] = `${scrollDuration}s`;
-      line.style.transform = "translateX(-100%)";
+      if (this.currentNews && this.currentNews.id === "a244") {
+        line.style.transform = "translateX(0)";
+      } else {
+        line.style.transform = "translateX(-100%)";
+      }
 
       player.news.add(this.currentNews.id);
       if (player.news.size >= 50) Achievement(22).unlock();
@@ -87,6 +95,21 @@ Vue.component("news-ticker", {
       if (this.currentNews.id === "a210") {
         player.secretUnlocks.uselessNewsClicks++;
         this.$refs.line.innerHTML = this.currentNews.text;
+      }
+      if (this.currentNews.id === "a247") {
+        if (this.$refs.line.innerHTML.includes("This")) {
+          this.$refs.line.innerHTML =
+            "¡uʍop ǝpᴉsdn ɯǝɥʇ dᴉlɟ oʇ sǝƃɐssǝɯ sʍǝu uo ʞɔᴉlɔ oʇ ʎʇᴉlᴉqɐ ǝɥʇ ǝʞᴉl sƃuᴉɥʇ ǝɹnʇɐǝɟ llᴉʍ 0˙ᄅ sʍǝN " +
+            "˙,,0˙ᄅ sʍǝN,, ɟo ʇsǝʇ ɐ sᴉ ǝƃɐssǝɯ sʍǝu sᴉɥ┴";
+        } else {
+          this.$refs.line.innerHTML =
+            "This news message is a test of \"News 2.0\". News 2.0 will feature things like the ability to click " +
+            "on news messages to flip them upside down!";
+        }
+      }
+      if (this.currentNews.id === "a289") {
+        player.secretUnlocks.paperclips++;
+        GameOptions.toggleNews();
       }
     }
   },

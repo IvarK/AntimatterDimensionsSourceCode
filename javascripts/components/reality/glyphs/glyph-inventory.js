@@ -35,8 +35,7 @@ Vue.component("glyph-inventory", {
       const glyph = Glyphs.findById(id);
       if (!glyph) return;
       if (glyph.symbol === "key266b") {
-        const tempAudio = new Audio(`images/note${col}.mp3`);
-        tempAudio.play();
+        new Audio(`audio/note${col}.mp3`).play();
       }
     },
     glyphsChanged() {

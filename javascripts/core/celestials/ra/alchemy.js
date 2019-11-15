@@ -41,6 +41,10 @@ class AlchemyResourceState extends GameMechanicState {
     this.config.flow = value;
   }
 
+  get isUnlocked() {
+    return this.config.isUnlocked();
+  }
+
   get canBeApplied() {
     return true;
   }
@@ -72,6 +76,7 @@ class AlchemyReaction {
   // 100%, but the reaction will be forced to occur at higher than 100% if there is significantly more reagent than
   // product. This allows resources to be created quickly when its reaction is initially turned on with saved reagents.
   get reactionYield() {
+    if (!this._product.isUnlocked || this._reagents.some(r => !r.isUnlocked)) return 0;
     const forcingFactor = (this._reagents
       .map(r => r.resource.amount)
       .min() - this._product.amount) / 1000;

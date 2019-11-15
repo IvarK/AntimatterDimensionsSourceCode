@@ -5946,6 +5946,11 @@ kbd {
   z-index: 4;
 }
 
+.o-alchemy-node--locked {
+  opacity: 0.1;
+  z-index: 4;
+}
+
 .o-alchemy-node--base {
   background-color: #81d4fa;
 }

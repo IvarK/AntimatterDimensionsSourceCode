@@ -118,6 +118,7 @@ Vue.component("alchemy-tab", {
     },
     handleClick(node) {
       const resource = node.resource;
+      if (!resource.isUnlocked) return;
       if (this.infoResourceId !== resource.id) {
         this.infoResourceId = resource.id;
         this.focusedResourceId = resource.id;
@@ -127,17 +128,22 @@ Vue.component("alchemy-tab", {
       resource.reaction.isActive = !resource.reaction.isActive;
       GameUI.update();
     },
+    isUnlocked(reactionArrow) {
+      return reactionArrow.product.resource.isUnlocked && reactionArrow.reagent.resource.isUnlocked;
+    },
     isCapped(reactionArrow) {
-      return reactionArrow.product.resource.amount >= reactionArrow.reagent.resource.amount;
+      return reactionArrow.product.resource.amount > 0 && 
+        reactionArrow.product.resource.amount >= reactionArrow.reagent.resource.amount;
     },
     isActiveReaction(reactionArrow) {
       return reactionArrow.reaction.isActive;
     },
     isFocusedReaction(reactionArrow) {
-      return reactionArrow.reaction.product.id === this.focusedResourceId;
+      return this.isUnlocked(reactionArrow) && reactionArrow.reaction.product.id === this.focusedResourceId;
     },
     isDisplayed(reactionArrow) {
-      return this.isActiveReaction(reactionArrow) || this.isFocusedReaction(reactionArrow);
+      return this.isUnlocked(reactionArrow) &&
+        (this.isActiveReaction(reactionArrow) || this.isFocusedReaction(reactionArrow))
     },
     isFocusedNode(node) {
       if (this.focusedResourceId === -1) return true;
@@ -173,7 +179,7 @@ Vue.component("alchemy-tab", {
     },
     reactionPathClass(reactionArrow) {
       return {
-        "o-alchemy-reaction-path": true,
+        "o-alchemy-reaction-path": this.isUnlocked(reactionArrow),
         "o-alchemy-reaction-path--limited": this.isCapped(reactionArrow) && this.isDisplayed(reactionArrow),
         "o-alchemy-reaction-path--focused": !this.isCapped(reactionArrow) && this.isFocusedReaction(reactionArrow),
       };

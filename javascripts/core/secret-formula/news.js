@@ -433,7 +433,7 @@ GameDatabase.news = [
   },
   {
     id: "a100",
-    text: "Please insert Disc -1 to continue playing  Antimatter Dimensions™."
+    text: "Please insert Disc -1 to continue playing Antimatter Dimensions™."
   },
   {
     id: "a101",
@@ -629,7 +629,7 @@ GameDatabase.news = [
       "eventually leading to crashing through Gondelian spoilers. All who have researched it have eventually died " +
       "the same way, so it is impossible to tell exactly, but this is the common belief. Regardless, with the " +
       "introduction of 'cancer' mode, as well as reports of it's spontaneous appearance, sufficient repetition " +
-      "of this mode's appearance may lead to  an image forming in the mind similar to 'Fractal Cancer Type III'. " +
+      "of this mode's appearance may lead to an image forming in the mind similar to 'Fractal Cancer Type III'. " +
       "With this in mind, we have some suggestions if you find yourself plagued with it. First, refresh immediately " +
       "and see if that fixes the issue. If not, navigate to options, and change the theme from cancer to literally " +
       "anything else. And above all else, Godspeed. We can't afford to lose anymore viewers."
@@ -828,7 +828,7 @@ GameDatabase.news = [
   },
   {
     id: "a169",
-    text: "TODO: John, please remove this newsticker message before we release the Reality update to the public."
+    text: "TODO: John, please remove this news message before we release the Reality update to the public."
   },
   {
     id: "a170",
@@ -960,7 +960,7 @@ GameDatabase.news = [
   },
   {
     id: "a187",
-    text: "𝓒𝓮𝓬𝓲 𝓷'𝓮𝓼𝓽 𝓹𝓪𝓼 𝓾𝓷 𝓾𝓹𝓭𝓪𝓽𝓮 🚬"
+    text: "𝓒𝓮𝓬𝓲 𝓷'𝓮𝓼𝓽 𝓹𝓪𝓼 𝓾𝓷 𝓶𝓮𝓼𝓼𝓪𝓰𝓮 𝓭𝓮 𝓷𝓸𝓾𝓿𝓮𝓵𝓵𝓮𝓼 🚬"
   },
   {
     id: "a188",
@@ -1287,7 +1287,7 @@ GameDatabase.news = [
     text:
       "AD Player: \"How many orders of magnitude are you on?\" Normal person: \"Like, maybe 5 or 6 right now, my " +
       "dude.\" AD Player: \"You are like a little baby. Watch this: <span style='animation: text-crunch 22s " +
-      "1; font-size: 0rem;'>C R O N C H</span>\""
+      "1; font-size: 0;'>C R O N C H</span>\""
   },
   {
     id: "a239",
@@ -1313,6 +1313,346 @@ GameDatabase.news = [
   {
     id: "a243",
     text: "\"I can't breathe. Please move your finger.\" -M"
+  },
+  {
+    id: "a244",
+    text: "Don't mind me, just passing through."
+  },
+  {
+    id: "a245",
+    get text() {
+      const theme = Theme.current().displayName();
+      const reasons = {
+        Normal: "it has this certain elegant simplicity to it. You just know it's the way the developer intended you " +
+          "to see the game.",
+        Metro: "of the beautiful thin borders, pixel perfect harsh geometric edges, and simply delightfully well " +
+          "balanced color palette.",
+        Dark: "it's very easy on the eyes, and has this nice playful tone to it in both the colors and the shapes.",
+        DarkMetro: "it's just so soothing to look at, with that perfect blend of professional and playful design, " +
+          "with just a splash of color.",
+        Inverted: "it gives you these transcendently beautiful color combinations that you would normally never " +
+          "see in a typical dark theme.",
+        InvertedMetro: "it gives off this very stern vibe, with these highly contrasting colors clashing with a " +
+          "professional modern sort of design.",
+        S1: "it really gets me in the holiday spirit. I can just feel the magic in the air!",
+        S2: "it makes me proud to be Finnish, and proud to celebrate all that we have accomplished as a people.",
+        S3: "it's a beautiful analogue for life, in that it's ever changing and never quite right.",
+        S4: "it has this wonderfully chaotic design, to the point where it's nearly completely impractical. " +
+          "And there's a certain beauty in that.",
+        S5: "the image of that man permeates throughout all of pop culture. And having this blown-up " +
+          "picture of him in the background is just rather humorous.",
+        S6: "that beautifully animated background just entrances you, and then the subtle tone and " +
+          "colors pull you in and fully immerse you into the game.",
+        S7: "I always had fond memories of that background from my childhood.",
+        S8: "it makes it a lot easier to sneak in a little gameplay at the office.",
+      };
+      const reason = reasons[Theme.current().name.replace(/\s/gu, "")];
+      return `Ah, a fellow ${theme} theme user. I see that you have impeccable taste.
+        I myself like the ${theme} theme too, because ${reason}`;
+    }
+  },
+  {
+    id: "a246",
+    text: "<span style='animation: fade-out 3s infinite'>OoooOOOOooOOO, it's me, the infamous news ghost!</span>",
+  },
+  {
+    id: "a247",
+    text:
+      "This news message is a test of \"News 2.0\". News 2.0 will feature things like the ability to click on " +
+      "news messages to flip them upside down!",
+  },
+  {
+    id: "a248",
+    text:
+      "To be fair, you have to have a very high IQ to understand the news ticker. The humor is extremely subtle, " +
+      "and without a solid grasp of quantum physics, most of the jokes will go over a typical player's head."
+  },
+  {
+    id: "a249",
+    text: "This woman got TONS of Dimension Boosts with this 1 WEIRD TRICK! Galaxies HATE her!"
+  },
+  {
+    id: "a250",
+    get text() {
+      let scene = "";
+      const chasers = [
+        ["🐖", "🐢", "🦆", "🐓", "🐜", "🐕", "🐈"],
+        ["🚶‍", "🏃‍️", "🏇", "🚴‍"],
+        ["🚗", "🚓", "🚕", "🛺", "🚙", "🚌", "🚐", "🚎", "🚑", "🚒", "🚚", "🚛", "🚜"],
+        ["🚁", "🛸"]
+      ];
+      for (const set of chasers) {
+        const chaser = set.randomElement();
+        for (let i = 0; i < 3; i++) {
+          if (Math.random() > 0.5 || !scene.includes(chaser)) scene += chaser;
+        }
+        scene += "&nbsp;&nbsp;&nbsp;";
+      }
+      return scene;
+    }
+  },
+  {
+    id: "a251",
+    text:
+      "The debate on the singular form of Replicanti rages on. Team \"Replicantus\"'s base has been ransacked " +
+      "by Team \"Also Replicanti\", and many of their dimensions were stolen. Team \"The Plural Is Replicantis\" " +
+      "is still lying low after their plan to hack the dictionary failed."
+  },
+  {
+    id: "a252",
+    text: "<span style='animation: text-stretch 30s 1'>This message is dilated.</span>"
+  },
+  {
+    id: "a253",
+    text:
+      "After a surge of complaints from our viewers, we have decided to allow you at home to write your own " +
+      "messages. Give it a try here: <input style='border: none; outline: none; font-family: Typewriter; " +
+      "font-weight: bold; font-size: 1.5rem'></input>. Or don't. That's fine too."
+  },
+  {
+    id: "a254",
+    text:
+      "Antimatter Dimensions Anonymous has shut down due to the failure of their 12-step program. " +
+      "People would only get to step 8 and then reset."
+  },
+  {
+    id: "a255",
+    text: "Bruh Sound Effect #1.79e308."
+  },
+  {
+    id: "a256",
+    text: "The 9th dimension doesn't exist because the 7th dimension 8 it."
+  },
+  {
+    id: "a257",
+    text:
+      "A the triangular hole in the fabric of reality has caused some letters to " +
+      "no longer exist. Those letters are: j, k, q, u, x, z"
+  },
+  {
+    id: "a258",
+    text:
+      "Born too late to explore the world. Born too early to explore the cosmos. But born just in time to " +
+      "grind for a couple hours for the next big crunch."
+  },
+  {
+    id: "a259",
+    text:
+      "Now hold on, I know what you’re thinking, \"An M press is an M press, you can’t say it’s only a half!\" Well, " +
+      "TJ \"Slabdrill\" Yoshi, hear me out. An M press actually has three parts to it: when M is pressed, when M is " +
+      "held, and when M is released. Now, usually is the pressing that’s useful because that’s the only part that " +
+      "matters; however, sometimes it’s sufficient to just use the holding part, which also buys dimensions and " +
+      "tickspeed upgrades. And as for the release, well, there are currently no cases where that’s useful or " +
+      "important, so don’t worry about that part. Now, if we map out the required presses for challenge 2 it would " +
+      "look like this: /¯\\. We merely need to hold (¯) M to reach the first galaxy, we need to press (/) M to " +
+      "finish the challenge, and we need to press M again to start another challenge. So, how many presses is that " +
+      "total? Well, it appears to be three, and if we were doing this eternity in isolation then yes, it would be " +
+      "three, but in a full-game M Button Challenge run there are other M presses that occur earlier in the run, " +
+      "such as the M press needed for the first Infinity, so if we take that M press into consideration as well, " +
+      "then how many M presses does it take? The naive answer would be four: one to enter the challenge, and the " +
+      "three within the challenge we established earlier; however, we can do better. We can actually do it in " +
+      "three by simply holding out the first M press to be used for the half M press, because the half M press only " +
+      "required M to be held, not actually pressed, so in this fashion, Challenge 2 only adds on an additional two M " +
+      "presses to the run, since the first M press just leeches off the previous M press. So to capture this " +
+      "phenomenon, we call it 2.5 M presses. On a single Eternity basis, you’d round up that up to three, but in " +
+      "a full game run, you’d round it down to two. So, in conclusion, since that first M press counts in other " +
+      "contexts, but adds no additional presses in other contexts, we refer to it as a \"Half M Press\"."
+  },
+  {
+    id: "a260",
+    text:
+      "It seems that the Replicanti have a very divide-and-conquer method of doing things. " +
+      "Well, everything at this rate."
+  },
+  {
+    id: "a261",
+    text:
+      "Antimatter Dimensions is actually a Roguelite game! If you die, in the afterlife you unlock alternative " +
+      "features, like having Space Dimensions instead of Time Dimensions. You can even unlock new characters to " +
+      "play as, including an antimatter clone of yourself!"
+  },
+  {
+    id: "a262",
+    text: "Vibe check. 🏃‍♀️🏏"
+  },
+  {
+    id: "a263",
+    text: "What are gems for? Gems are for housing. Housing for what you ask? Good question."
+  },
+  {
+    id: "a264",
+    text: "A new prestige layer has been announced: Maternity. Get ready to have a baby!"
+  },
+  {
+    id: "a265",
+    text: "YOU MUST CONSTRUCT ADDITIONAL DIMENSIONS."
+  },
+  {
+    id: "a266",
+    text: "Hello, how is your day going?"
+  },
+  {
+    id: "a267",
+    text:
+      "I have an ant farm, and I want to make them into the world's smallest soccer team. My Aunt Diana wants to " +
+      "help, and together we gather everyone in the family to plan their season. \"How can we make this Ant Team " +
+      "matter?\", Di mentions."
+  },
+  {
+    id: "a268",
+    text: "👨‍💻Devengers, compile!👩‍💻"
+  },
+  {
+    id: "a269",
+    text:
+      "There is a traffic jam in Dimenton. If you plan on travelling in the area, leave early. Here's some live " +
+      "footage: 🚗🚕🚛🚙🚗🚚🚕🚕🚌🚛🚚🚙🚒🚛🚗🚙🚓🚗🚚🚛🚒🚌🚐🚚🚐🚛🚚🚓 Yeah, Dale, I'd say it " +
+      "looks pretty bad. And make sure to bring some water and a snack with you, too."
+  },
+  {
+    id: "a270",
+    text:
+      "The Galactic Association of News Writers has filed a class action lawsuit against the developers of the " +
+      "small web game \"Antimatter Dimensions\" for mass plagiarism."
+  },
+  {
+    id: "a271",
+    text:
+      "<i style='border: 1px solid black; border-radius: 50%; padding: 0.4rem; color: #2196F3; background: white; " +
+      "cursor: pointer;' class='fas fa-volume-up' onclick='(function(){new Audio(`audio/news.mp3`).play();})();'>" +
+      "</i> This news message is a test of \"News 2.0\". News 2.0 will feature things like the ability to listen to " +
+      "an audio version of any news message!"
+  },
+  {
+    id: "a272",
+    text: "What's hevier, a pound of bricks, or a pound of antimatter?"
+  },
+  {
+    id: "a273",
+    text: "There are no typos in any of these news messages. If you see a typo, the tpyo must be in your brain."
+  },
+  {
+    id: "a274",
+    text:
+      "A large number of mathematicans walk into a bar. They each order 10 times as many beers as the previous. " +
+      "The bartender says \"My my, that's an order of magnitude!\"."
+  },
+  {
+    id: "a275",
+    text: "Letter Go Down Idle is the shortest idle game of all time, lasting only 26 seconds."
+  },
+  {
+    id: "a276",
+    get text() { return `Fun fact: There are ${GameDatabase.news.length} news messages and counting!`; }
+  },
+  {
+    id: "a277",
+    text:
+      "Inside you there are two wolves. One is made out of matter. The other " +
+      "is made out of antimatter. You are exploding."
+  },
+  {
+    id: "a278",
+    text:
+      "This is just a friendly note to remind you that you've forgotten to do something really important. I don't " +
+      "know what it is, but there is definitely something."
+  },
+  {
+    id: "a279",
+    text:
+      "Coming soon to all good retailers- Antimatter Dimensions: The Board Game! Enjoy the thrill of watching huge " +
+      "numbers go up without the need for a PC or mobile phone. Comes complete with everything you need including a " +
+      "mixed scientific calculator, 1.79e308 antimatter counters, a high quality plastic BUY MAX button, and over a " +
+      "thousand news message cards with all the irrelevant memes you know and love! You can finally enjoy AD the way " +
+      "it was meant to be played. AD: The Board Game is also available in travel size, so you can even experience " +
+      "the joy of calculating logarithmic growth while you're on the go! BUY AD: The Board Game TODAY! Warning: may " +
+      "contain traces of actual matter. Replicanti sold separately. 9th Dimension not included."
+  },
+  {
+    id: "a280",
+    text: "I hate antimatter. It's rough, coarse, irritating, and it gets everywhere."
+  },
+  {
+    id: "a281",
+    text: "What if instead of creating antimatter, you're actually just losing matter?"
+  },
+  {
+    id: "a282",
+    text:
+      "There was a reported sighting of the 9th Dimension, but it has since been " +
+      "debunked as simply being a 6th Dimension from Australia."
+  },
+  {
+    id: "a283",
+    text:
+      "A strange phenomenon occurs when you attempt to shift to a higher dimension when you are in the 8th " +
+      "Dimension. There is no higher dimension, so the universe ejects you back into the 8th Dimension with " +
+      "an incredible velocity. This technique, known as a Dimension Boost, is used by starship pilots and " +
+      "antimatter enthusiasts everywhere."
+  },
+  {
+    id: "a284",
+    text: "Cold fully clothed couples in your area!"
+  },
+  {
+    id: "a285",
+    text:
+      "You are now breathing manually. You've now realized there's no comfortable spot in your mouth for your " +
+      "tongue. You are now manually holding your jaw up. You haven't blinked in a few seconds. You can see a " +
+      "little bit of your nose at all times."
+  },
+  {
+    id: "a286",
+    text: "Why do they call it oven when you of in the cold food of out hot eat the food?"
+  },
+  {
+    id: "a287",
+    text:
+      "Sequelitis has escalated to the point that some studios are now producing the sequels before the originals. " +
+      "Fans of long series wait, as the numbers count down until they can finally find out what is even going on " +
+      "in the first place."
+  },
+  {
+    id: "a288",
+    get text() {
+      const position = player.secretUnlocks.newsQueuePosition--;
+      if (position > 1) {
+        return "Thank you for contacting customer support. Your satisfaction is very important to us, and a company " +
+          `representative will be with you shortly. You are now at position ${position} in the queue. Thank you for ` +
+          "your patience, and please enjoy these quality selected news messages as you wait.";
+      }
+      return "Thank you for contacting customer support, this is Jane, how may I help you today?";
+    }
+  },
+  {
+    id: "a289",
+    text: "Click here to disassemble the news ticker for a trace amount of paperclips."
+  },
+  {
+    id: "a290",
+    get text() {
+      const paperclips = player.secretUnlocks.paperclips;
+      return "You see, this news isn't normal news. It is being produced by the first news dimension. If you want " +
+        "to unlock more news, you have to collect enough paperclips to build the second news dimension. You " +
+        `currently have ${paperclips} ${pluralize("paperclip", paperclips, "paperclips")}, but you need ` +
+        `${paperclips + 10} paperclips to afford it.`;
+    }
+  },
+  {
+    id: "a291",
+    text: "Considering Hevipelle's nationality, it's a little ironic that he created a game that you can never Finnish."
+  },
+  {
+    id: "a292",
+    text:
+      "Fairies are not real. Anti-fairies are also not real. This has only been the case since last week, when the " +
+      "two groups came into contact. The planet they were on, also, unsurprisingly, is no longer real."
+  },
+  {
+    id: "a293",
+    text:
+      `<span style='font-family: "Comic Sans MS", cursive, sans-serif; font-size: 1.7rem;'>` +
+      "Hello fellow news messages! 🛹</span>"
   },
   {
     id: "l1",
@@ -1655,6 +1995,25 @@ GameDatabase.news = [
         "of Pokemon up to 1e151. Good luck catching 'em all!";
     },
     get unlocked() { return PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l55",
+    get text() {
+      const recipes = [
+        "a Replicanti cake: Gather some Replicanti, place in oven, and watch rise. And rise. And rise.",
+        "an antimatter cake: Gather some antimatter, place in oven, and <b>BOOM<b>.",
+        "an Eternity cake: Gather some Eternity Points, place in oven, and wait...",
+        "an Infinity cake: Gather some Infinity Points, place in oven, and watch them shatter spacetime."
+      ];
+      const recipe = recipes.randomElement();
+      return `How to bake ${recipe}`;
+    },
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l56",
+    text: "Reality Challenges are the new 9th Dimension is the new orange.",
+    get unlocked() { return PlayerProgress.realityUnlocked(); }
   },
   {
     id: "j1",

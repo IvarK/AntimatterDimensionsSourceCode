@@ -434,7 +434,7 @@ function finishProcessReality(realityProps) {
   player.bestInfinitiesPerMs = new Decimal(0);
   player.bestEternitiesPerMs = new Decimal(0);
   player.bestIpPerMsWithoutMaxAll = new Decimal(0);
-  player.minNegativeBlackHoleThisReality = 300;
+  player.minNegativeBlackHoleThisReality = 0;
   player.celestials.v.cursedThisRun = 0;
   resetTimeDimensions();
   resetTickspeed();

@@ -325,7 +325,7 @@ let player = {
   blackHolePause: false,
   blackHolePauseTime: 0,
   blackHoleNegative: 1,
-  minNegativeBlackHoleThisReality: 300,
+  minNegativeBlackHoleThisReality: 0,
   ttbuyer: false,
   celestials: {
     teresa: {

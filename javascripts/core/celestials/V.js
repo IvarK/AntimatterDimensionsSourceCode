@@ -31,7 +31,7 @@ class VRunUnlockState extends GameMechanicState {
 
   tryComplete() {
     const playerData = player.celestials.v;
-    const value = this.config.currentValue();
+    const value = this.config.currentValue(this.conditionValue);
     // If we haven't set a record, we haven't completed any new tiers, either
     if (value <= playerData.runRecords[this.id]) return;
     playerData.runRecords[this.id] = value;

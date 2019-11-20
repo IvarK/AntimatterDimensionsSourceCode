@@ -21,7 +21,7 @@ Vue.component("new-dim-shift-row", {
       return SHORT_DISPLAY_NAMES[this.requirement.tier];
     },
     buttonText() {
-      return `Reset the game for a ${this.isShift ? "new Dimension" : "boost"}`;
+      return `Reset your Dimensions for a ${this.isShift ? "new Dimension" : "boost"}`;
     },
     boostCountText() {
       const parts = [this.purchasedBoosts];

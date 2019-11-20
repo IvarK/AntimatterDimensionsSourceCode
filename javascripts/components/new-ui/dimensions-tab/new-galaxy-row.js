@@ -24,7 +24,7 @@ Vue.component("new-galaxy-row", {
     },
     buttonText() {
       return this.lockText === null
-        ? "Lose all your previous progress, but get a tickspeed boost"
+        ? "Reset your Dimensions and Dimension Boosts for a tickspeed boost"
         : this.lockText;
     },
     sumText() {

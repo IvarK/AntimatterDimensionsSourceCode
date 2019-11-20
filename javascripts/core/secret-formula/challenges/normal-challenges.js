@@ -42,7 +42,8 @@ GameDatabase.challenges.normal = [
     id: 6,
     legacyId: 10,
     isQuickResettable: false,
-    description: "Each dimension costs the dimension 2 before it, with modified prices.",
+    description: "Each dimension costs the dimension 2 before it, " +
+      "instead of antimatter. Dimension prices are modified.",
     reward: "Sixth Dimension Autobuyer"
   },
   {

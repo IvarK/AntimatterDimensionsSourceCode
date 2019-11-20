@@ -193,8 +193,8 @@ Vue.component("alchemy-tab", {
         "and off by clicking the respective nodes, and each resource gives its own boost to various resources " +
         "in the game. Basic resource totals are limited to the level of the refined glyph, and compound resource " +
         "totals are limited to the amount of the reactants. All active alchemy reactions are applied once per " +
-        "reality, unaffected by amplification. Toggle reactions on or off by clicking the nodes. You can show the " +
-        "current totals of all alchemy resources by holding shift.");
+        "reality, unaffected by amplification. You can show the current" +
+        "totals of all alchemy resources by holding shift.");
     },
     setAllReactions(value) {
       for (const reaction of AlchemyReactions.all.compact()) {

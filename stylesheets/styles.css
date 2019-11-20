@@ -7039,3 +7039,70 @@ input.o-automator-block-input {
 .fa, .far, .fas {
   font-family: "Font Awesome 5 Free" !important;
 }
+.o-celestial-nav__hoverable .tooltiptext  { display: none; }
+.o-celestial-nav__hoverable:hover .tooltiptext,
+.o-celestial-nav__force-hover .tooltiptext { display: block; }
+
+.c-celestial-nav__test-ring {
+  fill: blue;
+}
+
+.c-celestial-nav__test-ring:hover {
+  fill: red;
+  stroke: black;
+  stroke-width: 2;
+}
+
+.c-celestial-nav__test-complete {
+  fill: #4EF;
+}
+
+.c-celestial-nav__effarig {
+  fill: #5151ec;
+}
+
+.c-celestial-nav__test-incomplete {
+  fill: #888;
+}
+
+.o-celestial-nav__symbol {
+  text-anchor: middle;
+}
+
+.o-celestial-nav__legend-arrow {
+  stroke: #CCC;
+  fill: none;
+  stroke-linecap: butt;
+  stroke-width: 2;
+}
+
+.o-celestial-nav__hoverable:hover .o-celestial-nav__legend-arrow {
+  stroke: #FFF;
+}
+
+.o-celestial-nav__legend-text {
+  fill: #CCC;
+  font-weight: bold;
+}
+
+.o-celestial-nav__hoverable:hover .o-celestial-nav__legend-text {
+  fill: #FFF;
+}
+
+.o-no-mouse {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.tooltiptext {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}

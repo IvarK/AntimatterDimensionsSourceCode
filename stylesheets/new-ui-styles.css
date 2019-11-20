@@ -256,11 +256,13 @@ body.t-s1 {
   opacity: 0;
   pointer-events: none;
   position: absolute;
-  top: -1px;
+  top: -6px;
   left: 200px;
   z-index: 4;
   transition-duration: 0.15s;
   transition-delay: 0.2s;
+  padding: 5px;
+  padding-left: 0;
 }
 
 .o-tab-btn--subtab {
@@ -725,7 +727,15 @@ body.t-s1 {
 
 .l-help-me {
   position: absolute;
+  top: 4.9rem;
   height: 2rem;
   border-radius: 50%;
   font-size: 1.5rem;
+}
+
+.t-metro .l-help-me,
+.t-dark-metro .l-help-me,
+.t-inverted-metro .l-help-me,
+.t-s8 .l-help-me {
+  border-radius: 0;
 }

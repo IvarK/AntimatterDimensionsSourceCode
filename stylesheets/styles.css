@@ -123,7 +123,7 @@ body {
   font-weight: 300;
   text-align:center;
   background-color: #fff;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 
 ._kong-test body {
@@ -405,6 +405,11 @@ button:focus {
   cursor: pointer;
   font-family: Typewriter;
   font-size: 1.8rem;
+  user-select: none;
+}
+
+.t-s6 .o-tab-btn {
+  text-shadow: 0 0 0.3rem;
 }
 
 .o-tab-btn:hover {
@@ -419,8 +424,7 @@ button:focus {
 }
 
 .t-dark .o-tab-btn--infinity,
-.t-dark-metro .o-tab-btn--infinity,
-.t-s6 .o-tab-btn--infinity {
+.t-dark-metro .o-tab-btn--infinity {
   color: black;
   background: white;
 }
@@ -494,14 +498,15 @@ button:focus {
 }
 
 #loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 1050px;
-    height:800px;
-    margin-top: -400px;
-    margin-left: -525px;
-    z-index: 1000;
+  height: 100%;
+  width: 100%;
+  background: url("../images/loading.png") no-repeat;
+  background-size: cover;
+  background-position-x: 50%;
+  background-position-y: 50%;
+  position: absolute;
+  background-color: black;
+  z-index: 999;
 }
 
 .l-reality-button {
@@ -540,6 +545,10 @@ button:focus {
 .t-s8 .c-reality-button {
   border-width: 0.1rem;
   border-radius: 0;
+}
+
+.t-s6 .c-reality-button {
+  background: black;
 }
 
 .c-reality-button--good {

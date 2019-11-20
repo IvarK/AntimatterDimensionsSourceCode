@@ -4,6 +4,7 @@ class PlayerProgress {
   constructor(player) {
     this._player = player;
   }
+  
   get isRealityUnlocked() {
     return this._player.realities > 0;
   }

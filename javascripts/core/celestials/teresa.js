@@ -81,6 +81,9 @@ const Teresa = {
   get isRunning() {
     return player.celestials.teresa.run;
   },
+  get runCompleted() {
+    return player.celestials.teresa.bestRunAM.gt(0);
+  },
   quotes: new CelestialQuotes("teresa", {
     INITIAL: {
       id: 1,

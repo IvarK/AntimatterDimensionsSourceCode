@@ -63,7 +63,7 @@ const Effarig = {
       case EFFARIG_STAGES.INFINITY:
         c = 1500;
         break;
-      case EFFARIG_STAGES.ETERNITY: 
+      case EFFARIG_STAGES.ETERNITY:
         c = 29;
         break;
       case EFFARIG_STAGES.REALITY:

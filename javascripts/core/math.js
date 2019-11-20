@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable max-params */
 "use strict";
 
 const LOG10_MAX_VALUE = Math.log10(Number.MAX_VALUE);
@@ -212,7 +214,6 @@ class LinearMultiplierScaling {
   }
 }
 
-// eslint-disable-next-line max-params
 function getCostWithLinearCostScaling(amountOfPurchases, costScalingStart, initialCost, costMult, costMultGrowth) {
   const preScalingPurchases = Math.max(0, Math.floor(Math.log(costScalingStart / initialCost) / Math.log(costMult)));
   const preScalingCost = Math.ceil(Math.pow(costMult, Math.min(preScalingPurchases, amountOfPurchases)) * initialCost);
@@ -224,11 +225,10 @@ function getCostWithLinearCostScaling(amountOfPurchases, costScalingStart, initi
 
 // Using the same arguments as getCostWithLinearCostScaling() above, do a binary search for the first purchase with a
 // cost of Infinity.
-// eslint-disable-next-line max-params
 function findFirstInfiniteCostPurchase(costScalingStart, initialCost, costMult, costMultGrowth) {
   let upper = 1;
   while (Number.isFinite(getCostWithLinearCostScaling(upper,
-          costScalingStart, initialCost, costMult, costMultGrowth))) {
+    costScalingStart, initialCost, costMult, costMultGrowth))) {
     upper *= 2;
   }
   let lower = upper / 2;
@@ -372,16 +372,15 @@ class ExponentialCostScaling {
 // Calculate cost scaling for something that follows getCostWithLinearCostScaling() under Infinity and immediately
 // starts accelerated ExponentialCostScaling above Infinity.  Yes this is a fuckton of arguments, sorry.  It sort of
 // needs to inherit all arguments from both cost scaling functions.
-// eslint-disable-next-line max-params
 function getHybridCostScaling(amountOfPurchases, linCostScalingStart, linInitialCost, linCostMult, linCostMultGrowth,
-                              expInitialCost, expCostMult, expCostMultGrowth) {
+  expInitialCost, expCostMult, expCostMultGrowth) {
   const normalCost = getCostWithLinearCostScaling(amountOfPurchases, linCostScalingStart, linInitialCost,
-                                                  linCostMult, linCostMultGrowth);
+    linCostMult, linCostMultGrowth);
   if (Number.isFinite(normalCost)) {
     return new Decimal(normalCost);
   }
   const postInfinityAmount = amountOfPurchases - findFirstInfiniteCostPurchase(linCostScalingStart, linInitialCost,
-                              linCostMult, linCostMultGrowth);
+    linCostMult, linCostMultGrowth);
   const costScale = new ExponentialCostScaling({
     baseCost: expInitialCost,
     baseIncrease: expCostMult,

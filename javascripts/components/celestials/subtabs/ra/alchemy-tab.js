@@ -78,6 +78,7 @@ Vue.component("alchemy-tab", {
       realityCreationAvailable: false,
       alwaysShowResource: false,
       reactionProgress: 0,
+      estimatedCap: 0,
     };
   },
   computed: {
@@ -104,6 +105,7 @@ Vue.component("alchemy-tab", {
       this.alwaysShowResource = player.options.showAlchemyResources;
       const animationTime = 800;
       this.reactionProgress = (player.realTimePlayed % animationTime) / animationTime;
+      this.estimatedCap = estimatedAlchemyCap();
     },
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
@@ -195,7 +197,8 @@ Vue.component("alchemy-tab", {
     },
     showAlchemyHowTo() {
       Modal.message.show("You can now refine glyphs using \"Alchemy Mode\" in the glyph auto-sacrifice settings. " +
-        "Refined glyphs will give 1% of their level in alchemy resources. Alchemy reactions can be toggled on " +
+        "Refined glyphs will give 1% of their level in alchemy resources, scaled linearly with rarity. For example " +
+        "a 70% rarity level 6000 glyph will give 42 of its resource. Alchemy reactions can be toggled on " +
         "and off by clicking the respective nodes, and each resource gives its own boost to various resources " +
         "in the game. Basic resource totals are limited to the level of the refined glyph, and compound resource " +
         "totals are limited to the amount of the reactants. All active alchemy reactions are applied once per " +
@@ -220,6 +223,7 @@ Vue.component("alchemy-tab", {
           @input="toggleResourceVisibility()">
         <label for="alwaysShowResourceBox">Always show resource totals</label>
       </div>
+      Resource cap, based on last 10 realities: {{ shorten(estimatedCap, 3, 2) }}
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">
           <circle

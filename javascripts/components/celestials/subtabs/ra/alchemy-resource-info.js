@@ -25,17 +25,13 @@ Vue.component("alchemy-resource-info", {
       const reagents = this.reaction.reagents
         .map(r => `${shorten(r.cost)}${r.resource.symbol}`)
         .join(" + ");
-      return this.unlocked
-        ? `${reagents} ➜ ${shorten(this.reaction.reactionProduction, 2, 2)}${this.resource.symbol}`
-        : "???";
+      return `${reagents} ➜ ${shorten(this.reaction.reactionProduction, 2, 2)}${this.resource.symbol}`;
     },
     realityReactionText() {
       const reagents = this.reaction.reagents
         .map(r => r.resource.symbol)
         .join(" + ");
-      return this.unlocked
-        ? `${reagents} ➜ ${this.resource.symbol}`
-        : "???";
+      return `${reagents} ➜ ${this.resource.symbol}`;
     },
     effectConfig() {
       const resource = this.resource;
@@ -59,9 +55,9 @@ Vue.component("alchemy-resource-info", {
   template: `
     <div class="c-alchemy-resource-info">
       <span>{{unlocked ? resource.symbol : "?"}} {{resource.name}}</span>
-      <span>Current: {{ shorten(amount, 2, 2) }}</span>
+      <span>Current: {{ unlocked ? shorten(amount, 2, 2) : "Locked!" }}</span>
       <span v-if="isBaseResource">Base Resource</span>
-      <span v-else>Reaction: {{isReactionActive ? "Active" : "Inactive"}} ({{reactionText}})</span>
+      <span v-else>Reaction: {{isReactionActive ? "Active" : "Inactive"}} ({{unlocked ? reactionText : "???"}})</span>
       <span v-if="unlocked"><effect-display title="Effect" :config="effectConfig" /></span>
       <span v-else>Unlock requirement: {{unlockRequirement}}</span>
     </div>

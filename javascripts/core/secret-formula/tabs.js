@@ -270,7 +270,7 @@ GameDatabase.tabs = [
         name: "Glyph alchemy",
         symbol: "<i class='fas fa-vial'></i>",
         component: "alchemy-tab",
-        condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)
+        condition: () => Ra.pets.effarig.level >= 1 && Ra.pets.effarig.exp > 0
       },
     ],
   },

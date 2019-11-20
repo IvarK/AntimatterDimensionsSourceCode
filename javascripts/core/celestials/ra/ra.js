@@ -280,7 +280,7 @@ const Ra = {
     }
   },
   get alchemyResourceCap() {
-    return 11111;
+    return 1000000;
   }
 };
 
@@ -420,16 +420,16 @@ const RA_UNLOCKS = {
     id: 10,
     description: "Get Effarig to level 15",
     reward: "Glyph level is increased based on relic shards gained",
-    effect: () => Math.pow(Math.log10(Math.max(Effarig.shardsGained, 1)), 2),
+    effect: () => 100 * Math.pow(Math.log10(Math.max(Effarig.shardsGained, 1)), 2),
     pet: Ra.pets.effarig,
     level: 15
   },
   GLYPH_ALCHEMY: {
     id: 11,
-    description: "Get Effarig to level 25",
-    reward: "Unlock Glyph Alchemy",
+    description: "Unlock Effarig memories",
+    reward: "Glyph Alchemy",
     pet: Ra.pets.effarig,
-    level: 25
+    level: 1
   },
   IMPROVED_STORED_TIME: {
     id: 12,

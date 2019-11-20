@@ -79,7 +79,10 @@ const AutoGlyphPicker = {
         }
         return comparedToThreshold;
       }
-      case AutoGlyphPickMode.LOWEST_ALCHEMY_RESOURCE: return -AlchemyResource[glyph.type].amount;
+      case AutoGlyphPickMode.LOWEST_ALCHEMY_RESOURCE:
+        return AlchemyResource[glyph.type].isUnlocked && glyphRefinementGain(glyph) !== 0
+          ? -AlchemyResource[glyph.type].amount
+          : -Number.MAX_VALUE;
     }
     throw new Error("Unknown auto glyph picker mode");
   },
@@ -640,7 +643,7 @@ const Glyphs = {
     }
   },
   get levelCap() {
-    return 10000 + AlchemyResource.boundless.effectValue;
+    return 1000000 + AlchemyResource.boundless.effectValue;
   },
   clearUndo() {
     player.reality.glyphs.undo = [];
@@ -897,13 +900,28 @@ function glyphAlchemyResource(glyph) {
 
 function glyphRefinementGain(glyph) {
   if (!canSacrifice()) return 0;
-  const glyphMaxValue = glyph.level * strengthToRarity(glyph.strength) / 100;
+  const glyphMaxValue = levelRefinementValue(glyph.level);
+  const glyphActualValue = 0.01 * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
   const alchemyResource = glyphAlchemyResource(glyph);
-  return Math.clamp(glyphMaxValue - alchemyResource.amount, 0, 0.01 * glyphMaxValue);
+  return Math.clamp(glyphMaxValue - alchemyResource.amount, 0, glyphActualValue);
+}
+
+// This is the value refined glyphs will eventually cap at, as a function of glyph level
+function levelRefinementValue(level) {
+  return Math.pow(level, 3) / 1e8;
+}
+
+// Gives a maximum resource total possible, based on the highest level glyph in recent realities. This doesn't
+// actually enforce any special behavior, but instead only affects various UI properties.
+function estimatedAlchemyCap() {
+  return levelRefinementValue(player.lastTenRealities.map(([, , , lvl]) => lvl).max());
 }
 
 function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
-  if (!noAlchemy && AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && glyph.type !== "reality") {
+  if (!noAlchemy &&
+      AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY &&
+      glyph.type !== "reality" &&
+      glyphAlchemyResource(glyph).isUnlocked) {
     const resource = glyphAlchemyResource(glyph);
     const refinementGain = glyphRefinementGain(glyph);
     resource.amount += refinementGain;
@@ -979,7 +997,8 @@ function getGlyphLevelInputs() {
   const dtEffect = adjustFactor(dtBase, weights.dt / 100);
   const eterEffect = adjustFactor(eterBase, weights.eternities / 100);
   const perkShopEffect = Effects.max(1, PerkShopUpgrade.glyphLevel);
-  let baseLevel = epEffect * replEffect * dtEffect * eterEffect * perkShopEffect;
+  const shardFactor = RA_UNLOCKS.SHARD_LEVEL_BOOST.effect();
+  let baseLevel = epEffect * replEffect * dtEffect * eterEffect * perkShopEffect + shardFactor;
   let scaledLevel = baseLevel;
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
   const scaleDelay = getAdjustedGlyphEffect("effarigglyph");
@@ -990,7 +1009,7 @@ function getGlyphLevelInputs() {
     scaledLevel = instabilityScaleBegin + 0.5 * instabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
   }
   const hyperInstabilityScaleBegin = 4000 + scaleDelay;
-  const hyperInstabilityScaleRate = 1000;
+  const hyperInstabilityScaleRate = 400;
   if (scaledLevel > hyperInstabilityScaleBegin) {
     const excess = (scaledLevel - hyperInstabilityScaleBegin) / hyperInstabilityScaleRate;
     scaledLevel = hyperInstabilityScaleBegin + 0.5 * hyperInstabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
@@ -1000,11 +1019,10 @@ function getGlyphLevelInputs() {
     Perk.glyphLevelIncrease1,
     Perk.glyphLevelIncrease2
   );
-  const shardFactor = RA_UNLOCKS.SHARD_LEVEL_BOOST.effect();
-  const postInstabilityFactors = perkFactor + shardFactor;
-  baseLevel += postInstabilityFactors;
-  scaledLevel += postInstabilityFactors;
-  const levelHardcap = Glyphs.levelCap;
+  baseLevel += perkFactor;
+  scaledLevel += perkFactor;
+  // Temporary runaway prevention (?)
+  const levelHardcap = 1000000;
   const levelCapped = scaledLevel > levelHardcap;
   scaledLevel = Math.min(scaledLevel, levelHardcap);
   return {

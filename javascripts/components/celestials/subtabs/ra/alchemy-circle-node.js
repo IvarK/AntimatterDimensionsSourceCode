@@ -86,30 +86,32 @@ Vue.component("alchemy-resource-arc", {
   data() {
     return {
       amount: 0,
+      fillFraction: 0,
     };
   },
   computed: {
     spinnerTransform() {
       return {
-        transform: `rotate(${this.amount / Ra.alchemyResourceCap * 360}deg)`,
-        background: this.amount === Ra.alchemyResourceCap ? "#ff9800" : undefined
+        transform: `rotate(${this.fillFraction * 360}deg)`,
+        background: this.fillFraction === 1 ? "#ff9800" : undefined
       };
     },
     fillerTransform() {
       return {
-        opacity: this.amount / Ra.alchemyResourceCap > 0.5 ? 1 : 0,
-        background: this.amount === Ra.alchemyResourceCap ? "#ff9800" : undefined
+        opacity: this.fillFraction > 0.5 ? 1 : 0,
+        background: this.fillFraction === 1 ? "#ff9800" : undefined
       };
     },
     maskTransform() {
       return {
-        opacity: this.amount / Ra.alchemyResourceCap > 0.5 ? 0 : 1
+        opacity: this.fillFraction > 0.5 ? 0 : 1
       };
     }
   },
   methods: {
     update() {
       this.amount = this.resource.amount;
+      this.fillFraction = Math.clamp(this.amount / estimatedAlchemyCap(), 0, 1);
     }
   },
   template: `

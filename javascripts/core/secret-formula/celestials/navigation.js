@@ -223,7 +223,7 @@ GameDatabase.celestials.navigation = {
     drawOrder: -1,
     node: {
       incompleteClass: "c-celestial-nav__test-incomplete",
-      fill: "#A101ec",
+      fill: "#ffa337",
       position: new Vector(625, 175),
       rMajor: 24,
       rMinor: 0,
@@ -239,7 +239,59 @@ GameDatabase.celestials.navigation = {
       pathStart: 0,
       pathEnd: 1,
       path: LinearPath.connectCircles(new Vector(550, 25), 40 - 1, new Vector(625, 175), 24 - 1),
-      fill: "#7131ec",
+      fill: "url(#gradEffarigEnslaved)",
+    }
+  },
+  "enslaved-unlock-glyph-level": {
+    visible: () => EffarigUnlock.reality.isUnlocked,
+    complete: () => 1,
+    drawOrder: -1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      fill: "#ffa337",
+      position: new Vector(725, 225),
+      rMajor: 16,
+      rMinor: 0,
+      legend: {
+        text: ["Reach glyph", "level 5000"],
+        angle: -45,
+        diagonal: 16,
+        horizontal: 16,
+      },
+    },
+    connector: {
+      pathStart: 0,
+      pathEnd: 1,
+      path: LinearPath.connectCircles(new Vector(625, 175), 24 - 1, new Vector(725, 225), 16 - 1),
+      fill: "#ffa337",
+      completeWidth: 6,
+      incompleteWidth: 4,
+    }
+  },
+  "v-unlock-achievement": {
+    visible: () => EffarigUnlock.reality.isUnlocked,
+    complete: () => 1,
+    drawOrder: -1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      fill: "#ffa337",
+      position: new Vector(550, 250),
+      rMajor: 16,
+      rMinor: 0,
+      legend: {
+        text: "?",
+        angle: -135,
+        diagonal: 16,
+        horizontal: 16,
+      },
+    },
+    connector: {
+      pathStart: 0,
+      pathEnd: 1,
+      path: LinearPath.connectCircles(new Vector(625, 175), 24 - 1, new Vector(550, 250), 16 - 1),
+      fill: "#ffa337",
+      completeWidth: 6,
+      incompleteWidth: 4,
     }
   },
 };

@@ -7067,6 +7067,7 @@ input.o-automator-block-input {
 
 .o-celestial-nav__symbol {
   text-anchor: middle;
+  font-family: sans-serif;
 }
 
 .o-celestial-nav__legend-arrow {

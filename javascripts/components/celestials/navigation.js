@@ -15,12 +15,15 @@ function cubicBezierArrayToPath(a, initialCommand = "M") {
   return prefix + parts.join("");
 }
 
-function svgRingPath(rMajor, rMinor) {
-  return `M -0.1, ${-rMajor}
-a ${rMajor} ${rMajor} 0 1 0 0.2 0
-z
-m 0.2 ${rMajor - rMinor}
-a ${rMinor} ${rMinor} 0 1 1 -0.2 0
+function svgRingPath(rMajor, rMinor, gapDeg = 60, gapCenterDeg = 0) {
+  const edge0 = Math.PI / 180 * (gapCenterDeg + gapDeg / 2);
+  const c0 = Math.cos(edge0), s0 = Math.sin(edge0);
+  const edge1 = Math.PI / 180 * (gapCenterDeg - gapDeg / 2);
+  const c1 = Math.cos(edge1), s1 = Math.sin(edge1);
+  return `M ${c0 * rMajor - 1e-3 * s0} ${s0 * rMajor + 1e-3 * c0}
+A ${rMajor} ${rMajor} 0 1 0 ${c1 * rMajor + 1e-3 * s1} ${s1 * rMajor - 1e-3 * c1}
+l 8 ${rMajor - rMinor}
+a ${rMinor} ${rMinor} 0 1 1 -4 0
 z`;
 }
 
@@ -61,7 +64,9 @@ Vue.component("celestial-navigation", {
               return (this.pathEnd - this.pathPadEnd) - (this.pathStart + this.pathPadStart);
             },
             incompleteStart() {
-              return this.pathStart + this.pathPadStart + this.unpaddedSpan * this.complete;
+              return this.complete >= 1
+                ? this.pathEnd
+                : this.pathStart + this.pathPadStart + this.unpaddedSpan * this.complete;
             },
             incompleteStartShape() {
               return this.shapeAt(this.incompleteStart);
@@ -227,7 +232,7 @@ Vue.component("celestial-navigation", {
               return typeof (data) === "string" ? [data] : data;
             },
             symbolFontSize() {
-              return 0; //this.rMajor * this.symbolScale;
+              return this.rMajor * this.symbolScale;
             },
             ringFilter() {
               return this.complete >= 1 ? "url(#completeGlow)" : "";
@@ -244,7 +249,7 @@ Vue.component("celestial-navigation", {
           <g :transform="baseTransform">
             <path :class="ringClass"
                   :d="pathData"
-                  stroke="none" :fill="fill" :filter="ringFilter" />
+                  stroke="black" :fill="fill" :filter="ringFilter" />
             <text v-if="symbol"
                   class="o-celestial-nav__symbol o-no-mouse"
                   fill="#000"
@@ -368,8 +373,8 @@ Vue.component("celestial-navigation", {
       <stop offset="1" stop-color="#5151ec"/>
     </linearGradient>
     <linearGradient id="gradEffarigEnslaved" y2="0" x2="1" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#4EF"/>
-      <stop offset="1" stop-color="#5151ec"/>
+      <stop offset="0" stop-color="#7131ec"/>
+      <stop offset="1" stop-color="#ffa337"/>
     </linearGradient>
     <mask id="fade" maskContentUnits="objectBoundingBox">
       <rect width="1" height="1" fill="url(#fadeGrad)"/>

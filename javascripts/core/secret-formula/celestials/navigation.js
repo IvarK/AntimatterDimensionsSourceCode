@@ -8,8 +8,10 @@ GameDatabase.celestials.navigation = {
       completeClass: "c-celestial-nav__test-complete",
       incompleteClass: "c-celestial-nav__test-incomplete",
       position: new Vector(100, 100),
-      rMajor: 78,
-      rMinor: 64,
+      ring: {
+        rMajor: 78,
+        rMinor: 64,
+      },
       alwaysShowLegend: true,
       legend: {
         text: "Teresa",
@@ -27,8 +29,10 @@ GameDatabase.celestials.navigation = {
       completeClass: "c-celestial-nav__test-complete",
       incompleteClass: "c-celestial-nav__test-incomplete",
       position: new Vector(100, 100),
-      rMajor: 32,
-      rMinor: 22,
+      ring: {
+        rMajor: 32,
+        rMinor: 22,
+      },
       legend: {
         text: "Reach 1e14 RM",
         angle: 135,
@@ -59,7 +63,9 @@ GameDatabase.celestials.navigation = {
       incompleteClass: "c-celestial-nav__test-incomplete",
       symbol: "Ϟ",
       position: new Vector(100, 100),
-      rMajor: 16,
+      ring: {
+        rMajor: 16,
+      },
       legend: {
         text: "Teresa's Reality",
         angle: -135,
@@ -76,8 +82,10 @@ GameDatabase.celestials.navigation = {
       completeClass: "c-celestial-nav__test-complete",
       incompleteClass: "c-celestial-nav__test-incomplete",
       position: new Vector(225, 250),
-      rMajor: 16,
-      rMinor: 0,
+      ring: {
+        rMajor: 16,
+        rMinor: 0,
+      },
       alwaysShowLegend: true,
       legend: {
         text: complete => {
@@ -110,8 +118,9 @@ GameDatabase.celestials.navigation = {
       completeClass: "c-celestial-nav__effarig",
       incompleteClass: "c-celestial-nav__test-incomplete",
       position: new Vector(300, 0),
-      rMajor: 24,
-      rMinor: 0,
+      ring: {
+        rMajor: 24,
+      },
       alwaysShowLegend: true,
       legend: {
         text: complete => {
@@ -142,11 +151,12 @@ GameDatabase.celestials.navigation = {
       completeClass: "c-celestial-nav__effarig",
       incompleteClass: "c-celestial-nav__test-incomplete",
       position: new Vector(400, 50),
-      rMajor: 16,
-      rMinor: 0,
+      ring: {
+        rMajor: 16,
+      },
       legend: {
         text: "TBD",
-        angle: 135,
+        angle: 150,
         diagonal: 16,
         horizontal: 16,
       },
@@ -165,12 +175,14 @@ GameDatabase.celestials.navigation = {
       completeClass: "c-celestial-nav__effarig",
       incompleteClass: "c-celestial-nav__test-incomplete",
       position: new Vector(550, 25),
-      rMajor: 60,
-      rMinor: 52,
+      ring: {
+        rMajor: 60,
+        rMinor: 52,
+      },
       legend: {
         text: "Effarig's Infinity",
         angle: 135,
-        diagonal: 16,
+        diagonal: 24,
         horizontal: 16,
       },
     },
@@ -184,16 +196,17 @@ GameDatabase.celestials.navigation = {
   "effarig-eternity": {
     visible: () => EffarigUnlock.infinity.isUnlocked,
     complete: () => (EffarigUnlock.eternity.isUnlocked ? 1 : 0),
-    drawOrder: -2,
     node: {
       incompleteClass: "c-celestial-nav__test-incomplete",
       fill: "#7131ec",
       position: new Vector(550, 25),
-      rMajor: 40,
-      rMinor: 30,
+      ring: {
+        rMajor: 40,
+        rMinor: 30,
+      },
       legend: {
         text: "Effarig's Eternity",
-        angle: 135,
+        angle: -45,
         diagonal: 16,
         horizontal: 16,
       },
@@ -206,8 +219,10 @@ GameDatabase.celestials.navigation = {
       incompleteClass: "c-celestial-nav__test-incomplete",
       fill: "#A101ec",
       position: new Vector(550, 25),
-      rMajor: 20,
-      rMinor: 0,
+      ring: {
+        rMajor: 20,
+        rMinor: 0,
+      },
       symbol: "Ϙ",
       legend: {
         text: "Effarig's Reality",
@@ -224,13 +239,17 @@ GameDatabase.celestials.navigation = {
     node: {
       incompleteClass: "c-celestial-nav__test-incomplete",
       fill: "#ffa337",
-      position: new Vector(625, 175),
-      rMajor: 24,
-      rMinor: 0,
-      alwaysShowLegend: true,
+      position: new Vector(650, 250),
+      ring: {
+        rMajor: 80,
+        rMinor: 70,
+        gapCenterDeg: 15,
+        gapDeg: 200,
+      },
+      alwaysShowLegend: false,
       legend: {
         text: "Enslaved",
-        angle: -45,
+        angle: -55,
         diagonal: 16,
         horizontal: 16,
       },
@@ -238,7 +257,7 @@ GameDatabase.celestials.navigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: LinearPath.connectCircles(new Vector(550, 25), 40 - 1, new Vector(625, 175), 24 - 1),
+      path: LinearPath.connectCircles(new Vector(550, 25), 40 - 1, new Vector(650, 250), 80 - 1),
       fill: "url(#gradEffarigEnslaved)",
     }
   },
@@ -249,9 +268,14 @@ GameDatabase.celestials.navigation = {
     node: {
       incompleteClass: "c-celestial-nav__test-incomplete",
       fill: "#ffa337",
-      position: new Vector(725, 225),
-      rMajor: 16,
-      rMinor: 0,
+      position: new Vector(650 + 75 * Math.cos(Math.PI / 180 * -60), 250 + 75 * Math.sin(Math.PI / 180 * -60)),
+      ring: {
+        rMajor: 24,
+        rMinor: 16,
+        gapCenterDeg: 40,
+        gapDeg: 60,
+        gapAngleDeg: 0,
+      },
       legend: {
         text: ["Reach glyph", "level 5000"],
         angle: -45,
@@ -262,13 +286,80 @@ GameDatabase.celestials.navigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: LinearPath.connectCircles(new Vector(625, 175), 24 - 1, new Vector(725, 225), 16 - 1),
+      path: new LinearPath(
+        new Vector(650 - 74 * Math.sqrt(0.75), 250 - 74 * 0.5),
+        new Vector(650 + 75 * Math.cos(Math.PI / 180 * -60), 250 + 75 * Math.sin(Math.PI / 180 * -60)))
+        .trimEnd(23),
       fill: "#ffa337",
       completeWidth: 6,
       incompleteWidth: 4,
     }
   },
-  "v-unlock-achievement": {
+  "enslaved-unlock-glyph-rarity": {
+    visible: () => EffarigUnlock.reality.isUnlocked,
+    complete: () => 1,
+    drawOrder: -1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      fill: "#ffa337",
+      position: new Vector(650 + 75 * Math.cos(Math.PI / 180 * 120), 250 + 75 * Math.sin(Math.PI / 180 * 120)),
+      ring: {
+        rMajor: 24,
+        rMinor: 16,
+        gapCenterDeg: 220,
+        gapDeg: 60,
+        gapAngleDeg: 0,
+      },
+      legend: {
+        text: ["Reach glyph", "level 5000"],
+        angle: -45,
+        diagonal: 16,
+        horizontal: 16,
+      },
+    },
+    connector: {
+      pathStart: 0,
+      pathEnd: 1,
+      path: new LinearPath(
+        new Vector(650 + 75 * Math.cos(Math.PI / 180 * -60), 250 + 75 * Math.sin(Math.PI / 180 * -60)),
+        new Vector(650 + 75 * Math.cos(Math.PI / 180 * 120), 250 + 75 * Math.sin(Math.PI / 180 * 120)))
+        .trimStart(23).trimEnd(23),
+      fill: "#ffa337",
+      completeWidth: 6,
+      incompleteWidth: 4,
+    }
+  },
+  "enslaved-reality": {
+    visible: () => EffarigUnlock.reality.isUnlocked,
+    complete: () => (Enslaved.isCompleted ? 1 : 0),
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      fill: "#ffa337",
+      position: new Vector(650, 250),
+      ring: {
+        rMajor: 80,
+        rMinor: 70,
+        gapCenterDeg: 195,
+        gapDeg: 200,
+      },
+      legend: {
+        text: "Enslaved Reality",
+        angle: 45,
+        diagonal: 16,
+        horizontal: 16,
+      },
+    },
+    connector: {
+      pathStart: 0,
+      pathEnd: 1,
+      path: new LinearPath(
+        new Vector(650 + 75 * Math.cos(Math.PI / 180 * 120), 250 + 75 * Math.sin(Math.PI / 180 * 120)),
+        new Vector(650 + 74 * Math.sqrt(0.75), 250 + 74 * 0.5))
+        .trimStart(23),
+      fill: "#ffa337",
+    }
+  },
+  /*  "v-unlock-achievement": {
     visible: () => EffarigUnlock.reality.isUnlocked,
     complete: () => 1,
     drawOrder: -1,
@@ -276,8 +367,9 @@ GameDatabase.celestials.navigation = {
       incompleteClass: "c-celestial-nav__test-incomplete",
       fill: "#ffa337",
       position: new Vector(550, 250),
-      rMajor: 16,
-      rMinor: 0,
+      ring: {
+        rMajor: 16,
+      },
       legend: {
         text: "?",
         angle: -135,
@@ -288,10 +380,10 @@ GameDatabase.celestials.navigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
-      path: LinearPath.connectCircles(new Vector(625, 175), 24 - 1, new Vector(550, 250), 16 - 1),
+      path: LinearPath.connectCircles(new Vector(650, 250), 80 - 1, new Vector(550, 250), 16 - 1),
       fill: "#ffa337",
       completeWidth: 6,
       incompleteWidth: 4,
     }
-  },
+  },*/
 };

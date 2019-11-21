@@ -1074,6 +1074,16 @@ class LinearPath extends Curve {
     return 0;
   }
 
+  trimStart(len) {
+    const dir = this.p1.minus(this.p0).normalized;
+    return new LinearPath(this.p0.plus(dir.times(len)), this.p1);
+  }
+
+  trimEnd(len) {
+    const dir = this.p1.minus(this.p0).normalized;
+    return new LinearPath(this.p0, this.p1.minus(dir.times(len)));
+  }
+
   transformed(tform) {
     return new LinearPath(this.p0.transformedBy(tform), this.p1.transformedBy(tform));
   }

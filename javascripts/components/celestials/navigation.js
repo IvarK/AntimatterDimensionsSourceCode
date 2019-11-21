@@ -15,15 +15,40 @@ function cubicBezierArrayToPath(a, initialCommand = "M") {
   return prefix + parts.join("");
 }
 
-function svgRingPath(rMajor, rMinor, gapDeg = 60, gapCenterDeg = 0) {
-  const edge0 = Math.PI / 180 * (gapCenterDeg + gapDeg / 2);
+/**
+ * @param {object} d 
+ * @param {number} d.rMajor
+ * @param {number} [d.rMinor]
+ * @param {number} [d.gapCenterDeg]
+ * @param {number} [d.gapDeg]
+ * @param {number} [d.gapAngleDeg]
+ */
+function svgRingPath(d) {
+  if (!d.gapDeg) {
+    return `M -0.1, ${-d.rMajor}
+a ${d.rMajor} ${d.rMajor} 0 1 0 0.2 0
+z
+m 0.2 ${d.rMajor - d.rMinor}
+a ${d.rMinor} ${d.rMinor} 0 1 1 -0.2 0
+z`;
+  }
+  const toRad = Math.PI / 180;
+  const gapAngleDeg = d.gapAngleDeg === undefined ? d.gapDeg / 2 : d.gapAngleDeg;
+  const edge0 = toRad * (d.gapCenterDeg + d.gapDeg / 2);
   const c0 = Math.cos(edge0), s0 = Math.sin(edge0);
-  const edge1 = Math.PI / 180 * (gapCenterDeg - gapDeg / 2);
+  const edge1 = toRad * (d.gapCenterDeg - d.gapDeg / 2);
   const c1 = Math.cos(edge1), s1 = Math.sin(edge1);
-  return `M ${c0 * rMajor - 1e-3 * s0} ${s0 * rMajor + 1e-3 * c0}
-A ${rMajor} ${rMajor} 0 1 0 ${c1 * rMajor + 1e-3 * s1} ${s1 * rMajor - 1e-3 * c1}
-l 8 ${rMajor - rMinor}
-a ${rMinor} ${rMinor} 0 1 1 -4 0
+  const x = d.rMajor / d.rMinor * Math.sin(toRad * (d.gapDeg / 2 - gapAngleDeg));
+  const innerAngle = Math.asin(x) + toRad * gapAngleDeg;
+  const edge2 = toRad * d.gapCenterDeg + innerAngle;
+  const c2 = Math.cos(edge2), s2 = Math.sin(edge2);
+  const edge3 = toRad * d.gapCenterDeg - innerAngle;
+  const c3 = Math.cos(edge3), s3 = Math.sin(edge3);
+  const big = d.gapDeg <= 180 ? 1 : 0;
+  return `M ${c0 * d.rMajor - 1e-3 * s0} ${s0 * d.rMajor + 1e-3 * c0}
+A ${d.rMajor} ${d.rMajor} 0 ${big} 1 ${c1 * d.rMajor + 1e-3 * s1} ${s1 * d.rMajor - 1e-3 * c1}
+L ${c3 * d.rMinor + 1e-3 * s3} ${s3 * d.rMinor - 1e-3 * c3}
+A ${d.rMinor} ${d.rMinor} 0 ${big} 0 ${c2 * d.rMinor - 1e-3 * s2} ${s2 * d.rMinor + 1e-3 * c2}
 z`;
 }
 
@@ -175,12 +200,8 @@ Vue.component("celestial-navigation", {
           props: {
             complete: Number,
             position: Vector,
-            rMajor: Number,
-            rMinor: {
-              type: Number,
-              default: 0,
-            },
             legend: Object,
+            ring: Object,
             symbol: {
               type: String,
               default: "",
@@ -199,14 +220,14 @@ Vue.component("celestial-navigation", {
               return this.position.asTranslate();
             },
             pathData() {
-              return svgRingPath(this.rMajor, this.rMinor);
+              return svgRingPath(this.ring);
             },
             hasLegend() {
               return Boolean(this.legend);
             },
             legendArrowPoints() {
               const dir = Vector.unitFromDegrees(this.legend.angle);
-              const pts = [dir.times(this.rMajor + 2)];
+              const pts = [dir.times(this.ring.rMajor + 2)];
               pts.push(pts[0].plus(dir.times(this.legend.diagonal)));
               pts.push(pts[1].plus(Vector.horiz(this.legend.horizontal * Math.sign(dir.x))));
               return pts;
@@ -232,7 +253,7 @@ Vue.component("celestial-navigation", {
               return typeof (data) === "string" ? [data] : data;
             },
             symbolFontSize() {
-              return this.rMajor * this.symbolScale;
+              return this.ring.rMajor * this.symbolScale;
             },
             ringFilter() {
               return this.complete >= 1 ? "url(#completeGlow)" : "";
@@ -249,7 +270,7 @@ Vue.component("celestial-navigation", {
           <g :transform="baseTransform">
             <path :class="ringClass"
                   :d="pathData"
-                  stroke="black" :fill="fill" :filter="ringFilter" />
+                  stroke="none" :fill="fill" :filter="ringFilter" />
             <text v-if="symbol"
                   class="o-celestial-nav__symbol o-no-mouse"
                   fill="#000"
@@ -294,8 +315,7 @@ Vue.component("celestial-navigation", {
           return this.config.node.position.asTranslate();
         },
         ringBackgroundPath() {
-          const rMinor = this.config.node.rMinor || 0;
-          return svgRingPath(this.config.node.rMajor, Math.max(0, rMinor));
+          return svgRingPath(this.config.node.ring);
         }
       },
       methods: {

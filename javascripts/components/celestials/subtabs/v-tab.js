@@ -5,8 +5,6 @@ Vue.component("v-tab", {
     return {
       mainUnlock: false,
       totalUnlocks: 0,
-      totalAdditionalStudies: 0,
-      achievementsPerAdditionalStudy: 0,
       realities: 0,
       infinities: new Decimal(0),
       eternities: new Decimal(0),
@@ -15,14 +13,13 @@ Vue.component("v-tab", {
       rm: new Decimal(0),
       runRecords: Array.from(player.celestials.v.runRecords),
       runGlyphs: player.celestials.v.runGlyphs.map(g => this.copyGlyphs(g)),
+      isFlipped: false
     };
   },
   methods: {
     update() {
       this.mainUnlock = V.has(V_UNLOCKS.MAIN_UNLOCK);
-      this.totalUnlocks = V.totalRunUnlocks;
-      this.totalAdditionalStudies = V.totalAdditionalStudies;
-      this.achievementsPerAdditionalStudy = V.achievementsPerAdditionalStudy;
+      this.totalUnlocks = V.spaceTheorems;
       this.realities = player.realities;
       this.infinities.copyFrom(player.infinitied);
       this.eternities.copyFrom(player.eternities);
@@ -31,6 +28,7 @@ Vue.component("v-tab", {
       this.rm.copyFrom(player.reality.realityMachines);
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(g => this.copyGlyphs(g));
+      this.isFlipped = V.isFlipped;
     },
     copyGlyphs(glyphList) {
       return glyphList.map(g => ({
@@ -48,17 +46,31 @@ Vue.component("v-tab", {
     }
   },
   computed: {
-    hexGrid: () => [
-      VRunUnlocks.all[0],
-      VRunUnlocks.all[1],
-      {},
-      VRunUnlocks.all[2],
-      { isRunButton: true },
-      VRunUnlocks.all[3],
-      VRunUnlocks.all[4],
-      VRunUnlocks.all[5],
-      {}
-    ],
+    // If V is flipped, change the layout of the grid
+    hexGrid() {
+      return this.isFlipped ? [
+        VRunUnlocks.all[6],
+        {},
+        {},
+        {},
+        { isRunButton: true },
+        VRunUnlocks.all[7],
+        VRunUnlocks.all[4],
+        {},
+        {}
+      ]
+      : [
+        VRunUnlocks.all[0],
+        VRunUnlocks.all[1],
+        {},
+        VRunUnlocks.all[2],
+        { isRunButton: true },
+        VRunUnlocks.all[3],
+        VRunUnlocks.all[4],
+        VRunUnlocks.all[5],
+        {}
+      ];
+    },
     runMilestones: () => V_UNLOCKS.RUN_UNLOCK_THRESHOLDS,
     db: () => GameDatabase.celestials.v,
   },
@@ -115,13 +127,8 @@ Vue.component("v-tab", {
           and re-entering the reality.
         </div>
         <div>
-          You have {{ shortenSmallInteger(totalUnlocks) }} V-achievements done. You can pick
-          {{ shortenSmallInteger(totalAdditionalStudies) }}
-          {{ "study" | pluralize(totalAdditionalStudies, "studies") }} on other paths you normally can't buy.
-        </div>
-        <div>
-          (You get one additional study per {{ shortenSmallInteger(achievementsPerAdditionalStudy) }}
-          V-achievements, rounded down.)
+          You have {{ shortenSmallInteger(totalUnlocks) }} V-achievements done. 
+          You gain 1 Space Theorem for each completion.
         </div>
         <br>
         <div class="l-v-milestones-container">

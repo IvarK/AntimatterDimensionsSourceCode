@@ -6,6 +6,7 @@ Vue.component("normal-time-study", {
   },
   data: () => ({
     showCost: true,
+    showSTCost: false
   }),
   computed: {
     study() {
@@ -47,10 +48,18 @@ Vue.component("normal-time-study", {
   methods: {
     update() {
       this.showCost = this.study.id !== 192 || !Enslaved.isRunning;
+      const canBeBought = typeof this.study.config.requirement === "function"
+                          ? this.study.config.requirement() 
+                          : TimeStudy(this.study.config.requirement).isBought;
+
+      this.showSTCost = !canBeBought && 
+                        this.study.config.requirementV !== undefined &&
+                        this.study.config.requirementV() && 
+                        this.study.STCost !== undefined;
     },
   },
   template:
-    `<time-study :setup="setup" :showCost="showCost" :class="classObject"">
+    `<time-study :setup="setup" :showCost="showCost" :class="classObject" :showSTCost="showSTCost">
       <hint-text class="l-hint-text--time-study">{{hintText}}</hint-text>
       <description-display :config="study.config" />
       <effect-display br :config="study.config" />

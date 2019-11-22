@@ -165,7 +165,9 @@ function canBuyStudy(id) {
 }
 
 function canBuyLocked(id) {
-  return V.canBuyLockedPath() && TimeStudy(id) && TimeStudy(id).checkVRequirement();
+  return V.availableST >= TimeStudy(id).STCost && 
+         TimeStudy(id) && 
+         TimeStudy(id).checkVRequirement();
 }
 
 function getSelectedDimensionStudyPaths() {
@@ -241,9 +243,11 @@ function studiesUntil(id) {
   }
   // If we've maxed out V rewards, we can brute force buy studies. Otherwise,
   // we don't assume we know which locked studies the player wants, if any.
+  /* TODO: modify this block to work with the flipped achievements as well
   if (V.totalAdditionalStudies >= 12) {
     buyTimeStudyRange(121, Math.min(lastInPrevRow, 214));
   }
+  */
   const pacePaths = getSelectedPacePaths();
   // If we don't have a middle path chosen at this point, we either can't decide
   // or can't afford any more studies
@@ -266,6 +270,7 @@ function studiesUntil(id) {
   // which case, they must have had one of the prerequisites) or b) it didn't, but the user has V
   // rewards so will be able to buy both prerequisites or c) they can't buy it
   // We only buy both if the player has maxed out V.
+  /* TODO: modify this block to work with the flipped achievements as well
   if (V.totalAdditionalStudies >= 12) {
     TimeStudy(220 + col * 2 - 1).purchase();
     TimeStudy(220 + col * 2).purchase();
@@ -273,6 +278,7 @@ function studiesUntil(id) {
     for (let i = 221; i <= 228; ++i) TimeStudy(i).purchase();
     study.purchase();
   }
+  */
 }
 
 function respecTimeStudies(auto) {
@@ -284,7 +290,8 @@ function respecTimeStudies(auto) {
   }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
-  player.celestials.v.additionalStudies = 0;
+  player.celestials.v.STSpent = 0;
+  player.celestials.v.triadStudies = [];
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();
@@ -323,7 +330,8 @@ function importStudyTree(input, auto) {
 const TimeStudyType = {
   NORMAL: 0,
   ETERNITY_CHALLENGE: 1,
-  DILATION: 2
+  DILATION: 2,
+  TRIAD: 3
 };
 
 class TimeStudyState extends GameMechanicState {
@@ -338,6 +346,12 @@ class TimeStudyState extends GameMechanicState {
 
   get cost() {
     return this.config.cost;
+  }
+
+  get STCost() {
+    let base = this.config.STCost;
+    if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) base /= 2;
+    return base;
   }
 
   refund() {
@@ -386,7 +400,7 @@ class NormalTimeStudyState extends TimeStudyState {
     if (this.isBought || !this.isAffordable) return false;
     if (!canBuyStudy(this.id)) {
       if (!canBuyLocked(this.id)) return false;
-      player.celestials.v.additionalStudies++;
+      player.celestials.v.STSpent += this.STCost;
     }
     player.timestudy.studies.push(this.id);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
@@ -619,6 +633,46 @@ class TimeStudyConnection {
   get isSatisfied() {
     return this.isOverridden || this._from.isBought;
   }
+}
+
+
+class TriadStudyState extends TimeStudyState {
+  constructor(config) {
+    super(config, TimeStudyType.TRIAD);
+  }
+
+  get canBeBought() {
+    return this.config.requirement.every(s => player.timestudy.studies.includes(s)) &&
+           V.availableST >= this.STCost &&
+           !this.isBought;
+  }
+
+  get isBought() {
+    return player.celestials.v.triadStudies.includes(this.config.id);
+  }
+
+  get description() {
+    return this.config.description;
+  }
+
+  get canBeApplied() {
+    return this.isBought;
+  }
+
+  purchase() {
+    if (!this.canBeBought) return;
+    player.celestials.v.triadStudies.push(this.config.id);
+    player.celestials.v.STSpent += this.STCost;
+  }
+}
+
+TriadStudyState.studies = mapGameData(
+  GameDatabase.celestials.v.triadStudies,
+  config => new TriadStudyState(config)
+);
+
+function TriadStudy(id) {
+  return TriadStudyState.studies[id]
 }
 
 /**

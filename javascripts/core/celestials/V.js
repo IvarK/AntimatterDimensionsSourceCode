@@ -31,7 +31,7 @@ class VRunUnlockState extends GameMechanicState {
 
   tryComplete() {
     const playerData = player.celestials.v;
-    const value = this.config.currentValue();
+    const value = this.config.currentValue(this.conditionValue);
     // If we haven't set a record, we haven't completed any new tiers, either
     if (value <= playerData.runRecords[this.id]) return;
     playerData.runRecords[this.id] = value;
@@ -43,10 +43,13 @@ class VRunUnlockState extends GameMechanicState {
         strength: g.strength,
         effects: g.effects,
       }));
-    if (this.completions === 6 || !this.config.condition(this.conditionValue)) return;
-    this.completions++;
-    GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
-    V.updateTotalRunUnlocks();
+
+    while (true) {
+      if (this.completions === 6 || !this.config.condition(this.conditionValue)) break;
+      this.completions++;
+      GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
+      V.updateTotalRunUnlocks();
+    }
   }
 }
 
@@ -83,31 +86,31 @@ const V_UNLOCKS = {
   RUN_UNLOCK_THRESHOLDS: [
     {
     id: 1,
-    reward: "Achievement multiplier affects auto EC completion time.",
+    reward: "Achievement multiplier affects auto EC completion time. Unlock Triad studies.",
     description: "Have 10 V-achievements",
     effect: () => Player.achievementPower.toNumber(),
     format: x => formatX(x, 2, 2),
-    requirement: () => V.totalRunUnlocks >= 10
+    requirement: () => V.spaceTheorems >= 10
     },
     {
     id: 2,
-    reward: "Achievement count affects black hole power, Unlock Ra, Celestial of the Forgotten.",
+    reward: "Achievement count affects black hole power.",
     description: "Have 30 V-achievements",
     effect: () => Player.achievementPower.toNumber(),
     format: x => formatX(x, 2, 0),
-    requirement: () => V.totalRunUnlocks >= 30
+    requirement: () => V.spaceTheorems >= 30
     },
     {
     id: 3,
-    reward: "Double the amount of locked studies you can buy.",
+    reward: "Divide the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
     description: "Have 36 V-achievements",
-    requirement: () => V.totalRunUnlocks >= 36
+    requirement: () => V.spaceTheorems >= 36
     }
   ]
 };
 
 const V = {
-  totalRunUnlocks: 0,
+  spaceTheorems: 0,
   checkForUnlocks() {
 
     if (!V.has(V_UNLOCKS.MAIN_UNLOCK) && V_UNLOCKS.MAIN_UNLOCK.requirement()) {
@@ -137,12 +140,18 @@ const V = {
   },
   startRun() {
     player.celestials.v.run = startRealityOver() || player.celestials.v.run;
-  },
-  canBuyLockedPath() {
-    return player.celestials.v.additionalStudies < this.totalAdditionalStudies;
+    player.celestials.v.cursedThisRun = Glyphs.active.filter(x => x && x.type === "cursed").length;
   },
   updateTotalRunUnlocks() {
-    this.totalRunUnlocks = player.celestials.v.runUnlocks.sum();
+    let sum = 0;
+    for (let i = 0; i < player.celestials.v.runUnlocks.length; i++) {
+      if (i < 6) sum += player.celestials.v.runUnlocks[i];
+      else sum += player.celestials.v.runUnlocks[i] * 3;
+    }
+    this.spaceTheorems = sum;
+  },
+  get availableST() {
+    return V.spaceTheorems - player.celestials.v.STSpent;
   },
   get isRunning() {
     return player.celestials.v.run;
@@ -151,6 +160,9 @@ const V = {
     return this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2]) ? 3 : 6;
   },
   get totalAdditionalStudies() {
-    return Math.floor(this.totalRunUnlocks / this.achievementsPerAdditionalStudy);
+    return Math.floor(this.spaceTheorems / this.achievementsPerAdditionalStudy);
+  },
+  get isFlipped() {
+    return this.spaceTheorems >= 36;
   }
 };

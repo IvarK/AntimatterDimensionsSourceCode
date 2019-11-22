@@ -55,6 +55,7 @@ function getTickSpeedMultiplier() {
     Achievement(86),
     InfinityChallenge(5).reward
   );
+  galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   const perGalaxy = new Decimal(0.965);
   return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
 }
@@ -205,7 +206,9 @@ const FreeTickspeed = {
       newAmount: 0,
       nextShards: new Decimal(1),
     };
-    const tickmult = 1 + (Effects.min(1.33, TimeStudy(171)) - 1) * AnnihilationUpgrade.freeTickDecrease.effect;
+    const tickmult = (1 + (Effects.min(1.33, TimeStudy(171)) - 1) * 
+      AnnihilationUpgrade.freeTickDecrease.effect) *
+      Math.max(getAdjustedGlyphEffect("cursedtickspeed"), 1);
     const logTickmult = Math.log(tickmult);
     const logShards = shards.ln();
     const uncapped = logShards / logTickmult;

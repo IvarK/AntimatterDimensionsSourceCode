@@ -38,6 +38,7 @@ function normalDimensionCommonMultiplier() {
     InfinityChallenge(3).reward,
     InfinityChallenge(8),
     EternityChallenge(10),
+    TriadStudy(4),
     AlchemyResource.dimensionality
   );
 
@@ -166,6 +167,8 @@ function applyNDPowers(mult, tier) {
       InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
       AlchemyResource.power
     );
+
+  multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));
 
   return multiplier;
 }

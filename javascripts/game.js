@@ -63,7 +63,7 @@ function gainedEternityPoints() {
       TimeStudy(123),
       RealityUpgrade(12),
       GlyphEffect.epMult
-    );
+    ).dividedBy(getAdjustedGlyphEffect("cursedeternity"));
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -344,12 +344,16 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
   if (tempSpeedupToggle) {
     factor *= tempSpeedupFactor;
   }
+  if (BlackHoles.arePaused) {
+    factor *= player.blackHoleNegative;
+  }
   return factor;
 }
 
 function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
-  if (Enslaved.isAutoReleasing && !(EternityChallenge(12).isRunning || TimeCompression.isActive)) {
+  if (Enslaved.isAutoReleasing && 
+    !(EternityChallenge(12).isRunning || TimeCompression.isActive || (BlackHoles.arePaused && player.blackHoleNegative < 1))) {
     return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
   return speedFactor;

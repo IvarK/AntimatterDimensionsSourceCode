@@ -115,6 +115,7 @@ function timeDimensionCommonMultiplier() {
       TimeStudy(103),
       TimeStudy(151),
       TimeStudy(221),
+      TriadStudy(1),
       EternityChallenge(1).reward,
       EternityChallenge(10).reward,
       EternityUpgrade.tdMultAchs,
@@ -172,6 +173,8 @@ class TimeDimensionState extends DimensionState {
     if (Laitela.has(LAITELA_UNLOCKS.DIM_POW)) mult = mult.pow(Laitela.dimensionMultPowerEffect);
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
+    
+    mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
 
     mult = mult.powEffectOf(AlchemyResource.time);
 

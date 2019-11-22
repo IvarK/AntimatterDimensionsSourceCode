@@ -396,10 +396,10 @@ const Replicanti = {
       return player.replicanti.galaxies;
     },
     get extra() {
-      return Effects.sum(
+      return (Effects.sum(
         TimeStudy(225),
         TimeStudy(226)
-      ) + Effarig.bonusRG;
+      ) + Effarig.bonusRG) * TriadStudy(3).effectOrDefault(1);
     },
     get total() {
       return this.bought + this.extra;

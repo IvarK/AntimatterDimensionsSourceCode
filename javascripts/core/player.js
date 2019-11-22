@@ -267,7 +267,8 @@ let player = {
         replication: 0,
         dilation: 0,
         effarig: 0,
-        reality: 0
+        reality: 0,
+        cursed: 0
       },
       undo: [],
     },
@@ -321,10 +322,12 @@ let player = {
     phase: 0,
     active: false,
     unlocked: false,
-    activations: 0
+    activations: 0,
   })),
   blackHolePause: false,
   blackHolePauseTime: 0,
+  blackHoleNegative: 1,
+  minNegativeBlackHoleThisReality: 0,
   ttbuyer: false,
   celestials: {
     teresa: {
@@ -379,12 +382,14 @@ let player = {
       unlockBits: 0,
       quoteIdx: 0,
       run: false,
-      runUnlocks: [0, 0, 0, 0, 0, 0],
-      additionalStudies: 0,
-      runGlyphs: [[], [], [], [], [], []],
+      runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      triadStudies: [],
+      STSpent: 0,
+      runGlyphs: [[], [], [], [], [], [], [], [], []],
       // The number of glyphs for reality goes down with tier, so 6 - num instead (6 means reality
       // has not been completed)
-      runRecords: [0, 0, 0, 0, 0, 0],
+      runRecords: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      cursedThisRun: 0
     },
     ra: {
       pets: {
@@ -447,7 +452,6 @@ let player = {
       darkEnergyUpgrades: new Set()
     }
   },
-  autoEcIsOn: true,
   options: {
     news: true,
     notation: "Mixed scientific",

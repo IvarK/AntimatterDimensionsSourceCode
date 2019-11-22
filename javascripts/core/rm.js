@@ -6,7 +6,8 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "dilationDT", "replicationdtgain", "replicationspeed", "timespeed",
   "timeetermult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
-  "effarigforgotten", "effarigdimensions", "effarigantimatter"];
+  "effarigforgotten", "effarigdimensions", "effarigantimatter",
+  "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedeternity"];
 
 // eslint-disable-next-line no-unused-vars
 const GlyphEffectOrder = orderedEffectList.mapToObject(e => e, (e, idx) => idx);
@@ -201,6 +202,25 @@ const GlyphGenerator = {
       strength: str,
       level: level.actualLevel,
       rawLevel: level.rawLevel,
+      effects: effectBitmask,
+    };
+  },
+
+  cursedGlyph() {
+    const str = rarityToStrength(100);
+    const effectBitmask = makeGlyphEffectBitmask(
+      orderedEffectList.filter(effect => effect.match("cursed*"))
+    );
+    // Each cursed glyph owned increases the level by 1000
+    const level = (1 + Glyphs.inventory.filter(g => g !== null && g.type === "cursed").length +
+      Glyphs.active.filter(g => g !== null && g.type === "cursed").length) * 1000;
+    return {
+      id: undefined,
+      idx: null,
+      type: "cursed",
+      strength: str,
+      level,
+      rawLevel: level,
       effects: effectBitmask,
     };
   },
@@ -552,7 +572,7 @@ const Glyphs = {
   sort() {
     const glyphsToSort = player.reality.glyphs.inventory.filter(g => g.idx >= this.protectedSlots);
     const freeSpace = this.freeInventorySpace;
-    const sortOrder = ["power", "infinity", "time", "replication", "dilation", "effarig", "reality"];
+    const sortOrder = ["power", "infinity", "time", "replication", "dilation", "effarig", "reality", "cursed"];
     const byType = sortOrder.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
     for (const g of glyphsToSort) byType[g.type].glyphs.push(g);
     const compareGlyphs = (a, b) => -a.level * a.strength + b.level * b.strength;
@@ -689,6 +709,7 @@ const GlyphSacrifice = (function() {
     power: new GlyphSacrificeState(db.power),
     effarig: new GlyphSacrificeState(db.effarig),
     reality: new GlyphSacrificeState(db.reality),
+    cursed: new GlyphSacrificeState(db.cursed),
   };
 }());
 

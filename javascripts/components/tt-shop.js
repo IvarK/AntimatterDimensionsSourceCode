@@ -17,7 +17,9 @@ Vue.component("tt-shop", {
         am: new Decimal(0),
         ip: new Decimal(0),
         ep: new Decimal(0)
-      }
+      },
+      showST: false,
+      STamount: 0
     };
   },
   computed: {
@@ -30,6 +32,9 @@ Vue.component("tt-shop", {
     },
     theoremNoun() {
       return this.theoremAmount.floor().eq(1) ? "Theorem" : "Theorems";
+    },
+    spaceTheoremNoun() {
+      return Math.floor(this.STamount) === 1 ? "Theorem" : "Theorems";
     },
     minimized() {
       return this.minimizeAvailable && this.shopMinimized;
@@ -85,6 +90,8 @@ Vue.component("tt-shop", {
       costs.am.copyFrom(player.timestudy.amcost);
       costs.ip.copyFrom(player.timestudy.ipcost);
       costs.ep.copyFrom(player.timestudy.epcost);
+      this.showST = Achievement(151).isEnabled;
+      this.STamount = V.availableST;
     },
     toggleTTAutobuyer() {
       player.ttbuyer = !player.ttbuyer;
@@ -96,6 +103,7 @@ Vue.component("tt-shop", {
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
           <p id="timetheorems">
             <span class="c-tt-amount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}
+            <span v-if="showST"><br>{{ STamount }} Space {{ spaceTheoremNoun }}</span>
           </p>
           <div style="display: flex; flex-direction: row; align-items: center;">
             <span class="c-ttshop__save-load-text">{{ saveLoadText }}</span>

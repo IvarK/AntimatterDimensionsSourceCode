@@ -8,6 +8,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedeternity"];
+const generatedTypes = ["power", "infinity", "time", "replication", "dilation", "effarig"];
 
 // eslint-disable-next-line no-unused-vars
 const GlyphEffectOrder = orderedEffectList.mapToObject(e => e, (e, idx) => idx);
@@ -757,6 +758,7 @@ function getGlyphEffectValues(effectKey) {
   return player.reality.glyphs.active
   // eslint-disable-next-line no-bitwise
     .filter(glyph => ((1 << GameDatabase.reality.glyphEffects[effectKey].bitmaskIndex) & glyph.effects) !== 0)
+    .filter(glyph => generatedTypes.includes(glyph.type) === GameDatabase.reality.glyphEffects[effectKey].isGenerated)
     .map(glyph => getSingleGlyphEffectFromBitmask(effectKey, glyph));
 }
 
@@ -814,7 +816,8 @@ function separateEffectKey(effectKey) {
   return [type, effect];
 }
 
-// Turns a glyph effect bitmask into an effect list and corresponding values
+// Turns a glyph effect bitmask into an effect list and corresponding values. This also picks up non-generated effects,
+// since there is some id overlap. Those should be filtered out as needed after calling this function.
 function getGlyphEffectsFromBitmask(bitmask, level, strength) {
   return orderedEffectList
     .map(effectName => GameDatabase.reality.glyphEffects[effectName])

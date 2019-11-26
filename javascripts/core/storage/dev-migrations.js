@@ -484,6 +484,13 @@ GameStorage.devMigrations = {
     },
     GameStorage.migrations.convertAchievementsToBits,
     GameStorage.migrations.removePower,
+    player => {
+      const cursedMask = 15;
+      const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
+      allGlyphs.forEach(glyph => {
+        if (glyph.type === "cursed") glyph.effects = cursedMask;
+      });
+    },
   ],
 
   patch(player) {

@@ -56,6 +56,8 @@ class GlyphEffectConfig {
     this.id = setup.id;
     /** @member{number}   bit position for the effect in the effect bitmask */
     this.bitmaskIndex = setup.bitmaskIndex;
+    /** @member{boolean}  flag to separate "basic"/effarig glyphs from cursed/reality glyphs */
+    this.isGenerated = setup.isGenerated;
     /** @member{string[]} the types of glyphs this effect can occur on */
     this.glyphTypes = setup.glyphTypes;
     /** @member{string} See info about setup, above*/
@@ -117,7 +119,8 @@ class GlyphEffectConfig {
   /** @private */
   static checkInputs(setup) {
     const KNOWN_KEYS = ["id", "bitmaskIndex", "glyphTypes", "singleDesc", "totalDesc", "genericDesc", "effect",
-      "formatEffect", "formatSingleEffect", "combine", "softcap", "conversion", "alteredColor", "alterationType"];
+      "formatEffect", "formatSingleEffect", "combine", "softcap", "conversion", "alteredColor", "alterationType",
+      "isGenerated"];
     const unknownField = Object.keys(setup).find(k => !KNOWN_KEYS.includes(k));
     if (unknownField !== undefined) {
       throw new Error(`Glyph effect "${setup.id}" includes unrecognized field "${unknownField}"`);
@@ -172,6 +175,7 @@ GameDatabase.reality.glyphEffects = [
   {
     id: "timepow",
     bitmaskIndex: 0,
+    isGenerated: true,
     glyphTypes: ["time", "reality"],
     singleDesc: "Time Dimension power boost +{value}",
     totalDesc: "Time Dimension multipliers ^{value}",
@@ -182,6 +186,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "timespeed",
     bitmaskIndex: 1,
+    isGenerated: true,
     glyphTypes: ["time", "reality"],
     singleDesc: "Multiply game speed by {value}",
     totalDesc: "Game runs ×{value} faster",
@@ -196,6 +201,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "timeetermult",
     bitmaskIndex: 2,
+    isGenerated: true,
     glyphTypes: ["time", "reality"],
     singleDesc: "Multiply eternitied stat gain by {value}",
     totalDesc: "Eternitied stat gain ×{value}",
@@ -209,6 +215,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "timeEP",
     bitmaskIndex: 3,
+    isGenerated: true,
     glyphTypes: ["time", "reality"],
     singleDesc: () => (GlyphAlteration.isAdded("time")
       ? "EP gain ×{value} [and ^]{value2}"
@@ -228,6 +235,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "dilationDT",
     bitmaskIndex: 4,
+    isGenerated: true,
     glyphTypes: ["dilation", "reality"],
     singleDesc: "Multiply Dilated Time gain by {value}",
     totalDesc: "DT gain ×{value}",
@@ -241,6 +249,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "dilationgalaxyThreshold",
     bitmaskIndex: 5,
+    isGenerated: true,
     glyphTypes: ["dilation", "reality"],
     singleDesc: "Free galaxy threshold multiplier ×{value}",
     genericDesc: "Free galaxy cost multiplier",
@@ -254,6 +263,7 @@ GameDatabase.reality.glyphEffects = [
     // TTgen slowly generates TT, value amount is per second, displayed per hour
     id: "dilationTTgen",
     bitmaskIndex: 6,
+    isGenerated: true,
     glyphTypes: ["dilation", "reality"],
     singleDesc: () => (GlyphAlteration.isAdded("dilation")
       ? "Generates {value} TT/hour [and\nmultiplies TT generation by] {value2}"
@@ -274,6 +284,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "dilationpow",
     bitmaskIndex: 7,
+    isGenerated: true,
     glyphTypes: ["dilation", "reality"],
     singleDesc: "Normal Dimension power boost +{value} while dilated",
     totalDesc: "Normal Dimension multipliers ^{value} while dilated",
@@ -285,6 +296,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "replicationspeed",
     bitmaskIndex: 8,
+    isGenerated: true,
     glyphTypes: ["replication", "reality"],
     singleDesc: "Multiply replication speed by {value}",
     totalDesc: "Replication speed ×{value}",
@@ -299,6 +311,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "replicationpow",
     bitmaskIndex: 9,
+    isGenerated: true,
     glyphTypes: ["replication", "reality"],
     singleDesc: "Replicanti multiplier power boost +{value}",
     totalDesc: "Replicanti multiplier ^{value}",
@@ -312,6 +325,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "replicationdtgain",
     bitmaskIndex: 10,
+    isGenerated: true,
     glyphTypes: ["replication", "reality"],
     singleDesc: () => (GlyphAlteration.isAdded("replication")
       ? "Multiply DT [and replicanti speed] by \nlog₁₀(replicanti)×{value}"
@@ -338,6 +352,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "replicationglyphlevel",
     bitmaskIndex: 11,
+    isGenerated: true,
     glyphTypes: ["replication", "reality"],
     singleDesc: () => `Replicanti scaling for next glyph level: \n^${shorten(0.4, 1, 1)}
       ➜ ^(${shorten(0.4, 1, 1)} + {value})`,
@@ -356,6 +371,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "infinitypow",
     bitmaskIndex: 12,
+    isGenerated: true,
     glyphTypes: ["infinity", "reality"],
     singleDesc: "Infinity Dimension power boost +{value}",
     totalDesc: "Infinity Dimension multipliers ^{value}",
@@ -369,6 +385,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "infinityrate",
     bitmaskIndex: 13,
+    isGenerated: true,
     glyphTypes: ["infinity", "reality"],
     singleDesc: () => `Infinity power conversion rate: \n^${shortenSmallInteger(7)}
       ➜ ^(${shortenSmallInteger(7)} + {value})`,
@@ -381,6 +398,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "infinityIP",
     bitmaskIndex: 14,
+    isGenerated: true,
     glyphTypes: ["infinity", "reality"],
     singleDesc: () => (GlyphAlteration.isAdded("infinity")
       ? "IP gain ×{value} [and ^]{value2}"
@@ -402,6 +420,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "infinityinfmult",
     bitmaskIndex: 15,
+    isGenerated: true,
     glyphTypes: ["infinity", "reality"],
     singleDesc: "Multiply infinitied stat gain by {value}",
     totalDesc: "Infinitied stat gain ×{value}",
@@ -416,6 +435,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "powerpow",
     bitmaskIndex: 16,
+    isGenerated: true,
     glyphTypes: ["power", "reality"],
     singleDesc: () => (GlyphAlteration.isAdded("power")
       ? "Normal Dimension power boost +{value}\n[and Dark Matter dimensions x]{value2}"
@@ -436,6 +456,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "powermult",
     bitmaskIndex: 17,
+    isGenerated: true,
     glyphTypes: ["power", "reality"],
     singleDesc: "Normal Dimension multipliers ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("power")
@@ -448,6 +469,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "powerdimboost",
     bitmaskIndex: 18,
+    isGenerated: true,
     glyphTypes: ["power", "reality"],
     singleDesc: "Dimension Boost multiplier ×{value}",
     genericDesc: "Dimension Boost multiplier",
@@ -460,6 +482,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "powerbuy10",
     bitmaskIndex: 19,
+    isGenerated: true,
     glyphTypes: ["power", "reality"],
     singleDesc: () => `Increase the bonus from buying ${shortenSmallInteger(10)} dimensions by ×{value}`,
     totalDesc: () => `Multiplier from "Buy ${shortenSmallInteger(10)}" ×{value}`,
@@ -470,6 +493,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigblackhole",
     bitmaskIndex: 20,
+    isGenerated: true,
     glyphTypes: ["effarig"],
     singleDesc: "Game speed ^{value}",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75,
@@ -478,6 +502,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigrm",
     bitmaskIndex: 21,
+    isGenerated: true,
     glyphTypes: ["effarig"],
     singleDesc: "Reality Machine multiplier x{value}",
     genericDesc: "Reality Machine multiplier",
@@ -491,6 +516,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigglyph",
     bitmaskIndex: 22,
+    isGenerated: true,
     glyphTypes: ["effarig"],
     singleDesc: "Instability starting glyph level +{value}",
     genericDesc: "Instability starting level",
@@ -500,6 +526,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigachievement",
     bitmaskIndex: 23,
+    isGenerated: true,
     glyphTypes: ["effarig"],
     singleDesc: "All achievement related effects ^{value}",
     genericDesc: "Achievement effects ^x",
@@ -512,6 +539,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigforgotten",
     bitmaskIndex: 24,
+    isGenerated: true,
     glyphTypes: ["effarig"],
     singleDesc: () => (GlyphAlteration.isAdded("effarig")
       ? `Buy ${shortenSmallInteger(10)} multiplier ^{value} [and\nDimension Boost multiplier ^]{value2}`
@@ -531,6 +559,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigdimensions",
     bitmaskIndex: 25,
+    isGenerated: true,
     glyphTypes: ["effarig"],
     singleDesc: "All dimension multipliers ^{value}",
     genericDesc: "All dimension multipliers ^x",
@@ -540,6 +569,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigantimatter",
     bitmaskIndex: 26,
+    isGenerated: true,
     glyphTypes: ["effarig"],
     singleDesc: () => `Antimatter production: ${shortenSmallInteger(10)}^x -> ${shortenSmallInteger(10)}^(x^{value})`,
     genericDesc: "Antimatter production exponent",
@@ -548,7 +578,8 @@ GameDatabase.reality.glyphEffects = [
     combine: GlyphCombiner.multiply,
   }, {
     id: "cursedgalaxies",
-    bitmaskIndex: 27,
+    bitmaskIndex: 0,
+    isGenerated: false,
     glyphTypes: ["cursed"],
     singleDesc: `Galaxies are {value} less effective`,
     genericDesc: "Galaxies are less effective",
@@ -558,7 +589,8 @@ GameDatabase.reality.glyphEffects = [
     combine: GlyphCombiner.multiply,
   }, {
     id: "curseddimensions",
-    bitmaskIndex: 28,
+    bitmaskIndex: 1,
+    isGenerated: false,
     glyphTypes: ["cursed"],
     singleDesc: "All dimension multipliers ^{value}",
     genericDesc: "All dimension multipliers are reduced",
@@ -568,7 +600,8 @@ GameDatabase.reality.glyphEffects = [
     combine: GlyphCombiner.multiply,
   }, {
     id: "cursedtickspeed",
-    bitmaskIndex: 29,
+    bitmaskIndex: 2,
+    isGenerated: false,
     glyphTypes: ["cursed"],
     singleDesc: "Multiply free tickspeed threshold increase by {value}x",
     genericDesc: "Multiply free tickspeed threshold increase",
@@ -578,7 +611,8 @@ GameDatabase.reality.glyphEffects = [
     combine: GlyphCombiner.add,
   }, {
     id: "cursedeternity",
-    bitmaskIndex: 30,
+    bitmaskIndex: 3,
+    isGenerated: false,
     glyphTypes: ["cursed"],
     singleDesc: "Divide EP gain by {value} ",
     genericDesc: "Divide EP gain by",

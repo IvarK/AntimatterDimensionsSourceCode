@@ -40,10 +40,13 @@ GameDatabase.celestials.v = {
     {
       id: 3,
       name: "Young Boy",
-      description: value => `Get ${shorten(value)} Antimatter in Eternity Challenge 12 without unlocking Time Dilation.`,
+      description: value => `Get ${shorten(value)} Antimatter in Eternity Challenge 12 without 
+        unlocking Time Dilation.`,
       values: [400e6, 450e6, 500e6, 600e6, 700e6, 800e6].map(Decimal.pow10),
       condition: x => EternityChallenge(12).isRunning && player.antimatter.gte(x) && !TimeStudy.dilation.isBought,
-      currentValue: () => ((EternityChallenge(12).isRunning && !TimeStudy.dilation.isBought) ? player.antimatter.exponent : 0),
+      currentValue: () => ((EternityChallenge(12).isRunning && !TimeStudy.dilation.isBought)
+        ? player.antimatter.exponent
+        : 0),
       formatRecord: x => (x === 0 ? shortenSmallInteger(0) : shorten(Decimal.pow10(x))),
     },
     {
@@ -71,7 +74,7 @@ GameDatabase.celestials.v = {
         `Unlock reality with at least ${shortenSmallInteger(value)} cursed ${pluralize("glyph", value)}`,
       values: [1, 2, 3, 4, 5],
       condition: x => TimeStudy.reality.isBought && player.celestials.v.cursedThisRun >= x,
-      currentValue: () => TimeStudy.reality.isBought ? player.celestials.v.cursedThisRun : 0,
+      currentValue: () => (TimeStudy.reality.isBought ? player.celestials.v.cursedThisRun : 0),
       formatRecord: x => shortenSmallInteger(x)
     },
     {
@@ -82,8 +85,9 @@ GameDatabase.celestials.v = {
       values: [50, 100, 150, 200, 300],
       condition: x => player.timestudy.theorem.gt(Math.pow(x, 2.4)) && 
         Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality,
-      currentValue: x => Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality ?
-        player.timestudy.theorem.toNumber() : 0,
+      currentValue: x => (Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality
+        ? player.timestudy.theorem.toNumber()
+        : 0),
       formatRecord: x => shortenSmallInteger(x)
     }
   ],

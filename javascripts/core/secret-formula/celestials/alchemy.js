@@ -402,7 +402,7 @@ GameDatabase.celestials.alchemy = {
       name: "Reality",
       symbol: "Ϟ",
       isBaseResource: false,
-      effect: amount => Math.floor(1.2 * amount),
+      effect: amount => Math.floor(amount),
       tier: 5,
       isUnlocked: () => player.celestials.ra.pets.effarig.level >= 25,
       lockText: "Effarig Level 25",

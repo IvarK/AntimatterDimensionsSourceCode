@@ -4,83 +4,37 @@ Vue.component("modal-reality-glyph-creation", {
   data() {
     return {
       realityGlyphLevel: 0,
+      // This contains an array where each entry is an array looking like [4000, "realitygalaxy"]
       possibleEffects: [],
-      selectedEffects: [],
-      maxEffects: 0,
-      effectCriteria: []
     };
   },
   methods: {
     update() {
       this.realityGlyphLevel = AlchemyResource.reality.effectValue;
-      this.possibleEffects = orderedEffectList.filter(effect => !effect.match("effarig*|cursed*"));
-      this.maxEffects = this.calculateMaxEffects();
-      this.effectCriteria = this.effectCriteriaList();
-    },
-    calculateMaxEffects() {
-      return this.effectCriteriaList().filter(c => c.value).length;
-    },
-    effectCriteriaList() {
-      const sumOfOtherAlchemyResources = AlchemyResources.all
-        .filter(r => r !== AlchemyResource.reality)
-        .map(r => r.amount)
-        .sum();
-      const highestLevelGlyph = player.reality.glyphs.active
-        .concat(player.reality.glyphs.inventory)
-        .map(glyph => glyph.level)
-        .max();
-      return [
-        {
-          desc: `At least ${shortenSmallInteger(5000)} Reality consumed for this glyph (Currently ` +
-            `${shortenSmallInteger(AlchemyResource.reality.amount)})`,
-          value: AlchemyResource.reality.amount >= 5000
-        },
-        {
-          desc: `${shortenSmallInteger(150000)} total of all other alchemy resources (Currently ` +
-            `${shortenSmallInteger(sumOfOtherAlchemyResources)})`,
-          value: sumOfOtherAlchemyResources >= 150000
-        },
-        {
-          desc: `${shorten(1e60, 0, 0)} relic shards (Currently ` +
-            `${shorten(player.celestials.effarig.relicShards, 2, 2)})`,
-          value: player.celestials.effarig.relicShards >= 1e60
-        },
-        {
-          desc: `A glyph with a level of at least ${shortenSmallInteger(12000)}, which is not consumed (highest: ` +
-            `${shortenSmallInteger(highestLevelGlyph)})`,
-          value: highestLevelGlyph >= 12000
-        }
-      ];
+      const realityEffectConfigs = Object.values(GameDatabase.reality.glyphEffects)
+        .filter(eff => eff.id.match("reality*"))
+        .sort((a, b) => a.bitmaskIndex - b.bitmaskIndex);
+      const minRealityEffectIndex = realityEffectConfigs.map(cfg => cfg.bitmaskIndex).min();
+      this.possibleEffects = realityEffectConfigs
+        .map(cfg => [realityGlyphEffectLevelThresholds[cfg.bitmaskIndex - minRealityEffectIndex], cfg.id]);
     },
     createRealityGlyph() {
       if (Glyphs.freeInventorySpace === 0) {
         Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
         return;
       }
-      Glyphs.addToInventory(GlyphGenerator.realityGlyph(
-        { actualLevel: this.realityGlyphLevel, rawLevel: this.realityGlyphLevel }, this.selectedEffects));
-      AlchemyResources.resetAmount();
-      // If the player leaves a choice open, don't spend shards
-      if (player.celestials.effarig.relicShards >= 1e60 && (this.selectedEffects === this.calculateMaxEffects())) {
-        player.celestials.effarig.relicShards -= 1e60;
-      }
-      for (const reaction of AlchemyReactions.all.compact()) {
-        reaction.isActive = false;
-      }
+      Glyphs.addToInventory(GlyphGenerator.realityGlyph(this.realityGlyphLevel));
+      AlchemyResource.reality.amount = 0;
       this.emitClose();
     },
     formatGlyphEffect(effect) {
-      const config = GameDatabase.reality.glyphEffects[effect];
+      if (this.realityGlyphLevel < effect[0]) return `(Requires glyph level ${shortenSmallInteger(effect[0])})`;
+      const config = GameDatabase.reality.glyphEffects[effect[1]];
       const value = config.effect(this.realityGlyphLevel, rarityToStrength(100));
       const effectTemplate = typeof config.singleDesc === "function"
         ? config.singleDesc()
         : config.singleDesc;
-      const effectText = effectTemplate
-        .replace("{value}", config.formatEffect(value))
-        .replace("[", "")
-        .replace("]", "");
-      if (config.conversion === undefined) return effectText;
-      return effectText.replace("{value2}", config.formatEffect(config.conversion(value)));
+      return effectTemplate.replace("{value}", config.formatEffect(value));
     }
   },
   template: `
@@ -88,26 +42,13 @@ Vue.component("modal-reality-glyph-creation", {
       <modal-close-button @click="emitClose"/>
       <div>  
         Create a level {{ shortenSmallInteger(realityGlyphLevel) }} reality glyph. Rarity will always be 100% and level
-        is unaffected by the glyph level cap. This will reset all alchemy resources.
+        scales on your current reality resource amount (which is all consumed). All other alchemy resources will be
+        unaffected. Reality glyphs have unique effects, some of which are only available with higher level glyphs.
       </div><br>
       <div>
-        Reality glyphs always have {{ shortenSmallInteger(4) }} effects picked from any of the
-        {{ shortenSmallInteger(5) }} basic glyph types; you can choose up to {{ shortenSmallInteger(maxEffects) }},
-        based on how many of the below requirements you meet. The rest of the effects, if any, are chosen randomly.
-        <div v-for="criterion in effectCriteria">
-          <span v-if="criterion.value">+</span>
-          <span v-else>-</span>
-          {{ criterion.desc }}
-        </div><br>
-      </div>
-      <div>
-        Possible Effects:
+        Available Effects:
       </div>
       <div v-for="effect in possibleEffects">
-        <input type="checkbox"
-          :value="effect"
-          :disabled="selectedEffects.length >= maxEffects && !selectedEffects.includes(effect)"
-          v-model="selectedEffects">
         {{ formatGlyphEffect(effect) }}
       </div><br>
         <button class="o-primary-btn" v-on:click="createRealityGlyph()">Create a Reality glyph!</button>

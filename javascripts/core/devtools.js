@@ -154,9 +154,9 @@ dev.giveGlyph = function(level, rawLevel = level) {
   Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }));
 };
 
-dev.giveRealityGlyph = function(level, rawLevel = level) {
+dev.giveRealityGlyph = function(level) {
   if (Glyphs.freeInventorySpace === 0) return;
-  Glyphs.addToInventory(GlyphGenerator.realityGlyph({ actualLevel: level, rawLevel }, []));
+  Glyphs.addToInventory(GlyphGenerator.realityGlyph(level));
 };
 
 dev.decriminalize = function() {

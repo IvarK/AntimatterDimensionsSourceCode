@@ -7,7 +7,8 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "timeetermult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
-  "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedeternity"];
+  "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedeternity",
+  "realityglyphlevel", "realitygalaxy", "realityeffect3", "realityeffect4"];
 const generatedTypes = ["power", "infinity", "time", "replication", "dilation", "effarig"];
 
 // eslint-disable-next-line no-unused-vars
@@ -194,18 +195,17 @@ const GlyphGenerator = {
     };
   },
 
-  realityGlyph(level, chosenEffects) {
+  realityGlyph(level) {
     const str = rarityToStrength(100);
-    const maxEffects = 4;
-    const effects = this.generateRealityEffects(maxEffects, chosenEffects);
+    const effects = this.generateRealityEffects(level);
     const effectBitmask = makeGlyphEffectBitmask(effects);
     return {
       id: undefined,
       idx: null,
       type: "reality",
       strength: str,
-      level: level.actualLevel,
-      rawLevel: level.rawLevel,
+      level,
+      rawLevel: level,
       effects: effectBitmask,
     };
   },
@@ -283,21 +283,14 @@ const GlyphGenerator = {
     return num;
   },
 
-  // "count" specifies the total number of effects in the glyph. However, this won't remove effects if chosenEffects
-  // is larer than count.
-  generateRealityEffects(count, chosenEffects) {
-    const rng = this.getRNG();
-    let possibleEffects = orderedEffectList.filter(effect => !effect.match("effarig*"));
-    for (const chosenEffect of chosenEffects) {
-      possibleEffects = possibleEffects.filter(effect => !effect.match(chosenEffect));
-    }
-    const randomEffects = [];
-    for (let i = chosenEffects.length; i < count && possibleEffects.length > 0; i++) {
-      const nextEffect = possibleEffects[Math.floor(rng.uniform() * possibleEffects.length)];
-      possibleEffects = possibleEffects.filter(effect => !effect.match(nextEffect));
-      randomEffects.push(nextEffect);
-    }
-    return randomEffects.concat(chosenEffects);
+  // Populate a list of reality glyph effects based on level
+  generateRealityEffects(level) {
+    const numberOfEffects = realityGlyphEffectLevelThresholds.filter(lv => lv < level).length;
+    const sortedRealityEffects = Object.values(GameDatabase.reality.glyphEffects)
+      .filter(eff => eff.id.match("reality*"))
+      .sort((a, b) => a.bitmaskIndex - b.bitmaskIndex)
+      .map(eff => eff.id);
+    return sortedRealityEffects.slice(0, numberOfEffects);
   },
 
   /**

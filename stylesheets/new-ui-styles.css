@@ -7,7 +7,7 @@
   outline: none;
 }
 
-#ui {
+.t-normal #ui {
   --color-text: white;
   --color-base: #1d1b22;
   --color-accent: rgb(223, 80, 80);
@@ -15,23 +15,10 @@
   --color-good-dark: #138626;
 }
 
-body {
+body.t-normal {
   position: relative;
   color: white;
   background-color: #111014;
-}
-
-body.t-metro {
-  color: black;
-  background-color: white;
-}
-
-body.t-dark {
-  color: #888
-}
-
-body.t-s1 {
-  color: black;
 }
 
 #page {
@@ -731,6 +718,7 @@ body.t-s1 {
   height: 2rem;
   border-radius: 50%;
   font-size: 1.5rem;
+  transition-delay: 0s;
 }
 
 .t-metro .l-help-me,

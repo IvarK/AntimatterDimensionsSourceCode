@@ -4443,19 +4443,16 @@ screen and (max-width: 480px) {
 
 /*#endregion t-dark t-dark-metro*/
 
-/*#region t-inverted t-inverted-metro t-metro*/
-
-.t-inverted .c-modal,
-.t-inverted-metro .c-modal {
-  filter: invert(100%);
-}
+/*#region t-metro t-dark-metro t-inverted-metro t-s8 */
 
 .t-metro .c-modal,
-.t-inverted-metro .c-modal {
+.t-dark-metro,
+.t-inverted-metro .c-modal,
+.t-s8 .c-modal {
   border: 0.1rem solid black;
 }
 
-/*#endregion t-inverted t-inverted-metro t-metro*/
+/*#endregion t-metro t-dark-metro t-inverted-metro t-s8 */
 
 /*#region t-s1*/
 
@@ -4485,10 +4482,6 @@ screen and (max-width: 480px) {
 /*#endregion t-s7*/
 
 /*#region t-s8*/
-
-.t-s8 .c-modal {
-  border: 0.1rem solid black;
-}
 
 .t-s8 h3 {
   color: black;

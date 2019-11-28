@@ -12,7 +12,7 @@ GameDatabase.celestials.v = {
   runUnlocks: [
     {
       id: 0,
-      name: "Cool Runnings",
+      name: "Glyph Knight",
       description: value => `Unlock reality with at most ${value} ${pluralize("glyph", value)} equipped.`,
       values: [5, 4, 3, 2, 1, 0],
       condition: x => TimeStudy.reality.isBought && Glyphs.activeList.length <= x,
@@ -66,7 +66,7 @@ GameDatabase.celestials.v = {
     },
     {
       id: 6,
-      name: "Glyph War",
+      name: "Requiem for a Glyph",
       description: value => 
         `Unlock reality with at least ${shortenSmallInteger(value)} cursed ${pluralize("glyph", value)}`,
       values: [1, 2, 3, 4, 5],
@@ -81,8 +81,8 @@ GameDatabase.celestials.v = {
         `Get ${shortenSmallInteger(Math.pow(value, 2.4))} TT with a 1e-${value} black hole`,
       values: [50, 100, 150, 200, 300],
       condition: x => player.timestudy.theorem.gt(Math.pow(x, 2.4)) && 
-        Decimal.pow10(x).reciprocate().gte(player.minNegativeBlackHoleThisReality),
-      currentValue: x => Decimal.pow10(x).reciprocate().gte(player.minNegativeBlackHoleThisReality) ?
+        Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality,
+      currentValue: x => Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality ?
         player.timestudy.theorem.toNumber() : 0,
       formatRecord: x => shortenSmallInteger(x)
     }

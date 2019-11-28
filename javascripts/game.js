@@ -857,7 +857,7 @@ window.onload = function() {
       kong.updatePurchases();
     }
     document.getElementById("loading").style.display = "none";
-    document.body.style.overflowY = "scroll";
+    document.body.style.overflowY = "auto";
   }, 500);
 };
 

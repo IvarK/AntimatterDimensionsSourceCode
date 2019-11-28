@@ -9,7 +9,13 @@ Vue.component("new-inf-dimensions-tab", {
       incomeType: "",
       isEC8Running: false,
       EC8PurchasesLeft: 0,
-      isAnyAutobuyerUnlocked: false
+      isAnyAutobuyerUnlocked: false,
+      conversionRate: 0,
+      nextDimCapIncrease: 0,
+      tesseractCost: new Decimal(0),
+      totalDimCapIncrease: 0,
+      canBuyTesseract: false,
+      enslavedCompleted: false
     };
   },
   computed: {
@@ -24,11 +30,11 @@ Vue.component("new-inf-dimensions-tab", {
     update() {
       const infinityPower = player.infinityPower;
       this.infinityPower.copyFrom(infinityPower);
+      this.conversionRate = getInfinityConversionRate();
       if (EternityChallenge(9).isRunning) {
         this.dimMultiplier.copyFrom(Decimal.pow(Math.max(infinityPower.log2(), 1), 4).max(1));
       } else {
-        const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
-        this.dimMultiplier.copyFrom(infinityPower.pow(conversionRate).max(1));
+        this.dimMultiplier.copyFrom(infinityPower.pow(this.conversionRate).max(1));
       }
       this.powerPerSecond.copyFrom(InfinityDimension(1).productionPerSecond);
       this.incomeType = EternityChallenge(7).isRunning ? "Seventh Dimensions" : "Infinity Power";
@@ -37,6 +43,11 @@ Vue.component("new-inf-dimensions-tab", {
         this.EC8PurchasesLeft = player.eterc8ids;
       }
       this.isAnyAutobuyerUnlocked = InfinityDimension(1).isAutobuyerUnlocked;
+      this.nextDimCapIncrease = Enslaved.nextDimCapIncrease;
+      this.tesseractCost.copyFrom(Enslaved.tesseractCost);
+      this.totalDimCapIncrease = player.celestials.enslaved.totalDimCapIncrease;
+      this.canBuyTesseract = Enslaved.canBuyTesseract;
+      this.enslavedCompleted = Enslaved.isCompleted;
     },
     maxAll() {
       buyMaxInfinityDimensions();
@@ -44,6 +55,9 @@ Vue.component("new-inf-dimensions-tab", {
     toggleAllAutobuyers() {
       toggleAllInfDims();
     },
+    buyTesseract() {
+      Enslaved.buyTesseract();
+    }
   },
   template:
   `<div class="l-infinity-dim-tab">
@@ -55,6 +69,17 @@ Vue.component("new-inf-dimensions-tab", {
       <span class="c-infinity-dim-description__accent">{{shortenMoney(dimMultiplier)}}</span>x
       multiplier on all dimensions
     </p>
+  </div>
+    <div class="l-infinity-dim-tab__enslaved-reward-container" v-if="enslavedCompleted">
+    <button 
+      class="c-infinity-dim-tab__tesseract-button"
+      :class="{ 'c-infinity-dim-tab__tesseract-button--disabled': !canBuyTesseract }"
+      @click="buyTesseract">
+      <p>Buy a Tesseract</p>
+      <p>Increase dimension caps by {{ shorten(nextDimCapIncrease, 2) }}</p>
+      <p><b>Costs: {{ shorten(tesseractCost, 0, 0) }} IP</b></p>
+    </button>
+    <div>Total dimension cap increase: {{ shorten(totalDimCapIncrease, 2) }}</div>
   </div>
   <div>You are getting {{shortenDimensions(powerPerSecond)}} {{incomeType}} per second.</div>
   <primary-button

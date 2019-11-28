@@ -41,5 +41,9 @@ GameDatabase.reality.glyphSacrifice = [
     id: "reality",
     effect: () => 1 + Math.sqrt(player.reality.glyphs.sac.reality) / 25,
     description: amount => `${formatPercents(amount - 1, 2)} increased alchemy yield`,
+  }, {
+    id: "cursed",
+    effect: () => 666,
+    description: amount => `${amount}x nothing`
   }
 ].mapToObject(g => g.id, g => g);

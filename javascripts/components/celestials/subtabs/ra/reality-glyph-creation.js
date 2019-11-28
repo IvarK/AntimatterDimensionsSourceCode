@@ -13,7 +13,7 @@ Vue.component("modal-reality-glyph-creation", {
   methods: {
     update() {
       this.realityGlyphLevel = AlchemyResource.reality.effectValue;
-      this.possibleEffects = orderedEffectList.filter(effect => !effect.match("effarig*"));
+      this.possibleEffects = orderedEffectList.filter(effect => !effect.match("effarig*|cursed*"));
       this.maxEffects = this.calculateMaxEffects();
       this.effectCriteria = this.effectCriteriaList();
     },

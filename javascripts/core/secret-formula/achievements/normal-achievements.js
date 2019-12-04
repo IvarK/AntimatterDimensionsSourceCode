@@ -199,7 +199,7 @@ GameDatabase.achievements.normal = [
     id: 43,
     name: "Zero Deaths",
     tooltip: "Get to Infinity without Dimension shifts, boosts or Antimatter Galaxies in a challenge.",
-    checkRequirement: () => player.galaxies === 0 && DimBoost.purchasedBoosts === 0 && NormalChallenge.current,
+    checkRequirement: () => player.galaxies === 0 && DimBoost.purchasedBoosts === 0 && NormalChallenge.isRunning,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: "Dimensions 1-4 are 25% stronger.",
     effect: 1.25

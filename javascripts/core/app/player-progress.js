@@ -41,21 +41,11 @@ class PlayerProgress {
   }
 
   static challengeCompleted() {
-    for (let i = 2; i < 13; i++) {
-      if (NormalChallenge(i).isCompleted) {
-        return true;
-      }
-    }
-    return false;
+    return NormalChallenges.all.slice(1).some(c => c.isCompleted);
   }
 
   static infinityChallengeCompleted() {
-    for (let i = 1; i < 9; i++) {
-      if (InfinityChallenge(i).isCompleted) {
-        return true;
-      }
-    }
-    return false;
+    return InfinityChallenges.all.some(c => c.isCompleted);
   }
 }
 

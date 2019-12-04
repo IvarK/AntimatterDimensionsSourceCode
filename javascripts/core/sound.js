@@ -1,12 +1,19 @@
 "use strict";
 
-class SoundEffectState extends GameMechanicState {
+class SoundEffectState {
   constructor(config) {
-    super(config);
+    if (!config) throw new Error("Must specify config for SoundEffectState");
+    this.config = config;
+  }
+
+  static createIndex(gameData) {
+    this.index = mapGameData(gameData, config => new this(config));
   }
 
   play() {
-      new Audio(`audio/${this.config.fileName}`).play();
+    const sound = new Audio(`audio/${this.config.fileName}.wav`);
+    sound.volume = 0.5;
+    sound.play();
   }
 }
 

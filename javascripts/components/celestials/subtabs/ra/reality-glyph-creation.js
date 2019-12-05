@@ -4,7 +4,7 @@ Vue.component("modal-reality-glyph-creation", {
   data() {
     return {
       realityGlyphLevel: 0,
-      // This contains an array where each entry is an array looking like [4000, "realitygalaxy"]
+      // This contains an array where each entry is an array looking like [4000, "realitygalaxies"]
       possibleEffects: [],
     };
   },

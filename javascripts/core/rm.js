@@ -8,7 +8,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedeternity",
-  "realityglyphlevel", "realitygalaxy", "realityeffect3", "realityeffect4"];
+  "realityglyphlevel", "realitygalaxies", "realitydimboost", "realitycopy"];
 const generatedTypes = ["power", "infinity", "time", "replication", "dilation", "effarig"];
 
 // eslint-disable-next-line no-unused-vars
@@ -373,6 +373,8 @@ const GlyphGenerator = {
 const Glyphs = {
   inventory: [],
   active: [],
+  copies: [],
+  levelBoost: 0,
   get inventoryList() {
     return player.reality.glyphs.inventory;
   },
@@ -477,6 +479,7 @@ const Glyphs = {
     player.reality.glyphs.active.push(glyph);
     glyph.idx = targetSlot;
     this.active[targetSlot] = glyph;
+    this.updateRealityGlyphEffects();
     EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
@@ -486,8 +489,9 @@ const Glyphs = {
       if (freeIndex < 0) break;
       const glyph = player.reality.glyphs.active.pop();
       this.active[glyph.idx] = null;
-      Glyphs.addToInventory(glyph);
+      this.addToInventory(glyph);
     }
+    this.updateRealityGlyphEffects();
     EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
   },
   unequip(activeIndex, requestedInventoryIndex) {
@@ -496,8 +500,38 @@ const Glyphs = {
     if (storedIndex < 0) return;
     const glyph = player.reality.glyphs.active.splice(storedIndex, 1)[0];
     this.active[activeIndex] = null;
-    Glyphs.addToInventory(glyph, requestedInventoryIndex);
+    this.addToInventory(glyph, requestedInventoryIndex);
+    this.updateRealityGlyphEffects();
     EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+  },
+  updateRealityGlyphEffects() {
+    // There should only be one reality glyph; this picks one pseudo-randomly if multiple are cheated/glitched in
+    const realityGlyph = player.reality.glyphs.active.filter(g => g.type === "reality")[0];
+    if (realityGlyph === undefined) {
+      this.levelBoost = 0;
+      this.copies = [];
+      return;
+    }
+    this.levelBoost = getAdjustedGlyphEffect("realityglyphlevel");
+    const copiedGlyphFactor = getAdjustedGlyphEffect("realitycopy");
+    if (copiedGlyphFactor !== 0) {
+      const realitySlot = realityGlyph.idx;
+      const glyphPrev = GlyphGenerator.copy(player.reality.glyphs.active
+        .filter(g => (g.idx - realitySlot + 1) % this.activeSlotCount === 0)[0]);
+      const glyphNext = GlyphGenerator.copy(player.reality.glyphs.active
+        .filter(g => (g.idx - realitySlot - 1) % this.activeSlotCount === 0)[0]);
+      this.copies = [];
+      if (glyphPrev !== undefined) {
+        glyphPrev.level = Math.floor(glyphPrev.level * copiedGlyphFactor);
+        glyphPrev.rawLevel = 0;
+        this.copies.push(glyphPrev);
+      }
+      if (glyphNext !== undefined) {
+        glyphNext.level = Math.floor(glyphNext.level * copiedGlyphFactor);
+        glyphNext.rawLevel = 0;
+        this.copies.push(glyphNext);
+      }
+    }
   },
   moveToSlot(glyph, targetSlot) {
     if (this.inventory[targetSlot] === null) this.moveToEmpty(glyph, targetSlot);
@@ -748,7 +782,7 @@ function getGlyphEffectValues(effectKey) {
   if (orderedEffectList.filter(effect => effect === effectKey).length === 0) {
     throw new Error(`Unknown glyph effect requested "${effectKey}"'`);
   }
-  return player.reality.glyphs.active
+  return player.reality.glyphs.active.concat(Glyphs.copies)
   // eslint-disable-next-line no-bitwise
     .filter(glyph => ((1 << GameDatabase.reality.glyphEffects[effectKey].bitmaskIndex) & glyph.effects) !== 0)
     .filter(glyph => generatedTypes.includes(glyph.type) === GameDatabase.reality.glyphEffects[effectKey].isGenerated)
@@ -770,6 +804,7 @@ function recalculateAllGlyphs() {
   for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
     calculateGlyph(player.reality.glyphs.inventory[i]);
   }
+  Glyphs.updateRealityGlyphEffects();
   Glyphs.refresh();
 }
 
@@ -822,9 +857,11 @@ function getGlyphEffectsFromBitmask(bitmask, level, strength) {
     }));
 }
 
-function getAdjustedGlyphLevel(level) {
+function getAdjustedGlyphLevel(glyph) {
+  const level = glyph.level;
   if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
   if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
+  if (glyph.type !== "reality" && glyph.rawLevel !== 0) return level + Glyphs.levelBoost;
   return level;
 }
 
@@ -835,7 +872,7 @@ function getSingleGlyphEffectFromBitmask(effectName, glyph) {
   if ((glyph.effects & (1 << glyphEffect.bitmaskIndex)) === 0) {
     return undefined;
   }
-  return glyphEffect.effect(getAdjustedGlyphLevel(glyph.level), glyph.strength);
+  return glyphEffect.effect(getAdjustedGlyphLevel(glyph), glyph.strength);
 }
 
 function countEffectsFromBitmask(bitmask) {

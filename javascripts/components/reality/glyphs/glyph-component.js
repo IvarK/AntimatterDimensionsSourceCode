@@ -362,7 +362,7 @@ Vue.component("glyph-component", {
       this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
         ? glyphRefinementGain(this.glyph)
         : glyphSacrificeGain(this.glyph);
-      this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph.level);
+      this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
     },
     moveTooltipTo(x, y) {
       const tooltipEl = this.$refs.tooltip.$el;

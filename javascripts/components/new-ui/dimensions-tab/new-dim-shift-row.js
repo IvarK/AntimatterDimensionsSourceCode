@@ -21,7 +21,7 @@ Vue.component("new-dim-shift-row", {
       return SHORT_DISPLAY_NAMES[this.requirement.tier];
     },
     buttonText() {
-      return `Reset the game for a ${this.isShift ? "new Dimension" : "boost"}`;
+      return `Reset your Dimensions for a ${this.isShift ? "new Dimension" : "boost"}`;
     },
     boostCountText() {
       const parts = [this.purchasedBoosts];
@@ -54,7 +54,7 @@ Vue.component("new-dim-shift-row", {
     <h4>Dimensional {{name}} ({{boostCountText}})</h4>
     <span>Requires: {{shortenSmallInteger(requirement.amount)}} {{dimName}} D</span>
     <button 
-      class="o-primary-btn o-primary-btn--new" style="height: 56px;"
+      class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
       :class="{ 'o-primary-btn--disabled': !isBuyable }"
       :enabled="isBuyable"
       @click="softReset"

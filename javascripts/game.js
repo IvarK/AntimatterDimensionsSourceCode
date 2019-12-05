@@ -861,7 +861,8 @@ window.onload = function() {
       kong.updatePurchases();
     }
     document.getElementById("loading").style.display = "none";
-  }, 1000);
+    document.body.style.overflowY = "auto";
+  }, 500);
 };
 
 window.onfocus = function() {

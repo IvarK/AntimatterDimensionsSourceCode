@@ -70,7 +70,7 @@ GameDatabase.tabs = [
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
-          PlayerProgress.infinityUnlocked()
+          PlayerProgress.challengeCompleted()
       },
       {
         key: "infinities",

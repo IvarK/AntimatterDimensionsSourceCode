@@ -2,18 +2,18 @@ body.t-inverted {
     background-color: black;
 }
 
-.t-inverted #container {
-    filter: invert(100%);
+.t-inverted #ui {
+  filter: invert(100%);
 }
 
 .t-inverted #realityanimbg {
-    filter: invert(1);
+  filter: invert(1);
 }
 
 .t-inverted #timetheorems,
 .t-inverted .c-ttshop__save-load-text,
 .t-inverted #minimizeArrow {
-    color: #bbb;
+  color: #bbb;
 }
 
 .t-inverted .c-tt-buy-button--unlocked {

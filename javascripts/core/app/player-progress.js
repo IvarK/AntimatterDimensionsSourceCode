@@ -4,7 +4,7 @@ class PlayerProgress {
   constructor(player) {
     this._player = player;
   }
-
+  
   get isRealityUnlocked() {
     return this._player.realities > 0;
   }
@@ -38,6 +38,14 @@ class PlayerProgress {
 
   static realityUnlocked() {
     return PlayerProgress.current.isRealityUnlocked;
+  }
+
+  static challengeCompleted() {
+    return NormalChallenges.all.slice(1).some(c => c.isCompleted);
+  }
+
+  static infinityChallengeCompleted() {
+    return InfinityChallenges.all.some(c => c.isCompleted);
   }
 }
 

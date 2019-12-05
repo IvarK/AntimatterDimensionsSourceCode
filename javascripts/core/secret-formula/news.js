@@ -886,8 +886,8 @@ GameDatabase.news = [
       "black; background: black;'>REDACTED</span> <span style='color: black; background: black;'>REDACTED</span> " +
       "work is that when you reach <span style='color: black; background: black;'>REDACTED</span> <span style=" +
       "'color: black; background: black;'>REDACTED</span>, you can <span style='color: black; background: black;'>" +
-      "REDACTED</span> the amount of <span style='color: black; background: black;'>REDACTED</span> in exchange for a" +
-      "<span style='color: black; background: black;'>REDACTED</span> <span style='color: black; background: " +
+      "REDACTED</span> the amount of <span style='color: black; background: black;'>REDACTED</span> in exchange for " +
+      "a <span style='color: black; background: black;'>REDACTED</span> <span style='color: black; background: " +
       "black;'>REDACTED</span>. These work just like <span style='color: black; background: black;'>REDACTED</span>, " +
       "improving <span style='color: black; background: black;'>REDACTED</span>."
   },

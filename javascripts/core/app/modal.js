@@ -39,6 +39,7 @@ Modal.shortcuts = new Modal("modal-shortcuts");
 Modal.animationOptions = new Modal("modal-animation-options");
 Modal.confirmationOptions = new Modal("modal-confirmation-options");
 Modal.loadGame = new Modal("modal-load-game");
+Modal.uiChoice = new Modal("modal-ui-choice");
 Modal.import = new Modal("modal-import");
 Modal.importTree = new Modal("modal-import-tree");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");

@@ -1,9 +1,6 @@
 body.t-dark-metro {
     background-image: url('../images/dark-bg.png');
     background-position: center;
-}
-
-.t-dark-metro .container {
     color: #757575;
 }
 

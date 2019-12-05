@@ -146,7 +146,7 @@ GameDatabase.infinity.upgrades = (function() {
     ipGen: {
       id: "passiveGen",
       cost: 10,
-      description: "Infinity Point generation based on fastest Infinity",
+      description: "Passively generate Infinity Points 10 times slower than your fastest Infinity",
       // Cutting corners: this is not actual effect (player.infMult is), but
       // it is totalIPMult that is displyed on upgrade
       effect: () => (Teresa.isRunning || V.isRunning ? new Decimal(0) : GameCache.totalIPMult.value),

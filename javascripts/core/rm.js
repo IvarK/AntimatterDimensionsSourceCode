@@ -861,8 +861,9 @@ function getAdjustedGlyphLevel(glyph) {
   const level = glyph.level;
   if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
   if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
+  const boostTypeBlacklist = ["effarig", "cursed", "reality"];
   // Copied glyphs have rawLevel === 0
-  if (glyph.type !== "reality" && glyph.type !== "cursed" && glyph.rawLevel !== 0) return level + Glyphs.levelBoost;
+  if (!boostTypeBlacklist.includes(glyph.type) && glyph.rawLevel !== 0) return level + Glyphs.levelBoost;
   return level;
 }
 

@@ -1983,7 +1983,7 @@ GameDatabase.news = [
       const names = [];
       if (PlayerProgress.infinityUnlocked()) names.push("Infinity");
       if (PlayerProgress.eternityUnlocked()) names.push("Eternity");
-      if (TimeStudy.dilation.isBought) names.push("Dilation");
+      if (PlayerProgress.dilationUnlocked()) names.push("Dilation");
       if (PlayerProgress.realityUnlocked()) names.push("Reality");
 
       const game1Name = names.randomElement();

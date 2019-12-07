@@ -43,8 +43,8 @@ GameDatabase.celestials.v = {
       description: value => `Get ${shorten(value)} Antimatter in Eternity Challenge 12 without 
         unlocking Time Dilation.`,
       values: [400e6, 450e6, 500e6, 600e6, 700e6, 800e6].map(Decimal.pow10),
-      condition: x => EternityChallenge(12).isRunning && player.antimatter.gte(x) && !TimeStudy.dilation.isBought,
-      currentValue: () => ((EternityChallenge(12).isRunning && !TimeStudy.dilation.isBought)
+      condition: x => EternityChallenge(12).isRunning && player.antimatter.gte(x) && !PlayerProgress.dilationUnlocked(),
+      currentValue: () => ((EternityChallenge(12).isRunning && !PlayerProgress.dilationUnlocked())
         ? player.antimatter.exponent
         : 0),
       formatRecord: x => (x === 0 ? shortenSmallInteger(0) : shorten(Decimal.pow10(x))),

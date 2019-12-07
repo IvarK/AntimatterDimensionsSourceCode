@@ -633,7 +633,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 4,
     isGenerated: false,
     glyphTypes: ["reality"],
-    singleDesc: "Temporarily increase the level of equipped basic glyphs by {value}",
+    singleDesc: "Increase the effective level of equipped basic glyphs by {value}",
     totalDesc: "Equipped basic glyph level +{value}",
     effect: (level, strength) => Math.floor(Math.sqrt(25 * level * strength)),
     formatEffect: x => shortenSmallInteger(x),

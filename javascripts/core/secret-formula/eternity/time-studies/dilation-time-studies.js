@@ -18,7 +18,7 @@ GameDatabase.eternity.timeStudies.dilation = [
     id: 2,
     description: "Unlock the 5th Time Dimension",
     cost: 1000000,
-    requirement: () => TimeStudy.dilation.isBought,
+    requirement: () => PlayerProgress.dilationUnlocked(),
     formatCost: shortenSmallInteger
   },
   {

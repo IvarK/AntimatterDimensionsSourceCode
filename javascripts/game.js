@@ -574,7 +574,7 @@ function gameLoop(diff, options = {}) {
   const currentEPmin = gainedEternityPoints().dividedBy(Time.thisEternityRealTime.totalMinutes);
   if (currentEPmin.gt(player.bestEPminThisEternity) && canEternity()) player.bestEPminThisEternity = currentEPmin;
 
-  if (TimeStudy.dilation.isBought) {
+  if (PlayerProgress.dilationUnlocked()) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
   }
 

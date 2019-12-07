@@ -359,7 +359,7 @@ const RA_UNLOCKS = {
   EFFARIG_UNLOCK: {
     id: 2,
     description: "Get Teresa to level 5",
-    reward: "Unlock Effarig memories",
+    reward: "Unlock Effarig's memories",
     pet: Ra.pets.teresa,
     level: 5
   },
@@ -405,7 +405,7 @@ const RA_UNLOCKS = {
   ENSLAVED_UNLOCK: {
     id: 8,
     description: "Get Effarig to level 5",
-    reward: "Unlock Enslaved memories",
+    reward: "Unlock Enslaved's memories",
     pet: Ra.pets.effarig,
     level: 5
   },
@@ -453,7 +453,7 @@ const RA_UNLOCKS = {
   V_UNLOCK: {
     id: 14,
     description: "Get Enslaved to level 5",
-    reward: "Unlock V memories",
+    reward: "Unlock V's memories",
     pet: Ra.pets.enslaved,
     level: 5
   },

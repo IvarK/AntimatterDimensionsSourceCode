@@ -36,6 +36,10 @@ class PlayerProgress {
     return PlayerProgress.current.isEternityUnlocked;
   }
 
+  static dilationUnlocked() {
+    return TimeStudy.dilation.isBought;
+  }
+
   static realityUnlocked() {
     return PlayerProgress.current.isRealityUnlocked;
   }

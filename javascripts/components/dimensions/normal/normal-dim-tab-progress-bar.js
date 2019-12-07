@@ -30,7 +30,7 @@ Vue.component("normal-dim-tab-progress-bar", {
         setProgress(player.antimatter, Decimal.MAX_NUMBER, "Percentage to Infinity");
       } else if (Enslaved.isCompleted) {
         setProgress(player.infinityPoints, Enslaved.tesseractCost, "Percentage to next Tesseract");
-      } else if (player.dilation.dilatedTime.gt(0)) {
+      } else if (PlayerProgress.dilationUnlocked()) {
         setProgress(player.eternityPoints, new Decimal("1e4000"), "Percentage to Reality");
       } else if (InfinityDimension(8).isUnlocked) {
         setProgress(

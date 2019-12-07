@@ -145,7 +145,7 @@ Vue.component("alchemy-tab", {
     },
     isDisplayed(reactionArrow) {
       return this.isUnlocked(reactionArrow) &&
-        (this.isActiveReaction(reactionArrow) || this.isFocusedReaction(reactionArrow))
+        (this.isActiveReaction(reactionArrow) || this.isFocusedReaction(reactionArrow));
     },
     isFocusedNode(node) {
       if (this.focusedResourceId === -1) return true;

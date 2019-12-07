@@ -11,7 +11,7 @@ Vue.component("alchemy-circle-node", {
       amount: 0,
       flow: 0,
       alwaysShowResource: false,
-      unlocked: false
+      isUnlocked: false
     };
   },
   computed: {
@@ -35,7 +35,7 @@ Vue.component("alchemy-circle-node", {
         "o-alchemy-node--base": this.isBaseResource,
         "o-alchemy-node--active": this.isReactionActive,
         "o-alchemy-node--unfocused": !this.isFocused,
-        "o-alchemy-node--locked": !this.unlocked,
+        "o-alchemy-node--locked": !this.isUnlocked,
       };
     },
     hintClassObject() {
@@ -47,7 +47,7 @@ Vue.component("alchemy-circle-node", {
       this.isReactionActive = !this.isBaseResource && this.node.resource.reaction.isActive;
       this.amount = this.resource.amount;
       this.flow = this.resource.flow;
-      this.unlocked = this.resource.isUnlocked;
+      this.isUnlocked = this.resource.isUnlocked;
       this.alwaysShowResource = player.options.showAlchemyResources;
     }
   },
@@ -63,7 +63,7 @@ Vue.component("alchemy-circle-node", {
         :resource="resource"
         :classObject="classObject"
       />
-      <span v-if="unlocked">
+      <span v-if="isUnlocked">
         <div v-if="alwaysShowResource"
           class="o-alchemy-node-resource--always-visible">
           {{ amount.toFixed(1) }}

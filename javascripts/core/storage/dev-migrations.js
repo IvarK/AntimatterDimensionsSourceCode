@@ -487,9 +487,9 @@ GameStorage.devMigrations = {
     player => {
       const cursedMask = 15;
       const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
-      allGlyphs.forEach(glyph => {
+      for (const glyph of allGlyphs) {
         if (glyph.type === "cursed") glyph.effects = cursedMask;
-      });
+      }
     },
   ],
 

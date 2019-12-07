@@ -50,6 +50,7 @@ Vue.component("equipped-glyphs", {
         position: "absolute",
         left: `calc(50% + ${this.glyphX(glyph.idx, 1.4)}rem)`,
         top: `calc(50% + ${this.glyphY(glyph.idx, 1.4)}rem)`,
+        opacity: 0.4,
       };
     },
     glyphX(idx, scale) {

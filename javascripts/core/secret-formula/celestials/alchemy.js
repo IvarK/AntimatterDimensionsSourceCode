@@ -332,13 +332,12 @@ GameDatabase.celestials.alchemy = {
       name: "Boundless",
       symbol: "Π",
       isBaseResource: false,
-      effect: amount => Math.clampMax(Math.ceil(amount / 10), 1111),
+      effect: amount => amount / 40000,
       tier: 4,
       uiOrder: 1,
       isUnlocked: () => player.celestials.ra.pets.effarig.level >= 19,
       lockText: "Effarig Level 19",
-      formatEffect: value => `Basic glyph level cap increased by ${shortenSmallInteger(value)} ` +
-        `(to ${shortenSmallInteger(value + 10000)})`,
+      formatEffect: value => `Tesseracts are +${formatPercents(value, 2, 2)} stronger`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.ETERNITY,

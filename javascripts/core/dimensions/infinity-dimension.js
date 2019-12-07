@@ -241,9 +241,10 @@ class InfinityDimensionState extends DimensionState {
     if (Enslaved.isRunning) {
       return 1;
     }
-    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease;
+    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease *
+      (1 + AlchemyResource.boundless.effectValue);
     const compressionBoost = Effects.max(0, CompressionUpgrade.infDimSoftcap);
-    return this._purchaseCap + enslavedBoost + compressionBoost;
+    return this._purchaseCap + Math.floor(enslavedBoost + compressionBoost);
   }
 
   get baseAmountCap() {

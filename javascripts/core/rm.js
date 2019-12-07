@@ -671,7 +671,7 @@ const Glyphs = {
     }
   },
   get levelCap() {
-    return 1000000 + AlchemyResource.boundless.effectValue;
+    return 1000000;
   },
   clearUndo() {
     player.reality.glyphs.undo = [];

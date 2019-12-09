@@ -41,6 +41,10 @@ class AlchemyResourceState extends GameMechanicState {
     this.config.flow = value;
   }
 
+  get isUnlocked() {
+    return this.config.isUnlocked();
+  }
+
   get canBeApplied() {
     return true;
   }
@@ -72,6 +76,7 @@ class AlchemyReaction {
   // 100%, but the reaction will be forced to occur at higher than 100% if there is significantly more reagent than
   // product. This allows resources to be created quickly when its reaction is initially turned on with saved reagents.
   get reactionYield() {
+    if (!this._product.isUnlocked || this._reagents.some(r => !r.resource.isUnlocked)) return 0;
     const forcingFactor = (this._reagents
       .map(r => r.resource.amount)
       .min() - this._product.amount) / 1000;
@@ -102,7 +107,7 @@ class AlchemyReaction {
   // is that if we assume that all the reactions are cap-limited, then by assigning priority in this way, reactions
   // get applied so that earlier reactions are less likely to reduce the yield of later reactions.
   get priority() {
-    let maxReagent = 11110;
+    let maxReagent = Glyphs.levelCap;
     for (const reagent of this._reagents) {
       const afterReaction = reagent.resource.amount - reagent.cost * this.actualYield;
       maxReagent = Math.min(maxReagent, afterReaction);
@@ -187,12 +192,7 @@ const AlchemyResource = (function() {
 
 const AlchemyResources = {
   all: Object.values(AlchemyResource),
-  base: Object.values(AlchemyResource).filter(r => r.isBaseResource),
-  resetAmount() {
-    for (const resource of AlchemyResources.all) {
-      resource.amount = 0;
-    }
-  }
+  base: Object.values(AlchemyResource).filter(r => r.isBaseResource)
 };
 
 const AlchemyReactions = (function() {

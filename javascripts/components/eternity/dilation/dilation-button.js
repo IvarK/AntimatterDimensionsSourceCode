@@ -14,7 +14,7 @@ Vue.component("dilation-button", {
   },
   methods: {
     update() {
-      this.isUnlocked = TimeStudy.dilation.isBought;
+      this.isUnlocked = PlayerProgress.dilationUnlocked();
       this.isRunning = player.dilation.active;
       if (!this.isRunning) return;
       this.canEternity = player.infinityPoints.gte(Player.eternityGoal);

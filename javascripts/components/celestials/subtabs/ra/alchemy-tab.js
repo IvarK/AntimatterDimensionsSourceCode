@@ -78,6 +78,7 @@ Vue.component("alchemy-tab", {
       realityCreationAvailable: false,
       alwaysShowResource: false,
       reactionProgress: 0,
+      estimatedCap: 0,
     };
   },
   computed: {
@@ -104,6 +105,7 @@ Vue.component("alchemy-tab", {
       this.alwaysShowResource = player.options.showAlchemyResources;
       const animationTime = 800;
       this.reactionProgress = (player.realTimePlayed % animationTime) / animationTime;
+      this.estimatedCap = estimatedAlchemyCap();
     },
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
@@ -118,6 +120,7 @@ Vue.component("alchemy-tab", {
     },
     handleClick(node) {
       const resource = node.resource;
+      if (!resource.isUnlocked) return;
       if (this.infoResourceId !== resource.id) {
         this.infoResourceId = resource.id;
         this.focusedResourceId = resource.id;
@@ -127,17 +130,22 @@ Vue.component("alchemy-tab", {
       resource.reaction.isActive = !resource.reaction.isActive;
       GameUI.update();
     },
+    isUnlocked(reactionArrow) {
+      return reactionArrow.product.resource.isUnlocked && reactionArrow.reagent.resource.isUnlocked;
+    },
     isCapped(reactionArrow) {
-      return reactionArrow.product.resource.amount >= reactionArrow.reagent.resource.amount;
+      return reactionArrow.product.resource.amount > 0 && 
+        reactionArrow.product.resource.amount >= reactionArrow.reagent.resource.amount;
     },
     isActiveReaction(reactionArrow) {
       return reactionArrow.reaction.isActive;
     },
     isFocusedReaction(reactionArrow) {
-      return reactionArrow.reaction.product.id === this.focusedResourceId;
+      return this.isUnlocked(reactionArrow) && reactionArrow.reaction.product.id === this.focusedResourceId;
     },
     isDisplayed(reactionArrow) {
-      return this.isActiveReaction(reactionArrow) || this.isFocusedReaction(reactionArrow);
+      return this.isUnlocked(reactionArrow) &&
+        (this.isActiveReaction(reactionArrow) || this.isFocusedReaction(reactionArrow));
     },
     isFocusedNode(node) {
       if (this.focusedResourceId === -1) return true;
@@ -173,7 +181,7 @@ Vue.component("alchemy-tab", {
     },
     reactionPathClass(reactionArrow) {
       return {
-        "o-alchemy-reaction-path": true,
+        "o-alchemy-reaction-path": this.isUnlocked(reactionArrow),
         "o-alchemy-reaction-path--limited": this.isCapped(reactionArrow) && this.isDisplayed(reactionArrow),
         "o-alchemy-reaction-path--focused": !this.isCapped(reactionArrow) && this.isFocusedReaction(reactionArrow),
       };
@@ -189,7 +197,8 @@ Vue.component("alchemy-tab", {
     },
     showAlchemyHowTo() {
       Modal.message.show("You can now refine glyphs using \"Alchemy Mode\" in the glyph auto-sacrifice settings. " +
-        "Refined glyphs will give 1% of their level in alchemy resources. Alchemy reactions can be toggled on " +
+        "Refined glyphs will give 1% of their level in alchemy resources, scaled linearly with rarity. For example " +
+        "a 70% rarity level 6000 glyph will give 42 of its resource. Alchemy reactions can be toggled on " +
         "and off by clicking the respective nodes, and each resource gives its own boost to various resources " +
         "in the game. Basic resource totals are limited to the level of the refined glyph, and compound resource " +
         "totals are limited to the amount of the reactants. All active alchemy reactions are applied once per " +
@@ -214,6 +223,7 @@ Vue.component("alchemy-tab", {
           @input="toggleResourceVisibility()">
         <label for="alwaysShowResourceBox">Always show resource totals</label>
       </div>
+      Resource cap, based on last 10 realities: {{ shorten(estimatedCap, 3, 2) }}
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">
           <circle

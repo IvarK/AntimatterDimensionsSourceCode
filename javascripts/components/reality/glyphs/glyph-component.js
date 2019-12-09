@@ -106,7 +106,9 @@ const GlyphTooltipComponent = {
       return this.levelOverride ? this.levelOverride : this.level;
     },
     sortedEffects() {
-      return getGlyphEffectsFromBitmask(this.effects, this.effectiveLevel, this.strength);
+      return getGlyphEffectsFromBitmask(this.effects, this.effectiveLevel, this.strength)
+        .filter(effect => 
+          GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },
     rarityInfo() {
       return getRarity(this.strength);
@@ -360,8 +362,7 @@ Vue.component("glyph-component", {
       this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
         ? glyphRefinementGain(this.glyph)
         : glyphSacrificeGain(this.glyph);
-      // eslint-disable-next-line no-nested-ternary
-      this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph.level);
+      this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
     },
     moveTooltipTo(x, y) {
       const tooltipEl = this.$refs.tooltip.$el;

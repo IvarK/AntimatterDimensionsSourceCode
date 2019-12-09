@@ -82,15 +82,15 @@ class DimBoost {
   }
 
   static get purchasedBoosts() {
-    return player.dimensionBoosts;
+    return Math.floor(player.dimensionBoosts * getAdjustedGlyphEffect("realitydimboost"));
   }
 
   static get freeBoosts() {
-    return Math.floor(Effects.max(0, CompressionUpgrade.freeBoost));
+    return Math.floor(Effects.max(0, CompressionUpgrade.freeBoost) * getAdjustedGlyphEffect("realitydimboost"));
   }
 
   static get totalBoosts() {
-    return this.purchasedBoosts + this.freeBoosts;
+    return (this.purchasedBoosts + this.freeBoosts);
   }
 }
 
@@ -150,14 +150,19 @@ function maxBuyDimBoosts() {
   const req1 = DimBoost.bulkRequirement(1);
   if (!req1.isSatisfied) return;
   const req2 = DimBoost.bulkRequirement(2);
-  if (!req2.isSatisfied) return softReset(1);
+  if (!req2.isSatisfied) {
+    softReset(1);
+    return;
+  }
   // Linearly extrapolate dimboost costs. req1 = a * 1 + b, req2 = a * 2 + b
   // so a = req2 - req1, b = req1 - a = 2 req1 - req2, num = (dims - b) / a
   const increase = req2.amount - req1.amount;
   let maxBoosts = Math.min(Number.MAX_VALUE,
     1 + Math.floor((NormalDimension(req1.tier).amount.toNumber() - req1.amount) / increase));
-  if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) return softReset(maxBoosts);
-
+  if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) {
+    softReset(maxBoosts);
+    return;
+  }
   // But in case of EC5 it's not, so do binary search for appropriate boost amount
   let minBoosts = 2;
   while (maxBoosts !== minBoosts + 1) {

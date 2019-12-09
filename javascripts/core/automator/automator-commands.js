@@ -524,7 +524,7 @@ const AutomatorCommands = ((() => {
         return true;
       },
       compile: () => () => {
-        if (TimeStudy.dilation.isBought) return AutomatorCommandStatus.NEXT_INSTRUCTION;
+        if (PlayerProgress.dilationUnlocked()) return AutomatorCommandStatus.NEXT_INSTRUCTION;
         return TimeStudy.dilation.purchase(true)
           ? AutomatorCommandStatus.NEXT_INSTRUCTION
           : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;

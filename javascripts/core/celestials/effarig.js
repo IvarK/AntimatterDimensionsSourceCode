@@ -43,9 +43,15 @@ const Effarig = {
     }
   },
   get glyphEffectAmount() {
-    // eslint-disable-next-line no-bitwise
-    const allEffectBitmask = Glyphs.activeList.reduce((prev, curr) => prev | curr.effects, 0);
-    return countEffectsFromBitmask(allEffectBitmask);
+    const genEffectBitmask = Glyphs.activeList
+      .filter(g => generatedTypes.includes(g.type))
+      // eslint-disable-next-line no-bitwise
+      .reduce((prev, curr) => prev | curr.effects, 0);
+    const nongenEffectBitmask = Glyphs.activeList
+      .filter(g => !generatedTypes.includes(g.type))
+      // eslint-disable-next-line no-bitwise
+      .reduce((prev, curr) => prev | curr.effects, 0);
+    return countEffectsFromBitmask(genEffectBitmask) + countEffectsFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {

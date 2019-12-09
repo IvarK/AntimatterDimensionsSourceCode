@@ -559,7 +559,7 @@ GameDatabase.reality.glyphEffects = [
       : `"Buy ${shortenSmallInteger(10)}" multiplier ^x`),
     effect: (level, strength) => 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4),
     formatEffect: x => shorten(x, 2, 2),
-    combine: GlyphCombiner.add,
+    combine: GlyphCombiner.multiply,
     conversion: x => Math.sqrt(x),
     alteredColor: () => GlyphAlteration.getAdditionColor("effarig"),
     alterationType: ALTERATION_TYPE.ADDITION

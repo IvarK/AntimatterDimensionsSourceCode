@@ -38,26 +38,26 @@ Vue.component("matter-dimension-row", {
   `<div class="c-matter-dimension-container">
     <div class="o-matter-dimension-amount"> {{ shorten(amount, 2, 0) }}</div>
     <div class="c-matter-dimension-buttons">
-      <button
-        @click="dimension.buyChance()"
-        class="o-matter-dimension-button"
-        :class="{ 'o-matter-dimension-button--available': canBuyChance }">
+      <button 
+        @click="dimension.buyChance()" 
+        class="o-matter-dimension-button" 
+        :class="{ 'o-matter-dimension-button--available': canBuyChance }"> 
         {{ chance }}% <span v-if="chance !== 100"><br>Cost: {{ shorten(chanceCost, 2, 0) }}</span>
       </button>
-      <button
-        @click="dimension.buyInterval()"
-        class="o-matter-dimension-button"
-        :class="{ 'o-matter-dimension-button--available': canBuyInterval }">
+      <button 
+        @click="dimension.buyInterval()" 
+        class="o-matter-dimension-button" 
+        :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> 
         {{ interval.toFixed(2) }}ms <span v-if="baseInterval.gt(50)"><br>Cost: {{ shorten(intervalCost, 2, 0) }}</span>
       </button>
-      <button
-        @click="dimension.buyPower()"
-        class="o-matter-dimension-button"
-        :class="{ 'o-matter-dimension-button--available': canBuyPower }">
+      <button 
+        @click="dimension.buyPower()" 
+        class="o-matter-dimension-button" 
+        :class="{ 'o-matter-dimension-button--available': canBuyPower }"> 
         {{ shorten(power, 2, 2) }}x <br>Cost: {{ shorten(powerCost, 2, 0) }}
       </button>
     </div>
   </div>
-
+  
   `
 })

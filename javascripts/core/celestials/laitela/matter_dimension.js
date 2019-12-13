@@ -51,19 +51,19 @@ class MatterDimensionState {
   }
 
   get chanceCost() {
-    return Decimal.pow(CHANCE_COST_MULT,
+    return Decimal.pow(CHANCE_COST_MULT, 
       this.dimension.chanceUpgrades + Math.max((this.dimension.chanceUpgrades - 15) * 2, 0))
       .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(CHANCE_START_COST);
   }
 
   get intervalCost() {
-    return Decimal.pow(INTERVAL_COST_MULT,
+    return Decimal.pow(INTERVAL_COST_MULT, 
       this.dimension.intervalUpgrades + Math.max((this.dimension.intervalUpgrades - 9) * 2, 0))
       .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST);
   }
 
   get powerCost() {
-    return Decimal.pow(POWER_COST_MULT,
+    return Decimal.pow(POWER_COST_MULT, 
       this.dimension.powerUpgrades + Math.max((this.dimension.powerUpgrades - 8) * 2, 0))
       .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_START_COST);
   }

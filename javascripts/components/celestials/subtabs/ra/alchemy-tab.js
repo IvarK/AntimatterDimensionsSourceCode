@@ -134,7 +134,7 @@ Vue.component("alchemy-tab", {
       return reactionArrow.product.resource.isUnlocked && reactionArrow.reagent.resource.isUnlocked;
     },
     isCapped(reactionArrow) {
-      return reactionArrow.product.resource.amount > 0 && 
+      return reactionArrow.product.resource.amount > 0 &&
         reactionArrow.product.resource.amount >= reactionArrow.reagent.resource.amount;
     },
     isActiveReaction(reactionArrow) {
@@ -197,13 +197,13 @@ Vue.component("alchemy-tab", {
     },
     showAlchemyHowTo() {
       Modal.message.show("You can now refine glyphs using \"Alchemy Mode\" in the glyph auto-sacrifice settings. " +
-        "Refined glyphs will give 1% of their level in alchemy resources, scaled linearly with rarity. For example " +
-        "a 70% rarity level 6000 glyph will give 42 of its resource. Alchemy reactions can be toggled on " +
-        "and off by clicking the respective nodes, and each resource gives its own boost to various resources " +
-        "in the game. Basic resource totals are limited to the level of the refined glyph, and compound resource " +
-        "totals are limited to the amount of the reactants. All active alchemy reactions are applied once per " +
-        "reality, unaffected by amplification. You can show the current" +
-        "totals of all alchemy resources by holding shift.");
+        "Refined glyphs will give their level cubed divided by 10 billion in alchemy resources, scaled linearly " +
+        "with rarity. For example, 6000^3 / 1e10 = 21.6, so a 70% rarity level 6000 glyph will give 0.7 * 21.6 = " +
+        "15.12 of its resource. Alchemy reactions can be toggled on and off by clicking the respective nodes, and " +
+        "each resource gives its own boost to various resources in the game. Basic resource totals are limited to " +
+        "100 times the gain from refining a perfect glyph of the same level, and compound resource totals are " +
+        "limited to the amount of the reactants. All active alchemy reactions are applied once per reality, " +
+        "unaffected by amplification. You can show the current totals of all alchemy resources by holding shift.");
     },
     setAllReactions(value) {
       for (const reaction of AlchemyReactions.all.compact()) {
@@ -234,8 +234,8 @@ Vue.component("alchemy-tab", {
             :r="orbitSize(orbit)"
             :class="orbitClass"
           />
-        </svg> 
-        <alchemy-circle-node 
+        </svg>
+        <alchemy-circle-node
           v-for="(node, i) in layout.nodes"
           :key="i"
           :node="node"
@@ -255,7 +255,7 @@ Vue.component("alchemy-tab", {
             v-bind="reactionArrowPositions(reactionArrow)"
             :class="reactionArrowClass(reactionArrow)"
           />
-        </svg> 
+        </svg>
       </div>
       <button class="o-primary-btn" @click="setAllReactions(true)">Turn on all reactions</button>
       <button class="o-primary-btn" @click="setAllReactions(false)">Turn off all reactions</button>

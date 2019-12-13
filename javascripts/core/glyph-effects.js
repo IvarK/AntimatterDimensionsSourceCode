@@ -242,10 +242,10 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply Dilated Time gain by {value}",
     totalDesc: "DT gain ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("dilation")
-      ? Math.pow(1.005, level) * 15
-      : Math.pow(level * strength, 1.5) * 2),
+      ? Decimal.pow(1.005, level).times(15)
+      : Decimal.pow(level * strength, 1.5) * 2),
     formatEffect: x => shorten(x, 2, 1),
-    combine: GlyphCombiner.multiply,
+    combine: effects => ({ value: effects.reduce(Decimal.prodReducer, new Decimal(1)), capped: false }),
     alteredColor: () => GlyphAlteration.getEmpowermentColor("dilation"),
     alterationType: ALTERATION_TYPE.EMPOWER
   }, {
@@ -304,10 +304,10 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Replication speed ×{value}",
     genericDesc: "Replication speed multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("replication")
-      ? Math.pow(1.007, level) * 10
-      : level * strength * 3),
+      ? Decimal.pow(1.007, level).times(10)
+      : Decimal.times(level, strength).times(3)),
     formatEffect: x => shorten(x, 2, 1),
-    combine: GlyphCombiner.multiply,
+    combine: effects => ({ value: effects.reduce(Decimal.prodReducer, new Decimal(1)), capped: false }),
     alteredColor: () => GlyphAlteration.getEmpowermentColor("replication"),
     alterationType: ALTERATION_TYPE.EMPOWER
   }, {
@@ -428,10 +428,10 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Infinitied stat gain ×{value}",
     genericDesc: "Infinitied stat gain multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("infinity")
-      ? Math.pow(1.02, level)
-      : Math.pow(level * strength, 1.5) * 2),
+      ? Decimal.pow(1.02, level)
+      : Decimal.pow(level * strength, 1.5) * 2),
     formatEffect: x => shorten(x, 2, 1),
-    combine: GlyphCombiner.multiply,
+    combine: effects => ({ value: effects.reduce(Decimal.prodReducer, new Decimal(1)), capped: false }),
     alteredColor: () => GlyphAlteration.getEmpowermentColor("infinity"),
     alterationType: ALTERATION_TYPE.EMPOWER
   }, {

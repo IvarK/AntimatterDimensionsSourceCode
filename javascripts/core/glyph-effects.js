@@ -159,7 +159,8 @@ class GlyphEffectConfig {
         const cappedValue = softcap(rawValue);
         return { value: cappedValue, capped: rawValue !== cappedValue };
       };
-    } else if (emptyCombine instanceof Decimal) {
+    }
+    if (emptyCombine instanceof Decimal) {
       if (softcap === undefined) return effects => ({ value: combine(effects), capped: false });
       const neqTest = emptyCombine.value instanceof Decimal ? (a, b) => a.neq(b) : (a, b) => a !== b;
       return combine = effects => {
@@ -167,10 +168,9 @@ class GlyphEffectConfig {
         const cappedValue = softcap(rawValue.value);
         return { value: cappedValue, capped: rawValue.capped || neqTest(rawValue.value, cappedValue) };
       };
-    } else {
-      // The result's an object, so it already has a capped propery, so we don't need to do anything.
-      return combine;
     }
+    // The result's an object, so it already has a capped propery, so we don't need to do anything.
+    return combine;
   }
 }
 

@@ -9,14 +9,14 @@ Vue.component("matter-dimension-row", {
       chance: 0,
       interval: new Decimal(0),
       power: new Decimal(0),
-      baseInterval: new Decimal(0),
       chanceCost: 0,
       intervalCost: 0,
       powerCost: 0,
       amount: new Decimal(0),
       canBuyChance: false,
       canBuyInterval: false,
-      canBuyPower: false
+      canBuyPower: false,
+      isIntervalCapped: false,
     };
   },
   methods: {
@@ -24,7 +24,6 @@ Vue.component("matter-dimension-row", {
       this.chance = this.dimension.chance;
       this.interval.copyFrom(this.dimension.interval);
       this.power.copyFrom(this.dimension.power);
-      this.baseInterval.copyFrom(this.dimension.baseInterval);
       this.chanceCost = this.dimension.chanceCost;
       this.intervalCost = this.dimension.intervalCost;
       this.powerCost = this.dimension.powerCost;
@@ -32,6 +31,7 @@ Vue.component("matter-dimension-row", {
       this.canBuyChance = this.dimension.canBuyChance;
       this.canBuyInterval = this.dimension.canBuyInterval;
       this.canBuyPower = this.dimension.canBuyPower;
+      this.isIntervalCapped = this.dimension.isIntervalCapped;
     }
   },
   template:
@@ -48,7 +48,7 @@ Vue.component("matter-dimension-row", {
         @click="dimension.buyInterval()" 
         class="o-matter-dimension-button" 
         :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> 
-        {{ interval.toFixed(2) }}ms <span v-if="baseInterval.gt(50)"><br>Cost: {{ shorten(intervalCost, 2, 0) }}</span>
+        {{ interval.toFixed(2) }}ms <span v-if="!isIntervalCapped"><br>Cost: {{ shorten(intervalCost, 2, 0) }}</span>
       </button>
       <button 
         @click="dimension.buyPower()" 

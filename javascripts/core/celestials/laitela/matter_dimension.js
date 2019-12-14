@@ -33,6 +33,10 @@ class MatterDimensionState {
      .times(Decimal.pow(2, this._tier))
      .times(1000);
   }
+  
+  get isIntervalCapped() {
+    return this.baseInterval.lte(50);
+  }
 
   // In milliseconds
   get interval() {
@@ -90,7 +94,7 @@ class MatterDimensionState {
   }
 
   get canBuyInterval() {
-    return this.intervalCost.lte(player.celestials.laitela.matter) && this.baseInterval.gt(50);
+    return this.intervalCost.lte(player.celestials.laitela.matter) && !this.isIntervalCapped;
   }
 
   get canBuyPower() {

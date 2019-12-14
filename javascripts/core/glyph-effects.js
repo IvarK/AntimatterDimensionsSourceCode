@@ -135,10 +135,10 @@ class GlyphEffectConfig {
     const emptyCombine = setup.combine([]);
     if (typeof emptyCombine !== "number" && !(emptyCombine instanceof Decimal)) {
       if (emptyCombine.value === undefined || emptyCombine.capped === undefined) {
-        throw new Error(`combine function for glyph effect "${setup.id}" has invalid return type`);
+        throw new Error(`The combine function for glyph effect "${setup.id}" has invalid return type`);
       }
       if (setup.softcap) {
-        throw new Error(`combine function for glyph effect "${setup.id}" gives capped information, ` +
+        throw new Error(`The combine function for glyph effect "${setup.id}" gives capped information, ` +
           `but there's also a softcap method`);
       }
     }

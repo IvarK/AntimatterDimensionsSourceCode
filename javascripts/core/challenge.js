@@ -137,7 +137,7 @@ const NormalChallenges = {
   /**
    * @type {NormalChallengeState[]}
    */
-  all: NormalChallengeState.index.compact(),
+  all: NormalChallenge.index.compact(),
   completeAll() {
     for (const challenge of NormalChallenges.all) challenge.complete();
   },
@@ -253,7 +253,7 @@ const InfinityChallenges = {
   /**
    * @type {InfinityChallengeState[]}
    */
-  all: InfinityChallengeState.index.compact(),
+  all: InfinityChallenge.index.compact(),
   completeAll() {
     for (const challenge of InfinityChallenges.all) challenge.complete();
   },

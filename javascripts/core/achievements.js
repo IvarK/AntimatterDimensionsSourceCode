@@ -96,7 +96,7 @@ const Achievements = {
   /**
    * @type {AchievementState[]}
    */
-  all: AchievementState.index.compact(),
+  all: Achievement.index.compact(),
 
   get effectiveCount() {
     const additionalAchievements = Ra.has(RA_UNLOCKS.V_UNLOCK)
@@ -212,7 +212,7 @@ const SecretAchievements = {
   /**
    * @type {SecretAchievementState[]}
    */
-  all: SecretAchievementState.index.compact(),
+  all: SecretAchievement.index.compact(),
 
   get enabledCount() {
     return SecretAchievements.all.filter(a => a.isEnabled).length;

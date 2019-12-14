@@ -62,7 +62,7 @@ const VRunUnlocks = {
   /**
    * @type {VRunUnlockState[]}
    */
-  all: VRunUnlockState.index.compact(),
+  all: VRunUnlock.index.compact(),
 };
 
 const V_UNLOCKS = {

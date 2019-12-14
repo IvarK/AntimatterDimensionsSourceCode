@@ -246,7 +246,7 @@ const EternityChallenges = {
   /**
    * @type {EternityChallengeState[]}
    */
-  all: EternityChallengeState.index.compact(),
+  all: EternityChallenge.index.compact(),
 
   get completions() {
     return EternityChallenges.all

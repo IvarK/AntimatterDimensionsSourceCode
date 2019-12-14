@@ -886,11 +886,11 @@ GameDatabase.achievements.normal = [
   {
     id: 138,
     name: "This is what I have to do to get rid of you.",
-    tooltip: () => `Reach ${shorten("1e28000", 0, 0)} IP without any time studies while Dilated.`,
+    tooltip: () => `Reach ${shorten("1e26000", 0, 0)} IP without any time studies while Dilated.`,
     checkRequirement: () =>
       player.timestudy.studies.length === 0 &&
       player.dilation.active &&
-      player.infinityPoints.exponent >= 28000,
+      player.infinityPoints.exponent >= 26000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Removes the downsides from the active and idle time study paths."
   },

@@ -114,13 +114,11 @@ class NormalChallengeState extends GameMechanicState {
   }
 }
 
-NormalChallengeState.createIndex(GameDatabase.challenges.normal);
-
 /**
  * @param {number} id
  * @return {NormalChallengeState}
  */
-const NormalChallenge = id => NormalChallengeState.index[id];
+const NormalChallenge = NormalChallengeState.createAccessor(GameDatabase.challenges.normal);
 
 /**
  * @returns {NormalChallengeState}
@@ -232,13 +230,11 @@ class InfinityChallengeState extends GameMechanicState {
   }
 }
 
-InfinityChallengeState.createIndex(GameDatabase.challenges.infinity);
-
 /**
  * @param {number} id
  * @return {InfinityChallengeState}
  */
-const InfinityChallenge = id => InfinityChallengeState.index[id];
+const InfinityChallenge = InfinityChallengeState.createAccessor(GameDatabase.challenges.infinity);
 
 /**
  * @returns {InfinityChallengeState}

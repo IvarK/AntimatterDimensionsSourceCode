@@ -223,13 +223,11 @@ class EternityChallengeState extends GameMechanicState {
   }
 }
 
-EternityChallengeState.createIndex(GameDatabase.challenges.eternity);
-
 /**
  * @param id
  * @return {EternityChallengeState}
  */
-const EternityChallenge = id => EternityChallengeState.index[id];
+const EternityChallenge = EternityChallengeState.createAccessor(GameDatabase.challenges.eternity);
 
 /**
  * @returns {EternityChallengeState}

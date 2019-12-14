@@ -55,8 +55,11 @@ class GameMechanicState {
     if (this.canBeApplied) applyFn(this.cappedEffectValue);
   }
 
-  static createIndex(gameData) {
-    this.index = mapGameData(gameData, config => new this(config));
+  static createAccessor(gameData) {
+    const index = mapGameData(gameData, config => new this(config));
+    const accessor = id => index[id];
+    accessor.index = index;
+    return accessor;
   }
 }
 

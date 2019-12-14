@@ -52,13 +52,11 @@ class VRunUnlockState extends GameMechanicState {
   }
 }
 
-VRunUnlockState.createIndex(GameDatabase.celestials.v.runUnlocks);
-
 /**
  * @param {number} id
  * @return {VRunUnlockState}
  */
-const VRunUnlock = id => VRunUnlockState.index[id];
+const VRunUnlock = VRunUnlockState.createAccessor(GameDatabase.celestials.v.runUnlocks);
 
 const VRunUnlocks = {
   /**

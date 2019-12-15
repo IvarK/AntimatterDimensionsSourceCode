@@ -345,7 +345,7 @@ GameDatabase.reality.glyphEffects = [
     // less than 1), so instead we do a multiplicative stacking relative to the "base" effect of a level 1, 0% glyph.
     // This is still just a flat DT mult when stacking multiple glyphs, but at least it's bigger than 2 or 3.
     combine: effects => ({
-      value: effects.reduce(Number.prodReducer, Math.pow(0.0003, 1 - effects.length)),
+      value: effects.length === 0 ? 0 : effects.reduce(Number.prodReducer, Math.pow(0.0003, 1 - effects.length)),
       capped: false
     }),
     conversion: x => Math.max(x, 1),

@@ -962,7 +962,7 @@ function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
     resource.amount += refinementGain;
     const decoherenceGain = refinementGain * AlchemyResource.decoherence.effectValue;
     for (const glyphType of GlyphTypes.list) {
-      if (glyphType !== GlyphTypes[glyph.type] && glyphType !== GlyphTypes.reality) {
+      if (glyphType !== GlyphTypes[glyph.type] && glyphType !== GlyphTypes.reality && glyphType !== GlyphTypes.cursed) {
         const otherResource = AlchemyResources.all[glyphType.alchemyResource];
         const maxResouce = Math.max(100 * refinementGain, otherResource.amount);
         otherResource.amount = Math.min(otherResource.amount + decoherenceGain, maxResouce);

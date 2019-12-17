@@ -151,6 +151,11 @@ function applyNDPowers(mult, tier) {
   const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
   const laitelaPowMultiplier = Laitela.has(LAITELA_UNLOCKS.DIM_POW) ? Laitela.dimensionMultPowerEffect : 1;
 
+  if (NormalChallenge(12).isRunning) {
+    if (tier === 2) multiplier = multiplier.pow(1.7);
+    if (tier === 4) multiplier = multiplier.pow(1.4);
+  }
+
   if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).effectValue);
   }

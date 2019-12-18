@@ -64,7 +64,7 @@ GameDatabase.celestials.alchemy = {
       name: "Cardinality",
       symbol: "α",
       isBaseResource: false,
-      effect: amount => 1.2 - 0.1 * (amount / 20000),
+      effect: amount => 1 + 0.2 / (1 + amount / 20000),
       tier: 2,
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 7,

@@ -960,8 +960,7 @@ GameDatabase.achievements.normal = [
     id: 148,
     name: "Royal Flush",
     tooltip: "Reality with one of each basic glyph type.",
-    checkRequirement: () => GLYPH_TYPES
-      .filter(type => type !== "effarig" && type !== "reality")
+    checkRequirement: () => BASIC_GLYPH_TYPES
       .every(type => Glyphs.activeList.some(g => g.type === type)),
     checkEvent: GameEvent.REALITY_RESET_BEFORE
   },

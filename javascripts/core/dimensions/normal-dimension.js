@@ -99,10 +99,16 @@ function getDimensionFinalMultiplierUncached(tier) {
 function applyNDMultipliers(mult, tier) {
   let multiplier = mult.times(GameCache.normalDimensionCommonMultiplier.value);
 
-  multiplier = multiplier.times(Decimal.pow(
+  let buy10AndDimboostContribution = Decimal.pow(
     NormalDimensions.buyTenMultiplier, Math.floor(NormalDimension(tier).bought / 10)
-    ));
-  multiplier = multiplier.times(DimBoost.multiplierToNDTier(tier));
+  ).times(DimBoost.multiplierToNDTier(tier));
+
+  if (NormalChallenge(12).isRunning) {
+    if (tier === 2) buy10AndDimboostContribution = buy10AndDimboostContribution.pow(1.7);
+    if (tier === 4) buy10AndDimboostContribution = buy10AndDimboostContribution.pow(1.4);
+  }
+
+  multiplier = multiplier.times(buy10AndDimboostContribution);
 
   let infinitiedMult = new Decimal(1).timesEffectsOf(
     NormalDimension(tier).infinityUpgrade,
@@ -150,11 +156,6 @@ function applyNDPowers(mult, tier) {
   const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
   const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
   const laitelaPowMultiplier = Laitela.has(LAITELA_UNLOCKS.DIM_POW) ? Laitela.dimensionMultPowerEffect : 1;
-
-  if (NormalChallenge(12).isRunning) {
-    if (tier === 2) multiplier = multiplier.pow(1.7);
-    if (tier === 4) multiplier = multiplier.pow(1.4);
-  }
 
   if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).effectValue);

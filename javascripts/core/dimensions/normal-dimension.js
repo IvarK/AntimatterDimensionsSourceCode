@@ -99,16 +99,10 @@ function getDimensionFinalMultiplierUncached(tier) {
 function applyNDMultipliers(mult, tier) {
   let multiplier = mult.times(GameCache.normalDimensionCommonMultiplier.value);
 
-  let buy10AndDimboostContribution = Decimal.pow(
+  multiplier = multiplier.times(Decimal.pow(
     NormalDimensions.buyTenMultiplier, Math.floor(NormalDimension(tier).bought / 10)
-  ).times(DimBoost.multiplierToNDTier(tier));
-
-  if (NormalChallenge(12).isRunning) {
-    if (tier === 2) buy10AndDimboostContribution = buy10AndDimboostContribution.pow(1.7);
-    if (tier === 4) buy10AndDimboostContribution = buy10AndDimboostContribution.pow(1.4);
-  }
-
-  multiplier = multiplier.times(buy10AndDimboostContribution);
+    ));
+  multiplier = multiplier.times(DimBoost.multiplierToNDTier(tier));
 
   let infinitiedMult = new Decimal(1).timesEffectsOf(
     NormalDimension(tier).infinityUpgrade,
@@ -377,8 +371,9 @@ function getDimensionProductionPerSecond(tier) {
   const dimension = NormalDimension(tier);
   let amount = dimension.amount.floor();
   if (NormalChallenge(12).isRunning) {
-    if (tier === 2) amount = amount.pow(1.5);
-    if (tier === 4) amount = amount.pow(1.3);
+    if (tier === 2) amount = amount.pow(1.6);
+    if (tier === 4) amount = amount.pow(1.4);
+    if (tier === 6) amount = amount.pow(1.2);
   }
   let production = amount.times(multiplier).dividedBy(Tickspeed.current.dividedBy(1000));
   if (NormalChallenge(2).isRunning) {

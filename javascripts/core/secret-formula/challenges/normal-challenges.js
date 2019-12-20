@@ -89,7 +89,8 @@ GameDatabase.challenges.normal = [
     id: 12,
     legacyId: 7,
     isQuickResettable: false,
-    description: "Each dimension produces the dimension 2 below it; 1st Dimensions produce reduced antimatter.",
+    description: "Each dimension produces the dimension 2 below it (1st Dimensions still " +
+      "produce antimatter). Dimensions 2, 4, and 6 are made stronger to compensate.",
     reward: "Automated Big Crunches"
   }
 ];

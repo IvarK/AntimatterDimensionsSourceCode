@@ -1,56 +1,54 @@
-body {
-  font-family: Arial;
+html {
+  font-size: 62.5%;
+  height: 100%;
+  width: 100%;
 }
 
-#container {
+body {
+  font-family: Arial, serif;
+}
+
+.depression {
+  text-align: center;
+  padding: 4%;
+  font-size: 2.5rem
+}
+
+.depression-amount {
+  font-size: 4.5rem;
+  font-weight: bold;
+}
+
+.stuff-container {
   margin: auto;
   text-align: center;
 }
 
-#depression {
-  text-align:center;
-  padding: 4%;
-  font-size: 25px
+.button {
+  margin: 1rem auto;
+  width: 13rem;
+  height: 5rem;
+  border: .2rem solid green;
+  border-radius: 1rem;
+  vertical-align: top;
+  cursor: pointer;
+  transition-duration: 0.3s;
 }
 
-
-#amount {
-  font-size: 45px;
-  font-weight: bold;
-}
-
-.btn {
-  margin: 10px auto;
-  width: 130px;
-  height: 50px;
-  border: 2px solid green;
-  border-radius: 10px;
+.button--stuff {
   background-color: grey;
   color: white;
-  vertical-align: top;
-  cursor: pointer;
-  transition-duration: 0.3s;
 }
 
-.btn:hover {
-  background-color: rgb(125, 151, 118);
+.button--stuff:hover {
+  background-color: #7d9776;
 }
 
-.prestigebtn {
-  margin: 10px auto;
-  width: 130px;
-  height: 50px;
-  border: 2px solid green;
-  border-radius: 10px;
-  background-color: rgb(221, 221, 221);
-  color: rgb(0, 0, 0);
-  vertical-align: top;
-  cursor: pointer;
-  transition-duration: 0.3s;
+.button--prestige {
+  background-color: #dddddd;
+  color: black;
 }
 
-.prestigebtn:hover {
-  background-color: rgb(141, 177, 221);
+.button--prestige:hover {
+  background-color: #8db1dd;
 }
-
-

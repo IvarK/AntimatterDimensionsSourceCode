@@ -149,23 +149,29 @@ function save() {
 
 function load() {
   const saveData = JSON.parse(localStorage.getItem("funsave"));
-  if (saveData) game = saveData;
-  game.depression = new Decimal(game.depression);
-  for (let i = 0; i < Object.keys(game.amounts).length; i++) {
-    game.amounts[i] = new Decimal(game.amounts[i]);
+  if (saveData === null) return;
+  saveData.depression = new Decimal(saveData.depression);
+  for (let i = 0; i < Object.keys(saveData.amounts).length; i++) {
+    saveData.amounts[i] = new Decimal(saveData.amounts[i]);
   }
-  for (let i = 0; i < Object.keys(game.prestige).length; i++) {
-    game.prestige[i] = new Decimal(game.prestige[i]);
+  for (let i = 0; i < Object.keys(saveData.prestige).length; i++) {
+    saveData.prestige[i] = new Decimal(saveData.prestige[i]);
   }
-  if (game.costs !== undefined) {
-    game.purchases = [];
-    for (let i = 0; i < Object.keys(game.costs).length; i++) {
-      const cost = new Decimal(game.costs[i]);
-      const baseCost = Decimal.pow(100, i);
-      const costIncrease = cost.dividedBy(baseCost);
-      game.purchases[i] = Decimal.floor(Decimal.log2(costIncrease)).max(0);
+  if (saveData.purchases !== undefined) {
+    for (let i = 0; i < Object.keys(saveData.purchases).length; i++) {
+      saveData.purchases[i] = new Decimal(saveData.purchases[i]);
     }
   }
+  if (saveData.costs !== undefined) {
+    saveData.purchases = [];
+    for (let i = 0; i < Object.keys(saveData.costs).length; i++) {
+      const cost = new Decimal(saveData.costs[i]);
+      const baseCost = Decimal.pow(100, i);
+      const costIncrease = cost.dividedBy(baseCost);
+      saveData.purchases[i] = Decimal.floor(Decimal.log2(costIncrease)).max(0);
+    }
+  }
+  game = saveData;
 }
 
 // eslint-disable-next-line prefer-const

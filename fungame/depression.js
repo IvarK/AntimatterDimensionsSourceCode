@@ -1,5 +1,7 @@
 "use strict";
 
+const UPDATE_INTERVAL = 33;
+const SAVE_INTERVAL = 5000;
 const notation = new ADNotations.ScientificNotation();
 
 let uiUpdateHooks = [];
@@ -106,7 +108,7 @@ class StuffState {
   }
 
   tick() {
-    const production = this.amount.times(this.prestige.dividedBy(33));
+    const production = this.amount.times(this.prestige.dividedBy(UPDATE_INTERVAL));
     if (this.id === 1) {
       game.depression = game.depression.plus(production);
     } else {
@@ -288,8 +290,8 @@ let vue;
 
 window.onload = () => {
   load();
-  setInterval(gameLoop, 33);
-  setInterval(save, 5000);
+  setInterval(gameLoop, UPDATE_INTERVAL);
+  setInterval(save, SAVE_INTERVAL);
   vue = new Vue({
     el: "#depression",
     components: {

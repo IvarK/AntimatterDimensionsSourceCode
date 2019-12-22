@@ -23,7 +23,7 @@ function breakInfinity() {
   if (!Autobuyer.bigCrunch.hasMaxedInterval) return;
   if (InfinityChallenge.isRunning) return;
   for (const autobuyer of Autobuyers.all) {
-    if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
+    if (autobuyer.data.interval !== undefined) autobuyer.maxIntervalForFree();
   }
   player.break = !player.break;
   EventHub.dispatch(player.break ? GameEvent.BREAK_INFINITY : GameEvent.FIX_INFINITY);

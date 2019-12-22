@@ -119,8 +119,6 @@ function buyMaxTickSpeed() {
     player.totalTickBought += purchases.quantity;
     player.antimatter = player.antimatter.minus(Decimal.pow10(purchases.logPrice)).max(0);
   }
-
-  flushValues();
 }
 
 function resetTickspeed() {

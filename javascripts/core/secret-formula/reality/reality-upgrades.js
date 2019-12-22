@@ -69,7 +69,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 7,
       cost: 15,
-      requirement: "Reach first Infinity with just 1 galaxy",
+      requirement: "Reach first Infinity with at most 1 galaxy",
       checkRequirement: () => player.galaxies <= 1 && isFirstInfinity(),
       checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
       description: "Infinitied stat gain is boosted from Antimatter Galaxy count",

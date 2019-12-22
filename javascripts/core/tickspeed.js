@@ -85,45 +85,43 @@ function buyTickSpeed() {
 function buyMaxTickSpeed() {
   if (!canBuyTickSpeed()) return;
   let antimatter = new Decimal(player.antimatter);
-  let totalTickBought = player.totalTickBought;
   const costBumps = player.chall9TickspeedCostBumps;
   function flushValues() {
     player.antimatter.fromDecimal(antimatter);
-    player.totalTickBought = totalTickBought;
   }
   const inCostScalingChallenge = NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning;
   const tickspeedMultDecreaseMaxed = BreakInfinityUpgrade.tickspeedCostMult.isMaxed;
   const costScale = Tickspeed.costScale;
 
   if (
-    costScale.calculateCost(totalTickBought + costBumps).lt(Decimal.MAX_NUMBER) ||
+    costScale.calculateCost(player.totalTickBought + costBumps).lt(Decimal.MAX_NUMBER) ||
     inCostScalingChallenge ||
     !tickspeedMultDecreaseMaxed
     ) {
 
     let shouldContinue = true;
-    while (antimatter.gt(costScale.calculateCost(totalTickBought + costBumps)) && shouldContinue) {
+    while (antimatter.gt(costScale.calculateCost(player.totalTickBought + costBumps)) && shouldContinue) {
       if (inCostScalingChallenge) {
         Tickspeed.multiplySameCosts();
       }
-      antimatter = antimatter.minus(costScale.calculateCost(totalTickBought + costBumps));
-      totalTickBought++;
+      antimatter = antimatter.minus(costScale.calculateCost(player.totalTickBought + costBumps));
+      player.totalTickBought++;
       player.thisInfinityLastBuyTime = player.thisInfinityTime;
       if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
-      if (costScale.calculateCost(totalTickBought + costBumps).gte(Decimal.MAX_NUMBER) &&
+      if (costScale.calculateCost(player.totalTickBought + costBumps).gte(Decimal.MAX_NUMBER) &&
         !inCostScalingChallenge &&
         tickspeedMultDecreaseMaxed) {
         shouldContinue = false;
       }
     }
   }
-  if (costScale.calculateCost(totalTickBought + costBumps).gte(Decimal.MAX_NUMBER)) {
-    const purchases = costScale.getMaxBought(totalTickBought + costBumps, antimatter);
+  if (costScale.calculateCost(player.totalTickBought + costBumps).gte(Decimal.MAX_NUMBER)) {
+    const purchases = costScale.getMaxBought(player.totalTickBought + costBumps, antimatter);
     if (purchases === null) {
       flushValues();
       return;
     }
-    totalTickBought += purchases.quantity;
+    player.totalTickBought += purchases.quantity;
     antimatter = antimatter.minus(Decimal.pow10(purchases.logPrice)).max(0);
   }
 

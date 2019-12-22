@@ -18,6 +18,7 @@ const GlyphCombiner = Object.freeze({
   // we have to add 1 - x.length to the actual sum, so that if all the exponents are close to 1 the result
   // is also close to 1 rather than close to x.length.
   addExponents: x => x.reduce(Number.sumReducer, 1 - x.length),
+  multiplyDecimal: x => x.reduce(Decimal.prodReducer, new Decimal(1))
 });
 
 /**
@@ -133,9 +134,13 @@ class GlyphEffectConfig {
     }
 
     const emptyCombine = setup.combine([]);
-    if (typeof emptyCombine !== "number") {
+    if (typeof emptyCombine !== "number" && !(emptyCombine instanceof Decimal)) {
       if (emptyCombine.value === undefined || emptyCombine.capped === undefined) {
-        throw new Error(`combine function for glyph effect "${setup.id}" has invalid return type`);
+        throw new Error(`The combine function for glyph effect "${setup.id}" has invalid return type`);
+      }
+      if (setup.softcap) {
+        throw new Error(`The combine function for glyph effect "${setup.id}" gives capped information, ` +
+          `but there's also a softcap method`);
       }
     }
   }
@@ -156,13 +161,17 @@ class GlyphEffectConfig {
         return { value: cappedValue, capped: rawValue !== cappedValue };
       };
     }
-    if (softcap === undefined) return combine;
-    const neqTest = emptyCombine.value instanceof Decimal ? (a, b) => a.neq(b) : (a, b) => a !== b;
-    return combine = effects => {
-      const rawValue = combine(effects);
-      const cappedValue = softcap(rawValue.value);
-      return { value: cappedValue, capped: rawValue.capped || neqTest(rawValue.value, cappedValue) };
-    };
+    if (emptyCombine instanceof Decimal) {
+      if (softcap === undefined) return effects => ({ value: combine(effects), capped: false });
+      const neqTest = emptyCombine.value instanceof Decimal ? (a, b) => a.neq(b) : (a, b) => a !== b;
+      return combine = effects => {
+        const rawValue = combine(effects);
+        const cappedValue = softcap(rawValue.value);
+        return { value: cappedValue, capped: rawValue.capped || neqTest(rawValue.value, cappedValue) };
+      };
+    }
+    // The result's an object, so it already has a capped propery, so we don't need to do anything.
+    return combine;
   }
 }
 
@@ -243,10 +252,10 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply Dilated Time gain by {value}",
     totalDesc: "DT gain ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("dilation")
-      ? Math.pow(1.005, level) * 15
-      : Math.pow(level * strength, 1.5) * 2),
+      ? Decimal.pow(1.005, level).times(15)
+      : Decimal.pow(level * strength, 1.5) * 2),
     formatEffect: x => shorten(x, 2, 1),
-    combine: GlyphCombiner.multiply,
+    combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("dilation"),
     alterationType: ALTERATION_TYPE.EMPOWER
   }, {
@@ -305,10 +314,10 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Replication speed ×{value}",
     genericDesc: "Replication speed multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("replication")
-      ? Math.pow(1.007, level) * 10
-      : level * strength * 3),
+      ? Decimal.pow(1.007, level).times(10)
+      : Decimal.times(level, strength).times(3)),
     formatEffect: x => shorten(x, 2, 1),
-    combine: GlyphCombiner.multiply,
+    combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("replication"),
     alterationType: ALTERATION_TYPE.EMPOWER
   }, {
@@ -429,10 +438,10 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Infinitied stat gain ×{value}",
     genericDesc: "Infinitied stat gain multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("infinity")
-      ? Math.pow(1.02, level)
-      : Math.pow(level * strength, 1.5) * 2),
+      ? Decimal.pow(1.02, level)
+      : Decimal.pow(level * strength, 1.5) * 2),
     formatEffect: x => shorten(x, 2, 1),
-    combine: GlyphCombiner.multiply,
+    combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("infinity"),
     alterationType: ALTERATION_TYPE.EMPOWER
   }, {
@@ -466,7 +475,7 @@ GameDatabase.reality.glyphEffects = [
       ? Decimal.pow(11111, level * 220)
       : Decimal.pow(level * strength * 10, level * strength * 10)),
     formatEffect: x => shorten(x, 2, 0),
-    combine: effects => ({ value: effects.reduce(Decimal.prodReducer, new Decimal(1)), capped: false }),
+    combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("power"),
     alterationType: ALTERATION_TYPE.EMPOWER
   }, {
@@ -628,7 +637,7 @@ GameDatabase.reality.glyphEffects = [
     // Effect at 1000 is 500 and at 5000 is 2500
     effect: (level, strength) => Decimal.pow10(level * strength / 3.5 / 2),
     formatEffect: x => shorten(x),
-    combine: effects => ({ value: effects.reduce(Decimal.prodReducer, new Decimal(1)), capped: false }),
+    combine: GlyphCombiner.multiplyDecimal,
   }, {
     id: "realityglyphlevel",
     bitmaskIndex: 4,

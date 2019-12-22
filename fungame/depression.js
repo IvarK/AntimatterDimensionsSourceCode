@@ -87,7 +87,7 @@ class StuffState {
   }
 
   get canPrestige() {
-    return Stuff(this.id + 5).isUnlocked;
+    return Stuff(this.id + 6).isUnlocked;
   }
 
   get nextPrestige() {

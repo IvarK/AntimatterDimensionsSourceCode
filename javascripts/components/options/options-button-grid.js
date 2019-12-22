@@ -38,6 +38,7 @@ Vue.component("options-button-grid", {
       cloud: false,
       hotkeys: false,
       commas: false,
+      offlineProgress: false,
       updateRate: 0
     };
   },
@@ -53,6 +54,9 @@ Vue.component("options-button-grid", {
     },
     commas(newValue) {
       player.options.commas = newValue;
+    },
+    offlineProgress(newValue) {
+      player.options.offlineProgress = newValue;
     },
     updateRate(newValue) {
       player.options.updateRate = newValue;
@@ -78,6 +82,7 @@ Vue.component("options-button-grid", {
       this.cloud = options.cloud;
       this.hotkeys = options.hotkeys;
       this.commas = options.commas;
+      this.offlineProgress = options.offlineProgress;
       this.updateRate = options.updateRate;
     },
     hardReset() {
@@ -170,14 +175,27 @@ Vue.component("options-button-grid", {
           class="o-primary-btn--option_font-large"
           onclick="GameOptions.toggleUI()"
         >{{ UILabel }}</options-button>
-        <update-rate-slider
-          v-model="updateRate"
-          oninput="GameOptions.refreshUpdateRate()"
+        <primary-button-on-off
+          class="o-primary-btn--option l-options-grid__button"
+          v-model="offlineProgress"
+          text="Offline progress:"
         />
         <options-button
           class="o-primary-btn--option_font-large"
           onclick="Modal.animationOptions.show();"
         >Animations</options-button>
+      </div>
+      <div class="l-options-grid__row">
+        <options-button
+           class="o-primary-btn--option l-options-grid__button--hidden"
+         />
+        <update-rate-slider
+          v-model="updateRate"
+          oninput="GameOptions.refreshUpdateRate()"
+        />
+        <options-button
+           class="o-primary-btn--option l-options-grid__button--hidden"
+         />
       </div>
     </div>`
 });

@@ -253,7 +253,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "DT gain ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("dilation")
       ? Decimal.pow(1.005, level).times(15)
-      : Decimal.pow(level * strength, 1.5) * 2),
+      : Decimal.pow(level * strength, 1.5).times(2)),
     formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("dilation"),
@@ -439,7 +439,7 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "Infinitied stat gain multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("infinity")
       ? Decimal.pow(1.02, level)
-      : Decimal.pow(level * strength, 1.5) * 2),
+      : Decimal.pow(level * strength, 1.5).times(2)),
     formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("infinity"),

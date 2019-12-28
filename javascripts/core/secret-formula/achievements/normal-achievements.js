@@ -4,53 +4,53 @@ GameDatabase.achievements.normal = [
   {
     id: 11,
     name: "You gotta start somewhere",
-    tooltip: "Buy a single 1st Dimension.",
+    tooltip: "Buy a 1st Dimension.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 12,
     name: "100 antimatter is a lot",
-    tooltip: "Buy a single 2nd Dimension.",
+    tooltip: "Buy a 2nd Dimension.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 13,
     name: "Half life 3 confirmed",
-    tooltip: "Buy a single 3rd Dimension.",
+    tooltip: "Buy a 3rd Dimension.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 14,
     name: "L4D: Left 4 Dimensions",
-    tooltip: "Buy a single 4th Dimension.",
+    tooltip: "Buy a 4th Dimension.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 15,
     name: "5 Dimension Antimatter Punch",
-    tooltip: "Buy a single 5th Dimension.",
+    tooltip: "Buy a 5th Dimension.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 16,
     name: "We couldn't afford 9",
     tooltip: () => (Enslaved.isRunning
-      ? "Buy a single 6th Dimension (they never amount to anything)"
-      : "Buy a single 6th Dimension."),
+      ? "Buy a 6th Dimension (they never amount to anything)"
+      : "Buy a 6th Dimension."),
       checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
     },
   {
     id: 17,
     name: "Not a luck related achievement",
-    tooltip: "Buy a single 7th Dimension.",
+    tooltip: "Buy a 7th Dimension.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 18,
     name: "90 degrees to infinity",
     tooltip: () => (Enslaved.isRunning
-      ? "Buy a single 8th Dimension (don't get used to it)"
-      : "Buy a single 8th Dimension."),
+      ? "Buy an 8th Dimension (don't get used to it)"
+      : "Buy an 8th Dimension."),
       checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
     },
   {

@@ -461,9 +461,13 @@ GameDatabase.achievements.normal = [
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: () => `Start with ${shorten(2e25, 0, 0)} antimatter ` +
       `and all Dimensions are stronger in the first ${shortenSmallInteger(300)}ms of Infinities.`,
-    effect: () => 330 / (Time.thisInfinity.totalMilliseconds + 30),
-    effectCondition: () => Time.thisInfinity.totalMilliseconds < 300,
-    secondaryEffect: () => 2e25
+    effects: {
+      dimensionMult: {
+        effect: () => 330 / (Time.thisInfinity.totalMilliseconds + 30),
+        effectCondition: () => Time.thisInfinity.totalMilliseconds < 300,
+      },
+      antimatter: 2e25
+    }
   },
   {
     id: 81,
@@ -902,8 +906,10 @@ GameDatabase.achievements.normal = [
     checkEvent: GameEvent.REALITY_RESET_BEFORE,
     reward: () => `${shortenSmallInteger(4)}x IP gain and boost from
       buying ${shortenSmallInteger(10)} Dimensions +${shorten(0.1, 0, 1)}.`,
-    effect: 4,
-    secondaryEffect: () => 0.1
+    effects: {
+      ipGain: 4,
+      buyTenMult: 0.1
+    }
   },
   {
     id: 142,

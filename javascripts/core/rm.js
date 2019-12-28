@@ -726,9 +726,7 @@ const Glyphs = {
   }
 };
 
-class GlyphSacrificeState extends GameMechanicState {
-  get canBeApplied() { return true; }
-}
+class GlyphSacrificeState extends GameMechanicState { }
 
 const GlyphSacrifice = (function() {
   const db = GameDatabase.reality.glyphSacrifice;

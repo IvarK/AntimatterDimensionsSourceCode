@@ -574,7 +574,7 @@ const Player = {
       Achievement(37),
       Achievement(54),
       Achievement(55),
-      Achievement(78).secondaryEffect
+      Achievement(78).effects.antimatter
     ).toDecimal();
   },
 

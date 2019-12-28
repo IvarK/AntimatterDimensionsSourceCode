@@ -45,7 +45,7 @@ class AlchemyResourceState extends GameMechanicState {
     return this.config.isUnlocked();
   }
 
-  get hasCustomEffectValue() {
+  get isCustomEffect() {
     return true;
   }
 

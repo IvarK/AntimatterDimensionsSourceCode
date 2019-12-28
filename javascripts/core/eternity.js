@@ -301,7 +301,7 @@ class EPMultiplierState extends GameMechanicState {
     Autobuyer.eternity.bumpAmount(Decimal.pow(5, diff));
   }
 
-  get hasCustomEffectValue() {
+  get isCustomEffect() {
     return true;
   }
 

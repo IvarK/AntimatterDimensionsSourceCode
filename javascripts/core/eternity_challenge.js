@@ -31,7 +31,7 @@ class EternityChallengeRewardState extends GameMechanicState {
     this._challenge = challenge;
   }
 
-  get hasCustomEffectValue() {
+  get isCustomEffect() {
     return true;
   }
 

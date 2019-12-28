@@ -5,21 +5,20 @@
  */
 class GameMechanicState extends Effect {
   constructor(config) {
-    super();
-    if (!config) throw new Error("Must specify config for GameMechanicState");
-    this._config = config;
-    if (config.effect !== undefined && !this.hasCustomEffectValue) {
-      this.defineEffect(config.effect, config.cap, config.effectCondition);
+    if (!config) {
+      throw new Error("Must specify config for GameMechanicState");
     }
+    super(config.effect, config.cap, config.effectCondition);
+    this._config = config;
     if (config.effects !== undefined) {
       this.effects = {};
       for (const key in config.effects) {
-        const effect = new Effect();
-        const value = config.effects[key];
-        if (typeof value === "number" || value instanceof Decimal) {
-          effect.defineEffect(value);
+        const nested = config.effects[key];
+        let effect;
+        if (typeof nested === "number" || nested instanceof Decimal) {
+          effect = new Effect(nested);
         } else {
-          effect.defineEffect(value.effect, value.cap, value.effectCondition);
+          effect = new Effect(nested.effect, nested.cap, nested.effectCondition);
         }
         Object.defineProperty(effect, "isEffectActive", {
           configurable: false,
@@ -36,10 +35,6 @@ class GameMechanicState extends Effect {
 
   get id() {
     return this.config.id;
-  }
-
-  get hasCustomEffectValue() {
-    return false;
   }
 
   static createAccessor(gameData) {

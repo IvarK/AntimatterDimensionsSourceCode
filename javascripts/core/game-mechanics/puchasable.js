@@ -13,7 +13,7 @@ class PurchasableMechanicState extends GameMechanicState {
     return this.currency.isAffordable(this.cost);
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return true;
   }
 
@@ -36,7 +36,7 @@ class PurchasableMechanicState extends GameMechanicState {
   set isBought(value) { throw new NotImplementedError(); }
 
   get canBeBought() {
-    return !this.isBought && this.isAffordable && this.isAvailable;
+    return !this.isBought && this.isAffordable && this.isAvailableForPurchase;
   }
 
   purchase() {

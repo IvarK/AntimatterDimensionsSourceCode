@@ -206,7 +206,7 @@ function getCostIncreaseThreshold() {
 
 function buyOneDimension(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailable || !dimension.isAffordable) return false;
+  if (!dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
 
   const cost = dimension.cost;
 
@@ -232,7 +232,7 @@ function buyOneDimension(tier) {
 
 function buyManyDimension(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailable || !dimension.isAffordableUntil10) return false;
+  if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return false;
   const cost = dimension.costUntil10;
 
   if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
@@ -250,7 +250,7 @@ function buyManyDimension(tier) {
 
 function buyAsManyAsYouCanBuy(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailable || !dimension.isAffordable) return false;
+  if (!dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
   const howMany = dimension.howManyCanBuy;
   const cost = dimension.cost.times(howMany);
 
@@ -292,7 +292,7 @@ function maxAll() {
 
 function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailable || !dimension.isAffordableUntil10) return;
+  if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
   const cost = dimension.costUntil10;
   let bulkLeft = bulk;
   const goal = Player.infinityGoal;
@@ -531,7 +531,7 @@ class NormalDimensionState extends DimensionState {
     return this.costUntil10.lte(this.currencyAmount);
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return false;
     if (this.tier > DimBoost.totalBoosts + 4) return false;
     if (this.tier > 1 &&

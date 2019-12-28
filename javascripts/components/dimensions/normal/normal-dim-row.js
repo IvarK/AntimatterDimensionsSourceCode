@@ -40,7 +40,7 @@ Vue.component("normal-dim-row", {
   methods: {
     update() {
       const tier = this.tier;
-      const isUnlocked = NormalDimension(tier).isAvailable;
+      const isUnlocked = NormalDimension(tier).isAvailableForPurchase;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
       const dimension = NormalDimension(tier);

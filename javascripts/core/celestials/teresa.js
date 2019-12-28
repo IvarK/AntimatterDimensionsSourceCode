@@ -125,7 +125,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     return this.cost === this.cap;
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return this.cost < this.currency.value;
   }
 

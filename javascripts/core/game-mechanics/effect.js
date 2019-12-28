@@ -57,7 +57,7 @@ class Effect {
           if (isNumber(effectValue)) {
             specializedProperty.get = () => Math.min(effect(), this.cap);
           } else if (isDecimal(effectValue)) {
-            effectValueProperty.get = () => Decimal.min(effect(), this.cap);
+            specializedProperty.get = () => Decimal.min(effect(), this.cap);
           } else {
             throw new Error("Unknown effect value type.");
           }

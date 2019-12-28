@@ -68,7 +68,7 @@ function buyMaxInfDims(tier) {
 
 function canBuyInfinityDimension(tier) {
   const dim = InfinityDimension(tier);
-  return !dim.isCapped && dim.isAvailableForPuchase && dim.isUnlocked;
+  return !dim.isCapped && dim.isAvailableForPurchase && dim.isUnlocked;
 
 }
 
@@ -139,7 +139,7 @@ class InfinityDimensionState extends DimensionState {
     return player.eternities.gte(10 + this.tier);
   }
 
-  get isAvailableForPuchase() {
+  get isAvailableForPurchase() {
     return this.isAffordable && (player.eterc8ids > 0 || !EternityChallenge(8).isRunning);
   }
 
@@ -205,7 +205,7 @@ class InfinityDimensionState extends DimensionState {
     mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
-    
+
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
 
     mult = mult.powEffectOf(AlchemyResource.infinity);

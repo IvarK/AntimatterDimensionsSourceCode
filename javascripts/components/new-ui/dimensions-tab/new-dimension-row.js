@@ -40,7 +40,7 @@ Vue.component("new-dimension-row", {
   methods: {
     update() {
       const tier = this.tier;
-      const isUnlocked = NormalDimension(tier).isAvailable;
+      const isUnlocked = NormalDimension(tier).isAvailableForPurchase;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
       const buyUntil10 = player.buyUntil10;
@@ -74,7 +74,7 @@ Vue.component("new-dimension-row", {
     <h3>{{name}} D<span class="mult">x{{ shortenMultiplier(multiplier) }}</span></h3>
     <span>{{amountDisplay}}</span>
     <button class="o-primary-btn o-primary-btn--new" @click="buy" :class="{ 'o-primary-btn--disabled': !isAffordable }">
-      <div 
+      <div
         class="button-content"
         :enabled="isAffordable"
         :ach-tooltip="cappedTooltip"

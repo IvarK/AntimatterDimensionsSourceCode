@@ -21,7 +21,7 @@ class PerkState extends SetPurchasableMechanicState {
     return 1;
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return this.id === 0 || this.connectedPerks.some(p => p.isBought);
   }
 

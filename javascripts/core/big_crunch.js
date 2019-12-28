@@ -161,7 +161,7 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
     return player.infinityUpgrades;
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return this._requirement === undefined || this._requirement.isBought;
   }
 
@@ -390,7 +390,7 @@ class BreakInfinityMultiplierCostUpgrade extends RebuyableMechanicState {
     return this.boughtAmount === this.config.maxUpgrades;
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return !this.isMaxed;
   }
 

@@ -17,7 +17,7 @@ class RebuyableMechanicState extends GameMechanicState {
     return this.config.cost();
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return true;
   }
 
@@ -44,7 +44,7 @@ class RebuyableMechanicState extends GameMechanicState {
   }
 
   get canBeBought() {
-    return this.isAffordable && this.isAvailable && !this.isCapped;
+    return this.isAffordable && this.isAvailableForPurchase && !this.isCapped;
   }
 
   purchase() {

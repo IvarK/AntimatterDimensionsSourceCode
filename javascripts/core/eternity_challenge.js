@@ -31,11 +31,15 @@ class EternityChallengeRewardState extends GameMechanicState {
     this._challenge = challenge;
   }
 
+  get hasCustomEffectValue() {
+    return true;
+  }
+
   get effectValue() {
     return this.config.effect(this._challenge.completions);
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this._challenge.completions > 0;
   }
 }
@@ -59,7 +63,7 @@ class EternityChallengeState extends GameMechanicState {
     return player.challenge.eternity.current === this.id;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isRunning;
   }
 

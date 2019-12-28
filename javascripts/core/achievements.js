@@ -3,13 +3,6 @@
 class AchievementState extends GameMechanicState {
   constructor(config) {
     super(config);
-    if (config.secondaryEffect) {
-      const secondaryConfig = {
-        id: config.id,
-        effect: config.secondaryEffect
-      };
-      this._secondaryState = new AchievementState(secondaryConfig);
-    }
     this._row = Math.floor(this.id / 10);
     this._column = this.id % 10;
     // eslint-disable-next-line no-bitwise
@@ -73,16 +66,8 @@ class AchievementState extends GameMechanicState {
     return this.isUnlocked;
   }
 
-  get isEffectConditionSatisfied() {
-    return this.config.effectCondition === undefined || this.config.effectCondition();
-  }
-
-  get canBeApplied() {
-    return this.isEnabled && this.isEffectConditionSatisfied;
-  }
-
-  get secondaryEffect() {
-    return this._secondaryState;
+  get isEffectActive() {
+    return this.isUnlocked;
   }
 }
 

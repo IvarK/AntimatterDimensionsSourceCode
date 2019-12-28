@@ -26,7 +26,7 @@ function normalDimensionCommonMultiplier() {
     Achievement(73),
     Achievement(74),
     Achievement(76),
-    Achievement(78),
+    Achievement(78).effects.dimensionMult,
     Achievement(84),
     Achievement(91),
     Achievement(92),
@@ -331,7 +331,7 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
     return;
   }
   let buying = maxBought.quantity;
-  if (buying > bulkLeft) buying = bulkLeft; 
+  if (buying > bulkLeft) buying = bulkLeft;
   dimension.amount = dimension.amount.plus(10 * buying).round();
   dimension.bought += 10 * buying;
   dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
@@ -596,9 +596,9 @@ const NormalDimensions = {
   },
   get buyTenMultiplier() {
     if (NormalChallenge(7).isRunning) return new Decimal(2).min(1 + DimBoost.totalBoosts / 5);
-  
+
     let mult = new Decimal(2).plusEffectsOf(
-      Achievement(141).secondaryEffect,
+      Achievement(141).effects.buyTenMult,
       EternityChallenge(3).reward
     );
 
@@ -606,9 +606,9 @@ const NormalDimensions = {
       InfinityUpgrade.buy10Mult,
       Achievement(58)
     ).times(getAdjustedGlyphEffect("powerbuy10"));
-  
+
     mult = mult.pow(getAdjustedGlyphEffect("effarigforgotten")).powEffectOf(InfinityUpgrade.buy10Mult.chargedEffect);
-  
+
     return mult;
   }
 };

@@ -152,7 +152,7 @@ class InfinityChallengeRewardState extends GameMechanicState {
     this._challenge = challenge;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this._challenge.isCompleted;
   }
 }
@@ -194,7 +194,7 @@ class InfinityChallengeState extends GameMechanicState {
     player.challenge.infinity.completedBits |= 1 << this.id;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isRunning;
   }
 

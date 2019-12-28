@@ -276,6 +276,7 @@ function buyUntilTen(tier) {
   dimension.challengeCostBump();
   dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10));
   dimension.bought += dimension.remainingUntil10;
+  onBuyDimension(tier);
 }
 
 function maxAll() {
@@ -319,7 +320,6 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
       buyUntilTen(tier);
       bulkLeft--;
     }
-    onBuyDimension(tier);
     return;
   }
 
@@ -335,7 +335,6 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   dimension.amount = dimension.amount.plus(10 * buying).round();
   dimension.bought += 10 * buying;
   dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
-  onBuyDimension(tier);
   const multAfter = Decimal.pow(NormalDimensions.buyTenMultiplier, dimension.bought / 10);
   if (multBefore.neq(multAfter) && auto === false) {
     floatText(tier, `x${shorten(multAfter.dividedBy(multBefore), 2, 1)}`);

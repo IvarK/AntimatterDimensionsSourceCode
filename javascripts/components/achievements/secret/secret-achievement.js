@@ -56,6 +56,7 @@ Vue.component("secret-achievement", {
       :style="styleObject"
       :ach-tooltip="tooltip"
       @click="onClick">
+      <hint-text type="achievements" class="l-hint-text--achievement">S{{row}}{{column}}</hint-text>
       <br>
      </div>`
 });

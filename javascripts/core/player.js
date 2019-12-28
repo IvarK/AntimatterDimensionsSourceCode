@@ -466,6 +466,13 @@ let player = {
     updateRate: 33,
     newUI: true,
     offlineProgress: true,
+    showHintText: {
+      achievements: false,
+      challenges: false,
+      studies: false,
+      realityUpgrades: false,
+      perks: false
+    },
     showAlchemyResources: false,
     chart: {
       updateRate: 1000,

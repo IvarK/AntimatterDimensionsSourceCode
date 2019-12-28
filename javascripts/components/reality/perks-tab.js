@@ -178,12 +178,12 @@ const PerkNetwork = {
 
 Vue.component("perks-tab", {
   computed: {
-    shiftDown() {
-      return ui.view.shiftDown;
+    showHintText() {
+      return ui.view.shiftDown || player.options.showHintText.perks;
     }
   },
   watch: {
-    shiftDown(newValue) {
+    showHintText(newValue) {
       PerkNetwork.setLabelVisibility(newValue);
     }
   },
@@ -193,6 +193,7 @@ Vue.component("perks-tab", {
   },
   mounted() {
     PerkNetwork.initializeIfNeeded();
+    PerkNetwork.setLabelVisibility(ui.view.shiftDown || player.options.showHintText.perks);
     PerkNetwork.updatePerkColors();
     PerkNetwork.resetPosition();
     this.$refs.tab.appendChild(PerkNetwork.container);

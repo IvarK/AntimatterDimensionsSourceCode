@@ -42,7 +42,7 @@ Vue.component("reality-upgrade-button", {
       class="l-reality-upgrade-btn c-reality-upgrade-btn"
       @click="upgrade.purchase()"
     >
-      <hint-text class="l-hint-text--reality-upgrade">RUPG {{config.id}}</hint-text>
+      <hint-text type="realityUpgrades" class="l-hint-text--reality-upgrade">RUPG {{config.id}}</hint-text>
       <description-display :config="config"/>
       <description-display
         v-if="!isAvailableForPurchase"

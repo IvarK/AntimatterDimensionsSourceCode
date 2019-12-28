@@ -21,7 +21,7 @@ const modalOptionsMixin = {
   methods: {
     update() {
       const progress = PlayerProgress.current;
-      this.bigCrunchUnlocked = progress.isInfinityUnlocked;
+      this.infinityUnlocked = progress.isInfinityUnlocked;
       this.eternityUnlocked = progress.isEternityUnlocked;
       this.realityUnlocked = progress.isRealityUnlocked;
       this.dilationUnlocked = progress.isRealityUnlocked || player.dilation.tachyonParticles.neq(0);

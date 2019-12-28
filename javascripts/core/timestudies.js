@@ -110,10 +110,12 @@ function autoBuyMaxTheorems(realDiff) {
     Perk.autobuyerTT1,
     Perk.autobuyerTT2,
     Perk.autobuyerTT3,
-    Perk.autobuyerTT4);
-  if (player.auto.ttTimer > period) {
+    Perk.autobuyerTT4
+  );
+  const milliseconds = TimeSpan.fromSeconds(period).totalMilliseconds;
+  if (player.auto.ttTimer > milliseconds) {
     TimeTheorems.buyMax(true);
-    player.auto.ttTimer = Math.min(player.auto.ttTimer - period, period);
+    player.auto.ttTimer = Math.min(player.auto.ttTimer - milliseconds, milliseconds);
   }
 }
 
@@ -144,10 +146,7 @@ function unlockDilation(quiet) {
   if (Perk.autounlockDilation2.isBought) {
     for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
   }
-  if (Perk.startTP.isBought) {
-    player.dilation.tachyonParticles =
-      player.dilation.tachyonParticles.plus(Enslaved.isRunning ? 1 : 10);
-  }
+  player.dilation.tachyonParticles = player.dilation.tachyonParticles.plusEffectOf(Perk.startTP);
 }
 
 function hasRow(row) {

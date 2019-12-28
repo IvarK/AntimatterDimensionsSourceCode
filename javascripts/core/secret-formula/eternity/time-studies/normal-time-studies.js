@@ -264,9 +264,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirementV: () => TimeStudy(111).isBought && (TimeStudy(121).isBought || TimeStudy(122).isBought),
       description: "You gain more EP based on time spent this Eternity",
       effect: () => {
-        let thisEternity = Time.thisEternity;
-        Perk.studyIdleEP.applyEffect(v => thisEternity = thisEternity.plus(v));
-        return Math.sqrt(1.39 * thisEternity.totalSeconds);
+        const perkEffect = TimeSpan.fromMinutes(Perk.studyIdleEP.effectOrDefault(0));
+        const totalSeconds = Time.thisEternity.plus(perkEffect).totalSeconds;
+        return Math.sqrt(1.39 * totalSeconds);
       },
       formatEffect: value => formatX(value, 1, 1)
     },
@@ -335,9 +335,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirementV: () => TimeStudy(133).isBought && (TimeStudy(141).isBought || TimeStudy(142).isBought),
       description: "Multiplier to IP, which increases over this Infinity",
       effect: () => {
-        let thisInfinity = Time.thisInfinity;
-        Perk.studyIdleEP.applyEffect(v => thisInfinity = thisInfinity.plus(v));
-        return thisInfinityMult(thisInfinity.totalSeconds);
+        const perkEffect = TimeSpan.fromMinutes(Perk.studyIdleEP.effectOrDefault(0));
+        const totalSeconds = Time.thisInfinity.plus(perkEffect).totalSeconds;
+        return thisInfinityMult(totalSeconds);
       },
       formatEffect: value => formatX(value, 2, 1),
       cap: () => Effarig.eternityCap

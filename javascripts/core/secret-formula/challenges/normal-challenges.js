@@ -49,7 +49,7 @@ GameDatabase.challenges.normal = [
   {
     id: 7,
     legacyId: 9,
-    isQuickResettable: true,
+    isQuickResettable: false,
     description: "The multiplier from buying 10 dimensions is reduced to 1x, but is increased by 0.2x per " +
       "Dimension Shift/Boost, up to a maximum of 2x.",
     reward: "Seventh Dimension Autobuyer"

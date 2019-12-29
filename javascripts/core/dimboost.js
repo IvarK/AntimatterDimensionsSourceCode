@@ -102,13 +102,13 @@ function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
     /**
      * All reset stuff are in these functions now. (Hope this works)
      */
-    player.sacrificed = new Decimal(0);
     resetChallengeStuff();
     if (forcedNDReset || !Perk.dimboostNonReset.isBought) {
       NormalDimensions.reset();
+      player.sacrificed = new Decimal(0);
+      resetTickspeed();
     }
     skipResetsIfPossible();
-    resetTickspeed();
     const currentAntimatter = player.antimatter;
     player.antimatter = Player.startingAM;
     if (!forcedAMReset && (Achievement(111).isEnabled || Perk.dimboostNonReset.isBought)) {

@@ -128,7 +128,7 @@ GameDatabase.reality.perks = {
     id: 30,
     label: "DB",
     family: PerkFamily.INFINITY,
-    description: "Dimboosts no longer reset normal dimensions"
+    description: "Dimboosts no longer reset normal dimensions, tickspeed, or sacrifice."
   },
   studyPassive1: {
     id: 31,

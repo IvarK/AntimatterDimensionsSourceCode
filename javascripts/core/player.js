@@ -474,7 +474,6 @@ let player = {
       perks: false,
       alchemy: false,
     },
-    showAlchemyResources: false,
     chart: {
       updateRate: 1000,
       duration: 10,

@@ -11,10 +11,11 @@ Vue.component("modal-options", {
 const modalOptionsMixin = {
   data() {
     return {
-      bigCrunchUnlocked: false,
+      infinityhUnlocked: false,
       eternityUnlocked: false,
       realityUnlocked: false,
       dilationUnlocked: false,
+      alchemyUnlocked: false,
       animatedThemeUnlocked: false
     };
   },
@@ -25,6 +26,7 @@ const modalOptionsMixin = {
       this.eternityUnlocked = progress.isEternityUnlocked;
       this.realityUnlocked = progress.isRealityUnlocked;
       this.dilationUnlocked = progress.isRealityUnlocked || player.dilation.tachyonParticles.neq(0);
+      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
       this.animatedThemeUnlocked = Themes.find("S1").isAvailable() || Themes.find("S6").isAvailable();
     }
   },

@@ -491,6 +491,10 @@ GameStorage.devMigrations = {
         if (glyph.type === "cursed") glyph.effects = cursedMask;
       }
     },
+    player => {
+      player.options.showHintText.alchemy = player.options.showAlchemyResources;
+      delete player.options.showAlchemyResources;
+    }
   ],
 
   patch(player) {

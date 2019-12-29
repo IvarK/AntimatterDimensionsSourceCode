@@ -471,7 +471,8 @@ let player = {
       challenges: false,
       studies: false,
       realityUpgrades: false,
-      perks: false
+      perks: false,
+      alchemy: false,
     },
     showAlchemyResources: false,
     chart: {

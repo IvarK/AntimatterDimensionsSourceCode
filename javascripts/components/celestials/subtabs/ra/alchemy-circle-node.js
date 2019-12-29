@@ -68,7 +68,7 @@ Vue.component("alchemy-circle-node", {
           class="o-alchemy-node-resource--always-visible">
           {{ amount.toFixed(1) }}
         </div>
-        <hint-text v-else
+        <hint-text type="alchemy" v-else
           :class="hintClassObject"
           class="o-hint-text--alchemy-node l-hint-text--alchemy-node">
           {{ amount.toFixed(1) }}

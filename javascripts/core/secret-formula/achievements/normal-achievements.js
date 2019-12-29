@@ -614,7 +614,7 @@ GameDatabase.achievements.normal = [
     id: 101,
     name: "Costco sells dimboosts now",
     tooltip: () => `Bulk buy ${shortenSmallInteger(750)} Dimension Boosts at once.`,
-    checkRequirement: bulk => bulk >= 750,
+    checkRequirement: ([bulk]) => bulk >= 750,
     checkEvent: GameEvent.DIMBOOST_AFTER,
     reward: "Dimension Boosts are 1% more powerful (to Normal Dimensions).",
     effect: 1.01

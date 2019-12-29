@@ -9,6 +9,7 @@ class AchievementState extends GameMechanicState {
     this._bitmask = 1 << (this.column - 1);
     // eslint-disable-next-line no-bitwise
     this._inverseBitmask = ~this._bitmask;
+    this.registerEvents(config.checkEvent, args => this.tryUnlock(args));
   }
 
   get name() {
@@ -38,9 +39,9 @@ class AchievementState extends GameMechanicState {
     return this.row < 14;
   }
 
-  tryUnlock(a1, a2, a3) {
+  tryUnlock(args) {
     if (this.isUnlocked) return;
-    if (!this.config.checkRequirement(a1, a2, a3)) return;
+    if (!this.config.checkRequirement(args)) return;
     this.unlock();
   }
 
@@ -131,13 +132,6 @@ const Achievements = {
   },
 };
 
-EventHub.registerStateCollectionEvents(
-  Achievements.all,
-  achievement => achievement.config.checkEvent,
-  // eslint-disable-next-line max-params
-  (achievement, a1, a2, a3) => achievement.tryUnlock(a1, a2, a3)
-);
-
 class SecretAchievementState extends GameMechanicState {
   constructor(config) {
     super(config);
@@ -147,6 +141,7 @@ class SecretAchievementState extends GameMechanicState {
     this._bitmask = 1 << (this.column - 1);
     // eslint-disable-next-line no-bitwise
     this._inverseBitmask = ~this._bitmask;
+    this.registerEvents(config.checkEvent, args => this.tryUnlock(args));
   }
 
   get name() {
@@ -166,9 +161,9 @@ class SecretAchievementState extends GameMechanicState {
     return (player.secretAchievementBits[this.row - 1] & this._bitmask) !== 0;
   }
 
-  tryUnlock(a1, a2, a3) {
+  tryUnlock(args) {
     if (this.isUnlocked) return;
-    if (!this.config.checkRequirement(a1, a2, a3)) return;
+    if (!this.config.checkRequirement(args)) return;
     this.unlock();
   }
 
@@ -207,13 +202,6 @@ const SecretAchievements = {
 setInterval(() => {
   if (Math.random() < 0.00001) SecretAchievement(18).unlock();
 }, 1000);
-
-EventHub.registerStateCollectionEvents(
-  SecretAchievements.all,
-  achievement => achievement.config.checkEvent,
-  // eslint-disable-next-line max-params
-  (achievement, a1, a2, a3) => achievement.tryUnlock(a1, a2, a3)
-);
 
 class AchievementTimer {
   constructor(isRealTime) {

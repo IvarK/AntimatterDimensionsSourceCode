@@ -69,7 +69,7 @@ const Effarig = {
       case EFFARIG_STAGES.INFINITY:
         c = 1500;
         break;
-      case EFFARIG_STAGES.ETERNITY: 
+      case EFFARIG_STAGES.ETERNITY:
         c = 29;
         break;
       case EFFARIG_STAGES.REALITY:
@@ -208,6 +208,10 @@ const EffarigUnlock = (function() {
     reality: new EffarigUnlockState(db.reality),
   };
 }());
+
+EventHub.logic.on(GameEvent.TAB_CHANGED, () => {
+  if (Tab.celestials.effarig.isOpen) Effarig.quotes.show(Effarig.quotes.INITIAL);
+});
 
 EventHub.logic.on(GameEvent.BIG_CRUNCH_BEFORE, () => {
   if (!Effarig.isRunning) return;

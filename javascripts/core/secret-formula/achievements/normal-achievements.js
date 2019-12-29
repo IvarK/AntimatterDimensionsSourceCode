@@ -694,7 +694,7 @@ GameDatabase.achievements.normal = [
     name: "Never again",
     tooltip: () => `Get the sum of Infinity Challenge times below ${shortenSmallInteger(750)}ms.`,
     checkRequirement: () => Time.infinityChallengeSum.totalMilliseconds < 750,
-    checkEvent: GameEvent.BIG_CRUNCH_AFTER,
+    checkEvent: [GameEvent.BIG_CRUNCH_AFTER, GameEvent.REALITY_RESET_AFTER],
     reward: "The limit for your third eternity upgrade is a bit higher.",
     effect: 610
   },

@@ -11,7 +11,7 @@ Vue.component("modal-options", {
 const modalOptionsMixin = {
   data() {
     return {
-      infinityhUnlocked: false,
+      infinityUnlocked: false,
       eternityUnlocked: false,
       realityUnlocked: false,
       dilationUnlocked: false,

@@ -6,6 +6,8 @@ Vue.component("hint-text", {
   },
   computed: {
     showThisHintText() {
+      // Accessing the player object in this computed is intentional for the sake of performance.
+      // Always access the player object in update method and store required stuff in component data.
       return player.options.showHintText[this.type];
     }
   },

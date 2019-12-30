@@ -187,8 +187,9 @@ Vue.component("options-button-grid", {
       </div>
       <div class="l-options-grid__row">
         <options-button
-           class="o-primary-btn--option l-options-grid__button--hidden"
-         />
+          class="o-primary-btn--option_font-large"
+          onclick="Modal.infoDisplayOptions.show()"
+        >Info Displays</options-button>
         <update-rate-slider
           v-model="updateRate"
           oninput="GameOptions.refreshUpdateRate()"

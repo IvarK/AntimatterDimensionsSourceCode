@@ -1634,7 +1634,7 @@ screen and (max-width: 480px) {
 }
 
 .o-hint-text--alchemy-node {
-  color: #aaaaaa;
+  color: #4f5957;
   text-shadow: none;
   font-size: 1.2rem;
   transition: opacity 0.2s;
@@ -5953,17 +5953,6 @@ kbd {
 
 .o-alchemy-node--base {
   background-color: #81d4fa;
-}
-
-.o-alchemy-node-resource--always-visible {
-  position: absolute;
-  color: #4f5957;
-  text-shadow: none;
-  font-size: 1.2rem;
-  transition: opacity 0.2s;
-  left: 50%;
-  top: 90%;
-  transform: translate(-50%);
 }
 
 .o-alchemy-node--active {

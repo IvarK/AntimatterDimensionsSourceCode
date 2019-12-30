@@ -76,7 +76,6 @@ Vue.component("alchemy-tab", {
       infoResourceId: 0,
       focusedResourceId: -1,
       realityCreationAvailable: false,
-      alwaysShowResource: false,
       reactionProgress: 0,
       estimatedCap: 0,
     };
@@ -102,7 +101,6 @@ Vue.component("alchemy-tab", {
   methods: {
     update() {
       this.realityCreationAvailable = AlchemyResource.reality.amount !== 0;
-      this.alwaysShowResource = player.options.showAlchemyResources;
       const animationTime = 800;
       this.reactionProgress = (player.realTimePlayed % animationTime) / animationTime;
       this.estimatedCap = estimatedAlchemyCap();
@@ -192,9 +190,6 @@ Vue.component("alchemy-tab", {
         "o-alchemy-reaction-arrow--focused": this.isFocusedReaction(reactionArrow),
       };
     },
-    toggleResourceVisibility() {
-      player.options.showAlchemyResources = !player.options.showAlchemyResources;
-    },
     showAlchemyHowTo() {
       Modal.message.show("You can now refine glyphs using \"Alchemy Mode\" in the glyph auto-sacrifice settings. " +
         "Refined glyphs will give an amount of their alchemy resources based on their level and rarity. Alchemy " +
@@ -214,14 +209,6 @@ Vue.component("alchemy-tab", {
     `<div class="l-ra-alchemy-tab">
       <div @click="showAlchemyHowTo()" class="o-primary-btn">Click for alchemy info</div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      <div>
-        <input type="checkbox"
-          id="alwaysShowResourceBox"
-          v-model="alwaysShowResource"
-          :value="alwaysShowResource"
-          @input="toggleResourceVisibility()">
-        <label for="alwaysShowResourceBox">Always show resource totals</label>
-      </div>
       Resource cap, based on last 10 realities: {{ shorten(estimatedCap, 3, 2) }}
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">

@@ -10,7 +10,6 @@ Vue.component("alchemy-circle-node", {
       isReactionActive: false,
       amount: 0,
       flow: 0,
-      alwaysShowResource: false,
       isUnlocked: false
     };
   },
@@ -48,7 +47,6 @@ Vue.component("alchemy-circle-node", {
       this.amount = this.resource.amount;
       this.flow = this.resource.flow;
       this.isUnlocked = this.resource.isUnlocked;
-      this.alwaysShowResource = player.options.showAlchemyResources;
     }
   },
   template: `
@@ -64,11 +62,7 @@ Vue.component("alchemy-circle-node", {
         :classObject="classObject"
       />
       <span v-if="isUnlocked">
-        <div v-if="alwaysShowResource"
-          class="o-alchemy-node-resource--always-visible">
-          {{ amount.toFixed(1) }}
-        </div>
-        <hint-text v-else
+        <hint-text type="alchemy"
           :class="hintClassObject"
           class="o-hint-text--alchemy-node l-hint-text--alchemy-node">
           {{ amount.toFixed(1) }}

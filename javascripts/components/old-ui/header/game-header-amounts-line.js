@@ -21,7 +21,7 @@ Vue.component("game-header-amounts-line", {
       }
     },
     shortenPoints(points) {
-      return points.eq(1) ? 1 : this.shortenDimensions(points);
+      return this.shortenDimensions(points);
     }
   },
   template:

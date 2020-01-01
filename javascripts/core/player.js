@@ -465,7 +465,15 @@ let player = {
     commas: true,
     updateRate: 33,
     newUI: true,
-    showAlchemyResources: false,
+    offlineProgress: true,
+    showHintText: {
+      achievements: false,
+      challenges: false,
+      studies: false,
+      realityUpgrades: false,
+      perks: false,
+      alchemy: false,
+    },
     chart: {
       updateRate: 1000,
       duration: 10,
@@ -573,7 +581,7 @@ const Player = {
       Achievement(37),
       Achievement(54),
       Achievement(55),
-      Achievement(78).secondaryEffect
+      Achievement(78).effects.antimatter
     ).toDecimal();
   },
 

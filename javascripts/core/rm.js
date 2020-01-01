@@ -726,9 +726,7 @@ const Glyphs = {
   }
 };
 
-class GlyphSacrificeState extends GameMechanicState {
-  get canBeApplied() { return true; }
-}
+class GlyphSacrificeState extends GameMechanicState { }
 
 const GlyphSacrifice = (function() {
   const db = GameDatabase.reality.glyphSacrifice;
@@ -962,7 +960,7 @@ function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
     resource.amount += refinementGain;
     const decoherenceGain = refinementGain * AlchemyResource.decoherence.effectValue;
     for (const glyphType of GlyphTypes.list) {
-      if (glyphType !== GlyphTypes[glyph.type] && glyphType !== GlyphTypes.reality) {
+      if (glyphType !== GlyphTypes[glyph.type] && glyphType !== GlyphTypes.reality && glyphType !== GlyphTypes.cursed) {
         const otherResource = AlchemyResources.all[glyphType.alchemyResource];
         const maxResouce = Math.max(100 * refinementGain, otherResource.amount);
         otherResource.amount = Math.min(otherResource.amount + decoherenceGain, maxResouce);
@@ -1119,12 +1117,12 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     player.reality.upgradeBits = value;
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return player.reality.upgReqs[this.id];
   }
 
   tryUnlock() {
-    if (this.isAvailable || !this.config.checkRequirement()) return;
+    if (this.isAvailableForPurchase || !this.config.checkRequirement()) return;
     player.reality.upgReqs[this.id] = true;
     if (player.realities > 0 || TimeStudy.reality.isBought) {
       GameUI.notify.success("You've unlocked a Reality upgrade!");

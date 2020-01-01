@@ -3,13 +3,6 @@
 class AchievementState extends GameMechanicState {
   constructor(config) {
     super(config);
-    if (config.secondaryEffect) {
-      const secondaryConfig = {
-        id: config.id,
-        effect: config.secondaryEffect
-      };
-      this._secondaryState = new AchievementState(secondaryConfig);
-    }
     this._row = Math.floor(this.id / 10);
     this._column = this.id % 10;
     // eslint-disable-next-line no-bitwise
@@ -73,32 +66,22 @@ class AchievementState extends GameMechanicState {
     return this.isUnlocked;
   }
 
-  get isEffectConditionSatisfied() {
-    return this.config.effectCondition === undefined || this.config.effectCondition();
-  }
-
-  get canBeApplied() {
-    return this.isEnabled && this.isEffectConditionSatisfied;
-  }
-
-  get secondaryEffect() {
-    return this._secondaryState;
+  get isEffectActive() {
+    return this.isUnlocked;
   }
 }
-
-AchievementState.createIndex(GameDatabase.achievements.normal);
 
 /**
  * @param {number} id
  * @returns {AchievementState}
  */
-const Achievement = id => AchievementState.index[id];
+const Achievement = AchievementState.createAccessor(GameDatabase.achievements.normal);
 
 const Achievements = {
   /**
    * @type {AchievementState[]}
    */
-  all: AchievementState.index.compact(),
+  all: Achievement.index.compact(),
 
   get effectiveCount() {
     const additionalAchievements = Ra.has(RA_UNLOCKS.V_UNLOCK)
@@ -120,14 +103,14 @@ const Achievements = {
     if (player.realities === 0) return;
     if (Achievements.rows(1, 13).every(row => row.every(a => a.isUnlocked))) return;
 
-    const disabled = Achievements.all.filter(a => !a.isEnabled);    
+    const disabled = Achievements.all.filter(a => !a.isEnabled);
     while (disabled[0].row <= GameCache.achSkipPerkCount.value) {
       disabled.shift().unlock();
     }
 
     if (player.reality.disableAutoAchieve) return;
     player.reality.achTimer += diff;
-    
+
     // Don't bother making the disabled list if we don't need it
     if (player.reality.achTimer < this.period) return;
     while (disabled.length > 0 && disabled[0].row <= 13 && player.reality.achTimer >= this.period) {
@@ -204,19 +187,17 @@ class SecretAchievementState extends GameMechanicState {
   }
 }
 
-SecretAchievementState.createIndex(GameDatabase.achievements.secret);
-
 /**
  * @param {number} id
  * @returns {SecretAchievementState}
  */
-const SecretAchievement = id => SecretAchievementState.index[id];
+const SecretAchievement = SecretAchievementState.createAccessor(GameDatabase.achievements.secret);
 
 const SecretAchievements = {
   /**
    * @type {SecretAchievementState[]}
    */
-  all: SecretAchievementState.index.compact(),
+  all: SecretAchievement.index.compact(),
 
   get enabledCount() {
     return SecretAchievements.all.filter(a => a.isEnabled).length;
@@ -239,18 +220,18 @@ class AchievementTimer {
     this.time = 0;
     this.realTime = isRealTime;
   }
-  
+
   reset() {
     this.time = 0;
   }
-  
+
   advance() {
     const addedTime = this.realTime
       ? Time.unscaledDeltaTime.totalSeconds
       : Time.deltaTime;
     this.time += addedTime;
   }
-  
+
   check(condition, duration) {
     if (!condition) {
       this.reset();

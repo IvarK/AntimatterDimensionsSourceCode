@@ -114,13 +114,11 @@ class NormalChallengeState extends GameMechanicState {
   }
 }
 
-NormalChallengeState.createIndex(GameDatabase.challenges.normal);
-
 /**
  * @param {number} id
  * @return {NormalChallengeState}
  */
-const NormalChallenge = id => NormalChallengeState.index[id];
+const NormalChallenge = NormalChallengeState.createAccessor(GameDatabase.challenges.normal);
 
 /**
  * @returns {NormalChallengeState}
@@ -139,7 +137,7 @@ const NormalChallenges = {
   /**
    * @type {NormalChallengeState[]}
    */
-  all: NormalChallengeState.index.compact(),
+  all: NormalChallenge.index.compact(),
   completeAll() {
     for (const challenge of NormalChallenges.all) challenge.complete();
   },
@@ -154,7 +152,7 @@ class InfinityChallengeRewardState extends GameMechanicState {
     this._challenge = challenge;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this._challenge.isCompleted;
   }
 }
@@ -196,7 +194,7 @@ class InfinityChallengeState extends GameMechanicState {
     player.challenge.infinity.completedBits |= 1 << this.id;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isRunning;
   }
 
@@ -232,13 +230,11 @@ class InfinityChallengeState extends GameMechanicState {
   }
 }
 
-InfinityChallengeState.createIndex(GameDatabase.challenges.infinity);
-
 /**
  * @param {number} id
  * @return {InfinityChallengeState}
  */
-const InfinityChallenge = id => InfinityChallengeState.index[id];
+const InfinityChallenge = InfinityChallengeState.createAccessor(GameDatabase.challenges.infinity);
 
 /**
  * @returns {InfinityChallengeState}
@@ -257,7 +253,7 @@ const InfinityChallenges = {
   /**
    * @type {InfinityChallengeState[]}
    */
-  all: InfinityChallengeState.index.compact(),
+  all: InfinityChallenge.index.compact(),
   completeAll() {
     for (const challenge of InfinityChallenges.all) challenge.complete();
   },

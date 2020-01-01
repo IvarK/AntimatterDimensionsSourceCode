@@ -60,7 +60,7 @@ Vue.component("normal-time-study", {
   },
   template:
     `<time-study :setup="setup" :showCost="showCost" :class="classObject" :showSTCost="showSTCost">
-      <hint-text class="l-hint-text--time-study">{{hintText}}</hint-text>
+      <hint-text type="studies" class="l-hint-text--time-study">{{hintText}}</hint-text>
       <description-display :config="study.config" />
       <effect-display br :config="study.config" />
     </time-study>`

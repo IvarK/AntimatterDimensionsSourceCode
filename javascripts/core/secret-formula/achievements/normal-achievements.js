@@ -4,53 +4,53 @@ GameDatabase.achievements.normal = [
   {
     id: 11,
     name: "You gotta start somewhere",
-    tooltip: "Buy a single 1st Dimension.",
+    tooltip: "Buy a 1st Dimension.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 12,
     name: "100 antimatter is a lot",
-    tooltip: "Buy a single 2nd Dimension.",
+    tooltip: "Buy a 2nd Dimension.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 13,
     name: "Half life 3 confirmed",
-    tooltip: "Buy a single 3rd Dimension.",
+    tooltip: "Buy a 3rd Dimension.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 14,
     name: "L4D: Left 4 Dimensions",
-    tooltip: "Buy a single 4th Dimension.",
+    tooltip: "Buy a 4th Dimension.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 15,
     name: "5 Dimension Antimatter Punch",
-    tooltip: "Buy a single 5th Dimension.",
+    tooltip: "Buy a 5th Dimension.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 16,
     name: "We couldn't afford 9",
     tooltip: () => (Enslaved.isRunning
-      ? "Buy a single 6th Dimension (they never amount to anything)"
-      : "Buy a single 6th Dimension."),
+      ? "Buy a 6th Dimension (they never amount to anything)"
+      : "Buy a 6th Dimension."),
       checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
     },
   {
     id: 17,
     name: "Not a luck related achievement",
-    tooltip: "Buy a single 7th Dimension.",
+    tooltip: "Buy a 7th Dimension.",
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 18,
     name: "90 degrees to infinity",
     tooltip: () => (Enslaved.isRunning
-      ? "Buy a single 8th Dimension (don't get used to it)"
-      : "Buy a single 8th Dimension."),
+      ? "Buy an 8th Dimension (don't get used to it)"
+      : "Buy an 8th Dimension."),
       checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
     },
   {
@@ -461,9 +461,13 @@ GameDatabase.achievements.normal = [
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: () => `Start with ${shorten(2e25, 0, 0)} antimatter ` +
       `and all Dimensions are stronger in the first ${shortenSmallInteger(300)}ms of Infinities.`,
-    effect: () => 330 / (Time.thisInfinity.totalMilliseconds + 30),
-    effectCondition: () => Time.thisInfinity.totalMilliseconds < 300,
-    secondaryEffect: () => 2e25
+    effects: {
+      dimensionMult: {
+        effect: () => 330 / (Time.thisInfinity.totalMilliseconds + 30),
+        effectCondition: () => Time.thisInfinity.totalMilliseconds < 300,
+      },
+      antimatter: 2e25
+    }
   },
   {
     id: 81,
@@ -690,7 +694,7 @@ GameDatabase.achievements.normal = [
     name: "Never again",
     tooltip: () => `Get the sum of Infinity Challenge times below ${shortenSmallInteger(750)}ms.`,
     checkRequirement: () => Time.infinityChallengeSum.totalMilliseconds < 750,
-    checkEvent: GameEvent.BIG_CRUNCH_AFTER,
+    checkEvent: [GameEvent.BIG_CRUNCH_AFTER, GameEvent.REALITY_RESET_AFTER],
     reward: "The limit for your third eternity upgrade is a bit higher.",
     effect: 610
   },
@@ -886,11 +890,11 @@ GameDatabase.achievements.normal = [
   {
     id: 138,
     name: "This is what I have to do to get rid of you.",
-    tooltip: () => `Reach ${shorten("1e28000", 0, 0)} IP without any time studies while Dilated.`,
+    tooltip: () => `Reach ${shorten("1e26000", 0, 0)} IP without any time studies while Dilated.`,
     checkRequirement: () =>
       player.timestudy.studies.length === 0 &&
       player.dilation.active &&
-      player.infinityPoints.exponent >= 28000,
+      player.infinityPoints.exponent >= 26000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Removes the downsides from the active and idle time study paths."
   },
@@ -902,8 +906,10 @@ GameDatabase.achievements.normal = [
     checkEvent: GameEvent.REALITY_RESET_BEFORE,
     reward: () => `${shortenSmallInteger(4)}x IP gain and boost from
       buying ${shortenSmallInteger(10)} Dimensions +${shorten(0.1, 0, 1)}.`,
-    effect: 4,
-    secondaryEffect: () => 0.1
+    effects: {
+      ipGain: 4,
+      buyTenMult: 0.1
+    }
   },
   {
     id: 142,
@@ -960,8 +966,7 @@ GameDatabase.achievements.normal = [
     id: 148,
     name: "Royal Flush",
     tooltip: "Reality with one of each basic glyph type.",
-    checkRequirement: () => GLYPH_TYPES
-      .filter(type => type !== "effarig" && type !== "reality")
+    checkRequirement: () => BASIC_GLYPH_TYPES
       .every(type => Glyphs.activeList.some(g => g.type === type)),
     checkEvent: GameEvent.REALITY_RESET_BEFORE
   },

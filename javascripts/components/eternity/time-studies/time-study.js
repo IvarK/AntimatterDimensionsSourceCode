@@ -5,7 +5,7 @@ Vue.component("time-study", {
   data() {
     return {
       isBought: false,
-      isAvailable: false,
+      isAvailableForPurchase: false,
       STCost: 0
     };
   },
@@ -33,7 +33,7 @@ Vue.component("time-study", {
     classObject() {
       return {
         "o-time-study": true,
-        "o-time-study--unavailable": !this.isAvailable && !this.isBought,
+        "o-time-study--unavailable": !this.isAvailableForPurchase && !this.isBought,
         "o-time-study--bought": this.isBought,
         "o-time-study--small": this.setup.isSmall,
         "l-time-study": true
@@ -48,7 +48,7 @@ Vue.component("time-study", {
       const study = this.study;
       this.isBought = study.isBought;
       if (!this.isBought) {
-        this.isAvailable = study.canBeBought && study.isAffordable;
+        this.isAvailableForPurchase = study.canBeBought && study.isAffordable;
       }
 
       this.STCost = this.study.STCost;

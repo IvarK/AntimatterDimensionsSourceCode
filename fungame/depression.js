@@ -1,172 +1,308 @@
 "use strict";
 
+const UPDATE_INTERVAL = 33;
+const SAVE_INTERVAL = 5000;
+const notation = new ADNotations.ScientificNotation();
+
+let uiUpdateHooks = [];
+
+function updateUI() {
+  for (const hook of uiUpdateHooks) {
+    hook.update();
+  }
+}
+
 let game = {
-  costs: [new Decimal(1)],
   amounts: [new Decimal(0)],
+  purchases: [new Decimal(0)],
   depression: new Decimal(1),
   prestige: [new Decimal(1)]
-}
+};
 
-
-
-function formatValue(x, places) {
-  if (x instanceof Decimal) {
-    if (x.lt(1000)) return x.toFixed(0);
-    else return (x.m.toFixed(places) + "e" + x.e)
+class StuffState {
+  constructor(id) {
+    this._id = id;
   }
-  const power = Math.floor(Math.log10(x))
-  const matissa = x / Math.pow(10, power)
-  if (x < 1000) return x.toString()
-  else return ((matissa).toFixed(places) + "e" + power)
-}
 
+  get id() {
+    return this._id;
+  }
 
-function insertAfter(newElement,targetElement) {
-    // target is what you want it to go after. Look for this elements parent.
-    const parent = targetElement.parentNode;
+  get previousStuff() {
+    return this.id > 1 ? Stuff(this.id - 1) : undefined;
+  }
 
-    // if the parents lastchild is the targetElement...
-    if (parent.lastChild == targetElement) {
-        // add the newElement after the target element.
-        parent.appendChild(newElement);
+  get nextStuff() {
+    return Stuff(this.id + 1);
+  }
+
+  get isUnlocked() {
+    return Stuffs.count >= this.id;
+  }
+
+  get amount() {
+    return game.amounts[this.id - 1];
+  }
+
+  set amount(value) {
+    game.amounts[this.id - 1] = value;
+  }
+
+  get purchases() {
+    return game.purchases[this.id - 1];
+  }
+
+  set purchases(value) {
+    game.purchases[this.id - 1] = value;
+  }
+
+  get cost() {
+    const baseCost = Decimal.pow(100, this.id - 1);
+    const costIncrease = Decimal.pow(2, this.purchases);
+    return baseCost.times(costIncrease);
+  }
+
+  get isAffordable() {
+    return game.depression.gte(this.cost);
+  }
+
+  purchase() {
+    if (!this.isAffordable) return;
+    game.depression = game.depression.minus(this.cost);
+    const nextStuff = this.nextStuff;
+    if (!nextStuff.isUnlocked) {
+      nextStuff.amount = new Decimal(0);
+      nextStuff.purchases = new Decimal(0);
+      nextStuff.prestige = new Decimal(1);
+    }
+    this.amount = this.amount.plus(1).max(this.amount.times(1.05).min(nextStuff.amount.times(10000)));
+    this.purchases = this.purchases.plus(1);
+    updateUI();
+  }
+
+  get prestige() {
+    return game.prestige[this.id - 1];
+  }
+
+  set prestige(value) {
+    game.prestige[this.id - 1] = Decimal.max(this.prestige, value);
+  }
+
+  get canPrestige() {
+    return Stuff(this.id + 6).isUnlocked;
+  }
+
+  get nextPrestige() {
+    return Decimal.max(Stuffs.count - this.id - 5, 1);
+  }
+
+  doPrestige() {
+    this.prestige = this.nextPrestige;
+    game = {
+      amounts: [new Decimal(0)],
+      purchases: [new Decimal(0)],
+      depression: new Decimal(1),
+      prestige: game.prestige
+    };
+    updateUI();
+  }
+
+  tick() {
+    const production = this.amount.times(this.prestige.dividedBy(UPDATE_INTERVAL));
+    if (this.id === 1) {
+      game.depression = game.depression.plus(production);
     } else {
-        // else the target has siblings, insert the new element between the target and it's next sibling.
-        parent.insertBefore(newElement, targetElement.nextSibling);
+      this.previousStuff.amount = this.previousStuff.amount.plus(production);
     }
+  }
 }
 
+const Stuff = id => new StuffState(id);
 
-
-function buyStuff(id) {
-  const elem = document.getElementById(id)
-  var i = id-1
-  
-  if (game.depression.gte(game.costs[i])) {
-    const next = document.getElementById(id+1)
-    if (next == null) {
-    const btn = document.createElement("button")
-    const br = document.createElement("br")
-    btn.innerHTML = "Amount: 0<br>Cost:"+formatValue(game.costs[i].times(100), 2)
-    btn.id = id+1
-    btn.className = "btn"
-    btn.onclick = function() {buyStuff(id+1);}
-    insertAfter(br, elem)
-    insertAfter(btn, br)
-    game.costs.push(game.costs[i].times(100))
-    game.amounts.push(new Decimal(0))
-    if (game.prestige[id] === undefined) game.prestige[id] = 1
-    
-    if (id > 5) {
-      const pbtn = document.createElement("button")
-      const otherbtn = document.getElementById(id-5)
-      pbtn.id = id-5+"prestige"
-      pbtn.className = "prestigebtn"
-      pbtn.onclick = function() {prestige(parseInt(this.id));}
-      insertAfter(pbtn, otherbtn)
-      for (var i=1; i<game.costs.length-5; i++) document.getElementById(i+"prestige").innerHTML = "Reset to increase bonus to "+Math.max(game.costs.length-i-5, game.prestige[id-1])+"x boost."
+const Stuffs = {
+  get count() {
+    return game.amounts.length;
+  },
+  get unlocked() {
+    return Stuffs.range(Stuffs.count);
+  },
+  range(count) {
+    const stuffs = [];
+    for (let i = 1; i < count + 1; i++) {
+      stuffs.push(Stuff(i));
     }
-    
-
-    
+    return stuffs;
+  },
+  tick() {
+    for (const stuff of Stuffs.unlocked) {
+      stuff.tick();
+    }
+  },
+  get last() {
+    return Stuff(Stuffs.count);
   }
-  game.amounts[i] = game.amounts[i].plus(1).max(game.amounts[i].times(1.05).min(game.amounts[id].times(10000)))
-  game.depression = game.depression.minus(game.costs[i])
-  game.costs[i] = game.costs[i].times(2)
-  }
-}
-
-
-function hardreset() {
-  game = {
-    costs: [new Decimal(1)],
-    amounts: [new Decimal(0)],
-    depression: new Decimal(1),
-    prestige: [1]
-  }
-}
-
-
-function prestige(id) {
-  console.log(id)
-  game.prestige[id-1] = Math.max(game.costs.length-id-5, game.prestige[id-1])
-  for (var i=2; i<=game.costs.length; i++) {
-    var btn = document.getElementById(i)
-    btn.parentNode.removeChild(btn)
-  }
-  var prestiges = document.getElementsByClassName("prestigebtn")
-  while(prestiges[0]) prestiges[0].parentNode.removeChild(prestiges[0])
-  const brs = document.getElementsByTagName("br")
-  while(brs[0]) brs[0].parentNode.removeChild(brs[0])
-  game = {
-    costs: [new Decimal(1)],
-    amounts: [new Decimal(0)],
-    depression: new Decimal(1),
-    prestige: game.prestige
-  }
-  for (var i=1; i<game.costs.length-5; i++) document.getElementById(i+"prestige").innerHTML = "Reset to increase bonus to "+Math.max(game.costs.length-id-5, game.prestige[id-1])+"x boost."
-}
-
+};
 
 function save() {
-  localStorage.setItem("funsave",JSON.stringify(game));
+  localStorage.setItem("funsave", JSON.stringify(game));
 }
 
 function load() {
-  var save = JSON.parse(localStorage.getItem("funsave"))
-  if (save) game = save
-  var elem = document.getElementById("1")
-  for (var i=1; i<game.costs.length; i++) {
-    var btn = document.createElement("button")
-    var br = document.createElement("br")
-    btn.innerHTML = "Amount: 0<br>Cost:"+formatValue(game.costs[i])
-    btn.id = i+1
-    btn.className = "btn"
-    btn.onclick = function() {buyStuff(parseInt(this.id));}
-    insertAfter(br, elem)
-    insertAfter(btn, br)
-    elem = btn
+  const saveData = JSON.parse(localStorage.getItem("funsave"));
+  if (saveData === null) return;
+  saveData.depression = new Decimal(saveData.depression);
+  for (let i = 0; i < Object.keys(saveData.amounts).length; i++) {
+    saveData.amounts[i] = new Decimal(saveData.amounts[i]);
   }
-  for (var i=1; i<game.costs.length-5; i++) {
-    var pbtn = document.createElement("button")
-    var otherbtn = document.getElementById(i)
-    pbtn.innerHTML = "Reset to increase bonus to "+Math.max(game.costs.length-i-5, game.prestige[i-1])+"x boost."
-    pbtn.id = i+"prestige"
-    pbtn.className = "prestigebtn"
-    pbtn.onclick = function() {prestige(parseInt(this.id));}
-    insertAfter(pbtn, otherbtn)
+  for (let i = 0; i < Object.keys(saveData.prestige).length; i++) {
+    saveData.prestige[i] = new Decimal(saveData.prestige[i]);
   }
-  game.depression = new Decimal(game.depression)
-  for (var i=0; i<Object.keys(game.amounts).length; i++) {
-    game.amounts[i] = new Decimal(game.amounts[i])
+  if (saveData.purchases !== undefined) {
+    for (let i = 0; i < Object.keys(saveData.purchases).length; i++) {
+      saveData.purchases[i] = new Decimal(saveData.purchases[i]);
+    }
   }
-  for (var i=0; i<Object.keys(game.costs).length; i++) {
-    game.costs[i] = new Decimal(game.costs[i])
+  if (saveData.costs !== undefined) {
+    saveData.purchases = [];
+    for (let i = 0; i < Object.keys(saveData.costs).length; i++) {
+      const cost = new Decimal(saveData.costs[i]);
+      const baseCost = Decimal.pow(100, i);
+      const costIncrease = cost.dividedBy(baseCost);
+      saveData.purchases[i] = Decimal.floor(Decimal.log2(costIncrease)).max(0);
+    }
   }
+  game = saveData;
 }
 
+// eslint-disable-next-line prefer-const
+let cheat = false;
 
+function gameLoop() {
+  Stuffs.tick();
 
-var cheat = false;
-
-
-setInterval(function() {
-  game.depression = game.depression.plus(game.amounts[0].times(game.prestige[0]/33))
-  document.getElementById("1").innerHTML = "Amount: "+formatValue(game.amounts[0], 2)+"<br>Power: "+formatValue(game.prestige[0], 2)+"x<br>Cost:"+formatValue(game.costs[0], 2)
-  for (var i=2; i <= game.costs.length; i++) {
-    document.getElementById(i).innerHTML = "Amount: "+formatValue(game.amounts[i-1], 2)+"<br>Power: "+formatValue(game.prestige[i-1], 2)+"x<br>Cost:"+formatValue(game.costs[i-1], 2)
-    game.amounts[i-2] = game.amounts[i-2].plus(game.amounts[i-1].times(game.prestige[i-1]/33))
-  }
-  
   if (cheat) {
-  if (game.amounts[game.amounts.length-2] < 5) document.getElementById(game.amounts.length-1).click()
-  document.getElementById(game.amounts.length).click()}
-  
-  document.getElementById("amount").innerHTML = formatValue(game.depression, 2)
-}, 33)
+    const preLastStuff = Stuffs.last.previousStuff;
+    if (preLastStuff !== undefined && preLastStuff.amount.lessThan(5)) {
+      preLastStuff.purchase();
+    }
+    Stuffs.last.purchase();
+  }
 
+  updateUI();
+}
 
-setInterval(function() { save() }, 5000)
+Vue.mixin({
+  methods: {
+    format(value, places, placesUnder1000) {
+      return notation.format(value, places, placesUnder1000);
+    }
+  },
+  created() {
+    if (this.update) {
+      uiUpdateHooks.push(this);
+      this.update();
+    }
+  },
+  destroyed() {
+    uiUpdateHooks = uiUpdateHooks.filter(h => h !== this);
+  }
+});
 
+const StuffButton = {
+  props: {
+    stuff: Object
+  },
+  data: () => ({
+    amount: new Decimal(0),
+    cost: new Decimal(0),
+    prestige: new Decimal(1)
+  }),
+  methods: {
+    update() {
+      if (!this.stuff.isUnlocked) return;
+      this.amount.fromDecimal(this.stuff.amount);
+      this.cost.fromDecimal(this.stuff.cost);
+      this.prestige.fromDecimal(this.stuff.prestige);
+    }
+  },
+  template: `
+    <button class="button button--stuff" @click="stuff.purchase()">
+      Amount: {{format(amount, 2)}}
+      <br>
+      Power: {{format(prestige, 2)}}x
+      <br>
+      Cost: {{format(cost, 2)}}
+    </button>
+  `
+};
 
+const PrestigeButton = {
+  props: {
+    stuff: Object
+  },
+  data: () => ({
+    canPrestige: false,
+    nextPrestige: new Decimal(1)
+  }),
+  methods: {
+    update() {
+      if (!this.stuff.isUnlocked) return;
+      this.canPrestige = this.stuff.canPrestige;
+      this.nextPrestige.fromDecimal(this.stuff.nextPrestige);
+    }
+  },
+  template: `
+    <button v-if="canPrestige" class="button button--prestige" @click="stuff.doPrestige()">
+      Reset to increase bonus to {{format(nextPrestige, 2)}}x boost.
+    </button>
+  `
+};
 
-load()
+const Depression = {
+  components: {
+    "stuff-button": StuffButton,
+    "prestige-button": PrestigeButton
+  },
+  data: () => ({
+    depression: new Decimal(1),
+    stuffCount: 0
+  }),
+  computed: {
+    stuffs() {
+      return Stuffs.range(this.stuffCount);
+    }
+  },
+  methods: {
+    update() {
+      this.depression.fromDecimal(game.depression);
+      this.stuffCount = Stuffs.count;
+    }
+  },
+  template: `
+    <div class="app">
+      <p class="depression">You have <span class="depression-amount">{{format(depression, 2)}}</span> depression</p>
+      <div class="stuff-container">
+        <template v-for="stuff in stuffs">
+          <br v-if="stuff.id > 1">
+          <stuff-button :stuff="stuff"/>
+          <prestige-button :stuff="stuff"/>
+        </template>
+      </div>
+    </div>
+  `
+};
+
+let vue;
+
+window.onload = () => {
+  load();
+  setInterval(gameLoop, UPDATE_INTERVAL);
+  setInterval(save, SAVE_INTERVAL);
+  vue = new Vue({
+    el: "#depression",
+    components: {
+      depression: Depression
+    },
+    template: "<depression/>"
+  });
+};

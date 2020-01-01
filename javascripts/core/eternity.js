@@ -192,7 +192,7 @@ function eternityResetReplicanti() {
   player.replicanti.gal = 0;
   player.replicanti.galaxies = 0;
   player.replicanti.galCost = new Decimal(1e170);
-  if (EternityMilestone.autobuyerReplicantiGalaxy.isReached && 
+  if (EternityMilestone.autobuyerReplicantiGalaxy.isReached &&
     player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
 }
 
@@ -281,10 +281,6 @@ class EPMultiplierState extends GameMechanicState {
     this.cachedEffectValue = new Lazy(() => Decimal.pow(5, player.epmultUpgrades));
   }
 
-  get canBeApplied() {
-    return true;
-  }
-
   get isAffordable() {
     return player.eternityPoints.gte(this.cost);
   }
@@ -303,6 +299,10 @@ class EPMultiplierState extends GameMechanicState {
     this.cachedCost.invalidate();
     this.cachedEffectValue.invalidate();
     Autobuyer.eternity.bumpAmount(Decimal.pow(5, diff));
+  }
+
+  get isCustomEffect() {
+    return true;
   }
 
   get effectValue() {

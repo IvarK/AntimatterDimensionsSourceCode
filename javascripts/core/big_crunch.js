@@ -54,7 +54,7 @@ function bigCrunchReset() {
   player.bestInfinitiesPerMs = player.bestInfinitiesPerMs.clampMin(
     gainedInfinities().round().dividedBy(player.thisInfinityRealTime)
   );
-  
+
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
@@ -139,7 +139,7 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
     this._upgrade = upgrade;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this._upgrade.isBought && this._upgrade.isCharged;
   }
 }
@@ -161,11 +161,11 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
     return player.infinityUpgrades;
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return this._requirement === undefined || this._requirement.isBought;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isBought && !this.isCharged;
   }
 
@@ -215,7 +215,7 @@ function totalIPMult() {
       Achievement(93),
       Achievement(116),
       Achievement(125),
-      Achievement(141),
+      Achievement(141).effects.ipGain,
       InfinityUpgrade.ipMult,
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
@@ -305,10 +305,6 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     return !this.isCapped && player.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
   }
 
-  get canBeApplied() {
-    return true;
-  }
-
   purchase(amount = 1) {
     if (!this.canBeBought) return;
     const costIncrease = this.costIncrease;
@@ -394,7 +390,7 @@ class BreakInfinityMultiplierCostUpgrade extends RebuyableMechanicState {
     return this.boughtAmount === this.config.maxUpgrades;
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return !this.isMaxed;
   }
 

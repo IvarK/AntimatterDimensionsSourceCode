@@ -31,11 +31,15 @@ class EternityChallengeRewardState extends GameMechanicState {
     this._challenge = challenge;
   }
 
+  get isCustomEffect() {
+    return true;
+  }
+
   get effectValue() {
     return this.config.effect(this._challenge.completions);
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this._challenge.completions > 0;
   }
 }
@@ -59,7 +63,7 @@ class EternityChallengeState extends GameMechanicState {
     return player.challenge.eternity.current === this.id;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isRunning;
   }
 
@@ -223,13 +227,11 @@ class EternityChallengeState extends GameMechanicState {
   }
 }
 
-EternityChallengeState.createIndex(GameDatabase.challenges.eternity);
-
 /**
  * @param id
  * @return {EternityChallengeState}
  */
-const EternityChallenge = id => EternityChallengeState.index[id];
+const EternityChallenge = EternityChallengeState.createAccessor(GameDatabase.challenges.eternity);
 
 /**
  * @returns {EternityChallengeState}
@@ -248,7 +250,7 @@ const EternityChallenges = {
   /**
    * @type {EternityChallengeState[]}
    */
-  all: EternityChallengeState.index.compact(),
+  all: EternityChallenge.index.compact(),
 
   get completions() {
     return EternityChallenges.all

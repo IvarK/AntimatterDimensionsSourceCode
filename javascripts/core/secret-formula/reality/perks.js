@@ -128,7 +128,7 @@ GameDatabase.reality.perks = {
     id: 30,
     label: "DB",
     family: PerkFamily.INFINITY,
-    description: "Dimboosts and RG no longer reset normal dimensions"
+    description: "Dimboosts no longer reset normal dimensions, tickspeed, or sacrifice."
   },
   studyPassive1: {
     id: 31,
@@ -468,10 +468,17 @@ GameDatabase.reality.perkConnections = (function() {
     [p.achievementRowGroup5, p.achievementRowGroup6],
   ];
   const connections = {};
-  for (const group of groups) {
-    const ids = group.map(perk => perk.id);
-    const start = ids.shift();
-    connections[start] = ids;
+  for (const perk of Object.values(GameDatabase.reality.perks)) {
+    const connectedPerks = [];
+    const directConnections = groups.find(g => g[0] === perk);
+    if (directConnections !== undefined) {
+      connectedPerks.push(...directConnections.slice(1));
+    }
+    const indirectConnections = groups
+      .filter(g => g.slice(1).some(groupPerk => groupPerk === perk))
+      .map(g => g[0]);
+    connectedPerks.push(...indirectConnections);
+    connections[perk.id] = [...new Set(connectedPerks.map(connectedPerk => connectedPerk.id))];
   }
   return connections;
 }());

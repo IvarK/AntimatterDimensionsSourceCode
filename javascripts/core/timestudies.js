@@ -165,8 +165,8 @@ function canBuyStudy(id) {
 }
 
 function canBuyLocked(id) {
-  return V.availableST >= TimeStudy(id).STCost && 
-         TimeStudy(id) && 
+  return V.availableST >= TimeStudy(id).STCost &&
+         TimeStudy(id) &&
          TimeStudy(id).checkVRequirement();
 }
 
@@ -392,7 +392,7 @@ class NormalTimeStudyState extends TimeStudyState {
     return canBuyStudy(this.id) || canBuyLocked(this.id);
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isBought;
   }
 
@@ -655,7 +655,7 @@ class TriadStudyState extends TimeStudyState {
     return this.config.description;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isBought;
   }
 

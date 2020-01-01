@@ -14,7 +14,7 @@ Vue.component("new-inf-dimension-row", {
       rateOfChange: new Decimal(0),
       isAutobuyerUnlocked: false,
       cost: new Decimal(0),
-      isAvailableForPuchase: false,
+      isAvailableForPurchase: false,
       isCapped: false,
       capIP: new Decimal(0),
       isAutobuyerOn: false,
@@ -63,7 +63,7 @@ Vue.component("new-inf-dimension-row", {
       }
       this.isAutobuyerUnlocked = dimension.isAutobuyerUnlocked;
       this.cost.copyFrom(dimension.cost);
-      this.isAvailableForPuchase = dimension.isAvailableForPuchase;
+      this.isAvailableForPurchase = dimension.isAvailableForPurchase;
       this.isCapped = dimension.isCapped;
       if (this.isCapped) {
         this.capIP.copyFrom(dimension.hardcapIPAmount);
@@ -92,7 +92,7 @@ Vue.component("new-inf-dimension-row", {
       />
       <primary-button
         v-tooltip="capTooltip"
-        :enabled="isAvailableForPuchase"
+        :enabled="isAvailableForPurchase"
         class="o-primary-btn--buy-id l-infinity-dim-row__button o-primary-btn o-primary-btn--new"
         @click="buyManyInfinityDimension"
       >{{costDisplay}}</primary-button>

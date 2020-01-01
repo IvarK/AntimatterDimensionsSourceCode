@@ -15,7 +15,8 @@ Vue.component("matter-dimension-row", {
       amount: new Decimal(0),
       canBuyChance: false,
       canBuyInterval: false,
-      canBuyPower: false
+      canBuyPower: false,
+      isIntervalCapped: false,
     };
   },
   methods: {
@@ -30,6 +31,7 @@ Vue.component("matter-dimension-row", {
       this.canBuyChance = this.dimension.canBuyChance;
       this.canBuyInterval = this.dimension.canBuyInterval;
       this.canBuyPower = this.dimension.canBuyPower;
+      this.isIntervalCapped = this.dimension.isIntervalCapped;
     }
   },
   template:
@@ -46,7 +48,7 @@ Vue.component("matter-dimension-row", {
         @click="dimension.buyInterval()" 
         class="o-matter-dimension-button" 
         :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> 
-        {{ interval.toFixed(2) }}ms <span v-if="!interval.eq(50)"><br>Cost: {{ shorten(intervalCost, 2, 0) }}</span>
+        {{ interval.toFixed(2) }}ms <span v-if="!isIntervalCapped"><br>Cost: {{ shorten(intervalCost, 2, 0) }}</span>
       </button>
       <button 
         @click="dimension.buyPower()" 

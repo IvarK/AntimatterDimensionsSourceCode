@@ -121,15 +121,11 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     player.celestials.teresa.perkShop[this.id] = value;
   }
 
-  get cap() {
-    return this.config.cap();
-  }
-
   get isCapped() {
     return this.cost === this.cap;
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return this.cost < this.currency.value;
   }
 

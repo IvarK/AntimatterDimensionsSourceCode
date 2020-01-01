@@ -1655,6 +1655,85 @@ GameDatabase.news = [
       "Hello fellow news messages! 🛹</span>"
   },
   {
+    id: "a294",
+    text: "If you see a news message, and then see it again later, does it become an olds message?"
+  },
+  {
+    id: "a295",
+    text: "👁"
+  },
+  {
+    id: "a296",
+    text: "Click on this news message to hard reset your game."
+  },
+  {
+    id: "a297",
+    text: "I don't think, therefore I'm not."
+  },
+  {
+    id: "a298",
+    text: "Is it crazy how saying sentences backwards makes backwards sentences saying how crazy it is?"
+  },
+  {
+    id: "a299",
+    text:
+      `Buy the new Antimatter Dimensions puzzle set now! With a combined ${format(Number.MAX_VALUE)} ` +
+      `pieces, these puzzles are the perfect way to spend some quality time with your family!`
+  },
+  {
+    id: "a300",
+    text:
+      "The board of directors here at A.N.N thinks we should replace the news ticker with a banner " +
+      "advertisement. Please sign our change.org petition, so we can stop them before it's too late!"
+  },
+  {
+    id: "a301",
+    text: "The next hour is in 0.2 updates."
+  },
+  {
+    id: "a302",
+    text: "Introducing Antimatter Lite! Zero calories... Same great Crunch."
+  },
+  {
+    id: "a303",
+    text: "Roses are red, violets are blue, flag is win, baba is you."
+  },
+  {
+    id: "a304",
+    text: "Hi, how's your day? Hope it's good. If it's not good, we hope playing AD made it a little bit better!"
+  },
+  {
+    id: "a305",
+    text: "We now bring you today's weather report. There is a 100% chance of weather."
+  },
+  {
+    id: "a306",
+    text: "FIXING NEWS: Please don't break it again."
+  },
+  {
+    id: "a307",
+    text:
+      "The paperclip maximizer is a thought experiment described by Swedish philosopher Nick Bostrom in 2003. It " +
+      "illustrates the existential risk that an artificial general intelligence may pose to human beings when " +
+      "programmed to pursue even seemingly-harmless goals, and the necessity of incorporating machine ethics into " +
+      "artificial intelligence design. The scenario describes an advanced artificial intelligence tasked with " +
+      "manufacturing paperclips. If such a machine were not programmed to value human life, or to use only " +
+      "designated resources in bounded time, then given enough power its optimized goal would be to turn all matter " +
+      "in the universe, including human beings, into either paperclips or machines which manufacture paperclips."
+  },
+  {
+    id: "a308",
+    text:
+      "Hey! It's me, you from the future! I came back to give you this warning: Pay VERY close attention to the " +
+      "next news ticker. In my timeline we ignored it, and humanity has regretted it ever since."
+  },
+  {
+    id: "a309",
+    text:
+      `Check out Avari's newly built actually infinite infinity pool! With an area of ` +
+      `${format(Number.MAX_VALUE)} square megametres, you'll be sure to have infinite fun!`
+  },
+  {
     id: "l1",
     text: "You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken",
     get unlocked() { return player.antimatter.e === 15; }

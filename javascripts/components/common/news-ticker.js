@@ -111,6 +111,10 @@ Vue.component("news-ticker", {
         player.secretUnlocks.paperclips++;
         GameOptions.toggleNews();
       }
+      if (this.currentNews.id === "a296") {
+        this.$refs.line.innerHTML = "You're crazy. You know what, here. Have a paperclip.";
+        player.secretUnlocks.paperclips++;
+      }
     }
   },
   template: `

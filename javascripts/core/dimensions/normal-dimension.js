@@ -5,7 +5,7 @@
 function normalDimensionCommonMultiplier() {
   let multiplier = new Decimal(1);
 
-  multiplier = multiplier.times(Player.achievementPower);
+  multiplier = multiplier.times(Achievements.power);
   multiplier = multiplier.times(kongDimMult);
   multiplier = multiplier.times(kongAllDimMult);
 
@@ -135,7 +135,7 @@ function applyNDMultipliers(mult, tier) {
     tier === 8 ? TimeStudy(214) : null,
     tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
   );
-  if (Achievement(77).isEnabled) {
+  if (Achievement(77).isUnlocked) {
     // Welp, this effect is too complex for Effects system
     multiplier = multiplier.times(1 + tier / 100);
   }

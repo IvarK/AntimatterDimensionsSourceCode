@@ -123,7 +123,7 @@ function initializeChallengeCompletions() {
   if (EternityMilestone.keepAutobuyers.isReached) {
     NormalChallenges.completeAll();
   }
-  if (Achievement(133).isEnabled) {
+  if (Achievement(133).isUnlocked) {
     InfinityChallenges.completeAll();
   }
   player.challenge.normal.current = 0;
@@ -162,7 +162,7 @@ function initializeResourcesAfterEternity() {
   player.onlyEighthDimensons = true;
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
-  player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
+  player.postChallUnlocked = Achievement(133).isUnlocked ? 8 : 0;
 }
 
 function applyRealityUpgrades() {

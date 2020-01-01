@@ -428,7 +428,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => InfinityDimension(4).isUnlocked,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Your achievement bonus affects Infinity Dimensions.",
-    effect: () => Player.achievementPower
+    effect: () => Achievements.power
   },
   {
     id: 76,

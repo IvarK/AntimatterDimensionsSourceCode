@@ -550,10 +550,6 @@ const Player = {
     return 1 + base * AnnihilationUpgrade.dimCostMult.effect;
   },
 
-  get achievementPower() {
-    return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
-  },
-
   get infinityGoal() {
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     return challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;

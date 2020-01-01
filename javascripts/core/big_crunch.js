@@ -86,7 +86,7 @@ function bigCrunchReset() {
   const currentReplicantiGalaxies = player.replicanti.galaxies;
   secondSoftReset(true);
 
-  if (Achievement(95).isEnabled) {
+  if (Achievement(95).isUnlocked) {
     player.replicanti.amount = currentReplicanti;
   }
   if (TimeStudy(33).isBought) {

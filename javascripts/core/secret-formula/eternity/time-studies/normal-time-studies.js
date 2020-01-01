@@ -276,7 +276,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 10,
       requirement: () => TimeStudy(121).isBought && !TimeStudy(132).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(121).isBought && (TimeStudy(132).isBought || TimeStudy(133).isBought),
-      description: () => (Achievement(138).isEnabled
+      description: () => (Achievement(138).isUnlocked
         ? "You can get 50% more Replicanti galaxies"
         : "Automatic Replicanti galaxies are disabled, but you can get 50% more"),
       effect: () => Math.floor(player.replicanti.gal / 2)
@@ -298,7 +298,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 10,
       requirement: () => TimeStudy(123).isBought && !TimeStudy(131).isBought && !TimeStudy(132).isBought,
       requirementV: () => TimeStudy(123).isBought && (TimeStudy(131).isBought || TimeStudy(132).isBought),
-      description: () => (Achievement(138).isEnabled
+      description: () => (Achievement(138).isUnlocked
       ? "Replicanti galaxies are 50% stronger"
       : `Replicanti are ${shortenSmallInteger(10)}x slower until infinity, but their galaxies are 50% stronger`),
       effect: 0.5

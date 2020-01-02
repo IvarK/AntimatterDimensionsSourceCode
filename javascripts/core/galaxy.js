@@ -147,7 +147,7 @@ function galaxyReset() {
   EventHub.dispatch(GameEvent.GALAXY_RESET_AFTER);
 }
 
-function galaxyResetBtnClick(bulk, limit) {
+function galaxyResetBtnClick(bulk, limit = Number.MAX_VALUE) {
   if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(limit);
   if (player.galaxies >= limit || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   galaxyReset();

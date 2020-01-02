@@ -111,7 +111,7 @@ function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
     skipResetsIfPossible();
     const currentAntimatter = player.antimatter;
     player.antimatter = Player.startingAM;
-    if (!forcedAMReset && (Achievement(111).isEnabled || Perk.dimboostNonReset.isBought)) {
+    if (!forcedAMReset && (Achievement(111).isUnlocked || Perk.dimboostNonReset.isBought)) {
         player.antimatter = player.antimatter.max(currentAntimatter);
     }
     EventHub.dispatch(GameEvent.DIMBOOST_AFTER, bulk);
@@ -134,7 +134,7 @@ function softResetBtnClick() {
   if (Ra.isRunning) return;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
   else softReset(1);
-  
+
   for (let tier = 1; tier < 9; tier++) {
     const mult = DimBoost.multiplierToNDTier(tier);
     if (mult.gt(1)) floatText(tier, formatX(mult));

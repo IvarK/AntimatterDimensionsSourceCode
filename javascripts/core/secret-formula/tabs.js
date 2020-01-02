@@ -305,7 +305,7 @@ GameDatabase.tabs = [
         name: "V",
         symbol: "⌬",
         component: "v-tab",
-        condition: () => Achievement(151).isEnabled
+        condition: () => Achievement(151).isUnlocked
       },
       {
         key: "ra",

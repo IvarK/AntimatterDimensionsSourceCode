@@ -352,7 +352,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
 
 function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
-  if (Enslaved.isAutoReleasing && 
+  if (Enslaved.isAutoReleasing &&
     !(EternityChallenge(12).isRunning || TimeCompression.isActive || (BlackHoles.arePaused && player.blackHoleNegative < 1))) {
     return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
@@ -514,7 +514,7 @@ function gameLoop(diff, options = {}) {
 
     EternityChallenge(12).tryFail();
 
-    GameCache.achievementPower.invalidate();
+    Achievements._power.invalidate();
 
     for (let tier = 1; tier < 9; tier++) {
       if (tier !== 8 && (InfinityDimension(tier).isUnlocked || EternityChallenge(7).completions > 0)) {

@@ -15,7 +15,7 @@ function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
   player.reality.upgReqChecks[0] = false;
   let galaxyGain = 1;
-  if (Achievement(126).isEnabled) {
+  if (Achievement(126).isUnlocked) {
     // Attempt to buy bulk if RG divides by e308 instead of resetting
     const maxGain = Replicanti.galaxies.max - player.replicanti.galaxies;
     const logReplicanti = player.replicanti.amount.log10();
@@ -69,14 +69,14 @@ function getReplicantiInterval(noMod, intervalIn) {
     RealityUpgrade(23)
   );
   interval = Decimal.divide(interval, preCelestialEffects);
-  if ((TimeStudy(133).isBought && !Achievement(138).isEnabled) || (amount.gt(replicantiCap()) || noMod)) {
+  if ((TimeStudy(133).isBought && !Achievement(138).isUnlocked) || (amount.gt(replicantiCap()) || noMod)) {
     interval = interval.times(10);
   }
   if (TimeStudy(132).isBought && Perk.studyPassive2.isBought) {
     interval = interval.divide(5);
   }
   if (amount.lte(replicantiCap()) || noMod) {
-    if (Achievement(134).isEnabled) interval = interval.divide(2);
+    if (Achievement(134).isUnlocked) interval = interval.divide(2);
   } else {
     const increases = (amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
     interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
@@ -105,7 +105,7 @@ function replicantiLoop(diff) {
   PerformanceStats.start("Replicanti");
   EventHub.dispatch(GameEvent.REPLICANTI_TICK_BEFORE);
   const interval = getReplicantiInterval();
-  const isActivePathDisablingRGAutobuyer = TimeStudy(131).isBought && !Achievement(138).isEnabled;
+  const isActivePathDisablingRGAutobuyer = TimeStudy(131).isBought && !Achievement(138).isUnlocked;
   const isRGAutobuyerEnabled = player.replicanti.galaxybuyer && !isActivePathDisablingRGAutobuyer;
   const logReplicanti = player.replicanti.amount.clampMin(1).ln();
   const isUncapped = TimeStudy(192).isBought;
@@ -257,7 +257,7 @@ const ReplicantiUpgrade = {
       this.baseCost = this.baseCost.times(Decimal.pow(this.costIncrease, N));
       this.value = this.nearestPercent(this.value + 0.01 * N);
     }
- 
+
     // Rounding errors suck
     nearestPercent(x) {
       return Math.round(100 * x) / 100;
@@ -425,7 +425,7 @@ const Replicanti = {
         this.isOn = !this.isOn;
       },
       get isEnabled() {
-        return !TimeStudy(131).isBought || Achievement(138).isEnabled;
+        return !TimeStudy(131).isBought || Achievement(138).isUnlocked;
       }
     }
   },

@@ -264,9 +264,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirementV: () => TimeStudy(111).isBought && (TimeStudy(121).isBought || TimeStudy(122).isBought),
       description: "You gain more EP based on time spent this Eternity",
       effect: () => {
-        let thisEternity = Time.thisEternity;
-        Perk.studyIdleEP.applyEffect(v => thisEternity = thisEternity.plus(v));
-        return Math.sqrt(1.39 * thisEternity.totalSeconds);
+        const perkEffect = TimeSpan.fromMinutes(Perk.studyIdleEP.effectOrDefault(0));
+        const totalSeconds = Time.thisEternity.plus(perkEffect).totalSeconds;
+        return Math.sqrt(1.39 * totalSeconds);
       },
       formatEffect: value => formatX(value, 1, 1)
     },
@@ -276,7 +276,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 10,
       requirement: () => TimeStudy(121).isBought && !TimeStudy(132).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(121).isBought && (TimeStudy(132).isBought || TimeStudy(133).isBought),
-      description: () => (Achievement(138).isEnabled
+      description: () => (Achievement(138).isUnlocked
         ? "You can get 50% more Replicanti galaxies"
         : "Automatic Replicanti galaxies are disabled, but you can get 50% more"),
       effect: () => Math.floor(player.replicanti.gal / 2)
@@ -298,7 +298,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 10,
       requirement: () => TimeStudy(123).isBought && !TimeStudy(131).isBought && !TimeStudy(132).isBought,
       requirementV: () => TimeStudy(123).isBought && (TimeStudy(131).isBought || TimeStudy(132).isBought),
-      description: () => (Achievement(138).isEnabled
+      description: () => (Achievement(138).isUnlocked
       ? "Replicanti galaxies are 50% stronger"
       : `Replicanti are ${shortenSmallInteger(10)}x slower until infinity, but their galaxies are 50% stronger`),
       effect: 0.5
@@ -335,9 +335,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirementV: () => TimeStudy(133).isBought && (TimeStudy(141).isBought || TimeStudy(142).isBought),
       description: "Multiplier to IP, which increases over this Infinity",
       effect: () => {
-        let thisInfinity = Time.thisInfinity;
-        Perk.studyIdleEP.applyEffect(v => thisInfinity = thisInfinity.plus(v));
-        return thisInfinityMult(thisInfinity.totalSeconds);
+        const perkEffect = TimeSpan.fromMinutes(Perk.studyIdleEP.effectOrDefault(0));
+        const totalSeconds = Time.thisInfinity.plus(perkEffect).totalSeconds;
+        return thisInfinityMult(totalSeconds);
       },
       formatEffect: value => formatX(value, 2, 1),
       cap: () => Effarig.eternityCap

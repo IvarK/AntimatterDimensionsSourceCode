@@ -1101,6 +1101,11 @@ const GlyphEffect = {
 };
 
 class RealityUpgradeState extends BitPurchasableMechanicState {
+  constructor(config) {
+    super(config);
+    this.registerEvents(config.checkEvent, () => this.tryUnlock());
+  }
+
   get currency() {
     return Currency.realityMachines;
   }
@@ -1184,10 +1189,3 @@ const RealityUpgrades = {
     return (player.reality.upgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.upgrades.length - 5);
   }
 };
-
-EventHub.registerStateCollectionEvents(
-  RealityUpgrades.all,
-  rupg => rupg.config.checkEvent,
-  // eslint-disable-next-line max-params
-  (rupg, a1, a2, a3) => rupg.tryUnlock(a1, a2, a3)
-);

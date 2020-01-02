@@ -83,7 +83,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => !player.reality.gainedAutoAchievements,
       checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
       description: "Tachyon Particle gain is multiplied based on achievement multiplier",
-      effect: () => Player.achievementPower.sqrt(),
+      effect: () => Math.sqrt(Achievements.power),
       formatEffect: value => formatX(value, 2, 2)
     },
     {

@@ -85,7 +85,7 @@ const V_UNLOCKS = {
       id: 1,
       reward: "Achievement multiplier affects auto EC completion time. Unlock Triad studies.",
       description: "Have 10 V-achievements",
-      effect: () => Player.achievementPower.toNumber(),
+      effect: () => Achievements.power,
       format: x => formatX(x, 2, 2),
       requirement: () => V.spaceTheorems >= 10
     },
@@ -93,7 +93,7 @@ const V_UNLOCKS = {
       id: 2,
       reward: "Achievement count affects black hole power.",
       description: "Have 30 V-achievements",
-      effect: () => Player.achievementPower.toNumber(),
+      effect: () => Achievements.power,
       format: x => formatX(x, 2, 0),
       requirement: () => V.spaceTheorems >= 30
     },

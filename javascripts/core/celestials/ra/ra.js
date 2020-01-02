@@ -518,7 +518,7 @@ const RA_UNLOCKS = {
     id: 22,
     description: "Get V to level 15",
     reward: "Achievement multiplier applies to Time Theorem generation",
-    effect: () => Player.achievementPower.toNumber(),
+    effect: () => Achievements.power,
     pet: Ra.pets.v,
     level: 15
   },

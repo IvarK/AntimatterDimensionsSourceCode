@@ -22,34 +22,18 @@ class EventHub {
   }
 
   // eslint-disable-next-line max-params
-  dispatch(event, a1, a2, a3) {
+  dispatch(event, args) {
     const handlers = this._handlers[event];
     if (handlers === undefined) return;
     for (const handler of handlers) {
-      handler.fn(a1, a2, a3);
+      handler.fn(args);
     }
   }
 
   // eslint-disable-next-line max-params
-  static dispatch(event, a1, a2, a3) {
-    EventHub.logic.dispatch(event, a1, a2, a3);
-    GameUI.dispatch(event, a1, a2, a3);
-  }
-
-  static registerStateEvents(state, getEvents, callback) {
-    const events = getEvents(state);
-    if (events === undefined) return;
-    for (const event of events instanceof Array ? events : [events]) {
-      EventHub.logic.on(event, (a1, a2, a3) => {
-        callback(state, a1, a2, a3);
-      });
-    }
-  }
-
-  static registerStateCollectionEvents(states, getEvents, callback) {
-    for (const state of states) {
-      EventHub.registerStateEvents(state, getEvents, callback);
-    }
+  static dispatch(event, ...args) {
+    EventHub.logic.dispatch(event, args);
+    GameUI.dispatch(event, args);
   }
 
   static get stats() {

@@ -150,3 +150,16 @@ const PerkShopUpgrade = (function() {
     musicGlyph: new PerkShopUpgradeState(db.musicGlyph),
   };
 }());
+
+EventHub.logic.on(GameEvent.TAB_CHANGED, () => {
+  if (Tab.celestials.teresa.isOpen) Teresa.quotes.show(Teresa.quotes.INITIAL);
+});
+
+EventHub.logic.on(GameEvent.CELESTIAL_UPGRADE_UNLOCKED, ([celestial, upgradeInfo]) => {
+  if (celestial === Teresa) {
+    if (upgradeInfo === TERESA_UNLOCKS.RUN) Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY);
+    if (upgradeInfo === TERESA_UNLOCKS.EFFARIG) Teresa.quotes.show(Teresa.quotes.EFFARIG);
+  }
+});
+
+EventHub.logic.on(GameEvent.GAME_LOAD, () => Teresa.checkForUnlocks());

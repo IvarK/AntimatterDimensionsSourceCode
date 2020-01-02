@@ -298,6 +298,7 @@ const EternityChallenges = {
     },
 
     get interval() {
+      if (!Perk.autocompleteEC1.isBought) return Infinity;
       let hours = Effects.min(
         Number.MAX_VALUE,
         Perk.autocompleteEC1,
@@ -307,7 +308,7 @@ const EternityChallenges = {
         Perk.autocompleteEC5
       );
       if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0])) hours /= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0].effect();
-      return hours === Number.MAX_VALUE ? Infinity : TimeSpan.fromHours(hours).totalMilliseconds;
+      return TimeSpan.fromHours(hours).totalMilliseconds;
     }
   }
 };

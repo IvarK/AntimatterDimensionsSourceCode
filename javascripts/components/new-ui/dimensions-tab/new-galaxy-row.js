@@ -79,7 +79,7 @@ Vue.component("new-galaxy-row", {
       if (NormalChallenge(8).isRunning) return "Locked (8th Dimension Autobuyer Challenge)";
       return null;
     },
-    buyGalaxy: bulk => galaxyResetBtnClick(bulk),
+    buyGalaxy: bulk => requestGalaxyReset(bulk),
   },
   template:
   `<div class="reset-container galaxy">

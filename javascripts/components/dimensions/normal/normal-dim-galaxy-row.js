@@ -80,7 +80,7 @@ Vue.component("normal-dim-galaxy-row", {
       if (NormalChallenge(8).isRunning) return "Locked (8th Dimension Autobuyer Challenge)";
       return null;
     },
-    buyGalaxy: bulk => galaxyResetBtnClick(bulk),
+    buyGalaxy: bulk => requestGalaxyReset(bulk),
   },
   template:
     `<div class="c-normal-dim-row">

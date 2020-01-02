@@ -1676,9 +1676,10 @@ GameDatabase.news = [
   },
   {
     id: "a299",
-    text:
-      `Buy the new Antimatter Dimensions puzzle set now! With a combined ${format(Number.MAX_VALUE)} ` +
-      `pieces, these puzzles are the perfect way to spend some quality time with your family!`
+    get text() {
+      return `Buy the new Antimatter Dimensions puzzle set now! With a combined ${format(Number.MAX_VALUE)} ` +
+      `pieces, these puzzles are the perfect way to spend some quality time with your family!`;
+    }
   },
   {
     id: "a300",
@@ -1729,9 +1730,10 @@ GameDatabase.news = [
   },
   {
     id: "a309",
-    text:
-      `Check out Avari's newly built actually infinite infinity pool! With an area of ` +
-      `${format(Number.MAX_VALUE)} square megametres, you'll be sure to have infinite fun!`
+    get text() {
+      return `Check out Avari's newly built actually infinite infinity pool! With an area of ` +
+      `${format(Number.MAX_VALUE)} square megametres, you'll be sure to have infinite fun!`;
+    }
   },
   {
     id: "l1",

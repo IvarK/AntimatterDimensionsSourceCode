@@ -112,8 +112,8 @@ Vue.component("news-ticker", {
         GameOptions.toggleNews();
       }
       if (this.currentNews.id === "a296") {
+        if (this.$refs.line.innerHTML.includes("hard reset")) player.secretUnlocks.paperclips++;
         this.$refs.line.innerHTML = "You're crazy. You know what, here. Have a paperclip.";
-        player.secretUnlocks.paperclips++;
       }
     }
   },

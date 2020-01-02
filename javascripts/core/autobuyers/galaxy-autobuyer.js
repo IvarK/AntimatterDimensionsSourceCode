@@ -63,10 +63,7 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends IntervaledAutobuyerSta
     if (!Galaxy.requirement.isSatisfied) return;
     super.tick();
     if (this.limitGalaxies && player.galaxies >= this.maxGalaxies) return;
-    if (this.isBuyMaxActive) {
-      maxBuyGalaxies();
-      return;
-    }
-    galaxyResetBtnClick(true);
+    const limit = Autobuyer.galaxy.limitGalaxies ? Autobuyer.galaxy.maxGalaxies : Number.MAX_VALUE;
+    galaxyResetBtnClick(this.isBuyMaxActive, limit);
   }
 }();

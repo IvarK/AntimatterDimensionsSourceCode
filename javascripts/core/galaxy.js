@@ -147,15 +147,14 @@ function galaxyReset() {
   EventHub.dispatch(GameEvent.GALAXY_RESET_AFTER);
 }
 
-function galaxyResetBtnClick(bulk) {
-  if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(true);
-  if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
+function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {
+  if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(limit);
+  if (player.galaxies >= limit || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   galaxyReset();
   return true;
 }
 
-function maxBuyGalaxies(manual) {
-  const limit = !manual && Autobuyer.galaxy.limitGalaxies ? Autobuyer.galaxy.maxGalaxies : Number.MAX_VALUE;
+function maxBuyGalaxies(limit = Number.MAX_VALUE) {
   if (player.galaxies >= limit || !Galaxy.canBeBought) return false;
   // Check for ability to buy one galaxy (which is pretty efficient)
   const req = Galaxy.requirement;

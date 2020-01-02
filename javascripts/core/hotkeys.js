@@ -11,7 +11,8 @@
 
 GameKeyboard.bindRepeatableHotkey("m", () => maxAll());
 GameKeyboard.bindRepeatableHotkey("d", () => softResetBtnClick());
-GameKeyboard.bindRepeatableHotkey("g", () => galaxyResetBtnClick(true));
+GameKeyboard.bindRepeatableHotkey("g", () => requestGalaxyReset(true));
+GameKeyboard.bindRepeatableHotkey("shift+g", () => requestGalaxyReset(false));
 GameKeyboard.bindRepeatableHotkey("s", () => sacrificeBtnClick());
 GameKeyboard.bindRepeatableHotkey("r", () => replicantiGalaxy());
 GameKeyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());

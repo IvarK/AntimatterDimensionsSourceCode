@@ -149,7 +149,7 @@ function galaxyReset() {
 
 function galaxyResetBtnClick(bulk, limit) {
   if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(limit);
-  if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
+  if (player.galaxies >= limit || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   galaxyReset();
   return true;
 }

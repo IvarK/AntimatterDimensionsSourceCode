@@ -77,12 +77,12 @@ Vue.component("v-tab", {
   template:
     `<div class="l-v-celestial-tab">
       <div v-if="!mainUnlock">
-        You need {{ shorten(db.mainUnlock.realities, 2, 0) }} realities (currently {{ shorten(realities, 2, 0) }}),<br>
-        {{ shorten(db.mainUnlock.eternities, 2, 0) }} eternities (currently {{ shorten(eternities, 2, 0) }}),<br>
-        {{ shorten(db.mainUnlock.infinities, 2, 0) }} infinities (currently {{ shorten(infinities, 2, 0) }}),<br>
-        {{ shorten(db.mainUnlock.dilatedTime, 2, 0) }} dilated time (currently {{ shorten(dilatedTime, 2, 0) }}),<br>
-        {{ shorten(db.mainUnlock.replicanti, 2, 0) }} replicanti (currently {{ shorten(replicanti, 2, 0) }}),<br>
-        and {{ shorten(db.mainUnlock.rm, 2, 0) }} RM (currently {{ shorten(rm, 2, 0) }})
+        You need {{ format(db.mainUnlock.realities, 2, 0) }} realities (currently {{ format(realities, 2, 0) }}),<br>
+        {{ format(db.mainUnlock.eternities, 2, 0) }} eternities (currently {{ format(eternities, 2, 0) }}),<br>
+        {{ format(db.mainUnlock.infinities, 2, 0) }} infinities (currently {{ format(infinities, 2, 0) }}),<br>
+        {{ format(db.mainUnlock.dilatedTime, 2, 0) }} dilated time (currently {{ format(dilatedTime, 2, 0) }}),<br>
+        {{ format(db.mainUnlock.replicanti, 2, 0) }} replicanti (currently {{ format(replicanti, 2, 0) }}),<br>
+        and {{ format(db.mainUnlock.rm, 2, 0) }} RM (currently {{ format(rm, 2, 0) }})
         to unlock V, The Celestial of Achievements
       </div>
       <div v-else>

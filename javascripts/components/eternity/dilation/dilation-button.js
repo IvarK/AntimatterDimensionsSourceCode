@@ -42,7 +42,7 @@ Vue.component("dilation-button", {
       <span v-else-if="hasGain">
         Disable dilation.
         <br>
-        Reach {{shorten(eternityGoal, 1, 0)}} IP to eternity and gain Tachyon Particles.
+        Reach {{format(eternityGoal, 1, 0)}} IP to eternity and gain Tachyon Particles.
       </span>
       <span v-else>
         Disable dilation.

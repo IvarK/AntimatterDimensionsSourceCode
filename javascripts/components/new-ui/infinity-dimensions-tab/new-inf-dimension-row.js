@@ -40,7 +40,7 @@ Vue.component("new-inf-dimension-row", {
       return this.isCapped ? "Capped!" : `Cost: ${format(this.cost, 0, 0)} IP`;
     },
     hardcapPurchases() {
-      return this.shorten(this.hardcap, 1, 1);
+      return this.format(this.hardcap, 1, 1);
     },
     capTooltip() {
       return this.isCapped

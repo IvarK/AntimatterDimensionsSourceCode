@@ -79,7 +79,7 @@ GameDatabase.achievements.normal = [
   {
     id: 24,
     name: "Antimatter Apocalypse",
-    tooltip: () => `Get over ${shorten(1e80, 0, 0)} antimatter.`,
+    tooltip: () => `Get over ${format(1e80, 0, 0)} antimatter.`,
     checkRequirement: () => player.antimatter.exponent >= 80,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
@@ -107,7 +107,7 @@ GameDatabase.achievements.normal = [
   {
     id: 28,
     name: "There's no point in doing that",
-    tooltip: () => `Buy a single 1st Dimension when you have over ${shorten(1e150)} of them.`,
+    tooltip: () => `Buy a single 1st Dimension when you have over ${format(1e150)} of them.`,
     checkRequirement: () => NormalDimension(1).amount.exponent >= 150,
     checkEvent: GameEvent.ACHIEVEMENT_EVENT_OTHER,
     reward: "1st Dimensions are 10% stronger.",
@@ -116,7 +116,7 @@ GameDatabase.achievements.normal = [
   {
     id: 31,
     name: "I forgot to nerf that",
-    tooltip: () => `Get any Dimension multiplier over ${shorten(1e31)}.`,
+    tooltip: () => `Get any Dimension multiplier over ${format(1e31)}.`,
     checkRequirement: () => NormalDimensions.all.find(x => x.multiplier.exponent >= 31) !== undefined,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "1st Dimensions are 5% stronger.",
@@ -189,7 +189,7 @@ GameDatabase.achievements.normal = [
   {
     id: 42,
     name: "Supersanic",
-    tooltip: () => `Have antimatter/sec exceed your current antimatter above ${shorten(1e63, 0, 0)}.`,
+    tooltip: () => `Have antimatter/sec exceed your current antimatter above ${format(1e63, 0, 0)}.`,
     checkRequirement: () =>
       player.antimatter.exponent >= 63 &&
       getDimensionProductionPerSecond(1).gt(player.antimatter),
@@ -216,7 +216,7 @@ GameDatabase.achievements.normal = [
   {
     id: 45,
     name: "Faster than a potato",
-    tooltip: () => `Get more than ${shorten(1e29)} ticks per second.`,
+    tooltip: () => `Get more than ${format(1e29)} ticks per second.`,
     checkRequirement: () => Tickspeed.current.exponent <= -26,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Reduces starting tick interval by 2%.",
@@ -225,7 +225,7 @@ GameDatabase.achievements.normal = [
   {
     id: 46,
     name: "Multidimensional",
-    tooltip: () => `Reach ${shorten(1e12)} of all Dimensions except the 8th.`,
+    tooltip: () => `Reach ${format(1e12)} of all Dimensions except the 8th.`,
     checkRequirement: () => NormalDimension(7).amount.exponent >= 12,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
@@ -274,7 +274,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Infinity in ${formatInt(10)} minutes or less.`,
     checkRequirement: () => Time.thisInfinityRealTime.totalMinutes <= 10,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
-    reward: () => `Start with ${shorten(2e5)} antimatter.`,
+    reward: () => `Start with ${format(2e5)} antimatter.`,
     effect: 2e5
   },
   {
@@ -283,7 +283,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Infinity in ${formatInt(1)} minute or less.`,
     checkRequirement: () => Time.thisInfinityRealTime.totalMinutes <= 1,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
-    reward: () => `Start with ${shorten(1e10)} antimatter.`,
+    reward: () => `Start with ${format(1e10)} antimatter.`,
     effect: 1e10
   },
   {
@@ -323,7 +323,7 @@ GameDatabase.achievements.normal = [
   {
     id: 62,
     name: "Oh hey, you're still here",
-    tooltip: () => `Reach ${shorten(1e8)} IP per minute.`,
+    tooltip: () => `Reach ${format(1e8)} IP per minute.`,
     checkRequirement: () => Player.bestRunIPPM.exponent >= 8,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
@@ -337,7 +337,7 @@ GameDatabase.achievements.normal = [
   {
     id: 64,
     name: "1 million is a lot",
-    tooltip: () => `Reach ${shorten(1e6)} Infinity power.`,
+    tooltip: () => `Reach ${format(1e6)} Infinity power.`,
     checkRequirement: () => player.infinityPower.exponent >= 6,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
@@ -356,7 +356,7 @@ GameDatabase.achievements.normal = [
   {
     id: 66,
     name: "Faster than a squared potato",
-    tooltip: () => `Get more than ${shorten(1e58, 0, 0)} ticks per second.`,
+    tooltip: () => `Get more than ${format(1e58, 0, 0)} ticks per second.`,
     checkRequirement: () => Tickspeed.current.exponent <= -55,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Reduces starting tick interval by 2%.",
@@ -395,7 +395,7 @@ GameDatabase.achievements.normal = [
   {
     id: 72,
     name: "Can't hold all these infinities",
-    tooltip: () => `Get all Dimension multipliers over ${shorten(1e308)}.`,
+    tooltip: () => `Get all Dimension multipliers over ${format(1e308)}.`,
     checkRequirement: () => Array.range(1, 8)
       .every(tier => getDimensionFinalMultiplier(tier).exponent >= 308),
     checkEvent: GameEvent.GAME_TICK_AFTER,
@@ -405,7 +405,7 @@ GameDatabase.achievements.normal = [
   {
     id: 73,
     name: "This achievement doesn't exist",
-    tooltip: () => `Get ${shorten("9.9999e9999", 4, 0)} antimatter.`,
+    tooltip: () => `Get ${format("9.9999e9999", 4, 0)} antimatter.`,
     checkRequirement: () => player.antimatter.gte("9.9999e9999"),
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Dimensions are more powerful the more unspent antimatter you have.",
@@ -459,7 +459,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get to Infinity in under ${formatInt(200)} milliseconds.`,
     checkRequirement: () => Time.thisInfinityRealTime.totalMilliseconds <= 200,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
-    reward: () => `Start with ${shorten(2e25, 0, 0)} antimatter ` +
+    reward: () => `Start with ${format(2e25, 0, 0)} antimatter ` +
       `and all Dimensions are stronger in the first ${formatInt(300)}ms of Infinities.`,
     effects: {
       dimensionMult: {
@@ -495,7 +495,7 @@ GameDatabase.achievements.normal = [
   {
     id: 84,
     name: "I got a few to spare",
-    tooltip: () => `Reach ${shorten("1e35000", 0, 0)} antimatter.`,
+    tooltip: () => `Reach ${format("1e35000", 0, 0)} antimatter.`,
     checkRequirement: () => player.antimatter.exponent >= 35000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Dimensions are more powerful the more unspent antimatter you have.",
@@ -504,7 +504,7 @@ GameDatabase.achievements.normal = [
   {
     id: 85,
     name: "All your IP are belong to us",
-    tooltip: () => `Big Crunch for ${shorten(1e150, 0, 0)} IP.`,
+    tooltip: () => `Big Crunch for ${format(1e150, 0, 0)} IP.`,
     checkRequirement: () => gainedInfinityPoints().exponent >= 150,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: () => `Additional ${formatInt(4)}x multiplier to IP.`,
@@ -522,7 +522,7 @@ GameDatabase.achievements.normal = [
   {
     id: 87,
     name: "2 Million Infinities",
-    tooltip: () => `Infinity ${shorten(2e6)} times.`,
+    tooltip: () => `Infinity ${format(2e6)} times.`,
     checkRequirement: () => player.infinitied.gt(2e6),
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: () => `Infinities more than ${formatInt(5)} seconds long
@@ -542,7 +542,7 @@ GameDatabase.achievements.normal = [
   {
     id: 91,
     name: "Ludicrous Speed",
-    tooltip: () => `Big Crunch for ${shorten(1e200, 0, 0)} IP in ${formatInt(2)} seconds or less.`,
+    tooltip: () => `Big Crunch for ${format(1e200, 0, 0)} IP in ${formatInt(2)} seconds or less.`,
     checkRequirement: () => gainedInfinityPoints().exponent >= 200 && Time.thisInfinityRealTime.totalSeconds <= 2,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: () => `All Dimensions are significantly stronger in the
@@ -553,7 +553,7 @@ GameDatabase.achievements.normal = [
   {
     id: 92,
     name: "I brake for nobody",
-    tooltip: () => `Big Crunch for ${shorten(1e250, 0, 0)} IP in ${formatInt(20)} seconds or less.`,
+    tooltip: () => `Big Crunch for ${format(1e250, 0, 0)} IP in ${formatInt(20)} seconds or less.`,
     checkRequirement: () => gainedInfinityPoints().exponent >= 250 && Time.thisInfinityRealTime.totalSeconds <= 20,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: () => `All Dimensions are significantly stronger in the
@@ -564,7 +564,7 @@ GameDatabase.achievements.normal = [
   {
     id: 93,
     name: "MAXIMUM OVERDRIVE",
-    tooltip: () => `Big Crunch with ${shorten(1e300, 0, 0)} IP/min.`,
+    tooltip: () => `Big Crunch with ${format(1e300, 0, 0)} IP/min.`,
     checkRequirement: () => Player.bestRunIPPM.exponent >= 300,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: () => `Additional ${formatInt(4)}x multiplier to IP.`,
@@ -573,7 +573,7 @@ GameDatabase.achievements.normal = [
   {
     id: 94,
     name: "4.3333 minutes of Infinity",
-    tooltip: () => `Reach ${shorten(1e260, 0, 0)} infinity power.`,
+    tooltip: () => `Reach ${format(1e260, 0, 0)} infinity power.`,
     checkRequirement: () => player.infinityPower.exponent >= 260,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Double Infinity power gain.",
@@ -601,7 +601,7 @@ GameDatabase.achievements.normal = [
     name: "Yes. This is hell.",
     checkRequirement: () => Time.infinityChallengeSum.totalSeconds < 6.66,
     checkEvent: [GameEvent.BIG_CRUNCH_AFTER, GameEvent.REALITY_RESET_AFTER],
-    tooltip: () => `Get the sum of Infinity Challenge times under ${shorten(6.66, 2, 2)} seconds.`
+    tooltip: () => `Get the sum of Infinity Challenge times under ${format(6.66, 2, 2)} seconds.`
   },
   {
     id: 98,
@@ -629,7 +629,7 @@ GameDatabase.achievements.normal = [
   {
     id: 103,
     name: "This achievement doesn't exist II",
-    tooltip: () => `Reach ${shorten("9.99999e999", 5, 0)} IP.`,
+    tooltip: () => `Reach ${format("9.99999e999", 5, 0)} IP.`,
     checkRequirement: () => player.infinityPoints.exponent >= 1000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Gain more IP based on amount of antimatter you had when crunching.",
@@ -641,7 +641,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Eternity in under ${formatInt(30)} seconds.`,
     checkRequirement: () => Time.thisEternity.totalSeconds <= 30,
     checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
-    reward: () => `Start Eternities with ${shorten(2e25)} IP.`,
+    reward: () => `Start Eternities with ${format(2e25)} IP.`,
     effect: 2e25
   },
   {
@@ -678,7 +678,7 @@ GameDatabase.achievements.normal = [
     id: 111,
     name: "Yo dawg, I heard you liked infinities...",
     tooltip: () => `Have all your Infinities in your past ${formatInt(10)} Infinities be at least ` +
-      `${shorten(Decimal.MAX_NUMBER, 1, 0)} times higher IP than the previous one.`,
+      `${format(Decimal.MAX_NUMBER, 1, 0)} times higher IP than the previous one.`,
     checkRequirement: () => {
       const infinities = player.lastTenRuns.map(run => run[1]);
       for (let i = 0; i < infinities.length - 1; i++) {
@@ -746,7 +746,7 @@ GameDatabase.achievements.normal = [
   {
     id: 118,
     name: "IT'S OVER 9000",
-    tooltip: () => `Get a total sacrifice multiplier of ${shorten("1e9000", 0, 0)}.`,
+    tooltip: () => `Get a total sacrifice multiplier of ${format("1e9000", 0, 0)}.`,
     checkRequirement: () => Sacrifice.totalBoost.exponent >= 9000,
     checkEvent: GameEvent.SACRIFICE_RESET_AFTER,
     reward: "Sacrifice doesn't reset your Dimensions.",
@@ -754,7 +754,7 @@ GameDatabase.achievements.normal = [
   {
     id: 121,
     name: "Can you get infinite IP?",
-    tooltip: () => `Reach ${shorten("1e30008", 0, 0)} IP.`,
+    tooltip: () => `Reach ${format("1e30008", 0, 0)} IP.`,
     checkRequirement: () => player.infinityPoints.exponent >= 30008,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
@@ -782,7 +782,7 @@ GameDatabase.achievements.normal = [
   {
     id: 125,
     name: "Like feasting on a behind",
-    tooltip: () => `Reach ${shorten(1e100, 0, 0)} IP without any Infinities or 1st Dimensions.`,
+    tooltip: () => `Reach ${format(1e100, 0, 0)} IP without any Infinities or 1st Dimensions.`,
     checkRequirement: () =>
       player.infinityPoints.exponent >= 100 &&
       NormalDimension(1).amount.eq(0) &&
@@ -805,19 +805,19 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Replicanti.galaxies.total >= 180 * player.galaxies && player.galaxies > 0,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: () => "Replicanti galaxies divide your Replicanti by " +
-      `${shorten(Decimal.MAX_NUMBER, 1, 0)} instead of resetting them to ${formatInt(1)}.`,
+      `${format(Decimal.MAX_NUMBER, 1, 0)} instead of resetting them to ${formatInt(1)}.`,
   },
   {
     id: 127,
     name: "But I wanted another prestige layer...",
-    tooltip: () => `Reach ${shorten(Decimal.MAX_NUMBER, 1, 0)} EP.`,
+    tooltip: () => `Reach ${format(Decimal.MAX_NUMBER, 1, 0)} EP.`,
     checkRequirement: () => player.eternityPoints.gte(Decimal.MAX_NUMBER),
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 128,
     name: "What do I have to do to get rid of you",
-    tooltip: () => `Reach ${shorten("1e22000", 0, 0)} IP without any time studies.`,
+    tooltip: () => `Reach ${format("1e22000", 0, 0)} IP without any time studies.`,
     checkRequirement: () => player.infinityPoints.exponent >= 22000 && player.timestudy.studies.length === 0,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Time Dimensions are multiplied by the number of studies you have.",
@@ -826,7 +826,7 @@ GameDatabase.achievements.normal = [
   {
     id: 131,
     name: "No ethical consumption",
-    tooltip: () => `Get ${shorten(5e9)} banked Infinities.`,
+    tooltip: () => `Get ${format(5e9)} banked Infinities.`,
     checkRequirement: () => player.infinitiedBank.gt(5e9),
     checkEvent: GameEvent.ETERNITY_RESET_AFTER,
     reward: "After Eternity you permanently keep 5% of your Infinities.",
@@ -844,7 +844,7 @@ GameDatabase.achievements.normal = [
   {
     id: 133,
     name: "I never liked this infinity stuff anyway",
-    tooltip: () => `Reach ${shorten("1e200000", 0, 0)} IP without buying IDs or IP multipliers.`,
+    tooltip: () => `Reach ${format("1e200000", 0, 0)} IP without buying IDs or IP multipliers.`,
     checkRequirement: () =>
       Array.dimensionTiers.map(InfinityDimension).every(dim => dim.baseAmount === 0) &&
       player.infMultCost.equals(10) &&
@@ -855,16 +855,16 @@ GameDatabase.achievements.normal = [
   {
     id: 134,
     name: "When will it be enough?",
-    tooltip: () => `Reach ${shorten("1e20000", 0, 0)} Replicanti.`,
+    tooltip: () => `Reach ${format("1e20000", 0, 0)} Replicanti.`,
     checkRequirement: () => player.replicanti.amount.exponent >= 20000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: () => `You gain Replicanti ${formatInt(2)} times faster
-      under ${shorten(Decimal.MAX_NUMBER, 1, 0)} Replicanti.`
+      under ${format(Decimal.MAX_NUMBER, 1, 0)} Replicanti.`
   },
   {
     id: 135,
     name: "Faster than a potato^286078",
-    tooltip: () => `Get more than ${shorten("1e8296262", 0, 0)} ticks per second.`,
+    tooltip: () => `Get more than ${format("1e8296262", 0, 0)} ticks per second.`,
     checkRequirement: () => Tickspeed.current.exponent <= -8296262,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
@@ -877,20 +877,20 @@ GameDatabase.achievements.normal = [
   {
     id: 137,
     name: "Now you're thinking with dilation!",
-    tooltip: () => `Eternity for ${shorten("1e600", 0, 0)} EP
+    tooltip: () => `Eternity for ${format("1e600", 0, 0)} EP
       in ${formatInt(1)} minute or less while Dilated.`,
     checkRequirement: () =>
       gainedEternityPoints().exponent >= 600 &&
       Time.thisEternity.totalMinutes <= 1 &&
       player.dilation.active,
     checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
-    reward: () => `Gain ${shorten(2, 0, 1)}x Dilated Time and Time Theorems while Dilated.`,
+    reward: () => `Gain ${format(2, 0, 1)}x Dilated Time and Time Theorems while Dilated.`,
     effect: () => (player.dilation.active ? 2 : 1),
   },
   {
     id: 138,
     name: "This is what I have to do to get rid of you.",
-    tooltip: () => `Reach ${shorten("1e26000", 0, 0)} IP without any time studies while Dilated.`,
+    tooltip: () => `Reach ${format("1e26000", 0, 0)} IP without any time studies while Dilated.`,
     checkRequirement: () =>
       player.timestudy.studies.length === 0 &&
       player.dilation.active &&
@@ -905,7 +905,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => true,
     checkEvent: GameEvent.REALITY_RESET_BEFORE,
     reward: () => `${formatInt(4)}x IP gain and boost from
-      buying ${formatInt(10)} Dimensions +${shorten(0.1, 0, 1)}.`,
+      buying ${formatInt(10)} Dimensions +${format(0.1, 0, 1)}.`,
     effects: {
       ipGain: 4,
       buyTenMult: 0.1
@@ -924,7 +924,7 @@ GameDatabase.achievements.normal = [
     id: 143,
     name: "Yo dawg, I heard you liked reskins...",
     tooltip: () => `Have all your Eternities in your past ${formatInt(10)} Eternities be at least ` +
-      `${shorten(Decimal.MAX_NUMBER, 1, 0)} times higher EP than the previous one.`,
+      `${format(Decimal.MAX_NUMBER, 1, 0)} times higher EP than the previous one.`,
     checkRequirement: () => {
       const eternities = player.lastTenEternities.map(run => run[1]);
       for (let i = 0; i < eternities.length - 1; i++) {

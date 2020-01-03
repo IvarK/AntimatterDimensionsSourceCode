@@ -31,32 +31,32 @@ GameDatabase.celestials.v = {
     {
       id: 2,
       name: "Se7en deadly matters",
-      description: value => `Get ${shorten(value)} IP in Eternity Challenge 7.`,
+      description: value => `Get ${format(value)} IP in Eternity Challenge 7.`,
       values: [6e5, 7.2e5, 8.4e5, 9.6e5, 1.08e6, 1.2e6].map(Decimal.pow10),
       condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x),
       currentValue: () => (EternityChallenge(7).isRunning ? player.infinityPoints.exponent : 0),
-      formatRecord: x => (x === 0 ? formatInt(0) : shorten(Decimal.pow10(x))),
+      formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
     },
     {
       id: 3,
       name: "Young Boy",
-      description: value => `Get ${shorten(value)} Antimatter in Eternity Challenge 12 without
+      description: value => `Get ${format(value)} Antimatter in Eternity Challenge 12 without
         unlocking Time Dilation.`,
       values: [400e6, 450e6, 500e6, 600e6, 700e6, 800e6].map(Decimal.pow10),
       condition: x => EternityChallenge(12).isRunning && player.antimatter.gte(x) && !PlayerProgress.dilationUnlocked(),
       currentValue: () => ((EternityChallenge(12).isRunning && !PlayerProgress.dilationUnlocked())
         ? player.antimatter.exponent
         : 0),
-      formatRecord: x => (x === 0 ? formatInt(0) : shorten(Decimal.pow10(x))),
+      formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
     },
     {
       id: 4,
       name: "Eternal Sunshine",
-      description: value => `Get ${shorten(value)} EP.`,
+      description: value => `Get ${format(value)} EP.`,
       values: ["1e7000", "1e7600", "1e8200", "1e8800", "1e9400", "1e10000"].map(v => new Decimal(v)),
       condition: x => player.eternityPoints.gte(x),
       currentValue: () => player.eternityPoints.exponent,
-      formatRecord: x => (x === 0 ? formatInt(0) : shorten(Decimal.pow10(x))),
+      formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
     },
     {
       id: 5,

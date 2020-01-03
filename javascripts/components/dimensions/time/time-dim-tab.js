@@ -14,7 +14,7 @@ Vue.component("time-dim-tab", {
   },
   computed: {
     e6000Tooltip() {
-      return `TD costs start increasing faster after ${shorten(new Decimal("1e6000"))}`;
+      return `TD costs start increasing faster after ${format(new Decimal("1e6000"))}`;
     },
     costScaleTooltip() {
       return this.showCostScaleTooltip ? this.e6000Tooltip : undefined;

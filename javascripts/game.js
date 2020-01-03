@@ -724,7 +724,7 @@ function simulateTime(seconds, real, fast) {
     // Needs an isFinite check in case it's zero before or afterwards
     if (player[varName].gt(playerStart[varName]) && Number.isFinite(oomIncrease)) {
       offlineIncreases.push(`your ${oomResourceNames[i]} increased by ` +
-        `${shorten(oomIncrease, 2, 2)} orders of magnitude`);
+        `${format(oomIncrease, 2, 2)} orders of magnitude`);
     }
   }
   // Linear increase
@@ -737,9 +737,9 @@ function simulateTime(seconds, real, fast) {
     if (linearIncrease.lessThan(0)) {
       // This happens when a prestige autobuyer triggers offline and resets the value
       offlineIncreases.push(`you ${prestigeReset[i]} and then generated ` +
-        `${shorten(player[varName], 2, 0)} more ${linearResourceNames[i]}`);
+        `${format(player[varName], 2, 0)} more ${linearResourceNames[i]}`);
     } else if (!Decimal.eq(player[varName], playerStart[varName])) {
-      offlineIncreases.push(`you generated ${shorten(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
+      offlineIncreases.push(`you generated ${format(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
     }
   }
   // Black hole activations

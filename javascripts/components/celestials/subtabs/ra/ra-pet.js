@@ -35,8 +35,8 @@ Vue.component("ra-pet", {
       return Math.round(expGain / (avgTimeMs / 60000));
     },
     experienceInformation() {
-      return `${shorten(this.exp, 2)}/${shorten(this.requiredExp, 2)}
-        memories - ${shorten(this.expPerMin, 2)} memories/min`;
+      return `${format(this.exp, 2)}/${format(this.requiredExp, 2)}
+        memories - ${format(this.expPerMin, 2)} memories/min`;
     }
   },
   methods: {

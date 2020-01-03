@@ -104,8 +104,8 @@ Vue.component("game-header", {
       }
       this.inEffarig = Effarig.isRunning;
       if (this.inEffarig) {
-        this.effarigMultNerfText = `^${shorten(0.25 + 0.25 * Effarig.nerfFactor(player.infinityPower), 0, 5)}`;
-        this.effarigTickNerfText = `^${shorten(0.7 + 0.1 * Effarig.nerfFactor(player.timeShards), 0, 5)}`;
+        this.effarigMultNerfText = `^${format(0.25 + 0.25 * Effarig.nerfFactor(player.infinityPower), 0, 5)}`;
+        this.effarigTickNerfText = `^${format(0.7 + 0.1 * Effarig.nerfFactor(player.timeShards), 0, 5)}`;
       }
       this.antimatter.copyFrom(player.antimatter);
       this.antimatterPerSec.copyFrom(Player.antimatterPerSecond);

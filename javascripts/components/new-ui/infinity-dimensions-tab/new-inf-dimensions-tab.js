@@ -76,10 +76,10 @@ Vue.component("new-inf-dimensions-tab", {
       :class="{ 'c-infinity-dim-tab__tesseract-button--disabled': !canBuyTesseract }"
       @click="buyTesseract">
       <p>Buy a Tesseract</p>
-      <p>Increase dimension caps by {{ shorten(nextDimCapIncrease, 2) }}</p>
-      <p><b>Costs: {{ shorten(tesseractCost, 0, 0) }} IP</b></p>
+      <p>Increase dimension caps by {{ format(nextDimCapIncrease, 2) }}</p>
+      <p><b>Costs: {{ format(tesseractCost, 0, 0) }} IP</b></p>
     </button>
-    <div>Total dimension cap increase: {{ shorten(totalDimCapIncrease, 2) }}</div>
+    <div>Total dimension cap increase: {{ format(totalDimCapIncrease, 2) }}</div>
   </div>
   <div>You are getting {{format(powerPerSecond, 2, 0)}} {{incomeType}} per second.</div>
   <primary-button

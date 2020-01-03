@@ -853,8 +853,8 @@ Storing real time completely stops all production, effectively pausing your game
 passes, you gain stored real time (modified by some efficiency factor). You can use stored real time in order to
 amplify a Reality in the Glyphs tab. This uses all of your stored real time at once in order to attempt to repeat that
 exact Reality over and over, giving you all the rewards you would normally get from the repetitions. For example, if
-you have 50 minutes stored and amplify a Reality which has lasted 10 minutes and would give ${shorten(1e30)} RM and
-${shorten(1e12)} Relic Shards, the amplified Reality will give you ${shorten(5e30)} RM, ${shorten(5e12)} Relic Shards,
+you have 50 minutes stored and amplify a Reality which has lasted 10 minutes and would give ${format(1e30)} RM and
+${format(1e12)} Relic Shards, the amplified Reality will give you ${format(5e30)} RM, ${format(5e12)} Relic Shards,
 5 Glyphs (subject to your filtering settings), and 5 Perk Points.
 <br>
 You can toggle a setting to automatically store offline time as stored real time.

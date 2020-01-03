@@ -38,9 +38,9 @@ Vue.component("ra-tab", {
       {
         pet: Ra.pets.enslaved,
         scalingUpgradeText: () => `Stored game time ^
-          ${shorten(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)}, stored real time efficiency
+          ${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)}, stored real time efficiency
           +${formatPercents(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency(), 0, 2)} and
-          +${shorten(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / 1000 / 3600, 0, 1)} hours maximum.`,
+          +${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / 1000 / 3600, 0, 1)} hours maximum.`,
       },
       {
         pet: Ra.pets.v,
@@ -51,7 +51,7 @@ Vue.component("ra-tab", {
   template:
     `<div class="l-ra-celestial-tab">
       <div class="c-ra-memory-header">
-        You will gain {{ shorten(this.currentExpGain, 2, 2) }}{{ showReality ? " base" : ""}}
+        You will gain {{ format(this.currentExpGain, 2, 2) }}{{ showReality ? " base" : ""}}
         memories on Reality, based on glyph level.
       </div>
       <div>

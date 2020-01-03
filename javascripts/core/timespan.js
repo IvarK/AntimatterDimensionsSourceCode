@@ -198,7 +198,7 @@ class TimeSpan {
    */
   toString() {
     if (this.years > 1e6) {
-      return `${shorten(this.totalYears, 3, 0)} years`;
+      return `${format(this.totalYears, 3, 0)} years`;
     }
     if (this.totalSeconds > 10) {
       return this.toStringNoDecimals();
@@ -236,29 +236,29 @@ class TimeSpan {
   toStringShort(useHMS = true) {
     const totalSeconds = this.totalSeconds;
     if (totalSeconds <= 1) {
-      return `${shorten(1000 * totalSeconds)} ms`;
+      return `${format(1000 * totalSeconds)} ms`;
     }
     if (totalSeconds <= 10) {
-      return `${shorten(totalSeconds, 0, 3)} seconds`;
+      return `${format(totalSeconds, 0, 3)} seconds`;
     }
     if (totalSeconds <= 60) {
-      return `${shorten(totalSeconds, 0, 2)} seconds`;
+      return `${format(totalSeconds, 0, 2)} seconds`;
     }
     if (this.totalHours < 100) {
       if (useHMS && !Notations.current.isPainful) {
         return `${format(Math.floor(this.totalHours))}:${format(this.minutes)}:${format(this.seconds)}`;
       }
       if (this.totalMinutes < 60) {
-        return `${shorten(this.totalMinutes, 0, 2)} minutes`;
+        return `${format(this.totalMinutes, 0, 2)} minutes`;
       }
       if (this.totalHours < 24) {
-        return `${shorten(this.totalHours, 0, 2)} hours`;
+        return `${format(this.totalHours, 0, 2)} hours`;
       }
     }
     if (this.totalDays < 500) {
-      return `${shorten(this.totalDays, 0, 2)} days`;
+      return `${format(this.totalDays, 0, 2)} days`;
     }
-    return `${shorten(this.totalYears, 3, 2)} years`;
+    return `${format(this.totalYears, 3, 2)} years`;
 
     function format(value) {
       const s = value.toString();

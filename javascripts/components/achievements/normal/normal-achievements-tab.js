@@ -43,7 +43,7 @@ Vue.component("normal-achievements-tab", {
   template:
     `<div>
       <div class="c-achievements-tab__header">
-        Current achievement multiplier on each Dimension: {{ shorten(achievementPower, 2, 3) }}x
+        Current achievement multiplier on each Dimension: {{ format(achievementPower, 2, 3) }}x
         <span @click="swapImages()" style="cursor: pointer">{{ swapImagesButton }}</span>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">

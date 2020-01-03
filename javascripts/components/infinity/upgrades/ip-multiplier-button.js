@@ -33,7 +33,7 @@ Vue.component("ip-multiplier-button", {
       >
         <template v-if="isCapped">
           <br>
-          <span>(Capped at {{shorten(upgrade.config.costCap, 0, 0)}} IP)</span>
+          <span>(Capped at {{format(upgrade.config.costCap, 0, 0)}} IP)</span>
         </template>
       </infinity-upgrade-button>
       <primary-button-on-off

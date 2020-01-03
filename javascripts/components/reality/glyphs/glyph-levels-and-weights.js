@@ -109,7 +109,7 @@ Vue.component("glyph-levels-and-weights", {
       // Not applied to + perks since it's always whole; for factors < 1, the slice makes the
       // factor be fixed point.
       return Notations.current.isPainful || x > 1000
-        ? shorten(x, 2, 2)
+        ? format(x, 2, 2)
         : x.toPrecision(5).slice(0, 6);
     },
     makeRowStyle(r) {
@@ -216,7 +216,7 @@ Vue.component("glyph-levels-and-weights", {
         <div class="l-glyph-levels-and-weights__adjust-label">
           Adjust weights
           <div class="l-glyph-levels-and-weights__reset-btn-outer">
-            <div 
+            <div
               class="l-glyph-levels-and-weights__reset-btn c-glyph-levels-and-weights__reset-btn"
               @click="resetWeights"
             >

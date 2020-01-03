@@ -36,11 +36,11 @@ Vue.component("past-runs-tab", {
       const time = run[2];
       const rpm = ratePerMinute(amount, time);
       return Decimal.lt(rpm, 1)
-        ? `${shorten(Decimal.mul(rpm, 60), 2, 2)} ${this.points}/hour`
-        : `${shorten(rpm, 2, 2)} ${this.points}/min`;
+        ? `${format(Decimal.mul(rpm, 60), 2, 2)} ${this.points}/hour`
+        : `${format(rpm, 2, 2)} ${this.points}/min`;
     },
     runTime: run => timeDisplayShort(run[0]),
-    runGain: run => shorten(run[1], 2, 0),
+    runGain: run => format(run[1], 2, 0),
     realRunTime: run => (run[2] === undefined ? "unrecorded" : timeDisplayShort(run[2]))
   },
   template:

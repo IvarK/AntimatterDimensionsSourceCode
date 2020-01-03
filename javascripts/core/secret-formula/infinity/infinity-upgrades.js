@@ -79,7 +79,7 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "Decrease Dimension Boost requirement based on Teresa level",
         effect: () => 1 / (1 + Math.sqrt(Ra.pets.teresa.level) / 10),
-        formatEffect: value => `${shorten(value, 4, 4)}x`
+        formatEffect: value => `${format(value, 4, 4)}x`
       }
     },
     buy10Mult: {
@@ -152,7 +152,7 @@ GameDatabase.infinity.upgrades = (function() {
       effect: () => (Teresa.isRunning || V.isRunning ? new Decimal(0) : GameCache.totalIPMult.value),
       formatEffect: value => {
         if (Teresa.isRunning || V.isRunning) return "Disabled in this reality";
-        const income = shorten(value, 2, 0);
+        const income = format(value, 2, 0);
         const period = player.bestInfinityTime >= 999999999999
           ? "hundred or so years"
           : Time.bestInfinity.times(10);
@@ -194,7 +194,7 @@ GameDatabase.infinity.upgrades = (function() {
       cost: 1000,
       description: "Only while offline, gain 50% of your best IP/min without using Max All",
       effect: () => player.bestIpPerMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
-      formatEffect: value => `${shorten(value, 2, 2)} IP/min`,
+      formatEffect: value => `${format(value, 2, 2)} IP/min`,
       bannedFromCharging: true
     },
     ipMult: {

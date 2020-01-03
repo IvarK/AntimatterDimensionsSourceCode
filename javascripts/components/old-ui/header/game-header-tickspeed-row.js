@@ -23,7 +23,7 @@ Vue.component("game-header-tickspeed-row", {
       if (InfinityChallenge(3).isRunning) return `Multiply all Normal Dimensions by
         ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)}`;
       const tickmult = this.mult;
-      if (tickmult.lte(1e-9)) return `Divide the tick interval by ${this.shorten(tickmult.reciprocal(), 2, 0)}.`;
+      if (tickmult.lte(1e-9)) return `Divide the tick interval by ${this.format(tickmult.reciprocal(), 2, 0)}.`;
 
       const asNumber = tickmult.toNumber();
       let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
@@ -31,7 +31,7 @@ Vue.component("game-header-tickspeed-row", {
       return `Reduce the tick interval by ${formatPercents(1 - asNumber, places)}.`;
     },
     tickspeedDisplay() {
-      return `Tickspeed: ${shorten(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
+      return `Tickspeed: ${format(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
     },
     isGameSpeedNormal() {
       return this.gameSpeedMult === 1;
@@ -45,7 +45,7 @@ Vue.component("game-header-tickspeed-row", {
     },
     tooltip() {
       if (this.isGameSpeedNormal) return undefined;
-      const displayValue = this.isGameSpeedSlow ? shorten(1 / this.gameSpeedMult, 2, 3) : this.formattedFastSpeed;
+      const displayValue = this.isGameSpeedSlow ? format(1 / this.gameSpeedMult, 2, 3) : this.formattedFastSpeed;
       return `The game is running ${displayValue}x ${this.isGameSpeedSlow ? "slower." : "faster."}`;
     },
     showCostTitle() {

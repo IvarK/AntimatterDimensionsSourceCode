@@ -31,8 +31,8 @@ function updateNormalAndInfinityChallenges(diff) {
         .times(Decimal.pow((1.03 + DimBoost.totalBoosts / 200 + player.galaxies / 100), diff / 100));
     }
     if (player.matter.gt(player.antimatter) && NormalChallenge(11).isRunning) {
-      Modal.message.show(`Your ${shorten(player.antimatter, 2, 2)} antimatter was annhiliated by ` +
-        `${shorten(player.matter, 2, 2)} matter.`);
+      Modal.message.show(`Your ${format(player.antimatter, 2, 2)} antimatter was annhiliated by ` +
+        `${format(player.matter, 2, 2)} matter.`);
       softReset(0);
     }
   }

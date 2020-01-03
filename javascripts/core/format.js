@@ -1,16 +1,12 @@
 "use strict";
 
-function shorten(value, places, placesUnder1000) {
-  return format(value, places, placesUnder1000);
-}
-
 function format(value, places, placesUnder1000) {
   return Notations.current.format(value, places, placesUnder1000);
 }
 
 function formatInt(value) {
   return Notations.current.isPainful
-    ? shorten(value, 2, 2)
+    ? format(value, 2, 2)
     : formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 

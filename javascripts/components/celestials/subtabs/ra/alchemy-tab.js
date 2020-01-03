@@ -132,7 +132,7 @@ Vue.component("alchemy-tab", {
       return reactionArrow.product.resource.isUnlocked && reactionArrow.reagent.resource.isUnlocked;
     },
     isCapped(reactionArrow) {
-      return reactionArrow.product.resource.amount > 0 && 
+      return reactionArrow.product.resource.amount > 0 &&
         reactionArrow.product.resource.amount >= reactionArrow.reagent.resource.amount;
     },
     isActiveReaction(reactionArrow) {
@@ -209,7 +209,7 @@ Vue.component("alchemy-tab", {
     `<div class="l-ra-alchemy-tab">
       <div @click="showAlchemyHowTo()" class="o-primary-btn">Click for alchemy info</div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      Resource cap, based on last 10 realities: {{ shorten(estimatedCap, 3, 2) }}
+      Resource cap, based on last 10 realities: {{ format(estimatedCap, 3, 2) }}
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">
           <circle
@@ -220,8 +220,8 @@ Vue.component("alchemy-tab", {
             :r="orbitSize(orbit)"
             :class="orbitClass"
           />
-        </svg> 
-        <alchemy-circle-node 
+        </svg>
+        <alchemy-circle-node
           v-for="(node, i) in layout.nodes"
           :key="i"
           :node="node"
@@ -241,7 +241,7 @@ Vue.component("alchemy-tab", {
             v-bind="reactionArrowPositions(reactionArrow)"
             :class="reactionArrowClass(reactionArrow)"
           />
-        </svg> 
+        </svg>
       </div>
       <button class="o-primary-btn" @click="setAllReactions(true)">Turn on all reactions</button>
       <button class="o-primary-btn" @click="setAllReactions(false)">Turn off all reactions</button>

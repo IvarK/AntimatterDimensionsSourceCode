@@ -7,7 +7,7 @@ GameDatabase.reality.glyphSacrifice = [
     description: amount => {
       const nextDistantGalaxy = Math.pow(10, Math.pow((amount + 1) / 3, 1 / 1.2)) - 1;
       return `Distant galaxy scaling starts ${formatInt(amount)} later
-        (next at ${shorten(nextDistantGalaxy, 2, 2)})`;
+        (next at ${format(nextDistantGalaxy, 2, 2)})`;
     }
   }, {
     id: "infinity",
@@ -23,7 +23,7 @@ GameDatabase.reality.glyphSacrifice = [
     description: amount => {
       const nextReplicatedGalaxy = Math.pow(10, Math.pow((amount + 1) / 6, 1 / 1.2)) - 1;
       return "Replicated galaxy scaling starts " +
-        `${formatInt(amount)} later (next at ${shorten(nextReplicatedGalaxy, 2, 2)})`;
+        `${formatInt(amount)} later (next at ${format(nextReplicatedGalaxy, 2, 2)})`;
     }
   }, {
     id: "dilation",
@@ -32,7 +32,7 @@ GameDatabase.reality.glyphSacrifice = [
       const exponent = 0.2 * Math.pow(Math.log10(sacPower + 1), 0.1);
       return Math.pow(Math.max(sacPower, 1), exponent);
     },
-    description: amount => `Multiply Tachyon Particle gain by ${shorten(amount, 2, 2)}x`
+    description: amount => `Multiply Tachyon Particle gain by ${format(amount, 2, 2)}x`
   }, {
     id: "effarig",
     effect: () => 2 * Math.log10(player.reality.glyphs.sac.effarig / 1e20 + 1),

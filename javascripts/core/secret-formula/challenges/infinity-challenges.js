@@ -82,7 +82,7 @@ GameDatabase.challenges.infinity = [
   {
     id: 7,
     description: () => `You can't get Antimatter Galaxies, but Dimension Boost multiplier
-      ${shorten(2.5, 1, 1)}x ➜ ${formatInt(10)}x`,
+      ${format(2.5, 1, 1)}x ➜ ${formatInt(10)}x`,
     goal: new Decimal("1e10000"),
     isQuickResettable: false,
     effect: 10,

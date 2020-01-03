@@ -19,8 +19,8 @@ Vue.mixin({
     on$(event, fn) {
       EventHub.ui.on(event, fn, this);
     },
-    shorten(value, places, placesUnder1000) {
-      return shorten(value, places, placesUnder1000);
+    format(value, places, placesUnder1000) {
+      return format(value, places, placesUnder1000);
     },
     format(value, places, placesUnder1000) {
       return format(value, places, placesUnder1000);

@@ -31,7 +31,7 @@ Vue.component("replicanti-tab", {
           // Checking isCapped() prevents text overflow when formatted as "__ ➜ __"
           return TimeSpan.fromMilliseconds(intervalNum).toStringShort(false);
         }
-        return `${shorten(actualInterval, 2, 2)}ms`;
+        return `${format(actualInterval, 2, 2)}ms`;
       }
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => `Interval: ${formatInterval(value)}`,
@@ -84,9 +84,9 @@ Vue.component("replicanti-tab", {
       <template v-else>
         <div v-if="isInEC8">You have {{ec8Purchases}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
         <div v-if="hasRaisedCap">
-          Your replicanti cap without study 192 has been raised to {{shorten(replicantiCap, 2)}}
+          Your replicanti cap without study 192 has been raised to {{format(replicantiCap, 2)}}
           and is giving you {{formatInt(effarigInfinityBonusRG)}} extra RG due to Effarig Infinity.
-          (Next RG at {{shorten(nextEffarigRGThreshold, 2)}})
+          (Next RG at {{format(nextEffarigRGThreshold, 2)}})
         </div>
         <p class="c-replicanti-description">
           You have

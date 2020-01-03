@@ -24,7 +24,7 @@ GameDatabase.celestials.perkShop = (function() {
       description: "Increase glyph levels by 5%",
       effect: bought => Math.pow(1.05, bought),
       formatEffect: value => formatX(value, 2, 2),
-      formatCost: value => shorten(value, 2, 0),
+      formatCost: value => format(value, 2, 0),
       cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048)
     }),
     rmMult: rebuyable({
@@ -34,7 +34,7 @@ GameDatabase.celestials.perkShop = (function() {
       description: "Double RM gain",
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => shorten(value, 2, 0),
+      formatCost: value => format(value, 2, 0),
       cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048)
     }),
     bulkDilation: rebuyable({
@@ -44,7 +44,7 @@ GameDatabase.celestials.perkShop = (function() {
       description: "Buy twice as many dilation upgrades at once.",
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => shorten(value, 2, 0),
+      formatCost: value => format(value, 2, 0),
       cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1638400 : 1600)
     }),
     autoSpeed: rebuyable({
@@ -54,7 +54,7 @@ GameDatabase.celestials.perkShop = (function() {
       description: "ID, TD, TT, dilation, and replicanti autobuyers are 2x faster.",
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => shorten(value, 2, 0),
+      formatCost: value => format(value, 2, 0),
       cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 64000 : 4000)
     }),
     musicGlyph: rebuyable({
@@ -63,7 +63,7 @@ GameDatabase.celestials.perkShop = (function() {
       increment: 1,
       description: "Receive a music glyph (random type, 80% of highest level)",
       effect: bought => Decimal.pow(3, bought),
-      formatCost: value => shorten(value, 2, 0),
+      formatCost: value => format(value, 2, 0),
       cap: () => Number.MAX_VALUE
     }),
   };

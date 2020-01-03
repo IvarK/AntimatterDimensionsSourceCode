@@ -11,7 +11,7 @@ GameDatabase.eternity.upgrades = {
   idMultEternities: {
     id: 2,
     cost: 10,
-    description: () => `Infinity Dimension multiplier based on Eternities ((x/200)^log4(2x), softcap at ${shorten(1e5)})`,
+    description: () => `Infinity Dimension multiplier based on Eternities ((x/200)^log4(2x), softcap at ${format(1e5)})`,
     effect() {
       const log4 = Math.log4;
       const eterPreCap = player.eternities.clampMax(1e5).toNumber();

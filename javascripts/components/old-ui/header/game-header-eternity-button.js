@@ -120,12 +120,12 @@ Vue.component("game-header-eternity-button", {
           <b>I need to become Eternal.</b>
           <br>
         </template>
-        Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 0)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <b :style="amountStyle">{{format(gainedEP, 2, 0)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
         <template v-if="isPeakEPPMVisible">
-          {{shorten(currentEPPM, 2, 2)}} EP/min
+          {{format(currentEPPM, 2, 2)}} EP/min
           <br>
-          Peaked at {{shorten(peakEPPM, 2, 2)}} EP/min
+          Peaked at {{format(peakEPPM, 2, 2)}} EP/min
         </template>
       </template>
 
@@ -136,7 +136,7 @@ Vue.component("game-header-eternity-button", {
 
       <!-- Dilation -->
       <template v-else-if="type === 3">
-        Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <b :style="amountStyle">{{format(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
         +{{format(gainedTachyons, 2, 1)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}.
       </template>
@@ -144,7 +144,7 @@ Vue.component("game-header-eternity-button", {
       <!-- New content available -->
       <template v-else-if="type === 4 || type === 5">
         <template v-if="type === 4">
-          Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 2)}}</b> EP
+          Gain <b :style="amountStyle">{{format(gainedEP, 2, 2)}}</b> EP
         </template>
         <template v-else>
           Gain <b>{{format(gainedTachyons, 2, 1)}}</b> Tachyon {{ "particle" | pluralize(gainedTachyons) }}

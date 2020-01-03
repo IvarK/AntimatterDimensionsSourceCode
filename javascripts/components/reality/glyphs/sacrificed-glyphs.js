@@ -24,7 +24,7 @@ Vue.component("sacrificed-glyphs", {
           return this.typeConfig.symbol;
         },
         formatAmount() {
-          return this.shorten(this.amount, 2, 2);
+          return this.format(this.amount, 2, 2);
         },
         description() {
           return this.sacConfig.description(this.effectValue);
@@ -36,7 +36,7 @@ Vue.component("sacrificed-glyphs", {
           return this.hasDragover && this.currentSacrifice.type === this.type;
         },
         formatNewAmount() {
-          return this.shorten(this.currentSacrifice.sacrificeValue, 2, 2);
+          return this.format(this.currentSacrifice.sacrificeValue, 2, 2);
         }
       },
       methods: {
@@ -119,9 +119,9 @@ Vue.component("sacrificed-glyphs", {
       Glyph types will have one of their effects<br>
       improved when their sacrifice values are above:
       <br><br>
-      {{ shorten(addThreshold) }} - an additional secondary effect<br>
-      {{ shorten(empowerThreshold) }} - formula drastically improved<br>
-      {{ shorten(boostThreshold) }} - a boost depending on glyph sacrifice
+      {{ format(addThreshold) }} - an additional secondary effect<br>
+      {{ format(empowerThreshold) }} - formula drastically improved<br>
+      {{ format(boostThreshold) }} - a boost depending on glyph sacrifice
       <br><br>
     </div>
     <div class="c-sacrificed-glyphs__header">Sacrifices:</div>

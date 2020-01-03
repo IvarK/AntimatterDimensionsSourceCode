@@ -15,7 +15,7 @@ GameDatabase.reality.upgrades = (function() {
     const { effect } = props;
     props.effect = () => Math.pow(effect, player.reality.rebuyables[props.id]);
     props.formatEffect = value => formatX(value, 2, 0);
-    props.formatCost = value => shorten(value, 2, 0);
+    props.formatCost = value => format(value, 2, 0);
     return props;
   };
   const isFirstEternity = () => player.realities > 0 && Player.gainedEternities.eq(0);
@@ -98,7 +98,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 10,
       cost: 15,
-      requirement: () => `Do your first Eternity with ${shorten("1e400")} IP`,
+      requirement: () => `Do your first Eternity with ${format("1e400")} IP`,
       checkRequirement: () => player.infinityPoints.exponent >= 400 && isFirstEternity(),
       checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
       description: "Start every reality with 100 Eternities (also applies to current reality)"
@@ -106,17 +106,17 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 11,
       cost: 50,
-      requirement: () => `${shorten(1e12)} banked Infinities`,
+      requirement: () => `${format(1e12)} banked Infinities`,
       checkRequirement: () => player.infinitiedBank.exponent >= 12,
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "Gain 10% of the Infinities you would gain by Infinitying each second.",
       effect: () => gainedInfinities().times(0.1),
-      formatEffect: value => `${shorten(value)} per second`
+      formatEffect: value => `${format(value)} per second`
     },
     {
       id: 12,
       cost: 50,
-      requirement: () => `Reach ${shorten(1e70)} EP without EC1`,
+      requirement: () => `Reach ${format(1e70)} EP without EC1`,
       checkRequirement: () => player.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "EP mult based on Realities and TT",
@@ -128,7 +128,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 13,
       cost: 50,
-      requirement: () => `Reach ${shorten("1e4000")} EP without TD5-8`,
+      requirement: () => `Reach ${format("1e4000")} EP without TD5-8`,
       checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
@@ -137,17 +137,17 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 14,
       cost: 50,
-      requirement: () => `${shorten(1e7)} Eternities`,
+      requirement: () => `${format(1e7)} Eternities`,
       checkRequirement: () => player.eternities.gte(1e7),
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "Gain Eternities per second equal to your Realities",
       effect: () => player.realities * RA_UNLOCKS.TT_BOOST.effect.eternity(),
-      formatEffect: value => `${shorten(value)} per second`
+      formatEffect: value => `${format(value)} per second`
     },
     {
       id: 15,
       cost: 50,
-      requirement: () => `Reach ${shorten(1e10)} EP without purchasing the 5xEP upgrade`,
+      requirement: () => `Reach ${format(1e10)} EP without purchasing the 5xEP upgrade`,
       checkRequirement: () => player.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "Multiply TP gain based on 5xEP mult",
@@ -162,7 +162,7 @@ GameDatabase.reality.upgrades = (function() {
       checkEvent: GameEvent.REALITY_RESET_BEFORE,
       description: "Improve the glyph rarity formula",
       effect: 1.3,
-      formatCost: value => shorten(value, 1, 0)
+      formatCost: value => format(value, 1, 0)
     },
     {
       id: 17,
@@ -171,7 +171,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2) === 4,
       checkEvent: GameEvent.REALITY_RESET_BEFORE,
       description: "50% chance to get +1 effect on glyphs",
-      formatCost: value => shorten(value, 1, 0)
+      formatCost: value => format(value, 1, 0)
     },
     {
       id: 18,
@@ -181,7 +181,7 @@ GameDatabase.reality.upgrades = (function() {
       checkEvent: GameEvent.REALITY_RESET_BEFORE,
       description: "Eternities affect glyph level",
       effect: () => Math.max(Math.sqrt(player.eternities.log10()) * 0.45, 1),
-      formatCost: value => shorten(value, 1, 0)
+      formatCost: value => format(value, 1, 0)
     },
     {
       id: 19,
@@ -190,7 +190,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => Glyphs.active.concat(Glyphs.inventory).countWhere(g => g) >= 30,
       checkEvent: GameEvent.REALITY_RESET_BEFORE,
       description: "You can sacrifice glyphs for permanent bonuses (Shift + click)",
-      formatCost: value => shorten(value, 1, 0)
+      formatCost: value => format(value, 1, 0)
     },
     {
       id: 20,
@@ -199,7 +199,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => Time.totalTimePlayed.totalYears >= 2,
       checkEvent: GameEvent.GAME_TICK_AFTER,
       description: "You can have 2 black holes",
-      formatCost: value => shorten(value, 1, 0)
+      formatCost: value => format(value, 1, 0)
     },
     {
       id: 21,
@@ -212,7 +212,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 22,
       cost: 100000,
-      requirement: () => `${shorten("1e28000")} time shards`,
+      requirement: () => `${format("1e28000")} time shards`,
       checkRequirement: () => player.timeShards.exponent >= 28000,
       checkEvent: GameEvent.GAME_TICK_AFTER,
       description: "Growing bonus to TD based on days spent in this Reality",
@@ -242,7 +242,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 25,
       cost: 100000,
-      requirement: () => `Reach ${shorten("1e10500")} EP`,
+      requirement: () => `Reach ${format("1e10500")} EP`,
       checkRequirement: () => player.eternityPoints.exponent >= 10500,
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "Reality autobuyer"

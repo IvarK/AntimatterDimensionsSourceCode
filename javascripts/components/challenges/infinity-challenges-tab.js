@@ -46,7 +46,7 @@ Vue.component("infinity-challenges-tab", {
             <effect-display v-if="isRunning" :config="config" />
           </template>
           <div slot="bottom" class="l-challenge-box__bottom--infinity">
-            <span>Goal: {{shorten(config.goal, 0, 0)}} antimatter</span>
+            <span>Goal: {{format(config.goal, 0, 0)}} antimatter</span>
             <description-display :config="config.reward" title="Reward:"/>
             <effect-display v-if="isCompleted" :config="config.reward" />
           </div>
@@ -65,7 +65,7 @@ Vue.component("infinity-challenges-tab", {
         : undefined;
       return next === undefined
         ? "All Infinity Challenges unlocked"
-        : `Next challenge unlocks at ${this.shorten(next, 0, 0)} antimatter.`;
+        : `Next challenge unlocks at ${this.format(next, 0, 0)} antimatter.`;
     }
   },
   methods: {

@@ -21,7 +21,7 @@ Vue.component("new-tickspeed-row", {
     multiplierDisplay() {
       const tickmult = this.mult;
       if (tickmult.lte(1e-9)) {
-        return `${this.shorten(tickmult.reciprocal(), 2, 0)}x faster / upgrade.`;
+        return `${this.format(tickmult.reciprocal(), 2, 0)}x faster / upgrade.`;
       }
       const asNumber = tickmult.toNumber();
       let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
@@ -29,7 +29,7 @@ Vue.component("new-tickspeed-row", {
       return `-${((1 - asNumber) * 100).toFixed(places)}% / upgrade`;
     },
     tickspeedDisplay() {
-      return `Tickspeed: ${shorten(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
+      return `Tickspeed: ${format(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
     },
     isGameSpeedNormal() {
       return this.gameSpeedMult === 1;

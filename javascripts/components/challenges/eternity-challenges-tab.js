@@ -86,7 +86,7 @@ Vue.component("eternity-challenges-tab", {
           this.challenge.start();
         },
         goalAtCompletions(completions) {
-          return shorten(this.challenge.goalAtCompletions(completions), 2, 1);
+          return format(this.challenge.goalAtCompletions(completions), 2, 1);
         }
       },
       template:

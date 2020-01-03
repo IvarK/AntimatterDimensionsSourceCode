@@ -32,7 +32,7 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Increase the multiplier for buying 10 dimensions",
       effect: completions => completions * 0.72,
-      formatEffect: value => `+${shorten(value, 2, 2)}`
+      formatEffect: value => `+${format(value, 2, 2)}`
     }
   },
   {
@@ -84,7 +84,7 @@ GameDatabase.challenges.eternity = [
       formatEffect: value => {
         const base = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward));
         const applied = base - value;
-        return `${shorten(base, 2, 1)}x ➜ ${shorten(applied, 2, 1)}x`;
+        return `${format(base, 2, 1)}x ➜ ${format(applied, 2, 1)}x`;
       }
     }
   },
@@ -97,7 +97,7 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "1st Time Dimension produces 8th Infinity Dimensions",
       effect: completions => TimeDimension(1).productionPerSecond.pow(completions * 0.2).minus(1).clampMin(0),
-      formatEffect: value => `${shorten(value, 2, 1)} per second`
+      formatEffect: value => `${format(value, 2, 1)} per second`
     }
   },
   {
@@ -133,7 +133,7 @@ GameDatabase.challenges.eternity = [
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
         infinitied stat to normal dimensions (infinitied^${formatInt(950)}).`;
-      EternityChallenge(10).applyEffect(v => description += ` Currently: ${shorten(v, 2, 1)}x`);
+      EternityChallenge(10).applyEffect(v => description += ` Currently: ${format(v, 2, 1)}x`);
       return description;
     },
     goal: new Decimal("1e3000"),
@@ -162,7 +162,7 @@ GameDatabase.challenges.eternity = [
       formatEffect: value => {
         const base = Math.round(Player.tickSpeedMultDecrease + Effects.sum(EternityChallenge(11).reward));
         const applied = base - value;
-        return `${shorten(base, 2, 2)}x ➜ ${shorten(applied, 2, 2)}x`;
+        return `${format(base, 2, 2)}x ➜ ${format(applied, 2, 2)}x`;
       }
     }
   },
@@ -175,13 +175,13 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e12000"),
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,
     checkRestriction: restriction => Time.thisEternity.totalSeconds < restriction,
-    formatRestriction: restriction => `in ${shorten(restriction, 0, 1)} in-game
+    formatRestriction: restriction => `in ${format(restriction, 0, 1)} in-game
       ${restriction === 1 ? "second" : "seconds"} or less.`,
     failedRestriction: "(Too slow for more)",
     reward: {
       description: "Infinity Dimension cost multipliers are reduced",
       effect: completions => 1 - completions * 0.008,
-      formatEffect: value => `x^${shorten(value, 3, 3)}`
+      formatEffect: value => `x^${format(value, 3, 3)}`
     }
   }
 ];

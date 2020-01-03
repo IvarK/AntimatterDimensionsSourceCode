@@ -1,9 +1,5 @@
 "use strict";
 
-function shortenMultiplier(money) {
-  return shorten(money, 1, 1);
-}
-
 function shorten(value, places, placesUnder1000) {
   return Notations.current.format(value, places, placesUnder1000);
 }

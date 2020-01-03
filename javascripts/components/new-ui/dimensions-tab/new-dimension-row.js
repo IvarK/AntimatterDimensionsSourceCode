@@ -71,7 +71,7 @@ Vue.component("new-dimension-row", {
   },
   template:
   `<div v-show="isUnlocked" class="dimension-row">
-    <h3>{{name}} D<span class="mult">x{{ shortenMultiplier(multiplier) }}</span></h3>
+    <h3>{{name}} D<span class="mult">{{ formatX(multiplier, 1, 1) }}</span></h3>
     <span>{{amountDisplay}}</span>
     <button class="o-primary-btn o-primary-btn--new" @click="buy" :class="{ 'o-primary-btn--disabled': !isAffordable }">
       <div

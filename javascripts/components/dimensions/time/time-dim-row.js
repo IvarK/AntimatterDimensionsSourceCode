@@ -27,7 +27,7 @@ Vue.component("time-dim-row", {
         : "";
     },
     buttonContents() {
-      return this.isCapped ? "Capped" : `Cost: ${this.shortenDimensions(this.cost)} EP`;
+      return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 0, 0)} EP`;
     }
   },
   watch: {
@@ -62,7 +62,7 @@ Vue.component("time-dim-row", {
         {{name}} Time Dimension x{{shortenMoney(multiplier)}}
       </div>
       <div class="c-time-dim-row__label c-time-dim-row__label--growable">
-        {{shortenDimensions(amount)}}{{rateOfChangeDisplay}}
+        {{format(amount, 2, 0)}}{{rateOfChangeDisplay}}
       </div>
       <primary-button-on-off
         v-if="areAutobuyersUnlocked"

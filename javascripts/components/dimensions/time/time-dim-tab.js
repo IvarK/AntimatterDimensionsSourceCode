@@ -47,8 +47,8 @@ Vue.component("time-dim-tab", {
           Next tickspeed upgrade at
           <span class="c-time-dim-description__accent">{{shortenMoney(upgradeThreshold)}}</span>
         </p>
-      </div>      
-      <div>You are getting {{shortenDimensions(shardsPerSecond)}} {{incomeType}} per second.</div>
+      </div>
+      <div>You are getting {{format(shardsPerSecond, 2, 0)}} {{incomeType}} per second.</div>
       <primary-button
         v-tooltip="costScaleTooltip"
         class="o-primary-btn--buy-max l-time-dim-tab__buy-max"

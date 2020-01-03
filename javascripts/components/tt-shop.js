@@ -68,7 +68,7 @@ Vue.component("tt-shop", {
       TimeTheorems.buyWithIP();
     },
     formatEP(ep) {
-      return this.shortenDimensions(ep) + " EP";
+      return format(ep, 2, 0) + " EP";
     },
     buyWithEP() {
       TimeTheorems.buyWithEP();

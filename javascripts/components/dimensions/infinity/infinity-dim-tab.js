@@ -63,7 +63,7 @@ Vue.component("infinity-dim-tab", {
         </p>
       </div>
       <div class="l-infinity-dim-tab__enslaved-reward-container" v-if="enslavedCompleted">
-        <button 
+        <button
           class="c-infinity-dim-tab__tesseract-button"
           :class="{ 'c-infinity-dim-tab__tesseract-button--disabled': !canBuyTesseract }"
           @click="buyTesseract">
@@ -73,7 +73,7 @@ Vue.component("infinity-dim-tab", {
         </button>
         <div>Total dimension cap increase: {{ shorten(totalDimCapIncrease, 2) }}</div>
       </div>
-      <div>You are getting {{shortenDimensions(powerPerSecond)}} {{incomeType}} per second.</div>
+      <div>You are getting {{format(powerPerSecond, 2, 0)}} {{incomeType}} per second.</div>
       <primary-button
         v-if="!isEC8Running"
         class="o-primary-btn--buy-max l-infinity-dim-tab__buy-max"

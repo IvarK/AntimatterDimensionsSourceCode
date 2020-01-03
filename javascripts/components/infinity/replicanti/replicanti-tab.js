@@ -90,7 +90,7 @@ Vue.component("replicanti-tab", {
         </div>
         <p class="c-replicanti-description">
           You have
-          <span class="c-replicanti-description__accent">{{shortenDimensions(amount)}}</span> Replicanti.
+          <span class="c-replicanti-description__accent">{{format(amount, 2, 0)}}</span> Replicanti.
           Translated to
           <span class="c-replicanti-description__accent">{{formatX(mult, 2, 2)}}</span>
           multiplier on all Infinity Dimensions.

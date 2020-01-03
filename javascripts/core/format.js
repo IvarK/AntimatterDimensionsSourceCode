@@ -1,9 +1,5 @@
 "use strict";
 
-function shortenDimensions(money) {
-  return shorten(money, 2, 0);
-}
-
 function shortenMoney(money) {
   return shorten(money, 2, 1);
 }

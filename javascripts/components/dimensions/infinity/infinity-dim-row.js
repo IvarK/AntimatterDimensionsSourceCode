@@ -80,7 +80,7 @@ Vue.component("infinity-dim-row", {
         {{name}} Infinity Dimension x{{shortenMoney(multiplier)}}
       </div>
       <div class="c-infinity-dim-row__label c-infinity-dim-row__label--growable">
-        {{shortenDimensions(amount)}} {{rateOfChangeDisplay}}
+        {{format(amount, 2, 0)}} {{rateOfChangeDisplay}}
       </div>
       <primary-button-on-off
         v-if="isAutobuyerUnlocked && !isEC8Running"

@@ -128,7 +128,7 @@ Vue.component("game-header", {
         <game-header-new-dim-button />
         <game-header-eternity-button />
       </div>
-      <div>You are getting {{shortenDimensions(antimatterPerSec)}} antimatter per second.</div>
+      <div>You are getting {{format(antimatterPerSec, 2, 0)}} antimatter per second.</div>
       <game-header-tickspeed-row />
     </div>`
 });

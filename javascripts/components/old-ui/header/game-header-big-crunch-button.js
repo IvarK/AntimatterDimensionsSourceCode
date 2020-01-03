@@ -12,7 +12,7 @@ Vue.component("game-header-big-crunch-button", {
   },
   computed: {
     peakIPPMThreshold: () => new Decimal("1e100"),
-    isPeakIPPMVisible() { 
+    isPeakIPPMVisible() {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     },
     amountStyle() {
@@ -65,14 +65,14 @@ Vue.component("game-header-big-crunch-button", {
       class="o-prestige-btn o-prestige-btn--big-crunch l-game-header__big-crunch-btn"
       onclick="bigCrunchResetRequest()"
     >
-      <b>Big Crunch for 
-      <span :style="amountStyle">{{shortenDimensions(gainedIP)}}</span> 
+      <b>Big Crunch for
+      <span :style="amountStyle">{{format(gainedIP, 2, 0)}}</span>
       Infinity {{ "point" | pluralize(gainedIP) }}.</b>
       <template v-if="isPeakIPPMVisible">
         <br>
-        {{shortenDimensions(currentIPPM)}} IP/min
+        {{format(currentIPPM, 2, 0)}} IP/min
         <br>
-        Peaked at {{shortenDimensions(peakIPPM)}} IP/min
+        Peaked at {{format(peakIPPM, 2, 0)}} IP/min
       </template>
     </button>`
 });

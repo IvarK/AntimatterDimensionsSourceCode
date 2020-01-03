@@ -39,7 +39,7 @@ Vue.component("new-tickspeed-row", {
     },
     formattedFastSpeed() {
       const gameSpeedMult = this.gameSpeedMult;
-      return gameSpeedMult < 10000 ? gameSpeedMult.toFixed(3) : this.shortenDimensions(gameSpeedMult);
+      return gameSpeedMult < 10000 ? gameSpeedMult.toFixed(3) : format(gameSpeedMult, 2, 0);
     },
     tooltip() {
       if (this.isGameSpeedNormal) return undefined;

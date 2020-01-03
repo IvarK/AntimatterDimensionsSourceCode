@@ -56,13 +56,13 @@ Vue.component("tt-shop", {
       player.timestudy.shopMinimized = !player.timestudy.shopMinimized;
     },
     formatAM(am) {
-      return this.shortenCosts(am) + " AM";
+      return format(am, 0, 0) + " AM";
     },
     buyWithAM() {
       TimeTheorems.buyWithAntimatter();
     },
     formatIP(ip) {
-      return this.shortenCosts(ip) + " IP";
+      return format(ip, 0, 0) + " IP";
     },
     buyWithIP() {
       TimeTheorems.buyWithIP();

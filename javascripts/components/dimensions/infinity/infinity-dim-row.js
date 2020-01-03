@@ -36,14 +36,14 @@ Vue.component("infinity-dim-row", {
         : "";
     },
     costDisplay() {
-      return this.isCapped ? "Capped!" : `Cost: ${this.shortenCosts(this.cost)} IP`;
+      return this.isCapped ? "Capped!" : `Cost: ${format(this.costMult, 0, 0)} IP`;
     },
     hardcapPurchases() {
       return this.shorten(this.hardcap, 1, 1);
     },
     capTooltip() {
       return this.isCapped
-        ? `Limited to ${this.hardcapPurchases} upgrades (${this.shortenCosts(this.capIP)} IP)`
+        ? `Limited to ${this.hardcapPurchases} upgrades (${format(this.capIP, 0, 0)} IP)`
         : undefined;
     }
   },

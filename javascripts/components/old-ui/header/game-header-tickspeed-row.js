@@ -20,7 +20,7 @@ Vue.component("game-header-tickspeed-row", {
       };
     },
     multiplierDisplay() {
-      if (InfinityChallenge(3).isRunning) return `Multiply all Normal Dimensions by 
+      if (InfinityChallenge(3).isRunning) return `Multiply all Normal Dimensions by
         ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)}`;
       const tickmult = this.mult;
       if (tickmult.lte(1e-9)) return `Divide the tick interval by ${this.shorten(tickmult.reciprocal(), 2, 0)}.`;
@@ -73,7 +73,7 @@ Vue.component("game-header-tickspeed-row", {
           :enabled="isAffordable"
           class="o-primary-btn--tickspeed"
           onclick="buyTickSpeed()"
-        ><span v-if="showCostTitle">Cost: </span>{{shortenCosts(cost)}}</primary-button>
+        ><span v-if="showCostTitle">Cost: </span>{{format(cost, 0, 0)}}</primary-button>
         <primary-button
           :enabled="isAffordable"
           class="o-primary-btn--buy-max"

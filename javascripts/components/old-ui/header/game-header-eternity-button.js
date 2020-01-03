@@ -113,7 +113,7 @@ Vue.component("game-header-eternity-button", {
       <template v-if="type === 0">
         Other times await... I need to become Eternal
       </template>
-      
+
       <!-- Normal -->
       <template v-else-if="type === 1">
         <template v-if="isGainedEPAmountSmall">
@@ -128,19 +128,19 @@ Vue.component("game-header-eternity-button", {
           Peaked at {{shorten(peakEPPM, 2, 2)}} EP/min
         </template>
       </template>
-      
+
       <!-- Challenge -->
       <template v-else-if="type === 2">
         Other challenges await... I need to become Eternal
       </template>
-      
+
       <!-- Dilation -->
       <template v-else-if="type === 3">
         Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
         +{{shortenMoney(gainedTachyons)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}.
       </template>
-      
+
       <!-- New content available -->
       <template v-else-if="type === 4 || type === 5">
         <template v-if="type === 4">
@@ -152,7 +152,7 @@ Vue.component("game-header-eternity-button", {
         <br>
         You should explore a bit and look at new content before clicking me!
       </template>
-      
+
       <!-- Challenge with multiple completions -->
       <template v-else-if="type === 6">
         Other challenges await...
@@ -169,7 +169,7 @@ Vue.component("game-header-eternity-button", {
           </template>
           <template v-else-if="hasMoreCompletions">
             <br>
-            Next goal at {{shortenCosts(nextGoalAt)}} IP
+            Next goal at {{format(nextGoalAt, 0, 0)}} IP
           </template>
         </template>
       </template>

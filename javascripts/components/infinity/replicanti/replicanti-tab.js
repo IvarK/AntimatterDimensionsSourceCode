@@ -19,7 +19,7 @@ Vue.component("replicanti-tab", {
     replicantiChanceSetup() {
       return new ReplicantiUpgradeButtonSetup(ReplicantiUpgrade.chance,
         value => `Replicate chance: ${Math.round(value * 100)}%`,
-        cost => `+1% Costs: ${this.shortenCosts(cost)} IP`
+        cost => `+1% Costs: ${format(cost, 0, 0)} IP`
       );
     },
     replicantiIntervalSetup() {
@@ -35,7 +35,7 @@ Vue.component("replicanti-tab", {
       }
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => `Interval: ${formatInterval(value)}`,
-        cost => `➜ ${formatInterval(upgrade.nextValue)} Costs: ${this.shortenCosts(cost)} IP`
+        cost => `➜ ${formatInterval(upgrade.nextValue)} Costs: ${format(cost, 0, 0)} IP`
       );
     },
     maxGalaxySetup() {
@@ -49,7 +49,7 @@ Vue.component("replicanti-tab", {
           }
           return description;
         },
-        cost => `+${shortenSmallInteger(1)} Costs: ${this.shortenCosts(cost)} IP`
+        cost => `+${shortenSmallInteger(1)} Costs: ${format(cost, 0, 0)} IP`
       );
     }
   },
@@ -80,7 +80,7 @@ Vue.component("replicanti-tab", {
         :enabled="isUnlockAffordable"
         class="o-primary-btn--replicanti-unlock"
         onclick="Replicanti.unlock();"
-      >Unlock Replicanti<br>Cost: {{shortenCosts(1e140)}} IP</primary-button>
+      >Unlock Replicanti<br>Cost: {{format(1e140, 0, 0)}} IP</primary-button>
       <template v-else>
         <div v-if="isInEC8">You have {{ec8Purchases}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
         <div v-if="hasRaisedCap">

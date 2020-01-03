@@ -26,7 +26,7 @@ Vue.component("new-dimension-row", {
       return SHORT_DISPLAY_NAMES[this.tier];
     },
     costDisplay() {
-      return this.buyUntil10 ? shortenCosts(this.until10Cost) : shortenCosts(this.singleCost);
+      return this.buyUntil10 ? format(this.until10Cost, 0, 0) : format(this.singleCost, 0, 0);
     },
     amountDisplay() {
       return this.tier < 8 ? this.shortenDimensions(this.amount) : shortenSmallInteger(this.amount);

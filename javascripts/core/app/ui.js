@@ -25,9 +25,6 @@ Vue.mixin({
     shortenPostBreak(value, places, placesUnder1000) {
       return shortenPostBreak(value, places, placesUnder1000);
     },
-    shortenCosts(value) {
-      return shortenCosts(value);
-    },
     shortenDimensions(value) {
       return shortenDimensions(value);
     },

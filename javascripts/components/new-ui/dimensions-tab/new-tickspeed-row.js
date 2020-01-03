@@ -74,8 +74,8 @@ Vue.component("new-tickspeed-row", {
           :class="{ 'o-primary-btn--disabled': !isAffordable }"
           :enabled="isAffordable"
           onclick="buyTickSpeed()"
-          >Cost: {{shortenCosts(cost)}}</button>
-        <button 
+          >Cost: {{format(cost, 0, 0)}}</button>
+        <button
           class="o-primary-btn tickspeed-max-btn"
           :class="{ 'o-primary-btn--disabled': !isAffordable }"
           :enabled="isAffordable"

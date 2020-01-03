@@ -18,7 +18,7 @@ Vue.component("secret-achievement-row", {
     }
   },
   created() {
-    this.on$(GameEvent.ACHIEVEMENT_UNLOCKED, this.updateState);
+    this.on$(GAME_EVENT.ACHIEVEMENT_UNLOCKED, this.updateState);
     this.updateState();
   },
   methods: {

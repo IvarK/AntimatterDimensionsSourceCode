@@ -135,7 +135,7 @@ const GameStorage = {
     Theme.set(player.options.theme);
     Notations.find(player.options.notation).setAsCurrent();
 
-    EventHub.dispatch(GameEvent.GAME_LOAD);
+    EventHub.dispatch(GAME_EVENT.GAME_LOAD);
     AutomatorBackend.initializeFromSave();
     Lazy.invalidateAll();
 

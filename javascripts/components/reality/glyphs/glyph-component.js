@@ -149,7 +149,7 @@ const GlyphTooltipComponent = {
       return { color };
     },
     sacrificeText() {
-      if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && this.type !== "reality") {
+      if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY && this.type !== "reality") {
         const refinementText = `${format(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
         const limitText = this.sacrificeReward === 0
           ? ` (limit reached)`
@@ -359,7 +359,7 @@ Vue.component("glyph-component", {
     },
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
+      this.sacrificeReward = AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY
         ? glyphRefinementGain(this.glyph)
         : glyphSacrificeGain(this.glyph);
       this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);

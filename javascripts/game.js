@@ -26,7 +26,7 @@ function breakInfinity() {
     if (autobuyer.data.interval !== undefined) autobuyer.maxIntervalForFree();
   }
   player.break = !player.break;
-  EventHub.dispatch(player.break ? GameEvent.BREAK_INFINITY : GameEvent.FIX_INFINITY);
+  EventHub.dispatch(player.break ? GAME_EVENT.BREAK_INFINITY : GAME_EVENT.FIX_INFINITY);
   GameUI.update();
 }
 
@@ -271,7 +271,13 @@ function kongLog10StatSubmission() {
 
 setInterval(kongLog10StatSubmission, 10000)
 
-const GameSpeedEffect = { FIXEDSPEED: 1, TIMEGLYPH: 2, BLACKHOLE: 3, TIMESTORAGE: 4, MOMENTUM: 5 };
+const GAME_SPEED_EFFECT = {
+  FIXED_SPEED: 1,
+  TIME_GLYPH: 2,
+  BLACK_HOLE: 3,
+  TIME_STORAGE: 4,
+  MOMENTUM: 5
+};
 
 /**
   * @param {number[]} effectsToConsider A list of various game speed changing effects to apply when calculating
@@ -284,13 +290,13 @@ const GameSpeedEffect = { FIXEDSPEED: 1, TIMEGLYPH: 2, BLACKHOLE: 3, TIMESTORAGE
 function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesActiveOverride) {
   let effects;
   if (effectsToConsider === undefined) {
-    effects = [GameSpeedEffect.FIXEDSPEED, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE,
-      GameSpeedEffect.TIMESTORAGE, GameSpeedEffect.MOMENTUM];
+    effects = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH, GAME_SPEED_EFFECT.BLACK_HOLE,
+      GAME_SPEED_EFFECT.TIME_STORAGE, GAME_SPEED_EFFECT.MOMENTUM];
   } else {
     effects = effectsToConsider;
   }
 
-  if (effects.includes(GameSpeedEffect.FIXEDSPEED)) {
+  if (effects.includes(GAME_SPEED_EFFECT.FIXED_SPEED)) {
     if (TimeCompression.isActive) {
       if (DarkEnergyUpgrade.compressionBoost.isBought) {
         return DarkEnergyUpgrade.compressionBoost.effect * 1e-100;
@@ -303,7 +309,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
   }
 
   let factor = 1;
-  if (effects.includes(GameSpeedEffect.BLACKHOLE)) {
+  if (effects.includes(GAME_SPEED_EFFECT.BLACK_HOLE)) {
     if (blackHoleOverride !== undefined) {
       factor *= blackHoleOverride;
     } else if (!BlackHoles.arePaused) {
@@ -321,18 +327,18 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
     }
   }
 
-  if (effects.includes(GameSpeedEffect.TIMEGLYPH)) {
+  if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
     factor *= getAdjustedGlyphEffect("timespeed");
     factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   }
 
-  if (effects.includes(GameSpeedEffect.MOMENTUM)) {
+  if (effects.includes(GAME_SPEED_EFFECT.MOMENTUM)) {
     const cappedTime = Math.min(Time.thisRealityRealTime.totalMinutes, 7 * 24 * 60);
     factor *= Math.pow(AlchemyResource.momentum.effectValue, cappedTime);
   }
 
   // Time storage is linearly scaled because exponential scaling is pretty useless in practice
-  if (player.celestials.enslaved.isStoring && effects.includes(GameSpeedEffect.TIMESTORAGE)) {
+  if (player.celestials.enslaved.isStoring && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
     const storedTimeWeight = player.celestials.enslaved.storedFraction;
     factor = factor * (1 - storedTimeWeight) + storedTimeWeight;
   }
@@ -365,7 +371,7 @@ function getGameSpeedupForDisplay() {
 function gameLoop(diff, options = {}) {
   PerformanceStats.start("Frame Time");
   PerformanceStats.start("Game Update");
-  EventHub.dispatch(GameEvent.GAME_TICK_BEFORE);
+  EventHub.dispatch(GAME_EVENT.GAME_TICK_BEFORE);
   const thisUpdate = Date.now();
   const realDiff = diff === undefined
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
@@ -427,8 +433,8 @@ function gameLoop(diff, options = {}) {
       if (player.celestials.enslaved.isStoring && !fixedSpeedActive) {
         // These variables are the actual game speed used and the game speed unaffected by time storage, respectively
         const reducedTimeFactor = getGameSpeedupFactor();
-        const totalTimeFactor = getGameSpeedupFactor([GameSpeedEffect.FIXEDSPEED, GameSpeedEffect.TIMEGLYPH,
-          GameSpeedEffect.BLACKHOLE, GameSpeedEffect.MOMENTUM]);
+        const totalTimeFactor = getGameSpeedupFactor([GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
+          GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.MOMENTUM]);
         const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
           ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
           : 1;
@@ -611,7 +617,7 @@ function gameLoop(diff, options = {}) {
   Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
 
-  EventHub.dispatch(GameEvent.GAME_TICK_AFTER);
+  EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);
   GameUI.update();
   player.lastUpdate = thisUpdate;
   PerformanceStats.end("Game Update");

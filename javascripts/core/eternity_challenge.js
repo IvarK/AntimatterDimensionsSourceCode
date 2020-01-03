@@ -215,7 +215,7 @@ class EternityChallengeState extends GameMechanicState {
   fail() {
     this.exit();
     Modal.message.show("You failed the challenge, you have now exited it.");
-    EventHub.dispatch(GameEvent.CHALLENGE_FAILED);
+    EventHub.dispatch(GAME_EVENT.CHALLENGE_FAILED);
   }
 
   tryFail() {

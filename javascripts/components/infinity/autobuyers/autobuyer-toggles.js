@@ -6,7 +6,7 @@ Vue.component("autobuyer-toggles", {
       autobuyersOn: false,
       bulkOn: false,
       isAutoRealityUnlocked: false,
-      autoRealityMode: AutoRealityMode.RM,
+      autoRealityMode: AUTO_REALITY_MODE.RM,
     };
   },
   watch: {
@@ -20,10 +20,10 @@ Vue.component("autobuyer-toggles", {
   computed: {
     autoRealityModeDisplay() {
       switch (this.autoRealityMode) {
-        case AutoRealityMode.RM: return "reality machines";
-        case AutoRealityMode.GLYPH: return "glyph level";
-        case AutoRealityMode.EITHER: return "either";
-        case AutoRealityMode.BOTH: return "both";
+        case AUTO_REALITY_MODE.RM: return "reality machines";
+        case AUTO_REALITY_MODE.GLYPH: return "glyph level";
+        case AUTO_REALITY_MODE.EITHER: return "either";
+        case AUTO_REALITY_MODE.BOTH: return "both";
       }
       throw new Error("Unknown auto reality mode");
     }

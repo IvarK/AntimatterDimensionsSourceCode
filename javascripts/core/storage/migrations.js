@@ -168,18 +168,18 @@ GameStorage.migrations = {
       const autobuyer = player.autobuyers[i];
       if (autobuyer % 1 !== 0) {
         if (autobuyer.target < 10) {
-          autobuyer.target = AutobuyerMode.BUY_SINGLE;
+          autobuyer.target = AUTOBUYER_MODE.BUY_SINGLE;
         } else {
-          autobuyer.target = AutobuyerMode.BUY_10;
+          autobuyer.target = AUTOBUYER_MODE.BUY_10;
         }
       }
     }
     const tickspeedAutobuyer = player.autobuyers[8];
     if (tickspeedAutobuyer % 1 !== 0) {
       if (tickspeedAutobuyer.target < 10) {
-        tickspeedAutobuyer.target = AutobuyerMode.BUY_SINGLE;
+        tickspeedAutobuyer.target = AUTOBUYER_MODE.BUY_SINGLE;
       } else {
-        tickspeedAutobuyer.target = AutobuyerMode.BUY_MAX;
+        tickspeedAutobuyer.target = AUTOBUYER_MODE.BUY_MAX;
       }
     }
   },
@@ -374,7 +374,7 @@ GameStorage.migrations = {
   fixAutobuyers(player) {
     for (let i = 0; i < 12; i++) {
       if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].target % 1 !== 0) {
-        player.autobuyers[i].target = AutobuyerMode.BUY_SINGLE;
+        player.autobuyers[i].target = AUTOBUYER_MODE.BUY_SINGLE;
       }
 
       if (

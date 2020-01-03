@@ -4,14 +4,14 @@ Vue.component("glyph-auto-pick-options", {
   data() {
     return {
       unlocked: false,
-      mode: AutoGlyphPickMode.RANDOM,
+      mode: AUTO_GLYPH_PICK_MODE.RANDOM,
       alchemyUnlocked: false,
       sacMode: 0
     };
   },
   computed: {
     modes() {
-      return AutoGlyphPickMode;
+      return AUTO_GLYPH_PICK_MODE;
     },
     pickerText() {
       switch (this.sacMode) {
@@ -52,9 +52,9 @@ Vue.component("glyph-auto-pick-options", {
     <div :class="optionClass(modes.ABOVE_SACRIFICE_THRESHOLD)" @click="setMode(modes.ABOVE_SACRIFICE_THRESHOLD)">
       {{ pickerText }} farthest above threshold
     </div>
-    <div 
+    <div
       v-if="alchemyUnlocked"
-      :class="optionClass(modes.LOWEST_ALCHEMY_RESOURCE)" 
+      :class="optionClass(modes.LOWEST_ALCHEMY_RESOURCE)"
       @click="setMode(modes.LOWEST_ALCHEMY_RESOURCE)">
       {{ pickerText }} lowest alchemy resource
     </div>

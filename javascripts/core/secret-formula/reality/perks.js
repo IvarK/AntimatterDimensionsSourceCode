@@ -1,6 +1,6 @@
 "use strict";
 
-const PerkFamily = {
+const PERK_FAMILY = {
   NORMAL: "NORMAL",
   INFINITY: "INFINITY",
   ETERNITY: "ETERNITY",
@@ -14,14 +14,14 @@ GameDatabase.reality.perks = {
   glyphChoice3: {
     id: 0,
     label: "GC3",
-    family: PerkFamily.REALITY,
+    family: PERK_FAMILY.REALITY,
     description: "You can now choose from 3 different glyphs on Reality.",
     effect: 3,
   },
   startAM1: {
     id: 10,
     label: "AM1",
-    family: PerkFamily.NORMAL,
+    family: PERK_FAMILY.NORMAL,
     description: "Start with 1e15 antimatter after every reset.",
     bumpResource: () => player.antimatter = player.antimatter.clampMin(1e15),
     effect: 1e15
@@ -29,7 +29,7 @@ GameDatabase.reality.perks = {
   startAM2: {
     id: 11,
     label: "AM2",
-    family: PerkFamily.NORMAL,
+    family: PERK_FAMILY.NORMAL,
     description: "Start with 1e130 antimatter after every reset.",
     bumpResource: () => player.antimatter = player.antimatter.clampMin(1e130),
     effect: 1e130
@@ -37,7 +37,7 @@ GameDatabase.reality.perks = {
   startIP1: {
     id: 12,
     label: "IP1",
-    family: PerkFamily.INFINITY,
+    family: PERK_FAMILY.INFINITY,
     description: "Start with 2e15 IP after every Eternity and Reality.",
     bumpResource: () => player.infinityPoints = player.infinityPoints.clampMin(2e15),
     effect: 2e15
@@ -45,7 +45,7 @@ GameDatabase.reality.perks = {
   startIP2: {
     id: 13,
     label: "IP2",
-    family: PerkFamily.INFINITY,
+    family: PERK_FAMILY.INFINITY,
     description: "Start with 2e130 IP after every Eternity and Reality.",
     bumpResource: () => player.infinityPoints = player.infinityPoints.clampMin(2e130),
     effect: 2e130
@@ -53,7 +53,7 @@ GameDatabase.reality.perks = {
   startEP1: {
     id: 14,
     label: "EP1",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Start with 10 EP after every Reality.",
     bumpResource: () => player.eternityPoints = player.eternityPoints.clampMin(10),
     effect: 10
@@ -61,7 +61,7 @@ GameDatabase.reality.perks = {
   startEP2: {
     id: 15,
     label: "EP2",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Start with 2000 EP after every Reality.",
     bumpResource: () => player.eternityPoints = player.eternityPoints.clampMin(2000),
     effect: 2000
@@ -69,7 +69,7 @@ GameDatabase.reality.perks = {
   startEP3: {
     id: 16,
     label: "EP3",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Start with 1e9 EP after every Reality.",
     bumpResource: () => player.eternityPoints = player.eternityPoints.clampMin(1e9),
     effect: 1e9
@@ -77,47 +77,47 @@ GameDatabase.reality.perks = {
   startTP: {
     id: 17,
     label: "STP",
-    family: PerkFamily.DILATION,
+    family: PERK_FAMILY.DILATION,
     description: "Start with 10 TP after unlocking Dilation.",
     effect: () => (Enslaved.isRunning ? 1 : 10)
   },
   glyphLevelIncrease1: {
     id: 20,
     label: "GL1",
-    family: PerkFamily.REALITY,
+    family: PERK_FAMILY.REALITY,
     description: "+1 to base glyph level.",
     effect: 1
   },
   glyphLevelIncrease2: {
     id: 21,
     label: "GL2",
-    family: PerkFamily.REALITY,
+    family: PERK_FAMILY.REALITY,
     description: "+1 to base glyph level.",
     effect: 1
   },
   glyphChoice4: {
     id: 22,
     label: "GC4",
-    family: PerkFamily.REALITY,
+    family: PERK_FAMILY.REALITY,
     description: "+1 glyph choice on Reality.",
     effect: 4,
   },
   glyphRarityIncrease: {
     id: 23,
     label: "GR",
-    family: PerkFamily.REALITY,
+    family: PERK_FAMILY.REALITY,
     description: "+5% minimum glyph rarity."
   },
   glyphUncommonGuarantee: {
     id: 24,
     label: "GU",
-    family: PerkFamily.REALITY,
+    family: PERK_FAMILY.REALITY,
     description: "One glyph choice is guaranteed to be uncommon or better."
   },
   realityMachineGain: {
     id: 25,
     label: "RM",
-    family: PerkFamily.REALITY,
+    family: PERK_FAMILY.REALITY,
     description: "Every reality, gain additional RM equal to your current reality count multiplied" +
       " by your highest glyph level.",
     effect: () => player.reality.glyphs.active
@@ -128,288 +128,288 @@ GameDatabase.reality.perks = {
   dimboostNonReset: {
     id: 30,
     label: "DB",
-    family: PerkFamily.INFINITY,
+    family: PERK_FAMILY.INFINITY,
     description: "Dimboosts no longer reset normal dimensions, tickspeed, or sacrifice."
   },
   studyPassive1: {
     id: 31,
     label: "PASS1",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Improve passive path EP to 100x and IP to 1e100x"
   },
   studyPassive2: {
     id: 32,
     label: "PASS2",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Passive path RG study gains 5x replicanti speed"
   },
   autounlockEU1: {
     id: 40,
     label: "EU1",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Auto-unlock the first row of Eternity upgrades after first Eternity of a Reality."
   },
   autounlockEU2: {
     id: 41,
     label: "EU2",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Auto-unlock the second row of Eternity upgrades after first Eternity of a Reality."
   },
   autounlockDilation1: {
     id: 42,
     label: "DIL1",
-    family: PerkFamily.DILATION,
+    family: PERK_FAMILY.DILATION,
     description: "Auto-unlock the second row of Dilation upgrades on Dilation unlock."
   },
   autounlockDilation2: {
     id: 43,
     label: "DIL2",
-    family: PerkFamily.DILATION,
+    family: PERK_FAMILY.DILATION,
     description: "Auto-unlock the third row of Dilation upgrades on Dilation unlock."
   },
   autounlockDilation3: {
     id: 44,
     label: "DIL3",
-    family: PerkFamily.DILATION,
+    family: PERK_FAMILY.DILATION,
     description: "Auto-unlock TT generation once you can afford it."
   },
   autounlockTD: {
     id: 45,
     label: "TD",
-    family: PerkFamily.DILATION,
+    family: PERK_FAMILY.DILATION,
     description: "Auto-unlock Time Dimensions 5-8 when you have enough TT."
   },
   autounlockReality: {
     id: 46,
     label: "REAL",
-    family: PerkFamily.REALITY,
+    family: PERK_FAMILY.REALITY,
     description: "Auto-unlock Reality at e4000 EP."
   },
   bypassIDAntimatter: {
     id: 51,
     label: "ID",
-    family: PerkFamily.INFINITY,
+    family: PERK_FAMILY.INFINITY,
     description: "Infinity Dimensions no longer have antimatter requirements."
   },
   bypassDGReset: {
     id: 52,
     label: "DG",
-    family: PerkFamily.DILATION,
+    family: PERK_FAMILY.DILATION,
     description: "The 2nd rebuyable Dilation upgrade no longer resets your Dilated Time."
   },
   bypassECDilation: {
     id: 53,
     label: "DIL-REQ",
-    family: PerkFamily.DILATION,
+    family: PERK_FAMILY.DILATION,
     description: "Remove the EC11/EC12 and total TT requirement for Time Dilation."
   },
   bypassEC1Lock: {
     id: 54,
     label: "EC1",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Remove the EC1 requirement from study 181."
   },
   bypassEC2Lock: {
     id: 55,
     label: "EC2",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Remove the EC2 requirement from study 181."
   },
   bypassEC3Lock: {
     id: 56,
     label: "EC3",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Remove the EC3 requirement from study 181."
   },
   bypassEC5Lock: {
     id: 57,
     label: "EC5",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Remove the EC5 requirement from study 62."
   },
   autocompleteEC1: {
     id: 60,
     label: "AEC1",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Auto-complete one EC every 6 hours (real-time).",
     effect: 6
   },
   autocompleteEC2: {
     id: 61,
     label: "AEC2",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Auto-complete one EC every 4 hours (real-time).",
     effect: 4
   },
   autocompleteEC3: {
     id: 62,
     label: "AEC3",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Auto-complete one EC every 2 hours (real-time).",
     effect: 2
   },
   autocompleteEC4: {
     id: 63,
     label: "AEC4",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Auto-complete one EC every 1 hour (real-time).",
     effect: 1
   },
   autocompleteEC5: {
     id: 64,
     label: "AEC5",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Auto-complete one EC every 30 minutes (real-time).",
     effect: 0.5
   },
   studyActiveEP: {
     id: 70,
     label: "ACT",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Active path multipliers are always maximized."
   },
   studyIdleEP: {
     id: 71,
     label: "IDL",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Idle path multipliers start as if you have spent 15 minutes in this Infinity/Eternity.",
     effect: 15
   },
   studyECRequirement: {
     id: 72,
     label: "EC-REQ",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "Remove non-TT requirements for unlocking Eternity Challenges."
   },
   studyECBulk: {
     id: 73,
     label: "EC-BLK",
-    family: PerkFamily.ETERNITY,
+    family: PERK_FAMILY.ETERNITY,
     description: "You can complete multiple tiers of Eternity Challenges at once " +
                  "if you reach the goal for a higher completion of that challenge."
   },
   retroactiveTP1: {
     id: 80,
     label: "TP1",
-    family: PerkFamily.DILATION,
+    family: PERK_FAMILY.DILATION,
     description: "When buying the 3xTP gain upgrade, multiply your TP by 1.5.",
     effect: 1.5
   },
   retroactiveTP2: {
     id: 81,
     label: "TP2",
-    family: PerkFamily.DILATION,
+    family: PERK_FAMILY.DILATION,
     description: "When buying the 3xTP gain upgrade, multiply your TP by 2.",
     effect: 2
   },
   retroactiveTP3: {
     id: 82,
     label: "TP3",
-    family: PerkFamily.DILATION,
+    family: PERK_FAMILY.DILATION,
     description: "When buying the 3xTP gain upgrade, multiply your TP by 2.5.",
     effect: 2.5
   },
   retroactiveTP4: {
     id: 83,
     label: "TP4",
-    family: PerkFamily.DILATION,
+    family: PERK_FAMILY.DILATION,
     description: "When buying the 3xTP gain upgrade, multiply your TP by 3.",
     effect: 3
   },
   autobuyerDilation: {
     id: 100,
     label: "A-DIL1",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Unlock autobuyers for repeatable dilation upgrades."
   },
   autobuyerFasterID: {
     id: 101,
     label: "A-ID",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Infinity Dimension autobuyers work 3 times faster.",
     effect: 1 / 3,
   },
   autobuyerFasterReplicanti: {
     id: 102,
     label: "A-REP",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Replicanti autobuyers work 3 times faster.",
     effect: 1 / 3,
   },
   autobuyerFasterDilation: {
     id: 103,
     label: "A-DIL2",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Dilation autobuyers work 3 times faster.",
     effect: 1 / 3,
   },
   autobuyerTT1: {
     id: 104,
     label: "TT1",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Autobuy max TT every 10 seconds.",
     effect: 10,
   },
   autobuyerTT2: {
     id: 105,
     label: "TT2",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Autobuy max TT every 5 seconds.",
     effect: 5,
   },
   autobuyerTT3: {
     id: 106,
     label: "TT3",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Autobuy max TT every 3 seconds.",
     effect: 3,
   },
   autobuyerTT4: {
     id: 107,
     label: "TT4",
-    family: PerkFamily.AUTOMATION,
+    family: PERK_FAMILY.AUTOMATION,
     description: "Autobuy max TT every second.",
     effect: 1,
   },
   achievementRowGroup1: {
     id: 201,
     label: "ACH1",
-    family: PerkFamily.ACHIEVEMENT,
+    family: PERK_FAMILY.ACHIEVEMENT,
     description: "Start with the first 3 achievement rows after Reality.",
     effect: 3
   },
   achievementRowGroup2: {
     id: 202,
     label: "ACH2",
-    family: PerkFamily.ACHIEVEMENT,
+    family: PERK_FAMILY.ACHIEVEMENT,
     description: "Start with the first 6 achievement rows after Reality.",
     effect: 6
   },
   achievementRowGroup3: {
     id: 203,
     label: "ACH3",
-    family: PerkFamily.ACHIEVEMENT,
+    family: PERK_FAMILY.ACHIEVEMENT,
     description: "Start with the first 8 achievement rows after Reality.",
     effect: 8
   },
   achievementRowGroup4: {
     id: 204,
     label: "ACH4",
-    family: PerkFamily.ACHIEVEMENT,
+    family: PERK_FAMILY.ACHIEVEMENT,
     description: "Start with the first 10 achievement rows after Reality.",
     effect: 10
   },
   achievementRowGroup5: {
     id: 205,
     label: "ACH5",
-    family: PerkFamily.ACHIEVEMENT,
+    family: PERK_FAMILY.ACHIEVEMENT,
     description: "Start with the first 12 achievement rows after Reality.",
     effect: 12
   },
   achievementRowGroup6: {
     id: 206,
     label: "ACH6",
-    family: PerkFamily.ACHIEVEMENT,
+    family: PERK_FAMILY.ACHIEVEMENT,
     description: "Reality no longer resets your achievements.",
     effect: 13
   }

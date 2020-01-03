@@ -92,7 +92,7 @@ Vue.component("glyph-sacrifice-options", {
   data() {
     return {
       unlocked: false,
-      mode: AutoGlyphSacMode.NONE,
+      mode: AUTO_GLYPH_SAC_MODE.NONE,
       lockedTypes: GlyphTypes.locked.map(e => e.id),
       advancedType: GLYPH_TYPES[0],
       alchemyUnlocked: false,
@@ -102,7 +102,7 @@ Vue.component("glyph-sacrifice-options", {
   },
   computed: {
     modes() {
-      return AutoGlyphSacMode;
+      return AUTO_GLYPH_SAC_MODE;
     },
     glyphTypes() {
       return GlyphTypes.list.filter(e => !this.lockedTypes.includes(e.id));

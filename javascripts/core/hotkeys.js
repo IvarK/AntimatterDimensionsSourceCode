@@ -35,7 +35,7 @@ GameKeyboard.bindHotkey("u", () => {
     AutomatorBackend.pause();
   }
   else if (AutomatorBackend.isOn) {
-    AutomatorBackend.mode = AutomatorMode.RUN;
+    AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
   }
 });
 

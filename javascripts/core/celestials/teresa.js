@@ -48,7 +48,7 @@ const Teresa = {
       if (!this.has(info) && this.rmStore >= info.price) {
         // eslint-disable-next-line no-bitwise
         player.celestials.teresa.unlockBits |= (1 << info.id);
-        EventHub.dispatch(GameEvent.CELESTIAL_UPGRADE_UNLOCKED, this, info);
+        EventHub.dispatch(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, this, info);
       }
     }
   },
@@ -151,15 +151,15 @@ const PerkShopUpgrade = (function() {
   };
 }());
 
-EventHub.logic.on(GameEvent.TAB_CHANGED, () => {
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
   if (Tab.celestials.teresa.isOpen) Teresa.quotes.show(Teresa.quotes.INITIAL);
 });
 
-EventHub.logic.on(GameEvent.CELESTIAL_UPGRADE_UNLOCKED, ([celestial, upgradeInfo]) => {
+EventHub.logic.on(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, ([celestial, upgradeInfo]) => {
   if (celestial === Teresa) {
     if (upgradeInfo === TERESA_UNLOCKS.RUN) Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY);
     if (upgradeInfo === TERESA_UNLOCKS.EFFARIG) Teresa.quotes.show(Teresa.quotes.EFFARIG);
   }
 });
 
-EventHub.logic.on(GameEvent.GAME_LOAD, () => Teresa.checkForUnlocks());
+EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Teresa.checkForUnlocks());

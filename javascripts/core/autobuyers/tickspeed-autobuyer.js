@@ -31,8 +31,8 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
 
   toggleMode() {
     this.mode = [
-      AutobuyerMode.BUY_SINGLE,
-      AutobuyerMode.BUY_MAX
+      AUTOBUYER_MODE.BUY_SINGLE,
+      AUTOBUYER_MODE.BUY_MAX
     ]
       .nextSibling(this.mode);
   }
@@ -40,10 +40,10 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
   tick() {
     super.tick();
     switch (this.mode) {
-      case AutobuyerMode.BUY_SINGLE:
+      case AUTOBUYER_MODE.BUY_SINGLE:
         buyTickSpeed();
         break;
-      case AutobuyerMode.BUY_MAX:
+      case AUTOBUYER_MODE.BUY_MAX:
         buyMaxTickSpeed();
         break;
     }

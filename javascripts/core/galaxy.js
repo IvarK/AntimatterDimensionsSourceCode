@@ -1,6 +1,6 @@
 "use strict";
 
-const GalaxyType = {
+const GALAXY_TYPE = {
   NORMAL: 0,
   DISTANT: 1,
   REMOTE: 2
@@ -78,14 +78,14 @@ class Galaxy {
 
     const type = Galaxy.typeAt(galaxies);
 
-    if (type === GalaxyType.DISTANT && EternityChallenge(5).isRunning) {
+    if (type === GALAXY_TYPE.DISTANT && EternityChallenge(5).isRunning) {
       amount += Math.pow(galaxies, 2) + galaxies;
-    } else if (type === GalaxyType.DISTANT || type === GalaxyType.REMOTE) {
+    } else if (type === GALAXY_TYPE.DISTANT || type === GALAXY_TYPE.REMOTE) {
       const galaxyCostScalingStart = this.costScalingStart;
       amount += Math.pow((galaxies) - (galaxyCostScalingStart - 1), 2) + (galaxies) - (galaxyCostScalingStart - 1);
     }
 
-    if (type === GalaxyType.REMOTE) {
+    if (type === GALAXY_TYPE.REMOTE) {
       amount = Math.floor(amount * Math.pow(1.002, galaxies - 800));
     }
 
@@ -128,23 +128,23 @@ class Galaxy {
 
   static typeAt(galaxies) {
     if (galaxies >= 800 && !RealityUpgrade(21).isBought) {
-      return GalaxyType.REMOTE;
+      return GALAXY_TYPE.REMOTE;
     }
     if (EternityChallenge(5).isRunning || galaxies >= this.costScalingStart) {
-      return GalaxyType.DISTANT;
+      return GALAXY_TYPE.DISTANT;
     }
-    return GalaxyType.NORMAL;
+    return GALAXY_TYPE.NORMAL;
   }
 }
 
 function galaxyReset() {
-  EventHub.dispatch(GameEvent.GALAXY_RESET_BEFORE);
+  EventHub.dispatch(GAME_EVENT.GALAXY_RESET_BEFORE);
   player.galaxies++;
   player.dimensionBoosts = 0;
   softReset(0);
   if (Notations.current === Notation.cancer) player.spreadingCancer += 1;
   player.noSacrifices = true;
-  EventHub.dispatch(GameEvent.GALAXY_RESET_AFTER);
+  EventHub.dispatch(GAME_EVENT.GALAXY_RESET_AFTER);
 }
 
 function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {

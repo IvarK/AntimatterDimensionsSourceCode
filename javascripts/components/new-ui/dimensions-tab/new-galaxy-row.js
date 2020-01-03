@@ -3,7 +3,7 @@
 Vue.component("new-galaxy-row", {
   data() {
     return {
-      type: GalaxyType.NORMAL,
+      type: GALAXY_TYPE.NORMAL,
       galaxies: {
         normal: 0,
         replicanti: 0,
@@ -39,20 +39,20 @@ Vue.component("new-galaxy-row", {
     },
     typeName() {
       switch (this.type) {
-        case GalaxyType.NORMAL: return "Antimatter Galaxies";
-        case GalaxyType.DISTANT: return "Distant Antimatter Galaxies";
-        case GalaxyType.REMOTE: return "Remote Antimatter Galaxies";
+        case GALAXY_TYPE.NORMAL: return "Antimatter Galaxies";
+        case GALAXY_TYPE.DISTANT: return "Distant Antimatter Galaxies";
+        case GALAXY_TYPE.REMOTE: return "Remote Antimatter Galaxies";
       }
       return undefined;
     },
     hasIncreasedScaling() {
-      return this.type !== GalaxyType.NORMAL;
+      return this.type !== GALAXY_TYPE.NORMAL;
     },
     costScalingText() {
       switch (this.type) {
-        case GalaxyType.DISTANT:
+        case GALAXY_TYPE.DISTANT:
           return `Each galaxy is more expensive past ${this.distantStart} galaxies`;
-        case GalaxyType.REMOTE:
+        case GALAXY_TYPE.REMOTE:
           return "Increased galaxy cost scaling: " +
             `Quadratic past ${this.distantStart} (distant), exponential past 800 (remote)`;
       }

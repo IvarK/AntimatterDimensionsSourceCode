@@ -121,7 +121,7 @@ const GameCache = {
   infinityChallengeTimeSum: new Lazy(() => player.challenge.infinity.bestTimes.sum()),
 };
 
-EventHub.logic.on(GameEvent.GLYPHS_CHANGED, () => {
+EventHub.logic.on(GAME_EVENT.GLYPHS_CHANGED, () => {
   GameCache.glyphEffects.invalidate();
 }, GameCache.glyphEffects);
 

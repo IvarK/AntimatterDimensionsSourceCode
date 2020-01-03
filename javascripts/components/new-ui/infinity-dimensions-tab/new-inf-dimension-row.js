@@ -39,12 +39,9 @@ Vue.component("new-inf-dimension-row", {
     costDisplay() {
       return this.isCapped ? "Capped!" : `Cost: ${format(this.cost, 0, 0)} IP`;
     },
-    hardcapPurchases() {
-      return this.format(this.hardcap, 1, 1);
-    },
     capTooltip() {
       return this.isCapped
-        ? `Limited to ${this.hardcapPurchases} upgrades (${format(this.capIP, 0, 0)} IP)`
+        ? `Limited to ${format(this.hardcap, 1, 1)} upgrades (${format(this.capIP, 0, 0)} IP)`
         : undefined;
     }
   },
@@ -79,7 +76,7 @@ Vue.component("new-inf-dimension-row", {
   template:
     `<div v-show="isUnlocked" class="c-infinity-dim-row">
       <div class="c-infinity-dim-row__label c-infinity-dim-row__name">
-        {{name}} Infinity D <span class="c-infinity-dim-row__multiplier">x{{format(multiplier, 2, 1)}}</span>
+        {{name}} Infinity D <span class="c-infinity-dim-row__multiplier">{{formatX(multiplier, 2, 1)}}</span>
       </div>
       <div class="c-infinity-dim-row__label c-infinity-dim-row__label--growable">
         {{format(amount, 2, 0)}}

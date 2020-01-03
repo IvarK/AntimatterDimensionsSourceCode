@@ -23,11 +23,8 @@ Vue.component("reality-button", {
     buttonHeader() {
       return this.canReality ? "Make a new reality" : "Start reality over";
     },
-    formatEPRequirement() {
-      return this.format("1e4000", 0, 0);
-    },
     formatMachinesGained() {
-      return `Machines gained: ${this.format(this.machinesGained, 2, 0)}`;
+      return `Machines gained: ${format(this.machinesGained, 2, 0)}`;
     },
     formatMachineStats() {
       if (this.machinesGained.lt(100)) {
@@ -42,7 +39,7 @@ Vue.component("reality-button", {
       return `Glyph level: ${formatInt(this.glyphLevel)}  (${this.nextGlyphPercent})`;
     },
     shardsGainedText() {
-      return `${this.format(this.shardsGained, 2)} Relic ${pluralize("Shard", this.shardsGained)}`;
+      return `${format(this.shardsGained, 2)} Relic ${pluralize("Shard", this.shardsGained)}`;
     }
   },
   methods: {
@@ -128,7 +125,7 @@ Vue.component("reality-button", {
         <div>{{formatGlyphLevel}}</div>
       </template>
       <template v-else-if="hasRealityStudy">
-        <div>Get {{formatEPRequirement}} EP to unlock a new reality</div>
+        <div>Get {{format("1e4000", 0, 0)}} EP to unlock a new reality</div>
       </template>
       <template v-else>
         <div>Purchase the study in the eternity tab to unlock a new reality</div>

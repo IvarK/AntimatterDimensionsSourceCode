@@ -24,7 +24,7 @@ Vue.component("sacrificed-glyphs", {
           return this.typeConfig.symbol;
         },
         formatAmount() {
-          return this.format(this.amount, 2, 2);
+          return format(this.amount, 2, 2);
         },
         description() {
           return this.sacConfig.description(this.effectValue);
@@ -36,7 +36,7 @@ Vue.component("sacrificed-glyphs", {
           return this.hasDragover && this.currentSacrifice.type === this.type;
         },
         formatNewAmount() {
-          return this.format(this.currentSacrifice.sacrificeValue, 2, 2);
+          return format(this.currentSacrifice.sacrificeValue, 2, 2);
         }
       },
       methods: {

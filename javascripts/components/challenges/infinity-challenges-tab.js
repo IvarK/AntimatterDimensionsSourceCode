@@ -65,7 +65,7 @@ Vue.component("infinity-challenges-tab", {
         : undefined;
       return next === undefined
         ? "All Infinity Challenges unlocked"
-        : `Next challenge unlocks at ${this.format(next, 0, 0)} antimatter.`;
+        : `Next challenge unlocks at ${format(next, 0, 0)} antimatter.`;
     }
   },
   methods: {

@@ -21,7 +21,7 @@ Vue.component("new-tickspeed-row", {
     multiplierDisplay() {
       const tickmult = this.mult;
       if (tickmult.lte(1e-9)) {
-        return `${this.format(tickmult.reciprocal(), 2, 0)}x faster / upgrade.`;
+        return `${formatX(tickmult.reciprocal(), 2, 0)} faster / upgrade.`;
       }
       const asNumber = tickmult.toNumber();
       let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));

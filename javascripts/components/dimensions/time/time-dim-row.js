@@ -23,7 +23,7 @@ Vue.component("time-dim-row", {
     },
     rateOfChangeDisplay() {
       return this.tier < 8
-        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
         : "";
     },
     buttonContents() {

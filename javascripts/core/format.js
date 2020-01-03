@@ -1,9 +1,5 @@
 "use strict";
 
-function shortenRateOfChange(money) {
-  return shorten(money, 2, 2);
-}
-
 function shortenCosts(money) {
   return shorten(money, 0, 0);
 }

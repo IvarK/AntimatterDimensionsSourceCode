@@ -20,7 +20,7 @@ Vue.component("new-inf-dimensions-tab", {
   },
   computed: {
     sacrificeBoostDisplay() {
-      return this.shortenRateOfChange(this.sacrificeBoost);
+      return format(this.sacrificeBoost, 2, 2);
     },
     sacrificeTooltip() {
       return `Boosts 8th Dimension by ${this.sacrificeBoostDisplay}x`;
@@ -71,7 +71,7 @@ Vue.component("new-inf-dimensions-tab", {
     </p>
   </div>
     <div class="l-infinity-dim-tab__enslaved-reward-container" v-if="enslavedCompleted">
-    <button 
+    <button
       class="c-infinity-dim-tab__tesseract-button"
       :class="{ 'c-infinity-dim-tab__tesseract-button--disabled': !canBuyTesseract }"
       @click="buyTesseract">

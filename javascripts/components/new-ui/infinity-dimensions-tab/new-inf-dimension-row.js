@@ -33,7 +33,7 @@ Vue.component("new-inf-dimension-row", {
     },
     rateOfChangeDisplay() {
       return this.hasRateOfChange
-        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
         : "";
     },
     costDisplay() {

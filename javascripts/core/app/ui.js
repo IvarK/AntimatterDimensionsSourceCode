@@ -25,9 +25,6 @@ Vue.mixin({
     shortenPostBreak(value, places, placesUnder1000) {
       return shortenPostBreak(value, places, placesUnder1000);
     },
-    shortenRateOfChange(value) {
-      return shortenRateOfChange(value);
-    },
     shortenCosts(value) {
       return shortenCosts(value);
     },
@@ -42,6 +39,9 @@ Vue.mixin({
     },
     shortenSmallInteger(value) {
       return shortenSmallInteger(value);
+    },
+    format(value, places, placesUnder1000) {
+      return format(value, places, placesUnder1000);
     },
     formatX(value, places, placesUnder1000) {
       return formatX(value, places, placesUnder1000);

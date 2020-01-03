@@ -12,17 +12,17 @@ GameDatabase.reality.glyphSacrifice = [
   }, {
     id: "infinity",
     effect: () => 1 + Math.pow(player.reality.glyphs.sac.infinity, 0.2) / 100,
-    description: amount => `${shortenRateOfChange(amount)}x bigger multiplier when buying 8th Infinity Dimension.`
+    description: amount => `${formatX(amount, 2, 2)} bigger multiplier when buying 8th Infinity Dimension.`
   }, {
     id: "time",
     effect: () => Math.pow(1 + Math.pow(player.reality.glyphs.sac.time, 0.2) / 100, 2),
-    description: amount => `${shortenRateOfChange(amount)}x bigger multiplier when buying 8th Time Dimension.`
+    description: amount => `${formatX(amount, 2, 2)} bigger multiplier when buying 8th Time Dimension.`
   }, {
     id: "replication",
     effect: () => Math.floor(6 * Math.pow(Math.log10(player.reality.glyphs.sac.replication + 1), 1.2)),
     description: amount => {
       const nextReplicatedGalaxy = Math.pow(10, Math.pow((amount + 1) / 6, 1 / 1.2)) - 1;
-      return "Replicated galaxy scaling starts " + 
+      return "Replicated galaxy scaling starts " +
         `${shortenSmallInteger(amount)} later (next at ${shorten(nextReplicatedGalaxy, 2, 2)})`;
     }
   }, {

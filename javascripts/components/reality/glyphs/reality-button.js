@@ -113,7 +113,7 @@ Vue.component("reality-button", {
       return this.formatScalingMultiplier(`${pet.name} memories`, pet.expBoost, pet.nextExpBoost);
     },
     formatScalingMultiplier(resource, before, after) {
-      return `${resource} ${shortenRateOfChange(before)}x ➜ ${shortenRateOfChange(after)}x`;
+      return `${resource} ${formatX(before, 2, 2)} ➜ ${formatX(after, 2, 2)}`;
     }
   },
   template: `

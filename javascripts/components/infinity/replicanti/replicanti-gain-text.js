@@ -30,7 +30,7 @@ Vue.component("replicanti-gain-text", {
           ? "an extremely long time"
           : `${TimeSpan.fromSeconds(timeToThousand.toNumber())}`;
         this.text = `You are gaining ${formatX(gainFactorPerSecond, 2, 1)} Replicanti per second` +
-          ` (${timeEstimateText} until ${shorten(nextThousandOOM)})`;
+          ` (${timeEstimateText} until ${format(nextThousandOOM)})`;
         return;
       }
       if (log10GainFactorPerTick.gt(308)) {
@@ -44,7 +44,7 @@ Vue.component("replicanti-gain-text", {
           effectiveMaxRG = Replicanti.galaxies.max;
         }
         const allGalaxyTime = Decimal.divide(effectiveMaxRG, baseGalaxiesPerSecond).toNumber();
-        this.text = `You are gaining ${shorten(galaxiesPerSecond, 2, 1)} galaxies per second` +
+        this.text = `You are gaining ${format(galaxiesPerSecond, 2, 1)} galaxies per second` +
           ` (all galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
         return;
       }

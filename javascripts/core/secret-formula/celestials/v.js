@@ -17,78 +17,78 @@ GameDatabase.celestials.v = {
       values: [5, 4, 3, 2, 1, 0],
       condition: x => TimeStudy.reality.isBought && Glyphs.activeList.length <= x,
       currentValue: () => (TimeStudy.reality.isBought ? 6 - Glyphs.activeList.length : 0),
-      formatRecord: x => (x === 0 ? "N/A" : shortenSmallInteger(6 - x)),
+      formatRecord: x => (x === 0 ? "N/A" : formatInt(6 - x)),
     },
     {
       id: 1,
       name: "AntiStellar",
-      description: value => `Have ${shortenSmallInteger(value)} total galaxies from all types.`,
+      description: value => `Have ${formatInt(value)} total galaxies from all types.`,
       values: [4000, 4300, 4600, 4900, 5200, 5500],
       condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= x,
       currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies,
-      formatRecord: x => shortenSmallInteger(x),
+      formatRecord: x => formatInt(x),
     },
     {
       id: 2,
       name: "Se7en deadly matters",
-      description: value => `Get ${shorten(value)} IP in Eternity Challenge 7.`,
+      description: value => `Get ${format(value)} IP in Eternity Challenge 7.`,
       values: [6e5, 7.2e5, 8.4e5, 9.6e5, 1.08e6, 1.2e6].map(Decimal.pow10),
       condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x),
       currentValue: () => (EternityChallenge(7).isRunning ? player.infinityPoints.exponent : 0),
-      formatRecord: x => (x === 0 ? shortenSmallInteger(0) : shorten(Decimal.pow10(x))),
+      formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
     },
     {
       id: 3,
       name: "Young Boy",
-      description: value => `Get ${shorten(value)} Antimatter in Eternity Challenge 12 without 
+      description: value => `Get ${format(value)} Antimatter in Eternity Challenge 12 without
         unlocking Time Dilation.`,
       values: [400e6, 450e6, 500e6, 600e6, 700e6, 800e6].map(Decimal.pow10),
       condition: x => EternityChallenge(12).isRunning && player.antimatter.gte(x) && !PlayerProgress.dilationUnlocked(),
       currentValue: () => ((EternityChallenge(12).isRunning && !PlayerProgress.dilationUnlocked())
         ? player.antimatter.exponent
         : 0),
-      formatRecord: x => (x === 0 ? shortenSmallInteger(0) : shorten(Decimal.pow10(x))),
+      formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
     },
     {
       id: 4,
       name: "Eternal Sunshine",
-      description: value => `Get ${shorten(value)} EP.`,
+      description: value => `Get ${format(value)} EP.`,
       values: ["1e7000", "1e7600", "1e8200", "1e8800", "1e9400", "1e10000"].map(v => new Decimal(v)),
       condition: x => player.eternityPoints.gte(x),
       currentValue: () => player.eternityPoints.exponent,
-      formatRecord: x => (x === 0 ? shortenSmallInteger(0) : shorten(Decimal.pow10(x))),
+      formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
     },
     {
       id: 5,
       name: "Matterception",
-      description: value => `Get ${shortenSmallInteger(value)} Dimensional Boosts while dilating time, inside EC5.`,
+      description: value => `Get ${formatInt(value)} Dimensional Boosts while dilating time, inside EC5.`,
       values: [50, 52, 54, 56, 58, 60],
       condition: x => player.dilation.active && EternityChallenge(5).isRunning && DimBoost.purchasedBoosts >= x,
       currentValue: () => (player.dilation.active && EternityChallenge(5).isRunning ? DimBoost.purchasedBoosts : 0),
-      formatRecord: x => shortenSmallInteger(x),
+      formatRecord: x => formatInt(x),
     },
     {
       id: 6,
       name: "Requiem for a Glyph",
-      description: value => 
-        `Unlock reality with at least ${shortenSmallInteger(value)} cursed ${pluralize("glyph", value)}`,
+      description: value =>
+        `Unlock reality with at least ${formatInt(value)} cursed ${pluralize("glyph", value)}`,
       values: [1, 2, 3, 4, 5],
       condition: x => TimeStudy.reality.isBought && player.celestials.v.cursedThisRun >= x,
       currentValue: () => (TimeStudy.reality.isBought ? player.celestials.v.cursedThisRun : 0),
-      formatRecord: x => shortenSmallInteger(x)
+      formatRecord: x => formatInt(x)
     },
     {
       id: 7,
       name: "Post-destination",
-      description: value => 
-        `Get ${shortenSmallInteger(Math.pow(value, 2.4))} TT with a 1e-${value} black hole`,
+      description: value =>
+        `Get ${formatInt(Math.pow(value, 2.4))} TT with a 1e-${value} black hole`,
       values: [50, 100, 150, 200, 300],
-      condition: x => player.timestudy.theorem.gt(Math.pow(x, 2.4)) && 
+      condition: x => player.timestudy.theorem.gt(Math.pow(x, 2.4)) &&
         Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality,
       currentValue: x => (Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality
         ? player.timestudy.theorem.toNumber()
         : 0),
-      formatRecord: x => shortenSmallInteger(x)
+      formatRecord: x => formatInt(x)
     }
   ],
   triadStudies: [

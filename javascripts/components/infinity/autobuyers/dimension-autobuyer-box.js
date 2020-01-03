@@ -20,7 +20,7 @@ Vue.component("dimension-autobuyer-box", {
           if (!this.hasMaxedBulk) {
             bulk = Math.min(bulk * 2, 1e100);
           }
-          return `${shortenDimensions(bulk)}x bulk purchase`;
+          return `${format(bulk, 2, 0)}x bulk purchase`;
         }
       },
       methods: {
@@ -44,7 +44,7 @@ Vue.component("dimension-autobuyer-box", {
         <span>{{bulkDisplay}}</span>
         <template v-if="!hasMaxedBulk">
           <br>
-          <span>Cost: {{shortenDimensions(cost)}} IP</span>
+          <span>Cost: {{format(cost, 2, 0)}} IP</span>
         </template>
         </button>`
     }

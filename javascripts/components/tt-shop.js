@@ -26,7 +26,7 @@ Vue.component("tt-shop", {
     theoremAmountDisplay() {
       const theorems = this.theoremAmount;
       if (theorems.gt(99999)) {
-        return this.shortenMoney(theorems);
+        return format(theorems, 2, 1);
       }
       return Math.floor(theorems.toNumber()).toFixed(0);
     },
@@ -56,19 +56,19 @@ Vue.component("tt-shop", {
       player.timestudy.shopMinimized = !player.timestudy.shopMinimized;
     },
     formatAM(am) {
-      return this.shortenCosts(am) + " AM";
+      return format(am, 0, 0) + " AM";
     },
     buyWithAM() {
       TimeTheorems.buyWithAntimatter();
     },
     formatIP(ip) {
-      return this.shortenCosts(ip) + " IP";
+      return format(ip, 0, 0) + " IP";
     },
     buyWithIP() {
       TimeTheorems.buyWithIP();
     },
     formatEP(ep) {
-      return this.shortenDimensions(ep) + " EP";
+      return format(ep, 2, 0) + " EP";
     },
     buyWithEP() {
       TimeTheorems.buyWithEP();

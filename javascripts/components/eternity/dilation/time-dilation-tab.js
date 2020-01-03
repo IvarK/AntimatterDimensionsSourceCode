@@ -51,21 +51,21 @@ Vue.component("time-dilation-tab", {
     `<div class="l-dilation-tab">
       <span>
         You have
-        <span class="c-dilation-tab__tachyons">{{shorten(tachyons, 2, 1)}}</span>
+        <span class="c-dilation-tab__tachyons">{{format(tachyons, 2, 1)}}</span>
         Tachyon {{"Particle" | pluralize(tachyons)}}.
       </span>
       <dilation-button />
       <span>
         You have
-        <span class="c-dilation-tab__dilated-time">{{shorten(dilatedTime, 2, 1)}}</span>
+        <span class="c-dilation-tab__dilated-time">{{format(dilatedTime, 2, 1)}}</span>
         Dilated Time.
-        <span class="c-dilation-tab__dilated-time-income">+{{shorten(dilatedTimeIncome, 2, 1)}}/s</span>
+        <span class="c-dilation-tab__dilated-time-income">+{{format(dilatedTimeIncome, 2, 1)}}/s</span>
       </span>
       <span>
         Next free galaxy at
-        <span class="c-dilation-tab__galaxy-threshold">{{shorten(galaxyThreshold, 2, 1)}}</span>
+        <span class="c-dilation-tab__galaxy-threshold">{{format(galaxyThreshold, 2, 1)}}</span>
         Dilated Time, gained total of
-        <span class="c-dilation-tab__galaxies">{{shortenSmallInteger(galaxies)}}</span>
+        <span class="c-dilation-tab__galaxies">{{formatInt(galaxies)}}</span>
         galaxies
       </span>
       <div class="l-dilation-upgrades-grid">

@@ -18,10 +18,10 @@ Vue.component("sidebar-ep", {
   },
   template:
   `<div class="resource">
-    <h2 class="o-sidebar-eternity-button">{{ shorten(ep, 2, 0) }}</h2>
+    <h2 class="o-sidebar-eternity-button">{{ format(ep, 2, 0) }}</h2>
     <div class="resource-information">
       <span class="resource-name">Eternity {{ "Point" | pluralize(ep) }}</span>
-      <span class="resource-gain" v-if="showEternity">+{{shorten(gainedEP, 2, 0)}}</span>
+      <span class="resource-gain" v-if="showEternity">+{{format(gainedEP, 2, 0)}}</span>
     </div>
   </div>`
 });

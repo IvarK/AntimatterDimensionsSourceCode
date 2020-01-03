@@ -31,9 +31,9 @@ Vue.component("normal-dim-galaxy-row", {
       const parts = [this.galaxies.normal];
       if (this.galaxies.replicanti > 0) parts.push(this.galaxies.replicanti);
       if (this.galaxies.dilation > 0) parts.push(this.galaxies.dilation);
-      const sum = parts.map(shortenSmallInteger).join(" + ");
+      const sum = parts.map(formatInt).join(" + ");
       if (parts.length >= 2) {
-        return `${sum} = ${shortenSmallInteger(parts.sum())}`;
+        return `${sum} = ${formatInt(parts.sum())}`;
       }
       return sum;
     },
@@ -51,11 +51,11 @@ Vue.component("normal-dim-galaxy-row", {
     costScalingText() {
       switch (this.type) {
         case GalaxyType.DISTANT:
-          return `Each galaxy is more expensive past ${shortenSmallInteger(this.distantStart)} galaxies`;
+          return `Each galaxy is more expensive past ${formatInt(this.distantStart)} galaxies`;
         case GalaxyType.REMOTE:
           return "Increased galaxy cost scaling: " +
-            `Quadratic past ${shortenSmallInteger(this.distantStart)} (distant),
-              exponential past ${shortenSmallInteger(800)} (remote)`;
+            `Quadratic past ${formatInt(this.distantStart)} (distant),
+              exponential past ${formatInt(800)} (remote)`;
       }
       return undefined;
     }
@@ -87,7 +87,7 @@ Vue.component("normal-dim-galaxy-row", {
       <div
         class="c-normal-dim-row__label c-normal-dim-row__label--growable"
       >{{typeName}} ({{sumText}}):
-        requires {{shortenSmallInteger(requirement.amount)}} {{dimName}} Dimensions
+        requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions
         <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
       </div>
       <primary-button

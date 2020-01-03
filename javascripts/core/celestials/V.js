@@ -7,7 +7,7 @@
  * description: Description what you need to do, for values add {value}
  * values: different values to display and check against the game
  * condition: function that takes the current value as an argument, if true completes an achievement
- * format: optional function that formats the value, defaults to shorten()
+ * format: optional function that formats the value, defaults to format()
  */
 
 class VRunUnlockState extends GameMechanicState {

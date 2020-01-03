@@ -39,20 +39,20 @@ Vue.component("compression-button", {
   template:
     `<button class="o-compression-btn" onclick="TimeCompression.toggle()">
       <span v-if="!canCompress && !isRunning">
-        Time compression requires {{ shorten(shardRequirement) }} time shards to activate.
+        Time compression requires {{ format(shardRequirement) }} time shards to activate.
         <br>
-        Currently: {{ shorten(timeShards) }} time shards
+        Currently: {{ format(timeShards) }} time shards
       </span>
       <span v-else-if="!isRunning">Compress time.</span>
       <span v-else-if="entanglementGain > 0">
         Disable compression.
         <br>
-        Gain {{shorten(entanglementGain, 0, 2)}} Entanglement.
+        Gain {{format(entanglementGain, 0, 2)}} Entanglement.
       </span>
       <span v-else>
         Disable compression.
         <br>
-        Reach {{shorten(requiredForGain, 2, 2)}} antimatter to gain more Entanglement.
+        Reach {{format(requiredForGain, 2, 2)}} antimatter to gain more Entanglement.
       </span>
     </button>`
 });

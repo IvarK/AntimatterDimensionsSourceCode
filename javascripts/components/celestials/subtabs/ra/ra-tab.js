@@ -28,30 +28,30 @@ Vue.component("ra-tab", {
     pets: () => [
       {
         pet: Ra.pets.teresa,
-        scalingUpgradeText: () => `You can charge ${shortenSmallInteger(Ra.totalCharges)} Infinity Upgrades.`,
+        scalingUpgradeText: () => `You can charge ${formatInt(Ra.totalCharges)} Infinity Upgrades.`,
       },
       {
         pet: Ra.pets.effarig,
-        scalingUpgradeText: level => `Glyph rarity +${level}% and +${shortenSmallInteger(Math.floor(level / 5))}
+        scalingUpgradeText: level => `Glyph rarity +${level}% and +${formatInt(Math.floor(level / 5))}
           additional choices.`,
       },
       {
         pet: Ra.pets.enslaved,
         scalingUpgradeText: () => `Stored game time ^
-          ${shorten(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)}, stored real time efficiency 
-          +${formatPercents(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency(), 0, 2)} and 
-          +${shorten(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / 1000 / 3600, 0, 1)} hours maximum.`,
+          ${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)}, stored real time efficiency
+          +${formatPercents(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency(), 0, 2)} and
+          +${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / 1000 / 3600, 0, 1)} hours maximum.`,
       },
       {
         pet: Ra.pets.v,
-        scalingUpgradeText: level => `+${shortenSmallInteger(level)} free achievements.`,
+        scalingUpgradeText: level => `+${formatInt(level)} free achievements.`,
       }
     ]
   },
   template:
     `<div class="l-ra-celestial-tab">
       <div class="c-ra-memory-header">
-        You will gain {{ shorten(this.currentExpGain, 2, 2) }}{{ showReality ? " base" : ""}} 
+        You will gain {{ format(this.currentExpGain, 2, 2) }}{{ showReality ? " base" : ""}}
         memories on Reality, based on glyph level.
       </div>
       <div>
@@ -70,16 +70,16 @@ Vue.component("ra-tab", {
             <h2> Memory multipliers: </h2>
             <div class="c-ra-rewards">
               <span class="c-ra-rewards-inner"> Teresa: {{formatX(expMults[0], 2, 2)}} </span>
-              <span 
-                class="c-ra-rewards-inner" 
+              <span
+                class="c-ra-rewards-inner"
                 v-if="pets[1].pet.isUnlocked"> Effarig: {{formatX(expMults[1], 2, 2)}} </span>
             </div>
             <div class="c-ra-rewards">
-              <span 
-                class="c-ra-rewards-inner" 
+              <span
+                class="c-ra-rewards-inner"
                 v-if="pets[2].pet.isUnlocked"> Enslaved: {{formatX(expMults[2], 2, 2)}} </span>
-              <span 
-                class="c-ra-rewards-inner" 
+              <span
+                class="c-ra-rewards-inner"
                 v-if="pets[3].pet.isUnlocked"> V: {{formatX(expMults[3], 2, 2)}} </span>
             </div>
           </div>
@@ -88,7 +88,7 @@ Vue.component("ra-tab", {
           <div class="l-ra-laitela-unlock-inner">
             <h1> Lai'tela: </h1>
             <h2> The Celestial of Matter </h2>
-            <p> Unlocked getting all four celestials to level {{ shortenSmallInteger(20) }} </p>
+            <p> Unlocked getting all four celestials to level {{ formatInt(20) }} </p>
           </div>
         </button>
       </div>

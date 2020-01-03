@@ -20,20 +20,20 @@ Vue.component("game-header-amounts-line", {
         this.eternityPoints.copyFrom(player.eternityPoints);
       }
     },
-    shortenPoints(points) {
-      return this.shorten(points, 2, 0);
+    formatPoints(points) {
+      return format(points, 2, 0);
     }
   },
   template:
     `<div class="l-game-header__amounts-line">
       <div v-if="showInfinityPoints" class="c-game-header__infinity-points l-game-header__infinity-points">
-        You have 
-        <span class="c-game-header__ip-amount">{{shortenPoints(infinityPoints)}}</span>
+        You have
+        <span class="c-game-header__ip-amount">{{formatPoints(infinityPoints)}}</span>
         Infinity {{ "point" | pluralize(infinityPoints) }}.
       </div>
       <div v-if="showEternityPoints" class="c-game-header__eternity-points l-game-header__eternity-points">
-        You have 
-        <span class="c-game-header__ep-amount">{{shortenPoints(eternityPoints)}}</span>
+        You have
+        <span class="c-game-header__ep-amount">{{formatPoints(eternityPoints)}}</span>
         Eternity {{ "point" | pluralize(eternityPoints) }}.
       </div>
     </div>`

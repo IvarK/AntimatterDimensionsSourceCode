@@ -28,7 +28,7 @@ Vue.component("modal-reality-glyph-creation", {
       this.emitClose();
     },
     formatGlyphEffect(effect) {
-      if (this.realityGlyphLevel < effect[0]) return `(Requires glyph level ${shortenSmallInteger(effect[0])})`;
+      if (this.realityGlyphLevel < effect[0]) return `(Requires glyph level ${formatInt(effect[0])})`;
       const config = GameDatabase.reality.glyphEffects[effect[1]];
       const value = config.effect(this.realityGlyphLevel, rarityToStrength(100));
       const effectTemplate = typeof config.singleDesc === "function"
@@ -40,8 +40,8 @@ Vue.component("modal-reality-glyph-creation", {
   template: `
     <div class="c-reality-glyph-creation">
       <modal-close-button @click="emitClose"/>
-      <div>  
-        Create a level {{ shortenSmallInteger(realityGlyphLevel) }} reality glyph. Rarity will always be 100% and level
+      <div>
+        Create a level {{ formatInt(realityGlyphLevel) }} reality glyph. Rarity will always be 100% and level
         scales on your current reality resource amount (which is all consumed). All other alchemy resources will be
         unaffected. Reality glyphs have unique effects, some of which are only available with higher level glyphs.
       </div><br>

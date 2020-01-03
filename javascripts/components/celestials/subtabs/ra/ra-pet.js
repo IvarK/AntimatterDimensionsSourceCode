@@ -28,15 +28,15 @@ Vue.component("ra-pet", {
       };
     },
     expPerMin() {
-      const expGain = this.lastTenGlyphLevels.reduce((acc, value) => 
+      const expGain = this.lastTenGlyphLevels.reduce((acc, value) =>
         acc + Math.pow(2, value / 500 - 10), 0
       ) * this.expBoost / 10;
       const avgTimeMs = this.lastTenRunTimers.reduce((acc, value) => acc + value, 0) / 10;
       return Math.round(expGain / (avgTimeMs / 60000));
     },
     experienceInformation() {
-      return `${shorten(this.exp, 2)}/${shorten(this.requiredExp, 2)} 
-        memories - ${shorten(this.expPerMin, 2)} memories/min`;
+      return `${format(this.exp, 2)}/${format(this.requiredExp, 2)}
+        memories - ${format(this.expPerMin, 2)} memories/min`;
     }
   },
   methods: {
@@ -55,7 +55,7 @@ Vue.component("ra-pet", {
   template: `
     <div class="l-ra-pet-container" v-if="isUnlocked">
       <div class="c-ra-pet-header" :style="petStyle">
-        <div class="c-ra-pet-title">{{ pet.name }} Lvl. {{ shortenSmallInteger(level) }}</div>
+        <div class="c-ra-pet-title">{{ pet.name }} Lvl. {{ formatInt(level) }}</div>
         <div v-if="level >= 2">{{ scalingUpgradeText }}</div>
         <div>{{ experienceInformation }}</div>
       </div>

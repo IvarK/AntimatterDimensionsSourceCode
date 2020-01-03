@@ -24,11 +24,11 @@ Vue.component("normal-dim-row", {
       return DISPLAY_NAMES[this.tier];
     },
     amountDisplay() {
-      return this.tier < 8 ? shorten(this.amount, 2, 0) : shortenSmallInteger(this.amount);
+      return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
     },
     rateOfChangeDisplay() {
       return this.tier < 8
-        ? ` (+${shorten(this.rateOfChange, 2, 2)}%/s)`
+        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
         : "";
     },
     cappedTooltip() {
@@ -69,10 +69,10 @@ Vue.component("normal-dim-row", {
   template:
     `<div v-show="isUnlocked" class="c-normal-dim-row">
       <div class="c-normal-dim-row__name c-normal-dim-row__label">
-        {{name}} Dimension x{{shorten(multiplier, 1, 1)}}
+        {{name}} Dimension {{formatX(multiplier, 1, 1)}}
       </div>
       <div class="c-normal-dim-row__label c-normal-dim-row__label--growable">
-        {{amountDisplay}} ({{shortenSmallInteger(boughtBefore10)}}){{rateOfChangeDisplay}}
+        {{amountDisplay}} ({{formatInt(boughtBefore10)}}){{rateOfChangeDisplay}}
       </div>
       <primary-button
         :enabled="isAffordable"
@@ -81,7 +81,7 @@ Vue.component("normal-dim-row", {
         @click="buySingle">
         <span v-if="isCapped">Capped!</span>
         <template v-else>
-          <span v-if="showCostTitle(singleCost)">Cost: </span>{{shorten(singleCost)}}
+          <span v-if="showCostTitle(singleCost)">Cost: </span>{{format(singleCost)}}
         </template>
       </primary-button>
       <primary-button
@@ -91,8 +91,8 @@ Vue.component("normal-dim-row", {
         @click="buyUntil10">
         <span v-if="isCapped">Capped!</span>
         <template v-else>
-          Until {{shortenSmallInteger(10)}}, <span v-if="showCostTitle(until10Cost)">
-          Cost: </span>{{shorten(until10Cost)}}
+          Until {{formatInt(10)}}, <span v-if="showCostTitle(until10Cost)">
+          Cost: </span>{{format(until10Cost)}}
         </template>
       </primary-button>
       <div

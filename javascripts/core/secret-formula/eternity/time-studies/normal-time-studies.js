@@ -33,7 +33,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 22,
       cost: 2,
       requirement: 11,
-      description: () => `Replicanti interval limit ${shortenSmallInteger(50)}ms ➜ ${shortenSmallInteger(1)}ms`,
+      description: () => `Replicanti interval limit ${formatInt(50)}ms ➜ ${formatInt(1)}ms`,
       effect: 1
     },
     {
@@ -41,14 +41,14 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 3,
       requirement: 21,
       description: () => `Powers up bonuses that are based on your infinitied stat
-        (infinitied^${shortenSmallInteger(4)})`,
+        (infinitied^${formatInt(4)})`,
       effect: 4
     },
     {
       id: 32,
       cost: 2,
       requirement: 22,
-      description: () => `You gain ${shortenSmallInteger(TimeStudy(32).effectValue)}x
+      description: () => `You gain ${formatInt(TimeStudy(32).effectValue)}x
         more infinitied stat (based on Dimension Boosts)`,
       effect: () => Math.max(DimBoost.totalBoosts, 1)
     },
@@ -62,7 +62,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 41,
       cost: 4,
       requirement: 31,
-      description: () => `Each galaxy gives a ${shorten(1.2, 1, 1)}x multiplier on IP gained.`,
+      description: () => `Each galaxy gives a ${format(1.2, 1, 1)}x multiplier on IP gained.`,
       effect: () => Decimal.pow(1.2, Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies),
       formatEffect: value => formatX(value, 2, 1)
     },
@@ -70,22 +70,22 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 42,
       cost: 6,
       requirement: 32,
-      description: () => `Galaxy requirement goes up ${shortenSmallInteger(52)}
-        8ths instead of ${shortenSmallInteger(60)}.`,
+      description: () => `Galaxy requirement goes up ${formatInt(52)}
+        8ths instead of ${formatInt(60)}.`,
       effect: 52
     },
     {
       id: 51,
       cost: 3,
       requirement: () => TimeStudy(41).isBought || TimeStudy(42).isBought,
-      description: () => `You gain ${shorten(1e15, 0, 0)}x more IP`,
+      description: () => `You gain ${format(1e15, 0, 0)}x more IP`,
       effect: 1e15
     },
     {
       id: 61,
       cost: 3,
       requirement: 51,
-      description: () => `You gain ${shortenSmallInteger(10)}x more EP`,
+      description: () => `You gain ${formatInt(10)}x more EP`,
       effect: 10
     },
     {
@@ -93,7 +93,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 3,
       requirement: () =>
         (Perk.bypassEC5Lock.isBought || EternityChallenge(5).completions > 0) && TimeStudy(42).isBought,
-      description: () => `You gain replicanti ${shortenSmallInteger(3)} times faster`,
+      description: () => `You gain replicanti ${formatInt(3)} times faster`,
       effect: 3
     },
     {
@@ -149,7 +149,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 81,
       cost: 4,
       requirement: 71,
-      description: () => `Dimension Boost power becomes ${shortenSmallInteger(10)}x`,
+      description: () => `Dimension Boost power becomes ${formatInt(10)}x`,
       effect: 10
     },
     {
@@ -225,8 +225,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 12,
       requirement: () => TimeStudy(101).isBought || TimeStudy(102).isBought || TimeStudy(103).isBought,
       description: () => (Achievement(103).canBeApplied
-        ? `Make the IP formula better log(x/${shorten(307.8, 0, 1)}) ➜ log(x/${shortenSmallInteger(285)})`
-        : `Make the IP formula better log(x/${shortenSmallInteger(308)}) ➜ log(x/${shortenSmallInteger(285)})`),
+        ? `Make the IP formula better log(x/${format(307.8, 0, 1)}) ➜ log(x/${formatInt(285)})`
+        : `Make the IP formula better log(x/${formatInt(308)}) ➜ log(x/${formatInt(285)})`),
       effect: 285
     },
     {
@@ -236,7 +236,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(111).isBought && !TimeStudy(122).isBought && !TimeStudy(123).isBought,
       requirementV: () => TimeStudy(111).isBought && (TimeStudy(122).isBought || TimeStudy(123).isBought),
       description: () => (Perk.studyActiveEP.isBought
-        ? `You gain ${shortenSmallInteger(50)}x more EP`
+        ? `You gain ${formatInt(50)}x more EP`
         : "The worse your average EP/min is, the more EP you get"),
       effect: () => (Perk.studyActiveEP.isBought
         ? 50
@@ -252,8 +252,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(111).isBought && !TimeStudy(121).isBought && !TimeStudy(123).isBought,
       requirementV: () => TimeStudy(111).isBought && (TimeStudy(121).isBought || TimeStudy(123).isBought),
       description: () => (Perk.studyPassive1.isBought
-        ? `You gain ${shortenSmallInteger(100)}x more EP`
-        : `You gain ${shortenSmallInteger(35)}x more EP`),
+        ? `You gain ${formatInt(100)}x more EP`
+        : `You gain ${formatInt(35)}x more EP`),
       effect: () => (Perk.studyPassive1.isBought ? 100 : 35)
     },
     {
@@ -288,7 +288,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(122).isBought && (TimeStudy(131).isBought || TimeStudy(133).isBought),
       description: () => (Perk.studyPassive2.isBought
-        ? `Replicanti galaxies are 40% more effective and replicanti are ${shortenSmallInteger(5)}x faster`
+        ? `Replicanti galaxies are 40% more effective and replicanti are ${formatInt(5)}x faster`
         : "Replicanti galaxies are 40% more effective"),
       effect: 0.4
     },
@@ -300,7 +300,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirementV: () => TimeStudy(123).isBought && (TimeStudy(131).isBought || TimeStudy(132).isBought),
       description: () => (Achievement(138).isUnlocked
       ? "Replicanti galaxies are 50% stronger"
-      : `Replicanti are ${shortenSmallInteger(10)}x slower until infinity, but their galaxies are 50% stronger`),
+      : `Replicanti are ${formatInt(10)}x slower until infinity, but their galaxies are 50% stronger`),
       effect: 0.5
     },
     {
@@ -323,7 +323,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 2,
       requirement: () => TimeStudy(132).isBought && !TimeStudy(141).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(132).isBought && (TimeStudy(141).isBought || TimeStudy(143).isBought),
-      description: () => `You gain ${shorten(Perk.studyPassive1.isBought ? 1e100 : 1e25, 0, 0)}x more IP`,
+      description: () => `You gain ${format(Perk.studyPassive1.isBought ? 1e100 : 1e25, 0, 0)}x more IP`,
       effect: () => (Perk.studyPassive1.isBought ? 1e100 : 1e25),
       cap: () => (Effarig.eternityCap === undefined ? undefined : Effarig.eternityCap.toNumber())
     },
@@ -346,21 +346,21 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 151,
       cost: 8,
       requirement: () => TimeStudy(141).isBought || TimeStudy(142).isBought || TimeStudy(143).isBought,
-      description: () => `${shorten(1e4, 0, 0)}x multiplier on all Time Dimensions`,
+      description: () => `${format(1e4, 0, 0)}x multiplier on all Time Dimensions`,
       effect: 1e4
     },
     {
       id: 161,
       cost: 7,
       requirement: 151,
-      description: () => `${shorten("1e616", 0, 0)}x multiplier on all Normal Dimensions`,
+      description: () => `${format("1e616", 0, 0)}x multiplier on all Normal Dimensions`,
       effect: () => new Decimal("1e616")
     },
     {
       id: 162,
       cost: 7,
       requirement: 151,
-      description: () => `${shorten(1e11, 0, 0)}x multiplier on all Infinity Dimensions`,
+      description: () => `${format(1e11, 0, 0)}x multiplier on all Infinity Dimensions`,
       effect: 1e11
     },
     {
@@ -394,7 +394,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0 && !Enslaved.isRunning,
       description: () => (Enslaved.isRunning
         ? "There is not enough space in this reality"
-        : `Replicanti can go beyond ${shorten(replicantiCap(), 2, 1)}, but growth slows down at higher amounts.`)
+        : `Replicanti can go beyond ${format(replicantiCap(), 2, 1)}, but growth slows down at higher amounts.`)
       },
     {
       id: 193,
@@ -420,7 +420,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 211,
       cost: 120,
       requirement: 191,
-      description: () => `Dimension Boost requirement scaling is reduced by ${shortenSmallInteger(5)}`,
+      description: () => `Dimension Boost requirement scaling is reduced by ${formatInt(5)}`,
       effect: 5
     },
     {
@@ -436,7 +436,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 213,
       cost: 200,
       requirement: 193,
-      description: () => `You gain Replicanti ${shortenSmallInteger(20)} times faster`,
+      description: () => `You gain Replicanti ${formatInt(20)} times faster`,
       effect: 20
     },
     {
@@ -469,7 +469,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 4,
       requirement: () => TimeStudy(211).isBought && !TimeStudy(221).isBought,
       requirementV: () => TimeStudy(211).isBought && TimeStudy(221).isBought,
-      description: () => `Dimension Boost costs scale by another ${shortenSmallInteger(2)} less`,
+      description: () => `Dimension Boost costs scale by another ${formatInt(2)} less`,
       effect: 2
     },
     {
@@ -478,7 +478,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 4,
       requirement: () => TimeStudy(212).isBought && !TimeStudy(224).isBought,
       requirementV: () => TimeStudy(212).isBought && TimeStudy(224).isBought,
-      description: () => `Galaxy cost scaling starts ${shortenSmallInteger(7)} galaxies later`,
+      description: () => `Galaxy cost scaling starts ${formatInt(7)} galaxies later`,
       effect: 7
     },
     {
@@ -490,8 +490,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       description() {
         const effect = TimeStudy(224).effectValue;
         const noun = effect === 1 ? "galaxy" : "galaxies";
-        return `Galaxy cost scaling starts ${shortenSmallInteger(effect)} ${noun} later
-          (${shortenSmallInteger(1)} for every ${shortenSmallInteger(2000)} DimBoosts)`;
+        return `Galaxy cost scaling starts ${formatInt(effect)} ${noun} later
+          (${formatInt(1)} for every ${formatInt(2000)} DimBoosts)`;
       },
       effect: () => Math.floor(DimBoost.totalBoosts / 2000)
     },
@@ -503,7 +503,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirementV: () => TimeStudy(213).isBought && TimeStudy(226).isBought,
       description: "You gain extra RGs based on your Replicanti amount",
       effect: () => Math.floor(Replicanti.amount.exponent / 1000),
-      formatEffect: value => `+${shortenSmallInteger(value)} RG`
+      formatEffect: value => `+${formatInt(value)} RG`
     },
     {
       id: 226,
@@ -513,7 +513,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirementV: () => TimeStudy(213).isBought && TimeStudy(225).isBought,
       description: "You gain extra RGs based on your max RGs",
       effect: () => Math.floor(player.replicanti.gal / 15),
-      formatEffect: value => `+${shortenSmallInteger(value)} RG`
+      formatEffect: value => `+${formatInt(value)} RG`
     },
     {
       id: 227,
@@ -531,7 +531,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 4,
       requirement: () => TimeStudy(214).isBought && !TimeStudy(227).isBought,
       requirementV: () => TimeStudy(214).isBought && TimeStudy(227).isBought,
-      description: () => `Sacrifice formula scales better, x^${shorten(0.011, 0, 3)} ➜ x^${shorten(0.013, 0, 3)}`,
+      description: () => `Sacrifice formula scales better, x^${format(0.011, 0, 3)} ➜ x^${format(0.013, 0, 3)}`,
       effect: 0.013
     },
     {
@@ -562,7 +562,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirementV: () => (TimeStudy(225).isBought || TimeStudy(226).isBought) && TimeStudy(234).isBought,
       description: "Max Replicanti galaxy upgrade is cheaper based on current Replicanti",
       effect: () => Replicanti.amount.pow(0.3),
-      formatEffect: value => `/ ${shorten(value, 1, 2)}`
+      formatEffect: value => `/ ${format(value, 1, 2)}`
     },
     {
       id: 234,

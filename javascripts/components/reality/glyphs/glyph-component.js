@@ -107,7 +107,7 @@ const GlyphTooltipComponent = {
     },
     sortedEffects() {
       return getGlyphEffectsFromBitmask(this.effects, this.effectiveLevel, this.strength)
-        .filter(effect => 
+        .filter(effect =>
           GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },
     rarityInfo() {
@@ -141,7 +141,7 @@ const GlyphTooltipComponent = {
     levelText() {
       // eslint-disable-next-line no-nested-ternary
       const arrow = this.isLevelCapped ? "▼" : (this.isLevelBoosted ? "⯅" : "");
-      return `Level: ${arrow}${shortenSmallInteger(this.effectiveLevel)}${arrow}`;
+      return `Level: ${arrow}${formatInt(this.effectiveLevel)}${arrow}`;
     },
     levelStyle() {
       // eslint-disable-next-line no-nested-ternary
@@ -150,7 +150,7 @@ const GlyphTooltipComponent = {
     },
     sacrificeText() {
       if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && this.type !== "reality") {
-        const refinementText = `${shorten(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+        const refinementText = `${format(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
         const limitText = this.sacrificeReward === 0
           ? ` (limit reached)`
           : ``;
@@ -158,7 +158,7 @@ const GlyphTooltipComponent = {
           ? `Refine for ${refinementText}${limitText}`
           : `Can be refined for ${refinementText}${limitText}`;
       }
-      const powerText = `${shorten(this.sacrificeReward, 2, 2)} power`;
+      const powerText = `${format(this.sacrificeReward, 2, 2)} power`;
       return this.onTouchDevice
         ? `Sacrifice for ${powerText}`
         : `Can be sacrificed for ${powerText}`;

@@ -15,13 +15,13 @@ Vue.component("replicanti-galaxy-button", {
   computed: {
     resetActionDisplay() {
       return this.isDivideUnlocked
-        ? `Divide Replicanti by ${shorten(Number.MAX_VALUE, 1, 1)}`
+        ? `Divide Replicanti by ${format(Number.MAX_VALUE, 1, 1)}`
         : "Reset Replicanti amount";
     },
     galaxyCountDisplay() {
       const bought = this.boughtGalaxies;
       const extra = this.extraGalaxies;
-      const galaxyCount = extra > 0 ? `${shortenSmallInteger(bought)}+${shortenSmallInteger(extra)}` : bought;
+      const galaxyCount = extra > 0 ? `${formatInt(bought)}+${formatInt(extra)}` : bought;
       return `Currently: ${galaxyCount}`;
     },
     autobuyer() {

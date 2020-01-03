@@ -14,7 +14,7 @@ Vue.component("time-dim-tab", {
   },
   computed: {
     e6000Tooltip() {
-      return `TD costs start increasing faster after ${shorten(new Decimal("1e6000"))}`;
+      return `TD costs start increasing faster after ${format(new Decimal("1e6000"))}`;
     },
     costScaleTooltip() {
       return this.showCostScaleTooltip ? this.e6000Tooltip : undefined;
@@ -40,15 +40,15 @@ Vue.component("time-dim-tab", {
   template:
     `<div class="l-time-dim-tab l-centered-vertical-tab">
       <div>
-        <p>You've gained {{shortenSmallInteger(totalUpgrades)}} tickspeed upgrades.</p>
+        <p>You've gained {{formatInt(totalUpgrades)}} tickspeed upgrades.</p>
         <p>
           You have
-          <span class="c-time-dim-description__accent">{{shortenMoney(timeShards)}}</span> time shards.
+          <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> time shards.
           Next tickspeed upgrade at
-          <span class="c-time-dim-description__accent">{{shortenMoney(upgradeThreshold)}}</span>
+          <span class="c-time-dim-description__accent">{{format(upgradeThreshold, 2, 1)}}</span>
         </p>
-      </div>      
-      <div>You are getting {{shortenDimensions(shardsPerSecond)}} {{incomeType}} per second.</div>
+      </div>
+      <div>You are getting {{format(shardsPerSecond, 2, 0)}} {{incomeType}} per second.</div>
       <primary-button
         v-tooltip="costScaleTooltip"
         class="o-primary-btn--buy-max l-time-dim-tab__buy-max"

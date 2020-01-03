@@ -19,29 +19,11 @@ Vue.mixin({
     on$(event, fn) {
       EventHub.ui.on(event, fn, this);
     },
-    shorten(value, places, placesUnder1000) {
-      return shorten(value, places, placesUnder1000);
+    format(value, places, placesUnder1000) {
+      return format(value, places, placesUnder1000);
     },
-    shortenPostBreak(value, places, placesUnder1000) {
-      return shortenPostBreak(value, places, placesUnder1000);
-    },
-    shortenRateOfChange(value) {
-      return shortenRateOfChange(value);
-    },
-    shortenCosts(value) {
-      return shortenCosts(value);
-    },
-    shortenDimensions(value) {
-      return shortenDimensions(value);
-    },
-    shortenMoney(value) {
-      return shortenMoney(value);
-    },
-    shortenMultiplier(value) {
-      return shortenMultiplier(value);
-    },
-    shortenSmallInteger(value) {
-      return shortenSmallInteger(value);
+    formatInt(value) {
+      return formatInt(value);
     },
     formatX(value, places, placesUnder1000) {
       return formatX(value, places, placesUnder1000);

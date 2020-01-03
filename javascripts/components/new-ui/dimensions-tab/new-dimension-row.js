@@ -26,10 +26,10 @@ Vue.component("new-dimension-row", {
       return SHORT_DISPLAY_NAMES[this.tier];
     },
     costDisplay() {
-      return this.buyUntil10 ? shortenCosts(this.until10Cost) : shortenCosts(this.singleCost);
+      return this.buyUntil10 ? format(this.until10Cost, 0, 0) : format(this.singleCost, 0, 0);
     },
     amountDisplay() {
-      return this.tier < 8 ? this.shortenDimensions(this.amount) : shortenSmallInteger(this.amount);
+      return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
     },
     cappedTooltip() {
       return this.isCapped
@@ -71,7 +71,7 @@ Vue.component("new-dimension-row", {
   },
   template:
   `<div v-show="isUnlocked" class="dimension-row">
-    <h3>{{name}} D<span class="mult">x{{ shortenMultiplier(multiplier) }}</span></h3>
+    <h3>{{name}} D<span class="mult">{{ formatX(multiplier, 1, 1) }}</span></h3>
     <span>{{amountDisplay}}</span>
     <button class="o-primary-btn o-primary-btn--new" @click="buy" :class="{ 'o-primary-btn--disabled': !isAffordable }">
       <div

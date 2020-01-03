@@ -11,7 +11,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       effect: () => player.infinityRebuyables[config.id],
       formatEffect: value => (value === maxUpgrades ? `10x ➜ ${10 - value}x` : `10x ➜ ${10 - value - 1}x`),
       staticEffect: true,
-      formatCost: value => shorten(value, 2, 0)
+      formatCost: value => format(value, 2, 0)
     };
   }
 
@@ -112,7 +112,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       // Cutting corners: this is not actual effect (player.offlineProd is), but
       // it is actual IPPM that is displyed on upgrade
       effect: () => Player.bestRunIPPM.times(player.offlineProd / 100),
-      formatEffect: value => `${shorten(value, 2, 1)} IP/min`
+      formatEffect: value => `${format(value, 2, 1)} IP/min`
     }
   };
 }());

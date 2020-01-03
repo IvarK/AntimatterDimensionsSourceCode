@@ -15,7 +15,7 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 2,
-    description: () => `Automatically sacrifice every ${shortenSmallInteger(8)} ticks once you have an 8th Dimension.`,
+    description: () => `Automatically sacrifice every ${formatInt(8)} ticks once you have an 8th Dimension.`,
     goal: new Decimal("1e10500"),
     isQuickResettable: false,
     reward: {
@@ -66,7 +66,7 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 6,
-    description: () => `Once you have at least ${shortenSmallInteger(1)} 2nd Dimension, exponentially rising matter
+    description: () => `Once you have at least ${formatInt(1)} 2nd Dimension, exponentially rising matter
       divides the multiplier on all of your dimensions.`,
     goal: new Decimal("2e22222"),
     isQuickResettable: true,
@@ -82,7 +82,7 @@ GameDatabase.challenges.infinity = [
   {
     id: 7,
     description: () => `You can't get Antimatter Galaxies, but Dimension Boost multiplier
-      ${shorten(2.5, 1, 1)}x ➜ ${shortenSmallInteger(10)}x`,
+      ${format(2.5, 1, 1)}x ➜ ${formatInt(10)}x`,
     goal: new Decimal("1e10000"),
     isQuickResettable: false,
     effect: 10,

@@ -22,7 +22,7 @@ Vue.component("black-hole-upgrade-button", {
       const { config } = this;
       return {
         cost: () => config.upgrade.cost,
-        formatCost: value => shorten(value, 2, 0)
+        formatCost: value => format(value, 2, 0)
       };
     },
     classObject() {

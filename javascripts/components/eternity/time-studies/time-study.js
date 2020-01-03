@@ -73,7 +73,7 @@ Vue.component("time-study", {
         plural="Time Theorems"
       />
       <div v-else-if="showSTCost">
-        Cost: {{ shorten(STCost) }} {{ "Space Theorem" | pluralize(STCost, "Space Theorems")}}
+        Cost: {{ format(STCost) }} {{ "Space Theorem" | pluralize(STCost, "Space Theorems")}}
       </div>
     </button>`
 });

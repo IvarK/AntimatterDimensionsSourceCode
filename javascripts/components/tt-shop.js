@@ -111,9 +111,9 @@ Vue.component("tt-shop", {
           </div>
         </div>
         <div class="ttbuttons-row" v-if="!minimized">
-          <tt-buy-button :budget="budget.am" :cost="costs.am" :format="formatAM" :action="buyWithAM"/>
-          <tt-buy-button :budget="budget.ip" :cost="costs.ip" :format="formatIP" :action="buyWithIP"/>
-          <tt-buy-button :budget="budget.ep" :cost="costs.ep" :format="formatEP" :action="buyWithEP"/>
+          <tt-buy-button :budget="budget.am" :cost="costs.am" :formatCost="formatAM" :action="buyWithAM"/>
+          <tt-buy-button :budget="budget.ip" :cost="costs.ip" :formatCost="formatIP" :action="buyWithIP"/>
+          <tt-buy-button :budget="budget.ep" :cost="costs.ep" :formatCost="formatEP" :action="buyWithEP"/>
           <div class="l-tt-buy-max-vbox">
             <button v-if="!minimized" class="o-tt-top-row-button c-tt-buy-button c-tt-buy-button--unlocked"
               @click="buyMaxTheorems">
@@ -205,7 +205,7 @@ Vue.component("tt-save-load-button", {
 });
 
 Vue.component("tt-buy-button", {
-  props: ["budget", "cost", "format", "action"],
+  props: ["budget", "cost", "formatCost", "action"],
   template: `
     <button class="l-tt-buy-button c-tt-buy-button"
             :class="enabledClass"

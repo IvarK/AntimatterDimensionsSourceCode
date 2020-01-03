@@ -69,7 +69,7 @@ Vue.component("normal-dim-row", {
   template:
     `<div v-show="isUnlocked" class="c-normal-dim-row">
       <div class="c-normal-dim-row__name c-normal-dim-row__label">
-        {{name}} Dimension {{format(multiplierX, 1, 1)}}
+        {{name}} Dimension {{formatX(multiplier, 1, 1)}}
       </div>
       <div class="c-normal-dim-row__label c-normal-dim-row__label--growable">
         {{amountDisplay}} ({{formatInt(boughtBefore10)}}){{rateOfChangeDisplay}}

@@ -61,7 +61,7 @@ Vue.component("modal-import", {
   },
   methods: {
     formatAntimatter(antimatter) {
-      return this.shortenPostBreak(antimatter, 2, 1);
+      return formatPostBreak(antimatter, 2, 1);
     },
     importSave() {
       if (!this.inputIsValid) return;

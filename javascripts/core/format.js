@@ -1,37 +1,41 @@
 "use strict";
 
 function shorten(value, places, placesUnder1000) {
-  return Notations.current.format(value, places, placesUnder1000);
+  return format(value, places, placesUnder1000);
 }
 
 function shortenSmallInteger(value) {
+  return formatInt(value);
+}
+
+function format(value, places, placesUnder1000) {
+  return Notations.current.format(value, places, placesUnder1000);
+}
+
+function formatInt(value) {
   return Notations.current.isPainful
     ? shorten(value, 2, 2)
     : formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
-function shortenPostBreak(value, places, placesUnder1000) {
+function formatPostBreak(value, places, placesUnder1000) {
   const currentFormat = ui.formatPreBreak;
   ui.formatPreBreak = false;
-  const shortened = shorten(value, places, placesUnder1000);
+  const formatted = format(value, places, placesUnder1000);
   ui.formatPreBreak = currentFormat;
-  return shortened;
-}
-
-function format(value, places, placesUnder1000) {
-  return shorten(value, places, placesUnder1000);
+  return formatted;
 }
 
 function formatX(value, places, placesUnder1000) {
-  return `${shorten(value, places, placesUnder1000)}x`;
+  return `${format(value, places, placesUnder1000)}x`;
 }
 
 function formatPow(value, places, placesUnder1000) {
-  return `^${shorten(value, places, placesUnder1000)}`;
+  return `^${format(value, places, placesUnder1000)}`;
 }
 
 function formatPercents(value, places) {
-  return `${shorten(value * 100, 2, places)}%`;
+  return `${format(value * 100, 2, places)}%`;
 }
 
 function timeDisplay(ms) {

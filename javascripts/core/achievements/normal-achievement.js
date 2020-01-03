@@ -58,7 +58,7 @@ class AchievementState extends GameMechanicState {
     GameUI.notify.success(this.name);
     kong.submitAchievements();
     Achievements._power.invalidate();
-    EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+    EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
   }
 }
 
@@ -128,7 +128,7 @@ const Achievements = {
   }
 };
 
-EventHub.logic.on(GameEvent.PERK_BOUGHT, () => {
+EventHub.logic.on(GAME_EVENT.PERK_BOUGHT, () => {
   const unlockedRows = GameCache.achSkipPerkCount.value;
   for (const row of Achievements.rows(1, unlockedRows)) {
     for (const achievement of row) {

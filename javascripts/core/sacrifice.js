@@ -84,7 +84,7 @@ function sacrificeReset(auto) {
   ) {
     return false;
   }
-  EventHub.dispatch(GameEvent.SACRIFICE_RESET_BEFORE);
+  EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
   if (!auto) floatText(8, `x${format(nextBoost, 2, 1)}`);
   player.chall8TotalSacrifice = player.chall8TotalSacrifice.times(nextBoost);
@@ -99,7 +99,7 @@ function sacrificeReset(auto) {
     clearDimensions(NormalChallenge(12).isRunning ? 6 : 7);
   }
   player.noSacrifices = false;
-  EventHub.dispatch(GameEvent.SACRIFICE_RESET_AFTER);
+  EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_AFTER);
   return true;
 }
 

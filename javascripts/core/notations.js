@@ -79,6 +79,6 @@ const Notations = {
 
 ADNotations.Settings.isInfinite = decimal => ui.formatPreBreak && decimal.gte(Decimal.MAX_NUMBER);
 
-EventHub.logic.on(GameEvent.GAME_TICK_AFTER, () => {
+EventHub.logic.on(GAME_EVENT.GAME_TICK_AFTER, () => {
   ui.formatPreBreak = !player.break || (NormalChallenge.isRunning && !Enslaved.isRunning);
 });

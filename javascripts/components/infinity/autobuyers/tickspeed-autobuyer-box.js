@@ -3,15 +3,15 @@
 Vue.component("tickspeed-autobuyer-box", {
   data() {
     return {
-      mode: AutobuyerMode.BUY_SINGLE
+      mode: AUTOBUYER_MODE.BUY_SINGLE
     };
   },
   computed: {
     autobuyer: () => Autobuyer.tickspeed,
     modeDisplay() {
       switch (this.mode) {
-        case AutobuyerMode.BUY_SINGLE: return "Buys singles";
-        case AutobuyerMode.BUY_MAX: return "Buys max";
+        case AUTOBUYER_MODE.BUY_SINGLE: return "Buys singles";
+        case AUTOBUYER_MODE.BUY_MAX: return "Buys max";
       }
       throw "Unknown tickspeed autobuyer mode";
     }

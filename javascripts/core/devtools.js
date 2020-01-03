@@ -161,7 +161,7 @@ dev.giveRealityGlyph = function(level) {
 
 dev.decriminalize = function() {
   SecretAchievement(23).lock();
-  EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+  EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
 };
 
 dev.removeAch = function(name) {
@@ -347,7 +347,7 @@ dev.testGlyphs = function(config) {
       return g;
     });
     Glyphs.active = Array.from(player.reality.glyphs.active);
-    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   }
   function glyphToShortString(glyph) {
     if (glyph.type === "effarig") {

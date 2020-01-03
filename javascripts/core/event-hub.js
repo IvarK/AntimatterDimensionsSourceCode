@@ -43,7 +43,7 @@ class EventHub {
         .map(handlers => handlers.length)
         .sum();
     }
-    return `UI(UPDATE/Total): ${EventHub.ui._handlers[GameEvent.UPDATE].length}/${countHandlers(EventHub.ui)}; ` +
+    return `UI(UPDATE/Total): ${EventHub.ui._handlers[GAME_EVENT.UPDATE].length}/${countHandlers(EventHub.ui)}; ` +
       `Logic(Total): ${countHandlers(EventHub.logic)}`;
   }
 }
@@ -51,7 +51,7 @@ class EventHub {
 EventHub.logic = new EventHub();
 EventHub.ui = new EventHub();
 
-const GameEvent = {
+const GAME_EVENT = {
   // Ticks
   GAME_TICK_BEFORE: "GAME_TICK_BEFORE",
   GAME_TICK_AFTER: "GAME_TICK_AFTER",

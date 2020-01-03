@@ -103,7 +103,7 @@ function replicantiCap() {
 function replicantiLoop(diff) {
   if (!player.replicanti.unl) return;
   PerformanceStats.start("Replicanti");
-  EventHub.dispatch(GameEvent.REPLICANTI_TICK_BEFORE);
+  EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_BEFORE);
   const interval = getReplicantiInterval();
   const isActivePathDisablingRGAutobuyer = TimeStudy(131).isBought && !Achievement(138).isUnlocked;
   const isRGAutobuyerEnabled = player.replicanti.galaxybuyer && !isActivePathDisablingRGAutobuyer;
@@ -137,7 +137,7 @@ function replicantiLoop(diff) {
   if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Decimal.MAX_NUMBER)) {
     replicantiGalaxy();
   }
-  EventHub.dispatch(GameEvent.REPLICANTI_TICK_AFTER);
+  EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_AFTER);
   PerformanceStats.end();
 }
 

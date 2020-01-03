@@ -152,20 +152,20 @@ const AutomatorLexer = (() => {
   createInCategory(PrestigeEvent, "Infinity", /infinity/i, {
     extraCategories: [StudyPath],
     $autobuyer: Autobuyer.bigCrunch,
-    $autobuyerDurationMode: AutoCrunchMode.TIME,
-    $autobuyerXLastMode: AutoCrunchMode.X_LAST,
-    $autobuyerCurrencyMode: AutoCrunchMode.AMOUNT,
+    $autobuyerDurationMode: AUTO_CRUNCH_MODE.TIME,
+    $autobuyerXLastMode: AUTO_CRUNCH_MODE.X_LAST,
+    $autobuyerCurrencyMode: AUTO_CRUNCH_MODE.AMOUNT,
     $prestigeAvailable: () => canCrunch(),
     $prestige: () => bigCrunchResetRequest(true),
     $prestigeLevel: 1,
     $prestigeCurrency: "IP",
-    $studyPath: TimeStudyPath.INFINITY_DIM,
+    $studyPath: TIME_STUDY_PATH.INFINITY_DIM,
   });
   createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
     $autobuyer: Autobuyer.eternity,
-    $autobuyerDurationMode: AutoEternityMode.TIME,
-    $autobuyerXLastMode: AutoEternityMode.X_LAST,
-    $autobuyerCurrencyMode: AutoEternityMode.AMOUNT,
+    $autobuyerDurationMode: AUTO_ETERNITY_MODE.TIME,
+    $autobuyerXLastMode: AUTO_ETERNITY_MODE.X_LAST,
+    $autobuyerCurrencyMode: AUTO_ETERNITY_MODE.AMOUNT,
     $prestigeAvailable: () => canEternity(),
     $prestigeLevel: 2,
     $prestigeCurrency: "EP",
@@ -173,18 +173,18 @@ const AutomatorLexer = (() => {
   });
   createInCategory(PrestigeEvent, "Reality", /reality/i, {
     $autobuyer: Autobuyer.reality,
-    $autobuyerCurrencyMode: AutoRealityMode.RM,
+    $autobuyerCurrencyMode: AUTO_REALITY_MODE.RM,
     $prestigeAvailable: () => isRealityAvailable(),
     $prestigeLevel: 3,
     $prestigeCurrency: "RM",
     $prestige: () => autoReality(),
   });
 
-  createInCategory(StudyPath, "Idle", /idle/i, { $studyPath: TimeStudyPath.IDLE });
-  createInCategory(StudyPath, "Passive", /passive/i, { $studyPath: TimeStudyPath.PASSIVE });
-  createInCategory(StudyPath, "Active", /active/i, { $studyPath: TimeStudyPath.ACTIVE });
-  createInCategory(StudyPath, "Normal", /normal/i, { $studyPath: TimeStudyPath.NORMAL_DIM });
-  createInCategory(StudyPath, "Time", /time/i, { $studyPath: TimeStudyPath.TIME_DIM });
+  createInCategory(StudyPath, "Idle", /idle/i, { $studyPath: TIME_STUDY_PATH.IDLE });
+  createInCategory(StudyPath, "Passive", /passive/i, { $studyPath: TIME_STUDY_PATH.PASSIVE });
+  createInCategory(StudyPath, "Active", /active/i, { $studyPath: TIME_STUDY_PATH.ACTIVE });
+  createInCategory(StudyPath, "Normal", /normal/i, { $studyPath: TIME_STUDY_PATH.NORMAL_DIM });
+  createInCategory(StudyPath, "Time", /time/i, { $studyPath: TIME_STUDY_PATH.TIME_DIM });
 
   createInCategory(TimeUnit, "Milliseconds", /ms/i, {
     $autocomplete: "ms",

@@ -57,7 +57,7 @@ function bigCrunchReset() {
 
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   const challenge = NormalChallenge.current || InfinityChallenge.current;
-  EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
   handleChallengeCompletion();
 
   if (earlyGame || (challenge && !player.options.retryChallenge)) {
@@ -111,7 +111,7 @@ function bigCrunchReset() {
     EffarigUnlock.infinity.unlock();
     beginProcessReality(getRealityProps(true));
   }
-  EventHub.dispatch(GameEvent.BIG_CRUNCH_AFTER);
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
 
 }
 

@@ -54,7 +54,7 @@ Vue.component("dimension-autobuyer-box", {
   },
   data() {
     return {
-      mode: AutobuyerMode.BUY_SINGLE
+      mode: AUTOBUYER_MODE.BUY_SINGLE
     };
   },
   computed: {
@@ -66,8 +66,8 @@ Vue.component("dimension-autobuyer-box", {
     },
     modeDisplay() {
       switch (this.mode) {
-        case AutobuyerMode.BUY_SINGLE: return "Buys singles";
-        case AutobuyerMode.BUY_10: return "Buys max";
+        case AUTOBUYER_MODE.BUY_SINGLE: return "Buys singles";
+        case AUTOBUYER_MODE.BUY_10: return "Buys max";
       }
       throw "Unknown dimension autobuyer mode";
     }

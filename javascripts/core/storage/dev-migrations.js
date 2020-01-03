@@ -163,7 +163,7 @@ GameStorage.devMigrations = {
       // (see the warning at the top of this file)
 
       // Following logic from autobuyers (before the addition of wall clock time stats)
-      // const speedup = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.WORMHOLE]);
+      // const speedup = getGameSpeedupFactor([GAME_SPEED_EFFECT.EC12, GAME_SPEED_EFFECT.WORMHOLE]);
       // player.thisInfinityRealTime = Time.thisInfinity.totalSeconds / speedup;
       // player.thisEternityRealTime = Time.thisEternity.totalSeconds / speedup;
       // player.thisRealityRealTime = Time.thisReality.totalSeconds / speedup;
@@ -173,8 +173,8 @@ GameStorage.devMigrations = {
       //   player.lastTenRealities[i][3] = undefined;
       // }
 
-      // For anyone who is looking at this part of the code for debugging purposes, note that GameSpeedEffect.EC12
-      // has been replaced by GameSpeedEffect.FIXEDSPEED since EC12 is no longer the only fixed-speed effect
+      // For anyone who is looking at this part of the code for debugging purposes, note that GAME_SPEED_EFFECT.EC12
+      // has been replaced by GAME_SPEED_EFFECT.FIXED_SPEED since EC12 is no longer the only fixed-speed effect
     },
     GameStorage.migrations.fixChallengeIds,
     GameStorage.migrations.adjustMultCosts,
@@ -224,7 +224,7 @@ GameStorage.devMigrations = {
         eternities: 25
       });
       movePropIfPossible("teresa", "effarig", "autoGlyphSac", {
-        mode: AutoGlyphSacMode.NONE,
+        mode: AUTO_GLYPH_SAC_MODE.NONE,
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({
           rarityThreshold: 0,
           scoreThreshold: 0,
@@ -232,7 +232,7 @@ GameStorage.devMigrations = {
         })),
       });
       movePropIfPossible("teresa", "effarig", "autoGlyphPick", {
-        mode: AutoGlyphPickMode.RANDOM,
+        mode: AUTO_GLYPH_PICK_MODE.RANDOM,
       });
       movePropIfPossible("teresa", "effarig", "relicShards", 0, Math.max);
       movePropIfPossible("effarig", "teresa", "quoteIdx", 0);
@@ -421,7 +421,7 @@ GameStorage.devMigrations = {
     GameStorage.migrations.convertEternityCountToDecimal,
     GameStorage.migrations.renameDimboosts,
     player => {
-      // Reset reality autobuyer mode, since AutoRealityMode was incorrectly starting from 1 and not from 0.
+      // Reset reality autobuyer mode, since AUTO_REALITY_MODE was incorrectly starting from 1 and not from 0.
       // Disable it also to not wreck people's long runs or smth
       player.auto.reality.mode = 0;
       player.auto.reality.isActive = false;

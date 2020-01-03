@@ -3,14 +3,14 @@
 const NormalTimeStudies = {};
 
 NormalTimeStudies.pathList = [
-  { path: TimeStudyPath.NORMAL_DIM, studies: [71, 81, 91, 101] },
-  { path: TimeStudyPath.INFINITY_DIM, studies: [72, 82, 92, 102] },
-  { path: TimeStudyPath.TIME_DIM, studies: [73, 83, 93, 103] },
-  { path: TimeStudyPath.ACTIVE, studies: [121, 131, 141] },
-  { path: TimeStudyPath.PASSIVE, studies: [122, 132, 142] },
-  { path: TimeStudyPath.IDLE, studies: [123, 133, 143] },
-  { path: TimeStudyPath.LIGHT, studies: [221, 223, 225, 227, 231, 233] },
-  { path: TimeStudyPath.DARK, studies: [222, 224, 226, 228, 232, 234] }
+  { path: TIME_STUDY_PATH.NORMAL_DIM, studies: [71, 81, 91, 101] },
+  { path: TIME_STUDY_PATH.INFINITY_DIM, studies: [72, 82, 92, 102] },
+  { path: TIME_STUDY_PATH.TIME_DIM, studies: [73, 83, 93, 103] },
+  { path: TIME_STUDY_PATH.ACTIVE, studies: [121, 131, 141] },
+  { path: TIME_STUDY_PATH.PASSIVE, studies: [122, 132, 142] },
+  { path: TIME_STUDY_PATH.IDLE, studies: [123, 133, 143] },
+  { path: TIME_STUDY_PATH.LIGHT, studies: [221, 223, 225, 227, 231, 233] },
+  { path: TIME_STUDY_PATH.DARK, studies: [222, 224, 226, 228, 232, 234] }
 ];
 
 NormalTimeStudies.paths = NormalTimeStudies.pathList.mapToObject(e => e.path, e => e.studies);
@@ -171,17 +171,17 @@ function canBuyLocked(id) {
 
 function getSelectedDimensionStudyPaths() {
   const paths = [];
-  if (TimeStudy(71).isBought) paths.push(TimeStudyPath.NORMAL_DIM);
-  if (TimeStudy(72).isBought) paths.push(TimeStudyPath.INFINITY_DIM);
-  if (TimeStudy(73).isBought) paths.push(TimeStudyPath.TIME_DIM);
+  if (TimeStudy(71).isBought) paths.push(TIME_STUDY_PATH.NORMAL_DIM);
+  if (TimeStudy(72).isBought) paths.push(TIME_STUDY_PATH.INFINITY_DIM);
+  if (TimeStudy(73).isBought) paths.push(TIME_STUDY_PATH.TIME_DIM);
   return paths;
 }
 
 function getSelectedPacePaths() {
   const paths = [];
-  if (TimeStudy(121).isBought) paths.push(TimeStudyPath.ACTIVE);
-  if (TimeStudy(122).isBought) paths.push(TimeStudyPath.PASSIVE);
-  if (TimeStudy(123).isBought) paths.push(TimeStudyPath.IDLE);
+  if (TimeStudy(121).isBought) paths.push(TIME_STUDY_PATH.ACTIVE);
+  if (TimeStudy(122).isBought) paths.push(TIME_STUDY_PATH.PASSIVE);
+  if (TimeStudy(123).isBought) paths.push(TIME_STUDY_PATH.IDLE);
   return paths;
 }
 
@@ -370,7 +370,7 @@ class NormalTimeStudyState extends TimeStudyState {
   constructor(config) {
     super(config, TimeStudyType.NORMAL);
     const path = NormalTimeStudies.pathList.find(p => p.studies.includes(this.id));
-    this._path = path === undefined ? TimeStudyPath.NONE : path.path;
+    this._path = path === undefined ? TIME_STUDY_PATH.NONE : path.path;
   }
 
   get isBought() {

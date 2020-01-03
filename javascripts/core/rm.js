@@ -34,10 +34,10 @@ const AutoGlyphSacrifice = {
   },
   comparedToThreshold(glyph) {
     const typeCfg = AutoGlyphSacrifice.types[glyph.type];
-    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.RARITY_THRESHOLDS) {
+    if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS) {
       return strengthToRarity(glyph.strength) - typeCfg.rarityThreshold;
     }
-    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ADVANCED) {
+    if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED) {
       const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0).map(effect => effect.id);
       const glyphScore = strengthToRarity(glyph.strength) +
         effectList.map(e => typeCfg.effectScores[e]).sum();
@@ -47,12 +47,12 @@ const AutoGlyphSacrifice = {
   },
   wouldSacrifice(glyph) {
     switch (AutoGlyphSacrifice.mode) {
-      case AutoGlyphSacMode.NONE: return false;
-      case AutoGlyphSacMode.ALL:
-      case AutoGlyphSacMode.ALCHEMY:
+      case AUTO_GLYPH_SAC_MODE.NONE: return false;
+      case AUTO_GLYPH_SAC_MODE.ALL:
+      case AUTO_GLYPH_SAC_MODE.ALCHEMY:
         return true;
-      case AutoGlyphSacMode.RARITY_THRESHOLDS:
-      case AutoGlyphSacMode.ADVANCED:
+      case AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS:
+      case AUTO_GLYPH_SAC_MODE.ADVANCED:
         return this.comparedToThreshold(glyph) < 0;
     }
     throw new Error("Unknown auto glyph sacrifice mode");
@@ -70,9 +70,9 @@ const AutoGlyphPicker = {
     // This function is non-deterministic, keep that in mind when calling it
     // (for example, cache the results).
     switch (AutoGlyphPicker.mode) {
-      case AutoGlyphPickMode.RANDOM: return Math.random();
-      case AutoGlyphPickMode.RARITY: return strengthToRarity(glyph.strength);
-      case AutoGlyphPickMode.ABOVE_SACRIFICE_THRESHOLD: {
+      case AUTO_GLYPH_PICK_MODE.RANDOM: return Math.random();
+      case AUTO_GLYPH_PICK_MODE.RARITY: return strengthToRarity(glyph.strength);
+      case AUTO_GLYPH_PICK_MODE.ABOVE_SACRIFICE_THRESHOLD: {
         const comparedToThreshold = AutoGlyphSacrifice.comparedToThreshold(glyph);
         if (comparedToThreshold < 0) {
           // We're going to sacrifice the glyph anyway. Also, if we have 1000% rarity glyphs everything has broken,
@@ -81,7 +81,7 @@ const AutoGlyphPicker = {
         }
         return comparedToThreshold;
       }
-      case AutoGlyphPickMode.LOWEST_ALCHEMY_RESOURCE:
+      case AUTO_GLYPH_PICK_MODE.LOWEST_ALCHEMY_RESOURCE:
         return AlchemyResource[glyph.type].isUnlocked && glyphRefinementGain(glyph) !== 0
           ? -AlchemyResource[glyph.type].amount
           : -Number.MAX_VALUE;
@@ -434,7 +434,7 @@ const Glyphs = {
       this.removeFromInventory(stacked.pop());
     }
     this.validate();
-    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   findById(id) {
     return player.reality.glyphs.inventory.find(glyph => glyph.id === id);
@@ -480,7 +480,7 @@ const Glyphs = {
     glyph.idx = targetSlot;
     this.active[targetSlot] = glyph;
     this.updateRealityGlyphEffects();
-    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },
   unequipAll() {
@@ -492,7 +492,7 @@ const Glyphs = {
       this.addToInventory(glyph);
     }
     this.updateRealityGlyphEffects();
-    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   unequip(activeIndex, requestedInventoryIndex) {
     if (this.active[activeIndex] === null) return;
@@ -502,7 +502,7 @@ const Glyphs = {
     this.active[activeIndex] = null;
     this.addToInventory(glyph, requestedInventoryIndex);
     this.updateRealityGlyphEffects();
-    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   updateRealityGlyphEffects() {
     // There should only be one reality glyph; this picks one pseudo-randomly if multiple are cheated/glitched in
@@ -546,7 +546,7 @@ const Glyphs = {
       this.inventory[glyph.idx] = null;
       this.inventory[targetSlot] = glyph;
       glyph.idx = targetSlot;
-      EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+      EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     } else {
       throw new Error("Attempted glyph move into non-empty slot");
     }
@@ -561,7 +561,7 @@ const Glyphs = {
     glyphA.idx = glyphB.idx;
     glyphB.idx = swapGlyph;
     this.validate();
-    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   addToInventory(glyph, requestedInventoryIndex) {
     this.validate();
@@ -574,7 +574,7 @@ const Glyphs = {
     this.inventory[index] = glyph;
     glyph.idx = index;
     player.reality.glyphs.inventory.push(glyph);
-    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },
   removeFromInventory(glyph) {
@@ -585,7 +585,7 @@ const Glyphs = {
     if (index < 0) return;
     this.inventory[glyph.idx] = null;
     player.reality.glyphs.inventory.splice(index, 1);
-    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },
   validate() {
@@ -952,7 +952,7 @@ function estimatedAlchemyCap() {
 
 function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
   if (!noAlchemy &&
-      AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY &&
+      AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY &&
       glyph.type !== "reality" &&
       glyphAlchemyResource(glyph).isUnlocked) {
     const resource = glyphAlchemyResource(glyph);
@@ -980,7 +980,7 @@ function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
   }
   player.reality.glyphs.sac[glyph.type] += toGain;
   Glyphs.removeFromInventory(glyph);
-  EventHub.dispatch(GameEvent.GLYPH_SACRIFICED, glyph);
+  EventHub.dispatch(GAME_EVENT.GLYPH_SACRIFICED, glyph);
 }
 
 function getGlyphLevelInputs() {
@@ -1136,7 +1136,7 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
 
   purchase() {
     if (!super.purchase()) return false;
-    EventHub.dispatch(GameEvent.REALITY_UPGRADE_BOUGHT);
+    EventHub.dispatch(GAME_EVENT.REALITY_UPGRADE_BOUGHT);
     const id = this.id;
     if (id === 9 || id === 24) {
       Glyphs.refreshActive();

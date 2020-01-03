@@ -209,16 +209,16 @@ const EffarigUnlock = (function() {
   };
 }());
 
-EventHub.logic.on(GameEvent.TAB_CHANGED, () => {
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
   if (Tab.celestials.effarig.isOpen) Effarig.quotes.show(Effarig.quotes.INITIAL);
 });
 
-EventHub.logic.on(GameEvent.BIG_CRUNCH_BEFORE, () => {
+EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_BEFORE, () => {
   if (!Effarig.isRunning) return;
   Effarig.quotes.show(Effarig.quotes.COMPLETE_INFINITY);
 });
 
-EventHub.logic.on(GameEvent.ETERNITY_RESET_BEFORE, () => {
+EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_BEFORE, () => {
   if (!Effarig.isRunning) return;
   Effarig.quotes.show(Effarig.quotes.COMPLETE_ETERNITY);
 });

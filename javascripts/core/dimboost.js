@@ -96,7 +96,7 @@ class DimBoost {
 
 function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
     if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
-    EventHub.dispatch(GameEvent.DIMBOOST_BEFORE, bulk);
+    EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
     player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
 
     /**
@@ -114,7 +114,7 @@ function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
     if (!forcedAMReset && (Achievement(111).isUnlocked || Perk.dimboostNonReset.isBought)) {
         player.antimatter = player.antimatter.max(currentAntimatter);
     }
-    EventHub.dispatch(GameEvent.DIMBOOST_AFTER, bulk);
+    EventHub.dispatch(GAME_EVENT.DIMBOOST_AFTER, bulk);
 }
 
 function skipResetsIfPossible() {

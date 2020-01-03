@@ -61,7 +61,7 @@ let player = {
       cost: 1,
       interval: [1500, 2000, 2500, 3000, 4000, 5000, 6000, 7500][tier],
       bulk: 1,
-      mode: AutobuyerMode.BUY_10,
+      mode: AUTOBUYER_MODE.BUY_10,
       priority: 1,
       isActive: false,
       lastTick: 0
@@ -70,7 +70,7 @@ let player = {
       isUnlocked: false,
       cost: 1,
       interval: 2500,
-      mode: AutobuyerMode.BUY_SINGLE,
+      mode: AUTOBUYER_MODE.BUY_SINGLE,
       priority: 1,
       isActive: false,
       lastTick: 0
@@ -300,7 +300,7 @@ let player = {
     gainedAutoAchievements: true,
     automator: {
       state: {
-        mode: AutomatorMode.STOP,
+        mode: AUTOMATOR_MODE.STOP,
         topLevelScript: 0,
         editorScript: 0,
         repeat: false,
@@ -310,7 +310,7 @@ let player = {
       },
       lastID: 0,
       execTimer: 0,
-      type: AutomatorType.TEXT
+      type: AUTOMATOR_TYPE.TEXT
     },
     achTimer: 0,
   },
@@ -350,7 +350,7 @@ let player = {
         eternities: 25
       },
       autoGlyphSac: {
-        mode: AutoGlyphSacMode.NONE,
+        mode: AUTO_GLYPH_SAC_MODE.NONE,
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({
           rarityThreshold: 0,
           scoreThreshold: 0,
@@ -358,7 +358,7 @@ let player = {
         })),
       },
       autoGlyphPick: {
-        mode: AutoGlyphPickMode.RANDOM,
+        mode: AUTO_GLYPH_PICK_MODE.RANDOM,
       },
     },
     enslaved: {

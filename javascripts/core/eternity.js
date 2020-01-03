@@ -61,7 +61,7 @@ function eternity(force, auto, specialConditions = {}) {
   } else {
     if (!canEternity()) return false;
     if (!auto && !askEternityConfirmation()) return false;
-    EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
+    EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     giveEternityRewards(auto);
   }
 
@@ -113,7 +113,7 @@ function eternity(force, auto, specialConditions = {}) {
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;
 
-  EventHub.dispatch(GameEvent.ETERNITY_RESET_AFTER);
+  EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_AFTER);
   return true;
 }
 

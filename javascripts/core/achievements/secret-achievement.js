@@ -41,7 +41,7 @@ class SecretAchievementState extends GameMechanicState {
     player.secretAchievementBits[this.row - 1] |= this._bitmask;
     GameUI.notify.success(this.name);
     kong.submitAchievements();
-    EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+    EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
   }
 
   lock() {

@@ -31,7 +31,7 @@ Vue.mixin({
   },
   created() {
     if (this.update) {
-      this.on$(GameEvent.UPDATE, this.update);
+      this.on$(GAME_EVENT.UPDATE, this.update);
       if (GameUI.initialized) {
         this.update();
       }
@@ -93,7 +93,7 @@ const GameUI = {
     if (index !== -1) {
       this.events.splice(index, 1);
     }
-    if (event !== GameEvent.UPDATE) {
+    if (event !== GAME_EVENT.UPDATE) {
       this.events.push(event);
     }
     if (this.flushPromise) return;
@@ -109,7 +109,7 @@ const GameUI = {
     for (const event of this.events) {
       EventHub.ui.dispatch(event);
     }
-    EventHub.ui.dispatch(GameEvent.UPDATE);
+    EventHub.ui.dispatch(GAME_EVENT.UPDATE);
     ReactivityComplainer.complain();
     if (PerformanceStats.isOn && PerformanceStats.currentBlocks.length > 0) {
       PerformanceStats.end();
@@ -122,7 +122,7 @@ const GameUI = {
     this.events = [];
   },
   update() {
-    this.dispatch(GameEvent.UPDATE);
+    this.dispatch(GAME_EVENT.UPDATE);
   }
 };
 

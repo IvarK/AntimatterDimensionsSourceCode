@@ -33,7 +33,7 @@ class BlackHoleUpgradeState {
     this.incrementAmount();
     this._lazyValue.invalidate();
     this._lazyCost.invalidate();
-    EventHub.dispatch(GameEvent.BLACK_HOLE_UPGRADE_BOUGHT);
+    EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT);
   }
 }
 
@@ -340,8 +340,8 @@ const BlackHoles = {
    * starting from black hole 1 and black hole 0 being normal game.
    */
   calculateSpeedups() {
-    const effectsToConsider = [GameSpeedEffect.FIXEDSPEED, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE, 
-      GameSpeedEffect.MOMENTUM];
+    const effectsToConsider = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH, GAME_SPEED_EFFECT.BLACK_HOLE,
+      GAME_SPEED_EFFECT.MOMENTUM];
     const speedupWithoutBlackHole = getGameSpeedupFactor(effectsToConsider, 1);
     const speedups = [1];
     for (const blackHole of this.list) {

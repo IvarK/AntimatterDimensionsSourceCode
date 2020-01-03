@@ -50,9 +50,9 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
   }
 
   get autoInfinitiesAvailable() {
-    return EternityMilestone.autoInfinities.isReached && 
-      this.data.isActive && 
-      this.mode === AutoCrunchMode.TIME && 
+    return EternityMilestone.autoInfinities.isReached &&
+      this.data.isActive &&
+      this.mode === AUTO_CRUNCH_MODE.TIME &&
       this.time < 60;
   }
 
@@ -68,13 +68,13 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
     let proc = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
     if (!proc) {
       switch (this.mode) {
-        case AutoCrunchMode.AMOUNT:
+        case AUTO_CRUNCH_MODE.AMOUNT:
           proc = gainedInfinityPoints().gte(this.amount);
           break;
-        case AutoCrunchMode.TIME:
+        case AUTO_CRUNCH_MODE.TIME:
           proc = Time.thisInfinityRealTime.totalSeconds > this.time;
           break;
-        case AutoCrunchMode.X_LAST:
+        case AUTO_CRUNCH_MODE.X_LAST:
           proc = gainedInfinityPoints().gte(player.lastTenRuns[0][1].times(this.xLast));
           break;
       }
@@ -87,6 +87,6 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
   reset() {
     super.reset();
     if (EternityMilestone.bigCrunchModes.isReached) return;
-    this.mode = AutoCrunchMode.AMOUNT;
+    this.mode = AUTO_CRUNCH_MODE.AMOUNT;
   }
 }();

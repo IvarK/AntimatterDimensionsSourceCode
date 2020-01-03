@@ -77,7 +77,7 @@ Vue.component("infinity-dim-row", {
   template:
     `<div v-show="isUnlocked" class="c-infinity-dim-row">
       <div class="c-infinity-dim-row__label c-infinity-dim-row__name">
-        {{name}} Infinity Dimension x{{shortenMoney(multiplier)}}
+        {{name}} Infinity Dimension x{{format(multiplier, 2, 1)}}
       </div>
       <div class="c-infinity-dim-row__label c-infinity-dim-row__label--growable">
         {{format(amount, 2, 0)}} {{rateOfChangeDisplay}}

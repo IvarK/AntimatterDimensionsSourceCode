@@ -138,7 +138,7 @@ Vue.component("game-header-eternity-button", {
       <template v-else-if="type === 3">
         Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
-        +{{shortenMoney(gainedTachyons)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}.
+        +{{format(gainedTachyons, 2, 1)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}.
       </template>
 
       <!-- New content available -->
@@ -147,7 +147,7 @@ Vue.component("game-header-eternity-button", {
           Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 2)}}</b> EP
         </template>
         <template v-else>
-          Gain <b>{{shortenMoney(gainedTachyons)}}</b> Tachyon {{ "particle" | pluralize(gainedTachyons) }}
+          Gain <b>{{format(gainedTachyons, 2, 1)}}</b> Tachyon {{ "particle" | pluralize(gainedTachyons) }}
         </template>
         <br>
         You should explore a bit and look at new content before clicking me!

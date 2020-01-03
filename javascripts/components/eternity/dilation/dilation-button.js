@@ -37,7 +37,7 @@ Vue.component("dilation-button", {
       <span v-else-if="canEternity && hasGain">
         Disable dilation.
         <br>
-        Gain {{shortenMoney(tachyonGain)}} Tachyon Particles.
+        Gain {{format(tachyonGain, 2, 1)}} Tachyon Particles.
       </span>
       <span v-else-if="hasGain">
         Disable dilation.
@@ -47,7 +47,7 @@ Vue.component("dilation-button", {
       <span v-else>
         Disable dilation.
         <br>
-        Reach {{shortenMoney(requiredForGain)}} antimatter to gain more Tachyon Particles.
+        Reach {{format(requiredForGain, 2, 1)}} antimatter to gain more Tachyon Particles.
       </span>
     </button>`
 });

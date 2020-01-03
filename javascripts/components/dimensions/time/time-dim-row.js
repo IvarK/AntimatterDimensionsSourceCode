@@ -59,7 +59,7 @@ Vue.component("time-dim-row", {
   template:
     `<div v-show="isUnlocked" class="c-time-dim-row">
       <div class="c-time-dim-row__label c-time-dim-row__name">
-        {{name}} Time Dimension x{{shortenMoney(multiplier)}}
+        {{name}} Time Dimension {{formatX(multiplier, 2, 1)}}
       </div>
       <div class="c-time-dim-row__label c-time-dim-row__label--growable">
         {{format(amount, 2, 0)}}{{rateOfChangeDisplay}}

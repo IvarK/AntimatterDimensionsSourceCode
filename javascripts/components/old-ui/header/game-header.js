@@ -118,10 +118,10 @@ Vue.component("game-header", {
         Gamespeed and multipliers dilated {{effarigMultNerfText}}<br>
         Tickspeed dilated {{effarigTickNerfText}}
       </div>
-      <div v-if="isInMatterChallenge">There is {{shortenMoney(matter)}} matter.</div>
+      <div v-if="isInMatterChallenge">There is {{format(matter, 2, 1)}} matter.</div>
       <game-header-amounts-line />
       <div>
-        <p>You have <span class="c-game-header__antimatter">{{shortenMoney(antimatter)}}</span> antimatter.</p>
+        <p>You have <span class="c-game-header__antimatter">{{format(antimatter, 2, 1)}}</span> antimatter.</p>
       </div>
       <div class="l-game-header__buttons-line">
         <game-header-big-crunch-button />

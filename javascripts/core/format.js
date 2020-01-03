@@ -1,9 +1,5 @@
 "use strict";
 
-function shortenMoney(money) {
-  return shorten(money, 2, 1);
-}
-
 function shortenMultiplier(money) {
   return shorten(money, 1, 1);
 }

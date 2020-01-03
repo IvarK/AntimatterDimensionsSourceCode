@@ -46,9 +46,9 @@ Vue.component("new-time-dimensions-tab", {
         <p>You've gained {{totalUpgradesDisplay}} tickspeed upgrades.</p>
         <p>
           You have
-          <span class="c-time-dim-description__accent">{{shortenMoney(timeShards)}}</span> time shards.
+          <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> time shards.
           Next tickspeed upgrade at
-          <span class="c-time-dim-description__accent">{{shortenMoney(upgradeThreshold)}}</span>
+          <span class="c-time-dim-description__accent">{{format(upgradeThreshold, 2, 1)}}</span>
         </p>
       </div>
       <div>You are getting {{format(shardsPerSecond, 2, 0)}} {{incomeType}} per second.</div>

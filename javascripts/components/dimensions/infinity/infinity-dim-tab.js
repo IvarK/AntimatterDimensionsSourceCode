@@ -56,9 +56,9 @@ Vue.component("infinity-dim-tab", {
       <div>
         <p>
           You have
-          <span class="c-infinity-dim-description__accent">{{shortenMoney(infinityPower)}}</span> infinity power,
+          <span class="c-infinity-dim-description__accent">{{format(infinityPower, 2, 1)}}</span> infinity power,
           translated to
-          <span class="c-infinity-dim-description__accent">{{shortenMoney(dimMultiplier)}}</span>x
+          <span class="c-infinity-dim-description__accent">{{formatX(dimMultiplier, 2, 1)}}</span>
           multiplier on all dimensions (^{{ shorten(conversionRate, 2, 3) }}).
         </p>
       </div>

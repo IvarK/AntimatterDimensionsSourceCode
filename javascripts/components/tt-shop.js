@@ -26,7 +26,7 @@ Vue.component("tt-shop", {
     theoremAmountDisplay() {
       const theorems = this.theoremAmount;
       if (theorems.gt(99999)) {
-        return this.shortenMoney(theorems);
+        return format(theorems, 2, 1);
       }
       return Math.floor(theorems.toNumber()).toFixed(0);
     },

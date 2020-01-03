@@ -53,14 +53,14 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 5,
-    description: () => `Galaxy cost increase scaling starts instantly (normally at ${shortenSmallInteger(100)}
+    description: () => `Galaxy cost increase scaling starts instantly (normally at ${formatInt(100)}
       galaxies). Dimension Boost costs scaling is massively increased.`,
     goal: new Decimal("1e750"),
     goalIncrease: new Decimal("1e400"),
     reward: {
       description: "Galaxy cost scaling starts later",
       effect: completions => completions * 5,
-      formatEffect: value => `${shortenSmallInteger(value)} galaxies later`
+      formatEffect: value => `${formatInt(value)} galaxies later`
     }
   },
   {
@@ -102,8 +102,8 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 8,
-    description: () => `You can only upgrade Infinity Dimensions ${shortenSmallInteger(50)} times and Replicanti
-      upgrades ${shortenSmallInteger(40)} times. Infinity Dimension and Replicanti upgrade autobuyers are disabled.`,
+    description: () => `You can only upgrade Infinity Dimensions ${formatInt(50)} times and Replicanti
+      upgrades ${formatInt(40)} times. Infinity Dimension and Replicanti upgrade autobuyers are disabled.`,
     goal: new Decimal("1e1300"),
     goalIncrease: new Decimal("1e900"),
     reward: {
@@ -132,7 +132,7 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
-        infinitied stat to normal dimensions (infinitied^${shortenSmallInteger(950)}).`;
+        infinitied stat to normal dimensions (infinitied^${formatInt(950)}).`;
       EternityChallenge(10).applyEffect(v => description += ` Currently: ${shorten(v, 2, 1)}x`);
       return description;
     },
@@ -169,8 +169,8 @@ GameDatabase.challenges.eternity = [
   {
     id: 12,
     description: () => (player.realities > 0
-      ? `The game runs ${shortenSmallInteger(1000)}x slower; all other gamespeed effects are disabled.`
-      : `The game runs ${shortenSmallInteger(1000)}x slower.`),
+      ? `The game runs ${formatInt(1000)}x slower; all other gamespeed effects are disabled.`
+      : `The game runs ${formatInt(1000)}x slower.`),
     goal: new Decimal("1e110000"),
     goalIncrease: new Decimal("1e12000"),
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,

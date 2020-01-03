@@ -127,7 +127,7 @@ Vue.component("v-tab", {
           and re-entering the reality.
         </div>
         <div>
-          You have {{ shortenSmallInteger(totalUnlocks) }} V-achievements done. 
+          You have {{ formatInt(totalUnlocks) }} V-achievements done.
           You gain 1 Space Theorem for each completion.
         </div>
         <br>

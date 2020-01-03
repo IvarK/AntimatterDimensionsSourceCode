@@ -107,7 +107,7 @@ const GlyphTooltipComponent = {
     },
     sortedEffects() {
       return getGlyphEffectsFromBitmask(this.effects, this.effectiveLevel, this.strength)
-        .filter(effect => 
+        .filter(effect =>
           GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },
     rarityInfo() {
@@ -141,7 +141,7 @@ const GlyphTooltipComponent = {
     levelText() {
       // eslint-disable-next-line no-nested-ternary
       const arrow = this.isLevelCapped ? "▼" : (this.isLevelBoosted ? "⯅" : "");
-      return `Level: ${arrow}${shortenSmallInteger(this.effectiveLevel)}${arrow}`;
+      return `Level: ${arrow}${formatInt(this.effectiveLevel)}${arrow}`;
     },
     levelStyle() {
       // eslint-disable-next-line no-nested-ternary

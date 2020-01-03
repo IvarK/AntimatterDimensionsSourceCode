@@ -28,9 +28,9 @@ Vue.component("new-dim-shift-row", {
       if (this.freeBoosts !== 0) {
         parts.push(this.freeBoosts);
       }
-      const sum = parts.map(shortenSmallInteger).join(" + ");
+      const sum = parts.map(formatInt).join(" + ");
       if (parts.length >= 2) {
-        return `${sum} = ${shortenSmallInteger(parts.sum())}`;
+        return `${sum} = ${formatInt(parts.sum())}`;
       }
       return sum;
     }
@@ -52,8 +52,8 @@ Vue.component("new-dim-shift-row", {
   template:
   `<div class="reset-container dimboost">
     <h4>Dimensional {{name}} ({{boostCountText}})</h4>
-    <span>Requires: {{shortenSmallInteger(requirement.amount)}} {{dimName}} D</span>
-    <button 
+    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} D</span>
+    <button
       class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
       :class="{ 'o-primary-btn--disabled': !isBuyable }"
       :enabled="isBuyable"

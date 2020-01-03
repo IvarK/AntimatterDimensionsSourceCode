@@ -399,10 +399,10 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 13,
     isGenerated: true,
     glyphTypes: ["infinity"],
-    singleDesc: () => `Infinity power conversion rate: \n^${shortenSmallInteger(7)}
-      ➜ ^(${shortenSmallInteger(7)} + {value})`,
-    totalDesc: () => `Infinity power conversion rate: ^${shortenSmallInteger(7)}
-      ➜ ^(${shortenSmallInteger(7)} + {value})`,
+    singleDesc: () => `Infinity power conversion rate: \n^${formatInt(7)}
+      ➜ ^(${formatInt(7)} + {value})`,
+    totalDesc: () => `Infinity power conversion rate: ^${formatInt(7)}
+      ➜ ^(${formatInt(7)} + {value})`,
     genericDesc: "Infinity power conversion rate",
     effect: (level, strength) => Math.pow(level, 0.2) * Math.pow(strength, 0.4) * 0.04,
     formatEffect: x => shorten(x, 2, 2),
@@ -496,9 +496,9 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 19,
     isGenerated: true,
     glyphTypes: ["power"],
-    singleDesc: () => `Increase the bonus from buying ${shortenSmallInteger(10)} dimensions by ×{value}`,
-    totalDesc: () => `Multiplier from "Buy ${shortenSmallInteger(10)}" ×{value}`,
-    genericDesc: () => `"Buy ${shortenSmallInteger(10)}" bonus increase`,
+    singleDesc: () => `Increase the bonus from buying ${formatInt(10)} dimensions by ×{value}`,
+    totalDesc: () => `Multiplier from "Buy ${formatInt(10)}" ×{value}`,
+    genericDesc: () => `"Buy ${formatInt(10)}" bonus increase`,
     effect: (level, strength) => 1 + level * strength / 12,
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.addExponents,
@@ -536,7 +536,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Glyph instability starting level +{value}",
     genericDesc: "Glyph instability delay",
     effect: (level, strength) => Math.floor(10 * Math.pow(level * strength, 0.5)),
-    formatEffect: x => shortenSmallInteger(x),
+    formatEffect: x => formatInt(x),
     combine: GlyphCombiner.add,
   }, {
     id: "effarigachievement",
@@ -559,14 +559,14 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     glyphTypes: ["effarig"],
     singleDesc: () => (GlyphAlteration.isAdded("effarig")
-      ? `Buy ${shortenSmallInteger(10)} multiplier ^{value} [and\nDimension Boost multiplier ^]{value2}`
-      : `Bonus from buying ${shortenSmallInteger(10)} Dimensions ^{value}`),
+      ? `Buy ${formatInt(10)} multiplier ^{value} [and\nDimension Boost multiplier ^]{value2}`
+      : `Bonus from buying ${formatInt(10)} Dimensions ^{value}`),
     totalDesc: () => (GlyphAlteration.isAdded("effarig")
-      ? `Multiplier from "Buy ${shortenSmallInteger(10)}" ^{value} and dimboosts ^{value2}`
-      : `Multiplier from "Buy ${shortenSmallInteger(10)}" ^{value}`),
+      ? `Multiplier from "Buy ${formatInt(10)}" ^{value} and dimboosts ^{value2}`
+      : `Multiplier from "Buy ${formatInt(10)}" ^{value}`),
     genericDesc: () => (GlyphAlteration.isAdded("power")
-      ? `"Buy ${shortenSmallInteger(10)}" and dimboost multipliers ^x`
-      : `"Buy ${shortenSmallInteger(10)}" multiplier ^x`),
+      ? `"Buy ${formatInt(10)}" and dimboost multipliers ^x`
+      : `"Buy ${formatInt(10)}" multiplier ^x`),
     effect: (level, strength) => 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4),
     formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
@@ -590,7 +590,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 26,
     isGenerated: true,
     glyphTypes: ["effarig"],
-    singleDesc: () => `Antimatter production: ${shortenSmallInteger(10)}^x -> ${shortenSmallInteger(10)}^(x^{value})`,
+    singleDesc: () => `Antimatter production: ${formatInt(10)}^x -> ${formatInt(10)}^(x^{value})`,
     genericDesc: "Antimatter production exponent",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 5000,
     formatEffect: x => shorten(x, 4, 4),
@@ -646,7 +646,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Increase the effective level of equipped basic glyphs by {value}",
     totalDesc: "Equipped basic glyph level +{value}",
     effect: (level, strength) => Math.floor(Math.sqrt(25 * level * strength)),
-    formatEffect: x => shortenSmallInteger(x),
+    formatEffect: x => formatInt(x),
     combine: GlyphCombiner.add,
   }, {
     id: "realitygalaxies",

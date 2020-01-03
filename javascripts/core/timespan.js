@@ -156,7 +156,7 @@ class TimeSpan {
   get totalMilliseconds() {
     return this._ms;
   }
-  
+
   /**
    * @param {TimeSpan} other
    * @returns {TimeSpan}
@@ -218,7 +218,7 @@ class TimeSpan {
       addComponent(value, name);
     }
     function addComponent(value, name) {
-      parts.push(value === 1 ? `${shortenSmallInteger(value)} ${name}` : `${shortenSmallInteger(value)} ${name}s`);
+      parts.push(value === 1 ? `${formatInt(value)} ${name}` : `${formatInt(value)} ${name}s`);
     }
     addCheckedComponent(this.years, "year");
     addCheckedComponent(this.days, "day");
@@ -259,7 +259,7 @@ class TimeSpan {
       return `${shorten(this.totalDays, 0, 2)} days`;
     }
     return `${shorten(this.totalYears, 3, 2)} years`;
-    
+
     function format(value) {
       const s = value.toString();
       return s.length === 1 ? `0${s}` : s;

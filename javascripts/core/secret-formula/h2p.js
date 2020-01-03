@@ -506,7 +506,7 @@ the middle of an Eternity.
 <br>
 <b>Infinity Points:</b> ${format(1e100)}
 <br>
-<b>Eternity Points:</b> ${shortenSmallInteger(2)}
+<b>Eternity Points:</b> ${formatInt(2)}
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked,
       tags: ["eternity", "ts", "theorems", "tree", "study", "midgame"],

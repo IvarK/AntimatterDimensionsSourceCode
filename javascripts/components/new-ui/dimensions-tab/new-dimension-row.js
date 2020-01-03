@@ -29,7 +29,7 @@ Vue.component("new-dimension-row", {
       return this.buyUntil10 ? format(this.until10Cost, 0, 0) : format(this.singleCost, 0, 0);
     },
     amountDisplay() {
-      return this.tier < 8 ? format(this.amount, 2, 0) : shortenSmallInteger(this.amount);
+      return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
     },
     cappedTooltip() {
       return this.isCapped

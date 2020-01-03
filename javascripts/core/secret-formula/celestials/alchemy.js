@@ -405,7 +405,7 @@ GameDatabase.celestials.alchemy = {
       tier: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 25,
       lockText: "Effarig Level 25",
-      formatEffect: value => `Use all resources to create a level ${shortenSmallInteger(value)} Reality glyph`,
+      formatEffect: value => `Use all resources to create a level ${formatInt(value)} Reality glyph`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EXPONENTIAL,

@@ -59,19 +59,19 @@ GameDatabase.achievements.normal = [
     tooltip: "Reach Infinite antimatter.",
     checkRequirement: () => player.antimatter.gt(Decimal.MAX_NUMBER),
     checkEvent: GameEvent.GAME_TICK_AFTER,
-    reward: () => `Start with ${shortenSmallInteger(100)} antimatter.`,
+    reward: () => `Start with ${formatInt(100)} antimatter.`,
     effect: 100
   },
   {
     id: 22,
     name: "Fake News",
-    tooltip: () => `Encounter ${shortenSmallInteger(50)} different news messages.`,
+    tooltip: () => `Encounter ${formatInt(50)} different news messages.`,
     checkRequirement: () => player.news.size >= 50
   },
   {
     id: 23,
     name: "The 9th Dimension is a lie",
-    tooltip: () => `Have exactly ${shortenSmallInteger(99)} 8th Dimensions.`,
+    tooltip: () => `Have exactly ${formatInt(99)} 8th Dimensions.`,
     checkRequirement: () => NormalDimension(8).amount.eq(99),
     reward: "8th Dimensions are 10% stronger.",
     effect: 1.1
@@ -86,7 +86,7 @@ GameDatabase.achievements.normal = [
   {
     id: 25,
     name: "Boosting to the max",
-    tooltip: () => `Buy ${shortenSmallInteger(10)} Dimension Boosts.`,
+    tooltip: () => `Buy ${formatInt(10)} Dimension Boosts.`,
     checkRequirement: () => DimBoost.purchasedBoosts >= 10,
     checkEvent: GameEvent.DIMBOOST_AFTER
   },
@@ -100,7 +100,7 @@ GameDatabase.achievements.normal = [
   {
     id: 27,
     name: "Double Galaxy",
-    tooltip: () => `Buy ${shortenSmallInteger(2)} Antimatter Galaxies.`,
+    tooltip: () => `Buy ${formatInt(2)} Antimatter Galaxies.`,
     checkRequirement: () => player.galaxies >= 2,
     checkEvent: GameEvent.GALAXY_RESET_AFTER
   },
@@ -125,7 +125,7 @@ GameDatabase.achievements.normal = [
   {
     id: 32,
     name: "The Gods are pleased",
-    tooltip: () => `Get over ${shortenSmallInteger(600)}x from Dimensional Sacrifice outside of Challenge 8.`,
+    tooltip: () => `Get over ${formatInt(600)}x from Dimensional Sacrifice outside of Challenge 8.`,
     checkRequirement: () => !NormalChallenge(8).isRunning && Sacrifice.totalBoost.gte(600),
     checkEvent: GameEvent.SACRIFICE_RESET_AFTER,
     reward: "Sacrifice is slightly stronger.",
@@ -134,7 +134,7 @@ GameDatabase.achievements.normal = [
   {
     id: 33,
     name: "That's a lot of infinites",
-    tooltip: () => `Reach Infinity ${shortenSmallInteger(10)} times.`,
+    tooltip: () => `Reach Infinity ${formatInt(10)} times.`,
     checkRequirement: () => player.infinitied.gte(10),
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
@@ -150,14 +150,14 @@ GameDatabase.achievements.normal = [
   {
     id: 35,
     name: "Don't you dare to sleep",
-    tooltip: () => `Be offline for over ${shortenSmallInteger(6)} hours in a row.`,
+    tooltip: () => `Be offline for over ${formatInt(6)} hours in a row.`,
     checkRequirement: () => Date.now() - player.lastUpdate >= 21600000,
     checkEvent: GameEvent.GAME_TICK_BEFORE
   },
   {
     id: 36,
     name: "Claustrophobic",
-    tooltip: () => `Go Infinite with just ${shortenSmallInteger(1)} Antimatter Galaxy.`,
+    tooltip: () => `Go Infinite with just ${formatInt(1)} Antimatter Galaxy.`,
     checkRequirement: () => player.galaxies === 1,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: "Reduces starting tick interval by 2%.",
@@ -166,10 +166,10 @@ GameDatabase.achievements.normal = [
   {
     id: 37,
     name: "That's fast!",
-    tooltip: () => `Go infinite in under ${shortenSmallInteger(2)} hours.`,
+    tooltip: () => `Go infinite in under ${formatInt(2)} hours.`,
     checkRequirement: () => Time.thisInfinityRealTime.totalHours <= 2,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
-    reward: () => `Start with ${shortenSmallInteger(1000)} antimatter.`,
+    reward: () => `Start with ${formatInt(1000)} antimatter.`,
     effect: 1000
   },
   {
@@ -182,7 +182,7 @@ GameDatabase.achievements.normal = [
   {
     id: 41,
     name: "Spreading Cancer",
-    tooltip: () => `Buy ${shortenSmallInteger(10)} Antimatter Galaxies in total while using cancer notation.`,
+    tooltip: () => `Buy ${formatInt(10)} Antimatter Galaxies in total while using cancer notation.`,
     checkRequirement: () => player.spreadingCancer >= 10,
     checkEvent: [GameEvent.GALAXY_RESET_AFTER, GameEvent.REALITY_RESET_AFTER]
   },
@@ -208,7 +208,7 @@ GameDatabase.achievements.normal = [
     id: 44,
     name: "Over in 30 seconds",
     tooltip: () => `Have antimatter/sec exceed your current antimatter
-      for ${shortenSmallInteger(30)} consecutive seconds.`,
+      for ${formatInt(30)} consecutive seconds.`,
     checkRequirement: () => AchievementTimers.marathon1
       .check(getDimensionProductionPerSecond(1).gt(player.antimatter), 30),
     checkEvent: GameEvent.GAME_TICK_AFTER,
@@ -232,7 +232,7 @@ GameDatabase.achievements.normal = [
   {
     id: 47,
     name: "Daredevil",
-    tooltip: () => `Complete ${shortenSmallInteger(2)} challenges (not including the first one).`,
+    tooltip: () => `Complete ${formatInt(2)} challenges (not including the first one).`,
     checkRequirement: () => NormalChallenges.all.slice(1).countWhere(c => c.isCompleted) >= 2,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
@@ -271,7 +271,7 @@ GameDatabase.achievements.normal = [
   {
     id: 54,
     name: "That's faster!",
-    tooltip: () => `Infinity in ${shortenSmallInteger(10)} minutes or less.`,
+    tooltip: () => `Infinity in ${formatInt(10)} minutes or less.`,
     checkRequirement: () => Time.thisInfinityRealTime.totalMinutes <= 10,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: () => `Start with ${shorten(2e5)} antimatter.`,
@@ -280,7 +280,7 @@ GameDatabase.achievements.normal = [
   {
     id: 55,
     name: "Forever isn't that long",
-    tooltip: () => `Infinity in ${shortenSmallInteger(1)} minute or less.`,
+    tooltip: () => `Infinity in ${formatInt(1)} minute or less.`,
     checkRequirement: () => Time.thisInfinityRealTime.totalMinutes <= 1,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: () => `Start with ${shorten(1e10)} antimatter.`,
@@ -289,17 +289,17 @@ GameDatabase.achievements.normal = [
   {
     id: 56,
     name: "Many Deaths",
-    tooltip: () => `Complete the Second Dimension Autobuyer challenge in ${shortenSmallInteger(3)} minutes or less.`,
+    tooltip: () => `Complete the Second Dimension Autobuyer challenge in ${formatInt(3)} minutes or less.`,
     checkRequirement: () => NormalChallenge(2).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
-    reward: () => `All Dimensions are stronger in the first ${shortenSmallInteger(3)} minutes of Infinities.`,
+    reward: () => `All Dimensions are stronger in the first ${formatInt(3)} minutes of Infinities.`,
     effect: () => 6 / (Time.thisInfinity.totalMinutes + 3),
     effectCondition: () => Time.thisInfinity.totalMinutes < 3
   },
   {
     id: 57,
     name: "Gift from the Gods",
-    tooltip: () => `Complete the Eighth Dimension Autobuyer challenge in ${shortenSmallInteger(3)} minutes or less.`,
+    tooltip: () => `Complete the Eighth Dimension Autobuyer challenge in ${formatInt(3)} minutes or less.`,
     checkRequirement: () => NormalChallenge(8).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: "Dimensional sacrifices are a lot stronger.",
@@ -308,16 +308,16 @@ GameDatabase.achievements.normal = [
   {
     id: 58,
     name: "Is this hell?",
-    tooltip: () => `Complete the Tickspeed Autobuyer challenge in ${shortenSmallInteger(3)} minutes or less.`,
+    tooltip: () => `Complete the Tickspeed Autobuyer challenge in ${formatInt(3)} minutes or less.`,
     checkRequirement: () => NormalChallenge(9).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
-    reward: () => `Boost per buying ${shortenSmallInteger(10)} Dimensions +1%.`,
+    reward: () => `Boost per buying ${formatInt(10)} Dimensions +1%.`,
     effect: 1.01
   },
   {
     id: 61,
     name: "Bulked up",
-    tooltip: () => `Get all of your Dimension bulk buyers to ${shortenSmallInteger(512)} or higher.`,
+    tooltip: () => `Get all of your Dimension bulk buyers to ${formatInt(512)} or higher.`,
     checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0
   },
   {
@@ -344,10 +344,10 @@ GameDatabase.achievements.normal = [
   {
     id: 65,
     name: "Not-so-challenging",
-    tooltip: () => `Get the sum of all of your challenge times under ${shortenSmallInteger(3)} minutes.`,
+    tooltip: () => `Get the sum of all of your challenge times under ${formatInt(3)} minutes.`,
     checkRequirement: () => Time.challengeSum.totalMinutes < 3,
     checkEvent: [GameEvent.BIG_CRUNCH_AFTER, GameEvent.REALITY_RESET_AFTER],
-    reward: () => `All Dimensions are stronger in the first ${shortenSmallInteger(3)} minutes of infinities,
+    reward: () => `All Dimensions are stronger in the first ${formatInt(3)} minutes of infinities,
       but only in challenges.`,
     effect: () => Math.max(4 / (Time.thisInfinity.totalMinutes + 1), 1),
     effectCondition: () => (NormalChallenge.isRunning || InfinityChallenge.isRunning) &&
@@ -372,7 +372,7 @@ GameDatabase.achievements.normal = [
   {
     id: 68,
     name: "You did this again just for the achievement right?",
-    tooltip: () => `Complete the Third Dimension Autobuyer challenge in ${shortenSmallInteger(10)} seconds or less.`,
+    tooltip: () => `Complete the Third Dimension Autobuyer challenge in ${formatInt(10)} seconds or less.`,
     checkRequirement: () => NormalChallenge(3).isRunning && Time.thisInfinityRealTime.totalSeconds <= 10,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: "1st Dimensions are 50% stronger.",
@@ -389,7 +389,7 @@ GameDatabase.achievements.normal = [
       DimBoost.purchasedBoosts === 0 &&
       player.galaxies === 0,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
-    reward: () => `1st Dimensions are ${shortenSmallInteger(3)} times stronger.`,
+    reward: () => `1st Dimensions are ${formatInt(3)} times stronger.`,
     effect: 3
   },
   {
@@ -414,7 +414,7 @@ GameDatabase.achievements.normal = [
   {
     id: 74,
     name: "End me",
-    tooltip: () => `Get the sum of all best challenge times under ${shortenSmallInteger(5)} seconds.`,
+    tooltip: () => `Get the sum of all best challenge times under ${formatInt(5)} seconds.`,
     checkRequirement: () => Time.challengeSum.totalSeconds < 5,
     checkEvent: [GameEvent.BIG_CRUNCH_AFTER, GameEvent.REALITY_RESET_AFTER],
     reward: "All Dimensions are 40% stronger, but only in challenges.",
@@ -433,7 +433,7 @@ GameDatabase.achievements.normal = [
   {
     id: 76,
     name: "One for each dimension",
-    tooltip: () => `Play for ${shortenSmallInteger(8)} days.`,
+    tooltip: () => `Play for ${formatInt(8)} days.`,
     checkRequirement: () => Time.totalTimePlayed.totalDays >= 8,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Extremely small multiplier to Dimensions based on time played.",
@@ -456,11 +456,11 @@ GameDatabase.achievements.normal = [
   {
     id: 78,
     name: "Blink of an eye",
-    tooltip: () => `Get to Infinity in under ${shortenSmallInteger(200)} milliseconds.`,
+    tooltip: () => `Get to Infinity in under ${formatInt(200)} milliseconds.`,
     checkRequirement: () => Time.thisInfinityRealTime.totalMilliseconds <= 200,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: () => `Start with ${shorten(2e25, 0, 0)} antimatter ` +
-      `and all Dimensions are stronger in the first ${shortenSmallInteger(300)}ms of Infinities.`,
+      `and all Dimensions are stronger in the first ${formatInt(300)}ms of Infinities.`,
     effects: {
       dimensionMult: {
         effect: () => 330 / (Time.thisInfinity.totalMilliseconds + 30),
@@ -472,21 +472,21 @@ GameDatabase.achievements.normal = [
   {
     id: 81,
     name: "Hevipelle did nothing wrong",
-    tooltip: () => `Beat Infinity Challenge 5 in ${shortenSmallInteger(15)} seconds or less.`,
+    tooltip: () => `Beat Infinity Challenge 5 in ${formatInt(15)} seconds or less.`,
     checkRequirement: () => InfinityChallenge(5).isRunning && Time.thisInfinityRealTime.totalSeconds <= 15,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE
   },
   {
     id: 82,
     name: "Anti-antichallenged",
-    tooltip: () => `Complete ${shortenSmallInteger(8)} Infinity Challenges.`,
+    tooltip: () => `Complete ${formatInt(8)} Infinity Challenges.`,
     checkRequirement: () => InfinityChallenges.completed.length === 8,
     checkEvent: [GameEvent.BIG_CRUNCH_AFTER, GameEvent.REALITY_RESET_AFTER],
   },
   {
     id: 83,
     name: "YOU CAN GET 50 GALAXIES!??",
-    tooltip: () => `Get ${shortenSmallInteger(50)} Antimatter Galaxies.`,
+    tooltip: () => `Get ${formatInt(50)} Antimatter Galaxies.`,
     checkRequirement: () => player.galaxies >= 50,
     checkEvent: GameEvent.GALAXY_RESET_AFTER,
     reward: "Tickspeed is 5% lower per Antimatter Galaxy.",
@@ -507,7 +507,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Big Crunch for ${shorten(1e150, 0, 0)} IP.`,
     checkRequirement: () => gainedInfinityPoints().exponent >= 150,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
-    reward: () => `Additional ${shortenSmallInteger(4)}x multiplier to IP.`,
+    reward: () => `Additional ${formatInt(4)}x multiplier to IP.`,
     effect: 4
   },
   {
@@ -525,8 +525,8 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Infinity ${shorten(2e6)} times.`,
     checkRequirement: () => player.infinitied.gt(2e6),
     checkEvent: GameEvent.GAME_TICK_AFTER,
-    reward: () => `Infinities more than ${shortenSmallInteger(5)} seconds long
-      give ${shortenSmallInteger(250)} infinitied stat.`,
+    reward: () => `Infinities more than ${formatInt(5)} seconds long
+      give ${formatInt(250)} infinitied stat.`,
     effect: 250,
     effectCondition: () => Time.thisInfinity.totalSeconds > 5
   },
@@ -542,22 +542,22 @@ GameDatabase.achievements.normal = [
   {
     id: 91,
     name: "Ludicrous Speed",
-    tooltip: () => `Big Crunch for ${shorten(1e200, 0, 0)} IP in ${shortenSmallInteger(2)} seconds or less.`,
+    tooltip: () => `Big Crunch for ${shorten(1e200, 0, 0)} IP in ${formatInt(2)} seconds or less.`,
     checkRequirement: () => gainedInfinityPoints().exponent >= 200 && Time.thisInfinityRealTime.totalSeconds <= 2,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: () => `All Dimensions are significantly stronger in the
-      first ${shortenSmallInteger(5)} seconds of Infinities.`,
+      first ${formatInt(5)} seconds of Infinities.`,
     effect: () => Math.max((5 - Time.thisInfinity.totalSeconds) * 60, 1),
     effectCondition: () => Time.thisInfinity.totalSeconds < 5
   },
   {
     id: 92,
     name: "I brake for nobody",
-    tooltip: () => `Big Crunch for ${shorten(1e250, 0, 0)} IP in ${shortenSmallInteger(20)} seconds or less.`,
+    tooltip: () => `Big Crunch for ${shorten(1e250, 0, 0)} IP in ${formatInt(20)} seconds or less.`,
     checkRequirement: () => gainedInfinityPoints().exponent >= 250 && Time.thisInfinityRealTime.totalSeconds <= 20,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: () => `All Dimensions are significantly stronger in the
-      first ${shortenSmallInteger(60)} seconds of Infinities.`,
+      first ${formatInt(60)} seconds of Infinities.`,
     effect: () => Math.max((1 - Time.thisInfinity.totalMinutes) * 100, 1),
     effectCondition: () => Time.thisInfinity.totalMinutes < 1
   },
@@ -567,7 +567,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Big Crunch with ${shorten(1e300, 0, 0)} IP/min.`,
     checkRequirement: () => Player.bestRunIPPM.exponent >= 300,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
-    reward: () => `Additional ${shortenSmallInteger(4)}x multiplier to IP.`,
+    reward: () => `Additional ${formatInt(4)}x multiplier to IP.`,
     effect: 4
   },
   {
@@ -582,7 +582,7 @@ GameDatabase.achievements.normal = [
   {
     id: 95,
     name: "Is this safe?",
-    tooltip: () => `Gain Infinite replicanti in ${shortenSmallInteger(30)} minutes.`,
+    tooltip: () => `Gain Infinite replicanti in ${formatInt(30)} minutes.`,
     reward: "Infinity doesn't reset your Replicanti amount.",
     checkRequirement: () =>
       (player.replicanti.amount.eq(Decimal.MAX_NUMBER) || player.replicanti.galaxies > 0) &&
@@ -613,7 +613,7 @@ GameDatabase.achievements.normal = [
   {
     id: 101,
     name: "Costco sells dimboosts now",
-    tooltip: () => `Bulk buy ${shortenSmallInteger(750)} Dimension Boosts at once.`,
+    tooltip: () => `Bulk buy ${formatInt(750)} Dimension Boosts at once.`,
     checkRequirement: ([bulk]) => bulk >= 750,
     checkEvent: GameEvent.DIMBOOST_AFTER,
     reward: "Dimension Boosts are 1% more powerful (to Normal Dimensions).",
@@ -638,7 +638,7 @@ GameDatabase.achievements.normal = [
   {
     id: 104,
     name: "That wasn't an eternity",
-    tooltip: () => `Eternity in under ${shortenSmallInteger(30)} seconds.`,
+    tooltip: () => `Eternity in under ${formatInt(30)} seconds.`,
     checkRequirement: () => Time.thisEternity.totalSeconds <= 30,
     checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
     reward: () => `Start Eternities with ${shorten(2e25)} IP.`,
@@ -647,7 +647,7 @@ GameDatabase.achievements.normal = [
   {
     id: 105,
     name: "Infinite time",
-    tooltip: () => `Get ${shortenSmallInteger(308)} tickspeed upgrades (in one Eternity) from Time Dimensions.`,
+    tooltip: () => `Get ${formatInt(308)} tickspeed upgrades (in one Eternity) from Time Dimensions.`,
     checkRequirement: () => player.totalTickGained >= 308,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Time Dimensions are affected slightly by tickspeed.",
@@ -656,28 +656,28 @@ GameDatabase.achievements.normal = [
   {
     id: 106,
     name: "The swarm",
-    tooltip: () => `Get ${shortenSmallInteger(10)} Replicanti galaxies in ${shortenSmallInteger(15)} seconds.`,
+    tooltip: () => `Get ${formatInt(10)} Replicanti galaxies in ${formatInt(15)} seconds.`,
     checkRequirement: () => Replicanti.galaxies.total >= 10 && Time.thisInfinity.totalSeconds <= 15,
     checkEvent: GameEvent.REPLICANTI_TICK_AFTER
   },
   {
     id: 107,
     name: "Do you really need a guide for this?",
-    tooltip: () => `Eternity with the infinitied stat under ${shortenSmallInteger(10)}.`,
+    tooltip: () => `Eternity with the infinitied stat under ${formatInt(10)}.`,
     checkRequirement: () => player.infinitied.lt(10),
     checkEvent: GameEvent.ETERNITY_RESET_BEFORE
   },
   {
     id: 108,
     name: "We could afford 9",
-    tooltip: () => `Eternity with exactly ${shortenSmallInteger(9)} Replicanti.`,
+    tooltip: () => `Eternity with exactly ${formatInt(9)} Replicanti.`,
     checkRequirement: () => player.replicanti.amount.round().eq(9),
     checkEvent: GameEvent.ETERNITY_RESET_BEFORE
   },
   {
     id: 111,
     name: "Yo dawg, I heard you liked infinities...",
-    tooltip: () => `Have all your Infinities in your past ${shortenSmallInteger(10)} Infinities be at least ` +
+    tooltip: () => `Have all your Infinities in your past ${formatInt(10)} Infinities be at least ` +
       `${shorten(Decimal.MAX_NUMBER, 1, 0)} times higher IP than the previous one.`,
     checkRequirement: () => {
       const infinities = player.lastTenRuns.map(run => run[1]);
@@ -692,7 +692,7 @@ GameDatabase.achievements.normal = [
   {
     id: 112,
     name: "Never again",
-    tooltip: () => `Get the sum of Infinity Challenge times below ${shortenSmallInteger(750)}ms.`,
+    tooltip: () => `Get the sum of Infinity Challenge times below ${formatInt(750)}ms.`,
     checkRequirement: () => Time.infinityChallengeSum.totalMilliseconds < 750,
     checkEvent: [GameEvent.BIG_CRUNCH_AFTER, GameEvent.REALITY_RESET_AFTER],
     reward: "The limit for your third eternity upgrade is a bit higher.",
@@ -702,7 +702,7 @@ GameDatabase.achievements.normal = [
     id: 113,
     name: "Long lasting relationship",
     tooltip: () => "Have your Infinity power per second exceed your Infinity power " +
-      `for ${shortenSmallInteger(60)} consecutive seconds during a single Infinity.`,
+      `for ${formatInt(60)} consecutive seconds during a single Infinity.`,
     checkRequirement: () => AchievementTimers.marathon2
       .check(
         !EternityChallenge(7).isRunning &&
@@ -729,7 +729,7 @@ GameDatabase.achievements.normal = [
   {
     id: 116,
     name: "Do I really need to infinity",
-    tooltip: () => `Eternity with only ${shortenSmallInteger(1)} Infinity.`,
+    tooltip: () => `Eternity with only ${formatInt(1)} Infinity.`,
     checkRequirement: () => player.infinitied.lte(1),
     checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
     reward: "Multiplier to IP based on Infinities.",
@@ -768,14 +768,14 @@ GameDatabase.achievements.normal = [
   {
     id: 123,
     name: "5 more eternities until the update",
-    tooltip: () => `Complete ${shortenSmallInteger(50)} unique Eternity Challenge tiers.`,
+    tooltip: () => `Complete ${formatInt(50)} unique Eternity Challenge tiers.`,
     checkRequirement: () => EternityChallenges.completions >= 50,
     checkEvent: GameEvent.ETERNITY_RESET_AFTER
   },
   {
     id: 124,
     name: "Eternities are the new infinity",
-    tooltip: () => `Eternity in under ${shortenSmallInteger(200)}ms.`,
+    tooltip: () => `Eternity in under ${formatInt(200)}ms.`,
     checkRequirement: () => Time.thisEternity.totalMilliseconds <= 200,
     checkEvent: GameEvent.ETERNITY_RESET_BEFORE
   },
@@ -801,11 +801,11 @@ GameDatabase.achievements.normal = [
   {
     id: 126,
     name: "Popular music",
-    tooltip: () => `Have ${shortenSmallInteger(180)} times more Replicanti Galaxies than Antimatter Galaxies.`,
+    tooltip: () => `Have ${formatInt(180)} times more Replicanti Galaxies than Antimatter Galaxies.`,
     checkRequirement: () => Replicanti.galaxies.total >= 180 * player.galaxies && player.galaxies > 0,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: () => "Replicanti galaxies divide your Replicanti by " +
-      `${shorten(Decimal.MAX_NUMBER, 1, 0)} instead of resetting them to ${shortenSmallInteger(1)}.`,
+      `${shorten(Decimal.MAX_NUMBER, 1, 0)} instead of resetting them to ${formatInt(1)}.`,
   },
   {
     id: 127,
@@ -835,7 +835,7 @@ GameDatabase.achievements.normal = [
   {
     id: 132,
     name: "Unique snowflakes",
-    tooltip: () => `Have ${shortenSmallInteger(630)} Antimatter Galaxies without having any Replicanti Galaxies.`,
+    tooltip: () => `Have ${formatInt(630)} Antimatter Galaxies without having any Replicanti Galaxies.`,
     checkRequirement: () => player.galaxies >= 630 && player.replicanti.galaxies === 0,
     checkEvent: GameEvent.GALAXY_RESET_AFTER,
     reward: "Gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies.",
@@ -858,7 +858,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Reach ${shorten("1e20000", 0, 0)} Replicanti.`,
     checkRequirement: () => player.replicanti.amount.exponent >= 20000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
-    reward: () => `You gain Replicanti ${shortenSmallInteger(2)} times faster
+    reward: () => `You gain Replicanti ${formatInt(2)} times faster
       under ${shorten(Decimal.MAX_NUMBER, 1, 0)} Replicanti.`
   },
   {
@@ -878,7 +878,7 @@ GameDatabase.achievements.normal = [
     id: 137,
     name: "Now you're thinking with dilation!",
     tooltip: () => `Eternity for ${shorten("1e600", 0, 0)} EP
-      in ${shortenSmallInteger(1)} minute or less while Dilated.`,
+      in ${formatInt(1)} minute or less while Dilated.`,
     checkRequirement: () =>
       gainedEternityPoints().exponent >= 600 &&
       Time.thisEternity.totalMinutes <= 1 &&
@@ -904,8 +904,8 @@ GameDatabase.achievements.normal = [
     tooltip: "Make a new Reality.",
     checkRequirement: () => true,
     checkEvent: GameEvent.REALITY_RESET_BEFORE,
-    reward: () => `${shortenSmallInteger(4)}x IP gain and boost from
-      buying ${shortenSmallInteger(10)} Dimensions +${shorten(0.1, 0, 1)}.`,
+    reward: () => `${formatInt(4)}x IP gain and boost from
+      buying ${formatInt(10)} Dimensions +${shorten(0.1, 0, 1)}.`,
     effects: {
       ipGain: 4,
       buyTenMult: 0.1
@@ -923,7 +923,7 @@ GameDatabase.achievements.normal = [
   {
     id: 143,
     name: "Yo dawg, I heard you liked reskins...",
-    tooltip: () => `Have all your Eternities in your past ${shortenSmallInteger(10)} Eternities be at least ` +
+    tooltip: () => `Have all your Eternities in your past ${formatInt(10)} Eternities be at least ` +
       `${shorten(Decimal.MAX_NUMBER, 1, 0)} times higher EP than the previous one.`,
     checkRequirement: () => {
       const eternities = player.lastTenEternities.map(run => run[1]);
@@ -973,7 +973,7 @@ GameDatabase.achievements.normal = [
   {
     id: 151,
     name: "You really didn't need it anyway",
-    tooltip: () => `Get ${shortenSmallInteger(800)} antimatter galaxies without
+    tooltip: () => `Get ${formatInt(800)} antimatter galaxies without
       buying 8th dimensions in your current infinity.`,
     checkRequirement: () => player.galaxies >= 800 && player.noEighthDimensions,
     checkEvent: GameEvent.GALAXY_RESET_AFTER,
@@ -982,7 +982,7 @@ GameDatabase.achievements.normal = [
   {
     id: 152,
     name: "Y'all got any more of them glyphs?",
-    tooltip: () => `Have ${shortenSmallInteger(100)} glyphs in your inventory.`,
+    tooltip: () => `Have ${formatInt(100)} glyphs in your inventory.`,
     checkRequirement: () => Glyphs.inventoryList.length === 100,
     checkEvent: GameEvent.GLYPHS_CHANGED
   },
@@ -996,7 +996,7 @@ GameDatabase.achievements.normal = [
   {
     id: 154,
     name: "I am speed",
-    tooltip: () => `Reality in under ${shortenSmallInteger(5)} seconds (game time).`,
+    tooltip: () => `Reality in under ${formatInt(5)} seconds (game time).`,
     checkRequirement: () => Time.thisReality.totalSeconds <= 5,
     checkEvent: GameEvent.REALITY_RESET_BEFORE
   },
@@ -1018,7 +1018,7 @@ GameDatabase.achievements.normal = [
     id: 157,
     name: "Perfectly Balanced",
     tooltip: () => `Have the same number of all 3 types of galaxy,
-      with ${shortenSmallInteger(1000)} or more of each type.`,
+      with ${formatInt(1000)} or more of each type.`,
     checkRequirement: () => player.galaxies === Replicanti.galaxies.total &&
       player.galaxies === player.dilation.freeGalaxies &&
       player.galaxies >= 1000,
@@ -1027,7 +1027,7 @@ GameDatabase.achievements.normal = [
   {
     id: 158,
     name: "Bruh, are you like, inside the hole?",
-    tooltip: () => `Spend ${shortenSmallInteger(24)} hours with black hole active in a row.`,
+    tooltip: () => `Spend ${formatInt(24)} hours with black hole active in a row.`,
     checkRequirement: () => TimeSpan.fromSeconds(BlackHole(1).phase).totalHours >= 24,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },

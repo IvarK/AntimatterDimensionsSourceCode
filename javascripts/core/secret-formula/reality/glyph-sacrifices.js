@@ -6,7 +6,7 @@ GameDatabase.reality.glyphSacrifice = [
     effect: () => Math.floor(3 * Math.pow(Math.log10(player.reality.glyphs.sac.power + 1), 1.2)),
     description: amount => {
       const nextDistantGalaxy = Math.pow(10, Math.pow((amount + 1) / 3, 1 / 1.2)) - 1;
-      return `Distant galaxy scaling starts ${shortenSmallInteger(amount)} later
+      return `Distant galaxy scaling starts ${formatInt(amount)} later
         (next at ${shorten(nextDistantGalaxy, 2, 2)})`;
     }
   }, {
@@ -23,7 +23,7 @@ GameDatabase.reality.glyphSacrifice = [
     description: amount => {
       const nextReplicatedGalaxy = Math.pow(10, Math.pow((amount + 1) / 6, 1 / 1.2)) - 1;
       return "Replicated galaxy scaling starts " +
-        `${shortenSmallInteger(amount)} later (next at ${shorten(nextReplicatedGalaxy, 2, 2)})`;
+        `${formatInt(amount)} later (next at ${shorten(nextReplicatedGalaxy, 2, 2)})`;
     }
   }, {
     id: "dilation",

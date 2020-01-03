@@ -65,7 +65,7 @@ Vue.component("time-dilation-tab", {
         Next free galaxy at
         <span class="c-dilation-tab__galaxy-threshold">{{shorten(galaxyThreshold, 2, 1)}}</span>
         Dilated Time, gained total of
-        <span class="c-dilation-tab__galaxies">{{shortenSmallInteger(galaxies)}}</span>
+        <span class="c-dilation-tab__galaxies">{{formatInt(galaxies)}}</span>
         galaxies
       </span>
       <div class="l-dilation-upgrades-grid">

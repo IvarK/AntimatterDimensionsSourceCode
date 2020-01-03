@@ -41,7 +41,7 @@ Vue.component("game-header-gamma-display", {
         return `${speedMod.toFixed(3)}${storedTimeText}`;
       }
       if (speedMod < 0.001) {
-        return `${shortenSmallInteger(1)} / ${shorten(1 / speedMod, 2)}${storedTimeText}`;
+        return `${formatInt(1)} / ${shorten(1 / speedMod, 2)}${storedTimeText}`;
       }
       return `${shorten(speedMod, 2)}${storedTimeText}`;
     }

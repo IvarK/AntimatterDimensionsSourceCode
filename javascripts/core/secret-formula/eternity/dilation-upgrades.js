@@ -55,8 +55,8 @@ GameDatabase.eternity.dilation = (function() {
       cost: 5e6,
       description: () => (CompressionUpgrade.freeGalaxySoftcap.canBeApplied
         ? `Gain twice as many free galaxies, up to
-          ${shortenSmallInteger(CompressionUpgrade.freeGalaxySoftcap.effectValue)}.`
-        : `Gain twice as many free galaxies, up to ${shortenSmallInteger(1000)}.`),
+          ${formatInt(CompressionUpgrade.freeGalaxySoftcap.effectValue)}.`
+        : `Gain twice as many free galaxies, up to ${formatInt(1000)}.`),
       effect: 2
     },
     tdMultReplicanti: {

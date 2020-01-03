@@ -31,7 +31,7 @@ Vue.component("new-galaxy-row", {
       const parts = [this.galaxies.normal];
       if (this.galaxies.replicanti > 0) parts.push(this.galaxies.replicanti);
       if (this.galaxies.dilation > 0) parts.push(this.galaxies.dilation);
-      const sum = parts.map(shortenSmallInteger).join(" + ");
+      const sum = parts.map(formatInt).join(" + ");
       if (parts.length >= 2) {
         return `${sum} = ${parts.sum()}`;
       }
@@ -84,9 +84,9 @@ Vue.component("new-galaxy-row", {
   template:
   `<div class="reset-container galaxy">
     <h4>{{typeName}} ({{sumText}})</h4>
-    <span>Requires: {{shortenSmallInteger(requirement.amount)}} {{dimName}} D</span>
+    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} D</span>
     <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
-    <button 
+    <button
       class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
       :class="{ 'o-primary-btn--disabled': !canBeBought }"
       @click.exact="buyGalaxy(true)"

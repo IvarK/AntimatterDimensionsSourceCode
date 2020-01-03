@@ -40,7 +40,7 @@ Vue.component("time-dim-tab", {
   template:
     `<div class="l-time-dim-tab l-centered-vertical-tab">
       <div>
-        <p>You've gained {{shortenSmallInteger(totalUpgrades)}} tickspeed upgrades.</p>
+        <p>You've gained {{formatInt(totalUpgrades)}} tickspeed upgrades.</p>
         <p>
           You have
           <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> time shards.

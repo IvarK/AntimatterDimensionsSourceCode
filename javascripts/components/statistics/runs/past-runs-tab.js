@@ -48,7 +48,7 @@ Vue.component("past-runs-tab", {
       <br>
       <div v-for="(run, index) in runs" :key="index">
         <span>
-          The {{ singular }} {{ shortenSmallInteger(index + 1) }}
+          The {{ singular }} {{ formatInt(index + 1) }}
           {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }}
         </span>
         <span v-if="isRealityUnlocked"> ({{ realRunTime(run) }} real time) </span>
@@ -56,7 +56,7 @@ Vue.component("past-runs-tab", {
       </div>
       <br>
       <div>
-        <span>Last {{ shortenSmallInteger(10) }} {{ plural }} average time: {{ runTime(averageRun) }}. </span>
+        <span>Last {{ formatInt(10) }} {{ plural }} average time: {{ runTime(averageRun) }}. </span>
         <span>Average {{ points }} gain: {{ averageRunGain(averageRun) }}.</span>
       </div>
     </div>`

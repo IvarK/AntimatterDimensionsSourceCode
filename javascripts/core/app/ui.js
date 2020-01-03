@@ -22,12 +22,11 @@ Vue.mixin({
     shorten(value, places, placesUnder1000) {
       return shorten(value, places, placesUnder1000);
     },
-
-    shortenSmallInteger(value) {
-      return shortenSmallInteger(value);
-    },
     format(value, places, placesUnder1000) {
       return format(value, places, placesUnder1000);
+    },
+    formatInt(value) {
+      return formatInt(value);
     },
     formatX(value, places, placesUnder1000) {
       return formatX(value, places, placesUnder1000);

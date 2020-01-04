@@ -200,10 +200,6 @@ function floatText(tier, text) {
   setTimeout(() => floatingText.shift(), 1000);
 }
 
-function getCostIncreaseThreshold() {
-  return Decimal.MAX_NUMBER;
-}
-
 function buyOneDimension(tier) {
   const dimension = NormalDimension(tier);
   if (!dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
@@ -365,31 +361,6 @@ function buyAsManyAsYouCanBuyBtnClick(tier) {
   buyAsManyAsYouCanBuy(tier);
 }
 
-function getDimensionProductionPerSecond(tier) {
-  const multiplier = getDimensionFinalMultiplier(tier);
-  const dimension = NormalDimension(tier);
-  let amount = dimension.amount.floor();
-  if (NormalChallenge(12).isRunning) {
-    if (tier === 2) amount = amount.pow(1.6);
-    if (tier === 4) amount = amount.pow(1.4);
-    if (tier === 6) amount = amount.pow(1.2);
-  }
-  let production = amount.times(multiplier).dividedBy(Tickspeed.current.dividedBy(1000));
-  if (NormalChallenge(2).isRunning) {
-    production = production.times(player.chall2Pow);
-  }
-  const postBreak = (player.break && !InfinityChallenge.isRunning && !NormalChallenge.isRunning) ||
-    InfinityChallenge.isRunning || Enslaved.isRunning;
-  if (!postBreak && production.gte(Decimal.MAX_NUMBER)) {
-    production = production.min("1e315");
-  }
-  if (tier === 1 && production.gt(10)) {
-    const log10 = production.log10();
-    production = Decimal.pow10(Math.pow(log10, getAdjustedGlyphEffect("effarigantimatter")));
-  }
-  return production;
-}
-
 class NormalDimensionState extends DimensionState {
   constructor(tier) {
     super(() => player.dimensions.normal, tier);
@@ -489,9 +460,9 @@ class NormalDimensionState extends DimensionState {
     if (tier === 7 && EternityChallenge(7).isRunning) {
       toGain = InfinityDimension(1).productionPerSecond.times(10);
     } else if (NormalChallenge(12).isRunning) {
-      toGain = getDimensionProductionPerSecond(tier + 2);
+      toGain = NormalDimension(tier + 2).productionPerSecond;
     } else {
-      toGain = getDimensionProductionPerSecond(tier + 1);
+      toGain = NormalDimension(tier + 1).productionPerSecond;
     }
     return toGain.times(10).dividedBy(this.amount.max(1)).times(getGameSpeedupForDisplay());
   }
@@ -574,7 +545,27 @@ class NormalDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    return getDimensionProductionPerSecond(this.tier);
+    const tier = this.tier;
+    let amount = this.amount.floor();
+    if (NormalChallenge(12).isRunning) {
+      if (tier === 2) amount = amount.pow(1.6);
+      if (tier === 4) amount = amount.pow(1.4);
+      if (tier === 6) amount = amount.pow(1.2);
+    }
+    let production = amount.times(this.multiplier).dividedBy(Tickspeed.current.dividedBy(1000));
+    if (NormalChallenge(2).isRunning) {
+      production = production.times(player.chall2Pow);
+    }
+    const postBreak = (player.break && !InfinityChallenge.isRunning && !NormalChallenge.isRunning) ||
+      InfinityChallenge.isRunning || Enslaved.isRunning;
+    if (!postBreak && production.gte(Decimal.MAX_NUMBER)) {
+      production = production.min("1e315");
+    }
+    if (tier === 1 && production.gt(10)) {
+      const log10 = production.log10();
+      production = Decimal.pow10(Math.pow(log10, getAdjustedGlyphEffect("effarigantimatter")));
+    }
+    return production;
   }
 }
 
@@ -632,7 +623,7 @@ const NormalDimensions = {
     }
     let amRate = NormalDimension(1).productionPerSecond;
     if (NormalChallenge(3).isRunning) amRate = amRate.times(player.chall3Pow);
-    if (NormalChallenge(12).isRunning) amRate = amRate.plus(getDimensionProductionPerSecond(2));
+    if (NormalChallenge(12).isRunning) amRate = amRate.plus(NormalDimension(2).productionPerSecond);
     const amProduced = amRate.times(diff / 1000);
     player.antimatter = player.antimatter.plus(amProduced);
     player.totalAntimatter = player.totalAntimatter.plus(amProduced);

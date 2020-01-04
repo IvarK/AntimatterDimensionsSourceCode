@@ -192,7 +192,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Have antimatter/sec exceed your current antimatter above ${format(1e63, 0, 0)}.`,
     checkRequirement: () =>
       player.antimatter.exponent >= 63 &&
-      getDimensionProductionPerSecond(1).gt(player.antimatter),
+      NormalDimension(1).productionPerSecond.gt(player.antimatter),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
@@ -210,7 +210,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Have antimatter/sec exceed your current antimatter
       for ${formatInt(30)} consecutive seconds.`,
     checkRequirement: () => AchievementTimers.marathon1
-      .check(getDimensionProductionPerSecond(1).gt(player.antimatter), 30),
+      .check(NormalDimension(1).productionPerSecond.gt(player.antimatter), 30),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
   },
   {

@@ -397,7 +397,7 @@ GameDatabase.achievements.normal = [
     name: "Can't hold all these infinities",
     tooltip: () => `Get all Dimension multipliers over ${format(1e308)}.`,
     checkRequirement: () => Array.range(1, 8)
-      .every(tier => getDimensionFinalMultiplier(tier).exponent >= 308),
+      .every(tier => NormalDimension(tier).multiplier.exponent >= 308),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "All Dimensions are 10% stronger.",
     effect: 1.1
@@ -444,7 +444,7 @@ GameDatabase.achievements.normal = [
     name: "How the antitables have turned",
     tooltip: "Get the 8th Dimension multiplier to be highest, 7th Dimension multiplier second highest, etc.",
     checkRequirement: () => {
-      const multipliers = Array.range(1, 8).map(getDimensionFinalMultiplier);
+      const multipliers = Array.range(1, 8).map(tier => NormalDimension(tier).multiplier);
       for (let i = 0; i < multipliers.length - 1; i++) {
         if (multipliers[i].gte(multipliers[i + 1])) return false;
       }

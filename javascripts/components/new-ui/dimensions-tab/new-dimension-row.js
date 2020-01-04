@@ -46,7 +46,7 @@ Vue.component("new-dimension-row", {
       const buyUntil10 = player.buyUntil10;
       const dimension = NormalDimension(tier);
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 10;
-      this.multiplier.copyFrom(getDimensionFinalMultiplier(tier));
+      this.multiplier.copyFrom(NormalDimension(tier).multiplier);
       this.amount.copyFrom(dimension.amount);
       this.boughtBefore10 = dimension.boughtBefore10;
       this.howManyCanBuy = buyUntil10 ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1);

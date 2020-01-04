@@ -49,10 +49,6 @@ function normalDimensionCommonMultiplier() {
   return multiplier;
 }
 
-function getDimensionFinalMultiplier(tier) {
-  return GameCache.normalDimensionFinalMultipliers[tier].value;
-}
-
 function getDimensionFinalMultiplierUncached(tier) {
   if (tier < 1 || tier > 8) throw new Error(`Invalid Normal Dimension tier ${tier}`);
   if (NormalChallenge(10).isRunning && tier > 6) return new Decimal(1);
@@ -541,7 +537,7 @@ class NormalDimensionState extends DimensionState {
   }
 
   get multiplier() {
-    return getDimensionFinalMultiplier(this.tier);
+    return GameCache.normalDimensionFinalMultipliers[this.tier].value;
   }
 
   get productionPerSecond() {

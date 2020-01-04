@@ -322,8 +322,7 @@ const InfinityDimensions = {
       if (!NormalChallenge(10).isRunning) {
         InfinityDimension(1).produceDimensions(NormalDimension(7), diff);
       }
-    }
-    else {
+    } else {
       InfinityDimension(1).produceCurrency(Currency.infinityPower, diff);
     }
   }

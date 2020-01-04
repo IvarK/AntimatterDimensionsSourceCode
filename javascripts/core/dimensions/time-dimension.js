@@ -265,7 +265,7 @@ const TimeDimensions = {
     }
 
     EternityChallenge(7).reward.applyEffect(production => {
-      InfinityDimension(8).amount = InfinityDimension(8).amount.plus(production.times(diff / 10))
+      InfinityDimension(8).amount = InfinityDimension(8).amount.plus(production.times(diff / 10));
     });
   }
 };

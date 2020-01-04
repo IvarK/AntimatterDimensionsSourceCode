@@ -42,8 +42,11 @@ class DimensionState {
     dimension.amount = dimension.amount.plus(this.productionForDiff(diff));
   }
 
-  static createIndex() {
-    this.index = Array.range(1, 8).map(tier => new this(tier));
-    this.index.unshift(null);
+  static createAccessor() {
+    const index = Array.range(1, 8).map(tier => new this(tier));
+    index.unshift(null);
+    const accessor = tier => index[tier];
+    accessor.index = index;
+    return accessor;
   }
 }

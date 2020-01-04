@@ -564,19 +564,18 @@ class NormalDimensionState extends DimensionState {
   }
 }
 
-NormalDimensionState.createIndex();
-
 /**
+ * @function
  * @param {number} tier
  * @return {NormalDimensionState}
  */
-const NormalDimension = tier => NormalDimensionState.index[tier];
+const NormalDimension = NormalDimensionState.createAccessor();
 
 const NormalDimensions = {
   /**
    * @type {NormalDimensionState[]}
    */
-  all: NormalDimensionState.index.compact(),
+  all: NormalDimension.index.compact(),
 
   reset() {
     for (const dimension of NormalDimensions.all) {

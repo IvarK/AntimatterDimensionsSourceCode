@@ -132,7 +132,6 @@ function applyNDMultipliers(mult, tier) {
     tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
   );
   if (Achievement(77).isUnlocked) {
-    // Welp, this effect is too complex for Effects system
     multiplier = multiplier.times(1 + tier / 100);
   }
 
@@ -578,12 +577,14 @@ const NormalDimensions = {
    * @type {NormalDimensionState[]}
    */
   all: NormalDimensionState.index.compact(),
+
   reset() {
     for (const dimension of NormalDimensions.all) {
       dimension.reset();
     }
     GameCache.dimensionMultDecrease.invalidate();
   },
+
   get buyTenMultiplier() {
     if (NormalChallenge(7).isRunning) return new Decimal(2).min(1 + DimBoost.totalBoosts / 5);
 

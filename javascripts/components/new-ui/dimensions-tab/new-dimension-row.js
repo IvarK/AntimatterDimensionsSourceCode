@@ -23,7 +23,7 @@ Vue.component("new-dimension-row", {
   },
   computed: {
     name() {
-      return SHORT_DISPLAY_NAMES[this.tier];
+      return NormalDimension(this.tier).shortDisplayName;
     },
     costDisplay() {
       return this.buyUntil10 ? format(this.until10Cost, 0, 0) : format(this.singleCost, 0, 0);

@@ -21,7 +21,7 @@ Vue.component("normal-dim-row", {
   },
   computed: {
     name() {
-      return DISPLAY_NAMES[this.tier];
+      return NormalDimension(this.tier).displayName;
     },
     amountDisplay() {
       return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);

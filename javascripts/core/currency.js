@@ -81,9 +81,24 @@ class DecimalCurrency extends Currency {
   }
 }
 
+Currency.antimatter = new class extends DecimalCurrency {
+  get value() { return player.antimatter; }
+  set value(value) { player.antimatter = value; }
+}();
+
+Currency.infinityPower = new class extends DecimalCurrency {
+  get value() { return player.infinityPower; }
+  set value(value) { player.infinityPower = value; }
+}();
+
 Currency.infinityPoints = new class extends DecimalCurrency {
   get value() { return player.infinityPoints; }
   set value(value) { player.infinityPoints = value; }
+}();
+
+Currency.timeShards = new class extends DecimalCurrency {
+  get value() { return player.timeShards; }
+  set value(value) { player.timeShards = value; }
 }();
 
 Currency.eternityPoints = new class extends DecimalCurrency {

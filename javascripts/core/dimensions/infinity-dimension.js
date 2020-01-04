@@ -285,6 +285,7 @@ const InfinityDimensions = {
    * @type {InfinityDimensionState[]}
    */
   all: InfinityDimensionState.index.compact(),
+
   unlockNext() {
     if (InfinityDimension(8).isUnlocked) return;
     const next = InfinityDimensions.next();
@@ -292,20 +293,38 @@ const InfinityDimensions = {
     next.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, next.tier);
   },
+
   next() {
     if (InfinityDimension(8).isUnlocked)
       throw "All Infinity Dimensions are unlocked";
     return this.all.first(dim => !dim.isUnlocked);
   },
+
   resetAmount() {
     player.infinityPower = new Decimal(0);
     for (const dimension of InfinityDimensions.all) {
       dimension.resetAmount();
     }
   },
+
   fullReset() {
     for (const dimension of InfinityDimensions.all) {
       dimension.fullReset();
+    }
+  },
+
+  tick(diff) {
+    for (let tier = 8; tier > 1; tier--) {
+      InfinityDimension(tier).produceDimensions(InfinityDimension(tier - 1), diff / 10);
+    }
+
+    if (EternityChallenge(7).isRunning) {
+      if (!NormalChallenge(10).isRunning) {
+        InfinityDimension(1).produceDimensions(NormalDimension(7), diff);
+      }
+    }
+    else {
+      InfinityDimension(1).produceCurrency(Currency.infinityPower, diff);
     }
   }
 };

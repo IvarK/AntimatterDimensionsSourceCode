@@ -168,18 +168,14 @@ function applyNDPowers(mult, tier) {
   return multiplier;
 }
 
-function clearDimensions(maxTier) {
-  for (let i = 1; i <= maxTier; i++) {
-    NormalDimension(i).amount = new Decimal(0);
-  }
-}
-
 function onBuyDimension(tier) {
   Achievement(10 + tier).unlock();
   Achievement(23).tryUnlock();
 
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
-  if (NormalChallenge(4).isRunning || InfinityChallenge(1).isRunning) clearDimensions(tier - 1);
+  if (NormalChallenge(4).isRunning || InfinityChallenge(1).isRunning) {
+    NormalDimensions.resetAmount(tier - 1);
+  }
 
   player.postC4Tier = tier;
   player.thisInfinityLastBuyTime = player.thisInfinityTime;
@@ -370,7 +366,7 @@ class NormalDimensionState extends DimensionState {
   }
 
   /**
-   * @returns {Decimal}
+   * @returns {ExponentialCostScaling}
    */
   get costScale() {
     return new ExponentialCostScaling({
@@ -511,6 +507,10 @@ class NormalDimensionState extends DimensionState {
     this.costBumps = 0;
   }
 
+  resetAmount() {
+    this.amount = new Decimal(0);
+  }
+
   challengeCostBump() {
     if (InfinityChallenge(5).isRunning) this.multiplyIC5Costs();
     else if (NormalChallenge(9).isRunning) this.multiplySameCosts();
@@ -582,6 +582,12 @@ const NormalDimensions = {
       dimension.reset();
     }
     GameCache.dimensionMultDecrease.invalidate();
+  },
+
+  resetAmount(maxTier) {
+    for (const dimension of NormalDimensions.all.slice(0, maxTier)) {
+      dimension.resetAmount();
+    }
   },
 
   get buyTenMultiplier() {

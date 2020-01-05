@@ -624,9 +624,8 @@ const NormalDimensions = {
     let maxTierProduced = EternityChallenge(3).isRunning ? 3 : 7;
     let nextTierOffset = 1;
     if (NormalChallenge(12).isRunning) {
-      // Reduce to 6 normally, leave at 3 for EC3:
-      maxTierProduced = Math.min(maxTierProduced, 6);
-      nextTierOffset = 2;
+      maxTierProduced--;
+      nextTierOffset++;
     }
     for (let tier = maxTierProduced; tier >= 1; --tier) {
       NormalDimension(tier + nextTierOffset).produceDimensions(NormalDimension(tier), diff / 10);

@@ -572,6 +572,10 @@ class NormalDimensionState extends DimensionState {
   get multiplier() {
     return getDimensionFinalMultiplier(this.tier);
   }
+
+  get productionPerSecond() {
+    return getDimensionProductionPerSecond(this.tier);
+  }
 }
 
 NormalDimensionState.createIndex();
@@ -609,32 +613,29 @@ const NormalDimensions = {
     mult = mult.pow(getAdjustedGlyphEffect("effarigforgotten")).powEffectOf(InfinityUpgrade.buy10Mult.chargedEffect);
 
     return mult;
+  },
+
+  tick(diff) {
+    // Stop producing antimatter at Big Crunch goal because all the game elements
+    // are hidden when pre-break Big Crunch button is on screen.
+    const hasBigCrunchGoal = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
+    if (hasBigCrunchGoal && Currency.antimatter.isAffordable(Player.infinityGoal)) return;
+
+    let maxTierProduced = EternityChallenge(3).isRunning ? 3 : 7;
+    let nextTierOffset = 1;
+    if (NormalChallenge(12).isRunning) {
+      maxTierProduced--;
+      nextTierOffset++;
+    }
+    for (let tier = maxTierProduced; tier >= 1; --tier) {
+      NormalDimension(tier + nextTierOffset).produceDimensions(NormalDimension(tier), diff / 10);
+    }
+    let amRate = NormalDimension(1).productionPerSecond;
+    if (NormalChallenge(3).isRunning) amRate = amRate.times(player.chall3Pow);
+    if (NormalChallenge(12).isRunning) amRate = amRate.plus(getDimensionProductionPerSecond(2));
+    const amProduced = amRate.times(diff / 1000);
+    player.antimatter = player.antimatter.plus(amProduced);
+    player.totalAntimatter = player.totalAntimatter.plus(amProduced);
+    player.thisInfinityMaxAM = player.thisInfinityMaxAM.max(player.antimatter);
   }
 };
-
-function produceAntimatter(diff) {
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
-  if (player.antimatter.gt(Decimal.MAX_NUMBER)) {
-    if (!player.break) return;
-    if (challenge && player.antimatter.gt(challenge.goal)) return;
-  }
-
-  let maxTierProduced = EternityChallenge(3).isRunning ? 3 : 7;
-  let nextTierOffset = 1;
-  if (NormalChallenge(12).isRunning) {
-    // Reduce to 6 normally, leave at 3 for EC3:
-    maxTierProduced = Math.min(maxTierProduced, 6);
-    nextTierOffset = 2;
-  }
-  for (let tier = maxTierProduced; tier >= 1; --tier) {
-    const dim = NormalDimension(tier);
-    dim.amount = dim.amount.plus(getDimensionProductionPerSecond(tier + nextTierOffset).times(diff / 10000));
-  }
-  let amRate = getDimensionProductionPerSecond(1);
-  if (NormalChallenge(3).isRunning) amRate = amRate.times(player.chall3Pow);
-  if (NormalChallenge(12).isRunning) amRate = amRate.plus(getDimensionProductionPerSecond(2));
-  const amProduced = amRate.times(diff / 1000);
-  player.antimatter = player.antimatter.plus(amProduced);
-  player.totalAntimatter = player.totalAntimatter.plus(amProduced);
-  player.thisInfinityMaxAM = player.thisInfinityMaxAM.max(player.antimatter);
-}

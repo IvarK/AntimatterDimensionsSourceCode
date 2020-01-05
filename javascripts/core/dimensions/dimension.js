@@ -20,6 +20,21 @@ class DimensionState {
   /** @param {number} value */
   set bought(value) { this.data.bought = value; }
 
+  /** @abstract */
+  get productionPerSecond() { throw new NotImplementedError(); }
+
+  productionForDiff(diff) {
+    return this.productionPerSecond.times(diff / 1000);
+  }
+
+  produceCurrency(currency, diff) {
+    currency.add(this.productionForDiff(diff));
+  }
+
+  produceDimensions(dimension, diff) {
+    dimension.amount = dimension.amount.plus(this.productionForDiff(diff));
+  }
+
   static createIndex() {
     this.index = Array.range(1, 8).map(tier => new this(tier));
     this.index.unshift(null);

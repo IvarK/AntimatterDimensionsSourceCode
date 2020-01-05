@@ -514,48 +514,14 @@ function gameLoop(diff, options = {}) {
   player.realities += uncountabilityGain;
   player.reality.pp += uncountabilityGain;
 
-  produceAntimatter(diff);
+  if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
 
-    if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
+  EternityChallenge(12).tryFail();
+  Achievements._power.invalidate();
 
-    EternityChallenge(12).tryFail();
-
-    Achievements._power.invalidate();
-
-    for (let tier = 1; tier < 9; tier++) {
-      if (tier !== 8 && (InfinityDimension(tier).isUnlocked || EternityChallenge(7).completions > 0)) {
-        const dimension = InfinityDimension(tier);
-        dimension.amount = dimension.amount.plus(InfinityDimension(tier + 1).productionPerSecond.times(diff / 10000));
-      }
-      if (tier < 8) {
-        const dimension = TimeDimension(tier);
-        dimension.amount = dimension.amount.plus(TimeDimension(tier + 1).productionPerSecond.times(diff / 10000))
-      }
-    }
-
-    const ID1ProductionThisTick = InfinityDimension(1).productionPerSecond.times(diff / 1000);
-    if (EternityChallenge(7).isRunning) {
-      if (!NormalChallenge(10).isRunning) {
-        NormalDimension(7).amount = NormalDimension(7).amount.plus(ID1ProductionThisTick)
-      }
-    }
-    else {
-      player.infinityPower = player.infinityPower.plus(ID1ProductionThisTick);
-    }
-
-    const TD1Production = TimeDimension(1).productionPerSecond;
-    const TD1ProductionThisTick = TD1Production.times(diff/1000);
-    if (EternityChallenge(7).isRunning) {
-      InfinityDimension(8).amount = InfinityDimension(8).amount.plus(TD1ProductionThisTick);
-    }
-    else {
-      player.timeShards = player.timeShards.plus(TD1ProductionThisTick)
-    }
-
-    if (TD1Production.gt(0)) {
-      const id8 = InfinityDimension(8);
-      EternityChallenge(7).reward.applyEffect(v => id8.amount = id8.amount.plus(v.times(diff/10)));
-    }
+  TimeDimensions.tick(diff);
+  InfinityDimensions.tick(diff);
+  NormalDimensions.tick(diff);
 
   const freeTickspeed = FreeTickspeed.fromShards(player.timeShards);
   let gain = Math.max(0, freeTickspeed.newAmount - player.totalTickGained);

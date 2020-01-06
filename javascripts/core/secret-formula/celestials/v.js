@@ -18,6 +18,7 @@ GameDatabase.celestials.v = {
       condition: x => TimeStudy.reality.isBought && Glyphs.activeList.length <= x,
       currentValue: () => (TimeStudy.reality.isBought ? 6 - Glyphs.activeList.length : 0),
       formatRecord: x => (x === 0 ? "N/A" : shortenSmallInteger(6 - x)),
+      shardReduction: () => 0
     },
     {
       id: 1,
@@ -27,6 +28,7 @@ GameDatabase.celestials.v = {
       condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= x,
       currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies,
       formatRecord: x => shortenSmallInteger(x),
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e35, 0.5)
     },
     {
       id: 2,
@@ -36,6 +38,7 @@ GameDatabase.celestials.v = {
       condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x),
       currentValue: () => (EternityChallenge(7).isRunning ? player.infinityPoints.exponent : 0),
       formatRecord: x => (x === 0 ? shortenSmallInteger(0) : shorten(Decimal.pow10(x))),
+      shardReduction: (goal) => goal * (1 - Math.pow(1e35/player.celestials.effarig.relicShards, 0.001))
     },
     {
       id: 3,
@@ -45,6 +48,7 @@ GameDatabase.celestials.v = {
       condition: x => EternityChallenge(12).isRunning && player.antimatter.gte(x) && !TimeStudy.dilation.isBought,
       currentValue: () => ((EternityChallenge(12).isRunning && !TimeStudy.dilation.isBought) ? player.antimatter.exponent : 0),
       formatRecord: x => (x === 0 ? shortenSmallInteger(0) : shorten(Decimal.pow10(x))),
+      shardReduction: (goal) => goal * (1 - Math.pow(1e35/player.celestials.effarig.relicShards, 0.001))
     },
     {
       id: 4,
@@ -54,6 +58,7 @@ GameDatabase.celestials.v = {
       condition: x => player.eternityPoints.gte(x),
       currentValue: () => player.eternityPoints.exponent,
       formatRecord: x => (x === 0 ? shortenSmallInteger(0) : shorten(Decimal.pow10(x))),
+      shardReduction: (goal) => Decimal.pow(goal, (1 - Math.pow(1e35/player.celestials.effarig.relicShards, 0.001)))
     },
     {
       id: 5,
@@ -63,6 +68,7 @@ GameDatabase.celestials.v = {
       condition: x => player.dilation.active && EternityChallenge(5).isRunning && DimBoost.purchasedBoosts >= x,
       currentValue: () => (player.dilation.active && EternityChallenge(5).isRunning ? DimBoost.purchasedBoosts : 0),
       formatRecord: x => shortenSmallInteger(x),
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e35, 0.1)
     },
     {
       id: 6,
@@ -72,7 +78,8 @@ GameDatabase.celestials.v = {
       values: [1, 2, 3, 4, 5],
       condition: x => TimeStudy.reality.isBought && player.celestials.v.cursedThisRun >= x,
       currentValue: () => TimeStudy.reality.isBought ? player.celestials.v.cursedThisRun : 0,
-      formatRecord: x => shortenSmallInteger(x)
+      formatRecord: x => shortenSmallInteger(x),
+      shardReduction: () => 0
     },
     {
       id: 7,
@@ -82,9 +89,10 @@ GameDatabase.celestials.v = {
       values: [50, 100, 150, 200, 300],
       condition: x => player.timestudy.theorem.gt(Math.pow(x, 2.4)) && 
         Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality,
-      currentValue: x => Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality ?
-        player.timestudy.theorem.toNumber() : 0,
-      formatRecord: x => shortenSmallInteger(x)
+      currentValue: x => Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality
+        ? player.timestudy.theorem.toNumber() : 0,
+      formatRecord: x => shortenSmallInteger(x),
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e38, 0.4)
     }
   ],
   triadStudies: [

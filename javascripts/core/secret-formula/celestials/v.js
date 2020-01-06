@@ -38,7 +38,7 @@ GameDatabase.celestials.v = {
       condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x),
       currentValue: () => (EternityChallenge(7).isRunning ? player.infinityPoints.exponent : 0),
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
-      shardReduction: (goal) => goal * (1 - Math.pow(1e35/player.celestials.effarig.relicShards, 0.001))
+      shardReduction: goal => goal.times(1 - Math.pow(1e35 / player.celestials.effarig.relicShards, 0.001))
     },
     {
       id: 3,
@@ -51,7 +51,7 @@ GameDatabase.celestials.v = {
         ? player.antimatter.exponent
         : 0),
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
-      shardReduction: (goal) => goal * (1 - Math.pow(1e35/player.celestials.effarig.relicShards, 0.001))
+      shardReduction: goal => goal.times(1 - Math.pow(1e35 / player.celestials.effarig.relicShards, 0.001))
     },
     {
       id: 4,
@@ -61,7 +61,7 @@ GameDatabase.celestials.v = {
       condition: x => player.eternityPoints.gte(x),
       currentValue: () => player.eternityPoints.exponent,
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
-      shardReduction: (goal) => Decimal.pow(goal, (1 - Math.pow(1e35/player.celestials.effarig.relicShards, 0.001)))
+      shardReduction: goal => Decimal.pow(goal, (1 - Math.pow(1e35 / player.celestials.effarig.relicShards, 0.001)))
     },
     {
       id: 5,
@@ -88,7 +88,7 @@ GameDatabase.celestials.v = {
       id: 7,
       name: "Post-destination",
       description: value =>
-        `Get ${formatInt(Math.pow(value, 2.4))} TT with a 1e-${value} black hole`,
+        `Get ${formatInt(Math.pow(value, 2.4))} TT with a 1e-${format(value, 2, 2)} black hole`,
       values: [50, 100, 150, 200, 300],
       condition: x => player.timestudy.theorem.gt(Math.pow(x, 2.4)) &&
         Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality,

@@ -17,15 +17,25 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   get conditionBaseValue() {
-    let value = this.config.values[this.completions];
+    const value = this.config.values[this.completions];
     return value === undefined ? this.config.values[this.completions - 1] : value;
+  }
+
+  get reduction() {
+    const value = this.conditionBaseValue;
+
+    if (typeof value === "number") return Math.max(0, this.config.shardReduction(value));
+    return Decimal.max(0, this.config.shardReduction(value));
   }
 
   get conditionValue() {
     let value = this.conditionBaseValue;
     
-    if (typeof value === "number") value -= this.config.shardReduction(value);
-    else value = value.minus(this.config.shardReduction(value));
+    if (typeof value === "number") {
+      value -= this.reduction;
+    } else {
+      value = value.minus(this.reduction);
+    }
 
     return value;
   }

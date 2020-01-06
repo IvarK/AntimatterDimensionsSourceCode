@@ -94,7 +94,7 @@ Vue.component("v-tab", {
                 <p class="o-v-unlock-name">{{ hex.config.name }}</p>
                 <p class="o-v-unlock-desc">{{ hex.formattedDescription }}</p>
                 <p class="o-v-unlock-goal-reduction">
-                  Goal reduced by {{ shorten(hex.config.shardReduction(hex.conditionBaseValue), 2, 2) }}
+                  Goal reduced by {{ format(hex.reduction, 2, 2) }}
                 </p>
                 <p class="o-v-unlock-amount">{{ hex.completions }}/{{hex.config.values.length}} done</p>
                 <p class="o-v-unlock-record">

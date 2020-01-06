@@ -531,9 +531,6 @@ const Player = {
 
   get antimatterPerSecond() {
     const basePerSecond = NormalDimension(1).productionPerSecond;
-    if (NormalChallenge(3).isRunning) {
-      return basePerSecond.times(player.chall3Pow);
-    }
     if (NormalChallenge(12).isRunning) {
       return basePerSecond.plus(NormalDimension(2).productionPerSecond);
     }

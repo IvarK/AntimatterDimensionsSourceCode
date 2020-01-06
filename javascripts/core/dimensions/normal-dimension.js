@@ -551,14 +551,20 @@ class NormalDimensionState extends DimensionState {
     if (NormalChallenge(2).isRunning) {
       production = production.times(player.chall2Pow);
     }
-    const postBreak = (player.break && !InfinityChallenge.isRunning && !NormalChallenge.isRunning) ||
-      InfinityChallenge.isRunning || Enslaved.isRunning;
+    if (tier === 1) {
+      if (NormalChallenge(3).isRunning) {
+        production = production.times(player.chall3Pow);
+      }
+      if (production.gt(10)) {
+        const log10 = production.log10();
+        production = Decimal.pow10(Math.pow(log10, getAdjustedGlyphEffect("effarigantimatter")));
+      }
+    }
+    const postBreak = (player.break && !NormalChallenge.isRunning) ||
+      InfinityChallenge.isRunning ||
+      Enslaved.isRunning;
     if (!postBreak && production.gte(Decimal.MAX_NUMBER)) {
       production = production.min("1e315");
-    }
-    if (tier === 1 && production.gt(10)) {
-      const log10 = production.log10();
-      production = Decimal.pow10(Math.pow(log10, getAdjustedGlyphEffect("effarigantimatter")));
     }
     return production;
   }
@@ -624,7 +630,6 @@ const NormalDimensions = {
       NormalDimension(tier + nextTierOffset).produceDimensions(NormalDimension(tier), diff / 10);
     }
     let amRate = NormalDimension(1).productionPerSecond;
-    if (NormalChallenge(3).isRunning) amRate = amRate.times(player.chall3Pow);
     if (NormalChallenge(12).isRunning) amRate = amRate.plus(NormalDimension(2).productionPerSecond);
     const amProduced = amRate.times(diff / 1000);
     player.antimatter = player.antimatter.plus(amProduced);

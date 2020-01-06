@@ -6,7 +6,7 @@ GameStorage.migrations = {
     1: player => {
       for (let i = 0; i < player.autobuyers.length; i++) {
         if (player.autobuyers[i] % 1 !== 0) {
-          player.infinityPoints = player.infinityPoints + player.autobuyers[i].cost - 1;
+          player.infinityPoints = player.infinityPoints.plus(player.autobuyers[i].cost - 1);
         }
       }
       player.autobuyers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -57,20 +57,27 @@ GameStorage.migrations = {
       const timeDimStartCosts = [null, 1, 5, 100, 1000];
       const timeDimCostMults = [null, 3, 9, 27, 81];
       // Updates TD costs to harsher scaling
-      for (let i = 1; i < 5; i++) {
-        if (new Decimal("1e300").lt(player[`timeDimension${i}`].cost)) {
-          player[`timeDimension${i}`].cost = Decimal.pow(
-            timeDimCostMults[i] * 2.2,
-            player[`timeDimension${i}`].bought
-          ).times(timeDimStartCosts[i]);
+      if (player.timeDimension1) {
+        for (let i = 1; i < 5; i++) {
+          if (new Decimal("1e300").lt(player[`timeDimension${i}`].cost)) {
+            player[`timeDimension${i}`].cost = Decimal.pow(
+              timeDimCostMults[i] * 2.2,
+              player[`timeDimension${i}`].bought
+            ).times(timeDimStartCosts[i]);
+          }
         }
       }
     },
     12.1: player => {
-      player.achievements.delete("s36");
+      for (const achievement of player.achievements) {
+        if (achievement.includes("s") && achievement.length <= 3) {
+          player.achievements.delete("s36");
+          break;
+        }
+      }
     },
     13: player => {
-      // 12.1 is currently on live, will be updated to 13 after release
+      // 12.3 is currently on live, will be updated to 13 after release
 
       // TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST
       if (isDevEnvironment()) GameStorage.devMigrations.setLatestTestVersion(player);
@@ -91,6 +98,8 @@ GameStorage.migrations = {
         player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
         player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
       }
+      player.options.newUI = false;
+      Modal.uiChoice.show();
 
       GameStorage.migrations.normalizeTimespans(player);
       GameStorage.migrations.convertAutobuyerMode(player);
@@ -146,8 +155,12 @@ GameStorage.migrations = {
       player.lastTenRuns[i][0] *= 100;
     }
 
-    player.challengeTimes = player.challengeTimes.map(e => e * 100);
-    player.infchallengeTimes = player.infchallengeTimes.map(e => e * 100);
+    if (player.challengeTimes) {
+      player.challengeTimes = player.challengeTimes.map(e => e * 100);
+    }
+    if (player.infchallengeTimes) {
+      player.infchallengeTimes = player.infchallengeTimes.map(e => e * 100);
+    }
   },
 
   convertAutobuyerMode(player) {
@@ -155,18 +168,18 @@ GameStorage.migrations = {
       const autobuyer = player.autobuyers[i];
       if (autobuyer % 1 !== 0) {
         if (autobuyer.target < 10) {
-          autobuyer.target = AutobuyerMode.BUY_SINGLE;
+          autobuyer.target = AUTOBUYER_MODE.BUY_SINGLE;
         } else {
-          autobuyer.target = AutobuyerMode.BUY_10;
+          autobuyer.target = AUTOBUYER_MODE.BUY_10;
         }
       }
     }
     const tickspeedAutobuyer = player.autobuyers[8];
     if (tickspeedAutobuyer % 1 !== 0) {
       if (tickspeedAutobuyer.target < 10) {
-        tickspeedAutobuyer.target = AutobuyerMode.BUY_SINGLE;
+        tickspeedAutobuyer.target = AUTOBUYER_MODE.BUY_SINGLE;
       } else {
-        tickspeedAutobuyer.target = AutobuyerMode.BUY_MAX;
+        tickspeedAutobuyer.target = AUTOBUYER_MODE.BUY_MAX;
       }
     }
   },
@@ -182,7 +195,7 @@ GameStorage.migrations = {
     }
     player.currentChallenge = unfuckChallengeId(player.currentChallenge);
     player.challenges = player.challenges.map(unfuckChallengeId);
-    if (wasFucked) {
+    if (wasFucked && player.challengeTimes) {
       player.challengeTimes = GameDatabase.challenges.normal
         .slice(1)
         .map(c => player.challengeTimes[c.legacyId - 2]);
@@ -361,7 +374,7 @@ GameStorage.migrations = {
   fixAutobuyers(player) {
     for (let i = 0; i < 12; i++) {
       if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].target % 1 !== 0) {
-        player.autobuyers[i].target = AutobuyerMode.BUY_SINGLE;
+        player.autobuyers[i].target = AUTOBUYER_MODE.BUY_SINGLE;
       }
 
       if (
@@ -454,7 +467,9 @@ GameStorage.migrations = {
       dimension.amount = new Decimal(player[oldProps.amount]);
       dimension.bought = player[oldProps.bought];
       dimension.power = new Decimal(player[oldProps.pow]);
-      dimension.costMultiplier = new Decimal(player.costMultipliers[tier - 1]);
+      if (player.costmultipliers) {
+        dimension.costMultiplier = new Decimal(player.costMultipliers[tier - 1]);
+      }
       delete player[oldProps.cost];
       delete player[oldProps.amount];
       delete player[oldProps.bought];
@@ -462,30 +477,34 @@ GameStorage.migrations = {
     }
     delete player.costMultipliers;
 
-    for (let tier = 1; tier <= 8; tier++) {
-      const dimension = player.dimensions.infinity[tier - 1];
-      const oldName = `infinityDimension${tier}`;
-      const old = player[oldName];
-      dimension.cost = new Decimal(old.cost);
-      dimension.amount = new Decimal(old.amount);
-      dimension.power = new Decimal(old.power);
-      dimension.bought = old.bought;
-      dimension.baseAmount = old.baseAmount;
-      dimension.isUnlocked = player.infDimensionsUnlocked[tier - 1];
-      delete player[oldName];
-    }
-    delete player.infDimensionsUnlocked;
-
-    for (let tier = 1; tier <= 8; tier++) {
-      const dimension = player.dimensions.time[tier - 1];
-      const oldName = `timeDimension${tier}`;
-      const old = player[oldName];
-      if (old !== undefined) {
+    if (player.infinityDimension1) {
+      for (let tier = 1; tier <= 8; tier++) {
+        const dimension = player.dimensions.infinity[tier - 1];
+        const oldName = `infinityDimension${tier}`;
+        const old = player[oldName];
         dimension.cost = new Decimal(old.cost);
         dimension.amount = new Decimal(old.amount);
         dimension.power = new Decimal(old.power);
         dimension.bought = old.bought;
+        dimension.baseAmount = old.baseAmount;
+        dimension.isUnlocked = player.infDimensionsUnlocked[tier - 1];
         delete player[oldName];
+      }
+      delete player.infDimensionsUnlocked;
+    }
+
+    if (player.timeDimension1) {
+      for (let tier = 1; tier <= 8; tier++) {
+        const dimension = player.dimensions.time[tier - 1];
+        const oldName = `timeDimension${tier}`;
+        const old = player[oldName];
+        if (old !== undefined) {
+          dimension.cost = new Decimal(old.cost);
+          dimension.amount = new Decimal(old.amount);
+          dimension.power = new Decimal(old.power);
+          dimension.bought = old.bought;
+          delete player[oldName];
+        }
       }
     }
   },
@@ -576,7 +595,7 @@ GameStorage.migrations = {
     delete player.autoCrunchMode;
     delete player.autobuyers;
 
-    if (player.autoSacrifice % 1 !== 0) {
+    if (player.autoSacrifice && player.autoSacrifice % 1 !== 0) {
       const old = player.autoSacrifice;
       const autobuyer = player.auto.sacrifice;
       autobuyer.multiplier = new Decimal(old.priority);

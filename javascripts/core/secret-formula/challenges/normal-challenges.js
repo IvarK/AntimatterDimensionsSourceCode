@@ -42,13 +42,14 @@ GameDatabase.challenges.normal = [
     id: 6,
     legacyId: 10,
     isQuickResettable: false,
-    description: "Each dimension costs the dimension 2 before it, with modified prices.",
+    description: "Each dimension costs the dimension 2 before it, " +
+      "instead of antimatter. Dimension prices are modified.",
     reward: "Sixth Dimension Autobuyer"
   },
   {
     id: 7,
     legacyId: 9,
-    isQuickResettable: true,
+    isQuickResettable: false,
     description: "The multiplier from buying 10 dimensions is reduced to 1x, but is increased by 0.2x per " +
       "Dimension Shift/Boost, up to a maximum of 2x.",
     reward: "Seventh Dimension Autobuyer"
@@ -88,7 +89,8 @@ GameDatabase.challenges.normal = [
     id: 12,
     legacyId: 7,
     isQuickResettable: false,
-    description: "Each dimension produces the dimension 2 below it; 1st Dimensions produce reduced antimatter.",
+    description: "Each dimension produces the dimension 2 below it (1st Dimensions still " +
+      "produce antimatter). Dimensions 2, 4, and 6 are made stronger to compensate.",
     reward: "Automated Big Crunches"
   }
 ];

@@ -135,20 +135,23 @@ const GameStorage = {
     Theme.set(player.options.theme);
     Notations.find(player.options.notation).setAsCurrent();
 
-    EventHub.dispatch(GameEvent.GAME_LOAD);
+    EventHub.dispatch(GAME_EVENT.GAME_LOAD);
     AutomatorBackend.initializeFromSave();
     Lazy.invalidateAll();
 
     if (overrideLastUpdate) {
       player.lastUpdate = overrideLastUpdate;
     }
-    let diff = Date.now() - player.lastUpdate;
-    if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
-      diff = Enslaved.autoStoreRealTime(diff);
-    }
-
-    if (diff > 1000 * 1000) {
-      simulateTime(diff / 1000);
+    if (player.options.offlineProgress) {
+      let diff = Date.now() - player.lastUpdate;
+      if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
+        diff = Enslaved.autoStoreRealTime(diff);
+      }
+      if (diff > 1000 * 1000) {
+        simulateTime(diff / 1000);
+      }
+    } else {
+      player.lastUpdate = Date.now();
     }
     Enslaved.nextTickDiff = player.options.updateRate;
     GameUI.update();

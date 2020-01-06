@@ -42,7 +42,7 @@ const COST_MULT_PER_TIER = 100;
 const laitelaMatterUnlockThresholds = [1, 2, 3].map(x => 10 * Math.pow(COST_MULT_PER_TIER, x));
 
 const Laitela = {
-  
+
   get celestial() {
     return player.celestials.laitela;
   },
@@ -81,7 +81,7 @@ const Laitela = {
   get nextMatterDimensionThreshold() {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);
-      if (d.amount.eq(0)) return `Next dimension at ${shorten(laitelaMatterUnlockThresholds[i - 1])} matter`;
+      if (d.amount.eq(0)) return `Next dimension at ${format(laitelaMatterUnlockThresholds[i - 1])} matter`;
     }
     return "";
   },
@@ -138,7 +138,7 @@ const Laitela = {
     this.celestial.higgs = this.celestial.higgs.plus(this.higgsGain);
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
-        { 
+        {
           amount: new Decimal(0),
           chanceUpgrades: 0,
           intervalUpgrades: 0,

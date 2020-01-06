@@ -35,7 +35,7 @@ Vue.component("compression-upgrade", {
   template:
     `<div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()">
-        <description-display 
+        <description-display
           :config="upgrade.config"
           :length="70"
           name="o-compression-upgrade__description"
@@ -53,8 +53,8 @@ Vue.component("compression-upgrade", {
           singular="Entanglement"
           plural="Entanglement"
         />
-        <div v-else-if="isActive">Active! (Cost: {{ shortenSmallInteger(upgrade.config.cost) }})</div>
-        <div v-else>Inactive (Cost: {{ shortenSmallInteger(upgrade.config.cost) }})</div>
+        <div v-else-if="isActive">Active! (Cost: {{ formatInt(upgrade.config.cost) }})</div>
+        <div v-else>Inactive (Cost: {{ formatInt(upgrade.config.cost) }})</div>
       </button>
     </div>`
 });

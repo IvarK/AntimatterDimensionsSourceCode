@@ -6,8 +6,8 @@
  * name: the achievement name
  * description: Description what you need to do, for values add {value}
  * values: different values to display and check against the game
- * condition: function that returns false or true, takes the current value as an argument, if true completes an achievement
- * format: optional function that formats the value, defaults to shorten()
+ * condition: function that takes the current value as an argument, if true completes an achievement
+ * format: optional function that formats the value, defaults to format()
  */
 
 class VRunUnlockState extends GameMechanicState {
@@ -53,8 +53,7 @@ class VRunUnlockState extends GameMechanicState {
         effects: g.effects,
       }));
 
-    while (true) {
-      if (this.completions === 6 || !this.config.condition(this.conditionValue)) break;
+    while (this.completions < 6 && this.config.condition(this.conditionValue)) {
       this.completions++;
       GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
       V.updateTotalRunUnlocks();
@@ -62,19 +61,17 @@ class VRunUnlockState extends GameMechanicState {
   }
 }
 
-VRunUnlockState.createIndex(GameDatabase.celestials.v.runUnlocks);
-
 /**
  * @param {number} id
  * @return {VRunUnlockState}
  */
-const VRunUnlock = id => VRunUnlockState.index[id];
+const VRunUnlock = VRunUnlockState.createAccessor(GameDatabase.celestials.v.runUnlocks);
 
 const VRunUnlocks = {
   /**
    * @type {VRunUnlockState[]}
    */
-  all: VRunUnlockState.index.compact(),
+  all: VRunUnlock.index.compact(),
 };
 
 const V_UNLOCKS = {
@@ -94,26 +91,26 @@ const V_UNLOCKS = {
   },
   RUN_UNLOCK_THRESHOLDS: [
     {
-    id: 1,
-    reward: "Achievement multiplier affects auto EC completion time. Unlock Triad studies.",
-    description: "Have 10 V-achievements",
-    effect: () => Player.achievementPower.toNumber(),
-    format: x => formatX(x, 2, 2),
-    requirement: () => V.spaceTheorems >= 10
+      id: 1,
+      reward: "Achievement multiplier affects auto EC completion time. Unlock Triad studies.",
+      description: "Have 10 V-achievements",
+      effect: () => Achievements.power,
+      format: x => formatX(x, 2, 2),
+      requirement: () => V.spaceTheorems >= 10
     },
     {
-    id: 2,
-    reward: "Achievement count affects black hole power.",
-    description: "Have 30 V-achievements",
-    effect: () => Player.achievementPower.toNumber(),
-    format: x => formatX(x, 2, 0),
-    requirement: () => V.spaceTheorems >= 30
+      id: 2,
+      reward: "Achievement count affects black hole power.",
+      description: "Have 30 V-achievements",
+      effect: () => Achievements.power,
+      format: x => formatX(x, 2, 0),
+      requirement: () => V.spaceTheorems >= 30
     },
     {
-    id: 3,
-    reward: "Divide the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
-    description: "Have 36 V-achievements",
-    requirement: () => V.spaceTheorems >= 36
+      id: 3,
+      reward: "Divide the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
+      description: "Have 36 V-achievements",
+      requirement: () => V.spaceTheorems >= 36
     }
   ]
 };

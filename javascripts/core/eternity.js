@@ -61,7 +61,7 @@ function eternity(force, auto, specialConditions = {}) {
   } else {
     if (!canEternity()) return false;
     if (!auto && !askEternityConfirmation()) return false;
-    EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
+    EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     giveEternityRewards(auto);
   }
 
@@ -113,7 +113,7 @@ function eternity(force, auto, specialConditions = {}) {
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;
 
-  EventHub.dispatch(GameEvent.ETERNITY_RESET_AFTER);
+  EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_AFTER);
   return true;
 }
 
@@ -123,7 +123,7 @@ function initializeChallengeCompletions() {
   if (EternityMilestone.keepAutobuyers.isReached) {
     NormalChallenges.completeAll();
   }
-  if (Achievement(133).isEnabled) {
+  if (Achievement(133).isUnlocked) {
     InfinityChallenges.completeAll();
   }
   player.challenge.normal.current = 0;
@@ -162,7 +162,7 @@ function initializeResourcesAfterEternity() {
   player.onlyEighthDimensons = true;
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
-  player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
+  player.postChallUnlocked = Achievement(133).isUnlocked ? 8 : 0;
 }
 
 function applyRealityUpgrades() {
@@ -192,7 +192,7 @@ function eternityResetReplicanti() {
   player.replicanti.gal = 0;
   player.replicanti.galaxies = 0;
   player.replicanti.galCost = new Decimal(1e170);
-  if (EternityMilestone.autobuyerReplicantiGalaxy.isReached && 
+  if (EternityMilestone.autobuyerReplicantiGalaxy.isReached &&
     player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
 }
 
@@ -281,10 +281,6 @@ class EPMultiplierState extends GameMechanicState {
     this.cachedEffectValue = new Lazy(() => Decimal.pow(5, player.epmultUpgrades));
   }
 
-  get canBeApplied() {
-    return true;
-  }
-
   get isAffordable() {
     return player.eternityPoints.gte(this.cost);
   }
@@ -303,6 +299,10 @@ class EPMultiplierState extends GameMechanicState {
     this.cachedCost.invalidate();
     this.cachedEffectValue.invalidate();
     Autobuyer.eternity.bumpAmount(Decimal.pow(5, diff));
+  }
+
+  get isCustomEffect() {
+    return true;
   }
 
   get effectValue() {

@@ -4,16 +4,16 @@ Vue.component("big-crunch-autobuyer-box", {
   data() {
     return {
       postBreak: false,
-      mode: AutoCrunchMode.AMOUNT,
+      mode: AUTO_CRUNCH_MODE.AMOUNT,
       hasAdditionalModes: false
     };
   },
   computed: {
     autobuyer: () => Autobuyer.bigCrunch,
     modes: () => [
-      AutoCrunchMode.AMOUNT,
-      AutoCrunchMode.TIME,
-      AutoCrunchMode.X_LAST
+      AUTO_CRUNCH_MODE.AMOUNT,
+      AUTO_CRUNCH_MODE.TIME,
+      AUTO_CRUNCH_MODE.X_LAST
     ]
   },
   methods: {
@@ -24,21 +24,21 @@ Vue.component("big-crunch-autobuyer-box", {
     },
     modeProps(mode) {
       switch (mode) {
-        case AutoCrunchMode.AMOUNT: return {
+        case AUTO_CRUNCH_MODE.AMOUNT: return {
           title: "Big Crunch at X IP",
           input: {
             property: "amount",
             type: "decimal"
           },
         };
-        case AutoCrunchMode.TIME: return {
+        case AUTO_CRUNCH_MODE.TIME: return {
           title: "Seconds between Crunches",
           input: {
             property: "time",
             type: "float"
           },
         };
-        case AutoCrunchMode.X_LAST: return {
+        case AUTO_CRUNCH_MODE.X_LAST: return {
           title: "X times last Crunch",
           input: {
             property: "xLast",

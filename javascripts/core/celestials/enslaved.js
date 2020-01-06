@@ -239,3 +239,7 @@ const Tesseracts = {
     return increases;
   }())
 };
+
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
+  if (Tab.celestials.enslaved.isOpen) Enslaved.quotes.show(Enslaved.quotes.INITIAL);
+});

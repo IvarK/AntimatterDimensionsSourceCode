@@ -154,14 +154,14 @@ dev.giveGlyph = function(level, rawLevel = level) {
   Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }));
 };
 
-dev.giveRealityGlyph = function(level, rawLevel = level) {
+dev.giveRealityGlyph = function(level) {
   if (Glyphs.freeInventorySpace === 0) return;
-  Glyphs.addToInventory(GlyphGenerator.realityGlyph({ actualLevel: level, rawLevel }, []));
+  Glyphs.addToInventory(GlyphGenerator.realityGlyph(level));
 };
 
 dev.decriminalize = function() {
   SecretAchievement(23).lock();
-  EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+  EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
 };
 
 dev.removeAch = function(name) {
@@ -335,9 +335,9 @@ dev.testGlyphs = function(config) {
     withFirst.forEach(e => e.push(elements[0]));
     return withFirst.concat(withoutFirst);
   }
-  const sets5 = makeCombinationsWithRepeats(5, GLYPH_TYPES.slice(0, 5))
+  const sets5 = makeCombinationsWithRepeats(5, BASIC_GLYPH_TYPES)
     .map(s => s.map(t => makeAllEffectGlyph(t)));
-  const sets4 = makeCombinationsWithRepeats(4, GLYPH_TYPES.slice(0, 5))
+  const sets4 = makeCombinationsWithRepeats(4, BASIC_GLYPH_TYPES)
     .map(s => s.map(t => makeAllEffectGlyph(t)));
   const effarigSets = effarigGlyphs.map(g => sets4.map(s => [g].concat(s)));
   const glyphSets = sets5.concat(...effarigSets);
@@ -347,7 +347,7 @@ dev.testGlyphs = function(config) {
       return g;
     });
     Glyphs.active = Array.from(player.reality.glyphs.active);
-    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   }
   function glyphToShortString(glyph) {
     if (glyph.type === "effarig") {

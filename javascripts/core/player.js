@@ -61,7 +61,7 @@ let player = {
       cost: 1,
       interval: [1500, 2000, 2500, 3000, 4000, 5000, 6000, 7500][tier],
       bulk: 1,
-      mode: AutobuyerMode.BUY_10,
+      mode: AUTOBUYER_MODE.BUY_10,
       priority: 1,
       isActive: false,
       lastTick: 0
@@ -70,7 +70,7 @@ let player = {
       isUnlocked: false,
       cost: 1,
       interval: 2500,
-      mode: AutobuyerMode.BUY_SINGLE,
+      mode: AUTOBUYER_MODE.BUY_SINGLE,
       priority: 1,
       isActive: false,
       lastTick: 0
@@ -161,7 +161,9 @@ let player = {
     // Incremented every time secret time study toggles
     secretTS: 0,
     uselessNewsClicks: 0,
-    cancerAchievements: false
+    cancerAchievements: false,
+    paperclips: 0,
+    newsQueuePosition: 1000
   },
   lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, new Decimal(1)]),
   lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 1]),
@@ -298,7 +300,7 @@ let player = {
     gainedAutoAchievements: true,
     automator: {
       state: {
-        mode: AutomatorMode.STOP,
+        mode: AUTOMATOR_MODE.STOP,
         topLevelScript: 0,
         editorScript: 0,
         repeat: false,
@@ -308,7 +310,7 @@ let player = {
       },
       lastID: 0,
       execTimer: 0,
-      type: AutomatorType.TEXT
+      type: AUTOMATOR_TYPE.TEXT
     },
     achTimer: 0,
   },
@@ -348,7 +350,7 @@ let player = {
         eternities: 25
       },
       autoGlyphSac: {
-        mode: AutoGlyphSacMode.NONE,
+        mode: AUTO_GLYPH_SAC_MODE.NONE,
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({
           rarityThreshold: 0,
           scoreThreshold: 0,
@@ -356,7 +358,7 @@ let player = {
         })),
       },
       autoGlyphPick: {
-        mode: AutoGlyphPickMode.RANDOM,
+        mode: AUTO_GLYPH_PICK_MODE.RANDOM,
       },
     },
     enslaved: {
@@ -463,7 +465,15 @@ let player = {
     commas: true,
     updateRate: 33,
     newUI: true,
-    showAlchemyResources: false,
+    offlineProgress: true,
+    showHintText: {
+      achievements: false,
+      challenges: false,
+      studies: false,
+      realityUpgrades: false,
+      perks: false,
+      alchemy: false,
+    },
     chart: {
       updateRate: 1000,
       duration: 10,
@@ -547,10 +557,6 @@ const Player = {
     return 1 + base * AnnihilationUpgrade.dimCostMult.effect;
   },
 
-  get achievementPower() {
-    return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
-  },
-
   get infinityGoal() {
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     return challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
@@ -571,7 +577,7 @@ const Player = {
       Achievement(37),
       Achievement(54),
       Achievement(55),
-      Achievement(78).secondaryEffect
+      Achievement(78).effects.antimatter
     ).toDecimal();
   },
 

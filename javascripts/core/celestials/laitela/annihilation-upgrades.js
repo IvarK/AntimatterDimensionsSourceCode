@@ -8,7 +8,7 @@ class AnnihilationUpgradeState extends RebuyableMechanicState {
   set currency(value) {
      player.celestials.laitela.higgs = value;
   }
-  
+
   get cost() {
     const base = Decimal.pow(this.config.costMult, this.boughtAmount).times(this.config.startCost);
     if (DarkEnergyUpgrade.annihilationUpgradeCostReduction.isBought) {
@@ -101,7 +101,7 @@ class DarkEnergyUpgradeState extends SetPurchasableMechanicState {
   }
 
   get formattedEffect() {
-    if (this.config.effectFormat === undefined) return `${shorten(this.effect, 2, 2)}x`;
+    if (this.config.effectFormat === undefined) return `${format(this.effect, 2, 2)}x`;
 
     return this.config.effectFormat(this.effect);
   }

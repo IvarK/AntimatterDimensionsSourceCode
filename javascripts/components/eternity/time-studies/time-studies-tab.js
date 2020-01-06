@@ -61,8 +61,8 @@ class TimeStudyTreeLayout {
       normalRow(                   TS(33), TS(31), TS(32), null                       )
     ];
 
-    if (type === StudyTreeLayoutType.ALTERNATIVE_62 || type === StudyTreeLayoutType.ALTERNATIVE_62_181 ||
-      type === StudyTreeLayoutType.ALTERNATIVE_TRIAD_STUDIES) {
+    if (type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62 || type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62_181 ||
+      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES) {
       this.rows.push(
         normalRow(                     null, TS(41), TS(42), EC(5)                      ),
         normalRow(                       null,   TS(51),  TS(62)                        ),
@@ -89,8 +89,8 @@ class TimeStudyTreeLayout {
       normalRow(                          TS(161), TS(162)                            )
     );
 
-    if (type === StudyTreeLayoutType.ALTERNATIVE_181 || type === StudyTreeLayoutType.ALTERNATIVE_62_181 ||
-        type === StudyTreeLayoutType.ALTERNATIVE_TRIAD_STUDIES) {
+    if (type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_181 || type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62_181 ||
+        type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES) {
       this.rows.push(
         normalRow(                         null, TS(171),  EC(2)                        ),
         normalRow(                        EC(1), TS(181),  EC(3)                        )
@@ -111,7 +111,7 @@ class TimeStudyTreeLayout {
       wideRow  (TS(221), TS(222), TS(223), TS(224), TS(225), TS(226), TS(227), TS(228))
     );
 
-    if (type === StudyTreeLayoutType.ALTERNATIVE_TRIAD_STUDIES) {
+    if (type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES) {
       this.rows.push(
         normalRow(    TrS(1),           TrS(2),           TrS(3),           TrS(4)      )
       );
@@ -197,7 +197,7 @@ class TimeStudyTreeLayout {
   }
 }
 
-const StudyTreeLayoutType = {
+const STUDY_TREE_LAYOUT_TYPE = {
   NORMAL: 0,
   ALTERNATIVE_62: 1,
   ALTERNATIVE_181: 2,
@@ -219,7 +219,7 @@ Vue.component("time-studies-tab", {
   data() {
     return {
       respec: player.respec,
-      layoutType: StudyTreeLayoutType.NORMAL,
+      layoutType: STUDY_TREE_LAYOUT_TYPE.NORMAL,
     };
   },
   watch: {
@@ -247,7 +247,7 @@ Vue.component("time-studies-tab", {
   methods: {
     update() {
       this.respec = player.respec;
-      this.layoutType = StudyTreeLayoutType.current;
+      this.layoutType = STUDY_TREE_LAYOUT_TYPE.current;
     },
     studyComponent(study) {
       switch (study.type) {

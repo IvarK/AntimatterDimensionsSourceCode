@@ -46,19 +46,17 @@ Vue.component("glyph-levels-and-weights", {
       return this.makeRowStyle(4);
     },
     rowStylePerkShop() {
-      // Perk shop will only ever show up with eternities unlocked
       return this.makeRowStyle(5);
     },
-    rowStylePenalty() {
-      // Perk shop will only ever show up with eternities unlocked
+    rowStyleShard() {
       return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible);
     },
-    rowStylePerk() {
-      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.penaltyVisible);
+    rowStylePenalty() {
+      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible);
     },
-    rowStyleShard() {
-      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.penaltyVisible +
-        this.perkVisible);
+    rowStylePerk() {
+      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible +
+        this.penaltyVisible);
     },
     formatPerkShop() {
       return `${(100 * (this.factors.perkShop - 1)).toFixed(1)}%`;
@@ -110,8 +108,8 @@ Vue.component("glyph-levels-and-weights", {
     formatFactor(x) {
       // Not applied to + perks since it's always whole; for factors < 1, the slice makes the
       // factor be fixed point.
-      return Notations.current.isPainful
-        ? shorten(x, 2, 2)
+      return Notations.current.isPainful || x > 1000
+        ? format(x, 2, 2)
         : x.toPrecision(5).slice(0, 6);
     },
     makeRowStyle(r) {
@@ -187,6 +185,13 @@ Vue.component("glyph-levels-and-weights", {
           {{formatFactor(factors.eterEffect)}}
         </div>
       </template>
+      <template v-if="shardVisible">
+        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__factor">Shards</div>
+        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__operator">+</div>
+        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__factor-val">
+          {{formatFactor(factors.shardFactor)}}
+        </div>
+      </template>
       <template v-if="perkShopVisible">
         <div :style="rowStylePerkShop" class="l-glyph-levels-and-weights__factor">Perk shop</div>
         <div :style="rowStylePerkShop" class="l-glyph-levels-and-weights__operator">+</div>
@@ -206,19 +211,12 @@ Vue.component("glyph-levels-and-weights", {
           {{factors.perkFactor}}&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
       </template>
-      <template v-if="shardVisible">
-        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__factor">Shards</div>
-        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__operator">+</div>
-        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__factor-val">
-          {{formatFactor(factors.shardFactor)}}
-        </div>
-      </template>
       <template v-if="adjustVisible">
         <div class="l-glyph-levels-and-weights__adjust-outline"></div>
         <div class="l-glyph-levels-and-weights__adjust-label">
           Adjust weights
           <div class="l-glyph-levels-and-weights__reset-btn-outer">
-            <div 
+            <div
               class="l-glyph-levels-and-weights__reset-btn c-glyph-levels-and-weights__reset-btn"
               @click="resetWeights"
             >

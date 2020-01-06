@@ -278,7 +278,7 @@ function beginProcessReality(realityProps) {
     finishProcessReality(realityProps);
     return;
   }
-  EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
+  EventHub.dispatch(GAME_EVENT.REALITY_RESET_BEFORE);
   const glyphsToProcess = realityProps.simulatedRealities + (realityProps.alreadyGotGlyph ? 0 : 1);
   const rng = GlyphGenerator.getRNG(false);
   Async.run(() => processAutoGlyph(realityProps.gainedGlyphLevel, rng),
@@ -455,7 +455,7 @@ function finishProcessReality(realityProps) {
   }
 
   Lazy.invalidateAll();
-  EventHub.dispatch(GameEvent.REALITY_RESET_AFTER);
+  EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
   // This immediately gives eternity upgrades instead of after the first eternity
   if (RealityUpgrades.allBought) {
@@ -485,7 +485,7 @@ function restoreCelestialRuns(celestialRunState) {
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
 function applyRUPG10() {
   NormalChallenges.completeAll();
-  
+
   const hasMaxBulkSecretAch = SecretAchievement(38).isUnlocked;
   player.auto.dimensions = player.auto.dimensions.map(() => ({
     isUnlocked: true,
@@ -494,7 +494,7 @@ function applyRUPG10() {
     interval: 100,
     // Only completely max bulk if the relevant secret achievement has already been unlocked
     bulk: hasMaxBulkSecretAch ? 1e100 : 1e90,
-    mode: AutobuyerMode.BUY_10,
+    mode: AUTOBUYER_MODE.BUY_10,
     priority: 1,
     isActive: true,
     lastTick: player.realTimePlayed
@@ -503,14 +503,14 @@ function applyRUPG10() {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
   }
   player.infinityUpgrades = new Set(
-    ["timeMult", "dimMult", "timeMult2", 
-    "skipReset1", "skipReset2", "unspentBonus", 
-    "27Mult", "18Mult", "36Mult", "resetMult", 
-    "skipReset3", "passiveGen", "45Mult", 
-    "resetBoost", "galaxyBoost", "skipResetGalaxy", 
-    "totalMult", "currentMult", "postGalaxy", 
-    "challengeMult", "achievementMult", "infinitiedMult", 
-    "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost", 
+    ["timeMult", "dimMult", "timeMult2",
+    "skipReset1", "skipReset2", "unspentBonus",
+    "27Mult", "18Mult", "36Mult", "resetMult",
+    "skipReset3", "passiveGen", "45Mult",
+    "resetBoost", "galaxyBoost", "skipResetGalaxy",
+    "totalMult", "currentMult", "postGalaxy",
+    "challengeMult", "achievementMult", "infinitiedMult",
+    "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost",
     "ipOffline"]
   );
   player.dimensionBoosts = Math.max(4, player.dimensionBoosts);

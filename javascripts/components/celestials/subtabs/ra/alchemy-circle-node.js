@@ -10,7 +10,7 @@ Vue.component("alchemy-circle-node", {
       isReactionActive: false,
       amount: 0,
       flow: 0,
-      alwaysShowResource: false
+      isUnlocked: false
     };
   },
   computed: {
@@ -34,6 +34,7 @@ Vue.component("alchemy-circle-node", {
         "o-alchemy-node--base": this.isBaseResource,
         "o-alchemy-node--active": this.isReactionActive,
         "o-alchemy-node--unfocused": !this.isFocused,
+        "o-alchemy-node--locked": !this.isUnlocked,
       };
     },
     hintClassObject() {
@@ -45,7 +46,7 @@ Vue.component("alchemy-circle-node", {
       this.isReactionActive = !this.isBaseResource && this.node.resource.reaction.isActive;
       this.amount = this.resource.amount;
       this.flow = this.resource.flow;
-      this.alwaysShowResource = player.options.showAlchemyResources;
+      this.isUnlocked = this.resource.isUnlocked;
     }
   },
   template: `
@@ -60,15 +61,13 @@ Vue.component("alchemy-circle-node", {
         :resource="resource"
         :classObject="classObject"
       />
-      <div v-if="alwaysShowResource"
-        class="o-alchemy-node-resource--always-visible">
-        {{ amount.toFixed(1) }}
-      </div>
-      <hint-text v-else
-        :class="hintClassObject"
-        class="o-hint-text--alchemy-node l-hint-text--alchemy-node">
-        {{ amount.toFixed(1) }}
-      </hint-text>
+      <span v-if="isUnlocked">
+        <hint-text type="alchemy"
+          :class="hintClassObject"
+          class="o-hint-text--alchemy-node l-hint-text--alchemy-node">
+          {{ amount.toFixed(1) }}
+        </hint-text>
+      </span>
     </div>
   `
 });
@@ -81,30 +80,32 @@ Vue.component("alchemy-resource-arc", {
   data() {
     return {
       amount: 0,
+      fillFraction: 0,
     };
   },
   computed: {
     spinnerTransform() {
       return {
-        transform: `rotate(${this.amount / Ra.alchemyResourceCap * 360}deg)`,
-        background: this.amount === Ra.alchemyResourceCap ? "#ff9800" : undefined
+        transform: `rotate(${this.fillFraction * 360}deg)`,
+        background: this.fillFraction === 1 ? "#ff9800" : undefined
       };
     },
     fillerTransform() {
       return {
-        opacity: this.amount / Ra.alchemyResourceCap > 0.5 ? 1 : 0,
-        background: this.amount === Ra.alchemyResourceCap ? "#ff9800" : undefined
+        opacity: this.fillFraction > 0.5 ? 1 : 0,
+        background: this.fillFraction === 1 ? "#ff9800" : undefined
       };
     },
     maskTransform() {
       return {
-        opacity: this.amount / Ra.alchemyResourceCap > 0.5 ? 0 : 1
+        opacity: this.fillFraction > 0.5 ? 0 : 1
       };
     }
   },
   methods: {
     update() {
       this.amount = this.resource.amount;
+      this.fillFraction = Math.clamp(this.amount / estimatedAlchemyCap(), 0, 1);
     }
   },
   template: `

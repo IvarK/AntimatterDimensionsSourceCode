@@ -173,7 +173,7 @@ class TimeDimensionState extends DimensionState {
     if (Laitela.has(LAITELA_UNLOCKS.DIM_POW)) mult = mult.pow(Laitela.dimensionMultPowerEffect);
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
-    
+
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
 
     mult = mult.powEffectOf(AlchemyResource.time);
@@ -248,7 +248,24 @@ const TimeDimensions = {
    * @type {TimeDimensionState[]}
    */
   all: TimeDimensionState.index.compact(),
+
   get scalingPast1e6000() {
     return 4;
+  },
+
+  tick(diff) {
+    for (let tier = 8; tier > 1; tier--) {
+      TimeDimension(tier).produceDimensions(TimeDimension(tier - 1), diff / 10);
+    }
+
+    if (EternityChallenge(7).isRunning) {
+      TimeDimension(1).produceDimensions(InfinityDimension(8), diff);
+    } else {
+      TimeDimension(1).produceCurrency(Currency.timeShards, diff);
+    }
+
+    EternityChallenge(7).reward.applyEffect(production => {
+      InfinityDimension(8).amount = InfinityDimension(8).amount.plus(production.times(diff / 10));
+    });
   }
 };

@@ -19,10 +19,10 @@ Vue.component("automator-tab", {
       return this.fullScreen ? "fa-compress-arrows-alt" : "fa-expand-arrows-alt";
     },
     intervalText() {
-      return this.interval === 1 
-        ? `The automator is running ${shorten(1000 / this.interval, 2, 2)} 
+      return this.interval === 1
+        ? `The automator is running ${format(1000 / this.interval, 2, 2)}
           commands per second, each reality makes it run 0.6% faster`
-        : `The automator is running ${shorten(1000 / this.interval, 2, 2)} commands per second`;
+        : `The automator is running ${format(1000 / this.interval, 2, 2)} commands per second`;
     }
   },
   methods: {
@@ -35,10 +35,10 @@ Vue.component("automator-tab", {
     <div :class="tabClass" class="c-automator-tab l-automator-tab" >
       <div v-if="automatorUnlocked">
         <div class="c-automator-tab__interval-info">{{ intervalText }}</div>
-        <split-pane 
-          :min-percent="40" 
-          :default-percent="50" 
-          split="vertical" 
+        <split-pane
+          :min-percent="40"
+          :default-percent="50"
+          split="vertical"
           class="_-automator-split-pane-fix" >
           <automator-editor slot="paneL" />
           <automator-docs slot="paneR" />

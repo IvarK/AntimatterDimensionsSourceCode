@@ -14,7 +14,7 @@ Vue.component("infinity-points-header", {
   template: `
     <div class="c-infinity-tab__header">
       You have
-      <span class="c-infinity-tab__infinity-points">{{shortenDimensions(infinityPoints)}}</span>
+      <span class="c-infinity-tab__infinity-points">{{format(infinityPoints, 2, 0)}}</span>
       {{ "Infinity Point" | pluralize(infinityPoints) }}.
     </div>
   `

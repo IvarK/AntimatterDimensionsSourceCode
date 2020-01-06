@@ -122,10 +122,10 @@
         this.addError(identifier, `Variable ${varName} has not been defined`);
         return undefined;
       }
-      if (varInfo.type === AutomatorVarTypes.UNKNOWN) {
+      if (varInfo.type === AUTOMATOR_VAR_TYPES.UNKNOWN) {
         varInfo.firstUseLineNumber = identifier.image.startLine;
         varInfo.type = type;
-        if (type === AutomatorVarTypes.STUDIES) {
+        if (type === AUTOMATOR_VAR_TYPES.STUDIES) {
           // The only time we have an unknown studies is if there was only one listed
           varInfo.value = {
             normal: [varInfo.value.toNumber()],
@@ -190,12 +190,12 @@
         name: varName,
         definitionLineNumber: ctx.Identifier[0].startLine,
         firstUseLineNumber: 0,
-        type: AutomatorVarTypes.UNKNOWN,
+        type: AUTOMATOR_VAR_TYPES.UNKNOWN,
         value: undefined,
       };
       this.variables[varName] = def;
       if (ctx.duration) {
-        def.type = AutomatorVarTypes.DURATION;
+        def.type = AUTOMATOR_VAR_TYPES.DURATION;
         def.value = this.visit(ctx.duration);
         return;
       }
@@ -203,7 +203,7 @@
       const studies = ctx.studyList[0].children.studyListEntry;
       if (studies.length > 1 || studies[0].children.studyRange ||
         studies[0].children.StudyPath || studies[0].children.Comma) {
-        def.type = AutomatorVarTypes.STUDIES;
+        def.type = AUTOMATOR_VAR_TYPES.STUDIES;
         def.value = this.visit(ctx.studyList);
         return;
       }
@@ -212,7 +212,7 @@
       def.value = new Decimal(studies[0].children.NumberLiteral[0].image);
       if (!/^[1-9][0-9]*[1-9]$/u.test(studies[0].children.NumberLiteral[0].image)) {
         // Study numbers are pretty specific number patterns
-        def.type = AutomatorVarTypes.NUMBER;
+        def.type = AUTOMATOR_VAR_TYPES.NUMBER;
       }
     }
 
@@ -278,7 +278,7 @@
       if (ctx.NumberLiteral) {
         ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       } else if (ctx.Identifier) {
-        const varLookup = this.lookupVar(ctx.Identifier[0], AutomatorVarTypes.NUMBER);
+        const varLookup = this.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.NUMBER);
         if (varLookup) ctx.$value = varLookup.value;
       }
     }

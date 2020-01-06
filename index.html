@@ -40,7 +40,7 @@
 </head>
 
 <body>
-  <img id="loading" src="images/Loading.png">
+  <div id="loading"></div>
   <div id="ui"></div>
   <div id="background-animations">
     <div class="videocontainer videocontainer--background">
@@ -48,10 +48,10 @@
         <source src="images/s6-bg.webm" type="video/webm">
       </video>
     </div>
-    <div id="snow" style="display: none; "></div>
+    <div id="snow" style="display: none;"></div>
   </div>
   <div class="videocontainer">
-    <video preload muted id="realityanimbg" style="opacity: 0; display: none; ">
+    <video preload muted id="realityanimbg" style="opacity: 0; display: none;">
       <source src="images/realityanimbg.webm" type="video/webm">
     </video>
   </div>
@@ -94,14 +94,20 @@
 <script type="text/javascript" src="javascripts/core/math.js"></script>
 <script type="text/javascript" src="javascripts/core/async-utils.js"></script>
 
+<script type="text/javascript" src="javascripts/core/game-mechanics/effect.js"></script>
+<script type="text/javascript" src="javascripts/core/game-mechanics/effects.js"></script>
+<script type="text/javascript" src="javascripts/core/game-mechanics/game-mechanic.js"></script>
+<script type="text/javascript" src="javascripts/core/game-mechanics/puchasable.js"></script>
+<script type="text/javascript" src="javascripts/core/game-mechanics/set-purchasable.js"></script>
+<script type="text/javascript" src="javascripts/core/game-mechanics/bit-purchasable.js"></script>
+<script type="text/javascript" src="javascripts/core/game-mechanics/rebuyable.js"></script>
+
 <script type="text/javascript" src="javascripts/core/automator/automator-backend.js"></script>
-<script type="text/javascript" src="javascripts/core/secret-formula/effects.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/game-database.js"></script>
 <script type="text/javascript" src="javascripts/core/glyph-effects.js"></script>
 <script type="text/javascript" src="javascripts/core/player.js"></script>
 <script type="text/javascript" src="javascripts/core/performance-stats.js"></script>
 <script type="text/javascript" src="javascripts/core/currency.js"></script>
-<script type="text/javascript" src="javascripts/core/game-mechanic.js"></script>
 <script type="text/javascript" src="javascripts/core/event-hub.js"></script>
 <script type="text/javascript" src="javascripts/core/cache.js"></script>
 <script type="text/javascript" src="javascripts/core/intervals.js"></script>
@@ -337,6 +343,7 @@
 <script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-shortcuts.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-message.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-ui-choice.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-import.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-import-tree.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-load-game.js"></script>
@@ -345,6 +352,7 @@
 <script type="text/javascript" src="javascripts/components/modals/options/modal-options.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/options/modal-animation-options.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/options/modal-confirmation-options.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/options/modal-info-display-options.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/cloud/modal-cloud-conflict-record.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/cloud/modal-cloud-load-conflict.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/cloud/modal-cloud-save-conflict.js"></script>
@@ -386,8 +394,11 @@
 <script type="text/javascript" src="javascripts/core/app/ui.js"></script>
 <script type="text/javascript" src="javascripts/core/app/notify.js"></script>
 
+<script type="text/javascript" src="javascripts/core/achievements/normal-achievement.js"></script>
+<script type="text/javascript" src="javascripts/core/achievements/secret-achievement.js"></script>
+<script type="text/javascript" src="javascripts/core/achievements/achievement-timer.js"></script>
+
 <script type="text/javascript" src="javascripts/core/time.js"></script>
-<script type="text/javascript" src="javascripts/core/achievements.js"></script>
 <script type="text/javascript" src="javascripts/core/chart.js"></script>
 <script type="text/javascript" src="javascripts/core/tickspeed.js"></script>
 <script type="text/javascript" src="javascripts/core/dimensions/dimension.js"></script>

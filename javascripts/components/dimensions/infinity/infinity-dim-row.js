@@ -13,7 +13,7 @@ Vue.component("infinity-dim-row", {
       rateOfChange: new Decimal(0),
       isAutobuyerUnlocked: false,
       cost: new Decimal(0),
-      isAvailableForPuchase: false,
+      isAvailableForPurchase: false,
       isCapped: false,
       capIP: new Decimal(0),
       isAutobuyerOn: false,
@@ -32,18 +32,18 @@ Vue.component("infinity-dim-row", {
     },
     rateOfChangeDisplay() {
       return this.hasRateOfChange
-        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
         : "";
     },
     costDisplay() {
-      return this.isCapped ? "Capped!" : `Cost: ${this.shortenCosts(this.cost)} IP`;
+      return this.isCapped ? "Capped!" : `Cost: ${format(this.costMult, 0, 0)} IP`;
     },
     hardcapPurchases() {
-      return this.shorten(this.hardcap, 1, 1);
+      return format(this.hardcap, 1, 1);
     },
     capTooltip() {
       return this.isCapped
-        ? `Limited to ${this.hardcapPurchases} upgrades (${this.shortenCosts(this.capIP)} IP)`
+        ? `Limited to ${this.hardcapPurchases} upgrades (${format(this.capIP, 0, 0)} IP)`
         : undefined;
     }
   },
@@ -61,7 +61,7 @@ Vue.component("infinity-dim-row", {
       }
       this.isAutobuyerUnlocked = dimension.isAutobuyerUnlocked;
       this.cost.copyFrom(dimension.cost);
-      this.isAvailableForPuchase = dimension.isAvailableForPuchase;
+      this.isAvailableForPurchase = dimension.isAvailableForPurchase;
       this.isCapped = dimension.isCapped;
       if (this.isCapped) {
         this.capIP.copyFrom(dimension.hardcapIPAmount);
@@ -77,10 +77,10 @@ Vue.component("infinity-dim-row", {
   template:
     `<div v-show="isUnlocked" class="c-infinity-dim-row">
       <div class="c-infinity-dim-row__label c-infinity-dim-row__name">
-        {{name}} Infinity Dimension x{{shortenMoney(multiplier)}}
+        {{name}} Infinity Dimension {{formatX(multiplier, 2, 1)}}
       </div>
       <div class="c-infinity-dim-row__label c-infinity-dim-row__label--growable">
-        {{shortenDimensions(amount)}} {{rateOfChangeDisplay}}
+        {{format(amount, 2, 0)}} {{rateOfChangeDisplay}}
       </div>
       <primary-button-on-off
         v-if="isAutobuyerUnlocked && !isEC8Running"
@@ -90,7 +90,7 @@ Vue.component("infinity-dim-row", {
       />
       <primary-button
         v-tooltip="capTooltip"
-        :enabled="isAvailableForPuchase"
+        :enabled="isAvailableForPurchase"
         class="o-primary-btn--buy-id l-infinity-dim-row__button"
         @click="buyManyInfinityDimension"
       >{{costDisplay}}</primary-button>

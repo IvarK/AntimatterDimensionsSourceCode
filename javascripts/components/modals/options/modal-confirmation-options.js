@@ -53,7 +53,7 @@ Vue.component("modal-confirmation-options", {
   template:
     `<modal-options @close="emitClose">
       <on-off-button v-model="sacrifice" text="Sacrifice:"/>
-      <on-off-button v-model="challenges" text="Challenges:"/>
+      <on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenges:"/>
       <on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:"/>
       <on-off-button v-if="dilationUnlocked" v-model="dilation" text="Dilation:"/>
       <on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:"/>

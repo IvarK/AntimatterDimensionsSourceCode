@@ -21,16 +21,16 @@ Vue.component("normal-dim-shift-row", {
       return DISPLAY_NAMES[this.requirement.tier];
     },
     buttonText() {
-      return `Reset the game for a ${this.isShift ? "new Dimension" : "boost"}`;
+      return `Reset your Dimensions for a ${this.isShift ? "new Dimension" : "boost"}`;
     },
     boostCountText() {
       const parts = [this.purchasedBoosts];
       if (this.freeBoosts !== 0) {
         parts.push(this.freeBoosts);
       }
-      const sum = parts.map(shortenSmallInteger).join(" + ");
+      const sum = parts.map(formatInt).join(" + ");
       if (parts.length >= 2) {
-        return `${sum} = ${shortenSmallInteger(parts.sum())}`;
+        return `${sum} = ${formatInt(parts.sum())}`;
       }
       return sum;
     }
@@ -51,11 +51,11 @@ Vue.component("normal-dim-shift-row", {
   },
   template:
     `<div class="c-normal-dim-row">
-      <div 
+      <div
         class="c-normal-dim-row__label c-normal-dim-row__label--growable"
       >
         Dimension {{name}} ({{boostCountText}}):
-        requires {{shortenSmallInteger(requirement.amount)}} {{dimName}} Dimensions
+        requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions
       </div>
       <primary-button
         :enabled="isBuyable"

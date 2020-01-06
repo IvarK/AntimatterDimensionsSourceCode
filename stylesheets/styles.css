@@ -2,6 +2,7 @@ html {
   font-size: 62.5%;
   height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 
 ._kong-test {
@@ -123,7 +124,7 @@ body {
   font-weight: 300;
   text-align:center;
   background-color: #fff;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 
 ._kong-test body {
@@ -405,6 +406,11 @@ button:focus {
   cursor: pointer;
   font-family: Typewriter;
   font-size: 1.8rem;
+  user-select: none;
+}
+
+.t-s6 .o-tab-btn {
+  text-shadow: 0 0 0.3rem;
 }
 
 .o-tab-btn:hover {
@@ -419,8 +425,7 @@ button:focus {
 }
 
 .t-dark .o-tab-btn--infinity,
-.t-dark-metro .o-tab-btn--infinity,
-.t-s6 .o-tab-btn--infinity {
+.t-dark-metro .o-tab-btn--infinity {
   color: black;
   background: white;
 }
@@ -494,14 +499,15 @@ button:focus {
 }
 
 #loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 1050px;
-    height:800px;
-    margin-top: -400px;
-    margin-left: -525px;
-    z-index: 1000;
+  height: 100%;
+  width: 100%;
+  background: url("../images/loading.png") no-repeat;
+  background-size: cover;
+  background-position-x: 50%;
+  background-position-y: 50%;
+  position: absolute;
+  background-color: black;
+  z-index: 999;
 }
 
 .l-reality-button {
@@ -540,6 +546,10 @@ button:focus {
 .t-s8 .c-reality-button {
   border-width: 0.1rem;
   border-radius: 0;
+}
+
+.t-s6 .c-reality-button {
+  background: black;
 }
 
 .c-reality-button--good {
@@ -987,12 +997,23 @@ screen and (max-width: 480px) {
 @keyframes text-crunch {
   0% {font-size: 1.5rem;}
   90% {font-size: 1.5rem;}
-  100% {font-size: 0rem;}
+  100% {font-size: 0;}
 }
 
 @keyframes text-flash {
   0% {color: yellow;}
   50% {color: red;}
+}
+
+@keyframes fade-out {
+  0% {opacity: 1;}
+  50% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+@keyframes text-stretch {
+  0% {letter-spacing: 0;}
+  100% {letter-spacing: 30rem;}
 }
 
 .infotooltip {
@@ -1613,7 +1634,7 @@ screen and (max-width: 480px) {
 }
 
 .o-hint-text--alchemy-node {
-  color: #aaaaaa;
+  color: #4f5957;
   text-shadow: none;
   font-size: 1.2rem;
   transition: opacity 0.2s;
@@ -4423,19 +4444,16 @@ screen and (max-width: 480px) {
 
 /*#endregion t-dark t-dark-metro*/
 
-/*#region t-inverted t-inverted-metro t-metro*/
-
-.t-inverted .c-modal,
-.t-inverted-metro .c-modal {
-  filter: invert(100%);
-}
+/*#region t-metro t-dark-metro t-inverted-metro t-s8 */
 
 .t-metro .c-modal,
-.t-inverted-metro .c-modal {
+.t-dark-metro,
+.t-inverted-metro .c-modal,
+.t-s8 .c-modal {
   border: 0.1rem solid black;
 }
 
-/*#endregion t-inverted t-inverted-metro t-metro*/
+/*#endregion t-metro t-dark-metro t-inverted-metro t-s8 */
 
 /*#region t-s1*/
 
@@ -4465,10 +4483,6 @@ screen and (max-width: 480px) {
 /*#endregion t-s7*/
 
 /*#region t-s8*/
-
-.t-s8 .c-modal {
-  border: 0.1rem solid black;
-}
 
 .t-s8 h3 {
   color: black;
@@ -5932,19 +5946,13 @@ kbd {
   z-index: 4;
 }
 
-.o-alchemy-node--base {
-  background-color: #81d4fa;
+.o-alchemy-node--locked {
+  opacity: 0.1;
+  z-index: 4;
 }
 
-.o-alchemy-node-resource--always-visible {
-  position: absolute;
-  color: #4f5957;
-  text-shadow: none;
-  font-size: 1.2rem;
-  transition: opacity 0.2s;
-  left: 50%;
-  top: 90%;
-  transform: translate(-50%);
+.o-alchemy-node--base {
+  background-color: #81d4fa;
 }
 
 .o-alchemy-node--active {

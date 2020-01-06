@@ -84,22 +84,22 @@ function sacrificeReset(auto) {
   ) {
     return false;
   }
-  EventHub.dispatch(GameEvent.SACRIFICE_RESET_BEFORE);
+  EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
-  if (!auto) floatText(8, `x${shorten(nextBoost, 2, 1)}`);
+  if (!auto) floatText(8, `x${format(nextBoost, 2, 1)}`);
   player.chall8TotalSacrifice = player.chall8TotalSacrifice.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(NormalDimension(1).amount);
-  const isAch118Enabled = Achievement(118).isEnabled;
+  const isAch118Unlocked = Achievement(118).isUnlocked;
   if (NormalChallenge(8).isRunning) {
-    if (!isAch118Enabled) {
+    if (!isAch118Unlocked) {
       NormalDimensions.reset();
     }
     player.antimatter = new Decimal(100);
-  } else if (!isAch118Enabled) {
+  } else if (!isAch118Unlocked) {
     clearDimensions(NormalChallenge(12).isRunning ? 6 : 7);
   }
   player.noSacrifices = false;
-  EventHub.dispatch(GameEvent.SACRIFICE_RESET_AFTER);
+  EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_AFTER);
   return true;
 }
 

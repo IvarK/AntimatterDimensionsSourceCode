@@ -43,9 +43,15 @@ const Effarig = {
     }
   },
   get glyphEffectAmount() {
-    // eslint-disable-next-line no-bitwise
-    const allEffectBitmask = Glyphs.activeList.reduce((prev, curr) => prev | curr.effects, 0);
-    return countEffectsFromBitmask(allEffectBitmask);
+    const genEffectBitmask = Glyphs.activeList
+      .filter(g => generatedTypes.includes(g.type))
+      // eslint-disable-next-line no-bitwise
+      .reduce((prev, curr) => prev | curr.effects, 0);
+    const nongenEffectBitmask = Glyphs.activeList
+      .filter(g => !generatedTypes.includes(g.type))
+      // eslint-disable-next-line no-bitwise
+      .reduce((prev, curr) => prev | curr.effects, 0);
+    return countEffectsFromBitmask(genEffectBitmask) + countEffectsFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
@@ -63,7 +69,7 @@ const Effarig = {
       case EFFARIG_STAGES.INFINITY:
         c = 1500;
         break;
-      case EFFARIG_STAGES.ETERNITY: 
+      case EFFARIG_STAGES.ETERNITY:
         c = 29;
         break;
       case EFFARIG_STAGES.REALITY:
@@ -203,12 +209,16 @@ const EffarigUnlock = (function() {
   };
 }());
 
-EventHub.logic.on(GameEvent.BIG_CRUNCH_BEFORE, () => {
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
+  if (Tab.celestials.effarig.isOpen) Effarig.quotes.show(Effarig.quotes.INITIAL);
+});
+
+EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_BEFORE, () => {
   if (!Effarig.isRunning) return;
   Effarig.quotes.show(Effarig.quotes.COMPLETE_INFINITY);
 });
 
-EventHub.logic.on(GameEvent.ETERNITY_RESET_BEFORE, () => {
+EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_BEFORE, () => {
   if (!Effarig.isRunning) return;
   Effarig.quotes.show(Effarig.quotes.COMPLETE_ETERNITY);
 });

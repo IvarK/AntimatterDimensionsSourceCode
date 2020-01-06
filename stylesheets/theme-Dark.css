@@ -1,20 +1,17 @@
 body.t-dark {
-    background-image: url('../images/dark-bg.png');
-    background-position: center;
+  background-image: url('../images/dark-bg.png');
+  background-position: center;
+  color: #888888;
 }
 
 input.t-dark {
-    background-color: #455A64;
-    border: 1px solid black;
-}
-
-.t-dark .container {
-    color: #888888;
+  background-color: #455A64;
+  border: 1px solid black;
 }
 
 .t-dark .c-tt-amount {
-    color: #64DD17;
-    text-shadow: 0 0 7px #64DD17;
+  color: #64DD17;
+  text-shadow: 0 0 7px #64DD17;
 }
 
 .t-dark .c-tt-buy-button--unlocked {

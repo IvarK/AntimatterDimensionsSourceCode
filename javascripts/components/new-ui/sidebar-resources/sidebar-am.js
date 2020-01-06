@@ -15,10 +15,10 @@ Vue.component("sidebar-am", {
   },
   template:
   `<div class="resource">
-    <h2 id="antimatter">{{ shorten(am, 2, 1) }}</h2>
+    <h2 id="antimatter">{{ format(am, 2, 1) }}</h2>
     <div class="resource-information">
       <span class="resource-name">Antimatter</span>
-      <span class="resource-gain"> +{{ shorten(perSecond, 2, 0) }}/s</span>
+      <span class="resource-gain"> +{{ format(perSecond, 2, 0) }}/s</span>
     </div>
   </div>`
 });

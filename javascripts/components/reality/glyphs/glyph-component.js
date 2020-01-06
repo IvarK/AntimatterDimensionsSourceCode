@@ -106,7 +106,9 @@ const GlyphTooltipComponent = {
       return this.levelOverride ? this.levelOverride : this.level;
     },
     sortedEffects() {
-      return getGlyphEffectsFromBitmask(this.effects, this.effectiveLevel, this.strength);
+      return getGlyphEffectsFromBitmask(this.effects, this.effectiveLevel, this.strength)
+        .filter(effect =>
+          GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },
     rarityInfo() {
       return getRarity(this.strength);
@@ -139,7 +141,7 @@ const GlyphTooltipComponent = {
     levelText() {
       // eslint-disable-next-line no-nested-ternary
       const arrow = this.isLevelCapped ? "▼" : (this.isLevelBoosted ? "⯅" : "");
-      return `Level: ${arrow}${shortenSmallInteger(this.effectiveLevel)}${arrow}`;
+      return `Level: ${arrow}${formatInt(this.effectiveLevel)}${arrow}`;
     },
     levelStyle() {
       // eslint-disable-next-line no-nested-ternary
@@ -147,8 +149,8 @@ const GlyphTooltipComponent = {
       return { color };
     },
     sacrificeText() {
-      if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && this.type !== "reality") {
-        const refinementText = `${shorten(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+      if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY && this.type !== "reality") {
+        const refinementText = `${format(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
         const limitText = this.sacrificeReward === 0
           ? ` (limit reached)`
           : ``;
@@ -156,7 +158,7 @@ const GlyphTooltipComponent = {
           ? `Refine for ${refinementText}${limitText}`
           : `Can be refined for ${refinementText}${limitText}`;
       }
-      const powerText = `${shorten(this.sacrificeReward, 2, 2)} power`;
+      const powerText = `${format(this.sacrificeReward, 2, 2)} power`;
       return this.onTouchDevice
         ? `Sacrifice for ${powerText}`
         : `Can be sacrificed for ${powerText}`;
@@ -357,11 +359,10 @@ Vue.component("glyph-component", {
     },
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
+      this.sacrificeReward = AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY
         ? glyphRefinementGain(this.glyph)
         : glyphSacrificeGain(this.glyph);
-      // eslint-disable-next-line no-nested-ternary
-      this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph.level);
+      this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
     },
     moveTooltipTo(x, y) {
       const tooltipEl = this.$refs.tooltip.$el;

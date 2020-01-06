@@ -33,9 +33,7 @@ const Theme = function Theme(name, colors) {
             document.body.classList.remove(c);
           }
         }
-        if (!this.isDefault()) {
-          document.body.classList.add(this.cssClass());
-        }
+        document.body.classList.add(this.cssClass());
         if (this.isAnimated() && player.options.animations.background) {
             document.getElementById("background-animations").style.display = "block";
         } else {

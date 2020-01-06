@@ -1,7 +1,7 @@
 "use strict";
 
 function startDilatedEternity(auto) {
-  if (!TimeStudy.dilation.isBought) return false;
+  if (!PlayerProgress.dilationUnlocked()) return false;
   if (player.dilation.active) {
       eternity(false, auto, { switchingDilation: true });
       return false;
@@ -20,24 +20,16 @@ function startDilatedEternity(auto) {
   return true;
 }
 
-
-/**
-*
-* @param {Name of the ugrade} id
-* @param {Cost of the upgrade} cost
-* @param {Cost increase for the upgrade, only for rebuyables} costInc
-*
-* id 1-3 are rebuyables
-*
-* id 2 resets your dilated time and free galaxies
-*
-*/
+// @param {Name of the ugrade} id
+// @param {Cost of the upgrade} cost
+// @param {Cost increase for the upgrade, only for rebuyables} costInc
+// id 1-3 are rebuyables
+// id 2 resets your dilated time and free galaxies
 
 const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
-                            5e6,        1e9,         5e7,
-                            2e12,       1e10,        1e11,
-                                        1e15];
-
+                        5e6, 1e9, 5e7,
+                        2e12, 1e10, 1e11,
+                        1e15];
 
 function buyDilationUpgrade(id, bulk) {
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
@@ -79,10 +71,11 @@ function buyDilationUpgrade(id, bulk) {
       if (Enslaved.isRunning) {
         retroactiveTPFactor = Math.pow(retroactiveTPFactor, Enslaved.tachyonNerf);
       }
-      player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
+      player.dilation.tachyonParticles = player.dilation.tachyonParticles
+        .times(Decimal.pow(retroactiveTPFactor, buying));
     }
   }
-  return true
+  return true;
 }
 
 // This two are separate to avoid an infinite loop as the compression unlock condition checks the free galaxy mult

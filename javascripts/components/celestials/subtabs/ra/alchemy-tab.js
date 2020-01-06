@@ -76,8 +76,8 @@ Vue.component("alchemy-tab", {
       infoResourceId: 0,
       focusedResourceId: -1,
       realityCreationAvailable: false,
-      alwaysShowResource: false,
       reactionProgress: 0,
+      estimatedCap: 0,
     };
   },
   computed: {
@@ -101,9 +101,9 @@ Vue.component("alchemy-tab", {
   methods: {
     update() {
       this.realityCreationAvailable = AlchemyResource.reality.amount !== 0;
-      this.alwaysShowResource = player.options.showAlchemyResources;
       const animationTime = 800;
       this.reactionProgress = (player.realTimePlayed % animationTime) / animationTime;
+      this.estimatedCap = estimatedAlchemyCap();
     },
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
@@ -118,6 +118,7 @@ Vue.component("alchemy-tab", {
     },
     handleClick(node) {
       const resource = node.resource;
+      if (!resource.isUnlocked) return;
       if (this.infoResourceId !== resource.id) {
         this.infoResourceId = resource.id;
         this.focusedResourceId = resource.id;
@@ -127,17 +128,22 @@ Vue.component("alchemy-tab", {
       resource.reaction.isActive = !resource.reaction.isActive;
       GameUI.update();
     },
+    isUnlocked(reactionArrow) {
+      return reactionArrow.product.resource.isUnlocked && reactionArrow.reagent.resource.isUnlocked;
+    },
     isCapped(reactionArrow) {
-      return reactionArrow.product.resource.amount >= reactionArrow.reagent.resource.amount;
+      return reactionArrow.product.resource.amount > 0 &&
+        reactionArrow.product.resource.amount >= reactionArrow.reagent.resource.amount;
     },
     isActiveReaction(reactionArrow) {
       return reactionArrow.reaction.isActive;
     },
     isFocusedReaction(reactionArrow) {
-      return reactionArrow.reaction.product.id === this.focusedResourceId;
+      return this.isUnlocked(reactionArrow) && reactionArrow.reaction.product.id === this.focusedResourceId;
     },
     isDisplayed(reactionArrow) {
-      return this.isActiveReaction(reactionArrow) || this.isFocusedReaction(reactionArrow);
+      return this.isUnlocked(reactionArrow) &&
+        (this.isActiveReaction(reactionArrow) || this.isFocusedReaction(reactionArrow));
     },
     isFocusedNode(node) {
       if (this.focusedResourceId === -1) return true;
@@ -173,7 +179,7 @@ Vue.component("alchemy-tab", {
     },
     reactionPathClass(reactionArrow) {
       return {
-        "o-alchemy-reaction-path": true,
+        "o-alchemy-reaction-path": this.isUnlocked(reactionArrow),
         "o-alchemy-reaction-path--limited": this.isCapped(reactionArrow) && this.isDisplayed(reactionArrow),
         "o-alchemy-reaction-path--focused": !this.isCapped(reactionArrow) && this.isFocusedReaction(reactionArrow),
       };
@@ -184,17 +190,14 @@ Vue.component("alchemy-tab", {
         "o-alchemy-reaction-arrow--focused": this.isFocusedReaction(reactionArrow),
       };
     },
-    toggleResourceVisibility() {
-      player.options.showAlchemyResources = !player.options.showAlchemyResources;
-    },
     showAlchemyHowTo() {
       Modal.message.show("You can now refine glyphs using \"Alchemy Mode\" in the glyph auto-sacrifice settings. " +
-        "Refined glyphs will give 1% of their level in alchemy resources. Alchemy reactions can be toggled on " +
-        "and off by clicking the respective nodes, and each resource gives its own boost to various resources " +
-        "in the game. Basic resource totals are limited to the level of the refined glyph, and compound resource " +
-        "totals are limited to the amount of the reactants. All active alchemy reactions are applied once per " +
-        "reality, unaffected by amplification. Toggle reactions on or off by clicking the nodes. You can show the " +
-        "current totals of all alchemy resources by holding shift.");
+        "Refined glyphs will give an amount of their alchemy resources based on their level and rarity. Alchemy " +
+        "reactions can be toggled on and off by clicking the respective nodes, and each resource gives its own " +
+        "boost to various resources in the game. Basic resource totals are limited to 100 times the gain from " +
+        "refining a perfect glyph of the same level, and compound resource totals are limited to the amount of " +
+        "the reactants. All active alchemy reactions are applied once per reality, unaffected by amplification. " +
+        "You can show the current totals of all alchemy resources by holding shift.");
     },
     setAllReactions(value) {
       for (const reaction of AlchemyReactions.all.compact()) {
@@ -206,14 +209,7 @@ Vue.component("alchemy-tab", {
     `<div class="l-ra-alchemy-tab">
       <div @click="showAlchemyHowTo()" class="o-primary-btn">Click for alchemy info</div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      <div>
-        <input type="checkbox"
-          id="alwaysShowResourceBox"
-          v-model="alwaysShowResource"
-          :value="alwaysShowResource"
-          @input="toggleResourceVisibility()">
-        <label for="alwaysShowResourceBox">Always show resource totals</label>
-      </div>
+      Resource cap, based on last 10 realities: {{ format(estimatedCap, 3, 2) }}
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">
           <circle
@@ -224,8 +220,8 @@ Vue.component("alchemy-tab", {
             :r="orbitSize(orbit)"
             :class="orbitClass"
           />
-        </svg> 
-        <alchemy-circle-node 
+        </svg>
+        <alchemy-circle-node
           v-for="(node, i) in layout.nodes"
           :key="i"
           :node="node"
@@ -245,7 +241,7 @@ Vue.component("alchemy-tab", {
             v-bind="reactionArrowPositions(reactionArrow)"
             :class="reactionArrowClass(reactionArrow)"
           />
-        </svg> 
+        </svg>
       </div>
       <button class="o-primary-btn" @click="setAllReactions(true)">Turn on all reactions</button>
       <button class="o-primary-btn" @click="setAllReactions(false)">Turn off all reactions</button>

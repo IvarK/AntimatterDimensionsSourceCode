@@ -51,16 +51,16 @@ Vue.component("time-compression-tab", {
     `<div class="l-dilation-tab">
       <span>
         You have
-        <span class="c-dilation-tab__tachyons">{{shorten(entanglement, 2, 2)}}</span>
+        <span class="c-dilation-tab__tachyons">{{format(entanglement, 2, 2)}}</span>
         Entanglement.
       </span>
       <span>
-        Your total entanglement is {{shorten(totalEntanglement, 2, 2)}}.
+        Your total entanglement is {{format(totalEntanglement, 2, 2)}}.
       </span>
       <compression-button />
       <span>
         Time compression is a stronger type of dilation which dilates values twice, <br>
-        disables time dimensions, and causes the game to run {{ shorten(1e100) }} times slower.
+        disables time dimensions, and causes the game to run {{ format(1e100) }} times slower.
       </span>
       <div class="l-dilation-upgrades-grid">
         <div v-for="row in upgrades" class="l-dilation-upgrades-grid__row">

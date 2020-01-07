@@ -114,7 +114,7 @@ const GlyphTooltipComponent = {
       return getRarity(this.strength);
     },
     roundedRarity() {
-      return 0.1 * Math.floor(strengthToRarity(this.strength) * 10);
+      return 0.1 * Math.floor(strengthToRarity(this.strength) * 10 + 0.5);
     },
     descriptionStyle() {
       return {
@@ -159,9 +159,13 @@ const GlyphTooltipComponent = {
           : `Can be refined for ${refinementText}${limitText}`;
       }
       const powerText = `${format(this.sacrificeReward, 2, 2)} power`;
+      const advancedModeText = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ADVANCED
+        ? `\nScore (Advanced Mode): ${format(AutoGlyphSacrifice.comparedToThreshold(this.$parent.glyph) +
+            AutoGlyphSacrifice.types[this.type].scoreThreshold, 1, 1)}`
+        : "";
       return this.onTouchDevice
-        ? `Sacrifice for ${powerText}`
-        : `Can be sacrificed for ${powerText}`;
+        ? `Sacrifice for ${powerText}${advancedModeText}`
+        : `Can be sacrificed for ${powerText}${advancedModeText}`;
     },
     eventHandlers() {
       return GameUI.touchDevice ? {

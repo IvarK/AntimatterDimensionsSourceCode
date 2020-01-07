@@ -37,8 +37,24 @@ const AutoGlyphSacrifice = {
     if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS) {
       return strengthToRarity(glyph.strength) - typeCfg.rarityThreshold;
     }
+    if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.EFFECTS) {
+      const glyphEffectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
+        .filter(effect =>
+          GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(glyph.type))
+        .map(effect => effect.id);
+      if (strengthToRarity(glyph.strength) < typeCfg.rarityThreshold || glyphEffectList.length < typeCfg.effectCount) {
+        return -100;
+      }
+      for (const effect of Object.keys(typeCfg.effectChoices)) {
+        if (typeCfg.effectChoices[effect] && !glyphEffectList.includes(effect)) return -100;
+      }
+      return strengthToRarity(glyph.strength) - typeCfg.rarityThreshold;
+    }
     if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED) {
-      const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0).map(effect => effect.id);
+      const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
+        .filter(effect =>
+          GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(glyph.type))
+        .map(effect => effect.id);
       const glyphScore = strengthToRarity(glyph.strength) +
         effectList.map(e => typeCfg.effectScores[e]).sum();
       return glyphScore - typeCfg.scoreThreshold;
@@ -1031,7 +1047,7 @@ function getGlyphLevelInputs() {
   const dtEffect = adjustFactor(dtBase, weights.dt / 100);
   const eterEffect = adjustFactor(eterBase, weights.eternities / 100);
   const perkShopEffect = Effects.max(1, PerkShopUpgrade.glyphLevel);
-  const shardFactor = RA_UNLOCKS.SHARD_LEVEL_BOOST.effect();
+  const shardFactor = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) ? RA_UNLOCKS.SHARD_LEVEL_BOOST.effect() : 0;
   let baseLevel = epEffect * replEffect * dtEffect * eterEffect * perkShopEffect + shardFactor;
   let scaledLevel = baseLevel;
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000

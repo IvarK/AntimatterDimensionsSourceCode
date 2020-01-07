@@ -174,7 +174,7 @@ function onBuyDimension(tier) {
 
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
   if (NormalChallenge(4).isRunning || InfinityChallenge(1).isRunning) {
-    NormalDimensions.resetAmount(tier - 1);
+    NormalDimensions.resetAmountUpToTier(tier - 1);
   }
 
   player.postC4Tier = tier;
@@ -590,7 +590,7 @@ const NormalDimensions = {
     GameCache.dimensionMultDecrease.invalidate();
   },
 
-  resetAmount(maxTier) {
+  resetAmountUpToTier(maxTier) {
     for (const dimension of NormalDimensions.all.slice(0, maxTier)) {
       dimension.resetAmount();
     }

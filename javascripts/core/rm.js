@@ -52,6 +52,7 @@ const AutoGlyphSacrifice = {
       case AUTO_GLYPH_SAC_MODE.ALCHEMY:
         return true;
       case AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS:
+      case AUTO_GLYPH_SAC_MODE.EFFECTS:
       case AUTO_GLYPH_SAC_MODE.ADVANCED:
         return this.comparedToThreshold(glyph) < 0;
     }

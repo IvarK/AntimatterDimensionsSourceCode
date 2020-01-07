@@ -738,9 +738,9 @@ function simulateTime(seconds, real, fast) {
 function updateChart(first) {
     if (first !== true && (player.infinitied.gte(1) || player.eternities.gte(1)) && player.options.chart.on === true) {
         if (NormalChallenge(3).isRunning) {
-            addChartData(getDimensionProductionPerSecond(1).times(player.chall3Pow));
+            addChartData(NormalDimension(1).productionPerSecond.times(player.chall3Pow));
         } else {
-            addChartData(getDimensionProductionPerSecond(1));
+            addChartData(NormalDimension(1).productionPerSecond);
         }
     }
     if (player.options.chart.updateRate) {

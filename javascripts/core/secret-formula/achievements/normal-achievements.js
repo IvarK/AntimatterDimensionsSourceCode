@@ -192,7 +192,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Have antimatter/sec exceed your current antimatter above ${format(1e63, 0, 0)}.`,
     checkRequirement: () =>
       player.antimatter.exponent >= 63 &&
-      getDimensionProductionPerSecond(1).gt(player.antimatter),
+      NormalDimension(1).productionPerSecond.gt(player.antimatter),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
@@ -210,7 +210,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Have antimatter/sec exceed your current antimatter
       for ${formatInt(30)} consecutive seconds.`,
     checkRequirement: () => AchievementTimers.marathon1
-      .check(getDimensionProductionPerSecond(1).gt(player.antimatter), 30),
+      .check(NormalDimension(1).productionPerSecond.gt(player.antimatter), 30),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
   },
   {
@@ -397,7 +397,7 @@ GameDatabase.achievements.normal = [
     name: "Can't hold all these infinities",
     tooltip: () => `Get all Dimension multipliers over ${format(1e308)}.`,
     checkRequirement: () => Array.range(1, 8)
-      .every(tier => getDimensionFinalMultiplier(tier).exponent >= 308),
+      .every(tier => NormalDimension(tier).multiplier.exponent >= 308),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "All Dimensions are 10% stronger.",
     effect: 1.1
@@ -444,7 +444,7 @@ GameDatabase.achievements.normal = [
     name: "How the antitables have turned",
     tooltip: "Get the 8th Dimension multiplier to be highest, 7th Dimension multiplier second highest, etc.",
     checkRequirement: () => {
-      const multipliers = Array.range(1, 8).map(getDimensionFinalMultiplier);
+      const multipliers = Array.range(1, 8).map(tier => NormalDimension(tier).multiplier);
       for (let i = 0; i < multipliers.length - 1; i++) {
         if (multipliers[i].gte(multipliers[i + 1])) return false;
       }

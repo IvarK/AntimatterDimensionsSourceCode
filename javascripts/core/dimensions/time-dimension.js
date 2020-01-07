@@ -235,19 +235,18 @@ class TimeDimensionState extends DimensionState {
   }
 }
 
-TimeDimensionState.createIndex();
-
 /**
+ * @function
  * @param {number} tier
  * @return {TimeDimensionState}
  */
-const TimeDimension = tier => TimeDimensionState.index[tier];
+const TimeDimension = TimeDimensionState.createAccessor();
 
 const TimeDimensions = {
   /**
    * @type {TimeDimensionState[]}
    */
-  all: TimeDimensionState.index.compact(),
+  all: TimeDimension.index.compact(),
 
   get scalingPast1e6000() {
     return 4;

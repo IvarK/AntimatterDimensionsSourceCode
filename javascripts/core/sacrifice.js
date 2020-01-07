@@ -96,7 +96,7 @@ function sacrificeReset(auto) {
     }
     player.antimatter = new Decimal(100);
   } else if (!isAch118Unlocked) {
-    clearDimensions(NormalChallenge(12).isRunning ? 6 : 7);
+    NormalDimensions.resetAmountUpToTier(NormalChallenge(12).isRunning ? 6 : 7);
   }
   player.noSacrifices = false;
   EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_AFTER);

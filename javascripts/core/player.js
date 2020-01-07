@@ -530,12 +530,9 @@ const Player = {
   },
 
   get antimatterPerSecond() {
-    const basePerSecond = getDimensionProductionPerSecond(1);
-    if (NormalChallenge(3).isRunning) {
-      return basePerSecond.times(player.chall3Pow);
-    }
+    const basePerSecond = NormalDimension(1).productionPerSecond;
     if (NormalChallenge(12).isRunning) {
-      return basePerSecond.plus(getDimensionProductionPerSecond(2));
+      return basePerSecond.plus(NormalDimension(2).productionPerSecond);
     }
     return basePerSecond.times(getGameSpeedupForDisplay());
   },

@@ -18,7 +18,7 @@ Vue.component("normal-dim-shift-row", {
       return this.isShift ? "Shift" : "Boost";
     },
     dimName() {
-      return DISPLAY_NAMES[this.requirement.tier];
+      return NormalDimension(this.requirement.tier).displayName;
     },
     buttonText() {
       return `Reset your Dimensions for a ${this.isShift ? "new Dimension" : "boost"}`;

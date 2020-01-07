@@ -276,7 +276,7 @@ dev.printResourceTotals = function() {
 
   let NDmults = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
-    NDmults = NDmults.times(getDimensionFinalMultiplier(i));
+    NDmults = NDmults.times(NormalDimension(i).multiplier);
   }
   console.log(`ND mults: e${NDmults.log10().toPrecision(3)}`);
   let IDmults = new Decimal(1);

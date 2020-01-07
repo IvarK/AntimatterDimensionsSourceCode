@@ -159,7 +159,7 @@ const GlyphTooltipComponent = {
           : `Can be refined for ${refinementText}${limitText}`;
       }
       const powerText = `${format(this.sacrificeReward, 2, 2)} power`;
-      const advancedModeText = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ADVANCED
+      const advancedModeText = AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED
         ? `\nScore (Advanced Mode): ${format(AutoGlyphSacrifice.comparedToThreshold(this.$parent.glyph) +
             AutoGlyphSacrifice.types[this.type].scoreThreshold, 1, 1)}`
         : "";
@@ -477,7 +477,8 @@ Vue.component("glyph-component", {
                        :sacrificeReward="sacrificeReward"
                        :showDeletionText="showSacrifice"
                        :levelOverride="levelOverride"
-                       :visible="isCurrentTooltip"/>
+                       :visible="isCurrentTooltip"
+                       :key="isCurrentTooltip"/>
       </div>
       <div ref="over"
            :style="overStyle"

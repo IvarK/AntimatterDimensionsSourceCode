@@ -125,7 +125,7 @@ const AutoSacEffectTab = {
       }
     },
     toggleSelection(effect) {
-      this.autoSacrificeSettings.effectChoices[effect.id] = !this.autoSacrificeSettings.effectChoices[effect.id]
+      this.autoSacrificeSettings.effectChoices[effect.id] = !this.autoSacrificeSettings.effectChoices[effect.id];
       this.$parent.update();
     },
     effectClass(effect) {

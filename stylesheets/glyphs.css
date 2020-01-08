@@ -117,7 +117,8 @@
 
 .c-auto-sac-effect-tab__input::-webkit-inner-spin-button, 
 .c-auto-sac-effect-tab__input::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
+  -webkit-appearance: none;
+  -moz-appearance: none;
   margin: 0; 
 }
 
@@ -131,6 +132,7 @@
   border-radius: 0.2rem;
   border: solid 0.1rem;
   -webkit-appearance: none;
+  -moz-appearance: none;
   margin: 0;
 }
 

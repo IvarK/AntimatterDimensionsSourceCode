@@ -515,6 +515,9 @@ GameStorage.devMigrations = {
         }
       }
       player.celestials.effarig.autoGlyphSac.types = newSettings;
+    },
+    player => {
+      player.reality.glyphs.inventorySize += 10;
     }
   ],
 

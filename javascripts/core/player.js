@@ -258,7 +258,7 @@ let player = {
     glyphs: {
       active: [],
       inventory: [],
-      inventorySize: 100,
+      inventorySize: 110,
       last: "",
       sac: {
         power: 0,

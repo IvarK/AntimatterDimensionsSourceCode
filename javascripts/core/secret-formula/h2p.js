@@ -625,6 +625,10 @@ Active Glyphs can't be unequipped or swapped with other Glyphs without restartin
 equip Glyphs into <i>empty</i> active slots at any time during a Reality.
 <br>
 <br>
+The slots in the first row of your inventory are "protected" slots. New glyphs will never be placed into them (even if
+there is no more room in your inventory), and they are unaffected by the Sort and Auto clean buttons.
+<br>
+<br>
 You can delete Glyphs from your inventory by shift-clicking them, which will prompt you with a confirmation dialog
 asking if you are sure you want to delete the Glyph. Holding shift and ctrl together while clicking will bypass this
 dialog. <b>However, deleting Glyphs will give you no benefit beyond clearing up inventory space if you do so before
@@ -797,35 +801,47 @@ level of Glyphs gained on Reality.
 <br>
 Automatic Glyph Sacrifice is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.autosacrifice.cost)}
 Relic Shards. This lets you automatically reject the Glyph you would get from finishing the Reality if it doesn't meet
-a requirement you specify. You have four options:
+a requirement you specify. You have five options:
 <br>
-"Auto sacrifice disabled" - This is the original behavior you had before this upgrade. New Glyphs you get every Reality
-will be untouched by this feature.
+<b>Auto sacrifice disabled</b> - This is the original behavior you had before this upgrade. New Glyphs you get every
+Reality will be untouched by this feature.
 <br>
-"Auto sacrifice all" - Every Glyph you would normally get is instead immediately sacrificed and adds to your Glyph
+<b>Auto sacrifice all</b> - Every Glyph you would normally get is instead immediately sacrificed and adds to your Glyph
 Sacrifice totals appropriately.
 <br>
-"Set rarity requirements" - The Glyph you get will be compared to a type-specific rarity threshold you specify. If it's
-above the threshold then the Glyph is kept and put into your inventory, otherwise it is sacrificed.
+<b>Rarity Threshold Mode</b> - The Glyph you get will be compared to a type-specific rarity threshold you specify. If
+it's above the threshold then the Glyph is kept and put into your inventory, otherwise it is sacrificed.
 <br>
-"Advanced Mode" - Like "Set rarity requirements", but you can additionally make certain effects worth a certain amount
-of rarity in order to control what effects in particular are on the Glyphs you receive. For example if you specifically
-wanted to filter for Time Glyphs of rarity >60% with the EP multiplier effect, you could make the EP effect worth 100
-(and all other effects 0) and filter Time Glyphs with a threshold of 160.
+<b>Specified Effect Mode</b> - In addition to the behavior in Rarity Threshold Mode, the Glyph will also be checked for
+having a minimum number of effects and having all of the effects you choose. It must satisfy all three of these
+conditions to be chosen, otherwise it is sacrificed.
+<br>
+<b>Advanced Mode</b> - Like Specified Effect Mode, but you have even finer control over the effects of your Glyphs. The
+"score" of a Glyph is calculated from its rarity plus the score of each effect it has, and this score must be higher
+than an amount you specify in order for the Glyph to be chosen. One possible way you can use this behavior is to give
+a weaker effect a value of 5, which allows you to keep Glyphs without that effect as long as they are rarer.
 <br>
 <br>
-Automatic Glyph Picking is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.autopicker.cost)}. This
-gives you three options for choosing Glyphs after each Reality:
+<i>Note: If desired, "Specified Effect Mode" and "Advanced Mode" can be used to filter out some Glyph types entirely;
+for example setting impossible conditions like "at least 6 effects" or "Minimum score 999 and all effects worth 0" on
+Power Glyphs will make it so that a Power Glyph is never picked.</i>
 <br>
-"Auto pick random" - This is the behavior before this upgrade; the game looks at your possible choices and just takes
-one of them at random before considering your filtering settings on that single Glyph.
 <br>
-"Auto pick rarest" - Out of all your choices, it chooses the one with the highest rarity. Then it takes that Glyph and
-checks your filter settings to see if it should be kept.
+Automatic Glyph Picking is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.autopicker.cost)} Relic
+Shards. This gives you three options for choosing Glyphs after each Reality:
 <br>
-"Auto pick farthest above threshold" - This checks your filter settings against <i>all</i> of your Glyph choices, and
-then picks which one is the best according to your settings. For disabled/all, this effectively picks one at random.
-For rarity/advanced, it calculates (rarity - threshold) for each choice and chooses the one with the highest value.
+<b>Auto pick random</b> - This is the behavior before this upgrade; the game looks at your possible choices and just
+takes one of them at random before considering your filtering settings on that single Glyph.
+<br>
+<b>Auto pick rarest</b> - Out of all your choices, it chooses the one with the highest rarity. Then it takes that Glyph
+and checks your filter settings to see if it should be kept. The rarest Glyph will be guaranteed to have the highest
+sacrifice value out of all your options.
+<br>
+<b>Auto pick farthest above threshold</b> - This checks your filter settings against <i>all</i> of your Glyph choices,
+and then picks which one is the best according to your settings. For disabled/all, this effectively picks at random.
+For rarity/effect, it calculates (rarity - threshold) for each choice and chooses the one with the highest value,
+ignoring Glyphs without the right effects on effect mode. For advanced, it picks the Glyph that is the farthest above
+the minimum score for its type.
 `,
       isUnlocked: () => EffarigUnlock.adjuster.isUnlocked,
       tags: ["glyph", "weight", "adjustment", "sacrifice", "filter", "advanced", "threshold", "reality", "lategame",

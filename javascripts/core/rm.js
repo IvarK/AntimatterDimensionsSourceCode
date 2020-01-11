@@ -39,8 +39,7 @@ const AutoGlyphSacrifice = {
     }
     if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.EFFECTS) {
       const glyphEffectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
-        .filter(effect =>
-          GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(glyph.type))
+        .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated)
         .map(effect => effect.id);
       if (strengthToRarity(glyph.strength) < typeCfg.rarityThreshold || glyphEffectList.length < typeCfg.effectCount) {
         return -100;
@@ -52,8 +51,7 @@ const AutoGlyphSacrifice = {
     }
     if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED) {
       const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
-        .filter(effect =>
-          GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(glyph.type))
+        .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated)
         .map(effect => effect.id);
       const glyphScore = strengthToRarity(glyph.strength) +
         effectList.map(e => typeCfg.effectScores[e]).sum();

@@ -121,12 +121,11 @@ const AutoSacEffectTab = {
     setEffectCount(event) {
       const inputValue = event.target.value;
       if (!isNaN(inputValue)) {
-        this.autoSacrificeSettings.effectCount = Math.min(8, Math.max(inputValue, 0));
+        this.autoSacrificeSettings.effectCount = Math.clamp(inputValue, 0, 8);
       }
     },
     toggleSelection(effect) {
       this.autoSacrificeSettings.effectChoices[effect.id] = !this.autoSacrificeSettings.effectChoices[effect.id];
-      this.$parent.update();
     },
     effectClass(effect) {
       return {

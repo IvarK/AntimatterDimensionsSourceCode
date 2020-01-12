@@ -45,6 +45,9 @@ Vue.component("news-ticker", {
           this.currentNews = GameDatabase.news.randomElement();
         } while (!isUnlocked(this.currentNews));
       }
+      if (this.currentNews.reset) {
+        this.currentNews.reset();
+      }
 
       line.innerHTML = this.currentNews.text;
 
@@ -70,9 +73,6 @@ Vue.component("news-ticker", {
         line.style.transform = "translateX(0)";
       } else {
         line.style.transform = "translateX(-100%)";
-      }
-      if (this.currentNews.reset) {
-        this.currentNews.reset();
       }
       
       player.news.add(this.currentNews.id);

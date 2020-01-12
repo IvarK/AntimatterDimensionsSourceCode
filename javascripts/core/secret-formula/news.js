@@ -1385,8 +1385,8 @@ GameDatabase.news = [
       },
       onClick() {
         isFlipped = !isFlipped;
-      },
-      dynamic: true
+        return this.text;
+      }
     };
   }()),
   {
@@ -1709,8 +1709,8 @@ GameDatabase.news = [
       onClick() {
         if (!wasClicked) player.secretUnlocks.paperclips++;
         wasClicked = true;
-      },
-      dynamic: true
+        return this.text;
+      }
     };
   }()),
   {

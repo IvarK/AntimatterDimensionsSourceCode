@@ -63,6 +63,9 @@ const Effarig = {
   get shardAmount() {
     return player.celestials.effarig.relicShards;
   },
+  get maxRarityBoost() {
+    return 5 * Math.log10(Math.log10(this.shardAmount + 10));
+  },
   nerfFactor(power) {
     let c;
     switch (this.currentStage) {

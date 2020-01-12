@@ -1,6 +1,6 @@
 "use strict";
 
-const AutoSacTypeTab = {
+const AutoSacAdvancedTab = {
   props: {
     glyphType: String,
   },
@@ -85,9 +85,87 @@ const AutoSacTypeTab = {
   `
 };
 
+const AutoSacEffectTab = {
+  props: {
+    glyphType: String,
+  },
+  data() {
+    return {
+      effectCount: 0,
+      effectChoices: Object.assign({}, AutoGlyphSacrifice.types[this.glyphType].effectChoices),
+    };
+  },
+  computed: {
+    typeConfig() {
+      return GlyphTypes[this.glyphType];
+    },
+    autoSacrificeSettings() {
+      return AutoGlyphSacrifice.types[this.glyphType];
+    },
+    effects() {
+      return this.typeConfig.effects;
+    },
+    descStyle() {
+      return {
+        "border-color": this.typeConfig.color,
+      };
+    }
+  },
+  methods: {
+    update() {
+      this.effectCount = this.autoSacrificeSettings.effectCount;
+      for (const e of this.effects) {
+        this.effectChoices[e.id] = this.autoSacrificeSettings.effectChoices[e.id];
+      }
+    },
+    setEffectCount(event) {
+      const inputValue = event.target.value;
+      if (!isNaN(inputValue)) {
+        this.autoSacrificeSettings.effectCount = Math.clamp(inputValue, 0, 8);
+      }
+    },
+    toggleSelection(effect) {
+      this.autoSacrificeSettings.effectChoices[effect.id] = !this.autoSacrificeSettings.effectChoices[effect.id];
+    },
+    effectClass(effect) {
+      return {
+        "c-glyph-sacrifice-options__option--active": this.autoSacrificeSettings.effectChoices[effect.id],
+        "c-glyph-sacrifice-options__option--inactive": !this.autoSacrificeSettings.effectChoices[effect.id],
+      };
+    },
+  },
+  template: `
+    <div class="c-glyph-sacrifice-options__advanced">
+      <div>
+        Selected glyphs will have<br>
+        at least 
+        <input type="number" min="0" max="8" :value="effectCount"
+               ref="effectCount" @blur="setEffectCount"
+               class="c-auto-sac-effect-tab__input"/>
+        effects total,<br>
+        which must include all of<br>
+        the following effects:
+      </div>
+      <div v-for="effect in effects" class="l-auto-sac-type-tab__row-wrapper">
+        <div 
+          :class="effectClass(effect)"
+          class="c-auto-sac-type-tab__effect-desc l-auto-sac-type-tab__effect-desc" :style="descStyle">
+          {{ typeof effect.genericDesc === "function" ? effect.genericDesc() : effect.genericDesc }}
+        </div>
+        <input type="checkbox"
+          :value="effectChoices[effect.id]"
+          v-model="effectChoices[effect.id]"
+          @click="toggleSelection(effect)"
+          class="c-auto-sac-effect-tab__checkbox"/>
+      </div>
+    </div>
+  `
+};
+
 Vue.component("glyph-sacrifice-options", {
   components: {
-    "auto-sac-type-tab": AutoSacTypeTab,
+    "auto-sac-effect-tab": AutoSacEffectTab,
+    "auto-sac-advanced-tab": AutoSacAdvancedTab,
   },
   data() {
     return {
@@ -160,7 +238,7 @@ Vue.component("glyph-sacrifice-options", {
     update() {
       this.unlocked = EffarigUnlock.autosacrifice.isUnlocked;
       this.mode = AutoGlyphSacrifice.mode;
-      for (const type of GLYPH_TYPES) {
+      for (const type of generatedTypes) {
         this.rarityThresholds[type] = AutoGlyphSacrifice.types[type].rarityThreshold;
       }
       this.lockedTypes = GlyphTypes.locked.map(e => e.id);
@@ -185,32 +263,55 @@ Vue.component("glyph-sacrifice-options", {
       Auto sacrifice all
     </div>
     <div :class="optionClass(modes.RARITY_THRESHOLDS)" @click="setMode(modes.RARITY_THRESHOLDS)">
-      Set rarity requirements
+      Rarity Threshold Mode
+    </div>
+    <div :class="optionClass(modes.EFFECTS)" @click="setMode(modes.EFFECTS)">
+      Specified Effect Mode
     </div>
     <div :class="optionClass(modes.ADVANCED)" @click="setMode(modes.ADVANCED)">
-    ❃.✮:▹ Advanced mode ◃:✮.❃
+      ❃.✮:▹ Advanced mode ◃:✮.❃
     </div>
     <div v-if="alchemyUnlocked" :class="optionClass(modes.ALCHEMY)" @click="setMode(modes.ALCHEMY)">
-    🜁 🜄 Alchemy mode 🜃 🜂
+      🜁 🜄 Alchemy mode 🜃 🜂
     </div>
     <div v-if="mode === 2" class="l-glyph-sacrifice-options__rarity-sliders c-glyph-sacrifice-options__rarity-sliders">
+      <span class="c-glyph-sacrifice-options__advanced">
+        Minimum Rarity:
+      </span>
       <div v-for="type in glyphTypes" :key="type.id" class="l-glyph-sacrifice-options__rarity-slider-div">
         <glyph-component :glyph="{type: type.id, strength: strengthThreshold(type.id) }" v-bind="glyphIconProps"/>
         <ad-slider-component v-bind="raritySliderProps" :value="rarityThresholds[type.id]"
                              @input="setRarityThreshold(type.id, $event)"/>
       </div>
     </div>
-    <div v-if="mode === 3" class="l-glyph-sacrifice-options__advanced c-glyph-sacrifice-options__advanced">
+    <div v-if="mode === 3" class="l-glyph-sacrifice-options__rarity-sliders c-glyph-sacrifice-options__rarity-sliders">
+      <span v-for="type in glyphTypes" :key="type.id"
+            class="l-glyph-sacrifice-options__advanced-type-select c-glyph-sacrifice-options__advanced-type-select"
+            :style="advancedTypeSelectStyle(type)" @click="advancedType=type.id">
+        {{type.symbol}}
+      </span><br>
+      <span class="c-glyph-sacrifice-options__advanced">
+        Minimum Rarity:
+      </span>
+      <div class="l-glyph-sacrifice-options__rarity-slider-div">
+        <glyph-component :glyph="{type: advancedType, strength: strengthThreshold(advancedType) }"
+          v-bind="glyphIconProps"/>
+        <ad-slider-component v-bind="raritySliderProps" :value="rarityThresholds[advancedType]"
+                            @input="setRarityThreshold(advancedType, $event)"/>
+      </div>
+      <auto-sac-effect-tab :glyph-type="advancedType"/>
+    </div>
+    <div v-if="mode === 4" class="l-glyph-sacrifice-options__advanced c-glyph-sacrifice-options__advanced">
       <span v-for="type in glyphTypes" :key="type.id"
             class="l-glyph-sacrifice-options__advanced-type-select c-glyph-sacrifice-options__advanced-type-select"
             :style="advancedTypeSelectStyle(type)" @click="advancedType=type.id">
         {{type.symbol}}
       </span>
       <template v-for="type in glyphTypes">
-        <auto-sac-type-tab v-show="type.id === advancedType" :glyph-type="type.id"/>
+        <auto-sac-advanced-tab v-show="type.id === advancedType" :glyph-type="type.id"/>
       </template>
     </div>
-    <div v-if="mode === 4">
+    <div v-if="mode === 5">
       <br> All sacrificed glyphs will be
       <br> refined into alchemy resources.
       <br> (New glyphs will be sacrificed.)

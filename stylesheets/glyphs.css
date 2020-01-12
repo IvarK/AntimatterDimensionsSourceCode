@@ -115,6 +115,34 @@
   text-align: center;
 }
 
+.c-auto-sac-effect-tab__input::-webkit-inner-spin-button, 
+.c-auto-sac-effect-tab__input::-webkit-outer-spin-button { 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  margin: 0; 
+}
+
+.c-auto-sac-effect-tab__input {
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 1.2rem;
+  text-align: center;
+  background-color: #333;
+  color: #d5ffd7;
+  border-radius: 0.2rem;
+  border: solid 0.1rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  margin: 0;
+}
+
+.c-auto-sac-effect-tab__checkbox {
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 0.2rem;
+  border: solid 0.1rem;
+}
+
 .c-auto-sac-type-tab__input:focus {
   font-weight: bold;
   background-color: #555;

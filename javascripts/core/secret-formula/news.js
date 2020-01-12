@@ -617,7 +617,7 @@ GameDatabase.news = [
   },
   {
     id: "a130",
-    text: "Click this to unlock a secret achievement."
+    text: "Click this to unlock that one secret achievement."
   },
   {
     id: "a131",
@@ -1010,7 +1010,17 @@ GameDatabase.news = [
   },
   {
     id: "a196",
-    text: "Disco Time! (click me!)"
+    text: "Disco Time! (click me!)",
+    onClick() {
+      let random = Math.random();
+      // Golden ratio
+      random += 0.618033988749895;
+      random %= 1;
+      random *= 255;
+      const color = `hsl(${random}, 90%, 60%)`;
+      return `<span style='color: ${color}; text-shadow: 0 0 0.5rem ${color};
+        animation: text-grow 0.4s infinite;'>Disco Time!</span>`;
+    }
   },
   {
     id: "a197",
@@ -1113,6 +1123,10 @@ GameDatabase.news = [
         return `Nothing happens when you click this text. And yet, you've clicked it ${clicks} ${plural}.`;
       }
       return "Nothing happens when you click this text. And you understand that.";
+    },
+    onClick() {
+      player.secretUnlocks.uselessNewsClicks++;
+      return this.currentNews.text;
     }
   },
   {
@@ -1355,12 +1369,26 @@ GameDatabase.news = [
     id: "a246",
     text: "<span style='animation: fade-out 3s infinite'>OoooOOOOooOOO, it's me, the infamous news ghost!</span>",
   },
-  {
-    id: "a247",
-    text:
-      "This news message is a test of \"News 2.0\". News 2.0 will feature things like the ability to click on " +
-      "news messages to flip them upside down!",
-  },
+  (function() {
+    let isFlipped = false;
+    const normal = "This news message is a test of \"News 2.0\". News 2.0 will feature things like the ability to " +
+      "click on news messages to flip them upside down!";
+    const flipped = "¡uʍop ǝpᴉsdn ɯǝɥʇ dᴉlɟ oʇ sǝƃɐssǝɯ sʍǝu uo ʞɔᴉlɔ oʇ ʎʇᴉlᴉqɐ ǝɥʇ ǝʞᴉl sƃuᴉɥʇ ǝɹnʇɐǝɟ llᴉʍ 0˙ᄅ " +
+      "sʍǝN ˙,,0˙ᄅ sʍǝN,, ɟo ʇsǝʇ ɐ sᴉ ǝƃɐssǝɯ sʍǝu sᴉɥ┴";
+    return {
+      id: "a247",
+      get text() {
+        return isFlipped ? flipped : normal;
+      },
+      reset() {
+        isFlipped = false;
+      },
+      onClick() {
+        isFlipped = !isFlipped;
+      },
+      dynamic: true
+    };
+  }()),
   {
     id: "a248",
     text:
@@ -1626,7 +1654,11 @@ GameDatabase.news = [
   },
   {
     id: "a289",
-    text: "Click here to disassemble the news ticker for a trace amount of paperclips."
+    text: "Click here to disassemble the news ticker for a trace amount of paperclips.",
+    onClick() {
+      player.secretUnlocks.paperclips++;
+      GameOptions.toggleNews();
+    }
   },
   {
     id: "a290",
@@ -1662,10 +1694,25 @@ GameDatabase.news = [
     id: "a295",
     text: "👁"
   },
-  {
-    id: "a296",
-    text: "Click on this news message to hard reset your game."
-  },
+  (function() {
+    let wasClicked = false;
+    const normal = "Click on this news message to hard reset your game.";
+    const clicked = "You're crazy. You know what, here. Have a paperclip.";
+    return {
+      id: "a296",
+      get text() {
+        return wasClicked ? clicked : normal;
+      },
+      reset() {
+        wasClicked = false;
+      },
+      onClick() {
+        if (!wasClicked) player.secretUnlocks.paperclips++;
+        wasClicked = true;
+      },
+      dynamic: true
+    };
+  }()),
   {
     id: "a297",
     text: "I don't think, therefore I'm not."

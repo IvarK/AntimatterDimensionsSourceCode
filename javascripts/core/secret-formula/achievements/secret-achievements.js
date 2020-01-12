@@ -64,7 +64,7 @@ GameDatabase.achievements.secret = [
   {
     id: 24,
     name: "Real news",
-    tooltip: "Click on the news ticker that tells you to click on it."
+    tooltip: "Click on a news ticker that does something when you click on it."
   },
   {
     id: 25,

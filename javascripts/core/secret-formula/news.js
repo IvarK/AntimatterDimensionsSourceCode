@@ -1708,6 +1708,7 @@ GameDatabase.news = [
       },
       onClick() {
         if (wasClicked) return undefined;
+        wasClicked = true;
         player.secretUnlocks.paperclips++;
         return this.text;
       }

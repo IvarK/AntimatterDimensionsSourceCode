@@ -116,7 +116,7 @@ const Achievements = {
   },
 
   _power: new Lazy(() => {
-    const unlockedRows = Array.range(1, 14)
+    const unlockedRows = Array.range(1, 15)
       .map(Achievements.row)
       .countWhere(row => row.every(ach => ach.isUnlocked));
     const basePower = Math.pow(1.25, unlockedRows) * Math.pow(1.03, Achievements.effectiveCount);

@@ -31,10 +31,7 @@ GameDatabase.eternity.upgrades = {
     cost: 5e4,
     description: "Infinity Dimensions multiplier based on sum of Infinity Challenge times",
     effect() {
-      const sumOfRecords = Math.max(
-        Time.infinityChallengeSum.totalMilliseconds,
-        Effects.min(750, Achievement(112))
-      );
+      const sumOfRecords = Math.max(Time.infinityChallengeSum.totalMilliseconds, 610);
       return Decimal.pow(2, 30000 / sumOfRecords);
     },
     formatEffect: value => formatX(value, 2, 1)

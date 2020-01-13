@@ -1126,7 +1126,7 @@ GameDatabase.news = [
     },
     onClick() {
       player.secretUnlocks.uselessNewsClicks++;
-      return this.currentNews.text;
+      return this.text;
     }
   },
   {
@@ -1707,8 +1707,8 @@ GameDatabase.news = [
         wasClicked = false;
       },
       onClick() {
-        if (!wasClicked) player.secretUnlocks.paperclips++;
-        wasClicked = true;
+        if (wasClicked) return undefined;
+        player.secretUnlocks.paperclips++;
         return this.text;
       }
     };

@@ -74,7 +74,7 @@ Vue.component("news-ticker", {
       } else {
         line.style.transform = "translateX(-100%)";
       }
-      
+
       player.news.add(this.currentNews.id);
       if (player.news.size >= 50) Achievement(22).unlock();
 

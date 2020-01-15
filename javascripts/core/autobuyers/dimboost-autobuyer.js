@@ -69,18 +69,13 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends IntervaledAutobuye
       super.tick();
       return;
     }
-    if (DimBoost.purchasedBoosts >= this.maxDimBoosts && player.galaxies < this.galaxies) {
-      return;
-    }
-    if (this.isBulkBuyUnlocked && !DimBoost.isShift) {
-      const bulk = Math.clampMin(this.bulk, 1);
-      if (!DimBoost.bulkRequirement(bulk).isSatisfied) return;
+
+    const bulk = (this.isBulkBuyUnlocked && !DimBoost.isShift) ? Math.clampMin(this.bulk, 1) : 1;
+
+    if ((DimBoost.purchasedBoosts + bulk <= this.maxDimBoosts || player.galaxies >= this.galaxies) &&
+          DimBoost.bulkRequirement(bulk).isSatisfied) {
       softReset(bulk);
       super.tick();
-      return;
     }
-    if (!DimBoost.requirement.isSatisfied) return;
-    softReset(1);
-    super.tick();
   }
 }();

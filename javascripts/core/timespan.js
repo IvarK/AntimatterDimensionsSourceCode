@@ -246,7 +246,7 @@ class TimeSpan {
     }
     if (this.totalHours < 100) {
       if (useHMS && !Notations.current.isPainful) {
-        return `${format(Math.floor(this.totalHours))}:${format(this.minutes)}:${format(this.seconds)}`;
+        return `${formatHMS(Math.floor(this.totalHours))}:${formatHMS(this.minutes)}:${formatHMS(this.seconds)}`;
       }
       if (this.totalMinutes < 60) {
         return `${format(this.totalMinutes, 0, 2)} minutes`;
@@ -260,7 +260,7 @@ class TimeSpan {
     }
     return `${format(this.totalYears, 3, 2)} years`;
 
-    function format(value) {
+    function formatHMS(value) {
       const s = value.toString();
       return s.length === 1 ? `0${s}` : s;
     }

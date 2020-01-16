@@ -382,9 +382,9 @@ GameDatabase.achievements.normal = [
     id: 71,
     name: "ERROR 909: Dimension not found",
     tooltip: "Get to Infinity with only a single 1st Dimension without Dimension Boosts/Shifts " +
-      "or Antimatter Galaxies, while in the Automatic Antimatter Galaxies Challenge.",
+      "or Antimatter Galaxies, while in the Second Dimension Autobuyer Challenge.",
     checkRequirement: () =>
-      NormalChallenge(11).isRunning &&
+      NormalChallenge(2).isRunning &&
       NormalDimension(1).amount.eq(1) &&
       DimBoost.purchasedBoosts === 0 &&
       player.galaxies === 0,

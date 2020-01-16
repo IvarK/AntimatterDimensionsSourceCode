@@ -36,7 +36,7 @@ Vue.component("infinity-dim-row", {
         : "";
     },
     costDisplay() {
-      return this.isCapped ? "Capped!" : `Cost: ${format(this.costMult, 0, 0)} IP`;
+      return this.isCapped ? "Capped!" : `Cost: ${format(this.cost, 0, 0)} IP`;
     },
     hardcapPurchases() {
       return format(this.hardcap, 1, 1);

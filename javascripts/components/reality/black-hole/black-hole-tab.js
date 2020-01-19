@@ -24,7 +24,8 @@ Vue.component("black-hole-tab", {
       };
     },
     negativeBlackHoleLabel() {
-      return `Negative black hole gives 1e-${this.currentNegative} game speed, only works when black hole is paused.`;
+      return `Negative black hole divides game speed by ${shorten(1 / this.currentNegative, 2, 2)}. ` +
+        "This only works when black hole is paused.";
     }
   },
   mounted() {

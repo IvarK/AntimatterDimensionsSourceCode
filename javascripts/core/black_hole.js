@@ -340,14 +340,14 @@ const BlackHoles = {
    * starting from black hole 1 and black hole 0 being normal game.
    */
   calculateSpeedups() {
-    const effectsToConsider = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH, GAME_SPEED_EFFECT.BLACK_HOLE,
-      GAME_SPEED_EFFECT.MOMENTUM];
-    const speedupWithoutBlackHole = getGameSpeedupFactor(effectsToConsider, 1);
+    const effectsToConsider = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
+      GAME_SPEED_EFFECT.MOMENTUM, GAME_SPEED_EFFECT.NERFS];
+    const speedupWithoutBlackHole = getGameSpeedupFactor(effectsToConsider);
     const speedups = [1];
+    effectsToConsider.push(GAME_SPEED_EFFECT.BLACK_HOLE);
     for (const blackHole of this.list) {
       if (!blackHole.isUnlocked) break;
-      const speedupFactor = getGameSpeedupFactor(effectsToConsider, undefined, blackHole.id);
-      speedups.push(speedupFactor / speedupWithoutBlackHole);
+      speedups.push(getGameSpeedupFactor(effectsToConsider, blackHole.id) / speedupWithoutBlackHole);
     }
     return speedups;
   },

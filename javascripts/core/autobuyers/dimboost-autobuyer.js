@@ -71,15 +71,10 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends IntervaledAutobuye
     }
 
     const bulk = (this.isBulkBuyUnlocked && !DimBoost.isShift) ? Math.clampMin(this.bulk, 1) : 1;
-
     const isConditionSatisfied = DimBoost.purchasedBoosts + bulk <= this.maxDimBoosts ||
       player.galaxies >= this.galaxies;
     if (!isConditionSatisfied || !DimBoost.bulkRequirement(bulk).isSatisfied) return;
     softReset(bulk);
     super.tick();
-          DimBoost.bulkRequirement(bulk).isSatisfied) {
-      softReset(bulk);
-      super.tick();
-    }
   }
 }();

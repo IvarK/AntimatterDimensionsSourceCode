@@ -466,7 +466,6 @@ function finishProcessReality(realityProps) {
 
   player.reality.gainedAutoAchievements = false;
 
-  tryUnlockAchievementsOnReality();
   if (realityProps.restoreCelestialState) restoreCelestialRuns(celestialRunState);
 }
 
@@ -558,26 +557,13 @@ function startRealityOver() {
 }
 
 function lockAchievementsOnReality() {
-  const startRow = GameCache.achSkipPerkCount.value + 1;
-  const lastRow = 13;
-  if (startRow > lastRow) return;
-  const lockedRows = lastRow - startRow + 1;
-  for (const row of Achievements.rows(startRow, lockedRows)) {
+  const preRealityRows = Achievements.preRealityRows;
+  const lockedRowCount = preRealityRows.length - GameCache.achSkipPerkCount.value;
+  const lockedRows = preRealityRows.slice(-lockedRowCount);
+  for (const row of lockedRows) {
     for (const achievement of row) {
       achievement.lock();
     }
   }
   player.reality.achTimer = 0;
-}
-
-function tryUnlockAchievementsOnReality() {
-  const startRow = GameCache.achSkipPerkCount.value + 1;
-  const lastRow = 13;
-  for (let r = startRow; r <= lastRow; ++r) {
-    // If the achievement has a checkEvent set, that means that it
-    // can't be checked out of context:
-    for (const a of Achievements.row(r)) {
-      if (a.config.checkEvent === undefined) a.tryUnlock();
-    }
-  }
 }

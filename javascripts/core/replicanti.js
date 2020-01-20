@@ -309,18 +309,24 @@ const ReplicantiUpgrade = {
     get baseCost() { return player.replicanti.galCost; }
     set baseCost(value) { player.replicanti.galCost = value; }
 
+    get distantRGStart() {
+      return 100 + Effects.sum(GlyphSacrifice.replication);
+    }
+
+    get remoteRGStart() {
+      return 1000 + Effects.sum(GlyphSacrifice.replication);
+    }
+
     get costIncrease() {
       const galaxies = this.value;
       let increase = EternityChallenge(6).isRunning
         ? Decimal.pow(1e2, galaxies).times(1e2)
         : Decimal.pow(1e5, galaxies).times(1e25);
-      const distantReplicatedGalaxyStart = 100 + Effects.sum(GlyphSacrifice.replication);
-      if (galaxies >= distantReplicatedGalaxyStart) {
-        increase = increase.times(Decimal.pow(1e50, galaxies - distantReplicatedGalaxyStart + 5));
+      if (galaxies >= this.distantRGStart) {
+        increase = increase.times(Decimal.pow(1e50, galaxies - this.distantRGStart + 5));
       }
-      const remoteReplicatedGalaxyStart = 1000 + Effects.sum(GlyphSacrifice.replication);
-      if (galaxies >= remoteReplicatedGalaxyStart) {
-        increase = increase.times(Decimal.pow(1e5, Math.pow(galaxies - remoteReplicatedGalaxyStart + 1, 2)));
+      if (galaxies >= this.remoteRGStart) {
+        increase = increase.times(Decimal.pow(1e5, Math.pow(galaxies - this.remoteRGStart + 1, 2)));
       }
       return increase;
     }

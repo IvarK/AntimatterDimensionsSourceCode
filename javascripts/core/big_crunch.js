@@ -80,7 +80,7 @@ function bigCrunchReset() {
 
   // FIXME: Infinitified is now Decimal so decide what happens here!
   // kong.submitStats('Infinitied', Player.totalInfinitied);
-  kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime));
+  kong.submitStats("Fastest Infinity time (ms)", Math.floor(player.bestInfinityTime));
 
   const currentReplicanti = player.replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;

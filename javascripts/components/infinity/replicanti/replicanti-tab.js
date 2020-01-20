@@ -11,6 +11,8 @@ Vue.component("replicanti-tab", {
       mult: new Decimal(0),
       hasRaisedCap: false,
       replicantiCap: new Decimal(0),
+      distantRG: 0,
+      remoteRG: 0,
       effarigInfinityBonusRG: 0,
       nextEffarigRGThreshold: 0
     };
@@ -68,6 +70,8 @@ Vue.component("replicanti-tab", {
       this.mult.copyFrom(replicantiMult());
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked;
       this.replicantiCap.copyFrom(replicantiCap());
+      this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;
+      this.remoteRG = ReplicantiUpgrade.galaxies.remoteRGStart;
       this.effarigInfinityBonusRG = Effarig.bonusRG;
       this.nextEffarigRGThreshold = Decimal.MAX_NUMBER.pow(Effarig.bonusRG + 2);
     }
@@ -100,6 +104,10 @@ Vue.component("replicanti-tab", {
           <replicanti-upgrade-button :setup="replicantiChanceSetup" />
           <replicanti-upgrade-button :setup="replicantiIntervalSetup" />
           <replicanti-upgrade-button :setup="maxGalaxySetup" />
+        </div>
+        <div>
+          The Max Replicanti Galaxy upgrade can be purchased endlessly,<br>
+          but costs increase more rapidly above {{formatInt(distantRG)}} RG and {{formatInt(remoteRG)}} RG.
         </div>
         <br>
         <br>

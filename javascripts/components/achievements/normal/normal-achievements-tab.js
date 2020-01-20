@@ -10,7 +10,7 @@ Vue.component("normal-achievements-tab", {
     };
   },
   computed: {
-    rows: () => Achievements.rows(1, 15),
+    rows: () => Achievements.allRows,
     swapImagesButton() {
       return Theme.current().name === "S4" || this.isCancer ? "😂" : ".";
     }

@@ -73,10 +73,27 @@ const Achievements = {
    * @type {AchievementState[]}
    */
   all: Achievement.index.compact(),
+
   /**
    * @type {AchievementState[]}
    */
-  preReality: Achievement.index.compact().filter(ach => ach.isPreReality),
+  get preReality() {
+    return Achievements.all.filter(ach => ach.isPreReality);
+  },
+
+  get allRows() {
+    const count = Achievements.all.map(a => a.row).max();
+    return Achievements.rows(1, count);
+  },
+
+  get preRealityRows() {
+    const count = Achievements.preReality.map(a => a.row).max();
+    return Achievements.rows(1, count);
+  },
+
+  rows: (start, count) => Array.range(start, count).map(Achievements.row),
+
+  row: row => Array.range(row * 10 + 1, 8).map(Achievement),
 
   get effectiveCount() {
     const unlockedAchievements = Achievements.all.countWhere(a => a.isUnlocked);
@@ -87,10 +104,6 @@ const Achievements = {
   get period() {
     return TimeSpan.fromMinutes(30).totalMilliseconds;
   },
-
-  row: row => Array.range(row * 10 + 1, 8).map(Achievement),
-
-  rows: (start, count) => Array.range(start, count).map(Achievements.row),
 
   autoAchieveUpdate(diff) {
     if (player.realities === 0) return;
@@ -110,14 +123,13 @@ const Achievements = {
 
   timeToNextAutoAchieve() {
     if (player.realities === 0) return 0;
-    if (GameCache.achSkipPerkCount.value >= 13) return 0;
+    if (GameCache.achSkipPerkCount.value >= Achievements.preRealityRows.length) return 0;
     if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) return 0;
     return Math.max(this.period - player.reality.achTimer, 1);
   },
 
   _power: new Lazy(() => {
-    const unlockedRows = Array.range(1, 15)
-      .map(Achievements.row)
+    const unlockedRows = Achievements.allRows
       .countWhere(row => row.every(ach => ach.isUnlocked));
     const basePower = Math.pow(1.25, unlockedRows) * Math.pow(1.03, Achievements.effectiveCount);
     return basePower * getAdjustedGlyphEffect("effarigachievement");

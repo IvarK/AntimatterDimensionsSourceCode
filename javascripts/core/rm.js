@@ -7,7 +7,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "timeetermult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
-  "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedeternity",
+  "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
   "realityglyphlevel", "realitygalaxies", "realitydimboost", "realitycopy"];
 const generatedTypes = ["power", "infinity", "time", "replication", "dilation", "effarig"];
 
@@ -689,6 +689,12 @@ const Glyphs = {
   get levelCap() {
     return 1000000;
   },
+  get instabilityThreshold() {
+    return 1000 + getAdjustedGlyphEffect("effarigglyph");
+  },
+  get hyperInstabilityThreshold() {
+    return 4000 + getAdjustedGlyphEffect("effarigglyph");
+  },
   clearUndo() {
     player.reality.glyphs.undo = [];
   },
@@ -905,13 +911,34 @@ function countEffectsFromBitmask(bitmask) {
 
 // Returns both effect value and softcap status
 function getActiveGlyphEffects() {
-  return orderedEffectList
+  let effectValues = orderedEffectList
     .map(effect => ({ effect, values: getGlyphEffectValues(effect) }))
     .filter(ev => ev.values.length > 0)
     .map(ev => ({
       id: ev.effect,
       value: GameDatabase.reality.glyphEffects[ev.effect].combine(ev.values),
     }));
+  const effectNames = effectValues.map(e => e.id);
+
+  // Numerically combine cursed effects with other glyph effects which directly conflict with them
+  const cursedEffects = ["cursedgalaxies", "curseddimensions", "cursedEP"];
+  const conflictingEffects = ["realitygalaxies", "effarigdimensions", "timeEP"];
+  const combineFunction = [GlyphCombiner.multiply, GlyphCombiner.multiply, GlyphCombiner.multiplyDecimal];
+  for (let i = 0; i < cursedEffects.length; i++) {
+    if (effectNames.includes(cursedEffects[i]) && effectNames.includes(conflictingEffects[i])) {
+      const combined = combineFunction[i]([getAdjustedGlyphEffect(cursedEffects[i]),
+        getAdjustedGlyphEffect(conflictingEffects[i])]);
+      if (Decimal.lt(combined, 1)) {
+        effectValues = effectValues.filter(e => e.id !== conflictingEffects[i]);
+        effectValues.filter(e => e.id === cursedEffects[i])[0].value.value = combined;
+      } else {
+        effectValues = effectValues.filter(e => e.id !== cursedEffects[i]);
+        effectValues.filter(e => e.id === conflictingEffects[i])[0].value.value = combined;
+      }
+    }
+  }
+
+  return effectValues;
 }
 
 function deleteGlyph(id, force) {
@@ -1050,14 +1077,13 @@ function getGlyphLevelInputs() {
   let baseLevel = epEffect * replEffect * dtEffect * eterEffect * perkShopEffect + shardFactor;
   let scaledLevel = baseLevel;
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
-  const scaleDelay = getAdjustedGlyphEffect("effarigglyph");
-  const instabilityScaleBegin = 1000 + scaleDelay;
+  const instabilityScaleBegin = Glyphs.instabilityThreshold;
   const instabilityScaleRate = 500;
   if (scaledLevel > instabilityScaleBegin) {
     const excess = (scaledLevel - instabilityScaleBegin) / instabilityScaleRate;
     scaledLevel = instabilityScaleBegin + 0.5 * instabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
   }
-  const hyperInstabilityScaleBegin = 4000 + scaleDelay;
+  const hyperInstabilityScaleBegin = Glyphs.hyperInstabilityThreshold;
   const hyperInstabilityScaleRate = 400;
   if (scaledLevel > hyperInstabilityScaleBegin) {
     const excess = (scaledLevel - hyperInstabilityScaleBegin) / hyperInstabilityScaleRate;

@@ -63,7 +63,7 @@ function gainedEternityPoints() {
       TimeStudy(123),
       RealityUpgrade(12),
       GlyphEffect.epMult
-    ).dividedBy(getAdjustedGlyphEffect("cursedeternity"));
+    ).times(getAdjustedGlyphEffect("cursedEP"));
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);

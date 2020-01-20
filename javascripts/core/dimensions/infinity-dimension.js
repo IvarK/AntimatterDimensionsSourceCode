@@ -37,7 +37,7 @@ const HARDCAP_ID_PURCHASES = 2000000;
 function buyManyInfinityDimension(tier) {
   if (!canBuyInfinityDimension(tier)) return false;
   const dim = InfinityDimension(tier);
-  player.infinityPoints = player.infinityPoints.minus(dim.cost)
+  player.infinityPoints = player.infinityPoints.minus(dim.cost);
   dim.amount = dim.amount.plus(10);
   dim.cost = Decimal.round(dim.cost.times(dim.costMultiplier));
   dim.baseAmount += IDPurchasesToIDAmount(1);
@@ -241,10 +241,7 @@ class InfinityDimensionState extends DimensionState {
     if (Enslaved.isRunning) {
       return 1;
     }
-    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease *
-      (1 + AlchemyResource.boundless.effectValue);
-    const compressionBoost = Effects.max(0, CompressionUpgrade.infDimSoftcap);
-    return this._purchaseCap + Math.floor(enslavedBoost + compressionBoost);
+    return this._purchaseCap + InfinityDimensions.capIncrease;
   }
 
   get baseAmountCap() {
@@ -310,6 +307,13 @@ const InfinityDimensions = {
     for (const dimension of InfinityDimensions.all) {
       dimension.fullReset();
     }
+  },
+
+  get capIncrease() {
+    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease *
+      (1 + AlchemyResource.boundless.effectValue);
+    const compressionBoost = Effects.max(0, CompressionUpgrade.infDimSoftcap);
+    return Math.floor(enslavedBoost + compressionBoost);
   },
 
   tick(diff) {

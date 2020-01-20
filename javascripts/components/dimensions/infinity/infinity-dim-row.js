@@ -8,6 +8,7 @@ Vue.component("infinity-dim-row", {
     return {
       isUnlocked: false,
       multiplier: new Decimal(0),
+      baseAmount: 0,
       amount: new Decimal(0),
       hasRateOfChange: false,
       rateOfChange: new Decimal(0),
@@ -43,8 +44,8 @@ Vue.component("infinity-dim-row", {
     },
     capTooltip() {
       return this.isCapped
-        ? `Limited to ${this.hardcapPurchases} upgrades (${format(this.capIP, 0, 0)} IP)`
-        : undefined;
+        ? `Cap reached at ${format(this.capIP, 0, 0)} IP`
+        : `Purchased ${formatInt(IDAmountToIDPurchases(this.baseAmount))} times`;
     }
   },
   methods: {
@@ -54,6 +55,7 @@ Vue.component("infinity-dim-row", {
       this.isUnlocked = dimension.isUnlocked;
       if (!this.isUnlocked) return;
       this.multiplier.copyFrom(dimension.multiplier);
+      this.baseAmount = dimension.baseAmount;
       this.amount.copyFrom(dimension.amount);
       this.hasRateOfChange = dimension.hasRateOfChange;
       if (this.hasRateOfChange) {

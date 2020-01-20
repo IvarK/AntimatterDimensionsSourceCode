@@ -4,6 +4,8 @@ Vue.component("time-dim-tab", {
   data() {
     return {
       totalUpgrades: 0,
+      multPerTickspeed: 0,
+      tickspeedSoftcap: 0,
       timeShards: new Decimal(0),
       upgradeThreshold: new Decimal(0),
       shardsPerSecond: new Decimal(0),
@@ -23,6 +25,8 @@ Vue.component("time-dim-tab", {
   methods: {
     update() {
       this.totalUpgrades = player.totalTickGained;
+      this.multPerTickspeed = FreeTickspeed.multToNext;
+      this.tickspeedSoftcap = FreeTickspeed.softcap;
       this.timeShards.copyFrom(player.timeShards);
       this.upgradeThreshold.copyFrom(player.tickThreshold);
       this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerSecond);
@@ -45,8 +49,12 @@ Vue.component("time-dim-tab", {
           You have
           <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> time shards.
           Next tickspeed upgrade at
-          <span class="c-time-dim-description__accent">{{format(upgradeThreshold, 2, 1)}}</span>
+          <span class="c-time-dim-description__accent">{{format(upgradeThreshold, 2, 1)}}.</span>
         </p>
+      </div>
+      <div>
+        Each additional upgrade requires {{formatX(multPerTickspeed, 2, 2)}} more time shards. This will start
+        increasing above {{formatInt(tickspeedSoftcap)}} upgrades.
       </div>
       <div>You are getting {{format(shardsPerSecond, 2, 0)}} {{incomeType}} per second.</div>
       <primary-button

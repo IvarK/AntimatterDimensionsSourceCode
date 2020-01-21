@@ -1,6 +1,11 @@
 "use strict";
 
 Vue.component("eternity-upgrades-tab", {
+  data() {
+    return {
+      costIncreases: [1e100, Decimal.MAX_NUMBER, new Decimal("1e1300"), new Decimal("1e4000")],
+    };
+  },
   computed: {
     grid() {
       return [
@@ -28,5 +33,10 @@ Vue.component("eternity-upgrades-tab", {
         />
       </div>
       <ep-multiplier-button />
+      <div>
+        The cost for the EP multiplier jumps at {{format(costIncreases[0])}} EP,
+        {{format(costIncreases[1], 2, 2)}} EP, and {{format(costIncreases[2])}} EP.<br>
+        It gets expensive more quickly past {{format(costIncreases[3])}} EP.
+      </div>
     </div>`
 });

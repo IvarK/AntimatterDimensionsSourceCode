@@ -10,17 +10,9 @@ Vue.component("time-dim-tab", {
       upgradeThreshold: new Decimal(0),
       shardsPerSecond: new Decimal(0),
       incomeType: "",
-      showCostScaleTooltip: false,
+      costIncreases: [Decimal.MAX_NUMBER, new Decimal("1e1300"), new Decimal("1e6000")],
       areAutobuyersUnlocked: false
     };
-  },
-  computed: {
-    e6000Tooltip() {
-      return `TD costs start increasing faster after ${format(new Decimal("1e6000"))}`;
-    },
-    costScaleTooltip() {
-      return this.showCostScaleTooltip ? this.e6000Tooltip : undefined;
-    }
   },
   methods: {
     update() {
@@ -31,7 +23,6 @@ Vue.component("time-dim-tab", {
       this.upgradeThreshold.copyFrom(player.tickThreshold);
       this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerSecond);
       this.incomeType = EternityChallenge(7).isRunning ? "Eighth Infinity Dimensions" : "time shards";
-      this.showCostScaleTooltip = player.eternityPoints.exponent > 6000;
       this.areAutobuyersUnlocked = RealityUpgrade(13).isBought;
     },
     maxAll() {
@@ -58,7 +49,6 @@ Vue.component("time-dim-tab", {
       </div>
       <div>You are getting {{format(shardsPerSecond, 2, 0)}} {{incomeType}} per second.</div>
       <primary-button
-        v-tooltip="costScaleTooltip"
         class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
         @click="maxAll"
       >Max all</primary-button>
@@ -75,5 +65,9 @@ Vue.component("time-dim-tab", {
         class="o-primary-btn--td-all-autobuyers l-time-dim-tab__all-autobuyers"
         @click="toggleAllAutobuyers"
       >Toggle all ON/OFF</primary-button>
+      <div>
+        Time Dimension costs jump at {{format(costIncreases[0], 2, 2)}} EP and {{format(costIncreases[1])}} EP,<br>
+        and get expensive more quickly past {{format(costIncreases[2])}} EP
+      </div>
     </div>`
 });

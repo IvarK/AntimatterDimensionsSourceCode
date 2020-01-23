@@ -106,6 +106,39 @@ class BlackHoleState {
     return this._data.active;
   }
 
+  // When inactive, returns time until active; when active, returns time until inactive (or paused for hole 2)
+  get timeToNextStateChange() {
+    let remainingTime = this.isCharged
+      ? this.duration - this.phase
+      : this.interval - this.phase;
+
+    if (this.id === 1) return remainingTime;
+
+    // 2nd hole activation logic (not bothering generalizing since we're not adding that 3rd hole again)
+    if (this.isCharged) {
+      if (BlackHole(1).isCharged) return Math.min(remainingTime, BlackHole(1).timeToNextStateChange);
+      return BlackHole(1).timeToNextStateChange;
+    }
+    if (BlackHole(1).isCharged) {
+      if (remainingTime < BlackHole(1).timeToNextStateChange) return remainingTime;
+      remainingTime -= BlackHole(1).timeToNextStateChange;
+    }
+    let totalTime = BlackHole(1).isCharged
+      ? BlackHole(1).timeToNextStateChange + BlackHole(1).interval
+      : BlackHole(1).timeToNextStateChange;
+    totalTime += Math.floor(remainingTime / BlackHole(1).duration) * BlackHole(1).cycleLength;
+    totalTime += remainingTime % BlackHole(1).duration;
+    return totalTime;
+  }
+
+  // This is a value which counts up from 0 to 1 when inactive, and 1 to 0 when active
+  get stateProgress() {
+    if (this.isCharged) {
+      return 1 - this.phase / this.duration;
+    }
+    return this.phase / this.interval;
+  }
+
   get isActive() {
     return this.isCharged && (this.id === 1 || BlackHole(this.id - 1).isActive);
   }

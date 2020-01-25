@@ -62,7 +62,7 @@ Vue.component("dimension-autobuyer-box", {
       return Autobuyer.dimension(this.tier);
     },
     name() {
-      return `${DISPLAY_NAMES[this.tier]} Dimension Autobuyer`;
+      return `${NormalDimension(this.tier).displayName} Dimension Autobuyer`;
     },
     modeDisplay() {
       switch (this.mode) {

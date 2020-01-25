@@ -1,8 +1,5 @@
 "use strict";
 
-const DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
-const SHORT_DISPLAY_NAMES = [null, "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"];
-
 const AUTOBUYER_MODE = {
   BUY_SINGLE: 1,
   BUY_10: 10,
@@ -75,8 +72,9 @@ const AUTO_GLYPH_SAC_MODE = {
   NONE: 0,
   ALL: 1,
   RARITY_THRESHOLDS: 2,
-  ADVANCED: 3,
-  ALCHEMY: 4
+  EFFECTS: 3,
+  ADVANCED: 4,
+  ALCHEMY: 5
 };
 
 const AUTO_GLYPH_PICK_MODE = {

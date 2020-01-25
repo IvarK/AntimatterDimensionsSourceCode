@@ -15,8 +15,8 @@ Vue.component("glyph-auto-pick-options", {
     },
     pickerText() {
       switch (this.sacMode) {
-        case 1: return "Sacrifice";
-        case 4: return "Refine";
+        case AUTO_GLYPH_SAC_MODE.ALL: return "Sacrifice";
+        case AUTO_GLYPH_SAC_MODE.ALCHEMY: return "Refine";
         default: return "Auto pick";
       }
     }

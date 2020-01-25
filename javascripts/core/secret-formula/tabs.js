@@ -238,7 +238,7 @@ GameDatabase.tabs = [
       {
         key: "glyphs",
         name: "Glyphs",
-        symbol: "G",
+        symbol: "<i class='fas fa-clone'></i>",
         component: "glyphs-tab"
       },
       {

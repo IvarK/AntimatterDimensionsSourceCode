@@ -494,6 +494,30 @@ GameStorage.devMigrations = {
     player => {
       player.options.showHintText.alchemy = player.options.showAlchemyResources;
       delete player.options.showAlchemyResources;
+    },
+    player => {
+      // Adds in effect selection settings and removes non-generated types while preserving old glyph filter settings
+      const oldSettings = player.celestials.effarig.autoGlyphSac.types;
+      const newSettings = GlyphTypes.list
+        .filter(type => generatedTypes.includes(type.id))
+        .mapToObject(t => t.id, t => ({
+          rarityThreshold: 0,
+          scoreThreshold: 0,
+          effectCount: 0,
+          effectChoices: t.effects.mapToObject(e => e.id, () => false),
+          effectScores: t.effects.mapToObject(e => e.id, () => 0),
+      }));
+      for (const type of generatedTypes) {
+        newSettings[type].rarityThreshold = oldSettings[type].rarityThreshold;
+        newSettings[type].scoreThreshold = oldSettings[type].scoreThreshold;
+        for (const effect of Object.keys(newSettings[type].effectScores)) {
+          newSettings[type].effectScores[effect] = oldSettings[type].effectScores[effect];
+        }
+      }
+      player.celestials.effarig.autoGlyphSac.types = newSettings;
+    },
+    player => {
+      player.reality.glyphs.inventorySize += 10;
     }
   ],
 

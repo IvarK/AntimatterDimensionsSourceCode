@@ -28,7 +28,7 @@ Vue.component("infinity-dim-row", {
   },
   computed: {
     name() {
-      return DISPLAY_NAMES[this.tier];
+      return InfinityDimension(this.tier).displayName;
     },
     rateOfChangeDisplay() {
       return this.hasRateOfChange
@@ -36,7 +36,7 @@ Vue.component("infinity-dim-row", {
         : "";
     },
     costDisplay() {
-      return this.isCapped ? "Capped!" : `Cost: ${format(this.costMult, 0, 0)} IP`;
+      return this.isCapped ? "Capped!" : `Cost: ${format(this.cost, 0, 0)} IP`;
     },
     hardcapPurchases() {
       return format(this.hardcap, 1, 1);

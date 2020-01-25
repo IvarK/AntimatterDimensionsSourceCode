@@ -1029,7 +1029,7 @@ screen and (max-width: 480px) {
     padding: 5px 5px;
     border-radius: 5px;
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     white-space: nowrap;
     left: 105%
 }

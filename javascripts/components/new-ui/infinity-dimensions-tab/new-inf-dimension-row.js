@@ -29,7 +29,7 @@ Vue.component("new-inf-dimension-row", {
   },
   computed: {
     name() {
-      return SHORT_DISPLAY_NAMES[this.tier];
+      return InfinityDimension(this.tier).shortDisplayName;
     },
     rateOfChangeDisplay() {
       return this.hasRateOfChange

@@ -27,16 +27,11 @@ function startEternityChallenge() {
 
 class EternityChallengeRewardState extends GameMechanicState {
   constructor(config, challenge) {
-    super(config);
+    const effect = config.effect;
+    const configCopy = deepmerge.all([{}, config]);
+    configCopy.effect = () => effect(challenge.completions);
+    super(configCopy);
     this._challenge = challenge;
-  }
-
-  get isCustomEffect() {
-    return true;
-  }
-
-  get effectValue() {
-    return this.config.effect(this._challenge.completions);
   }
 
   get isEffectActive() {

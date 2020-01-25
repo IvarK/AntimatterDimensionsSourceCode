@@ -210,7 +210,7 @@ Vue.component("tt-buy-button", {
     <button class="l-tt-buy-button c-tt-buy-button"
             :class="enabledClass"
             @click="action">
-      {{ format(cost) }}
+      {{ formatCost(cost) }}
     </button>`,
   computed: {
     isEnabled() {

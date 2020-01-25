@@ -258,7 +258,7 @@ let player = {
     glyphs: {
       active: [],
       inventory: [],
-      inventorySize: 100,
+      inventorySize: 110,
       last: "",
       sac: {
         power: 0,
@@ -354,6 +354,8 @@ let player = {
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({
           rarityThreshold: 0,
           scoreThreshold: 0,
+          effectCount: 0,
+          effectChoices: t.effects.mapToObject(e => e.id, () => false),
           effectScores: t.effects.mapToObject(e => e.id, () => 0),
         })),
       },
@@ -530,12 +532,9 @@ const Player = {
   },
 
   get antimatterPerSecond() {
-    const basePerSecond = getDimensionProductionPerSecond(1);
-    if (NormalChallenge(3).isRunning) {
-      return basePerSecond.times(player.chall3Pow);
-    }
+    const basePerSecond = NormalDimension(1).productionPerSecond;
     if (NormalChallenge(12).isRunning) {
-      return basePerSecond.plus(getDimensionProductionPerSecond(2));
+      return basePerSecond.plus(NormalDimension(2).productionPerSecond);
     }
     return basePerSecond.times(getGameSpeedupForDisplay());
   },

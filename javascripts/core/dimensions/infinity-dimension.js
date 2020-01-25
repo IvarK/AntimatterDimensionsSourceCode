@@ -272,19 +272,18 @@ class InfinityDimensionState extends DimensionState {
   }
 }
 
-InfinityDimensionState.createIndex();
-
 /**
+ * @function
  * @param {number} tier
  * @return {InfinityDimensionState}
  */
-const InfinityDimension = tier => InfinityDimensionState.index[tier];
+const InfinityDimension = InfinityDimensionState.createAccessor();
 
 const InfinityDimensions = {
   /**
    * @type {InfinityDimensionState[]}
    */
-  all: InfinityDimensionState.index.compact(),
+  all: InfinityDimension.index.compact(),
 
   unlockNext() {
     if (InfinityDimension(8).isUnlocked) return;

@@ -19,7 +19,7 @@ Vue.component("time-dim-row", {
   },
   computed: {
     name() {
-      return DISPLAY_NAMES[this.tier];
+      return TimeDimension(this.tier).displayName;
     },
     rateOfChangeDisplay() {
       return this.tier < 8

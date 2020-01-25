@@ -960,7 +960,7 @@ This requires six (three with the final unlock) V-Achievements to be completed t
       info: () => `
 <h1>Work in Progress</h1>
 `,
-      isUnlocked: () => V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]),
+      isUnlocked: () => V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2]),
       tags: ["reality", "memories", "razenpok", "levels", "glyphs", "lategame", "endgame",
         "effarig", "teresa", "enslaved", "v"],
       tab: "celestials/ra"

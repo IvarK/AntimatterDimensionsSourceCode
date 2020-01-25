@@ -28,7 +28,7 @@ GameDatabase.celestials.v = {
       condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= x,
       currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies,
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e35, 0.5)
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e20, 0.2)
     },
     {
       id: 2,
@@ -38,7 +38,7 @@ GameDatabase.celestials.v = {
       condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x),
       currentValue: () => (EternityChallenge(7).isRunning ? player.infinityPoints.exponent : 0),
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
-      shardReduction: goal => goal.times(1 - Math.pow(1e35 / player.celestials.effarig.relicShards, 0.001))
+      shardReduction: goal => goal.times(1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001))
     },
     {
       id: 3,
@@ -51,7 +51,7 @@ GameDatabase.celestials.v = {
         ? player.antimatter.exponent
         : 0),
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
-      shardReduction: goal => goal.times(1 - Math.pow(1e35 / player.celestials.effarig.relicShards, 0.001))
+      shardReduction: goal => goal.times(1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001))
     },
     {
       id: 4,
@@ -61,7 +61,7 @@ GameDatabase.celestials.v = {
       condition: x => player.eternityPoints.gte(x),
       currentValue: () => player.eternityPoints.exponent,
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
-      shardReduction: goal => Decimal.pow(goal, (1 - Math.pow(1e35 / player.celestials.effarig.relicShards, 0.001)))
+      shardReduction: goal => Decimal.pow(goal, (1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001)))
     },
     {
       id: 5,
@@ -71,7 +71,7 @@ GameDatabase.celestials.v = {
       condition: x => player.dilation.active && EternityChallenge(5).isRunning && DimBoost.purchasedBoosts >= x,
       currentValue: () => (player.dilation.active && EternityChallenge(5).isRunning ? DimBoost.purchasedBoosts : 0),
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e35, 0.1)
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e20, 0.05)
     },
     {
       id: 6,

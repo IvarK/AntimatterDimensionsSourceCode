@@ -103,7 +103,7 @@ const V_UNLOCKS = {
   RUN_UNLOCK_THRESHOLDS: [
     {
       id: 1,
-      reward: "Relic shards reduce V-achievement requirements.",
+      reward: "Relic shards reduce V-achievement requirements. Starting at 1e20 Relic Shards.",
       description: "Have 2 V-achievements",
       requirement: () => V.spaceTheorems >= 2
     },

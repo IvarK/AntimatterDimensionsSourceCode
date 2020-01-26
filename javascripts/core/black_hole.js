@@ -139,6 +139,31 @@ class BlackHoleState {
     return this.phase / this.interval;
   }
 
+  // The logic to determine what state the black hole is in for displaying is nontrivial and used in multiple places
+  get displayState() {
+    // Pulsing black hole
+    if (Enslaved.isAutoReleasing) {
+      const pulseState = ["▂", "▃", "▅", "▆", "▇"];
+      return `${pulseState[Enslaved.autoReleaseTick]} Pulsing`;
+    }
+    if (BlackHoles.arePaused) {
+      // Inverted black hole
+      if (player.blackHoleNegative < 1) return "⏷ Negative";
+      // Paused normally
+      return "⏸ Paused";
+    }
+    if (this.isPermanent) return "⟳ Permanent";
+
+    const timeString = TimeSpan.fromSeconds(this.timeToNextStateChange).toStringShort(true);
+    if (this.isCharged) {
+      // Active
+      return `⏩ Active (${timeString})`;
+    }
+
+    // Inactive
+    return `▶️ Inactive (${timeString})`;
+  }
+
   get isActive() {
     return this.isCharged && (this.id === 1 || BlackHole(this.id - 1).isActive);
   }

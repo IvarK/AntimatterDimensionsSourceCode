@@ -96,6 +96,9 @@ Vue.component("game-header", {
       antimatterPerSec: new Decimal(0)
     };
   },
+  computed: {
+    blackHoles: () => BlackHoles.list
+  },
   methods: {
     update() {
       this.isInMatterChallenge = Player.isInMatterChallenge;
@@ -130,5 +133,10 @@ Vue.component("game-header", {
       </div>
       <div>You are getting {{format(antimatterPerSec, 2, 0)}} antimatter per second.</div>
       <game-header-tickspeed-row />
+      <black-hole-header-row
+        v-for="(blackHole, i) in blackHoles"
+        :key="'state' + i"
+        :blackHole="blackHole"
+      />
     </div>`
 });

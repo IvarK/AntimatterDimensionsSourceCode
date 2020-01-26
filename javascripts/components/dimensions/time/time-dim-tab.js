@@ -25,7 +25,7 @@ Vue.component("time-dim-tab", {
       this.totalUpgrades = player.totalTickGained;
       this.timeShards.copyFrom(player.timeShards);
       this.upgradeThreshold.copyFrom(player.tickThreshold);
-      this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerSecond);
+      this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerRealSecond);
       this.incomeType = EternityChallenge(7).isRunning ? "Eighth Infinity Dimensions" : "time shards";
       this.showCostScaleTooltip = player.eternityPoints.exponent > 6000;
       this.areAutobuyersUnlocked = RealityUpgrade(13).isBought;

@@ -28,7 +28,7 @@ Vue.component("infinity-dim-tab", {
       } else {
         this.dimMultiplier.copyFrom(infinityPower.pow(this.conversionRate).max(1));
       }
-      this.powerPerSecond.copyFrom(InfinityDimension(1).productionPerSecond);
+      this.powerPerSecond.copyFrom(InfinityDimension(1).productionPerRealSecond);
       this.incomeType = EternityChallenge(7).isRunning ? "Seventh Dimensions" : "Infinity Power";
       this.isEC8Running = EternityChallenge(8).isRunning;
       if (this.isEC8Running) {

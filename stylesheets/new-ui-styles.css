@@ -276,44 +276,6 @@ body.t-normal {
   padding: 0.5rem 5rem 0.5rem 9rem; /* TOP RIGHT BOTTOM LEFT */
 }
 
-.dimension-row {
-  display: flex;
-  color: var(--color-text);;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 0 0.5rem 1rem;
-  border-radius: 5px;
-}
-
-.dimension-row:nth-child(even) {
-  background-color: rgba(223, 80, 80, 0.3);
-}
-
-.t-metro .dimension-row:nth-child(even),
-.t-inverted-metro .dimension-row:nth-child(even),
-.t-s8 .dimension-row:nth-child(even) {
-  background-color: rgba(33, 150, 243, 0.3);
-}
-
-.dimension-row h3 {
-  font-size: 2rem;
-  display: flex;
-  align-items: center;
-  margin: 0;
-  color: var(--color-text);;
-}
-
-.dimension-row h3 .mult {
-  font-size: 0.6em;
-  margin-left: 10px;
-}
-
-.dimension-row span {
-  font-weight: bold;
-  font-size: 1.8rem;
-}
-
-
 .o-primary-btn--new {
   background-color: var(--color-base);
   border: 0.1rem solid var(--color-good);
@@ -567,9 +529,37 @@ body.t-normal {
   border: 0.1rem solid var(--color-accent);
 }
 
-
 .c-replicanti-description__accent {
   color: #2196f3
+}
+
+.c-normal-dim-row,
+.c-infinity-dim-row,
+.c-time-dim-row {
+  color: var(--color-text);
+  font-weight: bold;
+  margin: 0;
+  padding: 0.5rem 0 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.c-normal-dim-row:nth-child(even) {
+  background-color: rgba(223, 80, 80, 0.3);
+}
+
+.t-metro .c-normal-dim-row:nth-child(even),
+.t-inverted-metro .c-normal-dim-row:nth-child(even),
+.t-s8 .c-normal-dim-row:nth-child(even) {
+  background-color: rgba(33, 150, 243, 0.3);
+}
+
+.c-normal-dim-row__name {
+  font-size: 2rem;
+  width: 41%
+}
+
+.c-normal-dim-row__multiplier {
+  font-size: 1.4rem
 }
 
 .c-infinity-dim-description__accent {
@@ -582,12 +572,6 @@ body.t-normal {
 
 .l-infinity-dim-tab__row-container {
   padding: 0.5rem 5rem 0.5rem 9rem;
-}
-
-.c-infinity-dim-row {
-  margin: 0;
-  padding: 0.5rem 0 0.5rem 1rem;
-  border-radius: 0.5rem;
 }
 
 .c-infinity-dim-row:nth-child(even) {
@@ -619,12 +603,6 @@ body.t-normal {
 
 .l-time-dim-tab__row-container {
   padding: 0.5rem 5rem 0.5rem 9rem;
-}
-
-.c-time-dim-row {
-  margin: 0;
-  padding: 0.5rem 0 0.5rem 1rem;
-  border-radius: 0.5rem;
 }
 
 .c-time-dim-row:nth-child(even) {

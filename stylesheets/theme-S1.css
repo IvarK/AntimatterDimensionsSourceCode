@@ -4,13 +4,13 @@ html {
     align-content: center;
     background-size: 100%;
     background-color: #d72621;
-    color: black !important;
     background-attachment:fixed;
     background-position:center bottom;
 }
 
-body {
-    background: none !important;
+body.t-s1 {
+  color: black;
+  background: none;
 }
 
 #container.container {

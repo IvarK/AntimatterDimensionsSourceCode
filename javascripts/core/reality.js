@@ -238,7 +238,7 @@ function giveRealityRewards(realityProps) {
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
     player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
   }
-  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
+  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3])) {
     Ra.giveExp(multiplier);
   }
   if (multiplier > 1 && Enslaved.boostReality) {
@@ -278,7 +278,7 @@ function beginProcessReality(realityProps) {
     finishProcessReality(realityProps);
     return;
   }
-  EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
+  EventHub.dispatch(GAME_EVENT.REALITY_RESET_BEFORE);
   const glyphsToProcess = realityProps.simulatedRealities + (realityProps.alreadyGotGlyph ? 0 : 1);
   const rng = GlyphGenerator.getRNG(false);
   Async.run(() => processAutoGlyph(realityProps.gainedGlyphLevel, rng),
@@ -397,7 +397,7 @@ function finishProcessReality(realityProps) {
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);
   player.timestudy.studies = [];
-  player.celestials.v.additionalStudies = 0;
+  player.celestials.v.STSpent = 0;
   player.dilation.studies = [];
   player.dilation.active = false;
   player.dilation.tachyonParticles = new Decimal(0);
@@ -434,6 +434,8 @@ function finishProcessReality(realityProps) {
   player.bestInfinitiesPerMs = new Decimal(0);
   player.bestEternitiesPerMs = new Decimal(0);
   player.bestIpPerMsWithoutMaxAll = new Decimal(0);
+  player.minNegativeBlackHoleThisReality = 0;
+  player.celestials.v.cursedThisRun = 0;
   resetTimeDimensions();
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
@@ -453,7 +455,7 @@ function finishProcessReality(realityProps) {
   }
 
   Lazy.invalidateAll();
-  EventHub.dispatch(GameEvent.REALITY_RESET_AFTER);
+  EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
   // This immediately gives eternity upgrades instead of after the first eternity
   if (RealityUpgrades.allBought) {
@@ -464,7 +466,6 @@ function finishProcessReality(realityProps) {
 
   player.reality.gainedAutoAchievements = false;
 
-  tryUnlockAchievementsOnReality();
   if (realityProps.restoreCelestialState) restoreCelestialRuns(celestialRunState);
 }
 
@@ -483,7 +484,7 @@ function restoreCelestialRuns(celestialRunState) {
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
 function applyRUPG10() {
   NormalChallenges.completeAll();
-  
+
   const hasMaxBulkSecretAch = SecretAchievement(38).isUnlocked;
   player.auto.dimensions = player.auto.dimensions.map(() => ({
     isUnlocked: true,
@@ -492,7 +493,7 @@ function applyRUPG10() {
     interval: 100,
     // Only completely max bulk if the relevant secret achievement has already been unlocked
     bulk: hasMaxBulkSecretAch ? 1e100 : 1e90,
-    mode: AutobuyerMode.BUY_10,
+    mode: AUTOBUYER_MODE.BUY_10,
     priority: 1,
     isActive: true,
     lastTick: player.realTimePlayed
@@ -501,14 +502,14 @@ function applyRUPG10() {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
   }
   player.infinityUpgrades = new Set(
-    ["timeMult", "dimMult", "timeMult2", 
-    "skipReset1", "skipReset2", "unspentBonus", 
-    "27Mult", "18Mult", "36Mult", "resetMult", 
-    "skipReset3", "passiveGen", "45Mult", 
-    "resetBoost", "galaxyBoost", "skipResetGalaxy", 
-    "totalMult", "currentMult", "postGalaxy", 
-    "challengeMult", "achievementMult", "infinitiedMult", 
-    "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost", 
+    ["timeMult", "dimMult", "timeMult2",
+    "skipReset1", "skipReset2", "unspentBonus",
+    "27Mult", "18Mult", "36Mult", "resetMult",
+    "skipReset3", "passiveGen", "45Mult",
+    "resetBoost", "galaxyBoost", "skipResetGalaxy",
+    "totalMult", "currentMult", "postGalaxy",
+    "challengeMult", "achievementMult", "infinitiedMult",
+    "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost",
     "ipOffline"]
   );
   player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
@@ -556,26 +557,13 @@ function startRealityOver() {
 }
 
 function lockAchievementsOnReality() {
-  const startRow = GameCache.achSkipPerkCount.value + 1;
-  const lastRow = 13;
-  if (startRow > lastRow) return;
-  const lockedRows = lastRow - startRow + 1;
-  for (const row of Achievements.rows(startRow, lockedRows)) {
+  const preRealityRows = Achievements.preRealityRows;
+  const lockedRowCount = preRealityRows.length - GameCache.achSkipPerkCount.value;
+  const lockedRows = preRealityRows.slice(-lockedRowCount);
+  for (const row of lockedRows) {
     for (const achievement of row) {
       achievement.lock();
     }
   }
   player.reality.achTimer = 0;
-}
-
-function tryUnlockAchievementsOnReality() {
-  const startRow = GameCache.achSkipPerkCount.value + 1;
-  const lastRow = 13;
-  for (let r = startRow; r <= lastRow; ++r) {
-    // If the achievement has a checkEvent set, that means that it
-    // can't be checked out of context:
-    for (const a of Achievements.row(r)) {
-      if (a.config.checkEvent === undefined) a.tryUnlock();
-    }
-  }
 }

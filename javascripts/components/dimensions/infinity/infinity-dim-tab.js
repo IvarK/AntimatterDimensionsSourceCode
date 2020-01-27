@@ -56,24 +56,24 @@ Vue.component("infinity-dim-tab", {
       <div>
         <p>
           You have
-          <span class="c-infinity-dim-description__accent">{{shortenMoney(infinityPower)}}</span> infinity power,
+          <span class="c-infinity-dim-description__accent">{{format(infinityPower, 2, 1)}}</span> infinity power,
           translated to
-          <span class="c-infinity-dim-description__accent">{{shortenMoney(dimMultiplier)}}</span>x
-          multiplier on all dimensions (^{{ shorten(conversionRate, 2, 3) }}).
+          <span class="c-infinity-dim-description__accent">{{formatX(dimMultiplier, 2, 1)}}</span>
+          multiplier on all dimensions (^{{ format(conversionRate, 2, 3) }}).
         </p>
       </div>
       <div class="l-infinity-dim-tab__enslaved-reward-container" v-if="enslavedCompleted">
-        <button 
+        <button
           class="c-infinity-dim-tab__tesseract-button"
           :class="{ 'c-infinity-dim-tab__tesseract-button--disabled': !canBuyTesseract }"
           @click="buyTesseract">
           <p>Buy a Tesseract</p>
-          <p>Increase dimension caps by {{ shorten(nextDimCapIncrease, 2) }}</p>
-          <p><b>Costs: {{ shorten(tesseractCost, 0, 0) }} IP</b></p>
+          <p>Increase dimension caps by {{ format(nextDimCapIncrease, 2) }}</p>
+          <p><b>Costs: {{ format(tesseractCost, 0, 0) }} IP</b></p>
         </button>
-        <div>Total dimension cap increase: {{ shorten(totalDimCapIncrease, 2) }}</div>
+        <div>Total dimension cap increase: {{ format(totalDimCapIncrease, 2) }}</div>
       </div>
-      <div>You are getting {{shortenDimensions(powerPerSecond)}} {{incomeType}} per second.</div>
+      <div>You are getting {{format(powerPerSecond, 2, 0)}} {{incomeType}} per second.</div>
       <primary-button
         v-if="!isEC8Running"
         class="o-primary-btn--buy-max l-infinity-dim-tab__buy-max"

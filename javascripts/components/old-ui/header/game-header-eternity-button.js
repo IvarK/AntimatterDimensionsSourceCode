@@ -4,7 +4,7 @@ Vue.component("game-header-eternity-button", {
   data() {
     return {
       isVisible: false,
-      type: EPButtonDisplayType.FIRST_TIME,
+      type: EP_BUTTON_DISPLAY_TYPE.FIRST_TIME,
       gainedEP: new Decimal(0),
       currentEP: new Decimal(0),
       currentEPPM: new Decimal(0),
@@ -32,8 +32,8 @@ Vue.component("game-header-eternity-button", {
         : "o-prestige-btn--eternity";
     },
     isDilation() {
-      return this.type === EPButtonDisplayType.DILATION ||
-        this.type === EPButtonDisplayType.DILATION_EXPLORE_NEW_CONTENT;
+      return this.type === EP_BUTTON_DISPLAY_TYPE.DILATION ||
+        this.type === EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT;
     },
     amountStyle() {
       if (this.currentEP.lt(1e50)) return undefined;
@@ -53,16 +53,16 @@ Vue.component("game-header-eternity-button", {
       this.isVisible = player.infinityPoints.gte(Player.eternityGoal) && InfinityDimension(8).isUnlocked;
       if (!this.isVisible) return;
       if (!PlayerProgress.eternityUnlocked()) {
-        this.type = EPButtonDisplayType.FIRST_TIME;
+        this.type = EP_BUTTON_DISPLAY_TYPE.FIRST_TIME;
         return;
       }
 
       if (EternityChallenge.isRunning) {
         if (!Perk.studyECBulk.isBought) {
-          this.type = EPButtonDisplayType.CHALLENGE;
+          this.type = EP_BUTTON_DISPLAY_TYPE.CHALLENGE;
           return;
         }
-        this.type = EPButtonDisplayType.CHALLENGE_RUPG;
+        this.type = EP_BUTTON_DISPLAY_TYPE.CHALLENGE_RUPG;
         this.updateChallengeWithRUPG();
         return;
       }
@@ -77,15 +77,15 @@ Vue.component("game-header-eternity-button", {
 
       if (player.dilation.active) {
         this.type = hasNewContent
-          ? EPButtonDisplayType.DILATION_EXPLORE_NEW_CONTENT
-          : EPButtonDisplayType.DILATION;
+          ? EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT
+          : EP_BUTTON_DISPLAY_TYPE.DILATION;
         this.gainedTachyons.copyFrom(getTachyonGain());
         return;
       }
 
       this.type = hasNewContent
-        ? EPButtonDisplayType.NORMAL_EXPLORE_NEW_CONTENT
-        : EPButtonDisplayType.NORMAL;
+        ? EP_BUTTON_DISPLAY_TYPE.NORMAL_EXPLORE_NEW_CONTENT
+        : EP_BUTTON_DISPLAY_TYPE.NORMAL;
       this.currentEPPM.copyFrom(gainedEP.dividedBy(
         TimeSpan.fromMilliseconds(player.thisEternityRealTime).totalMinutes)
       );
@@ -113,46 +113,46 @@ Vue.component("game-header-eternity-button", {
       <template v-if="type === 0">
         Other times await... I need to become Eternal
       </template>
-      
+
       <!-- Normal -->
       <template v-else-if="type === 1">
         <template v-if="isGainedEPAmountSmall">
           <b>I need to become Eternal.</b>
           <br>
         </template>
-        Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 0)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <b :style="amountStyle">{{format(gainedEP, 2, 0)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
         <template v-if="isPeakEPPMVisible">
-          {{shorten(currentEPPM, 2, 2)}} EP/min
+          {{format(currentEPPM, 2, 2)}} EP/min
           <br>
-          Peaked at {{shorten(peakEPPM, 2, 2)}} EP/min
+          Peaked at {{format(peakEPPM, 2, 2)}} EP/min
         </template>
       </template>
-      
+
       <!-- Challenge -->
       <template v-else-if="type === 2">
         Other challenges await... I need to become Eternal
       </template>
-      
+
       <!-- Dilation -->
       <template v-else-if="type === 3">
-        Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <b :style="amountStyle">{{format(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
-        +{{shortenMoney(gainedTachyons)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}.
+        +{{format(gainedTachyons, 2, 1)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}.
       </template>
-      
+
       <!-- New content available -->
       <template v-else-if="type === 4 || type === 5">
         <template v-if="type === 4">
-          Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 2)}}</b> EP
+          Gain <b :style="amountStyle">{{format(gainedEP, 2, 2)}}</b> EP
         </template>
         <template v-else>
-          Gain <b>{{shortenMoney(gainedTachyons)}}</b> Tachyon {{ "particle" | pluralize(gainedTachyons) }}
+          Gain <b>{{format(gainedTachyons, 2, 1)}}</b> Tachyon {{ "particle" | pluralize(gainedTachyons) }}
         </template>
         <br>
         You should explore a bit and look at new content before clicking me!
       </template>
-      
+
       <!-- Challenge with multiple completions -->
       <template v-else-if="type === 6">
         Other challenges await...
@@ -169,14 +169,14 @@ Vue.component("game-header-eternity-button", {
           </template>
           <template v-else-if="hasMoreCompletions">
             <br>
-            Next goal at {{shortenCosts(nextGoalAt)}} IP
+            Next goal at {{format(nextGoalAt, 0, 0)}} IP
           </template>
         </template>
       </template>
     </button>`
 });
 
-const EPButtonDisplayType = {
+const EP_BUTTON_DISPLAY_TYPE = {
   FIRST_TIME: 0,
   NORMAL: 1,
   CHALLENGE: 2,

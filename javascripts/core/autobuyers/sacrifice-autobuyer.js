@@ -18,7 +18,7 @@ Autobuyer.sacrifice = new class SacrificeAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    if (Sacrifice.nextBoost.lt(this.multiplier.clampMin(1.01))) return;
+    if (Sacrifice.nextBoost.lt(Decimal.max(this.multiplier, 1.01))) return;
     sacrificeReset(true);
   }
 }();

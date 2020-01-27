@@ -31,8 +31,8 @@ function updateNormalAndInfinityChallenges(diff) {
         .times(Decimal.pow((1.03 + DimBoost.totalBoosts / 200 + player.galaxies / 100), diff / 100));
     }
     if (player.matter.gt(player.antimatter) && NormalChallenge(11).isRunning) {
-      Modal.message.show(`Your ${shorten(player.antimatter, 2, 2)} antimatter was annhiliated by ` +
-        `${shorten(player.matter, 2, 2)} matter.`);
+      Modal.message.show(`Your ${format(player.antimatter, 2, 2)} antimatter was annhiliated by ` +
+        `${format(player.matter, 2, 2)} matter.`);
       softReset(0);
     }
   }
@@ -46,13 +46,13 @@ function updateNormalAndInfinityChallenges(diff) {
   }
 
   if (InfinityChallenge(2).isRunning) {
-    if (postC2Count >= 8 || diff > 8000) {
+    if (player.ic2Count >= 8) {
       if (NormalDimension(8).amount.gt(0)) {
         sacrificeReset();
       }
-      postC2Count = 0;
+      player.ic2Count = 0;
     } else {
-      postC2Count++;
+      player.ic2Count++;
     }
   }
 }
@@ -74,7 +74,7 @@ class NormalChallengeState extends GameMechanicState {
     player.challenge.normal.current = this.id;
     player.challenge.infinity.current = 0;
 
-    if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) Enslaved.showEC10C6Hint();
+    if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) Enslaved.showEC6C10Hint();
 
     startChallenge();
   }
@@ -109,18 +109,16 @@ class NormalChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.normal.current = 0;
-    secondSoftReset();
+    secondSoftReset(true);
     if (!Enslaved.isRunning) Tab.dimensions.normal.show();
   }
 }
-
-NormalChallengeState.createIndex(GameDatabase.challenges.normal);
 
 /**
  * @param {number} id
  * @return {NormalChallengeState}
  */
-const NormalChallenge = id => NormalChallengeState.index[id];
+const NormalChallenge = NormalChallengeState.createAccessor(GameDatabase.challenges.normal);
 
 /**
  * @returns {NormalChallengeState}
@@ -139,7 +137,7 @@ const NormalChallenges = {
   /**
    * @type {NormalChallengeState[]}
    */
-  all: NormalChallengeState.index.compact(),
+  all: NormalChallenge.index.compact(),
   completeAll() {
     for (const challenge of NormalChallenges.all) challenge.complete();
   },
@@ -154,7 +152,7 @@ class InfinityChallengeRewardState extends GameMechanicState {
     this._challenge = challenge;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this._challenge.isCompleted;
   }
 }
@@ -196,7 +194,7 @@ class InfinityChallengeState extends GameMechanicState {
     player.challenge.infinity.completedBits |= 1 << this.id;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isRunning;
   }
 
@@ -227,18 +225,16 @@ class InfinityChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.infinity.current = 0;
-    secondSoftReset();
+    secondSoftReset(true);
     if (!Enslaved.isRunning) Tab.dimensions.normal.show();
   }
 }
-
-InfinityChallengeState.createIndex(GameDatabase.challenges.infinity);
 
 /**
  * @param {number} id
  * @return {InfinityChallengeState}
  */
-const InfinityChallenge = id => InfinityChallengeState.index[id];
+const InfinityChallenge = InfinityChallengeState.createAccessor(GameDatabase.challenges.infinity);
 
 /**
  * @returns {InfinityChallengeState}
@@ -257,7 +253,7 @@ const InfinityChallenges = {
   /**
    * @type {InfinityChallengeState[]}
    */
-  all: InfinityChallengeState.index.compact(),
+  all: InfinityChallenge.index.compact(),
   completeAll() {
     for (const challenge of InfinityChallenges.all) challenge.complete();
   },

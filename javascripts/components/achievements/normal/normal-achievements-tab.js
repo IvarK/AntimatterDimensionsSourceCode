@@ -3,21 +3,21 @@
 Vue.component("normal-achievements-tab", {
   data() {
     return {
-      achPower: new Decimal(0),
+      achievementPower: 0,
       achCountdown: 0,
       disableAutoAchieve: false,
       isCancer: 0
     };
   },
   computed: {
-    rows: () => Achievements.rows(1, 15),
+    rows: () => Achievements.allRows,
     swapImagesButton() {
       return Theme.current().name === "S4" || this.isCancer ? "😂" : ".";
     }
   },
   methods: {
     update() {
-      this.achPower.copyFrom(Player.achievementPower);
+      this.achievementPower = Achievements.power;
       this.achCountdown = Achievements.timeToNextAutoAchieve();
       this.isCancer = player.secretUnlocks.cancerAchievements;
     },
@@ -43,7 +43,7 @@ Vue.component("normal-achievements-tab", {
   template:
     `<div>
       <div class="c-achievements-tab__header">
-        Current achievement multiplier on each Dimension: {{ shorten(achPower, 2, 3) }}x
+        Current achievement multiplier on each Dimension: {{ format(achievementPower, 2, 3) }}x
         <span @click="swapImages()" style="cursor: pointer">{{ swapImagesButton }}</span>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">

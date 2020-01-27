@@ -7,7 +7,7 @@
   outline: none;
 }
 
-#ui {
+.t-normal #ui {
   --color-text: white;
   --color-base: #1d1b22;
   --color-accent: rgb(223, 80, 80);
@@ -15,23 +15,10 @@
   --color-good-dark: #138626;
 }
 
-body {
+body.t-normal {
   position: relative;
   color: white;
   background-color: #111014;
-}
-
-body.t-metro {
-  color: black;
-  background-color: white;
-}
-
-body.t-dark {
-  color: #888
-}
-
-body.t-s1 {
-  color: black;
 }
 
 #page {
@@ -256,11 +243,13 @@ body.t-s1 {
   opacity: 0;
   pointer-events: none;
   position: absolute;
-  top: -1px;
+  top: -6px;
   left: 200px;
   z-index: 4;
   transition-duration: 0.15s;
   transition-delay: 0.2s;
+  padding: 5px;
+  padding-left: 0;
 }
 
 .o-tab-btn--subtab {
@@ -725,7 +714,16 @@ body.t-s1 {
 
 .l-help-me {
   position: absolute;
+  top: 4.9rem;
   height: 2rem;
   border-radius: 50%;
   font-size: 1.5rem;
+  transition-delay: 0s;
+}
+
+.t-metro .l-help-me,
+.t-dark-metro .l-help-me,
+.t-inverted-metro .l-help-me,
+.t-s8 .l-help-me {
+  border-radius: 0;
 }

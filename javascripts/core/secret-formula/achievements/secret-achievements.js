@@ -32,7 +32,7 @@ GameDatabase.achievements.secret = [
     tooltip: "Use a \"painful\" notation for 10 real-time minutes after having eternitied at least once.",
     checkRequirement: () => AchievementTimers.pain
       .check(PlayerProgress.eternityUnlocked() && Notations.current.isPainful, 600),
-    checkEvent: GameEvent.GAME_TICK_AFTER
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 17,
@@ -54,7 +54,7 @@ GameDatabase.achievements.secret = [
     name: "Cancer = Spread",
     tooltip: "Buy 100,000 Antimatter Galaxies in total while using cancer notation.",
     checkRequirement: () => player.spreadingCancer >= 1e5,
-    checkEvent: GameEvent.GALAXY_RESET_AFTER
+    checkEvent: GAME_EVENT.GALAXY_RESET_AFTER
   },
   {
     id: 23,
@@ -64,7 +64,7 @@ GameDatabase.achievements.secret = [
   {
     id: 24,
     name: "Real news",
-    tooltip: "Click on the news ticker that tells you to click on it."
+    tooltip: "Click on a news ticker message that does something when you click on it."
   },
   {
     id: 25,
@@ -79,14 +79,14 @@ GameDatabase.achievements.secret = [
       let count = 0;
       return () => ++count >= 10;
     }()),
-    checkEvent: GameEvent.CHALLENGE_FAILED
+    checkEvent: GAME_EVENT.CHALLENGE_FAILED
   },
   {
     id: 27,
     name: "It's not called matter dimensions is it?",
     tooltip: "Get Infinite matter.",
     checkRequirement: () => Player.effectiveMatterAmount.gte(Decimal.MAX_NUMBER),
-    checkEvent: GameEvent.GAME_TICK_AFTER
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 28,
@@ -105,7 +105,7 @@ GameDatabase.achievements.secret = [
     checkRequirement: () =>
       Time.bestInfinity.totalMilliseconds <= 1 ||
       Time.bestEternity.totalMilliseconds <= 1,
-    checkEvent: [GameEvent.BIG_CRUNCH_BEFORE, GameEvent.ETERNITY_RESET_BEFORE]
+    checkEvent: [GAME_EVENT.BIG_CRUNCH_BEFORE, GAME_EVENT.ETERNITY_RESET_BEFORE]
   },
   {
     id: 33,
@@ -122,7 +122,7 @@ GameDatabase.achievements.secret = [
     name: "Should we tell them about buy max...",
     tooltip: "Buy single tickspeed 100,000 times.",
     checkRequirement: () => player.secretUnlocks.why >= 1e5,
-    checkEvent: GameEvent.GAME_TICK_AFTER
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 36,
@@ -155,14 +155,14 @@ GameDatabase.achievements.secret = [
     name: "Time fixes everything",
     tooltip: "Fix infinity while dilated.",
     checkRequirement: () => player.dilation.active,
-    checkEvent: GameEvent.FIX_INFINITY
+    checkEvent: GAME_EVENT.FIX_INFINITY
   },
   {
     id: 44,
     name: "Are you statisfied now?",
     tooltip: "Stare intently at the statistics tab for 15 real-time minutes.",
     checkRequirement: () => AchievementTimers.stats.check(Tab.statistics.isOpen, 900),
-    checkEvent: GameEvent.GAME_TICK_AFTER
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 45,

@@ -36,11 +36,11 @@ Vue.component("past-runs-tab", {
       const time = run[2];
       const rpm = ratePerMinute(amount, time);
       return Decimal.lt(rpm, 1)
-        ? `${shorten(Decimal.mul(rpm, 60), 2, 2)} ${this.points}/hour`
-        : `${shorten(rpm, 2, 2)} ${this.points}/min`;
+        ? `${format(Decimal.mul(rpm, 60), 2, 2)} ${this.points}/hour`
+        : `${format(rpm, 2, 2)} ${this.points}/min`;
     },
     runTime: run => timeDisplayShort(run[0]),
-    runGain: run => shorten(run[1], 2, 0),
+    runGain: run => format(run[1], 2, 0),
     realRunTime: run => (run[2] === undefined ? "unrecorded" : timeDisplayShort(run[2]))
   },
   template:
@@ -48,7 +48,7 @@ Vue.component("past-runs-tab", {
       <br>
       <div v-for="(run, index) in runs" :key="index">
         <span>
-          The {{ singular }} {{ shortenSmallInteger(index + 1) }}
+          The {{ singular }} {{ formatInt(index + 1) }}
           {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }}
         </span>
         <span v-if="isRealityUnlocked"> ({{ realRunTime(run) }} real time) </span>
@@ -56,7 +56,7 @@ Vue.component("past-runs-tab", {
       </div>
       <br>
       <div>
-        <span>Last {{ shortenSmallInteger(10) }} {{ plural }} average time: {{ runTime(averageRun) }}. </span>
+        <span>Last {{ formatInt(10) }} {{ plural }} average time: {{ runTime(averageRun) }}. </span>
         <span>Average {{ points }} gain: {{ averageRunGain(averageRun) }}.</span>
       </div>
     </div>`

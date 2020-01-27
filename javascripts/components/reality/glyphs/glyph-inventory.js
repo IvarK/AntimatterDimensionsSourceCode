@@ -11,7 +11,7 @@ Vue.component("glyph-inventory", {
     colCount: () => 10,
   },
   created() {
-    this.on$(GameEvent.GLYPHS_CHANGED, this.glyphsChanged);
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
   },
   methods: {
@@ -35,8 +35,7 @@ Vue.component("glyph-inventory", {
       const glyph = Glyphs.findById(id);
       if (!glyph) return;
       if (glyph.symbol === "key266b") {
-        const tempAudio = new Audio(`images/note${col}.mp3`);
-        tempAudio.play();
+        new Audio(`audio/note${col}.mp3`).play();
       }
     },
     glyphsChanged() {

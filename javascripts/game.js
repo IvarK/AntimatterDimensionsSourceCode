@@ -23,10 +23,10 @@ function breakInfinity() {
   if (!Autobuyer.bigCrunch.hasMaxedInterval) return;
   if (InfinityChallenge.isRunning) return;
   for (const autobuyer of Autobuyers.all) {
-    if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
+    if (autobuyer.data.interval !== undefined) autobuyer.maxIntervalForFree();
   }
   player.break = !player.break;
-  EventHub.dispatch(player.break ? GameEvent.BREAK_INFINITY : GameEvent.FIX_INFINITY);
+  EventHub.dispatch(player.break ? GAME_EVENT.BREAK_INFINITY : GAME_EVENT.FIX_INFINITY);
   GameUI.update();
 }
 
@@ -46,7 +46,7 @@ function gainedInfinityPoints() {
     ip = ip.pow(0.5);
   }
   if (GlyphAlteration.isAdded("infinity")) {
-    ip = ip.pow(getSecondaryGlyphEffect("infinityipgain"));
+    ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
   return ip.floor();
 }
@@ -63,7 +63,7 @@ function gainedEternityPoints() {
       TimeStudy(123),
       RealityUpgrade(12),
       GlyphEffect.epMult
-    );
+    ).dividedBy(getAdjustedGlyphEffect("cursedeternity"));
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -71,7 +71,7 @@ function gainedEternityPoints() {
     ep = ep.pow(0.5);
   }
   if (GlyphAlteration.isAdded("time")) {
-    ep = ep.pow(getSecondaryGlyphEffect("timeeternity"));
+    ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
   return ep.floor();
 }
@@ -216,21 +216,15 @@ function gainedInfinities() {
     return infGain;
 }
 
-setInterval(function() {
+setInterval(() => {
   if (isLocalEnvironment()) return;
-    $.getJSON('version.txt', function(data){
-        //data is actual content of version.txt, so
-        //do whatever you need with it
-        //I'd compare it with last result and if it's different
-        //show the message received and nag for attention
-        //like this:
-        if (data.version > player.version) {
-            player.version = data.version
-            Modal.message.show(data.message, updateRefresh);
-            //or some more resilient method
-            //like forced news bar with message running over and over
-        }
-    })
+  fetch("version.txt")
+    .then(response => response.json())
+    .then(json => {
+      if (json.version > player.version) {
+        Modal.message.show(json.message, updateRefresh);
+      }
+    });
 }, 60000);
 
 // TODO: remove before release
@@ -277,10 +271,13 @@ function kongLog10StatSubmission() {
 
 setInterval(kongLog10StatSubmission, 10000)
 
-var postC2Count = 0;
-var replicantiTicks = 0
-
-const GameSpeedEffect = { FIXEDSPEED: 1, TIMEGLYPH: 2, BLACKHOLE: 3, TIMESTORAGE: 4, MOMENTUM: 5 };
+const GAME_SPEED_EFFECT = {
+  FIXED_SPEED: 1,
+  TIME_GLYPH: 2,
+  BLACK_HOLE: 3,
+  TIME_STORAGE: 4,
+  MOMENTUM: 5
+};
 
 /**
   * @param {number[]} effectsToConsider A list of various game speed changing effects to apply when calculating
@@ -293,13 +290,13 @@ const GameSpeedEffect = { FIXEDSPEED: 1, TIMEGLYPH: 2, BLACKHOLE: 3, TIMESTORAGE
 function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesActiveOverride) {
   let effects;
   if (effectsToConsider === undefined) {
-    effects = [GameSpeedEffect.FIXEDSPEED, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE,
-      GameSpeedEffect.TIMESTORAGE, GameSpeedEffect.MOMENTUM];
+    effects = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH, GAME_SPEED_EFFECT.BLACK_HOLE,
+      GAME_SPEED_EFFECT.TIME_STORAGE, GAME_SPEED_EFFECT.MOMENTUM];
   } else {
     effects = effectsToConsider;
   }
 
-  if (effects.includes(GameSpeedEffect.FIXEDSPEED)) {
+  if (effects.includes(GAME_SPEED_EFFECT.FIXED_SPEED)) {
     if (TimeCompression.isActive) {
       if (DarkEnergyUpgrade.compressionBoost.isBought) {
         return DarkEnergyUpgrade.compressionBoost.effect * 1e-100;
@@ -312,7 +309,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
   }
 
   let factor = 1;
-  if (effects.includes(GameSpeedEffect.BLACKHOLE)) {
+  if (effects.includes(GAME_SPEED_EFFECT.BLACK_HOLE)) {
     if (blackHoleOverride !== undefined) {
       factor *= blackHoleOverride;
     } else if (!BlackHoles.arePaused) {
@@ -323,25 +320,25 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
           : blackHole.id <= blackHolesActiveOverride;
         if (!isActive) break;
         factor *= Math.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor);
-        if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-          factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect();
+        if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) {
+          factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2].effect();
         }
       }
     }
   }
 
-  if (effects.includes(GameSpeedEffect.TIMEGLYPH)) {
+  if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
     factor *= getAdjustedGlyphEffect("timespeed");
     factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   }
 
-  if (effects.includes(GameSpeedEffect.MOMENTUM)) {
+  if (effects.includes(GAME_SPEED_EFFECT.MOMENTUM)) {
     const cappedTime = Math.min(Time.thisRealityRealTime.totalMinutes, 7 * 24 * 60);
     factor *= Math.pow(AlchemyResource.momentum.effectValue, cappedTime);
   }
 
   // Time storage is linearly scaled because exponential scaling is pretty useless in practice
-  if (player.celestials.enslaved.isStoring && effects.includes(GameSpeedEffect.TIMESTORAGE)) {
+  if (player.celestials.enslaved.isStoring && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
     const storedTimeWeight = player.celestials.enslaved.storedFraction;
     factor = factor * (1 - storedTimeWeight) + storedTimeWeight;
   }
@@ -353,18 +350,20 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
   if (tempSpeedupToggle) {
     factor *= tempSpeedupFactor;
   }
+  if (BlackHoles.arePaused) {
+    factor *= player.blackHoleNegative;
+  }
   return factor;
 }
 
 function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
-  if (Enslaved.isAutoReleasing && !(EternityChallenge(12).isRunning || TimeCompression.isActive)) {
+  if (Enslaved.isAutoReleasing &&
+    !(EternityChallenge(12).isRunning || TimeCompression.isActive || (BlackHoles.arePaused && player.blackHoleNegative < 1))) {
     return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
   return speedFactor;
 }
-
-let autobuyerOnGameLoop = true;
 
 // "diff" is in ms.  It is only unspecified when it's being called normally and not due to simulating time, in which
 // case it uses the gap between now and the last time the function was called.  This is on average equal to the update
@@ -372,7 +371,7 @@ let autobuyerOnGameLoop = true;
 function gameLoop(diff, options = {}) {
   PerformanceStats.start("Frame Time");
   PerformanceStats.start("Game Update");
-  EventHub.dispatch(GameEvent.GAME_TICK_BEFORE);
+  EventHub.dispatch(GAME_EVENT.GAME_TICK_BEFORE);
   const thisUpdate = Date.now();
   const realDiff = diff === undefined
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
@@ -409,9 +408,7 @@ function gameLoop(diff, options = {}) {
   }
 
   slowerAutobuyers(realDiff);
-  if (autobuyerOnGameLoop) {
-      Autobuyers.tick();
-  }
+  Autobuyers.tick();
 
     // We do these after autobuyers, since it's possible something there might
     // change a multiplier.
@@ -436,8 +433,8 @@ function gameLoop(diff, options = {}) {
       if (player.celestials.enslaved.isStoring && !fixedSpeedActive) {
         // These variables are the actual game speed used and the game speed unaffected by time storage, respectively
         const reducedTimeFactor = getGameSpeedupFactor();
-        const totalTimeFactor = getGameSpeedupFactor([GameSpeedEffect.FIXEDSPEED, GameSpeedEffect.TIMEGLYPH,
-          GameSpeedEffect.BLACKHOLE, GameSpeedEffect.MOMENTUM]);
+        const totalTimeFactor = getGameSpeedupFactor([GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
+          GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.MOMENTUM]);
         const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
           ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
           : 1;
@@ -459,7 +456,11 @@ function gameLoop(diff, options = {}) {
   player.thisInfinityRealTime += realDiff;
   player.thisInfinityTime += diff;
   player.thisEternityRealTime += realDiff;
-  player.thisEternity += diff;
+  if (Enslaved.isRunning && Enslaved.feltEternity) {
+      player.thisEternity += diff * (1 + player.eternities.clampMax(1e66).toNumber());
+  } else {
+    player.thisEternity += diff;
+   }
   player.thisRealityRealTime += realDiff;
   player.thisReality += diff;
 
@@ -495,14 +496,14 @@ function gameLoop(diff, options = {}) {
     }
 
     if (RealityUpgrade(14).isBought) {
-      player.reality.partEternitied = player.reality.partEternitied.plus(
-        new Decimal(Time.deltaTime)
-          .times(Effects.product(
-            RealityUpgrade(3),
-            RealityUpgrade(14)
-            )
-          )
-        );
+      let eternitiedGain = Effects.product(
+        RealityUpgrade(3),
+        RealityUpgrade(14)
+      );
+      eternitiedGain *= getAdjustedGlyphEffect("timeetermult");
+      player.reality.partEternitied = player.reality.partEternitied
+        .plus(new Decimal(Time.deltaTime).times(Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue))
+      );
       player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
       player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
     }
@@ -513,48 +514,14 @@ function gameLoop(diff, options = {}) {
   player.realities += uncountabilityGain;
   player.reality.pp += uncountabilityGain;
 
-  produceAntimatter(diff);
+  if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
 
-    if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
+  EternityChallenge(12).tryFail();
+  Achievements._power.invalidate();
 
-    EternityChallenge(12).tryFail();
-
-    GameCache.achievementPower.invalidate();
-
-    for (let tier = 1; tier < 9; tier++) {
-      if (tier !== 8 && (InfinityDimension(tier).isUnlocked || EternityChallenge(7).completions > 0)) {
-        const dimension = InfinityDimension(tier);
-        dimension.amount = dimension.amount.plus(InfinityDimension(tier + 1).productionPerSecond.times(diff / 10000));
-      }
-      if (tier < 8) {
-        const dimension = TimeDimension(tier);
-        dimension.amount = dimension.amount.plus(TimeDimension(tier + 1).productionPerSecond.times(diff / 10000))
-      }
-    }
-
-    const ID1ProductionThisTick = InfinityDimension(1).productionPerSecond.times(diff / 1000);
-    if (EternityChallenge(7).isRunning) {
-      if (!NormalChallenge(10).isRunning) {
-        NormalDimension(7).amount = NormalDimension(7).amount.plus(ID1ProductionThisTick)
-      }
-    }
-    else {
-      player.infinityPower = player.infinityPower.plus(ID1ProductionThisTick);
-    }
-
-    const TD1Production = TimeDimension(1).productionPerSecond;
-    const TD1ProductionThisTick = TD1Production.times(diff/1000);
-    if (EternityChallenge(7).isRunning) {
-      InfinityDimension(8).amount = InfinityDimension(8).amount.plus(TD1ProductionThisTick);
-    }
-    else {
-      player.timeShards = player.timeShards.plus(TD1ProductionThisTick)
-    }
-
-    if (TD1Production.gt(0)) {
-      const id8 = InfinityDimension(8);
-      EternityChallenge(7).reward.applyEffect(v => id8.amount = id8.amount.plus(v.times(diff/10)));
-    }
+  TimeDimensions.tick(diff);
+  InfinityDimensions.tick(diff);
+  NormalDimensions.tick(diff);
 
   const freeTickspeed = FreeTickspeed.fromShards(player.timeShards);
   let gain = Math.max(0, freeTickspeed.newAmount - player.totalTickGained);
@@ -579,7 +546,7 @@ function gameLoop(diff, options = {}) {
   const currentEPmin = gainedEternityPoints().dividedBy(Time.thisEternityRealTime.totalMinutes);
   if (currentEPmin.gt(player.bestEPminThisEternity) && canEternity()) player.bestEPminThisEternity = currentEPmin;
 
-  if (TimeStudy.dilation.isBought) {
+  if (PlayerProgress.dilationUnlocked()) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
   }
 
@@ -616,7 +583,7 @@ function gameLoop(diff, options = {}) {
   Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
 
-  EventHub.dispatch(GameEvent.GAME_TICK_AFTER);
+  EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);
   GameUI.update();
   player.lastUpdate = thisUpdate;
   PerformanceStats.end("Game Update");
@@ -671,16 +638,6 @@ function getTTPerSecond() {
   return dilationTT.add(glyphTT);
 }
 
-function gameLoopWithAutobuyers(seconds, ticks, real) {
-  for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
-    gameLoop(1000 * seconds);
-    Autobuyers.tick();
-    if (real) {
-      console.log(ticksDone);
-    }
-  }
-}
-
 function simulateTime(seconds, real, fast) {
   // Don't do asynchronous processing loops nested in simulateTime
   Async.enabled = false;
@@ -690,7 +647,6 @@ function simulateTime(seconds, real, fast) {
   // warning: do not call this function with real unless you know what you're doing
   // calling it with fast will only simulate it with a max of 50 ticks
   let ticks = seconds * 20;
-  autobuyerOnGameLoop = false;
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)
@@ -720,10 +676,14 @@ function simulateTime(seconds, real, fast) {
         numberOfTicksRemaining, 0.0001);
       remainingRealSeconds -= realTickTime;
       gameLoop(1000 * realTickTime, { blackHoleSpeedup: blackHoleSpeedup });
-      Autobuyers.tick();
     }
   } else {
-    gameLoopWithAutobuyers(largeDiff / 1000, ticks, real);
+    for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
+      gameLoop(largeDiff);
+      if (real) {
+        console.log(ticksDone);
+      }
+    }
   }
 
   const offlineIncreases = ["While you were away"];
@@ -736,7 +696,7 @@ function simulateTime(seconds, real, fast) {
     // Needs an isFinite check in case it's zero before or afterwards
     if (player[varName].gt(playerStart[varName]) && Number.isFinite(oomIncrease)) {
       offlineIncreases.push(`your ${oomResourceNames[i]} increased by ` +
-        `${shorten(oomIncrease, 2, 2)} orders of magnitude`);
+        `${format(oomIncrease, 2, 2)} orders of magnitude`);
     }
   }
   // Linear increase
@@ -749,9 +709,9 @@ function simulateTime(seconds, real, fast) {
     if (linearIncrease.lessThan(0)) {
       // This happens when a prestige autobuyer triggers offline and resets the value
       offlineIncreases.push(`you ${prestigeReset[i]} and then generated ` +
-        `${shorten(player[varName], 2, 0)} more ${linearResourceNames[i]}`);
+        `${format(player[varName], 2, 0)} more ${linearResourceNames[i]}`);
     } else if (!Decimal.eq(player[varName], playerStart[varName])) {
-      offlineIncreases.push(`you generated ${shorten(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
+      offlineIncreases.push(`you generated ${format(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
     }
   }
   // Black hole activations
@@ -771,18 +731,13 @@ function simulateTime(seconds, real, fast) {
   }
 
   Modal.message.show(popupString);
-  autobuyerOnGameLoop = true;
   GameUI.notify.showBlackHoles = true;
   Async.enabled = true;
 }
 
 function updateChart(first) {
     if (first !== true && (player.infinitied.gte(1) || player.eternities.gte(1)) && player.options.chart.on === true) {
-        if (NormalChallenge(3).isRunning) {
-            addChartData(getDimensionProductionPerSecond(1).times(player.chall3Pow));
-        } else {
-            addChartData(getDimensionProductionPerSecond(1));
-        }
+      addChartData(NormalDimension(1).productionPerSecond);
     }
     if (player.options.chart.updateRate) {
         setTimeout(updateChart, player.options.chart.updateRate);
@@ -865,14 +820,17 @@ setInterval(function () {
 }, 1000*60*5)
 
 window.onload = function() {
-    GameIntervals.start();
-    setTimeout(() => {
-        if (kong.enabled) {
-            playFabLogin();
-            kong.updatePurchases();
-        }
-        document.getElementById("loading").style.display = "none";
-    }, 1000);
+  GameUI.initialized = true;
+  ui.view.initialized = true;
+  GameIntervals.start();
+  setTimeout(() => {
+    if (kong.enabled) {
+      playFabLogin();
+      kong.updatePurchases();
+    }
+    document.getElementById("loading").style.display = "none";
+    document.body.style.overflowY = "auto";
+  }, 500);
 };
 
 window.onfocus = function() {
@@ -884,7 +842,6 @@ window.onblur = function() {
 };
 
 function setShiftKey(isDown) {
-  shiftDown = isDown;
   ui.view.shiftDown = isDown;
 }
 

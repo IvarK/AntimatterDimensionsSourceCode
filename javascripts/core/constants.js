@@ -1,27 +1,24 @@
 "use strict";
 
-const DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
-const SHORT_DISPLAY_NAMES = [null, "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"];
-
-const AutobuyerMode = {
+const AUTOBUYER_MODE = {
   BUY_SINGLE: 1,
   BUY_10: 10,
   BUY_MAX: 100,
 };
 
-const AutoCrunchMode = {
+const AUTO_CRUNCH_MODE = {
   AMOUNT: 0,
   TIME: 1,
   X_LAST: 2
 };
 
-const AutoEternityMode = {
+const AUTO_ETERNITY_MODE = {
   AMOUNT: 0,
   TIME: 1,
   X_LAST: 2
 };
 
-const AutoRealityMode = {
+const AUTO_REALITY_MODE = {
   RM: 0,
   GLYPH: 1,
   EITHER: 2,
@@ -71,22 +68,23 @@ const GlyphRarities = [
   },
 ];
 
-const AutoGlyphSacMode = {
+const AUTO_GLYPH_SAC_MODE = {
   NONE: 0,
   ALL: 1,
   RARITY_THRESHOLDS: 2,
-  ADVANCED: 3,
-  ALCHEMY: 4
-}
+  EFFECTS: 3,
+  ADVANCED: 4,
+  ALCHEMY: 5
+};
 
-const AutoGlyphPickMode = {
+const AUTO_GLYPH_PICK_MODE = {
   RANDOM: 0,
   RARITY: 1,
   ABOVE_SACRIFICE_THRESHOLD: 2,
   LOWEST_ALCHEMY_RESOURCE: 3
 };
 
-const TimeStudyPath = {
+const TIME_STUDY_PATH = {
   NONE: 0,
   NORMAL_DIM: 1,
   INFINITY_DIM: 2,
@@ -120,4 +118,5 @@ const ALCHEMY_RESOURCE = {
   MULTIVERSAL: 18,
   UNPREDICTABILITY: 19,
   REALITY: 20,
+  CURSED: 21
 };

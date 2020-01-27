@@ -70,7 +70,7 @@ GameDatabase.tabs = [
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
-          PlayerProgress.infinityUnlocked()
+          PlayerProgress.challengeCompleted()
       },
       {
         key: "infinities",
@@ -217,7 +217,7 @@ GameDatabase.tabs = [
         name: "Time dilation",
         symbol: "Ψ",
         component: "time-dilation-tab",
-        condition: () => TimeStudy.dilation.isBought || PlayerProgress.realityUnlocked()
+        condition: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked()
       },
       {
         key: "compression",
@@ -238,7 +238,7 @@ GameDatabase.tabs = [
       {
         key: "glyphs",
         name: "Glyphs",
-        symbol: "G",
+        symbol: "<i class='fas fa-clone'></i>",
         component: "glyphs-tab"
       },
       {
@@ -270,7 +270,7 @@ GameDatabase.tabs = [
         name: "Glyph alchemy",
         symbol: "<i class='fas fa-vial'></i>",
         component: "alchemy-tab",
-        condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)
+        condition: () => Ra.pets.effarig.level >= 1 && Ra.pets.effarig.exp > 0
       },
     ],
   },
@@ -305,14 +305,14 @@ GameDatabase.tabs = [
         name: "V",
         symbol: "⌬",
         component: "v-tab",
-        condition: () => Achievement(151).isEnabled
+        condition: () => Achievement(151).isUnlocked
       },
       {
         key: "ra",
         name: "Ra",
         symbol: "☼",
         component: "ra-tab",
-        condition: () => V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])
+        condition: () => V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3])
       },
       {
         key: "laitela",

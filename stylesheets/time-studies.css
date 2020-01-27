@@ -726,3 +726,20 @@
   transition-delay: 1.5s;
   opacity: 1;
 }
+
+.o-time-study--triad {
+  width: 17rem;
+  height: 8rem;
+  border: none;
+  border-radius: 0;
+  background: #f1aa7f;
+}
+
+.o-time-study--unavailable.o-time-study--triad {
+  background: #29180e;
+  color: white;
+}
+
+.o-time-study--bought.o-time-study--triad {
+  box-shadow: inset 0px 0px 20px black; 
+}

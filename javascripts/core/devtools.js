@@ -107,10 +107,8 @@ dev.updateTDCosts = function() {
 };
 
 dev.refundTimeDims = function() {
-    for (let i = 1; i < 9; i++) {
-        const dim = TimeDimension(i);
-        dim.bought = 0;
-        dim.power = new Decimal(1);
+    for (const dimension of TimeDimensions.all) {
+        dimension.bought = 0;
     }
     dev.updateTDCosts();
 };
@@ -156,20 +154,20 @@ dev.giveGlyph = function(level, rawLevel = level) {
   Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }));
 };
 
-dev.giveRealityGlyph = function(level, rawLevel = level) {
+dev.giveRealityGlyph = function(level) {
   if (Glyphs.freeInventorySpace === 0) return;
-  Glyphs.addToInventory(GlyphGenerator.realityGlyph({ actualLevel: level, rawLevel }, []));
+  Glyphs.addToInventory(GlyphGenerator.realityGlyph(level));
 };
 
 dev.decriminalize = function() {
-  player.secretAchievements.delete(23);
-  EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+  SecretAchievement(23).lock();
+  EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
 };
 
 dev.removeAch = function(name) {
-  if (typeof (name) === "number") return player.achievements.delete(name);
-  if (name.startsWith("r")) return player.achievements.delete(parseInt(name.slice(1), 10));
-  if (name.startsWith("s")) return player.achievements.delete(parseInt(name.slice(1), 10));
+  if (typeof (name) === "number") return Achievement(name).lock();
+  if (name.startsWith("r")) return Achievement(parseInt(name.slice(1), 10)).lock();
+  if (name.startsWith("s")) return SecretAchievement(parseInt(name.slice(1), 10)).lock();
   return "failed to delete achievement";
 };
 
@@ -278,7 +276,7 @@ dev.printResourceTotals = function() {
 
   let NDmults = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
-    NDmults = NDmults.times(getDimensionFinalMultiplier(i));
+    NDmults = NDmults.times(NormalDimension(i).multiplier);
   }
   console.log(`ND mults: e${NDmults.log10().toPrecision(3)}`);
   let IDmults = new Decimal(1);
@@ -337,9 +335,9 @@ dev.testGlyphs = function(config) {
     withFirst.forEach(e => e.push(elements[0]));
     return withFirst.concat(withoutFirst);
   }
-  const sets5 = makeCombinationsWithRepeats(5, GLYPH_TYPES.slice(0, 5))
+  const sets5 = makeCombinationsWithRepeats(5, BASIC_GLYPH_TYPES)
     .map(s => s.map(t => makeAllEffectGlyph(t)));
-  const sets4 = makeCombinationsWithRepeats(4, GLYPH_TYPES.slice(0, 5))
+  const sets4 = makeCombinationsWithRepeats(4, BASIC_GLYPH_TYPES)
     .map(s => s.map(t => makeAllEffectGlyph(t)));
   const effarigSets = effarigGlyphs.map(g => sets4.map(s => [g].concat(s)));
   const glyphSets = sets5.concat(...effarigSets);
@@ -349,7 +347,7 @@ dev.testGlyphs = function(config) {
       return g;
     });
     Glyphs.active = Array.from(player.reality.glyphs.active);
-    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   }
   function glyphToShortString(glyph) {
     if (glyph.type === "effarig") {

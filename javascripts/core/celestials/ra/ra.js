@@ -261,7 +261,7 @@ const Ra = {
     return this.totalCharges - player.celestials.ra.charged.size;
   },
   get chargeUnlocked() {
-    return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]) && Ra.pets.teresa.level > 1;
+    return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2]) && Ra.pets.teresa.level > 1;
   },
   applyAlchemyReactions() {
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return;
@@ -280,7 +280,7 @@ const Ra = {
     }
   },
   get alchemyResourceCap() {
-    return 11111;
+    return 1000000;
   }
 };
 
@@ -359,7 +359,7 @@ const RA_UNLOCKS = {
   EFFARIG_UNLOCK: {
     id: 2,
     description: "Get Teresa to level 5",
-    reward: "Unlock Effarig memories",
+    reward: "Unlock Effarig's memories",
     pet: Ra.pets.teresa,
     level: 5
   },
@@ -405,7 +405,7 @@ const RA_UNLOCKS = {
   ENSLAVED_UNLOCK: {
     id: 8,
     description: "Get Effarig to level 5",
-    reward: "Unlock Enslaved memories",
+    reward: "Unlock Enslaved's memories",
     pet: Ra.pets.effarig,
     level: 5
   },
@@ -420,16 +420,16 @@ const RA_UNLOCKS = {
     id: 10,
     description: "Get Effarig to level 15",
     reward: "Glyph level is increased based on relic shards gained",
-    effect: () => Math.pow(Math.log10(Math.max(Effarig.shardsGained, 1)), 2),
+    effect: () => 100 * Math.pow(Math.log10(Math.max(Effarig.shardsGained, 1)), 2),
     pet: Ra.pets.effarig,
     level: 15
   },
   GLYPH_ALCHEMY: {
     id: 11,
-    description: "Get Effarig to level 25",
-    reward: "Unlock Glyph Alchemy",
+    description: "Unlock Effarig memories",
+    reward: "Glyph Alchemy",
     pet: Ra.pets.effarig,
-    level: 25
+    level: 1
   },
   IMPROVED_STORED_TIME: {
     id: 12,
@@ -453,7 +453,7 @@ const RA_UNLOCKS = {
   V_UNLOCK: {
     id: 14,
     description: "Get Enslaved to level 5",
-    reward: "Unlock V memories",
+    reward: "Unlock V's memories",
     pet: Ra.pets.enslaved,
     level: 5
   },
@@ -518,7 +518,7 @@ const RA_UNLOCKS = {
     id: 22,
     description: "Get V to level 15",
     reward: "Achievement multiplier applies to Time Theorem generation",
-    effect: () => Player.achievementPower.toNumber(),
+    effect: () => Achievements.power,
     pet: Ra.pets.v,
     level: 15
   },

@@ -5,7 +5,8 @@ Vue.component("time-study", {
   data() {
     return {
       isBought: false,
-      isAvailable: false
+      isAvailableForPurchase: false,
+      STCost: 0
     };
   },
   props: {
@@ -13,6 +14,10 @@ Vue.component("time-study", {
     showCost: {
       type: Boolean,
       default: true
+    },
+    showSTCost: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -28,7 +33,7 @@ Vue.component("time-study", {
     classObject() {
       return {
         "o-time-study": true,
-        "o-time-study--unavailable": !this.isAvailable && !this.isBought,
+        "o-time-study--unavailable": !this.isAvailableForPurchase && !this.isBought,
         "o-time-study--bought": this.isBought,
         "o-time-study--small": this.setup.isSmall,
         "l-time-study": true
@@ -43,8 +48,10 @@ Vue.component("time-study", {
       const study = this.study;
       this.isBought = study.isBought;
       if (!this.isBought) {
-        this.isAvailable = study.canBeBought && study.isAffordable;
+        this.isAvailableForPurchase = study.canBeBought && study.isAffordable;
       }
+
+      this.STCost = this.study.STCost;
     },
     handleClick() {
       this.study.purchase();
@@ -60,11 +67,14 @@ Vue.component("time-study", {
              @click.shift.exact="shiftClick">
       <slot />
       <cost-display br
-        v-if="showCost"
+        v-if="showCost && !showSTCost"
         :config="config"
         singular="Time Theorem"
         plural="Time Theorems"
       />
+      <div v-else-if="showSTCost">
+        Cost: {{ format(STCost) }} {{ "Space Theorem" | pluralize(STCost, "Space Theorems")}}
+      </div>
     </button>`
 });
 

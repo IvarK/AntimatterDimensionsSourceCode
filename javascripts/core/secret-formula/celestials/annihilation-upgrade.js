@@ -23,7 +23,7 @@ GameDatabase.annihilationUpgrades = {
     startCost: 300,
     costMult: 8,
     effect: x => Math.pow(1.20, x),
-    effectFormat: x => `${shorten(x, 2, 2)}x`
+    effectFormat: x => `${format(x, 2, 2)}x`
   },
   infConversion: {
     id: "infConversion",
@@ -57,7 +57,7 @@ GameDatabase.darkEnergyUpgrade = {
     description: "Multiply Dark Matter Dimension production based on Dark Energy",
     cost: 30,
     effect: () => Math.log10(player.celestials.laitela.darkEnergy + 1) * 1.5 + 1,
-    effectFormat: x => `Currently: ${shorten(x, 2, 2)}x`
+    effectFormat: x => `Currently: ${format(x, 2, 2)}x`
   },
   annihilationUpgradeCostReduction: {
     id: 2,
@@ -71,7 +71,7 @@ GameDatabase.darkEnergyUpgrade = {
     description: "Gain more Higgs Bosons based on current amount",
     cost: 400,
     effect: () => player.celestials.laitela.higgs.plus(1).log10() * 0.75 + 1,
-    effectFormat: x => `Currently: ${shorten(x, 2, 2)}x`
+    effectFormat: x => `Currently: ${format(x, 2, 2)}x`
   },
   realityPenaltyReduction: {
     id: 4,
@@ -85,13 +85,13 @@ GameDatabase.darkEnergyUpgrade = {
     description: "Glyph Alchemy reactions are more efficient based on Dark Energy",
     cost: 10000,
     effect: () => Math.log10(player.celestials.laitela.darkEnergy + 1) * 0.75 + 1,
-    effectFormat: x => `Currently: ${shorten(x, 2, 2)}x`
+    effectFormat: x => `Currently: ${format(x, 2, 2)}x`
   },
   compressionBoost: {
     id: 6,
     description: "Time runs faster in Time Compression based on current Entanglement",
     cost: 50000,
     effect: () => 1e10 * Math.pow(2, player.celestials.ra.compression.entanglement),
-    effectFormat: x => `Currently: ${shorten(x, 2, 2)}x`
+    effectFormat: x => `Currently: ${format(x, 2, 2)}x`
   }
 };

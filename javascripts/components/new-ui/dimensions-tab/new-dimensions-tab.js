@@ -44,7 +44,7 @@ Vue.component("new-dimensions-tab", {
       this.isChallengePowerVisible = isChallengePowerVisible;
       if (isChallengePowerVisible) {
         const c2Power = `${(player.chall2Pow * 100).toFixed(2)}%`;
-        const c3Power = `${this.shortenRateOfChange(player.chall3Pow.times(100))}%`;
+        const c3Power = `${format(player.chall3Pow.times(100), 2, 2)}%`;
         if (isC2Running && isC3Running) {
           this.challengePower = `Production: ${c2Power}, First dimension: ${c3Power}`;
         } else if (isC2Running) {

@@ -11,7 +11,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       effect: () => player.infinityRebuyables[config.id],
       formatEffect: value => (value === maxUpgrades ? `10x ➜ ${10 - value}x` : `10x ➜ ${10 - value - 1}x`),
       staticEffect: true,
-      formatCost: value => shorten(value, 2, 0)
+      formatCost: value => format(value, 2, 0)
     };
   }
 
@@ -39,7 +39,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     infinitiedMult: {
       id: "infinitiedMult",
       cost: 1e5,
-      description: "Normal dimensions gain a multiplier based on amount infinitied",
+      description: "Normal dimensions gain a multiplier based on infinitied stat",
       effect: () => 1 + Player.totalInfinitied.pLog10() * 10,
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -66,7 +66,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     infinitiedGen: {
       id: "infinitiedGeneration",
       cost: 2e7,
-      description: "You passively generate Infinitied stat based on your fastest infinity",
+      description: "Passively generate infinitied stat based on your fastest infinity",
       effect: () => player.bestInfinityTime,
       formatEffect: value => {
         const period = value >= 999999999999
@@ -90,7 +90,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       initialCost: 3e6,
       costIncrease: 5,
       maxUpgrades: 8,
-      description: "Tickspeed cost multiplier increase",
+      description: "Post-infinity tickspeed cost multiplier increase",
 
     }),
     dimCostMult: rebuyable({
@@ -98,21 +98,21 @@ GameDatabase.infinity.breakUpgrades = (function() {
       initialCost: 1e8,
       costIncrease: 5e3,
       maxUpgrades: 7,
-      description: "Dimension cost multiplier increase"
+      description: "Post-infinity dimension cost multiplier increase"
     }),
     ipGen: {
       cost: () => player.offlineProdCost,
       description: () => {
         let generation = `Generate ${player.offlineProd}%`;
         if (!BreakInfinityUpgrade.ipGen.isMaxed) {
-          generation += ` > ${player.offlineProd + 5}%`;
+          generation += ` ➜ ${player.offlineProd + 5}%`;
         }
         return `${generation} of your best IP/min from last 10 infinities, works offline`;
       },
       // Cutting corners: this is not actual effect (player.offlineProd is), but
       // it is actual IPPM that is displyed on upgrade
       effect: () => Player.bestRunIPPM.times(player.offlineProd / 100),
-      formatEffect: value => `${shorten(value, 2, 1)} IP/min`
+      formatEffect: value => `${format(value, 2, 1)} IP/min`
     }
   };
 }());

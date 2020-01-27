@@ -1,7 +1,7 @@
 "use strict";
 
 function startDilatedEternity(auto) {
-  if (!TimeStudy.dilation.isBought) return false;
+  if (!PlayerProgress.dilationUnlocked()) return false;
   if (player.dilation.active) {
       eternity(false, auto, { switchingDilation: true });
       return false;
@@ -20,24 +20,16 @@ function startDilatedEternity(auto) {
   return true;
 }
 
-
-/**
-*
-* @param {Name of the ugrade} id
-* @param {Cost of the upgrade} cost
-* @param {Cost increase for the upgrade, only for rebuyables} costInc
-*
-* id 1-3 are rebuyables
-*
-* id 2 resets your dilated time and free galaxies
-*
-*/
+// @param {Name of the ugrade} id
+// @param {Cost of the upgrade} cost
+// @param {Cost increase for the upgrade, only for rebuyables} costInc
+// id 1-3 are rebuyables
+// id 2 resets your dilated time and free galaxies
 
 const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
-                            5e6,        1e9,         5e7,
-                            2e12,       1e10,        1e11,
-                                        1e15];
-
+                        5e6, 1e9, 5e7,
+                        2e12, 1e10, 1e11,
+                        1e15];
 
 function buyDilationUpgrade(id, bulk) {
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
@@ -79,10 +71,11 @@ function buyDilationUpgrade(id, bulk) {
       if (Enslaved.isRunning) {
         retroactiveTPFactor = Math.pow(retroactiveTPFactor, Enslaved.tachyonNerf);
       }
-      player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
+      player.dilation.tachyonParticles = player.dilation.tachyonParticles
+        .times(Decimal.pow(retroactiveTPFactor, buying));
     }
   }
-  return true
+  return true;
 }
 
 // This two are separate to avoid an infinite loop as the compression unlock condition checks the free galaxy mult
@@ -107,11 +100,11 @@ function getDilationGainPerSecond() {
       RealityUpgrade(1),
       AlchemyResource.dilation
     );
-  dtRate = dtRate.times(getAdjustedGlyphEffect("dilationdilationMult"));
+  dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
   dtRate = dtRate.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
   dtRate = dtRate.times(Ra.gamespeedDTMult());
   if (Enslaved.isRunning) {
-    dtRate = dilatedValueOf(dtRate).dividedBy(player.dilation.dilatedTime.plus(1).log10() + 1);
+    dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
   }
   dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime());
   if (V.isRunning) dtRate = dtRate.pow(0.5);
@@ -150,7 +143,7 @@ function getTachyonGain() {
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
 function getTachyonReq() {
   let effectiveTP = player.dilation.tachyonParticles;
-  if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(4);
+  if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
   return Decimal.pow10(
     effectiveTP
       .times(Math.pow(400, 1.5))

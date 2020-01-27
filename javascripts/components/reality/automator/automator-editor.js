@@ -32,12 +32,12 @@ Vue.component("automator-editor", {
       if (this.isPaused) return "Resume automator execution";
       return "Start automator";
     },
-    modeIconClass() { return this.automatorType === AutomatorType.BLOCK ? "fa-cubes" : "fa-code"; },
+    modeIconClass() { return this.automatorType === AUTOMATOR_TYPE.BLOCK ? "fa-cubes" : "fa-code"; },
     isTextAutomator() {
-      return this.automatorType === AutomatorType.TEXT;
+      return this.automatorType === AUTOMATOR_TYPE.TEXT;
     },
     isBlockAutomator() {
-      return this.automatorType === AutomatorType.BLOCK;
+      return this.automatorType === AUTOMATOR_TYPE.BLOCK;
     }
   },
   methods: {
@@ -133,18 +133,18 @@ Vue.component("automator-editor", {
       this.$nextTick(() => AutomatorTextUI.editor.refresh());
     },
     toggleAutomatorMode() {
-      if (this.automatorType === AutomatorType.BLOCK) { 
+      if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
         this.parseTextFromBlocks();
-        player.reality.automator.type = AutomatorType.TEXT;
+        player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
       } else if (BlockAutomator.fromText(this.currentScript)) {
-        player.reality.automator.type = AutomatorType.BLOCK;
+        player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
       } else {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");
       }
     }
   },
   created() {
-    EventHub.ui.on(GameEvent.GAME_LOAD, () => this.onGameLoad(), this);
+    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
     this.updateCurrentScriptID();
     this.updateScriptList();
   },

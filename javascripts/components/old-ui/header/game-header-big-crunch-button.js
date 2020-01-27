@@ -12,7 +12,7 @@ Vue.component("game-header-big-crunch-button", {
   },
   computed: {
     peakIPPMThreshold: () => new Decimal("1e100"),
-    isPeakIPPMVisible() { 
+    isPeakIPPMVisible() {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     },
     amountStyle() {
@@ -43,8 +43,12 @@ Vue.component("game-header-big-crunch-button", {
   },
   methods: {
     update() {
-      this.isVisible = player.break && player.antimatter.gte(Decimal.MAX_NUMBER) &&
-        !NormalChallenge.isRunning && !InfinityChallenge.isRunning;
+      this.isVisible = player.break && player.antimatter.gte(Decimal.MAX_NUMBER) && !InfinityChallenge.isRunning;
+      if (NormalChallenge.isRunning) {
+        if (!Enslaved.isRunning || Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(NormalChallenge.current.id)) {
+          this.isVisible = false;
+        }
+      }
       if (!this.isVisible) return;
       const gainedIP = gainedInfinityPoints();
       this.currentIP.copyFrom(player.infinityPoints);
@@ -61,14 +65,14 @@ Vue.component("game-header-big-crunch-button", {
       class="o-prestige-btn o-prestige-btn--big-crunch l-game-header__big-crunch-btn"
       onclick="bigCrunchResetRequest()"
     >
-      <b>Big Crunch for 
-      <span :style="amountStyle">{{shortenDimensions(gainedIP)}}</span> 
+      <b>Big Crunch for
+      <span :style="amountStyle">{{format(gainedIP, 2, 0)}}</span>
       Infinity {{ "point" | pluralize(gainedIP) }}.</b>
       <template v-if="isPeakIPPMVisible">
         <br>
-        {{shortenDimensions(currentIPPM)}} IP/min
+        {{format(currentIPPM, 2, 0)}} IP/min
         <br>
-        Peaked at {{shortenDimensions(peakIPPM)}} IP/min
+        Peaked at {{format(peakIPPM, 2, 0)}} IP/min
       </template>
     </button>`
 });

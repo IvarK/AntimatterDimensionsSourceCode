@@ -20,7 +20,7 @@ Vue.component("dimension-autobuyer-box", {
           if (!this.hasMaxedBulk) {
             bulk = Math.min(bulk * 2, 1e100);
           }
-          return `${shortenDimensions(bulk)}x bulk purchase`;
+          return `${format(bulk, 2, 0)}x bulk purchase`;
         }
       },
       methods: {
@@ -44,7 +44,7 @@ Vue.component("dimension-autobuyer-box", {
         <span>{{bulkDisplay}}</span>
         <template v-if="!hasMaxedBulk">
           <br>
-          <span>Cost: {{shortenDimensions(cost)}} IP</span>
+          <span>Cost: {{format(cost, 2, 0)}} IP</span>
         </template>
         </button>`
     }
@@ -54,7 +54,7 @@ Vue.component("dimension-autobuyer-box", {
   },
   data() {
     return {
-      mode: AutobuyerMode.BUY_SINGLE
+      mode: AUTOBUYER_MODE.BUY_SINGLE
     };
   },
   computed: {
@@ -62,12 +62,12 @@ Vue.component("dimension-autobuyer-box", {
       return Autobuyer.dimension(this.tier);
     },
     name() {
-      return `${DISPLAY_NAMES[this.tier]} Dimension Autobuyer`;
+      return `${NormalDimension(this.tier).displayName} Dimension Autobuyer`;
     },
     modeDisplay() {
       switch (this.mode) {
-        case AutobuyerMode.BUY_SINGLE: return "Buys singles";
-        case AutobuyerMode.BUY_10: return "Buys max";
+        case AUTOBUYER_MODE.BUY_SINGLE: return "Buys singles";
+        case AUTOBUYER_MODE.BUY_10: return "Buys max";
       }
       throw "Unknown dimension autobuyer mode";
     }

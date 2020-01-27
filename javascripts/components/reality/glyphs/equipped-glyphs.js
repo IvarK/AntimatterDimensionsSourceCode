@@ -4,6 +4,7 @@ Vue.component("equipped-glyphs", {
   data() {
     return {
       glyphs: [],
+      copiedGlyphs: [],
       dragoverIndex: -1,
       respec: player.reality.respec,
       undoAvailable: false,
@@ -32,23 +33,32 @@ Vue.component("equipped-glyphs", {
     },
   },
   created() {
-    this.on$(GameEvent.GLYPHS_CHANGED, this.glyphsChanged);
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
   },
   methods: {
     glyphPositionStyle(idx) {
       return {
         position: "absolute",
-        left: `calc(50% + ${this.glyphX(idx)}rem)`,
-        top: `calc(50% + ${this.glyphY(idx)}rem)`,
+        left: `calc(50% + ${this.glyphX(idx, 1)}rem)`,
+        top: `calc(50% + ${this.glyphY(idx, 1)}rem)`,
+        "z-index": 1,
       };
     },
-    glyphX(idx) {
-      return -this.GLYPH_SIZE / 2 + this.arrangementRadius *
+    copyPositionStyle(glyph) {
+      return {
+        position: "absolute",
+        left: `calc(50% + ${this.glyphX(glyph.idx, 1.4)}rem)`,
+        top: `calc(50% + ${this.glyphY(glyph.idx, 1.4)}rem)`,
+        opacity: 0.4,
+      };
+    },
+    glyphX(idx, scale) {
+      return -this.GLYPH_SIZE / 2 + this.arrangementRadius * scale *
         Math.sin(2 * Math.PI * idx / this.slotCount);
     },
-    glyphY(idx) {
-      return -this.GLYPH_SIZE / 2 + this.arrangementRadius *
+    glyphY(idx, scale) {
+      return -this.GLYPH_SIZE / 2 + this.arrangementRadius * scale *
         Math.cos(2 * Math.PI * idx / this.slotCount);
     },
     dragover(event, idx) {
@@ -76,6 +86,7 @@ Vue.component("equipped-glyphs", {
     },
     glyphsChanged() {
       this.glyphs = Glyphs.active.map(GlyphGenerator.copy);
+      this.copiedGlyphs = Glyphs.copies.map(GlyphGenerator.copy);
     },
     undo() {
       if (!this.undoAvailable) return;
@@ -117,6 +128,11 @@ Vue.component("equipped-glyphs", {
         <div v-else
              :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
                       {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]" />
+      </div>
+      <div v-for="glyph in copiedGlyphs" :style="copyPositionStyle(glyph)">
+        <glyph-component v-if="glyph"
+                          :glyph="glyph"
+                          :circular="true"/>
       </div>
     </div>
     <div class="l-equipped-glyphs__buttons">

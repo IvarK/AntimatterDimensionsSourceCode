@@ -11,16 +11,11 @@ const ReplicantiGrowth = {
   }
 };
 
-// Rounding errors suck
-function nearestPercent(x) {
-  return Math.round(100 * x) / 100;
-}
-
 function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
   player.reality.upgReqChecks[0] = false;
   let galaxyGain = 1;
-  if (Achievement(126).isEnabled) {
+  if (Achievement(126).isUnlocked) {
     // Attempt to buy bulk if RG divides by e308 instead of resetting
     const maxGain = Replicanti.galaxies.max - player.replicanti.galaxies;
     const logReplicanti = player.replicanti.amount.log10();
@@ -32,7 +27,6 @@ function replicantiGalaxy() {
     player.replicanti.amount = new Decimal(1);
   }
   player.replicanti.galaxies += galaxyGain;
-  softReset(0);
 }
 
 // Produces replicanti quickly below e308, will auto-bulk-RG if production is fast enough
@@ -75,14 +69,14 @@ function getReplicantiInterval(noMod, intervalIn) {
     RealityUpgrade(23)
   );
   interval = Decimal.divide(interval, preCelestialEffects);
-  if ((TimeStudy(133).isBought && !Achievement(138).isEnabled) || (amount.gt(replicantiCap()) || noMod)) {
+  if ((TimeStudy(133).isBought && !Achievement(138).isUnlocked) || (amount.gt(replicantiCap()) || noMod)) {
     interval = interval.times(10);
   }
   if (TimeStudy(132).isBought && Perk.studyPassive2.isBought) {
     interval = interval.divide(5);
   }
   if (amount.lte(replicantiCap()) || noMod) {
-    if (Achievement(134).isEnabled) interval = interval.divide(2);
+    if (Achievement(134).isUnlocked) interval = interval.divide(2);
   } else {
     const increases = (amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
     interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
@@ -109,9 +103,9 @@ function replicantiCap() {
 function replicantiLoop(diff) {
   if (!player.replicanti.unl) return;
   PerformanceStats.start("Replicanti");
-  EventHub.dispatch(GameEvent.REPLICANTI_TICK_BEFORE);
+  EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_BEFORE);
   const interval = getReplicantiInterval();
-  const isActivePathDisablingRGAutobuyer = TimeStudy(131).isBought && !Achievement(138).isEnabled;
+  const isActivePathDisablingRGAutobuyer = TimeStudy(131).isBought && !Achievement(138).isUnlocked;
   const isRGAutobuyerEnabled = player.replicanti.galaxybuyer && !isActivePathDisablingRGAutobuyer;
   const logReplicanti = player.replicanti.amount.clampMin(1).ln();
   const isUncapped = TimeStudy(192).isBought;
@@ -128,22 +122,22 @@ function replicantiLoop(diff) {
     } else {
       fastReplicantiBelow308(logGainFactorPerTick.times(LOG10_E), isRGAutobuyerEnabled);
     }
-    replicantiTicks = 0;
-  } else if (interval.lte(replicantiTicks)) {
+    player.replicanti.timer = 0;
+  } else if (interval.lte(player.replicanti.timer)) {
     const reproduced = binomialDistribution(player.replicanti.amount, player.replicanti.chance);
      player.replicanti.amount = player.replicanti.amount.plus(reproduced);
     if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount);
-    replicantiTicks -= interval.toNumber();
+    player.replicanti.timer -= interval.toNumber();
   }
 
   if (player.replicanti.amount !== 0) {
-    replicantiTicks += player.options.updateRate;
+    player.replicanti.timer += diff;
   }
 
   if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Decimal.MAX_NUMBER)) {
     replicantiGalaxy();
   }
-  EventHub.dispatch(GameEvent.REPLICANTI_TICK_AFTER);
+  EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_AFTER);
   PerformanceStats.end();
 }
 
@@ -225,7 +219,7 @@ const ReplicantiUpgrade = {
     set value(value) { player.replicanti.chance = value; }
 
     get nextValue() {
-      return nearestPercent(this.value + 0.01);
+      return this.nearestPercent(this.value + 0.01);
     }
 
     get cost() { return player.replicanti.chanceCost; }
@@ -241,7 +235,7 @@ const ReplicantiUpgrade = {
     }
 
     get isCapped() {
-      return nearestPercent(this.value) >= this.cap;
+      return this.nearestPercent(this.value) >= this.cap;
     }
 
     get autobuyerMilestone() {
@@ -261,7 +255,12 @@ const ReplicantiUpgrade = {
       const totalCost = this.cost.times(Decimal.pow(this.costIncrease, N).minus(1).dividedBy(this.costIncrease - 1));
       player.infinityPoints = player.infinityPoints.minus(totalCost);
       this.baseCost = this.baseCost.times(Decimal.pow(this.costIncrease, N));
-      this.value = nearestPercent(this.value + 0.01 * N);
+      this.value = this.nearestPercent(this.value + 0.01 * N);
+    }
+
+    // Rounding errors suck
+    nearestPercent(x) {
+      return Math.round(100 * x) / 100;
     }
   }(),
   interval: new class ReplicantiIntervalUpgrade extends ReplicantiUpgradeState {
@@ -396,10 +395,10 @@ const Replicanti = {
       return player.replicanti.galaxies;
     },
     get extra() {
-      return Effects.sum(
+      return (Effects.sum(
         TimeStudy(225),
         TimeStudy(226)
-      ) + Effarig.bonusRG;
+      ) + Effarig.bonusRG) * TriadStudy(3).effectOrDefault(1);
     },
     get total() {
       return this.bought + this.extra;
@@ -426,7 +425,7 @@ const Replicanti = {
         this.isOn = !this.isOn;
       },
       get isEnabled() {
-        return !TimeStudy(131).isBought || Achievement(138).isEnabled;
+        return !TimeStudy(131).isBought || Achievement(138).isUnlocked;
       }
     }
   },

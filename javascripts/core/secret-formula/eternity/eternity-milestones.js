@@ -26,7 +26,7 @@ GameDatabase.eternity.milestones = {
     reward: () => {
       const EPmin = getOfflineEPGain(TimeSpan.fromMinutes(1).totalMilliseconds);
       return `While offline, gain 25% of your best EP/min from previous eternities.
-        (Currently ${shorten(EPmin, 2, 2)} EP/min)`;
+        (Currently ${format(EPmin, 2, 2)} EP/min)`;
     },
   },
   autoIC: {
@@ -110,15 +110,15 @@ GameDatabase.eternity.milestones = {
     reward: () => {
       const eternities = getEternitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
       return `While offline, gain eternities at 50% the rate of your fastest eternity.
-        (Currently ${shorten(eternities, 2, 2)}/hour)`;
+        (Currently ${format(eternities, 2, 2)}/hour)`;
     },
   },
   autoInfinities: {
     eternities: 1000,
     reward: () => {
       const infinities = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
-      return `While offline, gain infinities equal to 50% your best infinitied/hour this eternity.
-        (Currently ${shorten(infinities, 2, 2)}/hour)`;
+      return `While offline, gain Infinitied stat equal to 50% your best Infinitied stat/hour this eternity.
+        (Currently ${format(infinities, 2, 2)}/hour)`;
     },
   }
 };

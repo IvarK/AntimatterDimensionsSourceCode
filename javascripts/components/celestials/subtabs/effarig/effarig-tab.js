@@ -38,6 +38,7 @@ Vue.component("effarig-tab", {
   data() {
     return {
       relicShards: 0,
+      shardRarityBoost: 0,
       shardsGained: 0,
       autosacrificeUnlocked: false,
       adjusterUnlocked: false,
@@ -46,6 +47,7 @@ Vue.component("effarig-tab", {
       quote: "",
       quoteIdx: 0,
       isRunning: false,
+      vIsFlipped: false
     };
   },
   computed: {
@@ -69,15 +71,18 @@ Vue.component("effarig-tab", {
     },
     runDescription() {
       return this.isRunning
-        ? "You are in Effarig's Reality - give up?"
-        : `Start Effarig's Reality; all production, gamespeed, and tickspeed are severely lowered,
-          infinity power reduces the production and gamespeed penalties and time shards reduce the 
-          tickspeed penalty. Glyph levels are temporarily capped.`;
+        ? `All dimension multipliers, gamespeed, and tickspeed are severely lowered, like dilation. Infinity power
+          reduces the production and gamespeed penalties and time shards reduce the tickspeed penalty. Glyph levels
+          are temporarily capped to ${Effarig.glyphLevelCap}, rarity is unaffected.`
+        : `Start Effarig's Reality; all dimension multipliers, gamespeed, and tickspeed are severely lowered, like
+          dilation. Infinity power reduces the production and gamespeed penalties and time shards reduce the tickspeed
+          penalty. Glyph levels are temporarily capped, rarity is unaffected.`;
     }
   },
   methods: {
     update() {
       this.relicShards = player.celestials.effarig.relicShards;
+      this.shardRarityBoost = Effarig.maxRarityBoost;
       this.shardsGained = Effarig.shardsGained;
       this.quote = Effarig.quote;
       this.quoteIdx = player.celestials.effarig.quoteIdx;
@@ -86,6 +91,7 @@ Vue.component("effarig-tab", {
       this.adjusterUnlocked = EffarigUnlock.adjuster.isUnlocked;
       this.autopickerUnlocked = EffarigUnlock.autopicker.isUnlocked;
       this.isRunning = Effarig.isRunning;
+      this.vIsFlipped = V.isFlipped;
     },
     startRun() {
       if (this.isRunning) startRealityOver();
@@ -96,14 +102,26 @@ Vue.component("effarig-tab", {
     },
     hasNextQuote() {
       return this.quoteIdx < Effarig.maxQuoteIdx;
+    },
+    createCursedGlyph() {
+      if (Glyphs.freeInventorySpace === 0) {
+        Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
+        return;
+      }
+      Glyphs.addToInventory(GlyphGenerator.cursedGlyph());
+      GameUI.notify.error("Created a cursed glyph");
+      this.emitClose();
     }
   },
   template:
     `<div class="l-teresa-celestial-tab">
       <celestial-quote-history celestial="effarig"/>
-      <div class="c-effarig-relics">You have {{ shorten(relicShards, 2, 0) }} Relic Shards.</div>
+      <div class="c-effarig-relics">
+        You have {{ format(relicShards, 2, 0) }} Relic Shards, which increases <br>
+        the rarity of new glyphs by up to +{{ format(shardRarityBoost, 2, 2) }}%.
+      </div>
       <div class="c-effarig-relic-description">
-        You will gain {{ shorten(shardsGained, 2, 0) }} Relic Shards next reality. More EP slightly increases <br>
+        You will gain {{ format(shardsGained, 2, 0) }} Relic Shards next reality. More EP slightly increases <br>
         shards gained. More distinct glyph effects significantly increases shards gained.
       </div>
       <div class="l-effarig-shop-and-run">
@@ -113,9 +131,17 @@ Vue.component("effarig-tab", {
            :key="i"
            :unlock="unlock" />
           <effarig-unlock-button v-if="!runUnlocked" :unlock="runUnlock" />
+          <button class="o-effarig-shop-button" @click="createCursedGlyph" v-if="vIsFlipped">
+            Get a cursed glyph...
+          </button>
         </div>
         <div v-if="runUnlocked" class="l-effarig-run">
-          <div class="c-effarig-run-description">{{runDescription}}</div>
+          <div class="c-effarig-run-description">
+            <div v-if="isRunning">
+              You are in Effarig's Reality - give up?
+            </div><br>
+          {{runDescription}}
+          </div>
           <div :class="['l-effarig-run-button', 'c-effarig-run-button', runButtonOuterClass]"
                @click="startRun">
             <div :class="runButtonInnerClass" :button-symbol="symbol">{{symbol}}</div>

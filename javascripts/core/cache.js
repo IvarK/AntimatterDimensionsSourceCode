@@ -116,20 +116,12 @@ const GameCache = {
 
   totalIPMult: new Lazy(() => totalIPMult()),
 
-  achievementPower: new Lazy(() => Decimal.pow(
-    1.25,
-    Array.range(1, 14)
-      .map(Achievements.row)
-      .countWhere(row => row.every(ach => ach.isEnabled))
-  ).times(Math.pow(1.03, Achievements.effectiveCount))),
-
   challengeTimeSum: new Lazy(() => player.challenge.normal.bestTimes.sum()),
 
   infinityChallengeTimeSum: new Lazy(() => player.challenge.infinity.bestTimes.sum()),
-
 };
 
-EventHub.logic.on(GameEvent.GLYPHS_CHANGED, () => {
+EventHub.logic.on(GAME_EVENT.GLYPHS_CHANGED, () => {
   GameCache.glyphEffects.invalidate();
 }, GameCache.glyphEffects);
 

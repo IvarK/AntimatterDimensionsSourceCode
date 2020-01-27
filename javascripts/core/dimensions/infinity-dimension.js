@@ -40,14 +40,12 @@ function buyManyInfinityDimension(tier) {
   player.infinityPoints = player.infinityPoints.minus(dim.cost)
   dim.amount = dim.amount.plus(10);
   dim.cost = Decimal.round(dim.cost.times(dim.costMultiplier));
-  dim.power = dim.power.times(dim.powerMultiplier);
-  dim.power = dim.power.timesEffectsOf(tier === 8 ? GlyphSacrifice.infinity : null);
-  dim.baseAmount += IDPurchasesToIDAmount(1)
+  dim.baseAmount += IDPurchasesToIDAmount(1);
 
   if (EternityChallenge(8).isRunning) {
     player.eterc8ids -= 1;
   }
-  return true
+  return true;
 }
 
 function buyMaxInfDims(tier) {
@@ -63,10 +61,6 @@ function buyMaxInfDims(tier) {
   player.infinityPoints = player.infinityPoints.minus(dim.cost);
   dim.cost = dim.cost.times(costMult);
   dim.amount = dim.amount.plus(10 * toBuy);
-  if (toBuy > 0) {
-    const base = dim.powerMultiplier * Effects.product(tier === 8 ? GlyphSacrifice.infinity : null);
-    dim.power = dim.power.times(Decimal.pow(base, toBuy));
-  }
   dim.baseAmount += IDPurchasesToIDAmount(toBuy);
   buyManyInfinityDimension(tier);
   return true;
@@ -74,7 +68,7 @@ function buyMaxInfDims(tier) {
 
 function canBuyInfinityDimension(tier) {
   const dim = InfinityDimension(tier);
-  return !dim.isCapped && dim.isAvailableForPuchase && dim.isUnlocked;
+  return !dim.isCapped && dim.isAvailableForPurchase && dim.isUnlocked;
 
 }
 
@@ -145,7 +139,7 @@ class InfinityDimensionState extends DimensionState {
     return player.eternities.gte(10 + this.tier);
   }
 
-  get isAvailableForPuchase() {
+  get isAvailableForPurchase() {
     return this.isAffordable && (player.eterc8ids > 0 || !EternityChallenge(8).isRunning);
   }
 
@@ -194,13 +188,13 @@ class InfinityDimensionState extends DimensionState {
     if (EternityChallenge(11).isRunning) {
       return new Decimal(1);
     }
-    let mult = this.power
-      .times(GameCache.infinityDimensionCommonMultiplier.value)
+    let mult = GameCache.infinityDimensionCommonMultiplier.value
       .timesEffectsOf(
         tier === 1 ? Achievement(94) : null,
         tier === 4 ? TimeStudy(72) : null,
         tier === 1 ? EternityChallenge(2).reward : null
       );
+    mult = mult.times(Decimal.pow(this.powerMultiplier, Math.floor(this.baseAmount / 10)));
 
     mult = mult.clampMin(0);
 
@@ -211,6 +205,8 @@ class InfinityDimensionState extends DimensionState {
     mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
+
+    mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
 
     mult = mult.powEffectOf(AlchemyResource.infinity);
 
@@ -245,9 +241,10 @@ class InfinityDimensionState extends DimensionState {
     if (Enslaved.isRunning) {
       return 1;
     }
-    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease;
+    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease *
+      (1 + AlchemyResource.boundless.effectValue);
     const compressionBoost = Effects.max(0, CompressionUpgrade.infDimSoftcap);
-    return this._purchaseCap + enslavedBoost + compressionBoost;
+    return this._purchaseCap + Math.floor(enslavedBoost + compressionBoost);
   }
 
   get baseAmountCap() {
@@ -269,47 +266,63 @@ class InfinityDimensionState extends DimensionState {
   fullReset() {
     this.cost = new Decimal(this.baseCost);
     this.amount = new Decimal(0);
-    this.power = new Decimal(1);
     this.bought = 0;
     this.baseAmount = 0;
     this.isUnlocked = false;
   }
 }
 
-InfinityDimensionState.createIndex();
-
 /**
+ * @function
  * @param {number} tier
  * @return {InfinityDimensionState}
  */
-const InfinityDimension = tier => InfinityDimensionState.index[tier];
+const InfinityDimension = InfinityDimensionState.createAccessor();
 
 const InfinityDimensions = {
   /**
    * @type {InfinityDimensionState[]}
    */
-  all: InfinityDimensionState.index.compact(),
+  all: InfinityDimension.index.compact(),
+
   unlockNext() {
     if (InfinityDimension(8).isUnlocked) return;
     const next = InfinityDimensions.next();
     if (!Perk.bypassIDAntimatter.isBought && player.antimatter.lt(next.requirement)) return;
     next.isUnlocked = true;
-    EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, next.tier);
+    EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, next.tier);
   },
+
   next() {
     if (InfinityDimension(8).isUnlocked)
       throw "All Infinity Dimensions are unlocked";
     return this.all.first(dim => !dim.isUnlocked);
   },
+
   resetAmount() {
     player.infinityPower = new Decimal(0);
     for (const dimension of InfinityDimensions.all) {
       dimension.resetAmount();
     }
   },
+
   fullReset() {
     for (const dimension of InfinityDimensions.all) {
       dimension.fullReset();
+    }
+  },
+
+  tick(diff) {
+    for (let tier = 8; tier > 1; tier--) {
+      InfinityDimension(tier).produceDimensions(InfinityDimension(tier - 1), diff / 10);
+    }
+
+    if (EternityChallenge(7).isRunning) {
+      if (!NormalChallenge(10).isRunning) {
+        InfinityDimension(1).produceDimensions(NormalDimension(7), diff);
+      }
+    } else {
+      InfinityDimension(1).produceCurrency(Currency.infinityPower, diff);
     }
   }
 };
@@ -321,7 +334,7 @@ function tryUnlockInfinityDimensions() {
     // If we cannot unlock this one, we can't unlock the rest, either
     if (!Perk.bypassIDAntimatter.isBought && InfinityDimension(tier).requirement.gt(player.antimatter)) break;
     InfinityDimension(tier).isUnlocked = true;
-    EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, tier);
+    EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, tier);
     if (player.infDimBuyers[tier - 1] &&
       !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
       buyMaxInfDims(tier);

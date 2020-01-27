@@ -48,7 +48,7 @@ const Teresa = {
       if (!this.has(info) && this.rmStore >= info.price) {
         // eslint-disable-next-line no-bitwise
         player.celestials.teresa.unlockBits |= (1 << info.id);
-        EventHub.dispatch(GameEvent.CELESTIAL_UPGRADE_UNLOCKED, this, info);
+        EventHub.dispatch(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, this, info);
       }
     }
   },
@@ -121,15 +121,11 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     player.celestials.teresa.perkShop[this.id] = value;
   }
 
-  get cap() {
-    return this.config.cap();
-  }
-
   get isCapped() {
     return this.cost === this.cap;
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return this.cost < this.currency.value;
   }
 
@@ -154,3 +150,16 @@ const PerkShopUpgrade = (function() {
     musicGlyph: new PerkShopUpgradeState(db.musicGlyph),
   };
 }());
+
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
+  if (Tab.celestials.teresa.isOpen) Teresa.quotes.show(Teresa.quotes.INITIAL);
+});
+
+EventHub.logic.on(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, ([celestial, upgradeInfo]) => {
+  if (celestial === Teresa) {
+    if (upgradeInfo === TERESA_UNLOCKS.RUN) Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY);
+    if (upgradeInfo === TERESA_UNLOCKS.EFFARIG) Teresa.quotes.show(Teresa.quotes.EFFARIG);
+  }
+});
+
+EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Teresa.checkForUnlocks());

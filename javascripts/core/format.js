@@ -1,57 +1,33 @@
 "use strict";
 
-function shortenRateOfChange(money) {
-  return shorten(money, 2, 2);
-}
-
-function shortenCosts(money) {
-  return shorten(money, 0, 0);
-}
-
-function shortenDimensions(money) {
-  return shorten(money, 2, 0);
-}
-
-function shortenMoney(money) {
-  return shorten(money, 2, 1);
-}
-
-function shortenMultiplier(money) {
-  return shorten(money, 1, 1);
-}
-
-function shorten(value, places, placesUnder1000) {
+function format(value, places, placesUnder1000) {
   return Notations.current.format(value, places, placesUnder1000);
 }
 
-function shortenSmallInteger(value) {
+function formatInt(value) {
   return Notations.current.isPainful
-    ? shorten(value, 2, 2)
+    ? format(value, 2, 2)
     : formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
-function shortenPostBreak(value, places, placesUnder1000) {
+function formatPostBreak(value, places, placesUnder1000) {
   const currentFormat = ui.formatPreBreak;
   ui.formatPreBreak = false;
-  const shortened = shorten(value, places, placesUnder1000);
+  const formatted = format(value, places, placesUnder1000);
   ui.formatPreBreak = currentFormat;
-  return shortened;
-}
-
-function format(value, places, placesUnder1000) {
-  return shorten(value, places, placesUnder1000);
+  return formatted;
 }
 
 function formatX(value, places, placesUnder1000) {
-  return `${shorten(value, places, placesUnder1000)}x`;
+  return `${format(value, places, placesUnder1000)}x`;
 }
 
 function formatPow(value, places, placesUnder1000) {
-  return `^${shorten(value, places, placesUnder1000)}`;
+  return `^${format(value, places, placesUnder1000)}`;
 }
 
 function formatPercents(value, places) {
-  return `${shorten(value * 100, 2, places)}%`;
+  return `${format(value * 100, 2, places)}%`;
 }
 
 function timeDisplay(ms) {

@@ -19,15 +19,15 @@ Vue.component("time-dim-row", {
   },
   computed: {
     name() {
-      return DISPLAY_NAMES[this.tier];
+      return TimeDimension(this.tier).displayName;
     },
     rateOfChangeDisplay() {
       return this.tier < 8
-        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
         : "";
     },
     buttonContents() {
-      return this.isCapped ? "Capped" : `Cost: ${this.shortenDimensions(this.cost)} EP`;
+      return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 0, 0)} EP`;
     }
   },
   watch: {
@@ -59,10 +59,10 @@ Vue.component("time-dim-row", {
   template:
     `<div v-show="isUnlocked" class="c-time-dim-row">
       <div class="c-time-dim-row__label c-time-dim-row__name">
-        {{name}} Time Dimension x{{shortenMoney(multiplier)}}
+        {{name}} Time Dimension {{formatX(multiplier, 2, 1)}}
       </div>
       <div class="c-time-dim-row__label c-time-dim-row__label--growable">
-        {{shortenDimensions(amount)}}{{rateOfChangeDisplay}}
+        {{format(amount, 2, 0)}}{{rateOfChangeDisplay}}
       </div>
       <primary-button-on-off
         v-if="areAutobuyersUnlocked"

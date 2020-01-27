@@ -1,6 +1,5 @@
 "use strict";
 
-var shiftDown = false;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
 let player = {
@@ -31,8 +30,8 @@ let player = {
   },
   buyUntil10: true,
   sacrificed: new Decimal(0),
-  achievements: new Set(),
-  secretAchievements: new Set(),
+  achievementBits: Array.repeat(0, 15),
+  secretAchievementBits: Array.repeat(0, 4),
   infinityUpgrades: new Set(),
   usedMaxAll: false,
   bestIpPerMsWithoutMaxAll: new Decimal(0),
@@ -62,7 +61,7 @@ let player = {
       cost: 1,
       interval: [1500, 2000, 2500, 3000, 4000, 5000, 6000, 7500][tier],
       bulk: 1,
-      mode: AutobuyerMode.BUY_10,
+      mode: AUTOBUYER_MODE.BUY_10,
       priority: 1,
       isActive: false,
       lastTick: 0
@@ -71,7 +70,7 @@ let player = {
       isUnlocked: false,
       cost: 1,
       interval: 2500,
-      mode: AutobuyerMode.BUY_SINGLE,
+      mode: AUTOBUYER_MODE.BUY_SINGLE,
       priority: 1,
       isActive: false,
       lastTick: 0
@@ -151,6 +150,7 @@ let player = {
   matter: new Decimal(1),
   chall9TickspeedCostBumps: 0,
   chall8TotalSacrifice: new Decimal(1),
+  ic2Count: 0,
   partInfinityPoint: 0,
   partInfinitied: 0,
   break: false,
@@ -161,7 +161,9 @@ let player = {
     // Incremented every time secret time study toggles
     secretTS: 0,
     uselessNewsClicks: 0,
-    cancerAchievements: false
+    cancerAchievements: false,
+    paperclips: 0,
+    newsQueuePosition: 1000
   },
   lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, new Decimal(1)]),
   lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 1]),
@@ -204,7 +206,8 @@ let player = {
     gal: 0,
     galaxies: 0,
     galCost: new Decimal(1e170),
-    auto: [false, false, false]
+    auto: [false, false, false],
+    timer: 0,
   },
   timestudy: {
     theorem: new Decimal(0),
@@ -255,7 +258,7 @@ let player = {
     glyphs: {
       active: [],
       inventory: [],
-      inventorySize: 100,
+      inventorySize: 110,
       last: "",
       sac: {
         power: 0,
@@ -264,7 +267,8 @@ let player = {
         replication: 0,
         dilation: 0,
         effarig: 0,
-        reality: 0
+        reality: 0,
+        cursed: 0
       },
       undo: [],
     },
@@ -296,7 +300,7 @@ let player = {
     gainedAutoAchievements: true,
     automator: {
       state: {
-        mode: AutomatorMode.STOP,
+        mode: AUTOMATOR_MODE.STOP,
         topLevelScript: 0,
         editorScript: 0,
         repeat: false,
@@ -306,7 +310,7 @@ let player = {
       },
       lastID: 0,
       execTimer: 0,
-      type: AutomatorType.TEXT
+      type: AUTOMATOR_TYPE.TEXT
     },
     achTimer: 0,
   },
@@ -318,10 +322,12 @@ let player = {
     phase: 0,
     active: false,
     unlocked: false,
-    activations: 0
+    activations: 0,
   })),
   blackHolePause: false,
   blackHolePauseTime: 0,
+  blackHoleNegative: 1,
+  minNegativeBlackHoleThisReality: 0,
   ttbuyer: false,
   celestials: {
     teresa: {
@@ -344,15 +350,17 @@ let player = {
         eternities: 25
       },
       autoGlyphSac: {
-        mode: AutoGlyphSacMode.NONE,
+        mode: AUTO_GLYPH_SAC_MODE.NONE,
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({
           rarityThreshold: 0,
           scoreThreshold: 0,
+          effectCount: 0,
+          effectChoices: t.effects.mapToObject(e => e.id, () => false),
           effectScores: t.effects.mapToObject(e => e.id, () => 0),
         })),
       },
       autoGlyphPick: {
-        mode: AutoGlyphPickMode.RANDOM,
+        mode: AUTO_GLYPH_PICK_MODE.RANDOM,
       },
     },
     enslaved: {
@@ -369,18 +377,21 @@ let player = {
       completed: false,
       maxQuotes: 6,
       tesseracts: 0,
-      totalDimCapIncrease: 0
+      totalDimCapIncrease: 0,
+      feltEternity: false,
     },
     v: {
       unlockBits: 0,
       quoteIdx: 0,
       run: false,
-      runUnlocks: [0, 0, 0, 0, 0, 0],
-      additionalStudies: 0,
-      runGlyphs: [[], [], [], [], [], []],
+      runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      triadStudies: [],
+      STSpent: 0,
+      runGlyphs: [[], [], [], [], [], [], [], [], []],
       // The number of glyphs for reality goes down with tier, so 6 - num instead (6 means reality
       // has not been completed)
-      runRecords: [0, 0, 0, 0, 0, 0],
+      runRecords: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      cursedThisRun: 0
     },
     ra: {
       pets: {
@@ -443,7 +454,6 @@ let player = {
       darkEnergyUpgrades: new Set()
     }
   },
-  autoEcIsOn: true,
   options: {
     news: true,
     notation: "Mixed scientific",
@@ -457,7 +467,15 @@ let player = {
     commas: true,
     updateRate: 33,
     newUI: true,
-    showAlchemyResources: false,
+    offlineProgress: true,
+    showHintText: {
+      achievements: false,
+      challenges: false,
+      studies: false,
+      realityUpgrades: false,
+      perks: false,
+      alchemy: false,
+    },
     chart: {
       updateRate: 1000,
       duration: 10,
@@ -483,7 +501,9 @@ let player = {
       glyphUndo: true,
       glyphReplace: true,
     }
-  }
+  },
+  // Remove later
+  newEC10Test: false,
 };
 
 const Player = {
@@ -512,12 +532,9 @@ const Player = {
   },
 
   get antimatterPerSecond() {
-    const basePerSecond = getDimensionProductionPerSecond(1);
-    if (NormalChallenge(3).isRunning) {
-      return basePerSecond.times(player.chall3Pow);
-    }
+    const basePerSecond = NormalDimension(1).productionPerSecond;
     if (NormalChallenge(12).isRunning) {
-      return basePerSecond.plus(getDimensionProductionPerSecond(2));
+      return basePerSecond.plus(NormalDimension(2).productionPerSecond);
     }
     return basePerSecond.times(getGameSpeedupForDisplay());
   },
@@ -537,10 +554,6 @@ const Player = {
   get dimensionMultDecrease() {
     const base = GameCache.dimensionMultDecrease.value - 1;
     return 1 + base * AnnihilationUpgrade.dimCostMult.effect;
-  },
-
-  get achievementPower() {
-    return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
   },
 
   get infinityGoal() {
@@ -563,7 +576,7 @@ const Player = {
       Achievement(37),
       Achievement(54),
       Achievement(55),
-      Achievement(78).secondaryEffect
+      Achievement(78).effects.antimatter
     ).toDecimal();
   },
 

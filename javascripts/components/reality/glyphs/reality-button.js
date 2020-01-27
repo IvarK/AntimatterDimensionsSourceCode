@@ -23,26 +23,23 @@ Vue.component("reality-button", {
     buttonHeader() {
       return this.canReality ? "Make a new reality" : "Start reality over";
     },
-    formatEPRequirement() {
-      return this.shorten("1e4000", 0, 0);
-    },
     formatMachinesGained() {
-      return `Machines gained: ${this.shorten(this.machinesGained, 2, 0)}`;
+      return `Machines gained: ${format(this.machinesGained, 2, 0)}`;
     },
     formatMachineStats() {
       if (this.machinesGained.lt(100)) {
-        return `Next at ${shorten(this.nextMachineEP, 2)} EP`;
+        return `Next at ${format(this.nextMachineEP, 2)} EP`;
       }
       if (this.machinesGained.lt(1e100)) {
-        return `${shorten(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;
+        return `${format(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;
       }
       return "";
     },
     formatGlyphLevel() {
-      return `Glyph level: ${shortenSmallInteger(this.glyphLevel)}  (${this.nextGlyphPercent})`;
+      return `Glyph level: ${formatInt(this.glyphLevel)}  (${this.nextGlyphPercent})`;
     },
     shardsGainedText() {
-      return `${this.shorten(this.shardsGained, 2)} Relic ${pluralize("Shard", this.shardsGained)}`;
+      return `${format(this.shardsGained, 2)} Relic ${pluralize("Shard", this.shardsGained)}`;
     }
   },
   methods: {
@@ -77,7 +74,7 @@ Vue.component("reality-button", {
       this.ppGained = multiplier;
       this.shardsGained = Effarig.shardsGained * multiplier;
       this.expGained = Ra.pets.all.map(p => p.gainedExp * multiplier);
-      this.raUnlocks = [V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]),
+      this.raUnlocks = [V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2]),
         Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK),
         Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),
         Ra.has(RA_UNLOCKS.V_UNLOCK)];
@@ -113,7 +110,7 @@ Vue.component("reality-button", {
       return this.formatScalingMultiplier(`${pet.name} memories`, pet.expBoost, pet.nextExpBoost);
     },
     formatScalingMultiplier(resource, before, after) {
-      return `${resource} ${shortenRateOfChange(before)}x ➜ ${shortenRateOfChange(after)}x`;
+      return `${resource} ${formatX(before, 2, 2)} ➜ ${formatX(after, 2, 2)}`;
     }
   },
   template: `
@@ -128,7 +125,7 @@ Vue.component("reality-button", {
         <div>{{formatGlyphLevel}}</div>
       </template>
       <template v-else-if="hasRealityStudy">
-        <div>Get {{formatEPRequirement}} EP to unlock a new reality</div>
+        <div>Get {{format("1e4000", 0, 0)}} EP to unlock a new reality</div>
       </template>
       <template v-else>
         <div>Purchase the study in the eternity tab to unlock a new reality</div>
@@ -138,10 +135,18 @@ Vue.component("reality-button", {
           <div>Other resources gained:</div>
           <div>{{ppGained}} Perk {{ "point" | pluralize(ppGained) }}</div>
           <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
-          <div v-if="raUnlocks[0]">{{ shorten(expGained[0], 2, 2) }} Teresa {{ "memory" | pluralize(expGained[0], "memories") }}</div>
-          <div v-if="raUnlocks[1]">{{ shorten(expGained[1], 2, 2) }} Effarig {{ "memory" | pluralize(expGained[1], "memories") }}</div>
-          <div v-if="raUnlocks[2]">{{ shorten(expGained[2], 2, 2) }} Enslaved {{ "memory" | pluralize(expGained[2], "memories") }}</div>
-          <div v-if="raUnlocks[3]">{{ shorten(expGained[3], 2, 2) }} V {{ "memory" | pluralize(expGained[3], "memories") }}</div>
+          <div v-if="raUnlocks[0]">
+            {{ format(expGained[0], 2, 2) }} Teresa {{ "memory" | pluralize(expGained[0], "memories") }}
+          </div>
+          <div v-if="raUnlocks[1]">
+            {{ format(expGained[1], 2, 2) }} Effarig {{ "memory" | pluralize(expGained[1], "memories") }}
+          </div>
+          <div v-if="raUnlocks[2]">
+            {{ format(expGained[2], 2, 2) }} Enslaved {{ "memory" | pluralize(expGained[2], "memories") }}
+          </div>
+          <div v-if="raUnlocks[3]">
+            {{ format(expGained[3], 2, 2) }} V {{ "memory" | pluralize(expGained[3], "memories") }}
+          </div>
           <div v-if="inTeresaReality">{{ celestialRunText[0] }}</div>
           <div v-if="raExpBoosts[0]">{{ celestialRunText[1] }}</div>
           <div v-if="raExpBoosts[1]">{{ celestialRunText[2] }}</div>

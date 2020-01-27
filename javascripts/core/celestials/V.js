@@ -16,9 +16,29 @@ class VRunUnlockState extends GameMechanicState {
     return completions === undefined ? 0 : completions;
   }
 
-  get conditionValue() {
+  get conditionBaseValue() {
     const value = this.config.values[this.completions];
     return value === undefined ? this.config.values[this.completions - 1] : value;
+  }
+
+  get reduction() {
+    if (!V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0])) return 0;
+    const value = this.conditionBaseValue;
+
+    if (typeof value === "number") return Math.max(0, this.config.shardReduction(value));
+    return Decimal.max(0, this.config.shardReduction(value));
+  }
+
+  get conditionValue() {
+    let value = this.conditionBaseValue;
+    
+    if (typeof value === "number") {
+      value -= this.reduction;
+    } else {
+      value = value.minus(this.reduction);
+    }
+
+    return value;
   }
 
   get formattedDescription() {
@@ -83,6 +103,12 @@ const V_UNLOCKS = {
   RUN_UNLOCK_THRESHOLDS: [
     {
       id: 1,
+      reward: "Relic shards reduce V-achievement requirements. Starting at 1e20 Relic Shards.",
+      description: "Have 2 V-achievements",
+      requirement: () => V.spaceTheorems >= 2
+    },
+    {
+      id: 2,
       reward: "Achievement multiplier affects auto EC completion time. Unlock Triad studies.",
       description: "Have 10 V-achievements",
       effect: () => Achievements.power,
@@ -90,7 +116,7 @@ const V_UNLOCKS = {
       requirement: () => V.spaceTheorems >= 10
     },
     {
-      id: 2,
+      id: 3,
       reward: "Achievement count affects black hole power.",
       description: "Have 30 V-achievements",
       effect: () => Achievements.power,
@@ -98,7 +124,7 @@ const V_UNLOCKS = {
       requirement: () => V.spaceTheorems >= 30
     },
     {
-      id: 3,
+      id: 4,
       reward: "Divide the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
       description: "Have 36 V-achievements",
       requirement: () => V.spaceTheorems >= 36
@@ -154,7 +180,7 @@ const V = {
     return player.celestials.v.run;
   },
   get achievementsPerAdditionalStudy() {
-    return this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2]) ? 3 : 6;
+    return this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3]) ? 3 : 6;
   },
   get totalAdditionalStudies() {
     return Math.floor(this.spaceTheorems / this.achievementsPerAdditionalStudy);

@@ -18,6 +18,7 @@ GameDatabase.celestials.v = {
       condition: x => TimeStudy.reality.isBought && Glyphs.activeList.length <= x,
       currentValue: () => (TimeStudy.reality.isBought ? 6 - Glyphs.activeList.length : 0),
       formatRecord: x => (x === 0 ? "N/A" : formatInt(6 - x)),
+      shardReduction: () => 0
     },
     {
       id: 1,
@@ -27,6 +28,7 @@ GameDatabase.celestials.v = {
       condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= x,
       currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies,
       formatRecord: x => formatInt(x),
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e20, 0.2)
     },
     {
       id: 2,
@@ -36,6 +38,7 @@ GameDatabase.celestials.v = {
       condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x),
       currentValue: () => (EternityChallenge(7).isRunning ? player.infinityPoints.exponent : 0),
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
+      shardReduction: goal => goal.times(1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001))
     },
     {
       id: 3,
@@ -48,6 +51,7 @@ GameDatabase.celestials.v = {
         ? player.antimatter.exponent
         : 0),
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
+      shardReduction: goal => goal.times(1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001))
     },
     {
       id: 4,
@@ -57,6 +61,7 @@ GameDatabase.celestials.v = {
       condition: x => player.eternityPoints.gte(x),
       currentValue: () => player.eternityPoints.exponent,
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
+      shardReduction: goal => Decimal.pow(goal, (1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001)))
     },
     {
       id: 5,
@@ -66,6 +71,7 @@ GameDatabase.celestials.v = {
       condition: x => player.dilation.active && EternityChallenge(5).isRunning && DimBoost.purchasedBoosts >= x,
       currentValue: () => (player.dilation.active && EternityChallenge(5).isRunning ? DimBoost.purchasedBoosts : 0),
       formatRecord: x => formatInt(x),
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e20, 0.05)
     },
     {
       id: 6,
@@ -75,20 +81,22 @@ GameDatabase.celestials.v = {
       values: [1, 2, 3, 4, 5],
       condition: x => TimeStudy.reality.isBought && player.celestials.v.cursedThisRun >= x,
       currentValue: () => (TimeStudy.reality.isBought ? player.celestials.v.cursedThisRun : 0),
-      formatRecord: x => formatInt(x)
+      formatRecord: x => formatInt(x),
+      shardReduction: () => 0
     },
     {
       id: 7,
       name: "Post-destination",
       description: value =>
-        `Get ${formatInt(Math.pow(value, 2.4))} TT with a 1e-${value} black hole`,
+        `Get ${formatInt(Math.pow(value, 2.4))} TT with a 1e-${format(value, 2, 2)} black hole`,
       values: [50, 100, 150, 200, 300],
       condition: x => player.timestudy.theorem.gt(Math.pow(x, 2.4)) &&
         Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality,
       currentValue: x => (Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality
         ? player.timestudy.theorem.toNumber()
         : 0),
-      formatRecord: x => formatInt(x)
+      formatRecord: x => formatInt(x),
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e38, 0.4)
     }
   ],
   triadStudies: [

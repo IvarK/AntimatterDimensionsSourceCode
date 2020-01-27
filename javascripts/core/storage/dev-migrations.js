@@ -518,6 +518,10 @@ GameStorage.devMigrations = {
     },
     player => {
       player.reality.glyphs.inventorySize += 10;
+    },
+    player => {
+      player.celestials.v.unlockBits = 1;
+      V.checkForUnlocks();
     }
   ],
 

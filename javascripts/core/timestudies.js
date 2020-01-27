@@ -349,7 +349,7 @@ class TimeStudyState extends GameMechanicState {
 
   get STCost() {
     let base = this.config.STCost;
-    if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) base /= 2;
+    if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3])) base /= 2;
     return base;
   }
 

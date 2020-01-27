@@ -93,6 +93,9 @@ Vue.component("v-tab", {
               :class="{ 'c-v-unlock-completed': hex.completions == 6 }">
                 <p class="o-v-unlock-name">{{ hex.config.name }}</p>
                 <p class="o-v-unlock-desc">{{ hex.formattedDescription }}</p>
+                <p class="o-v-unlock-goal-reduction" v-if="has(runMilestones[0])">
+                  Goal reduced by {{ format(hex.reduction, 2, 2) }}
+                </p>
                 <p class="o-v-unlock-amount">{{ hex.completions }}/{{hex.config.values.length}} done</p>
                 <p class="o-v-unlock-record">
                   Best: {{ hex.config.formatRecord(runRecords[hex.id]) }}

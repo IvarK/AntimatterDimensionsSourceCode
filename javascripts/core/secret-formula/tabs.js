@@ -312,7 +312,7 @@ GameDatabase.tabs = [
         name: "Ra",
         symbol: "☼",
         component: "ra-tab",
-        condition: () => V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])
+        condition: () => V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3])
       },
       {
         key: "laitela",

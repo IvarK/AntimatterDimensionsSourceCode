@@ -33,9 +33,11 @@ class VRunUnlockState extends GameMechanicState {
     let value = this.conditionBaseValue;
     
     if (typeof value === "number") {
-      value -= this.reduction;
+      if (this.config.mode === V_REDUCTION_MODE.MINUS) value -= this.reduction;
+      if (this.config.mode === V_REDUCTION_MODE.DIVISION) value /= this.reduction;
     } else {
-      value = value.minus(this.reduction);
+      if (this.config.mode === V_REDUCTION_MODE.MINUS) value = value.minus(this.reduction);
+      if (this.config.mode === V_REDUCTION_MODE.DIVISION) value = value.dividedBy(this.reduction);
     }
 
     return value;

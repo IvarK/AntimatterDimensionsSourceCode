@@ -1,5 +1,10 @@
 "use strict";
 
+const V_REDUCTION_MODE = {
+  MINUS: 1,
+  DIVISION: 2
+}
+
 GameDatabase.celestials.v = {
   mainUnlock: {
     realities: 10000,
@@ -18,7 +23,8 @@ GameDatabase.celestials.v = {
       condition: x => TimeStudy.reality.isBought && Glyphs.activeList.length <= x,
       currentValue: () => (TimeStudy.reality.isBought ? 6 - Glyphs.activeList.length : 0),
       formatRecord: x => (x === 0 ? "N/A" : formatInt(6 - x)),
-      shardReduction: () => 0
+      shardReduction: () => 0,
+      mode: V_REDUCTION_MODE.MINUS
     },
     {
       id: 1,
@@ -28,7 +34,8 @@ GameDatabase.celestials.v = {
       condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= x,
       currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies,
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e20, 0.2)
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e20, 0.2),
+      mode: V_REDUCTION_MODE.MINUS
     },
     {
       id: 2,
@@ -38,7 +45,8 @@ GameDatabase.celestials.v = {
       condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x),
       currentValue: () => (EternityChallenge(7).isRunning ? player.infinityPoints.exponent : 0),
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
-      shardReduction: goal => goal.times(1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001))
+      shardReduction: goal => goal.pow(1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001)),
+      mode: V_REDUCTION_MODE.DIVISION
     },
     {
       id: 3,
@@ -51,7 +59,8 @@ GameDatabase.celestials.v = {
         ? player.antimatter.exponent
         : 0),
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
-      shardReduction: goal => goal.times(1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001))
+      shardReduction: goal => goal.pow(1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001)),
+      mode: V_REDUCTION_MODE.DIVISION
     },
     {
       id: 4,
@@ -61,7 +70,8 @@ GameDatabase.celestials.v = {
       condition: x => player.eternityPoints.gte(x),
       currentValue: () => player.eternityPoints.exponent,
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
-      shardReduction: goal => Decimal.pow(goal, (1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001)))
+      shardReduction: goal => goal.pow(1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001)),
+      mode: V_REDUCTION_MODE.DIVISION
     },
     {
       id: 5,
@@ -71,7 +81,8 @@ GameDatabase.celestials.v = {
       condition: x => player.dilation.active && EternityChallenge(5).isRunning && DimBoost.purchasedBoosts >= x,
       currentValue: () => (player.dilation.active && EternityChallenge(5).isRunning ? DimBoost.purchasedBoosts : 0),
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e20, 0.05)
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e20, 0.05),
+      mode: V_REDUCTION_MODE.MINUS
     },
     {
       id: 6,
@@ -82,7 +93,8 @@ GameDatabase.celestials.v = {
       condition: x => TimeStudy.reality.isBought && player.celestials.v.cursedThisRun >= x,
       currentValue: () => (TimeStudy.reality.isBought ? player.celestials.v.cursedThisRun : 0),
       formatRecord: x => formatInt(x),
-      shardReduction: () => 0
+      shardReduction: () => 0,
+      mode: V_REDUCTION_MODE.MINUS
     },
     {
       id: 7,
@@ -96,7 +108,8 @@ GameDatabase.celestials.v = {
         ? player.timestudy.theorem.toNumber()
         : 0),
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e38, 0.4)
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e38, 0.4),
+      mode: V_REDUCTION_MODE.MINUS
     }
   ],
   triadStudies: [

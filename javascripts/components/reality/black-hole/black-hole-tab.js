@@ -6,8 +6,9 @@ Vue.component("black-hole-tab", {
       isUnlocked: false,
       isPaused: false,
       isEnslaved: false,
-      vIsFlipped: false,
-      currentNegative: Math.log10(1 / player.blackHoleNegative),
+      isNegativeBHUnlocked: false,
+      negativeSlider: 0,
+      negativeBHDivisor: 1,
       maxNegativeBlackHole: 300,
       detailedBH2: "",
     };
@@ -24,10 +25,6 @@ Vue.component("black-hole-tab", {
         tooltip: false
       };
     },
-    negativeBlackHoleLabel() {
-      return `Negative black hole divides game speed by ${format(1 / this.currentNegative, 2, 2)}. ` +
-        "This only works when black hole is paused.";
-    }
   },
   mounted() {
     if (this.$refs.canvas) {
@@ -42,7 +39,9 @@ Vue.component("black-hole-tab", {
       this.isUnlocked = BlackHoles.areUnlocked;
       this.isPaused = BlackHoles.arePaused;
       this.isEnslaved = Enslaved.isRunning;
-      this.vIsFlipped = V.isFlipped;
+      this.isNegativeBHUnlocked = V.isFlipped && BlackHole(1).isPermanent && BlackHole(2).isPermanent;
+      this.negativeSlider = -Math.log10(player.blackHoleNegative);
+      this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
 
       if (!BlackHole(2).isUnlocked || BlackHole(1).isActive) this.detailedBH2 = " ";
       else if (BlackHole(2).timeToNextStateChange > BlackHole(1).cycleLength) {
@@ -60,11 +59,14 @@ Vue.component("black-hole-tab", {
     },
     togglePause() {
       BlackHoles.togglePause();
+      if (BlackHoles.arePaused) {
+        player.celestials.enslaved.isAutoReleasing = false;
+      }
       this.update();
     },
     adjustSlider(value) {
-      this.currentNegative = value;
-      player.blackHoleNegative = 1 / Math.pow(10, value);
+      this.negativeSlider = value;
+      player.blackHoleNegative = Math.pow(10, -this.negativeSlider);
       player.minNegativeBlackHoleThisReality = Math.max(
         player.minNegativeBlackHoleThisReality,
         player.blackHoleNegative
@@ -84,7 +86,17 @@ Vue.component("black-hole-tab", {
             v-for="(blackHole, i) in blackHoles"
             :key="'state' + i"
             :blackHole="blackHole"
-          />{{ detailedBH2 }}
+          />
+          {{ detailedBH2 }}
+          <div v-if="isNegativeBHUnlocked" class="l-enslaved-shop-container">
+            Negative black hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
+            This requires both black holes to be permanent and only works when paused.
+            <ad-slider-component
+                v-bind="sliderProps"
+                :value="negativeSlider"
+                @input="adjustSlider($event)"
+              />
+          </div>
           <black-hole-upgrade-row
             v-for="(blackHole, i) in blackHoles"
             :key="'upgrades' + i"
@@ -96,14 +108,6 @@ Vue.component("black-hole-tab", {
           >
             {{ isPaused ? "Resume" : "Pause" }}
           </button>
-          <div v-if="vIsFlipped" class="l-enslaved-shop-container">
-            {{ negativeBlackHoleLabel }}
-            <ad-slider-component
-                v-bind="sliderProps"
-                :value="currentNegative"
-                @input="adjustSlider($event)"
-              />
-          </div>
         </div>
       </template>
     </div>

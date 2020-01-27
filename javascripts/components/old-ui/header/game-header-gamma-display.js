@@ -16,12 +16,12 @@ Vue.component("game-header-gamma-display", {
       this.gammaText = this.getGameSpeedupText();
     },
     getGameSpeedupText() {
-      if (player.celestials.enslaved.isStoringReal) {
+      if (Enslaved.isStoringRealTime) {
         return "Stopped (storing real time)";
       }
       const speedMod = getGameSpeedupForDisplay();
       let storedTimeText = "";
-      if (player.celestials.enslaved.isStoring) {
+      if (Enslaved.isStoringGameTime) {
         if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
           const storedTimeWeight = player.celestials.enslaved.storedFraction;
           if (storedTimeWeight !== 0) {

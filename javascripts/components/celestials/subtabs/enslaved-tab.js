@@ -55,9 +55,9 @@ Vue.component("enslaved-tab", {
   },
   methods: {
     update() {
-      this.isStoringBlackHole = player.celestials.enslaved.isStoring;
+      this.isStoringBlackHole = Enslaved.isStoringGameTime;
       this.storedBlackHole = player.celestials.enslaved.stored;
-      this.isStoringReal = player.celestials.enslaved.isStoringReal;
+      this.isStoringReal = Enslaved.isStoringRealTime;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
       this.hasAmplifyStoredReal = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME);
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);

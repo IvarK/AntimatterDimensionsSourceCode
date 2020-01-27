@@ -89,7 +89,7 @@ Theme.tryUnlock = function(name) {
     }
     const prefix = `S${index + 1}`;
     const fullName = prefix + name.capitalize();
-    let alreadyUnlocked = player.secretUnlocks.themes.has(fullName);
+    const alreadyUnlocked = player.secretUnlocks.themes.has(fullName);
     player.secretUnlocks.themes.add(fullName);
     Theme.set(prefix);
     SecretAchievement(25).unlock();

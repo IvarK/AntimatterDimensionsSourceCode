@@ -674,7 +674,7 @@ TriadStudyState.studies = mapGameData(
 );
 
 function TriadStudy(id) {
-  return TriadStudyState.studies[id]
+  return TriadStudyState.studies[id];
 }
 
 /**

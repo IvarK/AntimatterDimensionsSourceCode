@@ -145,14 +145,22 @@ class BlackHoleState {
       const pulseState = ["▂", "▃", "▅", "▆", "▇"];
       return `${pulseState[Enslaved.autoReleaseTick]} Pulsing`;
     }
+    if (Enslaved.isStoringGameTime) {
+      if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
+        const storedTimeWeight = player.celestials.enslaved.storedFraction;
+        if (storedTimeWeight !== 0) {
+          return `⇮ Charging (${formatPercents(storedTimeWeight, 1)})`;
+        }
+      } else {
+        return "⇮ Charging";
+      }
+    }
     if (BlackHoles.areNegative) return "⏷ Inverted";
     if (BlackHoles.arePaused) return "⏸ Paused";
     if (this.isPermanent) return "⟳ Permanent";
 
     const timeString = TimeSpan.fromSeconds(this.timeToNextStateChange).toStringShort(true);
-    if (this.isCharged) {
-      return `⏩ Active (${timeString})`;
-    }
+    if (this.isCharged) return `⏩ Active (${timeString})`;
     return `▶️ Inactive (${timeString})`;
   }
 
@@ -298,6 +306,10 @@ const BlackHoles = {
 
   get areNegative() {
     return this.arePaused && player.blackHoleNegative < 1;
+  },
+
+  get arePermanent() {
+    return BlackHoles.list.every(bh => bh.isPermanent);
   },
 
   updatePhases(blackHoleDiff) {

@@ -133,10 +133,6 @@ Vue.component("game-header", {
       </div>
       <div>You are getting {{format(antimatterPerSec, 2, 0)}} antimatter per second.</div>
       <game-header-tickspeed-row />
-      <black-hole-header-row
-        v-for="(blackHole, i) in blackHoles"
-        :key="'state' + i"
-        :blackHole="blackHole"
-      />
+      <black-hole-header-row />
     </div>`
 });

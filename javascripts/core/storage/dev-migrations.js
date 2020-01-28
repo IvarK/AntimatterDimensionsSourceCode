@@ -522,6 +522,11 @@ GameStorage.devMigrations = {
     player => {
       player.celestials.v.unlockBits = 1;
       V.checkForUnlocks();
+    },
+    player => {
+      // Reset the v-unlocks again
+      player.celestials.v.unlockBits = 1;
+      V.checkForUnlocks();
     }
   ],
 

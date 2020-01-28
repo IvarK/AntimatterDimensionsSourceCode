@@ -111,6 +111,14 @@ const V_UNLOCKS = {
     },
     {
       id: 2,
+      reward: "Normal dimension power based on Space Theorems.",
+      description: "Have 5 V-achievements",
+      effect: () => 1 + Math.sqrt(V.spaceTheorems) / 100,
+      format: x => formatPow(x, 3, 3),
+      requirement: () => V.spaceTheorems >= 5
+    },
+    {
+      id: 3,
       reward: "Achievement multiplier affects auto EC completion time. Unlock Triad studies.",
       description: "Have 10 V-achievements",
       effect: () => Achievements.power,
@@ -118,7 +126,7 @@ const V_UNLOCKS = {
       requirement: () => V.spaceTheorems >= 10
     },
     {
-      id: 3,
+      id: 4,
       reward: "Achievement count affects black hole power.",
       description: "Have 30 V-achievements",
       effect: () => Achievements.power,
@@ -126,7 +134,7 @@ const V_UNLOCKS = {
       requirement: () => V.spaceTheorems >= 30
     },
     {
-      id: 4,
+      id: 5,
       reward: "Divide the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
       description: "Have 36 V-achievements",
       requirement: () => V.spaceTheorems >= 36
@@ -182,7 +190,7 @@ const V = {
     return player.celestials.v.run;
   },
   get achievementsPerAdditionalStudy() {
-    return this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3]) ? 3 : 6;
+    return this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[4]) ? 3 : 6;
   },
   get totalAdditionalStudies() {
     return Math.floor(this.spaceTheorems / this.achievementsPerAdditionalStudy);

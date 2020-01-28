@@ -10,9 +10,9 @@ Vue.component("new-dimensions-tab", {
       sacrificeBoost: new Decimal(0),
       isInMatterChallenge: false,
       matter: new Decimal(0),
-      inEffarig: false,
-      effarigMultNerfText: 0,
-      effarigTickNerfText: 0,
+      isInEffarig: false,
+      effarigMultNerfText: "",
+      effarigTickNerfText: "",
       disabledCondition: "",
       currCelestial: "",
       challengeDisplay: "",
@@ -66,10 +66,10 @@ Vue.component("new-dimensions-tab", {
       if (this.isInMatterChallenge) {
         this.matter.copyFrom(Player.effectiveMatterAmount);
       }
-      this.inEffarig = Effarig.isRunning;
-      if (this.inEffarig) {
-        this.effarigMultNerfText = `^${format(0.25 + 0.25 * Effarig.nerfFactor(player.infinityPower), 0, 5)}`;
-        this.effarigTickNerfText = `^${format(0.7 + 0.1 * Effarig.nerfFactor(player.timeShards), 0, 5)}`;
+      this.isInEffarig = Effarig.isRunning;
+      if (this.isInEffarig) {
+        this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(player.infinityPower), 0, 5)}`;
+        this.effarigTickNerfText = `${formatPow(0.7 + 0.1 * Effarig.nerfFactor(player.timeShards), 0, 5)}`;
       }
 
       this.updateCelestial();
@@ -121,12 +121,13 @@ Vue.component("new-dimensions-tab", {
   `<div class="l-normal-dim-tab">
     <div class="information-header" >
       <span v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</span>
-      <div v-if="inEffarig">
+      <div v-if="isInEffarig">
         Gamespeed and multipliers dilated {{effarigMultNerfText}}<br>
         Tickspeed dilated {{effarigTickNerfText}}
       </div>
       <div v-if="isInMatterChallenge">There is {{format(matter, 2, 1)}} matter.</div>
       <br><span v-if="isChallengePowerVisible">{{challengePower}}</span>
+      <black-hole-header-row />
     </div>
     <div class="modes-container">
       <button class="o-primary-btn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">

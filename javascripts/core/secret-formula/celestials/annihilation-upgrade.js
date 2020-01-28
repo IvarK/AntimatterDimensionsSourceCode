@@ -7,7 +7,7 @@ GameDatabase.annihilationUpgrades = {
     startCost: 10,
     costMult: 6,
     effect: x => 1 + x * 0.1,
-    effectFormat: x => `x^${x}`
+    effectFormat: x => `${formatPow(x, 3, 3)}`
   },
   intervalPower: {
     id: "intervalPower",

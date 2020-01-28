@@ -537,7 +537,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 4,
       requirement: () => TimeStudy(214).isBought && !TimeStudy(227).isBought,
       requirementV: () => TimeStudy(214).isBought && TimeStudy(227).isBought,
-      description: () => `Sacrifice formula scales better, x^${format(0.011, 0, 3)} ➜ x^${format(0.013, 0, 3)}`,
+      description: () => `Sacrifice formula scales better, x${formatPow(0.011, 0, 3)} ➜ x${formatPow(0.013, 0, 3)}`,
       effect: 0.013
     },
     {

@@ -110,6 +110,17 @@ GameDatabase.celestials.v = {
       formatRecord: x => formatInt(x),
       shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e38, 0.4),
       mode: V_REDUCTION_MODE.MINUS
+    },
+    {
+      id: 8,
+      name: "Shutter Glyph",
+      description: value => `Reach a glyph of level ${value}`,
+      values: [7000, 7500, 8000, 8500, 9000],
+      condition: x => gainedGlyphLevel().actualLevel >= x,
+      currentValue: () => gainedGlyphLevel().actualLevel,
+      formatRecord: x => formatInt(x),
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e37, 0.6),
+      mode: V_REDUCTION_MODE.minus
     }
   ],
   triadStudies: [

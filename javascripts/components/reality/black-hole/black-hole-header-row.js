@@ -32,10 +32,12 @@ Vue.component("black-hole-status-text", {
 Vue.component("black-hole-header-row", {
   data() {
     return {
+      hasBlackHoles: false,
       displaySingle: false,
       singleState: "",
       pauseText: "",
       canCharge: false,
+      isCharging: false,
       storedTime: 0,
       canAutoRelease: false,
       isAutoReleasing: false,
@@ -49,10 +51,12 @@ Vue.component("black-hole-header-row", {
   },
   methods: {
     update() {
+      this.hasBlackHoles = BlackHoles.areUnlocked;
       this.displaySingle = BlackHoles.arePermanent;
       if (this.displaySingle) this.singleState = BlackHole(1).displayState;
       this.pauseText = this.pauseButtonText();
       this.canCharge = Enslaved.isUnlocked;
+      this.isCharging = Enslaved.isStoringGameTime;
       this.storedTime = player.celestials.enslaved.stored;
       this.canAutoRelease = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.isAutoReleasing = player.celestials.enslaved.isAutoReleasing;
@@ -72,7 +76,7 @@ Vue.component("black-hole-header-row", {
     },
   },
   template: `
-    <span>
+    <span v-if="hasBlackHoles">
       <primary-button
         class="o-primary-btn--buy-max"
         onclick="BlackHoles.togglePause()"
@@ -80,8 +84,14 @@ Vue.component("black-hole-header-row", {
       <span v-if="canCharge">
         <primary-button
           class="o-primary-btn--buy-max"
-          onclick="Enslaved.toggleStoreBlackHole()"
-        >Charge</primary-button>
+          onclick="Enslaved.toggleStoreBlackHole()">
+          <span v-if="isCharging">
+            Stop Charging
+          </span>
+          <span v-else>
+            Charge
+          </span>
+        </primary-button>
       </span>
       <span v-if="displaySingle">
         🌀:{{ singleState }}

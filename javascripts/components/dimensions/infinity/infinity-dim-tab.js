@@ -73,14 +73,14 @@ Vue.component("infinity-dim-tab", {
           <p>Increase dimension caps by {{ format(nextDimCapIncrease, 2) }}</p>
           <p><b>Costs: {{ format(tesseractCost, 0, 0) }} IP</b></p>
         </button>
-        <div v-if="isEnslavedRunning">
+      </div>
+      <div v-if="isEnslavedRunning">
           All Infinity Dimensions are limited to a single purchase.
         </div>
         <div v-else>
           All Infinity Dimensions except for the 8th are limited to a maximum of {{format(totalDimCapIncrease, 2)}}
           purchases each.
         </div>
-      </div>
       <div>You are getting {{format(powerPerSecond, 2, 0)}} {{incomeType}} per second.</div>
       <primary-button
         v-if="!isEC8Running"

@@ -155,7 +155,7 @@ class BlackHoleState {
         return "⇮ Charging";
       }
     }
-    if (BlackHoles.areNegative) return "⏷ Inverted";
+    if (BlackHoles.areNegative) return "↓ Inverted";
     if (BlackHoles.arePaused) return "⏸ Paused";
     if (this.isPermanent) return "⟳ Permanent";
 

@@ -51,9 +51,8 @@ function gainedInfinityPoints() {
   return ip.floor();
 }
 
-function gainedEternityPoints() {
-  const ip = player.infinityPoints.plus(gainedInfinityPoints());
-  let ep = Decimal.pow(5, ip.e / 308 - 0.7)
+function totaEPMult() {
+  return new Decimal(getAdjustedGlyphEffect("cursedEP"))
     .times(kongEPMult)
     .timesEffectsOf(
       EternityUpgrade.epMult,
@@ -63,7 +62,12 @@ function gainedEternityPoints() {
       TimeStudy(123),
       RealityUpgrade(12),
       GlyphEffect.epMult
-    ).times(getAdjustedGlyphEffect("cursedEP"));
+  );
+}
+
+function gainedEternityPoints() {
+  const ip = player.infinityPoints.plus(gainedInfinityPoints());
+  let ep = Decimal.pow(5, ip.e / 308 - 0.7).times(totaEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -74,6 +78,10 @@ function gainedEternityPoints() {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
   return ep.floor();
+}
+
+function requiredIPForEP() {
+  return Decimal.pow10(Math.ceil(308 * (Decimal.log(totaEPMult().reciprocal(), 5) + 0.7)));
 }
 
 function getRealityMachineMultiplier() {

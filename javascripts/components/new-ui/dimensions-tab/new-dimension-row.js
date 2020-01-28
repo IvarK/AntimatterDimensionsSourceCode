@@ -35,7 +35,7 @@ Vue.component("new-dimension-row", {
       return this.isCapped
         ? "Further eighth dimension purchases are prohibited, as they are the only way to acquire galaxies"
         : null;
-    }
+    },
   },
   methods: {
     update() {
@@ -64,9 +64,28 @@ Vue.component("new-dimension-row", {
       } else {
         buyOneDimensionBtnClick(this.tier);
       }
+
+      if (this.tier === 1) {
+        Tutorial.turnOffEffect(TUTORIAL_STATE.DIM1);
+      } 
+      
+      if (this.tier === 2) {
+        Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
+      }
     },
     showCostTitle(value) {
       return value.exponent < 1000000;
+    },
+    tutorialClass() {
+      if (this.tier === 1) {
+        return Tutorial.glowingClass(TUTORIAL_STATE.DIM1);
+      } 
+      
+      if (this.tier === 2) {
+        return Tutorial.glowingClass(TUTORIAL_STATE.DIM2);
+      }
+
+      return {};
     }
   },
   template:
@@ -78,6 +97,7 @@ Vue.component("new-dimension-row", {
         class="button-content"
         :enabled="isAffordable"
         :ach-tooltip="cappedTooltip"
+        :class="tutorialClass()"
         >Buy {{ howManyCanBuy }}<br>Cost: {{ costDisplay }}</div>
       <div class="fill">
         <div class="fill1" :style="{ 'width': boughtBefore10*10 + '%' }"></div>

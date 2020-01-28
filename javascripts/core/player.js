@@ -454,6 +454,7 @@ let player = {
       darkEnergyUpgrades: new Set()
     }
   },
+  tutorialState: 0,
   options: {
     news: true,
     notation: "Mixed scientific",
@@ -500,7 +501,7 @@ let player = {
       glyphSacrifice: true,
       glyphUndo: true,
       glyphReplace: true,
-    }
+    },
   },
   // Remove later
   newEC10Test: false,

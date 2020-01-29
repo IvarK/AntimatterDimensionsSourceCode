@@ -590,6 +590,7 @@ const Glyphs = {
     this.inventory[index] = glyph;
     glyph.idx = index;
     player.reality.glyphs.inventory.push(glyph);
+    player.bestGlyphLevel = Math.max(player.bestGlyphLevel, glyph.level);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },

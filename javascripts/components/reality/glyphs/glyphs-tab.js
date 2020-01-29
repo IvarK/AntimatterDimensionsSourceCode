@@ -15,7 +15,7 @@ Vue.component("glyphs-tab", {
   },
   methods: {
     update() {
-      this.showInstability = Teresa.has(TERESA_UNLOCKS.EFFARIG);
+      this.showInstability = player.bestGlyphLevel > 800;
       this.showHyperInstability = EffarigUnlock.reality.isUnlocked;
       this.instabilityThreshold = Glyphs.instabilityThreshold;
       this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;

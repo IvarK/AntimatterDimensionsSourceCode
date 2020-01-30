@@ -39,7 +39,7 @@ class VRunUnlockState extends GameMechanicState {
     if (!this.isReduced) return value;
     
     // Type checking not needed, see above comment in reduction()
-    if (this.config.mode === V_REDUCTION_MODE.MINUS) value -= this.reduction;
+    if (this.config.mode === V_REDUCTION_MODE.SUBTRACTION) value -= this.reduction;
     if (this.config.mode === V_REDUCTION_MODE.DIVISION) value = value.dividedBy(this.reduction);
 
     return value;

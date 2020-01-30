@@ -185,6 +185,19 @@ const V = {
     }
     this.spaceTheorems = sum;
   },
+  reset() {
+    player.celestials.v = {
+      unlockBits: 0,
+      quoteIdx: 0,
+      run: false,
+      runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      triadStudies: [],
+      STSpent: 0,
+      runGlyphs: [[], [], [], [], [], [], [], [], []],
+      runRecords: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      cursedThisRun: 0
+    };
+  },
   get availableST() {
     return V.spaceTheorems - player.celestials.v.STSpent;
   },

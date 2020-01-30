@@ -197,6 +197,7 @@ const V = {
       runRecords: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       cursedThisRun: 0
     };
+    this.spaceTheorems = 0;
   },
   get availableST() {
     return V.spaceTheorems - player.celestials.v.STSpent;

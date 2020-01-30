@@ -137,7 +137,7 @@ const V_UNLOCKS = {
     },
     {
       id: 5,
-      reward: "Divide the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
+      reward: "Reduce the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
       description: "Have 36 V-achievements",
       requirement: () => V.spaceTheorems >= 36
     }
@@ -181,7 +181,7 @@ const V = {
     let sum = 0;
     for (let i = 0; i < player.celestials.v.runUnlocks.length; i++) {
       if (i < 6) sum += player.celestials.v.runUnlocks[i];
-      else sum += player.celestials.v.runUnlocks[i] * 3;
+      else sum += player.celestials.v.runUnlocks[i] * 2;
     }
     this.spaceTheorems = sum;
   },

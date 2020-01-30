@@ -537,7 +537,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 231,
       cost: 500,
-      STCost: 6,
+      STCost: 5,
       requirement: () => (TimeStudy(221).isBought || TimeStudy(222).isBought) && !TimeStudy(232).isBought,
       requirementV: () => (TimeStudy(221).isBought || TimeStudy(222).isBought) && TimeStudy(232).isBought,
       description: "Dimension Boosts are more effective based on their amount",
@@ -547,7 +547,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 232,
       cost: 500,
-      STCost: 6,
+      STCost: 5,
       requirement: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && !TimeStudy(231).isBought,
       requirementV: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && TimeStudy(231).isBought,
       description: "Galaxies are more effective based on Antimatter Galaxies",
@@ -557,7 +557,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 233,
       cost: 500,
-      STCost: 6,
+      STCost: 5,
       requirement: () => (TimeStudy(225).isBought || TimeStudy(226).isBought) && !TimeStudy(234).isBought,
       requirementV: () => (TimeStudy(225).isBought || TimeStudy(226).isBought) && TimeStudy(234).isBought,
       description: "Max Replicanti galaxy upgrade is cheaper based on current Replicanti",
@@ -567,7 +567,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 234,
       cost: 500,
-      STCost: 6,
+      STCost: 5,
       requirement: () => (TimeStudy(227).isBought || TimeStudy(228).isBought) && !TimeStudy(233).isBought,
       requirementV: () => (TimeStudy(227).isBought || TimeStudy(228).isBought) && TimeStudy(233).isBought,
       description: "Sacrifice boosts First Dimension",

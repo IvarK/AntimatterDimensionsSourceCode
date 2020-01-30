@@ -33,6 +33,7 @@ Vue.component("time-study", {
     classObject() {
       return {
         "o-time-study": true,
+        "o-time-study--extra": this.showSTCost,
         "o-time-study--unavailable": !this.isAvailableForPurchase && !this.isBought,
         "o-time-study--bought": this.isBought,
         "o-time-study--small": this.setup.isSmall,

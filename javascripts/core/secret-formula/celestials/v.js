@@ -1,7 +1,7 @@
 "use strict";
 
 const V_REDUCTION_MODE = {
-  MINUS: 1,
+  SUBTRACTION: 1,
   DIVISION: 2
 }
 
@@ -24,7 +24,7 @@ GameDatabase.celestials.v = {
       currentValue: () => (TimeStudy.reality.isBought ? 6 - Glyphs.activeList.length : 0),
       formatRecord: x => (x === 0 ? "N/A" : formatInt(6 - x)),
       shardReduction: () => 0,
-      mode: V_REDUCTION_MODE.MINUS
+      mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
       id: 1,
@@ -34,8 +34,8 @@ GameDatabase.celestials.v = {
       condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= x,
       currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies,
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e20, 0.2),
-      mode: V_REDUCTION_MODE.MINUS
+      shardReduction: () => Math.floor(Math.pow(player.celestials.effarig.relicShards / 1e20, 0.2)),
+      mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
       id: 2,
@@ -82,7 +82,7 @@ GameDatabase.celestials.v = {
       currentValue: () => (player.dilation.active && EternityChallenge(5).isRunning ? DimBoost.purchasedBoosts : 0),
       formatRecord: x => formatInt(x),
       shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e20, 0.05),
-      mode: V_REDUCTION_MODE.MINUS
+      mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
       id: 6,
@@ -94,22 +94,23 @@ GameDatabase.celestials.v = {
       currentValue: () => (TimeStudy.reality.isBought ? player.celestials.v.cursedThisRun : 0),
       formatRecord: x => formatInt(x),
       shardReduction: () => 0,
-      mode: V_REDUCTION_MODE.MINUS
+      mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
       id: 7,
       name: "Post-destination",
       description: value =>
-        `Get ${formatInt(Math.pow(value, 2.4))} TT with a 1e-${format(value, 2, 2)} black hole`,
+        `Get ${formatInt(Math.floor(Math.pow(value, 2.4)))} TT with a 
+          /${format(Decimal.pow10(value), 2, 2)} black hole`,
       values: [50, 100, 150, 200, 300],
-      condition: x => player.timestudy.theorem.gt(Math.pow(x, 2.4)) &&
+      condition: x => player.timestudy.theorem.gt(Math.floor(Math.pow(x, 2.4))) &&
         Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality,
       currentValue: x => (Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality
         ? player.timestudy.theorem.toNumber()
         : 0),
       formatRecord: x => formatInt(x),
       shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e38, 0.4),
-      mode: V_REDUCTION_MODE.MINUS
+      mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
       id: 8,
@@ -119,14 +120,14 @@ GameDatabase.celestials.v = {
       condition: x => gainedGlyphLevel().actualLevel >= x,
       currentValue: () => gainedGlyphLevel().actualLevel,
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e37, 0.6),
-      mode: V_REDUCTION_MODE.minus
+      shardReduction: () => Math.floor(Math.pow(player.celestials.effarig.relicShards / 1e37, 0.6)),
+      mode: V_REDUCTION_MODE.SUBTRACTION
     }
   ],
   triadStudies: [
     {
       id: 1,
-      STCost: 16,
+      STCost: 11,
       requirement: [221, 222, 231],
       description: "Study 231 powers up the effect of study 221",
       effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue.minus(1)).clampMin(1),
@@ -134,21 +135,21 @@ GameDatabase.celestials.v = {
     },
     {
       id: 2,
-      STCost: 16,
+      STCost: 11,
       requirement: [223, 224, 232],
       description: "Multiply the distant galaxy scaling threshold by 2x",
       effect: 2,
     },
     {
       id: 3,
-      STCost: 16,
+      STCost: 11,
       requirement: [225, 226, 233],
       description: "Your extra RGs are multiplied by 1.5x",
       effect: 1.5,
     },
     {
       id: 4,
-      STCost: 16,
+      STCost: 11,
       requirement: [227, 228, 234],
       description: "Sacrifice boosts all normal dimensions.",
       effect: () => Sacrifice.totalBoost,

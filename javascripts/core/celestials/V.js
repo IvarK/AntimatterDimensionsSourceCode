@@ -21,24 +21,26 @@ class VRunUnlockState extends GameMechanicState {
     return value === undefined ? this.config.values[this.completions - 1] : value;
   }
 
+  get isReduced() {
+    return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0]) && player.celestials.effarig.relicShards >= 1e20 &&
+      Decimal.gt(this.reduction, 1);
+  }
+
   get reduction() {
-    if (!V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0])) return 0;
     const value = this.conditionBaseValue;
 
+    // It's safe to assume that subtraction is only used on numbers and division on Decimals
     if (typeof value === "number") return Math.max(0, this.config.shardReduction(value));
-    return Decimal.max(0, this.config.shardReduction(value));
+    return Decimal.max(1, this.config.shardReduction(value));
   }
 
   get conditionValue() {
     let value = this.conditionBaseValue;
+    if (!this.isReduced) return value;
     
-    if (typeof value === "number") {
-      if (this.config.mode === V_REDUCTION_MODE.MINUS) value -= this.reduction;
-      if (this.config.mode === V_REDUCTION_MODE.DIVISION) value /= this.reduction;
-    } else {
-      if (this.config.mode === V_REDUCTION_MODE.MINUS) value = value.minus(this.reduction);
-      if (this.config.mode === V_REDUCTION_MODE.DIVISION) value = value.dividedBy(this.reduction);
-    }
+    // Type checking not needed, see above comment in reduction()
+    if (this.config.mode === V_REDUCTION_MODE.SUBTRACTION) value -= this.reduction;
+    if (this.config.mode === V_REDUCTION_MODE.DIVISION) value = value.dividedBy(this.reduction);
 
     return value;
   }
@@ -135,7 +137,7 @@ const V_UNLOCKS = {
     },
     {
       id: 5,
-      reward: "Divide the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
+      reward: "Reduce the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
       description: "Have 36 V-achievements",
       requirement: () => V.spaceTheorems >= 36
     }
@@ -179,9 +181,22 @@ const V = {
     let sum = 0;
     for (let i = 0; i < player.celestials.v.runUnlocks.length; i++) {
       if (i < 6) sum += player.celestials.v.runUnlocks[i];
-      else sum += player.celestials.v.runUnlocks[i] * 3;
+      else sum += player.celestials.v.runUnlocks[i] * 2;
     }
     this.spaceTheorems = sum;
+  },
+  reset() {
+    player.celestials.v = {
+      unlockBits: 0,
+      quoteIdx: 0,
+      run: false,
+      runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      triadStudies: [],
+      STSpent: 0,
+      runGlyphs: [[], [], [], [], [], [], [], [], []],
+      runRecords: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      cursedThisRun: 0
+    };
   },
   get availableST() {
     return V.spaceTheorems - player.celestials.v.STSpent;

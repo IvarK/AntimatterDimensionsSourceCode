@@ -120,7 +120,7 @@ GameDatabase.celestials.v = {
       currentValue: () => gainedGlyphLevel().actualLevel,
       formatRecord: x => formatInt(x),
       shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e37, 0.6),
-      mode: V_REDUCTION_MODE.minus
+      mode: V_REDUCTION_MODE.MINUS
     }
   ],
   triadStudies: [

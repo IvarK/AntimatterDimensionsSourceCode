@@ -401,6 +401,9 @@ class NormalTimeStudyState extends TimeStudyState {
     if (!canBuyStudy(this.id)) {
       if (!canBuyLocked(this.id)) return false;
       player.celestials.v.STSpent += this.STCost;
+      player.timestudy.studies.push(this.id);
+      GameCache.timeStudies.invalidate();
+      return true;
     }
     player.timestudy.studies.push(this.id);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
@@ -672,7 +675,7 @@ TriadStudyState.studies = mapGameData(
 );
 
 function TriadStudy(id) {
-  return TriadStudyState.studies[id]
+  return TriadStudyState.studies[id];
 }
 
 /**

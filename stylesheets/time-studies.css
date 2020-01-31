@@ -52,6 +52,10 @@
   animation: a-time-study 7s infinite;
 }
 
+.o-time-study--extra {
+  animation: a-time-study 1.5s infinite;
+}
+
 .o-time-study:hover {
   animation: none;
 }

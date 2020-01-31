@@ -70,9 +70,13 @@ Vue.component("new-dimension-row", {
     }
   },
   template:
-  `<div v-show="isUnlocked" class="dimension-row">
-    <h3>{{name}} D<span class="mult">{{ formatX(multiplier, 1, 1) }}</span></h3>
-    <span>{{amountDisplay}}</span>
+  `<div v-show="isUnlocked" class="c-normal-dim-row">
+    <div class="c-normal-dim-row__label c-normal-dim-row__name">
+      {{name}} D <span class="c-normal-dim-row__multiplier">{{formatX(multiplier, 1, 1)}}</span>
+    </div>
+    <div class="c-normal-dim-row__label c-normal-dim-row__label--growable">
+      {{amountDisplay}}
+    </div>
     <button class="o-primary-btn o-primary-btn--new" @click="buy" :class="{ 'o-primary-btn--disabled': !isAffordable }">
       <div
         class="button-content"

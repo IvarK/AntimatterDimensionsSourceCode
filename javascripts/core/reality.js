@@ -238,7 +238,7 @@ function giveRealityRewards(realityProps) {
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
     player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
   }
-  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3])) {
+  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[4])) {
     Ra.giveExp(multiplier);
   }
   if (multiplier > 1 && Enslaved.boostReality) {

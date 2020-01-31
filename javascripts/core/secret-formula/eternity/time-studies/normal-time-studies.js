@@ -273,7 +273,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 131,
       cost: 5,
-      STCost: 10,
+      STCost: 8,
       requirement: () => TimeStudy(121).isBought && !TimeStudy(132).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(121).isBought && (TimeStudy(132).isBought || TimeStudy(133).isBought),
       description: () => (Achievement(138).isUnlocked
@@ -284,7 +284,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 132,
       cost: 5,
-      STCost: 10,
+      STCost: 8,
       requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(122).isBought && (TimeStudy(131).isBought || TimeStudy(133).isBought),
       description: () => (Perk.studyPassive2.isBought
@@ -295,7 +295,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 133,
       cost: 5,
-      STCost: 10,
+      STCost: 8,
       requirement: () => TimeStudy(123).isBought && !TimeStudy(131).isBought && !TimeStudy(132).isBought,
       requirementV: () => TimeStudy(123).isBought && (TimeStudy(131).isBought || TimeStudy(132).isBought),
       description: () => (Achievement(138).isUnlocked

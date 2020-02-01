@@ -14,6 +14,9 @@ Vue.component("time-dim-tab", {
       areAutobuyersUnlocked: false
     };
   },
+  computed: {
+    costIncreases: () => TimeDimension(1).costIncreaseThresholds,
+  },
   methods: {
     update() {
       this.totalUpgrades = player.totalTickGained;

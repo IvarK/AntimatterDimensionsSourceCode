@@ -102,7 +102,7 @@ dev.implode = function() {
 dev.updateTDCosts = function() {
     for (let tier = 1; tier < 9; tier++) {
         const dim = TimeDimension(tier);
-        dim.cost = timeDimensionCost(tier, dim.bought);
+        dim.cost = dim.nextCost(dim.bought);
     }
 };
 

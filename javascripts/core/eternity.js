@@ -332,16 +332,18 @@ class EPMultiplierState extends GameMechanicState {
     this.boughtAmount = 0;
   }
 
+  get costIncreaseThresholds() {
+    return [1e100, Decimal.MAX_NUMBER, "1e1300", "1e4000"];
+  }
+
   costAfterCount(count) {
-    // Up to just past 1e100
-    if (count <= 58) return Decimal.pow(50, count).times(500);
-    // Up to just past Number.MAX_VALUE
-    if (count <= 153) return Decimal.pow(100, count).times(500);
-    // Up to just past 1e1300
-    if (count <= 481) return Decimal.pow(500, count).times(500);
-    // Up to 1e4000
-    if (count <= 1333) return Decimal.pow(1000, count).times(500);
-    return Decimal.pow(1000, count + Math.pow(count - 1334, 1.2)).times(500);
+    const costThresholds = this.costIncreaseThresholds;
+    const multPerUpgrade = [50, 100, 500, 1000];
+    for (let i = 0; i < costThresholds.length; i++) {
+      const cost = Decimal.pow(multPerUpgrade[i], count).times(500);
+      if (cost.lt(costThresholds[i])) return cost;
+    }
+    return Decimal.pow(1000, count + Math.pow(Math.clampMin(count - 1334, 0), 1.2)).times(500);
   }
 }
 

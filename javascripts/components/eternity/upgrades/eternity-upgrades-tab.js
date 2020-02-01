@@ -1,11 +1,6 @@
 "use strict";
 
 Vue.component("eternity-upgrades-tab", {
-  data() {
-    return {
-      costIncreases: [1e100, Decimal.MAX_NUMBER, new Decimal("1e1300"), new Decimal("1e4000")],
-    };
-  },
   computed: {
     grid() {
       return [
@@ -20,7 +15,8 @@ Vue.component("eternity-upgrades-tab", {
           EternityUpgrade.tdMultRealTime,
         ]
       ];
-    }
+    },
+    costIncreases: () => EternityUpgrade.epMult.costIncreaseThresholds.map(x => new Decimal(x)),
   },
   template:
     `<div class="l-eternity-upgrades-grid">

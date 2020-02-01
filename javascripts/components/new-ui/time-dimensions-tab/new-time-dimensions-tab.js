@@ -10,7 +10,6 @@ Vue.component("new-time-dimensions-tab", {
       upgradeThreshold: new Decimal(0),
       shardsPerSecond: new Decimal(0),
       incomeType: "",
-      costIncreases: [Decimal.MAX_NUMBER, new Decimal("1e1300"), new Decimal("1e6000")],
       areAutobuyersUnlocked: false
     };
   },
@@ -18,6 +17,7 @@ Vue.component("new-time-dimensions-tab", {
     totalUpgradesDisplay() {
       return formatWithCommas(this.totalUpgrades);
     },
+    costIncreases: () => TimeDimension(1).costIncreaseThresholds,
   },
   methods: {
     update() {

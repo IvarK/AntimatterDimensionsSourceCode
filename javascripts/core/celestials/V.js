@@ -26,12 +26,19 @@ class VRunUnlockState extends GameMechanicState {
       Decimal.gt(this.reduction, 1);
   }
 
+  get isCapped() {
+    const value = this.conditionBaseValue;
+    return new Decimal(this.reduction).eq(this.config.maxShardReduction(value));
+  }
+
   get reduction() {
     const value = this.conditionBaseValue;
 
     // It's safe to assume that subtraction is only used on numbers and division on Decimals
-    if (typeof value === "number") return Math.max(0, this.config.shardReduction(value));
-    return Decimal.max(1, this.config.shardReduction(value));
+    if (typeof value === "number") {
+      return Math.clamp(this.config.shardReduction(value), 0, this.config.maxShardReduction(value));
+    }
+    return Decimal.clamp(this.config.shardReduction(value), 1, this.config.maxShardReduction(value));
   }
 
   get conditionValue() {
@@ -56,19 +63,19 @@ class VRunUnlockState extends GameMechanicState {
   tryComplete() {
     const playerData = player.celestials.v;
     const value = this.config.currentValue(this.conditionValue);
-    // If we haven't set a record, we haven't completed any new tiers, either
-    if (value <= playerData.runRecords[this.id]) return;
-    playerData.runRecords[this.id] = value;
-    playerData.runGlyphs[this.id] = Glyphs.active
-      .filter(g => g !== null)
-      .map(g => ({
-        type: g.type,
-        level: g.level,
-        strength: g.strength,
-        effects: g.effects,
-      }));
+    if (value > playerData.runRecords[this.id]) {
+      playerData.runRecords[this.id] = value;
+      playerData.runGlyphs[this.id] = Glyphs.active
+        .filter(g => g !== null)
+        .map(g => ({
+          type: g.type,
+          level: g.level,
+          strength: g.strength,
+          effects: g.effects,
+        }));
+    }
 
-    while (this.completions < 6 && this.config.condition(this.conditionValue)) {
+    while (this.completions < this.config.values.length && this.config.condition(this.conditionValue)) {
       this.completions++;
       GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
       V.updateTotalRunUnlocks();

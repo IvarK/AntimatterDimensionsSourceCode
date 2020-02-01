@@ -102,7 +102,10 @@ Vue.component("v-tab", {
                 <p class="o-v-unlock-name">{{ hex.config.name }}</p>
                 <p class="o-v-unlock-desc">{{ hex.formattedDescription }}</p>
                 <p class="o-v-unlock-goal-reduction" v-if="has(runMilestones[0]) && hex.isReduced">
-                  Goal {{ mode(hex) }} by {{ format(hex.reduction, 2, 0) }}
+                  Goal has been {{ mode(hex) }} by {{ format(hex.reduction, 2, 0) }}
+                  <span v-if="hex.isCapped">
+                    (capped)
+                  </span>
                 </p>
                 <p class="o-v-unlock-amount">{{ hex.completions }}/{{hex.config.values.length}} done</p>
                 <p class="o-v-unlock-record">

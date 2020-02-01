@@ -96,9 +96,6 @@ Vue.component("game-header", {
       antimatterPerSec: new Decimal(0)
     };
   },
-  computed: {
-    blackHoles: () => BlackHoles.list
-  },
   methods: {
     update() {
       this.isInMatterChallenge = Player.isInMatterChallenge;

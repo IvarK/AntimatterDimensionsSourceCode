@@ -106,7 +106,8 @@ Vue.component("replicanti-tab", {
           <replicanti-upgrade-button :setup="maxGalaxySetup" />
         </div>
         <div>
-          The Max Replicanti Galaxy upgrade can be purchased endlessly,<br>
+          The Max Replicanti Galaxy upgrade can be purchased endlessly,
+          <br>
           but costs increase more rapidly above {{formatInt(distantRG)}} RG and {{formatInt(remoteRG)}} RG.
         </div>
         <br>

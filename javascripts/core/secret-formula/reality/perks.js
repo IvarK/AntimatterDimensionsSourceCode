@@ -120,10 +120,7 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.REALITY,
     description: "Every reality, gain additional RM equal to your current reality count multiplied" +
       " by your highest glyph level.",
-    effect: () => player.reality.glyphs.active
-      .concat(player.reality.glyphs.inventory)
-      .map(glyph => glyph.level)
-      .max() * player.realities
+    effect: () => player.bestGlyphLevel * player.realities
   },
   dimboostNonReset: {
     id: 30,

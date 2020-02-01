@@ -202,13 +202,10 @@ const Ra = {
     for (const pet of Ra.pets.all) pet.reset();
   },
   // Scans through all glyphs and fills base resources to the maximum allowed by the cap
+  // TODO update/delete this function when we get back to alchemy, it's outdated since it's not linear any more
   fillAlchemyResources() {
-    const maxLevel = player.reality.glyphs.active
-      .concat(player.reality.glyphs.inventory)
-      .map(g => g.level)
-      .max();
     for (const resource of AlchemyResources.base) {
-      resource.amount = Math.min(this.alchemyResourceCap, maxLevel);
+      resource.amount = Math.min(this.alchemyResourceCap, player.bestGlyphLevel);
     }
   },
   giveExp(multiplier) {

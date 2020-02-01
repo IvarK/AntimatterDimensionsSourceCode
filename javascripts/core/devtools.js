@@ -54,32 +54,32 @@ dev.giveAllAchievements = function() {
 };
 
 dev.doubleEverything = function() {
-    Object.keys(player).forEach(key => {
-        if (typeof player[key] === "number") player[key] *= 2;
-        if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(2);
-        if (typeof player[key] === "object" && !isFinite(player[key])) {
-            Object.keys(player[key]).forEach(key2 => {
-                if (typeof player[key][key2] === "number") player[key][key2] *= 2;
-                if (typeof player[key][key2] === "object" && player[key][key2].constructor !== Object)
-                  player[key][key2] = player[key][key2].times(2);
-            });
-        }
-    });
+  Object.keys(player).forEach(key => {
+    if (typeof player[key] === "number") player[key] *= 2;
+    if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(2);
+    if (typeof player[key] === "object" && !isFinite(player[key])) {
+      Object.keys(player[key]).forEach(key2 => {
+        if (typeof player[key][key2] === "number") player[key][key2] *= 2;
+        if (typeof player[key][key2] === "object" && player[key][key2].constructor !== Object)
+          player[key][key2] = player[key][key2].times(2);
+      });
+    }
+  });
 };
 
 dev.spin3d = function() {
-    if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite";
-    else document.body.style.animation = "";
+  if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite";
+  else document.body.style.animation = "";
 };
 
 dev.spin4d = function() {
-    if (document.body.style.animation === "") document.body.style.animation = "spin4d 3s infinite";
-    else document.body.style.animation = "";
+  if (document.body.style.animation === "") document.body.style.animation = "spin4d 3s infinite";
+  else document.body.style.animation = "";
 };
 
 dev.cancerize = function() {
-    Theme.tryUnlock("Cancer");
-    Notation.cancer.setAsCurrent();
+  Theme.tryUnlock("Cancer");
+  Notation.cancer.setAsCurrent();
 };
 
 dev.fixSave = function() {
@@ -95,22 +95,22 @@ dev.fixSave = function() {
 };
 
 dev.implode = function() {
-    document.body.style.animation = "implode 2s 1";
-    setTimeout(() => document.body.style.animation = "", 2000);
+  document.body.style.animation = "implode 2s 1";
+  setTimeout(() => document.body.style.animation = "", 2000);
 };
 
 dev.updateTDCosts = function() {
-    for (let tier = 1; tier < 9; tier++) {
-        const dim = TimeDimension(tier);
-        dim.cost = dim.nextCost(dim.bought);
-    }
+  for (let tier = 1; tier < 9; tier++) {
+    const dim = TimeDimension(tier);
+    dim.cost = dim.nextCost(dim.bought);
+  }
 };
 
 dev.refundTimeDims = function() {
-    for (const dimension of TimeDimensions.all) {
-        dimension.bought = 0;
-    }
-    dev.updateTDCosts();
+  for (const dimension of TimeDimensions.all) {
+    dimension.bought = 0;
+  }
+  dev.updateTDCosts();
 };
 
 dev.refundEPMult = function() {
@@ -118,13 +118,13 @@ dev.refundEPMult = function() {
 };
 
 dev.refundDilStudies = function() {
-    for (const study of GameDatabase.eternity.timeStudies.dilation) {
-        if (player.dilation.studies.includes(study.id)) {
-            player.dilation.studies.splice(player.dilation.studies.indexOf(study.id), 1);
-            console.log(document.getElementById(`removed dilstudy${study.id}`));
-            player.timestudy.theorem = player.timestudy.theorem.plus(study.cost);
-        }
+  for (const study of GameDatabase.eternity.timeStudies.dilation) {
+    if (player.dilation.studies.includes(study.id)) {
+      player.dilation.studies.splice(player.dilation.studies.indexOf(study.id), 1);
+      console.log(document.getElementById(`removed dilstudy${study.id}`));
+      player.timestudy.theorem = player.timestudy.theorem.plus(study.cost);
     }
+  }
 };
 
 dev.resetDilation = function() {
@@ -172,24 +172,24 @@ dev.removeAch = function(name) {
 };
 
 dev.realize = function() {
-    document.getElementById("container").style.animation = "realize 10s 1";
-    document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
-    setTimeout(() => {
-        document.getElementById("realityanimbg").play();
-        document.getElementById("realityanimbg").currentTime = 0;
-        document.getElementById("realityanimbg").play();
-    }, 2000);
-    setTimeout(() => {
-        document.getElementById("container").style.animation = "";
-        document.getElementById("realityanimbg").style.animation = "";
-    }, 10000);
+  document.getElementById("container").style.animation = "realize 10s 1";
+  document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
+  setTimeout(() => {
+    document.getElementById("realityanimbg").play();
+    document.getElementById("realityanimbg").currentTime = 0;
+    document.getElementById("realityanimbg").play();
+  }, 2000);
+  setTimeout(() => {
+    document.getElementById("container").style.animation = "";
+    document.getElementById("realityanimbg").style.animation = "";
+  }, 10000);
 };
 
 dev.respecPerks = function() {
-    player.reality.pp += player.reality.perks.size;
-    player.reality.perks = new Set();
-    GameCache.achSkipPerkCount.invalidate();
-    GameCache.buyablePerks.invalidate();
+  player.reality.pp += player.reality.perks.size;
+  player.reality.perks = new Set();
+  GameCache.achSkipPerkCount.invalidate();
+  GameCache.buyablePerks.invalidate();
 };
 
 function isDevEnvironment() {
@@ -382,4 +382,4 @@ dev.testGlyphs = function(config) {
     setTimeout(finishTrial, duration, index);
   }
   runTrial(0);
-}
+};

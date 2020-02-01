@@ -23,12 +23,16 @@ class VRunUnlockState extends GameMechanicState {
 
   get isReduced() {
     return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0]) && player.celestials.effarig.relicShards >= 1e20 &&
-      Decimal.gt(this.reduction, 1);
+      (typeof this.conditionBaseValue === "number"
+        ? this.reduction > 0
+        : Decimal.gt(this.reduction, 1));
   }
 
-  get isCapped() {
+  get reductionInfo() {
     const value = this.conditionBaseValue;
-    return new Decimal(this.reduction).eq(this.config.maxShardReduction(value));
+    if (new Decimal(this.reduction).eq(this.config.maxShardReduction(value))) return "(capped)";
+    if (this.config.nextShards === undefined) return "";
+    return `(next at ${format(this.config.nextShards(Math.floor(this.reduction) + 1), 2, 0)} shards)`;
   }
 
   get reduction() {
@@ -114,7 +118,7 @@ const V_UNLOCKS = {
   RUN_UNLOCK_THRESHOLDS: [
     {
       id: 1,
-      reward: "Relic shards reduce V-achievement requirements. Starting at 1e20 Relic Shards.",
+      reward: "Relic shards reduce V-achievement requirements, starting at 1e20 Relic Shards.",
       description: "Have 2 V-achievements",
       requirement: () => V.spaceTheorems >= 2
     },

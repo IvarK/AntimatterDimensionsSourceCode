@@ -37,6 +37,7 @@ GameDatabase.celestials.v = {
       formatRecord: x => formatInt(x),
       shardReduction: () => Math.floor(Math.pow(player.celestials.effarig.relicShards / 1e20, 0.2)),
       maxShardReduction: goal => goal / 10,
+      nextShards: x => 1e20 * Math.pow(x, 5),
       mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
@@ -86,8 +87,9 @@ GameDatabase.celestials.v = {
       condition: x => player.dilation.active && EternityChallenge(5).isRunning && DimBoost.purchasedBoosts >= x,
       currentValue: () => (player.dilation.active && EternityChallenge(5).isRunning ? DimBoost.purchasedBoosts : 0),
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e20, 0.05),
+      shardReduction: () => Math.floor(Math.pow(player.celestials.effarig.relicShards / 1e20, 0.05)),
       maxShardReduction: () => 4,
+      nextShards: x => 1e20 * Math.pow(x, 20),
       mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
@@ -118,6 +120,7 @@ GameDatabase.celestials.v = {
       formatRecord: x => formatInt(x),
       shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e38, 0.4),
       maxShardReduction: goal => goal / 10,
+      nextShards: x => 1e38 * Math.pow(x, 2.5),
       mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
@@ -130,6 +133,7 @@ GameDatabase.celestials.v = {
       formatRecord: x => formatInt(x),
       shardReduction: () => Math.floor(Math.pow(player.celestials.effarig.relicShards / 1e37, 0.6)),
       maxShardReduction: () => 500,
+      nextShards: x => 1e37 * Math.pow(x, 5 / 3),
       mode: V_REDUCTION_MODE.SUBTRACTION
     }
   ],

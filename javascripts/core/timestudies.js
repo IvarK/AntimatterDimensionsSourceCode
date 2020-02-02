@@ -198,19 +198,19 @@ function buyTimeStudyListUntilID(list, maxId) {
   }
 }
 
-// eslint-disable-next-line complexity
 function studiesUntil(id) {
-  const row = Math.floor(id / 10);
-  const col = id % 10;
-  const lastInPrevRow = row * 10 - 1;
+  const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
   const study = TimeStudy(id);
-  // This process is greedy (starts buying studies from the top). However, if the
-  // player shift clicks a study that is immeidately buyable, we try to buy it first --
-  // in case buying studies up to that point renders it unaffordable.
-  study.purchase();
   const requestedPath = study.path;
+
+  // If the player tries to buy a study which isimmeidately buyable, we try to buy it first
+  // in case buying other studies up to that point renders it unaffordable.
+  study.purchase();
+
+  // Greddily buy all studies before the dimension split, then try again
   buyTimeStudyRange(11, Math.min(lastInPrevRow, 70));
   study.purchase();
+
   if (id < 71) return;
   const dimPaths = getSelectedDimensionStudyPaths();
   // If we have already selected as many dimension paths as available, we can brute
@@ -234,50 +234,31 @@ function studiesUntil(id) {
     return;
   }
   if (id >= 111) TimeStudy(111).purchase();
+
   if (id < 121) return;
-  // If we clicked on a active/idle/passive path, purchase things on that path
-  // before doing anything else
-  if (id <= 143) {
-    buyTimeStudyListUntilID(NormalTimeStudies.paths[requestedPath], id);
-  }
-  // If we've maxed out V rewards, we can brute force buy studies. Otherwise,
-  // we don't assume we know which locked studies the player wants, if any.
-  /* TODO: modify this block to work with the flipped achievements as well
-  if (V.totalAdditionalStudies >= 12) {
-    buyTimeStudyRange(121, Math.min(lastInPrevRow, 214));
-  }
-  */
   const pacePaths = getSelectedPacePaths();
-  // If we don't have a middle path chosen at this point, we either can't decide
-  // or can't afford any more studies
-  if (pacePaths.length === 0) return;
-  // If we have V, and have started on more than one pace path, but haven't finished
-  // it, we don't know how to proceed. If only one path is selected, we'll assume that
-  // it's the path the player wants
-  if (pacePaths.length > 1) {
-    if (!TimeStudy(141).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought) return;
-  } else {
-    // Buy as much of the rest of the selected middle path as we need
+  // Only brute-force buying all pace studies if the player is done with V, and stop buying completely if they aren't
+  if (pacePaths.length === 0) {
+    if (!V.isFullyCompleted) return;
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[TIME_STUDY_PATH.ACTIVE], id);
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[TIME_STUDY_PATH.PASSIVE], id);
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[TIME_STUDY_PATH.IDLE], id);
+  } else if (pacePaths.length === 1) {
     buyTimeStudyListUntilID(NormalTimeStudies.paths[pacePaths[0]], id);
+  } else {
+    // If the player has more than one pace path, we explicitly do nothing here so that we don't potentially waste ST
+    // they might be saving for lower studies. However, we keep continuing since up to row 22 the choices are obvious.
   }
+
+  // Attempt to buy things below the pace split, up to the requested study
+  if (!TimeStudy(141).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought) return;
   buyTimeStudyRange(151, Math.min(lastInPrevRow, 214));
-  // If the user clicked on a study in rows 19-22, we've tried to buy up to the previous
-  // row. Try to buy that study now:
   study.purchase();
-  if (id < 230) return;
-  // If the user clicked on a study in row 23, then either a) the above purchase call bought it (in
-  // which case, they must have had one of the prerequisites) or b) it didn't, but the user has V
-  // rewards so will be able to buy both prerequisites or c) they can't buy it
-  // We only buy both if the player has maxed out V.
-  /* TODO: modify this block to work with the flipped achievements as well
-  if (V.totalAdditionalStudies >= 12) {
-    TimeStudy(220 + col * 2 - 1).purchase();
-    TimeStudy(220 + col * 2).purchase();
-    // Try to buy the rest of the row 22 studies
-    for (let i = 221; i <= 228; ++i) TimeStudy(i).purchase();
-    study.purchase();
-  }
-  */
+
+  // Don't bother buying any more studies beyond row 22 unless the player has fully finished V,
+  // in which case just brute-force buy all of them
+  if (!V.isFullyCompleted) return;
+  buyTimeStudyRange(221, 234);
 }
 
 function respecTimeStudies(auto) {

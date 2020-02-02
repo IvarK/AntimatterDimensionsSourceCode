@@ -90,7 +90,7 @@ Vue.component("tt-shop", {
       costs.am.copyFrom(player.timestudy.amcost);
       costs.ip.copyFrom(player.timestudy.ipcost);
       costs.ep.copyFrom(player.timestudy.epcost);
-      this.showST = Achievement(151).isUnlocked;
+      this.showST = V.has(V_UNLOCKS.MAIN_UNLOCK);
       this.STamount = V.availableST;
     },
     toggleTTAutobuyer() {

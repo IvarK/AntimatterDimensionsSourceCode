@@ -226,13 +226,10 @@ const V = {
   get isRunning() {
     return player.celestials.v.run;
   },
-  get achievementsPerAdditionalStudy() {
-    return this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[4]) ? 3 : 6;
-  },
-  get totalAdditionalStudies() {
-    return Math.floor(this.spaceTheorems / this.achievementsPerAdditionalStudy);
-  },
   get isFlipped() {
     return this.spaceTheorems >= 36;
+  },
+  get isFullyCompleted() {
+    return this.spaceTheorems >= 66;
   }
 };

@@ -5517,9 +5517,17 @@ kbd {
   font-size: 1.3rem;
 }
 
-.l-v-milestones-container {
+.l-v-milestones-grid {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+}
+
+.l-v-milestones-grid__row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0.5rem;
 }
 
 .o-v-milestone {

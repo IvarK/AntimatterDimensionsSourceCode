@@ -46,7 +46,12 @@ Vue.component("v-tab", {
     },
     mode(hex) {
       return hex.config.mode === V_REDUCTION_MODE.SUBTRACTION ? "reduced" : "divided";
-    }
+    },
+    rewardText(milestone) {
+      return typeof milestone.reward === "function"
+        ? milestone.reward()
+        : milestone.reward;
+    },
   },
   computed: {
     // If V is flipped, change the layout of the grid
@@ -74,24 +79,44 @@ Vue.component("v-tab", {
         {}
       ];
     },
-    runMilestones: () => V_UNLOCKS.RUN_UNLOCK_THRESHOLDS,
+    vUnlock: () => V_UNLOCKS.MAIN_UNLOCK,
+    runMilestones() {
+      return [
+        [
+          V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0],
+          V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1],
+          V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2]
+        ],
+        [
+          V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3],
+          V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[4],
+          V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[5]
+        ],
+      ]
+    },
     db: () => GameDatabase.celestials.v,
   },
   template:
     `<div class="l-v-celestial-tab">
       <div v-if="!mainUnlock">
-        You need {{ format(db.mainUnlock.realities, 2, 0) }} realities (currently {{ format(realities, 2, 0) }}),
+        {{ format(rm, 2, 0) }} / {{ format(db.mainUnlock.rm, 2, 0) }} RM
         <br>
-        {{ format(db.mainUnlock.eternities, 2, 0) }} eternities (currently {{ format(eternities, 2, 0) }}),
+        {{ format(realities, 2, 0) }} / {{ format(db.mainUnlock.realities, 2, 0) }} realities
         <br>
-        {{ format(db.mainUnlock.infinities, 2, 0) }} infinities (currently {{ format(infinities, 2, 0) }}),
+        {{ format(eternities, 2, 0) }} / {{ format(db.mainUnlock.eternities, 2, 0) }} eternities
         <br>
-        {{ format(db.mainUnlock.dilatedTime, 2, 0) }} dilated time (currently {{ format(dilatedTime, 2, 0) }}),
+        {{ format(infinities, 2, 0) }} / {{ format(db.mainUnlock.infinities, 2, 0) }} infinities
         <br>
-        {{ format(db.mainUnlock.replicanti, 2, 0) }} replicanti (currently {{ format(replicanti, 2, 0) }}),
+        {{ format(dilatedTime, 2, 0) }} / {{ format(db.mainUnlock.dilatedTime, 2, 0) }} dilated time
         <br>
-        and {{ format(db.mainUnlock.rm, 2, 0) }} RM (currently {{ format(rm, 2, 0) }})
-        to unlock V, The Celestial of Achievements
+        {{ format(replicanti, 2, 0) }} / {{ format(db.mainUnlock.replicanti, 2, 0) }} replicanti
+        <br>
+        <div class="l-v-milestones-grid__row">
+          <div class="o-v-milestone">
+            <p>{{ vUnlock.description }}</p>
+            <p>Reward: {{ rewardText(vUnlock) }}</p>
+          </div>
+        </div>
       </div>
       <div v-else>
         <div class="l-v-unlocks-container">
@@ -142,14 +167,16 @@ Vue.component("v-tab", {
           You gain 1 Space Theorem for each completion.
         </div>
         <br>
-        <div class="l-v-milestones-container">
-          <div class="o-v-milestone"
-            v-for="milestone in runMilestones"
-            :class="{'o-v-milestone-unlocked':
-            has(milestone)}">
-              <p>{{ milestone.description }}</p>
-              <p>Reward: {{ milestone.reward }}</p>
-              <p v-if="milestone.effect">Currently: <b>{{ milestone.format(milestone.effect()) }}</b></p>
+        <div class="l-v-milestones-grid">
+          <div v-for="row in runMilestones" class="l-v-milestones-grid__row">
+            <div class="o-v-milestone"
+              v-for="milestone in row"
+              :class="{'o-v-milestone-unlocked':
+              has(milestone)}">
+                <p>{{ milestone.description }}</p>
+                <p>Reward: {{ rewardText(milestone) }}</p>
+                <p v-if="milestone.effect">Currently: <b>{{ milestone.format(milestone.effect()) }}</b></p>
+            </div>
           </div>
         </div>
       </div>

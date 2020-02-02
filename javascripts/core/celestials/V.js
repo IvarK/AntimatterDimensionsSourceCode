@@ -103,7 +103,8 @@ const VRunUnlocks = {
 const V_UNLOCKS = {
   MAIN_UNLOCK: {
     id: 0,
-    description: "Fully unlocks V, The Celestial Of Achievements",
+    reward: "Fully unlocks V, The Celestial Of Achievements",
+    description: "Meet all the above requirements simultaneously",
     requirement: () => {
       const db = GameDatabase.celestials.v.mainUnlock;
       if (player.realities < db.realities) return false;
@@ -118,8 +119,10 @@ const V_UNLOCKS = {
   RUN_UNLOCK_THRESHOLDS: [
     {
       id: 1,
-      reward: "Relic shards reduce V-achievement requirements, starting at 1e20 Relic Shards.",
+      reward: () => `Relic shards reduce V-achievement requirements, starting at ${format(1e20, 0, 0)} Relic Shards.`,
       description: "Have 2 V-achievements",
+      effect: () => player.celestials.effarig.relicShards,
+      format: x => `${format(x, 2, 0)} Relic Shards`,
       requirement: () => V.spaceTheorems >= 2
     },
     {
@@ -132,14 +135,21 @@ const V_UNLOCKS = {
     },
     {
       id: 3,
-      reward: "Achievement multiplier affects auto EC completion time. Unlock Triad studies.",
+      reward: "Achievement multiplier affects auto EC completion time.",
       description: "Have 10 V-achievements",
       effect: () => Achievements.power,
-      format: x => formatX(x, 2, 2),
+      // Base rate is 60 ECs at 30 minutes each
+      format: x => TimeSpan.fromSeconds(60 * 30 * 60 / x).toStringShort(false),
       requirement: () => V.spaceTheorems >= 10
     },
     {
       id: 4,
+      reward: "Unlock Triad studies.",
+      description: "Have 16 V-achievements",
+      requirement: () => V.spaceTheorems >= 16
+    },
+    {
+      id: 5,
       reward: "Achievement count affects black hole power.",
       description: "Have 30 V-achievements",
       effect: () => Achievements.power,
@@ -147,7 +157,7 @@ const V_UNLOCKS = {
       requirement: () => V.spaceTheorems >= 30
     },
     {
-      id: 5,
+      id: 6,
       reward: "Reduce the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
       description: "Have 36 V-achievements",
       requirement: () => V.spaceTheorems >= 36
@@ -162,7 +172,7 @@ const V = {
     if (!V.has(V_UNLOCKS.MAIN_UNLOCK) && V_UNLOCKS.MAIN_UNLOCK.requirement()) {
       // eslint-disable-next-line no-bitwise
       player.celestials.v.unlockBits |= (1 << V_UNLOCKS.MAIN_UNLOCK.id);
-      GameUI.notify.success(V_UNLOCKS.MAIN_UNLOCK.description);
+      GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!");
     }
 
     for (let i = 0; i < V_UNLOCKS.RUN_UNLOCK_THRESHOLDS.length; i++) {

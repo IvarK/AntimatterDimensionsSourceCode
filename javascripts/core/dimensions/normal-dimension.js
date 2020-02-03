@@ -165,8 +165,8 @@ function applyNDPowers(mult, tier) {
 
   multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));
 
-  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-    multiplier = multiplier.pow(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect());
+  if (V.has(V_UNLOCKS.ND_POW)) {
+    multiplier = multiplier.pow(V_UNLOCKS.ND_POW.effect());
   }
 
   return multiplier;

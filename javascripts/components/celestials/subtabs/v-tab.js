@@ -18,7 +18,7 @@ Vue.component("v-tab", {
   },
   methods: {
     update() {
-      this.mainUnlock = V.has(V_UNLOCKS.MAIN_UNLOCK);
+      this.mainUnlock = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
       this.totalUnlocks = V.spaceTheorems;
       this.realities = player.realities;
       this.infinities.copyFrom(player.infinitied);
@@ -79,18 +79,18 @@ Vue.component("v-tab", {
         {}
       ];
     },
-    vUnlock: () => V_UNLOCKS.MAIN_UNLOCK,
+    vUnlock: () => V_UNLOCKS.V_ACHIEVEMENT_UNLOCK,
     runMilestones() {
       return [
         [
-          V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0],
-          V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1],
-          V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2]
+          V_UNLOCKS.SHARD_REDUCTION,
+          V_UNLOCKS.ND_POW,
+          V_UNLOCKS.FAST_AUTO_EC
         ],
         [
-          V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3],
-          V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[4],
-          V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[5]
+          V_UNLOCKS.TRIAD_STUDIES,
+          V_UNLOCKS.ACHIEVEMENT_BH,
+          V_UNLOCKS.RA_UNLOCK
         ],
       ]
     },

@@ -302,7 +302,7 @@ const EternityChallenges = {
         Perk.autocompleteEC4,
         Perk.autocompleteEC5
       );
-      if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) hours /= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2].effect();
+      if (V.has(V_UNLOCKS.FAST_AUTO_EC)) hours /= V_UNLOCKS.FAST_AUTO_EC.effect();
       return TimeSpan.fromHours(hours).totalMilliseconds;
     }
   }

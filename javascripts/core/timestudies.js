@@ -337,7 +337,7 @@ class TimeStudyState extends GameMechanicState {
 
   get STCost() {
     const base = this.config.STCost;
-    return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[4])
+    return V.has(V_UNLOCKS.RA_UNLOCK)
       ? base - 2
       : base;
   }
@@ -389,9 +389,6 @@ class NormalTimeStudyState extends TimeStudyState {
     if (!canBuyStudy(this.id)) {
       if (!canBuyLocked(this.id)) return false;
       player.celestials.v.STSpent += this.STCost;
-      player.timestudy.studies.push(this.id);
-      GameCache.timeStudies.invalidate();
-      return true;
     }
     player.timestudy.studies.push(this.id);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);

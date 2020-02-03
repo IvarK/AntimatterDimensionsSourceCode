@@ -327,8 +327,8 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
           : blackHole.id <= blackHolesActiveOverride;
         if (!isActive) break;
         factor *= Math.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor);
-        if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3])) {
-          factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3].effect();
+        if (V.has(V_UNLOCKS.ACHIEVEMENT_BH)) {
+          factor *= V_UNLOCKS.ACHIEVEMENT_BH.effect();
         }
       }
     }

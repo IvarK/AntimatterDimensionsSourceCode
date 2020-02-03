@@ -32,6 +32,7 @@ Vue.component("triad-time-study", {
   },
   template:
     `<time-study :setup="setup" class="o-time-study--triad" :showSTCost="true">
+      <hint-text type="studies" class="l-hint-text--time-study">T{{id}}</hint-text>
       <template>
         <span>
           {{ config.description }}

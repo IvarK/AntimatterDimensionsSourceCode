@@ -26,12 +26,12 @@ Vue.component("modal-import-tree", {
       }
       const firstSplitPaths = new Set();
       const secondSplitPaths = new Set();
-      let hasFirstSplit = false;
-      let hasSecondSplit = false;
       for (const study of studies) {
-        totalCost += study.cost;
-        if (!study.isBought) {
-          currentCost += study.cost;
+        if (study.cost) {
+          totalCost += study.cost;
+          if (!study.isBought) {
+            currentCost += study.cost;
+          }
         }
         switch (study.path) {
           case TIME_STUDY_PATH.NORMAL_DIM: firstSplitPaths.add("Normal Dims");
@@ -47,13 +47,31 @@ Vue.component("modal-import-tree", {
           case TIME_STUDY_PATH.IDLE: secondSplitPaths.add("Idle");
         }
       }
-      if (firstSplitPaths.size > 0) hasFirstSplit = true;
-      if (secondSplitPaths.size > 0) hasSecondSplit = true;
+
+      // Take advantage of all extra studies within the same row costing the same amount
+      const extraStudyRows = [12, 13, 14, 22, 23];
+      const maxStudiesBeforeExtra = [1, 1, 1, 4, 2];
+      let totalST = 0;
+      let currentST = 0;
+      for (let row = 0; row < extraStudyRows.length; row++) {
+        // Triads only have .STCost and not .cost
+        const studiesInRow = [...studies]
+          .filter(study => study.cost && Math.floor(study.id / 10) === extraStudyRows[row]);
+        if (studiesInRow.length > 1) {
+          const costPerExtra = studiesInRow[0].STCost;
+          totalST += costPerExtra * Math.clampMin(studiesInRow.length - maxStudiesBeforeExtra[row], 0);
+          currentST += costPerExtra * 
+            Math.clampMin(studiesInRow.filter(study => !study.isBought).length - maxStudiesBeforeExtra[row], 0);
+        }
+      }
+      totalST += [...studies].filter(study => !study.cost).length * TriadStudy(1).STCost;
+      currentST += player.celestials.v.triadStudies.length * TriadStudy(1).STCost;
+
       return {
+        totalST,
+        currentST,
         totalCost,
         currentCost,
-        hasFirstSplit,
-        hasSecondSplit,
         firstSplitPaths,
         secondSplitPaths,
         eternityChallenge,
@@ -113,16 +131,22 @@ Vue.component("modal-import-tree", {
           <div class="l-modal-import-tree__tree-info-line">
             Total tree cost:
             {{ formatCost(tree.totalCost) }} {{ "Time Theorem" | pluralize(tree.totalCost, "Time Theorems") }}
+            <span v-if="tree.totalST !== 0">
+              and {{ formatCost(tree.totalST) }} {{ "Space Theorem" | pluralize(tree.totalST, "Space Theorems") }}
+            </span>
           </div>
           <div class="l-modal-import-tree__tree-info-line">
             Cost of missing studies:
             {{ formatCost(tree.currentCost) }} {{ "Time Theorem" | pluralize(tree.currentCost, "Time Theorems") }}
+            <span v-if="tree.currentST !== 0">
+              and {{ formatCost(tree.currentST) }} {{ "Space Theorem" | pluralize(tree.currentST, "Space Theorems") }}
+            </span>
           </div>
-          <div v-if="tree.hasFirstSplit" class="l-modal-import-tree__tree-info-line">
+          <div v-if="tree.firstSplitPaths.size > 0" class="l-modal-import-tree__tree-info-line">
             {{ "First split path:" | pluralize(tree.firstSplitPaths.size, "First split paths:") }}
             {{ formatPaths(tree.firstSplitPaths) }}
           </div>
-          <div v-if="tree.hasSecondSplit" class="l-modal-import-tree__tree-info-line">
+          <div v-if="tree.secondSplitPaths.size > 0" class="l-modal-import-tree__tree-info-line">
             {{ "Second split path:" | pluralize(tree.secondSplitPaths.size, "Second split paths:") }}
             {{ formatPaths(tree.secondSplitPaths) }}
             </div>

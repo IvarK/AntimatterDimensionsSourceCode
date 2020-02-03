@@ -237,14 +237,18 @@ function studiesUntil(id) {
 
   if (id < 121) return;
   const pacePaths = getSelectedPacePaths();
-  // Only brute-force buying all pace studies if the player is done with V, and stop buying completely if they aren't
-  if (pacePaths.length === 0) {
+  if (pacePaths.length === 1) {
+    // We've chosen a path already
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[pacePaths[0]], id);
+  } else if (id < 151) {
+    // This click is choosing a path
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy(id).path], id);
+  } else if (pacePaths.length === 0) {
+    // Only brute-force buying all pace studies if the player is done with V
     if (!V.isFullyCompleted) return;
     buyTimeStudyListUntilID(NormalTimeStudies.paths[TIME_STUDY_PATH.ACTIVE], id);
     buyTimeStudyListUntilID(NormalTimeStudies.paths[TIME_STUDY_PATH.PASSIVE], id);
     buyTimeStudyListUntilID(NormalTimeStudies.paths[TIME_STUDY_PATH.IDLE], id);
-  } else if (pacePaths.length === 1) {
-    buyTimeStudyListUntilID(NormalTimeStudies.paths[pacePaths[0]], id);
   } else {
     // If the player has more than one pace path, we explicitly do nothing here so that we don't potentially waste ST
     // they might be saving for lower studies. However, we keep continuing since up to row 22 the choices are obvious.
@@ -283,7 +287,12 @@ function respecTimeStudies(auto) {
 }
 
 function studyTreeExportString() {
-  return `${player.timestudy.studies}|${player.challenge.eternity.unlocked}`;
+  let studyString = player.timestudy.studies.toString();
+  if (player.celestials.v.triadStudies.length !== 0) {
+    const triadString = player.celestials.v.triadStudies.map(id => `T${id}`);
+    studyString += `,${triadString}`;
+  }
+  return `${studyString}|${player.challenge.eternity.unlocked}`;
 }
 
 function exportStudyTree() {
@@ -293,8 +302,6 @@ function exportStudyTree() {
 function importStudyTree(input, auto) {
   const splitOnEC = input.split("|");
   splitOnEC[0].split(",")
-    .map(id => parseInt(id, 10))
-    .filter(id => !isNaN(id))
     .map(TimeStudy)
     .filter(study => study !== undefined)
     .forEach(study => study.purchase());
@@ -412,6 +419,7 @@ NormalTimeStudyState.all = NormalTimeStudyState.studies.filter(e => e !== undefi
  * @returns {NormalTimeStudyState}
  */
 function TimeStudy(id) {
+  if (/^T[1-4]$/u.test(id)) return TriadStudy(id.slice(1));
   return NormalTimeStudyState.studies[id];
 }
 
@@ -648,6 +656,12 @@ class TriadStudyState extends TimeStudyState {
     player.celestials.v.triadStudies.push(this.config.id);
     player.celestials.v.STSpent += this.STCost;
   }
+
+  purchaseUntil() {
+    studiesUntil(214);
+    for (const id of this.config.requirement) TimeStudy(id).purchase();
+    this.purchase();
+  }
 }
 
 TriadStudyState.studies = mapGameData(
@@ -738,7 +752,8 @@ TimeStudy.allConnections = (function() {
     [TS(171), EC(2)],
     [TS(171), EC(3)],
 
-    [TS(171), TS(181), () => !Perk.bypassEC1Lock.isBought || !Perk.bypassEC2Lock.isBought || !Perk.bypassEC3Lock.isBought],
+    [TS(171), TS(181),
+      () => !Perk.bypassEC1Lock.isBought || !Perk.bypassEC2Lock.isBought || !Perk.bypassEC3Lock.isBought],
 
     [EC(1), TS(181), () => Perk.bypassEC1Lock.isBought],
     [EC(2), TS(181), () => Perk.bypassEC2Lock.isBought],

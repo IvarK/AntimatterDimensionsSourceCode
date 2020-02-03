@@ -1267,6 +1267,12 @@ screen and (max-width: 480px) {
   cursor: default;
 }
 
+.o-primary-btn--glyph-trash {
+  width: 25rem;
+  height: 3.5rem;
+  font-size: 1rem;
+}
+
 .o-primary-btn--discharge-options {
   width: 15rem;
   height: 4rem;

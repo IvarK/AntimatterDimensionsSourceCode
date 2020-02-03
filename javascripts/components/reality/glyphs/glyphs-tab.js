@@ -6,6 +6,8 @@ Vue.component("glyphs-tab", {
     showInstability: false,
     instabilityThreshold: 0,
     hyperInstabilityThreshold: 0,
+    isInCelestialReality: false,
+    autoRestartCelestialRuns: false
   }),
   computed: {
     showEnslavedHint() {
@@ -17,18 +19,31 @@ Vue.component("glyphs-tab", {
       this.showInstability = player.bestGlyphLevel > 800;
       this.instabilityThreshold = Glyphs.instabilityThreshold;
       this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;
+      this.isInCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
+      this.autoRestartCelestialRuns = player.options.retryCelestial;
       this.enslavedHint = "";
       if (!Enslaved.isRunning) return;
       const haveBoost = Glyphs.activeList.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
       if (haveBoost) {
         this.enslavedHint = "done... what little... I can...";
       }
+    },
+    toggleAutoRestartCelestial() {
+      player.options.retryCelestial = !player.options.retryCelestial;
     }
   },
   template:
   `<div class="l-glyphs-tab">
     <div class="l-reality-button-column">
       <reality-button />
+      <div v-if="isInCelestialReality">
+        <input type="checkbox"
+          id="autoRestart"
+          v-model="autoRestartCelestialRuns"
+          :value="autoRestartCelestialRuns"
+          @input="toggleAutoRestartCelestial()">
+        <label for="autoRestart">Repeat this celestial's Reality</label>
+      </div>
       <reality-amplify-button />
       <div v-if="showInstability">
         Glyphs are becoming unstable.

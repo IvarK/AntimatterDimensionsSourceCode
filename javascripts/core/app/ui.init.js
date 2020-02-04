@@ -42,6 +42,8 @@ let ui = {
     newUI: false,
     news: false,
     initialized: false,
+    tutorialState: 0,
+    tutorialActive: true
   },
   notationName: "",
   formatPreBreak: false

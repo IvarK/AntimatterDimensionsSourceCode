@@ -58,6 +58,9 @@ Vue.component("normal-dim-galaxy-row", {
               exponential past ${formatInt(800)} (remote)`;
       }
       return undefined;
+    },
+    tutorialClass() {
+      return Tutorial.glowingClass(TUTORIAL_STATE.GALAXY, this.$viewModel.tutorialState, this.canBeBought);
     }
   },
   methods: {
@@ -80,7 +83,10 @@ Vue.component("normal-dim-galaxy-row", {
       if (NormalChallenge(8).isRunning) return "Locked (8th Dimension Autobuyer Challenge)";
       return null;
     },
-    buyGalaxy: bulk => requestGalaxyReset(bulk),
+    buyGalaxy(bulk) {
+      requestGalaxyReset(bulk);
+      Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
+    },
   },
   template:
     `<div class="c-normal-dim-row">
@@ -93,6 +99,7 @@ Vue.component("normal-dim-galaxy-row", {
       <primary-button
         :enabled="canBeBought"
         class="o-primary-btn--galaxy c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
+        :class="tutorialClass"
         @click.exact="buyGalaxy(true)"
         @click.shift.exact="buyGalaxy(false)"
       >{{buttonText}}</primary-button>

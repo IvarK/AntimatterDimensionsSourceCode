@@ -813,7 +813,6 @@ function slowerAutobuyers(realDiff) {
     autoBuyDilationUpgrades();
   }
   autoBuyMaxTheorems(ampDiff);
-
   Tutorial.tutorialLoop();
 }
 

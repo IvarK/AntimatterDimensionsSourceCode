@@ -33,6 +33,9 @@ Vue.component("normal-dim-shift-row", {
         return `${sum} = ${formatInt(parts.sum())}`;
       }
       return sum;
+    },
+    tutorialClass() {
+      return Tutorial.glowingClass(TUTORIAL_STATE.DIMSHIFT, this.$viewModel.tutorialState, this.isBuyable);
     }
   },
   methods: {
@@ -47,6 +50,7 @@ Vue.component("normal-dim-shift-row", {
     },
     softReset() {
       softResetBtnClick();
+      Tutorial.turnOffEffect(TUTORIAL_STATE.DIMSHIFT);
     }
   },
   template:
@@ -60,6 +64,7 @@ Vue.component("normal-dim-shift-row", {
       <primary-button
         :enabled="isBuyable"
         class="o-primary-btn--dimboost c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
+        :class=tutorialClass
         @click="softReset"
       >{{buttonText}}</primary-button>
     </div>`

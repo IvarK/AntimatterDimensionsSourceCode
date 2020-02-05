@@ -99,42 +99,36 @@ const TimeTheorems = {
     return player.timestudy.amcost.e / 20000 - 1 +
       player.timestudy.ipcost.e / 100 +
       Math.round(player.timestudy.epcost.log2());
+  },
+
+  autoBuyMaxTheorems(realDiff) {
+    if (!player.ttbuyer) return;
+    player.auto.ttTimer += realDiff;
+    const period = Effects.min(
+      Number.POSITIVE_INFINITY,
+      Perk.autobuyerTT1,
+      Perk.autobuyerTT2,
+      Perk.autobuyerTT3,
+      Perk.autobuyerTT4
+    );
+    const milliseconds = TimeSpan.fromSeconds(period).totalMilliseconds;
+    if (player.auto.ttTimer > milliseconds) {
+      TimeTheorems.buyMax(true);
+      player.auto.ttTimer = Math.min(player.auto.ttTimer - milliseconds, milliseconds);
+    }
+  },
+
+  calculateTimeStudiesCost() {
+    let totalCost = TimeStudy.boughtNormalTS()
+      .map(ts => ts.cost)
+      .reduce(Number.sumReducer, 0);
+    const ecStudy = TimeStudy.eternityChallenge.current();
+    if (ecStudy !== undefined) {
+      totalCost += ecStudy.cost;
+    }
+    return totalCost;
   }
 };
-
-function autoBuyMaxTheorems(realDiff) {
-  if (!player.ttbuyer) return;
-  player.auto.ttTimer += realDiff;
-  const period = Effects.min(
-    Number.POSITIVE_INFINITY,
-    Perk.autobuyerTT1,
-    Perk.autobuyerTT2,
-    Perk.autobuyerTT3,
-    Perk.autobuyerTT4
-  );
-  const milliseconds = TimeSpan.fromSeconds(period).totalMilliseconds;
-  if (player.auto.ttTimer > milliseconds) {
-    TimeTheorems.buyMax(true);
-    player.auto.ttTimer = Math.min(player.auto.ttTimer - milliseconds, milliseconds);
-  }
-}
-
-function calculateTimeStudiesCost() {
-  let totalCost = TimeStudy.boughtNormalTS()
-    .map(ts => ts.cost)
-    .reduce(Number.sumReducer, 0);
-  const ecStudy = TimeStudy.eternityChallenge.current();
-  if (ecStudy !== undefined) {
-    totalCost += ecStudy.cost;
-  }
-  return totalCost;
-}
-
-function calculateDilationStudiesCost() {
-  return TimeStudy.boughtDilationTS()
-    .map(ts => ts.cost)
-    .reduce(Number.sumReducer, 0);
-}
 
 function unlockDilation(quiet) {
   if (!quiet) {
@@ -147,26 +141,6 @@ function unlockDilation(quiet) {
     for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
   }
   player.dilation.tachyonParticles = player.dilation.tachyonParticles.plusEffectOf(Perk.startTP);
-}
-
-function hasRow(row) {
-  for (let i = 1; i < 10; ++i) {
-    const study = TimeStudy(row * 10 + i);
-    if (!study) break;
-    if (study.isBought) return true;
-  }
-  return false;
-}
-
-function canBuyStudy(id) {
-  const study = TimeStudy(id);
-  return study ? study.checkRequirement() : false;
-}
-
-function canBuyLocked(id) {
-  return V.availableST >= TimeStudy(id).STCost &&
-         TimeStudy(id) &&
-         TimeStudy(id).checkVRequirement();
 }
 
 function getSelectedDimensionStudyPaths() {
@@ -198,6 +172,7 @@ function buyTimeStudyListUntilID(list, maxId) {
   }
 }
 
+// eslint-disable-next-line complexity
 function studiesUntil(id) {
   const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
   const study = TimeStudy(id);
@@ -373,11 +348,13 @@ class NormalTimeStudyState extends TimeStudyState {
 
   checkVRequirement() {
     const req = this.config.requirementV;
-    return req === undefined ? false : req();
+    return req === undefined
+      ? false
+      : req() && V.availableST >= this.config.STCost;
   }
 
   get canBeBought() {
-    return canBuyStudy(this.id) || canBuyLocked(this.id);
+    return this.checkRequirement() || this.checkVRequirement();
   }
 
   get isEffectActive() {
@@ -386,8 +363,8 @@ class NormalTimeStudyState extends TimeStudyState {
 
   purchase() {
     if (this.isBought || !this.isAffordable) return false;
-    if (!canBuyStudy(this.id)) {
-      if (!canBuyLocked(this.id)) return false;
+    if (!this.checkRequirement()) {
+      if (!this.checkVRequirement()) return false;
       player.celestials.v.STSpent += this.STCost;
     }
     player.timestudy.studies.push(this.id);

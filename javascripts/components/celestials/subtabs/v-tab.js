@@ -92,7 +92,7 @@ Vue.component("v-tab", {
           V_UNLOCKS.ACHIEVEMENT_BH,
           V_UNLOCKS.RA_UNLOCK
         ],
-      ]
+      ];
     },
     db: () => GameDatabase.celestials.v,
   },

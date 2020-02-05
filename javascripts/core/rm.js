@@ -702,8 +702,7 @@ const Glyphs = {
       am: new Decimal(player.antimatter),
       ip: new Decimal(player.infinityPoints),
       ep: new Decimal(player.eternityPoints),
-      tt: player.timestudy.theorem.plus(calculateTimeStudiesCost() -
-        TimeTheorems.totalPurchased()),
+      tt: player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost() - TimeTheorems.totalPurchased()),
       ecs: EternityChallenges.all.map(e => e.completions),
       thisReality: player.thisReality,
       thisRealityRealTime: player.thisRealityRealTime,

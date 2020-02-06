@@ -80,11 +80,16 @@ Vue.component("v-tab", {
   template:
     `<div class="l-v-celestial-tab">
       <div v-if="!mainUnlock">
-        You need {{ format(db.mainUnlock.realities, 2, 0) }} realities (currently {{ format(realities, 2, 0) }}),<br>
-        {{ format(db.mainUnlock.eternities, 2, 0) }} eternities (currently {{ format(eternities, 2, 0) }}),<br>
-        {{ format(db.mainUnlock.infinities, 2, 0) }} infinities (currently {{ format(infinities, 2, 0) }}),<br>
-        {{ format(db.mainUnlock.dilatedTime, 2, 0) }} dilated time (currently {{ format(dilatedTime, 2, 0) }}),<br>
-        {{ format(db.mainUnlock.replicanti, 2, 0) }} replicanti (currently {{ format(replicanti, 2, 0) }}),<br>
+        You need {{ format(db.mainUnlock.realities, 2, 0) }} realities (currently {{ format(realities, 2, 0) }}),
+        <br>
+        {{ format(db.mainUnlock.eternities, 2, 0) }} eternities (currently {{ format(eternities, 2, 0) }}),
+        <br>
+        {{ format(db.mainUnlock.infinities, 2, 0) }} infinities (currently {{ format(infinities, 2, 0) }}),
+        <br>
+        {{ format(db.mainUnlock.dilatedTime, 2, 0) }} dilated time (currently {{ format(dilatedTime, 2, 0) }}),
+        <br>
+        {{ format(db.mainUnlock.replicanti, 2, 0) }} replicanti (currently {{ format(replicanti, 2, 0) }}),
+        <br>
         and {{ format(db.mainUnlock.rm, 2, 0) }} RM (currently {{ format(rm, 2, 0) }})
         to unlock V, The Celestial of Achievements
       </div>

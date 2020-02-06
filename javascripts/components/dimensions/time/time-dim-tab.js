@@ -10,7 +10,6 @@ Vue.component("time-dim-tab", {
       upgradeThreshold: new Decimal(0),
       shardsPerSecond: new Decimal(0),
       incomeType: "",
-      costIncreases: [Decimal.MAX_NUMBER, new Decimal("1e1300"), new Decimal("1e6000")],
       areAutobuyersUnlocked: false
     };
   },
@@ -69,7 +68,8 @@ Vue.component("time-dim-tab", {
         @click="toggleAllAutobuyers"
       >Toggle all ON/OFF</primary-button>
       <div>
-        Time Dimension costs jump at {{format(costIncreases[0], 2, 2)}} EP and {{format(costIncreases[1])}} EP,<br>
+        Time Dimension costs jump at {{format(costIncreases[0], 2, 2)}} EP and {{format(costIncreases[1])}} EP,
+        <br>
         and get expensive more quickly past {{format(costIncreases[2])}} EP
       </div>
     </div>`

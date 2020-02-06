@@ -34,7 +34,8 @@ Vue.component("triad-time-study", {
     `<time-study :setup="setup" class="o-time-study--triad" :showSTCost="true">
       <template>
         <span>
-          {{ config.description }}<br>
+          {{ config.description }}
+          <br>
           <span v-if="showEffect">Currently: {{ formattedEffect }}</span>
         </span>
       </template>

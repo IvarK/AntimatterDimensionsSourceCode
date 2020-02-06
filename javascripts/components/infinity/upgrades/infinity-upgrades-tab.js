@@ -100,7 +100,8 @@ Vue.component("infinity-upgrades-tab", {
         />
       </div>
       <div>
-        This IP multiplier can be bought repeatedly, but becomes more expensive<br>
+        This IP multiplier can be bought repeatedly, but becomes more expensive
+        <br>
         above {{format(ipMultSoftCap)}} IP and cannot be purchased past {{format(ipMultHardCap)}} IP.
       </div>
     </div>`

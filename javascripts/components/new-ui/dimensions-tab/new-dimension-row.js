@@ -82,7 +82,9 @@ Vue.component("new-dimension-row", {
         class="button-content"
         :enabled="isAffordable"
         :ach-tooltip="cappedTooltip"
-        >Buy {{ howManyCanBuy }}<br>Cost: {{ costDisplay }}</div>
+        >Buy {{ howManyCanBuy }}
+        <br>
+        Cost: {{ costDisplay }}</div>
       <div class="fill">
         <div class="fill1" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
         <div class="fill2" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>

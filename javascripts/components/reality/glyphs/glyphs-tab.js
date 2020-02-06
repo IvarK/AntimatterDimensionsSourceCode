@@ -31,8 +31,10 @@ Vue.component("glyphs-tab", {
       <reality-button />
       <reality-amplify-button />
       <div v-if="showInstability">
-        Glyphs are becoming unstable.<br>
-        Glyph levels higher than {{formatInt(instabilityThreshold)}} are harder to reach.<br>
+        Glyphs are becoming unstable.
+        <br>
+        Glyph levels higher than {{formatInt(instabilityThreshold)}} are harder to reach.
+        <br>
         This effect is even stronger above level {{formatInt(hyperInstabilityThreshold)}}.
       </div>
       <expanding-control-box

@@ -115,7 +115,8 @@ Vue.component("game-header", {
     `<div>
       <challenge-display />
       <div v-if="isInEffarig">
-        Gamespeed and multipliers dilated {{effarigMultNerfText}}<br>
+        Gamespeed and multipliers dilated {{effarigMultNerfText}}
+        <br>
         Tickspeed dilated {{effarigTickNerfText}}
       </div>
       <div v-if="isInMatterChallenge">There is {{format(matter, 2, 1)}} matter.</div>

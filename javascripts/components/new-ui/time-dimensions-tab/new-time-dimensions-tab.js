@@ -71,7 +71,8 @@ Vue.component("new-time-dimensions-tab", {
         @click="toggleAllAutobuyers"
       >Toggle all ON/OFF</primary-button>
       <div>
-        Time Dimension costs jump at {{format(costIncreases[0], 2, 2)}} EP and {{format(costIncreases[1])}} EP,<br>
+        Time Dimension costs jump at {{format(costIncreases[0], 2, 2)}} EP and {{format(costIncreases[1])}} EP,
+        <br>
         and get expensive more quickly past {{format(costIncreases[2])}} EP
       </div>
     </div>`

@@ -8,7 +8,9 @@ Vue.component("infinity-dim-row", {
     return {
       isUnlocked: false,
       multiplier: new Decimal(0),
+      baseAmount: 0,
       amount: new Decimal(0),
+      purchases: 0,
       hasRateOfChange: false,
       rateOfChange: new Decimal(0),
       isAutobuyerUnlocked: false,
@@ -18,7 +20,7 @@ Vue.component("infinity-dim-row", {
       capIP: new Decimal(0),
       isAutobuyerOn: false,
       isEC8Running: false,
-      hardcap: HARDCAP_ID_PURCHASES,
+      hardcap: InfinityDimensions.HARDCAP_PURCHASES,
     };
   },
   watch: {
@@ -43,8 +45,8 @@ Vue.component("infinity-dim-row", {
     },
     capTooltip() {
       return this.isCapped
-        ? `Limited to ${this.hardcapPurchases} upgrades (${format(this.capIP, 0, 0)} IP)`
-        : undefined;
+        ? `Cap reached at ${format(this.capIP, 0, 0)} IP`
+        : `Purchased ${formatInt(this.purchases)} times`;
     }
   },
   methods: {
@@ -54,6 +56,8 @@ Vue.component("infinity-dim-row", {
       this.isUnlocked = dimension.isUnlocked;
       if (!this.isUnlocked) return;
       this.multiplier.copyFrom(dimension.multiplier);
+      this.baseAmount = dimension.baseAmount;
+      this.purchases = dimension.purchases;
       this.amount.copyFrom(dimension.amount);
       this.hasRateOfChange = dimension.hasRateOfChange;
       if (this.hasRateOfChange) {

@@ -896,9 +896,9 @@ directly unlock the next Celestial.
 Tesseracts are a new resource you unlock for completing The Enslaved Ones' Reality.
 <br>
 <br>
-Infinity Dimensions are normally capped at ${format(HARDCAP_ID_PURCHASES)} total purchases, which limits how large
-their multipliers can grow since eventually you can't upgrade them any more. Tesseracts allow you to raise this cap
-by spending Infinity Points.
+Infinity Dimensions are normally capped at ${format(InfinityDimensions.HARDCAP_PURCHASES)} total purchases, 
+which limits how large their multipliers can grow since eventually you can't upgrade them any more. 
+Tesseracts allow you to raise this cap by spending Infinity Points.
 <br>
 <br>
 The cost of Tesseracts increases super-exponentially, but each successive Tesseract is significantly more powerful than

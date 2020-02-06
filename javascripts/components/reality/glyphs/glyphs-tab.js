@@ -3,6 +3,9 @@
 Vue.component("glyphs-tab", {
   data: () => ({
     enslavedHint: "",
+    showInstability: false,
+    instabilityThreshold: 0,
+    hyperInstabilityThreshold: 0,
   }),
   computed: {
     showEnslavedHint() {
@@ -11,6 +14,9 @@ Vue.component("glyphs-tab", {
   },
   methods: {
     update() {
+      this.showInstability = player.bestGlyphLevel > 800;
+      this.instabilityThreshold = Glyphs.instabilityThreshold;
+      this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;
       this.enslavedHint = "";
       if (!Enslaved.isRunning) return;
       const haveBoost = Glyphs.activeList.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
@@ -24,6 +30,13 @@ Vue.component("glyphs-tab", {
     <div class="l-reality-button-column">
       <reality-button />
       <reality-amplify-button />
+      <div v-if="showInstability">
+        Glyphs are becoming unstable.
+        <br>
+        Glyph levels higher than {{formatInt(instabilityThreshold)}} are harder to reach.
+        <br>
+        This effect is even stronger above level {{formatInt(hyperInstabilityThreshold)}}.
+      </div>
       <expanding-control-box
           label="Glyph level factors"
           container-class="c-glyph-level-factors-dropdown-header">

@@ -496,7 +496,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 19,
     isGenerated: true,
     glyphTypes: ["power"],
-    singleDesc: () => `Increase the bonus from buying ${formatInt(10)} dimensions by ×{value}`,
+    singleDesc: () => `Increase the bonus from buying ${formatInt(10)} dimensions by {value}`,
     totalDesc: () => `Multiplier from "Buy ${formatInt(10)}" ×{value}`,
     genericDesc: () => `"Buy ${formatInt(10)}" bonus increase`,
     effect: (level, strength) => 1 + level * strength / 12,
@@ -628,15 +628,15 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.add,
   }, {
-    id: "cursedeternity",
+    id: "cursedEP",
     bitmaskIndex: 3,
     isGenerated: false,
     glyphTypes: ["cursed"],
     singleDesc: "Divide EP gain by {value}",
-    totalDesc: "EP gain /{value}",
+    totalDesc: "EP gain / {value}",
     // Effect at 1000 is 500 and at 5000 is 2500
-    effect: (level, strength) => Decimal.pow10(level * strength / 3.5 / 2),
-    formatEffect: x => format(x),
+    effect: (level, strength) => Decimal.pow10(-level * strength / 3.5 / 2),
+    formatEffect: x => format(x.reciprocal()),
     combine: GlyphCombiner.multiplyDecimal,
   }, {
     id: "realityglyphlevel",

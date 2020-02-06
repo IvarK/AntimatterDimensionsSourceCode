@@ -5445,6 +5445,11 @@ kbd {
   width: 1px;
 }
 
+.o-enslaved-release-header-button {
+  font-size: 1rem;
+  width: 20rem;
+}
+
 /* #endregion enslaved tab*/
 
 /* #startregion v tab */

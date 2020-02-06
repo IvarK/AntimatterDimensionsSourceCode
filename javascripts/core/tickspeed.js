@@ -180,6 +180,7 @@ const FreeTickspeed = {
   BASE_SOFTCAP: 300000,
   GROWTH_RATE: 6e-6,
   GROWTH_EXP: 2,
+  multToNext: 1.33,
 
   get amount() {
     return player.totalTickGained;
@@ -205,6 +206,7 @@ const FreeTickspeed = {
     const logShards = shards.ln();
     const uncapped = logShards / logTickmult;
     if (uncapped <= FreeTickspeed.softcap) {
+      this.multToNext = tickmult;
       return {
         newAmount: Math.ceil(uncapped),
         nextShards: Decimal.pow(tickmult, Math.ceil(uncapped))
@@ -243,6 +245,7 @@ const FreeTickspeed = {
     // This undoes the function we're implicitly applying to costs (the "+ 1") is because we want
     // the cost of the next upgrade.
     const next = Decimal.exp(priceToCap + boughtToCost(purchases + 1) * logTickmult);
+    this.multToNext = Decimal.exp((boughtToCost(purchases + 1) - boughtToCost(purchases)) * logTickmult);
     return {
       newAmount: purchases + FreeTickspeed.softcap,
       nextShards: next,

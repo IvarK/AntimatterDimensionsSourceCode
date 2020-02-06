@@ -2,6 +2,8 @@
 
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
+// This is actually reassigned when importing saves
+// eslint-disable-next-line prefer-const
 let player = {
   antimatter: new Decimal(10),
   totalAntimatter: new Decimal(0),
@@ -175,6 +177,7 @@ let player = {
   bestInfinitiesPerMs: new Decimal(0),
   bestEternitiesPerMs: new Decimal(0),
   bestRMmin: new Decimal(0),
+  bestGlyphLevel: 0,
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
   version: 13,

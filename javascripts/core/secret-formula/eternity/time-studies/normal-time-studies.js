@@ -324,7 +324,13 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(132).isBought && !TimeStudy(141).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(132).isBought && (TimeStudy(141).isBought || TimeStudy(143).isBought),
       description: () => `You gain ${format(Perk.studyPassive1.isBought ? 1e100 : 1e25, 0, 0)}x more IP`,
-      effect: () => (Perk.studyPassive1.isBought ? 1e100 : 1e25),
+      effect: () => {
+        const isEffarigLimited = Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY;
+        const normalValue = Perk.studyPassive1.isBought ? 1e100 : 1e25;
+        return isEffarigLimited
+          ? Math.min(normalValue, Effarig.eternityCap.toNumber())
+          : normalValue;
+        },
       cap: () => (Effarig.eternityCap === undefined ? undefined : Effarig.eternityCap.toNumber())
     },
     {
@@ -531,7 +537,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 4,
       requirement: () => TimeStudy(214).isBought && !TimeStudy(227).isBought,
       requirementV: () => TimeStudy(214).isBought && TimeStudy(227).isBought,
-      description: () => `Sacrifice formula scales better, x^${format(0.011, 0, 3)} ➜ x^${format(0.013, 0, 3)}`,
+      description: () => `Sacrifice formula scales better, x${formatPow(0.011, 0, 3)} ➜ x${formatPow(0.013, 0, 3)}`,
       effect: 0.013
     },
     {

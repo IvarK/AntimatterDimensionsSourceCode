@@ -74,7 +74,7 @@ GameDatabase.celestials.compression = {
   infDimSoftcap: {
     id: 6,
     description: () => `ID softcap increases based on free galaxies past ${formatInt(10000)}`,
-    secondary: () => `^${format(7.3, 1, 1)} Infinity power conversion`,
+    secondary: () => `${formatPow(7.3, 1, 1)} Infinity power conversion`,
     cost: 24,
     resource: () => getInfinityConversionRate(),
     threshold: () => 7.3,

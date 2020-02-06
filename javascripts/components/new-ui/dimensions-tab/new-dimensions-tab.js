@@ -8,6 +8,11 @@ Vue.component("new-dimensions-tab", {
       isSacrificeAffordable: false,
       currentSacrifice: new Decimal(0),
       sacrificeBoost: new Decimal(0),
+      isInMatterChallenge: false,
+      matter: new Decimal(0),
+      isInEffarig: false,
+      effarigMultNerfText: "",
+      effarigTickNerfText: "",
       disabledCondition: "",
       currCelestial: "",
       challengeDisplay: "",
@@ -40,21 +45,32 @@ Vue.component("new-dimensions-tab", {
       this.isInAnyChallenge = this.challengeDisplay.length !== 0;
       const isC2Running = NormalChallenge(2).isRunning;
       const isC3Running = NormalChallenge(3).isRunning;
-      const isChallengePowerVisible = isC2Running || isC3Running;
+      const isIC6Running = InfinityChallenge(6).isRunning;
+      const isIC8Running = InfinityChallenge(8).isRunning;
+      const isChallengePowerVisible = isC2Running || isC3Running || isIC6Running || isIC8Running;
       this.isChallengePowerVisible = isChallengePowerVisible;
       if (isChallengePowerVisible) {
-        const c2Power = `${(player.chall2Pow * 100).toFixed(2)}%`;
-        const c3Power = `${format(player.chall3Pow.times(100), 2, 2)}%`;
-        if (isC2Running && isC3Running) {
-          this.challengePower = `Production: ${c2Power}, First dimension: ${c3Power}`;
-        } else if (isC2Running) {
-          this.challengePower = `Production: ${c2Power}`;
-        } else if (isC3Running) {
-          this.challengePower = `First dimension: ${c3Power}`;
-        }
+        const powerArray = [];
+        if (isC2Running) powerArray.push(`Production: ${formatPercents(player.chall2Pow, 2, 2)}`);
+        if (isC3Running) powerArray.push(`First dimension: ${formatX(player.chall3Pow, 2, 2)}`);
+        if (isIC6Running) powerArray.push(`Matter: /
+          ${format(new Decimal(1).timesEffectOf(InfinityChallenge(6)), 2, 2)}`);
+        if (isIC8Running) powerArray.push(`Production: /
+          ${format(new Decimal(1).timesEffectOf(InfinityChallenge(8)).reciprocal(), 2, 2)}`);
+        this.challengePower = powerArray.join(", ");
       }
       const challenge = NormalChallenge.current || InfinityChallenge.current;
       this.isQuickResetAvailable = challenge && challenge.isQuickResettable;
+
+      this.isInMatterChallenge = Player.isInMatterChallenge;
+      if (this.isInMatterChallenge) {
+        this.matter.copyFrom(Player.effectiveMatterAmount);
+      }
+      this.isInEffarig = Effarig.isRunning;
+      if (this.isInEffarig) {
+        this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(player.infinityPower), 0, 5)}`;
+        this.effarigTickNerfText = `${formatPow(0.7 + 0.1 * Effarig.nerfFactor(player.timeShards), 0, 5)}`;
+      }
 
       this.updateCelestial();
       this.updateChallengeDisplay();
@@ -105,7 +121,14 @@ Vue.component("new-dimensions-tab", {
   `<div class="l-normal-dim-tab">
     <div class="information-header" >
       <span v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</span>
+      <div v-if="isInEffarig">
+        Gamespeed and multipliers dilated {{effarigMultNerfText}}
+        <br>
+        Tickspeed dilated {{effarigTickNerfText}}
+      </div>
+      <div v-if="isInMatterChallenge">There is {{format(matter, 2, 1)}} matter.</div>
       <br><span v-if="isChallengePowerVisible">{{challengePower}}</span>
+      <black-hole-header-row />
     </div>
     <div class="modes-container">
       <button class="o-primary-btn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">

@@ -6,7 +6,7 @@ const LAITELA_UNLOCKS = {
     price: 1e60,
     description: "Boost Lai'tela reward based on RM",
     value: () => Laitela.rmRewardPowEffect,
-    format: x => `x^${x.toFixed(2)}`
+    format: x => `x${formatPow(x, 2, 2)}`
   },
   ID: {
     id: 1,
@@ -27,7 +27,7 @@ const LAITELA_UNLOCKS = {
     price: 1e250,
     description: "Power all dimension multipliers based on matter",
     value: () => Laitela.dimensionMultPowerEffect,
-    format: x => `x^${x.toFixed(2)}`
+    format: x => `x${formatPow(x, 2, 2)}`
   },
   PELLE: {
     id: 4,

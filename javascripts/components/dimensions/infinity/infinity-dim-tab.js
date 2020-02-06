@@ -8,12 +8,13 @@ Vue.component("infinity-dim-tab", {
       powerPerSecond: new Decimal(0),
       incomeType: "",
       isEC8Running: false,
+      isEnslavedRunning: false,
       EC8PurchasesLeft: 0,
       isAnyAutobuyerUnlocked: false,
       conversionRate: 0,
       nextDimCapIncrease: 0,
       tesseractCost: new Decimal(0),
-      totalDimCapIncrease: 0,
+      totalDimCap: 0,
       canBuyTesseract: false,
       enslavedCompleted: false
     };
@@ -34,10 +35,11 @@ Vue.component("infinity-dim-tab", {
       if (this.isEC8Running) {
         this.EC8PurchasesLeft = player.eterc8ids;
       }
+      this.isEnslavedRunning = Enslaved.isRunning;
       this.isAnyAutobuyerUnlocked = InfinityDimension(1).isAutobuyerUnlocked;
       this.nextDimCapIncrease = Enslaved.nextDimCapIncrease;
       this.tesseractCost.copyFrom(Enslaved.tesseractCost);
-      this.totalDimCapIncrease = player.celestials.enslaved.totalDimCapIncrease;
+      this.totalDimCap = InfinityDimensions.totalDimCap;
       this.canBuyTesseract = Enslaved.canBuyTesseract;
       this.enslavedCompleted = Enslaved.isCompleted;
     },
@@ -71,7 +73,13 @@ Vue.component("infinity-dim-tab", {
           <p>Increase dimension caps by {{ format(nextDimCapIncrease, 2) }}</p>
           <p><b>Costs: {{ format(tesseractCost, 0, 0) }} IP</b></p>
         </button>
-        <div>Total dimension cap increase: {{ format(totalDimCapIncrease, 2) }}</div>
+      </div>
+      <div v-if="isEnslavedRunning">
+        All Infinity Dimensions are limited to a single purchase.
+      </div>
+      <div v-else>
+        All Infinity Dimensions except for the 8th are limited to a maximum of {{format(totalDimCap, 2)}}
+        purchases each.
       </div>
       <div>You are getting {{format(powerPerSecond, 2, 0)}} {{incomeType}} per second.</div>
       <primary-button

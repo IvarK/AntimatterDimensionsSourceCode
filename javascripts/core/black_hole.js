@@ -106,6 +106,64 @@ class BlackHoleState {
     return this._data.active;
   }
 
+  // When inactive, returns time until active; when active, returns time until inactive (or paused for hole 2)
+  get timeToNextStateChange() {
+    let remainingTime = this.isCharged
+      ? this.duration - this.phase
+      : this.interval - this.phase;
+
+    if (this.id === 1) return remainingTime;
+
+    // 2nd hole activation logic (not bothering generalizing since we're not adding that 3rd hole again)
+    if (this.isCharged) {
+      if (BlackHole(1).isCharged) return Math.min(remainingTime, BlackHole(1).timeToNextStateChange);
+      return BlackHole(1).timeToNextStateChange;
+    }
+    if (BlackHole(1).isCharged) {
+      if (remainingTime < BlackHole(1).timeToNextStateChange) return remainingTime;
+      remainingTime -= BlackHole(1).timeToNextStateChange;
+    }
+    let totalTime = BlackHole(1).isCharged
+      ? BlackHole(1).timeToNextStateChange + BlackHole(1).interval
+      : BlackHole(1).timeToNextStateChange;
+    totalTime += Math.floor(remainingTime / BlackHole(1).duration) * BlackHole(1).cycleLength;
+    totalTime += remainingTime % BlackHole(1).duration;
+    return totalTime;
+  }
+
+  // This is a value which counts up from 0 to 1 when inactive, and 1 to 0 when active
+  get stateProgress() {
+    if (this.isCharged) {
+      return 1 - this.phase / this.duration;
+    }
+    return this.phase / this.interval;
+  }
+
+  // The logic to determine what state the black hole is in for displaying is nontrivial and used in multiple places
+  get displayState() {
+    if (Enslaved.isAutoReleasing) {
+      const pulseState = ["▂", "▃", "▅", "▆", "▇"];
+      return `${pulseState[Enslaved.autoReleaseTick]} Pulsing`;
+    }
+    if (Enslaved.isStoringGameTime) {
+      if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
+        const storedTimeWeight = player.celestials.enslaved.storedFraction;
+        if (storedTimeWeight !== 0) {
+          return `⇮ Charging (${formatPercents(storedTimeWeight, 1)})`;
+        }
+      } else {
+        return "⇮ Charging";
+      }
+    }
+    if (BlackHoles.areNegative) return "↓ Inverted";
+    if (BlackHoles.arePaused) return "⏸ Paused";
+    if (this.isPermanent) return "⟳ Permanent";
+
+    const timeString = TimeSpan.fromSeconds(this.timeToNextStateChange).toStringShort(true);
+    if (this.isCharged) return `⏩ Active (${timeString})`;
+    return `▶️ Inactive (${timeString})`;
+  }
+
   get isActive() {
     return this.isCharged && (this.id === 1 || BlackHole(this.id - 1).isActive);
   }
@@ -246,6 +304,14 @@ const BlackHoles = {
     return player.blackHolePause;
   },
 
+  get areNegative() {
+    return this.arePaused && player.blackHoleNegative < 1;
+  },
+
+  get arePermanent() {
+    return BlackHoles.list.every(bh => bh.isPermanent);
+  },
+
   updatePhases(blackHoleDiff) {
     if (!this.areUnlocked || this.arePaused) return;
     // This code is intended to successfully update the black hole phases
@@ -340,14 +406,14 @@ const BlackHoles = {
    * starting from black hole 1 and black hole 0 being normal game.
    */
   calculateSpeedups() {
-    const effectsToConsider = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH, GAME_SPEED_EFFECT.BLACK_HOLE,
-      GAME_SPEED_EFFECT.MOMENTUM];
-    const speedupWithoutBlackHole = getGameSpeedupFactor(effectsToConsider, 1);
+    const effectsToConsider = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
+      GAME_SPEED_EFFECT.MOMENTUM, GAME_SPEED_EFFECT.NERFS];
+    const speedupWithoutBlackHole = getGameSpeedupFactor(effectsToConsider);
     const speedups = [1];
+    effectsToConsider.push(GAME_SPEED_EFFECT.BLACK_HOLE);
     for (const blackHole of this.list) {
       if (!blackHole.isUnlocked) break;
-      const speedupFactor = getGameSpeedupFactor(effectsToConsider, undefined, blackHole.id);
-      speedups.push(speedupFactor / speedupWithoutBlackHole);
+      speedups.push(getGameSpeedupFactor(effectsToConsider, blackHole.id) / speedupWithoutBlackHole);
     }
     return speedups;
   },

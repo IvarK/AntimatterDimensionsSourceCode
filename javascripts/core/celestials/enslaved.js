@@ -40,6 +40,9 @@ const Enslaved = {
   toggleAutoStoreReal() {
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
+  get isStoringGameTime() {
+    return player.celestials.enslaved.isStoring && !BlackHoles.arePaused;
+  },
   get isStoringRealTime() {
     return player.celestials.enslaved.isStoringReal;
   },
@@ -56,7 +59,7 @@ const Enslaved = {
     return 1000 * 3600 * 4 + addedCap;
   },
   get isAutoReleasing() {
-    return player.celestials.enslaved.isAutoReleasing;
+    return player.celestials.enslaved.isAutoReleasing && !BlackHoles.areNegative;
   },
   storeRealTime() {
     const thisUpdate = Date.now();

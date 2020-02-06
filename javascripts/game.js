@@ -51,9 +51,8 @@ function gainedInfinityPoints() {
   return ip.floor();
 }
 
-function gainedEternityPoints() {
-  const ip = player.infinityPoints.plus(gainedInfinityPoints());
-  let ep = Decimal.pow(5, ip.e / 308 - 0.7)
+function totaEPMult() {
+  return new Decimal(getAdjustedGlyphEffect("cursedEP"))
     .times(kongEPMult)
     .timesEffectsOf(
       EternityUpgrade.epMult,
@@ -63,7 +62,12 @@ function gainedEternityPoints() {
       TimeStudy(123),
       RealityUpgrade(12),
       GlyphEffect.epMult
-    ).dividedBy(getAdjustedGlyphEffect("cursedeternity"));
+  );
+}
+
+function gainedEternityPoints() {
+  const ip = player.infinityPoints.plus(gainedInfinityPoints());
+  let ep = Decimal.pow(5, ip.e / 308 - 0.7).times(totaEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -74,6 +78,10 @@ function gainedEternityPoints() {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
   return ep.floor();
+}
+
+function requiredIPForEP() {
+  return Decimal.pow10(Math.ceil(308 * (Decimal.log(totaEPMult().reciprocal(), 5) + 0.7)));
 }
 
 function getRealityMachineMultiplier() {
@@ -264,9 +272,9 @@ function updateRefresh() {
 }
 
 function kongLog10StatSubmission() {
-  kong.submitStats('Log10 of total antimatter', player.totalAntimatter.e);
-  kong.submitStats('Log10 of Infinity Points', player.infinityPoints.e);
-  kong.submitStats('Log10 of Eternity Points', player.eternityPoints.e);
+  kong.submitStats("Log10 of total antimatter", player.totalAntimatter.e);
+  kong.submitStats("Log10 of Infinity Points", player.infinityPoints.e);
+  kong.submitStats("Log10 of Eternity Points", player.eternityPoints.e);
 }
 
 setInterval(kongLog10StatSubmission, 10000)
@@ -276,22 +284,21 @@ const GAME_SPEED_EFFECT = {
   TIME_GLYPH: 2,
   BLACK_HOLE: 3,
   TIME_STORAGE: 4,
-  MOMENTUM: 5
+  MOMENTUM: 5,
+  NERFS: 6
 };
 
 /**
   * @param {number[]} effectsToConsider A list of various game speed changing effects to apply when calculating
   *   the game speed.  If left undefined, all effects will be applied.
-  * @param {number} blackHoleOverride A numerical value that, if supplied, will replace the multiplier that would
-  *   have been applied for black holes.
   * @param {number} blackHolesActiveOverride A numerical value which forces all black holes up to its specified index
-  *   to be active for the purposes of game speed calculation.
+  *   to be active for the purposes of game speed calculation. This is only used during offline black hole stuff.
   */
-function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesActiveOverride) {
+function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
   let effects;
   if (effectsToConsider === undefined) {
     effects = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH, GAME_SPEED_EFFECT.BLACK_HOLE,
-      GAME_SPEED_EFFECT.TIME_STORAGE, GAME_SPEED_EFFECT.MOMENTUM];
+      GAME_SPEED_EFFECT.TIME_STORAGE, GAME_SPEED_EFFECT.MOMENTUM, GAME_SPEED_EFFECT.NERFS];
   } else {
     effects = effectsToConsider;
   }
@@ -310,9 +317,9 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
 
   let factor = 1;
   if (effects.includes(GAME_SPEED_EFFECT.BLACK_HOLE)) {
-    if (blackHoleOverride !== undefined) {
-      factor *= blackHoleOverride;
-    } else if (!BlackHoles.arePaused) {
+    if (BlackHoles.arePaused) {
+      factor *= player.blackHoleNegative;
+    } else {
       for (const blackHole of BlackHoles.list) {
         if (!blackHole.isUnlocked) break;
         const isActive = blackHolesActiveOverride === undefined
@@ -327,31 +334,33 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
     }
   }
 
-  if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
-    factor *= getAdjustedGlyphEffect("timespeed");
-    factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
-  }
-
   if (effects.includes(GAME_SPEED_EFFECT.MOMENTUM)) {
     const cappedTime = Math.min(Time.thisRealityRealTime.totalMinutes, 7 * 24 * 60);
     factor *= Math.pow(AlchemyResource.momentum.effectValue, cappedTime);
   }
 
+  if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
+    factor *= getAdjustedGlyphEffect("timespeed");
+    factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
+  }
+
   // Time storage is linearly scaled because exponential scaling is pretty useless in practice
-  if (player.celestials.enslaved.isStoring && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
+  if (Enslaved.isStoringGameTime && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
     const storedTimeWeight = player.celestials.enslaved.storedFraction;
     factor = factor * (1 - storedTimeWeight) + storedTimeWeight;
   }
 
-  // Effarig nerf and dev.goFast() will always be applied
-  if (Effarig.isRunning) {
-    factor = Effarig.multiplier(factor).toNumber();
+  // These effects should always be active, but need to be disabled during offline black hole simulations because
+  // otherwise it gets applied twice
+  if (effects.includes(GAME_SPEED_EFFECT.NERFS)) {
+    if (Effarig.isRunning) {
+      factor = Effarig.multiplier(factor).toNumber();
+    }
   }
+
+  // Dev speedup should always be active
   if (tempSpeedupToggle) {
     factor *= tempSpeedupFactor;
-  }
-  if (BlackHoles.arePaused) {
-    factor *= player.blackHoleNegative;
   }
   return factor;
 }
@@ -359,7 +368,8 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
 function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
   if (Enslaved.isAutoReleasing &&
-    !(EternityChallenge(12).isRunning || TimeCompression.isActive || (BlackHoles.arePaused && player.blackHoleNegative < 1))) {
+    !(EternityChallenge(12).isRunning || TimeCompression.isActive ||
+      (BlackHoles.arePaused && player.blackHoleNegative < 1))) {
     return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
   return speedFactor;
@@ -410,45 +420,46 @@ function gameLoop(diff, options = {}) {
   slowerAutobuyers(realDiff);
   Autobuyers.tick();
 
-    // We do these after autobuyers, since it's possible something there might
-    // change a multiplier.
-    GameCache.normalDimensionCommonMultiplier.invalidate();
-    GameCache.normalDimensionFinalMultipliers.invalidate();
-    GameCache.infinityDimensionCommonMultiplier.invalidate();
-    GameCache.timeDimensionCommonMultiplier.invalidate();
-    GameCache.totalIPMult.invalidate();
+  // We do these after autobuyers, since it's possible something there might
+  // change a multiplier.
+  GameCache.normalDimensionCommonMultiplier.invalidate();
+  GameCache.normalDimensionFinalMultipliers.invalidate();
+  GameCache.infinityDimensionCommonMultiplier.invalidate();
+  GameCache.timeDimensionCommonMultiplier.invalidate();
+  GameCache.totalIPMult.invalidate();
 
-    const blackHoleDiff = realDiff;
-
-    const fixedSpeedActive = EternityChallenge(12).isRunning || TimeCompression.isActive;
-    if (!Enslaved.isReleaseTick && !fixedSpeedActive) {
-      let speedFactor;
-      if (options.blackHoleSpeedup === undefined) {
-        speedFactor = getGameSpeedupFactor();
-      } else {
-        // This is only called from simulateTime(), apply all effects but override black hole speed
-        speedFactor = getGameSpeedupFactor(undefined, options.blackHoleSpeedup);
-      }
-
-      if (player.celestials.enslaved.isStoring && !fixedSpeedActive) {
-        // These variables are the actual game speed used and the game speed unaffected by time storage, respectively
-        const reducedTimeFactor = getGameSpeedupFactor();
-        const totalTimeFactor = getGameSpeedupFactor([GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
-          GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.MOMENTUM]);
-        const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
-          ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
-          : 1;
-        Enslaved.currentBlackHoleStoreAmountPerMs = Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
-        player.celestials.enslaved.stored += diff * Enslaved.currentBlackHoleStoreAmountPerMs;
-        speedFactor = reducedTimeFactor;
-      }
-      diff *= speedFactor;
-    } else if (fixedSpeedActive) {
-      diff *= getGameSpeedupFactor();
+  const blackHoleDiff = realDiff;
+  const fixedSpeedActive = EternityChallenge(12).isRunning || TimeCompression.isActive;
+  if (!Enslaved.isReleaseTick && !fixedSpeedActive) {
+    let speedFactor;
+    if (options.blackHoleSpeedup === undefined) {
+      speedFactor = getGameSpeedupFactor();
+    } else {
+      // This is only called from simulateTime() and is calculated externally in order to avoid weirdness when game
+      // speed is directly nerfed
+      speedFactor = options.blackHoleSpeedup;
     }
-    player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
-    Enslaved.isReleaseTick = false;
-// These need to all be done consecutively in order to minimize the chance of a reset occurring between real time
+
+    if (Enslaved.isStoringGameTime && !fixedSpeedActive) {
+      // These variables are the actual game speed used and the game speed unaffected by time storage, respectively
+      const reducedTimeFactor = getGameSpeedupFactor();
+      const totalTimeFactor = getGameSpeedupFactor([GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
+        GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.MOMENTUM]);
+      const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
+        ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
+        : 1;
+      Enslaved.currentBlackHoleStoreAmountPerMs = Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
+      player.celestials.enslaved.stored += diff * Enslaved.currentBlackHoleStoreAmountPerMs;
+      speedFactor = reducedTimeFactor;
+    }
+    diff *= speedFactor;
+  } else if (fixedSpeedActive) {
+    diff *= getGameSpeedupFactor();
+  }
+  player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
+  Enslaved.isReleaseTick = false;
+
+  // These need to all be done consecutively in order to minimize the chance of a reset occurring between real time
   // updating and game time updating.  This is only particularly noticeable when game speed is 1 and the player
   // expects to see identical numbers.
   player.realTimePlayed += realDiff;
@@ -457,56 +468,56 @@ function gameLoop(diff, options = {}) {
   player.thisInfinityTime += diff;
   player.thisEternityRealTime += realDiff;
   if (Enslaved.isRunning && Enslaved.feltEternity) {
-      player.thisEternity += diff * (1 + player.eternities.clampMax(1e66).toNumber());
+    player.thisEternity += diff * (1 + player.eternities.clampMax(1e66).toNumber());
   } else {
     player.thisEternity += diff;
-   }
+  }
   player.thisRealityRealTime += realDiff;
   player.thisReality += diff;
 
-    DeltaTimeState.update(realDiff, diff);
+  DeltaTimeState.update(realDiff, diff);
 
-    updateNormalAndInfinityChallenges(diff);
+  updateNormalAndInfinityChallenges(diff);
 
-    // IP generation is broken into a couple of places in gameLoop; changing that might change the
-    // behavior of eternity farming.
-    preProductionGenerateIP(diff);
+  // IP generation is broken into a couple of places in gameLoop; changing that might change the
+  // behavior of eternity farming.
+  preProductionGenerateIP(diff);
 
-    if (!EternityChallenge(4).isRunning) {
-      let infGen = new Decimal(0);
-      if (BreakInfinityUpgrade.infinitiedGen.isBought) {
-        // Multipliers are done this way to explicitly exclude ach87 and TS32
-        infGen = infGen.plus(0.2 * Time.deltaTimeMs / player.bestInfinityTime);
-        infGen = infGen.timesEffectsOf(
-          RealityUpgrade(5),
-          RealityUpgrade(7)
-        );
-        infGen = infGen.times(getAdjustedGlyphEffect("infinityinfmult"));
-        infGen = infGen.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
-      }
-      if (RealityUpgrade(11).isBought) {
-        infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
-      }
-      if (EffarigUnlock.eternity.isUnlocked) {
-        infGen = infGen.plus(gainedInfinities().times(player.eternities).times(Time.deltaTime));
-      }
-      infGen = infGen.plus(player.partInfinitied);
-      player.infinitied = player.infinitied.plus(infGen.floor());
-      player.partInfinitied = infGen.minus(infGen.floor()).toNumber();
-    }
-
-    if (RealityUpgrade(14).isBought) {
-      let eternitiedGain = Effects.product(
-        RealityUpgrade(3),
-        RealityUpgrade(14)
+  if (!EternityChallenge(4).isRunning) {
+    let infGen = new Decimal(0);
+    if (BreakInfinityUpgrade.infinitiedGen.isBought) {
+      // Multipliers are done this way to explicitly exclude ach87 and TS32
+      infGen = infGen.plus(0.2 * Time.deltaTimeMs / player.bestInfinityTime);
+      infGen = infGen.timesEffectsOf(
+        RealityUpgrade(5),
+        RealityUpgrade(7)
       );
-      eternitiedGain *= getAdjustedGlyphEffect("timeetermult");
-      player.reality.partEternitied = player.reality.partEternitied
-        .plus(new Decimal(Time.deltaTime).times(Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue))
-      );
-      player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
-      player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
+      infGen = infGen.times(getAdjustedGlyphEffect("infinityinfmult"));
+      infGen = infGen.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
     }
+    if (RealityUpgrade(11).isBought) {
+      infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
+    }
+    if (EffarigUnlock.eternity.isUnlocked) {
+      infGen = infGen.plus(gainedInfinities().times(player.eternities).times(Time.deltaTime));
+    }
+    infGen = infGen.plus(player.partInfinitied);
+    player.infinitied = player.infinitied.plus(infGen.floor());
+    player.partInfinitied = infGen.minus(infGen.floor()).toNumber();
+  }
+
+  if (RealityUpgrade(14).isBought) {
+    let eternitiedGain = Effects.product(
+      RealityUpgrade(3),
+      RealityUpgrade(14)
+    );
+    eternitiedGain *= getAdjustedGlyphEffect("timeetermult");
+    player.reality.partEternitied = player.reality.partEternitied
+      .plus(new Decimal(Time.deltaTime).times(Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue))
+    );
+    player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
+    player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
+  }
 
   applyAutoprestige(realDiff);
 
@@ -524,24 +535,24 @@ function gameLoop(diff, options = {}) {
   NormalDimensions.tick(diff);
 
   const freeTickspeed = FreeTickspeed.fromShards(player.timeShards);
-  let gain = Math.max(0, freeTickspeed.newAmount - player.totalTickGained);
+  const gain = Math.max(0, freeTickspeed.newAmount - player.totalTickGained);
   player.totalTickGained += gain;
   player.tickThreshold = freeTickspeed.nextShards;
 
   const currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinityRealTime.totalMinutes);
   if (currentIPmin.gt(player.bestIPminThisInfinity) && canCrunch()) player.bestIPminThisInfinity = currentIPmin;
 
-    tryUnlockInfinityChallenges();
+  tryUnlockInfinityChallenges();
 
-    EternityChallenges.autoComplete.tick();
+  EternityChallenges.autoComplete.tick();
 
-    replicantiLoop(diff);
+  replicantiLoop(diff);
 
-    if (player.infMultBuyer) {
-      InfinityUpgrade.ipMult.autobuyerTick();
-    }
+  if (player.infMultBuyer) {
+    InfinityUpgrade.ipMult.autobuyerTick();
+  }
 
-    if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
+  if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
 
   const currentEPmin = gainedEternityPoints().dividedBy(Time.thisEternityRealTime.totalMinutes);
   if (currentEPmin.gt(player.bestEPminThisEternity) && canEternity()) player.bestEPminThisEternity = currentEPmin;

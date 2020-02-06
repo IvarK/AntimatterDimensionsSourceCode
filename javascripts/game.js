@@ -327,8 +327,8 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
           : blackHole.id <= blackHolesActiveOverride;
         if (!isActive) break;
         factor *= Math.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor);
-        if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3])) {
-          factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3].effect();
+        if (V.has(V_UNLOCKS.ACHIEVEMENT_BH)) {
+          factor *= V_UNLOCKS.ACHIEVEMENT_BH.effect();
         }
       }
     }
@@ -569,8 +569,9 @@ function gameLoop(diff, options = {}) {
   BlackHoles.updatePhases(blackHoleDiff);
 
   // Code to auto-unlock dilation; 16617 is the cost for buying literally all time studies and unlocking dilation
-  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) && player.timestudy.theorem.plus(calculateTimeStudiesCost()).gte(16617)) {
-    TimeStudy.dilation.purchase(true);
+  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) &&
+    player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()).gte(16617)) {
+      TimeStudy.dilation.purchase(true);
   }
 
   // TD5-8/Reality unlock and TTgen perk autobuy
@@ -823,7 +824,7 @@ function slowerAutobuyers(realDiff) {
     player.auto.dilUpgradeTimer = Math.min(player.auto.dilUpgradeTimer - dilUpgradePeriod, dilUpgradePeriod);
     autoBuyDilationUpgrades();
   }
-  autoBuyMaxTheorems(ampDiff);
+  TimeTheorems.autoBuyMaxTheorems(ampDiff);
 }
 
 setInterval(function () {

@@ -17,21 +17,21 @@ Vue.component("modal-import-tree", {
         studies.add(TimeStudy(study));
       }
       let totalCost = 0;
-      let currentCost = 0;
+      let missingCost = 0;
       if (hasEternityChallenge) {
         totalCost += eternityChallenge.cost;
         if (player.challenge.eternity.unlocked !== eternityChallenge.id) {
-          currentCost += eternityChallenge.cost;
+          missingCost += eternityChallenge.cost;
         }
       }
       const firstSplitPaths = new Set();
       const secondSplitPaths = new Set();
-      let hasFirstSplit = false;
-      let hasSecondSplit = false;
       for (const study of studies) {
-        totalCost += study.cost;
-        if (!study.isBought) {
-          currentCost += study.cost;
+        if (study.cost) {
+          totalCost += study.cost;
+          if (!study.isBought) {
+            missingCost += study.cost;
+          }
         }
         switch (study.path) {
           case TIME_STUDY_PATH.NORMAL_DIM: firstSplitPaths.add("Normal Dims");
@@ -47,13 +47,13 @@ Vue.component("modal-import-tree", {
           case TIME_STUDY_PATH.IDLE: secondSplitPaths.add("Idle");
         }
       }
-      if (firstSplitPaths.size > 0) hasFirstSplit = true;
-      if (secondSplitPaths.size > 0) hasSecondSplit = true;
+      const totalST = this.calculateMissingSTCost([...studies], true);
+      const missingST = this.calculateMissingSTCost([...studies], false);
       return {
+        totalST,
+        missingST,
         totalCost,
-        currentCost,
-        hasFirstSplit,
-        hasSecondSplit,
+        missingCost,
         firstSplitPaths,
         secondSplitPaths,
         eternityChallenge,
@@ -93,7 +93,45 @@ Vue.component("modal-import-tree", {
     },
     formatPaths(paths) {
       return Array.from(paths).join(", ");
-    }
+    },
+    calculateMissingSTCost(studiesToBuy, ignoreCurrentStudies) {
+      // Explicitly hardcoding how the study tree affects total ST should be fine here, as it massively simplifies
+      // the code and the study tree structure is very unlikely to change. Note that all studies within the same
+      // set also have identical ST costs. Triads also have identical costs too.
+      const conflictingStudySets = [
+        [121, 122, 123],
+        [131, 132, 133],
+        [141, 142, 143],
+        [221, 222],
+        [223, 224],
+        [225, 226],
+        [227, 228],
+        [231, 232],
+        [233, 234],
+      ];
+      let totalSTSpent = 0;
+      for (const studySet of conflictingStudySets) {
+        const studiesInSet = studiesToBuy.filter(study => studySet.includes(study.id));
+        if (studiesInSet.length > 1) {
+          totalSTSpent += TimeStudy(studySet[0]).STCost * (studiesInSet.length - 1);
+          if (!ignoreCurrentStudies) {
+            const currStudies = player.timestudy.studies;
+            const alreadyBought = studiesInSet.filter(study => currStudies.includes(study.id));
+            totalSTSpent -= TimeStudy(studySet[0]).STCost * Math.clampMin(alreadyBought.length - 1, 0);
+          }
+        }
+      }
+      // Triad studies don't have .cost
+      const triads = studiesToBuy.filter(study => !study.cost);
+      if (ignoreCurrentStudies) {
+        totalSTSpent += triads.length * TriadStudy(1).STCost;
+      } else {
+        totalSTSpent += TriadStudy(1).STCost * triads
+          .filter(study => !player.celestials.v.triadStudies.includes(study))
+          .length;
+      }
+      return totalSTSpent;
+    },
   },
   template:
     `<div class="c-modal-import-tree l-modal-content--centered">
@@ -113,16 +151,22 @@ Vue.component("modal-import-tree", {
           <div class="l-modal-import-tree__tree-info-line">
             Total tree cost:
             {{ formatCost(tree.totalCost) }} {{ "Time Theorem" | pluralize(tree.totalCost, "Time Theorems") }}
+            <span v-if="tree.totalST !== 0">
+              and {{ formatCost(tree.totalST) }} {{ "Space Theorem" | pluralize(tree.totalST, "Space Theorems") }}
+            </span>
           </div>
           <div class="l-modal-import-tree__tree-info-line">
             Cost of missing studies:
-            {{ formatCost(tree.currentCost) }} {{ "Time Theorem" | pluralize(tree.currentCost, "Time Theorems") }}
+            {{ formatCost(tree.missingCost) }} {{ "Time Theorem" | pluralize(tree.missingCost, "Time Theorems") }}
+            <span v-if="tree.missingST !== 0">
+              and {{ formatCost(tree.missingST) }} {{ "Space Theorem" | pluralize(tree.missingST, "Space Theorems") }}
+            </span>
           </div>
-          <div v-if="tree.hasFirstSplit" class="l-modal-import-tree__tree-info-line">
+          <div v-if="tree.firstSplitPaths.size > 0" class="l-modal-import-tree__tree-info-line">
             {{ "First split path:" | pluralize(tree.firstSplitPaths.size, "First split paths:") }}
             {{ formatPaths(tree.firstSplitPaths) }}
           </div>
-          <div v-if="tree.hasSecondSplit" class="l-modal-import-tree__tree-info-line">
+          <div v-if="tree.secondSplitPaths.size > 0" class="l-modal-import-tree__tree-info-line">
             {{ "Second split path:" | pluralize(tree.secondSplitPaths.size, "Second split paths:") }}
             {{ formatPaths(tree.secondSplitPaths) }}
             </div>

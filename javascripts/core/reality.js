@@ -93,9 +93,13 @@ const GlyphSelection = {
     }
   },
 
-  select(index) {
+  select(index, sacrifice) {
     ui.view.modal.glyphSelection = false;
-    Glyphs.addToInventory(this.glyphs[index]);
+    if (sacrifice) {
+      sacrificeGlyph(this.glyphs[index]);
+    } else {
+      Glyphs.addToInventory(this.glyphs[index]);
+    }
     this.glyphs = [];
     triggerManualReality(this.realityProps);
     this.realityProps = undefined;
@@ -238,7 +242,7 @@ function giveRealityRewards(realityProps) {
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
     player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
   }
-  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[4])) {
+  if (V.has(V_UNLOCKS.RA_UNLOCK)) {
     Ra.giveExp(multiplier);
   }
   if (multiplier > 1 && Enslaved.boostReality) {
@@ -466,7 +470,8 @@ function finishProcessReality(realityProps) {
 
   player.reality.gainedAutoAchievements = false;
 
-  if (realityProps.restoreCelestialState) restoreCelestialRuns(celestialRunState);
+  if (realityProps.restoreCelestialState || player.options.retryCelestial) restoreCelestialRuns(celestialRunState);
+
 }
 
 function restoreCelestialRuns(celestialRunState) {

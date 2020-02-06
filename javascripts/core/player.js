@@ -461,6 +461,7 @@ let player = {
     news: true,
     notation: "Mixed scientific",
     retryChallenge: false,
+    retryCelestial: false,
     showAllChallenges: false,
     bulkOn: true,
     autobuyersOn: true,

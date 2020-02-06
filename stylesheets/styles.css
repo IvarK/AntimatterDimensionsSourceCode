@@ -1267,6 +1267,12 @@ screen and (max-width: 480px) {
   cursor: default;
 }
 
+.o-primary-btn--glyph-trash {
+  width: 25rem;
+  height: 3.5rem;
+  font-size: 1rem;
+}
+
 .o-primary-btn--discharge-options {
   width: 15rem;
   height: 4rem;
@@ -5517,9 +5523,17 @@ kbd {
   font-size: 1.3rem;
 }
 
-.l-v-milestones-container {
+.l-v-milestones-grid {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+}
+
+.l-v-milestones-grid__row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0.5rem;
 }
 
 .o-v-milestone {

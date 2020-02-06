@@ -4,6 +4,7 @@ Vue.component("modal-glyph-selection", {
   data() {
     return {
       glyphs: GlyphSelection.glyphs.map(GlyphGenerator.copy),
+      canTrashGlyphs: false,
     };
   },
   methods: {
@@ -16,20 +17,34 @@ Vue.component("modal-glyph-selection", {
         currentGlyph.level = newGlyph.level;
         currentGlyph.effects = newGlyph.effects;
       }
+      // For now, it only appears when completing celestial runs, maybe change this later?
+      this.canTrashGlyphs = Object.entries(player.celestials).map(x => x[1].run).includes(true);
     },
     select(index) {
-      GlyphSelection.select(index);
+      GlyphSelection.select(index, false);
+    },
+    trashGlyphs() {
+      GlyphSelection.select(Math.floor(Math.random() * GlyphSelection.choiceCount), true);
     }
   },
   template: `
   <div class="l-modal-overlay c-modal-overlay">
     <div class="l-modal-glyph-selection c-modal">
-      <glyph-component v-for="(glyph, index) in glyphs"
-                       class="l-modal-glyph-selection__glyph"
-                       :key="index"
-                       :glyph="glyph"
-                       :noLevelOverride="true"
-                       @click.native="select(index)"/>
+      <div class="l-modal-glyph-selection__row">
+        <glyph-component v-for="(glyph, index) in glyphs"
+                        class="l-modal-glyph-selection__glyph"
+                        :key="index"
+                        :glyph="glyph"
+                        :noLevelOverride="true"
+                        @click.native="select(index)"/>
+      </div>
+      <button class="o-primary-btn o-primary-btn--glyph-trash"
+        v-if="canTrashGlyphs"
+        v-on:click="trashGlyphs()">
+          I don't want any of these glyphs
+          <br>
+          (pick and sacrifice one at random)
+      </button>
     </div>
   </div>`,
 });

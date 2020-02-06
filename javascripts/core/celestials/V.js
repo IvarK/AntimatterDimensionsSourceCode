@@ -22,16 +22,27 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   get isReduced() {
-    return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0]) && player.celestials.effarig.relicShards >= 1e20 &&
-      Decimal.gt(this.reduction, 1);
+    return V.has(V_UNLOCKS.SHARD_REDUCTION) && player.celestials.effarig.relicShards >= 1e20 &&
+      (typeof this.conditionBaseValue === "number"
+        ? this.reduction > 0
+        : Decimal.gt(this.reduction, 1));
+  }
+
+  get reductionInfo() {
+    const value = this.conditionBaseValue;
+    if (new Decimal(this.reduction).eq(this.config.maxShardReduction(value))) return "(capped)";
+    if (this.config.nextShards === undefined) return "";
+    return `(next at ${format(this.config.nextShards(Math.floor(this.reduction) + 1), 2, 0)} shards)`;
   }
 
   get reduction() {
     const value = this.conditionBaseValue;
 
     // It's safe to assume that subtraction is only used on numbers and division on Decimals
-    if (typeof value === "number") return Math.max(0, this.config.shardReduction(value));
-    return Decimal.max(1, this.config.shardReduction(value));
+    if (typeof value === "number") {
+      return Math.clamp(this.config.shardReduction(value), 0, this.config.maxShardReduction(value));
+    }
+    return Decimal.clamp(this.config.shardReduction(value), 1, this.config.maxShardReduction(value));
   }
 
   get conditionValue() {
@@ -56,19 +67,19 @@ class VRunUnlockState extends GameMechanicState {
   tryComplete() {
     const playerData = player.celestials.v;
     const value = this.config.currentValue(this.conditionValue);
-    // If we haven't set a record, we haven't completed any new tiers, either
-    if (value <= playerData.runRecords[this.id]) return;
-    playerData.runRecords[this.id] = value;
-    playerData.runGlyphs[this.id] = Glyphs.active
-      .filter(g => g !== null)
-      .map(g => ({
-        type: g.type,
-        level: g.level,
-        strength: g.strength,
-        effects: g.effects,
-      }));
+    if (value > playerData.runRecords[this.id]) {
+      playerData.runRecords[this.id] = value;
+      playerData.runGlyphs[this.id] = Glyphs.active
+        .filter(g => g !== null)
+        .map(g => ({
+          type: g.type,
+          level: g.level,
+          strength: g.strength,
+          effects: g.effects,
+        }));
+    }
 
-    while (this.completions < 6 && this.config.condition(this.conditionValue)) {
+    while (this.completions < this.config.values.length && this.config.condition(this.conditionValue)) {
       this.completions++;
       GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
       V.updateTotalRunUnlocks();
@@ -90,9 +101,10 @@ const VRunUnlocks = {
 };
 
 const V_UNLOCKS = {
-  MAIN_UNLOCK: {
+  V_ACHIEVEMENT_UNLOCK: {
     id: 0,
-    description: "Fully unlocks V, The Celestial Of Achievements",
+    reward: "Fully unlocks V, The Celestial Of Achievements",
+    description: "Meet all the above requirements simultaneously",
     requirement: () => {
       const db = GameDatabase.celestials.v.mainUnlock;
       if (player.realities < db.realities) return false;
@@ -104,58 +116,65 @@ const V_UNLOCKS = {
       return true;
     }
   },
-  RUN_UNLOCK_THRESHOLDS: [
-    {
-      id: 1,
-      reward: "Relic shards reduce V-achievement requirements. Starting at 1e20 Relic Shards.",
-      description: "Have 2 V-achievements",
-      requirement: () => V.spaceTheorems >= 2
-    },
-    {
-      id: 2,
-      reward: "Normal dimension power based on Space Theorems.",
-      description: "Have 5 V-achievements",
-      effect: () => 1 + Math.sqrt(V.spaceTheorems) / 100,
-      format: x => formatPow(x, 3, 3),
-      requirement: () => V.spaceTheorems >= 5
-    },
-    {
-      id: 3,
-      reward: "Achievement multiplier affects auto EC completion time. Unlock Triad studies.",
-      description: "Have 10 V-achievements",
-      effect: () => Achievements.power,
-      format: x => formatX(x, 2, 2),
-      requirement: () => V.spaceTheorems >= 10
-    },
-    {
-      id: 4,
-      reward: "Achievement count affects black hole power.",
-      description: "Have 30 V-achievements",
-      effect: () => Achievements.power,
-      format: x => formatX(x, 2, 0),
-      requirement: () => V.spaceTheorems >= 30
-    },
-    {
-      id: 5,
-      reward: "Reduce the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
-      description: "Have 36 V-achievements",
-      requirement: () => V.spaceTheorems >= 36
-    }
-  ]
+  SHARD_REDUCTION: {
+    id: 1,
+    reward: () => `Relic shards reduce V-achievement requirements, starting at ${format(1e20, 0, 0)} Relic Shards.`,
+    description: "Have 2 V-achievements",
+    effect: () => player.celestials.effarig.relicShards,
+    format: x => `${format(x, 2, 0)} Relic Shards`,
+    requirement: () => V.spaceTheorems >= 2
+  },
+  ND_POW: {
+    id: 2,
+    reward: "Normal dimension power based on Space Theorems.",
+    description: "Have 5 V-achievements",
+    effect: () => 1 + Math.sqrt(V.spaceTheorems) / 100,
+    format: x => formatPow(x, 3, 3),
+    requirement: () => V.spaceTheorems >= 5
+  },
+  FAST_AUTO_EC: {
+    id: 3,
+    reward: "Achievement multiplier affects auto EC completion time.",
+    description: "Have 10 V-achievements",
+    effect: () => Achievements.power,
+    // Base rate is 60 ECs at 30 minutes each
+    format: x => TimeSpan.fromSeconds(60 * 30 * 60 / x).toStringShort(false),
+    requirement: () => V.spaceTheorems >= 10
+  },
+  TRIAD_STUDIES: {
+    id: 4,
+    reward: "Unlock Triad studies.",
+    description: "Have 16 V-achievements",
+    requirement: () => V.spaceTheorems >= 16
+  },
+  ACHIEVEMENT_BH: {
+    id: 5,
+    reward: "Achievement count affects black hole power.",
+    description: "Have 30 V-achievements",
+    effect: () => Achievements.power,
+    format: x => formatX(x, 2, 0),
+    requirement: () => V.spaceTheorems >= 30
+  },
+  RA_UNLOCK: {
+    id: 6,
+    reward: "Reduce the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
+    description: "Have 36 V-achievements",
+    requirement: () => V.spaceTheorems >= 36
+  }
 };
 
 const V = {
   spaceTheorems: 0,
   checkForUnlocks() {
 
-    if (!V.has(V_UNLOCKS.MAIN_UNLOCK) && V_UNLOCKS.MAIN_UNLOCK.requirement()) {
+    if (!V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) && V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.requirement()) {
       // eslint-disable-next-line no-bitwise
-      player.celestials.v.unlockBits |= (1 << V_UNLOCKS.MAIN_UNLOCK.id);
-      GameUI.notify.success(V_UNLOCKS.MAIN_UNLOCK.description);
+      player.celestials.v.unlockBits |= (1 << V_UNLOCKS.V_ACHIEVEMENT_UNLOCK.id);
+      GameUI.notify.success("You have unlocked V, The Celestial Of Achievements!");
     }
 
-    for (let i = 0; i < V_UNLOCKS.RUN_UNLOCK_THRESHOLDS.length; i++) {
-      const unl = V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[i];
+    for (const key of Object.keys(V_UNLOCKS)) {
+      const unl = V_UNLOCKS[key];
       if (unl.requirement() && !this.has(unl)) {
         // eslint-disable-next-line no-bitwise
         player.celestials.v.unlockBits |= (1 << unl.id);
@@ -205,13 +224,10 @@ const V = {
   get isRunning() {
     return player.celestials.v.run;
   },
-  get achievementsPerAdditionalStudy() {
-    return this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[4]) ? 3 : 6;
-  },
-  get totalAdditionalStudies() {
-    return Math.floor(this.spaceTheorems / this.achievementsPerAdditionalStudy);
-  },
   get isFlipped() {
     return this.spaceTheorems >= 36;
+  },
+  get isFullyCompleted() {
+    return this.spaceTheorems >= 66;
   }
 };

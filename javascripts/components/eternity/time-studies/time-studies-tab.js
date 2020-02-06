@@ -206,7 +206,7 @@ const STUDY_TREE_LAYOUT_TYPE = {
   get current() {
     const alt62 = Perk.bypassEC5Lock.isBought;
     const alt181 = Perk.bypassEC1Lock.isBought && Perk.bypassEC2Lock.isBought && Perk.bypassEC3Lock.isBought;
-    if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return this.ALTERNATIVE_TRIAD_STUDIES;
+    if (V.has(V_UNLOCKS.TRIAD_STUDIES)) return this.ALTERNATIVE_TRIAD_STUDIES;
     if (alt62 && alt181) return this.ALTERNATIVE_62_181;
     if (alt62) return this.ALTERNATIVE_62;
     if (alt181) return this.ALTERNATIVE_181;

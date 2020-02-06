@@ -258,7 +258,7 @@ const Ra = {
     return this.totalCharges - player.celestials.ra.charged.size;
   },
   get chargeUnlocked() {
-    return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3]) && Ra.pets.teresa.level > 1;
+    return V.has(V_UNLOCKS.RA_UNLOCK) && Ra.pets.teresa.level > 1;
   },
   applyAlchemyReactions() {
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return;

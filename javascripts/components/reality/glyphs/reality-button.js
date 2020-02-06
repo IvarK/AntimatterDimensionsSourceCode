@@ -74,7 +74,7 @@ Vue.component("reality-button", {
       this.ppGained = multiplier;
       this.shardsGained = Effarig.shardsGained * multiplier;
       this.expGained = Ra.pets.all.map(p => p.gainedExp * multiplier);
-      this.raUnlocks = [V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[3]),
+      this.raUnlocks = [V.has(V_UNLOCKS.RA_UNLOCK),
         Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK),
         Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),
         Ra.has(RA_UNLOCKS.V_UNLOCK)];

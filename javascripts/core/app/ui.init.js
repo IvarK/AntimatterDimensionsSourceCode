@@ -12,7 +12,7 @@ let ui = {
     tabs: {
       dimensions: {
         normal: {
-          floatingText: Array.from({length: 9}, () => [])
+          floatingText: Array.from({ length: 9 }, () => [])
         },
       },
       reality: {

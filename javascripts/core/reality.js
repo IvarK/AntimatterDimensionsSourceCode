@@ -562,9 +562,9 @@ function startRealityOver() {
 }
 
 function lockAchievementsOnReality() {
-  const preRealityRows = Achievements.preRealityRows;
-  const lockedRowCount = preRealityRows.length - GameCache.achSkipPerkCount.value;
-  const lockedRows = preRealityRows.slice(-lockedRowCount);
+  const lockedRows = Achievements.preRealityRows
+    .slice(GameCache.achSkipPerkCount.value);
+    
   for (const row of lockedRows) {
     for (const achievement of row) {
       achievement.lock();

@@ -44,12 +44,12 @@ class RaPetState {
     if (this.level < 20) {
       const floor5 = Math.floor(this.level / 5);
       const adjustedLevel = 2.5 * floor5 * (floor5 + 1) + (this.level % 5) * (floor5 + 1);
-      return Math.floor(1000 + Math.pow(adjustedLevel - 1, 4) * 5);
+      return Math.floor(1000 * Math.sqrt(adjustedLevel) + Math.pow(adjustedLevel - 1, 4) * 5);
     }
     if (this.level < 25) {
-      return Math.floor(1000 + Math.pow(this.level + 30, 4) * 5);
+      return Math.floor(1000 * Math.sqrt(this.level + 30) + Math.pow(this.level + 30, 4) * 5);
     }
-    return Math.floor(1000 + Math.pow(7 * this.level - 120, 4) * 5);
+    return Math.floor(1000 * Math.sqrt(7 * this.level - 120) + Math.pow(7 * this.level - 120, 4) * 5);
   }
 
   addGainedExp(multiplier) {
@@ -353,17 +353,17 @@ const RA_UNLOCKS = {
     pet: Ra.pets.teresa,
     level: 3
   },
-  EFFARIG_UNLOCK: {
+  AUTO_TP: {
     id: 2,
     description: "Get Teresa to level 5",
-    reward: "Unlock Effarig's memories",
+    reward: "Tachyon Particles are given immediately during dilation",
     pet: Ra.pets.teresa,
     level: 5
   },
-  AUTO_TP: {
+  EFFARIG_UNLOCK: {
     id: 3,
     description: "Get Teresa to level 10",
-    reward: "Tachyon Particles are given immediately during dilation",
+    reward: "Unlock Effarig's memories",
     pet: Ra.pets.teresa,
     level: 10
   },
@@ -399,17 +399,17 @@ const RA_UNLOCKS = {
     pet: Ra.pets.effarig,
     level: 3
   },
-  ENSLAVED_UNLOCK: {
+  GLYPH_EFFECT_COUNT: {
     id: 8,
     description: "Get Effarig to level 5",
-    reward: "Unlock Enslaved's memories",
+    reward: "Glyphs always have 4 effects (Effarig glyphs can now have more)",
     pet: Ra.pets.effarig,
     level: 5
   },
-  GLYPH_EFFECT_COUNT: {
+  ENSLAVED_UNLOCK: {
     id: 9,
     description: "Get Effarig to level 10",
-    reward: "Glyphs always have 4 effects (Effarig glyphs can now have more)",
+    reward: "Unlock Enslaved's memories",
     pet: Ra.pets.effarig,
     level: 10
   },
@@ -447,17 +447,17 @@ const RA_UNLOCKS = {
     pet: Ra.pets.enslaved,
     level: 3
   },
-  V_UNLOCK: {
+  ADJUSTABLE_STORED_TIME: {
     id: 14,
     description: "Get Enslaved to level 5",
-    reward: "Unlock V's memories",
+    reward: "Stored game time can be rate-adjusted and automatically released",
     pet: Ra.pets.enslaved,
     level: 5
   },
-  ADJUSTABLE_STORED_TIME: {
+  V_UNLOCK: {
     id: 15,
     description: "Get Enslaved to level 10",
-    reward: "Stored game time can be rate-adjusted and automatically released",
+    reward: "Unlock V's memories",
     pet: Ra.pets.enslaved,
     level: 10
   },

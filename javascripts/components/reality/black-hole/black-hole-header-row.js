@@ -24,7 +24,7 @@ Vue.component("black-hole-status-text", {
   },
   template: `
     <span v-if="isUnlocked">
-     🌀{{ id }}:{{ state }}
+     🌀{{ id }}:<span v-html="state"></span>
     </span>
   `
 });
@@ -94,7 +94,7 @@ Vue.component("black-hole-header-row", {
         </primary-button>
       </span>
       <span v-if="displaySingle">
-        🌀:{{ singleState }}
+        🌀:<span v-html="singleState"></span>
       </span>
       <span v-else>
         <black-hole-status-text

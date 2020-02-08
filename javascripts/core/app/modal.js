@@ -93,6 +93,6 @@ Modal.message = new class extends Modal {
     // Sometimes we have stacked messages that get lost, since we don't have stacking modal system.
     // TODO: remove this console.log
     // eslint-disable-next-line no-console
-    console.log(`Modal mesasge: ${text}`);
+    console.log(`Modal message: ${text}`);
   }
 }("modal-message");

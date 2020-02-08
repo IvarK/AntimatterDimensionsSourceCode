@@ -291,6 +291,7 @@ const BlackHoles = {
 
   togglePause: () => {
     if (!BlackHoles.areUnlocked) return;
+    if (player.blackHolePause) player.minNegativeBlackHoleThisReality = 1;
     player.blackHolePause = !player.blackHolePause;
     player.blackHolePauseTime = player.realTimePlayed;
     GameUI.notify.blackHole(player.blackHolePause ? "Black Hole paused" : "Black Hole unpaused");

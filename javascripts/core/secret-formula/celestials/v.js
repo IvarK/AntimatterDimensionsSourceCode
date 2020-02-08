@@ -109,12 +109,12 @@ GameDatabase.celestials.v = {
       id: 7,
       name: "Post-destination",
       description: value =>
-        `Get ${formatInt(Math.floor(Math.pow(value, 2.2)))} TT with a 
+        `Get ${formatInt(Math.floor(Math.pow(value, 2.3)))} TT with a 
           /${format(Decimal.pow10(value), 2, 2)} black hole`,
       values: [50, 100, 150, 200, 300],
-      condition: x => player.timestudy.theorem.gt(Math.floor(Math.pow(x, 2.2))) &&
-        Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality,
-      currentValue: x => (Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality
+      condition: x => player.timestudy.theorem.gt(Math.floor(Math.pow(x, 2.3))) &&
+        Decimal.pow10(x).recip().toNumber() >= player.minNegativeBlackHoleThisReality,
+      currentValue: x => (Decimal.pow10(x).recip().toNumber() >= player.minNegativeBlackHoleThisReality
         ? player.timestudy.theorem.toNumber()
         : 0),
       formatRecord: x => formatInt(x),

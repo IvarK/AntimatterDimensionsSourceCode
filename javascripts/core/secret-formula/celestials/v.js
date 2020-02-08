@@ -109,18 +109,18 @@ GameDatabase.celestials.v = {
       id: 7,
       name: "Post-destination",
       description: value =>
-        `Get ${formatInt(Math.floor(Math.pow(value, 2.4)))} TT with a 
+        `Get ${formatInt(Math.floor(Math.pow(value, 2.2)))} TT with a 
           /${format(Decimal.pow10(value), 2, 2)} black hole`,
       values: [50, 100, 150, 200, 300],
-      condition: x => player.timestudy.theorem.gt(Math.floor(Math.pow(x, 2.4))) &&
+      condition: x => player.timestudy.theorem.gt(Math.floor(Math.pow(x, 2.2))) &&
         Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality,
       currentValue: x => (Decimal.pow10(x).exponent <= player.minNegativeBlackHoleThisReality
         ? player.timestudy.theorem.toNumber()
         : 0),
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e38, 0.4),
+      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e25, 0.2),
       maxShardReduction: goal => goal / 10,
-      nextShards: x => 1e38 * Math.pow(x, 2.5),
+      nextShards: x => 1e25 * Math.pow(x, 5),
       mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
@@ -131,9 +131,9 @@ GameDatabase.celestials.v = {
       condition: x => gainedGlyphLevel().actualLevel >= x,
       currentValue: () => gainedGlyphLevel().actualLevel,
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.floor(Math.pow(player.celestials.effarig.relicShards / 1e37, 0.6)),
+      shardReduction: () => Math.floor(Math.pow(player.celestials.effarig.relicShards / 1e25, 0.6)),
       maxShardReduction: () => 500,
-      nextShards: x => 1e37 * Math.pow(x, 5 / 3),
+      nextShards: x => 1e25 * Math.pow(x, 5 / 3),
       mode: V_REDUCTION_MODE.SUBTRACTION
     }
   ],

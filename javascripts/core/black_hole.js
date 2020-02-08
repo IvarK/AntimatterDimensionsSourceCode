@@ -143,7 +143,7 @@ class BlackHoleState {
   get displayState() {
     if (Enslaved.isAutoReleasing) {
       if (Enslaved.autoReleaseTick < 3) return `<i class="fas fa-compress-arrows-alt"></i> Pulsing`;
-      return `<i class="fas fa-expand-arrows-alt"></i> Pulsing`;
+      return `<i class="fas fa-expand-arrows-alt  "></i> Pulsing`;
     }
     if (Enslaved.isStoringGameTime) {
       if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {

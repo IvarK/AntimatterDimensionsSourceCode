@@ -122,10 +122,10 @@ Vue.component("game-header-eternity-button", {
       <!-- Normal -->
       <template v-else-if="type === 1">
         <template v-if="isGainedEPAmountSmall">
-          <b>I need to become Eternal.</b>
+          I need to become Eternal.
           <br>
         </template>
-        Gain <b :style="amountStyle">{{format(gainedEP, 2, 0)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <span :style="amountStyle">{{format(gainedEP, 2, 0)}}</span> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
         <template v-if="isGainedEPAmountZero">
           Reach {{ format(minIP) }} IP to
@@ -146,7 +146,7 @@ Vue.component("game-header-eternity-button", {
 
       <!-- Dilation -->
       <template v-else-if="type === 3">
-        Gain <b :style="amountStyle">{{format(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <span :style="amountStyle">{{format(gainedEP, 2, 2)}}</span> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
         +{{format(gainedTachyons, 2, 1)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}.
       </template>
@@ -154,10 +154,10 @@ Vue.component("game-header-eternity-button", {
       <!-- New content available -->
       <template v-else-if="type === 4 || type === 5">
         <template v-if="type === 4">
-          Gain <b :style="amountStyle">{{format(gainedEP, 2, 2)}}</b> EP
+          Gain <span :style="amountStyle">{{format(gainedEP, 2, 2)}}</span> EP
         </template>
         <template v-else>
-          Gain <b>{{format(gainedTachyons, 2, 1)}}</b> Tachyon {{ "particle" | pluralize(gainedTachyons) }}
+          Gain {{format(gainedTachyons, 2, 1)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}
         </template>
         <br>
         You should explore a bit and look at new content before clicking me!

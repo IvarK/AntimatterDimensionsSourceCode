@@ -127,7 +127,7 @@ GameDatabase.celestials.v = {
       id: 8,
       name: "Shutter Glyph",
       description: value => `Reach a glyph of level ${value}`,
-      values: [3000, 3500, 4000, 4500, 5000],
+      values: [3500, 4000, 5000, 5500, 6500],
       condition: x => gainedGlyphLevel().actualLevel >= x,
       currentValue: () => gainedGlyphLevel().actualLevel,
       formatRecord: x => formatInt(x),

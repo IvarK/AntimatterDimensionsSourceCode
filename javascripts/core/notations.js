@@ -80,7 +80,7 @@ const Notations = {
   // This extra junk is added to the name so that if the custom notation changes,
   // the UI recomputes the custom notation.
   customNotationName(letters, separator) {
-    return 'Custom ' + letters.map(i => i.replace(/,/g, ',0')).join(',1') + ',' + separator;
+    return `Custom ${letters.map(i => i.replace(/,/gu, ",0")).join(",1")},${separator}`;
   },
   updateCustomNotation(letters, useSpaceSeparator) {
     const separator = useSpaceSeparator ? " " : "";

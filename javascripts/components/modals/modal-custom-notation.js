@@ -46,10 +46,9 @@ Vue.component("modal-custom-notation", {
     letters() {
       if (this.input.includes(" ")) {
         return this.input.split(" ");
-      } else {
-        // This handles some emoji (though it fails on others).
-        return Array.from(this.input);
       }
+      // This handles some emoji (though it fails on others).
+      return Array.from(this.input);
     }
   },
   methods: {

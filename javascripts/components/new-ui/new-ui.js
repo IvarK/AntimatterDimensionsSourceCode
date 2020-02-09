@@ -9,6 +9,7 @@ Vue.component("new-ui", {
       breakInfinity: false,
       realities: 0,
       antimatter: new Decimal(0),
+      antimatterPerSec: new Decimal(0)
     };
   },
   computed: {
@@ -19,6 +20,7 @@ Vue.component("new-ui", {
   methods: {
     update() {
       this.antimatter.copyFrom(player.antimatter);
+      this.antimatterPerSec.copyFrom(Player.antimatterPerSecond);
       this.breakInfinity = player.break;
       this.realities = player.realities;
       const canCrunch = player.antimatter.gte(Player.infinityGoal);
@@ -52,6 +54,7 @@ Vue.component("new-ui", {
         <game-header-amounts-line />
         <div class="l-game-header__antimatter-container">
           <p>You have <span class="c-game-header__antimatter">{{format(antimatter, 2, 1)}}</span> antimatter.</p>
+          <div>You are getting {{format(antimatterPerSec, 2, 0)}} antimatter per second.</div>
         </div>
         <button 
         class="btn-big-crunch btn-big-crunch--small"

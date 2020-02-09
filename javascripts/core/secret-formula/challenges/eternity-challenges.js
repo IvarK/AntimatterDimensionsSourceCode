@@ -107,7 +107,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e1300"),
     goalIncrease: new Decimal("1e900"),
     reward: {
-      description: "Infinity Power powers up Replicanti galaxies",
+      description: "Infinity Power strengthens Replicanti galaxies",
       effect: completions => {
         const infinityPower = Math.log10(player.infinityPower.pLog10() + 1);
         return Math.max(0, Math.pow(infinityPower, 0.03 * completions) - 1);

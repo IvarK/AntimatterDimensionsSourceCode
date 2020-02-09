@@ -288,8 +288,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(122).isBought && (TimeStudy(131).isBought || TimeStudy(133).isBought),
       description: () => (Perk.studyPassive2.isBought
-        ? `Replicanti galaxies are 40% more effective and replicanti are ${formatInt(5)}x faster`
-        : "Replicanti galaxies are 40% more effective"),
+        ? `Replicanti galaxies are 40% stronger and replicanti are ${formatInt(5)}x faster`
+        : "Replicanti galaxies are 40% stronger"),
       effect: 0.4
     },
     {
@@ -433,7 +433,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 212,
       cost: 150,
       requirement: 191,
-      description: "Galaxies are more effective based on your time shards",
+      description: "Galaxies are stronger based on your time shards",
       effect: () => Math.pow(player.timeShards.clampMin(2).log2(), 0.005),
       cap: 1.1,
       formatEffect: value => `+${formatPercents(value - 1, 3)}`
@@ -546,7 +546,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 5,
       requirement: () => (TimeStudy(221).isBought || TimeStudy(222).isBought) && !TimeStudy(232).isBought,
       requirementV: () => (TimeStudy(221).isBought || TimeStudy(222).isBought) && TimeStudy(232).isBought,
-      description: "Dimension Boosts are more effective based on their amount",
+      description: "Dimension Boosts are stronger based on their amount",
       effect: () => Decimal.pow(DimBoost.totalBoosts, 0.3).clampMin(1),
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -556,7 +556,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 5,
       requirement: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && !TimeStudy(231).isBought,
       requirementV: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && TimeStudy(231).isBought,
-      description: "Galaxies are more effective based on Antimatter Galaxies",
+      description: "Galaxies are stronger based on Antimatter Galaxies",
       effect: () => Math.pow(1 + player.galaxies / 1000, 0.2),
       formatEffect: value => `+${formatPercents(value - 1, 3)}`
     },

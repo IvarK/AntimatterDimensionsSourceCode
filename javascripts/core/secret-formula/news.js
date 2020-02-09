@@ -1778,6 +1778,10 @@ GameDatabase.news = [
   },
   {
     id: "a309",
+    text: "Testing... testing... testing... Oh goddamn I was in prod again."
+  },
+  {
+    id: "a309",
     get text() {
       return `Check out Avari's newly built actually infinite infinity pool! With an area of ` +
       `${format(Number.MAX_VALUE)} square megametres, you'll be sure to have infinite fun!`;

@@ -7,7 +7,8 @@ Vue.component("new-ui", {
       bigCrunch: false,
       smallCrunch: false,
       breakInfinity: false,
-      realities: 0
+      realities: 0,
+      antimatter: new Decimal(0),
     };
   },
   computed: {
@@ -17,6 +18,7 @@ Vue.component("new-ui", {
   },
   methods: {
     update() {
+      this.antimatter.copyFrom(player.antimatter);
       this.breakInfinity = player.break;
       this.realities = player.realities;
       const canCrunch = player.antimatter.gte(Player.infinityGoal);
@@ -45,8 +47,11 @@ Vue.component("new-ui", {
         <div class="l-reset-buttons-container" v-if="breakInfinity">
           <game-header-eternity-button/>
           <game-header-new-dim-button/>
-          <reality-button v-if="realities > 0" class="l-reset-buttons-container__reality-button"/>
           <game-header-big-crunch-button/>
+        </div>
+        <game-header-amounts-line />
+        <div class="l-game-header__antimatter-container">
+          <p>You have <span class="c-game-header__antimatter">{{format(antimatter, 2, 1)}}</span> antimatter.</p>
         </div>
         <button 
         class="btn-big-crunch btn-big-crunch--small"

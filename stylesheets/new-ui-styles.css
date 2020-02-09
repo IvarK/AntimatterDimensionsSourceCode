@@ -51,6 +51,7 @@ body.t-normal {
   background-color: var(--color-base);
   border-right: 1px solid var(--color-accent);
   border-bottom: 1px solid var(--color-accent);
+  padding: 10px;
 }
 
 .resource img {
@@ -211,6 +212,7 @@ body.t-normal {
   display: flex;
   justify-content: center;
   flex-direction: column;
+  position: relative;
 }
 
 .tab-container > .l-normal-dim-tab {
@@ -656,13 +658,51 @@ body.t-normal {
   right: 72%;
 }
 
+.l-game-header__infinity-points {
+  left: 72%;
+  top: 8.5rem;
+}
+
+.l-game-header__eternity-points {
+  right: 72%;
+  top: 8.5rem;
+}
+
+
 .l-reset-buttons-container__reality-button {
   margin-top: 1.7rem;
   margin-bottom: 0;
 }
 
+.l-new-header__amounts-container {
+  position: relative;
+}
+
+.l-reset-buttons-container {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.l-game-header__antimatter-container {
+  margin-top: 3rem;
+  margin-bottom: 2.5rem;
+}
+
 .c-achievements-tab__timer {
   color: white;
+}
+
+.c-game-header__ip-amount {
+  color: var(--color-infinity);
+}
+
+.c-game-header__ep-amount {
+  color: var(--color-eternity);
+}
+
+.c-game-header__antimatter {
+  color: var(--color-accent);
 }
 
 .c-dilation-tab__tachyons,

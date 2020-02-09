@@ -4523,6 +4523,14 @@ screen and (max-width: 480px) {
 
 /*#endregion c-modal-message*/
 
+/*#region c-modal-custom-notation*/
+
+.c-modal-custom-notation__input {
+  width: 45rem;
+}
+
+/*#endregion c-modal-custom-notation*/
+
 /*#region c-modal-import*/
 
 .c-modal-import {

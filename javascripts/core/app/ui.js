@@ -158,7 +158,7 @@ ui = new Vue({
   data: ui,
   computed: {
     notation() {
-      return Notations.find(this.notationName);
+      return Notations.find(this.notationName.split(" ")[0]);
     },
     currentGlyphTooltip() {
       return this.view.tabs.reality.currentGlyphTooltip;

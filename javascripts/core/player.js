@@ -504,6 +504,13 @@ let player = {
       glyphSacrifice: true,
       glyphUndo: true,
       glyphReplace: true,
+    },
+    customNotation: {
+      letters: [
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+        "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+      ],
+      useSpaceSeparator: false,
     }
   },
   // Remove later

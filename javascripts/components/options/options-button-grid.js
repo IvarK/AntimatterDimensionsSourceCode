@@ -195,8 +195,9 @@ Vue.component("options-button-grid", {
           oninput="GameOptions.refreshUpdateRate()"
         />
         <options-button
-           class="o-primary-btn--option l-options-grid__button--hidden"
-         />
+          class="o-primary-btn--option_font-large"
+          onclick="Modal.customNotation.show()"
+        >Custom Notation</options-button>
       </div>
     </div>`
 });

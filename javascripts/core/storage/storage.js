@@ -133,6 +133,9 @@ const GameStorage = {
     V.updateTotalRunUnlocks();
     Enslaved.boostReality = false;
     Theme.set(player.options.theme);
+    Notations.updateCustomNotation(
+      player.options.customNotation.letters.map(x => decodeURIComponent(escape(x))),
+      player.options.customNotation.useSpaceSeparator);
     Notations.find(player.options.notation).setAsCurrent();
 
     EventHub.dispatch(GAME_EVENT.GAME_LOAD);

@@ -2,8 +2,8 @@
 
 const Notation = (function() {
   const N = ADNotations;
-  const notation = type => {
-    const n = new type();
+  const notation = (type, ...params) => {
+    const n = new type(...params);
     n.setAsCurrent = () => {
       player.options.notation = n.name;
       ui.notationName = n.name;
@@ -34,7 +34,8 @@ const Notation = (function() {
     prime: notation(N.PrimeNotation),
     bar: notation(N.BarNotation),
     shi: painful(notation(N.ShiNotation)),
-    blind: painful(notation(N.BlindNotation))
+    blind: painful(notation(N.BlindNotation)),
+    custom: notation(N.CustomNotation, ["this", "changes", "on", "load"])
   };
 }());
 
@@ -67,6 +68,7 @@ const Notations = {
     Notation.bar,
     Notation.shi,
     Notation.blind,
+    Notation.custom,
   ],
   find: name => {
     const notation = Notations.all.find(n => n.name === name);
@@ -74,6 +76,19 @@ const Notations = {
   },
   get current() {
     return GameUI.initialized ? ui.notation : Notation.mixedScientific;
+  },
+  // This extra junk is added to the name so that if the custom notation changes,
+  // the UI recomputes the custom notation.
+  customNotationName(letters, separator) {
+    return 'Custom ' + letters.map(i => i.replace(/,/g, ',0')).join(',1') + ',' + separator;
+  },
+  updateCustomNotation(letters, useSpaceSeparator) {
+    const separator = useSpaceSeparator ? " " : "";
+    const n = Notations.find("Custom");
+    n.letters = letters;
+    n.mantissaExponentSeparator = separator;
+    n.separator = separator;
+    ui.notationName = this.customNotationName(letters, separator);
   }
 };
 

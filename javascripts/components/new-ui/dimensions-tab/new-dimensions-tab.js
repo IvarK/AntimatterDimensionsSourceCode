@@ -8,17 +8,6 @@ Vue.component("new-dimensions-tab", {
       isSacrificeAffordable: false,
       currentSacrifice: new Decimal(0),
       sacrificeBoost: new Decimal(0),
-      isInMatterChallenge: false,
-      matter: new Decimal(0),
-      isInEffarig: false,
-      effarigMultNerfText: "",
-      effarigTickNerfText: "",
-      disabledCondition: "",
-      currCelestial: "",
-      challengeDisplay: "",
-      isInAnyChallenge: false,
-      isChallengePowerVisible: false,
-      challengePower: "",
       isQuickResetAvailable: false
     };
   },
@@ -42,38 +31,8 @@ Vue.component("new-dimensions-tab", {
     },
     update() {
       this.buyUntil10 = player.buyUntil10;
-      this.isInAnyChallenge = this.challengeDisplay.length !== 0;
-      const isC2Running = NormalChallenge(2).isRunning;
-      const isC3Running = NormalChallenge(3).isRunning;
-      const isIC6Running = InfinityChallenge(6).isRunning;
-      const isIC8Running = InfinityChallenge(8).isRunning;
-      const isChallengePowerVisible = isC2Running || isC3Running || isIC6Running || isIC8Running;
-      this.isChallengePowerVisible = isChallengePowerVisible;
-      if (isChallengePowerVisible) {
-        const powerArray = [];
-        if (isC2Running) powerArray.push(`Production: ${formatPercents(player.chall2Pow, 2, 2)}`);
-        if (isC3Running) powerArray.push(`First dimension: ${formatX(player.chall3Pow, 2, 2)}`);
-        if (isIC6Running) powerArray.push(`Matter: /
-          ${format(new Decimal(1).timesEffectOf(InfinityChallenge(6)), 2, 2)}`);
-        if (isIC8Running) powerArray.push(`Production: /
-          ${format(new Decimal(1).timesEffectOf(InfinityChallenge(8)).reciprocal(), 2, 2)}`);
-        this.challengePower = powerArray.join(", ");
-      }
       const challenge = NormalChallenge.current || InfinityChallenge.current;
       this.isQuickResetAvailable = challenge && challenge.isQuickResettable;
-
-      this.isInMatterChallenge = Player.isInMatterChallenge;
-      if (this.isInMatterChallenge) {
-        this.matter.copyFrom(Player.effectiveMatterAmount);
-      }
-      this.isInEffarig = Effarig.isRunning;
-      if (this.isInEffarig) {
-        this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(player.infinityPower), 0, 5)}`;
-        this.effarigTickNerfText = `${formatPow(0.7 + 0.1 * Effarig.nerfFactor(player.timeShards), 0, 5)}`;
-      }
-
-      this.updateCelestial();
-      this.updateChallengeDisplay();
 
       const isSacrificeUnlocked = Sacrifice.isVisible;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
@@ -84,52 +43,10 @@ Vue.component("new-dimensions-tab", {
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
     },
-    updateCelestial() {
-      if (Teresa.isRunning) this.currCelestial = "Teresa's";
-      else if (Effarig.isRunning) this.currCelestial = "Effarig's";
-      else if (Enslaved.isRunning) this.currCelestial = "The Enslaved Ones'";
-      else if (V.isRunning) this.currCelestial = "V's";
-      else if (Ra.isRunning) this.currCelestial = "Ra's";
-      else if (Laitela.isRunning) this.currCelestial = "Lai'tela's";
-      else this.currCelestial = "";
-    },
-    updateChallengeDisplay() {
-      let displayValue = "";
-
-      const inCelestialReality = this.currCelestial.length !== 0;
-      if (inCelestialReality) displayValue += ` + ${this.currCelestial} Reality`;
-
-      const inDilation = player.dilation.active;
-      if (inDilation) displayValue += " + Time Dilation";
-
-      const normalChallenge = NormalChallenge.current;
-      if (normalChallenge !== undefined) displayValue += ` + ${normalChallenge.config.reward} Challenge `;
-
-      const infinityChallenge = InfinityChallenge.current;
-      if (infinityChallenge !== undefined) displayValue += ` + Infinity Challenge ${infinityChallenge.id}`;
-
-      const eternityChallenge = EternityChallenge.current;
-      if (eternityChallenge !== undefined) displayValue += ` + Eternity Challenge ${eternityChallenge.id}`;
-
-      if (displayValue.length !== 0) this.challengeDisplay = displayValue.substring(3);
-      else if (PlayerProgress.infinityUnlocked()) {
-        this.challengeDisplay = "the Antimatter Universe (no active challenges)";
-      } else this.challengeDisplay = "";
-    }
   },
   template:
   `<div class="l-normal-dim-tab">
-    <div class="information-header" >
-      <span v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</span>
-      <div v-if="isInEffarig">
-        Gamespeed and multipliers dilated {{effarigMultNerfText}}
-        <br>
-        Tickspeed dilated {{effarigTickNerfText}}
-      </div>
-      <div v-if="isInMatterChallenge">There is {{format(matter, 2, 1)}} matter.</div>
-      <br><span v-if="isChallengePowerVisible">{{challengePower}}</span>
-      <black-hole-header-row />
-    </div>
+    
     <div class="modes-container">
       <button class="o-primary-btn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">
         {{ getUntil10Display() }}

@@ -44,12 +44,12 @@ class RaPetState {
     if (this.level < 20) {
       const floor5 = Math.floor(this.level / 5);
       const adjustedLevel = 2.5 * floor5 * (floor5 + 1) + (this.level % 5) * (floor5 + 1);
-      return Math.floor(1000 * adjustedLevel + Math.pow(adjustedLevel - 1, 4) * 5);
+      return Math.floor(1000 * adjustedLevel + Math.pow(adjustedLevel - 1, 4) * 2);
     }
     if (this.level < 25) {
-      return Math.floor(1000 * (this.level + 30) + Math.pow(this.level + 30, 4) * 5);
+      return Math.floor(1000 * (this.level + 30) + Math.pow(this.level + 30, 4) * 2);
     }
-    return Math.floor(1000 * (7 * this.level - 120) + Math.pow(7 * this.level - 120, 4) * 5);
+    return Math.floor(1000 * (7 * this.level - 120) + Math.pow(7 * this.level - 120, 4) * 2);
   }
 
   addGainedExp(multiplier) {
@@ -154,7 +154,7 @@ const Ra = {
       get color() { return "#ea8585"; }
 
       expFormula(glyphCount) {
-        return Math.pow(1.3, 5 - glyphCount);
+        return Math.pow(1.3, 5 - glyphCount) / 2;
       }
     }(),
     enslaved: new class EnslavedRaPetState extends RaPetState {
@@ -171,8 +171,8 @@ const Ra = {
         const seconds = TimeSpan.fromMilliseconds(milliseconds).totalSeconds;
         // This curve is 2x at 100, very steep below that (up to 10x at 1) and very shallow to 1x at 1e102
         return seconds < 100
-          ? 40 / (4 + Math.max(0, Math.pow(Math.log10(seconds), 4)))
-          : Math.max(1, 2.02 - Math.log10(seconds) / 100);
+          ? 40 / (4 + Math.max(0, Math.pow(Math.log10(seconds), 4))) / 4
+          : Math.max(1, 2.02 - Math.log10(seconds) / 100) / 4;
       }
     }(),
     v: new class VRaPetState extends RaPetState {
@@ -186,7 +186,7 @@ const Ra = {
       get color() { return "#f1aa7f"; }
 
       expFormula(theoremCount) {
-        return Math.max(1, Math.pow(theoremCount / 50000, 0.9));
+        return Math.max(1, Math.pow(theoremCount / 50000, 0.9)) / 8;
       }
     }(),
   },

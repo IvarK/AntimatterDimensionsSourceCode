@@ -62,7 +62,6 @@ body.t-normal {
   margin: 0;
   color: var(--color-accent);
   font-size: 1.7em;
-  padding-left: 10px;
   z-index: 1;
   text-align: left;
 }
@@ -78,7 +77,6 @@ body.t-normal {
   align-items: flex-start;
   color: var(--color-text);
   justify-content: space-between;
-  padding: 0 5px;
   font-size: 1.5em;
 }
 

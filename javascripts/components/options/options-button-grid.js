@@ -132,7 +132,7 @@ Vue.component("options-button-grid", {
         >Confirmations</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"
-          onclick="GameStorage.save()"
+          onclick="GameStorage.save(manual = true)"
         >Save</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"

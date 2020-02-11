@@ -171,7 +171,7 @@ function recursiveDilation(value, depth) {
     return value;
   }
   const log10 = value.log10();
-  const basePenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
+  const basePenalty = 0.75 * DilationUpgrade.dilationPenalty.effectOrDefault(1);
   const alchemyReduction = (player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
   const dilationPenalty = Math.min(1, basePenalty + (1 - basePenalty) * alchemyReduction);
   return recursiveDilation(Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty)), depth - 1);

@@ -104,7 +104,7 @@ function applyNDMultipliers(mult, tier) {
     NormalDimension(tier).infinityUpgrade,
     BreakInfinityUpgrade.infinitiedMult
   );
-  infinitiedMult = infinitiedMult.pow(Effects.product(TimeStudy(31)));
+  infinitiedMult = infinitiedMult.pow(TimeStudy(31).effectOrDefault(1));
   multiplier = multiplier.times(infinitiedMult);
 
   if (tier === 1) {

@@ -138,7 +138,7 @@ GameDatabase.challenges.eternity = [
     },
     goal: new Decimal("1e3000"),
     goalIncrease: new Decimal("1e300"),
-    effect: () => Decimal.pow(Player.totalInfinitied, 950).clampMin(1).pow(Effects.product(TimeStudy(31))),
+    effect: () => Decimal.pow(Player.totalInfinitied, 950).clampMin(1).pow(TimeStudy(31).effectOrDefault(1)),
     reward: {
       description: "Time Dimension multiplier based on infinitied stat",
       effect: completions => {

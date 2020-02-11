@@ -12,10 +12,9 @@ function giveEternityRewards(auto) {
   addEternityTime(
     player.thisEternity,
     player.thisEternityRealTime,
-    gainedEternityPoints(),
-    Effects.product(RealityUpgrade(3))
+    gainedEternityPoints()
   );
-  const newEternities = new Decimal(Effects.product(RealityUpgrade(3)))
+  const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
   if (player.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
@@ -36,7 +35,7 @@ function giveEternityRewards(auto) {
   }
 
   player.bestEternitiesPerMs = player.bestEternitiesPerMs.clampMin(
-    Effects.product(RealityUpgrade(3)) / player.thisEternityRealTime
+    RealityUpgrade(3).effectOrDefault(1) / player.thisEternityRealTime
   );
   player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
 

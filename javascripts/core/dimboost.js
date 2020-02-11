@@ -74,7 +74,7 @@ class DimBoost {
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
     if (InfinityChallenge(5).isCompleted) amount -= 1;
 
-    amount *= Effects.product(InfinityUpgrade.resetBoost.chargedEffect);
+    amount *= InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1);
 
     amount = Math.ceil(amount);
 

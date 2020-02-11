@@ -8,6 +8,7 @@ Vue.component("reality-upgrade-button", {
     return {
       isAvailableForPurchase: false,
       canBeBought: false,
+      isRebuyable: false,
       isBought: false
     };
   },
@@ -33,6 +34,7 @@ Vue.component("reality-upgrade-button", {
       const upgrade = this.upgrade;
       this.isAvailableForPurchase = upgrade.isAvailableForPurchase;
       this.canBeBought = upgrade.canBeBought;
+      this.isRebuyable = upgrade.isRebuyable;
       this.isBought = !upgrade.isRebuyable && upgrade.isBought;
     }
   },
@@ -45,15 +47,14 @@ Vue.component("reality-upgrade-button", {
       <hint-text type="realityUpgrades" class="l-hint-text--reality-upgrade">RUPG {{config.id}}</hint-text>
       <description-display :config="config"/>
       <description-display
-        v-if="!isAvailableForPurchase"
+        v-if="$viewModel.shiftDown && !isRebuyable"
         :config="requirementConfig"
-        title="Requires:"
+        title="Requirement:"
         class="c-reality-upgrade-btn__requirement"
       />
       <template v-else>
         <effect-display :config="config" />
         <cost-display
-          v-if="!isBought"
           :config="config"
           singular="RM"
           plural="RM"

@@ -99,6 +99,7 @@ function replicantiCap() {
     ? player.infinitied
       .plus(player.infinitiedBank)
       .pow(TimeStudy(31).isBought ? 120 : 30)
+      .clampMin(1)
       .times(Decimal.NUMBER_MAX_VALUE)
     : Decimal.NUMBER_MAX_VALUE;
 }

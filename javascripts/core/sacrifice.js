@@ -76,11 +76,11 @@ class Sacrifice {
 function sacrificeReset(auto) {
   if (!Sacrifice.canSacrifice) return false;
   if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
-    player.antimatter.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
+    player.antimatter.gte(Decimal.NUMBER_MAX_VALUE) && !Enslaved.isRunning) return false;
   if (
     !Enslaved.isRunning &&
     NormalChallenge(8).isRunning &&
-    (Sacrifice.totalBoost.gte(Decimal.MAX_NUMBER))
+    (Sacrifice.totalBoost.gte(Decimal.NUMBER_MAX_VALUE))
   ) {
     return false;
   }

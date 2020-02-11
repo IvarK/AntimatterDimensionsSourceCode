@@ -406,7 +406,9 @@ GameStorage.devMigrations = {
           eternityAutobuyer.amount = condition;
           break;
         case "time":
-          eternityAutobuyer.time = condition.lt(Decimal.MAX_NUMBER) ? condition.toNumber() : eternityAutobuyer.time;
+          eternityAutobuyer.time = condition.lt(Decimal.NUMBER_MAX_VALUE)
+            ? condition.toNumber()
+            : eternityAutobuyer.time;
           break;
         case "relative":
           eternityAutobuyer.xLast = condition;

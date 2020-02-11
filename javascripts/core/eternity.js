@@ -3,7 +3,7 @@
 function canEternity() {
   return EternityChallenge.isRunning
     ? EternityChallenge.current.canBeCompleted
-    : player.infinityPoints.gte(Decimal.MAX_NUMBER) && InfinityDimension(8).isUnlocked;
+    : player.infinityPoints.gte(Decimal.NUMBER_MAX_VALUE) && InfinityDimension(8).isUnlocked;
 }
 
 function giveEternityRewards(auto) {
@@ -332,7 +332,7 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   get costIncreaseThresholds() {
-    return [1e100, Decimal.MAX_NUMBER, "1e1300", "1e4000"];
+    return [1e100, Decimal.NUMBER_MAX_VALUE, "1e1300", "1e4000"];
   }
 
   costAfterCount(count) {

@@ -90,7 +90,7 @@ function buyMaxTickSpeed() {
   const costScale = Tickspeed.costScale;
 
   if (
-    costScale.calculateCost(player.totalTickBought + costBumps).lt(Decimal.MAX_NUMBER) ||
+    costScale.calculateCost(player.totalTickBought + costBumps).lt(Decimal.NUMBER_MAX_VALUE) ||
     inCostScalingChallenge ||
     !tickspeedMultDecreaseMaxed
     ) {
@@ -104,14 +104,14 @@ function buyMaxTickSpeed() {
       player.totalTickBought++;
       player.thisInfinityLastBuyTime = player.thisInfinityTime;
       if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
-      if (costScale.calculateCost(player.totalTickBought + costBumps).gte(Decimal.MAX_NUMBER) &&
+      if (costScale.calculateCost(player.totalTickBought + costBumps).gte(Decimal.NUMBER_MAX_VALUE) &&
         !inCostScalingChallenge &&
         tickspeedMultDecreaseMaxed) {
         shouldContinue = false;
       }
     }
   }
-  if (costScale.calculateCost(player.totalTickBought + costBumps).gte(Decimal.MAX_NUMBER)) {
+  if (costScale.calculateCost(player.totalTickBought + costBumps).gte(Decimal.NUMBER_MAX_VALUE)) {
     const purchases = costScale.getMaxBought(player.totalTickBought + costBumps, player.antimatter);
     if (purchases === null) {
       return;

@@ -582,7 +582,7 @@ GameStorage.migrations = {
           autobuyer.amount = condition;
           break;
         case "time":
-          autobuyer.time = condition.lt(Decimal.MAX_NUMBER) ? condition.toNumber() : autobuyer.time;
+          autobuyer.time = condition.lt(Decimal.NUMBER_MAX_VALUE) ? condition.toNumber() : autobuyer.time;
           break;
         case "relative":
           autobuyer.xLast = condition;

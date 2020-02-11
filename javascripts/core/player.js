@@ -562,13 +562,13 @@ const Player = {
 
   get infinityGoal() {
     const challenge = NormalChallenge.current || InfinityChallenge.current;
-    return challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
+    return challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
   },
 
   get eternityGoal() {
     return EternityChallenge.isRunning
       ? EternityChallenge.current.currentGoal
-      : Decimal.MAX_NUMBER;
+      : Decimal.NUMBER_MAX_VALUE;
   },
 
   get startingAM() {

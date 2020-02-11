@@ -130,7 +130,7 @@ const AutomatorLexer = (() => {
     $getter: () => {
       // If we are not in an EC, pretend like we have a ton of completions so any check for sufficient
       // completions returns true
-      if (!EternityChallenge.isRunning) return Decimal.MAX_NUMBER;
+      if (!EternityChallenge.isRunning) return Decimal.NUMBER_MAX_VALUE;
       return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
     }
   });

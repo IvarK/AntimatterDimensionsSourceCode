@@ -27,7 +27,7 @@ Vue.component("normal-dim-tab-progress-bar", {
       if (challenge) {
         setProgress(player.antimatter, challenge.goal, "Percentage to challenge goal");
       } else if (!player.break) {
-        setProgress(player.antimatter, Decimal.MAX_NUMBER, "Percentage to Infinity");
+        setProgress(player.antimatter, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
       } else if (Enslaved.isCompleted) {
         setProgress(player.infinityPoints, Enslaved.tesseractCost, "Percentage to next Tesseract");
       } else if (PlayerProgress.dilationUnlocked()) {

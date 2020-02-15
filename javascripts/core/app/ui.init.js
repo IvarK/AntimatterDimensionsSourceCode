@@ -29,6 +29,13 @@ let ui = {
           // TODO: enum
           lines: []
         }
+      },
+      statistics: {
+        runsShown: {
+          Reality: true,
+          Eternity: true,
+          Infinity: true
+        }
       }
     },
     shiftDown: false,

@@ -73,26 +73,12 @@ GameDatabase.tabs = [
           PlayerProgress.challengeCompleted()
       },
       {
-        key: "infinities",
-        name: "Past Infinities",
-        symbol: "∞",
-        component: "past-infinities-tab",
+        key: "prestige runs",
+        name: "Past Prestige Runs",
+        symbol: "🏃",
+        component: "past-runs-tab",
         condition: () => PlayerProgress.infinityUnlocked()
       },
-      {
-        key: "eternities",
-        name: "Past Eternities",
-        symbol: "Δ",
-        component: "past-eternities-tab",
-        condition: () => PlayerProgress.eternityUnlocked()
-      },
-      {
-        key: "realities",
-        name: "Past Realities",
-        symbol: "Ϟ",
-        component: "past-realities-tab",
-        condition: () => PlayerProgress.realityUnlocked()
-      }
     ]
   },
   {

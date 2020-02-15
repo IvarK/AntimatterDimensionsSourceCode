@@ -2833,6 +2833,11 @@ screen and (max-width: 480px) {
   cursor: default;
 }
 
+.o-challenge-btn--redo {
+  color: white;
+  background-color: #17a32e;
+}
+
 /*#region themes*/
 
 /*#region t-dark*/
@@ -2857,6 +2862,11 @@ screen and (max-width: 480px) {
 
 .t-dark .o-challenge-btn--locked {
   background-color: #23292a;
+  border-color: #b84b5f;
+}
+
+.t-dark .o-challenge-btn--redo {
+  background-color: #58da5e;
   border-color: #b84b5f;
 }
 
@@ -2908,6 +2918,15 @@ screen and (max-width: 480px) {
   border-right-color: #616161;
 }
 
+.t-metro .o-challenge-btn--redo,
+.t-inverted-metro .o-challenge-btn--redo,
+.t-s8 .o-challenge-btn--redo {
+  background-color: #4b8a4e;
+  border: 0.3rem solid #757575;
+  border-bottom-color: #616161;
+  border-right-color: #616161;
+}
+
 /*#endregion t-metro t-dark-metro t-inverted-metro t-s8*/
 
 /*#region t-s1*/
@@ -2952,6 +2971,11 @@ screen and (max-width: 480px) {
 .t-s6 .o-challenge-btn--locked {
   color: grey;
   background: black;
+  border-color: #b84b5f;
+}
+
+.t-s6 .o-challenge-btn--redo {
+  background-color: #2a682d;
   border-color: #b84b5f;
 }
 

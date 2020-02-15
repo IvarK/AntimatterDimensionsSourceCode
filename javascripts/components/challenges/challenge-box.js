@@ -6,6 +6,7 @@ Vue.component("challenge-box", {
     isUnlocked: false,
     isRunning: false,
     isCompleted: false,
+    isEC: false,
     overrideLabel: {
       type: String,
       default: "",
@@ -18,8 +19,10 @@ Vue.component("challenge-box", {
       };
       if (this.isRunning) {
         classObject["o-challenge-btn--running"] = true;
-      } else if (this.isCompleted) {
+      } else if (this.isCompleted && ((this.isUnlocked && !this.isEC) || (!this.isUnlocked && this.isEC))) {
         classObject["o-challenge-btn--completed"] = true;
+      } else if (this.isCompleted && this.isUnlocked && this.isEC) {
+        classObject["o-challenge-btn--redo"] = true;
       } else if (this.isUnlocked) {
         classObject["o-challenge-btn--unlocked"] = true;
       } else {
@@ -28,9 +31,13 @@ Vue.component("challenge-box", {
       return classObject;
     },
     buttonText() {
+      this.isEC = this.name.startsWith("EC");
       if (this.overrideLabel.length) return this.overrideLabel;
       if (this.isRunning) return "Running";
-      if (this.isCompleted) return "Completed";
+      if (this.isCompleted) {
+        if (this.isEC && this.isUnlocked) return "Redo";
+        return "Completed";
+      }
       if (this.isUnlocked) return "Start";
       return "Locked";
     }

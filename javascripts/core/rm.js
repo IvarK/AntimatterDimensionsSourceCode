@@ -612,16 +612,15 @@ const Glyphs = {
       }
     }
   },
-  sort() {
+  sort(sortFunction) {
     const glyphsToSort = player.reality.glyphs.inventory.filter(g => g.idx >= this.protectedSlots);
     const freeSpace = this.freeInventorySpace;
     const sortOrder = ["power", "infinity", "time", "replication", "dilation", "effarig", "reality", "cursed"];
     const byType = sortOrder.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
     for (const g of glyphsToSort) byType[g.type].glyphs.push(g);
-    const compareGlyphs = (a, b) => -a.level * a.strength + b.level * b.strength;
     let totalDesiredPadding = 0;
     for (const t of Object.values(byType)) {
-      t.glyphs.sort(compareGlyphs);
+      t.glyphs.sort(sortFunction);
       t.padding = Math.ceil(t.glyphs.length / 10) * 10 - t.glyphs.length;
       // Try to get a full row of padding if possible in some cases
       if (t.padding < 5 && t.glyphs.length > 8) t.padding += 10;

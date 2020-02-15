@@ -230,12 +230,27 @@ function autoReality() {
   beginProcessReality(getRealityProps(false, false));
 }
 
+function updateRealityRecords(realityProps) {
+  const thisRunRMmin = realityProps.gainedRM.dividedBy(Time.thisRealityRealTime.totalMinutes);
+  if (player.bestRMmin.lt(thisRunRMmin)) {
+    player.bestRMmin = thisRunRMmin;
+    player.bestRMminSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  }
+  if (player.bestGlyphLevel < realityProps.gainedGlyphLevel.actualLevel) {
+    player.bestGlyphLevel = realityProps.gainedGlyphLevel.actualLevel;
+    player.bestGlyphLevelSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  }
+  if (player.thisReality < player.bestReality) {
+    player.bestReality = player.thisReality;
+    player.bestSpeedSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  }
+}
+
 function giveRealityRewards(realityProps) {
   const multiplier = realityProps.simulatedRealities + 1;
   const gainedRM = realityProps.gainedRM;
-  player.bestReality = Math.min(player.bestReality, player.thisReality);
   player.reality.realityMachines = player.reality.realityMachines.plus(gainedRM.times(multiplier));
-  player.bestRMmin = player.bestRMmin.max(gainedRM.dividedBy(Time.thisRealityRealTime.totalMinutes));
+  updateRealityRecords(realityProps);
   addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRM, realityProps.gainedGlyphLevel.actualLevel);
   player.realities += multiplier;
   player.reality.pp += multiplier;

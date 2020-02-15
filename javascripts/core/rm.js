@@ -586,7 +586,6 @@ const Glyphs = {
     this.inventory[index] = glyph;
     glyph.idx = index;
     player.reality.glyphs.inventory.push(glyph);
-    player.bestGlyphLevel = Math.max(player.bestGlyphLevel, glyph.level);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },
@@ -741,6 +740,14 @@ const Glyphs = {
       player.dilation.tachyonParticles.fromValue(undoData.tp);
       player.dilation.dilatedTime.fromValue(undoData.dt);
     }
+  },
+  copyForRecords(glyphList) {
+    return glyphList.map(g => ({
+      type: g.type,
+      level: g.level,
+      strength: g.strength,
+      effects: g.effects,
+    }));
   }
 };
 

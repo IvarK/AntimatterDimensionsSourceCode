@@ -48,6 +48,11 @@ function giveEternityRewards(auto) {
     EffarigUnlock.eternity.unlock();
     beginProcessReality(getRealityProps(true));
   }
+
+  if (player.bestEP.lt(player.eternityPoints)) {
+    player.bestEP = new Decimal(player.eternityPoints);
+    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  }
 }
 
 function eternity(force, auto, specialConditions = {}) {

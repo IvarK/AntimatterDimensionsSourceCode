@@ -177,7 +177,13 @@ let player = {
   bestInfinitiesPerMs: new Decimal(0),
   bestEternitiesPerMs: new Decimal(0),
   bestRMmin: new Decimal(0),
+  bestRMminSet: [],
   bestGlyphLevel: 0,
+  bestGlyphLevelSet: [],
+  bestEP: new Decimal(0),
+  bestEPSet: [],
+  bestReality: 999999999999,
+  bestSpeedSet: [],
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
   version: 13,
@@ -255,7 +261,6 @@ let player = {
   partSimulatedReality: 0,
   thisReality: 0,
   thisRealityRealTime: 0,
-  bestReality: 999999999999,
   reality: {
     realityMachines: new Decimal(0),
     glyphs: {

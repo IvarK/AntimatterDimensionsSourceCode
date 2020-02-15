@@ -12,7 +12,7 @@ Vue.component("v-tab", {
       replicanti: new Decimal(0),
       rm: new Decimal(0),
       runRecords: Array.from(player.celestials.v.runRecords),
-      runGlyphs: player.celestials.v.runGlyphs.map(g => this.copyGlyphs(g)),
+      runGlyphs: [],
       isFlipped: false
     };
   },
@@ -27,16 +27,8 @@ Vue.component("v-tab", {
       this.replicanti.copyFrom(player.replicanti.amount);
       this.rm.copyFrom(player.reality.realityMachines);
       this.runRecords = Array.from(player.celestials.v.runRecords);
-      this.runGlyphs = player.celestials.v.runGlyphs.map(g => this.copyGlyphs(g));
+      this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
-    },
-    copyGlyphs(glyphList) {
-      return glyphList.map(g => ({
-        type: g.type,
-        level: g.level,
-        strength: g.strength,
-        effects: g.effects,
-      }));
     },
     startRun() {
       V.startRun();
@@ -134,17 +126,8 @@ Vue.component("v-tab", {
                   Best: {{ hex.config.formatRecord(runRecords[hex.id]) }}
                 </p>
                 <p v-if="runRecords[hex.id] > 0">
-                  <glyph-component v-for="(g, idx) in runGlyphs[hex.id]"
-                         :key="idx"
-                         style="margin: 0.2rem;"
-                         :glyph="g"
-                         :showSacrifice="false"
-                         :draggable="false"
-                         :circular="true"
-                         size="2.8rem"
-                         :textProportion="0.6"
-                         glowBlur="0.2rem"
-                         glowSpread="0.1rem" />
+                  <glyph-set-preview
+                    :glyphs="runGlyphs[hex.id]" />
                 </p>
             </div>
             <div v-else-if="hex.isRunButton" @click="startRun()" class="l-v-hexagon o-v-run-button">

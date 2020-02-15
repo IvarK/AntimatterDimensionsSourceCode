@@ -615,6 +615,11 @@ function applyAutoprestige(diff) {
       .times(diff / 1000);
     player.reality.realityMachines = player.reality.realityMachines.add(addedRM);
   }
+
+  if (player.bestEP.lt(player.eternityPoints)) {
+    player.bestEP = new Decimal(player.eternityPoints);
+    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  }
 }
 
 function updateFreeGalaxies() {

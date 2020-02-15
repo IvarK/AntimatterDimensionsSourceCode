@@ -69,14 +69,7 @@ class VRunUnlockState extends GameMechanicState {
     const value = this.config.currentValue(this.conditionValue);
     if (value > playerData.runRecords[this.id]) {
       playerData.runRecords[this.id] = value;
-      playerData.runGlyphs[this.id] = Glyphs.active
-        .filter(g => g !== null)
-        .map(g => ({
-          type: g.type,
-          level: g.level,
-          strength: g.strength,
-          effects: g.effects,
-        }));
+      playerData.runGlyphs[this.id] = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     }
 
     while (this.completions < this.config.values.length && this.config.condition(this.conditionValue)) {

@@ -529,6 +529,11 @@ GameStorage.devMigrations = {
       // Reset the v-unlocks again
       player.celestials.v.unlockBits = 1;
       V.checkForUnlocks();
+    },
+    player => {
+      player.reality.autoAchieve = !player.reality.disableAutoAchieve;
+      delete player.reality.disableAutoAchieve;
+      delete player.newEC10Test;
     }
   ],
 

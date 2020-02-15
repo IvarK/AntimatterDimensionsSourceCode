@@ -6,13 +6,20 @@ Vue.component("challenge-box", {
     isUnlocked: false,
     isRunning: false,
     isCompleted: false,
-    isEC: false,
     overrideLabel: {
       type: String,
       default: "",
     }
   },
+  data() {
+    return {
+      isEC: false,
+    };
+  },
   computed: {
+    update() {
+      this.isEC = this.name.startsWith("EC");
+    },
     buttonClassObject() {
       const classObject = {
         "o-challenge-btn": true
@@ -31,7 +38,6 @@ Vue.component("challenge-box", {
       return classObject;
     },
     buttonText() {
-      this.isEC = this.name.startsWith("EC");
       if (this.overrideLabel.length) return this.overrideLabel;
       if (this.isRunning) return "Running";
       if (this.isCompleted) {

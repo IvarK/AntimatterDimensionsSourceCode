@@ -304,7 +304,7 @@ let player = {
     autoEC: true,
     lastAutoEC: 0,
     partEternitied: new Decimal(0),
-    disableAutoAchieve: false,
+    autoAchieve: true,
     gainedAutoAchievements: true,
     automator: {
       state: {
@@ -511,8 +511,6 @@ let player = {
       glyphReplace: true,
     }
   },
-  // Remove later
-  newEC10Test: false,
 };
 
 const Player = {

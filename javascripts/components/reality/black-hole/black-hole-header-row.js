@@ -49,6 +49,11 @@ Vue.component("black-hole-header-row", {
       return this.blackHole.id;
     },
   },
+  watch: {
+    isAutoReleasing(newValue) {
+      player.celestials.enslaved.isAutoReleasing = newValue;
+    }
+  },
   methods: {
     update() {
       this.hasBlackHoles = BlackHoles.areUnlocked;
@@ -110,12 +115,11 @@ Vue.component("black-hole-header-row", {
         >Discharge: {{timeDisplayShort(storedTime)}}</primary-button>
       </span>
       <span v-if="canAutoRelease">
-        <input type="checkbox"
-          id="autoReleaseBox"
+        <primary-button-on-off
           v-model="isAutoReleasing"
-          :value="isAutoReleasing"
-          @input="toggleAutoRelease()">
-        <label for="autoReleaseBox">Auto</label>
+          class="o-primary-btn--buy-max"
+          text="Pulse:"
+        />
       </span>
     </span>
   `

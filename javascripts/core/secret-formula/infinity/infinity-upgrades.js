@@ -97,10 +97,10 @@ GameDatabase.infinity.upgrades = (function() {
     galaxyBoost: {
       id: "galaxyBoost",
       cost: 2,
-      description: "Galaxies are twice as effective",
+      description: "Galaxies are twice as strong",
       effect: 2,
       charged: {
-        description: "Galaxies are more effective based on Teresa level",
+        description: "Galaxies are stronger based on Teresa level",
         effect: () => 2 + Math.sqrt(Ra.pets.teresa.level) / 100,
         formatEffect: value => `+${formatPercents(value - 1)}`
       }

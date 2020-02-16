@@ -21,7 +21,7 @@ Vue.component("black-hole-upgrade-row", {
     powerConfig() {
       return {
         upgrade: this.blackHole.powerUpgrade,
-        description: "Make the black hole 35% more powerful",
+        description: "Make the black hole 35% stronger",
         effectTitle: "Current power",
         formatEffect: value => `${formatX(value, 2, 2)}`
       };

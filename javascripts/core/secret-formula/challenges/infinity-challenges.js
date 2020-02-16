@@ -19,7 +19,7 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e10500"),
     isQuickResettable: false,
     reward: {
-      description: "Sacrifice autobuyer and more powerful sacrifice"
+      description: "Sacrifice autobuyer and stronger sacrifice"
     },
     unlockAM: new Decimal("1e5000"),
   },
@@ -59,7 +59,7 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {
-      description: "Galaxies are 10% more powerful and reduce the requirements for them and Dimension Boosts by 1",
+      description: "Galaxies are 10% stronger and reduce the requirements for them and Dimension Boosts by 1",
       effect: 1.1
     },
     unlockAM: new Decimal("1e18000"),

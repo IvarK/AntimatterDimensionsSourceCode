@@ -408,7 +408,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get ${format("9.9999e9999", 4, 0)} antimatter.`,
     checkRequirement: () => player.antimatter.gte("9.9999e9999"),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Dimensions are more powerful the more unspent antimatter you have.",
+    reward: "Dimensions are stronger the more unspent antimatter you have.",
     effect: () => player.antimatter.pow(0.00002).plus(1)
   },
   {
@@ -498,7 +498,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Reach ${format("1e35000", 0, 0)} antimatter.`,
     checkRequirement: () => player.antimatter.exponent >= 35000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Dimensions are more powerful the more unspent antimatter you have.",
+    reward: "Dimensions are stronger the more unspent antimatter you have.",
     effect: () => player.antimatter.pow(0.00002).plus(1)
   },
   {
@@ -516,7 +516,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Reach -99.9% tickspeed per upgrade.",
     checkRequirement: () => getTickSpeedMultiplier().lt(0.001),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Galaxies are 1% more powerful.",
+    reward: "Galaxies are 1% stronger.",
     effect: 1.01
   },
   {
@@ -616,7 +616,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Bulk buy ${formatInt(750)} Dimension Boosts at once.`,
     checkRequirement: ([bulk]) => bulk >= 750,
     checkEvent: GAME_EVENT.DIMBOOST_AFTER,
-    reward: "Dimension Boosts are 1% more powerful (to Normal Dimensions).",
+    reward: "Dimension Boosts are 1% stronger (to Normal Dimensions).",
     effect: 1.01
   },
   {
@@ -915,7 +915,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Unlock the automator.",
     checkRequirement: () => player.realities >= 5,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
-    reward: "Dimension Boosts are 50% more effective.",
+    reward: "Dimension Boosts are 50% stronger.",
     effect: 1.5,
   },
   {

@@ -59,7 +59,7 @@ GameDatabase.challenges.normal = [
     legacyId: 11,
     isQuickResettable: false,
     description: "Dimension Boosts and galaxies are useless, " +
-      "sacrifice is immensely more powerful but resets everything except tickspeed.",
+      "sacrifice is immensely stronger but resets everything except tickspeed.",
     reward: "Eighth Dimension Autobuyer"
   },
   {

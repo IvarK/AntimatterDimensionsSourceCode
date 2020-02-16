@@ -520,8 +520,8 @@ amount of Time Theorems to enter, plus a secondary requirement which you must me
 <br>
 When you enter an Eternity Challenge, your goal becomes reaching a certain target IP. After completing the challenge,
 you do not need to have the Eternity Challenge's study unlocked for the reward to take effect. The rewards for these
-challenges are similar to time studies, but often even more powerful and permanent since they don't require you to
-spend theorems to have their effects.
+challenges are similar to time studies, but often even stronger and permanent since they don't require you to spend
+theorems to have their effects.
 <br>
 <br>
 You can complete each Eternity Challenge up to five times. After each completion, the rewards grow stronger but the
@@ -901,9 +901,9 @@ which limits how large their multipliers can grow since eventually you can't upg
 Tesseracts allow you to raise this cap by spending Infinity Points.
 <br>
 <br>
-The cost of Tesseracts increases super-exponentially, but each successive Tesseract is significantly more powerful than
-the last in order to make up for that. Tesseract count is never reset, meaning that once purchased, you don't need to
-reach the IP cost again in order to take advantage of the raised cap in later realities.
+The cost of Tesseracts increases super-exponentially, but each successive Tesseract is significantly stronger than
+the last in order to make up for that. Tesseract count is never reset, meaning that once purchased, you don't need
+to reach the IP cost again in order to take advantage of the raised cap in later realities.
 `,
       isUnlocked: () => Enslaved.isCompleted,
       tags: ["reality", "lategame", "endgame", "tesseract", "id"],

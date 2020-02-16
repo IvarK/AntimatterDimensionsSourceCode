@@ -59,10 +59,10 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 6,
       cost: 15,
-      requirement: "Complete your first Eternity without any Replicanti Galaxies",
+      requirement: "Complete your first Eternity without using Replicanti Galaxies",
       checkRequirement: () => player.reality.upgReqChecks[0] && isFirstEternity(),
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
-      description: "Replicanti speed is boosted from Replicanti Galaxy count",
+      description: "Replicanti speed is multiplied based on Replicanti Galaxies",
       effect: () => 1 + (player.replicanti.galaxies / 50),
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -98,7 +98,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 10,
       cost: 15,
-      requirement: () => `Complete your first Eternity with ${format("1e400")} IP`,
+      requirement: () => `Complete your first Eternity with at least ${format("1e400")} IP`,
       checkRequirement: () => player.infinityPoints.exponent >= 400 && isFirstEternity(),
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: "Start every reality with 100 Eternities (also applies to current reality)"
@@ -116,7 +116,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 12,
       cost: 50,
-      requirement: () => `Reach ${format(1e70)} EP without Eternity Challenge 1`,
+      requirement: () => `Eternity for ${format(1e70)} EP without Eternity Challenge 1`,
       checkRequirement: () => player.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "EP multiplier based on Reality and Time Theorem count",
@@ -128,7 +128,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 13,
       cost: 50,
-      requirement: () => `Reach ${format("1e4000")} EP without Time Dimensions 5-8`,
+      requirement: () => `Eternity for ${format("1e4000")} EP without Time Dimensions 5-8`,
       checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
@@ -147,7 +147,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 15,
       cost: 50,
-      requirement: () => `Reach ${format(1e10)} EP without purchasing the 5xEP upgrade`,
+      requirement: () => `Eternity for ${format(1e10)} EP without purchasing the 5xEP upgrade`,
       checkRequirement: () => player.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Boost Tachyon Particle gain based on 5xEP multiplier",
@@ -167,7 +167,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 17,
       cost: 1500,
-      requirement: "Reality with 4 equipped, each having at least 2 effects",
+      requirement: "Reality with 4 glyphs equipped, each having at least 2 effects",
       checkRequirement: () => Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2) === 4,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "50% chance to get an additional effect on glyphs",
@@ -198,7 +198,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: "2 years total play time",
       checkRequirement: () => Time.totalTimePlayed.totalYears >= 2,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "Unlock a 2nd black hole",
+      description: "Unlock the 2nd black hole",
       formatCost: value => format(value, 1, 0)
     },
     {
@@ -225,7 +225,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: "Reality in under 15 minutes",
       checkRequirement: () => Time.thisReality.totalMinutes < 15,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-      description: "Replicanti speed is boosted based on your fastest reality",
+      description: "Replicanti speed is boosted based on your fastest Reality",
       effect: () => 15 / Math.clamp(Time.bestReality.totalMinutes, 1 / 12, 15),
       cap: 900,
       formatEffect: value => formatX(value, 2, 2)

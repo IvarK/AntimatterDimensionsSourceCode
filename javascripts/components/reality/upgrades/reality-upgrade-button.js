@@ -47,7 +47,7 @@ Vue.component("reality-upgrade-button", {
       <hint-text type="realityUpgrades" class="l-hint-text--reality-upgrade">RUPG {{config.id}}</hint-text>
       <description-display :config="config"/>
       <description-display
-        v-if="$viewModel.shiftDown && !isRebuyable"
+        v-if="!$viewModel.shiftDown && !isRebuyable"
         :config="requirementConfig"
         title="Requirement:"
         class="c-reality-upgrade-btn__requirement"

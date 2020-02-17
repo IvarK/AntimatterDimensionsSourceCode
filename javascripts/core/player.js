@@ -183,6 +183,7 @@ let player = {
   bestEP: new Decimal(0),
   bestEPSet: [],
   bestReality: 999999999999,
+  bestRealityRealTime: 999999999999,
   bestSpeedSet: [],
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),

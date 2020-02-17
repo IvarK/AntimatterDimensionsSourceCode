@@ -28,7 +28,7 @@ Vue.component("tt-shop", {
       return this.minimizeAvailable && this.shopMinimized;
     },
     TTgenRateText() {
-      if (this.theoremGeneration.lt(0.001)) {
+      if (this.theoremGeneration.lt(1 / 3600)) {
         return `one TT every ${TimeSpan.fromSeconds(
           this.theoremGeneration.reciprocal().toNumber()).toStringShort(false)}`;
       }

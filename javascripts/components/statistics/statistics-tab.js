@@ -28,6 +28,7 @@ Vue.component("statistics-tab", {
         isUnlocked: false,
         count: 0,
         best: TimeSpan.zero,
+        bestReal: TimeSpan.zero,
         this: TimeSpan.zero,
         thisReal: TimeSpan.zero,
         totalTimePlayed: TimeSpan.zero,
@@ -69,6 +70,7 @@ Vue.component("statistics-tab", {
       if (isRealityUnlocked) {
         reality.count = Math.floor(player.realities);
         reality.best.setFrom(player.bestReality);
+        reality.bestReal.setFrom(player.bestRealityRealTime);
         reality.this.setFrom(player.thisReality);
         reality.totalTimePlayed.setFrom(player.totalTimePlayed);
         // Real time tracking is only a thing once reality is unlocked:
@@ -82,7 +84,8 @@ Vue.component("statistics-tab", {
         [Glyphs.copyForRecords(player.bestRMminSet), `Best RM/min: ${format(player.bestRMmin, 2, 2)} RM/min`],
         [Glyphs.copyForRecords(player.bestGlyphLevelSet), `Best glyph level: ${formatInt(player.bestGlyphLevel)}`],
         [Glyphs.copyForRecords(player.bestEPSet), `Best EP: ${format(player.bestEP, 2, 2)} EP`],
-        [Glyphs.copyForRecords(player.bestSpeedSet), `Fastest Reality: ${reality.best.toStringShort()}`]
+        [Glyphs.copyForRecords(player.bestSpeedSet),
+          `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`]
       ];
     },
     formatDecimalAmount(value) {
@@ -155,7 +158,8 @@ Vue.component("statistics-tab", {
         <div v-if="reality.isUnlocked">
             <h3>Reality</h3>
             <div>You have Realitied {{formatInt(reality.count)}} {{"time" | pluralize(reality.count)}}.</div>
-            <div>Your fastest Reality was {{ reality.best.toStringShort() }}.</div>
+            <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
+            <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>
             <div>
               You have spent
               {{ reality.this.toStringShort() }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)

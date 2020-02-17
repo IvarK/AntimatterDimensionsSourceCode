@@ -15,10 +15,13 @@ Vue.component("reality-upgrades-tab", {
       The first row of upgrades can be purchased endlessly, but get expensive more quickly above {{ format(1e30) }} RM
       and {{ format(maxNumber, 1) }} RM.
       <br>
-      The rest of the upgrades are one-time upgrades which have an RM cost, but additionally require you to do something
-      else to be able to buy them.
+      The rest of the upgrades are one-time upgrades which have an unlocking requirement in addition to an RM cost.
       <br>
-      Hold shift to see the additional requirement for the one-time upgrades.
+      These requirements, once completed, permanently unlock the ability to purchase the upgrades at any point.
+      <br>
+      Upgrades show their requirements by default; hold shift to see the costs for the upgrades instead.
+      <br>
+      <br>
       <div v-for="row in 5" class="l-reality-upgrade-grid__row">
         <reality-upgrade-button
           v-for="column in 5"

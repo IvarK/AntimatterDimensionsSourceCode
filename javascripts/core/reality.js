@@ -240,8 +240,9 @@ function updateRealityRecords(realityProps) {
     player.bestGlyphLevel = realityProps.gainedGlyphLevel.actualLevel;
     player.bestGlyphLevelSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
-  if (player.thisReality < player.bestReality) {
-    player.bestReality = player.thisReality;
+  player.bestReality = Math.min(player.thisReality, player.bestReality);
+  if (player.thisRealityRealTime < player.bestRealityRealTime) {
+    player.bestRealityRealTime = player.thisRealityRealTime;
     player.bestSpeedSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }

@@ -51,7 +51,7 @@ Vue.component("glyph-inventory", {
       // eslint-disable-next-line no-bitwise
       Glyphs.sort((a, b) => -(~a.effects * Math.pow(1e12, countEffectsFromBitmask(a.effects))) +
         // eslint-disable-next-line no-bitwise
-        (~b.effects * Math.pow(1e10, countEffectsFromBitmask(b.effects))));
+        (~b.effects * Math.pow(1e12, countEffectsFromBitmask(b.effects))));
     },
     autoClean() {
       Glyphs.autoClean();

@@ -18,7 +18,7 @@ html {
 
 /* css vars */
 
-#ui {
+#ui { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #F2F2F2;
@@ -34,7 +34,7 @@ html {
   --color-celestials: #5151ec;
 }
 
-.t-metro #ui,
+.t-metro #ui, /* csslint allow: empty-rules */
 .t-inverted-metro #ui,
 .t-s8 #ui {
   --color-text: black;
@@ -52,7 +52,7 @@ html {
   --color-celestials: #00bcd4;
 }
 
-.t-dark #ui {
+.t-dark #ui { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
   --color-base: #455a64;
@@ -62,7 +62,7 @@ html {
   --color-infinity: #FF9800;
 }
 
-.t-dark-metro #ui {
+.t-dark-metro #ui { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
   --color-base: #455a64;
@@ -78,7 +78,7 @@ html {
   --color-celestials: #00bcd4;
 }
 
-.t-s1 #ui {
+.t-s1 #ui { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: #dbd242;
   --color-base: #dbd242;
@@ -94,7 +94,7 @@ html {
   --color-celestials: #F2D6C1;
 }
 
-.t-s4 #ui {
+.t-s4 #ui { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #1b00ff;
@@ -103,7 +103,7 @@ html {
   --color-bad: #ff0000;
 }
 
-.t-s6 #ui {
+.t-s6 #ui { /* csslint allow: empty-rules */
   --color-text: #E0E0E0;
   --color-text-inverted: black;
   --color-base: black;

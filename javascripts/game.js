@@ -490,7 +490,8 @@ function gameLoop(diff, options = {}) {
       RealityUpgrade(14)
     );
     eternitiedGain = Decimal.times(eternitiedGain, getAdjustedGlyphEffect("timeetermult"));
-    eternitiedGain = new Decimal(Time.deltaTime).times(Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue));
+    eternitiedGain = new Decimal(Time.deltaTime).times(
+      Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue));
     player.reality.partEternitied = player.reality.partEternitied.plus(eternitiedGain);
     player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
     player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
@@ -518,7 +519,7 @@ function gameLoop(diff, options = {}) {
       // infinities and eternities gained overall will be the same
       // for two ticks as for one tick of twice the length.
       infGen = infGen.plus(gainedInfinities().times(
-        player.eternities.minus(eternitiedGain.div(2))).times(Time.deltaTime));
+        player.eternities.minus(eternitiedGain.div(2)).max(0)).times(Time.deltaTime));
     }
     infGen = infGen.plus(player.partInfinitied);
     player.infinitied = player.infinitied.plus(infGen.floor());

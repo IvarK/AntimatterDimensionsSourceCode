@@ -520,12 +520,12 @@ GameStorage.devMigrations = {
       player.reality.glyphs.inventorySize += 10;
     },
     player => {
-      player.celestials.v.unlockBits = 1;
+      player.celestials.v.unlockBits = Math.min(player.celestials.v.unlockBits, 1);
       V.checkForUnlocks();
     },
     player => {
       // Reset the v-unlocks again
-      player.celestials.v.unlockBits = 1;
+      player.celestials.v.unlockBits = Math.min(player.celestials.v.unlockBits, 1);
       V.checkForUnlocks();
     }
   ],

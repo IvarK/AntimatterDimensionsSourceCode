@@ -482,6 +482,19 @@ function gameLoop(diff, options = {}) {
   // IP generation is broken into a couple of places in gameLoop; changing that might change the
   // behavior of eternity farming.
   preProductionGenerateIP(diff);
+  
+  let eternitiedGain = 0;
+  if (RealityUpgrade(14).isBought) {
+    eternitiedGain = Effects.product(
+      RealityUpgrade(3),
+      RealityUpgrade(14)
+    );
+    eternitiedGain = Decimal.times(eternitiedGain, getAdjustedGlyphEffect("timeetermult"));
+    eternitiedGain = new Decimal(Time.deltaTime).times(Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue));
+    player.reality.partEternitied = player.reality.partEternitied.plus(eternitiedGain);
+    player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
+    player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
+  }
 
   if (!EternityChallenge(4).isRunning) {
     let infGen = new Decimal(0);
@@ -499,24 +512,17 @@ function gameLoop(diff, options = {}) {
       infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
     }
     if (EffarigUnlock.eternity.isUnlocked) {
-      infGen = infGen.plus(gainedInfinities().times(player.eternities).times(Time.deltaTime));
+      // We consider half of the eternities we gained above this tick
+      // to have been gained before the infinities, and thus not to
+      // count here. This gives us the desirable behavior that
+      // infinities and eternities gained overall will be the same
+      // for two ticks as for one tick of twice the length.
+      infGen = infGen.plus(gainedInfinities().times(
+        player.eternities.minus(eternitiedGain.div(2))).times(Time.deltaTime));
     }
     infGen = infGen.plus(player.partInfinitied);
     player.infinitied = player.infinitied.plus(infGen.floor());
     player.partInfinitied = infGen.minus(infGen.floor()).toNumber();
-  }
-
-  if (RealityUpgrade(14).isBought) {
-    let eternitiedGain = Effects.product(
-      RealityUpgrade(3),
-      RealityUpgrade(14)
-    );
-    eternitiedGain *= getAdjustedGlyphEffect("timeetermult");
-    player.reality.partEternitied = player.reality.partEternitied
-      .plus(new Decimal(Time.deltaTime).times(Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue))
-    );
-    player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
-    player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
   }
 
   applyAutoprestige(realDiff);

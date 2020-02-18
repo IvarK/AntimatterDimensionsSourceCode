@@ -359,6 +359,7 @@ Vue.component("glyph-component", {
     update() {
       this.isRealityGlyph = this.glyph.type === "reality";
       this.glyphEffects = this.extractGlyphEffects();
+      this.showGlyphEffectDots = player.options.showGlyphEffectDots;
     },
     // This finds all the effects of a glyph and shifts all their IDs so that type's lowest-ID effect is 0 and all
     // other effects count up to 3 (or 6 for effarig). Used to add dots in unique positions on glyphs to show effects.
@@ -526,7 +527,7 @@ Vue.component("glyph-component", {
            :style="innerStyle"
            :class="['l-glyph-component', 'c-glyph-component']">
         {{symbol}}
-        <div v-for="x in glyphEffects"
+        <div v-if="showGlyphEffectDots" v-for="x in glyphEffects"
           :style="glyphEffectIcon(x)"/>
         <glyph-tooltip v-if="hasTooltip"
                        v-show="isCurrentTooltip"

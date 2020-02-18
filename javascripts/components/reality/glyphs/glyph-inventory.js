@@ -41,8 +41,17 @@ Vue.component("glyph-inventory", {
     glyphsChanged() {
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);
     },
-    sort() {
-      Glyphs.sort();
+    sortByPower() {
+      Glyphs.sort((a, b) => -a.level * a.strength + b.level * b.strength);
+    },
+    sortByEffect() {
+      // Multiplying by 1e12 per effect guarantees that glyphs with less effects are placed later, and the bitwise
+      // inversion is so that the effects with the LOWER id are valued higher in the sorting. This primarily meant
+      // for effarig glyph effect sorting, which makes it prioritize timespeed pow highest.
+      // eslint-disable-next-line no-bitwise
+      Glyphs.sort((a, b) => -(~a.effects * Math.pow(1e12, countEffectsFromBitmask(a.effects))) +
+        // eslint-disable-next-line no-bitwise
+        (~b.effects * Math.pow(1e12, countEffectsFromBitmask(b.effects))));
     },
     autoClean() {
       Glyphs.autoClean();
@@ -70,9 +79,14 @@ Vue.component("glyph-inventory", {
     </div>
     <div>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-              ach-tooltip="Sort by type and level * rarity"
-              @click="sort">
-        Sort
+        ach-tooltip="Arranges by decreasing level*rarity"
+        @click="sortByPower">
+          Sort by power
+      </button>
+      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        ach-tooltip="Group glyphs together based on effects"
+        @click="sortByEffect">
+          Sort by effects
       </button>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
              ach-tooltip="Sacrifice glyphs that are worse in every way than enough other glyphs"

@@ -3,7 +3,7 @@
 function canEternity() {
   return EternityChallenge.isRunning
     ? EternityChallenge.current.canBeCompleted
-    : player.infinityPoints.gte(Decimal.MAX_NUMBER) && InfinityDimension(8).isUnlocked;
+    : player.infinityPoints.gte(Decimal.NUMBER_MAX_VALUE) && InfinityDimension(8).isUnlocked;
 }
 
 function giveEternityRewards(auto) {
@@ -12,10 +12,9 @@ function giveEternityRewards(auto) {
   addEternityTime(
     player.thisEternity,
     player.thisEternityRealTime,
-    gainedEternityPoints(),
-    Effects.product(RealityUpgrade(3))
+    gainedEternityPoints()
   );
-  const newEternities = new Decimal(Effects.product(RealityUpgrade(3)))
+  const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
   if (player.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
@@ -36,7 +35,7 @@ function giveEternityRewards(auto) {
   }
 
   player.bestEternitiesPerMs = player.bestEternitiesPerMs.clampMin(
-    Effects.product(RealityUpgrade(3)) / player.thisEternityRealTime
+    RealityUpgrade(3).effectOrDefault(1) / player.thisEternityRealTime
   );
   player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
 
@@ -48,6 +47,11 @@ function giveEternityRewards(auto) {
   if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked) {
     EffarigUnlock.eternity.unlock();
     beginProcessReality(getRealityProps(true));
+  }
+
+  if (player.bestEP.lt(player.eternityPoints)) {
+    player.bestEP = new Decimal(player.eternityPoints);
+    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }
 
@@ -333,7 +337,7 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   get costIncreaseThresholds() {
-    return [1e100, Decimal.MAX_NUMBER, "1e1300", "1e4000"];
+    return [1e100, Decimal.NUMBER_MAX_VALUE, "1e1300", "1e4000"];
   }
 
   costAfterCount(count) {

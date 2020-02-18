@@ -171,17 +171,16 @@ function getInfinitiedMilestoneReward(ms) {
     : 0;
 }
 
-// eslint-disable-next-line max-params
-function addEternityTime(time, realTime, ep, eternities) {
+function addEternityTime(time, realTime, ep) {
   player.lastTenEternities.pop();
-  player.lastTenEternities.unshift([time, ep, realTime, eternities]);
+  player.lastTenEternities.unshift([time, ep, realTime]);
   GameCache.averageEPPerRun.invalidate();
 }
 
 function resetEternityRuns() {
   player.lastTenEternities = Array.from(
     { length: 10 },
-    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, 1]
+    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]
   );
   GameCache.averageEPPerRun.invalidate();
 }
@@ -616,6 +615,11 @@ function applyAutoprestige(diff) {
       .times(diff / 1000);
     player.reality.realityMachines = player.reality.realityMachines.add(addedRM);
   }
+
+  if (player.bestEP.lt(player.eternityPoints)) {
+    player.bestEP = new Decimal(player.eternityPoints);
+    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  }
 }
 
 function updateFreeGalaxies() {
@@ -797,9 +801,9 @@ function autoBuyExtraTimeDims() {
 }
 
 function slowerAutobuyers(realDiff) {
-  const ampDiff = realDiff * Effects.product(PerkShopUpgrade.autoSpeed);
+  const ampDiff = realDiff * PerkShopUpgrade.autoSpeed.effectOrDefault(1);
   player.auto.infDimTimer += ampDiff;
-  const infDimPeriod = 1000 * Effects.product(Perk.autobuyerFasterID);
+  const infDimPeriod = 1000 * Perk.autobuyerFasterID.effectOrDefault(1);
   if (player.auto.infDimTimer >= infDimPeriod) {
     // Note: we need to reset to a low number here, because we don't want a pile of these accumulating during offline
     // time and then releasing normally.
@@ -813,13 +817,13 @@ function slowerAutobuyers(realDiff) {
     autoBuyTimeDims();
   }
   player.auto.repUpgradeTimer += ampDiff;
-  const repUpgradePeriod = 1000 * Effects.product(Perk.autobuyerFasterReplicanti);
+  const repUpgradePeriod = 1000 * Perk.autobuyerFasterReplicanti.effectOrDefault(1);
   if (player.auto.repUpgradeTimer >= repUpgradePeriod) {
     player.auto.repUpgradeTimer = Math.min(player.auto.repUpgradeTimer - repUpgradePeriod, repUpgradePeriod);
     autoBuyReplicantiUpgrades();
   }
   player.auto.dilUpgradeTimer += ampDiff;
-  const dilUpgradePeriod = 1000 * Effects.product(Perk.autobuyerFasterDilation);
+  const dilUpgradePeriod = 1000 * Perk.autobuyerFasterDilation.effectOrDefault(1);
   if (player.auto.dilUpgradeTimer >= dilUpgradePeriod) {
     player.auto.dilUpgradeTimer = Math.min(player.auto.dilUpgradeTimer - dilUpgradePeriod, dilUpgradePeriod);
     autoBuyDilationUpgrades();

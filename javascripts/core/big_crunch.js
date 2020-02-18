@@ -13,7 +13,7 @@ function canCrunch() {
     return true;
   }
   const challenge = NormalChallenge.current || InfinityChallenge.current;
-  const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
+  const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
   if (player.thisInfinityMaxAM.lt(goal)) return false;
   return true;
 }

@@ -891,7 +891,6 @@ directly unlock the next Celestial.
       tab: "celestials/enslaved"
     }, {
       name: "Tesseracts",
-      // TODO Expand upon this when mechanics are finalized
       info: () => `
 Tesseracts are a new resource you unlock for completing The Enslaved Ones' Reality.
 <br>
@@ -911,48 +910,49 @@ to reach the IP cost again in order to take advantage of the raised cap in later
     }, {
       name: "V, Celestial of Achievements",
       alias: "V",
-      // Proofread up until unlock condition
       info: () => `
-V is a special Celestial in the sense that it is not unlocked by another Celestial,
-but by instead by completing an achievement.
-She is unlocked by completing achievement r151 (row 15, column 1, "You really didn't need it anyway")
+V is a special Celestial in the sense that she is not unlocked by another Celestial,
+but is instead unlocked by completing a certain achievement.
+She is unlocked by completing achievement r151 (row 15, column 1, "You really didn't need it anyway"),
 which requires you to get 800 Antimatter Galaxies without buying 8th Dimensions in your current infinity.
 <br>
-After being unlocked, you are met with another set of requirements to fully unlock V.
-You are required to reach ${format(1e4)} Realities, ${format(1e70)} Eternities, ${format(1e160)} Infinities,
-${format(1e320)} Dilated Time, and ${format(new Decimal("1e320000"))} Replicanti, all in the same run.
+<br>
+After being unlocked from the achievement, you are met with another set of requirements to fully unlock V.
+You must have completed ${formatInt(GameDatabase.celestials.v.mainUnlock.realities)} Realities and have
+${format(GameDatabase.celestials.v.mainUnlock.rm)} RM (which is not spent). Additionally you need to reach 
+${format(GameDatabase.celestials.v.mainUnlock.eternities)} Eternities,
+${format(GameDatabase.celestials.v.mainUnlock.infinities)} Infinities,
+${format(GameDatabase.celestials.v.mainUnlock.dilatedTime)} Dilated Time, and 
+${format(GameDatabase.celestials.v.mainUnlock.replicanti)} Replicanti, all in the same reality.
 <br>
 <br>
-When you meet those requirements, you are now in the V interface.
-On the screen, you should see six white hexagons surrounding one orange hexagon.
-The six white hexagons represent what are known as "V-achievements",
-which are unlocked by reaching their requirements inside of V's Reality.
-The orange hexagon in the middle is the button to enter into the Reality,
-which contains the nerfs to V's Reality, which are as follows:
+When you meet all of those requirements, you will be able to access V's Reality. However, completing the 
+Reality itself is only the beginning. V has six different requirements, each of which require you to make a 
+certain amount of progress within V's Reality. Completing a requirement rewards you with a V-achievement.
+V-achievements are permanent and persist after exiting V's reality, and do not all need to be done simultaneously.
 <br>
-<div style="text-align: center">
-<i>"Start V's Reality. All dimension multipliers, EP gain, IP gain,
-and dilated time gain per second are square-rooted, and Replicanti interval is squared."</i>
-</div>
-When you reach the requirements for a V-Achievement in her Reality, you are awarded with that achievement.
-V-achievements go to two different things: unlocking rewards and being able to add more studies to your tree.
 <br>
-V has three rewards unlockable with the V-Achievements.
-The first one requires you to have ten V-Achievements,
-and increases the speed of the Auto-EC perk by your Achievement multiplier.
+After completing the requirement, the V-achievement threshold then increases and can be completed again 
+if you can reach the new goal.  You can complete each category of V-achievement up to six times. 
+Completed V-achievements do two things:
 <br>
-The second unlockable needs thirty V-Achievements to unlock,
-and it multiplies black hole power by your achievement count.
-It also unlocks Ra, the next Celestial.
+- Upon reaching certain totals of V-achievements, you automatically unlock upgrades on the V tab without needing
+to spend any resources.
 <br>
-The final unlockable takes all thirty-six V-Achievements to unlock,
-and doubles the amount of locked studies you can buy.
+- Each V-achievement also gives you one Space Theorem.
 <br>
-One of V's passive unlocks is the ability to buy studies that you are not normally able to buy.
-This requires six (three with the final unlock) V-Achievements to be completed to buy one locked study.
+<br>
+Space Theorems allow you to purchase time studies which are normally forbidden, such as multiple paths in the 
+split after the improved IP formula, or both time studies within a black/white pair near the bottom. Like Time 
+Theorems, they are freely given back every time you respec your studies.
+With enough Space Theorems you will eventually be able to purchase every single time study at once!
+<br>
+<br>
+Reaching 36 V-achievements (and therefore completing all of V's achievements) unlocks the next Celestial.
 `,
       isUnlocked: () => Achievement(151).isUnlocked,
-      tags: ["reality", "lategame", "endgame", "girlfriend", "challenges"],
+      tags: ["reality", "lategame", "endgame", "girlfriend", "challenges", "achievement", "space", "theorems", 
+        "study", "triad"],
       tab: "celestials/v"
     }, {
       name: "Ra, Celestial of the Forgotten",

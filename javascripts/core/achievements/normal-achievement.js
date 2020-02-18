@@ -107,7 +107,7 @@ const Achievements = {
 
   autoAchieveUpdate(diff) {
     if (player.realities === 0) return;
-    if (player.reality.disableAutoAchieve) return;
+    if (!player.reality.autoAchieve) return;
     if (Achievements.preReality.every(a => a.isUnlocked)) return;
 
     player.reality.achTimer += diff;

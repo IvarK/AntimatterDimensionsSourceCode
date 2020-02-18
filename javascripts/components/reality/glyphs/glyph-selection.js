@@ -17,8 +17,9 @@ Vue.component("modal-glyph-selection", {
         currentGlyph.level = newGlyph.level;
         currentGlyph.effects = newGlyph.effects;
       }
-      // For now, it only appears when completing celestial runs, maybe change this later?
-      this.canTrashGlyphs = Object.entries(player.celestials).map(x => x[1].run).includes(true);
+      const inCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
+      const isLowLevelGlyph = GlyphSelection.glyphs[0].level + 1000 < player.bestGlyphLevel;
+      this.canTrashGlyphs = inCelestialReality || isLowLevelGlyph;
     },
     select(index) {
       GlyphSelection.select(index, false);

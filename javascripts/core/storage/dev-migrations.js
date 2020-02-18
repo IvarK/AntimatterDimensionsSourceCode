@@ -406,7 +406,9 @@ GameStorage.devMigrations = {
           eternityAutobuyer.amount = condition;
           break;
         case "time":
-          eternityAutobuyer.time = condition.lt(Decimal.MAX_NUMBER) ? condition.toNumber() : eternityAutobuyer.time;
+          eternityAutobuyer.time = condition.lt(Decimal.NUMBER_MAX_VALUE)
+            ? condition.toNumber()
+            : eternityAutobuyer.time;
           break;
         case "relative":
           eternityAutobuyer.xLast = condition;
@@ -527,6 +529,11 @@ GameStorage.devMigrations = {
       // Reset the v-unlocks again
       player.celestials.v.unlockBits = Math.min(player.celestials.v.unlockBits, 1);
       V.checkForUnlocks();
+    },
+    player => {
+      player.reality.autoAchieve = !player.reality.disableAutoAchieve;
+      delete player.reality.disableAutoAchieve;
+      delete player.newEC10Test;
     }
   ],
 

@@ -54,19 +54,19 @@ Vue.component("tt-shop", {
       player.timestudy.shopMinimized = !player.timestudy.shopMinimized;
     },
     formatAM(am) {
-      return format(am, 0, 0) + " AM";
+      return `${format(am)} AM`;
     },
     buyWithAM() {
       TimeTheorems.buyWithAntimatter();
     },
     formatIP(ip) {
-      return format(ip, 0, 0) + " IP";
+      return `${format(ip)} IP`;
     },
     buyWithIP() {
       TimeTheorems.buyWithIP();
     },
     formatEP(ep) {
-      return format(ep, 2, 0) + " EP";
+      return `${format(ep, 2, 0)} EP`;
     },
     buyWithEP() {
       TimeTheorems.buyWithEP();
@@ -89,7 +89,7 @@ Vue.component("tt-shop", {
       costs.am.copyFrom(player.timestudy.amcost);
       costs.ip.copyFrom(player.timestudy.ipcost);
       costs.ep.copyFrom(player.timestudy.epcost);
-      this.showST = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
+      this.showST = V.availableST > 0;
       this.STamount = V.availableST;
     },
     toggleTTAutobuyer() {

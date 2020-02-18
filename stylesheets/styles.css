@@ -1539,6 +1539,7 @@ screen and (max-width: 480px) {
   color: var(--color-eternity);
   background-color: black;
   border-color: var(--color-eternity);
+  font-weight: bold;
 }
 
 .o-prestige-btn--dilation {
@@ -1552,15 +1553,15 @@ screen and (max-width: 480px) {
   background-color: white;
 } 
 
-.o-prestige-btn--eternity b {
+.o-prestige-btn--eternity span {
   transition-duration: 0.2s;
 }
 
-.o-prestige-btn--eternity:hover b {
+.o-prestige-btn--eternity:hover span {
   color: var(--color-eternity) !important;
 }
 
-.t-s1 .o-prestige-btn--eternity:hover b {
+.t-s1 .o-prestige-btn--eternity:hover span {
   color: var(--color-text) !important;
 }
 

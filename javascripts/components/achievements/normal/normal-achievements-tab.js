@@ -25,7 +25,7 @@ Vue.component("normal-achievements-tab", {
     update() {
       this.achievementPower = Achievements.power;
       this.achCountdown = Achievements.timeToNextAutoAchieve() / getGameSpeedupFactor();
-      this.showAutoAchieve = this.achCountdown > 0;
+      this.showAutoAchieve = !Perk.achievementRowGroup6.isBought;
       this.isAutoAchieveActive = player.reality.autoAchieve;
       this.isCancer = player.secretUnlocks.cancerAchievements;
     },
@@ -47,7 +47,7 @@ Vue.component("normal-achievements-tab", {
         Current achievement multiplier on each Dimension: {{ format(achievementPower, 2, 3) }}x
         <span @click="swapImages()" style="cursor: pointer">{{ swapImagesButton }}</span>
       </div>
-      <div v-if="showAutoAchieve" class="c-achievements-tab__header">
+      <div v-if="achCountdown > 0" class="c-achievements-tab__header">
         Next automatic achievement in {{timeDisplayNoDecimals(achCountdown)}}.
       </div>
       <div v-if="showAutoAchieve">

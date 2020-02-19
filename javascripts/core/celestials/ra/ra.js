@@ -57,12 +57,12 @@ class RaPetState {
     this.addExp(this.gainedExp * multiplier);
   }
 
-  get baseExp() {
-    return Math.pow(2, gainedGlyphLevel().actualLevel / 500 - 10);
+  baseExp(glyphLevel) {
+    return Math.pow(2, glyphLevel / 500 - 10);
   }
 
   get gainedExp() {
-    return this.baseExp * this.expBoost;
+    return this.baseExp(gainedGlyphLevel().actualLevel) * this.expBoost;
   }
 
   get expBoost() {

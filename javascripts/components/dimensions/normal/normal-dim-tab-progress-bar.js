@@ -13,14 +13,14 @@ Vue.component("normal-dim-tab-progress-bar", {
     },
     progressBarStyle() {
       return {
-        width: Notations.current.name === 'Blind' ? '0%' : `${this.fill.toFixed(2)}%`
+        width: Notations.current.name === 'Blind' ? '0%' : `${(this.fill * 100).toFixed(2)}%`
       };
     }
   },
   methods: {
     update() {
       const setProgress = (current, goal, tooltip) => {
-        this.fill.copyFrom(Decimal.min(current.pLog10() / Decimal.log10(goal) * 100, 100));
+        this.fill = Math.min(current.pLog10() / Decimal.log10(goal), 1);
         this.tooltip = tooltip;
       };
       const challenge = NormalChallenge.current || InfinityChallenge.current;

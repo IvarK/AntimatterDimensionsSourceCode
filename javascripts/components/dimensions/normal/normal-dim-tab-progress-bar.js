@@ -3,17 +3,17 @@
 Vue.component("normal-dim-tab-progress-bar", {
   data() {
     return {
-      fill: new Decimal(0),
+      fill: 0,
       tooltip: ""
     };
   },
   computed: {
-    percents() {
-      return `${this.fill.toFixed(2)}%`;
+    displayPercents() {
+      return formatPercents(this.fill, 2);
     },
     progressBarStyle() {
       return {
-        width: this.percents
+        width: Notations.current.name === 'Blind' ? '0%' : `${this.fill.toFixed(2)}%`
       };
     }
   },
@@ -46,7 +46,7 @@ Vue.component("normal-dim-tab-progress-bar", {
   template:
     `<div class="c-progress-bar">
         <div :style="progressBarStyle" class="c-progress-bar__fill">
-            <span v-tooltip="tooltip" class="c-progress-bar__percents">{{percents}}</span>
+            <span v-tooltip="tooltip" class="c-progress-bar__percents">{{displayPercents}}</span>
           </div>
     </div>`
 });

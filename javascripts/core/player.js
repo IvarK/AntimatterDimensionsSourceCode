@@ -540,11 +540,11 @@ const Player = {
   },
 
   get antimatterPerSecond() {
-    const basePerSecond = NormalDimension(1).productionPerSecond;
+    const basePerSecond = NormalDimension(1).productionPerRealSecond;
     if (NormalChallenge(12).isRunning) {
-      return basePerSecond.plus(NormalDimension(2).productionPerSecond);
+      return basePerSecond.plus(NormalDimension(2).productionPerRealSecond);
     }
-    return basePerSecond.times(getGameSpeedupForDisplay());
+    return basePerSecond;
   },
 
   get bestRunIPPM() {

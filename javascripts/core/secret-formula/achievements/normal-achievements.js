@@ -882,7 +882,7 @@ GameDatabase.achievements.normal = [
       Time.thisEternity.totalMinutes <= 1 &&
       player.dilation.active,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
-    reward: () => `Gain ${format(2, 0, 1)}x Dilated Time and Time Theorems while Dilated.`,
+    reward: () => `Gain ${formatInt(2)}x Dilated Time and Time Theorems while Dilated.`,
     effect: () => (player.dilation.active ? 2 : 1),
   },
   {

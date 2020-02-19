@@ -132,7 +132,7 @@ const Achievements = {
     const unlockedRows = Achievements.allRows
       .countWhere(row => row.every(ach => ach.isUnlocked));
     const basePower = Math.pow(1.25, unlockedRows) * Math.pow(1.03, Achievements.effectiveCount);
-    return basePower * getAdjustedGlyphEffect("effarigachievement");
+    return Math.pow(basePower, getAdjustedGlyphEffect("effarigachievement"));
   }),
 
   get power() {

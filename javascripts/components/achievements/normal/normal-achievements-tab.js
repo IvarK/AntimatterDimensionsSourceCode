@@ -25,7 +25,7 @@ Vue.component("normal-achievements-tab", {
     update() {
       this.achievementPower = Achievements.power;
       this.achCountdown = Achievements.timeToNextAutoAchieve() / getGameSpeedupFactor();
-      this.showAutoAchieve = !Perk.achievementRowGroup6.isBought;
+      this.showAutoAchieve = player.realities > 0 && !Perk.achievementRowGroup6.isBought;
       this.isAutoAchieveActive = player.reality.autoAchieve;
       this.isCancer = player.secretUnlocks.cancerAchievements;
     },

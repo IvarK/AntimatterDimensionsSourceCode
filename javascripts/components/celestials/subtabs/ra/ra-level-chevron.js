@@ -18,17 +18,13 @@ Vue.component("ra-level-chevron", {
     };
   },
   computed: {
-    percentPerLevel() {
-      return this.singleLevel ? 0 : 100 / (this.goal - 1);
+    levelPercent() {
+      return 100 * Ra.totalExpForLevel(this.level) / Ra.totalExpForLevel(this.goal);
     },
     levelPosition() {
-      if (this.level === this.goal)
-        return {
-          right: "0%",
-        };
-      return {
-        left: `${this.percentPerLevel * (this.level - 1)}%`,
-      };
+      if (this.level === this.goal) return { right: "0%" };
+      if (this.singleLevel) return { left: "0%" };
+      return { left: `${this.levelPercent}%` };
     },
     classList() {
       return [
@@ -58,7 +54,7 @@ Vue.component("ra-level-chevron", {
     <div v-if="isMouseOver && isImportantLevel" class="o-ra-unlock-hover-text">
       {{unlock.reward}}
     </div>
-    <span>
+    <span v-if="levelPercent > 20">
       {{level}}
     </span>
   </div>

@@ -20,20 +20,14 @@ Vue.component("ra-pet-level-bar", {
     unlocks() {
       return Object.values(RA_UNLOCKS).filter(unlock => unlock.pet === this.pet);
     },
-    percentPerLevel() {
-      return 100 / (this.currentLevelGoal - 1);
-    },
-    percentToNextLevel() {
-      return this.exp / this.requiredExp;
-    },
     multiLevelStyle() {
       return {
-        width: `${Math.min((this.level - 1 + this.percentToNextLevel) * this.percentPerLevel, 100)}%`
+        width: `${100 * (Ra.totalExpForLevel(this.level) + this.exp) / Ra.totalExpForLevel(this.importantGoal)}%`
       };
     },
     singleLevelStyle() {
       return {
-        width: `${this.percentToNextLevel * 100}%`
+        width: `${100 * this.exp / this.requiredExp}%`
       };
     },
     petStyle() {
@@ -81,7 +75,7 @@ Vue.component("ra-pet-level-bar", {
           />
         </div>
         <div v-else>
-          <ra-level-chevron v-for="lvl in (currentLevelGoal - 1)"
+          <ra-level-chevron v-for="lvl in currentLevelGoal"
             :key="lvl"
             :level="lvl"
             :goal="currentLevelGoal"
@@ -91,12 +85,6 @@ Vue.component("ra-pet-level-bar", {
         </div>
         <div class="l-ra-exp-bar-inner" :style="[shiftDown ? singleLevelStyle : multiLevelStyle, petStyle]" />
       </div>
-        <div class="l-ra-unlock" :style="petStyle">
-          <div class="l-ra-unlock-inner" v-if="activeUnlock">
-            <b>{{ activeUnlock.description }}</b>
-            <p>{{ activeUnlock.reward }}</p>
-          </div>
-        </div>
     </div>
   `
 });

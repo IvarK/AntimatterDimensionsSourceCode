@@ -36,20 +36,8 @@ class RaPetState {
     this.data.exp = value;
   }
 
-  // The point of adjustedLevel is to effectively make the level used for the exp calculation scale upward like
-  //    1, 2, 3, 4, 5, 7, 9, 11, 13, 15, 18, 21, ... , 50
-  // or in other words, every 5 levels the increase-per-level in effective level increases by +1.  This increase
-  // in scaling stops at level 20 because memories effectively get hardcapped via the glyph level hardcap there.
   get requiredExp() {
-    if (this.level < 20) {
-      const floor5 = Math.floor(this.level / 5);
-      const adjustedLevel = 2.5 * floor5 * (floor5 + 1) + (this.level % 5) * (floor5 + 1);
-      return Math.floor(1000 * adjustedLevel + Math.pow(adjustedLevel - 1, 4) * 2);
-    }
-    if (this.level < 25) {
-      return Math.floor(1000 * (this.level + 30) + Math.pow(this.level + 30, 4) * 2);
-    }
-    return Math.floor(1000 * (7 * this.level - 120) + Math.pow(7 * this.level - 120, 4) * 2);
+    return Ra.requiredExpForLevel(this.level);
   }
 
   addGainedExp(multiplier) {
@@ -57,12 +45,8 @@ class RaPetState {
     this.addExp(this.gainedExp * multiplier);
   }
 
-  baseExp(glyphLevel) {
-    return Math.pow(2, glyphLevel / 500 - 10);
-  }
-
   get gainedExp() {
-    return this.baseExp(gainedGlyphLevel().actualLevel) * this.expBoost;
+    return Ra.baseExp(gainedGlyphLevel().actualLevel) * this.expBoost;
   }
 
   get expBoost() {
@@ -211,6 +195,24 @@ const Ra = {
   giveExp(multiplier) {
     for (const pet of Ra.pets.all) pet.addGainedExp(multiplier);
     this.checkForUnlocks();
+  },
+  baseExp(glyphLevel) {
+    return Math.pow(2, glyphLevel / 500 - 10);
+  },
+  // The point of adjustedLevel is to effectively make the level used for the exp calculation scale upward like
+  //    1, 2, 3, 4, 5, 7, 9, 11, 13, 15, 18, 21, ... , 50
+  // or in other words, every 5 levels the increase-per-level in effective level increases by +1.
+  requiredExpForLevel(level) {
+    const floor5 = Math.floor(level / 5);
+    const adjustedLevel = 2.5 * floor5 * (floor5 + 1) + (level % 5) * (floor5 + 1);
+    return Math.floor(1000 * adjustedLevel + Math.pow(adjustedLevel - 1, 4) * 2);
+  },
+  // Calculates the cumulative exp needed for a level starting from nothing.
+  // TODO mathematically optimize this once Ra exp curves and balancing are finalized
+  totalExpForLevel(maxLevel) {
+    let runningTotal = 0;
+    for (let lv = 2; lv <= maxLevel; lv++) runningTotal += this.requiredExpForLevel(lv);
+    return runningTotal;
   },
   checkForUnlocks() {
     for (const unl of Object.values(RA_UNLOCKS)) {

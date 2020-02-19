@@ -54,6 +54,7 @@ Vue.component("options-button-grid", {
     },
     commas(newValue) {
       player.options.commas = newValue;
+      ADNotations.Settings.exponentCommas.show = newValue;
     },
     offlineProgress(newValue) {
       player.options.offlineProgress = newValue;

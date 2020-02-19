@@ -134,6 +134,7 @@ const GameStorage = {
     Enslaved.boostReality = false;
     Theme.set(player.options.theme);
     Notations.find(player.options.notation).setAsCurrent();
+    ADNotations.Settings.exponentCommas.show = player.options.commas;
 
     EventHub.dispatch(GAME_EVENT.GAME_LOAD);
     AutomatorBackend.initializeFromSave();

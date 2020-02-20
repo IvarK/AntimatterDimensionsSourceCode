@@ -51,6 +51,15 @@ Vue.component("glyph-inventory", {
     sortByScore() {
       Glyphs.sort((a, b) => -AutoGlyphSacrifice.comparedToThreshold(a) + AutoGlyphSacrifice.comparedToThreshold(b));
     },
+    sortByEffect() {
+      function reverseBitstring(eff) {
+        // eslint-disable-next-line no-bitwise
+        return parseInt(((1 << 30) + (eff >>> 0)).toString(2).split("").reverse().join(""), 2);
+      }
+      // The bitwise reversal is so that the effects with the LOWER id are valued higher in the sorting.
+      // This primarily meant for effarig glyph effect sorting, which makes it prioritize timespeed pow highest.
+      Glyphs.sort((a, b) => -reverseBitstring(a.effects) + reverseBitstring(b.effects));
+    },
     autoClean() {
       Glyphs.autoClean();
     },
@@ -80,6 +89,11 @@ Vue.component("glyph-inventory", {
         ach-tooltip="Arranges by decreasing level*rarity"
         @click="sortByPower">
           Sort by power
+      </button>
+      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        ach-tooltip="Group glyphs together based on effects"
+        @click="sortByEffect">
+          Sort by effect
       </button>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
         v-if="showScoreFilter"

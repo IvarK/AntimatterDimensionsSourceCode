@@ -20,7 +20,7 @@ Vue.component("normal-dim-tab-progress-bar", {
   methods: {
     update() {
       const setProgress = (current, goal, tooltip) => {
-        this.fill = Math.min(current.pLog10() / Decimal.log10(goal), 1);
+        this.fill = Math.clampMax(current.pLog10() / Decimal.log10(goal), 1);
         this.tooltip = tooltip;
       };
       const challenge = NormalChallenge.current || InfinityChallenge.current;

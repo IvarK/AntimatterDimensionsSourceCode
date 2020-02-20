@@ -5,6 +5,7 @@ Vue.component("modal-glyph-selection", {
     return {
       glyphs: GlyphSelection.glyphs.map(GlyphGenerator.copy),
       canTrashGlyphs: false,
+      bestGlyphLevel: 0,
     };
   },
   methods: {
@@ -17,9 +18,8 @@ Vue.component("modal-glyph-selection", {
         currentGlyph.level = newGlyph.level;
         currentGlyph.effects = newGlyph.effects;
       }
-      const inCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
-      const isLowLevelGlyph = GlyphSelection.glyphs[0].level + 1000 < player.bestGlyphLevel;
-      this.canTrashGlyphs = inCelestialReality || isLowLevelGlyph;
+      this.canTrashGlyphs = RealityUpgrades.allBought;
+      this.bestGlyphLevel = player.bestGlyphLevel;
     },
     select(index) {
       GlyphSelection.select(index, false);
@@ -42,9 +42,11 @@ Vue.component("modal-glyph-selection", {
       <button class="o-primary-btn o-primary-btn--glyph-trash"
         v-if="canTrashGlyphs"
         v-on:click="trashGlyphs()">
-          I don't want any of these glyphs
+          I don't want any of these glyphs,
           <br>
-          (pick and sacrifice one at random)
+          pick and sacrifice one at random.
+          <br>
+          (Previous highest level glyph: {{ bestGlyphLevel }})
       </button>
     </div>
   </div>`,

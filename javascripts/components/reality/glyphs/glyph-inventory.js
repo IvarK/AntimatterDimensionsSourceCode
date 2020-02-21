@@ -49,7 +49,7 @@ Vue.component("glyph-inventory", {
       Glyphs.sort((a, b) => -a.level * a.strength + b.level * b.strength);
     },
     sortByScore() {
-      Glyphs.sort((a, b) => -AutoGlyphSacrifice.comparedToThreshold(a) + AutoGlyphSacrifice.comparedToThreshold(b));
+      Glyphs.sort((a, b) => -AutoGlyphSacrifice.filterValue(a) + AutoGlyphSacrifice.filterValue(b));
     },
     sortByEffect() {
       function reverseBitstring(eff) {

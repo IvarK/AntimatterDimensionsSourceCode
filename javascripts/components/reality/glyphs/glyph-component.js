@@ -162,8 +162,7 @@ const GlyphTooltipComponent = {
       const showFilterScoreModes = [AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS,
         AUTO_GLYPH_SAC_MODE.EFFECTS, AUTO_GLYPH_SAC_MODE.ADVANCED];
       const filterScoreText = showFilterScoreModes.includes(AutoGlyphSacrifice.mode)
-        ? `\nGlyph Filter Score: ${format(AutoGlyphSacrifice.comparedToThreshold(this.$parent.glyph) +
-            AutoGlyphSacrifice.types[this.type].scoreThreshold, 1, 1)}`
+        ? `\nGlyph Filter Score: ${format(AutoGlyphSacrifice.filterValue(this.$parent.glyph), 1, 1)}`
         : "";
       return this.onTouchDevice
         ? `Sacrifice for ${powerText}${filterScoreText}`

@@ -32,7 +32,7 @@ const AutoGlyphSacrifice = {
   get types() {
     return player.celestials.effarig.autoGlyphSac.types;
   },
-  comparedToThreshold(glyph) {
+  filterValue(glyph) {
     const typeCfg = AutoGlyphSacrifice.types[glyph.type];
     const excessRarity = strengthToRarity(glyph.strength) - typeCfg.rarityThreshold;
     if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS) {
@@ -57,9 +57,15 @@ const AutoGlyphSacrifice = {
         .map(effect => effect.id);
       const glyphScore = strengthToRarity(glyph.strength) +
         effectList.map(e => typeCfg.effectScores[e]).sum();
-      return glyphScore - typeCfg.scoreThreshold;
+      return glyphScore;
     }
     return strengthToRarity(glyph.strength);
+  },
+  thresholdValue(glyph) {
+    if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED) {
+      return AutoGlyphSacrifice.types[glyph.type].scoreThreshold;
+    }
+    return 0;
   },
   wouldSacrifice(glyph) {
     switch (AutoGlyphSacrifice.mode) {
@@ -70,7 +76,7 @@ const AutoGlyphSacrifice = {
       case AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS:
       case AUTO_GLYPH_SAC_MODE.EFFECTS:
       case AUTO_GLYPH_SAC_MODE.ADVANCED:
-        return this.comparedToThreshold(glyph) < 0;
+        return this.filterValue(glyph) < this.thresholdValue(glyph);
     }
     throw new Error("Unknown auto glyph sacrifice mode");
   },
@@ -90,13 +96,13 @@ const AutoGlyphPicker = {
       case AUTO_GLYPH_PICK_MODE.RANDOM: return Math.random();
       case AUTO_GLYPH_PICK_MODE.RARITY: return strengthToRarity(glyph.strength);
       case AUTO_GLYPH_PICK_MODE.ABOVE_SACRIFICE_THRESHOLD: {
-        const comparedToThreshold = AutoGlyphSacrifice.comparedToThreshold(glyph);
-        if (comparedToThreshold < 0) {
+        const filterValue = AutoGlyphSacrifice.filterValue(glyph);
+        if (filterValue < 0) {
           // We're going to sacrifice the glyph anyway. Also, if we have 1000% rarity glyphs everything has broken,
           // so subtracting 1000 should be safe (glyphs we would sacrifice are sorted below all other glyphs).
           return strengthToRarity(glyph.strength) - 1000;
         }
-        return comparedToThreshold;
+        return filterValue;
       }
       case AUTO_GLYPH_PICK_MODE.LOWEST_ALCHEMY_RESOURCE:
         return AlchemyResource[glyph.type].isUnlocked && glyphRefinementGain(glyph) !== 0

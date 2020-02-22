@@ -34,22 +34,21 @@ const AutoGlyphSacrifice = {
   },
   filterValue(glyph) {
     const typeCfg = AutoGlyphSacrifice.types[glyph.type];
-    const excessRarity = strengthToRarity(glyph.strength) - typeCfg.rarityThreshold;
     if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS) {
-      return excessRarity;
+      return strengthToRarity(glyph.strength);
     }
     if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.EFFECTS) {
       const glyphEffectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
         .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated)
         .map(effect => effect.id);
       if (glyphEffectList.length < typeCfg.effectCount) {
-        return excessRarity - 200 * (typeCfg.effectCount - glyphEffectList.length);
+        return strengthToRarity(glyph.strength) - 200 * (typeCfg.effectCount - glyphEffectList.length);
       }
       let missingEffects = 0;
       for (const effect of Object.keys(typeCfg.effectChoices)) {
         if (typeCfg.effectChoices[effect] && !glyphEffectList.includes(effect)) missingEffects++;
       }
-      return excessRarity - 200 * missingEffects;
+      return strengthToRarity(glyph.strength) - 200 * missingEffects;
     }
     if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED) {
       const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
@@ -62,6 +61,10 @@ const AutoGlyphSacrifice = {
     return strengthToRarity(glyph.strength);
   },
   thresholdValue(glyph) {
+    if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS || 
+      AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.EFFECTS) {
+        return AutoGlyphSacrifice.types[glyph.type].rarityThreshold;
+    }
     if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED) {
       return AutoGlyphSacrifice.types[glyph.type].scoreThreshold;
     }

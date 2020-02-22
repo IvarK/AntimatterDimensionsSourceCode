@@ -4,6 +4,7 @@ Vue.component("tt-shop", {
   data() {
     return {
       theoremAmount: new Decimal(0),
+      theoremGeneration: new Decimal(0),
       shopMinimized: false,
       minimizeAvailable: false,
       hasTTAutobuyer: false,
@@ -23,21 +24,18 @@ Vue.component("tt-shop", {
     };
   },
   computed: {
-    theoremAmountDisplay() {
-      const theorems = this.theoremAmount;
-      if (theorems.gt(99999)) {
-        return format(theorems, 2, 1);
-      }
-      return Math.floor(theorems.toNumber()).toFixed(0);
-    },
-    theoremNoun() {
-      return this.theoremAmount.floor().eq(1) ? "Theorem" : "Theorems";
-    },
-    spaceTheoremNoun() {
-      return Math.floor(this.STamount) === 1 ? "Theorem" : "Theorems";
-    },
     minimized() {
       return this.minimizeAvailable && this.shopMinimized;
+    },
+    TTgenRateText() {
+      if (this.theoremGeneration.lt(1 / 3600)) {
+        return `one TT every ${TimeSpan.fromSeconds(
+          this.theoremGeneration.reciprocal().toNumber()).toStringShort(false)}`;
+      }
+      if (this.theoremGeneration.lt(0.1)) {
+        return `${format(this.theoremGeneration.times(3600), 2, 2)} TT/hour`;
+      }
+      return `${format(this.theoremGeneration, 2, 2)} TT/sec`;
     },
     minimizeArrowStyle() {
       return {
@@ -56,19 +54,19 @@ Vue.component("tt-shop", {
       player.timestudy.shopMinimized = !player.timestudy.shopMinimized;
     },
     formatAM(am) {
-      return format(am, 0, 0) + " AM";
+      return `${format(am)} AM`;
     },
     buyWithAM() {
       TimeTheorems.buyWithAntimatter();
     },
     formatIP(ip) {
-      return format(ip, 0, 0) + " IP";
+      return `${format(ip)} IP`;
     },
     buyWithIP() {
       TimeTheorems.buyWithIP();
     },
     formatEP(ep) {
-      return format(ep, 2, 0) + " EP";
+      return `${format(ep, 2, 0)} EP`;
     },
     buyWithEP() {
       TimeTheorems.buyWithEP();
@@ -78,6 +76,7 @@ Vue.component("tt-shop", {
     },
     update() {
       this.theoremAmount.copyFrom(player.timestudy.theorem);
+      this.theoremGeneration.copyFrom(getTTPerSecond().times(getGameSpeedupFactor()));
       this.shopMinimized = player.timestudy.shopMinimized;
       this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought;
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
@@ -90,7 +89,7 @@ Vue.component("tt-shop", {
       costs.am.copyFrom(player.timestudy.amcost);
       costs.ip.copyFrom(player.timestudy.ipcost);
       costs.ep.copyFrom(player.timestudy.epcost);
-      this.showST = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
+      this.showST = V.availableST > 0;
       this.STamount = V.availableST;
     },
     toggleTTAutobuyer() {
@@ -102,12 +101,23 @@ Vue.component("tt-shop", {
       <div class="ttshop-container ttshop-background">
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
           <p id="timetheorems">
-            <span class="c-tt-amount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}
-            <span v-if="showST"><br>{{ STamount }} Space {{ spaceTheoremNoun }}</span>
+            <span class="c-tt-amount">
+              {{ theoremAmount.gt(1e9) ? format(theoremAmount, 2) : formatInt(theoremAmount) }} 
+              {{ "Time Theorem" | pluralize(theoremAmount, "Time Theorems") }}
+            </span>
+            <span v-if="showST">
+              <br>
+              {{ formatInt(STamount) }} {{ "Space Theorem" | pluralize(STamount, "Space Theorems") }}
+            </span>
           </p>
-          <div style="display: flex; flex-direction: row; align-items: center;">
-            <span class="c-ttshop__save-load-text">{{ saveLoadText }}</span>
-            <tt-save-load-button v-for="saveslot in 6" :key="saveslot" :saveslot="saveslot"></tt-save-load-button>
+          <div style="display: flex; flex-direction: column; align-items: left;">
+            <div style="display: flex; flex-direction: row; align-items: center;">
+              <span class="c-ttshop__save-load-text">{{ saveLoadText }}</span>
+              <tt-save-load-button v-for="saveslot in 6" :key="saveslot" :saveslot="saveslot"></tt-save-load-button>
+            </div>
+            <span v-if="theoremGeneration.gt(0)">
+              You are gaining {{ TTgenRateText }}.
+            </span>
           </div>
         </div>
         <div class="ttbuttons-row" v-if="!minimized">
@@ -119,7 +129,10 @@ Vue.component("tt-shop", {
               @click="buyMaxTheorems">
               Buy max
             </button>
-            <button v-if="!minimized && hasTTAutobuyer" class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
+            <button v-if="!minimized && hasTTAutobuyer"
+              class="o-tt-autobuyer-button
+              c-tt-buy-button
+              c-tt-buy-button--unlocked"
               @click="toggleTTAutobuyer">
               Auto: {{autobuyerText}}
             </button>

@@ -53,6 +53,11 @@ Vue.component("enslaved-tab", {
       };
     }
   },
+  watch: {
+    autoRelease(newValue) {
+      player.celestials.enslaved.isAutoReleasing = newValue;
+    }
+  },
   methods: {
     update() {
       this.isStoringBlackHole = Enslaved.isStoringGameTime;
@@ -120,9 +125,6 @@ Vue.component("enslaved-tab", {
       this.storedFraction = value;
       player.celestials.enslaved.storedFraction = value / 1000;
     },
-    toggleAutoRelease() {
-      player.celestials.enslaved.isAutoReleasing = !player.celestials.enslaved.isAutoReleasing;
-    },
     glitchStyle(x) {
       const xScale = 15 / 27;
       const yScale = 5;
@@ -184,12 +186,11 @@ Vue.component("enslaved-tab", {
       </div>
       <br>
       <div v-if="canAdjustStoredTime">
-        <input type="checkbox"
-          id="autoReleaseBox"
+        <primary-button-on-off
           v-model="autoRelease"
-          :value="autoRelease"
-          @input="toggleAutoRelease()">
-        <label for="autoReleaseBox">Pulse black hole (uses 1% every 5 ticks)</label>
+          class="o-primary-btn"
+          text="Pulse black hole:"
+        />
       </div>
       <div class="l-enslaved-shop-container">
         <button

@@ -189,7 +189,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 0,
     isGenerated: true,
     glyphTypes: ["time"],
-    singleDesc: "Time Dimension power boost +{value}",
+    singleDesc: "Time Dimension power +{value}",
     totalDesc: "Time Dimension multipliers ^{value}",
     effect: (level, strength) => 1.01 + Math.pow(level, 0.32) * Math.pow(strength, 0.45) / 75,
     formatEffect: x => format(x, 3, 3),
@@ -298,7 +298,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 7,
     isGenerated: true,
     glyphTypes: ["dilation"],
-    singleDesc: "Normal Dimension power boost +{value} while dilated",
+    singleDesc: "Normal Dimension power +{value} while dilated",
     totalDesc: "Normal Dimension multipliers ^{value} while dilated",
     genericDesc: "Normal Dimensions ^x while dilated",
     effect: (level, strength) => 1.1 + Math.pow(level, 0.7) * Math.pow(strength, 0.7) / 25,
@@ -325,7 +325,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 9,
     isGenerated: true,
     glyphTypes: ["replication"],
-    singleDesc: "Replicanti multiplier power boost +{value}",
+    singleDesc: "Replicanti multiplier power +{value}",
     totalDesc: "Replicanti multiplier ^{value}",
     effect: (level, strength) => 1.1 + Math.pow(level, 0.5) * strength / 25 +
       GlyphAlteration.sacrificeBoost("replication") * 3,
@@ -385,7 +385,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 12,
     isGenerated: true,
     glyphTypes: ["infinity"],
-    singleDesc: "Infinity Dimension power boost +{value}",
+    singleDesc: "Infinity Dimension power +{value}",
     totalDesc: "Infinity Dimension multipliers ^{value}",
     effect: (level, strength) => 1.007 + Math.pow(level, 0.21) * Math.pow(strength, 0.4) / 75 +
       GlyphAlteration.sacrificeBoost("infinity") / 50,
@@ -450,8 +450,8 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     glyphTypes: ["power"],
     singleDesc: () => (GlyphAlteration.isAdded("power")
-      ? "Normal Dimension power boost +{value}\n[and Dark Matter dimensions x]{value2}"
-      : "Normal Dimension power boost +{value}"),
+      ? "Normal Dimension power +{value}\n[and Dark Matter dimensions x]{value2}"
+      : "Normal Dimension power +{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("power")
       ? "ND multipliers ^{value} and Dark Matter dimensions x{value2}"
       : "Normal Dimension multipliers ^{value}"),
@@ -507,7 +507,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 20,
     isGenerated: true,
     glyphTypes: ["effarig"],
-    singleDesc: "Game speed power boost +{value}",
+    singleDesc: "Game speed power +{value}",
     totalDesc: "Game speed ^{value}",
     genericDesc: "Game speed ^x",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75,
@@ -543,7 +543,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 23,
     isGenerated: true,
     glyphTypes: ["effarig"],
-    singleDesc: "Achievement multiplier power boost +{value}",
+    singleDesc: "Achievement multiplier power +{value}",
     totalDesc: "Achievement multiplier ^{value}",
     genericDesc: "Achievement multiplier ^x",
     effect: (level, strength) => 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 60 +
@@ -578,7 +578,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 25,
     isGenerated: true,
     glyphTypes: ["effarig"],
-    singleDesc: "All dimension power boost +{value}",
+    singleDesc: "All dimension power +{value}",
     totalDesc: "All dimension multipliers ^{value}",
     genericDesc: "All dimension multipliers ^x",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 500,
@@ -600,8 +600,8 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 0,
     isGenerated: false,
     glyphTypes: ["cursed"],
-    singleDesc: `Galaxies are {value} less effective`,
-    totalDesc: "Galaxy effectiveness -{value}",
+    singleDesc: `Galaxies are {value} weaker`,
+    totalDesc: "Galaxy strength -{value}",
     // Effect at 1000 is 0.697 and at 5000 is 0.548
     effect: (level, strength) => 3.5 / (strength * Math.pow(level, 0.02)),
     formatEffect: x => formatPercents(1 - x, 2),
@@ -653,8 +653,8 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 5,
     isGenerated: false,
     glyphTypes: ["reality"],
-    singleDesc: "Galaxies are {value} more effective",
-    totalDesc: "Galaxy effectiveness +{value}",
+    singleDesc: "Galaxies are {value} stronger",
+    totalDesc: "Galaxy strength +{value}",
     effect: (level, strength) => Math.pow(1 + level * strength / 200000, 1.6),
     formatEffect: x => formatPercents(x, 2),
     combine: GlyphCombiner.multiply,

@@ -16,7 +16,6 @@ Vue.component("new-ui", {
       isInEffarig: false,
       effarigMultNerfText: "",
       effarigTickNerfText: "",
-      disabledCondition: "",
       currCelestial: "",
       isInAnyChallenge: false,
       isChallengePowerVisible: false,

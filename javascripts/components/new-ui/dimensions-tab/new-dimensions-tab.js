@@ -8,6 +8,7 @@ Vue.component("new-dimensions-tab", {
       isSacrificeAffordable: false,
       currentSacrifice: new Decimal(0),
       sacrificeBoost: new Decimal(0),
+      disabledCondition: "",
       isQuickResetAvailable: false
     };
   },

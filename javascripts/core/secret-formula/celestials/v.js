@@ -3,7 +3,7 @@
 const V_REDUCTION_MODE = {
   SUBTRACTION: 1,
   DIVISION: 2
-}
+};
 
 GameDatabase.celestials.v = {
   mainUnlock: {
@@ -12,7 +12,7 @@ GameDatabase.celestials.v = {
     infinities: 1e160,
     dilatedTime: new Decimal("1e320"),
     replicanti: new Decimal("1e320000"),
-    rm: new Decimal("1e60")
+    rm: 1e60
   },
   runUnlocks: [
     {

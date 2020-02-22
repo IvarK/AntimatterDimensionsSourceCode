@@ -171,17 +171,16 @@ function getInfinitiedMilestoneReward(ms) {
     : 0;
 }
 
-// eslint-disable-next-line max-params
-function addEternityTime(time, realTime, ep, eternities) {
+function addEternityTime(time, realTime, ep) {
   player.lastTenEternities.pop();
-  player.lastTenEternities.unshift([time, ep, realTime, eternities]);
+  player.lastTenEternities.unshift([time, ep, realTime]);
   GameCache.averageEPPerRun.invalidate();
 }
 
 function resetEternityRuns() {
   player.lastTenEternities = Array.from(
     { length: 10 },
-    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, 1]
+    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]
   );
   GameCache.averageEPPerRun.invalidate();
 }
@@ -482,6 +481,20 @@ function gameLoop(diff, options = {}) {
   // IP generation is broken into a couple of places in gameLoop; changing that might change the
   // behavior of eternity farming.
   preProductionGenerateIP(diff);
+  
+  let eternitiedGain = 0;
+  if (RealityUpgrade(14).isBought) {
+    eternitiedGain = Effects.product(
+      RealityUpgrade(3),
+      RealityUpgrade(14)
+    );
+    eternitiedGain = Decimal.times(eternitiedGain, getAdjustedGlyphEffect("timeetermult"));
+    eternitiedGain = new Decimal(Time.deltaTime).times(
+      Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue));
+    player.reality.partEternitied = player.reality.partEternitied.plus(eternitiedGain);
+    player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
+    player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
+  }
 
   if (!EternityChallenge(4).isRunning) {
     let infGen = new Decimal(0);
@@ -499,24 +512,17 @@ function gameLoop(diff, options = {}) {
       infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
     }
     if (EffarigUnlock.eternity.isUnlocked) {
-      infGen = infGen.plus(gainedInfinities().times(player.eternities).times(Time.deltaTime));
+      // We consider half of the eternities we gained above this tick
+      // to have been gained before the infinities, and thus not to
+      // count here. This gives us the desirable behavior that
+      // infinities and eternities gained overall will be the same
+      // for two ticks as for one tick of twice the length.
+      infGen = infGen.plus(gainedInfinities().times(
+        player.eternities.minus(eternitiedGain.div(2).floor())).times(Time.deltaTime));
     }
     infGen = infGen.plus(player.partInfinitied);
     player.infinitied = player.infinitied.plus(infGen.floor());
     player.partInfinitied = infGen.minus(infGen.floor()).toNumber();
-  }
-
-  if (RealityUpgrade(14).isBought) {
-    let eternitiedGain = Effects.product(
-      RealityUpgrade(3),
-      RealityUpgrade(14)
-    );
-    eternitiedGain *= getAdjustedGlyphEffect("timeetermult");
-    player.reality.partEternitied = player.reality.partEternitied
-      .plus(new Decimal(Time.deltaTime).times(Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue))
-    );
-    player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
-    player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
   }
 
   applyAutoprestige(realDiff);
@@ -615,6 +621,11 @@ function applyAutoprestige(diff) {
       .timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
       .times(diff / 1000);
     player.reality.realityMachines = player.reality.realityMachines.add(addedRM);
+  }
+
+  if (player.bestEP.lt(player.eternityPoints)) {
+    player.bestEP = new Decimal(player.eternityPoints);
+    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }
 
@@ -797,9 +808,9 @@ function autoBuyExtraTimeDims() {
 }
 
 function slowerAutobuyers(realDiff) {
-  const ampDiff = realDiff * Effects.product(PerkShopUpgrade.autoSpeed);
+  const ampDiff = realDiff * PerkShopUpgrade.autoSpeed.effectOrDefault(1);
   player.auto.infDimTimer += ampDiff;
-  const infDimPeriod = 1000 * Effects.product(Perk.autobuyerFasterID);
+  const infDimPeriod = 1000 * Perk.autobuyerFasterID.effectOrDefault(1);
   if (player.auto.infDimTimer >= infDimPeriod) {
     // Note: we need to reset to a low number here, because we don't want a pile of these accumulating during offline
     // time and then releasing normally.
@@ -813,13 +824,13 @@ function slowerAutobuyers(realDiff) {
     autoBuyTimeDims();
   }
   player.auto.repUpgradeTimer += ampDiff;
-  const repUpgradePeriod = 1000 * Effects.product(Perk.autobuyerFasterReplicanti);
+  const repUpgradePeriod = 1000 * Perk.autobuyerFasterReplicanti.effectOrDefault(1);
   if (player.auto.repUpgradeTimer >= repUpgradePeriod) {
     player.auto.repUpgradeTimer = Math.min(player.auto.repUpgradeTimer - repUpgradePeriod, repUpgradePeriod);
     autoBuyReplicantiUpgrades();
   }
   player.auto.dilUpgradeTimer += ampDiff;
-  const dilUpgradePeriod = 1000 * Effects.product(Perk.autobuyerFasterDilation);
+  const dilUpgradePeriod = 1000 * Perk.autobuyerFasterDilation.effectOrDefault(1);
   if (player.auto.dilUpgradeTimer >= dilUpgradePeriod) {
     player.auto.dilUpgradeTimer = Math.min(player.auto.dilUpgradeTimer - dilUpgradePeriod, dilUpgradePeriod);
     autoBuyDilationUpgrades();

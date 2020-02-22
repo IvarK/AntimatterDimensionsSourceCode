@@ -168,7 +168,7 @@ let player = {
     newsQueuePosition: 1000
   },
   lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, new Decimal(1)]),
-  lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 1]),
+  lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenRealities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 0]),
   bestIPminThisInfinity: new Decimal(0),
   bestIPminThisEternity: new Decimal(0),
@@ -177,7 +177,14 @@ let player = {
   bestInfinitiesPerMs: new Decimal(0),
   bestEternitiesPerMs: new Decimal(0),
   bestRMmin: new Decimal(0),
+  bestRMminSet: [],
   bestGlyphLevel: 0,
+  bestGlyphLevelSet: [],
+  bestEP: new Decimal(0),
+  bestEPSet: [],
+  bestReality: 999999999999,
+  bestRealityRealTime: 999999999999,
+  bestSpeedSet: [],
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
   version: 13,
@@ -255,7 +262,6 @@ let player = {
   partSimulatedReality: 0,
   thisReality: 0,
   thisRealityRealTime: 0,
-  bestReality: 999999999999,
   reality: {
     realityMachines: new Decimal(0),
     glyphs: {
@@ -299,7 +305,7 @@ let player = {
     autoEC: true,
     lastAutoEC: 0,
     partEternitied: new Decimal(0),
-    disableAutoAchieve: false,
+    autoAchieve: true,
     gainedAutoAchievements: true,
     automator: {
       state: {
@@ -472,6 +478,7 @@ let player = {
     updateRate: 33,
     newUI: true,
     offlineProgress: true,
+    showGlyphEffectDots: true,
     showHintText: {
       achievements: false,
       challenges: false,
@@ -506,8 +513,6 @@ let player = {
       glyphReplace: true,
     }
   },
-  // Remove later
-  newEC10Test: false,
 };
 
 const Player = {
@@ -536,11 +541,11 @@ const Player = {
   },
 
   get antimatterPerSecond() {
-    const basePerSecond = NormalDimension(1).productionPerSecond;
+    const basePerSecond = NormalDimension(1).productionPerRealSecond;
     if (NormalChallenge(12).isRunning) {
-      return basePerSecond.plus(NormalDimension(2).productionPerSecond);
+      return basePerSecond.plus(NormalDimension(2).productionPerRealSecond);
     }
-    return basePerSecond.times(getGameSpeedupForDisplay());
+    return basePerSecond;
   },
 
   get bestRunIPPM() {
@@ -562,13 +567,13 @@ const Player = {
 
   get infinityGoal() {
     const challenge = NormalChallenge.current || InfinityChallenge.current;
-    return challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
+    return challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
   },
 
   get eternityGoal() {
     return EternityChallenge.isRunning
       ? EternityChallenge.current.currentGoal
-      : Decimal.MAX_NUMBER;
+      : Decimal.NUMBER_MAX_VALUE;
   },
 
   get startingAM() {

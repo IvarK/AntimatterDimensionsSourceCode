@@ -18,7 +18,7 @@ html {
 
 /* css vars */
 
-#ui {
+#ui { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #F2F2F2;
@@ -34,7 +34,7 @@ html {
   --color-celestials: #5151ec;
 }
 
-.t-metro #ui,
+.t-metro #ui, /* csslint allow: empty-rules */
 .t-inverted-metro #ui,
 .t-s8 #ui {
   --color-text: black;
@@ -52,7 +52,7 @@ html {
   --color-celestials: #00bcd4;
 }
 
-.t-dark #ui {
+.t-dark #ui { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
   --color-base: #455a64;
@@ -62,7 +62,7 @@ html {
   --color-infinity: #FF9800;
 }
 
-.t-dark-metro #ui {
+.t-dark-metro #ui { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
   --color-base: #455a64;
@@ -78,7 +78,7 @@ html {
   --color-celestials: #00bcd4;
 }
 
-.t-s1 #ui {
+.t-s1 #ui { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: #dbd242;
   --color-base: #dbd242;
@@ -94,7 +94,7 @@ html {
   --color-celestials: #F2D6C1;
 }
 
-.t-s4 #ui {
+.t-s4 #ui { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #1b00ff;
@@ -103,7 +103,7 @@ html {
   --color-bad: #ff0000;
 }
 
-.t-s6 #ui {
+.t-s6 #ui { /* csslint allow: empty-rules */
   --color-text: #E0E0E0;
   --color-text-inverted: black;
   --color-base: black;
@@ -1539,6 +1539,7 @@ screen and (max-width: 480px) {
   color: var(--color-eternity);
   background-color: black;
   border-color: var(--color-eternity);
+  font-weight: bold;
 }
 
 .o-prestige-btn--dilation {
@@ -1552,15 +1553,15 @@ screen and (max-width: 480px) {
   background-color: white;
 } 
 
-.o-prestige-btn--eternity b {
+.o-prestige-btn--eternity span {
   transition-duration: 0.2s;
 }
 
-.o-prestige-btn--eternity:hover b {
+.o-prestige-btn--eternity:hover span {
   color: var(--color-eternity) !important;
 }
 
-.t-s1 .o-prestige-btn--eternity:hover b {
+.t-s1 .o-prestige-btn--eternity:hover span {
   color: var(--color-text) !important;
 }
 
@@ -2833,6 +2834,11 @@ screen and (max-width: 480px) {
   cursor: default;
 }
 
+.o-challenge-btn--redo {
+  color: white;
+  background-color: #17a32e;
+}
+
 /*#region themes*/
 
 /*#region t-dark*/
@@ -2857,6 +2863,11 @@ screen and (max-width: 480px) {
 
 .t-dark .o-challenge-btn--locked {
   background-color: #23292a;
+  border-color: #b84b5f;
+}
+
+.t-dark .o-challenge-btn--redo {
+  background-color: #58da5e;
   border-color: #b84b5f;
 }
 
@@ -2908,6 +2919,15 @@ screen and (max-width: 480px) {
   border-right-color: #616161;
 }
 
+.t-metro .o-challenge-btn--redo,
+.t-inverted-metro .o-challenge-btn--redo,
+.t-s8 .o-challenge-btn--redo {
+  background-color: #4b8a4e;
+  border: 0.3rem solid #757575;
+  border-bottom-color: #616161;
+  border-right-color: #616161;
+}
+
 /*#endregion t-metro t-dark-metro t-inverted-metro t-s8*/
 
 /*#region t-s1*/
@@ -2952,6 +2972,11 @@ screen and (max-width: 480px) {
 .t-s6 .o-challenge-btn--locked {
   color: grey;
   background: black;
+  border-color: #b84b5f;
+}
+
+.t-s6 .o-challenge-btn--redo {
+  background-color: #2a682d;
   border-color: #b84b5f;
 }
 

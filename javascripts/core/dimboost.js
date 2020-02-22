@@ -74,7 +74,7 @@ class DimBoost {
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
     if (InfinityChallenge(5).isCompleted) amount -= 1;
 
-    amount *= Effects.product(InfinityUpgrade.resetBoost.chargedEffect);
+    amount *= InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1);
 
     amount = Math.ceil(amount);
 
@@ -95,7 +95,7 @@ class DimBoost {
 }
 
 function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
-    if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
+    if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return;
     EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
     player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
 
@@ -130,7 +130,7 @@ function skipResetsIfPossible() {
 }
 
 function softResetBtnClick() {
-  if ((!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) || !DimBoost.requirement.isSatisfied) return;
+  if ((!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) || !DimBoost.requirement.isSatisfied) return;
   if (Ra.isRunning) return;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
   else softReset(1);

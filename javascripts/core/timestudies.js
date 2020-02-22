@@ -350,7 +350,7 @@ class NormalTimeStudyState extends TimeStudyState {
     const req = this.config.requirementV;
     return req === undefined
       ? false
-      : req() && V.availableST >= this.config.STCost;
+      : req() && V.availableST >= this.STCost;
   }
 
   get canBeBought() {

@@ -316,6 +316,7 @@ function beginProcessReality(realityProps) {
 function finishProcessReality(realityProps) {
   const isReset = realityProps.reset;
   if (!isReset) giveRealityRewards(realityProps);
+  if (!player.options.retryCelestial || player.reality.respec) player.celestials.v.cursedThisRun = 0;
   if (!realityProps.glyphUndo) {
     Glyphs.clearUndo();
     if (player.reality.respec) respecGlyphs();
@@ -442,7 +443,6 @@ function finishProcessReality(realityProps) {
   if (!BlackHoles.areNegative) {
     player.minNegativeBlackHoleThisReality = 1;
   }
-  player.celestials.v.cursedThisRun = 0;
   resetTimeDimensions();
   resetTickspeed();
   playerInfinityUpgradesOnEternity();

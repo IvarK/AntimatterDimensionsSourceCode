@@ -4,6 +4,7 @@ Vue.component("glyph-inventory", {
   data() {
     return {
       inventory: [],
+      showScoreFilter: false,
     };
   },
   computed: {
@@ -15,6 +16,9 @@ Vue.component("glyph-inventory", {
     this.glyphsChanged();
   },
   methods: {
+    update() {
+      this.showScoreFilter = EffarigUnlock.autosacrifice.isUnlocked;
+    },
     toIndex(row, col) {
       return (row - 1) * this.colCount + (col - 1);
     },
@@ -44,14 +48,17 @@ Vue.component("glyph-inventory", {
     sortByPower() {
       Glyphs.sort((a, b) => -a.level * a.strength + b.level * b.strength);
     },
+    sortByScore() {
+      Glyphs.sort((a, b) => -AutoGlyphSacrifice.filterValue(a) + AutoGlyphSacrifice.filterValue(b));
+    },
     sortByEffect() {
-      // Multiplying by 1e12 per effect guarantees that glyphs with less effects are placed later, and the bitwise
-      // inversion is so that the effects with the LOWER id are valued higher in the sorting. This primarily meant
-      // for effarig glyph effect sorting, which makes it prioritize timespeed pow highest.
-      // eslint-disable-next-line no-bitwise
-      Glyphs.sort((a, b) => -(~a.effects * Math.pow(1e12, countEffectsFromBitmask(a.effects))) +
+      function reverseBitstring(eff) {
         // eslint-disable-next-line no-bitwise
-        (~b.effects * Math.pow(1e12, countEffectsFromBitmask(b.effects))));
+        return parseInt(((1 << 30) + (eff >>> 0)).toString(2).split("").reverse().join(""), 2);
+      }
+      // The bitwise reversal is so that the effects with the LOWER id are valued higher in the sorting.
+      // This primarily meant for effarig glyph effect sorting, which makes it prioritize timespeed pow highest.
+      Glyphs.sort((a, b) => -reverseBitstring(a.effects) + reverseBitstring(b.effects));
     },
     autoClean() {
       Glyphs.autoClean();
@@ -86,7 +93,13 @@ Vue.component("glyph-inventory", {
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
         ach-tooltip="Group glyphs together based on effects"
         @click="sortByEffect">
-          Sort by effects
+          Sort by effect
+      </button>
+      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        v-if="showScoreFilter"
+        ach-tooltip="Arranges by decreasing glyph filter score"
+        @click="sortByScore">
+          Sort by score
       </button>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
              ach-tooltip="Sacrifice glyphs that are worse in every way than enough other glyphs"

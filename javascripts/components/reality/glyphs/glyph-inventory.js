@@ -5,6 +5,8 @@ Vue.component("glyph-inventory", {
     return {
       inventory: [],
       showScoreFilter: false,
+      doubleClickTimeOut: null,
+      clickedGlyphId: null
     };
   },
   computed: {
@@ -37,9 +39,23 @@ Vue.component("glyph-inventory", {
     },
     clickGlyph(col, id) {
       const glyph = Glyphs.findById(id);
-      if (!glyph) return;
-      if (glyph.symbol === "key266b") {
-        new Audio(`audio/note${col}.mp3`).play();
+      // If single click
+      if (!this.doubleClickTimeOut) {
+        this.doubleClickTimeOut = setTimeout(() => { 
+          this.clickedGlyphId = null;
+          this.doubleClickTimeOut = null;
+        }, 200);
+        this.clickedGlyphId = id;
+        if (!glyph) return;
+        if (glyph.symbol === "key266b") {
+          new Audio(`audio/note${col}.mp3`).play();
+        }
+      // Else it's double click, so equip a glyph
+      } else if (this.clickedGlyphId === id) {
+        clearTimeout(this.doubleClickTimeOut);
+        this.doubleClickTimeOut = null;
+        const idx = Glyphs.active.indexOf(null);
+        if (idx !== -1) Glyphs.equip(glyph, idx);
       }
     },
     glyphsChanged() {

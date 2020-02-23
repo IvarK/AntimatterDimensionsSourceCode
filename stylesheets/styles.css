@@ -5640,19 +5640,12 @@ kbd {
   top: 0;
   font-size: 1.2rem;
   z-index: 2;
-  color: black;
+  color: white;
   height: 1.75rem;
-  border-left: 0.1rem solid black;
+  border-left: 0.1rem solid white;
   padding: 0 0.2rem;
   user-select: none;
   cursor: default;
-}
-
-.t-dark .l-ra-lvl-chevron,
-.t-dark-metro .l-ra-lvl-chevron,
-.t-s6 .l-ra-lvl-chevron {
-  color: white;
-  border-left-color: white;
 }
 
 .l-ra-lvl-chevron--no-bar {
@@ -5686,12 +5679,12 @@ kbd {
 
 .l-ra-exp-bar {
   position: relative;
-  border: 0.2rem solid black;
+  border: 0.2rem solid white;
   border-radius: 0.5rem;
   width: 80%;
   margin: 2.5rem 0 2.5rem 0;
   height: 5rem;
-  justify-self: center;
+  margin: auto;
   z-index: 1;
 }
 
@@ -5709,8 +5702,9 @@ kbd {
 }
 
 .l-ra-pet-container {
-  flex: 1 1 auto;
-  margin: 0 0 -5rem 0;
+  float: left;
+  width: 50%;
+  height: 50%;
 }
 
 .c-ra-memory-header {
@@ -5780,9 +5774,10 @@ kbd {
 }
 
 .l-ra-all-pets-container {
-  flex: 1 0 auto;
-  flex-direction: column;
-  display: flex;
+  margin: auto;
+  width: 80rem;
+  height: 100%;
+  overflow: hidden;
 }
 
 .l-ra-unlock {

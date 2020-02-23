@@ -6,7 +6,8 @@ Vue.component("glyph-inventory", {
       inventory: [],
       showScoreFilter: false,
       doubleClickTimeOut: null,
-      clickedGlyphId: null
+      clickedGlyphId: null,
+      glyphSacrificeUnlocked: false,
     };
   },
   computed: {
@@ -19,6 +20,7 @@ Vue.component("glyph-inventory", {
   },
   methods: {
     update() {
+      this.glyphSacrificeUnlocked = canSacrifice();
       this.showScoreFilter = EffarigUnlock.autosacrifice.isUnlocked;
     },
     toIndex(row, col) {
@@ -118,7 +120,8 @@ Vue.component("glyph-inventory", {
           Sort by score
       </button>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-             ach-tooltip="Sacrifice glyphs that are worse in every way than enough other glyphs"
+             :ach-tooltip="glyphSacrificeUnlocked ? 'Sacrifice' : 'Delete' +
+             ' glyphs that are worse in every way than enough other glyphs'"
              @click="autoClean">
        Auto clean
       </button>

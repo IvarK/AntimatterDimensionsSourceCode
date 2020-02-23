@@ -72,7 +72,6 @@ Vue.component("sacrificed-glyphs", {
       addThreshold: 0,
       empowerThreshold: 0,
       boostThreshold: 0,
-      confirmSacrifice: false,
     };
   },
   computed: {
@@ -85,7 +84,6 @@ Vue.component("sacrificed-glyphs", {
       this.addThreshold = GlyphAlteration.additionThreshold;
       this.empowerThreshold = GlyphAlteration.empowermentThreshold;
       this.boostThreshold = GlyphAlteration.boostingThreshold;
-      this.confirmSacrifice = player.options.confirmations.glyphSacrifice;
     },
     dragover(event) {
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
@@ -104,9 +102,6 @@ Vue.component("sacrificed-glyphs", {
       sacrificeGlyph(glyph, false, true);
       this.hasDragover = false;
     },
-    toggleConfirm() {
-      player.options.confirmations.glyphSacrifice = !this.confirmSacrifice;
-    }
   },
   template: `
   <div v-show="anySacrifices"
@@ -131,10 +126,6 @@ Vue.component("sacrificed-glyphs", {
     <div class="l-sacrificed-glyphs__help">
       <div>Drag glyphs here or shift-click to sacrifice.</div>
       <div>Ctrl-shift-click to sacrifice without confirmation</div>
-      <div @click="toggleConfirm" class="c-sacrificed-glyphs__confirm">
-        <input :checked="confirmSacrifice" type="checkbox" />
-        Ask for confirmation when sacrificing
-      </div>
     </div>
   </div>`,
 });

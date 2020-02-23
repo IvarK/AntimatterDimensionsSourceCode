@@ -685,6 +685,16 @@ const Glyphs = {
     return betterCount >= compareThreshold;
   },
   autoClean() {
+    // If the player hasn't unlocked sacrifice yet, we warn them.
+    if (!canSacrifice() &&
+      // eslint-disable-next-line prefer-template
+      !confirm("This will not give you any benefit" +
+        (RealityUpgrade(19).isAvailableForPurchase ? "" : " and may reduce the number of glyphs in your inventory. " +
+        "It may be hard to get more glyphs. The reality upgrade to unlock glyph sacrifice requires 30 glyphs") +
+        ". Also, when you unlock sacrifice, you will not be able to later sacrifice glyphs you delete now. " +
+        "Are you sure you want to do this?")) {
+      return;
+    }
     // We look in backwards order so that later glyphs get cleaned up first
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
@@ -1029,7 +1039,7 @@ function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
   const toGain = glyphSacrificeGain(glyph);
   const askConfirmation = !force && player.options.confirmations.glyphSacrifice;
   if (askConfirmation) {
-    if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type}` +
+    if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} ` +
       `glyphs will increase to ${(player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2)}`)) {
       return;
     }

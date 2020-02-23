@@ -73,6 +73,7 @@ class VRunUnlockState extends GameMechanicState {
     }
 
     while (this.completions < this.config.values.length && this.config.condition(this.conditionValue)) {
+      if (!V.isFlipped && this.config.isHard) continue;
       this.completions++;
       GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
       V.updateTotalRunUnlocks();
@@ -218,7 +219,7 @@ const V = {
     return player.celestials.v.run;
   },
   get isFlipped() {
-    return this.spaceTheorems >= 36;
+    return Ra.has(RA_UNLOCKS.HARD_V);
   },
   get isFullyCompleted() {
     return this.spaceTheorems >= 66;

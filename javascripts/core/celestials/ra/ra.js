@@ -355,10 +355,10 @@ const RA_UNLOCKS = {
   },
   AUTO_TP: {
     id: 2,
-    description: "Get Teresa to level 5",
+    description: "Get Teresa to level 25",
     reward: "Tachyon Particles are given immediately during dilation",
     pet: Ra.pets.teresa,
-    level: 5
+    level: 25
   },
   EFFARIG_UNLOCK: {
     id: 3,
@@ -376,10 +376,10 @@ const RA_UNLOCKS = {
   },
   ALTERED_GLYPHS: {
     id: 5,
-    description: "Get Teresa to level 25",
+    description: "Get Teresa to level 5",
     reward: "Unlock Altered Glyphs",
     pet: Ra.pets.teresa,
-    level: 25
+    level: 5
   },
   IMPROVED_GLYPHS: {
     id: 6,
@@ -423,7 +423,7 @@ const RA_UNLOCKS = {
   },
   GLYPH_ALCHEMY: {
     id: 11,
-    description: "Unlock Effarig memories",
+    description: "Unlock Effarig memories and Glyph Alchemy",
     reward: "Glyph Alchemy",
     pet: Ra.pets.effarig,
     level: 1
@@ -519,10 +519,10 @@ const RA_UNLOCKS = {
     pet: Ra.pets.v,
     level: 15
   },
-  SPACE_THEOREMS: {
+  HARD_V: {
     id: 23,
     description: "Get V to level 25",
-    reward: "Unlock Space Theorems [unimplemented]",
+    reward: "Unlock more V achievements",
     pet: Ra.pets.v,
     level: 25
   }

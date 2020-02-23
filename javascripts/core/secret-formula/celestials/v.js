@@ -103,7 +103,8 @@ GameDatabase.celestials.v = {
       formatRecord: x => formatInt(x),
       shardReduction: () => 0,
       maxShardReduction: () => 0,
-      mode: V_REDUCTION_MODE.SUBTRACTION
+      mode: V_REDUCTION_MODE.SUBTRACTION,
+      isHard: true
     },
     {
       id: 7,
@@ -121,7 +122,8 @@ GameDatabase.celestials.v = {
       shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e25, 0.2),
       maxShardReduction: goal => goal / 10,
       nextShards: x => 1e25 * Math.pow(x, 5),
-      mode: V_REDUCTION_MODE.SUBTRACTION
+      mode: V_REDUCTION_MODE.SUBTRACTION,
+      isHard: true
     },
     {
       id: 8,
@@ -134,7 +136,8 @@ GameDatabase.celestials.v = {
       shardReduction: () => Math.floor(Math.pow(player.celestials.effarig.relicShards / 1e25, 0.6)),
       maxShardReduction: () => 500,
       nextShards: x => 1e25 * Math.pow(x, 5 / 3),
-      mode: V_REDUCTION_MODE.SUBTRACTION
+      mode: V_REDUCTION_MODE.SUBTRACTION,
+      isHard: true
     }
   ],
   triadStudies: [

@@ -47,10 +47,7 @@ const Enslaved = {
     return player.celestials.enslaved.isStoringReal;
   },
   get storedRealTimeEfficiency() {
-    const addedEff = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
-      ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency()
-      : 0;
-    return Math.min(0.7 + addedEff, 1);
+    return 0.7;
   },
   get storedRealTimeCap() {
     const addedCap = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)

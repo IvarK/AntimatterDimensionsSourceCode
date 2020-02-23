@@ -83,7 +83,7 @@ GameDatabase.celestials.v = {
       id: 5,
       name: "Matterception",
       description: value => `Get ${formatInt(value)} Dimensional Boosts while dilating time, inside EC5.`,
-      values: [50, 52, 54, 56, 57, 58],
+      values: [51, 52, 53, 54, 55, 56],
       condition: x => player.dilation.active && EternityChallenge(5).isRunning && DimBoost.purchasedBoosts >= x,
       currentValue: () => (player.dilation.active && EternityChallenge(5).isRunning ? DimBoost.purchasedBoosts : 0),
       formatRecord: x => formatInt(x),
@@ -147,7 +147,8 @@ GameDatabase.celestials.v = {
       requirement: [221, 222, 231],
       description: "Study 231 powers up the effect of study 221",
       effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue.minus(1)).clampMin(1),
-      formatEffect: value => formatX(value, 2, 1)
+      formatEffect: value => formatX(value, 2, 1),
+      unlocked: () => Ra.pets.v.level >= 5
     },
     {
       id: 2,
@@ -155,6 +156,7 @@ GameDatabase.celestials.v = {
       requirement: [223, 224, 232],
       description: "Multiply the distant galaxy scaling threshold by 2x",
       effect: 2,
+      unlocked: () => Ra.pets.v.level >= 10
     },
     {
       id: 3,
@@ -162,6 +164,7 @@ GameDatabase.celestials.v = {
       requirement: [225, 226, 233],
       description: "Your extra RGs are multiplied by 1.5x",
       effect: 1.5,
+      unlocked: () => Ra.pets.v.level >= 15
     },
     {
       id: 4,
@@ -169,7 +172,8 @@ GameDatabase.celestials.v = {
       requirement: [227, 228, 234],
       description: "Sacrifice boosts all normal dimensions.",
       effect: () => Sacrifice.totalBoost,
-      formatEffect: value => formatX(value, 2, 1)
+      formatEffect: value => formatX(value, 2, 1),
+      unlocked: () => Ra.pets.v.level >= 20
     }
   ]
 };

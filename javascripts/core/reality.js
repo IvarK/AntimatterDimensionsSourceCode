@@ -17,10 +17,7 @@ const GlyphSelection = {
       Perk.glyphChoice4,
       Perk.glyphChoice3
     );
-    const raChoices = Ra.has(RA_UNLOCKS.IMPROVED_GLYPHS)
-      ? RA_UNLOCKS.IMPROVED_GLYPHS.effect.choice()
-      : 0;
-    return baseChoices + raChoices;
+    return baseChoices;
   },
 
   /**

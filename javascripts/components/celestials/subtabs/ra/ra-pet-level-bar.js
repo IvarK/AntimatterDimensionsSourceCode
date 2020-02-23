@@ -16,7 +16,7 @@ Vue.component("ra-pet-level-bar", {
     shiftDown() {
       return ui.view.shiftDown;
     },
-    importantLevels: () => [2, 3, 5, 10, 15, 25],
+    importantLevels: () => [2, 5, 8, 10, 15, 25],
     unlocks() {
       return Object.values(RA_UNLOCKS).filter(unlock => unlock.pet === this.pet);
     },

@@ -32,19 +32,17 @@ Vue.component("ra-tab", {
       },
       {
         pet: Ra.pets.effarig,
-        scalingUpgradeText: level => `Glyph rarity +${level}% and +${formatInt(Math.floor(level / 5))}
-          additional choices.`,
+        scalingUpgradeText: level => `You have unlocked ${level} alchemy resources`,
       },
       {
         pet: Ra.pets.enslaved,
         scalingUpgradeText: () => `Stored game time ^
-          ${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)}, stored real time efficiency
-          +${formatPercents(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency(), 0, 2)} and
-          +${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / 1000 / 3600, 0, 1)} hours maximum.`,
+          ${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)} and
+          +${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / 1000 / 3600, 0, 1)} hours maximum stored real time.`,
       },
       {
         pet: Ra.pets.v,
-        scalingUpgradeText: level => `+${formatInt(level)} free achievements.`,
+        scalingUpgradeText: level => `You've unlocked ${Math.floor(level / 5)} triad studies.`,
       }
     ]
   },

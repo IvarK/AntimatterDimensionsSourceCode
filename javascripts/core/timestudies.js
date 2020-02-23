@@ -610,7 +610,7 @@ class TriadStudyState extends TimeStudyState {
   get canBeBought() {
     return this.config.requirement.every(s => player.timestudy.studies.includes(s)) &&
            V.availableST >= this.STCost &&
-           !this.isBought;
+           !this.isBought && this.config.unlocked();
   }
 
   get isBought() {

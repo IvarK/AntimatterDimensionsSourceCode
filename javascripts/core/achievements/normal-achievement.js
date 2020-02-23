@@ -97,8 +97,7 @@ const Achievements = {
 
   get effectiveCount() {
     const unlockedAchievements = Achievements.all.countWhere(a => a.isUnlocked);
-    const additionalAchievements = Ra.has(RA_UNLOCKS.V_UNLOCK) ? Ra.pets.v.level : 0;
-    return unlockedAchievements + additionalAchievements;
+    return unlockedAchievements;
   },
 
   get period() {

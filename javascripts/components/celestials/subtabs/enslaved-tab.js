@@ -5,7 +5,6 @@ Vue.component("enslaved-tab", {
     isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
-    hasAmplifyStoredReal: false,
     canAdjustStoredTime: false,
     storedFraction: 0,
     inEnslaved: false,
@@ -22,9 +21,6 @@ Vue.component("enslaved-tab", {
     currentSpeedUp: 0
   }),
   computed: {
-    amplifiedGameDesc() {
-      return `${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 2, 2)}`;
-    },
     storedRealEfficiencyDesc() {
       return formatPercents(this.storedRealEffiency);
     },
@@ -64,7 +60,6 @@ Vue.component("enslaved-tab", {
       this.storedBlackHole = player.celestials.enslaved.stored;
       this.isStoringReal = Enslaved.isStoringRealTime;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
-      this.hasAmplifyStoredReal = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME);
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.inEnslaved = Enslaved.isRunning;
       this.completed = Enslaved.isCompleted;
@@ -156,7 +151,6 @@ Vue.component("enslaved-tab", {
             Discharge black hole
             <p v-if="inEnslaved">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
           </button>
-          <div v-if="hasAmplifyStoredReal"> Amplified: {{ amplifiedGameDesc }} </div>
         </div>
         <div class="l-enslaved-top-container__half">
           Storing real time completely halts all production, setting game speed to 0. You can use stored real time to

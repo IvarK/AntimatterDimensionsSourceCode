@@ -284,11 +284,11 @@ const Ra = {
 const GlyphAlteration = {
   // Adding a secondary effect to some effects
   get additionThreshold() {
-    return 1e40;
+    return 1e36;
   },
   // One-time massive boost of a single effect
   get empowermentThreshold() {
-    return 1e45;
+    return 1e43;
   },
   // Scaling boost from sacrifice quantity
   get boostingThreshold() {
@@ -348,10 +348,10 @@ const RA_UNLOCKS = {
   },
   TERESA_XP: {
     id: 1,
-    description: "Get Teresa to level 3",
+    description: "Get Teresa to level 5",
     reward: "Unlock Ra's Reality, boost Teresa memory gain based on EP reached in Ra's Reality",
     pet: Ra.pets.teresa,
-    level: 3
+    level: 5
   },
   AUTO_TP: {
     id: 2,
@@ -363,7 +363,7 @@ const RA_UNLOCKS = {
   EFFARIG_UNLOCK: {
     id: 3,
     description: "Get Teresa to level 10",
-    reward: "Unlock Effarig's memories",
+    reward: "Unlock Effarig's memories and Glyph Alteration",
     pet: Ra.pets.teresa,
     level: 10
   },
@@ -376,35 +376,34 @@ const RA_UNLOCKS = {
   },
   ALTERED_GLYPHS: {
     id: 5,
-    description: "Get Teresa to level 5",
+    description: "Get Teresa to level 8",
     reward: "Unlock Altered Glyphs",
     pet: Ra.pets.teresa,
-    level: 5
+    level: 8
   },
-  IMPROVED_GLYPHS: {
+  ALCHEMY_RESOURCES: {
     id: 6,
     description: "Get Effarig to level 2",
-    reward: "Glyph rarity is increased and you gain more glyph choices",
+    reward: "Glyph Alchemy resources are unlocked every Effarig level",
     effect: {
-      rarity: () => Ra.pets.effarig.level,
-      choice: () => Math.floor(Ra.pets.effarig.level / 5),
+      resources: () => Ra.pets.effarig.level,
     },
     pet: Ra.pets.effarig,
     level: 2
   },
   EFFARIG_XP: {
     id: 7,
-    description: "Get Effarig to level 3",
+    description: "Get Effarig to level 5",
     reward: "Boost Effarig memory gain based on glyph count in Ra's Reality, less glyphs means higher boost",
     pet: Ra.pets.effarig,
-    level: 3
+    level: 5
   },
   GLYPH_EFFECT_COUNT: {
     id: 8,
-    description: "Get Effarig to level 5",
+    description: "Get Effarig to level 8",
     reward: "Glyphs always have 4 effects (Effarig glyphs can now have more)",
     pet: Ra.pets.effarig,
-    level: 5
+    level: 8
   },
   ENSLAVED_UNLOCK: {
     id: 9,
@@ -431,7 +430,7 @@ const RA_UNLOCKS = {
   IMPROVED_STORED_TIME: {
     id: 12,
     description: "Get Enslaved to level 2",
-    reward: "Stored game time is amplified and stored real time is more efficient",
+    reward: "Stored game time is amplified and you can store more real time",
     effect: {
       gameTimeAmplification: () => 1 + Math.clampMax(Ra.pets.enslaved.level, 25) / 100,
       realTimeEfficiency: () => Ra.pets.enslaved.level / 50,
@@ -442,22 +441,22 @@ const RA_UNLOCKS = {
   },
   ENSLAVED_XP: {
     id: 13,
-    description: "Get Enslaved to level 3",
+    description: "Get Enslaved to level 5",
     reward: "Boost Enslaved memory gain based on game time in Ra's Reality, lower time means higher boost",
     pet: Ra.pets.enslaved,
-    level: 3
+    level: 5
   },
   ADJUSTABLE_STORED_TIME: {
     id: 14,
-    description: "Get Enslaved to level 5",
+    description: "Get Enslaved to level 8",
     reward: "Stored game time can be rate-adjusted and automatically released",
     pet: Ra.pets.enslaved,
-    level: 5
+    level: 8
   },
   V_UNLOCK: {
     id: 15,
     description: "Get Enslaved to level 10",
-    reward: "Unlock V's memories",
+    reward: "Unlock V's memories.",
     pet: Ra.pets.enslaved,
     level: 10
   },
@@ -475,26 +474,26 @@ const RA_UNLOCKS = {
     pet: Ra.pets.enslaved,
     level: 25
   },
-  MORE_ACHIEVEMENT: {
+  HARD_V: {
     id: 18,
-    description: "Get V to level 2",
-    reward: "Gain extra achievements for free (based on V level)",
+    description: "Get V to level 8",
+    reward: "Unlock more V-achievements.",
     pet: Ra.pets.v,
-    level: 2
+    level: 8
   },
   V_XP: {
     id: 19,
-    description: "Get V to level 3",
+    description: "Get V to level 5",
     reward: "Boost V memory gain based on purchased TT in Ra's Reality",
     pet: Ra.pets.v,
-    level: 3
+    level: 5
   },
   INSTANT_AUTOEC: {
     id: 20,
-    description: "Get V to level 5",
+    description: "Get V to level 2",
     reward: "Auto-EC happens instantly and dilation is auto-unlocked at 17000 TT",
     pet: Ra.pets.v,
-    level: 5
+    level: 2
   },
   TT_BOOST: {
     id: 21,
@@ -519,13 +518,6 @@ const RA_UNLOCKS = {
     pet: Ra.pets.v,
     level: 15
   },
-  HARD_V: {
-    id: 23,
-    description: "Get V to level 25",
-    reward: "Unlock more V achievements",
-    pet: Ra.pets.v,
-    level: 25
-  }
 };
 
 const RA_LAITELA_UNLOCK = {

@@ -159,13 +159,14 @@ const GlyphTooltipComponent = {
           : `Can be refined for ${refinementText}${limitText}`;
       }
       const powerText = `${format(this.sacrificeReward, 2, 2)} power`;
-      const advancedModeText = AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED
-        ? `\nScore (Advanced Mode): ${format(AutoGlyphSacrifice.comparedToThreshold(this.$parent.glyph) +
-            AutoGlyphSacrifice.types[this.type].scoreThreshold, 1, 1)}`
+      const showFilterScoreModes = [AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS,
+        AUTO_GLYPH_SAC_MODE.EFFECTS, AUTO_GLYPH_SAC_MODE.ADVANCED];
+      const filterScoreText = showFilterScoreModes.includes(AutoGlyphSacrifice.mode)
+        ? `\nGlyph Filter Score: ${format(AutoGlyphSacrifice.filterValue(this.$parent.glyph), 1, 1)}`
         : "";
       return this.onTouchDevice
-        ? `Sacrifice for ${powerText}${advancedModeText}`
-        : `Can be sacrificed for ${powerText}${advancedModeText}`;
+        ? `Sacrifice for ${powerText}${filterScoreText}`
+        : `Can be sacrificed for ${powerText}${filterScoreText}`;
     },
     eventHandlers() {
       return GameUI.touchDevice ? {
@@ -499,10 +500,12 @@ Vue.component("glyph-component", {
       }
     },
     glyphEffectIcon(id) {
-      // This puts 4 effects in the corners, and then additional effarig effects at the top and sides
-      const angle = (Math.PI / 2) * (0.5 + id + (id >= 4 ? 0.5 : 0));
+      // Place dots clockwise starting from the bottom left
+      const angle = this.glyph.type === "effarig"
+        ? (Math.PI / 4) * (id + 1)
+        : (Math.PI / 2) * (id + 0.5);
       const scale = 0.3 * this.size.replace("rem", "");
-      const dx = scale * Math.sin(angle);
+      const dx = -scale * Math.sin(angle);
       const dy = scale * (Math.cos(angle) + 0.15);
       return {
         position: "absolute",

@@ -92,7 +92,7 @@ Vue.component("ra-pet-level-bar", {
         <div class="l-ra-exp-bar-inner" :style="[shiftDown ? singleLevelStyle : multiLevelStyle, petStyle]" />
       </div>
         <div class="l-ra-unlock" :style="petStyle">
-          <div class="l-ra-unlock-inner">
+          <div class="l-ra-unlock-inner" v-if="activeUnlock">
             <b>{{ activeUnlock.description }}</b>
             <p>{{ activeUnlock.reward }}</p>
           </div>

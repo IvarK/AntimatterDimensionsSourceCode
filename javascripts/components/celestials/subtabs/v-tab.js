@@ -32,8 +32,8 @@ Vue.component("v-tab", {
       this.pp = player.reality.pp;
       this.showReduction = V.has(V_UNLOCKS.SHARD_REDUCTION);
       // The second half of this conditional prevents the player from wasting pp on reduction that doesn't do anything
-      this.canReduce = this.pp > 10000 &&
-        player.celestials.v.ppSpent < 1000000 * player.celestials.v.runUnlocks.max();
+      this.canReduce = this.pp > 2000 &&
+        player.celestials.v.ppSpent < 200000 * player.celestials.v.runUnlocks.max();
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
@@ -54,8 +54,8 @@ Vue.component("v-tab", {
     },
     reduceGoals() {
       if (!this.canReduce) return;
-      player.reality.pp -= 10000;
-      player.celestials.v.ppSpent += 10000;
+      player.reality.pp -= 2000;
+      player.celestials.v.ppSpent += 2000;
     }
   },
   computed: {
@@ -168,7 +168,7 @@ Vue.component("v-tab", {
             class="o-primary-btn"
             :class="{ 'o-primary-btn--disabled': !canReduce }"
             @click="reduceGoals()">
-              Spend {{ format(10000) }} PP to reduce all goals by 1% of a tier
+              Spend {{ format(2000) }} PP to reduce all goals by 1% of a tier
           </button>
           <br>
           (You currently have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}})

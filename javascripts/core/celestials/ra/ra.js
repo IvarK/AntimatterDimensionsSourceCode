@@ -420,12 +420,12 @@ const RA_UNLOCKS = {
     pet: Ra.pets.effarig,
     level: 15
   },
-  GLYPH_ALCHEMY: {
+  AUTO_BLACK_HOLE_POWER: {
     id: 11,
-    description: "Unlock Effarig memories and Glyph Alchemy",
-    reward: "Glyph Alchemy",
+    description: "Get Effarig to level 25",
+    reward: "Black hole power upgrades are bought automagically",
     pet: Ra.pets.effarig,
-    level: 1
+    level: 25
   },
   IMPROVED_STORED_TIME: {
     id: 12,
@@ -518,6 +518,13 @@ const RA_UNLOCKS = {
     pet: Ra.pets.v,
     level: 15
   },
+  AUTO_REALITY_UPGRADES: {
+    id: 23,
+    description: "Get V to level 25",
+    reward: "Automagically purchases reality upgrades",
+    pet: Ra.pets.v,
+    level: 25
+  }
 };
 
 const RA_LAITELA_UNLOCK = {

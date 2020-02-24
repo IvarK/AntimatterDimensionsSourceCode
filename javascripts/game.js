@@ -836,6 +836,17 @@ function slowerAutobuyers(realDiff) {
     autoBuyDilationUpgrades();
   }
   TimeTheorems.autoBuyMaxTheorems(ampDiff);
+
+  if (Ra.has(RA_UNLOCKS.AUTO_BLACK_HOLE_POWER)) {
+    BlackHole(1).powerUpgrade.purchase();
+    BlackHole(2).powerUpgrade.purchase();
+  }
+
+  if (Ra.has(RA_UNLOCKS.AUTO_REALITY_UPGRADES)) {
+    for (let i = 1; i <= 5; i++) {
+      RealityUpgrade(i).purchase();
+    }
+  }
 }
 
 setInterval(function () {

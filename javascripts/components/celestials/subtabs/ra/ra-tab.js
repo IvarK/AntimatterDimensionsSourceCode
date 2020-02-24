@@ -36,9 +36,8 @@ Vue.component("ra-tab", {
       },
       {
         pet: Ra.pets.enslaved,
-        scalingUpgradeText: () => `Stored game time ^
-          ${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)} and
-          +${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / 1000 / 3600, 0, 1)} hours maximum stored real time.`,
+        scalingUpgradeText: () => `Stored game time 
+          ${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)}.`,
       },
       {
         pet: Ra.pets.v,

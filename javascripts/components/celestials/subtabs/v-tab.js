@@ -11,6 +11,9 @@ Vue.component("v-tab", {
       dilatedTime: new Decimal(0),
       replicanti: new Decimal(0),
       rm: new Decimal(0),
+      pp: 0,
+      showReduction: false,
+      canReduce: false,
       runRecords: Array.from(player.celestials.v.runRecords),
       runGlyphs: [],
       isFlipped: false
@@ -26,6 +29,11 @@ Vue.component("v-tab", {
       this.dilatedTime.copyFrom(player.dilation.dilatedTime);
       this.replicanti.copyFrom(player.replicanti.amount);
       this.rm.copyFrom(player.reality.realityMachines);
+      this.pp = player.reality.pp;
+      this.showReduction = V.has(V_UNLOCKS.SHARD_REDUCTION);
+      // The second half of this conditional prevents the player from wasting pp on reduction that doesn't do anything
+      this.canReduce = this.pp > 2000 &&
+        player.celestials.v.ppSpent < 200000 * player.celestials.v.runUnlocks.max();
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
@@ -44,6 +52,11 @@ Vue.component("v-tab", {
         ? milestone.reward()
         : milestone.reward;
     },
+    reduceGoals() {
+      if (!this.canReduce) return;
+      player.reality.pp -= 2000;
+      player.celestials.v.ppSpent += 2000;
+    }
   },
   computed: {
     // If V is flipped, change the layout of the grid
@@ -119,7 +132,7 @@ Vue.component("v-tab", {
                 <p class="o-v-unlock-name">{{ hex.config.name }}</p>
                 <p class="o-v-unlock-desc">{{ hex.formattedDescription }}</p>
                 <p class="o-v-unlock-goal-reduction" v-if="has(runMilestones[0]) && hex.isReduced">
-                  Goal has been {{ mode(hex) }} by {{ format(hex.reduction, 2, 0) }} {{ hex.reductionInfo }}
+                  Goal has been {{ mode(hex) }} by {{ format(hex.reduction) }} {{ hex.reductionInfo }}
                 </p>
                 <p class="o-v-unlock-amount">{{ hex.completions }}/{{hex.config.values.length}} done</p>
                 <p class="o-v-unlock-record">
@@ -146,10 +159,20 @@ Vue.component("v-tab", {
           and re-entering the reality.
         </div>
         <div>
-          You have {{ formatInt(totalUnlocks) }} V-achievements done.
-          You gain 1 Space Theorem for each completion.
+          You have {{ formatInt(totalUnlocks) }} V-achievements done. You gain 1 Space Theorem for each completion,
+          allowing you to purchase time studies which are normally locked.
         </div>
         <br>
+        <div v-if="showReduction">
+          <button
+            class="o-primary-btn"
+            :class="{ 'o-primary-btn--disabled': !canReduce }"
+            @click="reduceGoals()">
+              Spend {{ format(2000) }} PP to reduce all goals by 1% of a tier
+          </button>
+          <br>
+          (You currently have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}})
+        </div>
         <div class="l-v-milestones-grid">
           <div v-for="row in runMilestones" class="l-v-milestones-grid__row">
             <div class="o-v-milestone"

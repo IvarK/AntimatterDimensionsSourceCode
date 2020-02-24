@@ -7,8 +7,10 @@ Vue.component("glyph-set-preview", {
   },
   template:
     `<div>
-      {{ text }}
-      <br>
+      <span v-if="text">
+        {{ text }}
+        <br>
+      </span>
       <glyph-component v-for="(g, idx) in glyphs"
         :key="idx"
         style="margin: 0.2rem;"

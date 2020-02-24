@@ -395,6 +395,7 @@ let player = {
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       triadStudies: [],
+      ppSpent: 0,
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],
       // The number of glyphs for reality goes down with tier, so 6 - num instead (6 means reality

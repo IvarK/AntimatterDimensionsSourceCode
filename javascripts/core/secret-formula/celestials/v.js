@@ -35,9 +35,8 @@ GameDatabase.celestials.v = {
       condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= x,
       currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies,
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.floor(Math.pow(player.celestials.effarig.relicShards / 1e20, 0.2)),
-      maxShardReduction: goal => goal / 10,
-      nextShards: x => 1e20 * Math.pow(x, 5),
+      shardReduction: () => Math.floor(300 * (player.celestials.v.ppSpent / 200000)),
+      maxShardReduction: goal => goal - 4000,
       mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
@@ -48,8 +47,8 @@ GameDatabase.celestials.v = {
       condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x),
       currentValue: () => (EternityChallenge(7).isRunning ? player.infinityPoints.exponent : 0),
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
-      shardReduction: goal => goal.pow(1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001)),
-      maxShardReduction: goal => goal.pow(0.1),
+      shardReduction: () => Decimal.pow10(1.2e5 * (player.celestials.v.ppSpent / 200000)),
+      maxShardReduction: goal => goal.dividedBy(Decimal.pow10(6e5)),
       mode: V_REDUCTION_MODE.DIVISION
     },
     {
@@ -63,8 +62,8 @@ GameDatabase.celestials.v = {
         ? player.antimatter.exponent
         : 0),
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
-      shardReduction: goal => goal.pow(1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001)),
-      maxShardReduction: goal => goal.pow(0.1),
+      shardReduction: () => Decimal.pow10(50e6 * (player.celestials.v.ppSpent / 200000)),
+      maxShardReduction: goal => goal.dividedBy(Decimal.pow10(400e6)),
       mode: V_REDUCTION_MODE.DIVISION
     },
     {
@@ -75,8 +74,8 @@ GameDatabase.celestials.v = {
       condition: x => player.eternityPoints.gte(x),
       currentValue: () => player.eternityPoints.exponent,
       formatRecord: x => (x === 0 ? formatInt(0) : format(Decimal.pow10(x))),
-      shardReduction: goal => goal.pow(1 - Math.pow(1e20 / player.celestials.effarig.relicShards, 0.001)),
-      maxShardReduction: goal => goal.pow(0.1),
+      shardReduction: () => Decimal.pow10(600 * (player.celestials.v.ppSpent / 200000)),
+      maxShardReduction: goal => goal.dividedBy(Decimal.pow10(7000)),
       mode: V_REDUCTION_MODE.DIVISION
     },
     {
@@ -87,9 +86,9 @@ GameDatabase.celestials.v = {
       condition: x => player.dilation.active && EternityChallenge(5).isRunning && DimBoost.purchasedBoosts >= x,
       currentValue: () => (player.dilation.active && EternityChallenge(5).isRunning ? DimBoost.purchasedBoosts : 0),
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.floor(Math.pow(player.celestials.effarig.relicShards / 1e20, 0.05)),
+      shardReduction: () => Math.floor(player.celestials.v.ppSpent / 200000),
       maxShardReduction: () => 4,
-      nextShards: x => 1e20 * Math.pow(x, 20),
+      nextReduction: x => 200000 * x,
       mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
@@ -119,9 +118,8 @@ GameDatabase.celestials.v = {
         ? player.timestudy.theorem.toNumber()
         : 0),
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.pow(player.celestials.effarig.relicShards / 1e25, 0.2),
-      maxShardReduction: goal => goal / 10,
-      nextShards: x => 1e25 * Math.pow(x, 5),
+      shardReduction: () => 5 * Math.log10(1 + player.celestials.v.ppSpent),
+      maxShardReduction: () => 50,
       mode: V_REDUCTION_MODE.SUBTRACTION,
       isHard: true
     },
@@ -133,9 +131,8 @@ GameDatabase.celestials.v = {
       condition: x => gainedGlyphLevel().actualLevel >= x,
       currentValue: () => gainedGlyphLevel().actualLevel,
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.floor(Math.pow(player.celestials.effarig.relicShards / 1e25, 0.6)),
+      shardReduction: () => 20 * Math.log10(1 + player.celestials.v.ppSpent),
       maxShardReduction: () => 500,
-      nextShards: x => 1e25 * Math.pow(x, 5 / 3),
       mode: V_REDUCTION_MODE.SUBTRACTION,
       isHard: true
     }

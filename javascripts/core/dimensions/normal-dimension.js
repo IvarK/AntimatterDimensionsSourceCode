@@ -85,7 +85,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   }
 
   // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
-  if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
+  if (Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
     multiplier = multiplier.pow(1.05);
   }
 

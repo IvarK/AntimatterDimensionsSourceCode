@@ -13,7 +13,7 @@ Vue.component("ra-tab", {
     update() {
       this.expMults = this.pets.map(obj => obj.pet.expBoost);
       this.currentExpGain = Ra.pets.teresa.baseExp;
-      this.showReality = Ra.pets.teresa.level > 2;
+      this.showReality = Ra.has(RA_UNLOCKS.TERESA_XP);
       this.showLaitela = Ra.pets.v.isUnlocked;
     },
     startRun() {

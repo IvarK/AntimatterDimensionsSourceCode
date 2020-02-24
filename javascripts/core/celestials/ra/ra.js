@@ -261,7 +261,7 @@ const Ra = {
     return V.has(V_UNLOCKS.RA_UNLOCK) && Ra.pets.teresa.level > 1;
   },
   applyAlchemyReactions() {
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return;
+    if (!Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)) return;
     const sortedReactions = AlchemyReactions.all
       .compact()
       .sort((r1, r2) => r2.priority - r1.priority);
@@ -363,7 +363,7 @@ const RA_UNLOCKS = {
   EFFARIG_UNLOCK: {
     id: 3,
     description: "Get Teresa to level 10",
-    reward: "Unlock Effarig's memories and Glyph Alteration",
+    reward: "Unlock Effarig's memories and Glyph Alchemy",
     pet: Ra.pets.teresa,
     level: 10
   },

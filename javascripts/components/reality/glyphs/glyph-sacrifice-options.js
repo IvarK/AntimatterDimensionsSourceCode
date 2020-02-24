@@ -242,7 +242,7 @@ Vue.component("glyph-sacrifice-options", {
         this.rarityThresholds[type] = AutoGlyphSacrifice.types[type].rarityThreshold;
       }
       this.lockedTypes = GlyphTypes.locked.map(e => e.id);
-      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
     },
     setMode(m) {
       AutoGlyphSacrifice.mode = m;

@@ -56,7 +56,7 @@ class Sacrifice {
         Achievement(88),
         TimeStudy(228)
       );
-      if (GlyphAlteration.isAdded("power")) scale = scale * getSecondaryGlyphEffect("powerpow");
+      if (GlyphAlteration.isAdded("power")) scale *= getSecondaryGlyphEffect("powerpow");
       return player.sacrificed.pow(scale).clampMin(1);
     }
 

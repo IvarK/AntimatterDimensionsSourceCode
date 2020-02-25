@@ -30,7 +30,8 @@ const GlyphTooltipEffect = {
       return this.boostColor ? `⯅${value}⯅` : value;
     },
     secondaryEffectText() {
-      const value = this.effectConfig.formatEffect(this.effectConfig.conversion(this.value));
+      const value = this.effectConfig.formatSingleSecondaryEffect(
+        this.effectConfig.conversion(this.value));
       return this.boostColor ? `⯅${value}⯅` : value;
     },
     textSplits() {

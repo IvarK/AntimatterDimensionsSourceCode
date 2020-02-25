@@ -564,7 +564,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: () => (GlyphAlteration.isAdded("effarig")
       ? `Multiplier from "Buy ${formatInt(10)}" ^{value} and dimboosts ^{value2}`
       : `Multiplier from "Buy ${formatInt(10)}" ^{value}`),
-    genericDesc: () => (GlyphAlteration.isAdded("power")
+    genericDesc: () => (GlyphAlteration.isAdded("effarig")
       ? `"Buy ${formatInt(10)}" and dimboost multipliers ^x`
       : `"Buy ${formatInt(10)}" multiplier ^x`),
     effect: (level, strength) => 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4),

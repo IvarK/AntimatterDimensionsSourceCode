@@ -462,7 +462,7 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     glyphTypes: ["power"],
     singleDesc: () => (GlyphAlteration.isAdded("power")
-      ? "Normal Dimension power and sacrifice power +{value}"
+      ? "Normal Dimension power [and sacrifice power] +{value}"
       : "Normal Dimension power +{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("power")
       ? "ND multipliers and sacrifice ^{value}"

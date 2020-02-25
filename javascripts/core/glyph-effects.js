@@ -343,8 +343,8 @@ GameDatabase.reality.glyphEffects = [
       ? "Multiply DT [and replicanti speed] by \nlog₁₀(replicanti)×{value}"
       : "Multiply DT gain by \nlog₁₀(replicanti)×{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("replication")
-      ? "DT gain and replication speed from log₁₀(replicanti)×{value}"
-      : "DT gain from log₁₀(replicanti)×{value}"),
+      ? "DT gain and replication speed (log₁₀(replicanti)×{value})×"
+      : "DT gain (log₁₀(replicanti)×{value})×"),
     genericDesc: () => (GlyphAlteration.isAdded("replication")
       ? "DT+replicanti mult (log₁₀(replicanti))"
       : "DT gain multiplier (log₁₀(replicanti))"),

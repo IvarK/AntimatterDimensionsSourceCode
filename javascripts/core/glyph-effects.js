@@ -298,7 +298,7 @@ GameDatabase.reality.glyphEffects = [
     /** @type {function(number): string} */
     formatEffect: x => format(3600 * x, 2, 2),
     combine: GlyphCombiner.add,
-    conversion: x => Math.pow(10000 * x, 1.6),
+    conversion: x => Math.clampMin(Math.pow(10000 * x, 1.6), 1),
     formatSecondaryEffect: x => format(x, 2, 2),
     alteredColor: () => GlyphAlteration.getAdditionColor("dilation"),
     alterationType: ALTERATION_TYPE.ADDITION

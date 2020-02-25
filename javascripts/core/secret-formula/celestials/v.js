@@ -8,11 +8,12 @@ const V_REDUCTION_MODE = {
 GameDatabase.celestials.v = {
   mainUnlock: {
     realities: 10000,
+    totalGlyphSacrifice: 1e32,
     eternities: 1e70,
     infinities: 1e160,
     dilatedTime: new Decimal("1e320"),
     replicanti: new Decimal("1e320000"),
-    rm: 1e60
+    rm: 1e60,
   },
   runUnlocks: [
     {

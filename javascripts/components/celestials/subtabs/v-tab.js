@@ -6,6 +6,7 @@ Vue.component("v-tab", {
       mainUnlock: false,
       totalUnlocks: 0,
       realities: 0,
+      totalGlyphSacrifice: 0,
       infinities: new Decimal(0),
       eternities: new Decimal(0),
       dilatedTime: new Decimal(0),
@@ -24,6 +25,7 @@ Vue.component("v-tab", {
       this.mainUnlock = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
       this.totalUnlocks = V.spaceTheorems;
       this.realities = player.realities;
+      this.totalGlyphSacrifice = Object.values(player.reality.glyphs.sac).sum();
       this.infinities.copyFrom(player.infinitied);
       this.eternities.copyFrom(player.eternities);
       this.dilatedTime.copyFrom(player.dilation.dilatedTime);
@@ -115,6 +117,9 @@ Vue.component("v-tab", {
         {{ format(dilatedTime, 2, 0) }} / {{ format(db.mainUnlock.dilatedTime, 2, 0) }} dilated time
         <br>
         {{ format(replicanti, 2, 0) }} / {{ format(db.mainUnlock.replicanti, 2, 0) }} replicanti
+        <br>
+        {{ format(totalGlyphSacrifice, 2, 0) }} / {{ format(db.mainUnlock.totalGlyphSacrifice, 2, 0) }}
+        total glyph sacrifice power
         <br>
         <div class="l-v-milestones-grid__row">
           <div class="o-v-milestone">

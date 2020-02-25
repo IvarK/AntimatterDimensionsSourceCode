@@ -51,11 +51,12 @@ class Sacrifice {
     if (player.sacrificed.eq(0)) return new Decimal(1);
 
     if (InfinityChallenge(2).isCompleted) {
-      const scale = Effects.max(
+      let scale = Effects.max(
         0.01,
         Achievement(88),
         TimeStudy(228)
       );
+      if (GlyphAlteration.isAdded("power")) scale = scale * getSecondaryGlyphEffect("powerpow");
       return player.sacrificed.pow(scale).clampMin(1);
     }
 

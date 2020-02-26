@@ -918,9 +918,10 @@ which requires you to get 800 Antimatter Galaxies without buying 8th Dimensions 
 <br>
 <br>
 After being unlocked from the achievement, you are met with another set of requirements to fully unlock V.
-You must have completed ${formatInt(GameDatabase.celestials.v.mainUnlock.realities)} Realities and have
-${format(GameDatabase.celestials.v.mainUnlock.rm)} RM (which is not spent). Additionally you need to reach 
-${format(GameDatabase.celestials.v.mainUnlock.eternities)} Eternities,
+You must have completed ${formatInt(GameDatabase.celestials.v.mainUnlock.realities)} Realities, have
+${format(GameDatabase.celestials.v.mainUnlock.rm)} RM (which is not spent), and have
+${format(GameDatabase.celestials.v.mainUnlock.totalGlyphSacrifice)} total glyph sacrifice power.
+Additionally you need to reach  ${format(GameDatabase.celestials.v.mainUnlock.eternities)} Eternities,
 ${format(GameDatabase.celestials.v.mainUnlock.infinities)} Infinities,
 ${format(GameDatabase.celestials.v.mainUnlock.dilatedTime)} Dilated Time, and 
 ${format(GameDatabase.celestials.v.mainUnlock.replicanti)} Replicanti, all in the same reality.

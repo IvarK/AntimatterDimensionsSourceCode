@@ -103,6 +103,7 @@ const V_UNLOCKS = {
     requirement: () => {
       const db = GameDatabase.celestials.v.mainUnlock;
       if (player.realities < db.realities) return false;
+      if (Object.values(player.reality.glyphs.sac).sum() < db.totalGlyphSacrifice) return false;
       if (player.eternities.lt(db.eternities)) return false;
       if (player.infinitied.plus(player.infinitiedBank).lt(db.infinities)) return false;
       if (player.dilation.dilatedTime.lt(db.dilatedTime)) return false;

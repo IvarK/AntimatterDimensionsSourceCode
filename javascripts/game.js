@@ -104,6 +104,9 @@ function gainedRealityMachines() {
     const exponentOOMAboveCap = Math.log10(rmGain.log10() / softcapRM.log10());
     rmGain = softcapRM.pow(1 + exponentOOMAboveCap);
   }
+  // This is after the softcap since it's relatively weak and would become even weaker if it were before the softcap.
+  // If it's doing more than about ^1.1x or ^1.2x then there might be a problem.
+  if (GlyphAlteration.isAdded("power")) rmGain = rmGain.pow(getSecondaryGlyphEffect("powerpow"));
   return Decimal.floor(rmGain);
 }
 

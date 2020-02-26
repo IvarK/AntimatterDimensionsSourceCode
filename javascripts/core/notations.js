@@ -26,13 +26,13 @@ const Notation = (function() {
     brackets: painful(notation(N.BracketsNotation)),
     infinity: notation(N.InfinityNotation),
     roman: painful(notation(N.RomanNotation)),
-    dots: notation(N.DotsNotation),
+    dots: painful(notation(N.DotsNotation)),
     zalgo: painful(notation(N.ZalgoNotation)),
-    hex: notation(N.HexNotation),
+    hex: painful(notation(N.HexNotation)),
     imperial: painful(notation(N.ImperialNotation)),
-    clock: notation(N.ClockNotation),
-    prime: notation(N.PrimeNotation),
-    bar: notation(N.BarNotation),
+    clock: painful(notation(N.ClockNotation)),
+    prime: painful(notation(N.PrimeNotation)),
+    bar: painful(notation(N.BarNotation)),
     shi: painful(notation(N.ShiNotation)),
     blind: painful(notation(N.BlindNotation))
   };

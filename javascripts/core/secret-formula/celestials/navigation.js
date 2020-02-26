@@ -409,7 +409,9 @@ GameDatabase.celestials.navigation = {
       legend: {
         text: complete => {
           const goal = 100;
-          return ["Reach glyph", `rarity of ${formatPercents(complete * goal / 100, 2)}/${formatPercents(goal / 100, 0)}`];
+          return ["Reach glyph", 
+            `rarity of ${formatPercents(complete * goal / 100, 2)}/${formatPercents(goal / 100, 0)}`
+          ];
         },
         angle: 135,
         diagonal: 32,

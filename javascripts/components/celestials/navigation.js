@@ -25,6 +25,9 @@ function cubicBezierArrayToPath(a, initialCommand = "M") {
  */
 function svgRingPath(d) {
   if (!d.gapDeg) {
+    if (!d.rMinor) {
+      d.rMinor = 0;
+    }
     return `M -0.1, ${-d.rMajor}
 a ${d.rMajor} ${d.rMajor} 0 1 0 0.2 0
 z

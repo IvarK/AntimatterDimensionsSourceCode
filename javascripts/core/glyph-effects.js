@@ -41,7 +41,7 @@ class GlyphEffectConfig {
   * @param {(function(number, number): number) | function(number, number): Decimal} [setup.effect] Calculate effect
   *  value from level and strength
   * @param {NumericToString<number | Decimal>} [setup.formatEffect] Format the effect's value into a string. Defaults
-  *  to toFixed(3)
+  *  to format(x, 3, 3)
   * @param {NumericToString<number | Decimal>} [setup.formatSingleEffect] Format the effect's value into a string, used
   *  for effects which need to display different values in single values versus combined values (eg. power effects)
   * @param {NumericFunction<number | Decimal>} [setup.softcap] An optional softcap to be applied after glyph
@@ -77,7 +77,7 @@ class GlyphEffectConfig {
     * @member {NumericToString<number | Decimal>} formatEffect formatting function for the effect
     * (just the number conversion). Combined with the description strings to make descriptions
     */
-    this.formatEffect = setup.formatEffect || (x => x.toFixed(3));
+    this.formatEffect = setup.formatEffect || (x => format(x, 3, 3));
     /** @member{NumericToString<number | Decimal>} See info about setup, above*/
     this.formatSingleEffect = setup.formatSingleEffect || this.formatEffect;
     /**
@@ -91,7 +91,7 @@ class GlyphEffectConfig {
     * @member {NumericToString<number | Decimal>} formatSecondaryEffect formatting function for
     * the secondary effect (if there is one)
     */
-    this.formatSecondaryEffect = setup.formatSecondaryEffect || (x => x.toFixed(3));
+    this.formatSecondaryEffect = setup.formatSecondaryEffect || (x => format(x, 3, 3));
     /** @member{NumericToString<number | Decimal>} See info about setup, above*/
     this.formatSingleSecondaryEffect = setup.formatSingleSecondaryEffect || this.formatSecondaryEffect;
     /** @member{string} color to show numbers in glyph tooltips if boosted */

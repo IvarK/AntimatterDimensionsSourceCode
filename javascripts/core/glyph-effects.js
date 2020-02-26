@@ -41,7 +41,7 @@ class GlyphEffectConfig {
   * @param {(function(number, number): number) | function(number, number): Decimal} [setup.effect] Calculate effect
   *  value from level and strength
   * @param {NumericToString<number | Decimal>} [setup.formatEffect] Format the effect's value into a string. Defaults
-  *  to toFixed(3)
+  *  to format(x, 3, 3)
   * @param {NumericToString<number | Decimal>} [setup.formatSingleEffect] Format the effect's value into a string, used
   *  for effects which need to display different values in single values versus combined values (eg. power effects)
   * @param {NumericFunction<number | Decimal>} [setup.softcap] An optional softcap to be applied after glyph
@@ -77,9 +77,9 @@ class GlyphEffectConfig {
     * @member {NumericToString<number | Decimal>} formatEffect formatting function for the effect
     * (just the number conversion). Combined with the description strings to make descriptions
     */
-    this.formatEffect = setup.formatEffect || (x => x.toFixed(3));
-    /** @member{string} See info about setup, above*/
-    this.formatSingleEffect = setup.formatSingleEffect || setup.formatEffect;
+    this.formatEffect = setup.formatEffect || (x => format(x, 3, 3));
+    /** @member{NumericToString<number | Decimal>} See info about setup, above*/
+    this.formatSingleEffect = setup.formatSingleEffect || this.formatEffect;
     /**
     *  @member {function(number[]): GlyphEffectConfig__combine_result} combine Function that combines
     * multiple glyph effects into one value (adds up, applies softcaps, etc)
@@ -87,6 +87,13 @@ class GlyphEffectConfig {
     this.combine = GlyphEffectConfig.setupCombine(setup);
     /** @member{function(number)} conversion function to produce altered glyph effect */
     this.conversion = setup.conversion;
+    /**
+    * @member {NumericToString<number | Decimal>} formatSecondaryEffect formatting function for
+    * the secondary effect (if there is one)
+    */
+    this.formatSecondaryEffect = setup.formatSecondaryEffect || (x => format(x, 3, 3));
+    /** @member{NumericToString<number | Decimal>} See info about setup, above*/
+    this.formatSingleSecondaryEffect = setup.formatSingleSecondaryEffect || this.formatSecondaryEffect;
     /** @member{string} color to show numbers in glyph tooltips if boosted */
     this.alteredColor = setup.alteredColor;
     /** @member{number} string passed along to tooltip code to ensure proper formatting */
@@ -121,8 +128,8 @@ class GlyphEffectConfig {
   /** @private */
   static checkInputs(setup) {
     const KNOWN_KEYS = ["id", "bitmaskIndex", "glyphTypes", "singleDesc", "totalDesc", "genericDesc", "effect",
-      "formatEffect", "formatSingleEffect", "combine", "softcap", "conversion", "alteredColor", "alterationType",
-      "isGenerated"];
+      "formatEffect", "formatSingleEffect", "combine", "softcap", "conversion", "formatSecondaryEffect",
+      "formatSingleSecondaryEffect", "alteredColor", "alterationType", "isGenerated"];
     const unknownField = Object.keys(setup).find(k => !KNOWN_KEYS.includes(k));
     if (unknownField !== undefined) {
       throw new Error(`Glyph effect "${setup.id}" includes unrecognized field "${unknownField}"`);
@@ -242,6 +249,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => format(x, 2, 3),
     combine: GlyphCombiner.multiply,
     conversion: x => 1 + Math.log10(x) / 1000,
+    formatSecondaryEffect: x => format(x, 4, 4),
     alteredColor: () => GlyphAlteration.getAdditionColor("time"),
     alterationType: ALTERATION_TYPE.ADDITION
   }, {
@@ -290,7 +298,8 @@ GameDatabase.reality.glyphEffects = [
     /** @type {function(number): string} */
     formatEffect: x => format(3600 * x, 2, 2),
     combine: GlyphCombiner.add,
-    conversion: x => Math.max(1, Math.pow(50 * x, 1.6)),
+    conversion: x => Math.clampMin(Math.pow(10000 * x, 1.6), 1),
+    formatSecondaryEffect: x => format(x, 2, 2),
     alteredColor: () => GlyphAlteration.getAdditionColor("dilation"),
     alterationType: ALTERATION_TYPE.ADDITION
   }, {
@@ -343,8 +352,8 @@ GameDatabase.reality.glyphEffects = [
       ? "Multiply DT [and replicanti speed] by \nlog₁₀(replicanti)×{value}"
       : "Multiply DT gain by \nlog₁₀(replicanti)×{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("replication")
-      ? "DT gain and replication speed from log₁₀(replicanti)×{value}"
-      : "DT gain from log₁₀(replicanti)×{value}"),
+      ? "DT gain and replication speed ×(log₁₀(replicanti)×{value})"
+      : "DT gain ×(log₁₀(replicanti)×{value})"),
     genericDesc: () => (GlyphAlteration.isAdded("replication")
       ? "DT+replicanti mult (log₁₀(replicanti))"
       : "DT gain multiplier (log₁₀(replicanti))"),
@@ -358,7 +367,9 @@ GameDatabase.reality.glyphEffects = [
       value: effects.length === 0 ? 0 : effects.reduce(Number.prodReducer, Math.pow(0.0003, 1 - effects.length)),
       capped: false
     }),
-    conversion: x => Math.max(x, 1),
+    conversion: x => x,
+    formatSecondaryEffect: x => format(x, 2, 3),
+    formatSingleSecondaryEffect: x => format(x, 5, 5),
     alteredColor: () => GlyphAlteration.getAdditionColor("replication"),
     alterationType: ALTERATION_TYPE.ADDITION
   }, {
@@ -427,6 +438,7 @@ GameDatabase.reality.glyphEffects = [
     // eslint-disable-next-line no-negated-condition
     softcap: value => ((Effarig.eternityCap !== undefined) ? Math.min(value, Effarig.eternityCap.toNumber()) : value),
     conversion: x => 1 + Math.log10(x) / 1800,
+    formatSecondaryEffect: x => format(x, 4, 4),
     alteredColor: () => GlyphAlteration.getAdditionColor("infinity"),
     alterationType: ALTERATION_TYPE.ADDITION
   }, {
@@ -463,6 +475,7 @@ GameDatabase.reality.glyphEffects = [
     formatSingleEffect: x => format(x - 1, 3, 3),
     combine: GlyphCombiner.addExponents,
     conversion: x => Math.pow(x, 1.2),
+    formatSecondaryEffect: x => format(x, 3, 3),
     alteredColor: () => GlyphAlteration.getAdditionColor("power"),
     alterationType: ALTERATION_TYPE.ADDITION
   }, {
@@ -571,6 +584,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.multiply,
     conversion: x => Math.sqrt(x),
+    formatSecondaryEffect: x => format(x, 2, 2),
     alteredColor: () => GlyphAlteration.getAdditionColor("effarig"),
     alterationType: ALTERATION_TYPE.ADDITION
   }, {

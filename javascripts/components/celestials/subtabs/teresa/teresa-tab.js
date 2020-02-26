@@ -62,7 +62,6 @@ Vue.component("teresa-tab", {
   },
   template:
     `<div class="l-teresa-celestial-tab">
-      <celestial-navigation />
       <celestial-quote-history celestial="teresa"/>
       <div>You have {{shorten(rm, 2, 2)}} {{"Reality Machine" | pluralize(rm)}}.</div>
       <div class="l-mechanics-container">

@@ -7082,12 +7082,12 @@ input.o-automator-block-input {
 }
 
 .o-celestial-nav__legend-text {
-  fill: #CCC;
+  fill: rgb(238, 135, 17);
   font-weight: bold;
 }
 
 .o-celestial-nav__hoverable:hover .o-celestial-nav__legend-text {
-  fill: #FFF;
+  fill: rgb(197, 112, 14);
 }
 
 .o-no-mouse {
@@ -7106,4 +7106,10 @@ input.o-automator-block-input {
   -ms-user-select: none;
   user-select: none;
   pointer-events: none;
+}
+
+.l-celestial-navigation {
+  margin: auto;
+  border: 2px solid black;
+  border-radius: 5px;
 }

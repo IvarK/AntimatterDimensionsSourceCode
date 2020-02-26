@@ -374,7 +374,7 @@ Vue.component("celestial-navigation", {
     }
   },
   template: `
-<svg height="600" width="960">
+<svg height="600" width="960" class="l-celestial-navigation">
   <defs>
     <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:rgb(255,255,0);stop-opacity:1" />

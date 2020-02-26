@@ -77,7 +77,7 @@ GameDatabase.celestials.navigation = {
   "teresa-pp-shop": {
     visible: () => true,
     complete: () => (Teresa.has(TERESA_UNLOCKS.SHOP)
-      ? 1 : Teresa.rmStore.e / Math.log10(TERESA_UNLOCKS.SHOP.price)),
+      ? 1 : Math.log10(Teresa.rmStore) / Math.log10(TERESA_UNLOCKS.SHOP.price)),
     node: {
       completeClass: "c-celestial-nav__test-complete",
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -90,7 +90,7 @@ GameDatabase.celestials.navigation = {
       legend: {
         text: complete => {
           if (complete >= 1) return "Perk Point Shop";
-          const rm = player.reality.realityMachines;
+          const rm = Teresa.rmStore;
           const cost = TERESA_UNLOCKS.SHOP.price;
           return [
             "Perk Point Shop",
@@ -113,7 +113,7 @@ GameDatabase.celestials.navigation = {
   "effarig-shop": {
     visible: () => true,
     complete: () => (Teresa.has(TERESA_UNLOCKS.EFFARIG)
-      ? 1 : Teresa.rmStore.e / Math.log10(TERESA_UNLOCKS.EFFARIG.price)),
+      ? 1 : Math.log10(Teresa.rmStore) / Math.log10(TERESA_UNLOCKS.EFFARIG.price)),
     node: {
       completeClass: "c-celestial-nav__effarig",
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -125,7 +125,7 @@ GameDatabase.celestials.navigation = {
       legend: {
         text: complete => {
           if (complete >= 1) return "Effarig's Shop";
-          const rm = player.reality.realityMachines;
+          const rm = Teresa.rmStore;
           const cost = TERESA_UNLOCKS.EFFARIG.price;
           return [
             "Effarig",
@@ -146,7 +146,8 @@ GameDatabase.celestials.navigation = {
   },
   "effarig-reality-unlock": {
     visible: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
-    complete: () => 1,
+    complete: () => (EffarigUnlock.run.isUnlocked 
+      ? 1 : Math.log10(player.celestials.effarig.relicShards) / Math.log10(EffarigUnlock.run.cost)),
     node: {
       completeClass: "c-celestial-nav__effarig",
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -155,9 +156,17 @@ GameDatabase.celestials.navigation = {
         rMajor: 16,
       },
       legend: {
-        text: "TBD",
-        angle: 150,
-        diagonal: 16,
+        text: complete => {
+          if (complete >= 1) return "Unlock Effarig's Reality";
+          const rs = player.celestials.effarig.relicShards;
+          const cost = EffarigUnlock.run.cost;
+          return [
+            "Unlock Effarig's Reality",
+            `Reach ${shorten(rs, 1)} / ${shorten(cost, 0)} Relic Shards`
+          ];
+        },
+        angle: 75,
+        diagonal: 40,
         horizontal: 16,
       },
     },
@@ -170,7 +179,12 @@ GameDatabase.celestials.navigation = {
   },
   "effarig-infinity": {
     visible: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
-    complete: () => (EffarigUnlock.infinity.isUnlocked ? 1 : 0),
+    complete: () => {
+      if (EffarigUnlock.infinity.isUnlocked) return 1;
+      if (!Effarig.isRunning) return 0;
+
+      return player.antimatter.log10() / Decimal.MAX_NUMBER.log10();
+    },
     node: {
       completeClass: "c-celestial-nav__effarig",
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -180,9 +194,16 @@ GameDatabase.celestials.navigation = {
         rMinor: 52,
       },
       legend: {
-        text: "Effarig's Infinity",
-        angle: 135,
-        diagonal: 24,
+        text: complete => {
+          if (complete >= 1) return "Effarig's Infinity";
+          const am = Effarig.isRunning ? player.antimatter : 0;
+          return [
+            "Effarig's Infinity",
+            `Reach ${shorten(am, 1)} / ${shorten(Number.MAX_VALUE, 2)} Antimatter inside Effarig's Reality.`
+          ];
+        },
+        angle: -135,
+        diagonal: 70,
         horizontal: 16,
       },
     },
@@ -195,8 +216,14 @@ GameDatabase.celestials.navigation = {
   },
   "effarig-eternity": {
     visible: () => EffarigUnlock.infinity.isUnlocked,
-    complete: () => (EffarigUnlock.eternity.isUnlocked ? 1 : 0),
+    complete: () => {
+      if (EffarigUnlock.eternity.isUnlocked) return 1;
+      if (!Effarig.isRunning) return 0;
+
+      return player.infinityPoints.log10() / Decimal.MAX_NUMBER.log10();
+    },
     node: {
+      completeClass: "c-celestial-nav__effarig",
       incompleteClass: "c-celestial-nav__test-incomplete",
       fill: "#7131ec",
       position: new Vector(550, 25),
@@ -205,17 +232,46 @@ GameDatabase.celestials.navigation = {
         rMinor: 30,
       },
       legend: {
-        text: "Effarig's Eternity",
+        text: complete => {
+          if (complete >= 1) return "Effarig's Eternity";
+          const ip = Effarig.isRunning ? player.infinityPoints : 0;
+          return [
+            "Effarig's Eternity",
+            `Reach ${shorten(ip, 1)} / ${shorten(Number.MAX_VALUE, 2)} IP inside Effarig's Reality.`
+          ];
+        },
         angle: -45,
         diagonal: 16,
         horizontal: 16,
       },
     },
+    connector: (function() {
+      const pathStart = -Math.PI;
+      const pathEnd = 0;
+      const path = LogarithmicSpiral.fromPolarEndpoints(new Vector(560, 25), pathStart, 66, pathEnd, 26);
+      const pathPadStart = 0;
+      const pathPadEnd = pathEnd - path.angleFromRadius(30);
+      return {
+        pathStart,
+        pathEnd,
+        path,
+        pathPadStart,
+        pathPadEnd,
+        fill: "#5151ec"
+      };
+    }())
   },
   "effarig-reality": {
     visible: () => EffarigUnlock.eternity.isUnlocked,
-    complete: () => (EffarigUnlock.reality.isUnlocked ? 1 : 0),
+    complete: () => {
+      if (EffarigUnlock.reality.isUnlocked) return 1;
+      if (!Effarig.isRunning) return 0;
+
+      return player.eternityPoints.log10() / 4000;
+    },
     node: {
+      alwaysShowLegend: true,
+      completeClass: "c-celestial-nav__effarig",
       incompleteClass: "c-celestial-nav__test-incomplete",
       fill: "#A101ec",
       position: new Vector(550, 25),
@@ -225,15 +281,38 @@ GameDatabase.celestials.navigation = {
       },
       symbol: "Ϙ",
       legend: {
-        text: "Effarig's Reality",
+        text: complete => {
+          if (complete >= 1) return "Effarig's Reality";
+          const ep = Effarig.isRunning ? player.eternityPoints : 0;
+          const goal = new Decimal("1e4000");
+          return [
+            "Effarig's Reality",
+            `Reach ${shorten(ep, 1)} / ${shorten(goal, 2)} IP inside Effarig's Reality.`
+          ];
+        },
         angle: -120,
-        diagonal: 52,
+        diagonal: 82,
         horizontal: 16,
       },
     },
+    connector: (function() {
+      const pathStart = 0;
+      const pathEnd = Math.PI;
+      const path = LogarithmicSpiral.fromPolarEndpoints(new Vector(558, 25), pathStart, 26, pathEnd, 24);
+      const pathPadStart = 0;
+      const pathPadEnd = 0;
+      return {
+        pathStart,
+        pathEnd,
+        path,
+        pathPadStart,
+        pathPadEnd,
+        fill: "#5151ec"
+      };
+    }())
   },
   "enslaved": {
-    visible: () => EffarigUnlock.reality.isUnlocked,
+    visible: () => EffarigUnlock.eternity.isUnlocked,
     complete: () => 1,
     drawOrder: -1,
     node: {
@@ -262,8 +341,15 @@ GameDatabase.celestials.navigation = {
     }
   },
   "enslaved-unlock-glyph-level": {
-    visible: () => EffarigUnlock.reality.isUnlocked,
-    complete: () => 1,
+    visible: () => EffarigUnlock.eternity.isUnlocked,
+    complete: () => {
+      const glyphs = Glyphs.activeList.concat(Glyphs.inventoryList);
+      let bestGlyph = glyphs[0];
+      for (const g of glyphs) {
+        if (g.level > bestGlyph.level) bestGlyph = g;
+      }
+      return bestGlyph.level / 5000;
+    },
     drawOrder: -1,
     node: {
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -277,7 +363,10 @@ GameDatabase.celestials.navigation = {
         gapAngleDeg: 0,
       },
       legend: {
-        text: ["Reach glyph", "level 5000"],
+        text: complete => {
+          const goal = 5000;
+          return ["Reach glyph", `level ${shortenSmallInteger(complete * goal, 0)}/${shortenSmallInteger(goal, 0)}`];
+        },
         angle: -45,
         diagonal: 16,
         horizontal: 16,
@@ -296,8 +385,15 @@ GameDatabase.celestials.navigation = {
     }
   },
   "enslaved-unlock-glyph-rarity": {
-    visible: () => EffarigUnlock.reality.isUnlocked,
-    complete: () => 1,
+    visible: () => EffarigUnlock.eternity.isUnlocked,
+    complete: () => {
+      const glyphs = Glyphs.activeList.concat(Glyphs.inventoryList);
+      let bestGlyph = glyphs[0];
+      for (const g of glyphs) {
+        if (g.strength > bestGlyph.strength) bestGlyph = g;
+      }
+      return strengthToRarity(bestGlyph.strength) / 100;
+    },
     drawOrder: -1,
     node: {
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -311,10 +407,13 @@ GameDatabase.celestials.navigation = {
         gapAngleDeg: 0,
       },
       legend: {
-        text: ["Reach glyph", "level 5000"],
-        angle: -45,
-        diagonal: 16,
-        horizontal: 16,
+        text: complete => {
+          const goal = 100;
+          return ["Reach glyph", `rarity of ${formatPercents(complete * goal / 100, 2)}/${formatPercents(goal / 100, 0)}`];
+        },
+        angle: 135,
+        diagonal: 32,
+        horizontal: 32,
       },
     },
     connector: {
@@ -330,10 +429,11 @@ GameDatabase.celestials.navigation = {
     }
   },
   "enslaved-reality": {
-    visible: () => EffarigUnlock.reality.isUnlocked,
+    visible: () => EffarigUnlock.eternity.isUnlocked,
     complete: () => (Enslaved.isCompleted ? 1 : 0),
     node: {
       incompleteClass: "c-celestial-nav__test-incomplete",
+      alwaysShowLegend: true,
       fill: "#ffa337",
       position: new Vector(650, 250),
       ring: {

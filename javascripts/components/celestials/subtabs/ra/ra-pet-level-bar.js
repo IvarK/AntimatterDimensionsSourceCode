@@ -16,13 +16,16 @@ Vue.component("ra-pet-level-bar", {
     shiftDown() {
       return ui.view.shiftDown;
     },
-    importantLevels: () => [2, 5, 8, 10, 15, 25],
     unlocks() {
       return Object.values(RA_UNLOCKS).filter(unlock => unlock.pet === this.pet);
     },
+    importantLevels() {
+      return this.unlocks.map(u => u.level);
+    },
     multiLevelStyle() {
+      const thisLevelFill = this.exp * Ra.requiredExpForLevel(this.level + 1) / Ra.requiredExpForLevel(this.level);
       return {
-        width: `${100 * (Ra.totalExpForLevel(this.level) + this.exp) / Ra.totalExpForLevel(this.importantGoal)}%`
+        width: `${100 * (Ra.totalExpForLevel(this.level) + thisLevelFill) / Ra.totalExpForLevel(this.nextGoal)}%`
       };
     },
     singleLevelStyle() {
@@ -35,16 +38,14 @@ Vue.component("ra-pet-level-bar", {
         "background-color": this.pet.color
       };
     },
-    importantGoal() {
-      return this.importantLevels.find(goal => goal > this.level || goal === 25);
+    nextGoal() {
+      const missingUpgrades = this.importantLevels.filter(goal => goal > this.level);
+      return missingUpgrades.length === 0 ? 25 : missingUpgrades.min();
     },
     currentLevelGoal() {
       if (this.shiftDown) return this.level + 1;
-      return this.importantGoal;
+      return this.nextGoal;
     },
-    activeUnlock() {
-      return this.unlocks.find(unlock => unlock.level === this.importantGoal);
-    }
   },
   methods: {
     update() {
@@ -54,9 +55,6 @@ Vue.component("ra-pet-level-bar", {
       this.exp = pet.exp;
       this.level = pet.level;
       this.requiredExp = pet.requiredExp;
-    },
-    findUnlockByLevel(level) {
-      return this.unlocks.find(unlock => unlock.level === level);
     },
     isImportant(level) {
       return this.importantLevels.includes(level);
@@ -79,7 +77,6 @@ Vue.component("ra-pet-level-bar", {
             :key="lvl"
             :level="lvl"
             :goal="currentLevelGoal"
-            :unlock="findUnlockByLevel(lvl)"
             :isImportantLevel="isImportant(lvl)"
           />
         </div>

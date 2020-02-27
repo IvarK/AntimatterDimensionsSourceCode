@@ -327,7 +327,7 @@ Vue.component("celestial-navigation", {
         }
       },
       template: `
-      <g class="o-celestial-nav__hoverable" :class="forceHoverClass">
+      <g class="o-celestial-nav__hoverable" :class="forceHoverClass" :visibility="config.visible() ? 'visible' : 'hidden'">
         <path :transform="ringBackgroundTransform" :d="ringBackgroundPath" fill="black" stroke="none" filter="url(#completeGlow)" />
         <progress-connector v-if="hasConnector"
           :complete="complete"
@@ -340,7 +340,7 @@ Vue.component("celestial-navigation", {
     },
   },
   data: () => ({
-    visibleNodes: [],
+    nodes: [],
     bezTest: BezTestData,
   }),
   computed: {
@@ -365,12 +365,9 @@ Vue.component("celestial-navigation", {
   },
   methods: {
     update() {
-      const visibleNodes = [];
-      for (const key of Object.keys(this.db)) {
-        if (this.db[key].visible()) visibleNodes.push(key);
-      }
-      visibleNodes.sort((a, b) => (this.db[a].drawOrder || 0) - (this.db[b].drawOrder || 0));
-      this.visibleNodes = visibleNodes;
+      const nodes = Object.keys(this.db);
+      nodes.sort((a, b) => (this.db[a].drawOrder || 0) - (this.db[b].drawOrder || 0));
+      this.nodes = nodes;
     },
     vec(x, y) {
       return new Vector(x, y);
@@ -413,7 +410,7 @@ Vue.component("celestial-navigation", {
       </feMerge>
     </filter>
   </defs>
-  <navigation-node v-for="nodeId in visibleNodes" :key="nodeId" :nodeId="nodeId" />
+  <navigation-node v-for="nodeId in nodes" :key="nodeId" :nodeId="nodeId"/>
 </svg>
   `
 });

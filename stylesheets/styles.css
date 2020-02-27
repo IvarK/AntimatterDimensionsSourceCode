@@ -5630,7 +5630,7 @@ kbd {
 .l-ra-bar-container {
   margin: 1rem 0 4rem 0;
   width: 100%;
-  height: 10rem;
+  height: 3rem;
   flex-direction: row;
   flex-flow: nowrap;
 }
@@ -5710,6 +5710,18 @@ kbd {
   font-size: 1.3rem;
   margin-top: 1.5rem;
   font-weight: bold;
+}
+
+.l-ra-upgrade-icon {
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  font-size: x-large;
+  padding: 1rem;
+}
+
+.l-ra-upgrade-icon--inactive {
+  color: black;
 }
 
 .l-ra-non-pets {

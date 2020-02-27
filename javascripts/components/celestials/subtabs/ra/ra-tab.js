@@ -52,7 +52,10 @@ Vue.component("ra-tab", {
         memories on Reality, based on glyph level.
       </div>
       <div>
-        Mouse-over bolded numbers to see descriptions of upgrades you have already unlocked.
+        Hold shift to see progress on your current level.
+      </div>
+      <div>
+        Mouse-over the icons below the bar to see descriptions of upgrades.
       </div>
       <div class="l-ra-all-pets-container">
         <ra-pet v-for="(pet, i) in pets" :key="i" :petConfig="pet" />

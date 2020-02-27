@@ -346,42 +346,48 @@ const RA_UNLOCKS = {
     description: "Get Teresa to level 2",
     reward: "Unlock charging of Infinity upgrades",
     pet: Ra.pets.teresa,
-    level: 2
+    level: 2,
+    displayIcon: `<i class="fas fa-infinity"></i>`
   },
   TERESA_XP: {
     id: 1,
     description: "Get Teresa to level 5",
     reward: "Unlock Ra's Reality, boost Teresa memory gain based on EP reached in Ra's Reality",
     pet: Ra.pets.teresa,
-    level: 5
+    level: 5,
+    displayIcon: `<b>Ϟ</b>`
   },
   AUTO_TP: {
     id: 2,
     description: "Get Teresa to level 25",
     reward: "Tachyon Particles are given immediately during dilation",
     pet: Ra.pets.teresa,
-    level: 25
+    level: 25,
+    displayIcon: `<i class="fas fa-atom"></i>`
   },
   EFFARIG_UNLOCK: {
     id: 3,
     description: "Get Teresa to level 10",
     reward: "Unlock Effarig's memories and Glyph Alchemy",
     pet: Ra.pets.teresa,
-    level: 10
+    level: 10,
+    displayIcon: `<i class="fas fa-neuter"></i>`
   },
   PERK_SHOP_INCREASE: {
     id: 4,
     description: "Get Teresa to level 15",
     reward: "Perk shop caps are raised",
     pet: Ra.pets.teresa,
-    level: 15
+    level: 15,
+    displayIcon: `<i class="fas fa-project-diagram"></i>`
   },
   ALTERED_GLYPHS: {
     id: 5,
     description: "Get Teresa to level 8",
     reward: "Unlock Altered Glyphs",
     pet: Ra.pets.teresa,
-    level: 8
+    level: 8,
+    displayIcon: `<i class="fas fa-bolt"></i>`
   },
   ALCHEMY_RESOURCES: {
     id: 6,
@@ -391,28 +397,32 @@ const RA_UNLOCKS = {
       resources: () => Ra.pets.effarig.level,
     },
     pet: Ra.pets.effarig,
-    level: 2
+    level: 2,
+    displayIcon: `<i class="fas fa-random"></i>`
   },
   EFFARIG_XP: {
     id: 7,
     description: "Get Effarig to level 5",
     reward: "Boost Effarig memory gain based on glyph count in Ra's Reality, less glyphs means higher boost",
     pet: Ra.pets.effarig,
-    level: 5
+    level: 5,
+    displayIcon: `<i class="fas fa-question-circle"></i>`
   },
   GLYPH_EFFECT_COUNT: {
     id: 8,
     description: "Get Effarig to level 8",
     reward: "Glyphs always have 4 effects (Effarig glyphs can now have more)",
     pet: Ra.pets.effarig,
-    level: 8
+    level: 8,
+    displayIcon: `<i class="fas fa-question-circle"></i>`
   },
   ENSLAVED_UNLOCK: {
     id: 9,
     description: "Get Effarig to level 10",
     reward: "Unlock Enslaved's memories",
     pet: Ra.pets.effarig,
-    level: 10
+    level: 10,
+    displayIcon: `<i class="fas fa-link"></i>`
   },
   SHARD_LEVEL_BOOST: {
     id: 10,
@@ -420,14 +430,16 @@ const RA_UNLOCKS = {
     reward: "Glyph level is increased based on relic shards gained",
     effect: () => 100 * Math.pow(Math.log10(Math.max(Effarig.shardsGained, 1)), 2),
     pet: Ra.pets.effarig,
-    level: 15
+    level: 15,
+    displayIcon: `<i class="fas fa-fire"></i>`
   },
   AUTO_BLACK_HOLE_POWER: {
     id: 11,
     description: "Get Effarig to level 25",
     reward: "Black hole power upgrades are bought automagically",
     pet: Ra.pets.effarig,
-    level: 25
+    level: 25,
+    displayIcon: `<i class="fas fa-question-circle"></i>`
   },
   IMPROVED_STORED_TIME: {
     id: 12,
@@ -439,63 +451,72 @@ const RA_UNLOCKS = {
       realTimeCap: () => 1000 * 3600 * (Ra.pets.enslaved.level + Math.clampMin(Ra.pets.enslaved.level - 25, 0)) / 2,
     },
     pet: Ra.pets.enslaved,
-    level: 2
+    level: 2,
+    displayIcon: `<i class="fas fa-history"></i>`
   },
   ENSLAVED_XP: {
     id: 13,
     description: "Get Enslaved to level 5",
     reward: "Boost Enslaved memory gain based on game time in Ra's Reality, lower time means higher boost",
     pet: Ra.pets.enslaved,
-    level: 5
+    level: 5,
+    displayIcon: `<i class="fas fa-stopwatch"></i>`
   },
   ADJUSTABLE_STORED_TIME: {
     id: 14,
     description: "Get Enslaved to level 8",
     reward: "Stored game time can be rate-adjusted and automatically released",
     pet: Ra.pets.enslaved,
-    level: 8
+    level: 8,
+    displayIcon: `<i class="fas fa-expand-arrows-alt"></i>`
   },
   V_UNLOCK: {
     id: 15,
     description: "Get Enslaved to level 10",
     reward: "Unlock V's memories.",
     pet: Ra.pets.enslaved,
-    level: 10
+    level: 10,
+    displayIcon: `<i class="fas fa-question-circle"></i>`
   },
   PEAK_GAMESPEED: {
     id: 16,
     description: "Get Enslaved to level 15",
     reward: "Gain more dilated time based on peak game speed in each Reality",
     pet: Ra.pets.enslaved,
-    level: 15
+    level: 15,
+    displayIcon: `<i class="fas fa-question-circle"></i>`
   },
   TIME_COMPRESSION: {
     id: 17,
     description: "Get Enslaved to level 25",
     reward: "Unlock Time Compression",
     pet: Ra.pets.enslaved,
-    level: 25
+    level: 25,
+    displayIcon: `<i class="fas fa-compress-arrows-alt"></i>`
   },
   HARD_V: {
     id: 18,
     description: "Get V to level 8",
     reward: "Unlock more V-achievements.",
     pet: Ra.pets.v,
-    level: 8
+    level: 8,
+    displayIcon: `<i class="fas fa-question-circle"></i>`
   },
   V_XP: {
     id: 19,
     description: "Get V to level 5",
     reward: "Boost V memory gain based on purchased TT in Ra's Reality",
     pet: Ra.pets.v,
-    level: 5
+    level: 5,
+    displayIcon: `<i class="fas fa-question-circle"></i>`
   },
   INSTANT_AUTOEC: {
     id: 20,
     description: "Get V to level 2",
     reward: "Auto-EC happens instantly and dilation is auto-unlocked at 17000 TT",
     pet: Ra.pets.v,
-    level: 2
+    level: 2,
+    displayIcon: `<i class="fas fa-question-circle"></i>`
   },
   TT_BOOST: {
     id: 21,
@@ -510,7 +531,8 @@ const RA_UNLOCKS = {
       autoPrestige: () => 1 + 2.4 * Ra.theoremBoostFactor()
     },
     pet: Ra.pets.v,
-    level: 10
+    level: 10,
+    displayIcon: `<i class="fas fa-question-circle"></i>`
   },
   TT_ACHIEVEMENT: {
     id: 22,
@@ -518,14 +540,16 @@ const RA_UNLOCKS = {
     reward: "Achievement multiplier applies to Time Theorem generation",
     effect: () => Achievements.power,
     pet: Ra.pets.v,
-    level: 15
+    level: 15,
+    displayIcon: `<i class="fas fa-question-circle"></i>`
   },
   AUTO_REALITY_UPGRADES: {
     id: 23,
     description: "Get V to level 25",
     reward: "Automagically purchases reality upgrades",
     pet: Ra.pets.v,
-    level: 25
+    level: 25,
+    displayIcon: `<i class="fas fa-question-circle"></i>`
   }
 };
 

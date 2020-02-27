@@ -27,6 +27,11 @@ Vue.component("ra-pet", {
         color: this.petConfig.pet.color
       };
     },
+    unlocks() {
+      return Object.values(RA_UNLOCKS)
+        .filter(unlock => unlock.pet === this.petConfig.pet)
+        .sort((a, b) => a.level - b.level);
+    },
   },
   methods: {
     update() {
@@ -71,6 +76,9 @@ Vue.component("ra-pet", {
           (next level in {{ nextLevelEstimate }})
         </div>
         <ra-pet-level-bar :pet="petConfig.pet" />
+        <ra-upgrade-icon v-for="(unlock, i) in unlocks"
+          :key="i"
+          :unlock="unlock" />
       </div>
     </div>
   `

@@ -396,8 +396,13 @@ Vue.component("celestial-navigation", {
       <stop offset="1" stop-color="#5151ec"/>
     </linearGradient>
     <linearGradient id="gradEffarigEnslaved" y2="0" x2="1" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#7131ec"/>
+      <stop offset="0" stop-color="#5151ec"/>
       <stop offset="1" stop-color="#ffa337"/>
+    </linearGradient>
+    
+    <linearGradient id="gradEffarigV" y2="0" x2="1" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffa337"/>
+      <stop offset="1" stop-color="#6ef36e"/>
     </linearGradient>
     <mask id="fade" maskContentUnits="objectBoundingBox">
       <rect width="1" height="1" fill="url(#fadeGrad)"/>

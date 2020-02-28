@@ -5628,7 +5628,7 @@ kbd {
 }
 
 .l-ra-bar-container {
-  margin: 1rem 0 4rem 0;
+  margin: 1rem 0 3.5rem 0;
   width: 100%;
   height: 3rem;
   flex-direction: row;
@@ -5681,9 +5681,9 @@ kbd {
   border: 0.2rem solid white;
   border-radius: 0.5rem;
   width: 80%;
-  margin: 2.5rem 0 2.5rem 0;
   height: 5rem;
   margin: auto;
+  margin-bottom: 2rem;
   z-index: 1;
 }
 
@@ -5725,7 +5725,7 @@ kbd {
   background: #222;
   border-radius: 3rem;
   border: 1px solid #111;
-  margin: 0rem 0.3rem;
+  margin: 0 0.3rem;
 }
 
 .c-ra-upgrade-icon--inactive {

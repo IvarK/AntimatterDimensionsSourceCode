@@ -344,7 +344,7 @@ const RA_UNLOCKS = {
   CHARGE: {
     id: 0,
     description: "Get Teresa to level 2",
-    reward: "Unlock charging of Infinity upgrades",
+    reward: "Unlock charging of Infinity upgrades (one every 2 levels)",
     pet: Ra.pets.teresa,
     level: 2,
     displayIcon: `<span class="fas fa-infinity"></span>`
@@ -392,7 +392,7 @@ const RA_UNLOCKS = {
   GLYPH_ALCHEMY: {
     id: 6,
     description: "Get Effarig to level 2",
-    reward: "Unlock Glyph Alchemy",
+    reward: "Unlock Glyph Alchemy (one resource per level)",
     pet: Ra.pets.effarig,
     level: 2,
     displayIcon: `<span class="fas fa-vial"></span>`
@@ -441,7 +441,7 @@ const RA_UNLOCKS = {
   IMPROVED_STORED_TIME: {
     id: 12,
     description: "Get Enslaved to level 2",
-    reward: "Stored game time is amplified and you can store more real time",
+    reward: "Stored game time is amplified and you can store more real time (scales with level)",
     effect: {
       gameTimeAmplification: () => 1 + Math.clampMax(Ra.pets.enslaved.level, 25) / 100,
       realTimeEfficiency: () => Ra.pets.enslaved.level / 50,
@@ -502,7 +502,7 @@ const RA_UNLOCKS = {
   V_XP: {
     id: 19,
     description: "Get V to level 5",
-    reward: "Boost V memory gain based on purchased TT in Ra's Reality",
+    reward: "Boost V memory gain based on purchased TT in Ra's Reality, unlock a Triad study every 5 levels",
     pet: Ra.pets.v,
     level: 5,
     displayIcon: `<span class="fas fa-book"></span>`

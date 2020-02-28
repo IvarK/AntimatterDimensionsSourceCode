@@ -66,6 +66,9 @@ Vue.component("ra-pet", {
         <div v-if="level >= 2">
           {{ scalingUpgradeText }}
         </div>
+        <div v-else>
+          <br>
+        </div>
         <div>
           {{ format(exp, 2) }} / {{ format(requiredExp, 2) }} {{ name }} memories
         </div>

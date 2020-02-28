@@ -12,7 +12,7 @@ Vue.component("ra-tab", {
   methods: {
     update() {
       this.expMults = this.pets.map(obj => obj.pet.expBoost);
-      this.currentExpGain = Ra.pets.teresa.baseExp;
+      this.currentExpGain = Ra.baseExp(gainedGlyphLevel().actualLevel);
       this.showReality = Ra.has(RA_UNLOCKS.TERESA_XP);
       this.showLaitela = Ra.pets.v.isUnlocked;
     },
@@ -32,7 +32,8 @@ Vue.component("ra-tab", {
       },
       {
         pet: Ra.pets.effarig,
-        scalingUpgradeText: level => `You have unlocked ${level} alchemy resources`,
+        scalingUpgradeText: () => `You have unlocked
+          ${AlchemyResources.all.filter(r => r.isUnlocked).length} alchemy resources.`,
       },
       {
         pet: Ra.pets.enslaved,
@@ -52,7 +53,10 @@ Vue.component("ra-tab", {
         memories on Reality, based on glyph level.
       </div>
       <div>
-        Mouse-over bolded numbers to see descriptions of upgrades you have already unlocked.
+        Hold shift to see progress on your current level.
+      </div>
+      <div>
+        Mouse-over the icons below the bar to see descriptions of upgrades.
       </div>
       <div class="l-ra-all-pets-container">
         <ra-pet v-for="(pet, i) in pets" :key="i" :petConfig="pet" />
@@ -85,7 +89,7 @@ Vue.component("ra-tab", {
           <div class="l-ra-laitela-unlock-inner">
             <h1> Lai'tela: </h1>
             <h2> The Celestial of Matter </h2>
-            <p> Unlocked getting all four celestials to level {{ formatInt(20) }} </p>
+            <p> Unlocked by getting all four celestials to level {{ formatInt(20) }} </p>
           </div>
         </button>
       </div>

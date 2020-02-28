@@ -33,7 +33,7 @@ body.t-normal {
   flex-direction: column;
   width: 20rem;
   position: fixed;
-  z-index: 4;
+  z-index: 5;
 }
 
 .sidebar:hover .subtabs,

@@ -32,7 +32,8 @@ Vue.component("ra-tab", {
       },
       {
         pet: Ra.pets.effarig,
-        scalingUpgradeText: level => `You have unlocked ${level} alchemy resources`,
+        scalingUpgradeText: () => `You have unlocked
+          ${AlchemyResources.all.filter(r => r.isUnlocked).length} alchemy resources.`,
       },
       {
         pet: Ra.pets.enslaved,
@@ -88,7 +89,7 @@ Vue.component("ra-tab", {
           <div class="l-ra-laitela-unlock-inner">
             <h1> Lai'tela: </h1>
             <h2> The Celestial of Matter </h2>
-            <p> Unlocked getting all four celestials to level {{ formatInt(20) }} </p>
+            <p> Unlocked by getting all four celestials to level {{ formatInt(20) }} </p>
           </div>
         </button>
       </div>

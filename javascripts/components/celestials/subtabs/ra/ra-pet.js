@@ -76,9 +76,11 @@ Vue.component("ra-pet", {
           (next level in {{ nextLevelEstimate }})
         </div>
         <ra-pet-level-bar :pet="petConfig.pet" />
-        <ra-upgrade-icon v-for="(unlock, i) in unlocks"
+        <div style="display: flex; justify-content: center;">
+          <ra-upgrade-icon v-for="(unlock, i) in unlocks"
           :key="i"
           :unlock="unlock" />
+        </div>
       </div>
     </div>
   `

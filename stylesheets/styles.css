@@ -5655,7 +5655,7 @@ kbd {
 .c-important-chevron {
   font-weight: bold;
   font-size: 1.5rem;
-  height: 5rem;
+  height: 4.6rem;
   border-left-width: 0.2rem;
 }
 
@@ -5712,16 +5712,24 @@ kbd {
   font-weight: bold;
 }
 
-.l-ra-upgrade-icon {
+.c-ra-upgrade-icon {
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
-  font-size: x-large;
-  padding: 1rem;
+  line-height: 3.9rem;
+  font-size: 2.3rem;
+  font-weight: bold;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+  width: 4rem;
+  height: 4rem;
+  background: #222;
+  border-radius: 3rem;
+  border: 1px solid #111;
+  margin: 0rem 0.3rem;
 }
 
-.l-ra-upgrade-icon--inactive {
-  color: black;
+.c-ra-upgrade-icon--inactive {
+  color: #555;
 }
 
 .l-ra-non-pets {

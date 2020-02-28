@@ -10,8 +10,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 1 + amount / 200000,
       tier: 1,
       uiOrder: 1,
-      isUnlocked: () => Ra.pets.effarig.level >= 1,
-      lockText: "Effarig Level 1",
+      isUnlocked: () => Ra.pets.effarig.level >= 2,
+      lockText: "Effarig Level 2",
       formatEffect: value => `Normal dimensions ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.INFINITY]: {
@@ -21,8 +21,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 1 + amount / 200000,
       tier: 1,
       uiOrder: 2,
-      isUnlocked: () => Ra.pets.effarig.level >= 2,
-      lockText: "Effarig Level 2",
+      isUnlocked: () => Ra.pets.effarig.level >= 3,
+      lockText: "Effarig Level 3",
       formatEffect: value => `Infinity dimensions ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.TIME]: {
@@ -32,8 +32,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 1 + amount / 200000,
       tier: 1,
       uiOrder: 3,
-      isUnlocked: () => Ra.pets.effarig.level >= 3,
-      lockText: "Effarig Level 3",
+      isUnlocked: () => Ra.pets.effarig.level >= 4,
+      lockText: "Effarig Level 4",
       formatEffect: value => `Time dimensions ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.REPLICATION]: {
@@ -43,8 +43,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Decimal.pow10(amount / 1000),
       tier: 1,
       uiOrder: 4,
-      isUnlocked: () => Ra.pets.effarig.level >= 4,
-      lockText: "Effarig Level 4",
+      isUnlocked: () => Ra.pets.effarig.level >= 5,
+      lockText: "Effarig Level 5",
       formatEffect: value => `Replication speed ${formatX(value, 2, 2)}`
     },
     [ALCHEMY_RESOURCE.DILATION]: {
@@ -54,8 +54,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Decimal.pow10(amount / 2000),
       tier: 1,
       uiOrder: 5,
-      isUnlocked: () => Ra.pets.effarig.level >= 5,
-      lockText: "Effarig Level 5",
+      isUnlocked: () => Ra.pets.effarig.level >= 6,
+      lockText: "Effarig Level 6",
       formatEffect: value => `Dilated Time ${formatX(value, 2, 2)}`
     },
 

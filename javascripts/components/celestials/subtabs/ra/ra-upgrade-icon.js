@@ -21,16 +21,16 @@ Vue.component("ra-upgrade-icon", {
     },
     classObject() {
       return {
-        "l-ra-upgrade-icon": true,
-        "l-ra-upgrade-icon--inactive": !this.isUnlocked,
+        "c-ra-upgrade-icon": true,
+        "c-ra-upgrade-icon--inactive": !this.isUnlocked,
       };
     }
   },
   template: `
-    <span
+    <div
       v-html="icon"
       :ach-tooltip="description"
       :class="classObject">
-    </span>
+</div>
   `
 });

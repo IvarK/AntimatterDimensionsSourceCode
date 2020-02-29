@@ -166,7 +166,7 @@ const Ra = {
   },
   requiredExpForLevel(level) {
     const adjustedLevel = level + Math.pow(level, 2) / 10;
-    return Math.floor(Math.pow(adjustedLevel, 4) * 1e4);
+    return Math.floor(Math.pow(adjustedLevel, 4) * 1e5);
   },
   // Calculates the cumulative exp needed for a level starting from nothing.
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized

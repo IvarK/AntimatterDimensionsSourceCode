@@ -412,23 +412,23 @@ let player = {
       pets: {
         teresa: {
           level: 1,
-          exp: 0,
-          lastEPGained: new Decimal(0)
+          memoryChunks: 0,
+          exp: 0
         },
         effarig: {
           level: 1,
-          exp: 0,
-          lastGlyphCount: 5
+          memoryChunks: 0,
+          exp: 0
         },
         enslaved: {
           level: 1,
-          exp: 0,
-          lastTimeTaken: Number.MAX_VALUE
+          memoryChunks: 0,
+          exp: 0
         },
         v: {
           level: 1,
-          exp: 0,
-          lastTTPurchased: 0
+          memoryChunks: 0,
+          exp: 0
         }
       },
       alchemy: Array.repeat(0, 21)

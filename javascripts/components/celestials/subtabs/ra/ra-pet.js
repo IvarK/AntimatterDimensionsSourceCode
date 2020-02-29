@@ -11,9 +11,11 @@ Vue.component("ra-pet", {
       level: 0,
       exp: 0,
       requiredExp: 0,
-      expGainPerMs: 0,
       nextLevelEstimate: "",
-      expBoost: 0,
+      memoryChunks: 0,
+      memoryChunksPerSecond: 0,
+      memoriesPerSecond: 0,
+      canGetMemoryChunks: false,
       lastTenGlyphLevels: [],
       lastTenRunTimers: [],
     };
@@ -42,18 +44,20 @@ Vue.component("ra-pet", {
       this.level = pet.level;
       this.exp = pet.exp;
       this.requiredExp = pet.requiredExp;
-      this.expBoost = pet.expBoost;
+      this.memoryChunks = pet.memoryChunks;
+      this.memoryChunksPerSecond = pet.memoryChunksPerSecond;
+      this.memoriesPerSecond = pet.memoryChunks * Ra.productionPerMemoryChunk();
+      this.canGetMemoryChunks = pet.canGetMemoryChunks;
       this.lastTenGlyphLevels = player.lastTenRealities.map(([, , , lvl]) => lvl);
       this.lastTenRunTimers = player.lastTenRealities.map(([, , time]) => time);
 
-      const expGain = this.expBoost * this.lastTenGlyphLevels
-        .reduce((acc, level) => acc + Ra.baseExp(level), 0);
-      const avgTimeMs = this.lastTenRunTimers.reduce((acc, value) => acc + value, 0);
-      this.expGainPerMs = expGain / avgTimeMs;
-
-      const timeToLevel = (this.requiredExp - this.exp) / this.expGainPerMs;
+      const needed = (this.requiredExp - this.exp) / Ra.productionPerMemoryChunk();
+      const a = pet.memoryChunksPerSecond / 2;
+      const b = pet.memoryChunks;
+      const c = -needed;
+      const timeToLevel = a > 0 ? (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a) : -c / b;
       if (Number.isFinite(timeToLevel)) {
-        this.nextLevelEstimate = TimeSpan.fromMilliseconds(timeToLevel).toStringShort(false);
+        this.nextLevelEstimate = TimeSpan.fromSeconds(timeToLevel).toStringShort(false);
       } else {
         this.nextLevelEstimate = "never";
       }
@@ -73,10 +77,16 @@ Vue.component("ra-pet", {
           {{ format(exp, 2) }} / {{ format(requiredExp, 2) }} {{ name }} memories
         </div>
         <div>
-          Gaining {{ format(60000 * expGainPerMs, 2, 2) }} memories/min
+          {{ format(memoryChunks, 2, 2) }} memory chunks, {{ format(memoriesPerSecond, 2, 2) }} memories/second
         </div>
         <div>
           (next level in {{ nextLevelEstimate }})
+        </div>
+        <div v-if="canGetMemoryChunks">
+          {{ format(memoryChunksPerSecond, 2, 2) }} memory chunks/second
+        </div>
+        <div v-else>
+          <br>
         </div>
         <ra-pet-level-bar :pet="petConfig.pet" />
         <div style="display: flex; justify-content: center;">

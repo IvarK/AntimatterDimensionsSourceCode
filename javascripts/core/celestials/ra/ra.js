@@ -35,64 +35,49 @@ class RaPetState {
   set exp(value) {
     this.data.exp = value;
   }
+  
+  get memoryChunks() {
+    return this.data.memoryChunks;
+  }
+
+  set memoryChunks(value) {
+    this.data.memoryChunks = value;
+  }
 
   get requiredExp() {
     return Ra.requiredExpForLevel(this.level);
   }
-
-  addGainedExp(multiplier) {
-    if (!this.isUnlocked) return;
-    this.addExp(this.gainedExp * multiplier);
-  }
-
-  get gainedExp() {
-    return Ra.baseExp(gainedGlyphLevel().actualLevel) * this.expBoost;
-  }
-
-  get expBoost() {
-    if (!this.isUnlocked) return 0;
-    return this.expFormula(this.expBoostFactor);
-  }
-
-  get nextExpBoost() {
-    if (!this.isUnlocked) return 0;
-    return this.expFormula(this.nextExpBoostFactor);
-  }
-
+  
   /**
    * @abstract
    */
-  get expBoostFactor() { throw new NotImplementedError(); }
-
-  /**
-   * @abstract
-   */
-  set expBoostFactor(value) { throw new NotImplementedError(); }
-
-  /**
-   * @abstract
-   */
-  get defaultBoostFactor() { throw new NotImplementedError(); }
-
-  /**
-   * @abstract
-   */
-  get nextExpBoostFactor() { throw new NotImplementedError(); }
+  get rawMemoryChunksPerSecond() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
   get color() { throw new NotImplementedError(); }
-
-  /**
-   * @abstract
-   */
-  // eslint-disable-next-line no-unused-vars
-  expFormula(factor) { throw new NotImplementedError(); }
-
-  updateExpBoost() {
-    if (this.level < 3) return;
-    this.expBoostFactor = this.nextExpBoostFactor;
+  
+  get memoryChunksPerSecond() {
+    return this.canGetMemoryChunks ? this.rawMemoryChunksPerSecond : 0;
+  }
+  
+  get isUnlocked() {
+    const requiredUnlock = this.requiredUnlock;
+    return requiredUnlock === undefined || Ra.has(requiredUnlock);
+  }
+  
+  get canGetMemoryChunks() {
+    return this.isUnlocked && Ra.isRunning;
+  }
+  
+  tick(realDiff) {
+    let seconds = realDiff / 1000;
+    let newMemoryChunks = seconds * this.memoryChunksPerSecond;
+    let newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) *
+    Ra.productionPerMemoryChunk();
+    this.memoryChunks += newMemoryChunks;
+    this.addExp(newMemories);
   }
 
   addExp(exp) {
@@ -101,13 +86,15 @@ class RaPetState {
       this.exp -= this.requiredExp;
       this.level++;
       GameUI.notify.success(`${this.name} has leveled up to level ${this.level}!`);
+      // All Ra unlocks require a pet to gain a level so it suffices to do this here.
+      Ra.checkForUnlocks();
     }
   }
 
   reset() {
     this.data.level = 1;
     this.data.exp = 0;
-    this.expBoostFactor = this.defaultBoostFactor;
+    this.data.memoryChunks = 0;
   }
 }
 
@@ -117,61 +104,29 @@ const Ra = {
       get name() { return "Teresa"; }
       get data() { return player.celestials.ra.pets.teresa; }
       get requiredUnlock() { return undefined; }
-      get expBoostFactor() { return this.data.lastEPGained; }
-      set expBoostFactor(value) { this.data.lastEPGained = value; }
-      get defaultBoostFactor() { return new Decimal(0); }
-      get nextExpBoostFactor() { return new Decimal(player.eternityPoints); }
+      get rawMemoryChunksPerSecond() { return Math.pow(player.eternityPoints.pLog10() / 1e4, 3) }
       get color() { return "#86ea84"; }
-
-      expFormula(ep) {
-        return Math.max(ep.log10() / 7e3, 1);
-      }
     }(),
     effarig: new class EffarigRaPetState extends RaPetState {
       get name() { return "Effarig"; }
       get data() { return player.celestials.ra.pets.effarig; }
       get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
-      get expBoostFactor() { return this.data.lastGlyphCount; }
-      set expBoostFactor(value) { this.data.lastGlyphCount = value; }
-      get defaultBoostFactor() { return 5; }
-      get nextExpBoostFactor() { return Glyphs.activeList.length; }
+      get rawMemoryChunksPerSecond() { return Math.pow(Effarig.shardsGained, 0.1) }
       get color() { return "#ea8585"; }
-
-      expFormula(glyphCount) {
-        return Math.pow(1.3, 5 - glyphCount) / 2;
-      }
     }(),
     enslaved: new class EnslavedRaPetState extends RaPetState {
       get name() { return "Enslaved"; }
       get data() { return player.celestials.ra.pets.enslaved; }
       get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
-      get expBoostFactor() { return this.data.lastTimeTaken; }
-      set expBoostFactor(value) { this.data.lastTimeTaken = value; }
-      get defaultBoostFactor() { return Number.MAX_VALUE; }
-      get nextExpBoostFactor() { return player.thisReality; }
+      get rawMemoryChunksPerSecond() { return Math.pow(player.timeShards.pLog10() / 3e5, 2) }
       get color() { return "#ead584"; }
-
-      expFormula(milliseconds) {
-        const seconds = TimeSpan.fromMilliseconds(milliseconds).totalSeconds;
-        // This curve is 2x at 100, very steep below that (up to 10x at 1) and very shallow to 1x at 1e102
-        return seconds < 100
-          ? 40 / (4 + Math.max(0, Math.pow(Math.log10(seconds), 4))) / 4
-          : Math.max(1, 2.02 - Math.log10(seconds) / 100) / 4;
-      }
     }(),
     v: new class VRaPetState extends RaPetState {
       get name() { return "V"; }
       get data() { return player.celestials.ra.pets.v; }
       get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
-      get expBoostFactor() { return this.data.lastTTPurchased; }
-      set expBoostFactor(value) { this.data.lastTTPurchased = value; }
-      get defaultBoostFactor() { return 0; }
-      get nextExpBoostFactor() { return TimeTheorems.totalPurchased(); }
+      get rawMemoryChunksPerSecond() { return Math.pow(player.infinityPower.pLog10() / 1e7, 1.5) }
       get color() { return "#f1aa7f"; }
-
-      expFormula(theoremCount) {
-        return Math.max(1, Math.pow(theoremCount / 50000, 0.9)) / 8;
-      }
     }(),
   },
   // Dev/debug function for easier testing
@@ -192,20 +147,20 @@ const Ra = {
       resource.amount = Math.min(this.alchemyResourceCap, player.bestGlyphLevel);
     }
   },
-  giveExp(multiplier) {
-    for (const pet of Ra.pets.all) pet.addGainedExp(multiplier);
-    this.checkForUnlocks();
+  tick(realDiff) {
+    for (const pet of Ra.pets.all) pet.tick(realDiff);
   },
-  baseExp(glyphLevel) {
-    return Math.pow(2, glyphLevel / 500 - 10);
+  productionPerMemoryChunk() {
+    let res = 1;
+    if (this.has(RA_UNLOCKS.TERESA_XP)) res *= 1 + player.reality.realityMachines.pLog10() / 200;
+    if (this.has(RA_UNLOCKS.EFFARIG_XP)) res *= 1 + player.bestGlyphLevel / 10000;
+    if (this.has(RA_UNLOCKS.ENSLAVED_XP)) res *= 1 + Math.log10(player.totalTimePlayed) / 200;
+    if (this.has(RA_UNLOCKS.V_XP)) res *= 1 + Decimal.pLog10(Achievements.power) / 20;
+    return res;
   },
-  // The point of adjustedLevel is to effectively make the level used for the exp calculation scale upward like
-  //    1, 2, 3, 4, 5, 7, 9, 11, 13, 15, 18, 21, ... , 50
-  // or in other words, every 5 levels the increase-per-level in effective level increases by +1.
   requiredExpForLevel(level) {
-    const floor5 = Math.floor(level / 5);
-    const adjustedLevel = 2.5 * floor5 * (floor5 + 1) + (level % 5) * (floor5 + 1);
-    return Math.floor(1000 * adjustedLevel + Math.pow(adjustedLevel - 1, 4) * 2);
+    const adjustedLevel = level + Math.pow(level, 2 / 10);
+    return Math.floor(1e6 * adjustedLevel + Math.pow(adjustedLevel, 4) * 2e3);
   },
   // Calculates the cumulative exp needed for a level starting from nothing.
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized
@@ -219,7 +174,7 @@ const Ra = {
       // eslint-disable-next-line no-bitwise
       if (unl.pet.level >= unl.level && !this.has(unl)) player.celestials.ra.unlockBits |= (1 << unl.id);
     }
-    if (this.pets.all.every(pet => pet.level >= 20) && !this.has(RA_LAITELA_UNLOCK)) {
+    if (this.pets.all.map(pet => pet.level).sum() >= 80 && !this.has(RA_LAITELA_UNLOCK)) {
       // eslint-disable-next-line no-bitwise
       player.celestials.ra.unlockBits |= (1 << 24);
       MatterDimension(1).amount = new Decimal(1);
@@ -234,9 +189,6 @@ const Ra = {
   },
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;
-  },
-  updateExpBoosts() {
-    for (const pet of Ra.pets.all) pet.updateExpBoost();
   },
   gamespeedDTMult() {
     if (!Ra.has(RA_UNLOCKS.PEAK_GAMESPEED)) return 1;
@@ -352,7 +304,7 @@ const RA_UNLOCKS = {
   TERESA_XP: {
     id: 1,
     description: "Get Teresa to level 5",
-    reward: "Unlock Ra's Reality, boost Teresa memory gain based on Eternity Points reached in Ra's Reality",
+    reward: "All memory chunks produce more memories based on RM",
     pet: Ra.pets.teresa,
     level: 5,
     displayIcon: `Δ`
@@ -400,7 +352,7 @@ const RA_UNLOCKS = {
   EFFARIG_XP: {
     id: 7,
     description: "Get Effarig to level 5",
-    reward: "Boost Effarig memory gain based on glyph count in Ra's Reality (fewer glyphs means higher boost)",
+    reward: "All memory chunks produce more memories based on highest glyph level",
     pet: Ra.pets.effarig,
     level: 5,
     displayIcon: `<span class="fas fa-clone"></span>`
@@ -454,7 +406,7 @@ const RA_UNLOCKS = {
   ENSLAVED_XP: {
     id: 13,
     description: "Get Enslaved to level 5",
-    reward: "Boost Enslaved memory gain based on game time in Ra's Reality (lower time means higher boost)",
+    reward: "All memory chunks produce more memories based on total time played",
     pet: Ra.pets.enslaved,
     level: 5,
     displayIcon: `<span class="fas fa-stopwatch"></span>`
@@ -502,7 +454,7 @@ const RA_UNLOCKS = {
   V_XP: {
     id: 19,
     description: "Get V to level 5",
-    reward: "Boost V memory gain based on purchased TT in Ra's Reality, unlock a Triad study every 5 levels",
+    reward: "All memory chunks produce more memories based on achievement multiplier, unlock a Triad study every 5 levels",
     pet: Ra.pets.v,
     level: 5,
     displayIcon: `<span class="fas fa-book"></span>`
@@ -552,6 +504,6 @@ const RA_UNLOCKS = {
 
 const RA_LAITELA_UNLOCK = {
   id: 24,
-  description: "Get all celestials to level 20",
+  description: "Get 80 total celestial levels",
   reward: "Unlock Lai'tela, the Celestial of Dimensions",
 };

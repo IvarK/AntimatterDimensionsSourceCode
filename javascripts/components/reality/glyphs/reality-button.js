@@ -15,7 +15,6 @@ Vue.component("reality-button", {
       shardsGained: 0,
       expGained: [0, 0, 0, 0],
       raUnlocks: [false, false, false, false],
-      raExpBoosts: [false, false, false, false],
       celestialRunText: ["", "", "", "", ""]
     };
   },
@@ -80,23 +79,13 @@ Vue.component("reality-button", {
         Ra.has(RA_UNLOCKS.V_UNLOCK)];
       this.inTeresaReality = Teresa.isRunning;
       this.inLaitelaReality = Laitela.isRunning;
-      this.raExpBoosts = [Ra.isRunning && Ra.has(RA_UNLOCKS.TERESA_XP),
-        Ra.isRunning && Ra.has(RA_UNLOCKS.EFFARIG_XP),
-        Ra.isRunning && Ra.has(RA_UNLOCKS.ENSLAVED_XP),
-        Ra.isRunning && Ra.has(RA_UNLOCKS.V_XP)];
       const teresaReward = this.formatScalingMultiplier("Glyph sacrifice",
         Teresa.runRewardMultiplier,
         Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(player.antimatter)));
       const laitelaReward = this.formatScalingMultiplier("Matter dimensions",
         Laitela.realityReward,
         Math.max(Laitela.realityReward, Laitela.rewardMultiplier(player.antimatter)));
-      this.celestialRunText = [teresaReward,
-        this.formatPetMemories(Ra.pets.teresa),
-        this.formatPetMemories(Ra.pets.effarig),
-        this.formatPetMemories(Ra.pets.enslaved),
-        this.formatPetMemories(Ra.pets.v),
-        laitelaReward
-      ];
+      this.celestialRunText = [teresaReward, laitelaReward];
     },
     handleClick() {
       if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {
@@ -105,9 +94,6 @@ Vue.component("reality-button", {
       } else {
         requestManualReality();
       }
-    },
-    formatPetMemories(pet) {
-      return this.formatScalingMultiplier(`${pet.name} memories`, pet.expBoost, pet.nextExpBoost);
     },
     formatScalingMultiplier(resource, before, after) {
       return `${resource} ${formatX(before, 2, 2)} ➜ ${formatX(after, 2, 2)}`;
@@ -148,11 +134,7 @@ Vue.component("reality-button", {
             {{ format(expGained[3], 2, 2) }} V {{ "memory" | pluralize(expGained[3], "memories") }}
           </div>
           <div v-if="inTeresaReality">{{ celestialRunText[0] }}</div>
-          <div v-if="raExpBoosts[0]">{{ celestialRunText[1] }}</div>
-          <div v-if="raExpBoosts[1]">{{ celestialRunText[2] }}</div>
-          <div v-if="raExpBoosts[2]">{{ celestialRunText[3] }}</div>
-          <div v-if="raExpBoosts[3]">{{ celestialRunText[4] }}</div>
-          <div v-if="inLaitelaReality">{{ celestialRunText[5] }}</div>
+          <div v-if="inLaitelaReality">{{ celestialRunText[1] }}</div>
         </template>
         <template v-else>
           No resources gained

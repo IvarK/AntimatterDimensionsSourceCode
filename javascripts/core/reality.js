@@ -255,9 +255,6 @@ function giveRealityRewards(realityProps) {
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
     player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
   }
-  if (V.has(V_UNLOCKS.RA_UNLOCK)) {
-    Ra.giveExp(multiplier);
-  }
   if (multiplier > 1 && Enslaved.boostReality) {
     // Real time amplification is capped at 1 second of reality time; if it's faster then using all time at once would
     // be wasteful. Being faster than 1 second will only use as much time as needed to get the 1-second factor instead.
@@ -280,8 +277,6 @@ function giveRealityRewards(realityProps) {
   }
 
   if (Enslaved.isRunning) Enslaved.completeRun();
-
-  if (Ra.isRunning) Ra.updateExpBoosts();
 
   if (Laitela.isRunning) {
     player.celestials.laitela.maxAmGained = Decimal.max(player.celestials.laitela.maxAmGained, player.antimatter);

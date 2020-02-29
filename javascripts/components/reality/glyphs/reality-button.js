@@ -13,8 +13,6 @@ Vue.component("reality-button", {
       nextGlyphPercent: 0,
       nextMachineEP: 0,
       shardsGained: 0,
-      expGained: [0, 0, 0, 0],
-      raUnlocks: [false, false, false, false],
       celestialRunText: ["", "", "", "", ""]
     };
   },
@@ -72,11 +70,6 @@ Vue.component("reality-button", {
       this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
       this.ppGained = multiplier;
       this.shardsGained = Effarig.shardsGained * multiplier;
-      this.expGained = Ra.pets.all.map(p => p.gainedExp * multiplier);
-      this.raUnlocks = [V.has(V_UNLOCKS.RA_UNLOCK),
-        Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK),
-        Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),
-        Ra.has(RA_UNLOCKS.V_UNLOCK)];
       this.inTeresaReality = Teresa.isRunning;
       this.inLaitelaReality = Laitela.isRunning;
       const teresaReward = this.formatScalingMultiplier("Glyph sacrifice",
@@ -121,18 +114,6 @@ Vue.component("reality-button", {
           <div>Other resources gained:</div>
           <div>{{ppGained}} Perk {{ "point" | pluralize(ppGained) }}</div>
           <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
-          <div v-if="raUnlocks[0]">
-            {{ format(expGained[0], 2, 2) }} Teresa {{ "memory" | pluralize(expGained[0], "memories") }}
-          </div>
-          <div v-if="raUnlocks[1]">
-            {{ format(expGained[1], 2, 2) }} Effarig {{ "memory" | pluralize(expGained[1], "memories") }}
-          </div>
-          <div v-if="raUnlocks[2]">
-            {{ format(expGained[2], 2, 2) }} Enslaved {{ "memory" | pluralize(expGained[2], "memories") }}
-          </div>
-          <div v-if="raUnlocks[3]">
-            {{ format(expGained[3], 2, 2) }} V {{ "memory" | pluralize(expGained[3], "memories") }}
-          </div>
           <div v-if="inTeresaReality">{{ celestialRunText[0] }}</div>
           <div v-if="inLaitelaReality">{{ celestialRunText[1] }}</div>
         </template>

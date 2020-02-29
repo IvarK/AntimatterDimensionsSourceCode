@@ -59,7 +59,9 @@ class RaPetState {
   get color() { throw new NotImplementedError(); }
   
   get memoryChunksPerSecond() {
-    return this.canGetMemoryChunks ? this.rawMemoryChunksPerSecond : 0;
+    let res = this.canGetMemoryChunks ? this.rawMemoryChunksPerSecond : 0;
+    if (this.hasRecollection) res *= 2;
+    return res;
   }
   
   get isUnlocked() {
@@ -69,6 +71,10 @@ class RaPetState {
   
   get canGetMemoryChunks() {
     return this.isUnlocked && Ra.isRunning;
+  }
+  
+  get hasRecollection() {
+    return Ra.petWithRecollection === this.name;
   }
   
   tick(realDiff) {
@@ -152,15 +158,15 @@ const Ra = {
   },
   productionPerMemoryChunk() {
     let res = 1;
-    if (this.has(RA_UNLOCKS.TERESA_XP)) res *= 1 + player.reality.realityMachines.pLog10() / 200;
-    if (this.has(RA_UNLOCKS.EFFARIG_XP)) res *= 1 + player.bestGlyphLevel / 10000;
+    if (this.has(RA_UNLOCKS.TERESA_XP)) res *= 1 + Math.pow(player.reality.realityMachines.pLog10() / 100, 0.5);
+    if (this.has(RA_UNLOCKS.EFFARIG_XP)) res *= 1 + player.bestGlyphLevel / 7000;
     if (this.has(RA_UNLOCKS.ENSLAVED_XP)) res *= 1 + Math.log10(player.totalTimePlayed) / 200;
-    if (this.has(RA_UNLOCKS.V_XP)) res *= 1 + Decimal.pLog10(Achievements.power) / 20;
+    if (this.has(RA_UNLOCKS.V_XP)) res *= 1 + Ra.totalPetLevel / 50;
     return res;
   },
   requiredExpForLevel(level) {
-    const adjustedLevel = level + Math.pow(level, 2 / 10);
-    return Math.floor(1e6 * adjustedLevel + Math.pow(adjustedLevel, 4) * 2e3);
+    const adjustedLevel = level + Math.pow(level, 2) / 10;
+    return Math.floor(Math.pow(adjustedLevel, 4) * 1e4);
   },
   // Calculates the cumulative exp needed for a level starting from nothing.
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized
@@ -169,14 +175,21 @@ const Ra = {
     for (let lv = 2; lv <= maxLevel; lv++) runningTotal += this.requiredExpForLevel(lv);
     return runningTotal;
   },
+  get totalPetLevel() {
+    return this.pets.all.map(pet => pet.isUnlocked ? pet.level: 0).sum();
+  },
   checkForUnlocks() {
     for (const unl of Object.values(RA_UNLOCKS)) {
       // eslint-disable-next-line no-bitwise
       if (unl.pet.level >= unl.level && !this.has(unl)) player.celestials.ra.unlockBits |= (1 << unl.id);
     }
-    if (this.pets.all.map(pet => pet.level).sum() >= 80 && !this.has(RA_LAITELA_UNLOCK)) {
+    if (this.totalPetLevel >= 20 && !this.has(RA_RECOLLECTION_UNLOCK)) {
       // eslint-disable-next-line no-bitwise
-      player.celestials.ra.unlockBits |= (1 << 24);
+      player.celestials.ra.unlockBits |= (1 << RA_RECOLLECTION_UNLOCK.id);
+    }
+    if (this.totalPetLevel >= 80 && !this.has(RA_LAITELA_UNLOCK)) {
+      // eslint-disable-next-line no-bitwise
+      player.celestials.ra.unlockBits |= (1 << RA_LAITELA_UNLOCK.id);
       MatterDimension(1).amount = new Decimal(1);
     }
   },
@@ -213,6 +226,12 @@ const Ra = {
   },
   get chargeUnlocked() {
     return V.has(V_UNLOCKS.RA_UNLOCK) && Ra.pets.teresa.level > 1;
+  },
+  get petWithRecollection() {
+    return player.celestials.ra.petWithRecollection;
+  },
+  set petWithRecollection(name) {
+    player.celestials.ra.petWithRecollection = name;
   },
   applyAlchemyReactions() {
     if (!Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)) return;
@@ -454,7 +473,7 @@ const RA_UNLOCKS = {
   V_XP: {
     id: 19,
     description: "Get V to level 5",
-    reward: "All memory chunks produce more memories based on achievement multiplier, unlock a Triad study every 5 levels",
+    reward: "All memory chunks produce more memories based on total pet level, unlock a Triad study every 5 levels",
     pet: Ra.pets.v,
     level: 5,
     displayIcon: `<span class="fas fa-book"></span>`
@@ -500,6 +519,12 @@ const RA_UNLOCKS = {
     level: 25,
     displayIcon: `<span class="fas fa-sync-alt"></span>`
   }
+};
+
+const RA_RECOLLECTION_UNLOCK = {
+  id: 25,
+  description: "Get 20 total celestial levels",
+  reward: "Unlock Recollection",
 };
 
 const RA_LAITELA_UNLOCK = {

@@ -448,6 +448,7 @@ let player = {
         upgradeBits: 0,
         respec: false
       },
+      petWithRecollection: ""
     },
     laitela: {
       matter: new Decimal(0),

@@ -5,12 +5,14 @@ Vue.component("ra-tab", {
     return {
       memoriesPerChunk: 0,
       showReality: false,
-      showLaitela: false
+      hasRecollection: false,
+      showLaitela: false,
     };
   },
   methods: {
     update() {
       this.memoriesPerChunk = Ra.productionPerMemoryChunk();
+      this.hasRecollection = Ra.has(RA_RECOLLECTION_UNLOCK);
       this.showLaitela = Ra.pets.v.isUnlocked;
     },
     startRun() {
@@ -66,6 +68,26 @@ Vue.component("ra-tab", {
             <p> While in Ra's Reality, you will gain memory chunks based on your resources. </p>
           </div>
         </button>
+        <div class="l-ra-recollection-unlock">
+          <div class="l-ra-recollection-unlock-inner" v-if="hasRecollection">
+            Whichever pet currently has recollection will get {{formatInt(2)}}x memory chunk gain.
+            <br/>
+            <table>
+              <tr>
+                <td><ra-pet-recollection-button :petConfig="pets[0]" /></td>
+                <td><ra-pet-recollection-button :petConfig="pets[1]" /></td>
+              </tr>
+              <tr>
+                <td><ra-pet-recollection-button :petConfig="pets[2]" /></td>
+                <td><ra-pet-recollection-button :petConfig="pets[3]" /></td>
+              </tr>
+            </table>
+          </div>
+          <div class="l-ra-recollection-unlock-inner" v-else>
+            <h1>Recollection </h1>
+            <p> Unlocked by getting {{ formatInt(20) }} total celestial levels</p>
+          </div>
+        </div>
         <button class="l-ra-laitela-unlock" v-if="showLaitela">
           <div class="l-ra-laitela-unlock-inner">
             <h1> Lai'tela: </h1>

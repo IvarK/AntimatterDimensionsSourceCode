@@ -16,8 +16,7 @@ Vue.component("ra-pet", {
       memoryChunksPerSecond: 0,
       memoriesPerSecond: 0,
       canGetMemoryChunks: false,
-      lastTenGlyphLevels: [],
-      lastTenRunTimers: [],
+      resource: ""
     };
   },
   computed: {
@@ -48,8 +47,12 @@ Vue.component("ra-pet", {
       this.memoryChunksPerSecond = pet.memoryChunksPerSecond;
       this.memoriesPerSecond = pet.memoryChunks * Ra.productionPerMemoryChunk();
       this.canGetMemoryChunks = pet.canGetMemoryChunks;
-      this.lastTenGlyphLevels = player.lastTenRealities.map(([, , , lvl]) => lvl);
-      this.lastTenRunTimers = player.lastTenRealities.map(([, , time]) => time);
+      this.resource = {
+        "Teresa": "EP",
+        "Effarig": "relic shards gained",
+        "Enslaved": "time shards",
+        "V": "infinity power"
+      }[pet.name]
 
       const needed = (this.requiredExp - this.exp) / Ra.productionPerMemoryChunk();
       const a = pet.memoryChunksPerSecond / 2;
@@ -84,9 +87,8 @@ Vue.component("ra-pet", {
         </div>
         <div v-if="canGetMemoryChunks">
           {{ format(memoryChunksPerSecond, 2, 2) }} memory chunks/second
-        </div>
-        <div v-else>
-          <br>
+          <br/>
+          (based on {{ resource }})
         </div>
         <ra-pet-level-bar :pet="petConfig.pet" />
         <div style="display: flex; justify-content: center;">

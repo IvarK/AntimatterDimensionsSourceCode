@@ -63,6 +63,7 @@ Vue.component("ra-tab", {
           <div class="l-ra-reality-inner">
             <h1> Start Ra's Reality</h1>
             <p> Rules: You can't dimension boost and tick reduction is forced to be 11%. </p>
+            <p> While in Ra's Reality, you will gain memory chunks based on your resources. </p>
           </div>
         </button>
         <button class="l-ra-laitela-unlock" v-if="showLaitela">

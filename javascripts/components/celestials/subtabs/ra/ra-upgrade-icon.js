@@ -31,6 +31,6 @@ Vue.component("ra-upgrade-icon", {
       v-html="icon"
       :ach-tooltip="description"
       :class="classObject">
-</div>
+    </div>
   `
 });

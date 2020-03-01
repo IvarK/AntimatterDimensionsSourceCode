@@ -64,11 +64,6 @@ class RaPetState {
     return res;
   }
   
-  get isUnlocked() {
-    const requiredUnlock = this.requiredUnlock;
-    return requiredUnlock === undefined || Ra.has(requiredUnlock);
-  }
-  
   get canGetMemoryChunks() {
     return this.isUnlocked && Ra.isRunning;
   }
@@ -78,10 +73,11 @@ class RaPetState {
   }
   
   tick(realDiff) {
-    let seconds = realDiff / 1000;
-    let newMemoryChunks = seconds * this.memoryChunksPerSecond;
-    let newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) *
-    Ra.productionPerMemoryChunk();
+    const seconds = realDiff / 1000;
+    const newMemoryChunks = seconds * this.memoryChunksPerSecond;
+    // Adding memories from half of the gained chunks this tick results in the best mathematical behavior
+    // for very long simulated ticks
+    const newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk();
     this.memoryChunks += newMemoryChunks;
     this.addExp(newMemories);
   }
@@ -110,28 +106,32 @@ const Ra = {
       get name() { return "Teresa"; }
       get data() { return player.celestials.ra.pets.teresa; }
       get requiredUnlock() { return undefined; }
-      get rawMemoryChunksPerSecond() { return Math.pow(player.eternityPoints.pLog10() / 1e4, 3) }
+      get rawMemoryChunksPerSecond() { return Math.pow(player.eternityPoints.pLog10() / 1e4, 3); }
+      get memoryProductionMultiplier() { return 1 + Math.pow(player.reality.realityMachines.pLog10() / 100, 0.5); }
       get color() { return "#86ea84"; }
     }(),
     effarig: new class EffarigRaPetState extends RaPetState {
       get name() { return "Effarig"; }
       get data() { return player.celestials.ra.pets.effarig; }
       get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return Math.pow(Effarig.shardsGained, 0.1) }
+      get rawMemoryChunksPerSecond() { return Math.pow(Effarig.shardsGained, 0.1); }
+      get memoryProductionMultiplier() { return 1 + player.bestGlyphLevel / 7000; }
       get color() { return "#ea8585"; }
     }(),
     enslaved: new class EnslavedRaPetState extends RaPetState {
       get name() { return "Enslaved"; }
       get data() { return player.celestials.ra.pets.enslaved; }
       get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return Math.pow(player.timeShards.pLog10() / 3e5, 2) }
+      get rawMemoryChunksPerSecond() { return Math.pow(player.timeShards.pLog10() / 3e5, 2); }
+      get memoryProductionMultiplier() { return 1 + Math.log10(player.totalTimePlayed) / 200; }
       get color() { return "#ead584"; }
     }(),
     v: new class VRaPetState extends RaPetState {
       get name() { return "V"; }
       get data() { return player.celestials.ra.pets.v; }
       get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return Math.pow(player.infinityPower.pLog10() / 1e7, 1.5) }
+      get rawMemoryChunksPerSecond() { return Math.pow(player.infinityPower.pLog10() / 1e7, 1.5); }
+      get memoryProductionMultiplier() { return 1 + Ra.totalPetLevel / 50; }
       get color() { return "#f1aa7f"; }
     }(),
   },
@@ -158,10 +158,9 @@ const Ra = {
   },
   productionPerMemoryChunk() {
     let res = 1;
-    if (this.has(RA_UNLOCKS.TERESA_XP)) res *= 1 + Math.pow(player.reality.realityMachines.pLog10() / 100, 0.5);
-    if (this.has(RA_UNLOCKS.EFFARIG_XP)) res *= 1 + player.bestGlyphLevel / 7000;
-    if (this.has(RA_UNLOCKS.ENSLAVED_XP)) res *= 1 + Math.log10(player.totalTimePlayed) / 200;
-    if (this.has(RA_UNLOCKS.V_XP)) res *= 1 + Ra.totalPetLevel / 50;
+    for (const pet of Ra.pets.all) {
+      if (pet.isUnlocked) res *= pet.memoryProductionMultiplier;
+    }
     return res;
   },
   requiredExpForLevel(level) {
@@ -176,7 +175,7 @@ const Ra = {
     return runningTotal;
   },
   get totalPetLevel() {
-    return this.pets.all.map(pet => pet.isUnlocked ? pet.level: 0).sum();
+    return this.pets.all.map(pet => (pet.isUnlocked ? pet.level : 0)).sum();
   },
   checkForUnlocks() {
     for (const unl of Object.values(RA_UNLOCKS)) {

@@ -12,7 +12,7 @@ Vue.component("ra-level-chevron", {
   },
   computed: {
     levelPercent() {
-      return 100 * Ra.totalExpForLevel(this.level) / Ra.totalExpForLevel(this.goal);
+      return 100 * Math.sqrt(Ra.totalExpForLevel(this.level) / Ra.totalExpForLevel(this.goal));
     },
     levelPosition() {
       if (this.level === this.goal) return { right: "0%" };

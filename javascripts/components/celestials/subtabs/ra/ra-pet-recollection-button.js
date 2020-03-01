@@ -13,7 +13,7 @@ Vue.component("ra-pet-recollection-button", {
   },
   computed: {
     petStyle() {
-      return {backgroundColor: this.petConfig.pet.color};
+      return { backgroundColor: this.petConfig.pet.color };
     }
   },
   methods: {
@@ -29,11 +29,18 @@ Vue.component("ra-pet-recollection-button", {
     }
   },
   template: `
-    <div class="l-ra-pet-recollection-div" v-if="isUnlocked && hasRecollection" :style="petStyle">
-      Recollection given to {{ name }}
+    <div
+      class="l-ra-pet-recollection-div"
+      v-if="isUnlocked && hasRecollection"
+      :style="petStyle">
+        Recollection given to {{ name }}
     </div>
-    <button class="l-ra-pet-recollection-button" v-else-if="isUnlocked" @click="turnOnRecollection" style="color: grey;">
-      Give recollection to {{ name }}
+    <button
+      class="l-ra-pet-recollection-button"
+      v-else-if="isUnlocked"
+      @click="turnOnRecollection"
+      style="color: grey;">
+        Give to {{ name }}
     </button>
   `
 });

@@ -27,12 +27,15 @@ Vue.component("ra-tab", {
     pets: () => [
       {
         pet: Ra.pets.teresa,
-        scalingUpgradeText: () => `You can charge ${formatInt(Ra.totalCharges)} Infinity Upgrades.`,
+        scalingUpgradeText: () => `You can charge ${formatInt(Ra.totalCharges)} 
+          Infinity ${pluralize("Upgrade", Ra.totalCharges)}.`,
       },
       {
         pet: Ra.pets.effarig,
-        scalingUpgradeText: () => `You have unlocked
-          ${AlchemyResources.all.filter(r => r.isUnlocked).length} alchemy resources.`,
+        scalingUpgradeText: () => {
+          const resources = AlchemyResources.all.filter(r => r.isUnlocked).length;
+          return `You have unlocked ${formatInt(resources)} alchemy ${pluralize("resource", resources)}.`;
+        },
       },
       {
         pet: Ra.pets.enslaved,
@@ -41,21 +44,27 @@ Vue.component("ra-tab", {
       },
       {
         pet: Ra.pets.v,
-        scalingUpgradeText: level => `You've unlocked ${Math.floor(level / 5)} triad studies.`,
+        scalingUpgradeText: level => {
+          const triadCount = Math.floor(level / 5);
+          return `You've unlocked ${formatInt(triadCount)} triad ${pluralize("study", triadCount, "studies")}.`;
+        },
       }
     ]
   },
   template:
     `<div class="l-ra-celestial-tab">
       <div class="c-ra-memory-header">
-        You are gaining {{ format(memoriesPerChunk, 2, 2) }} {{ "memory" | pluralize(memoriesPerChunk, "memories") }}
-        per memory chunk per second.
+        Each memory chunk generates
+        {{ format(memoriesPerChunk, 2, 2) }} {{ "memory" | pluralize(memoriesPerChunk, "memories") }}
+        per second.
       </div>
       <div>
         Hold shift to see progress on your current level.
       </div>
       <div>
-        Mouse-over the icons below the bar to see descriptions of upgrades.
+        Mouse-over the icons below the bar to see descriptions of upgrades,
+        <br>
+        and mouse-over <i class="fas fa-question-circle"></i> icons for specific resource information.
       </div>
       <div class="l-ra-all-pets-container">
         <ra-pet v-for="(pet, i) in pets" :key="i" :petConfig="pet" />
@@ -63,14 +72,16 @@ Vue.component("ra-tab", {
       <div class="l-ra-non-pets">
         <button @click="startRun" class="l-ra-reality-container">
           <div class="l-ra-reality-inner">
-            <h1> Start Ra's Reality</h1>
-            <p> Rules: You can't dimension boost and tick reduction is forced to be 11%. </p>
-            <p> While in Ra's Reality, you will gain memory chunks based on your resources. </p>
+            <h2> Start Ra's Reality </h2>
+            You can't dimension boost and tick reduction is fixed at 11%.
+            <br>
+            <br>
+            Inside of Ra's reality, some resources will generate memory chunks.
           </div>
         </button>
         <div class="l-ra-recollection-unlock">
           <div class="l-ra-recollection-unlock-inner" v-if="hasRecollection">
-            Whichever pet currently has recollection will get {{formatInt(2)}}x memory chunk gain.
+            Whichever celestial has recollection will get {{formatInt(2)}}x memory chunk gain.
             <br/>
             <table>
               <tr>
@@ -84,8 +95,9 @@ Vue.component("ra-tab", {
             </table>
           </div>
           <div class="l-ra-recollection-unlock-inner" v-else>
-            <h1>Recollection </h1>
-            <p> Unlocked by getting {{ formatInt(20) }} total celestial levels</p>
+            <h1>Recollection</h1>
+            <p>Unlocked by getting {{ formatInt(20) }} total celestial levels</p>
+            <p>Recollection lets you choose a celestial to gain {{formatInt(2)}}x memory chunks.</p>
           </div>
         </div>
         <button class="l-ra-laitela-unlock" v-if="showLaitela">

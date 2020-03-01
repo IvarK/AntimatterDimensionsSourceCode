@@ -25,12 +25,16 @@ Vue.component("ra-pet-level-bar", {
     multiLevelStyle() {
       const thisLevelFill = this.exp * Ra.requiredExpForLevel(this.level + 1) / Ra.requiredExpForLevel(this.level);
       return {
-        width: `${100 * (Ra.totalExpForLevel(this.level) + thisLevelFill) / Ra.totalExpForLevel(this.nextGoal)}%`
+        width: `${100 * Math.sqrt(
+          Math.clampMax(
+            (Ra.totalExpForLevel(this.level) + thisLevelFill) / Ra.totalExpForLevel(this.nextGoal), 1
+          )
+        )}%`
       };
     },
     singleLevelStyle() {
       return {
-        width: `${100 * this.exp / this.requiredExp}%`
+        width: `${100 * Math.sqrt(this.exp / this.requiredExp)}%`
       };
     },
     petStyle() {

@@ -15,8 +15,8 @@ Vue.component("ra-pet", {
       memoryChunks: 0,
       memoryChunksPerSecond: 0,
       memoriesPerSecond: 0,
+      memoryMultiplier: 1,
       canGetMemoryChunks: false,
-      resource: ""
     };
   },
   computed: {
@@ -33,6 +33,34 @@ Vue.component("ra-pet", {
         .filter(unlock => unlock.pet === this.petConfig.pet)
         .sort((a, b) => a.level - b.level);
     },
+    chunkTooltip() {
+      switch (this.petConfig.pet.name) {
+        case "Teresa":
+          return "Based on EP";
+        case "Effarig":
+          return "Based on relic shards gained";
+        case "Enslaved":
+          return "Based on time shards";
+        case "V":
+          return "Based on infinity power";
+        default:
+          throw new Error(`Unrecognized celestial ${this.petConfig.pet.name} in Ra UI`);
+      }
+    },
+    memoryGainTooltip() {
+      switch (this.petConfig.pet.name) {
+        case "Teresa":
+          return "Based on current RM";
+        case "Effarig":
+          return "Based on best glyph level";
+        case "Enslaved":
+          return "Based on total time played";
+        case "V":
+          return "Based on total celestial levels";
+        default:
+          throw new Error(`Unrecognized celestial ${this.petConfig.pet.name} in Ra UI`);
+      }
+    },
   },
   methods: {
     update() {
@@ -47,20 +75,15 @@ Vue.component("ra-pet", {
       this.memoryChunksPerSecond = pet.memoryChunksPerSecond;
       this.memoriesPerSecond = pet.memoryChunks * Ra.productionPerMemoryChunk();
       this.canGetMemoryChunks = pet.canGetMemoryChunks;
-      this.resource = {
-        "Teresa": "EP",
-        "Effarig": "relic shards gained",
-        "Enslaved": "time shards",
-        "V": "infinity power"
-      }[pet.name]
+      this.memoryMultiplier = pet.memoryProductionMultiplier;
 
-      const needed = (this.requiredExp - this.exp) / Ra.productionPerMemoryChunk();
-      const a = pet.memoryChunksPerSecond / 2;
-      const b = pet.memoryChunks;
-      const c = -needed;
-      const timeToLevel = a > 0 ? (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a) : -c / b;
+      // Quadratic formula for growth
+      const a = Ra.productionPerMemoryChunk() * pet.memoryChunksPerSecond / 2;
+      const b = Ra.productionPerMemoryChunk() * pet.memoryChunks;
+      const c = this.exp - this.requiredExp;
+      const timeToLevel = (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
       if (Number.isFinite(timeToLevel)) {
-        this.nextLevelEstimate = TimeSpan.fromSeconds(timeToLevel).toStringShort(false);
+        this.nextLevelEstimate = TimeSpan.fromSeconds(timeToLevel).toStringShort();
       } else {
         this.nextLevelEstimate = "never";
       }
@@ -80,17 +103,25 @@ Vue.component("ra-pet", {
           {{ format(exp, 2) }} / {{ format(requiredExp, 2) }} {{ name }} memories
         </div>
         <div>
-          {{ format(memoryChunks, 2, 2) }} memory chunks, {{ format(memoriesPerSecond, 2, 2) }} memories/second
-        </div>
-        <div>
           (next level in {{ nextLevelEstimate }})
         </div>
-        <div v-if="canGetMemoryChunks">
-          {{ format(memoryChunksPerSecond, 2, 2) }} memory chunks/second
-          <br/>
-          (based on {{ resource }})
-        </div>
         <ra-pet-level-bar :pet="petConfig.pet" />
+        <div>
+          {{ format(memoryChunks, 2, 2) }} memory chunks, {{ format(memoriesPerSecond, 2, 2) }} memories/sec
+        </div>
+        <div v-if="canGetMemoryChunks">
+          Gaining {{ format(memoryChunksPerSecond, 2, 2) }} memory chunks/sec
+          <span :ach-tooltip="chunkTooltip">
+            <i class="fas fa-question-circle"></i>
+          </span>
+        </div>
+        <div>
+          Multiplying all memory production by {{ format(memoryMultiplier, 2, 3) }}
+          <span :ach-tooltip="memoryGainTooltip">
+            <i class="fas fa-question-circle"></i>
+          </span>
+        </div>
+        <br>
         <div style="display: flex; justify-content: center;">
           <ra-upgrade-icon v-for="(unlock, i) in unlocks"
           :key="i"

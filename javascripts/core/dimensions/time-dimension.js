@@ -117,7 +117,7 @@ class TimeDimensionState extends DimensionState {
     this._costMultiplier = COST_MULTS[tier];
     const E6000_SCALING_AMOUNTS = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456];
     this._e6000ScalingAmount = E6000_SCALING_AMOUNTS[tier];
-    const COST_THRESHOLDS = [Decimal.MAX_NUMBER, "1e1300", "1e6000"];
+    const COST_THRESHOLDS = [Decimal.NUMBER_MAX_VALUE, "1e1300", "1e6000"];
     this._costIncreaseThresholds = COST_THRESHOLDS;
   }
 

@@ -24,7 +24,7 @@ Vue.component("black-hole-status-text", {
   },
   template: `
     <span v-if="isUnlocked">
-     🌀{{ id }}:{{ state }}
+     🌀{{ id }}:<span v-html="state"></span>
     </span>
   `
 });
@@ -48,6 +48,11 @@ Vue.component("black-hole-header-row", {
     id() {
       return this.blackHole.id;
     },
+  },
+  watch: {
+    isAutoReleasing(newValue) {
+      player.celestials.enslaved.isAutoReleasing = newValue;
+    }
   },
   methods: {
     update() {
@@ -94,7 +99,7 @@ Vue.component("black-hole-header-row", {
         </primary-button>
       </span>
       <span v-if="displaySingle">
-        🌀:{{ singleState }}
+        🌀:<span v-html="singleState"></span>
       </span>
       <span v-else>
         <black-hole-status-text
@@ -110,12 +115,11 @@ Vue.component("black-hole-header-row", {
         >Discharge: {{timeDisplayShort(storedTime)}}</primary-button>
       </span>
       <span v-if="canAutoRelease">
-        <input type="checkbox"
-          id="autoReleaseBox"
+        <primary-button-on-off
           v-model="isAutoReleasing"
-          :value="isAutoReleasing"
-          @input="toggleAutoRelease()">
-        <label for="autoReleaseBox">Auto</label>
+          class="o-primary-btn--buy-max"
+          text="Pulse:"
+        />
       </span>
     </span>
   `

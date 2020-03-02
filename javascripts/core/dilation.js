@@ -101,7 +101,8 @@ function getDilationGainPerSecond() {
       AlchemyResource.dilation
     );
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
-  dtRate = dtRate.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
+  dtRate = dtRate.times(
+    Math.clampMin(Decimal.log10(player.replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
   dtRate = dtRate.times(Ra.gamespeedDTMult());
   if (Enslaved.isRunning) {
     dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
@@ -171,7 +172,7 @@ function recursiveDilation(value, depth) {
     return value;
   }
   const log10 = value.log10();
-  const basePenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
+  const basePenalty = 0.75 * DilationUpgrade.dilationPenalty.effectOrDefault(1);
   const alchemyReduction = (player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
   const dilationPenalty = Math.min(1, basePenalty + (1 - basePenalty) * alchemyReduction);
   return recursiveDilation(Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty)), depth - 1);

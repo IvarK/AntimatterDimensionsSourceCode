@@ -12,8 +12,8 @@ Vue.component("ra-tab", {
   methods: {
     update() {
       this.expMults = this.pets.map(obj => obj.pet.expBoost);
-      this.currentExpGain = Ra.pets.teresa.baseExp;
-      this.showReality = Ra.pets.teresa.level > 2;
+      this.currentExpGain = Ra.baseExp(gainedGlyphLevel().actualLevel);
+      this.showReality = Ra.has(RA_UNLOCKS.TERESA_XP);
       this.showLaitela = Ra.pets.v.isUnlocked;
     },
     startRun() {
@@ -32,19 +32,17 @@ Vue.component("ra-tab", {
       },
       {
         pet: Ra.pets.effarig,
-        scalingUpgradeText: level => `Glyph rarity +${level}% and +${formatInt(Math.floor(level / 5))}
-          additional choices.`,
+        scalingUpgradeText: () => `You have unlocked
+          ${AlchemyResources.all.filter(r => r.isUnlocked).length} alchemy resources.`,
       },
       {
         pet: Ra.pets.enslaved,
-        scalingUpgradeText: () => `Stored game time ^
-          ${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)}, stored real time efficiency
-          +${formatPercents(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency(), 0, 2)} and
-          +${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / 1000 / 3600, 0, 1)} hours maximum.`,
+        scalingUpgradeText: () => `Stored game time 
+          ${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)}.`,
       },
       {
         pet: Ra.pets.v,
-        scalingUpgradeText: level => `+${formatInt(level)} free achievements.`,
+        scalingUpgradeText: level => `You've unlocked ${Math.floor(level / 5)} triad studies.`,
       }
     ]
   },
@@ -55,7 +53,10 @@ Vue.component("ra-tab", {
         memories on Reality, based on glyph level.
       </div>
       <div>
-        Mouse-over bolded numbers to see descriptions of upgrades you have already unlocked.
+        Hold shift to see progress on your current level.
+      </div>
+      <div>
+        Mouse-over the icons below the bar to see descriptions of upgrades.
       </div>
       <div class="l-ra-all-pets-container">
         <ra-pet v-for="(pet, i) in pets" :key="i" :petConfig="pet" />
@@ -88,7 +89,7 @@ Vue.component("ra-tab", {
           <div class="l-ra-laitela-unlock-inner">
             <h1> Lai'tela: </h1>
             <h2> The Celestial of Matter </h2>
-            <p> Unlocked getting all four celestials to level {{ formatInt(20) }} </p>
+            <p> Unlocked by getting all four celestials to level {{ formatInt(20) }} </p>
           </div>
         </button>
       </div>

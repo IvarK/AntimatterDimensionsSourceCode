@@ -38,7 +38,7 @@ function updateNormalAndInfinityChallenges(diff) {
   }
 
   if (NormalChallenge(3).isRunning) {
-    player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)).clampMax(Decimal.MAX_NUMBER);
+    player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)).clampMax(Decimal.NUMBER_MAX_VALUE);
   }
 
   if (NormalChallenge(2).isRunning) {
@@ -93,7 +93,7 @@ class NormalChallengeState extends GameMechanicState {
     if (Enslaved.isRunning && !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(this.id)) {
       return Decimal.pow10(1e15);
     }
-    return Decimal.MAX_NUMBER;
+    return Decimal.NUMBER_MAX_VALUE;
   }
 
   updateChallengeTime() {

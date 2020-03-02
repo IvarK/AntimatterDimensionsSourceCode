@@ -22,17 +22,18 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   get isReduced() {
-    return V.has(V_UNLOCKS.SHARD_REDUCTION) && player.celestials.effarig.relicShards >= 1e20 &&
+    if (player.celestials.v.ppSpent === 0) return false;
+    return this.config.nextReduction || (V.has(V_UNLOCKS.SHARD_REDUCTION) &&
       (typeof this.conditionBaseValue === "number"
         ? this.reduction > 0
-        : Decimal.gt(this.reduction, 1));
+        : Decimal.gt(this.reduction, 1)));
   }
 
   get reductionInfo() {
     const value = this.conditionBaseValue;
     if (new Decimal(this.reduction).eq(this.config.maxShardReduction(value))) return "(capped)";
-    if (this.config.nextShards === undefined) return "";
-    return `(next at ${format(this.config.nextShards(Math.floor(this.reduction) + 1), 2, 0)} shards)`;
+    if (this.config.nextReduction === undefined) return "";
+    return `(next at ${format(this.config.nextReduction(Math.floor(this.reduction) + 1), 2, 0)} pp spent)`;
   }
 
   get reduction() {
@@ -69,17 +70,11 @@ class VRunUnlockState extends GameMechanicState {
     const value = this.config.currentValue(this.conditionValue);
     if (value > playerData.runRecords[this.id]) {
       playerData.runRecords[this.id] = value;
-      playerData.runGlyphs[this.id] = Glyphs.active
-        .filter(g => g !== null)
-        .map(g => ({
-          type: g.type,
-          level: g.level,
-          strength: g.strength,
-          effects: g.effects,
-        }));
+      playerData.runGlyphs[this.id] = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     }
 
     while (this.completions < this.config.values.length && this.config.condition(this.conditionValue)) {
+      if (!V.isFlipped && this.config.isHard) continue;
       this.completions++;
       GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
       V.updateTotalRunUnlocks();
@@ -108,6 +103,7 @@ const V_UNLOCKS = {
     requirement: () => {
       const db = GameDatabase.celestials.v.mainUnlock;
       if (player.realities < db.realities) return false;
+      if (Object.values(player.reality.glyphs.sac).sum() < db.totalGlyphSacrifice) return false;
       if (player.eternities.lt(db.eternities)) return false;
       if (player.infinitied.plus(player.infinitiedBank).lt(db.infinities)) return false;
       if (player.dilation.dilatedTime.lt(db.dilatedTime)) return false;
@@ -118,10 +114,10 @@ const V_UNLOCKS = {
   },
   SHARD_REDUCTION: {
     id: 1,
-    reward: () => `Relic shards reduce V-achievement requirements, starting at ${format(1e20, 0, 0)} Relic Shards.`,
+    reward: () => `You can spend perk points to reduce V-achievement requirements for later tiers.`,
     description: "Have 2 V-achievements",
-    effect: () => player.celestials.effarig.relicShards,
-    format: x => `${format(x, 2, 0)} Relic Shards`,
+    effect: () => player.celestials.v.ppSpent,
+    format: x => `${formatPercents(x / 200000)} Tier Reduction`,
     requirement: () => V.spaceTheorems >= 2
   },
   ND_POW: {
@@ -143,7 +139,7 @@ const V_UNLOCKS = {
   },
   TRIAD_STUDIES: {
     id: 4,
-    reward: "Unlock Triad studies.",
+    reward: "(Placeholder upgrade to replace triad study unlock)",
     description: "Have 16 V-achievements",
     requirement: () => V.spaceTheorems >= 16
   },
@@ -225,7 +221,7 @@ const V = {
     return player.celestials.v.run;
   },
   get isFlipped() {
-    return this.spaceTheorems >= 36;
+    return Ra.has(RA_UNLOCKS.HARD_V);
   },
   get isFullyCompleted() {
     return this.spaceTheorems >= 66;

@@ -82,7 +82,8 @@ function getReplicantiInterval(noMod, intervalIn) {
     interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
   }
   interval = interval.divide(getAdjustedGlyphEffect("replicationspeed"));
-  if (GlyphAlteration.isAdded("replication")) interval = interval.divide(getSecondaryGlyphEffect("replicationdtgain"));
+  if (GlyphAlteration.isAdded("replication")) interval = interval.divide(
+    Math.clampMin(Decimal.log10(player.replicanti.amount) * getSecondaryGlyphEffect("replicationdtgain"), 1));
   interval = interval.divide(RA_UNLOCKS.TT_BOOST.effect.replicanti());
   interval = interval.dividedByEffectOf(AlchemyResource.replication);
   interval = interval.divide(Effects.max(1, CompressionUpgrade.replicantiSpeedFromDB));
@@ -96,8 +97,12 @@ function getReplicantiInterval(noMod, intervalIn) {
 
 function replicantiCap() {
   return EffarigUnlock.infinity.isUnlocked
-    ? player.infinitied.plus(player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Decimal.MAX_NUMBER)
-    : Decimal.MAX_NUMBER;
+    ? player.infinitied
+      .plus(player.infinitiedBank)
+      .pow(TimeStudy(31).isBought ? 120 : 30)
+      .clampMin(1)
+      .times(Decimal.NUMBER_MAX_VALUE)
+    : Decimal.NUMBER_MAX_VALUE;
 }
 
 function replicantiLoop(diff) {
@@ -134,7 +139,7 @@ function replicantiLoop(diff) {
     player.replicanti.timer += diff;
   }
 
-  if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Decimal.MAX_NUMBER)) {
+  if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) {
     replicantiGalaxy();
   }
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_AFTER);
@@ -413,7 +418,7 @@ const Replicanti = {
       return ReplicantiUpgrade.galaxies.value + ReplicantiUpgrade.galaxies.extra;
     },
     get canBuyMore() {
-      if (!Replicanti.amount.gte(Decimal.MAX_NUMBER)) return false;
+      if (!Replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) return false;
       return this.bought < this.max;
     },
     autobuyer: {

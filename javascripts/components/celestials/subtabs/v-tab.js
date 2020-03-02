@@ -6,13 +6,17 @@ Vue.component("v-tab", {
       mainUnlock: false,
       totalUnlocks: 0,
       realities: 0,
+      totalGlyphSacrifice: 0,
       infinities: new Decimal(0),
       eternities: new Decimal(0),
       dilatedTime: new Decimal(0),
       replicanti: new Decimal(0),
       rm: new Decimal(0),
+      pp: 0,
+      showReduction: false,
+      canReduce: false,
       runRecords: Array.from(player.celestials.v.runRecords),
-      runGlyphs: player.celestials.v.runGlyphs.map(g => this.copyGlyphs(g)),
+      runGlyphs: [],
       isFlipped: false
     };
   },
@@ -21,22 +25,20 @@ Vue.component("v-tab", {
       this.mainUnlock = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
       this.totalUnlocks = V.spaceTheorems;
       this.realities = player.realities;
+      this.totalGlyphSacrifice = Object.values(player.reality.glyphs.sac).sum();
       this.infinities.copyFrom(player.infinitied);
       this.eternities.copyFrom(player.eternities);
       this.dilatedTime.copyFrom(player.dilation.dilatedTime);
       this.replicanti.copyFrom(player.replicanti.amount);
       this.rm.copyFrom(player.reality.realityMachines);
+      this.pp = player.reality.pp;
+      this.showReduction = V.has(V_UNLOCKS.SHARD_REDUCTION);
+      // The second half of this conditional prevents the player from wasting pp on reduction that doesn't do anything
+      this.canReduce = this.pp > 2000 &&
+        player.celestials.v.ppSpent < 200000 * player.celestials.v.runUnlocks.max();
       this.runRecords = Array.from(player.celestials.v.runRecords);
-      this.runGlyphs = player.celestials.v.runGlyphs.map(g => this.copyGlyphs(g));
+      this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
-    },
-    copyGlyphs(glyphList) {
-      return glyphList.map(g => ({
-        type: g.type,
-        level: g.level,
-        strength: g.strength,
-        effects: g.effects,
-      }));
     },
     startRun() {
       V.startRun();
@@ -52,6 +54,11 @@ Vue.component("v-tab", {
         ? milestone.reward()
         : milestone.reward;
     },
+    reduceGoals() {
+      if (!this.canReduce) return;
+      player.reality.pp -= 2000;
+      player.celestials.v.ppSpent += 2000;
+    }
   },
   computed: {
     // If V is flipped, change the layout of the grid
@@ -111,6 +118,9 @@ Vue.component("v-tab", {
         <br>
         {{ format(replicanti, 2, 0) }} / {{ format(db.mainUnlock.replicanti, 2, 0) }} replicanti
         <br>
+        {{ format(totalGlyphSacrifice, 2, 0) }} / {{ format(db.mainUnlock.totalGlyphSacrifice, 2, 0) }}
+        total glyph sacrifice power
+        <br>
         <div class="l-v-milestones-grid__row">
           <div class="o-v-milestone">
             <p>{{ vUnlock.description }}</p>
@@ -127,24 +137,15 @@ Vue.component("v-tab", {
                 <p class="o-v-unlock-name">{{ hex.config.name }}</p>
                 <p class="o-v-unlock-desc">{{ hex.formattedDescription }}</p>
                 <p class="o-v-unlock-goal-reduction" v-if="has(runMilestones[0]) && hex.isReduced">
-                  Goal has been {{ mode(hex) }} by {{ format(hex.reduction, 2, 0) }} {{ hex.reductionInfo }}
+                  Goal has been {{ mode(hex) }} by {{ format(hex.reduction) }} {{ hex.reductionInfo }}
                 </p>
                 <p class="o-v-unlock-amount">{{ hex.completions }}/{{hex.config.values.length}} done</p>
                 <p class="o-v-unlock-record">
                   Best: {{ hex.config.formatRecord(runRecords[hex.id]) }}
                 </p>
                 <p v-if="runRecords[hex.id] > 0">
-                  <glyph-component v-for="(g, idx) in runGlyphs[hex.id]"
-                         :key="idx"
-                         style="margin: 0.2rem;"
-                         :glyph="g"
-                         :showSacrifice="false"
-                         :draggable="false"
-                         :circular="true"
-                         size="2.8rem"
-                         :textProportion="0.6"
-                         glowBlur="0.2rem"
-                         glowSpread="0.1rem" />
+                  <glyph-set-preview
+                    :glyphs="runGlyphs[hex.id]" />
                 </p>
             </div>
             <div v-else-if="hex.isRunButton" @click="startRun()" class="l-v-hexagon o-v-run-button">
@@ -163,10 +164,20 @@ Vue.component("v-tab", {
           and re-entering the reality.
         </div>
         <div>
-          You have {{ formatInt(totalUnlocks) }} V-achievements done.
-          You gain 1 Space Theorem for each completion.
+          You have {{ formatInt(totalUnlocks) }} V-achievements done. You gain 1 Space Theorem for each completion,
+          allowing you to purchase time studies which are normally locked.
         </div>
         <br>
+        <div v-if="showReduction">
+          <button
+            class="o-primary-btn"
+            :class="{ 'o-primary-btn--disabled': !canReduce }"
+            @click="reduceGoals()">
+              Spend {{ format(2000) }} PP to reduce all goals by 1% of a tier
+          </button>
+          <br>
+          (You currently have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}})
+        </div>
         <div class="l-v-milestones-grid">
           <div v-for="row in runMilestones" class="l-v-milestones-grid__row">
             <div class="o-v-milestone"

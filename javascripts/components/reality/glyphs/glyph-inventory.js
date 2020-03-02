@@ -4,6 +4,9 @@ Vue.component("glyph-inventory", {
   data() {
     return {
       inventory: [],
+      showScoreFilter: false,
+      doubleClickTimeOut: null,
+      clickedGlyphId: null
     };
   },
   computed: {
@@ -15,6 +18,9 @@ Vue.component("glyph-inventory", {
     this.glyphsChanged();
   },
   methods: {
+    update() {
+      this.showScoreFilter = EffarigUnlock.autosacrifice.isUnlocked;
+    },
     toIndex(row, col) {
       return (row - 1) * this.colCount + (col - 1);
     },
@@ -33,16 +39,42 @@ Vue.component("glyph-inventory", {
     },
     clickGlyph(col, id) {
       const glyph = Glyphs.findById(id);
-      if (!glyph) return;
-      if (glyph.symbol === "key266b") {
-        new Audio(`audio/note${col}.mp3`).play();
+      // If single click
+      if (!this.doubleClickTimeOut) {
+        this.doubleClickTimeOut = setTimeout(() => { 
+          this.clickedGlyphId = null;
+          this.doubleClickTimeOut = null;
+        }, 200);
+        this.clickedGlyphId = id;
+        if (!glyph) return;
+        if (glyph.symbol === "key266b") {
+          new Audio(`audio/note${col}.mp3`).play();
+        }
+      // Else it's double click, so equip a glyph
+      } else if (this.clickedGlyphId === id) {
+        clearTimeout(this.doubleClickTimeOut);
+        this.doubleClickTimeOut = null;
+        const idx = Glyphs.active.indexOf(null);
+        if (idx !== -1) Glyphs.equip(glyph, idx);
       }
     },
     glyphsChanged() {
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);
     },
-    sort() {
-      Glyphs.sort();
+    sortByPower() {
+      Glyphs.sort((a, b) => -a.level * a.strength + b.level * b.strength);
+    },
+    sortByScore() {
+      Glyphs.sort((a, b) => -AutoGlyphSacrifice.filterValue(a) + AutoGlyphSacrifice.filterValue(b));
+    },
+    sortByEffect() {
+      function reverseBitstring(eff) {
+        // eslint-disable-next-line no-bitwise
+        return parseInt(((1 << 30) + (eff >>> 0)).toString(2).split("").reverse().join(""), 2);
+      }
+      // The bitwise reversal is so that the effects with the LOWER id are valued higher in the sorting.
+      // This primarily meant for effarig glyph effect sorting, which makes it prioritize timespeed pow highest.
+      Glyphs.sort((a, b) => -reverseBitstring(a.effects) + reverseBitstring(b.effects));
     },
     autoClean() {
       Glyphs.autoClean();
@@ -70,9 +102,20 @@ Vue.component("glyph-inventory", {
     </div>
     <div>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-              ach-tooltip="Sort by type and level * rarity"
-              @click="sort">
-        Sort
+        ach-tooltip="Arranges by decreasing level*rarity"
+        @click="sortByPower">
+          Sort by power
+      </button>
+      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        ach-tooltip="Group glyphs together based on effects"
+        @click="sortByEffect">
+          Sort by effect
+      </button>
+      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        v-if="showScoreFilter"
+        ach-tooltip="Arranges by decreasing glyph filter score"
+        @click="sortByScore">
+          Sort by score
       </button>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
              ach-tooltip="Sacrifice glyphs that are worse in every way than enough other glyphs"

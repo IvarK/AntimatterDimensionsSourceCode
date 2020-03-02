@@ -97,8 +97,7 @@ const Achievements = {
 
   get effectiveCount() {
     const unlockedAchievements = Achievements.all.countWhere(a => a.isUnlocked);
-    const additionalAchievements = Ra.has(RA_UNLOCKS.V_UNLOCK) ? Ra.pets.v.level : 0;
-    return unlockedAchievements + additionalAchievements;
+    return unlockedAchievements;
   },
 
   get period() {
@@ -107,7 +106,7 @@ const Achievements = {
 
   autoAchieveUpdate(diff) {
     if (player.realities === 0) return;
-    if (player.reality.disableAutoAchieve) return;
+    if (!player.reality.autoAchieve) return;
     if (Achievements.preReality.every(a => a.isUnlocked)) return;
 
     player.reality.achTimer += diff;
@@ -132,7 +131,7 @@ const Achievements = {
     const unlockedRows = Achievements.allRows
       .countWhere(row => row.every(ach => ach.isUnlocked));
     const basePower = Math.pow(1.25, unlockedRows) * Math.pow(1.03, Achievements.effectiveCount);
-    return basePower * getAdjustedGlyphEffect("effarigachievement");
+    return Math.pow(basePower, getAdjustedGlyphEffect("effarigachievement"));
   }),
 
   get power() {

@@ -32,22 +32,23 @@ const AutoGlyphSacrifice = {
   get types() {
     return player.celestials.effarig.autoGlyphSac.types;
   },
-  comparedToThreshold(glyph) {
+  filterValue(glyph) {
     const typeCfg = AutoGlyphSacrifice.types[glyph.type];
     if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS) {
-      return strengthToRarity(glyph.strength) - typeCfg.rarityThreshold;
+      return strengthToRarity(glyph.strength);
     }
     if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.EFFECTS) {
       const glyphEffectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
         .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated)
         .map(effect => effect.id);
-      if (strengthToRarity(glyph.strength) < typeCfg.rarityThreshold || glyphEffectList.length < typeCfg.effectCount) {
-        return -100;
+      if (glyphEffectList.length < typeCfg.effectCount) {
+        return strengthToRarity(glyph.strength) - 200 * (typeCfg.effectCount - glyphEffectList.length);
       }
+      let missingEffects = 0;
       for (const effect of Object.keys(typeCfg.effectChoices)) {
-        if (typeCfg.effectChoices[effect] && !glyphEffectList.includes(effect)) return -100;
+        if (typeCfg.effectChoices[effect] && !glyphEffectList.includes(effect)) missingEffects++;
       }
-      return strengthToRarity(glyph.strength) - typeCfg.rarityThreshold;
+      return strengthToRarity(glyph.strength) - 200 * missingEffects;
     }
     if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED) {
       const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
@@ -55,9 +56,19 @@ const AutoGlyphSacrifice = {
         .map(effect => effect.id);
       const glyphScore = strengthToRarity(glyph.strength) +
         effectList.map(e => typeCfg.effectScores[e]).sum();
-      return glyphScore - typeCfg.scoreThreshold;
+      return glyphScore;
     }
     return strengthToRarity(glyph.strength);
+  },
+  thresholdValue(glyph) {
+    if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS || 
+      AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.EFFECTS) {
+        return AutoGlyphSacrifice.types[glyph.type].rarityThreshold;
+    }
+    if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED) {
+      return AutoGlyphSacrifice.types[glyph.type].scoreThreshold;
+    }
+    return 0;
   },
   wouldSacrifice(glyph) {
     switch (AutoGlyphSacrifice.mode) {
@@ -68,7 +79,7 @@ const AutoGlyphSacrifice = {
       case AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS:
       case AUTO_GLYPH_SAC_MODE.EFFECTS:
       case AUTO_GLYPH_SAC_MODE.ADVANCED:
-        return this.comparedToThreshold(glyph) < 0;
+        return this.filterValue(glyph) < this.thresholdValue(glyph);
     }
     throw new Error("Unknown auto glyph sacrifice mode");
   },
@@ -88,13 +99,13 @@ const AutoGlyphPicker = {
       case AUTO_GLYPH_PICK_MODE.RANDOM: return Math.random();
       case AUTO_GLYPH_PICK_MODE.RARITY: return strengthToRarity(glyph.strength);
       case AUTO_GLYPH_PICK_MODE.ABOVE_SACRIFICE_THRESHOLD: {
-        const comparedToThreshold = AutoGlyphSacrifice.comparedToThreshold(glyph);
-        if (comparedToThreshold < 0) {
+        const filterValue = AutoGlyphSacrifice.filterValue(glyph);
+        if (filterValue < 0) {
           // We're going to sacrifice the glyph anyway. Also, if we have 1000% rarity glyphs everything has broken,
           // so subtracting 1000 should be safe (glyphs we would sacrifice are sorted below all other glyphs).
           return strengthToRarity(glyph.strength) - 1000;
         }
-        return comparedToThreshold;
+        return filterValue;
       }
       case AUTO_GLYPH_PICK_MODE.LOWEST_ALCHEMY_RESOURCE:
         return AlchemyResource[glyph.type].isUnlocked && glyphRefinementGain(glyph) !== 0
@@ -275,9 +286,7 @@ const GlyphGenerator = {
       result = GlyphGenerator.gaussianBellCurve(rng);
     } while (result <= minimumValue);
     result *= GlyphGenerator.strengthMultiplier;
-    const increasedRarity = rng.uniform() * Effarig.maxRarityBoost +
-      GlyphSacrifice.effarig.effectValue +
-      (Ra.has(RA_UNLOCKS.IMPROVED_GLYPHS) ? RA_UNLOCKS.IMPROVED_GLYPHS.effect.rarity() : 0);
+    const increasedRarity = rng.uniform() * Effarig.maxRarityBoost + GlyphSacrifice.effarig.effectValue;
     // Each rarity% is 0.025 strength.
     result += increasedRarity / 40;
     return Math.min(result, rarityToStrength(100));
@@ -586,7 +595,6 @@ const Glyphs = {
     this.inventory[index] = glyph;
     glyph.idx = index;
     player.reality.glyphs.inventory.push(glyph);
-    player.bestGlyphLevel = Math.max(player.bestGlyphLevel, glyph.level);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },
@@ -613,16 +621,15 @@ const Glyphs = {
       }
     }
   },
-  sort() {
+  sort(sortFunction) {
     const glyphsToSort = player.reality.glyphs.inventory.filter(g => g.idx >= this.protectedSlots);
     const freeSpace = this.freeInventorySpace;
     const sortOrder = ["power", "infinity", "time", "replication", "dilation", "effarig", "reality", "cursed"];
     const byType = sortOrder.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
     for (const g of glyphsToSort) byType[g.type].glyphs.push(g);
-    const compareGlyphs = (a, b) => -a.level * a.strength + b.level * b.strength;
     let totalDesiredPadding = 0;
     for (const t of Object.values(byType)) {
-      t.glyphs.sort(compareGlyphs);
+      t.glyphs.sort(sortFunction);
       t.padding = Math.ceil(t.glyphs.length / 10) * 10 - t.glyphs.length;
       // Try to get a full row of padding if possible in some cases
       if (t.padding < 5 && t.glyphs.length > 8) t.padding += 10;
@@ -741,6 +748,14 @@ const Glyphs = {
       player.dilation.tachyonParticles.fromValue(undoData.tp);
       player.dilation.dilatedTime.fromValue(undoData.dt);
     }
+  },
+  copyForRecords(glyphList) {
+    return glyphList.map(g => ({
+      type: g.type,
+      level: g.level,
+      strength: g.strength,
+      effects: g.effects,
+    }));
   }
 };
 

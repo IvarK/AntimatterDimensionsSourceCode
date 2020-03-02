@@ -226,6 +226,7 @@ class TimeSpan {
     addCheckedComponent(this.minutes, "minute");
     addCheckedComponent(this.seconds, "second");
     // Join with commas and 'and' in the end.
+    if (parts.length === 0) return "0 seconds";
     return [parts.slice(0, -1).join(", "), parts.slice(-1)[0]].join(parts.length < 2 ? "" : " and ");
   }
 

@@ -34,7 +34,7 @@ Vue.component("glyph-auto-pick-options", {
     update() {
       this.unlocked = EffarigUnlock.autopicker.isUnlocked;
       this.mode = AutoGlyphPicker.mode;
-      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
       this.sacMode = AutoGlyphSacrifice.mode;
     },
     setMode(m) {

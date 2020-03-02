@@ -85,7 +85,7 @@ GameDatabase.achievements.secret = [
     id: 27,
     name: "It's not called matter dimensions is it?",
     tooltip: "Get Infinite matter.",
-    checkRequirement: () => Player.effectiveMatterAmount.gte(Decimal.MAX_NUMBER),
+    checkRequirement: () => Player.effectiveMatterAmount.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {

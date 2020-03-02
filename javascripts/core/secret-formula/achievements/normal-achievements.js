@@ -57,7 +57,7 @@ GameDatabase.achievements.normal = [
     id: 21,
     name: "To infinity!",
     tooltip: "Reach Infinite antimatter.",
-    checkRequirement: () => player.antimatter.gt(Decimal.MAX_NUMBER),
+    checkRequirement: () => player.antimatter.gt(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => `Start with ${formatInt(100)} antimatter.`,
     effect: 100
@@ -408,7 +408,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get ${format("9.9999e9999", 4, 0)} antimatter.`,
     checkRequirement: () => player.antimatter.gte("9.9999e9999"),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Dimensions are more powerful the more unspent antimatter you have.",
+    reward: "Dimensions are stronger the more unspent antimatter you have.",
     effect: () => player.antimatter.pow(0.00002).plus(1)
   },
   {
@@ -498,7 +498,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Reach ${format("1e35000", 0, 0)} antimatter.`,
     checkRequirement: () => player.antimatter.exponent >= 35000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Dimensions are more powerful the more unspent antimatter you have.",
+    reward: "Dimensions are stronger the more unspent antimatter you have.",
     effect: () => player.antimatter.pow(0.00002).plus(1)
   },
   {
@@ -516,7 +516,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Reach -99.9% tickspeed per upgrade.",
     checkRequirement: () => getTickSpeedMultiplier().lt(0.001),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Galaxies are 1% more powerful.",
+    reward: "Galaxies are 1% stronger.",
     effect: 1.01
   },
   {
@@ -533,8 +533,8 @@ GameDatabase.achievements.normal = [
   {
     id: 88,
     name: "Yet another infinity reference",
-    tooltip: () => `Get a ${formatX(Decimal.MAX_NUMBER, 1, 0)} multiplier in a single sacrifice.`,
-    checkRequirement: () => Sacrifice.nextBoost.gte(Decimal.MAX_NUMBER),
+    tooltip: () => `Get a ${formatX(Decimal.NUMBER_MAX_VALUE, 1, 0)} multiplier in a single sacrifice.`,
+    checkRequirement: () => Sacrifice.nextBoost.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.SACRIFICE_RESET_BEFORE,
     reward: "Sacrifices are stronger.",
     effect: 0.011,
@@ -585,7 +585,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Gain Infinite replicanti in ${formatInt(30)} minutes.`,
     reward: "Infinity doesn't reset your Replicanti amount.",
     checkRequirement: () =>
-      (player.replicanti.amount.eq(Decimal.MAX_NUMBER) || player.replicanti.galaxies > 0) &&
+      (player.replicanti.amount.eq(Decimal.NUMBER_MAX_VALUE) || player.replicanti.galaxies > 0) &&
       Time.thisInfinityRealTime.totalMinutes <= 30,
     checkEvent: GAME_EVENT.REPLICANTI_TICK_AFTER
   },
@@ -616,7 +616,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Bulk buy ${formatInt(750)} Dimension Boosts at once.`,
     checkRequirement: ([bulk]) => bulk >= 750,
     checkEvent: GAME_EVENT.DIMBOOST_AFTER,
-    reward: "Dimension Boosts are 1% more powerful (to Normal Dimensions).",
+    reward: "Dimension Boosts are 1% stronger (to Normal Dimensions).",
     effect: 1.01
   },
   {
@@ -678,11 +678,11 @@ GameDatabase.achievements.normal = [
     id: 111,
     name: "Yo dawg, I heard you liked infinities...",
     tooltip: () => `Have all your Infinities in your past ${formatInt(10)} Infinities be at least ` +
-      `${format(Decimal.MAX_NUMBER, 1, 0)} times higher IP than the previous one.`,
+      `${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} times higher IP than the previous one.`,
     checkRequirement: () => {
       const infinities = player.lastTenRuns.map(run => run[1]);
       for (let i = 0; i < infinities.length - 1; i++) {
-        if (infinities[i].lt(infinities[i + 1].times(Decimal.MAX_NUMBER)) || infinities[i].eq(0)) return false;
+        if (infinities[i].lt(infinities[i + 1].times(Decimal.NUMBER_MAX_VALUE)) || infinities[i].eq(0)) return false;
       }
       return true;
     },
@@ -803,13 +803,13 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Replicanti.galaxies.total >= 180 * player.galaxies && player.galaxies > 0,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => "Replicanti galaxies divide your Replicanti by " +
-      `${format(Decimal.MAX_NUMBER, 1, 0)} instead of resetting them to ${formatInt(1)}.`,
+      `${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} instead of resetting them to ${formatInt(1)}.`,
   },
   {
     id: 127,
     name: "But I wanted another prestige layer...",
-    tooltip: () => `Reach ${format(Decimal.MAX_NUMBER, 1, 0)} EP.`,
-    checkRequirement: () => player.eternityPoints.gte(Decimal.MAX_NUMBER),
+    tooltip: () => `Reach ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} EP.`,
+    checkRequirement: () => player.eternityPoints.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
@@ -857,7 +857,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => player.replicanti.amount.exponent >= 20000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => `You gain Replicanti ${formatInt(2)} times faster
-      under ${format(Decimal.MAX_NUMBER, 1, 0)} Replicanti.`
+      under ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Replicanti.`
   },
   {
     id: 135,
@@ -882,7 +882,7 @@ GameDatabase.achievements.normal = [
       Time.thisEternity.totalMinutes <= 1 &&
       player.dilation.active,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
-    reward: () => `Gain ${format(2, 0, 1)}x Dilated Time and Time Theorems while Dilated.`,
+    reward: () => `Gain ${formatInt(2)}x Dilated Time and Time Theorems while Dilated.`,
     effect: () => (player.dilation.active ? 2 : 1),
   },
   {
@@ -915,18 +915,18 @@ GameDatabase.achievements.normal = [
     tooltip: "Unlock the automator.",
     checkRequirement: () => player.realities >= 5,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
-    reward: "Dimension Boosts are 50% more effective.",
+    reward: "Dimension Boosts are 50% stronger.",
     effect: 1.5,
   },
   {
     id: 143,
     name: "Yo dawg, I heard you liked reskins...",
     tooltip: () => `Have all your Eternities in your past ${formatInt(10)} Eternities be at least ` +
-      `${format(Decimal.MAX_NUMBER, 1, 0)} times higher EP than the previous one.`,
+      `${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} times higher EP than the previous one.`,
     checkRequirement: () => {
       const eternities = player.lastTenEternities.map(run => run[1]);
       for (let i = 0; i < eternities.length - 1; i++) {
-        if (eternities[i].lt(eternities[i + 1].times(Decimal.MAX_NUMBER)) || eternities[i].eq(0)) return false;
+        if (eternities[i].lt(eternities[i + 1].times(Decimal.NUMBER_MAX_VALUE)) || eternities[i].eq(0)) return false;
       }
       return true;
     },

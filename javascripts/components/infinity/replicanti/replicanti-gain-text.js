@@ -57,7 +57,7 @@ Vue.component("replicanti-gain-text", {
         remainingTime = 0;
       }
       this.text = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti` +
-        ` (${TimeSpan.fromSeconds(totalTime)} total)`;
+        ` (${TimeSpan.fromSeconds(totalTime)} total per galaxy)`;
     }
   },
   template: `<p>{{text}}</p>`

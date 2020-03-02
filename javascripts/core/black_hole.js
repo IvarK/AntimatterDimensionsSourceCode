@@ -142,26 +142,26 @@ class BlackHoleState {
   // The logic to determine what state the black hole is in for displaying is nontrivial and used in multiple places
   get displayState() {
     if (Enslaved.isAutoReleasing) {
-      const pulseState = ["▂", "▃", "▅", "▆", "▇"];
-      return `${pulseState[Enslaved.autoReleaseTick]} Pulsing`;
+      if (Enslaved.autoReleaseTick < 3) return `<i class="fas fa-compress-arrows-alt"></i> Pulsing`;
+      return `<i class="fas fa-expand-arrows-alt"></i> Pulsing`;
     }
     if (Enslaved.isStoringGameTime) {
       if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
         const storedTimeWeight = player.celestials.enslaved.storedFraction;
         if (storedTimeWeight !== 0) {
-          return `⇮ Charging (${formatPercents(storedTimeWeight, 1)})`;
+          return `<i class="fas fa-compress-arrows-alt"></i> Charging (${formatPercents(storedTimeWeight, 1)})`;
         }
       } else {
-        return "⇮ Charging";
+        return `<i class="fas fa-compress-arrows-alt"></i> Charging`;
       }
     }
-    if (BlackHoles.areNegative) return "↓ Inverted";
-    if (BlackHoles.arePaused) return "⏸ Paused";
-    if (this.isPermanent) return "⟳ Permanent";
+    if (BlackHoles.areNegative) return `<i class="fas fa-caret-left"></i> Inverted`;
+    if (BlackHoles.arePaused) return `<i class="fas fa-pause"></i> Paused`;
+    if (this.isPermanent) return `<i class="fas fa-infinity"></i> Permanent`;
 
     const timeString = TimeSpan.fromSeconds(this.timeToNextStateChange).toStringShort(true);
-    if (this.isCharged) return `⏩ Active (${timeString})`;
-    return `▶️ Inactive (${timeString})`;
+    if (this.isActive) return `<i class="fas fa-play"></i> Active (${timeString})`;
+    return `<i class="fas fa-redo"></i> Inactive (${timeString})`;
   }
 
   get isActive() {

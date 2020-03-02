@@ -37,7 +37,7 @@ Vue.component("description-display", {
       const classObject = {};
       classObject[name] = true;
       if (this.length !== undefined && this.description.length >= this.length) {
-        classObject[name + "--small-text"] = true;
+        classObject[`${name}--small-text`] = true;
       }
       return classObject;
     }

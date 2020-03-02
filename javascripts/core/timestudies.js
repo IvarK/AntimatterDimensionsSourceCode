@@ -350,7 +350,7 @@ class NormalTimeStudyState extends TimeStudyState {
     const req = this.config.requirementV;
     return req === undefined
       ? false
-      : req() && V.availableST >= this.config.STCost;
+      : req() && V.availableST >= this.STCost;
   }
 
   get canBeBought() {
@@ -610,7 +610,7 @@ class TriadStudyState extends TimeStudyState {
   get canBeBought() {
     return this.config.requirement.every(s => player.timestudy.studies.includes(s)) &&
            V.availableST >= this.STCost &&
-           !this.isBought;
+           !this.isBought && this.config.unlocked();
   }
 
   get isBought() {

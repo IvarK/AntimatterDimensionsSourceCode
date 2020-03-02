@@ -85,7 +85,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   }
 
   // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
-  if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
+  if (Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
     multiplier = multiplier.pow(1.05);
   }
 
@@ -104,7 +104,7 @@ function applyNDMultipliers(mult, tier) {
     NormalDimension(tier).infinityUpgrade,
     BreakInfinityUpgrade.infinitiedMult
   );
-  infinitiedMult = infinitiedMult.pow(Effects.product(TimeStudy(31)));
+  infinitiedMult = infinitiedMult.pow(TimeStudy(31).effectOrDefault(1));
   multiplier = multiplier.times(infinitiedMult);
 
   if (tier === 1) {
@@ -271,7 +271,7 @@ function buyUntilTen(tier) {
 }
 
 function maxAll() {
-  if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
+  if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return;
 
   player.usedMaxAll = true;
 
@@ -484,7 +484,7 @@ class NormalDimensionState extends DimensionState {
     * @returns {boolean}
     */
   get isAffordable() {
-    if (!player.break && this.cost.gt(Decimal.MAX_NUMBER)) return false;
+    if (!player.break && this.cost.gt(Decimal.NUMBER_MAX_VALUE)) return false;
     return this.cost.lte(this.currencyAmount);
   }
 
@@ -492,12 +492,12 @@ class NormalDimensionState extends DimensionState {
    * @returns {boolean}
    */
   get isAffordableUntil10() {
-    if (!player.break && this.cost.gt(Decimal.MAX_NUMBER)) return false;
+    if (!player.break && this.cost.gt(Decimal.NUMBER_MAX_VALUE)) return false;
     return this.costUntil10.lte(this.currencyAmount);
   }
 
   get isAvailableForPurchase() {
-    if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return false;
+    if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return false;
     if (this.tier > DimBoost.totalBoosts + 4) return false;
     if (this.tier > 1 &&
       NormalDimension(this.tier - 1).amount.eq(0) &&
@@ -567,7 +567,7 @@ class NormalDimensionState extends DimensionState {
     const postBreak = (player.break && !NormalChallenge.isRunning) ||
       InfinityChallenge.isRunning ||
       Enslaved.isRunning;
-    if (!postBreak && production.gte(Decimal.MAX_NUMBER)) {
+    if (!postBreak && production.gte(Decimal.NUMBER_MAX_VALUE)) {
       production = production.min("1e315");
     }
     return production;

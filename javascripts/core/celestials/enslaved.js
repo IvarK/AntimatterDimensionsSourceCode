@@ -47,16 +47,13 @@ const Enslaved = {
     return player.celestials.enslaved.isStoringReal;
   },
   get storedRealTimeEfficiency() {
-    const addedEff = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
-      ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency()
-      : 0;
-    return Math.min(0.4 + addedEff, 1);
+    return 0.7;
   },
   get storedRealTimeCap() {
     const addedCap = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
       ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap()
       : 0;
-    return 1000 * 3600 * 4 + addedCap;
+    return 1000 * 3600 * 8 + addedCap;
   },
   get isAutoReleasing() {
     return player.celestials.enslaved.isAutoReleasing && !BlackHoles.areNegative;

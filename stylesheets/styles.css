@@ -18,7 +18,7 @@ html {
 
 /* css vars */
 
-#ui {
+#ui { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #F2F2F2;
@@ -34,7 +34,7 @@ html {
   --color-celestials: #5151ec;
 }
 
-.t-metro #ui,
+.t-metro #ui, /* csslint allow: empty-rules */
 .t-inverted-metro #ui,
 .t-s8 #ui {
   --color-text: black;
@@ -52,7 +52,7 @@ html {
   --color-celestials: #00bcd4;
 }
 
-.t-dark #ui {
+.t-dark #ui { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
   --color-base: #455a64;
@@ -62,7 +62,7 @@ html {
   --color-infinity: #FF9800;
 }
 
-.t-dark-metro #ui {
+.t-dark-metro #ui { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
   --color-base: #455a64;
@@ -78,7 +78,7 @@ html {
   --color-celestials: #00bcd4;
 }
 
-.t-s1 #ui {
+.t-s1 #ui { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: #dbd242;
   --color-base: #dbd242;
@@ -94,7 +94,7 @@ html {
   --color-celestials: #F2D6C1;
 }
 
-.t-s4 #ui {
+.t-s4 #ui { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #1b00ff;
@@ -103,7 +103,7 @@ html {
   --color-bad: #ff0000;
 }
 
-.t-s6 #ui {
+.t-s6 #ui { /* csslint allow: empty-rules */
   --color-text: #E0E0E0;
   --color-text-inverted: black;
   --color-base: black;
@@ -1269,7 +1269,7 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--glyph-trash {
   width: 25rem;
-  height: 3.5rem;
+  height: 4.5rem;
   font-size: 1rem;
 }
 
@@ -1539,6 +1539,7 @@ screen and (max-width: 480px) {
   color: var(--color-eternity);
   background-color: black;
   border-color: var(--color-eternity);
+  font-weight: bold;
 }
 
 .o-prestige-btn--dilation {
@@ -1552,15 +1553,15 @@ screen and (max-width: 480px) {
   background-color: white;
 }
 
-.o-prestige-btn--eternity b {
+.o-prestige-btn--eternity span {
   transition-duration: 0.2s;
 }
 
-.o-prestige-btn--eternity:hover b {
+.o-prestige-btn--eternity:hover span {
   color: var(--color-eternity) !important;
 }
 
-.t-s1 .o-prestige-btn--eternity:hover b {
+.t-s1 .o-prestige-btn--eternity:hover span {
   color: var(--color-text) !important;
 }
 
@@ -2842,6 +2843,11 @@ screen and (max-width: 480px) {
   cursor: default;
 }
 
+.o-challenge-btn--redo {
+  color: white;
+  background-color: #17a32e;
+}
+
 /*#region themes*/
 
 /*#region t-dark*/
@@ -2866,6 +2872,11 @@ screen and (max-width: 480px) {
 
 .t-dark .o-challenge-btn--locked {
   background-color: #23292a;
+  border-color: #b84b5f;
+}
+
+.t-dark .o-challenge-btn--redo {
+  background-color: #58da5e;
   border-color: #b84b5f;
 }
 
@@ -2917,6 +2928,15 @@ screen and (max-width: 480px) {
   border-right-color: #616161;
 }
 
+.t-metro .o-challenge-btn--redo,
+.t-inverted-metro .o-challenge-btn--redo,
+.t-s8 .o-challenge-btn--redo {
+  background-color: #4b8a4e;
+  border: 0.3rem solid #757575;
+  border-bottom-color: #616161;
+  border-right-color: #616161;
+}
+
 /*#endregion t-metro t-dark-metro t-inverted-metro t-s8*/
 
 /*#region t-s1*/
@@ -2961,6 +2981,11 @@ screen and (max-width: 480px) {
 .t-s6 .o-challenge-btn--locked {
   color: grey;
   background: black;
+  border-color: #b84b5f;
+}
+
+.t-s6 .o-challenge-btn--redo {
+  background-color: #2a682d;
   border-color: #b84b5f;
 }
 
@@ -5612,9 +5637,9 @@ kbd {
 }
 
 .l-ra-bar-container {
-  margin: 1rem 0 4rem 0;
+  margin: 1rem 0 3.5rem 0;
   width: 100%;
-  height: 10rem;
+  height: 3rem;
   flex-direction: row;
   flex-flow: nowrap;
 }
@@ -5624,19 +5649,12 @@ kbd {
   top: 0;
   font-size: 1.2rem;
   z-index: 2;
-  color: black;
+  color: white;
   height: 1.75rem;
-  border-left: 0.1rem solid black;
+  border-left: 0.1rem solid white;
   padding: 0 0.2rem;
   user-select: none;
   cursor: default;
-}
-
-.t-dark .l-ra-lvl-chevron,
-.t-dark-metro .l-ra-lvl-chevron,
-.t-s6 .l-ra-lvl-chevron {
-  color: white;
-  border-left-color: white;
 }
 
 .l-ra-lvl-chevron--no-bar {
@@ -5646,9 +5664,8 @@ kbd {
 .c-important-chevron {
   font-weight: bold;
   font-size: 1.5rem;
-  height: 5rem;
+  height: 4.6rem;
   border-left-width: 0.2rem;
-  cursor: pointer;
 }
 
 .o-ra-unlock-hover-text {
@@ -5670,12 +5687,12 @@ kbd {
 
 .l-ra-exp-bar {
   position: relative;
-  border: 0.2rem solid black;
+  border: 0.2rem solid white;
   border-radius: 0.5rem;
   width: 80%;
-  margin: 2.5rem 0 2.5rem 0;
   height: 5rem;
-  justify-self: center;
+  margin: auto;
+  margin-bottom: 2rem;
   z-index: 1;
 }
 
@@ -5693,14 +5710,35 @@ kbd {
 }
 
 .l-ra-pet-container {
-  flex: 1 1 auto;
-  margin: 0 0 -5rem 0;
+  float: left;
+  width: 50%;
+  height: 50%;
 }
 
 .c-ra-memory-header {
   font-size: 1.3rem;
   margin-top: 1.5rem;
   font-weight: bold;
+}
+
+.c-ra-upgrade-icon {
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  line-height: 3.9rem;
+  font-size: 2.3rem;
+  font-weight: bold;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+  width: 4rem;
+  height: 4rem;
+  background: #222;
+  border-radius: 3rem;
+  border: 1px solid #111;
+  margin: 0 0.3rem;
+}
+
+.c-ra-upgrade-icon--inactive {
+  color: #555;
 }
 
 .l-ra-non-pets {
@@ -5764,9 +5802,10 @@ kbd {
 }
 
 .l-ra-all-pets-container {
-  flex: 1 0 auto;
-  flex-direction: column;
-  display: flex;
+  margin: auto;
+  width: 80rem;
+  height: 100%;
+  overflow: hidden;
 }
 
 .l-ra-unlock {

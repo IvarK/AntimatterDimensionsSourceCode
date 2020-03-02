@@ -54,34 +54,25 @@ const GameCache = {
       .reduce(Decimal.maxReducer)
   ),
 
-  averageEPPerRun: new Lazy(() => {
-    return player.lastTenEternities
+  averageEPPerRun: new Lazy(() => player.lastTenEternities
       .map(run => run[1])
       .reduce(Decimal.sumReducer)
-      .dividedBy(player.lastTenEternities.length);
-  }),
+      .dividedBy(player.lastTenEternities.length)),
 
-  tickSpeedMultDecrease: new Lazy(() => {
-    return 10 - Effects.sum(
+  tickSpeedMultDecrease: new Lazy(() => 10 - Effects.sum(
       BreakInfinityUpgrade.tickspeedCostMult,
       EternityChallenge(11).reward
-    );
-  }),
+    )),
 
-  dimensionMultDecrease: new Lazy(() => {
-    return 10 - Effects.sum(
+  dimensionMultDecrease: new Lazy(() => 10 - Effects.sum(
       BreakInfinityUpgrade.dimCostMult,
       EternityChallenge(6).reward
-    );
-  }),
+    )),
 
-  timeStudies: new Lazy(() => {
-    return NormalTimeStudyState.studies
-      .map(s => player.timestudy.studies.includes(s.id));
-  }),
+  timeStudies: new Lazy(() => NormalTimeStudyState.studies
+      .map(s => player.timestudy.studies.includes(s.id))),
 
-  achSkipPerkCount: new Lazy(() => {
-    return Effects.max(
+  achSkipPerkCount: new Lazy(() => Effects.max(
       0,
       Perk.achievementRowGroup1,
       Perk.achievementRowGroup2,
@@ -89,8 +80,7 @@ const GameCache = {
       Perk.achievementRowGroup4,
       Perk.achievementRowGroup5,
       Perk.achievementRowGroup6
-    );
-  }),
+    )),
 
   buyablePerks: new Lazy(() => Perks.all.filter(p => p.canBeBought)),
 

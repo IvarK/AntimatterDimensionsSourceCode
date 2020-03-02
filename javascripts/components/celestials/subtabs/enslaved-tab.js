@@ -5,7 +5,6 @@ Vue.component("enslaved-tab", {
     isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
-    hasAmplifyStoredReal: false,
     canAdjustStoredTime: false,
     storedFraction: 0,
     inEnslaved: false,
@@ -22,9 +21,6 @@ Vue.component("enslaved-tab", {
     currentSpeedUp: 0
   }),
   computed: {
-    amplifiedGameDesc() {
-      return `${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 2, 2)}`;
-    },
     storedRealEfficiencyDesc() {
       return formatPercents(this.storedRealEffiency);
     },
@@ -53,13 +49,17 @@ Vue.component("enslaved-tab", {
       };
     }
   },
+  watch: {
+    autoRelease(newValue) {
+      player.celestials.enslaved.isAutoReleasing = newValue;
+    }
+  },
   methods: {
     update() {
       this.isStoringBlackHole = Enslaved.isStoringGameTime;
       this.storedBlackHole = player.celestials.enslaved.stored;
       this.isStoringReal = Enslaved.isStoringRealTime;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
-      this.hasAmplifyStoredReal = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME);
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.inEnslaved = Enslaved.isRunning;
       this.completed = Enslaved.isCompleted;
@@ -120,9 +120,6 @@ Vue.component("enslaved-tab", {
       this.storedFraction = value;
       player.celestials.enslaved.storedFraction = value / 1000;
     },
-    toggleAutoRelease() {
-      player.celestials.enslaved.isAutoReleasing = !player.celestials.enslaved.isAutoReleasing;
-    },
     glitchStyle(x) {
       const xScale = 15 / 27;
       const yScale = 5;
@@ -154,7 +151,6 @@ Vue.component("enslaved-tab", {
             Discharge black hole
             <p v-if="inEnslaved">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
           </button>
-          <div v-if="hasAmplifyStoredReal"> Amplified: {{ amplifiedGameDesc }} </div>
         </div>
         <div class="l-enslaved-top-container__half">
           Storing real time completely halts all production, setting game speed to 0. You can use stored real time to
@@ -184,12 +180,11 @@ Vue.component("enslaved-tab", {
       </div>
       <br>
       <div v-if="canAdjustStoredTime">
-        <input type="checkbox"
-          id="autoReleaseBox"
+        <primary-button-on-off
           v-model="autoRelease"
-          :value="autoRelease"
-          @input="toggleAutoRelease()">
-        <label for="autoReleaseBox">Pulse black hole (uses 1% every 5 ticks)</label>
+          class="o-primary-btn"
+          text="Pulse black hole:"
+        />
       </div>
       <div class="l-enslaved-shop-container">
         <button

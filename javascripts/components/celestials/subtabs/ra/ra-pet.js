@@ -115,7 +115,7 @@ Vue.component("ra-pet", {
             <i class="fas fa-question-circle"></i>
           </span>
         </div>
-        <div>
+        <div v-if="memoryMultiplier > 1">
           Multiplying all memory production by {{ format(memoryMultiplier, 2, 3) }}
           <span :ach-tooltip="memoryGainTooltip">
             <i class="fas fa-question-circle"></i>

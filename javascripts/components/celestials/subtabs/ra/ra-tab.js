@@ -46,7 +46,7 @@ Vue.component("ra-tab", {
         pet: Ra.pets.v,
         scalingUpgradeText: level => {
           const triadCount = Math.floor(level / 5);
-          return `You've unlocked ${formatInt(triadCount)} triad ${pluralize("study", triadCount, "studies")}.`;
+          return `You have unlocked ${formatInt(triadCount)} triad ${pluralize("study", triadCount, "studies")}.`;
         },
       }
     ]

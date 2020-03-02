@@ -107,32 +107,48 @@ const Ra = {
       get data() { return player.celestials.ra.pets.teresa; }
       get requiredUnlock() { return undefined; }
       get rawMemoryChunksPerSecond() { return Math.pow(player.eternityPoints.pLog10() / 1e4, 3); }
-      get memoryProductionMultiplier() { return 1 + Math.pow(player.reality.realityMachines.pLog10() / 100, 0.5); }
       get color() { return "#86ea84"; }
+      get memoryProductionMultiplier() {
+        return Ra.has(RA_UNLOCKS.TERESA_XP)
+          ? 1 + Math.pow(player.reality.realityMachines.pLog10() / 100, 0.5)
+          : 1;
+      }
     }(),
     effarig: new class EffarigRaPetState extends RaPetState {
       get name() { return "Effarig"; }
       get data() { return player.celestials.ra.pets.effarig; }
       get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
       get rawMemoryChunksPerSecond() { return Math.pow(Effarig.shardsGained, 0.1); }
-      get memoryProductionMultiplier() { return 1 + player.bestGlyphLevel / 7000; }
       get color() { return "#ea8585"; }
+      get memoryProductionMultiplier() {
+        return Ra.has(RA_UNLOCKS.EFFARIG_XP)
+          ? 1 + player.bestGlyphLevel / 7000
+          : 1;
+      }
     }(),
     enslaved: new class EnslavedRaPetState extends RaPetState {
       get name() { return "Enslaved"; }
       get data() { return player.celestials.ra.pets.enslaved; }
       get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
       get rawMemoryChunksPerSecond() { return Math.pow(player.timeShards.pLog10() / 3e5, 2); }
-      get memoryProductionMultiplier() { return 1 + Math.log10(player.totalTimePlayed) / 200; }
       get color() { return "#ead584"; }
+      get memoryProductionMultiplier() {
+        return Ra.has(RA_UNLOCKS.ENSLAVED_XP)
+          ? 1 + Math.log10(player.totalTimePlayed) / 200
+          : 1;
+      }
     }(),
     v: new class VRaPetState extends RaPetState {
       get name() { return "V"; }
       get data() { return player.celestials.ra.pets.v; }
       get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
       get rawMemoryChunksPerSecond() { return Math.pow(player.infinityPower.pLog10() / 1e7, 1.5); }
-      get memoryProductionMultiplier() { return 1 + Ra.totalPetLevel / 50; }
       get color() { return "#f1aa7f"; }
+      get memoryProductionMultiplier() {
+        return Ra.has(RA_UNLOCKS.V_XP)
+          ? 1 + Ra.totalPetLevel / 50
+          : 1;
+      }
     }(),
   },
   // Dev/debug function for easier testing

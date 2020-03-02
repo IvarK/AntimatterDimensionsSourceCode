@@ -370,7 +370,7 @@ const RA_UNLOCKS = {
   ALTERED_GLYPHS: {
     id: 5,
     description: "Get Teresa to level 8",
-    reward: "Unlock Altered Glyphs",
+    reward: "Unlock Altered Glyphs (effects improved based on glyph sacrifice)",
     pet: Ra.pets.teresa,
     level: 8,
     displayIcon: `<span class="fas fa-bolt"></span>`

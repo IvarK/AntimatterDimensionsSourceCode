@@ -55,7 +55,7 @@ Vue.component("ra-tab", {
     `<div class="l-ra-celestial-tab">
       <div class="c-ra-memory-header">
         Each memory chunk generates
-        {{ format(memoriesPerChunk, 2, 2) }} {{ "memory" | pluralize(memoriesPerChunk, "memories") }}
+        {{ format(memoriesPerChunk, 2, 3) }} {{ "memory" | pluralize(memoriesPerChunk, "memories") }}
         per second.
       </div>
       <div>

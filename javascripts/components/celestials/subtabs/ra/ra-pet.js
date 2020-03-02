@@ -77,11 +77,13 @@ Vue.component("ra-pet", {
       this.canGetMemoryChunks = pet.canGetMemoryChunks;
       this.memoryMultiplier = pet.memoryProductionMultiplier;
 
-      // Quadratic formula for growth
+      // Quadratic formula for growth (uses constant growth for a = 0)
       const a = Ra.productionPerMemoryChunk() * pet.memoryChunksPerSecond / 2;
       const b = Ra.productionPerMemoryChunk() * pet.memoryChunks;
       const c = this.exp - this.requiredExp;
-      const timeToLevel = (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
+      const timeToLevel = a === 0
+        ? -c / b
+        : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
       if (Number.isFinite(timeToLevel)) {
         this.nextLevelEstimate = TimeSpan.fromSeconds(timeToLevel).toStringShort();
       } else {
@@ -124,8 +126,8 @@ Vue.component("ra-pet", {
         <br>
         <div style="display: flex; justify-content: center;">
           <ra-upgrade-icon v-for="(unlock, i) in unlocks"
-          :key="i"
-          :unlock="unlock" />
+            :key="i"
+            :unlock="unlock" />
         </div>
       </div>
     </div>

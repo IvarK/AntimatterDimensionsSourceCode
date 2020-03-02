@@ -75,6 +75,7 @@ Vue.component("alchemy-tab", {
     return {
       infoResourceId: 0,
       focusedResourceId: -1,
+      reactionsAvailable: false,
       realityCreationAvailable: false,
       reactionProgress: 0,
       estimatedCap: 0,
@@ -100,6 +101,7 @@ Vue.component("alchemy-tab", {
   },
   methods: {
     update() {
+      this.reactionsAvailable = AlchemyResources.all.filter(res => !res.isBaseResource && res.isUnlocked).length !== 0;
       this.realityCreationAvailable = AlchemyResource.reality.amount !== 0;
       const animationTime = 800;
       this.reactionProgress = (player.realTimePlayed % animationTime) / animationTime;
@@ -243,8 +245,10 @@ Vue.component("alchemy-tab", {
           />
         </svg>
       </div>
-      <button class="o-primary-btn" @click="setAllReactions(true)">Turn on all reactions</button>
-      <button class="o-primary-btn" @click="setAllReactions(false)">Turn off all reactions</button>
+      <div v-if="reactionsAvailable">
+        <button class="o-primary-btn" @click="setAllReactions(true)">Turn on all reactions</button>
+        <button class="o-primary-btn" @click="setAllReactions(false)">Turn off all reactions</button>
+      </div>
       <primary-button
         v-if="realityCreationAvailable"
         class="o-primary-btn"

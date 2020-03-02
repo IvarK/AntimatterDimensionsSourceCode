@@ -167,6 +167,11 @@ let player = {
     paperclips: 0,
     newsQueuePosition: 1000
   },
+  shownRuns: {
+    Reality: true,
+    Eternity: true,
+    Infinity: true
+  },
   lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, new Decimal(1)]),
   lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 1]),
   lastTenRealities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 0]),

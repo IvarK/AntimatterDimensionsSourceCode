@@ -5,6 +5,7 @@ Vue.component("past-runs-container", {
     return {
       isRealityUnlocked: false,
       runs: Array.repeat(0, 10).map(() => [0, new Decimal(0), 0, 0]),
+      shown: player.shownRuns[this.singular]
     };
   },
   props: {
@@ -18,14 +19,12 @@ Vue.component("past-runs-container", {
     averageRun() {
       return averageRun(this.runs);
     },
-    expand() {
-      return this.$viewModel.tabs.statistics.runsShown[this.singular];
-    }
   },
   methods: {
     update() {
       this.runs = this.clone(this.getRuns());
       this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
+      player.shownRuns[this.singular] = this.shown;
     },
     clone(runs) {
       return runs.map(run =>
@@ -43,8 +42,7 @@ Vue.component("past-runs-container", {
         : `${format(rpm, 2, 2)} ${this.points}/min`;
     },
     toggleShown() {
-      this.$viewModel.tabs.statistics.runsShown[this.singular] =
-        !this.$viewModel.tabs.statistics.runsShown[this.singular];
+      this.shown = !this.shown;
     },
     runTime: run => timeDisplayShort(run[0]),
     runGain: run => format(run[1], 2, 0),
@@ -55,10 +53,11 @@ Vue.component("past-runs-container", {
       <br>
       <div
         class="c-past-runs-header"
-        v-on:click="toggleShown">
+        v-on:click="toggleShown"
+        >
         <h3>Past 10 {{ plural }}</h3>
       </div>
-      <div v-show="expand">
+      <div v-show="shown">
         <div v-for="(run, index) in runs" :key="index">
           <span>
             The {{ singular }} {{ formatInt(index + 1) }}

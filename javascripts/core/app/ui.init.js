@@ -30,13 +30,6 @@ let ui = {
           lines: []
         }
       },
-      statistics: {
-        runsShown: {
-          Reality: true,
-          Eternity: true,
-          Infinity: true
-        }
-      }
     },
     shiftDown: false,
     theme: "Normal",

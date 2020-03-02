@@ -617,7 +617,10 @@ GameDatabase.news = [
   },
   {
     id: "a130",
-    text: "Click this to unlock that one secret achievement."
+    text: "Click this to unlock that one secret achievement.",
+    // This next line is needed for this news ticker to unlock
+    // the secret achievement.
+    onClick: () => undefined
   },
   {
     id: "a131",
@@ -847,8 +850,9 @@ GameDatabase.news = [
   {
     id: "a173",
     text:
-      "<span style='animation: a-game-header__antimatter--glow 3s infinite' onclick='bigCrunchAnimation()'>This " +
-      "text is made of antimatter. Do not touch or else the universe will collapse.</span>"
+      "<span style='animation: a-game-header__antimatter--glow 3s infinite'>This " +
+      "text is made of antimatter. Do not touch or else the universe will collapse.</span>",
+    onClick: () => bigCrunchAnimation()
   },
   {
     id: "a174",

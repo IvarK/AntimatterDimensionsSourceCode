@@ -66,7 +66,8 @@ GameDatabase.achievements.normal = [
     id: 22,
     name: "Fake News",
     tooltip: () => `Encounter ${formatInt(50)} different news messages.`,
-    checkRequirement: () => player.news.size >= 50
+    checkRequirement: () => player.news.size >= 50,
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {
     id: 23,
@@ -257,7 +258,8 @@ GameDatabase.achievements.normal = [
     name: "Age of Automation",
     tooltip: "Max dimension and tickspeed autobuyers.",
     checkRequirement: () => Autobuyers.upgradeable
-      .countWhere(a => a.hasMaxedInterval) >= 9
+      .countWhere(a => a.hasMaxedInterval) >= 9,
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {
     id: 53,
@@ -266,7 +268,8 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Autobuyers.upgradeable.countWhere(a => !a.hasMaxedInterval) === 0 &&
       Autobuyer.galaxy.hasMaxedInterval &&
       Autobuyer.dimboost.hasMaxedInterval &&
-      Autobuyer.bigCrunch.hasMaxedInterval
+      Autobuyer.bigCrunch.hasMaxedInterval,
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {
     id: 54,

@@ -2326,6 +2326,19 @@ screen and (max-width: 480px) {
 .c-past-runs-header {
   cursor: pointer;
   user-select: none;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex: auto;
+  resize: none;
+
+}
+
+.o-run-drop-down-icon {
+  font-size: 1.5em;
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 
 /*#endregion Past Prestige Runs*/

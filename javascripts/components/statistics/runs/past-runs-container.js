@@ -5,7 +5,8 @@ Vue.component("past-runs-container", {
     return {
       isRealityUnlocked: false,
       runs: Array.repeat(0, 10).map(() => [0, new Decimal(0), 0, 0]),
-      shown: player.shownRuns[this.singular]
+      shown: player.shownRuns[this.singular],
+      dropDown: `<i class="fas fa-caret-down"></i>`
     };
   },
   props: {
@@ -55,7 +56,11 @@ Vue.component("past-runs-container", {
         class="c-past-runs-header"
         v-on:click="toggleShown"
         >
-        <h3>Past 10 {{ plural }}</h3>
+        <span class="o-run-drop-down-icon" v-html="dropDown" v-show="!shown" />
+        <span>
+          <h3>Past 10 {{ plural }}</h3>
+        </span>
+        <span class="o-run-drop-down-icon" v-html="dropDown" v-show="!shown" />
       </div>
       <div v-show="shown">
         <div v-for="(run, index) in runs" :key="index">

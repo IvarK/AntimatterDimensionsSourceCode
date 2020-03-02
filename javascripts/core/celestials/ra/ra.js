@@ -195,17 +195,17 @@ const Ra = {
   },
   checkForUnlocks() {
     for (const unl of Object.values(RA_UNLOCKS)) {
-      // eslint-disable-next-line no-bitwise
-      if (unl.pet.level >= unl.level && !this.has(unl)) player.celestials.ra.unlockBits |= (1 << unl.id);
-    }
-    if (this.totalPetLevel >= 20 && !this.has(RA_RECOLLECTION_UNLOCK)) {
-      // eslint-disable-next-line no-bitwise
-      player.celestials.ra.unlockBits |= (1 << RA_RECOLLECTION_UNLOCK.id);
-    }
-    if (this.totalPetLevel >= 80 && !this.has(RA_LAITELA_UNLOCK)) {
-      // eslint-disable-next-line no-bitwise
-      player.celestials.ra.unlockBits |= (1 << RA_LAITELA_UNLOCK.id);
-      MatterDimension(1).amount = new Decimal(1);
+      // The condition() prop only exists for things which aren't tied to a single pet's level (recollection/Lai'tela)
+      const isUnlockable = unl.condition === undefined
+        ? unl.pet.level >= unl.level
+        : unl.condition();
+      if (isUnlockable && !this.has(unl)) {
+        // eslint-disable-next-line no-bitwise
+        player.celestials.ra.unlockBits |= (1 << unl.id);
+        if (unl.id === RA_UNLOCKS.RA_LAITELA_UNLOCK.id) {
+          MatterDimension(1).amount = new Decimal(1);
+        }
+      }
     }
   },
   has(info) {
@@ -533,17 +533,20 @@ const RA_UNLOCKS = {
     pet: Ra.pets.v,
     level: 25,
     displayIcon: `<span class="fas fa-sync-alt"></span>`
+  },
+  RA_RECOLLECTION_UNLOCK: {
+    id: 24,
+    description: "Get 20 total celestial levels",
+    reward: "Unlock Recollection",
+    condition: () => Ra.totalPetLevel >= 20,
+  },
+  RA_LAITELA_UNLOCK: {
+    id: 25,
+    description: "Get 80 total celestial levels",
+    reward: "Unlock Lai'tela, the Celestial of Dimensions",
+    condition: () => Ra.totalPetLevel >= 80,
   }
 };
 
-const RA_RECOLLECTION_UNLOCK = {
-  id: 25,
-  description: "Get 20 total celestial levels",
-  reward: "Unlock Recollection",
-};
-
-const RA_LAITELA_UNLOCK = {
-  id: 24,
-  description: "Get 80 total celestial levels",
-  reward: "Unlock Lai'tela, the Celestial of Dimensions",
-};
+// Normally only checked on level up, and offline level ups don't trigger it
+EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Ra.checkForUnlocks());

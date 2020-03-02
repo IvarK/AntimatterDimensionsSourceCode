@@ -971,7 +971,7 @@ Reaching 36 V-achievements (and therefore completing all of V's achievements) un
       info: () => `
 <h1>Work in Progress</h1>
 `,
-      isUnlocked: () => Ra.has(RA_LAITELA_UNLOCK),
+      isUnlocked: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
       tags: ["omsi", "reality", "matter", "dimensions", "lategame", "endgame"],
       tab: "celestials/laitela"
     }, {

@@ -12,7 +12,7 @@ Vue.component("ra-tab", {
   methods: {
     update() {
       this.memoriesPerChunk = Ra.productionPerMemoryChunk();
-      this.hasRecollection = Ra.has(RA_RECOLLECTION_UNLOCK);
+      this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
       this.showLaitela = Ra.pets.v.isUnlocked;
     },
     startRun() {
@@ -23,7 +23,7 @@ Vue.component("ra-tab", {
     }
   },
   computed: {
-    laitelaUnlock: () => RA_LAITELA_UNLOCK,
+    laitelaUnlock: () => RA_UNLOCKS.RA_LAITELA_UNLOCK,
     pets: () => [
       {
         pet: Ra.pets.teresa,

@@ -125,13 +125,12 @@ Vue.component("automator-editor", {
       }
       return label;
     },
-    parseTextFromBlocks() {
-      const content = BlockAutomator.parseLines(BlockAutomator.lines).join("\n");
-      const automatorID = ui.view.tabs.reality.automator.editorScriptID;
-      AutomatorBackend.saveScript(automatorID, content);
-      AutomatorTextUI.documents[automatorID].setValue(content);
+
+    startAutomator() {
+      BlockAutomator.parseTextFromBlocks();
       this.$nextTick(() => AutomatorTextUI.editor.refresh());
     },
+
     toggleAutomatorMode() {
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
         this.parseTextFromBlocks();
@@ -154,7 +153,7 @@ Vue.component("automator-editor", {
   template:
     `<div class="l-automator-pane">
       <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
-        <automator-controls @automatorplay="parseTextFromBlocks()"/>
+        <automator-controls @automatorplay="startAutomator"/>
         <div class="l-automator__script-names">
           <template v-if="!editingName">
             <select class="l-automator__scripts-dropdown"

@@ -79,7 +79,7 @@ class AlchemyReaction {
     if (!this._product.isUnlocked || this._reagents.some(r => !r.resource.isUnlocked)) return 0;
     const forcingFactor = (this._reagents
       .map(r => r.resource.amount)
-      .min() - this._product.amount) / 1000;
+      .min() - this._product.amount) / 200;
     const totalYield = this._reagents
       .map(r => r.resource.amount / r.cost)
       .min();

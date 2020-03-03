@@ -8,6 +8,7 @@ Vue.component("ra-tab", {
       totalLevels: 0,
       hasRecollection: false,
       recollectionReq: 0,
+      recollectionMult: 1,
       showLaitela: false,
       laitelaReq: 0,
     };
@@ -18,6 +19,7 @@ Vue.component("ra-tab", {
       this.totalLevels = Ra.totalPetLevel;
       this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
       this.recollectionReq = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels;
+      this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
       this.showLaitela = Ra.pets.v.isUnlocked;
       this.laitelaReq = RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels;
     },
@@ -46,7 +48,8 @@ Vue.component("ra-tab", {
       {
         pet: Ra.pets.enslaved,
         scalingUpgradeText: () => `Stored game time 
-          ${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)}.`,
+          ${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)} and real time
+          +${formatInt(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / (1000 * 3600))} hours`,
       },
       {
         pet: Ra.pets.v,
@@ -88,7 +91,7 @@ Vue.component("ra-tab", {
         <div class="l-ra-recollection-unlock">
           <br>
           <h1>Recollection</h1>
-          Whichever celestial has recollection will get {{formatInt(2)}}x memory chunk gain.
+          Whichever celestial has recollection will get {{formatInt(recollectionMult)}}x memory chunk gain.
           <div class="l-ra-recollection-unlock-inner" v-if="hasRecollection">
             <ra-pet-recollection-button
               v-for="(pet, i) in pets"

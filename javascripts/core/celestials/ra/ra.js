@@ -60,7 +60,7 @@ class RaPetState {
   
   get memoryChunksPerSecond() {
     let res = this.canGetMemoryChunks ? this.rawMemoryChunksPerSecond : 0;
-    if (this.hasRecollection) res *= 2;
+    if (this.hasRecollection) res *= RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
     return res;
   }
   
@@ -400,7 +400,7 @@ const RA_UNLOCKS = {
   GLYPH_EFFECT_COUNT: {
     id: 8,
     description: "Get Effarig to level 8",
-    reward: "Glyphs always have 4 effects (Effarig glyphs can now have more)",
+    reward: "Double your glyph choices and glyphs always have 4 effects (Effarig glyphs can now have more)",
     pet: Ra.pets.effarig,
     level: 8,
     displayIcon: `<span class="fas fa-braille"></span>`
@@ -436,8 +436,7 @@ const RA_UNLOCKS = {
     reward: "Stored game time is amplified and you can store more real time (scales with level)",
     effect: {
       gameTimeAmplification: () => 1 + Math.clampMax(Ra.pets.enslaved.level, 25) / 100,
-      realTimeEfficiency: () => Ra.pets.enslaved.level / 50,
-      realTimeCap: () => 1000 * 3600 * (Ra.pets.enslaved.level + Math.clampMin(Ra.pets.enslaved.level - 25, 0)) / 2,
+      realTimeCap: () => 1000 * 3600 * Ra.pets.enslaved.level,
     },
     pet: Ra.pets.enslaved,
     level: 2,
@@ -454,7 +453,7 @@ const RA_UNLOCKS = {
   ADJUSTABLE_STORED_TIME: {
     id: 14,
     description: "Get Enslaved to level 8",
-    reward: "Stored game time can be rate-adjusted and automatically released",
+    reward: "Stored game time can be stored at an adjustable rate and automatically released",
     pet: Ra.pets.enslaved,
     level: 8,
     displayIcon: `<span class="fas fa-expand-arrows-alt"></span>`
@@ -544,6 +543,7 @@ const RA_UNLOCKS = {
     id: 24,
     description: "Get 20 total celestial levels",
     reward: "Unlock Recollection",
+    effect: 3,
     totalLevels: 20,
   },
   RA_LAITELA_UNLOCK: {

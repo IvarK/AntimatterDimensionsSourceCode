@@ -12,11 +12,13 @@ const GlyphSelection = {
   },
 
   get choiceCount() {
-    const baseChoices = Effects.max(
+    let baseChoices = Effects.max(
       1,
       Perk.glyphChoice4,
       Perk.glyphChoice3
     );
+    // TODO Make Ra follow GMS pattern so this isn't as dumb as it is right now
+    if (Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) baseChoices *= 2;
     return baseChoices;
   },
 

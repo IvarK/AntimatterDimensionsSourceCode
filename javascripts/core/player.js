@@ -350,6 +350,7 @@ let player = {
       unlockBits: 0,
       run: false,
       bestRunAM: new Decimal(1),
+      bestAMSet: [],
       perkShop: Array.repeat(0, 5)
     },
     effarig: {

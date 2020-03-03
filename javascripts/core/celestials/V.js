@@ -137,9 +137,9 @@ const V_UNLOCKS = {
     format: x => TimeSpan.fromSeconds(60 * 30 * 60 / x).toStringShort(false),
     requirement: () => V.spaceTheorems >= 10
   },
-  TRIAD_STUDIES: {
+  AUTO_AUTOCLEAN: {
     id: 4,
-    reward: "(Placeholder upgrade to replace triad study unlock)",
+    reward: "Glyph Auto-clean triggers automatically after every reality.",
     description: "Have 16 V-achievements",
     requirement: () => V.spaceTheorems >= 16
   },

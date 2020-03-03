@@ -95,7 +95,7 @@ Vue.component("v-tab", {
           V_UNLOCKS.FAST_AUTO_EC
         ],
         [
-          V_UNLOCKS.TRIAD_STUDIES,
+          V_UNLOCKS.AUTO_AUTOCLEAN,
           V_UNLOCKS.ACHIEVEMENT_BH,
           V_UNLOCKS.RA_UNLOCK
         ],

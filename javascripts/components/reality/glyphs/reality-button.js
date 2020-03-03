@@ -5,8 +5,6 @@ Vue.component("reality-button", {
     return {
       canReality: false,
       hasRealityStudy: false,
-      inTeresaReality: false,
-      inLaitelaReality: false,
       machinesGained: new Decimal(0),
       realityTime: 0,
       glyphLevel: 0,
@@ -70,15 +68,26 @@ Vue.component("reality-button", {
       this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
       this.ppGained = multiplier;
       this.shardsGained = Effarig.shardsGained * multiplier;
-      this.inTeresaReality = Teresa.isRunning;
-      this.inLaitelaReality = Laitela.isRunning;
-      const teresaReward = this.formatScalingMultiplier("Glyph sacrifice",
+
+      const teresaReward = this.formatScalingMultiplierText(
+        "Glyph sacrifice",
         Teresa.runRewardMultiplier,
         Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(player.antimatter)));
-      const laitelaReward = this.formatScalingMultiplier("Matter dimensions",
+      const teresaThreshold = this.formatThresholdText(
+        Teresa.rewardMultiplier(player.antimatter) > Teresa.runRewardMultiplier,
+        player.celestials.teresa.bestRunAM,
+        "antimatter");
+      const laitelaReward = this.formatScalingMultiplierText(
+        "Matter dimensions",
         Laitela.realityReward,
         Math.max(Laitela.realityReward, Laitela.rewardMultiplier(player.antimatter)));
-      this.celestialRunText = [teresaReward, laitelaReward];
+      const laitelaThreshold = this.formatThresholdText(
+        Laitela.rewardMultiplier(player.antimatter) > Laitela.realityReward,
+        player.celestials.laitela.maxAmGained.clampMin(1),
+        "antimatter");
+      this.celestialRunText = [
+        [Teresa.isRunning, teresaReward, teresaThreshold],
+        [Laitela.isRunning, laitelaReward, laitelaThreshold]];
     },
     handleClick() {
       if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {
@@ -88,8 +97,12 @@ Vue.component("reality-button", {
         requestManualReality();
       }
     },
-    formatScalingMultiplier(resource, before, after) {
+    formatScalingMultiplierText(resource, before, after) {
       return `${resource} ${formatX(before, 2, 2)} ➜ ${formatX(after, 2, 2)}`;
+    },
+    formatThresholdText(condition, threshold, resourceName) {
+      if (condition) return "";
+      return `(${format(threshold, 2, 2)} ${resourceName} to improve)`;
     }
   },
   template: `
@@ -114,8 +127,13 @@ Vue.component("reality-button", {
           <div>Other resources gained:</div>
           <div>{{ppGained}} Perk {{ "point" | pluralize(ppGained) }}</div>
           <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
-          <div v-if="inTeresaReality">{{ celestialRunText[0] }}</div>
-          <div v-if="inLaitelaReality">{{ celestialRunText[1] }}</div>
+          <div v-for="celestialInfo in celestialRunText">
+            <span v-if="celestialInfo[0]">
+              {{ celestialInfo[1] }}
+              <br>
+              {{ celestialInfo[2] }}
+            </span>
+          </div>
         </template>
         <template v-else>
           No resources gained

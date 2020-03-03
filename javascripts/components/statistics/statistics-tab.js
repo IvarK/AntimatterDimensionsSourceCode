@@ -81,11 +81,14 @@ Vue.component("statistics-tab", {
       }
       this.matterScale = MatterScale.estimate(player.antimatter);
       this.recordGlyphInfo = [
-        [Glyphs.copyForRecords(player.bestRMminSet), `Best RM/min: ${format(player.bestRMmin, 2, 2)} RM/min`],
-        [Glyphs.copyForRecords(player.bestGlyphLevelSet), `Best glyph level: ${formatInt(player.bestGlyphLevel)}`],
-        [Glyphs.copyForRecords(player.bestEPSet), `Best EP: ${format(player.bestEP, 2, 2)} EP`],
-        [Glyphs.copyForRecords(player.bestSpeedSet),
-          `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`]
+        [true, Glyphs.copyForRecords(player.bestRMminSet), `Best RM/min: ${format(player.bestRMmin, 2, 2)} RM/min`],
+        [true, Glyphs.copyForRecords(player.bestGlyphLevelSet),
+          `Best glyph level: ${formatInt(player.bestGlyphLevel)}`],
+        [true, Glyphs.copyForRecords(player.bestEPSet), `Best EP: ${format(player.bestEP, 2, 2)} EP`],
+        [true, Glyphs.copyForRecords(player.bestSpeedSet),
+          `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
+        [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
+          `Best AM in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)}`]
       ];
     },
     formatDecimalAmount(value) {
@@ -171,8 +174,9 @@ Vue.component("statistics-tab", {
           <glyph-set-preview
             v-for="(set, idx) in recordGlyphInfo"
             :key="idx"
-            :glyphs="set[0]"
-            :text="set[1]" />
+            :show="set[0]"
+            :glyphs="set[1]"
+            :text="set[2]" />
         </div>
     </div>`
 });

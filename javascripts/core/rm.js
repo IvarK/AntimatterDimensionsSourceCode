@@ -750,12 +750,13 @@ const Glyphs = {
     }
   },
   copyForRecords(glyphList) {
+    // Sorting by effect ensures consistent ordering by type, based on how the effect bitmasks are structured
     return glyphList.map(g => ({
-      type: g.type,
-      level: g.level,
-      strength: g.strength,
-      effects: g.effects,
-    }));
+        type: g.type,
+        level: g.level,
+        strength: g.strength,
+        effects: g.effects, }))
+      .sort((a, b) => b.effects - a.effects);
   }
 };
 

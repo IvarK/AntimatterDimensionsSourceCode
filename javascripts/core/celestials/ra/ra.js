@@ -213,6 +213,7 @@ const Ra = {
     return Boolean(player.celestials.ra.unlockBits & (1 << info.id));
   },
   startRun() {
+    player.options.retryCelestial = false;
     player.celestials.ra.run = startRealityOver() || player.celestials.ra.run;
   },
   toggleMode() {

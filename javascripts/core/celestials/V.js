@@ -189,6 +189,7 @@ const V = {
     return Boolean(player.celestials.v.unlockBits & (1 << info.id));
   },
   startRun() {
+    player.options.retryCelestial = false;
     player.celestials.v.run = startRealityOver() || player.celestials.v.run;
     player.celestials.v.cursedThisRun = Glyphs.active.filter(x => x && x.type === "cursed").length;
   },

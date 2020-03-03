@@ -106,6 +106,7 @@ const Enslaved = {
     return true;
   },
   startRun() {
+    player.options.retryCelestial = false;
     if (this.maxQuoteIdx === 13) player.celestials.enslaved.maxQuotes += 2;
     player.celestials.enslaved.run = startRealityOver() || player.celestials.enslaved.run;
     // Round to the nearest multiple of 2 to make the secret study hide

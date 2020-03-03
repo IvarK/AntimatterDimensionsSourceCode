@@ -19,6 +19,10 @@ Vue.component("glyph-auto-pick-options", {
         case AUTO_GLYPH_SAC_MODE.ALCHEMY: return "Refine";
         default: return "Auto pick";
       }
+    },
+    lowestResourceText() {
+      if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && this.sacMode === AUTO_GLYPH_SAC_MODE.ALCHEMY) return "alchemy resource";
+      return "total sacrifice";
     }
   },
   methods: {
@@ -52,11 +56,8 @@ Vue.component("glyph-auto-pick-options", {
     <div :class="optionClass(modes.ABOVE_SACRIFICE_THRESHOLD)" @click="setMode(modes.ABOVE_SACRIFICE_THRESHOLD)">
       {{ pickerText }} farthest above threshold
     </div>
-    <div
-      v-if="alchemyUnlocked"
-      :class="optionClass(modes.LOWEST_ALCHEMY_RESOURCE)"
-      @click="setMode(modes.LOWEST_ALCHEMY_RESOURCE)">
-      {{ pickerText }} lowest alchemy resource
+    <div :class="optionClass(modes.LOWEST_RESOURCE)" @click="setMode(modes.LOWEST_RESOURCE)">
+      {{ pickerText }} lowest {{ lowestResourceText }}
     </div>
   </div>
   `

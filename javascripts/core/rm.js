@@ -107,10 +107,13 @@ const AutoGlyphPicker = {
         }
         return filterValue;
       }
-      case AUTO_GLYPH_PICK_MODE.LOWEST_ALCHEMY_RESOURCE:
-        return AlchemyResource[glyph.type].isUnlocked && glyphRefinementGain(glyph) !== 0
-          ? -AlchemyResource[glyph.type].amount
-          : -Number.MAX_VALUE;
+      case AUTO_GLYPH_PICK_MODE.LOWEST_RESOURCE:
+        if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY) {
+          return AlchemyResource[glyph.type].isUnlocked && glyphRefinementGain(glyph) !== 0
+            ? -AlchemyResource[glyph.type].amount
+            : -Number.MAX_VALUE;
+        }
+        return -player.reality.glyphs.sac[glyph.type];
     }
     throw new Error("Unknown auto glyph picker mode");
   },

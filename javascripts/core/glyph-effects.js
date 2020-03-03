@@ -583,7 +583,7 @@ GameDatabase.reality.glyphEffects = [
     effect: (level, strength) => 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4),
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.multiply,
-    conversion: x => Math.sqrt(x),
+    conversion: x => Math.pow(x, 0.4),
     formatSecondaryEffect: x => format(x, 2, 2),
     alteredColor: () => GlyphAlteration.getAdditionColor("effarig"),
     alterationType: ALTERATION_TYPE.ADDITION

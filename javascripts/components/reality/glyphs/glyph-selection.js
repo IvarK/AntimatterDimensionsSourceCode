@@ -5,8 +5,14 @@ Vue.component("modal-glyph-selection", {
     return {
       glyphs: GlyphSelection.glyphs.map(GlyphGenerator.copy),
       canTrashGlyphs: false,
-      bestGlyphLevel: 0,
+      levelDifference: 0,
     };
+  },
+  computed: {
+    direction() {
+      if (this.glyphs[0].level > player.bestGlyphLevel) return "higher";
+      return "lower";
+    }
   },
   methods: {
     update() {
@@ -19,7 +25,7 @@ Vue.component("modal-glyph-selection", {
         currentGlyph.effects = newGlyph.effects;
       }
       this.canTrashGlyphs = RealityUpgrades.allBought;
-      this.bestGlyphLevel = player.bestGlyphLevel;
+      this.levelDifference = Math.abs(player.bestGlyphLevel - this.glyphs[0].level);
     },
     select(index) {
       GlyphSelection.select(index, false);
@@ -46,7 +52,8 @@ Vue.component("modal-glyph-selection", {
           <br>
           pick and sacrifice one at random.
           <br>
-          (Previous highest level glyph: {{ bestGlyphLevel }})
+          (These are {{ formatInt(levelDifference) }} {{"level" | pluralize(levelDifference)}}
+          {{ direction }} than your best)
       </button>
     </div>
   </div>`,

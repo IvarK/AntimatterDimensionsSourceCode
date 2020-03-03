@@ -34,7 +34,7 @@ Vue.component("ra-pet-level-bar", {
     },
     singleLevelStyle() {
       return {
-        width: `${100 * Math.sqrt(this.exp / this.requiredExp)}%`
+        width: `${100 * (this.exp / this.requiredExp)}%`
       };
     },
     petStyle() {

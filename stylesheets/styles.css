@@ -1268,7 +1268,7 @@ screen and (max-width: 480px) {
 }
 
 .o-primary-btn--glyph-trash {
-  width: 25rem;
+  width: 30rem;
   height: 4.5rem;
   font-size: 1rem;
 }
@@ -5778,7 +5778,7 @@ kbd {
   border-radius: 2rem;
   flex: none none 20rem;
   width: 30rem;
-  margin: 2rem 2rem;
+  margin: 2rem;
   cursor: pointer;
 }
 
@@ -5807,7 +5807,7 @@ kbd {
   border-radius: 2rem;
   flex: none none 20rem;
   width: 30rem;
-  margin: 2rem 2rem;
+  margin: 2rem;
 }
 
 .l-ra-recollection-unlock-inner {
@@ -5837,7 +5837,7 @@ kbd {
 .l-ra-laitela-unlock {
   height: 25rem;
   width: 30rem;
-  margin: 2rem 2rem;
+  margin: 2rem;
   border-radius: 2rem;
   flex: none none 20rem;
   animation: a-ra-color-shift 10s infinite;
@@ -5863,7 +5863,6 @@ kbd {
   margin: auto;
   width: 80rem;
   height: 100%;
-  overflow: hidden;
 }
 
 .l-ra-unlock {

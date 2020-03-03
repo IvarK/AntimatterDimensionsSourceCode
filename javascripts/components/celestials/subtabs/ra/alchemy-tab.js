@@ -211,7 +211,7 @@ Vue.component("alchemy-tab", {
     `<div class="l-ra-alchemy-tab">
       <div @click="showAlchemyHowTo()" class="o-primary-btn">Click for alchemy info</div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      Resource cap, based on last 10 realities: {{ format(estimatedCap, 3, 2) }}
+      Resource cap, based on glyph level in last 10 realities: {{ format(estimatedCap, 3, 2) }}
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">
           <circle
@@ -248,6 +248,8 @@ Vue.component("alchemy-tab", {
       <div v-if="reactionsAvailable">
         <button class="o-primary-btn" @click="setAllReactions(true)">Turn on all reactions</button>
         <button class="o-primary-btn" @click="setAllReactions(false)">Turn off all reactions</button>
+        <br>
+        Reactions trigger once every time you reality.
       </div>
       <primary-button
         v-if="realityCreationAvailable"

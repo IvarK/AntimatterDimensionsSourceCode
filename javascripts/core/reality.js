@@ -225,6 +225,7 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   beginProcessReality(getRealityProps(false, false));
+  if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN)) Glyphs.autoClean();
 }
 
 function updateRealityRecords(realityProps) {
@@ -248,7 +249,6 @@ function giveRealityRewards(realityProps) {
   const multiplier = realityProps.simulatedRealities + 1;
   const gainedRM = realityProps.gainedRM;
   player.reality.realityMachines = player.reality.realityMachines.plus(gainedRM.times(multiplier));
-  if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN)) Glyphs.autoClean();
   updateRealityRecords(realityProps);
   addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRM, realityProps.gainedGlyphLevel.actualLevel);
   player.realities += multiplier;

@@ -145,6 +145,7 @@ Vue.component("v-tab", {
                 </p>
                 <p v-if="runRecords[hex.id] > 0">
                   <glyph-set-preview
+                    :show=true
                     :glyphs="runGlyphs[hex.id]" />
                 </p>
             </div>

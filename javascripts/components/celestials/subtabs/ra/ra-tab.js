@@ -5,15 +5,21 @@ Vue.component("ra-tab", {
     return {
       memoriesPerChunk: 0,
       showReality: false,
+      totalLevels: 0,
       hasRecollection: false,
+      recollectionReq: 0,
       showLaitela: false,
+      laitelaReq: 0,
     };
   },
   methods: {
     update() {
       this.memoriesPerChunk = Ra.productionPerMemoryChunk();
+      this.totalLevels = Ra.totalPetLevel;
       this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
+      this.recollectionReq = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels;
       this.showLaitela = Ra.pets.v.isUnlocked;
+      this.laitelaReq = RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels;
     },
     startRun() {
       Ra.startRun();
@@ -80,31 +86,29 @@ Vue.component("ra-tab", {
           </div>
         </button>
         <div class="l-ra-recollection-unlock">
+          <br>
+          <h1>Recollection</h1>
+          Whichever celestial has recollection will get {{formatInt(2)}}x memory chunk gain.
           <div class="l-ra-recollection-unlock-inner" v-if="hasRecollection">
-            Whichever celestial has recollection will get {{formatInt(2)}}x memory chunk gain.
-            <br/>
-            <table>
-              <tr>
-                <td><ra-pet-recollection-button :petConfig="pets[0]" /></td>
-                <td><ra-pet-recollection-button :petConfig="pets[1]" /></td>
-              </tr>
-              <tr>
-                <td><ra-pet-recollection-button :petConfig="pets[2]" /></td>
-                <td><ra-pet-recollection-button :petConfig="pets[3]" /></td>
-              </tr>
-            </table>
+            <ra-pet-recollection-button
+              v-for="pet in pets"
+              :petConfig="pet" />
           </div>
-          <div class="l-ra-recollection-unlock-inner" v-else>
-            <h1>Recollection</h1>
-            <p>Unlocked by getting {{ formatInt(20) }} total celestial levels</p>
-            <p>Recollection lets you choose a celestial to gain {{formatInt(2)}}x memory chunks.</p>
+          <div v-else class="l-ra-recollection-unlock-inner">
+            Unlocked by getting {{ formatInt(recollectionReq) }} total celestial levels
+            (You need {{formatInt(recollectionReq - totalLevels)}} more)
           </div>
         </div>
         <button class="l-ra-laitela-unlock" v-if="showLaitela">
           <div class="l-ra-laitela-unlock-inner">
             <h1> Lai'tela: </h1>
             <h2> The Celestial of Matter </h2>
-            <p> Unlocked by getting {{ formatInt(80) }} total celestial levels</p>
+            <p>
+              Unlocked by getting {{ formatInt(laitelaReq) }} total celestial levels
+              <span v-if="totalLevels < laitelaReq">
+                (You need {{formatInt(laitelaReq - totalLevels)}} more)
+              </span>
+            </p>
           </div>
         </button>
       </div>

@@ -198,9 +198,9 @@ const Ra = {
   checkForUnlocks() {
     for (const unl of Object.values(RA_UNLOCKS)) {
       // The condition() prop only exists for things which aren't tied to a single pet's level (recollection/Lai'tela)
-      const isUnlockable = unl.condition === undefined
+      const isUnlockable = unl.totalLevels === undefined
         ? unl.pet.level >= unl.level
-        : unl.condition();
+        : this.totalPetLevel >= unl.totalLevels;
       if (isUnlockable && !this.has(unl)) {
         // eslint-disable-next-line no-bitwise
         player.celestials.ra.unlockBits |= (1 << unl.id);
@@ -541,13 +541,13 @@ const RA_UNLOCKS = {
     id: 24,
     description: "Get 20 total celestial levels",
     reward: "Unlock Recollection",
-    condition: () => Ra.totalPetLevel >= 20,
+    totalLevels: 20,
   },
   RA_LAITELA_UNLOCK: {
     id: 25,
     description: "Get 80 total celestial levels",
     reward: "Unlock Lai'tela, the Celestial of Dimensions",
-    condition: () => Ra.totalPetLevel >= 80,
+    totalLevels: 80,
   }
 };
 

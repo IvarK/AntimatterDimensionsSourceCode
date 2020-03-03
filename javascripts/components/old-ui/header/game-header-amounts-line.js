@@ -1,12 +1,15 @@
 "use strict";
 
 Vue.component("game-header-amounts-line", {
-  data: function() {
+  data() {
     return {
       showInfinityPoints: false,
       infinityPoints: new Decimal(0),
       showEternityPoints: false,
       eternityPoints: new Decimal(0),
+      isTesseractUnlocked: false,
+      tesseractCost: new Decimal(0),
+      tesseractText: "",
     };
   },
   methods: {
@@ -19,17 +22,29 @@ Vue.component("game-header-amounts-line", {
       if (this.showEternityPoints) {
         this.eternityPoints.copyFrom(player.eternityPoints);
       }
+      this.isTesseractUnlocked = Enslaved.isCompleted;
+      this.tesseractCost = Enslaved.tesseractCost;
+      this.tesseractText = this.tesseractProgress();
     },
     formatPoints(points) {
       return format(points, 2, 0);
-    }
+    },
+    tesseractProgress() {
+      const progress = this.infinityPoints.log10() / this.tesseractCost.log10();
+      if (progress > 1) return `<b>(${formatPercents(1)})</b>`;
+      return `(${formatPercents(progress, 2, 2)})`;
+    },
   },
   template:
     `<div class="l-game-header__amounts-line">
-      <div v-if="showInfinityPoints" class="c-game-header__infinity-points l-game-header__infinity-points">
-        You have
-        <span class="c-game-header__ip-amount">{{formatPoints(infinityPoints)}}</span>
-        Infinity {{ "point" | pluralize(infinityPoints) }}.
+      <div v-if="showInfinityPoints"
+        class="c-game-header__infinity-points l-game-header__infinity-points">
+          You have
+          <span class="c-game-header__ip-amount">{{formatPoints(infinityPoints)}}</span>
+          Infinity {{ "point" | pluralize(infinityPoints) }}.
+          <span v-if="isTesseractUnlocked"
+            v-html="tesseractText">
+          </span>
       </div>
       <div v-if="showEternityPoints" class="c-game-header__eternity-points l-game-header__eternity-points">
         You have

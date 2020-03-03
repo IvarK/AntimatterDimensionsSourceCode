@@ -1678,6 +1678,17 @@ screen and (max-width: 480px) {
   width: 21rem;
 }
 
+.c-game-header__tesseract-available {
+  animation: a-tesseract-shift 5s infinite;
+}
+
+.t-dark .c-game-header__tesseract-available,
+.t-dark-metro .c-game-header__tesseract-available,
+.t-s6 .c-game-header__tesseract-available {
+  background: #EEEEEE;
+  animation: a-tesseract-shift-dark 5s infinite;
+}
+
 .c-game-header__ip-amount {
   font-weight: bold;
 }

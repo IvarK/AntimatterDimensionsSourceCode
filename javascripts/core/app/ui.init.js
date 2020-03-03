@@ -29,7 +29,7 @@ let ui = {
           // TODO: enum
           lines: []
         }
-      }
+      },
     },
     shiftDown: false,
     theme: "Normal",

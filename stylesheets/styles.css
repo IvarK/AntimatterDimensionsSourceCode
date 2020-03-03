@@ -28,8 +28,8 @@ html {
   --color-good-dark: #127A20;
   --color-bad: #B84B5F;
 
-  --color-infinity: #B67F33; 
-  --color-eternity: #b341e0; 
+  --color-infinity: #B67F33;
+  --color-eternity: #b341e0;
   --color-reality: #0b600e;
   --color-celestials: #5151ec;
 }
@@ -46,8 +46,8 @@ html {
   --color-good-dark: #66bb6a;
   --color-bad: #ef5350;
 
-  --color-infinity: #FF9800; 
-  --color-eternity: #673AB7; 
+  --color-infinity: #FF9800;
+  --color-eternity: #673AB7;
   --color-reality: #0b600e;
   --color-celestials: #00bcd4;
 }
@@ -72,8 +72,8 @@ html {
   --color-good-dark: #43a047;
   --color-bad: #e53935;
 
-  --color-infinity: #FF9800; 
-  --color-eternity: #673AB7; 
+  --color-infinity: #FF9800;
+  --color-eternity: #673AB7;
   --color-reality: #0b600e;
   --color-celestials: #00bcd4;
 }
@@ -88,8 +88,8 @@ html {
   --color-good-dark: #3c8b3e;
   --color-bad: #d72621;
 
-  --color-infinity: #7d3c1b; 
-  --color-eternity: #639565; 
+  --color-infinity: #7d3c1b;
+  --color-eternity: #639565;
   --color-reality: #AFA3A5;
   --color-celestials: #F2D6C1;
 }
@@ -1551,7 +1551,7 @@ screen and (max-width: 480px) {
 .o-prestige-btn--eternity:hover {
   color: var(--color-eternity);
   background-color: white;
-} 
+}
 
 .o-prestige-btn--eternity span {
   transition-duration: 0.2s;
@@ -2320,6 +2320,28 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion c-stats-tab*/
+
+/*#region Past Prestige Runs*/
+
+.c-past-runs-header {
+  cursor: pointer;
+  user-select: none;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex: auto;
+  resize: none;
+  align-items: baseline;
+}
+
+.o-run-drop-down-icon {
+  font-size: 1.5em;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+/*#endregion Past Prestige Runs*/
 
 /*#region Challenge Records*/
 

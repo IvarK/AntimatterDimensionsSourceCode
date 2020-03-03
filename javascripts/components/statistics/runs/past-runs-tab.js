@@ -35,16 +35,11 @@ Vue.component("past-runs-tab", {
   template:
     `
     <div>
-      <past-runs-container
-        v-for="layer in layers"
-        :key="layer.name"
-        v-if="layer.condition"
-        :getRuns="layer.getRuns"
-        :singular="layer.name"
-        :plural="layer.plural"
-        :points="layer.currency"
-        :reward="layer.reward"
-      />
+        <past-runs-container
+          v-for="layer in layers"
+          :key="layer.name"
+          :layer="layer"
+        />
     </div>
     `
 });

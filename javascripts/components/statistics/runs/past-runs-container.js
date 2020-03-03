@@ -6,20 +6,36 @@ Vue.component("past-runs-container", {
       isRealityUnlocked: false,
       runs: Array.repeat(0, 10).map(() => [0, new Decimal(0), 0, 0]),
       shown: player.shownRuns[this.singular],
-      dropDown: `<i class="fas fa-caret-down"></i>`
     };
   },
   props: {
-    getRuns: Function,
-    singular: String,
-    plural: String,
-    points: String,
-    reward: Function,
+    layer: Object,
   },
   computed: {
     averageRun() {
       return averageRun(this.runs);
     },
+    dropDown() {
+      return this.shown ? `<i class="far fa-minus-square"></i>` : `<i class="far fa-plus-square"></i>`;
+    },
+    points() {
+      return this.layer.currency;
+    },
+    condition() {
+      return this.layer.condition();
+    },
+    plural() {
+      return this.layer.plural;
+    },
+    singular() {
+      return this.layer.name;
+    },
+    getRuns() {
+      return this.layer.getRuns;
+    },
+    reward() {
+      return this.layer.reward;
+    }
   },
   methods: {
     update() {
@@ -50,17 +66,19 @@ Vue.component("past-runs-container", {
     realRunTime: run => (run[2] === undefined ? "unrecorded" : timeDisplayShort(run[2]))
   },
   template:
-    `<div class="c-stats-tab">
+    `<div
+      class="c-stats-tab"
+      v-if="condition"
+    >
       <br>
       <div
         class="c-past-runs-header"
         v-on:click="toggleShown"
         >
-        <span class="o-run-drop-down-icon" v-html="dropDown" v-show="!shown" />
+        <span class="o-run-drop-down-icon" v-html="dropDown" />
         <span>
           <h3>Past 10 {{ plural }}</h3>
         </span>
-        <span class="o-run-drop-down-icon" v-html="dropDown" v-show="!shown" />
       </div>
       <div v-show="shown">
         <div v-for="(run, index) in runs" :key="index">

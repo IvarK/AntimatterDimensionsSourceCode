@@ -2332,7 +2332,7 @@ screen and (max-width: 480px) {
   justify-content: center;
   flex: auto;
   resize: none;
-
+  align-items: baseline;
 }
 
 .o-run-drop-down-icon {

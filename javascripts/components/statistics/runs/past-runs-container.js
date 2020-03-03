@@ -5,7 +5,7 @@ Vue.component("past-runs-container", {
     return {
       isRealityUnlocked: false,
       runs: Array.repeat(0, 10).map(() => [0, new Decimal(0), 0, 0]),
-      shown: player.shownRuns[this.singular],
+      shown: true
     };
   },
   props: {
@@ -41,7 +41,7 @@ Vue.component("past-runs-container", {
     update() {
       this.runs = this.clone(this.getRuns());
       this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
-      player.shownRuns[this.singular] = this.shown;
+      this.shown = player.shownRuns[this.singular];
     },
     clone(runs) {
       return runs.map(run =>
@@ -59,7 +59,7 @@ Vue.component("past-runs-container", {
         : `${format(rpm, 2, 2)} ${this.points}/min`;
     },
     toggleShown() {
-      this.shown = !this.shown;
+      player.shownRuns[this.singular] = !player.shownRuns[this.singular];
     },
     runTime: run => timeDisplayShort(run[0]),
     runGain: run => format(run[1], 2, 0),

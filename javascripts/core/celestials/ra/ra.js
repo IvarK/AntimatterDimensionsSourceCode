@@ -72,9 +72,11 @@ class RaPetState {
     return Ra.petWithRecollection === this.name;
   }
   
-  tick(realDiff) {
+  tick(realDiff, generateChunks) {
     const seconds = realDiff / 1000;
-    const newMemoryChunks = seconds * this.memoryChunksPerSecond;
+    const newMemoryChunks = generateChunks
+      ? seconds * this.memoryChunksPerSecond
+      : 0;
     // Adding memories from half of the gained chunks this tick results in the best mathematical behavior
     // for very long simulated ticks
     const newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk();
@@ -169,8 +171,8 @@ const Ra = {
       resource.amount = Math.min(this.alchemyResourceCap, player.bestGlyphLevel);
     }
   },
-  tick(realDiff) {
-    for (const pet of Ra.pets.all) pet.tick(realDiff);
+  memoryTick(realDiff, generateChunks) {
+    for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
   },
   productionPerMemoryChunk() {
     let res = 1;

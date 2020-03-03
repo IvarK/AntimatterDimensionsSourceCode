@@ -386,7 +386,11 @@ function gameLoop(diff, options = {}) {
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
     : diff;
 
-  // Matter dimensions bypass any kind of stored time mechanics
+  // Ra memory generation bypasses stored real time but not memory chunk generation, in order to prevent players
+  // from using time inside of Ra's reality for amplification as well
+  Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
+
+  // Lai'tela mechanics should bypass stored real time entirely
   Laitela.handleMatterDimensionUnlocks();
   matterDimensionLoop(realDiff);
 
@@ -599,7 +603,6 @@ function gameLoop(diff, options = {}) {
   Achievements.autoAchieveUpdate(diff);
   V.checkForUnlocks();
   Ra.updateAlchemyFlow();
-  Ra.tick(realDiff);
   AutomatorBackend.update(realDiff);
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);

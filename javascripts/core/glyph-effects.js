@@ -616,8 +616,8 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["cursed"],
     singleDesc: `Galaxies are {value} weaker`,
     totalDesc: "Galaxy strength -{value}",
-    // Multiplies by 0.839 per glyph
-    effect: (level, strength) => Math.pow((strength / 3.5) * level, -0.02),
+    // Multiplies by 0.768 per glyph
+    effect: (level, strength) => Math.pow((strength / 3.5) * level, -0.03),
     formatEffect: x => formatPercents(1 - x, 2),
     combine: GlyphCombiner.multiply,
   }, {

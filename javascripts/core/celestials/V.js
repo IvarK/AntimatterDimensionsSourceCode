@@ -23,37 +23,25 @@ class VRunUnlockState extends GameMechanicState {
 
   get isReduced() {
     if (player.celestials.v.ppSpent === 0) return false;
-    return this.config.nextReduction || (V.has(V_UNLOCKS.SHARD_REDUCTION) &&
-      (typeof this.conditionBaseValue === "number"
-        ? this.reduction > 0
-        : Decimal.gt(this.reduction, 1)));
+    return this.config.nextReduction || (V.has(V_UNLOCKS.SHARD_REDUCTION) && this.reduction > 0);
   }
 
   get reductionInfo() {
     const value = this.conditionBaseValue;
     if (new Decimal(this.reduction).eq(this.config.maxShardReduction(value))) return "(capped)";
     if (this.config.nextReduction === undefined) return "";
-    return `(next at ${format(this.config.nextReduction(Math.floor(this.reduction) + 1), 2, 0)} pp spent)`;
+    return `(next at ${format(this.config.nextReduction(Math.floor(this.reduction) + 1), 2, 0)} PP spent)`;
   }
 
   get reduction() {
     const value = this.conditionBaseValue;
-
-    // It's safe to assume that subtraction is only used on numbers and division on Decimals
-    if (typeof value === "number") {
-      return Math.clamp(this.config.shardReduction(value), 0, this.config.maxShardReduction(value));
-    }
-    return Decimal.clamp(this.config.shardReduction(value), 1, this.config.maxShardReduction(value));
+    return Math.clamp(this.config.shardReduction(value), 0, this.config.maxShardReduction(value));
   }
 
   get conditionValue() {
     let value = this.conditionBaseValue;
     if (!this.isReduced) return value;
-    
-    // Type checking not needed, see above comment in reduction()
-    if (this.config.mode === V_REDUCTION_MODE.SUBTRACTION) value -= this.reduction;
-    if (this.config.mode === V_REDUCTION_MODE.DIVISION) value = value.dividedBy(this.reduction);
-
+    value -= this.reduction;
     return value;
   }
 
@@ -67,17 +55,18 @@ class VRunUnlockState extends GameMechanicState {
 
   tryComplete() {
     const playerData = player.celestials.v;
-    const value = this.config.currentValue(this.conditionValue);
-    if (value > playerData.runRecords[this.id]) {
+    const value = this.config.currentValue();
+    if (this.config.condition() && Decimal.gte(value, playerData.runRecords[this.id])) {
       playerData.runRecords[this.id] = value;
       playerData.runGlyphs[this.id] = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     }
 
-    while (this.completions < this.config.values.length && this.config.condition(this.conditionValue)) {
-      if (!V.isFlipped && this.config.isHard) continue;
-      this.completions++;
-      GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
-      V.updateTotalRunUnlocks();
+    while (this.completions < this.config.values.length &&
+      Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
+        if (!V.isFlipped && this.config.isHard) continue;
+        this.completions++;
+        GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
+        V.updateTotalRunUnlocks();
     }
   }
 }
@@ -117,7 +106,7 @@ const V_UNLOCKS = {
     reward: () => `You can spend perk points to reduce V-achievement requirements for later tiers.`,
     description: "Have 2 V-achievements",
     effect: () => player.celestials.v.ppSpent,
-    format: x => `${formatPercents(x / 200000)} Tier Reduction`,
+    format: () => `${formatPercents(V.tierReduction)} Tier Reduction`,
     requirement: () => V.spaceTheorems >= 2
   },
   ND_POW: {
@@ -210,7 +199,7 @@ const V = {
       triadStudies: [],
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],
-      runRecords: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0],
       cursedThisRun: 0
     };
     this.spaceTheorems = 0;
@@ -226,5 +215,9 @@ const V = {
   },
   get isFullyCompleted() {
     return this.spaceTheorems >= 66;
+  },
+  get tierReduction() {
+    if (!V.isFlipped) return player.celestials.v.ppSpent / 200000;
+    return Math.log10(Math.clampMin(player.celestials.v.ppSpent / 20000, 1)) / 10;
   }
 };

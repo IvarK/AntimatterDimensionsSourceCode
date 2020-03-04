@@ -539,6 +539,10 @@ GameStorage.devMigrations = {
       // Some older saves have screwed up Ra unlocks for some reason, this should fix that
       player.celestials.ra.unlockBits = 0;
       Ra.checkForUnlocks();
+    },
+    player => {
+      // Required for compatibility after V records refactor
+      player.celestials.v.runRecords[0] = -10;
     }
   ],
 

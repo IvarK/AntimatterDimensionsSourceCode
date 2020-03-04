@@ -32,8 +32,11 @@ Vue.component("secret-achievement", {
       };
     },
     tooltip() {
+      function evaluateText(prop) {
+        return typeof prop === "function" ? prop() : prop;
+      }
       const config = this.achievement.config;
-      return this.isUnlocked ? config.tooltip : config.name;
+      return this.isUnlocked ? evaluateText(config.tooltip) : config.name;
     }
   },
   created() {

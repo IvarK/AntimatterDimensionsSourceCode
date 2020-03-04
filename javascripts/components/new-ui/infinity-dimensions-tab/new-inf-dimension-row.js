@@ -43,7 +43,7 @@ Vue.component("new-inf-dimension-row", {
     capTooltip() {
       return this.isCapped
         ? `Cap reached at ${format(this.capIP, 0, 0)} IP`
-        : `Purchased ${formatInt(this.purchases)} times`;
+        : `Purchased ${formatInt(this.purchases)} ${pluralize("time", this.purchases)}`;
     }
   },
   methods: {

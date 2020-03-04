@@ -23,13 +23,9 @@ Vue.component("ra-pet-level-bar", {
       return this.unlocks.map(u => u.level);
     },
     multiLevelStyle() {
-      const thisLevelFill = this.exp * Ra.requiredExpForLevel(this.level + 1) / Ra.requiredExpForLevel(this.level);
+      const expFraction = (Ra.totalExpForLevel(this.level) + this.exp) / Ra.totalExpForLevel(this.nextGoal);
       return {
-        width: `${100 * Math.sqrt(
-          Math.clampMax(
-            (Ra.totalExpForLevel(this.level) + thisLevelFill) / Ra.totalExpForLevel(this.nextGoal), 1
-          )
-        )}%`
+        width: `${100 * Math.sqrt(Math.clampMax(expFraction, 1))}%`
       };
     },
     singleLevelStyle() {

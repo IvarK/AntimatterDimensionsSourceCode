@@ -12,6 +12,7 @@ Vue.component("ra-pet", {
       exp: 0,
       requiredExp: 0,
       nextLevelEstimate: "",
+      upgradeEstimate: "",
       memoryChunks: 0,
       memoryChunksPerSecond: 0,
       memoriesPerSecond: 0,
@@ -77,19 +78,32 @@ Vue.component("ra-pet", {
       this.canGetMemoryChunks = pet.canGetMemoryChunks;
       this.memoryMultiplier = pet.memoryProductionMultiplier;
 
+      const leftThisLevel = this.requiredExp - this.exp;
+      const toUnlock = Ra.totalExpForLevel(this.nextUnlockLevel()) - Ra.totalExpForLevel(this.level + 1);
+      this.nextLevelEstimate = this.timeToGoalString(leftThisLevel);
+      this.upgradeEstimate = this.timeToGoalString(leftThisLevel + toUnlock);
+    },
+    timeToGoalString(expToGain) {
+      const pet = this.petConfig.pet;
       // Quadratic formula for growth (uses constant growth for a = 0)
       const a = Ra.productionPerMemoryChunk() * pet.memoryChunksPerSecond / 2;
       const b = Ra.productionPerMemoryChunk() * pet.memoryChunks;
-      const c = this.exp - this.requiredExp;
-      const timeToLevel = a === 0
+      const c = -expToGain;
+      const estimate = a === 0
         ? -c / b
         : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
-      if (Number.isFinite(timeToLevel)) {
-        this.nextLevelEstimate = TimeSpan.fromSeconds(timeToLevel).toStringShort();
-      } else {
-        this.nextLevelEstimate = "never";
+      if (Number.isFinite(estimate)) {
+        return TimeSpan.fromSeconds(estimate).toStringShort();
       }
+      return "never";
     },
+    nextUnlockLevel() {
+      const missingUpgrades = Object.values(RA_UNLOCKS)
+        .filter(unlock => unlock.pet === this.petConfig.pet)
+        .map(u => u.level)
+        .filter(goal => goal > this.level);
+      return missingUpgrades.length === 0 ? 25 : missingUpgrades.min();
+    }
   },
   template: `
     <div class="l-ra-pet-container" v-if="isUnlocked">
@@ -106,6 +120,12 @@ Vue.component("ra-pet", {
         </div>
         <div>
           (next level in {{ nextLevelEstimate }})
+        </div>
+        <div v-if="level < 25">
+          (next upgrade in {{ upgradeEstimate }})
+        </div>
+        <div v-else>
+          <br>
         </div>
         <ra-pet-level-bar :pet="petConfig.pet" />
         <div>

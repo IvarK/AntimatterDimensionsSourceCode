@@ -184,15 +184,16 @@ const Ra = {
     }
     return res;
   },
+  // This is the exp required ON "level" in order to reach "level + 1"
   requiredExpForLevel(level) {
     const adjustedLevel = level + Math.pow(level, 2) / 10;
     return Math.floor(Math.pow(adjustedLevel, 4) * 1e5);
   },
-  // Calculates the cumulative exp needed for a level starting from nothing.
+  // Calculates the cumulative exp needed to REACH a level starting from nothing.
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized
   totalExpForLevel(maxLevel) {
     let runningTotal = 0;
-    for (let lv = 2; lv <= maxLevel; lv++) runningTotal += this.requiredExpForLevel(lv);
+    for (let lv = 1; lv < maxLevel; lv++) runningTotal += this.requiredExpForLevel(lv);
     return runningTotal;
   },
   get totalPetLevel() {

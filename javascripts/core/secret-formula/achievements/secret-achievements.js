@@ -29,7 +29,8 @@ GameDatabase.achievements.secret = [
   {
     id: 16,
     name: "Do you enjoy pain?",
-    tooltip: () => `Use a \"painful\" notation for ${formatInt(10)} real-time minutes after having eternitied at least once.`,
+    tooltip: () => `Use a "painful" notation for ${formatInt(10)} real-time minutes ` +
+      "after having eternitied at least once.",
     checkRequirement: () => AchievementTimers.pain
       .check(PlayerProgress.eternityUnlocked() && Notations.current.isPainful, 600),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
@@ -74,7 +75,8 @@ GameDatabase.achievements.secret = [
   {
     id: 26,
     name: "You're a failure",
-    tooltip: () => `Fail eternity challenges ${formatInt(10)} times without refreshing. What are you doing with your life...`,
+    tooltip: () => `Fail eternity challenges ${formatInt(10)} times without refreshing. ` +
+      "What are you doing with your life...",
     checkRequirement: (function() {
       let count = 0;
       return () => ++count >= 10;

@@ -258,17 +258,16 @@ GameDatabase.achievements.normal = [
     name: "Age of Automation",
     tooltip: "Max dimension and tickspeed autobuyers.",
     checkRequirement: () => Autobuyers.upgradeable
-      .countWhere(a => a.hasMaxedInterval) >= 9,
+      .countWhere(a => a.isUnlocked && a.hasMaxedInterval) >= 9,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {
     id: 53,
     name: "Definitely not worth it",
     tooltip: "Max all the autobuyers.",
-    checkRequirement: () => Autobuyers.upgradeable.countWhere(a => !a.hasMaxedInterval) === 0 &&
-      Autobuyer.galaxy.hasMaxedInterval &&
-      Autobuyer.dimboost.hasMaxedInterval &&
-      Autobuyer.bigCrunch.hasMaxedInterval,
+    checkRequirement: () => Autobuyers.upgradeable
+      .concat([Autobuyer.galaxy, Autobuyer.dimboost, Autobuyer.bigCrunch])
+      .countWhere(a => a.isUnlocked && a.hasMaxedInterval) >= 12,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {

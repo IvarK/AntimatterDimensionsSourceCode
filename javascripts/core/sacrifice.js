@@ -8,13 +8,14 @@ class Sacrifice {
   }
 
   static get canSacrifice() {
-    return DimBoost.totalBoosts > 4 && NormalDimension(8).amount.gt(0) && !EternityChallenge(3).isRunning;
+    return DimBoost.totalBoosts > 4 && NormalDimension(8).amount.gt(0) && !EternityChallenge(3).isRunning && this.nextBoost.gt(1);
   }
 
   static get disabledCondition() {
     if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
     if (DimBoost.totalBoosts <= DimBoost.maxShiftTier - 4) return "Requires a boost";
     if (NormalDimension(8).amount.eq(0)) return "No 8th dimensions";
+    if (this.nextBoost.lte(1)) return `${formatInt(1)}x multiplier`;
     return "";
   }
 

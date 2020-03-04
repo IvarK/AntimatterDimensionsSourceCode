@@ -112,6 +112,14 @@ class Galaxy {
     if (NormalChallenge(8).isRunning || InfinityChallenge(7).isRunning) return false;
     return player.break || player.antimatter.lt(Decimal.NUMBER_MAX_VALUE);
   }
+  
+  static get lockText() {
+    if (this.canBeBought) return null;
+    if (EternityChallenge(6).isRunning) return "Locked (Eternity Challenge 6)";
+    if (InfinityChallenge(7).isRunning) return "Locked (Infinity Challenge 7)";
+    if (NormalChallenge(8).isRunning) return "Locked (8th Dimension Autobuyer Challenge)";
+    return null;
+  }
 
   static get costScalingStart() {
     return (100 + Effects.sum(

@@ -616,8 +616,8 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["cursed"],
     singleDesc: `Galaxies are {value} weaker`,
     totalDesc: "Galaxy strength -{value}",
-    // Effect at 1000 is 0.697 and at 5000 is 0.548
-    effect: (level, strength) => 3.5 / (strength * Math.pow(level, 0.02)),
+    // Multiplies by 0.839 per glyph
+    effect: (level, strength) => Math.pow((strength / 3.5) * level, -0.02),
     formatEffect: x => formatPercents(1 - x, 2),
     combine: GlyphCombiner.multiply,
   }, {
@@ -626,8 +626,8 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: false,
     glyphTypes: ["cursed"],
     singleDesc: "All dimension multipliers ^{value}",
-    // Effect at 1000 is 0.730 and at 5000 is 0.606
-    effect: (level, strength) => 1 / (1 + Math.pow(level, 0.35) * Math.pow(strength, 0.4) / 50),
+    // Multiplies by 0.734 per glyph
+    effect: (level, strength) => Math.pow((strength / 3.5) * level, -0.035),
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
@@ -637,8 +637,8 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["cursed"],
     singleDesc: "Multiply free tickspeed threshold increase by ×{value}",
     totalDesc: "Free tickspeed threshold ×{value}",
-    // Effect at 1000 is 2 and at 5000 is 6
-    effect: (level, strength) => 1 + level * strength / 3500,
+    // Additive 3.82 per glyph
+    effect: (level, strength) => Math.log10(level) * (strength / 3.5),
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.add,
   }, {
@@ -648,8 +648,8 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["cursed"],
     singleDesc: "Divide EP gain by {value}",
     totalDesc: "EP gain / {value}",
-    // Effect at 1000 is 500 and at 5000 is 2500
-    effect: (level, strength) => Decimal.pow10(-level * strength / 3.5 / 2),
+    // Divides e666.6 per glyph
+    effect: (level, strength) => Decimal.pow10(-level / 10 * (strength / 3.5)),
     formatEffect: x => format(x.reciprocal()),
     combine: GlyphCombiner.multiplyDecimal,
   }, {

@@ -5841,6 +5841,7 @@ kbd {
   border-radius: 2rem;
   flex: none none 20rem;
   animation: a-ra-color-shift 10s infinite;
+  pointer-events: none;
 }
 @keyframes a-ra-color-shift {
   0% { background-color: #86ea84; }

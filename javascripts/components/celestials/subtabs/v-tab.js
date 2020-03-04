@@ -129,6 +129,11 @@ Vue.component("v-tab", {
         </div>
       </div>
       <div v-else>
+        <div v-if="isFlipped">
+          Cursed glyphs can be created in the Effarig tab, and the black hole can now be used to slow down time.
+          <br>
+          Each harder V-achievement will award {{ formatInt(2) }} Space Theorems instead of {{ formatInt(1) }}.
+        </div>
         <div class="l-v-unlocks-container">
           <li v-for="hex in hexGrid">
             <div v-if="hex.config"

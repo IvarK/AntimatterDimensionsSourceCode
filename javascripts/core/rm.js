@@ -244,16 +244,13 @@ const GlyphGenerator = {
     const effectBitmask = makeGlyphEffectBitmask(
       orderedEffectList.filter(effect => effect.match("cursed*"))
     );
-    // Each cursed glyph owned increases the level by 1000
-    const level = (1 + Glyphs.inventory.filter(g => g !== null && g.type === "cursed").length +
-      Glyphs.active.filter(g => g !== null && g.type === "cursed").length) * 1000;
     return {
       id: undefined,
       idx: null,
       type: "cursed",
       strength: str,
-      level,
-      rawLevel: level,
+      level: 6666,
+      rawLevel: 6666,
       effects: effectBitmask,
     };
   },
@@ -775,7 +772,6 @@ const GlyphSacrifice = (function() {
     power: new GlyphSacrificeState(db.power),
     effarig: new GlyphSacrificeState(db.effarig),
     reality: new GlyphSacrificeState(db.reality),
-    cursed: new GlyphSacrificeState(db.cursed),
   };
 }());
 
@@ -1009,6 +1005,11 @@ function estimatedAlchemyCap() {
 }
 
 function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
+  if (glyph.type === "cursed") {
+    Glyphs.removeFromInventory(glyph);
+    return;
+  }
+
   if (!noAlchemy &&
       AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY &&
       glyph.type !== "reality" &&

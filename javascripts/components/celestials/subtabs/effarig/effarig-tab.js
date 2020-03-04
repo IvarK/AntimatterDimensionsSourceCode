@@ -108,8 +108,16 @@ Vue.component("effarig-tab", {
         Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
         return;
       }
-      Glyphs.addToInventory(GlyphGenerator.cursedGlyph());
-      GameUI.notify.error("Created a cursed glyph");
+      const cursedCount = player.reality.glyphs.active
+        .concat(player.reality.glyphs.inventory)
+        .filter(g => g !== null && g.type === "cursed")
+        .length;
+      if (cursedCount >= 5) {
+        GameUI.notify.error("You don't need any more cursed glyphs!");
+      } else {
+        Glyphs.addToInventory(GlyphGenerator.cursedGlyph());
+        GameUI.notify.error("Created a cursed glyph");
+      }
       this.emitClose();
     }
   },

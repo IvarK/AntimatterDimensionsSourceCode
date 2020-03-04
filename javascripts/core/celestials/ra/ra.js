@@ -201,7 +201,6 @@ const Ra = {
   },
   checkForUnlocks() {
     for (const unl of Object.values(RA_UNLOCKS)) {
-      // The condition() prop only exists for things which aren't tied to a single pet's level (recollection/Lai'tela)
       const isUnlockable = unl.totalLevels === undefined
         ? unl.pet.level >= unl.level
         : this.totalPetLevel >= unl.totalLevels;

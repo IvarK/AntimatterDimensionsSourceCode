@@ -21,7 +21,7 @@ Vue.component("alchemy-circle-node", {
       return this.resource.isBaseResource;
     },
     layoutStyle() {
-      const scaledFlow = Math.clamp(0.4 * Math.sqrt(Math.abs(this.flow)), 0, 1);
+      const scaledFlow = Math.clamp(0.7 * Math.sqrt(Math.abs(this.flow)), 0, 1);
       return {
         left: `${this.node.x}%`,
         top: `${this.node.y}%`,

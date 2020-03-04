@@ -328,6 +328,12 @@ function beginProcessReality(realityProps) {
 }
 
 function finishProcessReality(realityProps) {
+  const finalEP = player.eternityPoints.plus(gainedEternityPoints());
+  if (player.bestEP.lt(finalEP)) {
+    player.bestEP = new Decimal(finalEP);
+    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  }
+  
   const isReset = realityProps.reset;
   if (!isReset) giveRealityRewards(realityProps);
   if (!player.options.retryCelestial || player.reality.respec) player.celestials.v.cursedThisRun = 0;
@@ -336,12 +342,6 @@ function finishProcessReality(realityProps) {
     if (player.reality.respec) respecGlyphs();
     if (player.celestials.ra.disCharge) disChargeAll();
     if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
-  }
-  
-  const finalEP = player.eternityPoints.plus(gainedEternityPoints());
-  if (player.bestEP.lt(finalEP)) {
-    player.bestEP = new Decimal(finalEP);
-    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 
   TimeCompression.isActive = false;

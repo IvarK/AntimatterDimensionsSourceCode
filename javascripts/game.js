@@ -386,8 +386,8 @@ function gameLoop(diff, options = {}) {
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
     : diff;
 
-  // Ra memory generation bypasses stored real time but not memory chunk generation, in order to prevent players
-  // from using time inside of Ra's reality for amplification as well
+  // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.
+  // This is in order to prevent players from using time inside of Ra's reality for amplification as well
   Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
 
   // Lai'tela mechanics should bypass stored real time entirely
@@ -702,7 +702,7 @@ function simulateTime(seconds, real, fast) {
       const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
         numberOfTicksRemaining, 0.0001);
       remainingRealSeconds -= realTickTime;
-      gameLoop(1000 * realTickTime, { blackHoleSpeedup: blackHoleSpeedup });
+      gameLoop(1000 * realTickTime, { blackHoleSpeedup });
     }
   } else {
     for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {

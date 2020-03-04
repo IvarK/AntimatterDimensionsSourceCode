@@ -462,19 +462,19 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     glyphTypes: ["power"],
     singleDesc: () => (GlyphAlteration.isAdded("power")
-      ? "Normal Dimension power +{value}\n[and Dark Matter dimensions x]{value2}"
+      ? "Normal Dimension power +{value}\n[and Antimatter Galaxy requirement ×]{value2}"
       : "Normal Dimension power +{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("power")
-      ? "ND multipliers ^{value} and Dark Matter dimensions x{value2}"
+      ? "ND multipliers ^{value} and galaxy cost x{value2}"
       : "Normal Dimension multipliers ^{value}"),
     genericDesc: () => (GlyphAlteration.isAdded("power")
-      ? "ND multipliers ^x and Dark matter multiplier"
+      ? "ND multipliers ^x and galaxy cost multiplier"
       : "Normal Dimension multipliers ^x"),
     effect: (level, strength) => 1.015 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75,
     formatEffect: x => format(x, 3, 3),
     formatSingleEffect: x => format(x - 1, 3, 3),
     combine: GlyphCombiner.addExponents,
-    conversion: x => Math.pow(x, 1.2),
+    conversion: x => 2 / (x + 1),
     formatSecondaryEffect: x => format(x, 3, 3),
     alteredColor: () => GlyphAlteration.getAdditionColor("power"),
     alterationType: ALTERATION_TYPE.ADDITION

@@ -34,43 +34,46 @@ class Galaxy {
     // Separate because it's applied post remote scaling:
     const finalOffset = Effects.sum(InfinityUpgrade.resetBoost) +
       (InfinityChallenge(5).isCompleted ? 1 : 0);
-
-    let quantity = Math.floor((currency - constantTerm + finalOffset) / linearTerm);
+      
+    const costDivision = GlyphAlteration.isAdded("power") ? getSecondaryGlyphEffect("powerpow") : 1;
+    
+    let quantity = (currency / costDivision - constantTerm + finalOffset) / linearTerm;
+    
+    let unroundedGalaxyAmount;
+    
     if (quantity < quadraticBegin) {
-      // Check the seemingly impossible case of going directly to remote scaling, somehow:
-      if (quantity >= 800 && !RealityUpgrade(21).isBought) {
-        const bulk = bulkBuyBinarySearch(new Decimal(currency), {
-          costFunction: x => Math.floor((x * linearTerm + constantTerm) * Math.pow(1.002, x - 800)) - finalOffset,
-          cumulative: false,
-        }, 800);
-        if (!bulk) throw new Error("Unexpected failure to calculate galaxy purchase");
-        // The formula we are using is the formula for the price of the *next* galaxy, given
-        // a quantity. So we add 1 when we return
-        return bulk.quantity + 800 + 1;
-      }
-      return quantity + 1;
+      unroundedGalaxyAmount = quantity;
+    } else {
+      // Cost is x + ((x - quadraticBegin) ** 2 + x - quadraticBegin) / linearTerm =
+      // x + x ** 2 / linearTerm - 2 * x * quadraticBegin / linearTerm + quadraticBegin ** 2 / linearTerm +
+      // x / linearTerm - quadraticBegin / linearTerm = (1 / linearTerm) * x ** 2 +
+      // (1 + (-2 * quadraticBegin + 1) / linearTerm) * x + (quadraticBegin ** 2 - quadraticBegin) / linearTerm.
+      let quadraticCoefficient = 1 / linearTerm;
+      let linearCoefficient = 1 + (-2 * quadraticBegin + 1) / linearTerm;
+      let constantCoefficient = (Math.pow(quadraticBegin, 2) - quadraticBegin) / linearTerm - quantity;
+      unroundedGalaxyAmount = (-linearCoefficient + Math.sqrt(
+        Math.pow(linearCoefficient, 2) - 4 * quadraticCoefficient * constantCoefficient)) / (2 * quadraticCoefficient);
     }
-    constantTerm += quadraticBegin * (quadraticBegin - 1);
-    linearTerm += 1 - 2 * quadraticBegin;
-    const quadSol = 0.5 * (-linearTerm + Math.sqrt(Math.pow(linearTerm, 2) - 4 * (constantTerm - currency - finalOffset)));
-    // There might be a small rounding error, and if we use floor, we might underestimate the quantity.
-    // Instead, we use round, then check if the resulting price is too high, and go down one if need be.
-    quantity = Math.round(quadSol);
-    let price = Math.pow(quantity, 2) + linearTerm * quantity + constantTerm - finalOffset;
-    if (price > currency) {
-      quantity--;
-      price = Math.pow(quantity, 2) + linearTerm * quantity + constantTerm - finalOffset;
+    
+    let galaxyAmount = Math.round(unroundedGalaxyAmount);
+    
+    if (this.requirementAt(galaxyAmount).amount > currency) {
+      galaxyAmount -= 1;
     }
-    // Check for remote scaling
-    if (quantity >= 800 && !RealityUpgrade(21).isBought) {
+    
+    if (galaxyAmount >= 800 && !RealityUpgrade(21).isBought) {
+      // We haven't considered remote scaling, give up and do binary search.
       const bulk = bulkBuyBinarySearch(new Decimal(currency), {
-        costFunction: x => Math.floor((x * x + x * linearTerm + constantTerm) * Math.pow(1.002, x - 800)) - finalOffset,
+        costFunction: x => this.requirementAt(x).amount,
         cumulative: false,
       }, 800);
       if (!bulk) throw new Error("Unexpected failure to calculate galaxy purchase");
-      return bulk.quantity + 800 + 1;
+      // The formula we are using is the formula for the price of the *next* galaxy, given
+      // a quantity. So we add 1 when we return
+      return 800 + bulk.quantity;
     }
-    return quantity + 1;
+    
+    return galaxyAmount + 1;
   }
 
   static requirementAt(galaxies) {
@@ -86,11 +89,15 @@ class Galaxy {
     }
 
     if (type === GALAXY_TYPE.REMOTE) {
-      amount = Math.floor(amount * Math.pow(1.002, galaxies - 800));
+      amount = amount * Math.pow(1.002, galaxies - 800);
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
     if (InfinityChallenge(5).isCompleted) amount -= 1;
+    
+    if (GlyphAlteration.isAdded("power")) amount = amount * getSecondaryGlyphEffect("powerpow");
+    
+    amount = Math.floor(amount);
     const tier = Galaxy.requiredTier;
     return new GalaxyRequirement(tier, amount);
   }

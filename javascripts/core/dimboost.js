@@ -61,7 +61,6 @@ class DimBoost {
   }
   
   static get canBeBought() {
-    const challenge8MaxBoosts = NormalChallenge(10).isRunning ? 2 : 5;
     return !(NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) && !Ra.isRunning;
   }
   

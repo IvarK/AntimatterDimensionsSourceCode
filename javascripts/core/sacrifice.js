@@ -8,7 +8,8 @@ class Sacrifice {
   }
 
   static get canSacrifice() {
-    return DimBoost.totalBoosts > 4 && NormalDimension(8).amount.gt(0) && !EternityChallenge(3).isRunning && this.nextBoost.gt(1);
+    return DimBoost.totalBoosts > 4 && NormalDimension(8).amount.gt(0) &&
+    !EternityChallenge(3).isRunning && this.nextBoost.gt(1);
   }
 
   static get disabledCondition() {

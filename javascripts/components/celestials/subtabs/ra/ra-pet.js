@@ -143,6 +143,9 @@ Vue.component("ra-pet", {
             <i class="fas fa-question-circle"></i>
           </span>
         </div>
+        <div v-else>
+          <br>
+        </div>
         <br>
         <div style="display: flex; justify-content: center;">
           <ra-upgrade-icon v-for="(unlock, i) in unlocks"

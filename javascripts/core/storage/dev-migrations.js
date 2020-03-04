@@ -534,6 +534,11 @@ GameStorage.devMigrations = {
       player.reality.autoAchieve = !player.reality.disableAutoAchieve;
       delete player.reality.disableAutoAchieve;
       delete player.newEC10Test;
+    },
+    player => {
+      // Some older saves have screwed up Ra unlocks for some reason, this should fix that
+      player.celestials.ra.unlockBits = 0;
+      Ra.checkForUnlocks();
     }
   ],
 

@@ -54,7 +54,7 @@ Vue.component("ra-tab", {
       {
         pet: Ra.pets.v,
         scalingUpgradeText: level => {
-          const triadCount = Math.floor(level / 5);
+          const triadCount = Math.clampMax(Math.floor(level / 5), 4);
           return `You have unlocked ${formatInt(triadCount)} triad ${pluralize("study", triadCount, "studies")}.`;
         },
       }
@@ -85,7 +85,7 @@ Vue.component("ra-tab", {
             You can't dimension boost and tick reduction is fixed at 11%.
             <br>
             <br>
-            Inside of Ra's reality, some resources will generate memory chunks.
+            Inside of Ra's reality, some resources will generate memory chunks based on their amount.
           </div>
         </button>
         <div class="l-ra-recollection-unlock">

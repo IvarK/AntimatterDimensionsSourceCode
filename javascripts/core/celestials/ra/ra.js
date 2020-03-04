@@ -202,7 +202,7 @@ const Ra = {
   checkForUnlocks() {
     for (const unl of Object.values(RA_UNLOCKS)) {
       const isUnlockable = unl.totalLevels === undefined
-        ? unl.pet.level >= unl.level
+        ? unl.pet.isUnlocked && unl.pet.level >= unl.level
         : this.totalPetLevel >= unl.totalLevels;
       if (isUnlockable && !this.has(unl)) {
         // eslint-disable-next-line no-bitwise

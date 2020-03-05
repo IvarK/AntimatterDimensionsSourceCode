@@ -44,6 +44,7 @@ Vue.component("modal-reality-glyph-creation", {
         Create a level {{ formatInt(realityGlyphLevel) }} reality glyph. Rarity will always be 100% and level
         scales on your current reality resource amount (which is all consumed). All other alchemy resources will be
         unaffected. Reality glyphs have unique effects, some of which are only available with higher level glyphs.
+        Reality glyphs can also be sacrificed for increased yield from alchemy reactions.
       </div><br>
       <div>
         Available Effects:

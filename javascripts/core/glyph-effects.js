@@ -670,7 +670,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Galaxies are {value} stronger",
     totalDesc: "Galaxy strength +{value}",
     effect: (level, strength) => Math.pow(1 + level * strength / 200000, 1.6),
-    formatEffect: x => formatPercents(x, 2),
+    formatEffect: x => formatPercents(x - 1, 2),
     combine: GlyphCombiner.multiply,
   }, {
     id: "realitydimboost",
@@ -680,7 +680,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Dimension Boost count +{value}",
     totalDesc: "{value} more Dimension Boosts",
     effect: (level, strength) => Math.pow(1 + level * strength / 150000, 1.2),
-    formatEffect: x => formatPercents(x, 2),
+    formatEffect: x => formatPercents(x - 1, 2),
     combine: GlyphCombiner.multiply,
   }, {
     id: "realitycopy",

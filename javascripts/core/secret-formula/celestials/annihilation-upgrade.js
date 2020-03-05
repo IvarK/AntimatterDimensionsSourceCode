@@ -71,7 +71,7 @@ GameDatabase.darkEnergyUpgrade = {
     description: "Gain more Anomalies based on current amount",
     cost: 400,
     effect: () => player.celestials.laitela.anomalies.plus(1).log10() * 0.75 + 1,
-    effectFormat: x => `Currently: ${shorten(x, 2, 2)}x`
+    effectFormat: x => `Currently: ${format(x, 2, 2)}x`
   },
   realityPenaltyReduction: {
     id: 4,

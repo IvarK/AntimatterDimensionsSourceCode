@@ -52,25 +52,26 @@ Vue.component("matter-dimension-row", {
       this.canBuyInterval = this.dimension.canBuyInterval;
       this.canBuyPower = this.dimension.canBuyPower;
       this.timer = this.dimension.timeSinceLastUpdate;
+      this.timerPercent = this.timer / this.interval.toNumber();
       this.intervalCap = this.dimension.intervalPurchaseCap;
     }
   },
   template:
   `<div class="c-matter-dimension-container">
-    <div class="o-matter-dimension-amount"> {{ name }} : {{ shorten(amount, 2, 0) }}</div>
+    <div class="o-matter-dimension-amount"> {{ name }} : {{ format(amount, 2, 0) }}</div>
     <div class="c-matter-dimension-buttons">
       <button 
         @click="dimension.buyChance()" 
         class="o-matter-dimension-button" 
         :class="{ 'o-matter-dimension-button--available': canBuyChance }"> 
-        {{ shorten(chance, 2, 2) }}% <span v-if="chance !== 100"><br>Cost: {{ shorten(chanceCost, 2, 0) }}</span>
+        {{ format(chance, 2, 2) }}% <span v-if="chance !== 100"><br>Cost: {{ format(chanceCost, 2, 0) }}</span>
       </button>
       <button 
         @click="dimension.buyInterval()" 
         class="o-matter-dimension-button" 
         :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> 
         {{ interval.toFixed(2) }}ms <span v-if="interval.gt(intervalCap)">
-        <br>Cost: {{ shorten(intervalCost, 2, 0) }}</span>
+        <br>Cost: {{ format(intervalCost, 2, 0) }}</span>
       </button>
       <button
         @click="dimension.buyPower()"
@@ -79,7 +80,7 @@ Vue.component("matter-dimension-row", {
         {{ format(power, 2, 2) }}x <br>Cost: {{ format(powerCost, 2, 0) }}
       </button>
     </div>
-    <span v-if="interval.gt(200)">Tick: {{ timer.toFixed(0) }} ms</span>
+    <span v-if="interval.gt(200)">Tick: {{ formatInt(timer) }} ms ({{ format(100 * timerPercent, 1, 1) }}%)</span>
   </div>
 
   `

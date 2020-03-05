@@ -23,9 +23,12 @@ Vue.component("ra-pet-level-bar", {
       return this.unlocks.map(u => u.level);
     },
     multiLevelStyle() {
-      const expFraction = (Ra.totalExpForLevel(this.level) + this.exp) / Ra.totalExpForLevel(this.nextGoal);
+      const startScl = Math.sqrt(Ra.totalExpForLevel(this.prevGoal));
+      const endScl = Math.sqrt(Ra.totalExpForLevel(this.nextGoal));
+      const currentScl = Math.sqrt(Ra.totalExpForLevel(this.level) + this.exp);
+      const expFraction = (currentScl - startScl) / (endScl - startScl);
       return {
-        width: `${100 * Math.sqrt(Math.clampMax(expFraction, 1))}%`
+        width: `${100 * Math.clampMax(expFraction, 1)}%`
       };
     },
     singleLevelStyle() {
@@ -37,6 +40,10 @@ Vue.component("ra-pet-level-bar", {
       return {
         "background-color": this.pet.color
       };
+    },
+    prevGoal() {
+      const currentUpgrades = this.importantLevels.filter(goal => goal <= this.level);
+      return currentUpgrades.length === 0 ? 1 : Math.clampMax(currentUpgrades.max(), 15);
     },
     nextGoal() {
       const missingUpgrades = this.importantLevels.filter(goal => goal > this.level);
@@ -66,7 +73,7 @@ Vue.component("ra-pet-level-bar", {
         <div v-if="shiftDown">
           <ra-level-chevron v-for="lvl in 2"
             :key="currentLevelGoal - 2 + lvl"
-            :level ="currentLevelGoal - 2 + lvl"
+            :level="currentLevelGoal - 2 + lvl"
             :goal="currentLevelGoal"
             :singleLevel="true"
             :isImportantLevel="isImportant(lvl)"
@@ -75,6 +82,7 @@ Vue.component("ra-pet-level-bar", {
         <div v-else>
           <ra-level-chevron v-for="lvl in currentLevelGoal"
             :key="lvl"
+            :minLevel="prevGoal"
             :level="lvl"
             :goal="currentLevelGoal"
             :isImportantLevel="isImportant(lvl)"

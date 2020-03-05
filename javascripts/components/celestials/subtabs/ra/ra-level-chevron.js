@@ -2,6 +2,7 @@
 
 Vue.component("ra-level-chevron", {
   props: {
+    minLevel: Number,
     level: Number,
     goal: Number,
     singleLevel: {
@@ -12,7 +13,11 @@ Vue.component("ra-level-chevron", {
   },
   computed: {
     levelPercent() {
-      return 100 * Math.sqrt(Ra.totalExpForLevel(this.level) / Ra.totalExpForLevel(this.goal));
+      const startScl = Math.sqrt(Ra.totalExpForLevel(this.minLevel));
+      const endScl = Math.sqrt(Ra.totalExpForLevel(this.goal));
+      const currentScl = Math.sqrt(Ra.totalExpForLevel(this.level));
+      const expFraction = (currentScl - startScl) / (endScl - startScl);
+      return 100 * expFraction;
     },
     levelPosition() {
       if (this.level === this.goal) return { right: "0%" };
@@ -27,11 +32,11 @@ Vue.component("ra-level-chevron", {
     }
   },
   template: `
-  <div
+  <div v-if="level >= minLevel || singleLevel"
     class="l-ra-lvl-chevron"
     :style="levelPosition"
     :class="classList">
-    <span v-if="levelPercent > 15">
+    <span v-if="isImportantLevel">
       {{level}}
     </span>
   </div>

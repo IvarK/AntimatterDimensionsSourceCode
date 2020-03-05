@@ -72,7 +72,7 @@ Vue.component("v-tab", {
     calculateReductionCost() {      
       if (!this.isFlipped) return 2000;
       const nextPercent = (Math.floor(100 * V.tierReduction) + 1) / 100;
-      return 20000 * Math.pow(10, 10 * nextPercent) - player.celestials.v.ppSpent + 1;
+      return 20000 * Math.ceil(Math.pow(10, 10 * nextPercent)) - player.celestials.v.ppSpent;
     }
   },
   computed: {

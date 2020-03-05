@@ -186,7 +186,8 @@ const Ra = {
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredExpForLevel(level) {
-    const adjustedLevel = level + Math.pow(level, 2) / 10;
+    let adjustedLevel = level + Math.pow(level, 2) / 10;
+    if (level > 25) adjustedLevel *= Math.pow(1.3, level - 25);
     return Math.floor(Math.pow(adjustedLevel, 4) * 1e5);
   },
   // Calculates the cumulative exp needed to REACH a level starting from nothing.
@@ -586,6 +587,3 @@ const RA_UNLOCKS = {
     totalLevels: 80,
   }
 };
-
-// Normally only checked on level up, and offline level ups don't trigger it
-EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Ra.checkForUnlocks());

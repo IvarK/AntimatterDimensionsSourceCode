@@ -332,7 +332,7 @@ GameDatabase.celestials.alchemy = {
       name: "Boundless",
       symbol: "Π",
       isBaseResource: false,
-      effect: amount => amount / 40000,
+      effect: amount => amount / 80000,
       tier: 4,
       uiOrder: 1,
       isUnlocked: () => Ra.pets.effarig.level >= 20,

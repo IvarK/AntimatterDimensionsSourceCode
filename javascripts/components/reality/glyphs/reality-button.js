@@ -25,7 +25,7 @@ Vue.component("reality-button", {
       if (this.machinesGained.lt(100)) {
         return `Next at ${format(this.nextMachineEP, 2)} EP`;
       }
-      if (this.machinesGained.lt(1e308)) {
+      if (this.machinesGained.lt(Number.MAX_VALUE)) {
         return `${format(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;
       }
       return "";

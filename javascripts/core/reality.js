@@ -419,7 +419,9 @@ function finishProcessReality(realityProps) {
   player.noTheoremPurchases = true;
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
-  player.timestudy.theorem = Ra.has(RA_UNLOCKS.START_TT) ? new Decimal(1e6) : new Decimal(0);
+  player.timestudy.theorem = (Ra.has(RA_UNLOCKS.START_TT) && !isInCelestialReality())
+    ? new Decimal(5e9)
+    : new Decimal(0);
   player.timestudy.amcost = new Decimal("1e20000");
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);
@@ -576,6 +578,15 @@ function clearCelestialRuns() {
   player.celestials.ra.run = false;
   player.celestials.laitela.run = false;
   return saved;
+}
+
+function isInCelestialReality() {
+  return player.celestials.teresa.run ||
+    player.celestials.effarig.run ||
+    player.celestials.enslaved.run ||
+    player.celestials.v.run ||
+    player.celestials.ra.run ||
+    player.celestials.laitela.run;
 }
 
 function startRealityOver() {

@@ -567,7 +567,7 @@ const RA_UNLOCKS = {
   START_TT: {
     id: 27,
     description: "Get V to level 25",
-    reward: "Start every non-celestial Reality with 1,000,000 TT",
+    reward: `Start every non-celestial Reality with 5,000,000,000 TT`,
     pet: Ra.pets.v,
     level: 25,
     displayIcon: `<i class="fab fa-buffer"></i>`

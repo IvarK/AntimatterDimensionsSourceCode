@@ -141,7 +141,9 @@ function unlockDilation(quiet) {
     for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
   }
   player.dilation.tachyonParticles = player.dilation.tachyonParticles.plusEffectOf(Perk.startTP);
-  if (Ra.has(RA_UNLOCKS.START_TP)) player.dilation.tachyonParticles = getTP(player.totalAntimatter.pow(0.5));
+  if (Ra.has(RA_UNLOCKS.START_TP) && !isInCelestialReality()) {
+    player.dilation.tachyonParticles = getTP(player.totalAntimatter.pow(0.5));
+  }
 }
 
 function getSelectedDimensionStudyPaths() {

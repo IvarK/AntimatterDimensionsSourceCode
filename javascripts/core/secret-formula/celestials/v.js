@@ -95,14 +95,14 @@ GameDatabase.celestials.v = {
       id: 6,
       name: "Requiem for a Glyph",
       description: value => `Unlock reality with at most ${-value} glyphs equipped for the entire reality.
-        <span ach-tooltip="Each equipped cursed glyph counts as -3 glyphs">
+        <div ach-tooltip="Each equipped cursed glyph counts as -3 glyphs">
           <i class="fas fa-question-circle"></i>
-        </span>`,
+        </div>`,
       // This achievement has internally negated values since the check is always greater than
       values: [2, 4, 6, 8, 10],
       condition: () => V.isRunning && TimeStudy.reality.isBought,
       currentValue: () => -player.celestials.v.maxGlyphsThisRun,
-      formatRecord: x => formatInt(x),
+      formatRecord: x => formatInt(-x),
       shardReduction: () => 0,
       maxShardReduction: () => 0,
       mode: V_REDUCTION_MODE.SUBTRACTION,
@@ -127,7 +127,7 @@ GameDatabase.celestials.v = {
     {
       id: 8,
       name: "Shutter Glyph",
-      description: value => `Reach a glyph of level ${value}.`,
+      description: value => `Reach a glyph of level ${formatInt(value)}.`,
       values: [6000, 6500, 7000, 7500, 8000],
       condition: () => V.isRunning,
       currentValue: () => gainedGlyphLevel().actualLevel,

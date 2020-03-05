@@ -278,6 +278,7 @@ const GlyphGenerator = {
   },
 
   randomStrength(rng) {
+    if (Ra.has(RA_UNLOCKS.MAX_RARITY)) return rarityToStrength(100);
     let result;
     // Divide the extra minimum rarity by the strength multiplier
     // since we'll multiply by the strength multiplier later.

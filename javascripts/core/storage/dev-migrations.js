@@ -543,6 +543,9 @@ GameStorage.devMigrations = {
     player => {
       // Required for compatibility after V records refactor
       player.celestials.v.runRecords[0] = -10;
+    },
+    player => {
+      delete player.celestials.v.cursedThisRun;
     }
   ],
 

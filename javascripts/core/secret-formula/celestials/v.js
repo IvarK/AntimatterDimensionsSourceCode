@@ -95,14 +95,14 @@ GameDatabase.celestials.v = {
       id: 6,
       name: "Requiem for a Glyph",
       description: value => `Unlock reality with at most ${-value} glyphs equipped for the entire reality.
-        <div ach-tooltip="Each equipped cursed glyph counts as -3 glyphs">
+        <span ach-tooltip="Each equipped cursed glyph counts as -3 glyphs">
           <i class="fas fa-question-circle"></i>
-        </div>`,
+        </span>`,
       // This achievement has internally negated values since the check is always greater than
       values: [2, 4, 6, 8, 10],
-      condition: () => V.isRunning,
-      currentValue: () => 3 * player.celestials.v.cursedThisRun - Glyphs.activeList.length,
-      formatRecord: x => formatInt(-x),
+      condition: () => V.isRunning && TimeStudy.reality.isBought,
+      currentValue: () => -player.celestials.v.maxGlyphsThisRun,
+      formatRecord: x => formatInt(x),
       shardReduction: () => 0,
       maxShardReduction: () => 0,
       mode: V_REDUCTION_MODE.SUBTRACTION,
@@ -111,25 +111,25 @@ GameDatabase.celestials.v = {
     {
       id: 7,
       name: "Post-destination",
-      // Black hole values are multiples of 1e50
-      description: value => `Get ${formatInt(value)} TT with a
-        /${format(Decimal.pow10((value - 180000) / 400), 2, 2)} black hole or slower.`,
-      values: [200000, 220000, 240000, 260000, 280000],
-      condition: x => V.isRunning &&
-        Decimal.pow10((x - 180000) / 400).recip().toNumber() >= player.minNegativeBlackHoleThisReality,
-      currentValue: () => player.timestudy.theorem.toNumber(),
-      formatRecord: x => formatInt(x),
-      shardReduction: () => Math.floor(15000 * V.tierReduction),
-      maxShardReduction: goal => goal - 10000,
-      mode: V_REDUCTION_MODE.SUBTRACTION,
+      description: value => `Get ${formatInt(200000)} TT with a /${format(Decimal.pow10(value), 2, 2)}
+        black hole or slower, without discharging or entering EC12.`,
+      values: [50, 100, 150, 200, 250],
+      condition: () => V.isRunning,
+      currentValue: () => (player.timestudy.theorem.toNumber() > 200000
+        ? -Math.log10(player.minNegativeBlackHoleThisReality)
+        : 0),
+      formatRecord: x => `1 / ${format(Math.pow(10, x))}`,
+      shardReduction: () => 50 * V.tierReduction,
+      maxShardReduction: goal => goal - 25,
+      mode: V_REDUCTION_MODE.DIVISION,
       isHard: true
     },
     {
       id: 8,
       name: "Shutter Glyph",
       description: value => `Reach a glyph of level ${value}.`,
-      values: [6500, 7000, 7500, 8000, 8500],
-      condition: x => gainedGlyphLevel().actualLevel >= x,
+      values: [6000, 6500, 7000, 7500, 8000],
+      condition: () => V.isRunning,
       currentValue: () => gainedGlyphLevel().actualLevel,
       formatRecord: x => formatInt(x),
       shardReduction: () => Math.floor(500 * V.tierReduction),

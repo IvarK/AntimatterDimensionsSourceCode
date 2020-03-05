@@ -294,7 +294,8 @@ const BlackHoles = {
     if (player.blackHolePause) player.minNegativeBlackHoleThisReality = 1;
     player.blackHolePause = !player.blackHolePause;
     player.blackHolePauseTime = player.realTimePlayed;
-    GameUI.notify.blackHole(player.blackHolePause ? "Black Hole paused" : "Black Hole unpaused");
+    const pauseType = BlackHoles.areNegative ? "inverted" : "paused";
+    GameUI.notify.blackHole(player.blackHolePause ? `Black Hole ${pauseType}` : "Black Hole unpaused");
   },
 
   get unpauseAccelerationFactor() {

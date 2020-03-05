@@ -148,7 +148,7 @@ GameDatabase.achievements.secret = [
   {
     id: 42,
     name: "SHAME ON ME",
-    tooltip: "Try to enter EC12 within Time Compression."
+    tooltip: "Try to use EC12 to speed up time."
   },
   {
     id: 43,

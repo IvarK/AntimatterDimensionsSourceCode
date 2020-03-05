@@ -501,6 +501,7 @@ const Glyphs = {
     glyph.idx = targetSlot;
     this.active[targetSlot] = glyph;
     this.updateRealityGlyphEffects();
+    this.updateGlyphCountForV();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },
@@ -513,6 +514,7 @@ const Glyphs = {
       this.addToInventory(glyph);
     }
     this.updateRealityGlyphEffects();
+    this.updateGlyphCountForV();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   unequip(activeIndex, requestedInventoryIndex) {
@@ -523,6 +525,7 @@ const Glyphs = {
     this.active[activeIndex] = null;
     this.addToInventory(glyph, requestedInventoryIndex);
     this.updateRealityGlyphEffects();
+    this.updateGlyphCountForV();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   updateRealityGlyphEffects() {
@@ -757,6 +760,14 @@ const Glyphs = {
         strength: g.strength,
         effects: g.effects, }))
       .sort((a, b) => b.effects - a.effects);
+  },
+  // Normal glyph count minus 3 for each cursed glyph, uses 4 instead of 3 in the calculation because cursed glyphs
+  // still contribute to the length of the active list. Note that it only ever decreases if startingReality is true.
+  updateGlyphCountForV(startingReality = false) {
+    const activeGlyphList = this.activeList.concat(this.copies);
+    const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
+    if (startingReality) player.celestials.v.maxGlyphsThisRun = currCount;
+    player.celestials.v.maxGlyphsThisRun = Math.max(player.celestials.v.maxGlyphsThisRun, currCount);
   }
 };
 

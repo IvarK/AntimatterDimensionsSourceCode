@@ -180,7 +180,7 @@ const V = {
   startRun() {
     player.options.retryCelestial = false;
     player.celestials.v.run = startRealityOver() || player.celestials.v.run;
-    player.celestials.v.cursedThisRun = Glyphs.active.filter(x => x && x.type === "cursed").length;
+    Glyphs.updateGlyphCountForV(true);
   },
   updateTotalRunUnlocks() {
     let sum = 0;
@@ -200,7 +200,7 @@ const V = {
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],
       runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0],
-      cursedThisRun: 0
+      maxGlyphsThisRun: 0
     };
     this.spaceTheorems = 0;
   },

@@ -447,7 +447,9 @@ function preProductionGenerateIP(diff) {
     player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
     if (player.partInfinityPoint >= 1) {
       const genCount = Math.floor(player.partInfinityPoint);
-      player.infinityPoints = player.infinityPoints.plus(new Decimal(genCount).timesEffectOf(InfinityUpgrade.ipGen));
+      let gainedThisTick = new Decimal(genCount).timesEffectOf(InfinityUpgrade.ipGen);
+      if (Laitela.isRunning) gainedThisTick = gainedEternityPoints(gainedThisTick);
+      player.infinityPoints = player.infinityPoints.plus(gainedThisTick);
       player.partInfinityPoint -= genCount;
     }
   }

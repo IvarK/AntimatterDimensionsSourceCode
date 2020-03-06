@@ -182,8 +182,6 @@ class TimeDimensionState extends DimensionState {
       mult = Effarig.multiplier(mult);
     } else if (V.isRunning) {
       mult = mult.pow(0.5);
-    } else if (Laitela.isRunning) {
-      mult = mult.pow(Laitela.dimMultNerf);
     }
 
     return mult;

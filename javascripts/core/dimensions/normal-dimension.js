@@ -80,8 +80,6 @@ function getDimensionFinalMultiplierUncached(tier) {
     multiplier = Effarig.multiplier(multiplier);
   } else if (V.isRunning) {
     multiplier = multiplier.pow(0.5);
-  } else if (Laitela.isRunning) {
-    multiplier = multiplier.pow(Laitela.dimMultNerf);
   }
 
   // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
@@ -636,7 +634,8 @@ const NormalDimensions = {
     }
     let amRate = NormalDimension(1).productionPerSecond;
     if (NormalChallenge(12).isRunning) amRate = amRate.plus(NormalDimension(2).productionPerSecond);
-    const amProduced = amRate.times(diff / 1000);
+    let amProduced = amRate.times(diff / 1000);
+    if (Laitela.isRunning) amProduced = gainedInfinityPoints(amProduced);
     player.antimatter = player.antimatter.plus(amProduced);
     player.totalAntimatter = player.totalAntimatter.plus(amProduced);
     player.thisInfinityMaxAM = player.thisInfinityMaxAM.max(player.antimatter);

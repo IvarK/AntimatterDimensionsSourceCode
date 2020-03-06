@@ -552,10 +552,9 @@ const Player = {
   },
 
   get antimatterPerSecond() {
-    const basePerSecond = NormalDimension(1).productionPerRealSecond;
-    if (NormalChallenge(12).isRunning) {
-      return basePerSecond.plus(NormalDimension(2).productionPerRealSecond);
-    }
+    const basePerSecond = NormalDimension(1).productionPerRealSecond
+      .plus(NormalChallenge(12).isRunning ? NormalDimension(2).productionPerRealSecond : 0);
+    if (Laitela.isRunning) return gainedInfinityPoints(basePerSecond);
     return basePerSecond;
   },
 

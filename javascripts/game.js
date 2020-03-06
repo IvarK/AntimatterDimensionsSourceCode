@@ -30,14 +30,17 @@ function breakInfinity() {
   GameUI.update();
 }
 
-function gainedInfinityPoints() {
+function gainedInfinityPoints(formulaOverride = undefined) {
+  const input = formulaOverride === undefined
+    ? player.thisInfinityMaxAM.e
+    : formulaOverride.log10();
   const div = Effects.min(
     308,
     Achievement(103),
     TimeStudy(111)
   );
   let ip = player.break
-    ? Decimal.pow10(player.thisInfinityMaxAM.e / div - 0.75)
+    ? Decimal.pow10(input / div - 0.75)
     : new Decimal(308 / div);
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
@@ -48,6 +51,7 @@ function gainedInfinityPoints() {
   if (GlyphAlteration.isAdded("infinity")) {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
+  if (Laitela.isRunning && formulaOverride === undefined) return gainedEternityPoints(ip.floor());
   return ip.floor();
 }
 
@@ -65,9 +69,11 @@ function totaEPMult() {
   );
 }
 
-function gainedEternityPoints() {
-  const ip = player.infinityPoints.plus(gainedInfinityPoints());
-  let ep = Decimal.pow(5, ip.e / 308 - 0.7).times(totaEPMult());
+function gainedEternityPoints(formulaOverride = undefined) {
+  const input = formulaOverride === undefined
+    ? player.infinityPoints.plus(gainedInfinityPoints()).e
+    : formulaOverride.log10();
+  let ep = Decimal.pow(5, input / 308 - 0.7).times(totaEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -77,6 +83,7 @@ function gainedEternityPoints() {
   if (GlyphAlteration.isAdded("time")) {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
+  if (Laitela.isRunning && formulaOverride === undefined) return gainedEternityPoints(ep.floor());
   return ep.floor();
 }
 
@@ -92,7 +99,7 @@ function gainedRealityMachines() {
   const log10FinalEP = player.eternityPoints.plus(gainedEternityPoints()).log10();
   let rmGain = Decimal.pow(1000, log10FinalEP / 4000 - 1);
   // Increase base RM gain if <10 RM
-  if (rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
+  if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
   rmGain = rmGain.times(getRealityMachineMultiplier());
   rmGain = rmGain.plusEffectOf(Perk.realityMachineGain);
   // This happens around ee10 and is necessary to reach e9e15 antimatter without having to deal with the various
@@ -653,7 +660,7 @@ function getTTPerSecond() {
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation
-  const glyphTT = Teresa.isRunning || Enslaved.isRunning
+  const glyphTT = Teresa.isRunning || Enslaved.isRunning || Laitela.isRunning
     ? 0
     : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
 

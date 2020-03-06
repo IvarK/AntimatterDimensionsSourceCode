@@ -137,8 +137,8 @@ Vue.component("laitela-tab", {
           <button class="o-laitela-run-button" @click="startRun">
             <b>Start Lai'tela's Reality</b>
             <div v-bind:class="runButtonClassObject()"></div>
-            Tickspeed is disabled and all dimension multipliers are decreased based on dark matter,
-            currently <b>x^{{ format(dimMultNerf, 3, 4) }}</b>
+            Antimatter production is reduced via the IP formula, IP gain is reduced via the EP formula,
+            and EP gain goes through the EP formula twice. Glyph TT generation is disabled.
             <br>
             Multiply all dark matter dimensions based on highest AM reached,
             Currently: <b>{{ format(realityReward, 2, 3)}}x</b>

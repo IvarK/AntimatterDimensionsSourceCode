@@ -5,7 +5,7 @@ function canBuyTickSpeed() {
 }
 
 function getTickSpeedMultiplier() {
-  if (InfinityChallenge(3).isRunning || Laitela.isRunning) return new Decimal(1);
+  if (InfinityChallenge(3).isRunning) return new Decimal(1);
   if (Ra.isRunning) return new Decimal(0.89);
   // Note that this already includes the "50% more" active path effect
   let replicantiGalaxies = Replicanti.galaxies.bought;

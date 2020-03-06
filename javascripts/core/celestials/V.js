@@ -65,7 +65,7 @@ class VRunUnlockState extends GameMechanicState {
       Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
         if (!V.isFlipped && this.config.isHard) continue;
         this.completions++;
-        GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
+        GameUI.notify.success(`You have unlocked V-achievement '${this.config.name}' tier ${this.completions}`);
         V.updateTotalRunUnlocks();
     }
   }

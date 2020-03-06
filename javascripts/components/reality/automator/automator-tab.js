@@ -19,7 +19,8 @@ Vue.component("automator-tab", {
       return this.fullScreen ? "fa-compress-arrows-alt" : "fa-expand-arrows-alt";
     },
     intervalText() {
-      const speedupText = `Each reality makes it run 0.6% faster, up to a maximum of ${formatInt(1000)} per second.`;
+      const speedupText = `Each Reality makes it run ${formatPercents(0.006, 1)} faster, up to a maximum of
+        ${formatInt(1000)} per second.`;
       return this.interval === 1
         ? `The automator is running at max speed (${formatInt(1000)} commands per second).`
         : `The automator is running ${format(1000 / this.interval, 2, 2)} commands per second. ${speedupText}`;

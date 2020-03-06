@@ -19,7 +19,7 @@ GameDatabase.celestials.v = {
     {
       id: 0,
       name: "Glyph Knight",
-      description: value => `Unlock reality with at most ${-value} ${pluralize("glyph", -value)} equipped.`,
+      description: value => `Unlock Reality with at most ${-value} ${pluralize("glyph", -value)} equipped.`,
       // This achievement has internally negated values since the check is always greater than
       values: [-5, -4, -3, -2, -1, 0],
       condition: () => V.isRunning && TimeStudy.reality.isBought,
@@ -94,7 +94,7 @@ GameDatabase.celestials.v = {
     {
       id: 6,
       name: "Requiem for a Glyph",
-      description: value => `Unlock reality with at most ${-value} glyphs equipped for the entire reality.
+      description: value => `Unlock Reality with at most ${-value} glyphs equipped for the entire reality.
         <div ach-tooltip="Each equipped cursed glyph counts as -3 glyphs">
           <i class="fas fa-question-circle"></i>
         </div>`,
@@ -112,7 +112,7 @@ GameDatabase.celestials.v = {
       id: 7,
       name: "Post-destination",
       description: value => `Get ${formatInt(200000)} TT with a /${format(Decimal.pow10(value), 2, 2)}
-        black hole or slower, without discharging or entering EC12.`,
+        Black Hole or slower, without discharging or entering EC12.`,
       values: [50, 100, 150, 200, 250],
       condition: () => V.isRunning,
       currentValue: () => (player.timestudy.theorem.toNumber() > 200000

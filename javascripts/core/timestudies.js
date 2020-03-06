@@ -142,7 +142,7 @@ function unlockDilation(quiet) {
   }
   player.dilation.tachyonParticles = player.dilation.tachyonParticles.plusEffectOf(Perk.startTP);
   if (Ra.has(RA_UNLOCKS.START_TP) && !isInCelestialReality()) {
-    player.dilation.tachyonParticles = getTP(player.totalAntimatter.pow(0.5));
+    player.dilation.tachyonParticles = getTP(RA_UNLOCKS.START_TP.effect());
   }
 }
 

@@ -52,7 +52,7 @@ Vue.component("modal-glyph-selection", {
           <br>
           pick and sacrifice one at random.
           <br>
-          (These are {{ formatInt(levelDifference) }} {{"level" | pluralize(levelDifference)}}
+          (these are {{ formatInt(levelDifference) }} {{"level" | pluralize(levelDifference)}}
           {{ direction }} than your best)
       </button>
     </div>

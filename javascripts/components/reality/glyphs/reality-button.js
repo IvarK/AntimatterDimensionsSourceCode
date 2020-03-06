@@ -78,7 +78,7 @@ Vue.component("reality-button", {
         player.celestials.teresa.bestRunAM,
         "antimatter");
       const laitelaReward = this.formatScalingMultiplierText(
-        "Matter dimensions",
+        "Dark Matter dimensions",
         Laitela.realityReward,
         Math.max(Laitela.realityReward, Laitela.rewardMultiplier(player.antimatter)));
       const laitelaThreshold = this.formatThresholdText(

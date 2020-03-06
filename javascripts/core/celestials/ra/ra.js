@@ -337,7 +337,7 @@ const RA_UNLOCKS = {
   AUTO_TP: {
     id: 0,
     description: "Unlock Teresa",
-    reward: "Tachyon Particles are given immediately during dilation",
+    reward: "Tachyon Particles are given immediately when Time Dilation is active",
     pet: Ra.pets.teresa,
     level: 1,
     displayIcon: `<span class="fas fa-atom"></span>`
@@ -345,7 +345,7 @@ const RA_UNLOCKS = {
   CHARGE: {
     id: 1,
     description: "Get Teresa to level 2",
-    reward: "Unlock charging of Infinity upgrades (one every 2 levels)",
+    reward: () => `Unlock charging of Infinity upgrades (one every ${formatInt(2)} levels)`,
     pet: Ra.pets.teresa,
     level: 2,
     displayIcon: `<span class="fas fa-infinity"></span>`
@@ -385,8 +385,9 @@ const RA_UNLOCKS = {
   START_TP: {
     id: 6,
     description: "Get Teresa to level 25",
-    reward: `When unlocking dilation in non-celestial Realities, gain TP as if you reached the square root
-      of your total antimatter in dilation`,
+    reward: `When unlocking Time Dilation in non-celestial Realities, gain TP as if you reached the square root
+      of your total antimatter in Dilation`,
+    effect: () => player.totalAntimatter.pow(0.5),
     pet: Ra.pets.teresa,
     level: 25,
     displayIcon: `<i class="far fa-dot-circle"></i>`
@@ -418,7 +419,7 @@ const RA_UNLOCKS = {
   GLYPH_EFFECT_COUNT: {
     id: 10,
     description: "Get Effarig to level 8",
-    reward: "Glyphs always have 4 effects (Effarig glyphs can now have more)",
+    reward: () => `Glyphs always have ${formatInt(4)} effects (Effarig glyphs can now have more)`,
     pet: Ra.pets.effarig,
     level: 8,
     displayIcon: `<span class="fas fa-braille"></span>`
@@ -443,7 +444,7 @@ const RA_UNLOCKS = {
   MAX_RARITY: {
     id: 13,
     description: "Get Effarig to level 25",
-    reward: "Glyphs are always generated with 100% rarity",
+    reward: () => `Glyphs are always generated with ${formatPercents(1)} rarity`,
     pet: Ra.pets.effarig,
     level: 25,
     displayIcon: `<i class="fas fa-ankh"></i>`
@@ -511,7 +512,7 @@ const RA_UNLOCKS = {
   AUTO_REALITY_UPGRADES: {
     id: 21,
     description: "Unlock V",
-    reward: "The rebuyable reality upgrades are bought automatically",
+    reward: "The rebuyable Reality upgrades are bought automatically",
     pet: Ra.pets.v,
     level: 1,
     displayIcon: `<span class="fas fa-sync-alt"></span>`
@@ -519,7 +520,8 @@ const RA_UNLOCKS = {
   INSTANT_AUTOEC: {
     id: 22,
     description: "Get V to level 2",
-    reward: "Auto-EC happens instantly and Dilation is unlocked automatically at 17000 Time Theorems",
+    reward: () => `Auto-EC happens instantly and Time Dilation is unlocked automatically
+      at ${formatInt(17000)} Time Theorems`,
     pet: Ra.pets.v,
     level: 2,
     displayIcon: `<span class="fas fa-fast-forward"></span>`
@@ -527,7 +529,8 @@ const RA_UNLOCKS = {
   V_XP: {
     id: 23,
     description: "Get V to level 5",
-    reward: "All memory chunks produce more memories based on total pet level, unlock a Triad study every 5 levels",
+    reward: () => `All memory chunks produce more memories based on total pet level,
+      unlock a Triad study every ${formatInt(5)} levels`,
     pet: Ra.pets.v,
     level: 5,
     displayIcon: `<span class="fas fa-book"></span>`
@@ -568,7 +571,8 @@ const RA_UNLOCKS = {
   START_TT: {
     id: 27,
     description: "Get V to level 25",
-    reward: `Start every non-celestial Reality with 5,000,000,000 TT`,
+    reward: () => `Start every non-celestial Reality with ${format(5e9)} TT`,
+    effect: 5e9,
     pet: Ra.pets.v,
     level: 25,
     displayIcon: `<i class="fab fa-buffer"></i>`

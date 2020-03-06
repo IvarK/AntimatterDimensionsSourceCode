@@ -133,7 +133,7 @@ Vue.component("automator-editor", {
 
     toggleAutomatorMode() {
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
-        this.parseTextFromBlocks();
+        BlockAutomator.parseTextFromBlocks();
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
       } else if (BlockAutomator.fromText(this.currentScript)) {
         player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
@@ -182,7 +182,7 @@ Vue.component("automator-editor", {
       </div>
       <automator-text-editor :currentScriptID="currentScriptID"
                              :activeLine="activeLine"
-                             v-show="isTextAutomator"/>
-      <automator-block-editor v-show="isBlockAutomator"/>
+                             v-if="isTextAutomator"/>
+      <automator-block-editor v-if="isBlockAutomator"/>
     </div>`
 });

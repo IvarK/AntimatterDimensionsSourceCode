@@ -89,7 +89,7 @@ Vue.component("tt-shop", {
       costs.am.copyFrom(player.timestudy.amcost);
       costs.ip.copyFrom(player.timestudy.ipcost);
       costs.ep.copyFrom(player.timestudy.epcost);
-      this.showST = V.availableST > 0;
+      this.showST = V.spaceTheorems > 0;
       this.STamount = V.availableST;
     },
     toggleTTAutobuyer() {

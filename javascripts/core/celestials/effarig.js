@@ -9,6 +9,7 @@ const EFFARIG_STAGES = {
 const Effarig = {
   displayName: "Effarig",
   startRun() {
+    player.options.retryCelestial = false;
     if (!startRealityOver()) return;
     player.celestials.effarig.run = true;
     recalculateAllGlyphs();

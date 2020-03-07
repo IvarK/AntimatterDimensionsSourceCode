@@ -9,7 +9,7 @@ Vue.component("black-hole-tab", {
       isNegativeBHUnlocked: false,
       negativeSlider: 0,
       negativeBHDivisor: 1,
-      maxNegativeBlackHole: 300,
+      maxNegativeBlackHole: 250,
       detailedBH2: "",
     };
   },

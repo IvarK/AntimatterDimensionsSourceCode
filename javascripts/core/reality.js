@@ -12,11 +12,13 @@ const GlyphSelection = {
   },
 
   get choiceCount() {
-    const baseChoices = Effects.max(
+    let baseChoices = Effects.max(
       1,
       Perk.glyphChoice4,
       Perk.glyphChoice3
     );
+    // TODO Make Ra follow GMS pattern so this isn't as dumb as it is right now
+    if (Ra.has(RA_UNLOCKS.GLYPH_CHOICES)) baseChoices *= 2;
     return baseChoices;
   },
 
@@ -143,6 +145,7 @@ function requestManualReality() {
   const realityProps = getRealityProps(false, false);
   if (simulatedRealityCount(false) > 0) {
     triggerManualReality(realityProps);
+    if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN)) Glyphs.autoClean();
     return;
   }
   realityProps.alreadyGotGlyph = true;
@@ -225,6 +228,7 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   beginProcessReality(getRealityProps(false, false));
+  if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN)) Glyphs.autoClean();
 }
 
 function updateRealityRecords(realityProps) {
@@ -255,9 +259,6 @@ function giveRealityRewards(realityProps) {
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
     player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
   }
-  if (V.has(V_UNLOCKS.RA_UNLOCK)) {
-    Ra.giveExp(multiplier);
-  }
   if (multiplier > 1 && Enslaved.boostReality) {
     // Real time amplification is capped at 1 second of reality time; if it's faster then using all time at once would
     // be wasteful. Being faster than 1 second will only use as much time as needed to get the 1-second factor instead.
@@ -270,7 +271,10 @@ function giveRealityRewards(realityProps) {
   }
 
   if (Teresa.isRunning) {
-    player.celestials.teresa.bestRunAM = Decimal.max(player.celestials.teresa.bestRunAM, player.antimatter);
+    if (player.antimatter.gt(player.celestials.teresa.bestRunAM)) {
+      player.celestials.teresa.bestRunAM = player.antimatter;
+      player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+    }
     Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
   }
 
@@ -280,8 +284,6 @@ function giveRealityRewards(realityProps) {
   }
 
   if (Enslaved.isRunning) Enslaved.completeRun();
-
-  if (Ra.isRunning) Ra.updateExpBoosts();
 
   if (Laitela.isRunning) {
     player.celestials.laitela.maxAmGained = Decimal.max(player.celestials.laitela.maxAmGained, player.antimatter);
@@ -327,18 +329,25 @@ function beginProcessReality(realityProps) {
 }
 
 function finishProcessReality(realityProps) {
+  const finalEP = player.eternityPoints.plus(gainedEternityPoints());
+  if (player.bestEP.lt(finalEP)) {
+    player.bestEP = new Decimal(finalEP);
+    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  }
+  
   const isReset = realityProps.reset;
   if (!isReset) giveRealityRewards(realityProps);
-  if (!player.options.retryCelestial || player.reality.respec) player.celestials.v.cursedThisRun = 0;
   if (!realityProps.glyphUndo) {
     Glyphs.clearUndo();
     if (player.reality.respec) respecGlyphs();
     if (player.celestials.ra.disCharge) disChargeAll();
     if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
   }
+
   TimeCompression.isActive = false;
   const celestialRunState = clearCelestialRuns();
   recalculateAllGlyphs();
+  Glyphs.updateGlyphCountForV(true);
 
   player.sacrificed = new Decimal(0);
 
@@ -410,11 +419,14 @@ function finishProcessReality(realityProps) {
   player.noTheoremPurchases = true;
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
-  player.timestudy.theorem = new Decimal(0);
+  player.timestudy.theorem = (Ra.has(RA_UNLOCKS.START_TT) && !isInCelestialReality())
+    ? new Decimal(RA_UNLOCKS.START_TT.effect)
+    : new Decimal(0);
   player.timestudy.amcost = new Decimal("1e20000");
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);
   player.timestudy.studies = [];
+  player.celestials.v.triadStudies = [];
   player.celestials.v.STSpent = 0;
   player.dilation.studies = [];
   player.dilation.active = false;
@@ -566,6 +578,15 @@ function clearCelestialRuns() {
   player.celestials.ra.run = false;
   player.celestials.laitela.run = false;
   return saved;
+}
+
+function isInCelestialReality() {
+  return player.celestials.teresa.run ||
+    player.celestials.effarig.run ||
+    player.celestials.enslaved.run ||
+    player.celestials.v.run ||
+    player.celestials.ra.run ||
+    player.celestials.laitela.run;
 }
 
 function startRealityOver() {

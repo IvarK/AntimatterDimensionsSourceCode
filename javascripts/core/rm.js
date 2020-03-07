@@ -107,10 +107,13 @@ const AutoGlyphPicker = {
         }
         return filterValue;
       }
-      case AUTO_GLYPH_PICK_MODE.LOWEST_ALCHEMY_RESOURCE:
-        return AlchemyResource[glyph.type].isUnlocked && glyphRefinementGain(glyph) !== 0
-          ? -AlchemyResource[glyph.type].amount
-          : -Number.MAX_VALUE;
+      case AUTO_GLYPH_PICK_MODE.LOWEST_RESOURCE:
+        if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY) {
+          return AlchemyResource[glyph.type].isUnlocked && glyphRefinementGain(glyph) !== 0
+            ? -AlchemyResource[glyph.type].amount
+            : -Number.MAX_VALUE;
+        }
+        return -player.reality.glyphs.sac[glyph.type];
     }
     throw new Error("Unknown auto glyph picker mode");
   },
@@ -241,16 +244,13 @@ const GlyphGenerator = {
     const effectBitmask = makeGlyphEffectBitmask(
       orderedEffectList.filter(effect => effect.match("cursed*"))
     );
-    // Each cursed glyph owned increases the level by 1000
-    const level = (1 + Glyphs.inventory.filter(g => g !== null && g.type === "cursed").length +
-      Glyphs.active.filter(g => g !== null && g.type === "cursed").length) * 1000;
     return {
       id: undefined,
       idx: null,
       type: "cursed",
       strength: str,
-      level,
-      rawLevel: level,
+      level: 6666,
+      rawLevel: 6666,
       effects: effectBitmask,
     };
   },
@@ -278,6 +278,7 @@ const GlyphGenerator = {
   },
 
   randomStrength(rng) {
+    if (Ra.has(RA_UNLOCKS.MAX_RARITY)) return rarityToStrength(100);
     let result;
     // Divide the extra minimum rarity by the strength multiplier
     // since we'll multiply by the strength multiplier later.
@@ -501,6 +502,7 @@ const Glyphs = {
     glyph.idx = targetSlot;
     this.active[targetSlot] = glyph;
     this.updateRealityGlyphEffects();
+    this.updateGlyphCountForV();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },
@@ -513,6 +515,7 @@ const Glyphs = {
       this.addToInventory(glyph);
     }
     this.updateRealityGlyphEffects();
+    this.updateGlyphCountForV();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   unequip(activeIndex, requestedInventoryIndex) {
@@ -523,6 +526,7 @@ const Glyphs = {
     this.active[activeIndex] = null;
     this.addToInventory(glyph, requestedInventoryIndex);
     this.updateRealityGlyphEffects();
+    this.updateGlyphCountForV();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   updateRealityGlyphEffects() {
@@ -750,12 +754,21 @@ const Glyphs = {
     }
   },
   copyForRecords(glyphList) {
+    // Sorting by effect ensures consistent ordering by type, based on how the effect bitmasks are structured
     return glyphList.map(g => ({
-      type: g.type,
-      level: g.level,
-      strength: g.strength,
-      effects: g.effects,
-    }));
+        type: g.type,
+        level: g.level,
+        strength: g.strength,
+        effects: g.effects, }))
+      .sort((a, b) => b.effects - a.effects);
+  },
+  // Normal glyph count minus 3 for each cursed glyph, uses 4 instead of 3 in the calculation because cursed glyphs
+  // still contribute to the length of the active list. Note that it only ever decreases if startingReality is true.
+  updateGlyphCountForV(startingReality = false) {
+    const activeGlyphList = this.activeList.concat(this.copies);
+    const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
+    if (startingReality) player.celestials.v.maxGlyphsThisRun = currCount;
+    player.celestials.v.maxGlyphsThisRun = Math.max(player.celestials.v.maxGlyphsThisRun, currCount);
   }
 };
 
@@ -771,7 +784,6 @@ const GlyphSacrifice = (function() {
     power: new GlyphSacrificeState(db.power),
     effarig: new GlyphSacrificeState(db.effarig),
     reality: new GlyphSacrificeState(db.reality),
-    cursed: new GlyphSacrificeState(db.cursed),
   };
 }());
 
@@ -1005,6 +1017,11 @@ function estimatedAlchemyCap() {
 }
 
 function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
+  if (glyph.type === "cursed") {
+    Glyphs.removeFromInventory(glyph);
+    return;
+  }
+
   if (!noAlchemy &&
       AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY &&
       glyph.type !== "reality" &&

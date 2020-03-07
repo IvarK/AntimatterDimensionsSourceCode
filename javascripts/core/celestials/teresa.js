@@ -58,6 +58,7 @@ const Teresa = {
     return Boolean(player.celestials.teresa.unlockBits & (1 << info.id));
   },
   startRun() {
+    player.options.retryCelestial = false;
     player.celestials.teresa.run = startRealityOver() || player.celestials.teresa.run;
   },
   rewardMultiplier(antimatter) {

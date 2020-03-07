@@ -75,6 +75,7 @@ Vue.component("alchemy-tab", {
     return {
       infoResourceId: 0,
       focusedResourceId: -1,
+      reactionsAvailable: false,
       realityCreationAvailable: false,
       reactionProgress: 0,
       estimatedCap: 0,
@@ -100,6 +101,7 @@ Vue.component("alchemy-tab", {
   },
   methods: {
     update() {
+      this.reactionsAvailable = AlchemyResources.all.filter(res => !res.isBaseResource && res.isUnlocked).length !== 0;
       this.realityCreationAvailable = AlchemyResource.reality.amount !== 0;
       const animationTime = 800;
       this.reactionProgress = (player.realTimePlayed % animationTime) / animationTime;
@@ -209,7 +211,7 @@ Vue.component("alchemy-tab", {
     `<div class="l-ra-alchemy-tab">
       <div @click="showAlchemyHowTo()" class="o-primary-btn">Click for alchemy info</div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      Resource cap, based on last 10 realities: {{ format(estimatedCap, 3, 2) }}
+      Resource cap, based on glyph level in last 10 realities: {{ format(estimatedCap, 3, 2) }}
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">
           <circle
@@ -243,8 +245,12 @@ Vue.component("alchemy-tab", {
           />
         </svg>
       </div>
-      <button class="o-primary-btn" @click="setAllReactions(true)">Turn on all reactions</button>
-      <button class="o-primary-btn" @click="setAllReactions(false)">Turn off all reactions</button>
+      <div v-if="reactionsAvailable">
+        <button class="o-primary-btn" @click="setAllReactions(true)">Turn on all reactions</button>
+        <button class="o-primary-btn" @click="setAllReactions(false)">Turn off all reactions</button>
+        <br>
+        Reactions trigger once every time you reality.
+      </div>
       <primary-button
         v-if="realityCreationAvailable"
         class="o-primary-btn"

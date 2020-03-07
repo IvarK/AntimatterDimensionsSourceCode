@@ -73,6 +73,7 @@ const Laitela = {
     return true;
   },
   startRun() {
+    player.options.retryCelestial = false;
     this.celestial.run = startRealityOver() || this.celestial.run;
   },
   get isRunning() {

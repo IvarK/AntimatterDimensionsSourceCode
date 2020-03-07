@@ -334,7 +334,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.MOMENTUM)) {
-    const cappedTime = Math.min(Time.thisRealityRealTime.totalMinutes, 7 * 24 * 60);
+    const cappedTime = Math.clampMax(Time.thisRealityRealTime.totalMinutes, 7 * 24 * 60);
     factor *= Math.pow(AlchemyResource.momentum.effectValue, cappedTime);
   }
 
@@ -386,7 +386,11 @@ function gameLoop(diff, options = {}) {
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
     : diff;
 
-  // Matter dimensions bypass any kind of stored time mechanics
+  // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.
+  // This is in order to prevent players from using time inside of Ra's reality for amplification as well
+  Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
+
+  // Lai'tela mechanics should bypass stored real time entirely
   Laitela.handleMatterDimensionUnlocks();
   matterDimensionLoop(realDiff);
 
@@ -698,7 +702,7 @@ function simulateTime(seconds, real, fast) {
       const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
         numberOfTicksRemaining, 0.0001);
       remainingRealSeconds -= realTickTime;
-      gameLoop(1000 * realTickTime, { blackHoleSpeedup: blackHoleSpeedup });
+      gameLoop(1000 * realTickTime, { blackHoleSpeedup });
     }
   } else {
     for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {

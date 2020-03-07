@@ -350,6 +350,7 @@ let player = {
       unlockBits: 0,
       run: false,
       bestRunAM: new Decimal(1),
+      bestAMSet: [],
       perkShop: Array.repeat(0, 5)
     },
     effarig: {
@@ -403,32 +404,31 @@ let player = {
       ppSpent: 0,
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],
-      // The number of glyphs for reality goes down with tier, so 6 - num instead (6 means reality
-      // has not been completed)
-      runRecords: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      cursedThisRun: 0
+      // The -10 is for glyph count, as glyph count for V is stored internally as a negative number
+      runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0],
+      maxGlyphsThisRun: 0
     },
     ra: {
       pets: {
         teresa: {
           level: 1,
-          exp: 0,
-          lastEPGained: new Decimal(0)
+          memoryChunks: 0,
+          exp: 0
         },
         effarig: {
           level: 1,
-          exp: 0,
-          lastGlyphCount: 5
+          memoryChunks: 0,
+          exp: 0
         },
         enslaved: {
           level: 1,
-          exp: 0,
-          lastTimeTaken: Number.MAX_VALUE
+          memoryChunks: 0,
+          exp: 0
         },
         v: {
           level: 1,
-          exp: 0,
-          lastTTPurchased: 0
+          memoryChunks: 0,
+          exp: 0
         }
       },
       alchemy: Array.repeat(0, 21)
@@ -448,6 +448,7 @@ let player = {
         upgradeBits: 0,
         respec: false
       },
+      petWithRecollection: ""
     },
     laitela: {
       matter: new Decimal(0),

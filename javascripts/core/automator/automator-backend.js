@@ -195,7 +195,7 @@ const AutomatorBackend = {
   },
 
   get currentInterval() {
-    return Math.max(Math.pow(0.994, player.realities) * 500, 1);
+    return Math.clampMin(Math.pow(0.994, player.realities) * 500, 1);
   },
 
   update(diff) {

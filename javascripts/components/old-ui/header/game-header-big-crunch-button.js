@@ -8,6 +8,7 @@ Vue.component("game-header-big-crunch-button", {
       currentIPPM: new Decimal(0),
       peakIPPM: new Decimal(0),
       currentIP: new Decimal(0),
+      tesseractCost: new Decimal(0),
     };
   },
   computed: {
@@ -39,7 +40,12 @@ Vue.component("game-header-big-crunch-button", {
         ];
       }
       return { color: `rgb(${rgb.join(",")})` };
-    }
+    },
+    classObject() {
+      return {
+        "c-game-header__tesseract-available": this.currentIP.gt(this.tesseractCost),
+      };
+    },
   },
   methods: {
     update() {
@@ -57,12 +63,14 @@ Vue.component("game-header-big-crunch-button", {
       if (this.isPeakIPPMVisible) {
         this.currentIPPM.copyFrom(gainedIP.dividedBy(Time.thisInfinityRealTime.totalMinutes));
       }
+      this.tesseractCost = Enslaved.tesseractCost;
     }
   },
   template:
     `<button
       v-if="isVisible"
       class="o-prestige-btn o-prestige-btn--big-crunch l-game-header__big-crunch-btn"
+      :class="classObject"
       onclick="bigCrunchResetRequest()"
     >
       <b>Big Crunch for

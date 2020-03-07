@@ -76,7 +76,7 @@ Vue.component("sacrificed-glyphs", {
     };
   },
   computed: {
-    types: () => GLYPH_TYPES,
+    types: () => GLYPH_TYPES.filter(type => type !== "cursed"),
   },
   methods: {
     update() {

@@ -1268,7 +1268,7 @@ screen and (max-width: 480px) {
 }
 
 .o-primary-btn--glyph-trash {
-  width: 25rem;
+  width: 30rem;
   height: 4.5rem;
   font-size: 1rem;
 }
@@ -1676,6 +1676,17 @@ screen and (max-width: 480px) {
 .c-game-header__infinity-points {
   font-size: 1.2rem;
   width: 21rem;
+}
+
+.c-game-header__tesseract-available {
+  animation: a-tesseract-shift 5s infinite;
+}
+
+.t-dark .c-game-header__tesseract-available,
+.t-dark-metro .c-game-header__tesseract-available,
+.t-s6 .c-game-header__tesseract-available {
+  background: #EEEEEE;
+  animation: a-tesseract-shift-dark 5s infinite;
 }
 
 .c-game-header__ip-amount {
@@ -5607,7 +5618,6 @@ kbd {
   height: 100%;
   width: 100%;
   transform: skewY(-30deg) rotate(60deg);
-  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -5762,18 +5772,18 @@ kbd {
 }
 
 .l-ra-reality-container {
-  height: 30rem;
+  height: 25rem;
   background: radial-gradient(ellipse at center, #35d035 55%, gainsboro);
   border-radius: 2rem;
-  flex: none none 50rem;
-  width: 50rem;
-  margin: 2.5rem 5rem;
+  flex: none none 20rem;
+  width: 30rem;
+  margin: 2rem;
   cursor: pointer;
 }
 
 .l-ra-reality-inner {
   font-family: Typewriter;
-  margin: 2.5rem;
+  margin: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -5790,12 +5800,47 @@ kbd {
   margin: 0 1rem;
 }
 
-.l-ra-laitela-unlock {
-  height: 30rem;
-  margin: 2.5rem 5rem;
+.l-ra-recollection-unlock {
+  height: 25rem;
+  background: radial-gradient(ellipse at center, #c0c0c0 55%, gainsboro);
   border-radius: 2rem;
-  flex: none none 30rem;
+  flex: none none 20rem;
+  width: 30rem;
+  margin: 2rem;
+}
+
+.l-ra-recollection-unlock-inner {
+  font-family: Typewriter;
+  height: 15rem;
+  margin: 1rem 3rem;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.l-ra-pet-recollection-button-container {
+  float: left;
+  width: 50%;
+  height: 40%;
+}
+
+.l-ra-pet-recollection-button {
+  font-size: 1.2rem;
+  text-align: center;
+  font-family: Typewriter;
+  height: 6rem;
+  border-radius: 1rem;
+  flex: none none 6rem;
+  width: 12rem;
+}
+
+.l-ra-laitela-unlock {
+  height: 25rem;
+  width: 30rem;
+  margin: 2rem;
+  border-radius: 2rem;
+  flex: none none 20rem;
   animation: a-ra-color-shift 10s infinite;
+  pointer-events: none;
 }
 @keyframes a-ra-color-shift {
   0% { background-color: #86ea84; }
@@ -5807,8 +5852,8 @@ kbd {
 
 .l-ra-laitela-unlock-inner {
   font-family: Typewriter;
-  height: 20rem;
-  margin: 5rem;
+  height: 15rem;
+  margin: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -5818,7 +5863,6 @@ kbd {
   margin: auto;
   width: 80rem;
   height: 100%;
-  overflow: hidden;
 }
 
 .l-ra-unlock {

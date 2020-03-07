@@ -129,6 +129,7 @@ const GlyphTooltipComponent = {
       };
     },
     description() {
+      if (this.type === "cursed") return "Cursed Glyph";
       const name = this.type === "reality" ? "Pure" : this.rarityInfo.name;
       const rarity = this.type === "reality" ? "" : `(${this.roundedRarity.toFixed(1)}%)`;
       return `${name} Glyph of ${this.type.charAt(0).toUpperCase()}${this.type.slice(1)} ${rarity}`;
@@ -150,6 +151,7 @@ const GlyphTooltipComponent = {
       return { color };
     },
     sacrificeText() {
+      if (this.type === "cursed") return "Cannot be sacrificed or refined";
       if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY && this.type !== "reality") {
         const refinementText = `${format(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
         const limitText = this.sacrificeReward === 0
@@ -407,7 +409,7 @@ Vue.component("glyph-component", {
     },
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY
+      this.sacrificeReward = AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY && this.glyph.type !== "cursed"
         ? glyphRefinementGain(this.glyph)
         : glyphSacrificeGain(this.glyph);
       this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);

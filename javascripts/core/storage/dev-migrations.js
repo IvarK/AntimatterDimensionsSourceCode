@@ -546,7 +546,12 @@ GameStorage.devMigrations = {
     },
     player => {
       delete player.celestials.v.cursedThisRun;
-    }
+    },
+    player => {
+      // Reset Ra unlocks again, because apparently Ra-Teresa Lv1 upgrades were always active due to an oversight
+      player.celestials.ra.unlockBits = 0;
+      Ra.checkForUnlocks();
+    },
   ],
 
   patch(player) {

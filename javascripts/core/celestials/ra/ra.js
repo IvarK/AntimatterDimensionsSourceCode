@@ -201,6 +201,7 @@ const Ra = {
     return this.pets.all.map(pet => (pet.isUnlocked ? pet.level : 0)).sum();
   },
   checkForUnlocks() {
+    if (!V.has(V_UNLOCKS.RA_UNLOCK)) return;
     for (const unl of Object.values(RA_UNLOCKS)) {
       const isUnlockable = unl.totalLevels === undefined
         ? unl.pet.isUnlocked && unl.pet.level >= unl.level

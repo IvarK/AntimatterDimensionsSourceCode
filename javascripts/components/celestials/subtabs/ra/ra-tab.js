@@ -100,7 +100,7 @@ Vue.component("ra-tab", {
           </div>
           <div v-else class="l-ra-recollection-unlock-inner">
             Unlocked by getting {{ formatInt(recollectionReq) }} total celestial levels
-            (You need {{formatInt(recollectionReq - totalLevels)}} more)
+            (you need {{formatInt(recollectionReq - totalLevels)}} more)
           </div>
         </div>
         <button class="l-ra-laitela-unlock" v-if="showLaitela">
@@ -110,7 +110,7 @@ Vue.component("ra-tab", {
             <p>
               Unlocked by getting {{ formatInt(laitelaReq) }} total celestial levels
               <span v-if="totalLevels < laitelaReq">
-                (You need {{formatInt(laitelaReq - totalLevels)}} more)
+                (you need {{formatInt(laitelaReq - totalLevels)}} more)
               </span>
             </p>
           </div>

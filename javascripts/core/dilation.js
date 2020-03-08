@@ -124,13 +124,13 @@ function tachyonGainMultiplier() {
 }
 
 function rewardTP() {
-  player.dilation.tachyonParticles = Decimal.max(player.dilation.tachyonParticles, getTP());
+  player.dilation.tachyonParticles = Decimal.max(player.dilation.tachyonParticles, getTP(player.antimatter));
 }
 
 // Returns the TP that would be gained this run
-function getTP() {
+function getTP(antimatter) {
   let tachyon = Decimal
-    .pow(Decimal.log10(player.antimatter) / 400, 1.5)
+    .pow(Decimal.log10(antimatter) / 400, 1.5)
     .times(tachyonGainMultiplier());
   if (Enslaved.isRunning) tachyon = tachyon.pow(Enslaved.tachyonNerf);
   return tachyon;
@@ -138,7 +138,7 @@ function getTP() {
 
 // Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
 function getTachyonGain() {
-  return getTP().minus(player.dilation.tachyonParticles).clampMin(0);
+  return getTP(player.antimatter).minus(player.dilation.tachyonParticles).clampMin(0);
 }
 
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes

@@ -5618,7 +5618,6 @@ kbd {
   height: 100%;
   width: 100%;
   transform: skewY(-30deg) rotate(60deg);
-  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;

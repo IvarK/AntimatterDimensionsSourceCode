@@ -39,11 +39,11 @@ Vue.component("ra-pet", {
         case "Teresa":
           return "Based on EP";
         case "Effarig":
-          return "Based on relic shards gained";
+          return "Based on Relic Shards gained";
         case "Enslaved":
-          return "Based on time shards";
+          return "Based on Time Shards";
         case "V":
-          return "Based on infinity power";
+          return "Based on Infinity Power";
         default:
           throw new Error(`Unrecognized celestial ${this.petConfig.pet.name} in Ra UI`);
       }

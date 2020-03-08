@@ -23,9 +23,12 @@ Vue.component("ra-pet-level-bar", {
       return this.unlocks.map(u => u.level);
     },
     multiLevelStyle() {
-      const expFraction = (Ra.totalExpForLevel(this.level) + this.exp) / Ra.totalExpForLevel(this.nextGoal);
+      const startScl = Math.sqrt(Ra.totalExpForLevel(this.prevGoal));
+      const endScl = Math.sqrt(Ra.totalExpForLevel(this.nextGoal));
+      const currentScl = Math.sqrt(Ra.totalExpForLevel(this.level) + this.exp);
+      const expFraction = (currentScl - startScl) / (endScl - startScl);
       return {
-        width: `${100 * Math.sqrt(Math.clampMax(expFraction, 1))}%`
+        width: `${100 * Math.clampMax(expFraction, 1)}%`
       };
     },
     singleLevelStyle() {
@@ -38,9 +41,15 @@ Vue.component("ra-pet-level-bar", {
         "background-color": this.pet.color
       };
     },
+    prevGoal() {
+      const currentUpgrades = this.importantLevels.filter(goal => goal <= this.level);
+      return currentUpgrades.length === this.importantLevels.length
+        ? 5 * Math.floor(this.level / 5)
+        : currentUpgrades.max();
+    },
     nextGoal() {
       const missingUpgrades = this.importantLevels.filter(goal => goal > this.level);
-      return missingUpgrades.length === 0 ? 25 : missingUpgrades.min();
+      return missingUpgrades.length === 0 ? this.prevGoal + 5 : missingUpgrades.min();
     },
     currentLevelGoal() {
       if (this.shiftDown) return this.level + 1;
@@ -66,7 +75,7 @@ Vue.component("ra-pet-level-bar", {
         <div v-if="shiftDown">
           <ra-level-chevron v-for="lvl in 2"
             :key="currentLevelGoal - 2 + lvl"
-            :level ="currentLevelGoal - 2 + lvl"
+            :level="currentLevelGoal - 2 + lvl"
             :goal="currentLevelGoal"
             :singleLevel="true"
             :isImportantLevel="isImportant(lvl)"
@@ -75,6 +84,7 @@ Vue.component("ra-pet-level-bar", {
         <div v-else>
           <ra-level-chevron v-for="lvl in currentLevelGoal"
             :key="lvl"
+            :minLevel="prevGoal"
             :level="lvl"
             :goal="currentLevelGoal"
             :isImportantLevel="isImportant(lvl)"

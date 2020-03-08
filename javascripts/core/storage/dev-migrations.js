@@ -539,7 +539,19 @@ GameStorage.devMigrations = {
       // Some older saves have screwed up Ra unlocks for some reason, this should fix that
       player.celestials.ra.unlockBits = 0;
       Ra.checkForUnlocks();
-    }
+    },
+    player => {
+      // Required for compatibility after V records refactor
+      player.celestials.v.runRecords[0] = -10;
+    },
+    player => {
+      delete player.celestials.v.cursedThisRun;
+    },
+    player => {
+      // Reset Ra unlocks again, because apparently Ra-Teresa Lv1 upgrades were always active due to an oversight
+      player.celestials.ra.unlockBits = 0;
+      Ra.checkForUnlocks();
+    },
   ],
 
   patch(player) {

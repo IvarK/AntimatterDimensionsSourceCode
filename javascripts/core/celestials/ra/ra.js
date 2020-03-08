@@ -186,7 +186,8 @@ const Ra = {
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredExpForLevel(level) {
-    const adjustedLevel = level + Math.pow(level, 2) / 10;
+    let adjustedLevel = level + Math.pow(level, 2) / 10;
+    if (level > 25) adjustedLevel *= Math.pow(1.3, level - 25);
     return Math.floor(Math.pow(adjustedLevel, 4) * 1e5);
   },
   // Calculates the cumulative exp needed to REACH a level starting from nothing.
@@ -200,6 +201,7 @@ const Ra = {
     return this.pets.all.map(pet => (pet.isUnlocked ? pet.level : 0)).sum();
   },
   checkForUnlocks() {
+    if (!V.has(V_UNLOCKS.RA_UNLOCK)) return;
     for (const unl of Object.values(RA_UNLOCKS)) {
       const isUnlockable = unl.totalLevels === undefined
         ? unl.pet.isUnlocked && unl.pet.level >= unl.level
@@ -333,32 +335,40 @@ const GlyphAlteration = {
 Ra.pets.all = [Ra.pets.teresa, Ra.pets.effarig, Ra.pets.enslaved, Ra.pets.v];
 
 const RA_UNLOCKS = {
-  CHARGE: {
+  AUTO_TP: {
     id: 0,
+    description: "Unlock Teresa",
+    reward: "Tachyon Particles are given immediately when Time Dilation is active",
+    pet: Ra.pets.teresa,
+    level: 1,
+    displayIcon: `<span class="fas fa-atom"></span>`
+  },
+  CHARGE: {
+    id: 1,
     description: "Get Teresa to level 2",
-    reward: "Unlock charging of Infinity upgrades (one every 2 levels)",
+    reward: () => `Unlock charging of Infinity upgrades (one every ${formatInt(2)} levels)`,
     pet: Ra.pets.teresa,
     level: 2,
     displayIcon: `<span class="fas fa-infinity"></span>`
   },
   TERESA_XP: {
-    id: 1,
+    id: 2,
     description: "Get Teresa to level 5",
     reward: "All memory chunks produce more memories based on RM",
     pet: Ra.pets.teresa,
     level: 5,
     displayIcon: `Δ`
   },
-  AUTO_TP: {
-    id: 2,
-    description: "Get Teresa to level 25",
-    reward: "Tachyon Particles are given immediately during dilation",
+  ALTERED_GLYPHS: {
+    id: 3,
+    description: "Get Teresa to level 8",
+    reward: "Unlock Altered Glyphs (effects improved based on glyph sacrifice)",
     pet: Ra.pets.teresa,
-    level: 25,
-    displayIcon: `<span class="fas fa-atom"></span>`
+    level: 8,
+    displayIcon: `<span class="fas fa-bolt"></span>`
   },
   EFFARIG_UNLOCK: {
-    id: 3,
+    id: 4,
     description: "Get Teresa to level 10",
     reward: "Unlock Effarig's memories",
     pet: Ra.pets.teresa,
@@ -366,23 +376,33 @@ const RA_UNLOCKS = {
     displayIcon: `Ϙ`
   },
   PERK_SHOP_INCREASE: {
-    id: 4,
+    id: 5,
     description: "Get Teresa to level 15",
     reward: "Perk shop caps are raised",
     pet: Ra.pets.teresa,
     level: 15,
     displayIcon: `<span class="fas fa-project-diagram"></span>`
   },
-  ALTERED_GLYPHS: {
-    id: 5,
-    description: "Get Teresa to level 8",
-    reward: "Unlock Altered Glyphs (effects improved based on glyph sacrifice)",
+  START_TP: {
+    id: 6,
+    description: "Get Teresa to level 25",
+    reward: `When unlocking Time Dilation in non-celestial Realities, gain TP as if you reached the square root
+      of your total antimatter in Dilation`,
+    effect: () => player.totalAntimatter.pow(0.5),
     pet: Ra.pets.teresa,
-    level: 8,
-    displayIcon: `<span class="fas fa-bolt"></span>`
+    level: 25,
+    displayIcon: `<i class="far fa-dot-circle"></i>`
+  },
+  GLYPH_CHOICES: {
+    id: 7,
+    description: "Unlock Effarig",
+    reward: "Choose from twice as many glyphs",
+    pet: Ra.pets.effarig,
+    level: 1,
+    displayIcon: `<i class="fas fa-grip-horizontal"></i>`
   },
   GLYPH_ALCHEMY: {
-    id: 6,
+    id: 8,
     description: "Get Effarig to level 2",
     reward: "Unlock Glyph Alchemy (one resource per level)",
     pet: Ra.pets.effarig,
@@ -390,7 +410,7 @@ const RA_UNLOCKS = {
     displayIcon: `<span class="fas fa-vial"></span>`
   },
   EFFARIG_XP: {
-    id: 7,
+    id: 9,
     description: "Get Effarig to level 5",
     reward: "All memory chunks produce more memories based on highest glyph level",
     pet: Ra.pets.effarig,
@@ -398,15 +418,15 @@ const RA_UNLOCKS = {
     displayIcon: `<span class="fas fa-clone"></span>`
   },
   GLYPH_EFFECT_COUNT: {
-    id: 8,
+    id: 10,
     description: "Get Effarig to level 8",
-    reward: "Double your glyph choices and glyphs always have 4 effects (Effarig glyphs can now have more)",
+    reward: () => `Glyphs always have ${formatInt(4)} effects (Effarig glyphs can now have more)`,
     pet: Ra.pets.effarig,
     level: 8,
     displayIcon: `<span class="fas fa-braille"></span>`
   },
   ENSLAVED_UNLOCK: {
-    id: 9,
+    id: 11,
     description: "Get Effarig to level 10",
     reward: "Unlock Enslaved's memories",
     pet: Ra.pets.effarig,
@@ -414,7 +434,7 @@ const RA_UNLOCKS = {
     displayIcon: `<span class="fas fa-link"></span>`
   },
   SHARD_LEVEL_BOOST: {
-    id: 10,
+    id: 12,
     description: "Get Effarig to level 15",
     reward: "Glyph level is increased based on relic shards gained",
     effect: () => 100 * Math.pow(Math.log10(Math.max(Effarig.shardsGained, 1)), 2),
@@ -422,16 +442,24 @@ const RA_UNLOCKS = {
     level: 15,
     displayIcon: `<span class="fas fa-fire"></span>`
   },
-  AUTO_BLACK_HOLE_POWER: {
-    id: 11,
+  MAX_RARITY: {
+    id: 13,
     description: "Get Effarig to level 25",
-    reward: "Black hole power upgrades are bought automatically",
+    reward: () => `Glyphs are always generated with ${formatPercents(1)} rarity`,
     pet: Ra.pets.effarig,
     level: 25,
+    displayIcon: `<i class="fas fa-ankh"></i>`
+  },
+  AUTO_BLACK_HOLE_POWER: {
+    id: 14,
+    description: "Unlock Enslaved",
+    reward: "Black hole power upgrades are bought automatically",
+    pet: Ra.pets.enslaved,
+    level: 1,
     displayIcon: `<span class="fas fa-circle"></span>`
   },
   IMPROVED_STORED_TIME: {
-    id: 12,
+    id: 15,
     description: "Get Enslaved to level 2",
     reward: "Stored game time is amplified and you can store more real time (scales with level)",
     effect: {
@@ -443,7 +471,7 @@ const RA_UNLOCKS = {
     displayIcon: `<span class="fas fa-history"></span>`
   },
   ENSLAVED_XP: {
-    id: 13,
+    id: 16,
     description: "Get Enslaved to level 5",
     reward: "All memory chunks produce more memories based on total time played",
     pet: Ra.pets.enslaved,
@@ -451,7 +479,7 @@ const RA_UNLOCKS = {
     displayIcon: `<span class="fas fa-stopwatch"></span>`
   },
   ADJUSTABLE_STORED_TIME: {
-    id: 14,
+    id: 17,
     description: "Get Enslaved to level 8",
     reward: "Stored game time can be stored at an adjustable rate and automatically released",
     pet: Ra.pets.enslaved,
@@ -459,7 +487,7 @@ const RA_UNLOCKS = {
     displayIcon: `<span class="fas fa-expand-arrows-alt"></span>`
   },
   V_UNLOCK: {
-    id: 15,
+    id: 18,
     description: "Get Enslaved to level 10",
     reward: "Unlock V's memories.",
     pet: Ra.pets.enslaved,
@@ -467,7 +495,7 @@ const RA_UNLOCKS = {
     displayIcon: `⌬`
   },
   PEAK_GAMESPEED: {
-    id: 16,
+    id: 19,
     description: "Get Enslaved to level 15",
     reward: "Gain more Dilated Time based on peak game speed in each Reality",
     pet: Ra.pets.enslaved,
@@ -475,39 +503,49 @@ const RA_UNLOCKS = {
     displayIcon: `<span class="fas fa-tachometer-alt"></span>`
   },
   TIME_COMPRESSION: {
-    id: 17,
+    id: 20,
     description: "Get Enslaved to level 25",
     reward: "Unlock Time Compression",
     pet: Ra.pets.enslaved,
     level: 25,
     displayIcon: `<span class="fas fa-compress-arrows-alt"></span>`
   },
+  AUTO_REALITY_UPGRADES: {
+    id: 21,
+    description: "Unlock V",
+    reward: "The rebuyable Reality upgrades are bought automatically",
+    pet: Ra.pets.v,
+    level: 1,
+    displayIcon: `<span class="fas fa-sync-alt"></span>`
+  },
+  INSTANT_AUTOEC: {
+    id: 22,
+    description: "Get V to level 2",
+    reward: () => `Auto-EC happens instantly and Time Dilation is unlocked automatically
+      at ${formatInt(17000)} Time Theorems`,
+    pet: Ra.pets.v,
+    level: 2,
+    displayIcon: `<span class="fas fa-fast-forward"></span>`
+  },
+  V_XP: {
+    id: 23,
+    description: "Get V to level 5",
+    reward: () => `All memory chunks produce more memories based on total pet level,
+      unlock a Triad study every ${formatInt(5)} levels`,
+    pet: Ra.pets.v,
+    level: 5,
+    displayIcon: `<span class="fas fa-book"></span>`
+  },
   HARD_V: {
-    id: 18,
+    id: 24,
     description: "Get V to level 8",
     reward: "Unlock more V-achievements.",
     pet: Ra.pets.v,
     level: 8,
     displayIcon: `<span class="fas fa-trophy"></span>`
   },
-  V_XP: {
-    id: 19,
-    description: "Get V to level 5",
-    reward: "All memory chunks produce more memories based on total pet level, unlock a Triad study every 5 levels",
-    pet: Ra.pets.v,
-    level: 5,
-    displayIcon: `<span class="fas fa-book"></span>`
-  },
-  INSTANT_AUTOEC: {
-    id: 20,
-    description: "Get V to level 2",
-    reward: "Auto-EC happens instantly and Dilation is unlocked automatically at 17000 Time Theorems",
-    pet: Ra.pets.v,
-    level: 2,
-    displayIcon: `<span class="fas fa-fast-forward"></span>`
-  },
   TT_BOOST: {
-    id: 21,
+    id: 25,
     description: "Get V to level 10",
     reward: "Time Theorems boost all forms of continuous non-dimension production",
     effect: {
@@ -523,7 +561,7 @@ const RA_UNLOCKS = {
     displayIcon: `<span class="fas fa-university"></span>`
   },
   TT_ACHIEVEMENT: {
-    id: 22,
+    id: 26,
     description: "Get V to level 15",
     reward: "Achievement multiplier applies to Time Theorem generation",
     effect: () => Achievements.power,
@@ -531,28 +569,26 @@ const RA_UNLOCKS = {
     level: 15,
     displayIcon: `<span class="fas fa-graduation-cap"></span>`
   },
-  AUTO_REALITY_UPGRADES: {
-    id: 23,
+  START_TT: {
+    id: 27,
     description: "Get V to level 25",
-    reward: "The rebuyable reality upgrades are bought automatically",
+    reward: () => `Start every non-celestial Reality with ${format(5e9)} TT`,
+    effect: 5e9,
     pet: Ra.pets.v,
     level: 25,
-    displayIcon: `<span class="fas fa-sync-alt"></span>`
+    displayIcon: `<i class="fab fa-buffer"></i>`
   },
   RA_RECOLLECTION_UNLOCK: {
-    id: 24,
+    id: 28,
     description: "Get 20 total celestial levels",
     reward: "Unlock Recollection",
     effect: 3,
     totalLevels: 20,
   },
   RA_LAITELA_UNLOCK: {
-    id: 25,
+    id: 29,
     description: "Get 80 total celestial levels",
     reward: "Unlock Lai'tela, the Celestial of Dimensions",
     totalLevels: 80,
   }
 };
-
-// Normally only checked on level up, and offline level ups don't trigger it
-EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Ra.checkForUnlocks());

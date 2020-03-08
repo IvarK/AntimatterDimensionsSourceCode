@@ -67,7 +67,7 @@ GameKeyboard.bindHotkey("h", () => {
 });
 
 GameKeyboard.bindHotkey(["ctrl+s", "meta+s"], () => {
-  GameStorage.save(manual = true);
+  GameStorage.save(false, true);
   return false;
 });
 GameKeyboard.bindHotkey(["ctrl+e", "meta+e"], () => {

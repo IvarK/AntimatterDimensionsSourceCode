@@ -81,6 +81,7 @@ const Enslaved = {
   useStoredTime(autoRelease) {
     if (EternityChallenge(12).isRunning || TimeCompression.isActive) return;
     if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
+    player.minNegativeBlackHoleThisReality = 1;
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);
     if (autoRelease) release *= 0.01;

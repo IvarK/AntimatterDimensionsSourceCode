@@ -63,6 +63,7 @@ Vue.component("challenges-header", {
       Exit Challenge
     </primary-button>
     <div>
+      <br v-if="isShowAllVisible || isAutoECVisible"/>
       <div v-if="isShowAllVisible"
         class="o-challenges-tab__header-toggle">
           <primary-button-on-off

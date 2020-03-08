@@ -176,7 +176,11 @@ class EternityChallengeState extends GameMechanicState {
     if (canEternity()) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
-      if (TimeCompression.isActive) SecretAchievement(42).unlock();
+      if (TimeCompression.isActive ||
+          (V.isRunning && player.minNegativeBlackHoleThisReality < 1)) {
+          SecretAchievement(42).unlock();
+      }
+      if (V.isRunning) player.minNegativeBlackHoleThisReality = 1;
       TimeCompression.isActive = false;
     }
     return startEternityChallenge();

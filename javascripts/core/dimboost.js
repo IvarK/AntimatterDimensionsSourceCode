@@ -49,6 +49,28 @@ class DimBoost {
     // hence there are just 4 (or 2, if in Auto DimBoosts challenge) shifts
     return DimBoost.purchasedBoosts + 4 < this.maxShiftTier;
   }
+  
+  static get challenge8MaxBoosts() {
+    // In Challenge 8, the only boosts that are useful are the first 5
+    // (the fifth unlocks sacrifice). In IC1 (Challenge 8 and Challenge 10
+    // combined, among other things), only the first 2 are useful
+    // (they unlock new dimensions).
+    // There's no actual problem with bulk letting the player get
+    // more boosts than this; it's just that boosts beyond this are pointless.
+    return NormalChallenge(10).isRunning ? 2 : 5;
+  }
+  
+  static get canBeBought() {
+    return !(NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) && !Ra.isRunning;
+  }
+  
+  static get lockText() {
+    if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) {
+      return "Locked (8th Dimension Autobuyer Challenge)";
+    }
+    if (Ra.isRunning) return "Locked (Ra's reality)";
+    return null;
+  }
 
   static get requirement() {
     return this.bulkRequirement(1);
@@ -131,7 +153,7 @@ function skipResetsIfPossible() {
 
 function softResetBtnClick() {
   if ((!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) || !DimBoost.requirement.isSatisfied) return;
-  if (Ra.isRunning) return;
+  if (!DimBoost.canBeBought) return;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
   else softReset(1);
 

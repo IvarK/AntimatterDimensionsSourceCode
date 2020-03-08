@@ -18,7 +18,7 @@ const GlyphSelection = {
       Perk.glyphChoice3
     );
     // TODO Make Ra follow GMS pattern so this isn't as dumb as it is right now
-    if (Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) baseChoices *= 2;
+    if (Ra.has(RA_UNLOCKS.GLYPH_CHOICES)) baseChoices *= 2;
     return baseChoices;
   },
 
@@ -145,6 +145,7 @@ function requestManualReality() {
   const realityProps = getRealityProps(false, false);
   if (simulatedRealityCount(false) > 0) {
     triggerManualReality(realityProps);
+    if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN)) Glyphs.autoClean();
     return;
   }
   realityProps.alreadyGotGlyph = true;
@@ -336,7 +337,6 @@ function finishProcessReality(realityProps) {
   
   const isReset = realityProps.reset;
   if (!isReset) giveRealityRewards(realityProps);
-  if (!player.options.retryCelestial || player.reality.respec) player.celestials.v.cursedThisRun = 0;
   if (!realityProps.glyphUndo) {
     Glyphs.clearUndo();
     if (player.reality.respec) respecGlyphs();
@@ -347,6 +347,7 @@ function finishProcessReality(realityProps) {
   TimeCompression.isActive = false;
   const celestialRunState = clearCelestialRuns();
   recalculateAllGlyphs();
+  Glyphs.updateGlyphCountForV(true);
 
   player.sacrificed = new Decimal(0);
 
@@ -418,7 +419,9 @@ function finishProcessReality(realityProps) {
   player.noTheoremPurchases = true;
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
-  player.timestudy.theorem = new Decimal(0);
+  player.timestudy.theorem = (Ra.has(RA_UNLOCKS.START_TT) && !isInCelestialReality())
+    ? new Decimal(RA_UNLOCKS.START_TT.effect)
+    : new Decimal(0);
   player.timestudy.amcost = new Decimal("1e20000");
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);
@@ -575,6 +578,15 @@ function clearCelestialRuns() {
   player.celestials.ra.run = false;
   player.celestials.laitela.run = false;
   return saved;
+}
+
+function isInCelestialReality() {
+  return player.celestials.teresa.run ||
+    player.celestials.effarig.run ||
+    player.celestials.enslaved.run ||
+    player.celestials.v.run ||
+    player.celestials.ra.run ||
+    player.celestials.laitela.run;
 }
 
 function startRealityOver() {

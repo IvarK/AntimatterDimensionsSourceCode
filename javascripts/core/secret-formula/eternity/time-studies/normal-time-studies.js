@@ -158,7 +158,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: 72,
       description: "Dimension Boosts affect Infinity Dimensions",
       effect: () => Decimal.pow(1.0000109, Math.pow(DimBoost.totalBoosts, 2)),
-      cap: new Decimal("1e10000000000"),
+      cap: new Decimal("1e10000000"),
       formatEffect: value => formatX(value, 2, 1)
     },
     {

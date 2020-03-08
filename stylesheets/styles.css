@@ -1604,7 +1604,7 @@ screen and (max-width: 480px) {
 .l--spoon-btn-group__little-spoon-reality-btn {
   width: 25rem;
   align-self: center;
-  margin-top: 0.3rem;
+  margin-top: -0.9rem;
 }
 
 /*#endregion l-spoon-btn-group*/

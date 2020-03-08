@@ -1234,6 +1234,18 @@ class RebuyableRealityUpgradeState extends RebuyableMechanicState {
   set boughtAmount(value) {
     player.reality.rebuyables[this.id] = value;
   }
+  
+  get autobuyerId() {
+    return this.id - 1;
+  }
+  
+  get isAutobuyerOn() {
+    return player.reality.rebuyablesAuto[this.autobuyerId];
+  }
+
+  set isAutobuyerOn(value) {
+    player.reality.rebuyablesAuto[this.autobuyerId] = value;
+  }
 }
 
 RealityUpgradeState.index = mapGameData(

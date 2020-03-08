@@ -6,7 +6,9 @@ Vue.component("glyph-inventory", {
       inventory: [],
       showScoreFilter: false,
       doubleClickTimeOut: null,
-      clickedGlyphId: null
+      clickedGlyphId: null,
+      showAutoAutoClean: false,
+      isAutoAutoCleanOn: false
     };
   },
   computed: {
@@ -17,9 +19,16 @@ Vue.component("glyph-inventory", {
     this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
   },
+  watch: {
+    isAutoAutoCleanOn(newValue) {
+      player.reality.autoAutoClean = newValue;
+    }
+  },
   methods: {
     update() {
       this.showScoreFilter = EffarigUnlock.autosacrifice.isUnlocked;
+      this.showAutoAutoClean = V.has(V_UNLOCKS.AUTO_AUTOCLEAN);
+      this.isAutoAutoCleanOn = player.reality.autoAutoClean;
     },
     toIndex(row, col) {
       return (row - 1) * this.colCount + (col - 1);
@@ -122,6 +131,12 @@ Vue.component("glyph-inventory", {
              @click="autoClean">
        Auto clean
       </button>
+      <primary-button-on-off
+        v-if="showAutoAutoClean"
+        v-model="isAutoAutoCleanOn"
+        class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        text="Auto auto-clean:"
+      />
     </div>
   </div>
   `,

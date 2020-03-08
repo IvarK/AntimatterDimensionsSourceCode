@@ -518,9 +518,10 @@ let player = {
       eternity: true,
       dilation: true,
       reality: true,
-      glyphSacrifice: true,
-      glyphUndo: true,
       glyphReplace: true,
+      glyphSacrifice: true,
+      glyphTrash: true,
+      glyphUndo: true,
     }
   },
 };

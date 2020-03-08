@@ -462,7 +462,7 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     glyphTypes: ["power"],
     singleDesc: () => (GlyphAlteration.isAdded("power")
-      ? "Normal Dimension power +{value}\n[and Antimatter Galaxy requirement ×]{value2}"
+      ? "Normal Dimension power +{value}\n[and Antimatter Galaxy cost ×]{value2}"
       : "Normal Dimension power +{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("power")
       ? "ND multipliers ^{value} and galaxy cost x{value2}"

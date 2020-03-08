@@ -36,9 +36,8 @@ class BlackHoleUpgradeState {
   get isAutobuyerOn() {
     if (this.hasAutobuyer) {
       return player.blackHole[this.autobuyerId].autoPower;
-    } else {
-      throw new Error("Trying to get status of the autobuyer of a black hole upgrade without an autobuyer.");
     }
+    throw new Error("Trying to get status of the autobuyer of a black hole upgrade without an autobuyer.");
   }
 
   set isAutobuyerOn(value) {

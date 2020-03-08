@@ -28,16 +28,16 @@ class Galaxy {
    * @returns {number} Max number of galaxies (total)
    */
   static buyableGalaxies(currency) {
-    let constantTerm = Galaxy.baseCost;
-    let linearTerm = Galaxy.costMult;
-    let quadraticBegin = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart - 1;
+    const constantTerm = Galaxy.baseCost;
+    const linearTerm = Galaxy.costMult;
+    const quadraticBegin = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart - 1;
     // Separate because it's applied post remote scaling:
     const finalOffset = Effects.sum(InfinityUpgrade.resetBoost) +
       (InfinityChallenge(5).isCompleted ? 1 : 0);
       
     const costDivision = GlyphAlteration.isAdded("power") ? getSecondaryGlyphEffect("powerpow") : 1;
     
-    let quantity = (currency / costDivision - constantTerm + finalOffset) / linearTerm;
+    const quantity = (currency / costDivision - constantTerm + finalOffset) / linearTerm;
     
     let unroundedGalaxyAmount;
     
@@ -48,9 +48,9 @@ class Galaxy {
       // x + x ** 2 / linearTerm - 2 * x * quadraticBegin / linearTerm + quadraticBegin ** 2 / linearTerm +
       // x / linearTerm - quadraticBegin / linearTerm = (1 / linearTerm) * x ** 2 +
       // (1 + (-2 * quadraticBegin + 1) / linearTerm) * x + (quadraticBegin ** 2 - quadraticBegin) / linearTerm.
-      let quadraticCoefficient = 1 / linearTerm;
-      let linearCoefficient = 1 + (-2 * quadraticBegin + 1) / linearTerm;
-      let constantCoefficient = (Math.pow(quadraticBegin, 2) - quadraticBegin) / linearTerm - quantity;
+      const quadraticCoefficient = 1 / linearTerm;
+      const linearCoefficient = 1 + (-2 * quadraticBegin + 1) / linearTerm;
+      const constantCoefficient = (Math.pow(quadraticBegin, 2) - quadraticBegin) / linearTerm - quantity;
       unroundedGalaxyAmount = (-linearCoefficient + Math.sqrt(
         Math.pow(linearCoefficient, 2) - 4 * quadraticCoefficient * constantCoefficient)) / (2 * quadraticCoefficient);
     }
@@ -89,13 +89,13 @@ class Galaxy {
     }
 
     if (type === GALAXY_TYPE.REMOTE) {
-      amount = amount * Math.pow(1.002, galaxies - 800);
+      amount *= Math.pow(1.002, galaxies - 800);
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
     if (InfinityChallenge(5).isCompleted) amount -= 1;
     
-    if (GlyphAlteration.isAdded("power")) amount = amount * getSecondaryGlyphEffect("powerpow");
+    if (GlyphAlteration.isAdded("power")) amount *= getSecondaryGlyphEffect("powerpow");
     
     amount = Math.floor(amount);
     const tier = Galaxy.requiredTier;

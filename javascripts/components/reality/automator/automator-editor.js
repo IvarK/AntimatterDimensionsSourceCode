@@ -117,6 +117,7 @@ Vue.component("automator-editor", {
       }
       this.$nextTick(() => this.editingName = false);
     },
+
     dropdownLabel(script) {
       let label = script.name;
       if (script.id === this.runningScriptID) {
@@ -124,11 +125,6 @@ Vue.component("automator-editor", {
         else if (this.isPaused) label += " (Paused)";
       }
       return label;
-    },
-
-    startAutomator() {
-      BlockAutomator.parseTextFromBlocks();
-      this.$nextTick(() => AutomatorTextUI.editor.refresh());
     },
 
     toggleAutomatorMode() {
@@ -153,7 +149,7 @@ Vue.component("automator-editor", {
   template:
     `<div class="l-automator-pane">
       <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
-        <automator-controls @automatorplay="startAutomator"/>
+        <automator-controls />
         <div class="l-automator__script-names">
           <template v-if="!editingName">
             <select class="l-automator__scripts-dropdown"

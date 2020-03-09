@@ -22,9 +22,6 @@ Vue.component("automator-single-block", {
   mounted() {
     this.b = this.block;
   },
-  created() {
-    this.parseRequest();
-  },
   methods: {
     parseRequest() {
       BlockAutomator.parseTextFromBlocks();

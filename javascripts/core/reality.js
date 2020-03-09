@@ -145,6 +145,7 @@ function requestManualReality() {
   const realityProps = getRealityProps(false, false);
   if (simulatedRealityCount(false) > 0) {
     triggerManualReality(realityProps);
+    if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) Glyphs.autoClean();
     return;
   }
   realityProps.alreadyGotGlyph = true;
@@ -227,6 +228,7 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   beginProcessReality(getRealityProps(false, false));
+  if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) Glyphs.autoClean();
 }
 
 function updateRealityRecords(realityProps) {
@@ -341,8 +343,6 @@ function finishProcessReality(realityProps) {
     if (player.celestials.ra.disCharge) disChargeAll();
     if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
   }
-  
-  if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) Glyphs.autoClean();
 
   TimeCompression.isActive = false;
   const celestialRunState = clearCelestialRuns();

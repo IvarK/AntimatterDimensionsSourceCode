@@ -120,9 +120,9 @@ Vue.component("glyph-inventory", {
           Sort by score
       </button>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-             :ach-tooltip="glyphSacrificeUnlocked ? 'Sacrifice' : 'Delete' +
-             ' glyphs that are worse in every way than enough other glyphs'"
-             @click="autoClean">
+            :ach-tooltip="(glyphSacrificeUnlocked ? 'Sacrifice' : 'Delete') +
+              ' glyphs that are worse in every way than enough other glyphs'"
+            @click="autoClean">
        Auto clean
       </button>
     </div>

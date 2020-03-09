@@ -462,7 +462,7 @@ const AutomatorCommands = ((() => {
       compile: ctx => {
         const presetIndex = ctx.$presetIndex;
         return () => {
-          importStudyTree(player.timestudy.presets[presetIndex - 1].studies);
+          importStudyTree(player.timestudy.presets[presetIndex - 1].studies, true);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },

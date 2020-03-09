@@ -25,7 +25,7 @@ Vue.component("automator-editor", {
       }
     },
     currentScript() {
-      return AutomatorTextUI.documents[this.currentScriptID].getValue()
+      return CodeMirror.Doc(player.reality.automator.scripts[this.currentScriptID].content, "automato").getValue();
     },
     playTooltip() {
       if (this.isRunning) return undefined;

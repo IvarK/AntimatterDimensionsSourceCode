@@ -128,7 +128,7 @@ const V_UNLOCKS = {
   },
   AUTO_AUTOCLEAN: {
     id: 4,
-    reward: "Glyph Auto-clean triggers automatically after every reality.",
+    reward: "Glyph Auto-clean triggers automatically after every automatic reality.",
     description: "Have 16 V-achievements",
     requirement: () => V.spaceTheorems >= 16
   },

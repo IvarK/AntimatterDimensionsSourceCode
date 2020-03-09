@@ -13,6 +13,8 @@ class BlackHoleUpgradeState {
       new Decimal("1e310"),
       1e5,
       10));
+    this.id = config.id;
+    this.hasAutobuyer = config.hasAutobuyer;
   }
 
   get value() {
@@ -25,6 +27,25 @@ class BlackHoleUpgradeState {
 
   get isAffordable() {
     return player.reality.realityMachines.gte(this.cost);
+  }
+  
+  get autobuyerId() {
+    return this.id - 1;
+  }
+  
+  get isAutobuyerOn() {
+    if (this.hasAutobuyer) {
+      return player.blackHole[this.autobuyerId].autoPower;
+    }
+    throw new Error("Trying to get status of the autobuyer of a black hole upgrade without an autobuyer.");
+  }
+
+  set isAutobuyerOn(value) {
+    if (this.hasAutobuyer) {
+      player.blackHole[this.autobuyerId].autoPower = value;
+    } else {
+      throw new Error("Trying to set status of the autobuyer of a black hole upgrade without an autobuyer.");
+    }
   }
 
   purchase() {
@@ -40,33 +61,39 @@ class BlackHoleUpgradeState {
 class BlackHoleState {
   constructor(id) {
     this.id = id + 1;
-    const wormholeCostMultipliers = [1, 1000];
+    const blackHoleCostMultipliers = [1, 1000];
     // Interval: starts at 3600, x0.8 per upgrade, upgrade cost goes x3.5, starts at 15
     this.intervalUpgrade = new BlackHoleUpgradeState({
+      id: this.id,
       getAmount: () => this._data.intervalUpgrades,
       setAmount: amount => this._data.intervalUpgrades = amount,
       calculateValue: amount => {
         const baseAmount = (3600 / (Math.pow(10, id))) * Math.pow(0.8, amount);
         return baseAmount < 0.1 ? 0 : baseAmount;
       },
-      initialCost: 15 * wormholeCostMultipliers[id],
-      costMult: 3.5
+      initialCost: 15 * blackHoleCostMultipliers[id],
+      costMult: 3.5,
+      hasAutobuyer: false,
     });
     // Power: starts at 5, x1.35 per upgrade, cost goes x2, starts at 20
     this.powerUpgrade = new BlackHoleUpgradeState({
+      id: this.id,
       getAmount: () => this._data.powerUpgrades,
       setAmount: amount => this._data.powerUpgrades = amount,
       calculateValue: amount => (180 / Math.pow(2, id)) * Math.pow(1.35, amount),
-      initialCost: 20 * wormholeCostMultipliers[id],
-      costMult: 2
+      initialCost: 20 * blackHoleCostMultipliers[id],
+      costMult: 2,
+      hasAutobuyer: true
     });
     // Duration: starts at 10, x1.5 per upgrade, cost goes x4, starts at 10
     this.durationUpgrade = new BlackHoleUpgradeState({
+      id: this.id,
       getAmount: () => this._data.durationUpgrades,
       setAmount: amount => this._data.durationUpgrades = amount,
       calculateValue: amount => (10 - (id) * 3) * Math.pow(1.3, amount),
-      initialCost: 10 * wormholeCostMultipliers[id],
-      costMult: 4
+      initialCost: 10 * blackHoleCostMultipliers[id],
+      costMult: 4,
+      hasAutobuyer: false
     });
   }
 

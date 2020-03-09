@@ -1240,6 +1240,10 @@ screen and (max-width: 480px) {
   font-size: 1rem;
 }
 
+.o-primary-btn--reality-upgrade-toggle {
+  font-size: 1rem;
+}
+
 .o-primary-btn--replicanti-galaxy {
   width: 20rem;
   height: 7rem;
@@ -1595,6 +1599,12 @@ screen and (max-width: 480px) {
 .l--spoon-btn-group__little-spoon {
   align-self: stretch;
   margin-top: 0.3rem;
+}
+
+.l--spoon-btn-group__little-spoon-reality-btn {
+  width: 25rem;
+  align-self: center;
+  margin-top: -0.9rem;
 }
 
 /*#endregion l-spoon-btn-group*/

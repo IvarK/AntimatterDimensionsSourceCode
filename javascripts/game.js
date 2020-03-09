@@ -842,13 +842,18 @@ function slowerAutobuyers(realDiff) {
   TimeTheorems.autoBuyMaxTheorems(ampDiff);
 
   if (Ra.has(RA_UNLOCKS.AUTO_BLACK_HOLE_POWER)) {
-    BlackHole(1).powerUpgrade.purchase();
-    BlackHole(2).powerUpgrade.purchase();
+    for (let i = 1; i <= 2; i++) {
+      if (BlackHole(i).powerUpgrade.isAutobuyerOn) {
+        BlackHole(i).powerUpgrade.purchase();
+      }
+    }
   }
 
   if (Ra.has(RA_UNLOCKS.AUTO_REALITY_UPGRADES)) {
     for (let i = 1; i <= 5; i++) {
-      RealityUpgrade(i).purchase();
+      if (RealityUpgrade(i).isAutobuyerOn) {
+        RealityUpgrade(i).purchase();
+      }
     }
   }
 }

@@ -188,8 +188,9 @@ class TimeDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning || TimeCompression.isActive) {
-      return new Decimal(0);
+    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning || TimeCompression.isActive ||
+      (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
+        return new Decimal(0);
     }
 
     if (EternityChallenge(11).isRunning) {

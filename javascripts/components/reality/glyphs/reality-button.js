@@ -77,17 +77,8 @@ Vue.component("reality-button", {
         Teresa.rewardMultiplier(player.antimatter) > Teresa.runRewardMultiplier,
         player.celestials.teresa.bestRunAM,
         "antimatter");
-      const laitelaReward = this.formatScalingMultiplierText(
-        "Dark Matter dimensions",
-        Laitela.realityReward,
-        Math.max(Laitela.realityReward, Laitela.rewardMultiplier(player.antimatter)));
-      const laitelaThreshold = this.formatThresholdText(
-        Laitela.rewardMultiplier(player.antimatter) > Laitela.realityReward,
-        player.celestials.laitela.maxAmGained.clampMin(1),
-        "antimatter");
       this.celestialRunText = [
-        [Teresa.isRunning, teresaReward, teresaThreshold],
-        [Laitela.isRunning, laitelaReward, laitelaThreshold]];
+        [Teresa.isRunning, teresaReward, teresaThreshold]];
     },
     handleClick() {
       if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {

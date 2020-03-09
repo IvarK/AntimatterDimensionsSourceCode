@@ -282,10 +282,6 @@ function giveRealityRewards(realityProps) {
   }
 
   if (Enslaved.isRunning) Enslaved.completeRun();
-
-  if (Laitela.isRunning) {
-    player.celestials.laitela.maxAmGained = Decimal.max(player.celestials.laitela.maxAmGained, player.antimatter);
-  }
 }
 
 // Due to simulated realities taking a long time in late game, this function might not immediately
@@ -444,6 +440,7 @@ function finishProcessReality(realityProps) {
   player.thisInfinityMaxAM = Player.startingAM;
   Enslaved.autoReleaseTick = 0;
   player.celestials.ra.compression.freeDimboosts = 0;
+  player.celestials.laitela.entropy = 0;
 
   resetInfinityRuns();
   resetEternityRuns();

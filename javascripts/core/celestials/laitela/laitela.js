@@ -110,13 +110,21 @@ const Laitela = {
     return base;
   },
   get realityReward() {
-    return this.rewardMultiplier(this.celestial.maxAmGained.clampMin(1));
+    // TODO add a formula here once the reality itself has been reworked
+    return 1;
   },
   rewardMultiplier(num) {
     const realityRewardExponent = Math.clamp(Math.log(num.log10() / 1e6), 1, Math.sqrt(num.log10() / 1e7));
     let matterDimMult = Math.pow(2, realityRewardExponent);
     matterDimMult = Math.pow(matterDimMult, AnnihilationUpgrade.realityReward.effect);
     return matterDimMult;
+  },
+  // Note that entropy goes from 0 to 1, with 1 being completion
+  get entropyGainPerSecond() {
+    return Math.clamp(Math.pow(player.antimatter.log10() / 5e10, 2), 0, 100) / 100;
+  },
+  get maxAllowedDimension() {
+    return 8 - player.celestials.laitela.difficultyTier;
   },
   get matter() {
     return this.celestial.matter;

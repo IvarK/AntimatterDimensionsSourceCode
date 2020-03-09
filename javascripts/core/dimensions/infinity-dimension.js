@@ -153,7 +153,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(10).isRunning) {
+    if (EternityChallenge(10).isRunning || (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
       return new Decimal(0);
     }
     let production = this.amount;

@@ -544,6 +544,7 @@ class NormalDimensionState extends DimensionState {
 
   get productionPerSecond() {
     const tier = this.tier;
+    if (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension) return new Decimal(0);
     let amount = this.amount.floor();
     if (NormalChallenge(12).isRunning) {
       if (tier === 2) amount = amount.pow(1.6);
@@ -634,8 +635,7 @@ const NormalDimensions = {
     }
     let amRate = NormalDimension(1).productionPerSecond;
     if (NormalChallenge(12).isRunning) amRate = amRate.plus(NormalDimension(2).productionPerSecond);
-    let amProduced = amRate.times(diff / 1000);
-    if (Laitela.isRunning) amProduced = gainedInfinityPoints(amProduced);
+    const amProduced = amRate.times(diff / 1000);
     player.antimatter = player.antimatter.plus(amProduced);
     player.totalAntimatter = player.totalAntimatter.plus(amProduced);
     player.thisInfinityMaxAM = player.thisInfinityMaxAM.max(player.antimatter);

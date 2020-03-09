@@ -79,7 +79,8 @@ const Enslaved = {
   },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
-    if (EternityChallenge(12).isRunning || TimeCompression.isActive) return;
+    if (EternityChallenge(12).isRunning || TimeCompression.isActive || Laitela.isRunning ||
+        (Enslaved.isRunning && autoRelease)) return;
     if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
     player.minNegativeBlackHoleThisReality = 1;
     let release = player.celestials.enslaved.stored;

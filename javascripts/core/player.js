@@ -465,7 +465,10 @@ let player = {
         powerUpgrades: 0,
         timeSinceLastUpdate: 0
       })),
-      maxAmGained: new Decimal(1),
+      entropy: 0,
+      thisCompletion: 3600,
+      fastestCompletion: 3600,
+      difficultyTier: 0,
       annihilated: false,
       anomalies: new Decimal(0),
       upgrades: {},
@@ -554,7 +557,6 @@ const Player = {
   get antimatterPerSecond() {
     const basePerSecond = NormalDimension(1).productionPerRealSecond
       .plus(NormalChallenge(12).isRunning ? NormalDimension(2).productionPerRealSecond : 0);
-    if (Laitela.isRunning) return gainedInfinityPoints(basePerSecond);
     return basePerSecond;
   },
 

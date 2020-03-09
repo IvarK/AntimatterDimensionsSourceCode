@@ -215,12 +215,14 @@ function studiesUntil(id) {
 
   if (id < 121) return;
   const pacePaths = getSelectedPacePaths();
+  if (id < 151) {
+    // This click is choosing a path
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy(id).path], id);
+  } 
+  
   if (pacePaths.length === 1) {
     // We've chosen a path already
     buyTimeStudyListUntilID(NormalTimeStudies.paths[pacePaths[0]], id);
-  } else if (id < 151) {
-    // This click is choosing a path
-    buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy(id).path], id);
   } else if (pacePaths.length === 0) {
     // Only brute-force buying all pace studies if the player is done with V
     if (!V.isFullyCompleted) return;

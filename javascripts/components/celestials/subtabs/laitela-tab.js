@@ -6,7 +6,7 @@ Vue.component("laitela-tab", {
       matter: new Decimal(0),
       nextUnlock: "",
       matterEffectPercentage: "",
-      dimMultNerf: 0,
+      maxDimTier: 0,
       activeDimensions: [],
       anomalies: new Decimal(0),
       anomalyGain: new Decimal(0),
@@ -21,7 +21,7 @@ Vue.component("laitela-tab", {
       this.matter.copyFrom(player.celestials.laitela.matter);
       this.nextUnlock = Laitela.nextMatterDimensionThreshold;
       this.matterEffectPercentage = Laitela.matterEffectPercentage;
-      this.dimMultNerf = Laitela.dimMultNerf;
+      this.maxDimTier = Laitela.maxAllowedDimension;
       this.realityReward = Laitela.realityReward;
       this.activeDimensions = Array.range(0, 4).filter(i => MatterDimension(i + 1).amount.neq(0));
       this.anomalies.copyFrom(player.celestials.laitela.anomalies);
@@ -137,11 +137,23 @@ Vue.component("laitela-tab", {
           <button class="o-laitela-run-button" @click="startRun">
             <b>Start Lai'tela's Reality</b>
             <div v-bind:class="runButtonClassObject()"></div>
-            Antimatter production is reduced via the IP formula, IP gain is reduced via the EP formula,
-            and EP gain goes through the EP formula twice. Glyph TT generation is disabled.
+            IP and EP gain are dilated. Game speed is reduced to 1 and gradually comes back over 10 minutes,
+            black hole discharging and pulsing are disabled.
             <br>
-            Multiply all dark matter dimensions based on highest AM reached,
-            Currently: <b>{{ format(realityReward, 2, 3)}}x</b>
+            <br>
+            Antimatter generates entropy inside of this reality. At 100% entropy, the reality becomes destabilized and
+            you gain a reward based on how quickly you reached 100%. If you can destabilize in less than 10 seconds,
+            the reality becomes more difficult but also gives a stronger reward.
+            <div v-if="maxDimTier === 7">
+              <br>
+              <br>
+              Production is disabled for all 8th dimensions.
+            </div>
+            <div v-else-if="maxDimTier < 7">
+              <br>
+              <br>
+              Production is disabled for all dimensions {{ maxDimTier + 1 }} or higher.
+            </div>
           </button>
           <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
             <h2>Annihilation</h2>

@@ -565,6 +565,9 @@ GameStorage.devMigrations = {
     player => {
       player.celestials.laitela.anomalies = new Decimal(player.celestials.laitela.higgs);
       delete player.celestials.laitela.higgs;
+    },
+    player => {
+      delete player.celestials.laitela.maxAmGained;
     }
   ],
 

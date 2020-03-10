@@ -619,19 +619,29 @@ function gameLoop(diff, options = {}) {
 }
 
 function laitelaRealityTick(realDiff) {
+  const laitelaInfo = player.celestials.laitela;
   if (!Laitela.isRunning) return;
-  if (player.celestials.laitela.entropy >= 0) {
-    player.celestials.laitela.entropy += (realDiff / 1000) * Laitela.entropyGainPerSecond;
+  if (laitelaInfo.entropy >= 0) {
+    laitelaInfo.entropy += (realDiff / 1000) * Laitela.entropyGainPerSecond;
   }
 
   // Setting entropy to -1 on completion prevents the modal from showing up repeatedly
-  if (player.celestials.laitela.entropy >= 1) {
-    Modal.message.show(`Lai'tela's reality has been destabilized after 
-      ${Time.thisRealityRealTime.toStringShort()}.`);
-    player.celestials.laitela.entropy = -1;
-    player.celestials.laitela.thisCompletion = Time.thisRealityRealTime.totalSeconds;
+  if (laitelaInfo.entropy >= 1) {
+    let completionText = `Lai'tela's Reality has been destabilized after ${Time.thisRealityRealTime.toStringShort()}.`;
+    laitelaInfo.entropy = -1;
+    laitelaInfo.thisCompletion = Time.thisRealityRealTime.totalSeconds;
+    laitelaInfo.fastestCompletion = Math.min(laitelaInfo.thisCompletion, laitelaInfo.fastestCompletion);
+    if (Time.thisRealityRealTime.totalSeconds < 30) {
+      laitelaInfo.difficultyTier++;
+      laitelaInfo.fastestCompletion = 600;
+      // This causes display oddities at 3 or lower but I don't expect the player to get that far legitimately (?)
+      completionText += `<br><br>Lai'tela's Reality will now disable production from all
+        ${Laitela.maxAllowedDimension + 1}th dimensions during future runs, but the reward will be
+        ${formatInt(20)} times stronger than before.`;
+    }
+    Modal.message.show(completionText);
   }
-  if (player.celestials.laitela.entropy < 0) player.antimatter = new Decimal(0);
+  if (laitelaInfo.entropy < 0) player.antimatter = new Decimal(0);
 }
 
 // This gives IP/EP/RM from the respective upgrades that reward the prestige currencies continuously

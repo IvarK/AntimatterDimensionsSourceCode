@@ -142,15 +142,13 @@ Vue.component("laitela-tab", {
             <br>
             <br>
             Antimatter generates entropy inside of this reality. At 100% entropy, the reality becomes destabilized and
-            you gain a reward based on how quickly you reached 100%. If you can destabilize in less than 10 seconds,
+            you gain a reward based on how quickly you reached 100%. If you can destabilize in less than 30 seconds,
             the reality becomes more difficult but also gives a stronger reward.
             <div v-if="maxDimTier === 7">
-              <br>
               <br>
               Production is disabled for all 8th dimensions.
             </div>
             <div v-else-if="maxDimTier < 7">
-              <br>
               <br>
               Production is disabled for all dimensions {{ maxDimTier + 1 }} or higher.
             </div>

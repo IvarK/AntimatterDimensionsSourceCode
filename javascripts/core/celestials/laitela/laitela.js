@@ -110,8 +110,8 @@ const Laitela = {
     return base;
   },
   get realityReward() {
-    // TODO add a formula here once the reality itself has been reworked
-    return 1;
+    return Math.clampMin(Math.pow(20, player.celestials.laitela.difficultyTier) *
+      (360 / player.celestials.laitela.fastestCompletion), 1);
   },
   rewardMultiplier(num) {
     const realityRewardExponent = Math.clamp(Math.log(num.log10() / 1e6), 1, Math.sqrt(num.log10() / 1e7));

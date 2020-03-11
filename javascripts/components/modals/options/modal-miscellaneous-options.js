@@ -25,7 +25,7 @@ Vue.component("modal-miscellaneous-options", {
       const options = player.options;
       this.offlineProgress = options.offlineProgress;
       this.showGlyphEffectDots = options.showGlyphEffectDots;
-      this.formatIntegers = options.formatIntegers ;
+      this.formatIntegers = options.formatIntegers;
     }
   },
   template:

@@ -26,7 +26,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 21,
       cost: 3,
       requirement: 11,
-      description: () => `Replicanti multiplier formula is better (log2(x)^${formatInt(2)}) ➜ (x^${format(0.032, 3, 3)})`,
+      description: () => `Replicanti multiplier formula is better
+        (log2(x)^${formatInt(2)}) ➜ (x^${format(0.032, 3, 3)})`,
       effect: () => player.replicanti.amount.pow(0.032)
     },
     {

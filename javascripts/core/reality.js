@@ -145,7 +145,7 @@ function requestManualReality() {
   const realityProps = getRealityProps(false, false);
   if (simulatedRealityCount(false) > 0) {
     triggerManualReality(realityProps);
-    if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN)) Glyphs.autoClean();
+    if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) Glyphs.autoClean();
     return;
   }
   realityProps.alreadyGotGlyph = true;
@@ -228,7 +228,7 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   beginProcessReality(getRealityProps(false, false));
-  if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN)) Glyphs.autoClean();
+  if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) Glyphs.autoClean();
 }
 
 function updateRealityRecords(realityProps) {

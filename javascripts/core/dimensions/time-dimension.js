@@ -259,7 +259,9 @@ const TimeDimensions = {
     if (EternityChallenge(7).isRunning) {
       TimeDimension(1).produceDimensions(InfinityDimension(8), diff);
     } else {
-      TimeDimension(1).produceCurrency(Currency.timeShards, diff);
+      let shardsProduced = TimeDimension(1).productionForDiff(diff);
+      shardsProduced = shardsProduced.pow(getAdjustedGlyphEffect("timeshardpow"));
+      Currency.timeShards.add(shardsProduced);
     }
 
     EternityChallenge(7).reward.applyEffect(production => {

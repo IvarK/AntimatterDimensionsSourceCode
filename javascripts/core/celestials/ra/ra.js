@@ -209,6 +209,13 @@ const Ra = {
       if (isUnlockable && !this.has(unl)) {
         // eslint-disable-next-line no-bitwise
         player.celestials.ra.unlockBits |= (1 << unl.id);
+        if (unl.id === RA_UNLOCKS.ALWAYS_GAMESPEED.id) {
+          const allGlyphs = player.reality.glyphs.active
+            .concat(player.reality.glyphs.inventory)
+          for (const glyph of allGlyphs) {
+            Glyphs.applyGamespeed(glyph);
+          }
+        }
         if (unl.id === RA_UNLOCKS.RA_LAITELA_UNLOCK.id) {
           MatterDimension(1).amount = new Decimal(1);
         }
@@ -503,13 +510,14 @@ const RA_UNLOCKS = {
     level: 15,
     displayIcon: `<span class="fas fa-tachometer-alt"></span>`
   },
-  TIME_COMPRESSION: {
+  ALWAYS_GAMESPEED: {
     id: 20,
     description: "Get Enslaved to level 25",
-    reward: "Unlock Time Compression",
+    reward: `All basic glyphs gain the increased game speed effect from time glyphs,
+      and time glyphs gain an additional effect`,
     pet: Ra.pets.enslaved,
     level: 25,
-    displayIcon: `<span class="fas fa-compress-arrows-alt"></span>`
+    displayIcon: `<span class="fas fa-clock"></span>`
   },
   AUTO_REALITY_UPGRADES: {
     id: 21,
@@ -573,8 +581,8 @@ const RA_UNLOCKS = {
   START_TT: {
     id: 27,
     description: "Get V to level 25",
-    reward: () => `Start every non-celestial Reality with ${format(5e9)} TT`,
-    effect: 5e9,
+    reward: () => `Start every non-celestial Reality with ${format(2e9)} TT`,
+    effect: 2e9,
     pet: Ra.pets.v,
     level: 25,
     displayIcon: `<i class="fab fa-buffer"></i>`

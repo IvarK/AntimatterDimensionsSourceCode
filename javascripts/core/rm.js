@@ -1,7 +1,7 @@
 "use strict";
 
-const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
-  "dilationpow", "powermult", "powerdimboost", "powerbuy10",
+const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow", "dilationpow",
+  "timeshardpow", "powermult", "powerdimboost", "powerbuy10",
   "dilationTTgen", "infinityinfmult", "infinityIP", "timeEP",
   "dilationDT", "replicationdtgain", "replicationspeed", "timespeed",
   "timeetermult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
@@ -605,6 +605,10 @@ const Glyphs = {
     }
     this.inventory[index] = glyph;
     glyph.idx = index;
+
+    // This is done here when adding to the inventory in order to keep it out of the glyph generation hot path
+    this.applyGamespeed(glyph);
+
     player.reality.glyphs.inventory.push(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
@@ -786,6 +790,17 @@ const Glyphs = {
     const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
     if (startingReality) player.celestials.v.maxGlyphsThisRun = currCount;
     player.celestials.v.maxGlyphsThisRun = Math.max(player.celestials.v.maxGlyphsThisRun, currCount);
+  },
+  // Modifies a basic glyph to have timespeed, and adds the new effect to time glyphs
+  applyGamespeed(glyph) {
+    if (BASIC_GLYPH_TYPES.includes(glyph.type)) {
+      // eslint-disable-next-line no-bitwise
+      glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timespeed.bitmaskIndex);
+      if (glyph.type === "time") {
+        // eslint-disable-next-line no-bitwise
+        glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timeshardpow.bitmaskIndex);
+      }
+    }
   }
 };
 

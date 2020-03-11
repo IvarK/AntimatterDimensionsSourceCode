@@ -1010,7 +1010,7 @@ function glyphAlchemyResource(glyph) {
 function glyphRefinementGain(glyph) {
   if (!canSacrifice()) return 0;
   const glyphMaxValue = levelRefinementValue(glyph.level);
-  const glyphActualValue = 0.01 * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
+  const glyphActualValue = 0.2 * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
   const alchemyResource = glyphAlchemyResource(glyph);
   return Math.clamp(glyphMaxValue - alchemyResource.amount, 0, glyphActualValue);
 }

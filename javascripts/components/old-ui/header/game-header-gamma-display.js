@@ -25,7 +25,7 @@ Vue.component("game-header-gamma-display", {
         storedTimeText = ` (fixed)`;
       }
       if (speedMod >= 0.001 && speedMod < 10000 && speedMod !== 1) {
-        return `${speedMod.toFixed(3)}${storedTimeText}`;
+        return `${format(speedMod, 3, 3)}${storedTimeText}`;
       }
       if (speedMod < 0.001) {
         return `${formatInt(1)} / ${format(1 / speedMod, 2)}${storedTimeText}`;

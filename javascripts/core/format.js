@@ -4,10 +4,20 @@ function format(value, places, placesUnder1000) {
   return Notations.current.format(value, places, placesUnder1000);
 }
 
+function areIntegersFormatted() {
+  return Notations.current.isPainful && player.options.formatIntegers;
+}
+
 function formatInt(value) {
-  return Notations.current.isPainful
+  return areIntegersFormatted()
     ? format(value, 2, 2)
     : formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
+}
+
+function formatIntWithoutCommas(value) {
+  return areIntegersFormatted()
+    ? format(value, 2, 2)
+    : (typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
 function formatPostBreak(value, places, placesUnder1000) {

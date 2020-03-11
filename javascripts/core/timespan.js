@@ -203,7 +203,7 @@ class TimeSpan {
     if (this.totalSeconds > 10) {
       return this.toStringNoDecimals();
     }
-    return `${this.totalSeconds.toFixed(3)} seconds`;
+    return `${format(this.totalSeconds, 3, 3)} seconds`;
   }
 
   /**

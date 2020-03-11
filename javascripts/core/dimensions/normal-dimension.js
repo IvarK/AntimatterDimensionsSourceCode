@@ -186,6 +186,7 @@ function onBuyDimension(tier) {
   if (tier !== 8) player.onlyEighthDimensons = false;
   if (tier !== 1) player.onlyFirstDimensions = false;
   if (tier === 8) player.noEighthDimensions = false;
+  if (tier === 1) player.noFirstDimensions = false;
 }
 
 function floatText(tier, text) {

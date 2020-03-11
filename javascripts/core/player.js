@@ -246,6 +246,7 @@ let player = {
   onlyEighthDimensons: true,
   onlyFirstDimensions: true,
   noEighthDimensions: false,
+  noFirstDimensions: false,
   noTheoremPurchases: true,
   dilation: {
     studies: [],

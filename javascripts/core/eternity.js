@@ -166,6 +166,7 @@ function initializeResourcesAfterEternity() {
   player.onlyEighthDimensons = true;
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
+  player.noFirstDimensions = true;
   player.postChallUnlocked = Achievement(133).isUnlocked ? 8 : 0;
 }
 

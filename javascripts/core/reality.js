@@ -416,6 +416,7 @@ function finishProcessReality(realityProps) {
   player.onlyEighthDimensons = true;
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
+  player.noFirstDimensions = true;
   player.noTheoremPurchases = true;
   player.thisReality = 0;
   player.thisRealityRealTime = 0;

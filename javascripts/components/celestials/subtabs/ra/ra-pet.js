@@ -131,7 +131,7 @@ Vue.component("ra-pet", {
         <div>
           {{ format(memoryChunks, 2, 2) }} memory chunks, {{ format(memoriesPerSecond, 2, 2) }} memories/sec
         </div>
-        <div v-if="canGetMemoryChunks">
+        <div>
           Gaining {{ format(memoryChunksPerSecond, 2, 2) }} memory chunks/sec
           <span :ach-tooltip="chunkTooltip">
             <i class="fas fa-question-circle"></i>

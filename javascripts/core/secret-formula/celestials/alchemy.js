@@ -377,7 +377,7 @@ GameDatabase.celestials.alchemy = {
       effect: amount => amount / 50000,
       tier: 4,
       uiOrder: 4,
-      isUnlocked: () => Ra.pets.effarig.level >= 21 && player.celestials.laitela.matter !== 0,
+      isUnlocked: () => Ra.pets.effarig.level >= 21 && player.celestials.laitela.matter.neq(0),
       lockText: "Effarig Level 21 and Lai'tela unlocked",
       formatEffect: value => `Boost dark matter dimension generation chance by +${formatPercents(value, 2, 2)}`,
       reagents: [

@@ -782,9 +782,9 @@ GameDatabase.achievements.normal = [
   {
     id: 125,
     name: "Like feasting on a behind",
-    tooltip: () => `Reach ${format(1e100, 0, 0)} IP without having any Infinities ` +
+    tooltip: () => `Reach ${format(1e90, 0, 0)} IP without having any Infinities ` +
       "or buying any 1st Dimensions in your current Eternity.",
-    checkRequirement: () => player.infinityPoints.exponent >= 100 &&
+    checkRequirement: () => player.infinityPoints.exponent >= 90 &&
       player.noFirstDimensions && player.infinitied.eq(0),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "IP multiplier based on time spent this Infinity.",

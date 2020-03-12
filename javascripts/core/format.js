@@ -11,17 +11,15 @@ function areIntegersFormatted() {
 function formatInt(value) {
   if (areIntegersFormatted()) {
     return format(value, 2, 2);
-  } else {
-    return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
   }
+  return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
 function formatIntWithoutCommas(value) {
   if (areIntegersFormatted()) {
     return format(value, 2, 2);
-  } else {
-    return typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0);
   }
+  return typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0);
 }
 
 function formatPostBreak(value, places, placesUnder1000) {

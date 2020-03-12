@@ -7,7 +7,7 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e850"),
     isQuickResettable: true,
     reward: {
-      description: "1.3x on all Infinity Dimensions for each Infinity Challenge completed",
+      description: () => `${format(1.3, 1, 1)}x on all Infinity Dimensions for each Infinity Challenge completed`,
       effect: () => Math.pow(1.3, InfinityChallenges.completed.length),
       formatEffect: value => formatX(value, 1, 1)
     },
@@ -46,7 +46,7 @@ GameDatabase.challenges.infinity = [
     isQuickResettable: true,
     effect: 0.25,
     reward: {
-      description: "All normal dimension multipliers become multiplier^1.05",
+      description: () => `All normal dimension multipliers become multiplier^${format(1.05, 2, 2)}`,
       effect: 1.05
     },
     unlockAM: new Decimal("1e14000"),
@@ -59,7 +59,7 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {
-      description: "Galaxies are 10% stronger and reduce the requirements for them and Dimension Boosts by 1",
+      description: () => `Galaxies are 10% stronger and reduce the requirements for them and Dimension Boosts by ${formatInt(1)}`,
       effect: 1.1
     },
     unlockAM: new Decimal("1e18000"),
@@ -87,7 +87,7 @@ GameDatabase.challenges.infinity = [
     isQuickResettable: false,
     effect: 10,
     reward: {
-      description: "Dimension Boost multiplier 2.5x ➜ 4x",
+      description: () => `Dimension Boost multiplier ${format(2.5, 1, 1)}x ➜ ${formatInt(4)}x`,
       effect: 4
     },
     unlockAM: new Decimal("1e23000"),

@@ -629,6 +629,12 @@ body.t-normal {
   margin: 0.5rem;
 }
 
+.l--spoon-btn-group__little-spoon-reality-btn {
+  width: 15.6rem;
+  align-self: center;
+  margin-top: -0.2rem;
+}
+
 .resource-eternity-canreset > div {
   height: 100%;
 }

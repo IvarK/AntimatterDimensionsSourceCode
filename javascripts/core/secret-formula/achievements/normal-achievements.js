@@ -783,7 +783,7 @@ GameDatabase.achievements.normal = [
     id: 125,
     name: "Like feasting on a behind",
     tooltip: () => `Reach ${format(1e100, 0, 0)} IP without having any Infinities ` +
-      "or buying any 1st Dimensions in your current eternity.",
+      "or buying any 1st Dimensions in your current Eternity.",
     checkRequirement: () => player.infinityPoints.exponent >= 100 &&
       player.noFirstDimensions && player.infinitied.eq(0),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -969,8 +969,8 @@ GameDatabase.achievements.normal = [
   {
     id: 151,
     name: "You really didn't need it anyway",
-    tooltip: () => `Get ${formatInt(800)} antimatter galaxies without
-      buying 8th dimensions in your current infinity.`,
+    tooltip: () => `Get ${formatInt(800)} Antimatter Galaxies without
+      buying 8th Dimensions in your current Infinity.`,
     checkRequirement: () => player.galaxies >= 800 && player.noEighthDimensions,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
     reward: "Unlock V, the Celestial of Achievements."

@@ -38,6 +38,10 @@ function formatPow(value, places, placesUnder1000) {
   return `^${format(value, places, placesUnder1000)}`;
 }
 
+function formatIntX(value) {
+  return `${formatInt(value)}x`;
+}
+
 function formatPercents(value, places) {
   return `${format(value * 100, 2, places)}%`;
 }

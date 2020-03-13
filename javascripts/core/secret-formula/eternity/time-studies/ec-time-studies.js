@@ -8,7 +8,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "Eternities",
       current: () => player.eternities,
       required: completions => new Decimal(20000 + completions * 20000),
-      formatValue: formatIntWithoutCommas
+      formatValue: formatInt
     }
   },
   {
@@ -18,7 +18,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "Tickspeed upgrades from time dimensions",
       current: () => player.totalTickGained,
       required: completions => 1300 + completions * 150,
-      formatValue: formatIntWithoutCommas
+      formatValue: formatInt
     }
   },
   {
@@ -28,7 +28,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "8th dimensions",
       current: () => NormalDimension(8).amount,
       required: completions => new Decimal(17300 + completions * 1250),
-      formatValue: value => formatIntWithoutCommas(Math.floor(value.toNumber()))
+      formatValue: value => formatInt(Math.floor(value.toNumber()))
     }
   },
   {

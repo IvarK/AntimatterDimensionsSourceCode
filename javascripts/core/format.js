@@ -11,13 +11,6 @@ function formatInt(value) {
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
-function formatIntWithoutCommas(value) {
-  if (Notations.current.isPainful) {
-    return format(value, 2, 2);
-  }
-  return typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0);
-}
-
 function formatPostBreak(value, places, placesUnder1000) {
   const currentFormat = ui.formatPreBreak;
   ui.formatPreBreak = false;

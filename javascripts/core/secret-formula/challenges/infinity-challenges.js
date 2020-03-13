@@ -83,12 +83,12 @@ GameDatabase.challenges.infinity = [
   {
     id: 7,
     description: () => `You can't get Antimatter Galaxies, but Dimension Boost multiplier
-      ${formatX(2.5, 1, 1)} ➜ ${formatIntX(10)}`,
+      ${formatX(2.5, 1, 1)} ➜ ${formatX(10, 0, 0)}`,
     goal: new Decimal("1e10000"),
     isQuickResettable: false,
     effect: 10,
     reward: {
-      description: () => `Dimension Boost multiplier ${formatX(2.5, 1, 1)} ➜ ${formatIntX(4)}`,
+      description: () => `Dimension Boost multiplier ${formatX(2.5, 1, 1)} ➜ ${formatX(4, 0, 0)}`,
       effect: 4
     },
     unlockAM: new Decimal("1e23000"),

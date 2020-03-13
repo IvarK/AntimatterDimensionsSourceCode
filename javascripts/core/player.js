@@ -488,7 +488,6 @@ let player = {
     updateRate: 33,
     newUI: true,
     offlineProgress: true,
-    formatIntegers: true,
     showGlyphEffectDots: true,
     showHintText: {
       achievements: false,

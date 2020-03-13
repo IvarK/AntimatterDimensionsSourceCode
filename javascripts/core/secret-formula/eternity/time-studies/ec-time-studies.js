@@ -48,7 +48,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "antimatter galaxies",
       current: () => player.galaxies,
       required: completions => 160 + completions * 14,
-      formatValue: formatIntWithoutCommas
+      formatValue: formatInt
     }
   },
   {
@@ -58,7 +58,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "replicanti galaxies",
       current: () => player.replicanti.galaxies,
       required: completions => 40 + completions * 5,
-      formatValue: formatIntWithoutCommas
+      formatValue: formatInt
     }
   },
   {

@@ -20,7 +20,7 @@ Vue.component("replicanti-tab", {
   computed: {
     replicantiChanceSetup() {
       return new ReplicantiUpgradeButtonSetup(ReplicantiUpgrade.chance,
-        value => `Replicate chance: ${formatPercents(value * 100)}`,
+        value => `Replicate chance: ${formatPercents(value)}`,
         cost => `+1% Costs: ${format(cost, 0, 0)} IP`
       );
     },

@@ -25,6 +25,9 @@ Vue.mixin({
     formatInt(value) {
       return formatInt(value);
     },
+    formatPercents(value) {
+      return formatPercents(value);
+    },
     formatX(value, places, placesUnder1000) {
       return formatX(value, places, placesUnder1000);
     }

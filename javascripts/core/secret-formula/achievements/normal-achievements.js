@@ -56,9 +56,9 @@ GameDatabase.achievements.normal = [
   {
     id: 21,
     name: "To infinity!",
-    tooltip: "Reach Infinite antimatter.",
-    checkRequirement: () => player.antimatter.gt(Decimal.NUMBER_MAX_VALUE),
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    tooltip: "Go Infinite.",
+    checkRequirement: () => true,
+    checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     reward: () => `Start with ${formatInt(100)} antimatter.`,
     effect: 100
   },

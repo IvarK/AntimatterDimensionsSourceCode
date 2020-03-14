@@ -56,9 +56,9 @@ GameDatabase.achievements.normal = [
   {
     id: 21,
     name: "To infinity!",
-    tooltip: "Reach Infinite antimatter.",
-    checkRequirement: () => player.antimatter.gt(Decimal.NUMBER_MAX_VALUE),
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    tooltip: "Go Infinite.",
+    checkRequirement: () => true,
+    checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     reward: () => `Start with ${formatInt(100)} antimatter.`,
     effect: 100
   },
@@ -142,7 +142,7 @@ GameDatabase.achievements.normal = [
   {
     id: 34,
     name: "You didn't need it anyway",
-    tooltip: "Reach Infinite antimatter without having any 8th Dimensions.",
+    tooltip: "Go Infinite without having any 8th Dimensions.",
     checkRequirement: () => NormalDimension(8).amount.eq(0),
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     reward: "Dimensions 1-7 are 2% stronger.",
@@ -235,14 +235,14 @@ GameDatabase.achievements.normal = [
     name: "Daredevil",
     tooltip: () => `Complete ${formatInt(2)} challenges (not including the first one).`,
     checkRequirement: () => NormalChallenges.all.slice(1).countWhere(c => c.isCompleted) >= 2,
-    checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER
+    checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
   },
   {
     id: 48,
     name: "AntiChallenged",
     tooltip: "Complete all the challenges.",
     checkRequirement: () => NormalChallenges.all.countWhere(c => !c.isCompleted) === 0,
-    checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
+    checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
     reward: "All Dimensions are 10% stronger.",
     effect: 1.1
   },
@@ -251,7 +251,7 @@ GameDatabase.achievements.normal = [
     name: "Limit Break",
     tooltip: "Break Infinity.",
     checkRequirement: () => player.break,
-    checkEvent: [GAME_EVENT.BREAK_INFINITY, GAME_EVENT.REALITY_RESET_AFTER],
+    checkEvent: [GAME_EVENT.BREAK_INFINITY, GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
   },
   {
     id: 52,
@@ -259,7 +259,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Max dimension and tickspeed autobuyers.",
     checkRequirement: () => Autobuyers.upgradeable
       .countWhere(a => a.isUnlocked && a.hasMaxedInterval) >= 9,
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
+    checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
   },
   {
     id: 53,
@@ -268,7 +268,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Autobuyers.upgradeable
       .concat([Autobuyer.galaxy, Autobuyer.dimboost, Autobuyer.bigCrunch])
       .countWhere(a => a.isUnlocked && a.hasMaxedInterval) >= 12,
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
+    checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
   },
   {
     id: 54,
@@ -320,7 +320,8 @@ GameDatabase.achievements.normal = [
     id: 61,
     name: "Bulked up",
     tooltip: () => `Get all of your Dimension bulk buyers to ${formatInt(512)} or higher.`,
-    checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0
+    checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0,
+    checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
   },
   {
     id: 62,
@@ -369,7 +370,7 @@ GameDatabase.achievements.normal = [
     name: "Infinitely Challenging",
     tooltip: "Complete an Infinity Challenge.",
     checkRequirement: () => InfinityChallenges.completed.length > 0,
-    checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER
+    checkEvent: [GAME_EVENT.INFINITY_CHALLENGE_COMPLETED, GAME_EVENT.REALITY_RESET_AFTER]
   },
   {
     id: 68,
@@ -483,7 +484,7 @@ GameDatabase.achievements.normal = [
     name: "Anti-antichallenged",
     tooltip: () => `Complete ${formatInt(8)} Infinity Challenges.`,
     checkRequirement: () => InfinityChallenges.completed.length === 8,
-    checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER],
+    checkEvent: [GAME_EVENT.INFINITY_CHALLENGE_COMPLETED, GAME_EVENT.REALITY_RESET_AFTER],
   },
   {
     id: 83,

@@ -5,9 +5,10 @@ function format(value, places, placesUnder1000) {
 }
 
 function formatInt(value) {
-  return Notations.current.isPainful
-    ? format(value, 2, 2)
-    : formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
+  if (Notations.current.isPainful) {
+    return format(value, 2, 2);
+  }
+  return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
 function formatPostBreak(value, places, placesUnder1000) {

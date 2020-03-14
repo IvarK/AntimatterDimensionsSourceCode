@@ -8,7 +8,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "Eternities",
       current: () => player.eternities,
       required: completions => new Decimal(20000 + completions * 20000),
-      formatValue: value => value.toString()
+      formatValue: formatInt
     }
   },
   {
@@ -18,7 +18,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "Tickspeed upgrades from time dimensions",
       current: () => player.totalTickGained,
       required: completions => 1300 + completions * 150,
-      formatValue: value => value.toString()
+      formatValue: formatInt
     }
   },
   {
@@ -28,7 +28,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "8th dimensions",
       current: () => NormalDimension(8).amount,
       required: completions => new Decimal(17300 + completions * 1250),
-      formatValue: value => Math.floor(value.toNumber()).toString()
+      formatValue: value => formatInt(Math.floor(value.toNumber()))
     }
   },
   {
@@ -38,7 +38,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "infinities",
       current: () => Player.totalInfinitied,
       required: completions => new Decimal(1e8 + completions * 5e7),
-      formatValue: value => formatWithCommas(Math.floor(value.toNumber()))
+      formatValue: value => formatInt(Math.floor(value.toNumber()))
     }
   },
   {
@@ -48,7 +48,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "antimatter galaxies",
       current: () => player.galaxies,
       required: completions => 160 + completions * 14,
-      formatValue: value => value.toString()
+      formatValue: formatInt
     }
   },
   {
@@ -58,7 +58,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "replicanti galaxies",
       current: () => player.replicanti.galaxies,
       required: completions => 40 + completions * 5,
-      formatValue: value => value.toString()
+      formatValue: formatInt
     }
   },
   {

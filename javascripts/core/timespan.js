@@ -203,7 +203,7 @@ class TimeSpan {
     if (this.totalSeconds > 10) {
       return this.toStringNoDecimals();
     }
-    return `${this.totalSeconds.toFixed(3)} seconds`;
+    return `${format(this.totalSeconds, 3, 3)} seconds`;
   }
 
   /**
@@ -226,7 +226,7 @@ class TimeSpan {
     addCheckedComponent(this.minutes, "minute");
     addCheckedComponent(this.seconds, "second");
     // Join with commas and 'and' in the end.
-    if (parts.length === 0) return "0 seconds";
+    if (parts.length === 0) return `${formatInt(0)} seconds`;
     return [parts.slice(0, -1).join(", "), parts.slice(-1)[0]].join(parts.length < 2 ? "" : " and ");
   }
 

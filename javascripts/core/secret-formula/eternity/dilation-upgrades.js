@@ -36,7 +36,7 @@ GameDatabase.eternity.dilation = (function() {
         ? "Reset Dilated Galaxies, but lower their threshold"
         : "Reset Dilated Time and Dilated Galaxies, but lower their threshold"),
       effect: bought => Math.pow(0.8, bought),
-      formatEffect: () => getFreeGalaxyMult().toFixed(3),
+      formatEffect: () => format(getFreeGalaxyMult(), 3, 3),
       formatCost: value => format(value, 2, 0)
     }),
     tachyonGain: rebuyable({

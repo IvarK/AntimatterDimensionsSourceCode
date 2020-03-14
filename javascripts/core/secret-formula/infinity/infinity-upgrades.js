@@ -201,7 +201,7 @@ GameDatabase.infinity.upgrades = (function() {
       cost: () => player.infMultCost,
       costCap: new Decimal("1e6000000"),
       costIncreaseThreshold: new Decimal("1e3000000"),
-      description: "Multiply Infinity Points from all sources by 2",
+      description: () => `Multiply Infinity Points from all sources by ${formatInt(2)}`,
       effect: () => player.infMult,
       cap: () => Effarig.eternityCap || new Decimal("1e1000000"),
       formatEffect: value => formatX(value, 2, 2),

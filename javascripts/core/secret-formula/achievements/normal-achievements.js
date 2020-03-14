@@ -235,14 +235,14 @@ GameDatabase.achievements.normal = [
     name: "Daredevil",
     tooltip: () => `Complete ${formatInt(2)} challenges (not including the first one).`,
     checkRequirement: () => NormalChallenges.all.slice(1).countWhere(c => c.isCompleted) >= 2,
-    checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER,GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
+    checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
   },
   {
     id: 48,
     name: "AntiChallenged",
     tooltip: "Complete all the challenges.",
     checkRequirement: () => NormalChallenges.all.countWhere(c => !c.isCompleted) === 0,
-    checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER,GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
+    checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
     reward: "All Dimensions are 10% stronger.",
     effect: 1.1
   },

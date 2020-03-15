@@ -198,8 +198,16 @@
   min-height: 3em;
 }
 
+.l-specified-effect-tab__effect-desc {
+  display: inline-flex;
+  width: 22rem;
+  align-items: center;
+  justify-content: center;
+}
+
 .l-auto-sac-type-tab__effect-desc {
   display: inline-flex;
+  width: 18rem;
   align-items: center;
   justify-content: center;
 }

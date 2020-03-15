@@ -92,7 +92,7 @@ const AutoGlyphProcessor = {
         // This mode always forces sacrifice
         return Number.MAX_VALUE;
       case AUTO_GLYPH_SCORE.EFFECT_COUNT:
-        return this.types[glyph.type].effectCount;
+        return player.celestials.effarig.glyphScoreSettings.simpleEffectCount;
       case AUTO_GLYPH_SCORE.RARITY_THRESHOLD:
       case AUTO_GLYPH_SCORE.SPECIFIED_EFFECT:
         return this.types[glyph.type].rarityThreshold;

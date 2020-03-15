@@ -369,6 +369,7 @@ let player = {
       },
       glyphScoreSettings: {
         mode: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
+        simpleEffectCount: 0,
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({
           rarityThreshold: 0,
           scoreThreshold: 0,

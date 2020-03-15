@@ -150,7 +150,7 @@ const AutoSacEffectTab = {
       </div>
       <div v-for="effect in effects" class="l-auto-sac-type-tab__row-wrapper">
         <selected-effect-toggle
-          class="c-auto-sac-type-tab__effect-desc l-auto-sac-type-tab__effect-desc"
+          class="c-auto-sac-type-tab__effect-desc l-specified-effect-tab__effect-desc"
           :effect="effect"
           :glyphType="glyphType"
           :style="descStyle"/>
@@ -211,6 +211,7 @@ Vue.component("glyph-sacrifice-options", {
     return {
       unlocked: false,
       mode: AUTO_GLYPH_SCORE.NONE,
+      effectCount: 0,
       lockedTypes: GlyphTypes.locked.map(e => e.id),
       advancedType: GLYPH_TYPES[0],
       alchemyUnlocked: false,
@@ -276,6 +277,7 @@ Vue.component("glyph-sacrifice-options", {
       } : {};
     },
     update() {
+      this.effectCount = player.celestials.effarig.glyphScoreSettings.simpleEffectCount;
       this.unlocked = EffarigUnlock.autosacrifice.isUnlocked;
       this.mode = AutoGlyphProcessor.scoreMode;
       for (const type of generatedTypes) {
@@ -289,6 +291,13 @@ Vue.component("glyph-sacrifice-options", {
     },
     setRarityThreshold(id, value) {
       AutoGlyphProcessor.types[id].rarityThreshold = value;
+    },
+    setEffectCount(event) {
+      const inputValue = event.target.value;
+      if (!isNaN(inputValue)) {
+        this.effectCount = Math.clamp(inputValue, 0, 8);
+        player.celestials.effarig.glyphScoreSettings.simpleEffectCount = this.effectCount;
+      }
     }
   },
   template: `
@@ -325,7 +334,10 @@ Vue.component("glyph-sacrifice-options", {
       <br> (This mode never keeps glyphs)
     </div>
     <div v-if="mode === modes.EFFECT_COUNT" class=" c-glyph-sacrifice-options__advanced">
-      <br> Glyphs must have at least X
+      <br> Glyphs must have at least
+      <input type="number" min="0" max="8" :value="effectCount"
+        ref="effectCount" @blur="setEffectCount"
+        class="c-auto-sac-effect-tab__input"/>
       <br> effects to be chosen. Rarer
       <br> glyphs are preferred in ties.
     </div>

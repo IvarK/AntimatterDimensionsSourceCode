@@ -13,6 +13,7 @@ Vue.component("v-tab", {
       replicanti: new Decimal(0),
       rm: new Decimal(0),
       pp: 0,
+      ppSpent: 0,
       showReduction: false,
       reductionCost: 0,
       canReduce: false,
@@ -33,6 +34,7 @@ Vue.component("v-tab", {
       this.replicanti.copyFrom(player.replicanti.amount);
       this.rm.copyFrom(player.reality.realityMachines);
       this.pp = player.reality.pp;
+      this.ppSpent = player.celestials.v.ppSpent;
       this.showReduction = V.has(V_UNLOCKS.SHARD_REDUCTION);
       this.reductionCost = this.calculateReductionCost();
       // The second half of this conditional prevents the player from wasting pp on reduction that doesn't do anything
@@ -72,7 +74,7 @@ Vue.component("v-tab", {
     calculateReductionCost() {      
       if (!this.isFlipped) return 2000;
       const nextPercent = (Math.floor(100 * V.tierReduction) + 1) / 100;
-      return 20000 * Math.ceil(Math.pow(10, 10 * nextPercent)) - player.celestials.v.ppSpent;
+      return 20000 * Math.ceil(Math.pow(10, 10 * nextPercent)) - this.ppSpent;
     }
   },
   computed: {
@@ -201,7 +203,8 @@ Vue.component("v-tab", {
               Spend {{ format(reductionCost, 2, 0) }} PP to reduce all goals by 1% of a tier
           </button>
           <br>
-          (You currently have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}})
+          (You currently have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}} and have spent
+          {{ format(ppSpent, 2, 0) }} {{"Perk Point" | pluralize(ppSpent)}} on goal reduction.)
         </div>
         <div class="l-v-milestones-grid">
           <div v-for="row in runMilestones" class="l-v-milestones-grid__row">

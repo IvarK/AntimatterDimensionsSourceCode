@@ -95,7 +95,7 @@ const GlyphSelection = {
   select(index, sacrifice) {
     ui.view.modal.glyphSelection = false;
     if (sacrifice) {
-      sacrificeGlyph(this.glyphs[index], true);
+      GlyphSacrificeHandler.removeGlyph(this.glyphs[index], true);
     } else {
       Glyphs.addToInventory(this.glyphs[index]);
     }

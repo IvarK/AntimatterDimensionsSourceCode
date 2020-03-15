@@ -27,7 +27,7 @@ Vue.component("glyph-inventory", {
   },
   methods: {
     update() {
-      this.glyphSacrificeUnlocked = canSacrifice();
+      this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.showScoreFilter = EffarigUnlock.autosacrifice.isUnlocked;
       this.showAutoAutoClean = V.has(V_UNLOCKS.AUTO_AUTOCLEAN);
       this.isAutoAutoCleanOn = player.reality.autoAutoClean;
@@ -45,8 +45,8 @@ Vue.component("glyph-inventory", {
       if (!glyph) return;
       Glyphs.moveToSlot(glyph, idx);
     },
-    deleteGlyph(id, force) {
-      deleteGlyph(id, force);
+    removeGlyph(id, force) {
+      GlyphSacrificeHandler.removeGlyph(Glyphs.findById(id), force);
     },
     clickGlyph(col, id) {
       const glyph = Glyphs.findById(id);
@@ -106,8 +106,8 @@ Vue.component("glyph-inventory", {
                          :glyph="inventory[toIndex(row, col)]"
                          :showSacrifice="true"
                          :draggable="true"
-                         @shiftClicked="deleteGlyph($event, false)"
-                         @ctrlShiftClicked="deleteGlyph($event, true)"
+                         @shiftClicked="removeGlyph($event, false)"
+                         @ctrlShiftClicked="removeGlyph($event, true)"
                          @clicked="clickGlyph(col, $event)"/>
       </div>
     </div>

@@ -57,7 +57,7 @@ Vue.component("modal-confirmation-options", {
       this.reality = options.reality;
       this.glyphReplace = options.glyphReplace;
       this.glyphSacrifice = options.glyphSacrifice;
-      this.glyphSacrificeUnlocked = canSacrifice();
+      this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.glyphTrash = options.glyphTrash;
       this.glyphTrashUnlocked = RealityUpgrades.allBought;
       this.glyphUndo = options.glyphUndo;

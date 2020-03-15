@@ -48,7 +48,8 @@ const AutoGlyphProcessor = {
         // Picked glyphs are never kept in this mode
         return -player.reality.glyphs.sac[glyph.type];
       case AUTO_GLYPH_SCORE.EFFECT_COUNT:
-        return getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
+        // Effect count, plus a very small rarity term to break ties in favor of rarer glyphs
+        return strengthToRarity(glyph.strength) / 1000 + getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
           .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated).length;
       case AUTO_GLYPH_SCORE.RARITY_THRESHOLD:
         return strengthToRarity(glyph.strength);

@@ -30,9 +30,12 @@ Vue.component("glyph-auto-pick-options", {
   },
   template: `
   <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
-    Behavior for deleted and filtered
+    <span class="c-glyph-sacrifice-options__advanced">
+      Behavior for deleted and filtered
+      <br>
+      glyphs in non-alchemy modes:
+    </span>
     <br>
-    glyphs in non-alchemy modes:
     <div :class="optionClass(modes.SACRIFICE)" @click="setMode(modes.SACRIFICE)">
       Always sacrifice
     </div>

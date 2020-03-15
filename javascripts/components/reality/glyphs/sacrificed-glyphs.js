@@ -99,7 +99,7 @@ Vue.component("sacrificed-glyphs", {
       if (isNaN(id)) return;
       const glyph = Glyphs.findById(id);
       if (!glyph) return;
-      sacrificeGlyph(glyph, false, true);
+      sacrificeGlyph(glyph);
       this.hasDragover = false;
     },
   },

@@ -223,8 +223,11 @@ GameStorage.devMigrations = {
         dt: 25,
         eternities: 25
       });
+      // There was a big glyph filter refactor done at some point, and it's infeasible to properly preserve old
+      // filter settings through this old migration. Any imported saves from before the Teresa/Effarig name swap
+      // which had glyph filtering unlocked are likely going to be invalid as a result.
       movePropIfPossible("teresa", "effarig", "autoGlyphSac", {
-        mode: AUTO_GLYPH_SAC_MODE.NONE,
+        mode: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({
           rarityThreshold: 0,
           scoreThreshold: 0,
@@ -232,7 +235,7 @@ GameStorage.devMigrations = {
         })),
       });
       movePropIfPossible("teresa", "effarig", "autoGlyphPick", {
-        mode: AUTO_GLYPH_PICK_MODE.RANDOM,
+        mode: AUTO_GLYPH_REJECT.SACRIFICE,
       });
       movePropIfPossible("teresa", "effarig", "relicShards", 0, Math.max);
       movePropIfPossible("effarig", "teresa", "quoteIdx", 0);
@@ -551,6 +554,13 @@ GameStorage.devMigrations = {
       // Reset Ra unlocks again, because apparently Ra-Teresa Lv1 upgrades were always active due to an oversight
       player.celestials.ra.unlockBits = 0;
       Ra.checkForUnlocks();
+    },
+    player => {
+      // Glyph filter refactor (not worth the trouble of translating between the modes, but copy the configs)
+      Object.assign(player.celestials.effarig.glyphScoreSettings, player.celestials.effarig.autoGlyphSac);
+      player.celestials.effarig.glyphTrashMode = 0;
+      delete player.celestials.effarig.autoGlyphSac;
+      delete player.celestials.effarig.autoGlyphPick;
     },
   ],
 

@@ -192,13 +192,13 @@ function processAutoGlyph(gainedLevel, rng) {
   if (EffarigUnlock.autopicker.isUnlocked) {
     const glyphs = Array.range(0, GlyphSelection.choiceCount)
       .map(() => GlyphGenerator.randomGlyph(gainedLevel, rng));
-    newGlyph = AutoGlyphPicker.pick(glyphs);
+    newGlyph = AutoGlyphProcessor.pick(glyphs);
   } else {
     newGlyph = GlyphGenerator.randomGlyph(gainedLevel, rng);
   }
   if (EffarigUnlock.autosacrifice.isUnlocked) {
-    if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || Glyphs.freeInventorySpace === 0) {
-      sacrificeGlyph(newGlyph, true);
+    if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
+      AutoGlyphProcessor.getRidOfGlyph(newGlyph);
       newGlyph = null;
     }
   }

@@ -210,6 +210,7 @@ Vue.component("glyph-sacrifice-options", {
   data() {
     return {
       unlocked: false,
+      advancedFilterUnlocked: false,
       mode: AUTO_GLYPH_SCORE.NONE,
       effectCount: 0,
       lockedTypes: GlyphTypes.locked.map(e => e.id),
@@ -278,7 +279,8 @@ Vue.component("glyph-sacrifice-options", {
     },
     update() {
       this.effectCount = player.celestials.effarig.glyphScoreSettings.simpleEffectCount;
-      this.unlocked = EffarigUnlock.autosacrifice.isUnlocked;
+      this.unlocked = EffarigUnlock.basicFilter.isUnlocked;
+      this.advancedFilterUnlocked = EffarigUnlock.advancedFilter.isUnlocked;
       this.mode = AutoGlyphProcessor.scoreMode;
       for (const type of generatedTypes) {
         this.rarityThresholds[type] = AutoGlyphProcessor.types[type].rarityThreshold;
@@ -312,13 +314,15 @@ Vue.component("glyph-sacrifice-options", {
       Number of effects
     </div>
     <div :class="optionClass(modes.RARITY_THRESHOLD)" @click="setMode(modes.RARITY_THRESHOLD)">
-      Rarity Threshold Mode
+        Rarity Threshold Mode
     </div>
-    <div :class="optionClass(modes.SPECIFIED_EFFECT)" @click="setMode(modes.SPECIFIED_EFFECT)">
-      Specified effect mode
+    <div v-if="advancedFilterUnlocked"
+     :class="optionClass(modes.SPECIFIED_EFFECT)" @click="setMode(modes.SPECIFIED_EFFECT)">
+        Specified effect mode
     </div>
-    <div :class="optionClass(modes.ADVANCED_MODE)" @click="setMode(modes.ADVANCED_MODE)">
-      ❃.✮:▹ Advanced mode ◃:✮.❃
+    <div v-if="advancedFilterUnlocked"
+      :class="optionClass(modes.ADVANCED_MODE)" @click="setMode(modes.ADVANCED_MODE)">
+        ❃.✮:▹ Advanced mode ◃:✮.❃
     </div>
     <div v-if="alchemyUnlocked" :class="optionClass(modes.LOWEST_ALCHEMY)" @click="setMode(modes.LOWEST_ALCHEMY)">
       🜁 🜄 Lowest alchemy resource 🜃 🜂

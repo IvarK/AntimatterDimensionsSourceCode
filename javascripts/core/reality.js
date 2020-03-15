@@ -189,18 +189,16 @@ function runRealityAnimation() {
 
 function processAutoGlyph(gainedLevel, rng) {
   let newGlyph;
-  if (EffarigUnlock.autopicker.isUnlocked) {
+  if (EffarigUnlock.basicFilter.isUnlocked) {
     const glyphs = Array.range(0, GlyphSelection.choiceCount)
       .map(() => GlyphGenerator.randomGlyph(gainedLevel, rng));
     newGlyph = AutoGlyphProcessor.pick(glyphs);
-  } else {
-    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, rng);
-  }
-  if (EffarigUnlock.autosacrifice.isUnlocked) {
     if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
       AutoGlyphProcessor.getRidOfGlyph(newGlyph);
       newGlyph = null;
     }
+  } else {
+    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, rng);
   }
   if (newGlyph && Glyphs.freeInventorySpace > 0) {
     Glyphs.addToInventory(newGlyph);

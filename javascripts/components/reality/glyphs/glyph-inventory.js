@@ -28,7 +28,7 @@ Vue.component("glyph-inventory", {
   methods: {
     update() {
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
-      this.showScoreFilter = EffarigUnlock.autosacrifice.isUnlocked;
+      this.showScoreFilter = EffarigUnlock.basicFilter.isUnlocked;
       this.showAutoAutoClean = V.has(V_UNLOCKS.AUTO_AUTOCLEAN);
       this.isAutoAutoCleanOn = player.reality.autoAutoClean;
     },

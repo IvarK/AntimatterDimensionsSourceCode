@@ -799,49 +799,40 @@ Shards. This allows you to set weights for each resource (EP, DT, Replicanti, Et
 level of Glyphs gained on Reality.
 <br>
 <br>
-Automatic Glyph Sacrifice is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.autosacrifice.cost)}
-Relic Shards. This lets you automatically reject the Glyph you would get from finishing the Reality if it doesn't meet
-a requirement you specify. You have five options:
+Automatic Glyph Filtering is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.basicFilter.cost)}
+Relic Shards. This system uses one of many methods to assign a score to your glyph choices, and then picks the choice
+with the highest score. After picking this glyph, it checks the score against a threshold and either keeps it if the
+score is above the threshold, or sacrifices it instead. Initially there are three modes:
 <br>
-<b>Auto sacrifice disabled</b> - This is the original behavior you had before this upgrade. New Glyphs you get every
-Reality will be untouched by this feature.
+<b>Lowest total sacrifice</b> - Glyphs are given a score based on how much sacrifice value you have of that
+particular glyph's type. Glyphs of the type you have the least sacrifice value in will have the highest score.
+This mode doesn't have a threshold and always sacrifices your glyphs.
 <br>
-<b>Auto sacrifice all</b> - Every Glyph you would normally get is instead immediately sacrificed and adds to your Glyph
-Sacrifice totals appropriately.
+<b>Number of effects</b> - Glyphs are given a score equal to the number of effects they have, and when multiple
+glyphs have the same effect count, glyphs with higher rarity will be picked. The threshold they are
+compared to is specified by your input in the text box.
 <br>
-<b>Rarity Threshold Mode</b> - The Glyph you get will be compared to a type-specific rarity threshold you specify. If
-it's above the threshold then the Glyph is kept and put into your inventory, otherwise it is sacrificed.
+<b>Rarity Threshold Mode</b> - Glyphs are given a score equal to their rarity percent. The comparison threshold
+can be set individually per glyph type.
 <br>
-<b>Specified Effect Mode</b> - In addition to the behavior in Rarity Threshold Mode, the Glyph will also be checked for
-having a minimum number of effects and having all of the effects you choose. It must satisfy all three of these
-conditions to be chosen, otherwise it is sacrificed.
 <br>
-<b>Advanced Mode</b> - Like Specified Effect Mode, but you have even finer control over the effects of your Glyphs. The
-"score" of a Glyph is calculated from its rarity plus the score of each effect it has, and this score must be higher
-than an amount you specify in order for the Glyph to be chosen. One possible way you can use this behavior is to give
-a weaker effect a value of 5, which allows you to keep Glyphs without that effect as long as they are rarer.
+For ${format(GameDatabase.celestials.effarig.unlocks.advancedFilter.cost)} Relic Shards, you can unlock two more modes
+with some additional flexibility:
+<br>
+<b>Specified Effect Mode</b> - Glyphs are given a score equal to their rarity and checked against the rarity threshold
+you specify, but this score is modified based on your inputs for effects. The Glyph will be checked for having a minimum
+number of effects and having all of the effects you choose, and its score is lowered by 200 for every missing effect. 
+This guarantees that any glyph that doesn't have the effects you want will be below the threshold.
+<br>
+<b>Advanced Mode</b> - This mode is like Specified Effect Mode, but you have even finer control over the effects of
+your Glyphs. The score of a Glyph is calculated from its rarity plus the score of each effect it has, and you can set
+the threshold to any value you want. One possible way you can use this behavior is to give a weaker effect a value of 5,
+which allows you to keep Glyphs without that effect as long as they are rarer.
 <br>
 <br>
 <i>Note: If desired, "Specified Effect Mode" and "Advanced Mode" can be used to filter out some Glyph types entirely;
 for example setting impossible conditions like "at least 6 effects" or "Minimum score 999 and all effects worth 0" on
 Power Glyphs will make it so that a Power Glyph is never picked.</i>
-<br>
-<br>
-Automatic Glyph Picking is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.autopicker.cost)} Relic
-Shards. This gives you three options for choosing Glyphs after each Reality:
-<br>
-<b>Auto pick random</b> - This is the behavior before this upgrade; the game looks at your possible choices and just
-takes one of them at random before considering your filtering settings on that single Glyph.
-<br>
-<b>Auto pick rarest</b> - Out of all your choices, it chooses the one with the highest rarity. Then it takes that Glyph
-and checks your filter settings to see if it should be kept. The rarest Glyph will be guaranteed to have the highest
-sacrifice value out of all your options.
-<br>
-<b>Auto pick farthest above threshold</b> - This checks your filter settings against <i>all</i> of your Glyph choices,
-and then picks which one is the best according to your settings. For disabled/all, this effectively picks at random.
-For rarity/effect, it calculates (rarity - threshold) for each choice and chooses the one with the highest value,
-ignoring Glyphs without the right effects on effect mode. For advanced, it picks the Glyph that is the farthest above
-the minimum score for its type.
 `,
       isUnlocked: () => EffarigUnlock.adjuster.isUnlocked,
       tags: ["glyph", "weight", "adjustment", "sacrifice", "filter", "advanced", "threshold", "reality", "lategame",

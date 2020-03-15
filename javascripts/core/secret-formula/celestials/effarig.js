@@ -4,17 +4,17 @@ GameDatabase.celestials.effarig = {
   unlocks: {
     adjuster: {
       id: 0,
-      description: "Glyph level adjustment",
+      description: "Glyph level weight adjustment",
       cost: 1e7
     },
-    autosacrifice: {
+    basicFilter: {
       id: 1,
-      description: "Automatic glyph sacrifice",
+      description: "Basic glyph filtering",
       cost: 2e8
     },
-    autopicker: {
+    advancedFilter: {
       id: 2,
-      description: "Automatic glyph picker",
+      description: "Advanced glyph filtering",
       cost: 3e9
     },
     run: {

@@ -40,9 +40,6 @@ Vue.component("effarig-tab", {
       relicShards: 0,
       shardRarityBoost: 0,
       shardsGained: 0,
-      autosacrificeUnlocked: false,
-      adjusterUnlocked: false,
-      autopickerUnlocked: false,
       runUnlocked: false,
       quote: "",
       quoteIdx: 0,
@@ -53,8 +50,8 @@ Vue.component("effarig-tab", {
   computed: {
     shopUnlocks: () => [
       EffarigUnlock.adjuster,
-      EffarigUnlock.autosacrifice,
-      EffarigUnlock.autopicker
+      EffarigUnlock.basicFilter,
+      EffarigUnlock.advancedFilter
     ],
     runUnlock: () => EffarigUnlock.run,
     runUnlocks: () => [
@@ -87,9 +84,6 @@ Vue.component("effarig-tab", {
       this.quote = Effarig.quote;
       this.quoteIdx = player.celestials.effarig.quoteIdx;
       this.runUnlocked = EffarigUnlock.run.isUnlocked;
-      this.autosacrificeUnlocked = EffarigUnlock.autosacrifice.isUnlocked;
-      this.adjusterUnlocked = EffarigUnlock.adjuster.isUnlocked;
-      this.autopickerUnlocked = EffarigUnlock.autopicker.isUnlocked;
       this.isRunning = Effarig.isRunning;
       this.vIsFlipped = V.isFlipped;
     },

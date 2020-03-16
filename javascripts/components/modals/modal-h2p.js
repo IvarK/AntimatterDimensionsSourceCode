@@ -28,11 +28,16 @@ Vue.component("modal-h2p", {
     }
   },
   methods: {
+    update() {
+      if (ui.view.h2pForcedTab !== undefined) this.activeTab = ui.view.h2pForcedTab;
+    },
     exit() {
       Modal.hide();
+      ui.view.h2pForcedTab = undefined;
     },
     setActiveTab(tab) {
       this.activeTab = tab;
+      ui.view.h2pForcedTab = undefined;
     }
   },
   template: `

@@ -837,7 +837,7 @@ Power Glyphs will make it so that a Power Glyph is never picked.</i>
       isUnlocked: () => EffarigUnlock.adjuster.isUnlocked,
       tags: ["glyph", "weight", "adjustment", "sacrifice", "filter", "advanced", "threshold", "reality", "lategame",
         "endgame"],
-      tab: "celestials/effarig"
+      tab: "celestials/glyphfilter"
     }, {
       name: "The Enslaved Ones, Celestial of Time",
       alias: "Enslaved Ones",
@@ -897,7 +897,7 @@ to reach the IP cost again in order to take advantage of the raised cap in later
 `,
       isUnlocked: () => Enslaved.isCompleted,
       tags: ["reality", "lategame", "endgame", "tesseract", "id"],
-      tab: "celestials/v"
+      tab: "celestials/tesseract"
     }, {
       name: "V, Celestial of Achievements",
       alias: "V",
@@ -950,12 +950,86 @@ Reaching 36 V-achievements (and therefore completing all of V's achievements) un
       name: "Ra, Celestial of the Forgotten",
       alias: "Ra",
       info: () => `
-<h1>Work in Progress</h1>
+Ra is the fifth Celestial, unlocked by fully completing all of V's achievements. He brings back mechanics from
+older celestials in a stronger way, by using their memories. Over time, you will unlock the previous four
+Celestials <i>within</i> Ra, with each Celestial offering additional upgrades related to their original themes.
+<br>
+<br>
+Each previous Celestial within Ra gains levels based on memories, which are generated passively over time from
+memory chunks. Memory chunks can only be gained by entering Ra's Reality, but inside of the reality chunks will
+be generated passively based on certain resource totals. If you are storing real time, you will not gain any
+chunks inside of Ra's reality, but memories will still be generated normally. Having a total of
+${formatInt(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels)} levels across all Celestials unlocks Recollection,
+which allows you to choose a particular Celestial to gain more chunks while inside of Ra's Reality.
+<br>
+<br>
+You start Ra with only Teresa unlocked, and each successive Celestial is unlocked by reaching level ${formatInt(10)}.
+Levels have no cap, but are significantly harder to gain above ${formatInt(25)}. 
+<br>
+<br>
+Teresa unlocks the ability to charge your Infinity Upgrades, making them much stronger. She also
+improves your glyph effects once you reach certain thresholds in glyph sacrifice value.
+<br>
+<br>
+Effarig unlocks a new mechanic called Glyph Alchemy and gradually removes all random elements of glyph generation.
+<br>
+<br>
+Enslaved makes your Black Holes significantly stronger and unlocks additional mechanics related to charging
+the Black Holes.
+<br>
+<br>
+V unlocks Triad Studies, which are time studies near the bottom of the tree which cost Space Theorems.
+She also unlocks a smaller set of more difficult V achievements to complete for additional Space Theorems.
+<br>
+<br>
+Having a total of ${formatInt(RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels)} levels across all four Celestials
+in Ra unlocks the next Celestial.
 `,
       isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
       tags: ["reality", "memories", "razenpok", "levels", "glyphs", "lategame", "endgame",
         "effarig", "teresa", "enslaved", "v"],
       tab: "celestials/ra"
+    }, {
+      name: "Glyph Alchemy",
+      info: () => `
+Glyph Alchemy is a mechanic unlocked by reaching Effarig level 2 in Ra. It unlocks the ability to use up your glyphs
+by refining them into alchemy resources associated with their type. Each resource gives some kind of a boost to
+certain parts of the game based on how much of them you have.
+<br>
+<br>
+The amount of a resource you get from a glyph is based on the cube of the glyph's level, scaled so that level
+${formatInt(10000)} glyphs correspond to ${formatInt(10000)} alchemy resources. A single glyph itself,
+however, only gives ${formatPercents(GlyphSacrificeHandler.glyphRefinementEfficiency)} of this maximum value, and
+also can't give you more resources than the cap. This cap is applied per glyph, and you will never lose resources
+when you try to refine a glyph.
+<br>
+(That this calculation applies for perfect ${formatPercents(1)}
+rarity glyphs. Glyphs of lesser rarity still have the same cap, but give less resources.)
+<br>
+<br>
+As an example of how the cap works, a level ${formatInt(10000)} glyph is worth
+${formatInt(10000 * GlyphSacrificeHandler.glyphRefinementEfficiency)} resources normally, but will be worth less if you
+already have at least ${formatInt(10000 * (1 - GlyphSacrificeHandler.glyphRefinementEfficiency))} of that resource
+(bringing you up to a maximum of ${formatInt(10000)} after refinement). The glyph is worth nothing at all if you
+already have ${formatInt(10000)} resources or more, as that is the cap for level ${formatInt(10000)} glyphs.
+<br>
+<br>
+Alchemy resources can be combined together in certain combinations in order to create new compound resources, which
+are unlocked at certain Effarig levels. Resources are combined once per reality, unaffected by real time
+amplification. The amount of compound resources you can have after a reaction is limited to the amount of the reagents
+that go into it, which means all of your resources are ultimately limited by your glyph level.
+<br>
+<br>
+To activate or deactivate a reaction, click the circle corresponding to the reaction's product. When the reaction can
+be applied, moving lines will be shown from all reagents to the product. If a connection is a solid line, that means
+that the reaction can't proceed due to not having enough of that reagent to get more of the product due to its cap.
+`,
+      isUnlocked: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
+      // Oh god I'm so sorry this is so many words
+      tags: ["reality", "lategame", "endgame", "ra", "effarig", "alchemy", "power", "infinity", "time", "replication",
+        "dilation", "cardinality", "eternity", "dimensionality", "inflation", "alternation", "synergism", "momentum",
+        "decoherence", "force", "exponential", "uncountability", "boundless", "unpredictability", "multiversal"],
+      tab: "celestials/alchemy"
     }, {
       name: "Lai'tela, Celestial of Matter",
       alias: "Lai'tela",

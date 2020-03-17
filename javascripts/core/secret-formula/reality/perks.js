@@ -400,7 +400,7 @@ GameDatabase.reality.perks = {
     id: 205,
     label: "ACH5",
     family: PERK_FAMILY.ACHIEVEMENT,
-    description: "Reduce the achievement timer by 2 minutes per achievement (5 minutes to 2 minutes).",
+    description: "Reduce the achievement timer by 3 minutes per achievement (5 minutes to 2 minutes).",
     effect: 3
   },
   achievementGroup6: {

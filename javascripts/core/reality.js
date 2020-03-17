@@ -601,13 +601,8 @@ function startRealityOver() {
 
 function lockAchievementsOnReality() {
   if (Perk.achievementGroup6.isBought) return;
-  
-  const lockedRows = Achievements.preRealityRows;
-    
-  for (const row of lockedRows) {
-    for (const achievement of row) {
-      achievement.lock();
-    }
+  for (const achievement of Achievements.preReality) {
+    achievement.lock();
   }
   player.reality.achTimer = 0;
 }

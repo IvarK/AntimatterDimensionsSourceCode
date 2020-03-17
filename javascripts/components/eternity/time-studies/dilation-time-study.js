@@ -31,7 +31,11 @@ Vue.component("dilation-time-study", {
         and ${formatInt(13000)} total theorems`;
     }
     if (this.id === 6) {
-      this.requirement = `Requirement: ${format("1e4000")} EP and ${formatInt(13)} rows of achievements`;
+      if (player.realities > 0) {
+        this.requirement = `Requirement: ${format("1e4000")} EP`;
+      } else {
+        this.requirement = `Requirement: ${format("1e4000")} EP and ${formatInt(13)} rows of achievements`;
+      }
       this.showRequirement = true;
     }
   },

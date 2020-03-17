@@ -32,7 +32,7 @@ class PerkState extends SetPurchasableMechanicState {
   purchase() {
     if (!super.purchase()) return;
     if (this.config.bumpResource !== undefined) this.config.bumpResource();
-    GameCache.achSkipPerkCount.invalidate();
+    GameCache.achievementPeriod.invalidate();
     GameCache.buyablePerks.invalidate();
     EventHub.dispatch(GAME_EVENT.PERK_BOUGHT);
   }
@@ -94,12 +94,12 @@ const Perk = (function() {
     autobuyerTT2: new PerkState(db.autobuyerTT2),
     autobuyerTT3: new PerkState(db.autobuyerTT3),
     autobuyerTT4: new PerkState(db.autobuyerTT4),
-    achievementRowGroup1: new PerkState(db.achievementRowGroup1),
-    achievementRowGroup2: new PerkState(db.achievementRowGroup2),
-    achievementRowGroup3: new PerkState(db.achievementRowGroup3),
-    achievementRowGroup4: new PerkState(db.achievementRowGroup4),
-    achievementRowGroup5: new PerkState(db.achievementRowGroup5),
-    achievementRowGroup6: new PerkState(db.achievementRowGroup6)
+    achievementGroup1: new PerkState(db.achievementGroup1),
+    achievementGroup2: new PerkState(db.achievementGroup2),
+    achievementGroup3: new PerkState(db.achievementGroup3),
+    achievementGroup4: new PerkState(db.achievementGroup4),
+    achievementGroup5: new PerkState(db.achievementGroup5),
+    achievementGroup6: new PerkState(db.achievementGroup6)
   };
 }());
 

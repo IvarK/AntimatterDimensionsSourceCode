@@ -15,6 +15,7 @@ class BlackHoleUpgradeState {
       10));
     this.id = config.id;
     this.hasAutobuyer = config.hasAutobuyer;
+    this.onPurchase = config.onPurchase;
   }
 
   get value() {
@@ -54,6 +55,9 @@ class BlackHoleUpgradeState {
     this.incrementAmount();
     this._lazyValue.invalidate();
     this._lazyCost.invalidate();
+    if (this.onPurchase) {
+      this.onPurchase();
+    }
     EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT);
   }
 }
@@ -74,6 +78,11 @@ class BlackHoleState {
       initialCost: 15 * blackHoleCostMultipliers[id],
       costMult: 3.5,
       hasAutobuyer: false,
+      onPurchase: () => {
+        if (!this.isCharged) {
+          this._data.phase = Math.clampMax(this.interval, this._data.phase);
+        }
+      }
     });
     // Power: starts at 5, x1.35 per upgrade, cost goes x2, starts at 20
     this.powerUpgrade = new BlackHoleUpgradeState({

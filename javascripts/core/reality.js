@@ -600,8 +600,9 @@ function startRealityOver() {
 }
 
 function lockAchievementsOnReality() {
-  const lockedRows = Achievements.preRealityRows
-    .slice(GameCache.achSkipPerkCount.value);
+  if (Perk.achievementGroup6.isBought) return;
+  
+  const lockedRows = Achievements.preRealityRows;
     
   for (const row of lockedRows) {
     for (const achievement of row) {

@@ -188,7 +188,7 @@ dev.realize = function() {
 dev.respecPerks = function() {
   player.reality.pp += player.reality.perks.size;
   player.reality.perks = new Set();
-  GameCache.achSkipPerkCount.invalidate();
+  GameCache.achievementPeriod.invalidate();
   GameCache.buyablePerks.invalidate();
 };
 

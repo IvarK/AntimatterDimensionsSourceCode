@@ -368,47 +368,47 @@ GameDatabase.reality.perks = {
     description: "Autobuy max TT every second.",
     effect: 1,
   },
-  achievementRowGroup1: {
+  achievementGroup1: {
     id: 201,
     label: "ACH1",
     family: PERK_FAMILY.ACHIEVEMENT,
-    description: "Start with the first 3 achievement rows after Reality.",
-    effect: 3
+    description: "Reduce the achievement timer by 10 minutes per achievement (30 minutes to 20 minutes).",
+    effect: 10
   },
-  achievementRowGroup2: {
+  achievementGroup2: {
     id: 202,
     label: "ACH2",
     family: PERK_FAMILY.ACHIEVEMENT,
-    description: "Start with the first 6 achievement rows after Reality.",
+    description: "Reduce the achievement timer by 6 minutes per achievement (20 minutes to 14 minutes).",
     effect: 6
   },
-  achievementRowGroup3: {
+  achievementGroup3: {
     id: 203,
     label: "ACH3",
     family: PERK_FAMILY.ACHIEVEMENT,
-    description: "Start with the first 8 achievement rows after Reality.",
-    effect: 8
+    description: "Reduce the achievement timer by 5 minutes per achievement (14 minutes to 9 minutes).",
+    effect: 5
   },
-  achievementRowGroup4: {
+  achievementGroup4: {
     id: 204,
     label: "ACH4",
     family: PERK_FAMILY.ACHIEVEMENT,
-    description: "Start with the first 10 achievement rows after Reality.",
-    effect: 10
+    description: "Reduce the achievement timer by 4 minutes per achievement (9 minutes to 5 minutes).",
+    effect: 4
   },
-  achievementRowGroup5: {
+  achievementGroup5: {
     id: 205,
     label: "ACH5",
     family: PERK_FAMILY.ACHIEVEMENT,
-    description: "Start with the first 12 achievement rows after Reality.",
-    effect: 12
+    description: "Reduce the achievement timer by 2 minutes per achievement (5 minutes to 2 minutes).",
+    effect: 3
   },
-  achievementRowGroup6: {
+  achievementGroup6: {
     id: 206,
     label: "ACH6",
     family: PERK_FAMILY.ACHIEVEMENT,
     description: "Reality no longer resets your achievements.",
-    effect: 13
+    effect: 2
   }
 };
 
@@ -417,7 +417,7 @@ GameDatabase.reality.perkConnections = (function() {
   // First item is the start, other items are the ends
   const groups = [
     [p.glyphChoice3,
-      p.achievementRowGroup1, p.startAM1, p.glyphLevelIncrease1, p.glyphLevelIncrease2,
+      p.achievementGroup1, p.startAM1, p.glyphLevelIncrease1, p.glyphLevelIncrease2,
       p.autounlockEU1, p.bypassEC5Lock],
     [p.startAM1, p.startAM2, p.startIP1],
     [p.startAM2, p.startEP1],
@@ -459,11 +459,11 @@ GameDatabase.reality.perkConnections = (function() {
     [p.autobuyerTT1, p.autobuyerTT2],
     [p.autobuyerTT2, p.autobuyerTT3],
     [p.autobuyerTT3, p.autobuyerTT4],
-    [p.achievementRowGroup1, p.achievementRowGroup2],
-    [p.achievementRowGroup2, p.achievementRowGroup3],
-    [p.achievementRowGroup3, p.achievementRowGroup4],
-    [p.achievementRowGroup4, p.achievementRowGroup5],
-    [p.achievementRowGroup5, p.achievementRowGroup6],
+    [p.achievementGroup1, p.achievementGroup2],
+    [p.achievementGroup2, p.achievementGroup3],
+    [p.achievementGroup3, p.achievementGroup4],
+    [p.achievementGroup4, p.achievementGroup5],
+    [p.achievementGroup5, p.achievementGroup6],
   ];
   const connections = {};
   for (const perk of Object.values(GameDatabase.reality.perks)) {

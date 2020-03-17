@@ -43,6 +43,6 @@ GameDatabase.eternity.timeStudies.dilation = [
     cost: () => (player.realities > 0 ? 0 : 5000000000),
     requirement: () => TimeStudy.timeDimension(8).isBought &&
       player.eternityPoints.gte("1e4000") &&
-      Achievements.preReality.every(a => a.isUnlocked)
+      (player.realities > 0 ? true : Achievements.preReality.every(a => a.isUnlocked))
   }
 ];

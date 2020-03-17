@@ -111,7 +111,7 @@ const Ra = {
       get name() { return "Teresa"; }
       get data() { return player.celestials.ra.pets.teresa; }
       get requiredUnlock() { return undefined; }
-      get rawMemoryChunksPerSecond() { return Math.pow(player.eternityPoints.pLog10() / 1e4, 3); }
+      get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.eternityPoints.pLog10() / 1e4, 3); }
       get color() { return "#86ea84"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.TERESA_XP)
@@ -123,7 +123,7 @@ const Ra = {
       get name() { return "Effarig"; }
       get data() { return player.celestials.ra.pets.effarig; }
       get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return Math.pow(Effarig.shardsGained, 0.1); }
+      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Effarig.shardsGained, 0.1); }
       get color() { return "#ea8585"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.EFFARIG_XP)
@@ -135,7 +135,7 @@ const Ra = {
       get name() { return "Enslaved"; }
       get data() { return player.celestials.ra.pets.enslaved; }
       get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return Math.pow(player.timeShards.pLog10() / 3e5, 2); }
+      get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.timeShards.pLog10() / 3e5, 2); }
       get color() { return "#ead584"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.ENSLAVED_XP)
@@ -147,7 +147,7 @@ const Ra = {
       get name() { return "V"; }
       get data() { return player.celestials.ra.pets.v; }
       get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return Math.pow(player.infinityPower.pLog10() / 1e7, 1.5); }
+      get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.infinityPower.pLog10() / 1e7, 1.5); }
       get color() { return "#f1aa7f"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.V_XP)
@@ -188,7 +188,7 @@ const Ra = {
   requiredExpForLevel(level) {
     let adjustedLevel = level + Math.pow(level, 2) / 10;
     if (level > 25) adjustedLevel *= Math.pow(1.3, level - 25);
-    return Math.floor(Math.pow(adjustedLevel, 4) * 1e5);
+    return Math.floor(Math.pow(adjustedLevel, 4) * 5e5);
   },
   // Calculates the cumulative exp needed to REACH a level starting from nothing.
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized

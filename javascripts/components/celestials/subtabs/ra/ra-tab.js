@@ -35,11 +35,13 @@ Vue.component("ra-tab", {
     pets: () => [
       {
         pet: Ra.pets.teresa,
+        scalingUpgradeVisible: () => Ra.totalCharges > 0,
         scalingUpgradeText: () => `You can charge ${formatInt(Ra.totalCharges)} 
           Infinity ${pluralize("Upgrade", Ra.totalCharges)}.`,
       },
       {
         pet: Ra.pets.effarig,
+        scalingUpgradeVisible: () => AlchemyResources.all.filter(r => r.isUnlocked).length > 0,
         scalingUpgradeText: () => {
           const resources = AlchemyResources.all.filter(r => r.isUnlocked).length;
           return `You have unlocked ${formatInt(resources)} alchemy ${pluralize("resource", resources)}.`;
@@ -47,12 +49,14 @@ Vue.component("ra-tab", {
       },
       {
         pet: Ra.pets.enslaved,
+        scalingUpgradeVisible: () => Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME),
         scalingUpgradeText: () => `Stored game time 
           ${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)} and real time
           +${formatInt(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / (1000 * 3600))} hours`,
       },
       {
         pet: Ra.pets.v,
+        scalingUpgradeVisible: () => Math.clampMax(Math.floor(Ra.pets.v.level / 5), 4) > 0,
         scalingUpgradeText: level => {
           const triadCount = Math.clampMax(Math.floor(level / 5), 4);
           return `You have unlocked ${formatInt(triadCount)} triad ${pluralize("study", triadCount, "studies")}.`;

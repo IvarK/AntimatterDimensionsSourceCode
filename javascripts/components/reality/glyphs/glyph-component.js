@@ -153,6 +153,7 @@ const GlyphTooltipComponent = {
     sacrificeText() {
       if (this.type === "cursed") return "Cannot be sacrificed or refined";
       if (GlyphSacrificeHandler.isRefining && this.type !== "reality") {
+        if (!AlchemyResource[this.type].isUnlocked) return "Cannot be refined (resource not unlocked)";
         const refinementText = `${format(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
         const limitText = this.sacrificeReward === 0
           ? ` (limit reached)`

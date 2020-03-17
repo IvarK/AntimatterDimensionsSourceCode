@@ -96,6 +96,9 @@ Vue.component("glyph-inventory", {
   },
   template: `
   <div class="l-glyph-inventory">
+    Click and drag or double-click to equip glyphs.
+    <br>
+    The top row of slots is unaffected by glyph sorting and Auto clean.
     <div v-for="row in rowCount" class="l-glyph-inventory__row">
       <div v-for="col in colCount"
            class="l-glyph-inventory__slot"

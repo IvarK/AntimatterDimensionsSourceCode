@@ -104,15 +104,15 @@ class DimBoost {
   }
 
   static get purchasedBoosts() {
-    return Math.floor(player.dimensionBoosts * getAdjustedGlyphEffect("realitydimboost"));
+    return Math.floor(player.dimensionBoosts);
   }
 
   static get freeBoosts() {
-    return Math.floor(Effects.max(0, CompressionUpgrade.freeBoost) * getAdjustedGlyphEffect("realitydimboost"));
+    return Math.floor(Effects.max(0, CompressionUpgrade.freeBoost));
   }
 
   static get totalBoosts() {
-    return (this.purchasedBoosts + this.freeBoosts);
+    return Math.floor((this.purchasedBoosts + this.freeBoosts) * getAdjustedGlyphEffect("realitydimboost"));
   }
 }
 

@@ -1813,6 +1813,10 @@ screen and (max-width: 480px) {
   visibility: hidden;
 }
 
+.u-fa-padding {
+  width: 1rem;
+}
+
 /*#endregion Header*/
 
 .t-s2 .c-dim-tab {

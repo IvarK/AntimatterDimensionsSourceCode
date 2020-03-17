@@ -108,7 +108,8 @@ class DimBoost {
   }
 
   static get freeBoosts() {
-    return Math.floor(Effects.max(0, CompressionUpgrade.freeBoost));
+    // This was originally used for Time Compression, probably use it for something in Lai'tela now
+    return 0;
   }
 
   static get totalBoosts() {

@@ -211,7 +211,7 @@ const Ra = {
         player.celestials.ra.unlockBits |= (1 << unl.id);
         if (unl.id === RA_UNLOCKS.ALWAYS_GAMESPEED.id) {
           const allGlyphs = player.reality.glyphs.active
-            .concat(player.reality.glyphs.inventory)
+            .concat(player.reality.glyphs.inventory);
           for (const glyph of allGlyphs) {
             Glyphs.applyGamespeed(glyph);
           }

@@ -335,10 +335,8 @@ function finishProcessReality(realityProps) {
     Glyphs.clearUndo();
     if (player.reality.respec) respecGlyphs();
     if (player.celestials.ra.disCharge) disChargeAll();
-    if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
   }
 
-  TimeCompression.isActive = false;
   const celestialRunState = clearCelestialRuns();
   recalculateAllGlyphs();
   Glyphs.updateGlyphCountForV(true);
@@ -439,7 +437,6 @@ function finishProcessReality(realityProps) {
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;
   Enslaved.autoReleaseTick = 0;
-  player.celestials.ra.compression.freeDimboosts = 0;
   player.celestials.laitela.entropy = 0;
 
   resetInfinityRuns();

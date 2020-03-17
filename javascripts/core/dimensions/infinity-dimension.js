@@ -187,7 +187,7 @@ class InfinityDimensionState extends DimensionState {
 
     mult = mult.clampMin(0);
 
-    if (player.dilation.active || TimeCompression.isActive) {
+    if (player.dilation.active) {
       mult = dilatedValueOf(mult);
     }
 
@@ -303,8 +303,7 @@ const InfinityDimensions = {
   get capIncrease() {
     const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease *
       (1 + AlchemyResource.boundless.effectValue);
-    const compressionBoost = Effects.max(0, CompressionUpgrade.infDimSoftcap);
-    return Math.floor(enslavedBoost + compressionBoost);
+    return Math.floor(enslavedBoost);
   },
 
   get totalDimCap() {

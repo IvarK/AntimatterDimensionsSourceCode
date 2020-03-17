@@ -306,12 +306,6 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.FIXED_SPEED)) {
-    if (TimeCompression.isActive) {
-      if (DarkEnergyUpgrade.compressionBoost.isBought) {
-        return DarkEnergyUpgrade.compressionBoost.effect * 1e-100;
-      }
-      return 1e-100;
-    }
     if (EternityChallenge(12).isRunning) {
       return 1 / 1000;
     }
@@ -373,8 +367,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
 function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
   if (Enslaved.isAutoReleasing &&
-    !(EternityChallenge(12).isRunning || TimeCompression.isActive ||
-      (BlackHoles.arePaused && player.blackHoleNegative < 1))) {
+    !(EternityChallenge(12).isRunning || (BlackHoles.arePaused && player.blackHoleNegative < 1))) {
     return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
   return speedFactor;
@@ -438,7 +431,7 @@ function gameLoop(diff, options = {}) {
   GameCache.totalIPMult.invalidate();
 
   const blackHoleDiff = realDiff;
-  const fixedSpeedActive = EternityChallenge(12).isRunning || TimeCompression.isActive;
+  const fixedSpeedActive = EternityChallenge(12).isRunning;
   if (!Enslaved.isReleaseTick && !fixedSpeedActive) {
     let speedFactor;
     if (options.blackHoleSpeedup === undefined) {
@@ -668,7 +661,7 @@ function applyAutoprestige(diff) {
 
 function updateFreeGalaxies() {
   const freeGalaxyMult = Effects.max(1, DilationUpgrade.doubleGalaxies);
-  const freeGalaxyThreshold = Effects.max(1000, CompressionUpgrade.freeGalaxySoftcap);
+  const freeGalaxyThreshold = 1000;
   const thresholdMult = getFreeGalaxyMult();
   player.dilation.baseFreeGalaxies = Math.max(player.dilation.baseFreeGalaxies,
     1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), thresholdMult)));

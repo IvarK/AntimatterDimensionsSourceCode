@@ -568,6 +568,9 @@ GameStorage.devMigrations = {
     },
     player => {
       delete player.celestials.laitela.maxAmGained;
+    },
+    player => {
+      delete player.celestials.ra.compression;
     }
   ],
 

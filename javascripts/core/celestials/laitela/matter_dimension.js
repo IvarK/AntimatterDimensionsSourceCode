@@ -37,12 +37,10 @@ class MatterDimensionState {
   get interval() {
     const perUpgrade = 0.92 - AnnihilationUpgrade.intervalPower.effect;
     const tierFactor = Math.pow(4, this._tier);
-    const postCapBoosts = Effects.max(1, CompressionUpgrade.matterBoost);
     return Decimal.pow(perUpgrade, this.dimension.intervalUpgrades)
       .times(tierFactor)
       .times(1000)
-      .clampMin(this.intervalPurchaseCap)
-      .divide(postCapBoosts);
+      .clampMin(this.intervalPurchaseCap);
   }
 
   get power() {

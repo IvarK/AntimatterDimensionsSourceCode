@@ -72,15 +72,14 @@ const GameCache = {
   timeStudies: new Lazy(() => NormalTimeStudyState.studies
       .map(s => player.timestudy.studies.includes(s.id))),
 
-  achSkipPerkCount: new Lazy(() => Effects.max(
-      0,
-      Perk.achievementRowGroup1,
-      Perk.achievementRowGroup2,
-      Perk.achievementRowGroup3,
-      Perk.achievementRowGroup4,
-      Perk.achievementRowGroup5,
-      Perk.achievementRowGroup6
-    )),
+  achievementPeriod: new Lazy(() => TimeSpan.fromMinutes(30 - Effects.sum(
+      Perk.achievementGroup1,
+      Perk.achievementGroup2,
+      Perk.achievementGroup3,
+      Perk.achievementGroup4,
+      Perk.achievementGroup5,
+      Perk.achievementGroup6
+    )).totalMilliseconds),
 
   buyablePerks: new Lazy(() => Perks.all.filter(p => p.canBeBought)),
 

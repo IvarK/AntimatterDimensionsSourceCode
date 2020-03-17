@@ -101,13 +101,19 @@ const Achievements = {
   },
 
   get period() {
-    return TimeSpan.fromMinutes(30).totalMilliseconds;
+    return GameCache.achievementPeriod.value;
   },
 
   autoAchieveUpdate(diff) {
     if (player.realities === 0) return;
     if (!player.reality.autoAchieve) return;
     if (Achievements.preReality.every(a => a.isUnlocked)) return;
+    if (Perk.achievementGroup6.isBought) {
+      for (const achievement of Achievements.preReality) {
+        achievement.unlock();
+      }
+      return;
+    }
 
     player.reality.achTimer += diff;
     if (player.reality.achTimer < this.period) return;
@@ -122,7 +128,7 @@ const Achievements = {
 
   timeToNextAutoAchieve() {
     if (player.realities === 0) return 0;
-    if (GameCache.achSkipPerkCount.value >= Achievements.preRealityRows.length) return 0;
+    if (GameCache.achievementPeriod.value === 0) return 0;
     if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) return 0;
     return Math.max(this.period - player.reality.achTimer, 1);
   },
@@ -140,10 +146,5 @@ const Achievements = {
 };
 
 EventHub.logic.on(GAME_EVENT.PERK_BOUGHT, () => {
-  const unlockedRows = GameCache.achSkipPerkCount.value;
-  for (const row of Achievements.rows(1, unlockedRows)) {
-    for (const achievement of row) {
-      achievement.unlock();
-    }
-  }
+  player.reality.achTimer = Math.clampMax(player.reality.achTimer, Achievements.period);
 });

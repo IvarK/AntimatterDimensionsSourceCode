@@ -200,7 +200,9 @@ GameDatabase.infinity.upgrades = (function() {
     ipMult: {
       cost: () => player.infMultCost,
       costCap: new Decimal("1e6000000"),
-      costIncreaseThreshold: new Decimal("1e3000000"),
+      // If the cost increase threshold is 1e2999999, the costs go
+      // 1e2999999, 1e3000000, 1e3000010, etc., which is nicer than the alternative.
+      costIncreaseThreshold: new Decimal("1e2999999"),
       description: () => `Multiply Infinity Points from all sources by ${formatInt(2)}`,
       effect: () => player.infMult,
       cap: () => Effarig.eternityCap || new Decimal("1e1000000"),

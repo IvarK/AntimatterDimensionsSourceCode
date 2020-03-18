@@ -307,12 +307,12 @@ class InfinityIPMultUpgrade extends GameMechanicState {
 
   purchase(amount = 1) {
     if (!this.canBeBought) return;
-    const costIncrease = this.costIncrease;
     const mult = Decimal.pow(2, amount);
     player.infMult = player.infMult.times(mult);
     if (!TimeStudy(181).isBought) {
       Autobuyer.bigCrunch.bumpAmount(mult);
     }
+    const costIncrease = this.costIncrease;
     player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
     player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
     this.adjustToCap();
@@ -329,13 +329,15 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   autobuyerTick() {
     if (!this.canBeBought) return;
     if (!this.hasIncreasedCost) {
-      const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent);
+      // The purchase at 1e3000000 is considered post-softcap because that purchase increases the cost by 1e10x.
+      const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent - 1);
       const purchases = buyUntil - this.cost.exponent + 1;
       if (purchases <= 0) return;
       this.purchase(purchases);
     }
     // Do not replace it with `if else` - it's specifically designed to process two sides of threshold separately
-    // (for example, we have 1e4000000 IP and no mult - first it will go to 1e3000000 and then it will go in this part)
+    // (for example, we have 1e4000000 IP and no mult - first it will go to (but not including) 1e3000000 and then
+    // it will go in this part)
     if (this.hasIncreasedCost) {
       const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costCap.exponent);
       const purchases = Math.floor((buyUntil - player.infMultCost.exponent) / 10) + 1;

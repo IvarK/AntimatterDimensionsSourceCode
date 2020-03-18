@@ -971,7 +971,8 @@ Teresa unlocks the ability to charge your Infinity Upgrades, making them much st
 improves your glyph effects once you reach certain thresholds in glyph sacrifice value.
 <br>
 <br>
-Effarig unlocks a new mechanic called Glyph Alchemy and gradually removes all random elements of glyph generation.
+Effarig unlocks a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually
+removing almost all random elements of glyph generation.
 <br>
 <br>
 Enslaved makes your Black Holes significantly stronger and unlocks additional mechanics related to charging
@@ -1003,7 +1004,7 @@ however, only gives ${formatPercents(GlyphSacrificeHandler.glyphRefinementEffici
 also can't give you more resources than the cap. This cap is applied per glyph, and you will never lose resources
 when you try to refine a glyph.
 <br>
-(That this calculation applies for perfect ${formatPercents(1)}
+(This calculation applies for perfect ${formatPercents(1)}
 rarity glyphs. Glyphs of lesser rarity still have the same cap, but give less resources.)
 <br>
 <br>

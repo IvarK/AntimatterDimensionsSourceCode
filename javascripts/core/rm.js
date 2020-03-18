@@ -88,9 +88,6 @@ const AutoGlyphProcessor = {
   // This is a mode-specific threshold which determines if selected glyphs are "good enough" to keep
   thresholdValue(glyph) {
     switch (this.scoreMode) {
-      case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
-        // This mode always forces sacrifice
-        return Number.MAX_VALUE;
       case AUTO_GLYPH_SCORE.EFFECT_COUNT:
         return player.celestials.effarig.glyphScoreSettings.simpleEffectCount;
       case AUTO_GLYPH_SCORE.RARITY_THRESHOLD:
@@ -98,9 +95,10 @@ const AutoGlyphProcessor = {
         return this.types[glyph.type].rarityThreshold;
       case AUTO_GLYPH_SCORE.ADVANCED_MODE:
         return this.types[glyph.type].scoreThreshold;
+        case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:
       case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
-        // These two always force refinement
+        // These modes never keep glyphs and always refine/sacrfice
         return Number.MAX_VALUE;
       default:
         throw new Error("Unknown glyph score mode in threshold check");

@@ -9,7 +9,8 @@ Vue.component("new-dimensions-tab", {
       currentSacrifice: new Decimal(0),
       sacrificeBoost: new Decimal(0),
       disabledCondition: "",
-      isQuickResetAvailable: false
+      isQuickResetAvailable: false,
+      isContinuumActive: false
     };
   },
   computed: {
@@ -28,10 +29,12 @@ Vue.component("new-dimensions-tab", {
       player.buyUntil10 = !player.buyUntil10;
     },
     getUntil10Display() {
+      if (this.isContinuumActive) return "Continuum";
       return this.buyUntil10 ? "Until 10" : "Buy 1";
     },
     update() {
       this.buyUntil10 = player.buyUntil10;
+      this.isContinuumActive = Laitela.continuumActive;
       const challenge = NormalChallenge.current || InfinityChallenge.current;
       this.isQuickResetAvailable = challenge && challenge.isQuickResettable;
 
@@ -65,21 +68,21 @@ Vue.component("new-dimensions-tab", {
       <button class="o-primary-btn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">Max All (M)</button>
     </div>
     <span v-if="isSacrificeUnlocked">Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
-    <new-tickspeed-row></new-tickspeed-row>
+    <new-tickspeed-row/>
     <div class="dimensions-container">
       <new-dimension-row
         v-for="tier in 8"
         :key="tier"
-        :tier="tier"></new-dimension-row>
+        :tier="tier"/>
     </div>
     <div class="resets-container">
-      <new-dim-shift-row></new-dim-shift-row>
+      <new-dim-shift-row/>
       <primary-button
           v-if="isQuickResetAvailable"
           class="o-primary-btn--quick-reset"
           onclick="softReset(-1, true, true)"
         >Lose a reset, returning to the start of the reset</primary-button>
-      <new-galaxy-row></new-galaxy-row>
+      <new-galaxy-row/>
     </div>
     <normal-dim-tab-progress-bar/>
   </div>`

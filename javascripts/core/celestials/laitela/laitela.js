@@ -79,6 +79,10 @@ const Laitela = {
   get isRunning() {
     return this.celestial.run;
   },
+  get continuumActive() {
+    // For testing; actually make it some kind of upgrade/unlock later
+    return true;
+  },
   get nextMatterDimensionThreshold() {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);

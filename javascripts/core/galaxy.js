@@ -13,7 +13,8 @@ class GalaxyRequirement {
   }
 
   get isSatisfied() {
-    return NormalDimension(this.tier).amount.gte(this.amount);
+    const dimension = NormalDimension(this.tier);
+    return dimension.totalAmount.gte(this.amount);
   }
 }
 
@@ -174,9 +175,12 @@ function maxBuyGalaxies(limit = Number.MAX_VALUE) {
   // Check for ability to buy one galaxy (which is pretty efficient)
   const req = Galaxy.requirement;
   if (!req.isSatisfied) return false;
-  const newGalaxies = Math.min(limit, Galaxy.buyableGalaxies(Math.round(NormalDimension(req.tier).amount.toNumber())));
+  const dim = NormalDimension(req.tier);
+  const newGalaxies = Math.clampMax(
+    Galaxy.buyableGalaxies(Math.round(dim.totalAmount.toNumber())),
+    limit);
   if (Notations.current === Notation.cancer) player.spreadingCancer += newGalaxies - player.galaxies;
-  // galaxyReset increments galaxies, so we add one less than we should:
+  // Function galaxyReset increments galaxies, so we add one less than we should:
   player.galaxies = newGalaxies - 1;
   galaxyReset();
   return true;

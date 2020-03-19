@@ -88,9 +88,14 @@ function getDimensionFinalMultiplierUncached(tier) {
 function applyNDMultipliers(mult, tier) {
   let multiplier = mult.times(GameCache.normalDimensionCommonMultiplier.value);
 
-  multiplier = multiplier.times(Decimal.pow(
-    NormalDimensions.buyTenMultiplier, Math.floor(NormalDimension(tier).bought / 10)
-    ));
+  let buy10Value;
+  if (Laitela.continuumActive) {
+    buy10Value = NormalDimension(tier).continuumValue;
+  } else {
+    buy10Value = Math.floor(NormalDimension(tier).bought / 10);
+  }
+
+  multiplier = multiplier.times(Decimal.pow(NormalDimensions.buyTenMultiplier, buy10Value));
   multiplier = multiplier.times(DimBoost.multiplierToNDTier(tier));
 
   let infinitiedMult = new Decimal(1).timesEffectsOf(
@@ -191,7 +196,7 @@ function floatText(tier, text) {
 
 function buyOneDimension(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
+  if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
 
   const cost = dimension.cost;
 
@@ -217,7 +222,7 @@ function buyOneDimension(tier) {
 
 function buyManyDimension(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return false;
+  if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return false;
   const cost = dimension.costUntil10;
 
   if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
@@ -235,7 +240,7 @@ function buyManyDimension(tier) {
 
 function buyAsManyAsYouCanBuy(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
+  if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
   const howMany = dimension.howManyCanBuy;
   const cost = dimension.cost.times(howMany);
 
@@ -257,6 +262,7 @@ function buyAsManyAsYouCanBuy(tier) {
 
 // This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
 function buyUntilTen(tier) {
+  if (Laitela.continuumActive) return;
   const dimension = NormalDimension(tier);
   dimension.challengeCostBump();
   dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10));
@@ -265,7 +271,7 @@ function buyUntilTen(tier) {
 }
 
 function maxAll() {
-  if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return;
+  if (Laitela.continuumActive || (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE))) return;
 
   player.usedMaxAll = true;
 
@@ -278,7 +284,7 @@ function maxAll() {
 
 function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
+  if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
   const cost = dimension.costUntil10;
   let bulkLeft = bulk;
   const goal = Player.infinityGoal;
@@ -474,10 +480,37 @@ class NormalDimensionState extends DimensionState {
       : player.antimatter = value;
   }
 
+  /**
+   * @returns {number}
+   */
+  get continuumValue() {
+    if (!this.isAvailableForPurchase) return 0;
+    return this.costScale.getContinuumValue(player.antimatter);
+  }
+
+  /**
+   * @returns {number}
+   */
+  get continuumAmount() {
+    if (!Laitela.continuumActive) return 0;
+    return Math.floor(10 * this.continuumValue);
+  }
+  
+  /**
+   * Continuum doesn't continually update dimension amount because that would require making the code
+   * significantly messier to handle it properly. Instead an effective amount is calculated here, which
+   * is only used for production and checking for shift/boost/galaxy. Doesn't affect achievements.
+   * @param {Decimal} value
+   */
+  get totalAmount() {
+    return this.amount.plus(this.continuumAmount);
+  }
+
    /**
     * @returns {boolean}
     */
   get isAffordable() {
+    if (Laitela.continuumActive) return false;
     if (!player.break && this.cost.gt(Decimal.NUMBER_MAX_VALUE)) return false;
     return this.cost.lte(this.currencyAmount);
   }
@@ -493,9 +526,11 @@ class NormalDimensionState extends DimensionState {
   get isAvailableForPurchase() {
     if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return false;
     if (this.tier > DimBoost.totalBoosts + 4) return false;
-    if (this.tier > 1 &&
-      NormalDimension(this.tier - 1).amount.eq(0) &&
-      !EternityMilestone.unlockAllND.isReached) return false;
+    const hasPrevTier = this.tier === 1 ||
+      (Laitela.continuumActive
+        ? NormalDimension(this.tier - 1).continuumValue >= 1
+        : NormalDimension(this.tier - 1).amount.neq(0));
+    if (!EternityMilestone.unlockAllND.isReached && !hasPrevTier) return false;
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }
 
@@ -540,7 +575,7 @@ class NormalDimensionState extends DimensionState {
   get productionPerSecond() {
     const tier = this.tier;
     if (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension) return new Decimal(0);
-    let amount = this.amount.floor();
+    let amount = this.totalAmount;
     if (NormalChallenge(12).isRunning) {
       if (tier === 2) amount = amount.pow(1.6);
       if (tier === 4) amount = amount.pow(1.4);

@@ -15,10 +15,10 @@ Vue.component("new-dimension-row", {
       singleCost: new Decimal(0),
       until10Cost: new Decimal(0),
       isAffordable: false,
-      isAffordableUntil10: false,
-      remainingUntil10: 0,
       buyUntil10: true,
-      howManyCanBuy: 0
+      howManyCanBuy: 0,
+      isContinuumActive: false,
+      continuumValue: 0
     };
   },
   computed: {
@@ -35,6 +35,9 @@ Vue.component("new-dimension-row", {
       return this.isCapped
         ? "Further eighth dimension purchases are prohibited, as they are the only way to acquire galaxies"
         : null;
+    },
+    continuumString() {
+      return formatContinuum(this.continuumValue);
     }
   },
   methods: {
@@ -47,17 +50,18 @@ Vue.component("new-dimension-row", {
       const dimension = NormalDimension(tier);
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 10;
       this.multiplier.copyFrom(NormalDimension(tier).multiplier);
-      this.amount.copyFrom(dimension.amount);
+      this.amount.copyFrom(dimension.totalAmount);
       this.boughtBefore10 = dimension.boughtBefore10;
       this.howManyCanBuy = buyUntil10 ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1);
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.cost.times(Math.max(dimension.howManyCanBuy, 1)));
       this.isAffordable = dimension.isAffordable;
-      this.isAffordableUntil10 = dimension.isAffordableUntil10;
-      this.remainingUntil10 = dimension.remainingUntil10;
       this.buyUntil10 = buyUntil10;
+      this.isContinuumActive = Laitela.continuumActive;
+      if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
     },
     buy() {
+      if (this.isContinuumActive) return;
       // TODO: Buy Until is on
       if (this.buyUntil10) {
         buyAsManyAsYouCanBuyBtnClick(this.tier);
@@ -77,18 +81,26 @@ Vue.component("new-dimension-row", {
     <div class="c-normal-dim-row__label c-normal-dim-row__label--growable">
       {{amountDisplay}}
     </div>
-    <button class="o-primary-btn o-primary-btn--new" @click="buy" :class="{ 'o-primary-btn--disabled': !isAffordable }">
-      <div
-        class="button-content"
-        :enabled="isAffordable"
-        :ach-tooltip="cappedTooltip"
-        >Buy {{ howManyCanBuy }}
-        <br>
-        Cost: {{ costDisplay }}</div>
-      <div class="fill">
-        <div class="fill1" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
-        <div class="fill2" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>
-      </div>
+    <button class="o-primary-btn o-primary-btn--new" @click="buy"
+      :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }">
+        <div class="button-content"
+          :enabled="isAffordable || isContinuumActive"
+          :ach-tooltip="cappedTooltip">
+            <span v-if="isContinuumActive">
+              Continuum:
+              <br>
+              {{ continuumString }}
+            </span>
+            <span v-else>
+              Buy {{ howManyCanBuy }}
+              <br>
+              Cost: {{ costDisplay }}
+            </span>
+        </div>
+        <div class="fill" v-if="!isContinuumActive">
+          <div class="fill1" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
+          <div class="fill2" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>
+        </div>
     </button>
     <div
       v-for="text in floatingText"

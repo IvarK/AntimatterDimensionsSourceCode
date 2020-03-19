@@ -1,7 +1,7 @@
 "use strict";
 
 function canBuyTickSpeed() {
-  return NormalDimension(3).isAvailableForPurchase && !EternityChallenge(9).isRunning;
+  return !Laitela.continuumActive && NormalDimension(3).isAvailableForPurchase && !EternityChallenge(9).isRunning;
 }
 
 function getTickSpeedMultiplier() {
@@ -149,7 +149,15 @@ const Tickspeed = {
     });
   },
 
+  get continuumValue() {
+    if (!this.isUnlocked) return 0;
+    return this.costScale.getContinuumValue(player.antimatter);
+  },
+
   get baseValue() {
+    let boughtTickspeed;
+    if (Laitela.continuumActive) boughtTickspeed = this.continuumValue;
+    else boughtTickspeed = player.totalTickBought;
     return new Decimal(1000)
       .timesEffectsOf(
         Achievement(36),
@@ -157,7 +165,7 @@ const Tickspeed = {
         Achievement(66),
         Achievement(83)
       )
-      .times(getTickSpeedMultiplier().pow(player.totalTickBought + player.totalTickGained));
+      .times(getTickSpeedMultiplier().pow(boughtTickspeed + player.totalTickGained));
   },
 
   multiplySameCosts() {

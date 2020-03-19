@@ -793,6 +793,7 @@ const Glyphs = {
   },
   // Modifies a basic glyph to have timespeed, and adds the new effect to time glyphs
   applyGamespeed(glyph) {
+    if (!Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) return;
     if (BASIC_GLYPH_TYPES.includes(glyph.type)) {
       // eslint-disable-next-line no-bitwise
       glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timespeed.bitmaskIndex);

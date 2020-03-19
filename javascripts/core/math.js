@@ -363,6 +363,31 @@ class ExponentialCostScaling {
     return { quantity: newPurchases - currentPurchases, logPrice };
   }
 
+  /**
+   * Determines the number of purchases that would be possible, if purchase count was continuous. Might
+   * have some odd behavior right at e308, but otherwise should work. It's mostly a copy-paste from
+   * getMaxBought() above but with unnecessary extra code removed.
+   * @param {Decimal} money
+   * @returns {number} maximum value of bought that money can buy up to
+   */
+  getContinuumValue(money) {
+    const logMoney = money.log10();
+    const logMult = this._logBaseIncrease;
+    const logBase = this._logBaseCost;
+    // The 1 + is because the multiplier isn't applied to the first purchase
+    let contValue = 1 + (logMoney - logBase) / logMult;
+    // We can use the linear method up to one purchase past the threshold, because the first purchase
+    // past the threshold doesn't have cost scaling in it yet.
+    if (contValue > this._purchasesBeforeScaling) {
+      const discrim = this._precalcDiscriminant + 8 * this._logCostScale * logMoney;
+      if (discrim < 0) {
+        return 0;
+      }
+      contValue = this._precalcCenter + Math.sqrt(discrim) / (2 * this._logCostScale);
+    }
+    return Math.clampMin(contValue, 0);
+  }
+
   static log10(value) {
     if (value instanceof Decimal) return value.log10();
     return Math.log10(value);

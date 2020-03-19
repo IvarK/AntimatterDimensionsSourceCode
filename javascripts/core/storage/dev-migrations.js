@@ -571,6 +571,15 @@ GameStorage.devMigrations = {
     },
     player => {
       delete player.celestials.ra.compression;
+    },
+    player => {
+      if (Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) {
+        const allGlyphs = player.reality.glyphs.active
+          .concat(player.reality.glyphs.inventory);
+        for (const glyph of allGlyphs) {
+          Glyphs.applyGamespeed(glyph);
+        }
+      }
     }
   ],
 

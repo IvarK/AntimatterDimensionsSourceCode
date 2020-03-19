@@ -930,7 +930,7 @@ GameDatabase.achievements.normal = [
       return true;
     },
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-    reward: "nothing right now."
+    reward: "Galaxies no longer reset Dimension Boosts."
   },
   {
     id: 144,

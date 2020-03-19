@@ -5765,7 +5765,7 @@ kbd {
   line-height: 3.9rem;
   font-size: 2.3rem;
   font-weight: bold;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+  box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.7);
   width: 4rem;
   height: 4rem;
   background: #222;
@@ -5816,7 +5816,8 @@ kbd {
 
 .l-ra-recollection-unlock {
   height: 25rem;
-  background: radial-gradient(ellipse at center, #c0c0c0 55%, gainsboro);
+  color: white;
+  background: linear-gradient(#333333, #464646);
   border-radius: 2rem;
   flex: none none 20rem;
   width: 30rem;
@@ -5825,7 +5826,6 @@ kbd {
 
 .l-ra-recollection-unlock-inner {
   font-family: Typewriter;
-  height: 15rem;
   margin: 1rem 3rem;
   flex-direction: row;
   justify-content: center;
@@ -5833,18 +5833,19 @@ kbd {
 
 .l-ra-pet-recollection-button-container {
   float: left;
-  width: 50%;
+  width: 48%;
   height: 40%;
+  margin: 0.8% 0.2rem;
 }
 
-.l-ra-pet-recollection-button {
+.c-ra-pet-recollection-button {
   font-size: 1.2rem;
   text-align: center;
   font-family: Typewriter;
   height: 6rem;
   border-radius: 1rem;
-  flex: none none 6rem;
-  width: 12rem;
+  border: 0.1rem solid #222;
+  user-select: none;
 }
 
 .l-ra-laitela-unlock {

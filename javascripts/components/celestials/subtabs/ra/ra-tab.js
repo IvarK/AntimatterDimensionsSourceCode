@@ -11,6 +11,7 @@ Vue.component("ra-tab", {
       recollectionMult: 1,
       showLaitela: false,
       laitelaReq: 0,
+      petWithRecollection: ""
     };
   },
   methods: {
@@ -22,6 +23,7 @@ Vue.component("ra-tab", {
       this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
       this.showLaitela = Ra.pets.v.isUnlocked;
       this.laitelaReq = RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels;
+      this.petWithRecollection = Ra.petWithRecollection;
     },
     startRun() {
       Ra.startRun();
@@ -62,10 +64,17 @@ Vue.component("ra-tab", {
           return `You have unlocked ${formatInt(triadCount)} triad ${pluralize("study", triadCount, "studies")}.`;
         },
       }
-    ]
+    ],
+    petStyle() {
+      return {
+        color: (this.petWithRecollection === "")
+          ? "white"
+          : this.pets.find(pet => pet.pet.name === this.petWithRecollection).pet.color,
+      };
+    }
   },
-  template:
-    `<div class="l-ra-celestial-tab">
+  template: `
+    <div class="l-ra-celestial-tab">
       <div class="c-ra-memory-header">
         Each memory chunk generates
         {{ format(memoriesPerChunk, 2, 3) }} {{ "memory" | pluralize(memoriesPerChunk, "memories") }}
@@ -94,8 +103,8 @@ Vue.component("ra-tab", {
         </button>
         <div class="l-ra-recollection-unlock">
           <br>
-          <h1>Recollection</h1>
-          Whichever celestial has recollection will get {{formatInt(recollectionMult)}}x memory chunk gain.
+          <h1 :style="petStyle">Recollection</h1>
+          <span :style="petStyle">Whichever celestial has recollection will get {{formatInt(recollectionMult)}}x memory chunk gain.</span>
           <div class="l-ra-recollection-unlock-inner" v-if="hasRecollection">
             <ra-pet-recollection-button
               v-for="(pet, i) in pets"
@@ -120,5 +129,6 @@ Vue.component("ra-tab", {
           </div>
         </button>
       </div>
-    </div>`
+    </div>
+  `
 });

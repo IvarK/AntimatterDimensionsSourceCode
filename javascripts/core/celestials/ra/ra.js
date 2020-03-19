@@ -531,7 +531,7 @@ const RA_UNLOCKS = {
   V_XP: {
     id: 23,
     description: "Get V to level 5",
-    reward: () => `All memory chunks produce more memories based on total celestial levels,
+    reward: () => `All memory chunks produce more memories based on total Celestial levels,
       unlock a Triad study every ${formatInt(5)} levels (see bottom of the Time Studies page)`,
     pet: Ra.pets.v,
     level: 5,

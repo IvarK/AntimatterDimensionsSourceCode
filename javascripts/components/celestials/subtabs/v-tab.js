@@ -203,8 +203,8 @@ Vue.component("v-tab", {
               Spend {{ format(reductionCost, 2, 0) }} PP to reduce all goals by 1% of a tier
           </button>
           <br>
-          (You currently have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}} and have spent
-          {{ format(ppSpent, 2, 0) }} {{"Perk Point" | pluralize(ppSpent)}} on goal reduction.)
+          (you currently have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}} and have spent
+          {{ format(ppSpent, 2, 0) }} {{"Perk Point" | pluralize(ppSpent)}} on goal reduction)
         </div>
         <div class="l-v-milestones-grid">
           <div v-for="row in runMilestones" class="l-v-milestones-grid__row">

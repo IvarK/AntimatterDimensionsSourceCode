@@ -95,7 +95,7 @@ const AutoGlyphProcessor = {
         return this.types[glyph.type].rarityThreshold;
       case AUTO_GLYPH_SCORE.ADVANCED_MODE:
         return this.types[glyph.type].scoreThreshold;
-        case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
+      case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:
       case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
         // These modes never keep glyphs and always refine/sacrfice

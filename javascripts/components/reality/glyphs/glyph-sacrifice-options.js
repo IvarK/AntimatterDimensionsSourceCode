@@ -335,7 +335,7 @@ Vue.component("glyph-sacrifice-options", {
       <br> type; the type you have the least
       <br> total sacrifice value of is given
       <br> the highest score.
-      <br> (This mode never keeps glyphs)
+      <br> (this mode never keeps glyphs)
     </div>
     <div v-if="mode === modes.EFFECT_COUNT" class=" c-glyph-sacrifice-options__advanced">
       <br> Glyphs must have at least
@@ -374,7 +374,7 @@ Vue.component("glyph-sacrifice-options", {
         <template v-for="type in glyphTypes">
           <auto-sac-effect-tab v-show="type.id === advancedType" :glyph-type="type.id"/>
         </template>
-        (Click to toggle effects on/off)
+        (click to toggle effects on/off)
     </div>
     <div v-if="mode === modes.ADVANCED_MODE"
       class="c-glyph-sacrifice-options__advanced">
@@ -390,12 +390,12 @@ Vue.component("glyph-sacrifice-options", {
     <div v-if="mode === modes.LOWEST_ALCHEMY" class="c-glyph-sacrifice-options__advanced">
       <br> Glyph score is assigned based
       <br> on current alchemy resource totals.
-      <br> (This mode never keeps glyphs)
+      <br> (this mode never keeps glyphs)
     </div>
     <div v-if="mode === modes.ALCHEMY_VALUE" class="c-glyph-sacrifice-options__advanced">
       <br> Glyphs will be assigned values
       <br> based on refinement value.
-      <br> (This mode never keeps glyphs)
+      <br> (this mode never keeps glyphs)
     </div>
   </div>
   `

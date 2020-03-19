@@ -951,20 +951,20 @@ Reaching 36 V-achievements (and therefore completing all of V's achievements) un
       alias: "Ra",
       info: () => `
 Ra is the fifth Celestial, unlocked by fully completing all of V's achievements. He brings back mechanics from
-older celestials in a stronger way, by using their memories. Over time, you will unlock the previous four
+older Celestials in a stronger way, by using their memories. Over time, you will unlock the previous four
 Celestials <i>within</i> Ra, with each Celestial offering additional upgrades related to their original themes.
 <br>
 <br>
 Each previous Celestial within Ra gains levels based on memories, which are generated passively over time from
-memory chunks. Memory chunks can only be gained by entering Ra's Reality, but inside of the reality chunks will
+memory chunks. Memory chunks can only be gained by entering Ra's Reality, but inside of the Reality chunks will
 be generated passively based on certain resource totals. If you are storing real time, you will not gain any
-chunks inside of Ra's reality, but memories will still be generated normally. Having a total of
+chunks inside of Ra's Reality, but memories will still be generated normally. Having a total of
 ${formatInt(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels)} levels across all Celestials unlocks Recollection,
 which allows you to choose a particular Celestial to gain more chunks while inside of Ra's Reality.
 <br>
 <br>
-You start Ra with only Teresa unlocked, and each successive Celestial is unlocked by reaching level ${formatInt(10)}.
-Levels have no cap, but are significantly harder to gain above ${formatInt(25)}. 
+You start Ra with only Teresa unlocked, and each successive Celestial is unlocked by reaching level ${formatInt(10)}
+with the previous Celestial. Levels have no cap, but are significantly harder to gain above ${formatInt(25)}. 
 <br>
 <br>
 Teresa unlocks the ability to charge your Infinity Upgrades, making them much stronger. She also
@@ -1016,7 +1016,7 @@ already have ${formatInt(10000)} resources or more, as that is the cap for level
 <br>
 <br>
 Alchemy resources can be combined together in certain combinations in order to create new compound resources, which
-are unlocked at certain Effarig levels. Resources are combined once per reality, unaffected by real time
+are unlocked at certain Effarig levels. Resources are combined once per Reality, unaffected by real time
 amplification. The amount of compound resources you can have after a reaction is limited to the amount of the reagents
 that go into it, which means all of your resources are ultimately limited by your glyph level.
 <br>

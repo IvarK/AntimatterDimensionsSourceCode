@@ -104,7 +104,7 @@ Vue.component("laitela-tab", {
       <div v-if="annihilated">
         You have {{ format(anomalies, 2, 0)}} {{"Anomaly" | pluralize(anomalies, "Anomalies")}}
       </div>
-      <div v-if="anomalies.gt(0)">You to have a {{ formatPercents(darkEnergyChance, 1) }}% chance of first dimensions
+      <div v-if="anomalies.gt(0)">You to have a {{ formatPercents(darkEnergyChance, 5) }} chance of first dimensions
         generating dark energy each dimension interval, based on your Anomaly count</div>
       <div v-if="darkEnergy > 0">You have {{ format(darkEnergy, 2, 0)}} Dark Energy</div>
       <primary-button

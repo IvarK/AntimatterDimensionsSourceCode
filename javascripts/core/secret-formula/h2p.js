@@ -1032,7 +1032,7 @@ that the reaction can't proceed due to not having enough of that reagent to get 
         "decoherence", "force", "exponential", "uncountability", "boundless", "unpredictability", "multiversal"],
       tab: "celestials/alchemy"
     }, {
-      name: "Lai'tela, Celestial of Matter",
+      name: "Lai'tela, Celestial of Dimensions",
       alias: "Lai'tela",
       info: () => `
 <h1>Work in Progress</h1>

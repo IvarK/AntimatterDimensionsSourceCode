@@ -366,8 +366,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
 
 function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
-  if (Enslaved.isAutoReleasing &&
-    !(EternityChallenge(12).isRunning || (BlackHoles.arePaused && player.blackHoleNegative < 1))) {
+  if (Enslaved.isAutoReleasing && Enslaved.canRelease(true) && !BlackHoles.areNegative) {
     return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
   return speedFactor;

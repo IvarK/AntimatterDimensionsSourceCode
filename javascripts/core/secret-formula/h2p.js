@@ -799,54 +799,45 @@ Shards. This allows you to set weights for each resource (EP, DT, Replicanti, Et
 level of Glyphs gained on Reality.
 <br>
 <br>
-Automatic Glyph Sacrifice is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.autosacrifice.cost)}
-Relic Shards. This lets you automatically reject the Glyph you would get from finishing the Reality if it doesn't meet
-a requirement you specify. You have five options:
+Automatic Glyph Filtering is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.basicFilter.cost)}
+Relic Shards. This system uses one of many methods to assign a score to your glyph choices, and then picks the choice
+with the highest score. After picking this glyph, it checks the score against a threshold and either keeps it if the
+score is above the threshold, or sacrifices it instead. Initially there are three modes:
 <br>
-<b>Auto sacrifice disabled</b> - This is the original behavior you had before this upgrade. New Glyphs you get every
-Reality will be untouched by this feature.
+<b>Lowest total sacrifice</b> - Glyphs are given a score based on how much sacrifice value you have of that
+particular glyph's type. Glyphs of the type you have the least sacrifice value in will have the highest score.
+This mode doesn't have a threshold and always sacrifices your glyphs.
 <br>
-<b>Auto sacrifice all</b> - Every Glyph you would normally get is instead immediately sacrificed and adds to your Glyph
-Sacrifice totals appropriately.
+<b>Number of effects</b> - Glyphs are given a score equal to the number of effects they have, and when multiple
+glyphs have the same effect count, glyphs with higher rarity will be picked. The threshold they are
+compared to is specified by your input in the text box.
 <br>
-<b>Rarity Threshold Mode</b> - The Glyph you get will be compared to a type-specific rarity threshold you specify. If
-it's above the threshold then the Glyph is kept and put into your inventory, otherwise it is sacrificed.
+<b>Rarity Threshold Mode</b> - Glyphs are given a score equal to their rarity percent. The comparison threshold
+can be set individually per glyph type.
 <br>
-<b>Specified Effect Mode</b> - In addition to the behavior in Rarity Threshold Mode, the Glyph will also be checked for
-having a minimum number of effects and having all of the effects you choose. It must satisfy all three of these
-conditions to be chosen, otherwise it is sacrificed.
 <br>
-<b>Advanced Mode</b> - Like Specified Effect Mode, but you have even finer control over the effects of your Glyphs. The
-"score" of a Glyph is calculated from its rarity plus the score of each effect it has, and this score must be higher
-than an amount you specify in order for the Glyph to be chosen. One possible way you can use this behavior is to give
-a weaker effect a value of 5, which allows you to keep Glyphs without that effect as long as they are rarer.
+For ${format(GameDatabase.celestials.effarig.unlocks.advancedFilter.cost)} Relic Shards, you can unlock two more modes
+with some additional flexibility:
+<br>
+<b>Specified Effect Mode</b> - Glyphs are given a score equal to their rarity and checked against the rarity threshold
+you specify, but this score is modified based on your inputs for effects. The Glyph will be checked for having a minimum
+number of effects and having all of the effects you choose, and its score is lowered by 200 for every missing effect. 
+This guarantees that any glyph that doesn't have the effects you want will be below the threshold.
+<br>
+<b>Advanced Mode</b> - This mode is like Specified Effect Mode, but you have even finer control over the effects of
+your Glyphs. The score of a Glyph is calculated from its rarity plus the score of each effect it has, and you can set
+the threshold to any value you want. One possible way you can use this behavior is to give a weaker effect a value of 5,
+which allows you to keep Glyphs without that effect as long as they are rarer.
 <br>
 <br>
 <i>Note: If desired, "Specified Effect Mode" and "Advanced Mode" can be used to filter out some Glyph types entirely;
 for example setting impossible conditions like "at least 6 effects" or "Minimum score 999 and all effects worth 0" on
 Power Glyphs will make it so that a Power Glyph is never picked.</i>
-<br>
-<br>
-Automatic Glyph Picking is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.autopicker.cost)} Relic
-Shards. This gives you three options for choosing Glyphs after each Reality:
-<br>
-<b>Auto pick random</b> - This is the behavior before this upgrade; the game looks at your possible choices and just
-takes one of them at random before considering your filtering settings on that single Glyph.
-<br>
-<b>Auto pick rarest</b> - Out of all your choices, it chooses the one with the highest rarity. Then it takes that Glyph
-and checks your filter settings to see if it should be kept. The rarest Glyph will be guaranteed to have the highest
-sacrifice value out of all your options.
-<br>
-<b>Auto pick farthest above threshold</b> - This checks your filter settings against <i>all</i> of your Glyph choices,
-and then picks which one is the best according to your settings. For disabled/all, this effectively picks at random.
-For rarity/effect, it calculates (rarity - threshold) for each choice and chooses the one with the highest value,
-ignoring Glyphs without the right effects on effect mode. For advanced, it picks the Glyph that is the farthest above
-the minimum score for its type.
 `,
       isUnlocked: () => EffarigUnlock.adjuster.isUnlocked,
       tags: ["glyph", "weight", "adjustment", "sacrifice", "filter", "advanced", "threshold", "reality", "lategame",
         "endgame"],
-      tab: "celestials/effarig"
+      tab: "celestials/glyphfilter"
     }, {
       name: "The Enslaved Ones, Celestial of Time",
       alias: "Enslaved Ones",
@@ -906,7 +897,7 @@ to reach the IP cost again in order to take advantage of the raised cap in later
 `,
       isUnlocked: () => Enslaved.isCompleted,
       tags: ["reality", "lategame", "endgame", "tesseract", "id"],
-      tab: "celestials/v"
+      tab: "celestials/tesseract"
     }, {
       name: "V, Celestial of Achievements",
       alias: "V",
@@ -959,12 +950,87 @@ Reaching 36 V-achievements (and therefore completing all of V's achievements) un
       name: "Ra, Celestial of the Forgotten",
       alias: "Ra",
       info: () => `
-<h1>Work in Progress</h1>
+Ra is the fifth Celestial, unlocked by fully completing all of V's achievements. He brings back mechanics from
+older Celestials in a stronger way, by using their memories. Over time, you will unlock the previous four
+Celestials <i>within</i> Ra, with each Celestial offering additional upgrades related to their original themes.
+<br>
+<br>
+Each previous Celestial within Ra gains levels based on memories, which are generated passively over time from
+memory chunks. Memory chunks can only be gained by entering Ra's Reality, but inside of the Reality chunks will
+be generated passively based on certain resource totals. If you are storing real time, you will not gain any
+chunks inside of Ra's Reality, but memories will still be generated normally. Having a total of
+${formatInt(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels)} levels across all Celestials unlocks Recollection,
+which allows you to choose a particular Celestial to gain more chunks while inside of Ra's Reality.
+<br>
+<br>
+You start Ra with only Teresa unlocked, and each successive Celestial is unlocked by reaching level ${formatInt(10)}
+with the previous Celestial. Levels have no cap, but are significantly harder to gain above ${formatInt(25)}. 
+<br>
+<br>
+Teresa unlocks the ability to charge your Infinity Upgrades, making them much stronger. She also
+improves your glyph effects once you reach certain thresholds in glyph sacrifice value.
+<br>
+<br>
+Effarig unlocks a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually
+removing almost all random elements of glyph generation.
+<br>
+<br>
+Enslaved makes your Black Holes significantly stronger and unlocks additional mechanics related to charging
+the Black Holes.
+<br>
+<br>
+V unlocks Triad Studies, which are time studies near the bottom of the tree which cost Space Theorems.
+She also unlocks a smaller set of more difficult V achievements to complete for additional Space Theorems.
+<br>
+<br>
+Having a total of ${formatInt(RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels)} levels across all four Celestials
+in Ra unlocks the next Celestial.
 `,
       isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
       tags: ["reality", "memories", "razenpok", "levels", "glyphs", "lategame", "endgame",
         "effarig", "teresa", "enslaved", "v"],
       tab: "celestials/ra"
+    }, {
+      name: "Glyph Alchemy",
+      info: () => `
+Glyph Alchemy is a mechanic unlocked by reaching Effarig level 2 in Ra. It unlocks the ability to use up your glyphs
+by refining them into alchemy resources associated with their type. Each resource gives some kind of a boost to
+certain parts of the game based on how much of them you have.
+<br>
+<br>
+The amount of a resource you get from a glyph is based on the cube of the glyph's level, scaled so that level
+${formatInt(10000)} glyphs correspond to ${formatInt(10000)} alchemy resources. A single glyph itself,
+however, only gives ${formatPercents(GlyphSacrificeHandler.glyphRefinementEfficiency)} of this maximum value, and
+also can't give you more resources than the cap. This cap is applied per glyph, and you will never lose resources
+when you try to refine a glyph.
+<br>
+(This calculation applies for perfect ${formatPercents(1)}
+rarity glyphs. Glyphs of lesser rarity still have the same cap, but give less resources.)
+<br>
+<br>
+As an example of how the cap works, a level ${formatInt(10000)} glyph is worth
+${formatInt(10000 * GlyphSacrificeHandler.glyphRefinementEfficiency)} resources normally, but will be worth less if you
+already have at least ${formatInt(10000 * (1 - GlyphSacrificeHandler.glyphRefinementEfficiency))} of that resource
+(bringing you up to a maximum of ${formatInt(10000)} after refinement). The glyph is worth nothing at all if you
+already have ${formatInt(10000)} resources or more, as that is the cap for level ${formatInt(10000)} glyphs.
+<br>
+<br>
+Alchemy resources can be combined together in certain combinations in order to create new compound resources, which
+are unlocked at certain Effarig levels. Resources are combined once per Reality, unaffected by real time
+amplification. The amount of compound resources you can have after a reaction is limited to the amount of the reagents
+that go into it, which means all of your resources are ultimately limited by your glyph level.
+<br>
+<br>
+To activate or deactivate a reaction, click the circle corresponding to the reaction's product. When the reaction can
+be applied, moving lines will be shown from all reagents to the product. If a connection is a solid line, that means
+that the reaction can't proceed due to not having enough of that reagent to get more of the product due to its cap.
+`,
+      isUnlocked: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
+      // Oh god I'm so sorry this is so many words
+      tags: ["reality", "lategame", "endgame", "ra", "effarig", "alchemy", "power", "infinity", "time", "replication",
+        "dilation", "cardinality", "eternity", "dimensionality", "inflation", "alternation", "synergism", "momentum",
+        "decoherence", "force", "exponential", "uncountability", "boundless", "unpredictability", "multiversal"],
+      tab: "celestials/alchemy"
     }, {
       name: "Lai'tela, Celestial of Matter",
       alias: "Lai'tela",

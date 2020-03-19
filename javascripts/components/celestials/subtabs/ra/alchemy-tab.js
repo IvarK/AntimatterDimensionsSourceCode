@@ -193,13 +193,9 @@ Vue.component("alchemy-tab", {
       };
     },
     showAlchemyHowTo() {
-      Modal.message.show("You can now refine glyphs using \"Alchemy Mode\" in the glyph auto-sacrifice settings. " +
-        "Refined glyphs will give an amount of their alchemy resources based on their level and rarity. Alchemy " +
-        "reactions can be toggled on and off by clicking the respective nodes, and each resource gives its own " +
-        "boost to various resources in the game. Basic resource totals are limited to 5 times the gain from " +
-        "refining a perfect glyph of the same level, and compound resource totals are limited to the amount of " +
-        "the reactants. All active alchemy reactions are applied once per reality, unaffected by amplification. " +
-        "You can show the current totals of all alchemy resources by holding shift.");
+      ui.view.h2pForcedTab = GameDatabase.h2p.tabs.filter(tab => tab.name === "Glyph Alchemy")[0];
+      Modal.h2p.show();
+      ui.view.h2pActive = true;
     },
     setAllReactions(value) {
       for (const reaction of AlchemyReactions.all.compact()) {

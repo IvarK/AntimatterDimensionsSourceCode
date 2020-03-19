@@ -178,8 +178,8 @@ class BlackHoleState {
   // The logic to determine what state the black hole is in for displaying is nontrivial and used in multiple places
   get displayState() {
     if (Enslaved.isAutoReleasing) {
-      if (Enslaved.autoReleaseTick < 3) return `<i class="fas fa-compress-arrows-alt"></i> Pulsing`;
-      return `<i class="fas fa-expand-arrows-alt"></i> Pulsing`;
+      if (Enslaved.autoReleaseTick < 3) return `<i class="fas fa-compress-arrows-alt u-fa-padding"></i> Pulsing`;
+      return `<i class="fas fa-expand-arrows-alt u-fa-padding"></i> Pulsing`;
     }
     if (Enslaved.isStoringGameTime) {
       if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {

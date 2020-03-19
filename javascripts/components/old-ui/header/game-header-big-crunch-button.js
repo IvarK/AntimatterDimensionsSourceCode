@@ -8,6 +8,7 @@ Vue.component("game-header-big-crunch-button", {
       currentIPPM: new Decimal(0),
       peakIPPM: new Decimal(0),
       currentIP: new Decimal(0),
+      tesseractUnlocked: false,
       tesseractCost: new Decimal(0),
     };
   },
@@ -43,7 +44,7 @@ Vue.component("game-header-big-crunch-button", {
     },
     classObject() {
       return {
-        "c-game-header__tesseract-available": this.currentIP.gt(this.tesseractCost),
+        "c-game-header__tesseract-available": this.tesseractUnlocked && this.currentIP.gt(this.tesseractCost),
       };
     },
   },
@@ -63,6 +64,7 @@ Vue.component("game-header-big-crunch-button", {
       if (this.isPeakIPPMVisible) {
         this.currentIPPM.copyFrom(gainedIP.dividedBy(Time.thisInfinityRealTime.totalMinutes));
       }
+      this.tesseractUnlocked = Enslaved.isCompleted;
       this.tesseractCost = Enslaved.tesseractCost;
     }
   },

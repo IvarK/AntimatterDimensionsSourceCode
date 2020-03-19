@@ -27,8 +27,8 @@ Vue.component("glyph-inventory", {
   },
   methods: {
     update() {
-      this.glyphSacrificeUnlocked = canSacrifice();
-      this.showScoreFilter = EffarigUnlock.autosacrifice.isUnlocked;
+      this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
+      this.showScoreFilter = EffarigUnlock.basicFilter.isUnlocked;
       this.showAutoAutoClean = V.has(V_UNLOCKS.AUTO_AUTOCLEAN);
       this.isAutoAutoCleanOn = player.reality.autoAutoClean;
     },
@@ -45,8 +45,8 @@ Vue.component("glyph-inventory", {
       if (!glyph) return;
       Glyphs.moveToSlot(glyph, idx);
     },
-    deleteGlyph(id, force) {
-      deleteGlyph(id, force);
+    removeGlyph(id, force) {
+      GlyphSacrificeHandler.removeGlyph(Glyphs.findById(id), force);
     },
     clickGlyph(col, id) {
       const glyph = Glyphs.findById(id);
@@ -76,7 +76,7 @@ Vue.component("glyph-inventory", {
       Glyphs.sort((a, b) => -a.level * a.strength + b.level * b.strength);
     },
     sortByScore() {
-      Glyphs.sort((a, b) => -AutoGlyphSacrifice.filterValue(a) + AutoGlyphSacrifice.filterValue(b));
+      Glyphs.sort((a, b) => -AutoGlyphProcessor.filterValue(a) + AutoGlyphProcessor.filterValue(b));
     },
     sortByEffect() {
       function reverseBitstring(eff) {
@@ -96,6 +96,9 @@ Vue.component("glyph-inventory", {
   },
   template: `
   <div class="l-glyph-inventory">
+    Click and drag or double-click to equip glyphs.
+    <br>
+    The top row of slots is unaffected by glyph sorting and auto clean.
     <div v-for="row in rowCount" class="l-glyph-inventory__row">
       <div v-for="col in colCount"
            class="l-glyph-inventory__slot"
@@ -106,8 +109,8 @@ Vue.component("glyph-inventory", {
                          :glyph="inventory[toIndex(row, col)]"
                          :showSacrifice="true"
                          :draggable="true"
-                         @shiftClicked="deleteGlyph($event, false)"
-                         @ctrlShiftClicked="deleteGlyph($event, true)"
+                         @shiftClicked="removeGlyph($event, false)"
+                         @ctrlShiftClicked="removeGlyph($event, true)"
                          @clicked="clickGlyph(col, $event)"/>
       </div>
     </div>

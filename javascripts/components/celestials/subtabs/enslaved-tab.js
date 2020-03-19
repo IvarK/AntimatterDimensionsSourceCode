@@ -38,6 +38,9 @@ Vue.component("enslaved-tab", {
         ? "You're inside Enslaved Ones' Reality"
         : "Start Enslaved One's Reality";
     },
+    storedTimeRate() {
+      return formatPercents(this.storedFraction / 1000, 1);
+    },
     sliderProps() {
       return {
         min: 0,
@@ -171,7 +174,10 @@ Vue.component("enslaved-tab", {
           <div> Maximum: {{ storedRealCapDesc }} </div>
         </div>
       </div>
-      <div v-if="canAdjustStoredTime" class="l-enslaved-shop-container">
+      <div v-if="canAdjustStoredTime" class="l-enslaved-top-container__half">
+        Black Hole charging rate: {{ storedTimeRate }}
+        <br>
+        <br>
         <ad-slider-component
             v-bind="sliderProps"
             :value="storedFraction"

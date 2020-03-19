@@ -368,8 +368,9 @@ let player = {
         dt: 25,
         eternities: 25
       },
-      autoGlyphSac: {
-        mode: AUTO_GLYPH_SAC_MODE.NONE,
+      glyphScoreSettings: {
+        mode: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
+        simpleEffectCount: 0,
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({
           rarityThreshold: 0,
           scoreThreshold: 0,
@@ -378,9 +379,7 @@ let player = {
           effectScores: t.effects.mapToObject(e => e.id, () => 0),
         })),
       },
-      autoGlyphPick: {
-        mode: AUTO_GLYPH_PICK_MODE.RANDOM,
-      },
+      glyphTrashMode: AUTO_GLYPH_REJECT.SACRIFICE,
     },
     enslaved: {
       isStoring: false,

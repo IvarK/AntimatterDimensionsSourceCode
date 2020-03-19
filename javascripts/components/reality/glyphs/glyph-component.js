@@ -152,7 +152,8 @@ const GlyphTooltipComponent = {
     },
     sacrificeText() {
       if (this.type === "cursed") return "Cannot be sacrificed or refined";
-      if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY && this.type !== "reality") {
+      if (GlyphSacrificeHandler.isRefining && this.type !== "reality") {
+        if (!AlchemyResource[this.type].isUnlocked) return "Cannot be refined (resource not unlocked)";
         const refinementText = `${format(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
         const limitText = this.sacrificeReward === 0
           ? ` (limit reached)`
@@ -162,10 +163,10 @@ const GlyphTooltipComponent = {
           : `Can be refined for ${refinementText}${limitText}`;
       }
       const powerText = `${format(this.sacrificeReward, 2, 2)} power`;
-      const showFilterScoreModes = [AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS,
-        AUTO_GLYPH_SAC_MODE.EFFECTS, AUTO_GLYPH_SAC_MODE.ADVANCED];
-      const filterScoreText = showFilterScoreModes.includes(AutoGlyphSacrifice.mode)
-        ? `\nGlyph Filter Score: ${format(AutoGlyphSacrifice.filterValue(this.$parent.glyph), 1, 1)}`
+      const showFilterScoreModes = [AUTO_GLYPH_SCORE.RARITY, AUTO_GLYPH_SCORE.RARITY_THRESHOLDS,
+        AUTO_GLYPH_SCORE.SPECIFIED_EFFECT, AUTO_GLYPH_SCORE.ADVANCED_MODE];
+      const filterScoreText = showFilterScoreModes.includes(AutoGlyphProcessor.scoreMode)
+        ? `\nGlyph Score: ${format(AutoGlyphProcessor.filterValue(this.$parent.glyph), 1, 1)}`
         : "";
       return this.onTouchDevice
         ? `Sacrifice for ${powerText}${filterScoreText}`
@@ -199,8 +200,8 @@ const GlyphTooltipComponent = {
       ev.preventDefault();
       ev.stopPropagation();
     },
-    sacrificeGlyph() {
-      sacrificeGlyph(Glyphs.findById(this.id), false);
+    removeGlyph() {
+      GlyphSacrificeHandler.removeGlyph(Glyphs.findById(this.id), false);
     },
   },
   mounted() {
@@ -225,7 +226,7 @@ const GlyphTooltipComponent = {
     </div>
     <div v-if="showDeletionText"
          :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
-         v-on="onTouchDevice ? { click: sacrificeGlyph } : {}">
+         v-on="onTouchDevice ? { click: removeGlyph } : {}">
       {{sacrificeText}}
     </div>
   </div>
@@ -409,9 +410,9 @@ Vue.component("glyph-component", {
     },
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY && this.glyph.type !== "cursed"
-        ? glyphRefinementGain(this.glyph)
-        : glyphSacrificeGain(this.glyph);
+      this.sacrificeReward = GlyphSacrificeHandler.isRefining && this.glyph.type !== "cursed"
+        ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
+        : GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
       this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
     },
     moveTooltipTo(x, y) {
@@ -452,7 +453,7 @@ Vue.component("glyph-component", {
       const dragInfo = this.$viewModel.tabs.reality.draggingGlyphInfo;
       dragInfo.id = this.glyph.id;
       dragInfo.type = this.glyph.type;
-      dragInfo.sacrificeValue = glyphSacrificeGain(this.glyph);
+      dragInfo.sacrificeValue = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
     },
     dragEnd() {
       this.isDragging = false;

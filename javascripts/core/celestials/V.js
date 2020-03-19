@@ -217,7 +217,7 @@ const V = {
     return this.spaceTheorems >= 66;
   },
   get tierReduction() {
-    if (!V.isFlipped) return player.celestials.v.ppSpent / 200000;
-    return Math.log10(Math.clampMin(player.celestials.v.ppSpent / 20000, 1)) / 10;
+    if (!V.isFlipped) return Math.clampMax(player.celestials.v.ppSpent / 200000, 5);
+    return Math.clampMax(Math.log10(Math.clampMin(player.celestials.v.ppSpent / 20000, 1)) / 10, 5);
   }
 };

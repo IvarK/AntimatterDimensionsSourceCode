@@ -3,27 +3,13 @@
 Vue.component("glyph-auto-pick-options", {
   data() {
     return {
-      unlocked: false,
-      mode: AUTO_GLYPH_PICK_MODE.RANDOM,
-      alchemyUnlocked: false,
-      sacMode: 0
+      mode: AUTO_GLYPH_REJECT.SACRIFICE,
     };
   },
   computed: {
     modes() {
-      return AUTO_GLYPH_PICK_MODE;
+      return AUTO_GLYPH_REJECT;
     },
-    pickerText() {
-      switch (this.sacMode) {
-        case AUTO_GLYPH_SAC_MODE.ALL: return "Sacrifice";
-        case AUTO_GLYPH_SAC_MODE.ALCHEMY: return "Refine";
-        default: return "Auto pick";
-      }
-    },
-    lowestResourceText() {
-      if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && this.sacMode === AUTO_GLYPH_SAC_MODE.ALCHEMY) return "alchemy resource";
-      return "total sacrifice";
-    }
   },
   methods: {
     optionClass(idx) {
@@ -36,28 +22,28 @@ Vue.component("glyph-auto-pick-options", {
       ];
     },
     update() {
-      this.unlocked = EffarigUnlock.autopicker.isUnlocked;
-      this.mode = AutoGlyphPicker.mode;
-      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
-      this.sacMode = AutoGlyphSacrifice.mode;
+      this.mode = AutoGlyphProcessor.sacMode;
     },
     setMode(m) {
-      AutoGlyphPicker.mode = m;
+      AutoGlyphProcessor.sacMode = m;
     },
   },
   template: `
-  <div v-if="unlocked" class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
-    <div :class="optionClass(modes.RANDOM)" @click="setMode(modes.RANDOM)">
-      {{ pickerText }} random
+  <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
+    <span class="c-glyph-sacrifice-options__advanced">
+      Behavior for deleted and filtered
+      <br>
+      glyphs in non-alchemy modes:
+    </span>
+    <br>
+    <div :class="optionClass(modes.SACRIFICE)" @click="setMode(modes.SACRIFICE)">
+      Always sacrifice
     </div>
-    <div :class="optionClass(modes.RARITY)" @click="setMode(modes.RARITY)">
-      {{ pickerText }} rarest
+    <div :class="optionClass(modes.ALWAYS_REFINE)" @click="setMode(modes.ALWAYS_REFINE)">
+      Always refine
     </div>
-    <div :class="optionClass(modes.ABOVE_SACRIFICE_THRESHOLD)" @click="setMode(modes.ABOVE_SACRIFICE_THRESHOLD)">
-      {{ pickerText }} farthest above threshold
-    </div>
-    <div :class="optionClass(modes.LOWEST_RESOURCE)" @click="setMode(modes.LOWEST_RESOURCE)">
-      {{ pickerText }} lowest {{ lowestResourceText }}
+    <div :class="optionClass(modes.REFINE_TO_CAP)" @click="setMode(modes.REFINE_TO_CAP)">
+      Refine to cap, then sacrifice
     </div>
   </div>
   `

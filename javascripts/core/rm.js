@@ -22,106 +22,113 @@ function strengthToRarity(x) {
   return (x - 1) * 100 / 2.5;
 }
 
-const AutoGlyphSacrifice = {
-  get mode() {
-    return player.celestials.effarig.autoGlyphSac.mode;
+const AutoGlyphProcessor = {
+  get scoreMode() {
+    return player.celestials.effarig.glyphScoreSettings.mode;
   },
-  set mode(value) {
-    player.celestials.effarig.autoGlyphSac.mode = value;
+  set scoreMode(value) {
+    player.celestials.effarig.glyphScoreSettings.mode = value;
+  },
+  get sacMode() {
+    return player.celestials.effarig.glyphTrashMode;
+  },
+  set sacMode(value) {
+    player.celestials.effarig.glyphTrashMode = value;
   },
   get types() {
-    return player.celestials.effarig.autoGlyphSac.types;
+    return player.celestials.effarig.glyphScoreSettings.types;
   },
+  // This function is meant to be something which assigns a value to every glyph, with the assumption that
+  // higher numbers correspond to better glyphs. This value is also displayed on tooltips when it depends
+  // on only the glyph itself and not external factors.
   filterValue(glyph) {
-    const typeCfg = AutoGlyphSacrifice.types[glyph.type];
-    if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS) {
-      return strengthToRarity(glyph.strength);
-    }
-    if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.EFFECTS) {
-      const glyphEffectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
-        .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated)
-        .map(effect => effect.id);
-      if (glyphEffectList.length < typeCfg.effectCount) {
-        return strengthToRarity(glyph.strength) - 200 * (typeCfg.effectCount - glyphEffectList.length);
-      }
-      let missingEffects = 0;
-      for (const effect of Object.keys(typeCfg.effectChoices)) {
-        if (typeCfg.effectChoices[effect] && !glyphEffectList.includes(effect)) missingEffects++;
-      }
-      return strengthToRarity(glyph.strength) - 200 * missingEffects;
-    }
-    if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED) {
-      const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
-        .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated)
-        .map(effect => effect.id);
-      const glyphScore = strengthToRarity(glyph.strength) +
-        effectList.map(e => typeCfg.effectScores[e]).sum();
-      return glyphScore;
-    }
-    return strengthToRarity(glyph.strength);
-  },
-  thresholdValue(glyph) {
-    if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS || 
-      AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.EFFECTS) {
-        return AutoGlyphSacrifice.types[glyph.type].rarityThreshold;
-    }
-    if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED) {
-      return AutoGlyphSacrifice.types[glyph.type].scoreThreshold;
-    }
-    return 0;
-  },
-  wouldSacrifice(glyph) {
-    switch (AutoGlyphSacrifice.mode) {
-      case AUTO_GLYPH_SAC_MODE.NONE: return false;
-      case AUTO_GLYPH_SAC_MODE.ALL:
-      case AUTO_GLYPH_SAC_MODE.ALCHEMY:
-        return true;
-      case AUTO_GLYPH_SAC_MODE.RARITY_THRESHOLDS:
-      case AUTO_GLYPH_SAC_MODE.EFFECTS:
-      case AUTO_GLYPH_SAC_MODE.ADVANCED:
-        return this.filterValue(glyph) < this.thresholdValue(glyph);
-    }
-    throw new Error("Unknown auto glyph sacrifice mode");
-  },
-};
-
-const AutoGlyphPicker = {
-  get mode() {
-    return player.celestials.effarig.autoGlyphPick.mode;
-  },
-  set mode(value) {
-    player.celestials.effarig.autoGlyphPick.mode = value;
-  },
-  getPickScore(glyph) {
-    // This function is non-deterministic, keep that in mind when calling it
-    // (for example, cache the results).
-    switch (AutoGlyphPicker.mode) {
-      case AUTO_GLYPH_PICK_MODE.RANDOM: return Math.random();
-      case AUTO_GLYPH_PICK_MODE.RARITY: return strengthToRarity(glyph.strength);
-      case AUTO_GLYPH_PICK_MODE.ABOVE_SACRIFICE_THRESHOLD: {
-        const filterValue = AutoGlyphSacrifice.filterValue(glyph);
-        if (filterValue < 0) {
-          // We're going to sacrifice the glyph anyway. Also, if we have 1000% rarity glyphs everything has broken,
-          // so subtracting 1000 should be safe (glyphs we would sacrifice are sorted below all other glyphs).
-          return strengthToRarity(glyph.strength) - 1000;
-        }
-        return filterValue;
-      }
-      case AUTO_GLYPH_PICK_MODE.LOWEST_RESOURCE:
-        if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY) {
-          return AlchemyResource[glyph.type].isUnlocked && glyphRefinementGain(glyph) !== 0
-            ? -AlchemyResource[glyph.type].amount
-            : -Number.MAX_VALUE;
-        }
+    const typeCfg = this.types[glyph.type];
+    switch (this.scoreMode) {
+      case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
+        // Picked glyphs are never kept in this mode
         return -player.reality.glyphs.sac[glyph.type];
+      case AUTO_GLYPH_SCORE.EFFECT_COUNT:
+        // Effect count, plus a very small rarity term to break ties in favor of rarer glyphs
+        return strengthToRarity(glyph.strength) / 1000 + getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
+          .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated).length;
+      case AUTO_GLYPH_SCORE.RARITY_THRESHOLD:
+        return strengthToRarity(glyph.strength);
+      case AUTO_GLYPH_SCORE.SPECIFIED_EFFECT: {
+        // Value is equal to rarity but minus 200 for each missing effect. This makes all glyphs which don't
+        // satisfy the requirements have a negative score and generally the worse a glyph misses the requirements,
+        // the more negative of a score it will have
+        const glyphEffectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
+          .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated)
+          .map(effect => effect.id);
+        if (glyphEffectList.length < typeCfg.effectCount) {
+          return strengthToRarity(glyph.strength) - 200 * (typeCfg.effectCount - glyphEffectList.length);
+        }
+        let missingEffects = 0;
+        for (const effect of Object.keys(typeCfg.effectChoices)) {
+          if (typeCfg.effectChoices[effect] && !glyphEffectList.includes(effect)) missingEffects++;
+        }
+        return strengthToRarity(glyph.strength) - 200 * missingEffects;
+      }
+      case AUTO_GLYPH_SCORE.ADVANCED_MODE: {
+        const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
+          .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated)
+          .map(effect => effect.id);
+        const effectScore = effectList.map(e => typeCfg.effectScores[e]).sum();
+        return strengthToRarity(glyph.strength) + effectScore;
+      }
+      case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:
+        // Picked glyphs are never kept in this mode
+        return -AlchemyResource[glyph.type].amount;
+      case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
+        return GlyphSacrificeHandler.glyphRefinementGain(glyph);
+      default:
+        throw new Error("Unknown glyph score mode in score assignment");
     }
-    throw new Error("Unknown auto glyph picker mode");
   },
+  // This is a mode-specific threshold which determines if selected glyphs are "good enough" to keep
+  thresholdValue(glyph) {
+    switch (this.scoreMode) {
+      case AUTO_GLYPH_SCORE.EFFECT_COUNT:
+        return player.celestials.effarig.glyphScoreSettings.simpleEffectCount;
+      case AUTO_GLYPH_SCORE.RARITY_THRESHOLD:
+      case AUTO_GLYPH_SCORE.SPECIFIED_EFFECT:
+        return this.types[glyph.type].rarityThreshold;
+      case AUTO_GLYPH_SCORE.ADVANCED_MODE:
+        return this.types[glyph.type].scoreThreshold;
+      case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
+      case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:
+      case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
+        // These modes never keep glyphs and always refine/sacrfice
+        return Number.MAX_VALUE;
+      default:
+        throw new Error("Unknown glyph score mode in threshold check");
+    }
+  },
+  wouldKeep(glyph) {
+    return this.filterValue(glyph) >= this.thresholdValue(glyph);
+  },
+  // Given a list of glyphs, pick the one with the highest score
   pick(glyphs) {
     return glyphs
-      .map(g => ({ glyph: g, score: this.getPickScore(g) }))
+      .map(g => ({ glyph: g, score: this.filterValue(g) }))
       .reduce((x, y) => (x.score > y.score ? x : y))
       .glyph;
+  },
+  getRidOfGlyph(glyph) {
+    switch (this.sacMode) {
+      case AUTO_GLYPH_REJECT.SACRIFICE:
+        GlyphSacrificeHandler.sacrificeGlyph(glyph, true);
+        break;
+      case AUTO_GLYPH_REJECT.ALWAYS_REFINE:
+        GlyphSacrificeHandler.refineGlyph(glyph);
+        break;
+      case AUTO_GLYPH_REJECT.REFINE_TO_CAP:
+        if (GlyphSacrificeHandler.glyphRefinementGain(glyph) === 0) GlyphSacrificeHandler.sacrificeGlyph(glyph, true);
+        else GlyphSacrificeHandler.refineGlyph(glyph);
+        break;
+      default:
+        throw new Error("Unknown auto glyph sacrifice mode");
+    }
   }
 };
 
@@ -688,7 +695,7 @@ const Glyphs = {
   },
   autoClean() {
     // If the player hasn't unlocked sacrifice yet, we warn them.
-    if (!canSacrifice() &&
+    if (!GlyphSacrificeHandler.canSacrifice &&
       // eslint-disable-next-line prefer-template
       !confirm("This will not give you any benefit" +
         (RealityUpgrade(19).isAvailableForPurchase ? "" : " and may reduce the number of glyphs in your inventory. " +
@@ -701,7 +708,7 @@ const Glyphs = {
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
       if (glyph === null || glyph.color !== undefined) continue;
-      if (this.isObjectivelyUseless(glyph)) sacrificeGlyph(glyph, true);
+      if (this.isObjectivelyUseless(glyph)) GlyphSacrificeHandler.removeGlyph(glyph, true);
     }
   },
   get levelCap() {
@@ -974,94 +981,105 @@ function getActiveGlyphEffects() {
   return effectValues;
 }
 
-function deleteGlyph(id, force) {
-  const glyph = Glyphs.findById(id);
-  if (canSacrifice()) {
-    sacrificeGlyph(glyph, force);
-    return;
-  }
-  if (force || confirm("Do you really want to delete this glyph?")) {
-    Glyphs.removeFromInventory(glyph);
-  }
-}
-
 function respecGlyphs() {
   Glyphs.unequipAll();
   player.reality.respec = false;
 }
 
-function canSacrifice() {
-  return RealityUpgrade(19).isBought;
-}
-
-function glyphSacrificeGain(glyph) {
-  if (!canSacrifice()) return 0;
-  if (glyph.type === "reality") return 0.01 * glyph.level;
-  const pre10kFactor = Math.pow(Math.min(glyph.level, 10000) + 10, 2.5);
-  const post10kFactor = 1 + Math.max(glyph.level - 10000, 0) / 100;
-  return pre10kFactor * post10kFactor * glyph.strength * Teresa.runRewardMultiplier;
-}
-
-function glyphAlchemyResource(glyph) {
-  const type = GlyphTypes[glyph.type];
-  return AlchemyResources.all[type.alchemyResource];
-}
-
-function glyphRefinementGain(glyph) {
-  if (!canSacrifice()) return 0;
-  const glyphMaxValue = levelRefinementValue(glyph.level);
-  const glyphActualValue = 0.2 * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
-  const alchemyResource = glyphAlchemyResource(glyph);
-  return Math.clamp(glyphMaxValue - alchemyResource.amount, 0, glyphActualValue);
-}
-
-// This is the value refined glyphs will eventually cap at, as a function of glyph level
-function levelRefinementValue(level) {
-  return Math.pow(level, 3) / 1e8;
-}
+// This actually deals with both sacrifice and refining, but I wasn't 100% sure what to call it
+const GlyphSacrificeHandler = {
+  get canSacrifice() {
+    return RealityUpgrade(19).isBought;
+  },
+  get isRefining() {
+    return Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && AutoGlyphProcessor.sacMode !== AUTO_GLYPH_REJECT.SACRIFICE;
+  },
+  // Removes a glyph, accounting for sacrifice unlock and alchemy state
+  removeGlyph(glyph, force = false) {
+    if (!this.canSacrifice) this.deleteGlyph(glyph, force);
+    if (this.isRefining) this.refineGlyph(glyph);
+    this.sacrificeGlyph(glyph, force);
+  },
+  deleteGlyph() {
+    if (force || confirm("Do you really want to delete this glyph?")) {
+      Glyphs.removeFromInventory(glyph);
+    }
+  },
+  glyphSacrificeGain(glyph) {
+    if (!this.canSacrifice) return 0;
+    if (glyph.type === "reality") return 0.01 * glyph.level;
+    const pre10kFactor = Math.pow(Math.clampMax(glyph.level, 10000) + 10, 2.5);
+    const post10kFactor = 1 + Math.clampMin(glyph.level - 10000, 0) / 100;
+    return pre10kFactor * post10kFactor * glyph.strength * Teresa.runRewardMultiplier;
+  },
+  sacrificeGlyph(glyph, force = false) {
+    if (glyph.type === "cursed") {
+      Glyphs.removeFromInventory(glyph);
+      return;
+    }
+  
+    const toGain = this.glyphSacrificeGain(glyph);
+    const askConfirmation = !force && player.options.confirmations.glyphSacrifice;
+    if (askConfirmation) {
+      if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} 
+        glyphs will increase from ${format(player.reality.glyphs.sac[glyph.type], 2, 2)} to 
+        ${format(player.reality.glyphs.sac[glyph.type] + toGain, 2, 2)}`)) {
+          return;
+      }
+    }
+    player.reality.glyphs.sac[glyph.type] += toGain;
+    Glyphs.removeFromInventory(glyph);
+    EventHub.dispatch(GAME_EVENT.GLYPH_SACRIFICED, glyph);
+  },
+  glyphAlchemyResource(glyph) {
+    const type = GlyphTypes[glyph.type];
+    return AlchemyResources.all[type.alchemyResource];
+  },
+  // Scaling function to make refinement value ramp up with higher glyph levels
+  levelRefinementValue(level) {
+    return Math.pow(level, 3) / 1e8;
+  },
+  // Refined glyphs give this proportion of their maximum attainable value from their level
+  glyphRefinementEfficiency: 0.2,
+  glyphRefinementGain(glyph) {
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
+    const glyphMaxValue = this.levelRefinementValue(glyph.level);
+    const glyphActualValue = this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
+    const alchemyResource = this.glyphAlchemyResource(glyph);
+    return Math.clamp(glyphMaxValue - alchemyResource.amount, 0, glyphActualValue);
+  },
+  refineGlyph(glyph) {
+    if (glyph.type === "reality") return;
+    if (glyph.type === "cursed") {
+      Glyphs.removeFromInventory(glyph);
+      return;
+    }
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || this.glyphRefinementGain(glyph) === 0) {
+      this.sacrificeGlyph(glyph, true);
+      return;
+    }
+    if (this.glyphAlchemyResource(glyph).isUnlocked) {
+      const resource = this.glyphAlchemyResource(glyph);
+      const refinementGain = this.glyphRefinementGain(glyph);
+      resource.amount += refinementGain;
+      const decoherenceGain = refinementGain * AlchemyResource.decoherence.effectValue;
+      for (const glyphType of GlyphTypes.list) {
+        if (glyphType !== GlyphTypes[glyph.type] && glyphType !== GlyphTypes.reality &&
+          glyphType !== GlyphTypes.cursed) {
+            const otherResource = AlchemyResources.all[glyphType.alchemyResource];
+            const maxResouce = Math.max(refinementGain / this.glyphRefinementEfficiency, otherResource.amount);
+            otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);
+        }
+      }
+      Glyphs.removeFromInventory(glyph);
+    }
+  }
+};
 
 // Gives a maximum resource total possible, based on the highest level glyph in recent realities. This doesn't
 // actually enforce any special behavior, but instead only affects various UI properties.
 function estimatedAlchemyCap() {
-  return levelRefinementValue(player.lastTenRealities.map(([, , , lvl]) => lvl).max());
-}
-
-function sacrificeGlyph(glyph, force = false, noAlchemy = false) {
-  if (glyph.type === "cursed") {
-    Glyphs.removeFromInventory(glyph);
-    return;
-  }
-
-  if (!noAlchemy &&
-      AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY &&
-      glyph.type !== "reality" &&
-      glyphAlchemyResource(glyph).isUnlocked) {
-    const resource = glyphAlchemyResource(glyph);
-    const refinementGain = glyphRefinementGain(glyph);
-    resource.amount += refinementGain;
-    const decoherenceGain = refinementGain * AlchemyResource.decoherence.effectValue;
-    for (const glyphType of GlyphTypes.list) {
-      if (glyphType !== GlyphTypes[glyph.type] && glyphType !== GlyphTypes.reality && glyphType !== GlyphTypes.cursed) {
-        const otherResource = AlchemyResources.all[glyphType.alchemyResource];
-        const maxResouce = Math.max(100 * refinementGain, otherResource.amount);
-        otherResource.amount = Math.min(otherResource.amount + decoherenceGain, maxResouce);
-      }
-    }
-    Glyphs.removeFromInventory(glyph);
-    return;
-  }
-
-  const toGain = glyphSacrificeGain(glyph);
-  const askConfirmation = !force && player.options.confirmations.glyphSacrifice;
-  if (askConfirmation) {
-    if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} ` +
-      `glyphs will increase to ${(player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2)}`)) {
-      return;
-    }
-  }
-  player.reality.glyphs.sac[glyph.type] += toGain;
-  Glyphs.removeFromInventory(glyph);
-  EventHub.dispatch(GAME_EVENT.GLYPH_SACRIFICED, glyph);
+  return GlyphSacrificeHandler.levelRefinementValue(player.lastTenRealities.map(([, , , lvl]) => lvl).max());
 }
 
 function getGlyphLevelInputs() {

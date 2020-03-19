@@ -21,6 +21,9 @@ Vue.component("ra-pet", {
     };
   },
   computed: {
+    showScalingUpgrade() {
+      return this.petConfig.scalingUpgradeVisible(this.level);
+    },
     scalingUpgradeText() {
       return this.petConfig.scalingUpgradeText(this.level);
     },
@@ -109,8 +112,9 @@ Vue.component("ra-pet", {
     <div class="l-ra-pet-container" v-if="isUnlocked">
       <div class="c-ra-pet-header" :style="petStyle">
         <div class="c-ra-pet-title">{{ name }} Level {{ formatInt(level) }}</div>
-        <div v-if="level >= 2">
-          {{ scalingUpgradeText }}
+        <div v-if="showScalingUpgrade"
+          :key="level">
+            {{ scalingUpgradeText }}
         </div>
         <div v-else>
           <br>
@@ -131,7 +135,7 @@ Vue.component("ra-pet", {
         <div>
           {{ format(memoryChunks, 2, 2) }} memory chunks, {{ format(memoriesPerSecond, 2, 2) }} memories/sec
         </div>
-        <div v-if="canGetMemoryChunks">
+        <div>
           Gaining {{ format(memoryChunksPerSecond, 2, 2) }} memory chunks/sec
           <span :ach-tooltip="chunkTooltip">
             <i class="fas fa-question-circle"></i>
@@ -148,8 +152,9 @@ Vue.component("ra-pet", {
         </div>
         <br>
         <div style="display: flex; justify-content: center;">
+          <!-- This choice of key forces a UI update every level up -->
           <ra-upgrade-icon v-for="(unlock, i) in unlocks"
-            :key="i"
+            :key="25 * level + i"
             :unlock="unlock" />
         </div>
       </div>

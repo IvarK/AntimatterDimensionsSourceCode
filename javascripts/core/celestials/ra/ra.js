@@ -111,7 +111,7 @@ const Ra = {
       get name() { return "Teresa"; }
       get data() { return player.celestials.ra.pets.teresa; }
       get requiredUnlock() { return undefined; }
-      get rawMemoryChunksPerSecond() { return Math.pow(player.eternityPoints.pLog10() / 1e4, 3); }
+      get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.eternityPoints.pLog10() / 1e4, 3); }
       get color() { return "#86ea84"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.TERESA_XP)
@@ -123,7 +123,7 @@ const Ra = {
       get name() { return "Effarig"; }
       get data() { return player.celestials.ra.pets.effarig; }
       get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return Math.pow(Effarig.shardsGained, 0.1); }
+      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Effarig.shardsGained, 0.1); }
       get color() { return "#ea8585"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.EFFARIG_XP)
@@ -135,7 +135,7 @@ const Ra = {
       get name() { return "Enslaved"; }
       get data() { return player.celestials.ra.pets.enslaved; }
       get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return Math.pow(player.timeShards.pLog10() / 3e5, 2); }
+      get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.timeShards.pLog10() / 3e5, 2); }
       get color() { return "#ead584"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.ENSLAVED_XP)
@@ -147,7 +147,7 @@ const Ra = {
       get name() { return "V"; }
       get data() { return player.celestials.ra.pets.v; }
       get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return Math.pow(player.infinityPower.pLog10() / 1e7, 1.5); }
+      get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.infinityPower.pLog10() / 1e7, 1.5); }
       get color() { return "#f1aa7f"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.V_XP)
@@ -188,7 +188,7 @@ const Ra = {
   requiredExpForLevel(level) {
     let adjustedLevel = level + Math.pow(level, 2) / 10;
     if (level > 25) adjustedLevel *= Math.pow(1.3, level - 25);
-    return Math.floor(Math.pow(adjustedLevel, 4) * 1e5);
+    return Math.floor(Math.pow(adjustedLevel, 4) * 5e5);
   },
   // Calculates the cumulative exp needed to REACH a level starting from nothing.
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized
@@ -362,7 +362,7 @@ const RA_UNLOCKS = {
   ALTERED_GLYPHS: {
     id: 3,
     description: "Get Teresa to level 8",
-    reward: "Unlock Altered Glyphs (effects improved based on glyph sacrifice)",
+    reward: "Unlock Altered Glyphs (effects improved based on glyph sacrifice; see Glyphs tab)",
     pet: Ra.pets.teresa,
     level: 8,
     displayIcon: `<span class="fas fa-bolt"></span>`
@@ -404,7 +404,7 @@ const RA_UNLOCKS = {
   GLYPH_ALCHEMY: {
     id: 8,
     description: "Get Effarig to level 2",
-    reward: "Unlock Glyph Alchemy (one resource per level)",
+    reward: "Unlock Glyph Alchemy (one resource per level; new subtab in Reality)",
     pet: Ra.pets.effarig,
     level: 2,
     displayIcon: `<span class="fas fa-vial"></span>`
@@ -420,7 +420,7 @@ const RA_UNLOCKS = {
   GLYPH_EFFECT_COUNT: {
     id: 10,
     description: "Get Effarig to level 8",
-    reward: () => `Glyphs always have ${formatInt(4)} effects (Effarig glyphs can now have more)`,
+    reward: () => `Glyphs always have ${formatInt(4)} effects (Effarig glyphs can now have up to ${formatInt(7)})`,
     pet: Ra.pets.effarig,
     level: 8,
     displayIcon: `<span class="fas fa-braille"></span>`
@@ -481,7 +481,8 @@ const RA_UNLOCKS = {
   ADJUSTABLE_STORED_TIME: {
     id: 17,
     description: "Get Enslaved to level 8",
-    reward: "Stored game time can be stored at an adjustable rate and automatically released",
+    reward: () => `Black hole charging can be done at an adjustable rate and automatically
+      pulsed every ${formatInt(5)} ticks (see The Enslaved Ones' tab)`,
     pet: Ra.pets.enslaved,
     level: 8,
     displayIcon: `<span class="fas fa-expand-arrows-alt"></span>`
@@ -530,8 +531,8 @@ const RA_UNLOCKS = {
   V_XP: {
     id: 23,
     description: "Get V to level 5",
-    reward: () => `All memory chunks produce more memories based on total pet level,
-      unlock a Triad study every ${formatInt(5)} levels`,
+    reward: () => `All memory chunks produce more memories based on total Celestial levels,
+      unlock a Triad study every ${formatInt(5)} levels (see bottom of the Time Studies page)`,
     pet: Ra.pets.v,
     level: 5,
     displayIcon: `<span class="fas fa-book"></span>`
@@ -539,7 +540,7 @@ const RA_UNLOCKS = {
   HARD_V: {
     id: 24,
     description: "Get V to level 8",
-    reward: "Unlock more V-achievements.",
+    reward: "Unlock more V-achievements (see V's tab)",
     pet: Ra.pets.v,
     level: 8,
     displayIcon: `<span class="fas fa-trophy"></span>`

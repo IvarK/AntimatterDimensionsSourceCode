@@ -7,7 +7,8 @@ Vue.component("glyphs-tab", {
     instabilityThreshold: 0,
     hyperInstabilityThreshold: 0,
     isInCelestialReality: false,
-    autoRestartCelestialRuns: false
+    autoRestartCelestialRuns: false,
+    hasAlchemy: false,
   }),
   computed: {
     showEnslavedHint() {
@@ -22,6 +23,7 @@ Vue.component("glyphs-tab", {
       this.isInCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
       this.autoRestartCelestialRuns = player.options.retryCelestial;
       this.enslavedHint = "";
+      this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
       if (!Enslaved.isRunning) return;
       const haveBoost = Glyphs.activeList.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
       if (haveBoost) {
@@ -58,7 +60,7 @@ Vue.component("glyphs-tab", {
         <glyph-levels-and-weights slot="dropdown" />
       </expanding-control-box>
       <glyph-sacrifice-options />
-      <glyph-auto-pick-options />
+      <glyph-auto-pick-options v-if="hasAlchemy" />
       <sacrificed-glyphs />
     </div>
     <div class="l-player-glyphs-column">

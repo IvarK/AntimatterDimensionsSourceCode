@@ -46,7 +46,7 @@ function buyDilationUpgrade(id, bulk) {
 
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
       DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
-    buying = Math.min(buying, Effects.max(1, PerkShopUpgrade.rmMult));
+    buying = Math.min(buying, Effects.max(1, PerkShopUpgrade.bulkDilation));
     if (!bulk) {
       buying = Math.min(buying, 1);
     }

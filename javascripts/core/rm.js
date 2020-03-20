@@ -700,7 +700,7 @@ const Glyphs = {
       !confirm("This will not give you any benefit" +
         (RealityUpgrade(19).isAvailableForPurchase ? "" : " and may reduce the number of glyphs in your inventory. " +
         "It may be hard to get more glyphs. The Reality upgrade to unlock glyph sacrifice requires 30 glyphs") +
-        ". Also, when you unlock sacrifice, you will not be able to later sacrifice glyphs you delete now. " +
+        ". Also, when you unlock glyph sacrifice, you will not be able to later sacrifice glyphs you delete now. " +
         "Are you sure you want to do this?")) {
       return;
     }

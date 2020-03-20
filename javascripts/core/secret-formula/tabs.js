@@ -179,6 +179,7 @@ GameDatabase.tabs = [
     condition: () =>
       PlayerProgress.realityUnlocked() ||
       PlayerProgress.eternityUnlocked(),
+    before: "eternity-points-header",
     subtabs: [
       {
         key: "studies",

@@ -32,6 +32,9 @@ Vue.component("modal-miscellaneous-options", {
     `<modal-options @close="emitClose">
       <on-off-button v-model="offlineProgress" text="Offline progress:"/>
       <on-off-button v-if="realityUnlocked" v-model="showGlyphEffectDots" text="Dots on glyphs (showing effects):"/>
-      <on-off-button v-if="realityUnlocked" v-model="respecIntoProtected" text="Put glyphs cleared from inventory into top two rows:"/>
+      <on-off-button
+        v-if="realityUnlocked"
+        v-model="respecIntoProtected"
+        text="Put glyphs cleared from inventory into top two rows:"/>
     </modal-options>`
 });

@@ -3757,6 +3757,10 @@ screen and (max-width: 480px) {
   margin: 1.5rem 0;
 }
 
+.c-eternity-tab__eternity-points {
+  color: var(--color-eternity);
+}
+
 /*#region themes*/
 
 /*#region t-dark t-s6*/
@@ -3769,12 +3773,6 @@ screen and (max-width: 480px) {
   color: #999;
 }
 
-.t-dark .c-eternity-tab__eternity-points,
-.t-s6 .c-eternity-tab__eternity-points {
-  color: white;
-  text-shadow: 0 0 0.7rem white;
-}
-
 /*#endregion t-dark*/
 
 /*#region t-metro t-dark-metro t-inverted-metro t-s8*/
@@ -3783,20 +3781,12 @@ screen and (max-width: 480px) {
   color: #757575;
 }
 
-.t-metro .c-eternity-tab__eternity-points,
-.t-dark-metro .c-eternity-tab__eternity-points,
-.t-inverted-metro .c-eternity-tab__eternity-points,
-.t-s8 .c-eternity-tab__eternity-points {
-  color: #673ab7;
-}
-
 /*#endregion t-metro t-dark-metro t-inverted-metro t-s8*/
 
 /*#region t-s1*/
 
 .t-s1 .c-eternity-tab__eternity-points {
-  color: #639565;
-  text-shadow: 0.1rem 0.1rem 0 black;
+  text-shadow: 0.1rem 0.1rem 0 var(--color-eternity);
 }
 
 /*#endregion t-s1*/

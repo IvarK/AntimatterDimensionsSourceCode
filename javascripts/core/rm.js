@@ -412,7 +412,8 @@ const Glyphs = {
   },
   findFreeIndex(useProtectedSlots) {
     this.validate();
-    return this.inventory.findIndex((slot, index) => slot === null && (useProtectedSlots ? index < this.protectedSlots : index >= this.protectedSlots));
+    let isUsableIndex = (index) => useProtectedSlots ? index < this.protectedSlots : index >= this.protectedSlots;
+    return this.inventory.findIndex((slot, index) => slot === null && isUsableIndex(index));
   },
   get freeInventorySpace() {
     this.validate();

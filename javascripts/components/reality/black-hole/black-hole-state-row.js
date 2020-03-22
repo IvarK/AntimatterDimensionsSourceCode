@@ -31,7 +31,7 @@ Vue.component("black-hole-state-row", {
   },
   template: `
     <h3 v-if="isUnlocked">
-      Black hole {{ id }}
+      Black Hole {{ id }}
       <template v-if="isPermanent">
         is active permanently.
       </template>

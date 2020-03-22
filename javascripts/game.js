@@ -741,14 +741,14 @@ function simulateTime(seconds, real, fast) {
       offlineIncreases.push(`you generated ${format(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
     }
   }
-  // Black hole activations
+  // Black Hole activations
   for (let i = 0; i < player.blackHole.length; i++) {
     const currentActivations = player.blackHole[i].activations;
     const oldActivations = playerStart.blackHole[i].activations;
     const activationsDiff = currentActivations - oldActivations;
     const pluralSuffix = activationsDiff === 1 ? " time" : " times";
     if (activationsDiff > 0 && !BlackHole(i + 1).isPermanent) {
-      offlineIncreases.push(`Black hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
+      offlineIncreases.push(`Black Hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
     }
   }
   let popupString = `${offlineIncreases.join(", <br>")}.`;

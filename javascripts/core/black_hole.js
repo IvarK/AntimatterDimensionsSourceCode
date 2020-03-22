@@ -238,7 +238,7 @@ class BlackHoleState {
         this._data.phase -= this.duration;
         this._data.active = false;
         if (GameUI.notify.showBlackHoles) {
-          GameUI.notify.blackHole(`Black hole ${this.id} duration ended.`);
+          GameUI.notify.blackHole(`Black Hole ${this.id} duration ended.`);
         }
       }
     } else if (this.phase >= this.interval) {
@@ -246,7 +246,7 @@ class BlackHoleState {
       this._data.activations++;
       this._data.active = true;
       if (GameUI.notify.showBlackHoles) {
-        GameUI.notify.blackHole(`Black hole ${this.id} is active!`);
+        GameUI.notify.blackHole(`Black Hole ${this.id} is active!`);
       }
     }
   }

@@ -116,7 +116,7 @@ Vue.component("glyph-inventory", {
     </div>
     <div>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="Arranges by decreasing level*rarity"
+        ach-tooltip="Arranges by decreasing level×rarity"
         @click="sortByPower">
           Sort by power
       </button>

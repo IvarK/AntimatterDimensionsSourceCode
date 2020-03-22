@@ -46,16 +46,16 @@ Vue.component("black-hole-tab", {
       if (!BlackHole(2).isUnlocked || BlackHole(1).isActive) this.detailedBH2 = " ";
       else if (BlackHole(2).timeToNextStateChange > BlackHole(1).cycleLength) {
         const cycleCount = Math.floor(BlackHole(2).timeToNextStateChange / BlackHole(1).cycleLength);
-        this.detailedBH2 = `Black hole 2 will activate after ${cycleCount} more
+        this.detailedBH2 = `Black Hole 2 will activate after ${cycleCount} more
           ${pluralize("cycle", cycleCount)} of Black Hole 1.`;
       } else if (BlackHole(2).isCharged) {
-        this.detailedBH2 = `Black hole 2 will activate with Black hole 1, for ${TimeSpan.fromSeconds(
+        this.detailedBH2 = `Black Hole 2 will activate with Black Hole 1, for ${TimeSpan.fromSeconds(
           Math.min(BlackHole(1).duration, BlackHole(2).duration - BlackHole(2).phase)).toStringShort()}.`;
       } else {
         const bh2Offset = BlackHole(2).timeToNextStateChange - BlackHole(1).timeToNextStateChange;
         const bh2Duration = Math.min(BlackHole(1).duration - bh2Offset, BlackHole(2).duration);
-        this.detailedBH2 = `Black hole 2 will activate ${TimeSpan.fromSeconds(bh2Offset).toStringShort()} after 
-          Black hole 1, for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
+        this.detailedBH2 = `Black Hole 2 will activate ${TimeSpan.fromSeconds(bh2Offset).toStringShort()} after 
+          Black Hole 1, for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
       }
     },
     togglePause() {

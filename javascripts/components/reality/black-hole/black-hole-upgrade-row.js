@@ -10,10 +10,18 @@ Vue.component("black-hole-upgrade-row", {
     };
   },
   computed: {
+    blackHoleDescription() {
+      if (RealityUpgrade(20).isBought) {
+        return `Black Hole ${this.blackHole.id}`;
+      } else {
+        // There's only one black hole and it's this one.
+        return "the Black Hole";
+      }
+    },
     intervalConfig() {
       return {
         upgrade: this.blackHole.intervalUpgrade,
-        description: "Reduce the black hole inactive time by 20%",
+        description: () => "Reduce " + this.blackHoleDescription + " inactive time by 20%",
         effectTitle: "Current interval",
         formatEffect: value => `${TimeSpan.fromSeconds(value).toStringShort(false)}`
       };
@@ -21,7 +29,7 @@ Vue.component("black-hole-upgrade-row", {
     powerConfig() {
       return {
         upgrade: this.blackHole.powerUpgrade,
-        description: "Make the black hole 35% stronger",
+        description: () => "Make " + this.blackHoleDescription + " 35% stronger",
         effectTitle: "Current power",
         formatEffect: value => `${formatX(value, 2, 2)}`
       };
@@ -29,7 +37,7 @@ Vue.component("black-hole-upgrade-row", {
     durationConfig() {
       return {
         upgrade: this.blackHole.durationUpgrade,
-        description: "Extend the black hole duration by 30%",
+        description: () => "Extend " + this.blackHoleDescription + " duration by 30%",
         effectTitle: "Current duration",
         formatEffect: value => `${TimeSpan.fromSeconds(value).toStringShort(false)}`
       };

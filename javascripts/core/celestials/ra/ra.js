@@ -453,7 +453,7 @@ const RA_UNLOCKS = {
   AUTO_BLACK_HOLE_POWER: {
     id: 14,
     description: "Unlock Enslaved",
-    reward: "Black hole power upgrades are bought automatically",
+    reward: "Black Hole power upgrades are bought automatically",
     pet: Ra.pets.enslaved,
     level: 1,
     displayIcon: `<span class="fas fa-circle"></span>`
@@ -481,7 +481,7 @@ const RA_UNLOCKS = {
   ADJUSTABLE_STORED_TIME: {
     id: 17,
     description: "Get Enslaved to level 8",
-    reward: () => `Black hole charging can be done at an adjustable rate and automatically
+    reward: () => `Black Hole charging can be done at an adjustable rate and automatically
       pulsed every ${formatInt(5)} ticks (see The Enslaved Ones' tab)`,
     pet: Ra.pets.enslaved,
     level: 8,

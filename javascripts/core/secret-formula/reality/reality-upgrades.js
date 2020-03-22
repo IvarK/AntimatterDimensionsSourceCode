@@ -30,7 +30,7 @@ GameDatabase.reality.upgrades = (function() {
     }),
     rebuyable({
       id: 2,
-      initialCost: 2,
+      initialCost: 1,
       costMult: 30,
       description: () => `You gain Replicanti ${formatInt(3)} times faster`,
       effect: 3
@@ -44,14 +44,14 @@ GameDatabase.reality.upgrades = (function() {
     }),
     rebuyable({
       id: 4,
-      initialCost: 3,
+      initialCost: 2,
       costMult: 30,
       description: () => `You gain ${formatInt(3)} times more Tachyon Particles`,
       effect: 3
     }),
     rebuyable({
       id: 5,
-      initialCost: 4,
+      initialCost: 3,
       costMult: 50,
       description: () => `You gain ${formatInt(5)} times more Infinities`,
       effect: 5

@@ -129,7 +129,7 @@ function replicantiLoop(diff) {
     player.replicanti.timer = 0;
   } else if (interval.lte(player.replicanti.timer)) {
     const reproduced = binomialDistribution(player.replicanti.amount, player.replicanti.chance);
-     player.replicanti.amount = player.replicanti.amount.plus(reproduced);
+    player.replicanti.amount = player.replicanti.amount.plus(reproduced);
     if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount);
     player.replicanti.timer -= interval.toNumber();
   }

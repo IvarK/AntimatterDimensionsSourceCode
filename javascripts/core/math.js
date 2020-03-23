@@ -517,7 +517,7 @@ function binomialDistribution(numSamples, p) {
     }
     const expected = numSamples.times(p);
     if (expected.e > 32) return expected;
-    return poissonDistribution(numSamples.times(p));
+    return new Decimal(poissonDistribution(numSamples.times(p)));
   }
   const expected = numSamples * p;
   // BTRD is good past 10, but the inversion method we use is faster up to 15 and is exact

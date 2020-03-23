@@ -466,6 +466,10 @@ let player = {
       annihilated: false,
       anomalies: new Decimal(0),
       upgrades: {},
+      singularity: {
+        amount: 0,
+        capUpgrades: 0
+      },
       darkEnergy: 0,
       darkEnergyUpgrades: new Set()
     }

@@ -14,6 +14,9 @@ Vue.component("laitela-tab", {
       darkEnergyChance: 0,
       darkEnergy: 0,
       annihilated: false,
+      isRunning: 0,
+      singularities: 0,
+      darkEnergyCap: 0,
     };
   },
   methods: {
@@ -31,6 +34,8 @@ Vue.component("laitela-tab", {
       this.darkEnergyChance = Laitela.darkEnergyChance;
       this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.isRunning = Laitela.isRunning;
+      this.singularities = player.celestials.laitela.singularity.amount;
+      this.darkEnergyCap = Singularity.darkEnergyCap;
     },
     startRun() {
       if (this.isRunning) startRealityOver();
@@ -106,7 +111,10 @@ Vue.component("laitela-tab", {
       </div>
       <div v-if="anomalies.gt(0)">You to have a {{ formatPercents(darkEnergyChance, 5) }} chance of first dimensions
         generating dark energy each dimension interval, based on your Anomaly count</div>
-      <div v-if="darkEnergy > 0">You have {{ format(darkEnergy, 2, 0)}} Dark Energy</div>
+        <div v-if="darkEnergy > 0">You have {{ format(darkEnergy, 2)}} / {{ format(darkEnergyCap) }} Dark Energy</div>
+        <div v-if="singularities > 0">
+          You have {{ format(singularities, 2)}} {{"Singularity" | pluralize(singularities, "Singularities")}}
+        </div>
       <primary-button
         class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
         @click="maxAll"

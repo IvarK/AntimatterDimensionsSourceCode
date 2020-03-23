@@ -42,11 +42,9 @@ const COST_MULT_PER_TIER = 1e5;
 const laitelaMatterUnlockThresholds = [1, 2, 3].map(x => 10 * Math.pow(COST_MULT_PER_TIER, x));
 
 const Laitela = {
-
   get celestial() {
     return player.celestials.laitela;
   },
-
   handleMatterDimensionUnlocks() {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);
@@ -56,7 +54,6 @@ const Laitela = {
       }
     }
   },
-
   has(info) {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.laitela.unlockBits & (1 << info.id));
@@ -147,7 +144,6 @@ const Laitela = {
   get darkEnergyChance() {
     return this.celestial.anomalies.plus(1).log10() / 10000;
   },
-
   annihilate() {
     this.celestial.anomalies = this.celestial.anomalies.plus(this.anomalyGain);
     this.celestial.dimensions = this.celestial.dimensions.map(
@@ -164,6 +160,41 @@ const Laitela = {
     this.celestial.dimensions[0].amount = new Decimal(1);
     this.celestial.matter = new Decimal(0);
     this.celestial.annihilated = true;
-  }
+  },
+  tickDarkMatter(realDiff) {
+    for (let i = 1; i <= 4; i++) {
+      const d = MatterDimension(i);
+      d.timeSinceLastUpdate += realDiff;
+      if (d.interval.lt(d.timeSinceLastUpdate)) {
+        const ticks = Decimal.floor(Decimal.div(d.timeSinceLastUpdate, d.interval));
+        const production = binomialDistribution(d.amount.times(ticks), (d.chance / 100)).times(d.power);
+        if (i === 1) player.celestials.laitela.matter = player.celestials.laitela.matter.plus(production);
+        else MatterDimension(i - 1).amount = MatterDimension(i - 1).amount.plus(production);
+        d.timeSinceLastUpdate = Decimal.minus(d.timeSinceLastUpdate, d.interval.times(ticks)).toNumber();
+      }
+    }
+  },
+  tickDarkEnergy(realDiff) {
+    // Uhh we still need to figure this part out, create it here properly instead of this test code
+    const increase = realDiff;
 
+    player.celestials.laitela.darkEnergy = Math.clampMax(player.celestials.laitela.darkEnergy + increase,
+      Singularity.darkEnergyCap);
+  },
+};
+
+const Singularity = {
+  get darkEnergyCap() {
+    return 1e6 * Math.pow(10, player.celestials.laitela.singularity.capUpgrades);
+  },
+  get singularityGain() {
+    return Math.pow(20, player.celestials.laitela.singularity.capUpgrades);
+  },
+  get canReset() {
+    return player.celestials.laitela.darkEnergy >= this.darkEnergyCap;
+  },
+  prestige() {
+    player.celestials.laitela.darkEnergy = 0;
+    player.celestials.laitela.singularity.amount += this.singularityGain;
+  }
 };

@@ -72,14 +72,14 @@ const Laitela = {
     this.celestial.matter = x;
   },
   get anomalyGain() {
-    return Decimal.floor(Decimal.pow(this.matter.dividedBy(1e8), 0.2));
+    return Decimal.floor(Decimal.pow(this.matter.dividedBy(1e30), 0.1));
   },
   get darkEnergyMult() {
     return this.celestial.anomalies.plus(1).toNumber();
   },
   get darkMatterMultFromDE() {
-    let power = Math.sqrt(1 + NormalDimension(8).amount.toNumber() / 1e6);
-    return Decimal.pow(Math.log10(1 + this.celestial.darkEnergy), power);
+    let power = Math.log10(1 + NormalDimension(8).amount.toNumber() / 1e6);
+    return Decimal.pow(Math.pow(1 + this.celestial.darkEnergy, 0.25), power);
   },
   annihilate() {
     this.celestial.anomalies = this.celestial.anomalies.plus(this.anomalyGain);
@@ -106,7 +106,11 @@ const Laitela = {
       if (d.interval < d.timeSinceLastUpdate) {
         const ticks = Math.floor(d.timeSinceLastUpdate / d.interval);
         const productionDM = d.amount.times(ticks).times(d.powerDM);
-        if (i === 1) player.celestials.laitela.matter = player.celestials.laitela.matter.plus(productionDM);
+        if (i === 1) {
+          player.celestials.laitela.matter = player.celestials.laitela.matter.plus(productionDM);
+          player.celestials.laitela.maxMatter = player.celestials.laitela.maxMatter.max(
+            player.celestials.laitela.matter);
+        }
         else MatterDimension(i - 1).amount = MatterDimension(i - 1).amount.plus(productionDM);
         if (MatterDimension(i).amount.gt(0)) {
           player.celestials.laitela.darkEnergy += ticks * d.powerDE;

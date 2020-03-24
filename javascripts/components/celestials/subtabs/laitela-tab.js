@@ -4,6 +4,7 @@ Vue.component("laitela-tab", {
   data() {
     return {
       matter: new Decimal(0),
+      maxMatter: new Decimal(0),
       nextUnlock: "",
       matterExtraPurchaseFactor: 0,
       maxDimTier: 0,
@@ -21,6 +22,7 @@ Vue.component("laitela-tab", {
   methods: {
     update() {
       this.matter.copyFrom(player.celestials.laitela.matter);
+      this.maxMatter.copyFrom(player.celestials.laitela.maxMatter);
       this.nextUnlock = Laitela.nextMatterDimensionThreshold;
       this.matterExtraPurchaseFactor = Laitela.matterExtraPurchaseFactor;
       this.maxDimTier = Laitela.maxAllowedDimension;
@@ -100,7 +102,8 @@ Vue.component("laitela-tab", {
   },
   template:
     `<div class="l-laitela-celestial-tab">
-      <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter,
+      <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter.</div>
+      <div class="o-laitela-matter-amount">Your maximum dark matter ever is {{ format(maxMatter.floor(), 2, 0) }},
       giving {{ formatX(matterExtraPurchaseFactor, 2, 2)}} more purchases from continuum.</div>
       <div>
         You have {{ format(darkEnergy, 2, 3)}} Dark Energy,

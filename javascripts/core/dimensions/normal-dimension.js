@@ -502,7 +502,13 @@ class NormalDimensionState extends DimensionState {
    * @param {Decimal} value
    */
   get totalAmount() {
-    return this.amount.plus(this.continuumAmount);
+    if (!Laitela.continuumActive) {
+      return this.amount;
+    } else if (this.tier === 8) {
+      return new Decimal(this.continuumAmount);
+    } else {
+      return this.amount.plus(this.continuumAmount);
+    }
   }
 
    /**

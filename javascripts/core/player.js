@@ -449,6 +449,7 @@ let player = {
     },
     laitela: {
       matter: new Decimal(0),
+      maxMatter: new Decimal(0),
       run: false,
       unlockBits: 0,
       dimensions: Array.range(0, 4).map(() =>

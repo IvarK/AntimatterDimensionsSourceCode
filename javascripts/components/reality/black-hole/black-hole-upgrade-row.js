@@ -11,15 +11,12 @@ Vue.component("black-hole-upgrade-row", {
   },
   computed: {
     blackHoleDescription() {
-      if (RealityUpgrade(20).isBought) {
-        return `Black Hole ${this.blackHole.id}`;
-      }
-      return "the Black Hole";
+      return this.blackHole.description(false);
     },
     intervalConfig() {
       return {
         upgrade: this.blackHole.intervalUpgrade,
-        description: () => `Reduce ${this.blackHoleDescription} inactive time by 20%`,
+        description: () => `Reduce ${this.blackHoleDescription}'s inactive time by 20%`,
         effectTitle: "Current interval",
         formatEffect: value => `${TimeSpan.fromSeconds(value).toStringShort(false)}`
       };
@@ -35,7 +32,7 @@ Vue.component("black-hole-upgrade-row", {
     durationConfig() {
       return {
         upgrade: this.blackHole.durationUpgrade,
-        description: () => `Extend ${this.blackHoleDescription} duration by 30%`,
+        description: () => `Extend ${this.blackHoleDescription}'s duration by 30%`,
         effectTitle: "Current duration",
         formatEffect: value => `${TimeSpan.fromSeconds(value).toStringShort(false)}`
       };

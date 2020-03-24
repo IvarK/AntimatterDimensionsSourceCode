@@ -46,7 +46,7 @@ Vue.component("black-hole-tab", {
       if (!BlackHole(2).isUnlocked || BlackHole(1).isActive) this.detailedBH2 = " ";
       else if (BlackHole(2).timeToNextStateChange > BlackHole(1).cycleLength) {
         const cycleCount = Math.floor(BlackHole(2).timeToNextStateChange / BlackHole(1).cycleLength);
-        this.detailedBH2 = `Black Hole 2 will activate after ${cycleCount} more
+        this.detailedBH2 = `Black Hole 2 will activate after ${formatInt(cycleCount)} more
           ${pluralize("cycle", cycleCount)} of Black Hole 1.`;
       } else if (BlackHole(2).isCharged) {
         this.detailedBH2 = `Black Hole 2 will activate with Black Hole 1, for ${TimeSpan.fromSeconds(

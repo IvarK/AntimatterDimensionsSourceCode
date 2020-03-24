@@ -101,7 +101,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: () => `Complete your first Eternity with at least ${format("1e400")} IP`,
       checkRequirement: () => player.infinityPoints.exponent >= 400 && isFirstEternity(),
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
-      description: () => `Start every reality with ${formatInt(100)} Eternities (also applies to current reality)`
+      description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`
     },
     {
       id: 11,
@@ -132,7 +132,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: () => `Improved Eternity autobuyer, ${formatInt(5)}xEP multiplier and Time Dimension autobuyers`
+      description: () => `Improved Eternity autobuyer, ${formatInt(5)}xEP multiplier, and Time Dimension autobuyers`
     },
     {
       id: 14,
@@ -198,7 +198,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: () => `${formatInt(2)} years total play time`,
       checkRequirement: () => Time.totalTimePlayed.totalYears >= 2,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "Unlock the 2nd black hole",
+      description: "Unlock Black Hole 2",
       formatCost: value => format(value, 1, 0)
     },
     {

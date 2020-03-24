@@ -499,16 +499,18 @@ class NormalDimensionState extends DimensionState {
    * Continuum doesn't continually update dimension amount because that would require making the code
    * significantly messier to handle it properly. Instead an effective amount is calculated here, which
    * is only used for production and checking for shift/boost/galaxy. Doesn't affect achievements.
+   * Taking the max is kind of a hack but it seems to work in all cases. Obviously it works if
+   * continuum isn't unlocked. If the dimension is being produced and the continuum is unlocked,
+   * the dimension will be being produced in large numbers (since the save is endgame), so the amount
+   * will be larger than the continuum and so the continuum is insignificant, which is fine.
+   * If the dimension isn't being produced, the continuum will be at least the amount, so
+   * the continuum will be used and that's fine. Note that when continuum is first unlocked,
+   * both 8d amount and 8d continuum will be nonzero until the next infinity, so taking the sum
+   * doesn't work.
    * @param {Decimal} value
    */
   get totalAmount() {
-    if (!Laitela.continuumActive) {
-      return this.amount;
-    } else if (this.tier === 8) {
-      return new Decimal(this.continuumAmount);
-    } else {
-      return this.amount.plus(this.continuumAmount);
-    }
+    return this.amount.max(this.continuumAmount);
   }
 
    /**

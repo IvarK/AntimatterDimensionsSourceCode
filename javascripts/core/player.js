@@ -566,8 +566,7 @@ const Player = {
   },
 
   get dimensionMultDecrease() {
-    const base = GameCache.dimensionMultDecrease.value;
-    return Math.pow(GameCache.dimensionMultDecrease.value, Math.pow(Laitela.matterExtraPurchaseFactor, -2));
+    return GameCache.dimensionMultDecrease.value;
   },
 
   get infinityGoal() {

@@ -101,14 +101,14 @@ Vue.component("laitela-tab", {
   template:
     `<div class="l-laitela-celestial-tab">
       <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter,
-      giving {{ formatX(matterExtraPurchaseFactor, 2, )}} more dimension purchases post-infinity.</div>
+      giving {{ formatX(matterExtraPurchaseFactor, 2, 2)}} more purchases from continuum.</div>
       <div>
         You have {{ format(darkEnergy, 2, 3)}} Dark Energy,
         giving a {{ formatX(darkMatterMultFromDE, 2, 2) }} multiplier to production of dark matter and
         dark matter dimensions (based on 8th Dimensions).
       </div>
       <div v-if="annihilated">
-        You have {{ format(anomalyGain, 2, 0) }} {{"Anomaly" | pluralize(anomalies, "Anomalies")}},
+        You have {{ format(anomalies, 2, 0) }} {{"Anomaly" | pluralize(anomalies, "Anomalies")}},
         giving a {{ formatX(darkEnergyMult, 2, 2) }} multiplier to dark energy production.
       </div>
       <primary-button
@@ -153,7 +153,9 @@ Vue.component("laitela-tab", {
               {{"Anomaly" | pluralize(anomalyGain, "Anomalies")}}.
             </p>
             <p>
-              Anomalies give a multiplier to Dark Energy production (amount + {{ formatInt(1) }}).
+              Anomalies give a multiplier to Dark Energy production.
+            </p>
+              (amount + {{ formatInt(1) }})
             </p>
           </button>
         </div>

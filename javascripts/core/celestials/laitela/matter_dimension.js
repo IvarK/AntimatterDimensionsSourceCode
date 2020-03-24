@@ -6,7 +6,7 @@
 
 const INTERVAL_COST_MULT = 3.2;
 const POWER_DM_COST_MULT = 1.4;
-const POWER_DE_COST_MULT = 1.3;
+const POWER_DE_COST_MULTS = [1.35, 1.3, 1.28, 1.27];
 
 const INTERVAL_START_COST = 10;
 const POWER_DM_START_COST = 10;
@@ -29,10 +29,8 @@ class MatterDimensionState {
   get interval() {
     const perUpgrade = 0.92;
     const tierFactor = Math.pow(4, this._tier);
-    return Decimal.pow(perUpgrade, this.dimension.intervalUpgrades)
-      .times(tierFactor)
-      .times(1000)
-      .clampMin(this.intervalPurchaseCap);
+    return Math.clampMin(this.intervalPurchaseCap,
+      Math.pow(perUpgrade, this.dimension.intervalUpgrades) * tierFactor * 1000);
   }
 
   get powerDM() {
@@ -54,7 +52,7 @@ class MatterDimensionState {
   }
   
   get powerDECost() {
-    return Decimal.pow(POWER_DM_COST_MULT, this.dimension.powerDEUpgrades)
+    return Decimal.pow(POWER_DE_COST_MULTS[this._tier], this.dimension.powerDEUpgrades)
       .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_DE_START_COST).floor();
   }
 
@@ -75,7 +73,7 @@ class MatterDimensionState {
   }
 
   get canBuyInterval() {
-    return this.intervalCost.lte(player.celestials.laitela.matter) && this.interval.gt(this.intervalPurchaseCap);
+    return this.intervalCost.lte(player.celestials.laitela.matter) && this.interval > this.intervalPurchaseCap;
   }
 
   get canBuyPowerDM() {

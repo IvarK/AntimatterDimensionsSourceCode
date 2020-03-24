@@ -42,7 +42,7 @@ Vue.component("matter-dimension-row", {
   methods: {
     update() {
       this.tier = this.dimension._tier;
-      this.interval.copyFrom(this.dimension.interval);
+      this.interval = this.dimension.interval;
       this.powerDM.copyFrom(this.dimension.powerDM);
       this.powerDE = this.dimension.powerDE;
       this.intervalCost = this.dimension.intervalCost;
@@ -53,7 +53,7 @@ Vue.component("matter-dimension-row", {
       this.canBuyPowerDM = this.dimension.canBuyPowerDM;
       this.canBuyPowerDE = this.dimension.canBuyPowerDE;
       this.timer = this.dimension.timeSinceLastUpdate;
-      this.timerPercent = this.timer / this.interval.toNumber();
+      this.timerPercent = this.timer / this.interval;
       this.intervalCap = this.dimension.intervalPurchaseCap;
     }
   },
@@ -65,7 +65,7 @@ Vue.component("matter-dimension-row", {
         @click="dimension.buyInterval()" 
         class="o-matter-dimension-button" 
         :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> 
-        {{ interval.toFixed(2) }}ms <span v-if="interval.gt(intervalCap)">
+        {{ interval.toFixed(2) }}ms <span v-if="interval > intervalCap">
         <br>Cost: {{ format(intervalCost, 2, 0) }}</span>
       </button>
       <button
@@ -78,10 +78,10 @@ Vue.component("matter-dimension-row", {
         @click="dimension.buyPowerDE()"
         class="o-matter-dimension-button"
         :class="{ 'o-matter-dimension-button--available': canBuyPowerDE }">
-        DE {{ format(powerDE, 2, 2) }}x <br>Cost: {{ format(powerDECost, 2, 0) }}
+        DE {{ format(powerDE, 4, 4) }}x <br>Cost: {{ format(powerDECost, 2, 0) }}
       </button>
     </div>
-    <span v-if="interval.gt(200)">Tick: {{ formatInt(timer) }} ms ({{ format(100 * timerPercent, 1, 1) }}%)</span>
+    <span v-if="interval > 200">Tick: {{ formatInt(timer) }} ms ({{ format(100 * timerPercent, 1, 1) }}%)</span>
   </div>
 
   `

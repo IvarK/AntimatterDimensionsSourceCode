@@ -484,7 +484,7 @@ class NormalDimensionState extends DimensionState {
    */
   get continuumValue() {
     if (!this.isAvailableForPurchase) return 0;
-    return this.costScale.getContinuumValue(player.antimatter);
+    return this.costScale.getContinuumValue(player.antimatter) * Laitela.matterExtraPurchaseFactor;
   }
 
   /**

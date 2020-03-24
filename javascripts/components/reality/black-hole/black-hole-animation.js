@@ -6,7 +6,7 @@ const BlackHoleAnimation = (function() {
   const PARTICLE_COUNT = 120;
   // Basically orbit size in pixels
   const SEMIMAJOR_AXIS = 100;
-  // Black hole active time approximately corresponds to time with >2x
+  // Black Hole active time approximately corresponds to time with >2x
   const ACTIVE_THRESHOLD = 2;
 
   let holeSize;
@@ -200,7 +200,7 @@ const BlackHoleAnimation = (function() {
       }
       this.eccentricity = eccentricity;
 
-      // Black hole size, calculated from orbit shape in order to give the right max boost
+      // Black Hole size, calculated from orbit shape in order to give the right max boost
       holeSize = SEMIMAJOR_AXIS * (1 - eccentricity) * (1 - Math.pow(BlackHole(1).power, -2));
       // Prevent planet + hole overlapping
       this.hole = new Hole((holeSize - PLANET_SIZE) / 2);

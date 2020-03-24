@@ -238,7 +238,7 @@ class BlackHoleState {
         this._data.phase -= this.duration;
         this._data.active = false;
         if (GameUI.notify.showBlackHoles) {
-          GameUI.notify.blackHole(`Black hole ${this.id} duration ended.`);
+          GameUI.notify.blackHole(`${this.description(true)} duration ended.`);
         }
       }
     } else if (this.phase >= this.interval) {
@@ -246,7 +246,7 @@ class BlackHoleState {
       this._data.activations++;
       this._data.active = true;
       if (GameUI.notify.showBlackHoles) {
-        GameUI.notify.blackHole(`Black hole ${this.id} is active!`);
+        GameUI.notify.blackHole(`${this.description(true)} has activated!`);
       }
     }
   }
@@ -287,6 +287,13 @@ class BlackHoleState {
       return this.duration - this.phase;
     }
     return this.cycleLength - this.phase;
+  }
+  
+  description(capitalized) {
+    if (RealityUpgrade(20).isBought) {
+      return `Black Hole ${this.id}`;
+    }
+    return capitalized ? "The Black Hole" : "the Black Hole";
   }
 }
 

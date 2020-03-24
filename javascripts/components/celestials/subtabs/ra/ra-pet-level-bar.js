@@ -23,6 +23,7 @@ Vue.component("ra-pet-level-bar", {
       return this.unlocks.map(u => u.level);
     },
     multiLevelStyle() {
+      if (Notations.current.name === "Blind") return { width: "0%" };
       const startScl = Math.sqrt(Ra.totalExpForLevel(this.prevGoal));
       const endScl = Math.sqrt(Ra.totalExpForLevel(this.nextGoal));
       const currentScl = Math.sqrt(Ra.totalExpForLevel(this.level) + this.exp);
@@ -32,6 +33,7 @@ Vue.component("ra-pet-level-bar", {
       };
     },
     singleLevelStyle() {
+      if (Notations.current.name === "Blind") return { width: "0%" };
       return {
         width: `${100 * (this.exp / this.requiredExp)}%`
       };

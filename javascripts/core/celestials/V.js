@@ -134,7 +134,7 @@ const V_UNLOCKS = {
   },
   ACHIEVEMENT_BH: {
     id: 5,
-    reward: "Achievement count affects black hole power.",
+    reward: "Achievement multiplier affects Black Hole power.",
     description: "Have 30 V-achievements",
     effect: () => Achievements.power,
     format: x => formatX(x, 2, 0),

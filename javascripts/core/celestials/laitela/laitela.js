@@ -78,8 +78,8 @@ const Laitela = {
     return this.celestial.anomalies.plus(1).toNumber();
   },
   get darkMatterMultFromDE() {
-    let power = Math.log10(1 + NormalDimension(8).amount.toNumber() / 1e6);
-    return Decimal.pow(Math.pow(1 + this.celestial.darkEnergy, 0.25), power);
+    let power = Math.log10(1 + NormalDimension(8).amount.toNumber() / 1e6) / 4;
+    return Decimal.pow(1 + this.celestial.darkEnergy, power);
   },
   annihilate() {
     this.celestial.anomalies = this.celestial.anomalies.plus(this.anomalyGain);

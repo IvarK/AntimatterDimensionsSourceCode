@@ -13,7 +13,7 @@ Vue.component("glyph-inventory", {
     };
   },
   computed: {
-    rowCount: () => player.reality.glyphs.inventorySize / 10,
+    rowCount: () => Glyphs.totalSlots / 10,
     colCount: () => 10,
   },
   created() {

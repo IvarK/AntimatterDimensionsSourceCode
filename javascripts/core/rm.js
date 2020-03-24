@@ -426,7 +426,7 @@ const Glyphs = {
     return 20;
   },
   get totalSlots() {
-    return player.reality.glyphs.inventorySize;
+    return 120;
   },
   refreshActive() {
     this.active = new Array(this.activeSlotCount).fill(null);

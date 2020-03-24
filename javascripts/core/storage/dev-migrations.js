@@ -564,7 +564,7 @@ GameStorage.devMigrations = {
     },
     player => {
       delete player.reality.glyphs.inventorySize;
-      for (let glyph of player.reality.glyphs.inventory) {
+      for (const glyph of player.reality.glyphs.inventory) {
         if (glyph.idx >= 10) {
           glyph.idx += 10;
         }

@@ -454,9 +454,9 @@ let player = {
       dimensions: Array.range(0, 4).map(() =>
       ({
         amount: new Decimal(0),
-        chanceUpgrades: 0,
         intervalUpgrades: 0,
-        powerUpgrades: 0,
+        powerDMUpgrades: 0,
+        powerDEUpgrades: 0,
         timeSinceLastUpdate: 0
       })),
       entropy: 0,
@@ -466,12 +466,7 @@ let player = {
       annihilated: false,
       anomalies: new Decimal(0),
       upgrades: {},
-      singularity: {
-        amount: 0,
-        capUpgrades: 0
-      },
-      darkEnergy: 0,
-      darkEnergyUpgrades: new Set()
+      darkEnergy: 0
     }
   },
   options: {
@@ -571,8 +566,8 @@ const Player = {
   },
 
   get dimensionMultDecrease() {
-    const base = GameCache.dimensionMultDecrease.value - 1;
-    return 1 + base * AnnihilationUpgrade.dimCostMult.effect;
+    const base = GameCache.dimensionMultDecrease.value;
+    return Math.pow(GameCache.dimensionMultDecrease.value, Math.pow(Laitela.matterExtraPurchaseFactor, -2));
   },
 
   get infinityGoal() {

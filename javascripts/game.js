@@ -391,7 +391,6 @@ function gameLoop(diff, options = {}) {
   // Lai'tela mechanics should bypass stored real time entirely
   Laitela.handleMatterDimensionUnlocks();
   Laitela.tickDarkMatter(realDiff);
-  Laitela.tickDarkEnergy(realDiff);
 
   // When storing real time, skip everything else having to do with production once stats are updated
   if (Enslaved.isStoringRealTime) {

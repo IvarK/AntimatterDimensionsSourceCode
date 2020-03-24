@@ -5,25 +5,24 @@ Vue.component("laitela-tab", {
     return {
       matter: new Decimal(0),
       nextUnlock: "",
-      matterEffectPercentage: "",
+      matterExtraPurchaseFactor: 0,
       maxDimTier: 0,
       activeDimensions: [],
       anomalies: new Decimal(0),
       anomalyGain: new Decimal(0),
       showReset: false,
-      darkEnergyChance: 0,
+      darkEnergyMult: 0,
+      darkMatterMultFromDE: 0,
       darkEnergy: 0,
       annihilated: false,
       isRunning: 0,
-      singularities: 0,
-      darkEnergyCap: 0,
     };
   },
   methods: {
     update() {
       this.matter.copyFrom(player.celestials.laitela.matter);
       this.nextUnlock = Laitela.nextMatterDimensionThreshold;
-      this.matterEffectPercentage = Laitela.matterEffectPercentage;
+      this.matterExtraPurchaseFactor = Laitela.matterExtraPurchaseFactor;
       this.maxDimTier = Laitela.maxAllowedDimension;
       this.realityReward = Laitela.realityReward;
       this.activeDimensions = Array.range(0, 4).filter(i => MatterDimension(i + 1).amount.neq(0));
@@ -31,11 +30,10 @@ Vue.component("laitela-tab", {
       this.anomalyGain.copyFrom(Laitela.anomalyGain);
       this.annihilated = player.celestials.laitela.annihilated;
       this.showReset = this.annihilated || this.anomalyGain.gt(0);
-      this.darkEnergyChance = Laitela.darkEnergyChance;
+      this.darkEnergyMult = Laitela.darkEnergyMult;
+      this.darkMatterMultFromDE = Laitela.darkMatterMultFromDE;
       this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.isRunning = Laitela.isRunning;
-      this.singularities = player.celestials.laitela.singularity.amount;
-      this.darkEnergyCap = Singularity.darkEnergyCap;
     },
     startRun() {
       if (this.isRunning) startRealityOver();
@@ -72,9 +70,9 @@ Vue.component("laitela-tab", {
       while (player.celestials.laitela.matter.gte(cheapestPrice)) {
         const sortedUpgradeInfo = unlockedDimensions
           .map(d => [
-            [d.chanceCost, d.canBuyChance, "chance", d._tier],
             [d.intervalCost, d.canBuyInterval, "interval", d._tier],
-            [d.powerCost, d.canBuyPower, "power", d._tier]])
+            [d.powerDMCost, d.canBuyPowerDM, "powerDM", d._tier],
+            [d.powerDECost, d.canBuyPowerDE, "powerDE", d._tier]])
           .flat(1)
           .filter(a => a[1])
           .sort((a, b) => a[0].div(b[0]).log10())
@@ -83,14 +81,14 @@ Vue.component("laitela-tab", {
         if (cheapestUpgrade === undefined) break;
         cheapestPrice = cheapestUpgrade[0];
         switch (cheapestUpgrade[1]) {
-          case "chance":
-            MatterDimensionState.list[cheapestUpgrade[2]].buyChance();
-            break;
           case "interval":
             MatterDimensionState.list[cheapestUpgrade[2]].buyInterval();
             break;
-          case "power":
-            MatterDimensionState.list[cheapestUpgrade[2]].buyPower();
+          case "powerDM":
+            MatterDimensionState.list[cheapestUpgrade[2]].buyPowerDM();
+            break;
+          case "powerDE":
+            MatterDimensionState.list[cheapestUpgrade[2]].buyPowerDE();
             break;
         }
       }
@@ -99,22 +97,20 @@ Vue.component("laitela-tab", {
   computed: {
     dimensions: () => MatterDimensionState.list,
     runUnlockThresholds: () => laitelaRunUnlockThresholds,
-    unlocksInfo: () => LAITELA_UNLOCKS,
-    upgrades: () => AnnihilationUpgrade.all,
-    darkEnergyUpgrades: () => DarkEnergyUpgrade.all
   },
   template:
     `<div class="l-laitela-celestial-tab">
-      <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter</div>
-      <div v-if="annihilated">
-        You have {{ format(anomalies, 2, 0)}} {{"Anomaly" | pluralize(anomalies, "Anomalies")}}
+      <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter,
+      giving {{ formatX(matterExtraPurchaseFactor, 2, )}} more dimension purchases post-infinity.</div>
+      <div>
+        You have {{ format(darkEnergy, 2, 3)}} Dark Energy,
+        giving a {{ formatX(darkMatterMultFromDE, 2, 2) }} multiplier to production of dark matter and
+        dark matter dimensions (based on 8th Dimensions).
       </div>
-      <div v-if="anomalies.gt(0)">You to have a {{ formatPercents(darkEnergyChance, 5) }} chance of first dimensions
-        generating dark energy each dimension interval, based on your Anomaly count</div>
-        <div v-if="darkEnergy > 0">You have {{ format(darkEnergy, 2)}} / {{ format(darkEnergyCap) }} Dark Energy</div>
-        <div v-if="singularities > 0">
-          You have {{ format(singularities, 2)}} {{"Singularity" | pluralize(singularities, "Singularities")}}
-        </div>
+      <div v-if="annihilated">
+        You have {{ format(anomalyGain, 2, 0) }} {{"Anomaly" | pluralize(anomalies, "Anomalies")}},
+        giving a {{ formatX(darkEnergyMult, 2, 2) }} multiplier to dark energy production.
+      </div>
       <primary-button
         class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
         @click="maxAll"
@@ -127,17 +123,6 @@ Vue.component("laitela-tab", {
             :dimension="dimensions[i]"
             />
           <div>{{ nextUnlock }}</div>
-        </div>
-        <div class="l-laitela-unlocks-container" v-if="showReset">
-          <button
-            v-for="upgrade in upgrades"
-            :key="upgrade.id"
-            class="o-laitela-shop-button"
-            :class="{'o-laitela-shop-button--available': upgrade.canBeBought }"
-            @click="upgrade.purchase()"> 
-              {{ upgrade.description }} <br/> Costs: <b>{{ format(upgrade.cost, 2, 0) }}</b> Anomalies 
-              <br/>Currently: {{ upgrade.formattedEffect }}, Next: {{ upgrade.formattedNextEffect }}
-          </button>
         </div>
       </div>
       <div class="l-laitela-mechanics-lower">
@@ -168,19 +153,8 @@ Vue.component("laitela-tab", {
               {{"Anomaly" | pluralize(anomalyGain, "Anomalies")}}.
             </p>
             <p>
-              Anomalies give your 1st Dark Dimensions a chance to produce Dark Energy.
+              Anomalies give a multiplier to Dark Energy production (amount + {{ formatInt(1) }}).
             </p>
-          </button>
-        </div>
-        <div class="l-laitela-dark-energy-upgrades">
-          <button
-            v-for="upgrade in darkEnergyUpgrades"
-            :key="upgrade.id"
-            class="o-laitela-shop-button--dark-energy"
-            :class="unlockClassObject(upgrade)"
-            @click="upgrade.purchase()">
-              {{ upgrade.description }} <br/> Costs: <b>{{ format(upgrade.cost, 2, 0) }}</b> Dark Energy
-              <br/>{{ upgrade.formattedEffect }}
           </button>
         </div>
       </div>

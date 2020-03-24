@@ -1046,7 +1046,7 @@ that the reaction can't proceed due to not having enough of that reagent to get 
       info: () => `
 <h1>Work in Progress</h1>
 `,
-      isUnlocked: () => Laitela.has(LAITELA_UNLOCKS.PELLE),
+      isUnlocked: () => false,
       tags: ["reality", "antimatter", "lategame", "endgame", "final", "hevipelle"],
       tab: "celestials/pelle"
     }

@@ -580,6 +580,14 @@ GameStorage.devMigrations = {
           Glyphs.applyGamespeed(glyph);
         }
       }
+    },
+    player => {
+      for (let dim of player.celestials.laitela.dimensions) {
+        dim.powerDMUpgrades = dim.powerUpgrades;
+        dim.powerDEUpgrades = 0;
+        delete dim.chanceUpgrades;
+        delete dim.powerUpgrades;
+      }
     }
   ],
 

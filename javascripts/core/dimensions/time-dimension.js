@@ -166,8 +166,6 @@ class TimeDimensionState extends DimensionState {
     mult = mult.times(Decimal.pow(dim.powerMultiplier, dim.bought));
     mult = mult.clampMin(0).pow(getAdjustedGlyphEffect("timepow"));
 
-    if (Laitela.has(LAITELA_UNLOCKS.DIM_POW)) mult = mult.pow(Laitela.dimensionMultPowerEffect);
-
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
 
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));

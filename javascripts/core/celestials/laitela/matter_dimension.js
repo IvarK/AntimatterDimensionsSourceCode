@@ -4,13 +4,13 @@
  * Constants for easily adjusting values
  */
 
-const CHANCE_COST_MULT = 1.6;
 const INTERVAL_COST_MULT = 3.2;
-const POWER_COST_MULT = 1.4;
+const POWER_DM_COST_MULT = 1.4;
+const POWER_DE_COST_MULT = 1.3;
 
-const CHANCE_START_COST = 10;
 const INTERVAL_START_COST = 10;
-const POWER_START_COST = 10;
+const POWER_DM_START_COST = 10;
+const POWER_DE_START_COST = 10;
 
 class MatterDimensionState {
   constructor(tier) {
@@ -25,17 +25,9 @@ class MatterDimensionState {
     return 10;
   }
 
-  // In percents
-  get chance() {
-    const fromUpgrades = 1 + this.dimension.chanceUpgrades * (this.dimension.chanceUpgrades + 1) / 2;
-    const tierFactor = Math.pow(2, this._tier);
-    const otherBoosts = 1 + AlchemyResource.unpredictability.effectValue;
-    return Math.min(fromUpgrades * otherBoosts / tierFactor, 100);
-  }
-
   // In milliseconds; if this is 10 then you can no longer buy it, but it can get lower with other upgrades
   get interval() {
-    const perUpgrade = 0.92 - AnnihilationUpgrade.intervalPower.effect;
+    const perUpgrade = 0.92;
     const tierFactor = Math.pow(4, this._tier);
     return Decimal.pow(perUpgrade, this.dimension.intervalUpgrades)
       .times(tierFactor)
@@ -43,17 +35,12 @@ class MatterDimensionState {
       .clampMin(this.intervalPurchaseCap);
   }
 
-  get power() {
-    let base = new Decimal(1 + Math.pow(1.05, this.dimension.powerUpgrades)).times(Laitela.realityReward);
-    if (DarkEnergyUpgrade.matterDimensionMult.isBought) {
-      base = base.times(DarkEnergyUpgrade.matterDimensionMult.effect);
-    }
-    return base;
+  get powerDM() {
+    return new Decimal(1 + Math.pow(1.05, this.dimension.powerDMUpgrades)).times(Laitela.realityReward).times(Laitela.darkMatterMultFromDE);
   }
-
-  get chanceCost() {
-    return Decimal.pow(CHANCE_COST_MULT, this.dimension.chanceUpgrades)
-      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(CHANCE_START_COST).floor();
+  
+  get powerDE() {
+    return (1 + Math.pow(1.05, this.dimension.powerDEUpgrades)) * Laitela.darkEnergyMult / 10000;
   }
 
   get intervalCost() {
@@ -61,9 +48,14 @@ class MatterDimensionState {
       .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST).floor();
   }
 
-  get powerCost() {
-    return Decimal.pow(POWER_COST_MULT, this.dimension.powerUpgrades)
-      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_START_COST).floor();
+  get powerDMCost() {
+    return Decimal.pow(POWER_DM_COST_MULT, this.dimension.powerDMUpgrades)
+      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_DM_START_COST).floor();
+  }
+  
+  get powerDECost() {
+    return Decimal.pow(POWER_DM_COST_MULT, this.dimension.powerDEUpgrades)
+      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_DE_START_COST).floor();
   }
 
   get amount() {
@@ -82,23 +74,16 @@ class MatterDimensionState {
     this.dimension.timeSinceLastUpdate = ms;
   }
 
-  get canBuyChance() {
-    return this.chanceCost.lte(player.celestials.laitela.matter) && this.chance < 100;
-  }
-
   get canBuyInterval() {
     return this.intervalCost.lte(player.celestials.laitela.matter) && this.interval.gt(this.intervalPurchaseCap);
   }
 
-  get canBuyPower() {
-    return this.powerCost.lte(player.celestials.laitela.matter);
+  get canBuyPowerDM() {
+    return this.powerDMCost.lte(player.celestials.laitela.matter);
   }
-
-  buyChance() {
-    if (!this.canBuyChance) return false;
-    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.chanceCost);
-    this.dimension.chanceUpgrades++;
-    return true;
+  
+  get canBuyPowerDE() {
+    return this.powerDECost.lte(player.celestials.laitela.matter);
   }
 
   buyInterval() {
@@ -108,10 +93,17 @@ class MatterDimensionState {
     return true;
   }
 
-  buyPower() {
-    if (!this.canBuyPower) return false;
-    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.powerCost);
-    this.dimension.powerUpgrades++;
+  buyPowerDM() {
+    if (!this.canBuyPowerDM) return false;
+    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.powerDMCost);
+    this.dimension.powerDMUpgrades++;
+    return true;
+  }
+  
+  buyPowerDE() {
+    if (!this.canBuyPowerDE) return false;
+    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.powerDECost);
+    this.dimension.powerDEUpgrades++;
     return true;
   }
 }

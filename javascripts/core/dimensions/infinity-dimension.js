@@ -199,8 +199,6 @@ class InfinityDimensionState extends DimensionState {
 
     mult = mult.powEffectOf(AlchemyResource.infinity);
 
-    if (Laitela.has(LAITELA_UNLOCKS.DIM_POW)) mult = mult.pow(Laitela.dimensionMultPowerEffect);
-
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);
     } else if (V.isRunning) {
@@ -341,5 +339,5 @@ function tryUnlockInfinityDimensions() {
 }
 
 function getInfinityConversionRate() {
-  return 7 + getAdjustedGlyphEffect("infinityrate") + AnnihilationUpgrade.infConversion.effect;
+  return 7 + getAdjustedGlyphEffect("infinityrate");
 }

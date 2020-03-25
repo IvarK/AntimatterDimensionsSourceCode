@@ -104,8 +104,8 @@ Vue.component("laitela-tab", {
       <div class="o-laitela-matter-amount">Your maximum dark matter ever is {{ format(maxMatter.floor(), 2, 0) }},
       giving {{ formatX(matterExtraPurchaseFactor, 2, 2)}} more purchases from continuum.</div>
       <div>
-        You have {{ format(darkEnergy, 2, 3)}} Dark Energy,
-        giving a {{ formatX(darkMatterMultFromDE, 2, 2) }} multiplier to production of dark matter and
+        You have {{ format(darkEnergy, 2, 4)}} Dark Energy,
+        giving a {{ formatX(darkMatterMultFromDE, 2, 4) }} multiplier to production of dark matter and
         dark matter dimensions (based on 8th Dimensions).
       </div>
       <div v-if="annihilated">
@@ -148,9 +148,12 @@ Vue.component("laitela-tab", {
           </button>
           <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
             <h2>Annihilation</h2>
-            <p>
+            <p v-if="darkEnergyMultGain > 0">
               Resets your dark matter dimensions and Dark Matter, but add <b>{{ format(darkEnergyMultGain, 2, 0) }}</b> 
               to the dark energy multiplier from prestige.
+            </p>
+            <p v-else>
+              Resets your dark matter dimensions and Dark Matter (requires {{ format(1e30, 0, 0) }} Dark Matter).
             </p>
           </button>
         </div>

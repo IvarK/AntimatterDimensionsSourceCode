@@ -588,7 +588,7 @@ GameStorage.devMigrations = {
         delete dim.chanceUpgrades;
         delete dim.powerUpgrades;
       }
-      player.celestials.laitela.darkEnergyMult = player.celestials.laitela.anomalies.toNumber() + 1;
+      player.celestials.laitela.darkEnergyMult = (+player.celestials.laitela.anomalies) + 1;
       delete player.celestials.laitela.anomalies;
     }
   ],

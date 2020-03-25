@@ -78,10 +78,11 @@ const Laitela = {
     return this.celestial.darkEnergyMult;
   },
   get darkMatterMultFromDE() {
-    let power = Math.log10(1 + NormalDimension(8).amount.toNumber() / 1e6) / 4;
+    let power = Math.log10(1 + NormalDimension(8).totalAmount.toNumber() / 1e6) / 4;
     return Decimal.pow(1 + this.celestial.darkEnergy, power);
   },
-  annihilate() {
+  annihilate(force) {
+    if (!force && this.darkEnergyMultGain === 0) return false;
     this.celestial.darkEnergyMult += this.darkEnergyMultGain;
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
@@ -119,4 +120,12 @@ const Laitela = {
       }
     }
   },
+  reset() {
+    this.annihilate(true);
+    this.celestial.darkEnergyMult = 0;
+    this.celestial.annihilated = false;
+    this.celestial.maxMatter = new Decimal(0);
+    this.celestial.fastestCompletion = 3600;
+    this.celestial.difficultyTier = 0;
+  }
 };

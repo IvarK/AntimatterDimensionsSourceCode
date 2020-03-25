@@ -71,18 +71,18 @@ const Laitela = {
   set matter(x) {
     this.celestial.matter = x;
   },
-  get anomalyGain() {
-    return Decimal.floor(Decimal.pow(this.matter.dividedBy(1e30), 0.1));
+  get darkEnergyMultGain() {
+    return Decimal.floor(Decimal.pow(this.matter.dividedBy(1e30), 0.1)).toNumber();
   },
   get darkEnergyMult() {
-    return this.celestial.anomalies.plus(1).toNumber();
+    return this.celestial.darkEnergyMult;
   },
   get darkMatterMultFromDE() {
     let power = Math.log10(1 + NormalDimension(8).amount.toNumber() / 1e6) / 4;
     return Decimal.pow(1 + this.celestial.darkEnergy, power);
   },
   annihilate() {
-    this.celestial.anomalies = this.celestial.anomalies.plus(this.anomalyGain);
+    this.celestial.darkEnergyMult += this.darkEnergyMultGain;
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
         {

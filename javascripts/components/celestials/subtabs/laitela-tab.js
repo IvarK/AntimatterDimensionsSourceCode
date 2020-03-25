@@ -9,10 +9,9 @@ Vue.component("laitela-tab", {
       matterExtraPurchaseFactor: 0,
       maxDimTier: 0,
       activeDimensions: [],
-      anomalies: new Decimal(0),
-      anomalyGain: new Decimal(0),
       showReset: false,
       darkEnergyMult: 0,
+      darkEnergyMultGain: 0,
       darkMatterMultFromDE: 0,
       darkEnergy: 0,
       annihilated: false,
@@ -28,11 +27,10 @@ Vue.component("laitela-tab", {
       this.maxDimTier = Laitela.maxAllowedDimension;
       this.realityReward = Laitela.realityReward;
       this.activeDimensions = Array.range(0, 4).filter(i => MatterDimension(i + 1).amount.neq(0));
-      this.anomalies.copyFrom(player.celestials.laitela.anomalies);
-      this.anomalyGain.copyFrom(Laitela.anomalyGain);
-      this.annihilated = player.celestials.laitela.annihilated;
-      this.showReset = this.annihilated || this.anomalyGain.gt(0);
       this.darkEnergyMult = Laitela.darkEnergyMult;
+      this.darkEnergyMultGain = Laitela.darkEnergyMultGain;
+      this.annihilated = player.celestials.laitela.annihilated;
+      this.showReset = this.annihilated || this.darkEnergyMultGain > 0;
       this.darkMatterMultFromDE = Laitela.darkMatterMultFromDE;
       this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.isRunning = Laitela.isRunning;
@@ -111,8 +109,7 @@ Vue.component("laitela-tab", {
         dark matter dimensions (based on 8th Dimensions).
       </div>
       <div v-if="annihilated">
-        You have {{ format(anomalies, 2, 0) }} {{"Anomaly" | pluralize(anomalies, "Anomalies")}},
-        giving a {{ formatX(darkEnergyMult, 2, 2) }} multiplier to dark energy production.
+        You have a {{ formatInt(darkEnergyMult, 0, 0) }}x multiplier to dark energy production from prestige.
       </div>
       <primary-button
         class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
@@ -152,13 +149,8 @@ Vue.component("laitela-tab", {
           <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
             <h2>Annihilation</h2>
             <p>
-              Resets your dark matter dimensions and Dark Matter, but gain <b>{{ format(anomalyGain, 2, 0) }}</b> 
-              {{"Anomaly" | pluralize(anomalyGain, "Anomalies")}}.
-            </p>
-            <p>
-              Anomalies give a multiplier to Dark Energy production.
-            </p>
-              (amount + {{ formatInt(1) }})
+              Resets your dark matter dimensions and Dark Matter, but add <b>{{ format(darkEnergyMultGain, 2, 0) }}</b> 
+              to the dark energy multiplier from prestige.
             </p>
           </button>
         </div>

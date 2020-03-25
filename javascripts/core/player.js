@@ -465,8 +465,8 @@ let player = {
       fastestCompletion: 3600,
       difficultyTier: 0,
       annihilated: false,
-      anomalies: new Decimal(0),
       upgrades: {},
+      darkEnergyMult: 0,
       darkEnergy: 0
     }
   },

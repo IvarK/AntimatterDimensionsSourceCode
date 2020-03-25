@@ -562,6 +562,12 @@ GameStorage.devMigrations = {
       delete player.celestials.effarig.autoGlyphSac;
       delete player.celestials.effarig.autoGlyphPick;
     },
+    player => {
+      // Typo fix, as long as we have to delete a player property let's also
+      // correctly initialize the new one.
+      player.onlyEighthDimensions = player.onlyEighthDimensons;
+      delete player.onlyEighthDimensons;
+    }
   ],
 
   patch(player) {

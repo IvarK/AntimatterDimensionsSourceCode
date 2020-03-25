@@ -411,11 +411,13 @@ function finishProcessReality(realityProps) {
   player.eterc8ids = 50;
   player.eterc8repl = 40;
   player.noSacrifices = true;
-  player.onlyEighthDimensons = true;
+  player.onlyEighthDimensions = true;
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
   player.noFirstDimensions = true;
   player.noTheoremPurchases = true;
+  player.noInfinitiesThisReality = true;
+  player.noEternitiesThisReality = true;
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
   player.timestudy.theorem = (Ra.has(RA_UNLOCKS.START_TT) && !isInCelestialReality())

@@ -1145,6 +1145,12 @@ screen and (max-width: 480px) {
   height: 3rem;
 }
 
+.o-primary-btn--buy-id-max {
+  font-size: 1rem;
+  width: 8rem;
+  height: 3rem;
+}
+
 .o-primary-btn--id-autobuyer {
   font-size: 1rem;
   width: 8rem;
@@ -1158,6 +1164,12 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--buy-td {
   width: 19.5rem;
+  height: 3rem;
+}
+
+.o-primary-btn--buy-td-max {
+  font-size: 1rem;
+  width: 8rem;
   height: 3rem;
 }
 

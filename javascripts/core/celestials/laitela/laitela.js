@@ -52,7 +52,7 @@ const Laitela = {
     return "";
   },
   get matterExtraPurchaseFactor() {
-    return 1 + Math.log(1 + Decimal.pLog10(this.celestial.maxMatter) / 100);
+    return 1 + Math.sqrt(Decimal.pLog10(this.celestial.maxMatter) / Math.log10(Number.MAX_VALUE));
   },
   get realityReward() {
     return Math.clampMin(Math.pow(20, player.celestials.laitela.difficultyTier) *

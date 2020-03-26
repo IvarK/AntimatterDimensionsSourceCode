@@ -6,7 +6,7 @@ Vue.component("laitela-tab", {
       matter: new Decimal(0),
       maxMatter: new Decimal(0),
       nextUnlock: "",
-      matterExtraPurchaseFactor: 0,
+      matterExtraPurchasePercentage: 0,
       maxDimTier: 0,
       activeDimensions: [],
       showReset: false,
@@ -23,7 +23,7 @@ Vue.component("laitela-tab", {
       this.matter.copyFrom(player.celestials.laitela.matter);
       this.maxMatter.copyFrom(player.celestials.laitela.maxMatter);
       this.nextUnlock = Laitela.nextMatterDimensionThreshold;
-      this.matterExtraPurchaseFactor = Laitela.matterExtraPurchaseFactor;
+      this.matterExtraPurchasePercentage = Laitela.matterExtraPurchaseFactor - 1;
       this.maxDimTier = Laitela.maxAllowedDimension;
       this.realityReward = Laitela.realityReward;
       this.activeDimensions = Array.range(0, 4).filter(i => MatterDimension(i + 1).amount.neq(0));
@@ -108,9 +108,9 @@ Vue.component("laitela-tab", {
       <button @click="showLaitelaHowTo()" class="o-primary-btn">Click for Lai'tela info</button>
       <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter.</div>
       <div class="o-laitela-matter-amount">Your maximum dark matter ever is {{ format(maxMatter.floor(), 2, 0) }},
-      giving {{ formatX(matterExtraPurchaseFactor, 2, 2)}} more purchases from continuum.</div>
+      giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from continuum.</div>
       <div>
-        You have {{ format(darkEnergy, 2, 4)}} Dark Energy,
+        You have {{ format(darkEnergy, 2, 4) }} Dark Energy,
         giving a {{ formatX(darkMatterMultFromDE, 2, 4) }} multiplier to production of dark matter and
         dark matter dimensions (based on 8th Dimensions).
       </div>

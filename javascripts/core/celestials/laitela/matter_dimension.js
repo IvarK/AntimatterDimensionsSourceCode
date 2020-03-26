@@ -38,7 +38,7 @@ class MatterDimensionState {
   }
   
   get powerDE() {
-    return (1 + Math.pow(1.05, this.dimension.powerDEUpgrades)) * Laitela.darkEnergyMult / 10000;
+    return (1 + this.dimension.powerDEUpgrades / 10) * Laitela.darkEnergyMult / 1000;
   }
 
   get intervalCost() {

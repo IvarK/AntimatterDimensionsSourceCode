@@ -93,6 +93,11 @@ Vue.component("laitela-tab", {
         }
       }
     },
+    showLaitelaHowTo() {
+      ui.view.h2pForcedTab = GameDatabase.h2p.tabs.filter(tab => tab.name === "Lai'tela")[0];
+      Modal.h2p.show();
+      ui.view.h2pActive = true;
+    },
   },
   computed: {
     dimensions: () => MatterDimensionState.list,
@@ -100,6 +105,7 @@ Vue.component("laitela-tab", {
   },
   template:
     `<div class="l-laitela-celestial-tab">
+      <button @click="showLaitelaHowTo()" class="o-primary-btn">Click for Lai'tela info</button>
       <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter.</div>
       <div class="o-laitela-matter-amount">Your maximum dark matter ever is {{ format(maxMatter.floor(), 2, 0) }},
       giving {{ formatX(matterExtraPurchaseFactor, 2, 2)}} more purchases from continuum.</div>

@@ -1070,7 +1070,7 @@ This is the only effect Dark Energy has.
 When you get ${format(1e30, 0, 0)} Dark Matter, you unlock a prestige layer called Annihilation.
 Annihilation resets your Dark Matter, Dark Dimensions, and Dark Energy, but adds to a multiplier
 (initially ${formatInt(1)}x) to Dark Energy. The amount added to the multiplier is
-floor((Dark Matter / ${format(1e30, 0, 0)})^${format(1.1, 1, 1)}. You can Annihilate
+(Dark Matter / ${format(1e30, 0, 0)})^${format(0.1, 1, 1)}. You can Annihilate
 multiple times, the additions to the multiplier stack additively, and there is no need
 to annihilate for a greater addition each time.
 <br/>

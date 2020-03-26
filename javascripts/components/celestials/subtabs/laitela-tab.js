@@ -30,7 +30,7 @@ Vue.component("laitela-tab", {
       this.darkEnergyMult = Laitela.darkEnergyMult;
       this.darkEnergyMultGain = Laitela.darkEnergyMultGain;
       this.annihilated = player.celestials.laitela.annihilated;
-      this.showReset = this.annihilated || this.darkEnergyMultGain > 0;
+      this.showReset = this.annihilated || this.darkEnergyMultGain >= 1;
       this.darkMatterMultFromDE = Laitela.darkMatterMultFromDE;
       this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.isRunning = Laitela.isRunning;
@@ -109,7 +109,7 @@ Vue.component("laitela-tab", {
         dark matter dimensions (based on 8th Dimensions).
       </div>
       <div v-if="annihilated">
-        You have a {{ formatInt(darkEnergyMult, 0, 0) }}x multiplier to dark energy production from prestige.
+        You have a {{ format(darkEnergyMult, 2, 2) }}x multiplier to dark energy production from prestige.
       </div>
       <primary-button
         class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
@@ -148,12 +148,12 @@ Vue.component("laitela-tab", {
           </button>
           <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
             <h2>Annihilation</h2>
-            <p v-if="darkEnergyMultGain > 0">
-              Resets your dark matter dimensions and Dark Matter, but add <b>{{ format(darkEnergyMultGain, 2, 0) }}</b> 
+            <p v-if="darkEnergyMultGain >= 1">
+              Resets your Dark Matter, Dark Dimensions, and Dark Energy, but add <b>{{ format(darkEnergyMultGain, 2, 2) }}</b> 
               to the dark energy multiplier from prestige.
             </p>
             <p v-else>
-              Resets your dark matter dimensions and Dark Matter (requires {{ format(1e30, 0, 0) }} Dark Matter).
+              Resets your Dark Matter, Dark Dimensions, and Dark Energy (requires {{ format(1e30, 0, 0) }} Dark Matter).
             </p>
           </button>
         </div>

@@ -52,7 +52,7 @@ const Laitela = {
     return "";
   },
   get matterExtraPurchaseFactor() {
-    return 1 + Math.log(1 + Decimal.pLog10(this.matter) / 100);
+    return 1 + Math.log(1 + Decimal.pLog10(this.celestial.maxMatter) / 100);
   },
   get realityReward() {
     return Math.clampMin(Math.pow(20, player.celestials.laitela.difficultyTier) *
@@ -72,7 +72,7 @@ const Laitela = {
     this.celestial.matter = x;
   },
   get darkEnergyMultGain() {
-    return Decimal.floor(Decimal.pow(this.matter.dividedBy(1e30), 0.1)).toNumber();
+    return Decimal.pow(this.matter.dividedBy(1e30), 0.1).toNumber();
   },
   get darkEnergyMult() {
     return this.celestial.darkEnergyMult;
@@ -122,7 +122,7 @@ const Laitela = {
   },
   reset() {
     this.annihilate(true);
-    this.celestial.darkEnergyMult = 0;
+    this.celestial.darkEnergyMult = 1;
     this.celestial.annihilated = false;
     this.celestial.maxMatter = new Decimal(0);
     this.celestial.fastestCompletion = 3600;

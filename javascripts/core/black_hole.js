@@ -318,7 +318,7 @@ const BlackHoles = {
   },
 
   get canBeUnlocked() {
-    return player.reality.realityMachines.gte(50) && !this.areUnlocked;
+    return player.reality.realityMachines.gte(100) && !this.areUnlocked;
   },
 
   get areUnlocked() {
@@ -328,7 +328,7 @@ const BlackHoles = {
   unlock() {
     if (!this.canBeUnlocked) return;
     player.blackHole[0].unlocked = true;
-    player.reality.realityMachines = player.reality.realityMachines.minus(50);
+    player.reality.realityMachines = player.reality.realityMachines.minus(100);
     Achievement(144).unlock();
   },
 

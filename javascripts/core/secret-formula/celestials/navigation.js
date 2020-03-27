@@ -93,7 +93,7 @@ GameDatabase.celestials.navigation = {
           const cost = TERESA_UNLOCKS.SHOP.price;
           return [
             "Perk Point Shop",
-            `Pour ${shorten(rm, 1)} / ${shorten(cost, 0)} RM`
+            `Pour ${format(rm, 1)} / ${format(cost, 0)} RM`
           ];
         },
         angle: 135,
@@ -127,7 +127,7 @@ GameDatabase.celestials.navigation = {
           const cost = TERESA_UNLOCKS.EFFARIG.price;
           return [
             "Effarig",
-            `Pour ${shorten(rm, 1)} / ${shorten(cost, 0)} RM`
+            `Pour ${format(rm, 1)} / ${format(cost, 0)} RM`
           ];
         },
         angle: -135,
@@ -160,7 +160,7 @@ GameDatabase.celestials.navigation = {
           const cost = EffarigUnlock.run.cost;
           return [
             "Unlock Effarig's Reality",
-            `Reach ${shorten(rs, 1)} / ${shorten(cost, 0)} Relic Shards`
+            `Reach ${format(rs, 1)} / ${format(cost, 0)} Relic Shards`
           ];
         },
         angle: 75,
@@ -197,7 +197,7 @@ GameDatabase.celestials.navigation = {
           const am = Effarig.isRunning ? player.antimatter : 0;
           return [
             "Effarig's Infinity",
-            `Reach ${shorten(am, 1)} / ${shorten(Number.MAX_VALUE, 2)} Antimatter inside Effarig's Reality.`
+            `Reach ${format(am, 1)} / ${format(Number.MAX_VALUE, 2)} Antimatter inside Effarig's Reality.`
           ];
         },
         angle: -135,
@@ -235,7 +235,7 @@ GameDatabase.celestials.navigation = {
           const ip = Effarig.isRunning ? player.infinityPoints : 0;
           return [
             "Effarig's Eternity",
-            `Reach ${shorten(ip, 1)} / ${shorten(Number.MAX_VALUE, 2)} IP inside Effarig's Reality.`
+            `Reach ${format(ip, 1)} / ${format(Number.MAX_VALUE, 2)} IP inside Effarig's Reality.`
           ];
         },
         angle: -45,
@@ -285,7 +285,7 @@ GameDatabase.celestials.navigation = {
           const goal = new Decimal("1e4000");
           return [
             "Effarig's Reality",
-            `Reach ${shorten(ep, 1)} / ${shorten(goal, 2)} IP inside Effarig's Reality.`
+            `Reach ${format(ep, 1)} / ${format(goal, 2)} IP inside Effarig's Reality.`
           ];
         },
         angle: -120,
@@ -454,7 +454,7 @@ GameDatabase.celestials.navigation = {
           const goal = new Decimal("1e4000");
           return [
             "Enslaved Reality",
-            `Reach ${shorten(ep, 1)} / ${shorten(goal, 2)} IP inside Enslaved Reality.`
+            `Reach ${format(ep, 1)} / ${format(goal, 2)} IP inside Enslaved Reality.`
           ];
         },
         angle: 45,
@@ -495,7 +495,7 @@ GameDatabase.celestials.navigation = {
           const goal = 800;
           return [
             "V's achievement",
-            `Reach ${shorten(galaxies, 1)} / ${shorten(goal, 2)} galaxies without any 8th dimensions.`
+            `Reach ${formatInt(galaxies, 1)} / ${formatInt(goal, 2)} galaxies without any 8th dimensions.`
           ];
         },
         angle: -135,
@@ -533,7 +533,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.realities;
           return [
             "V",
-            `Reach ${shorten(realities, 1)} / ${shorten(goal, 2)} realities.`
+            `Reach ${format(realities, 1)} / ${format(goal, 2)} realities.`
           ];
         },
         angle: -135,
@@ -573,7 +573,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.eternities;
           return [
             "V",
-            `Reach ${shorten(eternities, 1)} / ${shorten(goal, 2)} eternities.`
+            `Reach ${format(eternities, 1)} / ${format(goal, 2)} eternities.`
           ];
         },
         angle: -135,
@@ -614,7 +614,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.infinities;
           return [
             "V",
-            `Reach ${shorten(infinities, 1)} / ${shorten(goal, 2)} infinities.`
+            `Reach ${format(infinities, 1)} / ${format(goal, 2)} infinities.`
           ];
         },
         angle: -135,
@@ -654,7 +654,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.dilatedTime;
           return [
             "V",
-            `Reach ${shorten(dilatedTime, 1)} / ${shorten(goal, 2)} Dilated Time.`
+            `Reach ${format(dilatedTime, 1)} / ${format(goal, 2)} Dilated Time.`
           ];
         },
         angle: -135,
@@ -694,7 +694,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.replicanti;
           return [
             "V",
-            `Reach ${shorten(replicanti, 1)} / ${shorten(goal, 2)} replicanti.`
+            `Reach ${format(replicanti, 1)} / ${format(goal, 2)} replicanti.`
           ];
         },
         angle: -135,
@@ -717,7 +717,7 @@ GameDatabase.celestials.navigation = {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
       if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-      return player.reality.realityMachines.log10() / GameDatabase.celestials.v.mainUnlock.rm.log10();
+      return player.reality.realityMachines.log10() / Math.log10(GameDatabase.celestials.v.mainUnlock.rm);
     },
     drawOrder: -1,
     node: {
@@ -734,7 +734,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.rm;
           return [
             "V",
-            `Reach ${shorten(rm, 1)} / ${shorten(goal, 2)} Reality Machines.`
+            `Reach ${format(rm, 1)} / ${format(goal, 2)} Reality Machines.`
           ];
         },
         angle: -135,

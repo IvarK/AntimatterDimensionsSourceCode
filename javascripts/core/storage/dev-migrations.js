@@ -562,6 +562,14 @@ GameStorage.devMigrations = {
       delete player.celestials.effarig.autoGlyphSac;
       delete player.celestials.effarig.autoGlyphPick;
     },
+    player => {
+      delete player.reality.glyphs.inventorySize;
+      for (const glyph of player.reality.glyphs.inventory) {
+        if (glyph.idx >= 10) {
+          glyph.idx += 10;
+        }
+      }
+    },
   ],
 
   patch(player) {

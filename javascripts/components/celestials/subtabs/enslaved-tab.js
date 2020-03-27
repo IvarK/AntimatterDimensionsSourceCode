@@ -16,6 +16,7 @@ Vue.component("enslaved-tab", {
     autoRelease: false,
     autoReleaseSpeed: 0,
     unlocks: [],
+    buyableUnlocks: [],
     quote: "",
     quoteIdx: 0,
     currentSpeedUp: 0
@@ -70,6 +71,7 @@ Vue.component("enslaved-tab", {
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
       this.storedRealCap = Enslaved.storedRealTimeCap;
       this.unlocks = Array.from(player.celestials.enslaved.unlocks);
+      this.buyableUnlocks = Object.values(ENSLAVED_UNLOCKS).map(x => Enslaved.canBuy(x));
       this.quote = Enslaved.quote;
       this.quoteIdx = player.celestials.enslaved.quoteIdx;
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
@@ -105,7 +107,10 @@ Vue.component("enslaved-tab", {
       return Enslaved.has(info);
     },
     canBuyUnlock(info) {
-      return Enslaved.canBuy(info);
+      // This (rather than just using Enslaved.canBuy(info) and removing this.buyableUnlocks)
+      // is needed for proper reactivity of button styles (e.g., if you get a level 5000 glyph
+      // while on the Enslaved tab).
+      return this.buyableUnlocks[info.id];
     },
     nextQuote() {
       Enslaved.nextQuote();
@@ -199,7 +204,7 @@ Vue.component("enslaved-tab", {
           class="o-enslaved-shop-button"
           :class="unlockClassObject(unlock)"
           @click="buyUnlock(unlock)"> 
-            {{ unlock.description }}
+            {{ unlock.description() }}
             <br> 
             Costs: {{ timeDisplayShort(unlock.price) }}
             <br>

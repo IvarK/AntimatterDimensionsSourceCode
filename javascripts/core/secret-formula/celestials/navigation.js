@@ -155,8 +155,8 @@ GameDatabase.celestials.navigation = {
     // If the upgrade to unlock the reality isn't yet bought, clamp the progress at 99.9%,
     // even if the player has enough relic shards to buy it.
     complete: () => (EffarigUnlock.run.isUnlocked 
-      ? 1 : Math.clampMin(0.999, Decimal.pLog10(player.celestials.effarig.relicShards)
-        / Math.log10(EffarigUnlock.run.cost))),
+      ? 1 : Math.clampMin(0.999, Decimal.pLog10(player.celestials.effarig.relicShards) /
+        Math.log10(EffarigUnlock.run.cost))),
     node: {
       completeClass: "c-celestial-nav__effarig",
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -636,8 +636,8 @@ GameDatabase.celestials.navigation = {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
       if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-      return emphasizeEnd(player.dilation.dilatedTime.pLog10()
-        / GameDatabase.celestials.v.mainUnlock.dilatedTime.log10());
+      return emphasizeEnd(player.dilation.dilatedTime.pLog10() /
+        GameDatabase.celestials.v.mainUnlock.dilatedTime.log10());
     },
     drawOrder: -1,
     node: {
@@ -717,8 +717,8 @@ GameDatabase.celestials.navigation = {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
       if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-      return emphasizeEnd(player.reality.realityMachines.pLog10()
-        / Math.log10(GameDatabase.celestials.v.mainUnlock.rm));
+      return emphasizeEnd(player.reality.realityMachines.pLog10() /
+        Math.log10(GameDatabase.celestials.v.mainUnlock.rm));
     },
     drawOrder: -1,
     node: {

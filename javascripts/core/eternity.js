@@ -3,7 +3,7 @@
 function canEternity() {
   return EternityChallenge.isRunning
     ? EternityChallenge.current.canBeCompleted
-    : player.infinityPoints.gte(Decimal.MAX_NUMBER) && InfinityDimension(8).isUnlocked;
+    : player.infinityPoints.gte(Decimal.NUMBER_MAX_VALUE) && InfinityDimension(8).isUnlocked;
 }
 
 function giveEternityRewards(auto) {
@@ -12,10 +12,9 @@ function giveEternityRewards(auto) {
   addEternityTime(
     player.thisEternity,
     player.thisEternityRealTime,
-    gainedEternityPoints(),
-    Effects.product(RealityUpgrade(3))
+    gainedEternityPoints()
   );
-  const newEternities = new Decimal(Effects.product(RealityUpgrade(3)))
+  const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
   if (player.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
@@ -36,7 +35,7 @@ function giveEternityRewards(auto) {
   }
 
   player.bestEternitiesPerMs = player.bestEternitiesPerMs.clampMin(
-    Effects.product(RealityUpgrade(3)) / player.thisEternityRealTime
+    RealityUpgrade(3).effectOrDefault(1) / player.thisEternityRealTime
   );
   player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
 
@@ -48,6 +47,11 @@ function giveEternityRewards(auto) {
   if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked) {
     EffarigUnlock.eternity.unlock();
     beginProcessReality(getRealityProps(true));
+  }
+
+  if (player.bestEP.lt(player.eternityPoints)) {
+    player.bestEP = new Decimal(player.eternityPoints);
+    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }
 
@@ -61,7 +65,7 @@ function eternity(force, auto, specialConditions = {}) {
   } else {
     if (!canEternity()) return false;
     if (!auto && !askEternityConfirmation()) return false;
-    EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
+    EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     giveEternityRewards(auto);
   }
 
@@ -113,7 +117,7 @@ function eternity(force, auto, specialConditions = {}) {
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;
 
-  EventHub.dispatch(GameEvent.ETERNITY_RESET_AFTER);
+  EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_AFTER);
   return true;
 }
 
@@ -123,7 +127,7 @@ function initializeChallengeCompletions() {
   if (EternityMilestone.keepAutobuyers.isReached) {
     NormalChallenges.completeAll();
   }
-  if (Achievement(133).isEnabled) {
+  if (Achievement(133).isUnlocked) {
     InfinityChallenges.completeAll();
   }
   player.challenge.normal.current = 0;
@@ -162,7 +166,8 @@ function initializeResourcesAfterEternity() {
   player.onlyEighthDimensons = true;
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
-  player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
+  player.noFirstDimensions = true;
+  player.postChallUnlocked = Achievement(133).isUnlocked ? 8 : 0;
 }
 
 function applyRealityUpgrades() {
@@ -192,7 +197,7 @@ function eternityResetReplicanti() {
   player.replicanti.gal = 0;
   player.replicanti.galaxies = 0;
   player.replicanti.galCost = new Decimal(1e170);
-  if (EternityMilestone.autobuyerReplicantiGalaxy.isReached && 
+  if (EternityMilestone.autobuyerReplicantiGalaxy.isReached &&
     player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
 }
 
@@ -281,10 +286,6 @@ class EPMultiplierState extends GameMechanicState {
     this.cachedEffectValue = new Lazy(() => Decimal.pow(5, player.epmultUpgrades));
   }
 
-  get canBeApplied() {
-    return true;
-  }
-
   get isAffordable() {
     return player.eternityPoints.gte(this.cost);
   }
@@ -303,6 +304,10 @@ class EPMultiplierState extends GameMechanicState {
     this.cachedCost.invalidate();
     this.cachedEffectValue.invalidate();
     Autobuyer.eternity.bumpAmount(Decimal.pow(5, diff));
+  }
+
+  get isCustomEffect() {
+    return true;
   }
 
   get effectValue() {
@@ -332,16 +337,18 @@ class EPMultiplierState extends GameMechanicState {
     this.boughtAmount = 0;
   }
 
+  get costIncreaseThresholds() {
+    return [1e100, Decimal.NUMBER_MAX_VALUE, "1e1300", "1e4000"];
+  }
+
   costAfterCount(count) {
-    // Up to just past 1e100
-    if (count <= 58) return Decimal.pow(50, count).times(500);
-    // Up to just past Number.MAX_VALUE
-    if (count <= 153) return Decimal.pow(100, count).times(500);
-    // Up to just past 1e1300
-    if (count <= 481) return Decimal.pow(500, count).times(500);
-    // Up to 1e4000
-    if (count <= 1333) return Decimal.pow(1000, count).times(500);
-    return Decimal.pow(1000, count + Math.pow(count - 1334, 1.2)).times(500);
+    const costThresholds = EternityUpgrade.epMult.costIncreaseThresholds;
+    const multPerUpgrade = [50, 100, 500, 1000];
+    for (let i = 0; i < costThresholds.length; i++) {
+      const cost = Decimal.pow(multPerUpgrade[i], count).times(500);
+      if (cost.lt(costThresholds[i])) return cost;
+    }
+    return Decimal.pow(1000, count + Math.pow(Math.clampMin(count - 1334, 0), 1.2)).times(500);
   }
 }
 

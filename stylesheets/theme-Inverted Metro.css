@@ -2,12 +2,12 @@ body.t-inverted-metro {
     background-color: black;
 }
 
-.t-inverted-metro #container {
-    filter: invert(100%);
+.t-inverted-metro #ui {
+  filter: invert(100%);
 }
 
 .t-inverted-metro #realityanimbg {
-    filter: invert(1);
+  filter: invert(1);
 }
 
 .t-inverted-metro .c-tt-buy-button--unlocked {

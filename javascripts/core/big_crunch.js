@@ -13,7 +13,7 @@ function canCrunch() {
     return true;
   }
   const challenge = NormalChallenge.current || InfinityChallenge.current;
-  const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
+  const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
   if (player.thisInfinityMaxAM.lt(goal)) return false;
   return true;
 }
@@ -54,10 +54,10 @@ function bigCrunchReset() {
   player.bestInfinitiesPerMs = player.bestInfinitiesPerMs.clampMin(
     gainedInfinities().round().dividedBy(player.thisInfinityRealTime)
   );
-  
+
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   const challenge = NormalChallenge.current || InfinityChallenge.current;
-  EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
   handleChallengeCompletion();
 
   if (earlyGame || (challenge && !player.options.retryChallenge)) {
@@ -80,13 +80,13 @@ function bigCrunchReset() {
 
   // FIXME: Infinitified is now Decimal so decide what happens here!
   // kong.submitStats('Infinitied', Player.totalInfinitied);
-  kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime));
+  kong.submitStats("Fastest Infinity time (ms)", Math.floor(player.bestInfinityTime));
 
   const currentReplicanti = player.replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
   secondSoftReset(true);
 
-  if (Achievement(95).isEnabled) {
+  if (Achievement(95).isUnlocked) {
     player.replicanti.amount = currentReplicanti;
   }
   if (TimeStudy(33).isBought) {
@@ -111,7 +111,7 @@ function bigCrunchReset() {
     EffarigUnlock.infinity.unlock();
     beginProcessReality(getRealityProps(true));
   }
-  EventHub.dispatch(GameEvent.BIG_CRUNCH_AFTER);
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
 
 }
 
@@ -139,7 +139,7 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
     this._upgrade = upgrade;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this._upgrade.isBought && this._upgrade.isCharged;
   }
 }
@@ -161,11 +161,11 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
     return player.infinityUpgrades;
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return this._requirement === undefined || this._requirement.isBought;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isBought && !this.isCharged;
   }
 
@@ -215,7 +215,7 @@ function totalIPMult() {
       Achievement(93),
       Achievement(116),
       Achievement(125),
-      Achievement(141),
+      Achievement(141).effects.ipGain,
       InfinityUpgrade.ipMult,
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
@@ -305,18 +305,14 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     return !this.isCapped && player.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
   }
 
-  get canBeApplied() {
-    return true;
-  }
-
   purchase(amount = 1) {
     if (!this.canBeBought) return;
-    const costIncrease = this.costIncrease;
     const mult = Decimal.pow(2, amount);
     player.infMult = player.infMult.times(mult);
     if (!TimeStudy(181).isBought) {
       Autobuyer.bigCrunch.bumpAmount(mult);
     }
+    const costIncrease = this.costIncrease;
     player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
     player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
     this.adjustToCap();
@@ -333,13 +329,15 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   autobuyerTick() {
     if (!this.canBeBought) return;
     if (!this.hasIncreasedCost) {
-      const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent);
+      // The purchase at 1e3000000 is considered post-softcap because that purchase increases the cost by 1e10x.
+      const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent - 1);
       const purchases = buyUntil - this.cost.exponent + 1;
       if (purchases <= 0) return;
       this.purchase(purchases);
     }
     // Do not replace it with `if else` - it's specifically designed to process two sides of threshold separately
-    // (for example, we have 1e4000000 IP and no mult - first it will go to 1e3000000 and then it will go in this part)
+    // (for example, we have 1e4000000 IP and no mult - first it will go to (but not including) 1e3000000 and then
+    // it will go in this part)
     if (this.hasIncreasedCost) {
       const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costCap.exponent);
       const purchases = Math.floor((buyUntil - player.infMultCost.exponent) / 10) + 1;
@@ -394,7 +392,7 @@ class BreakInfinityMultiplierCostUpgrade extends RebuyableMechanicState {
     return this.boughtAmount === this.config.maxUpgrades;
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return !this.isMaxed;
   }
 

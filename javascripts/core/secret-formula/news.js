@@ -617,7 +617,10 @@ GameDatabase.news = [
   },
   {
     id: "a130",
-    text: "Click this to unlock a secret achievement."
+    text: "Click this to unlock that one secret achievement.",
+    // This next line is needed for this news ticker to unlock
+    // the secret achievement.
+    onClick: () => undefined
   },
   {
     id: "a131",
@@ -847,8 +850,9 @@ GameDatabase.news = [
   {
     id: "a173",
     text:
-      "<span style='animation: a-game-header__antimatter--glow 3s infinite' onclick='bigCrunchAnimation()'>This " +
-      "text is made of antimatter. Do not touch or else the universe will collapse.</span>"
+      "<span style='animation: a-game-header__antimatter--glow 3s infinite'>This " +
+      "text is made of antimatter. Do not touch or else the universe will collapse.</span>",
+    onClick: () => bigCrunchAnimation()
   },
   {
     id: "a174",
@@ -886,8 +890,8 @@ GameDatabase.news = [
       "black; background: black;'>REDACTED</span> <span style='color: black; background: black;'>REDACTED</span> " +
       "work is that when you reach <span style='color: black; background: black;'>REDACTED</span> <span style=" +
       "'color: black; background: black;'>REDACTED</span>, you can <span style='color: black; background: black;'>" +
-      "REDACTED</span> the amount of <span style='color: black; background: black;'>REDACTED</span> in exchange for a" +
-      "<span style='color: black; background: black;'>REDACTED</span> <span style='color: black; background: " +
+      "REDACTED</span> the amount of <span style='color: black; background: black;'>REDACTED</span> in exchange for " +
+      "a <span style='color: black; background: black;'>REDACTED</span> <span style='color: black; background: " +
       "black;'>REDACTED</span>. These work just like <span style='color: black; background: black;'>REDACTED</span>, " +
       "improving <span style='color: black; background: black;'>REDACTED</span>."
   },
@@ -1010,7 +1014,17 @@ GameDatabase.news = [
   },
   {
     id: "a196",
-    text: "Disco Time! (click me!)"
+    text: "Disco Time! (click me!)",
+    onClick() {
+      let random = Math.random();
+      // Golden ratio
+      random += 0.618033988749895;
+      random %= 1;
+      random *= 255;
+      const color = `hsl(${random}, 90%, 60%)`;
+      return `<span style='color: ${color}; text-shadow: 0 0 0.5rem ${color};
+        animation: text-grow 0.4s infinite;'>Disco Time!</span>`;
+    }
   },
   {
     id: "a197",
@@ -1113,6 +1127,10 @@ GameDatabase.news = [
         return `Nothing happens when you click this text. And yet, you've clicked it ${clicks} ${plural}.`;
       }
       return "Nothing happens when you click this text. And you understand that.";
+    },
+    onClick() {
+      player.secretUnlocks.uselessNewsClicks++;
+      return this.text;
     }
   },
   {
@@ -1355,12 +1373,26 @@ GameDatabase.news = [
     id: "a246",
     text: "<span style='animation: fade-out 3s infinite'>OoooOOOOooOOO, it's me, the infamous news ghost!</span>",
   },
-  {
-    id: "a247",
-    text:
-      "This news message is a test of \"News 2.0\". News 2.0 will feature things like the ability to click on " +
-      "news messages to flip them upside down!",
-  },
+  (function() {
+    let isFlipped = false;
+    const normal = "This news message is a test of \"News 2.0\". News 2.0 will feature things like the ability to " +
+      "click on news messages to flip them upside down!";
+    const flipped = "¡uʍop ǝpᴉsdn ɯǝɥʇ dᴉlɟ oʇ sǝƃɐssǝɯ sʍǝu uo ʞɔᴉlɔ oʇ ʎʇᴉlᴉqɐ ǝɥʇ ǝʞᴉl sƃuᴉɥʇ ǝɹnʇɐǝɟ llᴉʍ 0˙ᄅ " +
+      "sʍǝN ˙,,0˙ᄅ sʍǝN,, ɟo ʇsǝʇ ɐ sᴉ ǝƃɐssǝɯ sʍǝu sᴉɥ┴";
+    return {
+      id: "a247",
+      get text() {
+        return isFlipped ? flipped : normal;
+      },
+      reset() {
+        isFlipped = false;
+      },
+      onClick() {
+        isFlipped = !isFlipped;
+        return this.text;
+      }
+    };
+  }()),
   {
     id: "a248",
     text:
@@ -1626,7 +1658,11 @@ GameDatabase.news = [
   },
   {
     id: "a289",
-    text: "Click here to disassemble the news ticker for a trace amount of paperclips."
+    text: "Click here to disassemble the news ticker for a trace amount of paperclips.",
+    onClick() {
+      player.secretUnlocks.paperclips++;
+      GameOptions.toggleNews();
+    }
   },
   {
     id: "a290",
@@ -1653,6 +1689,107 @@ GameDatabase.news = [
     text:
       `<span style='font-family: "Comic Sans MS", cursive, sans-serif; font-size: 1.7rem;'>` +
       "Hello fellow news messages! 🛹</span>"
+  },
+  {
+    id: "a294",
+    text: "If you see a news message, and then see it again later, does it become an olds message?"
+  },
+  {
+    id: "a295",
+    text: "👁"
+  },
+  (function() {
+    let wasClicked = false;
+    const normal = "Click on this news message to hard reset your game.";
+    const clicked = "You're crazy. You know what, here. Have a paperclip.";
+    return {
+      id: "a296",
+      get text() {
+        return wasClicked ? clicked : normal;
+      },
+      reset() {
+        wasClicked = false;
+      },
+      onClick() {
+        if (wasClicked) return undefined;
+        wasClicked = true;
+        player.secretUnlocks.paperclips++;
+        return this.text;
+      }
+    };
+  }()),
+  {
+    id: "a297",
+    text: "I don't think, therefore I'm not."
+  },
+  {
+    id: "a298",
+    text: "Is it crazy how saying sentences backwards makes backwards sentences saying how crazy it is?"
+  },
+  {
+    id: "a299",
+    get text() {
+      return `Buy the new Antimatter Dimensions puzzle set now! With a combined ${format(Number.MAX_VALUE)} ` +
+      `pieces, these puzzles are the perfect way to spend some quality time with your family!`;
+    }
+  },
+  {
+    id: "a300",
+    text:
+      "The board of directors here at A.N.N thinks we should replace the news ticker with a banner " +
+      "advertisement. Please sign our change.org petition, so we can stop them before it's too late!"
+  },
+  {
+    id: "a301",
+    text: "The next hour is in 0.2 updates."
+  },
+  {
+    id: "a302",
+    text: "Introducing Antimatter Lite! Zero calories... Same great Crunch."
+  },
+  {
+    id: "a303",
+    text: "Roses are red, violets are blue, flag is win, baba is you."
+  },
+  {
+    id: "a304",
+    text: "Hi, how's your day? Hope it's good. If it's not good, we hope playing AD made it a little bit better!"
+  },
+  {
+    id: "a305",
+    text: "We now bring you today's weather report. There is a 100% chance of weather."
+  },
+  {
+    id: "a306",
+    text: "FIXING NEWS: Please don't break it again."
+  },
+  {
+    id: "a307",
+    text:
+      "The paperclip maximizer is a thought experiment described by Swedish philosopher Nick Bostrom in 2003. It " +
+      "illustrates the existential risk that an artificial general intelligence may pose to human beings when " +
+      "programmed to pursue even seemingly-harmless goals, and the necessity of incorporating machine ethics into " +
+      "artificial intelligence design. The scenario describes an advanced artificial intelligence tasked with " +
+      "manufacturing paperclips. If such a machine were not programmed to value human life, or to use only " +
+      "designated resources in bounded time, then given enough power its optimized goal would be to turn all matter " +
+      "in the universe, including human beings, into either paperclips or machines which manufacture paperclips."
+  },
+  {
+    id: "a308",
+    text:
+      "Hey! It's me, you from the future! I came back to give you this warning: Pay VERY close attention to the " +
+      "next news ticker. In my timeline we ignored it, and humanity has regretted it ever since."
+  },
+  {
+    id: "a309",
+    get text() {
+      return `Check out Avari's newly built actually infinite infinity pool! With an area of ` +
+      `${format(Number.MAX_VALUE)} square megametres, you'll be sure to have infinite fun!`;
+    }
+  },
+  {
+    id: "a310",
+    text: "Testing... testing... testing... Oh goddamn I was in prod again."
   },
   {
     id: "l1",
@@ -1983,7 +2120,7 @@ GameDatabase.news = [
       const names = [];
       if (PlayerProgress.infinityUnlocked()) names.push("Infinity");
       if (PlayerProgress.eternityUnlocked()) names.push("Eternity");
-      if (TimeStudy.dilation.isBought) names.push("Dilation");
+      if (PlayerProgress.dilationUnlocked()) names.push("Dilation");
       if (PlayerProgress.realityUnlocked()) names.push("Reality");
 
       const game1Name = names.randomElement();

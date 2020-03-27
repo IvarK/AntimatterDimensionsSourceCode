@@ -33,6 +33,10 @@ class MatterDimensionState {
      .times(Decimal.pow(2, this._tier))
      .times(1000);
   }
+  
+  get isIntervalCapped() {
+    return this.baseInterval.lte(50);
+  }
 
   // In milliseconds
   get interval() {
@@ -42,7 +46,6 @@ class MatterDimensionState {
 
   get power() {
     let base = Decimal.pow(1.1, this.dimension.powerUpgrades).times(Laitela.realityReward);
-    if (GlyphAlteration.isAdded("power")) base = base.times(getSecondaryGlyphEffect("powerpow"));
     if (DarkEnergyUpgrade.matterDimensionMult.isBought) {
       base = base.times(DarkEnergyUpgrade.matterDimensionMult.effect);
     }
@@ -90,7 +93,7 @@ class MatterDimensionState {
   }
 
   get canBuyInterval() {
-    return this.intervalCost.lte(player.celestials.laitela.matter) && !this.interval.eq(50);
+    return this.intervalCost.lte(player.celestials.laitela.matter) && !this.isIntervalCapped;
   }
 
   get canBuyPower() {

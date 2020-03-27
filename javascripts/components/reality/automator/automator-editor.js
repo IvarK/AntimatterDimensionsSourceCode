@@ -25,19 +25,19 @@ Vue.component("automator-editor", {
       }
     },
     currentScript() {
-      return AutomatorTextUI.documents[this.currentScriptID].getValue()
+      return CodeMirror.Doc(player.reality.automator.scripts[this.currentScriptID].content, "automato").getValue();
     },
     playTooltip() {
       if (this.isRunning) return undefined;
       if (this.isPaused) return "Resume automator execution";
       return "Start automator";
     },
-    modeIconClass() { return this.automatorType === AutomatorType.BLOCK ? "fa-cubes" : "fa-code"; },
+    modeIconClass() { return this.automatorType === AUTOMATOR_TYPE.BLOCK ? "fa-cubes" : "fa-code"; },
     isTextAutomator() {
-      return this.automatorType === AutomatorType.TEXT;
+      return this.automatorType === AUTOMATOR_TYPE.TEXT;
     },
     isBlockAutomator() {
-      return this.automatorType === AutomatorType.BLOCK;
+      return this.automatorType === AUTOMATOR_TYPE.BLOCK;
     }
   },
   methods: {
@@ -117,6 +117,7 @@ Vue.component("automator-editor", {
       }
       this.$nextTick(() => this.editingName = false);
     },
+
     dropdownLabel(script) {
       let label = script.name;
       if (script.id === this.runningScriptID) {
@@ -125,26 +126,20 @@ Vue.component("automator-editor", {
       }
       return label;
     },
-    parseTextFromBlocks() {
-      const content = BlockAutomator.parseLines(BlockAutomator.lines).join("\n");
-      const automatorID = ui.view.tabs.reality.automator.editorScriptID;
-      AutomatorBackend.saveScript(automatorID, content);
-      AutomatorTextUI.documents[automatorID].setValue(content);
-      this.$nextTick(() => AutomatorTextUI.editor.refresh());
-    },
+
     toggleAutomatorMode() {
-      if (this.automatorType === AutomatorType.BLOCK) { 
-        this.parseTextFromBlocks();
-        player.reality.automator.type = AutomatorType.TEXT;
+      if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
+        BlockAutomator.parseTextFromBlocks();
+        player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
       } else if (BlockAutomator.fromText(this.currentScript)) {
-        player.reality.automator.type = AutomatorType.BLOCK;
+        player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
       } else {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");
       }
     }
   },
   created() {
-    EventHub.ui.on(GameEvent.GAME_LOAD, () => this.onGameLoad(), this);
+    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
     this.updateCurrentScriptID();
     this.updateScriptList();
   },
@@ -154,7 +149,7 @@ Vue.component("automator-editor", {
   template:
     `<div class="l-automator-pane">
       <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
-        <automator-controls @automatorplay="parseTextFromBlocks()"/>
+        <automator-controls />
         <div class="l-automator__script-names">
           <template v-if="!editingName">
             <select class="l-automator__scripts-dropdown"
@@ -183,7 +178,7 @@ Vue.component("automator-editor", {
       </div>
       <automator-text-editor :currentScriptID="currentScriptID"
                              :activeLine="activeLine"
-                             v-show="isTextAutomator"/>
-      <automator-block-editor v-show="isBlockAutomator"/>
+                             v-if="isTextAutomator"/>
+      <automator-block-editor v-if="isBlockAutomator"/>
     </div>`
 });

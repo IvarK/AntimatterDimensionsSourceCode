@@ -3,14 +3,14 @@
 const NormalTimeStudies = {};
 
 NormalTimeStudies.pathList = [
-  { path: TimeStudyPath.NORMAL_DIM, studies: [71, 81, 91, 101] },
-  { path: TimeStudyPath.INFINITY_DIM, studies: [72, 82, 92, 102] },
-  { path: TimeStudyPath.TIME_DIM, studies: [73, 83, 93, 103] },
-  { path: TimeStudyPath.ACTIVE, studies: [121, 131, 141] },
-  { path: TimeStudyPath.PASSIVE, studies: [122, 132, 142] },
-  { path: TimeStudyPath.IDLE, studies: [123, 133, 143] },
-  { path: TimeStudyPath.LIGHT, studies: [221, 223, 225, 227, 231, 233] },
-  { path: TimeStudyPath.DARK, studies: [222, 224, 226, 228, 232, 234] }
+  { path: TIME_STUDY_PATH.NORMAL_DIM, studies: [71, 81, 91, 101] },
+  { path: TIME_STUDY_PATH.INFINITY_DIM, studies: [72, 82, 92, 102] },
+  { path: TIME_STUDY_PATH.TIME_DIM, studies: [73, 83, 93, 103] },
+  { path: TIME_STUDY_PATH.ACTIVE, studies: [121, 131, 141] },
+  { path: TIME_STUDY_PATH.PASSIVE, studies: [122, 132, 142] },
+  { path: TIME_STUDY_PATH.IDLE, studies: [123, 133, 143] },
+  { path: TIME_STUDY_PATH.LIGHT, studies: [221, 223, 225, 227, 231, 233] },
+  { path: TIME_STUDY_PATH.DARK, studies: [222, 224, 226, 228, 232, 234] }
 ];
 
 NormalTimeStudies.paths = NormalTimeStudies.pathList.mapToObject(e => e.path, e => e.studies);
@@ -99,40 +99,36 @@ const TimeTheorems = {
     return player.timestudy.amcost.e / 20000 - 1 +
       player.timestudy.ipcost.e / 100 +
       Math.round(player.timestudy.epcost.log2());
+  },
+
+  autoBuyMaxTheorems(realDiff) {
+    if (!player.ttbuyer) return;
+    player.auto.ttTimer += realDiff;
+    const period = Effects.min(
+      Number.POSITIVE_INFINITY,
+      Perk.autobuyerTT1,
+      Perk.autobuyerTT2,
+      Perk.autobuyerTT3,
+      Perk.autobuyerTT4
+    );
+    const milliseconds = TimeSpan.fromSeconds(period).totalMilliseconds;
+    if (player.auto.ttTimer > milliseconds) {
+      TimeTheorems.buyMax(true);
+      player.auto.ttTimer = Math.min(player.auto.ttTimer - milliseconds, milliseconds);
+    }
+  },
+
+  calculateTimeStudiesCost() {
+    let totalCost = TimeStudy.boughtNormalTS()
+      .map(ts => ts.cost)
+      .reduce(Number.sumReducer, 0);
+    const ecStudy = TimeStudy.eternityChallenge.current();
+    if (ecStudy !== undefined) {
+      totalCost += ecStudy.cost;
+    }
+    return totalCost;
   }
 };
-
-function autoBuyMaxTheorems(realDiff) {
-  if (!player.ttbuyer) return;
-  player.auto.ttTimer += realDiff;
-  const period = Effects.min(
-    Number.POSITIVE_INFINITY,
-    Perk.autobuyerTT1,
-    Perk.autobuyerTT2,
-    Perk.autobuyerTT3,
-    Perk.autobuyerTT4);
-  if (player.auto.ttTimer > period) {
-    TimeTheorems.buyMax(true);
-    player.auto.ttTimer = Math.min(player.auto.ttTimer - period, period);
-  }
-}
-
-function calculateTimeStudiesCost() {
-  let totalCost = TimeStudy.boughtNormalTS()
-    .map(ts => ts.cost)
-    .reduce(Number.sumReducer, 0);
-  const ecStudy = TimeStudy.eternityChallenge.current();
-  if (ecStudy !== undefined) {
-    totalCost += ecStudy.cost;
-  }
-  return totalCost;
-}
-
-function calculateDilationStudiesCost() {
-  return TimeStudy.boughtDilationTS()
-    .map(ts => ts.cost)
-    .reduce(Number.sumReducer, 0);
-}
 
 function unlockDilation(quiet) {
   if (!quiet) {
@@ -144,43 +140,25 @@ function unlockDilation(quiet) {
   if (Perk.autounlockDilation2.isBought) {
     for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
   }
-  if (Perk.startTP.isBought) {
-    player.dilation.tachyonParticles =
-      player.dilation.tachyonParticles.plus(Enslaved.isRunning ? 1 : 10);
+  player.dilation.tachyonParticles = player.dilation.tachyonParticles.plusEffectOf(Perk.startTP);
+  if (Ra.has(RA_UNLOCKS.START_TP) && !isInCelestialReality()) {
+    player.dilation.tachyonParticles = getTP(RA_UNLOCKS.START_TP.effect());
   }
-}
-
-function hasRow(row) {
-  for (let i = 1; i < 10; ++i) {
-    const study = TimeStudy(row * 10 + i);
-    if (!study) break;
-    if (study.isBought) return true;
-  }
-  return false;
-}
-
-function canBuyStudy(id) {
-  const study = TimeStudy(id);
-  return study ? study.checkRequirement() : false;
-}
-
-function canBuyLocked(id) {
-  return V.canBuyLockedPath() && TimeStudy(id) && TimeStudy(id).checkVRequirement();
 }
 
 function getSelectedDimensionStudyPaths() {
   const paths = [];
-  if (TimeStudy(71).isBought) paths.push(TimeStudyPath.NORMAL_DIM);
-  if (TimeStudy(72).isBought) paths.push(TimeStudyPath.INFINITY_DIM);
-  if (TimeStudy(73).isBought) paths.push(TimeStudyPath.TIME_DIM);
+  if (TimeStudy(71).isBought) paths.push(TIME_STUDY_PATH.NORMAL_DIM);
+  if (TimeStudy(72).isBought) paths.push(TIME_STUDY_PATH.INFINITY_DIM);
+  if (TimeStudy(73).isBought) paths.push(TIME_STUDY_PATH.TIME_DIM);
   return paths;
 }
 
 function getSelectedPacePaths() {
   const paths = [];
-  if (TimeStudy(121).isBought) paths.push(TimeStudyPath.ACTIVE);
-  if (TimeStudy(122).isBought) paths.push(TimeStudyPath.PASSIVE);
-  if (TimeStudy(123).isBought) paths.push(TimeStudyPath.IDLE);
+  if (TimeStudy(121).isBought) paths.push(TIME_STUDY_PATH.ACTIVE);
+  if (TimeStudy(122).isBought) paths.push(TIME_STUDY_PATH.PASSIVE);
+  if (TimeStudy(123).isBought) paths.push(TIME_STUDY_PATH.IDLE);
   return paths;
 }
 
@@ -199,17 +177,18 @@ function buyTimeStudyListUntilID(list, maxId) {
 
 // eslint-disable-next-line complexity
 function studiesUntil(id) {
-  const row = Math.floor(id / 10);
-  const col = id % 10;
-  const lastInPrevRow = row * 10 - 1;
+  const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
   const study = TimeStudy(id);
-  // This process is greedy (starts buying studies from the top). However, if the
-  // player shift clicks a study that is immeidately buyable, we try to buy it first --
-  // in case buying studies up to that point renders it unaffordable.
-  study.purchase();
   const requestedPath = study.path;
+
+  // If the player tries to buy a study which isimmeidately buyable, we try to buy it first
+  // in case buying other studies up to that point renders it unaffordable.
+  study.purchase();
+
+  // Greddily buy all studies before the dimension split, then try again
   buyTimeStudyRange(11, Math.min(lastInPrevRow, 70));
   study.purchase();
+
   if (id < 71) return;
   const dimPaths = getSelectedDimensionStudyPaths();
   // If we have already selected as many dimension paths as available, we can brute
@@ -233,46 +212,35 @@ function studiesUntil(id) {
     return;
   }
   if (id >= 111) TimeStudy(111).purchase();
+
   if (id < 121) return;
-  // If we clicked on a active/idle/passive path, purchase things on that path
-  // before doing anything else
-  if (id <= 143) {
-    buyTimeStudyListUntilID(NormalTimeStudies.paths[requestedPath], id);
-  }
-  // If we've maxed out V rewards, we can brute force buy studies. Otherwise,
-  // we don't assume we know which locked studies the player wants, if any.
-  if (V.totalAdditionalStudies >= 12) {
-    buyTimeStudyRange(121, Math.min(lastInPrevRow, 214));
-  }
   const pacePaths = getSelectedPacePaths();
-  // If we don't have a middle path chosen at this point, we either can't decide
-  // or can't afford any more studies
-  if (pacePaths.length === 0) return;
-  // If we have V, and have started on more than one pace path, but haven't finished
-  // it, we don't know how to proceed. If only one path is selected, we'll assume that
-  // it's the path the player wants
-  if (pacePaths.length > 1) {
-    if (!TimeStudy(141).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought) return;
-  } else {
-    // Buy as much of the rest of the selected middle path as we need
+  if (pacePaths.length === 1) {
+    // We've chosen a path already
     buyTimeStudyListUntilID(NormalTimeStudies.paths[pacePaths[0]], id);
+  } else if (id < 151) {
+    // This click is choosing a path
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy(id).path], id);
+  } else if (pacePaths.length === 0) {
+    // Only brute-force buying all pace studies if the player is done with V
+    if (!V.isFullyCompleted) return;
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[TIME_STUDY_PATH.ACTIVE], id);
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[TIME_STUDY_PATH.PASSIVE], id);
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[TIME_STUDY_PATH.IDLE], id);
+  } else {
+    // If the player has more than one pace path, we explicitly do nothing here so that we don't potentially waste ST
+    // they might be saving for lower studies. However, we keep continuing since up to row 22 the choices are obvious.
   }
+
+  // Attempt to buy things below the pace split, up to the requested study
+  if (!TimeStudy(141).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought) return;
   buyTimeStudyRange(151, Math.min(lastInPrevRow, 214));
-  // If the user clicked on a study in rows 19-22, we've tried to buy up to the previous
-  // row. Try to buy that study now:
   study.purchase();
-  if (id < 230) return;
-  // If the user clicked on a study in row 23, then either a) the above purchase call bought it (in
-  // which case, they must have had one of the prerequisites) or b) it didn't, but the user has V
-  // rewards so will be able to buy both prerequisites or c) they can't buy it
-  // We only buy both if the player has maxed out V.
-  if (V.totalAdditionalStudies >= 12) {
-    TimeStudy(220 + col * 2 - 1).purchase();
-    TimeStudy(220 + col * 2).purchase();
-    // Try to buy the rest of the row 22 studies
-    for (let i = 221; i <= 228; ++i) TimeStudy(i).purchase();
-    study.purchase();
-  }
+
+  // Don't bother buying any more studies beyond row 22 unless the player has fully finished V,
+  // in which case just brute-force buy all of them
+  if (!V.isFullyCompleted) return;
+  buyTimeStudyRange(221, 234);
 }
 
 function respecTimeStudies(auto) {
@@ -284,7 +252,8 @@ function respecTimeStudies(auto) {
   }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
-  player.celestials.v.additionalStudies = 0;
+  player.celestials.v.STSpent = 0;
+  player.celestials.v.triadStudies = [];
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();
@@ -296,7 +265,12 @@ function respecTimeStudies(auto) {
 }
 
 function studyTreeExportString() {
-  return `${player.timestudy.studies}|${player.challenge.eternity.unlocked}`;
+  let studyString = player.timestudy.studies.toString();
+  if (player.celestials.v.triadStudies.length !== 0) {
+    const triadString = player.celestials.v.triadStudies.map(id => `T${id}`);
+    studyString += `,${triadString}`;
+  }
+  return `${studyString}|${player.challenge.eternity.unlocked}`;
 }
 
 function exportStudyTree() {
@@ -306,8 +280,6 @@ function exportStudyTree() {
 function importStudyTree(input, auto) {
   const splitOnEC = input.split("|");
   splitOnEC[0].split(",")
-    .map(id => parseInt(id, 10))
-    .filter(id => !isNaN(id))
     .map(TimeStudy)
     .filter(study => study !== undefined)
     .forEach(study => study.purchase());
@@ -323,7 +295,8 @@ function importStudyTree(input, auto) {
 const TimeStudyType = {
   NORMAL: 0,
   ETERNITY_CHALLENGE: 1,
-  DILATION: 2
+  DILATION: 2,
+  TRIAD: 3
 };
 
 class TimeStudyState extends GameMechanicState {
@@ -338,6 +311,13 @@ class TimeStudyState extends GameMechanicState {
 
   get cost() {
     return this.config.cost;
+  }
+
+  get STCost() {
+    const base = this.config.STCost;
+    return V.has(V_UNLOCKS.RA_UNLOCK)
+      ? base - 2
+      : base;
   }
 
   refund() {
@@ -357,7 +337,7 @@ class NormalTimeStudyState extends TimeStudyState {
   constructor(config) {
     super(config, TimeStudyType.NORMAL);
     const path = NormalTimeStudies.pathList.find(p => p.studies.includes(this.id));
-    this._path = path === undefined ? TimeStudyPath.NONE : path.path;
+    this._path = path === undefined ? TIME_STUDY_PATH.NONE : path.path;
   }
 
   get isBought() {
@@ -371,22 +351,24 @@ class NormalTimeStudyState extends TimeStudyState {
 
   checkVRequirement() {
     const req = this.config.requirementV;
-    return req === undefined ? false : req();
+    return req === undefined
+      ? false
+      : req() && V.availableST >= this.STCost;
   }
 
   get canBeBought() {
-    return canBuyStudy(this.id) || canBuyLocked(this.id);
+    return this.checkRequirement() || this.checkVRequirement();
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isBought;
   }
 
   purchase() {
     if (this.isBought || !this.isAffordable) return false;
-    if (!canBuyStudy(this.id)) {
-      if (!canBuyLocked(this.id)) return false;
-      player.celestials.v.additionalStudies++;
+    if (!this.checkRequirement()) {
+      if (!this.checkVRequirement()) return false;
+      player.celestials.v.STSpent += this.STCost;
     }
     player.timestudy.studies.push(this.id);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
@@ -414,6 +396,7 @@ NormalTimeStudyState.all = NormalTimeStudyState.studies.filter(e => e !== undefi
  * @returns {NormalTimeStudyState}
  */
 function TimeStudy(id) {
+  if (/^T[1-4]$/u.test(id)) return TriadStudy(id.slice(1));
   return NormalTimeStudyState.studies[id];
 }
 
@@ -621,6 +604,52 @@ class TimeStudyConnection {
   }
 }
 
+
+class TriadStudyState extends TimeStudyState {
+  constructor(config) {
+    super(config, TimeStudyType.TRIAD);
+  }
+
+  get canBeBought() {
+    return this.config.requirement.every(s => player.timestudy.studies.includes(s)) &&
+           V.availableST >= this.STCost &&
+           !this.isBought && this.config.unlocked();
+  }
+
+  get isBought() {
+    return player.celestials.v.triadStudies.includes(this.config.id);
+  }
+
+  get description() {
+    return this.config.description;
+  }
+
+  get isEffectActive() {
+    return this.isBought;
+  }
+
+  purchase() {
+    if (!this.canBeBought) return;
+    player.celestials.v.triadStudies.push(this.config.id);
+    player.celestials.v.STSpent += this.STCost;
+  }
+
+  purchaseUntil() {
+    studiesUntil(214);
+    for (const id of this.config.requirement) TimeStudy(id).purchase();
+    this.purchase();
+  }
+}
+
+TriadStudyState.studies = mapGameData(
+  GameDatabase.celestials.v.triadStudies,
+  config => new TriadStudyState(config)
+);
+
+function TriadStudy(id) {
+  return TriadStudyState.studies[id];
+}
+
 /**
  * @type {TimeStudyConnection[]}
  */
@@ -700,7 +729,8 @@ TimeStudy.allConnections = (function() {
     [TS(171), EC(2)],
     [TS(171), EC(3)],
 
-    [TS(171), TS(181), () => !Perk.bypassEC1Lock.isBought || !Perk.bypassEC2Lock.isBought || !Perk.bypassEC3Lock.isBought],
+    [TS(171), TS(181),
+      () => !Perk.bypassEC1Lock.isBought || !Perk.bypassEC2Lock.isBought || !Perk.bypassEC3Lock.isBought],
 
     [EC(1), TS(181), () => Perk.bypassEC1Lock.isBought],
     [EC(2), TS(181), () => Perk.bypassEC2Lock.isBought],

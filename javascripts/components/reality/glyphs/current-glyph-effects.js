@@ -15,7 +15,7 @@ Vue.component("current-glyph-effects", {
           const value1 = this.effectConfig.formatEffect(baseValue);
           const value2 = this.effectConfig.conversion === undefined
             ? ""
-            : this.effectConfig.formatEffect(this.effectConfig.conversion(baseValue));
+            : this.effectConfig.formatSecondaryEffect(this.effectConfig.conversion(baseValue));
           const desc = typeof this.effectConfig.totalDesc === "function"
             ? this.effectConfig.totalDesc()
             : this.effectConfig.totalDesc;
@@ -47,7 +47,7 @@ Vue.component("current-glyph-effects", {
     }
   },
   created() {
-    this.on$(GameEvent.GLYPHS_CHANGED, this.glyphsChanged);
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
   },
   methods: {

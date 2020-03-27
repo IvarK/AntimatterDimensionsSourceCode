@@ -73,7 +73,7 @@ class CompressionUpgradeState extends BitPurchasableMechanicState {
     return this.config.effectDisplay(this.config.effect());
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     // eslint-disable-next-line no-bitwise
     const requirementFulfilled = new Decimal(this.config.resource()).gte(this.config.threshold()) ^
       this.config.invertedCondition;

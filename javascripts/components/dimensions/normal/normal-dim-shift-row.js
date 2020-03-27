@@ -10,7 +10,8 @@ Vue.component("normal-dim-shift-row", {
       isShift: false,
       isBuyable: false,
       purchasedBoosts: 0,
-      freeBoosts: 0
+      freeBoosts: 0,
+      lockText: null
     };
   },
   computed: {
@@ -18,19 +19,21 @@ Vue.component("normal-dim-shift-row", {
       return this.isShift ? "Shift" : "Boost";
     },
     dimName() {
-      return DISPLAY_NAMES[this.requirement.tier];
+      return NormalDimension(this.requirement.tier).displayName;
     },
     buttonText() {
-      return `Reset the game for a ${this.isShift ? "new Dimension" : "boost"}`;
+      return this.lockText === null
+        ? `Reset your Dimensions for a ${this.isShift ? "new Dimension" : "boost"}`
+        : this.lockText;
     },
     boostCountText() {
       const parts = [this.purchasedBoosts];
       if (this.freeBoosts !== 0) {
         parts.push(this.freeBoosts);
       }
-      const sum = parts.map(shortenSmallInteger).join(" + ");
+      const sum = parts.map(formatInt).join(" + ");
       if (parts.length >= 2) {
-        return `${sum} = ${shortenSmallInteger(parts.sum())}`;
+        return `${sum} = ${formatInt(parts.sum())}`;
       }
       return sum;
     }
@@ -40,10 +43,11 @@ Vue.component("normal-dim-shift-row", {
       const requirement = DimBoost.requirement;
       this.requirement.tier = requirement.tier;
       this.requirement.amount = requirement.amount;
-      this.isBuyable = requirement.isSatisfied;
+      this.isBuyable = requirement.isSatisfied && DimBoost.canBeBought;
       this.isShift = DimBoost.isShift;
       this.purchasedBoosts = DimBoost.purchasedBoosts;
       this.freeBoosts = DimBoost.freeBoosts;
+      this.lockText = DimBoost.lockText;
     },
     softReset() {
       softResetBtnClick();
@@ -51,11 +55,11 @@ Vue.component("normal-dim-shift-row", {
   },
   template:
     `<div class="c-normal-dim-row">
-      <div 
+      <div
         class="c-normal-dim-row__label c-normal-dim-row__label--growable"
       >
         Dimension {{name}} ({{boostCountText}}):
-        requires {{shortenSmallInteger(requirement.amount)}} {{dimName}} Dimensions
+        requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions
       </div>
       <primary-button
         :enabled="isBuyable"

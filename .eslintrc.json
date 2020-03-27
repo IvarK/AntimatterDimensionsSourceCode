@@ -108,7 +108,6 @@
     "computed-property-spacing": "error",
     "consistent-this": "error",
     "func-call-spacing": "error",
-    "guard-for-in": "warn",
     "id-blacklist": [
       "error",
       "ret",

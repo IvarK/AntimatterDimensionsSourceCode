@@ -13,6 +13,9 @@ class BlackHoleUpgradeState {
       new Decimal("1e310"),
       1e5,
       10));
+    this.id = config.id;
+    this.hasAutobuyer = config.hasAutobuyer;
+    this.onPurchase = config.onPurchase;
   }
 
   get value() {
@@ -26,6 +29,25 @@ class BlackHoleUpgradeState {
   get isAffordable() {
     return player.reality.realityMachines.gte(this.cost);
   }
+  
+  get autobuyerId() {
+    return this.id - 1;
+  }
+  
+  get isAutobuyerOn() {
+    if (this.hasAutobuyer) {
+      return player.blackHole[this.autobuyerId].autoPower;
+    }
+    throw new Error("Trying to get status of the autobuyer of a black hole upgrade without an autobuyer.");
+  }
+
+  set isAutobuyerOn(value) {
+    if (this.hasAutobuyer) {
+      player.blackHole[this.autobuyerId].autoPower = value;
+    } else {
+      throw new Error("Trying to set status of the autobuyer of a black hole upgrade without an autobuyer.");
+    }
+  }
 
   purchase() {
     if (!this.isAffordable || this.value === 0) return;
@@ -33,40 +55,54 @@ class BlackHoleUpgradeState {
     this.incrementAmount();
     this._lazyValue.invalidate();
     this._lazyCost.invalidate();
-    EventHub.dispatch(GameEvent.BLACK_HOLE_UPGRADE_BOUGHT);
+    if (this.onPurchase) {
+      this.onPurchase();
+    }
+    EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT);
   }
 }
 
 class BlackHoleState {
   constructor(id) {
     this.id = id + 1;
-    const wormholeCostMultipliers = [1, 1000];
+    const blackHoleCostMultipliers = [1, 1000];
     // Interval: starts at 3600, x0.8 per upgrade, upgrade cost goes x3.5, starts at 15
     this.intervalUpgrade = new BlackHoleUpgradeState({
+      id: this.id,
       getAmount: () => this._data.intervalUpgrades,
       setAmount: amount => this._data.intervalUpgrades = amount,
       calculateValue: amount => {
         const baseAmount = (3600 / (Math.pow(10, id))) * Math.pow(0.8, amount);
         return baseAmount < 0.1 ? 0 : baseAmount;
       },
-      initialCost: 15 * wormholeCostMultipliers[id],
-      costMult: 3.5
+      initialCost: 15 * blackHoleCostMultipliers[id],
+      costMult: 3.5,
+      hasAutobuyer: false,
+      onPurchase: () => {
+        if (!this.isCharged) {
+          this._data.phase = Math.clampMax(this.interval, this._data.phase);
+        }
+      }
     });
     // Power: starts at 5, x1.35 per upgrade, cost goes x2, starts at 20
     this.powerUpgrade = new BlackHoleUpgradeState({
+      id: this.id,
       getAmount: () => this._data.powerUpgrades,
       setAmount: amount => this._data.powerUpgrades = amount,
       calculateValue: amount => (180 / Math.pow(2, id)) * Math.pow(1.35, amount),
-      initialCost: 20 * wormholeCostMultipliers[id],
-      costMult: 2
+      initialCost: 20 * blackHoleCostMultipliers[id],
+      costMult: 2,
+      hasAutobuyer: true
     });
     // Duration: starts at 10, x1.5 per upgrade, cost goes x4, starts at 10
     this.durationUpgrade = new BlackHoleUpgradeState({
+      id: this.id,
       getAmount: () => this._data.durationUpgrades,
       setAmount: amount => this._data.durationUpgrades = amount,
       calculateValue: amount => (10 - (id) * 3) * Math.pow(1.3, amount),
-      initialCost: 10 * wormholeCostMultipliers[id],
-      costMult: 4
+      initialCost: 10 * blackHoleCostMultipliers[id],
+      costMult: 4,
+      hasAutobuyer: false
     });
   }
 
@@ -104,6 +140,64 @@ class BlackHoleState {
 
   get isCharged() {
     return this._data.active;
+  }
+
+  // When inactive, returns time until active; when active, returns time until inactive (or paused for hole 2)
+  get timeToNextStateChange() {
+    let remainingTime = this.isCharged
+      ? this.duration - this.phase
+      : this.interval - this.phase;
+
+    if (this.id === 1) return remainingTime;
+
+    // 2nd hole activation logic (not bothering generalizing since we're not adding that 3rd hole again)
+    if (this.isCharged) {
+      if (BlackHole(1).isCharged) return Math.min(remainingTime, BlackHole(1).timeToNextStateChange);
+      return BlackHole(1).timeToNextStateChange;
+    }
+    if (BlackHole(1).isCharged) {
+      if (remainingTime < BlackHole(1).timeToNextStateChange) return remainingTime;
+      remainingTime -= BlackHole(1).timeToNextStateChange;
+    }
+    let totalTime = BlackHole(1).isCharged
+      ? BlackHole(1).timeToNextStateChange + BlackHole(1).interval
+      : BlackHole(1).timeToNextStateChange;
+    totalTime += Math.floor(remainingTime / BlackHole(1).duration) * BlackHole(1).cycleLength;
+    totalTime += remainingTime % BlackHole(1).duration;
+    return totalTime;
+  }
+
+  // This is a value which counts up from 0 to 1 when inactive, and 1 to 0 when active
+  get stateProgress() {
+    if (this.isCharged) {
+      return 1 - this.phase / this.duration;
+    }
+    return this.phase / this.interval;
+  }
+
+  // The logic to determine what state the black hole is in for displaying is nontrivial and used in multiple places
+  get displayState() {
+    if (Enslaved.isAutoReleasing) {
+      if (Enslaved.autoReleaseTick < 3) return `<i class="fas fa-compress-arrows-alt u-fa-padding"></i> Pulsing`;
+      return `<i class="fas fa-expand-arrows-alt u-fa-padding"></i> Pulsing`;
+    }
+    if (Enslaved.isStoringGameTime) {
+      if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
+        const storedTimeWeight = player.celestials.enslaved.storedFraction;
+        if (storedTimeWeight !== 0) {
+          return `<i class="fas fa-compress-arrows-alt"></i> Charging (${formatPercents(storedTimeWeight, 1)})`;
+        }
+      } else {
+        return `<i class="fas fa-compress-arrows-alt"></i> Charging`;
+      }
+    }
+    if (BlackHoles.areNegative) return `<i class="fas fa-caret-left"></i> Inverted`;
+    if (BlackHoles.arePaused) return `<i class="fas fa-pause"></i> Paused`;
+    if (this.isPermanent) return `<i class="fas fa-infinity"></i> Permanent`;
+
+    const timeString = TimeSpan.fromSeconds(this.timeToNextStateChange).toStringShort(true);
+    if (this.isActive) return `<i class="fas fa-play"></i> Active (${timeString})`;
+    return `<i class="fas fa-redo"></i> Inactive (${timeString})`;
   }
 
   get isActive() {
@@ -144,7 +238,7 @@ class BlackHoleState {
         this._data.phase -= this.duration;
         this._data.active = false;
         if (GameUI.notify.showBlackHoles) {
-          GameUI.notify.blackHole(`Black hole ${this.id} duration ended.`);
+          GameUI.notify.blackHole(`${this.description(true)} duration ended.`);
         }
       }
     } else if (this.phase >= this.interval) {
@@ -152,7 +246,7 @@ class BlackHoleState {
       this._data.activations++;
       this._data.active = true;
       if (GameUI.notify.showBlackHoles) {
-        GameUI.notify.blackHole(`Black hole ${this.id} is active!`);
+        GameUI.notify.blackHole(`${this.description(true)} has activated!`);
       }
     }
   }
@@ -194,6 +288,13 @@ class BlackHoleState {
     }
     return this.cycleLength - this.phase;
   }
+  
+  description(capitalized) {
+    if (RealityUpgrade(20).isBought) {
+      return `Black Hole ${this.id}`;
+    }
+    return capitalized ? "The Black Hole" : "the Black Hole";
+  }
 }
 
 BlackHoleState.list = Array.range(0, 2).map(id => new BlackHoleState(id));
@@ -217,7 +318,7 @@ const BlackHoles = {
   },
 
   get canBeUnlocked() {
-    return player.reality.realityMachines.gte(50) && !this.areUnlocked;
+    return player.reality.realityMachines.gte(100) && !this.areUnlocked;
   },
 
   get areUnlocked() {
@@ -227,15 +328,17 @@ const BlackHoles = {
   unlock() {
     if (!this.canBeUnlocked) return;
     player.blackHole[0].unlocked = true;
-    player.reality.realityMachines = player.reality.realityMachines.minus(50);
+    player.reality.realityMachines = player.reality.realityMachines.minus(100);
     Achievement(144).unlock();
   },
 
   togglePause: () => {
     if (!BlackHoles.areUnlocked) return;
+    if (player.blackHolePause) player.minNegativeBlackHoleThisReality = 1;
     player.blackHolePause = !player.blackHolePause;
     player.blackHolePauseTime = player.realTimePlayed;
-    GameUI.notify.blackHole(player.blackHolePause ? "Black Hole paused" : "Black Hole unpaused");
+    const pauseType = BlackHoles.areNegative ? "inverted" : "paused";
+    GameUI.notify.blackHole(player.blackHolePause ? `Black Hole ${pauseType}` : "Black Hole unpaused");
   },
 
   get unpauseAccelerationFactor() {
@@ -244,6 +347,14 @@ const BlackHoles = {
 
   get arePaused() {
     return player.blackHolePause;
+  },
+
+  get areNegative() {
+    return this.arePaused && player.blackHoleNegative < 1;
+  },
+
+  get arePermanent() {
+    return BlackHoles.list.every(bh => bh.isPermanent);
   },
 
   updatePhases(blackHoleDiff) {
@@ -340,14 +451,14 @@ const BlackHoles = {
    * starting from black hole 1 and black hole 0 being normal game.
    */
   calculateSpeedups() {
-    const effectsToConsider = [GameSpeedEffect.FIXEDSPEED, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE, 
-      GameSpeedEffect.MOMENTUM];
-    const speedupWithoutBlackHole = getGameSpeedupFactor(effectsToConsider, 1);
+    const effectsToConsider = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
+      GAME_SPEED_EFFECT.MOMENTUM, GAME_SPEED_EFFECT.NERFS];
+    const speedupWithoutBlackHole = getGameSpeedupFactor(effectsToConsider);
     const speedups = [1];
+    effectsToConsider.push(GAME_SPEED_EFFECT.BLACK_HOLE);
     for (const blackHole of this.list) {
       if (!blackHole.isUnlocked) break;
-      const speedupFactor = getGameSpeedupFactor(effectsToConsider, undefined, blackHole.id);
-      speedups.push(speedupFactor / speedupWithoutBlackHole);
+      speedups.push(getGameSpeedupFactor(effectsToConsider, blackHole.id) / speedupWithoutBlackHole);
     }
     return speedups;
   },

@@ -163,7 +163,7 @@ GameStorage.devMigrations = {
       // (see the warning at the top of this file)
 
       // Following logic from autobuyers (before the addition of wall clock time stats)
-      // const speedup = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.WORMHOLE]);
+      // const speedup = getGameSpeedupFactor([GAME_SPEED_EFFECT.EC12, GAME_SPEED_EFFECT.WORMHOLE]);
       // player.thisInfinityRealTime = Time.thisInfinity.totalSeconds / speedup;
       // player.thisEternityRealTime = Time.thisEternity.totalSeconds / speedup;
       // player.thisRealityRealTime = Time.thisReality.totalSeconds / speedup;
@@ -173,8 +173,8 @@ GameStorage.devMigrations = {
       //   player.lastTenRealities[i][3] = undefined;
       // }
 
-      // For anyone who is looking at this part of the code for debugging purposes, note that GameSpeedEffect.EC12
-      // has been replaced by GameSpeedEffect.FIXEDSPEED since EC12 is no longer the only fixed-speed effect
+      // For anyone who is looking at this part of the code for debugging purposes, note that GAME_SPEED_EFFECT.EC12
+      // has been replaced by GAME_SPEED_EFFECT.FIXED_SPEED since EC12 is no longer the only fixed-speed effect
     },
     GameStorage.migrations.fixChallengeIds,
     GameStorage.migrations.adjustMultCosts,
@@ -223,8 +223,11 @@ GameStorage.devMigrations = {
         dt: 25,
         eternities: 25
       });
+      // There was a big glyph filter refactor done at some point, and it's infeasible to properly preserve old
+      // filter settings through this old migration. Any imported saves from before the Teresa/Effarig name swap
+      // which had glyph filtering unlocked are likely going to be invalid as a result.
       movePropIfPossible("teresa", "effarig", "autoGlyphSac", {
-        mode: AutoGlyphSacMode.NONE,
+        mode: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({
           rarityThreshold: 0,
           scoreThreshold: 0,
@@ -232,7 +235,7 @@ GameStorage.devMigrations = {
         })),
       });
       movePropIfPossible("teresa", "effarig", "autoGlyphPick", {
-        mode: AutoGlyphPickMode.RANDOM,
+        mode: AUTO_GLYPH_REJECT.SACRIFICE,
       });
       movePropIfPossible("teresa", "effarig", "relicShards", 0, Math.max);
       movePropIfPossible("effarig", "teresa", "quoteIdx", 0);
@@ -406,7 +409,9 @@ GameStorage.devMigrations = {
           eternityAutobuyer.amount = condition;
           break;
         case "time":
-          eternityAutobuyer.time = condition.lt(Decimal.MAX_NUMBER) ? condition.toNumber() : eternityAutobuyer.time;
+          eternityAutobuyer.time = condition.lt(Decimal.NUMBER_MAX_VALUE)
+            ? condition.toNumber()
+            : eternityAutobuyer.time;
           break;
         case "relative":
           eternityAutobuyer.xLast = condition;
@@ -421,7 +426,7 @@ GameStorage.devMigrations = {
     GameStorage.migrations.convertEternityCountToDecimal,
     GameStorage.migrations.renameDimboosts,
     player => {
-      // Reset reality autobuyer mode, since AutoRealityMode was incorrectly starting from 1 and not from 0.
+      // Reset reality autobuyer mode, since AUTO_REALITY_MODE was incorrectly starting from 1 and not from 0.
       // Disable it also to not wreck people's long runs or smth
       player.auto.reality.mode = 0;
       player.auto.reality.isActive = false;
@@ -484,6 +489,87 @@ GameStorage.devMigrations = {
     },
     GameStorage.migrations.convertAchievementsToBits,
     GameStorage.migrations.removePower,
+    player => {
+      const cursedMask = 15;
+      const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
+      for (const glyph of allGlyphs) {
+        if (glyph.type === "cursed") glyph.effects = cursedMask;
+      }
+    },
+    player => {
+      player.options.showHintText.alchemy = player.options.showAlchemyResources;
+      delete player.options.showAlchemyResources;
+    },
+    player => {
+      // Adds in effect selection settings and removes non-generated types while preserving old glyph filter settings
+      const oldSettings = player.celestials.effarig.autoGlyphSac.types;
+      const newSettings = GlyphTypes.list
+        .filter(type => generatedTypes.includes(type.id))
+        .mapToObject(t => t.id, t => ({
+          rarityThreshold: 0,
+          scoreThreshold: 0,
+          effectCount: 0,
+          effectChoices: t.effects.mapToObject(e => e.id, () => false),
+          effectScores: t.effects.mapToObject(e => e.id, () => 0),
+      }));
+      for (const type of generatedTypes) {
+        newSettings[type].rarityThreshold = oldSettings[type].rarityThreshold;
+        newSettings[type].scoreThreshold = oldSettings[type].scoreThreshold;
+        for (const effect of Object.keys(newSettings[type].effectScores)) {
+          newSettings[type].effectScores[effect] = oldSettings[type].effectScores[effect];
+        }
+      }
+      player.celestials.effarig.autoGlyphSac.types = newSettings;
+    },
+    player => {
+      player.reality.glyphs.inventorySize += 10;
+    },
+    player => {
+      player.celestials.v.unlockBits = Math.min(player.celestials.v.unlockBits, 1);
+      V.checkForUnlocks();
+    },
+    player => {
+      // Reset the v-unlocks again
+      player.celestials.v.unlockBits = Math.min(player.celestials.v.unlockBits, 1);
+      V.checkForUnlocks();
+    },
+    player => {
+      player.reality.autoAchieve = !player.reality.disableAutoAchieve;
+      delete player.reality.disableAutoAchieve;
+      delete player.newEC10Test;
+    },
+    player => {
+      // Some older saves have screwed up Ra unlocks for some reason, this should fix that
+      player.celestials.ra.unlockBits = 0;
+      Ra.checkForUnlocks();
+    },
+    player => {
+      // Required for compatibility after V records refactor
+      player.celestials.v.runRecords[0] = -10;
+    },
+    player => {
+      delete player.celestials.v.cursedThisRun;
+    },
+    player => {
+      // Reset Ra unlocks again, because apparently Ra-Teresa Lv1 upgrades were always active due to an oversight
+      player.celestials.ra.unlockBits = 0;
+      Ra.checkForUnlocks();
+    },
+    player => {
+      // Glyph filter refactor (not worth the trouble of translating between the modes, but copy the configs)
+      Object.assign(player.celestials.effarig.glyphScoreSettings, player.celestials.effarig.autoGlyphSac);
+      player.celestials.effarig.glyphTrashMode = 0;
+      delete player.celestials.effarig.autoGlyphSac;
+      delete player.celestials.effarig.autoGlyphPick;
+    },
+    player => {
+      delete player.reality.glyphs.inventorySize;
+      for (const glyph of player.reality.glyphs.inventory) {
+        if (glyph.idx >= 10) {
+          glyph.idx += 10;
+        }
+      }
+    },
   ],
 
   patch(player) {

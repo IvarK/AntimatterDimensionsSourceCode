@@ -28,7 +28,7 @@ Vue.component("automator-docs", {
       this.commandID = event;
     },
     update() {
-      this.isBlockAutomator = player.reality.automator.type === AutomatorType.BLOCK;
+      this.isBlockAutomator = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
     }
   },
   template: `

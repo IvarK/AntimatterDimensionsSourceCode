@@ -11,20 +11,22 @@ Vue.component("modal-options", {
 const modalOptionsMixin = {
   data() {
     return {
-      bigCrunchUnlocked: false,
+      infinityUnlocked: false,
       eternityUnlocked: false,
       realityUnlocked: false,
       dilationUnlocked: false,
+      alchemyUnlocked: false,
       animatedThemeUnlocked: false
     };
   },
   methods: {
     update() {
       const progress = PlayerProgress.current;
-      this.bigCrunchUnlocked = progress.isInfinityUnlocked;
+      this.infinityUnlocked = progress.isInfinityUnlocked;
       this.eternityUnlocked = progress.isEternityUnlocked;
       this.realityUnlocked = progress.isRealityUnlocked;
       this.dilationUnlocked = progress.isRealityUnlocked || player.dilation.tachyonParticles.neq(0);
+      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
       this.animatedThemeUnlocked = Themes.find("S1").isAvailable() || Themes.find("S6").isAvailable();
     }
   },

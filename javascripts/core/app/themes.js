@@ -33,9 +33,7 @@ const Theme = function Theme(name, colors) {
             document.body.classList.remove(c);
           }
         }
-        if (!this.isDefault()) {
-          document.body.classList.add(this.cssClass());
-        }
+        document.body.classList.add(this.cssClass());
         if (this.isAnimated() && player.options.animations.background) {
             document.getElementById("background-animations").style.display = "block";
         } else {
@@ -91,10 +89,13 @@ Theme.tryUnlock = function(name) {
     }
     const prefix = `S${index + 1}`;
     const fullName = prefix + name.capitalize();
+    const isAlreadyUnlocked = player.secretUnlocks.themes.has(fullName);
     player.secretUnlocks.themes.add(fullName);
     Theme.set(prefix);
     SecretAchievement(25).unlock();
-    GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`);
+    if (!isAlreadyUnlocked) {
+      GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`);
+    }
     return true;
 };
 

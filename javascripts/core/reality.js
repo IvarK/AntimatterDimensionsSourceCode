@@ -12,15 +12,14 @@ const GlyphSelection = {
   },
 
   get choiceCount() {
-    const baseChoices = Effects.max(
+    let baseChoices = Effects.max(
       1,
       Perk.glyphChoice4,
       Perk.glyphChoice3
     );
-    const raChoices = Ra.has(RA_UNLOCKS.IMPROVED_GLYPHS)
-      ? RA_UNLOCKS.IMPROVED_GLYPHS.effect.choice()
-      : 0;
-    return baseChoices + raChoices;
+    // TODO Make Ra follow GMS pattern so this isn't as dumb as it is right now
+    if (Ra.has(RA_UNLOCKS.GLYPH_CHOICES)) baseChoices *= 2;
+    return baseChoices;
   },
 
   /**
@@ -93,9 +92,13 @@ const GlyphSelection = {
     }
   },
 
-  select(index) {
+  select(index, sacrifice) {
     ui.view.modal.glyphSelection = false;
-    Glyphs.addToInventory(this.glyphs[index]);
+    if (sacrifice) {
+      GlyphSacrificeHandler.removeGlyph(this.glyphs[index], true);
+    } else {
+      Glyphs.addToInventory(this.glyphs[index]);
+    }
     this.glyphs = [];
     triggerManualReality(this.realityProps);
     this.realityProps = undefined;
@@ -142,6 +145,7 @@ function requestManualReality() {
   const realityProps = getRealityProps(false, false);
   if (simulatedRealityCount(false) > 0) {
     triggerManualReality(realityProps);
+    if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) Glyphs.autoClean();
     return;
   }
   realityProps.alreadyGotGlyph = true;
@@ -185,18 +189,16 @@ function runRealityAnimation() {
 
 function processAutoGlyph(gainedLevel, rng) {
   let newGlyph;
-  if (EffarigUnlock.autopicker.isUnlocked) {
+  if (EffarigUnlock.basicFilter.isUnlocked) {
     const glyphs = Array.range(0, GlyphSelection.choiceCount)
       .map(() => GlyphGenerator.randomGlyph(gainedLevel, rng));
-    newGlyph = AutoGlyphPicker.pick(glyphs);
-  } else {
-    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, rng);
-  }
-  if (EffarigUnlock.autosacrifice.isUnlocked) {
-    if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || Glyphs.freeInventorySpace === 0) {
-      sacrificeGlyph(newGlyph, true);
+    newGlyph = AutoGlyphProcessor.pick(glyphs);
+    if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
+      AutoGlyphProcessor.getRidOfGlyph(newGlyph);
       newGlyph = null;
     }
+  } else {
+    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, rng);
   }
   if (newGlyph && Glyphs.freeInventorySpace > 0) {
     Glyphs.addToInventory(newGlyph);
@@ -224,22 +226,36 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   beginProcessReality(getRealityProps(false, false));
+  if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) Glyphs.autoClean();
+}
+
+function updateRealityRecords(realityProps) {
+  const thisRunRMmin = realityProps.gainedRM.dividedBy(Time.thisRealityRealTime.totalMinutes);
+  if (player.bestRMmin.lt(thisRunRMmin)) {
+    player.bestRMmin = thisRunRMmin;
+    player.bestRMminSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  }
+  if (player.bestGlyphLevel < realityProps.gainedGlyphLevel.actualLevel) {
+    player.bestGlyphLevel = realityProps.gainedGlyphLevel.actualLevel;
+    player.bestGlyphLevelSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  }
+  player.bestReality = Math.min(player.thisReality, player.bestReality);
+  if (player.thisRealityRealTime < player.bestRealityRealTime) {
+    player.bestRealityRealTime = player.thisRealityRealTime;
+    player.bestSpeedSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  }
 }
 
 function giveRealityRewards(realityProps) {
   const multiplier = realityProps.simulatedRealities + 1;
   const gainedRM = realityProps.gainedRM;
-  player.bestReality = Math.min(player.bestReality, player.thisReality);
   player.reality.realityMachines = player.reality.realityMachines.plus(gainedRM.times(multiplier));
-  player.bestRMmin = player.bestRMmin.max(gainedRM.dividedBy(Time.thisRealityRealTime.totalMinutes));
+  updateRealityRecords(realityProps);
   addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRM, realityProps.gainedGlyphLevel.actualLevel);
   player.realities += multiplier;
   player.reality.pp += multiplier;
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
     player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
-  }
-  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-    Ra.giveExp(multiplier);
   }
   if (multiplier > 1 && Enslaved.boostReality) {
     // Real time amplification is capped at 1 second of reality time; if it's faster then using all time at once would
@@ -253,7 +269,10 @@ function giveRealityRewards(realityProps) {
   }
 
   if (Teresa.isRunning) {
-    player.celestials.teresa.bestRunAM = Decimal.max(player.celestials.teresa.bestRunAM, player.antimatter);
+    if (player.antimatter.gt(player.celestials.teresa.bestRunAM)) {
+      player.celestials.teresa.bestRunAM = player.antimatter;
+      player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+    }
     Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
   }
 
@@ -263,8 +282,6 @@ function giveRealityRewards(realityProps) {
   }
 
   if (Enslaved.isRunning) Enslaved.completeRun();
-
-  if (Ra.isRunning) Ra.updateExpBoosts();
 
   if (Laitela.isRunning) {
     player.celestials.laitela.maxAmGained = Decimal.max(player.celestials.laitela.maxAmGained, player.antimatter);
@@ -278,7 +295,7 @@ function beginProcessReality(realityProps) {
     finishProcessReality(realityProps);
     return;
   }
-  EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
+  EventHub.dispatch(GAME_EVENT.REALITY_RESET_BEFORE);
   const glyphsToProcess = realityProps.simulatedRealities + (realityProps.alreadyGotGlyph ? 0 : 1);
   const rng = GlyphGenerator.getRNG(false);
   Async.run(() => processAutoGlyph(realityProps.gainedGlyphLevel, rng),
@@ -310,6 +327,12 @@ function beginProcessReality(realityProps) {
 }
 
 function finishProcessReality(realityProps) {
+  const finalEP = player.eternityPoints.plus(gainedEternityPoints());
+  if (player.bestEP.lt(finalEP)) {
+    player.bestEP = new Decimal(finalEP);
+    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  }
+  
   const isReset = realityProps.reset;
   if (!isReset) giveRealityRewards(realityProps);
   if (!realityProps.glyphUndo) {
@@ -318,9 +341,11 @@ function finishProcessReality(realityProps) {
     if (player.celestials.ra.disCharge) disChargeAll();
     if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
   }
+
   TimeCompression.isActive = false;
   const celestialRunState = clearCelestialRuns();
   recalculateAllGlyphs();
+  Glyphs.updateGlyphCountForV(true);
 
   player.sacrificed = new Decimal(0);
 
@@ -389,15 +414,19 @@ function finishProcessReality(realityProps) {
   player.onlyEighthDimensons = true;
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
+  player.noFirstDimensions = true;
   player.noTheoremPurchases = true;
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
-  player.timestudy.theorem = new Decimal(0);
+  player.timestudy.theorem = (Ra.has(RA_UNLOCKS.START_TT) && !isInCelestialReality())
+    ? new Decimal(RA_UNLOCKS.START_TT.effect)
+    : new Decimal(0);
   player.timestudy.amcost = new Decimal("1e20000");
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);
   player.timestudy.studies = [];
-  player.celestials.v.additionalStudies = 0;
+  player.celestials.v.triadStudies = [];
+  player.celestials.v.STSpent = 0;
   player.dilation.studies = [];
   player.dilation.active = false;
   player.dilation.tachyonParticles = new Decimal(0);
@@ -434,6 +463,10 @@ function finishProcessReality(realityProps) {
   player.bestInfinitiesPerMs = new Decimal(0);
   player.bestEternitiesPerMs = new Decimal(0);
   player.bestIpPerMsWithoutMaxAll = new Decimal(0);
+  player.minNegativeBlackHoleThisReality = player.blackHoleNegative;
+  if (!BlackHoles.areNegative) {
+    player.minNegativeBlackHoleThisReality = 1;
+  }
   resetTimeDimensions();
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
@@ -453,7 +486,7 @@ function finishProcessReality(realityProps) {
   }
 
   Lazy.invalidateAll();
-  EventHub.dispatch(GameEvent.REALITY_RESET_AFTER);
+  EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
   // This immediately gives eternity upgrades instead of after the first eternity
   if (RealityUpgrades.allBought) {
@@ -464,8 +497,8 @@ function finishProcessReality(realityProps) {
 
   player.reality.gainedAutoAchievements = false;
 
-  tryUnlockAchievementsOnReality();
-  if (realityProps.restoreCelestialState) restoreCelestialRuns(celestialRunState);
+  if (realityProps.restoreCelestialState || player.options.retryCelestial) restoreCelestialRuns(celestialRunState);
+
 }
 
 function restoreCelestialRuns(celestialRunState) {
@@ -483,7 +516,7 @@ function restoreCelestialRuns(celestialRunState) {
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
 function applyRUPG10() {
   NormalChallenges.completeAll();
-  
+
   const hasMaxBulkSecretAch = SecretAchievement(38).isUnlocked;
   player.auto.dimensions = player.auto.dimensions.map(() => ({
     isUnlocked: true,
@@ -492,7 +525,7 @@ function applyRUPG10() {
     interval: 100,
     // Only completely max bulk if the relevant secret achievement has already been unlocked
     bulk: hasMaxBulkSecretAch ? 1e100 : 1e90,
-    mode: AutobuyerMode.BUY_10,
+    mode: AUTOBUYER_MODE.BUY_10,
     priority: 1,
     isActive: true,
     lastTick: player.realTimePlayed
@@ -501,14 +534,14 @@ function applyRUPG10() {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
   }
   player.infinityUpgrades = new Set(
-    ["timeMult", "dimMult", "timeMult2", 
-    "skipReset1", "skipReset2", "unspentBonus", 
-    "27Mult", "18Mult", "36Mult", "resetMult", 
-    "skipReset3", "passiveGen", "45Mult", 
-    "resetBoost", "galaxyBoost", "skipResetGalaxy", 
-    "totalMult", "currentMult", "postGalaxy", 
-    "challengeMult", "achievementMult", "infinitiedMult", 
-    "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost", 
+    ["timeMult", "dimMult", "timeMult2",
+    "skipReset1", "skipReset2", "unspentBonus",
+    "27Mult", "18Mult", "36Mult", "resetMult",
+    "skipReset3", "passiveGen", "45Mult",
+    "resetBoost", "galaxyBoost", "skipResetGalaxy",
+    "totalMult", "currentMult", "postGalaxy",
+    "challengeMult", "achievementMult", "infinitiedMult",
+    "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost",
     "ipOffline"]
   );
   player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
@@ -546,6 +579,15 @@ function clearCelestialRuns() {
   return saved;
 }
 
+function isInCelestialReality() {
+  return player.celestials.teresa.run ||
+    player.celestials.effarig.run ||
+    player.celestials.enslaved.run ||
+    player.celestials.v.run ||
+    player.celestials.ra.run ||
+    player.celestials.laitela.run;
+}
+
 function startRealityOver() {
   if (confirm("This will put you at the start of your reality and reset your progress in this reality." +
     "Are you sure you want to do this?")) {
@@ -556,26 +598,9 @@ function startRealityOver() {
 }
 
 function lockAchievementsOnReality() {
-  const startRow = GameCache.achSkipPerkCount.value + 1;
-  const lastRow = 13;
-  if (startRow > lastRow) return;
-  const lockedRows = lastRow - startRow + 1;
-  for (const row of Achievements.rows(startRow, lockedRows)) {
-    for (const achievement of row) {
-      achievement.lock();
-    }
+  if (Perk.achievementGroup6.isBought) return;
+  for (const achievement of Achievements.preReality) {
+    achievement.lock();
   }
   player.reality.achTimer = 0;
-}
-
-function tryUnlockAchievementsOnReality() {
-  const startRow = GameCache.achSkipPerkCount.value + 1;
-  const lastRow = 13;
-  for (let r = startRow; r <= lastRow; ++r) {
-    // If the achievement has a checkEvent set, that means that it
-    // can't be checked out of context:
-    for (const a of Achievements.row(r)) {
-      if (a.config.checkEvent === undefined) a.tryUnlock();
-    }
-  }
 }

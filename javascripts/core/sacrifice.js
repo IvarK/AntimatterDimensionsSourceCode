@@ -8,13 +8,15 @@ class Sacrifice {
   }
 
   static get canSacrifice() {
-    return DimBoost.totalBoosts > 4 && NormalDimension(8).amount.gt(0) && !EternityChallenge(3).isRunning;
+    return DimBoost.totalBoosts > 4 && NormalDimension(8).amount.gt(0) &&
+    !EternityChallenge(3).isRunning && this.nextBoost.gt(1);
   }
 
   static get disabledCondition() {
     if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
     if (DimBoost.totalBoosts <= DimBoost.maxShiftTier - 4) return "Requires a boost";
     if (NormalDimension(8).amount.eq(0)) return "No 8th dimensions";
+    if (this.nextBoost.lte(1)) return `${formatInt(1)}x multiplier`;
     return "";
   }
 
@@ -76,30 +78,30 @@ class Sacrifice {
 function sacrificeReset(auto) {
   if (!Sacrifice.canSacrifice) return false;
   if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
-    player.antimatter.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
+    player.antimatter.gte(Decimal.NUMBER_MAX_VALUE) && !Enslaved.isRunning) return false;
   if (
     !Enslaved.isRunning &&
     NormalChallenge(8).isRunning &&
-    (Sacrifice.totalBoost.gte(Decimal.MAX_NUMBER))
+    (Sacrifice.totalBoost.gte(Decimal.NUMBER_MAX_VALUE))
   ) {
     return false;
   }
-  EventHub.dispatch(GameEvent.SACRIFICE_RESET_BEFORE);
+  EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
-  if (!auto) floatText(8, `x${shorten(nextBoost, 2, 1)}`);
+  if (!auto) floatText(8, `x${format(nextBoost, 2, 1)}`);
   player.chall8TotalSacrifice = player.chall8TotalSacrifice.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(NormalDimension(1).amount);
-  const isAch118Enabled = Achievement(118).isEnabled;
+  const isAch118Unlocked = Achievement(118).isUnlocked;
   if (NormalChallenge(8).isRunning) {
-    if (!isAch118Enabled) {
+    if (!isAch118Unlocked) {
       NormalDimensions.reset();
     }
     player.antimatter = new Decimal(100);
-  } else if (!isAch118Enabled) {
-    clearDimensions(NormalChallenge(12).isRunning ? 6 : 7);
+  } else if (!isAch118Unlocked) {
+    NormalDimensions.resetAmountUpToTier(NormalChallenge(12).isRunning ? 6 : 7);
   }
   player.noSacrifices = false;
-  EventHub.dispatch(GameEvent.SACRIFICE_RESET_AFTER);
+  EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_AFTER);
   return true;
 }
 

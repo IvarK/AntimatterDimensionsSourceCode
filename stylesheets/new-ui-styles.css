@@ -7,7 +7,7 @@
   outline: none;
 }
 
-#ui {
+.t-normal #ui {
   --color-text: white;
   --color-base: #1d1b22;
   --color-accent: rgb(223, 80, 80);
@@ -15,23 +15,10 @@
   --color-good-dark: #138626;
 }
 
-body {
+body.t-normal {
   position: relative;
   color: white;
   background-color: #111014;
-}
-
-body.t-metro {
-  color: black;
-  background-color: white;
-}
-
-body.t-dark {
-  color: #888
-}
-
-body.t-s1 {
-  color: black;
 }
 
 #page {
@@ -46,7 +33,7 @@ body.t-s1 {
   flex-direction: column;
   width: 20rem;
   position: fixed;
-  z-index: 4;
+  z-index: 5;
 }
 
 .sidebar:hover .subtabs,
@@ -64,6 +51,7 @@ body.t-s1 {
   background-color: var(--color-base);
   border-right: 1px solid var(--color-accent);
   border-bottom: 1px solid var(--color-accent);
+  padding: 10px;
 }
 
 .resource img {
@@ -74,7 +62,6 @@ body.t-s1 {
   margin: 0;
   color: var(--color-accent);
   font-size: 1.7em;
-  padding-left: 10px;
   z-index: 1;
   text-align: left;
 }
@@ -90,7 +77,6 @@ body.t-s1 {
   align-items: flex-start;
   color: var(--color-text);
   justify-content: space-between;
-  padding: 0 5px;
   font-size: 1.5em;
 }
 
@@ -224,6 +210,7 @@ body.t-s1 {
   display: flex;
   justify-content: center;
   flex-direction: column;
+  position: relative;
 }
 
 .tab-container > .l-normal-dim-tab {
@@ -256,11 +243,13 @@ body.t-s1 {
   opacity: 0;
   pointer-events: none;
   position: absolute;
-  top: -1px;
+  top: -6px;
   left: 200px;
   z-index: 4;
   transition-duration: 0.15s;
   transition-delay: 0.2s;
+  padding: 5px;
+  padding-left: 0;
 }
 
 .o-tab-btn--subtab {
@@ -286,44 +275,6 @@ body.t-s1 {
 .dimensions-container {
   padding: 0.5rem 5rem 0.5rem 9rem; /* TOP RIGHT BOTTOM LEFT */
 }
-
-.dimension-row {
-  display: flex;
-  color: var(--color-text);;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 0 0.5rem 1rem;
-  border-radius: 5px;
-}
-
-.dimension-row:nth-child(even) {
-  background-color: rgba(223, 80, 80, 0.3);
-}
-
-.t-metro .dimension-row:nth-child(even),
-.t-inverted-metro .dimension-row:nth-child(even),
-.t-s8 .dimension-row:nth-child(even) {
-  background-color: rgba(33, 150, 243, 0.3);
-}
-
-.dimension-row h3 {
-  font-size: 2rem;
-  display: flex;
-  align-items: center;
-  margin: 0;
-  color: var(--color-text);;
-}
-
-.dimension-row h3 .mult {
-  font-size: 0.6em;
-  margin-left: 10px;
-}
-
-.dimension-row span {
-  font-weight: bold;
-  font-size: 1.8rem;
-}
-
 
 .o-primary-btn--new {
   background-color: var(--color-base);
@@ -578,9 +529,37 @@ body.t-s1 {
   border: 0.1rem solid var(--color-accent);
 }
 
-
 .c-replicanti-description__accent {
   color: #2196f3
+}
+
+.c-normal-dim-row,
+.c-infinity-dim-row,
+.c-time-dim-row {
+  color: var(--color-text);
+  font-weight: bold;
+  margin: 0;
+  padding: 0.5rem 0 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.c-normal-dim-row:nth-child(even) {
+  background-color: rgba(223, 80, 80, 0.3);
+}
+
+.t-metro .c-normal-dim-row:nth-child(even),
+.t-inverted-metro .c-normal-dim-row:nth-child(even),
+.t-s8 .c-normal-dim-row:nth-child(even) {
+  background-color: rgba(33, 150, 243, 0.3);
+}
+
+.c-normal-dim-row__name {
+  font-size: 2rem;
+  width: 41%
+}
+
+.c-normal-dim-row__multiplier {
+  font-size: 1.4rem
 }
 
 .c-infinity-dim-description__accent {
@@ -593,12 +572,6 @@ body.t-s1 {
 
 .l-infinity-dim-tab__row-container {
   padding: 0.5rem 5rem 0.5rem 9rem;
-}
-
-.c-infinity-dim-row {
-  margin: 0;
-  padding: 0.5rem 0 0.5rem 1rem;
-  border-radius: 0.5rem;
 }
 
 .c-infinity-dim-row:nth-child(even) {
@@ -632,12 +605,6 @@ body.t-s1 {
   padding: 0.5rem 5rem 0.5rem 9rem;
 }
 
-.c-time-dim-row {
-  margin: 0;
-  padding: 0.5rem 0 0.5rem 1rem;
-  border-radius: 0.5rem;
-}
-
 .c-time-dim-row:nth-child(even) {
   background: rgba(179, 65, 224, 0.3);
 }
@@ -660,6 +627,12 @@ body.t-s1 {
 .l-reality-upgrade-btn {
   width: 15.6rem;
   margin: 0.5rem;
+}
+
+.l--spoon-btn-group__little-spoon-reality-btn {
+  width: 15.6rem;
+  align-self: center;
+  margin-top: -0.2rem;
 }
 
 .resource-eternity-canreset > div {
@@ -689,13 +662,51 @@ body.t-s1 {
   right: 72%;
 }
 
+.l-game-header__infinity-points {
+  left: 72%;
+  top: 8.5rem;
+}
+
+.l-game-header__eternity-points {
+  right: 72%;
+  top: 8.5rem;
+}
+
+
 .l-reset-buttons-container__reality-button {
   margin-top: 1.7rem;
   margin-bottom: 0;
 }
 
+.l-new-header__amounts-container {
+  position: relative;
+}
+
+.l-reset-buttons-container {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.l-game-header__antimatter-container {
+  margin-top: 3rem;
+  margin-bottom: 2.5rem;
+}
+
 .c-achievements-tab__timer {
   color: white;
+}
+
+.c-game-header__ip-amount {
+  color: var(--color-infinity);
+}
+
+.c-game-header__ep-amount {
+  color: var(--color-eternity);
+}
+
+.c-game-header__antimatter {
+  color: var(--color-accent);
 }
 
 .c-dilation-tab__tachyons,
@@ -725,7 +736,16 @@ body.t-s1 {
 
 .l-help-me {
   position: absolute;
+  top: 4.9rem;
   height: 2rem;
   border-radius: 50%;
   font-size: 1.5rem;
+  transition-delay: 0s;
+}
+
+.t-metro .l-help-me,
+.t-dark-metro .l-help-me,
+.t-inverted-metro .l-help-me,
+.t-s8 .l-help-me {
+  border-radius: 0;
 }

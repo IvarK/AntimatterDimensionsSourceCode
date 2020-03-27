@@ -93,7 +93,14 @@ const AutobuyerInputFunctions = {
     copyValue: value => new Decimal(value),
     tryParse: input => {
       try {
-        const decimal = Decimal.fromString(input.replace(",", ""));
+        let decimal;
+        if (/^e\d*[.]?\d+$/u.test(input.replace(",", ""))) {
+          // Logarithm Notation
+          decimal = Decimal.pow10(parseFloat(input.replace(",", "").slice(1)));
+        } else {
+          // Scientific notation
+          decimal = Decimal.fromString(input.replace(",", ""));
+        }
         return isNaN(decimal.mantissa) || isNaN(decimal.exponent) ? undefined : decimal;
       } catch (e) {
         return undefined;

@@ -10,6 +10,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 1 + amount / 200000,
       tier: 1,
       uiOrder: 1,
+      isUnlocked: () => Ra.pets.effarig.level >= 2,
+      lockText: "Effarig Level 2",
       formatEffect: value => `Normal dimensions ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.INFINITY]: {
@@ -19,6 +21,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 1 + amount / 200000,
       tier: 1,
       uiOrder: 2,
+      isUnlocked: () => Ra.pets.effarig.level >= 3,
+      lockText: "Effarig Level 3",
       formatEffect: value => `Infinity dimensions ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.TIME]: {
@@ -28,6 +32,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 1 + amount / 200000,
       tier: 1,
       uiOrder: 3,
+      isUnlocked: () => Ra.pets.effarig.level >= 4,
+      lockText: "Effarig Level 4",
       formatEffect: value => `Time dimensions ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.REPLICATION]: {
@@ -37,6 +43,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Decimal.pow10(amount / 1000),
       tier: 1,
       uiOrder: 4,
+      isUnlocked: () => Ra.pets.effarig.level >= 5,
+      lockText: "Effarig Level 5",
       formatEffect: value => `Replication speed ${formatX(value, 2, 2)}`
     },
     [ALCHEMY_RESOURCE.DILATION]: {
@@ -46,6 +54,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Decimal.pow10(amount / 2000),
       tier: 1,
       uiOrder: 5,
+      isUnlocked: () => Ra.pets.effarig.level >= 6,
+      lockText: "Effarig Level 6",
       formatEffect: value => `Dilated Time ${formatX(value, 2, 2)}`
     },
 
@@ -54,11 +64,13 @@ GameDatabase.celestials.alchemy = {
       name: "Cardinality",
       symbol: "α",
       isBaseResource: false,
-      effect: amount => 1.2 - 0.1 * (amount / 20000),
+      effect: amount => 1 + 0.2 / (1 + amount / 20000),
       tier: 2,
       uiOrder: 3,
+      isUnlocked: () => Ra.pets.effarig.level >= 8,
+      lockText: "Effarig Level 8",
       formatEffect: value => `Uncapped replicanti slowdown ${formatX(1.2, 1, 1)} ➜ ` +
-        `${formatX(value, 4, 4)} per ${shorten(Number.MAX_VALUE, 2)}`,
+        `${formatX(value, 4, 4)} per ${format(Number.MAX_VALUE, 2)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.TIME,
@@ -77,6 +89,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 1 + amount / 15000,
       tier: 2,
       uiOrder: 2,
+      isUnlocked: () => Ra.pets.effarig.level >= 9,
+      lockText: "Effarig Level 9",
       formatEffect: value => `Eternitied stat generation ${formatPow(value, 4, 4)}`,
       reagents: [
         {
@@ -96,6 +110,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Decimal.pow10(5 * amount),
       tier: 2,
       uiOrder: 1,
+      isUnlocked: () => Ra.pets.effarig.level >= 10,
+      lockText: "Effarig Level 10",
       formatEffect: value => `All dimensions ${formatX(value)}`,
       reagents: [
         {
@@ -115,7 +131,9 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Decimal.pow10(6e9 - 3e5 * amount),
       tier: 2,
       uiOrder: 5,
-      formatEffect: value => `${formatPow(1.05, 2, 2)} for normal dimension multipliers above ${shorten(value)}`,
+      isUnlocked: () => Ra.pets.effarig.level >= 11,
+      lockText: "Effarig Level 11",
+      formatEffect: value => `${formatPow(1.05, 2, 2)} for normal dimension multipliers above ${format(value)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.POWER,
@@ -134,8 +152,10 @@ GameDatabase.celestials.alchemy = {
       effect: amount => amount / 100000,
       tier: 2,
       uiOrder: 4,
+      isUnlocked: () => Ra.pets.effarig.level >= 12,
+      lockText: "Effarig Level 12",
       formatEffect: value => `Dilation penalty reduced by ${formatPercents(value, 2, 2)} ` +
-        `per ${shorten("1e1000000")} replicanti`,
+        `per ${format("1e1000000")} replicanti`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.REPLICATION,
@@ -156,6 +176,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Math.pow(10, amount / 2500),
       tier: 2,
       uiOrder: 3.5,
+      isUnlocked: () => Ra.pets.effarig.level >= 7,
+      lockText: "Effarig Level 7",
       formatEffect: value => `Relic Shards ${formatX(value, 2, 2)}`
     },
     [ALCHEMY_RESOURCE.SYNERGISM]: {
@@ -165,6 +187,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Math.clampMax(0.3 + Math.sqrt(amount / 15000), 1),
       tier: 3,
       uiOrder: 2,
+      isUnlocked: () => Ra.pets.effarig.level >= 13,
+      lockText: "Effarig Level 13",
       formatEffect(value) {
         const baseEffect = `Alchemy reaction efficiency 30% ➜ ${formatPercents(value, 2, 2)}`;
         if (player.reality.glyphs.sac.reality === 0) {
@@ -195,6 +219,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 1 + amount / 2000000,
       tier: 3,
       uiOrder: 3,
+      isUnlocked: () => Ra.pets.effarig.level >= 15,
+      lockText: "Effarig Level 15",
       formatEffect: value => `Game speed ${formatX(value, 5, 5)} per real-time minute in this reality`,
       reagents: [
         {
@@ -218,6 +244,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 0.10 * Math.sqrt(amount / 10000),
       tier: 3,
       uiOrder: 4,
+      isUnlocked: () => Ra.pets.effarig.level >= 14,
+      lockText: "Effarig Level 14",
       formatEffect: value => `Refined glyphs also give ${formatPercents(value, 2)} of their value ` +
         "to other base resources",
       reagents: [
@@ -240,6 +268,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 10 * Math.pow(amount / 10000, 2),
       tier: 4,
       uiOrder: 2,
+      isUnlocked: () => Ra.pets.effarig.level >= 18,
+      lockText: "Effarig Level 18",
       formatEffect: value => `IP multiplied by replicanti${formatPow(value, 2, 3)}`,
       reagents: [
         {
@@ -259,6 +289,8 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 5 * amount,
       tier: 4,
       uiOrder: 2,
+      isUnlocked: () => Ra.pets.effarig.level >= 17,
+      lockText: "Effarig Level 17",
       formatEffect: value => `Multiply normal dimensions by RM${formatPow(value, 2, 2)}`,
       reagents: [
         {
@@ -278,7 +310,9 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Math.sqrt(amount),
       tier: 4,
       uiOrder: 3,
-      formatEffect: value => `Generate ${shorten(value, 2, 2)} realities and perk points per second`,
+      isUnlocked: () => Ra.pets.effarig.level >= 19,
+      lockText: "Effarig Level 19",
+      formatEffect: value => `Generate ${format(value, 2, 2)} realities and perk points per second`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.INFINITY,
@@ -298,11 +332,12 @@ GameDatabase.celestials.alchemy = {
       name: "Boundless",
       symbol: "Π",
       isBaseResource: false,
-      effect: amount => Math.clampMax(Math.ceil(amount / 10), 1111),
+      effect: amount => amount / 80000,
       tier: 4,
       uiOrder: 1,
-      formatEffect: value => `Basic glyph level cap increased by ${shortenSmallInteger(value)} ` +
-        `(to ${shortenSmallInteger(value + 10000)})`,
+      isUnlocked: () => Ra.pets.effarig.level >= 20,
+      lockText: "Effarig Level 20",
+      formatEffect: value => `Tesseracts are +${formatPercents(value, 2, 2)} stronger`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.ETERNITY,
@@ -321,7 +356,9 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 5 * Math.pow(amount / 10000, 2),
       tier: 4,
       uiOrder: 5,
-      formatEffect: value => `Each reality simulates ${shorten(value, 2, 3)} additional realities`,
+      isUnlocked: () => Ra.pets.effarig.level >= 16,
+      lockText: "Effarig Level 16",
+      formatEffect: value => `Each reality simulates ${format(value, 2, 3)} additional realities`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.ALTERNATION,
@@ -340,9 +377,9 @@ GameDatabase.celestials.alchemy = {
       effect: amount => amount / 50000,
       tier: 4,
       uiOrder: 4,
-      formatEffect: value => (player.celestials.laitela.matter === 0
-        ? "?????"
-        : `Boost dark matter dimension generation chance by +${formatPercents(value, 2, 2)}`),
+      isUnlocked: () => Ra.pets.effarig.level >= 21 && player.celestials.laitela.matter.neq(0),
+      lockText: "Effarig Level 21 and Lai'tela unlocked",
+      formatEffect: value => `Boost dark matter dimension generation chance by +${formatPercents(value, 2, 2)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -364,9 +401,11 @@ GameDatabase.celestials.alchemy = {
       name: "Reality",
       symbol: "Ϟ",
       isBaseResource: false,
-      effect: amount => Math.floor(1.2 * amount),
+      effect: amount => Math.floor(amount),
       tier: 5,
-      formatEffect: value => `Use all resources to create a level ${shortenSmallInteger(value)} Reality glyph`,
+      isUnlocked: () => Ra.pets.effarig.level >= 25,
+      lockText: "Effarig Level 25",
+      formatEffect: value => `Use all resources to create a level ${formatInt(value)} Reality glyph`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EXPONENTIAL,

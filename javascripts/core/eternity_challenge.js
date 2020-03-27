@@ -27,15 +27,14 @@ function startEternityChallenge() {
 
 class EternityChallengeRewardState extends GameMechanicState {
   constructor(config, challenge) {
-    super(config);
+    const effect = config.effect;
+    const configCopy = deepmerge.all([{}, config]);
+    configCopy.effect = () => effect(challenge.completions);
+    super(configCopy);
     this._challenge = challenge;
   }
 
-  get effectValue() {
-    return this.config.effect(this._challenge.completions);
-  }
-
-  get canBeApplied() {
+  get isEffectActive() {
     return this._challenge.completions > 0;
   }
 }
@@ -59,7 +58,7 @@ class EternityChallengeState extends GameMechanicState {
     return player.challenge.eternity.current === this.id;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isRunning;
   }
 
@@ -177,7 +176,11 @@ class EternityChallengeState extends GameMechanicState {
     if (canEternity()) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
-      if (TimeCompression.isActive) SecretAchievement(42).unlock();
+      if (TimeCompression.isActive ||
+          (V.isRunning && player.minNegativeBlackHoleThisReality < 1)) {
+          SecretAchievement(42).unlock();
+      }
+      if (V.isRunning) player.minNegativeBlackHoleThisReality = 1;
       TimeCompression.isActive = false;
     }
     return startEternityChallenge();
@@ -211,7 +214,7 @@ class EternityChallengeState extends GameMechanicState {
   fail() {
     this.exit();
     Modal.message.show("You failed the challenge, you have now exited it.");
-    EventHub.dispatch(GameEvent.CHALLENGE_FAILED);
+    EventHub.dispatch(GAME_EVENT.CHALLENGE_FAILED);
   }
 
   tryFail() {
@@ -223,13 +226,11 @@ class EternityChallengeState extends GameMechanicState {
   }
 }
 
-EternityChallengeState.createIndex(GameDatabase.challenges.eternity);
-
 /**
  * @param id
  * @return {EternityChallengeState}
  */
-const EternityChallenge = id => EternityChallengeState.index[id];
+const EternityChallenge = EternityChallengeState.createAccessor(GameDatabase.challenges.eternity);
 
 /**
  * @returns {EternityChallengeState}
@@ -248,7 +249,7 @@ const EternityChallenges = {
   /**
    * @type {EternityChallengeState[]}
    */
-  all: EternityChallengeState.index.compact(),
+  all: EternityChallenge.index.compact(),
 
   get completions() {
     return EternityChallenges.all
@@ -270,7 +271,7 @@ const EternityChallenges = {
 
   autoComplete: {
     tick() {
-      if (!player.autoEcIsOn) return;
+      if (!player.reality.autoEC) return;
       if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
         let next = this.nextChallenge;
         while (next !== undefined) {
@@ -296,6 +297,7 @@ const EternityChallenges = {
     },
 
     get interval() {
+      if (!Perk.autocompleteEC1.isBought) return Infinity;
       let hours = Effects.min(
         Number.MAX_VALUE,
         Perk.autocompleteEC1,
@@ -304,8 +306,8 @@ const EternityChallenges = {
         Perk.autocompleteEC4,
         Perk.autocompleteEC5
       );
-      if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0])) hours /= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0].effect();
-      return hours === Number.MAX_VALUE ? Infinity : TimeSpan.fromHours(hours).totalMilliseconds;
+      if (V.has(V_UNLOCKS.FAST_AUTO_EC)) hours /= V_UNLOCKS.FAST_AUTO_EC.effect();
+      return TimeSpan.fromHours(hours).totalMilliseconds;
     }
   }
 };

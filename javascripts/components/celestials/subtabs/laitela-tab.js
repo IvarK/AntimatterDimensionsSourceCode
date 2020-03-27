@@ -47,13 +47,13 @@ Vue.component("laitela-tab", {
     },
     runButtonClassObject() {
       return {
-        "o-laitela-run-button__icon": true, 
+        "o-laitela-run-button__icon": true,
         "o-laitela-run-button__icon--running": this.isRunning,
       };
     },
     unlockClassObject(upgrade) {
       return {
-        "o-laitela-shop-button--bought": upgrade.isBought, 
+        "o-laitela-shop-button--bought": upgrade.isBought,
         "o-laitela-shop-button--available": upgrade.canBeBought
       };
     },
@@ -70,10 +70,13 @@ Vue.component("laitela-tab", {
   },
   template:
     `<div class="l-laitela-celestial-tab">
-      <div class="o-laitela-matter-amount">You have {{ shorten(matter, 2, 0) }} Dark Matter</div>
-      <div v-if="annihilated">You have {{ shorten(higgs, 2, 0)}} Higgs {{"Boson" | pluralize(higgs)}}</div>
-      <div v-if="higgs.gt(0)">Which cause you to have a {{ (darkEnergyChance * 100).toFixed(3) }}% chance of generating dark energy each dimension interval</div>
-      <div v-if="darkEnergy > 0">You have {{ shorten(darkEnergy, 2, 0)}} Dark Energy</div>
+      <div class="o-laitela-matter-amount">You have {{ format(matter, 2, 0) }} Dark Matter</div>
+      <div v-if="annihilated">You have {{ format(higgs, 2, 0)}} Higgs {{"Boson" | pluralize(higgs)}}</div>
+      <div v-if="higgs.gt(0)">
+        Which cause you to have a {{ formatPercents(darkEnergyChance, 1) }}
+        chance of generating dark energy each dimension interval
+      </div>
+      <div v-if="darkEnergy > 0">You have {{ format(darkEnergy, 2, 0)}} Dark Energy</div>
       <div class="l-laitela-mechanics-container">
         <div>
           <matter-dimension-row
@@ -84,13 +87,13 @@ Vue.component("laitela-tab", {
           <div>{{ nextUnlock }}</div>
         </div>
         <div class="l-laitela-unlocks-container" v-if="showReset">
-          <button 
-            v-for="upgrade in upgrades" 
-            :key="upgrade.id" 
+          <button
+            v-for="upgrade in upgrades"
+            :key="upgrade.id"
             class="o-laitela-shop-button"
             :class="{'o-laitela-shop-button--available': upgrade.canBeBought }"
-            @click="upgrade.purchase()"> 
-              {{ upgrade.description }} <br/> Costs: <b>{{ shorten(upgrade.cost, 2, 0) }}</b> Higgs Bosons 
+            @click="upgrade.purchase()">
+              {{ upgrade.description }} <br/> Costs: <b>{{ format(upgrade.cost, 2, 0) }}</b> Higgs Bosons
               <br/>Currently: {{ upgrade.formattedEffect }}, Next: {{ upgrade.formattedNextEffect }}
           </button>
         </div>
@@ -100,28 +103,28 @@ Vue.component("laitela-tab", {
           <button class="o-laitela-run-button" @click="startRun">
             <b>Start Lai'tela's Reality</b>
             <div v-bind:class="runButtonClassObject()"></div>
-            Tickspeed is disabled and all dimension multipliers are decreased based on dark matter, 
-            currently <b>x^{{ shorten(dimMultNerf, 3, 4) }}</b>
+            Tickspeed is disabled and all dimension multipliers are decreased based on dark matter,
+            currently <b>x^{{ format(dimMultNerf, 3, 4) }}</b>
             <br>
-            Multiply all dark matter dimensions based on highest AM reached, 
-            Currently: <b>{{ shorten(realityReward, 2, 3)}}x</b>
+            Multiply all dark matter dimensions based on highest AM reached,
+            Currently: <b>{{ format(realityReward, 2, 3)}}x</b>
           </button>
           <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
             <h2>Annihilation</h2>
             <p>
-              Resets your dark matter dimensions and Dark Matter, but gain <b>{{ shorten(higgsGain, 2, 0) }}</b> 
+              Resets your dark matter dimensions and Dark Matter, but gain <b>{{ format(higgsGain, 2, 0) }}</b>
               Higgs {{"Boson" | pluralize(higgsGain)}}
             </p>
           </button>
         </div>
         <div class="l-laitela-dark-energy-upgrades">
-          <button 
-            v-for="upgrade in darkEnergyUpgrades" 
-            :key="upgrade.id" 
+          <button
+            v-for="upgrade in darkEnergyUpgrades"
+            :key="upgrade.id"
             class="o-laitela-shop-button--dark-energy"
             :class="unlockClassObject(upgrade)"
-            @click="upgrade.purchase()"> 
-              {{ upgrade.description }} <br/> Costs: <b>{{ shorten(upgrade.cost, 2, 0) }}</b> Dark Energy
+            @click="upgrade.purchase()">
+              {{ upgrade.description }} <br/> Costs: <b>{{ format(upgrade.cost, 2, 0) }}</b> Dark Energy
               <br/>{{ upgrade.formattedEffect }}
           </button>
         </div>

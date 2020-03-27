@@ -21,7 +21,7 @@ Vue.component("new-tickspeed-row", {
     multiplierDisplay() {
       const tickmult = this.mult;
       if (tickmult.lte(1e-9)) {
-        return `${this.shorten(tickmult.reciprocal(), 2, 0)}x faster / upgrade.`;
+        return `${formatX(tickmult.reciprocal(), 2, 0)} faster / upgrade.`;
       }
       const asNumber = tickmult.toNumber();
       let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
@@ -29,7 +29,7 @@ Vue.component("new-tickspeed-row", {
       return `-${((1 - asNumber) * 100).toFixed(places)}% / upgrade`;
     },
     tickspeedDisplay() {
-      return `Tickspeed: ${shorten(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
+      return `Tickspeed: ${format(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
     },
     isGameSpeedNormal() {
       return this.gameSpeedMult === 1;
@@ -39,7 +39,7 @@ Vue.component("new-tickspeed-row", {
     },
     formattedFastSpeed() {
       const gameSpeedMult = this.gameSpeedMult;
-      return gameSpeedMult < 10000 ? gameSpeedMult.toFixed(3) : this.shortenDimensions(gameSpeedMult);
+      return gameSpeedMult < 10000 ? format(gameSpeedMult, 3, 3) : format(gameSpeedMult, 2, 0);
     },
     tooltip() {
       if (this.isGameSpeedNormal) return undefined;
@@ -74,8 +74,8 @@ Vue.component("new-tickspeed-row", {
           :class="{ 'o-primary-btn--disabled': !isAffordable }"
           :enabled="isAffordable"
           onclick="buyTickSpeed()"
-          >Cost: {{shortenCosts(cost)}}</button>
-        <button 
+          >Cost: {{format(cost, 0, 0)}}</button>
+        <button
           class="o-primary-btn tickspeed-max-btn"
           :class="{ 'o-primary-btn--disabled': !isAffordable }"
           :enabled="isAffordable"

@@ -24,7 +24,7 @@ Vue.component("sacrificed-glyphs", {
           return this.typeConfig.symbol;
         },
         formatAmount() {
-          return this.shorten(this.amount, 2, 2);
+          return format(this.amount, 2, 2);
         },
         description() {
           return this.sacConfig.description(this.effectValue);
@@ -36,7 +36,7 @@ Vue.component("sacrificed-glyphs", {
           return this.hasDragover && this.currentSacrifice.type === this.type;
         },
         formatNewAmount() {
-          return this.shorten(this.currentSacrifice.sacrificeValue, 2, 2);
+          return format(this.currentSacrifice.sacrificeValue, 2, 2);
         }
       },
       methods: {
@@ -72,11 +72,10 @@ Vue.component("sacrificed-glyphs", {
       addThreshold: 0,
       empowerThreshold: 0,
       boostThreshold: 0,
-      confirmSacrifice: false,
     };
   },
   computed: {
-    types: () => GLYPH_TYPES,
+    types: () => GLYPH_TYPES.filter(type => type !== "cursed"),
   },
   methods: {
     update() {
@@ -85,7 +84,6 @@ Vue.component("sacrificed-glyphs", {
       this.addThreshold = GlyphAlteration.additionThreshold;
       this.empowerThreshold = GlyphAlteration.empowermentThreshold;
       this.boostThreshold = GlyphAlteration.boostingThreshold;
-      this.confirmSacrifice = player.options.confirmations.glyphSacrifice;
     },
     dragover(event) {
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
@@ -101,12 +99,9 @@ Vue.component("sacrificed-glyphs", {
       if (isNaN(id)) return;
       const glyph = Glyphs.findById(id);
       if (!glyph) return;
-      sacrificeGlyph(glyph, false, true);
+      GlyphSacrificeHandler.sacrificeGlyph(glyph);
       this.hasDragover = false;
     },
-    toggleConfirm() {
-      player.options.confirmations.glyphSacrifice = !this.confirmSacrifice;
-    }
   },
   template: `
   <div v-show="anySacrifices"
@@ -119,9 +114,9 @@ Vue.component("sacrificed-glyphs", {
       Glyph types will have one of their effects<br>
       improved when their sacrifice values are above:
       <br><br>
-      {{ shorten(addThreshold) }} - an additional secondary effect<br>
-      {{ shorten(empowerThreshold) }} - formula drastically improved<br>
-      {{ shorten(boostThreshold) }} - a boost depending on glyph sacrifice
+      {{ format(addThreshold) }} - an additional secondary effect<br>
+      {{ format(empowerThreshold) }} - formula drastically improved<br>
+      {{ format(boostThreshold) }} - a boost depending on glyph sacrifice
       <br><br>
     </div>
     <div class="c-sacrificed-glyphs__header">Sacrifices:</div>
@@ -131,10 +126,6 @@ Vue.component("sacrificed-glyphs", {
     <div class="l-sacrificed-glyphs__help">
       <div>Drag glyphs here or shift-click to sacrifice.</div>
       <div>Ctrl-shift-click to sacrifice without confirmation</div>
-      <div @click="toggleConfirm" class="c-sacrificed-glyphs__confirm">
-        <input :checked="confirmSacrifice" type="checkbox" />
-        Ask for confirmation when sacrificing
-      </div>
     </div>
   </div>`,
 });

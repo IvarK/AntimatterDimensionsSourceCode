@@ -19,7 +19,7 @@ Vue.component("normal-achievement-row", {
   },
   methods: {
     update() {
-      this.isCompleted = this.row.every(a => a.isEnabled);
+      this.isCompleted = this.row.every(a => a.isUnlocked);
     }
   },
   template:

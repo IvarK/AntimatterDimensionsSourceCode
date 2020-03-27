@@ -7,7 +7,7 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e850"),
     isQuickResettable: true,
     reward: {
-      description: "1.3x on all Infinity Dimensions for each Infinity Challenge completed",
+      description: () => `${formatX(1.3, 1, 1)} on all Infinity Dimensions for each Infinity Challenge completed`,
       effect: () => Math.pow(1.3, InfinityChallenges.completed.length),
       formatEffect: value => formatX(value, 1, 1)
     },
@@ -15,11 +15,11 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 2,
-    description: () => `Automatically sacrifice every ${shortenSmallInteger(8)} ticks once you have an 8th Dimension.`,
+    description: () => `Automatically sacrifice every ${formatInt(8)} ticks once you have an 8th Dimension.`,
     goal: new Decimal("1e10500"),
     isQuickResettable: false,
     reward: {
-      description: "Sacrifice autobuyer and more powerful sacrifice"
+      description: "Sacrifice autobuyer and stronger sacrifice"
     },
     unlockAM: new Decimal("1e5000"),
   },
@@ -46,7 +46,7 @@ GameDatabase.challenges.infinity = [
     isQuickResettable: true,
     effect: 0.25,
     reward: {
-      description: "All normal dimension multipliers become multiplier^1.05",
+      description: () => `All normal dimension multipliers become multiplier${formatPow(1.05, 2, 2)}`,
       effect: 1.05
     },
     unlockAM: new Decimal("1e14000"),
@@ -59,14 +59,15 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {
-      description: "Galaxies are 10% more powerful and reduce the requirements for them and Dimension Boosts by 1",
+      description: () => `Galaxies are 10% stronger and reduce the requirements for them
+        and Dimension Boosts by ${formatInt(1)}`,
       effect: 1.1
     },
     unlockAM: new Decimal("1e18000"),
   },
   {
     id: 6,
-    description: () => `Once you have at least ${shortenSmallInteger(1)} 2nd Dimension, exponentially rising matter
+    description: () => `Once you have at least ${formatInt(1)} 2nd Dimension, exponentially rising matter
       divides the multiplier on all of your dimensions.`,
     goal: new Decimal("2e22222"),
     isQuickResettable: true,
@@ -82,12 +83,12 @@ GameDatabase.challenges.infinity = [
   {
     id: 7,
     description: () => `You can't get Antimatter Galaxies, but Dimension Boost multiplier
-      ${shorten(2.5, 1, 1)}x ➜ ${shortenSmallInteger(10)}x`,
+      ${formatX(2.5, 1, 1)} ➜ ${formatX(10, 0, 0)}`,
     goal: new Decimal("1e10000"),
     isQuickResettable: false,
     effect: 10,
     reward: {
-      description: "Dimension Boost multiplier 2.5x ➜ 4x",
+      description: () => `Dimension Boost multiplier ${formatX(2.5, 1, 1)} ➜ ${formatX(4, 0, 0)}`,
       effect: 4
     },
     unlockAM: new Decimal("1e23000"),
@@ -101,7 +102,7 @@ GameDatabase.challenges.infinity = [
       Math.max(0, player.thisInfinityTime - player.thisInfinityLastBuyTime)),
     reward: {
       description: "You get a multiplier to dimensions 2-7 based on 1st and 8th dimension multipliers.",
-      effect: () => getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02),
+      effect: () => NormalDimension(1).multiplier.times(NormalDimension(8).multiplier).pow(0.02),
       formatEffect: value => formatX(value, 2, 2)
     },
     unlockAM: new Decimal("1e28000"),

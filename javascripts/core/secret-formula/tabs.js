@@ -70,29 +70,15 @@ GameDatabase.tabs = [
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
-          PlayerProgress.infinityUnlocked()
+          PlayerProgress.challengeCompleted()
       },
       {
-        key: "infinities",
-        name: "Past Infinities",
-        symbol: "∞",
-        component: "past-infinities-tab",
+        key: "prestige runs",
+        name: "Past Prestige Runs",
+        symbol: "<i class='fas fa-list-ol'></i>",
+        component: "past-runs-tab",
         condition: () => PlayerProgress.infinityUnlocked()
       },
-      {
-        key: "eternities",
-        name: "Past Eternities",
-        symbol: "Δ",
-        component: "past-eternities-tab",
-        condition: () => PlayerProgress.eternityUnlocked()
-      },
-      {
-        key: "realities",
-        name: "Past Realities",
-        symbol: "Ϟ",
-        component: "past-realities-tab",
-        condition: () => PlayerProgress.realityUnlocked()
-      }
     ]
   },
   {
@@ -193,6 +179,7 @@ GameDatabase.tabs = [
     condition: () =>
       PlayerProgress.realityUnlocked() ||
       PlayerProgress.eternityUnlocked(),
+    before: "eternity-points-header",
     subtabs: [
       {
         key: "studies",
@@ -217,7 +204,7 @@ GameDatabase.tabs = [
         name: "Time dilation",
         symbol: "Ψ",
         component: "time-dilation-tab",
-        condition: () => TimeStudy.dilation.isBought || PlayerProgress.realityUnlocked()
+        condition: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked()
       },
       {
         key: "compression",
@@ -238,7 +225,7 @@ GameDatabase.tabs = [
       {
         key: "glyphs",
         name: "Glyphs",
-        symbol: "G",
+        symbol: "<i class='fas fa-clone'></i>",
         component: "glyphs-tab"
       },
       {
@@ -261,7 +248,7 @@ GameDatabase.tabs = [
       },
       {
         key: "hole",
-        name: "Black hole",
+        name: "Black Hole",
         symbol: "<i class='fas fa-circle'></i>",
         component: "black-hole-tab",
       },
@@ -311,21 +298,21 @@ GameDatabase.tabs = [
         name: "V",
         symbol: "⌬",
         component: "v-tab",
-        condition: () => Achievement(151).isEnabled
+        condition: () => Achievement(151).isUnlocked
       },
       {
         key: "ra",
         name: "Ra",
         symbol: "☼",
         component: "ra-tab",
-        condition: () => V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])
+        condition: () => V.has(V_UNLOCKS.RA_UNLOCK)
       },
       {
         key: "laitela",
         name: "Lai'tela",
         symbol: "ᛝ",
         component: "laitela-tab",
-        condition: () => Ra.has(RA_LAITELA_UNLOCK)
+        condition: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK)
       },
       {
         key: "pelle",

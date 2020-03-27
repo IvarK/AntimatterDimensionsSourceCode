@@ -15,7 +15,7 @@ GameDatabase.reality.upgrades = (function() {
     const { effect } = props;
     props.effect = () => Math.pow(effect, player.reality.rebuyables[props.id]);
     props.formatEffect = value => formatX(value, 2, 0);
-    props.formatCost = value => shorten(value, 2, 0);
+    props.formatCost = value => format(value, 2, 0);
     return props;
   };
   const isFirstEternity = () => player.realities > 0 && Player.gainedEternities.eq(0);
@@ -25,53 +25,53 @@ GameDatabase.reality.upgrades = (function() {
       id: 1,
       initialCost: 1,
       costMult: 30,
-      description: () => `You gain Dilated Time ${shortenSmallInteger(3)} times faster`,
+      description: () => `You gain Dilated Time ${formatInt(3)} times faster`,
       effect: 3
     }),
     rebuyable({
       id: 2,
-      initialCost: 2,
+      initialCost: 1,
       costMult: 30,
-      description: () => `You gain Replicanti ${shortenSmallInteger(3)} times faster`,
+      description: () => `You gain Replicanti ${formatInt(3)} times faster`,
       effect: 3
     }),
     rebuyable({
       id: 3,
       initialCost: 2,
       costMult: 30,
-      description: () => `You gain ${shortenSmallInteger(3)} times more Eternities`,
+      description: () => `You gain ${formatInt(3)} times more Eternities`,
       effect: 3
     }),
     rebuyable({
       id: 4,
-      initialCost: 3,
+      initialCost: 2,
       costMult: 30,
-      description: () => `You gain ${shortenSmallInteger(3)} times more Tachyon Particles`,
+      description: () => `You gain ${formatInt(3)} times more Tachyon Particles`,
       effect: 3
     }),
     rebuyable({
       id: 5,
-      initialCost: 4,
+      initialCost: 3,
       costMult: 50,
-      description: () => `You gain ${shortenSmallInteger(5)} times more Infinities`,
+      description: () => `You gain ${formatInt(5)} times more Infinities`,
       effect: 5
     }),
     {
       id: 6,
       cost: 15,
-      requirement: "Reach first Eternity without getting any RGs during that Eternity",
+      requirement: "Complete your first Eternity without using Replicanti Galaxies",
       checkRequirement: () => player.reality.upgReqChecks[0] && isFirstEternity(),
-      checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
-      description: "Replicanti gain is boosted from RG count",
+      checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
+      description: "Replicanti speed is multiplied based on Replicanti Galaxies",
       effect: () => 1 + (player.replicanti.galaxies / 50),
       formatEffect: value => formatX(value, 2, 2)
     },
     {
       id: 7,
       cost: 15,
-      requirement: "Reach first Infinity with just 1 galaxy",
+      requirement: "Complete your first Infinity with at most 1 galaxy",
       checkRequirement: () => player.galaxies <= 1 && isFirstInfinity(),
-      checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
+      checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
       description: "Infinitied stat gain is boosted from Antimatter Galaxy count",
       effect: () => 1 + (player.galaxies / 30),
       formatEffect: value => formatX(value, 2, 2)
@@ -81,45 +81,45 @@ GameDatabase.reality.upgrades = (function() {
       cost: 15,
       requirement: "Get to Eternity without any automatic achievements",
       checkRequirement: () => !player.reality.gainedAutoAchievements,
-      checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
-      description: "Tachyon Particle gain is multiplied based on achievement multiplier",
-      effect: () => Player.achievementPower.sqrt(),
+      checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
+      description: "Tachyon Particle gain is boosted based on achievement multiplier",
+      effect: () => Math.sqrt(Achievements.power),
       formatEffect: value => formatX(value, 2, 2)
     },
     {
       id: 9,
       cost: 15,
-      requirement: "Reality using only a single level 3+ glyph.",
+      requirement: () => `Reality using only a single level ${formatInt(3)}+ glyph.`,
       checkRequirement: () => Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
-      checkEvent: GameEvent.REALITY_RESET_BEFORE,
+      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain another glyph slot",
       effect: () => 1
     },
     {
       id: 10,
       cost: 15,
-      requirement: () => `Do your first Eternity with ${shorten("1e400")} IP`,
+      requirement: () => `Complete your first Eternity with at least ${format("1e400")} IP`,
       checkRequirement: () => player.infinityPoints.exponent >= 400 && isFirstEternity(),
-      checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
-      description: "Start every reality with 100 Eternities (also applies to current reality)"
+      checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
+      description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`
     },
     {
       id: 11,
       cost: 50,
-      requirement: () => `${shorten(1e12)} banked Infinities`,
+      requirement: () => `${format(1e12)} banked Infinities`,
       checkRequirement: () => player.infinitiedBank.exponent >= 12,
-      checkEvent: GameEvent.ETERNITY_RESET_AFTER,
-      description: "Gain 10% of the Infinities you would gain by Infinitying each second.",
+      checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+      description: "Every second, gain 10% of the Infinities you would normally gain by Infinitying",
       effect: () => gainedInfinities().times(0.1),
-      formatEffect: value => `${shorten(value)} per second`
+      formatEffect: value => `${format(value)} per second`
     },
     {
       id: 12,
       cost: 50,
-      requirement: () => `Reach ${shorten(1e70)} EP without EC1`,
+      requirement: () => `Eternity for ${format(1e70)} EP without Eternity Challenge 1`,
       checkRequirement: () => player.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
-      checkEvent: GameEvent.ETERNITY_RESET_AFTER,
-      description: "EP mult based on Realities and TT",
+      checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+      description: "EP multiplier based on Reality and Time Theorem count",
       effect: () => player.timestudy.theorem
         .minus(1e3).clampMin(2)
         .pow(Math.log2(Math.min(player.realities, 1e4))).clampMin(1),
@@ -128,104 +128,104 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 13,
       cost: 50,
-      requirement: () => `Reach ${shorten("1e4000")} EP without TD5-8`,
+      requirement: () => `Eternity for ${format("1e4000")} EP without Time Dimensions 5-8`,
       checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
-      checkEvent: GameEvent.ETERNITY_RESET_AFTER,
-      description: "More Eternity autobuyer options, EP multiplier and Time Dimension autobuyers"
+      checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+      description: () => `Improved Eternity autobuyer, ${formatInt(5)}xEP multiplier, and Time Dimension autobuyers`
     },
     {
       id: 14,
       cost: 50,
-      requirement: () => `${shorten(1e7)} Eternities`,
+      requirement: () => `${format(1e7)} Eternities`,
       checkRequirement: () => player.eternities.gte(1e7),
-      checkEvent: GameEvent.ETERNITY_RESET_AFTER,
-      description: "Gain Eternities per second equal to your Realities",
+      checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+      description: "Gain Eternities per second equal to your Reality count",
       effect: () => player.realities * RA_UNLOCKS.TT_BOOST.effect.eternity(),
-      formatEffect: value => `${shorten(value)} per second`
+      formatEffect: value => `${format(value)} per second`
     },
     {
       id: 15,
       cost: 50,
-      requirement: () => `Reach ${shorten(1e10)} EP without purchasing the 5xEP upgrade`,
+      requirement: () => `Eternity for ${format(1e10)} EP without purchasing the ${formatInt(5)}xEP upgrade`,
       checkRequirement: () => player.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
-      checkEvent: GameEvent.ETERNITY_RESET_AFTER,
-      description: "Multiply TP gain based on 5xEP mult",
+      checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+      description: () => `Boost Tachyon Particle gain based on ${formatInt(5)}xEP multiplier`,
       effect: () => Math.max(Math.sqrt(Decimal.log10(EternityUpgrade.epMult.effectValue)) / 3, 1),
       formatEffect: value => formatX(value, 2, 2)
     },
     {
       id: 16,
       cost: 1500,
-      requirement: "Reality with 4 glyphs with uncommon or better rarity",
+      requirement: () => `Reality with ${formatInt(4)} glyphs equipped of uncommon or better rarity`,
       checkRequirement: () => Glyphs.activeList.countWhere(g => g.strength >= 1.5) === 4,
-      checkEvent: GameEvent.REALITY_RESET_BEFORE,
+      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Improve the glyph rarity formula",
       effect: 1.3,
-      formatCost: value => shorten(value, 1, 0)
+      formatCost: value => format(value, 1, 0)
     },
     {
       id: 17,
       cost: 1500,
-      requirement: "Reality with 4 glyphs, with each having at least 2 effects",
+      requirement: () => `Reality with ${formatInt(4)} glyphs equipped, each having at least ${formatInt(2)} effects`,
       checkRequirement: () => Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2) === 4,
-      checkEvent: GameEvent.REALITY_RESET_BEFORE,
-      description: "50% chance to get +1 effect on glyphs",
-      formatCost: value => shorten(value, 1, 0)
+      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+      description: "50% chance to get an additional effect on glyphs",
+      formatCost: value => format(value, 1, 0)
     },
     {
       id: 18,
       cost: 1500,
-      requirement: "Reality with 4 level 10 or higher glyphs equipped.",
+      requirement: () => `Reality with ${formatInt(4)} glyphs equipped, each at level ${formatInt(10)} or higher`,
       checkRequirement: () => Glyphs.activeList.countWhere(g => g.level >= 10) === 4,
-      checkEvent: GameEvent.REALITY_RESET_BEFORE,
-      description: "Eternities affect glyph level",
+      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+      description: "Eternity count boosts glyph level",
       effect: () => Math.max(Math.sqrt(player.eternities.log10()) * 0.45, 1),
-      formatCost: value => shorten(value, 1, 0)
+      formatCost: value => format(value, 1, 0)
     },
     {
       id: 19,
       cost: 1500,
-      requirement: "Have a total of 30 or more glyphs",
+      requirement: () => `Have a total of ${formatInt(30)} or more glyphs at once`,
       checkRequirement: () => Glyphs.active.concat(Glyphs.inventory).countWhere(g => g) >= 30,
-      checkEvent: GameEvent.REALITY_RESET_BEFORE,
+      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "You can sacrifice glyphs for permanent bonuses (Shift + click)",
-      formatCost: value => shorten(value, 1, 0)
+      formatCost: value => format(value, 1, 0)
     },
     {
       id: 20,
       cost: 1500,
-      requirement: "2 years total play time",
+      requirement: () => `${formatInt(2)} years total play time`,
       checkRequirement: () => Time.totalTimePlayed.totalYears >= 2,
-      checkEvent: GameEvent.GAME_TICK_AFTER,
-      description: "You can have 2 black holes",
-      formatCost: value => shorten(value, 1, 0)
+      checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+      description: "Unlock Black Hole 2",
+      formatCost: value => format(value, 1, 0)
     },
     {
       id: 21,
       cost: 100000,
-      requirement: "2800 total galaxies from all types",
+      requirement: () => `${formatInt(2800)} total galaxies from all types`,
       checkRequirement: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= 2800,
-      checkEvent: GameEvent.GAME_TICK_AFTER,
+      checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Remote galaxy scaling is removed"
     },
     {
       id: 22,
       cost: 100000,
-      requirement: () => `${shorten("1e28000")} time shards`,
+      requirement: () => `${format("1e28000")} time shards`,
       checkRequirement: () => player.timeShards.exponent >= 28000,
-      checkEvent: GameEvent.GAME_TICK_AFTER,
-      description: "Growing bonus to TD based on days spent in this Reality",
+      checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+      description: "Time Dimension multiplier based on days spent in this Reality",
       effect: () => Decimal.pow10(Math.pow(1 + 2 * Math.log10(Time.thisReality.totalDays + 1), 1.6)),
       formatEffect: value => formatX(value, 2, 2)
     },
     {
       id: 23,
       cost: 100000,
-      requirement: "Reality in under 15 minutes",
+      requirement: () => `Reality in under ${formatInt(15)} minutes`,
       checkRequirement: () => Time.thisReality.totalMinutes < 15,
-      checkEvent: GameEvent.REALITY_RESET_BEFORE,
-      description: "Replicanti gain is boosted based on your fastest reality",
+      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+      description: "Replicanti speed is boosted based on your fastest Reality",
       effect: () => 15 / Math.clamp(Time.bestReality.totalMinutes, 1 / 12, 15),
       cap: 900,
       formatEffect: value => formatX(value, 2, 2)
@@ -233,18 +233,18 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 24,
       cost: 100000,
-      requirement: "Reality for 5000 RM without glyphs",
+      requirement: () => `Reality for ${formatInt(5000)} RM without glyphs`,
       checkRequirement: () => gainedRealityMachines().gte(5000) && Glyphs.activeList.length === 0,
-      checkEvent: GameEvent.REALITY_RESET_BEFORE,
+      checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain another glyph slot",
       effect: () => 1
     },
     {
       id: 25,
       cost: 100000,
-      requirement: () => `Reach ${shorten("1e10500")} EP`,
+      requirement: () => `Reach ${format("1e10500")} EP`,
       checkRequirement: () => player.eternityPoints.exponent >= 10500,
-      checkEvent: GameEvent.ETERNITY_RESET_AFTER,
+      checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Reality autobuyer"
     },
   ];

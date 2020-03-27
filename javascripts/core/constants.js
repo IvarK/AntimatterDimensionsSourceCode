@@ -1,27 +1,24 @@
 "use strict";
 
-const DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
-const SHORT_DISPLAY_NAMES = [null, "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"];
-
-const AutobuyerMode = {
+const AUTOBUYER_MODE = {
   BUY_SINGLE: 1,
   BUY_10: 10,
   BUY_MAX: 100,
 };
 
-const AutoCrunchMode = {
+const AUTO_CRUNCH_MODE = {
   AMOUNT: 0,
   TIME: 1,
   X_LAST: 2
 };
 
-const AutoEternityMode = {
+const AUTO_ETERNITY_MODE = {
   AMOUNT: 0,
   TIME: 1,
   X_LAST: 2
 };
 
-const AutoRealityMode = {
+const AUTO_REALITY_MODE = {
   RM: 0,
   GLYPH: 1,
   EITHER: 2,
@@ -71,22 +68,23 @@ const GlyphRarities = [
   },
 ];
 
-const AutoGlyphSacMode = {
-  NONE: 0,
-  ALL: 1,
-  RARITY_THRESHOLDS: 2,
-  ADVANCED: 3,
-  ALCHEMY: 4
-}
-
-const AutoGlyphPickMode = {
-  RANDOM: 0,
-  RARITY: 1,
-  ABOVE_SACRIFICE_THRESHOLD: 2,
-  LOWEST_ALCHEMY_RESOURCE: 3
+const AUTO_GLYPH_SCORE = {
+  LOWEST_SACRIFICE: 0,
+  EFFECT_COUNT: 1,
+  RARITY_THRESHOLD: 2,
+  SPECIFIED_EFFECT: 3,
+  ADVANCED_MODE: 4,
+  LOWEST_ALCHEMY: 5,
+  ALCHEMY_VALUE: 6
 };
 
-const TimeStudyPath = {
+const AUTO_GLYPH_REJECT = {
+  SACRIFICE: 0,
+  ALWAYS_REFINE: 1,
+  REFINE_TO_CAP: 2,
+};
+
+const TIME_STUDY_PATH = {
   NONE: 0,
   NORMAL_DIM: 1,
   INFINITY_DIM: 2,
@@ -120,4 +118,5 @@ const ALCHEMY_RESOURCE = {
   MULTIVERSAL: 18,
   UNPREDICTABILITY: 19,
   REALITY: 20,
+  CURSED: 21
 };

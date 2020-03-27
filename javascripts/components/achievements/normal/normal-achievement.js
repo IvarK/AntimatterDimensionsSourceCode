@@ -66,7 +66,7 @@ Vue.component("normal-achievement", {
       :ach-tooltip="tooltip"
       @mouseenter="onMouseEnter"
       @mouseleave="onMouseLeave">
-      <hint-text class="l-hint-text--achievement">{{id}}</hint-text>
+      <hint-text type="achievements" class="l-hint-text--achievement">{{id}}</hint-text>
       <br>
      </div>`
 });

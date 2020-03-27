@@ -5,7 +5,7 @@
 function normalDimensionCommonMultiplier() {
   let multiplier = new Decimal(1);
 
-  multiplier = multiplier.times(Player.achievementPower);
+  multiplier = multiplier.times(Achievements.power);
   multiplier = multiplier.times(kongDimMult);
   multiplier = multiplier.times(kongAllDimMult);
 
@@ -26,7 +26,7 @@ function normalDimensionCommonMultiplier() {
     Achievement(73),
     Achievement(74),
     Achievement(76),
-    Achievement(78),
+    Achievement(78).effects.dimensionMult,
     Achievement(84),
     Achievement(91),
     Achievement(92),
@@ -38,6 +38,7 @@ function normalDimensionCommonMultiplier() {
     InfinityChallenge(3).reward,
     InfinityChallenge(8),
     EternityChallenge(10),
+    TriadStudy(4),
     AlchemyResource.dimensionality
   );
 
@@ -46,10 +47,6 @@ function normalDimensionCommonMultiplier() {
   multiplier = multiplier.times(player.reality.realityMachines.powEffectOf(AlchemyResource.force));
 
   return multiplier;
-}
-
-function getDimensionFinalMultiplier(tier) {
-  return GameCache.normalDimensionFinalMultipliers[tier].value;
 }
 
 function getDimensionFinalMultiplierUncached(tier) {
@@ -88,7 +85,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   }
 
   // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
-  if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
+  if (Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
     multiplier = multiplier.pow(1.05);
   }
 
@@ -107,7 +104,7 @@ function applyNDMultipliers(mult, tier) {
     NormalDimension(tier).infinityUpgrade,
     BreakInfinityUpgrade.infinitiedMult
   );
-  infinitiedMult = infinitiedMult.pow(Effects.product(TimeStudy(31)));
+  infinitiedMult = infinitiedMult.pow(TimeStudy(31).effectOrDefault(1));
   multiplier = multiplier.times(infinitiedMult);
 
   if (tier === 1) {
@@ -134,8 +131,7 @@ function applyNDMultipliers(mult, tier) {
     tier === 8 ? TimeStudy(214) : null,
     tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
   );
-  if (Achievement(77).isEnabled) {
-    // Welp, this effect is too complex for Effects system
+  if (Achievement(77).isUnlocked) {
     multiplier = multiplier.times(1 + tier / 100);
   }
 
@@ -167,13 +163,13 @@ function applyNDPowers(mult, tier) {
       AlchemyResource.power
     );
 
-  return multiplier;
-}
+  multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));
 
-function clearDimensions(maxTier) {
-  for (let i = 1; i <= maxTier; i++) {
-    NormalDimension(i).amount = new Decimal(0);
+  if (V.has(V_UNLOCKS.ND_POW)) {
+    multiplier = multiplier.pow(V_UNLOCKS.ND_POW.effect());
   }
+
+  return multiplier;
 }
 
 function onBuyDimension(tier) {
@@ -181,13 +177,16 @@ function onBuyDimension(tier) {
   Achievement(23).tryUnlock();
 
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
-  if (NormalChallenge(4).isRunning || InfinityChallenge(1).isRunning) clearDimensions(tier - 1);
+  if (NormalChallenge(4).isRunning || InfinityChallenge(1).isRunning) {
+    NormalDimensions.resetAmountUpToTier(tier - 1);
+  }
 
   player.postC4Tier = tier;
   player.thisInfinityLastBuyTime = player.thisInfinityTime;
   if (tier !== 8) player.onlyEighthDimensons = false;
   if (tier !== 1) player.onlyFirstDimensions = false;
   if (tier === 8) player.noEighthDimensions = false;
+  if (tier === 1) player.noFirstDimensions = false;
 }
 
 function floatText(tier, text) {
@@ -197,13 +196,9 @@ function floatText(tier, text) {
   setTimeout(() => floatingText.shift(), 1000);
 }
 
-function getCostIncreaseThreshold() {
-  return Decimal.MAX_NUMBER;
-}
-
 function buyOneDimension(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailable || !dimension.isAffordable) return false;
+  if (!dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
 
   const cost = dimension.cost;
 
@@ -219,7 +214,7 @@ function buyOneDimension(tier) {
   dimension.bought++;
 
   if (dimension.boughtBefore10 === 0) {
-    floatText(tier, `x${shorten(NormalDimensions.buyTenMultiplier, 2, 1)}`);
+    floatText(tier, `x${format(NormalDimensions.buyTenMultiplier, 2, 1)}`);
   }
 
   onBuyDimension(tier);
@@ -229,7 +224,7 @@ function buyOneDimension(tier) {
 
 function buyManyDimension(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailable || !dimension.isAffordableUntil10) return false;
+  if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return false;
   const cost = dimension.costUntil10;
 
   if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
@@ -239,7 +234,7 @@ function buyManyDimension(tier) {
   dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
   dimension.bought += dimension.remainingUntil10;
 
-  floatText(tier, `x${shorten(NormalDimensions.buyTenMultiplier, 2, 1)}`);
+  floatText(tier, `x${format(NormalDimensions.buyTenMultiplier, 2, 1)}`);
   onBuyDimension(tier);
 
   return true;
@@ -247,7 +242,7 @@ function buyManyDimension(tier) {
 
 function buyAsManyAsYouCanBuy(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailable || !dimension.isAffordable) return false;
+  if (!dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
   const howMany = dimension.howManyCanBuy;
   const cost = dimension.cost.times(howMany);
 
@@ -259,7 +254,7 @@ function buyAsManyAsYouCanBuy(tier) {
   dimension.bought += howMany;
 
   if (dimension.boughtBefore10 === 0) {
-    floatText(tier, `x${shorten(NormalDimensions.buyTenMultiplier, 2, 1)}`);
+    floatText(tier, `x${format(NormalDimensions.buyTenMultiplier, 2, 1)}`);
   }
 
   onBuyDimension(tier);
@@ -273,10 +268,11 @@ function buyUntilTen(tier) {
   dimension.challengeCostBump();
   dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10));
   dimension.bought += dimension.remainingUntil10;
+  onBuyDimension(tier);
 }
 
 function maxAll() {
-  if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
+  if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return;
 
   player.usedMaxAll = true;
 
@@ -289,7 +285,7 @@ function maxAll() {
 
 function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailable || !dimension.isAffordableUntil10) return;
+  if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
   const cost = dimension.costUntil10;
   let bulkLeft = bulk;
   const goal = Player.infinityGoal;
@@ -316,7 +312,6 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
       buyUntilTen(tier);
       bulkLeft--;
     }
-    onBuyDimension(tier);
     return;
   }
 
@@ -328,14 +323,13 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
     return;
   }
   let buying = maxBought.quantity;
-  if (buying > bulkLeft) buying = bulkLeft; 
+  if (buying > bulkLeft) buying = bulkLeft;
   dimension.amount = dimension.amount.plus(10 * buying).round();
   dimension.bought += 10 * buying;
   dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
-  onBuyDimension(tier);
   const multAfter = Decimal.pow(NormalDimensions.buyTenMultiplier, dimension.bought / 10);
   if (multBefore.neq(multAfter) && auto === false) {
-    floatText(tier, `x${shorten(multAfter.dividedBy(multBefore), 2, 1)}`);
+    floatText(tier, `x${format(multAfter.dividedBy(multBefore), 2, 1)}`);
   }
 }
 
@@ -363,30 +357,6 @@ function buyAsManyAsYouCanBuyBtnClick(tier) {
   buyAsManyAsYouCanBuy(tier);
 }
 
-function getDimensionProductionPerSecond(tier) {
-  const multiplier = getDimensionFinalMultiplier(tier);
-  const dimension = NormalDimension(tier);
-  let amount = dimension.amount.floor();
-  if (NormalChallenge(12).isRunning) {
-    if (tier === 2) amount = amount.pow(1.5);
-    if (tier === 4) amount = amount.pow(1.3);
-  }
-  let production = amount.times(multiplier).dividedBy(Tickspeed.current.dividedBy(1000));
-  if (NormalChallenge(2).isRunning) {
-    production = production.times(player.chall2Pow);
-  }
-  const postBreak = (player.break && !InfinityChallenge.isRunning && !NormalChallenge.isRunning) ||
-    InfinityChallenge.isRunning || Enslaved.isRunning;
-  if (!postBreak && production.gte(Decimal.MAX_NUMBER)) {
-    production = production.min("1e315");
-  }
-  if (tier === 1 && production.gt(10)) {
-    const log10 = production.log10();
-    production = Decimal.pow10(Math.pow(log10, getAdjustedGlyphEffect("effarigantimatter")));
-  }
-  return production;
-}
-
 class NormalDimensionState extends DimensionState {
   constructor(tier) {
     super(() => player.dimensions.normal, tier);
@@ -401,7 +371,7 @@ class NormalDimensionState extends DimensionState {
   }
 
   /**
-   * @returns {Decimal}
+   * @returns {ExponentialCostScaling}
    */
   get costScale() {
     return new ExponentialCostScaling({
@@ -486,9 +456,9 @@ class NormalDimensionState extends DimensionState {
     if (tier === 7 && EternityChallenge(7).isRunning) {
       toGain = InfinityDimension(1).productionPerSecond.times(10);
     } else if (NormalChallenge(12).isRunning) {
-      toGain = getDimensionProductionPerSecond(tier + 2);
+      toGain = NormalDimension(tier + 2).productionPerSecond;
     } else {
-      toGain = getDimensionProductionPerSecond(tier + 1);
+      toGain = NormalDimension(tier + 1).productionPerSecond;
     }
     return toGain.times(10).dividedBy(this.amount.max(1)).times(getGameSpeedupForDisplay());
   }
@@ -515,7 +485,7 @@ class NormalDimensionState extends DimensionState {
     * @returns {boolean}
     */
   get isAffordable() {
-    if (!player.break && this.cost.gt(Decimal.MAX_NUMBER)) return false;
+    if (!player.break && this.cost.gt(Decimal.NUMBER_MAX_VALUE)) return false;
     return this.cost.lte(this.currencyAmount);
   }
 
@@ -523,12 +493,12 @@ class NormalDimensionState extends DimensionState {
    * @returns {boolean}
    */
   get isAffordableUntil10() {
-    if (!player.break && this.cost.gt(Decimal.MAX_NUMBER)) return false;
+    if (!player.break && this.cost.gt(Decimal.NUMBER_MAX_VALUE)) return false;
     return this.costUntil10.lte(this.currencyAmount);
   }
 
-  get isAvailable() {
-    if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return false;
+  get isAvailableForPurchase() {
+    if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return false;
     if (this.tier > DimBoost.totalBoosts + 4) return false;
     if (this.tier > 1 &&
       NormalDimension(this.tier - 1).amount.eq(0) &&
@@ -540,6 +510,10 @@ class NormalDimensionState extends DimensionState {
     this.amount = new Decimal(0);
     this.bought = 0;
     this.costBumps = 0;
+  }
+
+  resetAmount() {
+    this.amount = new Decimal(0);
   }
 
   challengeCostBump() {
@@ -567,34 +541,71 @@ class NormalDimensionState extends DimensionState {
   }
 
   get multiplier() {
-    return getDimensionFinalMultiplier(this.tier);
+    return GameCache.normalDimensionFinalMultipliers[this.tier].value;
+  }
+
+  get productionPerSecond() {
+    const tier = this.tier;
+    let amount = this.amount.floor();
+    if (NormalChallenge(12).isRunning) {
+      if (tier === 2) amount = amount.pow(1.6);
+      if (tier === 4) amount = amount.pow(1.4);
+      if (tier === 6) amount = amount.pow(1.2);
+    }
+    let production = amount.times(this.multiplier).dividedBy(Tickspeed.current.dividedBy(1000));
+    if (NormalChallenge(2).isRunning) {
+      production = production.times(player.chall2Pow);
+    }
+    if (tier === 1) {
+      if (NormalChallenge(3).isRunning) {
+        production = production.times(player.chall3Pow);
+      }
+      if (production.gt(10)) {
+        const log10 = production.log10();
+        production = Decimal.pow10(Math.pow(log10, getAdjustedGlyphEffect("effarigantimatter")));
+      }
+    }
+    const postBreak = (player.break && !NormalChallenge.isRunning) ||
+      InfinityChallenge.isRunning ||
+      Enslaved.isRunning;
+    if (!postBreak && production.gte(Decimal.NUMBER_MAX_VALUE)) {
+      production = production.min("1e315");
+    }
+    return production;
   }
 }
 
-NormalDimensionState.createIndex();
-
 /**
+ * @function
  * @param {number} tier
  * @return {NormalDimensionState}
  */
-const NormalDimension = tier => NormalDimensionState.index[tier];
+const NormalDimension = NormalDimensionState.createAccessor();
 
 const NormalDimensions = {
   /**
    * @type {NormalDimensionState[]}
    */
-  all: NormalDimensionState.index.compact(),
+  all: NormalDimension.index.compact(),
+
   reset() {
     for (const dimension of NormalDimensions.all) {
       dimension.reset();
     }
     GameCache.dimensionMultDecrease.invalidate();
   },
+
+  resetAmountUpToTier(maxTier) {
+    for (const dimension of NormalDimensions.all.slice(0, maxTier)) {
+      dimension.resetAmount();
+    }
+  },
+
   get buyTenMultiplier() {
     if (NormalChallenge(7).isRunning) return new Decimal(2).min(1 + DimBoost.totalBoosts / 5);
-  
+
     let mult = new Decimal(2).plusEffectsOf(
-      Achievement(141).secondaryEffect,
+      Achievement(141).effects.buyTenMult,
       EternityChallenge(3).reward
     );
 
@@ -602,36 +613,32 @@ const NormalDimensions = {
       InfinityUpgrade.buy10Mult,
       Achievement(58)
     ).times(getAdjustedGlyphEffect("powerbuy10"));
-  
+
     mult = mult.pow(getAdjustedGlyphEffect("effarigforgotten")).powEffectOf(InfinityUpgrade.buy10Mult.chargedEffect);
-  
+
     return mult;
+  },
+
+  tick(diff) {
+    // Stop producing antimatter at Big Crunch goal because all the game elements
+    // are hidden when pre-break Big Crunch button is on screen.
+    const hasBigCrunchGoal = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
+    if (hasBigCrunchGoal && Currency.antimatter.isAffordable(Player.infinityGoal)) return;
+
+    let maxTierProduced = EternityChallenge(3).isRunning ? 3 : 7;
+    let nextTierOffset = 1;
+    if (NormalChallenge(12).isRunning) {
+      maxTierProduced--;
+      nextTierOffset++;
+    }
+    for (let tier = maxTierProduced; tier >= 1; --tier) {
+      NormalDimension(tier + nextTierOffset).produceDimensions(NormalDimension(tier), diff / 10);
+    }
+    let amRate = NormalDimension(1).productionPerSecond;
+    if (NormalChallenge(12).isRunning) amRate = amRate.plus(NormalDimension(2).productionPerSecond);
+    const amProduced = amRate.times(diff / 1000);
+    player.antimatter = player.antimatter.plus(amProduced);
+    player.totalAntimatter = player.totalAntimatter.plus(amProduced);
+    player.thisInfinityMaxAM = player.thisInfinityMaxAM.max(player.antimatter);
   }
 };
-
-function produceAntimatter(diff) {
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
-  if (player.antimatter.gt(Decimal.MAX_NUMBER)) {
-    if (!player.break) return;
-    if (challenge && player.antimatter.gt(challenge.goal)) return;
-  }
-
-  let maxTierProduced = EternityChallenge(3).isRunning ? 3 : 7;
-  let nextTierOffset = 1;
-  if (NormalChallenge(12).isRunning) {
-    // Reduce to 6 normally, leave at 3 for EC3:
-    maxTierProduced = Math.min(maxTierProduced, 6);
-    nextTierOffset = 2;
-  }
-  for (let tier = maxTierProduced; tier >= 1; --tier) {
-    const dim = NormalDimension(tier);
-    dim.amount = dim.amount.plus(getDimensionProductionPerSecond(tier + nextTierOffset).times(diff / 10000));
-  }
-  let amRate = getDimensionProductionPerSecond(1);
-  if (NormalChallenge(3).isRunning) amRate = amRate.times(player.chall3Pow);
-  if (NormalChallenge(12).isRunning) amRate = amRate.plus(getDimensionProductionPerSecond(2));
-  const amProduced = amRate.times(diff / 1000);
-  player.antimatter = player.antimatter.plus(amProduced);
-  player.totalAntimatter = player.totalAntimatter.plus(amProduced);
-  player.thisInfinityMaxAM = player.thisInfinityMaxAM.max(player.antimatter);
-}

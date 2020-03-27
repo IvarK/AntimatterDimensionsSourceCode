@@ -52,7 +52,7 @@ function bulkBuyBinarySearch(money, costInfo, alreadyBought) {
   do {
     cantBuy *= 2;
     nextCost = costFunction(alreadyBought + cantBuy - 1);
-  } while (money.gt(nextCost));
+  } while (money.gte(nextCost));
   // Deal with the simple case of buying just one
   if (cantBuy === 2) {
     return { quantity: 1, purchasePrice: firstCost };
@@ -63,7 +63,7 @@ function bulkBuyBinarySearch(money, costInfo, alreadyBought) {
   if (cantBuy > Number.MAX_SAFE_INTEGER) throw new Error("Overflow in binary search");
   while (cantBuy - canBuy > 1) {
     const middle = Math.floor((canBuy + cantBuy) / 2);
-    if (money.gt(costFunction(alreadyBought + middle - 1))) {
+    if (money.gte(costFunction(alreadyBought + middle - 1))) {
       canBuy = middle;
     } else {
       cantBuy = middle;

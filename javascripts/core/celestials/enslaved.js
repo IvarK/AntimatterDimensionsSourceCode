@@ -40,23 +40,23 @@ const Enslaved = {
   toggleAutoStoreReal() {
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
+  get isStoringGameTime() {
+    return player.celestials.enslaved.isStoring && !BlackHoles.arePaused;
+  },
   get isStoringRealTime() {
     return player.celestials.enslaved.isStoringReal;
   },
   get storedRealTimeEfficiency() {
-    const addedEff = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
-      ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency()
-      : 0;
-    return Math.min(0.4 + addedEff, 1);
+    return 0.7;
   },
   get storedRealTimeCap() {
     const addedCap = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
       ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap()
       : 0;
-    return 1000 * 3600 * 4 + addedCap;
+    return 1000 * 3600 * 8 + addedCap;
   },
   get isAutoReleasing() {
-    return player.celestials.enslaved.isAutoReleasing;
+    return player.celestials.enslaved.isAutoReleasing && !BlackHoles.areNegative;
   },
   storeRealTime() {
     const thisUpdate = Date.now();
@@ -81,6 +81,7 @@ const Enslaved = {
   useStoredTime(autoRelease) {
     if (EternityChallenge(12).isRunning || TimeCompression.isActive) return;
     if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
+    player.minNegativeBlackHoleThisReality = 1;
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);
     if (autoRelease) release *= 0.01;
@@ -106,6 +107,7 @@ const Enslaved = {
     return true;
   },
   startRun() {
+    player.options.retryCelestial = false;
     if (this.maxQuoteIdx === 13) player.celestials.enslaved.maxQuotes += 2;
     player.celestials.enslaved.run = startRealityOver() || player.celestials.enslaved.run;
     // Round to the nearest multiple of 2 to make the secret study hide
@@ -239,3 +241,7 @@ const Tesseracts = {
     return increases;
   }())
 };
+
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
+  if (Tab.celestials.enslaved.isOpen) Enslaved.quotes.show(Enslaved.quotes.INITIAL);
+});

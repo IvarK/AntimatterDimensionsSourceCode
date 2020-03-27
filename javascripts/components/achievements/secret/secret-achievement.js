@@ -32,12 +32,15 @@ Vue.component("secret-achievement", {
       };
     },
     tooltip() {
+      function evaluateText(prop) {
+        return typeof prop === "function" ? prop() : prop;
+      }
       const config = this.achievement.config;
-      return this.isUnlocked ? config.tooltip : config.name;
+      return this.isUnlocked ? evaluateText(config.tooltip) : config.name;
     }
   },
   created() {
-    this.on$(GameEvent.ACHIEVEMENT_UNLOCKED, this.updateState);
+    this.on$(GAME_EVENT.ACHIEVEMENT_UNLOCKED, this.updateState);
     this.updateState();
   },
   methods: {
@@ -56,6 +59,7 @@ Vue.component("secret-achievement", {
       :style="styleObject"
       :ach-tooltip="tooltip"
       @click="onClick">
+      <hint-text type="achievements" class="l-hint-text--achievement">S{{row}}{{column}}</hint-text>
       <br>
      </div>`
 });

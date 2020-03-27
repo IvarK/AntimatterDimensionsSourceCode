@@ -65,7 +65,7 @@ class TabState {
     if (!this._currentSubtab.isAvailable) this.resetCurrentSubtab();
     ui.view.subtab = this._currentSubtab.key;
     Modal.hide();
-    EventHub.dispatch(GameEvent.TAB_CHANGED, ui.view.tab, ui.view.subtab);
+    EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
   }
 
   resetCurrentSubtab() {
@@ -87,7 +87,7 @@ const Tabs = (function() {
   };
 }());
 
-EventHub.logic.on(GameEvent.GAME_LOAD, () => {
+EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => {
   for (const tab of Tabs.all) {
     tab.resetCurrentSubtab();
   }

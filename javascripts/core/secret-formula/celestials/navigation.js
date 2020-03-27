@@ -363,7 +363,7 @@ GameDatabase.celestials.navigation = {
       legend: {
         text: complete => {
           const goal = 5000;
-          return ["Reach glyph", `level ${shortenSmallInteger(complete * goal, 0)}/${shortenSmallInteger(goal, 0)}`];
+          return ["Reach glyph", `level ${formatInt(complete * goal, 0)}/${formatInt(goal, 0)}`];
         },
         angle: -45,
         diagonal: 16,
@@ -515,7 +515,7 @@ GameDatabase.celestials.navigation = {
   "v-unlock-1": {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
-      if (V.has(V_UNLOCKS.MAIN_UNLOCK)) return 1;
+      if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
       return player.realities / GameDatabase.celestials.v.mainUnlock.realities;
     },
     drawOrder: -1,
@@ -555,7 +555,7 @@ GameDatabase.celestials.navigation = {
   "v-unlock-2": {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
-      if (V.has(V_UNLOCKS.MAIN_UNLOCK)) return 1;
+      if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
       return player.eternities.log10() / Math.log10(GameDatabase.celestials.v.mainUnlock.eternities);
     },
     drawOrder: -1,
@@ -596,7 +596,7 @@ GameDatabase.celestials.navigation = {
   "v-unlock-3": {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
-      if (V.has(V_UNLOCKS.MAIN_UNLOCK)) return 1;
+      if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
       return player.infinitied.log10() / Math.log10(GameDatabase.celestials.v.mainUnlock.infinities);
     },
     drawOrder: -1,
@@ -636,7 +636,7 @@ GameDatabase.celestials.navigation = {
   "v-unlock-4": {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
-      if (V.has(V_UNLOCKS.MAIN_UNLOCK)) return 1;
+      if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
       return player.dilation.dilatedTime.log10() / GameDatabase.celestials.v.mainUnlock.dilatedTime.log10();
     },
     drawOrder: -1,
@@ -676,7 +676,7 @@ GameDatabase.celestials.navigation = {
   "v-unlock-5": {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
-      if (V.has(V_UNLOCKS.MAIN_UNLOCK)) return 1;
+      if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
       return player.replicanti.amount.log10() / GameDatabase.celestials.v.mainUnlock.replicanti.log10();
     },
     drawOrder: -1,
@@ -716,7 +716,7 @@ GameDatabase.celestials.navigation = {
   "v-unlock-6": {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
-      if (V.has(V_UNLOCKS.MAIN_UNLOCK)) return 1;
+      if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
       return player.reality.realityMachines.log10() / GameDatabase.celestials.v.mainUnlock.rm.log10();
     },
     drawOrder: -1,
@@ -755,7 +755,7 @@ GameDatabase.celestials.navigation = {
   },
 
   "v-achievement-1": {
-    visible: () => V.has(V_UNLOCKS.MAIN_UNLOCK) || true,
+    visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) || true,
     complete: () => player.celestials.v.runUnlocks[0] / 6,
     drawOrder: -1,
     node: {
@@ -791,7 +791,7 @@ GameDatabase.celestials.navigation = {
     }
   },
   "v-achievement-2": {
-    visible: () => V.has(V_UNLOCKS.MAIN_UNLOCK) || true,
+    visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) || true,
     complete: () => player.celestials.v.runUnlocks[1] / 6,
     drawOrder: -1,
     node: {
@@ -827,7 +827,7 @@ GameDatabase.celestials.navigation = {
     }
   },
   "v-achievement-3": {
-    visible: () => V.has(V_UNLOCKS.MAIN_UNLOCK) || true,
+    visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) || true,
     complete: () => player.celestials.v.runUnlocks[2] / 6,
     drawOrder: -1,
     node: {
@@ -863,7 +863,7 @@ GameDatabase.celestials.navigation = {
     }
   },
   "v-achievement-4": {
-    visible: () => V.has(V_UNLOCKS.MAIN_UNLOCK) || true,
+    visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) || true,
     complete: () => player.celestials.v.runUnlocks[3] / 6,
     drawOrder: -1,
     node: {
@@ -899,7 +899,7 @@ GameDatabase.celestials.navigation = {
     }
   },
   "v-achievement-5": {
-    visible: () => V.has(V_UNLOCKS.MAIN_UNLOCK) || true,
+    visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) || true,
     complete: () => player.celestials.v.runUnlocks[4] / 6,
     drawOrder: -1,
     node: {
@@ -935,7 +935,7 @@ GameDatabase.celestials.navigation = {
     }
   },
   "v-achievement-6": {
-    visible: () => V.has(V_UNLOCKS.MAIN_UNLOCK) || true,
+    visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) || true,
     complete: () => player.celestials.v.runUnlocks[5] / 6,
     drawOrder: -1,
     node: {

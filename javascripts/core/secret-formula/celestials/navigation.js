@@ -448,12 +448,12 @@ GameDatabase.celestials.navigation = {
       },
       legend: {
         text: complete => {
-          if (complete >= 1) return "Enslaved Reality";
+          if (complete >= 1) return "The Enslaved Ones' Reality";
           const ep = Enslaved.isRunning ? player.eternityPoints : 0;
           const goal = new Decimal("1e4000");
           return [
-            "Enslaved Reality",
-            `Reach ${format(ep, 2)} / ${format(goal, 2)} EP inside Enslaved Reality.`
+            "The Enslaved Ones' Reality",
+            `Reach ${format(ep, 2)} / ${format(goal, 2)} EP inside The Enslaved Ones' Reality.`
           ];
         },
         angle: 45,
@@ -532,7 +532,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.realities;
           return [
             "V",
-            `Reach ${format(realities, 2)} / ${format(goal, 2)} realities.`
+            `Reach ${format(realities, 2)} / ${format(goal, 2)} Realities.`
           ];
         },
         angle: -135,
@@ -572,7 +572,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.eternities;
           return [
             "V",
-            `Reach ${format(eternities, 2)} / ${format(goal, 2)} eternities.`
+            `Reach ${format(eternities, 2)} / ${format(goal, 2)} Eternities.`
           ];
         },
         angle: -135,
@@ -613,7 +613,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.infinities;
           return [
             "V",
-            `Reach ${format(infinities, 2)} / ${format(goal, 2)} infinities.`
+            `Reach ${format(infinities, 2)} / ${format(goal, 2)} Infinities.`
           ];
         },
         angle: -135,
@@ -694,7 +694,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.replicanti;
           return [
             "V",
-            `Reach ${format(replicanti, 2)} / ${format(goal, 2)} replicanti.`
+            `Reach ${format(replicanti, 2)} / ${format(goal, 2)} Replicanti.`
           ];
         },
         angle: -135,

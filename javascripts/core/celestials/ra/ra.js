@@ -60,6 +60,7 @@ class RaPetState {
   
   get memoryChunksPerSecond() {
     let res = this.canGetMemoryChunks ? this.rawMemoryChunksPerSecond : 0;
+    res *= RA_UNLOCKS.TT_BOOST.effect.memoryChunks();
     if (this.hasRecollection) res *= RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
     return res;
   }
@@ -178,7 +179,7 @@ const Ra = {
     for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
   },
   productionPerMemoryChunk() {
-    let res = 1;
+    let res = RA_UNLOCKS.TT_BOOST.effect.memories();
     for (const pet of Ra.pets.all) {
       if (pet.isUnlocked) res *= pet.memoryProductionMultiplier;
     }
@@ -555,6 +556,8 @@ const RA_UNLOCKS = {
       infinity: () => Math.pow(10, 15 * Ra.theoremBoostFactor()),
       replicanti: () => Math.pow(10, 20 * Ra.theoremBoostFactor()),
       dilatedTime: () => Math.pow(10, 3 * Ra.theoremBoostFactor()),
+      memories: () => 1 + Ra.theoremBoostFactor() / 50,
+      memoryChunks: () => 1 + Ra.theoremBoostFactor() / 50,
       autoPrestige: () => 1 + 2.4 * Ra.theoremBoostFactor()
     },
     pet: Ra.pets.v,

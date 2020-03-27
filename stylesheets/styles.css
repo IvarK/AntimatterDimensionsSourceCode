@@ -1145,15 +1145,11 @@ screen and (max-width: 480px) {
   height: 3rem;
 }
 
-.o-primary-btn--buy-id-max {
-  font-size: 1rem;
-  width: 8rem;
-  height: 3rem;
-}
-
+.o-primary-btn--buy-id-max,
 .o-primary-btn--id-autobuyer {
   font-size: 1rem;
   width: 8rem;
+  height: 3rem;
 }
 
 .o-primary-btn--id-all-autobuyers {
@@ -1167,15 +1163,11 @@ screen and (max-width: 480px) {
   height: 3rem;
 }
 
-.o-primary-btn--buy-td-max {
-  font-size: 1rem;
-  width: 8rem;
-  height: 3rem;
-}
-
+.o-primary-btn--buy-td-max,
 .o-primary-btn--td-autobuyer {
   font-size: 1rem;
   width: 8rem;
+  height: 3rem;
 }
 
 .o-primary-btn--td-all-autobuyers {

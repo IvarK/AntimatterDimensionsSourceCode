@@ -410,9 +410,10 @@ const Glyphs = {
   get activeList() {
     return player.reality.glyphs.active;
   },
-  findFreeIndex() {
+  findFreeIndex(useProtectedSlots) {
     this.validate();
-    return this.inventory.findIndex((slot, index) => slot === null && index >= this.protectedSlots);
+    const isUsableIndex = index => (useProtectedSlots ? index < this.protectedSlots : index >= this.protectedSlots);
+    return this.inventory.findIndex((slot, index) => slot === null && isUsableIndex(index));
   },
   get freeInventorySpace() {
     this.validate();
@@ -422,10 +423,10 @@ const Glyphs = {
     return 3 + Effects.sum(RealityUpgrade(9), RealityUpgrade(24));
   },
   get protectedSlots() {
-    return 10;
+    return 20;
   },
   get totalSlots() {
-    return player.reality.glyphs.inventorySize;
+    return 120;
   },
   refreshActive() {
     this.active = new Array(this.activeSlotCount).fill(null);
@@ -515,11 +516,11 @@ const Glyphs = {
   },
   unequipAll() {
     while (player.reality.glyphs.active.length) {
-      const freeIndex = this.findFreeIndex();
+      const freeIndex = this.findFreeIndex(player.options.respecIntoProtected);
       if (freeIndex < 0) break;
       const glyph = player.reality.glyphs.active.pop();
       this.active[glyph.idx] = null;
-      this.addToInventory(glyph);
+      this.addToInventory(glyph, freeIndex);
     }
     this.updateRealityGlyphEffects();
     this.updateGlyphCountForV();

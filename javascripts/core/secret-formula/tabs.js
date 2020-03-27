@@ -268,6 +268,12 @@ GameDatabase.tabs = [
     condition: () => RealityUpgrades.allBought,
     subtabs: [
       {
+        key: "celestial-navigation",
+        name: "Celestial Navigation",
+        symbol: "N",
+        component: "celestial-navigation"
+      },
+      {
         key: "teresa",
         name: "Teresa",
         symbol: "Ϟ",

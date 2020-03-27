@@ -563,11 +563,19 @@ GameStorage.devMigrations = {
       delete player.celestials.effarig.autoGlyphPick;
     },
     player => {
+      delete player.reality.glyphs.inventorySize;
+      for (const glyph of player.reality.glyphs.inventory) {
+        if (glyph.idx >= 10) {
+          glyph.idx += 10;
+        }
+      }
+    },
+    player => {
       // Typo fix, as long as we have to delete a player property let's also
       // correctly initialize the new one.
       player.onlyEighthDimensions = player.onlyEighthDimensons;
       delete player.onlyEighthDimensons;
-    }
+    },
   ],
 
   patch(player) {

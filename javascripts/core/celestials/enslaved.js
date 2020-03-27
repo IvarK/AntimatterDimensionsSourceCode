@@ -10,9 +10,10 @@ const ENSLAVED_UNLOCKS = {
   RUN: {
     id: 1,
     price: TimeSpan.fromYears(1e40).totalMilliseconds,
-    secondaryRequirement: function (){
+    secondaryRequirement() {
       const hasLevelRequirement = player.bestGlyphLevel >= 5000;
-      const hasRarityRequirement = strengthToRarity(Glyphs.activeList.concat(Glyphs.inventoryList).map(g => g.strength).max()) >= 100;
+      const hasRarityRequirement = strengthToRarity(
+        Glyphs.activeList.concat(Glyphs.inventoryList).map(g => g.strength).max()) >= 100;
       return hasLevelRequirement && hasRarityRequirement;
     },
     description: () => `Unlock The Enslaved One's reality (requires

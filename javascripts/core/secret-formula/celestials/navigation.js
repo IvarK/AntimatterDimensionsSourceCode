@@ -1,5 +1,9 @@
 "use strict";
 
+function emphasizeEnd(fraction) {
+  return Math.pow(fraction, 10);
+}
+
 GameDatabase.celestials.navigation = {
   "teresa-base": {
     visible: () => true,
@@ -24,7 +28,7 @@ GameDatabase.celestials.navigation = {
   "teresa-reality-unlock": {
     visible: () => true,
     complete: () => (Teresa.has(TERESA_UNLOCKS.RUN)
-      ? 1 : player.reality.realityMachines.e / Math.log10(TERESA_UNLOCKS.RUN.price)),
+      ? 1 : Decimal.pLog10(Teresa.rmStore) / Math.log10(TERESA_UNLOCKS.RUN.price)),
     node: {
       completeClass: "c-celestial-nav__test-complete",
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -34,7 +38,11 @@ GameDatabase.celestials.navigation = {
         rMinor: 22,
       },
       legend: {
-        text: "Reach 1e14 RM",
+        text: () => {
+          const rm = Teresa.rmStore;
+          const cost = TERESA_UNLOCKS.RUN.price;
+          return `Pour ${format(rm, 2)} / ${format(cost, 2)} RM`;
+        },
         angle: 135,
         diagonal: 16,
         horizontal: 16,
@@ -77,7 +85,7 @@ GameDatabase.celestials.navigation = {
   "teresa-pp-shop": {
     visible: () => true,
     complete: () => (Teresa.has(TERESA_UNLOCKS.SHOP)
-      ? 1 : Math.log10(Teresa.rmStore) / Math.log10(TERESA_UNLOCKS.SHOP.price)),
+      ? 1 : Decimal.pLog10(Teresa.rmStore) / Math.log10(TERESA_UNLOCKS.SHOP.price)),
     node: {
       completeClass: "c-celestial-nav__test-complete",
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -93,7 +101,7 @@ GameDatabase.celestials.navigation = {
           const cost = TERESA_UNLOCKS.SHOP.price;
           return [
             "Perk Point Shop",
-            `Pour ${format(rm, 1)} / ${format(cost, 0)} RM`
+            `Pour ${format(rm, 2)} / ${format(cost, 2)} RM`
           ];
         },
         angle: 135,
@@ -112,7 +120,7 @@ GameDatabase.celestials.navigation = {
   "effarig-shop": {
     visible: () => true,
     complete: () => (Teresa.has(TERESA_UNLOCKS.EFFARIG)
-      ? 1 : Math.log10(Teresa.rmStore) / Math.log10(TERESA_UNLOCKS.EFFARIG.price)),
+      ? 1 : Decimal.pLog10(Teresa.rmStore) / Math.log10(TERESA_UNLOCKS.EFFARIG.price)),
     node: {
       completeClass: "c-celestial-nav__effarig",
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -127,7 +135,7 @@ GameDatabase.celestials.navigation = {
           const cost = TERESA_UNLOCKS.EFFARIG.price;
           return [
             "Effarig",
-            `Pour ${format(rm, 1)} / ${format(cost, 0)} RM`
+            `Pour ${format(rm, 2)} / ${format(cost, 2)} RM`
           ];
         },
         angle: -135,
@@ -139,13 +147,16 @@ GameDatabase.celestials.navigation = {
       pathStart: 0,
       pathEnd: 1,
       path: LinearPath.connectCircles(new Vector(100, 100), 78 - 1, new Vector(300, 0), 24 - 1),
-      fill: "url(#gradTeresaEffarig",
+      fill: "url(#gradTeresaEffarig)",
     }
   },
   "effarig-reality-unlock": {
     visible: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
+    // If the upgrade to unlock the reality isn't yet bought, clamp the progress at 99.9%,
+    // even if the player has enough relic shards to buy it.
     complete: () => (EffarigUnlock.run.isUnlocked 
-      ? 1 : Math.log10(player.celestials.effarig.relicShards) / Math.log10(EffarigUnlock.run.cost)),
+      ? 1 : Math.clampMin(0.999, Decimal.pLog10(player.celestials.effarig.relicShards) /
+        Math.log10(EffarigUnlock.run.cost))),
     node: {
       completeClass: "c-celestial-nav__effarig",
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -160,7 +171,7 @@ GameDatabase.celestials.navigation = {
           const cost = EffarigUnlock.run.cost;
           return [
             "Unlock Effarig's Reality",
-            `Reach ${format(rs, 1)} / ${format(cost, 0)} Relic Shards`
+            `Reach ${format(rs, 2)} / ${format(cost, 2)} Relic Shards`
           ];
         },
         angle: 75,
@@ -181,7 +192,7 @@ GameDatabase.celestials.navigation = {
       if (EffarigUnlock.infinity.isUnlocked) return 1;
       if (!Effarig.isRunning) return 0;
 
-      return player.antimatter.log10() / Decimal.MAX_NUMBER.log10();
+      return player.antimatter.pLog10() / Decimal.MAX_NUMBER.log10();
     },
     node: {
       completeClass: "c-celestial-nav__effarig",
@@ -197,7 +208,7 @@ GameDatabase.celestials.navigation = {
           const am = Effarig.isRunning ? player.antimatter : 0;
           return [
             "Effarig's Infinity",
-            `Reach ${format(am, 1)} / ${format(Number.MAX_VALUE, 2)} Antimatter inside Effarig's Reality.`
+            `Reach ${format(am, 2)} / ${format(Number.MAX_VALUE, 2)} Antimatter inside Effarig's Reality.`
           ];
         },
         angle: -135,
@@ -218,7 +229,7 @@ GameDatabase.celestials.navigation = {
       if (EffarigUnlock.eternity.isUnlocked) return 1;
       if (!Effarig.isRunning) return 0;
 
-      return player.infinityPoints.log10() / Decimal.MAX_NUMBER.log10();
+      return player.infinityPoints.pLog10() / Decimal.MAX_NUMBER.log10();
     },
     node: {
       completeClass: "c-celestial-nav__effarig",
@@ -235,7 +246,7 @@ GameDatabase.celestials.navigation = {
           const ip = Effarig.isRunning ? player.infinityPoints : 0;
           return [
             "Effarig's Eternity",
-            `Reach ${format(ip, 1)} / ${format(Number.MAX_VALUE, 2)} IP inside Effarig's Reality.`
+            `Reach ${format(ip, 2)} / ${format(Number.MAX_VALUE, 2)} IP inside Effarig's Reality.`
           ];
         },
         angle: -45,
@@ -265,7 +276,7 @@ GameDatabase.celestials.navigation = {
       if (EffarigUnlock.reality.isUnlocked) return 1;
       if (!Effarig.isRunning) return 0;
 
-      return player.eternityPoints.log10() / 4000;
+      return player.eternityPoints.pLog10() / 4000;
     },
     node: {
       alwaysShowLegend: true,
@@ -285,7 +296,7 @@ GameDatabase.celestials.navigation = {
           const goal = new Decimal("1e4000");
           return [
             "Effarig's Reality",
-            `Reach ${format(ep, 1)} / ${format(goal, 2)} IP inside Effarig's Reality.`
+            `Reach ${format(ep, 2)} / ${format(goal, 2)} EP inside Effarig's Reality.`
           ];
         },
         angle: -120,
@@ -340,14 +351,7 @@ GameDatabase.celestials.navigation = {
   },
   "enslaved-unlock-glyph-level": {
     visible: () => EffarigUnlock.eternity.isUnlocked,
-    complete: () => {
-      const glyphs = Glyphs.activeList.concat(Glyphs.inventoryList);
-      let bestGlyph = glyphs[0];
-      for (const g of glyphs) {
-        if (g.level > bestGlyph.level) bestGlyph = g;
-      }
-      return bestGlyph.level / 5000;
-    },
+    complete: () => player.bestGlyphLevel / 5000,
     drawOrder: -1,
     node: {
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -363,7 +367,7 @@ GameDatabase.celestials.navigation = {
       legend: {
         text: complete => {
           const goal = 5000;
-          return ["Reach glyph", `level ${formatInt(complete * goal, 0)}/${formatInt(goal, 0)}`];
+          return [`Reach glyph level ${formatInt(complete * goal)}/${formatInt(goal)}`];
         },
         angle: -45,
         diagonal: 16,
@@ -385,12 +389,8 @@ GameDatabase.celestials.navigation = {
   "enslaved-unlock-glyph-rarity": {
     visible: () => EffarigUnlock.eternity.isUnlocked,
     complete: () => {
-      const glyphs = Glyphs.activeList.concat(Glyphs.inventoryList);
-      let bestGlyph = glyphs[0];
-      for (const g of glyphs) {
-        if (g.strength > bestGlyph.strength) bestGlyph = g;
-      }
-      return strengthToRarity(bestGlyph.strength) / 100;
+      const bestRarity = strengthToRarity(Glyphs.activeList.concat(Glyphs.inventoryList).map(g => g.strength).max());
+      return bestRarity / 100;
     },
     drawOrder: -1,
     node: {
@@ -407,9 +407,8 @@ GameDatabase.celestials.navigation = {
       legend: {
         text: complete => {
           const goal = 100;
-          return ["Reach glyph", 
-            `rarity of ${formatPercents(complete * goal / 100, 2)}/${formatPercents(goal / 100, 0)}`
-          ];
+          return [`Reach glyph rarity
+            ${formatPercents(complete * goal / 100, 1)}/${formatPercents(goal / 100, 1)}`];
         },
         angle: 135,
         diagonal: 32,
@@ -434,7 +433,7 @@ GameDatabase.celestials.navigation = {
       if (Enslaved.isCompleted) return 1;
       if (!Enslaved.isRunning) return 0;
 
-      return player.eternityPoints.log10() / 4000;
+      return player.eternityPoints.pLog10() / 4000;
     },
     node: {
       incompleteClass: "c-celestial-nav__test-incomplete",
@@ -449,12 +448,12 @@ GameDatabase.celestials.navigation = {
       },
       legend: {
         text: complete => {
-          if (complete >= 1) return "Enslaved Reality";
+          if (complete >= 1) return "The Enslaved Ones' Reality";
           const ep = Enslaved.isRunning ? player.eternityPoints : 0;
           const goal = new Decimal("1e4000");
           return [
-            "Enslaved Reality",
-            `Reach ${format(ep, 1)} / ${format(goal, 2)} IP inside Enslaved Reality.`
+            "The Enslaved Ones' Reality",
+            `Reach ${format(ep, 2)} / ${format(goal, 2)} EP inside The Enslaved Ones' Reality.`
           ];
         },
         angle: 45,
@@ -495,7 +494,7 @@ GameDatabase.celestials.navigation = {
           const goal = 800;
           return [
             "V's achievement",
-            `Reach ${formatInt(galaxies, 1)} / ${formatInt(goal, 2)} galaxies without any 8th dimensions.`
+            `Reach ${formatInt(galaxies)} / ${formatInt(goal)} galaxies without any 8th dimensions.`
           ];
         },
         angle: -135,
@@ -507,7 +506,7 @@ GameDatabase.celestials.navigation = {
       pathStart: 0,
       pathEnd: 1,
       path: LinearPath.connectCircles(new Vector(650, 250), 80 - 1, new Vector(400, 350 + 50 * Math.sqrt(3)), 16 - 1),
-      fill: "url(#gradEffarigV",
+      fill: "url(#gradEffarigV)",
       completeWidth: 6,
       incompleteWidth: 4,
     }
@@ -528,12 +527,12 @@ GameDatabase.celestials.navigation = {
       },
       legend: {
         text: complete => {
-          if (complete === 1) return "Reality condition for V";
+          if (complete >= 1) return "Reality condition for V";
           const realities = player.realities;
           const goal = GameDatabase.celestials.v.mainUnlock.realities;
           return [
             "V",
-            `Reach ${format(realities, 1)} / ${format(goal, 2)} realities.`
+            `Reach ${format(realities, 2)} / ${format(goal, 2)} Realities.`
           ];
         },
         angle: -135,
@@ -556,7 +555,7 @@ GameDatabase.celestials.navigation = {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
       if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-      return player.eternities.log10() / Math.log10(GameDatabase.celestials.v.mainUnlock.eternities);
+      return emphasizeEnd(player.eternities.pLog10() / Math.log10(GameDatabase.celestials.v.mainUnlock.eternities));
     },
     drawOrder: -1,
     node: {
@@ -573,7 +572,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.eternities;
           return [
             "V",
-            `Reach ${format(eternities, 1)} / ${format(goal, 2)} eternities.`
+            `Reach ${format(eternities, 2)} / ${format(goal, 2)} Eternities.`
           ];
         },
         angle: -135,
@@ -597,7 +596,7 @@ GameDatabase.celestials.navigation = {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
       if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-      return player.infinitied.log10() / Math.log10(GameDatabase.celestials.v.mainUnlock.infinities);
+      return emphasizeEnd(player.infinitied.pLog10() / Math.log10(GameDatabase.celestials.v.mainUnlock.infinities));
     },
     drawOrder: -1,
     node: {
@@ -609,12 +608,12 @@ GameDatabase.celestials.navigation = {
       },
       legend: {
         text: complete => {
-          if (complete >= 1) return "Infinities condition for V";
-          const infinities = player.infinities;
+          if (complete >= 1) return "Infinity condition for V";
+          const infinities = player.infinitied;
           const goal = GameDatabase.celestials.v.mainUnlock.infinities;
           return [
             "V",
-            `Reach ${format(infinities, 1)} / ${format(goal, 2)} infinities.`
+            `Reach ${format(infinities, 2)} / ${format(goal, 2)} Infinities.`
           ];
         },
         angle: -135,
@@ -637,7 +636,8 @@ GameDatabase.celestials.navigation = {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
       if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-      return player.dilation.dilatedTime.log10() / GameDatabase.celestials.v.mainUnlock.dilatedTime.log10();
+      return emphasizeEnd(player.dilation.dilatedTime.pLog10() /
+        GameDatabase.celestials.v.mainUnlock.dilatedTime.log10());
     },
     drawOrder: -1,
     node: {
@@ -654,7 +654,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.dilatedTime;
           return [
             "V",
-            `Reach ${format(dilatedTime, 1)} / ${format(goal, 2)} Dilated Time.`
+            `Reach ${format(dilatedTime, 2)} / ${format(goal, 2)} Dilated Time.`
           ];
         },
         angle: -135,
@@ -677,7 +677,7 @@ GameDatabase.celestials.navigation = {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
       if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-      return player.replicanti.amount.log10() / GameDatabase.celestials.v.mainUnlock.replicanti.log10();
+      return emphasizeEnd(player.replicanti.amount.pLog10() / GameDatabase.celestials.v.mainUnlock.replicanti.log10());
     },
     drawOrder: -1,
     node: {
@@ -694,7 +694,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.replicanti;
           return [
             "V",
-            `Reach ${format(replicanti, 1)} / ${format(goal, 2)} replicanti.`
+            `Reach ${format(replicanti, 2)} / ${format(goal, 2)} Replicanti.`
           ];
         },
         angle: -135,
@@ -717,7 +717,8 @@ GameDatabase.celestials.navigation = {
     visible: () => Achievement(151).isUnlocked,
     complete: () => {
       if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-      return player.reality.realityMachines.log10() / Math.log10(GameDatabase.celestials.v.mainUnlock.rm);
+      return emphasizeEnd(player.reality.realityMachines.pLog10() /
+        Math.log10(GameDatabase.celestials.v.mainUnlock.rm));
     },
     drawOrder: -1,
     node: {
@@ -734,7 +735,7 @@ GameDatabase.celestials.navigation = {
           const goal = GameDatabase.celestials.v.mainUnlock.rm;
           return [
             "V",
-            `Reach ${format(rm, 1)} / ${format(goal, 2)} Reality Machines.`
+            `Reach ${format(rm, 2)} / ${format(goal, 2)} Reality Machines.`
           ];
         },
         angle: -135,
@@ -755,7 +756,7 @@ GameDatabase.celestials.navigation = {
   },
 
   "v-achievement-1": {
-    visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) || true,
+    visible: () => Achievement(151).isUnlocked,
     complete: () => player.celestials.v.runUnlocks[0] / 6,
     drawOrder: -1,
     node: {
@@ -769,9 +770,10 @@ GameDatabase.celestials.navigation = {
         text: complete => {
           if (complete >= 1) return "V's Achievement";
           const completions = player.celestials.v.runUnlocks[0];
+          const name = VRunUnlocks.all[0].config.name;
           return [
             "V's achievement",
-            `Reach ${completions} / 6 completions in .`
+            `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
         angle: -45,
@@ -791,7 +793,7 @@ GameDatabase.celestials.navigation = {
     }
   },
   "v-achievement-2": {
-    visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) || true,
+    visible: () => Achievement(151).isUnlocked,
     complete: () => player.celestials.v.runUnlocks[1] / 6,
     drawOrder: -1,
     node: {
@@ -805,9 +807,10 @@ GameDatabase.celestials.navigation = {
         text: complete => {
           if (complete >= 1) return "V's Achievement";
           const completions = player.celestials.v.runUnlocks[1];
+          const name = VRunUnlocks.all[1].config.name;
           return [
             "V's achievement",
-            `Reach ${completions} / 6 completions in .`
+            `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
         angle: -45,
@@ -827,7 +830,7 @@ GameDatabase.celestials.navigation = {
     }
   },
   "v-achievement-3": {
-    visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) || true,
+    visible: () => Achievement(151).isUnlocked,
     complete: () => player.celestials.v.runUnlocks[2] / 6,
     drawOrder: -1,
     node: {
@@ -841,9 +844,10 @@ GameDatabase.celestials.navigation = {
         text: complete => {
           if (complete >= 1) return "V's Achievement";
           const completions = player.celestials.v.runUnlocks[2];
+          const name = VRunUnlocks.all[2].config.name;
           return [
             "V's achievement",
-            `Reach ${completions} / 6 completions in .`
+            `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
         angle: 45,
@@ -863,7 +867,7 @@ GameDatabase.celestials.navigation = {
     }
   },
   "v-achievement-4": {
-    visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) || true,
+    visible: () => Achievement(151).isUnlocked,
     complete: () => player.celestials.v.runUnlocks[3] / 6,
     drawOrder: -1,
     node: {
@@ -877,9 +881,10 @@ GameDatabase.celestials.navigation = {
         text: complete => {
           if (complete >= 1) return "V's Achievement";
           const completions = player.celestials.v.runUnlocks[3];
+          const name = VRunUnlocks.all[3].config.name;
           return [
             "V's achievement",
-            `Reach ${completions} / 6 completions in .`
+            `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
         angle: 135,
@@ -899,7 +904,7 @@ GameDatabase.celestials.navigation = {
     }
   },
   "v-achievement-5": {
-    visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) || true,
+    visible: () => Achievement(151).isUnlocked,
     complete: () => player.celestials.v.runUnlocks[4] / 6,
     drawOrder: -1,
     node: {
@@ -913,9 +918,10 @@ GameDatabase.celestials.navigation = {
         text: complete => {
           if (complete >= 1) return "V's Achievement";
           const completions = player.celestials.v.runUnlocks[4];
+          const name = VRunUnlocks.all[4].config.name;
           return [
             "V's achievement",
-            `Reach ${completions} / 6 completions in .`
+            `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
         angle: 135,
@@ -935,7 +941,7 @@ GameDatabase.celestials.navigation = {
     }
   },
   "v-achievement-6": {
-    visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) || true,
+    visible: () => Achievement(151).isUnlocked,
     complete: () => player.celestials.v.runUnlocks[5] / 6,
     drawOrder: -1,
     node: {
@@ -949,9 +955,10 @@ GameDatabase.celestials.navigation = {
         text: complete => {
           if (complete >= 1) return "V's Achievement";
           const completions = player.celestials.v.runUnlocks[5];
+          const name = VRunUnlocks.all[5].config.name;
           return [
             "V's achievement",
-            `Reach ${completions} / 6 completions in .`
+            `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
         angle: -135,

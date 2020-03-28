@@ -299,6 +299,7 @@ Vue.component("celestial-navigation", {
         nodeId: String,
       },
       data: () => ({
+        visible: false,
         complete: 0,
       }),
       computed: {
@@ -323,11 +324,12 @@ Vue.component("celestial-navigation", {
       },
       methods: {
         update() {
+          this.visible = this.config.visible();
           this.complete = this.config.complete();
         }
       },
       template: `
-      <g class="o-celestial-nav__hoverable" :class="forceHoverClass" :visibility="config.visible() ? 'visible' : 'hidden'">
+      <g class="o-celestial-nav__hoverable" :class="forceHoverClass" :visibility="visible ? 'visible' : 'hidden'">
         <path :transform="ringBackgroundTransform" :d="ringBackgroundPath" fill="black" stroke="none" filter="url(#completeGlow)" />
         <progress-connector v-if="hasConnector"
           :complete="complete"

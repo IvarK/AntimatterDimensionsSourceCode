@@ -525,12 +525,18 @@ GameStorage.devMigrations = {
       player.reality.glyphs.inventorySize += 10;
     },
     player => {
-      player.celestials.v.unlockBits = Math.min(player.celestials.v.unlockBits, 1);
+      player.celestials.v.unlockBits = 0;
+      // Adding this in case the player is loading a save (otherwise it
+      // doesn't update immediately and the player still has nonzero ST
+      // for the purpose of checking unlocks).
+      V.updateTotalRunUnlocks();
       V.checkForUnlocks();
     },
     player => {
       // Reset the v-unlocks again
-      player.celestials.v.unlockBits = Math.min(player.celestials.v.unlockBits, 1);
+      player.celestials.v.unlockBits = 0;
+      // See above migration for an explanation of the below line.
+      V.updateTotalRunUnlocks();
       V.checkForUnlocks();
     },
     player => {

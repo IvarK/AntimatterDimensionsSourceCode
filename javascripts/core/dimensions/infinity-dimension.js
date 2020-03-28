@@ -223,7 +223,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get powerMultiplier() {
-    return this._powerMultiplier;
+    return new Decimal(this._powerMultiplier).timesEffectsOf(this._tier === 8 ? GlyphSacrifice.infinity : null);
   }
 
   get purchases() {

@@ -149,12 +149,12 @@ GameDatabase.celestials.alchemy = {
       name: "Alternation",
       symbol: "ω",
       isBaseResource: false,
-      effect: amount => amount / 100000,
+      effect: amount => amount / 200000,
       tier: 2,
       uiOrder: 4,
       isUnlocked: () => Ra.pets.effarig.level >= 12,
       lockText: "Effarig Level 12",
-      formatEffect: value => `Dilation penalty reduced by ${formatPercents(value, 2, 2)} ` +
+      formatEffect: value => `Free galaxies are ${formatPercents(value, 2, 2)} stronger ` +
         `per ${format("1e1000000")} replicanti`,
       reagents: [
         {
@@ -216,12 +216,13 @@ GameDatabase.celestials.alchemy = {
       name: "Momentum",
       symbol: "μ",
       isBaseResource: false,
-      effect: amount => 1 + amount / 2000000,
+      effect: amount => Math.sqrt(amount / 1000),
       tier: 3,
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 15,
       lockText: "Effarig Level 15",
-      formatEffect: value => `Game speed ${formatX(value, 5, 5)} per real-time minute in this reality`,
+      formatEffect: value => `Game speed multiplied by (1 + real-time minutes
+        in this reality)${formatPow(value, 3, 3)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -374,12 +375,13 @@ GameDatabase.celestials.alchemy = {
       name: "Unpredictability",
       symbol: "Λ",
       isBaseResource: false,
-      effect: amount => amount / 50000,
+      effect: amount => amount / 200000,
       tier: 4,
       uiOrder: 4,
-      isUnlocked: () => Ra.pets.effarig.level >= 21 && player.celestials.laitela.matter.neq(0),
-      lockText: "Effarig Level 21 and Lai'tela unlocked",
-      formatEffect: value => `Boost dark matter dimension generation chance by +${formatPercents(value, 2, 2)}`,
+      isUnlocked: () => Ra.pets.effarig.level >= 21,
+      lockText: "Effarig Level 21",
+      formatEffect: value => `Refined glyphs give ${formatPercents(value, 2)} of their value ` +
+        "to a random unlocked resource",
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,

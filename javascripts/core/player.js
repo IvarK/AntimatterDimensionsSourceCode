@@ -444,12 +444,6 @@ let player = {
       quoteIdx: 0,
       disCharge: false,
       peakGamespeed: 1,
-      compression: {
-        active: false,
-        entanglement: 0,
-        upgradeBits: 0,
-        respec: false
-      },
       petWithRecollection: ""
     },
     laitela: {

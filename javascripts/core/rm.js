@@ -1,7 +1,7 @@
 "use strict";
 
 const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
-  "dilationpow", "powermult", "powerdimboost", "powerbuy10",
+  "dilationpow", "timeshardpow", "powermult", "powerdimboost", "powerbuy10",
   "dilationTTgen", "infinityinfmult", "infinityIP", "timeEP",
   "dilationDT", "replicationdtgain", "replicationspeed", "timespeed",
   "timeetermult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
@@ -606,6 +606,11 @@ const Glyphs = {
     }
     this.inventory[index] = glyph;
     glyph.idx = index;
+    
+    // This is done here when adding to the inventory in order to keep it out of the glyph generation hot path
+    // It thus doesn't show up in manually choosing a glyph
+    this.applyGamespeed(glyph);
+    
     player.reality.glyphs.inventory.push(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
@@ -787,6 +792,17 @@ const Glyphs = {
     const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
     if (startingReality) player.celestials.v.maxGlyphsThisRun = currCount;
     player.celestials.v.maxGlyphsThisRun = Math.max(player.celestials.v.maxGlyphsThisRun, currCount);
+  },
+  // Modifies a basic glyph to have timespeed, and adds the new effect to time glyphs
+  applyGamespeed(glyph) {
+    if (BASIC_GLYPH_TYPES.includes(glyph.type)) {
+      // eslint-disable-next-line no-bitwise
+      glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timespeed.bitmaskIndex);
+      if (glyph.type === "time") {
+        // eslint-disable-next-line no-bitwise
+        glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timeshardpow.bitmaskIndex);
+      }
+    }
   }
 };
 
@@ -1042,10 +1058,20 @@ const GlyphSacrificeHandler = {
   },
   // Refined glyphs give this proportion of their maximum attainable value from their level
   glyphRefinementEfficiency: 0.2,
+  glyphRawRefinementGain(glyph) {
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
+    const glyphMaxValue = this.levelRefinementValue(glyph.level);
+    return this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
+  },
+  glyphRawRefinementGain(glyph) {
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
+    const glyphMaxValue = this.levelRefinementValue(glyph.level);
+    return this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
+  },
   glyphRefinementGain(glyph) {
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
     const glyphMaxValue = this.levelRefinementValue(glyph.level);
-    const glyphActualValue = this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
+    const glyphActualValue = this.glyphRawRefinementGain(glyph);
     const alchemyResource = this.glyphAlchemyResource(glyph);
     return Math.clamp(glyphMaxValue - alchemyResource.amount, 0, glyphActualValue);
   },
@@ -1055,23 +1081,29 @@ const GlyphSacrificeHandler = {
       Glyphs.removeFromInventory(glyph);
       return;
     }
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || this.glyphRefinementGain(glyph) === 0) {
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || (this.glyphRefinementGain(glyph) === 0 &&
+      !AlchemyResources.all[ALCHEMY_RESOURCE.DECOHERENCE].isUnlocked)) {
       this.sacrificeGlyph(glyph, true);
       return;
     }
     if (this.glyphAlchemyResource(glyph).isUnlocked) {
       const resource = this.glyphAlchemyResource(glyph);
+      const rawRefinementGain = this.glyphRawRefinementGain(glyph);
       const refinementGain = this.glyphRefinementGain(glyph);
       resource.amount += refinementGain;
-      const decoherenceGain = refinementGain * AlchemyResource.decoherence.effectValue;
+      const decoherenceGain = rawRefinementGain * AlchemyResource.decoherence.effectValue;
       for (const glyphType of GlyphTypes.list) {
         if (glyphType !== GlyphTypes[glyph.type] && glyphType !== GlyphTypes.reality &&
           glyphType !== GlyphTypes.cursed) {
             const otherResource = AlchemyResources.all[glyphType.alchemyResource];
-            const maxResouce = Math.max(refinementGain / this.glyphRefinementEfficiency, otherResource.amount);
+            const maxResouce = Math.max(rawRefinementGain / this.glyphRefinementEfficiency, otherResource.amount);
             otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);
         }
       }
+      const unpredictabilityGain = rawRefinementGain * AlchemyResource.unpredictability.effectValue;
+      const otherResource = AlchemyResources.all.filter(r => r.isUnlocked).randomElement();
+      const maxResouce = Math.max(rawRefinementGain / this.glyphRefinementEfficiency, otherResource.amount);
+      otherResource.amount = Math.clampMax(otherResource.amount + unpredictabilityGain, maxResouce);
       Glyphs.removeFromInventory(glyph);
     }
   }

@@ -339,10 +339,8 @@ function finishProcessReality(realityProps) {
     Glyphs.clearUndo();
     if (player.reality.respec) respecGlyphs();
     if (player.celestials.ra.disCharge) disChargeAll();
-    if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
   }
 
-  TimeCompression.isActive = false;
   const celestialRunState = clearCelestialRuns();
   recalculateAllGlyphs();
   Glyphs.updateGlyphCountForV(true);
@@ -418,8 +416,8 @@ function finishProcessReality(realityProps) {
   player.noTheoremPurchases = true;
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
-  player.timestudy.theorem = (Ra.has(RA_UNLOCKS.START_TT) && !isInCelestialReality())
-    ? new Decimal(RA_UNLOCKS.START_TT.effect)
+  player.timestudy.theorem = (Ra.has(RA_UNLOCKS.START_TT_AND_TP) && !isInCelestialReality())
+    ? new Decimal(RA_UNLOCKS.START_TT_AND_TP.effect)
     : new Decimal(0);
   player.timestudy.amcost = new Decimal("1e20000");
   player.timestudy.ipcost = new Decimal(1);
@@ -443,7 +441,6 @@ function finishProcessReality(realityProps) {
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;
   Enslaved.autoReleaseTick = 0;
-  player.celestials.ra.compression.freeDimboosts = 0;
 
   resetInfinityRuns();
   resetEternityRuns();

@@ -23,8 +23,7 @@ class MatterDimensionState {
 
   // In percents
   get chance() {
-    return Math.min(5 - this._tier + this.dimension.chanceUpgrades +
-      Math.floor(100 * AlchemyResource.unpredictability.effectValue), 100);
+    return Math.min(5 - this._tier + this.dimension.chanceUpgrades, 100);
   }
 
   // If this is 50 then you can no longer buy it, but it can get lower with other upgrades
@@ -40,8 +39,7 @@ class MatterDimensionState {
 
   // In milliseconds
   get interval() {
-    return this.baseInterval.clampMin(50)
-      .divide(Effects.max(1, CompressionUpgrade.matterBoost));
+    return this.baseInterval.clampMin(50);
   }
 
   get power() {

@@ -21,7 +21,7 @@ Vue.component("game-header-gamma-display", {
       }
       const speedMod = getGameSpeedupForDisplay();
       let storedTimeText = "";
-      if (EternityChallenge(12).isRunning || TimeCompression.isActive) {
+      if (EternityChallenge(12).isRunning) {
         storedTimeText = ` (fixed)`;
       }
       if (speedMod >= 0.001 && speedMod < 10000 && speedMod !== 1) {

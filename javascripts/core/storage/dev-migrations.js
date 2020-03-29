@@ -576,6 +576,19 @@ GameStorage.devMigrations = {
         }
       }
     },
+    player => {
+      for (let pet of Object.values(player.celestials.ra.pets)) {
+        pet.level = Math.clampMax(pet.level, 25);
+      }
+      delete player.celestials.ra.compression;
+      if (Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) {
+        const allGlyphs = player.reality.glyphs.active
+          .concat(player.reality.glyphs.inventory);
+        for (const glyph of allGlyphs) {
+          Glyphs.applyGamespeed(glyph);
+        }
+      }
+    },
   ],
 
   patch(player) {

@@ -190,7 +190,7 @@ class TimeDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning || TimeCompression.isActive) {
+    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning) {
       return new Decimal(0);
     }
 
@@ -201,6 +201,7 @@ class TimeDimensionState extends DimensionState {
     if (EternityChallenge(7).isRunning) {
       production = production.dividedBy(Tickspeed.current.dividedBy(1000));
     }
+    production = production.pow(getAdjustedGlyphEffect("timeshardpow"));
     return production;
   }
 

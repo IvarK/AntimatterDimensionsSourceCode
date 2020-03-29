@@ -610,6 +610,21 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => format(x, 4, 4),
     combine: GlyphCombiner.multiply,
   }, {
+     id: "timeshardpow",
+     bitmaskIndex: 27,
+     isGenerated: true,
+     // This gets explicitly added to time glyphs elsewhere (once unlocked)
+     glyphTypes: [],
+     // Technically, this applies to all production from the first time dimension,
+     // so it also applies to ID8 production in EC7.
+     singleDesc: () => `Time shard power +{value}`,
+     totalDesc: "Time shard gain ^{value}",
+     genericDesc: "Time shards ^x",
+     effect: (level, strength) => 1 + (strength / 3.5) * Math.pow(level, 0.35) / 400,
+     formatEffect: x => format(x, 3, 3),
+     formatSingleEffect: x => format(x - 1, 3, 3),
+     combine: GlyphCombiner.addExponents,
+   }, {
     id: "cursedgalaxies",
     bitmaskIndex: 0,
     isGenerated: false,

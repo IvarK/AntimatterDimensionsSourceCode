@@ -577,7 +577,7 @@ GameStorage.devMigrations = {
       }
     },
     player => {
-      for (let pet of Object.values(player.celestials.ra.pets)) {
+      for (const pet of Ra.pets.all) {
         pet.level = Math.clampMax(pet.level, 25);
       }
       delete player.celestials.ra.compression;

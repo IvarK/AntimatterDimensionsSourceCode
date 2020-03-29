@@ -1063,11 +1063,6 @@ const GlyphSacrificeHandler = {
     const glyphMaxValue = this.levelRefinementValue(glyph.level);
     return this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
   },
-  glyphRawRefinementGain(glyph) {
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
-    const glyphMaxValue = this.levelRefinementValue(glyph.level);
-    return this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
-  },
   glyphRefinementGain(glyph) {
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
     const glyphMaxValue = this.levelRefinementValue(glyph.level);

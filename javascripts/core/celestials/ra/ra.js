@@ -188,8 +188,8 @@ const Ra = {
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredExpForLevel(level) {
     if (level >= 25) return Infinity;
-    let adjustedLevel = level + Math.pow(level, 2) / 10;
-    let post15Scaling = Math.pow(1.4, Math.max(0, level - 15));
+    const adjustedLevel = level + Math.pow(level, 2) / 10;
+    const post15Scaling = Math.pow(1.4, Math.max(0, level - 15));
     return Math.floor(Math.pow(adjustedLevel, 4) * post15Scaling * 5e5);
   },
   // Calculates the cumulative exp needed to REACH a level starting from nothing.

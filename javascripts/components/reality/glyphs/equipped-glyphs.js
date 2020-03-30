@@ -86,7 +86,6 @@ Vue.component("equipped-glyphs", {
     },
     glyphsChanged() {
       this.glyphs = Glyphs.active.map(GlyphGenerator.copy);
-      this.copiedGlyphs = Glyphs.copies.map(GlyphGenerator.copy);
     },
     undo() {
       if (!this.undoAvailable) return;

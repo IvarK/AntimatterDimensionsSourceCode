@@ -8,7 +8,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
-  "realityglyphlevel", "realitygalaxies", "realitydimboost", "realitycopy"];
+  "realityglyphlevel", "realitygalaxies", "realitydimboost", "realityrow1pow"];
 const generatedTypes = ["power", "infinity", "time", "replication", "dilation", "effarig"];
 
 // eslint-disable-next-line no-unused-vars
@@ -542,29 +542,9 @@ const Glyphs = {
     const realityGlyph = player.reality.glyphs.active.filter(g => g.type === "reality")[0];
     if (realityGlyph === undefined) {
       this.levelBoost = 0;
-      this.copies = [];
       return;
     }
     this.levelBoost = getAdjustedGlyphEffect("realityglyphlevel");
-    const copiedGlyphFactor = getAdjustedGlyphEffect("realitycopy");
-    if (copiedGlyphFactor !== 0) {
-      const realitySlot = realityGlyph.idx;
-      const glyphPrev = GlyphGenerator.copy(player.reality.glyphs.active
-        .filter(g => (g.idx - realitySlot + 1) % this.activeSlotCount === 0)[0]);
-      const glyphNext = GlyphGenerator.copy(player.reality.glyphs.active
-        .filter(g => (g.idx - realitySlot - 1) % this.activeSlotCount === 0)[0]);
-      this.copies = [];
-      if (glyphPrev !== undefined) {
-        glyphPrev.level = Math.floor(glyphPrev.level * copiedGlyphFactor);
-        glyphPrev.rawLevel = 0;
-        this.copies.push(glyphPrev);
-      }
-      if (glyphNext !== undefined) {
-        glyphNext.level = Math.floor(glyphNext.level * copiedGlyphFactor);
-        glyphNext.rawLevel = 0;
-        this.copies.push(glyphNext);
-      }
-    }
   },
   moveToSlot(glyph, targetSlot) {
     if (this.inventory[targetSlot] === null) this.moveToEmpty(glyph, targetSlot);
@@ -790,7 +770,7 @@ const Glyphs = {
   // Normal glyph count minus 3 for each cursed glyph, uses 4 instead of 3 in the calculation because cursed glyphs
   // still contribute to the length of the active list. Note that it only ever decreases if startingReality is true.
   updateGlyphCountForV(startingReality = false) {
-    const activeGlyphList = this.activeList.concat(this.copies);
+    const activeGlyphList = this.activeList;
     const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
     if (startingReality) player.celestials.v.maxGlyphsThisRun = currCount;
     player.celestials.v.maxGlyphsThisRun = Math.max(player.celestials.v.maxGlyphsThisRun, currCount);
@@ -861,7 +841,7 @@ function getGlyphEffectValues(effectKey) {
   if (orderedEffectList.filter(effect => effect === effectKey).length === 0) {
     throw new Error(`Unknown glyph effect requested "${effectKey}"'`);
   }
-  return player.reality.glyphs.active.concat(Glyphs.copies)
+  return player.reality.glyphs.active
   // eslint-disable-next-line no-bitwise
     .filter(glyph => ((1 << GameDatabase.reality.glyphEffects[effectKey].bitmaskIndex) & glyph.effects) !== 0)
     .filter(glyph => generatedTypes.includes(glyph.type) === GameDatabase.reality.glyphEffects[effectKey].isGenerated)
@@ -1058,6 +1038,9 @@ const GlyphSacrificeHandler = {
   levelRefinementValue(level) {
     return Math.pow(level, 3) / 1e8;
   },
+  levelAlchemyCap(level) {
+    return Math.clampMax(25000, this.levelRefinementValue(level));
+  },
   // Refined glyphs give this proportion of their maximum attainable value from their level
   glyphRefinementEfficiency: 0.2,
   glyphRawRefinementGain(glyph) {
@@ -1070,7 +1053,8 @@ const GlyphSacrificeHandler = {
     const glyphMaxValue = this.levelRefinementValue(glyph.level);
     const glyphActualValue = this.glyphRawRefinementGain(glyph);
     const alchemyResource = this.glyphAlchemyResource(glyph);
-    return Math.clamp(glyphMaxValue - alchemyResource.amount, 0, glyphActualValue);
+    const glyphActualMaxValue = this.levelAlchemyCap(glyph.level);
+    return Math.clamp(glyphActualMaxValue - alchemyResource.amount, 0, glyphActualValue);
   },
   refineGlyph(glyph) {
     if (glyph.type === "reality") return;
@@ -1105,7 +1089,7 @@ const GlyphSacrificeHandler = {
 // Gives a maximum resource total possible, based on the highest level glyph in recent realities. This doesn't
 // actually enforce any special behavior, but instead only affects various UI properties.
 function estimatedAlchemyCap() {
-  return GlyphSacrificeHandler.levelRefinementValue(player.lastTenRealities.map(([, , , lvl]) => lvl).max());
+  return GlyphSacrificeHandler.levelAlchemyCap(player.lastTenRealities.map(([, , , lvl]) => lvl).max());
 }
 
 function getGlyphLevelInputs() {

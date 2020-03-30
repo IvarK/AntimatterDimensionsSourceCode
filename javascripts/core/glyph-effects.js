@@ -620,7 +620,7 @@ GameDatabase.reality.glyphEffects = [
      singleDesc: () => `Time shard power +{value}`,
      totalDesc: "Time shard gain ^{value}",
      genericDesc: "Time shards ^x",
-     effect: (level, strength) => 1 + (strength / 3.5) * Math.pow(level, 0.35) / 400,
+     effect: (level, strength) => 1 + (strength / 3.5) * Math.pow(level, 0.35) / 1000,
      formatEffect: x => format(x, 3, 3),
      formatSingleEffect: x => format(x - 1, 3, 3),
      combine: GlyphCombiner.addExponents,
@@ -698,14 +698,14 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => formatPercents(x - 1, 2),
     combine: GlyphCombiner.multiply,
   }, {
-    id: "realitycopy",
+    id: "realityrow1pow",
     bitmaskIndex: 7,
     isGenerated: false,
     glyphTypes: ["reality"],
-    singleDesc: "Copies adjacent glyphs at {value} of their original level",
+    singleDesc: "Multiplier from first row reality upgrades ^{value}",
     totalDesc: " ",
-    effect: (level, strength) => Math.clampMax(Math.pow(level * strength / 200000, 2), 1),
-    formatEffect: x => formatPercents(x, 2),
+    effect: (level, strength) => 1 + level * strength / 500000,
+    formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.add,
   }
 ].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));

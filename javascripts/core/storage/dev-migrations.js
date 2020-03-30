@@ -589,6 +589,14 @@ GameStorage.devMigrations = {
         }
       }
     },
+    player => {
+      player.celestials.enslaved.totalDimCapIncrease = 0;
+      player.celestials.enslaved.tesseracts = 0;
+      for (let i = 0; i < player.celestials.ra.alchemy.length; i++) {
+        player.celestials.ra.alchemy[i].amount = Math.clampMax(
+          player.celestials.ra.alchemy[i].amount, 25000);
+      }
+    }
   ],
 
   patch(player) {

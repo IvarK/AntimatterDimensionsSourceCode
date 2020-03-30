@@ -380,7 +380,7 @@ GameDatabase.celestials.alchemy = {
       isUnlocked: () => Ra.pets.effarig.level >= 21,
       lockText: "Effarig Level 21",
       formatEffect: value => `Any alchemy reaction has a ${formatPercents(value, 2, 2)}
-        chance of happening again`,
+        chance of triggering again`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -406,7 +406,7 @@ GameDatabase.celestials.alchemy = {
       tier: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 25,
       lockText: "Effarig Level 25",
-      formatEffect: value => `Use all resources to create a level ${formatInt(value)} Reality glyph`,
+      formatEffect: value => `Consume all Reality resource to create a level ${formatInt(value)} Reality glyph`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EXPONENTIAL,

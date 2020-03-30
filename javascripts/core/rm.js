@@ -314,7 +314,7 @@ const GlyphGenerator = {
 
   // Populate a list of reality glyph effects based on level
   generateRealityEffects(level) {
-    const numberOfEffects = realityGlyphEffectLevelThresholds.filter(lv => lv < level).length;
+    const numberOfEffects = realityGlyphEffectLevelThresholds.filter(lv => lv <= level).length;
     const sortedRealityEffects = Object.values(GameDatabase.reality.glyphEffects)
       .filter(eff => eff.id.match("reality*"))
       .sort((a, b) => a.bitmaskIndex - b.bitmaskIndex)
@@ -609,7 +609,9 @@ const Glyphs = {
     
     // This is done here when adding to the inventory in order to keep it out of the glyph generation hot path
     // It thus doesn't show up in manually choosing a glyph
-    this.applyGamespeed(glyph);
+    if (Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) {
+      this.applyGamespeed(glyph);
+    }
     
     player.reality.glyphs.inventory.push(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
@@ -1058,11 +1060,6 @@ const GlyphSacrificeHandler = {
   },
   // Refined glyphs give this proportion of their maximum attainable value from their level
   glyphRefinementEfficiency: 0.2,
-  glyphRawRefinementGain(glyph) {
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
-    const glyphMaxValue = this.levelRefinementValue(glyph.level);
-    return this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
-  },
   glyphRawRefinementGain(glyph) {
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
     const glyphMaxValue = this.levelRefinementValue(glyph.level);

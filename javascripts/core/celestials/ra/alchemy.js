@@ -89,7 +89,7 @@ class AlchemyReaction {
   // Check each reagent for if a full reaction would drop it below the product amount.  If so, reduce reaction yield
   actualYield(times) {
     // Assume a full reaction to see what the maximum possible product is
-    let reactionYield = this.reactionYield(times);
+    const reactionYield = this.reactionYield(times);
     const maxFromReaction = this.baseProduction * reactionYield * this.reactionEfficiency;
     const prodBefore = this._product.amount;
     const prodAfter = prodBefore + maxFromReaction;

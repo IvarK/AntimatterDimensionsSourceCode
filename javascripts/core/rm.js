@@ -1063,6 +1063,11 @@ const GlyphSacrificeHandler = {
     const glyphMaxValue = this.levelRefinementValue(glyph.level);
     return this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
   },
+  glyphRawRefinementGain(glyph) {
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
+    const glyphMaxValue = this.levelRefinementValue(glyph.level);
+    return this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
+  },
   glyphRefinementGain(glyph) {
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
     const glyphMaxValue = this.levelRefinementValue(glyph.level);
@@ -1077,7 +1082,7 @@ const GlyphSacrificeHandler = {
       return;
     }
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || (this.glyphRefinementGain(glyph) === 0 &&
-      !AlchemyResources.all[ALCHEMY_RESOURCE.DECOHERENCE].isUnlocked)) {
+      !AlchemyResource.decoherence.isUnlocked)) {
       this.sacrificeGlyph(glyph, true);
       return;
     }
@@ -1095,10 +1100,6 @@ const GlyphSacrificeHandler = {
             otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);
         }
       }
-      const unpredictabilityGain = rawRefinementGain * AlchemyResource.unpredictability.effectValue;
-      const otherResource = AlchemyResources.all.filter(r => r.isUnlocked).randomElement();
-      const maxResouce = Math.max(rawRefinementGain / this.glyphRefinementEfficiency, otherResource.amount);
-      otherResource.amount = Math.clampMax(otherResource.amount + unpredictabilityGain, maxResouce);
       Glyphs.removeFromInventory(glyph);
     }
   }

@@ -216,13 +216,12 @@ GameDatabase.celestials.alchemy = {
       name: "Momentum",
       symbol: "μ",
       isBaseResource: false,
-      effect: amount => Math.sqrt(amount / 1000),
+      effect: amount => 1 + amount / 2000000,
       tier: 3,
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 15,
       lockText: "Effarig Level 15",
-      formatEffect: value => `Game speed multiplied by (1 + real-time minutes
-        in this reality)${formatPow(value, 3, 3)}`,
+      formatEffect: value => `Game speed ${formatX(value, 5, 5)} per real-time minute in this reality`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -375,13 +374,13 @@ GameDatabase.celestials.alchemy = {
       name: "Unpredictability",
       symbol: "Λ",
       isBaseResource: false,
-      effect: amount => amount / 200000,
+      effect: amount => amount / (10000 + amount),
       tier: 4,
       uiOrder: 4,
       isUnlocked: () => Ra.pets.effarig.level >= 21,
       lockText: "Effarig Level 21",
-      formatEffect: value => `Refined glyphs give ${formatPercents(value, 2)} of their value ` +
-        "to a random unlocked resource",
+      formatEffect: value => `Any alchemy reaction has a ${formatPercents(value, 2, 2)}
+        chance of happening again`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,

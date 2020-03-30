@@ -392,14 +392,12 @@ const RA_UNLOCKS = {
     level: 15,
     displayIcon: `<span class="fas fa-project-diagram"></span>`
   },
-  START_TT_AND_TP: {
+  START_TP: {
     id: 6,
     description: "Get Teresa to level 25",
-    reward: () => `In non-celestial realities, start with ${format(2e9)} TT
-      and when unlocking Time Dilation gain TP as if you reached the square root
+    reward: `When unlocking Time Dilation in non-celestial Realities, gain TP as if you reached the square root
       of your total antimatter in Dilation`,
-    effect: 2e9,
-    secondaryEffect: () => player.totalAntimatter.pow(0.5),
+    effect: () => player.totalAntimatter.pow(0.5),
     pet: Ra.pets.teresa,
     level: 25,
     displayIcon: `<i class="far fa-dot-circle"></i>`

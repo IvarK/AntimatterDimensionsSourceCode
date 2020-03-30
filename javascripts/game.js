@@ -328,7 +328,8 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.MOMENTUM)) {
-    factor *= Math.pow(1 + Time.thisRealityRealTime.totalMinutes, AlchemyResource.momentum.effectValue);
+    const cappedTime = Math.clampMax(Time.thisRealityRealTime.totalMinutes, 7 * 24 * 60);
+    factor *= Math.pow(AlchemyResource.momentum.effectValue, cappedTime);
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {

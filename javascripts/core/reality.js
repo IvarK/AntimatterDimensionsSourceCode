@@ -416,9 +416,7 @@ function finishProcessReality(realityProps) {
   player.noTheoremPurchases = true;
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
-  player.timestudy.theorem = (Ra.has(RA_UNLOCKS.START_TT_AND_TP) && !isInCelestialReality())
-    ? new Decimal(RA_UNLOCKS.START_TT_AND_TP.effect)
-    : new Decimal(0);
+  player.timestudy.theorem = new Decimal(0);
   player.timestudy.amcost = new Decimal("1e20000");
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);

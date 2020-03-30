@@ -75,7 +75,7 @@ class AlchemyReaction {
   // Returns a percentage of a reaction that can be done, accounting for limiting reagents.  This normally caps at
   // 100%, but the reaction will be forced to occur at higher than 100% if there is significantly more reagent than
   // product. This allows resources to be created quickly when its reaction is initially turned on with saved reagents.
-  get reactionYield() {
+  reactionYield(times) {
     if (!this._product.isUnlocked || this._reagents.some(r => !r.resource.isUnlocked)) return 0;
     const forcingFactor = (this._reagents
       .map(r => r.resource.amount)
@@ -83,22 +83,23 @@ class AlchemyReaction {
     const totalYield = this._reagents
       .map(r => r.resource.amount / r.cost)
       .min();
-    return Math.min(totalYield, Math.max(forcingFactor, 1));
+    return Math.min(totalYield, times * Math.max(forcingFactor, 1));
   }
 
   // Check each reagent for if a full reaction would drop it below the product amount.  If so, reduce reaction yield
-  get actualYield() {
+  actualYield(times) {
     // Assume a full reaction to see what the maximum possible product is
-    const maxFromReaction = this.baseProduction * this.reactionYield * this.reactionEfficiency;
+    let reactionYield = this.reactionYield(times);
+    const maxFromReaction = this.baseProduction * reactionYield * this.reactionEfficiency;
     const prodBefore = this._product.amount;
     const prodAfter = prodBefore + maxFromReaction;
-    let cappedYield = this.reactionYield;
+    let cappedYield = reactionYield;
     for (const reagent of this._reagents) {
       const reagentBefore = reagent.resource.amount;
-      const reagentAfter = reagent.resource.amount - this.reactionYield * reagent.cost;
+      const reagentAfter = reagent.resource.amount - reactionYield * reagent.cost;
       const diffBefore = reagentBefore - prodBefore;
       const diffAfter = reagentAfter - prodAfter;
-      cappedYield = Math.min(cappedYield, this.reactionYield * diffBefore / (diffBefore - diffAfter));
+      cappedYield = Math.min(cappedYield, reactionYield * diffBefore / (diffBefore - diffAfter));
     }
     return Math.clampMin(cappedYield, 0);
   }
@@ -145,8 +146,10 @@ class AlchemyReaction {
   // Cap products at the minimum amount of all reagents before the reaction occurs, eg. 200Ξ and 350Ψ will not bring
   // ω above 200.  In fact, since some Ξ will be used during the reaction, the actual cap will be a bit lower.
   combineReagents() {
-    if (!this.isActive || this.reactionYield === 0) return;
-    const reactionYield = this.actualYield;
+    if (!this.isActive || this.reactionYield(1) === 0) return;
+    const unpredictabilityEffect = AlchemyResource.unpredictability.effectValue;
+    const times = 1 + poissonDistribution(unpredictabilityEffect / (1 - unpredictabilityEffect));
+    const reactionYield = this.actualYield(times);
     for (const reagent of this._reagents) {
       reagent.resource.amount -= reactionYield * reagent.cost;
     }

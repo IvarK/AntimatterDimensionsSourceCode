@@ -223,22 +223,26 @@ const Enslaved = {
 
 const Tesseracts = {
   costs: (function() {
-    const costs = [Decimal.pow10(20e6)];
+    const costs = [Decimal.pow10(20e6), Decimal.pow10(40e6), Decimal.pow10(60e6), Decimal.pow10(120e6)];
 
-    for (let i = 1; i < 31; i++) {
-      // Array.reduce can't be used easily just for a small number of elements
-      costs.push(costs[i - 1].pow(2));
+    for (let i = 4; i < 31; i++) {
+      // Array.reduce can't be used just for 4 elements
+      const next = costs[i - 4]
+                    .times(costs[i - 3])
+                    .times(costs[i - 2])
+                    .times(costs[i - 1]);
+      costs.push(next);
     }
 
     return costs;
   }()),
 
   increases: (function() {
-    const increases = [500e3, 500e3];
+    const increases = [500e3, 500e3, 1e6];
 
-    for (let i = 2; i < 31; i++) {
-      // Array.reduce can't be used easily just for a small number of elements
-      const next = increases[i - 2] + increases[i - 1];
+    for (let i = 3; i < 31; i++) {
+      // Array.reduce can't be used just for 4 elements
+      const next = increases[i - 3] + increases[i - 2] + increases[i - 1];
       increases.push(next);
     }
 

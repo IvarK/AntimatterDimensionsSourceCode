@@ -582,10 +582,10 @@ const RA_UNLOCKS = {
     level: 15,
     displayIcon: `<span class="fas fa-graduation-cap"></span>`
   },
-  ACHIEVEMENT_MULT_SQUARED: {
+  ACHIEVEMENT_POW: {
     id: 27,
     description: "Get V to level 25",
-    reward: "Achievement multiplier is squared",
+    reward: () => `Achievement multiplier is raised ${formatPow(1.5, 1, 1)}`,
     pet: Ra.pets.v,
     level: 25,
     displayIcon: `<i class="fab fa-buffer"></i>`

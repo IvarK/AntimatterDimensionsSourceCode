@@ -91,6 +91,7 @@ GameDatabase.darkEnergyUpgrade = {
     id: 6,
     description: "Dummy upgrade to replace compression upgrade which was deleted",
     cost: 50000,
+    effect: () => 1,
     effectFormat: x => `Currently: ${format(x, 2, 2)}x`
   }
 };

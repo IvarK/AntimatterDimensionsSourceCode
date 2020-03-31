@@ -221,7 +221,8 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 15,
       lockText: "Effarig Level 15",
-      formatEffect: value => `Game speed ${formatX(value, 5, 5)} per real-time minute in this reality`,
+      formatEffect: value => `Game speed ${formatX(value, 5, 5)} per real-time minute in this reality
+        (${formatX(1e30, 0, 0)} cap)`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,

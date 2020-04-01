@@ -1,6 +1,11 @@
 "use strict";
 
 Vue.component("news-ticker", {
+  data() {
+    return {
+      recentTickers: [],
+    };
+  },
   watch: {
     isHidden() {
       this.restart();
@@ -41,9 +46,15 @@ Vue.component("news-ticker", {
         this.currentNews = GameDatabase.news.find(message => message.id === "a216");
       } else {
         const isUnlocked = news => news.unlocked || news.unlocked === undefined;
+        let nextNews;
         do {
-          this.currentNews = GameDatabase.news.randomElement();
-        } while (!isUnlocked(this.currentNews));
+          nextNews = GameDatabase.news.randomElement();
+        } while (!isUnlocked(this.currentNews) && !this.recentTickers.includes(nextNews.id));
+        // Prevent tickers from repeating if they were seen recently
+        const repeatBuffer = 0.1 * GameDatabase.news.length;
+        this.recentTickers.push(nextNews.id);
+        if (this.recentTickers.length > repeatBuffer) this.recentTickers.shift();
+        this.currentNews = nextNews;
       }
       if (this.currentNews.reset) {
         this.currentNews.reset();

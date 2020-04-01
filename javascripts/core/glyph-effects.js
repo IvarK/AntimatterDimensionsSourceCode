@@ -706,7 +706,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: " ",
     effect: (level, strength) => 1 + level * strength / 500000,
     formatEffect: x => format(x, 3, 3),
-    combine: GlyphCombiner.add,
+    combine: GlyphCombiner.addExponents,
   }
 ].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));
 

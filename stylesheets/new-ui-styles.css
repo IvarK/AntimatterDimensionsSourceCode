@@ -26,6 +26,7 @@ body.t-normal {
   display: flex;
   font-family: Typewriter, serif;
   background: none;
+  height: 100%;
 }
 
 .sidebar {

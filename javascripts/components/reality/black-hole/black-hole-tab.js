@@ -79,7 +79,12 @@ Vue.component("black-hole-tab", {
       <div v-if="isEnslaved">
         The physics of this reality do not permit singularities.
       </div>
-      <black-hole-unlock-button v-else-if="!isUnlocked" />
+      <div v-else-if="!isUnlocked">
+        <black-hole-unlock-button/>
+        The black hole makes the entire game run significantly faster for a short period of time.
+        <br>
+        Starts at {{ formatX(180) }} faster for {{ formatInt(10) }} seconds, once per hour.
+      </div>
       <template v-else>
         <canvas class="c-black-hole-canvas" ref="canvas" width="400" height="400" />
         <div class="l-black-hole-upgrade-grid">

@@ -1044,7 +1044,7 @@ screen and (max-width: 480px) {
 
 .c-game-ui {
   width: 100%;
-  height: 100%
+  height: 100%;
 }
 
 ._kong-test .c-game-ui {
@@ -1120,6 +1120,7 @@ screen and (max-width: 480px) {
 .o-primary-btn--dimboost {
   font-size: 0.9rem;
   width: 21rem;
+  height: 3rem;
 }
 
 .o-primary-btn--galaxy {
@@ -1854,7 +1855,8 @@ screen and (max-width: 480px) {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center
+  align-items: center;
+  padding-top: 0.5rem;
 }
 
 /*#endregion l-normal-dim-tab-header*/
@@ -6666,6 +6668,7 @@ kbd {
 }
 
 .c-reality-upgrade-btn--black-hole-unlock {
+  margin: auto;
   text-shadow: -0.1rem 0.1rem 0.3rem #d5ffd7
 }
 

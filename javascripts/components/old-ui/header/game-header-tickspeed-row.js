@@ -45,11 +45,6 @@ Vue.component("game-header-tickspeed-row", {
       const gameSpeedMult = this.gameSpeedMult;
       return gameSpeedMult < 10000 ? format(gameSpeedMult, 3, 3) : format(gameSpeedMult, 2, 0);
     },
-    tooltip() {
-      if (this.isGameSpeedNormal) return undefined;
-      const displayValue = this.isGameSpeedSlow ? format(1 / this.gameSpeedMult, 2, 3) : this.formattedFastSpeed;
-      return `The game is running ${displayValue}x ${this.isGameSpeedSlow ? "slower." : "faster."}`;
-    },
     showCostTitle() {
       return this.cost.exponent < 1000000;
     },
@@ -92,6 +87,6 @@ Vue.component("game-header-tickspeed-row", {
             <span v-else>Buy Max</span>
         </primary-button>
       </div>
-      <div v-tooltip="tooltip">{{tickspeedDisplay}} <game-header-gamma-display v-if="!isGameSpeedNormal"/></div>
+      <div>{{tickspeedDisplay}} <game-header-gamma-display v-if="!isGameSpeedNormal"/></div>
     </div>`
 });

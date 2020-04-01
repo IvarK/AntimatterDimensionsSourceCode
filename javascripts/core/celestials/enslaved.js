@@ -34,7 +34,6 @@ const Enslaved = {
   currentBlackHoleStoreAmountPerMs: 0,
   tachyonNerf: 0.3,
   toggleStoreBlackHole() {
-    if (this.maxQuoteIdx === 6) player.celestials.enslaved.maxQuotes += 3;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
     player.celestials.enslaved.isStoringReal = false;
     if (!Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
@@ -92,7 +91,6 @@ const Enslaved = {
   useStoredTime(autoRelease) {
     if (!this.canRelease(autoRelease)) return;
     if (EternityChallenge(12).isRunning) return;
-    if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
     player.minNegativeBlackHoleThisReality = 1;
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);
@@ -120,7 +118,6 @@ const Enslaved = {
   },
   startRun() {
     player.options.retryCelestial = false;
-    if (this.maxQuoteIdx === 13) player.celestials.enslaved.maxQuotes += 2;
     player.celestials.enslaved.run = startRealityOver() || player.celestials.enslaved.run;
     // Round to the nearest multiple of 2 to make the secret study hide
     player.secretUnlocks.secretTS += player.secretUnlocks.secretTS % 2;
@@ -159,7 +156,7 @@ const Enslaved = {
   feelEternity() {
     if (!this.feltEternity) {
       this.feltEternity = true;
-    Modal.message.show("Time in eternity will be scaled by number of eternities");
+      Modal.message.show("Time in eternity will be scaled by number of eternities");
     }
   },
   get feltEternity() {

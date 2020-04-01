@@ -91,12 +91,6 @@ Vue.component("effarig-tab", {
       if (this.isRunning) startRealityOver();
       else Effarig.startRun();
     },
-    nextQuote() {
-      Effarig.nextQuote();
-    },
-    hasNextQuote() {
-      return this.quoteIdx < Effarig.maxQuoteIdx;
-    },
     createCursedGlyph() {
       if (Glyphs.freeInventorySpace === 0) {
         Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");

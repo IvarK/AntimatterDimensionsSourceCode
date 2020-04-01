@@ -3712,6 +3712,11 @@ screen and (max-width: 480px) {
   margin-top: 2rem;
 }
 
+.v-feel-eternity-btn {
+  background-color: #540c70;
+  animation: a-time-study 1.5s infinite;
+}
+
 .l-break-infinity-tab__grid {
   margin-top: 1rem;
 }

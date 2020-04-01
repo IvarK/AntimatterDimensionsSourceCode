@@ -638,6 +638,14 @@
   cursor: default;
 }
 
+.o-time-study--secret-enslaved {
+  opacity: 0.02;
+  background: #ead584;
+  transition: opacity 2s 0.5s;
+  cursor: pointer;
+  animation: a-time-study 0.5s infinite;
+}
+
 /*#endregion o-time-study*/
 
 .o-time-study-connection {

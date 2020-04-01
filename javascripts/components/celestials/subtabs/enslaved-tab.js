@@ -112,12 +112,6 @@ Vue.component("enslaved-tab", {
       // while on the Enslaved tab).
       return this.buyableUnlocks[info.id];
     },
-    nextQuote() {
-      Enslaved.nextQuote();
-    },
-    hasNextQuote() {
-      return this.quoteIdx < Enslaved.maxQuoteIdx;
-    },
     unlockClassObject(info) {
       return {
         "o-enslaved-shop-button--bought": this.hasUnlock(info),

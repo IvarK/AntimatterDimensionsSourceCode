@@ -593,9 +593,10 @@ function gameLoop(diff, options = {}) {
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
-  if (Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000 && !Enslaved.ec6c10timeHint) {
-    Enslaved.ec6c10timeHint = true;
-    Modal.message.show("... you need ... to look harder ...");
+  if (Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000 &&
+    player.celestials.enslaved.hintBits === 0) {
+      player.celestials.enslaved.hintBits = 1;
+      Enslaved.quotes.show(Enslaved.quotes.HINT_UNLOCK);
   }
 
   laitelaRealityTick(realDiff);

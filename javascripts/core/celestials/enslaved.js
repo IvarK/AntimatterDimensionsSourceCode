@@ -25,7 +25,6 @@ const Enslaved = {
   displayName: "Enslaved",
   boostReality: false,
   BROKEN_CHALLENGE_EXEMPTIONS: [1, 6, 9],
-  ec6c10timeHint: false,
   nextTickDiff: 50,
   isReleaseTick: false,
   autoReleaseTick: 0,
@@ -93,7 +92,10 @@ const Enslaved = {
     if (EternityChallenge(12).isRunning) return;
     player.minNegativeBlackHoleThisReality = 1;
     let release = player.celestials.enslaved.stored;
-    if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);
+    if (Enslaved.isRunning) {
+      release = Enslaved.storedTimeInsideEnslaved(release);
+      if (Time.thisReality.totalYears > 1) EnslavedProgress.storedTime.unlock();
+    }
     if (autoRelease) release *= 0.01;
     this.nextTickDiff = release;
     this.isReleaseTick = true;
@@ -121,8 +123,7 @@ const Enslaved = {
     player.celestials.enslaved.run = startRealityOver() || player.celestials.enslaved.run;
     // Round to the nearest multiple of 2 to make the secret study hide
     player.secretUnlocks.secretTS += player.secretUnlocks.secretTS % 2;
-    this.quotes.forget(this.quotes.EC6C10);
-    this.ec6c10timeHint = false;
+    this.feltEternity = false;
     this.quotes.show(this.quotes.START_RUN);
   },
   get isRunning() {
@@ -147,14 +148,9 @@ const Enslaved = {
     if (stored <= 1e3) return stored;
     return Math.pow(10, Math.pow(Math.log10(stored / 1e3), 0.55)) * 1e3;
   },
-  showEC6C10Hint() {
-    Enslaved.quotes.show(this.quotes.EC6C10);
-  },
-  get foundEC6C10() {
-    return Enslaved.quotes.seen(this.quotes.EC6C10);
-  },
   feelEternity() {
     if (!this.feltEternity) {
+      EnslavedProgress.feelEternity.unlock();
       this.feltEternity = true;
       Modal.message.show("Time in eternity will be scaled by number of eternities");
     }
@@ -218,9 +214,46 @@ const Enslaved = {
     EC6C10: CelestialQuotes.singleLine(
       5, "... did not ... underestimate you ..."
     ),
+    HINT_UNLOCK: {
+      id: 6,
+      lines: [
+        "... you need ... to look harder ...",
+        "I think ... I can help ...",
+        "* You have unlocked help from The Enslaved Ones"
+      ]
+    },
   }),
 };
 
+class EnslavedProgressState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
+  }
+
+  get isUnlocked() {
+    // eslint-disable-next-line no-bitwise
+    return Boolean(player.celestials.enslaved.progressBits & (1 << this.id));
+  }
+
+  unlock() {
+    // eslint-disable-next-line no-bitwise
+    player.celestials.enslaved.progressBits |= (1 << this.id);
+  }
+}
+
+const EnslavedProgress = (function() {
+  const db = GameDatabase.celestials.enslaved.progress;
+  return {
+    ec1: new EnslavedProgressState(db.ec1),
+    feelEternity: new EnslavedProgressState(db.feelEternity),
+    ec6: new EnslavedProgressState(db.ec6),
+    c10: new EnslavedProgressState(db.c10),
+    secretStudy: new EnslavedProgressState(db.secretStudy),
+    storedTime: new EnslavedProgressState(db.storedTime),
+    challengeCombo: new EnslavedProgressState(db.challengeCombo),
+  };
+}());
 
 const Tesseracts = {
   costs: (function() {

@@ -21,8 +21,6 @@ function startEternityChallenge() {
   player.thisInfinityMaxAM = Player.startingAM;
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
-  if (Enslaved.isRunning && Enslaved.foundEC6C10) Tab.challenges.normal.show();
-  return true;
 }
 
 class EternityChallengeRewardState extends GameMechanicState {
@@ -181,7 +179,12 @@ class EternityChallengeState extends GameMechanicState {
       }
       if (V.isRunning) player.minNegativeBlackHoleThisReality = 1;
     }
-    return startEternityChallenge();
+    if (Enslaved.isRunning) {
+      if (this.id === 6 && this.completions === 5) EnslavedProgress.ec6.unlock();
+      if (EnslavedProgress.challengeCombo.isUnlocked) Tab.challenges.normal.show();
+    }
+    startEternityChallenge();
+    return true;
   }
 
   /**

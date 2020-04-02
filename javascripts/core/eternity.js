@@ -26,9 +26,12 @@ function giveEternityRewards(auto) {
     const challenge = EternityChallenge.current;
     challenge.addCompletion();
     if (Perk.studyECBulk.isBought) {
+      let completionCount = 0;
       while (!challenge.isFullyCompleted && challenge.canBeCompleted) {
         challenge.addCompletion();
+        completionCount++;
       }
+      if (Enslaved.isRunning && completionCount > 5) EnslavedProgress.ec1.unlock();
     }
     player.etercreq = 0;
     respecTimeStudies(auto);

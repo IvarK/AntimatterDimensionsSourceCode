@@ -180,8 +180,9 @@ function maxBuyGalaxies(limit = Number.MAX_VALUE) {
     Galaxy.buyableGalaxies(Math.round(dim.totalAmount.toNumber())),
     limit);
   if (Notations.current === Notation.cancer) player.spreadingCancer += newGalaxies - player.galaxies;
-  // Function galaxyReset increments galaxies, so we add one less than we should:
+  // Galaxy count is incremented by galaxyReset(), so add one less than we should:
   player.galaxies = newGalaxies - 1;
   galaxyReset();
+  if (Enslaved.isRunning && player.galaxies > 1) EnslavedProgress.c10.unlock();
   return true;
 }

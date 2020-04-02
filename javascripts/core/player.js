@@ -398,6 +398,9 @@ let player = {
       tesseracts: 0,
       totalDimCapIncrease: 0,
       feltEternity: false,
+      progressBits: 0,
+      hintBits: 0,
+      hintsGiven: 0
     },
     v: {
       unlockBits: 0,

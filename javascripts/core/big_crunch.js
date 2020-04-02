@@ -69,6 +69,8 @@ function bigCrunchReset() {
 
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
+  
+  player.noInfinitiesThisReality = false;
 
   if (!player.usedMaxAll) {
     const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(player.thisInfinityRealTime);

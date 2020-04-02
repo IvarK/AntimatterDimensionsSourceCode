@@ -18,8 +18,6 @@ GameDatabase.reality.upgrades = (function() {
     props.formatCost = value => format(value, 2, 0);
     return props;
   };
-  const isFirstEternity = () => player.realities > 0 && Player.gainedEternities.eq(0);
-  const isFirstInfinity = () => isFirstEternity() && player.infinitied.eq(0);
   return [
     rebuyable({
       id: 1,
@@ -60,7 +58,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 6,
       cost: 15,
       requirement: "Complete your first Eternity without using Replicanti Galaxies",
-      checkRequirement: () => player.reality.upgReqChecks[0] && isFirstEternity(),
+      checkRequirement: () => player.reality.upgReqChecks[0] && player.noEternitiesThisReality,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: "Replicanti speed is multiplied based on Replicanti Galaxies",
       effect: () => 1 + (player.replicanti.galaxies / 50),
@@ -70,7 +68,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 7,
       cost: 15,
       requirement: "Complete your first Infinity with at most 1 galaxy",
-      checkRequirement: () => player.galaxies <= 1 && isFirstInfinity(),
+      checkRequirement: () => player.galaxies <= 1 && player.noInfinitiesThisReality,
       checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
       description: "Infinitied stat gain is boosted from Antimatter Galaxy count",
       effect: () => 1 + (player.galaxies / 30),
@@ -99,7 +97,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 10,
       cost: 15,
       requirement: () => `Complete your first Eternity with at least ${format("1e400")} IP`,
-      checkRequirement: () => player.infinityPoints.exponent >= 400 && isFirstEternity(),
+      checkRequirement: () => player.infinityPoints.exponent >= 400 && player.noEternitiesThisReality,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`
     },
@@ -108,7 +106,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 50,
       requirement: () => `${format(1e12)} banked Infinities`,
       checkRequirement: () => player.infinitiedBank.exponent >= 12,
-      checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+      checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
       description: "Every second, gain 10% of the Infinities you would normally gain by Infinitying",
       effect: () => gainedInfinities().times(0.1),
       formatEffect: value => `${format(value)} per second`
@@ -139,7 +137,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 50,
       requirement: () => `${format(1e7)} Eternities`,
       checkRequirement: () => player.eternities.gte(1e7),
-      checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+      checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
       description: "Gain Eternities per second equal to your Reality count",
       effect: () => player.realities * RA_UNLOCKS.TT_BOOST.effect.eternity(),
       formatEffect: value => `${format(value)} per second`
@@ -195,8 +193,8 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 20,
       cost: 1500,
-      requirement: () => `${formatInt(2)} years total play time`,
-      checkRequirement: () => Time.totalTimePlayed.totalYears >= 2,
+      requirement: () => `${formatInt(2)} years total play time and the Black Hole unlocked`,
+      checkRequirement: () => Time.totalTimePlayed.totalYears >= 2 && BlackHole(1).isUnlocked,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Unlock Black Hole 2",
       formatCost: value => format(value, 1, 0)

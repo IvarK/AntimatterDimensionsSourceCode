@@ -593,6 +593,11 @@ body.t-normal {
   font-size: 1.4rem
 }
 
+.o-primary-btn--buy-id-max,
+.o-primary-btn--id-autobuyer {
+  height: 4.4rem;
+}
+
 .c-time-dim-description__accent {
   color: var(--color-eternity);
 }
@@ -622,6 +627,11 @@ body.t-normal {
 
 .c-time-dim-row__multiplier {
   font-size: 1.4rem
+}
+
+.o-primary-btn--buy-td-max,
+.o-primary-btn--td-autobuyer {
+  height: 4.4rem;
 }
 
 .l-reality-upgrade-btn {

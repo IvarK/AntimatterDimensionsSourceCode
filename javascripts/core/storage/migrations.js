@@ -135,6 +135,10 @@ GameStorage.migrations = {
       GameStorage.migrations.changeC8Handling(player);
       GameStorage.migrations.convertAchievementsToBits(player);
       GameStorage.migrations.removePower(player);
+      GameStorage.migrations.setNoInfinitiesOrEternitiesThisReality(player);
+      
+      // Needed to check some reality upgrades which are usually only checked on eternity.
+      EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
     }
   },
 
@@ -329,7 +333,7 @@ GameStorage.migrations = {
   adjustAchievementVars(player) {
     player.onlyFirstDimensions = player.dead;
     delete player.dead;
-    player.onlyEighthDimensons = player.dimlife;
+    player.onlyEighthDimensions = player.dimlife;
     delete player.dimlife;
     if (
       player.timestudy.theorem.gt(0) ||
@@ -676,6 +680,11 @@ GameStorage.migrations = {
     for (const dimension of player.dimensions.time) {
       delete dimension.power;
     }
+  },
+  
+  setNoInfinitiesOrEternitiesThisReality(player) {
+    player.noInfinitiesThisReality = player.infinitied.eq(0) && player.eternities.eq(0);
+    player.noEternitiesThisReality = player.eternities.eq(0);
   },
 
   prePatch(saveData) {

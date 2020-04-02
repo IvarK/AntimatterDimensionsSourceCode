@@ -218,7 +218,7 @@ const Ra = {
             Glyphs.applyGamespeed(glyph);
           }
         }
-        if (unl.id === RA_UNLOCKS.id) {
+        if (unl.id === RA_UNLOCKS.RA_LAITELA_UNLOCK.id) {
           MatterDimension(1).amount = new Decimal(1);
         }
       }

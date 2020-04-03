@@ -101,7 +101,8 @@ Vue.component("enslaved-tab", {
       Enslaved.buyUnlock(info);
     },
     startRun() {
-      Enslaved.startRun();
+      resetReality();
+      Enslaved.initializeRun();
     },
     hasUnlock(info) {
       return Enslaved.has(info);

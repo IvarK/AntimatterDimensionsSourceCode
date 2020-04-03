@@ -57,9 +57,9 @@ const Teresa = {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.teresa.unlockBits & (1 << info.id));
   },
-  startRun() {
-    player.options.retryCelestial = false;
-    player.celestials.teresa.run = startRealityOver() || player.celestials.teresa.run;
+  initializeRun() {
+    clearCelestialRuns();
+    player.celestials.teresa.run = true;
   },
   rewardMultiplier(antimatter) {
     return Decimal.max(Decimal.pow(antimatter.plus(1).log10() / 1.5e8, 12), 1).toNumber();

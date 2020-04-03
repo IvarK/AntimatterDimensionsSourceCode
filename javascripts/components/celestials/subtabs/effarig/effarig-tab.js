@@ -88,8 +88,8 @@ Vue.component("effarig-tab", {
       this.vIsFlipped = V.isFlipped;
     },
     startRun() {
-      if (this.isRunning) startRealityOver();
-      else Effarig.startRun();
+      resetReality();
+      Effarig.initializeRun();
     },
     createCursedGlyph() {
       if (Glyphs.freeInventorySpace === 0) {

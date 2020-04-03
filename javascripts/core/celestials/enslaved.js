@@ -118,9 +118,9 @@ const Enslaved = {
     player.celestials.enslaved.unlocks.push(info.id);
     return true;
   },
-  startRun() {
-    player.options.retryCelestial = false;
-    player.celestials.enslaved.run = startRealityOver() || player.celestials.enslaved.run;
+  initializeRun() {
+    clearCelestialRuns();
+    player.celestials.enslaved.run = true;
     // Round to the nearest multiple of 2 to make the secret study hide
     player.secretUnlocks.secretTS += player.secretUnlocks.secretTS % 2;
     this.feltEternity = false;

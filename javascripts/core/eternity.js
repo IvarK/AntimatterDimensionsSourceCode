@@ -114,12 +114,13 @@ function eternity(force, auto, specialConditions = {}) {
     // FIXME: Eternity count is a Decimal and also why is this submitted in so many places?
     // kong.submitStats('Eternities', player.eternities);
   } catch (err) {
-      console.log("Couldn't load Kongregate API")
+      // eslint-disable-next-line no-console
+      console.log("Couldn't load Kongregate API");
   }
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
-  applyRealityUpgrades();
+  applyRealityUpgradesAfterEternity();
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;
 
@@ -176,7 +177,7 @@ function initializeResourcesAfterEternity() {
   player.postChallUnlocked = Achievement(133).isUnlocked ? 8 : 0;
 }
 
-function applyRealityUpgrades() {
+function applyRealityUpgradesAfterEternity() {
   if (RealityUpgrade(13).isBought) {
       if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
       for (let i = 1; i < 9; i++) {

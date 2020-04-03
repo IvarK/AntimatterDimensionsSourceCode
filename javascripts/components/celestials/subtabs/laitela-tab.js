@@ -36,8 +36,8 @@ Vue.component("laitela-tab", {
       this.isRunning = Laitela.isRunning;
     },
     startRun() {
-      if (this.isRunning) startRealityOver();
-      else Laitela.startRun();
+      resetReality();
+      Laitela.initializeRun();
     },
     buyUnlock(info) {
       Laitela.buyUnlock(info);

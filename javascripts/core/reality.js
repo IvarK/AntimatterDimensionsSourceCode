@@ -457,10 +457,6 @@ function finishProcessReality(realityProps) {
   player.bestInfinitiesPerMs = new Decimal(0);
   player.bestEternitiesPerMs = new Decimal(0);
   player.bestIpPerMsWithoutMaxAll = new Decimal(0);
-  player.minNegativeBlackHoleThisReality = player.blackHoleNegative;
-  if (!BlackHoles.areNegative) {
-    player.minNegativeBlackHoleThisReality = 1;
-  }
   resetTimeDimensions();
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
@@ -470,40 +466,32 @@ function finishProcessReality(realityProps) {
   if (RealityUpgrade(10).isBought) applyRUPG10();
   else Tab.dimensions.normal.show();
 
-  if (RealityUpgrade(13).isBought) {
-    if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
-    for (let i = 1; i < 9; i++) {
-      if (player.reality.tdbuyers[i - 1]) {
-        buyMaxTimeDimTier(i);
-      }
-    }
-  }
-
   Lazy.invalidateAll();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
   // This immediately gives eternity upgrades instead of after the first eternity
-  if (RealityUpgrades.allBought) {
-    applyRealityUpgrades();
-  }
+  if (RealityUpgrades.allBought) applyRealityUpgradesAfterEternity();
 
   if (!isReset) Ra.applyAlchemyReactions();
 
   player.reality.gainedAutoAchievements = false;
 
   if (realityProps.restoreCelestialState || player.options.retryCelestial) restoreCelestialRuns(celestialRunState);
-
 }
 
 function restoreCelestialRuns(celestialRunState) {
   player.celestials.teresa.run = celestialRunState.teresa;
+  if (player.celestials.teresa.run) Teresa.initializeRun();
   player.celestials.effarig.run = celestialRunState.effarig;
+  if (player.celestials.effarig.run) Effarig.initializeRun();
   player.celestials.enslaved.run = celestialRunState.enslaved;
+  if (player.celestials.enslaved.run) Enslaved.initializeRun();
   player.celestials.v.run = celestialRunState.v;
+  if (player.celestials.v.run) V.initializeRun();
   player.celestials.ra.run = celestialRunState.ra;
+  if (player.celestials.ra.run) Ra.initializeRun();
   player.celestials.laitela.run = celestialRunState.laitela;
-  // For effarig, in order to make sure glyph effects are correctly capped
-  recalculateAllGlyphs();
+  if (player.celestials.laitela.run) Laitela.initializeRun();
 }
 
 // This is also called when the upgrade is purchased, be aware of potentially having "default" values overwrite values
@@ -582,7 +570,7 @@ function isInCelestialReality() {
     player.celestials.laitela.run;
 }
 
-function startRealityOver() {
+function resetReality() {
   if (confirm("This will put you at the start of your reality and reset your progress in this reality." +
     "Are you sure you want to do this?")) {
     beginProcessReality(getRealityProps(true));

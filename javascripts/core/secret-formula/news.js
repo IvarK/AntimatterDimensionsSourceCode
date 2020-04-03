@@ -2194,7 +2194,7 @@ GameDatabase.news = [
   {
     id: "e1",
     get text() {
-      return `${format(1.10e106, 2, 2)} but normalized so the mantissa is greater than ` +
+      return `${format(1.1e108, 2, 2)} but normalized so the mantissa is greater than ` +
         `${formatInt(100)} and with the mantissa and exponent both written using roman numerals`;
     },
     get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
@@ -2279,6 +2279,22 @@ GameDatabase.news = [
   },
   {
     id: "e14",
+    text: "Dilation glyph TT generation has been replaced by a more all-at-once source.",
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+  },
+  {
+    id: "e15",
+    text: "To get to Reality, release stored time in EC10. Oh, sorry, that one was for a " +
+      "different celestial.",
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+  },
+  {
+    id: "e16",
+    text: "Introducing a new feature: Reality Studies! Get in-game benefits for studying in real life!",
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+  },
+  {
+    id: "e17",
     get text() {
       return `Did you know? While in The Enslaved Ones' Reality for more than ${formatInt(15)} ` +
         "minutes, there's a small chance of a fairly-useless hint in a news ticker message! " +

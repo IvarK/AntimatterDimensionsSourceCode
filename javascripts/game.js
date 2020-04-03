@@ -712,52 +712,54 @@ function simulateTime(seconds, real, fast) {
       }
     }
   }
-
-  const offlineIncreases = ["While you were away"];
-  // OoM increase
-  const oomVarNames = ["antimatter", "infinityPower", "timeShards"];
-  const oomResourceNames = ["antimatter", "infinity power", "time shards"];
-  for (let i = 0; i < oomVarNames.length; i++) {
-    const varName = oomVarNames[i];
-    const oomIncrease = player[varName].log10() - playerStart[varName].log10();
-    // Needs an isFinite check in case it's zero before or afterwards
-    if (player[varName].gt(playerStart[varName]) && Number.isFinite(oomIncrease)) {
-      offlineIncreases.push(`your ${oomResourceNames[i]} increased by ` +
-        `${format(oomIncrease, 2, 2)} orders of magnitude`);
+  
+  if (seconds > 1000) {
+    const offlineIncreases = ["While you were away"];
+    // OoM increase
+    const oomVarNames = ["antimatter", "infinityPower", "timeShards"];
+    const oomResourceNames = ["antimatter", "infinity power", "time shards"];
+    for (let i = 0; i < oomVarNames.length; i++) {
+      const varName = oomVarNames[i];
+      const oomIncrease = player[varName].log10() - playerStart[varName].log10();
+      // Needs an isFinite check in case it's zero before or afterwards
+      if (player[varName].gt(playerStart[varName]) && Number.isFinite(oomIncrease)) {
+        offlineIncreases.push(`your ${oomResourceNames[i]} increased by ` +
+          `${format(oomIncrease, 2, 2)} orders of magnitude`);
+      }
     }
-  }
-  // Linear increase
-  const linearVarNames = ["infinitied", "eternities"];
-  const linearResourceNames = ["infinities", "eternities"];
-  const prestigeReset = ["eternitied", "realitied"];
-  for (let i = 0; i < linearVarNames.length; i++) {
-    const varName = linearVarNames[i];
-    const linearIncrease = Decimal.sub(player[varName], playerStart[varName]);
-    if (linearIncrease.lessThan(0)) {
-      // This happens when a prestige autobuyer triggers offline and resets the value
-      offlineIncreases.push(`you ${prestigeReset[i]} and then generated ` +
-        `${format(player[varName], 2, 0)} more ${linearResourceNames[i]}`);
-    } else if (!Decimal.eq(player[varName], playerStart[varName])) {
-      offlineIncreases.push(`you generated ${format(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
+    // Linear increase
+    const linearVarNames = ["infinitied", "eternities"];
+    const linearResourceNames = ["infinities", "eternities"];
+    const prestigeReset = ["eternitied", "realitied"];
+    for (let i = 0; i < linearVarNames.length; i++) {
+      const varName = linearVarNames[i];
+      const linearIncrease = Decimal.sub(player[varName], playerStart[varName]);
+      if (linearIncrease.lessThan(0)) {
+        // This happens when a prestige autobuyer triggers offline and resets the value
+        offlineIncreases.push(`you ${prestigeReset[i]} and then generated ` +
+          `${format(player[varName], 2, 0)} more ${linearResourceNames[i]}`);
+      } else if (!Decimal.eq(player[varName], playerStart[varName])) {
+        offlineIncreases.push(`you generated ${format(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
+      }
     }
-  }
-  // Black Hole activations
-  for (let i = 0; i < player.blackHole.length; i++) {
-    const currentActivations = player.blackHole[i].activations;
-    const oldActivations = playerStart.blackHole[i].activations;
-    const activationsDiff = currentActivations - oldActivations;
-    const pluralSuffix = activationsDiff === 1 ? " time" : " times";
-    if (activationsDiff > 0 && !BlackHole(i + 1).isPermanent) {
-      offlineIncreases.push(`Black Hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
+    // Black Hole activations
+    for (let i = 0; i < player.blackHole.length; i++) {
+      const currentActivations = player.blackHole[i].activations;
+      const oldActivations = playerStart.blackHole[i].activations;
+      const activationsDiff = currentActivations - oldActivations;
+      const pluralSuffix = activationsDiff === 1 ? " time" : " times";
+      if (activationsDiff > 0 && !BlackHole(i + 1).isPermanent) {
+        offlineIncreases.push(`Black Hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
+      }
     }
+    let popupString = `${offlineIncreases.join(", <br>")}.`;
+    if (popupString === "While you were away.") {
+      popupString += ".. Nothing happened.";
+      SecretAchievement(36).unlock();
+    }
+    Modal.message.show(popupString);
   }
-  let popupString = `${offlineIncreases.join(", <br>")}.`;
-  if (popupString === "While you were away.") {
-    popupString += ".. Nothing happened.";
-    SecretAchievement(36).unlock();
-  }
-
-  Modal.message.show(popupString);
+  
   GameUI.notify.showBlackHoles = true;
   Async.enabled = true;
 }

@@ -3,6 +3,7 @@
 // A = always there
 // L = locked
 // J = joke/unreasonable condition
+// E = enslaved hints (practically but not technically missable)
 // R = random chance condition
 // P = patreon
 GameDatabase.news = [
@@ -2189,6 +2190,102 @@ GameDatabase.news = [
     id: "j6",
     text: "Whale complains that their buying isn't doing anything.",
     get unlocked() { return kongIPMult > 1.8e16; }
+  },
+  {
+    id: "e1",
+    get text() {
+      return `${format(1.06e112, 2, 2)} but normalized so the mantissa is an integer ` +
+        "and with the mantissa and exponent both written using roman numerals";
+    },
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
+  },
+  {
+    id: "e2",
+    get text() {
+      return "Sometimes you want to break things, sometimes you want to use broken things.";
+    },
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
+  },
+  {
+    id: "e3",
+    text: "Keep in mind, V, the Celestial of Achievements, is the next celestial.",
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
+  },
+  {
+    id: "e4",
+    get text() {
+      return "You can get Antimatter Galaxies the same way you can get more than "
+        `${formatInt(2)} Antimatter Galaxies without Infinity being broken.`;
+    },
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
+  },
+  {
+    id: "e5",
+    get text() {
+      return "You can't get [REDACTED]? You couldn't get those anyway, why do you care?";
+    },
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
+  },
+  {
+    id: "e6",
+    text: "The Zalgo text is a clue, not a puzzle.",
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
+  },
+  {
+    id: "e7",
+    text: "Enslaved strategy: Spend a really long time in your current eternity and " +
+      "get the huge effect on TDs.",
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
+  },
+  {
+    id: "e8",
+    get text() {
+      return `..., ${formatPow(0.95, 2, 2)} at ${formatInt(13)}, ${formatPow(1, 2, 2)} at ` +
+        `${formatInt(14)}, ...`
+    },
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+  },
+  {
+    id: "e9",
+    get text() {
+      return `No, you can't decrease [REDACTED] to ${formatX(1.8, 1, 1)}, but it's still ` +
+        "worth acting as if you could.";
+    },
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+  },
+  {
+    id: "e10",
+    get text() {
+      return `Have you tried rotating your screen ${formatInt(14)} degrees counterclockwise?`;
+    },
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+  },
+  {
+    id: "e11",
+    get text() {
+      return `${format(1e201600, 0, 0)} IP? I'm finally done!`;
+    },
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+  },
+  {
+    id: "e12",
+    text: "Go there and stand away from me / [REDACTED]",
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+  },
+  {
+    id: "e13",
+    text: "Social distancing with regard to Eternity is not encouraged.",
+    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+  },
+  {
+    id: "e14",
+    get text() {
+      return `Did you know? While in The Enslaved Ones' Reality for more than ${formatInt(15)} ` +
+        "minutes, there's a small chance of a fairly-useless hint in a news ticker message! " +
+        `Over ${formatInt(2)} hours, the hints will get slightly more useful and less convoluted, ` +
+        "but remain fairly impossible to figure out!"
+    },
+    get unlocked() { return Enslaved.isRunning; }
   },
   {
     id: "r1",

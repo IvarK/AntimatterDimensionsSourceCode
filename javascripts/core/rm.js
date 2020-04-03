@@ -1050,7 +1050,6 @@ const GlyphSacrificeHandler = {
   },
   glyphRefinementGain(glyph) {
     if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
-    const glyphMaxValue = this.levelRefinementValue(glyph.level);
     const glyphActualValue = this.glyphRawRefinementGain(glyph);
     const alchemyResource = this.glyphAlchemyResource(glyph);
     const glyphActualMaxValue = this.levelAlchemyCap(glyph.level);
@@ -1073,7 +1072,7 @@ const GlyphSacrificeHandler = {
       const refinementGain = this.glyphRefinementGain(glyph);
       resource.amount += refinementGain;
       const decoherenceGain = rawRefinementGain * AlchemyResource.decoherence.effectValue;
-      let alchemyCap = this.levelAlchemyCap(glyph.level);
+      const alchemyCap = this.levelAlchemyCap(glyph.level);
       for (const glyphType of GlyphTypes.list) {
         if (glyphType !== GlyphTypes[glyph.type] && glyphType !== GlyphTypes.reality &&
           glyphType !== GlyphTypes.cursed) {

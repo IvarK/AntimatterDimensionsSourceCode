@@ -2263,7 +2263,7 @@ GameDatabase.news = [
   {
     id: "e11",
     get text() {
-      return `${format(1e201600, 0, 0)} IP? I'm finally done!`;
+      return `${format(new Decimal("1e201600"), 0, 0)} IP? I'm finally done!`;
     },
     get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
   },

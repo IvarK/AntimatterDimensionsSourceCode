@@ -823,16 +823,6 @@ function autoBuyInfDims() {
   }
 }
 
-function autoBuyTimeDims() {
-  if (RealityUpgrade(13).isBought) {
-    for (let i = 1; i < 9; i++) {
-      if (player.reality.tdbuyers[i - 1]) {
-        buyMaxTimeDimTier(i)
-      }
-    }
-  }
-}
-
 function autoBuyExtraTimeDims() {
   if (TimeDimension(8).bought === 0 && Perk.autounlockTD.isBought) {
     for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
@@ -853,7 +843,9 @@ function slowerAutobuyers(realDiff) {
   const timeDimPeriod = 1000;
   if (player.auto.timeDimTimer >= timeDimPeriod) {
     player.auto.timeDimTimer = Math.min(player.auto.timeDimTimer - timeDimPeriod, timeDimPeriod);
-    autoBuyTimeDims();
+    if (RealityUpgrade(13).isBought) {
+      maxAllTimeDimensions(true);
+    }
   }
   player.auto.repUpgradeTimer += ampDiff;
   const repUpgradePeriod = 1000 * Perk.autobuyerFasterReplicanti.effectOrDefault(1);

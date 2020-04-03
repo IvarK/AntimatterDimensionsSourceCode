@@ -53,10 +53,10 @@ Vue.component("time-dim-row", {
       this.isAutobuyerOn = player.reality.tdbuyers[this.tier - 1];
     },
     buyTimeDimension() {
-      buyTimeDimension(this.tier);
+      buySingleTimeDimension(this.tier);
     },
     buyMaxTimeDimension() {
-      buyMaxTimeDimTier(this.tier);
+      buyMaxTimeDimension(this.tier);
     },
   },
   template:

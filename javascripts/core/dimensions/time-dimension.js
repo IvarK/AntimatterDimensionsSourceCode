@@ -1,7 +1,6 @@
 "use strict";
 
-function buyTimeDimension(tier) {
-
+function buySingleTimeDimension(tier) {
   const dim = TimeDimension(tier);
   if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
   if (player.eternityPoints.lt(dim.cost)) return false;
@@ -33,10 +32,10 @@ function toggleAllTimeDims() {
   }
 }
 
-function buyMaxTimeDimTier(tier) {
+function buyMaxTimeDimension(tier) {
   const dim = TimeDimension(tier);
   if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
-  if (Enslaved.isRunning) return buyTimeDimension(tier);
+  if (Enslaved.isRunning) return buySingleTimeDimension(tier);
   const bulk = bulkBuyBinarySearch(player.eternityPoints, {
     costFunction: bought => dim.nextCost(bought),
     cumulative: true,
@@ -50,31 +49,32 @@ function buyMaxTimeDimTier(tier) {
   return true;
 }
 
-function buyMaxTimeDimensions() {
+function maxAllTimeDimensions(checkAutobuyers = false) {
   // Default behavior: Buy as many as possible, starting with the highest dimension first
   // (reduces overhead at higher EP)
   if (player.eternityPoints.gte(1e10)) {
-    for (let i = 8; i > 0; i--) buyMaxTimeDimTier(i);
+    for (let i = 8; i > 0; i--) {
+      if (!checkAutobuyers || player.reality.tdbuyers[i - 1]) buyMaxTimeDimension(i);
+    }
   } else {
     // Low EP behavior: Try to buy the highest affordable new dimension, then loop buying the cheapest possible
-    for (let i = 4; i > 0 && TimeDimension(i).bought === 0; i--)
-      buyTimeDimension(i);
+    for (let i = 4; i > 0 && TimeDimension(i).bought === 0; i--) {
+      if (!checkAutobuyers || player.reality.tdbuyers[i - 1]) buySingleTimeDimension(i);
+    }
 
     // Should never take more than like 50 iterations; explicit infinite loops make me nervous
     for (let stop = 0; stop < 1000; stop++) {
-      let cheapestDim = 1;
-      let cheapestCost = TimeDimension(1).cost;
-      for (let i = 2; i <= 4; i++) {
-        if (TimeDimension(i).cost.lte(cheapestCost)) {
+      let cheapestDim = 0;
+      let cheapestCost = 1e10;
+      for (let i = 1; i <= 4; i++) {
+        if (TimeDimension(i).cost.lte(cheapestCost) && (!checkAutobuyers || player.reality.tdbuyers[i - 1])) {
           cheapestDim = i;
           cheapestCost = TimeDimension(i).cost;
         }
       }
       let bought = false;
-      if (player.eternityPoints.gte(cheapestCost))
-        bought = buyTimeDimension(cheapestDim);
-      if (!bought)
-        break;
+      if (cheapestDim !== 0 && player.eternityPoints.gte(cheapestCost)) bought = buySingleTimeDimension(cheapestDim);
+      if (!bought) break;
     }
   }
 }

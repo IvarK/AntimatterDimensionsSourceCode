@@ -28,7 +28,7 @@ Vue.component("time-dim-tab", {
       this.areAutobuyersUnlocked = RealityUpgrade(13).isBought;
     },
     maxAll() {
-      buyMaxTimeDimensions();
+      maxAllTimeDimensions();
     },
     toggleAllAutobuyers() {
       toggleAllTimeDims();

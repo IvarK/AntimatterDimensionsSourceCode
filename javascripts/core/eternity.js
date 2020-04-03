@@ -177,14 +177,15 @@ function initializeResourcesAfterEternity() {
   player.postChallUnlocked = Achievement(133).isUnlocked ? 8 : 0;
 }
 
-function applyRealityUpgradesAfterEternity() {
+function applyRealityUpgradesAfterEternity(buySingleTD = false) {
   if (RealityUpgrade(13).isBought) {
-      if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
-      for (let i = 1; i < 9; i++) {
-          if (player.reality.tdbuyers[i - 1]) {
-              buyMaxTimeDimTier(i);
-          }
+    if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
+    for (let i = 1; i < 9; i++) {
+      if (player.reality.tdbuyers[i - 1]) {
+        if (buySingleTD) buySingleTimeDimension(i);
+        else buyMaxTimeDimension(i);
       }
+    }
   }
   if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
     for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);

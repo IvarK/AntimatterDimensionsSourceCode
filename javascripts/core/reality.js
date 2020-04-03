@@ -470,7 +470,7 @@ function finishProcessReality(realityProps) {
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
   // This immediately gives eternity upgrades instead of after the first eternity
-  if (RealityUpgrades.allBought) applyRealityUpgradesAfterEternity();
+  if (RealityUpgrades.allBought) applyRealityUpgradesAfterEternity(celestialRunState.enslaved);
 
   if (!isReset) Ra.applyAlchemyReactions();
 
@@ -571,8 +571,8 @@ function isInCelestialReality() {
 }
 
 function resetReality() {
-  if (confirm("This will put you at the start of your reality and reset your progress in this reality." +
-    "Are you sure you want to do this?")) {
+  if (confirm("This will put you at the start of your reality and reset your progress in this reality, " +
+    "giving you no rewards from your progress in your current reality.  Are you sure you want to do this?")) {
     beginProcessReality(getRealityProps(true));
     return true;
   }

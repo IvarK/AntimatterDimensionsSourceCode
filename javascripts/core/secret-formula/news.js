@@ -2214,7 +2214,7 @@ GameDatabase.news = [
   {
     id: "e4",
     get text() {
-      return "You can get Antimatter Galaxies the same way you can get more than "
+      return "You can get Antimatter Galaxies the same way you can get more than " +
         `${formatInt(2)} Antimatter Galaxies without Infinity being broken.`;
     },
     get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
@@ -2241,7 +2241,7 @@ GameDatabase.news = [
     id: "e8",
     get text() {
       return `..., ${formatPow(0.95, 2, 2)} at ${formatInt(13)}, ${formatPow(1, 2, 2)} at ` +
-        `${formatInt(14)}, ...`
+        `${formatInt(14)}, ...`;
     },
     get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
   },
@@ -2283,7 +2283,7 @@ GameDatabase.news = [
       return `Did you know? While in The Enslaved Ones' Reality for more than ${formatInt(15)} ` +
         "minutes, there's a small chance of a fairly-useless hint in a news ticker message! " +
         `Over ${formatInt(2)} hours, the hints will get slightly more useful and less convoluted, ` +
-        "but remain fairly impossible to figure out!"
+        "but remain fairly impossible to figure out!";
     },
     get unlocked() { return Enslaved.isRunning; }
   },

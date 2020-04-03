@@ -188,7 +188,7 @@ const ALTERATION_TYPE = {
   BOOST: 3
 };
 
-const realityGlyphEffectLevelThresholds = [0, 9000, 15000, 22000];
+const realityGlyphEffectLevelThresholds = [0, 9000, 15000, 25000];
 
 GameDatabase.reality.glyphEffects = [
   {
@@ -692,7 +692,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["reality"],
     singleDesc: "Dimension Boost count +{value}",
     totalDesc: "{value} more Dimension Boosts",
-    effect: (level, strength) => Math.pow(1 + level * strength / 150000, 1.2),
+    effect: (level, strength) => Math.pow(1 + level * strength / 200000, 1.2),
     formatEffect: x => formatPercents(x - 1, 2),
     combine: GlyphCombiner.multiply,
   }, {

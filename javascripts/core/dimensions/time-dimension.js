@@ -201,7 +201,9 @@ class TimeDimensionState extends DimensionState {
     if (EternityChallenge(7).isRunning) {
       production = production.dividedBy(Tickspeed.current.dividedBy(1000));
     }
-    production = production.pow(getAdjustedGlyphEffect("timeshardpow"));
+    if (this._tier === 1 && !EternityChallenge(7).isRunning) {
+      production = production.pow(getAdjustedGlyphEffect("timeshardpow"));
+    }
     return production;
   }
 

@@ -148,8 +148,11 @@ const GameStorage = {
       if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
         diff = Enslaved.autoStoreRealTime(diff);
       }
-      if (diff > 1000 * 1000) {
-        simulateTime(diff / 1000);
+      if (diff > 1000) {
+        // The third parameter is a `fast` parameter that we use to only
+        // simulate at most 50 ticks if the player was offline for less
+        // than 50 seconds.
+        simulateTime(diff / 1000, false, diff < 50 * 1000);
       }
     } else {
       player.lastUpdate = Date.now();

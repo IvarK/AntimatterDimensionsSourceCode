@@ -2194,8 +2194,8 @@ GameDatabase.news = [
   {
     id: "e1",
     get text() {
-      return `${format(1.06e112, 2, 2)} but normalized so the mantissa is an integer ` +
-        "and with the mantissa and exponent both written using roman numerals";
+      return `${format(1.10e106, 2, 2)} but normalized so the mantissa is greater than ` +
+        `${formatInt(100)} and with the mantissa and exponent both written using roman numerals`;
     },
     get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
   },

@@ -45,6 +45,10 @@ function buyMaxInfDims(tier) {
   let toBuy = exponentDifference === 0 ? 1 : Math.floor(exponentDifference / Math.log10(costMult));
   const purchasesUntilHardcap = dim.purchaseCap - dim.purchases;
   toBuy = Math.min(toBuy, purchasesUntilHardcap);
+  if (EternityChallenge(8).isRunning) {
+    toBuy = Math.clampMax(toBuy, player.eterc8ids);
+    player.eterc8ids -= toBuy;
+  }
 
   dim.cost = dim.cost.times(Decimal.pow(costMult, toBuy - 1));
   player.infinityPoints = player.infinityPoints.minus(dim.cost);

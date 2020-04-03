@@ -54,7 +54,10 @@ Vue.component("time-dim-row", {
     },
     buyTimeDimension() {
       buyTimeDimension(this.tier);
-    }
+    },
+    buyMaxTimeDimension() {
+      buyMaxTimeDimTier(this.tier);
+    },
   },
   template:
     `<div v-show="isUnlocked" class="c-time-dim-row">
@@ -64,6 +67,11 @@ Vue.component("time-dim-row", {
       <div class="c-time-dim-row__label c-time-dim-row__label--growable">
         {{format(amount, 2, 0)}}{{rateOfChangeDisplay}}
       </div>
+      <primary-button
+        :enabled="isAffordable"
+        class="o-primary-btn--buy-td l-time-dim-row__button"
+        @click="buyTimeDimension"
+      >{{buttonContents}}</primary-button>
       <primary-button-on-off
         v-if="areAutobuyersUnlocked"
         v-model="isAutobuyerOn"
@@ -71,9 +79,10 @@ Vue.component("time-dim-row", {
         text="Auto:"
       />
       <primary-button
+        v-else
         :enabled="isAffordable"
-        class="o-primary-btn--buy-td l-time-dim-row__button"
-        @click="buyTimeDimension"
-      >{{buttonContents}}</primary-button>
+        class="o-primary-btn--buy-td-max l-time-dim-row__button"
+        @click="buyMaxTimeDimension"
+      >Buy Max</primary-button>
     </div>`,
 });

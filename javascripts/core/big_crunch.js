@@ -450,7 +450,10 @@ function preProductionGenerateIP(diff) {
     if (player.partInfinityPoint >= 1) {
       const genCount = Math.floor(player.partInfinityPoint);
       let gainedThisTick = new Decimal(genCount).timesEffectOf(InfinityUpgrade.ipGen);
-      if (Laitela.isRunning) gainedThisTick = gainedEternityPoints(gainedThisTick);
+      // This is technically incorrect (it depends on update rate)
+      // but IP from this upgrade is never your main source of IP
+      // so it should never matter.
+      if (Laitela.isRunning) gainedThisTick = dilatedValueOf(gainedThisTick, 1);
       player.infinityPoints = player.infinityPoints.plus(gainedThisTick);
       player.partInfinityPoint -= genCount;
     }

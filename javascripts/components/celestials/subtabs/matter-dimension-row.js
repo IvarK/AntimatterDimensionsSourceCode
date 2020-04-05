@@ -65,7 +65,7 @@ Vue.component("matter-dimension-row", {
         @click="dimension.buyInterval()" 
         class="o-matter-dimension-button" 
         :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> 
-        {{ interval.toFixed(2) }}ms <span v-if="interval > intervalCap">
+        {{ format(interval, 2, 2) }}ms <span v-if="interval > intervalCap">
         <br>Cost: {{ format(intervalCost, 2, 0) }}</span>
       </button>
       <button
@@ -81,7 +81,7 @@ Vue.component("matter-dimension-row", {
         DE {{ format(powerDE, 4, 4) }}x <br>Cost: {{ format(powerDECost, 2, 0) }}
       </button>
     </div>
-    <span v-if="interval > 200">Tick: {{ formatInt(timer) }} ms ({{ format(100 * timerPercent, 1, 1) }}%)</span>
+    <span v-if="interval > 200">Tick: {{ formatInt(timer) }} ms ({{ formatPercents(timerPercent, 1) }}%)</span>
   </div>
 
   `

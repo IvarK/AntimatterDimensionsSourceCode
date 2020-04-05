@@ -743,8 +743,10 @@ function cubicRealRoots(k3, k2, k1, k0) {
 
 function testCRR(k3, k2, k1, k0) {
   const r = cubicRealRoots(k3, k2, k1, k0);
+  // eslint-disable-next-line no-console
   console.log(r);
-  console.log(r.map(r => k0 + r * (k1 + r * (k2 + r * k3))));
+  // eslint-disable-next-line no-console
+  console.log(r.map(x => k0 + x * (k1 + x * (k2 + x * k3))));
 }
 
 function depressedQuarticRealRoots(k4, k2, k1, k0) {
@@ -793,8 +795,10 @@ function depressedQuarticRealRoots(k4, k2, k1, k0) {
 
 function testDQRR(k4, k2, k1, k0) {
   const r = depressedQuarticRealRoots(k4, k2, k1, k0);
+  // eslint-disable-next-line no-console
   console.log(r);
-  console.log(r.map(r => k0 + r * (k1 + r * (k2 + r * r * k4))));
+  // eslint-disable-next-line no-console
+  console.log(r.map(x => k0 + x * (k1 + x * (k2 + x * x * k4))));
 }
 
 function solveSimpleBiquadratic(A, B, C, D, E, F) {
@@ -836,11 +840,13 @@ function solveSimpleBiquadratic(A, B, C, D, E, F) {
 }
 
 function testSSBQ(A, B, C, D, E, F) {
+  // eslint-disable-next-line no-console
   console.log({ A, B, C, D, E, F });
   const sols = solveSimpleBiquadratic(A, B, C, D, E, F);
   for (const s of sols) {
     const e1 = A * s.x * s.x + B * s.y + C;
     const e2 = D * s.y * s.y + E * s.x + F;
+    // eslint-disable-next-line no-console
     console.log(`${s.x} ${s.y} ${e1} ${e2}`);
   }
 }
@@ -1008,7 +1014,7 @@ class Curve {
    * @param {number} t
    * @returns {Vector}
   */
-  position(t) {
+  position() {
     throw new NotImplementedError();
   }
 
@@ -1017,7 +1023,7 @@ class Curve {
    * @param {number} t
    * @returns {Vector}
   */
-  derivative(t) {
+  derivative() {
     throw new NotImplementedError();
   }
 
@@ -1026,7 +1032,7 @@ class Curve {
    * @param {number} t
    * @returns {Vector}
   */
-  secondDerivative(t) {
+  secondDerivative() {
     throw new NotImplementedError();
   }
 
@@ -1068,7 +1074,6 @@ class Curve {
       /* eslint-enable no-param-reassign */
       const distSecondDeriv = (offset.dot(dd) + d.dot(d)) * 2;
       const tStep = distSecondDeriv < 0 ? -dist / distDeriv : -distDeriv / distSecondDeriv;
-      // console.log(`${tGuess} ${tMin} ${tMax} ${tStep} ${dist} ${distDeriv} ${distSecondDeriv} ${dd.x} ${dd.y}`);
       if (Math.abs(tStep) < tTol || iter >= 16) return dist;
       tGuess = Math.clamp(tGuess + tStep, tMin, tMax);
     }
@@ -1086,11 +1091,11 @@ class LinearPath extends Curve {
     return this.p0.times(1 - t).plus(this.p1.times(t));
   }
 
-  derivative(t) {
+  derivative() {
     return this.p1.minus(this.p0);
   }
 
-  secondDerivative(t) {
+  secondDerivative() {
     return new Vector(0, 0);
   }
 

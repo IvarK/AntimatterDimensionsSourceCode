@@ -163,7 +163,6 @@ const Ra = {
     data.unlockBits = 0;
     data.run = false;
     data.charged = new Set();
-    data.quoteIdx = 0;
     data.disCharge = false;
     data.peakGamespeed = 1;
     for (const pet of Ra.pets.all) pet.reset();

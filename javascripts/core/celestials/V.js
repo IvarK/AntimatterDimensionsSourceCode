@@ -196,7 +196,6 @@ const V = {
   reset() {
     player.celestials.v = {
       unlockBits: 0,
-      quoteIdx: 0,
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       triadStudies: [],

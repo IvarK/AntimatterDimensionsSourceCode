@@ -156,7 +156,6 @@ function initializeResourcesAfterEternity() {
   player.infMultCost = new Decimal(10);
   player.infinityPower = new Decimal(1);
   player.timeShards = new Decimal(0);
-  player.tickThreshold = new Decimal(1);
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.totalTickGained = 0;

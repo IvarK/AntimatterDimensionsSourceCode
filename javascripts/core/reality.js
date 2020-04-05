@@ -359,7 +359,6 @@ function finishProcessReality(realityProps) {
   player.thisInfinityRealTime = 0;
   player.dimensionBoosts = 0;
   player.galaxies = 0;
-  player.interval = null;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.break = false;
@@ -370,7 +369,6 @@ function finishProcessReality(realityProps) {
   player.infinityPower = new Decimal(1);
   player.infDimBuyers = Array.repeat(false, 8);
   player.timeShards = new Decimal(0);
-  player.tickThreshold = new Decimal(1);
   player.replicanti.amount = new Decimal(0);
   player.replicanti.unl = false;
   player.replicanti.chance = 0.01;

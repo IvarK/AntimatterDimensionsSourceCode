@@ -542,10 +542,8 @@ function gameLoop(diff, options = {}) {
   InfinityDimensions.tick(diff);
   NormalDimensions.tick(diff);
 
-  const freeTickspeed = FreeTickspeed.fromShards(player.timeShards);
-  const gain = Math.max(0, freeTickspeed.newAmount - player.totalTickGained);
+  const gain = Math.clampMin(FreeTickspeed.fromShards(player.timeShards).newAmount - player.totalTickGained, 0);
   player.totalTickGained += gain;
-  player.tickThreshold = freeTickspeed.nextShards;
 
   const currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinityRealTime.totalMinutes);
   if (currentIPmin.gt(player.bestIPminThisInfinity) && canCrunch()) player.bestIPminThisInfinity = currentIPmin;

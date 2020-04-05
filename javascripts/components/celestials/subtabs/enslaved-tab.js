@@ -35,8 +35,8 @@ Vue.component("modal-enslaved-hints", {
       player.celestials.enslaved.stored -= this.nextHintCost;
       return true;
     },
-    giveRealityHint() {
-      if (!this.spendTime()) return;
+    giveRealityHint(available) {
+      if (available <= 0 || !this.spendTime()) return;
       player.celestials.enslaved.realityHintsGiven++;
       Object.values(EnslavedProgress).filter(prog => !prog.hasHint).randomElement().giveHint();
     },
@@ -116,7 +116,6 @@ Vue.component("enslaved-tab", {
     unlocks: [],
     buyableUnlocks: [],
     quote: "",
-    quoteIdx: 0,
     currentSpeedUp: 0,
     hintsUnlocked: false
   }),
@@ -172,7 +171,6 @@ Vue.component("enslaved-tab", {
       this.unlocks = Array.from(player.celestials.enslaved.unlocks);
       this.buyableUnlocks = Object.values(ENSLAVED_UNLOCKS).map(x => Enslaved.canBuy(x));
       this.quote = Enslaved.quote;
-      this.quoteIdx = player.celestials.enslaved.quoteIdx;
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
       this.autoRelease = player.celestials.enslaved.isAutoReleasing;
       this.autoReleaseSpeed = Enslaved.isAutoReleasing ? Enslaved.autoReleaseSpeed : 0;

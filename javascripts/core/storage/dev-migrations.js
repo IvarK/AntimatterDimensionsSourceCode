@@ -603,7 +603,7 @@ GameStorage.devMigrations = {
     },
     player => {
       delete player.celestials.laitela.maxAmGained;
-      for (let dim of player.celestials.laitela.dimensions) {
+      for (const dim of player.celestials.laitela.dimensions) {
         dim.powerDMUpgrades = dim.powerUpgrades;
         dim.powerDEUpgrades = 0;
         delete dim.chanceUpgrades;

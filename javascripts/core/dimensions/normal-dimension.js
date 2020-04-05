@@ -579,6 +579,16 @@ class NormalDimensionState extends DimensionState {
     return GameCache.normalDimensionFinalMultipliers[this.tier].value;
   }
 
+  get cappedProductionInNormalChallenges() {
+    const postBreak = (player.break && !NormalChallenge.isRunning) ||
+      InfinityChallenge.isRunning ||
+      Enslaved.isRunning;
+    if (!postBreak && production.gte(Decimal.NUMBER_MAX_VALUE)) {
+      return new Decimal("1e315");
+    }
+    return Decimal.MAX_VALUE;
+  }
+
   get productionPerSecond() {
     const tier = this.tier;
     if (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension) return new Decimal(0);
@@ -601,12 +611,7 @@ class NormalDimensionState extends DimensionState {
         production = Decimal.pow10(Math.pow(log10, getAdjustedGlyphEffect("effarigantimatter")));
       }
     }
-    const postBreak = (player.break && !NormalChallenge.isRunning) ||
-      InfinityChallenge.isRunning ||
-      Enslaved.isRunning;
-    if (!postBreak && production.gte(Decimal.NUMBER_MAX_VALUE)) {
-      production = production.min("1e315");
-    }
+    production = production.min(this.cappedProductionInNormalChallenges);
     return production;
   }
 }

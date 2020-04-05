@@ -68,7 +68,7 @@ Vue.component("secret-time-study", {
         }
         if (this.isEnslaved) {
           this.isVisible = true;
-          EnslavedProgress.secretStudy.unlock();
+          EnslavedProgress.secretStudy.giveProgress();
           player.timestudy.theorem = player.timestudy.theorem.plus(this.enslavedTT);
         }
       }

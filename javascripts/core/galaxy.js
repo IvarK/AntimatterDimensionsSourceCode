@@ -183,6 +183,6 @@ function maxBuyGalaxies(limit = Number.MAX_VALUE) {
   // Galaxy count is incremented by galaxyReset(), so add one less than we should:
   player.galaxies = newGalaxies - 1;
   galaxyReset();
-  if (Enslaved.isRunning && player.galaxies > 1) EnslavedProgress.c10.unlock();
+  if (Enslaved.isRunning && player.galaxies > 1) EnslavedProgress.c10.giveProgress();
   return true;
 }

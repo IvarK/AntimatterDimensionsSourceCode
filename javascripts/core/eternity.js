@@ -31,7 +31,7 @@ function giveEternityRewards(auto) {
         challenge.addCompletion();
         completionCount++;
       }
-      if (Enslaved.isRunning && completionCount > 5) EnslavedProgress.ec1.unlock();
+      if (Enslaved.isRunning && completionCount > 5) EnslavedProgress.ec1.giveProgress();
     }
     player.etercreq = 0;
     respecTimeStudies(auto);

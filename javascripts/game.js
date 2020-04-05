@@ -593,9 +593,9 @@ function gameLoop(diff, options = {}) {
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
-  if (Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000 &&
-    player.celestials.enslaved.hintBits === 0) {
-      player.celestials.enslaved.hintBits = 1;
+  if (Enslaved.isRunning && player.thisRealityRealTime > 4 * 3600 * 1000 &&
+    !EnslavedProgress.hintsUnlocked.hasProgress) {
+      EnslavedProgress.hintsUnlocked.giveProgress();
       Enslaved.quotes.show(Enslaved.quotes.HINT_UNLOCK);
   }
 

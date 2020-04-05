@@ -180,8 +180,8 @@ class EternityChallengeState extends GameMechanicState {
       if (V.isRunning) player.minNegativeBlackHoleThisReality = 1;
     }
     if (Enslaved.isRunning) {
-      if (this.id === 6 && this.completions === 5) EnslavedProgress.ec6.unlock();
-      if (EnslavedProgress.challengeCombo.isUnlocked) Tab.challenges.normal.show();
+      if (this.id === 6 && this.completions === 5) EnslavedProgress.ec6.giveProgress();
+      if (EnslavedProgress.challengeCombo.hasProgress) Tab.challenges.normal.show();
     }
     startEternityChallenge();
     return true;

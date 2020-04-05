@@ -94,7 +94,7 @@ const Enslaved = {
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) {
       release = Enslaved.storedTimeInsideEnslaved(release);
-      if (Time.thisReality.totalYears > 1) EnslavedProgress.storedTime.unlock();
+      if (Time.thisReality.totalYears > 1) EnslavedProgress.storedTime.giveProgress();
     }
     if (autoRelease) release *= 0.01;
     this.nextTickDiff = release;
@@ -150,7 +150,7 @@ const Enslaved = {
   },
   feelEternity() {
     if (!this.feltEternity) {
-      EnslavedProgress.feelEternity.unlock();
+      EnslavedProgress.feelEternity.giveProgress();
       this.feltEternity = true;
       Modal.message.show("Time in eternity will be scaled by number of eternities");
     }
@@ -160,6 +160,10 @@ const Enslaved = {
   },
   set feltEternity(value) {
     player.celestials.enslaved.feltEternity = value;
+  },
+  get nextHintCost() {
+    const totalHintsGiven = player.celestials.enslaved.realityHintsGiven + player.celestials.enslaved.glyphHintsGiven;
+    return TimeSpan.fromYears(1e40 * Math.pow(3, totalHintsGiven)).totalMilliseconds;
   },
   get tesseractCost() {
     return Tesseracts.costs[player.celestials.enslaved.tesseracts];
@@ -231,20 +235,31 @@ class EnslavedProgressState extends GameMechanicState {
     if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
   }
 
-  get isUnlocked() {
+  get hasProgress() {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.enslaved.progressBits & (1 << this.id));
   }
 
-  unlock() {
+  get hasHint() {
+    // eslint-disable-next-line no-bitwise
+    return this.hasProgress || Boolean(player.celestials.enslaved.hintBits & (1 << this.id));
+  }
+
+  giveProgress() {
     // eslint-disable-next-line no-bitwise
     player.celestials.enslaved.progressBits |= (1 << this.id);
+  }
+
+  giveHint() {
+    // eslint-disable-next-line no-bitwise
+    player.celestials.enslaved.hintBits |= (1 << this.id);
   }
 }
 
 const EnslavedProgress = (function() {
   const db = GameDatabase.celestials.enslaved.progress;
   return {
+    hintsUnlocked: new EnslavedProgressState(db.hintsUnlocked),
     ec1: new EnslavedProgressState(db.ec1),
     feelEternity: new EnslavedProgressState(db.feelEternity),
     ec6: new EnslavedProgressState(db.ec6),

@@ -1,5 +1,103 @@
 "use strict";
 
+Vue.component("modal-enslaved-hints", {
+  data() {
+    return {
+      currentStored: 0,
+      nextHintCost: 0,
+      shownEntries: [],
+      realityHintsLeft: 0,
+      glyphHintsLeft: 0,
+    };
+  },
+  methods: {
+    update() {
+      this.currentStored = player.celestials.enslaved.stored;
+      this.nextHintCost = Enslaved.nextHintCost;
+      this.shownEntries = [];
+
+      this.realityHintsLeft = Object.values(EnslavedProgress).length;
+      for (const prog of Object.values(EnslavedProgress)) {
+        if (prog.hasHint) {
+          this.shownEntries.push([prog.hasProgress ? prog.config.progress : "(Unknown)", prog.config.hint]);
+          this.realityHintsLeft--;
+        }
+      }
+
+      const glyphHintCount = player.celestials.enslaved.glyphHintsGiven;
+      for (let hintNum = 0; hintNum < glyphHintCount; hintNum++) {
+        this.shownEntries.push(["", GameDatabase.celestials.enslaved.glyphHints[hintNum]]);
+      }
+      this.glyphHintsLeft = GameDatabase.celestials.enslaved.glyphHints.length - glyphHintCount;
+    },
+    spendTime() {
+      if (this.currentStored < Enslaved.nextHintCost) return false;
+      player.celestials.enslaved.stored -= this.nextHintCost;
+      return true;
+    },
+    giveRealityHint() {
+      if (!this.spendTime()) return;
+      player.celestials.enslaved.realityHintsGiven++;
+      Object.values(EnslavedProgress).filter(prog => !prog.hasHint).randomElement().giveHint();
+    },
+    giveGlyphHint(available) {
+      if (available <= 0 || !this.spendTime()) return;
+      player.celestials.enslaved.glyphHintsGiven++;
+    }
+  },
+  computed: {
+    hintCost() {
+      return `${format(TimeSpan.fromMilliseconds(this.nextHintCost).totalYears, 1)} years`;
+    },
+    hasProgress(id) {
+      return this.progressEntries.some(entry => entry.id === id);
+    },
+    timeEstimate() {
+      const storeRate = Enslaved.isStoringGameTime
+        ? Enslaved.currentBlackHoleStoreAmountPerMs
+        : getGameSpeedupFactor();
+      const timeToGoal = Math.clampMin((this.nextHintCost - this.currentStored) / storeRate, 0);
+      return `${TimeSpan.fromMilliseconds(timeToGoal)}`;
+    }
+  },
+  template: `
+    <div class="c-reality-glyph-creation">
+      <modal-close-button @click="emitClose"/>
+      <div>
+        This Reality seems to be resisting your efforts to complete it. So far you have done the following:
+      </div><br>
+      <div v-for="entry in shownEntries">
+          <div v-if="entry[0]">
+            <b>{{ entry[0] }}</b>
+            <br>
+            - {{ entry[1] }}
+          </div>
+          <div v-else>
+            * <i>Glyph hint: {{ entry[1] }}</i>
+          </div>
+        </div>
+      <br>
+        You can spend some time looking for some more cracks in the Reality, but every hint you spend time on
+        will permanently increase the time needed for the next by a factor of {{ formatInt(3) }}.
+        <br>
+        <br>
+        The next hint requires {{ hintCost }} stored in your black hole, which will be used up. You can reach
+        this by charging your black hole for {{ timeEstimate }}.
+        <br>
+        <br>
+        <button class="o-primary-btn"
+          :class="{ 'o-primary-btn--disabled': realityHintsLeft <= 0 }"
+          v-on:click="giveRealityHint(realityHintsLeft)">
+            Get a hint about the Reality itself ({{ formatInt(realityHintsLeft) }} left)
+        </button>
+        <button class="o-primary-btn"
+          :class="{ 'o-primary-btn--disabled': glyphHintsLeft <= 0 }"
+          v-on:click="giveGlyphHint(glyphHintsLeft)">
+            Get a hint on what glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
+        </button>
+    </div>`,
+});
+
 Vue.component("enslaved-tab", {
   data: () => ({
     isStoringBlackHole: false,
@@ -19,7 +117,8 @@ Vue.component("enslaved-tab", {
     buyableUnlocks: [],
     quote: "",
     quoteIdx: 0,
-    currentSpeedUp: 0
+    currentSpeedUp: 0,
+    hintsUnlocked: false
   }),
   computed: {
     storedRealEfficiencyDesc() {
@@ -78,6 +177,7 @@ Vue.component("enslaved-tab", {
       this.autoRelease = player.celestials.enslaved.isAutoReleasing;
       this.autoReleaseSpeed = Enslaved.isAutoReleasing ? Enslaved.autoReleaseSpeed : 0;
       this.currentSpeedUp = Enslaved.currentBlackHoleStoreAmountPerMs;
+      this.hintsUnlocked = EnslavedProgress.hintsUnlocked.hasProgress;
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
@@ -140,6 +240,12 @@ Vue.component("enslaved-tab", {
   template:
     `<div class="l-enslaved-celestial-tab">
       <celestial-quote-history celestial="enslaved"/>
+      <primary-button
+        v-if="hintsUnlocked"
+        class="o-primary-btn"
+        onclick="Modal.enslavedHints.show()">
+          Examine the Reality more closely...
+      </primary-button>
       <div class="l-enslaved-top-container">
         <div class="l-enslaved-top-container__half">
           Charging your black hole 

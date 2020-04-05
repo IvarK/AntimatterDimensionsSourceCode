@@ -190,7 +190,7 @@ class TimeDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning || TimeCompression.isActive) {
+    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning) {
       return new Decimal(0);
     }
 
@@ -200,6 +200,9 @@ class TimeDimensionState extends DimensionState {
     let production = this.amount.times(this.multiplier);
     if (EternityChallenge(7).isRunning) {
       production = production.dividedBy(Tickspeed.current.dividedBy(1000));
+    }
+    if (this._tier === 1 && !EternityChallenge(7).isRunning) {
+      production = production.pow(getAdjustedGlyphEffect("timeshardpow"));
     }
     return production;
   }

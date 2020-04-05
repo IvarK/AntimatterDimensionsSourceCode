@@ -64,17 +64,12 @@ function getDimensionFinalMultiplierUncached(tier) {
   multiplier = applyNDPowers(multiplier, tier);
 
   const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
-  if (player.dilation.active || TimeCompression.isActive) {
+  if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier, 1));
   } else if (Enslaved.isRunning) {
     multiplier = dilatedValueOf(multiplier);
   }
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
-
-  // The "unaffected by dilation" ND mult and ND dilation power effect only apply to the first layer of dilation
-  if (TimeCompression.isActive) {
-    multiplier = dilatedValueOf(multiplier, TimeCompression.compressionDepth - 1);
-  }
 
   if (Effarig.isRunning) {
     multiplier = Effarig.multiplier(multiplier);

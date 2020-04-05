@@ -31,7 +31,6 @@ Vue.component("perk-shop-upgrade", {
         <description-display
           :config="upgrade.config"
           :length="70"
-          name="o-compression-upgrade__description"
         />
         <br>
         <effect-display :config="upgrade.config" />

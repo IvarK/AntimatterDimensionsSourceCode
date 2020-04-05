@@ -205,13 +205,6 @@ GameDatabase.tabs = [
         symbol: "Ψ",
         component: "time-dilation-tab",
         condition: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked()
-      },
-      {
-        key: "compression",
-        name: "Time compression",
-        symbol: "<i class='fas fa-compress-arrows-alt'></i>",
-        component: "time-compression-tab",
-        condition: () => Ra.pets.enslaved.level >= 25
       }
     ],
   },

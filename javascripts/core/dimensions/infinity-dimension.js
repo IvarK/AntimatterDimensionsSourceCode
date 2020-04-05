@@ -191,7 +191,7 @@ class InfinityDimensionState extends DimensionState {
 
     mult = mult.clampMin(0);
 
-    if (player.dilation.active || TimeCompression.isActive) {
+    if (player.dilation.active) {
       mult = dilatedValueOf(mult);
     }
 
@@ -239,9 +239,9 @@ class InfinityDimensionState extends DimensionState {
     if (Enslaved.isRunning) {
       return 1;
     }
-    return InfinityDimensions.capIncrease + (this.tier === 8
-      ? Number.MAX_VALUE
-      : InfinityDimensions.HARDCAP_PURCHASES);
+     return InfinityDimensions.capIncrease + (this.tier === 8
+       ? Number.MAX_VALUE
+       : InfinityDimensions.HARDCAP_PURCHASES);
   }
 
   get isCapped() {
@@ -309,8 +309,7 @@ const InfinityDimensions = {
   get capIncrease() {
     const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease *
       (1 + AlchemyResource.boundless.effectValue);
-    const compressionBoost = Effects.max(0, CompressionUpgrade.infDimSoftcap);
-    return Math.floor(enslavedBoost + compressionBoost);
+    return Math.floor(enslavedBoost);
   },
 
   get totalDimCap() {

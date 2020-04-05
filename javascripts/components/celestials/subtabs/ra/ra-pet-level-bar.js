@@ -45,13 +45,11 @@ Vue.component("ra-pet-level-bar", {
     },
     prevGoal() {
       const currentUpgrades = this.importantLevels.filter(goal => goal <= this.level);
-      return currentUpgrades.length === this.importantLevels.length
-        ? 5 * Math.floor(this.level / 5)
-        : currentUpgrades.max();
+      return Math.clampMax(currentUpgrades.max(), 15);
     },
     nextGoal() {
       const missingUpgrades = this.importantLevels.filter(goal => goal > this.level);
-      return missingUpgrades.length === 0 ? this.prevGoal + 5 : missingUpgrades.min();
+      return missingUpgrades.length === 0 ? 25 : missingUpgrades.min();
     },
     currentLevelGoal() {
       if (this.shiftDown) return this.level + 1;

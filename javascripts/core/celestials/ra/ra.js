@@ -187,9 +187,10 @@ const Ra = {
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredExpForLevel(level) {
-    let adjustedLevel = level + Math.pow(level, 2) / 10;
-    if (level > 25) adjustedLevel *= Math.pow(1.3, level - 25);
-    return Math.floor(Math.pow(adjustedLevel, 4) * 5e5);
+    if (level >= 25) return Infinity;
+    const adjustedLevel = level + Math.pow(level, 2) / 10;
+    const post15Scaling = Math.pow(1.4, Math.max(0, level - 15));
+    return Math.floor(Math.pow(adjustedLevel, 4) * post15Scaling * 5e5);
   },
   // Calculates the cumulative exp needed to REACH a level starting from nothing.
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized
@@ -210,6 +211,13 @@ const Ra = {
       if (isUnlockable && !this.has(unl)) {
         // eslint-disable-next-line no-bitwise
         player.celestials.ra.unlockBits |= (1 << unl.id);
+        if (unl.id === RA_UNLOCKS.ALWAYS_GAMESPEED.id) {
+          const allGlyphs = player.reality.glyphs.active
+            .concat(player.reality.glyphs.inventory);
+          for (const glyph of allGlyphs) {
+            Glyphs.applyGamespeed(glyph);
+          }
+        }
         if (unl.id === RA_UNLOCKS.RA_LAITELA_UNLOCK.id) {
           MatterDimension(1).amount = new Decimal(1);
         }
@@ -504,13 +512,14 @@ const RA_UNLOCKS = {
     level: 15,
     displayIcon: `<span class="fas fa-tachometer-alt"></span>`
   },
-  TIME_COMPRESSION: {
+  ALWAYS_GAMESPEED: {
     id: 20,
     description: "Get Enslaved to level 25",
-    reward: "Unlock Time Compression",
+    reward: `All basic glyphs gain the increased game speed effect from time glyphs,
+      and time glyphs gain an additional effect`,
     pet: Ra.pets.enslaved,
     level: 25,
-    displayIcon: `<span class="fas fa-compress-arrows-alt"></span>`
+    displayIcon: `<span class="fas fa-clock"></span>`
   },
   AUTO_REALITY_UPGRADES: {
     id: 21,
@@ -573,11 +582,10 @@ const RA_UNLOCKS = {
     level: 15,
     displayIcon: `<span class="fas fa-graduation-cap"></span>`
   },
-  START_TT: {
+  ACHIEVEMENT_POW: {
     id: 27,
     description: "Get V to level 25",
-    reward: () => `Start every non-celestial Reality with ${format(5e9)} TT`,
-    effect: 5e9,
+    reward: () => `Achievement multiplier is raised ${formatPow(1.5, 1, 1)}`,
     pet: Ra.pets.v,
     level: 25,
     displayIcon: `<i class="fab fa-buffer"></i>`
@@ -591,8 +599,8 @@ const RA_UNLOCKS = {
   },
   RA_LAITELA_UNLOCK: {
     id: 29,
-    description: "Get 80 total celestial levels",
+    description: "Get 100 total celestial levels",
     reward: "Unlock Lai'tela, the Celestial of Dimensions",
-    totalLevels: 80,
+    totalLevels: 100,
   }
 };

@@ -582,6 +582,23 @@ GameStorage.devMigrations = {
       player.onlyEighthDimensions = player.onlyEighthDimensons;
       delete player.onlyEighthDimensons;
     },
+    player => {
+      for (const pet of Ra.pets.all) {
+        pet.level = Math.clampMax(pet.level, 25);
+      }
+      delete player.celestials.ra.compression;
+      if (Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) {
+        const allGlyphs = player.reality.glyphs.active
+          .concat(player.reality.glyphs.inventory);
+        for (const glyph of allGlyphs) {
+          Glyphs.applyGamespeed(glyph);
+        }
+      }
+      for (let i = 0; i < player.celestials.ra.alchemy.length; i++) {
+        player.celestials.ra.alchemy[i].amount = Math.clampMax(
+          player.celestials.ra.alchemy[i].amount, 25000);
+      }
+    }
   ],
 
   patch(player) {

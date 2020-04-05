@@ -87,11 +87,11 @@ GameDatabase.darkEnergyUpgrade = {
     effect: () => Math.log10(player.celestials.laitela.darkEnergy + 1) * 0.75 + 1,
     effectFormat: x => `Currently: ${format(x, 2, 2)}x`
   },
-  compressionBoost: {
+  darkEnergy6: {
     id: 6,
-    description: "Time runs faster in Time Compression based on current Entanglement",
+    description: "Dummy upgrade to replace compression upgrade which was deleted",
     cost: 50000,
-    effect: () => 1e10 * Math.pow(2, player.celestials.ra.compression.entanglement),
+    effect: () => 1,
     effectFormat: x => `Currently: ${format(x, 2, 2)}x`
   }
 };

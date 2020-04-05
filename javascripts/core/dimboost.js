@@ -108,7 +108,7 @@ class DimBoost {
   }
 
   static get freeBoosts() {
-    return Math.floor(Effects.max(0, CompressionUpgrade.freeBoost));
+    return 0;
   }
 
   static get totalBoosts() {

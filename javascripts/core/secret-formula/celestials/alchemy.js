@@ -149,12 +149,12 @@ GameDatabase.celestials.alchemy = {
       name: "Alternation",
       symbol: "ω",
       isBaseResource: false,
-      effect: amount => amount / 100000,
+      effect: amount => amount / 200000,
       tier: 2,
       uiOrder: 4,
       isUnlocked: () => Ra.pets.effarig.level >= 12,
       lockText: "Effarig Level 12",
-      formatEffect: value => `Dilation penalty reduced by ${formatPercents(value, 2, 2)} ` +
+      formatEffect: value => `Free galaxies are ${formatPercents(value, 2, 2)} stronger ` +
         `per ${format("1e1000000")} replicanti`,
       reagents: [
         {
@@ -221,7 +221,8 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 15,
       lockText: "Effarig Level 15",
-      formatEffect: value => `Game speed ${formatX(value, 5, 5)} per real-time minute in this reality`,
+      formatEffect: value => `Game speed ${formatX(value, 5, 5)} per real-time minute in this reality
+        (${formatX(1e30, 0, 0)} cap)`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -374,12 +375,13 @@ GameDatabase.celestials.alchemy = {
       name: "Unpredictability",
       symbol: "Λ",
       isBaseResource: false,
-      effect: amount => amount / 50000,
+      effect: amount => amount / (10000 + amount),
       tier: 4,
       uiOrder: 4,
-      isUnlocked: () => Ra.pets.effarig.level >= 21 && player.celestials.laitela.matter.neq(0),
-      lockText: "Effarig Level 21 and Lai'tela unlocked",
-      formatEffect: value => `Boost dark matter dimension generation chance by +${formatPercents(value, 2, 2)}`,
+      isUnlocked: () => Ra.pets.effarig.level >= 21,
+      lockText: "Effarig Level 21",
+      formatEffect: value => `Any alchemy reaction has a ${formatPercents(value, 2, 2)}
+        chance of triggering again`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -405,7 +407,7 @@ GameDatabase.celestials.alchemy = {
       tier: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 25,
       lockText: "Effarig Level 25",
-      formatEffect: value => `Use all resources to create a level ${formatInt(value)} Reality glyph`,
+      formatEffect: value => `Consume all Reality resource to create a level ${formatInt(value)} Reality glyph`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EXPONENTIAL,

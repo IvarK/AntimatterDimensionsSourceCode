@@ -16,7 +16,6 @@ function startDilatedEternity(auto) {
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
-  TimeCompression.isActive = false;
   return true;
 }
 
@@ -78,17 +77,11 @@ function buyDilationUpgrade(id, bulk) {
   return true;
 }
 
-// This two are separate to avoid an infinite loop as the compression unlock condition checks the free galaxy mult
-function getFreeGalaxyMultBeforeCompression() {
+function getFreeGalaxyMult() {
   const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.35;
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
   return 1 + thresholdMult * glyphReduction;
-}
-
-function getFreeGalaxyMult() {
-  const compressionReduction = Effects.max(0, CompressionUpgrade.freeGalaxyScaling);
-  return 1 + (getFreeGalaxyMultBeforeCompression() - 1) / (1 + compressionReduction);
 }
 
 function getDilationGainPerSecond() {
@@ -161,9 +154,6 @@ function dilatedValueOf(value, depth) {
   if (player.dilation.active || Enslaved.isRunning) {
     return recursiveDilation(value, 1);
   }
-  if (TimeCompression.isActive) {
-    return recursiveDilation(value, TimeCompression.compressionDepth);
-  }
   throw new Error("Invald dilation depth");
 }
 
@@ -172,9 +162,7 @@ function recursiveDilation(value, depth) {
     return value;
   }
   const log10 = value.log10();
-  const basePenalty = 0.75 * DilationUpgrade.dilationPenalty.effectOrDefault(1);
-  const alchemyReduction = (player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
-  const dilationPenalty = Math.min(1, basePenalty + (1 - basePenalty) * alchemyReduction);
+  const dilationPenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
   return recursiveDilation(Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty)), depth - 1);
 }
 

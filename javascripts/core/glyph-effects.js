@@ -188,7 +188,7 @@ const ALTERATION_TYPE = {
   BOOST: 3
 };
 
-const realityGlyphEffectLevelThresholds = [0, 9000, 15000, 22000];
+const realityGlyphEffectLevelThresholds = [0, 9000, 15000, 25000];
 
 GameDatabase.reality.glyphEffects = [
   {
@@ -610,6 +610,19 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => format(x, 4, 4),
     combine: GlyphCombiner.multiply,
   }, {
+     id: "timeshardpow",
+     bitmaskIndex: 27,
+     isGenerated: true,
+     // This gets explicitly added to time glyphs elsewhere (once unlocked)
+     glyphTypes: [],
+     singleDesc: () => `Time shard power +{value}`,
+     totalDesc: "Time shard gain ^{value}",
+     genericDesc: "Time shards ^x",
+     effect: (level, strength) => 1 + (strength / 3.5) * Math.pow(level, 0.35) / 400,
+     formatEffect: x => format(x, 3, 3),
+     formatSingleEffect: x => format(x - 1, 3, 3),
+     combine: GlyphCombiner.addExponents,
+   }, {
     id: "cursedgalaxies",
     bitmaskIndex: 0,
     isGenerated: false,
@@ -679,19 +692,19 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["reality"],
     singleDesc: "Dimension Boost count +{value}",
     totalDesc: "{value} more Dimension Boosts",
-    effect: (level, strength) => Math.pow(1 + level * strength / 150000, 1.2),
+    effect: (level, strength) => Math.pow(1 + level * strength / 200000, 1.2),
     formatEffect: x => formatPercents(x - 1, 2),
     combine: GlyphCombiner.multiply,
   }, {
-    id: "realitycopy",
+    id: "realityrow1pow",
     bitmaskIndex: 7,
     isGenerated: false,
     glyphTypes: ["reality"],
-    singleDesc: "Copies adjacent glyphs at {value} of their original level",
+    singleDesc: "Multiplier from first row reality upgrades ^{value}",
     totalDesc: " ",
-    effect: (level, strength) => Math.clampMax(Math.pow(level * strength / 200000, 2), 1),
-    formatEffect: x => formatPercents(x, 2),
-    combine: GlyphCombiner.add,
+    effect: (level, strength) => 1 + level * strength / 500000,
+    formatEffect: x => format(x, 3, 3),
+    combine: GlyphCombiner.addExponents,
   }
 ].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));
 

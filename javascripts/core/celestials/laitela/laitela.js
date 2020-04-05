@@ -78,7 +78,7 @@ const Laitela = {
     return this.celestial.darkEnergyMult;
   },
   get darkMatterMultFromDE() {
-    let power = Math.log10(1 + NormalDimension(8).totalAmount.toNumber() / 1e6) / 4;
+    const power = Math.log10(1 + NormalDimension(8).totalAmount.toNumber() / 1e6) / 4;
     return Decimal.pow(1 + this.celestial.darkEnergy, power);
   },
   annihilate(force) {
@@ -99,6 +99,7 @@ const Laitela = {
     this.celestial.matter = new Decimal(0);
     this.celestial.darkEnergy = 0;
     this.celestial.annihilated = true;
+    return true;
   },
   tickDarkMatter(realDiff) {
     for (let i = 1; i <= 4; i++) {
@@ -111,8 +112,9 @@ const Laitela = {
           player.celestials.laitela.matter = player.celestials.laitela.matter.plus(productionDM);
           player.celestials.laitela.maxMatter = player.celestials.laitela.maxMatter.max(
             player.celestials.laitela.matter);
+        } else {
+          MatterDimension(i - 1).amount = MatterDimension(i - 1).amount.plus(productionDM);
         }
-        else MatterDimension(i - 1).amount = MatterDimension(i - 1).amount.plus(productionDM);
         if (MatterDimension(i).amount.gt(0)) {
           player.celestials.laitela.darkEnergy += ticks * d.powerDE;
         }

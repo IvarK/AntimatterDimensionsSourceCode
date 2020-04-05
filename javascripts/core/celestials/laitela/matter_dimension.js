@@ -34,7 +34,8 @@ class MatterDimensionState {
   }
 
   get powerDM() {
-    return new Decimal(1 + Math.pow(1.05, this.dimension.powerDMUpgrades)).times(Laitela.realityReward).times(Laitela.darkMatterMultFromDE);
+    return new Decimal(1 + Math.pow(1.05, this.dimension.powerDMUpgrades)).times(
+      Laitela.realityReward).times(Laitela.darkMatterMultFromDE);
   }
   
   get powerDE() {

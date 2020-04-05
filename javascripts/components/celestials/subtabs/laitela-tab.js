@@ -155,7 +155,8 @@ Vue.component("laitela-tab", {
           <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
             <h2>Annihilation</h2>
             <p v-if="darkEnergyMultGain >= 1">
-              Resets your Dark Matter, Dark Dimensions, and Dark Energy, but add <b>{{ format(darkEnergyMultGain, 2, 2) }}</b> 
+              Resets your Dark Matter, Dark Dimensions, and Dark Energy, but add
+              <b>{{ format(darkEnergyMultGain, 2, 2) }}</b> 
               to the dark energy multiplier from prestige.
             </p>
             <p v-else>

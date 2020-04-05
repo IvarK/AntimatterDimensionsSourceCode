@@ -1081,7 +1081,8 @@ Formulas:
 <br/>
 Dark Matter boost to Continuum = ${formatInt(1)} + ln(${formatInt(1)} + log10(Dark Matter) / ${formatInt(100)})
 <br/>
-Multiplier to Dark Matter power based on Dark Energy = (${formatInt(1)} + Dark Energy)^(log10(${formatInt(1)} + 8th Dimensions / ${format(1e6, 0, 0)}) / ${formatInt(4)})
+Multiplier to Dark Matter power based on Dark Energy = (${formatInt(1)} + Dark Energy)^(log10(${formatInt(1)} +
+8th Dimensions / ${format(1e6, 0, 0)}) / ${formatInt(4)})
 `,
       isUnlocked: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
       tags: ["omsi", "reality", "matter", "dimensions", "lategame", "endgame"],

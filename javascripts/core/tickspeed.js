@@ -20,7 +20,9 @@ function getTickSpeedMultiplier() {
   // Effects.sum is intentional here - if EC8 is not completed,
   // this value should not be contributed to total replicanti galaxies
   replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
-  let galaxies = player.galaxies + player.dilation.freeGalaxies + replicantiGalaxies;
+  let freeGalaxies = player.dilation.freeGalaxies;
+  freeGalaxies *= 1 + Math.max(0, player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
+  let galaxies = player.galaxies + replicantiGalaxies + freeGalaxies;
   if (galaxies < 3) {
       let baseMultiplier = 0.9;
       if (player.galaxies === 0) baseMultiplier = 0.89;

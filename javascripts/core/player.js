@@ -243,11 +243,13 @@ let player = {
   eterc8ids: 50,
   eterc8repl: 40,
   noSacrifices: true,
-  onlyEighthDimensons: true,
+  onlyEighthDimensions: true,
   onlyFirstDimensions: true,
   noEighthDimensions: false,
   noFirstDimensions: false,
   noTheoremPurchases: true,
+  noInfinitiesThisReality: true,
+  noEternitiesThisReality: true,
   dilation: {
     studies: [],
     active: false,
@@ -273,7 +275,6 @@ let player = {
     glyphs: {
       active: [],
       inventory: [],
-      inventorySize: 110,
       last: "",
       sac: {
         power: 0,
@@ -486,6 +487,7 @@ let player = {
     newUI: true,
     offlineProgress: true,
     showGlyphEffectDots: true,
+    respecIntoProtected: false,
     showHintText: {
       achievements: false,
       challenges: false,

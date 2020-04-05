@@ -13,7 +13,7 @@ Vue.component("glyph-inventory", {
     };
   },
   computed: {
-    rowCount: () => player.reality.glyphs.inventorySize / 10,
+    rowCount: () => Glyphs.totalSlots / 10,
     colCount: () => 10,
   },
   created() {
@@ -98,7 +98,7 @@ Vue.component("glyph-inventory", {
   <div class="l-glyph-inventory">
     Click and drag or double-click to equip glyphs.
     <br>
-    The top row of slots is unaffected by glyph sorting and auto clean.
+    The top two rows of slots are unaffected by glyph sorting and auto clean.
     <div v-for="row in rowCount" class="l-glyph-inventory__row">
       <div v-for="col in colCount"
            class="l-glyph-inventory__slot"
@@ -116,7 +116,7 @@ Vue.component("glyph-inventory", {
     </div>
     <div>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="Arranges by decreasing level*rarity"
+        ach-tooltip="Arranges by decreasing level×rarity"
         @click="sortByPower">
           Sort by power
       </button>

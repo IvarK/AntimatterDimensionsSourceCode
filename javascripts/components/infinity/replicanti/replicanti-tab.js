@@ -86,7 +86,7 @@ Vue.component("replicanti-tab", {
         onclick="Replicanti.unlock();"
       >Unlock Replicanti<br>Cost: {{format(1e140, 0, 0)}} IP</primary-button>
       <template v-else>
-        <div v-if="isInEC8">You have {{ec8Purchases}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
+        <div v-if="isInEC8">You have {{formatInt(ec8Purchases)}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
         <div v-if="hasRaisedCap">
           Your replicanti cap without study 192 has been raised to {{format(replicantiCap, 2)}}
           and is giving you {{formatInt(effarigInfinityBonusRG)}} extra RG due to Effarig Infinity.

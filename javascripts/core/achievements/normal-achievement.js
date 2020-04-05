@@ -137,7 +137,9 @@ const Achievements = {
     const unlockedRows = Achievements.allRows
       .countWhere(row => row.every(ach => ach.isUnlocked));
     const basePower = Math.pow(1.25, unlockedRows) * Math.pow(1.03, Achievements.effectiveCount);
-    return Math.pow(basePower, getAdjustedGlyphEffect("effarigachievement"));
+    let exponent = getAdjustedGlyphEffect("effarigachievement");
+    if (Ra.has(RA_UNLOCKS.ACHIEVEMENT_POW)) exponent *= 1.5;
+    return Math.pow(basePower, exponent);
   }),
 
   get power() {

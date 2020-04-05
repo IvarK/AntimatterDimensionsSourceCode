@@ -179,6 +179,7 @@ GameDatabase.tabs = [
     condition: () =>
       PlayerProgress.realityUnlocked() ||
       PlayerProgress.eternityUnlocked(),
+    before: "eternity-points-header",
     subtabs: [
       {
         key: "studies",
@@ -240,7 +241,7 @@ GameDatabase.tabs = [
       },
       {
         key: "hole",
-        name: "Black hole",
+        name: "Black Hole",
         symbol: "<i class='fas fa-circle'></i>",
         component: "black-hole-tab",
       },
@@ -259,6 +260,12 @@ GameDatabase.tabs = [
     UIClass: "o-tab-btn--celestial",
     condition: () => RealityUpgrades.allBought,
     subtabs: [
+      {
+        key: "celestial-navigation",
+        name: "Celestial Navigation",
+        symbol: "N",
+        component: "celestial-navigation"
+      },
       {
         key: "teresa",
         name: "Teresa",

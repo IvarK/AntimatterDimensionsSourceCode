@@ -198,6 +198,9 @@ class TimeDimensionState extends DimensionState {
     if (EternityChallenge(7).isRunning) {
       production = production.dividedBy(Tickspeed.current.dividedBy(1000));
     }
+    if (this._tier === 1 && !EternityChallenge(7).isRunning) {
+      production = production.pow(getAdjustedGlyphEffect("timeshardpow"));
+    }
     return production;
   }
 
@@ -257,9 +260,7 @@ const TimeDimensions = {
     if (EternityChallenge(7).isRunning) {
       TimeDimension(1).produceDimensions(InfinityDimension(8), diff);
     } else {
-      let shardsProduced = TimeDimension(1).productionForDiff(diff);
-      shardsProduced = shardsProduced.pow(getAdjustedGlyphEffect("timeshardpow"));
-      Currency.timeShards.add(shardsProduced);
+      Currency.timeShards.add(TimeDimension(1).productionForDiff(diff));
     }
 
     EternityChallenge(7).reward.applyEffect(production => {

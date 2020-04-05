@@ -4,12 +4,20 @@ const ENSLAVED_UNLOCKS = {
   FREE_TICKSPEED_SOFTCAP: {
     id: 0,
     price: TimeSpan.fromYears(1e35).totalMilliseconds,
-    description: "Increase the free tickspeed upgrade softcap by 100,000",
+    secondaryRequirement: () => true,
+    description: () => `Increase the free tickspeed upgrade softcap by ${formatInt(1e5)}`,
   },
   RUN: {
     id: 1,
     price: TimeSpan.fromYears(1e40).totalMilliseconds,
-    description: "Unlock The Enslaved One's reality.",
+    secondaryRequirement() {
+      const hasLevelRequirement = player.bestGlyphLevel >= 5000;
+      const hasRarityRequirement = strengthToRarity(
+        Glyphs.activeList.concat(Glyphs.inventoryList).map(g => g.strength).max()) >= 100;
+      return hasLevelRequirement && hasRarityRequirement;
+    },
+    description: () => `Unlock The Enslaved Ones' reality (requires
+      a level ${formatInt(5000)} glyph and a rarity ${formatPercents(1, 1)} glyph)`,
   }
 };
 
@@ -83,6 +91,7 @@ const Enslaved = {
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
     if (!this.canRelease(autoRelease)) return;
+    if (EternityChallenge(12).isRunning) return;
     if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
     player.minNegativeBlackHoleThisReality = 1;
     let release = player.celestials.enslaved.stored;
@@ -100,7 +109,7 @@ const Enslaved = {
     return player.celestials.enslaved.unlocks.includes(info.id);
   },
   canBuy(info) {
-    return player.celestials.enslaved.stored >= info.price && !this.has(info);
+    return player.celestials.enslaved.stored >= info.price && info.secondaryRequirement() && !this.has(info);
   },
   buyUnlock(info) {
     if (!this.canBuy(info)) return false;

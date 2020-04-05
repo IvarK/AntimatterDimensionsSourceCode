@@ -119,27 +119,36 @@ Vue.component("ra-pet", {
         <div v-else>
           <br>
         </div>
-        <div>
-          {{ format(exp, 2) }} / {{ format(requiredExp, 2) }} {{ name }} memories
-        </div>
-        <div>
-          (next level in {{ nextLevelEstimate }})
-        </div>
         <div v-if="level < 25">
-          (next upgrade in {{ upgradeEstimate }})
+          <div>
+            {{ format(exp, 2) }} / {{ format(requiredExp, 2) }} {{ name }} memories
+          </div>
+          <div>
+            (next level in {{ nextLevelEstimate }})
+          </div>
+          <div>
+            (next upgrade in {{ upgradeEstimate }})
+          </div>
         </div>
         <div v-else>
           <br>
         </div>
         <ra-pet-level-bar :pet="petConfig.pet" />
-        <div>
-          {{ format(memoryChunks, 2, 2) }} memory chunks, {{ format(memoriesPerSecond, 2, 2) }} memories/sec
+        <div v-if="level < 25">
+          <div>
+            {{ format(memoryChunks, 2, 2) }} memory chunks, {{ format(memoriesPerSecond, 2, 2) }} memories/sec
+          </div>
+          <div>
+            Gaining {{ format(memoryChunksPerSecond, 2, 2) }} memory chunks/sec
+            <span :ach-tooltip="chunkTooltip">
+              <i class="fas fa-question-circle"></i>
+            </span>
+          </div>
         </div>
-        <div>
-          Gaining {{ format(memoryChunksPerSecond, 2, 2) }} memory chunks/sec
-          <span :ach-tooltip="chunkTooltip">
-            <i class="fas fa-question-circle"></i>
-          </span>
+        <div v-else>
+          <div>
+            Capped at Level {{ formatInt(level) }}
+          </div>
         </div>
         <div v-if="memoryMultiplier > 1">
           Multiplying all memory production by {{ format(memoryMultiplier, 2, 3) }}

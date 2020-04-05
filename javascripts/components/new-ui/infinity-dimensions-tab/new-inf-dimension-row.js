@@ -73,7 +73,10 @@ Vue.component("new-inf-dimension-row", {
     },
     buyManyInfinityDimension() {
       buyManyInfinityDimension(this.tier);
-    }
+    },
+    buyMaxInfinityDimension() {
+      buyMaxInfDims(this.tier);
+    },
   },
   template:
     `<div v-show="isUnlocked" class="c-infinity-dim-row">
@@ -83,6 +86,12 @@ Vue.component("new-inf-dimension-row", {
       <div class="c-infinity-dim-row__label c-infinity-dim-row__label--growable">
         {{format(amount, 2, 0)}}
       </div>
+      <primary-button
+        v-tooltip="capTooltip"
+        :enabled="isAvailableForPurchase"
+        class="o-primary-btn--buy-id l-infinity-dim-row__button o-primary-btn o-primary-btn--new"
+        @click="buyManyInfinityDimension"
+      >{{costDisplay}}</primary-button>
       <primary-button-on-off
         v-if="isAutobuyerUnlocked && !isEC8Running"
         v-model="isAutobuyerOn"
@@ -90,10 +99,10 @@ Vue.component("new-inf-dimension-row", {
         text="Auto:"
       />
       <primary-button
-        v-tooltip="capTooltip"
+        v-else
         :enabled="isAvailableForPurchase"
-        class="o-primary-btn--buy-id l-infinity-dim-row__button o-primary-btn o-primary-btn--new"
-        @click="buyManyInfinityDimension"
-      >{{costDisplay}}</primary-button>
+        class="o-primary-btn--buy-id-max l-infinity-dim-row__button"
+        @click="buyMaxInfinityDimension"
+      >Buy Max</primary-button>
     </div>`,
 });

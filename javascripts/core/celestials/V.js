@@ -92,7 +92,6 @@ const V_UNLOCKS = {
     requirement: () => {
       const db = GameDatabase.celestials.v.mainUnlock;
       if (player.realities < db.realities) return false;
-      if (Object.values(player.reality.glyphs.sac).sum() < db.totalGlyphSacrifice) return false;
       if (player.eternities.lt(db.eternities)) return false;
       if (player.infinitied.plus(player.infinitiedBank).lt(db.infinities)) return false;
       if (player.dilation.dilatedTime.lt(db.dilatedTime)) return false;
@@ -134,7 +133,7 @@ const V_UNLOCKS = {
   },
   ACHIEVEMENT_BH: {
     id: 5,
-    reward: "Achievement count affects black hole power.",
+    reward: "Achievement multiplier affects Black Hole power.",
     description: "Have 30 V-achievements",
     effect: () => Achievements.power,
     format: x => formatX(x, 2, 0),

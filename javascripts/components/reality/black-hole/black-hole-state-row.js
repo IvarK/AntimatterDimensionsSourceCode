@@ -14,6 +14,9 @@ Vue.component("black-hole-state-row", {
     };
   },
   computed: {
+    description() {
+      return this.blackHole.description(true);
+    },
     id() {
       return this.blackHole.id;
     }
@@ -31,7 +34,7 @@ Vue.component("black-hole-state-row", {
   },
   template: `
     <h3 v-if="isUnlocked">
-      Black hole {{ id }}
+      {{ description }}
       <template v-if="isPermanent">
         is active permanently.
       </template>

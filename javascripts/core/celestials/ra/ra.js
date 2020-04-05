@@ -60,6 +60,7 @@ class RaPetState {
   
   get memoryChunksPerSecond() {
     let res = this.canGetMemoryChunks ? this.rawMemoryChunksPerSecond : 0;
+    res *= RA_UNLOCKS.TT_BOOST.effect.memoryChunks();
     if (this.hasRecollection) res *= RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
     return res;
   }
@@ -178,7 +179,7 @@ const Ra = {
     for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
   },
   productionPerMemoryChunk() {
-    let res = 1;
+    let res = RA_UNLOCKS.TT_BOOST.effect.memories();
     for (const pet of Ra.pets.all) {
       if (pet.isUnlocked) res *= pet.memoryProductionMultiplier;
     }
@@ -186,9 +187,10 @@ const Ra = {
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredExpForLevel(level) {
-    let adjustedLevel = level + Math.pow(level, 2) / 10;
-    if (level > 25) adjustedLevel *= Math.pow(1.3, level - 25);
-    return Math.floor(Math.pow(adjustedLevel, 4) * 5e5);
+    if (level >= 25) return Infinity;
+    const adjustedLevel = level + Math.pow(level, 2) / 10;
+    const post15Scaling = Math.pow(1.4, Math.max(0, level - 15));
+    return Math.floor(Math.pow(adjustedLevel, 4) * post15Scaling * 5e5);
   },
   // Calculates the cumulative exp needed to REACH a level starting from nothing.
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized
@@ -460,7 +462,7 @@ const RA_UNLOCKS = {
   AUTO_BLACK_HOLE_POWER: {
     id: 14,
     description: "Unlock Enslaved",
-    reward: "Black hole power upgrades are bought automatically",
+    reward: "Black Hole power upgrades are bought automatically",
     pet: Ra.pets.enslaved,
     level: 1,
     displayIcon: `<span class="fas fa-circle"></span>`
@@ -488,7 +490,7 @@ const RA_UNLOCKS = {
   ADJUSTABLE_STORED_TIME: {
     id: 17,
     description: "Get Enslaved to level 8",
-    reward: () => `Black hole charging can be done at an adjustable rate and automatically
+    reward: () => `Black Hole charging can be done at an adjustable rate and automatically
       pulsed every ${formatInt(5)} ticks (see The Enslaved Ones' tab)`,
     pet: Ra.pets.enslaved,
     level: 8,
@@ -563,6 +565,8 @@ const RA_UNLOCKS = {
       infinity: () => Math.pow(10, 15 * Ra.theoremBoostFactor()),
       replicanti: () => Math.pow(10, 20 * Ra.theoremBoostFactor()),
       dilatedTime: () => Math.pow(10, 3 * Ra.theoremBoostFactor()),
+      memories: () => 1 + Ra.theoremBoostFactor() / 50,
+      memoryChunks: () => 1 + Ra.theoremBoostFactor() / 50,
       autoPrestige: () => 1 + 2.4 * Ra.theoremBoostFactor()
     },
     pet: Ra.pets.v,
@@ -578,11 +582,10 @@ const RA_UNLOCKS = {
     level: 15,
     displayIcon: `<span class="fas fa-graduation-cap"></span>`
   },
-  START_TT: {
+  ACHIEVEMENT_POW: {
     id: 27,
     description: "Get V to level 25",
-    reward: () => `Start every non-celestial Reality with ${format(2e9)} TT`,
-    effect: 2e9,
+    reward: () => `Achievement multiplier is raised ${formatPow(1.5, 1, 1)}`,
     pet: Ra.pets.v,
     level: 25,
     displayIcon: `<i class="fab fa-buffer"></i>`
@@ -596,8 +599,8 @@ const RA_UNLOCKS = {
   },
   RA_LAITELA_UNLOCK: {
     id: 29,
-    description: "Get 80 total celestial levels",
+    description: "Get 100 total celestial levels",
     reward: "Unlock Lai'tela, the Celestial of Dimensions",
-    totalLevels: 80,
+    totalLevels: 100,
   }
 };

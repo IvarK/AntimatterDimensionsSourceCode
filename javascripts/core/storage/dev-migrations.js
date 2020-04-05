@@ -525,12 +525,18 @@ GameStorage.devMigrations = {
       player.reality.glyphs.inventorySize += 10;
     },
     player => {
-      player.celestials.v.unlockBits = Math.min(player.celestials.v.unlockBits, 1);
+      player.celestials.v.unlockBits = 0;
+      // Adding this in case the player is loading a save (otherwise it
+      // doesn't update immediately and the player still has nonzero ST
+      // for the purpose of checking unlocks).
+      V.updateTotalRunUnlocks();
       V.checkForUnlocks();
     },
     player => {
       // Reset the v-unlocks again
-      player.celestials.v.unlockBits = Math.min(player.celestials.v.unlockBits, 1);
+      player.celestials.v.unlockBits = 0;
+      // See above migration for an explanation of the below line.
+      V.updateTotalRunUnlocks();
       V.checkForUnlocks();
     },
     player => {
@@ -563,16 +569,24 @@ GameStorage.devMigrations = {
       delete player.celestials.effarig.autoGlyphPick;
     },
     player => {
-      player.celestials.laitela.anomalies = new Decimal(player.celestials.laitela.higgs);
-      delete player.celestials.laitela.higgs;
+      delete player.reality.glyphs.inventorySize;
+      for (const glyph of player.reality.glyphs.inventory) {
+        if (glyph.idx >= 10) {
+          glyph.idx += 10;
+        }
+      }
     },
     player => {
-      delete player.celestials.laitela.maxAmGained;
+      // Typo fix, as long as we have to delete a player property let's also
+      // correctly initialize the new one.
+      player.onlyEighthDimensions = player.onlyEighthDimensons;
+      delete player.onlyEighthDimensons;
     },
     player => {
+      for (const pet of Ra.pets.all) {
+        pet.level = Math.clampMax(pet.level, 25);
+      }
       delete player.celestials.ra.compression;
-    },
-    player => {
       if (Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) {
         const allGlyphs = player.reality.glyphs.active
           .concat(player.reality.glyphs.inventory);
@@ -582,13 +596,20 @@ GameStorage.devMigrations = {
       }
     },
     player => {
+      for (let i = 0; i < player.celestials.ra.alchemy.length; i++) {
+        player.celestials.ra.alchemy[i].amount = Math.clampMax(
+          player.celestials.ra.alchemy[i].amount, 25000);
+      }
+    },
+    player => {
+      delete player.celestials.laitela.maxAmGained;
       for (let dim of player.celestials.laitela.dimensions) {
         dim.powerDMUpgrades = dim.powerUpgrades;
         dim.powerDEUpgrades = 0;
         delete dim.chanceUpgrades;
         delete dim.powerUpgrades;
       }
-      player.celestials.laitela.darkEnergyMult = (+player.celestials.laitela.anomalies) + 1;
+      player.celestials.laitela.darkEnergyMult = (+player.celestials.laitela.higgs) + 1;
       delete player.celestials.laitela.anomalies;
     }
   ],

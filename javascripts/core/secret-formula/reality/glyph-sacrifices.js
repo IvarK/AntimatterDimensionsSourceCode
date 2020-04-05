@@ -11,7 +11,7 @@ GameDatabase.reality.glyphSacrifice = [
     }
   }, {
     id: "infinity",
-    effect: () => 1 + Math.pow(player.reality.glyphs.sac.infinity, 0.2) / 100,
+    effect: () => 1 + Math.log10(1 + Math.pow(player.reality.glyphs.sac.infinity, 0.2) / 100),
     description: amount => `${formatX(amount, 2, 2)} bigger multiplier when buying 8th Infinity Dimension.`
   }, {
     id: "time",

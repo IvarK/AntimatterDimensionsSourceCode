@@ -67,6 +67,9 @@ function eternity(force, auto, specialConditions = {}) {
     if (!auto && !askEternityConfirmation()) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     giveEternityRewards(auto);
+    // If somehow someone manages to force their first eternity
+    // (e.g., by starting an EC), they haven't really eternitied yet.
+    player.noEternitiesThisReality = false;
   }
 
   if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
@@ -163,7 +166,7 @@ function initializeResourcesAfterEternity() {
     GameCache.dimensionMultDecrease.invalidate();
   }
   player.noSacrifices = true;
-  player.onlyEighthDimensons = true;
+  player.onlyEighthDimensions = true;
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
   player.noFirstDimensions = true;

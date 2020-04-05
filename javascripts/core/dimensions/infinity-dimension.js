@@ -45,6 +45,10 @@ function buyMaxInfDims(tier) {
   let toBuy = exponentDifference === 0 ? 1 : Math.floor(exponentDifference / Math.log10(costMult));
   const purchasesUntilHardcap = dim.purchaseCap - dim.purchases;
   toBuy = Math.min(toBuy, purchasesUntilHardcap);
+  if (EternityChallenge(8).isRunning) {
+    toBuy = Math.clampMax(toBuy, player.eterc8ids);
+    player.eterc8ids -= toBuy;
+  }
 
   dim.cost = dim.cost.times(Decimal.pow(costMult, toBuy - 1));
   player.infinityPoints = player.infinityPoints.minus(dim.cost);
@@ -219,7 +223,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get powerMultiplier() {
-    return this._powerMultiplier;
+    return new Decimal(this._powerMultiplier).timesEffectsOf(this._tier === 8 ? GlyphSacrifice.infinity : null);
   }
 
   get purchases() {
@@ -231,9 +235,9 @@ class InfinityDimensionState extends DimensionState {
     if (Enslaved.isRunning) {
       return 1;
     }
-    return InfinityDimensions.capIncrease + (this.tier === 8
-      ? Number.MAX_VALUE
-      : InfinityDimensions.HARDCAP_PURCHASES);
+     return InfinityDimensions.capIncrease + (this.tier === 8
+       ? Number.MAX_VALUE
+       : InfinityDimensions.HARDCAP_PURCHASES);
   }
 
   get isCapped() {

@@ -28,8 +28,5 @@ Vue.component("glyph-set-preview", {
       <span v-else>
         (No glyphs equipped)
       </span>
-    </div>
-    <div v-else>
-      [Best ?????]
     </div>`
 });

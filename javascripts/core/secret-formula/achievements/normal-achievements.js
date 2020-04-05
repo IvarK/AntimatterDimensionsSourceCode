@@ -741,7 +741,7 @@ GameDatabase.achievements.normal = [
     id: 117,
     name: "8 nobody got time for that",
     tooltip: "Eternity without buying Dimensions 1-7.",
-    checkRequirement: () => player.onlyEighthDimensons,
+    checkRequirement: () => player.onlyEighthDimensions,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },
   {

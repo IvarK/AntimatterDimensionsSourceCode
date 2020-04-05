@@ -238,7 +238,7 @@ class BlackHoleState {
         this._data.phase -= this.duration;
         this._data.active = false;
         if (GameUI.notify.showBlackHoles) {
-          GameUI.notify.blackHole(`Black hole ${this.id} duration ended.`);
+          GameUI.notify.blackHole(`${this.description(true)} duration ended.`);
         }
       }
     } else if (this.phase >= this.interval) {
@@ -246,7 +246,7 @@ class BlackHoleState {
       this._data.activations++;
       this._data.active = true;
       if (GameUI.notify.showBlackHoles) {
-        GameUI.notify.blackHole(`Black hole ${this.id} is active!`);
+        GameUI.notify.blackHole(`${this.description(true)} has activated!`);
       }
     }
   }
@@ -288,6 +288,13 @@ class BlackHoleState {
     }
     return this.cycleLength - this.phase;
   }
+  
+  description(capitalized) {
+    if (RealityUpgrade(20).isBought) {
+      return `Black Hole ${this.id}`;
+    }
+    return capitalized ? "The Black Hole" : "the Black Hole";
+  }
 }
 
 BlackHoleState.list = Array.range(0, 2).map(id => new BlackHoleState(id));
@@ -311,7 +318,7 @@ const BlackHoles = {
   },
 
   get canBeUnlocked() {
-    return player.reality.realityMachines.gte(50) && !this.areUnlocked;
+    return player.reality.realityMachines.gte(100) && !this.areUnlocked;
   },
 
   get areUnlocked() {
@@ -321,7 +328,7 @@ const BlackHoles = {
   unlock() {
     if (!this.canBeUnlocked) return;
     player.blackHole[0].unlocked = true;
-    player.reality.realityMachines = player.reality.realityMachines.minus(50);
+    player.reality.realityMachines = player.reality.realityMachines.minus(100);
     Achievement(144).unlock();
   },
 

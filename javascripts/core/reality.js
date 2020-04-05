@@ -405,16 +405,16 @@ function finishProcessReality(realityProps) {
   player.eterc8ids = 50;
   player.eterc8repl = 40;
   player.noSacrifices = true;
-  player.onlyEighthDimensons = true;
+  player.onlyEighthDimensions = true;
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
   player.noFirstDimensions = true;
   player.noTheoremPurchases = true;
+  player.noInfinitiesThisReality = true;
+  player.noEternitiesThisReality = true;
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
-  player.timestudy.theorem = (Ra.has(RA_UNLOCKS.START_TT) && !isInCelestialReality())
-    ? new Decimal(RA_UNLOCKS.START_TT.effect)
-    : new Decimal(0);
+  player.timestudy.theorem = new Decimal(0);
   player.timestudy.amcost = new Decimal("1e20000");
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);

@@ -107,15 +107,15 @@ Vue.component("laitela-tab", {
     `<div class="l-laitela-celestial-tab">
       <button @click="showLaitelaHowTo()" class="o-primary-btn">Click for Lai'tela info</button>
       <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter.</div>
-      <div class="o-laitela-matter-amount">Your maximum dark matter ever is {{ format(maxMatter.floor(), 2, 0) }},
+      <div class="o-laitela-matter-amount">Your maximum Dark Matter ever is {{ format(maxMatter.floor(), 2, 0) }},
       giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from continuum.</div>
       <div>
         You have {{ format(darkEnergy, 2, 4) }} Dark Energy,
-        giving a {{ formatX(darkMatterMultFromDE, 2, 4) }} multiplier to production of dark matter and
-        dark matter dimensions (based on 8th Dimensions).
+        giving a {{ formatX(darkMatterMultFromDE, 2, 4) }} multiplier to production of Dark Matter and
+        Dark Matter Dimensions (based on 8th Dimensions).
       </div>
       <div v-if="annihilated">
-        You have a {{ format(darkEnergyMult, 2, 2) }}x multiplier to dark energy production from prestige.
+        You have a {{ format(darkEnergyMult, 2, 2) }}x multiplier to Dark Energy production from prestige.
       </div>
       <primary-button
         class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
@@ -137,12 +137,12 @@ Vue.component("laitela-tab", {
             <b>Start Lai'tela's Reality</b>
             <div v-bind:class="runButtonClassObject()"></div>
             IP and EP gain are dilated. Game speed is reduced to 1 and gradually comes back over 10 minutes,
-            black hole discharging and pulsing are disabled.
+            Black Hole discharging and pulsing are disabled.
             <br>
             <br>
-            Antimatter generates entropy inside of this reality. At 100% entropy, the reality becomes destabilized and
+            Antimatter generates entropy inside of this Reality. At 100% entropy, the Reality becomes destabilized and
             you gain a reward based on how quickly you reached 100%. If you can destabilize in less than 30 seconds,
-            the reality becomes more difficult but also gives a stronger reward.
+            the Reality becomes more difficult but also gives a stronger reward.
             <div v-if="maxDimTier === 7">
               <br>
               Production is disabled for all 8th dimensions.
@@ -155,12 +155,13 @@ Vue.component("laitela-tab", {
           <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
             <h2>Annihilation</h2>
             <p v-if="darkEnergyMultGain >= 1">
-              Resets your Dark Matter, Dark Dimensions, and Dark Energy, but add
+              Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, but add
               <b>{{ format(darkEnergyMultGain, 2, 2) }}</b> 
-              to the dark energy multiplier from prestige.
+              to the Dark Energy multiplier from prestige.
             </p>
             <p v-else>
-              Resets your Dark Matter, Dark Dimensions, and Dark Energy (requires {{ format(1e30, 0, 0) }} Dark Matter).
+              Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy
+              (requires {{ format(1e30, 0, 0) }} Dark Matter).
             </p>
           </button>
         </div>

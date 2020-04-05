@@ -609,7 +609,9 @@ GameStorage.devMigrations = {
         delete dim.chanceUpgrades;
         delete dim.powerUpgrades;
       }
-      player.celestials.laitela.darkEnergyMult = player.celestials.laitela.higgs.toNumber() + 1;
+      // Note that player.celestials.laitela.higgs is actually a string at this point
+      // (since conversion to Decimal hasn't happened yet).
+      player.celestials.laitela.darkEnergyMult = Number(player.celestials.laitela.higgs) + 1;
       delete player.celestials.laitela.anomalies;
     }
   ],

@@ -583,10 +583,7 @@ class NormalDimensionState extends DimensionState {
     const postBreak = (player.break && !NormalChallenge.isRunning) ||
       InfinityChallenge.isRunning ||
       Enslaved.isRunning;
-    if (!postBreak && production.gte(Decimal.NUMBER_MAX_VALUE)) {
-      return new Decimal("1e315");
-    }
-    return Decimal.MAX_VALUE;
+    return postBreak ? Decimal.MAX_VALUE : new Decimal("1e315");
   }
 
   get productionPerSecond() {

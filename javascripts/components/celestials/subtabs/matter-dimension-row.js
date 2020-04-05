@@ -24,7 +24,7 @@ Vue.component("matter-dimension-row", {
   },
   computed: {
     name() {
-      const suffix = " Dark Dimension";
+      const suffix = " Dark Matter Dimension";
       switch (this.tier) {
         case 0:
           return `First ${suffix}`;
@@ -35,7 +35,7 @@ Vue.component("matter-dimension-row", {
         case 3:
           return `Fourth ${suffix}`;
         default:
-          throw new Error("Invalid Dark Dimension index");
+          throw new Error("Invalid Dark Matter Dimension index");
       }
     }
   },

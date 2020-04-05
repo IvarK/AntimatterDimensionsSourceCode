@@ -1039,42 +1039,43 @@ your normal dimensions and tickspeed switch to a new mode of production called C
 but allows for buying fractions of dimensions or tickspeed upgrades. Lai'tela gives a new currency called Dark Matter
 which gives a multiplier to purchases of dimensions and tickspeed upgrades from Continuum (e.g., if the multiplier
 was ${format(1.1, 1, 1)} and you would normally have ${format(1e6, 2, 2)} purchases, Continuum would instead give you
-${format(1.1e6, 2, 2)} purchases). There are four Dark Dimensions; each generates the previous, except the first
-which generates Dark Matter. You cannot buy Dark Dimensions; instead you start with one of the First Dark Dimension,
-and get one of the Second, Third, and Fourth Dark Dimensions at ${format(1e4, 0, 0)}, ${format(1e7, 0, 0)},
-and ${format(1e10, 0, 0)} Dark Matter respectively.
+${format(1.1e6, 2, 2)} purchases). There are four Dark Matter Dimensions; each generates the previous, except the first
+which generates Dark Matter. You cannot buy Dark Matter Dimensions; instead you start with one of the
+First Dark Matter Dimension, and get one of the Second, Third, and Fourth Dark Matter Dimensions at
+${format(1e4, 0, 0)}, ${format(1e7, 0, 0)}, and ${format(1e10, 0, 0)} Dark Matter respectively.
 <br/>
-Each Dark Dimension, every so often, generates a certain amount of Dark Matter or the previous Dark Dimensions
-(based on amount of the generating Dark Dimension), and also generates another currency called Dark Energy
-to be explained later (independent of amount of the generating Dark Dimension). The time between generations
-is called the interval. The amount of Dark Matter or the previous Dark Dimensions generated per Dark Dimension
-is called the Dark Matter power. The amount of Dark Energy generated is called the Dark Energy power.
-The Dark Dimensions start with intervals ${formatInt(1)}, ${formatInt(4)}, ${formatInt(16)}, and ${formatInt(64)}
-seconds respectively. Each has a repeatable upgrade decreasing its interval by 8%, and increasing in cost by
-${format(3.2, 1, 1)}x each time it's purchased. The Dark Dimensions all start with Dark Matter power ${formatInt(2)}.
-Each has a repeatable upgrade increasing its power and increasing in cost ${format(1.4, 1, 1)}x each time
-it's purchased. The base Dark Matter power of a Dark Dimension is
-${formatInt(1)} + ${format(1.05, 2, 2)}^(times power upgrade has been purchased).
-The Dark Dimensions all start with Dark Energy power ${format(2e-4, 4, 4)}.
-Each has a repeatable upgrade increasing its power and increasing in cost ${format(1.35, 2, 2)}x,
-${format(1.3, 2, 2)}x, ${format(1.28, 2, 2)}x, and ${format(1.27, 2, 2)}x (respectively) each time
-it's purchased. The base Dark Energy power of a Dark Dimension is
-(${formatInt(1)} + ${format(1.05, 2, 2)}^(times power upgrade has been purchased)) / ${formatInt(1e4)}.
+Each Dark Matter Dimension, every so often, generates a certain amount of Dark Matter or the previous
+Dark Matter Dimension (how much is based on the amount of the generating Dark Matter Dimension), and also
+generates another currency called Dark Energy to be explained later (independent of the amount of the generating
+Dark Matter Dimension). The time between generations is called the interval. The amount of Dark Matter or
+the previous Dark Matter Dimension generated per Dark Matter Dimension is called the Dark Matter power.
+The amount of Dark Energy generated is called the Dark Energy power. The Dark Matter Dimensions start with intervals
+${formatInt(1)}, ${formatInt(4)}, ${formatInt(16)}, and ${formatInt(64)} seconds respectively. Each has a repeatable
+upgrade decreasing its interval by 8%, and increasing in cost by ${format(3.2, 1, 1)}x each time it's purchased.
+The Dark Matter Dimensions all start with Dark Matter power ${formatInt(2)}. Each has a repeatable upgrade
+increasing its power and increasing in cost ${format(1.4, 1, 1)}x each time it's purchased.
+The base Dark Matter power of a Dark Matter Dimension is ${formatInt(1)} +
+${format(1.05, 2, 2)}^(times power upgrade has been purchased). The Dark Matter Dimensions all start
+with Dark Energy power ${format(2e-4, 4, 4)}. Each has a repeatable upgrade increasing its power and
+increasing in cost ${format(1.35, 2, 2)}x, ${format(1.3, 2, 2)}x, ${format(1.28, 2, 2)}x, and
+${format(1.27, 2, 2)}x (respectively) each time it's purchased. The base Dark Energy power of
+a Dark Matter Dimension is (${formatInt(1)} + times power upgrade has been purchased /
+${formatInt(10)}) / ${formatInt(1e3)}.
 <br/>
-Dark Energy gives a multiplier to Dark Dimensions' Dark Matter power (but not their Dark Energy power)
-based on its amount and the amount of 8th Dimensions. So this multiplier boosts
-production of Dark Dimensions and of Dark Matter, but not of Dark Energy.
+Dark Energy gives a multiplier to Dark Matter Dimensions' Dark Matter power
+(but not their Dark Energy power) based on its amount and the amount of 8th Dimensions. So this multiplier boosts
+production of Dark Matter Dimensions and of Dark Matter, but not of Dark Energy.
 This is the only effect Dark Energy has.
 <br/>
 When you get ${format(1e30, 0, 0)} Dark Matter, you unlock a prestige layer called Annihilation.
-Annihilation resets your Dark Matter, Dark Dimensions, and Dark Energy, but adds to a multiplier
+Annihilation resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, but adds to a multiplier
 (initially ${formatInt(1)}x) to Dark Energy. The amount added to the multiplier is
 (Dark Matter / ${format(1e30, 0, 0)})^${format(0.1, 1, 1)}. You can Annihilate
 multiple times, the additions to the multiplier stack additively, and there is no need
 to annihilate for a greater addition each time.
 <br/>
-Lai'tela has a reality that is described on a button in Lai'tela's tab. Based on how well
-you do in this reality, you will get a multiplier to Dark Dimensions' Dark Matter power,
+Lai'tela has a Reality that is described on a button in Lai'tela's tab. Based on how well
+you do in this Reality, you will get a multiplier to Dark Matter Dimensions' Dark Matter power,
 similar in effect to the multiplier described above from Dark Energy.
 <br/>
 Formulas:

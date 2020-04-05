@@ -446,14 +446,12 @@ function preProductionGenerateIP(diff) {
   if (InfinityUpgrade.ipGen.isBought) {
     const genPeriod = Time.bestInfinity.totalMilliseconds * 10;
     // Partial progress (fractions from 0 to 1) are stored in player.partInfinityPoint
-    player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
+    player.partInfinityPoint += diff / genPeriod;
     if (player.partInfinityPoint >= 1) {
       const genCount = Math.floor(player.partInfinityPoint);
-      let gainedThisTick = new Decimal(genCount).timesEffectOf(InfinityUpgrade.ipGen);
-      // This is technically incorrect (it depends on update rate)
-      // but IP from this upgrade is never your main source of IP
-      // so it should never matter.
-      if (Laitela.isRunning) gainedThisTick = dilatedValueOf(gainedThisTick, 1);
+      let gainedPerGen = InfinityUpgrade.ipGen.effectValue;
+      if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen, 1);
+      const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
       player.infinityPoints = player.infinityPoints.plus(gainedThisTick);
       player.partInfinityPoint -= genCount;
     }

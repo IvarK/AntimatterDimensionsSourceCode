@@ -446,10 +446,13 @@ function preProductionGenerateIP(diff) {
   if (InfinityUpgrade.ipGen.isBought) {
     const genPeriod = Time.bestInfinity.totalMilliseconds * 10;
     // Partial progress (fractions from 0 to 1) are stored in player.partInfinityPoint
-    player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
+    player.partInfinityPoint += diff / genPeriod;
     if (player.partInfinityPoint >= 1) {
       const genCount = Math.floor(player.partInfinityPoint);
-      player.infinityPoints = player.infinityPoints.plus(new Decimal(genCount).timesEffectOf(InfinityUpgrade.ipGen));
+      let gainedPerGen = InfinityUpgrade.ipGen.effectValue;
+      if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen, 1);
+      const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
+      player.infinityPoints = player.infinityPoints.plus(gainedThisTick);
       player.partInfinityPoint -= genCount;
     }
   }

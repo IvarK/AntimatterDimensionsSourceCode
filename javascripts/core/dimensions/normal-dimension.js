@@ -75,8 +75,6 @@ function getDimensionFinalMultiplierUncached(tier) {
     multiplier = Effarig.multiplier(multiplier);
   } else if (V.isRunning) {
     multiplier = multiplier.pow(0.5);
-  } else if (Laitela.isRunning) {
-    multiplier = multiplier.pow(Laitela.dimMultNerf);
   }
 
   // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
@@ -90,9 +88,14 @@ function getDimensionFinalMultiplierUncached(tier) {
 function applyNDMultipliers(mult, tier) {
   let multiplier = mult.times(GameCache.normalDimensionCommonMultiplier.value);
 
-  multiplier = multiplier.times(Decimal.pow(
-    NormalDimensions.buyTenMultiplier, Math.floor(NormalDimension(tier).bought / 10)
-    ));
+  let buy10Value;
+  if (Laitela.continuumActive) {
+    buy10Value = NormalDimension(tier).continuumValue;
+  } else {
+    buy10Value = Math.floor(NormalDimension(tier).bought / 10);
+  }
+
+  multiplier = multiplier.times(Decimal.pow(NormalDimensions.buyTenMultiplier, buy10Value));
   multiplier = multiplier.times(DimBoost.multiplierToNDTier(tier));
 
   let infinitiedMult = new Decimal(1).timesEffectsOf(
@@ -139,7 +142,6 @@ function applyNDPowers(mult, tier) {
   let multiplier = mult;
   const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
   const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
-  const laitelaPowMultiplier = Laitela.has(LAITELA_UNLOCKS.DIM_POW) ? Laitela.dimensionMultPowerEffect : 1;
 
   if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).effectValue);
@@ -148,7 +150,7 @@ function applyNDPowers(mult, tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).reward.effectValue);
   }
 
-  multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier * laitelaPowMultiplier);
+  multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier);
 
   multiplier = multiplier
     .powEffectsOf(
@@ -193,7 +195,7 @@ function floatText(tier, text) {
 
 function buyOneDimension(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
+  if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
 
   const cost = dimension.cost;
 
@@ -219,7 +221,7 @@ function buyOneDimension(tier) {
 
 function buyManyDimension(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return false;
+  if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return false;
   const cost = dimension.costUntil10;
 
   if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
@@ -237,7 +239,7 @@ function buyManyDimension(tier) {
 
 function buyAsManyAsYouCanBuy(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
+  if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
   const howMany = dimension.howManyCanBuy;
   const cost = dimension.cost.times(howMany);
 
@@ -259,6 +261,7 @@ function buyAsManyAsYouCanBuy(tier) {
 
 // This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
 function buyUntilTen(tier) {
+  if (Laitela.continuumActive) return;
   const dimension = NormalDimension(tier);
   dimension.challengeCostBump();
   dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10));
@@ -267,7 +270,7 @@ function buyUntilTen(tier) {
 }
 
 function maxAll() {
-  if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return;
+  if (Laitela.continuumActive || (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE))) return;
 
   player.usedMaxAll = true;
 
@@ -280,7 +283,7 @@ function maxAll() {
 
 function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
+  if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
   const cost = dimension.costUntil10;
   let bulkLeft = bulk;
   const goal = Player.infinityGoal;
@@ -476,10 +479,45 @@ class NormalDimensionState extends DimensionState {
       : player.antimatter = value;
   }
 
+  /**
+   * @returns {number}
+   */
+  get continuumValue() {
+    if (!this.isAvailableForPurchase) return 0;
+    return this.costScale.getContinuumValue(player.antimatter) * Laitela.matterExtraPurchaseFactor;
+  }
+
+  /**
+   * @returns {number}
+   */
+  get continuumAmount() {
+    if (!Laitela.continuumActive) return 0;
+    return Math.floor(10 * this.continuumValue);
+  }
+  
+  /**
+   * Continuum doesn't continually update dimension amount because that would require making the code
+   * significantly messier to handle it properly. Instead an effective amount is calculated here, which
+   * is only used for production and checking for shift/boost/galaxy. Doesn't affect achievements.
+   * Taking the max is kind of a hack but it seems to work in all cases. Obviously it works if
+   * continuum isn't unlocked. If the dimension is being produced and the continuum is unlocked,
+   * the dimension will be being produced in large numbers (since the save is endgame), so the amount
+   * will be larger than the continuum and so the continuum is insignificant, which is fine.
+   * If the dimension isn't being produced, the continuum will be at least the amount, so
+   * the continuum will be used and that's fine. Note that when continuum is first unlocked,
+   * both 8d amount and 8d continuum will be nonzero until the next infinity, so taking the sum
+   * doesn't work.
+   * @param {Decimal} value
+   */
+  get totalAmount() {
+    return this.amount.max(this.continuumAmount);
+  }
+
    /**
     * @returns {boolean}
     */
   get isAffordable() {
+    if (Laitela.continuumActive) return false;
     if (!player.break && this.cost.gt(Decimal.NUMBER_MAX_VALUE)) return false;
     return this.cost.lte(this.currencyAmount);
   }
@@ -495,9 +533,11 @@ class NormalDimensionState extends DimensionState {
   get isAvailableForPurchase() {
     if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return false;
     if (this.tier > DimBoost.totalBoosts + 4) return false;
-    if (this.tier > 1 &&
-      NormalDimension(this.tier - 1).amount.eq(0) &&
-      !EternityMilestone.unlockAllND.isReached) return false;
+    const hasPrevTier = this.tier === 1 ||
+      (Laitela.continuumActive
+        ? NormalDimension(this.tier - 1).continuumValue >= 1
+        : NormalDimension(this.tier - 1).amount.neq(0));
+    if (!EternityMilestone.unlockAllND.isReached && !hasPrevTier) return false;
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }
 
@@ -539,9 +579,17 @@ class NormalDimensionState extends DimensionState {
     return GameCache.normalDimensionFinalMultipliers[this.tier].value;
   }
 
+  get cappedProductionInNormalChallenges() {
+    const postBreak = (player.break && !NormalChallenge.isRunning) ||
+      InfinityChallenge.isRunning ||
+      Enslaved.isRunning;
+    return postBreak ? Decimal.MAX_VALUE : new Decimal("1e315");
+  }
+
   get productionPerSecond() {
     const tier = this.tier;
-    let amount = this.amount.floor();
+    if (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension) return new Decimal(0);
+    let amount = this.totalAmount;
     if (NormalChallenge(12).isRunning) {
       if (tier === 2) amount = amount.pow(1.6);
       if (tier === 4) amount = amount.pow(1.4);
@@ -560,12 +608,7 @@ class NormalDimensionState extends DimensionState {
         production = Decimal.pow10(Math.pow(log10, getAdjustedGlyphEffect("effarigantimatter")));
       }
     }
-    const postBreak = (player.break && !NormalChallenge.isRunning) ||
-      InfinityChallenge.isRunning ||
-      Enslaved.isRunning;
-    if (!postBreak && production.gte(Decimal.NUMBER_MAX_VALUE)) {
-      production = production.min("1e315");
-    }
+    production = production.min(this.cappedProductionInNormalChallenges);
     return production;
   }
 }

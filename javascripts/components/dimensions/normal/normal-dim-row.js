@@ -17,6 +17,8 @@ Vue.component("normal-dim-row", {
       until10Cost: new Decimal(0),
       isAffordable: false,
       isAffordableUntil10: false,
+      isContinuumActive: false,
+      continuumValue: 0
     };
   },
   computed: {
@@ -35,6 +37,9 @@ Vue.component("normal-dim-row", {
       return this.isCapped
         ? "Further eighth dimension purchases are prohibited, as they are the only way to acquire galaxies"
         : null;
+    },
+    continuumString() {
+      return formatContinuum(this.continuumValue);
     }
   },
   methods: {
@@ -46,7 +51,7 @@ Vue.component("normal-dim-row", {
       const dimension = NormalDimension(tier);
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 1;
       this.multiplier.copyFrom(NormalDimension(tier).multiplier);
-      this.amount.copyFrom(dimension.amount);
+      this.amount.copyFrom(dimension.totalAmount);
       this.boughtBefore10 = dimension.boughtBefore10;
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.costUntil10);
@@ -55,11 +60,15 @@ Vue.component("normal-dim-row", {
       }
       this.isAffordable = dimension.isAffordable;
       this.isAffordableUntil10 = dimension.isAffordableUntil10;
+      this.isContinuumActive = Laitela.continuumActive;
+      if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
     },
     buySingle() {
+      if (this.isContinuumActive) return;
       buyOneDimensionBtnClick(this.tier);
     },
     buyUntil10() {
+      if (this.isContinuumActive) return;
       buyManyDimensionsBtnClick(this.tier);
     },
     showCostTitle(value) {
@@ -75,6 +84,7 @@ Vue.component("normal-dim-row", {
         {{amountDisplay}} ({{formatInt(boughtBefore10)}}){{rateOfChangeDisplay}}
       </div>
       <primary-button
+        v-if="!isContinuumActive"
         :enabled="isAffordable"
         class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd c-normal-dim-row__buy-button"
         :ach-tooltip="cappedTooltip"
@@ -85,11 +95,12 @@ Vue.component("normal-dim-row", {
         </template>
       </primary-button>
       <primary-button
-        :enabled="isAffordableUntil10"
+        :enabled="isAffordableUntil10 || isContinuumActive"
         class="o-primary-btn--buy-nd o-primary-btn--buy-10-nd c-normal-dim-row__buy-button"
         :ach-tooltip="cappedTooltip"
         @click="buyUntil10">
         <span v-if="isCapped">Capped!</span>
+        <span v-else-if="isContinuumActive">Continuum: {{continuumString}}</span>
         <template v-else>
           Until {{formatInt(10)}}, <span v-if="showCostTitle(until10Cost)">
           Cost: </span>{{format(until10Cost)}}

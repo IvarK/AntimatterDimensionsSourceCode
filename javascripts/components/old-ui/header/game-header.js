@@ -87,6 +87,9 @@ Vue.component("game-header", {
       isInEffarig: false,
       effarigMultNerfText: "",
       effarigTickNerfText: "",
+      isInLaitela: false,
+      laitelaTimer: 0,
+      laitelaEntropy: "",
       antimatter: new Decimal(0),
       antimatterPerSec: new Decimal(0)
     };
@@ -102,6 +105,16 @@ Vue.component("game-header", {
         this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(player.infinityPower), 0, 5)}`;
         this.effarigTickNerfText = `${formatPow(0.7 + 0.1 * Effarig.nerfFactor(player.timeShards), 0, 5)}`;
       }
+      this.isInLaitela = Laitela.isRunning;
+      if (this.isInLaitela) {
+        if (player.celestials.laitela.entropy > 0) { 
+          this.laitelaEntropy = `${formatPercents(player.celestials.laitela.entropy, 2, 2)}`;
+          this.laitelaTimer = Time.thisRealityRealTime.toStringShort();
+        } else {
+          this.laitelaEntropy = `${formatPercents(1, 2, 2)}`;
+          this.laitelaTimer = TimeSpan.fromSeconds(player.celestials.laitela.thisCompletion).toStringShort();
+        }
+      }
       this.antimatter.copyFrom(player.antimatter);
       this.antimatterPerSec.copyFrom(Player.antimatterPerSecond);
     }
@@ -113,6 +126,9 @@ Vue.component("game-header", {
         Gamespeed and multipliers dilated {{effarigMultNerfText}}
         <br>
         Tickspeed dilated {{effarigTickNerfText}}
+      </div>
+      <div v-if="isInLaitela">
+        Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})
       </div>
       <div v-if="isInMatterChallenge">There is {{format(matter, 2, 1)}} matter.</div>
       <game-header-amounts-line />

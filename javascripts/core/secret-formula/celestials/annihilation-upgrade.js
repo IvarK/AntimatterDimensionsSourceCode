@@ -68,9 +68,9 @@ GameDatabase.darkEnergyUpgrade = {
   },
   bosonMult: {
     id: 3,
-    description: "Gain more Higgs Bosons based on current amount",
+    description: "Gain more Dark Energy multiplier based on current amount",
     cost: 400,
-    effect: () => player.celestials.laitela.higgs.plus(1).log10() * 0.75 + 1,
+    effect: () => Math.log10(player.celestials.laitela.darkEnergyMult) * 0.75 + 1,
     effectFormat: x => `Currently: ${format(x, 2, 2)}x`
   },
   realityPenaltyReduction: {

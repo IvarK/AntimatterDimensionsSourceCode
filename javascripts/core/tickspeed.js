@@ -1,11 +1,11 @@
 "use strict";
 
 function canBuyTickSpeed() {
-  return NormalDimension(3).isAvailableForPurchase && !EternityChallenge(9).isRunning;
+  return !Laitela.continuumActive && NormalDimension(3).isAvailableForPurchase && !EternityChallenge(9).isRunning;
 }
 
 function getTickSpeedMultiplier() {
-  if (InfinityChallenge(3).isRunning || Laitela.isRunning) return new Decimal(1);
+  if (InfinityChallenge(3).isRunning) return new Decimal(1);
   if (Ra.isRunning) return new Decimal(0.89);
   // Note that this already includes the "50% more" active path effect
   let replicantiGalaxies = Replicanti.galaxies.bought;
@@ -151,7 +151,15 @@ const Tickspeed = {
     });
   },
 
+  get continuumValue() {
+    if (!this.isUnlocked) return 0;
+    return this.costScale.getContinuumValue(player.antimatter);
+  },
+
   get baseValue() {
+    let boughtTickspeed;
+    if (Laitela.continuumActive) boughtTickspeed = this.continuumValue;
+    else boughtTickspeed = player.totalTickBought;
     return new Decimal(1000)
       .timesEffectsOf(
         Achievement(36),
@@ -159,7 +167,7 @@ const Tickspeed = {
         Achievement(66),
         Achievement(83)
       )
-      .times(getTickSpeedMultiplier().pow(player.totalTickBought + player.totalTickGained));
+      .times(getTickSpeedMultiplier().pow(boughtTickspeed + player.totalTickGained));
   },
 
   multiplySameCosts() {
@@ -195,8 +203,7 @@ const FreeTickspeed = {
       nextShards: new Decimal(1),
     };
     const tickmult = (1 + (Effects.min(1.33, TimeStudy(171)) - 1) *
-      AnnihilationUpgrade.freeTickDecrease.effect) *
-      Math.max(getAdjustedGlyphEffect("cursedtickspeed"), 1);
+      Math.max(getAdjustedGlyphEffect("cursedtickspeed"), 1));
     const logTickmult = Math.log(tickmult);
     const logShards = shards.ln();
     const uncapped = logShards / logTickmult;

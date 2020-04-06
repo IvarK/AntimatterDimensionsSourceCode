@@ -157,7 +157,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(10).isRunning) {
+    if (EternityChallenge(10).isRunning || (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
       return new Decimal(0);
     }
     let production = this.amount;
@@ -203,14 +203,10 @@ class InfinityDimensionState extends DimensionState {
 
     mult = mult.powEffectOf(AlchemyResource.infinity);
 
-    if (Laitela.has(LAITELA_UNLOCKS.DIM_POW)) mult = mult.pow(Laitela.dimensionMultPowerEffect);
-
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);
     } else if (V.isRunning) {
       mult = mult.pow(0.5);
-    } else if (Laitela.isRunning) {
-      mult = mult.pow(Laitela.dimMultNerf);
     }
 
     return mult;
@@ -347,5 +343,5 @@ function tryUnlockInfinityDimensions() {
 }
 
 function getInfinityConversionRate() {
-  return 7 + getAdjustedGlyphEffect("infinityrate") + AnnihilationUpgrade.infConversion.effect;
+  return 7 + getAdjustedGlyphEffect("infinityrate");
 }

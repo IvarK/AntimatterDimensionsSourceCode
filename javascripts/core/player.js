@@ -450,22 +450,25 @@ let player = {
     },
     laitela: {
       matter: new Decimal(0),
+      maxMatter: new Decimal(0),
       run: false,
       unlockBits: 0,
       dimensions: Array.range(0, 4).map(() =>
       ({
         amount: new Decimal(0),
-        chanceUpgrades: 0,
         intervalUpgrades: 0,
-        powerUpgrades: 0,
+        powerDMUpgrades: 0,
+        powerDEUpgrades: 0,
         timeSinceLastUpdate: 0
       })),
-      maxAmGained: new Decimal(1),
+      entropy: 0,
+      thisCompletion: 3600,
+      fastestCompletion: 3600,
+      difficultyTier: 0,
       annihilated: false,
-      higgs: new Decimal(0),
       upgrades: {},
-      darkEnergy: 0,
-      darkEnergyUpgrades: new Set()
+      darkEnergyMult: 0,
+      darkEnergy: 0
     }
   },
   options: {
@@ -548,10 +551,8 @@ const Player = {
   },
 
   get antimatterPerSecond() {
-    const basePerSecond = NormalDimension(1).productionPerRealSecond;
-    if (NormalChallenge(12).isRunning) {
-      return basePerSecond.plus(NormalDimension(2).productionPerRealSecond);
-    }
+    const basePerSecond = NormalDimension(1).productionPerRealSecond
+      .plus(NormalChallenge(12).isRunning ? NormalDimension(2).productionPerRealSecond : 0);
     return basePerSecond;
   },
 
@@ -568,8 +569,7 @@ const Player = {
   },
 
   get dimensionMultDecrease() {
-    const base = GameCache.dimensionMultDecrease.value - 1;
-    return 1 + base * AnnihilationUpgrade.dimCostMult.effect;
+    return GameCache.dimensionMultDecrease.value;
   },
 
   get infinityGoal() {

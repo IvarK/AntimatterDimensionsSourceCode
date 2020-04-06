@@ -363,6 +363,31 @@ class ExponentialCostScaling {
     return { quantity: newPurchases - currentPurchases, logPrice };
   }
 
+  /**
+   * Determines the number of purchases that would be possible, if purchase count was continuous. Might
+   * have some odd behavior right at e308, but otherwise should work. It's mostly a copy-paste from
+   * getMaxBought() above but with unnecessary extra code removed.
+   * @param {Decimal} money
+   * @returns {number} maximum value of bought that money can buy up to
+   */
+  getContinuumValue(money) {
+    const logMoney = money.log10();
+    const logMult = this._logBaseIncrease;
+    const logBase = this._logBaseCost;
+    // The 1 + is because the multiplier isn't applied to the first purchase
+    let contValue = 1 + (logMoney - logBase) / logMult;
+    // We can use the linear method up to one purchase past the threshold, because the first purchase
+    // past the threshold doesn't have cost scaling in it yet.
+    if (contValue > this._purchasesBeforeScaling) {
+      const discrim = this._precalcDiscriminant + 8 * this._logCostScale * logMoney;
+      if (discrim < 0) {
+        return 0;
+      }
+      contValue = this._precalcCenter + Math.sqrt(discrim) / (2 * this._logCostScale);
+    }
+    return Math.clampMin(contValue, 0);
+  }
+
   static log10(value) {
     if (value instanceof Decimal) return value.log10();
     return Math.log10(value);
@@ -491,7 +516,7 @@ function binomialDistribution(numSamples, p) {
     }
     const expected = numSamples.times(p);
     if (expected.e > 32) return expected;
-    return poissonDistribution(numSamples.times(p));
+    return new Decimal(poissonDistribution(numSamples.times(p)));
   }
   const expected = numSamples * p;
   // BTRD is good past 10, but the inversion method we use is faster up to 15 and is exact
@@ -718,8 +743,10 @@ function cubicRealRoots(k3, k2, k1, k0) {
 
 function testCRR(k3, k2, k1, k0) {
   const r = cubicRealRoots(k3, k2, k1, k0);
+  // eslint-disable-next-line no-console
   console.log(r);
-  console.log(r.map(r => k0 + r * (k1 + r * (k2 + r * k3))));
+  // eslint-disable-next-line no-console
+  console.log(r.map(x => k0 + x * (k1 + x * (k2 + x * k3))));
 }
 
 function depressedQuarticRealRoots(k4, k2, k1, k0) {
@@ -768,8 +795,10 @@ function depressedQuarticRealRoots(k4, k2, k1, k0) {
 
 function testDQRR(k4, k2, k1, k0) {
   const r = depressedQuarticRealRoots(k4, k2, k1, k0);
+  // eslint-disable-next-line no-console
   console.log(r);
-  console.log(r.map(r => k0 + r * (k1 + r * (k2 + r * r * k4))));
+  // eslint-disable-next-line no-console
+  console.log(r.map(x => k0 + x * (k1 + x * (k2 + x * x * k4))));
 }
 
 function solveSimpleBiquadratic(A, B, C, D, E, F) {
@@ -811,11 +840,13 @@ function solveSimpleBiquadratic(A, B, C, D, E, F) {
 }
 
 function testSSBQ(A, B, C, D, E, F) {
+  // eslint-disable-next-line no-console
   console.log({ A, B, C, D, E, F });
   const sols = solveSimpleBiquadratic(A, B, C, D, E, F);
   for (const s of sols) {
     const e1 = A * s.x * s.x + B * s.y + C;
     const e2 = D * s.y * s.y + E * s.x + F;
+    // eslint-disable-next-line no-console
     console.log(`${s.x} ${s.y} ${e1} ${e2}`);
   }
 }
@@ -983,7 +1014,7 @@ class Curve {
    * @param {number} t
    * @returns {Vector}
   */
-  position(t) {
+  position() {
     throw new NotImplementedError();
   }
 
@@ -992,7 +1023,7 @@ class Curve {
    * @param {number} t
    * @returns {Vector}
   */
-  derivative(t) {
+  derivative() {
     throw new NotImplementedError();
   }
 
@@ -1001,7 +1032,7 @@ class Curve {
    * @param {number} t
    * @returns {Vector}
   */
-  secondDerivative(t) {
+  secondDerivative() {
     throw new NotImplementedError();
   }
 
@@ -1043,7 +1074,6 @@ class Curve {
       /* eslint-enable no-param-reassign */
       const distSecondDeriv = (offset.dot(dd) + d.dot(d)) * 2;
       const tStep = distSecondDeriv < 0 ? -dist / distDeriv : -distDeriv / distSecondDeriv;
-      // console.log(`${tGuess} ${tMin} ${tMax} ${tStep} ${dist} ${distDeriv} ${distSecondDeriv} ${dd.x} ${dd.y}`);
       if (Math.abs(tStep) < tTol || iter >= 16) return dist;
       tGuess = Math.clamp(tGuess + tStep, tMin, tMax);
     }
@@ -1061,11 +1091,11 @@ class LinearPath extends Curve {
     return this.p0.times(1 - t).plus(this.p1.times(t));
   }
 
-  derivative(t) {
+  derivative() {
     return this.p1.minus(this.p0);
   }
 
-  secondDerivative(t) {
+  secondDerivative() {
     return new Vector(0, 0);
   }
 

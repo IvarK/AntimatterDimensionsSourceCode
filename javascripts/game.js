@@ -37,13 +37,15 @@ function gainedInfinityPoints() {
     TimeStudy(111)
   );
   let ip = player.break
-    ? Decimal.pow10(player.thisInfinityMaxAM.e / div - 0.75)
+    ? Decimal.pow10(player.thisInfinityMaxAM.log10() / div - 0.75)
     : new Decimal(308 / div);
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
     ip = ip.pow(0.55);
   } else if (V.isRunning) {
     ip = ip.pow(0.5);
+  } else if (Laitela.isRunning) {
+    ip = dilatedValueOf(ip, 1);
   }
   if (GlyphAlteration.isAdded("infinity")) {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
@@ -51,7 +53,7 @@ function gainedInfinityPoints() {
   return ip.floor();
 }
 
-function totaEPMult() {
+function totalEPMult() {
   return new Decimal(getAdjustedGlyphEffect("cursedEP"))
     .times(kongEPMult)
     .timesEffectsOf(
@@ -66,13 +68,14 @@ function totaEPMult() {
 }
 
 function gainedEternityPoints() {
-  const ip = player.infinityPoints.plus(gainedInfinityPoints());
-  let ep = Decimal.pow(5, ip.e / 308 - 0.7).times(totaEPMult());
+  let ep = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
   } else if (V.isRunning) {
     ep = ep.pow(0.5);
+  } else if (Laitela.isRunning) {
+    ep = dilatedValueOf(ep, 1);
   }
   if (GlyphAlteration.isAdded("time")) {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
@@ -81,7 +84,7 @@ function gainedEternityPoints() {
 }
 
 function requiredIPForEP() {
-  return Decimal.pow10(Math.ceil(308 * (Decimal.log(totaEPMult().reciprocal(), 5) + 0.7)));
+  return Decimal.pow10(Math.ceil(308 * (Decimal.log(totalEPMult().reciprocal(), 5) + 0.7)));
 }
 
 function getRealityMachineMultiplier() {
@@ -92,7 +95,7 @@ function gainedRealityMachines() {
   const log10FinalEP = player.eternityPoints.plus(gainedEternityPoints()).log10();
   let rmGain = Decimal.pow(1000, log10FinalEP / 4000 - 1);
   // Increase base RM gain if <10 RM
-  if (rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
+  if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
   rmGain = rmGain.times(getRealityMachineMultiplier());
   rmGain = rmGain.plusEffectOf(Perk.realityMachineGain);
   // This happens around ee10 and is necessary to reach e9e15 antimatter without having to deal with the various
@@ -348,6 +351,9 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
   if (effects.includes(GAME_SPEED_EFFECT.NERFS)) {
     if (Effarig.isRunning) {
       factor = Effarig.multiplier(factor).toNumber();
+    } else if (Laitela.isRunning) {
+      const nerfModifier = Math.clampMax(Time.thisRealityRealTime.totalMinutes / 10, 1);
+      factor = Math.pow(factor, nerfModifier);
     }
   }
 
@@ -360,9 +366,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
 
 function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
-  if (Enslaved.isAutoReleasing &&
-    !(EternityChallenge(12).isRunning ||
-      (BlackHoles.arePaused && player.blackHoleNegative < 1))) {
+  if (Enslaved.isAutoReleasing && Enslaved.canRelease(true) && !BlackHoles.areNegative) {
     return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
   return speedFactor;
@@ -386,7 +390,7 @@ function gameLoop(diff, options = {}) {
 
   // Lai'tela mechanics should bypass stored real time entirely
   Laitela.handleMatterDimensionUnlocks();
-  matterDimensionLoop(realDiff);
+  Laitela.tickDarkMatter(realDiff);
 
   // When storing real time, skip everything else having to do with production once stats are updated
   if (Enslaved.isStoringRealTime) {
@@ -400,7 +404,7 @@ function gameLoop(diff, options = {}) {
   }
 
   // Ra-Enslaved auto-release stored time (once every 5 ticks)
-  if (Enslaved.isAutoReleasing && !Enslaved.isRunning) {
+  if (Enslaved.isAutoReleasing) {
     Enslaved.autoReleaseTick++;
   }
   if (Enslaved.autoReleaseTick >= 5) {
@@ -594,6 +598,7 @@ function gameLoop(diff, options = {}) {
     Modal.message.show("... you need ... to look harder ...");
   }
 
+  laitelaRealityTick(realDiff);
   Achievements.autoAchieveUpdate(diff);
   V.checkForUnlocks();
   Ra.updateAlchemyFlow();
@@ -603,6 +608,32 @@ function gameLoop(diff, options = {}) {
   GameUI.update();
   player.lastUpdate = thisUpdate;
   PerformanceStats.end("Game Update");
+}
+
+function laitelaRealityTick(realDiff) {
+  const laitelaInfo = player.celestials.laitela;
+  if (!Laitela.isRunning) return;
+  if (laitelaInfo.entropy >= 0) {
+    laitelaInfo.entropy += (realDiff / 1000) * Laitela.entropyGainPerSecond;
+  }
+
+  // Setting entropy to -1 on completion prevents the modal from showing up repeatedly
+  if (laitelaInfo.entropy >= 1) {
+    let completionText = `Lai'tela's Reality has been destabilized after ${Time.thisRealityRealTime.toStringShort()}.`;
+    laitelaInfo.entropy = -1;
+    laitelaInfo.thisCompletion = Time.thisRealityRealTime.totalSeconds;
+    laitelaInfo.fastestCompletion = Math.min(laitelaInfo.thisCompletion, laitelaInfo.fastestCompletion);
+    if (Time.thisRealityRealTime.totalSeconds < 30) {
+      laitelaInfo.difficultyTier++;
+      laitelaInfo.fastestCompletion = 600;
+      // This causes display oddities at 3 or lower but I don't expect the player to get that far legitimately (?)
+      completionText += `<br><br>Lai'tela's Reality will now disable production from all
+        ${Laitela.maxAllowedDimension + 1}th dimensions during future runs, but the reward will be
+        ${formatInt(20)} times stronger than before.`;
+    }
+    Modal.message.show(completionText);
+  }
+  if (laitelaInfo.entropy < 0) player.antimatter = new Decimal(0);
 }
 
 // This gives IP/EP/RM from the respective upgrades that reward the prestige currencies continuously
@@ -647,7 +678,7 @@ function getTTPerSecond() {
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation
-  const glyphTT = Teresa.isRunning || Enslaved.isRunning
+  const glyphTT = Teresa.isRunning || Enslaved.isRunning || Laitela.isRunning
     ? 0
     : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
 

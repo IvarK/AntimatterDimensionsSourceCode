@@ -594,10 +594,25 @@ GameStorage.devMigrations = {
           Glyphs.applyGamespeed(glyph);
         }
       }
+    },
+    player => {
       for (let i = 0; i < player.celestials.ra.alchemy.length; i++) {
         player.celestials.ra.alchemy[i].amount = Math.clampMax(
           player.celestials.ra.alchemy[i].amount, 25000);
       }
+    },
+    player => {
+      delete player.celestials.laitela.maxAmGained;
+      for (const dim of player.celestials.laitela.dimensions) {
+        dim.powerDMUpgrades = dim.powerUpgrades;
+        dim.powerDEUpgrades = 0;
+        delete dim.chanceUpgrades;
+        delete dim.powerUpgrades;
+      }
+      // Note that player.celestials.laitela.higgs is actually a string at this point
+      // (since conversion to Decimal hasn't happened yet).
+      player.celestials.laitela.darkEnergyMult = Number(player.celestials.laitela.higgs) + 1;
+      delete player.celestials.laitela.anomalies;
     }
   ],
 

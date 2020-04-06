@@ -312,7 +312,7 @@ GameDatabase.tabs = [
         name: "The Pelle",
         symbol: "Ϛ",
         component: "pelle-tab",
-        condition: () => Laitela.has(LAITELA_UNLOCKS.PELLE)
+        condition: () => false
       }
     ]
   },

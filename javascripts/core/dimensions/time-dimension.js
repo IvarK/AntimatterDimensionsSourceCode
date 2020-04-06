@@ -166,8 +166,6 @@ class TimeDimensionState extends DimensionState {
     mult = mult.times(Decimal.pow(dim.powerMultiplier, dim.bought));
     mult = mult.clampMin(0).pow(getAdjustedGlyphEffect("timepow"));
 
-    if (Laitela.has(LAITELA_UNLOCKS.DIM_POW)) mult = mult.pow(Laitela.dimensionMultPowerEffect);
-
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
 
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
@@ -182,16 +180,15 @@ class TimeDimensionState extends DimensionState {
       mult = Effarig.multiplier(mult);
     } else if (V.isRunning) {
       mult = mult.pow(0.5);
-    } else if (Laitela.isRunning) {
-      mult = mult.pow(Laitela.dimMultNerf);
     }
 
     return mult;
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning) {
-      return new Decimal(0);
+    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning ||
+      (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
+        return new Decimal(0);
     }
 
     if (EternityChallenge(11).isRunning) {
@@ -263,7 +260,7 @@ const TimeDimensions = {
     if (EternityChallenge(7).isRunning) {
       TimeDimension(1).produceDimensions(InfinityDimension(8), diff);
     } else {
-      TimeDimension(1).produceCurrency(Currency.timeShards, diff);
+      Currency.timeShards.add(TimeDimension(1).productionForDiff(diff));
     }
 
     EternityChallenge(7).reward.applyEffect(production => {

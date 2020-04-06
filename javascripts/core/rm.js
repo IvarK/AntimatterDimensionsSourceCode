@@ -589,9 +589,8 @@ const Glyphs = {
     
     // This is done here when adding to the inventory in order to keep it out of the glyph generation hot path
     // It thus doesn't show up in manually choosing a glyph
-    if (Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) {
-      this.applyGamespeed(glyph);
-    }
+    // This also only does anything if Ra has the appropriate unlock already.
+    this.applyGamespeed(glyph);
     
     player.reality.glyphs.inventory.push(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
@@ -777,6 +776,7 @@ const Glyphs = {
   },
   // Modifies a basic glyph to have timespeed, and adds the new effect to time glyphs
   applyGamespeed(glyph) {
+    if (!Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) return;
     if (BASIC_GLYPH_TYPES.includes(glyph.type)) {
       // eslint-disable-next-line no-bitwise
       glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timespeed.bitmaskIndex);

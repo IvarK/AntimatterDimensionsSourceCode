@@ -7,7 +7,8 @@ class DimBoostRequirement {
   }
 
   get isSatisfied() {
-    return NormalDimension(this.tier).amount.gte(this.amount);
+    const dimension = NormalDimension(this.tier);
+    return dimension.totalAmount.gte(this.amount);
   }
 }
 
@@ -108,6 +109,7 @@ class DimBoost {
   }
 
   static get freeBoosts() {
+    // This was originally used for Time Compression, probably use it for something in Lai'tela now
     return 0;
   }
 
@@ -179,8 +181,9 @@ function maxBuyDimBoosts() {
   // Linearly extrapolate dimboost costs. req1 = a * 1 + b, req2 = a * 2 + b
   // so a = req2 - req1, b = req1 - a = 2 req1 - req2, num = (dims - b) / a
   const increase = req2.amount - req1.amount;
+  const dim = NormalDimension(req1.tier);
   let maxBoosts = Math.min(Number.MAX_VALUE,
-    1 + Math.floor((NormalDimension(req1.tier).amount.toNumber() - req1.amount) / increase));
+    1 + Math.floor((dim.totalAmount.toNumber() - req1.amount) / increase));
   if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) {
     softReset(maxBoosts);
     return;

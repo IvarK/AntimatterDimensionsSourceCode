@@ -121,7 +121,7 @@ Vue.component("ra-tab", {
         <button class="l-ra-laitela-unlock" v-if="showLaitela">
           <div class="l-ra-laitela-unlock-inner">
             <h1> Lai'tela: </h1>
-            <h2> The Celestial of Matter </h2>
+            <h2> The Celestial of Dimensions </h2>
             <p>
               Unlocked by getting {{ formatInt(laitelaReq) }} total celestial levels
               <span v-if="totalLevels < laitelaReq">

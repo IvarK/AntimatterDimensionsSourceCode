@@ -1,52 +1,14 @@
 "use strict";
 
-const LAITELA_UNLOCKS = {
-  RM_POW: {
-    id: 0,
-    price: 1e60,
-    description: "Boost Lai'tela reward based on RM",
-    value: () => Laitela.rmRewardPowEffect,
-    format: x => `x${formatPow(x, 2, 2)}`
-  },
-  ID: {
-    id: 1,
-    price: 1e150,
-    description: "Increase Infinity Dimensions conversion amount based on matter",
-    value: () => Laitela.idConversionEffect,
-    format: x => `+${x.toFixed(2)}`
-  },
-  TD: {
-    id: 2,
-    price: 1e200,
-    description: "Decrease free tickspeed cost multiplier based on matter",
-    value: () => Laitela.freeTickspeedMultEffect,
-    format: x => `x${x.toFixed(2)}`
-  },
-  DIM_POW: {
-    id: 3,
-    price: 1e250,
-    description: "Power all dimension multipliers based on matter",
-    value: () => Laitela.dimensionMultPowerEffect,
-    format: x => `x${formatPow(x, 2, 2)}`
-  },
-  PELLE: {
-    id: 4,
-    price: Number.MAX_VALUE,
-    description: "Unlock Pelle, the Celestial of Antimatter",
-  },
-};
-
 // How much the starting matter dimension costs increase per tier
-const COST_MULT_PER_TIER = 100;
+const COST_MULT_PER_TIER = 1e3;
 
 const laitelaMatterUnlockThresholds = [1, 2, 3].map(x => 10 * Math.pow(COST_MULT_PER_TIER, x));
 
 const Laitela = {
-
   get celestial() {
     return player.celestials.laitela;
   },
-
   handleMatterDimensionUnlocks() {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);
@@ -56,7 +18,6 @@ const Laitela = {
       }
     }
   },
-
   has(info) {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.laitela.unlockBits & (1 << info.id));
@@ -79,6 +40,10 @@ const Laitela = {
   get isRunning() {
     return this.celestial.run;
   },
+  get continuumActive() {
+    // Make it unlock at Lai'tela unlock for now.
+    return Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK);
+  },
   get nextMatterDimensionThreshold() {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);
@@ -86,37 +51,19 @@ const Laitela = {
     }
     return "";
   },
-  get matterEffectToDimensionMultDecrease() {
-    let matterEffect = 1 / (1 + Decimal.pLog10(this.matter) / 100);
-    if (matterEffect < 0.5) {
-      matterEffect = Math.sqrt(matterEffect * 2) / 2;
-    }
-    return matterEffect;
-  },
-  get matterEffectPercentage() {
-    return `${((1 - this.matterEffectToDimensionMultDecrease) * 100).toFixed(2)}%`;
-  },
-  get freeTickspeedMultEffect() {
-    return 1 / (1 + Math.sqrt(Decimal.pLog10(this.matter)) / 100);
-  },
-  get dimensionMultPowerEffect() {
-    return 1 + Decimal.pLog10(this.matter) / 5000;
-  },
-  get dimMultNerf() {
-    const base = Math.min(1, Decimal.pLog10(this.matter) / LOG10_MAX_VALUE);
-    if (DarkEnergyUpgrade.realityPenaltyReduction.isBought) {
-      return base * DarkEnergyUpgrade.realityPenaltyReduction.effect;
-    }
-    return base;
+  get matterExtraPurchaseFactor() {
+    return 1 + Math.sqrt(Decimal.pLog10(this.celestial.maxMatter) / Math.log10(Number.MAX_VALUE));
   },
   get realityReward() {
-    return this.rewardMultiplier(this.celestial.maxAmGained.clampMin(1));
+    return Math.clampMin(Math.pow(20, player.celestials.laitela.difficultyTier) *
+      (360 / player.celestials.laitela.fastestCompletion), 1);
   },
-  rewardMultiplier(num) {
-    const realityRewardExponent = Math.clamp(Math.log(num.log10() / 1e6), 1, Math.sqrt(num.log10() / 1e7));
-    let matterDimMult = Math.pow(2, realityRewardExponent);
-    matterDimMult = Math.pow(matterDimMult, AnnihilationUpgrade.realityReward.effect);
-    return matterDimMult;
+  // Note that entropy goes from 0 to 1, with 1 being completion
+  get entropyGainPerSecond() {
+    return Math.clamp(Math.pow(player.antimatter.log10() / 1e11, 2), 0, 100) / 100;
+  },
+  get maxAllowedDimension() {
+    return 8 - player.celestials.laitela.difficultyTier;
   },
   get matter() {
     return this.celestial.matter;
@@ -124,33 +71,63 @@ const Laitela = {
   set matter(x) {
     this.celestial.matter = x;
   },
-  get higgsGain() {
-    const base = Decimal.floor(Decimal.pow(this.matter.dividedBy(1e8), 0.2));
-    if (DarkEnergyUpgrade.bosonMult.isBought) {
-      return base.times(DarkEnergyUpgrade.bosonMult.effect);
-    }
-    return base;
+  get darkEnergyMultGain() {
+    return Decimal.pow(this.matter.dividedBy(1e30), 0.1).toNumber();
   },
-  get darkEnergyChance() {
-    return this.celestial.higgs.plus(1).log10() / 10000;
+  get darkEnergyMult() {
+    return this.celestial.darkEnergyMult;
   },
-
-  annihilate() {
-    this.celestial.higgs = this.celestial.higgs.plus(this.higgsGain);
+  get darkMatterMultFromDE() {
+    const power = Math.log10(1 + NormalDimension(8).totalAmount.toNumber() / 1e6) / 4;
+    return Decimal.pow(1 + this.celestial.darkEnergy, power);
+  },
+  annihilate(force) {
+    if (!force && this.darkEnergyMultGain === 0) return false;
+    this.celestial.darkEnergyMult += this.darkEnergyMultGain;
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
         {
           amount: new Decimal(0),
-          chanceUpgrades: 0,
           intervalUpgrades: 0,
-          powerUpgrades: 0,
+          powerDMUpgrades: 0,
+          powerDEUpgrades: 0,
           timeSinceLastUpdate: 0
         }
       )
     );
     this.celestial.dimensions[0].amount = new Decimal(1);
     this.celestial.matter = new Decimal(0);
+    this.celestial.darkEnergy = 0;
     this.celestial.annihilated = true;
+    return true;
+  },
+  tickDarkMatter(realDiff) {
+    for (let i = 1; i <= 4; i++) {
+      const d = MatterDimension(i);
+      d.timeSinceLastUpdate += realDiff;
+      if (d.interval < d.timeSinceLastUpdate) {
+        const ticks = Math.floor(d.timeSinceLastUpdate / d.interval);
+        const productionDM = d.amount.times(ticks).times(d.powerDM);
+        if (i === 1) {
+          player.celestials.laitela.matter = player.celestials.laitela.matter.plus(productionDM);
+          player.celestials.laitela.maxMatter = player.celestials.laitela.maxMatter.max(
+            player.celestials.laitela.matter);
+        } else {
+          MatterDimension(i - 1).amount = MatterDimension(i - 1).amount.plus(productionDM);
+        }
+        if (MatterDimension(i).amount.gt(0)) {
+          player.celestials.laitela.darkEnergy += ticks * d.powerDE;
+        }
+        d.timeSinceLastUpdate -= d.interval * ticks;
+      }
+    }
+  },
+  reset() {
+    this.annihilate(true);
+    this.celestial.darkEnergyMult = 1;
+    this.celestial.annihilated = false;
+    this.celestial.maxMatter = new Decimal(0);
+    this.celestial.fastestCompletion = 3600;
+    this.celestial.difficultyTier = 0;
   }
-
 };

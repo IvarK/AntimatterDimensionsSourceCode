@@ -332,7 +332,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
 
   if (effects.includes(GAME_SPEED_EFFECT.MOMENTUM)) {
     factor *= Math.clampMax(1e30,
-      Math.pow(AlchemyResource.momentum.effectValue, Time.thisRealityRealTime.totalMinutes));
+      Math.pow(AlchemyResource.momentum.effectValue, Time.thisRealityRealTime.totalMinutes * SingularityMilestone(14).effect));
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
@@ -603,6 +603,8 @@ function gameLoop(diff, options = {}) {
   V.checkForUnlocks();
   Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
+
+  Singularity.autobuyerLoop(realDiff);
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);
   GameUI.update();

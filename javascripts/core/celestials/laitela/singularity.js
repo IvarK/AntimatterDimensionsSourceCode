@@ -68,6 +68,14 @@ class SingularityMilestoneState extends GameMechanicState {
     get description() {
         return this.config.description;
     }
+
+    get canBeApplied() {
+        return this.isUnlocked;
+    }
+
+    get effectValue() {
+        return this.effect;
+    }
 }
 
 
@@ -102,7 +110,7 @@ const Singularity = {
     },
 
     get singularitiesGained() {
-        return Math.pow(20, player.celestials.laitela.singularityCapIncreases);
+        return Math.pow(20, player.celestials.laitela.singularityCapIncreases) * SingularityMilestone(5).effect;
     },
 
     get capIsReached() {
@@ -114,5 +122,22 @@ const Singularity = {
 
         player.celestials.laitela.darkEnergy = 0;
         player.celestials.laitela.singularities += this.singularitiesGained;
+    },
+
+    autobuyerLoop(diff) {
+        if (this.capIsReached) {
+
+            player.celestials.laitela.secondsSinceReachedSingularity += diff * 1000;
+            if (player.celestials.laitela.secondsSinceReachedSingularity >= SingularityMilestone(6).effect) {
+                this.perform();
+                player.celestials.laitela.secondsSinceReachedSingularity = 0;
+            }
+
+            for (let i = 1; i <= SingularityMilestone(8).effect; i++) {
+                MatterDimension(i).buyInterval();
+                MatterDimension(i).buyPowerDM();
+                MatterDimension(i).buyPowerDE();
+            }
+        }
     }
 };

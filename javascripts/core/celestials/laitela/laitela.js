@@ -68,7 +68,8 @@ const Laitela = {
     this.celestial.matter = x;
   },
   get darkMatterMultGain() {
-    return Decimal.pow(this.matter.dividedBy(1e30), 0.1).toNumber();
+
+    return Decimal.pow(this.matter.dividedBy(1e30), 0.1).timesEffectsOf(SingularityMilestone(16)).toNumber();
   },
   get darkMatterMult() {
     return this.celestial.darkMatterMult;

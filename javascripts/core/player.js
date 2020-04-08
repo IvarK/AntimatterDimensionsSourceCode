@@ -470,7 +470,8 @@ let player = {
       darkMatterMult: 0,
       darkEnergy: 0,
       singularities: 0,
-      singularityCapIncreases: 0
+      singularityCapIncreases: 0,
+      secondsSinceReachedSingularity: 0
     }
   },
   options: {

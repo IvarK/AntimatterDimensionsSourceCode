@@ -83,6 +83,7 @@ Vue.component("laitela-tab", {
     increaseCap() {
       if (player.celestials.laitela.singularityCapIncreases >= 96) return;
       player.celestials.laitela.singularityCapIncreases++;
+      player.celestials.laitela.secondsSinceReachedSingularity = 0;
     },
     decreaseCap() {
       if (player.celestials.laitela.singularityCapIncreases === 0) return;

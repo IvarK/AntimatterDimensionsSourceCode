@@ -75,6 +75,7 @@ GameDatabase.celestials.singularityMilestones = [
         effect: completions => completions,
         effectFormat: x => `Dimension ${x} autobuyer`
     },
+    // TODO:
     {
         id: 9,
         start: 40,
@@ -84,6 +85,7 @@ GameDatabase.celestials.singularityMilestones = [
         effect: completions => [Infinity, 20, 15, 10, 5, 3, 2, 1, 0][completions],
         effectFormat: x => `${formatInt(x)}s`
     },
+    // TODO:
     {
         id: 10,
         start: 250,
@@ -181,7 +183,7 @@ GameDatabase.celestials.singularityMilestones = [
         repeat: 0,
         limit: 1,
         description: "Singularities make tesseracts stronger",
-        effect: () => Math.pow(Math.log10(player.celestials.laitela.singularities), 3),
+        effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 10,
         effectFormat: x => formatX(x)
     },
 ];

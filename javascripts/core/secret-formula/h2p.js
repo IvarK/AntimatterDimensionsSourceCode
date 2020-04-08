@@ -123,7 +123,7 @@ the Second Dimension ${formatX(4)}, the Third Dimension ${formatX(2)}, and all o
       name: "Antimatter Galaxies",
       info: () => `
 Purchasing an Antimatter Galaxy will reset your game back to the point where only ${formatInt(4)} Dimensions are
-available, but will increase the effect of your tickspeed upgrades by +${formatPercents(0.015)} for your first two
+available, but will increase the effect of your tickspeed upgrades by +${formatPercents(0.015, 1)} for your first two
 galaxies. As you get more galaxies, the reduction will continue becoming stronger and stronger.
 <br>
 <br>
@@ -131,13 +131,13 @@ Though it will have very little impact for the first few purchases,
 the increase is multiplicative and won’t take long to be visible.
 <br>
 <br>
-Your first Galaxy requires ${formatInt(80)} Eighth dimensions, and each additional Galaxy will cost
+Your first Antimatter Galaxy requires ${formatInt(80)} Eighth dimensions, and each additional Galaxy will cost
 another ${formatInt(60)} more.
 <br>
-Distant Galaxy scaling: Above ${formatInt(100)} Galaxies the cost increase between Galaxies will increase by
+Distant Galaxy scaling: Above ${formatInt(100)} Antimatter Galaxies the cost increase between Galaxies will increase by
 ${formatInt(2)} per Galaxy, making the next Galaxy cost ${formatInt(62)} more, then ${formatInt(64)} more, etc.
 <br>
-Remote Galaxy scaling: Above ${formatInt(800)} Galaxies, the <i>total</i> cost increases by another
+Remote Galaxy scaling: Above ${formatInt(800)} Antimatter Galaxies, the <i>total</i> cost increases by another
 ${formatPercents(0.002)} per Galaxy, on top of Distant scaling.
 <br>
 <br>
@@ -203,7 +203,7 @@ the number of times you have crunched.
 <br>
 The "Multiply Infinity Points from all sources by ${formatInt(2)}" upgrade can be bought multiple times,
 but each purchase requires ${formatInt(10)} times as much IP.
-You must buy all ${formatInt(16)} previous Infinity upgrades to start purchasing this particular upgrade.
+You must buy all ${formatInt(16)} previous Infinity Upgrades to start purchasing this particular upgrade.
 <br>
 <br>
 <b>Hotkey: C</b> Big Crunches.
@@ -224,11 +224,11 @@ You can run them multiple times (though only the first time grants a reward),
 and they can be exited at any time via the “Exit Challenge” button on the challenge tab.
 <br>
 <br>
-Your first Infinity is considered to be the first Challenge and is thus automatically completed once
+Your first Infinity is considered to be the first challenge, and is thus automatically completed once
 you unlock challenges.
 <br>
 <br>
-The rightmost row of Infinity upgrades does not work in challenges.
+The rightmost row of Infinity Upgrades does not work in challenges.
 `,
       isUnlocked: () => PlayerProgress.infinityUnlocked(),
       tags: ["infinity", "autobuyer", "earlygame"],
@@ -250,11 +250,11 @@ Priority 2 is bought 2nd, etc. Two equal priorities will pick their
 buying order randomly.
 <br>
 <br>
-<b>Autobuyer Speed:</b> The cooloff period before the autobuyer attempts to make another puchase.
+<b>Autobuyer Interval:</b> The cooldown period before the autobuyer attempts to make another puchase.
 <br>
 <br>
-<b>Bulk Buy:</b> Once the Speed of an autobuyer is maxed (at ${formatInt(100)} ms), all future upgrades will
-double the maximum amount the autobuyer can purchase per tick. This can be disabled.
+<b>Bulk Buy:</b> Once the interval of an autobuyer reaches its minimum (at ${formatInt(100)} ms), all
+future upgrades will double the maximum amount the autobuyer can purchase per tick. This can be disabled.
 <br>
 <br>
 <b>Dimension Autobuyer Buy Quantity:</b> Autobuyers for Dimensions can be set to buy a single Dimension,
@@ -740,7 +740,7 @@ first Black Hole's interval is.
 <br>
 The Black Holes can be paused, completely halting their interval/duration cycle. However, when unpausing them, it will
 take ${BlackHoles.ACCELERATION_TIME} real-time seconds for them to reach maximum speed if they were paused while their
-speed boost was active. Pausing and unpausing affects both black holes; they can't be paused or unpaused independently.
+speed boost was active. Pausing and unpausing affects both Black Holes; they can't be paused or unpaused independently.
 <br>
 <b>Hotkey: B</b> pauses and unpauses the Black Holes.
 `,
@@ -926,7 +926,7 @@ V is a special Celestial in the sense that she is not unlocked by another Celest
 but is instead unlocked by completing a certain achievement.
 She is unlocked by completing achievement ID 151 (row ${formatInt(15)}, column ${formatInt(1)},
 "You really didn't need it anyway"), which requires you to get ${formatInt(800)} Antimatter Galaxies
-without buying 8th Dimensions in your current infinity.
+without buying 8th Dimensions in your current Infinity.
 <br>
 <br>
 After being unlocked from the achievement, you are met with another set of requirements to fully unlock V.

@@ -81,7 +81,7 @@ Vue.component("black-hole-tab", {
       </div>
       <div v-else-if="!isUnlocked">
         <black-hole-unlock-button/>
-        The black hole makes the entire game run significantly faster for a short period of time.
+        The Black Hole makes the entire game run significantly faster for a short period of time.
         <br>
         Starts at {{ formatX(180) }} faster for {{ formatInt(10) }} seconds, once per hour.
       </div>

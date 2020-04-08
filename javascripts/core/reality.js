@@ -569,8 +569,8 @@ function isInCelestialReality() {
 }
 
 function resetReality() {
-  if (confirm("This will put you at the start of your reality and reset your progress in this reality, " +
-    "giving you no rewards from your progress in your current reality.  Are you sure you want to do this?")) {
+  if (confirm("This will put you at the start of your Reality and reset your progress in this Reality, " +
+    "giving you no rewards from your progress in your current Reality.  Are you sure you want to do this?")) {
     beginProcessReality(getRealityProps(true));
     return true;
   }

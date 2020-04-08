@@ -66,16 +66,16 @@ Vue.component("modal-enslaved-hints", {
       const alreadyWaited = this.currentStored / storeRate;
       const decaylessTime = this.nextHintCost / storeRate;
 
+      // Check if decay is irrelevant and don't do the hard calculations if so
+      const minCostEstimate = (TimeSpan.fromYears(1e40).totalMilliseconds - this.currentStored) / storeRate;
+      if (TimeSpan.fromSeconds(minCostEstimate).totalDays > this.hints) {
+        return `${TimeSpan.fromSeconds(minCostEstimate).toStringShort(true)}`;
+      }
+
       // Decay is 3x per day, but the math needs decay per second
       const K = Math.pow(3, 1 / 86400);
       const x = decaylessTime * Math.log(K) * Math.pow(K, alreadyWaited);
-      let timeToGoal = productLog(x) / Math.log(K) - alreadyWaited;
-
-      // Change the estimate if the decay caps out and recalculate with no decay and minimum cost
-      if (TimeSpan.fromSeconds(timeToGoal).totalDays > this.hints) {
-        timeToGoal = (TimeSpan.fromYears(1e40).totalMilliseconds - this.currentStored) / storeRate;
-      }
-
+      const timeToGoal = productLog(x) / Math.log(K) - alreadyWaited;
       return `${TimeSpan.fromSeconds(timeToGoal).toStringShort(true)}`;
     }
   },
@@ -103,9 +103,9 @@ Vue.component("modal-enslaved-hints", {
           divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
           <br>
           <br>
-          The next hint requires {{ hintCost }} stored in your black hole, which will be used up.
+          The next hint requires {{ hintCost }} stored in your Black Hole, which will be used up.
           <span v-if="currentStored < nextHintCost">
-            You will reach this if you charge your black hole for {{ timeEstimate }}.
+            You will reach this if you charge your Black Hole for {{ timeEstimate }}.
           </span>
           <br>
           <br>

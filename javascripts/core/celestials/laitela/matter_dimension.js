@@ -4,8 +4,8 @@
  * Constants for easily adjusting values
  */
 
-const INTERVAL_COST_MULT = 3.2;
-const POWER_DM_COST_MULT = 1.4;
+const INTERVAL_COST_MULT = 5;
+const POWER_DM_COST_MULT = 10;
 const POWER_DE_COST_MULTS = [1.35, 1.3, 1.28, 1.27];
 
 const INTERVAL_START_COST = 10;
@@ -36,7 +36,7 @@ class MatterDimensionState {
   }
 
   get powerDM() {
-    return new Decimal(1 + Math.pow(1.05, this.dimension.powerDMUpgrades))
+    return new Decimal(1 + Math.pow(1.5, this.dimension.powerDMUpgrades))
       .times(Laitela.realityReward).times(Laitela.darkMatterMultFromDE)
       .times(Math.max(Laitela.darkMatterMult, 1))
       .dividedBy(Math.pow(20, this._tier));

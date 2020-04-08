@@ -22,29 +22,29 @@ class SingularityMilestoneState extends GameMechanicState {
         return player.celestials.laitela.singularities >= this.start;
     }
 
+    get previousGoal() {
+        if (!this.isUnlocked) return 0;
+        return this.start * Math.pow(this.repeat, this.completions - 1);
+    }
+
+    get nextGoal() {
+        return this.start * Math.pow(this.repeat, this.completions);
+    }
+
     get completions() {
         if (this.isUnique) return this.isUnlocked ? 1 : 0;
-        return Math.max(
-            Math.min(
-                Math.floor(1 + (player.celestials.laitela.singularities - this.start) / this.repeat)
-            , this.limit === 0 ? Infinity : this.limit)
-        , 0);
+        if (!this.isUnlocked) return 0;
+
+        return Math.floor(1 + Math.log(player.celestials.laitela.singularities) / 
+            Math.log(this.repeat - Math.log(this.start) / Math.log(this.repeat)));
     }
 
     get remainingSingularities() {
-        return this.start + this.repeat * (this.completions) - player.celestials.laitela.singularities;
+        return this.nextGoal - player.celestials.laitela.singularities;
     }
 
     get progressToNext() {
-        if (this.completions === 0) {
-            return formatPercents(
-                1 - (this.start - player.celestials.laitela.singularities) / this.start
-            );
-        }
-
-        return formatPercents(
-            (player.celestials.laitela.singularities - this.start - this.repeat * (this.completions - 1)) / this.repeat
-        );
+        return (player.celestials.laitela.singularities - this.previousGoal) / this.nextGoal;
     }
 
     get isMaxed() {

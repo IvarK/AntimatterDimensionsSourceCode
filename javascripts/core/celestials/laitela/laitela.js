@@ -48,7 +48,7 @@ const Laitela = {
   },
   get matterExtraPurchaseFactor() {
     return (1 + Math.sqrt(Decimal.pLog10(this.celestial.maxMatter) / Math.log10(Number.MAX_VALUE))) * 
-      SingularityMilestone(1).effect;
+      (1 + SingularityMilestone(1).effect);
   },
   get realityReward() {
     return Math.clampMin(Math.pow(20, player.celestials.laitela.difficultyTier) *
@@ -74,7 +74,7 @@ const Laitela = {
     return this.celestial.darkMatterMult;
   },
   get darkMatterMultFromDE() {
-    const power = Math.log10(1 + NormalDimension(8).totalAmount.toNumber() / 1e6) / 4;
+    const power = Math.log10(1 + NormalDimension(8).totalAmount.toNumber() / 1e6) / 10;
     return Decimal.pow(1 + this.celestial.darkEnergy, power);
   },
   annihilate(force) {

@@ -1,10 +1,5 @@
 "use strict";
 
-// How much the starting matter dimension costs increase per tier
-const COST_MULT_PER_TIER = 1e3;
-
-const laitelaMatterUnlockThresholds = [1, 2, 3].map(x => 10 * Math.pow(COST_MULT_PER_TIER, x));
-
 const Laitela = {
   get celestial() {
     return player.celestials.laitela;
@@ -12,7 +7,7 @@ const Laitela = {
   handleMatterDimensionUnlocks() {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);
-      if (d.amount.eq(0) && this.matter.gte(laitelaMatterUnlockThresholds[i - 1])) {
+      if (d.amount.eq(0) && this.matter.gte(d.adjustedStartingCost)) {
         d.amount = new Decimal(1);
         d.timeSinceLastUpdate = 0;
       }
@@ -47,12 +42,13 @@ const Laitela = {
   get nextMatterDimensionThreshold() {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);
-      if (d.amount.eq(0)) return `Next dimension at ${format(laitelaMatterUnlockThresholds[i - 1])} matter`;
+      if (d.amount.eq(0)) return `Next dimension at ${format(d.adjustedStartingCost)} matter`;
     }
     return "";
   },
   get matterExtraPurchaseFactor() {
-    return 1 + Math.sqrt(Decimal.pLog10(this.celestial.maxMatter) / Math.log10(Number.MAX_VALUE));
+    return (1 + Math.sqrt(Decimal.pLog10(this.celestial.maxMatter) / Math.log10(Number.MAX_VALUE))) * 
+      SingularityMilestone(1).effect;
   },
   get realityReward() {
     return Math.clampMin(Math.pow(20, player.celestials.laitela.difficultyTier) *
@@ -71,19 +67,19 @@ const Laitela = {
   set matter(x) {
     this.celestial.matter = x;
   },
-  get darkEnergyMultGain() {
+  get darkMatterMultGain() {
     return Decimal.pow(this.matter.dividedBy(1e30), 0.1).toNumber();
   },
-  get darkEnergyMult() {
-    return this.celestial.darkEnergyMult;
+  get darkMatterMult() {
+    return this.celestial.darkMatterMult;
   },
   get darkMatterMultFromDE() {
     const power = Math.log10(1 + NormalDimension(8).totalAmount.toNumber() / 1e6) / 4;
     return Decimal.pow(1 + this.celestial.darkEnergy, power);
   },
   annihilate(force) {
-    if (!force && this.darkEnergyMultGain === 0) return false;
-    this.celestial.darkEnergyMult += this.darkEnergyMultGain;
+    if (!force && this.darkMatterMultGain === 0) return false;
+    this.celestial.darkMatterMult += this.darkMatterMultGain;
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
         {
@@ -124,7 +120,7 @@ const Laitela = {
   },
   reset() {
     this.annihilate(true);
-    this.celestial.darkEnergyMult = 1;
+    this.celestial.darkMatterMult = 1;
     this.celestial.annihilated = false;
     this.celestial.maxMatter = new Decimal(0);
     this.celestial.fastestCompletion = 3600;

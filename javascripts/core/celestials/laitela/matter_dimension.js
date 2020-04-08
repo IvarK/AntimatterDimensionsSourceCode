@@ -12,6 +12,8 @@ const INTERVAL_START_COST = 10;
 const POWER_DM_START_COST = 10;
 const POWER_DE_START_COST = 10;
 
+const COST_MULT_PER_TIER = 1e3;
+
 class MatterDimensionState {
   constructor(tier) {
     this._tier = tier;
@@ -34,27 +36,35 @@ class MatterDimensionState {
   }
 
   get powerDM() {
-    return new Decimal(1 + Math.pow(1.05, this.dimension.powerDMUpgrades)).times(
-      Laitela.realityReward).times(Laitela.darkMatterMultFromDE);
+    return new Decimal(1 + Math.pow(1.05, this.dimension.powerDMUpgrades))
+      .times(Laitela.realityReward).times(Laitela.darkMatterMultFromDE)
+      .times(Math.max(Laitela.darkMatterMult, 1))
+      .dividedBy(Math.pow(20, this._tier));
   }
   
   get powerDE() {
-    return (1 + this.dimension.powerDEUpgrades / 10) * Laitela.darkEnergyMult / 1000;
+    const tierFactor = Math.pow(4, this._tier);
+    return (1 + Math.pow(1.01, this.dimension.powerDEUpgrades)) * tierFactor / 1000;
+  }
+
+  get adjustedStartingCost() {
+    const tiers = [0, 1, 3, 5];
+    return 10 * Math.pow(COST_MULT_PER_TIER, tiers[this._tier]);
   }
 
   get intervalCost() {
     return Decimal.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades)
-      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST).floor();
+      .times(this.adjustedStartingCost).times(INTERVAL_START_COST).floor();
   }
 
   get powerDMCost() {
     return Decimal.pow(POWER_DM_COST_MULT, this.dimension.powerDMUpgrades)
-      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_DM_START_COST).floor();
+      .times(this.adjustedStartingCost).times(POWER_DM_START_COST).floor();
   }
   
   get powerDECost() {
     return Decimal.pow(POWER_DE_COST_MULTS[this._tier], this.dimension.powerDEUpgrades)
-      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_DE_START_COST).floor();
+      .times(this.adjustedStartingCost).times(POWER_DE_START_COST).floor();
   }
 
   get amount() {

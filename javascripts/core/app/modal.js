@@ -45,6 +45,7 @@ Modal.uiChoice = new Modal("modal-ui-choice");
 Modal.import = new Modal("modal-import");
 Modal.importTree = new Modal("modal-import-tree");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
+Modal.singularityMilestones = new Modal("singularity-milestones-modal");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;

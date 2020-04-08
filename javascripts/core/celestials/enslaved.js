@@ -162,8 +162,21 @@ const Enslaved = {
     player.celestials.enslaved.feltEternity = value;
   },
   get nextHintCost() {
-    const totalHintsGiven = player.celestials.enslaved.realityHintsGiven + player.celestials.enslaved.glyphHintsGiven;
-    return TimeSpan.fromYears(1e40 * Math.pow(3, totalHintsGiven)).totalMilliseconds;
+    return TimeSpan.fromYears(1e40 * Math.pow(3, this.hintCostIncreases)).totalMilliseconds;
+  },
+  get hintCostIncreases() {
+    const hintTime = player.celestials.enslaved.zeroHintTime - Date.now();
+    return Math.clampMin(hintTime / TimeSpan.fromDays(1).totalMilliseconds, 0);
+  },
+  spendTimeForHint() {
+    if (player.celestials.enslaved.stored < this.nextHintCost) return false;
+      player.celestials.enslaved.stored -= this.nextHintCost;
+      if (Enslaved.hintCostIncreases === 0) {
+        player.celestials.enslaved.zeroHintTime = Date.now() + TimeSpan.fromDays(1).totalMilliseconds;
+      } else {
+        player.celestials.enslaved.zeroHintTime += TimeSpan.fromDays(1).totalMilliseconds;
+      }
+      return true;
   },
   get tesseractCost() {
     return Tesseracts.costs[player.celestials.enslaved.tesseracts];
@@ -246,6 +259,11 @@ class EnslavedProgressState extends GameMechanicState {
   }
 
   giveProgress() {
+    // Bump the last hint time appropriately if the player found the hint
+    if (this.hasHint && !this.hasProgress) {
+      player.celestials.enslaved.zeroHintTime -= Math.log(2) / Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds;
+      GameUI.notify.success("You found a crack in The Enslaved Ones' Reality!");
+    }
     // eslint-disable-next-line no-bitwise
     player.celestials.enslaved.progressBits |= (1 << this.id);
   }

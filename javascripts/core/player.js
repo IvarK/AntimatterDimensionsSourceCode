@@ -395,8 +395,8 @@ let player = {
       feltEternity: false,
       progressBits: 0,
       hintBits: 0,
-      realityHintsGiven: 0,
-      glyphHintsGiven: 0
+      glyphHintsGiven: 0,
+      zeroHintTime: 0
     },
     v: {
       unlockBits: 0,

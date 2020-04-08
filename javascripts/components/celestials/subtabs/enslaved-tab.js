@@ -5,21 +5,26 @@ Vue.component("modal-enslaved-hints", {
     return {
       currentStored: 0,
       nextHintCost: 0,
+      canGetHint: false,
       shownEntries: [],
       realityHintsLeft: 0,
       glyphHintsLeft: 0,
+      hints: 0,
     };
   },
   methods: {
     update() {
       this.currentStored = player.celestials.enslaved.stored;
       this.nextHintCost = Enslaved.nextHintCost;
+      this.canGetHint = this.currentStored >= this.nextHintCost;
       this.shownEntries = [];
 
       this.realityHintsLeft = Object.values(EnslavedProgress).length;
       for (const prog of Object.values(EnslavedProgress)) {
         if (prog.hasHint) {
-          this.shownEntries.push([prog.hasProgress ? prog.config.progress : "(Unknown)", prog.config.hint]);
+          this.shownEntries.push([prog.hasProgress
+            ? prog.config.progress
+            : "(You haven't figured this hint out yet)", prog.config.hint]);
           this.realityHintsLeft--;
         }
       }
@@ -29,35 +34,49 @@ Vue.component("modal-enslaved-hints", {
         this.shownEntries.push(["", GameDatabase.celestials.enslaved.glyphHints[hintNum]]);
       }
       this.glyphHintsLeft = GameDatabase.celestials.enslaved.glyphHints.length - glyphHintCount;
-    },
-    spendTime() {
-      if (this.currentStored < Enslaved.nextHintCost) return false;
-      player.celestials.enslaved.stored -= this.nextHintCost;
-      return true;
+
+      this.hints = Enslaved.hintCostIncreases;
     },
     giveRealityHint(available) {
-      if (available <= 0 || !this.spendTime()) return;
-      player.celestials.enslaved.realityHintsGiven++;
+      if (available <= 0 || !Enslaved.spendTimeForHint()) return;
       Object.values(EnslavedProgress).filter(prog => !prog.hasHint).randomElement().giveHint();
     },
     giveGlyphHint(available) {
-      if (available <= 0 || !this.spendTime()) return;
+      if (available <= 0 || !Enslaved.spendTimeForHint()) return;
       player.celestials.enslaved.glyphHintsGiven++;
     }
   },
   computed: {
     hintCost() {
-      return `${format(TimeSpan.fromMilliseconds(this.nextHintCost).totalYears, 1)} years`;
+      return `${format(TimeSpan.fromMilliseconds(this.nextHintCost).totalYears, 2)} years`;
     },
     hasProgress(id) {
       return this.progressEntries.some(entry => entry.id === id);
     },
+    // Note: This calculation seems to behave extremely poorly if the goal has been raised more than 12 hints worth
+    // of cost bumps and I'm not entirely sure why. There's probably a numerical issue I can't quite figure out, but
+    // considering that much cost raising can't happen in practice I think I'm just going to leave it be.
     timeEstimate() {
-      const storeRate = Enslaved.isStoringGameTime
+      if (this.currentStored >= this.nextHintCost) return "";
+
+      // Relevant values are stored as milliseconds, so multiply the rate by 1000 to get to seconds
+      const storeRate = 1000 * (Enslaved.isStoringGameTime
         ? Enslaved.currentBlackHoleStoreAmountPerMs
-        : getGameSpeedupFactor();
-      const timeToGoal = Math.clampMin((this.nextHintCost - this.currentStored) / storeRate, 0);
-      return `${TimeSpan.fromMilliseconds(timeToGoal)}`;
+        : getGameSpeedupFactor());
+      const alreadyWaited = this.currentStored / storeRate;
+      const decaylessTime = this.nextHintCost / storeRate;
+
+      // Decay is 3x per day, but the math needs decay per second
+      const K = Math.pow(3, 1 / 86400);
+      const x = decaylessTime * Math.log(K) * Math.pow(K, alreadyWaited);
+      let timeToGoal = productLog(x) / Math.log(K) - alreadyWaited;
+
+      // Change the estimate if the decay caps out and recalculate with no decay and minimum cost
+      if (TimeSpan.fromSeconds(timeToGoal).totalDays > this.hints) {
+        timeToGoal = (TimeSpan.fromYears(1e40).totalMilliseconds - this.currentStored) / storeRate;
+      }
+
+      return `${TimeSpan.fromSeconds(timeToGoal).toStringShort(true)}`;
     }
   },
   template: `
@@ -75,26 +94,36 @@ Vue.component("modal-enslaved-hints", {
           <div v-else>
             * <i>Glyph hint: {{ entry[1] }}</i>
           </div>
+          <br>
         </div>
-      <br>
-        You can spend some time looking for some more cracks in the Reality, but every hint you spend time on
-        will permanently increase the time needed for the next by a factor of {{ formatInt(3) }}.
-        <br>
-        <br>
-        The next hint requires {{ hintCost }} stored in your black hole, which will be used up. You can reach
-        this by charging your black hole for {{ timeEstimate }}.
-        <br>
-        <br>
-        <button class="o-primary-btn"
-          :class="{ 'o-primary-btn--disabled': realityHintsLeft <= 0 }"
-          v-on:click="giveRealityHint(realityHintsLeft)">
-            Get a hint about the Reality itself ({{ formatInt(realityHintsLeft) }} left)
-        </button>
-        <button class="o-primary-btn"
-          :class="{ 'o-primary-btn--disabled': glyphHintsLeft <= 0 }"
-          v-on:click="giveGlyphHint(glyphHintsLeft)">
-            Get a hint on what glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
-        </button>
+        <div v-if="realityHintsLeft + glyphHintsLeft > 0">
+          You can spend some time looking for some more cracks in the Reality, but every hint you spend time on
+          will increase the time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
+          gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
+          divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
+          <br>
+          <br>
+          The next hint requires {{ hintCost }} stored in your black hole, which will be used up.
+          <span v-if="currentStored < nextHintCost">
+            You will reach this if you charge your black hole for {{ timeEstimate }}.
+          </span>
+          <br>
+          <br>
+          <button class="o-primary-btn"
+            :class="{ 'o-primary-btn--disabled': realityHintsLeft <= 0 || !canGetHint }"
+            v-on:click="giveRealityHint(realityHintsLeft)">
+              Get a hint about the Reality itself ({{ formatInt(realityHintsLeft) }} left)
+          </button>
+          <br>
+          <button class="o-primary-btn"
+            :class="{ 'o-primary-btn--disabled': glyphHintsLeft <= 0 || !canGetHint }"
+            v-on:click="giveGlyphHint(glyphHintsLeft)">
+              Get a hint on what glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
+          </button>
+        </div>
+        <div v-else>
+          There are no more hints left!
+        </div>
     </div>`,
 });
 

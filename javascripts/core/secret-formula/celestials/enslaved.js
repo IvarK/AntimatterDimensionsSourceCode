@@ -7,37 +7,38 @@ GameDatabase.celestials.enslaved = {
   progress: {
     hintsUnlocked: {
       id: 0,
-      progress: "Unlocked a helping hand",
+      progress: "Unlocked Enslaved Hints",
       hint: "The Enslaved Ones want to help, but the help takes a while.",
       condition: "Spent more than 4 real-time hours without completing the Reality",
     },
     ec1: {
       id: 1,
-      progress: "\"Completed\" Eternity Challenge 1",
+      progress: "\"Completed\" Eternity Challenge 1 more than five times",
       hint: "That's odd, AutoEC seems to have some trouble working properly.",
       condition: "Gained more than 5 completions of EC1 at once",
     },
     feelEternity: {
       id: 2,
-      progress: "Experienced Eternity",
+      progress: "Tried to Fix Infinity, but then experenced Eternity",
       hint: "Infinity seems to be more broken than usual in this Reality, but is that even fixable?",
       condition: "Clicked the FEEL ETERNITY button",
     },
     ec6: {
       id: 3,
-      progress: "Took advantage of cheaper scaling in an Eternity Challenge",
-      hint: "Some challenges are harder but also boost something in exchange, I wonder if that's useful somewhere.",
+      progress: "Took advantage of cheaper galaxy scaling in an Eternity Challenge",
+      hint: "Some challenges are hard but also boost something in exchange, I wonder if there's a challenge " +
+        "that's just strictly better than normal here.",
       condition: "Entered EC6 again after completing it 5 times",
     },
     c10: {
       id: 4,
-      progress: "Gained some galaxies using lower dimensions",
-      hint: "Wasn't there a way to get galaxies without 8th dimensions?",
+      progress: "Gained some antimatter galaxies using 6th dimensions",
+      hint: "Is there a way to get antimatter galaxies without 8th dimensions?",
       condition: "Used Challenge 10 to get more than one antimatter galaxy",
     },
     secretStudy: {
       id: 5,
-      progress: "Found some extra Time Theorems",
+      progress: "Found some extra secret Time Theorems",
       hint: "Time Study 12? What's that?",
       condition: "Clicked the secret time study",
     },
@@ -49,13 +50,15 @@ GameDatabase.celestials.enslaved = {
     },
     challengeCombo: {
       id: 7,
-      progress: "\"Exploited\" an interaction between different challenges",
-      hint: "Could I possibly use one challenge to make another challenge easier?",
+      progress: "\"Exploited\" an interaction between a Normal Challenge and an Eternity Challenge",
+      hint: "Could I possibly use one challenge to get around a restriction in another challenge?",
       condition: "Entered C10 while already inside of EC6",
     },
   },
   // These get unlocked sequentially
   glyphHints: [
-    "Infinity and Dilation glyphs seem confined too tightly to be useful, but time glyphs seem especially strong.",
-    "Glyph set hint 2 placeholder."]
+    "Infinity and Dilation glyphs seem confined too tightly to be useful at all.",
+    "Power and Time glyphs are particularly strong here.",
+    "Effarig glyphs are only useful with the right effects, but you can complete the reality without one. " +
+      "A Replication glyph is necessary, but they aren't quite as strong as Power and Time."]
 };

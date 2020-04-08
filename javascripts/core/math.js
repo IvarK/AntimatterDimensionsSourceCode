@@ -394,6 +394,19 @@ class ExponentialCostScaling {
   }
 }
 
+// Numerical approximation for values from the Lambert W function, using Newton's method with some algebraic
+// changes to make it less likely to overflow. Relative precision of 1e-6 should be good enough for most purposes;
+// this should never be turned down to 0 as there can be oscillatory behavior due to floating point quantization
+// that never converges to a fixed point. It also seems to take much longer to converge at higher values.
+function productLog(x) {
+  let curr = x, prev = 0;
+  do {
+    prev = curr;
+    curr -= 1 - (1 + x * Math.exp(-curr)) / (1 + curr);
+  } while (Math.abs(curr - prev) > 1e-6 * curr);
+  return curr;
+}
+
 // Calculate cost scaling for something that follows getCostWithLinearCostScaling() under Infinity and immediately
 // starts accelerated ExponentialCostScaling above Infinity.  Yes this is a fuckton of arguments, sorry.  It sort of
 // needs to inherit all arguments from both cost scaling functions.

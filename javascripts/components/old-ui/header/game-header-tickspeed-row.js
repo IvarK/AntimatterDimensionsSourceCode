@@ -77,7 +77,7 @@ Vue.component("game-header-tickspeed-row", {
           onclick="buyTickSpeed()">
           <span v-if="isContinuumActive">Cont: {{continuumString}}</span>
           <span v-else-if="showCostTitle">Cost: {{format(cost)}}</span>
-          <span v-else>{{format(cost)}}</span>
+          <span v-else>{{format(cost)}}<br></span>
         </primary-button>
         <primary-button
           :enabled="isAffordable"

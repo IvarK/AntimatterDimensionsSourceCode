@@ -1745,7 +1745,9 @@ GameDatabase.news = [
   },
   {
     id: "l1",
-    text: "You just made your first 1,000,000,000,000,000 antimatter. This one tastes like chicken",
+    get text() {
+      return `You just made your first ${formatInt(1e15)} antimatter. This one tastes like chicken.`;
+    },
     get unlocked() { return player.antimatter.e === 15; }
   },
   {

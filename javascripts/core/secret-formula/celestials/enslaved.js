@@ -13,7 +13,7 @@ GameDatabase.celestials.enslaved = {
     },
     ec1: {
       id: 1,
-      progress: "\"Completed\" Eternity Challenge 1 more than five times",
+      progress: "\"Completed\" Eternity Challenge 1 more than five times at once",
       hint: "That's odd, AutoEC seems to have some trouble working properly.",
       condition: "Gained more than 5 completions of EC1 at once",
     },
@@ -32,9 +32,9 @@ GameDatabase.celestials.enslaved = {
     },
     c10: {
       id: 4,
-      progress: "Gained some antimatter galaxies using 6th dimensions",
-      hint: "Is there a way to get antimatter galaxies without 8th dimensions?",
-      condition: "Used Challenge 10 to get more than one antimatter galaxy",
+      progress: "Gained some Antimatter Galaxies using 6th dimensions",
+      hint: "Is there a way to get Antimatter Galaxies without 8th dimensions?",
+      condition: "Used Challenge 10 to get more than one Antimatter Galaxy",
     },
     secretStudy: {
       id: 5,
@@ -59,6 +59,6 @@ GameDatabase.celestials.enslaved = {
   glyphHints: [
     "Infinity and Dilation glyphs seem confined too tightly to be useful at all.",
     "Power and Time glyphs are particularly strong here.",
-    "Effarig glyphs are only useful with the right effects, but you can complete the reality without one. " +
+    "Effarig glyphs are only useful with the right effects, but you can complete the Reality without one. " +
       "A Replication glyph is necessary, but they aren't quite as strong as Power and Time."]
 };

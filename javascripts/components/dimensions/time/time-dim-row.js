@@ -27,7 +27,7 @@ Vue.component("time-dim-row", {
         : "";
     },
     buttonContents() {
-      return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 0, 0)} EP`;
+      return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2)} EP`;
     }
   },
   watch: {

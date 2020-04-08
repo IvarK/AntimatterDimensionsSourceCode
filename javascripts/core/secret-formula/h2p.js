@@ -35,8 +35,8 @@ as well as produced from the higher Dimension.
 <br>
 <b>Purchased Dimensions Quantity:</b> Next to each accumulated quantity of owned Dimensions,
 the amount of that Dimension purchased toward the next multiplier upgrade is displayed in brackets.
-For example if you have (4) next to your accumulated dimension quantity,
-you will need 6 more of that dimension for the next multiplier increase.
+For example if you have (${formatInt(4)}) next to your accumulated dimension quantity,
+you will need ${formatInt(6)} more of that dimension for the next multiplier increase.
 <br>
 <br>
 <b>Dimension Growth Percent:</b> This number represents the amount of growth that each
@@ -186,7 +186,8 @@ rewards.
     }, {
       name: "Infinity",
       info: () => `
-Once you have too much antimatter for the world to handle (2<sup>1024</sup> or about ${format(Number.MAX_VALUE, 6)},
+Once you have too much antimatter for the world to handle (${formatInt(2)}<sup>${formatInt(1024)}</sup>
+or about ${format(Number.MAX_VALUE, 6)},
 sometimes called "Infinity"), you’ll be forced to do a “Big Crunch”. This will reset your antimatter, Dimensions,
 Shifts/Boosts, and your Galaxies. Doing a Big Crunch is also sometimes referred to as "Infinitying".
 <br>
@@ -223,7 +224,8 @@ You can run them multiple times (though only the first time grants a reward),
 and they can be exited at any time via the “Exit Challenge” button on the challenge tab.
 <br>
 <br>
-Your first Infinity is considered "Challenge 1" and is thus automatically completed once you unlock challenges.
+Your first Infinity is considered to be the first Challenge and is thus automatically completed once
+you unlock challenges.
 <br>
 <br>
 The rightmost row of Infinity upgrades does not work in challenges.
@@ -248,7 +250,7 @@ Priority 2 is bought 2nd, etc. Two equal priorities will pick their
 buying order randomly.
 <br>
 <br>
-<b>Autobuyer Speed:</b>The cooloff period before the autobuyer attempts to make another puchase.
+<b>Autobuyer Speed:</b> The cooloff period before the autobuyer attempts to make another puchase.
 <br>
 <br>
 <b>Bulk Buy:</b> Once the Speed of an autobuyer is maxed (at ${formatInt(100)} ms), all future upgrades will
@@ -309,15 +311,15 @@ and a similar scaling happens to tickspeed upgrade costs as well.
     }, {
       name: "Infinity Dimensions",
       info: () => `
-<b>Unlocking Infinity Dimensions:</b>Infinity Dimensions are unlocked by reaching a certain amount of antimatter.
+<b>Unlocking Infinity Dimensions:</b> Infinity Dimensions are unlocked by reaching a certain amount of antimatter.
 <br>
 <br>
-<b>Infinity Dimension Purchasing:</b>Infinity Dimensions are only purchasable in sets of ${formatInt(10)}, and cost
+<b>Infinity Dimension Purchasing:</b> Infinity Dimensions are only purchasable in sets of ${formatInt(10)}, and cost
 Infinity Points. They give a permanent multiplier per purchase, similar to the other dimensions. The actual multiplier
 applied depends on which Infinity Dimension you purchase. <!-- Sorry Garnet :/ -->
 <br>
 <br>
-<b>Infinity Dimension Production:</b>Just like Normal Dimensions, each Infinity Dimension produces the
+<b>Infinity Dimension Production:</b> Just like Normal Dimensions, each Infinity Dimension produces the
 next highest Infinity Dimension.
 <br>
 <br>
@@ -337,7 +339,7 @@ of Infinity Dimensions doesn't carry between crunches, all the multipliers you g
   .map(tier => format(InfinityDimension(tier)._baseCost))
   .join(", ")}
 <br>
-<b>Infinity Dimension price increases:</b>${Array.range(1, 8)
+<b>Infinity Dimension price increases:</b> ${Array.range(1, 8)
   .map(tier => format(InfinityDimension(tier)._costMultiplier))
   .join(", ")}
 <br>

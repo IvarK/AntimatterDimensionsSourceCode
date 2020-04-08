@@ -3,51 +3,62 @@
 Vue.component("normal-achievements-tab", {
   data() {
     return {
-      achPower: new Decimal(0),
-      timeUntilNext: 0,
-      totalDisabledTime: 0,
-      remainingDisabledTime: 0
+      achievementPower: 0,
+      achCountdown: 0,
+      showAutoAchieve: false,
+      isAutoAchieveActive: false,
+      isCancer: 0
     };
   },
   computed: {
-    rows: () => Achievements.rows(1, 15)
+    rows: () => Achievements.allRows,
+    swapImagesButton() {
+      return Theme.current().name === "S4" || this.isCancer ? "😂" : ".";
+    }
+  },
+  watch: {
+    isAutoAchieveActive(newValue) {
+      player.reality.autoAchieve = newValue;
+    }
   },
   methods: {
     update() {
-      this.achPower.copyFrom(Player.achievementPower);
-      if (player.realities === 0) {
-        this.timeUntilNext = 0;
-        this.totalDisabledTime = 0;
-        this.remainingDisabledTime = 0;
-        return;
-      }
-      this.timeUntilNext = Achievements.timeUntilNext;
-      this.totalDisabledTime = Achievements.totalDisabledTime;
-      this.remainingDisabledTime = Achievements.remainingDisabledTime;
+      this.achievementPower = Achievements.power;
+      this.achCountdown = Achievements.timeToNextAutoAchieve() / getGameSpeedupFactor();
+      this.showAutoAchieve = player.realities > 0 && !Perk.achievementGroup6.isBought;
+      this.isAutoAchieveActive = player.reality.autoAchieve;
+      this.isCancer = player.secretUnlocks.cancerAchievements;
     },
     timeDisplay(value) {
       return timeDisplay(value);
     },
     timeDisplayNoDecimals(value) {
       return timeDisplayNoDecimals(value);
+    },
+    swapImages() {
+      if (Themes.available().find(v => v.name === "S4") !== undefined && Theme.current().name !== "S4") {
+        player.secretUnlocks.cancerAchievements = !player.secretUnlocks.cancerAchievements;
+      }
     }
   },
   template:
     `<div>
-      <div
-        class="c-achievements-tab__header"
-      >Current achievement multiplier on each Dimension: {{ shorten(achPower, 2, 3) }}x</div>
-      <div
-        v-if="timeUntilNext > 0"
-        class="c-achievements-tab__header"
-      >Next achievement in {{timeDisplayNoDecimals(timeUntilNext)}}</div>
-      <br>
-      <div
-        v-if="totalDisabledTime > 0"
-        id="timeForAchievements"
-        class="c-achievements-tab__timer"
-      >You will gain your achievements back over the span of {{timeDisplay(totalDisabledTime)}}.</div>
-      <div v-if="remainingDisabledTime > 0">(Remaining: {{timeDisplay(remainingDisabledTime)}})</div>
+      <div class="c-achievements-tab__header">
+        Current achievement multiplier on each Dimension: {{ format(achievementPower, 2, 3) }}x
+        <span @click="swapImages()" style="cursor: pointer">{{ swapImagesButton }}</span>
+      </div>
+      <div v-if="achCountdown > 0" class="c-achievements-tab__header">
+        Next automatic achievement in {{timeDisplayNoDecimals(achCountdown)}}.
+      </div>
+      <div v-if="showAutoAchieve">
+        <primary-button-on-off
+          v-model="isAutoAchieveActive"
+          class="o-primary-btn"
+          text="Auto achievement:"
+        />
+        <br>
+        <br>
+      </div>
       <div class="l-achievement-grid">
         <normal-achievement-row v-for="(row, i) in rows" :key="i" :row="row" />
       </div>

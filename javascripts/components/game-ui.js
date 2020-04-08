@@ -21,14 +21,16 @@ Vue.component("game-ui", {
     }
   },
   template: `
-    <div id="ui" class="c-game-ui">
+    <div v-if="view.initialized" id="ui" class="c-game-ui">
       <component :is="uiLayout">
         <component :is="page" />
       </component>
       <modal-popup v-if="view.modal.current" />
       <modal-glyph-selection v-if="view.modal.glyphSelection" />
+      <modal-progress-bar v-if="view.modal.progressBar" />
       <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
       <div id="notification-container" class="l-notification-container" />
+      <help-me />
     </div>
   `
 });

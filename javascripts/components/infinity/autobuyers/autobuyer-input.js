@@ -20,7 +20,7 @@ Vue.component("autobuyer-input", {
     typeFunctions() {
       const functions = AutobuyerInputFunctions[this.type];
       if (functions === undefined) {
-        throw crash("Unknown autobuyer input type");
+        throw new Error("Unknown autobuyer input type");
       }
       return functions;
     },
@@ -89,11 +89,18 @@ Vue.component("autobuyer-input", {
 const AutobuyerInputFunctions = {
   decimal: {
     areEqual: (value, other) => Decimal.eq(value, other),
-    formatValue: value => Notation.scientific.format(value, 2, 0),
+    formatValue: value => Notation.scientific.format(value, 2, 2),
     copyValue: value => new Decimal(value),
     tryParse: input => {
       try {
-        const decimal = Decimal.fromString(input.replace(",", ""));
+        let decimal;
+        if (/^e\d*[.]?\d+$/u.test(input.replace(",", ""))) {
+          // Logarithm Notation
+          decimal = Decimal.pow10(parseFloat(input.replace(",", "").slice(1)));
+        } else {
+          // Scientific notation
+          decimal = Decimal.fromString(input.replace(",", ""));
+        }
         return isNaN(decimal.mantissa) || isNaN(decimal.exponent) ? undefined : decimal;
       } catch (e) {
         return undefined;

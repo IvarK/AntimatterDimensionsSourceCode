@@ -19,30 +19,14 @@ html{
 }
 
 body {
-    filter: invert(0%);
 	background: #0FFF0F !important;
-	
     border: 1px solid white !important;
 }
 
-.unavailablebtn {
-    background-color: #ff0000 !important;
-}
-
-.storebtn {
-    background-color: #ff00e0 !important;
-    cursor: url(cursor2.cur),  auto !important;
-}
-
-.tabbtn, .secondarytabbtn {
-    background-color: #1b00ff !important;
-    cursor: url(cursor2.cur), auto !important;
-}
-
 .o-achievement {
-    border-radius: .8rem !important;
+    border-radius: 0.8rem !important;
 }
 
 * {
-	box-shadow: 1px 1px 1px 0px #9E9E9E;
+	box-shadow: 1px 1px 1px 0 #9E9E9E;
 }

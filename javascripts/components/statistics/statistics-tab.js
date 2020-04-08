@@ -4,8 +4,6 @@ Vue.component("statistics-tab", {
   data() {
     return {
       totalAntimatter: new Decimal(0),
-      boosts: 0,
-      galaxies: 0,
       realTimePlayed: TimeSpan.zero,
       infinity: {
         isUnlocked: false,
@@ -30,19 +28,19 @@ Vue.component("statistics-tab", {
         isUnlocked: false,
         count: 0,
         best: TimeSpan.zero,
+        bestReal: TimeSpan.zero,
         this: TimeSpan.zero,
         thisReal: TimeSpan.zero,
         totalTimePlayed: TimeSpan.zero,
         bestRate: new Decimal(0),
       },
       matterScale: [],
+      recordGlyphInfo: [],
     };
   },
   methods: {
     update() {
       this.totalAntimatter.copyFrom(player.totalAntimatter);
-      this.boosts = DimBoost.purchasedBoosts;
-      this.galaxies = Math.round(player.galaxies);
       this.realTimePlayed.setFrom(Date.now() - player.gameCreatedTime);
       const progress = PlayerProgress.current;
       const isInfinityUnlocked = progress.isInfinityUnlocked;
@@ -72,6 +70,7 @@ Vue.component("statistics-tab", {
       if (isRealityUnlocked) {
         reality.count = Math.floor(player.realities);
         reality.best.setFrom(player.bestReality);
+        reality.bestReal.setFrom(player.bestRealityRealTime);
         reality.this.setFrom(player.thisReality);
         reality.totalTimePlayed.setFrom(player.totalTimePlayed);
         // Real time tracking is only a thing once reality is unlocked:
@@ -81,27 +80,26 @@ Vue.component("statistics-tab", {
         reality.bestRate.copyFrom(player.bestRMmin);
       }
       this.matterScale = MatterScale.estimate(player.antimatter);
-    },
-    formatAmount(value) { 
-      return value > 1e18 ? shorten(value, 3, 0) : formatWithCommas(value);
-    },
-    formatResetAmount(value) {
-      return this.formatAmount(value) + ((value === 1) ? " time" : " times");
+      this.recordGlyphInfo = [
+        [true, Glyphs.copyForRecords(player.bestRMminSet), `Best RM/min: ${format(player.bestRMmin, 2, 2)} RM/min`],
+        [true, Glyphs.copyForRecords(player.bestGlyphLevelSet),
+          `Best glyph level: ${formatInt(player.bestGlyphLevel)}`],
+        [true, Glyphs.copyForRecords(player.bestEPSet), `Best EP: ${format(player.bestEP, 2, 2)} EP`],
+        [true, Glyphs.copyForRecords(player.bestSpeedSet),
+          `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
+        [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
+          `Best AM in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)}`]
+      ];
     },
     formatDecimalAmount(value) {
-      return value.gt(1e9) ? shorten(value, 3, 0) : shortenSmallInteger(value.toNumber());
-    },
-    formatDecimalResetAmount(value) {
-      return this.formatDecimalAmount(value) + ((value.eq(1)) ? " time" : " times");
+      return value.gt(1e9) ? format(value, 3, 0) : formatInt(value.toNumber());
     }
   },
   template:
     `<div class="c-stats-tab">
         <br>
         <h3>General</h3>
-        <div>You have made a total of {{ shortenMoney(totalAntimatter) }} antimatter.</div>
-        <div>You have purchased {{ boosts }} Dimension {{"Boost/Shift" | pluralize(boosts, "Boosts/Shifts")}}.</div>
-        <div>You have {{ galaxies }} Antimatter {{"Galaxy" | pluralize(galaxies, "Galaxies")}}.</div>
+        <div>You have made a total of {{ format(totalAntimatter, 2, 1) }} antimatter.</div>
         <div>You have played for {{ realTimePlayed }}.</div>
         <div v-if="reality.isUnlocked">
           Your existence has spanned {{ reality.totalTimePlayed }} of time.
@@ -109,7 +107,7 @@ Vue.component("statistics-tab", {
         <div>
           <br>
           <div
-            v-if="eternity.thisReal.seconds > 1 && infinity.thisReal.seconds > 1"
+            v-if="eternity.thisReal.totalSeconds > 1 && infinity.thisReal.totalSeconds > 1"
             v-for="line in matterScale">{{line}}</div>
         </div>
         <br>
@@ -117,23 +115,24 @@ Vue.component("statistics-tab", {
             <h3>Infinity</h3>
             <div v-if="infinity.count.gt(0)">
               You have infinitied
-              {{ formatDecimalResetAmount(infinity.count) }}<span v-if="eternity.isUnlocked"> this Eternity</span>.
+              {{ formatDecimalAmount(infinity.count) }}
+              {{"time" | pluralize(infinity.count)}}<span v-if="eternity.isUnlocked"> this Eternity</span>.
             </div>
             <div v-else>You haven't infinitied<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
             <div v-if="infinity.banked.gt(0)">
               You have {{ formatDecimalAmount(infinity.banked) }} banked infinities.
             </div>
-            <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best }}.</div>
+            <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best.toStringShort() }}.</div>
             <div v-else>You have no fastest Infinity<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
-            <div>You have spent {{ infinity.this }} in this Infinity.
+            <div>You have spent {{ infinity.this.toStringShort() }} in this Infinity.
               <span v-if="reality.isUnlocked">
                 ({{infinity.thisReal.toStringShort()}} real time)
               </span>
             </div>
             <div>
-              Your best IP/min 
+              Your best IP/min
               <span v-if="eternity.count.gt(0)">this Eternity </span>
-              is {{ shorten(infinity.bestRate, 2, 2) }}.
+              is {{ format(infinity.bestRate, 2, 2) }}.
             </div>
             <br>
         </div>
@@ -141,35 +140,43 @@ Vue.component("statistics-tab", {
             <h3>Eternity</h3>
             <div v-if="eternity.count.gt(0)">
               You have Eternitied
-              {{ formatDecimalResetAmount(eternity.count) }}<span v-if="reality.isUnlocked"> this Reality</span>.
+              {{ formatDecimalAmount(eternity.count) }}
+              {{"time" | pluralize(eternity.count)}}<span v-if="reality.isUnlocked"> this Reality</span>.
             </div>
             <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
-            <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best }}.</div>
+            <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toStringShort() }}.</div>
             <div v-else>You have no fastest eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
-            <div>You have spent {{ eternity.this }} in this Eternity.
+            <div>You have spent {{ eternity.this.toStringShort() }} in this Eternity.
               <span v-if="reality.isUnlocked">
                 ({{eternity.thisReal.toStringShort()}} real time)
               </span>
             </div>
             <div>
-              Your best EP/min 
+              Your best EP/min
               <span v-if="reality.isUnlocked">this Reality </span>
-              is {{ shorten(eternity.bestRate, 2, 2) }}.
+              is {{ format(eternity.bestRate, 2, 2) }}.
             </div>
             <br>
         </div>
         <div v-if="reality.isUnlocked">
             <h3>Reality</h3>
-            <div>You have Realitied {{ formatResetAmount(reality.count) }}.</div>
-            <div>Your fastest Reality was {{ reality.best }}.</div>
+            <div>You have Realitied {{formatInt(reality.count)}} {{"time" | pluralize(reality.count)}}.</div>
+            <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
+            <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>
             <div>
               You have spent
-              {{ reality.this }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)
+              {{ reality.this.toStringShort() }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)
             </div>
             <div>
-              Your best RM/min is {{ shorten(reality.bestRate, 2, 2) }}.
+              Your best RM/min is {{ format(reality.bestRate, 2, 2) }}.
             </div>
             <br>
+          <glyph-set-preview
+            v-for="(set, idx) in recordGlyphInfo"
+            :key="idx"
+            :show="set[0]"
+            :glyphs="set[1]"
+            :text="set[2]" />
         </div>
     </div>`
 });
@@ -181,7 +188,7 @@ const MatterScale = {
     if (!matter) return ["There is no antimatter yet."];
     if (matter.gt(Decimal.fromMantissaExponent(1, 100000))) {
       return [
-        "If you wrote 3 numbers a second, it would take you",
+        `If you wrote ${formatInt(3)} numbers a second, it would take you`,
         TimeSpan.fromSeconds(matter.log10() / 3).toString(),
         "to write down your antimatter amount."
       ];
@@ -190,13 +197,13 @@ const MatterScale = {
     const planckedMatter = matter.times(planck);
     if (planckedMatter.gt(this.proton)) {
       const scale = this.macroScale(planckedMatter);
-      const amount = shortenMoney(planckedMatter.dividedBy(scale.amount));
-      return ["If every antimatter were a planck volume, " +
-        "you would have enough to " + scale.verb + " " + amount + " " + scale.name];
+      const amount = format(planckedMatter.dividedBy(scale.amount), 2, 1);
+      return [`If every antimatter were a planck volume, you would have
+        enough to ${scale.verb} ${amount} ${scale.name}`];
     }
     const scale = this.microScale(matter);
-    return ["If every antimatter were " + shortenMoney(this.proton / scale.amount / matter.toNumber()) + " " +
-      scale.name + ", you would have enough to make a proton."];
+    return [`If every antimatter were ${format(this.proton / scale.amount / matter.toNumber(), 2, 1)} ${scale.name},
+      you would have enough to make a proton.`];
   },
 
   microScale(matter) {

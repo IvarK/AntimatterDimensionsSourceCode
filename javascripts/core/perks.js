@@ -21,29 +21,20 @@ class PerkState extends SetPurchasableMechanicState {
     return 1;
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return this.id === 0 || this.connectedPerks.some(p => p.isBought);
   }
 
   initializeConnections() {
-    const dbConnections = GameDatabase.reality.perkConnections;
-    const connections = new Set(dbConnections[this.id]);
-    for (const start in dbConnections) {
-      if (!dbConnections.hasOwnProperty(start)) continue;
-      const startId = parseInt(start, 10);
-      if (startId === this.id) continue;
-      if (dbConnections[start].includes(this.id)) {
-        connections.add(startId);
-      }
-    }
-    this.connectedPerks = [...connections].map(id => Perks.find(id));
+    this.connectedPerks = GameDatabase.reality.perkConnections[this.id].map(id => Perks.find(id));
   }
 
   purchase() {
     if (!super.purchase()) return;
-    GameCache.achSkipPerkCount.invalidate();
+    if (this.config.bumpResource !== undefined) this.config.bumpResource();
+    GameCache.achievementPeriod.invalidate();
     GameCache.buyablePerks.invalidate();
-    EventHub.dispatch(GameEvent.PERK_BOUGHT);
+    EventHub.dispatch(GAME_EVENT.PERK_BOUGHT);
   }
 }
 
@@ -66,8 +57,8 @@ const Perk = (function() {
     glyphUncommonGuarantee: new PerkState(db.glyphUncommonGuarantee),
     realityMachineGain: new PerkState(db.realityMachineGain),
     dimboostNonReset: new PerkState(db.dimboostNonReset),
-    studyPassive: new PerkState(db.studyPassive),
-    automatorRowScaling: new PerkState(db.automatorRowScaling),
+    studyPassive1: new PerkState(db.studyPassive1),
+    studyPassive2: new PerkState(db.studyPassive2),
     autounlockEU1: new PerkState(db.autounlockEU1),
     autounlockEU2: new PerkState(db.autounlockEU2),
     autounlockDilation1: new PerkState(db.autounlockDilation1),
@@ -103,17 +94,21 @@ const Perk = (function() {
     autobuyerTT2: new PerkState(db.autobuyerTT2),
     autobuyerTT3: new PerkState(db.autobuyerTT3),
     autobuyerTT4: new PerkState(db.autobuyerTT4),
-    achievementRowGroup1: new PerkState(db.achievementRowGroup1),
-    achievementRowGroup2: new PerkState(db.achievementRowGroup2),
-    achievementRowGroup3: new PerkState(db.achievementRowGroup3),
-    achievementRowGroup4: new PerkState(db.achievementRowGroup4),
-    achievementRowGroup5: new PerkState(db.achievementRowGroup5),
-    achievementRowGroup6: new PerkState(db.achievementRowGroup6)
+    achievementGroup1: new PerkState(db.achievementGroup1),
+    achievementGroup2: new PerkState(db.achievementGroup2),
+    achievementGroup3: new PerkState(db.achievementGroup3),
+    achievementGroup4: new PerkState(db.achievementGroup4),
+    achievementGroup5: new PerkState(db.achievementGroup5),
+    achievementGroup6: new PerkState(db.achievementGroup6)
   };
 }());
 
 const Perks = {
   all: Object.values(Perk),
+  /**
+   * @param {number} id
+   * @returns {PerkState}
+   */
   find(id) {
     return Perks.all.find(p => p.id === id);
   }

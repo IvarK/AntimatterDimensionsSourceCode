@@ -3,7 +3,7 @@
 Vue.component("old-ui", {
   components: {
     "big-crunch-button": {
-      template: `<button class="tabbtn o-big-crunch-btn" onclick="bigCrunchResetRequest()">Big Crunch</button>`
+      template: `<button class="o-tab-btn o-big-crunch-btn" onclick="bigCrunchResetRequest()">Big Crunch</button>`
     }
   },
   data() {
@@ -14,6 +14,9 @@ Vue.component("old-ui", {
   },
   computed: {
     tab: () => Tabs.current,
+    news() {
+      return this.$viewModel.news;
+    }
   },
   methods: {
     update() {
@@ -39,7 +42,7 @@ Vue.component("old-ui", {
         </div>
       </template>
       <template v-else>
-        <news-ticker class="l-old-ui__news-bar" />
+        <news-ticker class="l-old-ui__news-bar" v-if="news"/>
         <game-header class="l-old-ui__header" />
         <old-ui-tab-bar />
         <component v-if="tab.config.before" :is="tab.config.before" />

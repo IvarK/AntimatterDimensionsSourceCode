@@ -7,6 +7,7 @@ Vue.component("automator-editor", {
       isRunning: false,
       isPaused: false,
       editingName: false,
+      automatorType: 0,
       runningScriptID: 0,
       scripts: [],
     };
@@ -23,10 +24,20 @@ Vue.component("automator-editor", {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
       }
     },
+    currentScript() {
+      return CodeMirror.Doc(player.reality.automator.scripts[this.currentScriptID].content, "automato").getValue();
+    },
     playTooltip() {
       if (this.isRunning) return undefined;
       if (this.isPaused) return "Resume automator execution";
       return "Start automator";
+    },
+    modeIconClass() { return this.automatorType === AUTOMATOR_TYPE.BLOCK ? "fa-cubes" : "fa-code"; },
+    isTextAutomator() {
+      return this.automatorType === AUTOMATOR_TYPE.TEXT;
+    },
+    isBlockAutomator() {
+      return this.automatorType === AUTOMATOR_TYPE.BLOCK;
     }
   },
   methods: {
@@ -34,6 +45,7 @@ Vue.component("automator-editor", {
       this.isRunning = AutomatorBackend.isRunning;
       this.isPaused = AutomatorBackend.isOn && !this.isRunning;
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
+      this.automatorType = player.reality.automator.type;
       if (AutomatorBackend.state.topLevelScript !== this.currentScriptID || !AutomatorBackend.isOn) {
         this.activeLine = 0;
         return;
@@ -58,6 +70,7 @@ Vue.component("automator-editor", {
         this.currentScriptID = Object.keys(storedScripts)[0];
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
+      this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     rename() {
       this.editingName = true;
@@ -72,7 +85,7 @@ Vue.component("automator-editor", {
     createNewScript() {
       const newScript = AutomatorBackend.newScript();
       player.reality.automator.state.editorScript = newScript.id;
-      this.updateScriptList();
+      this.updateCurrentScriptID();
       this.rename();
     },
     deleteScript() {
@@ -104,6 +117,7 @@ Vue.component("automator-editor", {
       }
       this.$nextTick(() => this.editingName = false);
     },
+
     dropdownLabel(script) {
       let label = script.name;
       if (script.id === this.runningScriptID) {
@@ -111,10 +125,21 @@ Vue.component("automator-editor", {
         else if (this.isPaused) label += " (Paused)";
       }
       return label;
+    },
+
+    toggleAutomatorMode() {
+      if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
+        BlockAutomator.parseTextFromBlocks();
+        player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
+      } else if (BlockAutomator.fromText(this.currentScript)) {
+        player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
+      } else {
+        Modal.message.show("Automator script has errors, cannot convert to blocks.");
+      }
     }
   },
   created() {
-    EventHub.ui.on(GameEvent.GAME_LOAD, () => this.onGameLoad(), this);
+    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
     this.updateCurrentScriptID();
     this.updateScriptList();
   },
@@ -142,11 +167,18 @@ Vue.component("automator-editor", {
                         @blur="nameEdited"
                         @keyup.enter="$refs.renameInput.blur()"/>
         </div>
-        <automator-button class="fas fa-trash"
-                          @click="deleteScript"
-                          v-tooltip="'Delete this script'"/>
+          <automator-button class="fas fa-trash"
+          @click="deleteScript"
+          v-tooltip="'Delete this script'"/>
+
+          <automator-button
+          :class="modeIconClass"
+          @click="toggleAutomatorMode()"
+          />
       </div>
       <automator-text-editor :currentScriptID="currentScriptID"
-                             :activeLine="activeLine"/>
+                             :activeLine="activeLine"
+                             v-if="isTextAutomator"/>
+      <automator-block-editor v-if="isBlockAutomator"/>
     </div>`
 });

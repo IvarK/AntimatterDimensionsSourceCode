@@ -8,7 +8,9 @@ Vue.component("new-tickspeed-row", {
       cost: new Decimal(0),
       isAffordable: false,
       tickspeed: new Decimal(0),
-      gameSpeedMult: 1
+      gameSpeedMult: 1,
+      isContinuumActive: false,
+      continuumValue: 0
     };
   },
   computed: {
@@ -21,7 +23,7 @@ Vue.component("new-tickspeed-row", {
     multiplierDisplay() {
       const tickmult = this.mult;
       if (tickmult.lte(1e-9)) {
-        return `${this.shorten(tickmult.reciprocal(), 2, 0)}x faster / upgrade.`;
+        return `${formatX(tickmult.reciprocal(), 2, 0)} faster / upgrade.`;
       }
       const asNumber = tickmult.toNumber();
       let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
@@ -29,15 +31,7 @@ Vue.component("new-tickspeed-row", {
       return `-${((1 - asNumber) * 100).toFixed(places)}% / upgrade`;
     },
     tickspeedDisplay() {
-      const tickspeed = this.tickspeed;
-      let displayValue;
-      if (tickspeed.exponent > 1) {
-        displayValue = tickspeed.toFixed(0);
-      } else {
-        const oom = Decimal.divide(100, Decimal.pow10(tickspeed.exponent));
-        displayValue = `${tickspeed.times(oom).toFixed(0)} / ${shorten(oom, 2, 2)}`;
-      }
-      return `Tickspeed: ${displayValue}`;
+      return `Tickspeed: ${format(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
     },
     isGameSpeedNormal() {
       return this.gameSpeedMult === 1;
@@ -47,7 +41,7 @@ Vue.component("new-tickspeed-row", {
     },
     formattedFastSpeed() {
       const gameSpeedMult = this.gameSpeedMult;
-      return gameSpeedMult < 10000 ? gameSpeedMult.toFixed(3) : this.shortenDimensions(gameSpeedMult);
+      return gameSpeedMult < 10000 ? format(gameSpeedMult, 3, 3) : format(gameSpeedMult, 2, 0);
     },
     tooltip() {
       if (this.isGameSpeedNormal) return undefined;
@@ -56,6 +50,9 @@ Vue.component("new-tickspeed-row", {
     },
     showCostTitle() {
       return this.cost.exponent < 1000000;
+    },
+    continuumString() {
+      return formatContinuum(this.continuumValue);
     }
   },
   methods: {
@@ -64,28 +61,37 @@ Vue.component("new-tickspeed-row", {
       this.isVisible = Tickspeed.isUnlocked || isEC9Running;
       if (!this.isVisible) return;
       this.mult.copyFrom(Tickspeed.multiplier);
-      this.cost.copyFrom(player.tickSpeedCost);
-      this.isAffordable = !isEC9Running && canAfford(player.tickSpeedCost);
+      this.cost.copyFrom(Tickspeed.cost);
+      this.isAffordable = !isEC9Running && canAfford(Tickspeed.cost);
       this.tickspeed.copyFrom(Tickspeed.current);
       this.gameSpeedMult = getGameSpeedupForDisplay();
+      this.isContinuumActive = Laitela.continuumActive;
+      if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
     }
   },
   template:
   `<div class="tickspeed-container" v-show="isVisible">
       <div class="tickspeed-labels">
-        <div v-tooltip="tooltip">{{ tickspeedDisplay }} <game-header-gamma-display v-if="!isGameSpeedNormal"/></div>
+        <span v-tooltip="tooltip">{{ tickspeedDisplay }} <game-header-gamma-display v-if="!isGameSpeedNormal"/></span>
         <span>{{ multiplierDisplay }}</span>
       </div>
       <div class="tickspeed-buttons">
         <button
-          class="storebtn tickspeed-btn"
-          :class="{ 'storebtn-unavailable': !isAffordable }"
+          class="o-primary-btn tickspeed-btn"
+          :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
           :enabled="isAffordable"
-          onclick="buyTickSpeed()"
-          >Cost: {{shortenCosts(cost)}}</button>
-        <button 
-          class="storebtn tickspeed-max-btn"
-          :class="{ 'storebtn-unavailable': !isAffordable }"
+          onclick="buyTickSpeed()">
+            <span v-if="isContinuumActive">
+              {{ continuumString }} (cont.)
+            </span>
+            <span v-else>
+              Cost: {{ format(cost) }}
+            </span>
+        </button>
+        <button
+          v-if="!isContinuumActive"
+          class="o-primary-btn tickspeed-max-btn"
+          :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
           :enabled="isAffordable"
           onclick="buyMaxTickSpeed()"
           >Buy Max</button>

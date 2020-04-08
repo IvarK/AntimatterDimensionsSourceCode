@@ -4,9 +4,9 @@ body {
 }
 
 @keyframes glasses {
-    0% {filter: blur(0px);}
+    0% {filter: blur(0);}
     10% {filter: blur(3px);}
-    20% {filter: blur(0px);}
+    20% {filter: blur(0);}
     30% {transform: rotateZ(0deg)}
     35% {transform: rotateZ(4deg)}
     40% {transform: rotateZ(-4deg)}

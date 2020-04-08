@@ -5,7 +5,6 @@ Vue.component("enslaved-tab", {
     isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
-    hasAmplifyStoredReal: false,
     canAdjustStoredTime: false,
     storedFraction: 0,
     inEnslaved: false,
@@ -17,13 +16,12 @@ Vue.component("enslaved-tab", {
     autoRelease: false,
     autoReleaseSpeed: 0,
     unlocks: [],
+    buyableUnlocks: [],
     quote: "",
     quoteIdx: 0,
+    currentSpeedUp: 0
   }),
   computed: {
-    amplifiedGameDesc() {
-      return `${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 2, 2)}`;
-    },
     storedRealEfficiencyDesc() {
       return formatPercents(this.storedRealEffiency);
     },
@@ -41,6 +39,9 @@ Vue.component("enslaved-tab", {
         ? "You're inside Enslaved Ones' Reality"
         : "Start Enslaved One's Reality";
     },
+    storedTimeRate() {
+      return formatPercents(this.storedFraction / 1000, 1);
+    },
     sliderProps() {
       return {
         min: 0,
@@ -50,15 +51,19 @@ Vue.component("enslaved-tab", {
         width: "60rem",
         tooltip: false
       };
-    },
+    }
+  },
+  watch: {
+    autoRelease(newValue) {
+      player.celestials.enslaved.isAutoReleasing = newValue;
+    }
   },
   methods: {
     update() {
-      this.isStoringBlackHole = player.celestials.enslaved.isStoring;
+      this.isStoringBlackHole = Enslaved.isStoringGameTime;
       this.storedBlackHole = player.celestials.enslaved.stored;
-      this.isStoringReal = player.celestials.enslaved.isStoringReal;
+      this.isStoringReal = Enslaved.isStoringRealTime;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
-      this.hasAmplifyStoredReal = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME);
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.inEnslaved = Enslaved.isRunning;
       this.completed = Enslaved.isCompleted;
@@ -66,11 +71,13 @@ Vue.component("enslaved-tab", {
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
       this.storedRealCap = Enslaved.storedRealTimeCap;
       this.unlocks = Array.from(player.celestials.enslaved.unlocks);
+      this.buyableUnlocks = Object.values(ENSLAVED_UNLOCKS).map(x => Enslaved.canBuy(x));
       this.quote = Enslaved.quote;
       this.quoteIdx = player.celestials.enslaved.quoteIdx;
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
       this.autoRelease = player.celestials.enslaved.isAutoReleasing;
       this.autoReleaseSpeed = Enslaved.isAutoReleasing ? Enslaved.autoReleaseSpeed : 0;
+      this.currentSpeedUp = Enslaved.currentBlackHoleStoreAmountPerMs;
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
@@ -87,6 +94,9 @@ Vue.component("enslaved-tab", {
     timeDisplayShort(ms) {
       return timeDisplayShort(ms);
     },
+    timeUntilBuy(price) {
+      return Math.max((price - this.storedBlackHole) / this.currentSpeedUp, 0);
+    },
     buyUnlock(info) {
       Enslaved.buyUnlock(info);
     },
@@ -97,7 +107,10 @@ Vue.component("enslaved-tab", {
       return Enslaved.has(info);
     },
     canBuyUnlock(info) {
-      return Enslaved.canBuy(info);
+      // This (rather than just using Enslaved.canBuy(info) and removing this.buyableUnlocks)
+      // is needed for proper reactivity of button styles (e.g., if you get a level 5000 glyph
+      // while on the Enslaved tab).
+      return this.buyableUnlocks[info.id];
     },
     nextQuote() {
       Enslaved.nextQuote();
@@ -115,9 +128,6 @@ Vue.component("enslaved-tab", {
       this.storedFraction = value;
       player.celestials.enslaved.storedFraction = value / 1000;
     },
-    toggleAutoRelease() {
-      player.celestials.enslaved.isAutoReleasing = !player.celestials.enslaved.isAutoReleasing;
-    },
     glitchStyle(x) {
       const xScale = 15 / 27;
       const yScale = 5;
@@ -132,23 +142,28 @@ Vue.component("enslaved-tab", {
   },
   template:
     `<div class="l-enslaved-celestial-tab">
-      <div class="o-teresa-quotes"> {{ quote }}</div>
-      <button class="o-quote-button" @click="nextQuote()" v-if="hasNextQuote()">→</button>
+      <celestial-quote-history celestial="enslaved"/>
       <div class="l-enslaved-top-container">
         <div class="l-enslaved-top-container__half">
+          Charging your black hole 
+          {{ canAdjustStoredTime ? "reduces your black hole speed" : "sets your game speed to 1" }}. You can use
+          time from charging to unlock Enslaved upgrades. You can also discharge it all in a single "supertick"
+          which acts as if it was the duration of all of your stored time.
           <button :class="['o-enslaved-mechanic-button',
                            {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
                   @click="toggleStoreBlackHole">
             <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedBlackHole) }}</div>
-            <div>{{ isStoringBlackHole ? "Storing black hole time": "Store black hole time" }}</div>
+            <div>{{ isStoringBlackHole ? "Charging black hole": "Charge black hole" }}</div>
           </button>
           <button class="o-enslaved-mechanic-button" @click="useStored">
-            Use stored black hole time
+            Discharge black hole
             <p v-if="inEnslaved">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
           </button>
-          <div v-if="hasAmplifyStoredReal"> Amplified: {{ amplifiedGameDesc }} </div>
         </div>
         <div class="l-enslaved-top-container__half">
+          Storing real time completely halts all production, setting game speed to 0. You can use stored real time to
+          "amplify" a reality, simulating repeated runs of it. Amplified realities give all the rewards that normal
+          realities do.
           <button :class="['o-enslaved-mechanic-button',
                            {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
                   @click="toggleStoreReal">
@@ -164,7 +179,10 @@ Vue.component("enslaved-tab", {
           <div> Maximum: {{ storedRealCapDesc }} </div>
         </div>
       </div>
-      <div v-if="canAdjustStoredTime" class="l-enslaved-shop-container">
+      <div v-if="canAdjustStoredTime" class="l-enslaved-top-container__half">
+        Black Hole charging rate: {{ storedTimeRate }}
+        <br>
+        <br>
         <ad-slider-component
             v-bind="sliderProps"
             :value="storedFraction"
@@ -173,12 +191,11 @@ Vue.component("enslaved-tab", {
       </div>
       <br>
       <div v-if="canAdjustStoredTime">
-        <input type="checkbox"
-          id="autoReleaseBox"
+        <primary-button-on-off
           v-model="autoRelease"
-          :value="autoRelease"
-          @input="toggleAutoRelease()">
-        <label for="autoReleaseBox">Use 1% of stored time every 5 ticks</label>
+          class="o-primary-btn"
+          text="Pulse black hole:"
+        />
       </div>
       <div class="l-enslaved-shop-container">
         <button
@@ -186,7 +203,15 @@ Vue.component("enslaved-tab", {
           :key="unlock.id"
           class="o-enslaved-shop-button"
           :class="unlockClassObject(unlock)"
-          @click="buyUnlock(unlock)"> {{ unlock.description }} <br> Costs: {{ timeDisplayShort(unlock.price) }}</button>
+          @click="buyUnlock(unlock)"> 
+            {{ unlock.description() }}
+            <br> 
+            Costs: {{ timeDisplayShort(unlock.price) }}
+            <br>
+            <span v-if="isStoringBlackHole && !hasUnlock(unlock)">
+              Time to obtain: {{ timeDisplayShort(timeUntilBuy(unlock.price)) }}
+            </span>
+          </button>
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">
         <div class="o-enslaved-run-box">
@@ -197,16 +222,17 @@ Vue.component("enslaved-tab", {
             <div v-for="x in 25" class="o-enslaved-run-button__glitch"
                                 :style="glitchStyle(x)"/>
           </div>
-          <p>ID, TD, and 8th dimension purchases are limited to 1 each.</p>
+          <p>Glyph levels will be boosted to a minimum of 5000</p>
+          <p>Infinity, time, and 8th dimension purchases are limited to 1 each.</p>
           <p>Normal dimension multipliers are always dilated (the glyph effect still only
              applies in actual dilation)</p>
-          <p>Time study 192 is locked</p>
+          <p>Time study 192 (uncapped replicanti) is locked</p>
           <p>The black hole is disabled</p>
           <p>Tachyon production and dilated time production are severely reduced</p>
-          <p>Time theorem generation from dilation glyphs is much slower</p>
+          <p>Time theorem generation from dilation glyphs is disabled</p>
           <p>Certain challenge goals have been increased</p>
-          <p>Stored time is much less effective</p>
-          <b>Reward: ID purchase caps are increased by 1000 for every 1000 free tickspeed upgrades you get</b>
+          <p>Stored time is effectively dilated (exponent^0.5)</p>
+          <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps (see Infinity Dimension tab)</b>
         </div>
       </div>
     </div>`

@@ -1,28 +1,20 @@
 * {
-    font-family: "Arial" !important;
+    font-family: "Arial";
     transition-duration: 0s !important;
     border-width: 1px !important;
-    border-radius: 0px !important;
+    border-radius: 0 !important;
     box-shadow: none !important;
     animation: none !important;
 }
 
-#container {
-    filter: saturate(0) !important;
-}
-
-.popup {
-    filter: saturate(0) !important;
-}
-
-#notification-container {
+#ui {
     filter: saturate(0) !important;
 }
 
 button {
-    -webkit-border-radius: 0px !important;
-    -moz-border-radius: 0px !important;
-    border-radius: 0px !important;
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    border-radius: 0 !important;
     background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.00, rgb(222, 222, 222)), color-stop(1.00, rgb(246, 246, 246))) !important;
     background-image: -moz-linear-gradient(center bottom, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
     background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important; 
@@ -33,9 +25,9 @@ button {
 }
 
 .o-primary-btn {
-    -webkit-border-radius: 0px !important;
-    -moz-border-radius: 0px !important;
-    border-radius: 0px !important;
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    border-radius: 0 !important;
     background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.00, rgb(222, 222, 222)), color-stop(1.00, rgb(246, 246, 246))) !important;
     background-image: -moz-linear-gradient(center bottom, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
     background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important; 

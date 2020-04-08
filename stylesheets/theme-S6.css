@@ -1,105 +1,38 @@
 .t-s6 #stars {
-    display: block;
-    position: fixed;
-    /* Make video to at least 100% wide and tall */
-    min-width: 100%;
-    min-height: 100%;
+  display: block;
+  /* Make video to at least 100% wide and tall */
+  min-width: 100%;
+  min-height: 100%;
 
-    /* Setting width & height to auto prevents the browser from stretching or squishing the video */
-    width: auto;
-    height: auto;
+  /* Setting width & height to auto prevents the browser from stretching or squishing the video */
+  width: auto;
+  height: auto;
 
-    /* Center the video */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: -1000;
-    transform: translate(-50%,-50%);
+  /* Center the video */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1000;
+  transform: translate(-50%,-50%);
 }
 
 body.t-s6 {
-    background: black;
-    background-image: url('../images/s6-bg.png');
-    background-size: 100%;
-    background-position: center;
-}
-
-.t-s6 .popup {
-    color: #E0E0E0;
-    background-color: black!important;
-    border: 1px solid #1B5E20;
-    box-shadow: 0 0 15px 0 black;
-}
-
-/*
-strong {
-    color: #E0E0E0;
-}
-*/
-.t-s6 .storebtn {
-    color: #FFF;
-    background-color: black;
-    box-shadow: 0 0 7px 2px #111111;
-}
-
-.t-s6 .storebtn:hover {
-    background: #1B5E20;
+  color: #999;
+  background: black;
+  background-image: url('../images/s6-bg.png');
+  background-size: 100%;
+  background-position: center;
 }
 
 .t-s6 input {
-    color: white;
-    background-color: black;
-    border: 1px solid grey;
-}
-
-.t-s6 .container {
-    color: #999;
-}
-
-.t-s6 .secondarytabbtn {
-    color: #E0E0E0;
-    background: black;
-    border: 2px solid #1565C0;
-    text-shadow: 0 0 10px white;
-}
-
-.t-s6 .secondarytabbtn:hover {
-    background: #1565C0;
-    color: black;
-}
-
-.t-s6 .unavailablebtn {
-    color: grey;
-    background-color: black;
-}
-
-.t-s6 .unavailablebtn:hover {
-    color: black;
-    background: #B84B5F;
-}
-
-.t-s6 .storebtn:hover {
-    color: #FFF;
-}
-
-.t-s6 .eternitytabbtn {
-    color: #b341e0;
-    background: black;
-    border: 2px solid #b341e0;
-}
-
-.t-s6 .eternitytabbtn:hover {
-    color: #511568;
-    background: white;
+  color: white;
+  background-color: black;
+  border: 1px solid grey;
 }
 
 .t-s6 .c-tt-amount {
-    color: #64DD17;
-    text-shadow: 0 0 7px #64DD17;
-}
-
-.t-s6 #timetheorems, .t-s6 .c-ttshop__save-load-text, .t-s6 #minimizeArrow {
-    color: grey;
+  color: #64DD17;
+  text-shadow: 0 0 7px #64DD17;
 }
 
 .t-s6 .c-tt-buy-button--unlocked {
@@ -121,45 +54,14 @@ strong {
 
 .t-s6 .c-tt-buy-button--locked:hover {
   color: black;
-  background: #B84B5F;
-  border: 1px solid #B84B5F;
-}
-
-.t-s6 #theorembuybackground {
-    border: 1px solid #3AACD6;
-    background: black;
-}
-
-.t-s6 .greedbtn {
-    background-color: #f2d729;
-    color: black;
-}
-
-.t-s6 .greedbtn:hover {
-    background-color: #9E913A;
-}
-
-.t-s6 .realitytabbtn {
-  color: #0b600e;
-  background-color: white;
-  border: 2px solid #0b600e;
-}
-
-.t-s6 .realitytabbtn:hover {
-    color: white ;
-    background-color: #0b600e;
-    border: 2px solid #0b600e;
+  background: var(--color-bad);
+  border: 1px solid var(--color-bad);
 }
 
 .t-s6 .c-rm-amount__desc {
-    color: #999;
-}
-
-.t-s6 .c-rm-amount {
-  color: #0b600e;
-  text-shadow: 0 0 7px #0b600e;
+  color: #999;
 }
 
 .t-s6 #realityanimbg {
-    filter: invert(1);
+  filter: invert(1);
 }

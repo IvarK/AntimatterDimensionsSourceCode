@@ -1,7 +1,7 @@
 "use strict";
 
-Vue.component('challenges-header', {
-  data: function() {
+Vue.component("challenges-header", {
+  data() {
     return {
       isICTabUnlocked: false,
       isECTabUnlocked: false,
@@ -21,7 +21,7 @@ Vue.component('challenges-header', {
     },
     showAllChallenges(newValue) {
       player.options.showAllChallenges = newValue;
-    }
+    },
   },
   methods: {
     update() {
@@ -34,7 +34,7 @@ Vue.component('challenges-header', {
         player.postChallUnlocked > 0;
       this.isICTabUnlocked = isICTabUnlocked;
       this.isInChallenge = NormalChallenge.isRunning || InfinityChallenge.isRunning || EternityChallenge.isRunning;
-      this.isShowAllVisible = PlayerProgress.realityUnlocked && (isECTabUnlocked || isICTabUnlocked);
+      this.isShowAllVisible = PlayerProgress.realityUnlocked() && (isECTabUnlocked || isICTabUnlocked);
       this.isAutoECVisible = Perk.autocompleteEC1.isBought;
       this.autoEC = player.reality.autoEC;
       const remainingCompletions = EternityChallenges.remainingCompletions;
@@ -53,36 +53,36 @@ Vue.component('challenges-header', {
       if (current !== undefined) {
         current.exit();
       }
-    }
+    },
   },
   template:
-  `<div v-if="isInChallenge || isShowAllVisible" class="l-challenges-tab__header">
-    <primary-button
-      v-if="isInChallenge"
-      class="o-primary-btn--exit-challenge l-challenges-tab__exit-btn"
-      @click="exitChallenge"
-    >Exit Challenge</primary-button>
-    <template v-if="isShowAllVisible">
-      <b>Show all:</b>
-      <input
-        v-model="showAllChallenges"
-        type="checkbox"
-        class="o-big-checkbox"
-      />
-    </template>
-    <template v-if="isAutoECVisible">
-      <b>Auto EC completion:</b>
-      <input
-        v-model="autoEC"
-        type="checkbox"
-        class="o-big-checkbox"
-      >
-    </template>
-    <div
-      v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
-      class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info"
-    >
-      <span>Until</span>
+  `<div class="l-challenges-tab__header">
+    <primary-button v-if="isInChallenge"
+                    class="o-primary-btn--exit-challenge l-challenges-tab__exit-btn"
+                    @click="exitChallenge">
+      Exit Challenge
+    </primary-button>
+    <div>
+      <br v-if="isShowAllVisible || isAutoECVisible"/>
+      <div v-if="isShowAllVisible"
+        class="o-challenges-tab__header-toggle">
+          <primary-button-on-off
+            v-model="showAllChallenges"
+            class="o-primary-btn"
+            text="Show all ECs:"
+          />
+      </div>
+      <div v-if="isAutoECVisible"
+        class="o-challenges-tab__header-toggle">
+          <primary-button-on-off
+          v-model="autoEC"
+          class="o-primary-btn"
+          text="Auto EC:"
+          />
+      </div>
+    </div>
+    <div v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
+         class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info">
       <div class="l-challenges-tab__auto-ec-timers">
         <span v-if="remainingECTiers > 1">next auto EC completion: {{untilNextEC}}</span>
         <span>all auto EC completions: {{untilAllEC}}</span>

@@ -1,31 +1,35 @@
 "use strict";
 
+// eslint-disable-next-line prefer-const
 let ui = {
   view: {
     modal: {
       current: undefined,
       cloudConflicts: [],
-      message: "",
-      callback: undefined,
-      closeButton: false,
       glyphSelection: false,
+      progressBar: undefined,
     },
     tabs: {
       dimensions: {
         normal: {
-          floatingText: Array.from({length: 9}, () => [])
+          floatingText: Array.from({ length: 9 }, () => [])
         },
       },
       reality: {
         openGlyphWeights: false,
         currentGlyphTooltip: -1,
+        draggingGlyphInfo: {
+          id: 0,
+          type: "",
+          sacrificeValue: 0,
+        },
         automator: {
           fullScreen: false,
           editorScriptID: "",
           // TODO: enum
-          mode: true
+          lines: []
         }
-      }
+      },
     },
     shiftDown: false,
     theme: "Normal",
@@ -36,7 +40,8 @@ let ui = {
     tab: "dimensions",
     subtab: "normal",
     newUI: false,
-    newsHidden: false
+    news: false,
+    initialized: false,
   },
   notationName: "",
   formatPreBreak: false

@@ -11,7 +11,8 @@
 
 GameKeyboard.bindRepeatableHotkey("m", () => maxAll());
 GameKeyboard.bindRepeatableHotkey("d", () => softResetBtnClick());
-GameKeyboard.bindRepeatableHotkey("g", () => galaxyResetBtnClick());
+GameKeyboard.bindRepeatableHotkey("g", () => requestGalaxyReset(true));
+GameKeyboard.bindRepeatableHotkey("shift+g", () => requestGalaxyReset(false));
 GameKeyboard.bindRepeatableHotkey("s", () => sacrificeBtnClick());
 GameKeyboard.bindRepeatableHotkey("r", () => replicantiGalaxy());
 GameKeyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());
@@ -34,7 +35,7 @@ GameKeyboard.bindHotkey("u", () => {
     AutomatorBackend.pause();
   }
   else if (AutomatorBackend.isOn) {
-    AutomatorBackend.mode = AutomatorMode.RUN;
+    AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
   }
 });
 
@@ -55,8 +56,18 @@ GameKeyboard.bindHotkey("?", () => {
   Modal.shortcuts.show();
 });
 
+GameKeyboard.bindHotkey("h", () => {
+  if (Modal.h2p.isOpen) {
+    Modal.hide();
+    return;
+  }
+  if (Modal.isOpen) return;
+  Modal.h2p.show();
+  ui.view.h2pActive = true;
+});
+
 GameKeyboard.bindHotkey(["ctrl+s", "meta+s"], () => {
-  GameStorage.save();
+  GameStorage.save(false, true);
   return false;
 });
 GameKeyboard.bindHotkey(["ctrl+e", "meta+e"], () => {

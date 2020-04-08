@@ -75,7 +75,7 @@ const ShopPurchase = (function() {
 ShopPurchase.all = Object.values(ShopPurchase);
 
 kong.submitAchievements = function() {
-  kong.submitStats("Achievements", Achievements.effectiveCount + player.secretAchievements.size);
+  kong.submitStats("Achievements", Achievements.effectiveCount + SecretAchievements.all.countWhere(a => a.isUnlocked));
 };
 
 

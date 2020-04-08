@@ -25,7 +25,27 @@ class AlchemyResourceState extends GameMechanicState {
     this.data.amount = value;
   }
 
-  get canBeApplied() {
+  get before() {
+    return this.config.before;
+  }
+
+  set before(value) {
+    this.config.before = value;
+  }
+
+  get flow() {
+    return this.config.flow;
+  }
+
+  set flow(value) {
+    this.config.flow = value;
+  }
+
+  get isUnlocked() {
+    return this.config.isUnlocked();
+  }
+
+  get isCustomEffect() {
     return true;
   }
 
@@ -56,13 +76,43 @@ class AlchemyReaction {
   // 100%, but the reaction will be forced to occur at higher than 100% if there is significantly more reagent than
   // product. This allows resources to be created quickly when its reaction is initially turned on with saved reagents.
   get reactionYield() {
+    if (!this._product.isUnlocked || this._reagents.some(r => !r.resource.isUnlocked)) return 0;
     const forcingFactor = (this._reagents
-    .map(r => r.resource.amount)
-    .min() - this._product.amount) / 1000;
+      .map(r => r.resource.amount)
+      .min() - this._product.amount) / 100;
     const totalYield = this._reagents
       .map(r => r.resource.amount / r.cost)
       .min();
     return Math.min(totalYield, Math.max(forcingFactor, 1));
+  }
+
+  // Check each reagent for if a full reaction would drop it below the product amount.  If so, reduce reaction yield
+  get actualYield() {
+    // Assume a full reaction to see what the maximum possible product is
+    const maxFromReaction = this.baseProduction * this.reactionYield * this.reactionEfficiency;
+    const prodBefore = this._product.amount;
+    const prodAfter = prodBefore + maxFromReaction;
+    let cappedYield = this.reactionYield;
+    for (const reagent of this._reagents) {
+      const reagentBefore = reagent.resource.amount;
+      const reagentAfter = reagent.resource.amount - this.reactionYield * reagent.cost;
+      const diffBefore = reagentBefore - prodBefore;
+      const diffAfter = reagentAfter - prodAfter;
+      cappedYield = Math.min(cappedYield, this.reactionYield * diffBefore / (diffBefore - diffAfter));
+    }
+    return Math.clampMin(cappedYield, 0);
+  }
+
+  // Assign reactions priority in descending order based on the largest reagent total after the reaction.  The logic
+  // is that if we assume that all the reactions are cap-limited, then by assigning priority in this way, reactions
+  // get applied so that earlier reactions are less likely to reduce the yield of later reactions.
+  get priority() {
+    let maxReagent = Glyphs.levelCap;
+    for (const reagent of this._reagents) {
+      const afterReaction = reagent.resource.amount - reagent.cost * this.actualYield;
+      maxReagent = Math.min(maxReagent, afterReaction);
+    }
+    return maxReagent;
   }
 
   get isActive() {
@@ -95,28 +145,17 @@ class AlchemyReaction {
   // ω above 200.  In fact, since some Ξ will be used during the reaction, the actual cap will be a bit lower.
   combineReagents() {
     if (!this.isActive || this.reactionYield === 0) return;
-
-    // Assume a full reaction to see what the maximum possible product is
-    const maxFromReaction = this.baseProduction * this.reactionYield * this.reactionEfficiency;
-    const prodBefore = this._product.amount;
-    const prodAfter = prodBefore + maxFromReaction;
-
-    // Check each reagent for if a full reaction would drop it below the product amount.  If so, reduce reaction yield
-    let cappedYield = this.reactionYield;
-    for (const reagent of this._reagents) {
-      const reagentBefore = reagent.resource.amount;
-      const reagentAfter = reagent.resource.amount - this.reactionYield * reagent.cost;
-      const diffBefore = reagentBefore - prodBefore;
-      const diffAfter = reagentAfter - prodAfter;
-      cappedYield = Math.min(cappedYield, this.reactionYield * diffBefore / (diffBefore - diffAfter));
+    const unpredictabilityEffect = AlchemyResource.unpredictability.effectValue;
+    const times = 1 + poissonDistribution(unpredictabilityEffect / (1 - unpredictabilityEffect));
+    for (let i = 0; i < times; i++) {
+      const reactionYield = this.actualYield;
+      for (const reagent of this._reagents) {
+        reagent.resource.amount -= reactionYield * reagent.cost;
+      }
+      this._product.amount += reactionYield * this.reactionProduction;
+      // Within a certain amount of the cap, just give the last bit for free so the cap is actually reached
+      if (Ra.alchemyResourceCap - this._product.amount < 0.05) this._product.amount = Ra.alchemyResourceCap;
     }
-    cappedYield = Math.clampMin(cappedYield, 0);
-
-    // Perform the reaction with potentially reduced yield due to the cap
-    for (const reagent of this._reagents) {
-      reagent.resource.amount -= cappedYield * reagent.cost;
-    }
-    this._product.amount += cappedYield * this.reactionProduction;
   }
 }
 
@@ -124,6 +163,8 @@ const AlchemyResource = (function() {
   function createResource(resource) {
     const config = GameDatabase.celestials.alchemy.resources[resource];
     config.id = resource;
+    config.before = 0;
+    config.flow = 0;
     return new AlchemyResourceState(config);
   }
 
@@ -154,12 +195,7 @@ const AlchemyResource = (function() {
 
 const AlchemyResources = {
   all: Object.values(AlchemyResource),
-  base: Object.values(AlchemyResource).filter(r => r.isBaseResource),
-  resetAmount() {
-    for (const resource of AlchemyResources.all) {
-      resource.amount = 0;
-    }
-  }
+  base: Object.values(AlchemyResource).filter(r => r.isBaseResource)
 };
 
 const AlchemyReactions = (function() {

@@ -86,20 +86,32 @@ const AutomatorLexer = (() => {
     $autocomplete: "<",
     $compare: (a, b) => Decimal.lt(a, b),
   });
+  const OpEQ = createInCategory(ComparisonOperator, "OpEQ", /==/, {
+    $compare: (a, b) => Decimal.eq(a, b),
+  });
+  // EqualSign is a single = which is defined for both comparisons and define
+  const EqualSign = createToken({
+    name: "EqualSign",
+    pattern: /=/,
+    categories: ComparisonOperator,
+    label: "=",
+    longer_alt: OpEQ,
+  });
+  EqualSign.$compare = (a, b) => Decimal.eq(a, b);
 
   createInCategory(Currency, "EP", /ep/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithEP(),
+    $buyTT: () => TimeTheorems.buyWithEP(true),
     $getter: () => player.eternityPoints
   });
   createInCategory(Currency, "IP", /ip/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithIP(),
+    $buyTT: () => TimeTheorems.buyWithIP(true),
     $getter: () => player.infinityPoints
   });
   createInCategory(Currency, "AM", /am/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyWithAntimatter(),
+    $buyTT: () => TimeTheorems.buyWithAntimatter(true),
     $getter: () => player.antimatter
   });
   createInCategory(Currency, "DT", /dt/i, { $getter: () => player.dilation.dilatedTime });
@@ -118,30 +130,42 @@ const AutomatorLexer = (() => {
     $getter: () => {
       // If we are not in an EC, pretend like we have a ton of completions so any check for sufficient
       // completions returns true
-      if (!EternityChallenge.isRunning) return Decimal.MAX_NUMBER;
+      if (!EternityChallenge.isRunning) return Decimal.NUMBER_MAX_VALUE;
       return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
     }
   });
+  createInCategory(Currency, "Total_TT", /total tt/i, {
+    $autocomplete: "total tt",
+    $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
+  });
+  for (let i = 1; i <= 12; ++i) {
+    const id = i;
+    createInCategory(Currency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {
+      $autocomplete: `ec${i} completions`,
+      // eslint-disable-next-line no-loop-func
+      $getter: () => EternityChallenge(id).completions
+    });
+  }
 
   // $prestigeLevel is used by things that wait for a prestige event. Something waiting for
   // eternity will be triggered by something waiting for reality, for example.
   createInCategory(PrestigeEvent, "Infinity", /infinity/i, {
     extraCategories: [StudyPath],
     $autobuyer: Autobuyer.bigCrunch,
-    $autobuyerDurationMode: AutoCrunchMode.TIME,
-    $autobuyerXLastMode: AutoCrunchMode.X_LAST,
-    $autobuyerCurrencyMode: AutoCrunchMode.AMOUNT,
+    $autobuyerDurationMode: AUTO_CRUNCH_MODE.TIME,
+    $autobuyerXLastMode: AUTO_CRUNCH_MODE.X_LAST,
+    $autobuyerCurrencyMode: AUTO_CRUNCH_MODE.AMOUNT,
     $prestigeAvailable: () => canCrunch(),
     $prestige: () => bigCrunchResetRequest(true),
     $prestigeLevel: 1,
     $prestigeCurrency: "IP",
-    $studyPath: TimeStudyPath.INFINITY_DIM,
+    $studyPath: TIME_STUDY_PATH.INFINITY_DIM,
   });
   createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
     $autobuyer: Autobuyer.eternity,
-    $autobuyerDurationMode: AutoEternityMode.TIME,
-    $autobuyerXLastMode: AutoEternityMode.X_LAST,
-    $autobuyerCurrencyMode: AutoEternityMode.AMOUNT,
+    $autobuyerDurationMode: AUTO_ETERNITY_MODE.TIME,
+    $autobuyerXLastMode: AUTO_ETERNITY_MODE.X_LAST,
+    $autobuyerCurrencyMode: AUTO_ETERNITY_MODE.AMOUNT,
     $prestigeAvailable: () => canEternity(),
     $prestigeLevel: 2,
     $prestigeCurrency: "EP",
@@ -149,18 +173,18 @@ const AutomatorLexer = (() => {
   });
   createInCategory(PrestigeEvent, "Reality", /reality/i, {
     $autobuyer: Autobuyer.reality,
-    $autobuyerCurrencyMode: AutoRealityMode.RM,
+    $autobuyerCurrencyMode: AUTO_REALITY_MODE.RM,
     $prestigeAvailable: () => isRealityAvailable(),
     $prestigeLevel: 3,
     $prestigeCurrency: "RM",
     $prestige: () => autoReality(),
   });
 
-  createInCategory(StudyPath, "Idle", /idle/i, { $studyPath: TimeStudyPath.IDLE });
-  createInCategory(StudyPath, "Passive", /passive/i, { $studyPath: TimeStudyPath.PASSIVE });
-  createInCategory(StudyPath, "Active", /active/i, { $studyPath: TimeStudyPath.ACTIVE });
-  createInCategory(StudyPath, "Normal", /normal/i, { $studyPath: TimeStudyPath.NORMAL_DIM });
-  createInCategory(StudyPath, "Time", /time/i, { $studyPath: TimeStudyPath.TIME_DIM });
+  createInCategory(StudyPath, "Idle", /idle/i, { $studyPath: TIME_STUDY_PATH.IDLE });
+  createInCategory(StudyPath, "Passive", /passive/i, { $studyPath: TIME_STUDY_PATH.PASSIVE });
+  createInCategory(StudyPath, "Active", /active/i, { $studyPath: TIME_STUDY_PATH.ACTIVE });
+  createInCategory(StudyPath, "Normal", /normal/i, { $studyPath: TIME_STUDY_PATH.NORMAL_DIM });
+  createInCategory(StudyPath, "Time", /time/i, { $studyPath: TIME_STUDY_PATH.TIME_DIM });
 
   createInCategory(TimeUnit, "Milliseconds", /ms/i, {
     $autocomplete: "ms",
@@ -208,7 +232,7 @@ const AutomatorLexer = (() => {
   createKeyword("Load", /load/i);
   createKeyword("Max", /max/i, {
     extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyMax(),
+    $buyTT: () => TimeTheorems.buyMax(true),
   });
   createKeyword("Nowait", /nowait/i);
   createKeyword("Off", /off/i);
@@ -250,21 +274,20 @@ const AutomatorLexer = (() => {
   const LCurly = createToken({ name: "LCurly", pattern: /[ \t]*{/ });
   const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*}/ });
   const Comma = createToken({ name: "Comma", pattern: /,/ });
-  const EqualSign = createToken({ name: "EqualSign", pattern: /=/, label: "=" });
   const Pipe = createToken({ name: "Pipe", pattern: /\|/, label: "|" });
   const Dash = createToken({ name: "Dash", pattern: /-/, label: "-" });
 
   // The order here is the order the lexer looks for tokens in.
   const automatorTokens = [
     HSpace, Comment, EOL,
-    LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
+    LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     NumberLiteral,
+    Currency, ...tokenLists.Currency,
     ECLiteral,
     Keyword, ...keywordTokens,
     PrestigeEvent, ...tokenLists.PrestigeEvent,
     StudyPath, ...tokenLists.StudyPath,
-    Currency, ...tokenLists.Currency,
     TTCurrency,
     TimeUnit, ...tokenLists.TimeUnit,
     Identifier,

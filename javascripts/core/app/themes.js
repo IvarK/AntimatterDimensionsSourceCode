@@ -22,11 +22,7 @@ const Theme = function Theme(name, colors) {
     };
 
     this.displayName = function() {
-        if (!this.isSecret()) return name;
-        if (!this.isAvailable()) {
-            console.warn("Secret theme " + name + " is not unlocked yet!");
-            return name;
-        }
+        if (!this.isSecret() || !this.isAvailable()) return name;
         // Secret themes are stored as "S9Whatever", so we need to strip the SN part
         return player.secretUnlocks.themes.find(theme => theme.includes(name)).substr(2);
     };
@@ -37,9 +33,7 @@ const Theme = function Theme(name, colors) {
             document.body.classList.remove(c);
           }
         }
-        if (!this.isDefault()) {
-          document.body.classList.add(this.cssClass());
-        }
+        document.body.classList.add(this.cssClass());
         if (this.isAnimated() && player.options.animations.background) {
             document.getElementById("background-animations").style.display = "block";
         } else {
@@ -52,8 +46,10 @@ const Theme = function Theme(name, colors) {
         normalDimChart.data.datasets[0].borderColor = colors.chartBorder;
     };
 
+    this.isDark = colors.isDark;
+
     this.cssClass = function() {
-      return "t-" + this.name.replace(/\s+/gu, "-").toLowerCase();
+      return `t-${this.name.replace(/\s+/gu, "-").toLowerCase()}`;
     };
 };
 
@@ -91,18 +87,23 @@ Theme.tryUnlock = function(name) {
     if (index === -1) {
       return false;
     }
-    const prefix = "S" + (index + 1);
+    const prefix = `S${index + 1}`;
     const fullName = prefix + name.capitalize();
+    const isAlreadyUnlocked = player.secretUnlocks.themes.has(fullName);
     player.secretUnlocks.themes.add(fullName);
     Theme.set(prefix);
     SecretAchievement(25).unlock();
+    if (!isAlreadyUnlocked) {
+      GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`);
+    }
     return true;
 };
 
 Theme.light = function(name) {
     const colors = {
         chartFont: "#000",
-        chartBorder: "#000"
+        chartBorder: "#000",
+        isDark: false
     };
     return new Theme(name, colors);
 };
@@ -110,7 +111,8 @@ Theme.light = function(name) {
 Theme.dark = function(name) {
     const colors = {
         chartFont: "#888",
-        chartBorder: "#888"
+        chartBorder: "#888",
+        isDark: true
     };
     return new Theme(name, colors);
 };

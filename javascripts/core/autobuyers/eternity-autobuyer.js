@@ -45,6 +45,12 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
     return RealityUpgrade(13).isBought;
   }
 
+  get autoEternitiesAvailable() {
+    return EternityMilestone.autoEternities.isReached &&
+      this.data.isActive &&
+      this.amount.equals(0);
+  }
+
   bumpAmount(mult) {
     if (this.isUnlocked) {
       this.amount = this.amount.times(mult);
@@ -54,13 +60,13 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
   tick() {
     let proc = false;
     switch (this.mode) {
-      case AutoEternityMode.AMOUNT:
+      case AUTO_ETERNITY_MODE.AMOUNT:
         proc = EternityChallenge.isRunning || gainedEternityPoints().gte(this.amount);
         break;
-      case AutoEternityMode.TIME:
+      case AUTO_ETERNITY_MODE.TIME:
         proc = Time.thisEternityRealTime.totalSeconds > this.time;
         break;
-      case AutoEternityMode.X_LAST:
+      case AUTO_ETERNITY_MODE.X_LAST:
         proc = gainedEternityPoints().gte(player.lastTenEternities[0][1].times(this.xLast));
         break;
     }

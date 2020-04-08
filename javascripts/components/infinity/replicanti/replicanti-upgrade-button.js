@@ -41,7 +41,7 @@ Vue.component("replicanti-upgrade-button", {
     }
   },
   template:
-    `<div class="l-spoon-btn-group">
+    `<div class="l-spoon-btn-group l-replicanti-upgrade-button">
       <primary-button
         :enabled="canBeBought"
         class="o-primary-btn--replicanti-upgrade"

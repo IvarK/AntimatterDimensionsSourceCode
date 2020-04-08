@@ -1,34 +1,47 @@
 "use strict";
 
-let crashed = false;
-
-function crash(message) {
-  GameKeyboard.disable();
-  GameIntervals.stop();
-  function clearHandles(set, clear) {
-    // eslint-disable-next-line no-empty-function
-    let id = set(() => {}, 9999);
-    while (id--) {
-      clear(id);
-    }
+class NotImplementedError extends Error {
+  constructor() {
+    super("The method is not implemented.");
+    this.name = "NotImplementedError";
   }
-  clearHandles(setInterval, clearInterval);
-  clearHandles(setTimeout, clearTimeout);
-  clearHandles(requestAnimationFrame, cancelAnimationFrame);
-  // We are calling requestAnimationFrame here so Vue could initialize on init-time crashes
-  requestAnimationFrame(() => {
-    Modal.message.show(`Fatal error:<br>${message}<br>Check the console for more details`);
-  });
-  crashed = true;
-  // eslint-disable-next-line no-debugger
-  debugger;
-  return Error(`Fatal Error: ${message}`);
 }
 
-function NotImplementedCrash() {
-  return crash("The method is not implemented.");
-}
+const GlobalErrorHandler = {
+  handled: false,
+  cleanStart: false,
+  onerror(event) {
+    if (this.handled) return;
+    this.handled = true;
+    if (!this.cleanStart) {
+      document.getElementById("loading").style.display = "none";
+      requestAnimationFrame(() => this.crash(event));
+      return;
+    }
+    this.stopGame();
+    this.crash(event);
+  },
+  stopGame() {
+    GameKeyboard.disable();
+    GameIntervals.stop();
+    function clearHandles(set, clear) {
+      // eslint-disable-next-line no-empty-function
+      let id = set(() => {}, 9999);
+      while (id--) {
+        clear(id);
+      }
+    }
+    clearHandles(setInterval, clearInterval);
+    clearHandles(setTimeout, clearTimeout);
+    clearHandles(requestAnimationFrame, cancelAnimationFrame);
+  },
+  crash(message) {
+    if (GameUI.initialized) {
+      Modal.message.show(`${message}<br>Check the console for more details`);
+    }
+    // eslint-disable-next-line no-debugger
+    debugger;
+  }
+};
 
-function NotSupportedCrash() {
-  return crash("The method is not supported.");
-}
+window.onerror = event => GlobalErrorHandler.onerror(event);

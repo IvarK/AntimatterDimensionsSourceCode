@@ -7,12 +7,12 @@ class AutobuyerState {
   /**
    * @abstract
    */
-  get data() { throw NotImplementedCrash(); }
+  get data() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  get isUnlocked() { throw NotImplementedCrash(); }
+  get isUnlocked() { throw new NotImplementedError(); }
 
   get canTick() {
     return this.isActive && player.options.autobuyersOn && this.isUnlocked;
@@ -33,7 +33,7 @@ class AutobuyerState {
   /**
    * @abstract
    */
-  tick() { throw NotImplementedCrash(); }
+  tick() { throw new NotImplementedError(); }
 
   // eslint-disable-next-line no-empty-function
   reset() { }
@@ -46,7 +46,7 @@ class IntervaledAutobuyerState extends AutobuyerState {
   /**
    * @abstract
    */
-  get baseInterval() { throw NotImplementedCrash(); }
+  get baseInterval() { throw new NotImplementedError(); }
 
   get cost() {
     return this.data.cost;
@@ -70,21 +70,31 @@ class IntervaledAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    this.data.lastTick = player.realTimePlayed;
+    const realTimePlayed = player.realTimePlayed;
+    const interval = this.interval;
+    // Don't allow more than one interval worth of time to accumulate (at most one autobuyer tick)
+    this.data.lastTick = Math.max(
+      Math.min(this.data.lastTick + interval, realTimePlayed),
+      realTimePlayed - interval);
   }
 
-  upgradeInterval() {
+  upgradeInterval(free) {
     if (this.hasMaxedInterval) return;
-    if (!Currency.infinityPoints.isAffordable(this.cost)) return;
-    Currency.infinityPoints.subtract(this.cost);
-    this.data.interval = Math.clampMin(this.data.interval * 0.6, 100);
-    if (this.data.interval > 120) {
-      // If your last purchase wont be very strong, dont double the cost
-      this.data.cost *= 2;
+    if (!free) {
+      if (!Currency.infinityPoints.isAffordable(this.cost)) return;
+      Currency.infinityPoints.subtract(this.cost);
     }
+    this.data.cost *= 2;
+    this.data.interval = Math.clampMin(this.data.interval * 0.6, 100);
     Achievement(52).tryUnlock();
     Achievement(53).tryUnlock();
     GameUI.update();
+  }
+  
+  maxIntervalForFree() {
+    while (!this.hasMaxedInterval) {
+      this.upgradeInterval(true);
+    }
   }
 
   reset() {

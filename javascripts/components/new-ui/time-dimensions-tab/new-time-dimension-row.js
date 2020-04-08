@@ -14,20 +14,25 @@ Vue.component("new-time-dimension-row", {
       rateOfChange: new Decimal(0),
       cost: new Decimal(0),
       isAffordable: false,
-      autobuyers: Array.from(player.reality.tdbuyers)
+      isAutobuyerOn: false,
     };
   },
   computed: {
     name() {
-      return SHORT_DISPLAY_NAMES[this.tier];
+      return TimeDimension(this.tier).shortDisplayName;
     },
     rateOfChangeDisplay() {
       return this.tier < 8
-        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
         : "";
     },
     buttonContents() {
-      return this.isCapped ? "Capped" : `Cost: ${this.shortenDimensions(this.cost)} EP`;
+      return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2, 0)} EP`;
+    }
+  },
+  watch: {
+    isAutobuyerOn(newValue) {
+      player.reality.tdbuyers[this.tier - 1] = newValue;
     }
   },
   methods: {
@@ -45,30 +50,39 @@ Vue.component("new-time-dimension-row", {
       }
       this.cost.copyFrom(dimension.cost);
       this.isAffordable = dimension.isAffordable;
-      this.autobuyers = Array.from(player.reality.tdbuyers);
+      this.isAutobuyerOn = player.reality.tdbuyers[this.tier - 1];
     },
     buyTimeDimension() {
       buyTimeDimension(this.tier);
-    }
+    },
+    buyMaxTimeDimension() {
+      buyMaxTimeDimTier(this.tier);
+    },
   },
   template:
     `<div v-show="isUnlocked" class="c-time-dim-row">
-      <div
-        class="c-time-dim-row__label c-time-dim-row__name"
-      >{{name}} Time D <span class="c-time-dim-row__multiplier">x{{shortenMoney(multiplier)}}</span></div>
-      <div
-        class="c-time-dim-row__label c-time-dim-row__label--growable"
-      >{{shortenDimensions(amount)}}</div>
+      <div class="c-time-dim-row__label c-time-dim-row__name">
+        {{name}} Time D <span class="c-time-dim-row__multiplier">{{formatX(multiplier, 2, 1)}}</span>
+      </div>
+      <div class="c-time-dim-row__label c-time-dim-row__label--growable">
+        {{format(amount, 2, 0)}}
+      </div>
+      <primary-button
+        :enabled="isAffordable"
+        class="o-primary-btn--buy-td l-time-dim-row__button o-primary-btn o-primary-btn--new"
+        @click="buyTimeDimension"
+      >{{buttonContents}}</primary-button>
       <primary-button-on-off
         v-if="areAutobuyersUnlocked"
-        v-model="autobuyers[tier - 1]"
-        class="o-primary-btn--td-autobuyer c-time-dim-row__button"
+        v-model="isAutobuyerOn"
+        class="o-primary-btn--td-autobuyer l-time-dim-row__button"
         text="Auto:"
       />
       <primary-button
+        v-else
         :enabled="isAffordable"
-        class="o-primary-btn--buy-td c-time-dim-row__button storebtn"
-        @click="buyTimeDimension"
-      >{{buttonContents}}</primary-button>
+        class="o-primary-btn--buy-td-max l-time-dim-row__button"
+        @click="buyMaxTimeDimension"
+      >Buy Max</primary-button>
     </div>`,
 });

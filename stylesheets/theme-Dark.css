@@ -1,82 +1,17 @@
 body.t-dark {
-    background-image: url('../images/dark-bg.png');
-    background-position: center;
-}
-
-.t-dark .popup {
-    background-color: #455A64;
-    box-shadow: 0 0 15px 0 black;
-}
-
-.t-dark .storebtn {
-    color: #E0E0E0;
-    background-color: #455A64;
-    border: 1px solid black;
-    box-shadow: 0 0 7px 2px #111111;
-}
-
-.t-dark .storebtn:hover {
-  color: #FFF;
-  background: #1B5E20;
+  background-image: url('../images/dark-bg.png');
+  background-position: center;
+  color: #888888;
 }
 
 input.t-dark {
-    background-color: #455A64;
-    border: 1px solid black;
-}
-
-.t-dark .container {
-    color: #888888;
-}
-
-.t-dark .secondarytabbtn {
-  color: #E0E0E0;
-  border: 2px solid #1565C0;
   background-color: #455A64;
-}
-
-.t-dark .secondarytabbtn:hover {
-    background: #1565C0;
-    color: black;
-}
-
-.t-dark .infinitytabbtn {
-    color: #000;
-    background: #F5F5F5;
-    border: 2px solid #FF9800;
-}
-
-.t-dark .infinitytabbtn:hover {
-    background: #FF9800;
-}
-
-.t-dark .c-rm-amount {
-    color: #0b600e;
-    text-shadow: 0 0 7px #0b600e;
-}
-
-.t-dark .unavailablebtn {
-    background: #37474F;
-}
-
-.t-dark .unavailablebtn:hover {
-    background: #B84B5F;
-}
-
-.t-dark .eternitytabbtn {
-    color: #b341e0;
-    background: black;
-    border: 2px solid #b341e0;
-}
-
-.t-dark .eternitytabbtn:hover {
-    color: #511568;
-    background: white;
+  border: 1px solid black;
 }
 
 .t-dark .c-tt-amount {
-    color: #64DD17;
-    text-shadow: 0 0 7px #64DD17;
+  color: #64DD17;
+  text-shadow: 0 0 7px #64DD17;
 }
 
 .t-dark .c-tt-buy-button--unlocked {
@@ -96,38 +31,14 @@ input.t-dark {
 }
 
 .t-dark .c-tt-buy-button--locked:hover {
-  background: #B84B5F;
-  border: 1px solid #B84B5F;
-}
-
-.t-dark #theorembuybackground {
-    background: #455A64;
-}
-
-.t-dark .greedbtn {
-    background-color: #f2d729;
-    color: black;
-}
-
-.t-dark .greedbtn:hover {
-    background-color: #9E913A;
-}
-
-.t-dark .realitytabbtn {
-  color: #0b600e;
-  background-color: white;
-  border: 2px solid #0b600e;
-}
-
-.t-dark .realitytabbtn:hover {
-    background-color: #0b600e;
-    color: white;
+  background: var(--color-bad);
+  border: 1px solid var(--color-bad);
 }
 
 .t-dark .c-rm-amount__desc {
-    color: #757575;
+  color: #757575;
 }
 
 .t-dark #realityanimbg {
-    filter: invert(1);
+  filter: invert(1);
 }

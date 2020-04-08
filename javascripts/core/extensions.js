@@ -106,6 +106,10 @@ String.prototype.capitalize = function() {
   return this.toLowerCase().replace(/^\w/, c => c.toUpperCase());
 };
 
+String.prototype.splice = function(start, delCount, newSubStr) {
+  return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
+};
+
 /**
  * @param {number} start
  * @param {number} count
@@ -231,7 +235,9 @@ Array.prototype.randomElement = function() {
   return this[Math.floor(Math.random() * this.length)];
 };
 
-Decimal.prototype.valueOf = () => { throw crash("Implicit conversion from Decimal to number"); };
+Decimal.prototype.valueOf = () => {
+  throw new Error("Implicit conversion from Decimal to number");
+};
 
 Set.prototype.countWhere = function(predicate) {
   let count = 0;
@@ -259,7 +265,30 @@ Array.prototype.compact = function() {
   return this.filter(x => x !== undefined && x !== null);
 };
 
-Decimal.MAX_NUMBER = new Decimal(Number.MAX_VALUE);
+Array.prototype.toBitmask = function() {
+  // eslint-disable-next-line no-bitwise
+  return this.reduce((prev, val) => prev | (1 << val), 0);
+};
+
+Set.prototype.toBitmask = function() {
+  let mask = 0;
+  // eslint-disable-next-line no-bitwise
+  for (const id of this) mask |= (1 << id);
+  return mask;
+};
+
+Array.fromBitmask = function(mask) {
+  const bitIndices = [];
+  let currentIndex = 0;
+  while (mask !== 0) {
+    // eslint-disable-next-line no-bitwise
+    if (mask & 1) bitIndices.push(currentIndex);
+    // eslint-disable-next-line no-bitwise, no-param-reassign
+    mask >>= 1;
+    ++currentIndex;
+  }
+  return bitIndices;
+};
 
 String.isWhiteSpace = function(value) {
   return value && !value.trim();

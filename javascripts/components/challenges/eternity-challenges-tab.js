@@ -86,7 +86,7 @@ Vue.component("eternity-challenges-tab", {
           this.challenge.start();
         },
         goalAtCompletions(completions) {
-          return shorten(this.challenge.goalAtCompletions(completions), 2, 1);
+          return format(this.challenge.goalAtCompletions(completions), 2, 1);
         }
       },
       template:
@@ -101,7 +101,7 @@ Vue.component("eternity-challenges-tab", {
           <description-display :config="config" slot="top" />
           <template slot="bottom">
             <div :style="{ visiblity: completions < 5 ? 'visible' : 'hidden' }">
-              <div>Completed {{completions}} {{"time" | pluralize(completions)}}</div>
+              <div>Completed {{formatInt(completions)}} {{"time" | pluralize(completions)}}</div>
               <div v-if="!isCompleted">{{goalDisplay}}</div>
             </div>
             <span v-if="showGoalSpan">Goal Span: {{firstGoal}} IP - {{lastGoal}} IP</span>
@@ -141,8 +141,11 @@ Vue.component("eternity-challenges-tab", {
   template:
     `<div class="l-challenges-tab">
       <challenges-header/>
-      <div>Complete Eternity Challenges again for a bigger reward, maximum of 5 times.</div>
-      <div>(You have unlocked {{unlockedCount}} out of 12 Eternity Challenges)</div>
+      <div>Complete Eternity Challenges again for a bigger reward, maximum of {{formatInt(5)}} times.</div>
+      <div>
+        (You have unlocked {{formatInt(unlockedCount)}}
+        out of {{formatInt(12)}} Eternity Challenges)
+      </div>
       <challenge-grid :count="12" :isChallengeVisible="isChallengeVisible">
         <eternity-challenge-box slot-scope="slotProps" :challengeId="slotProps.challengeId" />
       </challenge-grid>

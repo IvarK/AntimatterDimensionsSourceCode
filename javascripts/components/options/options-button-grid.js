@@ -53,6 +53,7 @@ Vue.component("options-button-grid", {
     },
     commas(newValue) {
       player.options.commas = newValue;
+      ADNotations.Settings.exponentCommas.show = newValue;
     },
     updateRate(newValue) {
       player.options.updateRate = newValue;
@@ -127,7 +128,7 @@ Vue.component("options-button-grid", {
         >Confirmations</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"
-          onclick="GameStorage.save()"
+          onclick="GameStorage.save(false, true)"
         >Save</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"
@@ -178,6 +179,19 @@ Vue.component("options-button-grid", {
           class="o-primary-btn--option_font-large"
           onclick="Modal.animationOptions.show();"
         >Animations</options-button>
+      </div>
+      <div class="l-options-grid__row">
+        <options-button
+          class="o-primary-btn--option_font-large"
+          onclick="Modal.infoDisplayOptions.show()"
+        >Info Displays</options-button>
+        <options-button
+          class="o-primary-btn--option_font-large"
+          onclick="Modal.miscellaneousOptions.show()"
+        >Miscellaneous</options-button>
+        <options-button
+           class="o-primary-btn--option l-options-grid__button--hidden"
+         />
       </div>
     </div>`
 });

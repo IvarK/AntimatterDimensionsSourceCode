@@ -69,7 +69,7 @@ Vue.component("effect-display", {
     },
     titleDisplay() {
       if (this.config.staticEffect) return undefined;
-      return (this.hasCap && this.reachedCap ? "Capped" : this.title) + ": ";
+      return `${this.hasCap && this.reachedCap ? "Capped" : this.title}: `;
     },
     effectDisplay() {
       return this.formatEffect(this.hasCap && this.reachedCap ? this.cap : this.effectValue);

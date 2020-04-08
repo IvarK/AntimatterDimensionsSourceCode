@@ -44,22 +44,22 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
 
   toggleMode() {
     this.mode = [
-      AutobuyerMode.BUY_SINGLE,
-      AutobuyerMode.BUY_10
+      AUTOBUYER_MODE.BUY_SINGLE,
+      AUTOBUYER_MODE.BUY_10
     ]
       .nextSibling(this.mode);
   }
 
   tick() {
-    super.tick();
     const tier = this._tier;
-    if (!NormalDimension(tier).isAvailable) return;
+    if (!NormalDimension(tier).isAvailableForPurchase) return;
+    super.tick();
     switch (this.mode) {
-      case AutobuyerMode.BUY_SINGLE:
+      case AUTOBUYER_MODE.BUY_SINGLE:
         buyOneDimension(tier);
         break;
-      case AutobuyerMode.BUY_10:
-        buyManyDimensionAutobuyer(tier, player.options.bulkOn ? this.bulk : 1);
+      case AUTOBUYER_MODE.BUY_10:
+        buyMaxDimension(tier, player.options.bulkOn ? this.bulk : 1, true);
         break;
     }
   }

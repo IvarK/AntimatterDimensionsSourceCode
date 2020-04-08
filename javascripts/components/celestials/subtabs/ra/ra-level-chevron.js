@@ -2,33 +2,27 @@
 
 Vue.component("ra-level-chevron", {
   props: {
+    minLevel: Number,
     level: Number,
     goal: Number,
-    unlock: Object,
     singleLevel: {
       type: Boolean,
       defualt: false
     },
     isImportantLevel: Boolean
   },
-  data() {
-    return {
-      mouseOverInterval: 0,
-      isMouseOver: false
-    };
-  },
   computed: {
-    percentPerLevel() {
-      return this.singleLevel ? 0 : 100 / (this.goal - 1);
+    levelPercent() {
+      const startScl = Math.sqrt(Ra.totalExpForLevel(this.minLevel));
+      const endScl = Math.sqrt(Ra.totalExpForLevel(this.goal));
+      const currentScl = Math.sqrt(Ra.totalExpForLevel(this.level));
+      const expFraction = (currentScl - startScl) / (endScl - startScl);
+      return 100 * expFraction;
     },
     levelPosition() {
-      if (this.level === this.goal)
-        return {
-          right: "0%",
-        };
-      return {
-        left: `${this.percentPerLevel * (this.level - 1)}%`,
-      };
+      if (this.level === this.goal) return { right: "0%" };
+      if (this.singleLevel) return { left: "0%" };
+      return { left: `${this.levelPercent}%` };
     },
     classList() {
       return [
@@ -37,27 +31,12 @@ Vue.component("ra-level-chevron", {
       ];
     }
   },
-  methods: {
-    onMouseEnter() {
-      clearTimeout(this.mouseOverInterval);
-      this.isMouseOver = true;
-    },
-    onMouseLeave() {
-      this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 500);
-    }
-  },
   template: `
-  <div
+  <div v-if="level >= minLevel || singleLevel"
     class="l-ra-lvl-chevron"
     :style="levelPosition"
-    :class="classList"
-    @mouseenter="onMouseEnter"
-    @click="onMouseEnter"
-    @mouseleave="onMouseLeave">
-    <div v-if="isMouseOver && isImportantLevel" class="o-ra-unlock-hover-text">
-      {{unlock.reward}}
-    </div>
-    <span>
+    :class="classList">
+    <span v-if="isImportantLevel || level === goal">
       {{level}}
     </span>
   </div>

@@ -19,37 +19,22 @@ Vue.mixin({
     on$(event, fn) {
       EventHub.ui.on(event, fn, this);
     },
-    shorten(value, places, placesUnder1000) {
-      return shorten(value, places, placesUnder1000);
+    format(value, places, placesUnder1000) {
+      return format(value, places, placesUnder1000);
     },
-    shortenPostBreak(value, places, placesUnder1000) {
-      return shortenPostBreak(value, places, placesUnder1000);
+    formatInt(value) {
+      return formatInt(value);
     },
-    shortenRateOfChange(value) {
-      return shortenRateOfChange(value);
+    formatPercents(value, places) {
+      return formatPercents(value, places);
     },
-    shortenCosts(value) {
-      return shortenCosts(value);
-    },
-    shortenDimensions(value) {
-      return shortenDimensions(value);
-    },
-    shortenMoney(value) {
-      return shortenMoney(value);
-    },
-    shortenMultiplier(value) {
-      return shortenMultiplier(value);
-    },
-    shortenSmallInteger(value) {
-      return shortenSmallInteger(value);
-    },
-    formatX(value) {
-      return formatX(value);
+    formatX(value, places, placesUnder1000) {
+      return formatX(value, places, placesUnder1000);
     }
   },
   created() {
     if (this.update) {
-      this.on$(GameEvent.UPDATE, this.update);
+      this.on$(GAME_EVENT.UPDATE, this.update);
       if (GameUI.initialized) {
         this.update();
       }
@@ -66,13 +51,13 @@ function pluralize(value, amount, plural) {
   let isSingular = true;
   if (typeof amount === "number") {
     isSingular = amount === 1;
-  }
-  else if (amount instanceof Decimal) {
+  } else if (amount instanceof Decimal) {
     isSingular = amount.eq(1);
-  }
-  else
+  } else {
     throw "Amount must be either a number or Decimal";
-  return isSingular ? value : (plural !== undefined ? plural : value + "s");
+  }
+  if (isSingular) return value;
+  return plural === undefined ? `${value}s` : plural;
 }
 
 Vue.filter("pluralize", pluralize);
@@ -86,7 +71,7 @@ const ReactivityComplainer = {
       return;
     }
     if (obj.__ob__ !== undefined) {
-      throw crash(`Boi you fukked up - ${path} became REACTIVE (oh shite)`);
+      throw new Error(`Boi you fukked up - ${path} became REACTIVE (oh shite)`);
     }
     for (const key in obj) {
       if (!obj.hasOwnProperty(key)) continue;
@@ -111,7 +96,7 @@ const GameUI = {
     if (index !== -1) {
       this.events.splice(index, 1);
     }
-    if (event !== GameEvent.UPDATE) {
+    if (event !== GAME_EVENT.UPDATE) {
       this.events.push(event);
     }
     if (this.flushPromise) return;
@@ -127,7 +112,7 @@ const GameUI = {
     for (const event of this.events) {
       EventHub.ui.dispatch(event);
     }
-    EventHub.ui.dispatch(GameEvent.UPDATE);
+    EventHub.ui.dispatch(GAME_EVENT.UPDATE);
     ReactivityComplainer.complain();
     if (PerformanceStats.isOn && PerformanceStats.currentBlocks.length > 0) {
       PerformanceStats.end();
@@ -140,19 +125,19 @@ const GameUI = {
     this.events = [];
   },
   update() {
-    this.dispatch(GameEvent.UPDATE);
+    this.dispatch(GAME_EVENT.UPDATE);
   }
 };
 
-const UIID = function() {
+const UIID = (function() {
   let id = 0;
   return { next: () => id++ };
-}();
+}());
 
 (function() {
   const vTooltip = VTooltip.VTooltip.options;
-  vTooltip.defaultClass = 'general-tooltip';
-  vTooltip.popover.defaultBaseClass = 'general-tooltip';
+  vTooltip.defaultClass = "general-tooltip";
+  vTooltip.popover.defaultBaseClass = "general-tooltip";
   vTooltip.defaultTemplate = '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
 }());
 
@@ -220,4 +205,3 @@ ui = new Vue({
   template: "<game-ui />"
 });
 
-GameUI.initialized = true;

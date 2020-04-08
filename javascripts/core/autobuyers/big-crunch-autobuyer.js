@@ -49,6 +49,13 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
     this.data.xLast = value;
   }
 
+  get autoInfinitiesAvailable() {
+    return EternityMilestone.autoInfinities.isReached &&
+      this.data.isActive &&
+      this.mode === AUTO_CRUNCH_MODE.TIME &&
+      this.time < 60;
+  }
+
   bumpAmount(mult) {
     if (this.isUnlocked) {
       this.amount = this.amount.times(mult);
@@ -56,18 +63,18 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
   }
 
   tick() {
-    super.tick();
-    if (!player.antimatter.gte(Decimal.MAX_NUMBER)) return;
+    if (canCrunch()) super.tick();
+    if (!player.antimatter.gte(Decimal.NUMBER_MAX_VALUE)) return;
     let proc = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
     if (!proc) {
       switch (this.mode) {
-        case AutoCrunchMode.AMOUNT:
+        case AUTO_CRUNCH_MODE.AMOUNT:
           proc = gainedInfinityPoints().gte(this.amount);
           break;
-        case AutoCrunchMode.TIME:
+        case AUTO_CRUNCH_MODE.TIME:
           proc = Time.thisInfinityRealTime.totalSeconds > this.time;
           break;
-        case AutoCrunchMode.X_LAST:
+        case AUTO_CRUNCH_MODE.X_LAST:
           proc = gainedInfinityPoints().gte(player.lastTenRuns[0][1].times(this.xLast));
           break;
       }
@@ -80,6 +87,6 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
   reset() {
     super.reset();
     if (EternityMilestone.bigCrunchModes.isReached) return;
-    this.mode = AutoCrunchMode.AMOUNT;
+    this.mode = AUTO_CRUNCH_MODE.AMOUNT;
   }
 }();

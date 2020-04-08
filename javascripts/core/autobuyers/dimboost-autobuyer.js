@@ -60,25 +60,21 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends IntervaledAutobuye
   }
 
   get canTick() {
-    return !Ra.isRunning && super.canTick;
+    return DimBoost.canBeBought && super.canTick;
   }
 
   tick() {
-    super.tick();
     if (this.isBuyMaxUnlocked) {
       maxBuyDimBoosts();
+      super.tick();
       return;
     }
-    if (DimBoost.purchasedBoosts >= this.maxDimBoosts && player.galaxies < this.galaxies) {
-      return;
-    }
-    if (this.isBulkBuyUnlocked && !DimBoost.isShift) {
-      const bulk = Math.clampMin(this.bulk, 1);
-      if (!DimBoost.bulkRequirement(bulk).isSatisfied) return;
-      softReset(bulk);
-      return;
-    }
-    if (!DimBoost.requirement.isSatisfied) return;
-    softReset(1);
+
+    const bulk = (this.isBulkBuyUnlocked && !DimBoost.isShift) ? Math.clampMin(this.bulk, 1) : 1;
+    const isConditionSatisfied = DimBoost.purchasedBoosts + bulk <= this.maxDimBoosts ||
+      player.galaxies >= this.galaxies;
+    if (!isConditionSatisfied || !DimBoost.bulkRequirement(bulk).isSatisfied) return;
+    softReset(bulk);
+    super.tick();
   }
 }();

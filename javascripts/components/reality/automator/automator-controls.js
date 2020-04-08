@@ -26,14 +26,15 @@ Vue.component("automator-controls", {
     },
     rewind: () => AutomatorBackend.restart(),
     play() {
-      if (AutomatorBackend.isOn) AutomatorBackend.mode = AutomatorMode.RUN;
+      if (player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) this.$emit("automatorplay");
+      if (AutomatorBackend.isOn) AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
       else AutomatorBackend.start(this.currentScriptID);
     },
     pause: () => AutomatorBackend.pause(),
     stop: () => AutomatorBackend.stop(),
     step() {
-      if (AutomatorBackend.isOn) AutomatorBackend.mode = AutomatorMode.SINGLE_STEP;
-      else AutomatorBackend.start(this.currentScriptID, AutomatorMode.SINGLE_STEP);
+      if (AutomatorBackend.isOn) AutomatorBackend.mode = AUTOMATOR_MODE.SINGLE_STEP;
+      else AutomatorBackend.start(this.currentScriptID, AUTOMATOR_MODE.SINGLE_STEP);
     },
     repeat: () => AutomatorBackend.toggleRepeat(),
   },

@@ -49,6 +49,7 @@ class TimeStudyTreeLayout {
 
     const TS = id => TimeStudy(id);
     const EC = id => TimeStudy.eternityChallenge(id);
+    const TrS = id => TriadStudy(id)
 
     /**
      * @type {TimeStudyRow[]}
@@ -60,7 +61,8 @@ class TimeStudyTreeLayout {
       normalRow(                   TS(33), TS(31), TS(32), null                       )
     ];
 
-    if (type === StudyTreeLayoutType.ALTERNATIVE_62 || type === StudyTreeLayoutType.ALTERNATIVE_62_181) {
+    if (type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62 || type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62_181 ||
+      type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES) {
       this.rows.push(
         normalRow(                     null, TS(41), TS(42), EC(5)                      ),
         normalRow(                       null,   TS(51),  TS(62)                        ),
@@ -87,7 +89,8 @@ class TimeStudyTreeLayout {
       normalRow(                          TS(161), TS(162)                            )
     );
 
-    if (type === StudyTreeLayoutType.ALTERNATIVE_181 || type === StudyTreeLayoutType.ALTERNATIVE_62_181) {
+    if (type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_181 || type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62_181 ||
+        type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES) {
       this.rows.push(
         normalRow(                         null, TS(171),  EC(2)                        ),
         normalRow(                        EC(1), TS(181),  EC(3)                        )
@@ -105,7 +108,22 @@ class TimeStudyTreeLayout {
       normalRow(             TS(191),          TS(192),          TS(193)              ),
       normalRow(                               TS(201)                                ),
       normalRow(    TS(211),          TS(212),          TS(213),          TS(214)     ),
-      wideRow  (TS(221), TS(222), TS(223), TS(224), TS(225), TS(226), TS(227), TS(228)),
+      wideRow  (TS(221), TS(222), TS(223), TS(224), TS(225), TS(226), TS(227), TS(228))
+    );
+
+    if (type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES) {
+      const vLevel = Ra.pets.v.level;
+      this.rows.push(
+        normalRow(    
+          vLevel >= 5 ? TrS(1) : null,           
+          vLevel >= 10 ? TrS(2) : null,           
+          vLevel >= 15 ? TrS(3) : null,           
+          vLevel >= 20 ? TrS(4) : null      
+        )
+      );
+    }
+
+    this.rows.push(
       normalRow(    TS(231),          TS(232),          TS(233),          TS(234)     ),
       normalRow(              EC(11),                             EC(12)              ),
       normalRow(                          TimeStudy.dilation                          ),
@@ -185,14 +203,16 @@ class TimeStudyTreeLayout {
   }
 }
 
-const StudyTreeLayoutType = {
+const STUDY_TREE_LAYOUT_TYPE = {
   NORMAL: 0,
   ALTERNATIVE_62: 1,
   ALTERNATIVE_181: 2,
   ALTERNATIVE_62_181: 3,
+  ALTERNATIVE_TRIAD_STUDIES: 4,
   get current() {
     const alt62 = Perk.bypassEC5Lock.isBought;
     const alt181 = Perk.bypassEC1Lock.isBought && Perk.bypassEC2Lock.isBought && Perk.bypassEC3Lock.isBought;
+    if (Ra.pets.v.level >= 5) return this.ALTERNATIVE_TRIAD_STUDIES;
     if (alt62 && alt181) return this.ALTERNATIVE_62_181;
     if (alt62) return this.ALTERNATIVE_62;
     if (alt181) return this.ALTERNATIVE_181;
@@ -205,7 +225,7 @@ Vue.component("time-studies-tab", {
   data() {
     return {
       respec: player.respec,
-      layoutType: StudyTreeLayoutType.NORMAL,
+      layoutType: STUDY_TREE_LAYOUT_TYPE.NORMAL,
     };
   },
   watch: {
@@ -233,13 +253,14 @@ Vue.component("time-studies-tab", {
   methods: {
     update() {
       this.respec = player.respec;
-      this.layoutType = StudyTreeLayoutType.current;
+      this.layoutType = STUDY_TREE_LAYOUT_TYPE.current;
     },
     studyComponent(study) {
       switch (study.type) {
         case TimeStudyType.NORMAL: return "normal-time-study";
         case TimeStudyType.ETERNITY_CHALLENGE: return "ec-time-study";
         case TimeStudyType.DILATION: return "dilation-time-study";
+        case TimeStudyType.TRIAD: return "triad-time-study";
       }
       throw "Unknown study type";
     }

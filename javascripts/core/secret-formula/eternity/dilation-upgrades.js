@@ -20,12 +20,10 @@ GameDatabase.eternity.dilation = (function() {
       id: 1,
       initialCost: 1e5,
       increment: 10,
-      description: () => (CompressionUpgrade.improvedDTMult.canBeApplied
-       ? "Multiply Dilated Time gain by 2.2x"
-       : "Double Dilated Time gain."),
-      effect: bought => Decimal.pow(Effects.max(2, CompressionUpgrade.improvedDTMult), bought),
+      description: "Double Dilated Time gain.",
+      effect: bought => Decimal.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => shorten(value, 2, 0)
+      formatCost: value => format(value, 2, 0)
     }),
     galaxyThreshold: rebuyable({
       id: 2,
@@ -36,24 +34,24 @@ GameDatabase.eternity.dilation = (function() {
         ? "Reset Dilated Galaxies, but lower their threshold"
         : "Reset Dilated Time and Dilated Galaxies, but lower their threshold"),
       effect: bought => Math.pow(0.8, bought),
-      formatEffect: () => getFreeGalaxyMult().toFixed(3),
-      formatCost: value => shorten(value, 2, 0)
+      formatEffect: () => format(getFreeGalaxyMult(), 3, 3),
+      formatCost: value => format(value, 2, 0)
     }),
     tachyonGain: rebuyable({
       id: 3,
       initialCost: 1e7,
       increment: 20,
-      description: "Triple the amount of Tachyon Particles gained.",
+      description: () => (Enslaved.isRunning
+        ? `Multiply the amount of Tachyon Particles gained by ${Math.pow(3, Enslaved.tachyonNerf).toFixed(2)}`
+        : "Triple the amount of Tachyon Particles gained."),
       effect: bought => Decimal.pow(3, bought),
       formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => shorten(value, 2, 0)
+      formatCost: value => format(value, 2, 0)
     }),
     doubleGalaxies: {
       id: 4,
       cost: 5e6,
-      description: () => (CompressionUpgrade.freeGalaxySoftcap.canBeApplied
-        ? `Gain twice as many free galaxies, up to ${shortenSmallInteger(10000)}.`
-        : `Gain twice as many free galaxies, up to ${shortenSmallInteger(1000)}.`),
+      description: () => `Gain twice as many free galaxies, up to ${formatInt(1000)}.`,
       effect: 2
     },
     tdMultReplicanti: {
@@ -68,7 +66,8 @@ GameDatabase.eternity.dilation = (function() {
             multiplier = ratio.toFixed(2);
           }
         }
-        return `Time Dimensions are affected by Replicanti multiplier ^${multiplier}.`;
+        return `Time Dimensions are affected by Replicanti multiplier ${formatPow(multiplier, 1, 3)}, reduced
+          effect above ${formatX(new Decimal("1e9000"))}`;
       },
       effect: () => {
         let rep10 = replicantiMult().pLog10() * 0.1;

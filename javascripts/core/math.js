@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable max-params */
 "use strict";
 
 const LOG10_MAX_VALUE = Math.log10(Number.MAX_VALUE);
@@ -50,7 +52,7 @@ function bulkBuyBinarySearch(money, costInfo, alreadyBought) {
   do {
     cantBuy *= 2;
     nextCost = costFunction(alreadyBought + cantBuy - 1);
-  } while (money.gt(nextCost));
+  } while (money.gte(nextCost));
   // Deal with the simple case of buying just one
   if (cantBuy === 2) {
     return { quantity: 1, purchasePrice: firstCost };
@@ -58,10 +60,10 @@ function bulkBuyBinarySearch(money, costInfo, alreadyBought) {
   // The amount we can actually buy is in the interval [canBuy/2, canBuy), we do a binary search
   // to find the exact value:
   let canBuy = cantBuy / 2;
-  if (cantBuy > Number.MAX_SAFE_INTEGER) throw crash("Overflow in binary search");
+  if (cantBuy > Number.MAX_SAFE_INTEGER) throw new Error("Overflow in binary search");
   while (cantBuy - canBuy > 1) {
     const middle = Math.floor((canBuy + cantBuy) / 2);
-    if (money.gt(costFunction(alreadyBought + middle - 1))) {
+    if (money.gte(costFunction(alreadyBought + middle - 1))) {
       canBuy = middle;
     } else {
       cantBuy = middle;
@@ -79,7 +81,7 @@ function bulkBuyBinarySearch(money, costInfo, alreadyBought) {
     const newCost = otherCost.plus(costFunction(alreadyBought + i - 1));
     if (newCost.eq(otherCost)) break;
     otherCost = newCost;
-    if (++count > 1000) throw crash("unexpected long loop (buggy cost function?)");
+    if (++count > 1000) throw new Error("unexpected long loop (buggy cost function?)");
   }
   let totalCost = baseCost.plus(otherCost);
   // Check the purchase price again
@@ -160,7 +162,7 @@ class LinearMultiplierScaling {
    * @param {number} logMult natural logarithm of combined multiplier
    */
   purchasesForLogTotalMultiplier(logMult) {
-    if (this.baseRatio < 1.01) throw crash("Ratio is too small for good calculations");
+    if (this.baseRatio < 1.01) throw new Error("Ratio is too small for good calculations");
     const Lb = Math.log(this.baseRatio);
     const k = this.growth / this.baseRatio;
     // Final refinement step, applying 2nd order iteration directly to the formula of
@@ -195,7 +197,7 @@ class LinearMultiplierScaling {
     const h1 = (1 + h0 + rhs) / Math.log1p(h0);
 
     // At this point we should have a pretty solid guess -- enough that this calcuolation
-    // should be pretty accurate; the final refinement 
+    // should be pretty accurate; the final refinement
     const g1 = (h1 - this.baseRatio) / this.growth;
     return refineFinal(refineFinal(g1));
   }
@@ -212,7 +214,6 @@ class LinearMultiplierScaling {
   }
 }
 
-// eslint-disable-next-line max-params
 function getCostWithLinearCostScaling(amountOfPurchases, costScalingStart, initialCost, costMult, costMultGrowth) {
   const preScalingPurchases = Math.max(0, Math.floor(Math.log(costScalingStart / initialCost) / Math.log(costMult)));
   const preScalingCost = Math.ceil(Math.pow(costMult, Math.min(preScalingPurchases, amountOfPurchases)) * initialCost);
@@ -224,11 +225,10 @@ function getCostWithLinearCostScaling(amountOfPurchases, costScalingStart, initi
 
 // Using the same arguments as getCostWithLinearCostScaling() above, do a binary search for the first purchase with a
 // cost of Infinity.
-// eslint-disable-next-line max-params
 function findFirstInfiniteCostPurchase(costScalingStart, initialCost, costMult, costMultGrowth) {
   let upper = 1;
   while (Number.isFinite(getCostWithLinearCostScaling(upper,
-          costScalingStart, initialCost, costMult, costMultGrowth))) {
+    costScalingStart, initialCost, costMult, costMultGrowth))) {
     upper *= 2;
   }
   let lower = upper / 2;
@@ -250,7 +250,7 @@ function findFirstInfiniteCostPurchase(costScalingStart, initialCost, costMult, 
  * @property {number} quantity The new amount that can be bought
  * @property {number} logPrice The logarithm (base 10) of the price
  */
- 
+
 /**
  * This is a a helper class to deal with the more common case of a cost that
  * grows exponentially (past some threshold). NOTE: this assumes that you only
@@ -275,9 +275,9 @@ class ExponentialCostScaling {
   constructor(param) {
     this._baseCost = new Decimal(param.baseCost);
     this._baseIncrease = param.baseIncrease;
-    if (typeof this._baseIncrease !== "number") throw crash("baseIncrease must be a number");
+    if (typeof this._baseIncrease !== "number") throw new Error("baseIncrease must be a number");
     this._costScale = param.costScale;
-    if (typeof this._costScale !== "number") throw crash("costScale must be a number");
+    if (typeof this._costScale !== "number") throw new Error("costScale must be a number");
     this._logBaseCost = ExponentialCostScaling.log10(param.baseCost);
     this._logBaseIncrease = ExponentialCostScaling.log10(param.baseIncrease);
     this._logCostScale = ExponentialCostScaling.log10(param.costScale);
@@ -286,14 +286,14 @@ class ExponentialCostScaling {
     } else if (param.scalingCostThreshold !== undefined) {
       this._purchasesBeforeScaling = Math.ceil(
         (ExponentialCostScaling.log10(param.scalingCostThreshold) - this._logBaseCost) / this._logBaseIncrease);
-    } else throw crash("Must specify either scalingCostThreshold or purchasesBeforeScaling");
+    } else throw new Error("Must specify either scalingCostThreshold or purchasesBeforeScaling");
     this.updateCostScale();
   }
- 
+
   get costScale() {
     return this._costScale;
   }
- 
+
   /**
    * @param {number} value
    */
@@ -302,13 +302,13 @@ class ExponentialCostScaling {
     this._costScale = value;
     this.updateCostScale();
   }
- 
+
   updateCostScale() {
     this._precalcDiscriminant = Math.pow((2 * this._logBaseIncrease + this._logCostScale), 2) -
       8 * this._logCostScale * (this._purchasesBeforeScaling * this._logBaseIncrease + this._logBaseCost);
     this._precalcCenter = -this._logBaseIncrease / this._logCostScale + this._purchasesBeforeScaling + 0.5;
   }
- 
+
   /**
    * Calculates the cost of the next purchase
    * @param {number} currentPurchases
@@ -322,7 +322,7 @@ class ExponentialCostScaling {
       : currentPurchases * logMult + logBase;
     return Decimal.pow(10, logCost);
   }
- 
+
   /**
    * Figure out how much of this can be bought.
    * This returns the maximum new number of this thing; If you have 51 and can
@@ -362,7 +362,32 @@ class ExponentialCostScaling {
     }
     return { quantity: newPurchases - currentPurchases, logPrice };
   }
- 
+
+  /**
+   * Determines the number of purchases that would be possible, if purchase count was continuous. Might
+   * have some odd behavior right at e308, but otherwise should work. It's mostly a copy-paste from
+   * getMaxBought() above but with unnecessary extra code removed.
+   * @param {Decimal} money
+   * @returns {number} maximum value of bought that money can buy up to
+   */
+  getContinuumValue(money) {
+    const logMoney = money.log10();
+    const logMult = this._logBaseIncrease;
+    const logBase = this._logBaseCost;
+    // The 1 + is because the multiplier isn't applied to the first purchase
+    let contValue = 1 + (logMoney - logBase) / logMult;
+    // We can use the linear method up to one purchase past the threshold, because the first purchase
+    // past the threshold doesn't have cost scaling in it yet.
+    if (contValue > this._purchasesBeforeScaling) {
+      const discrim = this._precalcDiscriminant + 8 * this._logCostScale * logMoney;
+      if (discrim < 0) {
+        return 0;
+      }
+      contValue = this._precalcCenter + Math.sqrt(discrim) / (2 * this._logCostScale);
+    }
+    return Math.clampMin(contValue, 0);
+  }
+
   static log10(value) {
     if (value instanceof Decimal) return value.log10();
     return Math.log10(value);
@@ -372,16 +397,15 @@ class ExponentialCostScaling {
 // Calculate cost scaling for something that follows getCostWithLinearCostScaling() under Infinity and immediately
 // starts accelerated ExponentialCostScaling above Infinity.  Yes this is a fuckton of arguments, sorry.  It sort of
 // needs to inherit all arguments from both cost scaling functions.
-// eslint-disable-next-line max-params
 function getHybridCostScaling(amountOfPurchases, linCostScalingStart, linInitialCost, linCostMult, linCostMultGrowth,
-                              expInitialCost, expCostMult, expCostMultGrowth) {
+  expInitialCost, expCostMult, expCostMultGrowth) {
   const normalCost = getCostWithLinearCostScaling(amountOfPurchases, linCostScalingStart, linInitialCost,
-                                                  linCostMult, linCostMultGrowth);
+    linCostMult, linCostMultGrowth);
   if (Number.isFinite(normalCost)) {
     return new Decimal(normalCost);
   }
   const postInfinityAmount = amountOfPurchases - findFirstInfiniteCostPurchase(linCostScalingStart, linInitialCost,
-                              linCostMult, linCostMultGrowth);
+    linCostMult, linCostMultGrowth);
   const costScale = new ExponentialCostScaling({
     baseCost: expInitialCost,
     baseIncrease: expCostMult,
@@ -405,17 +429,24 @@ const logFactorial = (function() {
 }());
 
 /** 32 bit XORSHIFT generator */
+function xorshift32Update(state) {
+  /* eslint-disable no-bitwise */
+  /* eslint-disable no-param-reassign */
+  state ^= state << 13;
+  state ^= state >>> 17;
+  state ^= state << 5;
+  /* eslint-enable no-param-reassign */
+  /* eslint-enable no-bitwise */
+  return state;
+}
+
 const fastRandom = (function() {
   let state = Math.floor(Date.now()) % Math.pow(2, 32);
   const scale = 1 / (Math.pow(2, 32));
-  /* eslint-disable no-bitwise */
   return () => {
-    state ^= state << 13;
-    state ^= state >>> 17;
-    state ^= state << 5;
+    state = xorshift32Update(state);
     return state * scale + 0.5;
   };
-  /* eslint-enable no-bitwise */
 }());
 
 // Normal distribution with specified mean and standard deviation
@@ -485,7 +516,7 @@ function binomialDistribution(numSamples, p) {
     }
     const expected = numSamples.times(p);
     if (expected.e > 32) return expected;
-    return poissonDistribution(numSamples.times(p));
+    return new Decimal(poissonDistribution(numSamples.times(p)));
   }
   const expected = numSamples * p;
   // BTRD is good past 10, but the inversion method we use is faster up to 15 and is exact
@@ -643,3 +674,659 @@ function poissonDistributionPTRD(mu) {
     } else if (Math.log(v) <= k * Math.log(mu) - mu - logFactorial(k)) return k;
   }
 }
+
+function depressedCubicRealRoots(k3, k1, k0) {
+  if (k3 === 0) {
+    if (k1 === 0) return [];
+    return [-k0 / k1];
+  }
+  /* eslint-disable no-param-reassign */
+  k1 /= k3;
+  k0 /= k3;
+  /* eslint-enable no-param-reassign */
+  if (k0 === 0) {
+    if (k1 === 0) return [0];
+    if (k1 > 0) return [];
+    const r = Math.sqrt(-k1);
+    return [r, -r];
+  }
+  if (k1 === 0) {
+    return [Math.cbrt(-k0)];
+  }
+  let innerDisc = 0.25 * k0 * k0 + k1 * k1 * k1 / 27;
+  if (innerDisc >= 0) {
+    innerDisc = Math.sqrt(innerDisc);
+    return [Math.cbrt(-0.5 * k0 + innerDisc) + Math.cbrt(-0.5 * k0 - innerDisc)];
+  }
+  const po3 = 2 * Math.sqrt(-k1 / 3);
+  const theta = Math.acos(3 * k0 / (k1 * po3)) / 3;
+  return [
+    po3 * Math.cos(theta),
+    po3 * Math.cos(theta - 2 * Math.PI / 3),
+    po3 * Math.cos(theta - 4 * Math.PI / 3),
+  ];
+}
+
+function quadraticRealRoots(k2, k1, k0) {
+  if (k2 === 0) {
+    if (k1 === 0) return [];
+    return [-k0 / k1];
+  }
+  if (k1 === 0) {
+    const ktmp = k0 / k2;
+    if (ktmp > 0) return [];
+    return [Math.sqrt(-ktmp), -Math.sqrt(-ktmp)];
+  }
+  const disc = k1 * k1 - 4 * k2 * k0;
+  if (disc < 0) return [];
+  if (disc === 0) return [-k1 / (2 * k2)];
+  const bdsc = -k1 - Math.sign(k1) * Math.sqrt(disc);
+  return [
+    bdsc / (2 * k2),
+    2 * k0 / bdsc
+  ];
+}
+
+function cubicRealRoots(k3, k2, k1, k0) {
+  if (k3 === 0) {
+    return quadraticRealRoots(k2, k1, k0);
+  }
+  if (k2 === 0) return depressedCubicRealRoots(k3, k1, k0);
+  const bo3a = k2 / (3 * k3);
+  const bo3a2 = bo3a * bo3a;
+  const coa = k1 / k3;
+  const p = coa - 3 * bo3a2;
+  const q = 2 * bo3a * bo3a2 - bo3a * coa + k0 / k3;
+  const dcrr = depressedCubicRealRoots(1, p, q);
+  return dcrr.map(t => t - bo3a);
+}
+
+function testCRR(k3, k2, k1, k0) {
+  const r = cubicRealRoots(k3, k2, k1, k0);
+  // eslint-disable-next-line no-console
+  console.log(r);
+  // eslint-disable-next-line no-console
+  console.log(r.map(x => k0 + x * (k1 + x * (k2 + x * k3))));
+}
+
+function depressedQuarticRealRoots(k4, k2, k1, k0) {
+  if (k4 === 0) return quadraticRealRoots(k2, k1, k0);
+  if (k0 === 0) {
+    const reducedSol = depressedCubicRealRoots(k4, k2, k1);
+    if (!reducedSol.includes(0)) reducedSol.push(0);
+    return reducedSol;
+  }
+  if (k1 === 0) {
+    const squareSol = quadraticRealRoots(k4, k2, k0);
+    const solution = [];
+    for (const sr of squareSol) {
+      if (sr < 0) continue;
+      if (sr === 0) solution.push(0);
+      else solution.push(Math.sqrt(sr), -Math.sqrt(sr));
+    }
+    return solution;
+  }
+  /* eslint-disable no-param-reassign */
+  k2 /= k4;
+  k1 /= k4;
+  k0 /= k4;
+  /* eslint-enable no-param-reassign */
+  const mSol = cubicRealRoots(8, 8 * k2, 2 * k2 * k2 - 8 * k0, -k1 * k1);
+  const m = mSol.max();
+  // I don't think this can happen, but I haven't double checked the math
+  if (m <= 0) return [];
+  const sqrt2m = Math.sqrt(2 * m);
+  const dInner = 2 * k1 / sqrt2m;
+  const d1 = -(2 * k2 + 2 * m + dInner);
+  const solution = [];
+  if (d1 > 0) {
+    solution.push(0.5 * (sqrt2m + Math.sqrt(d1)), 0.5 * (sqrt2m - Math.sqrt(d1)));
+  } else if (d1 === 0) {
+    solution.push(0.5 * sqrt2m);
+  }
+  const d2 = -(2 * k2 + 2 * m - dInner);
+  if (d2 > 0) {
+    solution.push(0.5 * (-sqrt2m + Math.sqrt(d2)), 0.5 * (-sqrt2m - Math.sqrt(d2)));
+  } else if (d2 === 0) {
+    solution.push(-0.5 * sqrt2m);
+  }
+  return solution;
+}
+
+function testDQRR(k4, k2, k1, k0) {
+  const r = depressedQuarticRealRoots(k4, k2, k1, k0);
+  // eslint-disable-next-line no-console
+  console.log(r);
+  // eslint-disable-next-line no-console
+  console.log(r.map(x => k0 + x * (k1 + x * (k2 + x * x * k4))));
+}
+
+function solveSimpleBiquadratic(A, B, C, D, E, F) {
+  const solutions = [];
+  if (A === 0) {
+    if (B === 0 || E === 0) return [];
+    const y = -C / B;
+    if (D === 0) return [{ x: -F / E, y }];
+    return [{ x: (-F - D * y * y) / E, y }];
+  }
+  if (D === 0) {
+    if (B === 0 || E === 0) return [];
+    const x = -F / E;
+    return [{ x, y: (-C - A * x * x) / B }];
+  }
+  if (B === 0) {
+    const xSol = quadraticRealRoots(A, 0, C);
+    for (const x of xSol) {
+      const yTmp = F + E * x;
+      const ySol = quadraticRealRoots(D, 0, yTmp);
+      for (const y of ySol) solutions.push({ x, y });
+    }
+    return solutions;
+  }
+  if (E === 0) {
+    const ySol = quadraticRealRoots(D, 0, F);
+    for (const y of ySol) {
+      const xTmp = C + B * y;
+      const xSol = quadraticRealRoots(A, 0, xTmp);
+      for (const x of xSol) solutions.push({ x, y });
+    }
+    return solutions;
+  }
+  const AoB = A / B;
+  const CoB = C / B;
+  const xSol = depressedQuarticRealRoots(D * AoB * AoB, 2 * D * AoB * CoB, E, F + D * CoB * CoB);
+  for (const x of xSol) solutions.push({ x, y: -(AoB * x * x + CoB) });
+  return solutions;
+}
+
+function testSSBQ(A, B, C, D, E, F) {
+  // eslint-disable-next-line no-console
+  console.log({ A, B, C, D, E, F });
+  const sols = solveSimpleBiquadratic(A, B, C, D, E, F);
+  for (const s of sols) {
+    const e1 = A * s.x * s.x + B * s.y + C;
+    const e2 = D * s.y * s.y + E * s.x + F;
+    // eslint-disable-next-line no-console
+    console.log(`${s.x} ${s.y} ${e1} ${e2}`);
+  }
+}
+
+class AffineTransform {
+  constructor(a00 = 1, a01 = 0, a10 = 0, a11 = 1, o0 = 0, o1 = 0) {
+    this.a00 = a00;
+    this.a01 = a01;
+    this.a10 = a10;
+    this.a11 = a11;
+    this.o0 = o0;
+    this.o1 = o1;
+  }
+
+  times(ot) {
+    if (ot instanceof AffineTransform) {
+      return new AffineTransform(
+        this.a00 * ot.a00 + this.a01 * ot.a10, this.a00 * ot.a01 + this.a01 * ot.a11,
+        this.a10 * ot.a00 + this.a11 * ot.a10, this.a10 * ot.a01 + this.a11 * ot.a11,
+        this.a00 * ot.o0 + this.a01 * ot.o1 + this.o0,
+        this.a10 * ot.o0 + this.a11 * ot.o1 + this.o1
+      );
+    }
+    if (ot instanceof Vector) return ot.transformedBy(this);
+    throw new Error("unsupported operation");
+  }
+
+  translated(offX, offY = undefined) {
+    if (offX instanceof Vector) {
+      return new AffineTransform(this.a00, this.a01, this.a10, this.a11, this.o0 + offX.x, this.o1 + offX.y);
+    }
+    return new AffineTransform(this.a00, this.a01, this.a10, this.a11, this.o0 + offX, this.o1 + offY);
+  }
+
+  rotated(angle) {
+    return AffineTransform.rotation(angle).times(this);
+  }
+
+  scaled(scale) {
+    return AffineTransform.scale(scale).times(this);
+  }
+
+  get withoutTranslation() {
+    return new AffineTransform(this.a00, this.a01, this.a10, this.a11);
+  }
+
+  static translation(offX, offY) {
+    if (offX instanceof Vector) {
+      return new AffineTransform(1, 0, 0, 1, offX.x, offX.y);
+    }
+    return new AffineTransform(1, 0, 0, 1, offX, offY);
+  }
+
+  static rotation(angle) {
+    const c = Math.cos(angle), s = Math.sin(angle);
+    return new AffineTransform(c, -s, s, c);
+  }
+
+  static scale(sc) {
+    return new AffineTransform(sc, 0, 0, sc);
+  }
+
+  static identity() {
+    return new AffineTransform();
+  }
+}
+
+class Vector {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  get length() {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
+
+  plus(v) {
+    return new Vector(this.x + v.x, this.y + v.y);
+  }
+
+  dot(v) {
+    return this.x * v.x + this.y * v.y;
+  }
+
+  cross(v) {
+    // Produces scalar, z term of 3D vectors
+    return this.x * v.y - this.y * v.x;
+  }
+
+  minus(v) {
+    return new Vector(this.x - v.x, this.y - v.y);
+  }
+
+  times(s) {
+    return new Vector(this.x * s, this.y * s);
+  }
+
+  asTranslate() {
+    return `translate(${this.x}, ${this.y})`;
+  }
+
+  asRotate() {
+    return `rotate(${180 / Math.PI * Math.atan2(this.y, this.x)})`;
+  }
+
+  toString() {
+    return `${this.x}, ${this.y}`;
+  }
+
+  round(factor) {
+    return new Vector(Math.round(this.x * factor) / factor, Math.round(this.y * factor) / factor);    
+  }
+
+  get copy() {
+    return new Vector(this.x, this.y);
+  }
+
+  matrixTransform(a00, a01, a10, a11) {
+    return new Vector(a00 * this.x + a01 * this.y, a10 * this.x + a11 * this.y);
+  }
+
+  transformedBy(tform) {
+    return new Vector(tform.a00 * this.x + tform.a01 * this.y + tform.o0,
+      tform.a10 * this.x + tform.a11 * this.y + tform.o1);
+  }
+
+  get negative() {
+    return new Vector(-this.x, -this.y);
+  }
+
+  get normalized() {
+    return this.times(1 / this.length);
+  }
+
+  get right90() {
+    return new Vector(this.y, -this.x);
+  }
+
+  get left90() {
+    return new Vector(-this.y, this.x);
+  }
+
+  get angle() {
+    return Math.atan2(this.y, this.x);
+  }
+
+  static horiz(x) {
+    return new Vector(x, 0);
+  }
+
+  static unitFromRadians(rad) {
+    return new Vector(Math.cos(rad), Math.sin(rad));
+  }
+
+  static unitFromDegrees(deg) {
+    return Vector.unitFromRadians(deg * Math.PI / 180);
+  }
+}
+
+
+class Curve {
+  /**
+   * @abstract
+   * @param {number} t
+   * @returns {Vector}
+  */
+  position() {
+    throw new NotImplementedError();
+  }
+
+  /**
+   * @abstract
+   * @param {number} t
+   * @returns {Vector}
+  */
+  derivative() {
+    throw new NotImplementedError();
+  }
+
+  /**
+   * @abstract
+   * @param {number} t
+   * @returns {Vector}
+  */
+  secondDerivative() {
+    throw new NotImplementedError();
+  }
+
+  /**
+   * @param {number} t
+   * @returns {number}
+   */
+  curvature(t) {
+    const d = this.derivative(t);
+    const dd = this.secondDerivative(t);
+    const dMag = d.length;
+    return d.cross(dd) / (dMag * dMag * dMag);
+  }
+
+  shapeAt(t) {
+    const d = this.derivative(t);
+    return {
+      t,
+      position: this.position(t),
+      derivative: d,
+      direction: d.normalized,
+      curvature: this.curvature(t),
+    };
+  }
+
+  minimumDistanceTo(pDes, tMin, tMax) {
+    let tGuess = 0.5 * (tMin + tMax);
+    const tTol = Math.max(Math.abs(tMax), Math.abs(tMin)) * Number.EPSILON * 16;
+    for (let iter = 0; ; ++iter) {
+      const p = this.position(tGuess);
+      const d = this.derivative(tGuess);
+      const dd = this.secondDerivative(tGuess);
+      const offset = p.minus(pDes);
+      const dist = offset.length;
+      const distDeriv = offset.dot(d) * 2;
+      /* eslint-disable no-param-reassign */
+      if (distDeriv > 0) tMax = tGuess;
+      else tMin = tGuess;
+      /* eslint-enable no-param-reassign */
+      const distSecondDeriv = (offset.dot(dd) + d.dot(d)) * 2;
+      const tStep = distSecondDeriv < 0 ? -dist / distDeriv : -distDeriv / distSecondDeriv;
+      if (Math.abs(tStep) < tTol || iter >= 16) return dist;
+      tGuess = Math.clamp(tGuess + tStep, tMin, tMax);
+    }
+  }
+}
+
+class LinearPath extends Curve {
+  constructor(p0, p1) {
+    super();
+    this.p0 = p0.copy;
+    this.p1 = p1.copy;
+  }
+
+  position(t) {
+    return this.p0.times(1 - t).plus(this.p1.times(t));
+  }
+
+  derivative() {
+    return this.p1.minus(this.p0);
+  }
+
+  secondDerivative() {
+    return new Vector(0, 0);
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  curvature(t) {
+    return 0;
+  }
+
+  trimStart(len) {
+    const dir = this.p1.minus(this.p0).normalized;
+    return new LinearPath(this.p0.plus(dir.times(len)), this.p1);
+  }
+
+  trimEnd(len) {
+    const dir = this.p1.minus(this.p0).normalized;
+    return new LinearPath(this.p0, this.p1.minus(dir.times(len)));
+  }
+
+  transformed(tform) {
+    return new LinearPath(this.p0.transformedBy(tform), this.p1.transformedBy(tform));
+  }
+
+  get relativeSVG() {
+    const d1 = this.p1.minus(this.p0);
+    return `l ${d1.x} ${d1.y}\n`;
+  }
+
+  createOffsetLine(offset, t0 = 0, t1 = 1) {
+    const off = this.p1.minus(this.p0).normalized.right90.times(offset);
+    return new LinearPath(this.position(t0).plus(off), this.position(t1).plus(off));
+  }
+
+  static connectCircles(p0, r0, p1, r1) {
+    const dir = p1.minus(p0).normalized;
+    return new LinearPath(p0.plus(dir.times(r0)), p1.minus(dir.times(r1)));
+  }
+}
+
+class CubicBezier extends Curve {
+  constructor(p0, p1, p2, p3) {
+    super();
+    this.p0 = p0.copy;
+    this.p1 = p1.copy;
+    this.p2 = p2.copy;
+    this.p3 = p3.copy;
+  }
+
+  position(t) {
+    const nt2 = (1 - t) * (1 - t);
+    const t2 = t * t;
+    return this.p0.times((1 - t) * nt2)
+      .plus(this.p1.times(3 * t * nt2))
+      .plus(this.p2.times(3 * t2 * (1 - t)))
+      .plus(this.p3.times(t2 * t));
+  }
+
+  derivative(t) {
+    return this.p1.minus(this.p0).times(3 * (1 - t) * (1 - t))
+      .plus(this.p2.minus(this.p1).times(6 * t * (1 - t)))
+      .plus(this.p3.minus(this.p2).times(3 * t * t));
+  }
+
+  secondDerivative(t) {
+    return this.p2.minus(this.p1.times(2)).plus(this.p0).times(6 * (1 - t))
+      .plus(this.p3.minus(this.p2.times(2)).plus(this.p1).times(6 * t));
+  }
+
+  transformed(tform) {
+    return new CubicBezier(this.p0.transformedBy(tform), this.p1.transformedBy(tform),
+      this.p2.transformedBy(tform), this.p3.transformedBy(tform));
+  }
+
+  get relativeSVG() {
+    const d1 = this.p1.minus(this.p0);
+    const d2 = this.p2.minus(this.p0);
+    const d3 = this.p3.minus(this.p0);
+    return `c ${d1.x} ${d1.y} ${d2.x} ${d2.y} ${d3.x} ${d3.y}\n`;
+  }
+
+  get reverse() {
+    return new CubicBezier(this.p3, this.p2, this.p1, this.p0);
+  }
+
+  static fitCurveSection(shape0, shape1) {
+    const dP = shape1.position.minus(shape0.position);
+    const reversed = shape0.t > shape1.t;
+    const pathRotation = shape0.direction.cross(shape1.direction);
+    let magSol = solveSimpleBiquadratic(
+      1.5 * shape0.curvature, pathRotation, -shape0.direction.cross(dP),
+      1.5 * shape1.curvature, pathRotation, shape1.direction.cross(dP));
+    magSol = reversed ? magSol.filter(o => o.x <= 0 && o.y <= 0) : magSol.filter(o => o.x >= 0 && o.y >= 0);
+    if (magSol.length === 0) return null;
+    return new CubicBezier(
+      shape0.position, shape0.position.plus(shape0.direction.times(magSol[0].x)),
+      shape1.position.minus(shape1.direction.times(magSol[0].y)), shape1.position);
+  }
+}
+
+// This is an "inset/outset" kind of transform
+class OffsetCurve extends Curve {
+  constructor(baseCurve, offset) {
+    super();
+    this.base = baseCurve;
+    this.offset = offset;
+  }
+
+  position(t) {
+    const p = this.base.position(t);
+    const d = this.base.derivative(t);
+    return p.plus(d.normalized.right90.times(this.offset));
+  }
+
+  derivative(t) {
+    return this.base.derivative(t);
+  }
+
+  // 2nd derivative not implemented as only curvature is used atm
+  curvature(t) {
+    const c = this.base.curvature(t);
+    return 1 / (1 / c + this.offset);
+  }
+
+  shapeAt(t) {
+    const shape = this.base.shapeAt(t);
+    return {
+      t: shape.t,
+      position: shape.position.plus(shape.direction.right90.times(this.offset)),
+      derivative: shape.derivative,
+      direction: shape.direction,
+      curvature: shape.curvature / (1 + this.offset * shape.curvature),
+    };
+  }
+}
+
+class LogarithmicSpiral extends Curve {
+  constructor(center, scale, rate) {
+    super();
+    this.center = center;
+    this.scale = scale;
+    this.rate = rate;
+  }
+
+  position(t) {
+    return Vector.unitFromRadians(t)
+      .times(this.scale * Math.exp(this.rate * t))
+      .plus(this.center);
+  }
+
+  derivative(t) {
+    const unit = Vector.unitFromRadians(t);
+    const radius = this.scale * Math.exp(this.rate * t);
+    return unit.times(radius * this.rate).plus(unit.left90.times(radius));
+  }
+
+  secondDerivative(t) {
+    const unit = Vector.unitFromRadians(t);
+    const radius = this.scale * Math.exp(this.rate * t);
+    return unit.times(radius * (this.rate * this.rate - 1))
+      .plus(unit.left90.times(2 * radius * this.rate));
+  }
+
+  shapeAt(t) {
+    const unit = Vector.unitFromRadians(t);
+    const radius = this.scale * Math.exp(this.rate * t);
+    const ur = unit.times(radius);
+    const d = ur.times(this.rate).plus(ur.left90);
+    return {
+      t,
+      position: ur.plus(this.center),
+      derivative: d,
+      direction: d.normalized,
+      curvature: 1 / (Math.abs(radius) * Math.sqrt(1 + this.rate * this.rate))
+    };
+  }
+
+  angleFromRadius(r) {
+    return Math.log(r / this.scale) / this.rate;
+  }
+
+  static fromPolarEndpoints(center, theta0, r0, theta1, r1) {
+    const rate = Math.log(r1 / r0) / (theta1 - theta0);
+    return new LogarithmicSpiral(center, r0 / Math.exp(rate * theta0), rate);
+  }
+}
+
+class PiecewisePath {
+  constructor(data = undefined) {
+    this.path = data ? data : [];
+  }
+
+  push(element) {
+    this.path.push(element);
+  }
+
+  transformedBy(tform) {
+    return new PiecewisePath(this.path.map(x => x.transformed(tform)));
+  }
+
+  toSVG(initialPrefix) {
+    const p0 = this.path[0].position(0);
+    const lines = [`${initialPrefix} ${p0.x} ${p0.y}\n`];
+    for (const part of this.path) lines.push(part.relativeSVG);
+    return lines.join("");
+  }
+
+  static cubicBezierFitToCurveSection(curve, t0, t1, tol = 1, minPieces = 1) {
+    const output = new PiecewisePath();
+    const shape0 = curve.shapeAt(t0);
+    const shape1 = curve.shapeAt(t1);
+    function subdivide(shapeStart, shapeEnd, maxDepth = 8) {
+      const shapeMid = curve.shapeAt(0.5 * (shapeStart.t + shapeEnd.t));
+      return single(shapeStart, shapeMid, maxDepth - 1) &&
+        single(shapeMid, shapeEnd, maxDepth - 1);
+    }
+    function single(shapeStart, shapeEnd, maxDepth = 8) {
+      const singleFit = CubicBezier.fitCurveSection(shapeStart, shapeEnd);
+      if (singleFit === null) {
+        if (maxDepth <= 0) throw new Error("coulnd't decompose curve");
+        return subdivide(shapeStart, shapeEnd, maxDepth);
+      }
+      const tMid = 0.5 * (shapeStart.t + shapeEnd.t);
+      const err = singleFit.minimumDistanceTo(curve.position(tMid), 0, 1);
+      if (err > tol) {
+        return subdivide(shapeStart, shapeEnd, maxDepth);
+      }
+      output.push(singleFit);
+      return true;
+    }
+    if (minPieces > 1) subdivide(shape0, shape1);
+    else single(shape0, shape1);
+    return output;
+  }
+}
+

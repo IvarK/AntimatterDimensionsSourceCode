@@ -8,6 +8,12 @@ const AutomatorTextUI = {
     lint: "automato",
     lineNumbers: true,
     theme: "liquibyte",
+    tabSize: 2,
+    extraKeys: {
+      Tab: cm => cm.execCommand("indentMore"),
+      "Shift-Tab": cm => cm.execCommand("indentLess"),
+    },
+    autoCloseBrackets: true,
   },
   documents: {},
   initialize() {
@@ -27,7 +33,7 @@ const AutomatorTextUI = {
       const scriptID = ui.view.tabs.reality.automator.editorScriptID;
       AutomatorBackend.saveScript(scriptID, editor.getDoc().getValue());
     });
-    EventHub.ui.on(GameEvent.GAME_LOAD, () => this.documents = {});
+    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.documents = {});
   }
 };
 
@@ -87,7 +93,7 @@ Vue.component("automator-text-editor", {
   },
   created() {
     AutomatorTextUI.initialize();
-    EventHub.ui.on(GameEvent.GAME_LOAD, () => this.onGameLoad(), this);
+    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
   },
   mounted() {
     this.$refs.container.appendChild(this.UI.container);

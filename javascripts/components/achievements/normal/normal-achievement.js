@@ -7,8 +7,6 @@ Vue.component("normal-achievement", {
   data() {
     return {
       isUnlocked: false,
-      isEnabled: false,
-      remainingTime: 0,
       isMouseOver: false,
       mouseOverInterval: 0,
       isCancer: false
@@ -27,8 +25,7 @@ Vue.component("normal-achievement", {
       return {
         "o-achievement": true,
         "o-achievement--locked": !this.isUnlocked,
-        "o-achievement--unlocked": this.isUnlocked && this.isEnabled,
-        "o-achievement--disabled": this.isUnlocked && !this.isEnabled,
+        "o-achievement--unlocked": this.isUnlocked,
         "o-achievement--blink": this.id === 78 && !this.isUnlocked,
         "o-achievement--normal": !this.isCancer,
         "o-achievement--cancer": this.isCancer
@@ -45,33 +42,14 @@ Vue.component("normal-achievement", {
       }
       return tooltip;
     },
-    lockedTooltip() {
-      const remainingTime = TimeSpan.fromMilliseconds(this.remainingTime);
-      if (remainingTime.totalMinutes < 1) {
-        const floored = Math.floor(remainingTime.totalSeconds);
-        return `(Locked: ${floored} ${floored === 1 ? "second" : "seconds"})`;
-      }
-      if (remainingTime.totalHours < 1) {
-        return `(Locked: ${remainingTime.totalMinutes.toFixed(1)} minutes)`;
-      }
-      if (remainingTime.totalDays < 1) {
-        return `(Locked: ${remainingTime.totalHours.toFixed(1)} hours)`;
-      }
-      return `(Locked: ${remainingTime.totalDays.toFixed(1)} days)`;
-    },
     tooltip() {
-      if (this.isUnlocked && !this.isEnabled && this.isMouseOver) {
-        return `${this.detailsTooltip}\n${this.lockedTooltip}`;
-      }
       return this.detailsTooltip;
     }
   },
   methods: {
     update() {
-      this.remainingTime = this.achievement.remainingDisabledTime;
       this.isUnlocked = this.achievement.isUnlocked;
-      this.isEnabled = this.achievement.isEnabled;
-      this.isCancer = Theme.current().name === "S4";
+      this.isCancer = Theme.current().name === "S4" || player.secretUnlocks.cancerAchievements;
     },
     onMouseEnter() {
       clearTimeout(this.mouseOverInterval);
@@ -88,7 +66,7 @@ Vue.component("normal-achievement", {
       :ach-tooltip="tooltip"
       @mouseenter="onMouseEnter"
       @mouseleave="onMouseLeave">
-      <hint-text class="l-hint-text--achievement">{{id}}</hint-text>
+      <hint-text type="achievements" class="l-hint-text--achievement">{{id}}</hint-text>
       <br>
      </div>`
 });

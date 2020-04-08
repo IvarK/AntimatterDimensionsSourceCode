@@ -1,39 +1,34 @@
 "use strict";
 
 function startDilatedEternity(auto) {
-  if (!TimeStudy.dilation.isBought) return false;
+  if (!PlayerProgress.dilationUnlocked()) return false;
   if (player.dilation.active) {
       eternity(false, auto, { switchingDilation: true });
       return false;
   }
-  if (player.options.confirmations.dilation && !confirm("Dilating time will start a new eternity, and all of your Dimension/Infinity Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) {
-      return false;
+  if (!auto && player.options.confirmations.dilation) {
+    const confirmationMessage = "Dilating time will start a new eternity, and all of your Dimension/Infinity" +
+      " Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to" +
+      " ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your" +
+      " antimatter and tachyon particles.";
+    if (!confirm(confirmationMessage)) return false;
   }
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
-  TimeCompression.isActive = false;
   return true;
 }
 
-
-/**
-*
-* @param {Name of the ugrade} id
-* @param {Cost of the upgrade} cost
-* @param {Cost increase for the upgrade, only for rebuyables} costInc
-*
-* id 1-3 are rebuyables
-*
-* id 2 resets your dilated time and free galaxies
-*
-*/
+// @param {Name of the ugrade} id
+// @param {Cost of the upgrade} cost
+// @param {Cost increase for the upgrade, only for rebuyables} costInc
+// id 1-3 are rebuyables
+// id 2 resets your dilated time and free galaxies
 
 const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
-                            5e6,        1e9,         5e7,
-                            2e12,       1e10,        1e11,
-                                        1e15];
-
+                        5e6, 1e9, 5e7,
+                        2e12, 1e10, 1e11,
+                        1e15];
 
 function buyDilationUpgrade(id, bulk) {
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
@@ -50,7 +45,7 @@ function buyDilationUpgrade(id, bulk) {
 
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
       DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
-    buying = Math.min(buying, Effects.max(1, PerkShopUpgrade.rmMult));
+    buying = Math.min(buying, Effects.max(1, PerkShopUpgrade.bulkDilation));
     if (!bulk) {
       buying = Math.min(buying, 1);
     }
@@ -65,30 +60,28 @@ function buyDilationUpgrade(id, bulk) {
     }
 
     if (id === 3) {
-      const retroactiveTPFactor = Effects.max(
+      let retroactiveTPFactor = Effects.max(
         1,
         Perk.retroactiveTP1,
         Perk.retroactiveTP2,
         Perk.retroactiveTP3,
         Perk.retroactiveTP4
       );
-      player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
+      if (Enslaved.isRunning) {
+        retroactiveTPFactor = Math.pow(retroactiveTPFactor, Enslaved.tachyonNerf);
+      }
+      player.dilation.tachyonParticles = player.dilation.tachyonParticles
+        .times(Decimal.pow(retroactiveTPFactor, buying));
     }
   }
-  return true
+  return true;
 }
 
-// This two are separate to avoid an infinite loop as the compression unlock condition checks the free galaxy mult
-function getFreeGalaxyMultBeforeCompression() {
+function getFreeGalaxyMult() {
   const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.35;
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
   return 1 + thresholdMult * glyphReduction;
-}
-
-function getFreeGalaxyMult() {
-  const compressionReduction = Effects.max(0, CompressionUpgrade.freeGalaxyScaling);
-  return getFreeGalaxyMultBeforeCompression() - compressionReduction;
 }
 
 function getDilationGainPerSecond() {
@@ -96,16 +89,18 @@ function getDilationGainPerSecond() {
     .timesEffectsOf(
       DilationUpgrade.dtGain,
       Achievement(132),
+      Achievement(137),
       RealityUpgrade(1),
       AlchemyResource.dilation
     );
-  dtRate = dtRate.times(getAdjustedGlyphEffect("dilationdilationMult"));
-  dtRate = dtRate.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
+  dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
+  dtRate = dtRate.times(
+    Math.clampMin(Decimal.log10(player.replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
   dtRate = dtRate.times(Ra.gamespeedDTMult());
   if (Enslaved.isRunning) {
-    dtRate = dilatedValueOf(dtRate).dividedBy(player.dilation.dilatedTime.plus(1).log10() + 1);
+    dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
   }
-  dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime())
+  dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime());
   if (V.isRunning) dtRate = dtRate.pow(0.5);
   return dtRate;
 }
@@ -122,27 +117,27 @@ function tachyonGainMultiplier() {
 }
 
 function rewardTP() {
-  player.dilation.tachyonParticles = Decimal.max(player.dilation.tachyonParticles, getTP());
+  player.dilation.tachyonParticles = Decimal.max(player.dilation.tachyonParticles, getTP(player.antimatter));
 }
 
 // Returns the TP that would be gained this run
-function getTP() {
+function getTP(antimatter) {
   let tachyon = Decimal
-    .pow(Decimal.log10(player.antimatter) / 400, 1.5)
+    .pow(Decimal.log10(antimatter) / 400, 1.5)
     .times(tachyonGainMultiplier());
-  if (Enslaved.isRunning) tachyon = tachyon.pow(0.25);
+  if (Enslaved.isRunning) tachyon = tachyon.pow(Enslaved.tachyonNerf);
   return tachyon;
 }
 
 // Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
 function getTachyonGain() {
-  return getTP().minus(player.dilation.tachyonParticles).clampMin(0);
+  return getTP(player.antimatter).minus(player.dilation.tachyonParticles).clampMin(0);
 }
 
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
 function getTachyonReq() {
   let effectiveTP = player.dilation.tachyonParticles;
-  if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(4);
+  if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
   return Decimal.pow10(
     effectiveTP
       .times(Math.pow(400, 1.5))
@@ -159,10 +154,7 @@ function dilatedValueOf(value, depth) {
   if (player.dilation.active || Enslaved.isRunning) {
     return recursiveDilation(value, 1);
   }
-  if (TimeCompression.isActive) {
-    return recursiveDilation(value, TimeCompression.compressionDepth);
-  }
-  throw crash("Invald dilation depth");
+  throw new Error("Invald dilation depth");
 }
 
 function recursiveDilation(value, depth) {
@@ -170,9 +162,7 @@ function recursiveDilation(value, depth) {
     return value;
   }
   const log10 = value.log10();
-  const basePenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
-  const alchemyReduction = (player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
-  const dilationPenalty = Math.min(1, basePenalty + (1 - basePenalty) * alchemyReduction);
+  const dilationPenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
   return recursiveDilation(Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty)), depth - 1);
 }
 
@@ -235,6 +225,21 @@ const DilationUpgrade = (function() {
     ipMultDT: new DilationUpgradeState(db.ipMultDT),
     timeStudySplit: new DilationUpgradeState(db.timeStudySplit),
     dilationPenalty: new DilationUpgradeState(db.dilationPenalty),
-    ttGenerator: new DilationUpgradeState(db.ttGenerator)
+    ttGenerator: new DilationUpgradeState(db.ttGenerator),
   };
-})();
+}());
+
+const DilationUpgrades = {
+  rebuyable: [
+    DilationUpgrade.dtGain,
+    DilationUpgrade.galaxyThreshold,
+    DilationUpgrade.tachyonGain,
+  ],
+  fromId: (function() {
+    const upgradesById = [];
+    for (const upgrade of Object.values(DilationUpgrade)) {
+      upgradesById[upgrade.id] = upgrade;
+    }
+    return id => upgradesById[id];
+  }()),
+};

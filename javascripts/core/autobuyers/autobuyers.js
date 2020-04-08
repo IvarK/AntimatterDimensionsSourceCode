@@ -35,8 +35,8 @@ const Autobuyers = (function() {
 
       const autobuyers = [
         Autobuyer.reality,
-        Autobuyer.eternity,
         Autobuyer.bigCrunch,
+        Autobuyer.eternity,
         Autobuyer.galaxy,
         Autobuyer.dimboost,
         Autobuyer.sacrifice
@@ -59,5 +59,5 @@ const Autobuyers = (function() {
   };
 }());
 
-EventHub.logic.on(GameEvent.ETERNITY_RESET_AFTER, () => Autobuyers.reset());
-EventHub.logic.on(GameEvent.REALITY_RESET_AFTER, () => Autobuyers.reset());
+EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => Autobuyers.reset());
+EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => Autobuyers.reset());

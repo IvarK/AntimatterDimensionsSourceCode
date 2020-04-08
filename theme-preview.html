@@ -62,7 +62,7 @@
     }
   </style>
 </head>
-<body>
+<body style="overflow-y: scroll;">
 <div style="position: sticky; top: 5px; z-index: 100; background-color: whitesmoke">
   <span>Theme: <span id="current-theme">Normal</span></span>
   <div id="themes" style="display: inline-block;"></div>
@@ -71,20 +71,20 @@
 
 <div style="height: 10px"></div>
 
-<div id="container">
-  <div style="margin: 10px; display: flex; flex-direction: column">
+<div id="ui">
+  <div style="margin: 10px; display: flex; flex-direction: column;">
 
 
     <span>Common buttons</span>
     <div class="c-component-block">
       <button class="o-primary-btn">Normal button</button>
       <button class="o-primary-btn o-primary-btn--disabled">Disabled button</button>
-      <button class="tabbtn">Primary tab</button>
-      <button class="o-btn o-btn--secondary-tab">Secondary tab</button>
-      <button class="tabbtn infinitytabbtn">Infinity tab</button>
-      <button class="tabbtn eternitytabbtn">Eternity tab</button>
-      <button class="tabbtn realitytabbtn" style="display: flex;">Reality tab</button>
-      <button class="tabbtn celestialtabbtn" style="display: flex;">Celestial tab</button>
+      <button class="o-tab-btn">Primary tab</button>
+      <button class="o-tab-btn o-tab-btn--secondary">Secondary tab</button>
+      <button class="o-tab-btn o-tab-btn--infinity">Infinity tab</button>
+      <button class="o-tab-btn o-tab-btn--eternity">Eternity tab</button>
+      <button class="o-tab-btn o-tab-btn--reality" style="display: flex;">Reality tab</button>
+      <button class="o-tab-btn o-tab-btn--celestial" style="display: flex;">Celestial tab</button>
     </div>
 
 
@@ -166,9 +166,9 @@
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
         <button class="o-prestige-btn o-prestige-btn--eternity">
-          <b>I need to become Eternal.</b>
+          I need to become Eternal.
           <br>
-          Gain <b>1e308</b> Eternity points.
+          Gain 1e308 Eternity points.
           <br>
           1e308 EP/min
           <br>
@@ -180,7 +180,7 @@
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
         <button class="o-prestige-btn o-prestige-btn--eternity">
-          Gain <b>1e308</b> Eternity points.
+          Gain 1e308 Eternity points.
           <br>
           1e308 EP/min
           <br>
@@ -200,7 +200,7 @@
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
         <button class="o-prestige-btn o-prestige-btn--eternity">
-          Gain <b>1e308</b> Eternity points.
+          Gain 1e308 Eternity points.
           <br>
           +1e308 Tachyon particles.
         </button>
@@ -210,7 +210,7 @@
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
         <button class="o-prestige-btn o-prestige-btn--eternity">
-          Gain <b>1e308</b> EP
+          Gain 1e308 EP
           <br>
           You should explore a bit and look at new content before clicking me!
         </button>
@@ -220,7 +220,7 @@
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
         <button class="o-prestige-btn o-prestige-btn--eternity">
-          Gain <b>1e308</b> Tachyon particles
+          Gain 1e308 Tachyon particles
           <br>
           You should explore a bit and look at new content before clicking me!
         </button>
@@ -742,7 +742,7 @@
     <span>Teresa</span>
     <div class="c-component-block">
         <div style="display: flex; flex-direction: column">
-          <div class="c-teresa-unlock c-teresa-run-button">Start a new reality. TT generation is disabled and you gain less IP and EP (x^0.6). The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by 1e308x, based on realities.</div>
+          <div class="c-teresa-unlock c-teresa-run-button">Start a new reality. TT generation is disabled and you gain less IP and EP (x^0.55). The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by 1e308x, based on realities.</div>
           <div class="c-teresa-unlock">Teresa Reality Machine pour unlock</div>
           <div class="o-teresa-shop-button">Teresa perk point shop button</div>
           <button class="o-primary-btn c-teresa-pour">Pour RM</button>

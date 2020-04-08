@@ -1,11 +1,6 @@
 "use strict";
 
 Vue.component("news-ticker", {
-  computed: {
-    isHidden() {
-      return this.$viewModel.newsHidden;
-    }
-  },
   watch: {
     isHidden() {
       this.restart();
@@ -19,6 +14,9 @@ Vue.component("news-ticker", {
     this.clearTimeouts();
   },
   methods: {
+    update() {
+      if (this.currentNews && this.currentNews.dynamic) this.$refs.line.innerHTML = this.currentNews.text;
+    },
     restart() {
       // TODO: Proper delay before ui is initialized
       if (!GameUI.initialized) {
@@ -37,16 +35,28 @@ Vue.component("news-ticker", {
     },
     prepareNextMessage() {
       const line = this.$refs.line;
+      if (line === undefined) return;
 
-      const isUnlocked = news => news.condition === undefined || news.condition();
-      do {
-        this.currentNews = GameDatabase.news.randomElement();
-      } while (!isUnlocked(this.currentNews));
+      if (this.currentNews && this.currentNews.id === "a236") {
+        this.currentNews = GameDatabase.news.find(message => message.id === "a216");
+      } else {
+        const isUnlocked = news => news.unlocked || news.unlocked === undefined;
+        do {
+          this.currentNews = GameDatabase.news.randomElement();
+        } while (!isUnlocked(this.currentNews));
+      }
+      if (this.currentNews.reset) {
+        this.currentNews.reset();
+      }
 
       line.innerHTML = this.currentNews.text;
 
       line.style["transition-duration"] = "0ms";
-      line.style.transform = "translateX(0)";
+      if (this.currentNews && this.currentNews.id === "a244") {
+        line.style.transform = "translateX(-100%)";
+      } else {
+        line.style.transform = "translateX(0)";
+      }
 
       const DELAY = 1000;
       this.delayTimeout = setTimeout(this.scrollMessage.bind(this), DELAY);
@@ -59,7 +69,11 @@ Vue.component("news-ticker", {
       const scrollDuration = (this.$refs.ticker.clientWidth + line.clientWidth) / SCROLL_SPEED;
 
       line.style["transition-duration"] = `${scrollDuration}s`;
-      line.style.transform = "translateX(-100%)";
+      if (this.currentNews && this.currentNews.id === "a244") {
+        line.style.transform = "translateX(0)";
+      } else {
+        line.style.transform = "translateX(-100%)";
+      }
 
       player.news.add(this.currentNews.id);
       if (player.news.size >= 50) Achievement(22).unlock();
@@ -67,13 +81,17 @@ Vue.component("news-ticker", {
       this.scrollTimeout = setTimeout(this.prepareNextMessage.bind(this), scrollDuration * 1000);
     },
     onLineClick() {
-      if (this.currentNews.id === "a130") {
+      if (this.currentNews.onClick !== undefined) {
         SecretAchievement(24).unlock();
+        const updatedText = this.currentNews.onClick();
+        if (updatedText !== undefined) {
+          this.$refs.line.innerHTML = updatedText;
+        }
       }
     }
   },
   template: `
-    <div ref="ticker" v-if="!isHidden" class="c-news-ticker">
+    <div ref="ticker" class="c-news-ticker">
       <span ref="line" class="c-news-line c-news-ticker__line" @click="onLineClick" />
     </div>
   `

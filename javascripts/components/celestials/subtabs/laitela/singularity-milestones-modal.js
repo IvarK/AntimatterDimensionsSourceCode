@@ -1,15 +1,20 @@
 "use strict";
 
 Vue.component("singularity-milestones-modal", {
-    data: () => ({
-        milestones: []
-    }),
-    methods: {
-        update() {
-            this.milestones = SingularityMilestones.sortedForCompletions;
-        }
-    },
-    template: `
+  data: () => ({
+    milestoneIds: []
+  }),
+  methods: {
+    update() {
+      this.milestoneIds = SingularityMilestones.sortedForCompletions.map(m => m.id);
+    }
+  },
+  computed: {
+    milestones() {
+      return this.milestoneIds.map(id => SingularityMilestone(id));
+    }
+  },
+  template: `
     <div>
       <modal-close-button @click="emitClose"/>
       <div class="l-singularity-milestone-modal-container">

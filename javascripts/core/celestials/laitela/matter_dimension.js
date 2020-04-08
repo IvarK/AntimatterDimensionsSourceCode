@@ -32,7 +32,7 @@ class MatterDimensionState {
     const perUpgrade = 0.92;
     const tierFactor = Math.pow(4, this._tier);
     return Math.clampMin(this.intervalPurchaseCap,
-      Math.pow(perUpgrade, this.dimension.intervalUpgrades) * tierFactor * 1000 * SingularityMilestone(7).effect);
+      Math.pow(perUpgrade, this.dimension.intervalUpgrades) * tierFactor * 1000 * SingularityMilestone(7).effectValue);
   }
 
   get powerDM() {
@@ -70,17 +70,17 @@ class MatterDimensionState {
 
   get intervalCost() {
     return Decimal.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades)
-      .times(this.adjustedStartingCost).times(INTERVAL_START_COST).times(SingularityMilestone(3).effect).floor();
+      .times(this.adjustedStartingCost).times(INTERVAL_START_COST).times(SingularityMilestone(3).effectValue).floor();
   }
 
   get powerDMCost() {
     return Decimal.pow(POWER_DM_COST_MULT, this.dimension.powerDMUpgrades)
-      .times(this.adjustedStartingCost).times(POWER_DM_START_COST).times(SingularityMilestone(3).effect).floor();
+      .times(this.adjustedStartingCost).times(POWER_DM_START_COST).times(SingularityMilestone(3).effectValue).floor();
   }
   
   get powerDECost() {
     return Decimal.pow(POWER_DE_COST_MULTS[this._tier], this.dimension.powerDEUpgrades)
-      .times(this.adjustedStartingCost).times(POWER_DE_START_COST).times(SingularityMilestone(3).effect).floor();
+      .times(this.adjustedStartingCost).times(POWER_DE_START_COST).times(SingularityMilestone(3).effectValue).floor();
   }
 
   get amount() {

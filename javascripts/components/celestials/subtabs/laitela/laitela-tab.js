@@ -17,7 +17,7 @@ Vue.component("laitela-tab", {
       annihilated: false,
       isRunning: 0,
       realityReward: 1,
-      nextMilestones: [],
+      milesStoneIds: [],
       singularities: 0,
       singularityCapIncreases: 0,
       canPerformSingularity: false,
@@ -42,7 +42,7 @@ Vue.component("laitela-tab", {
       this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.isRunning = Laitela.isRunning;
       this.realityReward = Laitela.realityReward;
-      this.nextMilestones = SingularityMilestones.nextFive;
+      this.milesStoneIds = SingularityMilestones.nextFive.map(m => m.id);
       this.singularities = player.celestials.laitela.singularities;
       this.singularityCapIncreases = player.celestials.laitela.singularityCapIncreases;
       this.canPerformSingularity = Singularity.capIsReached;
@@ -128,6 +128,9 @@ Vue.component("laitela-tab", {
   computed: {
     dimensions: () => MatterDimensionState.list,
     runUnlockThresholds: () => laitelaRunUnlockThresholds,
+    nextMilestones() {
+      return this.milesStoneIds.map(id => SingularityMilestone(id));
+    }
   },
   template:
     `<div class="l-laitela-celestial-tab">

@@ -1,25 +1,49 @@
 "use strict";
 
 Vue.component("singularity-milestone", {
-    props: ["milestone"],
-    methods: {
-        milestoneProgressStyles() {
-            if (this.milestone.isMaxed) return { background: "#38ca38", width: "100%" };
-            return { width: this.milestone.progressToNext };
-        }
+  props: ["milestone"],
+  data: () => ({
+    isMaxed: false,
+    progressToNext: "",
+    remainingSingularities: 0,
+    description: "",
+    effectDisplay: "",
+    isUnique: false,
+    nextEffectDisplay: "",
+    completions: 0,
+    limit: 0
+  }),
+  methods: {
+    update() {
+      this.isMaxed = this.milestone.isMaxed;
+      this.progressToNext = this.milestone.progressToNext;
+      this.remainingSingularities = this.milestone.remainingSingularities;
+      this.description = this.milestone.description;
+      this.effectDisplay = this.milestone.effectDisplay;
+      this.isUnique = this.milestone.isUnique;
+      this.nextEffectDisplay = this.milestone.nextEffectDisplay;
+      this.completions = this.milestone.completions;
+      this.limit = this.milestone.limit;
     },
-    template: `
+  },
+  computed: {
+    milestoneProgressStyles() {
+      if (this.isMaxed) return { background: "#38ca38", width: "100%" };
+      return { width: this.progressToNext };
+    }
+  },
+  template: `
     <div class="c-laitela-milestone">
-        <div class="c-laitela-milestone__progress" :style="milestoneProgressStyles()"></div>
-        <b v-if="!milestone.isMaxed"> In {{ format(milestone.remainingSingularities, 2, 0) }} Singularities</b>
-        <p> {{ milestone.description }}</p>
+        <div class="c-laitela-milestone__progress" :style="milestoneProgressStyles"></div>
+        <b v-if="!isMaxed"> In {{ format(remainingSingularities, 2, 0) }} Singularities</b>
+        <p> {{ description }}</p>
         <br>
         <b>
-            {{ milestone.effectDisplay }} 
-            <span v-if="!milestone.isUnique && !milestone.isMaxed">-> {{milestone.nextEffectDisplay}}</span>
+            {{ effectDisplay }} 
+            <span v-if="!isUnique && !isMaxed">-> {{ nextEffectDisplay }}</span>
         </b>
         <div class="c-laitela-milestone__completions">
-            {{ milestone.completions }}/{{milestone.limit === 0 ? "∞" : milestone.limit }} completions
+            {{ completions }}/{{ limit === 0 ? "∞" : limit }} completions
         </div>
     </div>
     `

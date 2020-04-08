@@ -5,7 +5,8 @@ class SingularityMilestoneState extends GameMechanicState {
     const effect = config.effect;
     const configCopy = deepmerge.all([{}, config]);
     configCopy.effect = () => effect(this.completions);
-    super(configCopy);
+    super(configCopy); 
+    this._rawEffect = effect;
   }
 
   get start() {
@@ -66,7 +67,7 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get nextEffectDisplay() {
-    return this.config.effectFormat(this.config.effect(this.completions + 1));
+    return this.config.effectFormat(this._rawEffect(this.completions + 1));
   }
 
   get description() {

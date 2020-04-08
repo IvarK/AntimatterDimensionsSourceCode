@@ -48,7 +48,7 @@ const Laitela = {
   },
   get matterExtraPurchaseFactor() {
     return (1 + Math.sqrt(Decimal.pLog10(this.celestial.maxMatter) / Math.log10(Number.MAX_VALUE))) * 
-      (1 + SingularityMilestone(1).effect);
+      (1 + SingularityMilestone(1).effectValue);
   },
   get realityReward() {
     return Math.clampMin(Math.pow(20, player.celestials.laitela.difficultyTier) *

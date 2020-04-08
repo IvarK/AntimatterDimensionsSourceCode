@@ -42,7 +42,6 @@ Vue.component("effarig-tab", {
       shardsGained: 0,
       runUnlocked: false,
       quote: "",
-      quoteIdx: 0,
       isRunning: false,
       vIsFlipped: false
     };
@@ -82,20 +81,13 @@ Vue.component("effarig-tab", {
       this.shardRarityBoost = Effarig.maxRarityBoost;
       this.shardsGained = Effarig.shardsGained;
       this.quote = Effarig.quote;
-      this.quoteIdx = player.celestials.effarig.quoteIdx;
       this.runUnlocked = EffarigUnlock.run.isUnlocked;
       this.isRunning = Effarig.isRunning;
       this.vIsFlipped = V.isFlipped;
     },
     startRun() {
-      if (this.isRunning) startRealityOver();
-      else Effarig.startRun();
-    },
-    nextQuote() {
-      Effarig.nextQuote();
-    },
-    hasNextQuote() {
-      return this.quoteIdx < Effarig.maxQuoteIdx;
+      resetReality();
+      Effarig.initializeRun();
     },
     createCursedGlyph() {
       if (Glyphs.freeInventorySpace === 0) {

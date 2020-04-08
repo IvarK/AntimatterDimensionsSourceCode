@@ -27,7 +27,7 @@ Vue.component("time-dim-row", {
         : "";
     },
     buttonContents() {
-      return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 0, 0)} EP`;
+      return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2)} EP`;
     }
   },
   watch: {
@@ -53,10 +53,10 @@ Vue.component("time-dim-row", {
       this.isAutobuyerOn = player.reality.tdbuyers[this.tier - 1];
     },
     buyTimeDimension() {
-      buyTimeDimension(this.tier);
+      buySingleTimeDimension(this.tier);
     },
     buyMaxTimeDimension() {
-      buyMaxTimeDimTier(this.tier);
+      buyMaxTimeDimension(this.tier);
     },
   },
   template:

@@ -83,7 +83,7 @@ Vue.component("reality-button", {
     handleClick() {
       if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {
         if (player.realities === 0) return;
-        startRealityOver();
+        resetReality();
       } else {
         requestManualReality();
       }
@@ -113,22 +113,17 @@ Vue.component("reality-button", {
       <template v-else>
         <div>Purchase the study in the eternity tab to unlock a new reality</div>
       </template>
-      <div class="infotooltiptext">
-        <template v-if="canReality">
-          <div>Other resources gained:</div>
-          <div>{{ppGained}} Perk {{ "point" | pluralize(ppGained) }}</div>
-          <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
-          <div v-for="celestialInfo in celestialRunText">
-            <span v-if="celestialInfo[0]">
-              {{ celestialInfo[1] }}
-              <br>
-              {{ celestialInfo[2] }}
-            </span>
-          </div>
-        </template>
-        <template v-else>
-          No resources gained
-        </template>
+      <div class="infotooltiptext" v-if="canReality">
+        <div>Other resources gained:</div>
+        <div>{{ppGained}} Perk {{ "point" | pluralize(ppGained) }}</div>
+        <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
+        <div v-for="celestialInfo in celestialRunText">
+          <span v-if="celestialInfo[0]">
+            {{ celestialInfo[1] }}
+            <br>
+            {{ celestialInfo[2] }}
+          </span>
+        </div>
       </div>
     </div>
   </button>

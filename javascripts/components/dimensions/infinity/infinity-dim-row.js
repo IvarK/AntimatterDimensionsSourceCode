@@ -38,14 +38,14 @@ Vue.component("infinity-dim-row", {
         : "";
     },
     costDisplay() {
-      return this.isCapped ? "Capped!" : `Cost: ${format(this.cost, 0, 0)} IP`;
+      return this.isCapped ? "Capped!" : `Cost: ${format(this.cost)} IP`;
     },
     hardcapPurchases() {
       return format(this.hardcap, 1, 1);
     },
     capTooltip() {
       return this.isCapped
-        ? `Cap reached at ${format(this.capIP, 0, 0)} IP`
+        ? `Cap reached at ${format(this.capIP)} IP`
         : `Purchased ${formatInt(this.purchases)} ${pluralize("time", this.purchases)}`;
     }
   },

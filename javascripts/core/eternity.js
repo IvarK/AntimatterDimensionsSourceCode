@@ -26,9 +26,12 @@ function giveEternityRewards(auto) {
     const challenge = EternityChallenge.current;
     challenge.addCompletion();
     if (Perk.studyECBulk.isBought) {
+      let completionCount = 0;
       while (!challenge.isFullyCompleted && challenge.canBeCompleted) {
         challenge.addCompletion();
+        completionCount++;
       }
+      if (Enslaved.isRunning && completionCount > 5) EnslavedProgress.ec1.giveProgress();
     }
     player.etercreq = 0;
     respecTimeStudies(auto);
@@ -111,12 +114,13 @@ function eternity(force, auto, specialConditions = {}) {
     // FIXME: Eternity count is a Decimal and also why is this submitted in so many places?
     // kong.submitStats('Eternities', player.eternities);
   } catch (err) {
-      console.log("Couldn't load Kongregate API")
+      // eslint-disable-next-line no-console
+      console.log("Couldn't load Kongregate API");
   }
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
-  applyRealityUpgrades();
+  applyRealityUpgradesAfterEternity();
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;
 
@@ -152,7 +156,6 @@ function initializeResourcesAfterEternity() {
   player.infMultCost = new Decimal(10);
   player.infinityPower = new Decimal(1);
   player.timeShards = new Decimal(0);
-  player.tickThreshold = new Decimal(1);
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.totalTickGained = 0;
@@ -173,14 +176,15 @@ function initializeResourcesAfterEternity() {
   player.postChallUnlocked = Achievement(133).isUnlocked ? 8 : 0;
 }
 
-function applyRealityUpgrades() {
+function applyRealityUpgradesAfterEternity(buySingleTD = false) {
   if (RealityUpgrade(13).isBought) {
-      if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
-      for (let i = 1; i < 9; i++) {
-          if (player.reality.tdbuyers[i - 1]) {
-              buyMaxTimeDimTier(i);
-          }
+    if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
+    for (let i = 1; i < 9; i++) {
+      if (player.reality.tdbuyers[i - 1]) {
+        if (buySingleTD) buySingleTimeDimension(i);
+        else buyMaxTimeDimension(i);
       }
+    }
   }
   if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
     for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);

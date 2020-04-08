@@ -27,7 +27,7 @@ Vue.component("glyphs-tab", {
       if (!Enslaved.isRunning) return;
       const haveBoost = Glyphs.activeList.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
       if (haveBoost) {
-        this.enslavedHint = "done... what little... I can...";
+        this.enslavedHint = "done... what little... I can... with glyphs...";
       }
     },
     toggleAutoRestartCelestial() {

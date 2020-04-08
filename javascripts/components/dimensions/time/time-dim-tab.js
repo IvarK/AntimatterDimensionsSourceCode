@@ -22,13 +22,13 @@ Vue.component("time-dim-tab", {
       this.multPerTickspeed = FreeTickspeed.multToNext;
       this.tickspeedSoftcap = FreeTickspeed.softcap;
       this.timeShards.copyFrom(player.timeShards);
-      this.upgradeThreshold.copyFrom(player.tickThreshold);
+      this.upgradeThreshold.copyFrom(FreeTickspeed.fromShards(player.timeShards).nextShards);
       this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerRealSecond);
       this.incomeType = EternityChallenge(7).isRunning ? "Eighth Infinity Dimensions" : "time shards";
       this.areAutobuyersUnlocked = RealityUpgrade(13).isBought;
     },
     maxAll() {
-      buyMaxTimeDimensions();
+      maxAllTimeDimensions();
     },
     toggleAllAutobuyers() {
       toggleAllTimeDims();

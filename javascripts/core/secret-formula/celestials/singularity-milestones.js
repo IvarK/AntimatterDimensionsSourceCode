@@ -14,7 +14,7 @@ GameDatabase.celestials.singularityMilestones = [
   {
     id: 2,
     start: 2,
-    repeat: 10,
+    repeat: 20,
     limit: 0,
     description: "Dark Matter production multiplier",
     effect: completions => Math.pow(1.5, completions),
@@ -64,12 +64,12 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 5,
     description: "Dark Matter Dimension interval decrease",
     effect: completions => Math.pow(0.75, completions),
-    effectFormat: x => formatX(x)
+    effectFormat: x => formatX(x, 2, 2)
   },
   {
     id: 8,
     start: 30,
-    repeat: 100,
+    repeat: 10,
     limit: 4,
     description: "Dark Matter Dimension autobuyers",
     effect: completions => completions,
@@ -99,9 +99,9 @@ GameDatabase.celestials.singularityMilestones = [
     start: 10,
     repeat: 0,
     limit: 1,
-    description: "Tesseracts boost Dark Energy and Dark Matter production",
-    effect: () => Math.pow(1.25, player.celestials.enslaved.tesseracts),
-    effectFormat: x => formatX(x)
+    description: "Tesseracts boost Dark Matter production",
+    effect: () => Math.pow(1.15, player.celestials.enslaved.tesseracts),
+    effectFormat: x => formatX(x, 2, 2)
   },
   {
     id: 12,
@@ -110,16 +110,16 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities improve the DT multiplier upgrade",
     effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 21,
-    effectFormat: x => formatX(x)
+    effectFormat: x => formatX(x, 2, 2)
   },
   {
     id: 13,
     start: 1000,
     repeat: 0,
     limit: 1,
-    description: "Highest glyph level boosts Dark Energy and Dark Matter production",
+    description: "Highest glyph level boosts Dark Energy production",
     effect: () => Math.max(1, (player.bestGlyphLevel - 10000) / 1000),
-    effectFormat: x => formatX(x)
+    effectFormat: x => formatX(x, 2, 2)
   },
   {
     id: 14,
@@ -128,16 +128,16 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities boost Alchemy Momentum buildup speed",
     effect: () => Math.pow(Math.log10(player.celestials.laitela.singularities), 3),
-    effectFormat: x => formatX(x)
+    effectFormat: x => formatX(x, 2, 2)
   },
   {
     id: 15,
     start: 1e5,
     repeat: 0,
     limit: 1,
-    description: "Annihilation boosts dark energy and dark matter production",
+    description: "Annihilation boosts Dark Energy and Dark Matter production",
     effect: () => Math.max(Math.log10(Laitela.darkMatterMult), 1),
-    effectFormat: x => formatX(x)
+    effectFormat: x => formatX(x, 2, 2)
   },
   {
     id: 16,
@@ -146,16 +146,16 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities boosts Annihilation modifier",
     effect: () => Math.log10(player.celestials.laitela.singularities),
-    effectFormat: x => formatX(x)
+    effectFormat: x => formatX(x, 2, 2)
   },
   {
     id: 17,
     start: 1e7,
     repeat: 0,
     limit: 1,
-    description: "Gamespeed boosts dark energy and dark matter production",
-    effect: () => Math.max(Math.log10(getGameSpeedupFactor()) / 10 - 20, 1),
-    effectFormat: x => formatX(x)
+    description: "Gamespeed boosts Dark Energy production",
+    effect: () => Math.max(Math.log10(getGameSpeedupFactor()) / 10 - 10, 1),
+    effectFormat: x => formatX(x, 2, 2)
   },
   {
     id: 18,
@@ -164,16 +164,16 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities boost glyph level",
     effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 20,
-    effectFormat: x => formatX(x)
+    effectFormat: x => formatX(x, 2, 2)
   },
   {
     id: 19,
     start: 1e9,
     repeat: 0,
     limit: 1,
-    description: "DT boosts dark energy and dark matter production",
-    effect: () => Math.pow(1.5, Decimal.log10(player.dilation.dilatedTime) / 1000),
-    effectFormat: x => formatX(x)
+    description: "DT boosts Dark Matter production",
+    effect: () => Math.pow(1.5, Decimal.log10(player.dilation.dilatedTime.plus(1)) / 1000),
+    effectFormat: x => formatX(x, 2, 2)
   },
   {
     id: 20,
@@ -182,6 +182,6 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities make tesseracts stronger",
     effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 10,
-    effectFormat: x => formatX(x)
+    effectFormat: x => formatX(x, 2, 2)
   }
 ];

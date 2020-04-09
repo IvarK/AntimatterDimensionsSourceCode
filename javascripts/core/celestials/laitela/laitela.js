@@ -47,11 +47,11 @@ const Laitela = {
     return "";
   },
   get matterExtraPurchaseFactor() {
-    return (1 + Math.sqrt(Decimal.pLog10(this.celestial.maxMatter) / Math.log10(Number.MAX_VALUE))) * 
+    return (1 + Math.pow(Decimal.pLog10(this.celestial.maxMatter) / Math.log10(Number.MAX_VALUE), 0.8)) * 
       (1 + SingularityMilestone(1).effectValue);
   },
   get realityReward() {
-    return Math.clampMin(Math.pow(20, player.celestials.laitela.difficultyTier) *
+    return Math.clampMin(Math.pow(8, player.celestials.laitela.difficultyTier) *
       (360 / player.celestials.laitela.fastestCompletion), 1);
   },
   // Note that entropy goes from 0 to 1, with 1 being completion
@@ -69,7 +69,8 @@ const Laitela = {
   },
   get darkMatterMultGain() {
 
-    return Decimal.pow(this.matter.dividedBy(1e20), 0.1).timesEffectsOf(SingularityMilestone(16)).toNumber();
+    return new Decimal(this.matter.dividedBy(1e20).log10())
+      .timesEffectsOf(SingularityMilestone(16)).toNumber();
   },
   get darkMatterMult() {
     return this.celestial.darkMatterMult;
@@ -82,8 +83,8 @@ const Laitela = {
     return (this.celestial.darkMatterMult + this.darkMatterMultGain) / this.celestial.darkMatterMult;
   },
   annihilate(force) {
-    if (!force && this.darkMatterMultGain === 0) return false;
-    laitela.autoAnnihilationTimer = 0;
+    if (!force && this.darkMatterMultGain <= 0) return false;
+    this.celestial.autoAnnihilationTimer = 0;
     this.celestial.darkMatterMult += this.darkMatterMultGain;
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (

@@ -8,6 +8,7 @@ Vue.component("matter-dimension-row", {
     return {
       tier: 0,
       interval: new Decimal(0),
+      baseInterval: new Decimal(0),
       powerDM: new Decimal(0),
       powerDE: new Decimal(0),
       intervalCost: 0,
@@ -43,6 +44,7 @@ Vue.component("matter-dimension-row", {
     update() {
       this.tier = this.dimension._tier;
       this.interval = this.dimension.interval;
+      this.baseInterval = this.dimension.baseInterval;
       this.powerDM.copyFrom(this.dimension.powerDM);
       this.powerDE = this.dimension.powerDE;
       this.intervalCost = this.dimension.intervalCost;
@@ -65,7 +67,7 @@ Vue.component("matter-dimension-row", {
         @click="dimension.buyInterval()" 
         class="o-matter-dimension-button" 
         :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> 
-        {{ format(interval, 2, 2) }}ms <span v-if="interval > intervalCap">
+        {{ format(interval, 2, 2) }}ms <span v-if="baseInterval > intervalCap">
         <br>Cost: {{ format(intervalCost, 2, 0) }}</span>
       </button>
       <button

@@ -473,7 +473,7 @@ let player = {
       singularityCapIncreases: 0,
       secondsSinceReachedSingularity: 0,
       singularityAutoCapLimit: 30,
-      singularityTime: 0,
+      singularityTime: 99999999999,
       secondsSinceCappedTime: 0,
       reachedSingularityCapLimit: false,
       autoAnnihilationSetting: 5,

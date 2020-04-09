@@ -131,9 +131,6 @@ const Singularity = {
     laitela.singularities += this.singularitiesGained;
     laitela.singularityTime = 0;
     laitela.secondsSinceReachedSingularity = 0;
-    if (laitela.singularityTime <= laitela.singularityAutoCapLimit && SingularityMilestone(10).isUnlocked) {
-      laitela.reachedSingularityCapLimit = true;
-    }
   },
 
   autobuyerLoop(diff) {
@@ -146,11 +143,19 @@ const Singularity = {
       MatterDimension(i).buyPowerDE();
     }
 
+    
+    if (laitela.singularityTime <= laitela.singularityAutoCapLimit && 
+        this.capIsReached && 
+        SingularityMilestone(10).isUnlocked) {
+      laitela.reachedSingularityCapLimit = true;
+    }
+
     if (laitela.reachedSingularityCapLimit && SingularityMilestone(10).isUnlocked) {
       laitela.secondsSinceCappedTime += diff / 1000;
       if (laitela.secondsSinceCappedTime >= SingularityMilestone(10).effectValue) {
         this.increaseCap();
         laitela.reachedSingularityCapLimit = false;
+        laitela.secondsSinceCappedTime = 0;
       }
     }
 

@@ -2194,112 +2194,104 @@ GameDatabase.news = [
   {
     id: "e1",
     get text() {
-      return `${format(1.1e108, 2, 2)} but normalized so the mantissa is greater than ` +
-        `${formatInt(100)} and with the mantissa and exponent both written using roman numerals`;
+      return "Sometimes you want to break things, sometimes you want to use broken things.";
     },
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
+    get unlocked() { return Enslaved.isRunning &&
+      player.thisRealityRealTime > TimeSpan.fromHours(2).totalMilliseconds; }
   },
   {
     id: "e2",
-    get text() {
-      return "Sometimes you want to break things, sometimes you want to use broken things.";
-    },
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
+    text: "Keep in mind, V, the Celestial of Achievements, is the next celestial.",
+    get unlocked() { return Enslaved.isRunning &&
+      player.thisRealityRealTime > TimeSpan.fromHours(2).totalMilliseconds; }
   },
   {
     id: "e3",
-    text: "Keep in mind, V, the Celestial of Achievements, is the next celestial.",
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
-  },
-  {
-    id: "e4",
     get text() {
       return "You can get Antimatter Galaxies the same way you can get more than " +
         `${formatInt(2)} Antimatter Galaxies without Infinity being broken.`;
     },
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
+    get unlocked() { return Enslaved.isRunning &&
+      player.thisRealityRealTime > TimeSpan.fromHours(2).totalMilliseconds; }
+  },
+  {
+    id: "e4",
+    get text() {
+      return "You can't get <span style='color: black; background: black;'>REDACTED</span>? You couldn't get those anyway, why do you care?";
+    },
+    get unlocked() { return Enslaved.isRunning &&
+      player.thisRealityRealTime > TimeSpan.fromHours(2).totalMilliseconds; }
   },
   {
     id: "e5",
     get text() {
-      return "You can't get [REDACTED]? You couldn't get those anyway, why do you care?";
-    },
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
-  },
-  {
-    id: "e6",
-    text: "The Zalgo text is a clue, not a puzzle.",
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
-  },
-  {
-    id: "e7",
-    text: "Enslaved strategy: Spend a really long time in your current eternity and " +
-      "get the huge effect on TDs.",
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000; }
-  },
-  {
-    id: "e8",
-    get text() {
-      return `..., ${formatPow(0.95, 2, 2)} at ${formatInt(13)}, ${formatPow(1, 2, 2)} at ` +
-        `${formatInt(14)}, ...`;
-    },
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
-  },
-  {
-    id: "e9",
-    get text() {
       return `No, you can't decrease [REDACTED] to ${formatX(1.8, 1, 1)}, but it's still ` +
         "worth acting as if you could.";
     },
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+    get unlocked() { return Enslaved.isRunning &&
+      player.thisRealityRealTime > TimeSpan.fromMinutes(15).totalMilliseconds; }
   },
   {
-    id: "e10",
+    id: "e6",
     get text() {
       return `Have you tried rotating your screen ${formatInt(14)} degrees counterclockwise?`;
     },
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+    get unlocked() { return Enslaved.isRunning &&
+      player.thisRealityRealTime > TimeSpan.fromMinutes(15).totalMilliseconds; }
   },
   {
-    id: "e11",
+    id: "e7",
     get text() {
       return `${format(new Decimal("1e201600"), 0, 0)} IP? I'm finally done!`;
     },
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+    get unlocked() { return Enslaved.isRunning &&
+      player.thisRealityRealTime > TimeSpan.fromMinutes(15).totalMilliseconds; }
+  },
+  {
+    id: "e8",
+    text: `Go there and stand away from me /
+    <span style='color: black; background: black;'>RE</span>
+    <span style='color: black; background: black;'>REDA</span>
+    <span style='color: black; background: black;'>RE</span>
+    <span style='color: black; background: black;'>RE</span>
+    <span style='color: black; background: black;'>REDAC</span>
+    <span style='color: black; background: black;'>RED</span>
+    <span style='color: black; background: black;'>REDACTED</span>`,
+    get unlocked() { return Enslaved.isRunning &&
+      player.thisRealityRealTime > TimeSpan.fromMinutes(15).totalMilliseconds; }
+  },
+  {
+    id: "e9",
+    text: "Social distancing with regard to Eternity is not encouraged.",
+    get unlocked() { return Enslaved.isRunning &&
+      player.thisRealityRealTime > TimeSpan.fromMinutes(15).totalMilliseconds; }
+  },
+  {
+    id: "e10",
+    text: "Dilation glyph TT generation has been replaced by a more all-at-once source.",
+    get unlocked() { return Enslaved.isRunning &&
+      player.thisRealityRealTime > TimeSpan.fromMinutes(15).totalMilliseconds; }
+  },
+  {
+    id: "e11",
+    text: "To get to Reality, release stored time in EC10. Oh, sorry, that one was for a " +
+      "different celestial.",
+    get unlocked() { return Enslaved.isRunning &&
+      player.thisRealityRealTime > TimeSpan.fromMinutes(15).totalMilliseconds; }
   },
   {
     id: "e12",
-    text: "Go there and stand away from me / [REDACTED]",
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
+    text: "Introducing a new feature: Reality Studies! Get in-game benefits for studying in real life!",
+    get unlocked() { return Enslaved.isRunning &&
+      player.thisRealityRealTime > TimeSpan.fromMinutes(15).totalMilliseconds; }
   },
   {
     id: "e13",
-    text: "Social distancing with regard to Eternity is not encouraged.",
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
-  },
-  {
-    id: "e14",
-    text: "Dilation glyph TT generation has been replaced by a more all-at-once source.",
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
-  },
-  {
-    id: "e15",
-    text: "To get to Reality, release stored time in EC10. Oh, sorry, that one was for a " +
-      "different celestial.",
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
-  },
-  {
-    id: "e16",
-    text: "Introducing a new feature: Reality Studies! Get in-game benefits for studying in real life!",
-    get unlocked() { return Enslaved.isRunning && player.thisRealityRealTime > 900 * 1000; }
-  },
-  {
-    id: "e17",
     get text() {
-      return `Did you know? While in The Enslaved Ones' Reality for more than ${formatInt(15)} ` +
-        "minutes, there's a small chance of a fairly-useless hint in a news ticker message! " +
-        `Over ${formatInt(2)} hours, the hints will get slightly more useful and less convoluted, ` +
-        "but remain fairly impossible to figure out!";
+      return "Did you know? While in The Enslaved Ones' Reality for more than " +
+        `${TimeSpan.fromMinutes(15)}, there's a small chance of a fairly-useless` +
+        `hint in a news ticker message! Over ${TimeSpan.fromHours(2)}, the hints ` +
+        "will get slightly more useful and less convoluted, but remain fairly impossible to figure out!";
     },
     get unlocked() { return Enslaved.isRunning; }
   },

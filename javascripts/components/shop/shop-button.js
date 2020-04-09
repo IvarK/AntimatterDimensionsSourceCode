@@ -8,7 +8,7 @@ Vue.component("shop-button", {
     return {
       currentMult: 0,
       nextMult: 0
-    }
+    };
   },
   methods: {
     update() {
@@ -20,11 +20,14 @@ Vue.component("shop-button", {
   `<div class="c-shop-button-container">
     <div class="o-shop-button-description">
       {{ purchase.description }}
-      <br>Currently {{ currentMult }}x, next: {{ nextMult }}x
+      <br>Currently {{ formatX(currentMult, 2, 0) }}, next: {{ formatX(nextMult, 2, 0) }}
     </div>
     <button 
       @click="purchase.purchase()" 
-      class="o-shop-button-button">Cost: {{ purchase.cost }} <img src="images/std_coin.png" height="40"></button>
+      class="o-shop-button-button">
+        Cost: {{ purchase.cost }}
+        <img src="images/std_coin.png" height="40">
+      </button>
   </div>
   `
 });

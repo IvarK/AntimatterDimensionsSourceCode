@@ -41,22 +41,26 @@ class ShopPurchaseState extends RebuyableMechanicState {
     return this.config.cost;
   }
 
-  get currentMult() {
+  get purchases() {
     return player.IAP[this.config.key];
   }
 
-  set currentMult(value) {
+  set purchases(value) {
     player.IAP[this.config.key] = value;
   }
 
+  get currentMult() {
+    return this.config.multiplier(this.purchases);
+  }
+
   get nextMult() {
-    return this.config.multFn(this.currentMult);
+    return this.config.multiplier(this.purchases + 1);
   }
 
   purchase() {
     if (!this.canBeBought) return false;
     player.IAP.spentSTD += this.cost;
-    this.currentMult = this.nextMult;
+    this.purchases++;
     GameUI.update();
     return true;
   }
@@ -65,10 +69,10 @@ class ShopPurchaseState extends RebuyableMechanicState {
 const ShopPurchase = (function() {
   const db = GameDatabase.shopPurchases;
   return {
-    dimMult: new ShopPurchaseState(db.dimMult),
-    IPMult: new ShopPurchaseState(db.IPMult),
-    EPMult: new ShopPurchaseState(db.EPMult),
-    allDimMult: new ShopPurchaseState(db.allDimMult)
+    dimPurchases: new ShopPurchaseState(db.dimPurchases),
+    IPPurchases: new ShopPurchaseState(db.IPPurchases),
+    EPPurchases: new ShopPurchaseState(db.EPPurchases),
+    allDimPurchases: new ShopPurchaseState(db.allDimPurchases)
   };
 }());
 
@@ -157,34 +161,32 @@ kong.migratePurchases = function() {
   } catch (e) { console.log(e); }
 
   function items(result) {
-      let ipmult = 0;
-      let dimmult = 1;
-      let epmult = 0;
-      let alldimmult = 1;
+      let ipPurchases = 0;
+      let dimPurchases = 0;
+      let epPurchases = 0;
+      let alldimPurchases = 0;
       for (const item of result.data) {
           if (item.identifier === "doublemult") {
             player.IAP.totalSTD += 30;
-            dimmult *= 2;
+            dimPurchases++;
           }
           if (item.identifier === "doubleip") {
             player.IAP.totalSTD += 40;
-            ipmult += 2;
+            ipPurchases++;
           }
           if (item.identifier === "tripleep") {
             player.IAP.totalSTD += 50;
-            epmult += 3;
+            epPurchases++;
           }
           if (item.identifier === "alldimboost") {
             player.IAP.totalSTD += 60;
-            alldimmult = (alldimmult < 32) ? alldimmult * 2 : alldimmult + 32;
+            alldimPurchases++;
           }
 
       }
-      player.IAP.dimMult = dimmult;
-      player.IAP.allDimMult = alldimmult;
-
-      if (ipmult > 0) player.IAP.IPMult = ipmult;
-
-      if (epmult > 0) player.IAP.EPMult = epmult;
+      player.IAP.dimPurchases = dimPurchases;
+      player.IAP.allDimPurchases = alldimPurchases;
+      player.IAP.IPPurchases = ipPurchases;
+      player.IAP.EPPurchases = epPurchases;
   }
 };

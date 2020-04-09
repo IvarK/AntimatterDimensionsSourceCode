@@ -6,8 +6,8 @@ function normalDimensionCommonMultiplier() {
   let multiplier = new Decimal(1);
 
   multiplier = multiplier.times(Achievements.power);
-  multiplier = multiplier.times(player.IAP.dimMult);
-  multiplier = multiplier.times(player.IAP.allDimMult);
+  multiplier = multiplier.times(ShopPurchase.dimPurchases.currentMult);
+  multiplier = multiplier.times(ShopPurchase.allDimPurchases.currentMult);
 
   if (!EternityChallenge(9).isRunning) {
     multiplier = multiplier.times(player.infinityPower.pow(getInfinityConversionRate()).max(1));

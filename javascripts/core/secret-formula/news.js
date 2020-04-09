@@ -2178,17 +2178,17 @@ GameDatabase.news = [
   {
     id: "j4",
     text: "Whale is bad at making smart purchases.",
-    get unlocked() { return player.IAP.IPMult > 500 && player.IAP.dimMult < 5e307; }
+    get unlocked() { return ShopPurchase.IPPurchases.currentMult > 500 && ShopPurchase.dimPurchases.currentMult < 5e307; }
   },
   {
     id: "j5",
     text: "Whale complains that the game broke.",
-    get unlocked() { return player.IAP.dimMult > 5e307; }
+    get unlocked() { return ShopPurchase.dimPurchases.currentMult > 5e307; }
   },
   {
     id: "j6",
     text: "Whale complains that their buying isn't doing anything.",
-    get unlocked() { return player.IAP.IPMult > 1.8e16; }
+    get unlocked() { return ShopPurchase.IPPurchases.currentMult > 1.8e16; }
   },
   {
     id: "r1",

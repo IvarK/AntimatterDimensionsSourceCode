@@ -50,7 +50,7 @@ function gainedInfinityPoints() {
 
 function totalEPMult() {
   return new Decimal(getAdjustedGlyphEffect("cursedEP"))
-    .times(player.IAP.EPMult)
+    .times(ShopPurchase.EPPurchases.currentMult)
     .timesEffectsOf(
       EternityUpgrade.epMult,
       TimeStudy(61),

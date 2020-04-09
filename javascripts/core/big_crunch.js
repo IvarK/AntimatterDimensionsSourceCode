@@ -206,7 +206,7 @@ function totalIPMult() {
     return new Decimal(1);
   }
   let ipMult = new Decimal(1)
-    .times(player.IAP.IPMult)
+    .times(ShopPurchase.IPPurchases.currentMult)
     .timesEffectsOf(
       TimeStudy(41),
       TimeStudy(51),

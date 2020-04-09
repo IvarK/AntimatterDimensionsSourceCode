@@ -34,7 +34,7 @@ Vue.component("shop-tab", {
       <shop-button v-for="purchase in purchases" :purchase="purchase" :key="purchase.key"></shop-button>
       <div class="c-shop-button-container">
         <div class="o-shop-button-description">
-          Get 6 hours worth of offline production. (Doesn't work for autobuyers)
+          Get 6 hours worth of offline production. (Autobuyers don't work full speed)
         </div>
         <button 
           @click="buyTimeSkip()" 

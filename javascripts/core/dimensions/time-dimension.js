@@ -80,7 +80,7 @@ function buyMaxTimeDimensions() {
 }
 
 function timeDimensionCommonMultiplier() {
-  let mult = new Decimal(player.IAP.allDimMult)
+  let mult = new Decimal(ShopPurchase.allDimPurchases.currentMult)
     .timesEffectsOf(
       Achievement(105),
       Achievement(128),

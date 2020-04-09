@@ -169,7 +169,10 @@ Vue.component("laitela-tab", {
       >Max all (DM)</primary-button>
       <div class="l-laitela-singularity-container">
         <div class="l-laitela-singularity-container--left">
-          <h2>You have {{ format(singularities, 2, 0) }} {{ "Singularity" | pluralize(singularities, "Singularities")}}</h2>
+          <h2>
+            You have {{ format(singularities, 2, 0) }} 
+            {{ "Singularity" | pluralize(singularities, "Singularities")}}
+          </h2>
           <button class="c-laitela-singularity" @click="doSingularity">
             <h2 v-if="canPerformSingularity">Create a Singularity</h2>
             <h2 v-else>Reach {{ format(singularityCap) }} Dark Energy to create a Singularity</h2>

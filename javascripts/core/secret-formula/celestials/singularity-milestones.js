@@ -75,7 +75,6 @@ GameDatabase.celestials.singularityMilestones = [
     effect: completions => completions,
     effectFormat: x => `Dimension ${x} autobuyer`
   },
-  // TODO:
   {
     id: 9,
     start: 40,

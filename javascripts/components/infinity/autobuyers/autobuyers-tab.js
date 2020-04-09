@@ -1,6 +1,14 @@
 "use strict";
 
 Vue.component("autobuyers-tab", {
+  data: () => ({
+    hasContinuum: false
+  }),
+  methods: {
+    update() {
+      this.hasContinuum = Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK);
+    }
+  },
   template:
     `<div class="l-autobuyers-tab">
       <autobuyer-toggles class="l-autobuyers-tab__toggles" />
@@ -14,15 +22,24 @@ Vue.component("autobuyers-tab", {
           <galaxy-autobuyer-box />
           <big-crunch-autobuyer-box />
         </div>
-        <div class="l-autobuyer-grid__row">
-          <dimension-autobuyer-box v-for="column in 3" :key="column" :tier="column"/>
+        <div v-if="!hasContinuum">
+          <div class="l-autobuyer-grid__row">
+            <dimension-autobuyer-box v-for="column in 3" :key="column" :tier="column"/>
+          </div>
+          <div class="l-autobuyer-grid__row">
+            <dimension-autobuyer-box v-for="column in 3" :key="column + 3" :tier="column + 3"/>
+          </div>
+          <div class="l-autobuyer-grid__row">
+            <dimension-autobuyer-box v-for="column in 2" :key="column + 6" :tier="column + 6"/>
+            <tickspeed-autobuyer-box />
+          </div>
         </div>
-        <div class="l-autobuyer-grid__row">
-          <dimension-autobuyer-box v-for="column in 3" :key="column + 3" :tier="column + 3"/>
-        </div>
-        <div class="l-autobuyer-grid__row">
-          <dimension-autobuyer-box v-for="column in 2" :key="column + 6" :tier="column + 6"/>
-          <tickspeed-autobuyer-box />
+        <div v-else>
+          <br>
+          Continuum makes Dimension and Tickspeed autobuyers obsolete, 
+          now you automatically have dimensions based on your antimatter.
+          <br>
+          <br>
         </div>
         <div class="l-autobuyer-grid__row">
           <sacrifice-autobuyer-box />

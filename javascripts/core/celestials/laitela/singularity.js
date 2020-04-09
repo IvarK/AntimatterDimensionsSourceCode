@@ -42,11 +42,10 @@ class SingularityMilestoneState extends GameMechanicState {
     if (this.isUnique) return this.isUnlocked ? 1 : 0;
     if (!this.isUnlocked) return 0;
 
-    return Math.floor(
-      1 +
-        Math.log(player.celestials.laitela.singularities) /
-          Math.log(this.repeat - Math.log(this.start) / Math.log(this.repeat))
-    );
+    return Math.min(Math.floor(
+      1 + Math.log(player.celestials.laitela.singularities) /
+        Math.log(this.repeat) - Math.log(this.start) / Math.log(this.repeat)
+    ), this.limit === 0 ? Infinity : this.limit);
   }
 
   get remainingSingularities() {
@@ -54,7 +53,7 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get progressToNext() {
-    return (player.celestials.laitela.singularities - this.previousGoal) / this.nextGoal;
+    return formatPercents((player.celestials.laitela.singularities - this.previousGoal) / this.nextGoal);
   }
 
   get isMaxed() {
@@ -102,7 +101,7 @@ const SingularityMilestones = {
 
 const Singularity = {
   get cap() {
-    return 1e4 * Math.pow(10, player.celestials.laitela.singularityCapIncreases);
+    return 2e3 * Math.pow(10, player.celestials.laitela.singularityCapIncreases);
   },
 
   get singularitiesGained() {
@@ -113,25 +112,63 @@ const Singularity = {
     return player.celestials.laitela.darkEnergy > this.cap;
   },
 
+  increaseCap() {
+    if (player.celestials.laitela.singularityCapIncreases >= 96) return;
+    player.celestials.laitela.singularityCapIncreases++;
+    player.celestials.laitela.secondsSinceReachedSingularity = 0;
+  },
+
+  decreaseCap() {
+    if (player.celestials.laitela.singularityCapIncreases === 0) return;
+    player.celestials.laitela.singularityCapIncreases--;
+  },
+
   perform() {
     if (!this.capIsReached) return;
+    const laitela = player.celestials.laitela;
 
-    player.celestials.laitela.darkEnergy = 0;
-    player.celestials.laitela.singularities += this.singularitiesGained;
+    laitela.darkEnergy = 0;
+    laitela.singularities += this.singularitiesGained;
+    laitela.singularityTime = 0;
+    laitela.secondsSinceReachedSingularity = 0;
+    if (laitela.singularityTime <= laitela.singularityAutoCapLimit && SingularityMilestone(10).isUnlocked) {
+      laitela.reachedSingularityCapLimit = true;
+    }
   },
 
   autobuyerLoop(diff) {
-    if (this.capIsReached) {
-      player.celestials.laitela.secondsSinceReachedSingularity += diff * 1000;
-      if (player.celestials.laitela.secondsSinceReachedSingularity >= SingularityMilestone(6).effectValue) {
-        this.perform();
-        player.celestials.laitela.secondsSinceReachedSingularity = 0;
-      }
+    const laitela = player.celestials.laitela;
+    laitela.singularityTime += diff / 1000;
 
-      for (let i = 1; i <= SingularityMilestone(8).effectValue; i++) {
-        MatterDimension(i).buyInterval();
-        MatterDimension(i).buyPowerDM();
-        MatterDimension(i).buyPowerDE();
+    for (let i = 1; i <= SingularityMilestone(8).effectValue; i++) {
+      MatterDimension(i).buyInterval();
+      MatterDimension(i).buyPowerDM();
+      MatterDimension(i).buyPowerDE();
+    }
+
+    if (laitela.reachedSingularityCapLimit && SingularityMilestone(10).isUnlocked) {
+      laitela.secondsSinceCappedTime += diff / 1000;
+      if (laitela.secondsSinceCappedTime >= SingularityMilestone(10).effectValue) {
+        this.increaseCap();
+        laitela.reachedSingularityCapLimit = false;
+      }
+    }
+
+    if (SingularityMilestone(9).isUnlocked) {
+      if (Laitela.darkMatterMultRatio >= laitela.autoAnnihilationSetting) {
+        laitela.autoAnnihilationTimer += diff / 1000;
+        if (laitela.autoAnnihilationTimer >= SingularityMilestone(9).effectValue) {
+          Laitela.annihilate();
+        }
+      } else {
+        laitela.autoAnnihilationTimer = 0;
+      }
+    }
+
+    if (this.capIsReached) {
+      laitela.secondsSinceReachedSingularity += diff / 1000;
+      if (laitela.secondsSinceReachedSingularity >= SingularityMilestone(6).effectValue) {
+        this.perform();
       }
     }
   }

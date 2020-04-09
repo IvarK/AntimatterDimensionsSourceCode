@@ -22,7 +22,12 @@ Vue.component("laitela-tab", {
       singularityCapIncreases: 0,
       canPerformSingularity: false,
       singularityCap: 0,
-      singularitiesGained: 0
+      singularitiesGained: 0,
+      autoCapInput: player.celestials.laitela.singularityAutoCapLimit,
+      autoCapUnlocked: false,
+      autoAnnihilationUnlocked: false,
+      darkMatterMultRatio: 0,
+      autoAnnihilationInput: player.celestials.laitela.autoAnnihilationSetting
     };
   },
   methods: {
@@ -48,6 +53,9 @@ Vue.component("laitela-tab", {
       this.canPerformSingularity = Singularity.capIsReached;
       this.singularityCap = Singularity.cap;
       this.singularitiesGained = Singularity.singularitiesGained;
+      this.autoCapUnlocked = SingularityMilestone(10).isUnlocked;
+      this.autoAnnihilationUnlocked = SingularityMilestone(9).isUnlocked;
+      this.darkMatterMultRatio = Laitela.darkMatterMultRatio;
     },
     startRun() {
       if (this.isRunning) startRealityOver();
@@ -81,13 +89,10 @@ Vue.component("laitela-tab", {
       Singularity.perform();
     },
     increaseCap() {
-      if (player.celestials.laitela.singularityCapIncreases >= 96) return;
-      player.celestials.laitela.singularityCapIncreases++;
-      player.celestials.laitela.secondsSinceReachedSingularity = 0;
+      Singularity.increaseCap();
     },
     decreaseCap() {
-      if (player.celestials.laitela.singularityCapIncreases === 0) return;
-      player.celestials.laitela.singularityCapIncreases--;
+      Singularity.decreaseCap();
     },
     // Greedily buys the cheapest available upgrade until none are affordable
     maxAll() {
@@ -124,6 +129,22 @@ Vue.component("laitela-tab", {
       Modal.h2p.show();
       ui.view.h2pActive = true;
     },
+    handleAutoCapInputChange() {
+      const float = parseFloat(this.autoCapInput);
+      if (isNaN(float)) {
+        this.autoCapInput = player.celestials.laitela.singularityAutoCapLimit;
+      } else {
+        player.celestials.laitela.singularityAutoCapLimit = float;
+      }
+    },
+    handleAutoAnnihilationInputChange() {
+      const float = parseFloat(this.autoAnnihilationInput);
+      if (isNaN(float)) {
+        this.autoAnnihilationInput = player.celestials.laitela.autoAnnihilationSetting;
+      } else {
+        player.celestials.laitela.autoAnnihilationSetting = float;
+      }
+    }
   },
   computed: {
     dimensions: () => MatterDimensionState.list,
@@ -144,7 +165,7 @@ Vue.component("laitela-tab", {
         Dark Matter Dimensions (based on 8th Dimensions).
       </div>
       <div v-if="annihilated">
-        You have a {{ format(darkMatterMult, 2, 2) }}x multiplier to Dark Energy production from prestige.
+        You have a {{ format(darkMatterMult, 2, 2) }}x multiplier to Dark Matter production from prestige.
       </div>
       <primary-button
         class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
@@ -166,6 +187,10 @@ Vue.component("laitela-tab", {
           <button class="c-laitela-singularity__cap-control" @click="decreaseCap">
             Decrease singularity cap.
           </button>
+          <div v-if="autoCapUnlocked">
+            <input type="text" v-model="autoCapInput" @change="handleAutoCapInputChange()"/><br>
+            <label>Seconds to reach singularity, after cap is raised automatically</label>
+          </div>
         </div>
       </div>
       <div class="l-laitela-mechanics-container">
@@ -210,15 +235,24 @@ Vue.component("laitela-tab", {
       </div>
       <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
         <h2>Annihilation</h2>
-        <p v-if="darkMatterMultGain >= 1">
+        <p v-if="annihilated">
+          Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 
+          but multiply the Dark Matter multiplier from prestige by
+          <b>{{ formatX(darkMatterMultRatio, 2, 2) }}</b> 
+        </p>
+        <p v-else-if="darkMatterMultGain >= 1">
           Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, but add
           <b>{{ format(darkMatterMultGain, 2, 2) }}</b> 
           to the Dark Matter multiplier from prestige.
         </p>
         <p v-else>
           Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy
-          (requires {{ format(1e30, 0, 0) }} Dark Matter).
+          (requires {{ format(1e20, 0, 0) }} Dark Matter).
         </p>
       </button>
+      <div v-if="autoAnnihilationUnlocked">
+        <input type="text" v-model="autoAnnihilationInput" @change="handleAutoAnnihilationInputChange()"/><br>
+        <label>Multiplier on the Dark Matter mult, after annihilation is done</label>
+      </div>
     </div>`
 });

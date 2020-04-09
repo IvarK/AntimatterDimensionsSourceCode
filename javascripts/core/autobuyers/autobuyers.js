@@ -10,7 +10,7 @@ const Autobuyers = (function() {
       Autobuyer.bigCrunch,
       Autobuyer.sacrifice,
       Autobuyer.eternity,
-      Autobuyer.reality
+      Autobuyer.reality,
     ]);
 
   return {

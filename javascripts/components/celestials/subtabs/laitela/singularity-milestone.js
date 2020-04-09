@@ -21,7 +21,7 @@ Vue.component("singularity-milestone", {
       this.description = this.milestone.description;
       this.effectDisplay = this.milestone.effectDisplay;
       this.isUnique = this.milestone.isUnique;
-      this.nextEffectDisplay = this.milestone.nextEffectDisplay;
+      if (!this.isUnique && !this.isMaxed) this.nextEffectDisplay = this.milestone.nextEffectDisplay;
       this.completions = this.milestone.completions;
       this.limit = this.milestone.limit;
     },

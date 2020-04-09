@@ -8,8 +8,8 @@ GameDatabase.celestials.singularityMilestones = [
     repeat: 5,
     limit: 0,
     description: "Small continuum bonus",
-    effect: completions => completions * 0.05,
-    effectFormat: x => `+${format(x, 2, 2)}`
+    effect: completions => completions * 0.01,
+    effectFormat: x => formatX(1 + x, 2, 2)
   },
   {
     id: 2,
@@ -85,7 +85,6 @@ GameDatabase.celestials.singularityMilestones = [
     effect: completions => [Infinity, 20, 15, 10, 5, 3, 2, 1, 0][completions],
     effectFormat: x => `${formatInt(x)}s`
   },
-  // TODO:
   {
     id: 10,
     start: 250,
@@ -138,7 +137,7 @@ GameDatabase.celestials.singularityMilestones = [
     repeat: 0,
     limit: 1,
     description: "Annihilation boosts dark energy and dark matter production",
-    effect: () => Math.log10(Laitela.darkMatterMult),
+    effect: () => Math.max(Math.log10(Laitela.darkMatterMult), 1),
     effectFormat: x => formatX(x)
   },
   {
@@ -174,7 +173,7 @@ GameDatabase.celestials.singularityMilestones = [
     repeat: 0,
     limit: 1,
     description: "DT boosts dark energy and dark matter production",
-    effect: () => Math.pow(2, Decimal.log10(player.dilation.dilatedTime) / 1000),
+    effect: () => Math.pow(1.5, Decimal.log10(player.dilation.dilatedTime) / 1000),
     effectFormat: x => formatX(x)
   },
   {

@@ -471,7 +471,13 @@ let player = {
       darkEnergy: 0,
       singularities: 0,
       singularityCapIncreases: 0,
-      secondsSinceReachedSingularity: 0
+      secondsSinceReachedSingularity: 0,
+      singularityAutoCapLimit: 30,
+      singularityTime: 0,
+      secondsSinceCappedTime: 0,
+      reachedSingularityCapLimit: false,
+      autoAnnihilationSetting: 5,
+      autoAnnihilationTimer: 0
     }
   },
   options: {

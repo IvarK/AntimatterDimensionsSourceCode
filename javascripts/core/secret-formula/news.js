@@ -2220,7 +2220,7 @@ GameDatabase.news = [
   {
     id: "e4",
     get text() {
-      return "You can't get <span style='color: black; background: black;'>REDACTED</span>?" +
+      return "You can't get <span style='color: black; background: black;'>REDACTED</span>? " +
         "You couldn't get those anyway, why do you care?";
     },
     get unlocked() {
@@ -2230,7 +2230,7 @@ GameDatabase.news = [
   {
     id: "e5",
     get text() {
-      return "No, you can't decrease <span style='color: black; background: black;'>REDACTED</span>" +
+      return "No, you can't decrease <span style='color: black; background: black;'>REDACTED</span> " +
         `to ${formatX(1.8, 1, 1)}, but it's still worth acting as if you could.`;
     },
     get unlocked() {

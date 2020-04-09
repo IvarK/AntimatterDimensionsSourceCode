@@ -12,7 +12,6 @@ Vue.component("laitela-tab", {
       showReset: false,
       darkMatterMult: 0,
       darkMatterMultGain: 0,
-      darkMatterMultFromDE: 0,
       darkEnergy: 0,
       annihilated: false,
       isRunning: 0,
@@ -43,7 +42,6 @@ Vue.component("laitela-tab", {
       this.darkMatterMultGain = Laitela.darkMatterMultGain;
       this.annihilated = player.celestials.laitela.annihilated;
       this.showReset = this.annihilated || this.darkMatterMultGain >= 1;
-      this.darkMatterMultFromDE = Laitela.darkMatterMultFromDE;
       this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.isRunning = Laitela.isRunning;
       this.realityReward = Laitela.realityReward;
@@ -160,9 +158,7 @@ Vue.component("laitela-tab", {
       <div class="o-laitela-matter-amount">Your maximum Dark Matter ever is {{ format(maxMatter.floor(), 2, 0) }},
       giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from continuum.</div>
       <div>
-        You have {{ format(darkEnergy, 2, 4) }} Dark Energy,
-        giving a {{ formatX(darkMatterMultFromDE, 2, 4) }} multiplier to production of Dark Matter and
-        Dark Matter Dimensions (based on 8th Dimensions).
+        <div class="o-laitela-matter-amount">You have {{ format(darkEnergy, 2, 4) }} Dark Energy.</div>
       </div>
       <div v-if="annihilated">
         You have a {{ format(darkMatterMult, 2, 2) }}x multiplier to Dark Matter production from prestige.

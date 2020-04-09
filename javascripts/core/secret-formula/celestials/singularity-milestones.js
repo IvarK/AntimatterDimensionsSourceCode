@@ -100,7 +100,7 @@ GameDatabase.celestials.singularityMilestones = [
     repeat: 0,
     limit: 1,
     description: "Tesseracts boost Dark Matter production",
-    effect: () => Math.pow(1.15, player.celestials.enslaved.tesseracts),
+    effect: () => Math.pow(1.20, player.celestials.enslaved.tesseracts),
     effectFormat: x => formatX(x, 2, 2)
   },
   {
@@ -172,7 +172,7 @@ GameDatabase.celestials.singularityMilestones = [
     repeat: 0,
     limit: 1,
     description: "DT boosts Dark Matter production",
-    effect: () => Math.pow(1.5, Decimal.log10(player.dilation.dilatedTime.plus(1)) / 1000),
+    effect: () => Math.pow(2.2, Decimal.log10(player.dilation.dilatedTime.plus(1)) / 1000),
     effectFormat: x => formatX(x, 2, 2)
   },
   {

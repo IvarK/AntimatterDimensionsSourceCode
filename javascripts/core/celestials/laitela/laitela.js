@@ -51,7 +51,7 @@ const Laitela = {
       (1 + SingularityMilestone(1).effectValue);
   },
   get realityReward() {
-    return Math.clampMin(Math.pow(8, player.celestials.laitela.difficultyTier) *
+    return Math.clampMin(Math.pow(10, player.celestials.laitela.difficultyTier) *
       (360 / player.celestials.laitela.fastestCompletion), 1);
   },
   // Note that entropy goes from 0 to 1, with 1 being completion
@@ -69,15 +69,11 @@ const Laitela = {
   },
   get darkMatterMultGain() {
 
-    return new Decimal(this.matter.dividedBy(1e20).log10())
+    return Decimal.pow(this.matter.dividedBy(1e20).plus(1).log10(), 1.5)
       .timesEffectsOf(SingularityMilestone(16)).toNumber();
   },
   get darkMatterMult() {
     return this.celestial.darkMatterMult;
-  },
-  get darkMatterMultFromDE() {
-    const power = Math.log10(1 + NormalDimension(8).totalAmount.toNumber() / 1e6) / 10;
-    return Decimal.pow(1 + this.celestial.darkEnergy, power);
   },
   get darkMatterMultRatio() {
     return (this.celestial.darkMatterMult + this.darkMatterMultGain) / this.celestial.darkMatterMult;

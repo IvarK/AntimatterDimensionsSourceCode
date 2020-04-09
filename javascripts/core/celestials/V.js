@@ -176,9 +176,13 @@ const V = {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.v.unlockBits & (1 << info.id));
   },
-  startRun() {
-    player.options.retryCelestial = false;
-    player.celestials.v.run = startRealityOver() || player.celestials.v.run;
+  initializeRun() {
+    clearCelestialRuns();
+    player.celestials.v.run = true;
+    player.minNegativeBlackHoleThisReality = player.blackHoleNegative;
+    if (!BlackHoles.areNegative) {
+      player.minNegativeBlackHoleThisReality = 1;
+    }
     Glyphs.updateGlyphCountForV(true);
   },
   updateTotalRunUnlocks() {
@@ -192,7 +196,6 @@ const V = {
   reset() {
     player.celestials.v = {
       unlockBits: 0,
-      quoteIdx: 0,
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       triadStudies: [],

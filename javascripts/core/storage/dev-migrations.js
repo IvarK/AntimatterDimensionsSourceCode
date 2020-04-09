@@ -613,6 +613,14 @@ GameStorage.devMigrations = {
       // (since conversion to Decimal hasn't happened yet).
       player.celestials.laitela.darkMatterMult = Number(player.celestials.laitela.higgs) + 1;
       delete player.celestials.laitela.anomalies;
+    },
+    player => {
+      delete player.achPow;
+      delete player.interval;
+      delete player.tickThreshold;
+      delete player.celestials.enslaved.maxQuotes;
+      delete player.celestials.v.quoteIdx;
+      delete player.celestials.ra.quoteIdx;
     }
   ],
 

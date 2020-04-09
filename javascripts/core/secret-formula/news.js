@@ -665,21 +665,10 @@ GameDatabase.news = [
   },
   {
     id: "a138",
-    text:
-      "The Holy trinity of Hevipelle, Antimatter, Infinity Points, and Eternity Points. These 3 resources let us " +
-      "access Hevi’s gift, Time Theorems. And with these Time Theorems, we reach out to Hevi, and call, “Hevi, bless " +
-      "us on this fine day!” And Hevi does. He give us the blessing of Time Studies. These Time Studies were " +
-      "blessings so powerful, Hevi restricted their power. He said, “ I will give you a choice of three paths” and " +
-      "then humanity chose. The short, cheap route of Normal Dimensions, giving instant gratification, the powerful " +
-      "choice of Infinity Dimensions, which were a fast, middle ground path, or Time Dimension, the long wait, and " +
-      "struggle, of humanity. Then, as humanity chose, a crack broke the earth. A serpent snaked out and sneered to " +
-      "humanity, “I will offer the powerful choice of a ninth dimension! I am Slabdrill, lord of all Unhevi. " +
-      "Humanity rose and said “ Begone Slabdrill! We want none of your foul Heresy!” And Hevi rose as well, and " +
-      "smote Slabdrill with his godlike power. As Slabdrill’s corpse fell into the earth, he cried “ this will not " +
-      "be the last of me! Hevi will betr-“ and he fell in the Abyss of matter. Hevi gifted humanity with Eternity " +
-      "upgrades, which boosted infinity dimensions and time dimensions. And Hevi gave humanity his greatest gift. " +
-      "EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 25 times. Use " +
-      "them wisely. And Humanity journeyed off with their new power, as Slabdrill’s words echoed in their heads."
+    get text() {
+      return `Check out Avari's newly built actually infinite infinity pool! With an area of ` +
+      `${format(Number.MAX_VALUE)} square megametres, you'll be sure to have infinite fun!`;
+    }
   },
   {
     id: "a139",
@@ -1170,26 +1159,7 @@ GameDatabase.news = [
   },
   {
     id: "a216",
-    text:
-      "Jake returned home from a long day at school. On his way home, he came across a curious little object. " +
-      "Transparent, but opaque. Shimmering, but gloomy. Heavy, but weightless. Jake brought the object to his " +
-      "mother. \"Mom, I found this thing on the sidewalk, can I keep it?\", Jake said. His mother turned around " +
-      "to view the object her son spoke of. Her pupils dilated, \"Jake, get that thing out of the house now!\" " +
-      "she yelled. Jake was confused, as it seemed quite the harmless thing to him. He asked \"But mom, wh-\", " +
-      "but before he could finish, the object appeared to undergo mitosis at what seemed like an impossible " +
-      "speed, and the second copy slipped out of his hand and onto the floor. His mother rushed over to " +
-      "him, and tried to grab the object, but it replicated again. \"Jake... No matter what happens, don't " +
-      "forget that I love you honey...\". She wrapped her arms around him. \"M-mom, what's happening?\" Jake asked, " +
-      "with a quivering fear in his voice. His mother cried a single tear. \"⭔⭚⦕꒜ brand Replicanti...\" she said, " +
-      "in a somber tone. The Replicanti continued to replicate at a faster and faster pace. The bottom third of the " +
-      "house was now full of Replicanti. Then the bottom half. Then the entire house. The mother and child were " +
-      "trapped between the walls of their home and the Replicanti. Doomed to live the short rest of their life in " +
-      "that inorganic coffin, as the air remaining in their lungs slowly depleted. But that wasn't the end; far from " +
-      "it. The Replicanti began to replicate outside of the house, flooding out in a shimmering landslide. A few " +
-      "neighbours noticed the strange objects, almost liquid-like in their appearance, and attempted to run. " +
-      "But the Replicanti continued to replicate, and accelerate. Soon the entire block was covered in them; was " +
-      "them. Shortly after, several blocks. The city. The surrounding cities. The country. All the countries. All " +
-      "the planet. All the solar system. All the galaxy. All."
+    text: "Testing... testing... testing... Oh goddamn I was in prod again."
   },
   {
     id: "a217",
@@ -1426,9 +1396,8 @@ GameDatabase.news = [
   {
     id: "a251",
     text:
-      "The debate on the singular form of Replicanti rages on. Team \"Replicantus\"'s base has been ransacked " +
-      "by Team \"Also Replicanti\", and many of their dimensions were stolen. Team \"The Plural Is Replicantis\" " +
-      "is still lying low after their plan to hack the dictionary failed."
+      "Hey! It's me, you from the future! I came back to give you this warning: Pay VERY close attention to the " +
+      "next news ticker. In my timeline we ignored it, and humanity has regretted it ever since."
   },
   {
     id: "a252",
@@ -1775,25 +1744,10 @@ GameDatabase.news = [
       "in the universe, including human beings, into either paperclips or machines which manufacture paperclips."
   },
   {
-    id: "a308",
-    text:
-      "Hey! It's me, you from the future! I came back to give you this warning: Pay VERY close attention to the " +
-      "next news ticker. In my timeline we ignored it, and humanity has regretted it ever since."
-  },
-  {
-    id: "a309",
-    get text() {
-      return `Check out Avari's newly built actually infinite infinity pool! With an area of ` +
-      `${format(Number.MAX_VALUE)} square megametres, you'll be sure to have infinite fun!`;
-    }
-  },
-  {
-    id: "a310",
-    text: "Testing... testing... testing... Oh goddamn I was in prod again."
-  },
-  {
     id: "l1",
-    text: "You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken",
+    get text() {
+      return `You just made your first ${formatInt(1e15)} antimatter. This one tastes like chicken.`;
+    },
     get unlocked() { return player.antimatter.e === 15; }
   },
   {
@@ -2151,6 +2105,57 @@ GameDatabase.news = [
     id: "l56",
     text: "Reality Challenges are the new 9th Dimension is the new orange.",
     get unlocked() { return PlayerProgress.realityUnlocked(); }
+  },
+  {
+    id: "l57",
+    text:
+      "Jake returned home from a long day at school. On his way home, he came across a curious little object. " +
+      "Transparent, but opaque. Shimmering, but gloomy. Heavy, but weightless. Jake brought the object to his " +
+      "mother. \"Mom, I found this thing on the sidewalk, can I keep it?\", Jake said. His mother turned around " +
+      "to view the object her son spoke of. Her pupils dilated, \"Jake, get that thing out of the house now!\" " +
+      "she yelled. Jake was confused, as it seemed quite the harmless thing to him. He asked \"But mom, wh-\", " +
+      "but before he could finish, the object appeared to undergo mitosis at what seemed like an impossible " +
+      "speed, and the second copy slipped out of his hand and onto the floor. His mother rushed over to " +
+      "him, and tried to grab the object, but it replicated again. \"Jake... No matter what happens, don't " +
+      "forget that I love you honey...\". She wrapped her arms around him. \"M-mom, what's happening?\" Jake asked, " +
+      "with a quivering fear in his voice. His mother cried a single tear. \"⭔⭚⦕꒜ brand Replicanti...\" she said, " +
+      "in a somber tone. The Replicanti continued to replicate at a faster and faster pace. The bottom third of the " +
+      "house was now full of Replicanti. Then the bottom half. Then the entire house. The mother and child were " +
+      "trapped between the walls of their home and the Replicanti. Doomed to live the short rest of their life in " +
+      "that inorganic coffin, as the air remaining in their lungs slowly depleted. But that wasn't the end; far from " +
+      "it. The Replicanti began to replicate outside of the house, flooding out in a shimmering landslide. A few " +
+      "neighbours noticed the strange objects, almost liquid-like in their appearance, and attempted to run. " +
+      "But the Replicanti continued to replicate, and accelerate. Soon the entire block was covered in them; was " +
+      "them. Shortly after, several blocks. The city. The surrounding cities. The country. All the countries. All " +
+      "the planet. All the solar system. All the galaxy. All.",
+      get unlocked() { return player.replicanti.unl; }
+  },
+  {
+    id: "l58",
+    text:
+      "The Holy trinity of Hevipelle, Antimatter, Infinity Points, and Eternity Points. These 3 resources let us " +
+      "access Hevi’s gift, Time Theorems. And with these Time Theorems, we reach out to Hevi, and call, “Hevi, bless " +
+      "us on this fine day!” And Hevi does. He give us the blessing of Time Studies. These Time Studies were " +
+      "blessings so powerful, Hevi restricted their power. He said, “ I will give you a choice of three paths” and " +
+      "then humanity chose. The short, cheap route of Normal Dimensions, giving instant gratification, the powerful " +
+      "choice of Infinity Dimensions, which were a fast, middle ground path, or Time Dimension, the long wait, and " +
+      "struggle, of humanity. Then, as humanity chose, a crack broke the earth. A serpent snaked out and sneered to " +
+      "humanity, “I will offer the powerful choice of a ninth dimension! I am Slabdrill, lord of all Unhevi. " +
+      "Humanity rose and said “ Begone Slabdrill! We want none of your foul Heresy!” And Hevi rose as well, and " +
+      "smote Slabdrill with his godlike power. As Slabdrill’s corpse fell into the earth, he cried “ this will not " +
+      "be the last of me! Hevi will betr-“ and he fell in the Abyss of matter. Hevi gifted humanity with Eternity " +
+      "upgrades, which boosted infinity dimensions and time dimensions. And Hevi gave humanity his greatest gift. " +
+      "EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 25 times. Use " +
+      "them wisely. And Humanity journeyed off with their new power, as Slabdrill’s words echoed in their heads.",
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l59",
+    text:
+      "The debate on the singular form of Replicanti rages on. Team \"Replicantus\"'s base has been ransacked " +
+      "by Team \"Also Replicanti\", and many of their dimensions were stolen. Team \"The Plural Is Replicantis\" " +
+      "is still lying low after their plan to hack the dictionary failed.",
+      get unlocked() { return player.replicanti.unl; }
   },
   {
     id: "j1",

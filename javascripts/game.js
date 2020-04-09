@@ -543,10 +543,8 @@ function gameLoop(diff, options = {}) {
   InfinityDimensions.tick(diff);
   NormalDimensions.tick(diff);
 
-  const freeTickspeed = FreeTickspeed.fromShards(player.timeShards);
-  const gain = Math.max(0, freeTickspeed.newAmount - player.totalTickGained);
+  const gain = Math.clampMin(FreeTickspeed.fromShards(player.timeShards).newAmount - player.totalTickGained, 0);
   player.totalTickGained += gain;
-  player.tickThreshold = freeTickspeed.nextShards;
 
   const currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinityRealTime.totalMinutes);
   if (currentIPmin.gt(player.bestIPminThisInfinity) && canCrunch()) player.bestIPminThisInfinity = currentIPmin;
@@ -594,9 +592,10 @@ function gameLoop(diff, options = {}) {
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
-  if (Enslaved.isRunning && player.thisRealityRealTime > 2 * 3600 * 1000 && !Enslaved.ec6c10timeHint) {
-    Enslaved.ec6c10timeHint = true;
-    Modal.message.show("... you need ... to look harder ...");
+  if (Enslaved.isRunning && player.thisRealityRealTime > 4 * 3600 * 1000 &&
+    !EnslavedProgress.hintsUnlocked.hasProgress) {
+      EnslavedProgress.hintsUnlocked.giveProgress();
+      Enslaved.quotes.show(Enslaved.quotes.HINT_UNLOCK);
   }
 
   laitelaRealityTick(realDiff);
@@ -825,16 +824,6 @@ function autoBuyInfDims() {
   }
 }
 
-function autoBuyTimeDims() {
-  if (RealityUpgrade(13).isBought) {
-    for (let i = 1; i < 9; i++) {
-      if (player.reality.tdbuyers[i - 1]) {
-        buyMaxTimeDimTier(i)
-      }
-    }
-  }
-}
-
 function autoBuyExtraTimeDims() {
   if (TimeDimension(8).bought === 0 && Perk.autounlockTD.isBought) {
     for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
@@ -855,7 +844,9 @@ function slowerAutobuyers(realDiff) {
   const timeDimPeriod = 1000;
   if (player.auto.timeDimTimer >= timeDimPeriod) {
     player.auto.timeDimTimer = Math.min(player.auto.timeDimTimer - timeDimPeriod, timeDimPeriod);
-    autoBuyTimeDims();
+    if (RealityUpgrade(13).isBought) {
+      maxAllTimeDimensions(true);
+    }
   }
   player.auto.repUpgradeTimer += ampDiff;
   const repUpgradePeriod = 1000 * Perk.autobuyerFasterReplicanti.effectOrDefault(1);

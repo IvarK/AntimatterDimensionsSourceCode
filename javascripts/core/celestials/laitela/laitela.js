@@ -28,9 +28,9 @@ const Laitela = {
     player.celestials.laitela.unlockBits |= (1 << info.id);
     return true;
   },
-  startRun() {
-    player.options.retryCelestial = false;
-    this.celestial.run = startRealityOver() || this.celestial.run;
+  initializeRun() {
+    clearCelestialRuns();
+    this.celestial.run = true;
   },
   get isRunning() {
     return this.celestial.run;

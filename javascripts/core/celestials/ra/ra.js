@@ -163,7 +163,6 @@ const Ra = {
     data.unlockBits = 0;
     data.run = false;
     data.charged = new Set();
-    data.quoteIdx = 0;
     data.disCharge = false;
     data.peakGamespeed = 1;
     for (const pet of Ra.pets.all) pet.reset();
@@ -228,9 +227,9 @@ const Ra = {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.ra.unlockBits & (1 << info.id));
   },
-  startRun() {
-    player.options.retryCelestial = false;
-    player.celestials.ra.run = startRealityOver() || player.celestials.ra.run;
+  initializeRun() {
+    clearCelestialRuns();
+    player.celestials.ra.run = true;
   },
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;

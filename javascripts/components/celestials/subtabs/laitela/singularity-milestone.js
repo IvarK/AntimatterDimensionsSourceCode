@@ -35,7 +35,10 @@ Vue.component("singularity-milestone", {
   template: `
     <div class="c-laitela-milestone">
         <div class="c-laitela-milestone__progress" :style="milestoneProgressStyles"></div>
-        <b v-if="!isMaxed"> In {{ format(remainingSingularities, 2, 0) }} Singularities</b>
+        <b v-if="!isMaxed">
+          In {{ format(remainingSingularities, 2, 0) }} 
+          {{ "Singularity" | pluralize(remainingSingularities, "Singularities")}}
+        </b>
         <p> {{ description }}</p>
         <br>
         <b>

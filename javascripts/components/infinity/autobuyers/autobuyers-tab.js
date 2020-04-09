@@ -6,7 +6,7 @@ Vue.component("autobuyers-tab", {
   }),
   methods: {
     update() {
-      this.hasContinuum = Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK);
+      this.hasContinuum = Laitela.continuumActive;
     }
   },
   template:

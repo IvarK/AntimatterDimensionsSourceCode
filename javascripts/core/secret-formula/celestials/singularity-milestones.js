@@ -53,7 +53,7 @@ GameDatabase.celestials.singularityMilestones = [
     start: 8,
     repeat: 8,
     limit: 8,
-    description: "Automatically creates a singularity after reaching a cap (with a delay)",
+    description: "Automatically creates a singularity after reaching the cap (with a delay)",
     effect: completions => [Infinity, 20, 15, 10, 5, 3, 2, 1, 0][completions],
     effectFormat: x => `${formatInt(x)}s`
   },
@@ -73,7 +73,7 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 4,
     description: "Dark Matter Dimension autobuyers",
     effect: completions => completions,
-    effectFormat: x => `Dimension ${x} autobuyer`
+    effectFormat: x => ((x === 0) ? "No autobuyers" : `Dimension ${x} autobuyer`)
   },
   {
     id: 9,
@@ -89,7 +89,7 @@ GameDatabase.celestials.singularityMilestones = [
     start: 250,
     repeat: 10,
     limit: 8,
-    description: "Auto cap raiser (with a delay)",
+    description: "Auto Singularity cap raiser (with a delay)",
     effect: completions => [Infinity, 20, 15, 10, 5, 3, 2, 1, 0][completions],
     effectFormat: x => `${formatInt(x)}s`
   },

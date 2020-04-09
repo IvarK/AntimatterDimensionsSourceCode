@@ -305,8 +305,8 @@ const InfinityDimensions = {
   get capIncrease() {
     const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease *
       (1 + AlchemyResource.boundless.effectValue);
-    const mileStoneEffect = SingularityMilestone(20).isUnlocked ? SingularityMilestone(20).effectValue : 1;
-    return Math.floor(enslavedBoost * mileStoneEffect);
+    const milestoneEffect = SingularityMilestone(20).isUnlocked ? SingularityMilestone(20).effectValue : 1;
+    return Math.floor(enslavedBoost * milestoneEffect);
   },
 
   get totalDimCap() {

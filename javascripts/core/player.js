@@ -523,7 +523,6 @@ let player = {
       glyphUndo: true,
     }
   },
-<<<<<<< HEAD
   IAP: {
     totalSTD: 0,
     spentSTD: 0,
@@ -533,8 +532,6 @@ let player = {
     allDimMult: 1,
     allDimMultPurchased: 0
   }
-=======
->>>>>>> 95fec7610be2254e036cf04ad369393e3bb4b379
 };
 
 const Player = {

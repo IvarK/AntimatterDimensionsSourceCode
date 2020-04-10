@@ -183,8 +183,6 @@ body.t-normal {
 
 .game-container {
   width: calc(100% - 20rem);
-  overflow-x: hidden;
-  overflow-y: hidden;
   margin-left: 20rem;
 }
 

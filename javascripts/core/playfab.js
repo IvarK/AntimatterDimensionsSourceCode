@@ -178,8 +178,9 @@ function newestSave(first, second) {
       eternities: typeof save.eternities === "number" ? new Decimal(save.eternities) : save.eternities
     };
   }
-  const firstInfo = getSaveInfo(first);
-  const secondInfo = getSaveInfo(second);
+  const firstInfo = getSaveInfo({...first});
+  const secondInfo = getSaveInfo({...second});
+  debugger
   if (firstInfo.eternities.eq(secondInfo.eternities) && firstInfo.infinitied.eq(secondInfo.infinitied)) {
     return undefined;
   }

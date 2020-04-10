@@ -80,7 +80,7 @@ function maxAllTimeDimensions(checkAutobuyers = false) {
 }
 
 function timeDimensionCommonMultiplier() {
-  let mult = new Decimal(kongAllDimMult)
+  let mult = new Decimal(ShopPurchase.allDimPurchases.currentMult)
     .timesEffectsOf(
       Achievement(105),
       Achievement(128),

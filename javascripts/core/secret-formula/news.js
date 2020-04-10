@@ -3,6 +3,7 @@
 // A = always there
 // L = locked
 // J = joke/unreasonable condition
+// E = enslaved hints (practically but not technically missable)
 // R = random chance condition
 // P = patreon
 GameDatabase.news = [
@@ -2178,22 +2179,141 @@ GameDatabase.news = [
   {
     id: "j3",
     text: "Person with money likes to support this game.",
-    get unlocked() { return kongDimMult > 1 || kongIPMult > 1; }
+    get unlocked() { return player.IAP.totalSTD > 1; }
   },
   {
     id: "j4",
     text: "Whale is bad at making smart purchases.",
-    get unlocked() { return kongIPMult > 500 && kongDimMult < 5e307; }
+    get unlocked() { 
+      return ShopPurchase.IPPurchases.currentMult > 500 && 
+      ShopPurchase.dimPurchases.currentMult < 5e307; 
+    }
   },
   {
     id: "j5",
     text: "Whale complains that the game broke.",
-    get unlocked() { return kongDimMult > 5e307; }
+    get unlocked() { return ShopPurchase.dimPurchases.currentMult > 5e307; }
   },
   {
     id: "j6",
     text: "Whale complains that their buying isn't doing anything.",
-    get unlocked() { return kongIPMult > 1.8e16; }
+    get unlocked() { return ShopPurchase.IPPurchases.currentMult > 1.8e16; }
+  },
+  {
+    id: "e1",
+    get text() {
+      return "Sometimes you want to break things, sometimes you want to use broken things.";
+    },
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
+    }
+  },
+  {
+    id: "e2",
+    text: "Keep in mind, V, the Celestial of Achievements, is the next celestial.",
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
+    }
+  },
+  {
+    id: "e3",
+    get text() {
+      return "You can get Antimatter Galaxies the same way you can get more than " +
+        `${formatInt(2)} Antimatter Galaxies without Infinity being broken.`;
+    },
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
+    }
+  },
+  {
+    id: "e4",
+    get text() {
+      return "You can't get <span style='color: black; background: black;'>REDACTED</span>? " +
+        "You couldn't get those anyway, why do you care?";
+    },
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
+    }
+  },
+  {
+    id: "e5",
+    get text() {
+      return "No, you can't decrease <span style='color: black; background: black;'>REDACTED</span> " +
+        `to ${formatX(1.8, 1, 1)}, but it's still worth acting as if you could.`;
+    },
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e6",
+    get text() {
+      return `Have you tried rotating your screen ${formatInt(14)} degrees counterclockwise?`;
+    },
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e7",
+    get text() {
+      return `${format(new Decimal("1e201600"), 0, 0)} IP? I'm finally done!`;
+    },
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e8",
+    text: `Go there and stand away from me /
+    <span style='color: black; background: black;'>RE</span>
+    <span style='color: black; background: black;'>REDA</span>
+    <span style='color: black; background: black;'>RE</span>
+    <span style='color: black; background: black;'>RE</span>
+    <span style='color: black; background: black;'>REDAC</span>
+    <span style='color: black; background: black;'>RED</span>
+    <span style='color: black; background: black;'>REDACTED</span>`,
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e9",
+    text: "Social distancing with regard to Eternity is not encouraged.",
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e10",
+    text: "Dilation glyph TT generation has been replaced by a more all-at-once source.",
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e11",
+    text: "To get to Reality, release stored time in EC10. Oh, sorry, that one was for a different celestial.",
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e12",
+    text: "Introducing a new feature: Reality Studies! Get in-game benefits for studying in real life!",
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e13",
+    get text() {
+      return "Did you know? While in The Enslaved Ones' Reality for more than " +
+        `${TimeSpan.fromMinutes(15)}, there's a small chance of a fairly-useless` +
+        `hint in a news ticker message! Over ${TimeSpan.fromHours(2)}, the hints ` +
+        "will get slightly more useful and less convoluted, but remain fairly impossible to figure out!";
+    },
+    get unlocked() { return Enslaved.isRunning; }
   },
   {
     id: "r1",

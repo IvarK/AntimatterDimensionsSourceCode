@@ -295,10 +295,10 @@ let player = {
     rebuyablesAuto: [false, false, false, false, false],
     upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
-              false, false, false, false, false,
-              false, false, false, false, false,
-              false, false, false, false, false,
-              false, false, false, false, false,
+              false, false, false, false, false, 
+              false, false, false, false, false, 
+              false, false, false, false, false, 
+              false, false, false, false, false, 
               false, false, false, false, false],
     upgReqChecks: [false],
     perks: new Set(),
@@ -529,6 +529,14 @@ let player = {
       glyphUndo: true,
     }
   },
+  IAP: {
+    totalSTD: 0,
+    spentSTD: 0,
+    IPPurchases: 0,
+    EPPurchases: 0,
+    dimPurchases: 0,
+    allDimPurchases: 0
+  }
 };
 
 const Player = {

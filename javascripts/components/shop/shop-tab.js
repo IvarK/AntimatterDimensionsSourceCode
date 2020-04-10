@@ -16,6 +16,9 @@ Vue.component("shop-tab", {
     },
     buyTimeSkip() {
       kong.purchaseTimeSkip(10);
+    },
+    buyLongerTimeSkip() {
+      kong.purchaseLongerTimeSkip(20);
     }
   },
   computed: {
@@ -39,6 +42,14 @@ Vue.component("shop-tab", {
         <button 
           @click="buyTimeSkip()" 
           class="o-shop-button-button">Cost: 10 <img src="images/std_coin.png" height="40"></button>
+      </div>
+      <div class="c-shop-button-container">
+        <div class="o-shop-button-description">
+          Get 24 hours worth of offline production. (Autobuyers don't work full speed)
+        </div>
+        <button 
+          @click="buyLongerTimeSkip()" 
+          class="o-shop-button-button">Cost: 20 <img src="images/std_coin.png" height="40"></button>
       </div>
     </div>
     <span style="font-size: 12px"><b>

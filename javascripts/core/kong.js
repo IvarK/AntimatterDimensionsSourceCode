@@ -88,7 +88,13 @@ kong.submitAchievements = function() {
 kong.purchaseTimeSkip = function(cost) {
   if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
   player.IAP.spentSTD += cost;
-  simulateTime(21600);
+  simulateTime(3600 * 6);
+};
+
+kong.purchaseLongerTimeSkip = function(cost) {
+  if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
+  player.IAP.spentSTD += cost;
+  simulateTime(3600 * 24);
 };
 
 kong.buyMoreSTD = function(STD, kreds) {

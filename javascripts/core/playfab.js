@@ -174,19 +174,19 @@ function newestSave(first, second) {
   function getSaveInfo(save) {
     if (!save) return { infinitied: new Decimal(0), eternities: new Decimal(0) };
     return {
-      infinities: typeof save.infinitied === "number" ? new Decimal(save.infinitied) : save.infinitied,
+      infinitied: typeof save.infinitied === "number" ? new Decimal(save.infinitied) : save.infinitied,
       eternities: typeof save.eternities === "number" ? new Decimal(save.eternities) : save.eternities
     };
   }
   const firstInfo = getSaveInfo(first);
   const secondInfo = getSaveInfo(second);
-  if (firstInfo.eternities.eq(secondInfo.eternities) && firstInfo.infinities.eq(secondInfo.infinities)) {
+  if (firstInfo.eternities.eq(secondInfo.eternities) && firstInfo.infinitied.eq(secondInfo.infinitied)) {
     return undefined;
   }
   if (firstInfo.eternities.gt(secondInfo.eternities)) {
     return first;
   }
-  if (firstInfo.infinities.gt(secondInfo.infinities)) {
+  if (firstInfo.infinitied.gt(secondInfo.infinitied)) {
     return first;
   }
   return second;

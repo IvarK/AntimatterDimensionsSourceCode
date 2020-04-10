@@ -43,6 +43,7 @@ Modal.miscellaneousOptions = new Modal("modal-miscellaneous-options");
 Modal.loadGame = new Modal("modal-load-game");
 Modal.uiChoice = new Modal("modal-ui-choice");
 Modal.import = new Modal("modal-import");
+Modal.shop = new Modal("modal-std-store");
 Modal.importTree = new Modal("modal-import-tree");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");

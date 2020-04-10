@@ -5,11 +5,6 @@ if (GlobalErrorHandler.handled) {
 }
 GlobalErrorHandler.cleanStart = true;
 
-const kongIPMult = 1;
-const kongDimMult = 1;
-const kongAllDimMult = 1;
-const kongEPMult = 1;
-
 function playerInfinityUpgradesOnEternity() {
   if (!EternityMilestone.keepInfinityUpgrades.isReached) player.infinityUpgrades.clear();
   else if (!EternityMilestone.keepBreakUpgrades.isReached) {
@@ -55,7 +50,7 @@ function gainedInfinityPoints() {
 
 function totalEPMult() {
   return new Decimal(getAdjustedGlyphEffect("cursedEP"))
-    .times(kongEPMult)
+    .times(ShopPurchase.EPPurchases.currentMult)
     .timesEffectsOf(
       EternityUpgrade.epMult,
       TimeStudy(61),

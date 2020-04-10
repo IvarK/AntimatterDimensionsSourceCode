@@ -2179,22 +2179,25 @@ GameDatabase.news = [
   {
     id: "j3",
     text: "Person with money likes to support this game.",
-    get unlocked() { return kongDimMult > 1 || kongIPMult > 1; }
+    get unlocked() { return player.IAP.totalSTD > 1; }
   },
   {
     id: "j4",
     text: "Whale is bad at making smart purchases.",
-    get unlocked() { return kongIPMult > 500 && kongDimMult < 5e307; }
+    get unlocked() { 
+      return ShopPurchase.IPPurchases.currentMult > 500 && 
+      ShopPurchase.dimPurchases.currentMult < 5e307; 
+    }
   },
   {
     id: "j5",
     text: "Whale complains that the game broke.",
-    get unlocked() { return kongDimMult > 5e307; }
+    get unlocked() { return ShopPurchase.dimPurchases.currentMult > 5e307; }
   },
   {
     id: "j6",
     text: "Whale complains that their buying isn't doing anything.",
-    get unlocked() { return kongIPMult > 1.8e16; }
+    get unlocked() { return ShopPurchase.IPPurchases.currentMult > 1.8e16; }
   },
   {
     id: "e1",

@@ -859,8 +859,8 @@ br {
 }
 
 #realityanimbg {
-    min-width: 100%;
-    min-height: 100%;
+    min-width: 100%; 
+    min-height: 100%; 
     width: auto;
     height: auto;
     position: absolute;
@@ -4644,6 +4644,59 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion l-modal-options*/
+
+.l-modal-store-content {
+  display: flex;
+  align-items: center;
+}
+
+.l-modal-store-content > img {
+  height: 25rem;
+}
+
+.c-modal-store-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.c-modal-store-btn-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.o-modal-store-label {
+  margin-right: 1.5rem;
+  font-family: Typewriter;
+  font-size: 2rem;
+  min-width: 10rem;
+  text-align: right;
+}
+
+.o-modal-store-btn {
+  padding: 0.8rem;
+  border: none;
+  background: burlywood;
+  border-radius: .5rem;
+  font-family: Typewriter;
+  font-size: 2rem;
+  cursor: pointer;
+  transition-duration: 0.12s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 12rem;
+}
+
+.o-modal-store-btn:hover {
+  background: rgb(184, 146, 97);
+}
+
+.o-modal-store-btn img {
+  height: 4rem;
+  margin-left: 1rem;
+}
 
 /*#region c-modal-shortcuts*/
 

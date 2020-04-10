@@ -196,15 +196,15 @@ function playFabLoadCheck() {
   loadFromPlayFab(cloudRoot => {
     GameUI.notify.info("Loaded from cloud");
 
-    function overwriteLocalSave() {
-        GameStorage.overwriteSlot(saveId, cloudSave);
-    }
-
     for (let i = 0; i < 3; i++) {
       const saveId = i;
       const cloudSave = cloudRoot.saves[saveId];
       const localSave = GameStorage.saves[saveId];
       const newestSaveCheck = newestSave(cloudSave, localSave);
+
+      const overwriteLocalSave = () => {
+        GameStorage.overwriteSlot(saveId, cloudSave);
+      };
 
       if (newestSaveCheck === localSave) {
           Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteLocalSave);
@@ -218,13 +218,6 @@ function playFabLoadCheck() {
 
 function playFabSaveCheck() {
   loadFromPlayFab(cloudRoot => {
-    
-    function overwriteCloudSave() {
-      cloudRoot.saves[saveId] = GameStorage.saves[saveId];
-    }
-    function sendCloudSave() {
-        saveToPlayFab(cloudRoot);
-    }
 
     for (let i = 0; i < 3; i++) {
       const saveId = i;
@@ -232,6 +225,15 @@ function playFabSaveCheck() {
       const localSave = GameStorage.saves[saveId];
       const newestSaveCheck = newestSave(cloudSave, localSave);
       let isConflicted = false;
+
+      const overwriteCloudSave = () => {
+        cloudRoot.saves[saveId] = GameStorage.saves[saveId];
+      };
+
+      const sendCloudSave = () => {
+        saveToPlayFab(cloudRoot);
+      };
+
       if (newestSaveCheck === cloudSave) {
         isConflicted = true;
         Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);

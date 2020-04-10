@@ -526,10 +526,10 @@ let player = {
   IAP: {
     totalSTD: 0,
     spentSTD: 0,
-    IPPurchases: 1,
-    EPPurchases: 1,
-    dimPurchases: 1,
-    allDimPurchases: 1
+    IPPurchases: 0,
+    EPPurchases: 0,
+    dimPurchases: 0,
+    allDimPurchases: 0
   }
 };
 

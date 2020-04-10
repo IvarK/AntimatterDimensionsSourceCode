@@ -13,6 +13,7 @@ kong.init = function() {
       window.kongregate = kongregateAPI.getAPI();
       kong.updatePurchases();
     });
+    // eslint-disable-next-line no-console
   } catch (err) { console.log("Couldn't load Kongregate API"); }
 };
 
@@ -20,6 +21,7 @@ kong.submitStats = function(name, value) {
   if (!kong.enabled) return;
   try {
     kongregate.stats.submit(name, value);
+    // eslint-disable-next-line no-console
   } catch (e) { console.log(e); }
 };
 
@@ -102,6 +104,7 @@ kong.updatePurchases = function() {
   if (!kong.enabled) return;
   try {
       kongregate.mtx.requestUserItemList("", items);
+      // eslint-disable-next-line no-console
   } catch (e) { console.error(e); }
 
   function items(result) {
@@ -148,6 +151,7 @@ kong.updatePurchases = function() {
       }
     }
     if (player.IAP.totalSTD !== totalSTD) {
+      // eslint-disable-next-line no-console
       console.warn(`STD amounts don't match! ${player.IAP.totalSTD} in save, ${totalSTD} in kong`);
     }
   }
@@ -158,6 +162,7 @@ kong.migratePurchases = function() {
   if (!kong.enabled) return;
   try {
       kongregate.mtx.requestUserItemList("", items);
+      // eslint-disable-next-line no-console
   } catch (e) { console.log(e); }
 
   function items(result) {

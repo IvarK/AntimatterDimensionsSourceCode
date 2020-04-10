@@ -2178,7 +2178,10 @@ GameDatabase.news = [
   {
     id: "j4",
     text: "Whale is bad at making smart purchases.",
-    get unlocked() { return ShopPurchase.IPPurchases.currentMult > 500 && ShopPurchase.dimPurchases.currentMult < 5e307; }
+    get unlocked() { 
+      return ShopPurchase.IPPurchases.currentMult > 500 && 
+      ShopPurchase.dimPurchases.currentMult < 5e307; 
+    }
   },
   {
     id: "j5",

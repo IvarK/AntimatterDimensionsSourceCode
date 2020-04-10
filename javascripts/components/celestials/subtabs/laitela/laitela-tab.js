@@ -149,6 +149,18 @@ Vue.component("laitela-tab", {
     runUnlockThresholds: () => laitelaRunUnlockThresholds,
     nextMilestones() {
       return this.milestoneIds.map(id => SingularityMilestone(id));
+    },
+    singularityText() {
+      if (this.singularitiesGained === 1) {
+        return "Form a Singularity";
+      }
+
+      if (!this.canPerformSingularity) {
+        return `Reach ${format(this.singularityCap)} Dark Energy to \
+          Form ${format(this.singularitiesGained, 2, 0)} Singularities`;
+      }
+
+      return `Form ${format(this.singularitiesGained, 2, 0)} Singularities`;
     }
   },
   template:
@@ -174,8 +186,7 @@ Vue.component("laitela-tab", {
             {{ "Singularity" | pluralize(singularities, "Singularities")}}
           </h2>
           <button class="c-laitela-singularity" @click="doSingularity">
-            <h2 v-if="canPerformSingularity">Create a Singularity</h2>
-            <h2 v-else>Reach {{ format(singularityCap) }} Dark Energy to create a Singularity</h2>
+            <h2>{{ singularityText }}</h2>
           </button>
           <h4>You gain {{ format(singularitiesGained, 2, 0) }} from a Singularity.</h4>
         </div>
@@ -188,7 +199,7 @@ Vue.component("laitela-tab", {
           </button>
           <div v-if="autoCapUnlocked">
             <input type="text" v-model="autoCapInput" @change="handleAutoCapInputChange()"/><br>
-            <label>Seconds to reach singularity, after cap is raised automatically</label>
+            <label>Seconds to reach Singularity, after cap is raised automatically</label>
           </div>
         </div>
       </div>
@@ -251,7 +262,7 @@ Vue.component("laitela-tab", {
       </button>
       <div v-if="autoAnnihilationUnlocked">
         <input type="text" v-model="autoAnnihilationInput" @change="handleAutoAnnihilationInputChange()"/><br>
-        <label>Multiplier on the Dark Matter mult, after annihilation is done</label>
+        <label>Multiplier on the Dark Matter multiplier, after Annihilating</label>
       </div>
     </div>`
 });

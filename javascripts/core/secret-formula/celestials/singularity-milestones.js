@@ -7,7 +7,7 @@ GameDatabase.celestials.singularityMilestones = [
     start: 1,
     repeat: 5,
     limit: 0,
-    description: "Small continuum bonus",
+    description: "Continuum percentage multiplier",
     effect: completions => completions * 0.01,
     effectFormat: x => formatX(1 + x, 2, 2)
   },
@@ -108,7 +108,7 @@ GameDatabase.celestials.singularityMilestones = [
     start: 100,
     repeat: 0,
     limit: 1,
-    description: "Singularities improve the DT multiplier upgrade",
+    description: "Singularities improve the Dilated Time multiplier upgrade",
     effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 21,
     effectFormat: x => formatX(x, 2, 2)
   },
@@ -144,7 +144,7 @@ GameDatabase.celestials.singularityMilestones = [
     start: 1e6,
     repeat: 0,
     limit: 1,
-    description: "Singularities boosts Annihilation modifier",
+    description: "Singularities boost the Annihilation modifier",
     effect: () => Math.log10(player.celestials.laitela.singularities),
     effectFormat: x => formatX(x, 2, 2)
   },
@@ -171,7 +171,7 @@ GameDatabase.celestials.singularityMilestones = [
     start: 1e9,
     repeat: 0,
     limit: 1,
-    description: "DT boosts Dark Matter production",
+    description: "Dilated Time boosts Dark Matter production",
     effect: () => Math.pow(2.2, Decimal.log10(player.dilation.dilatedTime.plus(1)) / 1000),
     effectFormat: x => formatX(x, 2, 2)
   },

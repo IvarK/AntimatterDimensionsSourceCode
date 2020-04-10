@@ -6170,7 +6170,7 @@ kbd {
 /* #startregion laitela tab*/
 
 .o-laitela-run-button {
-  width: 220px;
+  width: 22rem;
   padding: 2rem;
   border-radius: 0.5rem;
   border: 0.2rem solid black;
@@ -6317,7 +6317,7 @@ kbd {
   margin: 0;
   color: white;
   font-family: Typewriter;
-  font-size: 1em;
+  font-size: 1.5rem;
   transition-duration: 0.12s;
 }
 
@@ -6334,7 +6334,7 @@ kbd {
   border-radius: .5rem;
   cursor: pointer;
   font-family: Typewriter;
-  font-size: 1em;
+  font-size: 1.1rem;
   font-weight: bold;
   transition-duration: 0.12s;
 }

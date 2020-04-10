@@ -36,8 +36,9 @@ Vue.component("autobuyers-tab", {
         </div>
         <div v-else>
           <br>
-          Continuum makes Dimension and Tickspeed autobuyers obsolete, 
-          now you automatically have dimensions based on your antimatter.
+          Continuum makes Normal Dimension and tickspeed autobuyers obsolete, 
+          as you now automatically have a certain amount of simulated Normal Dimension 
+          and tickspeed purchases based on your antimatter.
           <br>
           <br>
         </div>

@@ -192,18 +192,20 @@ function newestSave(first, second) {
 }
 
 function playFabLoadCheck() {
-  loadFromPlayFab(function(cloudRoot) {
+  loadFromPlayFab(cloudRoot => {
     GameUI.notify.info("Loaded from cloud");
 
-    for (var i = 0; i < 3; i++) {
-      let saveId = i;
-      let cloudSave = cloudRoot.saves[saveId];
-      let localSave = GameStorage.saves[saveId];
-      let newestSave = newestSave(cloudSave, localSave);
-      function overwriteLocalSave() {
-          GameStorage.overwriteSlot(saveId, cloudSave);
-      }
-      if (newestSave === localSave) {
+    function overwriteLocalSave() {
+        GameStorage.overwriteSlot(saveId, cloudSave);
+    }
+
+    for (let i = 0; i < 3; i++) {
+      const saveId = i;
+      const cloudSave = cloudRoot.saves[saveId];
+      const localSave = GameStorage.saves[saveId];
+      const newestSaveCheck = newestSave(cloudSave, localSave);
+
+      if (newestSaveCheck === localSave) {
           Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteLocalSave);
           Modal.cloudLoadConflict.show();
       } else {
@@ -214,28 +216,31 @@ function playFabLoadCheck() {
 }
 
 function playFabSaveCheck() {
-  loadFromPlayFab(function(cloudRoot) {
-    for (var i = 0; i < 3; i++) {
-      let saveId = i;
-      let cloudSave = cloudRoot.saves[saveId];
-      let localSave = GameStorage.saves[saveId];
-      let newestSave = newestSave(cloudSave, localSave);
+  loadFromPlayFab(cloudRoot => {
+    
+    function overwriteCloudSave() {
+      cloudRoot.saves[saveId] = GameStorage.saves[saveId];
+    }
+    function sendCloudSave() {
+        saveToPlayFab(cloudRoot);
+    }
+
+    for (let i = 0; i < 3; i++) {
+      const saveId = i;
+      const cloudSave = cloudRoot.saves[saveId];
+      const localSave = GameStorage.saves[saveId];
+      const newestSaveCheck = newestSave(cloudSave, localSave);
       let isConflicted = false;
-      function overwriteCloudSave() {
-          cloudRoot.saves[saveId] = GameStorage.saves[saveId];
-      }
-      function sendCloudSave() {
-          saveToPlayFab(cloudRoot);
-      }
-      if (newestSave === cloudSave) {
-          isConflicted = true;
-          Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
-          Modal.cloudSaveConflict.show();
+      if (newestSaveCheck === cloudSave) {
+        isConflicted = true;
+        Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
+        Modal.cloudSaveConflict.show();
       } else {
-          overwriteCloudSave();
+        overwriteCloudSave();
       }
-      if (!isConflicted){
-          sendCloudSave();
+
+      if (!isConflicted) {
+        sendCloudSave();
       }
     }
   });

@@ -179,6 +179,7 @@ function newestSave(first, second) {
   }
   const firstInfo = getSaveInfo(first);
   const secondInfo = getSaveInfo(second);
+  debugger;
   if (firstInfo.eternities.eq(secondInfo.eternities) && firstInfo.infinities.eq(secondInfo.infinities)) {
     return undefined;
   }

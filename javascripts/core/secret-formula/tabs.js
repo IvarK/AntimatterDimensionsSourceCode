@@ -140,18 +140,8 @@ GameDatabase.tabs = [
     key: "infinity",
     name: "Infinity",
     UIClass: "o-tab-btn--infinity",
-    condition: () =>
-      PlayerProgress.realityUnlocked() ||
-      PlayerProgress.eternityUnlocked() ||
-      PlayerProgress.infinityUnlocked(),
     before: "infinity-points-header",
     subtabs: [
-      {
-        key: "upgrades",
-        name: "Upgrades",
-        symbol: "<i class='fas fa-arrow-up'></i>",
-        component: "infinity-upgrades-tab"
-      },
       {
         key: "autobuyers",
         name: "Autobuyers",
@@ -159,16 +149,34 @@ GameDatabase.tabs = [
         component: "autobuyers-tab"
       },
       {
+        key: "upgrades",
+        name: "Upgrades",
+        symbol: "<i class='fas fa-arrow-up'></i>",
+        component: "infinity-upgrades-tab",
+        condition: () =>
+          PlayerProgress.realityUnlocked() ||
+          PlayerProgress.eternityUnlocked() ||
+          PlayerProgress.infinityUnlocked()
+      },
+      {
         key: "break",
         name: "Break Infinity",
         symbol: "<i class='fas fa-infinity'></i>",
-        component: "break-infinity-tab"
+        component: "break-infinity-tab",
+        condition: () =>
+          PlayerProgress.realityUnlocked() ||
+          PlayerProgress.eternityUnlocked() ||
+          PlayerProgress.infinityUnlocked()
       },
       {
         key: "replicanti",
         name: "Replicanti",
         symbol: "Ξ",
-        component: "replicanti-tab"
+        component: "replicanti-tab",
+        condition: () =>
+          PlayerProgress.realityUnlocked() ||
+          PlayerProgress.eternityUnlocked() ||
+          PlayerProgress.infinityUnlocked()
       }
     ],
   },

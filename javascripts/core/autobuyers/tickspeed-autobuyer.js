@@ -13,6 +13,19 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
     return Player.defaultStart.auto.tickspeed.interval;
   }
 
+  
+  get isBought() {
+    return this.data.isBought;
+  }
+
+  get antimatterCost() {
+    return new Decimal(1e140);
+  }
+
+  get canBeBought() {
+    return true;
+  }
+
   get priority() {
     return this.data.priority;
   }
@@ -47,6 +60,12 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
         buyMaxTickSpeed();
         break;
     }
+  }
+
+  purchase() {
+    if (!Currency.antimatter.isAffordable(this.antimatterCost)) return;
+    Currency.antimatter.subtract(this.antimatterCost);
+    this.data.isBought = true;
   }
 
   reset() {

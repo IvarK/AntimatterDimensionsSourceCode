@@ -42,7 +42,7 @@ const Laitela = {
   get nextMatterDimensionThreshold() {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);
-      if (d.amount.eq(0)) return `Next dimension at ${format(d.adjustedStartingCost)} matter`;
+      if (d.amount.eq(0)) return `Next dimension at ${format(d.adjustedStartingCost)} Dark Matter`;
     }
     return "";
   },

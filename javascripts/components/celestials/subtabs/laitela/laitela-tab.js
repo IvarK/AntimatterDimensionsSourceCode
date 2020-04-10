@@ -246,7 +246,9 @@ Vue.component("laitela-tab", {
           </div>
         </div>
       </div>
-      <button class="c-laitela-annihilation-button" @click="annihilate()" :style="{ visibility: showReset ? 'visible' : 'hidden' }">
+      <button class="c-laitela-annihilation-button" 
+        @click="annihilate()" 
+        :style="{ visibility: showReset ? 'visible' : 'hidden' }">
         <h2>Annihilation</h2>
         <p v-if="annihilated">
           Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 

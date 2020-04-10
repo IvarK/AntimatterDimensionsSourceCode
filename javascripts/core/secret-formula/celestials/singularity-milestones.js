@@ -181,7 +181,7 @@ GameDatabase.celestials.singularityMilestones = [
     repeat: 0,
     limit: 1,
     description: "Singularities make tesseracts stronger",
-    effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 10,
+    effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 40,
     effectFormat: x => formatX(x, 2, 2)
   }
 ];

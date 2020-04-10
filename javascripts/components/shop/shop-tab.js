@@ -4,13 +4,16 @@ Vue.component("shop-tab", {
   data() {
     return {
       STD: 0,
+      kongEnabled: false,
     };
   },
   methods: {
     update() {
       this.STD = player.IAP.totalSTD - player.IAP.spentSTD;
+      this.kongEnabled = kong.enabled;
     },
     showStore() {
+      if (!this.kongEnabled) return;
       Modal.shop.show();
       this.$viewModel.modal.closeButton = true;
     },
@@ -19,11 +22,14 @@ Vue.component("shop-tab", {
     },
     buyLongerTimeSkip() {
       kong.purchaseLongerTimeSkip(20);
-    }
+    },
   },
   computed: {
     purchases() {
       return ShopPurchase.all;
+    },
+    buySTDText() {
+      return this.kongEnabled ? "Buy More" : "Play in Kongregate to buy STDs";
     }
   },
   template: 
@@ -31,7 +37,7 @@ Vue.component("shop-tab", {
     <div class="c-shop-header">
       <span>You have {{ STD }}</span>
       <img src="images/std_coin.png" height="40">
-      <button class="o-shop-button-button" @click="showStore()">Buy More</button>
+      <button class="o-shop-button-button" @click="showStore()">{{ buySTDText }}</button>
     </div>
     <div class="l-shop-buttons-container">
       <shop-button v-for="purchase in purchases" :purchase="purchase" :key="purchase.key"></shop-button>

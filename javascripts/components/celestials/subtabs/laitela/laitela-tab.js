@@ -151,16 +151,19 @@ Vue.component("laitela-tab", {
       return this.milestoneIds.map(id => SingularityMilestone(id));
     },
     singularityText() {
+      const formText = this.singularitiesGained === 1 ? "Form a Singularity"
+        : `Form ${format(this.singularitiesGained, 2, 0)} Singularities`;
+
+      if (!this.canPerformSingularity) {
+        return `Reach ${format(this.singularityCap)} Dark Energy to \
+          ${formText}`;
+      }
+
       if (this.singularitiesGained === 1) {
         return "Form a Singularity";
       }
 
-      if (!this.canPerformSingularity) {
-        return `Reach ${format(this.singularityCap)} Dark Energy to \
-          Form ${format(this.singularitiesGained, 2, 0)} Singularities`;
-      }
-
-      return `Form ${format(this.singularitiesGained, 2, 0)} Singularities`;
+      return formText;
     }
   },
   template:

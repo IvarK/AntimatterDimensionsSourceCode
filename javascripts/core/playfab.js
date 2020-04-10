@@ -173,13 +173,14 @@ function getRootFromChunks(chunks) {
 function newestSave(first, second) {
   function getSaveInfo(save) {
     if (!save) return { infinitied: new Decimal(0), eternities: new Decimal(0) };
+    const deepCopy = { ...save };
     return {
-      infinitied: typeof save.infinitied === "number" ? new Decimal(save.infinitied) : save.infinitied,
-      eternities: typeof save.eternities === "number" ? new Decimal(save.eternities) : save.eternities
+      infinitied: typeof deepCopy.infinitied === "number" ? new Decimal(deepCopy.infinitied) : deepCopy.infinitied,
+      eternities: typeof deepCopy.eternities === "number" ? new Decimal(deepCopy.eternities) : deepCopy.eternities
     };
   }
-  const firstInfo = getSaveInfo({...first});
-  const secondInfo = getSaveInfo({...second});
+  const firstInfo = getSaveInfo(first);
+  const secondInfo = getSaveInfo(second);
   debugger
   if (firstInfo.eternities.eq(secondInfo.eternities) && firstInfo.infinitied.eq(secondInfo.infinitied)) {
     return undefined;

@@ -172,14 +172,14 @@ function getRootFromChunks(chunks) {
 // If both of them are the same, undefined will be returned
 function newestSave(first, second) {
   function getSaveInfo(save) {
+    if (!save) return { infinitied: new Decimal(0), eternities: new Decimal(0) };
     return {
-      infinities: save ? save.infinitied : new Decimal(0),
-      eternities: save ? save.eternities : new Decimal(0)
+      infinities: typeof save.infinitied === "number" ? new Decimal(save.infinitied) : save.infinitied,
+      eternities: typeof save.eternities === "number" ? new Decimal(save.eternities) : save.eternities
     };
   }
   const firstInfo = getSaveInfo(first);
   const secondInfo = getSaveInfo(second);
-  debugger;
   if (firstInfo.eternities.eq(secondInfo.eternities) && firstInfo.infinities.eq(secondInfo.infinities)) {
     return undefined;
   }

@@ -175,13 +175,12 @@ function newestSave(first, second) {
     if (!save) return { infinitied: new Decimal(0), eternities: new Decimal(0) };
     const deepCopy = { ...save };
     return {
-      infinitied: typeof deepCopy.infinitied === "number" ? new Decimal(deepCopy.infinitied) : deepCopy.infinitied,
-      eternities: typeof deepCopy.eternities === "number" ? new Decimal(deepCopy.eternities) : deepCopy.eternities
+      infinitied: typeof deepCopy.infinitied === "object" ? deepCopy.infinitied : new Decimal(deepCopy.infinitied),
+      eternities: typeof deepCopy.eternities === "object" ? deepCopy.eternities : new Decimal(deepCopy.eternities)
     };
   }
   const firstInfo = getSaveInfo(first);
   const secondInfo = getSaveInfo(second);
-  debugger;
   if (firstInfo.eternities.eq(secondInfo.eternities) && firstInfo.infinitied.eq(secondInfo.infinitied)) {
     return undefined;
   }

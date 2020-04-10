@@ -153,7 +153,7 @@ const Tickspeed = {
 
   get continuumValue() {
     if (!this.isUnlocked) return 0;
-    return this.costScale.getContinuumValue(player.antimatter);
+    return this.costScale.getContinuumValue(player.antimatter) * Laitela.matterExtraPurchaseFactor;
   },
 
   get baseValue() {

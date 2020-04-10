@@ -672,7 +672,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["reality"],
     singleDesc: "Increase the effective level of equipped basic glyphs by {value}",
     totalDesc: "Equipped basic glyph level +{value}",
-    effect: (level, strength) => Math.floor(Math.sqrt(25 * level * strength)),
+    effect: (level) => Math.floor(Math.sqrt(level * 90)),
     formatEffect: x => formatInt(x),
     combine: GlyphCombiner.add,
   }, {
@@ -682,7 +682,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["reality"],
     singleDesc: "Galaxies are {value} stronger",
     totalDesc: "Galaxy strength +{value}",
-    effect: (level, strength) => Math.pow(1 + level * strength / 200000, 1.6),
+    effect: (level) => 1 + Math.pow(level / 100000, 0.5),
     formatEffect: x => formatPercents(x - 1, 2),
     combine: GlyphCombiner.multiply,
   }, {
@@ -692,7 +692,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["reality"],
     singleDesc: "Dimension Boost count +{value}",
     totalDesc: "{value} more Dimension Boosts",
-    effect: (level, strength) => Math.pow(1 + level * strength / 200000, 1.2),
+    effect: (level) => 1 + Math.pow(level / 100000, 0.5),
     formatEffect: x => formatPercents(x - 1, 2),
     combine: GlyphCombiner.multiply,
   }, {
@@ -702,7 +702,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["reality"],
     singleDesc: "Multiplier from first row reality upgrades ^{value}",
     totalDesc: " ",
-    effect: (level, strength) => 1 + level * strength / 500000,
+    effect: (level) => 1 + level / 125000,
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.addExponents,
   }

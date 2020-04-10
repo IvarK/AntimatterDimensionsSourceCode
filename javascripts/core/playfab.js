@@ -169,26 +169,26 @@ function getRootFromChunks(chunks) {
   ));
 }
 
-// if both of them are the same, undefined will be returned
+// If both of them are the same, undefined will be returned
 function newestSave(first, second) {
-    function getSaveInfo(save) {
-        return {
-            infinities: save ? save.infinitied : 0,
-            eternities: save ? save.eternities : 0
-        }
-    }
-    let firstInfo = getSaveInfo(first);
-    let secondInfo = getSaveInfo(second);
-    if (firstInfo.eternities === secondInfo.eternities && firstInfo.infinities === secondInfo.infinities) {
-        return undefined;
-    }
-    if (firstInfo.eternities > secondInfo.eternities) {
-        return first;
-    }
-    if (firstInfo.infinities > secondInfo.infinities) {
-        return first;
-    }
-    return second;
+  function getSaveInfo(save) {
+    return {
+      infinities: save ? save.infinitied : new Decimal(0),
+      eternities: save ? save.eternities : new Decimal(0)
+    };
+  }
+  const firstInfo = getSaveInfo(first);
+  const secondInfo = getSaveInfo(second);
+  if (firstInfo.eternities.eq(secondInfo.eternities) && firstInfo.infinities.eq(secondInfo.infinities)) {
+    return undefined;
+  }
+  if (firstInfo.eternities.gt(secondInfo.eternities)) {
+    return first;
+  }
+  if (firstInfo.infinities.gt(secondInfo.infinities)) {
+    return first;
+  }
+  return second;
 }
 
 function playFabLoadCheck() {

@@ -220,9 +220,13 @@ Vue.component("laitela-tab", {
           the Reality becomes more difficult but also gives a stronger reward.
           <div v-if="maxDimTier === 7">
             <br>
+            <b>Additional limitation:</b>
+            <br>
             Production is disabled for all 8th dimensions.
           </div>
           <div v-else-if="maxDimTier < 7">
+            <br>
+            <b>Additional limitation:</b>
             <br>
             Production is disabled for all dimensions {{ maxDimTier + 1 }} or higher.
           </div>
@@ -242,7 +246,7 @@ Vue.component("laitela-tab", {
           </div>
         </div>
       </div>
-      <button class="c-laitela-annihilation-button" @click="annihilate()" v-if="showReset">
+      <button class="c-laitela-annihilation-button" @click="annihilate()" :style="{ visibility: showReset ? 'visible' : 'hidden' }">
         <h2>Annihilation</h2>
         <p v-if="annihilated">
           Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 
@@ -259,7 +263,7 @@ Vue.component("laitela-tab", {
           (requires {{ format(1e20, 0, 0) }} Dark Matter).
         </p>
       </button>
-      <div v-if="autoAnnihilationUnlocked">
+      <div :style="{ visibility: autoAnnihilationUnlocked ? 'visible' : 'hidden' }">
         <input type="text" v-model="autoAnnihilationInput" @change="handleAutoAnnihilationInputChange()"/><br>
         <label>Multiplier on the Dark Matter multiplier, after Annihilating</label>
       </div>

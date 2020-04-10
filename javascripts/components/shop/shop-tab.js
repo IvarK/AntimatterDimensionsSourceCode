@@ -15,7 +15,7 @@ Vue.component("shop-tab", {
       this.$viewModel.modal.closeButton = true;
     },
     buyTimeSkip() {
-      kong.purchaseTimeSkip();
+      kong.purchaseTimeSkip(10);
     }
   },
   computed: {
@@ -28,7 +28,7 @@ Vue.component("shop-tab", {
     <div class="c-shop-header">
       <span>You have {{ STD }}</span>
       <img src="images/std_coin.png" height="40">
-      <button class="o-shop-buy-more" @click="showStore()">Buy More</button>
+      <button class="o-shop-button-button" @click="showStore()">Buy More</button>
     </div>
     <div class="l-shop-buttons-container">
       <shop-button v-for="purchase in purchases" :purchase="purchase" :key="purchase.key"></shop-button>

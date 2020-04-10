@@ -20,7 +20,10 @@ Vue.component("shop-button", {
   `<div class="c-shop-button-container">
     <div class="o-shop-button-description">
       {{ purchase.description }}
-      <br>Currently {{ formatX(currentMult, 2, 0) }}, next: {{ formatX(nextMult, 2, 0) }}
+      <br>
+      <span class="o-shop-button-multiplier">
+        Currently {{ formatX(currentMult, 2, 0) }}, next: {{ formatX(nextMult, 2, 0) }}
+      </span>
     </div>
     <button 
       @click="purchase.purchase()" 

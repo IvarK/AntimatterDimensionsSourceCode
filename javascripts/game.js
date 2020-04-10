@@ -886,7 +886,6 @@ window.onload = function() {
   setTimeout(() => {
     if (kong.enabled) {
       playFabLogin();
-      kong.updatePurchases();
     }
     document.getElementById("loading").style.display = "none";
     document.body.style.overflowY = "auto";

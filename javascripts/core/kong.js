@@ -173,18 +173,22 @@ kong.migratePurchases = function() {
       for (const item of result.data) {
           if (item.identifier === "doublemult") {
             player.IAP.totalSTD += 30;
+            player.IAP.spentSTD += 30;
             dimPurchases++;
           }
           if (item.identifier === "doubleip") {
             player.IAP.totalSTD += 40;
+            player.IAP.spentSTD += 40;
             ipPurchases++;
           }
           if (item.identifier === "tripleep") {
             player.IAP.totalSTD += 50;
+            player.IAP.spentSTD += 50;
             epPurchases++;
           }
           if (item.identifier === "alldimboost") {
             player.IAP.totalSTD += 60;
+            player.IAP.spentSTD += 60;
             alldimPurchases++;
           }
 

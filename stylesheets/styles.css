@@ -7268,3 +7268,62 @@ input.o-automator-block-input {
   border: 2px solid black;
   border-radius: 5px;
 }
+
+/* STD-shop */
+
+.c-shop-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  margin: 1rem 0;
+}
+
+.c-shop-header img {
+  margin: 0 1rem;
+}
+
+.l-shop-buttons-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 62rem;
+  margin: auto;
+}
+
+.c-shop-button-container {
+  width: 30rem;
+  padding: 1rem;
+  border: .2rem solid #1f7d1f;
+  border-radius: .5rem;
+  margin: .5rem;
+  background: #3c3c3c;
+  color: white;
+}
+
+.o-shop-button-button {
+  background: turquoise;
+  border: none;
+  border-radius: .5rem;
+  display: flex;
+  margin: auto;
+  align-items: center;
+  font-family: Typewriter;
+  padding: .5rem 2rem;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.c-shop-header .o-shop-button-button {
+  margin: 0;
+}
+
+.o-shop-button-button img {
+  margin-left: 1rem;
+}
+
+.o-shop-button-multiplier {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+  display: block;
+}

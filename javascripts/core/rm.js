@@ -1141,6 +1141,10 @@ function getGlyphLevelInputs() {
   const perkShopEffect = Effects.max(1, PerkShopUpgrade.glyphLevel);
   const shardFactor = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) ? RA_UNLOCKS.SHARD_LEVEL_BOOST.effect() : 0;
   let baseLevel = epEffect * replEffect * dtEffect * eterEffect * perkShopEffect + shardFactor;
+
+  const singularityEffect = SingularityMilestone(18).isUnlocked ? SingularityMilestone(18).effectValue : 1;
+  baseLevel *= singularityEffect;
+  
   let scaledLevel = baseLevel;
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
   const instabilityScaleBegin = Glyphs.instabilityThreshold;

@@ -326,8 +326,9 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.MOMENTUM)) {
+    const milestoneFactor = SingularityMilestone(14).canBeApplied ? SingularityMilestone(14).effectValue : 1;
     factor *= Math.clampMax(1e30,
-      Math.pow(AlchemyResource.momentum.effectValue, Time.thisRealityRealTime.totalMinutes));
+      Math.pow(AlchemyResource.momentum.effectValue, Time.thisRealityRealTime.totalMinutes * milestoneFactor));
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
@@ -598,6 +599,8 @@ function gameLoop(diff, options = {}) {
   Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
 
+  Singularity.autobuyerLoop(realDiff);
+
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);
   GameUI.update();
   player.lastUpdate = thisUpdate;
@@ -617,6 +620,7 @@ function laitelaRealityTick(realDiff) {
     laitelaInfo.entropy = -1;
     laitelaInfo.thisCompletion = Time.thisRealityRealTime.totalSeconds;
     laitelaInfo.fastestCompletion = Math.min(laitelaInfo.thisCompletion, laitelaInfo.fastestCompletion);
+    clearCelestialRuns();
     if (Time.thisRealityRealTime.totalSeconds < 30) {
       laitelaInfo.difficultyTier++;
       laitelaInfo.fastestCompletion = 600;

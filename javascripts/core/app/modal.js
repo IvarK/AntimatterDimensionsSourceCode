@@ -47,6 +47,7 @@ Modal.shop = new Modal("modal-std-store");
 Modal.importTree = new Modal("modal-import-tree");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
+Modal.singularityMilestones = new Modal("singularity-milestones-modal");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;

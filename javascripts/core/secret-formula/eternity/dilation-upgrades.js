@@ -21,7 +21,10 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e5,
       increment: 10,
       description: "Double Dilated Time gain.",
-      effect: bought => Decimal.pow(2, bought),
+      effect: bought => {
+        const base = SingularityMilestone(12).isUnlocked ? 2 * SingularityMilestone(12).effectValue : 2;
+        return Decimal.pow(base, bought);
+      },
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => format(value, 2, 0)
     }),

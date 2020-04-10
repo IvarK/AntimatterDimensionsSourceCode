@@ -188,7 +188,6 @@ Vue.component("laitela-tab", {
           <button class="c-laitela-singularity" @click="doSingularity">
             <h2>{{ singularityText }}</h2>
           </button>
-          <h4>You gain {{ format(singularitiesGained, 2, 0) }} from a Singularity.</h4>
         </div>
         <div class="l-laitela-singularity-container--right">
           <button class="c-laitela-singularity__cap-control" @click="increaseCap">

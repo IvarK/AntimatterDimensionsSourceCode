@@ -42,7 +42,7 @@ class TabState {
       subtabs.push(subtab);
     }
     this.subtabs = subtabs;
-    this._currentSubtab = subtabs[0];
+    this._currentSubtab = subtabs.filter(tab => tab.isAvailable)[0];
   }
 
   get name() {
@@ -69,7 +69,7 @@ class TabState {
   }
 
   resetCurrentSubtab() {
-    this._currentSubtab = this.subtabs[0];
+    this._currentSubtab = this.subtabs.filter(tab => tab.isAvailable)[0];
   }
 }
 

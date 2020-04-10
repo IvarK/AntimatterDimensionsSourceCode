@@ -320,7 +320,7 @@ GameDatabase.tabs = [
     key: "shop",
     name: "Shop",
     newUIClass: "shop",
-    condition: () => player.IAP.totalSTD > 0,
+    condition: () => kong.enabled,
     subtabs: [
       {
         key: "shop",

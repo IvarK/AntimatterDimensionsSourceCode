@@ -56,6 +56,11 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
       this.time < 60;
   }
 
+  upgradeInterval(free) {
+    super.upgradeInterval(free);
+    TabNotification.breakInfinity.tryTrigger();
+  }
+
   bumpAmount(mult) {
     if (this.isUnlocked) {
       this.amount = this.amount.times(mult);

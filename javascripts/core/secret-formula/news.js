@@ -668,7 +668,7 @@ GameDatabase.news = [
     id: "a138",
     get text() {
       return `Check out Avari's newly built actually infinite infinity pool! With an area of ` +
-      `${format(Number.MAX_VALUE)} square megametres, you'll be sure to have infinite fun!`;
+      `${format(Number.MAX_VALUE, 2)} square megametres, you'll be sure to have infinite fun!`;
     }
   },
   {
@@ -1699,7 +1699,7 @@ GameDatabase.news = [
   {
     id: "a299",
     get text() {
-      return `Buy the new Antimatter Dimensions puzzle set now! With a combined ${format(Number.MAX_VALUE)} ` +
+      return `Buy the new Antimatter Dimensions puzzle set now! With a combined ${format(Number.MAX_VALUE, 2)} ` +
       `pieces, these puzzles are the perfect way to spend some quality time with your family!`;
     }
   },

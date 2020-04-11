@@ -3,12 +3,11 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  padding-bottom: 10rem;
 }
 
 .l-time-studies-tab__tree {
   margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 12.5rem;
 }
 
 .l-time-study-options {

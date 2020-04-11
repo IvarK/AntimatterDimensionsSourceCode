@@ -5735,7 +5735,7 @@ kbd {
               -0.1rem 0.1rem 0.1rem black,
               0.1rem -0.1rem 0.1rem black,
               -0.1rem -0.1rem 0.1rem black,
-              0.1rem -0.1rem 0px black;
+              0.1rem -0.1rem 0 black;
   z-index: 3;
 }
 

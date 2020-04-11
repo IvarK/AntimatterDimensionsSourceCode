@@ -38,7 +38,7 @@ Vue.component("new-dim-shift-row", {
       return sum;
     },
     tutorialClass() {
-      return Tutorial.glowingClass(TUTORIAL_STATE.DIMSHIFT, this.$viewModel.tutorialState, this.isBuyable);
+      return Tutorial.glowingClass(TUTORIAL_STATE.DIMSHIFT, this.isBuyable);
     }
   },
   methods: {

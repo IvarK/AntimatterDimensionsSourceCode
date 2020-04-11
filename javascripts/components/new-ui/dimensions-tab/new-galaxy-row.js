@@ -59,7 +59,7 @@ Vue.component("new-galaxy-row", {
       return undefined;
     },
     tutorialClass() {
-      return Tutorial.glowingClass(TUTORIAL_STATE.GALAXY, this.$viewModel.tutorialState, this.canBeBought);
+      return Tutorial.glowingClass(TUTORIAL_STATE.GALAXY, this.canBeBought);
     }
   },
   methods: {

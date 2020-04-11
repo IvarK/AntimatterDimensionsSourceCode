@@ -32,9 +32,9 @@ const tutorialStates = [
 const Tutorial = {
 
   // Class to be given to glowing components
-  glowingClass(atState, currentState, conditional = true) {
+  glowingClass(atState, conditional = true) {
     return {
-      "tutorial--glow": atState === currentState && conditional && ui.view.tutorialActive
+      "tutorial--glow": ui.view.tutorialState === atState && conditional && ui.view.tutorialActive
     };
   },
 

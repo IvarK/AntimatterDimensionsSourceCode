@@ -78,11 +78,11 @@ Vue.component("new-dimension-row", {
     },
     tutorialClass() {
       if (this.tier === 1) {
-        return Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.$viewModel.tutorialState, this.isAffordable);
+        return Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
       } 
       
       if (this.tier === 2) {
-        return Tutorial.glowingClass(TUTORIAL_STATE.DIM2, this.$viewModel.tutorialState, this.isAffordable);
+        return Tutorial.glowingClass(TUTORIAL_STATE.DIM2, this.isAffordable);
       }
 
       return {};

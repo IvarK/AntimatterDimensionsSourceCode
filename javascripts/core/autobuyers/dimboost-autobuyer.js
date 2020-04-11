@@ -63,6 +63,11 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends IntervaledAutobuye
     return DimBoost.canBeBought && super.canTick;
   }
 
+  upgradeInterval(free) {
+    super.upgradeInterval(free);
+    TabNotification.breakInfinity.tryTrigger();
+  }
+
   tick() {
     if (this.isBuyMaxUnlocked) {
       maxBuyDimBoosts();

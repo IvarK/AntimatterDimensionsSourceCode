@@ -5,14 +5,14 @@ class TabNotificationState {
     this.config = config;
     if (config.events) {
       for (const event of config.events) {
-        EventHub.logic.on(event, this.tryTrigger, this);
+        EventHub.logic.on(event, () => this.tryTrigger, this);
       }
     }
   }
 
   tryTrigger() {
-    if (!this.target.config.condition()) return;
-    this.target.config.tabsToHighLight.map(t => t.parent + t.tab)
+    if (!this.config.condition()) return;
+    this.config.tabsToHighLight.map(t => t.parent + t.tab)
       .forEach(tab => player.tabNotifications.add(tab));
   }
 }

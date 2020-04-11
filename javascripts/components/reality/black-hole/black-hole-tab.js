@@ -77,7 +77,7 @@ Vue.component("black-hole-tab", {
   template: `
     <div class="l-black-hole-tab">
       <div v-if="isEnslaved">
-        The physics of this reality do not permit singularities.
+        The physics of this Reality do not permit singularities.
       </div>
       <div v-else-if="!isUnlocked">
         <black-hole-unlock-button/>

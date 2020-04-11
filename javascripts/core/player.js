@@ -480,6 +480,8 @@ let player = {
     }
   },
   tabNotifications: new Set(),
+  tutorialState: 0,
+  tutorialActive: true,
   options: {
     news: true,
     notation: "Mixed scientific",

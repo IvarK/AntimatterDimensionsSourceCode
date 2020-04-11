@@ -66,13 +66,30 @@ Vue.component("normal-dim-row", {
     buySingle() {
       if (this.isContinuumActive) return;
       buyOneDimensionBtnClick(this.tier);
+      if (this.tier === 2) {
+        Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
+      } 
     },
     buyUntil10() {
       if (this.isContinuumActive) return;
       buyManyDimensionsBtnClick(this.tier);
+      if (this.tier === 2) {
+        Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
+      } 
     },
     showCostTitle(value) {
       return value.exponent < 1000000;
+    },
+    tutorialClass() {
+      if (this.tier === 1) {
+        return Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
+      } 
+      
+      if (this.tier === 2) {
+        return Tutorial.glowingClass(TUTORIAL_STATE.DIM2, this.isAffordable);
+      }
+
+      return {};
     }
   },
   template:
@@ -87,6 +104,7 @@ Vue.component("normal-dim-row", {
         v-if="!isContinuumActive"
         :enabled="isAffordable"
         class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd c-normal-dim-row__buy-button"
+        :class="tutorialClass()"
         :ach-tooltip="cappedTooltip"
         @click="buySingle">
         <span v-if="isCapped">Capped!</span>

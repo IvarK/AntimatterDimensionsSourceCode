@@ -212,7 +212,7 @@ GameDatabase.celestials.navigation = {
           ];
         },
         angle: -135,
-        diagonal: 70,
+        diagonal: 100,
         horizontal: 16,
       },
     },

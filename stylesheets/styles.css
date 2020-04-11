@@ -7334,6 +7334,7 @@ input.o-automator-block-input {
   margin: auto;
   border: 2px solid black;
   border-radius: 5px;
+  background: #1a1a1a;
 }
 
 /* STD-shop */

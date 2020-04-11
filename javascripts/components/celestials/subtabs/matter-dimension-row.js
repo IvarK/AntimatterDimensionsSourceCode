@@ -6,41 +6,85 @@ Vue.component("matter-dimension-row", {
   },
   data() {
     return {
-      chance: 0,
+      tier: 0,
       interval: new Decimal(0),
-      power: new Decimal(0),
-      chanceCost: 0,
+      baseInterval: new Decimal(0),
+      powerDM: new Decimal(0),
+      powerDE: new Decimal(0),
       intervalCost: 0,
-      powerCost: 0,
+      powerDMCost: 0,
+      powerDECost: 0,
       amount: new Decimal(0),
-      canBuyChance: false,
       canBuyInterval: false,
-      canBuyPower: false
+      canBuyPowerDM: false,
+      canBuyPowerDE: false,
+      timer: 0,
+      timerPecent: 0,
+      intervalCap: 0
     };
+  },
+  computed: {
+    name() {
+      const suffix = " Dark Matter Dimension";
+      switch (this.tier) {
+        case 0:
+          return `First ${suffix}`;
+        case 1:
+          return `Second ${suffix}`;
+        case 2:
+          return `Third ${suffix}`;
+        case 3:
+          return `Fourth ${suffix}`;
+        default:
+          throw new Error("Invalid Dark Matter Dimension index");
+      }
+    }
   },
   methods: {
     update() {
-      this.chance = this.dimension.chance;
-      this.interval.copyFrom(this.dimension.interval);
-      this.power.copyFrom(this.dimension.power);
-      this.chanceCost = this.dimension.chanceCost;
+      this.tier = this.dimension._tier;
+      this.interval = this.dimension.interval;
+      this.baseInterval = this.dimension.baseInterval;
+      this.powerDM.copyFrom(this.dimension.powerDM);
+      this.powerDE = this.dimension.powerDE;
       this.intervalCost = this.dimension.intervalCost;
-      this.powerCost = this.dimension.powerCost;
+      this.powerDMCost = this.dimension.powerDMCost;
+      this.powerDECost = this.dimension.powerDECost;
       this.amount.copyFrom(this.dimension.amount);
-      this.canBuyChance = player.celestials.laitela.matter.gte(this.chanceCost);
-      this.canBuyInterval = player.celestials.laitela.matter.gte(this.intervalCost);
-      this.canBuyPower = player.celestials.laitela.matter.gte(this.powerCost);
+      this.canBuyInterval = this.dimension.canBuyInterval;
+      this.canBuyPowerDM = this.dimension.canBuyPowerDM;
+      this.canBuyPowerDE = this.dimension.canBuyPowerDE;
+      this.timer = this.dimension.timeSinceLastUpdate;
+      this.timerPercent = this.timer / this.interval;
+      this.intervalCap = this.dimension.intervalPurchaseCap;
     }
   },
   template:
   `<div class="c-matter-dimension-container">
-    <div class="o-matter-dimension-amount"> {{ shorten(amount, 2, 0) }}</div>
+    <div class="o-matter-dimension-amount"> {{ name }} : {{ format(amount, 2, 0) }}</div>
     <div class="c-matter-dimension-buttons">
-      <button @click="dimension.buyChance()" :class="{ 'o-matter-dimension-button--available': canBuyChance }"> {{ chance }}% <br>Cost: {{ shorten(chanceCost, 2, 0) }}</button>
-      <button @click="dimension.buyInterval()" :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> {{ interval.toFixed(2) }}ms <br>Cost: {{ shorten(intervalCost, 2, 0) }}</button>
-      <button @click="dimension.buyPower()" :class="{ 'o-matter-dimension-button--available': canBuyPower }"> {{ shorten(power, 2, 2) }}x <br>Cost: {{ shorten(powerCost, 2, 0) }}</button>
+      <button 
+        @click="dimension.buyInterval()" 
+        class="o-matter-dimension-button" 
+        :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> 
+        {{ format(interval, 2, 2) }}ms <span v-if="baseInterval > intervalCap">
+        <br>Cost: {{ format(intervalCost, 2, 0) }}</span>
+      </button>
+      <button
+        @click="dimension.buyPowerDM()"
+        class="o-matter-dimension-button"
+        :class="{ 'o-matter-dimension-button--available': canBuyPowerDM }">
+        DM {{ format(powerDM, 2, 2) }}x <br>Cost: {{ format(powerDMCost, 2, 0) }}
+      </button>
+      <button
+        @click="dimension.buyPowerDE()"
+        class="o-matter-dimension-button"
+        :class="{ 'o-matter-dimension-button--available': canBuyPowerDE }">
+        DE {{ format(powerDE, 4, 4) }}x <br>Cost: {{ format(powerDECost, 2, 0) }}
+      </button>
     </div>
+    <span v-if="interval > 200">Tick: {{ formatInt(timer) }} ms ({{ formatPercents(timerPercent, 1) }}%)</span>
   </div>
-  
+
   `
 })

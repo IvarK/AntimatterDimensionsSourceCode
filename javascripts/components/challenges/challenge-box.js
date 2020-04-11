@@ -11,15 +11,25 @@ Vue.component("challenge-box", {
       default: "",
     }
   },
+  data() {
+    return {
+      isEC: false,
+    };
+  },
   computed: {
+    update() {
+      this.isEC = this.name.startsWith("EC");
+    },
     buttonClassObject() {
       const classObject = {
         "o-challenge-btn": true
       };
       if (this.isRunning) {
         classObject["o-challenge-btn--running"] = true;
-      } else if (this.isCompleted) {
+      } else if (this.isCompleted && ((this.isUnlocked && !this.isEC) || (!this.isUnlocked && this.isEC))) {
         classObject["o-challenge-btn--completed"] = true;
+      } else if (this.isCompleted && this.isUnlocked && this.isEC) {
+        classObject["o-challenge-btn--redo"] = true;
       } else if (this.isUnlocked) {
         classObject["o-challenge-btn--unlocked"] = true;
       } else {
@@ -30,14 +40,17 @@ Vue.component("challenge-box", {
     buttonText() {
       if (this.overrideLabel.length) return this.overrideLabel;
       if (this.isRunning) return "Running";
-      if (this.isCompleted) return "Completed";
+      if (this.isCompleted) {
+        if (this.isEC && this.isUnlocked) return "Redo";
+        return "Completed";
+      }
       if (this.isUnlocked) return "Start";
       return "Locked";
     }
   },
   template:
     `<div class="c-challenge-box l-challenge-box">
-      <hint-text class="l-hint-text--challenge">{{name}}</hint-text>
+      <hint-text type="challenges" class="l-hint-text--challenge">{{name}}</hint-text>
       <slot name="top" />
       <div class="l-challenge-box__fill" />
       <button

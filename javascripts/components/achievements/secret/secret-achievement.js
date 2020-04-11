@@ -19,9 +19,7 @@ Vue.component("secret-achievement", {
     },
     styleObject() {
       if (this.isUnlocked) {
-        return {
-          "background-image": `url(images/s${this.achId}.png)`,
-        };
+        return { "background-position": `-${(this.column - 1) * 104}px -${(this.row - 1) * 104}px` };
       }
       return {};
     },
@@ -29,16 +27,20 @@ Vue.component("secret-achievement", {
       return {
         "o-achievement": true,
         "o-achievement--hidden": !this.isUnlocked,
-        "o-achievement--unlocked": this.isUnlocked
+        "o-achievement--unlocked": this.isUnlocked,
+        "o-achievement--secret": true
       };
     },
     tooltip() {
+      function evaluateText(prop) {
+        return typeof prop === "function" ? prop() : prop;
+      }
       const config = this.achievement.config;
-      return this.isUnlocked ? config.tooltip : config.name;
+      return this.isUnlocked ? evaluateText(config.tooltip) : config.name;
     }
   },
   created() {
-    this.on$(GameEvent.ACHIEVEMENT_UNLOCKED, this.updateState);
+    this.on$(GAME_EVENT.ACHIEVEMENT_UNLOCKED, this.updateState);
     this.updateState();
   },
   methods: {
@@ -57,6 +59,7 @@ Vue.component("secret-achievement", {
       :style="styleObject"
       :ach-tooltip="tooltip"
       @click="onClick">
+      <hint-text type="achievements" class="l-hint-text--achievement">S{{row}}{{column}}</hint-text>
       <br>
      </div>`
 });

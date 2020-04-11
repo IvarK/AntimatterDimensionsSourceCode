@@ -79,16 +79,15 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "Decrease Dimension Boost requirement based on Teresa level",
         effect: () => 1 / (1 + Math.sqrt(Ra.pets.teresa.level) / 10),
-        formatEffect: value => `${shorten(value, 4, 4)}x`
+        formatEffect: value => `${format(value, 4, 4)}x`
       }
     },
     buy10Mult: {
       id: "dimMult",
       cost: 1,
       description: "Increase the multiplier for buying 10 Dimensions",
-      effect: 1.1,
-      formatEffect: () => "2x ➜ 2.2x",
-      staticEffect: true,
+      effect: () => 1.1,
+      formatEffect: () => `${formatX(2, 0, 1)} ➜ ${formatX(2.2, 0, 1)}`,
       charged: {
         description: "Multiplier for buying 10 Dimensions gains a power effect based on Teresa level",
         effect: () => 1 + Ra.pets.teresa.level / 200,
@@ -98,10 +97,10 @@ GameDatabase.infinity.upgrades = (function() {
     galaxyBoost: {
       id: "galaxyBoost",
       cost: 2,
-      description: "Galaxies are twice as effective",
+      description: "Galaxies are twice as strong",
       effect: 2,
       charged: {
-        description: "Galaxies are more effective based on Teresa level",
+        description: "Galaxies are stronger based on Teresa level",
         effect: () => 2 + Math.sqrt(Ra.pets.teresa.level) / 100,
         formatEffect: value => `+${formatPercents(value - 1)}`
       }
@@ -136,9 +135,8 @@ GameDatabase.infinity.upgrades = (function() {
       id: "resetMult",
       cost: 7,
       description: "Increase Dimension Boost multiplier",
-      effect: 2.5,
-      formatEffect: () => "2x ➜ 2.5x",
-      staticEffect: true,
+      effect: () => 2.5,
+      formatEffect: () => `${formatX(2, 0, 1)} ➜ ${formatX(2.5, 0, 1)}`,
       charged: {
         description: "Dimension Boost multiplier gains a power effect based on Teresa level",
         effect: () => 1 + Ra.pets.teresa.level / 200,
@@ -148,13 +146,13 @@ GameDatabase.infinity.upgrades = (function() {
     ipGen: {
       id: "passiveGen",
       cost: 10,
-      description: "Infinity Point generation based on fastest Infinity",
+      description: "Passively generate Infinity Points 10 times slower than your fastest Infinity",
       // Cutting corners: this is not actual effect (player.infMult is), but
       // it is totalIPMult that is displyed on upgrade
       effect: () => (Teresa.isRunning || V.isRunning ? new Decimal(0) : GameCache.totalIPMult.value),
       formatEffect: value => {
         if (Teresa.isRunning || V.isRunning) return "Disabled in this reality";
-        const income = shorten(value, 2, 0);
+        const income = format(value, 2, 0);
         const period = player.bestInfinityTime >= 999999999999
           ? "hundred or so years"
           : Time.bestInfinity.times(10);
@@ -191,14 +189,23 @@ GameDatabase.infinity.upgrades = (function() {
       description: "You start with the 8th Dimension unlocked, and an Antimatter Galaxy",
       bannedFromCharging: true
     },
+    ipOffline: {
+      id: "ipOffline",
+      cost: 1000,
+      description: "Only while offline, gain 50% of your best IP/min without using Max All",
+      effect: () => player.bestIpPerMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
+      formatEffect: value => `${format(value, 2, 2)} IP/min`,
+      bannedFromCharging: true
+    },
     ipMult: {
       cost: () => player.infMultCost,
       costCap: new Decimal("1e6000000"),
       costIncreaseThreshold: new Decimal("1e3000000"),
-      description: "Multiply Infinity Points from all sources by 2",
+      description: () => `Multiply Infinity Points from all sources by ${formatInt(2)}`,
       effect: () => player.infMult,
       cap: () => Effarig.eternityCap || new Decimal("1e1000000"),
-      formatEffect: value => formatX(value, 2, 2)
+      formatEffect: value => formatX(value, 2, 2),
+      bannedFromCharging: true
     }
   };
 }());

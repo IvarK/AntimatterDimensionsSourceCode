@@ -10,28 +10,31 @@ Vue.component("black-hole-upgrade-row", {
     };
   },
   computed: {
+    blackHoleDescription() {
+      return this.blackHole.description(false);
+    },
     intervalConfig() {
       return {
         upgrade: this.blackHole.intervalUpgrade,
-        description: "Reduce the black hole inactive time by 20%",
+        description: () => `Reduce ${this.blackHoleDescription}'s inactive time by 20%`,
         effectTitle: "Current interval",
-        formatEffect: value => `${value.toFixed(1)} seconds`
+        formatEffect: value => `${TimeSpan.fromSeconds(value).toStringShort(false)}`
       };
     },
     powerConfig() {
       return {
         upgrade: this.blackHole.powerUpgrade,
-        description: "Make the black hole 35% more powerful",
+        description: () => `Make ${this.blackHoleDescription} 35% stronger`,
         effectTitle: "Current power",
-        formatEffect: value => `${value.toFixed(1)}x`
+        formatEffect: value => `${formatX(value, 2, 2)}`
       };
     },
     durationConfig() {
       return {
         upgrade: this.blackHole.durationUpgrade,
-        description: "Extend the black hole duration by 30%",
+        description: () => `Extend ${this.blackHoleDescription}'s duration by 30%`,
         effectTitle: "Current duration",
-        formatEffect: value => `${value.toFixed(1)} seconds`
+        formatEffect: value => `${TimeSpan.fromSeconds(value).toStringShort(false)}`
       };
     }
   },

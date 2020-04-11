@@ -21,10 +21,10 @@ Vue.component("modal-import", {
       <div class="c-modal-import__save-info">
         <div v-if="inputIsSecret">???</div>
         <template v-else-if="inputIsValidSave">
-          <div>Antimatter: {{ formatMoney(player.money) }}</div>
-          <div v-if="progress.isInfinityUnlocked">Infinities: {{ shortenDimensions(player.infinitied) }}</div>
-          <div v-if="progress.isEternityUnlocked">Eternities: {{ shortenDimensions(player.eternities) }}</div>
-          <div v-if="progress.isRealityUnlocked">Realities: {{ shortenDimensions(player.realities) }}</div>
+          <div>Antimatter: {{ formatAntimatter(antimatter) }}</div>
+          <div v-if="progress.isInfinityUnlocked">Infinities: {{ format(player.infinitied, 2, 0) }}</div>
+          <div v-if="progress.isEternityUnlocked">Eternities: {{ format(player.eternities, 2, 0) }}</div>
+          <div v-if="progress.isRealityUnlocked">Realities: {{ format(player.realities, 2, 0) }}</div>
           <div class="c-modal-import__warning">(your current save file will be overwritten!)</div>
         </template>
         <div v-else-if="hasInput">Not a valid save</div>
@@ -43,6 +43,9 @@ Vue.component("modal-import", {
     progress() {
       return PlayerProgress.of(this.player);
     },
+    antimatter() {
+      return this.player.antimatter || this.player.money;
+    },
     hasInput() {
       return this.input !== "";
     },
@@ -57,8 +60,8 @@ Vue.component("modal-import", {
     }
   },
   methods: {
-    formatMoney(money) {
-      return this.shortenPostBreak(money, 2, 1);
+    formatAntimatter(antimatter) {
+      return formatPostBreak(antimatter, 2, 1);
     },
     importSave() {
       if (!this.inputIsValid) return;

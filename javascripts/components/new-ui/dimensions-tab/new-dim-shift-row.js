@@ -9,7 +9,9 @@ Vue.component("new-dim-shift-row", {
       },
       isShift: false,
       isBuyable: false,
-      resets: 0
+      purchasedBoosts: 0,
+      freeBoosts: 0,
+      lockText: null
     };
   },
   computed: {
@@ -17,10 +19,26 @@ Vue.component("new-dim-shift-row", {
       return this.isShift ? "Shift" : "Boost";
     },
     dimName() {
-      return SHORT_DISPLAY_NAMES[this.requirement.tier];
+      return NormalDimension(this.requirement.tier).shortDisplayName;
     },
     buttonText() {
-      return `Reset the game for a ${this.isShift ? "new Dimension" : "boost"}`;
+      return this.lockText === null
+        ? `Reset your Dimensions for a ${this.isShift ? "new Dimension" : "boost"}`
+        : this.lockText;
+    },
+    boostCountText() {
+      const parts = [this.purchasedBoosts];
+      if (this.freeBoosts !== 0) {
+        parts.push(this.freeBoosts);
+      }
+      const sum = parts.map(formatInt).join(" + ");
+      if (parts.length >= 2) {
+        return `${sum} = ${formatInt(parts.sum())}`;
+      }
+      return sum;
+    },
+    tutorialClass() {
+      return Tutorial.glowingClass(TUTORIAL_STATE.DIMSHIFT, this.isBuyable);
     }
   },
   methods: {
@@ -28,21 +46,24 @@ Vue.component("new-dim-shift-row", {
       const requirement = DimBoost.requirement;
       this.requirement.tier = requirement.tier;
       this.requirement.amount = requirement.amount;
-      this.isBuyable = requirement.isSatisfied;
+      this.isBuyable = requirement.isSatisfied && DimBoost.canBeBought;
       this.isShift = DimBoost.isShift;
-      this.resets = player.resets;
+      this.purchasedBoosts = DimBoost.purchasedBoosts;
+      this.freeBoosts = DimBoost.freeBoosts;
+      this.lockText = DimBoost.lockText;
     },
     softReset() {
       softResetBtnClick();
+      Tutorial.turnOffEffect(TUTORIAL_STATE.DIMSHIFT);
     }
   },
   template:
   `<div class="reset-container dimboost">
-    <h4>Dimensional {{name}} ({{shortenSmallInteger(resets)}})</h4>
-    <span>Requires: {{shortenSmallInteger(requirement.amount)}} {{dimName}} D</span>
-    <button 
-      class="storebtn" style="height: 56px;"
-      :class="{ 'storebtn-unavailable': !isBuyable }"
+    <h4>Dimensional {{name}} ({{boostCountText}})</h4>
+    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} D</span>
+    <button
+      class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
+      :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"
       :enabled="isBuyable"
       @click="softReset"
       >{{buttonText}}</button>

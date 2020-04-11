@@ -11,7 +11,8 @@
 
 GameKeyboard.bindRepeatableHotkey("m", () => maxAll());
 GameKeyboard.bindRepeatableHotkey("d", () => softResetBtnClick());
-GameKeyboard.bindRepeatableHotkey("g", () => galaxyResetBtnClick());
+GameKeyboard.bindRepeatableHotkey("g", () => requestGalaxyReset(true));
+GameKeyboard.bindRepeatableHotkey("shift+g", () => requestGalaxyReset(false));
 GameKeyboard.bindRepeatableHotkey("s", () => sacrificeBtnClick());
 GameKeyboard.bindRepeatableHotkey("r", () => replicantiGalaxy());
 GameKeyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());
@@ -27,9 +28,16 @@ GameKeyboard.bindRepeatableHotkey("e", () => eternity());
   for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);
 }());
 
-GameKeyboard.bindHotkey("a", () => toggleAutobuyers());
+GameKeyboard.bindHotkey("a", () => Autobuyers.toggle());
 GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
-GameKeyboard.bindHotkey("u", () => automatorOnOff());
+GameKeyboard.bindHotkey("u", () => {
+  if (AutomatorBackend.isRunning) {
+    AutomatorBackend.pause();
+  }
+  else if (AutomatorBackend.isOn) {
+    AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
+  }
+});
 
 GameKeyboard.bindHotkey("esc", () => {
   if (Modal.isOpen) {
@@ -48,8 +56,18 @@ GameKeyboard.bindHotkey("?", () => {
   Modal.shortcuts.show();
 });
 
+GameKeyboard.bindHotkey("h", () => {
+  if (Modal.h2p.isOpen) {
+    Modal.hide();
+    return;
+  }
+  if (Modal.isOpen) return;
+  Modal.h2p.show();
+  ui.view.h2pActive = true;
+});
+
 GameKeyboard.bindHotkey(["ctrl+s", "meta+s"], () => {
-  GameStorage.save();
+  GameStorage.save(false, true);
   return false;
 });
 GameKeyboard.bindHotkey(["ctrl+e", "meta+e"], () => {
@@ -69,8 +87,8 @@ GameKeyboard.bind(
 
 GameKeyboard.bind("up up down down left right left right b a", () => {
   SecretAchievement(17).unlock();
-  if (player.money.lt(30)) {
-    player.money = new Decimal(30);
+  if (player.antimatter.lt(30)) {
+    player.antimatter = new Decimal(30);
   }
 });
 

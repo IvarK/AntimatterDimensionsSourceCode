@@ -2,17 +2,17 @@
 
 (function() {
   if (AutomatorGrammar === undefined) {
-    throw crash("AutomatorGrammar must be defined here");
+    throw new Error("AutomatorGrammar must be defined here");
   }
 
   const parser = AutomatorGrammar.parser;
   const BaseVisitor = parser.getBaseCstVisitorConstructorWithDefaults();
 
   class Validator extends BaseVisitor {
-    constructor() {
+    constructor(rawText) {
       super();
       this.validateVisitor();
-      this.reset();
+      this.reset(rawText);
       // Commands can provide validation hooks; we might also have some here
       for (const cmd of AutomatorCommands) {
         if (!cmd.validate) continue;
@@ -24,14 +24,23 @@
       }
     }
 
-    addLexerErrors(errors, input) {
+    addLexerErrors(errors) {
       for (const err of errors) {
         this.errors.push({
+          startLine: err.line,
           startOffset: err.offset,
           endOffset: err.offset + err.length,
-          info: `Unexpected characters "${input.substr(err.offset, err.length)}"`,
+          info: `Unexpected characters "${this.rawText.substr(err.offset, err.length)}"`,
         });
       }
+    }
+
+    static combinePositionRanges(r1, r2) {
+      return {
+        startLine: Math.min(r1.startLine, r2.startLine),
+        startOffset: Math.min(r1.startOffset, r2.startOffset),
+        endOffset: Math.max(r1.endOffset, r2.endOffset),
+      };
     }
 
     addParserErrors(errors, tokens) {
@@ -57,26 +66,22 @@
       }
     }
 
-    static combinePositionRanges(r1, r2) {
-      return {
-        startOffset: Math.min(r1.startOffset, r2.startOffset),
-        endOffset: Math.max(r1.endOffset, r2.endOffset),
-      };
-    }
-
-    // Chevrotain doesn't provide position ranges for higher level grammar constructs yet
-    // We have to recursively figure out the range so we can highlight an error
     static getPositionRange(ctx) {
       let pos = {
+        startLine: Number.MAX_VALUE,
         startOffset: Number.MAX_VALUE,
         endOffset: 0,
       };
       if (ctx === undefined || ctx === null) return pos;
       if (ctx.startOffset !== undefined) {
         return {
+          startLine: ctx.startLine,
           startOffset: ctx.startOffset,
           endOffset: ctx.endOffset,
         };
+      }
+      if (ctx.location !== undefined && ctx.location.startOffset !== undefined) {
+        return ctx.location;
       }
       if (ctx.children && !Array.isArray(ctx.children)) return Validator.getPositionRange(ctx.children);
       if (Array.isArray(ctx)) {
@@ -95,7 +100,8 @@
       this.errors.push(pos);
     }
 
-    reset() {
+    reset(rawText) {
+      this.rawText = rawText;
       this.variables = {};
       this.errors = [];
     }
@@ -116,10 +122,10 @@
         this.addError(identifier, `Variable ${varName} has not been defined`);
         return undefined;
       }
-      if (varInfo.type === AutomatorVarTypes.UNKNOWN) {
+      if (varInfo.type === AUTOMATOR_VAR_TYPES.UNKNOWN) {
         varInfo.firstUseLineNumber = identifier.image.startLine;
         varInfo.type = type;
-        if (type === AutomatorVarTypes.STUDIES) {
+        if (type === AUTOMATOR_VAR_TYPES.STUDIES) {
           // The only time we have an unknown studies is if there was only one listed
           varInfo.value = {
             normal: [varInfo.value.toNumber()],
@@ -133,7 +139,7 @@
         this.addError(identifier, `Variable ${varName} is not a ${type.name}${inferenceMessage}`);
         return undefined;
       }
-      if (varInfo.value === undefined) throw crash("Unexpected undefined variable value");
+      if (varInfo.value === undefined) throw new Error("Unexpected undefined Automator variable value");
       return varInfo;
     }
 
@@ -145,10 +151,30 @@
       }
       const value = parseFloat(ctx.NumberLiteral[0].image) * ctx.TimeUnit[0].tokenType.$scale;
       if (isNaN(value)) {
-        this.addError(ctx, "Error parsing time unit");
+        this.addError(ctx, "Error parsing duration");
         return undefined;
       }
       ctx.$value = value;
+      return ctx.$value;
+    }
+
+    xLast(ctx) {
+      if (ctx.$value) return ctx.$value;
+      if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
+        this.addError(ctx, "Missing multiplier");
+        return undefined;
+      }
+      ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
+      return ctx.$value;
+    }
+
+    currencyAmount(ctx) {
+      if (ctx.$value) return ctx.$value;
+      if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
+        this.addError(ctx, "Missing amount");
+        return undefined;
+      }
+      ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       return ctx.$value;
     }
 
@@ -164,12 +190,12 @@
         name: varName,
         definitionLineNumber: ctx.Identifier[0].startLine,
         firstUseLineNumber: 0,
-        type: AutomatorVarTypes.UNKNOWN,
+        type: AUTOMATOR_VAR_TYPES.UNKNOWN,
         value: undefined,
       };
       this.variables[varName] = def;
       if (ctx.duration) {
-        def.type = AutomatorVarTypes.DURATION;
+        def.type = AUTOMATOR_VAR_TYPES.DURATION;
         def.value = this.visit(ctx.duration);
         return;
       }
@@ -177,7 +203,7 @@
       const studies = ctx.studyList[0].children.studyListEntry;
       if (studies.length > 1 || studies[0].children.studyRange ||
         studies[0].children.StudyPath || studies[0].children.Comma) {
-        def.type = AutomatorVarTypes.STUDIES;
+        def.type = AUTOMATOR_VAR_TYPES.STUDIES;
         def.value = this.visit(ctx.studyList);
         return;
       }
@@ -186,7 +212,7 @@
       def.value = new Decimal(studies[0].children.NumberLiteral[0].image);
       if (!/^[1-9][0-9]*[1-9]$/u.test(studies[0].children.NumberLiteral[0].image)) {
         // Study numbers are pretty specific number patterns
-        def.type = AutomatorVarTypes.NUMBER;
+        def.type = AUTOMATOR_VAR_TYPES.NUMBER;
       }
     }
 
@@ -229,8 +255,10 @@
       if (ctx.$cached !== undefined) return ctx.$cached;
       const studiesOut = [];
       for (const sle of ctx.studyListEntry) this.visit(sle, studiesOut);
+      const positionRange = Validator.getPositionRange(ctx);
       ctx.$cached = {
         normal: studiesOut,
+        image: this.rawText.substr(positionRange.startOffset, positionRange.endOffset - positionRange.startOffset + 1),
         ec: 0
       };
       if (ctx.ECNumber) {
@@ -238,7 +266,7 @@
           this.addError(ctx.Pipe[0], "Missing eternity challenge number");
         }
         const ecNumber = parseFloat(ctx.ECNumber[0].image);
-        if (!Number.isInteger(ecNumber) || ecNumber < 1 || ecNumber > 12) {
+        if (!Number.isInteger(ecNumber) || ecNumber < 0 || ecNumber > 12) {
           this.addError(ctx.ECNumber, `Invalid eternity challenge ID ${ecNumber}`);
         }
         ctx.$cached.ec = ecNumber;
@@ -250,7 +278,8 @@
       if (ctx.NumberLiteral) {
         ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       } else if (ctx.Identifier) {
-        ctx.$value = this.lookupVar(ctx.Identifier[0], AutomatorVarTypes.NUMBER).value;
+        const varLookup = this.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.NUMBER);
+        if (varLookup) ctx.$value = varLookup.value;
       }
     }
 
@@ -264,6 +293,11 @@
       }
       if (!ctx.ComparisonOperator || ctx.ComparisonOperator[0].isInsertedInRecovery) {
         this.addError(ctx, "Missing comparison operator (<, >, <=, >=)");
+        return;
+      }
+      const T = AutomatorLexer.tokenMap;
+      if (ctx.ComparisonOperator[0].tokenType === T.OpEQ || ctx.ComparisonOperator[0].tokenType === T.EqualSign) {
+        this.addError(ctx, "Please use an inequality comparison (>,<,>=,<=)");
       }
     }
 
@@ -305,7 +339,6 @@
     }
 
     script(ctx) {
-      this.reset();
       if (ctx.block) this.visit(ctx.block);
       ctx.variables = this.variables;
     }
@@ -350,20 +383,76 @@
 
     script(ctx) {
       if (ctx.variables === undefined) {
-        throw crash("Compiler called before Validator");
+        throw new Error("Compiler called before Validator");
       }
       return ctx.block ? this.visit(ctx.block) : [];
+    }
+  }
+
+  class Blockifier extends BaseVisitor {
+    constructor() {
+      super();
+      for (const cmd of AutomatorCommands) {
+        const blockify = cmd.blockify;
+        if (!blockify) continue;
+        const ownMethod = this[cmd.id];
+        // eslint-disable-next-line no-loop-func
+        this[cmd.id] = (ctx, output) => {
+          if (ownMethod && ownMethod !== super[cmd.id]) ownMethod.call(this, ctx, output);
+          let block = blockify(ctx, this);
+          output.push({
+            ...block,
+            id: UIID.next()
+          });
+        };
+      }
+      this.validateVisitor();
+    }
+
+    comparison(ctx) {
+      const flipped = ctx.Currency[0].startOffset > ctx.ComparisonOperator[0].startOffset;
+      const valueChildren = ctx.compareValue[0].children
+      const isDecimalValue = Boolean(valueChildren.$value)
+      const value = isDecimalValue ? valueChildren.$value.toString() : valueChildren.NumberLiteral[0].image
+      let operator = ctx.ComparisonOperator[0].image
+      if (flipped) {
+        switch (operator) {
+          case ">": operator = "<"; break;
+          case "<": operator = ">"; break;
+          case ">=": operator = "<="; break;
+          case "<=": operator = ">="; break;
+        }
+      }
+      return {
+        target: ctx.Currency[0].image,
+        secondaryTarget: operator,
+        inputValue: value,
+      }
+    }
+
+    script(ctx) {
+      const output = [];
+      if (ctx.block) this.visit(ctx.block, output);
+      return output;
+    }
+
+    block(ctx, output) {
+      if (ctx.command) {
+        for (const cmd of ctx.command) {
+          this.visit(cmd, output);
+        }
+      }
     }
   }
 
   function compile(input, validateOnly = false) {
     const lexResult = AutomatorLexer.lexer.tokenize(input);
     const tokens = lexResult.tokens;
-    parser.input = tokens;    const t1 = Date.now();
+    parser.input = tokens;
     const parseResult = parser.script();
-    const validator = new Validator();
+    const validator = new Validator(input);
     validator.visit(parseResult);
-    validator.addLexerErrors(lexResult.errors, input);
+    validator.addLexerErrors(lexResult.errors);
     validator.addParserErrors(parser.errors, tokens);
     let compiled;
     if (validator.errors.length === 0 && !validateOnly) {
@@ -375,4 +464,36 @@
     };
   }
   AutomatorGrammar.compile = compile;
+
+  function blockifyTextAutomator(input) {
+    const lexResult = AutomatorLexer.lexer.tokenize(input);
+    const tokens = lexResult.tokens;
+
+    AutomatorGrammar.parser.input = tokens;
+    const parseResult = AutomatorGrammar.parser.script()
+    const validator = new Validator(input);
+    validator.visit(parseResult)
+    if (lexResult.errors.length == 0 && AutomatorGrammar.parser.errors.length == 0 && validator.errors.length == 0) {
+      const b = new Blockifier()
+      let blocks = b.visit(parseResult)
+      return blocks
+    }
+
+    return null;
+  }
+  AutomatorGrammar.blockifyTextAutomator = blockifyTextAutomator;
+
+  function validateLine(input) {
+    const lexResult = AutomatorLexer.lexer.tokenize(input);
+    const tokens = lexResult.tokens;
+    AutomatorGrammar.parser.input = tokens;
+    const parseResult = AutomatorGrammar.parser.script();
+    const validator = new Validator(input);
+    validator.visit(parseResult);
+    validator.addLexerErrors(lexResult.errors);
+    validator.addParserErrors(parser.errors, tokens);
+    return validator
+  }
+
+  AutomatorGrammar.validateLine = validateLine;
 }());

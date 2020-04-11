@@ -7,7 +7,8 @@ class DimBoostRequirement {
   }
 
   get isSatisfied() {
-    return NormalDimension(this.tier).amount.gte(this.amount);
+    const dimension = NormalDimension(this.tier);
+    return dimension.totalAmount.gte(this.amount);
   }
 }
 
@@ -17,8 +18,7 @@ class DimBoost {
       return new Decimal(1);
     }
 
-    return Effects
-      .max(
+    let boost = Effects.max(
         2,
         InfinityUpgrade.dimboostMult,
         InfinityChallenge(7).reward,
@@ -33,6 +33,12 @@ class DimBoost {
         Achievement(142),
         GlyphEffect.dimBoostPower
       ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);
+    if (GlyphAlteration.isAdded("effarig")) boost = boost.pow(getSecondaryGlyphEffect("effarigforgotten"));
+    return boost;
+  }
+
+  static multiplierToNDTier(tier) {
+    return DimBoost.power.pow(this.totalBoosts + 1 - tier).clampMin(1);
   }
 
   static get maxShiftTier() {
@@ -42,7 +48,29 @@ class DimBoost {
   static get isShift() {
     // Player starts with 4 unlocked dimensions,
     // hence there are just 4 (or 2, if in Auto DimBoosts challenge) shifts
-    return player.resets + 4 < this.maxShiftTier;
+    return DimBoost.purchasedBoosts + 4 < this.maxShiftTier;
+  }
+  
+  static get challenge8MaxBoosts() {
+    // In Challenge 8, the only boosts that are useful are the first 5
+    // (the fifth unlocks sacrifice). In IC1 (Challenge 8 and Challenge 10
+    // combined, among other things), only the first 2 are useful
+    // (they unlock new dimensions).
+    // There's no actual problem with bulk letting the player get
+    // more boosts than this; it's just that boosts beyond this are pointless.
+    return NormalChallenge(10).isRunning ? 2 : 5;
+  }
+  
+  static get canBeBought() {
+    return !(NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) && !Ra.isRunning;
+  }
+  
+  static get lockText() {
+    if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) {
+      return "Locked (8th Dimension Autobuyer Challenge)";
+    }
+    if (Ra.isRunning) return "Locked (Ra's reality)";
+    return null;
   }
 
   static get requirement() {
@@ -50,113 +78,116 @@ class DimBoost {
   }
 
   static bulkRequirement(bulk) {
-    let targetResets = player.resets + bulk;
-    let tier = Math.min(targetResets + 3, this.maxShiftTier);
+    const targetResets = DimBoost.purchasedBoosts + bulk;
+    const tier = Math.min(targetResets + 3, this.maxShiftTier);
     let amount = 20;
-
+    const discount = Effects.sum(
+      TimeStudy(211),
+      TimeStudy(222)
+    );
     if (tier === 6 && NormalChallenge(10).isRunning) {
-      amount += Math.ceil((targetResets - 3) * 20);
-    }
-    else if (tier === 8) {
-      const mult = 15 - Effects.sum(
-        TimeStudy(211),
-        TimeStudy(222)
-      );
-      amount += Math.ceil((targetResets - 5) * mult);
+      amount += Math.ceil((targetResets - 3) * (20 - discount));
+    } else if (tier === 8) {
+      amount += Math.ceil((targetResets - 5) * (15 - discount));
     }
     if (EternityChallenge(5).isRunning) {
-      amount += Math.pow(targetResets - 1, 3) + targetResets;
+      amount += Math.pow(targetResets - 1, 3) + targetResets - 1;
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
     if (InfinityChallenge(5).isCompleted) amount -= 1;
 
-    amount *= Effects.product(InfinityUpgrade.resetBoost.chargedEffect);
+    amount *= InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1);
 
     amount = Math.ceil(amount);
 
     return new DimBoostRequirement(tier, amount);
   }
+
+  static get purchasedBoosts() {
+    return Math.floor(player.dimensionBoosts);
+  }
+
+  static get freeBoosts() {
+    // This was originally used for Time Compression, probably use it for something in Lai'tela now
+    return 0;
+  }
+
+  static get totalBoosts() {
+    return Math.floor((this.purchasedBoosts + this.freeBoosts) * getAdjustedGlyphEffect("realitydimboost"));
+  }
 }
 
-function applyDimensionBoost() {
-    const power = DimBoost.power;
-    for (let tier = 1; tier <= 8; tier++) {
-        NormalDimension(tier).power = power.pow(player.resets + 1 - tier).max(1);
-    }
-}
-
-function softReset(bulk) {
-    //if (bulk < 1) bulk = 1 (fixing issue 184)
-    if (!player.break && player.money.gt(Decimal.MAX_NUMBER)) return;
-    EventHub.dispatch(GameEvent.DIMBOOST_BEFORE, bulk);
-    player.resets += bulk;
+function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
+    if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return;
+    EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
+    player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
 
     /**
      * All reset stuff are in these functions now. (Hope this works)
      */
-    player.sacrificed = new Decimal(0);
     resetChallengeStuff();
-    NormalDimensions.reset();
-    applyDimensionBoost();
-    skipResetsIfPossible();
-    resetTickspeed();
-    const currentMoney = player.money;
-    resetMoney();
-    if (Achievement(111).isEnabled) {
-        player.money = player.money.max(currentMoney);
+    if (forcedNDReset || !Perk.dimboostNonReset.isBought) {
+      NormalDimensions.reset();
+      player.sacrificed = new Decimal(0);
+      resetTickspeed();
     }
-    EventHub.dispatch(GameEvent.DIMBOOST_AFTER, bulk);
+    skipResetsIfPossible();
+    const currentAntimatter = player.antimatter;
+    player.antimatter = Player.startingAM;
+    if (!forcedAMReset && (Achievement(111).isUnlocked || Perk.dimboostNonReset.isBought)) {
+        player.antimatter = player.antimatter.max(currentAntimatter);
+    }
+    EventHub.dispatch(GAME_EVENT.DIMBOOST_AFTER, bulk);
 }
 
 function skipResetsIfPossible() {
   if (NormalChallenge.isRunning || InfinityChallenge.isRunning) {
     return;
   }
-  if (InfinityUpgrade.skipResetGalaxy.isBought && player.resets < 4) {
-    player.resets = 4;
+  if (InfinityUpgrade.skipResetGalaxy.isBought && player.dimensionBoosts < 4) {
+    player.dimensionBoosts = 4;
     if (player.galaxies === 0) player.galaxies = 1;
-  }
-  else if (InfinityUpgrade.skipReset3.isBought && player.resets < 3) player.resets = 3;
-  else if (InfinityUpgrade.skipReset2.isBought && player.resets < 2) player.resets = 2;
-  else if (InfinityUpgrade.skipReset1.isBought && player.resets < 1) player.resets = 1;
+  } else if (InfinityUpgrade.skipReset3.isBought && player.dimensionBoosts < 3) player.dimensionBoosts = 3;
+  else if (InfinityUpgrade.skipReset2.isBought && player.dimensionBoosts < 2) player.dimensionBoosts = 2;
+  else if (InfinityUpgrade.skipReset1.isBought && player.dimensionBoosts < 1) player.dimensionBoosts = 1;
 }
 
 function softResetBtnClick() {
-  if ((!player.break && player.money.gt(Decimal.MAX_NUMBER)) || !DimBoost.requirement.isSatisfied) return;
-  if (Ra.isRunning) return;
+  if ((!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) || !DimBoost.requirement.isSatisfied) return;
+  if (!DimBoost.canBeBought) return;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
-  else softReset(1)
-  
-  for (let tier = 1; tier<9; tier++) {
-    const mult = DimBoost.power.pow(player.resets + 1 - tier);
-    if (mult.gt(1)) floatText(tier, "x" + shortenDimensions(mult));
+  else softReset(1);
+
+  for (let tier = 1; tier < 9; tier++) {
+    const mult = DimBoost.multiplierToNDTier(tier);
+    if (mult.gt(1)) floatText(tier, formatX(mult));
   }
 }
 
-function maxBuyDimBoosts(manual) {
+function maxBuyDimBoosts() {
   // Shifts are bought one at a time, unlocking the next dimension
   if (DimBoost.isShift) {
     if (DimBoost.requirement.isSatisfied) softReset(1);
     return;
   }
-  let availableBoosts = Number.MAX_VALUE;
-  if (player.overXGalaxies > player.galaxies && !manual) {
-    availableBoosts = Autobuyer.dimboost.maxDimBoosts - player.resets;
-  }
-  if (availableBoosts <= 0) return;
-
   const req1 = DimBoost.bulkRequirement(1);
   if (!req1.isSatisfied) return;
   const req2 = DimBoost.bulkRequirement(2);
-  if (!req2.isSatisfied) return softReset(1);
+  if (!req2.isSatisfied) {
+    softReset(1);
+    return;
+  }
   // Linearly extrapolate dimboost costs. req1 = a * 1 + b, req2 = a * 2 + b
   // so a = req2 - req1, b = req1 - a = 2 req1 - req2, num = (dims - b) / a
   const increase = req2.amount - req1.amount;
-  let maxBoosts = Math.min(availableBoosts,
-    1 + Math.floor((NormalDimension(req1.tier).amount.toNumber() - req1.amount) / increase));
-  if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) return softReset(maxBoosts);
-
+  const dim = NormalDimension(req1.tier);
+  let maxBoosts = Math.min(Number.MAX_VALUE,
+    1 + Math.floor((dim.totalAmount.toNumber() - req1.amount) / increase));
+  if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) {
+    softReset(maxBoosts);
+    return;
+  }
   // But in case of EC5 it's not, so do binary search for appropriate boost amount
   let minBoosts = 2;
   while (maxBoosts !== minBoosts + 1) {

@@ -7,7 +7,7 @@ GameDatabase.eternity.milestones = {
   },
   keepAutobuyers: {
     eternities: 2,
-    reward: "You keep your autobuyers on Eternity"
+    reward: "You start Eternity with all normal autobuyers"
   },
   autobuyerReplicantiGalaxy: {
     eternities: 3,
@@ -15,15 +15,27 @@ GameDatabase.eternity.milestones = {
   },
   keepInfinityUpgrades: {
     eternities: 4,
-    reward: "You keep your infinity upgrades on Eternity"
+    reward: "You start Eternity with all infinity upgrades"
   },
   bigCrunchModes: {
     eternities: 5,
     reward: "Unlock more Big Crunch autobuyer options"
   },
+  autoEP: {
+    eternities: 6,
+    reward: () => {
+      const EPmin = getOfflineEPGain(TimeSpan.fromMinutes(1).totalMilliseconds);
+      return `While offline, gain 25% of your best EP/min from previous eternities.
+        (Currently ${format(EPmin, 2, 2)} EP/min)`;
+    },
+  },
   autoIC: {
     eternities: 7,
     reward: "You complete Infinity Challenges as soon as you unlock them (you get sacrifice autobuyer immediately)"
+  },
+  keepBreakUpgrades: {
+    eternities: 8,
+    reward: "You keep your Breaking Infinity upgrades on Eternity"
   },
   autobuyMaxGalaxies: {
     eternities: 9,
@@ -65,10 +77,6 @@ GameDatabase.eternity.milestones = {
     eternities: 18,
     reward: "Unlock autobuyer for the 8th Infinity Dimension"
   },
-  keepBreakUpgrades: {
-    eternities: 20,
-    reward: "You keep your Breaking Infinity upgrades on Eternity"
-  },
   autoUnlockID: {
     eternities: 25,
     reward: "You automatically unlock Infinity Dimensions upon reaching them"
@@ -95,6 +103,22 @@ GameDatabase.eternity.milestones = {
   },
   autobuyerEternity: {
     eternities: 100,
-    reward: "Unlock autobuyer for Eternities"
+    reward: "Unlock autobuyer for Eternities."
+  },
+  autoEternities: {
+    eternities: 200,
+    reward: () => {
+      const eternities = getEternitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
+      return `While offline, gain eternities at 50% the rate of your fastest eternity.
+        (Currently ${format(eternities, 2, 2)}/hour)`;
+    },
+  },
+  autoInfinities: {
+    eternities: 1000,
+    reward: () => {
+      const infinities = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
+      return `While offline, gain Infinitied stat equal to 50% your best Infinitied stat/hour this eternity.
+        (Currently ${format(infinities, 2, 2)}/hour)`;
+    },
   }
 };

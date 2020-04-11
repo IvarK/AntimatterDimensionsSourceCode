@@ -19,17 +19,17 @@ const AutomatorCommands = ((() => {
     }
   }
 
-  EventHub.logic.on(GameEvent.BIG_CRUNCH_AFTER, () => prestigeNotify(T.Infinity.$prestigeLevel));
-  EventHub.logic.on(GameEvent.ETERNITY_RESET_AFTER, () => prestigeNotify(T.Eternity.$prestigeLevel));
-  EventHub.logic.on(GameEvent.REALITY_RESET_AFTER, () => prestigeNotify(T.Reality.$prestigeLevel));
+  EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_AFTER, () => prestigeNotify(T.Infinity.$prestigeLevel));
+  EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => prestigeNotify(T.Eternity.$prestigeLevel));
+  EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => prestigeNotify(T.Reality.$prestigeLevel));
 
   // Used by while and until
   function compileConditionLoop(evalComparison, commands) {
     return {
       run: () => {
-        if (!evalComparison()) return AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION;
+        if (!evalComparison()) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         AutomatorBackend.push(commands);
-        return AutomatorCommandStatus.SAME_INSTRUCTION;
+        return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
       },
       blockCommands: commands,
     };
@@ -44,31 +44,81 @@ const AutomatorCommands = ((() => {
         $.OR([
           { ALT: () => $.CONSUME(T.On) },
           { ALT: () => $.CONSUME(T.Off) },
-          { ALT: () => $.SUBRULE($.duration) },
+          { ALT: () => $.OR1([
+            { ALT: () => $.SUBRULE($.duration) },
+            { ALT: () => $.SUBRULE($.xLast) },
+            { ALT: () => $.SUBRULE($.currencyAmount) },
+          ]) },
         ]);
       },
       validate: (ctx, V) => {
         ctx.startLine = ctx.Auto[0].startLine;
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && ctx.duration) {
-          V.addError(ctx.duration[0], "auto reality cannot be set to a duration");
+        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && (ctx.duration || ctx.xLast)) {
+          V.addError((ctx.duration || ctx.xLast)[0],
+            "auto reality cannot be set to a duration or x last");
           return false;
+        }
+        if (ctx.PrestigeEvent && ctx.currencyAmount) {
+          const desired$ = ctx.PrestigeEvent[0].tokenType.$prestigeCurrency;
+          const specified$ = ctx.currencyAmount[0].children.Currency[0].tokenType.name;
+          if (desired$ !== specified$) {
+            V.addError(ctx.currencyAmount, `Currency doesn't match prestige (${desired$} vs ${specified$})`);
+            return false;
+          }
         }
         return true;
       },
       compile: ctx => {
-        const on = Boolean(ctx.On || ctx.duration);
+        const isReality = ctx.PrestigeEvent[0].tokenType === T.Reality;
+        const on = Boolean(ctx.On || ctx.duration || ctx.xLast || ctx.currencyAmount);
         const duration = ctx.duration ? ctx.duration[0].children.$value : undefined;
+        const xLast = ctx.xLast ? ctx.xLast[0].children.$value : undefined;
+        const fixedAmount = ctx.currencyAmount ? ctx.currencyAmount[0].children.$value : undefined;
         const durationMode = ctx.PrestigeEvent[0].tokenType.$autobuyerDurationMode;
+        const xLastMode = ctx.PrestigeEvent[0].tokenType.$autobuyerXLastMode;
+        const fixedMode = ctx.PrestigeEvent[0].tokenType.$autobuyerCurrencyMode;
         const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer;
         return () => {
-          autobuyer.isOn = on;
+          autobuyer.isActive = on;
           if (duration !== undefined) {
             autobuyer.mode = durationMode;
-            autobuyer.limit = new Decimal(1e-3 * duration);
+            autobuyer.time = 1e-3 * duration;
+          } else if (xLast !== undefined) {
+            autobuyer.mode = xLastMode;
+            autobuyer.xLast = new Decimal(xLast);
+          } else if (fixedAmount !== undefined) {
+            autobuyer.mode = fixedMode;
+            if (isReality) {
+              autobuyer.rm = new Decimal(fixedAmount);
+            } else {
+              autobuyer.amount = new Decimal(fixedAmount);
+            }
           }
-          return AutomatorCommandStatus.NEXT_INSTRUCTION;
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
+      blockify: ctx => {
+        const duration = ctx.duration
+        ? `${ctx.duration[0].children.NumberLiteral[0].image} ${ctx.duration[0].children.TimeUnit[0].image}`
+        : undefined;
+        const xLast = ctx.xLast ? ctx.xLast[0].children.$value : undefined;
+        const fixedAmount = ctx.currencyAmount
+        ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image} ${ctx.currencyAmount[0].children.Currency[0].image}`
+        : undefined;
+        const on = Boolean(ctx.On);
+        let input = "";
+
+        if (duration) input = duration;
+        else if (xLast) input = `${xLast} x last`;
+        else if (fixedAmount) input = `${fixedAmount}`;
+        else input = (on ? "ON" : "OFF");
+
+        return {
+          target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
+          inputValue: input,
+          ...automatorBlocksMap['AUTO']
+        }
+      }
     },
     {
       id: "blackHole",
@@ -91,12 +141,19 @@ const AutomatorCommands = ((() => {
         const on = Boolean(ctx.On);
         return () => {
           if (on === BlackHoles.arePaused) BlackHoles.togglePause();
-          return AutomatorCommandStatus.NEXT_INSTRUCTION;
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
+      blockify: ctx => {
+        return {
+          target: Boolean(ctx.On) ? 'ON' : 'OFF',
+          ...automatorBlocksMap['BLACK HOLE']
+        }
+      }
     },
     {
       id: "define",
+      block: null,
       rule: $ => () => {
         $.CONSUME(T.Define);
         $.CONSUME(T.Identifier);
@@ -116,7 +173,7 @@ const AutomatorCommands = ((() => {
       },
       // Since define creates constants, they are all resolved at compile. The actual define instruction
       // doesn't have to do anything.
-      compile: () => () => AutomatorCommandStatus.NEXT_INSTRUCTION,
+      compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
     },
     {
       id: "ifBlock",
@@ -139,14 +196,25 @@ const AutomatorCommands = ((() => {
           run: S => {
             // We avoid running the same if condition twice by creating an empty object
             // on the stack.
-            if (S.commandState !== null) return AutomatorCommandStatus.NEXT_INSTRUCTION;
+            if (S.commandState !== null) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             S.commandState = {};
-            if (!evalComparison()) return AutomatorCommandStatus.NEXT_INSTRUCTION;
+            if (!evalComparison()) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             AutomatorBackend.push(commands);
-            return AutomatorCommandStatus.SAME_INSTRUCTION;
+            return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
           },
           blockCommands: commands,
         };
+      },
+      blockify: (ctx, B) => {
+        const commands = []
+        B.visit(ctx.block, commands)
+        const comparison = B.visit(ctx.comparison);
+        return {
+          nest: commands,
+          ...automatorBlocksMap['IF'],
+          ...comparison,
+          target: comparison.target.toUpperCase()
+        }
       }
     },
     {
@@ -162,7 +230,7 @@ const AutomatorCommands = ((() => {
       validate: (ctx, V) => {
         ctx.startLine = ctx.Pause[0].startLine;
         ctx.$duration = ctx.Identifier
-          ? V.lookupVar(ctx.Identifier[0], AutomatorVarTypes.DURATION).value
+          ? V.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.DURATION).value
           : V.visit(ctx.duration);
         return ctx.$duration !== undefined;
       },
@@ -172,27 +240,20 @@ const AutomatorCommands = ((() => {
           if (S.commandState === null) {
             S.commandState = { timeMs: 0 };
           } else {
-            S.commandState.timeMs += Time.unscaledDeltaTime.milliseconds;
+            S.commandState.timeMs += Math.max(Time.unscaledDeltaTime.milliseconds, AutomatorBackend.currentInterval);
           }
           return S.commandState.timeMs >= duration
-            ? AutomatorCommandStatus.NEXT_INSTRUCTION
-            : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+            ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
+            : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
+      },
+      blockify: ctx => {
+        const c = ctx.duration[0].children
+        return {
+          ...automatorBlocksMap['PAUSE'],
+          inputValue: c.NumberLiteral[0].image + c.TimeUnit[0].image
+        }
       }
-    },
-    {
-      id: "pause",
-      rule: $ => () => {
-        $.CONSUME(T.Pause);
-      },
-      validate: ctx => {
-        ctx.startLine = ctx.Pause[0].startLine;
-        return true;
-      },
-      compile: () => () => {
-        AutomatorBackend.pause();
-        return AutomatorCommandStatus.NEXT_INSTRUCTION;
-      },
     },
     {
       id: "prestige",
@@ -211,12 +272,17 @@ const AutomatorCommands = ((() => {
           const available = prestigeToken.$prestigeAvailable();
           if (!available) {
             return nowait
-              ? AutomatorCommandStatus.NEXT_INSTRUCTION
-              : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+              ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
+              : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
           }
           prestigeToken.$prestige();
-          return AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION;
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         };
+      },
+      blockify: ctx => {
+        return automatorBlocksMap[
+          ctx.PrestigeEvent[0].tokenType.name.toUpperCase()
+        ]
       }
     },
     {
@@ -230,9 +296,12 @@ const AutomatorCommands = ((() => {
         return true;
       },
       compile: () => () => {
-        if (player.dilation.active) return AutomatorCommandStatus.NEXT_INSTRUCTION;
-        if (startDilatedEternity(true)) return AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION;
-        return AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+        if (player.dilation.active) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+        if (startDilatedEternity(true)) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+        return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+      },
+      blockify: ctx => {
+        return { target: 'DILATION', ...automatorBlocksMap['START'] }
       }
     },
     {
@@ -249,15 +318,22 @@ const AutomatorCommands = ((() => {
         const ecNumber = ctx.eternityChallenge[0].children.$ecNumber;
         return () => {
           const ec = EternityChallenge(ecNumber);
-          if (ec.isRunning) return AutomatorCommandStatus.NEXT_INSTRUCTION;
+          if (ec.isRunning) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           if (!EternityChallenge(ecNumber).isUnlocked) {
             if (!TimeStudy.eternityChallenge(ecNumber).purchase(true)) {
-              return AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+              return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
             }
           }
-          if (ec.start(true)) return AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION;
-          return AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+          if (ec.start(true)) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
+      },
+      blockify: ctx => {
+        return {
+          target: 'EC',
+          inputValue: ctx.eternityChallenge[0].children.$ecNumber,
+          ...automatorBlocksMap['START']
+        }
       }
     },
     {
@@ -280,15 +356,21 @@ const AutomatorCommands = ((() => {
       },
       compile: ctx => {
         if (ctx.Use) return () => {
-          Enslaved.useStoredTime();
-          return AutomatorCommandStatus.NEXT_INSTRUCTION;
+          Enslaved.useStoredTime(false);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
         const on = Boolean(ctx.On);
         return () => {
           if (on !== player.celestials.enslaved.isStoring) Enslaved.toggleStoreBlackHole();
-          return AutomatorCommandStatus.NEXT_INSTRUCTION;
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
+      blockify: ctx => {
+        return {
+          target: ctx.Use ? "USE" : ( Boolean(ctx.On) ? 'ON' : 'OFF'),
+          ...automatorBlocksMap["STORE TIME"]
+        }
+      }
     },
     {
       id: "studiesBuy",
@@ -303,7 +385,7 @@ const AutomatorCommands = ((() => {
       validate: (ctx, V) => {
         ctx.startLine = ctx.Studies[0].startLine;
         if (ctx.Identifier) {
-          const varInfo = V.lookupVar(ctx.Identifier[0], AutomatorVarTypes.STUDIES);
+          const varInfo = V.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.STUDIES);
           if (!varInfo) return;
           ctx.$studies = varInfo.value;
         } else if (ctx.studyList) {
@@ -317,25 +399,31 @@ const AutomatorCommands = ((() => {
             if (TimeStudy(tsNumber).isBought) continue;
             if (!TimeStudy(tsNumber).purchase()) {
               if (tsNumber === 201 && DilationUpgrade.timeStudySplit.isBought) continue;
-              return AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+              return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
             }
           }
           if (!studies.ec || TimeStudy.eternityChallenge(studies.ec).isBought) {
-            return AutomatorCommandStatus.NEXT_INSTRUCTION;
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
           return TimeStudy.eternityChallenge(studies.ec).purchase(true)
-            ? AutomatorCommandStatus.NEXT_INSTRUCTION
-            : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+            ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
+            : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
         return () => {
           for (const tsNumber of studies.normal) TimeStudy(tsNumber).purchase();
           if (!studies.ec || TimeStudy.eternityChallenge(studies.ec).isBought) {
-            return AutomatorCommandStatus.NEXT_INSTRUCTION;
+            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
           TimeStudy.eternityChallenge(studies.ec).purchase(true);
-          return AutomatorCommandStatus.NEXT_INSTRUCTION;
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
+      blockify: ctx => {
+        return {
+          inputValue: ctx.$studies.image,
+          ...automatorBlocksMap["STUDIES"]
+        }
+      }
     },
     {
       id: "studiesLoad",
@@ -374,9 +462,15 @@ const AutomatorCommands = ((() => {
       compile: ctx => {
         const presetIndex = ctx.$presetIndex;
         return () => {
-          importStudyTree(player.timestudy.presets[presetIndex - 1].studies);
-          return AutomatorCommandStatus.NEXT_INSTRUCTION;
+          importStudyTree(player.timestudy.presets[presetIndex - 1].studies, true);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
+      },
+      blockify: ctx => {
+        return {
+          inputValue: ctx.$presetIndex,
+          ...automatorBlocksMap["LOAD"]
+        }
       }
     },
     {
@@ -391,8 +485,9 @@ const AutomatorCommands = ((() => {
       },
       compile: () => () => {
         player.respec = true;
-        return AutomatorCommandStatus.NEXT_INSTRUCTION;
-      }
+        return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+      },
+      blockify: ctx => automatorBlocksMap["RESPEC"]
     },
     {
       id: "tt",
@@ -408,8 +503,14 @@ const AutomatorCommands = ((() => {
       compile: ctx => {
         const buyFunction = ctx.TTCurrency[0].tokenType.$buyTT;
         return () => (buyFunction()
-          ? AutomatorCommandStatus.NEXT_INSTRUCTION
-          : AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION);
+          ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
+          : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION);
+      },
+      blockify: ctx => {
+        return {
+          target: ctx.TTCurrency[0].tokenType.name.toUpperCase(),
+          ...automatorBlocksMap["TT"]
+        }
       }
     },
     {
@@ -423,10 +524,16 @@ const AutomatorCommands = ((() => {
         return true;
       },
       compile: () => () => {
-        if (TimeStudy.dilation.isBought) return AutomatorCommandStatus.NEXT_INSTRUCTION;
+        if (PlayerProgress.dilationUnlocked()) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         return TimeStudy.dilation.purchase(true)
-          ? AutomatorCommandStatus.NEXT_INSTRUCTION
-          : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+          ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
+          : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+      },
+      blockify: ctx => {
+        return {
+          target: 'DILATION',
+          ...automatorBlocksMap['UNLOCK']
+        }
       }
     },
     {
@@ -442,11 +549,18 @@ const AutomatorCommands = ((() => {
       compile: ctx => {
         const ecNumber = ctx.eternityChallenge[0].children.$ecNumber;
         return () => {
-          if (EternityChallenge(ecNumber).isUnlocked) return AutomatorCommandStatus.NEXT_INSTRUCTION;
+          if (EternityChallenge(ecNumber).isUnlocked) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           return TimeStudy.eternityChallenge(ecNumber).purchase(true)
-            ? AutomatorCommandStatus.NEXT_INSTRUCTION
-            : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+            ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
+            : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
+      },
+      blockify: ctx => {
+        return {
+          target: 'EC',
+          inputValue: ctx.eternityChallenge[0].children.$ecNumber,
+          ...automatorBlocksMap['UNLOCK']
+        }
       }
     },
     {
@@ -478,12 +592,30 @@ const AutomatorCommands = ((() => {
             if (S.commandState === null) {
               S.commandState = { prestigeLevel: 0 };
             }
-            if (S.commandState.prestigeLevel >= prestigeLevel) return AutomatorCommandStatus.NEXT_INSTRUCTION;
+            if (S.commandState.prestigeLevel >= prestigeLevel) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             AutomatorBackend.push(commands);
-            return AutomatorCommandStatus.SAME_INSTRUCTION;
+            return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
           },
           blockCommands: commands
         };
+      },
+      blockify: (ctx, B) => {
+        const commands = []
+        B.visit(ctx.block, commands)
+        const comparison = B.visit(ctx.comparison);
+        if (ctx.comparison) {
+          return {
+            nest: commands,
+            ...automatorBlocksMap['UNTIL'],
+            ...comparison,
+            target: comparison.target.toUpperCase()
+          }
+        }
+        return {
+          target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
+          nest: commands,
+          ...automatorBlocksMap['UNTIL']
+        }
       }
     },
     {
@@ -499,8 +631,19 @@ const AutomatorCommands = ((() => {
       compile: (ctx, C) => {
         const evalComparison = C.visit(ctx.comparison);
         return () => (evalComparison()
-          ? AutomatorCommandStatus.NEXT_INSTRUCTION
-          : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION);
+          ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
+          : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION);
+      },
+      blockify: (ctx, B) => {
+        const commands = []
+        B.visit(ctx.block, commands)
+        const comparison = B.visit(ctx.comparison);
+        return {
+          nest: commands,
+          ...automatorBlocksMap['WAIT'],
+          ...comparison,
+          target: comparison.target.toUpperCase()
+        }
       }
     },
     {
@@ -520,9 +663,15 @@ const AutomatorCommands = ((() => {
             S.commandState = { prestigeLevel: 0 };
           }
           return S.commandState.prestigeLevel >= prestigeLevel
-            ? AutomatorCommandStatus.NEXT_INSTRUCTION
-            : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+            ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
+            : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
+      },
+      blockify: (ctx, B) => {
+        return {
+          target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
+          ...automatorBlocksMap['WAIT']
+        }
       }
     },
     {
@@ -540,6 +689,15 @@ const AutomatorCommands = ((() => {
         return V.checkBlock(ctx, ctx.While);
       },
       compile: (ctx, C) => compileConditionLoop(C.visit(ctx.comparison), C.visit(ctx.block)),
-    },
+      blockify: (ctx, B) => {
+        const commands = []
+        B.visit(ctx.block, commands)
+        return {
+          nest: commands,
+          ...automatorBlocksMap['WHILE'],
+          ...B.visit(ctx.comparison)
+        }
+      }
+    }
   ];
 })());

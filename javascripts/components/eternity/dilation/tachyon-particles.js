@@ -22,7 +22,7 @@ Vue.component("tachyon-particles", {
   methods: {
     update() {
       this.count = player.dilation.tachyonParticles.gte(1)
-        ? player.dilation.tachyonParticles.exponent + 1
+        ? Math.clampMin(Math.floor(20 * Math.log10(player.dilation.tachyonParticles.exponent)), 1)
         : 0;
     },
     updateSize() {
@@ -52,10 +52,16 @@ Vue.component("tachyon-particle", {
     };
   },
   created() {
+    this.tween = null;
     if (GameUI.initialized) {
       this.fly();
     } else {
       Vue.nextTick(() => this.fly());
+    }
+  },
+  destroyed() {
+    if (this.tween !== null) {
+      TWEEN.remove(this.tween);
     }
   },
   methods: {
@@ -78,7 +84,7 @@ Vue.component("tachyon-particle", {
 
       this.x = start.x;
       this.y = start.y;
-      new TWEEN.Tween(this.$data)
+      this.tween = new TWEEN.Tween(this.$data)
         .to(intersection, duration)
         .easing(TWEEN.Easing.Linear.None)
         .onComplete(this.fly.bind(this))

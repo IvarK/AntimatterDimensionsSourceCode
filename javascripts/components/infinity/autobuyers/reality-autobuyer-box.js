@@ -1,36 +1,41 @@
 "use strict";
 
 Vue.component("reality-autobuyer-box", {
+  data() {
+    return {
+      levelCap: 0,
+      isOverCap: false
+    };
+  },
   computed: {
-    boxSetup() {
-      return new AutobuyerBoxSetup("Automatic Reality", Autobuyer.reality);
-    },
-    targetRMInputSetup() {
-      return new AutobuyerInputSetup(
-        AutobuyerInputType.DECIMAL,
-        () => Autobuyer.reality.rm,
-        value => Autobuyer.reality.rm = value
-      );
-    },
-    targetGlyphInputSetup() {
-      return new AutobuyerInputSetup(
-        AutobuyerInputType.INT,
-        () => Autobuyer.reality.glyph,
-        value => Autobuyer.reality.glyph = value
-      );
+    autobuyer: () => Autobuyer.reality
+  },
+  methods: {
+    update() {
+      this.levelCap = Glyphs.levelCap;
+      this.isOverCap = this.autobuyer.glyph > this.levelCap;
     }
   },
   template:
-    `<autobuyer-box :setup="boxSetup">
-      <br>
+    `<autobuyer-box :autobuyer="autobuyer" name="Automatic Reality">
       <div>
         <span>Target reality machines:</span>
-        <autobuyer-input :setup="targetRMInputSetup" />
+        <autobuyer-input
+         :autobuyer="autobuyer"
+         type="decimal"
+         property="rm"
+        />
       </div>
       <div>
         <span>Target glyph level:</span>
-        <autobuyer-input :setup="targetGlyphInputSetup" />
+        <autobuyer-input
+         :autobuyer="autobuyer"
+         type="int"
+         property="glyph"
+        />
       </div>
-      <br>
+      <div v-if="isOverCap">
+        Autobuyer will trigger at the glyph level cap of {{formatInt(levelCap)}}.
+      </div>
     </autobuyer-box>`
 });

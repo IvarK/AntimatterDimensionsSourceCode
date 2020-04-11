@@ -2,88 +2,12 @@ body.t-inverted-metro {
     background-color: black;
 }
 
-.t-inverted-metro #container {
-    filter: invert(100%);
-}
-
-.t-inverted-metro .popup {
-    filter: invert(100%);
+.t-inverted-metro #ui {
+  filter: invert(100%);
 }
 
 .t-inverted-metro #realityanimbg {
-    filter: invert(1);
-}
-
-.radial-progress, .circle, .mask full, .fill, .fill fix, .inset{
-    border-radius: 50%;
-}
-
-.t-inverted-metro .popup {
-    border: 1px solid black;
-}
-
-.t-inverted-metro #game {
-    border: 1px solid black;
-}
-
-.t-inverted-metro .secondarytabbtn {
-    background: #EEEEEE;
-    border: 1px solid #2196F3;
-    border-radius: 0;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.t-inverted-metro .secondarytabbtn:hover {
-    background: #2196F3;
-    border: 1px solid #2196F3;
-}
-
-.t-inverted-metro .storebtn {
-    background: #EEEEEE;
-    border: 1px solid #66BB6A;
-    border-radius: 0;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.t-inverted-metro .storebtn:hover {
-    background: #66BB6A;
-}
-
-.t-inverted-metro .unavailablebtn {
-    background: #9E9E9E;
-    border: 1px solid #EF5350;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.t-inverted-metro .unavailablebtn:hover {
-    background: #EF5350;
-}
-
-.t-inverted-metro .infinitytabbtn {
-    border: 1px solid #FF9800;
-    background: #1F1F1F;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.t-inverted-metro .infinitytabbtn:hover {
-    background: #FF9800;
-    border: 1px solid #FF9800;
-}
-
-.t-inverted-metro .eternitytabbtn {
-    color: #673AB7;
-    background: #000;
-    border: 1px solid #673AB7;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.t-inverted-metro .eternitytabbtn:hover {
-    background: #FFF;
-    border: 1px solid #673AB7;
-}
-
-.t-inverted-metro .c-rm-amount {
-    color: #0b600e;
+  filter: invert(1);
 }
 
 .t-inverted-metro .c-tt-buy-button--unlocked {
@@ -100,26 +24,9 @@ body.t-inverted-metro {
 .t-inverted-metro .c-tt-buy-button--locked {
   background: #9E9E9E;
   border: none;
-  box-shadow: 1px 1px 1px 0px #000;
+  box-shadow: 1px 1px 1px 0 #000;
 }
 
 .t-inverted-metro .c-tt-buy-button--locked:hover {
   background: #EF5350;
-}
-
-.t-inverted-metro #theorembuybackground {
-    background: #EEEEEE;
-    border-width: 1px;
-}
-
-.t-inverted-metro .realitytabbtn {
-    background: white;
-    border: 1px solid #0b600e;
-    display: none;
-}
-
-.t-inverted-metro .realitytabbtn:hover {
-    background-color: #0b600e;
-    border: 1px solid #0b600e;
-    color: white;
 }

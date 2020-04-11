@@ -10,7 +10,8 @@ GameDatabase.infinity.breakUpgrades = (function() {
       description: config.description,
       effect: () => player.infinityRebuyables[config.id],
       formatEffect: value => (value === maxUpgrades ? `10x ➜ ${10 - value}x` : `10x ➜ ${10 - value - 1}x`),
-      staticEffect: true
+      staticEffect: true,
+      formatCost: value => format(value, 2, 0)
     };
   }
 
@@ -19,14 +20,14 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "totalMult",
       cost: 1e4,
       description: "Normal dimensions gain a multiplier based on total antimatter produced",
-      effect: () => Math.pow(player.totalmoney.exponent + 1, 0.5),
+      effect: () => Math.pow(player.totalAntimatter.exponent + 1, 0.5),
       formatEffect: value => formatX(value, 2, 2)
     },
     currentAMMult: {
       id: "currentMult",
       cost: 5e4,
       description: "Normal dimensions gain a multiplier based on current antimatter",
-      effect: () => Math.pow(player.money.exponent + 1, 0.5),
+      effect: () => Math.pow(player.antimatter.exponent + 1, 0.5),
       formatEffect: value => formatX(value, 2, 2)
     },
     galaxyBoost: {
@@ -38,7 +39,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     infinitiedMult: {
       id: "infinitiedMult",
       cost: 1e5,
-      description: "Normal dimensions gain a multiplier based on amount infinitied",
+      description: "Normal dimensions gain a multiplier based on infinitied stat",
       effect: () => 1 + Player.totalInfinitied.pLog10() * 10,
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -46,13 +47,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "achievementMult",
       cost: 1e6,
       description: "Normal dimensions gain a multiplier based on achievements completed",
-      effect: () => Math.max(
-        Math.pow(
-          Math.pow((Achievements.effectiveCount - 30), 3) / 40,
-          getAdjustedGlyphEffect("effarigachievement")
-        ),
-        1
-      ),
+      effect: () => Math.max(Math.pow((Achievements.effectiveCount - 30), 3) / 40, 1),
       formatEffect: value => formatX(value, 2, 2)
     },
     slowestChallengeMult: {
@@ -65,7 +60,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     infinitiedGen: {
       id: "infinitiedGeneration",
       cost: 2e7,
-      description: "You passively generate Infinitied stat based on your fastest infinity",
+      description: "Passively generate infinitied stat based on your fastest infinity",
       effect: () => player.bestInfinityTime,
       formatEffect: value => {
         const period = value >= 999999999999
@@ -89,7 +84,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       initialCost: 3e6,
       costIncrease: 5,
       maxUpgrades: 8,
-      description: "Tickspeed cost multiplier increase",
+      description: "Post-infinity tickspeed cost multiplier increase",
 
     }),
     dimCostMult: rebuyable({
@@ -97,21 +92,21 @@ GameDatabase.infinity.breakUpgrades = (function() {
       initialCost: 1e8,
       costIncrease: 5e3,
       maxUpgrades: 7,
-      description: "Dimension cost multiplier increase"
+      description: "Post-infinity dimension cost multiplier increase"
     }),
     ipGen: {
       cost: () => player.offlineProdCost,
       description: () => {
         let generation = `Generate ${player.offlineProd}%`;
         if (!BreakInfinityUpgrade.ipGen.isMaxed) {
-          generation += ` > ${player.offlineProd + 5}%`;
+          generation += ` ➜ ${player.offlineProd + 5}%`;
         }
         return `${generation} of your best IP/min from last 10 infinities, works offline`;
       },
       // Cutting corners: this is not actual effect (player.offlineProd is), but
       // it is actual IPPM that is displyed on upgrade
       effect: () => Player.bestRunIPPM.times(player.offlineProd / 100),
-      formatEffect: value => `${shorten(value, 2, 1)} IP/min`
+      formatEffect: value => `${format(value, 2, 1)} IP/min`
     }
   };
 }());

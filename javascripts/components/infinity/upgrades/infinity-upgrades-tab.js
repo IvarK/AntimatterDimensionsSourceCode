@@ -6,6 +6,8 @@ Vue.component("infinity-upgrades-tab", {
       chargeUnlocked: false,
       chargesLeft: 0,
       disCharge: false,
+      ipMultSoftCap: 0,
+      ipMultHardCap: 0,
     };
   },
   watch: {
@@ -44,16 +46,19 @@ Vue.component("infinity-upgrades-tab", {
     },
     disChargeClassObject() {
       return {
-        "o-primary-btn--discharge-options": true,
-        "o-primary-btn--discharge-active": this.disCharge
+        "o-primary-btn--respec-options": true,
+        "o-primary-btn--respec-active": this.disCharge
       };
-    }
+    },
+    offlineIpUpgrade: () => InfinityUpgrade.ipOffline
   },
   methods: {
     update() {
       this.chargeUnlocked = Ra.chargeUnlocked;
       this.chargesLeft = Ra.chargesLeft;
       this.disCharge = player.celestials.ra.disCharge;
+      this.ipMultSoftCap = GameDatabase.infinity.upgrades.ipMult.costIncreaseThreshold;
+      this.ipMultHardCap = GameDatabase.infinity.upgrades.ipMult.costCap;
     },
     btnClassObject(column) {
       const classObject = {
@@ -69,7 +74,9 @@ Vue.component("infinity-upgrades-tab", {
   template:
     `<div class="l-infinity-upgrades-tab">
       <div v-if="chargeUnlocked">
-          <div>You can charge {{ chargesLeft }} more {{ "upgrade" | pluralize(chargesLeft) }}.</div>
+          <div>
+            You can charge {{ formatInt(chargesLeft) }} more {{ "upgrade" | pluralize(chargesLeft) }}.
+          </div>
           <primary-button
           :class="disChargeClassObject"
           @click="disCharge = !disCharge"
@@ -85,6 +92,17 @@ Vue.component("infinity-upgrades-tab", {
           />
         </div>
       </div>
-      <ip-multiplier-button class="l-infinity-upgrades-tab__mult-btn" />
+      <div class="l-infinity-upgrades-bottom-row">
+        <ip-multiplier-button class="l-infinity-upgrades-tab__mult-btn" />
+        <infinity-upgrade-button
+          :upgrade="offlineIpUpgrade"
+          :class="btnClassObject(1)"
+        />
+      </div>
+      <div>
+        This IP multiplier can be bought repeatedly, but becomes more expensive
+        <br>
+        above {{format(ipMultSoftCap)}} IP and cannot be purchased past {{format(ipMultHardCap)}} IP.
+      </div>
     </div>`
 });

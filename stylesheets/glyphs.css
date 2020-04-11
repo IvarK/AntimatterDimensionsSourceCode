@@ -9,8 +9,7 @@
 .c-glyph-component {
   font-family: Typewriter;
   background: black;
-  padding-left: 0.04em;
-  padding-bottom: 0.04em;
+  padding-bottom: 0.2em;
 }
 
 .c-glyph-component--dragging {
@@ -34,7 +33,7 @@
   left: calc(100% - 0.2rem);
   top: 0.2rem;
   transform: translateX(-100%);
-  z-index: 3;
+  z-index: 2;
 }
 
 .c-glyph-sacrifice-options__help {
@@ -64,8 +63,8 @@
 }
 
 .c-glyph-sacrifice-options__option--inactive {
-  color: #0b600e;
-  border-color: #0b600e;
+  color: var(--color-reality);
+  border-color: var(--color-reality);
 }
 
 .l-glyph-sacrifice-options__rarity-sliders {
@@ -89,7 +88,7 @@
 }
 
 .c-glyph-sacrifice-options__rarity-slider-bg {
-  background-color: #0b600e;
+  background-color: var(--color-reality);
 }
 
 .c-glyph-sacrifice-options__rarity-slider-handle {
@@ -98,8 +97,6 @@
   box-shadow: 0 0 0 0.1rem #d5ffd7 !important;
   border-radius: 0.8rem !important;
 }
-
-.l-glyph-sacrifice-options__advanced {}
 
 .c-glyph-sacrifice-options__advanced {
   color: #d5ffd7;
@@ -114,6 +111,36 @@
   border-radius: 0.2rem;
   border: solid 0.1rem;
   text-align: center;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+.c-auto-sac-effect-tab__input::-webkit-inner-spin-button, 
+.c-auto-sac-effect-tab__input::-webkit-outer-spin-button { 
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  margin: 0; 
+}
+
+.c-auto-sac-effect-tab__input {
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 1.2rem;
+  text-align: center;
+  background-color: #333;
+  color: #d5ffd7;
+  border-radius: 0.2rem;
+  border: solid 0.1rem;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  margin: 0;
+}
+
+.c-auto-sac-effect-tab__checkbox {
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 0.2rem;
+  border: solid 0.1rem;
 }
 
 .c-auto-sac-type-tab__input:focus {
@@ -125,7 +152,7 @@
 .c-auto-sac-type-tab__input::-webkit-outer-spin-button,
 .c-auto-sac-type-tab__input::-webkit-inner-spin-button {
   -webkit-appearance: none;
-  -moz-appearance: none;
+  -moz-appearance: textfield;
   margin: 0;
 }
 
@@ -171,8 +198,16 @@
   min-height: 3em;
 }
 
+.l-specified-effect-tab__effect-desc {
+  display: inline-flex;
+  width: 22rem;
+  align-items: center;
+  justify-content: center;
+}
+
 .l-auto-sac-type-tab__effect-desc {
   display: inline-flex;
+  width: 18rem;
   align-items: center;
   justify-content: center;
 }
@@ -243,8 +278,8 @@
 }
 
 .c-glyph-auto-pick-options__option--inactive {
-  color: #0b600e;
-  border-color: #0b600e;
+  color: var(--color-reality);
+  border-color: var(--color-reality);
 }
 
 .c-glyph-tooltip__effect {
@@ -322,11 +357,15 @@
   position: fixed;
   z-index: 3;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   left: 50vw;
   top: 50vh;
   transform: translate(-50%, -50%);
+}
+
+.l-modal-glyph-selection__row {
+  flex-direction: row;
 }
 
 .l-modal-glyph-selection__glyph {
@@ -337,6 +376,7 @@
   display: flex;
   flex-direction: column;
   align-content: center;
+  align-items: center;
   flex-grow: 0;
 }
 
@@ -384,12 +424,28 @@
   box-shadow: 0 0 0.5rem 0.25rem #444;
 }
 
+.l-equipped-glyphs__buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .l-equipped-glyphs__respec {
   width: 15rem;
   height: 4rem;
   margin: auto;
   margin-top: 2rem;
   margin-bottom: 1rem;
+}
+
+.l-equipped-glyphs__undo {
+  width: 5em;
+  height: 4rem;
+  margin: auto;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  margin-left: 0.2rem;
 }
 
 .c-current-glyph-effects__effect--capped {
@@ -411,13 +467,13 @@
 }
 
 .l-current-glyph-effects::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 .5rem grey;
+  box-shadow: inset 0 0 0.5rem grey;
   border-radius: 1rem;
 }
 
 .l-current-glyph-effects::-webkit-scrollbar-thumb {
   background: #08450b;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
 }
 
 .c-current-glyph-effects {
@@ -451,6 +507,18 @@
   padding-bottom: 1rem;
 }
 
+.c-sacrificed-glyphs--dragover {
+  border-color: rgb(0, 0, 0);
+  box-shadow: 0 0 0.1rem 0.1rem  rgb(0, 0, 0);
+}
+
+.t-dark .c-sacrificed-glyphs--dragover,
+.t-dark-metro .c-sacrificed-glyphs--dragover,
+.t-s6 .c-sacrificed-glyphs--dragover {
+  border-color: rgb(255, 255, 255);
+  box-shadow: 0 0 0.1rem 0.1rem  rgb(255, 255, 255);
+}
+
 .c-sacrificed-glyphs__header {
   font-size: 1.2rem;
   font-weight: bold;
@@ -475,6 +543,23 @@
   font-weight: bold;
 }
 
+.c-sacrificed-glyphs__type-new-amount {
+  color: rgb(0, 180, 0);
+}
+
+.t-s8 .c-sacrificed-glyphs__type-new-amount {
+  color: rgb(0, 80, 0);
+}
+
+.l-sacrificed-glyphs__help {
+  margin-top: 1rem;
+}
+
+.c-sacrificed-glyphs__confirm {
+  cursor: pointer;
+  user-select: none;
+}
+
 .l-glyph-inventory {
   display: flex;
   flex-direction: column;
@@ -497,6 +582,10 @@
   width: 5rem;
   height: 5rem;
   margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.c-glyph-inventory__protected-slot {
+  background-color: rgb(110, 110, 110);
 }
 
 .c-glyph-inventory__slot {

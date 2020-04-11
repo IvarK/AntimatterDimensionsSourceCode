@@ -22,34 +22,18 @@ class EventHub {
   }
 
   // eslint-disable-next-line max-params
-  dispatch(event, a1, a2, a3) {
+  dispatch(event, args) {
     const handlers = this._handlers[event];
     if (handlers === undefined) return;
     for (const handler of handlers) {
-      handler.fn(a1, a2, a3);
+      handler.fn(args);
     }
   }
 
   // eslint-disable-next-line max-params
-  static dispatch(event, a1, a2, a3) {
-    EventHub.logic.dispatch(event, a1, a2, a3);
-    GameUI.dispatch(event, a1, a2, a3);
-  }
-
-  static registerStateEvents(state, getEvents, callback) {
-    const events = getEvents(state);
-    if (events === undefined) return;
-    for (const event of events instanceof Array ? events : [events]) {
-      EventHub.logic.on(event, (a1, a2, a3) => {
-        callback(state, a1, a2, a3);
-      });
-    }
-  }
-
-  static registerStateCollectionEvents(states, getEvents, callback) {
-    for (const state of states) {
-      EventHub.registerStateEvents(state, getEvents, callback);
-    }
+  static dispatch(event, ...args) {
+    EventHub.logic.dispatch(event, args);
+    GameUI.dispatch(event, args);
   }
 
   static get stats() {
@@ -59,7 +43,7 @@ class EventHub {
         .map(handlers => handlers.length)
         .sum();
     }
-    return `UI(UPDATE/Total): ${EventHub.ui._handlers[GameEvent.UPDATE].length}/${countHandlers(EventHub.ui)}; ` +
+    return `UI(UPDATE/Total): ${EventHub.ui._handlers[GAME_EVENT.UPDATE].length}/${countHandlers(EventHub.ui)}; ` +
       `Logic(Total): ${countHandlers(EventHub.logic)}`;
   }
 }
@@ -67,7 +51,7 @@ class EventHub {
 EventHub.logic = new EventHub();
 EventHub.ui = new EventHub();
 
-const GameEvent = {
+const GAME_EVENT = {
   // Ticks
   GAME_TICK_BEFORE: "GAME_TICK_BEFORE",
   GAME_TICK_AFTER: "GAME_TICK_AFTER",
@@ -98,12 +82,20 @@ const GameEvent = {
 
   // Other
   INFINITY_DIMENSION_UNLOCKED: "INFINITY_DIMENSION_UNLOCKED",
+  INFINITY_CHALLENGE_COMPLETED: "INFINITY_CHALLENGE_COMPLETED",
   ACHIEVEMENT_UNLOCKED: "ACHIEVEMENT_UNLOCKED",
   CHALLENGE_FAILED: "CHALLENGE_FAILED",
   REALITY_UPGRADE_BOUGHT: "REALITY_UPGRADE_BOUGHT",
+  REALITY_UPGRADE_TEN_BOUGHT: "REALITY_UPGRADE_TEN_BOUGHT",
   PERK_BOUGHT: "PERK_BOUGHT",
   BLACK_HOLE_UPGRADE_BOUGHT: "BLACK_HOLE_UPGRADE_BOUGHT",
   GAME_LOAD: "GAME_LOAD",
+  CELESTIAL_UPGRADE_UNLOCKED: "CELESTIAL_UPGRADE_UNLOCKED",
+  SAVE_CONVERTED_FROM_PREVIOUS_VERSION: "SAVE_CONVERTED_FROM_PREVIOUS_VERSION",
+
+  // Used by events to signify that they are triggered by a particular
+  // event, not handled by the event hub
+  ACHIEVEMENT_EVENT_OTHER: "ACHIEVEMENT_EVENT_OTHER",
 
   // UI Events
   UPDATE: "UPDATE",

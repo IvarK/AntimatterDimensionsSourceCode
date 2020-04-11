@@ -1,19 +1,13 @@
 html {
-    background: url('../images/s5-bg.jpg') repeat;
-    background-size: contain;
-    background-position-x: 50%;
-    background-position-y: 50%;
-    background-size: 150%;
-    background-color: white;
-    color: black !important;
+  background: url('../images/s5-bg.jpg');
+  background-position-x: 50%;
+  background-position-y: 50%;
+  background-size: 150%;
 }
 
-body {
-    background: none !important;
-    filter: sepia(100%) hue-rotate(0deg) saturate(100%);
-}
-
-.container {
-    color: black !important;
-    text-shadow: 0.5px 0.5px 0px black;
+body.t-s5 {
+  color: black;
+  text-shadow: 0.5px 0.5px 0 black;
+  background: none;
+  filter: sepia(100%) hue-rotate(0deg) saturate(100%);
 }

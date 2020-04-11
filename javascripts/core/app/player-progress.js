@@ -4,13 +4,14 @@ class PlayerProgress {
   constructor(player) {
     this._player = player;
   }
-
+  
   get isRealityUnlocked() {
     return this._player.realities > 0;
   }
 
   get isEternityUnlocked() {
-    return this._player.eternities > 0 || this.isRealityUnlocked;
+    // This is some old-save-new-save number-to-Decimal conversion schenanigans (see below)
+    return new Decimal(this._player.eternities).gt(0) || this.isRealityUnlocked;
   }
 
   get isInfinityUnlocked() {
@@ -35,8 +36,20 @@ class PlayerProgress {
     return PlayerProgress.current.isEternityUnlocked;
   }
 
-  static get realityUnlocked() {
+  static dilationUnlocked() {
+    return TimeStudy.dilation.isBought;
+  }
+
+  static realityUnlocked() {
     return PlayerProgress.current.isRealityUnlocked;
+  }
+
+  static challengeCompleted() {
+    return NormalChallenges.all.slice(1).some(c => c.isCompleted);
+  }
+
+  static infinityChallengeCompleted() {
+    return InfinityChallenges.all.some(c => c.isCompleted);
   }
 }
 

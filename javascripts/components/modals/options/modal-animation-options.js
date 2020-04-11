@@ -4,18 +4,49 @@ Vue.component("modal-animation-options", {
   mixins: [modalOptionsMixin],
   data() {
     return {
-      options: player.options.animations
+      floatingText: false,
+      bigCrunch: false,
+      tachyonParticles: false,
+      reality: false,
+      background: false
     };
+  },
+  watch: {
+    floatingText(newValue) {
+      player.options.animations.floatingText = newValue;
+    },
+    bigCrunch(newValue) {
+      player.options.animations.bigCrunch = newValue;
+    },
+    tachyonParticles(newValue) {
+      player.options.animations.tachyonParticles = newValue;
+    },
+    reality(newValue) {
+      player.options.animations.reality = newValue;
+    },
+    background(newValue) {
+      player.options.animations.background = newValue;
+    }
+  },
+  methods: {
+    update() {
+      const options = player.options.animations;
+      this.floatingText = options.floatingText;
+      this.bigCrunch = options.bigCrunch;
+      this.tachyonParticles = options.tachyonParticles;
+      this.reality = options.reality;
+      this.background = options.background;
+    }
   },
   template:
     `<modal-options @close="emitClose">
-      <on-off-button v-model="options.floatingText" text="Floating text:"/>
-      <on-off-button v-if="bigCrunchUnlocked" v-model="options.bigCrunch" text="Big crunch:"/>
-      <on-off-button v-if="dilationUnlocked" v-model="options.tachyonParticles" text="Tachyon particles:"/>
-      <on-off-button v-if="realityUnlocked" v-model="options.reality" text="Reality:"/>
+      <on-off-button v-model="floatingText" text="Floating text:"/>
+      <on-off-button v-if="infinityUnlocked" v-model="bigCrunch" text="Big crunch:"/>
+      <on-off-button v-if="dilationUnlocked" v-model="tachyonParticles" text="Tachyon particles:"/>
+      <on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:"/>
       <on-off-button
         v-if="animatedThemeUnlocked"
-        v-model="options.background"
+        v-model="background"
         onclick="Themes.find(player.options.theme).set();"
         text="Background:"/>
     </modal-options>`

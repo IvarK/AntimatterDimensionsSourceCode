@@ -27,10 +27,15 @@ Vue.component("dilation-time-study", {
   },
   created() {
     if (this.id === 1) {
-      this.requirement = "Requirement: 5 EC11 and EC12 completions and 13,000 total theorems";
+      this.requirement = `Requirement: ${formatInt(5)} EC11 and EC12 completions
+        and ${formatInt(13000)} total theorems`;
     }
     if (this.id === 6) {
-      this.requirement = "Requirement: 1e4000 EP";
+      if (player.realities > 0) {
+        this.requirement = `Requirement: ${format("1e4000")} EP`;
+      } else {
+        this.requirement = `Requirement: ${format("1e4000")} EP and ${formatInt(13)} rows of achievements`;
+      }
       this.showRequirement = true;
     }
   },

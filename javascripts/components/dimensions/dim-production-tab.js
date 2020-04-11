@@ -31,7 +31,10 @@ Vue.component("dim-production-tab", {
   },
   data() {
     return {
-      options: player.options
+      duration: 0,
+      updateRate: 0,
+      enabled: false,
+      dips: false
     };
   },
   computed: {
@@ -39,29 +42,52 @@ Vue.component("dim-production-tab", {
       return this.options.chart;
     }
   },
+  watch: {
+    duration(newValue) {
+      player.options.chart.duration = newValue;
+    },
+    updateRate(newValue) {
+      player.options.chart.updateRate = newValue;
+    },
+    enabled(newValue) {
+      player.options.chart.on = newValue;
+    },
+    dips(newValue) {
+      player.options.chart.dips = newValue;
+    }
+  },
   mounted() {
     const container = this.$refs.chartContainer;
     container.appendChild(dimChartEl);
   },
   methods: {
+    update() {
+      const options = player.options.chart;
+      this.duration = options.duration;
+      this.updateRate = options.updateRate;
+      this.enabled = options.on;
+      this.dips = options.dips;
+    },
     checkOptionsWarnings() {
-      const options = this.chartOptions;
+      const options = player.options.chart;
       const updateRate = options.updateRate;
       const duration = options.duration;
       if (updateRate <= 200 && duration >= 30 && options.warning === 0) {
-        alert("Warning: setting the duration and update rate too high can cause performance issues.");
+        Modal.message.show("Warning: setting the duration and update rate too high can cause performance issues.");
         options.warning = 1;
       }
       if (duration / updateRate * 1000 >= 1000 && options.warning !== 2) {
-        alert("Warning: you have set the duration and update rate quite high, " +
+        Modal.message.show("Warning: you have set the duration and update rate quite high, " +
           "make sure you know what you're doing or have a good computer");
         options.warning = 2;
       }
     },
     checkToggleWarnings() {
-      if (this.chartOptions.on) return;
-      if (this.chartOptions.warning < 1) {
-        alert("Warning: the chart can cause performance issues. Please disable it if you're experiencing lag.");
+      const options = player.options.chart;
+      if (options.on) return;
+      if (options.warning < 1) {
+        Modal.message.show("Warning: the chart can cause performance issues. " +
+          "Please disable it if you're experiencing lag.");
       }
     }
   },
@@ -70,7 +96,7 @@ Vue.component("dim-production-tab", {
       <div class="c-production-header">
         <b>seconds of history:</b>
         <number-input
-          v-model="chartOptions.duration"
+          v-model="duration"
           :min="1"
           :max="300"
           :default="10"
@@ -78,7 +104,7 @@ Vue.component("dim-production-tab", {
         />
         <b>update rate (in ms):</b>
         <number-input
-          v-model="chartOptions.updateRate"
+          v-model="updateRate"
           :min="50"
           :max="10000"
           :default="1000"
@@ -86,14 +112,14 @@ Vue.component("dim-production-tab", {
         />
         <b>enabled:</b>
         <input
-          v-model="chartOptions.on"
+          v-model="enabled"
           class="c-production-header__checkbox"
           type="checkbox"
           @input="checkToggleWarnings"
         />
         <b>dips:</b>
         <input
-          v-model="chartOptions.dips"
+          v-model="dips"
           class="c-production-header__checkbox"
           type="checkbox"
           @input="checkToggleWarnings"

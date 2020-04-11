@@ -3,7 +3,12 @@
 }
 
 .c-automator-tab {
-  height: 35rem;
+  height: 45rem;
+  width: 94rem;
+}
+
+.c-automator-tab > div {
+  height: 45rem;
   width: 94rem;
 }
 
@@ -15,16 +20,22 @@
 .l-automator-tab {
   position: relative;
   align-self: center;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 .l-automator-tab--full-screen {
   position: fixed;
   left: 0;
   right: 0;
-  top: 0;
+  top: -1.7rem;
   bottom: 0;
   margin-top: 0;
+  z-index: 4;
+}
+
+.l-automator-tab--full-screen > div {
+  height: 100%;
+  width: 100%;
 }
 
 .l-automator-pane {
@@ -83,7 +94,7 @@
 }
 
 .l-automator__script-names {
-  width: 15rem;
+  flex-grow: 1;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -103,13 +114,15 @@
 }
 
 .c-automator-editor__active-line {
-  background: rgb(25, 10, 44);
+  background: rgb(43, 6, 92);
+  outline: 1px solid rgb(68, 0, 255);
 }
 
 .c-automator-editor__active-line-gutter {
   font-weight: bold;
-  background: rgb(25, 10, 44);
+  background: rgb(43, 6, 92);
   filter: brightness(200%);
+  outline: 1px solid rgb(68, 0, 255);
 }
 
 .c-automator-editor {
@@ -136,7 +149,8 @@
   font-family: Typewriter, serif;
 }
 
-.cm-s-liquibyte.CodeMirror {
+.cm-s-liquibyte.CodeMirror,
+.cm-s-panda-syntax.CodeMirror {
   font-size: 1.4rem;
   font-family: Typewriter, serif;
   line-height: 1.6rem;
@@ -168,4 +182,23 @@
 
 .c-automator-docs-page__indented {
   margin-left: 4rem;
+}
+
+
+.o-automator-error-underline {
+  display: inline-block;
+  position: relative;
+}
+
+.o-automator-error-underline:before {
+  content: "~~~~~~~~~~~~";
+  font-size: 0.6em;
+  font-weight: 700;
+  font-family: Times New Roman, Serif;
+  color: red;
+  width: 100%;
+  position: absolute;
+  top: 12px;
+  left: -1px;
+  overflow: hidden;
 }

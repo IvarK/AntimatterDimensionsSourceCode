@@ -1,6 +1,6 @@
 "use strict";
 
-const GalaxyType = {
+const GALAXY_TYPE = {
   NORMAL: 0,
   DISTANT: 1,
   REMOTE: 2
@@ -13,7 +13,8 @@ class GalaxyRequirement {
   }
 
   get isSatisfied() {
-    return NormalDimension(this.tier).amount.gte(this.amount);
+    const dimension = NormalDimension(this.tier);
+    return dimension.totalAmount.gte(this.amount);
   }
 }
 
@@ -28,49 +29,52 @@ class Galaxy {
    * @returns {number} Max number of galaxies (total)
    */
   static buyableGalaxies(currency) {
-    let constantTerm = Galaxy.baseCost;
-    let linearTerm = Galaxy.costMult;
-    let quadraticBegin = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart - 1;
+    const constantTerm = Galaxy.baseCost;
+    const linearTerm = Galaxy.costMult;
+    const quadraticBegin = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart - 1;
     // Separate because it's applied post remote scaling:
     const finalOffset = Effects.sum(InfinityUpgrade.resetBoost) +
       (InfinityChallenge(5).isCompleted ? 1 : 0);
-
-    let quantity = Math.floor((currency - constantTerm + finalOffset) / linearTerm);
+      
+    const costDivision = GlyphAlteration.isAdded("power") ? getSecondaryGlyphEffect("powerpow") : 1;
+    
+    const quantity = (currency / costDivision - constantTerm + finalOffset) / linearTerm;
+    
+    let unroundedGalaxyAmount;
+    
     if (quantity < quadraticBegin) {
-      // Check the seemingly impossible case of going directly to remote scaling, somehow:
-      if (quantity >= 800 && !RealityUpgrade(21).isBought) {
-        const bulk = bulkBuyBinarySearch(new Decimal(currency), {
-          costFunction: x => Math.floor((x * linearTerm + constantTerm) * Math.pow(1.002, x - 800)) - finalOffset,
-          cumulative: false,
-        }, 800);
-        if (!bulk) throw crash("Unexpected failure to calculate galaxy purchase");
-        // The formula we are using is the formula for the price of the *next* galaxy, given
-        // a quantity. So we add 1 when we return
-        return bulk.quantity + 800 + 1;
-      }
-      return quantity + 1;
+      unroundedGalaxyAmount = quantity;
+    } else {
+      // Cost is x + ((x - quadraticBegin) ** 2 + x - quadraticBegin) / linearTerm =
+      // x + x ** 2 / linearTerm - 2 * x * quadraticBegin / linearTerm + quadraticBegin ** 2 / linearTerm +
+      // x / linearTerm - quadraticBegin / linearTerm = (1 / linearTerm) * x ** 2 +
+      // (1 + (-2 * quadraticBegin + 1) / linearTerm) * x + (quadraticBegin ** 2 - quadraticBegin) / linearTerm.
+      const quadraticCoefficient = 1 / linearTerm;
+      const linearCoefficient = 1 + (-2 * quadraticBegin + 1) / linearTerm;
+      const constantCoefficient = (Math.pow(quadraticBegin, 2) - quadraticBegin) / linearTerm - quantity;
+      unroundedGalaxyAmount = (-linearCoefficient + Math.sqrt(
+        Math.pow(linearCoefficient, 2) - 4 * quadraticCoefficient * constantCoefficient)) / (2 * quadraticCoefficient);
     }
-    constantTerm += quadraticBegin * (quadraticBegin - 1);
-    linearTerm += 1 - 2 * quadraticBegin;
-    const quadSol = 0.5 * (-linearTerm + Math.sqrt(Math.pow(linearTerm, 2) - 4 * (constantTerm - currency - finalOffset)));
-    // There might be a small rounding error, and if we use floor, we might underestimate the quantity.
-    // Instead, we use round, then check if the resulting price is too high, and go down one if need be.
-    quantity = Math.round(quadSol);
-    let price = Math.pow(quantity, 2) + linearTerm * quantity + constantTerm - finalOffset;
-    if (price > currency) {
-      quantity--;
-      price = Math.pow(quantity, 2) + linearTerm * quantity + constantTerm - finalOffset;
+    
+    let galaxyAmount = Math.round(unroundedGalaxyAmount);
+    
+    if (this.requirementAt(galaxyAmount).amount > currency) {
+      galaxyAmount -= 1;
     }
-    // Check for remote scaling
-    if (quantity >= 800 && !RealityUpgrade(21).isBought) {
+    
+    if (galaxyAmount >= 800 && !RealityUpgrade(21).isBought) {
+      // We haven't considered remote scaling, give up and do binary search.
       const bulk = bulkBuyBinarySearch(new Decimal(currency), {
-        costFunction: x => Math.floor((x * x + x * linearTerm + constantTerm) * Math.pow(1.002, x - 800)) - finalOffset,
+        costFunction: x => this.requirementAt(x).amount,
         cumulative: false,
       }, 800);
-      if (!bulk) throw crash("Unexpected failure to calculate galaxy purchase");
-      return bulk.quantity + 800 + 1;
+      if (!bulk) throw new Error("Unexpected failure to calculate galaxy purchase");
+      // The formula we are using is the formula for the price of the *next* galaxy, given
+      // a quantity. So we add 1 when we return
+      return 800 + bulk.quantity;
     }
-    return quantity + 1;
+    
+    return galaxyAmount + 1;
   }
 
   static requirementAt(galaxies) {
@@ -78,25 +82,29 @@ class Galaxy {
 
     const type = Galaxy.typeAt(galaxies);
 
-    if (type === GalaxyType.DISTANT && EternityChallenge(5).isRunning) {
+    if (type === GALAXY_TYPE.DISTANT && EternityChallenge(5).isRunning) {
       amount += Math.pow(galaxies, 2) + galaxies;
-    } else if (type === GalaxyType.DISTANT || type === GalaxyType.REMOTE) {
+    } else if (type === GALAXY_TYPE.DISTANT || type === GALAXY_TYPE.REMOTE) {
       const galaxyCostScalingStart = this.costScalingStart;
       amount += Math.pow((galaxies) - (galaxyCostScalingStart - 1), 2) + (galaxies) - (galaxyCostScalingStart - 1);
     }
 
-    if (type === GalaxyType.REMOTE) {
-      amount = Math.floor(amount * Math.pow(1.002, galaxies - 800));
+    if (type === GALAXY_TYPE.REMOTE) {
+      amount *= Math.pow(1.002, galaxies - 800);
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
     if (InfinityChallenge(5).isCompleted) amount -= 1;
+    
+    if (GlyphAlteration.isAdded("power")) amount *= getSecondaryGlyphEffect("powerpow");
+    
+    amount = Math.floor(amount);
     const tier = Galaxy.requiredTier;
     return new GalaxyRequirement(tier, amount);
   }
 
   static get costMult() {
-    return NormalChallenge(10).isRunning ? 90 : Effects.min(60, TimeStudy(42));
+    return Effects.min(NormalChallenge(10).isRunning ? 90 : 60, TimeStudy(42));
   }
 
   static get baseCost() {
@@ -110,16 +118,24 @@ class Galaxy {
   static get canBeBought() {
     if (EternityChallenge(6).isRunning && !Enslaved.isRunning) return false;
     if (NormalChallenge(8).isRunning || InfinityChallenge(7).isRunning) return false;
-    return player.break || player.money.lt(Decimal.MAX_NUMBER);
+    return player.break || player.antimatter.lt(Decimal.NUMBER_MAX_VALUE);
+  }
+  
+  static get lockText() {
+    if (this.canBeBought) return null;
+    if (EternityChallenge(6).isRunning) return "Locked (Eternity Challenge 6)";
+    if (InfinityChallenge(7).isRunning) return "Locked (Infinity Challenge 7)";
+    if (NormalChallenge(8).isRunning) return "Locked (8th Dimension Autobuyer Challenge)";
+    return null;
   }
 
   static get costScalingStart() {
-    return 100 + Effects.sum(
+    return (100 + Effects.sum(
       TimeStudy(223),
       TimeStudy(224),
       EternityChallenge(5).reward,
       GlyphSacrifice.power
-    );
+    )) * TriadStudy(2).effectOrDefault(1);
   }
 
   static get type() {
@@ -128,43 +144,45 @@ class Galaxy {
 
   static typeAt(galaxies) {
     if (galaxies >= 800 && !RealityUpgrade(21).isBought) {
-      return GalaxyType.REMOTE;
+      return GALAXY_TYPE.REMOTE;
     }
     if (EternityChallenge(5).isRunning || galaxies >= this.costScalingStart) {
-      return GalaxyType.DISTANT;
+      return GALAXY_TYPE.DISTANT;
     }
-    return GalaxyType.NORMAL;
+    return GALAXY_TYPE.NORMAL;
   }
 }
 
 function galaxyReset() {
-  EventHub.dispatch(GameEvent.GALAXY_RESET_BEFORE);
+  EventHub.dispatch(GAME_EVENT.GALAXY_RESET_BEFORE);
   player.galaxies++;
-  player.tickDecrease -= 0.03;
-  player.resets = 0;
+  if (!Achievement(143).isUnlocked) player.dimensionBoosts = 0;
   softReset(0);
-  if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
+  if (Notations.current === Notation.cancer) player.spreadingCancer += 1;
   player.noSacrifices = true;
-  EventHub.dispatch(GameEvent.GALAXY_RESET_AFTER);
+  EventHub.dispatch(GAME_EVENT.GALAXY_RESET_AFTER);
 }
 
-function galaxyResetBtnClick() {
-  if (player.eternities >= 7 && !shiftDown) return maxBuyGalaxies(true);
-  if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
+function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {
+  if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(limit);
+  if (player.galaxies >= limit || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   galaxyReset();
   return true;
 }
 
-function maxBuyGalaxies(manual) {
-  const limit = manual ? Number.MAX_VALUE : Autobuyer.galaxy.limit;
+function maxBuyGalaxies(limit = Number.MAX_VALUE) {
   if (player.galaxies >= limit || !Galaxy.canBeBought) return false;
   // Check for ability to buy one galaxy (which is pretty efficient)
   const req = Galaxy.requirement;
   if (!req.isSatisfied) return false;
-  const newGalaxies = Math.min(limit, Galaxy.buyableGalaxies(Math.round(NormalDimension(req.tier).amount.toNumber())));
-  if (Notation.current === Notation.cancer) player.spreadingCancer += newGalaxies - player.galaxies;
-  // galaxyReset increments galaxies, so we add one less than we should:
+  const dim = NormalDimension(req.tier);
+  const newGalaxies = Math.clampMax(
+    Galaxy.buyableGalaxies(Math.round(dim.totalAmount.toNumber())),
+    limit);
+  if (Notations.current === Notation.cancer) player.spreadingCancer += newGalaxies - player.galaxies;
+  // Galaxy count is incremented by galaxyReset(), so add one less than we should:
   player.galaxies = newGalaxies - 1;
   galaxyReset();
+  if (Enslaved.isRunning && player.galaxies > 1) EnslavedProgress.c10.giveProgress();
   return true;
 }

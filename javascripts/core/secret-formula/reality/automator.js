@@ -140,13 +140,40 @@ GameDatabase.reality.automator = {
     {
       id: 7,
       keyword: "auto",
-      name: "<b>auto</b> - can turn the Infinity/Eternity/Reality autobuyers on or off and can edit the inputs on the infinity and eternity autobuyers (editing will turn them on)",
-      syntax: "<b>auto</b> [infinity|eternity] [interval]",
+      name: "<b>auto</b> - turn Infinity/Eternity/Reality autobuyers on or off and change their modes",
+      syntax: "<b>auto</b> [infinity|eternity|reality] [setting]",
+      sections: [
+        {
+          name: "SETTINGS",
+          items: [
+            {
+              header: "<i>on</i> | <i>off</i>",
+              description: "Turns autobuyer on or off",
+            },
+            {
+              header: "<i>number</i> <i>time units</i>",
+              description: "Usable with infinity/eternity only. Turn automator on and set it to trigger at the given interval"
+            },
+            {
+              header: "<i>number</i> x last",
+              description: 'Usable with infinity/eternity only. Turn automator on and sets it to "X times last" mode'
+            },
+            {
+              header: "<i>number currency</i>",
+              description: `Turn automator on and sets it to trigger at a specific amount. The currency must match the
+                            autobuyer type (ip, ep, or rm). For the reality autobuyer, this will select "reality
+                            machines" mode`,
+            },
+          ]
+        }
+      ],
       examples: [
         "auto infinity on",
         "auto eternity off",
         "auto infinity 30s",
-        "auto eternity 10 seconds"
+        "auto eternity 10 seconds",
+        "auto eternity 1e100 x last",
+        "auto infinity 1e1e4 ip"
       ]
     },
     {

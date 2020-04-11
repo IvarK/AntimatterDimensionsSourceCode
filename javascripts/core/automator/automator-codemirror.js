@@ -52,15 +52,53 @@
     // The start state contains the rules that are intially used
     start: [
       commentRule,
+      { regex: /studies\s+/ui, token: "keyword", next: "studiesArgs" },
       {
-        regex: /auto\s|define\s|if\s|pause\s|start\s|studies\s|tt\s|time theorems\s|unlock\s|until\s|wait\s|while\s|black[ \t]+hole\s|stored?[ \t]time\s/ui,
+        regex: /auto\s|if\s|pause\s|studies\s|tt\s|time theorems\s|until\s|wait\s|while\s|black[ \t]+hole\s|stored?[ \t]time\s/ui,
         token: "keyword",
         next: "commandArgs"
+      },
+      {
+        regex: /define\s/ui,
+        token: "keyword",
+        next: "defineIdentifier"
+      },
+      {
+        regex: /start\s|unlock\s/ui,
+        token: "keyword",
+        next: "startUnlock"
       },
       { regex: /infinity\S+|eternity\S+|reality\S+|pause\S+|restart\S+/ui, token: "error", next: "commandDone" },
       { regex: /infinity|eternity|reality|pause|restart/ui, token: "keyword", next: "commandDone" },
       { regex: /\}/ui, dedent: true },
       { regex: /\S+\s/ui, token: "error", next: "commandDone" },
+    ],
+    studiesArgs: [
+      commentRule,
+      { sol: true, next: "start" },
+      { regex: /load(\s+|$)/ui, token: "variable-2", next: "studiesLoad" },
+      { regex: /respec/ui, token: "variable-2", next: "commandDone" },
+      { regex: /nowait(\s+|$)/ui, token: "property", next: "studiesList" },
+      { regex: /(?=\S)/ui, next: "studiesList" },
+    ],
+    studiesList: [
+      commentRule,
+      { sol: true, next: "start" },
+      { regex: /normal(?=[\s,]|$)|infinity(?=[\s,]|$)|time(?=[\s,]|$)/ui, token: "variable-2" },
+      { regex: /active(?=[\s,]|$)|passive(?=[\s,]|$)|idle(?=[\s,]|$)/ui, token: "variable-2" },
+      { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable", next: "commandDone" },
+      { regex: /[1-9][0-9]+/ui, token: "number" },
+    ],
+    studiesLoad: [
+      commentRule,
+      { sol: true, next: "start" },
+      { regex: /preset(\s+|$)/ui, token: "variable-2", next: "studiesLoadPreset" },
+      { regex: /\S+/ui, token: "error" },
+    ],
+    studiesLoadPreset: [
+      commentRule,
+      { sol: true, next: "start" },
+      { regex: /(\/(?!\/)|[^\s#/])+/ui, token: "qualifier", next: "commandDone" },
     ],
     commandDone: [
       commentRule,
@@ -69,15 +107,36 @@
       { regex: /\}/ui, dedent: true },
       { regex: /\S+/ui, token: "error" },
     ],
+    defineIdentifier: [
+      commentRule,
+      { sol: true, next: "start" },
+      { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable", next: "commandArgs" },
+    ],
+    startUnlock: [
+      commentRule,
+      { sol: true, next: "start" },
+      {
+        regex: /ec(1[0-2]|[1-9])|dilation/ui,
+        token: "variable-2",
+        next: "commandDone",
+      },
+    ],
     commandArgs: [
       commentRule,
       { sol: true, next: "start" },
       { regex: /<=|>=|<|>/ui, token: "operator" },
-      { regex: /on(\s|$)|off(\s|$)|dilation(\s|$)|load(\s|$)|respec(\s|$)|nowait(\s|$)/ui, token: "variable-2" },
-      { regex: /preset(\s|$)|infinity(\s|$)|eternity(\s|$)|reality(\s|$)|use(\s|$)/ui, token: "variable-2" },
-      { regex: /am|ip|ep|tt|sec(onds?)?|min(utes?)?|hours?/ui, token: "attribute" },
+      { regex: /nowait(\s|$)/ui, token: "property" },
+      { regex: /on(\s|$)|off(\s|$)|dilation(\s|$)|load(\s|$)|respec(\s|$)/ui, token: "variable-2" },
+      { regex: /preset(\s|$)|eternity(\s|$)|reality(\s|$)|use(\s|$)/ui, token: "variable-2" },
+      { regex: /normal(\s|$|(?=,))|infinity(\s|$|(?=,))|time(\s|$|(?=,))/ui, token: "variable-2" },
+      { regex: /x[\t ]+last(\s|$)/ui, token: "variable-2" },
+      { regex: /completions(\s|$)|ec(1[0-2]|[1-9]) completions(\s|$)/ui, token: "variable-2" },
+      {
+        regex: /am(\s|$)|ip(\s|$)|ep(\s|$)|rm(\s|$)|rg(\s|$)|dt(\s|$)|tp(\s|$)|tt(\s|$)|max(\s|$)|total tt(\s|$)/ui,
+        token: "variable-2",
+      },
+      { regex: / sec(onds ?) ?| min(utes ?) ?| hours ?/ui, token: "variable-2" },
       { regex: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9])/ui, token: "number" },
-      { regex: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?\s/ui, token: "number" },
       { regex: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/ui, token: "number" },
       { regex: /\{/ui, indent: true, next: "commandDone" },
       // This seems necessary to have a closing curly brace de-indent automatically in some cases

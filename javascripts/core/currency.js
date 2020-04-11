@@ -7,36 +7,36 @@ class Currency {
   /**
    * @abstract
    */
-  get value() { throw NotImplementedCrash(); }
+  get value() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
-  set value(value) { throw NotImplementedCrash(); }
-
-  /**
-   * @abstract
-   */
-  // eslint-disable-next-line no-unused-vars
-  add(amount) { throw NotImplementedCrash(); }
+  set value(value) { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
   // eslint-disable-next-line no-unused-vars
-  integrate(perSecond, deltaTime) { throw NotImplementedCrash(); }
+  add(amount) { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
   // eslint-disable-next-line no-unused-vars
-  subtract(amount) { throw NotImplementedCrash(); }
+  integrate(perSecond, deltaTime) { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
   // eslint-disable-next-line no-unused-vars
-  isAffordable(cost) { throw NotImplementedCrash(); }
+  subtract(amount) { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  isAffordable(cost) { throw new NotImplementedError(); }
 }
 
 /**
@@ -81,9 +81,24 @@ class DecimalCurrency extends Currency {
   }
 }
 
+Currency.antimatter = new class extends DecimalCurrency {
+  get value() { return player.antimatter; }
+  set value(value) { player.antimatter = value; }
+}();
+
+Currency.infinityPower = new class extends DecimalCurrency {
+  get value() { return player.infinityPower; }
+  set value(value) { player.infinityPower = value; }
+}();
+
 Currency.infinityPoints = new class extends DecimalCurrency {
   get value() { return player.infinityPoints; }
   set value(value) { player.infinityPoints = value; }
+}();
+
+Currency.timeShards = new class extends DecimalCurrency {
+  get value() { return player.timeShards; }
+  set value(value) { player.timeShards = value; }
 }();
 
 Currency.eternityPoints = new class extends DecimalCurrency {

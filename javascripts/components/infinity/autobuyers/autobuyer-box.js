@@ -13,11 +13,7 @@ Vue.component("autobuyer-box", {
       },
       computed: {
         intervalDisplay() {
-          let seconds = TimeSpan.fromMilliseconds(this.interval).totalSeconds;
-          if (BreakInfinityUpgrade.autobuyerSpeed.isBought) {
-            seconds /= 2;
-          }
-          return seconds.toFixed(2);
+          return TimeSpan.fromMilliseconds(this.interval).totalSeconds.toFixed(2);
         }
       },
       methods: {
@@ -30,58 +26,78 @@ Vue.component("autobuyer-box", {
     }
   },
   props: {
-    setup: Object
+    autobuyer: Object,
+    name: String,
+    showInterval: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
       isUnlocked: false,
-      isOn: false
+      isActive: false,
+      globalToggle: false,
+      canBeBought: false,
+      antimatterCost: new Decimal(0),
+      isBought: false,
+      antimatter: new Decimal(0)
     };
   },
-  computed: {
-    autobuyer() {
-      return this.setup.autobuyer;
-    },
-    hasInterval() {
-      return (this.autobuyer instanceof AutobuyerState);
+  watch: {
+    isActive(newValue) {
+      this.autobuyer.isActive = newValue;
     }
   },
   methods: {
     update() {
-      if (this.setup === undefined) return;
       const autobuyer = this.autobuyer;
       this.isUnlocked = autobuyer.isUnlocked;
-      if (!this.isUnlocked) return;
-      this.isOn = autobuyer.isOn;
+      this.isActive = autobuyer.isActive;
+      this.globalToggle = player.options.autobuyersOn;
+      this.canBeBought = this.autobuyer.canBeBought;
+      this.antimatterCost = this.autobuyer.antimatterCost;
+      this.isBought = this.autobuyer.isBought;
+      this.antimatter.copyFrom(player.antimatter);
     },
-    changeActive() {
-      const newValue = !this.autobuyer.isOn;
-      this.autobuyer.isOn = newValue;
-      this.active = newValue;
+    toggle() {
+      if (!this.globalToggle) return;
+      this.isActive = !this.isActive;
+    },
+    purchase() {
+      this.autobuyer.purchase();
+    }
+  },
+  computed: {
+    canBuy() {
+      return this.antimatter.gte(this.antimatterCost);
+    },
+    autobuyerBuyBoxClass() {
+      return {
+        "c-autobuyer-buy-box--purchaseable": this.canBuy
+      };
     }
   },
   template:
-    `<div v-if="isUnlocked" class="c-autobuyer-box l-autobuyer-box">
-      <div>{{setup.name}}</div>
-      <template v-if="hasInterval">
+    `<div>
+      <div v-if="isUnlocked || isBought" class="c-autobuyer-box l-autobuyer-box">
+        <div class="l-autobuyer-box__header">{{name}}</div>
         <slot name="beforeInterval" />
-        <interval-label :autobuyer="autobuyer"/>
-      </template>
-      <slot />
-      <div class="o-autobuyer-toggle-checkbox" @click="changeActive">
-        <span class="o-autobuyer-toggle-checkbox__label">Is active:</span>
-        <input :checked="isOn" type="checkbox"/>
+        <interval-label v-if="showInterval" :autobuyer="autobuyer"/>
+        <div class="l-autobuyer-box__content">
+          <slot />
+        </div>
+        <div class="o-autobuyer-toggle-checkbox l-autobuyer-box__footer" @click="toggle">
+          <span class="o-autobuyer-toggle-checkbox__label">Is active:</span>
+          <input
+            :checked="isActive && globalToggle"
+            :disabled="!globalToggle"
+            type="checkbox"
+          />
+        </div>
+      </div>
+      <div v-else-if="canBeBought" @click="purchase" class="c-autobuyer-buy-box" :class="autobuyerBuyBoxClass">
+        Buy the {{ name }} for {{ format(antimatterCost) }} antimatter
       </div>
     </div>`
 });
-
-class AutobuyerBoxSetup {
-  /**
-   * @param {string} name
-   * @param {AutobuyerState|Autobuyer.eternity|Autobuyer.reality} autobuyer
-   */
-  constructor(name, autobuyer) {
-    this.name = name;
-    this.autobuyer = autobuyer;
-  }
-}

@@ -16,7 +16,7 @@ Vue.component("secret-time-study", {
     enslavedTT: () => 100,
     description() {
       return this.isEnslaved
-        ? "... your infinities ... have great potential ..."
+        ? "... you ... have great potential ..."
         : "Unlock a secret achievement";
     },
     hide() {
@@ -36,8 +36,9 @@ Vue.component("secret-time-study", {
         "l-time-study": true,
         "o-time-study": true,
         "o-time-study--bought": true,
-        "o-time-study--secret": true,
-        "o-time-study--secret-unlocked": this.isVisible
+        "o-time-study--secret": !this.isEnslaved && !this.isVisible,
+        "o-time-study--secret-enslaved": this.isEnslaved && !this.isVisible,
+        "o-time-study--secret-unlocked": this.isVisible,
       };
     }
   },
@@ -67,6 +68,7 @@ Vue.component("secret-time-study", {
         }
         if (this.isEnslaved) {
           this.isVisible = true;
+          EnslavedProgress.secretStudy.giveProgress();
           player.timestudy.theorem = player.timestudy.theorem.plus(this.enslavedTT);
         }
       }
@@ -74,11 +76,13 @@ Vue.component("secret-time-study", {
   },
   template:
     `<button :class="classObject" :style="styleObject" @click="handleClick" ref="study">
-      {{description}}
-      <br>
-      {{hide}}
-      <br>
-      Cost: {{cost}} Time Theorems
+      <span v-if="isVisible">
+        {{description}}
+        <br>
+        {{hide}}
+        <br>
+        Cost: {{cost}} Time Theorems
+      </span>
     </button>`
 });
 

@@ -1,56 +1,42 @@
 "use strict";
 
-function shortenRateOfChange(money) {
-  return shorten(money, 2, 2);
+function format(value, places, placesUnder1000) {
+  return Notations.current.format(value, places, placesUnder1000);
 }
 
-function shortenCosts(money) {
-  return shorten(money, 0, 0);
+function formatInt(value) {
+  if (Notations.current.isPainful) {
+    return format(value, 2, 2);
+  }
+  return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
-function shortenDimensions(money) {
-  return shorten(money, 2, 0);
+// There's probably a better way, but I basically needed formatInt behavior but with some decimal points
+function formatContinuum(value) {
+  if (Notations.current.isPainful) {
+    return format(value, 2, 2);
+  }
+  return formatWithCommas(value.toFixed(2));
 }
 
-function shortenMoney(money) {
-  return shorten(money, 2, 1);
-}
-
-function shortenMultiplier(money) {
-  return shorten(money, 1, 1);
-}
-
-function shortenAutobuyerInput(value) {
-  return Notation.scientific.format(value, 2, 0);
-}
-
-function shorten(value, places, placesUnder1000) {
-  return Notation.current.format(value, places, placesUnder1000);
-}
-
-function shortenSmallInteger(value) {
-  return Notation.current.isPainful
-    ? shorten(value, 2, 2)
-    : formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
-}
-
-function shortenPostBreak(value, places, placesUnder1000) {
-  Notation.forcePostBreakFormat = true;
-  const shortened = shorten(value, places, placesUnder1000);
-  Notation.forcePostBreakFormat = false;
-  return shortened;
+function formatPostBreak(value, places, placesUnder1000) {
+  const currentFormat = ui.formatPreBreak;
+  ui.formatPreBreak = false;
+  const formatted = format(value, places, placesUnder1000);
+  ui.formatPreBreak = currentFormat;
+  return formatted;
 }
 
 function formatX(value, places, placesUnder1000) {
-  return `${shorten(value, places, placesUnder1000)}x`;
+  return `${format(value, places, placesUnder1000)}x`;
 }
 
 function formatPow(value, places, placesUnder1000) {
-  return `^${shorten(value, places, placesUnder1000)}`;
+  return `^${format(value, places, placesUnder1000)}`;
 }
 
 function formatPercents(value, places) {
-  return `${(value * 100).toFixed(places)}%`;
+  return `${format(value * 100, 2, places)}%`;
 }
 
 function timeDisplay(ms) {
@@ -67,5 +53,7 @@ function timeDisplayShort(ms) {
 
 const commaRegexp = /\B(?=(\d{3})+(?!\d))/gu;
 function formatWithCommas(value) {
-  return value.toString().replace(commaRegexp, ",");
+  const decimalPointSplit = value.toString().split(".");
+  decimalPointSplit[0] = decimalPointSplit[0].replace(commaRegexp, ",");
+  return decimalPointSplit.join(".");
 }

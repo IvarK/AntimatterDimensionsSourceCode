@@ -8,11 +8,11 @@ const GameStorage = {
     2: undefined
   },
   saved: 0,
-  
+
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
   },
-  
+
   load() {
     const save = localStorage.getItem(this.localStorageKey);
     const root = GameSaveSerializer.deserialize(save);
@@ -40,7 +40,7 @@ const GameStorage = {
     this.currentSlot = root.current;
     this.loadPlayerObject(this.saves[this.currentSlot]);
   },
-  
+
   loadSlot(slot) {
     this.currentSlot = slot;
     // Save current slot to make sure no changes are lost
@@ -50,7 +50,7 @@ const GameStorage = {
     GameUI.notify.info("Game loaded");
   },
 
-  import(saveData) {
+  import(saveData, overrideLastUpdate = undefined) {
     if (tryImportSecret(saveData) || Theme.tryUnlock(saveData)) {
       return;
     }
@@ -59,7 +59,7 @@ const GameStorage = {
       Modal.message.show("Could not load the save");
       return;
     }
-    this.loadPlayerObject(player);
+    this.loadPlayerObject(player, overrideLastUpdate);
     this.save(true);
     GameUI.notify.info("Game imported");
   },
@@ -74,12 +74,12 @@ const GameStorage = {
   },
 
   verifyPlayerObject(save) {
-    return save !== undefined && save !== null && save.money !== undefined;
+    return save !== undefined && save !== null && (save.money !== undefined || save.antimatter !== undefined);
   },
 
-  save(silent = false) {
-    if (GlyphSelection.active) return;
-    if (++this.saved > 99) SecretAchievement(12).unlock();
+  save(silent = false, manual = false) {
+    if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
+    if (manual && ++this.saved > 99) SecretAchievement(12).unlock();
     const root = {
       current: this.currentSlot,
       saves: this.saves
@@ -99,13 +99,8 @@ const GameStorage = {
     Tab.dimensions.normal.show();
   },
 
-  loadPlayerObject(playerObject) {
+  loadPlayerObject(playerObject, overrideLastUpdate = undefined) {
     this.saved = 0;
-
-    postc8Mult = new Decimal(0);
-    mult18 = new Decimal(1);
-    IPminpeak = new Decimal(0);
-    EPminpeak = new Decimal(0);
 
     if (
       playerObject === Player.defaultStart ||
@@ -129,44 +124,49 @@ const GameStorage = {
     if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
       NormalChallenge(1).complete();
     }
-    if (player.secretUnlocks.fixed === "hasbeenfixed") {
-      SecretAchievement(42).unlock();
-    }
 
-    if (player.options.newsHidden) {
-      document.getElementById("game").style.display = "none";
-    }
+    ui.view.news = player.options.news;
+    ui.view.newUI = player.options.newUI;
+    ui.view.tutorialState = player.tutorialState;
+    ui.view.tutorialActive = player.tutorialActive;
 
     recalculateAllGlyphs();
-    Autobuyer.tryUnlockAny();
-    Autobuyer.checkIntervalAchievements();
-    Autobuyer.checkBulkAchievements();
-    Autobuyer.convertPropertiesToDecimal();
     checkPerkValidity();
-    Teresa.checkPPShopValidity();
-    drawPerkNetwork();
-    updatePerkColors();
     V.updateTotalRunUnlocks();
     Enslaved.boostReality = false;
     Theme.set(player.options.theme);
-    Notation.find(player.options.notation).setCurrent();
+    Notations.find(player.options.notation).setAsCurrent();
+    ADNotations.Settings.exponentCommas.show = player.options.commas;
 
-    if (player.options.newUI) {
-      ui.view.newUI = true;
-      ui.view.page = "new-dimensions-tab";
-    }
-
-    EventHub.dispatch(GameEvent.GAME_LOAD);
+    EventHub.dispatch(GAME_EVENT.GAME_LOAD);
     AutomatorBackend.initializeFromSave();
     Lazy.invalidateAll();
 
-    let diff = Date.now() - player.lastUpdate;
-    if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
-      diff = Enslaved.autoStoreRealTime(diff);
+    if (overrideLastUpdate) {
+      player.lastUpdate = overrideLastUpdate;
     }
-    if (diff > 1000 * 1000) {
-      simulateTime(diff / 1000);
+    if (player.options.offlineProgress) {
+      let diff = Date.now() - player.lastUpdate;
+      if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
+        diff = Enslaved.autoStoreRealTime(diff);
+      }
+      if (diff > 1000) {
+        // The third parameter is a `fast` parameter that we use to only
+        // simulate at most 50 ticks if the player was offline for less
+        // than 50 seconds.
+        simulateTime(diff / 1000, false, diff < 50 * 1000);
+      }
+    } else {
+      player.lastUpdate = Date.now();
     }
+    Enslaved.nextTickDiff = player.options.updateRate;
     GameUI.update();
+    if (GameIntervals.gameLoop.isStarted) {
+      GameIntervals.gameLoop.restart();
+    }
+
+    for (const resource of AlchemyResources.all) {
+      resource.before = resource.amount;
+    }
   }
 };

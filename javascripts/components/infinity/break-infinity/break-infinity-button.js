@@ -4,7 +4,8 @@ Vue.component("break-infinity-button", {
   data() {
     return {
       isBroken: false,
-      isUnlocked: false
+      isUnlocked: false,
+      isEnslaved: false,
     };
   },
   computed: {
@@ -14,24 +15,35 @@ Vue.component("break-infinity-button", {
         "o-infinity-upgrade-btn--color-2": true,
         "o-infinity-upgrade-btn--available": this.isUnlocked,
         "o-infinity-upgrade-btn--unavailable": !this.isUnlocked,
+        "v-feel-eternity-btn": this.isEnslaved,
       };
     },
     tooltip() {
-      return this.isUnlocked
+      if (this.isEnslaved) return "...eons stacked on eons stacked on eons stacked on eons stacked on ...";
+      return (this.isUnlocked && !this.isBroken)
         ? "Cost multipliers post-infinity will begin increasing faster, but so will the Infinity Point gain"
         : undefined;
+    },
+    text() {
+      if (this.isEnslaved) return "FEEL ETERNITY";
+      return this.isBroken ? "FIX INFINITY" : "BREAK INFINITY";
     }
   },
   methods: {
     update() {
       this.isBroken = player.break;
-      this.isUnlocked = Autobuyer.infinity.isUnlocked && Autobuyer.infinity.hasMaxedInterval;
+      this.isUnlocked = Autobuyer.bigCrunch.hasMaxedInterval;
+      this.isEnslaved = Enslaved.isRunning;
+    },
+    clicked() {
+      if (this.isEnslaved) Enslaved.feelEternity();
+      else breakInfinity();
     }
   },
   template:
     `<button
       v-tooltip="tooltip"
       :class="classObject"
-      onclick="breakInfinity()"
-    >{{isBroken ? "FIX INFINITY" : "BREAK INFINITY"}}</button>`
+      @click="clicked"
+    >{{text}}</button>`
 });

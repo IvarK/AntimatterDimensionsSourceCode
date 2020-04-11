@@ -11,6 +11,8 @@ Vue.component("replicanti-tab", {
       mult: new Decimal(0),
       hasRaisedCap: false,
       replicantiCap: new Decimal(0),
+      distantRG: 0,
+      remoteRG: 0,
       effarigInfinityBonusRG: 0,
       nextEffarigRGThreshold: 0
     };
@@ -18,8 +20,8 @@ Vue.component("replicanti-tab", {
   computed: {
     replicantiChanceSetup() {
       return new ReplicantiUpgradeButtonSetup(ReplicantiUpgrade.chance,
-        value => `Replicate chance: ${Math.round(value * 100)}%`,
-        cost => `+1% Costs: ${this.shortenCosts(cost)} IP`
+        value => `Replicate chance: ${formatPercents(value)}`,
+        cost => `+1% Costs: ${format(cost, 0, 0)} IP`
       );
     },
     replicantiIntervalSetup() {
@@ -29,27 +31,27 @@ Vue.component("replicanti-tab", {
         const intervalNum = actualInterval.toNumber();
         if (Number.isFinite(intervalNum) && intervalNum > 1 && upgrade.isCapped) {
           // Checking isCapped() prevents text overflow when formatted as "__ ➜ __"
-          return TimeSpan.fromMilliseconds(intervalNum).toString();
+          return TimeSpan.fromMilliseconds(intervalNum).toStringShort(false);
         }
-        return `${shorten(actualInterval, 2, 2)}ms`;
+        return `${format(actualInterval, 2, 2)}ms`;
       }
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => `Interval: ${formatInterval(value)}`,
-        cost => `➜ ${formatInterval(upgrade.nextValue)} Costs: ${this.shortenCosts(cost)} IP`
+        cost => `➜ ${formatInterval(upgrade.nextValue)} Costs: ${format(cost, 0, 0)} IP`
       );
     },
     maxGalaxySetup() {
       const upgrade = ReplicantiUpgrade.galaxies;
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => {
-          let description = `Max Replicanti galaxies: ${value}`;
+          let description = `Max Replicanti galaxies: ${formatInt(value)}`;
           const extra = upgrade.extra;
           if (extra > 0) {
-            description += `+${extra}`;
+            description += `+${formatInt(extra)}`;
           }
           return description;
         },
-        cost => `+1 Costs: ${this.shortenCosts(cost)} IP`
+        cost => `+${formatInt(1)} Costs: ${format(cost, 0, 0)} IP`
       );
     }
   },
@@ -68,8 +70,10 @@ Vue.component("replicanti-tab", {
       this.mult.copyFrom(replicantiMult());
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked;
       this.replicantiCap.copyFrom(replicantiCap());
+      this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;
+      this.remoteRG = ReplicantiUpgrade.galaxies.remoteRGStart;
       this.effarigInfinityBonusRG = Effarig.bonusRG;
-      this.nextEffarigRGThreshold = Decimal.MAX_NUMBER.pow(Effarig.bonusRG + 2);
+      this.nextEffarigRGThreshold = Decimal.NUMBER_MAX_VALUE.pow(Effarig.bonusRG + 2);
     }
   },
   template:
@@ -80,19 +84,19 @@ Vue.component("replicanti-tab", {
         :enabled="isUnlockAffordable"
         class="o-primary-btn--replicanti-unlock"
         onclick="Replicanti.unlock();"
-      >Unlock Replicanti<br>Cost: {{shortenCosts(1e140)}} IP</primary-button>
+      >Unlock Replicanti<br>Cost: {{format(1e140, 0, 0)}} IP</primary-button>
       <template v-else>
-        <div v-if="isInEC8">You have {{ec8Purchases}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
+        <div v-if="isInEC8">You have {{formatInt(ec8Purchases)}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
         <div v-if="hasRaisedCap">
-          Your replicanti cap without study 192 has been raised to {{shorten(replicantiCap, 2)}}
-          and is giving you {{effarigInfinityBonusRG}} extra RG due to Effarig Infinity.
-          (Next RG at {{shorten(nextEffarigRGThreshold, 2)}})
+          Your replicanti cap without study 192 has been raised to {{format(replicantiCap, 2)}}
+          and is giving you {{formatInt(effarigInfinityBonusRG)}} extra RG due to Effarig Infinity.
+          (Next RG at {{format(nextEffarigRGThreshold, 2)}})
         </div>
         <p class="c-replicanti-description">
           You have
-          <span class="c-replicanti-description__accent">{{shortenDimensions(amount)}}</span> Replicanti.
+          <span class="c-replicanti-description__accent">{{format(amount, 2, 0)}}</span> Replicanti.
           Translated to
-          <span class="c-replicanti-description__accent">{{shortenRateOfChange(mult)}}</span>x
+          <span class="c-replicanti-description__accent">{{formatX(mult, 2, 2)}}</span>
           multiplier on all Infinity Dimensions.
         </p>
         <br>
@@ -100,6 +104,11 @@ Vue.component("replicanti-tab", {
           <replicanti-upgrade-button :setup="replicantiChanceSetup" />
           <replicanti-upgrade-button :setup="replicantiIntervalSetup" />
           <replicanti-upgrade-button :setup="maxGalaxySetup" />
+        </div>
+        <div>
+          The Max Replicanti Galaxy upgrade can be purchased endlessly,
+          <br>
+          but costs increase more rapidly above {{formatInt(distantRG)}} RG and {{formatInt(remoteRG)}} RG.
         </div>
         <br>
         <br>

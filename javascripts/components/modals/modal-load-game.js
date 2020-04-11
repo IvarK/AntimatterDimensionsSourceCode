@@ -9,7 +9,7 @@ Vue.component("modal-load-game", {
       data() {
         const save = GameStorage.saves[this.saveId];
         return {
-          antimatter: new Decimal(save ? save.money : 10)
+          antimatter: new Decimal(save ? save.antimatter || save.money : 10)
         };
       },
       computed: {
@@ -22,19 +22,19 @@ Vue.component("modal-load-game", {
           GameStorage.loadSlot(this.saveId);
           Modal.hide();
         },
-        formatMoney(money) {
-          return this.shortenPostBreak(money, 2, 1);
+        formatAntimatter(antimatter) {
+          return formatPostBreak(antimatter, 2, 1);
         },
         update() {
           if (this.isSelected) {
-            this.antimatter.copyFrom(player.money);
+            this.antimatter.copyFrom(player.antimatter);
           }
         }
       },
       template:
         `<div class="l-modal-options__save-record">
           <strong>Save #{{ saveId + 1 }}:<span v-if="isSelected"> (selected)</span></strong>
-          <span>Antimatter: {{ formatMoney(antimatter) }}</span>
+          <span>Antimatter: {{ formatAntimatter(antimatter) }}</span>
           <primary-button
             class="o-primary-btn--width-medium"
             @click="load"

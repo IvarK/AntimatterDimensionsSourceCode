@@ -1,102 +1,12 @@
 body.t-dark-metro {
     background-image: url('../images/dark-bg.png');
     background-position: center;
-}
-
-.t-dark-metro .radial-progress, .circle, .mask full, .fill, .fill fix, .inset{
-    border-radius: 50%;
-}
-
-.t-dark-metro .container {
     color: #757575;
-}
-
-.t-dark-metro .popup {
-    background-color: #455A64;
-    box-shadow: 0 0 10px 0 black;
-}
-
-.t-dark-metro #news {
-    color: #E0E0E0;
-}
-
-.t-dark-metro #game {
-    border: 1px solid black;
-    background-color: #455A64;
 }
 
 .t-dark-metro input {
     background-color: #455A64;
     border: 1px solid black;
-}
-
-.t-dark-metro .secondarytabbtn {
-    color: #E0E0E0;
-    background: #455A64;
-    border: 1px solid #1E88E5;
-    box-shadow: 1px 1px 1px 0 black;
-    border-radius: 0;
-}
-
-.t-dark-metro .secondarytabbtn:hover {
-    background: #1E88E5;
-}
-
-.t-dark-metro .storebtn {
-    background: #455A64;
-    border: 1px solid #43A047;
-    box-shadow: 1px 1px 1px 0 black;
-}
-
-.t-dark-metro .storebtn:hover {
-    background: #43A047;
-}
-
-.t-dark-metro .unavailablebtn {
-    background: #37474F;
-    border: 1px solid #E53935;
-    box-shadow: 1px 1px 1px 0 black;
-}
-
-.t-dark-metro .unavailablebtn:hover {
-    background: #E53935;
-}
-
-.t-dark-metro .infinitytabbtn {
-    color: black;
-    background: white;
-    border: 1px solid #FF9800;
-    box-shadow: 1px 1px 1px 0 black;
-}
-
-.t-dark-metro .infinitytabbtn:hover {
-    background: #FF9800;
-    border-color: #FF9800;
-}
-
-.t-dark-metro .eternitytabbtn {
-    color: #673AB7;
-    background: black;
-    border: 1px solid #673AB7;
-    box-shadow: 1px 1px 1px 0 black;
-}
-
-.t-dark-metro .eternitytabbtn:hover {
-    background: white;
-    border-color: #673AB7;
-    box-shadow: 1px 1px 1px 0 black;
-}
-
-.t-dark-metro .celestialtabbtn {
-    background-color: #00bcd4;
-    border-color: #00838f;
-    color: white;
-}
-      
-.t-dark-metro .celestialtabbtn:hover {
-    background-color: white;
-    color: #00bcd4;
-    border-color: #00838f;
 }
 
 .t-dark-metro .c-tt-buy-button--unlocked {
@@ -118,31 +28,6 @@ body.t-dark-metro {
 
 .t-dark-metro .c-tt-buy-button--locked:hover {
     background: #E53935;
-}
-
-.t-dark-metro #theorembuybackground {
-    background: #455A64;
-    border-width: 1px;
-}
-
-.t-dark-metro .realitytabbtn {
-    background-color: white;
-    border: 1px solid #0b600e;
-    color: #0b600e;
-}
-
-.t-dark-metro .realitytabbtn:hover {
-    color: white;
-    background-color: #0b600e;
-    border-color: #0b600e;
-}
-
-.t-dark-metro .c-rm-amount__desc {
-    color: #757575;
-}
-
-.t-dark-metro .c-rm-amount {
-  color: #0b600e;
 }
 
 .t-dark-metro #realityanimbg {

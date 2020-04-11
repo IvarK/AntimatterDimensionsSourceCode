@@ -1,39 +1,45 @@
 "use strict";
 
 Vue.component("tab-button", {
-  data() {
-    return {
-      visible: false,
-      subtabVisibilities: []
-    };
-  },
   props: {
     tab: Object
   },
-  methods: {
-    changeTab(tab) {
-      this.$viewModel.page = tab;
+  data() {
+    return {
+      isAvailable: false,
+      subtabVisibilities: []
+    };
+  },
+  computed: {
+    classObject() {
+      return {
+        "o-tab-btn": true,
+        "o-tab-btn--subtabs": this.isAvailable && this.subtabVisibilities.filter(x => x).length > 1,
+      };
     },
+  },
+  methods: {
     update() {
-      this.visible = this.tab.condition();
-      if (this.tab.subtabs) this.subtabVisibilities = this.tab.subtabs.map(x => x.condition());
+      this.isAvailable = this.tab.isAvailable;
+      this.subtabVisibilities = this.tab.subtabs.map(x => x.isAvailable);
     }
   },
   template:
-  `<div class="tab-button" :class="tab.class">
+  `<div :class="[classObject, tab.config.UIClass]">
     <div 
-      @click="changeTab(tab.component)"
-      v-if="visible"
-      class="tab-button-inner">
-      <h3>{{ tab.label }}</h3>
+      v-if="isAvailable"
+      class="l-tab-btn-inner"
+      @click="tab.show()"
+    >
+      {{ tab.name }}
     </div>
-    <div v-else class="tab-button-inner"><h3>???</h3></div>
-    <div class="subtabs" v-if="visible && subtabVisibilities.filter(x => x).length > 1">
-      <div v-for="(subtab, index) in tab.subtabs">
-        <div 
+    <div v-else class="l-tab-btn-inner">???</div>
+    <div class="subtabs" v-if="isAvailable && subtabVisibilities.filter(x => x).length > 1">
+      <div v-for="(subtab, index) in tab.subtabs"
           v-if="subtabVisibilities[index]"
-          class="subtab" :class="tab.class"
-          @click="changeTab(subtab.component)">{{ subtab.label }}</div>
+          class="o-tab-btn o-tab-btn--subtab"
+          :class="tab.config.UIClass"
+          @click="subtab.show()"><span v-html="subtab.symbol"></span>
       </div>
     </div>
   </div>`

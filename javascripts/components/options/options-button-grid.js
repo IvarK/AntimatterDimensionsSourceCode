@@ -32,31 +32,59 @@ Vue.component("options-button-grid", {
   },
   data() {
     return {
-      options: player.options
+      theme: "",
+      notation: "",
+      retryChallenge: false,
+      cloud: false,
+      hotkeys: false,
+      commas: false,
+      updateRate: 0
     };
+  },
+  watch: {
+    retryChallenge(newValue) {
+      player.options.retryChallenge = newValue;
+    },
+    cloud(newValue) {
+      player.options.cloud = newValue;
+    },
+    hotkeys(newValue) {
+      player.options.hotkeys = newValue;
+    },
+    commas(newValue) {
+      player.options.commas = newValue;
+      ADNotations.Settings.exponentCommas.show = newValue;
+    },
+    updateRate(newValue) {
+      player.options.updateRate = newValue;
+    },
   },
   computed: {
     themeLabel() {
-      return `Theme: ${Themes.find(this.options.theme).displayName()} ▼`;
+      return `Theme: ${Themes.find(this.theme).displayName()} ▼`;
     },
     notationLabel() {
-      return `Notation: ${this.options.notation} ▼`;
+      return `Notation: ${this.notation} ▼`;
     },
     UILabel() {
-      return `UI: ${this.$viewModel.newUI ? "New" : "Old"}`
+      return `UI: ${this.$viewModel.newUI ? "New" : "Old"}`;
     }
   },
   methods: {
+    update() {
+      const options = player.options;
+      this.theme = options.theme;
+      this.notation = options.notation;
+      this.retryChallenge = options.retryChallenge;
+      this.cloud = options.cloud;
+      this.hotkeys = options.hotkeys;
+      this.commas = options.commas;
+      this.updateRate = options.updateRate;
+    },
     hardReset() {
       if (confirm("Do you really want to erase all your progress?")) {
         GameStorage.hardReset();
       }
-    },
-    switchUI() {
-      player.options.newUI = !player.options.newUI
-      this.$viewModel.newUI = !this.$viewModel.newUI
-      this.$viewModel.page = "options-tab";
-      showTab("options");
     }
   },
   template: `
@@ -80,7 +108,7 @@ Vue.component("options-button-grid", {
       </div>
       <div class="l-options-grid__row">
         <primary-button-on-off
-          v-model="options.retryChallenge"
+          v-model="retryChallenge"
           class="o-primary-btn--option l-options-grid__button"
           text="Automatically retry challenges:"
         />
@@ -100,7 +128,7 @@ Vue.component("options-button-grid", {
         >Confirmations</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"
-          onclick="GameStorage.save()"
+          onclick="GameStorage.save(false, true)"
         >Save</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"
@@ -116,13 +144,13 @@ Vue.component("options-button-grid", {
         >Cloud load</options-button>
         <primary-button-on-off
           class="o-primary-btn--option l-options-grid__button"
-          v-model="options.cloud"
+          v-model="cloud"
           text="Automatic cloud saving/loading:"
         />
       </div>
       <div class="l-options-grid__row">
         <primary-button-on-off-custom
-          v-model="options.hotkeys"
+          v-model="hotkeys"
           class="o-primary-btn--option l-options-grid__button"
           on="Disable hotkeys"
           off="Enable hotkeys"
@@ -132,7 +160,7 @@ Vue.component("options-button-grid", {
           @click="hardReset"
         >RESET THE GAME</options-button>
         <primary-button-on-off-custom
-          v-model="options.commas"
+          v-model="commas"
           class="o-primary-btn--option l-options-grid__button"
           on="Commas on exponents"
           off="Notation on exponents"
@@ -141,16 +169,29 @@ Vue.component("options-button-grid", {
       <div class="l-options-grid__row">
         <options-button
           class="o-primary-btn--option_font-large"
-          @click="switchUI"
+          onclick="GameOptions.toggleUI()"
         >{{ UILabel }}</options-button>
         <update-rate-slider
-          v-model="options.updateRate"
+          v-model="updateRate"
           oninput="GameOptions.refreshUpdateRate()"
         />
         <options-button
           class="o-primary-btn--option_font-large"
           onclick="Modal.animationOptions.show();"
         >Animations</options-button>
+      </div>
+      <div class="l-options-grid__row">
+        <options-button
+          class="o-primary-btn--option_font-large"
+          onclick="Modal.infoDisplayOptions.show()"
+        >Info Displays</options-button>
+        <options-button
+          class="o-primary-btn--option_font-large"
+          onclick="Modal.miscellaneousOptions.show()"
+        >Miscellaneous</options-button>
+        <options-button
+           class="o-primary-btn--option l-options-grid__button--hidden"
+         />
       </div>
     </div>`
 });

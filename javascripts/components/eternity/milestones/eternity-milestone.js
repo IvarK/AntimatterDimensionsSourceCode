@@ -20,7 +20,8 @@ Vue.component("eternity-milestone", {
       return this.config.eternities;
     },
     reward() {
-      return this.config.reward;
+      const reward = this.config.reward;
+      return typeof reward === "function" ? reward() : reward;
     },
     rewardClassObject() {
       return {
@@ -37,9 +38,9 @@ Vue.component("eternity-milestone", {
     }
   },
   template:
-    `<div class="l-eternity-milestone">
+    `<div class="l-eternity-milestone" v-if="!this.config.invisible">
       <span class="o-eternity-milestone__goal">
-        {{eternities}} {{"Eternity" | pluralize(eternities, "Eternities")}}:
+        {{formatInt(eternities)}} {{"Eternity" | pluralize(eternities, "Eternities")}}:
       </span>
       <button :class="rewardClassObject">{{reward}}</button>
     </div>`

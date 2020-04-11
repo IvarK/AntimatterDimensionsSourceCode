@@ -1,17 +1,5 @@
 "use strict";
 
-const teresaQuotes = [
-  "We've been observing you",
-  "You have shown promise with your bending of the reality",
-  "We are the Celestials, and we want you to join us.",
-  "My name is Teresa, the Celestial Of Reality",
-  "Prove your worth.",
-  "I'll let you inside my Reality, mortal. Don't get crushed by it.",
-  "You've proven your worth mortal, if you wish to join us you need to start over...",
-  "Why are you still here... You were supposed to vanish... You are still no match for us.",
-  "I hope the others succeed where I have failed."
-];
-
 const TERESA_UNLOCKS = {
   RUN: {
     id: 0,
@@ -33,25 +21,19 @@ const TERESA_UNLOCKS = {
     price: 1e24,
     description: "unlock Perk Point Shop.",
   },
-};
-
-const PERK_SHOP = {
-  GLYPH_LEVEL: {
-    id: 0
-  },
-  RM_MULT: {
-    id: 1
-  },
-  DILATION_BULK: {
-    id: 2
+  UNDO: {
+    id: 4,
+    price: 1e10,
+    description: 'unlock "Undo" of equipping a glyph.',
   }
-}
+};
 
 const Teresa = {
   timePoured: 0,
   unlockInfo: TERESA_UNLOCKS,
   lastUnlock: "SHOP",
   rmStoreMax: 1e24,
+  displayName: "Teresa",
   pourRM(diff) {
     if (this.rmStore >= Teresa.rmStoreMax) return;
     this.timePoured += diff;
@@ -64,55 +46,23 @@ const Teresa = {
   checkForUnlocks() {
     for (const info of Object.values(Teresa.unlockInfo)) {
       if (!this.has(info) && this.rmStore >= info.price) {
-        player.celestials.teresa.unlocks.push(info.id);
+        // eslint-disable-next-line no-bitwise
+        player.celestials.teresa.unlockBits |= (1 << info.id);
+        EventHub.dispatch(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, this, info);
       }
     }
   },
   has(info) {
     if (!info.hasOwnProperty("id")) throw "Pass in the whole TERESA UNLOCK object";
-    return player.celestials.teresa.unlocks.includes(info.id);
+    // eslint-disable-next-line no-bitwise
+    return Boolean(player.celestials.teresa.unlockBits & (1 << info.id));
   },
-  startRun() {
-    player.celestials.teresa.run = startRealityOver() || player.celestials.teresa.run;
-  },
-  buyGlyphLevelPower() {
-    const cost = Math.pow(2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05));
-    if (cost > Teresa.perkShopCap(PERK_SHOP.GLYPH_LEVEL)) return false;
-    if (player.reality.pp < cost) return false;
-    player.celestials.teresa.glyphLevelMult *= 1.05;
-    player.reality.pp -= cost;
-    return true;
-  },
-  buyRmMult() {
-    const cost = player.celestials.teresa.rmMult;
-    if (cost > Teresa.perkShopCap(PERK_SHOP.RM_MULT)) return false;
-    if (player.reality.pp < cost) return false;
-    player.celestials.teresa.rmMult *= 2;
-    player.reality.pp -= cost;
-    return true;
-  },
-  buyDtBulk() {
-    const cost = player.celestials.teresa.dtBulk * 100;
-    if (cost > Teresa.perkShopCap(PERK_SHOP.DILATION_BULK)) return false;
-    if (player.reality.pp < cost) return false;
-    player.celestials.teresa.dtBulk *= 2;
-    player.reality.pp -= cost;
-    return true;
+  initializeRun() {
+    clearCelestialRuns();
+    player.celestials.teresa.run = true;
   },
   rewardMultiplier(antimatter) {
-    return Decimal.max(Decimal.pow(antimatter.log10() / 1.5e8, 12), 1).toNumber();
-  },
-  perkShopCap(upgrade) {
-    switch (upgrade.id) {
-      case PERK_SHOP.GLYPH_LEVEL.id:
-        return Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048;
-      case PERK_SHOP.RM_MULT.id:
-        return Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048;
-      case PERK_SHOP.DILATION_BULK.id:
-        return Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 812900 : 1600;
-      default:
-        return 0;
-    }
+    return Decimal.max(Decimal.pow(antimatter.plus(1).log10() / 1.5e8, 12), 1).toNumber();
   },
   get rmStore() {
     return player.celestials.teresa.rmStore;
@@ -129,35 +79,91 @@ const Teresa = {
   get runRewardMultiplier() {
     return this.rewardMultiplier(player.celestials.teresa.bestRunAM);
   },
-  get quote() {
-    return teresaQuotes[player.celestials.teresa.quoteIdx];
-  },
-  nextQuote() {
-    if (player.celestials.teresa.quoteIdx < 4 + player.celestials.teresa.unlocks.length) {
-      player.celestials.teresa.quoteIdx++;
-    }
-  },
   get isRunning() {
     return player.celestials.teresa.run;
   },
-  checkPPShopValidity() {
-    let totalPPSpent = 0;
-    if (Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05) > 12) {
-      totalPPSpent += Math.pow(2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05)) - 4096;
-      player.celestials.teresa.glyphLevelMult = Math.pow(1.05, 12);
+  get runCompleted() {
+    return player.celestials.teresa.bestRunAM.gt(0);
+  },
+  quotes: new CelestialQuotes("teresa", {
+    INITIAL: {
+      id: 1,
+      lines: [
+        "We've been observing you",
+        "You have shown promise with your bending of the reality",
+        "We are the Celestials, and we want you to join us.",
+        "My name is Teresa, the Celestial Of Reality",
+        "Prove your worth.",
+      ]
+    },
+    UNLOCK_REALITY: CelestialQuotes.singleLine(
+      2, "I'll let you inside my Reality, mortal. Don't get crushed by it."
+    ),
+    COMPLETE_REALITY: CelestialQuotes.singleLine(
+      3, "Why are you still here... You were supposed to fail"
+    ),
+    EFFARIG: {
+      id: 4,
+      lines: [
+        "You are still no match for us.",
+        "I hope the others succeed where I have failed."
+      ]
     }
-    if (player.celestials.teresa.rmMult > 2096) {
-      totalPPSpent += player.celestials.teresa.rmMult - 4096;
-      player.celestials.teresa.rmMult = 4096;
+  }),
+};
+
+class PerkShopUpgradeState extends RebuyableMechanicState {
+  get currency() {
+    return Currency.perkPoints;
+  }
+
+  get boughtAmount() {
+    return player.celestials.teresa.perkShop[this.id];
+  }
+
+  set boughtAmount(value) {
+    player.celestials.teresa.perkShop[this.id] = value;
+  }
+
+  get isCapped() {
+    return this.cost === this.cap;
+  }
+
+  get isAvailableForPurchase() {
+    return this.cost < this.currency.value;
+  }
+
+  purchase() {
+    if (!super.purchase()) return;
+    if (this.id === 1) {
+      Autobuyer.reality.bumpAmount(2);
     }
-    if (player.celestials.teresa.dtBulk > 32) {
-      totalPPSpent += player.celestials.teresa.rdtBulk * 100 - 3200;
-      player.celestials.teresa.dtBulk = 32;
-    }
-    if (totalPPSpent > 0) {
-      player.reality.pp += totalPPSpent;
-      Modal.message.show("You had too many PP shop purchases, " +
-        "your PP shop purchases have been capped and your perk points refunded.");
+    if (this.id === 4) {
+      Glyphs.addToInventory(GlyphGenerator.musicGlyph());
     }
   }
-};
+}
+
+const PerkShopUpgrade = (function() {
+  const db = GameDatabase.celestials.perkShop;
+  return {
+    glyphLevel: new PerkShopUpgradeState(db.glyphLevel),
+    rmMult: new PerkShopUpgradeState(db.rmMult),
+    bulkDilation: new PerkShopUpgradeState(db.bulkDilation),
+    autoSpeed: new PerkShopUpgradeState(db.autoSpeed),
+    musicGlyph: new PerkShopUpgradeState(db.musicGlyph),
+  };
+}());
+
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
+  if (Tab.celestials.teresa.isOpen) Teresa.quotes.show(Teresa.quotes.INITIAL);
+});
+
+EventHub.logic.on(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, ([celestial, upgradeInfo]) => {
+  if (celestial === Teresa) {
+    if (upgradeInfo === TERESA_UNLOCKS.RUN) Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY);
+    if (upgradeInfo === TERESA_UNLOCKS.EFFARIG) Teresa.quotes.show(Teresa.quotes.EFFARIG);
+  }
+});
+
+EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Teresa.checkForUnlocks());

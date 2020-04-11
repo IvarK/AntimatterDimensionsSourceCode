@@ -156,7 +156,7 @@ class TimeSpan {
   get totalMilliseconds() {
     return this._ms;
   }
-  
+
   /**
    * @param {TimeSpan} other
    * @returns {TimeSpan}
@@ -198,12 +198,12 @@ class TimeSpan {
    */
   toString() {
     if (this.years > 1e6) {
-      return `${shorten(this.totalYears, 3, 0)} years`;
+      return `${format(this.totalYears, 3, 0)} years`;
     }
     if (this.totalSeconds > 10) {
       return this.toStringNoDecimals();
     }
-    return `${this.totalSeconds.toFixed(3)} seconds`;
+    return `${format(this.totalSeconds, 3, 3)} seconds`;
   }
 
   /**
@@ -218,37 +218,50 @@ class TimeSpan {
       addComponent(value, name);
     }
     function addComponent(value, name) {
-      parts.push(value === 1 ? `${value} ${name}` : `${value} ${name}s`);
+      parts.push(value === 1 ? `${formatInt(value)} ${name}` : `${formatInt(value)} ${name}s`);
     }
     addCheckedComponent(this.years, "year");
     addCheckedComponent(this.days, "day");
     addCheckedComponent(this.hours, "hour");
     addCheckedComponent(this.minutes, "minute");
-    addComponent(this.seconds, "second");
+    addCheckedComponent(this.seconds, "second");
     // Join with commas and 'and' in the end.
+    if (parts.length === 0) return `${formatInt(0)} seconds`;
     return [parts.slice(0, -1).join(", "), parts.slice(-1)[0]].join(parts.length < 2 ? "" : " and ");
   }
 
   /**
+   * @param {boolean} useHMS If true, will display times as HH:MM:SS in between a minute and 100 hours.
    * @returns {String}
    */
-  toStringShort() {
+  toStringShort(useHMS = true) {
     const totalSeconds = this.totalSeconds;
+    if (totalSeconds <= 1) {
+      return `${format(1000 * totalSeconds)} ms`;
+    }
     if (totalSeconds <= 10) {
-      return `${totalSeconds.toFixed(3)} seconds`;
+      return `${format(totalSeconds, 0, 3)} seconds`;
     }
     if (totalSeconds <= 60) {
-      return `${totalSeconds.toFixed(2)} seconds`;
+      return `${format(totalSeconds, 0, 2)} seconds`;
     }
-    if (this.totalHours < 10000) {
-      return `${format(Math.floor(this.totalHours))}:${format(this.minutes)}:${format(this.seconds)}`;
+    if (this.totalHours < 100) {
+      if (useHMS && !Notations.current.isPainful) {
+        return `${formatHMS(Math.floor(this.totalHours))}:${formatHMS(this.minutes)}:${formatHMS(this.seconds)}`;
+      }
+      if (this.totalMinutes < 60) {
+        return `${format(this.totalMinutes, 0, 2)} minutes`;
+      }
+      if (this.totalHours < 24) {
+        return `${format(this.totalHours, 0, 2)} hours`;
+      }
     }
-    if (this.totalDays < 10000) {
-      return `${this.totalDays.toFixed(2)} days`;
+    if (this.totalDays < 500) {
+      return `${format(this.totalDays, 0, 2)} days`;
     }
-    return `${shorten(this.totalYears, 3, 0)} years`;
-    
-    function format(value) {
+    return `${format(this.totalYears, 3, 2)} years`;
+
+    function formatHMS(value) {
       const s = value.toString();
       return s.length === 1 ? `0${s}` : s;
     }

@@ -41,11 +41,11 @@ Vue.component("ep-multiplier-button", {
   template:
     `<div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()">
-        You gain 5 times more EP
+        You gain {{formatInt(5)}} times more EP
         <br>
-        Currently: {{shorten(multiplier, 2, 0)}}x
+        Currently: {{format(multiplier, 2, 0)}}x
         <br>
-        Cost: {{shorten(cost, 2, 0)}} EP
+        Cost: {{format(cost, 2, 0)}} EP
       </button>
       <primary-button
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"

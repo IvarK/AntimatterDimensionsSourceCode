@@ -21,9 +21,12 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e5,
       increment: 10,
       description: "Double Dilated Time gain.",
-      effect: bought => Decimal.pow(2, bought),
+      effect: bought => {
+        const base = SingularityMilestone(12).isUnlocked ? 2 * SingularityMilestone(12).effectValue : 2;
+        return Decimal.pow(base, bought);
+      },
       formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => shorten(value, 2, 0)
+      formatCost: value => format(value, 2, 0)
     }),
     galaxyThreshold: rebuyable({
       id: 2,
@@ -34,32 +37,40 @@ GameDatabase.eternity.dilation = (function() {
         ? "Reset Dilated Galaxies, but lower their threshold"
         : "Reset Dilated Time and Dilated Galaxies, but lower their threshold"),
       effect: bought => Math.pow(0.8, bought),
-      formatEffect: () => getFreeGalaxyMult().toFixed(3),
-      formatCost: value => shorten(value, 2, 0)
+      formatEffect: () => format(getFreeGalaxyMult(), 3, 3),
+      formatCost: value => format(value, 2, 0)
     }),
     tachyonGain: rebuyable({
       id: 3,
       initialCost: 1e7,
       increment: 20,
-      description: "Triple the amount of Tachyon Particles gained.",
+      description: () => (Enslaved.isRunning
+        ? `Multiply the amount of Tachyon Particles gained by ${Math.pow(3, Enslaved.tachyonNerf).toFixed(2)}`
+        : "Triple the amount of Tachyon Particles gained."),
       effect: bought => Decimal.pow(3, bought),
       formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => shorten(value, 2, 0)
+      formatCost: value => format(value, 2, 0)
     }),
     doubleGalaxies: {
       id: 4,
       cost: 5e6,
-      description: "Gain twice as many free galaxies.",
+      description: () => `Gain twice as many free galaxies, up to ${formatInt(1000)}.`,
       effect: 2
     },
     tdMultReplicanti: {
       id: 5,
       cost: 1e9,
       description: () => {
-        const mult = replicantiMult().pLog10();
-        const ratio = DilationUpgrade.tdMultReplicanti.effectValue.pLog10() / mult;
-        const out = ratio > 0.095 ? "0.1" : ratio.toFixed(2);
-        return `Time Dimensions are affected by Replicanti multiplier ^${out}.`;
+        const rep10 = replicantiMult().pLog10();
+        let multiplier = "0.1";
+        if (rep10 > 9000) {
+          const ratio = DilationUpgrade.tdMultReplicanti.effectValue.pLog10() / rep10;
+          if (ratio < 0.095) {
+            multiplier = ratio.toFixed(2);
+          }
+        }
+        return `Time Dimensions are affected by Replicanti multiplier ${formatPow(multiplier, 1, 3)}, reduced
+          effect above ${formatX(new Decimal("1e9000"))}`;
       },
       effect: () => {
         let rep10 = replicantiMult().pLog10() * 0.1;

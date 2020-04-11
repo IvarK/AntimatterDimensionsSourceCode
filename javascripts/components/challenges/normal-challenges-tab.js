@@ -10,7 +10,7 @@ Vue.component("normal-challenges-tab", {
         return {
           isRunning: false,
           isCompleted: false,
-          isImpossible: false,
+          isBroken: false,
         };
       },
       computed: {
@@ -21,15 +21,15 @@ Vue.component("normal-challenges-tab", {
           return `C${this.challengeId}`;
         },
         overrideLabel() {
-          return this.isImpossible ? "Impossible" : "";
+          return this.isBroken ? "Broken" : "";
         }
       },
       methods: {
         update() {
           this.isRunning = this.challenge.isRunning;
-          this.isCompleted = this.challenge.isCompleted;
-          this.isImpossible = Enslaved.isRunning &&
-            !Enslaved.IMPOSSIBLE_CHALLENGE_EXEMPTIONS.includes(this.challengeId);
+          this.isBroken = Enslaved.isRunning &&
+            !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(this.challengeId);
+          this.isCompleted = this.challenge.isCompleted && !this.isBroken;
         }
       },
       template:
@@ -48,7 +48,7 @@ Vue.component("normal-challenges-tab", {
     }
   },
   template:
-    `<div class="l-normal-challenge-tab">
+    `<div class="l-challenges-tab">
       <challenges-header/>
       <challenge-grid :count="12">
         <normal-challenge-box slot-scope="slotProps" :challengeId="slotProps.challengeId" />

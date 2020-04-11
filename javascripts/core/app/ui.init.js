@@ -1,53 +1,35 @@
 "use strict";
 
-
+// eslint-disable-next-line prefer-const
 let ui = {
   view: {
     modal: {
       current: undefined,
       cloudConflicts: [],
-      message: "",
-      callback: undefined,
-      closeButton: false,
       glyphSelection: false,
+      progressBar: undefined,
     },
     tabs: {
-      current: undefined,
       dimensions: {
-        subtab: "",
         normal: {
-          floatingText: Array.from({length: 9}, () => [])
+          floatingText: Array.from({ length: 9 }, () => [])
         },
       },
-      statistics: {
-        subtab: ""
-      },
-      achievements: {
-        subtab: ""
-      },
-      challenges: {
-        subtab: ""
-      },
-      infinity: {
-        subtab: ""
-      },
-      eternity: {
-        subtab: ""
-      },
       reality: {
-        subtab: "",
         openGlyphWeights: false,
         currentGlyphTooltip: -1,
+        draggingGlyphInfo: {
+          id: 0,
+          type: "",
+          sacrificeValue: 0,
+        },
         automator: {
           fullScreen: false,
           editorScriptID: "",
           // TODO: enum
-          mode: true
+          lines: []
         }
       },
-      celestials: {
-        subtab: ""
-      }
     },
     shiftDown: false,
     theme: "Normal",
@@ -55,8 +37,14 @@ let ui = {
     scrollWindow: 0,
     draggingUIID: -1,
     currentContextMenu: null,
-    page: "normal-dim-tab",
-    newUI: false
+    tab: "dimensions",
+    subtab: "normal",
+    newUI: false,
+    news: false,
+    initialized: false,
+    tutorialState: 0,
+    tutorialActive: true
   },
   notationName: "",
+  formatPreBreak: false
 };

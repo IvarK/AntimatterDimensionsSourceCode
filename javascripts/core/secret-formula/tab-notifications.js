@@ -80,4 +80,33 @@ GameDatabase.tabNotifications = {
       !TimeStudy.dilation.isBought,
     events: [GAME_EVENT.GAME_TICK_AFTER]
   },
+  dilationAfterUnlock: {
+    tabsToHighLight: [
+      {
+        parent: "eternity",
+        tab: "dilation"
+      }
+    ],
+    condition: () => !PlayerProgress.realityUnlocked()
+  },
+  blackHoleUnlock: {
+    tabsToHighLight: [
+      {
+        parent: "reality",
+        tab: "hole"
+      }
+    ],
+    condition: () => player.reality.realityMachines.gte(100),
+    events: [GAME_EVENT.GAME_TICK_AFTER]
+  },
+  automatorUnlock: {
+    tabsToHighLight: [
+      {
+        parent: "reality",
+        tab: "automator"
+      }
+    ],
+    condition: () => player.realities >= 5,
+    events: [GAME_EVENT.REALITY_RESET_AFTER]
+  },
 };

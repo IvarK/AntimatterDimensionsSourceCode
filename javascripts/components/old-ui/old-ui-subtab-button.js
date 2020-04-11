@@ -18,7 +18,7 @@ Vue.component("old-ui-subtab-button", {
   },
   template: `
   <button v-if="isAvailable" @click="subtab.show()" style="margin: 0.5rem 0.8rem" class="o-tab-btn o-tab-btn--secondary">
-    {{subtab.name}} {{ hasNotification ? "(!)" : "" }}
+    {{subtab.name}} <i v-if="hasNotification" class="fas fa-exclamation"></i>
   </button>
   `
 });

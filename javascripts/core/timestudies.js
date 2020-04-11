@@ -548,6 +548,7 @@ class DilationTimeStudyState extends TimeStudyState {
     if (this.id === 6 && !Perk.autounlockReality.isBought) {
       Tab.reality.glyphs.show();
     }
+    TabNotification.dilationAfterUnlock.tryTrigger();
     player.dilation.studies.push(this.id);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
     return true;

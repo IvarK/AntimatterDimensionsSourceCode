@@ -23,6 +23,6 @@ Vue.component("old-ui-tab-button", {
       class="o-tab-btn"
       style="margin: 0.2rem"
       @click="tab.show()"
-    >{{tab.name}} {{ hasNotification ? "(!)" : "" }}</button>
+    >{{tab.name}} <i v-if="hasNotification" class="fas fa-exclamation"></i></button>
   `
 });

@@ -188,16 +188,19 @@ Vue.component("laitela-tab", {
             You have {{ format(singularities, 2, 0) }} 
             {{ "Singularity" | pluralize(singularities, "Singularities")}}
           </h2>
-          <button class="c-laitela-singularity" @click="doSingularity">
+          <button
+            class="c-laitela-singularity"
+            :class="{ 'c-laitela-singularity--active' : canPerformSingularity }"
+            @click="doSingularity">
             <h2>{{ singularityText }}</h2>
           </button>
         </div>
         <div class="l-laitela-singularity-container--right">
           <button class="c-laitela-singularity__cap-control" @click="increaseCap">
-            Increase singularity cap.
+            Increase Singularity cap.
           </button>
           <button class="c-laitela-singularity__cap-control" @click="decreaseCap">
-            Decrease singularity cap.
+            Decrease Singularity cap.
           </button>
           <div v-if="autoCapUnlocked">
             <input type="text" v-model="autoCapInput" @change="handleAutoCapInputChange()"/><br>

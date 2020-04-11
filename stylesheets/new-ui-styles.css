@@ -24,8 +24,12 @@ body.t-normal {
 #page {
   margin: auto;
   display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
   font-family: Typewriter, serif;
   background: none;
+  height: 100%;
+  width: 100%;
 }
 
 .sidebar {
@@ -98,7 +102,7 @@ body.t-normal {
 .resource-eternity-canreset {
   background-color: black;
   cursor: pointer;
-  transition-duration: 0.12s;
+  transition-duration: 0.15s;
 }
 
 .resource-infinity-canreset:hover,

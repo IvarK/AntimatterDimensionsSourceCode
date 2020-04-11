@@ -506,7 +506,7 @@ GameDatabase.celestials.navigation = {
       pathStart: 0,
       pathEnd: 1,
       path: LinearPath.connectCircles(new Vector(650, 250), 80 - 1, new Vector(400, 350 + 50 * Math.sqrt(3)), 16 - 1),
-      fill: "url(#gradEffarigV)",
+      fill: "url(#gradEnslavedV)",
       completeWidth: 6,
       incompleteWidth: 4,
     }
@@ -977,4 +977,269 @@ GameDatabase.celestials.navigation = {
       incompleteWidth: 4,
     }
   },
+  "ra": {
+    visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    complete: () => 1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "☼",
+      fill: "#d10043",
+      position: new Vector(400, 200),
+      ring: {
+        rMajor: 24,
+      },
+      legend: {
+        text: "Ra, celestial of the Forgotten",
+        angle: 135,
+        diagonal: 96,
+        horizontal: 16,
+      },
+    }
+  },
+  "teresa-pet": {
+    visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    complete: () => Ra.pets.teresa.level / 25,
+    drawOrder: -1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "",
+      fill: "#d10043",
+      position: new Vector(400, 200),
+      ring: {
+        rMajor: 24,
+      },
+      legend: {
+        text: () => {
+          const level = Ra.pets.teresa.level;
+          return [
+            `Ra's pet Teresa level ${formatInt(level)} / ${formatInt(25)}.`
+          ];
+        },
+        angle: 135,
+        diagonal: 96,
+        horizontal: 16,
+      },
+    },
+    connector: {
+      pathStart: 0.05,
+      pathEnd: 0.75,
+      path: new LinearPath(new Vector(400, 200), new Vector(100, 100)),
+      fill: "url(#gradRaTeresa)",
+      completeWidth: 6,
+      incompleteWidth: 4,
+    }
+  },
+  "effarig-pet": {
+    visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    complete: () => Ra.pets.effarig.level / 25,
+    drawOrder: -1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "",
+      fill: "#d10043",
+      position: new Vector(400, 200),
+      ring: {
+        rMajor: 24,
+      },
+      legend: {
+        text: () => {
+          const level = Ra.pets.effarig.level;
+          return [
+            `Ra's pet Effarig level ${formatInt(level)} / ${formatInt(25)}.`
+          ];
+        },
+        angle: 135,
+        diagonal: 96,
+        horizontal: 16,
+      },
+    },
+    connector: {
+      pathStart: 0.05,
+      pathEnd: 0.75,
+      path: new LinearPath(new Vector(400, 200), new Vector(550, 25)),
+      fill: "url(#gradRaEffarig)",
+      completeWidth: 6,
+      incompleteWidth: 4,
+    }
+  },
+  "enslaved-pet": {
+    visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    complete: () => Ra.pets.enslaved.level / 25,
+    drawOrder: -1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "",
+      fill: "#d10043",
+      position: new Vector(400, 200),
+      ring: {
+        rMajor: 24,
+      },
+      legend: {
+        text: () => {
+          const level = Ra.pets.enslaved.level;
+          return [
+            `Ra's pet Enslaved level ${formatInt(level)} / ${formatInt(25)}.`
+          ];
+        },
+        angle: 135,
+        diagonal: 96,
+        horizontal: 16,
+      },
+    },
+    connector: {
+      pathStart: 0.05,
+      pathEnd: 0.7,
+      path: new LinearPath(new Vector(400, 200), new Vector(650, 250)),
+      fill: "url(#gradRaEnslaved)",
+      completeWidth: 6,
+      incompleteWidth: 4,
+    }
+  },
+  "v-pet": {
+    visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    complete: () => Ra.pets.v.level / 25,
+    drawOrder: -1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "",
+      fill: "#d10043",
+      position: new Vector(400, 200),
+      ring: {
+        rMajor: 24,
+      },
+      legend: {
+        text: () => {
+          const level = Ra.pets.v.level;
+          return [
+            `Ra's pet V level ${formatInt(level)} / ${formatInt(25)}.`
+          ];
+        },
+        angle: 135,
+        diagonal: 96,
+        horizontal: 16,
+      },
+    },
+    connector: {
+      pathStart: 0.05,
+      pathEnd: 0.62,
+      path: new LinearPath(new Vector(400, 200), new Vector(400, 350 + 50 * Math.sqrt(3))),
+      fill: "url(#gradRaV)",
+      completeWidth: 6,
+      incompleteWidth: 4,
+    }
+  },
+  "laitela-unlock": {
+    visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    complete: () => Ra.totalPetLevel / 100,
+    drawOrder: -1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "",
+      fill: "#d10043",
+      position: new Vector(100, 500),
+      ring: {
+        rMajor: 0,
+      },
+      legend: {
+        text: () => {
+          const level = Ra.totalPetLevel;
+          return [
+            "Lai'tela unlock",
+            `Total Ra pet levels ${formatInt(level)} / ${formatInt(100)}.`
+          ];
+        },
+        angle: 135,
+        diagonal: 96,
+        horizontal: 16,
+      },
+    },
+    connector: {
+      pathStart: 0.05,
+      pathEnd: 1,
+      path: new LinearPath(new Vector(400, 200), new Vector(100, 500)),
+      fill: "url(#gradRaV)",
+      completeWidth: 6,
+      incompleteWidth: 4,
+    }
+  },
+  "ra-ring-1": {
+    visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    complete: () => 1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "",
+      fill: "#d10043",
+      position: new Vector(400, 200),
+      ring: {
+        rMajor: 90,
+        rMinor: 80,
+        gapCenterDeg: 75,
+        gapDeg: 272,
+      },
+    }
+  },
+  "ra-ring-2": {
+    visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    complete: () => 1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "",
+      fill: "#d10043",
+      position: new Vector(400, 200),
+      ring: {
+        rMajor: 90,
+        rMinor: 80,
+        gapCenterDeg: 160,
+        gapDeg: 320,
+      },
+    }
+  },
+  "ra-ring-3": {
+    visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    complete: () => 1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "",
+      fill: "#d10043",
+      position: new Vector(400, 200),
+      ring: {
+        rMajor: 90,
+        rMinor: 80,
+        gapCenterDeg: 230,
+        gapDeg: 300,
+      },
+    }
+  },
+  "ra-ring-4": {
+    visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    complete: () => 1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "",
+      fill: "#d10043",
+      position: new Vector(400, 200),
+      ring: {
+        rMajor: 90,
+        rMinor: 80,
+        gapCenterDeg: 292,
+        gapDeg: 335,
+      },
+    }
+  },
+  "ra-ring-5": {
+    visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    complete: () => 1,
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "",
+      fill: "#d10043",
+      position: new Vector(400, 200),
+      ring: {
+        rMajor: 90,
+        rMinor: 80,
+        gapCenterDeg: -12,
+        gapDeg: 320,
+      },
+    }
+  }
 };

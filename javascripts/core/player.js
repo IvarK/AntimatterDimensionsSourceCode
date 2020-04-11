@@ -479,6 +479,8 @@ let player = {
       autoAnnihilationTimer: 0
     }
   },
+  tutorialState: 0,
+  tutorialActive: true,
   options: {
     news: true,
     notation: "Mixed scientific",

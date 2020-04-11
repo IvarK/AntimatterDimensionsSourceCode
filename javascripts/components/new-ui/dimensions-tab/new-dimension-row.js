@@ -68,9 +68,24 @@ Vue.component("new-dimension-row", {
       } else {
         buyOneDimensionBtnClick(this.tier);
       }
+      
+      if (this.tier === 2) {
+        Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
+      }
     },
     showCostTitle(value) {
       return value.exponent < 1000000;
+    },
+    tutorialClass() {
+      if (this.tier === 1) {
+        return Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
+      } 
+      
+      if (this.tier === 2) {
+        return Tutorial.glowingClass(TUTORIAL_STATE.DIM2, this.isAffordable);
+      }
+
+      return {};
     }
   },
   template:
@@ -85,7 +100,8 @@ Vue.component("new-dimension-row", {
       :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }">
         <div class="button-content"
           :enabled="isAffordable || isContinuumActive"
-          :ach-tooltip="cappedTooltip">
+          :ach-tooltip="cappedTooltip"
+          :class="tutorialClass()">
             <span v-if="isContinuumActive">
               Continuum:
               <br>

@@ -7194,6 +7194,29 @@ input.o-automator-block-input {
 .fa, .far, .fas {
   font-family: "Font Awesome 5 Free" !important;
 }
+
+@keyframes opacity {
+  0% { opacity: 0; }
+  50% { opacity: 0.4; }
+  100% { opacity: 0; }
+}
+
+.tutorial--glow {
+  position: relative;
+}
+
+.tutorial--glow:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: gold;
+  animation: opacity 3s infinite;
+  top: 0;
+  left: 0;
+  border-radius: inherit;
+}
+
 .o-celestial-nav__hoverable .tooltiptext  { display: none; }
 .o-celestial-nav__hoverable:hover .tooltiptext,
 .o-celestial-nav__force-hover .tooltiptext { display: block; }

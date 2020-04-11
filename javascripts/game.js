@@ -856,7 +856,9 @@ function slowerAutobuyers(realDiff) {
     player.auto.dilUpgradeTimer = Math.min(player.auto.dilUpgradeTimer - dilUpgradePeriod, dilUpgradePeriod);
     autoBuyDilationUpgrades();
   }
+  
   TimeTheorems.autoBuyMaxTheorems(ampDiff);
+  Tutorial.tutorialLoop();
 
   if (Ra.has(RA_UNLOCKS.AUTO_BLACK_HOLE_POWER)) {
     for (let i = 1; i <= 2; i++) {

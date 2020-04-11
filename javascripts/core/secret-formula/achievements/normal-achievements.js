@@ -1061,7 +1061,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 165,
-    name: "Woah, we're halfway there ",
+    name: "Woah, we're halfway there",
     tooltip: () => `Get ${formatInt(50)} total Ra levels.`,
     checkRequirement: () => Ra.totalPetLevel >= 50,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER

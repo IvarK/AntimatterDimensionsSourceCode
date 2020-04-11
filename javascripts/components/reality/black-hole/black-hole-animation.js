@@ -218,16 +218,8 @@ const BlackHoleAnimation = (function() {
       }
       const delta = time - this.lastFrame;
       this.lastFrame = time;
-
-      if (BlackHoles.arePaused) return;
-
+      
       this.planet.update(this.totalPhase(), this.eccentricity, this.period);
-
-      // Time dilation factor (Realistic formula, but only actually used for particle speed)
-      const dilationFactor = 1 / Math.sqrt(1 - holeSize / this.planet.distance);
-      for (const particle of this.particles) {
-        particle.update(delta, dilationFactor);
-      }
 
       this.context.clearRect(0, 0, 400, 400);
       this.hole.draw(this.context);
@@ -235,6 +227,15 @@ const BlackHoleAnimation = (function() {
         particle.draw(this.context);
       }
       this.planet.draw(this.context);
+
+      if (BlackHoles.arePaused) return;
+
+
+      // Time dilation factor (Realistic formula, but only actually used for particle speed)
+      const dilationFactor = 1 / Math.sqrt(1 - holeSize / this.planet.distance);
+      for (const particle of this.particles) {
+        particle.update(delta, dilationFactor);
+      }
     }
 
     // Code was originally written to use phase over a cycle of active+inactive time and

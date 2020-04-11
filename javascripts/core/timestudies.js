@@ -634,6 +634,7 @@ class TriadStudyState extends TimeStudyState {
     if (!this.canBeBought) return;
     player.celestials.v.triadStudies.push(this.config.id);
     player.celestials.v.STSpent += this.STCost;
+    player.noTriadStudies = false;
   }
 
   purchaseUntil() {

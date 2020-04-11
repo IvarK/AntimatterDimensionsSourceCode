@@ -245,6 +245,8 @@ let player = {
   onlyFirstDimensions: true,
   noEighthDimensions: false,
   noFirstDimensions: false,
+  noAntimatterProduced: true,
+  noTriadStudies: true,
   noTheoremPurchases: true,
   noInfinitiesThisReality: true,
   noEternitiesThisReality: true,
@@ -281,8 +283,7 @@ let player = {
         replication: 0,
         dilation: 0,
         effarig: 0,
-        reality: 0,
-        cursed: 0
+        reality: 0
       },
       undo: [],
     },

@@ -621,6 +621,9 @@ GameStorage.devMigrations = {
       delete player.celestials.enslaved.maxQuotes;
       delete player.celestials.v.quoteIdx;
       delete player.celestials.ra.quoteIdx;
+    },
+    player => {
+      delete player.reality.glyphs.sac.cursed;
     }
   ],
 

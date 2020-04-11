@@ -407,6 +407,8 @@ function finishProcessReality(realityProps) {
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
   player.noFirstDimensions = true;
+  player.noAntimatterProduced = true;
+  player.noTriadStudies = true;
   player.noTheoremPurchases = true;
   player.noInfinitiesThisReality = true;
   player.noEternitiesThisReality = true;

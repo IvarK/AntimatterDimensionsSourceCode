@@ -985,10 +985,10 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 153,
-    name: "The god is delighted",
-    tooltip: "Sacrifice every glyph type at least once.",
-    checkRequirement: () => Object.values(player.reality.glyphs.sac).every(s => s > 0),
-    checkEvent: GAME_EVENT.GLYPHS_CHANGED
+    name: "Real hell",
+    tooltip: "Reality without producing antimatter.",
+    checkRequirement: () => player.noAntimatterProduced,
+    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
   },
   {
     id: 154,
@@ -1013,19 +1013,81 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 157,
-    name: "Perfectly Balanced",
-    tooltip: () => `Have the same number of all 3 types of galaxy,
-      with ${formatInt(1000)} or more of each type.`,
-    checkRequirement: () => player.galaxies === Replicanti.galaxies.total &&
-      player.galaxies === player.dilation.freeGalaxies &&
-      player.galaxies >= 1000,
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+    name: "It's super effective!",
+    tooltip: () => `Get a glyph with ${formatInt(4)} effects.`,
+    checkRequirement: () => Glyphs.activeList.concat(Glyphs.inventoryList).map(
+      glyph => getGlyphEffectsFromBitmask(glyph.effects, 0, 0).filter(
+        effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated).length
+    ).max() >= 4,
+    checkEvent: GAME_EVENT.GLYPHS_CHANGED
   },
   {
     id: 158,
     name: "Bruh, are you like, inside the hole?",
-    tooltip: () => `Spend ${formatInt(24)} hours with black hole active in a row.`,
-    checkRequirement: () => TimeSpan.fromSeconds(BlackHole(1).phase).totalHours >= 24,
+    tooltip: "Make both Black Holes permanent.",
+    checkRequirement: () => BlackHole(1).isPermanent && BlackHole(2).isPermanent,
+    checkEvent: GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT
+  },
+  {
+    id: 161,
+    name: "Wait. That's illegal.",
+    tooltip: "Get all the time studies",
+    checkRequirement: () => player.timestudy.studies.length >= 58,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 162,
+    name: "Neither eternity nor challenging",
+    tooltip: () => `Complete all the eternity challenges 5 times with less than ${formatInt(1)}
+      second (game time) in your current Reality.`,
+    checkRequirement: () => EternityChallenges.completions >= 60 && Time.thisReality.totalSeconds <= 1,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 163,
+    name: "Perfectly balanced",
+    tooltip: () => `Get a level ${formatInt(5000)} glyph with all glyph level factors equally weighted.`,
+    checkRequirement: () => gainedGlyphLevel().actualLevel >= 5000 &&
+      ["repl", "dt", "eternities"].every(
+        i => player.celestials.effarig.glyphWeights[i] === player.celestials.effarig.glyphWeights.ep),
+    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
+  },
+  {
+    id: 164,
+    name: "No more prestige layers!",
+    tooltip: () => `Reach ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} RM.`,
+    checkRequirement: () => player.reality.realityMachines.gte(Decimal.NUMBER_MAX_VALUE),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 165,
+    name: "Woah, we're halfway there ",
+    tooltip: () => `Get ${formatInt(50)} total Ra levels.`,
+    checkRequirement: () => Ra.totalPetLevel >= 50,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 166,
+    name: "The god is delighted",
+    tooltip: "Sacrifice every sacrificable glyph type at least once.",
+    checkRequirement: () => Object.values(player.reality.glyphs.sac).every(s => s > 0),
+    checkEvent: GAME_EVENT.GLYPHS_CHANGED
+  },
+  {
+    id: 167,
+    name: "What do I lose...",
+    tooltip: () => `Reality for ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} RM without having
+      any charged infinity upgrades, having any equipped glyphs, or buying any triad studies.`,
+    checkRequirement: () => gainedRealityMachines().gte(Decimal.NUMBER_MAX_VALUE) &&
+      player.celestials.ra.charged.size === 0 && Glyphs.activeList.length === 0 &&
+      player.noTriadStudies,
+    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
+  },
+  {
+    id: 168,
+    name: "The last alkahistorian",
+    tooltip: () => `Get ${formatInt(25000)} of all alchemy resources.`,
+    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= 25000),
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
 ];

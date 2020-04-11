@@ -7,7 +7,8 @@ Vue.component("tab-button", {
   data() {
     return {
       isAvailable: false,
-      subtabVisibilities: []
+      subtabVisibilities: [],
+      hasNotification: false
     };
   },
   computed: {
@@ -22,6 +23,7 @@ Vue.component("tab-button", {
     update() {
       this.isAvailable = this.tab.isAvailable;
       this.subtabVisibilities = this.tab.subtabs.map(x => x.isAvailable);
+      this.hasNotification = this.tab.hasNotification;
     }
   },
   template:
@@ -31,7 +33,7 @@ Vue.component("tab-button", {
       class="l-tab-btn-inner"
       @click="tab.show()"
     >
-      {{ tab.name }}
+      {{ tab.name }} {{ hasNotification ? "(!)" : "" }}
     </div>
     <div v-else class="l-tab-btn-inner">???</div>
     <div class="subtabs" v-if="isAvailable && subtabVisibilities.filter(x => x).length > 1">
@@ -39,7 +41,7 @@ Vue.component("tab-button", {
           v-if="subtabVisibilities[index]"
           class="o-tab-btn o-tab-btn--subtab"
           :class="tab.config.UIClass"
-          @click="subtab.show()"><span v-html="subtab.symbol"></span>
+          @click="subtab.show()"><span v-html="subtab.symbol"> {{ subtab.hasNotification ? "(!)" : "" }}</span>
       </div>
     </div>
   </div>`

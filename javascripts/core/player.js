@@ -479,6 +479,7 @@ let player = {
       autoAnnihilationTimer: 0
     }
   },
+  tabNotifications: new Set(),
   options: {
     news: true,
     notation: "Mixed scientific",

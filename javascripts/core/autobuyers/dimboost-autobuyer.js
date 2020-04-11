@@ -60,7 +60,7 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends IntervaledAutobuye
   }
 
   get canTick() {
-    return !Ra.isRunning && super.canTick;
+    return DimBoost.canBeBought && super.canTick;
   }
 
   tick() {

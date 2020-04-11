@@ -10,7 +10,8 @@ Vue.component("normal-dim-shift-row", {
       isShift: false,
       isBuyable: false,
       purchasedBoosts: 0,
-      freeBoosts: 0
+      freeBoosts: 0,
+      lockText: null
     };
   },
   computed: {
@@ -21,7 +22,9 @@ Vue.component("normal-dim-shift-row", {
       return NormalDimension(this.requirement.tier).displayName;
     },
     buttonText() {
-      return `Reset your Dimensions for a ${this.isShift ? "new Dimension" : "boost"}`;
+      return this.lockText === null
+        ? `Reset your Dimensions for a ${this.isShift ? "new Dimension" : "boost"}`
+        : this.lockText;
     },
     boostCountText() {
       const parts = [this.purchasedBoosts];
@@ -40,10 +43,11 @@ Vue.component("normal-dim-shift-row", {
       const requirement = DimBoost.requirement;
       this.requirement.tier = requirement.tier;
       this.requirement.amount = requirement.amount;
-      this.isBuyable = requirement.isSatisfied;
+      this.isBuyable = requirement.isSatisfied && DimBoost.canBeBought;
       this.isShift = DimBoost.isShift;
       this.purchasedBoosts = DimBoost.purchasedBoosts;
       this.freeBoosts = DimBoost.freeBoosts;
+      this.lockText = DimBoost.lockText;
     },
     softReset() {
       softResetBtnClick();

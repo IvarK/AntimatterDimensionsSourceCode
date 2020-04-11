@@ -11,7 +11,7 @@ GameDatabase.reality.glyphSacrifice = [
     }
   }, {
     id: "infinity",
-    effect: () => 1 + Math.pow(player.reality.glyphs.sac.infinity, 0.2) / 100,
+    effect: () => 1 + Math.log10(1 + Math.pow(player.reality.glyphs.sac.infinity, 0.2) / 100),
     description: amount => `${formatX(amount, 2, 2)} bigger multiplier when buying 8th Infinity Dimension.`
   }, {
     id: "time",
@@ -41,9 +41,5 @@ GameDatabase.reality.glyphSacrifice = [
     id: "reality",
     effect: () => 1 + Math.sqrt(player.reality.glyphs.sac.reality) / 25,
     description: amount => `${formatPercents(amount - 1, 2)} increased alchemy yield`,
-  }, {
-    id: "cursed",
-    effect: () => 666,
-    description: amount => `${amount}x nothing`
   }
 ].mapToObject(g => g.id, g => g);

@@ -42,7 +42,7 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e550"),
     restriction: completions => Math.max(16 - 4 * completions, 0),
     checkRestriction: restriction => player.infinitied.lte(restriction),
-    formatRestriction: restriction => `in ${restriction} infinities or less`,
+    formatRestriction: restriction => `in ${formatInt(restriction)} Infinities or less`,
     failedRestriction: "(Too many infinities for more)",
     reward: {
       description: "Infinity Dimension multiplier based on unspent IP",
@@ -107,7 +107,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e1300"),
     goalIncrease: new Decimal("1e900"),
     reward: {
-      description: "Infinity Power powers up Replicanti galaxies",
+      description: "Infinity Power strengthens Replicanti galaxies",
       effect: completions => {
         const infinityPower = Math.log10(player.infinityPower.pLog10() + 1);
         return Math.max(0, Math.pow(infinityPower, 0.03 * completions) - 1);
@@ -138,13 +138,11 @@ GameDatabase.challenges.eternity = [
     },
     goal: new Decimal("1e3000"),
     goalIncrease: new Decimal("1e300"),
-    effect: () => Decimal.pow(Player.totalInfinitied, 950).clampMin(1).pow(Effects.product(TimeStudy(31))),
+    effect: () => Decimal.pow(Player.totalInfinitied, 950).clampMin(1).pow(TimeStudy(31).effectOrDefault(1)),
     reward: {
       description: "Time Dimension multiplier based on infinitied stat",
       effect: completions => {
-        const mult = player.newEC10Test
-          ? Player.totalInfinitied.times(2.783e-6).pow(0.4 + 0.1 * completions).clampMin(1)
-          : Player.totalInfinitied.pow(0.9).times(completions * 2e-6).clampMin(1);
+        const mult = Player.totalInfinitied.times(2.783e-6).pow(0.4 + 0.1 * completions).clampMin(1);
         return mult.powEffectOf(TimeStudy(31));
       },
       formatEffect: value => formatX(value, 2, 1)
@@ -181,7 +179,7 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Infinity Dimension cost multipliers are reduced",
       effect: completions => 1 - completions * 0.008,
-      formatEffect: value => `x^${format(value, 3, 3)}`
+      formatEffect: value => `x${formatPow(value, 3, 3)}`
     }
   }
 ];

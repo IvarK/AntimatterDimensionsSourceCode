@@ -26,7 +26,7 @@ const modalOptionsMixin = {
       this.eternityUnlocked = progress.isEternityUnlocked;
       this.realityUnlocked = progress.isRealityUnlocked;
       this.dilationUnlocked = progress.isRealityUnlocked || player.dilation.tachyonParticles.neq(0);
-      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
       this.animatedThemeUnlocked = Themes.find("S1").isAvailable() || Themes.find("S6").isAvailable();
     }
   },

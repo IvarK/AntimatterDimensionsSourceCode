@@ -70,14 +70,7 @@ Vue.component("new-galaxy-row", {
       this.requirement.tier = requirement.tier;
       this.canBeBought = requirement.isSatisfied && Galaxy.canBeBought;
       this.distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
-      this.lockText = this.generateLockText();
-    },
-    generateLockText() {
-      if (Galaxy.canBeBought) return null;
-      if (EternityChallenge(6).isRunning) return "Locked (Eternity Challenge 6)";
-      if (InfinityChallenge(7).isRunning) return "Locked (Infinity Challenge 7)";
-      if (NormalChallenge(8).isRunning) return "Locked (8th Dimension Autobuyer Challenge)";
-      return null;
+      this.lockText = Galaxy.lockText;
     },
     buyGalaxy: bulk => requestGalaxyReset(bulk),
   },

@@ -112,8 +112,14 @@ class TimeStudyTreeLayout {
     );
 
     if (type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES) {
+      const vLevel = Ra.pets.v.level;
       this.rows.push(
-        normalRow(    TrS(1),           TrS(2),           TrS(3),           TrS(4)      )
+        normalRow(    
+          vLevel >= 5 ? TrS(1) : null,           
+          vLevel >= 10 ? TrS(2) : null,           
+          vLevel >= 15 ? TrS(3) : null,           
+          vLevel >= 20 ? TrS(4) : null      
+        )
       );
     }
 
@@ -206,7 +212,7 @@ const STUDY_TREE_LAYOUT_TYPE = {
   get current() {
     const alt62 = Perk.bypassEC5Lock.isBought;
     const alt181 = Perk.bypassEC1Lock.isBought && Perk.bypassEC2Lock.isBought && Perk.bypassEC3Lock.isBought;
-    if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return this.ALTERNATIVE_TRIAD_STUDIES;
+    if (Ra.pets.v.level >= 5) return this.ALTERNATIVE_TRIAD_STUDIES;
     if (alt62 && alt181) return this.ALTERNATIVE_62_181;
     if (alt62) return this.ALTERNATIVE_62;
     if (alt181) return this.ALTERNATIVE_181;

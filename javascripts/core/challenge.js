@@ -38,7 +38,7 @@ function updateNormalAndInfinityChallenges(diff) {
   }
 
   if (NormalChallenge(3).isRunning) {
-    player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)).clampMax(Decimal.MAX_NUMBER);
+    player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)).clampMax(Decimal.NUMBER_MAX_VALUE);
   }
 
   if (NormalChallenge(2).isRunning) {
@@ -74,7 +74,10 @@ class NormalChallengeState extends GameMechanicState {
     player.challenge.normal.current = this.id;
     player.challenge.infinity.current = 0;
 
-    if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) Enslaved.showEC6C10Hint();
+    if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) {
+      EnslavedProgress.challengeCombo.giveProgress();
+      Enslaved.quotes.show(Enslaved.quotes.EC6C10);
+    }
 
     startChallenge();
   }
@@ -87,13 +90,18 @@ class NormalChallengeState extends GameMechanicState {
   complete() {
     // eslint-disable-next-line no-bitwise
     player.challenge.normal.completedBits |= 1 << this.id;
+    // Since breaking infinity maxes even autobuyers that aren't unlocked,
+    // it's possible to get r52 or r53 from completing a challenge
+    // and thus unlocking an autobuyer.
+    Achievement(52).tryUnlock();
+    Achievement(53).tryUnlock();
   }
 
   get goal() {
     if (Enslaved.isRunning && !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(this.id)) {
       return Decimal.pow10(1e15);
     }
-    return Decimal.MAX_NUMBER;
+    return Decimal.NUMBER_MAX_VALUE;
   }
 
   updateChallengeTime() {
@@ -192,6 +200,7 @@ class InfinityChallengeState extends GameMechanicState {
   complete() {
     // eslint-disable-next-line no-bitwise
     player.challenge.infinity.completedBits |= 1 << this.id;
+    EventHub.dispatch(GAME_EVENT.INFINITY_CHALLENGE_COMPLETED);
   }
 
   get isEffectActive() {

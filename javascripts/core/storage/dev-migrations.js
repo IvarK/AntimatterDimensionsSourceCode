@@ -223,8 +223,11 @@ GameStorage.devMigrations = {
         dt: 25,
         eternities: 25
       });
+      // There was a big glyph filter refactor done at some point, and it's infeasible to properly preserve old
+      // filter settings through this old migration. Any imported saves from before the Teresa/Effarig name swap
+      // which had glyph filtering unlocked are likely going to be invalid as a result.
       movePropIfPossible("teresa", "effarig", "autoGlyphSac", {
-        mode: AUTO_GLYPH_SAC_MODE.NONE,
+        mode: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({
           rarityThreshold: 0,
           scoreThreshold: 0,
@@ -232,7 +235,7 @@ GameStorage.devMigrations = {
         })),
       });
       movePropIfPossible("teresa", "effarig", "autoGlyphPick", {
-        mode: AUTO_GLYPH_PICK_MODE.RANDOM,
+        mode: AUTO_GLYPH_REJECT.SACRIFICE,
       });
       movePropIfPossible("teresa", "effarig", "relicShards", 0, Math.max);
       movePropIfPossible("effarig", "teresa", "quoteIdx", 0);
@@ -406,7 +409,9 @@ GameStorage.devMigrations = {
           eternityAutobuyer.amount = condition;
           break;
         case "time":
-          eternityAutobuyer.time = condition.lt(Decimal.MAX_NUMBER) ? condition.toNumber() : eternityAutobuyer.time;
+          eternityAutobuyer.time = condition.lt(Decimal.NUMBER_MAX_VALUE)
+            ? condition.toNumber()
+            : eternityAutobuyer.time;
           break;
         case "relative":
           eternityAutobuyer.xLast = condition;
@@ -520,13 +525,102 @@ GameStorage.devMigrations = {
       player.reality.glyphs.inventorySize += 10;
     },
     player => {
-      player.celestials.v.unlockBits = 1;
+      player.celestials.v.unlockBits = 0;
+      // Adding this in case the player is loading a save (otherwise it
+      // doesn't update immediately and the player still has nonzero ST
+      // for the purpose of checking unlocks).
+      V.updateTotalRunUnlocks();
       V.checkForUnlocks();
     },
     player => {
       // Reset the v-unlocks again
-      player.celestials.v.unlockBits = 1;
+      player.celestials.v.unlockBits = 0;
+      // See above migration for an explanation of the below line.
+      V.updateTotalRunUnlocks();
       V.checkForUnlocks();
+    },
+    player => {
+      player.reality.autoAchieve = !player.reality.disableAutoAchieve;
+      delete player.reality.disableAutoAchieve;
+      delete player.newEC10Test;
+    },
+    player => {
+      // Some older saves have screwed up Ra unlocks for some reason, this should fix that
+      player.celestials.ra.unlockBits = 0;
+      Ra.checkForUnlocks();
+    },
+    player => {
+      // Required for compatibility after V records refactor
+      player.celestials.v.runRecords[0] = -10;
+    },
+    player => {
+      delete player.celestials.v.cursedThisRun;
+    },
+    player => {
+      // Reset Ra unlocks again, because apparently Ra-Teresa Lv1 upgrades were always active due to an oversight
+      player.celestials.ra.unlockBits = 0;
+      Ra.checkForUnlocks();
+    },
+    player => {
+      // Glyph filter refactor (not worth the trouble of translating between the modes, but copy the configs)
+      Object.assign(player.celestials.effarig.glyphScoreSettings, player.celestials.effarig.autoGlyphSac);
+      player.celestials.effarig.glyphTrashMode = 0;
+      delete player.celestials.effarig.autoGlyphSac;
+      delete player.celestials.effarig.autoGlyphPick;
+    },
+    player => {
+      delete player.reality.glyphs.inventorySize;
+      for (const glyph of player.reality.glyphs.inventory) {
+        if (glyph.idx >= 10) {
+          glyph.idx += 10;
+        }
+      }
+    },
+    player => {
+      // Typo fix, as long as we have to delete a player property let's also
+      // correctly initialize the new one.
+      player.onlyEighthDimensions = player.onlyEighthDimensons;
+      delete player.onlyEighthDimensons;
+    },
+    player => {
+      for (const pet of Ra.pets.all) {
+        pet.level = Math.clampMax(pet.level, 25);
+      }
+      delete player.celestials.ra.compression;
+      if (Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) {
+        const allGlyphs = player.reality.glyphs.active
+          .concat(player.reality.glyphs.inventory);
+        for (const glyph of allGlyphs) {
+          Glyphs.applyGamespeed(glyph);
+        }
+      }
+    },
+    player => {
+      for (let i = 0; i < player.celestials.ra.alchemy.length; i++) {
+        player.celestials.ra.alchemy[i].amount = Math.clampMax(
+          player.celestials.ra.alchemy[i].amount, 25000);
+      }
+    },
+    player => {
+      delete player.celestials.laitela.maxAmGained;
+      for (const dim of player.celestials.laitela.dimensions) {
+        dim.powerDMUpgrades = dim.powerUpgrades;
+        dim.powerDEUpgrades = 0;
+        delete dim.chanceUpgrades;
+        delete dim.powerUpgrades;
+      }
+      // Note that player.celestials.laitela.higgs is actually a string at this point
+      // (since conversion to Decimal hasn't happened yet).
+      player.celestials.laitela.darkMatterMult = Number(player.celestials.laitela.higgs) + 1;
+      delete player.celestials.laitela.anomalies;
+    },
+    player => {
+      delete player.achPow;
+      delete player.interval;
+      delete player.tickThreshold;
+      delete player.celestials.enslaved.maxQuotes;
+      delete player.celestials.v.quoteIdx;
+      delete player.celestials.ra.quoteIdx;
     }
   ],
 

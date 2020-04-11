@@ -7,7 +7,8 @@ class DimBoostRequirement {
   }
 
   get isSatisfied() {
-    return NormalDimension(this.tier).amount.gte(this.amount);
+    const dimension = NormalDimension(this.tier);
+    return dimension.totalAmount.gte(this.amount);
   }
 }
 
@@ -49,6 +50,28 @@ class DimBoost {
     // hence there are just 4 (or 2, if in Auto DimBoosts challenge) shifts
     return DimBoost.purchasedBoosts + 4 < this.maxShiftTier;
   }
+  
+  static get challenge8MaxBoosts() {
+    // In Challenge 8, the only boosts that are useful are the first 5
+    // (the fifth unlocks sacrifice). In IC1 (Challenge 8 and Challenge 10
+    // combined, among other things), only the first 2 are useful
+    // (they unlock new dimensions).
+    // There's no actual problem with bulk letting the player get
+    // more boosts than this; it's just that boosts beyond this are pointless.
+    return NormalChallenge(10).isRunning ? 2 : 5;
+  }
+  
+  static get canBeBought() {
+    return !(NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) && !Ra.isRunning;
+  }
+  
+  static get lockText() {
+    if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) {
+      return "Locked (8th Dimension Autobuyer Challenge)";
+    }
+    if (Ra.isRunning) return "Locked (Ra's reality)";
+    return null;
+  }
 
   static get requirement() {
     return this.bulkRequirement(1);
@@ -74,7 +97,7 @@ class DimBoost {
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
     if (InfinityChallenge(5).isCompleted) amount -= 1;
 
-    amount *= Effects.product(InfinityUpgrade.resetBoost.chargedEffect);
+    amount *= InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1);
 
     amount = Math.ceil(amount);
 
@@ -82,20 +105,21 @@ class DimBoost {
   }
 
   static get purchasedBoosts() {
-    return Math.floor(player.dimensionBoosts * getAdjustedGlyphEffect("realitydimboost"));
+    return Math.floor(player.dimensionBoosts);
   }
 
   static get freeBoosts() {
-    return Math.floor(Effects.max(0, CompressionUpgrade.freeBoost) * getAdjustedGlyphEffect("realitydimboost"));
+    // This was originally used for Time Compression, probably use it for something in Lai'tela now
+    return 0;
   }
 
   static get totalBoosts() {
-    return (this.purchasedBoosts + this.freeBoosts);
+    return Math.floor((this.purchasedBoosts + this.freeBoosts) * getAdjustedGlyphEffect("realitydimboost"));
   }
 }
 
 function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
-    if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
+    if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return;
     EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
     player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
 
@@ -130,8 +154,8 @@ function skipResetsIfPossible() {
 }
 
 function softResetBtnClick() {
-  if ((!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) || !DimBoost.requirement.isSatisfied) return;
-  if (Ra.isRunning) return;
+  if ((!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) || !DimBoost.requirement.isSatisfied) return;
+  if (!DimBoost.canBeBought) return;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
   else softReset(1);
 
@@ -157,8 +181,9 @@ function maxBuyDimBoosts() {
   // Linearly extrapolate dimboost costs. req1 = a * 1 + b, req2 = a * 2 + b
   // so a = req2 - req1, b = req1 - a = 2 req1 - req2, num = (dims - b) / a
   const increase = req2.amount - req1.amount;
+  const dim = NormalDimension(req1.tier);
   let maxBoosts = Math.min(Number.MAX_VALUE,
-    1 + Math.floor((NormalDimension(req1.tier).amount.toNumber() - req1.amount) / increase));
+    1 + Math.floor((dim.totalAmount.toNumber() - req1.amount) / increase));
   if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) {
     softReset(maxBoosts);
     return;

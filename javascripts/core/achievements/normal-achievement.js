@@ -97,18 +97,23 @@ const Achievements = {
 
   get effectiveCount() {
     const unlockedAchievements = Achievements.all.countWhere(a => a.isUnlocked);
-    const additionalAchievements = Ra.has(RA_UNLOCKS.V_UNLOCK) ? Ra.pets.v.level : 0;
-    return unlockedAchievements + additionalAchievements;
+    return unlockedAchievements;
   },
 
   get period() {
-    return TimeSpan.fromMinutes(30).totalMilliseconds;
+    return GameCache.achievementPeriod.value;
   },
 
   autoAchieveUpdate(diff) {
     if (player.realities === 0) return;
-    if (player.reality.disableAutoAchieve) return;
+    if (!player.reality.autoAchieve) return;
     if (Achievements.preReality.every(a => a.isUnlocked)) return;
+    if (Perk.achievementGroup6.isBought) {
+      for (const achievement of Achievements.preReality) {
+        achievement.unlock();
+      }
+      return;
+    }
 
     player.reality.achTimer += diff;
     if (player.reality.achTimer < this.period) return;
@@ -123,7 +128,7 @@ const Achievements = {
 
   timeToNextAutoAchieve() {
     if (player.realities === 0) return 0;
-    if (GameCache.achSkipPerkCount.value >= Achievements.preRealityRows.length) return 0;
+    if (GameCache.achievementPeriod.value === 0) return 0;
     if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) return 0;
     return Math.max(this.period - player.reality.achTimer, 1);
   },
@@ -132,7 +137,9 @@ const Achievements = {
     const unlockedRows = Achievements.allRows
       .countWhere(row => row.every(ach => ach.isUnlocked));
     const basePower = Math.pow(1.25, unlockedRows) * Math.pow(1.03, Achievements.effectiveCount);
-    return basePower * getAdjustedGlyphEffect("effarigachievement");
+    let exponent = getAdjustedGlyphEffect("effarigachievement");
+    if (Ra.has(RA_UNLOCKS.ACHIEVEMENT_POW)) exponent *= 1.5;
+    return Math.pow(basePower, exponent);
   }),
 
   get power() {
@@ -141,10 +148,5 @@ const Achievements = {
 };
 
 EventHub.logic.on(GAME_EVENT.PERK_BOUGHT, () => {
-  const unlockedRows = GameCache.achSkipPerkCount.value;
-  for (const row of Achievements.rows(1, unlockedRows)) {
-    for (const achievement of row) {
-      achievement.unlock();
-    }
-  }
+  player.reality.achTimer = Math.clampMax(player.reality.achTimer, Achievements.period);
 });

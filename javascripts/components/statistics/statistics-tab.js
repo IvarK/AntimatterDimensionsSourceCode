@@ -28,12 +28,14 @@ Vue.component("statistics-tab", {
         isUnlocked: false,
         count: 0,
         best: TimeSpan.zero,
+        bestReal: TimeSpan.zero,
         this: TimeSpan.zero,
         thisReal: TimeSpan.zero,
         totalTimePlayed: TimeSpan.zero,
         bestRate: new Decimal(0),
       },
       matterScale: [],
+      recordGlyphInfo: [],
     };
   },
   methods: {
@@ -68,6 +70,7 @@ Vue.component("statistics-tab", {
       if (isRealityUnlocked) {
         reality.count = Math.floor(player.realities);
         reality.best.setFrom(player.bestReality);
+        reality.bestReal.setFrom(player.bestRealityRealTime);
         reality.this.setFrom(player.thisReality);
         reality.totalTimePlayed.setFrom(player.totalTimePlayed);
         // Real time tracking is only a thing once reality is unlocked:
@@ -77,6 +80,16 @@ Vue.component("statistics-tab", {
         reality.bestRate.copyFrom(player.bestRMmin);
       }
       this.matterScale = MatterScale.estimate(player.antimatter);
+      this.recordGlyphInfo = [
+        [true, Glyphs.copyForRecords(player.bestRMminSet), `Best RM/min: ${format(player.bestRMmin, 2, 2)} RM/min`],
+        [true, Glyphs.copyForRecords(player.bestGlyphLevelSet),
+          `Best glyph level: ${formatInt(player.bestGlyphLevel)}`],
+        [true, Glyphs.copyForRecords(player.bestEPSet), `Best EP: ${format(player.bestEP, 2, 2)} EP`],
+        [true, Glyphs.copyForRecords(player.bestSpeedSet),
+          `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
+        [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
+          `Best AM in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)}`]
+      ];
     },
     formatDecimalAmount(value) {
       return value.gt(1e9) ? format(value, 3, 0) : formatInt(value.toNumber());
@@ -148,7 +161,8 @@ Vue.component("statistics-tab", {
         <div v-if="reality.isUnlocked">
             <h3>Reality</h3>
             <div>You have Realitied {{formatInt(reality.count)}} {{"time" | pluralize(reality.count)}}.</div>
-            <div>Your fastest Reality was {{ reality.best.toStringShort() }}.</div>
+            <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
+            <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>
             <div>
               You have spent
               {{ reality.this.toStringShort() }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)
@@ -157,6 +171,12 @@ Vue.component("statistics-tab", {
               Your best RM/min is {{ format(reality.bestRate, 2, 2) }}.
             </div>
             <br>
+          <glyph-set-preview
+            v-for="(set, idx) in recordGlyphInfo"
+            :key="idx"
+            :show="set[0]"
+            :glyphs="set[1]"
+            :text="set[2]" />
         </div>
     </div>`
 });

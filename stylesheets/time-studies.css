@@ -52,6 +52,10 @@
   animation: a-time-study 7s infinite;
 }
 
+.o-time-study--extra {
+  animation: a-time-study 1.5s infinite;
+}
+
 .o-time-study:hover {
   animation: none;
 }
@@ -632,6 +636,14 @@
   opacity: 1;
   transition-delay: 0s;
   cursor: default;
+}
+
+.o-time-study--secret-enslaved {
+  opacity: 0.02;
+  background: #ead584;
+  transition: opacity 2s 0.5s;
+  cursor: pointer;
+  animation: a-time-study 0.5s infinite;
 }
 
 /*#endregion o-time-study*/

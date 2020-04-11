@@ -3,94 +3,135 @@
 Vue.component("ra-tab", {
   data() {
     return {
-      expMults: [0, 0, 0, 0],
-      currentExpGain: 0,
+      memoriesPerChunk: 0,
       showReality: false,
-      showLaitela: false
+      totalLevels: 0,
+      hasRecollection: false,
+      recollectionReq: 0,
+      recollectionMult: 1,
+      showLaitela: false,
+      laitelaReq: 0,
+      petWithRecollection: ""
     };
   },
   methods: {
     update() {
-      this.expMults = this.pets.map(obj => obj.pet.expBoost);
-      this.currentExpGain = Ra.pets.teresa.baseExp;
-      this.showReality = Ra.pets.teresa.level > 2;
+      this.memoriesPerChunk = Ra.productionPerMemoryChunk();
+      this.totalLevels = Ra.totalPetLevel;
+      this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
+      this.recollectionReq = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels;
+      this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
       this.showLaitela = Ra.pets.v.isUnlocked;
+      this.laitelaReq = RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels;
+      this.petWithRecollection = Ra.petWithRecollection;
     },
     startRun() {
-      Ra.startRun();
+      resetReality();
+      Ra.initializeRun();
     },
     toggleMode() {
       Ra.toggleMode();
     }
   },
   computed: {
-    laitelaUnlock: () => RA_LAITELA_UNLOCK,
+    laitelaUnlock: () => RA_UNLOCKS.RA_LAITELA_UNLOCK,
     pets: () => [
       {
         pet: Ra.pets.teresa,
-        scalingUpgradeText: () => `You can charge ${formatInt(Ra.totalCharges)} Infinity Upgrades.`,
+        scalingUpgradeVisible: () => Ra.totalCharges > 0,
+        scalingUpgradeText: () => `You can charge ${formatInt(Ra.totalCharges)} 
+          Infinity ${pluralize("Upgrade", Ra.totalCharges)}.`,
       },
       {
         pet: Ra.pets.effarig,
-        scalingUpgradeText: level => `Glyph rarity +${level}% and +${formatInt(Math.floor(level / 5))}
-          additional choices.`,
+        scalingUpgradeVisible: () => AlchemyResources.all.filter(r => r.isUnlocked).length > 0,
+        scalingUpgradeText: () => {
+          const resources = AlchemyResources.all.filter(r => r.isUnlocked).length;
+          return `You have unlocked ${formatInt(resources)} alchemy ${pluralize("resource", resources)}.`;
+        },
       },
       {
         pet: Ra.pets.enslaved,
-        scalingUpgradeText: () => `Stored game time ^
-          ${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)}, stored real time efficiency
-          +${formatPercents(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency(), 0, 2)} and
-          +${format(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / 1000 / 3600, 0, 1)} hours maximum.`,
+        scalingUpgradeVisible: () => Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME),
+        scalingUpgradeText: () => `Stored game time 
+          ${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)} and real time
+          +${formatInt(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / (1000 * 3600))} hours`,
       },
       {
         pet: Ra.pets.v,
-        scalingUpgradeText: level => `+${formatInt(level)} free achievements.`,
+        scalingUpgradeVisible: () => Math.clampMax(Math.floor(Ra.pets.v.level / 5), 4) > 0,
+        scalingUpgradeText: level => {
+          const triadCount = Math.clampMax(Math.floor(level / 5), 4);
+          return `You have unlocked ${formatInt(triadCount)} triad ${pluralize("study", triadCount, "studies")}.`;
+        },
       }
-    ]
+    ],
+    petStyle() {
+      return {
+        color: (this.petWithRecollection === "")
+          ? "white"
+          : this.pets.find(pet => pet.pet.name === this.petWithRecollection).pet.color,
+      };
+    }
   },
-  template:
-    `<div class="l-ra-celestial-tab">
+  template: `
+    <div class="l-ra-celestial-tab">
       <div class="c-ra-memory-header">
-        You will gain {{ format(this.currentExpGain, 2, 2) }}{{ showReality ? " base" : ""}}
-        memories on Reality, based on glyph level.
+        Each memory chunk generates
+        {{ format(memoriesPerChunk, 2, 3) }} {{ "memory" | pluralize(memoriesPerChunk, "memories") }}
+        per second.
       </div>
       <div>
-        Mouse-over bolded numbers to see descriptions of upgrades you have already unlocked.
+        Hold shift to see progress on your current level.
+      </div>
+      <div>
+        Mouse-over the icons below the bar to see descriptions of upgrades,
+        <br>
+        and mouse-over <i class="fas fa-question-circle"></i> icons for specific resource information.
       </div>
       <div class="l-ra-all-pets-container">
         <ra-pet v-for="(pet, i) in pets" :key="i" :petConfig="pet" />
       </div>
       <div class="l-ra-non-pets">
-        <button @click="startRun" class="l-ra-reality-container" v-if="showReality">
+        <button @click="startRun" class="l-ra-reality-container">
           <div class="l-ra-reality-inner">
-            <h1> Start Ra's Reality</h1>
-            <p> Rules: You can't dimension boost and tick reduction is forced to be 11%. </p>
+            <h2> Start Ra's Reality </h2>
+            You can't dimension boost and tick reduction is fixed at 11%.
             <br>
             <br>
-            <h2> Memory multipliers: </h2>
-            <div class="c-ra-rewards">
-              <span class="c-ra-rewards-inner"> Teresa: {{formatX(expMults[0], 2, 2)}} </span>
-              <span
-                class="c-ra-rewards-inner"
-                v-if="pets[1].pet.isUnlocked"> Effarig: {{formatX(expMults[1], 2, 2)}} </span>
-            </div>
-            <div class="c-ra-rewards">
-              <span
-                class="c-ra-rewards-inner"
-                v-if="pets[2].pet.isUnlocked"> Enslaved: {{formatX(expMults[2], 2, 2)}} </span>
-              <span
-                class="c-ra-rewards-inner"
-                v-if="pets[3].pet.isUnlocked"> V: {{formatX(expMults[3], 2, 2)}} </span>
-            </div>
+            Inside of Ra's reality, some resources will generate memory chunks based on their amount.
           </div>
         </button>
+        <div class="l-ra-recollection-unlock">
+          <br>
+          <h1 :style="petStyle">Recollection</h1>
+          <span :style="petStyle">
+            Whichever celestial has recollection will get {{formatInt(recollectionMult)}}x memory chunk gain.
+          </span>
+          <div class="l-ra-recollection-unlock-inner" v-if="hasRecollection">
+            <ra-pet-recollection-button
+              v-for="(pet, i) in pets"
+              :key="i"
+              :petConfig="pet" />
+          </div>
+          <div v-else class="l-ra-recollection-unlock-inner">
+            Unlocked by getting {{ formatInt(recollectionReq) }} total celestial levels
+            (you need {{formatInt(recollectionReq - totalLevels)}} more)
+          </div>
+        </div>
         <button class="l-ra-laitela-unlock" v-if="showLaitela">
           <div class="l-ra-laitela-unlock-inner">
             <h1> Lai'tela: </h1>
-            <h2> The Celestial of Matter </h2>
-            <p> Unlocked getting all four celestials to level {{ formatInt(20) }} </p>
+            <h2> The Celestial of Dimensions </h2>
+            <p>
+              Unlocked by getting {{ formatInt(laitelaReq) }} total celestial levels
+              <span v-if="totalLevels < laitelaReq">
+                (you need {{formatInt(laitelaReq - totalLevels)}} more)
+              </span>
+            </p>
           </div>
         </button>
       </div>
-    </div>`
+    </div>
+  `
 });

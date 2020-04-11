@@ -8,13 +8,15 @@ class Sacrifice {
   }
 
   static get canSacrifice() {
-    return DimBoost.totalBoosts > 4 && NormalDimension(8).amount.gt(0) && !EternityChallenge(3).isRunning;
+    return DimBoost.totalBoosts > 4 && !EternityChallenge(3).isRunning && this.nextBoost.gt(1) &&
+      NormalDimension(8).totalAmount.gt(0);
   }
 
   static get disabledCondition() {
     if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
     if (DimBoost.totalBoosts <= DimBoost.maxShiftTier - 4) return "Requires a boost";
-    if (NormalDimension(8).amount.eq(0)) return "No 8th dimensions";
+    if (NormalDimension(8).totalAmount.eq(0)) return "No 8th dimensions";
+    if (this.nextBoost.lte(1)) return `${formatInt(1)}x multiplier`;
     return "";
   }
 
@@ -76,11 +78,11 @@ class Sacrifice {
 function sacrificeReset(auto) {
   if (!Sacrifice.canSacrifice) return false;
   if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
-    player.antimatter.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
+    player.antimatter.gte(Decimal.NUMBER_MAX_VALUE) && !Enslaved.isRunning) return false;
   if (
     !Enslaved.isRunning &&
     NormalChallenge(8).isRunning &&
-    (Sacrifice.totalBoost.gte(Decimal.MAX_NUMBER))
+    (Sacrifice.totalBoost.gte(Decimal.NUMBER_MAX_VALUE))
   ) {
     return false;
   }

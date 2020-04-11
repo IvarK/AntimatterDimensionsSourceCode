@@ -40,9 +40,7 @@ Vue.component("primary-button-on-off", {
     '<primary-button v-bind="$attrs" @click="emitInput(!value)">{{displayText}}</primary-button>',
   computed: {
     displayText() {
-      let text = this.text;
-      text = text && text.length > 0 ? text + " " : "";
-      return this.value ? text + "ON" : text + "OFF";
+      return `${this.text} ${this.value ? "ON" : "OFF"}`.trim();
     }
   }
 });

@@ -8,8 +8,8 @@ const EFFARIG_STAGES = {
 
 const Effarig = {
   displayName: "Effarig",
-  startRun() {
-    if (!startRealityOver()) return;
+  initializeRun() {
+    clearCelestialRuns();
     player.celestials.effarig.run = true;
     recalculateAllGlyphs();
     Tab.reality.glyphs.show();
@@ -29,7 +29,7 @@ const Effarig = {
     return EFFARIG_STAGES.REALITY;
   },
   get eternityCap() {
-    return Effarig.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? new Decimal(1e50) : undefined;
+    return this.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? new Decimal(1e50) : undefined;
   },
   get glyphLevelCap() {
     switch (this.currentStage) {
@@ -110,10 +110,10 @@ const Effarig = {
     UNLOCK_WEIGHTS: CelestialQuotes.singleLine(
       2, "Do you like my little Stall? It’s not much, but it’s mine."
     ),
-    UNLOCK_AUTOSACRIFICE: CelestialQuotes.singleLine(
+    UNLOCK_BASIC_FILTER: CelestialQuotes.singleLine(
       3, "Thank you for your purchase, customer!"
     ),
-    UNLOCK_AUTOPICK: CelestialQuotes.singleLine(
+    UNLOCK_ADVANCED_FILTER: CelestialQuotes.singleLine(
       4, "Is that too much? I think it’s too much."
     ),
     UNLOCK_RUN: {
@@ -184,11 +184,11 @@ class EffarigUnlockState extends GameMechanicState {
       case EffarigUnlock.adjuster.id:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_WEIGHTS);
         break;
-      case EffarigUnlock.autosacrifice.id:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_AUTOSACRIFICE);
+      case EffarigUnlock.basicFilter.id:
+        Effarig.quotes.show(Effarig.quotes.UNLOCK_BASIC_FILTER);
         break;
-      case EffarigUnlock.autopicker.id:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_AUTOPICK);
+      case EffarigUnlock.advancedFilter.id:
+        Effarig.quotes.show(Effarig.quotes.UNLOCK_ADVANCED_FILTER);
         break;
       case EffarigUnlock.run.id:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_RUN);
@@ -203,8 +203,8 @@ const EffarigUnlock = (function() {
   const db = GameDatabase.celestials.effarig.unlocks;
   return {
     adjuster: new EffarigUnlockState(db.adjuster),
-    autosacrifice: new EffarigUnlockState(db.autosacrifice),
-    autopicker: new EffarigUnlockState(db.autopicker),
+    basicFilter: new EffarigUnlockState(db.basicFilter),
+    advancedFilter: new EffarigUnlockState(db.advancedFilter),
     run: new EffarigUnlockState(db.run),
     infinity: new EffarigUnlockState(db.infinity),
     eternity: new EffarigUnlockState(db.eternity),

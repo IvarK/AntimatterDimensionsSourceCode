@@ -6,6 +6,8 @@ Vue.component("infinity-upgrades-tab", {
       chargeUnlocked: false,
       chargesLeft: 0,
       disCharge: false,
+      ipMultSoftCap: 0,
+      ipMultHardCap: 0,
     };
   },
   watch: {
@@ -55,6 +57,8 @@ Vue.component("infinity-upgrades-tab", {
       this.chargeUnlocked = Ra.chargeUnlocked;
       this.chargesLeft = Ra.chargesLeft;
       this.disCharge = player.celestials.ra.disCharge;
+      this.ipMultSoftCap = GameDatabase.infinity.upgrades.ipMult.costIncreaseThreshold;
+      this.ipMultHardCap = GameDatabase.infinity.upgrades.ipMult.costCap;
     },
     btnClassObject(column) {
       const classObject = {
@@ -94,6 +98,11 @@ Vue.component("infinity-upgrades-tab", {
           :upgrade="offlineIpUpgrade"
           :class="btnClassObject(1)"
         />
+      </div>
+      <div>
+        This IP multiplier can be bought repeatedly, but becomes more expensive
+        <br>
+        above {{format(ipMultSoftCap)}} IP and cannot be purchased past {{format(ipMultHardCap)}} IP.
       </div>
     </div>`
 });

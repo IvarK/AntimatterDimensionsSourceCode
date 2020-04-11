@@ -26,7 +26,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 21,
       cost: 3,
       requirement: 11,
-      description: "Replicanti multiplier formula is better (log2(x)^2) ➜ (x^0.032)",
+      description: () => `Replicanti multiplier formula is better
+        (log2(x)^${formatInt(2)}) ➜ (x${formatPow(0.032, 3, 3)})`,
       effect: () => player.replicanti.amount.pow(0.032)
     },
     {
@@ -158,7 +159,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: 72,
       description: "Dimension Boosts affect Infinity Dimensions",
       effect: () => Decimal.pow(1.0000109, Math.pow(DimBoost.totalBoosts, 2)),
-      cap: new Decimal("1e10000000000"),
+      cap: new Decimal("1e10000000"),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -273,7 +274,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 131,
       cost: 5,
-      STCost: 10,
+      STCost: 8,
       requirement: () => TimeStudy(121).isBought && !TimeStudy(132).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(121).isBought && (TimeStudy(132).isBought || TimeStudy(133).isBought),
       description: () => (Achievement(138).isUnlocked
@@ -284,18 +285,18 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 132,
       cost: 5,
-      STCost: 10,
+      STCost: 8,
       requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(122).isBought && (TimeStudy(131).isBought || TimeStudy(133).isBought),
       description: () => (Perk.studyPassive2.isBought
-        ? `Replicanti galaxies are 40% more effective and replicanti are ${formatInt(5)}x faster`
-        : "Replicanti galaxies are 40% more effective"),
+        ? `Replicanti galaxies are 40% stronger and replicanti are ${formatInt(5)}x faster`
+        : "Replicanti galaxies are 40% stronger"),
       effect: 0.4
     },
     {
       id: 133,
       cost: 5,
-      STCost: 10,
+      STCost: 8,
       requirement: () => TimeStudy(123).isBought && !TimeStudy(131).isBought && !TimeStudy(132).isBought,
       requirementV: () => TimeStudy(123).isBought && (TimeStudy(131).isBought || TimeStudy(132).isBought),
       description: () => (Achievement(138).isUnlocked
@@ -324,7 +325,13 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(132).isBought && !TimeStudy(141).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(132).isBought && (TimeStudy(141).isBought || TimeStudy(143).isBought),
       description: () => `You gain ${format(Perk.studyPassive1.isBought ? 1e100 : 1e25, 0, 0)}x more IP`,
-      effect: () => (Perk.studyPassive1.isBought ? 1e100 : 1e25),
+      effect: () => {
+        const isEffarigLimited = Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY;
+        const normalValue = Perk.studyPassive1.isBought ? 1e100 : 1e25;
+        return isEffarigLimited
+          ? Math.min(normalValue, Effarig.eternityCap.toNumber())
+          : normalValue;
+        },
       cap: () => (Effarig.eternityCap === undefined ? undefined : Effarig.eternityCap.toNumber())
     },
     {
@@ -427,7 +434,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 212,
       cost: 150,
       requirement: 191,
-      description: "Galaxies are more effective based on your time shards",
+      description: "Galaxies are stronger based on your time shards",
       effect: () => Math.pow(player.timeShards.clampMin(2).log2(), 0.005),
       cap: 1.1,
       formatEffect: value => `+${formatPercents(value - 1, 3)}`
@@ -531,33 +538,33 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 4,
       requirement: () => TimeStudy(214).isBought && !TimeStudy(227).isBought,
       requirementV: () => TimeStudy(214).isBought && TimeStudy(227).isBought,
-      description: () => `Sacrifice formula scales better, x^${format(0.011, 0, 3)} ➜ x^${format(0.013, 0, 3)}`,
+      description: () => `Sacrifice formula scales better, x${formatPow(0.011, 0, 3)} ➜ x${formatPow(0.013, 0, 3)}`,
       effect: 0.013
     },
     {
       id: 231,
       cost: 500,
-      STCost: 6,
+      STCost: 5,
       requirement: () => (TimeStudy(221).isBought || TimeStudy(222).isBought) && !TimeStudy(232).isBought,
       requirementV: () => (TimeStudy(221).isBought || TimeStudy(222).isBought) && TimeStudy(232).isBought,
-      description: "Dimension Boosts are more effective based on their amount",
+      description: "Dimension Boosts are stronger based on their amount",
       effect: () => Decimal.pow(DimBoost.totalBoosts, 0.3).clampMin(1),
       formatEffect: value => formatX(value, 2, 2)
     },
     {
       id: 232,
       cost: 500,
-      STCost: 6,
+      STCost: 5,
       requirement: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && !TimeStudy(231).isBought,
       requirementV: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && TimeStudy(231).isBought,
-      description: "Galaxies are more effective based on Antimatter Galaxies",
+      description: "Galaxies are stronger based on Antimatter Galaxies",
       effect: () => Math.pow(1 + player.galaxies / 1000, 0.2),
       formatEffect: value => `+${formatPercents(value - 1, 3)}`
     },
     {
       id: 233,
       cost: 500,
-      STCost: 6,
+      STCost: 5,
       requirement: () => (TimeStudy(225).isBought || TimeStudy(226).isBought) && !TimeStudy(234).isBought,
       requirementV: () => (TimeStudy(225).isBought || TimeStudy(226).isBought) && TimeStudy(234).isBought,
       description: "Max Replicanti galaxy upgrade is cheaper based on current Replicanti",
@@ -567,7 +574,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 234,
       cost: 500,
-      STCost: 6,
+      STCost: 5,
       requirement: () => (TimeStudy(227).isBought || TimeStudy(228).isBought) && !TimeStudy(233).isBought,
       requirementV: () => (TimeStudy(227).isBought || TimeStudy(228).isBought) && TimeStudy(233).isBought,
       description: "Sacrifice boosts First Dimension",

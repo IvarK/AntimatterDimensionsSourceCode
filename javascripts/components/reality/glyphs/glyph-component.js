@@ -30,7 +30,8 @@ const GlyphTooltipEffect = {
       return this.boostColor ? `⯅${value}⯅` : value;
     },
     secondaryEffectText() {
-      const value = this.effectConfig.formatEffect(this.effectConfig.conversion(this.value));
+      const value = this.effectConfig.formatSingleSecondaryEffect(
+        this.effectConfig.conversion(this.value));
       return this.boostColor ? `⯅${value}⯅` : value;
     },
     textSplits() {
@@ -128,6 +129,7 @@ const GlyphTooltipComponent = {
       };
     },
     description() {
+      if (this.type === "cursed") return "Cursed Glyph";
       const name = this.type === "reality" ? "Pure" : this.rarityInfo.name;
       const rarity = this.type === "reality" ? "" : `(${this.roundedRarity.toFixed(1)}%)`;
       return `${name} Glyph of ${this.type.charAt(0).toUpperCase()}${this.type.slice(1)} ${rarity}`;
@@ -149,7 +151,9 @@ const GlyphTooltipComponent = {
       return { color };
     },
     sacrificeText() {
-      if (AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY && this.type !== "reality") {
+      if (this.type === "cursed") return "Cannot be sacrificed or refined";
+      if (GlyphSacrificeHandler.isRefining && this.type !== "reality") {
+        if (!AlchemyResource[this.type].isUnlocked) return "Cannot be refined (resource not unlocked)";
         const refinementText = `${format(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
         const limitText = this.sacrificeReward === 0
           ? ` (limit reached)`
@@ -159,13 +163,14 @@ const GlyphTooltipComponent = {
           : `Can be refined for ${refinementText}${limitText}`;
       }
       const powerText = `${format(this.sacrificeReward, 2, 2)} power`;
-      const advancedModeText = AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ADVANCED
-        ? `\nScore (Advanced Mode): ${format(AutoGlyphSacrifice.comparedToThreshold(this.$parent.glyph) +
-            AutoGlyphSacrifice.types[this.type].scoreThreshold, 1, 1)}`
+      const showFilterScoreModes = [AUTO_GLYPH_SCORE.RARITY, AUTO_GLYPH_SCORE.RARITY_THRESHOLDS,
+        AUTO_GLYPH_SCORE.SPECIFIED_EFFECT, AUTO_GLYPH_SCORE.ADVANCED_MODE];
+      const filterScoreText = showFilterScoreModes.includes(AutoGlyphProcessor.scoreMode)
+        ? `\nGlyph Score: ${format(AutoGlyphProcessor.filterValue(this.$parent.glyph), 1, 1)}`
         : "";
       return this.onTouchDevice
-        ? `Sacrifice for ${powerText}${advancedModeText}`
-        : `Can be sacrificed for ${powerText}${advancedModeText}`;
+        ? `Sacrifice for ${powerText}${filterScoreText}`
+        : `Can be sacrificed for ${powerText}${filterScoreText}`;
     },
     eventHandlers() {
       return GameUI.touchDevice ? {
@@ -195,8 +200,8 @@ const GlyphTooltipComponent = {
       ev.preventDefault();
       ev.stopPropagation();
     },
-    sacrificeGlyph() {
-      sacrificeGlyph(Glyphs.findById(this.id), false);
+    removeGlyph() {
+      GlyphSacrificeHandler.removeGlyph(Glyphs.findById(this.id), false);
     },
   },
   mounted() {
@@ -221,7 +226,7 @@ const GlyphTooltipComponent = {
     </div>
     <div v-if="showDeletionText"
          :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
-         v-on="onTouchDevice ? { click: sacrificeGlyph } : {}">
+         v-on="onTouchDevice ? { click: removeGlyph } : {}">
       {{sacrificeText}}
     </div>
   </div>
@@ -277,6 +282,7 @@ Vue.component("glyph-component", {
       sacrificeReward: 0,
       levelOverride: 0,
       isRealityGlyph: false,
+      glyphEffects: [],
     };
   },
   computed: {
@@ -357,15 +363,56 @@ Vue.component("glyph-component", {
   methods: {
     update() {
       this.isRealityGlyph = this.glyph.type === "reality";
+      this.glyphEffects = this.extractGlyphEffects();
+      this.showGlyphEffectDots = player.options.showGlyphEffectDots;
+    },
+    // This finds all the effects of a glyph and shifts all their IDs so that type's lowest-ID effect is 0 and all
+    // other effects count up to 3 (or 6 for effarig). Used to add dots in unique positions on glyphs to show effects.
+    extractGlyphEffects() {
+      let minEffectID = 0;
+      switch (this.glyph.type) {
+        case "time":
+        case "cursed":
+          minEffectID = 0;
+          break;
+        case "dilation":
+        case "reality":
+          minEffectID = 4;
+          break;
+        case "replication":
+          minEffectID = 8;
+          break;
+        case "infinity":
+          minEffectID = 12;
+          break;
+        case "power":
+          minEffectID = 16;
+          break;
+        case "effarig":
+          minEffectID = 20;
+          break;
+        default:
+          throw new Error(`Unrecognized glyph type "${this.glyph.type}" in glyph effect icons`);
+      }
+      const effectIDs = [];
+      // eslint-disable-next-line no-bitwise
+      let remainingEffects = this.glyph.effects >> minEffectID;
+      for (let id = 0; remainingEffects > 0; id++) {
+        // eslint-disable-next-line no-bitwise
+        if ((remainingEffects & 1) === 1) effectIDs.push(id);
+        // eslint-disable-next-line no-bitwise
+        remainingEffects >>= 1;
+      }
+      return effectIDs;
     },
     hideTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = AutoGlyphSacrifice.mode === AUTO_GLYPH_SAC_MODE.ALCHEMY
-        ? glyphRefinementGain(this.glyph)
-        : glyphSacrificeGain(this.glyph);
+      this.sacrificeReward = GlyphSacrificeHandler.isRefining && this.glyph.type !== "cursed"
+        ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
+        : GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
       this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
     },
     moveTooltipTo(x, y) {
@@ -406,7 +453,7 @@ Vue.component("glyph-component", {
       const dragInfo = this.$viewModel.tabs.reality.draggingGlyphInfo;
       dragInfo.id = this.glyph.id;
       dragInfo.type = this.glyph.type;
-      dragInfo.sacrificeValue = glyphSacrificeGain(this.glyph);
+      dragInfo.sacrificeValue = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
     },
     dragEnd() {
       this.isDragging = false;
@@ -456,6 +503,23 @@ Vue.component("glyph-component", {
         this.drag(t);
       }
     },
+    glyphEffectIcon(id) {
+      // Place dots clockwise starting from the bottom left
+      const angle = this.glyph.type === "effarig"
+        ? (Math.PI / 4) * (id + 1)
+        : (Math.PI / 2) * (id + 0.5);
+      const scale = 0.3 * this.size.replace("rem", "");
+      const dx = -scale * Math.sin(angle);
+      const dy = scale * (Math.cos(angle) + 0.15);
+      return {
+        position: "absolute",
+        width: "0.4rem",
+        height: "0.4rem",
+        "background-image":
+          `radial-gradient(${this.glyph.color || getRarity(this.glyph.strength).color}, rgba(0, 0, 0, 1))`,
+        transform: `translate(${dx}rem, ${dy}rem)`,
+      };
+    }
   },
   template: `
   <!-- The naive approach with a border and box-shadow seems to have problems with
@@ -470,6 +534,8 @@ Vue.component("glyph-component", {
            :style="innerStyle"
            :class="['l-glyph-component', 'c-glyph-component']">
         {{symbol}}
+        <div v-if="showGlyphEffectDots" v-for="x in glyphEffects"
+          :style="glyphEffectIcon(x)"/>
         <glyph-tooltip v-if="hasTooltip"
                        v-show="isCurrentTooltip"
                        ref="tooltip"

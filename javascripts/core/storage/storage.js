@@ -77,9 +77,9 @@ const GameStorage = {
     return save !== undefined && save !== null && (save.money !== undefined || save.antimatter !== undefined);
   },
 
-  save(silent = false) {
+  save(silent = false, manual = false) {
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
-    if (++this.saved > 99) SecretAchievement(12).unlock();
+    if (manual && ++this.saved > 99) SecretAchievement(12).unlock();
     const root = {
       current: this.currentSlot,
       saves: this.saves
@@ -134,6 +134,7 @@ const GameStorage = {
     Enslaved.boostReality = false;
     Theme.set(player.options.theme);
     Notations.find(player.options.notation).setAsCurrent();
+    ADNotations.Settings.exponentCommas.show = player.options.commas;
 
     EventHub.dispatch(GAME_EVENT.GAME_LOAD);
     AutomatorBackend.initializeFromSave();
@@ -147,8 +148,11 @@ const GameStorage = {
       if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
         diff = Enslaved.autoStoreRealTime(diff);
       }
-      if (diff > 1000 * 1000) {
-        simulateTime(diff / 1000);
+      if (diff > 1000) {
+        // The third parameter is a `fast` parameter that we use to only
+        // simulate at most 50 ticks if the player was offline for less
+        // than 50 seconds.
+        simulateTime(diff / 1000, false, diff < 50 * 1000);
       }
     } else {
       player.lastUpdate = Date.now();

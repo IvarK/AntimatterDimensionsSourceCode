@@ -57,8 +57,9 @@ const Teresa = {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.teresa.unlockBits & (1 << info.id));
   },
-  startRun() {
-    player.celestials.teresa.run = startRealityOver() || player.celestials.teresa.run;
+  initializeRun() {
+    clearCelestialRuns();
+    player.celestials.teresa.run = true;
   },
   rewardMultiplier(antimatter) {
     return Decimal.max(Decimal.pow(antimatter.plus(1).log10() / 1.5e8, 12), 1).toNumber();
@@ -80,6 +81,9 @@ const Teresa = {
   },
   get isRunning() {
     return player.celestials.teresa.run;
+  },
+  get runCompleted() {
+    return player.celestials.teresa.bestRunAM.gt(0);
   },
   quotes: new CelestialQuotes("teresa", {
     INITIAL: {

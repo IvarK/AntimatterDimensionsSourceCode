@@ -10,7 +10,7 @@ const Autobuyers = (function() {
       Autobuyer.bigCrunch,
       Autobuyer.sacrifice,
       Autobuyer.eternity,
-      Autobuyer.reality
+      Autobuyer.reality,
     ]);
 
   return {
@@ -19,7 +19,7 @@ const Autobuyers = (function() {
     upgradeable: dimensions.concat([Autobuyer.tickspeed]),
 
     get unlocked() {
-      return Autobuyers.all.filter(a => a.isUnlocked);
+      return Autobuyers.all.filter(a => a.isUnlocked || a.isBought);
     },
 
     toggle() {

@@ -39,7 +39,7 @@ Vue.component("teresa-tab", {
       }
       this.time = now;
       this.rmStore = player.celestials.teresa.rmStore;
-      this.percentage = formatPercents(Teresa.fill, 2);
+      this.percentage = Notations.current.name === "Blind" ? "0%" : `${(Teresa.fill * 100).toFixed(2)}%`;
       this.rmMult = Teresa.rmMultiplier;
       this.hasReality = Teresa.has(TERESA_UNLOCKS.RUN);
       this.hasEPGen = Teresa.has(TERESA_UNLOCKS.EPGEN);
@@ -50,7 +50,8 @@ Vue.component("teresa-tab", {
       this.rm.copyFrom(player.reality.realityMachines);
     },
     startRun() {
-      Teresa.startRun();
+      resetReality();
+      Teresa.initializeRun();
     },
     unlockDescriptionStyle(unlockInfo) {
       const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;

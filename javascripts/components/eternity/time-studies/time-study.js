@@ -33,6 +33,7 @@ Vue.component("time-study", {
     classObject() {
       return {
         "o-time-study": true,
+        "o-time-study--extra": this.showSTCost,
         "o-time-study--unavailable": !this.isAvailableForPurchase && !this.isBought,
         "o-time-study--bought": this.isBought,
         "o-time-study--small": this.setup.isSmall,
@@ -40,7 +41,7 @@ Vue.component("time-study", {
       };
     },
     config() {
-      return this.study.config;
+      return {...this.study.config, formatCost: formatInt};
     }
   },
   methods: {
@@ -73,7 +74,10 @@ Vue.component("time-study", {
         plural="Time Theorems"
       />
       <div v-else-if="showSTCost">
-        Cost: {{ format(STCost) }} {{ "Space Theorem" | pluralize(STCost, "Space Theorems")}}
+        Cost: {{ formatInt(STCost) }} {{ "Space Theorem" | pluralize(STCost, "Space Theorems")}}
+        <span v-if="config.cost">
+          and {{formatInt(config.cost)}} TT
+        </span>
       </div>
     </button>`
 });

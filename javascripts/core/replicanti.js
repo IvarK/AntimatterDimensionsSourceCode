@@ -82,10 +82,10 @@ function getReplicantiInterval(noMod, intervalIn) {
     interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
   }
   interval = interval.divide(getAdjustedGlyphEffect("replicationspeed"));
-  if (GlyphAlteration.isAdded("replication")) interval = interval.divide(getSecondaryGlyphEffect("replicationdtgain"));
+  if (GlyphAlteration.isAdded("replication")) interval = interval.divide(
+    Math.clampMin(Decimal.log10(player.replicanti.amount) * getSecondaryGlyphEffect("replicationdtgain"), 1));
   interval = interval.divide(RA_UNLOCKS.TT_BOOST.effect.replicanti());
   interval = interval.dividedByEffectOf(AlchemyResource.replication);
-  interval = interval.divide(Effects.max(1, CompressionUpgrade.replicantiSpeedFromDB));
   if (V.isRunning) {
     // This is a boost if interval < 1, but that only happens in EC12
     // and handling it would make the replicanti code a lot more complicated.
@@ -96,8 +96,12 @@ function getReplicantiInterval(noMod, intervalIn) {
 
 function replicantiCap() {
   return EffarigUnlock.infinity.isUnlocked
-    ? player.infinitied.plus(player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Decimal.MAX_NUMBER)
-    : Decimal.MAX_NUMBER;
+    ? player.infinitied
+      .plus(player.infinitiedBank)
+      .pow(TimeStudy(31).isBought ? 120 : 30)
+      .clampMin(1)
+      .times(Decimal.NUMBER_MAX_VALUE)
+    : Decimal.NUMBER_MAX_VALUE;
 }
 
 function replicantiLoop(diff) {
@@ -125,7 +129,7 @@ function replicantiLoop(diff) {
     player.replicanti.timer = 0;
   } else if (interval.lte(player.replicanti.timer)) {
     const reproduced = binomialDistribution(player.replicanti.amount, player.replicanti.chance);
-     player.replicanti.amount = player.replicanti.amount.plus(reproduced);
+    player.replicanti.amount = player.replicanti.amount.plus(reproduced);
     if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount);
     player.replicanti.timer -= interval.toNumber();
   }
@@ -134,7 +138,7 @@ function replicantiLoop(diff) {
     player.replicanti.timer += diff;
   }
 
-  if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Decimal.MAX_NUMBER)) {
+  if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) {
     replicantiGalaxy();
   }
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_AFTER);
@@ -309,18 +313,24 @@ const ReplicantiUpgrade = {
     get baseCost() { return player.replicanti.galCost; }
     set baseCost(value) { player.replicanti.galCost = value; }
 
+    get distantRGStart() {
+      return 100 + Effects.sum(GlyphSacrifice.replication);
+    }
+
+    get remoteRGStart() {
+      return 1000 + Effects.sum(GlyphSacrifice.replication);
+    }
+
     get costIncrease() {
       const galaxies = this.value;
       let increase = EternityChallenge(6).isRunning
         ? Decimal.pow(1e2, galaxies).times(1e2)
         : Decimal.pow(1e5, galaxies).times(1e25);
-      const distantReplicatedGalaxyStart = 100 + Effects.sum(GlyphSacrifice.replication);
-      if (galaxies >= distantReplicatedGalaxyStart) {
-        increase = increase.times(Decimal.pow(1e50, galaxies - distantReplicatedGalaxyStart + 5));
+      if (galaxies >= this.distantRGStart) {
+        increase = increase.times(Decimal.pow(1e50, galaxies - this.distantRGStart + 5));
       }
-      const remoteReplicatedGalaxyStart = 1000 + Effects.sum(GlyphSacrifice.replication);
-      if (galaxies >= remoteReplicatedGalaxyStart) {
-        increase = increase.times(Decimal.pow(1e5, Math.pow(galaxies - remoteReplicatedGalaxyStart + 1, 2)));
+      if (galaxies >= this.remoteRGStart) {
+        increase = increase.times(Decimal.pow(1e5, Math.pow(galaxies - this.remoteRGStart + 1, 2)));
       }
       return increase;
     }
@@ -407,7 +417,7 @@ const Replicanti = {
       return ReplicantiUpgrade.galaxies.value + ReplicantiUpgrade.galaxies.extra;
     },
     get canBuyMore() {
-      if (!Replicanti.amount.gte(Decimal.MAX_NUMBER)) return false;
+      if (!Replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) return false;
       return this.bought < this.max;
     },
     autobuyer: {

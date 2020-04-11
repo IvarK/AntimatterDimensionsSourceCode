@@ -11,6 +11,8 @@ Vue.component("replicanti-tab", {
       mult: new Decimal(0),
       hasRaisedCap: false,
       replicantiCap: new Decimal(0),
+      distantRG: 0,
+      remoteRG: 0,
       effarigInfinityBonusRG: 0,
       nextEffarigRGThreshold: 0
     };
@@ -18,7 +20,7 @@ Vue.component("replicanti-tab", {
   computed: {
     replicantiChanceSetup() {
       return new ReplicantiUpgradeButtonSetup(ReplicantiUpgrade.chance,
-        value => `Replicate chance: ${Math.round(value * 100)}%`,
+        value => `Replicate chance: ${formatPercents(value)}`,
         cost => `+1% Costs: ${format(cost, 0, 0)} IP`
       );
     },
@@ -68,8 +70,10 @@ Vue.component("replicanti-tab", {
       this.mult.copyFrom(replicantiMult());
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked;
       this.replicantiCap.copyFrom(replicantiCap());
+      this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;
+      this.remoteRG = ReplicantiUpgrade.galaxies.remoteRGStart;
       this.effarigInfinityBonusRG = Effarig.bonusRG;
-      this.nextEffarigRGThreshold = Decimal.MAX_NUMBER.pow(Effarig.bonusRG + 2);
+      this.nextEffarigRGThreshold = Decimal.NUMBER_MAX_VALUE.pow(Effarig.bonusRG + 2);
     }
   },
   template:
@@ -82,7 +86,7 @@ Vue.component("replicanti-tab", {
         onclick="Replicanti.unlock();"
       >Unlock Replicanti<br>Cost: {{format(1e140, 0, 0)}} IP</primary-button>
       <template v-else>
-        <div v-if="isInEC8">You have {{ec8Purchases}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
+        <div v-if="isInEC8">You have {{formatInt(ec8Purchases)}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
         <div v-if="hasRaisedCap">
           Your replicanti cap without study 192 has been raised to {{format(replicantiCap, 2)}}
           and is giving you {{formatInt(effarigInfinityBonusRG)}} extra RG due to Effarig Infinity.
@@ -100,6 +104,11 @@ Vue.component("replicanti-tab", {
           <replicanti-upgrade-button :setup="replicantiChanceSetup" />
           <replicanti-upgrade-button :setup="replicantiIntervalSetup" />
           <replicanti-upgrade-button :setup="maxGalaxySetup" />
+        </div>
+        <div>
+          The Max Replicanti Galaxy upgrade can be purchased endlessly,
+          <br>
+          but costs increase more rapidly above {{formatInt(distantRG)}} RG and {{formatInt(remoteRG)}} RG.
         </div>
         <br>
         <br>

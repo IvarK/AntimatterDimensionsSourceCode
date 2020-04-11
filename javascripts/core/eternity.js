@@ -3,7 +3,7 @@
 function canEternity() {
   return EternityChallenge.isRunning
     ? EternityChallenge.current.canBeCompleted
-    : player.infinityPoints.gte(Decimal.MAX_NUMBER) && InfinityDimension(8).isUnlocked;
+    : player.infinityPoints.gte(Decimal.NUMBER_MAX_VALUE) && InfinityDimension(8).isUnlocked;
 }
 
 function giveEternityRewards(auto) {
@@ -12,10 +12,9 @@ function giveEternityRewards(auto) {
   addEternityTime(
     player.thisEternity,
     player.thisEternityRealTime,
-    gainedEternityPoints(),
-    Effects.product(RealityUpgrade(3))
+    gainedEternityPoints()
   );
-  const newEternities = new Decimal(Effects.product(RealityUpgrade(3)))
+  const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
   if (player.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
@@ -27,16 +26,19 @@ function giveEternityRewards(auto) {
     const challenge = EternityChallenge.current;
     challenge.addCompletion();
     if (Perk.studyECBulk.isBought) {
+      let completionCount = 0;
       while (!challenge.isFullyCompleted && challenge.canBeCompleted) {
         challenge.addCompletion();
+        completionCount++;
       }
+      if (Enslaved.isRunning && completionCount > 5) EnslavedProgress.ec1.giveProgress();
     }
     player.etercreq = 0;
     respecTimeStudies(auto);
   }
 
   player.bestEternitiesPerMs = player.bestEternitiesPerMs.clampMin(
-    Effects.product(RealityUpgrade(3)) / player.thisEternityRealTime
+    RealityUpgrade(3).effectOrDefault(1) / player.thisEternityRealTime
   );
   player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
 
@@ -48,6 +50,11 @@ function giveEternityRewards(auto) {
   if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked) {
     EffarigUnlock.eternity.unlock();
     beginProcessReality(getRealityProps(true));
+  }
+
+  if (player.bestEP.lt(player.eternityPoints)) {
+    player.bestEP = new Decimal(player.eternityPoints);
+    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }
 
@@ -63,6 +70,9 @@ function eternity(force, auto, specialConditions = {}) {
     if (!auto && !askEternityConfirmation()) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     giveEternityRewards(auto);
+    // If somehow someone manages to force their first eternity
+    // (e.g., by starting an EC), they haven't really eternitied yet.
+    player.noEternitiesThisReality = false;
   }
 
   if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
@@ -104,12 +114,13 @@ function eternity(force, auto, specialConditions = {}) {
     // FIXME: Eternity count is a Decimal and also why is this submitted in so many places?
     // kong.submitStats('Eternities', player.eternities);
   } catch (err) {
-      console.log("Couldn't load Kongregate API")
+      // eslint-disable-next-line no-console
+      console.log("Couldn't load Kongregate API");
   }
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
-  applyRealityUpgrades();
+  applyRealityUpgradesAfterEternity();
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;
 
@@ -145,7 +156,6 @@ function initializeResourcesAfterEternity() {
   player.infMultCost = new Decimal(10);
   player.infinityPower = new Decimal(1);
   player.timeShards = new Decimal(0);
-  player.tickThreshold = new Decimal(1);
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.totalTickGained = 0;
@@ -159,20 +169,22 @@ function initializeResourcesAfterEternity() {
     GameCache.dimensionMultDecrease.invalidate();
   }
   player.noSacrifices = true;
-  player.onlyEighthDimensons = true;
+  player.onlyEighthDimensions = true;
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
+  player.noFirstDimensions = true;
   player.postChallUnlocked = Achievement(133).isUnlocked ? 8 : 0;
 }
 
-function applyRealityUpgrades() {
+function applyRealityUpgradesAfterEternity(buySingleTD = false) {
   if (RealityUpgrade(13).isBought) {
-      if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
-      for (let i = 1; i < 9; i++) {
-          if (player.reality.tdbuyers[i - 1]) {
-              buyMaxTimeDimTier(i);
-          }
+    if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
+    for (let i = 1; i < 9; i++) {
+      if (player.reality.tdbuyers[i - 1]) {
+        if (buySingleTD) buySingleTimeDimension(i);
+        else buyMaxTimeDimension(i);
       }
+    }
   }
   if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
     for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);
@@ -332,16 +344,18 @@ class EPMultiplierState extends GameMechanicState {
     this.boughtAmount = 0;
   }
 
+  get costIncreaseThresholds() {
+    return [1e100, Decimal.NUMBER_MAX_VALUE, "1e1300", "1e4000"];
+  }
+
   costAfterCount(count) {
-    // Up to just past 1e100
-    if (count <= 58) return Decimal.pow(50, count).times(500);
-    // Up to just past Number.MAX_VALUE
-    if (count <= 153) return Decimal.pow(100, count).times(500);
-    // Up to just past 1e1300
-    if (count <= 481) return Decimal.pow(500, count).times(500);
-    // Up to 1e4000
-    if (count <= 1333) return Decimal.pow(1000, count).times(500);
-    return Decimal.pow(1000, count + Math.pow(count - 1334, 1.2)).times(500);
+    const costThresholds = EternityUpgrade.epMult.costIncreaseThresholds;
+    const multPerUpgrade = [50, 100, 500, 1000];
+    for (let i = 0; i < costThresholds.length; i++) {
+      const cost = Decimal.pow(multPerUpgrade[i], count).times(500);
+      if (cost.lt(costThresholds[i])) return cost;
+    }
+    return Decimal.pow(1000, count + Math.pow(Math.clampMin(count - 1334, 0), 1.2)).times(500);
   }
 }
 

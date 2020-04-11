@@ -20,10 +20,11 @@ GameDatabase.eternity.dilation = (function() {
       id: 1,
       initialCost: 1e5,
       increment: 10,
-      description: () => (CompressionUpgrade.improvedDTMult.canBeApplied
-       ? "Multiply Dilated Time gain by 2.2x"
-       : "Double Dilated Time gain."),
-      effect: bought => Decimal.pow(Effects.max(2, CompressionUpgrade.improvedDTMult), bought),
+      description: "Double Dilated Time gain.",
+      effect: bought => {
+        const base = SingularityMilestone(12).isUnlocked ? 2 * SingularityMilestone(12).effectValue : 2;
+        return Decimal.pow(base, bought);
+      },
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => format(value, 2, 0)
     }),
@@ -36,7 +37,7 @@ GameDatabase.eternity.dilation = (function() {
         ? "Reset Dilated Galaxies, but lower their threshold"
         : "Reset Dilated Time and Dilated Galaxies, but lower their threshold"),
       effect: bought => Math.pow(0.8, bought),
-      formatEffect: () => getFreeGalaxyMult().toFixed(3),
+      formatEffect: () => format(getFreeGalaxyMult(), 3, 3),
       formatCost: value => format(value, 2, 0)
     }),
     tachyonGain: rebuyable({
@@ -53,10 +54,7 @@ GameDatabase.eternity.dilation = (function() {
     doubleGalaxies: {
       id: 4,
       cost: 5e6,
-      description: () => (CompressionUpgrade.freeGalaxySoftcap.canBeApplied
-        ? `Gain twice as many free galaxies, up to
-          ${formatInt(CompressionUpgrade.freeGalaxySoftcap.effectValue)}.`
-        : `Gain twice as many free galaxies, up to ${formatInt(1000)}.`),
+      description: () => `Gain twice as many free galaxies, up to ${formatInt(1000)}.`,
       effect: 2
     },
     tdMultReplicanti: {
@@ -71,7 +69,8 @@ GameDatabase.eternity.dilation = (function() {
             multiplier = ratio.toFixed(2);
           }
         }
-        return `Time Dimensions are affected by Replicanti multiplier ^${format(multiplier, 1, 2)}.`;
+        return `Time Dimensions are affected by Replicanti multiplier ${formatPow(multiplier, 1, 3)}, reduced
+          effect above ${formatX(new Decimal("1e9000"))}`;
       },
       effect: () => {
         let rep10 = replicantiMult().pLog10() * 0.1;

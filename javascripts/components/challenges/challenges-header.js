@@ -13,7 +13,6 @@ Vue.component("challenges-header", {
       remainingECTiers: 0,
       untilNextEC: TimeSpan.zero,
       untilAllEC: TimeSpan.zero,
-      newEC10: false,
     };
   },
   watch: {
@@ -23,9 +22,6 @@ Vue.component("challenges-header", {
     showAllChallenges(newValue) {
       player.options.showAllChallenges = newValue;
     },
-    newEC10(newValue) {
-      player.newEC10Test = newValue;
-    }
   },
   methods: {
     update() {
@@ -49,7 +45,6 @@ Vue.component("challenges-header", {
         this.untilNextEC.setFrom(untilNextEC);
         this.untilAllEC.setFrom(untilNextEC + (autoECInterval * (remainingCompletions - 1)));
       }
-      this.newEC10 = player.newEC10Test;
     },
     exitChallenge() {
       const current = NormalChallenge.current ||
@@ -58,15 +53,6 @@ Vue.component("challenges-header", {
       if (current !== undefined) {
         current.exit();
       }
-    },
-    toggleShowAll() {
-      this.showAllChallenges = !this.showAllChallenges;
-    },
-    toggleAutoEC() {
-      this.autoEC = !this.autoEC;
-    },
-    toggleNewEC10() {
-      this.newEC10 = !this.newEC10;
     },
   },
   template:
@@ -77,22 +63,22 @@ Vue.component("challenges-header", {
       Exit Challenge
     </primary-button>
     <div>
-      <div class="o-challenges-tab__header-toggle"
-           @click="toggleNewEC10">
-        <input :checked="newEC10" type="checkbox" class="o-big-checkbox" />
-        <b>EC10 Reward Test</b>
-      </div>
+      <br v-if="isShowAllVisible || isAutoECVisible"/>
       <div v-if="isShowAllVisible"
-           class="o-challenges-tab__header-toggle"
-           @click="toggleShowAll">
-        <input :checked="showAllChallenges" type="checkbox" class="o-big-checkbox" />
-        <b>Show all</b>
+        class="o-challenges-tab__header-toggle">
+          <primary-button-on-off
+            v-model="showAllChallenges"
+            class="o-primary-btn"
+            text="Show all ECs:"
+          />
       </div>
       <div v-if="isAutoECVisible"
-           class="o-challenges-tab__header-toggle"
-           @click="toggleAutoEC">
-        <input :checked="autoEC" type="checkbox" class="o-big-checkbox" />
-        <b>Auto EC completion</b>
+        class="o-challenges-tab__header-toggle">
+          <primary-button-on-off
+          v-model="autoEC"
+          class="o-primary-btn"
+          text="Auto EC:"
+          />
       </div>
     </div>
     <div v-if="autoEC && isAutoECVisible && remainingECTiers > 0"

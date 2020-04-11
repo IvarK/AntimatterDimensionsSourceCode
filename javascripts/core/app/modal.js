@@ -39,11 +39,15 @@ Modal.shortcuts = new Modal("modal-shortcuts");
 Modal.animationOptions = new Modal("modal-animation-options");
 Modal.confirmationOptions = new Modal("modal-confirmation-options");
 Modal.infoDisplayOptions = new Modal("modal-info-display-options");
+Modal.miscellaneousOptions = new Modal("modal-miscellaneous-options");
 Modal.loadGame = new Modal("modal-load-game");
 Modal.uiChoice = new Modal("modal-ui-choice");
 Modal.import = new Modal("modal-import");
+Modal.shop = new Modal("modal-std-store");
 Modal.importTree = new Modal("modal-import-tree");
+Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
+Modal.singularityMilestones = new Modal("singularity-milestones-modal");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;
@@ -93,6 +97,6 @@ Modal.message = new class extends Modal {
     // Sometimes we have stacked messages that get lost, since we don't have stacking modal system.
     // TODO: remove this console.log
     // eslint-disable-next-line no-console
-    console.log(`Modal mesasge: ${text}`);
+    console.log(`Modal message: ${text}`);
   }
 }("modal-message");

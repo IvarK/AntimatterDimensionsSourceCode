@@ -15,7 +15,7 @@ class AutobuyerState {
   get isUnlocked() { throw new NotImplementedError(); }
 
   get canTick() {
-    return this.isActive && player.options.autobuyersOn && this.isUnlocked;
+    return this.isActive && player.options.autobuyersOn && (this.isUnlocked || this.isBought);
   }
 
   get isActive() {

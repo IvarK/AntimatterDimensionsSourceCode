@@ -8,7 +8,9 @@ Vue.component("new-tickspeed-row", {
       cost: new Decimal(0),
       isAffordable: false,
       tickspeed: new Decimal(0),
-      gameSpeedMult: 1
+      gameSpeedMult: 1,
+      isContinuumActive: false,
+      continuumValue: 0
     };
   },
   computed: {
@@ -39,15 +41,13 @@ Vue.component("new-tickspeed-row", {
     },
     formattedFastSpeed() {
       const gameSpeedMult = this.gameSpeedMult;
-      return gameSpeedMult < 10000 ? gameSpeedMult.toFixed(3) : format(gameSpeedMult, 2, 0);
-    },
-    tooltip() {
-      if (this.isGameSpeedNormal) return undefined;
-      const displayValue = this.isGameSpeedSlow ? (1 / this.gameSpeedMult).toFixed(0) : this.formattedFastSpeed;
-      return `The game is running ${displayValue}x ${this.isGameSpeedSlow ? "slower." : "faster."}`;
+      return gameSpeedMult < 10000 ? format(gameSpeedMult, 3, 3) : format(gameSpeedMult, 2, 0);
     },
     showCostTitle() {
       return this.cost.exponent < 1000000;
+    },
+    continuumString() {
+      return formatContinuum(this.continuumValue);
     }
   },
   methods: {
@@ -60,24 +60,33 @@ Vue.component("new-tickspeed-row", {
       this.isAffordable = !isEC9Running && canAfford(Tickspeed.cost);
       this.tickspeed.copyFrom(Tickspeed.current);
       this.gameSpeedMult = getGameSpeedupForDisplay();
+      this.isContinuumActive = Laitela.continuumActive;
+      if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
     }
   },
   template:
   `<div class="tickspeed-container" v-show="isVisible">
       <div class="tickspeed-labels">
-        <span v-tooltip="tooltip">{{ tickspeedDisplay }} <game-header-gamma-display v-if="!isGameSpeedNormal"/></span>
+        <span>{{ tickspeedDisplay }} <game-header-gamma-display v-if="!isGameSpeedNormal"/></span>
         <span>{{ multiplierDisplay }}</span>
       </div>
       <div class="tickspeed-buttons">
         <button
           class="o-primary-btn tickspeed-btn"
-          :class="{ 'o-primary-btn--disabled': !isAffordable }"
+          :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
           :enabled="isAffordable"
-          onclick="buyTickSpeed()"
-          >Cost: {{format(cost, 0, 0)}}</button>
+          onclick="buyTickSpeed()">
+            <span v-if="isContinuumActive">
+              {{ continuumString }} (cont.)
+            </span>
+            <span v-else>
+              Cost: {{ format(cost) }}
+            </span>
+        </button>
         <button
+          v-if="!isContinuumActive"
           class="o-primary-btn tickspeed-max-btn"
-          :class="{ 'o-primary-btn--disabled': !isAffordable }"
+          :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
           :enabled="isAffordable"
           onclick="buyMaxTickSpeed()"
           >Buy Max</button>

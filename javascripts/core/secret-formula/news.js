@@ -3,6 +3,7 @@
 // A = always there
 // L = locked
 // J = joke/unreasonable condition
+// E = enslaved hints (practically but not technically missable)
 // R = random chance condition
 // P = patreon
 GameDatabase.news = [
@@ -617,7 +618,10 @@ GameDatabase.news = [
   },
   {
     id: "a130",
-    text: "Click this to unlock that one secret achievement."
+    text: "Click this to unlock that one secret achievement.",
+    // This next line is needed for this news ticker to unlock
+    // the secret achievement.
+    onClick: () => undefined
   },
   {
     id: "a131",
@@ -662,21 +666,10 @@ GameDatabase.news = [
   },
   {
     id: "a138",
-    text:
-      "The Holy trinity of Hevipelle, Antimatter, Infinity Points, and Eternity Points. These 3 resources let us " +
-      "access Hevi’s gift, Time Theorems. And with these Time Theorems, we reach out to Hevi, and call, “Hevi, bless " +
-      "us on this fine day!” And Hevi does. He give us the blessing of Time Studies. These Time Studies were " +
-      "blessings so powerful, Hevi restricted their power. He said, “ I will give you a choice of three paths” and " +
-      "then humanity chose. The short, cheap route of Normal Dimensions, giving instant gratification, the powerful " +
-      "choice of Infinity Dimensions, which were a fast, middle ground path, or Time Dimension, the long wait, and " +
-      "struggle, of humanity. Then, as humanity chose, a crack broke the earth. A serpent snaked out and sneered to " +
-      "humanity, “I will offer the powerful choice of a ninth dimension! I am Slabdrill, lord of all Unhevi. " +
-      "Humanity rose and said “ Begone Slabdrill! We want none of your foul Heresy!” And Hevi rose as well, and " +
-      "smote Slabdrill with his godlike power. As Slabdrill’s corpse fell into the earth, he cried “ this will not " +
-      "be the last of me! Hevi will betr-“ and he fell in the Abyss of matter. Hevi gifted humanity with Eternity " +
-      "upgrades, which boosted infinity dimensions and time dimensions. And Hevi gave humanity his greatest gift. " +
-      "EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 25 times. Use " +
-      "them wisely. And Humanity journeyed off with their new power, as Slabdrill’s words echoed in their heads."
+    get text() {
+      return `Check out Avari's newly built actually infinite infinity pool! With an area of ` +
+      `${format(Number.MAX_VALUE)} square megametres, you'll be sure to have infinite fun!`;
+    }
   },
   {
     id: "a139",
@@ -847,8 +840,9 @@ GameDatabase.news = [
   {
     id: "a173",
     text:
-      "<span style='animation: a-game-header__antimatter--glow 3s infinite' onclick='bigCrunchAnimation()'>This " +
-      "text is made of antimatter. Do not touch or else the universe will collapse.</span>"
+      "<span style='animation: a-game-header__antimatter--glow 3s infinite'>This " +
+      "text is made of antimatter. Do not touch or else the universe will collapse.</span>",
+    onClick: () => bigCrunchAnimation()
   },
   {
     id: "a174",
@@ -1166,26 +1160,7 @@ GameDatabase.news = [
   },
   {
     id: "a216",
-    text:
-      "Jake returned home from a long day at school. On his way home, he came across a curious little object. " +
-      "Transparent, but opaque. Shimmering, but gloomy. Heavy, but weightless. Jake brought the object to his " +
-      "mother. \"Mom, I found this thing on the sidewalk, can I keep it?\", Jake said. His mother turned around " +
-      "to view the object her son spoke of. Her pupils dilated, \"Jake, get that thing out of the house now!\" " +
-      "she yelled. Jake was confused, as it seemed quite the harmless thing to him. He asked \"But mom, wh-\", " +
-      "but before he could finish, the object appeared to undergo mitosis at what seemed like an impossible " +
-      "speed, and the second copy slipped out of his hand and onto the floor. His mother rushed over to " +
-      "him, and tried to grab the object, but it replicated again. \"Jake... No matter what happens, don't " +
-      "forget that I love you honey...\". She wrapped her arms around him. \"M-mom, what's happening?\" Jake asked, " +
-      "with a quivering fear in his voice. His mother cried a single tear. \"⭔⭚⦕꒜ brand Replicanti...\" she said, " +
-      "in a somber tone. The Replicanti continued to replicate at a faster and faster pace. The bottom third of the " +
-      "house was now full of Replicanti. Then the bottom half. Then the entire house. The mother and child were " +
-      "trapped between the walls of their home and the Replicanti. Doomed to live the short rest of their life in " +
-      "that inorganic coffin, as the air remaining in their lungs slowly depleted. But that wasn't the end; far from " +
-      "it. The Replicanti began to replicate outside of the house, flooding out in a shimmering landslide. A few " +
-      "neighbours noticed the strange objects, almost liquid-like in their appearance, and attempted to run. " +
-      "But the Replicanti continued to replicate, and accelerate. Soon the entire block was covered in them; was " +
-      "them. Shortly after, several blocks. The city. The surrounding cities. The country. All the countries. All " +
-      "the planet. All the solar system. All the galaxy. All."
+    text: "Testing... testing... testing... Oh goddamn I was in prod again."
   },
   {
     id: "a217",
@@ -1422,9 +1397,8 @@ GameDatabase.news = [
   {
     id: "a251",
     text:
-      "The debate on the singular form of Replicanti rages on. Team \"Replicantus\"'s base has been ransacked " +
-      "by Team \"Also Replicanti\", and many of their dimensions were stolen. Team \"The Plural Is Replicantis\" " +
-      "is still lying low after their plan to hack the dictionary failed."
+      "Hey! It's me, you from the future! I came back to give you this warning: Pay VERY close attention to the " +
+      "next news ticker. In my timeline we ignored it, and humanity has regretted it ever since."
   },
   {
     id: "a252",
@@ -1771,21 +1745,10 @@ GameDatabase.news = [
       "in the universe, including human beings, into either paperclips or machines which manufacture paperclips."
   },
   {
-    id: "a308",
-    text:
-      "Hey! It's me, you from the future! I came back to give you this warning: Pay VERY close attention to the " +
-      "next news ticker. In my timeline we ignored it, and humanity has regretted it ever since."
-  },
-  {
-    id: "a309",
-    get text() {
-      return `Check out Avari's newly built actually infinite infinity pool! With an area of ` +
-      `${format(Number.MAX_VALUE)} square megametres, you'll be sure to have infinite fun!`;
-    }
-  },
-  {
     id: "l1",
-    text: "You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken",
+    get text() {
+      return `You just made your first ${formatInt(1e15)} antimatter. This one tastes like chicken.`;
+    },
     get unlocked() { return player.antimatter.e === 15; }
   },
   {
@@ -2145,6 +2108,57 @@ GameDatabase.news = [
     get unlocked() { return PlayerProgress.realityUnlocked(); }
   },
   {
+    id: "l57",
+    text:
+      "Jake returned home from a long day at school. On his way home, he came across a curious little object. " +
+      "Transparent, but opaque. Shimmering, but gloomy. Heavy, but weightless. Jake brought the object to his " +
+      "mother. \"Mom, I found this thing on the sidewalk, can I keep it?\", Jake said. His mother turned around " +
+      "to view the object her son spoke of. Her pupils dilated, \"Jake, get that thing out of the house now!\" " +
+      "she yelled. Jake was confused, as it seemed quite the harmless thing to him. He asked \"But mom, wh-\", " +
+      "but before he could finish, the object appeared to undergo mitosis at what seemed like an impossible " +
+      "speed, and the second copy slipped out of his hand and onto the floor. His mother rushed over to " +
+      "him, and tried to grab the object, but it replicated again. \"Jake... No matter what happens, don't " +
+      "forget that I love you honey...\". She wrapped her arms around him. \"M-mom, what's happening?\" Jake asked, " +
+      "with a quivering fear in his voice. His mother cried a single tear. \"⭔⭚⦕꒜ brand Replicanti...\" she said, " +
+      "in a somber tone. The Replicanti continued to replicate at a faster and faster pace. The bottom third of the " +
+      "house was now full of Replicanti. Then the bottom half. Then the entire house. The mother and child were " +
+      "trapped between the walls of their home and the Replicanti. Doomed to live the short rest of their life in " +
+      "that inorganic coffin, as the air remaining in their lungs slowly depleted. But that wasn't the end; far from " +
+      "it. The Replicanti began to replicate outside of the house, flooding out in a shimmering landslide. A few " +
+      "neighbours noticed the strange objects, almost liquid-like in their appearance, and attempted to run. " +
+      "But the Replicanti continued to replicate, and accelerate. Soon the entire block was covered in them; was " +
+      "them. Shortly after, several blocks. The city. The surrounding cities. The country. All the countries. All " +
+      "the planet. All the solar system. All the galaxy. All.",
+      get unlocked() { return player.replicanti.unl; }
+  },
+  {
+    id: "l58",
+    text:
+      "The Holy trinity of Hevipelle, Antimatter, Infinity Points, and Eternity Points. These 3 resources let us " +
+      "access Hevi’s gift, Time Theorems. And with these Time Theorems, we reach out to Hevi, and call, “Hevi, bless " +
+      "us on this fine day!” And Hevi does. He give us the blessing of Time Studies. These Time Studies were " +
+      "blessings so powerful, Hevi restricted their power. He said, “ I will give you a choice of three paths” and " +
+      "then humanity chose. The short, cheap route of Normal Dimensions, giving instant gratification, the powerful " +
+      "choice of Infinity Dimensions, which were a fast, middle ground path, or Time Dimension, the long wait, and " +
+      "struggle, of humanity. Then, as humanity chose, a crack broke the earth. A serpent snaked out and sneered to " +
+      "humanity, “I will offer the powerful choice of a ninth dimension! I am Slabdrill, lord of all Unhevi. " +
+      "Humanity rose and said “ Begone Slabdrill! We want none of your foul Heresy!” And Hevi rose as well, and " +
+      "smote Slabdrill with his godlike power. As Slabdrill’s corpse fell into the earth, he cried “ this will not " +
+      "be the last of me! Hevi will betr-“ and he fell in the Abyss of matter. Hevi gifted humanity with Eternity " +
+      "upgrades, which boosted infinity dimensions and time dimensions. And Hevi gave humanity his greatest gift. " +
+      "EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 25 times. Use " +
+      "them wisely. And Humanity journeyed off with their new power, as Slabdrill’s words echoed in their heads.",
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l59",
+    text:
+      "The debate on the singular form of Replicanti rages on. Team \"Replicantus\"'s base has been ransacked " +
+      "by Team \"Also Replicanti\", and many of their dimensions were stolen. Team \"The Plural Is Replicantis\" " +
+      "is still lying low after their plan to hack the dictionary failed.",
+      get unlocked() { return player.replicanti.unl; }
+  },
+  {
     id: "j1",
     text: "How dare you actually get zero deaths on a first run?",
     get unlocked() {
@@ -2165,22 +2179,141 @@ GameDatabase.news = [
   {
     id: "j3",
     text: "Person with money likes to support this game.",
-    get unlocked() { return kongDimMult > 1 || kongIPMult > 1; }
+    get unlocked() { return player.IAP.totalSTD > 1; }
   },
   {
     id: "j4",
     text: "Whale is bad at making smart purchases.",
-    get unlocked() { return kongIPMult > 500 && kongDimMult < 5e307; }
+    get unlocked() { 
+      return ShopPurchase.IPPurchases.currentMult > 500 && 
+      ShopPurchase.dimPurchases.currentMult < 5e307; 
+    }
   },
   {
     id: "j5",
     text: "Whale complains that the game broke.",
-    get unlocked() { return kongDimMult > 5e307; }
+    get unlocked() { return ShopPurchase.dimPurchases.currentMult > 5e307; }
   },
   {
     id: "j6",
     text: "Whale complains that their buying isn't doing anything.",
-    get unlocked() { return kongIPMult > 1.8e16; }
+    get unlocked() { return ShopPurchase.IPPurchases.currentMult > 1.8e16; }
+  },
+  {
+    id: "e1",
+    get text() {
+      return "Sometimes you want to break things, sometimes you want to use broken things.";
+    },
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
+    }
+  },
+  {
+    id: "e2",
+    text: "Keep in mind, V, the Celestial of Achievements, is the next celestial.",
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
+    }
+  },
+  {
+    id: "e3",
+    get text() {
+      return "You can get Antimatter Galaxies the same way you can get more than " +
+        `${formatInt(2)} Antimatter Galaxies without Infinity being broken.`;
+    },
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
+    }
+  },
+  {
+    id: "e4",
+    get text() {
+      return "You can't get <span style='color: black; background: black;'>REDACTED</span>? " +
+        "You couldn't get those anyway, why do you care?";
+    },
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
+    }
+  },
+  {
+    id: "e5",
+    get text() {
+      return "No, you can't decrease <span style='color: black; background: black;'>REDACTED</span> " +
+        `to ${formatX(1.8, 1, 1)}, but it's still worth acting as if you could.`;
+    },
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e6",
+    get text() {
+      return `Have you tried rotating your screen ${formatInt(14)} degrees counterclockwise?`;
+    },
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e7",
+    get text() {
+      return `${format(new Decimal("1e201600"), 0, 0)} IP? I'm finally done!`;
+    },
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e8",
+    text: `Go there and stand away from me /
+    <span style='color: black; background: black;'>RE</span>
+    <span style='color: black; background: black;'>REDA</span>
+    <span style='color: black; background: black;'>RE</span>
+    <span style='color: black; background: black;'>RE</span>
+    <span style='color: black; background: black;'>REDAC</span>
+    <span style='color: black; background: black;'>RED</span>
+    <span style='color: black; background: black;'>REDACTED</span>`,
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e9",
+    text: "Social distancing with regard to Eternity is not encouraged.",
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e10",
+    text: "Dilation glyph TT generation has been replaced by a more all-at-once source.",
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e11",
+    text: "To get to Reality, release stored time in EC10. Oh, sorry, that one was for a different celestial.",
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e12",
+    text: "Introducing a new feature: Reality Studies! Get in-game benefits for studying in real life!",
+    get unlocked() {
+      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+    }
+  },
+  {
+    id: "e13",
+    get text() {
+      return "Did you know? While in The Enslaved Ones' Reality for more than " +
+        `${TimeSpan.fromMinutes(15)}, there's a small chance of a fairly-useless` +
+        `hint in a news ticker message! Over ${TimeSpan.fromHours(2)}, the hints ` +
+        "will get slightly more useful and less convoluted, but remain fairly impossible to figure out!";
+    },
+    get unlocked() { return Enslaved.isRunning; }
   },
   {
     id: "r1",

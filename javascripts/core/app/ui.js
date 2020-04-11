@@ -25,6 +25,9 @@ Vue.mixin({
     formatInt(value) {
       return formatInt(value);
     },
+    formatPercents(value, places) {
+      return formatPercents(value, places);
+    },
     formatX(value, places, placesUnder1000) {
       return formatX(value, places, placesUnder1000);
     }
@@ -48,13 +51,13 @@ function pluralize(value, amount, plural) {
   let isSingular = true;
   if (typeof amount === "number") {
     isSingular = amount === 1;
-  }
-  else if (amount instanceof Decimal) {
+  } else if (amount instanceof Decimal) {
     isSingular = amount.eq(1);
-  }
-  else
+  } else {
     throw "Amount must be either a number or Decimal";
-  return isSingular ? value : (plural !== undefined ? plural : value + "s");
+  }
+  if (isSingular) return value;
+  return plural === undefined ? `${value}s` : plural;
 }
 
 Vue.filter("pluralize", pluralize);
@@ -126,15 +129,15 @@ const GameUI = {
   }
 };
 
-const UIID = function() {
+const UIID = (function() {
   let id = 0;
   return { next: () => id++ };
-}();
+}());
 
 (function() {
   const vTooltip = VTooltip.VTooltip.options;
-  vTooltip.defaultClass = 'general-tooltip';
-  vTooltip.popover.defaultBaseClass = 'general-tooltip';
+  vTooltip.defaultClass = "general-tooltip";
+  vTooltip.popover.defaultBaseClass = "general-tooltip";
   vTooltip.defaultTemplate = '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
 }());
 

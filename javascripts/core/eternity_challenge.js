@@ -21,8 +21,6 @@ function startEternityChallenge() {
   player.thisInfinityMaxAM = Player.startingAM;
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
-  if (Enslaved.isRunning && Enslaved.foundEC6C10) Tab.challenges.normal.show();
-  return true;
 }
 
 class EternityChallengeRewardState extends GameMechanicState {
@@ -176,10 +174,17 @@ class EternityChallengeState extends GameMechanicState {
     if (canEternity()) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
-      if (TimeCompression.isActive) SecretAchievement(42).unlock();
-      TimeCompression.isActive = false;
+      if (V.isRunning && player.minNegativeBlackHoleThisReality < 1) {
+        SecretAchievement(42).unlock();
+      }
+      if (V.isRunning) player.minNegativeBlackHoleThisReality = 1;
     }
-    return startEternityChallenge();
+    if (Enslaved.isRunning) {
+      if (this.id === 6 && this.completions === 5) EnslavedProgress.ec6.giveProgress();
+      if (EnslavedProgress.challengeCombo.hasProgress) Tab.challenges.normal.show();
+    }
+    startEternityChallenge();
+    return true;
   }
 
   /**
@@ -302,7 +307,7 @@ const EternityChallenges = {
         Perk.autocompleteEC4,
         Perk.autocompleteEC5
       );
-      if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) hours /= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2].effect();
+      if (V.has(V_UNLOCKS.FAST_AUTO_EC)) hours /= V_UNLOCKS.FAST_AUTO_EC.effect();
       return TimeSpan.fromHours(hours).totalMilliseconds;
     }
   }

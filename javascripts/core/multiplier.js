@@ -23,16 +23,16 @@ class Multiplier {
   breakdown(name, callback, conditional, type, opperator) {
     let display;
     if (type === "multiplier") display = () => formatX(callback(), 2, 2);
-    if (type === "divisor") display = () => `/${shorten(callback(), 2, 2)}`;
+    if (type === "divisor") display = () => `/${format(callback(), 2, 2)}`;
     if (type === "power" || type === "exponent") display = () => formatPow(callback(), 2, 2);
     if (type === "percentage") {
       if (opperator === "add") display = () => `+${formatPercents(callback(), 2, 2)}`;
       else display = () => formatPercents(callback(), 2, 2);
     }
     if (type === "amount") {
-      if (opperator === "add") display = () => `+${shorten(callback(), 2, 2)}`;
-      else if (opperator === "subtract") display = () => `-${shorten(callback(), 2, 2)}`;
-      else display = () => shorten(callback(), 2, 2);
+      if (opperator === "add") display = () => `+${format(callback(), 2, 2)}`;
+      else if (opperator === "subtract") display = () => `-${format(callback(), 2, 2)}`;
+      else display = () => format(callback(), 2, 2);
     }
 
     return {
@@ -76,17 +76,16 @@ Multiplier.Dimension = new class DimensionMultipliers extends Multiplier {
         () => true,
         "amount"),
       this.breakdown("Achievement Multiplier",
-        () => Player.achievementPower,
-        () => Player.achievementPower.gt(1),
+        () => Achievements.power,
+        () => Achievements.power > 1,
         "multiplier"),
       this.breakdown("Kong Purchases Dimension Multiplier",
-        () => kongDimMult * kongAllDimMult,
-        () => kongDimMult * kongAllDimMult > 1,
+        () => ShopPurchase.dimPurchases.currentMult * ShopPurchase.allDimPurchases.currentMult,
+        () => ShopPurchase.dimPurchases.currentMult * ShopPurchase.allDimPurchases.currentMult > 1,
         "multiplier"),
       this.breakdown("Infinity Power Multiplier",
         () => {
-          let glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
-          if (Laitela.has(LAITELA_UNLOCKS.ID)) glyphConversionRate += Laitela.idConversionEffect;
+          const glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
           return player.infinityPower.pow(glyphConversionRate).max(1);
         },
         () => !EternityChallenge(9).isRunning && InfinityDimension(1).isUnlocked,
@@ -211,7 +210,7 @@ Multiplier.Dimension = new class DimensionMultipliers extends Multiplier {
     ]);
     return {
       name: "First Dimension Multiplier",
-      total: () => formatX(getDimensionFinalMultiplier(1)),
+      total: () => formatX(NormalDimension(1).multiplier),
       breakdown: list,
     };
   }
@@ -220,7 +219,7 @@ Multiplier.Dimension = new class DimensionMultipliers extends Multiplier {
     const list = this.sharedDimBreakdown();
     return {
       name: "Second Dimension Multiplier",
-      total: () => formatX(getDimensionFinalMultiplier(2)),
+      total: () => formatX(NormalDimension(2).multiplier),
       breakdown: list,
     };
   }
@@ -229,7 +228,7 @@ Multiplier.Dimension = new class DimensionMultipliers extends Multiplier {
     const list = this.sharedDimBreakdown();
     return {
       name: "Third Dimension Multiplier",
-      total: () => formatX(getDimensionFinalMultiplier(3)),
+      total: () => formatX(NormalDimension(3).multiplier),
       breakdown: list,
     };
   }
@@ -238,7 +237,7 @@ Multiplier.Dimension = new class DimensionMultipliers extends Multiplier {
     const list = this.sharedDimBreakdown();
     return {
       name: "Forth Dimension Multiplier",
-      total: () => formatX(getDimensionFinalMultiplier(4)),
+      total: () => formatX(NormalDimension(4).multiplier),
       breakdown: list,
     };
   }
@@ -247,7 +246,7 @@ Multiplier.Dimension = new class DimensionMultipliers extends Multiplier {
     const list = this.sharedDimBreakdown();
     return {
       name: "Fith Dimension Multiplier",
-      total: () => formatX(getDimensionFinalMultiplier(5)),
+      total: () => formatX(NormalDimension(5).multiplier),
       breakdown: list,
     };
   }
@@ -256,7 +255,7 @@ Multiplier.Dimension = new class DimensionMultipliers extends Multiplier {
     const list = this.sharedDimBreakdown();
     return {
       name: "Sixth Dimension Multiplier",
-      total: () => formatX(getDimensionFinalMultiplier(6)),
+      total: () => formatX(NormalDimension(6).multiplier),
       breakdown: list,
     };
   }
@@ -265,7 +264,7 @@ Multiplier.Dimension = new class DimensionMultipliers extends Multiplier {
     const list = this.sharedDimBreakdown();
     return {
       name: "Seventh Dimension Multiplier",
-      total: () => formatX(getDimensionFinalMultiplier(7)),
+      total: () => formatX(NormalDimension(7).multiplier),
       breakdown: list,
     };
   }
@@ -274,7 +273,7 @@ Multiplier.Dimension = new class DimensionMultipliers extends Multiplier {
     const list = this.sharedDimBreakdown();
     return {
       name: "Eight Dimension Multiplier",
-      total: () => formatX(getDimensionFinalMultiplier(8)),
+      total: () => formatX(NormalDimension(8).multiplier),
       breakdown: list,
     };
   }
@@ -293,7 +292,7 @@ Multiplier.Infinity = new class InfinityMultipliers extends Multiplier {
   ipGain() {
     return {
       name: "Infinity Point Gain",
-      total: () => shorten(gainedInfinityPoints()),
+      total: () => format(gainedInfinityPoints()),
     };
   }
 

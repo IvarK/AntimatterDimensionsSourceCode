@@ -171,7 +171,7 @@ ui = new Vue({
     },
     newUI() {
       return this.view.newUI;
-    }
+    },
   },
   methods: {
     scroll(t) {

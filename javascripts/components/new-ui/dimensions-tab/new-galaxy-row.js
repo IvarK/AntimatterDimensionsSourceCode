@@ -57,6 +57,9 @@ Vue.component("new-galaxy-row", {
             `Quadratic past ${this.distantStart} (distant), exponential past 800 (remote)`;
       }
       return undefined;
+    },
+    tutorialClass() {
+      return Tutorial.glowingClass(TUTORIAL_STATE.GALAXY, this.$viewModel.tutorialState, this.canBeBought);
     }
   },
   methods: {
@@ -72,7 +75,10 @@ Vue.component("new-galaxy-row", {
       this.distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
       this.lockText = Galaxy.lockText;
     },
-    buyGalaxy: bulk => requestGalaxyReset(bulk),
+    buyGalaxy(bulk) {
+      requestGalaxyReset(bulk);
+      Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
+    },
   },
   template:
   `<div class="reset-container galaxy">
@@ -81,7 +87,7 @@ Vue.component("new-galaxy-row", {
     <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
     <button
       class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
-      :class="{ 'o-primary-btn--disabled': !canBeBought }"
+      :class="{ 'o-primary-btn--disabled': !canBeBought, ...tutorialClass }"
       @click.exact="buyGalaxy(true)"
       @click.shift.exact="buyGalaxy(false)"
       :enabled="canBeBought"

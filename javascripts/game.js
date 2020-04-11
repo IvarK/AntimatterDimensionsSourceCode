@@ -856,6 +856,7 @@ function slowerAutobuyers(realDiff) {
     player.auto.dilUpgradeTimer = Math.min(player.auto.dilUpgradeTimer - dilUpgradePeriod, dilUpgradePeriod);
     autoBuyDilationUpgrades();
   }
+  
   TimeTheorems.autoBuyMaxTheorems(ampDiff);
   Tutorial.tutorialLoop();
 

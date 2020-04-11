@@ -36,6 +36,9 @@ Vue.component("new-dim-shift-row", {
         return `${sum} = ${formatInt(parts.sum())}`;
       }
       return sum;
+    },
+    tutorialClass() {
+      return Tutorial.glowingClass(TUTORIAL_STATE.DIMSHIFT, this.$viewModel.tutorialState, this.isBuyable);
     }
   },
   methods: {
@@ -51,6 +54,7 @@ Vue.component("new-dim-shift-row", {
     },
     softReset() {
       softResetBtnClick();
+      Tutorial.turnOffEffect(TUTORIAL_STATE.DIMSHIFT);
     }
   },
   template:
@@ -59,7 +63,7 @@ Vue.component("new-dim-shift-row", {
     <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} D</span>
     <button
       class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
-      :class="{ 'o-primary-btn--disabled': !isBuyable }"
+      :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"
       :enabled="isBuyable"
       @click="softReset"
       >{{buttonText}}</button>

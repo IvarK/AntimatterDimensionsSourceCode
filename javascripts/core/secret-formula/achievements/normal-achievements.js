@@ -15,7 +15,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 13,
-    name: "Half life 3 confirmed",
+    name: "Half life 3 CONFIRMED",
     tooltip: "Buy a 3rd Dimension.",
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
   },
@@ -64,7 +64,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 22,
-    name: "Fake News",
+    name: "FAKE NEWS!",
     tooltip: () => `Encounter ${formatInt(50)} different news messages.`,
     checkRequirement: () => player.news.size >= 50,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
@@ -107,7 +107,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 28,
-    name: "There's no point in doing that",
+    name: "There's no point in doing that...",
     tooltip: () => `Buy a single 1st Dimension when you have over ${format(1e150)} of them.`,
     checkRequirement: () => NormalDimension(1).amount.exponent >= 150,
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
@@ -150,7 +150,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 35,
-    name: "Don't you dare to sleep",
+    name: "Don't you dare sleep",
     tooltip: () => `Be offline for over ${formatInt(6)} hours in a row.`,
     checkRequirement: () => Date.now() - player.lastUpdate >= 21600000,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE
@@ -166,7 +166,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 37,
-    name: "That's fast!",
+    name: "That's FAST!",
     tooltip: () => `Go infinite in under ${formatInt(2)} hours.`,
     checkRequirement: () => Time.thisInfinityRealTime.totalHours <= 2,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
@@ -189,7 +189,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 42,
-    name: "Supersanic",
+    name: "Super Sanic",
     tooltip: () => `Have antimatter/sec exceed your current antimatter above ${format(1e63, 0, 0)}.`,
     checkRequirement: () =>
       player.antimatter.exponent >= 63 &&
@@ -207,7 +207,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 44,
-    name: "Over in 30 seconds",
+    name: "Over in 30 Seconds",
     tooltip: () => `Have antimatter/sec exceed your current antimatter
       for ${formatInt(30)} consecutive seconds.`,
     checkRequirement: () => AchievementTimers.marathon1
@@ -239,7 +239,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 48,
-    name: "AntiChallenged",
+    name: "Antichallenged",
     tooltip: "Complete all the challenges.",
     checkRequirement: () => NormalChallenges.all.countWhere(c => !c.isCompleted) === 0,
     checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
@@ -272,7 +272,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 54,
-    name: "That's faster!",
+    name: "That's FASTER!",
     tooltip: () => `Infinity in ${formatInt(10)} minutes or less.`,
     checkRequirement: () => Time.thisInfinityRealTime.totalMinutes <= 10,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
@@ -318,28 +318,28 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 61,
-    name: "Bulked up",
+    name: "Bulked Up",
     tooltip: () => `Get all of your Dimension bulk buyers to ${formatInt(512)} or higher.`,
     checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0,
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
   },
   {
     id: 62,
-    name: "Oh hey, you're still here",
+    name: "Oh, hey... You're still here?",
     tooltip: () => `Reach ${format(1e8)} IP per minute.`,
     checkRequirement: () => Player.bestRunIPPM.exponent >= 8,
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER
   },
   {
     id: 63,
-    name: "A new beginning.",
+    name: "A new beginning",
     tooltip: "Begin generation of Infinity power.",
     checkRequirement: () => player.infinityPower.gt(1),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 64,
-    name: "1 million is a lot",
+    name: "1 Million is a lot",
     tooltip: () => `Reach ${format(1e6)} Infinity power.`,
     checkRequirement: () => player.infinityPower.exponent >= 6,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
@@ -407,7 +407,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 73,
-    name: "This achievement doesn't exist",
+    name: "THIS ACHIEVEMENT DOESN'T EXIST",
     tooltip: () => `Get ${format("9.9999e9999", 4, 0)} antimatter.`,
     checkRequirement: () => player.antimatter.gte("9.9999e9999"),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -444,7 +444,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 77,
-    name: "How the antitables have turned",
+    name: "How the antitables have turned..",
     tooltip: "Get the 8th Dimension multiplier to be highest, 7th Dimension multiplier second highest, etc.",
     checkRequirement: () => {
       const multipliers = Array.range(1, 8).map(tier => NormalDimension(tier).multiplier);
@@ -488,7 +488,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 83,
-    name: "YOU CAN GET 50 GALAXIES!??",
+    name: "YOU CAN GET 50 GALAXIES?!?!",
     tooltip: () => `Get ${formatInt(50)} Antimatter Galaxies.`,
     checkRequirement: () => player.galaxies >= 50,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
@@ -506,7 +506,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 85,
-    name: "All your IP are belong to us",
+    name: "ALL YOUR IP ARE BELONG TO US",
     tooltip: () => `Big Crunch for ${format(1e150, 0, 0)} IP.`,
     checkRequirement: () => gainedInfinityPoints().exponent >= 150,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
@@ -524,7 +524,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 87,
-    name: "2 Million Infinities",
+    name: "2 MILLION INFINITIES",
     tooltip: () => `Infinity ${format(2e6)} times.`,
     checkRequirement: () => player.infinitied.gt(2e6),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -555,7 +555,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 92,
-    name: "I brake for nobody",
+    name: "I brake for NOBODY!",
     tooltip: () => `Big Crunch for ${format(1e250, 0, 0)} IP in ${formatInt(20)} seconds or less.`,
     checkRequirement: () => gainedInfinityPoints().exponent >= 250 && Time.thisInfinityRealTime.totalSeconds <= 20,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
@@ -601,21 +601,21 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 97,
-    name: "Yes. This is hell.",
+    name: "YES This. Is. Hell.",
     checkRequirement: () => Time.infinityChallengeSum.totalSeconds < 6.66,
     checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER],
     tooltip: () => `Get the sum of Infinity Challenge times under ${format(6.66, 2, 2)} seconds.`
   },
   {
     id: 98,
-    name: "0 degrees from infinity",
+    name: "0 degrees from Infinity",
     tooltip: "Unlock the 8th Infinity Dimension.",
     checkRequirement: () => InfinityDimension(8).isUnlocked,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 101,
-    name: "Costco sells dimboosts now",
+    name: "Costco sells Dimboosts now!",
     tooltip: () => `Bulk buy ${formatInt(750)} Dimension Boosts at once.`,
     checkRequirement: ([bulk]) => bulk >= 750,
     checkEvent: GAME_EVENT.DIMBOOST_AFTER,
@@ -624,14 +624,14 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 102,
-    name: "This mile took an Eternity",
+    name: "This mile took an eternity",
     tooltip: "Get all Eternity milestones.",
     checkRequirement: () => EternityMilestones.all.every(m => m.isReached),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER
   },
   {
     id: 103,
-    name: "This achievement doesn't exist II",
+    name: "Tätä saavutusta ei ole olemassa II",
     tooltip: () => `Reach ${format("9.99999e999", 5, 0)} IP.`,
     checkRequirement: () => player.infinityPoints.exponent >= 1000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -649,7 +649,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 105,
-    name: "Infinite time",
+    name: "Infinite Time",
     tooltip: () => `Get ${formatInt(308)} tickspeed upgrades (in one Eternity) from Time Dimensions.`,
     checkRequirement: () => player.totalTickGained >= 308,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -672,7 +672,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 108,
-    name: "We could afford 9",
+    name: "We COULD afford 9",
     tooltip: () => `Eternity with exactly ${formatInt(9)} Replicanti.`,
     checkRequirement: () => player.replicanti.amount.round().eq(9),
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
@@ -961,7 +961,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 148,
-    name: "Royal Flush",
+    name: "Royal flush",
     tooltip: "Reality with one of each basic glyph type.",
     checkRequirement: () => BASIC_GLYPH_TYPES
       .every(type => Glyphs.activeList.some(g => g.type === type)),

@@ -110,7 +110,7 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities improve the Dilated Time multiplier upgrade",
     effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 21,
-    effectFormat: x => formatX(Math.max(x, 1), 2, 2)
+    effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2)
   },
   {
     id: 13,
@@ -118,7 +118,7 @@ GameDatabase.celestials.singularityMilestones = [
     repeat: 0,
     limit: 1,
     description: "Highest glyph level boosts Dark Energy production",
-    effect: () => Math.max(1, (player.bestGlyphLevel - 10000) / 1000),
+    effect: () => Math.clampMin((player.bestGlyphLevel - 10000) / 1000, 1),
     effectFormat: x => formatX(x, 2, 2)
   },
   {
@@ -128,7 +128,7 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities boost Alchemy Momentum buildup speed",
     effect: () => Math.pow(Math.log10(player.celestials.laitela.singularities), 3),
-    effectFormat: x => formatX(Math.max(x, 1), 2, 2)
+    effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2)
   },
   {
     id: 15,
@@ -136,7 +136,7 @@ GameDatabase.celestials.singularityMilestones = [
     repeat: 0,
     limit: 1,
     description: "Annihilation boosts Dark Energy and Dark Matter production",
-    effect: () => Math.max(Math.log10(Laitela.darkMatterMult), 1),
+    effect: () => Math.clampMin(Math.log10(Laitela.darkMatterMult), 1),
     effectFormat: x => formatX(x, 2, 2)
   },
   {
@@ -146,7 +146,7 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities boost the Annihilation modifier",
     effect: () => Math.log10(player.celestials.laitela.singularities),
-    effectFormat: x => formatX(Math.max(x, 1), 2, 2)
+    effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2)
   },
   {
     id: 17,
@@ -154,7 +154,7 @@ GameDatabase.celestials.singularityMilestones = [
     repeat: 0,
     limit: 1,
     description: "Gamespeed boosts Dark Energy production",
-    effect: () => Math.max(Math.log10(getGameSpeedupFactor()) / 10 - 10, 1),
+    effect: () => Math.clampMin(Math.log10(getGameSpeedupFactor()) / 10 - 10, 1),
     effectFormat: x => formatX(x, 2, 2)
   },
   {
@@ -164,7 +164,7 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities boost glyph level",
     effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 20,
-    effectFormat: x => formatX(Math.max(x, 1), 2, 2)
+    effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2)
   },
   {
     id: 19,
@@ -182,6 +182,6 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities make Tesseracts stronger",
     effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 40,
-    effectFormat: x => formatX(Math.max(x, 1), 2, 2)
+    effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2)
   }
 ];

@@ -7327,3 +7327,17 @@ input.o-automator-block-input {
   margin: 0.5rem 0;
   display: block;
 }
+
+.c-autobuyer-buy-box {
+  border: .2rem solid grey;
+  padding: 10rem 4rem;
+  background: #c7c7c7;
+  border-radius: .5rem;
+  margin: .5rem;
+  width: 23.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+  user-select: none;
+}

@@ -18,6 +18,18 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
     return NormalChallenge(this._tier).isCompleted;
   }
 
+  get isBought() {
+    return this.data.isBought;
+  }
+
+  get antimatterCost() {
+    return Decimal.pow(1e10, this._tier - 1).times(1e40);
+  }
+
+  get canBeBought() {
+    return true;
+  }
+
   get bulk() {
     return this.data.bulk;
   }
@@ -75,10 +87,17 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
     GameUI.update();
   }
 
+  purchase() {
+    if (!Currency.antimatter.isAffordable(this.antimatterCost)) return;
+    Currency.antimatter.subtract(this.antimatterCost);
+    this.data.isBought = true;
+  }
+
   reset() {
     super.reset();
     if (EternityMilestone.keepAutobuyers.isReached) return;
     this.data.isUnlocked = false;
+    this.data.isBought = false;
     this.data.bulk = 1;
   }
 }

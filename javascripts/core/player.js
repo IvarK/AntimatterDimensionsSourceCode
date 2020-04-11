@@ -66,7 +66,8 @@ let player = {
       mode: AUTOBUYER_MODE.BUY_10,
       priority: 1,
       isActive: false,
-      lastTick: 0
+      lastTick: 0,
+      isBought: false
     })),
     tickspeed: {
       isUnlocked: false,
@@ -75,7 +76,8 @@ let player = {
       mode: AUTOBUYER_MODE.BUY_SINGLE,
       priority: 1,
       isActive: false,
-      lastTick: 0
+      lastTick: 0,
+      isBought: false
     },
     dimBoost: {
       cost: 1,

@@ -43,7 +43,7 @@ GameDatabase.celestials.singularityMilestones = [
     start: 50,
     repeat: 1000,
     limit: 0,
-    description: "You gain more singularities",
+    description: "You gain more Singularities",
     effect: completions => Math.pow(2, completions),
     effectFormat: x => formatX(x, 2, 0)
   },
@@ -53,7 +53,7 @@ GameDatabase.celestials.singularityMilestones = [
     start: 8,
     repeat: 8,
     limit: 8,
-    description: "Automatically creates a singularity after reaching the cap (with a delay)",
+    description: "Automatically creates a Singularity after reaching the cap (with a delay)",
     effect: completions => [Infinity, 20, 15, 10, 5, 3, 2, 1, 0][completions],
     effectFormat: x => `${formatInt(x)}s`
   },
@@ -110,7 +110,7 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities improve the Dilated Time multiplier upgrade",
     effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 21,
-    effectFormat: x => formatX(x, 2, 2)
+    effectFormat: x => formatX(Math.max(x, 1), 2, 2)
   },
   {
     id: 13,
@@ -128,7 +128,7 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities boost Alchemy Momentum buildup speed",
     effect: () => Math.pow(Math.log10(player.celestials.laitela.singularities), 3),
-    effectFormat: x => formatX(x, 2, 2)
+    effectFormat: x => formatX(Math.max(x, 1), 2, 2)
   },
   {
     id: 15,
@@ -146,7 +146,7 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities boost the Annihilation modifier",
     effect: () => Math.log10(player.celestials.laitela.singularities),
-    effectFormat: x => formatX(x, 2, 2)
+    effectFormat: x => formatX(Math.max(x, 1), 2, 2)
   },
   {
     id: 17,
@@ -164,7 +164,7 @@ GameDatabase.celestials.singularityMilestones = [
     limit: 1,
     description: "Singularities boost glyph level",
     effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 20,
-    effectFormat: x => formatX(x, 2, 2)
+    effectFormat: x => formatX(Math.max(x, 1), 2, 2)
   },
   {
     id: 19,
@@ -180,8 +180,8 @@ GameDatabase.celestials.singularityMilestones = [
     start: 1e10,
     repeat: 0,
     limit: 1,
-    description: "Singularities make tesseracts stronger",
+    description: "Singularities make Tesseracts stronger",
     effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 40,
-    effectFormat: x => formatX(x, 2, 2)
+    effectFormat: x => formatX(Math.max(x, 1), 2, 2)
   }
 ];

@@ -18,7 +18,11 @@ html {
 
 /* css vars */
 
-#ui { /* csslint allow: empty-rules */
+#ui {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #F2F2F2;
@@ -2016,7 +2020,7 @@ screen and (max-width: 480px) {
   color: #2ebce6;
   border: none;
   cursor: pointer;
-  transition-duration: 0.12s;
+  transition-duration: 0.15s;
   animation: a-tesseract-shift 5s infinite;
 }
 
@@ -4437,9 +4441,6 @@ screen and (max-width: 480px) {
 
 .l-modal {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
   z-index: 5;
   display: inline-block;
 }
@@ -4456,6 +4457,7 @@ screen and (max-width: 480px) {
   font-size: 1.4rem;
   padding: 1rem 1rem 1rem;
   transition-duration: 0.2s;
+  overflow: hidden;
 }
 
 .c-modal__close-btn {
@@ -4682,7 +4684,7 @@ screen and (max-width: 480px) {
   font-family: Typewriter;
   font-size: 2rem;
   cursor: pointer;
-  transition-duration: 0.12s;
+  transition-duration: 0.15s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5072,7 +5074,7 @@ kbd {
   border-radius: 0.5rem;
   padding: 1rem;
   margin: auto;
-  transition-duration: 0.12s;
+  transition-duration: 0.15s;
   user-select: none;
   background-color: var(--color-celestials);
   border: none;
@@ -5109,7 +5111,7 @@ kbd {
   font-family: Typewriter, serif;
   font-size: 1rem;
   cursor: pointer;
-  transition-duration: 0.12s;
+  transition-duration: 0.15s;
 }
 
 .o-teresa-shop-button:hover {
@@ -5166,7 +5168,7 @@ kbd {
   border-radius: 0.5rem;
   margin: 1rem;
   cursor: pointer;
-  transition-duration: 0.12s;
+  transition-duration: 0.15s;
 }
 
 .o-effarig-shop-button:hover {
@@ -5479,7 +5481,7 @@ kbd {
   border-radius: 0.5rem;
   margin: 1rem;
   cursor: pointer;
-  transition-duration: 0.12s;
+  transition-duration: 0.15s;
   width: 30rem;
   height: 10rem;
   font-family: Typewriter;
@@ -5729,6 +5731,12 @@ kbd {
   font-size: 1.5rem;
   height: 4.6rem;
   border-left-width: 0.2rem;
+  text-shadow: 0.1rem 0.1rem 0.1rem black,
+              -0.1rem 0.1rem 0.1rem black,
+              0.1rem -0.1rem 0.1rem black,
+              -0.1rem -0.1rem 0.1rem black,
+              0.1rem -0.1rem 0px black;
+  z-index: 3;
 }
 
 .o-ra-unlock-hover-text {
@@ -6211,13 +6219,19 @@ kbd {
   background: white;
   border: 0.1rem solid grey;
   border-radius: 0.5rem;
-  transition-duration: 0.12s;
+  transition-duration: 0.15s;
 }
 
 .o-matter-dimension-button--available {
   background: black;
   color: white;
   cursor: pointer;
+  border-color: black;
+}
+
+.o-matter-dimension-button--available:hover {
+  color: black;
+  background: white;
 }
 
 .l-laitela-unlocks-container {
@@ -6266,7 +6280,7 @@ kbd {
 .c-laitela-milestone {
   width: 22rem;
   background: white;
-  padding: 2rem;
+  padding: 1.5rem;
   margin-bottom: 1rem;
   border-radius: 0.5rem;
   border: .2rem solid black;
@@ -6274,6 +6288,10 @@ kbd {
   z-index: -2;
   color: black;
   margin-right: 1rem;
+}
+
+.l-singularity-milestone-modal-container .c-laitela-milestone {
+  box-shadow: 0.1rem 0.1rem 0.3rem black;
 }
 
 .c-laitela-milestone__progress {
@@ -6289,6 +6307,7 @@ kbd {
   background: white;
   width: 70rem;
   margin: auto;
+  border: 0.2rem solid black;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   display: flex;
@@ -6304,13 +6323,7 @@ kbd {
   background: black;
   border: .2rem solid transparent;
   border-radius: 0.5rem;
-  cursor: pointer;
-  transition-duration: 0.12s;
-}
-
-.c-laitela-singularity:hover {
-  background: white;
-  border: .2rem solid black;
+  transition-duration: 0.15s;
 }
 
 .c-laitela-singularity h2 {
@@ -6318,10 +6331,19 @@ kbd {
   color: white;
   font-family: Typewriter;
   font-size: 1.5rem;
-  transition-duration: 0.12s;
+  transition-duration: 0.15s;
 }
 
-.c-laitela-singularity:hover h2 {
+.c-laitela-singularity--active {
+  cursor: pointer;
+}
+
+.c-laitela-singularity--active:hover {
+  background: white;
+  border: .2rem solid black;
+}
+
+.c-laitela-singularity--active:hover h2 {
   color: black;
 }
 
@@ -6336,7 +6358,7 @@ kbd {
   font-family: Typewriter;
   font-size: 1.1rem;
   font-weight: bold;
-  transition-duration: 0.12s;
+  transition-duration: 0.15s;
 }
 
 .c-laitela-singularity__cap-control:hover {
@@ -6361,6 +6383,12 @@ kbd {
   border-radius: .5rem;
   border: .2rem solid black;
   cursor: pointer;
+  transition-duration: 0.15s;
+}
+
+.o-laitela-singularity-modal-button:hover {
+  color: white;
+  background: black;
 }
 
 .c-laitela-next-milestones {
@@ -6794,7 +6822,7 @@ kbd {
   border-radius: 0.5rem;
   color: #d5ffd7;
   cursor: pointer;
-  transition-duration: 0.12s;
+  transition-duration: 0.15s;
   text-align: center;
   font-size: 1rem;
   font-family: Typewriter, serif;
@@ -7096,9 +7124,9 @@ input.o-automator-block-input {
 }
 
 .l-h2p-search-tab {
-  flex: 0.1 0 10rem;
   display: flex;
   flex-direction: column;
+  width: 15rem;
 }
 .l-h2p-info {
   flex: 1 1 50rem;
@@ -7137,7 +7165,7 @@ input.o-automator-block-input {
 }
 
 .c-h2p-search-bar {
-  font-size: 2rem;
+  font-size: 1.5rem;
   width: calc(100% - 1rem);
   padding: 0.2rem;
 }
@@ -7165,6 +7193,16 @@ input.o-automator-block-input {
   cursor: pointer;
   border-bottom: 0.1rem solid black;
   padding: 0.3rem 0.5rem 0.3rem 0;
+  transition: font-size 0.2s;
+}
+
+.o-h2p-tab-button:hover {
+  color: white;
+  text-shadow:
+    0.1rem 0.1rem 0.1rem black,
+    -0.1rem -0.1rem 0.1rem black,
+    -0.1rem 0.1rem 0.1rem black,
+    0.1rem -0.1rem 0.1rem black;
 }
 
 .t-dark .o-h2p-tab-button,
@@ -7174,7 +7212,13 @@ input.o-automator-block-input {
 }
 
 .o-h2p-tab-button--selected {
-  color: aqua;
+  font-size: 1.5rem;
+  color: white;
+  text-shadow:
+    0.1rem 0.1rem 0.1rem black,
+    -0.1rem -0.1rem 0.1rem black,
+    -0.1rem 0.1rem 0.1rem black,
+    0.1rem -0.1rem 0.1rem black;
 }
 
 .l-help-me {

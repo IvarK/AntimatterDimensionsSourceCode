@@ -30,6 +30,11 @@ Vue.component("singularity-milestone", {
     milestoneProgressStyles() {
       if (this.isMaxed) return { background: "#38ca38", width: "100%" };
       return { width: this.progressToNext };
+    },
+    completionsDisplay() {
+      return (this.limit === 0)
+        ? `${this.completions} ${pluralize("completion", this.completions)}`
+        : `${this.completions}/${this.limit} ${pluralize("completion", this.completions)}`;
     }
   },
   template: `
@@ -46,7 +51,7 @@ Vue.component("singularity-milestone", {
             <span v-if="!isUnique && !isMaxed">-> {{ nextEffectDisplay }}</span>
         </b>
         <div class="c-laitela-milestone__completions">
-            {{ completions }}/{{ limit === 0 ? "∞" : limit }} completions
+            {{ completionsDisplay }}
         </div>
     </div>
     `

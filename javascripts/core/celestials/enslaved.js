@@ -298,10 +298,11 @@ const Tesseracts = {
   }()),
 
   increases: (function() {
-    const increases = [500e3, 500e3, 1e6];
-    for (let i = 0; i < 32; i++) {
-      increases.push(2 * increases[i + 2]);
+    const increases = [];
+    for (let i = 0; i < 34; i++) {
+      increases.push(500e3 * Math.pow(2, i));
     }
+    increases.unshift(500e3);
     return increases;
   }())
 };

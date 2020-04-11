@@ -40,7 +40,8 @@ Vue.component("autobuyer-box", {
       globalToggle: false,
       canBeBought: false,
       antimatterCost: new Decimal(0),
-      isBought: false
+      isBought: false,
+      antimatter: new Decimal(0)
     };
   },
   watch: {
@@ -57,6 +58,7 @@ Vue.component("autobuyer-box", {
       this.canBeBought = this.autobuyer.canBeBought;
       this.antimatterCost = this.autobuyer.antimatterCost;
       this.isBought = this.autobuyer.isBought;
+      this.antimatter.copyFrom(player.antimatter);
     },
     toggle() {
       if (!this.globalToggle) return;
@@ -64,6 +66,16 @@ Vue.component("autobuyer-box", {
     },
     purchase() {
       this.autobuyer.purchase();
+    }
+  },
+  computed: {
+    canBuy() {
+      return this.antimatter.gte(this.antimatterCost);
+    },
+    autobuyerBuyBoxClass() {
+      return {
+        "c-autobuyer-buy-box--purchaseable": this.canBuy
+      };
     }
   },
   template:
@@ -84,7 +96,7 @@ Vue.component("autobuyer-box", {
           />
         </div>
       </div>
-      <div v-else-if="canBeBought" @click="purchase" class="c-autobuyer-buy-box">
+      <div v-else-if="canBeBought" @click="purchase" class="c-autobuyer-buy-box" :class="autobuyerBuyBoxClass">
         Buy the {{ name }} for {{ format(antimatterCost) }} antimatter
       </div>
     </div>`

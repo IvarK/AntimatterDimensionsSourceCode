@@ -7194,7 +7194,6 @@ input.o-automator-block-input {
 .fa, .far, .fas {
   font-family: "Font Awesome 5 Free" !important;
 }
-<<<<<<< HEAD
 
 @keyframes opacity {
   0% { opacity: 0; }
@@ -7212,11 +7211,12 @@ input.o-automator-block-input {
   width: 100%;
   height: 100%;
   background: gold;
-  animation: opacity 5s infinite;
+  animation: opacity 3s infinite;
   top: 0;
   left: 0;
   border-radius: inherit;
-=======
+}
+
 .o-celestial-nav__hoverable .tooltiptext  { display: none; }
 .o-celestial-nav__hoverable:hover .tooltiptext,
 .o-celestial-nav__force-hover .tooltiptext { display: block; }
@@ -7368,5 +7368,4 @@ input.o-automator-block-input {
 .c-autobuyer-buy-box--purchaseable {
   background: #91da91;
   cursor: pointer;
->>>>>>> d23db8aa985956dc0368c4ff5188322e613ac05b
 }

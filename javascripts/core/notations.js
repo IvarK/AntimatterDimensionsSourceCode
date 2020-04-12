@@ -38,10 +38,10 @@ const Notation = (function() {
   };
 }());
 
-Notation.cancer.setAsCurrent = () => {
+Notation.cancer.setAsCurrent = (silent = false) => {
   player.options.notation = Notation.cancer.name;
   ui.notationName = Notation.cancer.name;
-  GameUI.notify.success("😂😂😂");
+  if (!silent) GameUI.notify.success("😂😂😂");
 };
 
 const Notations = {

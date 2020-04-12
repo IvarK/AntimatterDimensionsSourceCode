@@ -621,6 +621,10 @@ GameStorage.devMigrations = {
       delete player.celestials.enslaved.maxQuotes;
       delete player.celestials.v.quoteIdx;
       delete player.celestials.ra.quoteIdx;
+    },
+    player => {
+      player.celestials.enslaved.totalDimCapIncrease = 0;
+      player.celestials.enslaved.tesseracts = 0;
     }
   ],
 

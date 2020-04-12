@@ -19,6 +19,7 @@ Vue.component("black-hole-unlock-button", {
     },
     unlock() {
       BlackHoles.unlock();
+      this.$emit("blackholeunlock");
     }
   },
   template: `

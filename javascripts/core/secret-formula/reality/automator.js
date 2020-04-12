@@ -284,5 +284,16 @@ GameDatabase.reality.automator = {
         "studies nowait ec6Studies",
       ]
     },
+    {
+      id: 15,
+      keyword: "define",
+      name: "<b>define</b> - defining constants",
+      syntax: `<b>define [constant_name] = [constant]</b>`,
+      description: `Define constants for either numbers or study tree imports`,
+      examples: [
+        "define inf = 1e308",
+        "define studytree = 11,21,22,31,32,33"
+      ]
+    },
   ]
 };

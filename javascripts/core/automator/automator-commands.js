@@ -66,15 +66,28 @@ const AutomatorCommands = ((() => {
             return false;
           }
         }
+
+        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity && 
+          (ctx.duration || ctx.xLast) && !EternityMilestone.bigCrunchModes.isReached) {
+          V.addError((ctx.duration || ctx.xLast)[0],
+            "Advanced Infinity autobuyer settings not unlocked");
+          return false;
+        }
+
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity && 
           (ctx.duration || ctx.xLast) && !RealityUpgrade(13).isBought) {
           V.addError((ctx.duration || ctx.xLast)[0],
-            "Advanced eternity autobuyer settings not unlocked");
+            "Advanced Eternity autobuyer settings not unlocked");
           return false;
         }
 
         if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity && !EternityMilestone.autobuyerEternity.isReached) {
           V.addError(ctx.PrestigeEvent, "Eternity autobuyer not unlocked");
+          return false;
+        }
+
+        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity && !NormalChallenge(12).isCompleted) {
+          V.addError(ctx.PrestigeEvent, "Infinity autobuyer not unlocked");
           return false;
         }
 

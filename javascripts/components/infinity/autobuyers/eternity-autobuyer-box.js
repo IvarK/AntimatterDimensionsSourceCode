@@ -54,12 +54,12 @@ Vue.component("eternity-autobuyer-box", {
   },
   template:
     `<autobuyer-box :autobuyer="autobuyer" name="Automatic Eternity">
-      <div>
+      <template slot="intervalSlot">
         <select
           v-if="hasAdditionalModes"
           class="c-autobuyer-box__mode-select l-autobuyer-box__mode-select"
           @change="changeMode"
-        >
+          >
           <option
             v-for="optionMode in modes"
             :value="optionMode"
@@ -67,11 +67,13 @@ Vue.component("eternity-autobuyer-box", {
           >{{modeProps(optionMode).title}}</option>
         </select>
         <span v-else>{{modeProps(mode).title}}:</span>
+      </template>
+      <template slot="toggleSlot">
         <autobuyer-input
-         :autobuyer="autobuyer"
-         :key="mode"
-         v-bind="modeProps(mode).input"
+          :autobuyer="autobuyer"
+          :key="mode"
+          v-bind="modeProps(mode).input"
         />
-      </div>
+      </template>
     </autobuyer-box>`
 });

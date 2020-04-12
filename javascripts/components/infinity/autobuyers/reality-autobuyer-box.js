@@ -18,24 +18,24 @@ Vue.component("reality-autobuyer-box", {
   },
   template:
     `<autobuyer-box :autobuyer="autobuyer" name="Automatic Reality">
-      <div>
-        <span>Target reality machines:</span>
+      <template slot="intervalSlot">
+        <div>Target reality machines:</div>
         <autobuyer-input
          :autobuyer="autobuyer"
          type="decimal"
          property="rm"
         />
-      </div>
-      <div>
-        <span>Target glyph level:</span>
+      </template>
+      <template slot="toggleSlot">
+        <div>Target glyph level:</div>
         <autobuyer-input
          :autobuyer="autobuyer"
          type="int"
          property="glyph"
         />
-      </div>
-      <div v-if="isOverCap">
-        Autobuyer will trigger at the glyph level cap of {{formatInt(levelCap)}}.
-      </div>
+        <div v-if="isOverCap">
+          Autobuyer will trigger at the glyph level cap of {{formatInt(levelCap)}}.
+        </div>
+      </template>
     </autobuyer-box>`
 });

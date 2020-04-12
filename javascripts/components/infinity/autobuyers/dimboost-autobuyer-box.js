@@ -19,40 +19,40 @@ Vue.component("dimboost-autobuyer-box", {
   },
   template:
     `<autobuyer-box :autobuyer="autobuyer" :showInterval="!isBuyMaxUnlocked" name="Automatic DimBoosts">
-      <div v-if="isBuyMaxUnlocked">
-        <span>Buy max every X seconds:</span>
+      <template v-if="false" slot="intervalSlot">
+        <div>Buy max every X seconds:</div>
         <autobuyer-input
          :autobuyer="autobuyer"
          type="float"
          property="buyMaxInterval"
         />
-      </div>
+      </template>
       <template v-else>
-        <autobuyer-interval-button slot="beforeInterval" :autobuyer="autobuyer" />
-        <div>
-          <span class="c-autobuyer-box__small-text">Limit DimBoosts to:</span>
+        <autobuyer-interval-button slot="intervalSlot" :autobuyer="autobuyer" />
+        <template slot="toggleSlot">
+          <div class="c-autobuyer-box__small-text">Limit DimBoosts to:</div>
           <autobuyer-input
            :autobuyer="autobuyer"
            type="int"
            property="maxDimBoosts"
           />
-        </div>
-        <div>
-          <span class="c-autobuyer-box__small-text">Galaxies required to always DimBoost:</span>
+        </template>
+        <template slot="prioritySlot">
+          <div class="c-autobuyer-box__small-text">Galaxies required to always DimBoost:</div>
           <autobuyer-input
            :autobuyer="autobuyer"
            type="int"
            property="galaxies"
           />
-        </div>
-        <div v-if="isBulkBuyUnlocked">
-          <span class="c-autobuyer-box__small-text">Bulk DimBoost Amount:</span>
+        </template>
+        <template v-if="isBulkBuyUnlocked" slot="optionSlot">
+          <div class="c-autobuyer-box__small-text">Bulk DimBoost Amount:</div>
           <autobuyer-input
            :autobuyer="autobuyer"
            type="int"
            property="bulk"
           />
-        </div>
+        </template>
       </template>
     </autobuyer-box>`
 });

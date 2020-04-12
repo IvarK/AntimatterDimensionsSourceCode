@@ -79,25 +79,31 @@ Vue.component("autobuyer-box", {
     }
   },
   template:
-    `<div>
-      <div v-if="isUnlocked || isBought" class="c-autobuyer-box l-autobuyer-box">
-        <div class="l-autobuyer-box__header">{{name}}</div>
-        <slot name="beforeInterval" />
-        <interval-label v-if="showInterval" :autobuyer="autobuyer"/>
-        <div class="l-autobuyer-box__content">
-          <slot />
-        </div>
-        <div class="o-autobuyer-toggle-checkbox l-autobuyer-box__footer" @click="toggle">
-          <span class="o-autobuyer-toggle-checkbox__label">Is active:</span>
+    `<tr>
+      <div v-if="isUnlocked || isBought" class="l-autobuyer-box-row">
+        <td class="l-autobuyer-box__header">
+          {{name}}
+          <interval-label v-if="showInterval" :autobuyer="autobuyer"/>
+        </td>
+        <td class="c-autobuyer-box-row__intervalSlot"><slot name="intervalSlot" /></td>
+        <td class="c-autobuyer-box-row__toggleSlot"><slot name="toggleSlot" /></td>
+        <td class="c-autobuyer-box-row__prioritySlot"><slot name="prioritySlot" /></td>
+        <td class="c-autobuyer-box-row__optionSlot"><slot name="optionSlot" /></td>
+        <td class="l-autobuyer-box__footer" @click="toggle">
+          <label 
+            :for="name" 
+            class="o-autobuyer-toggle-checkbox__label" 
+            :class="{ 'o-autobuyer-toggle-checkbox__label--active': isActive && globalToggle }">Active</label>
           <input
             :checked="isActive && globalToggle"
             :disabled="!globalToggle"
+            :name="name"
             type="checkbox"
           />
-        </div>
+        </td>
       </div>
       <div v-else-if="canBeBought" @click="purchase" class="c-autobuyer-buy-box" :class="autobuyerBuyBoxClass">
         Buy the {{ name }} for {{ format(antimatterCost) }} antimatter
       </div>
-    </div>`
+    </tr>`
 });

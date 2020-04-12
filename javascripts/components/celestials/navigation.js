@@ -16,7 +16,7 @@ function cubicBezierArrayToPath(a, initialCommand = "M") {
 }
 
 /**
- * @param {object} d 
+ * @param {object} d
  * @param {number} d.rMajor
  * @param {number} [d.rMinor]
  * @param {number} [d.gapCenterDeg]
@@ -54,6 +54,11 @@ L ${c3 * d.rMinor + 1e-3 * s3} ${s3 * d.rMinor - 1e-3 * c3}
 A ${d.rMinor} ${d.rMinor} 0 ${big} 0 ${c2 * d.rMinor - 1e-3 * s2} ${s2 * d.rMinor + 1e-3 * c2}
 z`;
 }
+
+const CelestialNavigationViewportCache = {
+  pan: null,
+  zoom: null,
+};
 
 Vue.component("celestial-navigation", {
   components: {
@@ -352,15 +357,35 @@ Vue.component("celestial-navigation", {
     db: () => GameDatabase.celestials.navigation,
   },
   mounted() {
+    // eslint-disable-next-line no-unused-vars
+    const panLimiter = function(oldPan, newPan) {
+      // In the callback context, "this" is the svgPanZoom object.
+      // eslint-disable-next-line no-invalid-this
+      const sizes = this.getSizes();
+      const leftLimit = sizes.width - ((sizes.viewBox.x + sizes.viewBox.width) * sizes.realZoom);
+      const rightLimit = -sizes.viewBox.x * sizes.realZoom;
+      const topLimit = sizes.height - ((sizes.viewBox.y + sizes.viewBox.height) * sizes.realZoom);
+      const bottomLimit = -sizes.viewBox.y * sizes.realZoom;
+      return {
+        x: Math.max(leftLimit, Math.min(rightLimit, newPan.x)),
+        y: Math.max(topLimit, Math.min(bottomLimit, newPan.y))
+      };
+    };
     this.panZoom = svgPanZoom(this.$el, {
       controlIconsEnabled: true,
       dblClickZoomEnabled: false,
       center: false,
       fit: false,
+      minZoom: 0.64,
+      beforePan: panLimiter,
     });
+    if (CelestialNavigationViewportCache.pan) this.panZoom.pan(CelestialNavigationViewportCache.pan);
+    if (CelestialNavigationViewportCache.zoom) this.panZoom.zoom(CelestialNavigationViewportCache.zoom);
   },
   beforeDestroy() {
     if (this.panZoom) {
+      CelestialNavigationViewportCache.zoom = this.panZoom.getZoom();
+      CelestialNavigationViewportCache.pan = this.panZoom.getPan();
       this.panZoom.destroy();
       delete this.panZoom;
     }
@@ -377,6 +402,7 @@ Vue.component("celestial-navigation", {
   },
   template: `
 <svg height="600" width="960" class="l-celestial-navigation">
+  <image x="-250" y="-250" height="1503" width="1503" xlink:href="images/celestial-navigation-bg.svg" />
   <defs>
     <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:rgb(255,255,0);stop-opacity:1" />

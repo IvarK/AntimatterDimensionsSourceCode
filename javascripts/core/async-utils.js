@@ -55,7 +55,7 @@ const Async = {
       return config.then ? runResult.then(config.then) : runResult;
     }
     for (let i = 0; i < maxIter; ++i) {
-      fun();
+      fun(i);
     }
     if (config.then) config.then();
   },

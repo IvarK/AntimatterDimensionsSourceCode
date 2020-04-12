@@ -499,6 +499,7 @@ let player = {
     offlineProgress: true,
     showGlyphEffectDots: true,
     respecIntoProtected: false,
+    offlineTicks: 1000,
     showHintText: {
       achievements: false,
       challenges: false,

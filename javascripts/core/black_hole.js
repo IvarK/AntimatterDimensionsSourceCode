@@ -117,21 +117,21 @@ class BlackHoleState {
    * Amount of time the black hole is inactive for between activations.
    */
   get interval() {
-    return this.intervalUpgrade.value;
+    return this.intervalUpgrade.value * Achievement(145).effectValue;
   }
 
   /**
    * Multiplier to time the black hole gives when active.
    */
   get power() {
-    return this.powerUpgrade.value;
+    return this.powerUpgrade.value * Achievement(158).effectValue;
   }
 
   /**
    * Amount of time the black hole is active for.
    */
   get duration() {
-    return this.durationUpgrade.value;
+    return this.durationUpgrade.value * Achievement(155).effectValue;
   }
 
   get isUnlocked() {

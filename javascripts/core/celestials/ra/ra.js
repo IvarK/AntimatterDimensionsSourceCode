@@ -178,7 +178,7 @@ const Ra = {
     for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
   },
   productionPerMemoryChunk() {
-    let res = RA_UNLOCKS.TT_BOOST.effect.memories();
+    let res = RA_UNLOCKS.TT_BOOST.effect.memories() * Achievement(168).effectValue;
     for (const pet of Ra.pets.all) {
       if (pet.isUnlocked) res *= pet.memoryProductionMultiplier;
     }

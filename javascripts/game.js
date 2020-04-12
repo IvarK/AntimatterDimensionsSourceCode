@@ -83,7 +83,8 @@ function requiredIPForEP() {
 }
 
 function getRealityMachineMultiplier() {
-  return Teresa.rmMultiplier * Effects.max(1, PerkShopUpgrade.rmMult) * getAdjustedGlyphEffect("effarigrm");
+  return Teresa.rmMultiplier * Effects.max(1, PerkShopUpgrade.rmMult) *
+    getAdjustedGlyphEffect("effarigrm") * Achievement(167).effectValue;
 }
 
 function gainedRealityMachines() {
@@ -214,7 +215,8 @@ function gainedInfinities() {
     infGain = infGain.timesEffectsOf(
       TimeStudy(32),
       RealityUpgrade(5),
-      RealityUpgrade(7)
+      RealityUpgrade(7),
+      Achievement(164)
     );
     infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
     infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
@@ -416,6 +418,10 @@ function gameLoop(diff, options = {}) {
 
   slowerAutobuyers(realDiff);
   Autobuyers.tick();
+  
+  if (Achievement(165).isUnlocked && player.celestials.effarig.autoAdjustGlyphWeights) {
+    autoAdjustGlyphWeights();
+  }
 
   // We do these after autobuyers, since it's possible something there might
   // change a multiplier.

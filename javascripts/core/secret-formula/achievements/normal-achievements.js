@@ -942,7 +942,9 @@ GameDatabase.achievements.normal = [
     name: "Are you sure these are the right way around?",
     tooltip: "Have the Black Hole interval smaller than the duration.",
     checkRequirement: () => BlackHoles.list.some(bh => bh.interval < bh.duration),
-    checkEvent: GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT
+    checkEvent: GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT,
+    reward: "Black Hole intervals are 10% lower.",
+    effect: 0.9
   },
   {
     id: 146,
@@ -965,7 +967,9 @@ GameDatabase.achievements.normal = [
     tooltip: "Reality with one of each basic glyph type.",
     checkRequirement: () => BASIC_GLYPH_TYPES
       .every(type => Glyphs.activeList.some(g => g.type === type)),
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
+    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+    reward: "Gained glyph level is increased by number of distinct glyph types equipped.",
+    effect: () => (new Set(Glyphs.activeList.map(g => g.type))).size,
   },
   {
     id: 151,
@@ -988,28 +992,33 @@ GameDatabase.achievements.normal = [
     name: "Real hell",
     tooltip: "Reality without producing antimatter.",
     checkRequirement: () => player.noAntimatterProduced,
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
+    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
   },
   {
     id: 154,
     name: "I am speed",
     tooltip: () => `Reality in under ${formatInt(5)} seconds (game time).`,
     checkRequirement: () => Time.thisReality.totalSeconds <= 5,
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
+    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+    reward: "10% chance each reality of 2x Realities and perk points.",
+    effect: 0.1
   },
   {
     id: 155,
     name: "Achievement #15983",
     tooltip: "Play for 13.7 billion years.",
     checkRequirement: () => Time.totalTimePlayed.totalYears > 13.7e9,
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    reward: "Black Hole durations are 10% higher.",
+    effect: 1.1
   },
   {
     id: 156,
     name: "College Dropout",
     tooltip: "Reality without buying time theorems.",
     checkRequirement: () => player.noTheoremPurchases,
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
+    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+    reward: "Free coupon to McDonalds™️."
   },
   {
     id: 157,
@@ -1019,24 +1028,35 @@ GameDatabase.achievements.normal = [
       glyph => getGlyphEffectsFromBitmask(glyph.effects, 0, 0).filter(
         effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated).length
     ).max() >= 4,
-    checkEvent: GAME_EVENT.GLYPHS_CHANGED
+    checkEvent: GAME_EVENT.GLYPHS_CHANGED,
+    reward: "Gained glyph level is increased by number of distinct glyph effects equipped.",
+    effect: () => Effarig.glyphEffectAmount,
   },
   {
     id: 158,
     name: "Bruh, are you like, inside the hole?",
     tooltip: "Make both Black Holes permanent.",
     checkRequirement: () => BlackHole(1).isPermanent && BlackHole(2).isPermanent,
-    checkEvent: GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT
+    checkEvent: GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT,
+    reward: "Black Hole powers are 10% higher.",
+    effect: 1.1
   },
   {
     id: 161,
-    name: "Wait. That's illegal.",
-    tooltip: "Get all the time studies",
-    checkRequirement: () => player.timestudy.studies.length >= 58,
+    name: "Is it really a nerf?",
+    tooltip: () => `Get ${format("1e100000000", 0, 0)} antimatter while dilated.`,
+    checkRequirement: () => player.antimatter.gte("1e100000000") && player.dilation.active,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 162,
+    name: "Wait. That's illegal.",
+    tooltip: "Get all the time studies.",
+    checkRequirement: () => player.timestudy.studies.length >= 58,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 163,
     name: "Neither eternity nor challenging",
     tooltip: () => `Complete all the eternity challenges 5 times with less than ${formatInt(1)}
       second (game time) in your current Reality.`,
@@ -1044,50 +1064,112 @@ GameDatabase.achievements.normal = [
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
-    id: 163,
+    id: 164,
+    name: "Infinityception",
+    tooltip: () => `Get ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Infinities.`,
+    checkRequirement: () => player.infinitied.gte(Decimal.NUMBER_MAX_VALUE),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    reward: () => `Gain ${formatInt(1024)}x more Infinities`,
+    effect: 1024
+  },
+  {
+    id: 165,
     name: "Perfectly balanced",
     tooltip: () => `Get a level ${formatInt(5000)} glyph with all glyph level factors equally weighted.`,
     checkRequirement: () => gainedGlyphLevel().actualLevel >= 5000 &&
       ["repl", "dt", "eternities"].every(
         i => player.celestials.effarig.glyphWeights[i] === player.celestials.effarig.glyphWeights.ep),
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
-  },
-  {
-    id: 164,
-    name: "No more prestige layers!",
-    tooltip: () => `Reach ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} RM.`,
-    checkRequirement: () => player.reality.realityMachines.gte(Decimal.NUMBER_MAX_VALUE),
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER
-  },
-  {
-    id: 165,
-    name: "Woah, we're halfway there",
-    tooltip: () => `Get ${formatInt(50)} total Ra levels.`,
-    checkRequirement: () => Ra.totalPetLevel >= 50,
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+    reward: "Unlock optimal auto glyph level factor adjustment."
   },
   {
     id: 166,
-    name: "The god is delighted",
-    tooltip: "Sacrifice every sacrificable glyph type at least once.",
-    checkRequirement: () => Object.values(player.reality.glyphs.sac).every(s => s > 0),
-    checkEvent: GAME_EVENT.GLYPHS_CHANGED
+    name: "Nicenice",
+    tooltip: () => `Get a glyph with level exactly ${formatInt(6969)}.`,
+    checkRequirement: () => gainedGlyphLevel().actualLevel === 6969,
+    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
   },
   {
     id: 167,
+    name: "No more prestige layers!",
+    tooltip: () => `Reach ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} RM.`,
+    checkRequirement: () => player.reality.realityMachines.gte(Decimal.NUMBER_MAX_VALUE),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    reward: "Gain more RM based on your current RM",
+    effect: () => Math.clampMin(1, player.reality.realityMachines.log2())
+  },
+  {
+    id: 168,
+    name: "Woah, we're halfway there",
+    tooltip: () => `Get ${formatInt(50)} total Ra levels.`,
+    checkRequirement: () => Ra.totalPetLevel >= 50,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    reward: "Get 10% more memories",
+    effect: 1.1
+  },
+  {
+    id: 171,
+    name: "The god is delighted",
+    tooltip: "Sacrifice every sacrificable glyph type at least once.",
+    checkRequirement: () => Object.values(player.reality.glyphs.sac).every(s => s > 0),
+    checkEvent: GAME_EVENT.GLYPHS_CHANGED,
+    reward: () => `Glyph sacrifice is ${formatInt(2)}x stronger.`,
+    effect: 2,
+  },
+  {
+    id: 172,
     name: "What do I lose...",
     tooltip: () => `Reality for ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} RM without having
       any charged infinity upgrades, having any equipped glyphs, or buying any triad studies.`,
     checkRequirement: () => gainedRealityMachines().gte(Decimal.NUMBER_MAX_VALUE) &&
       player.celestials.ra.charged.size === 0 && Glyphs.activeList.length === 0 &&
       player.noTriadStudies,
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
+    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+    // Change when achievement title is changed (probably remove)
+    reward: "Pectoral cursed lepidoptera."
   },
   {
-    id: 168,
+    id: 173,
     name: "The last alkahistorian",
     tooltip: () => `Get ${formatInt(25000)} of all alchemy resources.`,
     checkRequirement: () => AlchemyResources.all.every(x => x.amount >= 25000),
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
+  },
+  {
+    id: 174,
+    name: "Not another black hole...",
+    tooltip: "Get a singularity.",
+    checkRequirement: () => true,
+    checkEvent: GAME_EVENT.SINGULARITY_RESET_BEFORE
+  },
+  {
+    id: 175,
+    name: "✈✈✈ ✈✈✈",
+    tooltip: () => `Get ${formatInt(100000)} Antimatter Galaxies.`,
+    checkRequirement: () => player.galaxies >= 100000,
+    checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
+    reward: "Galaxies are 1% stronger.",
+    effect: 1.01
+  },
+  {
+    id: 176,
+    name: "dummy achievement 1",
+    tooltip: "This one isn't implemented yet",
+    checkRequirement: () => false,
+    checkEvent: []
+  },
+  {
+    id: 177,
+    name: "dummy achievement 2",
+    tooltip: "Neither is this one.",
+    checkRequirement: () => false,
+    checkEvent: []
+  },
+  {
+    id: 178,
+    name: "dummy achievement 3",
+    tooltip: "And this last one isn't either.",
+    checkRequirement: () => false,
+    checkEvent: []
   },
 ];

@@ -126,11 +126,15 @@ const Singularity = {
   perform() {
     if (!this.capIsReached) return;
     const laitela = player.celestials.laitela;
+    
+    EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_BEFORE);
 
     laitela.darkEnergy = 0;
     laitela.singularities += this.singularitiesGained;
     laitela.singularityTime = 0;
     laitela.secondsSinceReachedSingularity = 0;
+    
+    EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_AFTER);
   },
 
   autobuyerLoop(diff) {

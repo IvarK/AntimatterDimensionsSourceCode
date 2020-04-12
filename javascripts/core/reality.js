@@ -248,12 +248,13 @@ function updateRealityRecords(realityProps) {
 
 function giveRealityRewards(realityProps) {
   const multiplier = realityProps.simulatedRealities + 1;
+  const realityAndPPMultiplier = multiplier * (fastRandom() < Achievement(154).effectValue ? 2 : 1);
   const gainedRM = realityProps.gainedRM;
   player.reality.realityMachines = player.reality.realityMachines.plus(gainedRM.times(multiplier));
   updateRealityRecords(realityProps);
   addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRM, realityProps.gainedGlyphLevel.actualLevel);
-  player.realities += multiplier;
-  player.reality.pp += multiplier;
+  player.realities += realityAndPPMultiplier;
+  player.reality.pp += realityAndPPMultiplier;
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
     player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
   }

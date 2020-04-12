@@ -368,6 +368,7 @@ let player = {
         dt: 25,
         eternities: 25
       },
+      autoAdjustGlyphWeights: false,
       glyphScoreSettings: {
         mode: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
         simpleEffectCount: 0,

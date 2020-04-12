@@ -623,6 +623,10 @@ GameStorage.devMigrations = {
       delete player.celestials.ra.quoteIdx;
     },
     player => {
+      player.celestials.enslaved.totalDimCapIncrease = 0;
+      player.celestials.enslaved.tesseracts = 0;
+    },
+    player => {
       delete player.reality.glyphs.sac.cursed;
       Achievement(153).lock();
       Achievement(157).lock();

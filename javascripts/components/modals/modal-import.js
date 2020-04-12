@@ -67,7 +67,7 @@ Vue.component("modal-import", {
       if (!this.inputIsValid) return;
       Modal.hide();
       GameStorage.import(this.input);
-    }
+    },
   },
   mounted() {
     this.$refs.input.select();

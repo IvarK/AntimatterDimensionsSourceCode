@@ -7362,6 +7362,7 @@ input.o-automator-block-input {
   margin: auto;
   border: 2px solid black;
   border-radius: 5px;
+  /* background: #1a1a1a; */
 }
 
 /* STD-shop */
@@ -7425,7 +7426,6 @@ input.o-automator-block-input {
 
 .c-autobuyer-buy-box {
   border: .2rem solid grey;
-  padding: 10rem 4rem;
   background: #c7c7c7;
   border-radius: .5rem;
   margin: .5rem;
@@ -7434,7 +7434,9 @@ input.o-automator-block-input {
   font-weight: bold;
   color: black;
   user-select: none;
-  min-height: 29.2rem;
+  height: 17.5rem;
+  display: flex;
+  align-items: center;
 }
 
 .c-autobuyer-buy-box--purchaseable {

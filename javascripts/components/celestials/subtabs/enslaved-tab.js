@@ -230,7 +230,7 @@ Vue.component("enslaved-tab", {
     startRun() {
       // This needs to be added here before the reset so that TD autobuyers don't buy too much on start
       player.celestials.enslaved.run = true;
-      resetReality();
+      if (!resetReality()) return;
       Enslaved.initializeRun();
     },
     hasUnlock(info) {

@@ -63,6 +63,12 @@ GameDatabase.tabs = [
         component: "statistics-tab"
       },
       {
+        name: "Multipliers",
+        id: "Multipliers",
+        symbol: "M",
+        component: "multipliers-tab",
+      },
+      {
         key: "challenges",
         name: "Challenge records",
         symbol: "<i class='fas fa-stopwatch'></i>",

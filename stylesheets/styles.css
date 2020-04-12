@@ -7415,3 +7415,18 @@ input.o-automator-block-input {
   background: #91da91;
   cursor: pointer;
 }
+
+.multiplier-tab {
+  user-select: none;
+}
+
+.multiplier-tab .total {
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.multiplier-tab .title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}

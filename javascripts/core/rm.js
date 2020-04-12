@@ -1094,9 +1094,9 @@ function estimatedAlchemyCap() {
 }
 
 function autoAdjustGlyphWeights() {
-  let sources = getGlyphLevelSources();
-  let f = x => Math.pow(Math.clampMin(1, Math.log(5 * x)), 3 / 2);
-  let totalWeight = Object.values(sources).map(f).sum();
+  const sources = getGlyphLevelSources();
+  const f = x => Math.pow(Math.clampMin(1, Math.log(5 * x)), 3 / 2);
+  const totalWeight = Object.values(sources).map(f).sum();
   player.celestials.effarig.glyphWeights.ep = 100 * f(sources.epBase) / totalWeight;
   player.celestials.effarig.glyphWeights.repl = 100 * f(sources.replBase) / totalWeight;
   player.celestials.effarig.glyphWeights.dt = 100 * f(sources.dtBase) / totalWeight;
@@ -1116,11 +1116,11 @@ function getGlyphLevelSources() {
   const replBase = Math.pow(Math.max(1, player.replicanti.amount.log10()), replPow) * 0.02514867;
   const dtBase = Math.pow(Math.max(1, player.dilation.dilatedTime.pLog10()), 1.3) * 0.02514867;
   const eterBase = Effects.max(1, RealityUpgrade(18));
-  return {epBase, replBase, dtBase, eterBase}
+  return { epBase, replBase, dtBase, eterBase };
 }
 
 function getGlyphLevelInputs() {
-  const {epBase, replBase, dtBase, eterBase} = getGlyphLevelSources();
+  const { epBase, replBase, dtBase, eterBase } = getGlyphLevelSources();
   // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
   // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
   // If n1..n4 just add up to 4, then the optimal strategy is to just max out the one over the

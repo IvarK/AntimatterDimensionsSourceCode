@@ -624,8 +624,8 @@ GameStorage.devMigrations = {
     },
     player => {
       delete player.reality.glyphs.sac.cursed;
-      // Remove achievements r153 and r157
-      player.achievementBits[14] &= ~68;
+      Achievement(153).lock();
+      Achievement(157).lock();
     }
   ],
 

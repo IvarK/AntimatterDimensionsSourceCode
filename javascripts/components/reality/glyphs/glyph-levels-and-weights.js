@@ -62,7 +62,7 @@ Vue.component("glyph-levels-and-weights", {
         this.penaltyVisible);
     },
     adjustOutlineStyle() {
-      let rows = 5 + (this.showAutoAdjustWeights ? 1 : 0);
+      const rows = 5 + (this.showAutoAdjustWeights ? 1 : 0);
       return `grid-row: 1 / ${rows + 1}; -ms-grid-row: 1; -ms-grid-row-span: ${rows};`;
     },
     formatPerkShop() {

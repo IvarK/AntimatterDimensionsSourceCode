@@ -376,7 +376,9 @@ Vue.component("celestial-navigation", {
       dblClickZoomEnabled: false,
       center: false,
       fit: false,
+      zoomScaleSensitivity: 0.3,
       minZoom: 0.64,
+      maxZoom: 3,
       beforePan: panLimiter,
     });
     if (CelestialNavigationViewportCache.pan) this.panZoom.pan(CelestialNavigationViewportCache.pan);
@@ -402,7 +404,7 @@ Vue.component("celestial-navigation", {
   },
   template: `
 <svg height="600" width="960" class="l-celestial-navigation">
-  <image x="-250" y="-250" height="1503" width="1503" xlink:href="images/celestial-navigation-bg.svg" />
+  <image x="-250" y="-250" height="1503" width="1503" href="images/celestial-navigation-bg.png" />
   <defs>
     <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:rgb(255,255,0);stop-opacity:1" />

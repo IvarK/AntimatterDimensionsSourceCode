@@ -19,16 +19,16 @@ Vue.component("autobuyers-tab", {
           <dimboost-autobuyer-box />
           <galaxy-autobuyer-box />
           <big-crunch-autobuyer-box />
+          <div v-if="!hasContinuum">
+            <dimension-autobuyer-box v-for="tier in 8" :key="tier" :tier="tier"/>
+            <tickspeed-autobuyer-box />
+          </div>
+          <sacrifice-autobuyer-box />
           <template v-if="hasContinuum">
             Continuum makes Normal Dimension and tickspeed autobuyers obsolete, 
             as you now automatically have a certain amount of simulated Normal Dimension 
             and tickspeed purchases based on your antimatter.
           </template>
-          <div v-else>
-            <dimension-autobuyer-box v-for="tier in 8" :key="tier" :tier="tier"/>
-          </div>
-          <tickspeed-autobuyer-box />
-          <sacrifice-autobuyer-box />
         </tbody>
       </table>
     </div>`

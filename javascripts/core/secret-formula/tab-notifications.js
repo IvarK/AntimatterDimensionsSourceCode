@@ -67,19 +67,6 @@ GameDatabase.tabNotifications = {
       !PlayerProgress.eternityUnlocked(),
     events: [GAME_EVENT.ETERNITY_RESET_BEFORE]
   },
-  dilationUnlock: {
-    tabsToHighLight: [
-      {
-        parent: "eternity",
-        tab: "studies"
-      }
-    ],
-    condition: () => !PlayerProgress.realityUnlocked() && 
-      player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()).gte(13000) && 
-      EternityChallenge(11).isFullyCompleted && EternityChallenge(12).isFullyCompleted &&
-      !TimeStudy.dilation.isBought,
-    events: [GAME_EVENT.GAME_TICK_AFTER]
-  },
   dilationAfterUnlock: {
     tabsToHighLight: [
       {

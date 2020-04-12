@@ -97,7 +97,7 @@ GameDatabase.tabNotifications = {
       }
     ],
     condition: () => player.reality.realityMachines.gte(100),
-    events: [GAME_EVENT.GAME_TICK_AFTER]
+    events: [GAME_EVENT.REALITY_RESET_AFTER]
   },
   automatorUnlock: {
     tabsToHighLight: [

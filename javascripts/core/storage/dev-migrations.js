@@ -625,7 +625,10 @@ GameStorage.devMigrations = {
     player => {
       player.celestials.enslaved.totalDimCapIncrease = 0;
       player.celestials.enslaved.tesseracts = 0;
-    }
+    },
+    player => {
+      delete player.auto.galaxy.buyMax;
+    },
   ],
 
   patch(player) {

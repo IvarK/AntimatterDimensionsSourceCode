@@ -61,7 +61,7 @@ Vue.component("big-crunch-autobuyer-box", {
         <template slot="intervalSlot">
           <select
             v-if="hasAdditionalModes"
-            class="c-autobuyer-box__mode-select l-autobuyer-box__mode-select"
+            class="c-autobuyer-box__mode-select"
             @change="changeMode"
           >
             <option

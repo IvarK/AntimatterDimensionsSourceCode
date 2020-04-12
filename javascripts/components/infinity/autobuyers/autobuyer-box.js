@@ -76,34 +76,39 @@ Vue.component("autobuyer-box", {
       return {
         "c-autobuyer-buy-box--purchaseable": this.canBuy
       };
+    },
+    autobuyerToggleClass() {
+      return this.isActive ? "fas fa-play" : "fas fa-pause";
     }
   },
   template:
-    `<tr>
+    `<div>
       <div v-if="isUnlocked || isBought" class="l-autobuyer-box-row">
-        <td class="l-autobuyer-box__header">
+        <div class="l-autobuyer-box__header">
           {{name}}
           <interval-label v-if="showInterval" :autobuyer="autobuyer"/>
-        </td>
-        <td class="c-autobuyer-box-row__intervalSlot"><slot name="intervalSlot" /></td>
-        <td class="c-autobuyer-box-row__toggleSlot"><slot name="toggleSlot" /></td>
-        <td class="c-autobuyer-box-row__prioritySlot"><slot name="prioritySlot" /></td>
-        <td class="c-autobuyer-box-row__optionSlot"><slot name="optionSlot" /></td>
-        <td class="l-autobuyer-box__footer" @click="toggle">
+        </div>
+        <div class="c-autobuyer-box-row__intervalSlot"><slot name="intervalSlot" /></div>
+        <div class="c-autobuyer-box-row__toggleSlot"><slot name="toggleSlot" /></div>
+        <div class="c-autobuyer-box-row__prioritySlot"><slot name="prioritySlot" /></div>
+        <div class="c-autobuyer-box-row__optionSlot"><slot name="optionSlot" /></div>
+        <div class="l-autobuyer-box__footer" @click="toggle">
           <label 
             :for="name" 
             class="o-autobuyer-toggle-checkbox__label" 
-            :class="{ 'o-autobuyer-toggle-checkbox__label--active': isActive && globalToggle }">Active</label>
+            :class="{ 'o-autobuyer-toggle-checkbox__label--active': isActive && globalToggle }">
+            <span :class="autobuyerToggleClass"></span>
+          </label>
           <input
             :checked="isActive && globalToggle"
             :disabled="!globalToggle"
             :name="name"
             type="checkbox"
           />
-        </td>
+        </div>
       </div>
       <div v-else-if="canBeBought" @click="purchase" class="c-autobuyer-buy-box" :class="autobuyerBuyBoxClass">
         Buy the {{ name }} for {{ format(antimatterCost) }} antimatter
       </div>
-    </tr>`
+    </div>`
 });

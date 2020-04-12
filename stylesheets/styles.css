@@ -3491,6 +3491,7 @@ screen and (max-width: 480px) {
   color: white;
   font-weight: bold;
   cursor: pointer;
+  user-select: none;
 }
 
 .l-autobuyer-box__footer input {

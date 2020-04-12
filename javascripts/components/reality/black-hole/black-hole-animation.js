@@ -226,7 +226,6 @@ const BlackHoleAnimation = (function() {
       for (const particle of this.particles) {
         particle.draw(this.context);
       }
-      this.planet.draw(this.context);
 
       if (BlackHoles.arePaused) return;
 

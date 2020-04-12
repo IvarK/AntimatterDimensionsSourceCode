@@ -25,7 +25,6 @@ const TabNotification = (function() {
     replicanti: new TabNotificationState(db.replicanti),
     breakInfinity: new TabNotificationState(db.breakInfinity),
     firstEternity: new TabNotificationState(db.firstEternity),
-    dilationUnlock: new TabNotificationState(db.dilationUnlock),
     dilationAfterUnlock: new TabNotificationState(db.dilationAfterUnlock),
     blackHoleUnlock: new TabNotificationState(db.blackHoleUnlock),
     automatorUnlock: new TabNotificationState(db.automatorUnlock)

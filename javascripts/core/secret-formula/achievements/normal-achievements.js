@@ -943,7 +943,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Have the Black Hole interval smaller than the duration.",
     checkRequirement: () => BlackHoles.list.some(bh => bh.interval < bh.duration),
     checkEvent: GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT,
-    reward: "Black Hole intervals are 10% lower.",
+    reward: "Black Hole intervals are 10% shorter.",
     effect: 0.9
   },
   {
@@ -1009,7 +1009,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Play for 13.7 billion years.",
     checkRequirement: () => Time.totalTimePlayed.totalYears > 13.7e9,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Black Hole durations are 10% higher.",
+    reward: "Black Hole durations are 10% longer.",
     effect: 1.1
   },
   {
@@ -1038,7 +1038,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Make both Black Holes permanent.",
     checkRequirement: () => BlackHole(1).isPermanent && BlackHole(2).isPermanent,
     checkEvent: GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT,
-    reward: "Black Hole powers are 10% higher.",
+    reward: "Black Hole power increased by 10%.",
     effect: 1.1
   },
   {

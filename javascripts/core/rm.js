@@ -1006,11 +1006,11 @@ const GlyphSacrificeHandler = {
   },
   glyphSacrificeGain(glyph) {
     if (!this.canSacrifice) return 0;
-    if (glyph.type === "reality") return 0.01 * glyph.level * Achievement(171).effectValue;
+    if (glyph.type === "reality") return 0.01 * glyph.level * Achievement(171).effectOrDefault(1);
     const pre10kFactor = Math.pow(Math.clampMax(glyph.level, 10000) + 10, 2.5);
     const post10kFactor = 1 + Math.clampMin(glyph.level - 10000, 0) / 100;
     return pre10kFactor * post10kFactor * glyph.strength *
-      Teresa.runRewardMultiplier * Achievement(171).effectValue;
+      Teresa.runRewardMultiplier * Achievement(171).effectOrDefault(1);
   },
   sacrificeGlyph(glyph, force = false) {
     if (glyph.type === "cursed") {

@@ -84,7 +84,7 @@ function requiredIPForEP() {
 
 function getRealityMachineMultiplier() {
   return Teresa.rmMultiplier * Effects.max(1, PerkShopUpgrade.rmMult) *
-    getAdjustedGlyphEffect("effarigrm") * Achievement(167).effectValue;
+    getAdjustedGlyphEffect("effarigrm") * Achievement(167).effectOrDefault(1);
 }
 
 function gainedRealityMachines() {
@@ -677,7 +677,7 @@ function updateFreeGalaxies() {
 function getTTPerSecond() {
   // All TT multipliers (note that this is equal to 1 pre-Ra)
   let ttMult = RA_UNLOCKS.TT_BOOST.effect.ttGen();
-  ttMult *= Achievement(137).effectValue;
+  ttMult *= Achievement(137).effectOrDefault(1);
   if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttMult *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 

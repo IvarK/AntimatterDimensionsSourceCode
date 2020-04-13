@@ -248,7 +248,7 @@ function updateRealityRecords(realityProps) {
 
 function giveRealityRewards(realityProps) {
   const multiplier = realityProps.simulatedRealities + 1;
-  const realityAndPPMultiplier = multiplier * (fastRandom() < Achievement(154).effectValue ? 2 : 1);
+  const realityAndPPMultiplier = multiplier * (fastRandom() < Achievement(154).effectOrDefault(0) ? 2 : 1);
   const gainedRM = realityProps.gainedRM;
   player.reality.realityMachines = player.reality.realityMachines.plus(gainedRM.times(multiplier));
   updateRealityRecords(realityProps);

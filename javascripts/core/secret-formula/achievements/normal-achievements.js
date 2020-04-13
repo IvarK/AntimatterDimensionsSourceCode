@@ -111,7 +111,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Buy a single 1st Dimension when you have over ${format(1e150)} of them.`,
     checkRequirement: () => NormalDimension(1).amount.exponent >= 150,
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
-    reward: () => `1th Dimensions are ${formatPercents(0.1)} stronger.`,
+    reward: () => `1st Dimensions are ${formatPercents(0.1)} stronger.`,
     effect: 1.1
   },
   {

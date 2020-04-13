@@ -87,7 +87,10 @@ function getRealityMachineMultiplier() {
 }
 
 function gainedRealityMachines() {
-  const log10FinalEP = player.eternityPoints.plus(gainedEternityPoints()).log10();
+  let log10FinalEP = player.eternityPoints.plus(gainedEternityPoints()).log10();
+  if (player.realities === 0 && log10FinalEP > 6000 && player.saveOverThresholdFlag) {
+    log10FinalEP -= (log10FinalEP - 6000) * 0.75;
+  }
   let rmGain = Decimal.pow(1000, log10FinalEP / 4000 - 1);
   // Increase base RM gain if <10 RM
   if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);

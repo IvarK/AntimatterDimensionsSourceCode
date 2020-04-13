@@ -74,7 +74,7 @@ GameDatabase.achievements.normal = [
     name: "The 9th Dimension is a lie",
     tooltip: () => `Have exactly ${formatInt(99)} 8th Dimensions.`,
     checkRequirement: () => NormalDimension(8).amount.eq(99),
-    reward: "8th Dimensions are 10% stronger.",
+    reward: () => `8th Dimensions are ${formatPercents(0.1)} stronger.`,
     effect: 1.1
   },
   {
@@ -111,7 +111,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Buy a single 1st Dimension when you have over ${format(1e150)} of them.`,
     checkRequirement: () => NormalDimension(1).amount.exponent >= 150,
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
-    reward: "1st Dimensions are 10% stronger.",
+    reward: () => `1th Dimensions are ${formatPercents(0.1)} stronger.`,
     effect: 1.1
   },
   {
@@ -120,7 +120,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get any Dimension multiplier over ${format(1e31)}.`,
     checkRequirement: () => NormalDimensions.all.find(x => x.multiplier.exponent >= 31) !== undefined,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "1st Dimensions are 5% stronger.",
+    reward: () => `1st Dimensions are ${formatPercents(0.05)} stronger.`,
     effect: 1.05
   },
   {
@@ -145,7 +145,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Go Infinite without having any 8th Dimensions.",
     checkRequirement: () => NormalDimension(8).amount.eq(0),
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: "Dimensions 1-7 are 2% stronger.",
+    reward: () => `Dimensions 1-7 are ${formatPercents(0.02)} stronger.`,
     effect: 1.02
   },
   {
@@ -161,7 +161,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Go Infinite with just ${formatInt(1)} Antimatter Galaxy.`,
     checkRequirement: () => player.galaxies === 1,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: "Reduces starting tick interval by 2%.",
+    reward: () => `Reduces starting tick interval by ${formatPercents(0.02)}.`,
     effect: 0.98
   },
   {
@@ -202,7 +202,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Get to Infinity without Dimension shifts, boosts or Antimatter Galaxies in a challenge.",
     checkRequirement: () => player.galaxies === 0 && DimBoost.purchasedBoosts === 0 && NormalChallenge.isRunning,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: "Dimensions 1-4 are 25% stronger.",
+    reward: () => `Dimensions 1-4 are ${formatPercents(0.25)} stronger.`,
     effect: 1.25
   },
   {
@@ -220,7 +220,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get more than ${format(1e29)} ticks per second.`,
     checkRequirement: () => Tickspeed.current.exponent <= -26,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Reduces starting tick interval by 2%.",
+    reward: () => `Reduces starting tick interval by ${formatPercents(0.02)}.`,
     effect: 0.98
   },
   {
@@ -243,7 +243,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Complete all the challenges.",
     checkRequirement: () => NormalChallenges.all.countWhere(c => !c.isCompleted) === 0,
     checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
-    reward: "All Dimensions are 10% stronger.",
+    reward: () => `All Dimensions are ${formatPercents(0.1)} stronger.`,
     effect: 1.1
   },
   {
@@ -313,7 +313,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Complete the Tickspeed Autobuyer challenge in ${formatInt(3)} minutes or less.`,
     checkRequirement: () => NormalChallenge(9).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: () => `Boost per buying ${formatInt(10)} Dimensions +1%.`,
+    reward: () => `Boost per buying ${formatInt(10)} Dimensions +${formatPercents(0.01)}.`,
     effect: 1.01
   },
   {
@@ -362,7 +362,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get more than ${format(1e58, 0, 0)} ticks per second.`,
     checkRequirement: () => Tickspeed.current.exponent <= -55,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Reduces starting tick interval by 2%.",
+    reward: () => `Reduces starting tick interval by ${formatPercents(0.02)}.`,
     effect: 0.98
   },
   {
@@ -378,7 +378,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Complete the Third Dimension Autobuyer challenge in ${formatInt(10)} seconds or less.`,
     checkRequirement: () => NormalChallenge(3).isRunning && Time.thisInfinityRealTime.totalSeconds <= 10,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: "1st Dimensions are 50% stronger.",
+    reward: () => `1st Dimensions are ${formatPercents(0.5)} stronger.`,
     effect: 1.5
   },
   {
@@ -402,7 +402,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Array.range(1, 8)
       .every(tier => NormalDimension(tier).multiplier.exponent >= 308),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "All Dimensions are 10% stronger.",
+    reward: () => `All Dimensions are ${formatPercents(0.1)} stronger.`,
     effect: 1.1
   },
   {
@@ -420,7 +420,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get the sum of all best challenge times under ${formatInt(5)} seconds.`,
     checkRequirement: () => Time.challengeSum.totalSeconds < 5,
     checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER],
-    reward: "All Dimensions are 40% stronger, but only in challenges.",
+    reward: () => `All Dimensions are ${formatPercents(0.4)} stronger, but only in challenges.`,
     effect: 1.4,
     effectCondition: () => NormalChallenge.isRunning || InfinityChallenge.isRunning
   },
@@ -454,7 +454,8 @@ GameDatabase.achievements.normal = [
       return true;
     },
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Each Dimension gains a boost proportional to tier (8th dimension gets 8%, 7th gets 7%, etc.)",
+    reward: () => "Each Dimension gains a boost proportional to tier " +
+      `(8th dimension gets ${formatPercents(0.08)}, 7th gets ${formatPercents(0.07)}, etc.)`,
   },
   {
     id: 78,
@@ -492,7 +493,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get ${formatInt(50)} Antimatter Galaxies.`,
     checkRequirement: () => player.galaxies >= 50,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
-    reward: "Tickspeed is 5% lower per Antimatter Galaxy.",
+    reward: () => `Tickspeed is ${formatPercents(0.05)} lower per Antimatter Galaxy.`,
     effect: () => Decimal.pow(0.95, player.galaxies)
   },
   {
@@ -519,7 +520,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Reach -${formatPercents(0.999, 1)} tickspeed per upgrade.`,
     checkRequirement: () => getTickSpeedMultiplier().lt(0.001),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Galaxies are 1% stronger.",
+    reward: () => `Galaxies are ${formatPercents(0.01)} stronger.`,
     effect: 1.01
   },
   {
@@ -619,7 +620,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Bulk buy ${formatInt(750)} Dimension Boosts at once.`,
     checkRequirement: ([bulk]) => bulk >= 750,
     checkEvent: GAME_EVENT.DIMBOOST_AFTER,
-    reward: "Dimension Boosts are 1% stronger (to Normal Dimensions).",
+    reward: () => `Dimension Boosts are ${formatPercents(0.01)} stronger (to Normal Dimensions).`,
     effect: 1.01
   },
   {
@@ -826,7 +827,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get ${format(5e9)} banked Infinities.`,
     checkRequirement: () => player.infinitiedBank.gt(5e9),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-    reward: "After Eternity you permanently keep 5% of your Infinities.",
+    reward: () => `After Eternity you permanently keep ${formatPercents(0.05)} of your Infinities.`,
     effect: () => player.infinitied.times(0.05).floor()
   },
   {
@@ -914,7 +915,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Unlock the automator.",
     checkRequirement: () => player.realities >= 5,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
-    reward: "Dimension Boosts are 50% stronger.",
+    reward: () => `Dimension Boosts are ${formatPercents(0.5)} stronger.`,
     effect: 1.5,
   },
   {
@@ -943,7 +944,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Have the Black Hole interval smaller than the duration.",
     checkRequirement: () => BlackHoles.list.some(bh => bh.interval < bh.duration),
     checkEvent: GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT,
-    reward: "Black Hole intervals are 10% shorter.",
+    reward: () => `Black Hole intervals are ${formatPercents(0.1)} shorter.`,
     effect: 0.9
   },
   {
@@ -1000,16 +1001,16 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Reality in under ${formatInt(5)} seconds (game time).`,
     checkRequirement: () => Time.thisReality.totalSeconds <= 5,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    reward: "10% chance each reality of 2x Realities and perk points.",
+    reward: () => `${formatPercents(0.1)} chance each reality of ${formatInt(2)}x Realities and perk points.`,
     effect: 0.1
   },
   {
     id: 155,
     name: "Achievement #15983",
-    tooltip: "Play for 13.7 billion years.",
+    tooltip: () => `Play for ${format(13.7e9, 2, 2)} years.`,
     checkRequirement: () => Time.totalTimePlayed.totalYears > 13.7e9,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Black Hole durations are 10% longer.",
+    reward: () => `Black Hole durations are ${formatPercents(0.1)} longer.`,
     effect: 1.1
   },
   {
@@ -1038,7 +1039,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Make both Black Holes permanent.",
     checkRequirement: () => BlackHole(1).isPermanent && BlackHole(2).isPermanent,
     checkEvent: GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT,
-    reward: "Black Hole power increased by 10%.",
+    reward: () => `Black Hole power increased by ${formatPercents(0.1)}.`,
     effect: 1.1
   },
   {
@@ -1069,7 +1070,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Infinities.`,
     checkRequirement: () => player.infinitied.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: () => `Gain ${formatInt(1024)}x more Infinities`,
+    reward: () => `Gain ${formatInt(1024)}x more Infinities.`,
     effect: 1024
   },
   {
@@ -1104,7 +1105,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get ${formatInt(50)} total Ra levels.`,
     checkRequirement: () => Ra.totalPetLevel >= 50,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Get 10% more memories",
+    reward: () => `Get ${formatPercents(0.1)} more memories`,
     effect: 1.1
   },
   {
@@ -1146,7 +1147,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get ${formatInt(100000)} Antimatter Galaxies.`,
     checkRequirement: () => player.galaxies >= 100000,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
-    reward: "Galaxies are 1% stronger.",
+    reward: () => `Galaxies are ${formatPercents(0.01)} stronger.`,
     effect: 1.01
   },
   {

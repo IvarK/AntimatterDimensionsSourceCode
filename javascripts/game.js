@@ -783,7 +783,6 @@ function simulateTime(seconds, real, fast) {
   // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
     loopFn = i => {
-      console.log(i)
       const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
         i, 0.0001);
       remainingRealSeconds -= realTickTime;

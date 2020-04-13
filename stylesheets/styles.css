@@ -3652,6 +3652,7 @@ screen and (max-width: 480px) {
   border-radius: .5rem;
   margin: .5rem;
   padding: 1rem;
+  width: 90rem;
 }
 
 .l-autobuyer-box__header {
@@ -7447,20 +7448,30 @@ input.o-automator-block-input {
 }
 
 .c-autobuyer-buy-box {
-  border: .2rem solid grey;
-  padding: 10rem 4rem;
-  background: #c7c7c7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 6.4rem;
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: var(--color-text);
+  background-color: var(--color-disabled);
+  border: 0.2rem solid var(--color-bad);
+  transition-duration: 0.2s;
   border-radius: .5rem;
   margin: .5rem;
-  width: 23.5rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: black;
-  user-select: none;
-  min-height: 29.2rem;
+  padding: 1rem;
+  width: 90rem;
+  cursor: default;
+}
+
+.c-autobuyer-buy-box--purchaseable:hover {
+  color: #FFF;
+  background-color: var(--color-good);
 }
 
 .c-autobuyer-buy-box--purchaseable {
-  background: #91da91;
+  background-color: var(--color-base);
+  border-color: var(--color-good);
   cursor: pointer;
 }

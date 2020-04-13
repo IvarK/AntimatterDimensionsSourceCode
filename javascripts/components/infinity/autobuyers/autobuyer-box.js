@@ -82,33 +82,31 @@ Vue.component("autobuyer-box", {
     }
   },
   template:
-    `<div>
-      <div v-if="isUnlocked || isBought" class="l-autobuyer-box-row">
-        <div class="l-autobuyer-box__header">
-          {{name}}
-          <interval-label v-if="showInterval" :autobuyer="autobuyer"/>
-        </div>
-        <div class="c-autobuyer-box-row__intervalSlot"><slot name="intervalSlot" /></div>
-        <div class="c-autobuyer-box-row__toggleSlot"><slot name="toggleSlot" /></div>
-        <div class="c-autobuyer-box-row__prioritySlot"><slot name="prioritySlot" /></div>
-        <div class="c-autobuyer-box-row__optionSlot"><slot name="optionSlot" /></div>
-        <div class="l-autobuyer-box__footer" @click="toggle">
-          <label 
-            :for="name" 
-            class="o-autobuyer-toggle-checkbox__label" 
-            :class="{ 'o-autobuyer-toggle-checkbox__label--active': isActive && globalToggle }">
-            <span :class="autobuyerToggleClass"></span>
-          </label>
-          <input
-            :checked="isActive && globalToggle"
-            :disabled="!globalToggle"
-            :name="name"
-            type="checkbox"
-          />
-        </div>
+    `<div v-if="isUnlocked || isBought" class="l-autobuyer-box-row">
+      <div class="l-autobuyer-box__header">
+        {{name}}
+        <interval-label v-if="showInterval" :autobuyer="autobuyer"/>
       </div>
-      <div v-else-if="canBeBought" @click="purchase" class="c-autobuyer-buy-box" :class="autobuyerBuyBoxClass">
-        Buy the {{ name }} for {{ format(antimatterCost) }} antimatter
+      <div class="c-autobuyer-box-row__intervalSlot"><slot name="intervalSlot" /></div>
+      <div class="c-autobuyer-box-row__toggleSlot"><slot name="toggleSlot" /></div>
+      <div class="c-autobuyer-box-row__prioritySlot"><slot name="prioritySlot" /></div>
+      <div class="c-autobuyer-box-row__optionSlot"><slot name="optionSlot" /></div>
+      <div class="l-autobuyer-box__footer" @click="toggle">
+        <label 
+          :for="name" 
+          class="o-autobuyer-toggle-checkbox__label" 
+          :class="{ 'o-autobuyer-toggle-checkbox__label--active': isActive && globalToggle }">
+          <span :class="autobuyerToggleClass"></span>
+        </label>
+        <input
+          :checked="isActive && globalToggle"
+          :disabled="!globalToggle"
+          :name="name"
+          type="checkbox"
+        />
       </div>
+    </div>
+    <div v-else-if="canBeBought" @click="purchase" class="c-autobuyer-buy-box" :class="autobuyerBuyBoxClass">
+      Buy the {{ name }} for {{ format(antimatterCost) }} antimatter
     </div>`
 });

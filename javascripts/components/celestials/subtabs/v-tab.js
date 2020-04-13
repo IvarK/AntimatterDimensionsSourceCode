@@ -43,7 +43,7 @@ Vue.component("v-tab", {
       this.isFlipped = V.isFlipped;
     },
     startRun() {
-      resetReality();
+      if (!resetReality()) return;
       V.initializeRun();
     },
     has(info) {

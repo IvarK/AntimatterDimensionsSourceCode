@@ -480,6 +480,7 @@ let player = {
       autoAnnihilationTimer: 0
     }
   },
+  tabNotifications: new Set(),
   tutorialState: 0,
   tutorialActive: true,
   options: {

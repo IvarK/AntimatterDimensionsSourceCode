@@ -50,7 +50,7 @@ Vue.component("teresa-tab", {
       this.rm.copyFrom(player.reality.realityMachines);
     },
     startRun() {
-      resetReality();
+      if (!resetReality()) return;
       Teresa.initializeRun();
     },
     unlockDescriptionStyle(unlockInfo) {

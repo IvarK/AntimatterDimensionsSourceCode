@@ -1059,9 +1059,10 @@ GameDatabase.achievements.normal = [
   {
     id: 163,
     name: "Actually, super easy! Barely an inconvenience!",
-    tooltip: () => `Complete all the Eternity Challenges 5 times with less than ${formatInt(1)}
+    tooltip: () => `Complete all the Eternity Challenges ${formatInt(5)} times with less than ${formatInt(1)}
       second (game time) in your current Reality.`,
-    checkRequirement: () => EternityChallenges.completions >= 60 && Time.thisReality.totalSeconds <= 1,
+    checkRequirement: () => EternityChallenges.all.map(ec => ec.completions).min() >= 5 &&
+      Time.thisReality.totalSeconds <= 1,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {

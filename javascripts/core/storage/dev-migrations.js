@@ -634,6 +634,11 @@ GameStorage.devMigrations = {
       Achievement(153).lock();
       Achievement(157).lock();
     },
+    player => {
+      // Return all PP spent on old V goal reduction
+      player.reality.pp += player.celestials.v.ppSpent;
+      delete player.celestials.v.ppSpent;
+    }
   ],
 
   patch(player) {

@@ -36,8 +36,9 @@ GameDatabase.celestials.v = {
       condition: () => V.isRunning,
       currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies,
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.floor(300 * V.tierReduction),
+      shardReduction: tiers => Math.floor(300 * tiers),
       maxShardReduction: goal => goal - 4000,
+      perReductionStep: 3,
       mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
@@ -48,8 +49,9 @@ GameDatabase.celestials.v = {
       condition: () => V.isRunning && EternityChallenge(7).isRunning,
       currentValue: () => player.infinityPoints.log10(),
       formatRecord: x => format(Decimal.pow10(x), 2),
-      shardReduction: () => 1.2e5 * V.tierReduction,
+      shardReduction: tiers => 1.2e5 * tiers,
       maxShardReduction: goal => goal - 6e5,
+      perReductionStep: Decimal.pow10(1200),
       mode: V_REDUCTION_MODE.DIVISION
     },
     {
@@ -61,8 +63,9 @@ GameDatabase.celestials.v = {
       condition: () => V.isRunning && EternityChallenge(12).isRunning && !PlayerProgress.dilationUnlocked(),
       currentValue: () => player.antimatter.log10(),
       formatRecord: x => format(Decimal.pow10(x)),
-      shardReduction: () => 50e6 * V.tierReduction,
+      shardReduction: tiers => 50e6 * tiers,
       maxShardReduction: goal => goal - 400e6,
+      perReductionStep: Decimal.pow10(5e5),
       mode: V_REDUCTION_MODE.DIVISION
     },
     {
@@ -73,8 +76,9 @@ GameDatabase.celestials.v = {
       condition: () => V.isRunning,
       currentValue: () => player.eternityPoints.log10(),
       formatRecord: x => format(Decimal.pow10(x), 2),
-      shardReduction: () => 600 * V.tierReduction,
+      shardReduction: tiers => 600 * tiers,
       maxShardReduction: goal => goal - 7000,
+      perReductionStep: 6,
       mode: V_REDUCTION_MODE.DIVISION
     },
     {
@@ -85,9 +89,10 @@ GameDatabase.celestials.v = {
       condition: () => V.isRunning && player.dilation.active && EternityChallenge(5).isRunning,
       currentValue: () => DimBoost.purchasedBoosts,
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.floor(V.tierReduction),
+      shardReduction: tiers => Math.floor(tiers),
       maxShardReduction: () => 4,
-      nextReduction: x => 200000 * x,
+      reductionStepSize: 100,
+      perReductionStep: 1,
       mode: V_REDUCTION_MODE.SUBTRACTION
     },
     {
@@ -118,8 +123,10 @@ GameDatabase.celestials.v = {
         ? -Math.log10(player.minNegativeBlackHoleThisReality)
         : 0),
       formatRecord: x => `1 / ${format(Math.pow(10, x))}`,
-      shardReduction: () => 50 * V.tierReduction,
+      shardReduction: tiers => 50 * tiers,
       maxShardReduction: goal => goal - 25,
+      reductionStepSize: 2,
+      perReductionStep: 1e10,
       mode: V_REDUCTION_MODE.DIVISION,
       isHard: true
     },
@@ -131,8 +138,9 @@ GameDatabase.celestials.v = {
       condition: () => V.isRunning,
       currentValue: () => gainedGlyphLevel().actualLevel,
       formatRecord: x => formatInt(x),
-      shardReduction: () => Math.floor(500 * V.tierReduction),
+      shardReduction: tiers => Math.floor(500 * tiers),
       maxShardReduction: () => 500,
+      perReductionStep: 5,
       mode: V_REDUCTION_MODE.SUBTRACTION,
       isHard: true
     }

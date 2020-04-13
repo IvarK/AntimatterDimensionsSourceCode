@@ -989,7 +989,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 153,
-    name: "Real hell",
+    name: "Antimatter really doesn't matter",
     tooltip: "Reality without producing antimatter.",
     checkRequirement: () => player.noAntimatterProduced,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
@@ -1130,7 +1130,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 173,
-    name: "The last alkahistorian",
+    name: "The first antihistorian",
     tooltip: () => `Get ${formatInt(25000)} of all alchemy resources.`,
     checkRequirement: () => AlchemyResources.all.every(x => x.amount >= 25000),
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
@@ -1144,7 +1144,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 175,
-    name: "✈✈✈ ✈✈✈",
+    name: "Destroyer of Worlds",
     tooltip: () => `Get ${formatInt(100000)} Antimatter Galaxies.`,
     checkRequirement: () => player.galaxies >= 100000,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,

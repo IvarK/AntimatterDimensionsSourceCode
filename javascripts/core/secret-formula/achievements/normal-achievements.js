@@ -989,7 +989,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 153,
-    name: "Antimatter really doesn't matter",
+    name: "More like \"reallydoesn'tmatter\"",
     tooltip: "Reality without producing antimatter.",
     checkRequirement: () => player.noAntimatterProduced,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
@@ -1043,29 +1043,29 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 161,
-    name: "Is it really a nerf?",
-    tooltip: () => `Get ${format("1e100000000", 0, 0)} antimatter while dilated.`,
+    name: "that's where you're wrong kiddo",
+    tooltip: () => `Get ${format("1e100000000", 0, 0)} antimatter while Dilated.`,
     checkRequirement: () => player.antimatter.gte("1e100000000") && player.dilation.active,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 162,
-    name: "Wait. That's illegal.",
-    tooltip: "Get all the time studies.",
+    name: "Reinstalled the game and rejoined the server",
+    tooltip: "Have every Time Study at once.",
     checkRequirement: () => player.timestudy.studies.length >= 58,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 163,
-    name: "Neither eternity nor challenging",
-    tooltip: () => `Complete all the eternity challenges 5 times with less than ${formatInt(1)}
+    name: "Actually, super easy! Barely an inconvenience!",
+    tooltip: () => `Complete all the Eternity Challenges 5 times with less than ${formatInt(1)}
       second (game time) in your current Reality.`,
     checkRequirement: () => EternityChallenges.completions >= 60 && Time.thisReality.totalSeconds <= 1,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 164,
-    name: "Infinityception",
+    name: "Infinity times two",
     tooltip: () => `Get ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Infinities.`,
     checkRequirement: () => player.infinitied.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -1084,14 +1084,14 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 166,
-    name: "Nicenice",
+    name: "Nicenice.",
     tooltip: () => `Get a glyph with level exactly ${formatInt(6969)}.`,
     checkRequirement: () => gainedGlyphLevel().actualLevel === 6969,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
   },
   {
     id: 167,
-    name: "No more prestige layers!",
+    name: "Mr. Layer? Sorry, you're not on the list",
     tooltip: () => `Reach ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} RM.`,
     checkRequirement: () => player.reality.realityMachines.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -1118,26 +1118,24 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 172,
-    name: "What do I lose...",
+    name: "Hitchhiker's Guide to Reality",
     tooltip: () => `Reality for ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} RM without having
-      any charged infinity upgrades, having any equipped glyphs, or buying any triad studies.`,
+      any charged Infinity Upgrades, having any equipped glyphs, or buying any Triad Studies.`,
     checkRequirement: () => gainedRealityMachines().gte(Decimal.NUMBER_MAX_VALUE) &&
       player.celestials.ra.charged.size === 0 && Glyphs.activeList.length === 0 &&
       player.noTriadStudies,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    // Change when achievement title is changed (probably remove)
-    reward: "Pectoral cursed lepidoptera."
   },
   {
     id: 173,
-    name: "The first antihistorian",
+    name: "The First Antihistorian",
     tooltip: () => `Get ${formatInt(25000)} of all alchemy resources.`,
     checkRequirement: () => AlchemyResources.all.every(x => x.amount >= 25000),
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {
     id: 174,
-    name: "Not another black hole...",
+    name: "Don't you already have two of these?",
     tooltip: "Get a singularity.",
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.SINGULARITY_RESET_BEFORE

@@ -482,6 +482,7 @@ let player = {
   tabNotifications: new Set(),
   tutorialState: 0,
   tutorialActive: true,
+  saveOverThresholdFlag: false,
   options: {
     news: true,
     notation: "Mixed scientific",

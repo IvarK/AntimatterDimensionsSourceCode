@@ -746,9 +746,8 @@ function afterSimulation(seconds, playerStart) {
 }
 
 function simulateTime(seconds, real, fast) {
-  // Don't do asynchronous processing loops nested in simulateTime
-
-  // The game is simulated at a base 50ms update rate, with a max of 1000 ticks. additional ticks are converted
+  // The game is simulated at a base 50ms update rate, with a max of 
+  // player.options.offlineTicks ticks. additional ticks are converted
   // into a higher diff per tick
   // warning: do not call this function with real unless you know what you're doing
   // calling it with fast will only simulate it with a max of 50 ticks
@@ -765,14 +764,14 @@ function simulateTime(seconds, real, fast) {
 
   const playerStart = deepmerge.all([{}, player]);
 
-  player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * player.options.offlineTicks));
-  player.eternities = player.eternities.plus(getEternitiedMilestoneReward(seconds * player.options.offlineTicks));
-  player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * player.options.offlineTicks));
+  player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * 1000));
+  player.eternities = player.eternities.plus(getEternitiedMilestoneReward(seconds * 1000));
+  player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
 
   if (InfinityUpgrade.ipOffline.isBought) {
     player.infinityPoints = player.infinityPoints
       .plus(player.bestIpPerMsWithoutMaxAll
-        .times(seconds * player.options.offlineTicks / 2)
+        .times(seconds * 1000 / 2)
       );
   }
 
@@ -784,10 +783,11 @@ function simulateTime(seconds, real, fast) {
   // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
     loopFn = i => {
+      console.log(i)
       const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
-        ticks - i, 0.0001);
+        i, 0.0001);
       remainingRealSeconds -= realTickTime;
-      gameLoop(player.options.offlineTicks * realTickTime, { blackHoleSpeedup });
+      gameLoop(1000 * realTickTime, { blackHoleSpeedup });
     };
   }
 

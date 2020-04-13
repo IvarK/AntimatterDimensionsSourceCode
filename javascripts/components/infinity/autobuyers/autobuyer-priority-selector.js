@@ -21,7 +21,7 @@ Vue.component("autobuyer-priority-selector", {
   },
   template:
     `<div>
-      <span>Priority:</span>
+      <div>Priority:</div>
       <select @change="handleChange">
         <option v-for="i in 9" :value="i" :selected="i === value">{{i}}</option>
       </select>

@@ -3423,6 +3423,11 @@ screen and (max-width: 480px) {
   align-items: center;
 }
 
+.l-autobuyers-tab td {
+  padding: 0;
+  text-align: center;
+}
+
 .l-autobuyers-tab__toggles {
   margin-top: 1.5rem;
 }
@@ -3459,7 +3464,6 @@ screen and (max-width: 480px) {
   border: .01rem solid #c2c2c2;
   padding: 0.3rem;
   height: 2.5rem;
-  width: 20rem;
   box-sizing: border-box;
 }
 
@@ -3486,7 +3490,33 @@ screen and (max-width: 480px) {
 }
 
 .o-autobuyer-toggle-checkbox__label {
-  font-size: 0.9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--color-bad);
+  font-size: 1rem;
+  height: 2rem;
+  width: 2rem;
+  border: 0.2rem solid #383232;
+  border-top-right-radius: 0.3rem;
+  border-bottom-left-radius: 1rem;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition-duration: 0.2s;
+}
+
+.o-autobuyer-toggle-checkbox__label:hover {
+  transform: scale(1.1) translate(-0.1rem, 0.1rem);
+}
+
+.l-autobuyer-box__footer input {
+  display: none;
+}
+
+.o-autobuyer-toggle-checkbox__label--active {
+  background: var(--color-good);
 }
 
 /*#endregion o-autobuyer-toggle-checkbox*/
@@ -3494,7 +3524,7 @@ screen and (max-width: 480px) {
 /*#region o-autobuyer-btn*/
 
 .o-autobuyer-btn {
-  width: 18rem;
+  width: 16rem;
   height: 3.5rem;
   color: white;
   background: #1f1f1f;
@@ -3604,7 +3634,6 @@ screen and (max-width: 480px) {
   text-align: center;
   text-align-last: center;
   height: 2.5rem;
-  width: 20rem;
 }
 
 .l-autobuyer-box {
@@ -3614,8 +3643,32 @@ screen and (max-width: 480px) {
   margin: 0.5rem 0.8rem;
 }
 
+.l-autobuyer-box-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border: .2rem solid #383232;
+  border-radius: .5rem;
+  margin: .5rem;
+  padding: 1rem;
+  width: 90rem;
+}
+
 .l-autobuyer-box__header {
-  height: 1.6rem;
+  width: 25%;
+}
+
+.c-autobuyer-box-row__intervalSlot {
+  width: 25%;
+}
+
+.c-autobuyer-box-row__toggleSlot {
+  width: 25%;
+}
+
+.c-autobuyer-box-row__prioritySlot {
+  width: 25%;
 }
 
 .l-autobuyer-box__content {
@@ -3627,15 +3680,14 @@ screen and (max-width: 480px) {
 }
 
 .l-autobuyer-box__footer {
-  height: 1.6rem;
+  position: absolute;
+  top: -0.2rem;
+  right: 1.8rem;
+  width: 0%;
 }
 
 .l-autobuyer-box__button {
   flex-shrink: 0;
-}
-
-.l-autobuyer-box__mode-select {
-  margin-bottom: 0.5rem
 }
 
 .l-autobuyer-box__fill {
@@ -7397,21 +7449,30 @@ input.o-automator-block-input {
 }
 
 .c-autobuyer-buy-box {
-  border: .2rem solid grey;
-  background: #c7c7c7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 6.4rem;
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: var(--color-text);
+  background-color: var(--color-disabled);
+  border: 0.2rem solid var(--color-bad);
+  transition-duration: 0.2s;
   border-radius: .5rem;
   margin: .5rem;
-  width: 23.5rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: black;
-  user-select: none;
-  height: 17.5rem;
-  display: flex;
-  align-items: center;
+  padding: 1rem;
+  width: 90rem;
+  cursor: default;
+}
+
+.c-autobuyer-buy-box--purchaseable:hover {
+  color: #FFF;
+  background-color: var(--color-good);
 }
 
 .c-autobuyer-buy-box--purchaseable {
-  background: #91da91;
+  background-color: var(--color-base);
+  border-color: var(--color-good);
   cursor: pointer;
 }

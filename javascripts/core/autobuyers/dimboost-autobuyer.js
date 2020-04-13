@@ -13,6 +13,14 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends IntervaledAutobuye
     return Player.defaultStart.auto.dimBoost.interval;
   }
 
+  get limitDimBoosts() {
+    return this.data.limitDimBoosts;
+  }
+
+  set limitDimBoosts(value) {
+    this.data.limitDimBoosts = value;
+  }
+
   get maxDimBoosts() {
     return this.data.maxDimBoosts;
   }
@@ -70,8 +78,9 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends IntervaledAutobuye
       return;
     }
 
+    const limit = this.limitDimBoosts ? this.maxDimBoosts : Number.MAX_VALUE;
     const bulk = (this.isBulkBuyUnlocked && !DimBoost.isShift) ? Math.clampMin(this.bulk, 1) : 1;
-    const isConditionSatisfied = DimBoost.purchasedBoosts + bulk <= this.maxDimBoosts ||
+    const isConditionSatisfied = DimBoost.purchasedBoosts + bulk <= limit ||
       player.galaxies >= this.galaxies;
     if (!isConditionSatisfied || !DimBoost.bulkRequirement(bulk).isSatisfied) return;
     softReset(bulk);

@@ -6826,6 +6826,27 @@ kbd {
   }
 }
 
+@keyframes a-reality-glyph-dot-cycle {
+  0% {
+    background: #b67f33;
+  }
+  20% {
+    background: #64dd17;
+  }
+  40% {
+    background: #22aa48;
+  }
+  60% {
+    background: #03a9f4;
+  }
+  80% {
+    background: #b241e3;
+  }
+  100% {
+    background: #b67f33;
+  }
+}
+
 .l-reality-button-column {
   display: flex;
   flex-direction: column;

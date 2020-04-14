@@ -513,11 +513,12 @@ Vue.component("glyph-component", {
       const dy = scale * (Math.cos(angle) + 0.15);
       return {
         position: "absolute",
-        width: "0.4rem",
-        height: "0.4rem",
-        "background-image":
-          `radial-gradient(${this.glyph.color || getRarity(this.glyph.strength).color}, rgba(0, 0, 0, 1))`,
+        width: "0.3rem",
+        height: "0.3rem",
+        "border-radius": "50%",
+        background: `${this.glyph.color || getRarity(this.glyph.strength).color}`,
         transform: `translate(${dx}rem, ${dy}rem)`,
+        animation: this.glyph.type === "reality" ? "a-reality-glyph-dot-cycle 10s infinite" : "none",
       };
     }
   },

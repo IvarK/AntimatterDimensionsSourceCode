@@ -701,7 +701,7 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: false,
     glyphTypes: ["reality"],
     singleDesc: "Multiplier from first row reality upgrades ^{value}",
-    totalDesc: " ",
+    totalDesc: "First-row reality upgrade multiplier ^{value}",
     effect: level => 1 + level / 125000,
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.addExponents,

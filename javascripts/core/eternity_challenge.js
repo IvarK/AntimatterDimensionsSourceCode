@@ -14,8 +14,6 @@ function startEternityChallenge() {
   player.bestIPminThisInfinity = new Decimal(0);
   player.bestEPminThisEternity = new Decimal(0);
   resetTimeDimensions();
-  // FIXME: Eternity count is now a Decimal, also why is this submitted twice?
-  // kong.submitStats("Eternities", player.eternities);
   resetTickspeed();
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;

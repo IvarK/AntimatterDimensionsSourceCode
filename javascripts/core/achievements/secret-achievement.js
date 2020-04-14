@@ -40,7 +40,6 @@ class SecretAchievementState extends GameMechanicState {
     // eslint-disable-next-line no-bitwise
     player.secretAchievementBits[this.row - 1] |= this._bitmask;
     GameUI.notify.success(this.name);
-    kong.submitAchievements();
     EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
   }
 
@@ -62,7 +61,3 @@ const SecretAchievements = {
    */
   all: SecretAchievement.index.compact()
 };
-
-setInterval(() => {
-  if (Math.random() < 0.00001) SecretAchievement(18).unlock();
-}, 1000);

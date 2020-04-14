@@ -82,6 +82,7 @@ let player = {
     dimBoost: {
       cost: 1,
       interval: 8000,
+      limitDimBoosts: true,
       maxDimBoosts: 1,
       galaxies: 10,
       bulk: 1,
@@ -501,6 +502,7 @@ let player = {
     offlineProgress: true,
     showGlyphEffectDots: true,
     respecIntoProtected: false,
+    offlineTicks: 1000,
     showHintText: {
       achievements: false,
       challenges: false,

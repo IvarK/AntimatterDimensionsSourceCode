@@ -5,16 +5,12 @@ Vue.component("galaxy-autobuyer-box", {
     return {
       limitGalaxies: false,
       isBuyMaxUnlocked: false,
-      buyMax: false,
-      showInterval: false
+      buyMax: false
     };
   },
   watch: {
     limitGalaxies(newValue) {
       this.autobuyer.limitGalaxies = newValue;
-    },
-    buyMax(newValue) {
-      this.autobuyer.buyMax = newValue;
     }
   },
   computed: {
@@ -24,14 +20,20 @@ Vue.component("galaxy-autobuyer-box", {
     update() {
       this.isBuyMaxUnlocked = this.autobuyer.isBuyMaxUnlocked;
       this.limitGalaxies = this.autobuyer.limitGalaxies;
-      this.buyMax = this.autobuyer.buyMax;
-      this.showInterval = !this.autobuyer.isBuyMaxActive;
     }
   },
   template:
-    `<autobuyer-box :autobuyer="autobuyer" :showInterval="showInterval" name="Automatic Galaxies">
-      <autobuyer-interval-button slot="beforeInterval" :autobuyer="autobuyer" />
-      <div>
+    `<autobuyer-box :autobuyer="autobuyer" name="Automatic Galaxies">
+      <autobuyer-interval-button slot="intervalSlot" :autobuyer="autobuyer" />
+      <template v-if="isBuyMaxUnlocked" slot="intervalSlot">
+        <div>Activates every X seconds:</div>
+        <autobuyer-input
+        :autobuyer="autobuyer"
+        type="float"
+        property="buyMaxInterval"
+        />
+      </template>
+      <template :slot=" isBuyMaxUnlocked ? 'toggleSlot' : 'intervalSlot' ">
         <div class="o-autobuyer-toggle-checkbox" @click="limitGalaxies = !limitGalaxies">
           <input type="checkbox" :checked="limitGalaxies"/>
           <span>Limit galaxies to:</span>
@@ -41,18 +43,6 @@ Vue.component("galaxy-autobuyer-box", {
          type="int"
          property="maxGalaxies"
         />
-      </div>
-      <div v-if="isBuyMaxUnlocked">
-        <div class="o-autobuyer-toggle-checkbox" @click="buyMax = !buyMax">
-          <input type="checkbox" :checked="buyMax"/>
-          <span>Buy max</span>
-        </div>
-        <span>Activates every x seconds:</span>
-        <autobuyer-input
-         :autobuyer="autobuyer"
-         type="float"
-         property="buyMaxInterval"
-        />
-      </div>
+      </template>
     </autobuyer-box>`
 });

@@ -19,7 +19,7 @@ const Async = {
     const t0 = Date.now();
     for (let remaining = maxIter; remaining > 0;) {
       for (let j = 0; j < Math.min(remaining, batchSize); ++j) {
-        fun();
+        fun(remaining);
         --remaining;
       }
       if (Date.now() - t0 >= maxTime) return remaining;
@@ -55,7 +55,7 @@ const Async = {
       return config.then ? runResult.then(config.then) : runResult;
     }
     for (let i = 0; i < maxIter; ++i) {
-      fun();
+      fun(i);
     }
     if (config.then) config.then();
   },

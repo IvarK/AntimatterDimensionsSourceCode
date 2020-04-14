@@ -627,10 +627,13 @@ GameStorage.devMigrations = {
       player.celestials.enslaved.tesseracts = 0;
     },
     player => {
+      delete player.auto.galaxy.buyMax;
+    },
+    player => {
       delete player.reality.glyphs.sac.cursed;
       Achievement(153).lock();
       Achievement(157).lock();
-    }
+    },
   ],
 
   patch(player) {

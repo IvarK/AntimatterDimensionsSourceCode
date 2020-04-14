@@ -629,6 +629,11 @@ GameStorage.devMigrations = {
     player => {
       delete player.auto.galaxy.buyMax;
     },
+    player => {
+      delete player.reality.glyphs.sac.cursed;
+      Achievement(153).lock();
+      Achievement(157).lock();
+    },
   ],
 
   patch(player) {

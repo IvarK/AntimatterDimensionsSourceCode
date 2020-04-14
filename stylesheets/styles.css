@@ -2399,8 +2399,8 @@ screen and (max-width: 480px) {
 /*#region o-achievement*/
 
 .o-achievement {
-  width: 10.4rem;
-  height: 10.4rem;
+  width: 10.6rem;
+  height: 10.6rem;
   border-radius: 0.8rem;
   margin: 0 auto;
   text-align: center;
@@ -6599,13 +6599,23 @@ kbd {
   z-index: 2;
 }
 
+.l-glyph-levels-and-weights__adjust-auto {
+  grid-column: 4;
+  -ms-grid-column: 4;
+  -ms-grid-column-span: 2;
+  grid-row: 6;
+  -ms-grid-row: 6;
+  white-space: nowrap;
+  font-weight: bold;
+  padding: 0.25em 0 .25em 1em;
+  z-index: 2;
+}
+
 .l-glyph-levels-and-weights__adjust-outline {
   grid-column: 4 / 5;
   -ms-grid-column: 4;
   -ms-grid-column-span: 1;
-  grid-row: 1 / 6;
   -ms-grid-row: 1;
-  -ms-grid-row-span: 5;
   position:relative;
 }
 
@@ -6692,7 +6702,7 @@ kbd {
 
 .l-glyph-levels-and-weights__reset-btn {
   display: inline-block;
-  padding: 0.2rem 0.5rem 0.2rem 0.5rem;
+  padding: 0.2rem 0.5rem;
 }
 
 .c-glyph-levels-and-weights__reset-btn {
@@ -6703,6 +6713,24 @@ kbd {
 }
 
 .c-glyph-levels-and-weights__reset-btn:hover {
+  color: black;
+  background-color: #d5ffd7;
+}
+
+.l-glyph-levels-and-weights__auto-btn {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  font-size: 10px;
+}
+
+.c-glyph-levels-and-weights__auto-btn {
+  color: #d5ffd7;
+  background-color: black;
+  border-radius: 0.5rem;
+  border: 0.1rem solid #d5ffd7;
+}
+
+.c-glyph-levels-and-weights__auto-btn:hover {
   color: black;
   background-color: #d5ffd7;
 }

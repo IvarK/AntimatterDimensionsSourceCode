@@ -33,7 +33,9 @@ function getTickSpeedMultiplier() {
         InfinityUpgrade.galaxyBoost.chargedEffect,
         BreakInfinityUpgrade.galaxyBoost,
         TimeStudy(212),
+        TimeStudy(232),
         Achievement(86),
+        Achievement(175),
         InfinityChallenge(5).reward
       );
       return new Decimal(Math.max(0.01, baseMultiplier - (galaxies * perGalaxy)));
@@ -48,6 +50,7 @@ function getTickSpeedMultiplier() {
     TimeStudy(212),
     TimeStudy(232),
     Achievement(86),
+    Achievement(175),
     InfinityChallenge(5).reward
   );
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");

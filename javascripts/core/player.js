@@ -246,6 +246,8 @@ let player = {
   onlyFirstDimensions: true,
   noEighthDimensions: false,
   noFirstDimensions: false,
+  noAntimatterProduced: true,
+  noTriadStudies: true,
   noTheoremPurchases: true,
   noInfinitiesThisReality: true,
   noEternitiesThisReality: true,
@@ -282,8 +284,7 @@ let player = {
         replication: 0,
         dilation: 0,
         effarig: 0,
-        reality: 0,
-        cursed: 0
+        reality: 0
       },
       undo: [],
     },
@@ -368,6 +369,7 @@ let player = {
         dt: 25,
         eternities: 25
       },
+      autoAdjustGlyphWeights: false,
       glyphScoreSettings: {
         mode: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
         simpleEffectCount: 0,

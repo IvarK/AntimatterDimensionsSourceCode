@@ -144,6 +144,7 @@ function unlockDilation(quiet) {
   if (Ra.has(RA_UNLOCKS.START_TP) && !isInCelestialReality()) {
     player.dilation.tachyonParticles = getTP(RA_UNLOCKS.START_TP.effect());
   }
+  TabNotification.dilationAfterUnlock.tryTrigger();
 }
 
 function getSelectedDimensionStudyPaths() {
@@ -548,7 +549,6 @@ class DilationTimeStudyState extends TimeStudyState {
     if (this.id === 6 && !Perk.autounlockReality.isBought) {
       Tab.reality.glyphs.show();
     }
-    TabNotification.dilationAfterUnlock.tryTrigger();
     player.dilation.studies.push(this.id);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
     return true;

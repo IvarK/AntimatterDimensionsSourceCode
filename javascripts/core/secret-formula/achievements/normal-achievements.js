@@ -1097,7 +1097,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Reach ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} RM.`,
     checkRequirement: () => player.reality.realityMachines.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Gain more RM based on your current RM",
+    reward: "Gain more RM based on your current RM.",
     effect: () => Math.clampMin(1, player.reality.realityMachines.log2())
   },
   {
@@ -1106,7 +1106,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get ${formatInt(50)} total Ra levels.`,
     checkRequirement: () => Ra.totalPetLevel >= 50,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: () => `Get ${formatPercents(0.1)} more memories`,
+    reward: () => `Get ${formatPercents(0.1)} more memories.`,
     effect: 1.1
   },
   {
@@ -1154,7 +1154,7 @@ GameDatabase.achievements.normal = [
   {
     id: 176,
     name: "dummy achievement 1",
-    tooltip: "This one isn't implemented yet",
+    tooltip: "This one isn't implemented yet.",
     checkRequirement: () => false,
     checkEvent: []
   },

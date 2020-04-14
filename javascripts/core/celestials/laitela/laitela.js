@@ -47,8 +47,8 @@ const Laitela = {
     return "";
   },
   get matterExtraPurchaseFactor() {
-    return (1 + Math.pow(Decimal.pLog10(this.celestial.maxMatter) / Math.log10(Number.MAX_VALUE), 0.8)) * 
-      (1 + SingularityMilestone(1).effectValue);
+    return (1 + Math.pow(Decimal.pLog10(this.celestial.maxMatter) / 
+      Math.log10(Number.MAX_VALUE), 0.8) * (1 + SingularityMilestone(1).effectValue) / 2);
   },
   get realityReward() {
     return Math.clampMin(Math.pow(10, player.celestials.laitela.difficultyTier) *

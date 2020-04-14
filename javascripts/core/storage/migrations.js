@@ -337,6 +337,7 @@ GameStorage.migrations = {
     delete player.dead;
     player.onlyEighthDimensions = player.dimlife;
     delete player.dimlife;
+    if (player.totalAntimatter.gt(0)) player.noAntimatterProduced = false;
     if (
       player.timestudy.theorem.gt(0) ||
       player.timestudy.studies.length > 0 ||

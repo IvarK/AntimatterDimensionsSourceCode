@@ -6348,7 +6348,7 @@ kbd {
 
 .c-laitela-milestone__progress {
   position: absolute;
-  background: #a0dca0;
+  background: var(--color-good);
   top: 0;
   left: 0;
   height: 100%;

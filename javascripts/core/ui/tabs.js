@@ -79,6 +79,15 @@ class TabState {
     ui.view.tabs.reality.currentGlyphTooltip = -1;
     Modal.hide();
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
+
+    if (this.config.key === "reality" && 
+        player.saveOverThresholdFlag && 
+        !player.saveOverThresholdFlagModalDisplayed) {
+      Modal.message.show(`Your save seems to be over ${format(new Decimal("1e6000"))}EP, 
+        there has been nerfs past that in the update, so for the first reality your EP is less effective
+        past ${format(new Decimal("1e6000"))}EP`);
+      player.saveOverThresholdFlagModalDisplayed = true;
+    }
   }
 
   resetCurrentSubtab() {

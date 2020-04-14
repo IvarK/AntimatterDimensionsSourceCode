@@ -519,6 +519,7 @@ Vue.component("glyph-component", {
         background: `${this.glyph.color || getRarity(this.glyph.strength).color}`,
         transform: `translate(${dx}rem, ${dy}rem)`,
         animation: this.glyph.type === "reality" ? "a-reality-glyph-dot-cycle 10s infinite" : "none",
+        opacity: 0.8
       };
     }
   },

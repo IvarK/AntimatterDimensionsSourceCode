@@ -6355,6 +6355,10 @@ kbd {
   z-index: -1;
 }
 
+.l-singularity-milestone-modal-container .c-laitela-milestone--completed {
+  box-shadow: none;
+}
+
 .l-laitela-singularity-container {
   background: white;
   width: 70rem;

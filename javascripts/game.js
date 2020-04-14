@@ -691,54 +691,13 @@ function getTTPerSecond() {
   return dilationTT.add(glyphTT);
 }
 
-function simulateTime(seconds, real, fast) {
-  // Don't do asynchronous processing loops nested in simulateTime
-  Async.enabled = false;
+function recursiveTimeOut(fn, iterations, endFn) {
+  fn(iterations);
+  if (iterations === 0) endFn();
+  else setTimeout(() => recursiveTimeOut(fn, iterations - 1, endFn), 0);
+}
 
-  // The game is simulated at a base 50ms update rate, with a max of 1000 ticks. additional ticks are converted
-  // into a higher diff per tick
-  // warning: do not call this function with real unless you know what you're doing
-  // calling it with fast will only simulate it with a max of 50 ticks
-  let ticks = seconds * 20;
-  GameUI.notify.showBlackHoles = false;
-
-  // Limit the tick count (this also applies if the black hole is unlocked)
-  if (ticks > 1000 && !real && !fast) {
-    ticks = 1000;
-  } else if (ticks > 50 && fast) {
-    ticks = 50;
-  }
-  const largeDiff = (1000 * seconds) / ticks;
-
-  const playerStart = deepmerge.all([{}, player]);
-
-  player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * 1000));
-  player.eternities = player.eternities.plus(getEternitiedMilestoneReward(seconds * 1000));
-  player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
-
-  if (InfinityUpgrade.ipOffline.isBought) {
-    player.infinityPoints = player.infinityPoints.plus(player.bestIpPerMsWithoutMaxAll.times(seconds * 1000 / 2));
-  }
-
-
-  // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
-  if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
-    let remainingRealSeconds = seconds;
-    for (let numberOfTicksRemaining = ticks; numberOfTicksRemaining > 0; numberOfTicksRemaining--) {
-      const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
-        numberOfTicksRemaining, 0.0001);
-      remainingRealSeconds -= realTickTime;
-      gameLoop(1000 * realTickTime, { blackHoleSpeedup });
-    }
-  } else {
-    for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
-      gameLoop(largeDiff);
-      if (real) {
-        console.log(ticksDone);
-      }
-    }
-  }
-  
+function afterSimulation(seconds, playerStart) {
   if (seconds > 1000) {
     const offlineIncreases = ["While you were away"];
     // OoM increase
@@ -787,7 +746,78 @@ function simulateTime(seconds, real, fast) {
   }
   
   GameUI.notify.showBlackHoles = true;
-  Async.enabled = true;
+}
+
+function simulateTime(seconds, real, fast) {
+  // The game is simulated at a base 50ms update rate, with a max of 
+  // player.options.offlineTicks ticks. additional ticks are converted
+  // into a higher diff per tick
+  // warning: do not call this function with real unless you know what you're doing
+  // calling it with fast will only simulate it with a max of 50 ticks
+  let ticks = seconds * 20;
+  GameUI.notify.showBlackHoles = false;
+
+  // Limit the tick count (this also applies if the black hole is unlocked)
+  if (ticks > player.options.offlineTicks && !real && !fast) {
+    ticks = player.options.offlineTicks;
+  } else if (ticks > 50 && fast) {
+    ticks = 50;
+  }
+  const largeDiff = (player.options.offlineTicks * seconds) / ticks;
+
+  const playerStart = deepmerge.all([{}, player]);
+
+  player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * 1000));
+  player.eternities = player.eternities.plus(getEternitiedMilestoneReward(seconds * 1000));
+  player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
+
+  if (InfinityUpgrade.ipOffline.isBought) {
+    player.infinityPoints = player.infinityPoints
+      .plus(player.bestIpPerMsWithoutMaxAll
+        .times(seconds * 1000 / 2)
+      );
+  }
+
+  ui.view.modal.progressBar = {};
+  ui.view.modal.progressBar.label = "Simulating offline time...";
+
+  let loopFn = () => gameLoop(largeDiff);
+  let remainingRealSeconds = seconds;
+  // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
+  if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
+    loopFn = i => {
+      const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
+        i, 0.0001);
+      remainingRealSeconds -= realTickTime;
+      gameLoop(1000 * realTickTime, { blackHoleSpeedup });
+    };
+  }
+
+  Async.run(loopFn,
+    ticks,
+    {
+      batchSize: 1,
+      maxTime: 60,
+      sleepTime: 1,
+      asyncEntry: doneSoFar => {
+        GameIntervals.stop();
+        ui.$viewModel.modal.progressBar = {
+          label: "Simulating offline time...",
+          current: doneSoFar,
+          max: ticks,
+        };
+      },
+      asyncProgress: doneSoFar => {
+        ui.$viewModel.modal.progressBar.current = doneSoFar;
+      },
+      asyncExit: () => {
+        ui.$viewModel.modal.progressBar = undefined;
+        GameIntervals.start();
+      },
+      then: () => {
+        afterSimulation(seconds, playerStart);
+      }
+    });
 }
 
 function updateChart(first) {

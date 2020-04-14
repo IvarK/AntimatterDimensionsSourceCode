@@ -6905,7 +6905,6 @@ kbd {
 .l-reality-upgrade-grid__row {
   display: flex;
   flex-direction: row;
-  max-width: 120rem;
 }
 
 .l-reality-upgrade-btn {

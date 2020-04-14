@@ -3,12 +3,9 @@
 Vue.component("ra-tab", {
   data() {
     return {
-      memoriesPerChunk: 0,
       showReality: false,
       totalLevels: 0,
       hasRecollection: false,
-      recollectionReq: 0,
-      recollectionMult: 1,
       showLaitela: false,
       laitelaReq: 0,
       petWithRecollection: ""
@@ -16,11 +13,8 @@ Vue.component("ra-tab", {
   },
   methods: {
     update() {
-      this.memoriesPerChunk = Ra.productionPerMemoryChunk();
       this.totalLevels = Ra.totalPetLevel;
-      this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
-      this.recollectionReq = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels;
-      this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
+      this.hasRecollection = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
       this.showLaitela = Ra.pets.v.isUnlocked;
       this.laitelaReq = RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels;
       this.petWithRecollection = Ra.petWithRecollection;
@@ -76,11 +70,6 @@ Vue.component("ra-tab", {
   },
   template: `
     <div class="l-ra-celestial-tab">
-      <div class="c-ra-memory-header">
-        Each memory chunk generates
-        {{ format(memoriesPerChunk, 2, 3) }} {{ "memory" | pluralize(memoriesPerChunk, "memories") }}
-        per second.
-      </div>
       <div>
         Hold shift to see progress on your current level.
       </div>
@@ -99,14 +88,14 @@ Vue.component("ra-tab", {
             You can't dimension boost and tick reduction is fixed at 11%.
             <br>
             <br>
-            Inside of Ra's reality, some resources will generate memory chunks based on their amount.
+            Inside of Ra's reality, some resources will generate memories based on their amount.
           </div>
         </button>
         <div class="l-ra-recollection-unlock">
           <br>
           <h1 :style="petStyle">Recollection</h1>
           <span :style="petStyle">
-            Whichever celestial has recollection will get {{formatX(recollectionMult)}} memory chunk gain.
+            Whichever Celestial has recollection will gain memories in Ra's reality; the others will not.
           </span>
           <div class="l-ra-recollection-unlock-inner" v-if="hasRecollection">
             <ra-pet-recollection-button
@@ -115,8 +104,7 @@ Vue.component("ra-tab", {
               :petConfig="pet" />
           </div>
           <div v-else class="l-ra-recollection-unlock-inner">
-            Unlocked by getting {{ formatInt(recollectionReq) }} total celestial levels
-            (you need {{formatInt(recollectionReq - totalLevels)}} more)
+            Unlocked by unlocking more than one Celestial within Ra
           </div>
         </div>
         <button class="l-ra-laitela-unlock" v-if="showLaitela">

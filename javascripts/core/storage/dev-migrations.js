@@ -649,6 +649,19 @@ GameStorage.devMigrations = {
       //  Put in a default value of 1 for realities.
       player.lastTenRealities = player.lastTenRealities.map(x => [x[0], x[1], 1, Number(x[2]), x[3]]);
       GameStorage.migrations.migrateIPGen(player);
+    },  
+    player => {
+      delete player.celestials.ra.pets.teresa.memoryChunks;
+      delete player.celestials.ra.pets.effarig.memoryChunks;
+      delete player.celestials.ra.pets.enslaved.memoryChunks;
+      delete player.celestials.ra.pets.v.memoryChunks;
+      if (player.celestials.ra.petWithRecollection === "") {
+        player.celestials.ra.petWithRecollection = "Teresa";
+      }
+      // Change 29 to 28, and make it future-proof against future ID changes.
+      player.celestials.ra.unlockBits = Math.pow(2, 28) *
+        (player.celestials.ra.unlockBits >= Math.pow(2, 29)) +
+        player.celestials.ra.unlockBits % Math.pow(2, 28);
     }
   ],
 

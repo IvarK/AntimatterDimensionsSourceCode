@@ -35,14 +35,6 @@ class RaPetState {
   set exp(value) {
     this.data.exp = value;
   }
-  
-  get memoryChunks() {
-    return this.data.memoryChunks;
-  }
-
-  set memoryChunks(value) {
-    this.data.memoryChunks = value;
-  }
 
   get requiredExp() {
     return Ra.requiredExpForLevel(this.level);
@@ -51,38 +43,36 @@ class RaPetState {
   /**
    * @abstract
    */
-  get rawMemoryChunksPerSecond() { throw new NotImplementedError(); }
+  get rawMemoriesPerSecond() { throw new NotImplementedError(); }
 
   /**
    * @abstract
    */
   get color() { throw new NotImplementedError(); }
   
-  get memoryChunksPerSecond() {
-    let res = this.canGetMemoryChunks ? this.rawMemoryChunksPerSecond : 0;
-    res *= RA_UNLOCKS.TT_BOOST.effect.memoryChunks();
-    if (this.hasRecollection) res *= RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
+  get memoriesPerSecond() {
+    if (!this.canGetMemories) return 0;
+    let res = this.rawMemoriesPerSecond * RA_UNLOCKS.TT_BOOST.effect.memories() *
+      Achievement(168).effectOrDefault(1);
+    for (const pet of Ra.pets.all) {
+      if (pet.isUnlocked) res *= pet.memoryProductionMultiplier;
+    }
     return res;
   }
   
-  get canGetMemoryChunks() {
-    return this.isUnlocked && Ra.isRunning;
+  get canGetMemories() {
+    // Memory generation is disabled when storing real time. This is to prevent real time
+    // spent in Ra's reality from also being used for amplification.
+    return this.hasRecollection && this.isUnlocked && Ra.isRunning && !Enslaved.isStoringRealTime;
   }
   
   get hasRecollection() {
     return Ra.petWithRecollection === this.name;
   }
   
-  tick(realDiff, generateChunks) {
+  tick(realDiff) {
     const seconds = realDiff / 1000;
-    const newMemoryChunks = generateChunks
-      ? seconds * this.memoryChunksPerSecond
-      : 0;
-    // Adding memories from half of the gained chunks this tick results in the best mathematical behavior
-    // for very long simulated ticks
-    const newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk();
-    this.memoryChunks += newMemoryChunks;
-    this.addExp(newMemories);
+    this.addExp(seconds * this.memoriesPerSecond);
   }
 
   addExp(exp) {
@@ -102,7 +92,6 @@ class RaPetState {
   reset() {
     this.data.level = 1;
     this.data.exp = 0;
-    this.data.memoryChunks = 0;
   }
 }
 
@@ -112,7 +101,7 @@ const Ra = {
       get name() { return "Teresa"; }
       get data() { return player.celestials.ra.pets.teresa; }
       get requiredUnlock() { return undefined; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.eternityPoints.pLog10() / 1e4, 3); }
+      get rawMemoriesPerSecond() { return 4 * Math.pow(player.eternityPoints.pLog10() / 1e4, 3); }
       get color() { return "#86ea84"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.TERESA_XP)
@@ -124,7 +113,7 @@ const Ra = {
       get name() { return "Effarig"; }
       get data() { return player.celestials.ra.pets.effarig; }
       get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Effarig.shardsGained, 0.1); }
+      get rawMemoriesPerSecond() { return 4 * Math.pow(Effarig.shardsGained, 0.1); }
       get color() { return "#ea8585"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.EFFARIG_XP)
@@ -136,7 +125,7 @@ const Ra = {
       get name() { return "Enslaved"; }
       get data() { return player.celestials.ra.pets.enslaved; }
       get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.timeShards.pLog10() / 3e5, 2); }
+      get rawMemoriesPerSecond() { return 4 * Math.pow(player.timeShards.pLog10() / 3e5, 2); }
       get color() { return "#f1aa7f"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.ENSLAVED_XP)
@@ -148,7 +137,7 @@ const Ra = {
       get name() { return "V"; }
       get data() { return player.celestials.ra.pets.v; }
       get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.infinityPower.pLog10() / 1e7, 1.5); }
+      get rawMemoriesPerSecond() { return 4 * Math.pow(player.infinityPower.pLog10() / 1e7, 1.5); }
       get color() { return "#ead584"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.V_XP)
@@ -174,22 +163,15 @@ const Ra = {
       resource.amount = Math.min(this.alchemyResourceCap, player.bestGlyphLevel);
     }
   },
-  memoryTick(realDiff, generateChunks) {
-    for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
-  },
-  productionPerMemoryChunk() {
-    let res = RA_UNLOCKS.TT_BOOST.effect.memories() * Achievement(168).effectOrDefault(1);
-    for (const pet of Ra.pets.all) {
-      if (pet.isUnlocked) res *= pet.memoryProductionMultiplier;
-    }
-    return res;
+  memoryTick(realDiff) {
+    for (const pet of Ra.pets.all) pet.tick(realDiff);
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredExpForLevel(level) {
     if (level >= 25) return Infinity;
     const adjustedLevel = level + Math.pow(level, 2) / 10;
     const post15Scaling = Math.pow(1.4, Math.max(0, level - 15));
-    return Math.floor(Math.pow(adjustedLevel, 4) * post15Scaling * 5e5);
+    return Math.floor(Math.pow(adjustedLevel, 3) * post15Scaling * 50);
   },
   // Calculates the cumulative exp needed to REACH a level starting from nothing.
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized
@@ -362,7 +344,7 @@ const RA_UNLOCKS = {
   TERESA_XP: {
     id: 2,
     description: "Get Teresa to level 5",
-    reward: "All memory chunks produce more memories based on RM",
+    reward: "All Celestials produce more memories based on RM",
     pet: Ra.pets.teresa,
     level: 5,
     displayIcon: `Δ`
@@ -420,7 +402,7 @@ const RA_UNLOCKS = {
   EFFARIG_XP: {
     id: 9,
     description: "Get Effarig to level 5",
-    reward: "All memory chunks produce more memories based on highest glyph level",
+    reward: "All Celestials produce more memories based on highest glyph level",
     pet: Ra.pets.effarig,
     level: 5,
     displayIcon: `<span class="fas fa-clone"></span>`
@@ -481,7 +463,7 @@ const RA_UNLOCKS = {
   ENSLAVED_XP: {
     id: 16,
     description: "Get Enslaved to level 5",
-    reward: "All memory chunks produce more memories based on total time played",
+    reward: "All Celestials produce more memories based on total time played",
     pet: Ra.pets.enslaved,
     level: 5,
     displayIcon: `<span class="fas fa-stopwatch"></span>`
@@ -540,7 +522,7 @@ const RA_UNLOCKS = {
   V_XP: {
     id: 23,
     description: "Get V to level 5",
-    reward: () => `All memory chunks produce more memories based on total Celestial levels,
+    reward: () => `All Celestials produce more memories based on total Celestial levels,
       unlock a Triad study every ${formatInt(5)} levels (see bottom of the Time Studies page)`,
     pet: Ra.pets.v,
     level: 5,
@@ -565,7 +547,6 @@ const RA_UNLOCKS = {
       replicanti: () => Math.pow(10, 20 * Ra.theoremBoostFactor()),
       dilatedTime: () => Math.pow(10, 3 * Ra.theoremBoostFactor()),
       memories: () => 1 + Ra.theoremBoostFactor() / 50,
-      memoryChunks: () => 1 + Ra.theoremBoostFactor() / 50,
       autoPrestige: () => 1 + 2.4 * Ra.theoremBoostFactor()
     },
     pet: Ra.pets.v,
@@ -589,15 +570,8 @@ const RA_UNLOCKS = {
     level: 25,
     displayIcon: `<i class="fab fa-buffer"></i>`
   },
-  RA_RECOLLECTION_UNLOCK: {
-    id: 28,
-    description: "Get 20 total celestial levels",
-    reward: "Unlock Recollection",
-    effect: 3,
-    totalLevels: 20,
-  },
   RA_LAITELA_UNLOCK: {
-    id: 29,
+    id: 28,
     description: "Get 100 total celestial levels",
     reward: "Unlock Lai'tela, the Celestial of Dimensions",
     totalLevels: 100,

@@ -375,10 +375,7 @@ function gameLoop(diff, options = {}) {
   const realDiff = diff === undefined
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
     : diff;
-
-  // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.
-  // This is in order to prevent players from using time inside of Ra's reality for amplification as well
-  Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
+  Ra.memoryTick(realDiff);
 
   // Lai'tela mechanics should bypass stored real time entirely
   Laitela.handleMatterDimensionUnlocks();

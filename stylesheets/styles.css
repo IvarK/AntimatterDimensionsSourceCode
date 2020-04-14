@@ -6016,12 +6016,6 @@ kbd {
   height: 50%;
 }
 
-.c-ra-memory-header {
-  font-size: 1.3rem;
-  margin-top: 1.5rem;
-  font-weight: bold;
-}
-
 .c-ra-upgrade-icon {
   box-sizing: border-box;
   align-items: center;

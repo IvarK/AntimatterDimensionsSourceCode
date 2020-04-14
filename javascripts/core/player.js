@@ -421,22 +421,18 @@ let player = {
       pets: {
         teresa: {
           level: 1,
-          memoryChunks: 0,
           exp: 0
         },
         effarig: {
           level: 1,
-          memoryChunks: 0,
           exp: 0
         },
         enslaved: {
           level: 1,
-          memoryChunks: 0,
           exp: 0
         },
         v: {
           level: 1,
-          memoryChunks: 0,
           exp: 0
         }
       },
@@ -450,7 +446,7 @@ let player = {
       charged: new Set(),
       disCharge: false,
       peakGamespeed: 1,
-      petWithRecollection: ""
+      petWithRecollection: "Teresa"
     },
     laitela: {
       matter: new Decimal(0),

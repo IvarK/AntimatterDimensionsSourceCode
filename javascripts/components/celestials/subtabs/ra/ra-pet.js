@@ -13,11 +13,8 @@ Vue.component("ra-pet", {
       requiredExp: 0,
       nextLevelEstimate: "",
       upgradeEstimate: "",
-      memoryChunks: 0,
-      memoryChunksPerSecond: 0,
       memoriesPerSecond: 0,
       memoryMultiplier: 1,
-      canGetMemoryChunks: false,
     };
   },
   computed: {
@@ -37,7 +34,7 @@ Vue.component("ra-pet", {
         .filter(unlock => unlock.pet === this.petConfig.pet)
         .sort((a, b) => a.level - b.level);
     },
-    chunkTooltip() {
+    memoryTooltip() {
       switch (this.petConfig.pet.name) {
         case "Teresa":
           return "Based on EP";
@@ -51,7 +48,7 @@ Vue.component("ra-pet", {
           throw new Error(`Unrecognized celestial ${this.petConfig.pet.name} in Ra UI`);
       }
     },
-    memoryGainTooltip() {
+    memoryMultiplierTooltip() {
       switch (this.petConfig.pet.name) {
         case "Teresa":
           return "Based on current RM";
@@ -75,10 +72,7 @@ Vue.component("ra-pet", {
       this.level = pet.level;
       this.exp = pet.exp;
       this.requiredExp = pet.requiredExp;
-      this.memoryChunks = pet.memoryChunks;
-      this.memoryChunksPerSecond = pet.memoryChunksPerSecond;
-      this.memoriesPerSecond = pet.memoryChunks * Ra.productionPerMemoryChunk();
-      this.canGetMemoryChunks = pet.canGetMemoryChunks;
+      this.memoriesPerSecond = pet.memoriesPerSecond;
       this.memoryMultiplier = pet.memoryProductionMultiplier;
 
       const leftThisLevel = this.requiredExp - this.exp;
@@ -88,13 +82,7 @@ Vue.component("ra-pet", {
     },
     timeToGoalString(expToGain) {
       const pet = this.petConfig.pet;
-      // Quadratic formula for growth (uses constant growth for a = 0)
-      const a = Ra.productionPerMemoryChunk() * pet.memoryChunksPerSecond / 2;
-      const b = Ra.productionPerMemoryChunk() * pet.memoryChunks;
-      const c = -expToGain;
-      const estimate = a === 0
-        ? -c / b
-        : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
+      const estimate = expToGain / pet.memoriesPerSecond;
       if (Number.isFinite(estimate)) {
         return TimeSpan.fromSeconds(estimate).toStringShort();
       }
@@ -123,10 +111,10 @@ Vue.component("ra-pet", {
           <div>
             {{ format(exp, 2) }} / {{ format(requiredExp, 2) }} {{ name }} memories
           </div>
-          <div>
+          <div v-if="memoriesPerSecond > 0">
             (next level in {{ nextLevelEstimate }})
           </div>
-          <div>
+          <div v-if="memoriesPerSecond > 0">
             (next upgrade in {{ upgradeEstimate }})
           </div>
         </div>
@@ -136,11 +124,8 @@ Vue.component("ra-pet", {
         <ra-pet-level-bar :pet="petConfig.pet" />
         <div v-if="level < 25">
           <div>
-            {{ format(memoryChunks, 2, 2) }} memory chunks, {{ format(memoriesPerSecond, 2, 2) }} memories/sec
-          </div>
-          <div>
-            Gaining {{ format(memoryChunksPerSecond, 2, 2) }} memory chunks/sec
-            <span :ach-tooltip="chunkTooltip">
+            Gaining {{ format(memoriesPerSecond, 2, 2) }} memories/sec
+            <span :ach-tooltip="memoryTooltip">
               <i class="fas fa-question-circle"></i>
             </span>
           </div>
@@ -152,7 +137,7 @@ Vue.component("ra-pet", {
         </div>
         <div v-if="memoryMultiplier > 1">
           Multiplying all memory production by {{ format(memoryMultiplier, 2, 3) }}
-          <span :ach-tooltip="memoryGainTooltip">
+          <span :ach-tooltip="memoryMultiplierTooltip">
             <i class="fas fa-question-circle"></i>
           </span>
         </div>

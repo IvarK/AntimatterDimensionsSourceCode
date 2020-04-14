@@ -979,16 +979,11 @@ older Celestials in a stronger way, by using their memories. Over time, you will
 Celestials <i>within</i> Ra, with each Celestial offering additional upgrades related to their original themes.
 <br>
 <br>
-Each previous Celestial within Ra gains levels based on memories, which are generated passively over time from
-memory chunks. Memory chunks can only be gained by entering Ra's Reality, but inside of the Reality chunks will
-be generated passively based on certain resource totals. If you are storing real time, you will not gain any
-chunks inside of Ra's Reality, but memories will still be generated normally. Having a total of
-${formatInt(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels)} levels across all Celestials unlocks Recollection,
-which allows you to choose a particular Celestial to gain more chunks while inside of Ra's Reality.
-<br>
-<br>
-You start Ra with only Teresa unlocked, and each successive Celestial is unlocked by reaching level ${formatInt(10)}
-with the previous Celestial. Levels have no cap, but are significantly harder to gain above ${formatInt(25)}.
+Each previous Celestial within Ra gains levels based on memories. Memories can only be gained by entering Ra's Reality,
+but inside of the Reality you can choose one Celestial to generate memories based on a certain resource total
+depending on the celestial. You start Ra with only Teresa unlocked, and each successive Celestial is unlocked
+by reaching level ${formatInt(10)} with the previous Celestial. Levels cap at level ${formatInt(25)}.
+Celestials do not produce memories within Ra while real time is being stored.
 <br>
 <br>
 Teresa unlocks the ability to charge your Infinity Upgrades, making them much stronger. She also

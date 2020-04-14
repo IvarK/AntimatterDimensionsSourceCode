@@ -8,7 +8,8 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
-  "realityglyphlevel", "realitygalaxies", "realitydimboost", "realityrow1pow"];
+  "realityglyphlevel", "realitygalaxies", "realitydimboost", "realityrow1pow",
+  "companiondescription", "companionEP", "companionreduction"];
 const generatedTypes = ["power", "infinity", "time", "replication", "dilation", "effarig"];
 
 // eslint-disable-next-line no-unused-vars
@@ -259,6 +260,25 @@ const GlyphGenerator = {
       level: 6666,
       rawLevel: 6666,
       effects: effectBitmask,
+    };
+  },
+
+  companionGlyph(eternityPoints) {
+    // Store the pre-Reality EP value in the glyph's rarity
+    const str = rarityToStrength(eternityPoints.log10() / 1e6);
+    const effects = orderedEffectList.filter(effect => effect.match("companion*"));
+    // The last effect is the nerf reduction text, get rid of it if it doesn't apply
+    if (!player.saveOverThresholdFlag) effects.pop();
+    const effectBitmask = makeGlyphEffectBitmask(effects);
+    return {
+      id: undefined,
+      idx: null,
+      type: "companion",
+      strength: str,
+      level: 1,
+      rawLevel: 1,
+      effects: effectBitmask,
+      color: "#feaec9"
     };
   },
 

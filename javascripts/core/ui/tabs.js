@@ -83,9 +83,9 @@ class TabState {
     if (this.config.key === "reality" && 
         player.saveOverThresholdFlag && 
         !player.saveOverThresholdFlagModalDisplayed) {
-      Modal.message.show(`Your save seems to be over ${format(new Decimal("1e6000"))}EP, 
-        there has been nerfs past that in the update, so for the first reality your EP is less effective
-        past ${format(new Decimal("1e6000"))}EP`);
+      Modal.message.show(`Your save seems to be over ${format(new Decimal("1e6000"))} EP, 
+        there has been nerfs past that in the update, so for the first reality your EP gives fewer RM
+        past ${format(new Decimal("1e6000"))} EP`);
       player.saveOverThresholdFlagModalDisplayed = true;
     }
   }

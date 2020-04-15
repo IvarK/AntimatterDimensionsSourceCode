@@ -163,13 +163,16 @@ Vue.component("v-tab", {
                       :show=true
                       :glyphs="runGlyphs[hex.id]" />
                   </p>
-                  <button v-if="hex.canBeReduced && showReduction"
-                    class="o-primary-btn l-v-reduction"
-                    :class="{ 'o-primary-btn--disabled': !hex.canBeReduced || pp < hex.reductionCost }"
-                    :ach-tooltip="reductionTooltip(hex)"
-                    @click="reduceGoals(hex)">
-                      <i class="fas fa-angle-double-down"></i>
-                  </button>
+                  <div v-if="hex.canBeReduced && showReduction">
+                    <div style="height:0.8rem;"/>
+                    <button
+                      class="o-primary-btn l-v-reduction"
+                      :class="{ 'o-primary-btn--disabled': !hex.canBeReduced || pp < hex.reductionCost }"
+                      :ach-tooltip="reductionTooltip(hex)"
+                      @click="reduceGoals(hex)">
+                        <i class="fas fa-angle-double-down"></i>
+                    </button>
+                  </div>
                 </div>
             </div>
             <div v-else-if="hex.isRunButton" @click="startRun()" class="l-v-hexagon o-v-run-button">

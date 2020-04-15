@@ -5,13 +5,20 @@ const GameIntervals = (function() {
     let id = -1;
     return {
       start() {
-        id = setInterval(handler, typeof timeout === "function" ? timeout() : timeout);
+        // This starts the interval if it isn't already started,
+        // and does nothing if it is already started.
+        if (!this.isStarted) {
+          id = setInterval(handler, typeof timeout === "function" ? timeout() : timeout);
+        }
       },
       get isStarted() {
         return id !== -1;
       },
       stop() {
+        // This stops the interval if it isn't already stopped,
+        // and does nothing if it is already stopped.
         clearInterval(id);
+        id = -1;
       },
       restart() {
         this.stop();

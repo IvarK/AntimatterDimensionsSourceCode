@@ -26,11 +26,13 @@ const GameIntervals = (function() {
         .filter(i => i.hasOwnProperty("start") && i.hasOwnProperty("stop"));
     },
     start() {
+      // eslint-disable-next-line no-shadow
       for (const interval of this.all()) {
         interval.start();
       }
     },
     stop() {
+      // eslint-disable-next-line no-shadow
       for (const interval of this.all()) {
         interval.stop();
       }

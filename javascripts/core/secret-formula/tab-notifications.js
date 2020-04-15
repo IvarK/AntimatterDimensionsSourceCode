@@ -17,6 +17,16 @@ GameDatabase.tabNotifications = {
       !PlayerProgress.infinityUnlocked(),
     events: [GAME_EVENT.BIG_CRUNCH_BEFORE]
   },
+  IDUnlock: {
+    tabsToHighLight: [
+      {
+        parent: "dimensions",
+        tab: "infinity"
+      }
+    ],
+    condition: () => !PlayerProgress.realityUnlocked() &&
+      !PlayerProgress.eternityUnlocked() && !InfinityDimension(2).isUnlocked
+  },
   ICUnlock: {
     tabsToHighLight: [
       {
@@ -26,17 +36,6 @@ GameDatabase.tabNotifications = {
     ],
     condition: () => !PlayerProgress.realityUnlocked() &&
       !PlayerProgress.eternityUnlocked()
-  },
-  replicanti: {
-    tabsToHighLight: [
-      {
-        parent: "infinity",
-        tab: "replicanti"
-      }
-    ],
-    condition: () => !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked() && player.infinityPoints.gte(1e140),
-    events: [GAME_EVENT.BIG_CRUNCH_AFTER]
   },
   breakInfinity: {
     tabsToHighLight: [
@@ -61,6 +60,10 @@ GameDatabase.tabNotifications = {
       {
         parent: "eternity",
         tab: "upgrades"
+      },
+      {
+        parent: "dimensions",
+        tab: "time"
       }
     ],
     condition: () => !PlayerProgress.realityUnlocked() &&

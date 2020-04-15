@@ -103,7 +103,8 @@ Vue.component("infinity-dim-row", {
     },
   },
   template:
-    `<div v-show="showRow" class="c-infinity-dim-row" :class="{ 'c-infinity-dim-row--not-reached': !isUnlocked && !requirementReached }">
+    `<div v-show="showRow" class="c-infinity-dim-row"
+      :class="{ 'c-infinity-dim-row--not-reached': !isUnlocked && !requirementReached }">
       <div class="c-infinity-dim-row__label c-infinity-dim-row__name">
         {{name}} Infinity Dimension {{formatX(multiplier, 2, 1)}}
       </div>

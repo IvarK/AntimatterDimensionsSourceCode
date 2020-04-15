@@ -9,11 +9,18 @@ class TabNotificationState {
       }
     }
   }
+  
+  get triggered() {
+    // eslint-disable-next-line no-bitwise
+    return player.triggeredTabNotificationBits & (1 << this.config.id);
+  }
 
   tryTrigger() {
-    if (!this.config.condition()) return;
+    if (!this.config.condition() || this.triggered) return;
     this.config.tabsToHighLight.map(t => t.parent + t.tab)
       .forEach(tab => player.tabNotifications.add(tab));
+    // eslint-disable-next-line no-bitwise
+    player.triggeredTabNotificationBits |= 1 << this.config.id;
   }
 }
 

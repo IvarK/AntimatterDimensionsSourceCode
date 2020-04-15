@@ -2,6 +2,7 @@
 
 GameDatabase.tabNotifications = {
   firstInfinity: {
+    id: 0,
     tabsToHighLight: [
       {
         parent: "infinity",
@@ -18,6 +19,7 @@ GameDatabase.tabNotifications = {
     events: [GAME_EVENT.BIG_CRUNCH_BEFORE]
   },
   IDUnlock: {
+    id: 1,
     tabsToHighLight: [
       {
         parent: "dimensions",
@@ -28,6 +30,7 @@ GameDatabase.tabNotifications = {
       !PlayerProgress.eternityUnlocked() && !InfinityDimension(2).isUnlocked
   },
   ICUnlock: {
+    id: 2,
     tabsToHighLight: [
       {
         parent: "challenges",
@@ -38,6 +41,7 @@ GameDatabase.tabNotifications = {
       !PlayerProgress.eternityUnlocked()
   },
   breakInfinity: {
+    id: 3,
     tabsToHighLight: [
       {
         parent: "infinity",
@@ -48,6 +52,7 @@ GameDatabase.tabNotifications = {
       !PlayerProgress.eternityUnlocked() && Autobuyer.bigCrunch.hasMaxedInterval
   },
   firstEternity: {
+    id: 4,
     tabsToHighLight: [
       {
         parent: "eternity",
@@ -71,6 +76,7 @@ GameDatabase.tabNotifications = {
     events: [GAME_EVENT.ETERNITY_RESET_BEFORE]
   },
   dilationAfterUnlock: {
+    id: 5,
     tabsToHighLight: [
       {
         parent: "eternity",
@@ -80,6 +86,7 @@ GameDatabase.tabNotifications = {
     condition: () => !PlayerProgress.realityUnlocked()
   },
   blackHoleUnlock: {
+    id: 6,
     tabsToHighLight: [
       {
         parent: "reality",
@@ -90,6 +97,7 @@ GameDatabase.tabNotifications = {
     events: [GAME_EVENT.REALITY_RESET_AFTER]
   },
   automatorUnlock: {
+    id: 7,
     tabsToHighLight: [
       {
         parent: "reality",

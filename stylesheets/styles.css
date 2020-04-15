@@ -6348,11 +6348,15 @@ kbd {
 
 .c-laitela-milestone__progress {
   position: absolute;
-  background: #a0dca0;
+  background: var(--color-good);
   top: 0;
   left: 0;
   height: 100%;
   z-index: -1;
+}
+
+.l-singularity-milestone-modal-container .c-laitela-milestone--completed {
+  box-shadow: none;
 }
 
 .l-laitela-singularity-container {
@@ -6854,6 +6858,27 @@ kbd {
   }
 }
 
+@keyframes a-reality-glyph-dot-cycle {
+  0% {
+    background: #b67f33;
+  }
+  20% {
+    background: #64dd17;
+  }
+  40% {
+    background: #22aa48;
+  }
+  60% {
+    background: #03a9f4;
+  }
+  80% {
+    background: #b241e3;
+  }
+  100% {
+    background: #b67f33;
+  }
+}
+
 .l-reality-button-column {
   display: flex;
   flex-direction: column;
@@ -6880,7 +6905,6 @@ kbd {
 .l-reality-upgrade-grid__row {
   display: flex;
   flex-direction: row;
-  max-width: 120rem;
 }
 
 .l-reality-upgrade-btn {

@@ -80,11 +80,6 @@ const ShopPurchase = (function() {
 
 ShopPurchase.all = Object.values(ShopPurchase);
 
-kong.submitAchievements = function() {
-  kong.submitStats("Achievements", Achievements.effectiveCount + SecretAchievements.all.countWhere(a => a.isUnlocked));
-};
-
-
 kong.purchaseTimeSkip = function(cost) {
   if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
   player.IAP.spentSTD += cost;

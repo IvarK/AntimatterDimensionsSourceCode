@@ -223,17 +223,6 @@ function gainedInfinities() {
     return infGain;
 }
 
-setInterval(() => {
-  if (isLocalEnvironment()) return;
-  fetch("version.txt")
-    .then(response => response.json())
-    .then(json => {
-      if (json.version > player.version) {
-        Modal.message.show(json.message, updateRefresh);
-      }
-    });
-}, 60000);
-
 // TODO: remove before release
 (function() {
   if (isLocalEnvironment()) return;
@@ -269,14 +258,6 @@ function updateRefresh() {
   GameStorage.save(true);
   location.reload(true);
 }
-
-function kongLog10StatSubmission() {
-  kong.submitStats("Log10 of total antimatter", player.totalAntimatter.e);
-  kong.submitStats("Log10 of Infinity Points", player.infinityPoints.e);
-  kong.submitStats("Log10 of Eternity Points", player.eternityPoints.e);
-}
-
-setInterval(kongLog10StatSubmission, 10000)
 
 const GAME_SPEED_EFFECT = {
   FIXED_SPEED: 1,
@@ -912,10 +893,6 @@ function slowerAutobuyers(realDiff) {
     }
   }
 }
-
-setInterval(function () {
-    if (playFabId != -1 && player.options.cloud) playFabSaveCheck();
-}, 1000*60*5)
 
 window.onload = function() {
   GameUI.initialized = true;

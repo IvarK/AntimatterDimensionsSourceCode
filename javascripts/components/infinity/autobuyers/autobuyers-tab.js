@@ -14,9 +14,9 @@ Vue.component("autobuyers-tab", {
       <autobuyer-toggles class="l-autobuyers-tab__toggles" />
       <reality-autobuyer-box />
       <eternity-autobuyer-box />
-      <dimboost-autobuyer-box />
-      <galaxy-autobuyer-box />
       <big-crunch-autobuyer-box />
+      <galaxy-autobuyer-box />
+      <dimboost-autobuyer-box />
       <dimension-autobuyer-box v-if="!hasContinuum" v-for="tier in 8" :key="tier" :tier="tier"/>
       <tickspeed-autobuyer-box v-if="!hasContinuum" />
       <sacrifice-autobuyer-box />

@@ -123,7 +123,8 @@ Vue.component("equipped-glyphs", {
         <glyph-component v-if="glyph"
                          :key="idx"
                          :glyph="glyph"
-                         :circular="true"/>
+                         :circular="true"
+                         style="-webkit-user-drag: none;"/>
         <div v-else
              :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
                       {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]" />

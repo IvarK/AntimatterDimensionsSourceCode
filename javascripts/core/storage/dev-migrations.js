@@ -636,8 +636,10 @@ GameStorage.devMigrations = {
     },
     player => {
       // Return all PP spent on old V goal reduction
-      player.reality.pp += player.celestials.v.ppSpent;
-      delete player.celestials.v.ppSpent;
+      if (player.celestials.v.ppSpent) {
+        player.reality.pp += player.celestials.v.ppSpent;
+        delete player.celestials.v.ppSpent;
+      }
     }
   ],
 

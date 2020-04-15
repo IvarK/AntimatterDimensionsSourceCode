@@ -25,7 +25,7 @@ Vue.component("game-ui", {
       <component :is="uiLayout">
         <component :is="page" />
       </component>
-      <modal-popup v-if="view.modal.current" />
+      <modal-popup v-for="modal in view.modal.queue" :modal="modal" />
       <modal-glyph-selection v-if="view.modal.glyphSelection" />
       <modal-progress-bar v-if="view.modal.progressBar" />
       <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">

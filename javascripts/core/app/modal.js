@@ -8,7 +8,8 @@ class Modal {
 
   show() {
     if (!GameUI.initialized) return;
-    ui.view.modal.current = this;
+    if (ui.view.modal.queue.length === 0) ui.view.modal.current = this;
+    ui.view.modal.queue.push(this);    
   }
 
   get isOpen() {
@@ -25,12 +26,14 @@ class Modal {
 
   static hide() {
     if (!GameUI.initialized) return;
-    ui.view.modal.current = undefined;
+    ui.view.modal.queue.pop();
+    if (ui.view.modal.queue.length === 0) ui.view.modal.current = undefined;
+    else ui.view.modal.current = ui.view.modal.queue[0];
     ui.view.modal.cloudConflicts = [];
   }
 
   static get isOpen() {
-    return ui.view.modal.current !== undefined;
+    return ui.view.modal.current === this;
   }
 }
 
@@ -62,7 +65,7 @@ Modal.celestialQuote = new class extends Modal {
       this.lines = this.lines.concat(newLines);
       return;
     }
-    ui.view.modal.current = this;
+    super.show();
     this.lines = newLines;
   }
 }("modal-celestial-quote", true);
@@ -90,7 +93,7 @@ Modal.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLast
 Modal.message = new class extends Modal {
   show(text, callback, closeButton = false) {
     if (!GameUI.initialized) return;
-    ui.view.modal.current = this;
+    super.show();
     this.message = text;
     this.callback = callback;
     this.closeButton = closeButton;

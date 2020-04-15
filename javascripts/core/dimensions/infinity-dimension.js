@@ -263,6 +263,17 @@ class InfinityDimensionState extends DimensionState {
     this.baseAmount = 0;
     this.isUnlocked = false;
   }
+
+  tryUnlock() {
+    if (!Perk.bypassIDAntimatter.isBought && !this.requirementReached) return;
+
+    this.isUnlocked = true;
+    EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, this.tier);
+    if (player.infDimBuyers[tier - 1] &&
+      !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
+      buyMaxInfDims(this.tier);
+    }
+  }
 }
 
 /**
@@ -337,13 +348,7 @@ function tryUnlockInfinityDimensions() {
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;
     // If we cannot unlock this one, we can't unlock the rest, either
-    if (!Perk.bypassIDAntimatter.isBought && InfinityDimension(tier).requirementReached) break;
-    InfinityDimension(tier).isUnlocked = true;
-    EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, tier);
-    if (player.infDimBuyers[tier - 1] &&
-      !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
-      buyMaxInfDims(tier);
-    }
+    InfinityDimension(tier).tryUnlock();
   }
 }
 

@@ -53,7 +53,7 @@ Vue.component("new-inf-dimension-row", {
         : `Purchased ${formatInt(this.purchases)} ${pluralize("time", this.purchases)}`;
     },
     showRow() {
-      return this.eternityReached || this.isUnlocked || this.requirementReached || this.amount.gt(0)
+      return this.eternityReached || this.isUnlocked || this.requirementReached || this.amount.gt(0);
     }
   },
   methods: {
@@ -85,7 +85,7 @@ Vue.component("new-inf-dimension-row", {
     buyManyInfinityDimension() {
       if (!this.isUnlocked) {
         if (this.requirementReached) {
-          InfinityDimension(this.tier).isUnlocked = true;
+          InfinityDimension(this.tier).tryUnlock();
         }
         return;
       }

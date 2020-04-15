@@ -56,7 +56,7 @@ Vue.component("infinity-dim-row", {
         : `Purchased ${formatInt(this.purchases)} ${pluralize("time", this.purchases)}`;
     },
     showRow() {
-      return this.eternityReached || this.isUnlocked || this.requirementReached || this.amount.gt(0)
+      return this.eternityReached || this.isUnlocked || this.requirementReached || this.amount.gt(0);
     }
   },
   methods: {
@@ -90,9 +90,7 @@ Vue.component("infinity-dim-row", {
     },
     buyManyInfinityDimension() {
       if (!this.isUnlocked) {
-        if (this.requirementReached) {
-          InfinityDimension(this.tier).isUnlocked = true;
-        }
+        InfinityDimension(this.tier).tryUnlock();
         return;
       }
       buyManyInfinityDimension(this.tier);
@@ -125,7 +123,7 @@ Vue.component("infinity-dim-row", {
       />
       <primary-button
         v-else
-        :enabled="isAvailableForPurchase"
+        :enabled="isAvailableForPurchase && isUnlocked"
         class="o-primary-btn--buy-id-max l-infinity-dim-row__button"
         @click="buyMaxInfinityDimension"
       >Buy Max</primary-button>

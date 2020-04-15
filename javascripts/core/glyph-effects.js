@@ -9,7 +9,7 @@ const BASIC_GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power
 const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω",
   effarig: "Ϙ", reality: "Ϟ", cursed: "⸸", companion: "♥" };
 const CANCER_GLYPH_SYMBOLS = { time: "🕟", dilation: "☎", replication: "⚤", infinity: "8", power: "⚡",
-  effarig: "🦒", reality: "⛧", cursed: "☠", companion: "😠" };
+  effarig: "🦒", reality: "⛧", cursed: "☠", companion: "³" };
 
 const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),

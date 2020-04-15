@@ -20,11 +20,7 @@ function formatContinuum(value) {
 }
 
 function formatPostBreak(value, places, placesUnder1000) {
-  const currentFormat = ui.formatPreBreak;
-  ui.formatPreBreak = false;
-  const formatted = format(value, places, placesUnder1000);
-  ui.formatPreBreak = currentFormat;
-  return formatted;
+  return Notations.current.formatDecimal(new Decimal(value), places, placesUnder1000);
 }
 
 function formatX(value, places, placesUnder1000) {

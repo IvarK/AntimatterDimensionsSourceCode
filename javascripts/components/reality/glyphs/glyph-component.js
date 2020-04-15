@@ -40,6 +40,9 @@ const GlyphTooltipEffect = {
       if (secondSplit.length !== 1) return [firstSplit[0]].concat(secondSplit);
       return firstSplit;
     },
+    hasValue() {
+      return this.effectStringTemplate.includes("{value}");
+    },
     hasSecondaryValue() {
       return this.textSplits[2] !== undefined;
     },
@@ -68,7 +71,7 @@ const GlyphTooltipEffect = {
   template: `
     <div class="c-glyph-tooltip__effect">
       <span v-html="convertedParts[0]"/>
-      <span :style="valueStyle">{{primaryEffectText}}</span>
+      <span v-if="hasValue" :style="valueStyle">{{primaryEffectText}}</span>
       <span v-html="convertedParts[1]"/>
       <span v-if="hasSecondaryValue" :style="valueStyle">{{secondaryEffectText}}</span>
       <span v-if="hasSecondaryValue" v-html="convertedParts[2]"/>

@@ -488,7 +488,7 @@ GameDatabase.reality.glyphEffects = [
     effect: (level, strength) => (GlyphAlteration.isEmpowered("power")
       ? Decimal.pow(11111, level * 220)
       : Decimal.pow(level * strength * 10, level * strength * 10)),
-    formatEffect: x => format(x, 2, 0),
+    formatEffect: x => formatPostBreak(x, 2, 0),
     combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("power"),
     alterationType: ALTERATION_TYPE.EMPOWER
@@ -713,9 +713,9 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["companion"],
     singleDesc: "It does nothing but sit there and cutely smile at you, whisper into your dreams politely, " +
       "and plot the demise of all who stand against you.",
-    totalDesc: " ",
-    effect: () => 0,
-    formatEffect: () => "",
+    totalDesc: "+{value} happiness",
+    effect: () => (Enslaved.isRunning ? 0 : (0.4 + 0.6 * Math.random())),
+    formatEffect: x => formatPercents(x, 2, 2),
     combine: GlyphCombiner.add,
   }, {
     id: "companionEP",
@@ -723,20 +723,24 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: false,
     glyphTypes: ["companion"],
     singleDesc: "Thanks for your dedication for the game! You reached {value} EP on your first Reality.",
-    totalDesc: " ",
-    effect: (level, strength) => Decimal.pow10(1e6 * level * strengthToRarity(strength)),
-    formatEffect: x => format(x, 2),
+    totalDesc: () => (Enslaved.isRunning ? "Help me" : "Yay!"),
+    // The EP value for this (and the next effect) are entirely encoded in rarity, but level needs to be present to
+    // make sure the proper parameter is being used. The actual glyph level shouldn't do anything.
+    // eslint-disable-next-line no-unused-vars
+    effect: (level, strength) => Decimal.pow10(1e6 * strengthToRarity(strength)),
+    formatEffect: x => formatPostBreak(x, 2),
     combine: GlyphCombiner.multiplyDecimal,
   }, {
     id: "companionreduction",
     bitmaskIndex: 10,
     isGenerated: false,
     glyphTypes: ["companion"],
-    singleDesc: "(Due to scaling changes from before the Reality update, this was effectively reduced to {value} EP" +
+    singleDesc: "(Due to scaling changes from before the Reality update, this was reduced to {value} EP" +
       " for calculating Reality Machines gained)",
     totalDesc: " ",
-    effect: (level, strength) => Decimal.pow10(6000 + 0.25 * (1e6 * level * strengthToRarity(strength) - 6000)),
-    formatEffect: x => format(x, 2),
+    // eslint-disable-next-line no-unused-vars
+    effect: (level, strength) => Decimal.pow10(6000 + 0.25 * (1e6 * strengthToRarity(strength) - 6000)),
+    formatEffect: x => formatPostBreak(x, 2),
     combine: GlyphCombiner.multiplyDecimal,
   }
 ].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));

@@ -268,7 +268,7 @@ const GlyphGenerator = {
     const str = rarityToStrength(eternityPoints.log10() / 1e6);
     const effects = orderedEffectList.filter(effect => effect.match("companion*"));
     // The last effect is the nerf reduction text, get rid of it if it doesn't apply
-    if (!player.saveOverThresholdFlag) effects.pop();
+    if (!(player.saveOverThresholdFlag && eternityPoints.gte("1e6000"))) effects.pop();
     const effectBitmask = makeGlyphEffectBitmask(effects);
     return {
       id: undefined,
@@ -1019,7 +1019,7 @@ const GlyphSacrificeHandler = {
     if (this.isRefining) this.refineGlyph(glyph);
     this.sacrificeGlyph(glyph, force);
   },
-  deleteGlyph() {
+  deleteGlyph(glyph, force) {
     if (force || confirm("Do you really want to delete this glyph?")) {
       Glyphs.removeFromInventory(glyph);
     }

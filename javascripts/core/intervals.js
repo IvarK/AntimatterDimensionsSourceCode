@@ -9,6 +9,8 @@ const GameIntervals = (function() {
         // and does nothing if it is already started.
         if (!this.isStarted) {
           id = setInterval(handler, typeof timeout === "function" ? timeout() : timeout);
+        } else {
+          throw new Error("An already started interval cannot be started again.")
         }
       },
       get isStarted() {
@@ -42,6 +44,12 @@ const GameIntervals = (function() {
       // eslint-disable-next-line no-shadow
       for (const interval of this.all()) {
         interval.stop();
+      }
+    },
+    restart() {
+      // eslint-disable-next-line no-shadow
+      for (const interval of this.all()) {
+        interval.restart();
       }
     },
     gameLoop: interval(() => gameLoop(), () => player.options.updateRate),

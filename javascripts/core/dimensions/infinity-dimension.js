@@ -128,6 +128,10 @@ class InfinityDimensionState extends DimensionState {
     return this._unlockRequirement;
   }
 
+  get requirementReached() {
+    return player.antimatter.gte(this.requirement);
+  }
+
   get isAutobuyerUnlocked() {
     return player.eternities.gte(10 + this.tier);
   }
@@ -333,7 +337,7 @@ function tryUnlockInfinityDimensions() {
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;
     // If we cannot unlock this one, we can't unlock the rest, either
-    if (!Perk.bypassIDAntimatter.isBought && InfinityDimension(tier).requirement.gt(player.antimatter)) break;
+    if (!Perk.bypassIDAntimatter.isBought && InfinityDimension(tier).requirementReached) break;
     InfinityDimension(tier).isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, tier);
     if (player.infDimBuyers[tier - 1] &&

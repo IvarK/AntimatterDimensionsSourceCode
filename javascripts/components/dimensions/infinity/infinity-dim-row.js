@@ -21,6 +21,8 @@ Vue.component("infinity-dim-row", {
       isAutobuyerOn: false,
       isEC8Running: false,
       hardcap: InfinityDimensions.HARDCAP_PURCHASES,
+      requirementReached: false,
+      eternityReached: false
     };
   },
   watch: {
@@ -38,6 +40,11 @@ Vue.component("infinity-dim-row", {
         : "";
     },
     costDisplay() {
+      const requirement = InfinityDimension(this.tier).requirement;
+      if (!this.isUnlocked) {
+        if (this.requirementReached) return "Unlock";
+        return `Reach ${format(requirement)} AM`;
+      }
       return this.isCapped ? "Capped!" : `Cost: ${format(this.cost)} IP`;
     },
     hardcapPurchases() {
@@ -47,6 +54,9 @@ Vue.component("infinity-dim-row", {
       return this.isCapped
         ? `Cap reached at ${format(this.capIP)} IP`
         : `Purchased ${formatInt(this.purchases)} ${pluralize("time", this.purchases)}`;
+    },
+    showRow() {
+      return this.eternityReached || this.isUnlocked || this.requirementReached || this.amount.gt(0)
     }
   },
   methods: {
@@ -54,7 +64,6 @@ Vue.component("infinity-dim-row", {
       const tier = this.tier;
       const dimension = InfinityDimension(tier);
       this.isUnlocked = dimension.isUnlocked;
-      if (!this.isUnlocked) return;
       this.multiplier.copyFrom(dimension.multiplier);
       this.baseAmount = dimension.baseAmount;
       this.purchases = dimension.purchases;
@@ -66,6 +75,9 @@ Vue.component("infinity-dim-row", {
       this.isAutobuyerUnlocked = dimension.isAutobuyerUnlocked;
       this.cost.copyFrom(dimension.cost);
       this.isAvailableForPurchase = dimension.isAvailableForPurchase;
+      if (!this.isUnlocked) {
+        this.isAvailableForPurchase = dimension.requirementReached;
+      }
       this.isCapped = dimension.isCapped;
       if (this.isCapped) {
         this.capIP.copyFrom(dimension.hardcapIPAmount);
@@ -73,16 +85,25 @@ Vue.component("infinity-dim-row", {
       }
       this.isEC8Running = EternityChallenge(8).isRunning;
       this.isAutobuyerOn = player.infDimBuyers[this.tier - 1];
+      this.requirementReached = dimension.requirementReached;
+      this.eternityReached = PlayerProgress.eternityUnlocked();
     },
     buyManyInfinityDimension() {
+      if (!this.isUnlocked) {
+        if (this.requirementReached) {
+          InfinityDimension(this.tier).isUnlocked = true;
+        }
+        return;
+      }
       buyManyInfinityDimension(this.tier);
     },
     buyMaxInfinityDimension() {
+      if (!this.isUnlocked) return;
       buyMaxInfDims(this.tier);
     },
   },
   template:
-    `<div v-show="isUnlocked" class="c-infinity-dim-row">
+    `<div v-show="showRow" class="c-infinity-dim-row" :class="{ 'c-infinity-dim-row--not-reached': !isUnlocked && !requirementReached }">
       <div class="c-infinity-dim-row__label c-infinity-dim-row__name">
         {{name}} Infinity Dimension {{formatX(multiplier, 2, 1)}}
       </div>

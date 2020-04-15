@@ -61,6 +61,10 @@ GameDatabase.tabNotifications = {
       {
         parent: "eternity",
         tab: "upgrades"
+      },
+      {
+        parent: "dimensions",
+        tab: "time"
       }
     ],
     condition: () => !PlayerProgress.realityUnlocked() &&

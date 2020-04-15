@@ -9,7 +9,8 @@ class Modal {
   show() {
     if (!GameUI.initialized) return;
     if (ui.view.modal.queue.length === 0) ui.view.modal.current = this;
-    ui.view.modal.queue.push(this);    
+    // New modals go to the back of the queue (shown last).
+    ui.view.modal.queue.push(this);
   }
 
   get isOpen() {
@@ -26,7 +27,7 @@ class Modal {
 
   static hide() {
     if (!GameUI.initialized) return;
-    ui.view.modal.queue.pop();
+    ui.view.modal.queue.shift();
     if (ui.view.modal.queue.length === 0) ui.view.modal.current = undefined;
     else ui.view.modal.current = ui.view.modal.queue[0];
     ui.view.modal.cloudConflicts = [];

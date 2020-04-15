@@ -6,11 +6,11 @@ const GameIntervals = (function() {
     return {
       start() {
         // This starts the interval if it isn't already started,
-        // and does nothing if it is already started.
-        if (!this.isStarted) {
-          id = setInterval(handler, typeof timeout === "function" ? timeout() : timeout);
+        // and throws an error if it is.
+        if (this.isStarted) {
+          throw new Error("An already started interval cannot be started again.");
         } else {
-          throw new Error("An already started interval cannot be started again.")
+          id = setInterval(handler, typeof timeout === "function" ? timeout() : timeout);
         }
       },
       get isStarted() {

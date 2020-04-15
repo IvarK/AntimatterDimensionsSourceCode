@@ -5718,6 +5718,13 @@ kbd {
   flex-direction: column;
 }
 
+.l-v-reduction {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  font-size: 1.5rem;
+}
+
 .o-v-run-button {
   color: black;
   background: #f1aa7f;

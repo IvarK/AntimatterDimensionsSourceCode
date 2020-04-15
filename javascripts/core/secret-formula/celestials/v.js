@@ -78,7 +78,7 @@ GameDatabase.celestials.v = {
       formatRecord: x => format(Decimal.pow10(x), 2),
       shardReduction: tiers => 600 * tiers,
       maxShardReduction: goal => goal - 7000,
-      perReductionStep: 6,
+      perReductionStep: 1e6,
       mode: V_REDUCTION_MODE.DIVISION
     },
     {
@@ -90,7 +90,7 @@ GameDatabase.celestials.v = {
       currentValue: () => DimBoost.purchasedBoosts,
       formatRecord: x => formatInt(x),
       shardReduction: tiers => Math.floor(tiers),
-      maxShardReduction: () => 4,
+      maxShardReduction: () => 5,
       reductionStepSize: 100,
       perReductionStep: 1,
       mode: V_REDUCTION_MODE.SUBTRACTION
@@ -122,11 +122,11 @@ GameDatabase.celestials.v = {
       currentValue: () => (player.timestudy.theorem.toNumber() > 200000
         ? -Math.log10(player.minNegativeBlackHoleThisReality)
         : 0),
-      formatRecord: x => `1 / ${format(Math.pow(10, x))}`,
+      formatRecord: x => `${formatInt(1)} / ${format(Math.pow(10, x))}`,
       shardReduction: tiers => 50 * tiers,
-      maxShardReduction: goal => goal - 25,
+      maxShardReduction: goal => goal - 50,
       reductionStepSize: 2,
-      perReductionStep: 1e10,
+      perReductionStep: 10,
       mode: V_REDUCTION_MODE.DIVISION,
       isHard: true
     },

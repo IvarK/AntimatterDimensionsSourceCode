@@ -139,9 +139,6 @@ GameStorage.migrations = {
       GameStorage.migrations.setTutorialState(player);
 
       kong.migratePurchases();
-      
-      // Needed to check some reality upgrades which are usually only checked on eternity.
-      EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
     }
   },
 

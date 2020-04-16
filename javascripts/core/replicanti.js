@@ -132,9 +132,7 @@ function replicantiLoop(diff) {
     player.replicanti.amount = player.replicanti.amount.plus(reproduced);
     if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount);
     player.replicanti.timer -= interval.toNumber();
-  }
-
-  if (player.replicanti.amount.neq(0)) {
+  } else {
     player.replicanti.timer += diff;
   }
 
@@ -388,12 +386,30 @@ const Replicanti = {
   get areUnlocked() {
     return player.replicanti.unl;
   },
-  unlock() {
-    if (!player.infinityPoints.gte(1e140) || player.replicanti.unl) return;
-    player.replicanti.unl = true;
+  reset(force = false) {
+    player.replicanti.unl = force ? false : EternityMilestone.unlockReplicanti.isReached;
+    player.replicanti.amount = player.replicanti.unl ? new Decimal(1) : new Decimal(0);
     player.replicanti.timer = 0;
-    player.replicanti.amount = new Decimal(1);
-    player.infinityPoints = player.infinityPoints.minus(1e140);
+    player.replicanti.chance = 0.01;
+    player.replicanti.chanceCost = new Decimal(1e150);
+    player.replicanti.interval = 1000;
+    player.replicanti.intervalCost = new Decimal(1e140);
+    player.replicanti.gal = 0;
+    player.replicanti.galaxies = 0;
+    player.replicanti.galCost = new Decimal(1e170);
+    if (force ||
+      (EternityMilestone.autobuyerReplicantiGalaxy.isReached && player.replicanti.galaxybuyer === undefined)) {
+        player.replicanti.galaxybuyer = false;
+    }
+  },
+  unlock(freeUnlock = false) {
+    if (player.replicanti.unl) return;
+    if (freeUnlock || player.infinityPoints.gte(1e140)) {
+      if (!freeUnlock) player.infinityPoints = player.infinityPoints.minus(1e140);
+      player.replicanti.unl = true;
+      player.replicanti.timer = 0;
+      player.replicanti.amount = new Decimal(1);
+    }
   },
   get amount() {
     return player.replicanti.amount;

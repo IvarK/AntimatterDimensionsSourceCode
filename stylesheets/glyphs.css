@@ -295,7 +295,7 @@
   width: 27.4rem;
   padding: 0.5rem 0;
   position: absolute;
-  z-index: 4;
+  z-index: 6;
   transform: translate(-50%, calc(-100% - 1rem));
 }
 

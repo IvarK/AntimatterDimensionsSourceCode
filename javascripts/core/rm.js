@@ -8,7 +8,8 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
-  "realityglyphlevel", "realitygalaxies", "realitydimboost", "realityrow1pow"];
+  "realityglyphlevel", "realitygalaxies", "realitydimboost", "realityrow1pow",
+  "companiondescription", "companionEP", "companionreduction"];
 const generatedTypes = ["power", "infinity", "time", "replication", "dilation", "effarig"];
 
 // eslint-disable-next-line no-unused-vars
@@ -259,6 +260,25 @@ const GlyphGenerator = {
       level: 6666,
       rawLevel: 6666,
       effects: effectBitmask,
+    };
+  },
+
+  companionGlyph(eternityPoints) {
+    // Store the pre-Reality EP value in the glyph's rarity
+    const str = rarityToStrength(eternityPoints.log10() / 1e6);
+    const effects = orderedEffectList.filter(effect => effect.match("companion*"));
+    // The last effect is the nerf reduction text, get rid of it if it doesn't apply
+    if (!(player.saveOverThresholdFlag && eternityPoints.gte("1e6000"))) effects.pop();
+    const effectBitmask = makeGlyphEffectBitmask(effects);
+    return {
+      id: undefined,
+      idx: null,
+      type: "companion",
+      strength: str,
+      level: 1,
+      rawLevel: 1,
+      effects: effectBitmask,
+      color: "#feaec9"
     };
   },
 
@@ -996,20 +1016,23 @@ const GlyphSacrificeHandler = {
   // Removes a glyph, accounting for sacrifice unlock and alchemy state
   removeGlyph(glyph, force = false) {
     if (!this.canSacrifice) this.deleteGlyph(glyph, force);
-    if (this.isRefining) this.refineGlyph(glyph);
-    this.sacrificeGlyph(glyph, force);
+    else if (this.isRefining) this.refineGlyph(glyph);
+    else this.sacrificeGlyph(glyph, force);
   },
-  deleteGlyph() {
-    if (force || confirm("Do you really want to delete this glyph?")) {
+  deleteGlyph(glyph, force) {
+    if (glyph.type === "companion") {
+      Modal.deleteCompanion.show();
+    } else if (force || confirm("Do you really want to delete this glyph?")) {
       Glyphs.removeFromInventory(glyph);
     }
   },
   glyphSacrificeGain(glyph) {
     if (!this.canSacrifice) return 0;
-    if (glyph.type === "reality") return 0.01 * glyph.level;
+    if (glyph.type === "reality") return 0.01 * glyph.level * Achievement(171).effectOrDefault(1);
     const pre10kFactor = Math.pow(Math.clampMax(glyph.level, 10000) + 10, 2.5);
     const post10kFactor = 1 + Math.clampMin(glyph.level - 10000, 0) / 100;
-    return pre10kFactor * post10kFactor * glyph.strength * Teresa.runRewardMultiplier;
+    return pre10kFactor * post10kFactor * glyph.strength *
+      Teresa.runRewardMultiplier * Achievement(171).effectOrDefault(1);
   },
   sacrificeGlyph(glyph, force = false) {
     if (glyph.type === "cursed") {
@@ -1092,10 +1115,20 @@ function estimatedAlchemyCap() {
   return GlyphSacrificeHandler.levelAlchemyCap(player.lastTenRealities.map(([, , , lvl]) => lvl).max());
 }
 
-function getGlyphLevelInputs() {
+function autoAdjustGlyphWeights() {
+  const sources = getGlyphLevelSources();
+  const f = x => Math.pow(Math.clampMin(1, Math.log(5 * x)), 3 / 2);
+  const totalWeight = Object.values(sources).map(f).sum();
+  player.celestials.effarig.glyphWeights.ep = 100 * f(sources.epBase) / totalWeight;
+  player.celestials.effarig.glyphWeights.repl = 100 * f(sources.replBase) / totalWeight;
+  player.celestials.effarig.glyphWeights.dt = 100 * f(sources.dtBase) / totalWeight;
+  player.celestials.effarig.glyphWeights.eternities = 100 * f(sources.eterBase) / totalWeight;
+}
+
+function getGlyphLevelSources() {
   // Glyph levels are the product of 3 or 4 sources (eternities are enabled via upgrade).
   // Once Effarig is unlocked, these contributions can be adjusted; the math is described in detail
-  // below. These *Base values are the nominal inputs, as they would be multiplied without Effarig
+  // in getGlyphLevelInputs. These *Base values are the nominal inputs, as they would be multiplied without Effarig
   const eternityPoints = canEternity() ? player.eternityPoints.plus(gainedEternityPoints()) : player.eternityPoints;
   const epBase = Math.pow(Math.max(1, eternityPoints.pLog10()) / 4000, 0.5);
   // @ts-ignore
@@ -1105,6 +1138,11 @@ function getGlyphLevelInputs() {
   const replBase = Math.pow(Math.max(1, player.replicanti.amount.log10()), replPow) * 0.02514867;
   const dtBase = Math.pow(Math.max(1, player.dilation.dilatedTime.pLog10()), 1.3) * 0.02514867;
   const eterBase = Effects.max(1, RealityUpgrade(18));
+  return { epBase, replBase, dtBase, eterBase };
+}
+
+function getGlyphLevelInputs() {
+  const { epBase, replBase, dtBase, eterBase } = getGlyphLevelSources();
   // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
   // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
   // If n1..n4 just add up to 4, then the optimal strategy is to just max out the one over the
@@ -1164,8 +1202,12 @@ function getGlyphLevelInputs() {
     Perk.glyphLevelIncrease1,
     Perk.glyphLevelIncrease2
   );
-  baseLevel += perkFactor;
-  scaledLevel += perkFactor;
+  const achievementFactor = Effects.sum(
+    Achievement(148),
+    Achievement(157)
+  );
+  baseLevel += perkFactor + achievementFactor;
+  scaledLevel += perkFactor + achievementFactor;
   // Temporary runaway prevention (?)
   const levelHardcap = 1000000;
   const levelCapped = scaledLevel > levelHardcap;
@@ -1178,6 +1220,7 @@ function getGlyphLevelInputs() {
     perkShop: perkShopEffect,
     scalePenalty,
     perkFactor,
+    achievementFactor,
     shardFactor,
     rawLevel: baseLevel,
     actualLevel: Math.max(1, scaledLevel),

@@ -83,12 +83,15 @@ Vue.component("dimension-autobuyer-box", {
   },
   template:
     `<autobuyer-box :autobuyer="autobuyer" :name="name" showInterval>
-      <template slot="beforeInterval">
+      <template slot="intervalSlot">
         <bulk-button :autobuyer="autobuyer" />
         <autobuyer-interval-button :autobuyer="autobuyer" />
+      </template>
+      <template slot="toggleSlot">
         <button class="o-autobuyer-btn" @click="toggleMode">{{modeDisplay}}</button>
       </template>
-      <div class="l-autobuyer-box__fill" />
-      <autobuyer-priority-selector :autobuyer="autobuyer" class="l-autobuyer-box__priority-selector" />
+      <template slot="prioritySlot">
+        <autobuyer-priority-selector :autobuyer="autobuyer" class="l-autobuyer-box__priority-selector" />
+      </template>
     </autobuyer-box>`
 });

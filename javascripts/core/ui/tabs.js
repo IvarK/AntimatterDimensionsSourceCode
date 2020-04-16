@@ -17,6 +17,10 @@ class SubtabState {
   get isAvailable() {
     return this.config.condition === undefined || this.config.condition();
   }
+  
+  get hasNotification() {
+    return player.tabNotifications.has(this._parent.config.key + this.key);
+  }
 
   get key() {
     return this.config.key;
@@ -57,6 +61,10 @@ class TabState {
     return ui.view.tab === this.config.key;
   }
 
+  get hasNotification() {
+    return this.subtabs.some(tab => tab.hasNotification);
+  }
+
   show(subtab = undefined) {
     ui.view.tab = this.config.key;
     if (subtab !== undefined) {
@@ -64,8 +72,22 @@ class TabState {
     }
     if (!this._currentSubtab.isAvailable) this.resetCurrentSubtab();
     ui.view.subtab = this._currentSubtab.key;
+    const tabNotificationKey = this.config.key + this._currentSubtab.key;
+    if (player.tabNotifications.has(tabNotificationKey)) player.tabNotifications.delete(tabNotificationKey);
+    
+    // Makes it so that the glyph tooltip doesn't stay on tab change
+    ui.view.tabs.reality.currentGlyphTooltip = -1;
     Modal.hide();
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
+
+    if (this.config.key === "reality" && 
+        player.saveOverThresholdFlag && 
+        !player.saveOverThresholdFlagModalDisplayed) {
+      Modal.message.show(`Your save seems to be over ${format(new Decimal("1e6000"))} EP. 
+        There have been nerfs past that in the update, so for the first Reality your EP gives fewer RM
+        past ${format(new Decimal("1e6000"))} EP.`);
+      player.saveOverThresholdFlagModalDisplayed = true;
+    }
   }
 
   resetCurrentSubtab() {

@@ -83,11 +83,15 @@ function requiredIPForEP() {
 }
 
 function getRealityMachineMultiplier() {
-  return Teresa.rmMultiplier * Effects.max(1, PerkShopUpgrade.rmMult) * getAdjustedGlyphEffect("effarigrm");
+  return Teresa.rmMultiplier * Effects.max(1, PerkShopUpgrade.rmMult) *
+    getAdjustedGlyphEffect("effarigrm") * Achievement(167).effectOrDefault(1);
 }
 
 function gainedRealityMachines() {
-  const log10FinalEP = player.eternityPoints.plus(gainedEternityPoints()).log10();
+  let log10FinalEP = player.eternityPoints.plus(gainedEternityPoints()).log10();
+  if (player.realities === 0 && log10FinalEP > 6000 && player.saveOverThresholdFlag) {
+    log10FinalEP -= (log10FinalEP - 6000) * 0.75;
+  }
   let rmGain = Decimal.pow(1000, log10FinalEP / 4000 - 1);
   // Increase base RM gain if <10 RM
   if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
@@ -214,23 +218,13 @@ function gainedInfinities() {
     infGain = infGain.timesEffectsOf(
       TimeStudy(32),
       RealityUpgrade(5),
-      RealityUpgrade(7)
+      RealityUpgrade(7),
+      Achievement(164)
     );
     infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
     infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
     return infGain;
 }
-
-setInterval(() => {
-  if (isLocalEnvironment()) return;
-  fetch("version.txt")
-    .then(response => response.json())
-    .then(json => {
-      if (json.version > player.version) {
-        Modal.message.show(json.message, updateRefresh);
-      }
-    });
-}, 60000);
 
 // TODO: remove before release
 (function() {
@@ -267,14 +261,6 @@ function updateRefresh() {
   GameStorage.save(true);
   location.reload(true);
 }
-
-function kongLog10StatSubmission() {
-  kong.submitStats("Log10 of total antimatter", player.totalAntimatter.e);
-  kong.submitStats("Log10 of Infinity Points", player.infinityPoints.e);
-  kong.submitStats("Log10 of Eternity Points", player.eternityPoints.e);
-}
-
-setInterval(kongLog10StatSubmission, 10000)
 
 const GAME_SPEED_EFFECT = {
   FIXED_SPEED: 1,
@@ -416,6 +402,10 @@ function gameLoop(diff, options = {}) {
 
   slowerAutobuyers(realDiff);
   Autobuyers.tick();
+  
+  if (Achievement(165).isUnlocked && player.celestials.effarig.autoAdjustGlyphWeights) {
+    autoAdjustGlyphWeights();
+  }
 
   // We do these after autobuyers, since it's possible something there might
   // change a multiplier.
@@ -671,7 +661,7 @@ function updateFreeGalaxies() {
 function getTTPerSecond() {
   // All TT multipliers (note that this is equal to 1 pre-Ra)
   let ttMult = RA_UNLOCKS.TT_BOOST.effect.ttGen();
-  ttMult *= Achievement(137).effectValue;
+  ttMult *= Achievement(137).effectOrDefault(1);
   if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttMult *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
@@ -688,54 +678,13 @@ function getTTPerSecond() {
   return dilationTT.add(glyphTT);
 }
 
-function simulateTime(seconds, real, fast) {
-  // Don't do asynchronous processing loops nested in simulateTime
-  Async.enabled = false;
+function recursiveTimeOut(fn, iterations, endFn) {
+  fn(iterations);
+  if (iterations === 0) endFn();
+  else setTimeout(() => recursiveTimeOut(fn, iterations - 1, endFn), 0);
+}
 
-  // The game is simulated at a base 50ms update rate, with a max of 1000 ticks. additional ticks are converted
-  // into a higher diff per tick
-  // warning: do not call this function with real unless you know what you're doing
-  // calling it with fast will only simulate it with a max of 50 ticks
-  let ticks = seconds * 20;
-  GameUI.notify.showBlackHoles = false;
-
-  // Limit the tick count (this also applies if the black hole is unlocked)
-  if (ticks > 1000 && !real && !fast) {
-    ticks = 1000;
-  } else if (ticks > 50 && fast) {
-    ticks = 50;
-  }
-  const largeDiff = (1000 * seconds) / ticks;
-
-  const playerStart = deepmerge.all([{}, player]);
-
-  player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * 1000));
-  player.eternities = player.eternities.plus(getEternitiedMilestoneReward(seconds * 1000));
-  player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
-
-  if (InfinityUpgrade.ipOffline.isBought) {
-    player.infinityPoints = player.infinityPoints.plus(player.bestIpPerMsWithoutMaxAll.times(seconds * 1000 / 2));
-  }
-
-
-  // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
-  if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
-    let remainingRealSeconds = seconds;
-    for (let numberOfTicksRemaining = ticks; numberOfTicksRemaining > 0; numberOfTicksRemaining--) {
-      const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
-        numberOfTicksRemaining, 0.0001);
-      remainingRealSeconds -= realTickTime;
-      gameLoop(1000 * realTickTime, { blackHoleSpeedup });
-    }
-  } else {
-    for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
-      gameLoop(largeDiff);
-      if (real) {
-        console.log(ticksDone);
-      }
-    }
-  }
-  
+function afterSimulation(seconds, playerStart) {
   if (seconds > 1000) {
     const offlineIncreases = ["While you were away"];
     // OoM increase
@@ -784,7 +733,78 @@ function simulateTime(seconds, real, fast) {
   }
   
   GameUI.notify.showBlackHoles = true;
-  Async.enabled = true;
+}
+
+function simulateTime(seconds, real, fast) {
+  // The game is simulated at a base 50ms update rate, with a max of 
+  // player.options.offlineTicks ticks. additional ticks are converted
+  // into a higher diff per tick
+  // warning: do not call this function with real unless you know what you're doing
+  // calling it with fast will only simulate it with a max of 50 ticks
+  let ticks = seconds * 20;
+  GameUI.notify.showBlackHoles = false;
+
+  // Limit the tick count (this also applies if the black hole is unlocked)
+  if (ticks > player.options.offlineTicks && !real && !fast) {
+    ticks = player.options.offlineTicks;
+  } else if (ticks > 50 && fast) {
+    ticks = 50;
+  }
+  const largeDiff = (player.options.offlineTicks * seconds) / ticks;
+
+  const playerStart = deepmerge.all([{}, player]);
+
+  player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * 1000));
+  player.eternities = player.eternities.plus(getEternitiedMilestoneReward(seconds * 1000));
+  player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
+
+  if (InfinityUpgrade.ipOffline.isBought) {
+    player.infinityPoints = player.infinityPoints
+      .plus(player.bestIpPerMsWithoutMaxAll
+        .times(seconds * 1000 / 2)
+      );
+  }
+
+  ui.view.modal.progressBar = {};
+  ui.view.modal.progressBar.label = "Simulating offline time...";
+
+  let loopFn = () => gameLoop(largeDiff);
+  let remainingRealSeconds = seconds;
+  // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
+  if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
+    loopFn = i => {
+      const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
+        i, 0.0001);
+      remainingRealSeconds -= realTickTime;
+      gameLoop(1000 * realTickTime, { blackHoleSpeedup });
+    };
+  }
+
+  Async.run(loopFn,
+    ticks,
+    {
+      batchSize: 1,
+      maxTime: 60,
+      sleepTime: 1,
+      asyncEntry: doneSoFar => {
+        GameIntervals.stop();
+        ui.$viewModel.modal.progressBar = {
+          label: "Simulating offline time...",
+          current: doneSoFar,
+          max: ticks,
+        };
+      },
+      asyncProgress: doneSoFar => {
+        ui.$viewModel.modal.progressBar.current = doneSoFar;
+      },
+      asyncExit: () => {
+        ui.$viewModel.modal.progressBar = undefined;
+        GameIntervals.start();
+      },
+      then: () => {
+        afterSimulation(seconds, playerStart);
+      }
+    });
 }
 
 function updateChart(first) {
@@ -877,14 +897,9 @@ function slowerAutobuyers(realDiff) {
   }
 }
 
-setInterval(function () {
-    if (playFabId != -1 && player.options.cloud) playFabSaveCheck();
-}, 1000*60*5)
-
 window.onload = function() {
   GameUI.initialized = true;
   ui.view.initialized = true;
-  GameIntervals.start();
   setTimeout(() => {
     if (kong.enabled) {
       playFabLogin();

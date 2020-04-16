@@ -4,6 +4,7 @@
 let ui = {
   view: {
     modal: {
+      queue: [],
       current: undefined,
       cloudConflicts: [],
       glyphSelection: false,

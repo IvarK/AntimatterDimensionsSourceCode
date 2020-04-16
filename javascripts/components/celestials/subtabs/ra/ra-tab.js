@@ -26,7 +26,7 @@ Vue.component("ra-tab", {
       this.petWithRecollection = Ra.petWithRecollection;
     },
     startRun() {
-      resetReality();
+      if (!resetReality()) return;
       Ra.initializeRun();
     },
     toggleMode() {

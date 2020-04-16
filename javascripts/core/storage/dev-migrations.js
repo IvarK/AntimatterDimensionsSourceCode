@@ -621,6 +621,25 @@ GameStorage.devMigrations = {
       delete player.celestials.enslaved.maxQuotes;
       delete player.celestials.v.quoteIdx;
       delete player.celestials.ra.quoteIdx;
+    },
+    player => {
+      player.celestials.enslaved.totalDimCapIncrease = 0;
+      player.celestials.enslaved.tesseracts = 0;
+    },
+    player => {
+      delete player.auto.galaxy.buyMax;
+    },
+    player => {
+      delete player.reality.glyphs.sac.cursed;
+      Achievement(153).lock();
+      Achievement(157).lock();
+    },
+    player => {
+      // Return all PP spent on old V goal reduction
+      if (player.celestials.v.ppSpent) {
+        player.reality.pp += player.celestials.v.ppSpent;
+        delete player.celestials.v.ppSpent;
+      }
     }
   ],
 

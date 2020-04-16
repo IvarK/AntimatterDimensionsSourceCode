@@ -1,16 +1,22 @@
 "use strict";
 
 Vue.component("modal-popup", {
+  props: {
+    modal: {
+      type: Object,
+    }
+  },
   methods: {
     hide() {
-      Modal.hide();
+      if (this.modal.hide) this.modal.hide();
+      else Modal.hide();
     }
   },
   template:
-    `<div v-if="!$viewModel.modal.current.isBare" class="c-modal l-modal">
-      <component :is="$viewModel.modal.current.component" @close="hide" />
+    `<div v-if="!modal.isBare" class="c-modal l-modal">
+      <component :is="modal.component" @close="hide" />
     </div>
-    <component v-else :is="$viewModel.modal.current.component" />`
+    <component v-else :is="modal.component" />`
 });
 
 Vue.component("modal-close-button", {

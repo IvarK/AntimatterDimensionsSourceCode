@@ -109,14 +109,8 @@ function eternity(force, auto, specialConditions = {}) {
   player.bestIPminThisEternity = new Decimal(0);
   player.bestInfinitiesPerMs = new Decimal(0);
   player.bestIpPerMsWithoutMaxAll = new Decimal(0);
+  player.thisEternityMaxAM = new Decimal(0);
   resetTimeDimensions();
-  try {
-    // FIXME: Eternity count is a Decimal and also why is this submitted in so many places?
-    // kong.submitStats('Eternities', player.eternities);
-  } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log("Couldn't load Kongregate API");
-  }
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();

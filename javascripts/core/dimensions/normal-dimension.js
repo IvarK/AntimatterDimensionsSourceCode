@@ -678,5 +678,7 @@ const NormalDimensions = {
     player.antimatter = player.antimatter.plus(amProduced);
     player.totalAntimatter = player.totalAntimatter.plus(amProduced);
     player.thisInfinityMaxAM = player.thisInfinityMaxAM.max(player.antimatter);
+    player.thisEternityMaxAM = player.thisEternityMaxAM.max(player.antimatter);
+    if (amProduced.gt(0)) player.noAntimatterProduced = false;
   }
 };

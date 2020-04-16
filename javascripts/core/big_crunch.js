@@ -26,9 +26,6 @@ function handleChallengeCompletion() {
   if (!challenge) return;
   challenge.complete();
   challenge.updateChallengeTime();
-  if (NormalChallenge(9).isRunning) {
-    kong.submitStats("NormalChallenge 9 time record (ms)", Math.floor(player.thisInfinityTime));
-  }
   if (!player.options.retryChallenge) {
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = 0;
@@ -79,10 +76,6 @@ function bigCrunchReset() {
   player.usedMaxAll = false;
 
   if (EternityChallenge(4).tryFail()) return;
-
-  // FIXME: Infinitified is now Decimal so decide what happens here!
-  // kong.submitStats('Infinitied', Player.totalInfinitied);
-  kong.submitStats("Fastest Infinity time (ms)", Math.floor(player.bestInfinityTime));
 
   const currentReplicanti = player.replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;

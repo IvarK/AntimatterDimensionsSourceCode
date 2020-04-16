@@ -150,10 +150,12 @@ function requestManualReality() {
   }
   realityProps.alreadyGotGlyph = true;
   if (GlyphSelection.choiceCount === 1) {
-    const newGlyph = player.realities === 0
-      ? GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel)
-      : GlyphGenerator.randomGlyph(realityProps.gainedGlyphLevel);
-    Glyphs.addToInventory(newGlyph);
+    if (player.realities === 0) {
+      Glyphs.addToInventory(GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel));
+      Glyphs.addToInventory(GlyphGenerator.companionGlyph(player.eternityPoints));
+    } else {
+      Glyphs.addToInventory(GlyphGenerator.randomGlyph(realityProps.gainedGlyphLevel));
+    }
     triggerManualReality(realityProps);
     return;
   }
@@ -248,12 +250,13 @@ function updateRealityRecords(realityProps) {
 
 function giveRealityRewards(realityProps) {
   const multiplier = realityProps.simulatedRealities + 1;
+  const realityAndPPMultiplier = multiplier + binomialDistribution(multiplier, Achievement(154).effectOrDefault(0));
   const gainedRM = realityProps.gainedRM;
   player.reality.realityMachines = player.reality.realityMachines.plus(gainedRM.times(multiplier));
   updateRealityRecords(realityProps);
   addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRM, realityProps.gainedGlyphLevel.actualLevel);
-  player.realities += multiplier;
-  player.reality.pp += multiplier;
+  player.realities += realityAndPPMultiplier;
+  player.reality.pp += realityAndPPMultiplier;
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
     player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
   }
@@ -407,6 +410,8 @@ function finishProcessReality(realityProps) {
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
   player.noFirstDimensions = true;
+  player.noAntimatterProduced = true;
+  player.noTriadStudies = true;
   player.noTheoremPurchases = true;
   player.noInfinitiesThisReality = true;
   player.noEternitiesThisReality = true;

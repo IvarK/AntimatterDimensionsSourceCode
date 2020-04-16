@@ -56,25 +56,29 @@ Vue.component("big-crunch-autobuyer-box", {
   },
   template:
     `<autobuyer-box :autobuyer="autobuyer" :showInterval="!postBreak" name="Automatic Big Crunch">
-      <autobuyer-interval-button slot="beforeInterval" :autobuyer="autobuyer" />
-      <div v-if="postBreak">
-        <select
-          v-if="hasAdditionalModes"
-          class="c-autobuyer-box__mode-select l-autobuyer-box__mode-select"
-          @change="changeMode"
-        >
-          <option
-            v-for="optionMode in modes"
-            :value="optionMode"
-            :selected="mode === optionMode"
-          >{{modeProps(optionMode).title}}</option>
-        </select>
-        <span v-else>{{modeProps(mode).title}}:</span>
-        <autobuyer-input
-         :autobuyer="autobuyer"
-         :key="mode"
-         v-bind="modeProps(mode).input"
-        />
-      </div>
+      <autobuyer-interval-button slot="intervalSlot" :autobuyer="autobuyer" />
+      <template v-if="postBreak">
+        <template slot="intervalSlot">
+          <select
+            v-if="hasAdditionalModes"
+            class="c-autobuyer-box__mode-select"
+            @change="changeMode"
+          >
+            <option
+              v-for="optionMode in modes"
+              :value="optionMode"
+              :selected="mode === optionMode"
+            >{{modeProps(optionMode).title}}</option>
+          </select>
+          <span v-else>{{modeProps(mode).title}}:</span>
+        </template>
+        <template slot="toggleSlot">
+          <autobuyer-input
+            :autobuyer="autobuyer"
+            :key="mode"
+            v-bind="modeProps(mode).input"
+          />
+        </template>
+      </template>
     </autobuyer-box>`
 });

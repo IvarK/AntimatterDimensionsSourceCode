@@ -56,7 +56,6 @@ class AchievementState extends GameMechanicState {
       Autobuyer.bigCrunch.bumpAmount(4);
     }
     GameUI.notify.success(this.name);
-    kong.submitAchievements();
     Achievements._power.invalidate();
     EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
   }

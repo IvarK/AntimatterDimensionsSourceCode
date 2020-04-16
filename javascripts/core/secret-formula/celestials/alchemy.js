@@ -313,7 +313,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 19,
       lockText: "Effarig Level 19",
-      formatEffect: value => `Generate ${format(value, 2, 2)} realities and perk points per second`,
+      formatEffect: value => `Generate ${format(value, 2, 2)} Realities and perk points per second`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.INFINITY,

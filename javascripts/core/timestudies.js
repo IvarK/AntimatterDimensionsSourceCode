@@ -144,6 +144,7 @@ function unlockDilation(quiet) {
   if (Ra.has(RA_UNLOCKS.START_TP) && !isInCelestialReality()) {
     player.dilation.tachyonParticles = getTP(RA_UNLOCKS.START_TP.effect());
   }
+  TabNotification.dilationAfterUnlock.tryTrigger();
 }
 
 function getSelectedDimensionStudyPaths() {
@@ -634,6 +635,7 @@ class TriadStudyState extends TimeStudyState {
     if (!this.canBeBought) return;
     player.celestials.v.triadStudies.push(this.config.id);
     player.celestials.v.STSpent += this.STCost;
+    player.noTriadStudies = false;
   }
 
   purchaseUntil() {

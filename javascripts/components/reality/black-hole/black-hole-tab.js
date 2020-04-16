@@ -27,9 +27,7 @@ Vue.component("black-hole-tab", {
     },
   },
   mounted() {
-    if (this.$refs.canvas) {
-      this.animation = new BlackHoleAnimation(this.$refs.canvas.getContext("2d"));
-    }
+    this.startAnimation();
   },
   destroyed() {
     if (this.animation) this.animation.unmount();
@@ -73,6 +71,13 @@ Vue.component("black-hole-tab", {
         player.blackHoleNegative
       );
     },
+    startAnimation() {
+      setTimeout(() => {
+        if (this.$refs.canvas) {
+          this.animation = new BlackHoleAnimation(this.$refs.canvas.getContext("2d"));
+        }
+      }, 1);
+    }
   },
   template: `
     <div class="l-black-hole-tab">
@@ -80,7 +85,7 @@ Vue.component("black-hole-tab", {
         The physics of this Reality do not permit singularities.
       </div>
       <div v-else-if="!isUnlocked">
-        <black-hole-unlock-button/>
+        <black-hole-unlock-button @blackholeunlock="startAnimation"/>
         The Black Hole makes the entire game run significantly faster for a short period of time.
         <br>
         Starts at {{ formatX(180) }} faster for {{ formatInt(10) }} seconds, once per hour.

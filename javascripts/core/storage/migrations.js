@@ -136,8 +136,11 @@ GameStorage.migrations = {
       GameStorage.migrations.convertAchievementsToBits(player);
       GameStorage.migrations.removePower(player);
       GameStorage.migrations.setNoInfinitiesOrEternitiesThisReality(player);
+      GameStorage.migrations.setTutorialState(player);
 
       kong.migratePurchases();
+      
+      if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
       
       // Needed to check some reality upgrades which are usually only checked on eternity.
       EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
@@ -337,6 +340,7 @@ GameStorage.migrations = {
     delete player.dead;
     player.onlyEighthDimensions = player.dimlife;
     delete player.dimlife;
+    if (player.totalAntimatter.gt(0)) player.noAntimatterProduced = false;
     if (
       player.timestudy.theorem.gt(0) ||
       player.timestudy.studies.length > 0 ||
@@ -687,6 +691,12 @@ GameStorage.migrations = {
   setNoInfinitiesOrEternitiesThisReality(player) {
     player.noInfinitiesThisReality = player.infinitied.eq(0) && player.eternities.eq(0);
     player.noEternitiesThisReality = player.eternities.eq(0);
+  },
+
+  setTutorialState(player) {
+    if (player.infinitied.gt(0) || player.eternities.gt(0) || player.realities > 0 || player.galaxies > 0) {
+      player.tutorialState = 4;
+    } else if (player.dimensionBoosts > 0) player.tutorialState = TUTORIAL_STATE.GALAXY;
   },
 
   prePatch(saveData) {

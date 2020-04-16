@@ -8,6 +8,7 @@ let player = {
   antimatter: new Decimal(10),
   totalAntimatter: new Decimal(0),
   thisInfinityMaxAM: new Decimal(0),
+  thisEternityMaxAM: new Decimal(0),
   dimensions: {
     normal: Array.range(0, 8).map(() => ({
       bought: 0,
@@ -82,6 +83,7 @@ let player = {
     dimBoost: {
       cost: 1,
       interval: 8000,
+      limitDimBoosts: true,
       maxDimBoosts: 1,
       galaxies: 10,
       bulk: 1,
@@ -245,6 +247,8 @@ let player = {
   onlyFirstDimensions: true,
   noEighthDimensions: false,
   noFirstDimensions: false,
+  noAntimatterProduced: true,
+  noTriadStudies: true,
   noTheoremPurchases: true,
   noInfinitiesThisReality: true,
   noEternitiesThisReality: true,
@@ -281,8 +285,7 @@ let player = {
         replication: 0,
         dilation: 0,
         effarig: 0,
-        reality: 0,
-        cursed: 0
+        reality: 0
       },
       undo: [],
     },
@@ -367,6 +370,7 @@ let player = {
         dt: 25,
         eternities: 25
       },
+      autoAdjustGlyphWeights: false,
       glyphScoreSettings: {
         mode: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
         simpleEffectCount: 0,
@@ -405,7 +409,7 @@ let player = {
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       triadStudies: [],
-      ppSpent: 0,
+      goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],
       // The -10 is for glyph count, as glyph count for V is stored internally as a negative number
@@ -479,8 +483,11 @@ let player = {
       autoAnnihilationTimer: 0
     }
   },
+  tabNotifications: new Set(),
   tutorialState: 0,
   tutorialActive: true,
+  saveOverThresholdFlag: false,
+  saveOverThresholdFlagModalDisplayed: false,
   options: {
     news: true,
     notation: "Mixed scientific",
@@ -498,6 +505,7 @@ let player = {
     offlineProgress: true,
     showGlyphEffectDots: true,
     respecIntoProtected: false,
+    offlineTicks: 1000,
     showHintText: {
       achievements: false,
       challenges: false,

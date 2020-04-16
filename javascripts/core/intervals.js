@@ -5,13 +5,22 @@ const GameIntervals = (function() {
     let id = -1;
     return {
       start() {
-        id = setInterval(handler, typeof timeout === "function" ? timeout() : timeout);
+        // This starts the interval if it isn't already started,
+        // and throws an error if it is.
+        if (this.isStarted) {
+          throw new Error("An already started interval cannot be started again.");
+        } else {
+          id = setInterval(handler, typeof timeout === "function" ? timeout() : timeout);
+        }
       },
       get isStarted() {
         return id !== -1;
       },
       stop() {
+        // This stops the interval if it isn't already stopped,
+        // and does nothing if it is already stopped.
         clearInterval(id);
+        id = -1;
       },
       restart() {
         this.stop();
@@ -35,6 +44,12 @@ const GameIntervals = (function() {
       // eslint-disable-next-line no-shadow
       for (const interval of this.all()) {
         interval.stop();
+      }
+    },
+    restart() {
+      // eslint-disable-next-line no-shadow
+      for (const interval of this.all()) {
+        interval.restart();
       }
     },
     gameLoop: interval(() => gameLoop(), () => player.options.updateRate),

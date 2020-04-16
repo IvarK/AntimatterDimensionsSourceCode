@@ -109,6 +109,7 @@ function eternity(force, auto, specialConditions = {}) {
   player.bestIPminThisEternity = new Decimal(0);
   player.bestInfinitiesPerMs = new Decimal(0);
   player.bestIpPerMsWithoutMaxAll = new Decimal(0);
+  player.thisEternityMaxAM = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
   playerInfinityUpgradesOnEternity();

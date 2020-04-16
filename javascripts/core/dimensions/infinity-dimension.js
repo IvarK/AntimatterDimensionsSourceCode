@@ -128,6 +128,10 @@ class InfinityDimensionState extends DimensionState {
     return this._unlockRequirement;
   }
 
+  get requirementReached() {
+    return player.thisEternityMaxAM.gte(this.requirement);
+  }
+
   get isAutobuyerUnlocked() {
     return player.eternities.gte(10 + this.tier);
   }
@@ -259,6 +263,17 @@ class InfinityDimensionState extends DimensionState {
     this.baseAmount = 0;
     this.isUnlocked = false;
   }
+
+  tryUnlock() {
+    if (!Perk.bypassIDAntimatter.isBought && !this.requirementReached) return;
+
+    this.isUnlocked = true;
+    EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, this.tier);
+    if (player.infDimBuyers[this.tier - 1] &&
+      !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
+      buyMaxInfDims(this.tier);
+    }
+  }
 }
 
 /**
@@ -278,7 +293,7 @@ const InfinityDimensions = {
   unlockNext() {
     if (InfinityDimension(8).isUnlocked) return;
     const next = InfinityDimensions.next();
-    if (!Perk.bypassIDAntimatter.isBought && player.antimatter.lt(next.requirement)) return;
+    if (!Perk.bypassIDAntimatter.isBought && player.thisEternityMaxAM.lt(next.requirement)) return;
     next.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, next.tier);
   },
@@ -329,17 +344,10 @@ const InfinityDimensions = {
 };
 
 function tryUnlockInfinityDimensions() {
-  if (player.eternities.lt(25) || InfinityDimension(8).isUnlocked) return;
+  if (!EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked) return;
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;
-    // If we cannot unlock this one, we can't unlock the rest, either
-    if (!Perk.bypassIDAntimatter.isBought && InfinityDimension(tier).requirement.gt(player.antimatter)) break;
-    InfinityDimension(tier).isUnlocked = true;
-    EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, tier);
-    if (player.infDimBuyers[tier - 1] &&
-      !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
-      buyMaxInfDims(tier);
-    }
+    InfinityDimension(tier).tryUnlock();
   }
 }
 

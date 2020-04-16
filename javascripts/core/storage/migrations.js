@@ -139,6 +139,7 @@ GameStorage.migrations = {
       GameStorage.migrations.setTutorialState(player);
 
       kong.migratePurchases();
+      if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
     }
   },
 

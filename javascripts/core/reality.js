@@ -150,10 +150,12 @@ function requestManualReality() {
   }
   realityProps.alreadyGotGlyph = true;
   if (GlyphSelection.choiceCount === 1) {
-    const newGlyph = player.realities === 0
-      ? GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel)
-      : GlyphGenerator.randomGlyph(realityProps.gainedGlyphLevel);
-    Glyphs.addToInventory(newGlyph);
+    if (player.realities === 0) {
+      Glyphs.addToInventory(GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel));
+      Glyphs.addToInventory(GlyphGenerator.companionGlyph(player.eternityPoints));
+    } else {
+      Glyphs.addToInventory(GlyphGenerator.randomGlyph(realityProps.gainedGlyphLevel));
+    }
     triggerManualReality(realityProps);
     return;
   }

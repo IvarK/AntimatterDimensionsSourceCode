@@ -20,11 +20,31 @@ function formatContinuum(value) {
 }
 
 function formatPostBreak(value, places, placesUnder1000) {
-  const currentFormat = ui.formatPreBreak;
-  ui.formatPreBreak = false;
-  const formatted = format(value, places, placesUnder1000);
-  ui.formatPreBreak = currentFormat;
-  return formatted;
+  const notation = Notations.current;
+  // This is basically just a copy of the format method from notations library,
+  // with the pre-break case removed.
+  if (typeof value === "number" && !Number.isFinite(value)) {
+    return notation.infinite;
+  }
+
+  const decimal = Decimal.fromValue_noAlloc(value);
+
+  if (decimal.exponent < -300) {
+    return decimal.sign() < 0
+      ? notation.formatVerySmallNegativeDecimal(decimal.abs(), placesUnder1000)
+      : notation.formatVerySmallDecimal(decimal, placesUnder1000);
+  }
+
+  if (decimal.exponent < 3) {
+    const number = decimal.toNumber();
+    return number < 0
+      ? notation.formatNegativeUnder1000(Math.abs(number), placesUnder1000)
+      : notation.formatUnder1000(number, placesUnder1000);
+  }
+
+  return decimal.sign() < 0
+    ? notation.formatNegativeDecimal(decimal.abs(), places)
+    : notation.formatDecimal(decimal, places);
 }
 
 function formatX(value, places, placesUnder1000) {

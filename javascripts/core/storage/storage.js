@@ -164,6 +164,11 @@ const GameStorage = {
     } else {
       player.lastUpdate = Date.now();
     }
+    // If simulateTime didn't run, we don't currently know if game intervals
+    // are off or on (could be off because the game was just loaded or on
+    // because a save was imported) so we need to restart rather than start
+    // (restart will always lead to starting and not throw an error).
+    GameIntervals.restart();
     Enslaved.nextTickDiff = player.options.updateRate;
     GameUI.update();
     if (GameIntervals.gameLoop.isStarted) {

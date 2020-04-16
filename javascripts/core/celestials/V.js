@@ -21,21 +21,33 @@ class VRunUnlockState extends GameMechanicState {
     return value === undefined ? this.config.values[this.completions - 1] : value;
   }
 
-  get isReduced() {
-    if (player.celestials.v.ppSpent === 0) return false;
-    return this.config.nextReduction || (V.has(V_UNLOCKS.SHARD_REDUCTION) && this.reduction > 0);
+  get canBeReduced() {
+    return this.completions < this.config.values.length &&
+      new Decimal(this.reduction).neq(this.config.maxShardReduction(this.conditionBaseValue));
   }
 
-  get reductionInfo() {
-    const value = this.conditionBaseValue;
-    if (new Decimal(this.reduction).eq(this.config.maxShardReduction(value))) return "(capped)";
-    if (this.config.nextReduction === undefined) return "";
-    return `(next at ${format(this.config.nextReduction(Math.floor(this.reduction) + 1), 2, 0)} PP spent)`;
+  get isReduced() {
+    if (player.celestials.v.goalReductionSteps[this.id] === 0) return false;
+    return (V.has(V_UNLOCKS.SHARD_REDUCTION) && this.reduction > 0);
+  }
+
+  get reductionCost() {
+    const stepCount = this.config.reductionStepSize ? this.config.reductionStepSize : 1;
+    if (this.config.isHard) {
+      // The numbers come from inside of nextHardReductionCost, this is an effective bulk-buy factor
+      const modifiedStepCount = (Math.pow(1.15, stepCount) - 1) / 0.15;
+      return modifiedStepCount * V.nextHardReductionCost(player.celestials.v.goalReductionSteps[this.id]);
+    }
+    return stepCount * V.nextNormalReductionCost();
+  }
+
+  get tiersReduced() {
+    return player.celestials.v.goalReductionSteps[this.id] / 100;
   }
 
   get reduction() {
     const value = this.conditionBaseValue;
-    return Math.clamp(this.config.shardReduction(value), 0, this.config.maxShardReduction(value));
+    return Math.clamp(this.config.shardReduction(this.tiersReduced), 0, this.config.maxShardReduction(value));
   }
 
   get conditionValue() {
@@ -104,8 +116,6 @@ const V_UNLOCKS = {
     id: 1,
     reward: () => `You can spend perk points to reduce V-achievement requirements for later tiers.`,
     description: "Have 2 V-achievements",
-    effect: () => player.celestials.v.ppSpent,
-    format: () => `${formatPercents(V.tierReduction)} Tier Reduction`,
     requirement: () => V.spaceTheorems >= 2
   },
   ND_POW: {
@@ -199,6 +209,7 @@ const V = {
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       triadStudies: [],
+      goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],
       runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -218,8 +229,10 @@ const V = {
   get isFullyCompleted() {
     return this.spaceTheorems >= 66;
   },
-  get tierReduction() {
-    if (!V.isFlipped) return Math.clampMax(player.celestials.v.ppSpent / 200000, 5);
-    return Math.clampMax(Math.log10(Math.clampMin(player.celestials.v.ppSpent / 20000, 1)) / 10, 5);
-  }
+  nextNormalReductionCost() {
+    return 1000;
+  },
+  nextHardReductionCost(currReductionSteps) {
+    return 1000 * Math.pow(1.15, currReductionSteps);
+  },
 };

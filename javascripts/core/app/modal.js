@@ -8,9 +8,9 @@ class Modal {
 
   show() {
     if (!GameUI.initialized) return;
-    if (ui.view.modal.stack.length === 0) ui.view.modal.current = this;
+    if (ui.view.modal.queue.length === 0) ui.view.modal.current = this;
     // New modals go to the back of the queue (shown last).
-    ui.view.modal.stack.push(this);
+    ui.view.modal.queue.push(this);
   }
 
   get isOpen() {
@@ -27,9 +27,9 @@ class Modal {
 
   static hide() {
     if (!GameUI.initialized) return;
-    ui.view.modal.stack.shift();
-    if (ui.view.modal.stack.length === 0) ui.view.modal.current = undefined;
-    else ui.view.modal.current = ui.view.modal.stack[0];
+    ui.view.modal.queue.shift();
+    if (ui.view.modal.queue.length === 0) ui.view.modal.current = undefined;
+    else ui.view.modal.current = ui.view.modal.queue[0];
     ui.view.modal.cloudConflicts = [];
   }
 
@@ -101,8 +101,8 @@ Modal.message = new class extends Modal {
       this.callback = callback;
       this.closeButton = closeButton;
     }
-    if (!this.stack) this.stack = [];
-    this.stack.push({ text, callback, closeButton });
+    if (!this.queue) this.queue = [];
+    this.queue.push({ text, callback, closeButton });
     // Sometimes we have stacked messages that get lost, since we don't have stacking modal system.
     // TODO: remove this console.log
     // eslint-disable-next-line no-console
@@ -111,12 +111,12 @@ Modal.message = new class extends Modal {
 
   hide() {
     Modal.hide();
-    this.stack.shift();
-    if (this.stack && this.stack.length === 0) this.message = undefined;
+    this.queue.shift();
+    if (this.queue && this.queue.length === 0) this.message = undefined;
     else {
-      this.message = this.stack[0].text;
-      this.callback = this.stack[0].callback;
-      this.closeButton = this.stack[0].closeButton;
+      this.message = this.queue[0].text;
+      this.callback = this.queue[0].callback;
+      this.closeButton = this.queue[0].closeButton;
     }
   }
 }("modal-message");

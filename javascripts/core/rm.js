@@ -1016,11 +1016,13 @@ const GlyphSacrificeHandler = {
   // Removes a glyph, accounting for sacrifice unlock and alchemy state
   removeGlyph(glyph, force = false) {
     if (!this.canSacrifice) this.deleteGlyph(glyph, force);
-    if (this.isRefining) this.refineGlyph(glyph);
-    this.sacrificeGlyph(glyph, force);
+    else if (this.isRefining) this.refineGlyph(glyph);
+    else this.sacrificeGlyph(glyph, force);
   },
   deleteGlyph(glyph, force) {
-    if (force || confirm("Do you really want to delete this glyph?")) {
+    if (glyph.type === "companion") {
+      Modal.deleteCompanion.show();
+    } else if (force || confirm("Do you really want to delete this glyph?")) {
       Glyphs.removeFromInventory(glyph);
     }
   },

@@ -712,7 +712,7 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: false,
     glyphTypes: ["companion"],
     singleDesc: "It does nothing but sit there and cutely smile at you, whisper into your dreams politely, " +
-      "and plot the demise of all who stand against you.",
+      "and plot the demise of all who stand against you. This one-of-a-kind glyph will never leave you.",
     totalDesc: "+{value} happiness",
     effect: () => (Enslaved.isRunning ? 0 : (0.4 + 0.6 * Math.random())),
     formatEffect: x => formatPercents(x, 2, 2),

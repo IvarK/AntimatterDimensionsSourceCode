@@ -8,7 +8,8 @@ Vue.component("modal-popup", {
   },
   methods: {
     hide() {
-      Modal.hide();
+      if (this.modal.hide) this.modal.hide();
+      else Modal.hide();
     }
   },
   template:

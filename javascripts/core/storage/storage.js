@@ -111,7 +111,12 @@ const GameStorage = {
       player.lastUpdate = Date.now();
       if (isDevEnvironment()) this.devMigrations.setLatestTestVersion(player);
     } else {
+      const isPreviousVersionSave = playerObject.version < 13;
       player = this.migrations.patch(playerObject);
+      if (isPreviousVersionSave) {
+        // Needed to check some reality upgrades which are usually only checked on eternity.
+        EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
+      }
       this.devMigrations.patch(player);
     }
 

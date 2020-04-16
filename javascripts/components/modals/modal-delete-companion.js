@@ -18,12 +18,29 @@ Vue.component("modal-delete-companion", {
           return "You will not receive any cake.";
         case 2:
           return "This is permanent! You will not get another Companion Glyph!";
+        case 3:
+          return "You deleted your faithful Companion Glyph more quickly than any " +
+            "other test subject on record. Congratulations.";
         default:
           return "Invalid message index";
       }
     }
   },
   methods: {
+    handleLeftButtonClick() {
+      if (this.messageIndex < 2) {
+        this.handleYesClick();
+      } else {
+        this.handleNoClick();
+      }
+    },
+    handleRightButtonClick() {
+      if (this.messageIndex >= 2) {
+        this.handleYesClick();
+      } else {
+        this.handleNoClick();
+      }
+    },
     handleYesClick() {
       this.messageIndex++;
       if (this.messageIndex === 3) this.deleteCompanion();
@@ -37,19 +54,28 @@ Vue.component("modal-delete-companion", {
       // Passing information into modals seems to require a bunch of refactoring that's not worth it for this one case.
       const toDelete = player.reality.glyphs.inventory.filter(g => g.type === "companion")[0];
       Glyphs.removeFromInventory(toDelete);
-      this.handleNoClick();
     }
   },
   template:
     `<div class="c-modal-message l-modal-content--centered">
-      {{ message }}
-      <primary-button
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleYesClick"
-      >Yes</primary-button>
-      <primary-button
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >No</primary-button>
+      <div class="c-modal-message__text">
+        {{ message }}
+      </div>
+      <div v-if="messageIndex < 3">
+        <primary-button
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          @click="handleLeftButtonClick"
+        >{{messageIndex < 2 ? "Delete" : "Cancel"}}</primary-button>
+        <primary-button
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          @click="handleRightButtonClick"
+        >{{messageIndex >= 2 ? "Delete" : "Cancel"}}</primary-button>
+      </div>
+      <div v-else>
+        <primary-button
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          @click="handleNoClick"
+        >Thank you</primary-button>
+      </div>
     </div>`
 });

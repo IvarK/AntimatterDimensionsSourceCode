@@ -191,6 +191,7 @@ function applyRealityUpgradesAfterEternity(buySingleTD = false) {
 function eternityResetReplicanti() {
   player.replicanti.unl = EternityMilestone.unlockReplicanti.isReached;
   player.replicanti.amount = player.replicanti.unl ? new Decimal(1) : new Decimal(0);
+  player.replicanti.timer = 0;
   player.replicanti.chance = 0.01;
   player.replicanti.chanceCost = new Decimal(1e150);
   player.replicanti.interval = 1000;

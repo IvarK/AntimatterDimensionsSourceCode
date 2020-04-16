@@ -374,6 +374,7 @@ function finishProcessReality(realityProps) {
   player.timeShards = new Decimal(0);
   player.replicanti.amount = new Decimal(0);
   player.replicanti.unl = false;
+  player.replicanti.timer = 0;
   player.replicanti.chance = 0.01;
   player.replicanti.chanceCost = new Decimal(1e150);
   player.replicanti.interval = 1000;

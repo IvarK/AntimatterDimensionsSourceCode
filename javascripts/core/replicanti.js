@@ -134,7 +134,7 @@ function replicantiLoop(diff) {
     player.replicanti.timer -= interval.toNumber();
   }
 
-  if (player.replicanti.amount !== 0) {
+  if (player.replicanti.amount.neq(0)) {
     player.replicanti.timer += diff;
   }
 
@@ -391,6 +391,7 @@ const Replicanti = {
   unlock() {
     if (!player.infinityPoints.gte(1e140) || player.replicanti.unl) return;
     player.replicanti.unl = true;
+    player.replicanti.timer = 0;
     player.replicanti.amount = new Decimal(1);
     player.infinityPoints = player.infinityPoints.minus(1e140);
   },

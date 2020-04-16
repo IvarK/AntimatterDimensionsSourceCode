@@ -49,6 +49,7 @@ Modal.uiChoice = new Modal("modal-ui-choice");
 Modal.import = new Modal("modal-import");
 Modal.shop = new Modal("modal-std-store");
 Modal.importTree = new Modal("modal-import-tree");
+Modal.deleteCompanion = new Modal("modal-delete-companion");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");

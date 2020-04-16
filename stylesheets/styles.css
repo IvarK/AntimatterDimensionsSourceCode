@@ -2120,6 +2120,10 @@ screen and (max-width: 480px) {
   font-size: 1.6rem;
 }
 
+.c-infinity-dim-row--not-reached {
+  opacity: 0.5;
+}
+
 .c-infinity-dim-row__label {
   text-align: left;
 }
@@ -5716,6 +5720,13 @@ kbd {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.l-v-reduction {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  font-size: 1.5rem;
 }
 
 .o-v-run-button {

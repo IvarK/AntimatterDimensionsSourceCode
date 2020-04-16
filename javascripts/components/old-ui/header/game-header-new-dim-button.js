@@ -1,7 +1,7 @@
 "use strict";
 
 Vue.component("game-header-new-dim-button", {
-  data: function() {
+  data() {
     return {
       isVisible: false,
       requirement: new Decimal(0),
@@ -10,11 +10,12 @@ Vue.component("game-header-new-dim-button", {
   },
   methods: {
     update() {
-      this.isVisible = player.break && !InfinityDimension(8).isUnlocked;
+      this.isVisible = player.break && !InfinityDimension(8).isUnlocked && 
+        player.infinityPoints.lt(Player.eternityGoal);
       if (!this.isVisible) return;
       const requirement = InfinityDimensions.next().requirement;
       this.requirement.copyFrom(requirement);
-      this.isAffordable = player.antimatter.gte(requirement);
+      this.isAffordable = player.thisEternityMaxAM.gte(requirement);
     }
   },
   template:

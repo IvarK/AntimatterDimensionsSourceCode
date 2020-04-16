@@ -36,9 +36,12 @@ const GlyphTooltipEffect = {
     },
     textSplits() {
       const firstSplit = this.effectStringTemplate.split("{value}");
-      const secondSplit = firstSplit[1].split("{value2}");
+      const secondSplit = firstSplit[1] ? firstSplit[1].split("{value2}") : "";
       if (secondSplit.length !== 1) return [firstSplit[0]].concat(secondSplit);
       return firstSplit;
+    },
+    hasValue() {
+      return this.effectStringTemplate.includes("{value}");
     },
     hasSecondaryValue() {
       return this.textSplits[2] !== undefined;
@@ -68,7 +71,7 @@ const GlyphTooltipEffect = {
   template: `
     <div class="c-glyph-tooltip__effect">
       <span v-html="convertedParts[0]"/>
-      <span :style="valueStyle">{{primaryEffectText}}</span>
+      <span v-if="hasValue" :style="valueStyle">{{primaryEffectText}}</span>
       <span v-html="convertedParts[1]"/>
       <span v-if="hasSecondaryValue" :style="valueStyle">{{secondaryEffectText}}</span>
       <span v-if="hasSecondaryValue" v-html="convertedParts[2]"/>
@@ -129,6 +132,7 @@ const GlyphTooltipComponent = {
       };
     },
     description() {
+      if (this.type === "companion") return "Companion Glyph";
       if (this.type === "cursed") return "Cursed Glyph";
       const name = this.type === "reality" ? "Pure" : this.rarityInfo.name;
       const rarity = this.type === "reality" ? "" : `(${this.roundedRarity.toFixed(1)}%)`;
@@ -141,6 +145,7 @@ const GlyphTooltipComponent = {
       return this.levelOverride && this.levelOverride > this.level;
     },
     levelText() {
+      if (this.type === "companion") return "";
       // eslint-disable-next-line no-nested-ternary
       const arrow = this.isLevelCapped ? "▼" : (this.isLevelBoosted ? "⯅" : "");
       return `Level: ${arrow}${formatInt(this.effectiveLevel)}${arrow}`;
@@ -151,7 +156,8 @@ const GlyphTooltipComponent = {
       return { color };
     },
     sacrificeText() {
-      if (this.type === "cursed") return "Cannot be sacrificed or refined";
+      if (this.type === "companion") return "";
+      if (this.type === "cursed") return "Gives nothing when sacrificed or refined";
       if (GlyphSacrificeHandler.isRefining && this.type !== "reality") {
         if (!AlchemyResource[this.type].isUnlocked) return "Cannot be refined (resource not unlocked)";
         const refinementText = `${format(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
@@ -373,6 +379,7 @@ Vue.component("glyph-component", {
       switch (this.glyph.type) {
         case "time":
         case "cursed":
+        case "companion":
           minEffectID = 0;
           break;
         case "dilation":
@@ -504,6 +511,7 @@ Vue.component("glyph-component", {
       }
     },
     glyphEffectIcon(id) {
+      if (this.glyph.type === "companion") return {};
       // Place dots clockwise starting from the bottom left
       const angle = this.glyph.type === "effarig"
         ? (Math.PI / 4) * (id + 1)

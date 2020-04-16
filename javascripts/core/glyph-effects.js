@@ -3,12 +3,13 @@
 // There is a little too much stuff about glyph effects to put in constants.
 
 // The last glyph type you can only get if you got effarig reality
-const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig", "reality", "cursed"];
+const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig",
+  "reality", "cursed", "companion"];
 const BASIC_GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power"];
 const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω",
-  effarig: "Ϙ", reality: "Ϟ", cursed: "⸸" };
+  effarig: "Ϙ", reality: "Ϟ", cursed: "⸸", companion: "♥" };
 const CANCER_GLYPH_SYMBOLS = { time: "🕟", dilation: "☎", replication: "⚤", infinity: "8", power: "⚡",
-  effarig: "🦒", reality: "⛧", cursed: "☠" };
+  effarig: "🦒", reality: "⛧", cursed: "☠", companion: "³" };
 
 const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),
@@ -487,7 +488,7 @@ GameDatabase.reality.glyphEffects = [
     effect: (level, strength) => (GlyphAlteration.isEmpowered("power")
       ? Decimal.pow(11111, level * 220)
       : Decimal.pow(level * strength * 10, level * strength * 10)),
-    formatEffect: x => format(x, 2, 0),
+    formatEffect: x => formatPostBreak(x, 2, 0),
     combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getEmpowermentColor("power"),
     alterationType: ALTERATION_TYPE.EMPOWER
@@ -705,6 +706,42 @@ GameDatabase.reality.glyphEffects = [
     effect: level => 1 + level / 125000,
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.addExponents,
+  }, {
+    id: "companiondescription",
+    bitmaskIndex: 8,
+    isGenerated: false,
+    glyphTypes: ["companion"],
+    singleDesc: "It does nothing but sit there and cutely smile at you, whisper into your dreams politely, " +
+      "and plot the demise of all who stand against you. This one-of-a-kind glyph will never leave you.",
+    totalDesc: "+{value} happiness",
+    effect: () => (Enslaved.isRunning ? 0 : (0.4 + 0.6 * Math.random())),
+    formatEffect: x => formatPercents(x, 2, 2),
+    combine: GlyphCombiner.add,
+  }, {
+    id: "companionEP",
+    bitmaskIndex: 9,
+    isGenerated: false,
+    glyphTypes: ["companion"],
+    singleDesc: "Thanks for your dedication for the game! You reached {value} EP on your first Reality.",
+    totalDesc: () => (Enslaved.isRunning ? "Help me" : "Yay!"),
+    // The EP value for this (and the next effect) are entirely encoded in rarity, but level needs to be present to
+    // make sure the proper parameter is being used. The actual glyph level shouldn't do anything.
+    // eslint-disable-next-line no-unused-vars
+    effect: (level, strength) => Decimal.pow10(1e6 * strengthToRarity(strength)),
+    formatEffect: x => formatPostBreak(x, 2),
+    combine: GlyphCombiner.multiplyDecimal,
+  }, {
+    id: "companionreduction",
+    bitmaskIndex: 10,
+    isGenerated: false,
+    glyphTypes: ["companion"],
+    singleDesc: "(Due to scaling changes from before the Reality update, this was reduced to {value} EP" +
+      " for calculating Reality Machines gained)",
+    totalDesc: " ",
+    // eslint-disable-next-line no-unused-vars
+    effect: (level, strength) => Decimal.pow10(6000 + 0.25 * (1e6 * strengthToRarity(strength) - 6000)),
+    formatEffect: x => formatPostBreak(x, 2),
+    combine: GlyphCombiner.multiplyDecimal,
   }
 ].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));
 
@@ -849,7 +886,13 @@ const GlyphTypes = {
     effects: findGlyphTypeEffects("cursed"),
     color: "black",
     unlockedFn: () => false,
-    alchemyResource: ALCHEMY_RESOURCE.CURSED
+  }),
+  companion: new GlyphType({
+    id: "companion",
+    symbol: GLYPH_SYMBOLS.companion,
+    effects: findGlyphTypeEffects("companion"),
+    color: "#feaec9",
+    unlockedFn: () => false,
   }),
   /**
     * @param {function(): number} rng Random number source (0..1)

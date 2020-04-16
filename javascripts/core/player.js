@@ -8,6 +8,7 @@ let player = {
   antimatter: new Decimal(10),
   totalAntimatter: new Decimal(0),
   thisInfinityMaxAM: new Decimal(0),
+  thisEternityMaxAM: new Decimal(0),
   dimensions: {
     normal: Array.range(0, 8).map(() => ({
       bought: 0,
@@ -408,7 +409,7 @@ let player = {
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       triadStudies: [],
-      ppSpent: 0,
+      goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       STSpent: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], []],
       // The -10 is for glyph count, as glyph count for V is stored internally as a negative number
@@ -485,6 +486,8 @@ let player = {
   tabNotifications: new Set(),
   tutorialState: 0,
   tutorialActive: true,
+  saveOverThresholdFlag: false,
+  saveOverThresholdFlagModalDisplayed: false,
   options: {
     news: true,
     notation: "Mixed scientific",

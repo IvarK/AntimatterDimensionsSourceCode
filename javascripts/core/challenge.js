@@ -18,7 +18,7 @@ function tryUnlockInfinityChallenges() {
     player.thisEternityMaxAM.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
     ++player.postChallUnlocked;
     TabNotification.ICUnlock.tryTrigger();
-    if (player.eternities.gte(7)) {
+    if (EternityMilestone.autoIC.isReached) {
       InfinityChallenge(player.postChallUnlocked).complete();
     }
   }

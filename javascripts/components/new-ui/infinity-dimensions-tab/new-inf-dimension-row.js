@@ -41,11 +41,15 @@ Vue.component("new-inf-dimension-row", {
     },
     costDisplay() {
       const requirement = InfinityDimension(this.tier).requirement;
-      if (!this.isUnlocked) {
-        if (this.requirementReached) return "Unlock";
-        return `Reach ${format(requirement)} AM`;
+      if (this.isUnlocked) {
+        return this.isCapped ? "Capped!" : `Cost: ${format(this.cost)} IP`;
       }
-      return this.isCapped ? "Capped!" : `Cost: ${format(this.cost)} IP`;
+      
+      if (this.requirementReached) {
+        return "Unlock";
+      }
+
+      return `Reach ${format(requirement)} AM`;
     },
     capTooltip() {
       return this.isCapped

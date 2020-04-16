@@ -897,7 +897,6 @@ function slowerAutobuyers(realDiff) {
 window.onload = function() {
   GameUI.initialized = true;
   ui.view.initialized = true;
-  GameIntervals.start();
   setTimeout(() => {
     if (kong.enabled) {
       playFabLogin();

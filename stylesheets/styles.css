@@ -2120,6 +2120,10 @@ screen and (max-width: 480px) {
   font-size: 1.6rem;
 }
 
+.c-infinity-dim-row--not-reached {
+  opacity: 0.5;
+}
+
 .c-infinity-dim-row__label {
   text-align: left;
 }

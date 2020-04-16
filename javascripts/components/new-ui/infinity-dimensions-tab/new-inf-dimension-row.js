@@ -76,6 +76,9 @@ Vue.component("new-inf-dimension-row", {
       this.isAutobuyerUnlocked = dimension.isAutobuyerUnlocked;
       this.cost.copyFrom(dimension.cost);
       this.isAvailableForPurchase = dimension.isAvailableForPurchase;
+      if (!this.isUnlocked) {
+        this.isAvailableForPurchase = dimension.requirementReached;
+      }
       this.isCapped = dimension.isCapped;
       if (this.isCapped) {
         this.capIP.copyFrom(dimension.hardcapIPAmount);

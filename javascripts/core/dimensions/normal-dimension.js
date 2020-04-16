@@ -676,9 +676,9 @@ const NormalDimensions = {
     if (NormalChallenge(12).isRunning) amRate = amRate.plus(NormalDimension(2).productionPerSecond);
     const amProduced = amRate.times(diff / 1000);
     player.antimatter = player.antimatter.plus(amProduced);
-    player.thisEternityMaxAM = Decimal.max(player.thisEternityMaxAM, player.antimatter);
     player.totalAntimatter = player.totalAntimatter.plus(amProduced);
     player.thisInfinityMaxAM = player.thisInfinityMaxAM.max(player.antimatter);
+    player.thisEternityMaxAM = player.thisEternityMaxAM.max(player.antimatter);
     if (amProduced.gt(0)) player.noAntimatterProduced = false;
   }
 };

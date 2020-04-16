@@ -15,7 +15,7 @@ function askChallengeConfirmation(goal) {
 
 function tryUnlockInfinityChallenges() {
   while (player.postChallUnlocked < 8 &&
-    player.antimatter.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
+    player.thisEternityMaxAM.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
     ++player.postChallUnlocked;
     TabNotification.ICUnlock.tryTrigger();
     if (player.eternities.gte(7)) {

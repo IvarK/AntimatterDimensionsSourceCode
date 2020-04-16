@@ -408,7 +408,7 @@ GameDatabase.achievements.normal = [
   {
     id: 73,
     name: "THIS ACHIEVEMENT DOESN'T EXIST",
-    tooltip: () => `Get ${format("9.9999e9999", 4, 0)} antimatter.`,
+    tooltip: () => `Get ${formatPostBreak("9.9999e9999", 4, 0)} antimatter.`,
     checkRequirement: () => player.antimatter.gte("9.9999e9999"),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Dimensions are stronger the more unspent antimatter you have.",
@@ -499,7 +499,7 @@ GameDatabase.achievements.normal = [
   {
     id: 84,
     name: "I got a few to spare",
-    tooltip: () => `Reach ${format("1e35000", 0, 0)} antimatter.`,
+    tooltip: () => `Reach ${formatPostBreak("1e35000", 0, 0)} antimatter.`,
     checkRequirement: () => player.antimatter.exponent >= 35000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Dimensions are stronger the more unspent antimatter you have.",
@@ -633,7 +633,7 @@ GameDatabase.achievements.normal = [
   {
     id: 103,
     name: "Tätä saavutusta ei ole olemassa II",
-    tooltip: () => `Reach ${format("9.99999e999", 5, 0)} IP.`,
+    tooltip: () => `Reach ${formatPostBreak("9.99999e999", 5, 0)} IP.`,
     checkRequirement: () => player.infinityPoints.exponent >= 1000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Gain more IP based on amount of antimatter you had when crunching.",
@@ -748,7 +748,7 @@ GameDatabase.achievements.normal = [
   {
     id: 118,
     name: "IT'S OVER 9000",
-    tooltip: () => `Get a total sacrifice multiplier of ${format("1e9000", 0, 0)}.`,
+    tooltip: () => `Get a total sacrifice multiplier of ${formatPostBreak("1e9000", 0, 0)}.`,
     checkRequirement: () => Sacrifice.totalBoost.exponent >= 9000,
     checkEvent: GAME_EVENT.SACRIFICE_RESET_AFTER,
     reward: "Sacrifice doesn't reset your Dimensions.",
@@ -756,7 +756,7 @@ GameDatabase.achievements.normal = [
   {
     id: 121,
     name: "Can you get infinite IP?",
-    tooltip: () => `Reach ${format("1e30008", 0, 0)} IP.`,
+    tooltip: () => `Reach ${formatPostBreak("1e30008", 0, 0)} IP.`,
     checkRequirement: () => player.infinityPoints.exponent >= 30008,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
@@ -815,7 +815,7 @@ GameDatabase.achievements.normal = [
   {
     id: 128,
     name: "What do I have to do to get rid of you",
-    tooltip: () => `Reach ${format("1e22000", 0, 0)} IP without any time studies.`,
+    tooltip: () => `Reach ${formatPostBreak("1e22000", 0, 0)} IP without any time studies.`,
     checkRequirement: () => player.infinityPoints.exponent >= 22000 && player.timestudy.studies.length === 0,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Time Dimensions are multiplied by the number of studies you have.",
@@ -842,7 +842,7 @@ GameDatabase.achievements.normal = [
   {
     id: 133,
     name: "I never liked this infinity stuff anyway",
-    tooltip: () => `Reach ${format("1e200000", 0, 0)} IP without buying IDs or IP multipliers.`,
+    tooltip: () => `Reach ${formatPostBreak("1e200000", 0, 0)} IP without buying IDs or IP multipliers.`,
     checkRequirement: () =>
       Array.dimensionTiers.map(InfinityDimension).every(dim => dim.baseAmount === 0) &&
       player.infMultCost.equals(10) &&
@@ -853,7 +853,7 @@ GameDatabase.achievements.normal = [
   {
     id: 134,
     name: "When will it be enough?",
-    tooltip: () => `Reach ${format("1e20000", 0, 0)} Replicanti.`,
+    tooltip: () => `Reach ${formatPostBreak("1e20000", 0, 0)} Replicanti.`,
     checkRequirement: () => player.replicanti.amount.exponent >= 20000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => `You gain Replicanti ${formatInt(2)} times faster
@@ -862,7 +862,7 @@ GameDatabase.achievements.normal = [
   {
     id: 135,
     name: "Faster than a potato^286078",
-    tooltip: () => `Get more than ${format("1e8296262", 0, 0)} ticks per second.`,
+    tooltip: () => `Get more than ${formatPostBreak("1e8296262", 0, 0)} ticks per second.`,
     checkRequirement: () => Tickspeed.current.exponent <= -8296262,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
@@ -875,7 +875,7 @@ GameDatabase.achievements.normal = [
   {
     id: 137,
     name: "Now you're thinking with dilation!",
-    tooltip: () => `Eternity for ${format("1e600", 0, 0)} EP
+    tooltip: () => `Eternity for ${formatPostBreak("1e600", 0, 0)} EP
       in ${formatInt(1)} minute or less while Dilated.`,
     checkRequirement: () =>
       gainedEternityPoints().exponent >= 600 &&
@@ -888,7 +888,7 @@ GameDatabase.achievements.normal = [
   {
     id: 138,
     name: "This is what I have to do to get rid of you.",
-    tooltip: () => `Reach ${format("1e26000", 0, 0)} IP without any time studies while Dilated.`,
+    tooltip: () => `Reach ${formatPostBreak("1e26000", 0, 0)} IP without any time studies while Dilated.`,
     checkRequirement: () =>
       player.timestudy.studies.length === 0 &&
       player.dilation.active &&

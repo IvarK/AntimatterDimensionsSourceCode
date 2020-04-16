@@ -75,11 +75,11 @@ Vue.component("sacrificed-glyphs", {
     };
   },
   computed: {
-    types: () => GLYPH_TYPES.filter(type => type !== "cursed"),
+    types: () => GLYPH_TYPES.filter(type => type !== "cursed" && type !== "companion"),
   },
   methods: {
     update() {
-      this.anySacrifices = GLYPH_TYPES.some(e => player.reality.glyphs.sac[e] !== 0);
+      this.anySacrifices = GLYPH_TYPES.some(e => player.reality.glyphs.sac[e] && player.reality.glyphs.sac[e] !== 0);
       this.hasAlteration = Ra.has(RA_UNLOCKS.ALTERED_GLYPHS);
       this.addThreshold = GlyphAlteration.additionThreshold;
       this.empowerThreshold = GlyphAlteration.empowermentThreshold;

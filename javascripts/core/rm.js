@@ -8,7 +8,8 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
-  "realityglyphlevel", "realitygalaxies", "realitydimboost", "realityrow1pow"];
+  "realityglyphlevel", "realitygalaxies", "realitydimboost", "realityrow1pow",
+  "companiondescription", "companionEP", "companionreduction"];
 const generatedTypes = ["power", "infinity", "time", "replication", "dilation", "effarig"];
 
 // eslint-disable-next-line no-unused-vars
@@ -259,6 +260,25 @@ const GlyphGenerator = {
       level: 6666,
       rawLevel: 6666,
       effects: effectBitmask,
+    };
+  },
+
+  companionGlyph(eternityPoints) {
+    // Store the pre-Reality EP value in the glyph's rarity
+    const str = rarityToStrength(eternityPoints.log10() / 1e6);
+    const effects = orderedEffectList.filter(effect => effect.match("companion*"));
+    // The last effect is the nerf reduction text, get rid of it if it doesn't apply
+    if (!(player.saveOverThresholdFlag && eternityPoints.gte("1e6000"))) effects.pop();
+    const effectBitmask = makeGlyphEffectBitmask(effects);
+    return {
+      id: undefined,
+      idx: null,
+      type: "companion",
+      strength: str,
+      level: 1,
+      rawLevel: 1,
+      effects: effectBitmask,
+      color: "#feaec9"
     };
   },
 
@@ -996,11 +1016,13 @@ const GlyphSacrificeHandler = {
   // Removes a glyph, accounting for sacrifice unlock and alchemy state
   removeGlyph(glyph, force = false) {
     if (!this.canSacrifice) this.deleteGlyph(glyph, force);
-    if (this.isRefining) this.refineGlyph(glyph);
-    this.sacrificeGlyph(glyph, force);
+    else if (this.isRefining) this.refineGlyph(glyph);
+    else this.sacrificeGlyph(glyph, force);
   },
-  deleteGlyph() {
-    if (force || confirm("Do you really want to delete this glyph?")) {
+  deleteGlyph(glyph, force) {
+    if (glyph.type === "companion") {
+      Modal.deleteCompanion.show();
+    } else if (force || confirm("Do you really want to delete this glyph?")) {
       Glyphs.removeFromInventory(glyph);
     }
   },

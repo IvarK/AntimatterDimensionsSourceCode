@@ -99,10 +99,9 @@ Modal.message = new class extends Modal {
       this.message = text;
       this.callback = callback;
       this.closeButton = closeButton;
-    } else {
-      if (!this.stack) this.stack = [];
-      this.stack.push({ text, callback, closeButton });
     }
+    if (!this.stack) this.stack = [];
+    this.stack.push({ text, callback, closeButton });
     // Sometimes we have stacked messages that get lost, since we don't have stacking modal system.
     // TODO: remove this console.log
     // eslint-disable-next-line no-console
@@ -111,12 +110,12 @@ Modal.message = new class extends Modal {
 
   hide() {
     Modal.hide();
+    this.stack.shift();
     if (this.stack && this.stack.length === 0) this.message = undefined;
     else {
       this.message = this.stack[0].text;
       this.callback = this.stack[0].callback;
       this.closeButton = this.stack[0].closeButton;
-      this.stack.shift();
     }
   }
 }("modal-message");

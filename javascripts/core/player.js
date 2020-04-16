@@ -8,6 +8,7 @@ let player = {
   antimatter: new Decimal(10),
   totalAntimatter: new Decimal(0),
   thisInfinityMaxAM: new Decimal(0),
+  thisEternityMaxAM: new Decimal(0),
   dimensions: {
     normal: Array.range(0, 8).map(() => ({
       bought: 0,
@@ -235,7 +236,6 @@ let player = {
       studies: "",
     }),
   },
-  thisEternityMaxAM: new Decimal(0),
   eternityChalls: {},
   etercreq: 0,
   infMultBuyer: false,

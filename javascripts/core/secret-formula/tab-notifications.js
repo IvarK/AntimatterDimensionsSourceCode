@@ -18,8 +18,19 @@ GameDatabase.tabNotifications = {
       !PlayerProgress.infinityUnlocked(),
     events: [GAME_EVENT.BIG_CRUNCH_BEFORE]
   },
-  IDUnlock: {
+  breakInfinity: {
     id: 1,
+    tabsToHighLight: [
+      {
+        parent: "infinity",
+        tab: "break"
+      }
+    ],
+    condition: () => !PlayerProgress.realityUnlocked() &&
+      !PlayerProgress.eternityUnlocked() && Autobuyer.bigCrunch.hasMaxedInterval
+  },
+  IDUnlock: {
+    id: 2,
     tabsToHighLight: [
       {
         parent: "dimensions",
@@ -30,7 +41,7 @@ GameDatabase.tabNotifications = {
       !PlayerProgress.eternityUnlocked() && !InfinityDimension(2).isUnlocked
   },
   ICUnlock: {
-    id: 2,
+    id: 3,
     tabsToHighLight: [
       {
         parent: "challenges",
@@ -40,19 +51,20 @@ GameDatabase.tabNotifications = {
     condition: () => !PlayerProgress.realityUnlocked() &&
       !PlayerProgress.eternityUnlocked()
   },
-  breakInfinity: {
-    id: 3,
+  replicanti: {
+    id: 4,
     tabsToHighLight: [
       {
         parent: "infinity",
-        tab: "break"
+        tab: "replicanti"
       }
     ],
     condition: () => !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked() && Autobuyer.bigCrunch.hasMaxedInterval
+      !PlayerProgress.eternityUnlocked() && player.infinityPoints.gte(1e140),
+    events: [GAME_EVENT.BIG_CRUNCH_AFTER]
   },
   firstEternity: {
-    id: 4,
+    id: 5,
     tabsToHighLight: [
       {
         parent: "eternity",
@@ -76,7 +88,7 @@ GameDatabase.tabNotifications = {
     events: [GAME_EVENT.ETERNITY_RESET_BEFORE]
   },
   dilationAfterUnlock: {
-    id: 5,
+    id: 6,
     tabsToHighLight: [
       {
         parent: "eternity",
@@ -86,7 +98,7 @@ GameDatabase.tabNotifications = {
     condition: () => !PlayerProgress.realityUnlocked()
   },
   blackHoleUnlock: {
-    id: 6,
+    id: 7,
     tabsToHighLight: [
       {
         parent: "reality",
@@ -97,7 +109,7 @@ GameDatabase.tabNotifications = {
     events: [GAME_EVENT.REALITY_RESET_AFTER]
   },
   automatorUnlock: {
-    id: 7,
+    id: 8,
     tabsToHighLight: [
       {
         parent: "reality",

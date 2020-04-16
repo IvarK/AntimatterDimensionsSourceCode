@@ -1,11 +1,9 @@
 "use strict";
 
 Vue.component("modal-message", {
-  data: function() {
-    return {
-      message: ""
-    };
-  },
+  data: () => ({
+    message: ""
+  }),
   computed: {
     modal() {
       return this.$viewModel.modal.current;

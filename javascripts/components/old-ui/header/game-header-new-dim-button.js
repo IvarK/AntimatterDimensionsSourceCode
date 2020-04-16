@@ -1,7 +1,7 @@
 "use strict";
 
 Vue.component("game-header-new-dim-button", {
-  data: function() {
+  data() {
     return {
       isVisible: false,
       requirement: new Decimal(0),
@@ -14,7 +14,7 @@ Vue.component("game-header-new-dim-button", {
       if (!this.isVisible) return;
       const requirement = InfinityDimensions.next().requirement;
       this.requirement.copyFrom(requirement);
-      this.isAffordable = player.antimatter.gte(requirement);
+      this.isAffordable = player.thisEternityMaxAM.gte(requirement);
     }
   },
   template:

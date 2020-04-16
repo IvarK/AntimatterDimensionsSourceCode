@@ -235,6 +235,7 @@ let player = {
       studies: "",
     }),
   },
+  thisEternityMaxAM: new Decimal(0),
   eternityChalls: {},
   etercreq: 0,
   infMultBuyer: false,

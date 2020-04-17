@@ -40,7 +40,7 @@ Vue.component("dimboost-autobuyer-box", {
       <template slot="prioritySlot">
         <div class="c-autobuyer-box__small-text">
           Galaxies required to always DimBoost,
-          ignoring the specified limit:
+          ignoring the limit:
         </div>
         <autobuyer-input
           :autobuyer="autobuyer"

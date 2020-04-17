@@ -29,8 +29,11 @@ Vue.component("automator-editor", {
       if (this.isPaused) return "Resume automator execution";
       return "Start automator";
     },
+    currentScriptContent() {
+      return player.reality.automator.scripts[this.currentScriptID].content;
+    },
     currentScript() {
-      return CodeMirror.Doc(player.reality.automator.scripts[this.currentScriptID].content, "automato").getValue();
+      return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
     },
     modeIconClass() { return this.automatorType === AUTOMATOR_TYPE.BLOCK ? "fa-cubes" : "fa-code"; },
     isTextAutomator() {
@@ -131,11 +134,13 @@ Vue.component("automator-editor", {
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
         BlockAutomator.parseTextFromBlocks();
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-      } else if (BlockAutomator.fromText(this.currentScript)) {
+      } else if (BlockAutomator.fromText(this.currentScriptContent)) {
         player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
       } else {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");
       }
+
+      this.$recompute("currentScriptContent");
     }
   },
   created() {

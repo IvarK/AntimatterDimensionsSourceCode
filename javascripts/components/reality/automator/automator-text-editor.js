@@ -61,15 +61,7 @@ Vue.component("automator-text-editor", {
     },
     currentScriptID: {
       handler(id, oldId) {
-        const storedScripts = player.reality.automator.scripts;
-        if (this.UI.documents[id] === undefined) {
-          this.UI.documents[id] = CodeMirror.Doc(storedScripts[id].content, "automato");
-        }
-        this.UI.editor.swapDoc(this.UI.documents[id]);
-        // When a script gets deleted, get rid of the old document object
-        if (this.UI.documents[oldId] !== undefined && storedScripts[oldId] === undefined) {
-          delete this.UI.documents[oldId];
-        }
+        this.refreshScripts(id, oldId);
       },
       immediate: true,
     },
@@ -90,9 +82,19 @@ Vue.component("automator-text-editor", {
     onGameLoad() {
       this.UI.documents = {};
     },
+    refreshScripts(id, oldId) {
+      const storedScripts = player.reality.automator.scripts;
+      this.UI.documents[id] = CodeMirror.Doc(storedScripts[id].content, "automato");
+      this.UI.editor.swapDoc(this.UI.documents[id]);
+      // When a script gets deleted, get rid of the old document object
+      if (this.UI.documents[oldId] !== undefined && storedScripts[oldId] === undefined) {
+        delete this.UI.documents[oldId];
+      }
+    }
   },
   created() {
     AutomatorTextUI.initialize();
+    this.refreshScripts(this.currentScriptID);
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
   },
   mounted() {

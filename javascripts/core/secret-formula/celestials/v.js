@@ -159,15 +159,15 @@ GameDatabase.celestials.v = {
       id: 2,
       STCost: 12,
       requirement: [223, 224, 232],
-      description: "Multiply the distant galaxy scaling threshold by 2x",
-      effect: 2,
+      description: () => `Multiply the distant galaxy scaling threshold by ${format(1.5, 1, 1)}x`,
+      effect: 1.5,
       unlocked: () => Ra.pets.v.level >= 10
     },
     {
       id: 3,
       STCost: 12,
       requirement: [225, 226, 233],
-      description: "Your extra RGs are multiplied by 1.5x",
+      description: () => `Your extra RGs are multiplied by ${format(1.5, 1, 1)}x`,
       effect: 1.5,
       unlocked: () => Ra.pets.v.level >= 15
     },

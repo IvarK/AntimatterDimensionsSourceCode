@@ -41,9 +41,6 @@ const Theme = function Theme(name, colors) {
         }
         player.options.theme = name;
         ui.view.theme = name;
-
-        Chart.defaults.global.defaultFontColor = colors.chartFont;
-        normalDimChart.data.datasets[0].borderColor = colors.chartBorder;
     };
 
     this.isDark = colors.isDark;
@@ -101,8 +98,6 @@ Theme.tryUnlock = function(name) {
 
 Theme.light = function(name) {
     const colors = {
-        chartFont: "#000",
-        chartBorder: "#000",
         isDark: false
     };
     return new Theme(name, colors);
@@ -110,8 +105,6 @@ Theme.light = function(name) {
 
 Theme.dark = function(name) {
     const colors = {
-        chartFont: "#888",
-        chartBorder: "#888",
         isDark: true
     };
     return new Theme(name, colors);

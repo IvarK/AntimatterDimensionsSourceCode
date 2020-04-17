@@ -6,6 +6,7 @@
 const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig",
   "reality", "cursed", "companion"];
 const BASIC_GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power"];
+const ALCHEMY_BASIC_GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig"];
 const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω",
   effarig: "Ϙ", reality: "Ϟ", cursed: "⸸", companion: "♥" };
 const CANCER_GLYPH_SYMBOLS = { time: "🕟", dilation: "☎", replication: "⚤", infinity: "8", power: "⚡",
@@ -755,9 +756,14 @@ function makeGlyphEffectBitmask(effectList) {
 }
 
 const glyphEffectsFromBitmask = (function() {
-  const table = Object.values(GameDatabase.reality.glyphEffects)
-    .mapToObject(effect => effect.bitmaskIndex, effect => effect);
-  return mask => Array.fromBitmask(mask).map(id => table[id]);
+  const table = {};
+  for (const effect of Object.values(GameDatabase.reality.glyphEffects)) {
+    if (!table[effect.bitmaskIndex]) {
+      table[effect.bitmaskIndex] = [];
+    }
+    table[effect.bitmaskIndex].push(effect);
+  }
+  return mask => [].concat.apply([], Array.fromBitmask(mask).map(id => table[id]));
 }());
 
 class GlyphType {

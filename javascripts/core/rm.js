@@ -642,7 +642,7 @@ const Glyphs = {
   sort(sortFunction) {
     const glyphsToSort = player.reality.glyphs.inventory.filter(g => g.idx >= this.protectedSlots);
     const freeSpace = this.freeInventorySpace;
-    const sortOrder = ["power", "infinity", "time", "replication", "dilation", "effarig", "reality", "cursed"];
+    const sortOrder = ["power", "infinity", "time", "replication", "dilation", "effarig", "reality", "cursed", "companion"];
     const byType = sortOrder.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
     for (const g of glyphsToSort) byType[g.type].glyphs.push(g);
     let totalDesiredPadding = 0;
@@ -696,7 +696,7 @@ const Glyphs = {
         ((g.effects & glyph.effects) === glyph.effects));
     const compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
     if (toCompare.length < compareThreshold) return false;
-    const comparedEffects = glyphEffectsFromBitmask(glyph.effects);
+    const comparedEffects = glyphEffectsFromBitmask(glyph.effects).filter(x => x.id.startsWith(glyph.type));
     const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
     return betterCount >= compareThreshold;
   },
@@ -715,7 +715,7 @@ const Glyphs = {
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
       if (glyph === null || glyph.color !== undefined) continue;
-      if (this.isObjectivelyUseless(glyph)) GlyphSacrificeHandler.removeGlyph(glyph, true);
+      if (this.isObjectivelyUseless(glyph)) AutoGlyphProcessor.getRidOfGlyph(glyph)
     }
   },
   get levelCap() {
@@ -940,9 +940,8 @@ function getAdjustedGlyphLevel(glyph) {
   const level = glyph.level;
   if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
   if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
-  const boostTypeBlacklist = ["effarig", "cursed", "reality"];
   // Copied glyphs have rawLevel === 0
-  if (!boostTypeBlacklist.includes(glyph.type) && glyph.rawLevel !== 0) return level + Glyphs.levelBoost;
+  if (BASIC_GLYPH_TYPES.includes(glyph.type) && glyph.rawLevel !== 0) return level + Glyphs.levelBoost;
   return level;
 }
 
@@ -1098,7 +1097,7 @@ const GlyphSacrificeHandler = {
       const alchemyCap = this.levelAlchemyCap(glyph.level);
       for (const glyphType of GlyphTypes.list) {
         if (glyphType !== GlyphTypes[glyph.type] && glyphType !== GlyphTypes.reality &&
-          glyphType !== GlyphTypes.cursed) {
+          glyphType !== GlyphTypes.cursed && glyphType !== GlyphTypes.companion) {
             const otherResource = AlchemyResources.all[glyphType.alchemyResource];
             const maxResouce = Math.max(alchemyCap, otherResource.amount);
             otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);

@@ -21,7 +21,6 @@ const BlockAutomator = {
     const content = this.parseLines(BlockAutomator.lines).join("\n");
     const automatorID = ui.view.tabs.reality.automator.editorScriptID;
     AutomatorBackend.saveScript(automatorID, content);
-    CodeMirror.Doc(content, "automato");
   },
 
   fromText(scriptText) {

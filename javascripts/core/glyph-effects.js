@@ -763,7 +763,7 @@ const glyphEffectsFromBitmask = (function() {
     }
     table[effect.bitmaskIndex].push(effect);
   }
-  return mask => [].concat.apply([], Array.fromBitmask(mask).map(id => table[id]));
+  return mask => [].concat(...Array.fromBitmask(mask).map(id => table[id]));
 }());
 
 class GlyphType {

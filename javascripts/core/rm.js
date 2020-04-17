@@ -51,7 +51,7 @@ const AutoGlyphProcessor = {
       case AUTO_GLYPH_SCORE.EFFECT_COUNT:
         // Effect count, plus a very small rarity term to break ties in favor of rarer glyphs
         return strengthToRarity(glyph.strength) / 1000 + getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
-          .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated).length;
+          .filter(effect => effect.isGenerated).length;
       case AUTO_GLYPH_SCORE.RARITY_THRESHOLD:
         return strengthToRarity(glyph.strength);
       case AUTO_GLYPH_SCORE.SPECIFIED_EFFECT: {
@@ -59,7 +59,7 @@ const AutoGlyphProcessor = {
         // satisfy the requirements have a negative score and generally the worse a glyph misses the requirements,
         // the more negative of a score it will have
         const glyphEffectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
-          .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated)
+          .filter(effect => effect.isGenerated)
           .map(effect => effect.id);
         if (glyphEffectList.length < typeCfg.effectCount) {
           return strengthToRarity(glyph.strength) - 200 * (typeCfg.effectCount - glyphEffectList.length);
@@ -72,7 +72,7 @@ const AutoGlyphProcessor = {
       }
       case AUTO_GLYPH_SCORE.ADVANCED_MODE: {
         const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
-          .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated)
+          .filter(effect => effect.isGenerated)
           .map(effect => effect.id);
         const effectScore = effectList.map(e => typeCfg.effectScores[e]).sum();
         return strengthToRarity(glyph.strength) + effectScore;
@@ -642,7 +642,8 @@ const Glyphs = {
   sort(sortFunction) {
     const glyphsToSort = player.reality.glyphs.inventory.filter(g => g.idx >= this.protectedSlots);
     const freeSpace = this.freeInventorySpace;
-    const sortOrder = ["power", "infinity", "time", "replication", "dilation", "effarig", "reality", "cursed"];
+    const sortOrder = ["power", "infinity", "time", "replication", "dilation", "effarig",
+      "reality", "cursed", "companion"];
     const byType = sortOrder.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
     for (const g of glyphsToSort) byType[g.type].glyphs.push(g);
     let totalDesiredPadding = 0;
@@ -696,7 +697,7 @@ const Glyphs = {
         ((g.effects & glyph.effects) === glyph.effects));
     const compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
     if (toCompare.length < compareThreshold) return false;
-    const comparedEffects = glyphEffectsFromBitmask(glyph.effects);
+    const comparedEffects = getGlyphEffectsFromBitmask(glyph.effects).filter(x => x.id.startsWith(glyph.type));
     const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
     return betterCount >= compareThreshold;
   },
@@ -715,7 +716,7 @@ const Glyphs = {
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
       if (glyph === null || glyph.color !== undefined) continue;
-      if (this.isObjectivelyUseless(glyph)) GlyphSacrificeHandler.removeGlyph(glyph, true);
+      if (this.isObjectivelyUseless(glyph)) AutoGlyphProcessor.getRidOfGlyph(glyph);
     }
   },
   get levelCap() {
@@ -925,11 +926,8 @@ function separateEffectKey(effectKey) {
 
 // Turns a glyph effect bitmask into an effect list and corresponding values. This also picks up non-generated effects,
 // since there is some id overlap. Those should be filtered out as needed after calling this function.
-function getGlyphEffectsFromBitmask(bitmask, level, strength) {
-  return orderedEffectList
-    .map(effectName => GameDatabase.reality.glyphEffects[effectName])
-    // eslint-disable-next-line no-bitwise
-    .filter(effect => (bitmask & (1 << effect.bitmaskIndex)) !== 0)
+function getGlyphEffectValuesFromBitmask(bitmask, level, strength) {
+  return getGlyphEffectsFromBitmask(bitmask)
     .map(effect => ({
       id: effect.id,
       value: effect.effect(level, strength)
@@ -940,9 +938,8 @@ function getAdjustedGlyphLevel(glyph) {
   const level = glyph.level;
   if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
   if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
-  const boostTypeBlacklist = ["effarig", "cursed", "reality"];
   // Copied glyphs have rawLevel === 0
-  if (!boostTypeBlacklist.includes(glyph.type) && glyph.rawLevel !== 0) return level + Glyphs.levelBoost;
+  if (BASIC_GLYPH_TYPES.includes(glyph.type) && glyph.rawLevel !== 0) return level + Glyphs.levelBoost;
   return level;
 }
 
@@ -1096,12 +1093,12 @@ const GlyphSacrificeHandler = {
       resource.amount += refinementGain;
       const decoherenceGain = rawRefinementGain * AlchemyResource.decoherence.effectValue;
       const alchemyCap = this.levelAlchemyCap(glyph.level);
-      for (const glyphType of GlyphTypes.list) {
-        if (glyphType !== GlyphTypes[glyph.type] && glyphType !== GlyphTypes.reality &&
-          glyphType !== GlyphTypes.cursed) {
-            const otherResource = AlchemyResources.all[glyphType.alchemyResource];
-            const maxResouce = Math.max(alchemyCap, otherResource.amount);
-            otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);
+      for (const glyphTypeName of ALCHEMY_BASIC_GLYPH_TYPES) {
+        if (glyphTypeName !== glyph.type) {
+          const glyphType = GlyphTypes[glyphTypeName];
+          const otherResource = AlchemyResources.all[glyphType.alchemyResource];
+          const maxResouce = Math.max(alchemyCap, otherResource.amount);
+          otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResouce);
         }
       }
       Glyphs.removeFromInventory(glyph);

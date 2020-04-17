@@ -29,6 +29,9 @@ Vue.component("automator-editor", {
       if (this.isPaused) return "Resume automator execution";
       return "Start automator";
     },
+    currentScript() {
+      return CodeMirror.Doc(player.reality.automator.scripts[this.currentScriptID].content, "automato").getValue();
+    },
     modeIconClass() { return this.automatorType === AUTOMATOR_TYPE.BLOCK ? "fa-cubes" : "fa-code"; },
     isTextAutomator() {
       return this.automatorType === AUTOMATOR_TYPE.TEXT;
@@ -48,9 +51,6 @@ Vue.component("automator-editor", {
         return;
       }
       this.activeLine = AutomatorBackend.stack.top.lineNumber;
-    },
-    currentScript() {
-      return CodeMirror.Doc(player.reality.automator.scripts[this.currentScriptID].content, "automato").getValue();
     },
     onGameLoad() {
       this.updateCurrentScriptID();
@@ -131,7 +131,7 @@ Vue.component("automator-editor", {
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
         BlockAutomator.parseTextFromBlocks();
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-      } else if (BlockAutomator.fromText(this.currentScript())) {
+      } else if (BlockAutomator.fromText(this.currentScript)) {
         player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
       } else {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");

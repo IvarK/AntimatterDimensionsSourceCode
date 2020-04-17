@@ -13,6 +13,7 @@ const ReplicantiGrowth = {
 
 function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
+  player.replicanti.timer = 0;
   player.reality.upgReqChecks[0] = false;
   let galaxyGain = 1;
   if (Achievement(126).isUnlocked) {
@@ -131,7 +132,7 @@ function replicantiLoop(diff) {
     const reproduced = binomialDistribution(player.replicanti.amount, player.replicanti.chance);
     player.replicanti.amount = player.replicanti.amount.plus(reproduced);
     if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount);
-    player.replicanti.timer -= interval.toNumber();
+    player.replicanti.timer += diff - interval.toNumber();
   } else {
     player.replicanti.timer += diff;
   }

@@ -365,6 +365,9 @@ Vue.component("glyph-component", {
   beforeDestroy() {
     if (this.isCurrentTooltip) this.hideTooltip();
     if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
+    // For some fucking reason the glyph tooltip goes outside the vue container 
+    // so we say bye bye to it when the vue component is destroyed.
+    $(`[component='${this.componentID}']`).remove();
   },
   methods: {
     update() {
@@ -554,7 +557,8 @@ Vue.component("glyph-component", {
                        :showDeletionText="showSacrifice"
                        :levelOverride="levelOverride"
                        :visible="isCurrentTooltip"
-                       :key="isCurrentTooltip"/>
+                       :key="isCurrentTooltip"
+                       :component="componentID"/>
       </div>
       <div ref="over"
            :style="overStyle"

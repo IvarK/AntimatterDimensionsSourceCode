@@ -51,7 +51,7 @@ const AutoGlyphProcessor = {
       case AUTO_GLYPH_SCORE.EFFECT_COUNT:
         // Effect count, plus a very small rarity term to break ties in favor of rarer glyphs
         return strengthToRarity(glyph.strength) / 1000 + getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
-          .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated).length;
+          .filter(effect => effect.isGenerated).length;
       case AUTO_GLYPH_SCORE.RARITY_THRESHOLD:
         return strengthToRarity(glyph.strength);
       case AUTO_GLYPH_SCORE.SPECIFIED_EFFECT: {
@@ -59,7 +59,7 @@ const AutoGlyphProcessor = {
         // satisfy the requirements have a negative score and generally the worse a glyph misses the requirements,
         // the more negative of a score it will have
         const glyphEffectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
-          .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated)
+          .filter(effect => effect.isGenerated)
           .map(effect => effect.id);
         if (glyphEffectList.length < typeCfg.effectCount) {
           return strengthToRarity(glyph.strength) - 200 * (typeCfg.effectCount - glyphEffectList.length);
@@ -72,7 +72,7 @@ const AutoGlyphProcessor = {
       }
       case AUTO_GLYPH_SCORE.ADVANCED_MODE: {
         const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
-          .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated)
+          .filter(effect => effect.isGenerated)
           .map(effect => effect.id);
         const effectScore = effectList.map(e => typeCfg.effectScores[e]).sum();
         return strengthToRarity(glyph.strength) + effectScore;
@@ -697,7 +697,7 @@ const Glyphs = {
         ((g.effects & glyph.effects) === glyph.effects));
     const compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
     if (toCompare.length < compareThreshold) return false;
-    const comparedEffects = glyphEffectsFromBitmask(glyph.effects).filter(x => x.id.startsWith(glyph.type));
+    const comparedEffects = getGlyphEffectsFromBitmask(glyph.effects).filter(x => x.id.startsWith(glyph.type));
     const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
     return betterCount >= compareThreshold;
   },
@@ -926,11 +926,8 @@ function separateEffectKey(effectKey) {
 
 // Turns a glyph effect bitmask into an effect list and corresponding values. This also picks up non-generated effects,
 // since there is some id overlap. Those should be filtered out as needed after calling this function.
-function getGlyphEffectsFromBitmask(bitmask, level, strength) {
-  return orderedEffectList
-    .map(effectName => GameDatabase.reality.glyphEffects[effectName])
-    // eslint-disable-next-line no-bitwise
-    .filter(effect => (bitmask & (1 << effect.bitmaskIndex)) !== 0)
+function getGlyphEffectValuesFromBitmask(bitmask, level, strength) {
+  return getGlyphEffectsFromBitmask(bitmask)
     .map(effect => ({
       id: effect.id,
       value: effect.effect(level, strength)

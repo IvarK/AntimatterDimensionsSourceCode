@@ -110,7 +110,7 @@ const GlyphTooltipComponent = {
       return this.levelOverride ? this.levelOverride : this.level;
     },
     sortedEffects() {
-      return getGlyphEffectsFromBitmask(this.effects, this.effectiveLevel, this.strength)
+      return getGlyphEffectValuesFromBitmask(this.effects, this.effectiveLevel, this.strength)
         .filter(effect =>
           GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },

@@ -755,16 +755,12 @@ function makeGlyphEffectBitmask(effectList) {
   return effectList.reduce((mask, eff) => mask + (1 << GameDatabase.reality.glyphEffects[eff].bitmaskIndex), 0);
 }
 
-const glyphEffectsFromBitmask = (function() {
-  const table = {};
-  for (const effect of Object.values(GameDatabase.reality.glyphEffects)) {
-    if (!table[effect.bitmaskIndex]) {
-      table[effect.bitmaskIndex] = [];
-    }
-    table[effect.bitmaskIndex].push(effect);
-  }
-  return mask => [].concat(...Array.fromBitmask(mask).map(id => table[id]));
-}());
+function getGlyphEffectsFromBitmask(bitmask) {
+  return orderedEffectList
+    .map(effectName => GameDatabase.reality.glyphEffects[effectName])
+    // eslint-disable-next-line no-bitwise
+    .filter(effect => (bitmask & (1 << effect.bitmaskIndex)) !== 0);
+}
 
 class GlyphType {
   /**

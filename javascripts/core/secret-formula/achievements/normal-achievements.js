@@ -1026,8 +1026,8 @@ GameDatabase.achievements.normal = [
     name: "It's super effective!",
     tooltip: () => `Get a glyph with ${formatInt(4)} effects.`,
     checkRequirement: () => Glyphs.activeList.concat(Glyphs.inventoryList).map(
-      glyph => getGlyphEffectsFromBitmask(glyph.effects, 0, 0).filter(
-        effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated).length
+      glyph => getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
+        .filter(effect => effect.isGenerated).length
     ).max() >= 4,
     checkEvent: GAME_EVENT.GLYPHS_CHANGED,
     reward: "Gained glyph level is increased by number of distinct glyph effects equipped.",

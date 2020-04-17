@@ -1,9 +1,7 @@
 "use strict";
 
 function canEternity() {
-  return EternityChallenge.isRunning
-    ? EternityChallenge.current.canBeCompleted
-    : player.infinityPoints.gte(Decimal.NUMBER_MAX_VALUE);
+  return player.infinityPoints.gte(Player.eternityGoal);
 }
 
 function giveEternityRewards(auto) {

@@ -1930,7 +1930,7 @@ GameDatabase.news = [
     id: "l27",
     text:
       "New strange material was been found. It seems to grow exponentially, but only helps with antimatter production.",
-    get unlocked() { return player.replicanti.unl && player.replicanti.chance === 0.01; }
+    get unlocked() { return Replicanti.areUnlocked && player.replicanti.chance === 0.01; }
   },
   {
     id: "l28",
@@ -2172,7 +2172,7 @@ GameDatabase.news = [
     text: "Legend says the ninth dimension is supposed to be found here, but I don't see anything.",
     get unlocked() {
       return player.antimatter.e >= 41900 &&
-      !player.replicanti.unl &&
+      !Replicanti.areUnlocked &&
       !PlayerProgress.eternityUnlocked();
     }
   },

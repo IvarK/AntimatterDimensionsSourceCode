@@ -16,7 +16,7 @@ function infinityDimensionCommonMultiplier() {
       AlchemyResource.dimensionality
     );
 
-  if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
+  if (Replicanti.areUnlocked && player.replicanti.amount.gt(1)) {
     mult = mult.times(replicantiMult());
   }
   return mult;

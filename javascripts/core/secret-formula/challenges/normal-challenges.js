@@ -6,14 +6,16 @@ GameDatabase.challenges.normal = [
     legacyId: 1,
     isQuickResettable: false,
     description: "Reach Infinity for the first time.",
-    reward: "First Dimension Autobuyer"
+    name: "First Dimension Autobuyer",
+    reward: "Upgradeable First Dimension Autobuyer interval"
   },
   {
     id: 2,
     legacyId: 2,
     isQuickResettable: false,
     description: "Buying anything halts your production, gradually coming back over 3 minutes.",
-    reward: "Second Dimension Autobuyer"
+    name: "Second Dimension Autobuyer",
+    reward: "Upgradeable Second Dimension Autobuyer interval"
   },
   {
     id: 3,
@@ -21,7 +23,8 @@ GameDatabase.challenges.normal = [
     isQuickResettable: false,
     description: "The 1st Dimension is heavily weakened but gets " +
       "an exponentially increasing bonus that resets on reset.",
-    reward: "Third Dimension Autobuyer"
+    name: "Third Dimension Autobuyer",
+    reward: "Upgradeable Third Dimension Autobuyer interval"
   },
   {
     id: 4,
@@ -29,14 +32,16 @@ GameDatabase.challenges.normal = [
     isQuickResettable: false,
     description: "Buying a dimension automatically erases all lower tier dimensions, " +
       "like a sacrifice without the boost.",
-    reward: "Fourth Dimension Autobuyer"
+    name: "Fourth Dimension Autobuyer",
+    reward: "Upgradeable Fourth Dimension Autobuyer interval"
   },
   {
     id: 5,
     legacyId: 6,
     isQuickResettable: false,
     description: "Tickspeed starts at 7%.",
-    reward: "Fifth Dimension Autobuyer"
+    name: "Fifth Dimension Autobuyer",
+    reward: "Upgradeable Fifth Dimension Autobuyer interval"
   },
   {
     id: 6,
@@ -44,7 +49,8 @@ GameDatabase.challenges.normal = [
     isQuickResettable: false,
     description: "Each dimension costs the dimension 2 before it, " +
       "instead of antimatter. Dimension prices are modified.",
-    reward: "Sixth Dimension Autobuyer"
+    name: "Sixth Dimension Autobuyer",
+    reward: "Upgradeable Sixth Dimension Autobuyer interval"
   },
   {
     id: 7,
@@ -52,7 +58,8 @@ GameDatabase.challenges.normal = [
     isQuickResettable: false,
     description: "The multiplier from buying 10 dimensions is reduced to 1x, but is increased by 0.2x per " +
       "Dimension Shift/Boost, up to a maximum of 2x.",
-    reward: "Seventh Dimension Autobuyer"
+    name: "Seventh Dimension Autobuyer",
+    reward: "Upgradeable Seventh Dimension Autobuyer interval"
   },
   {
     id: 8,
@@ -60,7 +67,8 @@ GameDatabase.challenges.normal = [
     isQuickResettable: false,
     description: "Dimension Boosts and galaxies are useless, " +
       "sacrifice is immensely stronger but resets everything except tickspeed.",
-    reward: "Eighth Dimension Autobuyer"
+    name: "Eighth Dimension Autobuyer",
+    reward: "Upgradeable Eighth Dimension Autobuyer interval"
   },
   {
     id: 9,
@@ -68,13 +76,15 @@ GameDatabase.challenges.normal = [
     isQuickResettable: true,
     description: "Whenever you buy 10 of a dimension or tickspeed, " +
       "everything else of equal cost will increase to its next cost step.",
-    reward: "Tickspeed Autobuyer"
+    name: "Tickspeed Autobuyer",
+    reward: "Upgradeable Tickspeed Autobuyer interval"
   },
   {
     id: 10,
     legacyId: 4,
     isQuickResettable: false,
     description: "There are only 6 dimensions, with Dimension Boost and Antimatter Galaxy costs modified.",
+    name: "Automated Dimension Boosts",
     reward: "Automated Dimension Boosts"
   },
   {
@@ -83,6 +93,7 @@ GameDatabase.challenges.normal = [
     isQuickResettable: true,
     description: "There's normal matter which rises once you have at least 1 2nd Dimension. " +
       "If it exceeds your antimatter, it will Dimension Boost without giving the bonus.",
+    name: "Automated Antimatter Galaxies",
     reward: "Automated Antimatter Galaxies"
   },
   {
@@ -91,6 +102,7 @@ GameDatabase.challenges.normal = [
     isQuickResettable: false,
     description: "Each dimension produces the dimension 2 below it (1st Dimensions still " +
       "produce antimatter). Dimensions 2, 4, and 6 are made stronger to compensate.",
+    name: "Automated Big Crunches",
     reward: "Automated Big Crunches"
   }
 ];

@@ -3,7 +3,7 @@
 function canEternity() {
   return EternityChallenge.isRunning
     ? EternityChallenge.current.canBeCompleted
-    : player.infinityPoints.gte(Decimal.NUMBER_MAX_VALUE) && InfinityDimension(8).isUnlocked;
+    : player.infinityPoints.gte(Decimal.NUMBER_MAX_VALUE);
 }
 
 function giveEternityRewards(auto) {

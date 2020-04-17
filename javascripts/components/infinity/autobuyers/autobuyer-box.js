@@ -8,21 +8,30 @@ Vue.component("autobuyer-box", {
       },
       data() {
         return {
-          interval: 0
+          interval: 0,
+          hasMaxedInterval: false,
+          bulk: 0
         };
       },
       computed: {
         intervalDisplay() {
-          return TimeSpan.fromMilliseconds(this.interval).totalSeconds.toFixed(2);
+          return format(TimeSpan.fromMilliseconds(this.interval).totalSeconds, 2, 2);
         }
       },
       methods: {
         update() {
           this.interval = this.autobuyer.interval;
+          this.hasMaxedInterval = this.autobuyer.hasMaxedInterval;
+          this.bulk = this.autobuyer.bulk;
         }
       },
       template:
-        `<div class="c-autobuyer-box__small-text">Current interval: {{intervalDisplay}} seconds</div>`
+        `<div class="c-autobuyer-box__small-text">
+          Current interval: {{intervalDisplay}} seconds
+          <span v-if="hasMaxedInterval && bulk">
+            <br>Current bulk: {{formatX(bulk, 2)}}
+          </span>
+        </div>`
     }
   },
   props: {
@@ -78,8 +87,15 @@ Vue.component("autobuyer-box", {
       };
     },
     autobuyerToggleClass() {
-      return this.isActive ? "fas fa-play" : "fas fa-pause";
-    }
+      return this.isActive ? "fas fa-check" : "fas fa-times";
+    },
+    autobuyerStateClass() {
+      return {
+        "o-autobuyer-toggle-checkbox__label": true,
+        "o-autobuyer-toggle-checkbox__label--active": this.isActive,
+        "o-autobuyer-toggle-checkbox__label--disabled": !this.globalToggle,
+      };
+    },
   },
   template:
     `<div v-if="isUnlocked || isBought" class="l-autobuyer-box-row">
@@ -94,8 +110,7 @@ Vue.component("autobuyer-box", {
       <div class="l-autobuyer-box__footer" @click="toggle">
         <label 
           :for="name" 
-          class="o-autobuyer-toggle-checkbox__label" 
-          :class="{ 'o-autobuyer-toggle-checkbox__label--active': isActive && globalToggle }">
+          :class="autobuyerStateClass">
           <span :class="autobuyerToggleClass"></span>
         </label>
         <input

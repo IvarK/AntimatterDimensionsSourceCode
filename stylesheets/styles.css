@@ -3523,6 +3523,11 @@ screen and (max-width: 480px) {
   background: var(--color-good);
 }
 
+.o-autobuyer-toggle-checkbox__label--disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 /*#endregion o-autobuyer-toggle-checkbox*/
 
 /*#region o-autobuyer-btn*/
@@ -3629,6 +3634,8 @@ screen and (max-width: 480px) {
 
 .c-autobuyer-box__small-text {
   font-size: 0.9rem;
+  height: 3rem;
+  vertical-align: text-bottom;
 }
 
 .c-autobuyer-box__mode-select {

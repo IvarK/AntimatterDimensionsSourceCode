@@ -160,20 +160,21 @@ const GameStorage = {
         // simulate at most 50 ticks if the player was offline for less
         // than 50 seconds.
         simulateTime(diff / 1000, false, diff < 50 * 1000);
+      } else {
+        // This is ugly, should fix how we deal with it...
+        this.postLoadStuff();
       }
     } else {
       player.lastUpdate = Date.now();
+      this.postLoadStuff();
     }
-    // If simulateTime didn't run, we don't currently know if game intervals
-    // are off or on (could be off because the game was just loaded or on
-    // because a save was imported) so we need to restart rather than start
-    // (restart will always lead to starting and not throw an error).
+  },
+  postLoadStuff() {
+    // This is called from simulateTime, if that's called; otherwise, it gets called
+    // manually above
     GameIntervals.restart();
     Enslaved.nextTickDiff = player.options.updateRate;
     GameUI.update();
-    if (GameIntervals.gameLoop.isStarted) {
-      GameIntervals.gameLoop.restart();
-    }
 
     for (const resource of AlchemyResources.all) {
       resource.before = resource.amount;

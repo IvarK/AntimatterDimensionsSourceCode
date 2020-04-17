@@ -415,6 +415,7 @@ body.t-normal {
   position: absolute;
   top: 4.3rem;
   left: calc(50% - 0.6rem);
+  transform: translateX(-50%);
   font-size: 3rem;
 }
 

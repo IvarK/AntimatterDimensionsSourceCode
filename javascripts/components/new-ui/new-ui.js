@@ -108,7 +108,7 @@ Vue.component("new-ui", {
       if (inDilation) displayValue += " + Time Dilation";
 
       const normalChallenge = NormalChallenge.current;
-      if (normalChallenge !== undefined) displayValue += ` + ${normalChallenge.config.reward} Challenge `;
+      if (normalChallenge !== undefined) displayValue += ` + ${normalChallenge.config.name} Challenge `;
 
       const infinityChallenge = InfinityChallenge.current;
       if (infinityChallenge !== undefined) displayValue += ` + Infinity Challenge ${infinityChallenge.id}`;

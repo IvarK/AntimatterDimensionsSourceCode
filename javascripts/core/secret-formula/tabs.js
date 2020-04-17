@@ -31,13 +31,6 @@ GameDatabase.tabs = [
         newUIComponent: "new-time-dimensions-tab",
         condition: () => PlayerProgress.eternityUnlocked()
       },
-      {
-        key: "production",
-        name: "Production",
-        symbol: "<i class='fas fa-chart-line'></i>",
-        component: "dim-production-tab",
-        condition: () => PlayerProgress.eternityUnlocked() || PlayerProgress.infinityUnlocked()
-      }
     ]
   },
   {

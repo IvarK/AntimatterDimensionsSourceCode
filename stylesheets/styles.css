@@ -2227,27 +2227,6 @@ screen and (max-width: 480px) {
 
 /*#endregion Time Dimensions*/
 
-/*#region Production*/
-
-.c-production-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2rem;
-}
-
-.c-production-header > * {
-  margin-right: 0.4rem;
-  margin-left: 0.4rem;
-}
-
-.c-production-header__checkbox {
-  width: 1.3rem;
-  height: 1.3rem;
-}
-
-/*#endregion Production*/
-
 /*#region Options*/
 
 .l-options-tab {

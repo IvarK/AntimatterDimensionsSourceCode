@@ -807,18 +807,6 @@ function simulateTime(seconds, real, fast) {
     });
 }
 
-function updateChart(first) {
-    if (first !== true && (player.infinitied.gte(1) || player.eternities.gte(1)) && player.options.chart.on === true) {
-      addChartData(NormalDimension(1).productionPerSecond);
-    }
-    if (player.options.chart.updateRate) {
-        setTimeout(updateChart, player.options.chart.updateRate);
-    } else {
-        setTimeout(updateChart, 1000);
-    }
-}
-updateChart(true);
-
 function autoBuyDilationUpgrades() {
   if (Perk.autobuyerDilation.isBought) {
     const upgrades = [DilationUpgrade.dtGain, DilationUpgrade.galaxyThreshold, DilationUpgrade.tachyonGain].filter(

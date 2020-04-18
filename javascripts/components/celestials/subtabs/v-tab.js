@@ -35,8 +35,10 @@ Vue.component("v-tab", {
       this.isFlipped = V.isFlipped;
     },
     startRun() {
-      if (!resetReality()) return;
-      V.initializeRun();
+      celestialResetModal(() => {
+        resetReality(true);
+        V.initializeRun();
+      });
     },
     has(info) {
       return V.has(info);

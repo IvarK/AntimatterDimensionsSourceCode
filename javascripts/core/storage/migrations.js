@@ -250,7 +250,7 @@ GameStorage.migrations = {
   },
 
   adjustGameCreatedTime(player) {
-    player.gameCreatedTime = Date.now() - player.realTimePlayed;
+    player.gameCreatedTime = player.lastUpdate - player.realTimePlayed;
   },
 
   moveSavedStudyTrees(player) {

@@ -26,7 +26,7 @@ Vue.component("dimboost-autobuyer-box", {
   template:
     `<autobuyer-box :autobuyer="autobuyer" :showInterval="!isBuyMaxUnlocked" name="Automatic DimBoosts">
       <autobuyer-interval-button slot="intervalSlot" :autobuyer="autobuyer" />
-      <template slot="toggleSlot">
+      <template :slot=" isBuyMaxUnlocked ? 'toggleSlot' : 'intervalSlot' ">
         <div class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text" @click="limitDimBoosts = !limitDimBoosts">
           <input type="checkbox" :checked="limitDimBoosts"/>
           <span>Limit dimboosts to:</span>
@@ -37,7 +37,7 @@ Vue.component("dimboost-autobuyer-box", {
           property="maxDimBoosts"
         />
       </template>
-      <template slot="prioritySlot">
+      <template :slot=" isBuyMaxUnlocked ? 'prioritySlot' : 'toggleSlot' ">
         <div class="c-autobuyer-box__small-text">
           Galaxies required to always DimBoost,
           ignoring the limit:
@@ -56,7 +56,7 @@ Vue.component("dimboost-autobuyer-box", {
           property="buyMaxInterval"
         />
       </template>
-      <template v-else-if="isBulkBuyUnlocked" slot="optionSlot">
+      <template v-else-if="isBulkBuyUnlocked" slot="prioritySlot">
         <div class="c-autobuyer-box__small-text">Bulk DimBoost Amount:</div>
         <autobuyer-input
           :autobuyer="autobuyer"

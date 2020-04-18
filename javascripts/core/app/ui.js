@@ -41,6 +41,7 @@ Vue.mixin({
     }
 
     // Following is used to force the recomputation of computed values
+    // from this fiddle https://codepen.io/sirlancelot/pen/JBeXeV
     const recomputed = Object.create(null);
     const watchers = this._computedWatchers;
 
@@ -57,9 +58,12 @@ Vue.mixin({
   }
 });
 
+// This function is also from the fiddle above
 function makeRecomputable(watcher, key, recomputed) {
   const original = watcher.getter;
   recomputed[key] = true;
+  
+  // eslint-disable-next-line no-sequences
   watcher.getter = vm => (recomputed[key], original.call(vm, vm));
 }
 

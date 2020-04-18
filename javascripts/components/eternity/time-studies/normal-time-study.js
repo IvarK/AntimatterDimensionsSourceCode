@@ -52,7 +52,7 @@ Vue.component("normal-time-study", {
                           ? this.study.config.requirement()
                           : TimeStudy(this.study.config.requirement).isBought;
 
-      this.showSTCost = !canBeBought &&
+      this.showSTCost = !canBeBought && Achievement(151).isUnlocked &&
                         this.study.config.requirementV !== undefined &&
                         this.study.config.requirementV() &&
                         this.study.STCost !== undefined;

@@ -50,8 +50,10 @@ Vue.component("teresa-tab", {
       this.rm.copyFrom(player.reality.realityMachines);
     },
     startRun() {
-      if (!resetReality()) return;
-      Teresa.initializeRun();
+      celestialResetModal(() => {
+        resetReality(true);
+        Teresa.initializeRun();
+      });
     },
     unlockDescriptionStyle(unlockInfo) {
       const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;

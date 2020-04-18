@@ -56,8 +56,10 @@ Vue.component("laitela-tab", {
       this.darkMatterMultRatio = Laitela.darkMatterMultRatio;
     },
     startRun() {
-      if (!resetReality()) return;
-      Laitela.initializeRun();
+      celestialResetModal(() => {
+        resetReality(true);
+        Laitela.initializeRun();
+      });
     },
     buyUnlock(info) {
       Laitela.buyUnlock(info);

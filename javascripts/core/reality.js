@@ -564,15 +564,15 @@ function isInCelestialReality() {
     player.celestials.laitela.run;
 }
 
+const RESET_TEXT = "This will put you at the start of your Reality and reset your progress in this Reality, " +
+  "giving you no rewards from your progress in your current Reality.  Are you sure you want to do this?";
+
 function celestialResetModal(callback) {
-  Modal.confirmation.show("This will put you at the start of your Reality and reset your progress in this Reality, " +
-  "giving you no rewards from your progress in your current Reality.  Are you sure you want to do this?",
-  callback);
+  Modal.confirmation.show(RESET_TEXT, callback);
 }
 
 function resetReality(force) {
-  if (force || confirm("This will put you at the start of your Reality and reset your progress in this Reality, " +
-    "giving you no rewards from your progress in your current Reality.  Are you sure you want to do this?")) {
+  if (force || confirm(RESET_TEXT)) {
     beginProcessReality(getRealityProps(true));
     return true;
   }

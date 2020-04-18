@@ -3452,6 +3452,11 @@ screen and (max-width: 480px) {
   box-sizing: border-box;
 }
 
+.t-metro .o-autobuyer-input {
+  color: black;
+  border: 0.1rem solid #A9A9A9;
+}
+
 .t-dark .o-autobuyer-input,
 .t-dark-metro .o-autobuyer-input {
   background-color: #455A64;
@@ -3668,6 +3673,11 @@ screen and (max-width: 480px) {
   text-align: center;
   text-align-last: center;
   height: 3rem;
+}
+
+.t-metro .c-autobuyer-box__mode-select {
+  color: black;
+  border: 0.1rem solid #A9A9A9;
 }
 
 .t-dark .c-autobuyer-box__mode-select,

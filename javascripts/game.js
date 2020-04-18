@@ -195,8 +195,13 @@ function getEternitiedMilestoneReward(ms) {
     : 0;
 }
 
+function isOfflineEPGainEnabled() {
+  return !Autobuyer.bigCrunch.autoInfinitiesAvailable &&
+    !Autobuyer.eternity.autoEternitiesAvailable;
+}
+
 function getOfflineEPGain(ms) {
-  if (!EternityMilestone.autoEP.isReached) return new Decimal(0);
+  if (!EternityMilestone.autoEP.isReached || !isOfflineEPGainEnabled()) return new Decimal(0);
   return player.bestEPminThisReality.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 
@@ -754,9 +759,16 @@ function simulateTime(seconds, real, fast) {
 
   const playerStart = deepmerge.all([{}, player]);
 
-  player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * 1000));
-  player.eternities = player.eternities.plus(getEternitiedMilestoneReward(seconds * 1000));
-  player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
+  const infinitiedMilestone = getInfinitiedMilestoneReward(seconds * 1000);
+  const eternitiedMilestone = getEternitiedMilestoneReward(seconds * 1000);
+
+  if (eternitiedMilestone > 0) {
+    player.eternities = player.eternities.plus(eternitiedMilestone);
+  } else if (infinitiedMilestone > 0) {
+    player.infinitied = player.infinitied.plus(infinitiedMilestone);
+  } else {
+    player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
+  }
 
   if (InfinityUpgrade.ipOffline.isBought) {
     player.infinityPoints = player.infinityPoints

@@ -11,7 +11,7 @@ html{
     color: black !important;
     background-attachment:fixed;
     background-position:center bottom;	
-	border: 1px solid white !important;
+	border: 0.1rem solid white !important;
 }
 
 #container {
@@ -20,7 +20,7 @@ html{
 
 body {
 	background: #0FFF0F !important;
-    border: 1px solid white !important;
+    border: 0.1rem solid white !important;
 }
 
 .o-achievement {

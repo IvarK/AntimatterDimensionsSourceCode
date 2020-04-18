@@ -19,7 +19,7 @@ button {
     background-image: -moz-linear-gradient(center bottom, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
     background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important; 
     padding: 3px !important;
-    border: 1px solid #9B9B9B !important;
+    border: 0.1rem solid #9B9B9B !important;
     color: black !important;
     text-decoration: none !important;
 }
@@ -32,11 +32,11 @@ button {
     background-image: -moz-linear-gradient(center bottom, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
     background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important; 
     padding: 3px !important;
-    border: 1px solid #9B9B9B !important;
+    border: 0.1rem solid #9B9B9B !important;
     color: black !important;
     text-decoration: none !important;
 }
 
 button:hover {
-    border: 1px solid #737373 !important;
+    border: 0.1rem solid #737373 !important;
 }

@@ -1520,7 +1520,7 @@ GameDatabase.news = [
   {
     id: "a271",
     text:
-      "<i style='border: 1px solid black; border-radius: 50%; padding: 0.4rem; color: #2196F3; background: white; " +
+      "<i style='border: 0.1rem solid black; border-radius: 50%; padding: 0.4rem; color: #2196F3; background: white; " +
       "cursor: pointer;' class='fas fa-volume-up' onclick='(function(){new Audio(`audio/news.mp3`).play();})();'>" +
       "</i> This news message is a test of \"News 2.0\". News 2.0 will feature things like the ability to listen to " +
       "an audio version of any news message!"

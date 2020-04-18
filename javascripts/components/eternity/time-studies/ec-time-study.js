@@ -47,7 +47,7 @@ Vue.component("ec-time-study", {
     }
   },
   template:
-    `<time-study :setup="setup" class="o-time-study--eternity-challenge">
+    `<time-study :setup="setup">
       Eternity Challenge {{id}}
       <template v-if="hasRequirement">
         <br>

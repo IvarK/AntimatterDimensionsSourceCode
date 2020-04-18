@@ -18,10 +18,9 @@ Vue.component("game-header-big-crunch-button", {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     },
     amountStyle() {
-      if (this.currentIP.lt(1e50)) return { color: "white" };
-
       // If the player is using a dark theme, it should be black instead of white when ratio is 1
-      const darkTheme = player.options.theme.includes("Dark");
+      const darkTheme = Theme.current().isDark;
+      if (this.currentIP.lt(1e50)) return darkTheme ? { color: "white" } : { color: "black" };
 
       const ratio = this.gainedIP.log10() / this.currentIP.log10();
       let rgb;

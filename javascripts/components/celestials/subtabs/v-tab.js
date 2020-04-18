@@ -147,7 +147,7 @@ Vue.component("v-tab", {
           <li v-for="hex in hexGrid">
             <div v-if="hex.config"
               class="l-v-hexagon c-v-unlock"
-              :class="{ 'c-v-unlock-completed': hex.completions == 6 }">
+              :class="{ 'c-v-unlock-completed': hex.completions === hex.config.values.length }">
                 <p class="o-v-unlock-name"><br v-if="hex.canBeReduced && showReduction">{{ hex.config.name }}</p>
                 <p class="o-v-unlock-desc" v-html="hex.formattedDescription"></p>
                 <p class="o-v-unlock-goal-reduction" v-if="has(runMilestones[0]) && hex.isReduced">

@@ -799,7 +799,8 @@ function simulateTime(seconds, real, fast) {
       },
       asyncExit: () => {
         ui.$viewModel.modal.progressBar = undefined;
-        GameIntervals.start();
+        // .postLoadStuff will restart GameIntervals
+        GameStorage.postLoadStuff();
       },
       then: () => {
         afterSimulation(seconds, playerStart);

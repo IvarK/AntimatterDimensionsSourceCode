@@ -154,7 +154,7 @@ GameDatabase.tabs = [
       {
         key: "break",
         name: "Break Infinity",
-        symbol: "<i class='fas fa-infinity'></i>",
+        symbol: "<i class='fab fa-skyatlas'></i>",
         component: "break-infinity-tab",
         condition: () =>
           PlayerProgress.realityUnlocked() ||

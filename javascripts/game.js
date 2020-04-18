@@ -754,12 +754,16 @@ function simulateTime(seconds, real, fast) {
 
   const playerStart = deepmerge.all([{}, player]);
 
+  const infinitiedMilestone = getInfinitiedMilestoneReward(seconds * 1000);
   const eternitiedMilestone = getEternitiedMilestoneReward(seconds * 1000);
-  if (eternitiedMilestone === 0) {
-    player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * 1000));
+
+  if (eternitiedMilestone > 0) {
+    player.eternities = player.eternities.plus(eternitiedMilestone);
+  } else if (infinitiedMilestone > 0) {
+    player.infinitied = player.infinitied.plus(infinitiedMilestone);
+  } else {
+    player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
   }
-  player.eternities = player.eternities.plus(eternitiedMilestone);
-  player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
 
   if (InfinityUpgrade.ipOffline.isBought) {
     player.infinityPoints = player.infinityPoints

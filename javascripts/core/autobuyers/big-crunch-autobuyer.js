@@ -53,7 +53,8 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
     return EternityMilestone.autoInfinities.isReached &&
       this.data.isActive &&
       this.mode === AUTO_CRUNCH_MODE.TIME &&
-      this.time < 60;
+      this.time < 60 &&
+      !Autobuyer.eternity.autoEternitiesAvailable;
   }
 
   upgradeInterval(free) {

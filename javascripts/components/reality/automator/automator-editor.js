@@ -92,7 +92,9 @@ Vue.component("automator-editor", {
       this.rename();
     },
     deleteScript() {
-      if (!confirm("Permanently and irrevocably delete script?")) return;
+      Modal.confirmation.show("Permanently and irrevocably delete script?", () => this.deleteScriptCallback)
+    },
+    deleteScriptCallback() {
       const scriptID = this.currentScriptID;
       AutomatorBackend.deleteScript(scriptID);
       this.updateScriptList();

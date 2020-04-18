@@ -31,9 +31,10 @@ Vue.component("modal-glyph-selection", {
       GlyphSelection.select(index, false);
     },
     trashGlyphs() {
-      if (!player.options.confirmations.glyphTrash ||
-        confirm("Are you sure you want to sacrifice a random one of these glyphs?")) {
-        GlyphSelection.select(Math.floor(Math.random() * GlyphSelection.choiceCount), true);
+      if (!player.options.confirmations.glyphTrash) {
+        Modal.confirmation.show("Are you sure you want to sacrifice a random one of these glyphs?", () => {
+          GlyphSelection.select(Math.floor(Math.random() * GlyphSelection.choiceCount), true);
+        });
       }
     }
   },

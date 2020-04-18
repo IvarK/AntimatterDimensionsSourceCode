@@ -87,9 +87,9 @@ Vue.component("options-button-grid", {
       this.offlineTicks = options.offlineTicks;
     },
     hardReset() {
-      if (confirm("Do you really want to erase all your progress?")) {
+      Modal.confirmation.show("Do you really want to erase all your progress?", () => {
         GameStorage.hardReset();
-      }
+      });
     }
   },
   template: `

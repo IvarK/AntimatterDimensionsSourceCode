@@ -195,8 +195,13 @@ function getEternitiedMilestoneReward(ms) {
     : 0;
 }
 
+function isOfflineEPGainEnabled() {
+  return !Autobuyer.bigCrunch.autoInfinitiesAvailable &&
+    !Autobuyer.eternity.autoEternitiesAvailable;
+}
+
 function getOfflineEPGain(ms) {
-  if (!EternityMilestone.autoEP.isReached) return new Decimal(0);
+  if (!EternityMilestone.autoEP.isReached || !isOfflineEPGainEnabled()) return new Decimal(0);
   return player.bestEPminThisReality.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 

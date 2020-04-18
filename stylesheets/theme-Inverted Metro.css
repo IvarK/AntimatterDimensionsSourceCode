@@ -2,12 +2,23 @@ body.t-inverted-metro {
     background-color: black;
 }
 
-.t-inverted-metro #ui {
+.t-inverted-metro #container,
+.t-inverted-metro #page,
+.t-inverted-metro .l-notification-container,
+.t-inverted-metro .c-modal,
+.t-inverted-metro #TTbuttons {
   filter: invert(100%);
 }
 
 .t-inverted-metro #realityanimbg {
   filter: invert(1);
+}
+
+.t-inverted-metro #timetheorems,
+.t-inverted-metro .c-ttshop__save-load-text,
+.t-inverted-metro #minimizeArrow,
+.t-inverted-metro .ttshop-background {
+  color: #bbb;
 }
 
 .t-inverted-metro .c-tt-buy-button--unlocked {

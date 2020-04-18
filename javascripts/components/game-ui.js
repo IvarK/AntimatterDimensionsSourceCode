@@ -21,7 +21,7 @@ Vue.component("game-ui", {
     }
   },
   template: `
-    <div>
+    <div id="ui-container" style="display: flex; justify-content: center;">
       <div v-if="view.initialized" id="ui" class="c-game-ui">
         <component :is="uiLayout">
           <component :is="page" />
@@ -33,6 +33,7 @@ Vue.component("game-ui", {
         <help-me />
       </div>
       <div id="notification-container" class="l-notification-container" />
+      <tt-shop v-if="view.subtab === 'studies'" class="l-time-studies-tab__tt-shop" />
     </div>
   `
 });

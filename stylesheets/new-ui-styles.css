@@ -7,7 +7,7 @@
   outline: none;
 }
 
-.t-normal #ui {
+.t-normal #ui-container {
   --color-text: white;
   --color-base: #1d1b22;
   --color-accent: rgb(223, 80, 80);

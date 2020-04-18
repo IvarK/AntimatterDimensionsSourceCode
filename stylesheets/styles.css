@@ -22,7 +22,9 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+}
 
+#ui-container {
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #F2F2F2;
@@ -38,9 +40,9 @@ html {
   --color-celestials: #5151ec;
 }
 
-.t-metro #ui, /* csslint allow: empty-rules */
-.t-inverted-metro #ui,
-.t-s8 #ui {
+.t-metro #ui-container, /* csslint allow: empty-rules */
+.t-inverted-metro #ui-container,
+.t-s8 #ui-container {
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #eeeeee;
@@ -56,7 +58,7 @@ html {
   --color-celestials: #00bcd4;
 }
 
-.t-dark #ui { /* csslint allow: empty-rules */
+.t-dark #ui-container { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
   --color-base: #455a64;
@@ -66,7 +68,7 @@ html {
   --color-infinity: #FF9800;
 }
 
-.t-dark-metro #ui { /* csslint allow: empty-rules */
+.t-dark-metro #ui-container { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
   --color-base: #455a64;
@@ -82,7 +84,7 @@ html {
   --color-celestials: #00bcd4;
 }
 
-.t-s1 #ui { /* csslint allow: empty-rules */
+.t-s1 #ui-container { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: #dbd242;
   --color-base: #dbd242;
@@ -98,7 +100,7 @@ html {
   --color-celestials: #F2D6C1;
 }
 
-.t-s4 #ui { /* csslint allow: empty-rules */
+.t-s4 #ui-container { /* csslint allow: empty-rules */
   --color-text: black;
   --color-text-inverted: white;
   --color-base: #1b00ff;
@@ -107,7 +109,7 @@ html {
   --color-bad: #ff0000;
 }
 
-.t-s6 #ui { /* csslint allow: empty-rules */
+.t-s6 #ui-container { /* csslint allow: empty-rules */
   --color-text: #E0E0E0;
   --color-text-inverted: black;
   --color-base: black;
@@ -182,6 +184,7 @@ button:focus {
   display: flex;
   align-items: flex-end;
   z-index: 2;
+  width: 55.5rem;
 }
 
 .l-tt-buy-button {
@@ -197,6 +200,13 @@ button:focus {
   transition-duration: 0.2s;
   border-radius: 4px;
   font-size: 1.35rem;
+}
+
+.t-metro .c-tt-buy-button,
+.t-dark-metro .c-tt-buy-button,
+.t-inverted-metro .c-tt-buy-button,
+.t-s8 .c-tt-buy-button{
+  border-radius: 0;
 }
 
 .c-tt-buy-button--unlocked {
@@ -348,11 +358,6 @@ button:focus {
   border-radius: 0;
 }
 
-.t-inverted .ttshop-background {
-  border-color: #fff;
-  background-color: #1f1f1f;
-}
-
 .t-s6 .ttshop-background {
   border: 0.1rem solid #3AACD6;
 }
@@ -368,8 +373,8 @@ button:focus {
 .ttshop-minimize-btn {
   display: flex;
   justify-content: center;
-  width: 3.1rem;
-  height: 3.1rem;
+  width: 2.6rem;
+  height: 4.7rem;
   margin-left: -1px
 }
 
@@ -377,8 +382,8 @@ button:focus {
 .t-dark-metro .ttshop-minimize-btn,
 .t-inverted-metro .ttshop-minimize-btn,
 .t-s8 .ttshop-minimize-btn {
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 4.6rem;
 }
 
 .ttshop-minimize-btn span {

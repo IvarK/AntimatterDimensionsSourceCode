@@ -853,8 +853,8 @@ GameDatabase.achievements.normal = [
   {
     id: 134,
     name: "When will it be enough?",
-    tooltip: () => `Reach ${formatPostBreak("1e20000", 0, 0)} Replicanti.`,
-    checkRequirement: () => player.replicanti.amount.exponent >= 20000,
+    tooltip: () => `Reach ${formatPostBreak("1e18000", 0, 0)} Replicanti.`,
+    checkRequirement: () => player.replicanti.amount.exponent >= 18000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => `You gain Replicanti ${formatInt(2)} times faster
       under ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Replicanti.`

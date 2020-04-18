@@ -27,10 +27,6 @@ const TimeTheorems = {
       if (!auto) Modal.message.show("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
       return false;
     }
-    if (player.eternities.lt(1)) {
-      if (!auto) Modal.message.show("You need to eternity at least once before you can purchase Time Theorems.");
-      return false;
-    }
     return true;
   },
 

@@ -36,6 +36,8 @@ Vue.component("secret-time-study", {
         "l-time-study": true,
         "o-time-study": true,
         "o-time-study--bought": true,
+        "o-time-study-normal": true,
+        "o-time-study-normal--bought": true,
         "o-time-study--secret": !this.isEnslaved && !this.isVisible,
         "o-time-study--secret-enslaved": this.isEnslaved && !this.isVisible,
         "o-time-study--secret-unlocked": this.isVisible,

@@ -5560,6 +5560,7 @@ kbd {
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 0.2rem solid sandybrown;
+  box-shadow: 0 0 2rem inset rgba(244, 164, 96, 0.5);
   background-color: #fdd3b0;
   cursor: pointer;
   margin: 1rem 0.5rem;
@@ -5568,6 +5569,7 @@ kbd {
   padding-bottom: 1rem;
   padding-top: 1rem;
   font-family: Typewriter;
+  transition-duration: 0.2s;
 }
 
 .t-metro .o-enslaved-mechanic-button,
@@ -5578,8 +5580,13 @@ kbd {
   border-width: 0.1rem;
 }
 
+.o-enslaved-mechanic-button:hover {
+  background-color: #ffa337;
+}
+
 .o-enslaved-mechanic-button--storing-time {
   background-color: #ffa337;
+  box-shadow: none;
 }
 
 .l-enslaved-shop-container {
@@ -5592,25 +5599,38 @@ kbd {
 
 .o-enslaved-shop-button {
   padding: 1.7rem;
-  background-color: #5151ec;
+  background-color: var(--color-celestials);
   color: white;
   border: none;
   border-radius: 0.5rem;
   margin: 1rem;
-  cursor: pointer;
-  transition-duration: 0.15s;
+  transition-duration: 0.2s;
   width: 30rem;
   height: 10rem;
   font-family: Typewriter;
 }
 
+.t-metro .o-enslaved-shop-button,
+.t-dark-metro .o-enslaved-shop-button,
+.t-inverted-metro .o-enslaved-shop-button,
+.t-s8 .o-enslaved-shop-button {
+  border-radius: 0;
+}
+
 .o-enslaved-shop-button--available {
   background: aquamarine;
+  box-shadow: 0 0 1rem aquamarine;
   cursor: pointer;
+}
+
+.o-enslaved-shop-button--available:hover {
+  background: #16c55e;
+  box-shadow: 0 0 1rem #16c55e;
 }
 
 .o-enslaved-shop-button--bought {
   background: #16c55e;
+  pointer-events: none;
 }
 
 .o-enslaved-run-box {
@@ -5629,6 +5649,13 @@ kbd {
   align-items: center;
 }
 
+.t-metro .o-enslaved-run-box,
+.t-dark-metro .o-enslaved-run-box,
+.t-inverted-metro .o-enslaved-run-box,
+.t-s8 .o-enslaved-run-box {
+  border-radius: 0;
+}
+
 .o-enslaved-run-box__title {
   font-weight: bold;
   font-size: larger;
@@ -5637,7 +5664,7 @@ kbd {
 
 .o-enslaved-run-button {
   border-radius: 50%;
-  background: #ead584;
+  background: #f1aa7f;
   width: 15rem;
   height: 15rem;
   margin: 1.5rem;
@@ -5792,7 +5819,7 @@ kbd {
 
 .o-v-run-button {
   color: black;
-  background: #f1aa7f;
+  background: #ead584;
   font-family: Typewriter;
   font-size: 1.1rem;
   cursor: pointer;
@@ -6018,8 +6045,8 @@ kbd {
 @keyframes a-ra-color-shift {
   0% { background-color: #86ea84; }
   25% { background-color: #ea8585; }
-  50% { background-color: #ead584; }
-  75% { background-color: #f1aa7f; }
+  50% { background-color: #f1aa7f; }
+  75% { background-color: #ead584; }
   100% { background-color: #86ea84; }
 }
 

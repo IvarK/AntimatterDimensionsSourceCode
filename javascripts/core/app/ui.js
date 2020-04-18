@@ -39,11 +39,33 @@ Vue.mixin({
         this.update();
       }
     }
+
+    // Following is used to force the recomputation of computed values
+    // from this fiddle https://codepen.io/sirlancelot/pen/JBeXeV
+    const recomputed = Object.create(null);
+    const watchers = this._computedWatchers;
+
+    if (!watchers) return;
+
+    for (const key in watchers)
+      makeRecomputable(watchers[key], key, recomputed);
+
+    this.$recompute = key => recomputed[key] = !recomputed[key];
+    Vue.observable(recomputed);
   },
   destroyed() {
     EventHub.ui.offAll(this);
   }
 });
+
+// This function is also from the fiddle above
+function makeRecomputable(watcher, key, recomputed) {
+  const original = watcher.getter;
+  recomputed[key] = true;
+  
+  // eslint-disable-next-line no-sequences
+  watcher.getter = vm => (recomputed[key], original.call(vm, vm));
+}
 
 function pluralize(value, amount, plural) {
   if (value === undefined || amount === undefined)

@@ -730,6 +730,10 @@ body.t-normal {
   color: #64dd17;
 }
 
+.o-tachyon-particle {
+  fill: white;
+}
+
 .c-progress-bar {
   width: 80%;
   margin: 2rem 10%;

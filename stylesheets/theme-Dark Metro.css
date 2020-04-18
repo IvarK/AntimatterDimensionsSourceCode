@@ -6,13 +6,13 @@ body.t-dark-metro {
 
 .t-dark-metro input {
     background-color: #455A64;
-    border: 1px solid black;
+    border: 0.1rem solid black;
 }
 
 .t-dark-metro .c-tt-buy-button--unlocked {
     background: #212121;
     color: #00BCD4;
-    border: 1px solid #00BCD4;
+    border: 0.1rem solid #00BCD4;
 }
 
 .t-dark-metro .c-tt-buy-button--unlocked:hover {

@@ -13,7 +13,7 @@ body.t-inverted-metro {
 .t-inverted-metro .c-tt-buy-button--unlocked {
   background: #212121;
   color: #00BCD4;
-  border: 1px solid #00BCD4;
+  border: 0.1rem solid #00BCD4;
 }
 
 .t-inverted-metro .c-tt-buy-button--unlocked:hover {

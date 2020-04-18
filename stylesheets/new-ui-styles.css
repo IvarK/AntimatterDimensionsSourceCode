@@ -53,8 +53,8 @@ body.t-normal {
   display: flex;
   flex-direction: column;
   background-color: var(--color-base);
-  border-right: 1px solid var(--color-accent);
-  border-bottom: 1px solid var(--color-accent);
+  border-right: 0.1rem solid var(--color-accent);
+  border-bottom: 0.1rem solid var(--color-accent);
   padding: 10px;
 }
 
@@ -444,7 +444,7 @@ body.t-normal {
 .o-infinity-upgrade-btn--unavailable {
   background: #525252;
   color: white;
-  border: 1px solid var(--color-accent);
+  border: 0.1rem solid var(--color-accent);
   cursor: default;
 }
 
@@ -454,14 +454,14 @@ body.t-normal {
 }
 
 .o-infinity-upgrade-btn--bought {
-  border: 1px solid var(--color-accent);
+  border: 0.1rem solid var(--color-accent);
   background: var(--color-good);
 }
 
 .o-primary-btn--option, .c-select-theme__item, .c-select-notation__item {
   background: var(--color-base);
   color: var(--color-text);
-  border: 1px solid var(--color-good);
+  border: 0.1rem solid var(--color-good);
 }
 
 .o-primary-btn {
@@ -478,7 +478,7 @@ body.t-normal {
 .c-challenge-box--normal {
   color: var(--color-text);
   background: var(--color-base);
-  border: 1px solid var(--color-accent);
+  border: 0.1rem solid var(--color-accent);
 }
 
 .c-challenge-box--infinity {

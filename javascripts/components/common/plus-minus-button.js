@@ -22,7 +22,7 @@ Vue.component("plus-minus-button", {
         height: this.size,
         position: "relative !important",
         "border-radius": "50% !important",
-        border: "1px solid " + this.color + " !important",
+        border: "0.1rem solid " + this.color + " !important",
       };
     },
     horizStyle() {

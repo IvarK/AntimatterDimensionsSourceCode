@@ -27,7 +27,7 @@ body.t-s6 {
 .t-s6 input {
   color: white;
   background-color: black;
-  border: 1px solid grey;
+  border: 0.1rem solid #888;
 }
 
 .t-s6 .c-tt-amount {
@@ -38,7 +38,7 @@ body.t-s6 {
 .t-s6 .c-tt-buy-button--unlocked {
   color: #3AACD6;
   background: black;
-  border: 1px solid #3AACD6;
+  border: 0.1rem solid #3AACD6;
 }
 
 .t-s6 .c-tt-buy-button--unlocked:hover {
@@ -49,13 +49,13 @@ body.t-s6 {
 .t-s6 .c-tt-buy-button--locked {
   color: grey;
   background: black;
-  border: 1px solid grey;
+  border: 0.1rem solid grey;
 }
 
 .t-s6 .c-tt-buy-button--locked:hover {
   color: black;
   background: var(--color-bad);
-  border: 1px solid var(--color-bad);
+  border: 0.1rem solid var(--color-bad);
 }
 
 .t-s6 .c-rm-amount__desc {

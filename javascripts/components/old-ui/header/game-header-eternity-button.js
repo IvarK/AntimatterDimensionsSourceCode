@@ -40,7 +40,7 @@ Vue.component("game-header-eternity-button", {
         this.type === EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT;
     },
     amountStyle() {
-      if (this.currentEP.lt(1e50)) return undefined;
+      if (this.currentEP.lt(1e50)) return { color: "var(--color-eternity)" };
       const ratio = this.gainedEP.log10() / this.currentEP.log10();
 
       const rgb = [

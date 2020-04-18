@@ -4,7 +4,7 @@ GameDatabase.challenges.infinity = [
   {
     id: 1,
     description: "All previous challenges (except tickspeed challenge and automatic big crunch challenge) at once.",
-    goal: new Decimal("1e850"),
+    goal: new Decimal("1e650"),
     isQuickResettable: true,
     reward: {
       description: () => `${formatX(1.3, 1, 1)} on all Infinity Dimensions for each Infinity Challenge completed`,
@@ -21,7 +21,7 @@ GameDatabase.challenges.infinity = [
     reward: {
       description: "Sacrifice autobuyer and stronger sacrifice"
     },
-    unlockAM: new Decimal("1e5000"),
+    unlockAM: new Decimal("1e11000"),
   },
   {
     id: 3,
@@ -78,7 +78,7 @@ GameDatabase.challenges.infinity = [
       effect: () => Decimal.divide(1000, Tickspeed.current).pow(0.0005),
       formatEffect: value => formatX(value, 2, 2)
     },
-    unlockAM: new Decimal("1e20000"),
+    unlockAM: new Decimal("1e22500"),
   },
   {
     id: 7,

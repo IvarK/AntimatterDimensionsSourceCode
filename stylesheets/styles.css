@@ -7407,6 +7407,23 @@ input.o-automator-block-input {
   stroke: #FFF;
 }
 
+.o-celestial-nav__legend-outline {
+  stroke: none;
+  fill: none;
+  stroke-linecap: butt;
+  stroke-width: 2;
+}
+
+.o-celestial-nav__hoverable:hover .o-celestial-nav__legend-outline {
+  stroke: #FFF;
+}
+
+.o-celestial-nav__node-overlay {
+  stroke: transparent;
+  fill: transparent;
+  stroke-width: 12;
+}
+
 .o-celestial-nav__legend-text {
   fill: rgb(238, 135, 17);
   font-weight: bold;

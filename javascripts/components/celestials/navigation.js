@@ -56,8 +56,8 @@ z`;
 }
 
 const CelestialNavigationViewportCache = {
-  pan: null,
-  zoom: null,
+  pan: { x: 125, y: 125 },
+  zoom: 0.75,
 };
 
 Vue.component("celestial-navigation", {
@@ -148,7 +148,7 @@ Vue.component("celestial-navigation", {
           return svgRingPath(this.ring);
         },
         hasLegend() {
-          return Boolean(this.legend);
+          return Boolean(this.legend) && (!this.legend.hideWhenCompleted || this.complete < 1);
         },
         legendArrowPoints() {
           const dir = Vector.unitFromDegrees(this.legend.angle);
@@ -511,7 +511,7 @@ Vue.component("celestial-navigation", {
       </feMerge>
     </filter>
   </defs>
-  <image x="-250" y="-250" height="1503" width="1503" href="images/celestial-navigation-bg.png" />
+  <image x="-250" y="-350" height="1503" width="1503" href="images/celestial-navigation-bg.png" />
   <g v-for="(obj, index) in drawOrder" :key="index" :visibility="nodeVisibility(obj)">
     <component :is="obj.is"
                :complete="nodeState[obj.nodeId].complete"

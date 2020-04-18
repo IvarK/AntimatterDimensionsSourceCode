@@ -33,7 +33,7 @@ Vue.component("game-header", {
               activityToken: () => player.dilation.active
             },
             {
-              name: token => `${NormalChallenge(token).config.reward} Challenge`,
+              name: token => `${NormalChallenge(token).config.name} Challenge`,
               isActive: token => token > 0,
               activityToken: () => player.challenge.normal.current
             },

@@ -4,11 +4,21 @@ function emphasizeEnd(fraction) {
   return Math.pow(fraction, 10);
 }
 
+const CELESTIAL_NAV_DRAW_ORDER = {
+  // Node background is a black fuzzy circle drawn behind nodes. It can help show their
+  // outline in some cases, and can be used in cases where a connector passes under a node
+  NODE_BG: 0,
+  CONNECTORS: 1000,
+  NODES: 2000,
+  NODE_OVERLAYS: 3000,
+};
+
 GameDatabase.celestials.navigation = {
   "teresa-base": {
     visible: () => true,
     complete: () => 1,
     node: {
+      clickAction: () => Tab.celestials.teresa.show(),
       completeClass: "c-celestial-nav__test-complete",
       incompleteClass: "c-celestial-nav__test-incomplete",
       position: new Vector(100, 100),
@@ -67,6 +77,7 @@ GameDatabase.celestials.navigation = {
     visible: () => true,
     complete: () => (Teresa.runCompleted ? 1 : 0),
     node: {
+      clickAction: () => Tab.celestials.teresa.show(),
       completeClass: "c-celestial-nav__test-complete",
       incompleteClass: "c-celestial-nav__test-incomplete",
       symbol: "Ϟ",
@@ -122,6 +133,7 @@ GameDatabase.celestials.navigation = {
     complete: () => (Teresa.has(TERESA_UNLOCKS.EFFARIG)
       ? 1 : Decimal.pLog10(Teresa.rmStore) / Math.log10(TERESA_UNLOCKS.EFFARIG.price)),
     node: {
+      clickAction: () => Tab.celestials.effarig.show(),
       completeClass: "c-celestial-nav__effarig",
       incompleteClass: "c-celestial-nav__test-incomplete",
       position: new Vector(300, 0),
@@ -215,6 +227,7 @@ GameDatabase.celestials.navigation = {
         diagonal: 100,
         horizontal: 16,
       },
+      bgDrawOrder: CELESTIAL_NAV_DRAW_ORDER.NODE_BG + 750,
     },
     connector: {
       pathStart: 0,
@@ -345,6 +358,7 @@ GameDatabase.celestials.navigation = {
     connector: {
       pathStart: 0,
       pathEnd: 1,
+      drawOrder: CELESTIAL_NAV_DRAW_ORDER.NODE_BG + 500,
       path: LinearPath.connectCircles(new Vector(550, 25), 40 - 1, new Vector(650, 250), 80 - 1),
       fill: "url(#gradEffarigEnslaved)",
     }
@@ -1243,3 +1257,4 @@ GameDatabase.celestials.navigation = {
     }
   }
 };
+

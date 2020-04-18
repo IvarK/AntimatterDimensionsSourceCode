@@ -212,14 +212,14 @@
 }
 
 .o-time-study-reality--available {
-  color: var(-color-reality);
+  color: var(--color-reality);
   background-color: white;
-  border-color: var(-color-reality);
+  border-color: var(--color-reality);
 }
 
 .o-time-study-reality--available:hover {
   color: white;
-  background-color: var(-color-reality);
+  background-color: var(--color-reality);
 }
 
 .o-time-study-triad--available {

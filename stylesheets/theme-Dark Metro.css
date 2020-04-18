@@ -4,11 +4,6 @@ body.t-dark-metro {
     color: #757575;
 }
 
-.t-dark-metro input {
-    background-color: #455A64;
-    border: 0.1rem solid black;
-}
-
 .t-dark-metro .c-tt-buy-button--unlocked {
     background: #212121;
     color: #00BCD4;

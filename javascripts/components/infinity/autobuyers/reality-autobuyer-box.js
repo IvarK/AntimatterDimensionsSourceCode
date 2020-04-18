@@ -41,6 +41,7 @@ Vue.component("reality-autobuyer-box", {
   template:
     `<autobuyer-box :autobuyer="autobuyer" name="Automatic Reality">
       <template slot="intervalSlot">
+        <div class="c-autobuyer-box__small-text"></div>
         <select
           class="c-autobuyer-box__mode-select"
           @change="changeMode"

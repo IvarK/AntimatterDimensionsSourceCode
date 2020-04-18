@@ -193,7 +193,7 @@ button:focus {
 .c-tt-buy-button {
   font-weight: bold;
   font-family: Typewriter, serif;
-  border: 1px solid #691fa5;
+  border: 0.1rem solid #691fa5;
   transition-duration: 0.2s;
   border-radius: 4px;
   font-size: 1.35rem;
@@ -354,7 +354,7 @@ button:focus {
 }
 
 .t-s6 .ttshop-background {
-  border: 1px solid #3AACD6;
+  border: 0.1rem solid #3AACD6;
 }
 
 .ttshop-container {
@@ -722,7 +722,7 @@ a:hover small {
 }
 
 blockquote {
-    border-left: 1px solid #e5e5e5;
+    border-left: 0.1rem solid #e5e5e5;
     margin: 0;
     padding: 0 0 0 20px;
     font-style: italic;
@@ -764,14 +764,14 @@ header ul {
     padding: 0;
     background: #f4f4f4;
     border-radius: 5px;
-    border: 1px solid #e0e0e0;
+    border: 0.1rem solid #e0e0e0;
     width: 270px;
 }
 
 header li {
     width: 89px;
     float: left;
-    border-right: 1px solid #e0e0e0;
+    border-right: 0.1rem solid #e0e0e0;
     height: 40px;
 }
 
@@ -890,7 +890,7 @@ br {
         padding-right: 320px;
     }
     section {
-        border: 1px solid #e5e5e5;
+        border: 0.1rem solid #e5e5e5;
         border-width: 1px 0;
         padding: 20px 0;
         margin: 0 0 20px;
@@ -3490,6 +3490,26 @@ screen and (max-width: 480px) {
   transition-duration: 0.2s;
 }
 
+.t-metro .o-autobuyer-toggle-checkbox__label,
+.t-inverted-metro .o-autobuyer-toggle-checkbox__label,
+.t-s8 .o-autobuyer-toggle-checkbox__label {
+  border: 0.1rem solid black;
+  border-radius: 0;
+}
+
+.t-dark .o-autobuyer-toggle-checkbox__label {
+  border-color: var(--color-base);
+}
+
+.t-dark-metro .o-autobuyer-toggle-checkbox__label {
+  border: 0.1rem solid var(--color-base);
+  border-radius: 0;
+}
+
+.t-s6 .o-autobuyer-toggle-checkbox__label {
+  border: 0.1rem solid #888;
+}
+
 .o-autobuyer-toggle-checkbox__label:hover {
   transform: scale(1.1) translate(-0.1rem, 0.1rem);
 }
@@ -3620,10 +3640,23 @@ screen and (max-width: 480px) {
 .c-autobuyer-box__mode-select {
   font-family: Typewriter, serif;
   font-size: 1.1rem;
-  color: #4f5957;
+  color: black;
   text-align: center;
   text-align-last: center;
   height: 2.5rem;
+}
+
+.t-dark .c-autobuyer-box__mode-select,
+.t-dark-metro .c-autobuyer-box__mode-select {
+  color: black;
+  background-color: #455A64;
+  border: 0.1rem solid black;
+}
+
+.t-s6 .c-autobuyer-box__mode-select {
+  color: white;
+  background-color: black;
+  border: 0.1rem solid #888;
 }
 
 .l-autobuyer-box {
@@ -3633,7 +3666,7 @@ screen and (max-width: 480px) {
   margin: 0.5rem 0.8rem;
 }
 
-.l-autobuyer-box-row {
+.c-autobuyer-box-row {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3643,6 +3676,35 @@ screen and (max-width: 480px) {
   margin: .5rem;
   padding: 1rem;
   width: 90rem;
+}
+
+.t-metro .c-autobuyer-box-row,
+.t-inverted-metro .c-autobuyer-box-row,
+.t-s8 .c-autobuyer-box-row {
+  color: black;
+  border: 0.1rem solid black;
+  border-radius: 0;
+}
+
+.t-dark .c-autobuyer-box-row {
+  color: var(--color-text);
+  border-color: var(--color-base);
+}
+
+.t-dark-metro .c-autobuyer-box-row {
+  color: var(--color-text);
+  border: 0.1rem solid var(--color-base);
+  border-radius: 0;
+}
+
+.t-s6 .c-autobuyer-box-row {
+  color: white;
+  border: 0.1rem solid #888;
+  background: black;
+}
+
+.t-s8 .c-autobuyer-box-row {
+  background: white;
 }
 
 .l-autobuyer-box__header {
@@ -3674,6 +3736,16 @@ screen and (max-width: 480px) {
   top: -0.2rem;
   right: 1.8rem;
   width: 0%;
+}
+
+.t-metro .l-autobuyer-box__footer,
+.t-dark-metro .l-autobuyer-box__footer,
+.t-inverted-metro .l-autobuyer-box__footer,
+.t-s6 .l-autobuyer-box__footer,
+.t-s7 .l-autobuyer-box__footer,
+.t-s8 .l-autobuyer-box__footer {
+  top: -0.1rem;
+  right: 1.9rem;
 }
 
 .l-autobuyer-box__button {
@@ -4545,7 +4617,7 @@ screen and (max-width: 480px) {
 /*#region t-metro t-dark-metro t-inverted-metro t-s8 */
 
 .t-metro .c-modal,
-.t-dark-metro,
+.t-dark-metro .c-modal,
 .t-inverted-metro .c-modal,
 .t-s8 .c-modal {
   border: 0.1rem solid black;
@@ -4566,7 +4638,7 @@ screen and (max-width: 480px) {
 .t-s6 .c-modal {
   color: #e0e0e0;
   background-color: black;
-  border: 1px solid #1b5e20;
+  border: 0.1rem solid #1b5e20;
   box-shadow: 0 0 1.5rem 0 black;
 }
 
@@ -5856,7 +5928,7 @@ kbd {
   height: 4rem;
   background: #222;
   border-radius: 3rem;
-  border: 1px solid #111;
+  border: 0.1rem solid #111;
   margin: 0 0.3rem;
 }
 

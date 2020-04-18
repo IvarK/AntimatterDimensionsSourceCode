@@ -98,7 +98,7 @@ Vue.component("autobuyer-box", {
     },
   },
   template:
-    `<div v-if="isUnlocked || isBought" class="l-autobuyer-box-row">
+    `<div v-if="isUnlocked || isBought" class="c-autobuyer-box-row">
       <div class="l-autobuyer-box__header">
         {{name}}
         <interval-label v-if="showInterval" :autobuyer="autobuyer"/>

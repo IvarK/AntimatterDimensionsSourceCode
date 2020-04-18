@@ -26,8 +26,9 @@ Vue.component("dimboost-autobuyer-box", {
   template:
     `<autobuyer-box :autobuyer="autobuyer" :showInterval="!isBuyMaxUnlocked" name="Automatic DimBoosts">
       <autobuyer-interval-button slot="intervalSlot" :autobuyer="autobuyer" />
-      <template :slot=" isBuyMaxUnlocked ? 'toggleSlot' : 'intervalSlot' ">
-        <div class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text" @click="limitDimBoosts = !limitDimBoosts">
+      <template :slot=" isBuyMaxUnlocked ? 'toggleSlot' : 'intervalSlot' " style="margin-top: 1.2rem;">
+        <div class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text" @click="limitDimBoosts = !limitDimBoosts" 
+        style="margin-top: 1.2rem;">
           <input type="checkbox" :checked="limitDimBoosts"/>
           <span>Limit dimboosts to:</span>
         </div>
@@ -38,7 +39,7 @@ Vue.component("dimboost-autobuyer-box", {
         />
       </template>
       <template :slot=" isBuyMaxUnlocked ? 'prioritySlot' : 'toggleSlot' ">
-        <div class="c-autobuyer-box__small-text">
+        <div class="c-autobuyer-box__small-text" style="height: 3rem;">
           Galaxies required to always DimBoost,
           ignoring the limit:
         </div>
@@ -49,7 +50,7 @@ Vue.component("dimboost-autobuyer-box", {
         />
       </template>
       <template v-if="isBuyMaxUnlocked" slot="intervalSlot">
-        <div class="c-autobuyer-box__small-text">Activates every X seconds:</div>
+        <div class="c-autobuyer-box__small-text" style="margin-top: 1.2rem;">Activates every X seconds:</div>
         <autobuyer-input
           :autobuyer="autobuyer"
           type="float"
@@ -57,7 +58,7 @@ Vue.component("dimboost-autobuyer-box", {
         />
       </template>
       <template v-else-if="isBulkBuyUnlocked" slot="prioritySlot">
-        <div class="c-autobuyer-box__small-text">Bulk DimBoost Amount:</div>
+        <div class="c-autobuyer-box__small-text" style="margin-top: 1.2rem;">Bulk DimBoost Amount:</div>
         <autobuyer-input
           :autobuyer="autobuyer"
           type="int"

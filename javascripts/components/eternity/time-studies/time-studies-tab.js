@@ -301,6 +301,5 @@ Vue.component("time-studies-tab", {
           <secret-time-study-connection :setup="layout.secretStudyConnection" />
         </svg>
       </div>
-      <tt-shop class="l-time-studies-tab__tt-shop" />
     </div>`
 });

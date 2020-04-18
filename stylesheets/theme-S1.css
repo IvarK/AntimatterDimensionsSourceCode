@@ -17,12 +17,6 @@ body.t-s1 {
     color: black !important;
 }
 
-input {
-    background-color: #9a921d !important;
-    border: 1px solid black !important;
-    border-radius: 3px !important;
-}
-
 .t-s1 .c-tt-buy-button--unlocked {
   color: #639565;
   border-color: #639565;

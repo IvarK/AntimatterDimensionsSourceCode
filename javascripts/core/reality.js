@@ -430,6 +430,7 @@ function finishProcessReality(realityProps) {
   };
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;
+  player.thisEternityMaxAM = Player.startingAM;
   Enslaved.autoReleaseTick = 0;
   player.celestials.laitela.entropy = 0;
 

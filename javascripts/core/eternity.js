@@ -107,7 +107,6 @@ function eternity(force, auto, specialConditions = {}) {
   player.bestIPminThisEternity = new Decimal(0);
   player.bestInfinitiesPerMs = new Decimal(0);
   player.bestIpPerMsWithoutMaxAll = new Decimal(0);
-  player.thisEternityMaxAM = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
@@ -115,6 +114,7 @@ function eternity(force, auto, specialConditions = {}) {
   applyRealityUpgradesAfterEternity();
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;
+  player.thisEternityMaxAM = Player.startingAM;
 
   EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_AFTER);
   return true;

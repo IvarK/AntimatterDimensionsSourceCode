@@ -755,7 +755,8 @@ function simulateTime(seconds, real, fast) {
   } else if (ticks > 50 && fast) {
     ticks = 50;
   }
-  const largeDiff = (player.options.offlineTicks * seconds) / ticks;
+  // 1000 * seconds is milliseconds so 1000 * seconds / ticks is milliseconds per tick.
+  const largeDiff = 1000 * seconds / ticks;
 
   const playerStart = deepmerge.all([{}, player]);
 

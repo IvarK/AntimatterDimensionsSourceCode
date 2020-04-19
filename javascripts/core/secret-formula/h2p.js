@@ -1169,10 +1169,11 @@ Multiplier to Dark Matter power based on Dark Energy = (${formatInt(1)} + Dark E
 
   GameDatabase.h2p.search = query => {
     if (query === "") return GameDatabase.h2p.tabs;
-    const searchWords = [query];
-    searchWords.push(query.toLowerCase().split(" ").filter(str => str !== ""));
+    const words = query.toLowerCase().split(" ").filter(str => str !== "");
+    /* eslint-disable-next-line no-unused-vars*/
+    const searchTerms = words.map((_word, i, arr) => arr.slice(0, arr.length - i).join(" "));
     const result = new Set();
-    for (const searchWord of searchWords) {
+    for (const searchWord of searchTerms) {
       const matches = searchIndex[searchWord];
       if (matches === undefined) continue;
       for (const match of matches) {

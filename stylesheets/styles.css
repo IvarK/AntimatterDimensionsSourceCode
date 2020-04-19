@@ -1638,13 +1638,13 @@ screen and (max-width: 480px) {
       1px -1px 0 black,
       -1px 1px 0 black,
       1px 1px 0 black;
+  pointer-events: none;
 }
 
 .l-hint-text {
   position: absolute;
   top: -1.5rem;
   left: 0;
-  z-index: -999;
 }
 
 .l-hint-text--challenge {

@@ -1,53 +1,154 @@
 "use strict";
 
-// Multiplier applied to all normal dimensions, regardless of tier. This is cached using a Lazy
-// and invalidated every update.
-function normalDimensionCommonMultiplier() {
-  let multiplier = new Decimal(1);
+const AntimatterDimensionCommonMultiplier =
+  new EffectScope("Normal Dimension Common Multipliers").addMultipliers(
+    () => [
+      // Make Inf pow its own Effect Scope
+      new Effect(
+        () => player.infinityPower.pow(getInfinityConversionRate()).max(1),
+        undefined,
+        () => !EternityChallenge(9).isRunning
+      ),
+      new Effect(() => Achievements.power),
+      new Effect(() => ShopPurchase.dimPurchases.currentMult),
+      new Effect(() => ShopPurchase.allDimPurchases.currentMult),
+      new Effect(() => getAdjustedGlyphEffect("powermult")),
+      new Effect(() => player.reality.realityMachines.powEffectOf(AlchemyResource.force)),
+      BreakInfinityUpgrade.totalAMMult,
+      BreakInfinityUpgrade.currentAMMult,
+      BreakInfinityUpgrade.achievementMult,
+      BreakInfinityUpgrade.slowestChallengeMult,
+      InfinityUpgrade.totalTimeMult,
+      InfinityUpgrade.thisInfinityTimeMult,
+      Achievement(48),
+      Achievement(56),
+      Achievement(65),
+      Achievement(72),
+      Achievement(73),
+      Achievement(74),
+      Achievement(76),
+      Achievement(78).effects.dimensionMult,
+      Achievement(84),
+      Achievement(91),
+      Achievement(92),
+      TimeStudy(91),
+      TimeStudy(101),
+      TimeStudy(161),
+      TimeStudy(193),
+      InfinityChallenge(3),
+      InfinityChallenge(3).reward,
+      InfinityChallenge(8),
+      EternityChallenge(10)
+    ]).addDividends(
+      () => [
+        InfinityChallenge(6)
+      ]
+    );
 
-  multiplier = multiplier.times(Achievements.power);
-  multiplier = multiplier.times(ShopPurchase.dimPurchases.currentMult);
-  multiplier = multiplier.times(ShopPurchase.allDimPurchases.currentMult);
-
-  if (!EternityChallenge(9).isRunning) {
-    multiplier = multiplier.times(player.infinityPower.pow(getInfinityConversionRate()).max(1));
-  }
-  multiplier = multiplier.timesEffectsOf(
-    BreakInfinityUpgrade.totalAMMult,
-    BreakInfinityUpgrade.currentAMMult,
-    BreakInfinityUpgrade.achievementMult,
-    BreakInfinityUpgrade.slowestChallengeMult,
-    InfinityUpgrade.totalTimeMult,
-    InfinityUpgrade.thisInfinityTimeMult,
-    Achievement(48),
-    Achievement(56),
-    Achievement(65),
-    Achievement(72),
-    Achievement(73),
-    Achievement(74),
-    Achievement(76),
-    Achievement(78).effects.dimensionMult,
-    Achievement(84),
-    Achievement(91),
-    Achievement(92),
-    TimeStudy(91),
-    TimeStudy(101),
-    TimeStudy(161),
-    TimeStudy(193),
-    InfinityChallenge(3),
-    InfinityChallenge(3).reward,
-    InfinityChallenge(8),
-    EternityChallenge(10),
-    TriadStudy(4),
-    AlchemyResource.dimensionality
+const NormalDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
+  if (tier === 0) return null;
+  const scope = new EffectScope(`Antimatter Dimension ${tier} Multipliers`).addMultipliers(
+    () => [
+      NormalDimensionCommonMultiplier,
+      new EffectScope(`Antimatter Dimension ${tier} Buy10 Multiplier`).addMultipliers(
+        () => [
+          new Effect(() => NormalDimensions.buyTenMultiplier)
+        ]
+      ).addPowers(
+        () => [
+          new Effect(
+            () => NormalDimension(tier).continuumValue,
+            undefined,
+            () => Laitela.continuumActive
+          ),
+          new Effect(
+            () => Math.floor(NormalDimension(tier).bought / 10),
+            undefined,
+            () => !Laitela.continuumActive
+          ),
+        ]
+      ),
+      // Rework this to use effects on dimboost multis
+      new EffectScope(`Antimatter Dimension ${tier} DimBoost Multiplier`).addMultipliers(
+        () => [
+          new Effect(() => DimBoost.multiplierToNDTier(tier))
+        ]
+      ),
+      new EffectScope(`Antimatter Dimension ${tier} Infinitied Multiplier`).addMultipliers(
+        () => [
+          NormalDimension(tier).infinityUpgrade,
+          BreakInfinityUpgrade.infinitiedMult
+        ]
+      ).addPowers(
+        () => [
+          TimeStudy(31)
+        ]
+      ),
+      Achievement(77).effects[tier]
+    ]
+  );
+  if (tier === 1) scope.addMultipliers(
+    () => [
+      InfinityUpgrade.unspentIPMult,
+      InfinityUpgrade.unspentIPMult.chargedEffect,
+      Achievement(28),
+      Achievement(31),
+      Achievement(68),
+      Achievement(71),
+      TimeStudy(234)
+    ]
+  );
+  if (tier === 8) scope.addMultipliers(
+    () => [
+      // Replace this with an effect scope instead of just being a wrapper effect
+      new Effect(() => Sacrifice.totalBoost),
+      Achievement(23),
+      TimeStudy(214)
+    ]
+  );
+  if (tier < 8) scope.addMultipliers(
+    () => [
+      Achievement(23),
+      TimeStudy(214)
+    ]
+  );
+  if (tier <= 4) scope.addMultipliers(
+    () => [
+      Achievement(43)
+    ]
   );
 
-  multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
-  multiplier = multiplier.times(getAdjustedGlyphEffect("powermult"));
-  multiplier = multiplier.times(player.reality.realityMachines.powEffectOf(AlchemyResource.force));
+  scope.addPowers(
+    () => [
+      new Effect(
+        () => InfinityChallenge(4).effectValue,
+        undefined,
+        () => InfinityChallenge(4).isRunning && player.postC4Tier !== tier
+      ),
+      InfinityChallenge(4).reward,
+      AntimatterDimensionGlyphPowerEffect,
+      NormalDimension(tier).infinityUpgrade.chargedEffect,
+      InfinityUpgrade.totalTimeMult.chargedEffect,
+      InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
+      AlchemyResource.power,
+      new Effect(() => getAdjustedGlyphEffect("curseddimensions")),
+      new Effect(
+        () => V_UNLOCKS.ND_POW.effect(),
+        undefined,
+        () => V.has(V_UNLOCKS.ND_POW)
+      )
+    ]
+  );
+  return scope;
+});
 
-  return multiplier;
-}
+const AntimatterDimensionGlyphPowerEffect = new EffectScope("Antimatter Dimension Glyph Power").addMultipliers(
+  () => [
+    new Effect(() => getAdjustedGlyphEffect("powerpow")),
+    new Effect(() => getAdjustedGlyphEffect("effarigdimensions"))
+  ]
+);
+
 
 function getDimensionFinalMultiplierUncached(tier) {
   if (tier < 1 || tier > 8) throw new Error(`Invalid Normal Dimension tier ${tier}`);
@@ -58,10 +159,7 @@ function getDimensionFinalMultiplierUncached(tier) {
       ).max(1).times(DimBoost.multiplierToNDTier(tier));
   }
 
-  let multiplier = new Decimal(1);
-
-  multiplier = applyNDMultipliers(multiplier, tier);
-  multiplier = applyNDPowers(multiplier, tier);
+  let multiplier = AntimatterDimensionStandardMultipliers[tier].value;
 
   const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
   if (player.dilation.active) {
@@ -80,90 +178,6 @@ function getDimensionFinalMultiplierUncached(tier) {
   // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
   if (Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
     multiplier = multiplier.pow(1.05);
-  }
-
-  return multiplier;
-}
-
-function applyNDMultipliers(mult, tier) {
-  let multiplier = mult.times(GameCache.normalDimensionCommonMultiplier.value);
-
-  let buy10Value;
-  if (Laitela.continuumActive) {
-    buy10Value = NormalDimension(tier).continuumValue;
-  } else {
-    buy10Value = Math.floor(NormalDimension(tier).bought / 10);
-  }
-
-  multiplier = multiplier.times(Decimal.pow(NormalDimensions.buyTenMultiplier, buy10Value));
-  multiplier = multiplier.times(DimBoost.multiplierToNDTier(tier));
-
-  let infinitiedMult = new Decimal(1).timesEffectsOf(
-    NormalDimension(tier).infinityUpgrade,
-    BreakInfinityUpgrade.infinitiedMult
-  );
-  infinitiedMult = infinitiedMult.pow(TimeStudy(31).effectOrDefault(1));
-  multiplier = multiplier.times(infinitiedMult);
-
-  if (tier === 1) {
-    multiplier = multiplier
-      .timesEffectsOf(
-        InfinityUpgrade.unspentIPMult,
-        InfinityUpgrade.unspentIPMult.chargedEffect,
-        Achievement(28),
-        Achievement(31),
-        Achievement(68),
-        Achievement(71),
-        TimeStudy(234)
-      );
-  }
-  if (tier === 8) {
-    multiplier = multiplier.times(Sacrifice.totalBoost);
-  }
-
-  multiplier = multiplier.timesEffectsOf(
-    tier === 8 ? Achievement(23) : null,
-    tier < 8 ? Achievement(34) : null,
-    tier <= 4 ? Achievement(43) : null,
-    tier < 8 ? TimeStudy(71) : null,
-    tier === 8 ? TimeStudy(214) : null,
-    tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
-  );
-  if (Achievement(77).isUnlocked) {
-    multiplier = multiplier.times(1 + tier / 100);
-  }
-
-  multiplier = multiplier.clampMin(1);
-
-  return multiplier;
-}
-
-function applyNDPowers(mult, tier) {
-  let multiplier = mult;
-  const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
-  const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
-
-  if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
-    multiplier = multiplier.pow(InfinityChallenge(4).effectValue);
-  }
-  if (InfinityChallenge(4).isCompleted) {
-    multiplier = multiplier.pow(InfinityChallenge(4).reward.effectValue);
-  }
-
-  multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier);
-
-  multiplier = multiplier
-    .powEffectsOf(
-      NormalDimension(tier).infinityUpgrade.chargedEffect,
-      InfinityUpgrade.totalTimeMult.chargedEffect,
-      InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
-      AlchemyResource.power
-    );
-
-  multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));
-
-  if (V.has(V_UNLOCKS.ND_POW)) {
-    multiplier = multiplier.pow(V_UNLOCKS.ND_POW.effect());
   }
 
   return multiplier;
@@ -494,7 +508,7 @@ class NormalDimensionState extends DimensionState {
     if (!Laitela.continuumActive) return 0;
     return Math.floor(10 * this.continuumValue);
   }
-  
+
   /**
    * Continuum doesn't continually update dimension amount because that would require making the code
    * significantly messier to handle it properly. Instead an effective amount is calculated here, which

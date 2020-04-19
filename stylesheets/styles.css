@@ -37,7 +37,7 @@ html {
   --color-infinity: #B67F33;
   --color-eternity: #b341e0;
   --color-reality: #0b600e;
-  --light-color-reality: #0ba00e;
+  --color-reality-light: #0ba00e;
   --color-celestials: #5151ec;
 }
 
@@ -56,7 +56,6 @@ html {
   --color-infinity: #FF9800;
   --color-eternity: #673AB7;
   --color-reality: #0b600e;
-  --light-color-reality: #0ba00e;
   --color-celestials: #00bcd4;
 }
 
@@ -83,7 +82,6 @@ html {
   --color-infinity: #FF9800;
   --color-eternity: #673AB7;
   --color-reality: #0b600e;
-  --light-color-reality: #0ba00e;
   --color-celestials: #00bcd4;
 }
 
@@ -100,7 +98,7 @@ html {
   --color-infinity: #7d3c1b;
   --color-eternity: #639565;
   --color-reality: #AFA3A5;
-  --light-color-reality: #AFA3A5;
+  --color-reality-light: #AFA3A5;
   --color-celestials: #F2D6C1;
 }
 
@@ -5055,8 +5053,8 @@ kbd {
 }
 
 .o-notification--reality {
-  background-color: var(--light-color-reality);
-  border-color: var(--light-color-reality);
+  background-color: var(--color-reality-light);
+  border-color: var(--color-reality-light);
 }
 
 .o-notification--black-hole {

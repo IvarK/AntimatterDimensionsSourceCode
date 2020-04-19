@@ -142,7 +142,13 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
 class InfinityUpgrade extends SetPurchasableMechanicState {
   constructor(config, requirement) {
     super(config);
-    this._requirement = requirement;
+    if (Array.isArray(requirement)) {
+      this._requirements = requirement;
+    } else if (requirement === undefined) {
+      this._requirements = [];
+    } else {
+      this._requirements = [requirement];
+    }
     if (config.charged) {
       this._chargedEffect = new ChargedInfinityUpgradeState(config.charged, this);
     }
@@ -157,7 +163,7 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   get isAvailableForPurchase() {
-    return this._requirement === undefined || this._requirement.isBought;
+    return this._requirements.every(x => x.isBought);
   }
 
   get isEffectActive() {
@@ -265,7 +271,10 @@ function disChargeAll() {
   InfinityUpgrade.skipReset3 = upgrade(db.skipReset3, InfinityUpgrade.skipReset2);
   InfinityUpgrade.skipResetGalaxy = upgrade(db.skipResetGalaxy, InfinityUpgrade.skipReset3);
 
-  InfinityUpgrade.ipOffline = upgrade(db.ipOffline, InfinityUpgrade.totalTimeMult);
+  InfinityUpgrade.ipOffline = upgrade(db.ipOffline, [
+    InfinityUpgrade.resetBoost, InfinityUpgrade.galaxyBoost,
+    InfinityUpgrade.ipGen, InfinityUpgrade.skipResetGalaxy
+  ]);
 }());
 
 class InfinityIPMultUpgrade extends GameMechanicState {

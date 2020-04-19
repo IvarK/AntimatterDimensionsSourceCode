@@ -192,8 +192,8 @@ sometimes called "Infinity"), you’ll be forced to do a “Big Crunch”. This 
 Shifts/Boosts, and your Galaxies. Doing a Big Crunch is also sometimes referred to as "Infinitying".
 <br>
 <br>
-You will eventually be able to pass ${formatPostBreak(Number.MAX_VALUE, 6)}, but until then any larger numbers will display
-as ${format(Infinity)}.
+You will eventually be able to pass ${formatPostBreak(Number.MAX_VALUE, 6)}, but until then any larger numbers will
+display as ${format(Infinity)}.
 <br>
 <br>
 Each Infinity completed will give an Infinity Point, which can be spent on upgrades in the new Infinity tab.
@@ -215,8 +215,8 @@ You must buy all ${formatInt(16)} previous Infinity Upgrades to start purchasing
       name: "Challenges",
       info: () => `
 Challenges are unlocked after your first Infinity; they change in-game mechanics in different ways to create more
-difficult Infinity circumstances. To complete a challenge, you must reach ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter
-again.
+difficult Infinity circumstances. To complete a challenge, you must reach ${formatPostBreak(Number.MAX_VALUE, 2)}
+antimatter again.
 <br>
 <br>
 Each completed challenge will award an autobuyer.
@@ -292,18 +292,20 @@ individual autobuyer settings.
     }, {
       name: "Break Infinity",
       info: () => `
-Once you Break Infinity, you are no longer limited to ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter and can start gaining
-more than ${formatInt(1)} IP per crunch depending on how much more antimatter you have when you crunch.
+Once you Break Infinity, you are no longer limited to ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter and can start
+gaining more than ${formatInt(1)} IP per crunch depending on how much more antimatter you have when you crunch.
 <br>
 <br>
-You now gain ~${format(1.78, 2, 2)} IP for crunching at ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter. The IP you gain for
-crunching is multiplied by ${formatInt(10)} for every additional factor of ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter
-you gain (in a continuous manner). This is rounded down to the nearest integer <i>after</i> all multipliers are applied.
+You now gain ~${format(1.78, 2, 2)} IP for crunching at ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter. The IP you
+gain for crunching is multiplied by ${formatInt(10)} for every additional factor of
+${formatPostBreak(Number.MAX_VALUE, 2)} antimatter you gain (in a continuous manner). This is rounded down to the
+nearest integer <i>after</i> all multipliers are applied.
 <br>
 <br>
-The antimatter costs of all Dimensions begin to increase faster after they pass ${formatPostBreak(Number.MAX_VALUE, 2)}. The
-cost <i>between</i> upgrades will increase by ${formatX(10)} <i>per upgrade</i> above ${formatPostBreak(Number.MAX_VALUE, 2)},
-and a similar scaling happens to tickspeed upgrade costs as well.
+The antimatter costs of all Dimensions begin to increase faster after they pass
+${formatPostBreak(Number.MAX_VALUE, 2)}. The cost <i>between</i> upgrades will increase by ${formatX(10)}
+<i>per upgrade</i> above ${formatPostBreak(Number.MAX_VALUE, 2)}, and a similar scaling happens to
+tickspeed upgrade costs as well.
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked(),
       tags: ["limit", "crunch", "upgrades", "midgame"],
@@ -374,9 +376,9 @@ amount of antimatter before you can attempt them.
       info: () => `
 Replicanti are another resource you unlock at ${format(1e140)} IP. Rather
 than producing something else, Replicanti actually produces <i>itself</i> up to a maximum of
-${formatPostBreak(Number.MAX_VALUE, 2)}. Replicanti are produced at their own pace, unaffected by tickspeed upgrades. Each
-individual Replicanti has a certain chance (initially ${formatPercents(0.01)}) of producing another Replicanti every
-Replicanti tick (initially every second), and both of these can be upgraded by spending IP.
+${formatPostBreak(Number.MAX_VALUE, 2)}. Replicanti are produced at their own pace, unaffected by tickspeed upgrades.
+Each individual Replicanti has a certain chance (initially ${formatPercents(0.01)}) of producing another Replicanti
+every Replicanti tick (initially every second), and both of these can be upgraded by spending IP.
 <br>
 <br>
 If you have purchased a Replicanti Galaxy upgrade, then you can get a "free" Replicanti Galaxy in exchange for
@@ -405,20 +407,20 @@ from quadratic to cubic, with the ${formatX(1e55)} multiplier itself increasing 
     }, {
       name: "Eternity",
       info: () => `
-Upon reaching ${formatPostBreak(Number.MAX_VALUE, 2)} IP, you can Eternity. Eternities will reset everything before this point
-except challenge times, achievements, and total antimatter. You will be able to access more content after your first
-Eternity.
+Upon reaching ${formatPostBreak(Number.MAX_VALUE, 2)} IP, you can Eternity. Eternities will reset everything before this
+point except challenge times, achievements, and total antimatter. You will be able to access more content after your
+first Eternity.
 <br>
 <br>
-You can pass ${formatPostBreak(Number.MAX_VALUE, 2)} IP without anything being forced upon you, unlike the first time you
-reached ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter. You will recieve more Eternity Points the more Infinity Points you
-had before going Eternal. You will also gain one "eternitied stat" for completing an Eternity.
+You can pass ${formatPostBreak(Number.MAX_VALUE, 2)} IP without anything being forced upon you, unlike the first time
+you reached ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter. You will recieve more Eternity Points the more
+Infinity Points you had before going Eternal. You will also gain one "Eternitied stat" for completing an Eternity.
 <br>
 <br>
 Eternity Point gain scales similarly to Infinity Point gain, but scaling off of Infinity Points instead of antimatter.
 The base amount of EP gained at ${formatPostBreak(Number.MAX_VALUE, 2)} IP is ~${format(1.62, 2, 2)} EP, multiplied by
-${formatInt(5)} for every factor of ${formatPostBreak(Number.MAX_VALUE, 2)} more IP you have. This is always rounded down,
-which means that you will get ${formatInt(1)} EP at ${formatPostBreak(Number.MAX_VALUE, 2)} IP but will not reach
+${formatInt(5)} for every factor of ${formatPostBreak(Number.MAX_VALUE, 2)} more IP you have. This is always rounded
+down, which means that you will get ${formatInt(1)} EP at ${formatPostBreak(Number.MAX_VALUE, 2)} IP but will not reach
 ${formatInt(2)} EP until ${formatPostBreak(new Decimal("1e349"))}.
 <b>Hotkey: E</b> will Eternity.
 `,
@@ -558,10 +560,10 @@ Dimension multipliers’ <i>exponents</i> and the tickspeed multipliers’ <i>ex
 ${format(0.75, 2, 2)}, significantly reducing them.
 <br>
 <br>
-If you can reach ${formatPostBreak(Number.MAX_VALUE, 2)} IP and then complete the Eternity while dilated, you will be rewarded
-with Tachyon Particles. You can dilate as many times as you want, but Tachyon Particles cannot be "farmed" like other
-resources. Instead, you can only gain more Tachyon Particles by passing your previous highest antimatter within Time
-Dilation, and you will only gain more based on your <i>new</i> highest antimatter from this new run.
+If you can reach ${formatPostBreak(Number.MAX_VALUE, 2)} IP and then complete the Eternity while dilated, you will be
+rewarded with Tachyon Particles. You can dilate as many times as you want, but Tachyon Particles cannot be "farmed" like
+other resources. Instead, you can only gain more Tachyon Particles by passing your previous highest antimatter within
+Time Dilation, and you will only gain more based on your <i>new</i> highest antimatter from this new run.
 <br>
 <br>
 Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Dilated Galaxies by

@@ -402,11 +402,12 @@ function gameLoop(diff, options = {}) {
 
   slowerAutobuyers(realDiff);
   Autobuyers.tick();
-  
+
   if (Achievement(165).isUnlocked && player.celestials.effarig.autoAdjustGlyphWeights) {
     autoAdjustGlyphWeights();
   }
 
+  EffectScopes.update();
   // We do these after autobuyers, since it's possible something there might
   // change a multiplier.
   GameCache.normalDimensionCommonMultiplier.invalidate();
@@ -469,7 +470,7 @@ function gameLoop(diff, options = {}) {
   // IP generation is broken into a couple of places in gameLoop; changing that might change the
   // behavior of eternity farming.
   preProductionGenerateIP(diff);
-  
+
   let eternitiedGain = 0;
   if (RealityUpgrade(14).isBought) {
     eternitiedGain = Effects.product(
@@ -731,12 +732,12 @@ function afterSimulation(seconds, playerStart) {
     }
     Modal.message.show(popupString);
   }
-  
+
   GameUI.notify.showBlackHoles = true;
 }
 
 function simulateTime(seconds, real, fast) {
-  // The game is simulated at a base 50ms update rate, with a max of 
+  // The game is simulated at a base 50ms update rate, with a max of
   // player.options.offlineTicks ticks. additional ticks are converted
   // into a higher diff per tick
   // warning: do not call this function with real unless you know what you're doing
@@ -876,7 +877,7 @@ function slowerAutobuyers(realDiff) {
     player.auto.dilUpgradeTimer = Math.min(player.auto.dilUpgradeTimer - dilUpgradePeriod, dilUpgradePeriod);
     autoBuyDilationUpgrades();
   }
-  
+
   TimeTheorems.autoBuyMaxTheorems(ampDiff);
   Tutorial.tutorialLoop();
 

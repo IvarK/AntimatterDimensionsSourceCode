@@ -270,7 +270,7 @@ function buyUntilTen(tier) {
 }
 
 function maxAll() {
-  if (Laitela.continuumActive || (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE))) return;
+  if (Laitela.continuumActive || player.antimatter.gt(Player.infinityLimit)) return;
 
   player.usedMaxAll = true;
 
@@ -531,7 +531,7 @@ class NormalDimensionState extends DimensionState {
   }
 
   get isAvailableForPurchase() {
-    if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return false;
+    if (player.antimatter.gt(Player.infinityLimit)) return false;
     if (this.tier > DimBoost.totalBoosts + 4) return false;
     const hasPrevTier = this.tier === 1 ||
       (Laitela.continuumActive

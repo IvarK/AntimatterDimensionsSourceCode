@@ -603,6 +603,11 @@ const Player = {
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     return challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
   },
+  
+  get infinityLimit() {
+    const challenge = NormalChallenge.current || InfinityChallenge.current;
+    return challenge === undefined ? Decimal.MAX_VALUE : challenge.goal;
+  },
 
   get eternityGoal() {
     return EternityChallenge.isRunning

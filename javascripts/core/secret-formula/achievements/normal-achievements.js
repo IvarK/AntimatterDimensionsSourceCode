@@ -530,7 +530,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => player.infinitied.gt(2e6),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => `Infinities more than ${formatInt(5)} seconds long
-      give ${formatInt(250)} infinitied stat.`,
+      give ${formatInt(250)} Infinitied stat.`,
     effect: 250,
     effectCondition: () => Time.thisInfinity.totalSeconds > 5
   },
@@ -667,7 +667,7 @@ GameDatabase.achievements.normal = [
   {
     id: 107,
     name: "Do you really need a guide for this?",
-    tooltip: () => `Eternity with the infinitied stat under ${formatInt(10)}.`,
+    tooltip: () => `Eternity with the Infinitied stat under ${formatInt(10)}.`,
     checkRequirement: () => player.infinitied.lt(10),
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },

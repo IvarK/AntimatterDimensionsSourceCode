@@ -401,7 +401,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 730,
       requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0 && !Enslaved.isRunning,
       description: () => (Enslaved.isRunning
-        ? "There is not enough space in this reality"
+        ? "There is not enough space in this Reality"
         : `Replicanti can go beyond ${format(replicantiCap(), 2, 1)}, but growth slows down at higher amounts.`)
       },
     {

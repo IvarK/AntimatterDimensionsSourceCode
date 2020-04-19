@@ -197,7 +197,7 @@ display as ${format(Infinity)}.
 <br>
 <br>
 Each Infinity completed will give an Infinity Point, which can be spent on upgrades in the new Infinity tab.
-You must purchase these upgrades from top to bottom. You will also gain one "infinitied stat", which is effectively
+You must purchase these upgrades from top to bottom. You will also gain one "Infinitied stat", which is effectively
 the number of times you have crunched.
 <br>
 <br>
@@ -1075,11 +1075,11 @@ Dark Matter Dimension). The time between generations is called the interval. The
 the previous Dark Matter Dimension generated per Dark Matter Dimension is called the Dark Matter power.
 The amount of Dark Energy generated is called the Dark Energy power. The Dark Matter Dimensions start with intervals
 ${formatInt(1)}, ${formatInt(4)}, ${formatInt(16)}, and ${formatInt(64)} seconds respectively. Each has a repeatable
-upgrade decreasing its interval by 8%, and increasing in cost by ${formatX(3.2, 1, 1)} each time it's purchased.
-The Dark Matter Dimensions all start with Dark Matter power ${formatInt(2)}. Each has a repeatable upgrade
-increasing its power and increasing in cost ${formatX(1.4, 1, 1)} each time it's purchased.
+upgrade decreasing its interval by ${formatPercents(0.08)}, and increasing in cost by ${formatX(3.2, 1, 1)} each time
+it's purchased. The Dark Matter Dimensions all start with Dark Matter power ${formatInt(2)}. Each has a repeatable
+upgrade increasing its power and increasing in cost ${formatX(1.4, 1, 1)} each time it's purchased.
 The base Dark Matter power of a Dark Matter Dimension is ${formatInt(1)} +
-${format(1.05, 2, 2)}^(times power upgrade has been purchased). The Dark Matter Dimensions all start
+${format(1.05, 2, 2)}<sup>purchases</sup>. The Dark Matter Dimensions all start
 with Dark Energy power ${format(2e-4, 4, 4)}. Each has a repeatable upgrade increasing its power and
 increasing in cost ${formatX(1.35, 2, 2)}, ${formatX(1.3, 2, 2)}, ${formatX(1.28, 2, 2)}, and
 ${formatX(1.27, 2, 2)} (respectively) each time it's purchased. The base Dark Energy power of

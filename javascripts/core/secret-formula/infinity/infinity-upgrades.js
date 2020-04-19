@@ -61,7 +61,7 @@ GameDatabase.infinity.upgrades = (function() {
     dim45mult: {
       id: "45Mult",
       cost: 1,
-      description: "Fourth and Fifth Dimensions gain a multiplier based on Iinfinitied stat",
+      description: "Fourth and Fifth Dimensions gain a multiplier based on Infinitied stat",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {

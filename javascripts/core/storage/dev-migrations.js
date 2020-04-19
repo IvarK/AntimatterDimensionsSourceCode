@@ -640,6 +640,9 @@ GameStorage.devMigrations = {
         player.reality.pp += player.celestials.v.ppSpent;
         delete player.celestials.v.ppSpent;
       }
+    },
+    player => {
+      player.thisEternityMaxAM = new Decimal(0);
     }
   ],
 

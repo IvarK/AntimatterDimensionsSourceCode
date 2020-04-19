@@ -20,7 +20,7 @@ Vue.component("dimension-autobuyer-box", {
           if (!this.hasMaxedBulk) {
             bulk = Math.min(bulk * 2, 1e100);
           }
-          return `${format(bulk, 2, 0)}x bulk purchase`;
+          return `${formatX(bulk, 2, 0)} bulk purchase`;
         }
       },
       methods: {

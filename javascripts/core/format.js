@@ -48,7 +48,7 @@ function formatPostBreak(value, places, placesUnder1000) {
 }
 
 function formatX(value, places, placesUnder1000) {
-  return `${format(value, places, placesUnder1000)}x`;
+  return `×${format(value, places, placesUnder1000)}`;
 }
 
 function formatPow(value, places, placesUnder1000) {

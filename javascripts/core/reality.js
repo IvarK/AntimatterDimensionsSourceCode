@@ -372,16 +372,7 @@ function finishProcessReality(realityProps) {
   player.infinityPower = new Decimal(1);
   player.infDimBuyers = Array.repeat(false, 8);
   player.timeShards = new Decimal(0);
-  player.replicanti.amount = new Decimal(0);
-  player.replicanti.unl = false;
-  player.replicanti.chance = 0.01;
-  player.replicanti.chanceCost = new Decimal(1e150);
-  player.replicanti.interval = 1000;
-  player.replicanti.intervalCost = new Decimal(1e140);
-  player.replicanti.gal = 0;
-  player.replicanti.galaxies = 0;
-  player.replicanti.galCost = new Decimal(1e170);
-  player.replicanti.galaxybuyer = false;
+  Replicanti.reset(true);
   player.replicanti.auto = Array.repeat(false, 3);
 
   player.eternityPoints = Player.startingEP;
@@ -439,6 +430,7 @@ function finishProcessReality(realityProps) {
   };
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;
+  player.thisEternityMaxAM = Player.startingAM;
   Enslaved.autoReleaseTick = 0;
   player.celestials.laitela.entropy = 0;
 
@@ -539,7 +531,7 @@ function applyRUPG10() {
   player.infMultBuyer = true;
   player.eternities = player.eternities.plus(100);
   player.replicanti.amount = player.replicanti.amount.clampMin(1);
-  player.replicanti.unl = true;
+  Replicanti.unlock(true);
   player.replicanti.galaxybuyer = true;
   player.replicanti.auto = Array.repeat(true, 3);
   GameCache.tickSpeedMultDecrease.invalidate();

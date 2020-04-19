@@ -41,7 +41,7 @@ Vue.component("game-header-amounts-line", {
         class="c-game-header__infinity-points l-game-header__infinity-points">
           You have
           <span class="c-game-header__ip-amount">{{formatPoints(infinityPoints)}}</span>
-          Infinity {{ "point" | pluralize(infinityPoints) }}.
+          Infinity {{ "Point" | pluralize(infinityPoints) }}.
           <span v-if="isTesseractUnlocked"
             v-html="tesseractText">
           </span>
@@ -49,7 +49,7 @@ Vue.component("game-header-amounts-line", {
       <div v-if="showEternityPoints" class="c-game-header__eternity-points l-game-header__eternity-points">
         You have
         <span class="c-game-header__ep-amount">{{formatPoints(eternityPoints)}}</span>
-        Eternity {{ "point" | pluralize(eternityPoints) }}.
+        Eternity {{ "Point" | pluralize(eternityPoints) }}.
       </div>
     </div>`
 });

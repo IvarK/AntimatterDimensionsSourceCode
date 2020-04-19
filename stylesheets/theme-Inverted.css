@@ -2,37 +2,14 @@ body.t-inverted {
     background-color: black;
 }
 
-.t-inverted #ui {
+.t-inverted #container,
+.t-inverted #page,
+.t-inverted .l-notification-container,
+.t-inverted .c-modal,
+.t-inverted #TTbuttons {
   filter: invert(100%);
 }
 
 .t-inverted #realityanimbg {
   filter: invert(1);
-}
-
-.t-inverted #timetheorems,
-.t-inverted .c-ttshop__save-load-text,
-.t-inverted #minimizeArrow {
-  color: #bbb;
-}
-
-.t-inverted .c-tt-buy-button--unlocked {
-  color: #c55329;
-  background-color: #dcdfd7;
-  border-color: #96e05a;
-}
-
-.t-inverted .c-tt-buy-button--unlocked:hover {
-  color: #dcdfd7;
-  background-color: #c55329;
-}
-
-.t-inverted .c-tt-buy-button--locked {
-  color: #fff;
-  background-color: #b5b5b5;
-  border-color: #96e05a;
-}
-
-.t-inverted .c-tt-buy-button--locked:hover {
-  background: #9ad0d0;
 }

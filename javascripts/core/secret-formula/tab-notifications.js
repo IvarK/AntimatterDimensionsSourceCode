@@ -2,6 +2,7 @@
 
 GameDatabase.tabNotifications = {
   firstInfinity: {
+    id: 0,
     tabsToHighLight: [
       {
         parent: "infinity",
@@ -17,7 +18,19 @@ GameDatabase.tabNotifications = {
       !PlayerProgress.infinityUnlocked(),
     events: [GAME_EVENT.BIG_CRUNCH_BEFORE]
   },
+  breakInfinity: {
+    id: 1,
+    tabsToHighLight: [
+      {
+        parent: "infinity",
+        tab: "break"
+      }
+    ],
+    condition: () => !PlayerProgress.realityUnlocked() &&
+      !PlayerProgress.eternityUnlocked() && Autobuyer.bigCrunch.hasMaxedInterval
+  },
   IDUnlock: {
+    id: 2,
     tabsToHighLight: [
       {
         parent: "dimensions",
@@ -28,6 +41,7 @@ GameDatabase.tabNotifications = {
       !PlayerProgress.eternityUnlocked() && !InfinityDimension(2).isUnlocked
   },
   ICUnlock: {
+    id: 3,
     tabsToHighLight: [
       {
         parent: "challenges",
@@ -37,17 +51,20 @@ GameDatabase.tabNotifications = {
     condition: () => !PlayerProgress.realityUnlocked() &&
       !PlayerProgress.eternityUnlocked()
   },
-  breakInfinity: {
+  replicanti: {
+    id: 4,
     tabsToHighLight: [
       {
         parent: "infinity",
-        tab: "break"
+        tab: "replicanti"
       }
     ],
     condition: () => !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked() && Autobuyer.bigCrunch.hasMaxedInterval
+      !PlayerProgress.eternityUnlocked() && player.infinityPoints.gte(1e140),
+    events: [GAME_EVENT.BIG_CRUNCH_AFTER]
   },
   firstEternity: {
+    id: 5,
     tabsToHighLight: [
       {
         parent: "eternity",
@@ -71,6 +88,7 @@ GameDatabase.tabNotifications = {
     events: [GAME_EVENT.ETERNITY_RESET_BEFORE]
   },
   dilationAfterUnlock: {
+    id: 6,
     tabsToHighLight: [
       {
         parent: "eternity",
@@ -79,7 +97,19 @@ GameDatabase.tabNotifications = {
     ],
     condition: () => !PlayerProgress.realityUnlocked()
   },
+  realityUnlock: {
+    id: 7,
+    tabsToHighLight: [
+      {
+        parent: "eternity",
+        tab: "studies"
+      }
+    ],
+    condition: () => !PlayerProgress.realityUnlocked() && TimeStudy.reality.canBeBought,
+    events: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION]
+  },
   blackHoleUnlock: {
+    id: 8,
     tabsToHighLight: [
       {
         parent: "reality",
@@ -90,6 +120,7 @@ GameDatabase.tabNotifications = {
     events: [GAME_EVENT.REALITY_RESET_AFTER]
   },
   automatorUnlock: {
+    id: 9,
     tabsToHighLight: [
       {
         parent: "reality",

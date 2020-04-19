@@ -17,12 +17,6 @@ Vue.component("dilation-time-study", {
     },
     id() {
       return this.study.id;
-    },
-    classObject() {
-      return {
-        "o-time-study--dilation": this.id !== 6,
-        "o-time-study--reality": this.id === 6
-      };
     }
   },
   created() {
@@ -49,7 +43,7 @@ Vue.component("dilation-time-study", {
     }
   },
   template:
-    `<time-study :setup="setup" :showCost="showCost" :class="classObject">
+    `<time-study :setup="setup" :showCost="showCost">
       <description-display :config="study.config" />
       <template v-if="showRequirement">
         <br>

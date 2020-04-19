@@ -26,8 +26,9 @@ Vue.component("dimboost-autobuyer-box", {
   template:
     `<autobuyer-box :autobuyer="autobuyer" :showInterval="!isBuyMaxUnlocked" name="Automatic DimBoosts">
       <autobuyer-interval-button slot="intervalSlot" :autobuyer="autobuyer" />
-      <template slot="toggleSlot">
-        <div class="o-autobuyer-toggle-checkbox" @click="limitDimBoosts = !limitDimBoosts">
+      <template :slot=" isBuyMaxUnlocked ? 'toggleSlot' : 'intervalSlot' " style="margin-top: 1.2rem;">
+        <div class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text" @click="limitDimBoosts = !limitDimBoosts" 
+        style="margin-top: 1.2rem;">
           <input type="checkbox" :checked="limitDimBoosts"/>
           <span>Limit dimboosts to:</span>
         </div>
@@ -37,8 +38,11 @@ Vue.component("dimboost-autobuyer-box", {
           property="maxDimBoosts"
         />
       </template>
-      <template slot="prioritySlot">
-        <div class="c-autobuyer-box__small-text">Galaxies required to always DimBoost:</div>
+      <template :slot=" isBuyMaxUnlocked ? 'prioritySlot' : 'toggleSlot' ">
+        <div class="c-autobuyer-box__small-text" style="height: 3rem;">
+          Galaxies required to always DimBoost,
+          ignoring the limit:
+        </div>
         <autobuyer-input
           :autobuyer="autobuyer"
           type="int"
@@ -46,15 +50,15 @@ Vue.component("dimboost-autobuyer-box", {
         />
       </template>
       <template v-if="isBuyMaxUnlocked" slot="intervalSlot">
-        <div>Activates every X seconds:</div>
+        <div class="c-autobuyer-box__small-text" style="margin-top: 1.2rem;">Activates every X seconds:</div>
         <autobuyer-input
           :autobuyer="autobuyer"
           type="float"
           property="buyMaxInterval"
         />
       </template>
-      <template v-else-if="isBulkBuyUnlocked" slot="optionSlot">
-        <div class="c-autobuyer-box__small-text">Bulk DimBoost Amount:</div>
+      <template v-else-if="isBulkBuyUnlocked" slot="prioritySlot">
+        <div class="c-autobuyer-box__small-text" style="margin-top: 1.2rem;">Bulk DimBoost Amount:</div>
         <autobuyer-input
           :autobuyer="autobuyer"
           type="int"

@@ -194,11 +194,8 @@ class TimeStudyTreeLayout {
     if (this._instances === undefined) {
       this._instances = [];
     }
-    let layout = this._instances[type];
-    if (layout === undefined) {
-      layout = new TimeStudyTreeLayout(type);
-      this._instances[type] = layout;
-    }
+    const layout = new TimeStudyTreeLayout(type);
+    this._instances[type] = layout;
     return layout;
   }
 }
@@ -226,11 +223,16 @@ Vue.component("time-studies-tab", {
     return {
       respec: player.respec,
       layoutType: STUDY_TREE_LAYOUT_TYPE.NORMAL,
+      vLevel: 0
     };
   },
   watch: {
     respec(newValue) {
       player.respec = newValue;
+    },
+    vLevel() {
+      // When vLevel changes, we recompute the study tree because of triad studies
+      this.$recompute("layout");
     }
   },
   computed: {
@@ -254,6 +256,7 @@ Vue.component("time-studies-tab", {
     update() {
       this.respec = player.respec;
       this.layoutType = STUDY_TREE_LAYOUT_TYPE.current;
+      this.vLevel = Ra.pets.v.level;
     },
     studyComponent(study) {
       switch (study.type) {
@@ -298,6 +301,5 @@ Vue.component("time-studies-tab", {
           <secret-time-study-connection :setup="layout.secretStudyConnection" />
         </svg>
       </div>
-      <tt-shop class="l-time-studies-tab__tt-shop" />
     </div>`
 });

@@ -18,10 +18,9 @@ Vue.component("game-header-big-crunch-button", {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     },
     amountStyle() {
-      if (this.currentIP.lt(1e50)) return undefined;
-
       // If the player is using a dark theme, it should be black instead of white when ratio is 1
-      const darkTheme = player.options.theme.includes("Dark");
+      const darkTheme = Theme.current().isDark && Theme.current().name !== "S6";
+      if (this.currentIP.lt(1e50)) return darkTheme ? { color: "black" } : { color: "white" };
 
       const ratio = this.gainedIP.log10() / this.currentIP.log10();
       let rgb;
@@ -77,7 +76,7 @@ Vue.component("game-header-big-crunch-button", {
     >
       <b>Big Crunch for
       <span :style="amountStyle">{{format(gainedIP, 2, 0)}}</span>
-      Infinity {{ "point" | pluralize(gainedIP) }}.</b>
+      Infinity {{ "Point" | pluralize(gainedIP) }}.</b>
       <template v-if="isPeakIPPMVisible">
         <br>
         {{format(currentIPPM, 2, 0)}} IP/min

@@ -109,7 +109,7 @@ GameDatabase.eternity.dilation = (function() {
       cost: 1e15,
       description: "Generate Time Theorems based on Tachyon Particles.",
       effect: () => player.dilation.tachyonParticles.div(20000),
-      formatEffect: value => formatX(value, 2, 1)
+      formatEffect: value => `${format(value, 2, 1)}/sec`
     }
   };
 }());

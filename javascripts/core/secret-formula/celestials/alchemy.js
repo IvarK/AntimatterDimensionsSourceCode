@@ -12,7 +12,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 1,
       isUnlocked: () => Ra.pets.effarig.level >= 2,
       lockText: "Effarig Level 2",
-      formatEffect: value => `Normal dimensions ${formatPow(value, 4, 4)}`
+      formatEffect: value => `Normal Dimensions ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.INFINITY]: {
       name: "Infinity",
@@ -23,7 +23,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 2,
       isUnlocked: () => Ra.pets.effarig.level >= 3,
       lockText: "Effarig Level 3",
-      formatEffect: value => `Infinity dimensions ${formatPow(value, 4, 4)}`
+      formatEffect: value => `Infinity Dimensions ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.TIME]: {
       name: "Time",
@@ -34,7 +34,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 4,
       lockText: "Effarig Level 4",
-      formatEffect: value => `Time dimensions ${formatPow(value, 4, 4)}`
+      formatEffect: value => `Time Dimensions ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.REPLICATION]: {
       name: "Replication",

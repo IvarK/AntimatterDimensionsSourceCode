@@ -35,7 +35,8 @@
 }
 
 .l-old-ui__footer {
-  padding-bottom: 0.9rem
+  padding-bottom: 1rem;
+  padding-top: 2.5rem;
 }
 
 .l-old-ui-page {

@@ -5,7 +5,7 @@ function startEternityChallenge() {
   initializeResourcesAfterEternity();
   resetInfinityRuns();
   InfinityDimensions.fullReset();
-  eternityResetReplicanti();
+  Replicanti.reset();
   resetChallengeStuff();
   NormalDimensions.reset();
   player.replicanti.galaxies = 0;
@@ -17,6 +17,7 @@ function startEternityChallenge() {
   resetTickspeed();
   player.antimatter = Player.startingAM;
   player.thisInfinityMaxAM = Player.startingAM;
+  player.thisEternityMaxAM = Player.startingAM;
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
 }

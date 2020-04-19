@@ -170,7 +170,7 @@ function resetInfinityRuns() {
 function getInfinitiedMilestoneReward(ms) {
   return Autobuyer.bigCrunch.autoInfinitiesAvailable
     ? Decimal.floor(player.bestInfinitiesPerMs.times(ms).dividedBy(2))
-    : 0;
+    : new Decimal(0);
 }
 
 function addEternityTime(time, realTime, ep) {
@@ -192,11 +192,16 @@ function resetEternityRuns() {
 function getEternitiedMilestoneReward(ms) {
   return Autobuyer.eternity.autoEternitiesAvailable
     ? Decimal.floor(player.bestEternitiesPerMs.times(ms).dividedBy(2))
-    : 0;
+    : new Decimal(0);
+}
+
+function isOfflineEPGainEnabled() {
+  return !Autobuyer.bigCrunch.autoInfinitiesAvailable &&
+    !Autobuyer.eternity.autoEternitiesAvailable;
 }
 
 function getOfflineEPGain(ms) {
-  if (!EternityMilestone.autoEP.isReached) return new Decimal(0);
+  if (!EternityMilestone.autoEP.isReached || !isOfflineEPGainEnabled()) return new Decimal(0);
   return player.bestEPminThisReality.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 
@@ -751,13 +756,21 @@ function simulateTime(seconds, real, fast) {
   } else if (ticks > 50 && fast) {
     ticks = 50;
   }
-  const largeDiff = (player.options.offlineTicks * seconds) / ticks;
+  // 1000 * seconds is milliseconds so 1000 * seconds / ticks is milliseconds per tick.
+  const largeDiff = 1000 * seconds / ticks;
 
   const playerStart = deepmerge.all([{}, player]);
 
-  player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * 1000));
-  player.eternities = player.eternities.plus(getEternitiedMilestoneReward(seconds * 1000));
-  player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
+  const infinitiedMilestone = getInfinitiedMilestoneReward(seconds * 1000);
+  const eternitiedMilestone = getEternitiedMilestoneReward(seconds * 1000);
+
+  if (eternitiedMilestone.gt(0)) {
+    player.eternities = player.eternities.plus(eternitiedMilestone);
+  } else if (infinitiedMilestone.gt(0)) {
+    player.infinitied = player.infinitied.plus(infinitiedMilestone);
+  } else {
+    player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
+  }
 
   if (InfinityUpgrade.ipOffline.isBought) {
     player.infinityPoints = player.infinityPoints
@@ -800,25 +813,14 @@ function simulateTime(seconds, real, fast) {
       },
       asyncExit: () => {
         ui.$viewModel.modal.progressBar = undefined;
-        GameIntervals.start();
+        // .postLoadStuff will restart GameIntervals
+        GameStorage.postLoadStuff();
       },
       then: () => {
         afterSimulation(seconds, playerStart);
       }
     });
 }
-
-function updateChart(first) {
-    if (first !== true && (player.infinitied.gte(1) || player.eternities.gte(1)) && player.options.chart.on === true) {
-      addChartData(NormalDimension(1).productionPerSecond);
-    }
-    if (player.options.chart.updateRate) {
-        setTimeout(updateChart, player.options.chart.updateRate);
-    } else {
-        setTimeout(updateChart, 1000);
-    }
-}
-updateChart(true);
 
 function autoBuyDilationUpgrades() {
   if (Perk.autobuyerDilation.isBought) {

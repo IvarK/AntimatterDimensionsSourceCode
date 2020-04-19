@@ -484,6 +484,7 @@ let player = {
     }
   },
   tabNotifications: new Set(),
+  triggeredTabNotificationBits: 0,
   tutorialState: 0,
   tutorialActive: true,
   saveOverThresholdFlag: false,

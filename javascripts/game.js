@@ -170,7 +170,7 @@ function resetInfinityRuns() {
 function getInfinitiedMilestoneReward(ms) {
   return Autobuyer.bigCrunch.autoInfinitiesAvailable
     ? Decimal.floor(player.bestInfinitiesPerMs.times(ms).dividedBy(2))
-    : 0;
+    : new Decimal(0);
 }
 
 function addEternityTime(time, realTime, ep) {
@@ -192,7 +192,7 @@ function resetEternityRuns() {
 function getEternitiedMilestoneReward(ms) {
   return Autobuyer.eternity.autoEternitiesAvailable
     ? Decimal.floor(player.bestEternitiesPerMs.times(ms).dividedBy(2))
-    : 0;
+    : new Decimal(0);
 }
 
 function isOfflineEPGainEnabled() {
@@ -762,9 +762,9 @@ function simulateTime(seconds, real, fast) {
   const infinitiedMilestone = getInfinitiedMilestoneReward(seconds * 1000);
   const eternitiedMilestone = getEternitiedMilestoneReward(seconds * 1000);
 
-  if (eternitiedMilestone > 0) {
+  if (eternitiedMilestone.gt(0)) {
     player.eternities = player.eternities.plus(eternitiedMilestone);
-  } else if (infinitiedMilestone > 0) {
+  } else if (infinitiedMilestone.gt(0)) {
     player.infinitied = player.infinitied.plus(infinitiedMilestone);
   } else {
     player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));

@@ -94,16 +94,17 @@ Vue.component("normal-dim-row", {
   },
   template:
     `<div v-show="isUnlocked" class="c-normal-dim-row">
-      <div class="c-normal-dim-row__label c-normal-dim-row__name">
+      <div class="c-dim-row__label c-dim-row__name">
         {{name}} Dimension {{formatX(multiplier, 1, 1)}}
       </div>
-      <div class="c-normal-dim-row__label c-normal-dim-row__label--growable">
-        {{amountDisplay}} ({{formatInt(boughtBefore10)}}){{rateOfChangeDisplay}}
+      <div class="c-dim-row__label c-dim-row__label--growable">
+        {{amountDisplay}} ({{formatInt(boughtBefore10)}})
+        <span class="c-dim-row__label--small">{{rateOfChangeDisplay}}</span>
       </div>
       <primary-button
         v-if="!isContinuumActive"
         :enabled="isAffordable"
-        class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd c-normal-dim-row__buy-button"
+        class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd l-dim-row__button"
         :class="tutorialClass()"
         :ach-tooltip="cappedTooltip"
         @click="buySingle">
@@ -114,7 +115,7 @@ Vue.component("normal-dim-row", {
       </primary-button>
       <primary-button
         :enabled="isAffordableUntil10 || isContinuumActive"
-        class="o-primary-btn--buy-nd o-primary-btn--buy-10-nd c-normal-dim-row__buy-button"
+        class="o-primary-btn--buy-nd o-primary-btn--buy-10-nd l-dim-row__button"
         :ach-tooltip="cappedTooltip"
         @click="buyUntil10">
         <span v-if="isCapped">Capped!</span>

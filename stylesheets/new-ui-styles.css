@@ -274,7 +274,7 @@ body.t-normal {
   background-color: #2c2933;
 }
 
-.dimensions-container {
+.l-dimensions-container {
   padding: 0.5rem 5rem 0.5rem 9rem; /* TOP RIGHT BOTTOM LEFT */
 }
 
@@ -540,6 +540,10 @@ body.t-normal {
   color: #2196f3
 }
 
+.c-dim-row__name {
+  font-size: 2rem;
+}
+
 .c-normal-dim-row,
 .c-infinity-dim-row,
 .c-time-dim-row {
@@ -560,11 +564,6 @@ body.t-normal {
   background-color: rgba(33, 150, 243, 0.3);
 }
 
-.c-normal-dim-row__name {
-  font-size: 2rem;
-  width: 41%
-}
-
 .c-normal-dim-row__multiplier {
   font-size: 1.4rem
 }
@@ -577,10 +576,6 @@ body.t-normal {
   padding: 1rem 0;
 }
 
-.l-infinity-dim-tab__row-container {
-  padding: 0.5rem 5rem 0.5rem 9rem;
-}
-
 .c-infinity-dim-row:nth-child(even) {
   background: rgba(182, 127, 51, 0.3);
 }
@@ -590,10 +585,6 @@ body.t-normal {
 .t-inverted-metro .c-infinity-dim-row:nth-child(even),
 .t-s8 .c-infinity-dim-row:nth-child(even) {
   background: rgba(255, 152, 0, 0.3);
-}
-
-.c-infinity-dim-row__name {
-  font-size: 2rem;
 }
 
 .c-infinity-dim-row__multiplier {
@@ -613,10 +604,6 @@ body.t-normal {
   padding: 2rem 0;
 }
 
-.l-time-dim-tab__row-container {
-  padding: 0.5rem 5rem 0.5rem 9rem;
-}
-
 .c-time-dim-row:nth-child(even) {
   background: rgba(179, 65, 224, 0.3);
 }
@@ -626,10 +613,6 @@ body.t-normal {
 .t-inverted-metro .c-time-dim-row:nth-child(even),
 .t-s8 .c-time-dim-row:nth-child(even) {
   background: rgba(103, 58, 183, 0.3);
-}
-
-.c-time-dim-row__name {
-  font-size: 2rem;
 }
 
 .c-time-dim-row__multiplier {

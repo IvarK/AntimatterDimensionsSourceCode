@@ -12,6 +12,7 @@ Vue.component("new-dimension-row", {
       multiplier: new Decimal(0),
       amount: new Decimal(0),
       boughtBefore10: 0,
+      rateOfChange: new Decimal(0),
       singleCost: new Decimal(0),
       until10Cost: new Decimal(0),
       isAffordable: false,
@@ -30,6 +31,11 @@ Vue.component("new-dimension-row", {
     },
     amountDisplay() {
       return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
+    },
+    rateOfChangeDisplay() {
+      return this.tier < 8
+        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
+        : "";
     },
     cappedTooltip() {
       return this.isCapped
@@ -55,6 +61,9 @@ Vue.component("new-dimension-row", {
       this.howManyCanBuy = buyUntil10 ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1);
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.cost.times(Math.max(dimension.howManyCanBuy, 1)));
+      if (tier < 8) {
+        this.rateOfChange.copyFrom(dimension.rateOfChange);
+      }
       this.isAffordable = dimension.isAffordable;
       this.buyUntil10 = buyUntil10;
       this.isContinuumActive = Laitela.continuumActive;
@@ -90,11 +99,12 @@ Vue.component("new-dimension-row", {
   },
   template:
   `<div v-show="isUnlocked" class="c-normal-dim-row">
-    <div class="c-normal-dim-row__label c-normal-dim-row__name">
+    <div class="c-dim-row__label c-dim-row__name">
       {{name}} D <span class="c-normal-dim-row__multiplier">{{formatX(multiplier, 1, 1)}}</span>
     </div>
-    <div class="c-normal-dim-row__label c-normal-dim-row__label--growable">
+    <div class="c-dim-row__label c-dim-row__label--growable">
       {{amountDisplay}}
+      <span class="c-dim-row__label--small">{{rateOfChangeDisplay}}</span>
     </div>
     <button class="o-primary-btn o-primary-btn--new" @click="buy"
       :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }">

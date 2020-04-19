@@ -69,7 +69,7 @@ Vue.component("new-dimensions-tab", {
     </div>
     <span v-if="isSacrificeUnlocked">Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
     <new-tickspeed-row/>
-    <div class="dimensions-container">
+    <div class="l-dimensions-container">
       <new-dimension-row
         v-for="tier in 8"
         :key="tier"

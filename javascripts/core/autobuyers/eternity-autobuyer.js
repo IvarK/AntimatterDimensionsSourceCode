@@ -45,8 +45,9 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
     return RealityUpgrade(13).isBought;
   }
 
-  get autoEternitiesAvailable() {
-    return EternityMilestone.autoEternities.isReached &&
+  autoEternitiesAvailable(considerMilestoneReached) {
+    return (considerMilestoneReached || EternityMilestone.autoEternities.isReached) &&
+      !EternityChallenge.isRunning &&
       this.data.isActive &&
       this.amount.equals(0);
   }

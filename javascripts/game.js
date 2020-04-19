@@ -167,10 +167,10 @@ function resetInfinityRuns() {
 
 // Player gains 50% of infinitied stat they would get based on their best infinitied/hour crunch if they have the
 // milestone and turned on infinity autobuyer with 1 minute or less per crunch
-function getInfinitiedMilestoneReward(ms) {
-  return Autobuyer.bigCrunch.autoInfinitiesAvailable
+function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
+  return Autobuyer.bigCrunch.autoInfinitiesAvailable(considerMilestoneReached)
     ? Decimal.floor(player.bestInfinitiesPerMs.times(ms).dividedBy(2))
-    : 0;
+    : new Decimal(0);
 }
 
 function addEternityTime(time, realTime, ep) {
@@ -189,15 +189,15 @@ function resetEternityRuns() {
 
 // Player gains 50% of the eternities they would get if they continuously repeated their fastest eternity, if they
 // have the auto-eternity milestone and turned on eternity autobuyer with 0 EP
-function getEternitiedMilestoneReward(ms) {
-  return Autobuyer.eternity.autoEternitiesAvailable
+function getEternitiedMilestoneReward(ms, considerMilestoneReached) {
+  return Autobuyer.eternity.autoEternitiesAvailable(considerMilestoneReached)
     ? Decimal.floor(player.bestEternitiesPerMs.times(ms).dividedBy(2))
-    : 0;
+    : new Decimal(0);
 }
 
 function isOfflineEPGainEnabled() {
-  return !Autobuyer.bigCrunch.autoInfinitiesAvailable &&
-    !Autobuyer.eternity.autoEternitiesAvailable;
+  return !Autobuyer.bigCrunch.autoInfinitiesAvailable() &&
+    !Autobuyer.eternity.autoEternitiesAvailable();
 }
 
 function getOfflineEPGain(ms) {
@@ -763,9 +763,9 @@ function simulateTime(seconds, real, fast) {
   const infinitiedMilestone = getInfinitiedMilestoneReward(seconds * 1000);
   const eternitiedMilestone = getEternitiedMilestoneReward(seconds * 1000);
 
-  if (eternitiedMilestone > 0) {
+  if (eternitiedMilestone.gt(0)) {
     player.eternities = player.eternities.plus(eternitiedMilestone);
-  } else if (infinitiedMilestone > 0) {
+  } else if (infinitiedMilestone.gt(0)) {
     player.infinitied = player.infinitied.plus(infinitiedMilestone);
   } else {
     player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));

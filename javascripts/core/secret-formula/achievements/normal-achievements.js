@@ -126,7 +126,7 @@ GameDatabase.achievements.normal = [
   {
     id: 32,
     name: "The Gods are pleased",
-    tooltip: () => `Get over ${formatInt(600)}x from Dimensional Sacrifice outside of Challenge 8.`,
+    tooltip: () => `Get over ${formatX(600)} from Dimensional Sacrifice outside of Challenge 8.`,
     checkRequirement: () => !NormalChallenge(8).isRunning && Sacrifice.totalBoost.gte(600),
     checkEvent: GAME_EVENT.SACRIFICE_RESET_AFTER,
     reward: "Sacrifice is slightly stronger.",
@@ -511,7 +511,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Big Crunch for ${format(1e150, 0, 0)} IP.`,
     checkRequirement: () => gainedInfinityPoints().exponent >= 150,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: () => `Additional ${formatInt(4)}x multiplier to IP.`,
+    reward: () => `Additional ${formatX(4)} multiplier to IP.`,
     effect: 4
   },
   {
@@ -571,7 +571,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Big Crunch with ${format(1e300, 0, 0)} IP/min.`,
     checkRequirement: () => Player.bestRunIPPM.exponent >= 300,
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
-    reward: () => `Additional ${formatInt(4)}x multiplier to IP.`,
+    reward: () => `Additional ${formatX(4)} multiplier to IP.`,
     effect: 4
   },
   {
@@ -882,7 +882,7 @@ GameDatabase.achievements.normal = [
       Time.thisEternity.totalMinutes <= 1 &&
       player.dilation.active,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
-    reward: () => `Gain ${formatInt(2)}x Dilated Time and Time Theorems while Dilated.`,
+    reward: () => `Gain ${formatX(2)} Dilated Time and Time Theorems while Dilated.`,
     effect: () => (player.dilation.active ? 2 : 1),
   },
   {
@@ -902,7 +902,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Make a new Reality.",
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    reward: () => `${formatInt(4)}x IP gain and boost from
+    reward: () => `${formatX(4)} IP gain, and boost from
       buying ${formatInt(10)} Dimensions +${format(0.1, 0, 1)}.`,
     effects: {
       ipGain: 4,
@@ -1001,7 +1001,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Reality in under ${formatInt(5)} seconds (game time).`,
     checkRequirement: () => Time.thisReality.totalSeconds <= 5,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    reward: () => `${formatPercents(0.1)} chance each reality of ${formatInt(2)}x Realities and perk points.`,
+    reward: () => `${formatPercents(0.1)} chance each Reality of ${formatX(2)} Realities and Perk Points.`,
     effect: 0.1
   },
   {
@@ -1071,7 +1071,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Infinities.`,
     checkRequirement: () => player.infinitied.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: () => `Gain ${formatInt(1024)}x more Infinities.`,
+    reward: () => `Gain ×${formatInt(1024)} more Infinities.`,
     effect: 1024
   },
   {
@@ -1115,7 +1115,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Sacrifice every sacrificable glyph type at least once.",
     checkRequirement: () => Object.values(player.reality.glyphs.sac).every(s => s > 0),
     checkEvent: GAME_EVENT.GLYPHS_CHANGED,
-    reward: () => `Glyph sacrifice is ${formatInt(2)}x stronger.`,
+    reward: () => `Glyph sacrifice is ${formatX(2)} stronger.`,
     effect: 2,
   },
   {

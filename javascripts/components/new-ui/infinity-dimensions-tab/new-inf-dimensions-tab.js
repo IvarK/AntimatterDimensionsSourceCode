@@ -21,10 +21,10 @@ Vue.component("new-inf-dimensions-tab", {
   },
   computed: {
     sacrificeBoostDisplay() {
-      return format(this.sacrificeBoost, 2, 2);
+      return formatX(this.sacrificeBoost, 2, 2);
     },
     sacrificeTooltip() {
-      return `Boosts 8th Dimension by ${this.sacrificeBoostDisplay}x`;
+      return `Boosts 8th Dimension by ${this.sacrificeBoostDisplay}`;
     },
   },
   methods: {

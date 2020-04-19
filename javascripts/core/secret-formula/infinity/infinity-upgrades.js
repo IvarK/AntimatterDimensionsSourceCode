@@ -22,11 +22,11 @@ GameDatabase.infinity.upgrades = (function() {
     dim18mult: {
       id: "18Mult",
       cost: 1,
-      description: "First and Eighth Dimensions gain a multiplier based on infinitied stat",
+      description: "First and Eighth Dimensions gain a multiplier based on Infinitied stat",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {
-        description: "First and Eighth Dimensions gain a power effect based on infinitied stat and Teresa level",
+        description: "First and Eighth Dimensions gain a power effect based on Infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
         Math.sqrt(Ra.pets.teresa.level) / 150,
         formatEffect: value => formatPow(value, 4, 4)
@@ -35,11 +35,11 @@ GameDatabase.infinity.upgrades = (function() {
     dim27mult: {
       id: "27Mult",
       cost: 1,
-      description: "Second and Seventh Dimensions gain a multiplier based on infinitied stat",
+      description: "Second and Seventh Dimensions gain a multiplier based on Infinitied stat",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {
-        description: "Second and Seventh Dimensions gain a power effect based on infinitied stat and Teresa level",
+        description: "Second and Seventh Dimensions gain a power effect based on Infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
         Math.sqrt(Ra.pets.teresa.level) / 150,
         formatEffect: value => formatPow(value, 4, 4)
@@ -48,11 +48,11 @@ GameDatabase.infinity.upgrades = (function() {
     dim36mult: {
       id: "36Mult",
       cost: 1,
-      description: "Third and Sixth Dimensions gain a multiplier based on infinitied stat",
+      description: "Third and Sixth Dimensions gain a multiplier based on Infinitied stat",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {
-        description: "Third and Sixth Dimensions gain a power effect based on infinitied stat and Teresa level",
+        description: "Third and Sixth Dimensions gain a power effect based on Infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
         Math.sqrt(Ra.pets.teresa.level) / 150,
         formatEffect: value => formatPow(value, 4, 4)
@@ -61,11 +61,11 @@ GameDatabase.infinity.upgrades = (function() {
     dim45mult: {
       id: "45Mult",
       cost: 1,
-      description: "Fourth and Fifth Dimensions gain a multiplier based on infinitied stat",
+      description: "Fourth and Fifth Dimensions gain a multiplier based on Iinfinitied stat",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {
-        description: "Fourth and Fifth Dimensions gain a power effect based on infinitied stat and Teresa level",
+        description: "Fourth and Fifth Dimensions gain a power effect based on Infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
         Math.sqrt(Ra.pets.teresa.level) / 150,
         formatEffect: value => formatPow(value, 4, 4)
@@ -79,7 +79,7 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "Decrease Dimension Boost requirement based on Teresa level",
         effect: () => 1 / (1 + Math.sqrt(Ra.pets.teresa.level) / 10),
-        formatEffect: value => `${format(value, 4, 4)}x`
+        formatEffect: value => `${formatX(value, 4, 4)}`
       }
     },
     buy10Mult: {
@@ -112,7 +112,7 @@ GameDatabase.infinity.upgrades = (function() {
       effect: () => Decimal.max(Math.pow(Time.thisInfinity.totalMinutes / 4, 0.25), 1),
       formatEffect: value => formatX(value, 2, 2),
       charged: {
-        description: "Normal Dimensions gain a power effect based on time spent in current infinity and Teresa level",
+        description: "Normal Dimensions gain a power effect based on time spent in current Infinity and Teresa level",
         effect: () => 1 +
           Math.log10(Math.log10(Time.thisInfinity.totalMilliseconds + 100)) *
           Math.sqrt(Ra.pets.teresa.level) / 150,
@@ -122,11 +122,11 @@ GameDatabase.infinity.upgrades = (function() {
     unspentIPMult: {
       id: "unspentBonus",
       cost: 5,
-      description: "Multiplier for unspent Infinity Points on 1st Dimension",
+      description: "Multiplier to 1st Dimension based on unspent Infinity Points",
       effect: () => player.infinityPoints.dividedBy(2).pow(1.5).plus(1),
       formatEffect: value => formatX(value, 2, 2),
       charged: {
-        description: "Multiplier for unspent Infinity Points on 1st Dimension, powered by Teresa level",
+        description: "Multiplier to 1st Dimension based on unspent Infinity Points, powered by Teresa level",
         effect: () => player.infinityPoints.dividedBy(2).pow(Math.sqrt(Ra.pets.teresa.level) * 1.5).plus(1),
         formatEffect: value => formatX(value, 2, 2)
       }
@@ -159,7 +159,7 @@ GameDatabase.infinity.upgrades = (function() {
         return `${income} every ${period}`;
       },
       charged: {
-        description: "Gain a percentage of your RM gained on reality each real-time second, " +
+        description: "Gain a percentage of your RM gained on Reality each real-time second, " +
           "percent increases with Teresa level",
         effect: () => Math.sqrt(Ra.pets.teresa.level) / 1000 * RA_UNLOCKS.TT_BOOST.effect.autoPrestige(),
         formatEffect: value => `${formatPercents(value, 2)}`
@@ -201,7 +201,7 @@ GameDatabase.infinity.upgrades = (function() {
       cost: () => player.infMultCost,
       costCap: new Decimal("1e6000000"),
       costIncreaseThreshold: new Decimal("1e3000000"),
-      description: () => `Multiply Infinity Points from all sources by ${formatInt(2)}`,
+      description: () => `Multiply Infinity Points from all sources by ${formatX(2)}`,
       effect: () => player.infMult,
       cap: () => Effarig.eternityCap || new Decimal("1e1000000"),
       formatEffect: value => formatX(value, 2, 2),

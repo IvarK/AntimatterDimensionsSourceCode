@@ -84,7 +84,7 @@ GameDatabase.challenges.eternity = [
       formatEffect: value => {
         const base = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward));
         const applied = base - value;
-        return `${format(base, 2, 1)}x ➜ ${format(applied, 2, 1)}x`;
+        return `${formatX(base, 2, 1)} ➜ ${formatX(applied, 2, 1)}`;
       }
     }
   },
@@ -133,7 +133,7 @@ GameDatabase.challenges.eternity = [
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
         infinitied stat to normal dimensions (infinitied^${formatInt(950)}).`;
-      EternityChallenge(10).applyEffect(v => description += ` Currently: ${format(v, 2, 1)}x`);
+      EternityChallenge(10).applyEffect(v => description += ` Currently: ${formatX(v, 2, 1)}`);
       return description;
     },
     goal: new Decimal("1e3000"),
@@ -160,15 +160,15 @@ GameDatabase.challenges.eternity = [
       formatEffect: value => {
         const base = Math.round(Player.tickSpeedMultDecrease + Effects.sum(EternityChallenge(11).reward));
         const applied = base - value;
-        return `${format(base, 2, 2)}x ➜ ${format(applied, 2, 2)}x`;
+        return `${formatX(base, 2, 2)} ➜ ${formatX(applied, 2, 2)}`;
       }
     }
   },
   {
     id: 12,
     description: () => (player.realities > 0
-      ? `The game runs ${formatInt(1000)}x slower; all other gamespeed effects are disabled.`
-      : `The game runs ${formatInt(1000)}x slower.`),
+      ? `The game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled.`
+      : `The game runs ×${formatInt(1000)} slower.`),
     goal: new Decimal("1e110000"),
     goalIncrease: new Decimal("1e12000"),
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,

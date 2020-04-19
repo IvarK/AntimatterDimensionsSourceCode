@@ -9,7 +9,10 @@ GameDatabase.infinity.breakUpgrades = (function() {
       maxUpgrades,
       description: config.description,
       effect: () => player.infinityRebuyables[config.id],
-      formatEffect: value => (value === maxUpgrades ? `10x ➜ ${10 - value}x` : `10x ➜ ${10 - value - 1}x`),
+      formatEffect: value => (value === maxUpgrades
+        ? `Default: ${formatX(10)} | Currently: ${formatX(10 - value)}`
+        : `Default: ${formatX(10)} | Currently: ${formatX(10 - value)} Next: ${formatX(10 - value - 1)}`
+      ),
       staticEffect: true,
       formatCost: value => format(value, 2, 0)
     };
@@ -84,7 +87,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       initialCost: 3e6,
       costIncrease: 5,
       maxUpgrades: 8,
-      description: "Post-infinity tickspeed cost multiplier increase",
+      description: "Reduce post-infinity tickspeed cost multiplier scaling",
 
     }),
     dimCostMult: rebuyable({
@@ -92,7 +95,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       initialCost: 1e8,
       costIncrease: 5e3,
       maxUpgrades: 7,
-      description: "Post-infinity dimension cost multiplier increase"
+      description: "Reduce post-infinity Normal Dimension cost multiplier scaling"
     }),
     ipGen: {
       cost: () => player.offlineProdCost,

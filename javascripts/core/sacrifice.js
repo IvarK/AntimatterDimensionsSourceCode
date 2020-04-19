@@ -16,7 +16,7 @@ class Sacrifice {
     if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
     if (DimBoost.totalBoosts <= DimBoost.maxShiftTier - 4) return "Requires a boost";
     if (NormalDimension(8).totalAmount.eq(0)) return "No 8th dimensions";
-    if (this.nextBoost.lte(1)) return `${formatInt(1)}x multiplier`;
+    if (this.nextBoost.lte(1)) return `${formatX(1)} multiplier`;
     return "";
   }
 
@@ -88,7 +88,7 @@ function sacrificeReset(auto) {
   }
   EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
-  if (!auto) floatText(8, `x${format(nextBoost, 2, 1)}`);
+  if (!auto) floatText(8, formatX(nextBoost, 2, 1));
   player.chall8TotalSacrifice = player.chall8TotalSacrifice.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(NormalDimension(1).amount);
   const isAch118Unlocked = Achievement(118).isUnlocked;

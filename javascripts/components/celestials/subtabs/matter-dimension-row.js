@@ -74,13 +74,13 @@ Vue.component("matter-dimension-row", {
         @click="dimension.buyPowerDM()"
         class="o-matter-dimension-button"
         :class="{ 'o-matter-dimension-button--available': canBuyPowerDM }">
-        DM {{ format(powerDM, 2, 2) }}x <br>Cost: {{ format(powerDMCost, 2, 0) }}
+        DM {{ formatX(powerDM, 2, 2) }} <br>Cost: {{ format(powerDMCost, 2, 0) }}
       </button>
       <button
         @click="dimension.buyPowerDE()"
         class="o-matter-dimension-button"
         :class="{ 'o-matter-dimension-button--available': canBuyPowerDE }">
-        DE {{ format(powerDE, 4, 4) }}x <br>Cost: {{ format(powerDECost, 2, 0) }}
+        DE {{ formatX(powerDE, 4, 4) }} <br>Cost: {{ format(powerDECost, 2, 0) }}
       </button>
     </div>
     <span v-if="interval > 200">Tick: {{ formatInt(timer) }} ms ({{ formatPercents(timerPercent, 1) }}%)</span>

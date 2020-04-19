@@ -76,7 +76,7 @@ Vue.component("game-header-big-crunch-button", {
     >
       <b>Big Crunch for
       <span :style="amountStyle">{{format(gainedIP, 2, 0)}}</span>
-      Infinity {{ "point" | pluralize(gainedIP) }}.</b>
+      Infinity {{ "Point" | pluralize(gainedIP) }}.</b>
       <template v-if="isPeakIPPMVisible">
         <br>
         {{format(currentIPPM, 2, 0)}} IP/min

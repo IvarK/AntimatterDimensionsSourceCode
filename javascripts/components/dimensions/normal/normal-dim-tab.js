@@ -42,7 +42,7 @@ Vue.component("normal-dim-tab", {
       <span v-if="isSacrificeUnlocked">Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
       <normal-dim-tab-header />
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
-      <div class="l-normal-dim-tab__row-container l-normal-dim-row-container">
+      <div class="l-dimensions-container">
         <normal-dim-row
           v-for="tier in 8"
           :key="tier"

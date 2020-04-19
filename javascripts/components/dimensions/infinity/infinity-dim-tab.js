@@ -87,7 +87,7 @@ Vue.component("infinity-dim-tab", {
         class="o-primary-btn--buy-max l-infinity-dim-tab__buy-max"
         @click="maxAll"
       >Max all</primary-button>
-      <div class="l-infinity-dim-tab__row-container">
+      <div class="l-dimensions-container">
         <infinity-dim-row
           v-for="tier in 8"
           :key="tier"

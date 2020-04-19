@@ -96,7 +96,7 @@ Vue.component("teresa-tab", {
           >Pour RM</button>
           <div class="c-rm-store">
             <div class="c-rm-store-inner" :style="{ height: percentage}">
-              <div class="c-rm-store-label"> {{ format(rmMult, 2, 2) }}x RM gain
+              <div class="c-rm-store-label"> {{ formatX(rmMult, 2, 2) }} RM gain
                 <br>{{ format(rmStore, 2, 2) }}/{{ format(rmStoreMax, 2, 2) }}
               </div>
             </div>

@@ -54,7 +54,7 @@ Vue.component("time-dim-tab", {
         class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
         @click="maxAll"
       >Max all</primary-button>
-      <div class="l-time-dim-tab__row-container">
+      <div class="l-dimensions-container">
         <time-dim-row
           v-for="tier in 8"
           :key="tier"

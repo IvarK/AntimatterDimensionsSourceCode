@@ -1282,7 +1282,7 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     if (this.isAvailableForPurchase || !this.config.checkRequirement()) return;
     player.reality.upgReqs[this.id] = true;
     if (player.realities > 0 || TimeStudy.reality.isBought) {
-      GameUI.notify.success("You've unlocked a Reality upgrade!");
+      GameUI.notify.reality("You've unlocked a Reality upgrade!");
     }
   }
 

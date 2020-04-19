@@ -5050,6 +5050,11 @@ kbd {
   border-color: #4980cc;
 }
 
+.o-notification--reality {
+  background-color: var(--color-reality);
+  border-color: var(--color-reality);
+}
+
 .o-notification--black-hole {
   background-color: #b341e0;
   border-color: black;

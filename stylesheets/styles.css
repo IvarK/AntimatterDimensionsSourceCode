@@ -4793,7 +4793,16 @@ screen and (max-width: 480px) {
 
 .c-modal-options {
   width: 30rem;
-  height: 30rem;
+}
+
+.c-modal-options .o-primary-btn--option {
+  height: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.c-modal-options .o-primary-btn--width-medium {
+  margin-top: 0.7rem;
 }
 
 /*#region l-modal-options*/
@@ -4809,6 +4818,7 @@ screen and (max-width: 480px) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 1rem;
 }
 
 /*#endregion l-modal-options*/

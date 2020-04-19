@@ -352,10 +352,14 @@ body.t-normal {
   align-items: center;
 }
 
-.tickspeed-container {
+.l-tickspeed-container {
   display: flex;
   justify-content: space-between;
   padding: 1rem 5rem 0 9rem;
+}
+
+.l-tickspeed-container--hidden {
+  visibility: hidden;
 }
 
 .tickspeed-labels {

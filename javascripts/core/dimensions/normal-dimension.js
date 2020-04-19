@@ -1,7 +1,7 @@
 "use strict";
 
 const AntimatterDimensionCommonMultiplier =
-  new EffectScope("Normal Dimension Common Multipliers").addMultipliers(
+  new EffectScope("Antimatter Dimension Common Multipliers").addMultipliers(
     () => [
       // Make Inf pow its own Effect Scope
       new Effect(

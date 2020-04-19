@@ -303,7 +303,7 @@
 }
 
 .l-glyph-tooltip--down-left {
-  transform: translate(calc(-100% - 0.7rem), 0.5rem);
+  transform: translate(calc(-100% - 0.7rem), 0);
 }
 
 .c-glyph-tooltip {

@@ -1149,7 +1149,7 @@ Multiplier to Dark Matter power based on Dark Energy = (${formatInt(1)} + Dark E
   };
 
   const addPhrase = (phrase, tab) => {
-    addWord(phrase.toLowerCase(), tab);
+    addWord(phrase, tab);
     for (const part of phrase.split(" ")) {
       addWord(part, tab);
     }

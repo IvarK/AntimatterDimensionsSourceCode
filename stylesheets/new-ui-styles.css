@@ -503,33 +503,32 @@ body.t-normal {
   color: var(--color-text);
 }
 
-.o-autobuyer-input,
-.l-autobuyer-grid select {
+.o-autobuyer-input {
   background: var(--color-base);
   border: 0.1rem solid var(--color-accent);
   color: var(--color-accent);
 }
 
+.t-metro .o-autobuyer-input {
+  color: black;
+  border: 0.1rem solid #A9A9A9;
+}
+
 .t-dark .o-autobuyer-input,
-.t-dark-metro .o-autobuyer-input,
-.t-dark .l-autobuyer-grid select,
-.t-dark-metro .l-autobuyer-grid select {
+.t-dark-metro .o-autobuyer-input {
+  background-color: #455A64;
   border: 0.1rem solid black;
-  color: black;
 }
 
-.t-metro .o-autobuyer-input,
-.t-inverted-metro .o-autobuyer-input,
-.t-s8 .o-autobuyer-input,
-.t-metro .l-autobuyer-grid select,
-.t-inverted-metro .l-autobuyer-grid select,
-.t-s8 .l-autobuyer-grid select {
-  color: black;
+.t-s1 .o-autobuyer-input {
+  background-color: var(--color-base);
+  border: 0.1rem solid black;
 }
 
-.t-s6 .l-autobuyer-grid select {
-  border: 0.1rem solid white;
+.t-s6 .o-autobuyer-input {
   color: white;
+  background-color: black;
+  border: 0.1rem solid #888;
 }
 
 .o-autobuyer-btn {

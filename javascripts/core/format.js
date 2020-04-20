@@ -11,10 +11,6 @@ function formatInt(value) {
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
-function formatContinuum(value) {
-  return formatWithPrecision(value, 2);
-}
-
 function formatWithPrecision(value, digits) {
   if (Notations.current.isPainful) {
     return format(value, Math.max(2, digits), digits);

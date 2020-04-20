@@ -37,7 +37,7 @@ Vue.component("new-dimension-row", {
         : null;
     },
     continuumString() {
-      return formatContinuum(this.continuumValue);
+      return formatWithPrecision(this.continuumValue, 2);
     }
   },
   methods: {

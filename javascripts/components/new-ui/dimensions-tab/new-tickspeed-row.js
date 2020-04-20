@@ -47,7 +47,7 @@ Vue.component("new-tickspeed-row", {
       return this.cost.exponent < 1000000;
     },
     continuumString() {
-      return formatContinuum(this.continuumValue);
+      return formatWithPrecision(this.continuumValue, 2);
     }
   },
   methods: {

@@ -205,10 +205,6 @@ const AntimatterDimensionGlyphPowerEffect = new EffectScope("Antimatter Dimensio
   )
 );
 
-function getDimensionFinalMultiplierUncached(tier) {
-  throw new Error(`Don't use this function`);
-}
-
 function onBuyDimension(tier) {
   Achievement(10 + tier).unlock();
   Achievement(23).tryUnlock();

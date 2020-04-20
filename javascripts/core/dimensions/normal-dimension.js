@@ -149,7 +149,53 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
         () => player.dilation.active && !Enslaved.isRunning
       )
     );
+
+    scope.addDilations(
+       TimeDilationStrength
+    );
+
+    scope.addMultipliers(
+      DilationUpgrade.ndMultDT
+    );
+
+    scope.addDilations(
+      EffarigDilationStrength
+    );
+
+    scope.addPowers(
+      new Effect(
+        () => 0.5,
+        undefined,
+        () => V.isRunning
+      ),
+      new Effect(
+        () => 1.05,
+        undefined,
+        // This condition doesnt work right now
+        () => Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK) && scope.value.gte(AlchemyResource.inflation.effectValue)
+      )
+    );
+
   });
+});
+
+// Move these to somewhere better
+const TimeDilationStrength = new EffectScope("Time Dilation Strength", scope => {
+  scope.base = 0.75;
+  scope.condition = () => player.dilation.active || Enslaved.isRunning;
+  scope.addMultipliers(
+    DilationUpgrade.dilationPenalty
+  );
+});
+
+const EffarigDilationStrength = new EffectScope("Effarig Dilation Strength", scope => {
+  scope.base = 0.25;
+  scope.condition = () => Effarig.isRunning;
+  scope.addMultipliers(
+    new Effect(
+      () => Effarig.nerfFactor(player.infinityPower)
+    )
+  );
 });
 
 const AntimatterDimensionGlyphPowerEffect = new EffectScope("Antimatter Dimension Glyph Power", scope =>
@@ -160,30 +206,7 @@ const AntimatterDimensionGlyphPowerEffect = new EffectScope("Antimatter Dimensio
 );
 
 function getDimensionFinalMultiplierUncached(tier) {
-  if (tier < 1 || tier > 8) throw new Error(`Invalid Normal Dimension tier ${tier}`);
-
-  let multiplier = AntimatterDimensionStandardMultipliers[tier].value;
-
-
-  if (player.dilation.active) {
-    multiplier = dilatedValueOf(multiplier);
-  } else if (Enslaved.isRunning) {
-    multiplier = dilatedValueOf(multiplier);
-  }
-  multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
-
-  if (Effarig.isRunning) {
-    multiplier = Effarig.multiplier(multiplier);
-  } else if (V.isRunning) {
-    multiplier = multiplier.pow(0.5);
-  }
-
-  // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
-  if (Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
-    multiplier = multiplier.pow(1.05);
-  }
-
-  return multiplier;
+  throw new Error(`Don't use this function`);
 }
 
 function onBuyDimension(tier) {
@@ -491,18 +514,18 @@ class NormalDimensionState extends DimensionState {
    * @returns {Decimal}
    */
   get currencyAmount() {
-    return this.tier >= 3 && NormalChallenge(6).isRunning ?
-      NormalDimension(this.tier - 2).amount :
-      player.antimatter;
+    return this.tier >= 3 && NormalChallenge(6).isRunning
+      ? NormalDimension(this.tier - 2).amount
+      : player.antimatter;
   }
 
   /**
    * @param {Decimal} value
    */
   set currencyAmount(value) {
-    return this.tier >= 3 && NormalChallenge(6).isRunning ?
-      NormalDimension(this.tier - 2).amount = value :
-      player.antimatter = value;
+    return this.tier >= 3 && NormalChallenge(6).isRunning
+      ? NormalDimension(this.tier - 2).amount = value
+      : player.antimatter = value;
   }
 
   /**
@@ -602,7 +625,7 @@ class NormalDimensionState extends DimensionState {
   }
 
   get multiplier() {
-    return GameCache.normalDimensionFinalMultipliers[this.tier].value;
+    return AntimatterDimensionStandardMultipliers[this.tier].value;
   }
 
   get cappedProductionInNormalChallenges() {

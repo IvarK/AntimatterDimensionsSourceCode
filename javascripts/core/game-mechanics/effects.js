@@ -175,10 +175,10 @@ Decimal.prototype.dilateByEffectOf = function(effectSource) {
   return result;
 };
 
-Decimal.prototype.dilateByEffectsOf = function(...effectSource) {
+Decimal.prototype.dilateByEffectsOf = function(...effectSources) {
   // eslint-disable-next-line consistent-this
-  let result = this.log10();
-  applyEffectsOf(v => result = Decimal.pow10(Math.sign(result) * Math.pow(Math.abs(result), v)));
+  let result = this;
+  applyEffectsOf(effectSources, v => result = Decimal.pow10(Math.pow(result.plog10(), v)));
   return result;
 };
 

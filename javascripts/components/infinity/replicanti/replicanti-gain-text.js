@@ -3,7 +3,8 @@
 Vue.component("replicanti-gain-text", {
   data() {
     return {
-      text: ""
+      galaxyText: "",
+      replicantiText: ""
     };
   },
   methods: {
@@ -29,11 +30,21 @@ Vue.component("replicanti-gain-text", {
         const timeEstimateText = timeToThousand.eq(0)
           ? "an extremely long time"
           : `${TimeSpan.fromSeconds(timeToThousand.toNumber())}`;
-        this.text = `You are gaining ${formatX(gainFactorPerSecond, 2, 1)} Replicanti per second` +
+        this.replicantiText = `You are gaining ${formatX(gainFactorPerSecond, 2, 1)} Replicanti per second` +
           ` (${timeEstimateText} until ${format(nextThousandOOM)})`;
         return;
       }
-      if (log10GainFactorPerTick.gt(308)) {
+
+      const totalTime = LOG10_MAX_VALUE / (ticksPerSecond * log10GainFactorPerTick.toNumber());
+      let remainingTime = (LOG10_MAX_VALUE - replicantiAmount.log10()) /
+        (ticksPerSecond * log10GainFactorPerTick.toNumber());
+      if (remainingTime < 0) {
+        // If the cap is raised via Effarig Infinity but the player doesn't have TS192, this will be a negative number
+        remainingTime = 0;
+      }
+      this.replicantiText = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti`;
+
+      if (log10GainFactorPerTick.gt(308 / ticksPerSecond / 60)) {
         const galaxiesPerSecond = log10GainFactorPerTick.times(ticksPerSecond / 308);
         let baseGalaxiesPerSecond, effectiveMaxRG;
         if (RealityUpgrade(6).isBought) {
@@ -44,21 +55,17 @@ Vue.component("replicanti-gain-text", {
           effectiveMaxRG = Replicanti.galaxies.max;
         }
         const allGalaxyTime = Decimal.divide(effectiveMaxRG, baseGalaxiesPerSecond).toNumber();
-        this.text = `You are gaining ${format(galaxiesPerSecond, 2, 1)} galaxies per second` +
-          ` (all galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
-        return;
+        this.galaxyText = `You are gaining 1 galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
+        if (galaxiesPerSecond.gte(1)) {
+          this.galaxyText = `You are gaining ${format(galaxiesPerSecond, 2, 1)} galaxies per second`;
+          this.replicantiText = ``;
+        }
+        this.galaxyText += ` (all galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
+      } else {
+        this.galaxyText = ``;
+        this.replicantiText += ` (${TimeSpan.fromSeconds(totalTime)} total per galaxy)`;
       }
-      // Explicit toNumber() is safe here since log10GainFactorPerTick must be less than 308
-      const totalTime = LOG10_MAX_VALUE / (ticksPerSecond * log10GainFactorPerTick.toNumber());
-      let remainingTime = (LOG10_MAX_VALUE - replicantiAmount.log10()) /
-        (ticksPerSecond * log10GainFactorPerTick.toNumber());
-      if (remainingTime < 0) {
-        // If the cap is raised via Effarig Infinity but the player doesn't have TS192, this will be a negative number
-        remainingTime = 0;
-      }
-      this.text = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti` +
-        ` (${TimeSpan.fromSeconds(totalTime)} total per galaxy)`;
     }
   },
-  template: `<p>{{text}}</p>`
+  template: `<p>{{replicantiText}}<br>{{galaxyText}}</p>`
 });

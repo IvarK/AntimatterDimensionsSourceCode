@@ -6,7 +6,7 @@ function format(value, places, placesUnder1000) {
 
 function formatInt(value) {
   if (Notations.current.isPainful) {
-    return format(value, 2, 2);
+    return format(value, 2, 0);
   }
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
@@ -14,7 +14,7 @@ function formatInt(value) {
 // There's probably a better way, but I basically needed formatInt behavior but with some decimal points
 function formatContinuum(value) {
   if (Notations.current.isPainful) {
-    return format(value, 2, 2);
+    return format(value, 2, 0);
   }
   return formatWithCommas(value.toFixed(2));
 }

@@ -93,7 +93,7 @@ Vue.component("equipped-glyphs", {
         // eslint-disable-next-line prefer-template
         !confirm("The last equipped glyph will be removed. Reality will be reset, but some things will" +
           " be restored to what they were when it equipped:\n" +
-          " - antimmatter, Infinity Points, and Eternity Points;\n" +
+          " - antimatter, Infinity Points, and Eternity Points;\n" +
           " - Dilation Upgrades, Tachyon Particles, and Dilated Time;\n" +
           " - Time Theorems and EC completions;\n" +
           " - Time Dimension and Reality unlocks;\n" +

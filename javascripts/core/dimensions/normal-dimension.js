@@ -1,61 +1,75 @@
 "use strict";
 
-const AntimatterDimensionCommonMultiplier =
-  new EffectScope("Antimatter Dimension Common Multipliers").addMultipliers(
-    () => [
-      // Make Inf pow its own Effect Scope
-      new Effect(
-        () => player.infinityPower.pow(getInfinityConversionRate()).max(1),
-        undefined,
-        () => !EternityChallenge(9).isRunning
-      ),
-      new Effect(() => Achievements.power),
-      new Effect(() => ShopPurchase.dimPurchases.currentMult),
-      new Effect(() => ShopPurchase.allDimPurchases.currentMult),
-      new Effect(() => getAdjustedGlyphEffect("powermult")),
-      new Effect(() => player.reality.realityMachines.powEffectOf(AlchemyResource.force)),
-      BreakInfinityUpgrade.totalAMMult,
-      BreakInfinityUpgrade.currentAMMult,
-      BreakInfinityUpgrade.achievementMult,
-      BreakInfinityUpgrade.slowestChallengeMult,
-      InfinityUpgrade.totalTimeMult,
-      InfinityUpgrade.thisInfinityTimeMult,
-      Achievement(48),
-      Achievement(56),
-      Achievement(65),
-      Achievement(72),
-      Achievement(73),
-      Achievement(74),
-      Achievement(76),
-      Achievement(78).effects.dimensionMult,
-      Achievement(84),
-      Achievement(91),
-      Achievement(92),
-      TimeStudy(91),
-      TimeStudy(101),
-      TimeStudy(161),
-      TimeStudy(193),
-      InfinityChallenge(3),
-      InfinityChallenge(3).reward,
-      InfinityChallenge(8),
-      EternityChallenge(10)
-    ]).addDividends(
-      () => [
-        InfinityChallenge(6)
-      ]
-    );
+const AntimatterDimensionCommonMultiplier = new EffectScope("Antimatter Dimension Common Multipliers", scope =>
+  scope.addMultipliers(
+    // Make Inf pow its own Effect Scope
+    new Effect(
+      () => player.infinityPower.pow(getInfinityConversionRate()).max(1),
+      undefined,
+      () => !EternityChallenge(9).isRunning
+    ),
+    new Effect(() => Achievements.power),
+    new Effect(() => ShopPurchase.dimPurchases.currentMult),
+    new Effect(() => ShopPurchase.allDimPurchases.currentMult),
+    new Effect(() => getAdjustedGlyphEffect("powermult")),
+    new Effect(() => player.reality.realityMachines.powEffectOf(AlchemyResource.force)),
+    BreakInfinityUpgrade.totalAMMult,
+    BreakInfinityUpgrade.currentAMMult,
+    BreakInfinityUpgrade.achievementMult,
+    BreakInfinityUpgrade.slowestChallengeMult,
+    InfinityUpgrade.totalTimeMult,
+    InfinityUpgrade.thisInfinityTimeMult,
+    Achievement(48),
+    Achievement(56),
+    Achievement(65),
+    Achievement(72),
+    Achievement(73),
+    Achievement(74),
+    Achievement(76),
+    Achievement(78).effects.dimensionMult,
+    Achievement(84),
+    Achievement(91),
+    Achievement(92),
+    TimeStudy(91),
+    TimeStudy(101),
+    TimeStudy(161),
+    TimeStudy(193),
+    InfinityChallenge(3),
+    InfinityChallenge(3).reward,
+    InfinityChallenge(8),
+    EternityChallenge(10)
+  ).addDividends(
+    InfinityChallenge(6)
+  ));
 
-const NormalDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
+const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
   if (tier === 0) return null;
-  const scope = new EffectScope(`Antimatter Dimension ${tier} Multipliers`).addMultipliers(
-    () => [
-      NormalDimensionCommonMultiplier,
-      new EffectScope(`Antimatter Dimension ${tier} Buy10 Multiplier`).addMultipliers(
-        () => [
+  return new EffectScope(`Antimatter Dimension ${tier} Multipliers`, scope => {
+    // Make Overides Effect Scopes?
+    scope.addOverides(
+      new Effect(
+        () =>
+          player.infinityPower.pow(
+            getInfinityConversionRate()
+          ).max(1).times(DimBoost.multiplierToNDTier(tier)),
+        undefined,
+        () => EternityChallenge(11).isRunning
+      )
+    );
+    if (tier > 6)
+      scope.addOverides(
+        new Effect(
+          () => new Decimal(1),
+          undefined,
+          () => NormalChallenge(10).isRunning
+        )
+      );
+    scope.addMultipliers(
+      AntimatterDimensionCommonMultiplier,
+      new EffectScope(`Antimatter Dimension ${tier} Buy10 Multiplier`, scoped =>
+        scoped.addMultipliers(
           new Effect(() => NormalDimensions.buyTenMultiplier)
-        ]
-      ).addPowers(
-        () => [
+        ).addPowers(
           new Effect(
             () => NormalDimension(tier).continuumValue,
             undefined,
@@ -65,61 +79,53 @@ const NormalDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
             () => Math.floor(NormalDimension(tier).bought / 10),
             undefined,
             () => !Laitela.continuumActive
-          ),
-        ]
+          )
+        )
       ),
       // Rework this to use effects on dimboost multis
-      new EffectScope(`Antimatter Dimension ${tier} DimBoost Multiplier`).addMultipliers(
-        () => [
+      new EffectScope(`Antimatter Dimension ${tier} DimBoost Multiplier`, scoped =>
+        scoped.addMultipliers(
           new Effect(() => DimBoost.multiplierToNDTier(tier))
-        ]
+        )
       ),
-      new EffectScope(`Antimatter Dimension ${tier} Infinitied Multiplier`).addMultipliers(
-        () => [
+      new EffectScope(`Antimatter Dimension ${tier} Infinitied Multiplier`, scoped =>
+        scoped.addMultipliers(
           NormalDimension(tier).infinityUpgrade,
           BreakInfinityUpgrade.infinitiedMult
-        ]
-      ).addPowers(
-        () => [
+        ).addPowers(
           TimeStudy(31)
-        ]
+        )
       ),
       Achievement(77).effects[tier]
-    ]
-  );
-  if (tier === 1) scope.addMultipliers(
-    () => [
-      InfinityUpgrade.unspentIPMult,
-      InfinityUpgrade.unspentIPMult.chargedEffect,
-      Achievement(28),
-      Achievement(31),
-      Achievement(68),
-      Achievement(71),
-      TimeStudy(234)
-    ]
-  );
-  if (tier === 8) scope.addMultipliers(
-    () => [
-      // Replace this with an effect scope instead of just being a wrapper effect
-      new Effect(() => Sacrifice.totalBoost),
-      Achievement(23),
-      TimeStudy(214)
-    ]
-  );
-  if (tier < 8) scope.addMultipliers(
-    () => [
-      Achievement(23),
-      TimeStudy(214)
-    ]
-  );
-  if (tier <= 4) scope.addMultipliers(
-    () => [
-      Achievement(43)
-    ]
-  );
+    );
+    if (tier === 1)
+      scope.addMultipliers(
+        InfinityUpgrade.unspentIPMult,
+        InfinityUpgrade.unspentIPMult.chargedEffect,
+        Achievement(28),
+        Achievement(31),
+        Achievement(68),
+        Achievement(71),
+        TimeStudy(234)
+      );
+    if (tier === 8)
+      scope.addMultipliers(
+        // Replace this with an effect scope instead of just being a wrapper effect
+        new Effect(() => Sacrifice.totalBoost),
+        Achievement(23),
+        TimeStudy(214)
+      );
+    if (tier < 8)
+      scope.addMultipliers(
+        Achievement(23),
+        TimeStudy(214)
+      );
+    if (tier <= 4)
+      scope.addMultipliers(
+        Achievement(43)
+      );
 
-  scope.addPowers(
-    () => [
+    scope.addPowers(
       new Effect(
         () => InfinityChallenge(4).effectValue,
         undefined,
@@ -136,34 +142,31 @@ const NormalDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
         () => V_UNLOCKS.ND_POW.effect(),
         undefined,
         () => V.has(V_UNLOCKS.ND_POW)
+      ),
+      new Effect(
+        () => getAdjustedGlyphEffect("dilationpow"),
+        undefined,
+        () => player.dilation.active && !Enslaved.isRunning
       )
-    ]
-  );
-  return scope;
+    );
+  });
 });
 
-const AntimatterDimensionGlyphPowerEffect = new EffectScope("Antimatter Dimension Glyph Power").addMultipliers(
-  () => [
+const AntimatterDimensionGlyphPowerEffect = new EffectScope("Antimatter Dimension Glyph Power", scope =>
+  scope.addMultipliers(
     new Effect(() => getAdjustedGlyphEffect("powerpow")),
     new Effect(() => getAdjustedGlyphEffect("effarigdimensions"))
-  ]
+  )
 );
-
 
 function getDimensionFinalMultiplierUncached(tier) {
   if (tier < 1 || tier > 8) throw new Error(`Invalid Normal Dimension tier ${tier}`);
-  if (NormalChallenge(10).isRunning && tier > 6) return new Decimal(1);
-  if (EternityChallenge(11).isRunning) {
-    return player.infinityPower.pow(
-      getInfinityConversionRate()
-      ).max(1).times(DimBoost.multiplierToNDTier(tier));
-  }
 
   let multiplier = AntimatterDimensionStandardMultipliers[tier].value;
 
-  const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
+
   if (player.dilation.active) {
-    multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier, 1));
+    multiplier = dilatedValueOf(multiplier);
   } else if (Enslaved.isRunning) {
     multiplier = dilatedValueOf(multiplier);
   }
@@ -203,7 +206,10 @@ function onBuyDimension(tier) {
 function floatText(tier, text) {
   if (!player.options.animations.floatingText) return;
   const floatingText = ui.view.tabs.dimensions.normal.floatingText[tier];
-  floatingText.push({ text, key: UIID.next() });
+  floatingText.push({
+    text,
+    key: UIID.next()
+  });
   setTimeout(() => floatingText.shift(), 1000);
 }
 
@@ -235,7 +241,8 @@ function buyOneDimension(tier) {
 
 function buyManyDimension(tier) {
   const dimension = NormalDimension(tier);
-  if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return false;
+  if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10)
+    return false;
   const cost = dimension.costUntil10;
 
   if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
@@ -402,9 +409,14 @@ class NormalDimensionState extends DimensionState {
   }
 
   /** @returns {number} */
-  get costBumps() { return this.data.costBumps; }
+  get costBumps() {
+    return this.data.costBumps;
+  }
+
   /** @param {number} value */
-  set costBumps(value) { this.data.costBumps = value; }
+  set costBumps(value) {
+    this.data.costBumps = value;
+  }
 
   /**
    * @returns {number}
@@ -479,18 +491,18 @@ class NormalDimensionState extends DimensionState {
    * @returns {Decimal}
    */
   get currencyAmount() {
-    return this.tier >= 3 && NormalChallenge(6).isRunning
-      ? NormalDimension(this.tier - 2).amount
-      : player.antimatter;
+    return this.tier >= 3 && NormalChallenge(6).isRunning ?
+      NormalDimension(this.tier - 2).amount :
+      player.antimatter;
   }
 
   /**
    * @param {Decimal} value
    */
   set currencyAmount(value) {
-    return this.tier >= 3 && NormalChallenge(6).isRunning
-      ? NormalDimension(this.tier - 2).amount = value
-      : player.antimatter = value;
+    return this.tier >= 3 && NormalChallenge(6).isRunning ?
+      NormalDimension(this.tier - 2).amount = value :
+      player.antimatter = value;
   }
 
   /**
@@ -527,9 +539,9 @@ class NormalDimensionState extends DimensionState {
     return this.amount.max(this.continuumAmount);
   }
 
-   /**
-    * @returns {boolean}
-    */
+  /**
+   * @returns {boolean}
+   */
   get isAffordable() {
     if (Laitela.continuumActive) return false;
     if (!player.break && this.cost.gt(Decimal.NUMBER_MAX_VALUE)) return false;
@@ -549,8 +561,8 @@ class NormalDimensionState extends DimensionState {
     if (this.tier > DimBoost.totalBoosts + 4) return false;
     const hasPrevTier = this.tier === 1 ||
       (Laitela.continuumActive
-        ? NormalDimension(this.tier - 1).continuumValue >= 1
-        : NormalDimension(this.tier - 1).amount.neq(0));
+      ? NormalDimension(this.tier - 1).continuumValue >= 1
+      : NormalDimension(this.tier - 1).amount.neq(0));
     if (!EternityMilestone.unlockAllND.isReached && !hasPrevTier) return false;
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }
@@ -666,7 +678,8 @@ const NormalDimensions = {
       Achievement(58)
     ).times(getAdjustedGlyphEffect("powerbuy10"));
 
-    mult = mult.pow(getAdjustedGlyphEffect("effarigforgotten")).powEffectOf(InfinityUpgrade.buy10Mult.chargedEffect);
+    mult = mult.pow(getAdjustedGlyphEffect("effarigforgotten"))
+      .powEffectOf(InfinityUpgrade.buy10Mult.chargedEffect);
 
     return mult;
   },

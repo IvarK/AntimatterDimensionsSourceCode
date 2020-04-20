@@ -3,19 +3,28 @@
 class EffectScope {
 
   /**
-   * @param {String} name
-   * @param {Number} base
+   * Intialization callback for an Effect Scope
+   * @callback initializationCallback
+   * @return {void}
+   */
+  /**
+   * @param {String} name - The name of the created Effect Scope
+   * @param {initializationCallback} initFn - Callback used to initialize the Effects within an Effect scope
    */
 
-  constructor(name, base) {
+  constructor(name, initFn) {
     this._name = name;
-    this._initEffects = {};
+    this._initFn = initFn || (() => this);
     this._effects = {};
     this._dependency = 0;
     this._eval = [];
     this._value = 0;
-    this._base = new Decimal(base || 1);
+    this._base = new Decimal(1);
     EffectScopes.add(this);
+  }
+
+  set base(value) {
+    this._base = value;
   }
 
   get name() {
@@ -28,66 +37,74 @@ class EffectScope {
 
   /**
    * @param {EFFECT_TYPE} type
-   * @param {Function} effects
+   * @param {Effect[]} effects
    */
 
   _addEffects(type, effects) {
-    if (this._initEffects[type]) {
-      this._initEffects[type].push(effects);
+    if (!this._initFn) return this;
+    const ApplyFn = {
+      overides: (val, eff) => Effects.last(val, ...eff.reverse()),
+      addends: (val, eff) => val.plusEffectOf(...eff),
+      subtrahends: (val, eff) => val.minusEffectOf(...eff),
+      dividends: (val, eff) => val.dividedByEffectOf(...eff),
+      multipliers: (val, eff) => val.timesEffectOf(...eff),
+      powers: (val, eff) => val.powEffectOf(...eff),
+    };
+
+    this._eval.push(val => ApplyFn[type](val, effects));
+
+    if (this._effects[type]) {
+      this._effects[type].push(...effects);
       return this;
     }
 
-    this._initEffects[type] = [effects];
+    this._effects[type] = effects;
     return this;
   }
 
-  addAddends(effects) {
+  addOverides(...effects) {
+    return this._addEffects(EFFECT_TYPE.overides, effects);
+  }
+
+  addAddends(...effects) {
     return this._addEffects(EFFECT_TYPE.addends, effects);
   }
 
-  addSubtrahends(effects) {
+  addSubtrahends(...effects) {
     return this._addEffects(EFFECT_TYPE.subtrahends, effects);
   }
 
-  addDividends(effects) {
+  addDividends(...effects) {
     return this._addEffects(EFFECT_TYPE.dividends, effects);
   }
 
-  addMultipliers(effects) {
+  addMultipliers(...effects) {
     return this._addEffects(EFFECT_TYPE.multipliers, effects);
   }
 
-  addPowers(effects) {
+  addPowers(...effects) {
     return this._addEffects(EFFECT_TYPE.powers, effects);
   }
 
   _init() {
-    if (!this._initEffects) return this;
-    const ApplyFn = [
-      (val, effects) => val.plusEffectsOf(...effects),
-      (val, effects) => val.minusEffectsOf(...effects),
-      (val, effects) => val.dividedByEffectsOf(...effects),
-      (val, effects) => val.timesEffectsOf(...effects),
-      (val, effects) => val.powEffectsOf(...effects),
-    ];
-    for (const id in this._initEffects) {
-      const name = Object.keys(EFFECT_TYPE).find(key => EFFECT_TYPE[key] === parseInt(id, 10));
-      this._effects[name] = this._initEffects[id].reduce((arr, fn) => arr.concat(fn()), []);
+    if (!this._initFn) return this;
+    this._initFn(this);
+    for (const name in this._effects) {
       this._effects[name].forEach(effect => {
         if (effect instanceof EffectScope) {
           effect._init();
           this._dependency = Math.max(this._dependency, effect._dependency + 1);
         }
       });
-      this._eval.push(val => ApplyFn[id](val, this._effects[name]));
     }
-    delete this._initEffects;
+    delete this._initFn;
+
     return this;
   }
 
   update() {
     if (this._initEffects) return this;
-    this._value = this._eval.reduce((val, applyFn) => applyFn(val), this._base);
+    this._value = this._eval.reduce((val, applyFn) => applyFn(val), this._base).clampMin(this._base);
     return this;
   }
 
@@ -122,9 +139,10 @@ const EffectScopes = (function() {
 }());
 
 const EFFECT_TYPE = {
-  addends: 0,
-  subtrahends: 1,
-  dividends: 2,
-  multipliers: 3,
-  powers: 4,
+  overides: "overides",
+  addends: "addends",
+  subtrahends: "subtrahends",
+  dividends: "dividends",
+  multipliers: "multipliers",
+  powers: "powers",
 };

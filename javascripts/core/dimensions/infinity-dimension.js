@@ -22,6 +22,54 @@ function infinityDimensionCommonMultiplier() {
   return mult;
 }
 
+const InfinityDimensionCommonMultiplier = new EffectScope("Infinity Dimension Common Multiplier", scope =>
+  scope.addMultipliers(
+    new Effect(() => ShopPurchase.allDimPurchases.currentMult),
+    Achievement(75),
+    TimeStudy(82),
+    TimeStudy(92),
+    TimeStudy(162),
+    InfinityChallenge(1).reward,
+    EternityChallenge(4).reward,
+    EternityChallenge(9).reward,
+    EternityUpgrade.idMultEP,
+    EternityUpgrade.idMultEternities,
+    EternityUpgrade.idMultICRecords,
+    AlchemyResource.dimensionality,
+    // Change this to better handle replicanti
+    new Effect(
+      () => replicantiMult(),
+      undefined,
+      () => Replicanti.areUnlocked && player.replicanti.amount.gt(1)
+    )
+  )
+);
+
+const InfinityDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
+  if (tier === 0) return null;
+  return new EffectScope(`Infinity Dimension ${tier} Multipliers`, scope => {
+    scope.addMultipliers(
+      InfinityDimensionCommonMultiplier,
+      new EffectScope(`Infinity Dimension ${tier} Buy10 Multiplier`, scoped =>
+        scoped.addMultipliers(
+          new Effect(() => InfinityDimension(tier).powerMultiplier)
+        ).addPowers(
+          new Effect(() => Math.floor(InfinityDimension(tier).baseAmount / 10))
+        )
+      )
+    );
+    if (tier === 1)
+      scope.addMultipliers(
+        Achievement(94),
+        EternityChallenge(2).reward
+      );
+    if (tier === 4)
+      scope.addMultipliers(
+        TimeStudy(72)
+      );
+  });
+});
+
 function buyManyInfinityDimension(tier) {
   if (!canBuyInfinityDimension(tier)) return false;
   const dim = InfinityDimension(tier);

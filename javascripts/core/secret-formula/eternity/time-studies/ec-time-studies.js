@@ -15,7 +15,7 @@ GameDatabase.eternity.timeStudies.ec = [
     id: 2,
     cost: 35,
     requirement: {
-      resource: "Tickspeed upgrades from time dimensions",
+      resource: "Tickspeed upgrades from Time Dimensions",
       current: () => player.totalTickGained,
       required: completions => 1300 + completions * 150,
       formatValue: formatInt
@@ -25,7 +25,7 @@ GameDatabase.eternity.timeStudies.ec = [
     id: 3,
     cost: 40,
     requirement: {
-      resource: "8th dimensions",
+      resource: "8th Dimensions",
       current: () => NormalDimension(8).amount,
       required: completions => new Decimal(17300 + completions * 1250),
       formatValue: value => formatInt(Math.floor(value.toNumber()))
@@ -35,7 +35,7 @@ GameDatabase.eternity.timeStudies.ec = [
     id: 4,
     cost: 70,
     requirement: {
-      resource: "infinities",
+      resource: "Infinities",
       current: () => Player.totalInfinitied,
       required: completions => new Decimal(1e8 + completions * 5e7),
       formatValue: value => formatInt(Math.floor(value.toNumber()))
@@ -45,7 +45,7 @@ GameDatabase.eternity.timeStudies.ec = [
     id: 5,
     cost: 130,
     requirement: {
-      resource: "antimatter galaxies",
+      resource: "Antimatter Galaxies",
       current: () => player.galaxies,
       required: completions => 160 + completions * 14,
       formatValue: formatInt
@@ -55,7 +55,7 @@ GameDatabase.eternity.timeStudies.ec = [
     id: 6,
     cost: 85,
     requirement: {
-      resource: "replicanti galaxies",
+      resource: "Replicanti Galaxies",
       current: () => player.replicanti.galaxies,
       required: completions => 40 + completions * 5,
       formatValue: formatInt

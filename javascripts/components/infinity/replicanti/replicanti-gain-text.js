@@ -56,14 +56,14 @@ Vue.component("replicanti-gain-text", {
       const allGalaxyTime = Decimal.divide(effectiveMaxRG, baseGalaxiesPerSecond).toNumber();
 
       this.replicantiText = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti`;
-      if (effectiveMaxRG >= 1 && ReplicantiUpgrade.galaxies.isAutobuyerOn) {
+      if (effectiveMaxRG > 0 && ReplicantiUpgrade.galaxies.isAutobuyerOn) {
         this.galaxyText = `You gain a galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
         if (galaxiesPerSecond.gte(1)) {
           this.galaxyText = `You are gaining ${format(galaxiesPerSecond, 2, 1)} galaxies per second`;
         }
         this.galaxyText += ` (all galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
       } else {
-        this.replicantiText += ` (${TimeSpan.fromSeconds(totalTime)} total time until Infinite Replicanti)`;
+        this.galaxyText = ` (${TimeSpan.fromSeconds(totalTime)} total time until Infinite Replicanti)`;
       }
     }
   },

@@ -168,6 +168,21 @@ Decimal.prototype.powEffectsOf = function(...effectSources) {
   return result;
 };
 
+Decimal.prototype.dilateByEffectOf = function(effectSource) {
+  // eslint-disable-next-line consistent-this
+  let result = this.log10();
+  effectSource.applyEffect(v => result = Decimal.pow10(Math.sign(result) * Math.pow(Math.abs(result), v)));
+  return result;
+};
+
+Decimal.prototype.dilateByEffectsOf = function(...effectSource) {
+  // eslint-disable-next-line consistent-this
+  let result = this.log10();
+  applyEffectsOf(v => result = Decimal.pow10(Math.sign(result) * Math.pow(Math.abs(result), v)));
+  return result;
+};
+
+
 function applyEffectsOf(effectSources, applyFn) {
   for (const effectSource of effectSources) {
     if (effectSource !== null && effectSource !== undefined) effectSource.applyEffect(applyFn);

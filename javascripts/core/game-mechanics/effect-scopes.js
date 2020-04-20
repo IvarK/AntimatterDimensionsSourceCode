@@ -86,6 +86,10 @@ class EffectScope {
     return this._addEffects(EFFECT_TYPE.powers, effects);
   }
 
+  addDilations(...effects) {
+    return this._addEffects(EFFECT_TYPE.dilations, effects);
+  }
+
   _init() {
     if (!this._initFn) return this;
     this._initFn(this);
@@ -145,4 +149,5 @@ const EFFECT_TYPE = {
   dividends: "dividends",
   multipliers: "multipliers",
   powers: "powers",
+  dilations: "dilations"
 };

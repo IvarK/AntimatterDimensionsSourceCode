@@ -11,12 +11,15 @@ function formatInt(value) {
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
-// There's probably a better way, but I basically needed formatInt behavior but with some decimal points
 function formatContinuum(value) {
+  return formatWithPrecision(value, 2);
+}
+
+function formatWithPrecision(value, digits) {
   if (Notations.current.isPainful) {
-    return format(value, 2, 2);
+    return format(value, Math.max(2, digits), digits);
   }
-  return formatWithCommas(value.toFixed(2));
+  return formatWithCommas(value.toFixed(digits));
 }
 
 function formatPostBreak(value, places, placesUnder1000) {

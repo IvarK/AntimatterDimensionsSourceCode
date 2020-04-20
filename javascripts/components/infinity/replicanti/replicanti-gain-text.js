@@ -15,6 +15,7 @@ Vue.component("replicanti-gain-text", {
         (Math.log(player.replicanti.chance + 1)), getReplicantiInterval());
       const log10GainFactorPerTick = logGainFactorPerTick.dividedBy(Math.LN10);
       const replicantiAmount = player.replicanti.amount;
+
       if (TimeStudy(192).isBought && replicantiAmount.log10() > 308) {
         const postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
         const gainFactorPerSecond = logGainFactorPerTick
@@ -42,10 +43,8 @@ Vue.component("replicanti-gain-text", {
         // If the cap is raised via Effarig Infinity but the player doesn't have TS192, this will be a negative number
         remainingTime = 0;
       }
-      this.replicantiText = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti`;
 
-      if (log10GainFactorPerTick.gt(308 / ticksPerSecond / 60)) {
-        const galaxiesPerSecond = log10GainFactorPerTick.times(ticksPerSecond / 308);
+      const galaxiesPerSecond = log10GainFactorPerTick.times(ticksPerSecond / 308);
         let baseGalaxiesPerSecond, effectiveMaxRG;
         if (RealityUpgrade(6).isBought) {
           baseGalaxiesPerSecond = galaxiesPerSecond.divide(RealityUpgrade(6).effectValue);
@@ -53,17 +52,18 @@ Vue.component("replicanti-gain-text", {
         } else {
           baseGalaxiesPerSecond = galaxiesPerSecond;
           effectiveMaxRG = Replicanti.galaxies.max;
-        }
-        const allGalaxyTime = Decimal.divide(effectiveMaxRG, baseGalaxiesPerSecond).toNumber();
-        this.galaxyText = `You are gaining 1 galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
+      }
+      const allGalaxyTime = Decimal.divide(effectiveMaxRG, baseGalaxiesPerSecond).toNumber();
+
+      this.replicantiText = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti`;
+      if (effectiveMaxRG >= 1 && ReplicantiUpgrade.galaxies.isAutobuyerOn) {
+        this.galaxyText = `You gain a galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
         if (galaxiesPerSecond.gte(1)) {
           this.galaxyText = `You are gaining ${format(galaxiesPerSecond, 2, 1)} galaxies per second`;
-          this.replicantiText = ``;
         }
         this.galaxyText += ` (all galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
       } else {
-        this.galaxyText = ``;
-        this.replicantiText += ` (${TimeSpan.fromSeconds(totalTime)} total per galaxy)`;
+        this.replicantiText += ` (${TimeSpan.fromSeconds(totalTime)} total time until Infinite Replicanti)`;
       }
     }
   },

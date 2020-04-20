@@ -62,6 +62,10 @@ Vue.component("game-header", {
         isVisible() {
           return this.infinityUnlocked || this.activeChallengeNames.length > 0;
         },
+        isInFailableEC() {
+          return this.activeChallengeNames.includes("Eternity Challenge 4") ||
+            this.activeChallengeNames.includes("Eternity Challenge 12");
+        },
         challengeDisplay() {
           if (this.activeChallengeNames.length === 0) {
             return "the Antimatter Universe (no active challenges)";
@@ -76,7 +80,9 @@ Vue.component("game-header", {
         }
       },
       template: `
-        <div v-if="isVisible">You are currently in {{challengeDisplay}}</div>
+        <div v-if="isVisible">
+          You are currently in {{challengeDisplay}} <failable-ec-text v-if="isInFailableEC"/>
+        </div>
       `
     }
   },

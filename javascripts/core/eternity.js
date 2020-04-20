@@ -36,7 +36,7 @@ function giveEternityRewards(auto) {
   }
 
   player.bestEternitiesPerMs = player.bestEternitiesPerMs.clampMin(
-    RealityUpgrade(3).effectOrDefault(1) / player.thisEternityRealTime
+    RealityUpgrade(3).effectOrDefault(1) / Math.clampMin(33, player.thisEternityRealTime)
   );
   player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
 

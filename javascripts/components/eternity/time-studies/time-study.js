@@ -105,7 +105,7 @@ Vue.component("time-study", {
              @click.shift.exact="shiftClick">
       <slot />
       <cost-display br
-        v-if="showCost && !showSTCost"
+        v-if="(showCost && !showSTCost) || STCost === 0"
         :config="config"
         singular="Time Theorem"
         plural="Time Theorems"

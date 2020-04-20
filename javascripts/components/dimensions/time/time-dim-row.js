@@ -69,7 +69,7 @@ Vue.component("time-dim-row", {
         <span class="c-dim-row__label--small">{{rateOfChangeDisplay}}</span>
       </div>
       <primary-button
-        :enabled="isAffordable"
+        :enabled="isAffordable && !isCapped"
         class="o-primary-btn--buy-td l-dim-row__button"
         @click="buyTimeDimension"
       >{{buttonContents}}</primary-button>
@@ -81,7 +81,7 @@ Vue.component("time-dim-row", {
       />
       <primary-button
         v-else
-        :enabled="isAffordable"
+        :enabled="isAffordable && !isCapped"
         class="o-primary-btn--buy-td-max l-dim-row__button"
         @click="buyMaxTimeDimension"
       >Buy Max</primary-button>

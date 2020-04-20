@@ -3515,7 +3515,6 @@ screen and (max-width: 480px) {
 
 .o-autobuyer-toggle-checkbox__label--disabled {
   opacity: 0.6;
-  pointer-events: none;
 }
 
 /*#endregion o-autobuyer-toggle-checkbox*/
@@ -5614,7 +5613,7 @@ kbd {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 90rem;
+  width: 65rem;
   margin: auto;
 }
 

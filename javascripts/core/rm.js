@@ -516,7 +516,7 @@ const Glyphs = {
         return;
       }
       if (player.options.confirmations.glyphReplace &&
-        !confirm("Replacing a glyph will restart reality. Proceed?")) return;
+        !confirm("Replacing a glyph will restart this Reality. Proceed?")) return;
       // Remove from inventory first so that there's room to unequip to the same inventory slot
       this.removeFromInventory(glyph);
       this.unequip(targetSlot, inventoryIndex);

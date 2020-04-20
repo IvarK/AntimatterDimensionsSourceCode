@@ -23,12 +23,13 @@ Vue.component("new-ui", {
       isInAnyChallenge: false,
       isChallengePowerVisible: false,
       challengePower: "",
+      isInFailableEC: false,
     };
   },
   computed: {
     news() {
       return this.$viewModel.news;
-    }
+    },
   },
   methods: {
     update() {
@@ -38,6 +39,8 @@ Vue.component("new-ui", {
       this.realities = player.realities;
 
       this.isInAnyChallenge = this.challengeDisplay.length !== 0;
+      this.currentEternityChallenge = EternityChallenge.current;
+      this.isInFailableEC = this.currentEternityChallenge && [4, 12].includes(this.currentEternityChallenge.id);
       const isC2Running = NormalChallenge(2).isRunning;
       const isC3Running = NormalChallenge(3).isRunning;
       const isIC6Running = InfinityChallenge(6).isRunning;
@@ -144,7 +147,10 @@ Vue.component("new-ui", {
           <div>You are getting {{format(antimatterPerSec, 2, 0)}} antimatter per second.</div>
         </div>
         <div class="information-header" >
-          <span v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</span>
+          <span v-if="isInAnyChallenge">
+            You are currently in {{challengeDisplay}} <failable-ec-text v-if="isInFailableEC"/>
+          </span>
+          </span>
           <div v-if="isInEffarig">
             Gamespeed and multipliers dilated {{effarigMultNerfText}}
             <br>

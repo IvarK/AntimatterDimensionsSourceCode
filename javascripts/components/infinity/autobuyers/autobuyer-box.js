@@ -70,7 +70,6 @@ Vue.component("autobuyer-box", {
       this.antimatter.copyFrom(player.antimatter);
     },
     toggle() {
-      if (!this.globalToggle) return;
       this.isActive = !this.isActive;
     },
     purchase() {
@@ -93,7 +92,7 @@ Vue.component("autobuyer-box", {
       return {
         "o-autobuyer-toggle-checkbox__label": true,
         "o-autobuyer-toggle-checkbox__label--active": this.isActive,
-        "o-autobuyer-toggle-checkbox__label--disabled": !this.globalToggle,
+        "o-autobuyer-toggle-checkbox__label--disabled": !this.globalToggle
       };
     },
   },

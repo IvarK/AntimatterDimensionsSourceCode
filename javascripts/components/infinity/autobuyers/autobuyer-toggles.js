@@ -19,6 +19,21 @@ Vue.component("autobuyer-toggles", {
     update() {
       this.autobuyersOn = player.options.autobuyersOn;
       this.bulkOn = player.options.bulkOn;
+    },
+    toggleAllAutobuyers() {
+      let allAutobuyersDisabled = true;
+      for (const autobuyer of Autobuyers.unlocked) {
+        if (autobuyer.isActive) allAutobuyersDisabled = false;
+      }
+      if (allAutobuyersDisabled) {
+        for (const autobuyer of Autobuyers.unlocked) {
+          autobuyer.isActive = true;
+        }
+      } else {
+        for (const autobuyer of Autobuyers.unlocked) {
+          autobuyer.isActive = false;
+        }
+      }
     }
   },
   template:
@@ -29,6 +44,11 @@ Vue.component("autobuyer-toggles", {
         off="Enable autobuyers"
         class="o-primary-btn--autobuyer-toggle"
       />
+      <primary-button
+        class="o-primary-btn--autobuyer-toggle"
+        @click="toggleAllAutobuyers()">
+        Toggle all autobuyers
+      </primary-button>
       <primary-button-on-off-custom
         v-model="bulkOn"
         on="Disable bulk buy"

@@ -101,7 +101,7 @@ Vue.component("black-hole-tab", {
           {{ detailedBH2 }}
           <div v-if="isNegativeBHUnlocked" class="l-enslaved-shop-container">
             Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
-            This requires Both Black holes to be permanent and only works when paused.
+            This requires both Black Holes to be permanent and only works when paused.
             <ad-slider-component
                 v-bind="sliderProps"
                 :value="negativeSlider"

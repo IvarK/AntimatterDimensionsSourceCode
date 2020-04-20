@@ -21,10 +21,7 @@ Vue.component("autobuyer-toggles", {
       this.bulkOn = player.options.bulkOn;
     },
     toggleAllAutobuyers() {
-      let allAutobuyersDisabled = true;
-      for (const autobuyer of Autobuyers.unlocked) {
-        if (autobuyer.isActive) allAutobuyersDisabled = false;
-      }
+      const allAutobuyersDisabled = Autobuyers.unlocked.every(autobuyer => !autobuyer.isActive);
       if (allAutobuyersDisabled) {
         for (const autobuyer of Autobuyers.unlocked) {
           autobuyer.isActive = true;

@@ -32,7 +32,7 @@ class EffectScope {
    */
 
   set base(value) {
-    this._base = value;
+    this._base = new Decimal(value);
   }
 
   /**
@@ -40,7 +40,7 @@ class EffectScope {
    * @return {void}
    */
 
-  set condtion(callback) {
+  set condition(callback) {
     this._conditional = callback;
   }
 
@@ -61,11 +61,12 @@ class EffectScope {
     if (!this._initFn) return this;
     const ApplyFn = {
       overides: (val, eff) => Effects.last(val, ...eff.reverse()),
-      addends: (val, eff) => val.plusEffectOf(...eff),
-      subtrahends: (val, eff) => val.minusEffectOf(...eff),
-      dividends: (val, eff) => val.dividedByEffectOf(...eff),
-      multipliers: (val, eff) => val.timesEffectOf(...eff),
-      powers: (val, eff) => val.powEffectOf(...eff),
+      addends: (val, eff) => val.plusEffectsOf(...eff),
+      subtrahends: (val, eff) => val.minusEffectsOf(...eff),
+      dividends: (val, eff) => val.dividedByEffectsOf(...eff),
+      multipliers: (val, eff) => val.timesEffectsOf(...eff),
+      powers: (val, eff) => val.powEffectsOf(...eff),
+      dilations: (val, eff) => val.dilateByEffectsOf(...eff)
     };
 
     this._eval.push(val => ApplyFn[type](val, effects));
@@ -75,7 +76,7 @@ class EffectScope {
       return this;
     }
 
-    this._effects[type] = effects;
+    this._effects[type] = Array.from(effects);
     return this;
   }
 

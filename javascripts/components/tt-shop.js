@@ -30,11 +30,11 @@ Vue.component("tt-shop", {
     formattedTheorems() {
       if (this.theoremAmount.gt(1e9)) {
         return format(this.theoremAmount, 2);
-      } else if (getAdjustedGlyphEffect("dilationTTgen") > 0 && !DilationUpgrade.ttGenerator.isBought) {
-        return formatWithPrecision(this.theoremAmount, 2);
-      } else {
-        return formatInt(this.theoremAmount);
       }
+      if (getAdjustedGlyphEffect("dilationTTgen") > 0 && !DilationUpgrade.ttGenerator.isBought) {
+        return formatWithPrecision(this.theoremAmount, 2);
+      }
+      return formatInt(this.theoremAmount);
     },
     TTgenRateText() {
       if (this.theoremGeneration.lt(1 / 3600)) {

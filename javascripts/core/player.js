@@ -62,43 +62,43 @@ let player = {
     dimensions: Array.range(0, 8).map(tier => ({
       isUnlocked: false,
       cost: 1,
-      interval: [1500, 2000, 2500, 3000, 4000, 5000, 6000, 7500][tier],
+      interval: [500, 600, 700, 800, 900, 1000, 1100, 1200][tier],
       bulk: 1,
       mode: AUTOBUYER_MODE.BUY_10,
       priority: 1,
-      isActive: false,
+      isActive: true,
       lastTick: 0,
       isBought: false
     })),
     tickspeed: {
       isUnlocked: false,
       cost: 1,
-      interval: 2500,
+      interval: 500,
       mode: AUTOBUYER_MODE.BUY_SINGLE,
       priority: 1,
-      isActive: false,
+      isActive: true,
       lastTick: 0,
       isBought: false
     },
     dimBoost: {
       cost: 1,
-      interval: 8000,
+      interval: 4000,
       limitDimBoosts: true,
       maxDimBoosts: 1,
       galaxies: 10,
       bulk: 1,
       buyMaxInterval: 0,
-      isActive: false,
+      isActive: true,
       lastTick: 0
     },
     galaxy: {
       cost: 1,
-      interval: 75000,
+      interval: 20000,
       limitGalaxies: true,
       maxGalaxies: 1,
       buyMax: false,
       buyMaxInterval: 0,
-      isActive: false,
+      isActive: true,
       lastTick: 0
     },
     bigCrunch: {
@@ -108,25 +108,25 @@ let player = {
       amount: new Decimal(1),
       time: 1,
       xLast: new Decimal(1),
-      isActive: false,
+      isActive: true,
       lastTick: 0
     },
     sacrifice: {
-      multiplier: new Decimal(5),
-      isActive: false
+      multiplier: new Decimal(2),
+      isActive: true
     },
     eternity: {
       mode: 0,
       amount: new Decimal(1),
       time: 1,
       xLast: new Decimal(1),
-      isActive: false
+      isActive: true
     },
     reality: {
       mode: 0,
       rm: new Decimal(1),
       glyph: 0,
-      isActive: false
+      isActive: true
     },
     timeDimTimer: 0,
     infDimTimer: 0,

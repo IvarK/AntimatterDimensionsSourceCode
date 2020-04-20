@@ -16,8 +16,11 @@ Vue.component("failable-ec-text", {
       // Goes from green to yellow to red. If theme is light, use a slightly lighter yellow
       // by not allowing full red and gree at the same time.
       const darkTheme = Theme.current().isDark && Theme.current().name !== "S6";
-      let c = darkTheme ? 2 : 1.5;
-      let rgb = [
+      // Setting this constant to 2 will give green - yellow - red, setting it to 1
+      // will give a straight line between green and red in colorspace, intermediate values
+      // will give intermediate results.
+      const c = darkTheme ? 2 : 1.5;
+      const rgb = [
         Math.round(Math.min(c * ratio, 1) * 255),
         Math.round(Math.min(c * (1 - ratio), 1) * 255),
         0
@@ -29,18 +32,20 @@ Vue.component("failable-ec-text", {
       if (this.currentEternityChallengeId === 4) {
         return `${formatInt(this.currentResource)} / ${formatInt(this.maximumResource)} Infinities used`;
       }
-      if (this.currentEternityChallengeId === 12) {
-        return `${TimeSpan.fromSeconds(this.currentResource.toNumber()).toString()} /
-          ${TimeSpan.fromSeconds(this.maximumResource.toNumber()).toString()} time spent`;
-      }
+      // We're always either in EC4 or EC12 when displaying this text.
+      return `${TimeSpan.fromSeconds(this.currentResource.toNumber()).toString()} /
+        ${TimeSpan.fromSeconds(this.maximumResource.toNumber()).toString()} time spent`;
     }
   },
   methods: {
     update() {
       if (EternityChallenge.current && [4, 12].includes(EternityChallenge.current.id)) {
         this.currentEternityChallengeId = EternityChallenge.current.id;
-        this.currentResource = (this.currentEternityChallengeId === 4)
-          ? player.infinitied : new Decimal(Time.thisEternity.totalSeconds);
+        if (this.currentEternityChallengeId === 4) {
+          this.currentResource.copyFrom(player.infinitied);
+        } else {
+          this.currentResource = new Decimal(Time.thisEternity.totalSeconds);
+        }
         this.maximumResource = new Decimal(EternityChallenge.current.config.restriction(
           EternityChallenge.current.completions));
       }

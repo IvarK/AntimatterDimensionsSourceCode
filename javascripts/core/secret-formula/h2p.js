@@ -908,8 +908,8 @@ directly unlock the next Celestial.
 Tesseracts are a new resource you unlock for completing The Enslaved Ones' Reality.
 <br>
 <br>
-Infinity Dimensions are normally capped at ${format(InfinityDimensions.HARDCAP_PURCHASES)} total purchases, 
-which limits how large their multipliers can grow since eventually you can't upgrade them any more. 
+Infinity Dimensions are normally capped at ${format(InfinityDimensions.HARDCAP_PURCHASES)} total purchases,
+which limits how large their multipliers can grow since eventually you can't upgrade them any more.
 Tesseracts allow you to raise this cap by spending Infinity Points.
 <br>
 <br>
@@ -936,18 +936,18 @@ You must have completed ${formatInt(GameDatabase.celestials.v.mainUnlock.realiti
 ${format(GameDatabase.celestials.v.mainUnlock.rm)} RM (which is not spent).
 Additionally you need to reach  ${format(GameDatabase.celestials.v.mainUnlock.eternities)} Eternities,
 ${format(GameDatabase.celestials.v.mainUnlock.infinities)} Infinities,
-${format(GameDatabase.celestials.v.mainUnlock.dilatedTime)} Dilated Time, and 
+${format(GameDatabase.celestials.v.mainUnlock.dilatedTime)} Dilated Time, and
 ${format(GameDatabase.celestials.v.mainUnlock.replicanti)} Replicanti, all in the same reality.
 <br>
 <br>
-When you meet all of those requirements, you will be able to access V's Reality. However, completing the 
-Reality itself is only the beginning. V has six different requirements, each of which require you to make a 
+When you meet all of those requirements, you will be able to access V's Reality. However, completing the
+Reality itself is only the beginning. V has six different requirements, each of which require you to make a
 certain amount of progress within V's Reality. Completing a requirement rewards you with a V-achievement.
 V-achievements are permanent and persist after exiting V's reality, and do not all need to be done simultaneously.
 <br>
 <br>
-After completing the requirement, the V-achievement threshold then increases and can be completed again 
-if you can reach the new goal.  You can complete each category of V-achievement up to six times. 
+After completing the requirement, the V-achievement threshold then increases and can be completed again
+if you can reach the new goal.  You can complete each category of V-achievement up to six times.
 Completed V-achievements do two things:
 <br>
 - Upon reaching certain totals of V-achievements, you automatically unlock upgrades on the V tab without needing
@@ -956,8 +956,8 @@ to spend any resources.
 - Each V-achievement also gives you one Space Theorem.
 <br>
 <br>
-Space Theorems allow you to purchase time studies which are normally forbidden, such as multiple paths in the 
-split after the improved IP formula, or both time studies within a black/white pair near the bottom. Like Time 
+Space Theorems allow you to purchase time studies which are normally forbidden, such as multiple paths in the
+split after the improved IP formula, or both time studies within a black/white pair near the bottom. Like Time
 Theorems, they are freely given back every time you respec your studies.
 With enough Space Theorems you will eventually be able to purchase every single time study at once!
 <br>
@@ -965,7 +965,7 @@ With enough Space Theorems you will eventually be able to purchase every single 
 Reaching 36 V-achievements (and therefore completing all of V's achievements) unlocks the next Celestial.
 `,
       isUnlocked: () => Achievement(151).isUnlocked,
-      tags: ["reality", "lategame", "endgame", "girlfriend", "challenges", "achievement", "space", "theorems", 
+      tags: ["reality", "lategame", "endgame", "girlfriend", "challenges", "achievement", "space", "theorems",
         "study", "triad"],
       tab: "celestials/v"
     }, {
@@ -986,7 +986,7 @@ which allows you to choose a particular Celestial to gain more chunks while insi
 <br>
 <br>
 You start Ra with only Teresa unlocked, and each successive Celestial is unlocked by reaching level ${formatInt(10)}
-with the previous Celestial. Levels have no cap, but are significantly harder to gain above ${formatInt(25)}. 
+with the previous Celestial. Levels have no cap, but are significantly harder to gain above ${formatInt(25)}.
 <br>
 <br>
 Teresa unlocks the ability to charge your Infinity Upgrades, making them much stronger. She also
@@ -1158,6 +1158,7 @@ Multiplier to Dark Matter power based on Dark Energy = (${formatInt(1)} + Dark E
   };
 
   const addPhrase = (phrase, tab) => {
+    addWord(phrase, tab);
     for (const part of phrase.split(" ")) {
       addWord(part, tab);
     }
@@ -1165,17 +1166,23 @@ Multiplier to Dark Matter power based on Dark Energy = (${formatInt(1)} + Dark E
 
   for (const tab of GameDatabase.h2p.tabs) {
     addPhrase(tab.name, tab);
+  }
+  for (const tab of GameDatabase.h2p.tabs) {
     for (const tag of tab.tags) {
       addPhrase(tag, tab);
     }
+  }
+  for (const tab of GameDatabase.h2p.tabs) {
     addPhrase(tab.alias, tab);
   }
 
   GameDatabase.h2p.search = query => {
     if (query === "") return GameDatabase.h2p.tabs;
-    const searchWords = query.toLowerCase().split(" ").filter(str => str !== "");
+    const words = query.toLowerCase().split(" ").filter(str => str !== "");
+    /* eslint-disable-next-line no-unused-vars*/
+    const searchTerms = words.map((_word, i, arr) => arr.slice(0, arr.length - i).join(" "));
     const result = new Set();
-    for (const searchWord of searchWords) {
+    for (const searchWord of searchTerms) {
       const matches = searchIndex[searchWord];
       if (matches === undefined) continue;
       for (const match of matches) {

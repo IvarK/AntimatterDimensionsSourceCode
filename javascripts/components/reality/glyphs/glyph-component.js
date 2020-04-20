@@ -215,6 +215,9 @@ const GlyphTooltipComponent = {
     // else, with no z order shenanigans
     document.body.appendChild(this.$el);
   },
+  destroyed() {
+    document.body.removeChild(this.$el);
+  },
   template: `
   <div class="l-glyph-tooltip c-glyph-tooltip"
        :style="pointerEventStyle"
@@ -289,6 +292,8 @@ Vue.component("glyph-component", {
       levelOverride: 0,
       isRealityGlyph: false,
       glyphEffects: [],
+      // We use this to not create a ton of tooltip components as soon as the glyph tab loads.
+      tooltipLoaded: false,
     };
   },
   computed: {
@@ -358,6 +363,10 @@ Vue.component("glyph-component", {
     isCurrentTooltip() {
       return this.$viewModel.tabs.reality.currentGlyphTooltip === this.componentID;
     },
+    tooltipDirectionClass() {
+      return this.$viewModel.tabs.reality.glyphTooltipDirection === 1
+        ? "l-glyph-tooltip--up-left" : "l-glyph-tooltip--down-left";
+    },
   },
   created() {
     this.$on("tooltip-touched", () => this.hideTooltip());
@@ -365,9 +374,6 @@ Vue.component("glyph-component", {
   beforeDestroy() {
     if (this.isCurrentTooltip) this.hideTooltip();
     if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
-    // For some fucking reason the glyph tooltip goes outside the vue container 
-    // so we say bye bye to it when the vue component is destroyed.
-    $(`[component='${this.componentID}']`).remove();
   },
   methods: {
     update() {
@@ -419,6 +425,7 @@ Vue.component("glyph-component", {
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },
     showTooltip() {
+      this.tooltipLoaded = true;
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
       this.sacrificeReward = GlyphSacrificeHandler.isRefining &&
         ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
@@ -427,11 +434,24 @@ Vue.component("glyph-component", {
       this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
     },
     moveTooltipTo(x, y) {
+      // If we are just creating the tooltip now, we can't move it yet.
+      if (!this.$refs.tooltip) {
+        this.$nextTick(() => this.moveTooltipTo(x, y));
+        return;
+      }
       const tooltipEl = this.$refs.tooltip.$el;
       if (tooltipEl) {
         const rect = document.body.getBoundingClientRect();
         tooltipEl.style.left = `${x - rect.left}px`;
         tooltipEl.style.top = `${y - rect.top}px`;
+        if (this.$viewModel.tabs.reality.glyphTooltipDirection === 1) {
+          // In case of a really short screen, don't flicker back and forth
+          if (y - tooltipEl.offsetHeight <= 0 && y + tooltipEl.offsetHeight < rect.height) {
+            this.$viewModel.tabs.reality.glyphTooltipDirection = -1;
+          }
+        } else if (y + tooltipEl.offsetHeight >= rect.height) {
+          this.$viewModel.tabs.reality.glyphTooltipDirection = 1;
+        }
       }
     },
     mouseEnter(ev) {
@@ -550,15 +570,14 @@ Vue.component("glyph-component", {
         {{symbol}}
         <div v-if="showGlyphEffectDots" v-for="x in glyphEffects"
           :style="glyphEffectIcon(x)"/>
-        <glyph-tooltip v-if="hasTooltip"
+        <glyph-tooltip v-if="hasTooltip && tooltipLoaded"
                        v-show="isCurrentTooltip"
                        ref="tooltip"
                        v-bind="glyph"
+                       :class="tooltipDirectionClass"
                        :sacrificeReward="sacrificeReward"
                        :showDeletionText="showSacrifice"
                        :levelOverride="levelOverride"
-                       :visible="isCurrentTooltip"
-                       :key="isCurrentTooltip"
                        :component="componentID"/>
       </div>
       <div ref="over"

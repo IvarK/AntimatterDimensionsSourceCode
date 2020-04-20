@@ -19,6 +19,8 @@ let ui = {
       reality: {
         openGlyphWeights: false,
         currentGlyphTooltip: -1,
+        // 1 means up and left of the mouse
+        glyphTooltipDirection: 1,
         draggingGlyphInfo: {
           id: 0,
           type: "",

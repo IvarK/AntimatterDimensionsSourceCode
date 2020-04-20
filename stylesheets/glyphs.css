@@ -296,7 +296,14 @@
   padding: 0.5rem 0;
   position: absolute;
   z-index: 6;
-  transform: translate(-50%, calc(-100% - 1rem));
+}
+
+.l-glyph-tooltip--up-left {
+  transform: translate(calc(-100% - 0.7rem), -100%);
+}
+
+.l-glyph-tooltip--down-left {
+  transform: translate(calc(-100% - 0.7rem), 0);
 }
 
 .c-glyph-tooltip {
@@ -315,13 +322,24 @@
 .l-glyph-tooltip::after {
   content: "";
   position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -0.5rem;
   border-width: 0.5rem;
   border-style: solid;
-  border-color: #4a4a4a transparent transparent transparent;
   pointer-events: none;
+}
+
+.l-glyph-tooltip--up-left::after {
+  top: 100%;
+  left: 100%;
+  margin-left: -0.5rem;
+  margin-top: -1rem;
+  border-color: transparent transparent #4a4a4a transparent;
+}
+
+.l-glyph-tooltip--down-left::after {
+  top: 0;
+  left: 100%;
+  margin-left: -0.5rem;
+  border-color: #4a4a4a transparent transparent transparent;
 }
 
 .c-glyph-tooltip__description {

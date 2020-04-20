@@ -167,8 +167,8 @@ function resetInfinityRuns() {
 
 // Player gains 50% of infinitied stat they would get based on their best infinitied/hour crunch if they have the
 // milestone and turned on infinity autobuyer with 1 minute or less per crunch
-function getInfinitiedMilestoneReward(ms) {
-  return Autobuyer.bigCrunch.autoInfinitiesAvailable
+function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
+  return Autobuyer.bigCrunch.autoInfinitiesAvailable(considerMilestoneReached)
     ? Decimal.floor(player.bestInfinitiesPerMs.times(ms).dividedBy(2))
     : new Decimal(0);
 }
@@ -189,15 +189,15 @@ function resetEternityRuns() {
 
 // Player gains 50% of the eternities they would get if they continuously repeated their fastest eternity, if they
 // have the auto-eternity milestone and turned on eternity autobuyer with 0 EP
-function getEternitiedMilestoneReward(ms) {
-  return Autobuyer.eternity.autoEternitiesAvailable
+function getEternitiedMilestoneReward(ms, considerMilestoneReached) {
+  return Autobuyer.eternity.autoEternitiesAvailable(considerMilestoneReached)
     ? Decimal.floor(player.bestEternitiesPerMs.times(ms).dividedBy(2))
     : new Decimal(0);
 }
 
 function isOfflineEPGainEnabled() {
-  return !Autobuyer.bigCrunch.autoInfinitiesAvailable &&
-    !Autobuyer.eternity.autoEternitiesAvailable;
+  return !Autobuyer.bigCrunch.autoInfinitiesAvailable() &&
+    !Autobuyer.eternity.autoEternitiesAvailable();
 }
 
 function getOfflineEPGain(ms) {

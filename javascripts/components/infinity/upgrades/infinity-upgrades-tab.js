@@ -73,6 +73,9 @@ Vue.component("infinity-upgrades-tab", {
   },
   template:
     `<div class="l-infinity-upgrades-tab">
+      Each upgrade requires the one above it to be purchased first.
+      The bottom two upgrades require the other {{formatInt(16)}} to already be purchased.
+      <br>
       <div v-if="chargeUnlocked">
           <div>
             You can charge {{ formatInt(chargesLeft) }} more {{ "upgrade" | pluralize(chargesLeft) }}.

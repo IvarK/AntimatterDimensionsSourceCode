@@ -108,17 +108,22 @@ GameDatabase.eternity.milestones = {
   autoEternities: {
     eternities: 200,
     reward: () => {
-      const eternities = getEternitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
-      return `While offline, gain eternities at 50% the rate of your fastest eternity.
-        (Currently ${format(eternities, 2, 2)}/hour)`;
+      const eternities = getEternitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds, true);
+      // As far as I can tell, using templates here as Codefactor wants would lead to nested templates,
+      // which seems messy to say the least.
+      // eslint-disable-next-line prefer-template
+      return `While offline, gain Eternities at ${formatPercents(0.5)} the rate of your fastest Eternity. ` +
+        (eternities.gt(0) ? `(currently ${format(eternities, 2, 2)}/hour)` : "(disabled)");
     },
   },
   autoInfinities: {
     eternities: 1000,
     reward: () => {
-      const infinities = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
-      return `While offline, gain Infinitied stat equal to 50% your best Infinitied stat/hour this eternity.
-        (Currently ${format(infinities, 2, 2)}/hour)`;
+      const infinities = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds, true);
+      // eslint-disable-next-line prefer-template
+      return `While offline, gain Infinitied stat equal to ${formatPercents(0.5)}
+        your best Infinitied stat/hour this Eternity. ` +
+        (infinities.gt(0) ? `(currently ${format(infinities, 2, 2)}/hour)` : "(disabled)");
     },
   }
 };

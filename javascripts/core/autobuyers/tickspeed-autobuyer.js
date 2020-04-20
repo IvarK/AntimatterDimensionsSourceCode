@@ -71,6 +71,7 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
   reset() {
     super.reset();
     if (EternityMilestone.keepAutobuyers.isReached) return;
+    this.data.mode = AUTOBUYER_MODE.BUY_SINGLE;
     this.data.isUnlocked = false;
   }
 }();

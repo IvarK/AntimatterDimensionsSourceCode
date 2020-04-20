@@ -39,7 +39,7 @@ Vue.component("normal-dim-row", {
         : null;
     },
     continuumString() {
-      return formatContinuum(this.continuumValue);
+      return formatFloat(this.continuumValue, 2);
     }
   },
   methods: {

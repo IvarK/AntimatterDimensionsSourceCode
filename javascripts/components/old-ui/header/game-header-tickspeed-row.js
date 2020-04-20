@@ -49,7 +49,7 @@ Vue.component("game-header-tickspeed-row", {
       return this.cost.exponent < 1000000;
     },
     continuumString() {
-      return formatContinuum(this.continuumValue);
+      return formatFloat(this.continuumValue, 2);
     }
   },
   methods: {

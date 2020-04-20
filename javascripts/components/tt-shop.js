@@ -27,6 +27,15 @@ Vue.component("tt-shop", {
     minimized() {
       return this.minimizeAvailable && this.shopMinimized;
     },
+    formattedTheorems() {
+      if (this.theoremAmount.gte(1e9)) {
+        return format(this.theoremAmount, 2);
+      }
+      if (getAdjustedGlyphEffect("dilationTTgen") > 0 && !DilationUpgrade.ttGenerator.isBought) {
+        return formatFloat(this.theoremAmount, 2);
+      }
+      return formatInt(this.theoremAmount);
+    },
     TTgenRateText() {
       if (this.theoremGeneration.lt(1 / 3600)) {
         return `one TT every ${TimeSpan.fromSeconds(
@@ -102,7 +111,7 @@ Vue.component("tt-shop", {
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
           <p id="timetheorems">
             <span class="c-tt-amount">
-              {{ theoremAmount.gt(1e9) ? format(theoremAmount, 2) : formatInt(theoremAmount) }} 
+              {{ formattedTheorems }} 
               {{ "Time Theorem" | pluralize(theoremAmount, "Time Theorems") }}
             </span>
             <span v-if="showST">

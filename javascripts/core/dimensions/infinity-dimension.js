@@ -193,12 +193,6 @@ class InfinityDimensionState extends DimensionState {
       );
     mult = mult.times(Decimal.pow(this.powerMultiplier, Math.floor(this.baseAmount / 10)));
 
-    mult = mult.clampMin(0);
-
-    if (player.dilation.active) {
-      mult = dilatedValueOf(mult);
-    }
-
     mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
@@ -206,6 +200,12 @@ class InfinityDimensionState extends DimensionState {
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
 
     mult = mult.powEffectOf(AlchemyResource.infinity);
+
+    mult = mult.clampMin(0);
+
+    if (player.dilation.active) {
+      mult = dilatedValueOf(mult);
+    }
 
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);

@@ -34,7 +34,8 @@ const Notation = (function() {
     prime: painful(notation(N.PrimeNotation)),
     bar: painful(notation(N.BarNotation)),
     shi: painful(notation(N.ShiNotation)),
-    blind: painful(notation(N.BlindNotation))
+    blind: painful(notation(N.BlindNotation)),
+    all: painful(notation(N.AllNotation))
   };
 }());
 
@@ -67,6 +68,7 @@ const Notations = {
     Notation.bar,
     Notation.shi,
     Notation.blind,
+    Notation.all,
   ],
   find: name => {
     const notation = Notations.all.find(n => n.name === name);

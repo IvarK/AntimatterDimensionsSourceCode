@@ -16,8 +16,8 @@ Vue.component("new-tickspeed-row", {
   computed: {
     classObject() {
       return {
-        "c-game-header__tickspeed-row": true,
-        "c-game-header__tickspeed-row--hidden": !this.isVisible
+        "l-tickspeed-container": true,
+        "l-tickspeed-container--hidden": !this.isVisible
       };
     },
     multiplierDisplay() {
@@ -65,7 +65,7 @@ Vue.component("new-tickspeed-row", {
     }
   },
   template:
-  `<div class="tickspeed-container" v-show="isVisible">
+  `<div :class="classObject">
       <div class="tickspeed-labels">
         <span>{{ tickspeedDisplay }} <game-header-gamma-display v-if="!isGameSpeedNormal"/></span>
         <span>{{ multiplierDisplay }}</span>

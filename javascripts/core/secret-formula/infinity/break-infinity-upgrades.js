@@ -9,7 +9,10 @@ GameDatabase.infinity.breakUpgrades = (function() {
       maxUpgrades,
       description: config.description,
       effect: () => player.infinityRebuyables[config.id],
-      formatEffect: value => (value === maxUpgrades ? `10x ➜ ${10 - value}x` : `10x ➜ ${10 - value - 1}x`),
+      formatEffect: value => (value === maxUpgrades
+        ? `Default: ${formatX(10)} | Currently: ${formatX(10 - value)}`
+        : `Default: ${formatX(10)} | Currently: ${formatX(10 - value)} Next: ${formatX(10 - value - 1)}`
+      ),
       staticEffect: true,
       formatCost: value => format(value, 2, 0)
     };
@@ -19,48 +22,48 @@ GameDatabase.infinity.breakUpgrades = (function() {
     totalAMMult: {
       id: "totalMult",
       cost: 1e4,
-      description: "Normal dimensions gain a multiplier based on total antimatter produced",
+      description: "Normal Dimensions gain a multiplier based on total antimatter produced",
       effect: () => Math.pow(player.totalAntimatter.exponent + 1, 0.5),
       formatEffect: value => formatX(value, 2, 2)
     },
     currentAMMult: {
       id: "currentMult",
       cost: 5e4,
-      description: "Normal dimensions gain a multiplier based on current antimatter",
+      description: "Normal Dimensions gain a multiplier based on current antimatter",
       effect: () => Math.pow(player.antimatter.exponent + 1, 0.5),
       formatEffect: value => formatX(value, 2, 2)
     },
     galaxyBoost: {
       id: "postGalaxy",
       cost: 5e11,
-      description: "Galaxies are 50% stronger",
+      description: () => `Galaxies are ${formatPercents(0.5)} stronger`,
       effect: 1.5
     },
     infinitiedMult: {
       id: "infinitiedMult",
       cost: 1e5,
-      description: "Normal dimensions gain a multiplier based on infinitied stat",
+      description: "Normal Dimensions gain a multiplier based on Infinitied stat",
       effect: () => 1 + Player.totalInfinitied.pLog10() * 10,
       formatEffect: value => formatX(value, 2, 2)
     },
     achievementMult: {
       id: "achievementMult",
       cost: 1e6,
-      description: "Normal dimensions gain a multiplier based on achievements completed",
+      description: "Normal Dimensions gain a multiplier based on achievements completed",
       effect: () => Math.max(Math.pow((Achievements.effectiveCount - 30), 3) / 40, 1),
       formatEffect: value => formatX(value, 2, 2)
     },
     slowestChallengeMult: {
       id: "challengeMult",
       cost: 1e7,
-      description: "Normal dimensions gain a multiplier based on slowest challenge run",
+      description: "Normal Dimensions gain a multiplier based on slowest challenge run",
       effect: () => Decimal.max(50 / Time.worstChallenge.totalMinutes, 1),
       formatEffect: value => formatX(value, 2, 2)
     },
     infinitiedGen: {
       id: "infinitiedGeneration",
       cost: 2e7,
-      description: "Passively generate infinitied stat based on your fastest infinity",
+      description: "Passively generate Infinitied stat based on your fastest Infinity",
       effect: () => player.bestInfinityTime,
       formatEffect: value => {
         const period = value >= 999999999999
@@ -84,7 +87,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       initialCost: 3e6,
       costIncrease: 5,
       maxUpgrades: 8,
-      description: "Post-infinity tickspeed cost multiplier increase",
+      description: "Reduce post-infinity tickspeed cost multiplier scaling",
 
     }),
     dimCostMult: rebuyable({
@@ -92,7 +95,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       initialCost: 1e8,
       costIncrease: 5e3,
       maxUpgrades: 7,
-      description: "Post-infinity dimension cost multiplier increase"
+      description: "Reduce post-infinity Normal Dimension cost multiplier scaling"
     }),
     ipGen: {
       cost: () => player.offlineProdCost,

@@ -448,7 +448,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 15,
     isGenerated: true,
     glyphTypes: ["infinity"],
-    singleDesc: "Multiply infinitied stat gain by {value}",
+    singleDesc: "Multiply Infinitied stat gain by {value}",
     totalDesc: "Infinitied stat gain ×{value}",
     genericDesc: "Infinitied stat gain multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("infinity")

@@ -176,7 +176,7 @@ Vue.component("laitela-tab", {
         <div class="o-laitela-matter-amount">You have {{ format(darkEnergy, 2, 4) }} Dark Energy.</div>
       </div>
       <div v-if="annihilated">
-        You have a {{ format(darkMatterMult, 2, 2) }}x multiplier to Dark Matter production from prestige.
+        You have a {{ formatX(darkMatterMult, 2, 2) }} multiplier to Dark Matter production from prestige.
       </div>
       <primary-button
         class="o-primary-btn--buy-max l-time-dim-tab__buy-max"

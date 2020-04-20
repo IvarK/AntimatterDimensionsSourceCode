@@ -37,7 +37,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 4,
-    description: "All infinitied stat multipliers and generators are disabled.",
+    description: "All Infinitied stat multipliers and generators are disabled.",
     goal: new Decimal("1e2750"),
     goalIncrease: new Decimal("1e550"),
     restriction: completions => Math.max(16 - 4 * completions, 0),
@@ -84,7 +84,7 @@ GameDatabase.challenges.eternity = [
       formatEffect: value => {
         const base = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward));
         const applied = base - value;
-        return `${format(base, 2, 1)}x ➜ ${format(applied, 2, 1)}x`;
+        return `${formatX(base, 2, 1)} ➜ ${formatX(applied, 2, 1)}`;
       }
     }
   },
@@ -132,15 +132,15 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
-        infinitied stat to normal dimensions (infinitied^${formatInt(950)}).`;
-      EternityChallenge(10).applyEffect(v => description += ` Currently: ${format(v, 2, 1)}x`);
+        Infinitied stat to normal dimensions (infinitied^${formatInt(950)}).`;
+      EternityChallenge(10).applyEffect(v => description += ` Currently: ${formatX(v, 2, 1)}`);
       return description;
     },
     goal: new Decimal("1e3000"),
     goalIncrease: new Decimal("1e300"),
     effect: () => Decimal.pow(Player.totalInfinitied, 950).clampMin(1).pow(TimeStudy(31).effectOrDefault(1)),
     reward: {
-      description: "Time Dimension multiplier based on infinitied stat",
+      description: "Time Dimension multiplier based on Infinitied stat",
       effect: completions => {
         const mult = Player.totalInfinitied.times(2.783e-6).pow(0.4 + 0.1 * completions).clampMin(1);
         return mult.powEffectOf(TimeStudy(31));
@@ -160,15 +160,15 @@ GameDatabase.challenges.eternity = [
       formatEffect: value => {
         const base = Math.round(Player.tickSpeedMultDecrease + Effects.sum(EternityChallenge(11).reward));
         const applied = base - value;
-        return `${format(base, 2, 2)}x ➜ ${format(applied, 2, 2)}x`;
+        return `${formatX(base, 2, 2)} ➜ ${formatX(applied, 2, 2)}`;
       }
     }
   },
   {
     id: 12,
     description: () => (player.realities > 0
-      ? `The game runs ${formatInt(1000)}x slower; all other gamespeed effects are disabled.`
-      : `The game runs ${formatInt(1000)}x slower.`),
+      ? `The game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled.`
+      : `The game runs ×${formatInt(1000)} slower.`),
     goal: new Decimal("1e110000"),
     goalIncrease: new Decimal("1e12000"),
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,

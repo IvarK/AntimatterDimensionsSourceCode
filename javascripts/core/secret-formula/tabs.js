@@ -137,7 +137,7 @@ GameDatabase.tabs = [
     subtabs: [
       {
         key: "upgrades",
-        name: "Upgrades",
+        name: "Infinity Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
         component: "infinity-upgrades-tab",
         condition: () =>
@@ -184,25 +184,25 @@ GameDatabase.tabs = [
     subtabs: [
       {
         key: "studies",
-        name: "Time studies",
+        name: "Time Studies",
         symbol: "<i class='fas fa-book'></i>",
         component: "time-studies-tab"
       },
       {
         key: "upgrades",
-        name: "Eternity upgrades",
+        name: "Eternity Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
         component: "eternity-upgrades-tab"
       },
       {
         key: "milestones",
-        name: "Eternity milestones",
+        name: "Eternity Milestones",
         symbol: "<i class='fas fa-trophy'></i>",
         component: "eternity-milestones-tab"
       },
       {
         key: "dilation",
-        name: "Time dilation",
+        name: "Time Dilation",
         symbol: "Ψ",
         component: "time-dilation-tab",
         condition: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked()
@@ -224,7 +224,7 @@ GameDatabase.tabs = [
       },
       {
         key: "upgrades",
-        name: "Reality upgrades",
+        name: "Reality Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
         component: "reality-upgrades-tab"
       },
@@ -248,7 +248,7 @@ GameDatabase.tabs = [
       },
       {
         key: "alchemy",
-        name: "Glyph alchemy",
+        name: "Glyph Alchemy",
         symbol: "<i class='fas fa-vial'></i>",
         component: "alchemy-tab",
         condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)

@@ -131,7 +131,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: () => `Improved Eternity autobuyer, ${formatInt(5)}xEP multiplier, and Time Dimension autobuyers`
+      description: () => `Improved Eternity autobuyer, ${formatX(5)} EP multiplier, and Time Dimension autobuyers`
     },
     {
       id: 14,
@@ -146,10 +146,10 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 15,
       cost: 50,
-      requirement: () => `Eternity for ${format(1e10)} EP without purchasing the ${formatInt(5)}xEP upgrade`,
+      requirement: () => `Eternity for ${format(1e10)} EP without purchasing the ${formatX(5)} EP upgrade`,
       checkRequirement: () => player.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: () => `Boost Tachyon Particle gain based on ${formatInt(5)}xEP multiplier`,
+      description: () => `Boost Tachyon Particle gain based on ${formatX(5)} EP multiplier`,
       effect: () => Math.max(Math.sqrt(Decimal.log10(EternityUpgrade.epMult.effectValue)) / 3, 1),
       formatEffect: value => formatX(value, 2, 2)
     },

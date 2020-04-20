@@ -211,7 +211,7 @@ function buyOneDimension(tier) {
   dimension.bought++;
 
   if (dimension.boughtBefore10 === 0) {
-    floatText(tier, `x${format(NormalDimensions.buyTenMultiplier, 2, 1)}`);
+    floatText(tier, formatX(NormalDimensions.buyTenMultiplier, 2, 1));
   }
 
   onBuyDimension(tier);
@@ -231,7 +231,7 @@ function buyManyDimension(tier) {
   dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
   dimension.bought += dimension.remainingUntil10;
 
-  floatText(tier, `x${format(NormalDimensions.buyTenMultiplier, 2, 1)}`);
+  floatText(tier, format(NormalDimensions.buyTenMultiplier, 2, 1));
   onBuyDimension(tier);
 
   return true;
@@ -251,7 +251,7 @@ function buyAsManyAsYouCanBuy(tier) {
   dimension.bought += howMany;
 
   if (dimension.boughtBefore10 === 0) {
-    floatText(tier, `x${format(NormalDimensions.buyTenMultiplier, 2, 1)}`);
+    floatText(tier, format(NormalDimensions.buyTenMultiplier, 2, 1));
   }
 
   onBuyDimension(tier);
@@ -327,7 +327,7 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
   const multAfter = Decimal.pow(NormalDimensions.buyTenMultiplier, dimension.bought / 10);
   if (multBefore.neq(multAfter) && auto === false) {
-    floatText(tier, `x${format(multAfter.dividedBy(multBefore), 2, 1)}`);
+    floatText(tier, format(multAfter.dividedBy(multBefore), 2, 1));
   }
 }
 

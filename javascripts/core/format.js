@@ -6,7 +6,7 @@ function format(value, places, placesUnder1000) {
 
 function formatInt(value) {
   if (Notations.current.isPainful) {
-    return format(value, 2, 2);
+    return format(value, 2, 0);
   }
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
@@ -47,7 +47,7 @@ function formatPostBreak(value, places, placesUnder1000) {
 }
 
 function formatX(value, places, placesUnder1000) {
-  return `${format(value, places, placesUnder1000)}x`;
+  return `×${format(value, places, placesUnder1000)}`;
 }
 
 function formatPow(value, places, placesUnder1000) {

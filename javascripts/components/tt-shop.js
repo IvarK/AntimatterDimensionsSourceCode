@@ -28,11 +28,11 @@ Vue.component("tt-shop", {
       return this.minimizeAvailable && this.shopMinimized;
     },
     formattedTheorems() {
-      if (this.theoremAmount.gt(1e9)) {
+      if (this.theoremAmount.gte(1e9)) {
         return format(this.theoremAmount, 2);
       }
       if (getAdjustedGlyphEffect("dilationTTgen") > 0 && !DilationUpgrade.ttGenerator.isBought) {
-        return formatWithPrecision(this.theoremAmount, 2);
+        return formatFloat(this.theoremAmount, 2);
       }
       return formatInt(this.theoremAmount);
     },

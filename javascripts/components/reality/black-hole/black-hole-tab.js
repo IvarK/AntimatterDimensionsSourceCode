@@ -84,7 +84,7 @@ Vue.component("black-hole-tab", {
       <div v-if="isEnslaved">
         The physics of this Reality do not permit singularities.
       </div>
-      <div v-else-if="!isUnlocked">
+      <div v-else-if="!isUnlocked" style="display: flex; flex-direction: column; align-items: center;">
         <black-hole-unlock-button @blackholeunlock="startAnimation"/>
         The Black Hole makes the entire game run significantly faster for a short period of time.
         <br>
@@ -100,8 +100,8 @@ Vue.component("black-hole-tab", {
           />
           {{ detailedBH2 }}
           <div v-if="isNegativeBHUnlocked" class="l-enslaved-shop-container">
-            Inverted black hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
-            This requires both black holes to be permanent and only works when paused.
+            Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
+            This requires Both Hlack holes to be permanent and only works when paused.
             <ad-slider-component
                 v-bind="sliderProps"
                 :value="negativeSlider"

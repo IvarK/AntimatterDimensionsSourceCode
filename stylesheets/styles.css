@@ -5613,7 +5613,7 @@ kbd {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 90rem;
+  width: 65rem;
   margin: auto;
 }
 

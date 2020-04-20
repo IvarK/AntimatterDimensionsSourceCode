@@ -150,7 +150,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 11,
-    description: "All dimension multipliers are disabled except for the multipliers from " +
+    description: "All dimension multipliers and powers are disabled except for the multipliers from " +
       "Infinity Power and Dimension Boosts (to normal dimensions).",
     goal: new Decimal("1e500"),
     goalIncrease: new Decimal("1e200"),

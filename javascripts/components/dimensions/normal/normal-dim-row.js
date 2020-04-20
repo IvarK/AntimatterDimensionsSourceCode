@@ -103,7 +103,7 @@ Vue.component("normal-dim-row", {
       </div>
       <primary-button
         v-if="!isContinuumActive"
-        :enabled="isAffordable"
+        :enabled="isAffordable && !isCapped"
         class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd l-dim-row__button"
         :class="tutorialClass()"
         :ach-tooltip="cappedTooltip"
@@ -114,7 +114,7 @@ Vue.component("normal-dim-row", {
         </template>
       </primary-button>
       <primary-button
-        :enabled="isAffordableUntil10 || isContinuumActive"
+        :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped"
         class="o-primary-btn--buy-nd o-primary-btn--buy-10-nd l-dim-row__button"
         :ach-tooltip="cappedTooltip"
         @click="buyUntil10">

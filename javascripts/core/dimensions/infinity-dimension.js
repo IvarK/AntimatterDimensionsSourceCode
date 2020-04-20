@@ -152,7 +152,9 @@ class InfinityDimensionState extends DimensionState {
     const tier = this.tier;
     let toGain = new Decimal(0);
     if (tier === 8) {
-      EternityChallenge(7).reward.applyEffect(v => toGain = v);
+      // We need a extra 10x here (since ID8 production is per-second and
+      // other ID production is per-10-seconds).
+      EternityChallenge(7).reward.applyEffect(v => toGain = v.times(10));
     } else {
       toGain = InfinityDimension(tier + 1).productionPerSecond;
     }

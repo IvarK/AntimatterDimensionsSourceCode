@@ -195,10 +195,6 @@ class InfinityDimensionState extends DimensionState {
 
     mult = mult.clampMin(0);
 
-    if (player.dilation.active) {
-      mult = dilatedValueOf(mult);
-    }
-
     mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
@@ -206,6 +202,10 @@ class InfinityDimensionState extends DimensionState {
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
 
     mult = mult.powEffectOf(AlchemyResource.infinity);
+
+    if (player.dilation.active) {
+      mult = dilatedValueOf(mult);
+    }
 
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);

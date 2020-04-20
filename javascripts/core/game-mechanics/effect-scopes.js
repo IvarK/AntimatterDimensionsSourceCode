@@ -5,6 +5,7 @@ class EffectScope {
   /**
    * Intialization callback for an Effect Scope
    * @callback initializationCallback
+   * @param {EffectScope} scope
    * @return {void}
    */
   /**
@@ -20,11 +21,27 @@ class EffectScope {
     this._eval = [];
     this._value = 0;
     this._base = new Decimal(1);
+    this._conditional = () => true;
     EffectScopes.add(this);
   }
 
+  /**
+   * Sets a base for the Effect Scope to be used in the initialization callback
+   * @param {Decimal} value
+   * @return {void}
+   */
+
   set base(value) {
     this._base = value;
+  }
+
+  /**
+   * @param {Function} callback
+   * @return {void}
+   */
+
+  set condtion(callback) {
+    this._conditional = callback;
   }
 
   get name() {
@@ -107,13 +124,14 @@ class EffectScope {
   }
 
   update() {
-    if (this._initEffects) return this;
+    if (this._initFn) return this;
     this._value = this._eval.reduce((val, applyFn) => applyFn(val), this._base).clampMin(this._base);
     return this;
   }
 
   applyEffect(applyFn) {
-    if (!this._initEffects) applyFn(this.value);
+    if (!this.initFn && this._conditional())
+      applyFn(this.value);
   }
 }
 

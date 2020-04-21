@@ -195,14 +195,9 @@ class InfinityDimensionState extends DimensionState {
       );
     mult = mult.times(Decimal.pow(this.powerMultiplier, Math.floor(this.baseAmount / 10)));
 
-    mult = mult.clampMin(0);
-
     mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
-
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
-
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
-
     mult = mult.powEffectOf(AlchemyResource.infinity);
 
     if (player.dilation.active) {

@@ -164,12 +164,10 @@ class TimeDimensionState extends DimensionState {
 
     const dim = TimeDimension(tier);
     mult = mult.times(Decimal.pow(dim.powerMultiplier, dim.bought));
-    mult = mult.clampMin(0).pow(getAdjustedGlyphEffect("timepow"));
-
+    
+    mult = mult.pow(getAdjustedGlyphEffect("timepow"));
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
-
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
-
     mult = mult.powEffectOf(AlchemyResource.time);
 
     if (player.dilation.active) {

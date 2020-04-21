@@ -40,7 +40,7 @@ function gainedInfinityPoints() {
   } else if (V.isRunning) {
     ip = ip.pow(0.5);
   } else if (Laitela.isRunning) {
-    ip = dilatedValueOf(ip, 1);
+    ip = dilatedValueOf(ip);
   }
   if (GlyphAlteration.isAdded("infinity")) {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
@@ -70,7 +70,7 @@ function gainedEternityPoints() {
   } else if (V.isRunning) {
     ep = ep.pow(0.5);
   } else if (Laitela.isRunning) {
-    ep = dilatedValueOf(ep, 1);
+    ep = dilatedValueOf(ep);
   }
   if (GlyphAlteration.isAdded("time")) {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));

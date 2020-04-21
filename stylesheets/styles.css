@@ -1619,6 +1619,7 @@ screen and (max-width: 480px) {
   width: 25rem;
   align-self: center;
   margin-top: -0.9rem;
+  margin-bottom: 1.2rem;
 }
 
 /*#endregion l-spoon-btn-group*/

@@ -45,7 +45,7 @@ GameDatabase.reality.upgrades = (function() {
       effect: 3
     }),
     rebuyable({
-      name: "Amplification of Light",
+      name: "Amplification of Paradoxes",
       id: 4,
       initialCost: 2,
       costMult: 30,
@@ -61,7 +61,7 @@ GameDatabase.reality.upgrades = (function() {
       effect: 5
     }),
     {
-      name: "Facsimile Parallelization",
+      name: "Parallelly Become",
       id: 6,
       cost: 15,
       requirement: "Complete your first Eternity without using Replicanti Galaxies",
@@ -72,7 +72,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2)
     },
     {
-      name: "Galactic Innumerability",
+      name: "Innumerably Expand",
       id: 7,
       cost: 15,
       requirement: "Complete your first Infinity with at most 1 galaxy",
@@ -83,7 +83,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2)
     },
     {
-      name: "Particulate Actualization",
+      name: "Paradoxically Achieve",
       id: 8,
       cost: 15,
       requirement: "Get to Eternity without any automatic achievements",
@@ -94,7 +94,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2)
     },
     {
-      name: "Glyphic Promise",
+      name: "Linguistically Expand",
       id: 9,
       cost: 15,
       requirement: () => `Reality using only a single level ${formatInt(3)}+ glyph.`,
@@ -104,7 +104,7 @@ GameDatabase.reality.upgrades = (function() {
       effect: () => 1
     },
     {
-      name: "Eternal Actuality",
+      name: "Existentially Prolong",
       id: 10,
       cost: 15,
       requirement: () => `Complete your first Eternity with at least ${format("1e450")} IP`,
@@ -113,7 +113,7 @@ GameDatabase.reality.upgrades = (function() {
       description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`
     },
     {
-      name: "Boundless Flow",
+      name: "The Boundless Flow",
       id: 11,
       cost: 50,
       requirement: () => `${format(1e12)} banked Infinities`,
@@ -124,7 +124,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => `${format(value)} per second`
     },
     {
-      name: "Forever Knowing Existence",
+      name: "The Knowing Existence",
       id: 12,
       cost: 50,
       requirement: () => `Eternity for ${format(1e70)} EP without Eternity Challenge 1`,
@@ -137,7 +137,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2)
     },
     {
-      name: "Unfathomable Telemechanics",
+      name: "The Telemechanical Three",
       id: 13,
       cost: 50,
       requirement: () => `Eternity for ${format("1e4000")} EP without Time Dimensions 5-8`,
@@ -147,7 +147,7 @@ GameDatabase.reality.upgrades = (function() {
       description: () => `Improved Eternity autobuyer, ${formatX(5)} EP multiplier, and Time Dimension autobuyers`
     },
     {
-      name: "Eternal Flow",
+      name: "The Eternal Flow",
       id: 14,
       cost: 50,
       requirement: () => `${format(1e7)} Eternities`,
@@ -158,7 +158,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => `${format(value)} per second`
     },
     {
-      name: "Particulate Eternality",
+      name: "The Paradoxical Forever",
       id: 15,
       cost: 50,
       requirement: () => `Eternity for ${format(1e10)} EP without purchasing the ${formatX(5)} EP upgrade`,
@@ -169,7 +169,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2)
     },
     {
-      name: "Glyphic Disparity",
+      name: "Disparity of Rarity",
       id: 16,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} glyphs equipped of uncommon or better rarity`,
@@ -180,7 +180,7 @@ GameDatabase.reality.upgrades = (function() {
       formatCost: value => format(value, 1, 0)
     },
     {
-      name: "A Potency once Untold",
+      name: "Duplicity of Potency",
       id: 17,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} glyphs equipped, each having at least ${formatInt(2)} effects`,
@@ -190,7 +190,7 @@ GameDatabase.reality.upgrades = (function() {
       formatCost: value => format(value, 1, 0)
     },
     {
-      name: "Forever a Symbol's Power",
+      name: "Endeavor from Forever",
       id: 18,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} glyphs equipped, each at level ${formatInt(10)} or higher`,
@@ -201,7 +201,7 @@ GameDatabase.reality.upgrades = (function() {
       formatCost: value => format(value, 1, 0)
     },
     {
-      name: "A Sacrifice of All",
+      name: "Sacrifice for Reprice",
       id: 19,
       cost: 1500,
       requirement: () => `Have a total of ${formatInt(30)} or more glyphs at once`,
@@ -211,7 +211,7 @@ GameDatabase.reality.upgrades = (function() {
       formatCost: value => format(value, 1, 0)
     },
     {
-      name: "Singularity Duplication",
+      name: "Parity in Singularity",
       id: 20,
       cost: 1500,
       requirement: () => `${formatInt(2)} years total play time and the Black Hole unlocked`,
@@ -221,7 +221,7 @@ GameDatabase.reality.upgrades = (function() {
       formatCost: value => format(value, 1, 0)
     },
     {
-      name: "Unique Magnetization",
+      name: "Galactic",
       id: 21,
       cost: 100000,
       requirement: () => `${formatInt(2800)} total galaxies from all types`,
@@ -230,7 +230,7 @@ GameDatabase.reality.upgrades = (function() {
       description: "Remote galaxy scaling is removed"
     },
     {
-      name: "100 Years of Truth",
+      name: "Temporal",
       id: 22,
       cost: 100000,
       requirement: () => `${format("1e28000")} time shards`,
@@ -241,7 +241,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2)
     },
     {
-      name: "Reproduction of Condition",
+      name: "Rapid",
       id: 23,
       cost: 100000,
       requirement: () => `Reality in under ${formatInt(15)} minutes`,
@@ -253,7 +253,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2)
     },
     {
-      name: "Glyphic Transcendence",
+      name: "Monumental",
       id: 24,
       cost: 100000,
       requirement: () => `Reality for ${formatInt(5000)} RM without glyphs`,
@@ -263,7 +263,7 @@ GameDatabase.reality.upgrades = (function() {
       effect: () => 1
     },
     {
-      name: "Instinctual Fact Throughout",
+      name: "Real",
       id: 25,
       cost: 100000,
       requirement: () => `Reach ${format("1e10500")} EP`,

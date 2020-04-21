@@ -53,8 +53,16 @@ Vue.component("game-header-eternity-button", {
       return { color: `rgb(${rgb.join(",")})` };
     },
     tachyonAmountStyle() {
-      // Note that Infinity and 0 can show up here.
-      const ratio = this.gainedTachyons.div(this.currentTachyons).toNumber();
+      // Note that Infinity and 0 can show up here. We have a special case for
+      // this.currentTachyons being 0 because dividing a Decimal by 0 returns 0.
+      let ratio;
+      if (this.currentTachyons.eq(0)) {
+        // In this case, make it always red or green.
+        // (Is it possible to gain 0 tachyons? Probably somehow it is.)
+        ratio = this.gainedTachyons.eq(0) ? 0 : Infinity;
+      } else {
+        ratio = this.gainedTachyons.div(this.currentTachyons).toNumber();
+      }
 
       const rgb = [
         Math.round(Math.clampMax(1 / ratio, 1) * 255),

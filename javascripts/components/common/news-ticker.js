@@ -41,8 +41,11 @@ Vue.component("news-ticker", {
     prepareNextMessage() {
       const line = this.$refs.line;
       if (line === undefined) return;
-
-      if (this.currentNews && this.currentNews.id === "a236") {
+      
+      if (nextNewsMessageId && GameDatabase.news.find(message => message.id === nextNewsMessageId)) {
+        this.currentNews = GameDatabase.news.find(message => message.id === nextNewsMessageId);
+        nextNewsMessageId = undefined;
+      } else if (this.currentNews && this.currentNews.id === "a236") {
         this.currentNews = GameDatabase.news.find(message => message.id === "a216");
       } else {
         const isUnlocked = news => news.unlocked || news.unlocked === undefined;

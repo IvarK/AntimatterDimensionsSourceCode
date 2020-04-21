@@ -49,7 +49,7 @@ Vue.component("news-ticker", {
         let nextNews;
         do {
           nextNews = GameDatabase.news.randomElement();
-        } while (!isUnlocked(nextNews) && !this.recentTickers.includes(nextNews.id));
+        } while (!isUnlocked(nextNews) || this.recentTickers.includes(nextNews.id));
         // Prevent tickers from repeating if they were seen recently
         const repeatBuffer = 0.1 * GameDatabase.news.length;
         this.recentTickers.push(nextNews.id);

@@ -52,15 +52,13 @@ Vue.component("news-ticker", {
           .filter(message => message.isAdvertising && isUnlocked(message))
           .randomElement();
       } else {
-        let nextNews;
-        do {
-          nextNews = GameDatabase.news.randomElement();
-        } while (!isUnlocked(nextNews) || this.recentTickers.includes(nextNews.id));
+        this.currentNews = GameDatabase.news
+          .filter(message => !this.recentTickers.includes(message) && isUnlocked(message))
+          .randomElement();
         // Prevent tickers from repeating if they were seen recently
         const repeatBuffer = 0.1 * GameDatabase.news.length;
-        this.recentTickers.push(nextNews.id);
+        this.recentTickers.push(this.currentNews.id);
         if (this.recentTickers.length > repeatBuffer) this.recentTickers.shift();
-        this.currentNews = nextNews;
       }
       if (this.currentNews.reset) {
         this.currentNews.reset();

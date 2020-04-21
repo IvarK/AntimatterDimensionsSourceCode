@@ -7322,6 +7322,7 @@ input.o-automator-block-input {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .c-perk-network {

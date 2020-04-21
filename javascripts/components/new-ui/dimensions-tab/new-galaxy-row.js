@@ -20,7 +20,7 @@ Vue.component("new-galaxy-row", {
   },
   computed: {
     dimName() {
-      return NormalDimension(this.requirement.tier).displayName;
+      return NormalDimension(this.requirement.tier).shortDisplayName;
     },
     buttonText() {
       return this.lockText === null

@@ -1278,6 +1278,10 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     return player.reality.upgReqs[this.id];
   }
 
+  get isPossible() {
+    return this.config.hasFailed ? !this.config.hasFailed() : true;
+  }
+
   tryUnlock() {
     if (this.isAvailableForPurchase || !this.config.checkRequirement()) return;
     player.reality.upgReqs[this.id] = true;

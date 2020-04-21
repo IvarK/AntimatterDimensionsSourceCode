@@ -59,6 +59,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 6,
       cost: 15,
       requirement: "Complete your first Eternity without using Replicanti Galaxies",
+      hasFailed: () => !(player.reality.upgReqChecks[0] && player.noEternitiesThisReality),
       checkRequirement: () => player.reality.upgReqChecks[0] && player.noEternitiesThisReality,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: "Replicanti speed is multiplied based on Replicanti Galaxies",
@@ -69,6 +70,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 7,
       cost: 15,
       requirement: "Complete your first Infinity with at most 1 galaxy",
+      hasFailed: () => !(player.galaxies <= 1 && player.noInfinitiesThisReality),
       checkRequirement: () => player.galaxies <= 1 && player.noInfinitiesThisReality,
       checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
       description: "Infinitied stat gain is boosted from Antimatter Galaxy count",
@@ -79,6 +81,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 8,
       cost: 15,
       requirement: "Get to Eternity without any automatic achievements",
+      hasFailed: () => player.reality.gainedAutoAchievements,
       checkRequirement: () => !player.reality.gainedAutoAchievements,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: "Tachyon Particle gain is boosted based on achievement multiplier",
@@ -89,6 +92,12 @@ GameDatabase.reality.upgrades = (function() {
       id: 9,
       cost: 15,
       requirement: () => `Reality using only a single level ${formatInt(3)}+ glyph.`,
+      hasFailed: () => {
+        const invalidEquippedGlyphs = Glyphs.activeList.length > 1 ||
+          (Glyphs.activeList.length === 1 && Glyphs.activeList[0].level < 3);
+        const hasValidGlyph = Glyphs.inventory.countWhere(g => g && g.level >= 3) > 0;
+        return invalidEquippedGlyphs || !hasValidGlyph;
+      },
       checkRequirement: () => Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain another glyph slot",
@@ -98,6 +107,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 10,
       cost: 15,
       requirement: () => `Complete your first Eternity with at least ${format("1e450")} IP`,
+      hasFailed: () => !player.noEternitiesThisReality,
       checkRequirement: () => player.infinityPoints.exponent >= 450 && player.noEternitiesThisReality,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`
@@ -116,6 +126,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 12,
       cost: 50,
       requirement: () => `Eternity for ${format(1e70)} EP without Eternity Challenge 1`,
+      hasFailed: () => EternityChallenge(1).completions !== 0,
       checkRequirement: () => player.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "EP multiplier based on Reality and Time Theorem count",
@@ -128,6 +139,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 13,
       cost: 50,
       requirement: () => `Eternity for ${format("1e4000")} EP without Time Dimensions 5-8`,
+      hasFailed: () => !Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
@@ -147,6 +159,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 15,
       cost: 50,
       requirement: () => `Eternity for ${format(1e10)} EP without purchasing the ${formatX(5)} EP upgrade`,
+      hasFailed: () => player.epmultUpgrades !== 0,
       checkRequirement: () => player.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: () => `Boost Tachyon Particle gain based on ${formatX(5)} EP multiplier`,
@@ -157,6 +170,12 @@ GameDatabase.reality.upgrades = (function() {
       id: 16,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} glyphs equipped of uncommon or better rarity`,
+      hasFailed: () => {
+        const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.strength >= 1.5);
+        const equipped = Glyphs.activeList.countWhere(g => g.strength >= 1.5);
+        const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
+        return equipped + Math.min(availableGlyphs, availableSlots) < 4;
+      },
       checkRequirement: () => Glyphs.activeList.countWhere(g => g.strength >= 1.5) === 4,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Improve the glyph rarity formula",
@@ -167,6 +186,12 @@ GameDatabase.reality.upgrades = (function() {
       id: 17,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} glyphs equipped, each having at least ${formatInt(2)} effects`,
+      hasFailed: () => {
+        const availableGlyphs = Glyphs.inventory.countWhere(g => g && countEffectsFromBitmask(g.effects) >= 2);
+        const equipped = Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2);
+        const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
+        return equipped + Math.min(availableGlyphs, availableSlots) < 4;
+      },
       checkRequirement: () => Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2) === 4,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "50% chance to get an additional effect on glyphs",
@@ -176,6 +201,12 @@ GameDatabase.reality.upgrades = (function() {
       id: 18,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} glyphs equipped, each at level ${formatInt(10)} or higher`,
+      hasFailed: () => {
+        const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.level >= 10);
+        const equipped = Glyphs.activeList.countWhere(g => g.level >= 10);
+        const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
+        return equipped + Math.min(availableGlyphs, availableSlots) < 4;
+      },
       checkRequirement: () => Glyphs.activeList.countWhere(g => g.level >= 10) === 4,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Eternity count boosts glyph level",
@@ -186,6 +217,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 19,
       cost: 1500,
       requirement: () => `Have a total of ${formatInt(30)} or more glyphs at once`,
+      hasFailed: () => Glyphs.active.concat(Glyphs.inventory).countWhere(g => g) < 30,
       checkRequirement: () => Glyphs.active.concat(Glyphs.inventory).countWhere(g => g) >= 30,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "You can sacrifice glyphs for permanent bonuses (Shift + click)",
@@ -195,6 +227,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 20,
       cost: 1500,
       requirement: () => `${formatInt(2)} years total play time and the Black Hole unlocked`,
+      hasFailed: () => !BlackHole(1).isUnlocked && player.reality.realityMachines.lt(100),
       checkRequirement: () => Time.totalTimePlayed.totalYears >= 2 && BlackHole(1).isUnlocked,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Unlock Black Hole 2",
@@ -222,6 +255,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 23,
       cost: 100000,
       requirement: () => `Reality in under ${formatInt(15)} minutes`,
+      hasFailed: () => Time.thisReality.totalMinutes >= 15,
       checkRequirement: () => Time.thisReality.totalMinutes < 15,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Replicanti speed is boosted based on your fastest Reality",
@@ -233,6 +267,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 24,
       cost: 100000,
       requirement: () => `Reality for ${formatInt(5000)} RM without glyphs`,
+      hasFailed: () => Glyphs.activeList.length > 0,
       checkRequirement: () => gainedRealityMachines().gte(5000) && Glyphs.activeList.length === 0,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain another glyph slot",

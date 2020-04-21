@@ -21,6 +21,8 @@ Vue.component("reality-upgrades-tab", {
       <br>
       Upgrades show their requirements by default; hold shift to see the costs for the upgrades instead.
       <br>
+      Red upgrades are impossible to get this reality, while yellow upgrades are still possible.
+      <br>
       <br>
       <div v-for="row in 5" class="l-reality-upgrade-grid__row">
         <reality-upgrade-button

@@ -489,29 +489,37 @@ body.t-normal {
   color: var(--color-text);
 }
 
-.o-autobuyer-input {
+.o-autobuyer-input,
+.c-autobuyer-box__mode-select {
   background: var(--color-base);
   border: 0.1rem solid var(--color-accent);
   color: var(--color-accent);
 }
 
-.t-metro .o-autobuyer-input {
+.t-metro .o-autobuyer-input,
+.t-metro .c-autobuyer-box__mode-select {
   color: black;
   border: 0.1rem solid #A9A9A9;
+  background: white;
 }
 
 .t-dark .o-autobuyer-input,
-.t-dark-metro .o-autobuyer-input {
+.t-dark-metro .o-autobuyer-input,
+.t-dark .c-autobuyer-box__mode-select,
+.t-dark-metro .c-autobuyer-box__mode-select {
+  color: black;
   background-color: #455A64;
   border: 0.1rem solid black;
 }
 
-.t-s1 .o-autobuyer-input {
+.t-s1 .o-autobuyer-input,
+.t-s1 .c-autobuyer-box__mode-select {
   background-color: var(--color-base);
   border: 0.1rem solid black;
 }
 
-.t-s6 .o-autobuyer-input {
+.t-s6 .o-autobuyer-input,
+.t-s6 .c-autobuyer-box__mode-select {
   color: white;
   background-color: black;
   border: 0.1rem solid #888;

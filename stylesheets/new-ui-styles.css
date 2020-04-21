@@ -485,20 +485,6 @@ body.t-normal {
   border: 0.1rem solid var(--color-accent);
 }
 
-.c-challenge-box--infinity {
-  height: 15rem;
-  color: white;
-  background-color: #181818;
-}
-
-.c-challenge-box--eternity {
-  height: 15rem;
-  color: var(--color-eternity);
-  background-color: black;
-  border: 0.3rem solid var(--color-eternity);
-  border-radius: 1rem;
-}
-
 .c-stats-tab {
   color: var(--color-text);
 }

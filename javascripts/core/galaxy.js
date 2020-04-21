@@ -130,12 +130,12 @@ class Galaxy {
   }
 
   static get costScalingStart() {
-    return (100 + Effects.sum(
+    return Math.floor((100 + Effects.sum(
       TimeStudy(223),
       TimeStudy(224),
       EternityChallenge(5).reward,
       GlyphSacrifice.power
-    )) * TriadStudy(2).effectOrDefault(1);
+    )) * TriadStudy(2).effectOrDefault(1));
   }
 
   static get type() {

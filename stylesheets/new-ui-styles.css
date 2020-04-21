@@ -625,13 +625,21 @@ body.t-normal {
 
 .l-reality-upgrade-btn {
   width: 15.6rem;
-  margin: 0.5rem;
+  margin: 0.6rem 0.4rem;
 }
 
 .l--spoon-btn-group__little-spoon-reality-btn {
   width: 15.6rem;
   align-self: center;
   margin-top: -0.2rem;
+}
+
+.l-hint-text--reality-upgrade {
+  top: -1.2rem;
+}
+
+.c-hint-text--reality-upgrade {
+  font-size: 0.95rem;
 }
 
 .resource-eternity-canreset > div {

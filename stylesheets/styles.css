@@ -1631,32 +1631,42 @@ screen and (max-width: 480px) {
 /*#region hint-text*/
 
 .o-hint-text {
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   color: white;
   text-shadow:
-      -1px -1px 0 black,
-      1px -1px 0 black,
-      -1px 1px 0 black,
-      1px 1px 0 black;
+    -0.1rem -0.1rem 0 black,
+    -0.1rem -0.1rem 0 black,
+    0.1rem -0.1rem 0 black,
+    0.1rem -0.1rem 0 black,
+    -0.1rem 0.1rem 0 black,
+    -0.1rem 0.1rem 0 black,
+    0.1rem 0.1rem 0 black,
+    0.1rem 0.1rem 0 black;
   pointer-events: none;
 }
 
 .l-hint-text {
   position: absolute;
-  top: -1.5rem;
+  top: -1.6rem;
   left: 0;
 }
 
 .l-hint-text--challenge {
-  top: -2rem;
+  top: -2.2rem;
 }
 
 .l-hint-text--time-study {
-  top: -1.85rem;
+  top: -1.95rem;
 }
 
 .l-hint-text--reality-upgrade {
   top: -2rem;
+}
+
+.c-hint-text--reality-upgrade {
+  color: var(--color-text);
+  text-shadow: none;
+  font-weight: bold;
 }
 
 .l-hint-text--achievement {

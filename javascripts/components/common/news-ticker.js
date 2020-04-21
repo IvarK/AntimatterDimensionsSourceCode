@@ -42,13 +42,16 @@ Vue.component("news-ticker", {
       const line = this.$refs.line;
       if (line === undefined) return;
       
+      const isUnlocked = news => news.unlocked || news.unlocked === undefined;
+
       if (nextNewsMessageId && GameDatabase.news.find(message => message.id === nextNewsMessageId)) {
         this.currentNews = GameDatabase.news.find(message => message.id === nextNewsMessageId);
         nextNewsMessageId = undefined;
       } else if (this.currentNews && this.currentNews.id === "a236") {
-        this.currentNews = GameDatabase.news.find(message => message.id === "a216");
+        this.currentNews = GameDatabase.news
+          .filter(message => message.isAdvertising && isUnlocked(message))
+          .randomElement();
       } else {
-        const isUnlocked = news => news.unlocked || news.unlocked === undefined;
         let nextNews;
         do {
           nextNews = GameDatabase.news.randomElement();

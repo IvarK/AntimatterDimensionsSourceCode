@@ -171,6 +171,12 @@ dev.removeAch = function(name) {
   return "failed to delete achievement";
 };
 
+let nextNewsMessageId = undefined;
+
+dev.setNextNewsMessage = function(id) {
+  nextNewsMessageId = id;
+};
+
 dev.realize = function() {
   document.getElementById("container").style.animation = "realize 10s 1";
   document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";

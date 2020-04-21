@@ -41,20 +41,24 @@ Vue.component("news-ticker", {
     prepareNextMessage() {
       const line = this.$refs.line;
       if (line === undefined) return;
+      
+      const isUnlocked = news => news.unlocked || news.unlocked === undefined;
 
-      if (this.currentNews && this.currentNews.id === "a236") {
-        this.currentNews = GameDatabase.news.find(message => message.id === "a216");
+      if (nextNewsMessageId && GameDatabase.news.find(message => message.id === nextNewsMessageId)) {
+        this.currentNews = GameDatabase.news.find(message => message.id === nextNewsMessageId);
+        nextNewsMessageId = undefined;
+      } else if (this.currentNews && this.currentNews.id === "a236") {
+        this.currentNews = GameDatabase.news
+          .filter(message => message.isAdvertising && isUnlocked(message))
+          .randomElement();
       } else {
-        const isUnlocked = news => news.unlocked || news.unlocked === undefined;
-        let nextNews;
-        do {
-          nextNews = GameDatabase.news.randomElement();
-        } while (!isUnlocked(nextNews) || this.recentTickers.includes(nextNews.id));
+        this.currentNews = GameDatabase.news
+          .filter(message => !this.recentTickers.includes(message) && isUnlocked(message))
+          .randomElement();
         // Prevent tickers from repeating if they were seen recently
         const repeatBuffer = 0.1 * GameDatabase.news.length;
-        this.recentTickers.push(nextNews.id);
+        this.recentTickers.push(this.currentNews.id);
         if (this.recentTickers.length > repeatBuffer) this.recentTickers.shift();
-        this.currentNews = nextNews;
       }
       if (this.currentNews.reset) {
         this.currentNews.reset();

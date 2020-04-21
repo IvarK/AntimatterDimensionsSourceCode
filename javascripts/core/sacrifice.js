@@ -96,7 +96,7 @@ function sacrificeReset(auto) {
     if (!isAch118Unlocked) {
       NormalDimensions.reset();
     }
-    player.antimatter = new Decimal(100);
+    player.antimatter = Player.startingAM;
   } else if (!isAch118Unlocked) {
     NormalDimensions.resetAmountUpToTier(NormalChallenge(12).isRunning ? 6 : 7);
   }

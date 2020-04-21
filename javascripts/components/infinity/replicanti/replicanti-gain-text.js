@@ -45,13 +45,15 @@ Vue.component("replicanti-gain-text", {
       }
 
       const galaxiesPerSecond = log10GainFactorPerTick.times(ticksPerSecond / 308);
-        let baseGalaxiesPerSecond, effectiveMaxRG;
-        if (RealityUpgrade(6).isBought) {
-          baseGalaxiesPerSecond = galaxiesPerSecond.divide(RealityUpgrade(6).effectValue);
-          effectiveMaxRG = 50 * Math.log((Replicanti.galaxies.max + 49.5) / 49.5);
-        } else {
-          baseGalaxiesPerSecond = galaxiesPerSecond;
-          effectiveMaxRG = Replicanti.galaxies.max;
+      let baseGalaxiesPerSecond, effectiveMaxRG;
+      if (RealityUpgrade(6).isBought) {
+        baseGalaxiesPerSecond = galaxiesPerSecond.divide(RealityUpgrade(6).effectValue);
+        const timeFromZeroRG = galaxies => 50 * Math.log((galaxies + 49.5) / 49.5);
+        effectiveMaxRG = timeFromZeroRG(Replicanti.galaxies.max + Replicanti.galaxies.extra) -
+          timeFromZeroRG(Replicanti.galaxies.extra);
+      } else {
+        baseGalaxiesPerSecond = galaxiesPerSecond;
+        effectiveMaxRG = Replicanti.galaxies.max;
       }
       const allGalaxyTime = Decimal.divide(effectiveMaxRG, baseGalaxiesPerSecond).toNumber();
 

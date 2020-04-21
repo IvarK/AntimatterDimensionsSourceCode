@@ -62,7 +62,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => player.reality.upgReqChecks[0] && player.noEternitiesThisReality,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: "Replicanti speed is multiplied based on Replicanti Galaxies",
-      effect: () => 1 + (player.replicanti.galaxies / 50),
+      effect: () => 1 + Replicanti.galaxies.total / 50,
       formatEffect: value => formatX(value, 2, 2)
     },
     {
@@ -72,7 +72,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => player.galaxies <= 1 && player.noInfinitiesThisReality,
       checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
       description: "Infinitied stat gain is boosted from Antimatter Galaxy count",
-      effect: () => 1 + (player.galaxies / 30),
+      effect: () => 1 + player.galaxies / 30,
       formatEffect: value => formatX(value, 2, 2)
     },
     {

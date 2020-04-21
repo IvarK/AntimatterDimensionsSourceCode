@@ -2637,8 +2637,7 @@ screen and (max-width: 480px) {
 /*#region l-challenge-grid*/
 
 .l-challenge-grid {
-  /* grid cell is 30rem < cell.width < 40rem, so the grid is 2x(N/2) */
-  width: 80rem;
+  width: 90rem;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -2646,7 +2645,7 @@ screen and (max-width: 480px) {
 }
 
 .l-challenge-grid__cell {
-  margin: 0.8rem 1.6rem;
+  margin: 0.8rem 1rem;
 }
 
 .l-challenge-grid__cell--hidden {
@@ -2658,31 +2657,31 @@ screen and (max-width: 480px) {
 /*#region c-challenge-box*/
 
 .c-challenge-box {
-  width: 35rem;
-  height: 10.5rem;
-  padding: 0.2rem 0.4rem 0.4rem 0.4rem;
+  width: 39rem;
+  height: 13rem;
+  padding: 0.5rem 0.4rem;
   box-sizing: border-box;
   font-weight: bold;
   border: 0.2rem solid black;
   border-radius: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
   transition: all 0.2s, visibility 0s;
 }
 
 .c-challenge-box--normal {
   color: black;
-  font-size: 1rem;
+  font-size: 1.05rem;
   background-color: #f2f2f2;
 }
 
 .c-challenge-box--infinity {
-  height: 15rem;
+  height: 16rem;
   color: white;
   background-color: #181818;
 }
 
 .c-challenge-box--eternity {
-  height: 15rem;
+  height: 16rem;
   color: var(--color-eternity);
   background-color: black;
   border: 0.3rem solid var(--color-eternity);
@@ -2690,7 +2689,7 @@ screen and (max-width: 480px) {
 }
 
 .c-challenge-box__reward-description--small-text {
-  font-size: .85rem;
+  font-size: .95rem;
 }
 
 /*#region themes*/
@@ -2709,8 +2708,29 @@ screen and (max-width: 480px) {
 .t-dark-metro .c-challenge-box,
 .t-inverted-metro .c-challenge-box,
 .t-s8 .c-challenge-box {
-  border: 0.1rem solid black;
   border-radius: 0;
+  border: 0.1rem solid;
+}
+
+.t-metro .c-challenge-box--normal,
+.t-dark-metro .c-challenge-box--normal,
+.t-inverted-metro .c-challenge-box--normal,
+.t-s8 .c-challenge-box--normal {
+  border-color: black;
+}
+
+.t-metro .c-challenge-box--infinity,
+.t-dark-metro .c-challenge-box--infinity,
+.t-inverted-metro .c-challenge-box--infinity,
+.t-s8 .c-challenge-box--infinity {
+  border-color: var(--color-infinity);
+}
+
+.t-metro .c-challenge-box--eternity,
+.t-dark-metro .c-challenge-box--eternity,
+.t-inverted-metro .c-challenge-box--eternity,
+.t-s8 .c-challenge-box--eternity {
+  border-color: var(--color-eternity);
 }
 
 .t-dark-metro .c-challenge-box--normal {
@@ -2809,6 +2829,7 @@ screen and (max-width: 480px) {
   border: 0.3rem solid #127a20;
   border-radius: 1rem;
   font-size: 1.2rem;
+  margin-bottom: 0.5rem;
   transition: all 0.2s, visibility 0s;
   cursor: pointer;
 }

@@ -7087,6 +7087,11 @@ kbd {
   cursor: default;
 }
 
+.c-reality-upgrade-btn--possible:hover {
+  background-color: #8b8529;
+  color: #d5ffd7;
+}
+
 .c-reality-upgrade-btn--locked {
   background-color: #a53939;
   cursor: default;

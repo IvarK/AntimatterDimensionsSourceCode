@@ -2507,7 +2507,6 @@ screen and (max-width: 480px) {
 .c-achievements-tab__header {
   font-size: 1.6rem;
   margin-top: 0.6rem;
-  margin-bottom: 0.6rem;
   position: relative;
   display: flex;
   flex-direction: row;
@@ -2544,6 +2543,7 @@ screen and (max-width: 480px) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 1rem;
 }
 
 .l-achievement-grid__row {
@@ -7322,6 +7322,7 @@ input.o-automator-block-input {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .c-perk-network {

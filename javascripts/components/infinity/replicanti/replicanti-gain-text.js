@@ -57,7 +57,7 @@ Vue.component("replicanti-gain-text", {
 
       this.replicantiText = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti`;
       if (effectiveMaxRG > 0 && ReplicantiUpgrade.galaxies.isAutobuyerOn) {
-        this.galaxyText = `You gain a galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
+        this.galaxyText = `You are gaining a galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
         if (galaxiesPerSecond.gte(1)) {
           this.galaxyText = `You are gaining ${format(galaxiesPerSecond, 2, 1)} galaxies per second`;
         }

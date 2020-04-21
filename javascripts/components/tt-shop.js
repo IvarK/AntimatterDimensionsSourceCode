@@ -31,7 +31,8 @@ Vue.component("tt-shop", {
       if (this.theoremAmount.gte(1e9)) {
         return format(this.theoremAmount, 2);
       }
-      if (getAdjustedGlyphEffect("dilationTTgen") > 0 && !DilationUpgrade.ttGenerator.isBought) {
+      if (!(Teresa.isRunning || Enslaved.isRunning) &&
+        getAdjustedGlyphEffect("dilationTTgen") > 0 && !DilationUpgrade.ttGenerator.isBought) {
         return formatFloat(this.theoremAmount, 2);
       }
       return formatInt(this.theoremAmount);

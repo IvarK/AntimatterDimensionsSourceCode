@@ -1560,12 +1560,6 @@ screen and (max-width: 480px) {
   font-weight: bold;
 }
 
-.o-prestige-btn--dilation {
-  color: #64dd17;
-  background-color: black;
-  border-color: #64dd17;
-}
-
 .o-prestige-btn--eternity:hover {
   color: var(--color-eternity);
   background-color: white;
@@ -1594,6 +1588,43 @@ screen and (max-width: 480px) {
 .t-s1 .o-prestige-btn--eternity:hover {
   color: black;
   background: var(--color-eternity);
+  border-color: black;
+}
+
+.o-prestige-btn--dilation {
+  color: #64dd17;
+  background-color: black;
+  border-color: #64dd17;
+}
+
+.o-prestige-btn--dilation:hover {
+  color: #64dd17;
+  background-color: white;
+}
+
+.o-prestige-btn--dilation span {
+  transition-duration: 0.2s;
+}
+
+.o-prestige-btn--dilation:hover span {
+  color: #64dd17 !important;
+}
+
+.t-s1 .o-prestige-btn--dilation:hover span {
+  color: var(--color-text) !important;
+}
+
+.t-metro .o-prestige-btn--dilation,
+.t-dark-metro .o-prestige-btn--dilation,
+.t-inverted-metro .o-prestige-btn--dilation,
+.t-s8 .o-prestige-btn--dilation {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.t-s1 .o-prestige-btn--dilation:hover {
+  color: black;
+  background: #64dd17;
   border-color: black;
 }
 

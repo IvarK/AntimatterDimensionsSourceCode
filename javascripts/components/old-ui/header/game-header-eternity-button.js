@@ -10,6 +10,7 @@ Vue.component("game-header-eternity-button", {
       currentEP: new Decimal(0),
       currentEPPM: new Decimal(0),
       peakEPPM: new Decimal(0),
+      currentTachyons: new Decimal(0),
       gainedTachyons: new Decimal(0),
       challengeCompletions: 0,
       gainedCompletions: 0,
@@ -50,6 +51,17 @@ Vue.component("game-header-eternity-button", {
         : Math.round(255 - (1 - ratio) * 10 * 255)
       ];
       return { color: `rgb(${rgb.join(",")})` };
+    },
+    tachyonAmountStyle() {
+      // Note that Infinity and 0 can show up here.
+      const ratio = this.gainedTachyons.div(this.currentTachyons).toNumber();
+
+      const rgb = [
+        Math.round(Math.clampMax(1 / ratio, 1) * 255),
+        Math.round(Math.clampMax(ratio, 1) * 255),
+        Math.round(Math.clampMax(ratio, 1 / ratio) * 255),
+      ];
+      return { color: `rgb(${rgb.join(",")})` };
     }
   },
   methods: {
@@ -84,6 +96,7 @@ Vue.component("game-header-eternity-button", {
         this.type = hasNewContent
           ? EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT
           : EP_BUTTON_DISPLAY_TYPE.DILATION;
+        this.currentTachyons.copyFrom(player.dilation.tachyonParticles);
         this.gainedTachyons.copyFrom(getTachyonGain());
         return;
       }
@@ -146,9 +159,10 @@ Vue.component("game-header-eternity-button", {
 
       <!-- Dilation -->
       <template v-else-if="type === 3">
-        Gain <span :style="amountStyle">{{format(gainedEP, 2, 2)}}</span> Eternity {{ "Point" | pluralize(gainedEP) }}.
+        Gain {{format(gainedEP, 2, 2)}} Eternity {{ "Point" | pluralize(gainedEP) }}.
         <br>
-        +{{format(gainedTachyons, 2, 1)}} Tachyon {{ "Particle" | pluralize(gainedTachyons) }}.
+        +<span :style="tachyonAmountStyle">{{format(gainedTachyons, 2, 1)}}</span>
+        Tachyon {{ "Particle" | pluralize(gainedTachyons) }}.
       </template>
 
       <!-- New content available -->

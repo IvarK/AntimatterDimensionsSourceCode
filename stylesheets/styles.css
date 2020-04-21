@@ -2659,7 +2659,7 @@ screen and (max-width: 480px) {
 .c-challenge-box {
   width: 39rem;
   height: 13rem;
-  padding: 0.5rem 0.4rem 0.5rem 0.4rem;
+  padding: 0.5rem 0.4rem;
   box-sizing: border-box;
   font-weight: bold;
   border: 0.2rem solid black;

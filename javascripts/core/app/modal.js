@@ -10,7 +10,7 @@ class Modal {
     if (!GameUI.initialized) return;
     if (ui.view.modal.queue.length === 0) ui.view.modal.current = this;
     // New modals go to the back of the queue (shown last).
-    ui.view.modal.queue.push(this);
+    if (!ui.view.modal.queue.includes(this)) ui.view.modal.queue.push(this);
   }
 
   get isOpen() {

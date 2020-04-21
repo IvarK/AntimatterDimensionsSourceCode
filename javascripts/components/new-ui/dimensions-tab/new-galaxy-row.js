@@ -33,7 +33,7 @@ Vue.component("new-galaxy-row", {
       if (this.galaxies.dilation > 0) parts.push(this.galaxies.dilation);
       const sum = parts.map(formatInt).join(" + ");
       if (parts.length >= 2) {
-        return `${sum} = ${parts.sum()}`;
+        return `${sum} = ${formatInt(parts.sum())}`;
       }
       return sum;
     },
@@ -51,10 +51,10 @@ Vue.component("new-galaxy-row", {
     costScalingText() {
       switch (this.type) {
         case GALAXY_TYPE.DISTANT:
-          return `Each galaxy is more expensive past ${this.distantStart} galaxies`;
+          return `Each galaxy is more expensive past ${formatInt(this.distantStart)} galaxies`;
         case GALAXY_TYPE.REMOTE:
           return "Increased galaxy cost scaling: " +
-            `Quadratic past ${this.distantStart} (distant), exponential past 800 (remote)`;
+            `Quadratic past ${formatInt(this.distantStart)} (distant), exponential past ${formatInt(800)} (remote)`;
       }
       return undefined;
     },
@@ -85,6 +85,7 @@ Vue.component("new-galaxy-row", {
     <h4>{{typeName}} ({{sumText}})</h4>
     <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} D</span>
     <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
+    <div v-else><br></div>
     <button
       class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
       :class="{ 'o-primary-btn--disabled': !canBeBought, ...tutorialClass }"

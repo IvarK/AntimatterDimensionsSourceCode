@@ -336,16 +336,17 @@ body.t-normal {
 .resets-container {
   display: flex;
   justify-content: space-around;
-  color: var(--color-text);;
+  color: var(--color-text);
 }
 
 .reset-container h4 {
   margin: 0;
   font-size: 1.4rem;
-  color: var(--color-text);;
+  color: var(--color-text);
 }
 
 .reset-container {
+  width: 33%;
   display: flex;
   flex-direction: column;
   justify-content: center;

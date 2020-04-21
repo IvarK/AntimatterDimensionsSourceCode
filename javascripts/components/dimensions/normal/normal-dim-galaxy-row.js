@@ -88,6 +88,7 @@ Vue.component("normal-dim-galaxy-row", {
       >{{typeName}} ({{sumText}}):
         requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions
         <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
+        <div v-else><br></div>
       </div>
       <primary-button
         :enabled="canBeBought"

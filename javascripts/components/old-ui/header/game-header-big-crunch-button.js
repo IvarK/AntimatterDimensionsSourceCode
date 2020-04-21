@@ -74,6 +74,7 @@ Vue.component("game-header-big-crunch-button", {
       :class="classObject"
       onclick="bigCrunchResetRequest()"
     >
+      <div v-if="!isPeakIPPMVisible"/>
       <b>Big Crunch for
       <span :style="amountStyle">{{format(gainedIP, 2, 0)}}</span>
       Infinity {{ "Point" | pluralize(gainedIP) }}.</b>
@@ -83,5 +84,6 @@ Vue.component("game-header-big-crunch-button", {
         <br>
         Peaked at {{format(peakIPPM, 2, 0)}} IP/min
       </template>
+      <div v-else/>
     </button>`
 });

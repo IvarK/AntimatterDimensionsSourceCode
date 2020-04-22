@@ -145,7 +145,7 @@ function replicantiLoop(diff) {
 }
 
 function replicantiMult() {
-  return Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
+  return Decimal.pow(Decimal.log2(player.replicanti.amount.clampMin(1)), 2)
     .plusEffectOf(TimeStudy(21))
     .timesEffectOf(TimeStudy(102))
     .clampMin(1)

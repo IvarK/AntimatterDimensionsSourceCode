@@ -100,7 +100,7 @@ Vue.component("new-dimension-row", {
   template:
   `<div v-show="isUnlocked" class="c-normal-dim-row">
     <div class="c-dim-row__label c-dim-row__name">
-      {{name}} D <span class="c-normal-dim-row__multiplier">{{formatX(multiplier, 1, 1)}}</span>
+      {{name}} Antimatter D <span class="c-normal-dim-row__multiplier">{{formatX(multiplier, 1, 1)}}</span>
     </div>
     <div class="c-dim-row__label c-dim-row__label--growable">
       {{amountDisplay}}

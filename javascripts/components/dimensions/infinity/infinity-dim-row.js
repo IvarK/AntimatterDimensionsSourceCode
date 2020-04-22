@@ -32,7 +32,7 @@ Vue.component("infinity-dim-row", {
   },
   computed: {
     name() {
-      return InfinityDimension(this.tier).displayName;
+      return InfinityDimension(this.tier).shortDisplayName;
     },
     rateOfChangeDisplay() {
       return this.hasRateOfChange

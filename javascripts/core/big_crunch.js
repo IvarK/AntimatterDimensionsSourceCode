@@ -452,7 +452,7 @@ function preProductionGenerateIP(diff) {
     if (player.partInfinityPoint >= 1) {
       const genCount = Math.floor(player.partInfinityPoint);
       let gainedPerGen = InfinityUpgrade.ipGen.effectValue;
-      if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen, 1);
+      if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen);
       const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
       player.infinityPoints = player.infinityPoints.plus(gainedThisTick);
       player.partInfinityPoint -= genCount;

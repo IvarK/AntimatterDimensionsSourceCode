@@ -83,11 +83,10 @@ Vue.component("normal-dim-galaxy-row", {
   },
   template:
     `<div class="c-normal-dim-row">
-      <div
-        class="c-dim-row__label c-dim-row__label--growable"
-      >{{typeName}} ({{sumText}}):
+      <div class="c-dim-row__label c-dim-row__label--growable" style="height: 6rem;">
+        {{typeName}} ({{sumText}}):
         requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions
-        <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
+        <div style="height: 2rem;">{{ hasIncreasedScaling ? costScalingText : "" }}</div>
       </div>
       <primary-button
         :enabled="canBeBought"

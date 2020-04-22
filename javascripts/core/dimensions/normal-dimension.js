@@ -65,7 +65,7 @@ function getDimensionFinalMultiplierUncached(tier) {
 
   const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
   if (player.dilation.active) {
-    multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier, 1));
+    multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
   } else if (Enslaved.isRunning) {
     multiplier = dilatedValueOf(multiplier);
   }

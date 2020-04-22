@@ -1147,7 +1147,7 @@ screen and (max-width: 480px) {
 .o-primary-btn--quick-reset {
   font-size: 1.2rem;
   width: 20rem;
-  height: 5rem;
+  height: 7rem;
 }
 
 .o-primary-btn--buy-id {
@@ -7143,6 +7143,16 @@ kbd {
 .c-reality-upgrade-btn--bought:hover {
   color: #d5ffd7;
   background-color: var(--color-reality);
+}
+
+.c-reality-upgrade-btn--possible {
+  background-color: #8b8529;
+  cursor: default;
+}
+
+.c-reality-upgrade-btn--possible:hover {
+  background-color: #8b8529;
+  color: #d5ffd7;
 }
 
 .c-reality-upgrade-btn--locked {

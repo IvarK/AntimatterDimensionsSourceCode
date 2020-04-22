@@ -61,6 +61,10 @@ Vue.component("glyph-levels-and-weights", {
       return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible +
         this.penaltyVisible);
     },
+    rowStyleAchievement() {
+      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible +
+        this.penaltyVisible + this.perkVisible);
+    },
     adjustOutlineStyle() {
       const rows = 5 + (this.showAutoAdjustWeights ? 1 : 0);
       return `grid-row: 1 / ${rows + 1}; -ms-grid-row: 1; -ms-grid-row-span: ${rows};`;
@@ -236,9 +240,9 @@ Vue.component("glyph-levels-and-weights", {
         </div>
       </template>
       <template v-if="achievementVisible">
-        <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor">Achievements</div>
-        <div :style="rowStylePerk" class="l-glyph-levels-and-weights__operator">+</div>
-        <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor-val">
+        <div :style="rowStyleAchievement" class="l-glyph-levels-and-weights__factor">Achievements</div>
+        <div :style="rowStyleAchievement" class="l-glyph-levels-and-weights__operator">+</div>
+        <div :style="rowStyleAchievement" class="l-glyph-levels-and-weights__factor-val">
           {{factors.achievementFactor}}&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
       </template>

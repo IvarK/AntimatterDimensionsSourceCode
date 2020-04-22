@@ -147,23 +147,10 @@ function getTachyonReq() {
   );
 }
 
-function dilatedValueOf(value, depth) {
-  if (depth !== undefined) {
-    return recursiveDilation(value, depth);
-  }
-  if (player.dilation.active || Enslaved.isRunning) {
-    return recursiveDilation(value, 1);
-  }
-  throw new Error("Invald dilation depth");
-}
-
-function recursiveDilation(value, depth) {
-  if (depth === 0) {
-    return value;
-  }
+function dilatedValueOf(value) {
   const log10 = value.log10();
   const dilationPenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
-  return recursiveDilation(Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty)), depth - 1);
+  return Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty));
 }
 
 class DilationUpgradeState extends SetPurchasableMechanicState {

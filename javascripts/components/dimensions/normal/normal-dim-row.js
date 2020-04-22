@@ -23,7 +23,7 @@ Vue.component("normal-dim-row", {
   },
   computed: {
     name() {
-      return NormalDimension(this.tier).displayName;
+      return NormalDimension(this.tier).shortDisplayName;
     },
     amountDisplay() {
       return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
@@ -95,7 +95,7 @@ Vue.component("normal-dim-row", {
   template:
     `<div v-show="isUnlocked" class="c-normal-dim-row">
       <div class="c-dim-row__label c-dim-row__name">
-        {{name}} Dimension {{formatX(multiplier, 1, 1)}}
+        {{name}} Antimatter Dimension {{formatX(multiplier, 1, 1)}}
       </div>
       <div class="c-dim-row__label c-dim-row__label--growable">
         {{amountDisplay}} ({{formatInt(boughtBefore10)}})

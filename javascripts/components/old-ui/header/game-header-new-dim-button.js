@@ -27,8 +27,7 @@ Vue.component("game-header-new-dim-button", {
       class="o-primary-btn--new-dim l-game-header__new-dim-btn"
       onclick="InfinityDimensions.unlockNext()"
     >
-      Get {{format(requirement, 0, 0)}} antimatter
-      <br/>
-      to unlock a new <span v-if="anyInfinityDimensionUnlocked">Infinity Dimension</span><span v-else>type of Dimension</span>.
+      Get {{format(requirement, 0, 0)}} antimatter<br/>to unlock a new
+      <span v-if="anyInfinityDimensionUnlocked">Infinity Dimension</span><span v-else>type of Dimension</span>.
     </primary-button>`
 });

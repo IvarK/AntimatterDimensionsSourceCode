@@ -44,7 +44,7 @@ Vue.component("replicanti-gain-text", {
         remainingTime = 0;
       }
 
-      const galaxiesPerSecond = log10GainFactorPerTick.times(ticksPerSecond / 308);
+      const galaxiesPerSecond = log10GainFactorPerTick.times(ticksPerSecond / LOG10_MAX_VALUE);
       let baseGalaxiesPerSecond, effectiveMaxRG;
       if (RealityUpgrade(6).isBought) {
         baseGalaxiesPerSecond = galaxiesPerSecond.divide(RealityUpgrade(6).effectValue);
@@ -58,7 +58,7 @@ Vue.component("replicanti-gain-text", {
       const allGalaxyTime = Decimal.divide(effectiveMaxRG, baseGalaxiesPerSecond).toNumber();
 
       this.replicantiText = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti`;
-      if (effectiveMaxRG > 0 && Replicanti.galaxies.autobuyer.isEnabled) {
+      if (effectiveMaxRG > 0 && Replicanti.galaxies.autobuyer.isEnabled && Replicanti.galaxies.autobuyer.isOn) {
         this.galaxyText = `You are gaining a galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
         if (galaxiesPerSecond.gte(1)) {
           this.galaxyText = `You are gaining ${format(galaxiesPerSecond, 2, 1)} galaxies per second`;

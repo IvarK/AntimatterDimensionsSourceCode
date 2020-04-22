@@ -19,7 +19,7 @@ Vue.component("reality-upgrades-tab", {
       <br>
       These requirements, once completed, permanently unlock the ability to purchase the upgrades at any point.
       <br>
-      Upgrades show their requirements by default; hold shift to see the costs for the upgrades instead.
+      Upgrades show their requirements by default; hold shift to see the effects and costs for the upgrades instead.
       <br>
       Red upgrades are impossible to unlock this Reality, while yellow upgrades are still possible.
       <br>

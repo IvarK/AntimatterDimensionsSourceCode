@@ -21,6 +21,7 @@ GameDatabase.reality.upgrades = (function() {
   };
   return [
     rebuyable({
+      name: "Temporal Amplifier",
       id: 1,
       initialCost: 1,
       costMult: 30,
@@ -28,6 +29,7 @@ GameDatabase.reality.upgrades = (function() {
       effect: 3
     }),
     rebuyable({
+      name: "Replicative Amplifier",
       id: 2,
       initialCost: 1,
       costMult: 30,
@@ -35,6 +37,7 @@ GameDatabase.reality.upgrades = (function() {
       effect: 3
     }),
     rebuyable({
+      name: "Eternal Amplifier",
       id: 3,
       initialCost: 2,
       costMult: 30,
@@ -42,6 +45,7 @@ GameDatabase.reality.upgrades = (function() {
       effect: 3
     }),
     rebuyable({
+      name: "Superluminal Amplifier",
       id: 4,
       initialCost: 2,
       costMult: 30,
@@ -49,6 +53,7 @@ GameDatabase.reality.upgrades = (function() {
       effect: 3
     }),
     rebuyable({
+      name: "Boundless Amplifier",
       id: 5,
       initialCost: 3,
       costMult: 50,
@@ -56,6 +61,7 @@ GameDatabase.reality.upgrades = (function() {
       effect: 5
     }),
     {
+      name: "Cosmically Duplicate",
       id: 6,
       cost: 15,
       requirement: "Complete your first Eternity without using Replicanti Galaxies",
@@ -63,10 +69,11 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => player.reality.upgReqChecks[0] && player.noEternitiesThisReality,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: "Replicanti speed is multiplied based on Replicanti Galaxies",
-      effect: () => 1 + (player.replicanti.galaxies / 50),
+      effect: () => 1 + Replicanti.galaxies.total / 50,
       formatEffect: value => formatX(value, 2, 2)
     },
     {
+      name: "Innumerably Construct",
       id: 7,
       cost: 15,
       requirement: "Complete your first Infinity with at most 1 galaxy",
@@ -74,10 +81,11 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => player.galaxies <= 1 && player.noInfinitiesThisReality,
       checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
       description: "Infinitied stat gain is boosted from Antimatter Galaxy count",
-      effect: () => 1 + (player.galaxies / 30),
+      effect: () => 1 + player.galaxies / 30,
       formatEffect: value => formatX(value, 2, 2)
     },
     {
+      name: "Paradoxically Attain",
       id: 8,
       cost: 15,
       requirement: "Get to Eternity without any automatic achievements",
@@ -89,6 +97,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2)
     },
     {
+      name: "Linguistically Expand",
       id: 9,
       cost: 15,
       requirement: () => `Reality using only a single level ${formatInt(3)}+ glyph.`,
@@ -104,6 +113,7 @@ GameDatabase.reality.upgrades = (function() {
       effect: () => 1
     },
     {
+      name: "Existentially Prolong",
       id: 10,
       cost: 15,
       requirement: () => `Complete your first Eternity with at least ${format("1e450")} IP`,
@@ -113,6 +123,7 @@ GameDatabase.reality.upgrades = (function() {
       description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`
     },
     {
+      name: "The Boundless Flow",
       id: 11,
       cost: 50,
       requirement: () => `${format(1e12)} banked Infinities`,
@@ -123,6 +134,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => `${format(value)} per second`
     },
     {
+      name: "The Knowing Existence",
       id: 12,
       cost: 50,
       requirement: () => `Eternity for ${format(1e70)} EP without Eternity Challenge 1`,
@@ -136,6 +148,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2)
     },
     {
+      name: "The Telemechanical Process",
       id: 13,
       cost: 50,
       requirement: () => `Eternity for ${format("1e4000")} EP without Time Dimensions 5-8`,
@@ -146,6 +159,7 @@ GameDatabase.reality.upgrades = (function() {
       description: () => `Improved Eternity autobuyer, ${formatX(5)} EP multiplier, and Time Dimension autobuyers`
     },
     {
+      name: "The Eternal Flow",
       id: 14,
       cost: 50,
       requirement: () => `${format(1e7)} Eternities`,
@@ -156,6 +170,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => `${format(value)} per second`
     },
     {
+      name: "The Paradoxical Forever",
       id: 15,
       cost: 50,
       requirement: () => `Eternity for ${format(1e10)} EP without purchasing the ${formatX(5)} EP upgrade`,
@@ -167,6 +182,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2)
     },
     {
+      name: "Disparity of Rarity",
       id: 16,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} glyphs equipped of uncommon or better rarity`,
@@ -183,6 +199,7 @@ GameDatabase.reality.upgrades = (function() {
       formatCost: value => format(value, 1, 0)
     },
     {
+      name: "Duplicity of Potency",
       id: 17,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} glyphs equipped, each having at least ${formatInt(2)} effects`,
@@ -198,6 +215,7 @@ GameDatabase.reality.upgrades = (function() {
       formatCost: value => format(value, 1, 0)
     },
     {
+      name: "Measure of Forever",
       id: 18,
       cost: 1500,
       requirement: () => `Reality with ${formatInt(4)} glyphs equipped, each at level ${formatInt(10)} or higher`,
@@ -214,6 +232,7 @@ GameDatabase.reality.upgrades = (function() {
       formatCost: value => format(value, 1, 0)
     },
     {
+      name: "Scour to Empower",
       id: 19,
       cost: 1500,
       requirement: () => `Have a total of ${formatInt(30)} or more glyphs at once`,
@@ -224,6 +243,7 @@ GameDatabase.reality.upgrades = (function() {
       formatCost: value => format(value, 1, 0)
     },
     {
+      name: "Parity of Singularity",
       id: 20,
       cost: 1500,
       requirement: () => `${formatInt(2)} years total play time and the Black Hole unlocked`,
@@ -234,6 +254,7 @@ GameDatabase.reality.upgrades = (function() {
       formatCost: value => format(value, 1, 0)
     },
     {
+      name: "Cosmic Conglomerate",
       id: 21,
       cost: 100000,
       requirement: () => `${formatInt(2800)} total galaxies from all types`,
@@ -242,6 +263,7 @@ GameDatabase.reality.upgrades = (function() {
       description: "Remote galaxy scaling is removed"
     },
     {
+      name: "Temporal Transcendence",
       id: 22,
       cost: 100000,
       requirement: () => `${format("1e28000")} time shards`,
@@ -252,6 +274,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2)
     },
     {
+      name: "Replicative Rapidity",
       id: 23,
       cost: 100000,
       requirement: () => `Reality in under ${formatInt(15)} minutes`,
@@ -264,6 +287,7 @@ GameDatabase.reality.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2)
     },
     {
+      name: "Synthetic Symbolism",
       id: 24,
       cost: 100000,
       requirement: () => `Reality for ${formatInt(5000)} RM without glyphs`,
@@ -274,6 +298,7 @@ GameDatabase.reality.upgrades = (function() {
       effect: () => 1
     },
     {
+      name: "Effortless Existence",
       id: 25,
       cost: 100000,
       requirement: () => `Reach ${format("1e10500")} EP`,

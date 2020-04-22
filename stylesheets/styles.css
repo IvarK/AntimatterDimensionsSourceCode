@@ -1140,8 +1140,8 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--new-dim {
   font-weight: bold;
-  width: 20rem;
-  height: 6rem;
+  width: 21rem;
+  height: 7rem;
 }
 
 .o-primary-btn--quick-reset {
@@ -1560,12 +1560,6 @@ screen and (max-width: 480px) {
   font-weight: bold;
 }
 
-.o-prestige-btn--dilation {
-  color: #64dd17;
-  background-color: black;
-  border-color: #64dd17;
-}
-
 .o-prestige-btn--eternity:hover {
   color: var(--color-eternity);
   background-color: white;
@@ -1597,6 +1591,43 @@ screen and (max-width: 480px) {
   border-color: black;
 }
 
+.o-prestige-btn--dilation {
+  color: #64dd17;
+  background-color: black;
+  border-color: #64dd17;
+}
+
+.o-prestige-btn--dilation:hover {
+  color: #64dd17;
+  background-color: white;
+}
+
+.o-prestige-btn--dilation span {
+  transition-duration: 0.2s;
+}
+
+.o-prestige-btn--dilation:hover span {
+  color: #64dd17 !important;
+}
+
+.t-s1 .o-prestige-btn--dilation:hover span {
+  color: var(--color-text) !important;
+}
+
+.t-metro .o-prestige-btn--dilation,
+.t-dark-metro .o-prestige-btn--dilation,
+.t-inverted-metro .o-prestige-btn--dilation,
+.t-s8 .o-prestige-btn--dilation {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.t-s1 .o-prestige-btn--dilation:hover {
+  color: black;
+  background: #64dd17;
+  border-color: black;
+}
+
 /*#endregion Eternity*/
 
 /*#endregion Big Crunch*/
@@ -1619,6 +1650,7 @@ screen and (max-width: 480px) {
   width: 25rem;
   align-self: center;
   margin-top: -0.9rem;
+  margin-bottom: 1.2rem;
 }
 
 /*#endregion l-spoon-btn-group*/
@@ -1631,32 +1663,42 @@ screen and (max-width: 480px) {
 /*#region hint-text*/
 
 .o-hint-text {
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   color: white;
   text-shadow:
-      -1px -1px 0 black,
-      1px -1px 0 black,
-      -1px 1px 0 black,
-      1px 1px 0 black;
+    -0.1rem -0.1rem 0 black,
+    -0.1rem -0.1rem 0 black,
+    0.1rem -0.1rem 0 black,
+    0.1rem -0.1rem 0 black,
+    -0.1rem 0.1rem 0 black,
+    -0.1rem 0.1rem 0 black,
+    0.1rem 0.1rem 0 black,
+    0.1rem 0.1rem 0 black;
   pointer-events: none;
 }
 
 .l-hint-text {
   position: absolute;
-  top: -1.5rem;
+  top: -1.6rem;
   left: 0;
 }
 
 .l-hint-text--challenge {
-  top: -2rem;
+  top: -2.2rem;
 }
 
 .l-hint-text--time-study {
-  top: -1.85rem;
+  top: -1.95rem;
 }
 
 .l-hint-text--reality-upgrade {
   top: -2rem;
+}
+
+.c-hint-text--reality-upgrade {
+  color: var(--color-text);
+  text-shadow: none;
+  font-weight: bold;
 }
 
 .l-hint-text--achievement {
@@ -2507,7 +2549,6 @@ screen and (max-width: 480px) {
 .c-achievements-tab__header {
   font-size: 1.6rem;
   margin-top: 0.6rem;
-  margin-bottom: 0.6rem;
   position: relative;
   display: flex;
   flex-direction: row;
@@ -2544,6 +2585,7 @@ screen and (max-width: 480px) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 1rem;
 }
 
 .l-achievement-grid__row {
@@ -2637,8 +2679,7 @@ screen and (max-width: 480px) {
 /*#region l-challenge-grid*/
 
 .l-challenge-grid {
-  /* grid cell is 30rem < cell.width < 40rem, so the grid is 2x(N/2) */
-  width: 80rem;
+  width: 90rem;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -2646,7 +2687,7 @@ screen and (max-width: 480px) {
 }
 
 .l-challenge-grid__cell {
-  margin: 0.8rem 1.6rem;
+  margin: 0.8rem 1rem;
 }
 
 .l-challenge-grid__cell--hidden {
@@ -2658,31 +2699,31 @@ screen and (max-width: 480px) {
 /*#region c-challenge-box*/
 
 .c-challenge-box {
-  width: 35rem;
-  height: 10.5rem;
-  padding: 0.2rem 0.4rem 0.4rem 0.4rem;
+  width: 39rem;
+  height: 13rem;
+  padding: 0.5rem 0.4rem;
   box-sizing: border-box;
   font-weight: bold;
   border: 0.2rem solid black;
   border-radius: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
   transition: all 0.2s, visibility 0s;
 }
 
 .c-challenge-box--normal {
   color: black;
-  font-size: 1rem;
+  font-size: 1.05rem;
   background-color: #f2f2f2;
 }
 
 .c-challenge-box--infinity {
-  height: 15rem;
+  height: 16rem;
   color: white;
   background-color: #181818;
 }
 
 .c-challenge-box--eternity {
-  height: 15rem;
+  height: 16rem;
   color: var(--color-eternity);
   background-color: black;
   border: 0.3rem solid var(--color-eternity);
@@ -2690,7 +2731,7 @@ screen and (max-width: 480px) {
 }
 
 .c-challenge-box__reward-description--small-text {
-  font-size: .85rem;
+  font-size: .95rem;
 }
 
 /*#region themes*/
@@ -2709,8 +2750,29 @@ screen and (max-width: 480px) {
 .t-dark-metro .c-challenge-box,
 .t-inverted-metro .c-challenge-box,
 .t-s8 .c-challenge-box {
-  border: 0.1rem solid black;
   border-radius: 0;
+  border: 0.1rem solid;
+}
+
+.t-metro .c-challenge-box--normal,
+.t-dark-metro .c-challenge-box--normal,
+.t-inverted-metro .c-challenge-box--normal,
+.t-s8 .c-challenge-box--normal {
+  border-color: black;
+}
+
+.t-metro .c-challenge-box--infinity,
+.t-dark-metro .c-challenge-box--infinity,
+.t-inverted-metro .c-challenge-box--infinity,
+.t-s8 .c-challenge-box--infinity {
+  border-color: var(--color-infinity);
+}
+
+.t-metro .c-challenge-box--eternity,
+.t-dark-metro .c-challenge-box--eternity,
+.t-inverted-metro .c-challenge-box--eternity,
+.t-s8 .c-challenge-box--eternity {
+  border-color: var(--color-eternity);
 }
 
 .t-dark-metro .c-challenge-box--normal {
@@ -2809,6 +2871,7 @@ screen and (max-width: 480px) {
   border: 0.3rem solid #127a20;
   border-radius: 1rem;
   font-size: 1.2rem;
+  margin-bottom: 0.5rem;
   transition: all 0.2s, visibility 0s;
   cursor: pointer;
 }
@@ -7311,6 +7374,7 @@ input.o-automator-block-input {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .c-perk-network {

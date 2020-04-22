@@ -5,6 +5,7 @@ Vue.component("statistics-tab", {
     return {
       totalAntimatter: new Decimal(0),
       realTimePlayed: TimeSpan.zero,
+      newsMessagesSeen: 0,
       infinity: {
         isUnlocked: false,
         count: new Decimal(0),
@@ -42,6 +43,7 @@ Vue.component("statistics-tab", {
     update() {
       this.totalAntimatter.copyFrom(player.totalAntimatter);
       this.realTimePlayed.setFrom(Date.now() - player.gameCreatedTime);
+      this.newsMessagesSeen = player.news.size;
       const progress = PlayerProgress.current;
       const isInfinityUnlocked = progress.isInfinityUnlocked;
       const infinity = this.infinity;
@@ -104,6 +106,7 @@ Vue.component("statistics-tab", {
         <div v-if="reality.isUnlocked">
           Your existence has spanned {{ reality.totalTimePlayed }} of time.
         </div>
+        <div>You have seen {{ formatInt(newsMessagesSeen) }} unique news ticker messages.</div>
         <div>
           <br>
           <div

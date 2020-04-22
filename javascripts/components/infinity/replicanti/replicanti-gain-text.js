@@ -3,7 +3,8 @@
 Vue.component("replicanti-gain-text", {
   data() {
     return {
-      text: ""
+      galaxyText: "",
+      replicantiText: ""
     };
   },
   methods: {
@@ -14,6 +15,7 @@ Vue.component("replicanti-gain-text", {
         (Math.log(player.replicanti.chance + 1)), getReplicantiInterval());
       const log10GainFactorPerTick = logGainFactorPerTick.dividedBy(Math.LN10);
       const replicantiAmount = player.replicanti.amount;
+
       if (TimeStudy(192).isBought && replicantiAmount.log10() > 308) {
         const postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
         const gainFactorPerSecond = logGainFactorPerTick
@@ -29,26 +31,11 @@ Vue.component("replicanti-gain-text", {
         const timeEstimateText = timeToThousand.eq(0)
           ? "an extremely long time"
           : `${TimeSpan.fromSeconds(timeToThousand.toNumber())}`;
-        this.text = `You are gaining ${formatX(gainFactorPerSecond, 2, 1)} Replicanti per second` +
+        this.replicantiText = `You are gaining ${formatX(gainFactorPerSecond, 2, 1)} Replicanti per second` +
           ` (${timeEstimateText} until ${format(nextThousandOOM)})`;
         return;
       }
-      if (log10GainFactorPerTick.gt(308)) {
-        const galaxiesPerSecond = log10GainFactorPerTick.times(ticksPerSecond / 308);
-        let baseGalaxiesPerSecond, effectiveMaxRG;
-        if (RealityUpgrade(6).isBought) {
-          baseGalaxiesPerSecond = galaxiesPerSecond.divide(RealityUpgrade(6).effectValue);
-          effectiveMaxRG = 50 * Math.log((Replicanti.galaxies.max + 49.5) / 49.5);
-        } else {
-          baseGalaxiesPerSecond = galaxiesPerSecond;
-          effectiveMaxRG = Replicanti.galaxies.max;
-        }
-        const allGalaxyTime = Decimal.divide(effectiveMaxRG, baseGalaxiesPerSecond).toNumber();
-        this.text = `You are gaining ${format(galaxiesPerSecond, 2, 1)} galaxies per second` +
-          ` (all galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
-        return;
-      }
-      // Explicit toNumber() is safe here since log10GainFactorPerTick must be less than 308
+
       const totalTime = LOG10_MAX_VALUE / (ticksPerSecond * log10GainFactorPerTick.toNumber());
       let remainingTime = (LOG10_MAX_VALUE - replicantiAmount.log10()) /
         (ticksPerSecond * log10GainFactorPerTick.toNumber());
@@ -56,9 +43,31 @@ Vue.component("replicanti-gain-text", {
         // If the cap is raised via Effarig Infinity but the player doesn't have TS192, this will be a negative number
         remainingTime = 0;
       }
-      this.text = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti` +
-        ` (${TimeSpan.fromSeconds(totalTime)} total per galaxy)`;
+
+      const galaxiesPerSecond = log10GainFactorPerTick.times(ticksPerSecond / 308);
+      let baseGalaxiesPerSecond, effectiveMaxRG;
+      if (RealityUpgrade(6).isBought) {
+        baseGalaxiesPerSecond = galaxiesPerSecond.divide(RealityUpgrade(6).effectValue);
+        const timeFromZeroRG = galaxies => 50 * Math.log((galaxies + 49.5) / 49.5);
+        effectiveMaxRG = timeFromZeroRG(Replicanti.galaxies.max + Replicanti.galaxies.extra) -
+          timeFromZeroRG(Replicanti.galaxies.extra);
+      } else {
+        baseGalaxiesPerSecond = galaxiesPerSecond;
+        effectiveMaxRG = Replicanti.galaxies.max;
+      }
+      const allGalaxyTime = Decimal.divide(effectiveMaxRG, baseGalaxiesPerSecond).toNumber();
+
+      this.replicantiText = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti`;
+      if (effectiveMaxRG > 0 && Replicanti.galaxies.autobuyer.isEnabled) {
+        this.galaxyText = `You are gaining a galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
+        if (galaxiesPerSecond.gte(1)) {
+          this.galaxyText = `You are gaining ${format(galaxiesPerSecond, 2, 1)} galaxies per second`;
+        }
+        this.galaxyText += ` (all galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
+      } else {
+        this.galaxyText = ` (${TimeSpan.fromSeconds(totalTime)} total time until Infinite Replicanti)`;
+      }
     }
   },
-  template: `<p>{{text}}</p>`
+  template: `<p>{{replicantiText}}<br>{{galaxyText}}</p>`
 });

@@ -478,7 +478,8 @@ GameDatabase.news = [
     id: "a109",
     text:
       "Antimatter Dimensions is proud to be sponsored by Lehmä! Now offering - grass eating lessons! Learn what " +
-      "grass is safe to eat and what grass isn't."
+      "grass is safe to eat and what grass isn't.",
+    isAdvertising: true
   },
   {
     id: "a110",
@@ -598,7 +599,8 @@ GameDatabase.news = [
     text:
       "Only today you can call 1-800-ANTIMATTER and get a FREE Infinity Dimension! The package also comes with a " +
       "COMPLETELY FREE SHIPPING and a FREE HIGH DEFINITION ANTI-V!!! Only today for the low price of 42! Estimated " +
-      "delivery time - 5 hours."
+      "delivery time - 5 hours.",
+    isAdvertising: true
   },
   {
     id: "a126",
@@ -669,7 +671,8 @@ GameDatabase.news = [
     get text() {
       return `Check out Avari's newly built actually infinite infinity pool! With an area of ` +
       `${format(Number.MAX_VALUE, 2)} square megametres, you'll be sure to have infinite fun!`;
-    }
+    },
+    isAdvertising: true
   },
   {
     id: "a139",
@@ -682,7 +685,8 @@ GameDatabase.news = [
       "all the bad memes in #news-ticker-suggestions. To do this, he needs a dozen new dank memes and a couple of " +
       "discord bots. To help him, all he needs is your Antimatter card number, the three numbers on the back, and " +
       "the expiration month and date. But you gotta be quick so that Hevipelle can secure the good memes, and " +
-      "achieve the epic meme R O Y A L."
+      "achieve the epic meme R O Y A L.",
+    isAdvertising: true
   },
   {
     id: "a141",
@@ -1160,7 +1164,8 @@ GameDatabase.news = [
   },
   {
     id: "a216",
-    text: "Testing... testing... testing... Oh goddamn I was in prod again."
+    text: "Testing... testing... testing... Oh goddamn I was in prod again.",
+    isAdvertising: true
   },
   {
     id: "a217",
@@ -1338,7 +1343,8 @@ GameDatabase.news = [
       const reason = reasons[Theme.current().name.replace(/\s/gu, "")];
       return `Ah, a fellow ${theme} theme user. I see that you have impeccable taste.
         I myself like the ${theme} theme too, because ${reason}`;
-    }
+    },
+    dynamic: true
   },
   {
     id: "a246",
@@ -1372,7 +1378,8 @@ GameDatabase.news = [
   },
   {
     id: "a249",
-    text: "This woman got TONS of Dimension Boosts with this 1 WEIRD TRICK! Galaxies HATE her!"
+    text: "This woman got TONS of Dimension Boosts with this 1 WEIRD TRICK! Galaxies HATE her!",
+    isAdvertising: true
   },
   {
     id: "a250",
@@ -1568,7 +1575,8 @@ GameDatabase.news = [
       "thousand news message cards with all the irrelevant memes you know and love! You can finally enjoy AD the way " +
       "it was meant to be played. AD: The Board Game is also available in travel size, so you can even experience " +
       "the joy of calculating logarithmic growth while you're on the go! BUY AD: The Board Game TODAY! Warning: may " +
-      "contain traces of actual matter. Replicanti sold separately. 9th Dimension not included."
+      "contain traces of actual matter. Replicanti sold separately. 9th Dimension not included.",
+    isAdvertising: true
   },
   {
     id: "a280",
@@ -1701,7 +1709,8 @@ GameDatabase.news = [
     get text() {
       return `Buy the new Antimatter Dimensions puzzle set now! With a combined ${format(Number.MAX_VALUE, 2)} ` +
       `pieces, these puzzles are the perfect way to spend some quality time with your family!`;
-    }
+    },
+    isAdvertising: true
   },
   {
     id: "a300",
@@ -1715,7 +1724,8 @@ GameDatabase.news = [
   },
   {
     id: "a302",
-    text: "Introducing Antimatter Lite! Zero calories... Same great Crunch."
+    text: "Introducing Antimatter Lite! Zero calories... Same great Crunch.",
+    isAdvertising: true
   },
   {
     id: "a303",
@@ -2086,7 +2096,8 @@ GameDatabase.news = [
       return `Pokemon ${game1Name} and ${game2Name} were just released! This new generation brings the total number ` +
         "of Pokemon up to 1e151. Good luck catching 'em all!";
     },
-    get unlocked() { return PlayerProgress.eternityUnlocked(); }
+    get unlocked() { return PlayerProgress.eternityUnlocked(); },
+    isAdvertising: true
   },
   {
     id: "l55",

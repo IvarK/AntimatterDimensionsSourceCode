@@ -60,7 +60,8 @@ Vue.component("new-dim-shift-row", {
   template:
   `<div class="reset-container dimboost">
     <h4>Dimensional {{name}} ({{boostCountText}})</h4>
-    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} D</span>
+    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} Antimatter D</span>
+    <br>
     <button
       class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
       :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"

@@ -463,7 +463,7 @@ body.t-normal {
   background: var(--color-good);
 }
 
-.o-primary-btn--option, .c-select-theme__item, .c-select-notation__item {
+.o-primary-btn--option, .o-primary-btn--option-wide, .c-select-theme__item, .c-select-notation__item {
   background: var(--color-base);
   color: var(--color-text);
   border: 0.1rem solid var(--color-good);

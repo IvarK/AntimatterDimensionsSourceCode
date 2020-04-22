@@ -1192,6 +1192,12 @@ screen and (max-width: 480px) {
   box-sizing: border-box;
 }
 
+.o-primary-btn--option-wide {
+  width: 24rem;
+  height: 5.5rem;
+  box-sizing: border-box;
+}
+
 .o-primary-btn--option_font-large {
   font-size: 1.8rem;
 }
@@ -4814,7 +4820,7 @@ screen and (max-width: 480px) {
   width: 30rem;
 }
 
-.c-modal-options .o-primary-btn--option {
+.c-modal-options .o-primary-btn--option, .o-primary-btn--option-wide {
   height: 100%;
   padding: 0.5rem;
   margin-bottom: 1rem;

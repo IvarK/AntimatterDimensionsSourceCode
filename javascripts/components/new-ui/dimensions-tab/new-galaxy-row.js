@@ -82,10 +82,9 @@ Vue.component("new-galaxy-row", {
   },
   template:
   `<div class="reset-container galaxy">
-    <h4>{{typeName}} ({{sumText}})</h4>
-    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} D</span>
-    <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
-    <div v-else><br></div>
+    <div style="height: 4rem;"><h4>{{typeName}} ({{sumText}})</h4></div>
+    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} Antimatter D</span>
+    <div style="height: 2rem;">{{ hasIncreasedScaling ? costScalingText : "" }}</div>
     <button
       class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
       :class="{ 'o-primary-btn--disabled': !canBeBought, ...tutorialClass }"

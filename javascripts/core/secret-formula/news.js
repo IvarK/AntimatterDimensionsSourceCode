@@ -1343,7 +1343,8 @@ GameDatabase.news = [
       const reason = reasons[Theme.current().name.replace(/\s/gu, "")];
       return `Ah, a fellow ${theme} theme user. I see that you have impeccable taste.
         I myself like the ${theme} theme too, because ${reason}`;
-    }
+    },
+    dynamic: true
   },
   {
     id: "a246",

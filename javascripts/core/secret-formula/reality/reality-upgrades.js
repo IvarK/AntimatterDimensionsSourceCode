@@ -156,7 +156,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: () => `Improved Eternity autobuyer, ${formatX(5)} EP multiplier, and Time Dimension autobuyers`
+      description: () => `Unlock Time Dimension, ${formatX(5)} EP multiplier, and improved Eternity autobuyers`
     },
     {
       name: "The Eternal Flow",

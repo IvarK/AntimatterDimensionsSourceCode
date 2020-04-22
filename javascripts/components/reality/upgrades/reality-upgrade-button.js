@@ -62,7 +62,7 @@ Vue.component("reality-upgrade-button", {
         </hint-text>
         <description-display :config="config"/>
         <description-display
-          v-if="!$viewModel.shiftDown && !isRebuyable"
+          v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable"
           :config="requirementConfig"
           title="Requirement:"
           class="c-reality-upgrade-btn__requirement"

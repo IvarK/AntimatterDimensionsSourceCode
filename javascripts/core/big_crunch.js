@@ -416,29 +416,30 @@ BreakInfinityUpgrade.dimCostMult = new BreakInfinityMultiplierCostUpgrade(
   GameDatabase.infinity.breakUpgrades.dimCostMult
 );
 
-class BreakInfinityIPGenUpgrade extends GameMechanicState {
-  get cost() {
-    return this.config.cost();
+class BreakInfinityIPGenUpgrade extends RebuyableMechanicState {
+  get currency() {
+    return Currency.infinityPoints;
+  }
+
+  get boughtAmount() {
+    return player.infinityRebuyables[2];
+  }
+
+  set boughtAmount(value) {
+    player.infinityRebuyables[2] = value;
   }
 
   get isMaxed() {
-    return player.offlineProd === 50;
+    return this.boughtAmount === 10;
   }
 
-  get isAffordable() {
-    return player.infinityPoints.gte(this.cost);
-  }
-
-  get canBeBought() {
-    return !this.isMaxed && this.isAffordable;
+  get isAvailableForPurchase() {
+    return !this.isMaxed;
   }
 
   purchase() {
-    if (!this.canBeBought) return;
-    player.infinityPoints = player.infinityPoints.minus(player.offlineProdCost);
-    player.offlineProdCost *= 10;
-    player.offlineProd += 5;
-    GameUI.update();
+    if (!super.purchase()) return false;
+    return true;
   }
 }
 
@@ -459,5 +460,5 @@ function preProductionGenerateIP(diff) {
     }
   }
   player.infinityPoints = player.infinityPoints
-    .plus(Player.bestRunIPPM.times(player.offlineProd / 100).times(diff / 60000));
+    .plus(BreakInfinityUpgrade.ipGen.effectOrDefault(new Decimal(0)).div(20).times(diff / 60000));
 }

@@ -652,6 +652,11 @@ GameStorage.devMigrations = {
       player.lastTenEternities = player.lastTenEternities.map(x => [x[0], x[1], new Decimal(1), x[2].toNumber()]);
       //  Put in a default value of 1 for realities
       player.lastTenRealities = player.lastTenRealities.map(x => [x[0], x[1], 1, Number(x[2]), x[3]]);
+    },
+    player => {
+      player.infinityRebuyables.push(player.offlineProd / 5);
+      delete player.offlineProd;
+      delete player.offlineProdCost;
     }
   ],
 

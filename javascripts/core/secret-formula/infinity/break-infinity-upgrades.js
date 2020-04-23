@@ -2,19 +2,18 @@
 
 GameDatabase.infinity.breakUpgrades = (function() {
   function rebuyable(config) {
-    const maxUpgrades = config.maxUpgrades;
     return {
       id: config.id,
       cost: () => config.initialCost * Math.pow(config.costIncrease, player.infinityRebuyables[config.id]),
-      maxUpgrades,
+      maxUpgrades: config.maxUpgrades,
       description: config.description,
-      effect: () => player.infinityRebuyables[config.id],
-      formatEffect: value => (value === maxUpgrades
+      effect: () => (config.effect || (x => x))(player.infinityRebuyables[config.id]),
+      formatEffect: config.formatEffect || (value => value === config.maxUpgrades
         ? `Default: ${formatX(10)} | Currently: ${formatX(10 - value)}`
         : `Default: ${formatX(10)} | Currently: ${formatX(10 - value)} Next: ${formatX(10 - value - 1)}`
       ),
-      staticEffect: true,
-      formatCost: value => format(value, 2, 0)
+      formatCost: value => format(value, 2, 0),
+      noTitle: !config.title
     };
   }
 
@@ -88,28 +87,31 @@ GameDatabase.infinity.breakUpgrades = (function() {
       costIncrease: 5,
       maxUpgrades: 8,
       description: "Reduce post-infinity tickspeed cost multiplier scaling",
-
+      title: false,
     }),
     dimCostMult: rebuyable({
       id: 1,
       initialCost: 1e8,
       costIncrease: 5e3,
       maxUpgrades: 7,
-      description: "Reduce post-infinity Normal Dimension cost multiplier scaling"
+      description: "Reduce post-infinity Normal Dimension cost multiplier scaling",
+      title: false,
     }),
-    ipGen: {
-      cost: () => player.offlineProdCost,
+    ipGen: rebuyable({
+      id: 2,
+      initialCost: 1e7,
+      costIncrease: 10,
+      maxUpgrades: 10,
+      effect: value => Player.bestRunIPPM.times(value / 20),
       description: () => {
-        let generation = `Generate ${player.offlineProd}%`;
+        let generation = `Generate ${formatInt(5 * player.infinityRebuyables[2])}%`;
         if (!BreakInfinityUpgrade.ipGen.isMaxed) {
-          generation += ` ➜ ${player.offlineProd + 5}%`;
+          generation += ` ➜ ${formatInt(5 * (1 + player.infinityRebuyables[2]))}%`;
         }
         return `${generation} of your best IP/min from last 10 infinities, works offline`;
       },
-      // Cutting corners: this is not actual effect (player.offlineProd is), but
-      // it is actual IPPM that is displyed on upgrade
-      effect: () => Player.bestRunIPPM.times(player.offlineProd / 100),
-      formatEffect: value => `${format(value, 2, 1)} IP/min`
-    }
+      formatEffect: value => `${format(value, 2, 1)} IP/min`,
+      title: true
+    })
   };
 }());

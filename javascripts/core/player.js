@@ -38,7 +38,7 @@ let player = {
   infinityUpgrades: new Set(),
   usedMaxAll: false,
   bestIpPerMsWithoutMaxAll: new Decimal(0),
-  infinityRebuyables: [0, 0],
+  infinityRebuyables: [0, 0, 0],
   challenge: {
     normal: {
       current: 0,

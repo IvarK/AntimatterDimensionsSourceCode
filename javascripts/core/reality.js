@@ -369,7 +369,7 @@ function finishProcessReality(realityProps) {
   player.break = false;
   player.infMult = new Decimal(1);
   player.infMultCost = new Decimal(10);
-  player.infinityRebuyables = [0, 0];
+  player.infinityRebuyables = [0, 0, 0];
   player.postChallUnlocked = 0;
   player.infinityPower = new Decimal(1);
   player.infDimBuyers = Array.repeat(false, 8);
@@ -387,8 +387,6 @@ function finishProcessReality(realityProps) {
   player.bestEternity = 999999999999;
   player.eternityUpgrades.clear();
   player.totalTickGained = 0;
-  player.offlineProd = 0;
-  player.offlineProdCost = 1e7;
   player.eternityChalls = {};
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
@@ -526,10 +524,8 @@ function applyRUPG10() {
   player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
-  player.infinityRebuyables = [8, 7];
+  player.infinityRebuyables = [8, 7, 10];
   player.infDimBuyers = Array.repeat(true, 8);
-  player.offlineProd = 50;
-  player.offlineProdCost = 1e17;
   player.infMultBuyer = true;
   player.eternities = player.eternities.plus(100);
   player.replicanti.amount = player.replicanti.amount.clampMin(1);

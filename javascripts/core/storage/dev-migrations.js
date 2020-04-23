@@ -643,6 +643,15 @@ GameStorage.devMigrations = {
     },
     player => {
       player.thisEternityMaxAM = new Decimal(0);
+    },
+    player => {
+      // Move infinities before time in infinity, and make them Decimal.
+      // Also the conversion to Number here is necessary for some reason (otherwise it's Decimal).
+      player.lastTenRuns = player.lastTenRuns.map(x => [x[0], x[1], new Decimal(x[3]), x[2].toNumber()]);
+      // Put in a default value of 1 for eternities
+      player.lastTenEternities = player.lastTenEternities.map(x => [x[0], x[1], new Decimal(1), x[2].toNumber()]);
+      //  Put in a default value of 1 for realities
+      player.lastTenRealities = player.lastTenRealities.map(x => [x[0], x[1], 1, Number(x[2]), x[3]]);
     }
   ],
 

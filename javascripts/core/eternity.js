@@ -7,16 +7,19 @@ function canEternity() {
 function giveEternityRewards(auto) {
   player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
   player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
-  addEternityTime(
-    player.thisEternity,
-    player.thisEternityRealTime,
-    gainedEternityPoints()
-  );
+  
   const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
   if (player.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
   }
+  
+  addEternityTime(
+    player.thisEternity,
+    player.thisEternityRealTime,
+    gainedEternityPoints(),
+    newEternities
+  );
 
   player.eternities = player.eternities.add(newEternities);
 

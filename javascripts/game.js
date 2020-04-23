@@ -133,19 +133,23 @@ function ratePerMinute(amount, time) {
     return Decimal.divide(amount, time / (60 * 1000));
 }
 
-function averageRun(runs) {
+function averageRun(runs, name) {
   const totalTime = runs
     .map(run => run[0])
     .reduce(Number.sumReducer);
   const totalAmount = runs
     .map(run => run[1])
     .reduce(Decimal.sumReducer);
-  const realTime = runs
+  const totalPrestigeGain = runs
     .map(run => run[2])
+    .reduce(name === "Reality" ? Number.sumReducer : Decimal.sumReducer);
+  const realTime = runs
+    .map(run => run[3])
     .reduce(Number.sumReducer);
   return [
     totalTime / runs.length,
     totalAmount.dividedBy(runs.length),
+    (name === "Reality") ? totalPrestigeGain / runs.length : totalPrestigeGain.dividedBy(runs.length),
     realTime / runs.length
   ];
 }
@@ -153,14 +157,14 @@ function averageRun(runs) {
 // eslint-disable-next-line max-params
 function addInfinityTime(time, realTime, ip, infinities) {
   player.lastTenRuns.pop();
-  player.lastTenRuns.unshift([time, ip, realTime, infinities]);
+  player.lastTenRuns.unshift([time, ip, infinities, realTime]);
   GameCache.bestRunIPPM.invalidate();
 }
 
 function resetInfinityRuns() {
   player.lastTenRuns = Array.from(
     { length: 10 },
-    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, new Decimal(1)]
+    () => [600 * 60 * 24 * 31, new Decimal(1), new Decimal(1), 600 * 60 * 24 * 31]
   );
   GameCache.bestRunIPPM.invalidate();
 }
@@ -173,16 +177,16 @@ function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
     : new Decimal(0);
 }
 
-function addEternityTime(time, realTime, ep) {
+function addEternityTime(time, realTime, ep, eternities) {
   player.lastTenEternities.pop();
-  player.lastTenEternities.unshift([time, ep, realTime]);
+  player.lastTenEternities.unshift([time, ep, eternities, realTime]);
   GameCache.averageEPPerRun.invalidate();
 }
 
 function resetEternityRuns() {
   player.lastTenEternities = Array.from(
     { length: 10 },
-    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]
+    () => [600 * 60 * 24 * 31, new Decimal(1), new Decimal(1), 600 * 60 * 24 * 31]
   );
   GameCache.averageEPPerRun.invalidate();
 }
@@ -206,9 +210,9 @@ function getOfflineEPGain(ms) {
 }
 
 // eslint-disable-next-line max-params
-function addRealityTime(time, realTime, rm, level) {
+function addRealityTime(time, realTime, rm, level, realities) {
   player.lastTenRealities.pop();
-  player.lastTenRealities.unshift([time, rm, realTime, level]);
+  player.lastTenRealities.unshift([time, rm, realities, realTime, level]);
 }
 
 function gainedInfinities() {

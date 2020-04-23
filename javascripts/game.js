@@ -177,6 +177,7 @@ function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
     : new Decimal(0);
 }
 
+// eslint-disable-next-line max-params
 function addEternityTime(time, realTime, ep, eternities) {
   player.lastTenEternities.pop();
   player.lastTenEternities.unshift([time, ep, eternities, realTime]);

@@ -49,7 +49,10 @@ Vue.component("modal-miscellaneous-options", {
         v-if="eternityUnlocked"
         v-model="unlockEternityChallengeTabSwitch"
         text="Switch tabs to Eternity Challenge tab on Eternity Challenge unlock:"/>
-      <wide-on-off-button v-if="realityUnlocked" v-model="showGlyphEffectDots" text="Dots on glyphs (showing effects):"/>
+      <wide-on-off-button
+        v-if="realityUnlocked"
+        v-model="showGlyphEffectDots"
+        text="Dots on glyphs (showing effects):"/>
       <wide-on-off-button
         v-if="realityUnlocked"
         v-model="respecIntoProtected"

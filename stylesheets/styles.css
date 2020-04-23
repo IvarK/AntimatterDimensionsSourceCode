@@ -1265,13 +1265,14 @@ screen and (max-width: 480px) {
 }
 
 .o-primary-btn--replicanti-galaxy {
-  width: 20rem;
+  width: 22rem;
   height: 7rem;
   font-size: 1.2rem;
   padding: 0.1rem 0.6rem;
 }
 
 .o-primary-btn--replicanti-galaxy-toggle {
+  width: 22rem;
   font-size: 1.2rem;
 }
 

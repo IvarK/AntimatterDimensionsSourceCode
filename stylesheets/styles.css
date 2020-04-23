@@ -1140,7 +1140,7 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--new-dim {
   font-weight: bold;
-  width: 21rem;
+  width: 22rem;
   height: 7rem;
 }
 
@@ -1494,7 +1494,7 @@ screen and (max-width: 480px) {
   border-radius: 0.4rem;
   transition-duration: 0.2s;
   cursor: pointer;
-  width: 21rem;
+  width: 22rem;
   height: 7rem;
   font-size: 1.1rem;
   font-family: Typewriter, serif;

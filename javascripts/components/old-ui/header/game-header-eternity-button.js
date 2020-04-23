@@ -167,10 +167,10 @@ Vue.component("game-header-eternity-button", {
 
       <!-- Dilation -->
       <template v-else-if="type === 3">
-        Gain {{format(gainedEP, 2, 2)}} Eternity {{ "Point" | pluralize(gainedEP) }}.
+        Gain <span :style="tachyonAmountStyle">{{format(gainedTachyons, 2, 1)}}</span>
+        Tachyon {{ "Particle" | pluralize(gainedTachyons) }}
         <br>
-        +<span :style="tachyonAmountStyle">{{format(gainedTachyons, 2, 1)}}</span>
-        Tachyon {{ "Particle" | pluralize(gainedTachyons) }}.
+        and {{format(gainedEP, 2, 2)}} Eternity {{ "Point" | pluralize(gainedEP) }}.
       </template>
 
       <!-- New content available -->

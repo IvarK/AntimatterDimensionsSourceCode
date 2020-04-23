@@ -75,6 +75,9 @@ function getDimensionFinalMultiplierUncached(tier) {
     multiplier = Effarig.multiplier(multiplier);
   } else if (V.isRunning) {
     multiplier = multiplier.pow(0.5);
+  } else if (Ra.effarigRealityActive) {
+    const nerf = 1 + Effarig.nerfFactor(player.antimatter);
+    multiplier = Decimal.pow10(Math.pow(multiplier.log10(), 0.25 * nerf));
   }
 
   // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them

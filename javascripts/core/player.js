@@ -443,10 +443,12 @@ let player = {
         })),
       unlocksBits: 0,
       run: false,
+      activeReality: 0,
       charged: new Set(),
       disCharge: false,
       peakGamespeed: 1,
-      petWithRecollection: "Teresa"
+      petWithRecollection: "Teresa",
+      memoryResource: 0
     },
     laitela: {
       matter: new Decimal(0),

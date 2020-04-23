@@ -149,9 +149,11 @@ GameDatabase.infinity.upgrades = (function() {
       description: "Passively generate Infinity Points 10 times slower than your fastest Infinity",
       // Cutting corners: this is not actual effect (player.infMult is), but
       // it is totalIPMult that is displyed on upgrade
-      effect: () => (Teresa.isRunning || V.isRunning ? new Decimal(0) : GameCache.totalIPMult.value),
+      effect: () => (Teresa.isRunning || V.isRunning || Ra.isRunning
+        ? new Decimal(0)
+        : GameCache.totalIPMult.value),
       formatEffect: value => {
-        if (Teresa.isRunning || V.isRunning) return "Disabled in this reality";
+        if (Teresa.isRunning || V.isRunning || Ra.isRunning) return "Disabled in this reality";
         const income = format(value, 2, 0);
         const period = player.bestInfinityTime >= 999999999999
           ? "hundred or so years"

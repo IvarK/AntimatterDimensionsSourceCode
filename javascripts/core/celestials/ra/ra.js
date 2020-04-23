@@ -212,6 +212,27 @@ const Ra = {
   initializeRun() {
     clearCelestialRuns();
     player.celestials.ra.run = true;
+    player.celestials.ra.memoryResource = 0;
+    switch (this.petWithRecollection) {
+      case "Teresa":
+        player.celestials.ra.activeReality = RA_REALITY_TYPE.TERESA;
+        break;
+      case "Effarig":
+        player.celestials.ra.activeReality = RA_REALITY_TYPE.EFFARIG;
+        if (Glyphs.active.countWhere(g => g && g.type === "effarig") !== 0) respecGlyphs();
+        recalculateAllGlyphs();
+        break;
+      case "Enslaved":
+        player.celestials.ra.activeReality = RA_REALITY_TYPE.ENSLAVED;
+        player.celestials.enslaved.stored = 0;
+        break;
+      case "V":
+        player.celestials.ra.activeReality = RA_REALITY_TYPE.V;
+        break;
+      default:
+        player.celestials.ra.activeReality = RA_REALITY_TYPE.NONE;
+        break;
+    }
   },
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;
@@ -230,6 +251,18 @@ const Ra = {
   },
   get isRunning() {
     return player.celestials.ra.run;
+  },
+  get teresaRealityActive() {
+    return player.celestials.ra.activeReality === RA_REALITY_TYPE.TERESA;
+  },
+  get effarigRealityActive() {
+    return player.celestials.ra.activeReality === RA_REALITY_TYPE.EFFARIG;
+  },
+  get enslavedRealityActive() {
+    return player.celestials.ra.activeReality === RA_REALITY_TYPE.ENSLAVED;
+  },
+  get vRealityActive() {
+    return player.celestials.ra.activeReality === RA_REALITY_TYPE.V;
   },
   get totalCharges() {
     return Math.min(12, Math.floor(Ra.pets.teresa.level / 2));

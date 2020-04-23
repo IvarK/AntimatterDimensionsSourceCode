@@ -91,6 +91,7 @@ Vue.component("game-header", {
       isInMatterChallenge: false,
       matter: new Decimal(0),
       isInEffarig: false,
+      isInRaEffarig: false,
       effarigMultNerfText: "",
       effarigTickNerfText: "",
       isInLaitela: false,
@@ -110,6 +111,10 @@ Vue.component("game-header", {
       if (this.isInEffarig) {
         this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(player.infinityPower), 0, 5)}`;
         this.effarigTickNerfText = `${formatPow(0.7 + 0.1 * Effarig.nerfFactor(player.timeShards), 0, 5)}`;
+      }
+      this.isInRaEffarig = Ra.effarigRealityActive;
+      if (this.isInRaEffarig) {
+        this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(player.antimatter), 0, 5)}`;
       }
       this.isInLaitela = Laitela.isRunning;
       if (this.isInLaitela) {
@@ -132,6 +137,9 @@ Vue.component("game-header", {
         Gamespeed and multipliers dilated {{effarigMultNerfText}}
         <br>
         Tickspeed dilated {{effarigTickNerfText}}
+      </div>
+      <div v-else-if="isInRaEffarig">
+        Multipliers dilated {{effarigMultNerfText}}
       </div>
       <div v-if="isInLaitela">
         Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})

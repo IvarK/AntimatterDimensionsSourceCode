@@ -79,6 +79,7 @@ const Effarig = {
         c = 25;
         break;
     }
+    if (Ra.effarigRealityActive) c = 800;
     return 3 * (1 - c / (c + Math.sqrt(power.pLog10())));
   },
   get tickspeed() {

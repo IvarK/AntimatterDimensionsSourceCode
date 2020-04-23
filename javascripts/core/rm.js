@@ -500,6 +500,7 @@ const Glyphs = {
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {
       throw new Error("Inconsistent inventory indexing");
     }
+    if (glyph.type === "effarig" && Ra.effarigRealityActive) return;
     let sameSpecialTypeIndex = -1;
     if (glyph.type === "effarig" || glyph.type === "reality") {
       sameSpecialTypeIndex = this.active.findIndex(x => x && x.type === glyph.type);
@@ -954,8 +955,8 @@ function getAdjustedGlyphLevel(glyph) {
   const level = glyph.level;
   if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
   if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
-  // Copied glyphs have rawLevel === 0
-  if (BASIC_GLYPH_TYPES.includes(glyph.type) && glyph.rawLevel !== 0) return level + Glyphs.levelBoost;
+  if (Ra.effarigRealityActive) return Math.floor(Math.sqrt(Math.clampMin(glyph.level - 5000, 1)));
+  if (BASIC_GLYPH_TYPES.includes(glyph.type)) return level + Glyphs.levelBoost;
   return level;
 }
 

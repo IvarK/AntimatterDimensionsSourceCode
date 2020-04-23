@@ -85,10 +85,11 @@ Vue.component("ra-tab", {
         <button @click="startRun" class="l-ra-reality-container">
           <div class="l-ra-reality-inner">
             <h2> Start Ra's Reality </h2>
-            You can't dimension boost and tick reduction is fixed at 11%.
+            You can't dimension boost and tick reduction is fixed at {{ formatPercents(0.11) }}. Passive IP
+            generation (Infinity Upgrade) and EP generation (Teresa reward) are disabled.
             <br>
             <br>
-            Inside of Ra's reality, some resources will generate memories based on their amount.
+            Each celestial within Ra adds additional conditions, but also gives memories as a reward.
           </div>
         </button>
         <div class="l-ra-recollection-unlock">

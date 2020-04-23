@@ -39,6 +39,8 @@ function gainedInfinityPoints() {
     ip = ip.pow(0.55);
   } else if (V.isRunning) {
     ip = ip.pow(0.5);
+  } else if (Ra.teresaRealityActive) {
+    ip = ip.pow(0.3);
   } else if (Laitela.isRunning) {
     ip = dilatedValueOf(ip);
   }
@@ -63,12 +65,14 @@ function totalEPMult() {
 }
 
 function gainedEternityPoints() {
-  let ep = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
-
+  let ep = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).log10() / 308 - 0.7);
+  ep = ep.times(totalEPMult());
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
   } else if (V.isRunning) {
     ep = ep.pow(0.5);
+  } else if (Ra.teresaRealityActive) {
+    ep = ep.pow(0.3);
   } else if (Laitela.isRunning) {
     ep = dilatedValueOf(ep);
   }
@@ -332,21 +336,27 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
     factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   }
 
-  // Time storage is linearly scaled because exponential scaling is pretty useless in practice
-  if (Enslaved.isStoringGameTime && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
-    const storedTimeWeight = player.celestials.enslaved.storedFraction;
-    factor = factor * (1 - storedTimeWeight) + storedTimeWeight;
-  }
-
   // These effects should always be active, but need to be disabled during offline black hole simulations because
   // otherwise it gets applied twice
   if (effects.includes(GAME_SPEED_EFFECT.NERFS)) {
     if (Effarig.isRunning) {
       factor = Effarig.multiplier(factor).toNumber();
+    } else if (Ra.enslavedRealityActive) {
+      const timeShardBoost = Math.log10(1 + player.timeShards.clampMin(1).log10());
+      const dilatedTimeBoost = Math.log10(1 + player.dilation.dilatedTime.clampMin(1).log10());
+      const nerfFactor = Math.clampMin(Time.thisRealityRealTime.totalSeconds /
+        (1 + timeShardBoost + dilatedTimeBoost), 0);
+      factor = Math.clampMin(factor / Math.pow(10, nerfFactor), 1);
     } else if (Laitela.isRunning) {
       const nerfModifier = Math.clampMax(Time.thisRealityRealTime.totalMinutes / 10, 1);
       factor = Math.pow(factor, nerfModifier);
     }
+  }
+  
+  // Time storage is linearly scaled because exponential scaling is pretty useless in practice
+  if (Enslaved.isStoringGameTime && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
+    const storedTimeWeight = player.celestials.enslaved.storedFraction;
+    factor = factor * (1 - storedTimeWeight) + storedTimeWeight;
   }
 
   // Dev speedup should always be active
@@ -438,7 +448,7 @@ function gameLoop(diff, options = {}) {
       // These variables are the actual game speed used and the game speed unaffected by time storage, respectively
       const reducedTimeFactor = getGameSpeedupFactor();
       const totalTimeFactor = getGameSpeedupFactor([GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
-        GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.MOMENTUM]);
+        GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.MOMENTUM, GAME_SPEED_EFFECT.NERFS]);
       const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
         ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
         : 1;
@@ -636,7 +646,7 @@ function laitelaRealityTick(realDiff) {
 function applyAutoprestige(diff) {
   player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
 
-  if (Teresa.has(TERESA_UNLOCKS.EPGEN)) {
+  if (Teresa.has(TERESA_UNLOCKS.EPGEN) && !Ra.isRunning) {
     player.eternityPoints = player.eternityPoints.plus(player.bestEPminThisEternity.times(0.01)
       .times(getGameSpeedupFactor() * diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
   }
@@ -674,7 +684,7 @@ function getTTPerSecond() {
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation
-  const glyphTT = Teresa.isRunning || Enslaved.isRunning
+  const glyphTT = Teresa.isRunning || Enslaved.isRunning || Ra.teresaRealityActive
     ? 0
     : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
 

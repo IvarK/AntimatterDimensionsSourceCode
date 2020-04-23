@@ -35,7 +35,8 @@ const TimeTheorems = {
     if (player.antimatter.lt(player.timestudy.amcost)) return false;
     player.antimatter = player.antimatter.minus(player.timestudy.amcost);
     player.timestudy.amcost = player.timestudy.amcost.times(TimeTheorems.costMultipliers.AM);
-    player.timestudy.theorem = player.timestudy.theorem.plus(1);
+    if (Ra.teresaRealityActive) player.celestials.ra.memoryResource += 1;
+    else player.timestudy.theorem = player.timestudy.theorem.plus(1);
     player.noTheoremPurchases = false;
     return true;
   },
@@ -65,7 +66,9 @@ const TimeTheorems = {
     const AMowned = player.timestudy.amcost.e / 20000 - 1;
     if (player.antimatter.gte(player.timestudy.amcost)) {
       player.timestudy.amcost.e = Math.floor(player.antimatter.e / 20000 + 1) * 20000;
-      player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.antimatter.e / 20000) - AMowned);
+      const gainedTT = Math.floor(player.antimatter.e / 20000) - AMowned;
+      if (Ra.teresaRealityActive) player.celestials.ra.memoryResource += gainedTT;
+      else player.timestudy.theorem = player.timestudy.theorem.plus(gainedTT);
       player.antimatter =
         player.antimatter.minus(Decimal.fromMantissaExponent(1, Math.floor(player.antimatter.e / 20000) * 20000));
       player.noTheoremPurchases = false;

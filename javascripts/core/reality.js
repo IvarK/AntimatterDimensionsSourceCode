@@ -550,6 +550,7 @@ function clearCelestialRuns() {
   player.celestials.enslaved.run = false;
   player.celestials.v.run = false;
   player.celestials.ra.run = false;
+  player.celestials.ra.activeReality = RA_REALITY_TYPE.NONE;
   player.celestials.laitela.run = false;
   return saved;
 }

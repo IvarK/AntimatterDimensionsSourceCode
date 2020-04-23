@@ -96,6 +96,14 @@ const TIME_STUDY_PATH = {
   DARK: 8
 };
 
+const RA_REALITY_TYPE = {
+  NONE: 0,
+  TERESA: 1,
+  EFFARIG: 2,
+  ENSLAVED: 3,
+  V: 4
+};
+
 const ALCHEMY_RESOURCE = {
   POWER: 0,
   INFINITY: 1,

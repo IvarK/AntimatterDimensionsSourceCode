@@ -504,6 +504,8 @@ let player = {
     updateRate: 33,
     newUI: true,
     offlineProgress: true,
+    respecStudiesTabSwitch: true,
+    unlockEternityChallengeTabSwitch: true,
     showGlyphEffectDots: true,
     respecIntoProtected: false,
     offlineTicks: 1000,

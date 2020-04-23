@@ -2,16 +2,17 @@
 
 GameDatabase.infinity.breakUpgrades = (function() {
   function rebuyable(config) {
+    const effectFunction = config.effect || (x => x);
     return {
       id: config.id,
       cost: () => config.initialCost * Math.pow(config.costIncrease, player.infinityRebuyables[config.id]),
       maxUpgrades: config.maxUpgrades,
       description: config.description,
-      effect: () => (config.effect || (x => x))(player.infinityRebuyables[config.id]),
-      formatEffect: config.formatEffect || (value => value === config.maxUpgrades
+      effect: () => effectFunction(player.infinityRebuyables[config.id]),
+      formatEffect: config.formatEffect || (value => (value === config.maxUpgrades
         ? `Default: ${formatX(10)} | Currently: ${formatX(10 - value)}`
         : `Default: ${formatX(10)} | Currently: ${formatX(10 - value)} Next: ${formatX(10 - value - 1)}`
-      ),
+      )),
       formatCost: value => format(value, 2, 0),
       noTitle: !config.title
     };

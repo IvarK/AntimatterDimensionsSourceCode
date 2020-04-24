@@ -566,7 +566,6 @@ function gameLoop(diff, options = {}) {
   updateFreeGalaxies();
   player.timestudy.theorem = player.timestudy.theorem.add(getTTPerSecond().times(diff / 1000));
   tryUnlockInfinityDimensions();
-  applyAutoprestige();
 
   BlackHoles.updatePhases(blackHoleDiff);
 

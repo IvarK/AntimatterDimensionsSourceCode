@@ -448,7 +448,13 @@ let player = {
       disCharge: false,
       peakGamespeed: 1,
       petWithRecollection: "Teresa",
-      memoryResource: 0
+      memoryResource: 0,
+      vRecords: {
+        eternityPoints: new Decimal(0),
+        glyphLevel: 0,
+        dilatedAntimatter: new Decimal(0),
+        infinities: new Decimal(0),
+      }
     },
     laitela: {
       matter: new Decimal(0),

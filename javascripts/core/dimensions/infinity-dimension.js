@@ -233,7 +233,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get purchaseCap() {
-    if (Enslaved.isRunning) {
+    if (Enslaved.isRunning || Ra.enslavedRealityActive) {
       return 1;
     }
      return InfinityDimensions.capIncrease + (this.tier === 8

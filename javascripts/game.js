@@ -34,6 +34,7 @@ function gainedInfinityPoints() {
   let ip = player.break
     ? Decimal.pow10(player.thisInfinityMaxAM.log10() / div - 0.75)
     : new Decimal(308 / div);
+  if (Ra.vRealityActive) return ip.floor();
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
     ip = ip.pow(0.55);
@@ -66,6 +67,7 @@ function totalEPMult() {
 
 function gainedEternityPoints() {
   let ep = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).log10() / 308 - 0.7);
+  if (Ra.vRealityActive) return ep.floor();
   ep = ep.times(totalEPMult());
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -341,15 +343,12 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
   if (effects.includes(GAME_SPEED_EFFECT.NERFS)) {
     if (Effarig.isRunning) {
       factor = Effarig.multiplier(factor).toNumber();
-    } else if (Ra.enslavedRealityActive) {
-      const timeShardBoost = Math.log10(1 + player.timeShards.clampMin(1).log10());
-      const dilatedTimeBoost = Math.log10(1 + player.dilation.dilatedTime.clampMin(1).log10());
-      const nerfFactor = Math.clampMin(Time.thisRealityRealTime.totalSeconds /
-        (1 + timeShardBoost + dilatedTimeBoost), 0);
-      factor = Math.clampMin(factor / Math.pow(10, nerfFactor), 1);
     } else if (Laitela.isRunning) {
       const nerfModifier = Math.clampMax(Time.thisRealityRealTime.totalMinutes / 10, 1);
       factor = Math.pow(factor, nerfModifier);
+    } else if (Ra.enslavedRealityActive) {
+      const dilatedEP = Math.pow(10, Math.pow(player.eternityPoints.pLog10(), 0.75));
+      factor = Math.clampMin(factor / dilatedEP, 1e-300);
     }
   }
   

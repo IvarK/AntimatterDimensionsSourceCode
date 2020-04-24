@@ -164,7 +164,28 @@ const Ra = {
     }
   },
   memoryTick(realDiff) {
-    for (const pet of Ra.pets.all) pet.tick(realDiff);
+    switch (player.celestials.ra.activeReality) {
+      case RA_REALITY_TYPE.TERESA:
+        //Ra.pets.teresa.tick(realDiff);
+        break;
+      case RA_REALITY_TYPE.EFFARIG:
+        //Ra.pets.effarig.tick(realDiff);
+        break;
+      case RA_REALITY_TYPE.ENSLAVED:
+        //Ra.pets.enslaved.tick(realDiff);
+        break;
+      case RA_REALITY_TYPE.V: {
+        const records = player.celestials.ra.vRecords;
+        records.eternityPoints = player.eternityPoints.clampMin(records.eternityPoints);
+        records.glyphLevel = Math.clampMin(records.glyphLevel, gainedGlyphLevel().actualLevel);
+        if (player.dilation.active) records.dilatedAntimatter = player.antimatter.clampMin(records.dilatedAntimatter);
+        records.infinities = player.infinitied.clampMin(records.infinities);
+        break;
+      }
+    }
+
+    // V memories generate passively, even outside the reality
+    //Ra.pets.v.tick(realDiff);
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredExpForLevel(level) {
@@ -224,7 +245,6 @@ const Ra = {
         break;
       case "Enslaved":
         player.celestials.ra.activeReality = RA_REALITY_TYPE.ENSLAVED;
-        player.celestials.enslaved.stored = 0;
         break;
       case "V":
         player.celestials.ra.activeReality = RA_REALITY_TYPE.V;

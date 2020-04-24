@@ -47,7 +47,7 @@ const Enslaved = {
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
   get isStoringGameTime() {
-    return player.celestials.enslaved.isStoring && !BlackHoles.arePaused;
+    return player.celestials.enslaved.isStoring && !BlackHoles.arePaused && !Ra.enslavedRealityActive;
   },
   get isStoringRealTime() {
     return player.celestials.enslaved.isStoringReal;
@@ -84,7 +84,7 @@ const Enslaved = {
     return diffMs - used;
   },
   canRelease(auto) {
-    return !EternityChallenge(12).isRunning && !Laitela.isRunning && !Ra.enslavedRealityActive &&
+    return !EternityChallenge(12).isRunning && !Laitela.isRunning && Ra.enslavedRealityActive &&
       !(Enslaved.isRunning && auto);
   },
   // "autoRelease" should only be true when called with the Ra upgrade

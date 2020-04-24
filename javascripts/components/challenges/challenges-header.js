@@ -69,7 +69,7 @@ Vue.component("challenges-header", {
           <primary-button-on-off
             v-model="showAllChallenges"
             class="o-primary-btn"
-            text="Show all ECs:"
+            text="Show all challenges:"
           />
       </div>
       <div v-if="isAutoECVisible"

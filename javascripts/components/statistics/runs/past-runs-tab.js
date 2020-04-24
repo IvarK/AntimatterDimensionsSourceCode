@@ -11,7 +11,7 @@ Vue.component("past-runs-tab", {
           condition: () => PlayerProgress.realityUnlocked(),
           getRuns: () => player.lastTenRealities,
           reward: (runGain, run) =>
-            `${runGain} ${pluralize("reality machine", run[1])}, a level ${formatInt(run[4])} glyph,`,
+            `${runGain} ${pluralize("Reality Machine", run[1])}, a level ${formatInt(run[4])} glyph,`,
           // Note that runGain is a string so we can't use it for pluralize
           prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Reality", run[2], "Realities")}`,
         },

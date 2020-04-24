@@ -223,7 +223,7 @@ GameStorage.migrations = {
   },
 
   convertAchivementsToNumbers(player) {
-    if (player.achievements.countWhere(e => typeof e !== "number") === 0) return;
+    if (player.achievements.length > 0 && player.achievements.every(e => typeof e === "number")) return;
     const old = player.achievements;
     // In this case, player.secretAchievements should be an empty set
     player.achievements = new Set();
@@ -699,10 +699,13 @@ GameStorage.migrations = {
 
   migrateLastTenRuns(player) {
     // Move infinities before time in infinity, and make them Decimal.
-    // Also the conversion to Number here is necessary for some reason (otherwise it's Decimal).
-    player.lastTenRuns = player.lastTenRuns.map(x => [x[0], x[1], new Decimal(x[3]), x[2].toNumber()]);
+    // I know new Decimal(x).toNumber() can't actually be the best way of converting a value
+    // that might be either Decimal or number to number, but it's the best way I know.
+    player.lastTenRuns = player.lastTenRuns.map(
+      x => [x[0], x[1], new Decimal(x[3]), new Decimal(x[2]).toNumber()]);
     // Put in a default value of 1 for eternities.
-    player.lastTenEternities = player.lastTenEternities.map(x => [x[0], x[1], new Decimal(1), x[2].toNumber()]);
+    player.lastTenEternities = player.lastTenEternities.map(
+      x => [x[0], x[1], new Decimal(1), new Decimal(x[2]).toNumber()]);
   },
 
   migrateIPGen(player) {

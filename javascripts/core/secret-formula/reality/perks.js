@@ -180,7 +180,7 @@ GameDatabase.reality.perks = {
     id: 46,
     label: "REAL",
     family: PERK_FAMILY.REALITY,
-    description: "Auto-unlock Reality at e4000 EP."
+    description: "Auto-unlock Reality once Time Dimension 8 is unlocked and you have 1e4000 EP."
   },
   bypassIDAntimatter: {
     id: 51,

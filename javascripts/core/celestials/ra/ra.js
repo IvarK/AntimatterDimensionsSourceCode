@@ -39,11 +39,6 @@ class RaPetState {
   get requiredExp() {
     return Ra.requiredExpForLevel(this.level);
   }
-  
-  /**
-   * @abstract
-   */
-  get rawMemoriesPerSecond() { throw new NotImplementedError(); }
 
   /**
    * @abstract
@@ -51,32 +46,15 @@ class RaPetState {
   get color() { throw new NotImplementedError(); }
   
   get memoriesPerSecond() {
-    if (!this.canGetMemories) return 0;
-    let res = this.rawMemoriesPerSecond * RA_UNLOCKS.TT_BOOST.effect.memories() *
-      Achievement(168).effectOrDefault(1);
-    for (const pet of Ra.pets.all) {
-      if (pet.isUnlocked) res *= pet.memoryProductionMultiplier;
-    }
-    return res;
-  }
-  
-  get canGetMemories() {
-    // Memory generation is disabled when storing real time. This is to prevent real time
-    // spent in Ra's reality from also being used for amplification.
-    return this.hasRecollection && this.isUnlocked && Ra.isRunning && !Enslaved.isStoringRealTime;
+    return -1;
   }
   
   get hasRecollection() {
     return Ra.petWithRecollection === this.name;
   }
-  
-  tick(realDiff) {
-    const seconds = realDiff / 1000;
-    this.addExp(seconds * this.memoriesPerSecond);
-  }
 
-  addExp(exp) {
-    this.exp += exp;
+  addExp(baseExp) {
+    this.exp += baseExp * this.memoryProductionMultiplier * Ra.globalMemoryMult;
     while (this.exp >= this.requiredExp) {
       this.exp -= this.requiredExp;
       this.level++;
@@ -101,48 +79,75 @@ const Ra = {
       get name() { return "Teresa"; }
       get data() { return player.celestials.ra.pets.teresa; }
       get requiredUnlock() { return undefined; }
-      get rawMemoriesPerSecond() { return 4 * Math.pow(player.eternityPoints.pLog10() / 1e4, 3); }
       get color() { return "#86ea84"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.TERESA_XP)
           ? 1 + Math.pow(player.reality.realityMachines.pLog10() / 100, 0.5)
           : 1;
       }
+
+      // Ra-Teresa: memoryResource gets incremented instead of TT when buying with antimatter
+      addMemories() {
+        this.addExp(player.celestials.ra.memoryResource);
+        player.celestials.ra.memoryResource = 0;
+      }
     }(),
     effarig: new class EffarigRaPetState extends RaPetState {
       get name() { return "Effarig"; }
       get data() { return player.celestials.ra.pets.effarig; }
       get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
-      get rawMemoriesPerSecond() { return 4 * Math.pow(Effarig.shardsGained, 0.1); }
       get color() { return "#ea8585"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.EFFARIG_XP)
           ? 1 + player.bestGlyphLevel / 7000
           : 1;
       }
+
+      // Ra-Effarig: Adds memory on glyph sacrifice (which is forced every time)
+      addMemories(sacrificeValue) {
+        this.addExp(Math.log10(sacrificeValue));
+      }
     }(),
     enslaved: new class EnslavedRaPetState extends RaPetState {
       get name() { return "Enslaved"; }
       get data() { return player.celestials.ra.pets.enslaved; }
       get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
-      get rawMemoriesPerSecond() { return 4 * Math.pow(player.timeShards.pLog10() / 3e5, 2); }
       get color() { return "#f1aa7f"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.ENSLAVED_XP)
           ? 1 + Math.log10(player.totalTimePlayed) / 200
           : 1;
       }
+
+      // Ra-Enslaved: Passively gives memories while inside the reality, based on TD purchases
+      addMemories(realDiff) {
+        const seconds = realDiff / 1000;
+        let totalTDPurchases = 0;
+        for (let tier = 1; tier < 9; tier++) totalTDPurchases += TimeDimension(tier).bought;
+        this.addExp(seconds * (totalTDPurchases / 1000));
+        player.celestials.ra.memoryResource = 0;
+      }
     }(),
     v: new class VRaPetState extends RaPetState {
       get name() { return "V"; }
       get data() { return player.celestials.ra.pets.v; }
       get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
-      get rawMemoriesPerSecond() { return 4 * Math.pow(player.infinityPower.pLog10() / 1e7, 1.5); }
       get color() { return "#ead584"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.V_XP)
           ? 1 + Ra.totalPetLevel / 50
           : 1;
+      }
+
+      // Ra-V: Always passively gives memories based on record amounts of certain things
+      addMemories(realDiff) {
+        const seconds = realDiff / 1000;
+        const records = player.celestials.ra.vRecords;
+        const EPterm = records.eternityPoints.pLog10();
+        const levelTerm = records.glyphLevel;
+        const dilatedTerm = records.dilatedAntimatter.pLog10();
+        const infTerm = records.infinities.pLog10();
+        this.addExp(seconds * (EPterm + levelTerm + dilatedTerm / 1e4 + infTerm));
       }
     }(),
   },
@@ -156,23 +161,25 @@ const Ra = {
     data.peakGamespeed = 1;
     for (const pet of Ra.pets.all) pet.reset();
   },
-  // Scans through all glyphs and fills base resources to the maximum allowed by the cap
-  // TODO update/delete this function when we get back to alchemy, it's outdated since it's not linear any more
-  fillAlchemyResources() {
+  // Scans through all glyphs and fills base resources to the specified amount, ignoring caps
+  fillAlchemyResources(amount) {
     for (const resource of AlchemyResources.base) {
-      resource.amount = Math.min(this.alchemyResourceCap, player.bestGlyphLevel);
+      resource.amount = Math.max(this.alchemyResourceCap, amount);
     }
+  },
+  get globalMemoryMult() {
+    return RA_UNLOCKS.TT_BOOST.effect.memories() * Achievement(168).effectOrDefault(1);
   },
   memoryTick(realDiff) {
     switch (player.celestials.ra.activeReality) {
       case RA_REALITY_TYPE.TERESA:
-        //Ra.pets.teresa.tick(realDiff);
+        Ra.pets.teresa.addMemories();
         break;
       case RA_REALITY_TYPE.EFFARIG:
-        //Ra.pets.effarig.tick(realDiff);
+        // Memory gain happens on-sacrifice when completing the reality
         break;
       case RA_REALITY_TYPE.ENSLAVED:
-        //Ra.pets.enslaved.tick(realDiff);
+        Ra.pets.enslaved.addMemories(realDiff);
         break;
       case RA_REALITY_TYPE.V: {
         const records = player.celestials.ra.vRecords;
@@ -183,9 +190,8 @@ const Ra = {
         break;
       }
     }
-
     // V memories generate passively, even outside the reality
-    //Ra.pets.v.tick(realDiff);
+    Ra.pets.v.addMemories(realDiff);
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredExpForLevel(level) {

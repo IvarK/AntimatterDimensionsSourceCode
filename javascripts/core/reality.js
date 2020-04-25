@@ -159,7 +159,11 @@ function requestManualReality() {
     triggerManualReality(realityProps);
     return;
   }
-  GlyphSelection.generate(GlyphSelection.choiceCount, realityProps);
+  if (Ra.effarigRealityActive) {
+    const rng = GlyphGenerator.getRNG(false);
+    processAutoGlyph(realityProps.gainedGlyphLevel, rng);
+    finishProcessReality(realityProps);
+  } else GlyphSelection.generate(GlyphSelection.choiceCount, realityProps);
 }
 
 function triggerManualReality(realityProps) {
@@ -195,7 +199,10 @@ function processAutoGlyph(gainedLevel, rng) {
     const glyphs = Array.range(0, GlyphSelection.choiceCount)
       .map(() => GlyphGenerator.randomGlyph(gainedLevel, rng));
     newGlyph = AutoGlyphProcessor.pick(glyphs);
-    if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
+    if (Ra.effarigRealityActive) {
+      Ra.pets.effarig.addMemories(GlyphSacrificeHandler.glyphSacrificeGain(newGlyph));
+      newGlyph = null;
+    } else if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
       AutoGlyphProcessor.getRidOfGlyph(newGlyph);
       newGlyph = null;
     }

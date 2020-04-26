@@ -340,18 +340,6 @@ function canAfford(cost) {
   return (player.break || cost.lt(new Decimal("1.79e308"))) && cost.lte(player.antimatter);
 }
 
-function buyOneDimensionBtnClick(tier) {
-  buyOneDimension(tier);
-}
-
-function buyManyDimensionsBtnClick(tier) {
-  buyManyDimension(tier);
-}
-
-function buyAsManyAsYouCanBuyBtnClick(tier) {
-  buyAsManyAsYouCanBuy(tier);
-}
-
 class NormalDimensionState extends DimensionState {
   constructor(tier) {
     super(() => player.dimensions.normal, tier);

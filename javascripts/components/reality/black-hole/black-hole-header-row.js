@@ -114,6 +114,13 @@ Vue.component("black-hole-header-row", {
           onclick="Enslaved.useStoredTime(false)"
         >Discharge: {{timeDisplayShort(storedTime)}}</primary-button>
       </span>
+      <span v-if="canAutoRelease">
+        <primary-button-on-off
+          v-model="isAutoReleasing"
+          class="o-primary-btn--buy-max"
+          text="Pulse:"
+        />
+      </span>
     </span>
   `
 });

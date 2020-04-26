@@ -118,7 +118,7 @@ function replicantiCap() {
 function isRGAutobuyerEnabled() {
   const isActivePathDisablingRGAutobuyer = TimeStudy(131).isBought && !Achievement(138).isUnlocked;
   // We consider the autobuyer also enabled if the player is holding R
-  return (player.replicanti.galaxybuyer && isActivePathDisablingRGAutobuyer) || holdingR;
+  return (player.replicanti.galaxybuyer && !isActivePathDisablingRGAutobuyer) || holdingR;
 }
 
 function replicantiLoop(diff) {

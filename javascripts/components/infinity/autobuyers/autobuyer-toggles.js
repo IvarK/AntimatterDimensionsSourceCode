@@ -34,15 +34,15 @@ Vue.component("autobuyer-toggles", {
     }
   },
   template:
-    `<div class="l-autobuyer-toggles">
+    `<div class="c-subtab-option-container">
       <primary-button-on-off-custom
         v-model="autobuyersOn"
         on="Disable autobuyers"
         off="Enable autobuyers"
-        class="o-primary-btn--autobuyer-toggle"
+        class="o-primary-btn--subtab-option"
       />
       <primary-button
-        class="o-primary-btn--autobuyer-toggle"
+        class="o-primary-btn--subtab-option"
         @click="toggleAllAutobuyers()">
         Toggle all autobuyers
       </primary-button>
@@ -50,7 +50,7 @@ Vue.component("autobuyer-toggles", {
         v-model="bulkOn"
         on="Disable bulk buy"
         off="Enable bulk buy"
-        class="o-primary-btn--autobuyer-toggle"
+        class="o-primary-btn--subtab-option"
       />
     </div>`
 });

@@ -504,7 +504,7 @@ let player = {
     updateRate: 33,
     newUI: true,
     offlineProgress: true,
-    tabSwitch: true,
+    automaticTabSwitching: true,
     showGlyphEffectDots: true,
     respecIntoProtected: false,
     offlineTicks: 1000,

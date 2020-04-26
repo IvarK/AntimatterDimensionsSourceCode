@@ -203,6 +203,14 @@ body.t-normal {
   color: var(--color-text);;
 }
 
+.c-laitela-singularity h2 {
+  color: white;
+}
+
+.c-laitela-singularity--active:hover h2 {
+  color: black;
+}
+
 .l-reset-buttons-container {
   position: relative;
   min-height: 8rem;
@@ -435,7 +443,8 @@ body.t-normal {
 
 .information-header {
   color: var(--color-text);
-  margin-top: 10px;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
   font-weight: bold;
   font-size: 1.1em;
 }
@@ -478,6 +487,19 @@ body.t-normal {
 .o-primary-btn--disabled {
   background: #752626;
   border-color: var(--color-bad);
+}
+
+.o-primary-btn--subtab-option {
+  border-width: 0.1rem;
+}
+
+.o-primary-btn--subtab-option:hover {
+  background-color: var(--color-good);
+}
+
+.c-subtab-option-container {
+  border-width: 0.1rem;
+  border-color: var(--color-good);
 }
 
 .c-challenge-box--normal {
@@ -566,10 +588,6 @@ body.t-normal {
   color: var(--color-infinity);
 }
 
-.l-infinity-dim-tab {
-  padding: 1rem 0;
-}
-
 .c-infinity-dim-row:nth-child(even) {
   background: rgba(182, 127, 51, 0.3);
 }
@@ -592,10 +610,6 @@ body.t-normal {
 
 .c-time-dim-description__accent {
   color: var(--color-eternity);
-}
-
-.l-time-dim-tab {
-  padding: 2rem 0;
 }
 
 .c-time-dim-row:nth-child(even) {

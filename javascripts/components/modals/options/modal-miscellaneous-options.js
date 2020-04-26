@@ -6,7 +6,7 @@ Vue.component("modal-miscellaneous-options", {
     return {
       offlineProgress: false,
       showGlyphEffectDots: false,
-      tabSwitch: false,
+      automaticTabSwitching: false,
       respecIntoProtected: false,
     };
   },
@@ -14,8 +14,8 @@ Vue.component("modal-miscellaneous-options", {
     offlineProgress(newValue) {
       player.options.offlineProgress = newValue;
     },
-    tabSwitch(newValue) {
-      player.options.tabSwitch = newValue;
+    automaticTabSwitching(newValue) {
+      player.options.automaticTabSwitching = newValue;
     },
     showGlyphEffectDots(newValue) {
       player.options.showGlyphEffectDots = newValue;
@@ -29,7 +29,7 @@ Vue.component("modal-miscellaneous-options", {
       const options = player.options;
       this.offlineProgress = options.offlineProgress;
       this.showGlyphEffectDots = options.showGlyphEffectDots;
-      this.tabSwitch = options.tabSwitch;
+      this.automaticTabSwitching = options.automaticTabSwitching;
       this.respecIntoProtected = options.respecIntoProtected;
     }
   },
@@ -38,7 +38,7 @@ Vue.component("modal-miscellaneous-options", {
       <wide-on-off-button v-model="offlineProgress" text="Offline progress:"/>
       <wide-on-off-button
         v-if="infinityUnlocked"
-        v-model="tabSwitch"
+        v-model="automaticTabSwitching"
         text="Switch tabs on certain game events (such as entering challenges):"/>
       <wide-on-off-button
         v-if="realityUnlocked"

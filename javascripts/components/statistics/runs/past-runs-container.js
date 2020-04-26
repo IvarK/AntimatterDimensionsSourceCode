@@ -77,7 +77,6 @@ Vue.component("past-runs-container", {
   },
   template:
     `<div
-      class="c-stats-tab"
       v-if="condition"
     >
       <br>

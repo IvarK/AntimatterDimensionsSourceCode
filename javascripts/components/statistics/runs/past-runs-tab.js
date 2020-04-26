@@ -48,20 +48,20 @@ Vue.component("past-runs-tab", {
       this.showLastTenRunsGainPerTime = player.options.showLastTenRunsGainPerTime;
     }
   },
-  template:
-    `
-    <div>
-      <primary-button-on-off-custom
-        v-model="showLastTenRunsGainPerTime"
-        on="Resource gain/time"
-        off="Resource gain"
-        class="o-primary-btn--last-ten-runs-toggle"
-      />
+  template: `
+    <div class="c-stats-tab">
+      <div class="c-subtab-option-container">
+        <primary-button-on-off-custom
+          v-model="showLastTenRunsGainPerTime"
+          on="Show resource gain"
+          off="Show resource gain/time"
+          class="o-primary-btn--subtab-option"
+        />
+      </div>
       <past-runs-container
         v-for="layer in layers"
         :key="layer.name"
         :layer="layer"
       />
-    </div>
-    `
+    </div>`
 });

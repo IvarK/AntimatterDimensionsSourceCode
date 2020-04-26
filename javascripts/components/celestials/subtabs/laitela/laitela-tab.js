@@ -166,9 +166,18 @@ Vue.component("laitela-tab", {
       return formText;
     }
   },
-  template:
-    `<div class="l-laitela-celestial-tab">
-      <button @click="showLaitelaHowTo()" class="o-primary-btn">Click for Lai'tela info</button>
+  template: `
+    <div class="l-laitela-celestial-tab">
+      <div class="c-subtab-option-container">
+        <primary-button
+          class="o-primary-btn--subtab-option"
+          @click="showLaitelaHowTo()"
+        >Click for Lai'tela info</primary-button>
+        <primary-button
+          class="o-primary-btn--subtab-option"
+          @click="maxAll"
+        >Max all Dark Matter Dimensions</primary-button>
+      </div>
       <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter.</div>
       <div class="o-laitela-matter-amount">Your maximum Dark Matter ever is {{ format(maxMatter.floor(), 2, 0) }},
       giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from continuum.</div>
@@ -178,10 +187,6 @@ Vue.component("laitela-tab", {
       <div v-if="annihilated">
         You have a {{ formatX(darkMatterMult, 2, 2) }} multiplier to Dark Matter production from prestige.
       </div>
-      <primary-button
-        class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
-        @click="maxAll"
-      >Max all (DM)</primary-button>
       <div class="l-laitela-singularity-container">
         <div class="l-laitela-singularity-container--left">
           <h2>

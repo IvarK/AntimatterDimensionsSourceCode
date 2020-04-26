@@ -66,7 +66,7 @@ class TabState {
   }
 
   show(manual, subtab = undefined) {
-    if (!manual && !player.options.tabSwitch) return;
+    if (!manual && !player.options.automaticTabSwitching) return;
     ui.view.tab = this.config.key;
     if (subtab !== undefined) {
       this._currentSubtab = subtab;

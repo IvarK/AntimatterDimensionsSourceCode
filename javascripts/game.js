@@ -142,7 +142,7 @@ function averageRun(runs, name) {
     .map(run => run[2])
     .reduce(name === "Reality" ? Number.sumReducer : Decimal.sumReducer);
   const realTime = runs.map(run => run[3]).sum();
-  let average = [
+  const average = [
     totalTime / runs.length,
     totalAmount.dividedBy(runs.length),
     (name === "Reality") ? totalPrestigeGain / runs.length : totalPrestigeGain.dividedBy(runs.length),

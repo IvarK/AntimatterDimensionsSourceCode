@@ -10,9 +10,9 @@ Vue.component("past-runs-tab", {
           currency: "RM",
           condition: () => PlayerProgress.realityUnlocked(),
           getRuns: () => player.lastTenRealities,
-          reward: (runGain, run, average) => average ?
-            `${runGain} ${pluralize("Reality Machine", run[1])}` :
-            `${runGain} ${pluralize("Reality Machine", run[1])}, a level ${formatInt(run[4])} glyph,`,
+          reward: (runGain, run, average) => (average
+            ? `${runGain} ${pluralize("Reality Machine", run[1])}`
+            : `${runGain} ${pluralize("Reality Machine", run[1])}, a level ${formatInt(run[4])} glyph,`),
           // Note that runGain is a string so we can't use it for pluralize
           prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Reality", run[2], "Realities")}`,
         },

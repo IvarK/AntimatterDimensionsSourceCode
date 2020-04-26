@@ -47,13 +47,13 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
   }
 
   if (!isAutobuyerActive) {
-    let remainingGain = log10GainFactor.minus(
+    const remainingGain = log10GainFactor.minus(
       replicantiCap().log10() - player.replicanti.amount.log10()).clampMin(0);
     player.replicanti.amount = Decimal.min(uncappedAmount, replicantiCap());
     return remainingGain;
   }
   
-  let gainNeededPerRG = Decimal.NUMBER_MAX_VALUE.log10();
+  const gainNeededPerRG = Decimal.NUMBER_MAX_VALUE.log10();
   const replicantiExponent = log10GainFactor.toNumber() + player.replicanti.amount.log10();
   const toBuy = Math.floor(Math.min(replicantiExponent / gainNeededPerRG,
     Replicanti.galaxies.max - player.replicanti.galaxies));
@@ -62,6 +62,7 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
   player.replicanti.amount = Decimal.pow10(replicantiExponent - gainNeededPerRG * toBuy)
     .clampMax(replicantiCap());
   player.replicanti.galaxies += toBuy;
+  return remainingGain;
 }
 
 function replicantiGalaxyAutoToggle(forcestate) {
@@ -114,15 +115,17 @@ function replicantiCap() {
     : Decimal.NUMBER_MAX_VALUE;
 }
 
+function isRGAutobuyerEnabled() {
+  const isActivePathDisablingRGAutobuyer = TimeStudy(131).isBought && !Achievement(138).isUnlocked;
+  // We consider the autobuyer also enabled if the player is holding R
+  return (player.replicanti.galaxybuyer && isActivePathDisablingRGAutobuyer) || holdingR;
+}
+
 function replicantiLoop(diff) {
   if (!player.replicanti.unl) return;
   PerformanceStats.start("Replicanti");
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_BEFORE);
   const interval = getReplicantiInterval();
-  const isActivePathDisablingRGAutobuyer = TimeStudy(131).isBought && !Achievement(138).isUnlocked;
-  // We consider the autobuyer also enabled if the player is holding R
-  const isRGAutobuyerEnabled = (player.replicanti.galaxybuyer &&
-    !isActivePathDisablingRGAutobuyer) || holdingR;
   const logReplicanti = player.replicanti.amount.clampMin(1).ln();
   const isUncapped = TimeStudy(192).isBought;
   if (diff > 500 || interval.lessThan(player.options.updateRate) || isUncapped) {
@@ -134,7 +137,7 @@ function replicantiLoop(diff) {
     const logGainFactorPerTick = Decimal.divide(diff * Math.log(player.replicanti.chance + 1), interval);
     // It is intended to be possible for both of the below conditionals to trigger.
     if (!isUncapped || player.replicanti.amount.lte(Decimal.NUMBER_MAX_VALUE)) {
-      fastReplicantiBelow308(logGainFactorPerTick.times(LOG10_E), isRGAutobuyerEnabled);
+      fastReplicantiBelow308(logGainFactorPerTick.times(LOG10_E), isRGAutobuyerEnabled());
     }
     if (isUncapped) {
       player.replicanti.amount =
@@ -150,7 +153,7 @@ function replicantiLoop(diff) {
     player.replicanti.timer += diff;
   }
 
-  if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) {
+  if (isRGAutobuyerEnabled() && player.replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) {
     replicantiGalaxy();
   }
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_AFTER);

@@ -25,7 +25,26 @@ Vue.component("game-header", {
             celestialReality(Effarig, "Effarig's"),
             celestialReality(Enslaved, "The Enslaved Ones'"),
             celestialReality(V, "V's"),
-            celestialReality(Ra, "Ra's"),
+            {
+              name: () => "Ra's Reality (Teresa)",
+              isActive: token => token,
+              activityToken: () => Ra.isRunning && Ra.teresaRealityActive
+            },
+            {
+              name: () => "Ra's Reality (Effarig)",
+              isActive: token => token,
+              activityToken: () => Ra.isRunning && Ra.effarigRealityActive
+            },
+            {
+              name: () => "Ra's Reality (The Enslaved Ones)",
+              isActive: token => token,
+              activityToken: () => Ra.isRunning && Ra.enslavedRealityActive
+            },
+            {
+              name: () => "Ra's Reality (V)",
+              isActive: token => token,
+              activityToken: () => Ra.isRunning && Ra.vRealityActive
+            },
             celestialReality(Laitela, "Lai'tela's"),
             {
               name: () => "Time Dilation",

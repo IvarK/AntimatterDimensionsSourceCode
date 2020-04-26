@@ -160,6 +160,13 @@ const Ra = {
     data.disCharge = false;
     data.peakGamespeed = 1;
     for (const pet of Ra.pets.all) pet.reset();
+    data.memoryResource = 0;
+    data.vRecords = {
+      eternityPoints: new Decimal(0),
+      glyphLevel: 0,
+      dilatedAntimatter: new Decimal(0),
+      infinities: new Decimal(0),
+    };
   },
   // Scans through all glyphs and fills base resources to the specified amount, ignoring caps
   fillAlchemyResources(amount) {

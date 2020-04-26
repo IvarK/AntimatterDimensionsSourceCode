@@ -1486,7 +1486,7 @@ screen and (max-width: 480px) {
   display: flex;
   flex-direction: row;
   background: var(--color-base);
-  border: 0.2rem solid var(--color-accent);
+  border: 0.2rem solid var(--color-bad);
   padding: 0.8rem 0.4rem;
   border-radius: 0.5rem;
 }

@@ -1233,6 +1233,13 @@ screen and (max-width: 480px) {
   font-size: 1rem;
 }
 
+.o-primary-btn--last-ten-runs-toggle {
+  font-size: 1.1rem;
+  width: 16rem;
+  height: 4rem;
+  margin: 0 0.3rem;
+}
+
 .o-primary-btn--autobuyer-toggle {
   font-size: 1.1rem;
   width: 16rem;
@@ -2730,7 +2737,7 @@ screen and (max-width: 480px) {
 }
 
 .c-challenge-box--eternity {
-  height: 16rem;
+  height: 18rem;
   color: var(--color-eternity);
   background-color: black;
   border: 0.3rem solid var(--color-eternity);
@@ -5696,7 +5703,7 @@ kbd {
   margin: 1rem;
   transition-duration: 0.2s;
   width: 30rem;
-  height: 10rem;
+  height: 12rem;
   font-family: Typewriter;
 }
 

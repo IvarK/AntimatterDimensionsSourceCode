@@ -6,8 +6,7 @@ Vue.component("modal-miscellaneous-options", {
     return {
       offlineProgress: false,
       showGlyphEffectDots: false,
-      respecStudiesTabSwitch: false,
-      unlockEternityChallengeTabSwitch: false,
+      tabSwitch: false,
       respecIntoProtected: false,
     };
   },
@@ -15,11 +14,8 @@ Vue.component("modal-miscellaneous-options", {
     offlineProgress(newValue) {
       player.options.offlineProgress = newValue;
     },
-    respecStudiesTabSwitch(newValue) {
-      player.options.respecStudiesTabSwitch = newValue;
-    },
-    unlockEternityChallengeTabSwitch(newValue) {
-      player.options.unlockEternityChallengeTabSwitch = newValue;
+    tabSwitch(newValue) {
+      player.options.tabSwitch = newValue;
     },
     showGlyphEffectDots(newValue) {
       player.options.showGlyphEffectDots = newValue;
@@ -33,8 +29,7 @@ Vue.component("modal-miscellaneous-options", {
       const options = player.options;
       this.offlineProgress = options.offlineProgress;
       this.showGlyphEffectDots = options.showGlyphEffectDots;
-      this.respecStudiesTabSwitch = options.respecStudiesTabSwitch;
-      this.unlockEternityChallengeTabSwitch = options.unlockEternityChallengeTabSwitch;
+      this.tabSwitch = options.tabSwitch;
       this.respecIntoProtected = options.respecIntoProtected;
     }
   },
@@ -42,13 +37,9 @@ Vue.component("modal-miscellaneous-options", {
     `<modal-options @close="emitClose">
       <wide-on-off-button v-model="offlineProgress" text="Offline progress:"/>
       <wide-on-off-button
-        v-if="eternityUnlocked"
-        v-model="respecStudiesTabSwitch"
-        text="Switch tabs to Time Study tab on time study respec:"/>
-      <wide-on-off-button
-        v-if="eternityUnlocked"
-        v-model="unlockEternityChallengeTabSwitch"
-        text="Switch tabs to Eternity Challenge tab on Eternity Challenge unlock:"/>
+        v-if="infinityUnlocked"
+        v-model="tabSwitch"
+        text="Switch tabs on certain game events (such as entering challenges):"/>
       <wide-on-off-button
         v-if="realityUnlocked"
         v-model="showGlyphEffectDots"

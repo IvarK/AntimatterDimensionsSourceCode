@@ -134,24 +134,24 @@ function ratePerMinute(amount, time) {
 }
 
 function averageRun(runs, name) {
-  const totalTime = runs
-    .map(run => run[0])
-    .reduce(Number.sumReducer);
+  const totalTime = runs.map(run => run[0]).sum();
   const totalAmount = runs
     .map(run => run[1])
     .reduce(Decimal.sumReducer);
   const totalPrestigeGain = runs
     .map(run => run[2])
     .reduce(name === "Reality" ? Number.sumReducer : Decimal.sumReducer);
-  const realTime = runs
-    .map(run => run[3])
-    .reduce(Number.sumReducer);
-  return [
+  const realTime = runs.map(run => run[3]).sum();
+  let average = [
     totalTime / runs.length,
     totalAmount.dividedBy(runs.length),
     (name === "Reality") ? totalPrestigeGain / runs.length : totalPrestigeGain.dividedBy(runs.length),
     realTime / runs.length
   ];
+  if (name === "Reality") {
+    average.push(runs.map(x => x[4]).sum() / runs.length);
+  }
+  return average;
 }
 
 // eslint-disable-next-line max-params
@@ -164,7 +164,7 @@ function addInfinityTime(time, realTime, ip, infinities) {
 function resetInfinityRuns() {
   player.lastTenRuns = Array.from(
     { length: 10 },
-    () => [600 * 60 * 24 * 31, new Decimal(1), new Decimal(1), 600 * 60 * 24 * 31]
+    () => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]
   );
   GameCache.bestRunIPPM.invalidate();
 }
@@ -187,7 +187,7 @@ function addEternityTime(time, realTime, ep, eternities) {
 function resetEternityRuns() {
   player.lastTenEternities = Array.from(
     { length: 10 },
-    () => [600 * 60 * 24 * 31, new Decimal(1), new Decimal(1), 600 * 60 * 24 * 31]
+    () => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]
   );
   GameCache.averageEPPerRun.invalidate();
 }
@@ -764,15 +764,23 @@ function simulateTime(seconds, real, fast) {
 
   const playerStart = deepmerge.all([{}, player]);
 
-  const infinitiedMilestone = getInfinitiedMilestoneReward(seconds * 1000);
-  const eternitiedMilestone = getEternitiedMilestoneReward(seconds * 1000);
+  let totalGameTime;
+
+  if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
+    totalGameTime = BlackHoles.calculateGameTimeFromRealTime(seconds, BlackHoles.calculateSpeedups());
+  } else {
+    totalGameTime = getGameSpeedupFactor() * seconds;
+  }
+
+  const infinitiedMilestone = getInfinitiedMilestoneReward(totalGameTime * 1000);
+  const eternitiedMilestone = getEternitiedMilestoneReward(totalGameTime * 1000);
 
   if (eternitiedMilestone.gt(0)) {
     player.eternities = player.eternities.plus(eternitiedMilestone);
   } else if (infinitiedMilestone.gt(0)) {
     player.infinitied = player.infinitied.plus(infinitiedMilestone);
   } else {
-    player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
+    player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(totalGameTime * 1000));
   }
 
   if (InfinityUpgrade.ipOffline.isBought) {
@@ -925,6 +933,14 @@ window.onblur = function() {
 
 function setShiftKey(isDown) {
   ui.view.shiftDown = isDown;
+}
+
+// Not really part of the UI, but also not really save data
+// (purposely becomes false on reload).
+let holdingR = false;
+
+function setHoldingR(x) {
+  holdingR = x;
 }
 
 function init() {

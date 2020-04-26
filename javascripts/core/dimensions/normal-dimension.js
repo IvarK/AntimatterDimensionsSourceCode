@@ -214,6 +214,10 @@ function buyOneDimension(tier) {
     floatText(tier, formatX(NormalDimensions.buyTenMultiplier, 2, 1));
   }
 
+  if (tier === 1) {
+    Achievement(28).tryUnlock();
+  }
+
   onBuyDimension(tier);
 
   return true;
@@ -337,13 +341,6 @@ function canAfford(cost) {
 }
 
 function buyOneDimensionBtnClick(tier) {
-  if (tier === 1) {
-    if (buyOneDimension(1)) {
-      // This achievement is granted only if the buy one button is pressed
-      Achievement(28).tryUnlock();
-    }
-    return;
-  }
   buyOneDimension(tier);
 }
 

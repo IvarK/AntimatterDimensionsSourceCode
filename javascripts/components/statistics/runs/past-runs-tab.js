@@ -10,7 +10,8 @@ Vue.component("past-runs-tab", {
           currency: "RM",
           condition: () => PlayerProgress.realityUnlocked(),
           getRuns: () => player.lastTenRealities,
-          reward: (runGain, run) =>
+          reward: (runGain, run, average) => average ?
+            `${runGain} ${pluralize("Reality Machine", run[1])}` :
             `${runGain} ${pluralize("Reality Machine", run[1])}, a level ${formatInt(run[4])} glyph,`,
           // Note that runGain is a string so we can't use it for pluralize
           prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Reality", run[2], "Realities")}`,
@@ -33,17 +34,34 @@ Vue.component("past-runs-tab", {
           reward: runGain => `${runGain} IP`,
           prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Infinity", run[2], "Infinities")}`,
         },
-      }
+      },
+      showLastTenRunsGainPerTime: false
     };
+  },
+  watch: {
+    showLastTenRunsGainPerTime(newValue) {
+      player.options.showLastTenRunsGainPerTime = newValue;
+    }
+  },
+  methods: {
+    update() {
+      this.showLastTenRunsGainPerTime = player.options.showLastTenRunsGainPerTime;
+    }
   },
   template:
     `
     <div>
-        <past-runs-container
-          v-for="layer in layers"
-          :key="layer.name"
-          :layer="layer"
-        />
+      <primary-button-on-off-custom
+        v-model="showLastTenRunsGainPerTime"
+        on="Resource gain/time"
+        off="Resource gain"
+        class="o-primary-btn--last-ten-runs-toggle"
+      />
+      <past-runs-container
+        v-for="layer in layers"
+        :key="layer.name"
+        :layer="layer"
+      />
     </div>
     `
 });

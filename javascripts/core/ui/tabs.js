@@ -26,8 +26,8 @@ class SubtabState {
     return this.config.key;
   }
 
-  show() {
-    this._parent.show(this);
+  show(manual) {
+    this._parent.show(manual, this);
   }
 
   get isOpen() {
@@ -65,7 +65,8 @@ class TabState {
     return this.subtabs.some(tab => tab.hasNotification);
   }
 
-  show(subtab = undefined) {
+  show(manual, subtab = undefined) {
+    if (!manual && !player.options.tabSwitch) return;
     ui.view.tab = this.config.key;
     if (subtab !== undefined) {
       this._currentSubtab = subtab;

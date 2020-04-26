@@ -1,6 +1,6 @@
 "use strict";
 
-const defaultMaxTime = 60000 * 60 * 24 * 31;
+const defaultMaxTime = TimeSpan.fromDays(31).totalMilliseconds;
 
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const
@@ -504,11 +504,11 @@ let player = {
     updateRate: 33,
     newUI: true,
     offlineProgress: true,
-    respecStudiesTabSwitch: true,
-    unlockEternityChallengeTabSwitch: true,
+    tabSwitch: true,
     showGlyphEffectDots: true,
     respecIntoProtected: false,
     offlineTicks: 1000,
+    showLastTenRunsGainPerTime: false,
     showHintText: {
       achievements: false,
       challenges: false,

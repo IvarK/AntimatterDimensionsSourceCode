@@ -258,7 +258,7 @@ function respecTimeStudies(auto) {
     ecStudy.refund();
     player.challenge.eternity.unlocked = 0;
   }
-  if (!auto && player.options.respecStudiesTabSwitch) {
+  if (!auto) {
     Tab.eternity.studies.show();
   }
 }
@@ -419,7 +419,7 @@ class ECTimeStudyState extends TimeStudyState {
     if (!this.canBeBought) return false;
     if (player.challenge.eternity.unlocked === 0) {
       player.challenge.eternity.unlocked = this.id;
-      if (!auto && player.options.unlockEternityChallengeTabSwitch) {
+      if (!auto) {
         Tab.challenges.eternity.show();
       }
       if (this.id !== 11 && this.id !== 12) player.etercreq = this.id;

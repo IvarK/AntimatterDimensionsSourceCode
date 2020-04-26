@@ -4,6 +4,7 @@ Vue.component("past-runs-container", {
   data() {
     return {
       isRealityUnlocked: false,
+      showGainPerTime: false,
       runs: Array.repeat(0, 10).map(() => [0, new Decimal(0), 0, 0]),
       shown: true
     };
@@ -49,6 +50,7 @@ Vue.component("past-runs-container", {
       this.runs = this.clone(this.getRuns());
       this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
       this.shown = player.shownRuns[this.singular];
+      this.showGainPerTime = player.options.showLastTenRunsGainPerTime;
     },
     clone(runs) {
       return runs.map(run =>
@@ -95,16 +97,28 @@ Vue.component("past-runs-container", {
             {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }}
           </span>
           <span v-if="isRealityUnlocked"> ({{ realRunTime(run) }} real time) </span>
-          <span>and gave {{ reward(runGain(run), run) }} and
-          {{ prestigeCountReward(runPrestigeCountGain(run), run) }}. </span>
-          <span>{{ averageRunGain(run, 1, points) }} and {{ averageRunGain(run, 2, prestigeCount) }}</span>
+          <span>and gave </span>
+          <span v-if="showGainPerTime">
+            {{ averageRunGain(run, 1, points) }} and {{ averageRunGain(run, 2, prestigeCount) }}.
+          </span>
+          <span v-else>
+            {{ reward(runGain(run), run, false) }} and {{ prestigeCountReward(runPrestigeCountGain(run), run) }}.
+          </span>
         </div>
         <br>
       </div>
       <div>
         <span>Last {{ formatInt(10) }} {{ plural }} average time: {{ runTime(averageRun) }}. </span>
-        <span>Average {{ points }} gain: {{ averageRunGain(averageRun, 1, points) }}.</span>
-        <span>Average {{ prestigeCount }} gain: {{ averageRunGain(averageRun, 2, prestigeCount) }}.</span>
+        <span v-if="showGainPerTime">
+          <span>Average {{ points }} gain: {{ averageRunGain(averageRun, 1, points) }}.</span>
+          <span>Average {{ prestigeCount }} gain:
+            {{ averageRunGain(averageRun, 2, prestigeCount) }}.</span>
+        </span>
+        <span v-else>
+          <span>Average {{ points }} gain: {{ reward(runGain(averageRun), averageRun, true) }}.</span>
+          <span>Average {{ prestigeCount }} gain:
+            {{ prestigeCountReward(runPrestigeCountGain(averageRun), averageRun) }}.</span>
+        </span>
       </div>
     </div>`
 });

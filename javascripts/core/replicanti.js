@@ -134,14 +134,17 @@ function replicantiLoop(diff) {
      if (V.isRunning) {
       postScale *= 2;
     }
-    const logGainFactorPerTick = Decimal.divide(diff * Math.log(player.replicanti.chance + 1), interval);
+
+    // All variables in the below are in log10 terms.
+    const logGainFactorPerTick = Decimal.divide(diff * Math.log(player.replicanti.chance + 1), interval).times(LOG10_E);
+    let remainingGain = logGainFactorPerTick;
     // It is intended to be possible for both of the below conditionals to trigger.
     if (!isUncapped || player.replicanti.amount.lte(Decimal.NUMBER_MAX_VALUE)) {
-      fastReplicantiBelow308(logGainFactorPerTick.times(LOG10_E), isRGAutobuyerEnabled());
+      remainingGain = fastReplicantiBelow308(logGainFactorPerTick, isRGAutobuyerEnabled());
     }
     if (isUncapped) {
       player.replicanti.amount =
-        Decimal.exp(logGainFactorPerTick.times(postScale).plus(1).log(Math.E) / postScale + logReplicanti);
+        Decimal.exp(remainingGain.div(LOG10_E).times(postScale).plus(1).ln() / postScale + logReplicanti);
     }
     player.replicanti.timer = 0;
   } else if (interval.lte(player.replicanti.timer)) {

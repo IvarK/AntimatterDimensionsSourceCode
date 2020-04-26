@@ -628,7 +628,7 @@ GameDatabase.achievements.normal = [
     name: "This mile took an eternity",
     tooltip: "Get all Eternity milestones.",
     checkRequirement: () => EternityMilestones.all.every(m => m.isReached),
-    checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 103,

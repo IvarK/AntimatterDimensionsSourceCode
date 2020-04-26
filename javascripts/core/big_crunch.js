@@ -83,9 +83,13 @@ function bigCrunchReset() {
 
   if (Achievement(95).isUnlocked) {
     player.replicanti.amount = currentReplicanti;
+    player.replicanti.galaxies = Math.min(currentReplicantiGalaxies, 1);
   }
   if (TimeStudy(33).isBought) {
-    player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
+    // The max is needed in case the player had 1 Replicanti Galaxy
+    // and kept it due to "Is this safe?"
+    player.replicanti.galaxies = Math.max(
+      player.replicanti.galaxies, Math.floor(currentReplicantiGalaxies / 2));
   }
 
   if (EternityMilestone.autobuyerID(1).isReached &&

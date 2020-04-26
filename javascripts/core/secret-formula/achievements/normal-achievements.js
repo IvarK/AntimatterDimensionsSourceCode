@@ -586,11 +586,11 @@ GameDatabase.achievements.normal = [
   {
     id: 95,
     name: "Is this safe?",
-    tooltip: () => `Gain Infinite replicanti in ${formatInt(45)} minutes.`,
+    tooltip: () => `Gain Infinite replicanti in ${formatInt(1)} hour.`,
     reward: () => `You keep your Replicanti and ${formatInt(1)} Replicanti Galaxy on Infinity.`,
     checkRequirement: () =>
       (player.replicanti.amount.eq(Decimal.NUMBER_MAX_VALUE) || player.replicanti.galaxies > 0) &&
-      Time.thisInfinityRealTime.totalMinutes <= 45,
+      Time.thisInfinityRealTime.totalHours <= 1,
     checkEvent: GAME_EVENT.REPLICANTI_TICK_AFTER
   },
   {
@@ -833,8 +833,9 @@ GameDatabase.achievements.normal = [
   {
     id: 132,
     name: "Unique snowflakes",
-    tooltip: () => `Have ${formatInt(569)} Antimatter Galaxies without having any Replicanti Galaxies.`,
-    checkRequirement: () => player.galaxies >= 569 && player.replicanti.galaxies === 0,
+    tooltip: () => `Have ${formatInt(569)} Antimatter Galaxies without getting any ` +
+      "Replicanti Galaxies in your current Eternity.",
+    checkRequirement: () => player.galaxies >= 569 && player.noReplicantiGalaxies,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
     reward: "Gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies.",
     effect: () => Math.max(Math.pow(player.galaxies, 0.04), 1)

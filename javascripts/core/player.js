@@ -252,6 +252,7 @@ let player = {
   noTheoremPurchases: true,
   noInfinitiesThisReality: true,
   noEternitiesThisReality: true,
+  noReplicantiGalaxies: true,
   dilation: {
     studies: [],
     active: false,
@@ -305,7 +306,6 @@ let player = {
               false, false, false, false, false, 
               false, false, false, false, false, 
               false, false, false, false, false],
-    upgReqChecks: [false],
     perks: new Set(),
     respec: false,
     tdbuyers: [false, false, false, false, false, false, false, false],

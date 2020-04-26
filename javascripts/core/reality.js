@@ -406,6 +406,7 @@ function finishProcessReality(realityProps) {
   player.noTheoremPurchases = true;
   player.noInfinitiesThisReality = true;
   player.noEternitiesThisReality = true;
+  player.noReplicantiGalaxies = true;
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
   player.timestudy.theorem = new Decimal(0);
@@ -443,7 +444,6 @@ function finishProcessReality(realityProps) {
   secondSoftReset();
   player.celestials.ra.peakGamespeed = 1;
 
-  player.reality.upgReqChecks = [true];
   InfinityDimensions.resetAmount();
   player.bestIPminThisInfinity = new Decimal(0);
   player.bestIPminThisEternity = new Decimal(0);

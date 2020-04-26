@@ -14,7 +14,7 @@ const ReplicantiGrowth = {
 function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
   player.replicanti.timer = 0;
-  player.reality.upgReqChecks[0] = false;
+  player.noReplicantiGalaxies = false;
   let galaxyGain = 1;
   if (Achievement(126).isUnlocked) {
     // Attempt to buy bulk if RG divides by e308 instead of resetting

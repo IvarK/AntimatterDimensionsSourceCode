@@ -643,6 +643,10 @@ GameStorage.devMigrations = {
     },
     player => {
       player.thisEternityMaxAM = new Decimal(0);
+    },
+    player => {
+      player.noReplicantiGalaxies = player.reality.upgReqChecks[0];
+      delete player.reality.upgReqChecks;
     }
   ],
 

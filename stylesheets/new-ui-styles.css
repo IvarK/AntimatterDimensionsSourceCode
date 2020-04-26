@@ -498,6 +498,7 @@ body.t-normal {
 }
 
 .c-subtab-option-container {
+  border-color: var(--color-good);
   border-width: 0.1rem;
 }
 

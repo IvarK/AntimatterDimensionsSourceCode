@@ -1100,7 +1100,7 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--subtab-option {
   border: 0.2rem solid var(--color-accent);
-  margin: 0 0.3rem;
+  margin: 0 0.8rem;
   line-height: 0;
 }
 
@@ -1485,10 +1485,7 @@ screen and (max-width: 480px) {
 .c-subtab-option-container {
   display: flex;
   flex-direction: row;
-  background: var(--color-base);
-  border: 0.2rem solid var(--color-bad);
-  padding: 0.8rem 0.4rem;
-  border-radius: 0.5rem;
+  padding: 0.8rem 0;
 }
 
 .t-metro .c-subtab-option-container,

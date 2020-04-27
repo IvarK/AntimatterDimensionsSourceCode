@@ -138,7 +138,9 @@ function replicantiLoop(diff) {
       // then some may be "left over" for increasing replicanti beyond their cap.
       remainingGain = fastReplicantiBelow308(remainingGain, areRGsBeingBought);
     }
-    if (isUncapped) {
+    if (isUncapped && player.replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE) && remainingGain.gt(0)) {
+      const intervalRatio = getReplicantiInterval().div(interval);
+      remainingGain = remainingGain.div(intervalRatio);
       player.replicanti.amount =
         Decimal.exp(remainingGain.div(LOG10_E).times(postScale).plus(1).ln() / postScale + logReplicanti);
     }

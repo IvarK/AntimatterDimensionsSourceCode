@@ -1058,7 +1058,6 @@ screen and (max-width: 480px) {
 
 ._kong-test .c-game-ui {
   max-height: 100%;
-  overflow-y: scroll;
 }
 
 /*#region o-primary-btn*/

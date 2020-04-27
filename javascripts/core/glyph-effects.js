@@ -364,9 +364,10 @@ GameDatabase.reality.glyphEffects = [
     formatSingleEffect: x => format(x, 5, 5),
     // It's bad to stack this one additively (N glyphs acts as a DT mult of N) or multiplicatively (the raw number is
     // less than 1), so instead we do a multiplicative stacking relative to the "base" effect of a level 1, 0% glyph.
+    // We also introduce a 3x mult per glyph after the first, so that stacking level 1, 0% glyphs still has an effect.
     // This is still just a flat DT mult when stacking multiple glyphs, but at least it's bigger than 2 or 3.
     combine: effects => ({
-      value: effects.length === 0 ? 0 : effects.reduce(Number.prodReducer, Math.pow(0.0003, 1 - effects.length)),
+      value: effects.length === 0 ? 0 : effects.reduce(Number.prodReducer, Math.pow(0.0001, 1 - effects.length)),
       capped: false
     }),
     conversion: x => x,

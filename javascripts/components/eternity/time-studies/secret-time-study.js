@@ -78,7 +78,7 @@ Vue.component("secret-time-study", {
   },
   template:
     `<button :class="classObject" :style="styleObject" @click="handleClick" ref="study">
-      <span v-if="isVisible">
+      <span>
         {{description}}
         <br>
         {{hide}}

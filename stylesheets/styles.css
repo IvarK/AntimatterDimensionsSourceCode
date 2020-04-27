@@ -134,8 +134,8 @@ body {
 }
 
 ._kong-test body {
-  width: 1050px;
-  height: 700px;
+  width: 1150px;
+  height: 800px;
   margin: auto;
   border: 0.1rem solid black;
   overflow-y: auto;
@@ -1058,7 +1058,6 @@ screen and (max-width: 480px) {
 
 ._kong-test .c-game-ui {
   max-height: 100%;
-  overflow-y: scroll;
 }
 
 /*#region o-primary-btn*/
@@ -1096,6 +1095,16 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--width-medium {
   width: 12rem;
+}
+
+.o-primary-btn--subtab-option {
+  border: 0.2rem solid var(--color-accent);
+  margin: 0 0.8rem;
+  line-height: 0;
+}
+
+.o-primary-btn--subtab-option:hover {
+  background-color: var(--color-accent);
 }
 
 .o-primary-btn--tickspeed {
@@ -1140,7 +1149,7 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--new-dim {
   font-weight: bold;
-  width: 21rem;
+  width: 22rem;
   height: 7rem;
 }
 
@@ -1162,12 +1171,6 @@ screen and (max-width: 480px) {
   height: 3rem;
 }
 
-.o-primary-btn--id-all-autobuyers {
-  font-size: 1.2rem;
-  width: 15rem;
-  height: 3rem;
-}
-
 .o-primary-btn--buy-td {
   width: 19.5rem;
   height: 3rem;
@@ -1177,12 +1180,6 @@ screen and (max-width: 480px) {
 .o-primary-btn--td-autobuyer {
   font-size: 1rem;
   width: 8rem;
-  height: 3rem;
-}
-
-.o-primary-btn--td-all-autobuyers {
-  font-size: 1.2rem;
-  width: 15rem;
   height: 3rem;
 }
 
@@ -1224,20 +1221,8 @@ screen and (max-width: 480px) {
   padding: 0;
 }
 
-.o-primary-btn--exit-challenge {
-  width: 20rem;
-  font-size: 1.1rem;
-}
-
 .o-primary-btn--small-spoon {
   font-size: 1rem;
-}
-
-.o-primary-btn--autobuyer-toggle {
-  font-size: 1.1rem;
-  width: 16rem;
-  height: 4rem;
-  margin: 0 0.3rem;
 }
 
 .o-primary-btn--replicanti-unlock {
@@ -1265,13 +1250,14 @@ screen and (max-width: 480px) {
 }
 
 .o-primary-btn--replicanti-galaxy {
-  width: 20rem;
+  width: 22rem;
   height: 7rem;
   font-size: 1.2rem;
   padding: 0.1rem 0.6rem;
 }
 
 .o-primary-btn--replicanti-galaxy-toggle {
+  width: 22rem;
   font-size: 1.2rem;
 }
 
@@ -1361,6 +1347,13 @@ screen and (max-width: 480px) {
 .t-inverted-metro .o-primary-btn,
 .t-s8 .o-primary-btn {
   border-radius: 0;
+  border-width: 0.1rem;
+}
+
+.t-metro .o-primary-btn--toggle,
+.t-dark-metro .o-primary-btn--toggle,
+.t-inverted-metro .o-primary-btn--toggle,
+.t-s8 .o-primary-btn--toggle {
   border-width: 0.1rem;
 }
 
@@ -1486,6 +1479,24 @@ screen and (max-width: 480px) {
 
 /*#endregion o-primary-btn*/
 
+/*#region c-subtab-option-container*/
+
+.c-subtab-option-container {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 0.8rem;
+}
+
+.t-metro .c-subtab-option-container,
+.t-dark-metro .c-subtab-option-container,
+.t-inverted-metro .c-subtab-option-container,
+.t-s8 .c-subtab-option-container {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+/*#endregion c-subtab-option-container*/
+
 /*#region o-prestige-btn*/
 
 .o-prestige-btn {
@@ -1493,7 +1504,7 @@ screen and (max-width: 480px) {
   border-radius: 0.4rem;
   transition-duration: 0.2s;
   cursor: pointer;
-  width: 21rem;
+  width: 22rem;
   height: 7rem;
   font-size: 1.1rem;
   font-family: Typewriter, serif;
@@ -2044,15 +2055,7 @@ screen and (max-width: 480px) {
   align-items: center;
 }
 
-.l-infinity-dim-tab__buy-max {
-  margin-top: 0.5rem;
-}
-
 .l-infinity-dim-tab__ec8-purchases {
-  margin-top: 1rem;
-}
-
-.l-infinity-dim-tab__all-autobuyers {
   margin-top: 1rem;
 }
 
@@ -2187,14 +2190,6 @@ screen and (max-width: 480px) {
   align-items: center;
 }
 
-.l-time-dim-tab__buy-max {
-  margin-top: 0.5rem;
-}
-
-.l-time-dim-tab__all-autobuyers {
-  margin-top: 1rem;
-}
-
 /*#endregion l-time-dim-tab*/
 
 /*#region c-time-dim-description__accent*/
@@ -2327,6 +2322,9 @@ screen and (max-width: 480px) {
 /* This the top-level Statistics tab (with all subtabs)*/
 
 .c-stats-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   color: black;
   font-size: 1.2rem;
 }
@@ -2656,11 +2654,6 @@ screen and (max-width: 480px) {
   margin: 0 1rem 0 1rem;
 }
 
-.l-challenges-tab__exit-btn {
-  margin-right: 1rem;
-  margin-left: 1rem;
-}
-
 .l-challenges-tab__auto-ec-info {
   left: 100%;
   display: flex;
@@ -2729,7 +2722,7 @@ screen and (max-width: 480px) {
 }
 
 .c-challenge-box--eternity {
-  height: 16rem;
+  height: 18rem;
   color: var(--color-eternity);
   background-color: black;
   border: 0.3rem solid var(--color-eternity);
@@ -3442,20 +3435,7 @@ screen and (max-width: 480px) {
   text-align: center;
 }
 
-.l-autobuyers-tab__toggles {
-  margin-top: 1.5rem;
-}
-
 /*#endregion l-autobuyers-tab*/
-
-/*#region l-autobuyer-toggles*/
-
-.l-autobuyer-toggles {
-  display: flex;
-  flex-direction: row;
-}
-
-/*#endregion l-autobuyer-toggles*/
 
 /*#region l-autobuyer-grid*/
 
@@ -5695,7 +5675,7 @@ kbd {
   margin: 1rem;
   transition-duration: 0.2s;
   width: 30rem;
-  height: 10rem;
+  height: 12rem;
   font-family: Typewriter;
 }
 
@@ -6179,7 +6159,6 @@ kbd {
 }
 
 .l-ra-alchemy-tab {
-  margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6194,6 +6173,7 @@ kbd {
   width: 60rem;
   font-size: 1.2rem;
   text-align: left;
+  margin-top: 0.5rem;
 }
 
 .c-reality-glyph-creation {
@@ -6417,6 +6397,12 @@ kbd {
 /* #endregion ra tab*/
 
 /* #startregion laitela tab*/
+
+.l-laitela-celestial-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .o-laitela-run-button {
   width: 22rem;
@@ -7232,6 +7218,7 @@ kbd {
 }
 
 .c-black-hole-canvas {
+  margin-top: 0.5rem;
   border: 0.1rem solid black;
 }
 

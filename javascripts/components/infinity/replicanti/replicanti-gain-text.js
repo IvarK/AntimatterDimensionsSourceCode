@@ -3,8 +3,8 @@
 Vue.component("replicanti-gain-text", {
   data() {
     return {
-      galaxyText: "",
-      replicantiText: ""
+      remainingTimeText: "",
+      galaxyText: ""
     };
   },
   methods: {
@@ -31,7 +31,7 @@ Vue.component("replicanti-gain-text", {
         const timeEstimateText = timeToThousand.eq(0)
           ? "an extremely long time"
           : `${TimeSpan.fromSeconds(timeToThousand.toNumber())}`;
-        this.replicantiText = `You are gaining ${formatX(gainFactorPerSecond, 2, 1)} Replicanti per second` +
+        this.remainingTimeText = `You are gaining ${formatX(gainFactorPerSecond, 2, 1)} Replicanti per second` +
           ` (${timeEstimateText} until ${format(nextThousandOOM)})`;
         return;
       }
@@ -57,17 +57,23 @@ Vue.component("replicanti-gain-text", {
       }
       const allGalaxyTime = Decimal.divide(effectiveMaxRG, baseGalaxiesPerSecond).toNumber();
 
-      this.replicantiText = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti`;
-      if (effectiveMaxRG > 0 && Replicanti.galaxies.autobuyer.isEnabled && Replicanti.galaxies.autobuyer.isOn) {
+      this.remainingTimeText = `${TimeSpan.fromSeconds(remainingTime)} remaining until Infinite Replicanti`;
+      
+      // If the player can get RG, this text is redundant with text below.
+      if (Replicanti.galaxies.max === 0) {
+        this.remainingTimeText += ` (${TimeSpan.fromSeconds(totalTime)} total)`;
+      }
+      
+      if (Replicanti.galaxies.max > 0) {
         this.galaxyText = `You are gaining a galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
         if (galaxiesPerSecond.gte(1)) {
           this.galaxyText = `You are gaining ${format(galaxiesPerSecond, 2, 1)} galaxies per second`;
         }
         this.galaxyText += ` (all galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
       } else {
-        this.galaxyText = ` (${TimeSpan.fromSeconds(totalTime)} total time until Infinite Replicanti)`;
+        this.galaxyText = ``;
       }
     }
   },
-  template: `<p>{{replicantiText}}<br>{{galaxyText}}</p>`
+  template: `<p>{{remainingTimeText}}<br>{{galaxyText}}</p>`
 });

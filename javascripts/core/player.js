@@ -1,6 +1,6 @@
 "use strict";
 
-const defaultMaxTime = 60000 * 60 * 24 * 31;
+const defaultMaxTime = TimeSpan.fromDays(31).totalMilliseconds;
 
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const
@@ -38,7 +38,7 @@ let player = {
   infinityUpgrades: new Set(),
   usedMaxAll: false,
   bestIpPerMsWithoutMaxAll: new Decimal(0),
-  infinityRebuyables: [0, 0],
+  infinityRebuyables: [0, 0, 0],
   challenge: {
     normal: {
       current: 0,
@@ -173,9 +173,9 @@ let player = {
     Eternity: true,
     Infinity: true
   },
-  lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, new Decimal(1)]),
-  lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
-  lastTenRealities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 0]),
+  lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]),
+  lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]),
+  lastTenRealities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), 1, defaultMaxTime, 0]),
   bestIPminThisInfinity: new Decimal(0),
   bestIPminThisEternity: new Decimal(0),
   bestEPminThisEternity: new Decimal(0),
@@ -504,9 +504,11 @@ let player = {
     updateRate: 33,
     newUI: true,
     offlineProgress: true,
+    automaticTabSwitching: true,
     showGlyphEffectDots: true,
     respecIntoProtected: false,
     offlineTicks: 1000,
+    showLastTenRunsGainPerTime: false,
     showHintText: {
       achievements: false,
       challenges: false,

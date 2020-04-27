@@ -65,14 +65,14 @@ Vue.component("normal-dim-row", {
     },
     buySingle() {
       if (this.isContinuumActive) return;
-      buyOneDimensionBtnClick(this.tier);
+      buyOneDimension(this.tier);
       if (this.tier === 2) {
         Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
       } 
     },
     buyUntil10() {
       if (this.isContinuumActive) return;
-      buyManyDimensionsBtnClick(this.tier);
+      buyManyDimensions(this.tier);
       if (this.tier === 2) {
         Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
       } 

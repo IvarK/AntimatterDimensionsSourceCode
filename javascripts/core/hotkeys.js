@@ -20,6 +20,11 @@ GameKeyboard.bindRepeatableHotkey("shift+t", () => buyTickSpeed());
 GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
 GameKeyboard.bindRepeatableHotkey("e", () => eternity());
 
+// We need to know whether the player is holding R or not for the
+// replicanti galaxy 
+GameKeyboard.bind("r", () => setHoldingR(true), "keydown");
+GameKeyboard.bind("r", () => setHoldingR(false), "keyup");
+
 (function() {
   function bindDimensionHotkeys(tier) {
     GameKeyboard.bindRepeatableHotkey(`${tier}`, () => buyManyDimension(tier));
@@ -43,7 +48,7 @@ GameKeyboard.bindHotkey("esc", () => {
   if (Modal.isOpen) {
     Modal.hide();
   } else {
-    Tab.options.show();
+    Tab.options.show(true);
   }
 });
 

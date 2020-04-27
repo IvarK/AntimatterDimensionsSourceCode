@@ -104,8 +104,8 @@ GameDatabase.reality.upgrades = (function() {
       hasFailed: () => {
         const invalidEquippedGlyphs = Glyphs.activeList.length > 1 ||
           (Glyphs.activeList.length === 1 && Glyphs.activeList[0].level < 3);
-        const hasValidGlyph = Glyphs.inventory.countWhere(g => g && g.level >= 3) > 0;
-        return invalidEquippedGlyphs || !hasValidGlyph;
+        const hasValidGlyphInInventory = Glyphs.inventory.countWhere(g => g && g.level >= 3) > 0;
+        return invalidEquippedGlyphs || (Glyphs.activeList.length === 0 && !hasValidGlyphInInventory);
       },
       checkRequirement: () => Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,

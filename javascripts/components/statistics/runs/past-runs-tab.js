@@ -10,8 +10,11 @@ Vue.component("past-runs-tab", {
           currency: "RM",
           condition: () => PlayerProgress.realityUnlocked(),
           getRuns: () => player.lastTenRealities,
-          reward: (runGain, run) =>
-            `${runGain} ${pluralize("reality machine", run[1])} and a level ${formatInt(run[3])} glyph`
+          reward: (runGain, run, average) => (average
+            ? `${runGain} ${pluralize("Reality Machine", run[1])}`
+            : `${runGain} ${pluralize("Reality Machine", run[1])}, a level ${formatInt(run[4])} glyph,`),
+          // Note that runGain is a string so we can't use it for pluralize
+          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Reality", run[2], "Realities")}`,
         },
         eternity: {
           name: "Eternity",
@@ -19,7 +22,8 @@ Vue.component("past-runs-tab", {
           currency: "EP",
           condition: () => PlayerProgress.eternityUnlocked(),
           getRuns: () => player.lastTenEternities,
-          reward: runGain => `${runGain} EP`
+          reward: runGain => `${runGain} EP`,
+          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Eternity", run[2], "Eternities")}`,
         },
         infinity: {
           name: "Infinity",
@@ -27,19 +31,37 @@ Vue.component("past-runs-tab", {
           currency: "IP",
           condition: () => PlayerProgress.infinityUnlocked(),
           getRuns: () => player.lastTenRuns,
-          reward: runGain => `${runGain} IP`
+          reward: runGain => `${runGain} IP`,
+          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Infinity", run[2], "Infinities")}`,
         },
-      }
+      },
+      showLastTenRunsGainPerTime: false
     };
   },
-  template:
-    `
-    <div>
-        <past-runs-container
-          v-for="layer in layers"
-          :key="layer.name"
-          :layer="layer"
+  watch: {
+    showLastTenRunsGainPerTime(newValue) {
+      player.options.showLastTenRunsGainPerTime = newValue;
+    }
+  },
+  methods: {
+    update() {
+      this.showLastTenRunsGainPerTime = player.options.showLastTenRunsGainPerTime;
+    }
+  },
+  template: `
+    <div class="c-stats-tab">
+      <div class="c-subtab-option-container">
+        <primary-button-on-off-custom
+          v-model="showLastTenRunsGainPerTime"
+          on="Show resource gain"
+          off="Show resource gain/time"
+          class="o-primary-btn--subtab-option"
         />
-    </div>
-    `
+      </div>
+      <past-runs-container
+        v-for="layer in layers"
+        :key="layer.name"
+        :layer="layer"
+      />
+    </div>`
 });

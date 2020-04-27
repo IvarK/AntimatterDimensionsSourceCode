@@ -336,7 +336,17 @@ GameStorage.migrations = {
     delete player.dead;
     player.onlyEighthDimensions = player.dimlife;
     delete player.dimlife;
-    if (player.totalAntimatter.gt(0)) player.noAntimatterProduced = false;
+    if (player.totalAntimatter.gt(0)) {
+      player.noAntimatterProduced = false;
+      // These are very imprecise checks which will often lead to
+      // player.noFirstDimensions and player.noEighthDimensions
+      // becoming false when they shouldn't be, but this basically
+      // only matters if you happen to be going for
+      // "Like feasting on a behind" when the update comes out,
+      // which seems rare.
+      player.noFirstDimensions = false;
+      player.noEighthDimensions = false;
+    }
     // If someone has 0 max replicanti galaxies, they can't have gotten any.
     // If they have more than 0 max replicanti galaxies, we don't give them
     // the benefit of the doubt.

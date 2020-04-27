@@ -1485,7 +1485,7 @@ screen and (max-width: 480px) {
 .c-subtab-option-container {
   display: flex;
   flex-direction: row;
-  padding: 0.8rem 0;
+  padding-bottom: 0.8rem;
 }
 
 .t-metro .c-subtab-option-container,

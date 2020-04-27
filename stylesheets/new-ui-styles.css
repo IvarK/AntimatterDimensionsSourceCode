@@ -447,6 +447,8 @@ body.t-normal {
   margin-bottom: 0.5rem;
   font-weight: bold;
   font-size: 1.1em;
+  border-bottom: 0.1rem solid var(--color-good);
+  padding-bottom: 0.6rem;
 }
 
 /* FIXING OLD TABS */

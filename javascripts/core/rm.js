@@ -1040,9 +1040,9 @@ const GlyphSacrificeHandler = {
     const toGain = this.glyphSacrificeGain(glyph);
     const askConfirmation = !force && player.options.confirmations.glyphSacrifice;
     if (askConfirmation) {
-      if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} 
-        glyphs will increase from ${format(player.reality.glyphs.sac[glyph.type], 2, 2)} to 
-        ${format(player.reality.glyphs.sac[glyph.type] + toGain, 2, 2)}`)) {
+      if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} ` + 
+        `glyphs will increase from ${format(player.reality.glyphs.sac[glyph.type], 2, 2)} to ` +
+        `${format(player.reality.glyphs.sac[glyph.type] + toGain, 2, 2)}.`)) {
           return;
       }
     }

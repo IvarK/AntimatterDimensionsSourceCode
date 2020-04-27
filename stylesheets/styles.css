@@ -134,8 +134,8 @@ body {
 }
 
 ._kong-test body {
-  width: 1050px;
-  height: 700px;
+  width: 1150px;
+  height: 800px;
   margin: auto;
   border: 0.1rem solid black;
   overflow-y: auto;

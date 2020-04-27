@@ -586,7 +586,7 @@ GameDatabase.achievements.normal = [
   {
     id: 95,
     name: "Is this safe?",
-    tooltip: () => `Gain Infinite replicanti in ${formatInt(1)} hour.`,
+    tooltip: () => `Gain ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Replicanti in ${formatInt(1)} hour.`,
     reward: () => `You keep your Replicanti and ${formatInt(1)} Replicanti Galaxy on Infinity.`,
     checkRequirement: () =>
       (player.replicanti.amount.eq(Decimal.NUMBER_MAX_VALUE) || player.replicanti.galaxies > 0) &&

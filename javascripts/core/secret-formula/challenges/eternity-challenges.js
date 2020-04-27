@@ -74,7 +74,7 @@ GameDatabase.challenges.eternity = [
             " Galaxies is massively reduced";
       }
       return "You can't gain Antimatter Galaxies normally, but the cost of upgrading your max Replicanti" +
-              " galaxies is massively reduced.";
+              " Galaxies is massively reduced.";
     },
     goal: new Decimal("1e850"),
     goalIncrease: new Decimal("1e250"),

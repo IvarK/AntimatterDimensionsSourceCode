@@ -115,12 +115,6 @@ function replicantiCap() {
     : Decimal.NUMBER_MAX_VALUE;
 }
 
-function isRGAutobuyerEnabled() {
-  const isActivePathDisablingRGAutobuyer = TimeStudy(131).isBought && !Achievement(138).isUnlocked;
-  // We consider the autobuyer also enabled if the player is holding R
-  return (player.replicanti.galaxybuyer && !isActivePathDisablingRGAutobuyer) || holdingR;
-}
-
 function replicantiLoop(diff) {
   if (!player.replicanti.unl) return;
   PerformanceStats.start("Replicanti");
@@ -128,6 +122,7 @@ function replicantiLoop(diff) {
   const interval = getReplicantiInterval();
   const logReplicanti = player.replicanti.amount.clampMin(1).ln();
   const isUncapped = TimeStudy(192).isBought;
+  const areRGsBeingBought = Replicanti.galaxies.areBeingBought;
   if (diff > 500 || interval.lessThan(player.options.updateRate) || isUncapped) {
     // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
     let postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
@@ -141,7 +136,7 @@ function replicantiLoop(diff) {
     if (!isUncapped || player.replicanti.amount.lte(Decimal.NUMBER_MAX_VALUE)) {
       // Some of the gain is "used up" below e308, but if replicanti are uncapped
       // then some may be "left over" for increasing replicanti beyond their cap.
-      remainingGain = fastReplicantiBelow308(remainingGain, isRGAutobuyerEnabled());
+      remainingGain = fastReplicantiBelow308(remainingGain, areRGsBeingBought);
     }
     if (isUncapped) {
       player.replicanti.amount =
@@ -157,7 +152,7 @@ function replicantiLoop(diff) {
     player.replicanti.timer += diff;
   }
 
-  if (isRGAutobuyerEnabled() && player.replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) {
+  if (areRGsBeingBought && player.replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) {
     replicantiGalaxy();
   }
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_AFTER);
@@ -439,6 +434,7 @@ const Replicanti = {
     return ReplicantiUpgrade.chance.value;
   },
   galaxies: {
+    isPlayerHoldingR: false,
     get bought() {
       return player.replicanti.galaxies;
     },
@@ -458,6 +454,9 @@ const Replicanti = {
       if (!Replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) return false;
       return this.bought < this.max;
     },
+    get areBeingBought() {
+      return this.autobuyer.isActive || this.isPlayerHoldingR;
+    },
     autobuyer: {
       get isUnlocked() {
         return EternityMilestone.autobuyerReplicantiGalaxy.isReached;
@@ -474,6 +473,9 @@ const Replicanti = {
       },
       get isEnabled() {
         return !TimeStudy(131).isBought || Achievement(138).isUnlocked;
+      },
+      get isActive() {
+        return this.isOn && this.isEnabled;
       }
     }
   },

@@ -935,12 +935,8 @@ function setShiftKey(isDown) {
   ui.view.shiftDown = isDown;
 }
 
-// Not really part of the UI, but also not really save data
-// (purposely becomes false on reload).
-let holdingR = false;
-
 function setHoldingR(x) {
-  holdingR = x;
+  Replicanti.galaxies.isPlayerHoldingR = x;
 }
 
 function init() {

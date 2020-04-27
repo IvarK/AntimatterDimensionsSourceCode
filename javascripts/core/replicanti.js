@@ -135,12 +135,13 @@ function replicantiLoop(diff) {
       postScale *= 2;
     }
 
-    // All variables in the below are in log10 terms.
-    const logGainFactorPerTick = Decimal.divide(diff * Math.log(player.replicanti.chance + 1), interval).times(LOG10_E);
-    let remainingGain = logGainFactorPerTick;
+    // Note that remainingGain is in log10 terms.
+    let remainingGain = Decimal.divide(diff * Math.log(player.replicanti.chance + 1), interval).times(LOG10_E);
     // It is intended to be possible for both of the below conditionals to trigger.
     if (!isUncapped || player.replicanti.amount.lte(Decimal.NUMBER_MAX_VALUE)) {
-      remainingGain = fastReplicantiBelow308(logGainFactorPerTick, isRGAutobuyerEnabled());
+      // Some of the gain is "used up" below e308, but if replicanti are uncapped
+      // then some may be "left over" for increasing replicanti beyond their cap.
+      remainingGain = fastReplicantiBelow308(remainingGain, isRGAutobuyerEnabled());
     }
     if (isUncapped) {
       player.replicanti.amount =

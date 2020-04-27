@@ -63,7 +63,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 41,
       cost: 4,
       requirement: 31,
-      description: () => `Each galaxy gives a ${formatX(1.2, 1, 1)} multiplier on IP gained.`,
+      description: () => `Each galaxy gives a ${formatX(1.2, 1, 1)} multiplier on IP gained`,
       effect: () => Decimal.pow(1.2, Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies),
       formatEffect: value => formatX(value, 2, 1)
     },
@@ -72,7 +72,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 6,
       requirement: 32,
       description: () => `Galaxy requirement goes up ${formatInt(52)}
-        8ths instead of ${formatInt(60)}.`,
+        8ths instead of ${formatInt(60)}`,
       effect: 52
     },
     {
@@ -375,7 +375,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 171,
       cost: 15,
       requirement: () => TimeStudy(161).isBought || TimeStudy(162).isBought,
-      description: () => `Time shard requirement for the next free tickspeed upgrade goes up slower,
+      description: () => `Time shard requirement for the next free tickspeed upgrade goes up slower
         ${formatX(1.33, 0, 2)} ➜ ${formatX(1.25, 0, 2)}`,
       effect: () => TS171_MULTIPLIER
     },
@@ -402,7 +402,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0 && !Enslaved.isRunning,
       description: () => (Enslaved.isRunning
         ? "There is not enough space in this Reality"
-        : `Replicanti can go beyond ${format(replicantiCap(), 2, 1)}, but growth slows down at higher amounts.`)
+        : `Replicanti can go beyond ${format(replicantiCap(), 2, 1)}, but growth slows down at higher amounts`)
       },
     {
       id: 193,
@@ -539,7 +539,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 4,
       requirement: () => TimeStudy(214).isBought && !TimeStudy(227).isBought,
       requirementV: () => TimeStudy(214).isBought && TimeStudy(227).isBought,
-      description: () => `Sacrifice formula scales better, x${formatPow(0.011, 0, 3)} ➜ x${formatPow(0.013, 0, 3)}`,
+      description: () => `Sacrifice formula scales better
+        x${formatPow(0.011, 0, 3)} ➜ x${formatPow(0.013, 0, 3)}`,
       effect: 0.013
     },
     {
@@ -568,7 +569,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 5,
       requirement: () => (TimeStudy(225).isBought || TimeStudy(226).isBought) && !TimeStudy(234).isBought,
       requirementV: () => (TimeStudy(225).isBought || TimeStudy(226).isBought) && TimeStudy(234).isBought,
-      description: "Max Replicanti galaxy upgrade is cheaper based on current Replicanti",
+      description: "Max Replicanti Galaxy upgrade is cheaper based on current Replicanti",
       effect: () => Replicanti.amount.pow(0.3),
       formatEffect: value => `/ ${format(value, 1, 2)}`
     },

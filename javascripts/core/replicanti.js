@@ -1,10 +1,10 @@
 "use strict";
 
 // Slowdown parameters for replicanti growth, interval will increase by scaleFactor for every scaleLog10
-// OoM past the cap(default is 308, 1.2, Number.MAX_VALUE)
+// OoM past the cap (default is 308.25 (log10 of 1.8e308), 1.2, Number.MAX_VALUE)
 const ReplicantiGrowth = {
   get scaleLog10() {
-    return 308;
+    return Math.log10(Number.MAX_VALUE);
   },
   get scaleFactor() {
     return AlchemyResource.cardinality.effectValue;
@@ -69,9 +69,15 @@ function replicantiGalaxyAutoToggle(forcestate) {
   player.replicanti.galaxybuyer = !player.replicanti.galaxybuyer || forcestate === true;
 }
 
-function getReplicantiInterval(noMod, intervalIn) {
+// When the amount is exactly the cap, there are two cases: the player can go
+// over cap (in which case interval should be as if over cap) or the player
+// has just crunched and is still at cap due to "Is this safe?" reward
+// (in which case interval should be as if not over cap). This is why we have
+// the overCapOverride parameter, to tell us which case we are in.
+function getReplicantiInterval(overCapOverride, intervalIn) {
   let interval = intervalIn || player.replicanti.interval;
   const amount = player.replicanti.amount;
+  const overCap = overCapOverride === undefined ? amount.gt(replicantiCap()) : overCapOverride;
   const preCelestialEffects = Effects.product(
     TimeStudy(62),
     TimeStudy(213),
@@ -80,13 +86,13 @@ function getReplicantiInterval(noMod, intervalIn) {
     RealityUpgrade(23)
   );
   interval = Decimal.divide(interval, preCelestialEffects);
-  if ((TimeStudy(133).isBought && !Achievement(138).isUnlocked) || (amount.gt(replicantiCap()) || noMod)) {
+  if ((TimeStudy(133).isBought && !Achievement(138).isUnlocked) || overCap) {
     interval = interval.times(10);
   }
   if (TimeStudy(132).isBought && Perk.studyPassive2.isBought) {
     interval = interval.divide(5);
   }
-  if (amount.lte(replicantiCap()) || noMod) {
+  if (amount.lte(replicantiCap()) || !overCap) {
     if (Achievement(134).isUnlocked) interval = interval.divide(2);
   } else {
     const increases = (amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
@@ -119,7 +125,8 @@ function replicantiLoop(diff) {
   if (!player.replicanti.unl) return;
   PerformanceStats.start("Replicanti");
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_BEFORE);
-  const interval = getReplicantiInterval();
+  // This gets the pre-cap interval (above the cap we recalculate the interval).
+  const interval = getReplicantiInterval(false);
   const logReplicanti = player.replicanti.amount.clampMin(1).ln();
   const isUncapped = TimeStudy(192).isBought;
   const areRGsBeingBought = Replicanti.galaxies.areBeingBought;
@@ -133,13 +140,15 @@ function replicantiLoop(diff) {
     // Note that remainingGain is in log10 terms.
     let remainingGain = Decimal.divide(diff * Math.log(player.replicanti.chance + 1), interval).times(LOG10_E);
     // It is intended to be possible for both of the below conditionals to trigger.
-    if (!isUncapped || player.replicanti.amount.lte(Decimal.NUMBER_MAX_VALUE)) {
+    if (!isUncapped || player.replicanti.amount.lte(replicantiCap())) {
       // Some of the gain is "used up" below e308, but if replicanti are uncapped
       // then some may be "left over" for increasing replicanti beyond their cap.
       remainingGain = fastReplicantiBelow308(remainingGain, areRGsBeingBought);
     }
-    if (isUncapped && player.replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE) && remainingGain.gt(0)) {
-      const intervalRatio = getReplicantiInterval().div(interval);
+    if (isUncapped && player.replicanti.amount.gte(replicantiCap()) && remainingGain.gt(0)) {
+      // Recalculate the interval (it may have increased due to additional replicanti, or,
+      // far less importantly, decreased due to Reality Upgrade 6 and additional RG).
+      const intervalRatio = getReplicantiInterval(true).div(interval);
       remainingGain = remainingGain.div(intervalRatio);
       player.replicanti.amount =
         Decimal.exp(remainingGain.div(LOG10_E).times(postScale).plus(1).ln() / postScale + logReplicanti);
@@ -313,7 +322,7 @@ const ReplicantiUpgrade = {
     get autobuyerId() { return 1; }
 
     applyModifiers(value) {
-      return getReplicantiInterval(false, value);
+      return getReplicantiInterval(undefined, value);
     }
   }(),
   galaxies: new class ReplicantiGalaxiesUpgrade extends ReplicantiUpgradeState {

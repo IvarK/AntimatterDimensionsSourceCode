@@ -530,7 +530,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => player.infinitied.gt(2e6),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => `Infinities more than ${formatInt(5)} seconds long
-      give ${formatInt(250)} Infinitied stat.`,
+      give ${formatX(250)} more Infinities.`,
     effect: 250,
     effectCondition: () => Time.thisInfinity.totalSeconds > 5
   },

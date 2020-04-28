@@ -142,11 +142,13 @@ class BlackHoleState {
     return this._data.active;
   }
 
+  get timeWithPreviousActiveToNextStateChange() {
+    return this.isCharged ? this.duration - this.phase : this.interval - this.phase;
+  }
+
   // When inactive, returns time until active; when active, returns time until inactive (or paused for hole 2)
   get timeToNextStateChange() {
-    let remainingTime = this.isCharged
-      ? this.duration - this.phase
-      : this.interval - this.phase;
+    let remainingTime = this.timeWithPreviousActiveToNextStateChange;
 
     if (this.id === 1) return remainingTime;
 

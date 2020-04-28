@@ -486,7 +486,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 4,
       requirement: () => TimeStudy(212).isBought && !TimeStudy(224).isBought,
       requirementV: () => TimeStudy(212).isBought && TimeStudy(224).isBought,
-      description: () => `Galaxy cost scaling starts ${formatInt(7)} galaxies later`,
+      description: () => `Distant Galaxy cost scaling starts ${formatInt(7)} galaxies later`,
       effect: 7
     },
     {
@@ -498,8 +498,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       description() {
         const effect = TimeStudy(224).effectValue;
         const noun = effect === 1 ? "galaxy" : "galaxies";
-        return `Galaxy cost scaling starts ${formatInt(effect)} ${noun} later
-          (${formatInt(1)} for every ${formatInt(2000)} DimBoosts)`;
+        return `Distant Galaxy cost scaling starts ${formatInt(effect)} ${noun} later
+          (${formatInt(1)} per ${formatInt(2000)} Dim Boosts)`;
       },
       effect: () => Math.floor(DimBoost.totalBoosts / 2000)
     },

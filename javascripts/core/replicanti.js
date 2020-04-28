@@ -127,7 +127,6 @@ function replicantiLoop(diff) {
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_BEFORE);
   // This gets the pre-cap interval (above the cap we recalculate the interval).
   const interval = getReplicantiInterval(false);
-  const logReplicanti = player.replicanti.amount.clampMin(1).ln();
   const isUncapped = TimeStudy(192).isBought;
   const areRGsBeingBought = Replicanti.galaxies.areBeingBought;
   if (diff > 500 || interval.lessThan(player.options.updateRate) || isUncapped) {
@@ -151,7 +150,8 @@ function replicantiLoop(diff) {
       const intervalRatio = getReplicantiInterval(true).div(interval);
       remainingGain = remainingGain.div(intervalRatio);
       player.replicanti.amount =
-        Decimal.exp(remainingGain.div(LOG10_E).times(postScale).plus(1).ln() / postScale + logReplicanti);
+        Decimal.exp(remainingGain.div(LOG10_E).times(postScale).plus(1).ln() / postScale +
+        player.replicanti.amount.clampMin(1).ln());
     }
     player.replicanti.timer = 0;
   } else if (interval.lte(player.replicanti.timer)) {

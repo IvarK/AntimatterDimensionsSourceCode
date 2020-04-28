@@ -7,16 +7,19 @@ function canEternity() {
 function giveEternityRewards(auto) {
   player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
   player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
-  addEternityTime(
-    player.thisEternity,
-    player.thisEternityRealTime,
-    gainedEternityPoints()
-  );
+  
   const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
   if (player.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
   }
+  
+  addEternityTime(
+    player.thisEternity,
+    player.thisEternityRealTime,
+    gainedEternityPoints(),
+    newEternities
+  );
 
   player.eternities = player.eternities.add(newEternities);
 
@@ -151,12 +154,10 @@ function initializeResourcesAfterEternity() {
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.totalTickGained = 0;
-  player.offlineProd = EternityMilestone.keepBreakUpgrades.isReached ? player.offlineProd : 0;
-  player.offlineProdCost = EternityMilestone.keepBreakUpgrades.isReached ? player.offlineProdCost : 1e7;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
   if (!EternityMilestone.keepBreakUpgrades.isReached) {
-    player.infinityRebuyables = [0, 0];
+    player.infinityRebuyables = [0, 0, 0];
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();
   }

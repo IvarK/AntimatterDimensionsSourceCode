@@ -214,6 +214,10 @@ function buyOneDimension(tier) {
     floatText(tier, formatX(NormalDimensions.buyTenMultiplier, 2, 1));
   }
 
+  if (tier === 1) {
+    Achievement(28).tryUnlock();
+  }
+
   onBuyDimension(tier);
 
   return true;
@@ -334,25 +338,6 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
 
 function canAfford(cost) {
   return (player.break || cost.lt(new Decimal("1.79e308"))) && cost.lte(player.antimatter);
-}
-
-function buyOneDimensionBtnClick(tier) {
-  if (tier === 1) {
-    if (buyOneDimension(1)) {
-      // This achievement is granted only if the buy one button is pressed
-      Achievement(28).tryUnlock();
-    }
-    return;
-  }
-  buyOneDimension(tier);
-}
-
-function buyManyDimensionsBtnClick(tier) {
-  buyManyDimension(tier);
-}
-
-function buyAsManyAsYouCanBuyBtnClick(tier) {
-  buyAsManyAsYouCanBuy(tier);
 }
 
 class NormalDimensionState extends DimensionState {

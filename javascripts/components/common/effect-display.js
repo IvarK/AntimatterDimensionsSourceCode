@@ -68,7 +68,7 @@ Vue.component("effect-display", {
       return this.reachedCapFn();
     },
     titleDisplay() {
-      if (this.config.staticEffect) return undefined;
+      if (this.config.noTitle) return "";
       return `${this.hasCap && this.reachedCap ? "Capped" : this.title}: `;
     },
     effectDisplay() {

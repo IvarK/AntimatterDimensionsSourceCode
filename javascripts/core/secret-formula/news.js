@@ -923,7 +923,7 @@ GameDatabase.news = [
   {
     id: "a183",
     text:
-      "In other unrelated news, we're getting reports that approximately 1.97 people are angry that lightning " +
+      "In other unrelated news, we're getting reports that approximately 1.79 people are angry that lightning " +
       "is striking their Christmas tree at night."
   },
   {

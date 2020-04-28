@@ -9,6 +9,7 @@ GameDatabase.celestials.perkShop = (function() {
       id: config.id,
       cost: () => rebuyableCost(config.initialCost, config.increment, config.id),
       cap: config.cap,
+      costCap: config.costCap,
       description: config.description,
       effect: () => config.effect(player.celestials.teresa.perkShop[config.id]),
       formatEffect: config.formatEffect,
@@ -25,7 +26,8 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Math.pow(1.05, bought),
       formatEffect: value => formatX(value, 2, 2),
       formatCost: value => format(value, 2, 0),
-      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048)
+      costCap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048),
+      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? Math.pow(1.05, 20) : Math.pow(1.05, 11))
     }),
     rmMult: rebuyable({
       id: 1,
@@ -35,6 +37,7 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => format(value, 2, 0),
+      costCap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048),
       cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048)
     }),
     bulkDilation: rebuyable({
@@ -45,7 +48,8 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => format(value, 2, 0),
-      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1638400 : 1600)
+      costCap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1638400 : 1600),
+      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 16384 : 16),
     }),
     autoSpeed: rebuyable({
       id: 3,
@@ -55,7 +59,8 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => format(value, 2, 0),
-      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 64000 : 4000)
+      costCap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 64000 : 4000),
+      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 64 : 4)
     }),
     musicGlyph: rebuyable({
       id: 4,
@@ -64,6 +69,7 @@ GameDatabase.celestials.perkShop = (function() {
       description: "Receive a music glyph (random type, 80% of highest level)",
       effect: bought => Decimal.pow(3, bought),
       formatCost: value => format(value, 2, 0),
+      costCap: () => Number.MAX_VALUE,
       cap: () => Number.MAX_VALUE
     }),
   };

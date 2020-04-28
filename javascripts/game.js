@@ -133,34 +133,38 @@ function ratePerMinute(amount, time) {
     return Decimal.divide(amount, time / (60 * 1000));
 }
 
-function averageRun(runs) {
-  const totalTime = runs
-    .map(run => run[0])
-    .reduce(Number.sumReducer);
+function averageRun(runs, name) {
+  const totalTime = runs.map(run => run[0]).sum();
   const totalAmount = runs
     .map(run => run[1])
     .reduce(Decimal.sumReducer);
-  const realTime = runs
+  const totalPrestigeGain = runs
     .map(run => run[2])
-    .reduce(Number.sumReducer);
-  return [
+    .reduce(name === "Reality" ? Number.sumReducer : Decimal.sumReducer);
+  const realTime = runs.map(run => run[3]).sum();
+  const average = [
     totalTime / runs.length,
     totalAmount.dividedBy(runs.length),
+    (name === "Reality") ? totalPrestigeGain / runs.length : totalPrestigeGain.dividedBy(runs.length),
     realTime / runs.length
   ];
+  if (name === "Reality") {
+    average.push(runs.map(x => x[4]).sum() / runs.length);
+  }
+  return average;
 }
 
 // eslint-disable-next-line max-params
 function addInfinityTime(time, realTime, ip, infinities) {
   player.lastTenRuns.pop();
-  player.lastTenRuns.unshift([time, ip, realTime, infinities]);
+  player.lastTenRuns.unshift([time, ip, infinities, realTime]);
   GameCache.bestRunIPPM.invalidate();
 }
 
 function resetInfinityRuns() {
   player.lastTenRuns = Array.from(
     { length: 10 },
-    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, new Decimal(1)]
+    () => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]
   );
   GameCache.bestRunIPPM.invalidate();
 }
@@ -173,16 +177,17 @@ function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
     : new Decimal(0);
 }
 
-function addEternityTime(time, realTime, ep) {
+// eslint-disable-next-line max-params
+function addEternityTime(time, realTime, ep, eternities) {
   player.lastTenEternities.pop();
-  player.lastTenEternities.unshift([time, ep, realTime]);
+  player.lastTenEternities.unshift([time, ep, eternities, realTime]);
   GameCache.averageEPPerRun.invalidate();
 }
 
 function resetEternityRuns() {
   player.lastTenEternities = Array.from(
     { length: 10 },
-    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]
+    () => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]
   );
   GameCache.averageEPPerRun.invalidate();
 }
@@ -206,9 +211,9 @@ function getOfflineEPGain(ms) {
 }
 
 // eslint-disable-next-line max-params
-function addRealityTime(time, realTime, rm, level) {
+function addRealityTime(time, realTime, rm, level, realities) {
   player.lastTenRealities.pop();
-  player.lastTenRealities.unshift([time, rm, realTime, level]);
+  player.lastTenRealities.unshift([time, rm, realities, realTime, level]);
 }
 
 function gainedInfinities() {
@@ -561,7 +566,6 @@ function gameLoop(diff, options = {}) {
   updateFreeGalaxies();
   player.timestudy.theorem = player.timestudy.theorem.add(getTTPerSecond().times(diff / 1000));
   tryUnlockInfinityDimensions();
-  applyAutoprestige();
 
   BlackHoles.updatePhases(blackHoleDiff);
 
@@ -765,15 +769,23 @@ function simulateTime(seconds, real, fast) {
 
   const playerStart = deepmerge.all([{}, player]);
 
-  const infinitiedMilestone = getInfinitiedMilestoneReward(seconds * 1000);
-  const eternitiedMilestone = getEternitiedMilestoneReward(seconds * 1000);
+  let totalGameTime;
+
+  if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
+    totalGameTime = BlackHoles.calculateGameTimeFromRealTime(seconds, BlackHoles.calculateSpeedups());
+  } else {
+    totalGameTime = getGameSpeedupFactor() * seconds;
+  }
+
+  const infinitiedMilestone = getInfinitiedMilestoneReward(totalGameTime * 1000);
+  const eternitiedMilestone = getEternitiedMilestoneReward(totalGameTime * 1000);
 
   if (eternitiedMilestone.gt(0)) {
     player.eternities = player.eternities.plus(eternitiedMilestone);
   } else if (infinitiedMilestone.gt(0)) {
     player.infinitied = player.infinitied.plus(infinitiedMilestone);
   } else {
-    player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
+    player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(totalGameTime * 1000));
   }
 
   if (InfinityUpgrade.ipOffline.isBought) {
@@ -926,6 +938,10 @@ window.onblur = function() {
 
 function setShiftKey(isDown) {
   ui.view.shiftDown = isDown;
+}
+
+function setHoldingR(x) {
+  Replicanti.galaxies.isPlayerHoldingR = x;
 }
 
 function init() {

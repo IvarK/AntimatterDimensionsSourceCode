@@ -247,7 +247,7 @@ Vue.component("time-studies-tab", {
     },
     respecClassObject() {
       return {
-        "o-primary-btn--time-study-options": true,
+        "o-primary-btn--subtab-option": true,
         "o-primary-btn--respec-active": this.respec
       };
     }
@@ -270,9 +270,9 @@ Vue.component("time-studies-tab", {
   },
   template:
     `<div class="l-time-studies-tab">
-      <div class="l-time-study-options">
+      <div class="c-subtab-option-container">
         <primary-button
-          class="o-primary-btn--time-study-options"
+          class="o-primary-btn--subtab-option"
           onclick="exportStudyTree()"
         >Export tree</primary-button>
         <primary-button
@@ -280,7 +280,7 @@ Vue.component("time-studies-tab", {
           @click="respec = !respec"
         >Respec time studies on next Eternity</primary-button>
         <primary-button
-          class="o-primary-btn--time-study-options"
+          class="o-primary-btn--subtab-option"
           onclick="Modal.importTree.show()"
         >Import tree</primary-button>
       </div>

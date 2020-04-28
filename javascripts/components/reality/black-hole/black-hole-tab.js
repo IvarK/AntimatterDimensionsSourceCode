@@ -91,6 +91,14 @@ Vue.component("black-hole-tab", {
         Starts at {{ formatX(180) }} faster for {{ formatInt(10) }} seconds, once per hour.
       </div>
       <template v-else>
+        <div class="c-subtab-option-container">
+          <button
+            class="o-primary-btn o-primary-btn--subtab-option"
+            @click="togglePause"
+          >
+            {{ isPaused ? "Resume" : "Pause" }} Black Hole
+          </button>
+        </div>
         <canvas class="c-black-hole-canvas" ref="canvas" width="400" height="400" />
         <div class="l-black-hole-upgrade-grid">
           <black-hole-state-row
@@ -113,12 +121,6 @@ Vue.component("black-hole-tab", {
             :key="'upgrades' + i"
             :blackHole="blackHole"
           />
-          <button
-            class="l-reality-upgrade-btn c-reality-upgrade-btn"
-            @click="togglePause"
-          >
-            {{ isPaused ? "Resume" : "Pause" }}
-          </button>
         </div>
       </template>
     </div>

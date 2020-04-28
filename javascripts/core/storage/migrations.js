@@ -137,6 +137,8 @@ GameStorage.migrations = {
       GameStorage.migrations.removePower(player);
       GameStorage.migrations.setNoInfinitiesOrEternitiesThisReality(player);
       GameStorage.migrations.setTutorialState(player);
+      GameStorage.migrations.migrateLastTenRuns(player);
+      GameStorage.migrations.migrateIPGen(player);
 
       kong.migratePurchases();
       if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
@@ -221,7 +223,7 @@ GameStorage.migrations = {
   },
 
   convertAchivementsToNumbers(player) {
-    if (player.achievements.countWhere(e => typeof e !== "number") === 0) return;
+    if (player.achievements.length > 0 && player.achievements.every(e => typeof e === "number")) return;
     const old = player.achievements;
     // In this case, player.secretAchievements should be an empty set
     player.achievements = new Set();
@@ -707,6 +709,23 @@ GameStorage.migrations = {
     if (player.infinitied.gt(0) || player.eternities.gt(0) || player.realities > 0 || player.galaxies > 0) {
       player.tutorialState = 4;
     } else if (player.dimensionBoosts > 0) player.tutorialState = TUTORIAL_STATE.GALAXY;
+  },
+
+  migrateLastTenRuns(player) {
+    // Move infinities before time in infinity, and make them Decimal.
+    // I know new Decimal(x).toNumber() can't actually be the best way of converting a value
+    // that might be either Decimal or number to number, but it's the best way I know.
+    player.lastTenRuns = player.lastTenRuns.map(
+      x => [x[0], x[1], new Decimal(x[3]), new Decimal(x[2]).toNumber()]);
+    // Put in a default value of 1 for eternities.
+    player.lastTenEternities = player.lastTenEternities.map(
+      x => [x[0], x[1], new Decimal(1), new Decimal(x[2]).toNumber()]);
+  },
+
+  migrateIPGen(player) {
+    player.infinityRebuyables.push(player.offlineProd / 5);
+    delete player.offlineProd;
+    delete player.offlineProdCost;
   },
 
   prePatch(saveData) {

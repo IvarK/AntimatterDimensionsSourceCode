@@ -264,8 +264,15 @@ Vue.component("enslaved-tab", {
       };
     }
   },
-  template:
-    `<div class="l-enslaved-celestial-tab">
+  template: `
+    <div class="l-enslaved-celestial-tab">
+      <div class="c-subtab-option-container" v-if="canAdjustStoredTime">
+        <primary-button-on-off
+          v-model="autoRelease"
+          class="o-primary-btn--subtab-option"
+          text="Pulse Black Hole:"
+        />
+      </div>
       <celestial-quote-history celestial="enslaved"/>
       <primary-button
         v-if="hintsUnlocked"
@@ -320,13 +327,6 @@ Vue.component("enslaved-tab", {
           />
       </div>
       <br>
-      <div v-if="canAdjustStoredTime">
-        <primary-button-on-off
-          v-model="autoRelease"
-          class="o-primary-btn"
-          text="Pulse black hole:"
-        />
-      </div>
       <div class="l-enslaved-shop-container">
         <button
           v-for="unlock in unlocksInfo"

@@ -113,6 +113,11 @@ const Teresa = {
 };
 
 class PerkShopUpgradeState extends RebuyableMechanicState {
+  constructor(config) {
+    super(config);
+    this.costCap = config.costCap;
+  }
+  
   get currency() {
     return Currency.perkPoints;
   }
@@ -126,7 +131,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
   }
 
   get isCapped() {
-    return this.cost === this.cap;
+    return this.cost === this.costCap(this.bought);
   }
 
   get isAvailableForPurchase() {
@@ -140,6 +145,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     }
     if (this.id === 4) {
       Glyphs.addToInventory(GlyphGenerator.musicGlyph());
+      GameUI.notify.success("Created a music glyph");
     }
   }
 }

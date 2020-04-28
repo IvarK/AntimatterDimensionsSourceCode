@@ -106,7 +106,8 @@ Vue.component("statistics-tab", {
         <div v-if="reality.isUnlocked">
           Your existence has spanned {{ reality.totalTimePlayed }} of time.
         </div>
-        <div>You have seen {{ formatInt(newsMessagesSeen) }} unique news ticker messages.</div>
+        <div>You have seen {{ formatInt(newsMessagesSeen) }} unique
+        news ticker {{ "message" | pluralize(newsMessagesSeen) }}.</div>
         <div>
           <br>
           <div

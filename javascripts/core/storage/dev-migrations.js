@@ -645,6 +645,12 @@ GameStorage.devMigrations = {
       player.thisEternityMaxAM = new Decimal(0);
     },
     player => {
+      GameStorage.migrations.migrateLastTenRuns(player);
+      //  Put in a default value of 1 for realities.
+      player.lastTenRealities = player.lastTenRealities.map(x => [x[0], x[1], 1, Number(x[2]), x[3]]);
+      GameStorage.migrations.migrateIPGen(player);
+    },
+    player => {
       player.noReplicantiGalaxies = player.reality.upgReqChecks[0];
       delete player.reality.upgReqChecks;
     }

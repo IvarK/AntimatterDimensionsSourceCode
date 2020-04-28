@@ -92,7 +92,7 @@ function getReplicantiInterval(overCapOverride, intervalIn) {
   if (TimeStudy(132).isBought && Perk.studyPassive2.isBought) {
     interval = interval.divide(5);
   }
-  if (amount.lte(replicantiCap()) || !overCap) {
+  if (!overCap) {
     if (Achievement(134).isUnlocked) interval = interval.divide(2);
   } else {
     const increases = (amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;

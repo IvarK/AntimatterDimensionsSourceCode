@@ -283,7 +283,7 @@ button:focus {
   top: -0.5rem;
   left: 50%;
   transform: translate(-50%, -100%);
-  padding: 0.5rem 0 0.5rem 0;
+  padding: 0.5rem 0;
 }
 
 .c-tt-save-load-btn__menu {
@@ -304,7 +304,7 @@ button:focus {
   margin-left: -0.5rem;
   border-width: 0.5rem;
   border-style: solid;
-  border-color: black transparent transparent transparent;
+  border-color: black transparent transparent;
 }
 
 .l-tt-save-load-btn__menu-rename {
@@ -322,7 +322,7 @@ button:focus {
 }
 
 .l-tt-save-load-btn__menu-item {
-  padding: 0.25rem 1rem 0.25rem 1rem;
+  padding: 0.25rem 1rem;
   cursor: pointer;
 }
 
@@ -479,7 +479,7 @@ button:focus {
 
 .o-tab-btn--celestial:hover {
   color: white;
-  background: var(--color-celestials);;
+  background: var(--color-celestials);
 }
 
 /*#endregion tab buttons*/
@@ -868,8 +868,8 @@ br {
 }
 
 #realityanimbg {
-    min-width: 100%; 
-    min-height: 100%; 
+    min-width: 100%;
+    min-height: 100%;
     width: auto;
     height: auto;
     position: absolute;
@@ -1035,7 +1035,7 @@ screen and (max-width: 480px) {
     background-color: black;
     color: #fff;
     text-align: left;
-    padding: 5px 5px;
+    padding: 5px;
     border-radius: 5px;
     position: absolute;
     z-index: 2;
@@ -1360,10 +1360,6 @@ screen and (max-width: 480px) {
 .t-metro .o-primary-btn,
 .t-inverted-metro .o-primary-btn {
   box-shadow: 0.1rem 0.1rem 0.1rem 0 #9e9e9e;
-}
-
-.t-dark-metro .o-primary-btn {
-  box-shadow: 0.1rem 0.1rem 0.1rem 0 black;
 }
 
 .t-metro .o-primary-btn--disabled,
@@ -2652,7 +2648,7 @@ screen and (max-width: 480px) {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  margin: 0 1rem 0 1rem;
+  margin: 0 1rem;
 }
 
 .l-challenges-tab__auto-ec-info {
@@ -4538,6 +4534,7 @@ screen and (max-width: 480px) {
 
 .t-s6 .o-dilation-upgrade--unavailable {
   color: gray;
+  background-color: black;
 }
 
 .t-dark .o-dilation-upgrade--unavailable {
@@ -4558,10 +4555,6 @@ screen and (max-width: 480px) {
 
 .t-s6 .o-dilation-upgrade--bought {
   background: #64dd17;
-}
-
-.t-s6 .o-dilation-upgrade--unavailable {
-  background-color: black;
 }
 
 /*#endregion o-dilation-upgrade*/
@@ -4627,7 +4620,7 @@ screen and (max-width: 480px) {
   color: black;
   font-family: Typewriter, serif;
   font-size: 1.4rem;
-  padding: 1rem 1rem 1rem;
+  padding: 1rem;
   transition-duration: 0.2s;
   overflow: hidden;
 }
@@ -5142,7 +5135,7 @@ kbd {
   flex-direction: row;
   align-items: stretch;
   justify-content: space-evenly;
-  margin: 1.5rem 0 1.5rem 0;
+  margin: 1.5rem 0;
   width: 80rem;
 }
 
@@ -5246,7 +5239,7 @@ kbd {
 
 .o-teresa-quotes {
   display: inline-block;
-  margin: 1.5rem 1.5rem;
+  margin: 1.5rem;
   font-size: 1.9rem;
   font-weight: bold;
   font-style: italic;
@@ -5805,14 +5798,10 @@ kbd {
 .l-v-unlocks-container li {
   position: relative;
   width: 22.5rem;
-  padding: 0 0 26rem 0;
+  padding: 0 0 26rem;
   list-style-type: none;
   transform: rotate(-60deg) skewY(30deg);
   overflow: hidden;
-  visibility: hidden;
-}
-
-.l-v-unlocks-container li {
   visibility: visible;
 }
 
@@ -5939,11 +5928,10 @@ kbd {
 }
 
 .l-ra-bar-container {
-  margin: 1rem 0 3.5rem 0;
+  margin: 1rem 0 3.5rem;
   width: 100%;
   height: 3rem;
-  flex-direction: row;
-  flex-flow: nowrap;
+  flex-direction: row nowrap;
 }
 
 .l-ra-lvl-chevron {
@@ -7100,7 +7088,7 @@ kbd {
 
 .l-reality-upgrade-btn {
   height: 10rem;
-  padding: 0 1rem 0 1rem;
+  padding: 0 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7422,7 +7410,7 @@ input.o-automator-block-input {
   display: flex;
   flex-direction: row;
   flex: 1 1 50rem;
-  margin: 2rem 0 2rem 0;
+  margin: 2rem 0;
 }
 
 .l-h2p-header {

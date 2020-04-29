@@ -401,7 +401,8 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     player.replicanti.chance = 1;
     for (let i = 0; i < situationLists.length; i++) {
       const div = situationLists.slice(0, i).map(x => x.length + 1).reduce((x, y) => x * y, 1);
-      let situation = [() => {}].concat(situationLists[i])[Math.floor(id / div) % (situationLists[i].length + 1)];
+      // eslint-disable-next-line no-empty-function
+      const situation = [() => {}].concat(situationLists[i])[Math.floor(id / div) % (situationLists[i].length + 1)];
       situation();
     }
     for (let j = 0; j <= 5; j++) {

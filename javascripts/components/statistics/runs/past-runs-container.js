@@ -72,7 +72,7 @@ Vue.component("past-runs-container", {
     },
     runTime: run => timeDisplayShort(run[0]),
     runGain: run => format(run[1], 2, 0),
-    runPrestigeCountGain: run => format(run[2], 2, 0),
+    runPrestigeCountGain: (run, isAverage) => format(run[2], 2, isAverage ? 1 : 0),
     realRunTime: run => (run[3] === undefined ? "unrecorded" : timeDisplayShort(run[3]))
   },
   template:
@@ -101,7 +101,7 @@ Vue.component("past-runs-container", {
             {{ averageRunGain(run, 1, points) }} and {{ averageRunGain(run, 2, prestigeCount) }}.
           </span>
           <span v-else>
-            {{ reward(runGain(run), run, false) }} and {{ prestigeCountReward(runPrestigeCountGain(run), run) }}.
+            {{ reward(runGain(run), run, false) }} and {{ prestigeCountReward(runPrestigeCountGain(run, false), run) }}.
           </span>
         </div>
         <br>
@@ -116,7 +116,7 @@ Vue.component("past-runs-container", {
         <span v-else>
           <span>Average {{ points }} gain: {{ reward(runGain(averageRun), averageRun, true) }}.</span>
           <span>Average {{ prestigeCount }} gain:
-            {{ prestigeCountReward(runPrestigeCountGain(averageRun), averageRun) }}.</span>
+            {{ prestigeCountReward(runPrestigeCountGain(averageRun, true), averageRun) }}.</span>
         </span>
       </div>
     </div>`

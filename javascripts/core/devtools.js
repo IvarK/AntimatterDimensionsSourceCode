@@ -315,7 +315,7 @@ dev.unlockCelestialQuotes = function(celestial) {
 };
 
 // This doesn't check everything but hopefully it gets some of the more obvious ones.
-dev.testReplicantiCode = function (id, useDebugger = false) {
+dev.testReplicantiCode = function(singleId, useDebugger = false) {
   const situationLists = [
     [
       function () {
@@ -390,7 +390,7 @@ dev.testReplicantiCode = function (id, useDebugger = false) {
   ];
   const situationCount = situationLists.map(x => x.length + 1).reduce((x, y) => x * y);
   const resultList = [];
-  const runSituation = function (id) {
+  const runSituation = function(id) {
     Replicanti.galaxies.isPlayerHoldingR = false;
     GameStorage.loadPlayerObject(Player.defaultStart);
     player.infinitied = new Decimal(1);
@@ -404,20 +404,20 @@ dev.testReplicantiCode = function (id, useDebugger = false) {
     }
     for (let j = 0; j <= 5; j++) {
       replicantiLoop(Math.pow(10, j));
-      resultList.push(player.replicanti.amount);
+      resultList.push(Notation.scientific.formatDecimal(player.replicanti.amount, 5, 5));
       resultList.push(player.replicanti.galaxies);
     }
-  }
-  if (id === undefined) {
+  };
+  if (singleId === undefined) {
     console.log(`Situation count: ${situationCount}`);
     for (let i = 0; i < situationCount; i++) {
       if (i % 100 === 0) {
-        console.log(`Considering situation #${i}`)
+        console.log(`Considering situation #${i}`);
       }
       runSituation(i);
     }
   } else {
-    runSituation(id);
+    runSituation(singleId);
   }
   const hash = sha512_256(resultList.toString());
   console.log(hash);

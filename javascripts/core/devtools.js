@@ -318,71 +318,73 @@ dev.unlockCelestialQuotes = function(celestial) {
 dev.testReplicantiCode = function(singleId, useDebugger = false) {
   const situationLists = [
     [
-      function () {
+      function() {
         player.infinitied = new Decimal(1e12);
         player.celestials.effarig.unlockBits = 64;
       }
     ],
     [
-      function () {
+      function() {
         player.replicanti.interval = 1;
       }
     ],
     [
-      function () {
+      function() {
         player.timestudy.studies.push(131);
       },
-      function () {
+      function() {
         player.timestudy.studies.push(132);
       },
-      function () {
+      function() {
         player.timestudy.studies.push(133);
       },
-      function () {
+      function() {
         player.timestudy.studies.push(131, 132, 133);
       }
     ],
     [
-      function () {
+      function() {
         player.timestudy.studies.push(192);
       }
     ],
     [
-      function () {
+      function() {
+        // eslint-disable-next-line no-bitwise
         player.achievementBits[12] |= 8;
       }
     ],
     [
-      function () {
+      function() {
+        // eslint-disable-next-line no-bitwise
         player.achievementBits[12] |= 128;
       }
     ],
     [
-      function () {
+      function() {
         player.reality.perks = new Set([32]);
       }
     ],
     [
-      function () {
+      function() {
         player.replicanti.galaxybuyer = true;
       }
     ],
     [
-      function () {
+      function() {
         Replicanti.galaxies.isPlayerHoldingR = true;
       }
     ],
     [
-      function () {
+      function() {
         player.replicanti.gal = 100;
       },
-      function () {
+      function() {
         player.replicanti.gal = 100;
         player.replicanti.galaxies = 50;
       }
     ],
     [
-      function () {
+      function() {
         player.reality.upgReqs[6] = true;
         player.reality.upgradeBits = 64;
       }
@@ -422,6 +424,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
   const hash = sha512_256(resultList.toString());
   console.log(hash);
   if (useDebugger) {
+    // eslint-disable-next-line no-debugger
     debugger;
   }
   return hash;

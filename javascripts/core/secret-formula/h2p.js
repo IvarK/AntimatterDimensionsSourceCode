@@ -725,7 +725,7 @@ Duration - How long each speed burst lasts before going back to normal speed,
 increased by ${formatPercents(0.3)} per upgrade.
 <br>
 <br>
-Once you reach ${formatInt(2)} years of game playtime, you unlock a Reality upgrade that allows you to have
+Once you reach ${formatInt(1)} year of game playtime, you unlock a Reality upgrade that allows you to have
 a second Black Hole. The time spent for this requirement is itself affected by the first Black Hole, so it
 takes much less than ${formatInt(2)} actual real-time years.
 <br>

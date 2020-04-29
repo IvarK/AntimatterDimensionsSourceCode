@@ -290,9 +290,9 @@ GameDatabase.reality.upgrades = (function() {
       name: "Synthetic Symbolism",
       id: 24,
       cost: 100000,
-      requirement: () => `Reality for ${formatInt(5000)} RM without glyphs`,
+      requirement: () => `Reality for ${formatInt(6666)} RM without glyphs`,
       hasFailed: () => Glyphs.activeList.length > 0,
-      checkRequirement: () => gainedRealityMachines().gte(5000) && Glyphs.activeList.length === 0,
+      checkRequirement: () => gainedRealityMachines().gte(6666) && Glyphs.activeList.length === 0,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain another glyph slot",
       effect: () => 1
@@ -301,8 +301,8 @@ GameDatabase.reality.upgrades = (function() {
       name: "Effortless Existence",
       id: 25,
       cost: 100000,
-      requirement: () => `Reach ${format("1e10500")} EP`,
-      checkRequirement: () => player.eternityPoints.exponent >= 10500,
+      requirement: () => `Reach ${format("1e11111")} EP`,
+      checkRequirement: () => player.eternityPoints.exponent >= 11111,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Reality autobuyer"
     },

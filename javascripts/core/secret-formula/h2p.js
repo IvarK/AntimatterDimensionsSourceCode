@@ -737,7 +737,9 @@ and the Black Hole becomes permanently active. This is tracked separately for th
 The timer on the second Black Hole only advances when the first Black Hole is active. So, for example, if the first
 Black Hole has a duration of ${formatInt(4)} minutes and the second has an interval of ${formatInt(8)} minutes, the
 second Black Hole will only activate once every two cycles of the first Black Hole regardless of how short the
-first Black Hole's interval is.
+first Black Hole's interval is. Note that the timer shown in the in-game header takes account of this and shows
+the actual time until the second Black Hole activates; in the Black Hole tab, you can see the amount of time with
+the first Black Hole active needed for the second Black Hole to activate.
 <br>
 <br>
 The Black Holes can be paused, completely halting their interval/duration cycle. However, when unpausing them, it will

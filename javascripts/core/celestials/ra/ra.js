@@ -105,7 +105,7 @@ const Ra = {
 
       // Ra-Effarig: Adds memory on glyph sacrifice (which is forced every time)
       addMemories(sacrificeValue) {
-        this.addExp(Math.log10(sacrificeValue));
+        this.addExp(Math.pow(Math.log10(sacrificeValue), 2.6));
       }
     }(),
     enslaved: new class EnslavedRaPetState extends RaPetState {
@@ -119,13 +119,10 @@ const Ra = {
           : 1;
       }
 
-      // Ra-Enslaved: Passively gives memories while inside the reality, based on TD purchases
+      // Ra-Enslaved: Passively gives memories while inside the reality, based on time shards
       addMemories(realDiff) {
         const seconds = realDiff / 1000;
-        let totalTDPurchases = 0;
-        for (let tier = 1; tier < 9; tier++) totalTDPurchases += TimeDimension(tier).bought;
-        this.addExp(seconds * (totalTDPurchases / 1000));
-        player.celestials.ra.memoryResource = 0;
+        this.addExp(seconds * player.timeShards.pLog10() / 10);
       }
     }(),
     v: new class VRaPetState extends RaPetState {
@@ -143,11 +140,17 @@ const Ra = {
       addMemories(realDiff) {
         const seconds = realDiff / 1000;
         const records = player.celestials.ra.vRecords;
-        const EPterm = records.eternityPoints.pLog10();
-        const levelTerm = records.glyphLevel;
-        const dilatedTerm = records.dilatedAntimatter.pLog10();
-        const infTerm = records.infinities.pLog10();
-        this.addExp(seconds * (EPterm + levelTerm + dilatedTerm / 1e4 + infTerm));
+        const EPterm = 1 + (records.eternityPoints.pLog10() - 10000) / 1000;
+        const levelTerm = 1 + (records.glyphLevel - 6000) / 500;
+        const dilatedTerm = 1 + (records.dilatedAntimatter.pLog10() - 1e8) / 3e7;
+        const infTerm = 1 + (records.infinities.pLog10() - 300) / 50;
+        const allTerms = [EPterm, levelTerm, dilatedTerm, infTerm];
+
+        // Combining all terms in quadrature makes sure they're all relevant, but don't let the player "cheat" with
+        // really low values which end up being scaled to negative
+        if (allTerms.some(term => term < 0)) return;
+        const combinedValue = Math.sqrt(allTerms.reduce((total, value) => total + Math.pow(value, 2), 0));
+        this.addExp(seconds * 5000 * combinedValue);
       }
     }(),
   },
@@ -167,6 +170,7 @@ const Ra = {
       dilatedAntimatter: new Decimal(0),
       infinities: new Decimal(0),
     };
+    player.celestials.ra.activeReality = RA_REALITY_TYPE.NONE;
   },
   // Scans through all glyphs and fills base resources to the specified amount, ignoring caps
   fillAlchemyResources(amount) {
@@ -177,11 +181,18 @@ const Ra = {
   get globalMemoryMult() {
     return RA_UNLOCKS.TT_BOOST.effect.memories() * Achievement(168).effectOrDefault(1);
   },
-  memoryTick(realDiff) {
+  tickAllPets(realDiff) {
+    // V memories generate passively, even outside the reality
+    Ra.pets.v.addMemories(realDiff);
+    if (!Ra.isRunning) return;
+
     switch (player.celestials.ra.activeReality) {
-      case RA_REALITY_TYPE.TERESA:
+      case RA_REALITY_TYPE.TERESA: {
         Ra.pets.teresa.addMemories();
+        const totalGalaxies = Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies;
+        if (totalGalaxies >= 2000) resetReality(true);
         break;
+      }
       case RA_REALITY_TYPE.EFFARIG:
         // Memory gain happens on-sacrifice when completing the reality
         break;
@@ -197,15 +208,11 @@ const Ra = {
         break;
       }
     }
-    // V memories generate passively, even outside the reality
-    Ra.pets.v.addMemories(realDiff);
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredExpForLevel(level) {
     if (level >= 25) return Infinity;
-    const adjustedLevel = level + Math.pow(level, 2) / 10;
-    const post15Scaling = Math.pow(1.4, Math.max(0, level - 15));
-    return Math.floor(Math.pow(adjustedLevel, 3) * post15Scaling * 50);
+    return Math.floor(1e7 + 1e6 * Math.pow(level - 1, 3));
   },
   // Calculates the cumulative exp needed to REACH a level starting from nothing.
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized
@@ -296,6 +303,9 @@ const Ra = {
   },
   get vRealityActive() {
     return player.celestials.ra.activeReality === RA_REALITY_TYPE.V;
+  },
+  enslavedSlowdownFactor(ep) {
+    return Math.pow(10, Math.pow(ep.pLog10(), 0.75));
   },
   get totalCharges() {
     return Math.min(12, Math.floor(Ra.pets.teresa.level / 2));

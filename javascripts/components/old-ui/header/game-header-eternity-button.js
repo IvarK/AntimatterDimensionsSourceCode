@@ -17,7 +17,9 @@ Vue.component("game-header-eternity-button", {
       fullyCompleted: false,
       failedRestriction: undefined,
       hasMoreCompletions: false,
-      nextGoalAt: new Decimal(0)
+      nextGoalAt: new Decimal(0),
+      isRaEnslavedRunning: false,
+      raEnslavedSpeed: 0,
     };
   },
   computed: {
@@ -70,6 +72,11 @@ Vue.component("game-header-eternity-button", {
         Math.round(Math.clampMax(ratio, 1 / ratio) * 255),
       ];
       return { color: `rgb(${rgb.join(",")})` };
+    },
+    slowdownSpeedText() {
+      return this.raEnslavedSpeed > 0.01
+        ? `${format(this.raEnslavedSpeed, 2)}`
+        : `${formatInt(1)} / ${format(1 / this.raEnslavedSpeed, 2)}`;
     }
   },
   methods: {
@@ -116,6 +123,11 @@ Vue.component("game-header-eternity-button", {
         TimeSpan.fromMilliseconds(player.thisEternityRealTime).totalMinutes)
       );
       this.peakEPPM.copyFrom(player.bestEPminThisEternity);
+
+      const nonNerfs = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH, GAME_SPEED_EFFECT.BLACK_HOLE,
+        GAME_SPEED_EFFECT.TIME_STORAGE, GAME_SPEED_EFFECT.MOMENTUM];
+      this.isRaEnslavedRunning = Ra.enslavedRealityActive;
+      this.raEnslavedSpeed = getGameSpeedupFactor(nonNerfs) / Ra.enslavedSlowdownFactor(gainedEP);
     },
     updateChallengeWithRUPG() {
       const ec = EternityChallenge.current;
@@ -205,6 +217,15 @@ Vue.component("game-header-eternity-button", {
           </template>
         </template>
       </template>
+
+      <div v-if="isRaEnslavedRunning && currentEP.lt(gainedEP)">
+        <template v-if="raEnslavedSpeed !== 0">
+          Game speed ➜ {{ slowdownSpeedText }}.
+        </template>
+        <template v-else>
+          Finishing this eternity will halt Ra's reality!
+        </template>
+      </div>
     </button>`
 });
 

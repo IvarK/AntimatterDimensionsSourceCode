@@ -571,9 +571,10 @@ function isInCelestialReality() {
     player.celestials.laitela.run;
 }
 
-function resetReality() {
-  if (confirm("This will put you at the start of your Reality and reset your progress in this Reality, " +
-    "giving you no rewards from your progress in your current Reality.  Are you sure you want to do this?")) {
+function resetReality(ignoreConfirmation = false) {
+  const confirmString = "This will put you at the start of your Reality and reset your progress in this Reality, " +
+    "giving you no rewards from your progress in your current Reality.  Are you sure you want to do this?";
+  if (ignoreConfirmation || confirm(confirmString)) {
     beginProcessReality(getRealityProps(true));
     return true;
   }

@@ -173,9 +173,10 @@ class EternityChallengeState extends GameMechanicState {
     if (canEternity()) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
-      if (V.isRunning && player.minNegativeBlackHoleThisReality < 1) {
+      if (Ra.enslavedRealityActive || (V.isRunning && player.minNegativeBlackHoleThisReality < 1)) {
         SecretAchievement(42).unlock();
       }
+      if (Ra.enslavedRealityActive) return false;
       if (V.isRunning) player.minNegativeBlackHoleThisReality = 1;
     }
     if (Enslaved.isRunning) {

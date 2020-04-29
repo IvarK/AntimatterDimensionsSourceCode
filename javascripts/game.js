@@ -207,8 +207,8 @@ function getEternitiedMilestoneReward(ms, considerMilestoneReached) {
 }
 
 function isOfflineEPGainEnabled() {
-  return !Autobuyer.bigCrunch.autoInfinitiesAvailable() &&
-    !Autobuyer.eternity.autoEternitiesAvailable();
+  return !Autobuyer.bigCrunch.autoInfinitiesAvailable() && !Autobuyer.eternity.autoEternitiesAvailable() &&
+    !Ra.isRunning;
 }
 
 function getOfflineEPGain(ms) {
@@ -347,8 +347,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
       const nerfModifier = Math.clampMax(Time.thisRealityRealTime.totalMinutes / 10, 1);
       factor = Math.pow(factor, nerfModifier);
     } else if (Ra.enslavedRealityActive) {
-      const dilatedEP = Math.pow(10, Math.pow(player.eternityPoints.pLog10(), 0.75));
-      factor = Math.clampMin(factor / dilatedEP, 1e-300);
+      factor /= Ra.enslavedSlowdownFactor(player.eternityPoints);
     }
   }
   
@@ -384,19 +383,20 @@ function gameLoop(diff, options = {}) {
   const realDiff = diff === undefined
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
     : diff;
-  Ra.memoryTick(realDiff);
+  Ra.tickAllPets(realDiff);
 
   // Lai'tela mechanics should bypass stored real time entirely
   Laitela.handleMatterDimensionUnlocks();
   Laitela.tickDarkMatter(realDiff);
 
   // When storing real time, skip everything else having to do with production once stats are updated
-  if (Enslaved.isStoringRealTime) {
+  const isStopped = Enslaved.isStoringRealTime || getGameSpeedupFactor() === 0;
+  if (isStopped) {
     player.realTimePlayed += realDiff;
     player.thisInfinityRealTime += realDiff;
     player.thisEternityRealTime += realDiff;
     player.thisRealityRealTime += realDiff;
-    Enslaved.storeRealTime();
+    if (Enslaved.isStoringRealTime) Enslaved.storeRealTime();
     GameUI.update();
     return;
   }
@@ -676,6 +676,8 @@ function updateFreeGalaxies() {
 }
 
 function getTTPerSecond() {
+  if (Ra.teresaRealityActive) return new Decimal(0);
+
   // All TT multipliers (note that this is equal to 1 pre-Ra)
   let ttMult = RA_UNLOCKS.TT_BOOST.effect.ttGen();
   ttMult *= Achievement(137).effectOrDefault(1);
@@ -683,7 +685,7 @@ function getTTPerSecond() {
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation
-  const glyphTT = Teresa.isRunning || Enslaved.isRunning || Ra.teresaRealityActive
+  const glyphTT = Teresa.isRunning || Enslaved.isRunning
     ? 0
     : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
 
@@ -791,7 +793,7 @@ function simulateTime(seconds, real, fast) {
     player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(totalGameTime * 1000));
   }
 
-  if (InfinityUpgrade.ipOffline.isBought) {
+  if (InfinityUpgrade.ipOffline.isBought && !Ra.isRunning) {
     player.infinityPoints = player.infinityPoints
       .plus(player.bestIpPerMsWithoutMaxAll
         .times(seconds * 1000 / 2)

@@ -19,6 +19,9 @@ Vue.component("game-header-gamma-display", {
       if (Enslaved.isStoringRealTime) {
         return "Stopped (storing real time)";
       }
+      if (getGameSpeedupForDisplay() === 0) {
+        return "Stopped (Ra-Enslaved)";
+      }
       const speedMod = getGameSpeedupForDisplay();
       let storedTimeText = "";
       if (EternityChallenge(12).isRunning) {

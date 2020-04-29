@@ -101,7 +101,7 @@ function getDilationGainPerSecond() {
     dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
   }
   dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime());
-  if (V.isRunning) dtRate = dtRate.pow(0.5);
+  if (V.isRunning || Ra.vRealityActive) dtRate = dtRate.pow(0.5);
   return dtRate;
 }
 

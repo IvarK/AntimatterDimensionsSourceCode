@@ -84,7 +84,7 @@ const Enslaved = {
     return diffMs - used;
   },
   canRelease(auto) {
-    return !EternityChallenge(12).isRunning && !Laitela.isRunning && Ra.enslavedRealityActive &&
+    return !EternityChallenge(12).isRunning && !Laitela.isRunning && !Ra.enslavedRealityActive &&
       !(Enslaved.isRunning && auto);
   },
   // "autoRelease" should only be true when called with the Ra upgrade

@@ -330,7 +330,7 @@ of Infinity Dimensions doesn't carry between crunches, all the multipliers you g
 <br>
 <br>
 <b>Infinity Dimension unlock thresholds (antimatter):</b> ${Array.range(1, 8)
-  .map(tier => format(InfinityDimension(tier)._unlockRequirement))
+  .map(tier => formatPostBreak(InfinityDimension(tier)._unlockRequirement))
   .join(", ")}
 <br>
 <b>Infinity Dimension purchase multipliers:</b> ${Array.range(1, 8)
@@ -366,7 +366,7 @@ amount of antimatter before you can attempt them.
 <br>
 <br>
 <b>Infinity Challenge unlock thresholds:</b> ${GameDatabase.challenges.infinity
-  .map(ic => format(ic.unlockAM)).join(", ")}
+  .map(ic => formatPostBreak(ic.unlockAM)).join(", ")}
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked(),
       tags: ["rewards", "break", "ic", "midgame"],

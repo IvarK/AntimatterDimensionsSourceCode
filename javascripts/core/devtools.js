@@ -330,6 +330,16 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
+        player.timestudy.studies.push(33);
+      }
+    ],
+    [
+      function() {
+        player.timestudy.studies.push(62);
+      }
+    ],
+    [
+      function() {
         player.timestudy.studies.push(131);
       },
       function() {
@@ -345,6 +355,27 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     [
       function() {
         player.timestudy.studies.push(192);
+      }
+    ],
+    [
+      function() {
+        player.timestudy.studies.push(213);
+      }
+    ],
+    [
+      function() {
+        player.timestudy.studies.push(225);
+      }
+    ],
+    [
+      function() {
+        player.timestudy.studies.push(226);
+      }
+    ],
+    [
+      function() {
+        // eslint-disable-next-line no-bitwise
+        player.achievementBits[8] |= 16;
       }
     ],
     [
@@ -405,19 +436,32 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
       const situation = [() => {}].concat(situationLists[i])[Math.floor(id / div) % (situationLists[i].length + 1)];
       situation();
     }
-    for (let j = 0; j <= 5; j++) {
-      replicantiLoop(Math.pow(10, j));
-      resultList.push(Notation.scientific.formatDecimal(player.replicanti.amount, 5, 5));
-      resultList.push(player.replicanti.galaxies);
+    function doReplicantiTicks() {
+      for (let j = 0; j <= 5; j++) {
+        replicantiLoop(Math.pow(10, j));
+        resultList.push(Notation.scientific.formatDecimal(player.replicanti.amount, 5, 5));
+        resultList.push(player.replicanti.galaxies);
+        resultList.push(Replicanti.galaxies.total);
+      }
     }
+    doReplicantiTicks();
+    player.antimatter = new Decimal('1e309');
+    player.thisInfinityMaxAM = new Decimal('1e309');
+    bigCrunchReset();
+    doReplicantiTicks();
   };
   if (singleId === undefined) {
-    console.log(`Situation count: ${situationCount}`);
-    for (let i = 0; i < situationCount; i++) {
+    const total = 4000;
+    const p = 10007;
+    if (total * p < situationCount) {
+      throw new Error("Prime p is not large enough to go through all situations.");
+    }
+    for (let i = 0; i < total; i++) {
+      const actual = i * p % situationCount;
       if (i % 100 === 0) {
-        console.log(`Considering situation #${i}`);
+        console.log(`Considering situation #${i}/${total} (${actual})`);
       }
-      runSituation(i);
+      runSituation(actual);
     }
   } else {
     runSituation(singleId);

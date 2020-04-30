@@ -21,9 +21,9 @@ GameDatabase.reality.glyphSacrifice = [
     id: "replication",
     effect: () => Math.floor(6 * Math.pow(Math.log10(player.reality.glyphs.sac.replication + 1), 1.2)),
     description: amount => {
-      const nextReplicatedGalaxy = Math.pow(10, Math.pow((amount + 1) / 6, 1 / 1.2)) - 1;
+      const nextReplicantiGalaxy = Math.pow(10, Math.pow((amount + 1) / 6, 1 / 1.2)) - 1;
       return "Replicanti Galaxy scaling starts " +
-        `${formatInt(amount)} later (next at ${format(nextReplicatedGalaxy, 2, 2)})`;
+        `${formatInt(amount)} later (next at ${format(nextReplicantiGalaxy, 2, 2)})`;
     }
   }, {
     id: "dilation",

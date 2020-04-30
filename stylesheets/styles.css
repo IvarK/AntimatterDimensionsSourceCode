@@ -5200,6 +5200,10 @@ kbd {
   min-width: 13rem;
 }
 
+.l-rm-container-labels {
+  min-width: 22rem;
+}
+
 .c-rm-store {
   border: 0.1rem solid black;
   height: 50rem;
@@ -5284,7 +5288,6 @@ kbd {
   display: flex;
   flex-direction: column;
   width: 20rem;
-  margin: 4rem auto;
 }
 
 .o-teresa-shop-button {
@@ -5345,7 +5348,7 @@ kbd {
   justify-content: center;
   flex-direction: column;
   line-height: 1.5;
-  width: 100%;
+  width: 35rem;
   padding: 1rem;
   font-size: 2rem;
   background-color: #5151ec;
@@ -5600,6 +5603,12 @@ kbd {
 /* #startregion enslaved tab */
 
 .l-enslaved-celestial-tab {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.l-enslaved-upgrades-column {
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -60,5 +60,6 @@ GameDatabase.celestials.enslaved = {
     "Infinity and Dilation glyphs seem confined too tightly to be useful at all.",
     "Power and Time glyphs are particularly strong here.",
     "Effarig glyphs are only useful with the right effects, but you can complete the Reality without one. " +
-      "A Replication glyph is necessary, but they aren't quite as strong as Power and Time."]
+      "A Replication glyph is very helpful, but it's not strictly necessary or quite as strong " +
+      "as Power and Time."]
 };

@@ -230,36 +230,36 @@ GameDatabase.reality.perks = {
     id: 60,
     label: "PEC1",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Auto-complete one Eternity Challenge every 6 hours (real-time).",
-    effect: 6
+    description: "Auto-complete one Eternity Challenge every 2 hours (real-time).",
+    effect: 120
   },
   autocompleteEC2: {
     id: 61,
     label: "PEC2",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Auto-complete one Eternity Challenge every 4 hours (real-time).",
-    effect: 4
+    description: "Auto-complete one Eternity Challenge every 80 minutes (real-time).",
+    effect: 80
   },
   autocompleteEC3: {
     id: 62,
     label: "PEC3",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Auto-complete one Eternity Challenge every 2 hours (real-time).",
-    effect: 2
+    description: "Auto-complete one Eternity Challenge every 50 minutes (real-time).",
+    effect: 50
   },
   autocompleteEC4: {
     id: 63,
     label: "PEC4",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Auto-complete one Eternity Challenge every 1 hour (real-time).",
-    effect: 1
+    description: "Auto-complete one Eternity Challenge every 30 minutes (real-time).",
+    effect: 30
   },
   autocompleteEC5: {
     id: 64,
     label: "PEC5",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Auto-complete one Eternity Challenge every 30 minutes (real-time).",
-    effect: 0.5
+    description: "Auto-complete one Eternity Challenge every 20 minutes (real-time).",
+    effect: 20
   },
   studyActiveEP: {
     id: 70,
@@ -444,7 +444,7 @@ GameDatabase.reality.perkConnections = (function() {
     [p.autounlockDilation3, p.autobuyerFasterDilation, p.autounlockTD],
     [p.autounlockTD, p.autounlockReality],
     [p.bypassDGReset, p.autobuyerDilation, p.retroactiveTP1],
-    [p.bypassEC1Lock, p.bypassEC2Lock, p.bypassEC3Lock, p.autocompleteEC1],
+    [p.bypassEC1Lock, p.bypassEC2Lock, p.bypassEC3Lock, p.studyECRequirement],
     [p.bypassEC2Lock, p.studyActiveEP, p.bypassEC1Lock],
     [p.bypassEC3Lock, p.studyIdleEP, p.bypassEC1Lock],
     [p.bypassEC5Lock, p.studyActiveEP, p.studyIdleEP, p.studyPassive1],
@@ -454,14 +454,14 @@ GameDatabase.reality.perkConnections = (function() {
     [p.autocompleteEC2, p.autocompleteEC3],
     [p.autocompleteEC3, p.autocompleteEC4],
     [p.autocompleteEC4, p.autocompleteEC5],
-    [p.studyActiveEP, p.bypassEC2Lock, p.studyECRequirement],
-    [p.studyIdleEP, p.bypassEC3Lock, p.autobuyerTT1],
+    [p.studyActiveEP, p.bypassEC2Lock, p.autobuyerTT1],
+    [p.studyIdleEP, p.bypassEC3Lock, p.autocompleteEC1],
     [p.studyECRequirement, p.studyECBulk],
     [p.retroactiveTP1, p.bypassDGReset, p.startTP, p.retroactiveTP2],
     [p.retroactiveTP2, p.retroactiveTP3],
     [p.retroactiveTP3, p.retroactiveTP4],
     [p.autobuyerDilation, p.autounlockEU2, p.autounlockDilation1, p.bypassECDilation, p.bypassDGReset],
-    [p.autobuyerFasterID,],
+    [p.autobuyerFasterID],
     [p.autobuyerTT1, p.autobuyerTT2],
     [p.autobuyerTT2, p.autobuyerTT3],
     [p.autobuyerTT3, p.autobuyerTT4],

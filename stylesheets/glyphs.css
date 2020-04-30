@@ -51,7 +51,7 @@
   padding-top: 0.5em;
   padding-left: 1em;
   padding-right: 1em;
-  border-width: 0.1rem 0.2rem 0.1rem 0.2rem;
+  border-width: 0.1rem 0.2rem;
   border-style: solid;
 }
 
@@ -68,10 +68,8 @@
 }
 
 .l-glyph-sacrifice-options__rarity-sliders {
-  padding: 0.5rem 0.25rem 0.25rem 0.25rem;
+  padding: 0.5rem 0.25rem 0.25rem;
 }
-
-.c-glyph-sacrifice-options__rarity-sliders {}
 
 .l-glyph-sacrifice-options__rarity-slider-div {
   display: flex;
@@ -115,11 +113,11 @@
   -moz-appearance: textfield;
 }
 
-.c-auto-sac-effect-tab__input::-webkit-inner-spin-button, 
-.c-auto-sac-effect-tab__input::-webkit-outer-spin-button { 
+.c-auto-sac-effect-tab__input::-webkit-inner-spin-button,
+.c-auto-sac-effect-tab__input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   -moz-appearance: textfield;
-  margin: 0; 
+  margin: 0;
 }
 
 .c-auto-sac-effect-tab__input {
@@ -169,8 +167,6 @@
   font-family: Typewriter, serif
 }
 
-.c-glyph-sacrifice-options__advanced-toggle {}
-
 .l-advanced-sac-options-for-glyph-type {
   display: flex;
   flex-direction: row;
@@ -187,13 +183,13 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 0.25rem 0.5rem 0.25rem 0.5rem;
+  margin: 0.25rem 0.5rem;
 }
 
 .c-auto-sac-type-tab__effect-desc {
   border-radius: 0.5em;
   border: 0.1rem solid;
-  padding: 0.25em 0.5em 0.25em 0.5em;
+  padding: 0.25em 0.5em;
   width: 12em;
   min-height: 3em;
 }
@@ -221,9 +217,6 @@
   font-size: 2em;
   width: 3em;
   height: 3em;
-}
-
-.l-glyph-sacrifice-options__advanced-type-select {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -236,7 +229,7 @@
   font-size: 2rem;
   width: 2.5rem;
   height: 2.5rem;
-  margin: 1rem 0.25rem 0.25rem 0.25rem;
+  margin: 1rem 0.25rem 0.25rem;
   font-family: Typewriter;
 }
 
@@ -266,7 +259,7 @@
   padding-top: 0.5em;
   padding-left: 1em;
   padding-right: 1em;
-  border-width: 0.1rem 0.2rem 0.1rem 0.2rem;
+  border-width: 0.1rem 0.2rem;
   border-style: solid;
 }
 
@@ -391,7 +384,7 @@
   color: #d4d4ff;
   border: 0.1rem solid #d4d4ff;
   border-radius: 0.5em;
-  padding: 0.25em 1em 0.25em 1em;
+  padding: 0.25em 1em;
 }
 
 .l-modal-glyph-selection {
@@ -642,7 +635,7 @@
 .l-glyph-inventory__slot {
   width: 5rem;
   height: 5rem;
-  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+  margin: 0.5rem;
 }
 
 .c-glyph-inventory__protected-slot {

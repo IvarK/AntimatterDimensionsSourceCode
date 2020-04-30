@@ -314,6 +314,167 @@ dev.unlockCelestialQuotes = function(celestial) {
   }
 };
 
+// This doesn't check everything but hopefully it gets some of the more obvious ones.
+dev.testReplicantiCode = function(singleId, useDebugger = false) {
+  const situationLists = [
+    [
+      function() {
+        player.infinitied = new Decimal(1e12);
+        player.celestials.effarig.unlockBits = 64;
+      }
+    ],
+    [
+      function() {
+        player.replicanti.interval = 1;
+      }
+    ],
+    [
+      function() {
+        player.timestudy.studies.push(33);
+      }
+    ],
+    [
+      function() {
+        player.timestudy.studies.push(62);
+      }
+    ],
+    [
+      function() {
+        player.timestudy.studies.push(131);
+      },
+      function() {
+        player.timestudy.studies.push(132);
+      },
+      function() {
+        player.timestudy.studies.push(133);
+      },
+      function() {
+        player.timestudy.studies.push(131, 132, 133);
+      }
+    ],
+    [
+      function() {
+        player.timestudy.studies.push(192);
+      }
+    ],
+    [
+      function() {
+        player.timestudy.studies.push(213);
+      }
+    ],
+    [
+      function() {
+        player.timestudy.studies.push(225);
+      }
+    ],
+    [
+      function() {
+        player.timestudy.studies.push(226);
+      }
+    ],
+    [
+      function() {
+        // eslint-disable-next-line no-bitwise
+        player.achievementBits[8] |= 16;
+      }
+    ],
+    [
+      function() {
+        // eslint-disable-next-line no-bitwise
+        player.achievementBits[12] |= 8;
+      }
+    ],
+    [
+      function() {
+        // eslint-disable-next-line no-bitwise
+        player.achievementBits[12] |= 128;
+      }
+    ],
+    [
+      function() {
+        player.reality.perks = new Set([32]);
+      }
+    ],
+    [
+      function() {
+        player.replicanti.galaxybuyer = true;
+      }
+    ],
+    [
+      function() {
+        Replicanti.galaxies.isPlayerHoldingR = true;
+      }
+    ],
+    [
+      function() {
+        player.replicanti.gal = 100;
+      },
+      function() {
+        player.replicanti.gal = 100;
+        player.replicanti.galaxies = 50;
+      }
+    ],
+    [
+      function() {
+        player.reality.upgReqs[6] = true;
+        player.reality.upgradeBits = 64;
+      }
+    ]
+  ];
+  const situationCount = situationLists.map(x => x.length + 1).reduce((x, y) => x * y);
+  const resultList = [];
+  const runSituation = function(id) {
+    Replicanti.galaxies.isPlayerHoldingR = false;
+    GameStorage.loadPlayerObject(Player.defaultStart);
+    player.infinitied = new Decimal(1);
+    player.infinityPoints = new Decimal(1e150);
+    Replicanti.unlock();
+    player.replicanti.chance = 1;
+    for (let i = 0; i < situationLists.length; i++) {
+      const div = situationLists.slice(0, i).map(x => x.length + 1).reduce((x, y) => x * y, 1);
+      // eslint-disable-next-line no-empty-function
+      const situation = [() => {}].concat(situationLists[i])[Math.floor(id / div) % (situationLists[i].length + 1)];
+      situation();
+    }
+    function doReplicantiTicks() {
+      for (let j = 0; j <= 5; j++) {
+        replicantiLoop(Math.pow(10, j));
+        resultList.push(Notation.scientific.formatDecimal(player.replicanti.amount, 5, 5));
+        resultList.push(player.replicanti.galaxies);
+        resultList.push(Replicanti.galaxies.total);
+      }
+    }
+    doReplicantiTicks();
+    player.antimatter = new Decimal('1e309');
+    player.thisInfinityMaxAM = new Decimal('1e309');
+    bigCrunchReset();
+    doReplicantiTicks();
+  };
+  if (singleId === undefined) {
+    const total = 4000;
+    const p = 10007;
+    if (total * p < situationCount) {
+      throw new Error("Prime p is not large enough to go through all situations.");
+    }
+    for (let i = 0; i < total; i++) {
+      const actual = i * p % situationCount;
+      if (i % 100 === 0) {
+        console.log(`Considering situation #${i}/${total} (${actual})`);
+      }
+      runSituation(actual);
+    }
+  } else {
+    runSituation(singleId);
+  }
+  const hash = sha512_256(resultList.toString());
+  console.log(hash);
+  if (useDebugger) {
+    // eslint-disable-next-line no-debugger
+    debugger;
+  }
+  return hash;
+}
+
 dev.testGlyphs = function(config) {
   const glyphLevel = config.glyphLevel || 6500;
   const duration = config.duration || 4000;

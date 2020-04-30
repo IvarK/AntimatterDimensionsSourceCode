@@ -138,7 +138,7 @@ Distant Galaxy scaling: Above ${formatInt(100)} Antimatter Galaxies the cost inc
 ${formatInt(2)} per Galaxy, making the next Galaxy cost ${formatInt(62)} more, then ${formatInt(64)} more, etc.
 <br>
 Remote Galaxy scaling: Above ${formatInt(800)} Antimatter Galaxies, the <i>total</i> cost increases by another
-${formatPercents(0.002)} per Galaxy, on top of Distant scaling.
+${formatPercents(0.002, 1)} per Galaxy, on top of Distant scaling.
 <br>
 <br>
 <b>Hotkey: G</b>
@@ -465,9 +465,9 @@ upgrades to your multipliers you purchased.
 <br>
 <br>
 Each threshold to gain another tickspeed upgrade is ${formatPercents(0.33)} more time shards than the previous,
-or ${formatPercents(0.25)} with the relevant time study. After ${format(300000)} upgrades, each successive free
+or ${formatPercents(0.25)} with the relevant time study. After ${formatInt(300000)} upgrades, each successive free
 tickspeed upgrade will start counting as an additional ${format(0.1, 1, 1)} upgrades for the purposes of calculating
-shard thresholds. For example, your ${format(300010)}th upgrade will require
+shard thresholds. For example, your ${formatInt(300010)}th upgrade will require
 ${format(1.33, 2, 2)}<sup>${formatInt(2)}</sup> (or ${format(1.25, 2, 2)}<sup>${formatInt(2)}</sup>) times more
 shards than your ${format(300009)}th upgrade.
 `,

@@ -7,7 +7,6 @@ Vue.component("modal-miscellaneous-options", {
       offlineProgress: false,
       showGlyphEffectDots: false,
       automaticTabSwitching: false,
-      respecIntoProtected: false,
     };
   },
   watch: {
@@ -20,9 +19,6 @@ Vue.component("modal-miscellaneous-options", {
     showGlyphEffectDots(newValue) {
       player.options.showGlyphEffectDots = newValue;
     },
-    respecIntoProtected(newValue) {
-      player.options.respecIntoProtected = newValue;
-    },
   },
   methods: {
     update() {
@@ -30,7 +26,6 @@ Vue.component("modal-miscellaneous-options", {
       this.offlineProgress = options.offlineProgress;
       this.showGlyphEffectDots = options.showGlyphEffectDots;
       this.automaticTabSwitching = options.automaticTabSwitching;
-      this.respecIntoProtected = options.respecIntoProtected;
     }
   },
   template:
@@ -44,9 +39,5 @@ Vue.component("modal-miscellaneous-options", {
         v-if="realityUnlocked"
         v-model="showGlyphEffectDots"
         text="Dots on glyphs (showing effects):"/>
-      <wide-on-off-button
-        v-if="realityUnlocked"
-        v-model="respecIntoProtected"
-        text="Put glyphs cleared from inventory into top two rows:"/>
     </modal-options>`
 });

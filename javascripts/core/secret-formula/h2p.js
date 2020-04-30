@@ -469,7 +469,7 @@ or ${formatPercents(0.25)} with the relevant time study. After ${formatInt(30000
 tickspeed upgrade will start counting as an additional ${format(0.1, 1, 1)} upgrades for the purposes of calculating
 shard thresholds. For example, your ${formatInt(300010)}th upgrade will require
 ${format(1.33, 2, 2)}<sup>${formatInt(2)}</sup> (or ${format(1.25, 2, 2)}<sup>${formatInt(2)}</sup>) times more
-shards than your ${format(300009)}th upgrade.
+shards than your ${formatInt(300009)}th upgrade.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["dims", "td", "shards", "eternity", "midgame"],

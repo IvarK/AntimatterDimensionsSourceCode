@@ -43,9 +43,13 @@ class PurchasableMechanicState extends GameMechanicState {
     if (!this.canBeBought) return false;
     this.currency.subtract(this.cost);
     this.isBought = true;
+    this.onPurchased();
     GameUI.update();
     return true;
   }
+
+  // eslint-disable-next-line no-empty-function
+  onPurchased() { }
 
   get isEffectActive() {
     return this.isBought;

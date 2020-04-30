@@ -51,7 +51,11 @@ class RebuyableMechanicState extends GameMechanicState {
     if (!this.canBeBought) return false;
     this.currency.subtract(this.cost);
     this.boughtAmount++;
+    this.onPurchased();
     GameUI.update();
     return true;
   }
+
+  // eslint-disable-next-line no-empty-function
+  onPurchased() { }
 }

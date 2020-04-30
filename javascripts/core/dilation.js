@@ -162,8 +162,7 @@ class DilationUpgradeState extends SetPurchasableMechanicState {
     return player.dilation.upgrades;
   }
 
-  purchase() {
-    if (!super.purchase()) return;
+  onPurchased() {
     if (this.id === 4) {
       player.dilation.freeGalaxies *= 2;
     }

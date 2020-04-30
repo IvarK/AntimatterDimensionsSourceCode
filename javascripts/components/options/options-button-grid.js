@@ -117,28 +117,12 @@ Vue.component("options-button-grid", {
           class="o-primary-btn--option l-options-grid__button"
           text="Automatically retry challenges:"
         />
-        <options-button
-          class="o-primary-btn--option_font-x-large"
-          onclick="GameStorage.export()"
-        >Export</options-button>
-        <options-button
-          class="o-primary-btn--option_font-x-large"
-          onclick="Modal.import.show()"
-        >Import</options-button>
       </div>
       <div class="l-options-grid__row">
         <options-button
           class="o-primary-btn--option_font-large"
           onclick="Modal.confirmationOptions.show()"
         >Confirmations</options-button>
-        <options-button
-          class="o-primary-btn--option_font-x-large"
-          onclick="GameStorage.save(false, true)"
-        >Save</options-button>
-        <options-button
-          class="o-primary-btn--option_font-x-large"
-          onclick="Modal.loadGame.show()"
-        >Load</options-button>
       </div>
       <div class="l-options-grid__row">
         <options-button
@@ -160,10 +144,6 @@ Vue.component("options-button-grid", {
           on="Disable hotkeys"
           off="Enable hotkeys"
         />
-        <options-button
-          class="o-primary-btn--option_font-x-large"
-          @click="hardReset"
-        >RESET THE GAME</options-button>
         <primary-button-on-off-custom
           v-model="commas"
           class="o-primary-btn--option l-options-grid__button"

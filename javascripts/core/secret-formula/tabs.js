@@ -39,8 +39,8 @@ GameDatabase.tabs = [
     subtabs: [
       {
         key: "options",
-        name: "Options",
-        symbol: "<i class='fas fa-wrench'></i>",
+        name: "User Interface",
+        symbol: "<i class='fas fa-user-cog'></i>",
         component: "options-tab"
       },
       {
@@ -48,6 +48,12 @@ GameDatabase.tabs = [
         name: "Saving",
         symbol: "<i class='fas fa-save'></i>",
         component: "options-saving-tab"
+      },
+      {
+        key: "customizability",
+        name: "Customizability",
+        symbol: "<i class='fas fa-cogs'></i>",
+        component: "options-customizability-tab"
       }
     ]
   },

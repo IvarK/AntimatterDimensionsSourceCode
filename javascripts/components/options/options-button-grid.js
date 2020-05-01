@@ -91,66 +91,9 @@ Vue.component("options-button-grid", {
         GameStorage.hardReset();
       }
     }
-  },
+  }, // the following is for options subtab "user interface."
   template: `
-    <div class="l-options-grid">
-      <div class="l-options-grid__row">
-        <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
-          <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
-            {{themeLabel}}
-          </div>
-          <select-theme slot="dropdown" />
-        </expanding-control-box>
-        <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
-          <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
-            {{notationLabel}}
-          </div>
-          <select-notation slot="dropdown" />
-        </expanding-control-box>
-        <options-button
-          onclick="GameOptions.toggleNews()"
-        >Hide/show the news</options-button>
-      </div>
-      <div class="l-options-grid__row">
-        <primary-button-on-off
-          v-model="retryChallenge"
-          class="o-primary-btn--option l-options-grid__button"
-          text="Automatically retry challenges:"
-        />
-      </div>
-      <div class="l-options-grid__row">
-        <options-button
-          class="o-primary-btn--option_font-large"
-          onclick="Modal.confirmationOptions.show()"
-        >Confirmations</options-button>
-      </div>
-      <div class="l-options-grid__row">
-        <options-button
-          onclick="GameOptions.cloudSave()"
-        >Cloud save</options-button>
-        <options-button
-          onclick="GameOptions.cloudLoad()"
-        >Cloud load</options-button>
-        <primary-button-on-off
-          class="o-primary-btn--option l-options-grid__button"
-          v-model="cloud"
-          text="Automatic cloud saving/loading:"
-        />
-      </div>
-      <div class="l-options-grid__row">
-        <primary-button-on-off-custom
-          v-model="hotkeys"
-          class="o-primary-btn--option l-options-grid__button"
-          on="Disable hotkeys"
-          off="Enable hotkeys"
-        />
-        <primary-button-on-off-custom
-          v-model="commas"
-          class="o-primary-btn--option l-options-grid__button"
-          on="Commas on exponents"
-          off="Notation on exponents"
-        />
-      </div>
+  <div class="l-options-grid">
       <div class="l-options-grid__row">
         <options-button
           class="o-primary-btn--option_font-large"
@@ -160,10 +103,6 @@ Vue.component("options-button-grid", {
           v-model="updateRate"
           oninput="GameOptions.refreshUpdateRate()"
         />
-        <options-button
-          class="o-primary-btn--option_font-large"
-          onclick="Modal.animationOptions.show();"
-        >Animations</options-button>
       </div>
       <div class="l-options-grid__row">
         <options-button
@@ -184,7 +123,7 @@ Vue.component("options-button-grid", {
             step="100"
             max="10000"
           />
-         </div>
+      </div>
       </div>
     </div>`
 });

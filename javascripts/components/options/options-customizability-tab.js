@@ -1,8 +1,8 @@
 "use strict";
 
-Vue.component("options-saving-tab", {
+Vue.component("options-customizability-tab", {
     components: {
-        "options-button-saving-tab": {
+        "options-button-customizability-tab": {
             template:
               `<primary-button
                 class="o-primary-btn--option l-options-grid__button"
@@ -72,48 +72,53 @@ Vue.component("options-saving-tab", {
               }
             }
         },
-        template: `
-        <div class="l-options-grid">
+        template: `<div class="l-options-grid">
         <div class="l-options-grid__row">
-        <options-button-saving-tab
-          class="o-primary-btn--option_font-x-large"
-          onclick="GameStorage.export()"
-        >Export save</options-button-saving-tab>
-        <options-button-saving-tab
-          class="o-primary-btn--option_font-x-large"
-          onclick="Modal.import.show()"
-        >Import save</options-button-saving-tab>
+        <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
+          <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
+            {{themeLabel}}
+          </div>
+          <select-theme slot="dropdown" />
+        </expanding-control-box>
+        <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
+          <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
+            {{notationLabel}}
+          </div>
+          <select-notation slot="dropdown" />
+        </expanding-control-box>
         </div>
         <div class="l-options-grid__row">
-        <options-button-saving-tab
-          class="o-primary-btn--option_font-x-large"
-          onclick="GameStorage.save(false, true)"
-        >Save game</options-button-saving-tab>
-        <options-button-saving-tab
-          class="o-primary-btn--option_font-x-large"
-          onclick="Modal.loadGame.show()"
-        >Choose save</options-button-saving-tab>
-        </div>
-        <div class="l-options-grid__row">
-        <options-button-saving-tab
-          class="o-primary-btn--option_font-x-large"
-          @click="hardReset"
-        >RESET THE GAME</options-button-saving-tab>
-        </div>
-        <div class="l-options-grid__row">
-        <options-button-saving-tab
-          onclick="GameOptions.cloudSave()"
-        >Cloud save</options-button-saving-tab>
-        <options-button-saving-tab
-          onclick="GameOptions.cloudLoad()"
-        >Cloud load</options-button-saving-tab>
+        <options-button-customizability-tab
+          onclick="GameOptions.toggleNews()"
+        >Hide/show the news</options-button-customizability-tab>
         <primary-button-on-off
+          v-model="retryChallenge"
           class="o-primary-btn--option l-options-grid__button"
-          v-model="cloud"
-          text="Automatic cloud saving/loading:"
+          text="Automatically retry challenges:"
         />
+        <options-button-customizability-tab
+          class="o-primary-btn--option_font-large"
+          onclick="Modal.animationOptions.show();"
+        >Animations</options-button-customizability-tab>
         </div>
-        </div>
-        `
+      <div class="l-options-grid__row">
+        <options-button-customizability-tab
+          class="o-primary-btn--option_font-large"
+          onclick="Modal.confirmationOptions.show()"
+        >Confirmations</options-button-customizability-tab>
+        <primary-button-on-off-custom
+          v-model="hotkeys"
+          class="o-primary-btn--option l-options-grid__button"
+          on="Disable hotkeys"
+          off="Enable hotkeys"
+        />
+        <primary-button-on-off-custom
+          v-model="commas"
+          class="o-primary-btn--option l-options-grid__button"
+          on="Commas on exponents"
+          off="Notation on exponents"
+        />
+      </div>
+        </div>`
     },
-) 
+)

@@ -60,6 +60,40 @@ Vue.component("ra-tab", {
         },
       }
     ],
+    modifiedRealityDescription() {
+      switch (this.petWithRecollection) {
+        case "Teresa":
+          return `All theorem generation is disabled, IP/EP gain ${formatPow(0.3, 1, 1)}, Reality auto-restarts
+            when reaching 2000 total galaxies.`;
+        case "Effarig":
+          return `Effarig glyphs are forbidden, glyph levels are reduced by ${formatInt(5000)} and square-rooted. 
+            A nerf similar to Effarig's reality is applied to Normal dimensions and is lessened with more antimatter.`;
+        case "Enslaved":
+          return `Infinity Dimensions are limited to one purchase, and game speed is reduced by the dilated value of
+            your EP amount. Charging and discharging your Black Hole is disabled, and you can't enter EC12. The game 
+            halts if your gamespeed is divided by more than ${format(Number.MAX_VALUE, 1, 1)}.`;
+        case "V":
+          return `All multipliers and powers to IP and EP are disabled and Dilated Time gain is square-rooted.`;
+        default:
+          return "Each celestial within Ra adds additional conditions, but also gives memories as a reward.";
+      }
+    },
+    memoryRewardCondition() {
+      switch (this.petWithRecollection) {
+        case "Teresa":
+          return `Purchasing theorems with antimatter gives memories instead of theorems.`;
+        case "Effarig":
+          return `Glyphs are automatically sacrificed when completing the reality and give memories based on 
+           their sacrifice value.`;
+        case "Enslaved":
+          return `Every second, gain memories equal to log10(Time shards).`;
+        case "V":
+          return `Gain memories based on the highest values reached in this Reality for EP, glyph level, antimatter in
+            Dilation, and number of infinities. This also occurs outside of the Reality as well.`;
+        default:
+          return "";
+      }
+    },
     petStyle() {
       return {
         color: (this.petWithRecollection === "")
@@ -89,14 +123,17 @@ Vue.component("ra-tab", {
             generation (Infinity Upgrade) and EP generation (Teresa reward) are disabled.
             <br>
             <br>
-            Each celestial within Ra adds additional conditions, but also gives memories as a reward.
+            {{ modifiedRealityDescription }}
+            <br>
+            <br>
+            {{ memoryRewardCondition }}
           </div>
         </button>
         <div class="l-ra-recollection-unlock">
           <br>
           <h1 :style="petStyle">Recollection</h1>
           <span :style="petStyle">
-            Whichever Celestial has recollection will gain memories in Ra's reality; the others will not.
+            The Celestial with recollection will alter Ra's reality in order to gain memories.
           </span>
           <div class="l-ra-recollection-unlock-inner" v-if="hasRecollection">
             <ra-pet-recollection-button

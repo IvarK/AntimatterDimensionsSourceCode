@@ -599,7 +599,8 @@ const Glyphs = {
   addToInventory(glyph, requestedInventoryIndex) {
     this.validate();
     glyph.id = GlyphGenerator.makeID();
-    let index = this.findFreeIndex();
+    const isProtectedIndex = requestedInventoryIndex < this.protectedSlots;
+    let index = this.findFreeIndex(isProtectedIndex);
     if (index < 0) return;
     if (requestedInventoryIndex !== undefined) {
       if (this.inventory[requestedInventoryIndex] === null) index = requestedInventoryIndex;

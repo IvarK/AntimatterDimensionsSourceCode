@@ -84,7 +84,7 @@ function buyMaxTickSpeed() {
   if (!canBuyTickSpeed()) return;
   const costBumps = player.chall9TickspeedCostBumps;
   const inCostScalingChallenge = NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning;
-  const tickspeedMultDecreaseMaxed = BreakInfinityUpgrade.tickspeedCostMult.isMaxed;
+  const tickspeedMultDecreaseMaxed = BreakInfinityUpgrade.tickspeedCostMult.isCapped;
   const costScale = Tickspeed.costScale;
 
   if (

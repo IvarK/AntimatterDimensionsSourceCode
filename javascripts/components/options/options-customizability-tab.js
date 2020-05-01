@@ -74,20 +74,6 @@ Vue.component("options-customizability-tab", {
         },
         template: `<div class="l-options-grid">
         <div class="l-options-grid__row">
-        <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
-          <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
-            {{themeLabel}}
-          </div>
-          <select-theme slot="dropdown" />
-        </expanding-control-box>
-        <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
-          <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
-            {{notationLabel}}
-          </div>
-          <select-notation slot="dropdown" />
-        </expanding-control-box>
-        </div>
-        <div class="l-options-grid__row">
         <options-button-customizability-tab
           onclick="GameOptions.toggleNews()"
         >Hide/show the news</options-button-customizability-tab>
@@ -111,13 +97,29 @@ Vue.component("options-customizability-tab", {
           class="o-primary-btn--option l-options-grid__button"
           on="Disable hotkeys"
           off="Enable hotkeys"
+        /> 
+        <options-button-customizability-tab
+          class="o-primary-btn--option_font-large"
+          onclick="Modal.infoDisplayOptions.show()"
+        >Info Displays</options-button-customizability-tab>
+        </div>
+        <div class="l-options-grid-row">
+        <div class="o-primary-btn o-primary-btn--option o-primary-btn--update-rate l-options-grid__button"> 
+        <b>Offline ticks: {{ offlineTicks }}</b>
+        <input
+          v-model="offlineTicks"
+          class="o-primary-btn--update-rate__slider"
+          type="range"
+          min="100"
+          step="100"
+          max="10000"
         />
-        <primary-button-on-off-custom
-          v-model="commas"
-          class="o-primary-btn--option l-options-grid__button"
-          on="Commas on exponents"
-          off="Notation on exponents"
-        />
+    </div>
+      <options-button-customizability-tab
+        class="o-primary-btn--option_font-large"
+        onclick="Modal.miscellaneousOptions.show()"
+      >Miscellaneous</options-button-customizability-tab>
+        </div>
       </div>
         </div>`
     },

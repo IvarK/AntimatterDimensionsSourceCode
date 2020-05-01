@@ -72,7 +72,8 @@ Vue.component("options-customizability-tab", {
               }
             }
         },
-        template: `<div class="l-options-grid">
+        template: `
+        <div class="l-options-grid">
         <div class="l-options-grid__row">
         <options-button-customizability-tab
           onclick="GameOptions.toggleNews()"
@@ -103,7 +104,7 @@ Vue.component("options-customizability-tab", {
           onclick="Modal.infoDisplayOptions.show()"
         >Info Displays</options-button-customizability-tab>
         </div>
-        <div class="l-options-grid-row">
+        <div class="l-options-grid__row">
         <div class="o-primary-btn o-primary-btn--option o-primary-btn--update-rate l-options-grid__button"> 
         <b>Offline ticks: {{ offlineTicks }}</b>
         <input
@@ -121,6 +122,7 @@ Vue.component("options-customizability-tab", {
       >Miscellaneous</options-button-customizability-tab>
         </div>
       </div>
-        </div>`
+        </div>
+        `
     },
 )

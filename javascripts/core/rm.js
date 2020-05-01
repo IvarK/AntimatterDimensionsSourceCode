@@ -678,7 +678,7 @@ const Glyphs = {
   },
   // If there are enough glyphs that are better than the specified glyph, in every way, then
   // the glyph is objectively a useless piece of garbage.
-  isObjectivelyUseless(glyph) {
+  isObjectivelyUseless(glyph, thresholdOverride) {
     function hasSomeBetterEffects(glyphA, glyphB, comparedEffects) {
       for (const effect of comparedEffects) {
         const c = effect.compareValues(
@@ -696,13 +696,18 @@ const Glyphs = {
         (g.level >= glyph.level || g.strength >= glyph.strength) &&
         // eslint-disable-next-line no-bitwise
         ((g.effects & glyph.effects) === glyph.effects));
-    const compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
+    let compareThreshold;
+    if (thresholdOverride === undefined) {
+      compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
+    } else {
+      compareThreshold = thresholdOverride;
+    }
     if (toCompare.length < compareThreshold) return false;
     const comparedEffects = getGlyphEffectsFromBitmask(glyph.effects).filter(x => x.id.startsWith(glyph.type));
     const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
     return betterCount >= compareThreshold;
   },
-  autoClean() {
+  autoClean(thresholdOverride) {
     // If the player hasn't unlocked sacrifice yet, we warn them.
     if (!GlyphSacrificeHandler.canSacrifice &&
       // eslint-disable-next-line prefer-template
@@ -717,8 +722,18 @@ const Glyphs = {
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
       if (glyph === null || glyph.color !== undefined) continue;
-      if (this.isObjectivelyUseless(glyph)) AutoGlyphProcessor.getRidOfGlyph(glyph);
+      // If the threshold for better glyphs needed is zero, the glyph is definitely getting deleted
+      // no matter what (well, unless it can't be gotten rid of in current glyph removal mode).
+      if (thresholdOverride === 0 || this.isObjectivelyUseless(glyph, thresholdOverride)) {
+        AutoGlyphProcessor.getRidOfGlyph(glyph);
+      }
     }
+  },
+  harshAutoClean() {
+    this.autoClean(1);
+  },
+  deleteAllUnprotected() {
+    this.autoClean(0);
   },
   get levelCap() {
     return 1000000;

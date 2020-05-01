@@ -55,7 +55,7 @@ const Async = {
       this.enabled = false;
       const runResult = this._run(fun, maxIter, config);
       return config.then ? runResult.then(() => {
-        config.then;
+        config.then();
         this.enabled = true;
       }) : runResult;
     }

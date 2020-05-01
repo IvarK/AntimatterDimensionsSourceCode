@@ -607,12 +607,12 @@ const Glyphs = {
     }
     this.inventory[index] = glyph;
     glyph.idx = index;
-    
+
     // This is done here when adding to the inventory in order to keep it out of the glyph generation hot path
     // It thus doesn't show up in manually choosing a glyph
     // This also only does anything if Ra has the appropriate unlock already.
     this.applyGamespeed(glyph);
-    
+
     player.reality.glyphs.inventory.push(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
@@ -1052,12 +1052,12 @@ const GlyphSacrificeHandler = {
       Glyphs.removeFromInventory(glyph);
       return;
     }
-  
+
     const toGain = this.glyphSacrificeGain(glyph);
     const askConfirmation = !force && player.options.confirmations.glyphSacrifice;
     if (askConfirmation) {
-      if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} 
-        glyphs will increase from ${format(player.reality.glyphs.sac[glyph.type], 2, 2)} to 
+      if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type}
+        glyphs will increase from ${format(player.reality.glyphs.sac[glyph.type], 2, 2)} to
         ${format(player.reality.glyphs.sac[glyph.type] + toGain, 2, 2)}`)) {
           return;
       }
@@ -1195,7 +1195,7 @@ function getGlyphLevelInputs() {
 
   const singularityEffect = SingularityMilestone(18).isUnlocked ? SingularityMilestone(18).effectValue : 1;
   baseLevel *= singularityEffect;
-  
+
   let scaledLevel = baseLevel;
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
   const instabilityScaleBegin = Glyphs.instabilityThreshold;
@@ -1306,8 +1306,7 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     }
   }
 
-  purchase() {
-    if (!super.purchase()) return false;
+  onPurchased() {
     EventHub.dispatch(GAME_EVENT.REALITY_UPGRADE_BOUGHT);
     const id = this.id;
     if (id === 9 || id === 24) {
@@ -1317,11 +1316,9 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
       applyRUPG10();
       EventHub.dispatch(GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT);
     }
-    if (id === 20) {
-      if (!player.blackHole[0].unlocked) return true;
+    if (id === 20 && player.blackHole[0].unlocked) {
       player.blackHole[1].unlocked = true;
     }
-    return true;
   }
 }
 
@@ -1337,11 +1334,11 @@ class RebuyableRealityUpgradeState extends RebuyableMechanicState {
   set boughtAmount(value) {
     player.reality.rebuyables[this.id] = value;
   }
-  
+
   get autobuyerId() {
     return this.id - 1;
   }
-  
+
   get isAutobuyerOn() {
     return player.reality.rebuyablesAuto[this.autobuyerId];
   }

@@ -66,7 +66,7 @@ function bigCrunchReset() {
 
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
-  
+
   player.noInfinitiesThisReality = false;
 
   if (!player.usedMaxAll) {
@@ -379,7 +379,7 @@ class BreakInfinityUpgrade extends SetPurchasableMechanicState {
   BreakInfinityUpgrade.autobuyerSpeed = upgrade(db.autobuyerSpeed);
 }());
 
-class BreakInfinityMultiplierCostUpgrade extends RebuyableMechanicState {
+class RebuyableBreakInfinityUpgradeState extends RebuyableMechanicState {
   get currency() {
     return Currency.infinityPoints;
   }
@@ -392,58 +392,24 @@ class BreakInfinityMultiplierCostUpgrade extends RebuyableMechanicState {
     player.infinityRebuyables[this.id] = value;
   }
 
-  get isMaxed() {
+  get isCapped() {
     return this.boughtAmount === this.config.maxUpgrades;
   }
+}
 
-  get isAvailableForPurchase() {
-    return !this.isMaxed;
-  }
-
-  purchase() {
-    if (!super.purchase()) return false;
-    GameCache.dimensionMultDecrease.invalidate();
+BreakInfinityUpgrade.tickspeedCostMult = new class extends RebuyableBreakInfinityUpgradeState {
+  onPurchased() {
     GameCache.tickSpeedMultDecrease.invalidate();
-    return true;
   }
-}
+}(GameDatabase.infinity.breakUpgrades.dimCostMult);
 
-BreakInfinityUpgrade.tickspeedCostMult = new BreakInfinityMultiplierCostUpgrade(
-  GameDatabase.infinity.breakUpgrades.tickspeedCostMult
-);
-
-BreakInfinityUpgrade.dimCostMult = new BreakInfinityMultiplierCostUpgrade(
-  GameDatabase.infinity.breakUpgrades.dimCostMult
-);
-
-class BreakInfinityIPGenUpgrade extends RebuyableMechanicState {
-  get currency() {
-    return Currency.infinityPoints;
+BreakInfinityUpgrade.dimCostMult = new class extends RebuyableBreakInfinityUpgradeState {
+  onPurchased() {
+    GameCache.dimensionMultDecrease.invalidate();
   }
+}(GameDatabase.infinity.breakUpgrades.tickspeedCostMult);
 
-  get boughtAmount() {
-    return player.infinityRebuyables[2];
-  }
-
-  set boughtAmount(value) {
-    player.infinityRebuyables[2] = value;
-  }
-
-  get isMaxed() {
-    return this.boughtAmount === 10;
-  }
-
-  get isAvailableForPurchase() {
-    return !this.isMaxed;
-  }
-
-  purchase() {
-    if (!super.purchase()) return false;
-    return true;
-  }
-}
-
-BreakInfinityUpgrade.ipGen = new BreakInfinityIPGenUpgrade(GameDatabase.infinity.breakUpgrades.ipGen);
+BreakInfinityUpgrade.ipGen = new RebuyableBreakInfinityUpgradeState(GameDatabase.infinity.breakUpgrades.ipGen);
 
 function preProductionGenerateIP(diff) {
   if (InfinityUpgrade.ipGen.isBought) {

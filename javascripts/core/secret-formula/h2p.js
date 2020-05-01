@@ -138,7 +138,7 @@ Distant Galaxy scaling: Above ${formatInt(100)} Antimatter Galaxies the cost inc
 ${formatInt(2)} per Galaxy, making the next Galaxy cost ${formatInt(62)} more, then ${formatInt(64)} more, etc.
 <br>
 Remote Galaxy scaling: Above ${formatInt(800)} Antimatter Galaxies, the <i>total</i> cost increases by another
-${formatPercents(0.002)} per Galaxy, on top of Distant scaling.
+${formatPercents(0.002, 1)} per Galaxy, on top of Distant scaling.
 <br>
 <br>
 <b>Hotkey: G</b>
@@ -330,7 +330,7 @@ of Infinity Dimensions doesn't carry between crunches, all the multipliers you g
 <br>
 <br>
 <b>Infinity Dimension unlock thresholds (antimatter):</b> ${Array.range(1, 8)
-  .map(tier => format(InfinityDimension(tier)._unlockRequirement))
+  .map(tier => formatPostBreak(InfinityDimension(tier)._unlockRequirement))
   .join(", ")}
 <br>
 <b>Infinity Dimension purchase multipliers:</b> ${Array.range(1, 8)
@@ -366,7 +366,7 @@ amount of antimatter before you can attempt them.
 <br>
 <br>
 <b>Infinity Challenge unlock thresholds:</b> ${GameDatabase.challenges.infinity
-  .map(ic => format(ic.unlockAM)).join(", ")}
+  .map(ic => formatPostBreak(ic.unlockAM)).join(", ")}
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked(),
       tags: ["rewards", "break", "ic", "midgame"],
@@ -465,11 +465,11 @@ upgrades to your multipliers you purchased.
 <br>
 <br>
 Each threshold to gain another tickspeed upgrade is ${formatPercents(0.33)} more time shards than the previous,
-or ${formatPercents(0.25)} with the relevant time study. After ${format(300000)} upgrades, each successive free
+or ${formatPercents(0.25)} with the relevant time study. After ${formatInt(300000)} upgrades, each successive free
 tickspeed upgrade will start counting as an additional ${format(0.1, 1, 1)} upgrades for the purposes of calculating
-shard thresholds. For example, your ${format(300010)}th upgrade will require
+shard thresholds. For example, your ${formatInt(300010)}th upgrade will require
 ${format(1.33, 2, 2)}<sup>${formatInt(2)}</sup> (or ${format(1.25, 2, 2)}<sup>${formatInt(2)}</sup>) times more
-shards than your ${format(300009)}th upgrade.
+shards than your ${formatInt(300009)}th upgrade.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["dims", "td", "shards", "eternity", "midgame"],
@@ -725,7 +725,7 @@ Duration - How long each speed burst lasts before going back to normal speed,
 increased by ${formatPercents(0.3)} per upgrade.
 <br>
 <br>
-Once you reach ${formatInt(2)} years of game playtime, you unlock a Reality upgrade that allows you to have
+Once you reach ${formatInt(1)} year of game playtime, you unlock a Reality upgrade that allows you to have
 a second Black Hole. The time spent for this requirement is itself affected by the first Black Hole, so it
 takes much less than ${formatInt(2)} actual real-time years.
 <br>

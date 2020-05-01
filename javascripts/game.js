@@ -586,10 +586,12 @@ function gameLoop(diff, options = {}) {
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
-  if (Enslaved.isRunning && player.thisRealityRealTime > 4 * 3600 * 1000 &&
-    !EnslavedProgress.hintsUnlocked.hasProgress) {
+  if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN)) {
+    player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;
+    if (player.celestials.enslaved.hintUnlockProgress >= TimeSpan.fromHours(5).totalMilliseconds) {
       EnslavedProgress.hintsUnlocked.giveProgress();
       Enslaved.quotes.show(Enslaved.quotes.HINT_UNLOCK);
+    }
   }
 
   laitelaRealityTick(realDiff);

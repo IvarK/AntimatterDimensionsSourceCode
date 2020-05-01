@@ -90,6 +90,12 @@ Vue.component("glyph-inventory", {
     autoClean() {
       Glyphs.autoClean();
     },
+    harshAutoClean() {
+      Glyphs.harshAutoClean();
+    },
+    deleteAllUnprotected() {
+      Glyphs.deleteAllUnprotected();
+    },
     slotClass(index) {
       return index < Glyphs.protectedSlots ? "c-glyph-inventory__protected-slot" : "c-glyph-inventory__slot";
     }
@@ -131,11 +137,22 @@ Vue.component("glyph-inventory", {
         @click="sortByScore">
           Sort by score
       </button>
+      <br/>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
             :ach-tooltip="(glyphSacrificeUnlocked ? 'Sacrifice' : 'Delete') +
               ' glyphs that are worse in every way than enough other glyphs'"
             @click="autoClean">
        Auto clean
+      </button>
+      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+            :ach-tooltip="(glyphSacrificeUnlocked ? 'Sacrifice' : 'Delete') +
+              ' glyphs that are worse in every way than any other glyph'"
+            @click="harshAutoClean">
+       Harsh auto clean
+      </button>
+      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+            @click="deleteAllUnprotected">
+       {{ glyphSacrificeUnlocked ? "Sacrifice" : "Delete" }} all glyphs not in first two rows
       </button>
       <primary-button-on-off
         v-if="showAutoAutoClean"

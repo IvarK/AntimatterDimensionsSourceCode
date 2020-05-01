@@ -466,6 +466,14 @@
   margin-left: 0.2rem;
 }
 
+.l-equipped-glyphs__respec-location {
+  width: 15rem;
+  height: 4.5rem;
+  margin: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 .c-current-glyph-effects__effect--capped {
   color: #ff8000;
 }

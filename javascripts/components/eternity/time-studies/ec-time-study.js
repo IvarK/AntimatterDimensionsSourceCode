@@ -30,6 +30,13 @@ Vue.component("ec-time-study", {
     },
     formatValue() {
       return this.config.requirement.formatValue;
+    },
+    // Linebreaks added to avoid twitching in scientific notation
+    needsFirstLinebreak() {
+      return this.study.id === 7;
+    },
+    needsSecondLinebreak() {
+      return [3, 4, 7].includes(this.study.id);
     }
   },
   methods: {
@@ -57,10 +64,12 @@ Vue.component("ec-time-study", {
       <template v-if="hasRequirement">
         <br>
         Requirement:
+        <br v-if="needsFirstLinebreak">
         <span v-if="id === 12">Use only the Time Dimension path</span>
         <span v-else-if="id === 11">Use only the Normal Dimension path</span>
         <span v-else>
           {{formatValue(requirement.current)}}/{{formatValue(requirement.total)}}
+          <br v-if="needsSecondLinebreak">
           {{config.requirement.resource}}
         </span>
       </template>

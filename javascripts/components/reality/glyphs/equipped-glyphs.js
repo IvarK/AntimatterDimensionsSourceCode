@@ -7,6 +7,7 @@ Vue.component("equipped-glyphs", {
       copiedGlyphs: [],
       dragoverIndex: -1,
       respec: player.reality.respec,
+      respecIntoProtected: player.options.respecIntoProtected,
       undoAvailable: false,
       undoVisible: false,
     };
@@ -79,8 +80,12 @@ Vue.component("equipped-glyphs", {
     toggleRespec() {
       player.reality.respec = !player.reality.respec;
     },
+    toggleRespecIntoProtected() {
+      player.options.respecIntoProtected = !player.options.respecIntoProtected;
+    },
     update() {
       this.respec = player.reality.respec;
+      this.respecIntoProtected = player.options.respecIntoProtected;
       this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
       this.undoAvailable = this.undoVisible && player.reality.glyphs.undo.length > 0;
     },
@@ -139,7 +144,7 @@ Vue.component("equipped-glyphs", {
       <button :class="['l-equipped-glyphs__respec', 'c-reality-upgrade-btn', {'c-reality-upgrade-btn--bought': respec}]"
               :ach-tooltip="respecTooltip"
               @click="toggleRespec">
-        Clear glyph slots on Reality
+        Unequip glyphs on Reality
       </button>
       <button v-if="undoVisible"
               class="l-equipped-glyphs__undo c-reality-upgrade-btn"
@@ -147,6 +152,15 @@ Vue.component("equipped-glyphs", {
               :ach-tooltip="undoTooltip"
               @click="undo">
         Undo
+      </button>
+    </div>
+    <div class="l-equipped-glyphs__buttons">
+      <button :class="['l-equipped-glyphs__respec-location', 'c-reality-upgrade-btn']"
+              @click="toggleRespecIntoProtected">
+        Unequip glyphs to:
+        <br>
+        <span v-if="respecIntoProtected">first two rows of inventory</span>
+        <span v-else>main inventory</span>
       </button>
     </div>
   </div>

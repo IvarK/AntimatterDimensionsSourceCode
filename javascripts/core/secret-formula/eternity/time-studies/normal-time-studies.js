@@ -312,12 +312,12 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(131).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(131).isBought && (TimeStudy(142).isBought || TimeStudy(143).isBought),
       description: () => (Perk.studyActiveEP.isBought
-        ? "Multiplier to IP"
+        ? `You gain ${formatX(1e45, 0, 0)} more IP`
         : "Multiplier to IP, which decays over this Infinity"),
       effect: () => (Perk.studyActiveEP.isBought
         ? 1e45
         : Decimal.divide(1e45, thisInfinityMult(Time.thisInfinity.totalSeconds)).clampMin(1)),
-      formatEffect: value => formatX(value, 2, 1)
+      formatEffect: value => (Perk.studyActiveEP.isBought ? undefined : formatX(value, 2, 1))
     },
     {
       id: 142,

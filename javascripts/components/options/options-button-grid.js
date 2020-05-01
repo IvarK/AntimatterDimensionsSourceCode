@@ -91,11 +91,7 @@ Vue.component("options-button-grid", {
         GameStorage.hardReset();
       }
     }
-  }, // the following is for options subtab "user interface."
-  // offline ticks, misc, challenges, confirmations, info displays, and hotkeys should be the ones in custom;
-// theme, notation, commas, UI, update rate, news, and animations should be the ones in UI
-// change these you fuck
-//if you see this in the code then i forgot to do this 
+  }, 
   template: `
   <div class="l-options-grid">
       <div class="l-options-grid__row">

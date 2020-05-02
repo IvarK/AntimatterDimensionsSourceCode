@@ -591,8 +591,8 @@ const Player = {
     return GameCache.bestRunIPPM.value;
   },
 
-  get averageEPPerRun() {
-    return GameCache.averageEPPerRun.value;
+  get averageRealTimePerEternity() {
+    return GameCache.averageRealTimePerEternity.value;
   },
 
   get tickSpeedMultDecrease() {

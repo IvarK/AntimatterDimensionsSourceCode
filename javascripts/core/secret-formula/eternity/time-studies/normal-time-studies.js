@@ -238,13 +238,12 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirementV: () => TimeStudy(111).isBought && (TimeStudy(122).isBought || TimeStudy(123).isBought),
       description: () => (Perk.studyActiveEP.isBought
         ? `You gain ${formatX(50)} more EP`
-        : "The worse your average EP/min is, the more EP you get"),
+        : `The faster your last ten eternities are${player.realities > 0 ? " (real time)" : ""},
+        the more EP you get`),
       effect: () => (Perk.studyActiveEP.isBought
         ? 50
-        : (253 - Player.averageEPPerRun
-        .dividedBy(EternityUpgrade.epMult.effectValue.times(10))
-        .clamp(3, 248).toNumber()) / 5),
-      formatEffect: value => (Perk.studyActiveEP.isBought ? undefined : formatX(value, 0, 0))
+        : Math.clamp(250 / Player.averageRealTimePerEternity, 1, 50)),
+      formatEffect: value => (Perk.studyActiveEP.isBought ? undefined : formatX(value, 1, 1))
     },
     {
       id: 122,

@@ -54,10 +54,9 @@ const GameCache = {
       .reduce(Decimal.maxReducer)
   ),
 
-  averageEPPerRun: new Lazy(() => player.lastTenEternities
-      .map(run => run[1])
-      .reduce(Decimal.sumReducer)
-      .dividedBy(player.lastTenEternities.length)),
+  averageRealTimePerEternity: new Lazy(() => player.lastTenEternities
+      .map(run => run[3])
+      .reduce(Number.sumReducer) / (1000 * player.lastTenEternities.length)),
 
   tickSpeedMultDecrease: new Lazy(() => 10 - Effects.sum(
       BreakInfinityUpgrade.tickspeedCostMult,

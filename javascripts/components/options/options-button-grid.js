@@ -1,5 +1,5 @@
 "use strict";
-// user interface subtab
+// User interface subtab
 Vue.component("options-button-grid", {
   components: {
     "options-button": {

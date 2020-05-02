@@ -1,5 +1,5 @@
 "use strict";
-// saving subtab
+// Saving subtab
 Vue.component("options-saving-tab", {
     components: {
         "options-button-saving-tab": {

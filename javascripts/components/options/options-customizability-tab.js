@@ -1,5 +1,5 @@
 "use strict";
-// customizability subtab
+// Customizability subtab
 Vue.component("options-customizability-tab", {
     components: {
         "options-button-customizability-tab": {

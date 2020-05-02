@@ -30,8 +30,10 @@ const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
                         2e12, 1e10, 1e11,
                         1e15];
 
-function buyDilationUpgrade(id, bulk) {
+function buyDilationUpgrade(id, bulk, extraFactor) {
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
+  // If a tick is really long (perhaps due to the player going offline), they can be automatically bought
+  // several times in one tick, which is what the extraFactor variable is used for.
   if (id > 3) {
     if (player.dilation.dilatedTime.lt(DIL_UPG_COSTS[id])) return false;
     if (player.dilation.upgrades.has(id)) return false;
@@ -45,7 +47,7 @@ function buyDilationUpgrade(id, bulk) {
 
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
       DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
-    buying = Math.min(buying, Effects.max(1, PerkShopUpgrade.bulkDilation));
+    buying = Math.min(buying, Effects.max(1, PerkShopUpgrade.bulkDilation) * extraFactor);
     if (!bulk) {
       buying = Math.min(buying, 1);
     }
@@ -194,8 +196,8 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
     player.dilation.auto[this.autobuyerId] = value;
   }
 
-  purchase(bulk) {
-    buyDilationUpgrade(this.config.id, bulk);
+  purchase(bulk, extraFactor = 1) {
+    buyDilationUpgrade(this.config.id, bulk, extraFactor);
   }
 }
 

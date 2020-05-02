@@ -840,12 +840,12 @@ function simulateTime(seconds, real, fast) {
     });
 }
 
-function autoBuyDilationUpgrades() {
+function autoBuyDilationUpgrades(extraFactor) {
   if (Perk.autobuyerDilation.isBought) {
     const upgrades = [DilationUpgrade.dtGain, DilationUpgrade.galaxyThreshold, DilationUpgrade.tachyonGain].filter(
       upgrade => upgrade.isAutobuyerOn);
     for (const upgrade of upgrades) {
-      upgrade.purchase(true);
+      upgrade.purchase(true, extraFactor);
     }
   }
 }
@@ -894,8 +894,12 @@ function slowerAutobuyers(realDiff) {
   player.auto.dilUpgradeTimer += ampDiff;
   const dilUpgradePeriod = 1000 * Perk.autobuyerFasterDilation.effectOrDefault(1);
   if (player.auto.dilUpgradeTimer >= dilUpgradePeriod) {
-    player.auto.dilUpgradeTimer = Math.min(player.auto.dilUpgradeTimer - dilUpgradePeriod, dilUpgradePeriod);
-    autoBuyDilationUpgrades();
+    // Because the dilation upgrade autobuyers naturally buy singles, it helps to
+    // be able to trigger them multiple times in one long-enough tick, which is
+    // what we do here. (This is why this code looks a bit different from that for
+    // the other autobuyers, which buy max.)
+    autoBuyDilationUpgrades(Math.floor(player.auto.dilUpgradeTimer / dilUpgradePeriod));
+    player.auto.dilUpgradeTimer %= dilUpgradePeriod;
   }
   
   TimeTheorems.autoBuyMaxTheorems(ampDiff);

@@ -539,6 +539,7 @@ let player = {
       eternity: true,
       dilation: true,
       reality: true,
+      harshAutoClean: true,
       glyphReplace: true,
       glyphSacrifice: true,
       glyphTrash: true,

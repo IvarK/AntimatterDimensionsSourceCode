@@ -718,6 +718,15 @@ const Glyphs = {
         "Are you sure you want to do this?")) {
       return;
     }
+    // If the player has unlocked sacrifice (so has not gotten the above warning) and auto clean could remove
+    // useful glyphs, we warn them.
+    if (GlyphSacrificeHandler.canSacrifice && thresholdOverride !== undefined &&
+      player.options.confirmations.harshAutoClean &&
+      // eslint-disable-next-line prefer-template
+      !confirm("This could delete glyphs in your inventory that are good enough that you might want to use them " +
+        "later. Are you sure you want to do this?")) {
+      return;
+    }
     // We look in backwards order so that later glyphs get cleaned up first
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];

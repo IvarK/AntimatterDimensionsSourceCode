@@ -697,7 +697,7 @@ function recursiveTimeOut(fn, iterations, endFn) {
 
 function afterSimulation(seconds, playerStart) {
   if (seconds > 1000) {
-    const offlineIncreases = ["While you were away"];
+    const offlineIncreases = [];
     // OoM increase
     const oomVarNames = ["antimatter", "infinityPower", "timeShards"];
     const oomResourceNames = ["antimatter", "infinity power", "time shards"];
@@ -735,10 +735,15 @@ function afterSimulation(seconds, playerStart) {
         offlineIncreases.push(`Black Hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
       }
     }
-    let popupString = `${offlineIncreases.join(", <br>")}.`;
-    if (popupString === "While you were away.") {
-      popupString += ".. Nothing happened.";
+    let popupString;
+    if (offlineIncreases.length === 0) {
+      popupString = "While you were away... Nothing happened.";
       SecretAchievement(36).unlock();
+    } else if (offlineIncreases.length === 1) {
+      popupString = `While you were away, <br>${offlineIncreases[0]}.`;
+    } else {
+      const last = offlineIncreases.pop();
+      popupString = `While you were away, <br>${offlineIncreases.join(", <br>")}, <br>and ${last}.`;
     }
     Modal.message.show(popupString);
   }

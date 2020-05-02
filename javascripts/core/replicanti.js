@@ -11,10 +11,16 @@ const ReplicantiGrowth = {
   }
 };
 
+function addReplicantiGalaxies(newGalaxies) {
+  if (newGalaxies > 0) {
+    player.replicanti.galaxies += newGalaxies;
+    player.noReplicantiGalaxies = false;
+  }
+}
+
 function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
   player.replicanti.timer = 0;
-  player.reality.upgReqChecks[0] = false;
   let galaxyGain = 1;
   if (Achievement(126).isUnlocked) {
     // Attempt to buy bulk if RG divides by e308 instead of resetting
@@ -27,7 +33,7 @@ function replicantiGalaxy() {
   } else {
     player.replicanti.amount = new Decimal(1);
   }
-  player.replicanti.galaxies += galaxyGain;
+  addReplicantiGalaxies(galaxyGain);
 }
 
 // Produces replicanti quickly below e308, will auto-bulk-RG if production is fast enough
@@ -39,7 +45,7 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
   // Checking for uncapped equaling zero is because Decimal.pow returns zero for overflow for some reason
   if (log10GainFactor.gt(Number.MAX_VALUE) || uncappedAmount.eq(0)) {
     if (isAutobuyerActive) {
-      player.replicanti.galaxies += Replicanti.galaxies.max - player.replicanti.galaxies;
+      addReplicantiGalaxies(Replicanti.galaxies.max - player.replicanti.galaxies);
     }
     player.replicanti.amount = replicantiCap();
     // Basically we've used nothing.
@@ -61,7 +67,7 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
   const remainingGain = log10GainFactor.minus(maxUsedGain).clampMin(0);
   player.replicanti.amount = Decimal.pow10(replicantiExponent - gainNeededPerRG * toBuy)
     .clampMax(replicantiCap());
-  player.replicanti.galaxies += toBuy;
+  addReplicantiGalaxies(toBuy);
   return remainingGain;
 }
 

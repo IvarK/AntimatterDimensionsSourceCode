@@ -44,7 +44,7 @@ Vue.component("replicanti-tab", {
       const upgrade = ReplicantiUpgrade.galaxies;
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => {
-          let description = `Max Replicanti galaxies: ${formatInt(value)}`;
+          let description = `Max Replicanti Galaxies: ${formatInt(value)}`;
           const extra = upgrade.extra;
           if (extra > 0) {
             description += `+${formatInt(extra)}`;

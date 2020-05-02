@@ -338,7 +338,14 @@ GameStorage.migrations = {
     delete player.dead;
     player.onlyEighthDimensions = player.dimlife;
     delete player.dimlife;
-    if (player.totalAntimatter.gt(0)) player.noAntimatterProduced = false;
+    // Just initialize all these to false, which is basically always correct.
+    player.noAntimatterProduced = false;
+    player.noFirstDimensions = false;
+    player.noEighthDimensions = false;
+    // If someone has 0 max replicanti galaxies, they can't have gotten any.
+    // If they have more than 0 max replicanti galaxies, we don't give them
+    // the benefit of the doubt.
+    player.noReplicantiGalaxies = player.replicanti.gal === 0;
     if (
       player.timestudy.theorem.gt(0) ||
       player.timestudy.studies.length > 0 ||

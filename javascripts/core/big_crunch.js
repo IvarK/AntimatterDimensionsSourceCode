@@ -80,13 +80,19 @@ function bigCrunchReset() {
   const currentReplicanti = player.replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
   secondSoftReset(true);
-
+  
+  let remainingGalaxies = 0;
   if (Achievement(95).isUnlocked) {
     player.replicanti.amount = currentReplicanti;
+    remainingGalaxies += Math.min(currentReplicantiGalaxies, 1);
   }
   if (TimeStudy(33).isBought) {
-    player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
+    remainingGalaxies += Math.floor(currentReplicantiGalaxies / 2);
   }
+  
+  // I don't think this Math.clampMax is technically needed, but if we add another source
+  // of keeping Replicanti Galaxies then it might be.
+  player.replicanti.galaxies = Math.clampMax(remainingGalaxies, currentReplicantiGalaxies);
 
   if (EternityMilestone.autobuyerID(1).isReached &&
       !EternityChallenge(8).isRunning &&

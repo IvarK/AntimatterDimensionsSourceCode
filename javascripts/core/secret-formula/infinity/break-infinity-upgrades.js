@@ -84,7 +84,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     },
     tickspeedCostMult: rebuyable({
       id: 0,
-      initialCost: 3e6,
+      initialCost: 1e6,
       costIncrease: 5,
       maxUpgrades: 8,
       description: "Reduce post-infinity tickspeed cost multiplier scaling",
@@ -92,7 +92,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     }),
     dimCostMult: rebuyable({
       id: 1,
-      initialCost: 1e8,
+      initialCost: 1e7,
       costIncrease: 5e3,
       maxUpgrades: 7,
       description: "Reduce post-infinity Normal Dimension cost multiplier scaling",

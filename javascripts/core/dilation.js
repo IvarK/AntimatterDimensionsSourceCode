@@ -47,9 +47,9 @@ function buyDilationUpgrade(id, bulk, extraFactor) {
 
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
       DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
-    buying = Math.min(buying, Effects.max(1, PerkShopUpgrade.bulkDilation) * extraFactor);
+    buying = Math.clampMax(buying, Effects.max(1, PerkShopUpgrade.bulkDilation) * extraFactor);
     if (!bulk) {
-      buying = Math.min(buying, 1);
+      buying = Math.clampMax(buying, 1);
     }
     const cost = Decimal.sumGeometricSeries(buying, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount);
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost);

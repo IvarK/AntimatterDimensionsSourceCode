@@ -110,16 +110,16 @@ Vue.component("effarig-tab", {
   template:
     `<div class="l-teresa-celestial-tab">
       <celestial-quote-history celestial="effarig"/>
-      <div class="c-effarig-relics">
-        You have {{ format(relicShards, 2, 0) }} Relic Shards, which increases <br>
-        the rarity of new glyphs by up to +{{ format(shardRarityBoost, 2, 2) }}%.
-      </div>
-      <div class="c-effarig-relic-description">
-        You will gain {{ format(shardsGained, 2, 0) }} Relic Shards next reality. More EP slightly increases <br>
-        shards gained. More distinct glyph effects significantly increases shards gained.
-      </div>
       <div class="l-effarig-shop-and-run">
         <div class="l-effarig-shop">
+          <div class="c-effarig-relics">
+            You have {{ format(relicShards, 2, 0) }} Relic Shards, which increases <br>
+            the rarity of new glyphs by up to +{{ format(shardRarityBoost, 2, 2) }}%.
+          </div>
+          <div class="c-effarig-relic-description">
+            You will gain {{ format(shardsGained, 2, 0) }} Relic Shards next reality. More EP slightly increases <br>
+            shards gained. More distinct glyph effects significantly increases shards gained.
+          </div>
           <effarig-unlock-button
            v-for="(unlock, i) in shopUnlocks"
            :key="i"

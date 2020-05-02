@@ -29,8 +29,7 @@ class PerkState extends SetPurchasableMechanicState {
     this.connectedPerks = GameDatabase.reality.perkConnections[this.id].map(id => Perks.find(id));
   }
 
-  purchase() {
-    if (!super.purchase()) return;
+  onPurchased() {
     if (this.config.bumpResource !== undefined) this.config.bumpResource();
     GameCache.achievementPeriod.invalidate();
     GameCache.buyablePerks.invalidate();

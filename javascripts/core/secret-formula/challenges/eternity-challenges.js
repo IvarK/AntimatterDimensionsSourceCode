@@ -58,7 +58,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e750"),
     goalIncrease: new Decimal("1e400"),
     reward: {
-      description: "Galaxy cost scaling starts later",
+      description: "Distant Galaxy cost scaling starts later",
       effect: completions => completions * 5,
       formatEffect: value => `${formatInt(value)} galaxies later`
     }

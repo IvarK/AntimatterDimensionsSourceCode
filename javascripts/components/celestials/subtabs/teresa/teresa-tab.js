@@ -66,7 +66,7 @@ Vue.component("teresa-tab", {
       <celestial-quote-history celestial="teresa"/>
       <div>You have {{format(rm, 2, 2)}} {{"Reality Machine" | pluralize(rm)}}.</div>
       <div class="l-mechanics-container">
-        <div class="l-teresa-unlocks l-teresa-mechanic-container">
+        <div class="l-teresa-mechanic-container">
           <div class="c-teresa-unlock c-teresa-run-button" v-if="hasReality" @click="startRun()">
             Start Teresa's Reality. Glyph TT generation is disabled and
             you gain less IP and EP (x^{{format(0.55, 2, 2)}}).
@@ -77,14 +77,6 @@ Vue.component("teresa-tab", {
             Teresa Reality reward: Glyph sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
           <div class="c-teresa-unlock" v-if="hasEPGen">You gain 1% of your peaked EP/min every second.</div>
-          <div class="c-teresa-shop" v-if="hasPerkShop">
-            <span class="o-teresa-pp"> You have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}}.</span>
-            <perk-shop-upgrade
-              v-for="upgrade in upgrades"
-              :key="upgrade.id"
-              :upgrade="upgrade"
-            />
-          </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">
           <button class="o-primary-btn c-teresa-pour"
@@ -108,7 +100,15 @@ Vue.component("teresa-tab", {
             </div>
           </div>
         </div>
-        <div class="c-unlock-descriptions l-teresa-mechanic-container"></div>
+        <div class="l-rm-container-labels l-teresa-mechanic-container"/>
+        <div class="c-teresa-shop" v-if="hasPerkShop">
+          <span class="o-teresa-pp"> You have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}}.</span>
+          <perk-shop-upgrade
+            v-for="upgrade in upgrades"
+            :key="upgrade.id"
+            :upgrade="upgrade"
+          />
+        </div>
       </div>
     </div>`
 });

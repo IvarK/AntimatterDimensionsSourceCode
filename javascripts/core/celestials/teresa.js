@@ -117,7 +117,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     super(config);
     this.costCap = config.costCap;
   }
-  
+
   get currency() {
     return Currency.perkPoints;
   }
@@ -138,8 +138,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     return this.cost < this.currency.value;
   }
 
-  purchase() {
-    if (!super.purchase()) return;
+  onPurchased() {
     if (this.id === 1) {
       Autobuyer.reality.bumpAmount(2);
     }

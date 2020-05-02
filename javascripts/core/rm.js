@@ -599,19 +599,20 @@ const Glyphs = {
   addToInventory(glyph, requestedInventoryIndex) {
     this.validate();
     glyph.id = GlyphGenerator.makeID();
-    let index = this.findFreeIndex();
+    const isProtectedIndex = requestedInventoryIndex < this.protectedSlots;
+    let index = this.findFreeIndex(isProtectedIndex);
     if (index < 0) return;
     if (requestedInventoryIndex !== undefined) {
       if (this.inventory[requestedInventoryIndex] === null) index = requestedInventoryIndex;
     }
     this.inventory[index] = glyph;
     glyph.idx = index;
-    
+
     // This is done here when adding to the inventory in order to keep it out of the glyph generation hot path
     // It thus doesn't show up in manually choosing a glyph
     // This also only does anything if Ra has the appropriate unlock already.
     this.applyGamespeed(glyph);
-    
+
     player.reality.glyphs.inventory.push(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
@@ -677,7 +678,7 @@ const Glyphs = {
   },
   // If there are enough glyphs that are better than the specified glyph, in every way, then
   // the glyph is objectively a useless piece of garbage.
-  isObjectivelyUseless(glyph) {
+  isObjectivelyUseless(glyph, thresholdOverride) {
     function hasSomeBetterEffects(glyphA, glyphB, comparedEffects) {
       for (const effect of comparedEffects) {
         const c = effect.compareValues(
@@ -695,13 +696,18 @@ const Glyphs = {
         (g.level >= glyph.level || g.strength >= glyph.strength) &&
         // eslint-disable-next-line no-bitwise
         ((g.effects & glyph.effects) === glyph.effects));
-    const compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
+    let compareThreshold;
+    if (thresholdOverride === undefined) {
+      compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
+    } else {
+      compareThreshold = thresholdOverride;
+    }
     if (toCompare.length < compareThreshold) return false;
     const comparedEffects = getGlyphEffectsFromBitmask(glyph.effects).filter(x => x.id.startsWith(glyph.type));
     const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
     return betterCount >= compareThreshold;
   },
-  autoClean() {
+  autoClean(thresholdOverride) {
     // If the player hasn't unlocked sacrifice yet, we warn them.
     if (!GlyphSacrificeHandler.canSacrifice &&
       // eslint-disable-next-line prefer-template
@@ -716,8 +722,18 @@ const Glyphs = {
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
       if (glyph === null || glyph.color !== undefined) continue;
-      if (this.isObjectivelyUseless(glyph)) AutoGlyphProcessor.getRidOfGlyph(glyph);
+      // If the threshold for better glyphs needed is zero, the glyph is definitely getting deleted
+      // no matter what (well, unless it can't be gotten rid of in current glyph removal mode).
+      if (thresholdOverride === 0 || this.isObjectivelyUseless(glyph, thresholdOverride)) {
+        AutoGlyphProcessor.getRidOfGlyph(glyph);
+      }
     }
+  },
+  harshAutoClean() {
+    this.autoClean(1);
+  },
+  deleteAllUnprotected() {
+    this.autoClean(0);
   },
   get levelCap() {
     return 1000000;
@@ -1036,11 +1052,11 @@ const GlyphSacrificeHandler = {
       Glyphs.removeFromInventory(glyph);
       return;
     }
-  
+
     const toGain = this.glyphSacrificeGain(glyph);
     const askConfirmation = !force && player.options.confirmations.glyphSacrifice;
     if (askConfirmation) {
-      if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} ` + 
+      if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} ` +
         `glyphs will increase from ${format(player.reality.glyphs.sac[glyph.type], 2, 2)} to ` +
         `${format(player.reality.glyphs.sac[glyph.type] + toGain, 2, 2)}.`)) {
           return;
@@ -1179,7 +1195,7 @@ function getGlyphLevelInputs() {
 
   const singularityEffect = SingularityMilestone(18).isUnlocked ? SingularityMilestone(18).effectValue : 1;
   baseLevel *= singularityEffect;
-  
+
   let scaledLevel = baseLevel;
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
   const instabilityScaleBegin = Glyphs.instabilityThreshold;
@@ -1290,8 +1306,7 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     }
   }
 
-  purchase() {
-    if (!super.purchase()) return false;
+  onPurchased() {
     EventHub.dispatch(GAME_EVENT.REALITY_UPGRADE_BOUGHT);
     const id = this.id;
     if (id === 9 || id === 24) {
@@ -1301,11 +1316,9 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
       applyRUPG10();
       EventHub.dispatch(GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT);
     }
-    if (id === 20) {
-      if (!player.blackHole[0].unlocked) return true;
+    if (id === 20 && player.blackHole[0].unlocked) {
       player.blackHole[1].unlocked = true;
     }
-    return true;
   }
 }
 
@@ -1321,11 +1334,11 @@ class RebuyableRealityUpgradeState extends RebuyableMechanicState {
   set boughtAmount(value) {
     player.reality.rebuyables[this.id] = value;
   }
-  
+
   get autobuyerId() {
     return this.id - 1;
   }
-  
+
   get isAutobuyerOn() {
     return player.reality.rebuyablesAuto[this.autobuyerId];
   }

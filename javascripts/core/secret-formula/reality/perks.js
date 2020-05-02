@@ -85,14 +85,14 @@ GameDatabase.reality.perks = {
     id: 20,
     label: "GL1",
     family: PERK_FAMILY.REALITY,
-    description: "Increase Glyph level by 1.",
+    description: "Increase glyph level by 1.",
     effect: 1
   },
   glyphLevelIncrease2: {
     id: 21,
     label: "GL2",
     family: PERK_FAMILY.REALITY,
-    description: "Increase Glyph level by 1.",
+    description: "Increase glyph level by 1.",
     effect: 1
   },
   glyphChoice4: {
@@ -139,37 +139,37 @@ GameDatabase.reality.perks = {
     id: 32,
     label: "PASS2",
     family: PERK_FAMILY.ETERNITY,
-    description: "Time Study 132 also makes replicanti 5x faster."
+    description: "Time Study 132 also makes Replicanti 5x faster."
   },
   autounlockEU1: {
     id: 40,
     label: "EU1",
     family: PERK_FAMILY.ETERNITY,
-    description: "After the first Eternity of a Reality, auto-unlock the first row of Eternity upgrades."
+    description: "After the first Eternity of a Reality, auto-unlock the first row of Eternity Upgrades."
   },
   autounlockEU2: {
     id: 41,
     label: "EU2",
     family: PERK_FAMILY.ETERNITY,
-    description: "After the first Eternity of a Reality, auto-unlock the second row of Eternity upgrades."
+    description: "After the first Eternity of a Reality, auto-unlock the second row of Eternity Upgrades."
   },
   autounlockDilation1: {
     id: 42,
     label: "UD1",
     family: PERK_FAMILY.DILATION,
-    description: "After unlocking Dilation, auto-unlock the second row of Dilation upgrades."
+    description: "After unlocking Dilation, auto-unlock the second row of Dilation Upgrades."
   },
   autounlockDilation2: {
     id: 43,
     label: "UD2",
     family: PERK_FAMILY.DILATION,
-    description: "After unlocking Dilation, auto-unlock the third row of Dilation upgrades."
+    description: "After unlocking Dilation, auto-unlock the third row of Dilation Upgrades."
   },
   autounlockDilation3: {
     id: 44,
     label: "ATT",
     family: PERK_FAMILY.DILATION,
-    description: "Auto-unlock passive Time Theorem generation once you can afford it."
+    description: "Auto-unlock the passive Time Theorem generation Dilation Upgrade once you can afford it."
   },
   autounlockTD: {
     id: 45,
@@ -193,7 +193,7 @@ GameDatabase.reality.perks = {
     id: 52,
     label: "DGR",
     family: PERK_FAMILY.DILATION,
-    description: "The 2nd rebuyable Dilation upgrade no longer resets your Dilated Time."
+    description: "The 2nd rebuyable Dilation Upgrade no longer resets your Dilated Time."
   },
   bypassECDilation: {
     id: 53,
@@ -291,7 +291,7 @@ GameDatabase.reality.perks = {
     id: 80,
     label: "TP1",
     family: PERK_FAMILY.DILATION,
-    description: "When buying the \"You gain 3 times more Tachyon Particles\" upgrade, " +
+    description: "When buying the \"You gain 3 times more Tachyon Particles\" Dilation Upgrade, " +
       "multiply your current Tachyon Particle amount by 1.5.",
     effect: 1.5
   },
@@ -299,7 +299,7 @@ GameDatabase.reality.perks = {
     id: 81,
     label: "TP2",
     family: PERK_FAMILY.DILATION,
-    description: "When buying the \"You gain 3 times more Tachyon Particles\" upgrade, " +
+    description: "When buying the \"You gain 3 times more Tachyon Particles\" Dilation Upgrade, " +
       "multiply your current Tachyon Particle amount by 2.",
     effect: 2
   },
@@ -307,7 +307,7 @@ GameDatabase.reality.perks = {
     id: 82,
     label: "TP3",
     family: PERK_FAMILY.DILATION,
-    description: "When buying the \"You gain 3 times more Tachyon Particles\" upgrade, " +
+    description: "When buying the \"You gain 3 times more Tachyon Particles\" Dilation Upgrade, " +
       "multiply your current Tachyon Particle amount by 2.5.",
     effect: 2.5
   },
@@ -315,7 +315,7 @@ GameDatabase.reality.perks = {
     id: 83,
     label: "TP4",
     family: PERK_FAMILY.DILATION,
-    description: "When buying the \"You gain 3 times more Tachyon Particles\" upgrade, " +
+    description: "When buying the \"You gain 3 times more Tachyon Particles\" Dilation Upgrade, " +
       "multiply your current Tachyon Particle amount by 3.",
     effect: 3
   },
@@ -323,7 +323,7 @@ GameDatabase.reality.perks = {
     id: 100,
     label: "DAU",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Unlock autobuyers for the repeatable Dilation upgrades."
+    description: "Unlock autobuyers for the repeatable Dilation Upgrades."
   },
   autobuyerFasterID: {
     id: 101,
@@ -343,7 +343,7 @@ GameDatabase.reality.perks = {
     id: 103,
     label: "DAS",
     family: PERK_FAMILY.AUTOMATION,
-    description: "Dilation upgrade autobuyers work 3 times faster.",
+    description: "Dilation Upgrade autobuyers work 3 times faster.",
     effect: 1 / 3,
   },
   autobuyerTT1: {

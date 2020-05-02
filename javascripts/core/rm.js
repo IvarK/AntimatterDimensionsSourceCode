@@ -613,6 +613,11 @@ const Glyphs = {
     // This also only does anything if Ra has the appropriate unlock already.
     this.applyGamespeed(glyph);
 
+    // This should only apply to glyphs you actually choose, so can't be done in glyph generation.
+    // Sometimes a glyph you already have is added to the inventory (for example, unequipping),
+    // but that's not an issue because then this line just won't do anything, which is fine.
+    player.bestGlyphStrength = Math.clampMin(player.bestGlyphStrength, newGlyph.strength);
+
     player.reality.glyphs.inventory.push(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();

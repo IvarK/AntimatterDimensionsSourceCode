@@ -106,7 +106,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       effect: value => Player.bestRunIPPM.times(value / 20),
       description: () => {
         let generation = `Generate ${formatInt(5 * player.infinityRebuyables[2])}%`;
-        if (!BreakInfinityUpgrade.ipGen.isMaxed) {
+        if (!BreakInfinityUpgrade.ipGen.isCapped) {
           generation += ` ➜ ${formatInt(5 * (1 + player.infinityRebuyables[2]))}%`;
         }
         return `${generation} of your best IP/min from last 10 infinities, works offline`;

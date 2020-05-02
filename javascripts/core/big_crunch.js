@@ -407,13 +407,13 @@ BreakInfinityUpgrade.tickspeedCostMult = new class extends RebuyableBreakInfinit
   onPurchased() {
     GameCache.tickSpeedMultDecrease.invalidate();
   }
-}(GameDatabase.infinity.breakUpgrades.dimCostMult);
+}(GameDatabase.infinity.breakUpgrades.tickspeedCostMult);
 
 BreakInfinityUpgrade.dimCostMult = new class extends RebuyableBreakInfinityUpgradeState {
   onPurchased() {
     GameCache.dimensionMultDecrease.invalidate();
   }
-}(GameDatabase.infinity.breakUpgrades.tickspeedCostMult);
+}(GameDatabase.infinity.breakUpgrades.dimCostMult);
 
 BreakInfinityUpgrade.ipGen = new RebuyableBreakInfinityUpgradeState(GameDatabase.infinity.breakUpgrades.ipGen);
 

@@ -1,5 +1,5 @@
 "use strict";
-
+// saving subtab
 Vue.component("options-saving-tab", {
     components: {
         "options-button-saving-tab": {
@@ -73,6 +73,7 @@ Vue.component("options-saving-tab", {
             }
         },
         template: `
+        <div class="l-options-tab">
         <div class="l-options-grid">
         <div class="l-options-grid__row">
         <options-button-saving-tab
@@ -113,6 +114,10 @@ Vue.component("options-saving-tab", {
           text="Automatic cloud saving/loading:"
         />
         </div>
+        </div>
+        <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
+        Press <kbd>?</kbd> to open shortcut list.
+      </p>
         </div>
         `
     },

@@ -1,5 +1,5 @@
 "use strict";
-
+// customizability subtab
 Vue.component("options-customizability-tab", {
     components: {
         "options-button-customizability-tab": {
@@ -73,16 +73,17 @@ Vue.component("options-customizability-tab", {
             }
         },
         template: `
+        <div class="l-options-tab">
         <div class="l-options-grid">
-        <div class="l-options-grid__row">
-        <options-button-customizability-tab
-          onclick="GameOptions.toggleNews()"
-        >Hide/show the news</options-button-customizability-tab>
-        <primary-button-on-off
-          v-model="retryChallenge"
-          class="o-primary-btn--option l-options-grid__button"
-          text="Automatically retry challenges:"
-        />
+          <div class="l-options-grid__row">
+            <options-button-customizability-tab
+            onclick="GameOptions.toggleNews()"
+            >Hide/show the news</options-button-customizability-tab>
+            <primary-button-on-off
+            v-model="retryChallenge"
+            class="o-primary-btn--option l-options-grid__button"
+            text="Automatically retry challenges:"
+            />
         <options-button-customizability-tab
           class="o-primary-btn--option_font-large"
           onclick="Modal.animationOptions.show();"
@@ -122,6 +123,10 @@ Vue.component("options-customizability-tab", {
       >Miscellaneous</options-button-customizability-tab>
         </div>
       </div>
+      <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
+        Press <kbd>?</kbd> to open shortcut list.
+      </p>
+        </div>
         </div>
         `
     },

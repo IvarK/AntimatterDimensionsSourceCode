@@ -653,6 +653,10 @@ GameStorage.devMigrations = {
     player => {
       player.noReplicantiGalaxies = player.reality.upgReqChecks[0];
       delete player.reality.upgReqChecks;
+    },
+    player => {
+      player.bestGlyphStrength = player.reality.glyphs.active.concat(
+        player.reality.glyphs.inventory).map(g => g.strength).max();
     }
   ],
 

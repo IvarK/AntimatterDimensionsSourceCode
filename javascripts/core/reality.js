@@ -204,6 +204,7 @@ function processAutoGlyph(gainedLevel, rng) {
   }
   if (newGlyph && Glyphs.freeInventorySpace > 0) {
     Glyphs.addToInventory(newGlyph);
+    player.bestGlyphStrength = Math.clampMin(player.bestGlyphStrength, newGlyph.strength);
   }
 }
 

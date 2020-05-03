@@ -72,7 +72,7 @@ Vue.component("normal-dim-row", {
     },
     buyUntil10() {
       if (this.isContinuumActive) return;
-      buyManyDimensions(this.tier);
+      buyManyDimension(this.tier);
       if (this.tier === 2) {
         Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
       } 

@@ -511,6 +511,7 @@ let player = {
     respecIntoProtected: false,
     offlineTicks: 1000,
     showLastTenRunsGainPerTime: false,
+    autosaveInterval: 30000, 
     showHintText: {
       achievements: false,
       challenges: false,

@@ -53,7 +53,7 @@ const GameIntervals = (function() {
       }
     },
     gameLoop: interval(() => gameLoop(), () => player.options.updateRate),
-    save: interval(() => GameStorage.save(), 30000),
+    save: interval(() => GameStorage.save(), () => player.options.autosaveInterval),
     checkCloudSave: interval(() => {
       if (playFabId !== -1 && player.options.cloud) playFabSaveCheck();
     }, 300000),

@@ -181,7 +181,7 @@ function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
 function addEternityTime(time, realTime, ep, eternities) {
   player.lastTenEternities.pop();
   player.lastTenEternities.unshift([time, ep, eternities, realTime]);
-  GameCache.averageEPPerRun.invalidate();
+  GameCache.averageRealTimePerEternity.invalidate();
 }
 
 function resetEternityRuns() {
@@ -189,7 +189,7 @@ function resetEternityRuns() {
     { length: 10 },
     () => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]
   );
-  GameCache.averageEPPerRun.invalidate();
+  GameCache.averageRealTimePerEternity.invalidate();
 }
 
 // Player gains 50% of the eternities they would get if they continuously repeated their fastest eternity, if they

@@ -661,6 +661,7 @@ GameStorage.devMigrations = {
     player => {
       player.options.showHintText.glyphEffectDots = player.options.showGlyphEffectDots;
       delete player.options.showGlyphEffectDots;
+      GameStorage.migrations.renameCloudVariable(player);
     }
   ],
 

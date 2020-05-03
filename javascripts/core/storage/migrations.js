@@ -139,6 +139,7 @@ GameStorage.migrations = {
       GameStorage.migrations.setTutorialState(player);
       GameStorage.migrations.migrateLastTenRuns(player);
       GameStorage.migrations.migrateIPGen(player);
+      GameStorage.migrations.renameCloudVariable(player);
 
       kong.migratePurchases();
       if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
@@ -719,6 +720,11 @@ GameStorage.migrations = {
     player.infinityRebuyables.push(player.offlineProd / 5);
     delete player.offlineProd;
     delete player.offlineProdCost;
+  },
+
+  renameCloudVariable(player) {
+    player.options.cloudEnabled = player.options.cloud;
+    delete player.options.cloud;
   },
 
   prePatch(saveData) {

@@ -34,13 +34,14 @@ Vue.component("options-saving-tab", {
   },
   data() {
     return {
-      cloud: false,
-      autosaveInterval: 10,
+      cloudAvailable: false,
+      cloudEnabled: false,
+      autosaveInterval: 10
     };
   },
   watch: {
-    cloud(newValue) {
-      player.options.cloud = newValue;
+    cloudEnabled(newValue) {
+      player.options.cloudEnabled = newValue;
     },
     autosaveInterval(newValue) {
       player.options.autosaveInterval = 1000 * newValue;
@@ -48,8 +49,9 @@ Vue.component("options-saving-tab", {
   },
   methods: {
     update() {
+      this.cloudAvailable = kong.enabled;
       const options = player.options;
-      this.cloud = options.cloud;
+      this.cloudEnabled = options.cloudEnabled;
       this.autosaveInterval = options.autosaveInterval / 1000;
     },
     hardReset() {
@@ -89,7 +91,7 @@ Vue.component("options-saving-tab", {
           oninput="GameOptions.refreshAutosaveInterval()"
         />
       </div>
-      <div class="l-options-grid__row">
+      <div class="l-options-grid__row" v-if="cloudAvailable">
         <options-button
           onclick="GameOptions.cloudSave()"
         >Cloud save</options-button>
@@ -98,7 +100,7 @@ Vue.component("options-saving-tab", {
         >Cloud load</options-button>
         <primary-button-on-off
           class="o-primary-btn--option l-options-grid__button"
-          v-model="cloud"
+          v-model="cloudEnabled"
           text="Automatic cloud saving/loading:"
         />
       </div>

@@ -499,7 +499,7 @@ let player = {
     showAllChallenges: false,
     bulkOn: true,
     autobuyersOn: true,
-    cloud: true,
+    cloudEnabled: true,
     hotkeys: true,
     theme: "Normal",
     commas: true,

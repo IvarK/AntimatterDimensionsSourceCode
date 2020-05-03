@@ -34,38 +34,19 @@ Vue.component("options-button-grid", {
     return {
       theme: "",
       notation: "",
-      retryChallenge: false,
-      cloud: false,
-      hotkeys: false,
       commas: false,
       updateRate: 0,
-      offlineTicks: 0,
       news: true,
       autosaveInterval: 3000,
     };
   },
   watch: {
-    retryChallenge(newValue) {
-      player.options.retryChallenge = newValue;
-    },
-    cloud(newValue) {
-      player.options.cloud = newValue;
-    },
-    hotkeys(newValue) {
-      player.options.hotkeys = newValue;
-    },
     commas(newValue) {
       player.options.commas = newValue;
       ADNotations.Settings.exponentCommas.show = newValue;
     },
     updateRate(newValue) {
       player.options.updateRate = newValue;
-    },
-    offlineTicks(newValue) {
-      player.options.offlineTicks = parseInt(newValue, 10);
-    },
-    newsSetting(newValue) {
-      player.options.news = newValue;
     }
   },
   computed: {
@@ -87,14 +68,9 @@ Vue.component("options-button-grid", {
       const options = player.options;
       this.theme = options.theme;
       this.notation = options.notation;
-      this.retryChallenge = options.retryChallenge;
-      this.cloud = options.cloud;
-      this.hotkeys = options.hotkeys;
       this.commas = options.commas;
       this.updateRate = options.updateRate;
-      this.offlineTicks = options.offlineTicks;
       this.news = options.news;
-      this.autosaveInterval = options.autosaveInterval;
     },
     hardReset() {
       if (confirm("Do you really want to erase all your progress?")) {

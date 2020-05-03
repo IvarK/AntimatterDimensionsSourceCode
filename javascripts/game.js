@@ -464,7 +464,7 @@ function gameLoop(diff, options = {}) {
   player.thisInfinityRealTime += realDiff;
   player.thisInfinityTime += diff;
   player.thisEternityRealTime += realDiff;
-  if (Enslaved.isRunning && Enslaved.feltEternity) {
+  if (Enslaved.isRunning && Enslaved.feltEternity && !EternityChallenge(12).isRunning) {
     player.thisEternity += diff * (1 + player.eternities.clampMax(1e66).toNumber());
   } else {
     player.thisEternity += diff;

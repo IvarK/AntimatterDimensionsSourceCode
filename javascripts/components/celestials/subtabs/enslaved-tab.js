@@ -266,8 +266,8 @@ Vue.component("enslaved-tab", {
   },
   template: `
     <div class="l-enslaved-celestial-tab">
-      <div class="l-enslaved-upgrades-column">
-        <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">
+      <div class="l-enslaved-run-container">
+        <div v-if="hasUnlock(unlocksInfo.RUN)">
           <div class="o-enslaved-run-box">
             <div class="o-enslaved-run-box__title">{{realityTitle}}</div>
             <div v-if="completed"><b>(Completed)</b></div>
@@ -308,10 +308,9 @@ Vue.component("enslaved-tab", {
         </primary-button>
         <div class="l-enslaved-top-container">
           <div class="l-enslaved-top-container__half">
-            Charging your black hole 
-            {{ canAdjustStoredTime ? "reduces your black hole speed" : "sets your game speed to 1" }}. You can use
-            time from charging to unlock Enslaved upgrades. You can also discharge it all in a single "supertick"
-            which acts as if it was the duration of all of your stored time.
+            While charging, the black hole's speed boost is {{ canAdjustStoredTime ? "decreased" : "disabled" }}, and
+            the lost speed is converted into stored time. Discharging the black hole allows you to skip forward in time.
+            Stored time is also used to unlock certain upgrades.
             <button :class="['o-enslaved-mechanic-button',
                             {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
                     @click="toggleStoreBlackHole">

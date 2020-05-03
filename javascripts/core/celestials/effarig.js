@@ -128,7 +128,8 @@ const Effarig = {
       id: 6,
       lines: [
         "* You have completed Effarig's Infinity.",
-        "This is the first threshold. It only gets worse from here."
+        "This is the first threshold. It only gets worse from here.",
+        "None but me know enough about my domain to get further.",
       ]
     },
     COMPLETE_ETERNITY: {
@@ -136,7 +137,8 @@ const Effarig = {
       lines: [
         "* You have completed Effarig's Eternity.",
         "This is the limit. I don’t want you to proceed past this point.",
-        "I'll just wait here until you give up."
+        "You won't finish this in your lifetime.",
+        "I'll just wait here until you give up.",
       ]
     },
     COMPLETE_REALITY: {

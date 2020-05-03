@@ -5614,6 +5614,12 @@ kbd {
   align-items: center;
 }
 
+.l-enslaved-run-container {
+  display: block;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .l-enslaved-top-container {
   display: flex;
   flex-direction: row;

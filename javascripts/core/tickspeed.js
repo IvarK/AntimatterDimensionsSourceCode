@@ -1,9 +1,5 @@
 "use strict";
 
-function canBuyTickSpeed() {
-  return !Laitela.continuumActive && NormalDimension(3).isAvailableForPurchase && !EternityChallenge(9).isRunning;
-}
-
 function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning) return new Decimal(1);
   if (Ra.isRunning) return new Decimal(0.89);
@@ -60,18 +56,12 @@ function getTickSpeedMultiplier() {
 }
 
 function buyTickSpeed() {
-  if (!canBuyTickSpeed()) {
-      return false;
-  }
-
-  if (!canAfford(Tickspeed.cost)) {
-      return false;
-  }
+  if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return false;
 
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
     Tickspeed.multiplySameCosts();
   }
-  player.antimatter = player.antimatter.minus(Tickspeed.cost);
+  Currency.antimatter.purchase(Tickspeed.cost);
   player.totalTickBought++;
   player.thisInfinityLastBuyTime = player.thisInfinityTime;
   player.secretUnlocks.why++;
@@ -81,7 +71,7 @@ function buyTickSpeed() {
 }
 
 function buyMaxTickSpeed() {
-  if (!canBuyTickSpeed()) return;
+  if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return;
   const costBumps = player.chall9TickspeedCostBumps;
   const inCostScalingChallenge = NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning;
   const tickspeedMultDecreaseMaxed = BreakInfinityUpgrade.tickspeedCostMult.isCapped;
@@ -94,11 +84,11 @@ function buyMaxTickSpeed() {
     ) {
 
     let shouldContinue = true;
-    while (player.antimatter.gt(costScale.calculateCost(player.totalTickBought + costBumps)) && shouldContinue) {
+    while (Currency.antimatter.gt(costScale.calculateCost(player.totalTickBought + costBumps)) && shouldContinue) {
       if (inCostScalingChallenge) {
         Tickspeed.multiplySameCosts();
       }
-      player.antimatter = player.antimatter.minus(costScale.calculateCost(player.totalTickBought + costBumps));
+      Currency.antimatter.subtract(costScale.calculateCost(player.totalTickBought + costBumps));
       player.totalTickBought++;
       player.thisInfinityLastBuyTime = player.thisInfinityTime;
       if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
@@ -110,12 +100,12 @@ function buyMaxTickSpeed() {
     }
   }
   if (costScale.calculateCost(player.totalTickBought + costBumps).gte(Decimal.NUMBER_MAX_VALUE)) {
-    const purchases = costScale.getMaxBought(player.totalTickBought + costBumps, player.antimatter);
+    const purchases = costScale.getMaxBought(player.totalTickBought + costBumps, Currency.antimatter.value);
     if (purchases === null) {
       return;
     }
     player.totalTickBought += purchases.quantity;
-    player.antimatter = player.antimatter.minus(Decimal.pow10(purchases.logPrice)).max(0);
+    Currency.antimatter.subtract(Decimal.pow10(purchases.logPrice));
   }
 }
 
@@ -128,6 +118,18 @@ const Tickspeed = {
 
   get isUnlocked() {
     return NormalDimension(2).amount.gt(0) || player.eternities.gte(30);
+  },
+
+  get isAvailableForPurchase() {
+    return this.isUnlocked &&
+      NormalDimension(3).isAvailableForPurchase &&
+      !EternityChallenge(9).isRunning &&
+      !Laitela.continuumActive &&
+      (player.break || this.cost.lt(Decimal.NUMBER_MAX_VALUE));
+  },
+
+  get isAffordable() {
+    return Currency.antimatter.gte(this.cost);
   },
 
   get multiplier() {
@@ -156,7 +158,7 @@ const Tickspeed = {
 
   get continuumValue() {
     if (!this.isUnlocked) return 0;
-    return this.costScale.getContinuumValue(player.antimatter) * Laitela.matterExtraPurchaseFactor;
+    return this.costScale.getContinuumValue(Currency.antimatter.value) * Laitela.matterExtraPurchaseFactor;
   },
 
   get baseValue() {

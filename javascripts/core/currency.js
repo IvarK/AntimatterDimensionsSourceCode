@@ -3,6 +3,105 @@
 /**
  * @abstract
  */
+class MathOperations {
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  add(left, right) { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  subtract(left, right) { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  multiply(left, right) { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  divide(left, right) { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  max(left, right) { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  min(left, right) { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  eq(left, right) { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  gt(left, right) { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  gte(left, right) { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  lt(left, right) { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  lte(left, right) { throw new NotImplementedError(); }
+}
+
+MathOperations.number = new class NumberMathOperations extends MathOperations {
+  add(left, right) { return left + right; }
+  subtract(left, right) { return left - right; }
+  multiply(left, right) { return left * right; }
+  divide(left, right) { return left / right; }
+  max(left, right) { return Math.max(left, right); }
+  min(left, right) { return Math.min(left, right); }
+  eq(left, right) { return left === right; }
+  gt(left, right) { return left > right; }
+  gte(left, right) { return left >= right; }
+  lt(left, right) { return left < right; }
+  lte(left, right) { return left <= right; }
+}();
+
+MathOperations.decimal = new class DecimalMathOperations extends MathOperations {
+  add(left, right) { return Decimal.add(left, right); }
+  subtract(left, right) { return Decimal.subtract(left, right); }
+  multiply(left, right) { return Decimal.multiply(left, right); }
+  divide(left, right) { return Decimal.divide(left, right); }
+  max(left, right) { return Decimal.max(left, right); }
+  min(left, right) { return Decimal.min(left, right); }
+  eq(left, right) { return Decimal.eq(left, right); }
+  gt(left, right) { return Decimal.gt(left, right); }
+  gte(left, right) { return Decimal.gte(left, right); }
+  lt(left, right) { return Decimal.lt(left, right); }
+  lte(left, right) { return Decimal.lte(left, right); }
+}();
+
+/**
+ * @abstract
+ */
 class Currency {
   /**
    * @abstract
@@ -16,74 +115,108 @@ class Currency {
 
   /**
    * @abstract
+   * @type {MathOperations}
    */
-  // eslint-disable-next-line no-unused-vars
-  add(amount) { throw new NotImplementedError(); }
+  get operations() { throw new NotImplementedError(); }
 
-  /**
-   * @abstract
-   */
-  // eslint-disable-next-line no-unused-vars
-  integrate(perSecond, deltaTime) { throw new NotImplementedError(); }
+  add(amount) {
+    this.value = this.operations.add(this.value, amount);
+  }
 
-  /**
-   * @abstract
-   */
-  // eslint-disable-next-line no-unused-vars
-  subtract(amount) { throw new NotImplementedError(); }
+  subtract(amount) {
+    this.value = this.operations.max(this.operations.subtract(this.value, amount), 0);
+  }
 
-  /**
-   * @abstract
-   */
-  // eslint-disable-next-line no-unused-vars
-  isAffordable(cost) { throw new NotImplementedError(); }
+  eq(amount) {
+    return this.operations.eq(this.value, amount);
+  }
+
+  gt(amount) {
+    return this.operations.gt(this.value, amount);
+  }
+
+  gte(amount) {
+    return this.operations.gte(this.value, amount);
+  }
+
+  lt(amount) {
+    return this.operations.lt(this.value, amount);
+  }
+
+  lte(amount) {
+    return this.operations.lte(this.value, amount);
+  }
+
+  purchase(cost) {
+    if (!this.gte(cost)) return false;
+    this.subtract(cost);
+    return true;
+  }
+
+  integrate(perSecond, deltaTime) {
+    this.add(this.operations.multiply(perSecond * deltaTime));
+  }
+
+  bumpTo(value) {
+    this.value = this.operations.max(this.value, value);
+  }
 }
 
 /**
  * @abstract
  */
 class NumberCurrency extends Currency {
-  add(amount) {
-    this.value += amount;
-  }
-
-  integrate(perSecond, deltaTime) {
-    this.add(perSecond * deltaTime);
-  }
-
-  subtract(amount) {
-    this.value -= amount;
-  }
-
-  isAffordable(cost) {
-    return this.value >= cost;
-  }
+  get operations() { return MathOperations.number; }
 }
 
 /**
  * @abstract
  */
 class DecimalCurrency extends Currency {
-  add(amount) {
-    this.value = this.value.plus(amount);
-  }
-
-  integrate(perSecond, deltaTime) {
-    this.add(perSecond.times(deltaTime));
-  }
-
-  subtract(amount) {
-    this.value = this.value.minus(amount);
-  }
-
-  isAffordable(cost) {
-    return this.value.gte(cost);
-  }
+  get operations() { return MathOperations.decimal; }
+  get mantissa() { return this.value.mantissa; }
+  get exponent() { return this.value.exponent; }
 }
 
 Currency.antimatter = new class extends DecimalCurrency {
   get value() { return player.antimatter; }
-  set value(value) { player.antimatter = value; }
+
+  set value(value) {
+    player.antimatter = value;
+    player.thisInfinityMaxAM = player.thisInfinityMaxAM.max(value);
+    player.thisEternityMaxAM = player.thisEternityMaxAM.max(value);
+  }
+
+  add(amount) {
+    super.add(amount);
+    player.totalAntimatter = player.totalAntimatter.plus(amount);
+    if (amount.gt(0)) player.noAntimatterProduced = false;
+  }
+
+  get productionPerSecond() {
+    let production = NormalDimension(1).productionPerRealSecond;
+    if (NormalChallenge(12).isRunning) {
+      production = production.plus(NormalDimension(2).productionPerRealSecond);
+    }
+    return production;
+  }
+
+  get startingValue() {
+    return Effects.max(
+      10,
+      Perk.startAM1,
+      Perk.startAM2,
+      Achievement(21),
+      Achievement(37),
+      Achievement(54),
+      Achievement(55),
+      Achievement(78).effects.antimatter
+    ).toDecimal();
+  }
+
+  reset() {
+    this.value = this.startingValue;
+  }
 }();
 
 Currency.infinityPower = new class extends DecimalCurrency {

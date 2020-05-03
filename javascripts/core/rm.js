@@ -765,7 +765,7 @@ const Glyphs = {
     const undoData = {
       oldIndex,
       targetSlot,
-      am: new Decimal(player.antimatter),
+      am: new Decimal(Currency.antimatter.value),
       ip: new Decimal(player.infinityPoints),
       ep: new Decimal(player.eternityPoints),
       tt: player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost() - TimeTheorems.totalPurchased()),
@@ -790,7 +790,7 @@ const Glyphs = {
       glyphUndo: true,
       restoreCelestialState: true,
     });
-    player.antimatter.fromValue(undoData.am);
+    Currency.antimatter.value = undoData.am;
     player.infinityPoints.fromValue(undoData.ip);
     player.eternityPoints.fromValue(undoData.ep);
     player.timestudy.theorem.fromValue(undoData.tt);

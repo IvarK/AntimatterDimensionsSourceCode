@@ -78,8 +78,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
 
   upgradeBulk() {
     if (this.hasMaxedBulk) return;
-    if (!Currency.infinityPoints.isAffordable(this.cost)) return;
-    Currency.infinityPoints.subtract(this.cost);
+    if (!Currency.infinityPoints.purchase(this.cost)) return;
     this.data.bulk = Math.clampMax(this.bulk * 2, 1e100);
     this.data.cost = Math.ceil(2.4 * this.cost);
     Achievement(61).tryUnlock();
@@ -88,8 +87,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   purchase() {
-    if (!Currency.antimatter.isAffordable(this.antimatterCost)) return;
-    Currency.antimatter.subtract(this.antimatterCost);
+    if (!Currency.antimatter.purchase(this.antimatterCost)) return;
     this.data.isBought = true;
   }
 

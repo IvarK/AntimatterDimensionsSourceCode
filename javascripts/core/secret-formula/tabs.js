@@ -126,7 +126,7 @@ GameDatabase.tabs = [
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
-          player.antimatter.e >= 2000 ||
+          Currency.antimatter.exponent >= 2000 ||
           player.postChallUnlocked > 0
       },
       {

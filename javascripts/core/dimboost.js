@@ -50,7 +50,7 @@ class DimBoost {
     // hence there are just 4 (or 2, if in Auto DimBoosts challenge) shifts
     return DimBoost.purchasedBoosts + 4 < this.maxShiftTier;
   }
-  
+
   static get challenge8MaxBoosts() {
     // In Challenge 8, the only boosts that are useful are the first 5
     // (the fifth unlocks sacrifice). In IC1 (Challenge 8 and Challenge 10
@@ -60,11 +60,11 @@ class DimBoost {
     // more boosts than this; it's just that boosts beyond this are pointless.
     return NormalChallenge(10).isRunning ? 2 : 5;
   }
-  
+
   static get canBeBought() {
     return !(NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) && !Ra.isRunning;
   }
-  
+
   static get lockText() {
     if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) {
       return "Locked (8th Dimension Autobuyer Challenge)";
@@ -119,13 +119,9 @@ class DimBoost {
 }
 
 function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
-    if (player.antimatter.gt(Player.infinityLimit)) return;
+    if (Currency.antimatter.gt(Player.infinityLimit)) return;
     EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
     player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
-
-    /**
-     * All reset stuff are in these functions now. (Hope this works)
-     */
     resetChallengeStuff();
     if (forcedNDReset || !Perk.dimboostNonReset.isBought) {
       NormalDimensions.reset();
@@ -133,10 +129,11 @@ function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
       resetTickspeed();
     }
     skipResetsIfPossible();
-    const currentAntimatter = player.antimatter;
-    player.antimatter = Player.startingAM;
-    if (!forcedAMReset && (Achievement(111).isUnlocked || Perk.dimboostNonReset.isBought)) {
-        player.antimatter = player.antimatter.max(currentAntimatter);
+    const canKeepAntimatter = Achievement(111).isUnlocked || Perk.dimboostNonReset.isBought;
+    if (!forcedAMReset && canKeepAntimatter) {
+      Currency.antimatter.bumpTo(Currency.antimatter.startingValue);
+    } else {
+      Currency.antimatter.reset();
     }
     EventHub.dispatch(GAME_EVENT.DIMBOOST_AFTER, bulk);
 }
@@ -154,7 +151,7 @@ function skipResetsIfPossible() {
 }
 
 function softResetBtnClick() {
-  if (player.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
+  if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
   if (!DimBoost.canBeBought) return;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
   else softReset(1);

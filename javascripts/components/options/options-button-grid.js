@@ -28,7 +28,7 @@ Vue.component("options-button-grid", {
             @input="emitInput(parseInt($event.target.value))"
           />
          </div>`
-    }
+    },
   },
   data() {
     return {
@@ -41,6 +41,7 @@ Vue.component("options-button-grid", {
       updateRate: 0,
       offlineTicks: 0,
       news: true,
+      autosaveInterval: 3000,
     };
   },
   watch: {
@@ -93,6 +94,7 @@ Vue.component("options-button-grid", {
       this.updateRate = options.updateRate;
       this.offlineTicks = options.offlineTicks;
       this.news = options.news;
+      this.autosaveInterval = options.autosaveInterval;
     },
     hardReset() {
       if (confirm("Do you really want to erase all your progress?")) {
@@ -137,6 +139,9 @@ Vue.component("options-button-grid", {
       />
         </div>
         <div class="l-options-grid__row"> 
+        <options-button
+        style="visibility:hidden"
+        ></options-button>
         <options-button
         class="o-primary-btn--option_font-large"
         onclick="GameOptions.toggleNews()"

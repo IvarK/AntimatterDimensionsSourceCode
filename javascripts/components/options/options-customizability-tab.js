@@ -54,7 +54,7 @@ Vue.component("options-customizability-tab", {
               return `UI: ${this.$viewModel.newUI ? "New" : "Old"}`;
             },
             newsOnOffLabel() {
-              return `News: ${this.news ? "On" : "Off"}`
+              return `News: ${this.news ? "On" : "Off"}`;
             }
           },
           methods: {
@@ -68,7 +68,7 @@ Vue.component("options-customizability-tab", {
               this.commas = options.commas;
               this.updateRate = options.updateRate;
               this.offlineTicks = options.offlineTicks;
-              this.news = options.news
+              this.news = options.news;
             },
             hardReset() {
               if (confirm("Do you really want to erase all your progress?")) {
@@ -89,6 +89,17 @@ Vue.component("options-customizability-tab", {
           class="o-primary-btn--option_font-large"
           onclick="Modal.animationOptions.show();"
         >Animations</options-button-customizability-tab>
+        <div class="o-primary-btn o-primary-btn--option o-primary-btn--update-rate l-options-grid__button"> 
+        <b>Offline ticks: {{ offlineTicks }}</b>
+        <input
+          v-model="offlineTicks"
+          class="o-primary-btn--update-rate__slider"
+          type="range"
+          min="100"
+          step="100"
+          max="10000"
+        />
+    </div>
         </div>
       <div class="l-options-grid__row">
         <options-button-customizability-tab
@@ -107,17 +118,9 @@ Vue.component("options-customizability-tab", {
         >Info Displays</options-button-customizability-tab>
         </div>
         <div class="l-options-grid__row">
-        <div class="o-primary-btn o-primary-btn--option o-primary-btn--update-rate l-options-grid__button"> 
-        <b>Offline ticks: {{ offlineTicks }}</b>
-        <input
-          v-model="offlineTicks"
-          class="o-primary-btn--update-rate__slider"
-          type="range"
-          min="100"
-          step="100"
-          max="10000"
-        />
-    </div>
+        <options-button-customizability-tab
+        style="visibility:hidden"
+        ></options-button-customizability-tab>
       <options-button-customizability-tab
         class="o-primary-btn--option_font-large"
         onclick="Modal.miscellaneousOptions.show()"
@@ -130,5 +133,5 @@ Vue.component("options-customizability-tab", {
         </div>
         </div>
         `
-    },
-)
+    }
+);

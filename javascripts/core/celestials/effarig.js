@@ -73,7 +73,7 @@ const Effarig = {
         c = 1500;
         break;
       case EFFARIG_STAGES.ETERNITY:
-        c = 29;
+        c = 29.29;
         break;
       case EFFARIG_STAGES.REALITY:
         c = 25;

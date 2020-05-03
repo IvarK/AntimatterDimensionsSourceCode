@@ -123,14 +123,17 @@ function eternity(force, auto, specialConditions = {}) {
   return true;
 }
 
-function initializeChallengeCompletions() {
+function initializeChallengeCompletions(isReality) {
   NormalChallenges.clearCompletions();
   InfinityChallenges.clearCompletions();
-  if (EternityMilestone.keepAutobuyers.isReached) {
+  if (!isReality && EternityMilestone.keepAutobuyers.isReached) {
     NormalChallenges.completeAll();
   }
   if (Achievement(133).isUnlocked) {
+    player.postChallUnlocked = 8;
     InfinityChallenges.completeAll();
+  } else {
+    player.postChallUnlocked = 0;
   }
   player.challenge.normal.current = 0;
   player.challenge.infinity.current = 0;
@@ -167,7 +170,6 @@ function initializeResourcesAfterEternity() {
   player.noEighthDimensions = true;
   player.noFirstDimensions = true;
   player.noReplicantiGalaxies = true;
-  player.postChallUnlocked = Achievement(133).isUnlocked ? 8 : 0;
 }
 
 function applyRealityUpgradesAfterEternity(buySingleTD = false) {

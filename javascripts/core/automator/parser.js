@@ -126,8 +126,7 @@ const AutomatorGrammar = (function() {
 
       $.RULE("xLast", () => {
         $.CONSUME(T.NumberLiteral);
-        $.CONSUME(T.CharX);
-        $.CONSUME(T.Last);
+        $.CONSUME(T.XLast);
       });
 
       $.RULE("currencyAmount", () => {

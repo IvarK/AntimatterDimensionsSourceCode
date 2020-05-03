@@ -262,8 +262,7 @@ const AutomatorLexer = (() => {
 
   createKeyword("Dilation", /dilation/i);
   createKeyword("EC", /ec/i);
-  createKeyword("CharX", /x/i);
-  createKeyword("Last", /last/i);
+  createKeyword("XLast", /x[ \t]+last/i);
 
   // We allow ECLiteral to consume lots of digits because that makes error reporting more
   // clear (it's nice to say ec123 is an invalid ec)

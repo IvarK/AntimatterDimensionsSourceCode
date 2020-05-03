@@ -38,12 +38,6 @@ GameDatabase.tabs = [
     name: "Options",
     subtabs: [
       {
-        key: "general",
-        name: "General",
-        symbol: "<i class='fas fa-cogs'></i>",
-        component: "options-general-tab"
-      },
-      {
         key: "saving",
         name: "Saving",
         symbol: "<i class='fas fa-save'></i>",
@@ -52,8 +46,14 @@ GameDatabase.tabs = [
       {
         key: "visual",
         name: "Visual",
-        symbol: "<i class='fas fa-user-cog'></i>",
+        symbol: "<i class='fas fa-palette'></i>",
         component: "options-visual-tab"
+      },
+      {
+        key: "gameplay",
+        name: "Gameplay",
+        symbol: "<i class='fas fa-wrench'></i>",
+        component: "options-gameplay-tab"
       }
     ]
   },

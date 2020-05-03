@@ -1,6 +1,6 @@
 "use strict";
-// General subtab
-Vue.component("options-general-tab", {
+
+Vue.component("options-gameplay-tab", {
   components: {
     "options-button": {
       template:

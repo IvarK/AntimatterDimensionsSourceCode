@@ -1,5 +1,5 @@
 "use strict";
-// User interface subtab
+
 Vue.component("options-visual-tab", {
   components: {
     "options-button": {

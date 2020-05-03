@@ -38,10 +38,10 @@ GameDatabase.tabs = [
     name: "Options",
     subtabs: [
       {
-        key: "options",
-        name: "User Interface",
-        symbol: "<i class='fas fa-user-cog'></i>",
-        component: "options-tab"
+        key: "general",
+        name: "General",
+        symbol: "<i class='fas fa-cogs'></i>",
+        component: "options-general-tab"
       },
       {
         key: "saving",
@@ -50,10 +50,10 @@ GameDatabase.tabs = [
         component: "options-saving-tab"
       },
       {
-        key: "customizability",
-        name: "Customizability",
-        symbol: "<i class='fas fa-cogs'></i>",
-        component: "options-customizability-tab"
+        key: "visual",
+        name: "Visual",
+        symbol: "<i class='fas fa-user-cog'></i>",
+        component: "options-visual-tab"
       }
     ]
   },

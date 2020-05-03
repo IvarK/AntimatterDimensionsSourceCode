@@ -657,6 +657,10 @@ GameStorage.devMigrations = {
     player => {
       player.bestGlyphStrength = player.reality.glyphs.active.concat(
         player.reality.glyphs.inventory).map(g => g.strength).max();
+    },
+    player => {
+      player.options.showHintText.glyphEffectDots = player.options.showGlyphEffectDots;
+      delete player.options.showGlyphEffectDots;
     }
   ],
 

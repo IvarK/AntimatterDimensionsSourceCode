@@ -350,11 +350,11 @@ function finishProcessReality(realityProps) {
 
   lockAchievementsOnReality();
 
-  NormalChallenges.clearCompletions();
-  InfinityChallenges.clearCompletions();
+  // Because initializeChallengeCompletions has some code that completes normal challenges with 2 eternities,
+  // and we haven't reset eternities yet (and I'm nervous about changing the order of this code),
+  // add a flag to indicate that this is a reality reset.
+  initializeChallengeCompletions(true);
 
-  player.challenge.normal.current = 0;
-  player.challenge.infinity.current = 0;
   player.infinityUpgrades.clear();
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
@@ -370,7 +370,6 @@ function finishProcessReality(realityProps) {
   player.infMult = new Decimal(1);
   player.infMultCost = new Decimal(10);
   player.infinityRebuyables = [0, 0, 0];
-  player.postChallUnlocked = 0;
   player.infinityPower = new Decimal(1);
   player.infDimBuyers = Array.repeat(false, 8);
   player.timeShards = new Decimal(0);

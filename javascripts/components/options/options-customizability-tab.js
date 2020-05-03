@@ -52,6 +52,9 @@ Vue.component("options-customizability-tab", {
             },
             UILabel() {
               return `UI: ${this.$viewModel.newUI ? "New" : "Old"}`;
+            },
+            newsOnOffLabel() {
+              return `News: ${this.news ? "On" : "Off"}`
             }
           },
           methods: {
@@ -65,6 +68,7 @@ Vue.component("options-customizability-tab", {
               this.commas = options.commas;
               this.updateRate = options.updateRate;
               this.offlineTicks = options.offlineTicks;
+              this.news = options.news
             },
             hardReset() {
               if (confirm("Do you really want to erase all your progress?")) {
@@ -76,9 +80,6 @@ Vue.component("options-customizability-tab", {
         <div class="l-options-tab">
         <div class="l-options-grid">
           <div class="l-options-grid__row">
-            <options-button-customizability-tab
-            onclick="GameOptions.toggleNews()"
-            >Hide/show the news</options-button-customizability-tab>
             <primary-button-on-off
             v-model="retryChallenge"
             class="o-primary-btn--option l-options-grid__button"

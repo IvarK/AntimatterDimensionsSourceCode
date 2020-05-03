@@ -39,7 +39,8 @@ Vue.component("options-button-grid", {
       hotkeys: false,
       commas: false,
       updateRate: 0,
-      offlineTicks: 0
+      offlineTicks: 0,
+      news: true,
     };
   },
   watch: {
@@ -61,6 +62,9 @@ Vue.component("options-button-grid", {
     },
     offlineTicks(newValue) {
       player.options.offlineTicks = parseInt(newValue, 10);
+    },
+    newsSetting(newValue) {
+      player.options.news = newValue
     }
   },
   computed: {
@@ -72,6 +76,9 @@ Vue.component("options-button-grid", {
     },
     UILabel() {
       return `UI: ${this.$viewModel.newUI ? "New" : "Old"}`;
+    },
+    newsOnOffLabel() {
+      return `News: ${this.news ? "On" : "Off"}`
     }
   },
   methods: {
@@ -85,6 +92,7 @@ Vue.component("options-button-grid", {
       this.commas = options.commas;
       this.updateRate = options.updateRate;
       this.offlineTicks = options.offlineTicks;
+      this.news = options.news;
     },
     hardReset() {
       if (confirm("Do you really want to erase all your progress?")) {
@@ -130,8 +138,9 @@ Vue.component("options-button-grid", {
         </div>
         <div class="l-options-grid__row"> 
         <options-button
+        class="o-primary-btn--option_font-large"
         onclick="GameOptions.toggleNews()"
-      >Hide/show the news</options-button>
+      >{{ newsOnOffLabel }}</options-button>
     </div>
       </div>
       </div>

@@ -111,7 +111,7 @@ const AutoSacEffectTab = {
       };
     },
     questionmarkTooltip() {
-      return `Glyph score is rarity, minus 200 for every missing effect. 
+      return `Glyph score is rarity, minus ${formatInt(200)} for every missing effect. 
         Glyphs with less than the specified rarity are sacrificed.`;
     }
   },

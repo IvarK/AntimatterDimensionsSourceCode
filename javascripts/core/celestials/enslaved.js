@@ -200,6 +200,7 @@ const Enslaved = {
         "A visitor? I haven’t had one... eons.",
         "I am... had a name. It’s been lost... to this place.",
         "The others... won't let me rest. I do their work with time...",
+        "Place time ... into places ... that need it...",
         "Watch myself grow... pass and die.",
         "Perhaps you... will break these chains... I will wait",
       ]

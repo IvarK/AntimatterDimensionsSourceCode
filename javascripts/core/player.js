@@ -185,6 +185,7 @@ let player = {
   bestRMmin: new Decimal(0),
   bestRMminSet: [],
   bestGlyphLevel: 0,
+  bestGlyphStrength: 0,
   bestGlyphLevelSet: [],
   bestEP: new Decimal(0),
   bestEPSet: [],

@@ -34,6 +34,7 @@ Vue.component("statistics-tab", {
         thisReal: TimeSpan.zero,
         totalTimePlayed: TimeSpan.zero,
         bestRate: new Decimal(0),
+        bestRarity: 0,
       },
       matterScale: [],
       recordGlyphInfo: [],
@@ -80,6 +81,7 @@ Vue.component("statistics-tab", {
         eternity.thisReal.setFrom(player.thisEternityRealTime);
         reality.thisReal.setFrom(player.thisRealityRealTime);
         reality.bestRate.copyFrom(player.bestRMmin);
+        reality.bestRarity = strengthToRarity(player.bestGlyphStrength);
       }
       this.matterScale = MatterScale.estimate(player.antimatter);
       this.recordGlyphInfo = [
@@ -174,6 +176,7 @@ Vue.component("statistics-tab", {
             <div>
               Your best RM/min is {{ format(reality.bestRate, 2, 2) }}.
             </div>
+            <div>Your best glyph rarity is {{ formatPercents(reality.bestRarity / 100, 1) }}.</div>
             <br>
           <glyph-set-preview
             v-for="(set, idx) in recordGlyphInfo"

@@ -223,10 +223,10 @@ const AutomatorCommands = ((() => {
         const commands = C.visit(ctx.block);
         return {
           run: S => {
-            // We avoid running the same if condition twice by creating an empty object
-            // on the stack.
+            // If the commandState is empty, it means we haven't evaluated the if yet
             if (S.commandState !== null) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
-            S.commandState = {};
+            // We use this flag to make "single step" advance to the next command after the if when the block ends
+            S.commandState = { advanceOnPop: true };
             if (!evalComparison()) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             AutomatorBackend.push(commands);
             return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;

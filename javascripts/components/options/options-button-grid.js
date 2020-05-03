@@ -64,7 +64,7 @@ Vue.component("options-button-grid", {
       player.options.offlineTicks = parseInt(newValue, 10);
     },
     newsSetting(newValue) {
-      player.options.news = newValue
+      player.options.news = newValue;
     }
   },
   computed: {
@@ -78,7 +78,7 @@ Vue.component("options-button-grid", {
       return `UI: ${this.$viewModel.newUI ? "New" : "Old"}`;
     },
     newsOnOffLabel() {
-      return `News: ${this.news ? "On" : "Off"}`
+      return `News: ${this.news ? "On" : "Off"}`;
     }
   },
   methods: {

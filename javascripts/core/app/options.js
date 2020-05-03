@@ -28,6 +28,10 @@ class GameOptions {
     }
     GameIntervals.gameLoop.restart();
   }
+  
+  static refreshAutosaveInterval() {
+    GameIntervals.save.restart();
+  }
 }
 
 const secretImports = [

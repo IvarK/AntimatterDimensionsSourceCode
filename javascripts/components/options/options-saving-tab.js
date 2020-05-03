@@ -1,7 +1,5 @@
 "use strict";
 // Saving subtab
-// Autosave-interval-slider is being added sometime whenever, useless atm
-// psst dan the "refreshAutosaveInterval()" function isn't implemented
 Vue.component("options-saving-tab", {
     components: {
         "options-button-saving-tab": {
@@ -13,25 +11,26 @@ Vue.component("options-saving-tab", {
           },
           "autosave-interval-slider": {
             props: {
-              autosaveIntervalValue: {
+              value: {
                 type: Number,
-                default: 3000
+                default: 30
               },
             },
             template: 
             `
             <div class="o-primary-btn o-primary-btn--option o-primary-btn--autosave-slider l-options-grid__button">
-            <b>Autosave interval: {{ autosaveIntervalValue }} ms</b>
+            <b>Autosave interval: {{ value }} seconds</b>
             <input
-            :autosaveIntervalValue="autosaveIntervalValue"
+            :value="value"
             class="o-primary-btn--autosave-slider"
             type="range"
-            min="1000"
-            max="6000"
+            min="10"
+            max="60"
             @input="emitInput(parseInt($event.target.value))"
             />
             </div>
             `
+          }
         },
         data() {
           return {
@@ -43,7 +42,7 @@ Vue.component("options-saving-tab", {
             commas: false,
             updateRate: 0,
             offlineTicks: 0,
-            autosaveIntervalNumber: 3000,
+            autosaveInterval: 10,
           };
         },
         watch: {
@@ -60,11 +59,8 @@ Vue.component("options-saving-tab", {
               player.options.commas = newValue;
               ADNotations.Settings.exponentCommas.show = newValue;
             },
-            updateRate(newValue) {
-              player.options.updateRate = newValue;
-            },
             autosaveInterval(newValue) {
-              player.options.autosaveInterval = newValue;
+              player.options.autosaveInterval = 1000 * newValue;
             },
             offlineTicks(newValue) {
               player.options.offlineTicks = parseInt(newValue, 10);
@@ -92,7 +88,7 @@ Vue.component("options-saving-tab", {
               this.commas = options.commas;
               this.updateRate = options.updateRate;
               this.offlineTicks = options.offlineTicks;
-              this.autosaveIntervalNumber = options.autosaveInterval;
+              this.autosaveInterval = options.autosaveInterval / 1000;
             },
             hardReset() {
               if (confirm("Do you really want to erase all your progress?")) {
@@ -112,6 +108,10 @@ Vue.component("options-saving-tab", {
           class="o-primary-btn--option_font-x-large"
           onclick="Modal.import.show()"
         >Import save</options-button-saving-tab>
+        <options-button-saving-tab
+          class="o-primary-btn--option_font-x-large"
+          @click="hardReset"
+        >RESET THE GAME</options-button-saving-tab>
         </div>
         <div class="l-options-grid__row">
         <options-button-saving-tab
@@ -122,15 +122,10 @@ Vue.component("options-saving-tab", {
           class="o-primary-btn--option_font-x-large"
           onclick="Modal.loadGame.show()"
         >Choose save</options-button-saving-tab>
-        </div>
-        <div class="l-options-grid__row">
-        <options-button-saving-tab
-          class="o-primary-btn--option_font-x-large"
-          @click="hardReset"
-        >RESET THE GAME</options-button-saving-tab>
-        <options-button-saving-tab 
-        class="o-primary-btn--option_font-x-large"
-        >WIP by Dan</options-button-saving-tab>
+        <autosave-interval-slider
+          v-model="autosaveInterval"
+          oninput="GameOptions.refreshAutosaveInterval()"
+        />
         </div>
         <div class="l-options-grid__row">
         <options-button-saving-tab
@@ -151,6 +146,5 @@ Vue.component("options-saving-tab", {
       </p>
         </div>
         `
-    }
   }
 );

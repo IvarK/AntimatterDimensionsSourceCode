@@ -285,11 +285,9 @@
 
     comparison(ctx) {
       super.comparison(ctx);
-      if (!ctx.compareValue || ctx.compareValue[0].recoveredNode) {
+      if (!ctx.compareValue || ctx.compareValue[0].recoveredNode ||
+        ctx.compareValue.length != 2 || ctx.compareValue[1].recoveredNode) {
         this.addError(ctx, "Missing value for comparison");
-      }
-      if (!ctx.Currency || ctx.Currency[0].isInsertedInRecovery) {
-        this.addError(ctx, "Missing currency for comparison");
       }
       if (!ctx.ComparisonOperator || ctx.ComparisonOperator[0].isInsertedInRecovery) {
         this.addError(ctx, "Missing comparison operator (<, >, <=, >=)");
@@ -365,13 +363,12 @@
     }
 
     comparison(ctx) {
-      const flipped = ctx.Currency[0].startOffset > ctx.ComparisonOperator[0].startOffset;
-      const threshold = ctx.compareValue[0].children.$value;
-      const currencyGetter = ctx.Currency[0].tokenType.$getter;
+      const getters = ctx.compareValue.map(cv => (
+        cv.children.Currency ? cv.children.Currency[0].tokenType.$getter : () => cv.children.$value
+      ));
       const compareFun = ctx.ComparisonOperator[0].tokenType.$compare;
       return () => {
-        const currency = currencyGetter();
-        return flipped ? compareFun(threshold, currency) : compareFun(currency, threshold);
+        return compareFun(getters[0](), getters[1]());
       };
     }
 

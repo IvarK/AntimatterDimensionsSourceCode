@@ -137,7 +137,8 @@ const Effarig = {
       lines: [
         "* You have completed Effarig's Eternity.",
         "This is the limit. I don’t want you to proceed past this point.",
-        "You won't finish this in your lifetime, I'll just wait here until you give up."
+        "You won't finish this in your lifetime.",
+        "I'll just wait here until you give up.",
       ]
     },
     COMPLETE_REALITY: {

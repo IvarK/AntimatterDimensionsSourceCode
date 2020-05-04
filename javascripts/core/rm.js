@@ -1139,7 +1139,7 @@ const GlyphSacrificeHandler = {
 // Gives a maximum resource total possible, based on the highest level glyph in recent realities. This doesn't
 // actually enforce any special behavior, but instead only affects various UI properties.
 function estimatedAlchemyCap() {
-  return GlyphSacrificeHandler.levelAlchemyCap(player.lastTenRealities.map(([, , , lvl]) => lvl).max());
+  return GlyphSacrificeHandler.levelAlchemyCap(player.lastTenRealities.map(([, , , , lvl]) => lvl).max());
 }
 
 function autoAdjustGlyphWeights() {

@@ -278,7 +278,7 @@ GameDatabase.reality.perks = {
     id: 72,
     label: "ECR",
     family: PERK_FAMILY.ETERNITY,
-    description: "Remove non-TT requirements for unlocking Eternity Challenges."
+    description: "Remove non–Time Theorem requirements for unlocking Eternity Challenges."
   },
   studyECBulk: {
     id: 73,

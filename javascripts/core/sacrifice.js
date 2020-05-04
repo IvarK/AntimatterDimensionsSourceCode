@@ -78,7 +78,7 @@ class Sacrifice {
 function sacrificeReset(auto) {
   if (!Sacrifice.canSacrifice) return false;
   if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
-    player.antimatter.gte(Decimal.NUMBER_MAX_VALUE) && !Enslaved.isRunning) return false;
+    Currency.antimatter.gt(Decimal.NUMBER_MAX_VALUE) && !Enslaved.isRunning) return false;
   if (
     !Enslaved.isRunning &&
     NormalChallenge(8).isRunning &&
@@ -96,7 +96,7 @@ function sacrificeReset(auto) {
     if (!isAch118Unlocked) {
       NormalDimensions.reset();
     }
-    player.antimatter = Player.startingAM;
+    Currency.antimatter.reset();
   } else if (!isAch118Unlocked) {
     NormalDimensions.resetAmountUpToTier(NormalChallenge(12).isRunning ? 6 : 7);
   }

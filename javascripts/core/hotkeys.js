@@ -21,7 +21,7 @@ GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
 GameKeyboard.bindRepeatableHotkey("e", () => eternity());
 
 // We need to know whether the player is holding R or not for the
-// replicanti galaxy 
+// replicanti galaxy
 GameKeyboard.bind("r", () => setHoldingR(true), "keydown");
 GameKeyboard.bind("r", () => setHoldingR(false), "keyup");
 
@@ -92,9 +92,7 @@ GameKeyboard.bind(
 
 GameKeyboard.bind("up up down down left right left right b a", () => {
   SecretAchievement(17).unlock();
-  if (player.antimatter.lt(30)) {
-    player.antimatter = new Decimal(30);
-  }
+  Currency.antimatter.bumpTo(30);
 });
 
 GameKeyboard.bindRepeatable("f", () => {

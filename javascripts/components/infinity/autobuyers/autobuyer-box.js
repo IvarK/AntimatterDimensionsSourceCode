@@ -71,7 +71,7 @@ Vue.component("autobuyer-box", {
       this.canBeBought = this.autobuyer.canBeBought;
       this.antimatterCost = this.autobuyer.antimatterCost;
       this.isBought = this.autobuyer.isBought;
-      this.antimatter.copyFrom(player.antimatter);
+      this.antimatter.copyFrom(Currency.antimatter);
     },
     toggle() {
       this.isActive = !this.isActive;
@@ -111,8 +111,8 @@ Vue.component("autobuyer-box", {
       <div class="c-autobuyer-box-row__prioritySlot"><slot name="prioritySlot" /></div>
       <div class="c-autobuyer-box-row__optionSlot"><slot name="optionSlot" /></div>
       <div class="l-autobuyer-box__footer" @click="toggle">
-        <label 
-          :for="name" 
+        <label
+          :for="name"
           :class="autobuyerStateClass">
           <span :class="autobuyerToggleClass"></span>
         </label>

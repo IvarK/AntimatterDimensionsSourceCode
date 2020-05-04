@@ -30,7 +30,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "currentMult",
       cost: 5e4,
       description: "Normal Dimensions gain a multiplier based on current antimatter",
-      effect: () => Math.pow(player.antimatter.exponent + 1, 0.5),
+      effect: () => Math.pow(Currency.antimatter.exponent + 1, 0.5),
       formatEffect: value => formatX(value, 2, 2)
     },
     galaxyBoost: {

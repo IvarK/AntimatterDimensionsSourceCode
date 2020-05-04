@@ -61,7 +61,7 @@ GameDatabase.celestials.v = {
         unlocking Time Dilation.`,
       values: [400e6, 450e6, 500e6, 600e6, 700e6, 800e6],
       condition: () => V.isRunning && EternityChallenge(12).isRunning && !PlayerProgress.dilationUnlocked(),
-      currentValue: () => player.antimatter.log10(),
+      currentValue: () => Currency.antimatter.value.log10(),
       formatRecord: x => format(Decimal.pow10(x)),
       shardReduction: tiers => 50e6 * tiers,
       maxShardReduction: goal => goal - 400e6,

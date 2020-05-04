@@ -14,8 +14,7 @@ function canCrunch() {
   }
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
-  if (player.thisInfinityMaxAM.lt(goal)) return false;
-  return true;
+  return player.thisInfinityMaxAM.gte(goal);
 }
 
 function handleChallengeCompletion() {
@@ -80,7 +79,7 @@ function bigCrunchReset() {
   const currentReplicanti = player.replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
   secondSoftReset(true);
-  
+
   let remainingGalaxies = 0;
   if (Achievement(95).isUnlocked) {
     player.replicanti.amount = currentReplicanti;
@@ -89,7 +88,7 @@ function bigCrunchReset() {
   if (TimeStudy(33).isBought) {
     remainingGalaxies += Math.floor(currentReplicantiGalaxies / 2);
   }
-  
+
   // I don't think this Math.clampMax is technically needed, but if we add another source
   // of keeping Replicanti Galaxies then it might be.
   player.replicanti.galaxies = Math.clampMax(remainingGalaxies, currentReplicantiGalaxies);
@@ -119,8 +118,8 @@ function bigCrunchReset() {
 function secondSoftReset(forcedNDReset = false) {
   player.dimensionBoosts = 0;
   player.galaxies = 0;
-  player.antimatter = Player.startingAM;
-  player.thisInfinityMaxAM = Player.startingAM;
+  player.thisInfinityMaxAM = new Decimal(0);
+  Currency.antimatter.reset();
   softReset(0, forcedNDReset);
   InfinityDimensions.resetAmount();
   if (player.replicanti.unl)

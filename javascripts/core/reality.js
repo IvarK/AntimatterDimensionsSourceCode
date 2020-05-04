@@ -274,8 +274,8 @@ function giveRealityRewards(realityProps) {
   }
 
   if (Teresa.isRunning) {
-    if (player.antimatter.gt(player.celestials.teresa.bestRunAM)) {
-      player.celestials.teresa.bestRunAM = player.antimatter;
+    if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
+      player.celestials.teresa.bestRunAM = Currency.antimatter.value;
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     }
     Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
@@ -333,7 +333,7 @@ function finishProcessReality(realityProps) {
     player.bestEP = new Decimal(finalEP);
     player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
-  
+
   const isReset = realityProps.reset;
   if (!isReset) giveRealityRewards(realityProps);
   if (!realityProps.glyphUndo) {
@@ -428,9 +428,9 @@ function finishProcessReality(realityProps) {
     2: 0,
     3: 0
   };
-  player.antimatter = Player.startingAM;
-  player.thisInfinityMaxAM = Player.startingAM;
-  player.thisEternityMaxAM = Player.startingAM;
+  player.thisInfinityMaxAM = new Decimal(0);
+  player.thisEternityMaxAM = new Decimal(0);
+  Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
   player.celestials.laitela.entropy = 0;
 

@@ -47,7 +47,7 @@ GameDatabase.challenges.normal = [
     id: 6,
     legacyId: 10,
     isQuickResettable: false,
-    description: "Each dimension costs the dimension 2 before it, " +
+    description: () => `Each dimension costs the dimension ${formatInt(2)} before it, ` +
       "instead of antimatter. Dimension prices are modified.",
     name: "Sixth Dimension Autobuyer",
     reward: "Upgradeable Sixth Dimension Autobuyer interval"
@@ -83,7 +83,7 @@ GameDatabase.challenges.normal = [
     id: 10,
     legacyId: 4,
     isQuickResettable: false,
-    description: "There are only 6 dimensions, with Dimension Boost and Antimatter Galaxy costs modified.",
+    description: () => `There are only ${formatInt(6)} dimensions, with Dimension Boost and Antimatter Galaxy costs modified.`,
     name: "Automated Dimension Boosts",
     reward: "Automated Dimension Boosts"
   },
@@ -100,7 +100,7 @@ GameDatabase.challenges.normal = [
     id: 12,
     legacyId: 7,
     isQuickResettable: false,
-    description: "Each dimension produces the dimension 2 below it (1st Dimensions still " +
+    description: () => `Each dimension produces the dimension ${formatInt(2)} below it (1st Dimensions still ` +
       "produce antimatter). Dimensions 2, 4, and 6 are made stronger to compensate.",
     name: "Automated Big Crunches",
     reward: "Automated Big Crunches"

@@ -85,11 +85,11 @@ GameDatabase.infinity.upgrades = (function() {
     buy10Mult: {
       id: "dimMult",
       cost: 1,
-      description: "Increase the multiplier for buying 10 Dimensions",
+      description: () => `Increase the multiplier for buying ${formatInt(10)} Dimensions`,
       effect: () => 1.1,
       formatEffect: () => `${formatX(2, 0, 1)} ➜ ${formatX(2.2, 0, 1)}`,
       charged: {
-        description: "Multiplier for buying 10 Dimensions gains a power effect based on Teresa level",
+        description: () => `Multiplier for buying ${formatInt(10)} Dimensions gains a power effect based on Teresa level`,
         effect: () => 1 + Ra.pets.teresa.level / 200,
         formatEffect: value => formatPow(value, 3, 3)
       }

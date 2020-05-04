@@ -83,7 +83,8 @@ GameDatabase.challenges.normal = [
     id: 10,
     legacyId: 4,
     isQuickResettable: false,
-    description: () => `There are only ${formatInt(6)} dimensions, with Dimension Boost and Antimatter Galaxy costs modified.`,
+    description: () => `There are only ${formatInt(6)} dimensions, with Dimension Boost ` +
+      "and Antimatter Galaxy costs modified.",
     name: "Automated Dimension Boosts",
     reward: "Automated Dimension Boosts"
   },

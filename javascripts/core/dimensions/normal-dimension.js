@@ -278,11 +278,13 @@ function maxAll() {
 
   player.usedMaxAll = true;
 
-  buyMaxTickSpeed();
-
   for (let tier = 1; tier < 9; tier++) {
     buyMaxDimension(tier);
   }
+  
+  // Do this here because tickspeed might not have been unlocked before
+  // (and maxAll might have unlocked it by buying dimensions).
+  buyMaxTickSpeed();
 }
 
 function buyMaxDimension(tier, bulk = Infinity, auto = false) {

@@ -492,15 +492,13 @@ function restoreCelestialRuns(celestialRunState) {
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
 function applyRUPG10() {
   NormalChallenges.completeAll();
-
-  const hasMaxBulkSecretAch = SecretAchievement(38).isUnlocked;
+  
   player.auto.dimensions = player.auto.dimensions.map(() => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
-    cost: hasMaxBulkSecretAch ? 5e133 : 2e126,
+    cost: 5e133,
     interval: 100,
-    // Only completely max bulk if the relevant secret achievement has already been unlocked
-    bulk: hasMaxBulkSecretAch ? 1e100 : 1e90,
+    bulk: 1e100,
     mode: AUTOBUYER_MODE.BUY_10,
     priority: 1,
     isActive: true,

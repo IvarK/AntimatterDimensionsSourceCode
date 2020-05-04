@@ -319,9 +319,10 @@ GameDatabase.achievements.normal = [
   {
     id: 61,
     name: "Bulked Up",
-    tooltip: () => `Get all of your Dimension bulk buyers to ${formatInt(512)} or higher.`,
+    tooltip: () => `Get all of your Dimension autobuyer bulk amounts to ${formatInt(512)} or higher.`,
     checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0,
-    checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
+    checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
+    reward: "Dimension autobuyer bulk is unlimited."
   },
   {
     id: 62,

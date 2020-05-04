@@ -656,7 +656,7 @@ const NormalDimensions = {
     }
     for (let tier = maxTierProduced; tier >= 1; --tier) {
       NormalDimension(tier + nextTierOffset).produceDimensions(NormalDimension(tier), diff / 10);
-      if (tier === 1 && NormalDimension(tier + nextTierOffset).productionForDiff(diff).gt(0)) {
+      if (tier === 1 && diff > 0 && NormalDimension(tier + nextTierOffset).productionPerSecond.gt(0)) {
         player.noFirstDimensions = false;
       }
     }

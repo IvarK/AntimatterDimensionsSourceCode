@@ -17,7 +17,7 @@ GameDatabase.reality.automator = {
               description: `
                 Wait until resource amount satisfies the comparison.<br>
                 <b>Resources</b>: am (Antimatter), ip (Infinity Points), ep (Eternity Points), dt (Dilated Time),
-                tp (Tachyon Particles), rg (Replicanti Galaxies), rep/replicanti, tt/time theorems<br>
+                tp (Tachyon Particles), rg (Replicanti Galaxies), rep/replicanti, tt/time theorems, total tt<br>
                 <b>Comparisons</b>: <, <=, > >=<br>
                 <b>Number</b> should be in scientific format, e.g. 1000, 1e100, 1.8e308
               `
@@ -26,6 +26,7 @@ GameDatabase.reality.automator = {
               header: "<i>completions</i> <i>comparison</i> <i>number</i>",
               description: `
                 Wait for a certain <b>total</b> number of EC completions that you'd get at eternity.<br>
+                You can also use "ECX Completions", where X is an EC number.
                 <b>Comparisons</b>: >, >=
               `
             },
@@ -42,7 +43,7 @@ GameDatabase.reality.automator = {
       examples: [
         "wait infinity",
         "wait am >= 1e308",
-        "wait completions >= 5",
+        "wait completions >= 5 or wait EC9 Completions >= 4",
       ]
     },
     {
@@ -180,7 +181,7 @@ GameDatabase.reality.automator = {
       id: 8,
       keyword: "if",
       name: "<b>if</b> - compares your amount to the game's amount of something, such as a currency",
-      syntax: "<b>if</b> [am|ip|ep|dt|tp|rg|rep|tt|completions] (comparison) [number]",
+      syntax: "<b>if</b> [am|ip|ep|dt|tp|rg|rep|tt|total tt|completions|ecx completions] (comparison) [number]",
       examples: [
         "if ep <= 1e3000",
         "if dt >= 1e50",
@@ -196,6 +197,21 @@ GameDatabase.reality.automator = {
         "pause 10s",
         "pause 1 minute",
         "pause 34 seconds"
+      ],
+      sections: [
+        {
+          name: "OTHER",
+          items: [
+            {
+            header: "<b>Undesirable effects</b>",
+            description: "This command may behave undesirably when it runs during offline progress due to limited tick count. A 1-second pause that is usually 20-30 ticks might be only 1 game tick when processing 8 hours of offline progress, which might not be enough for the resources needed for the next line of the script",
+            },
+            {
+              header: "<b>Alternatives</b>",
+              description: "Using something like 'wait' will allow you to set it for a certain resource amount."
+            }
+          ]
+        }
       ]
     },
     {
@@ -206,7 +222,7 @@ GameDatabase.reality.automator = {
         <blockquote>commands</blockquote>
       }<br>
       <b>condition</b>: [quantity] (comparison) [number]<br>
-      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|completions]<br>
+      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|completions|ecx completions]<br>
       <b>event</b>: [infinity|eternity|reality] (can happen at any time after loop starts)`,
       description: `Commands are repeated; the condition is checked at the start and every
       time the loop repeats. If an event is specified, then the loop will repeat until the
@@ -227,7 +243,7 @@ GameDatabase.reality.automator = {
       syntax: `<b>while</b> [quantity] (comparison) [number]{<br>
         <blockquote>commands</blockquote>
       }<br>
-      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|completions]<br>
+      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|completions|ecx completions]<br>
       <b>comparison</b>: [<|<=|>=|>]<br>
       <b>number</b>: Number in normal or scientific notation`,
       description: `Commands are repeated; the condition is checked at the start and every
@@ -295,5 +311,32 @@ GameDatabase.reality.automator = {
         "define studytree = 11,21,22,31,32,33"
       ]
     },
+    {
+      id: 16,
+      keyword: "currencies",
+      name: "List of <b>currencies</b>",
+      syntax: "You can use these in any if, while, until, or wait command.",
+      description: `This is a list of "currencies" or numbers that you can use.<br>
+      Note that when used, most currencies will need to be in scientific notation.<br>
+      am - antimatter amount  <br>
+      ip - infinity point amount  <br>
+      ep - eternity point amount  <br>
+      dt - dilated time amount  <br>
+      tp - tachyon particle amount  <br>
+      rg - replicanti galaxy amount (does not use scientific)<br>
+      rep - replicanti amount <br>
+      tt - time theorem amount <br>
+      total tt - TOTAL time theorems, includes all forms of generated TT <br>
+      completions - amount of total EC completions <br>
+      ecx completions - amount of EC completions for a certain EC <br>
+      `,
+      examples: [
+        `if total tt >= 5 
+        <blockquote>commands</blockquote>
+        `,
+        `while ec10 completions >= 1
+        <blockquote>commands</blockquote>`
+      ]
+    }
   ]
 };

@@ -790,7 +790,7 @@ const Glyphs = {
       glyphUndo: true,
       restoreCelestialState: true,
     });
-    Currency.antimatter.value = undoData.am;
+    Currency.antimatter.value = new Decimal(undoData.am);
     player.infinityPoints.fromValue(undoData.ip);
     player.eternityPoints.fromValue(undoData.ep);
     player.timestudy.theorem.fromValue(undoData.tt);

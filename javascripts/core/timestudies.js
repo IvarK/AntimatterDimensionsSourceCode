@@ -64,7 +64,8 @@ const TimeTheorems = {
     const AMowned = player.timestudy.amcost.e / 20000 - 1;
     if (Currency.antimatter.gte(player.timestudy.amcost)) {
       player.timestudy.amcost.e = Math.floor(Currency.antimatter.exponent / 20000 + 1) * 20000;
-      player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(Currency.antimatter.exponent / 20000) - AMowned);
+      const boughtAmount = Math.floor(Currency.antimatter.exponent / 20000) - AMowned;
+      player.timestudy.theorem = player.timestudy.theorem.plus(boughtAmount);
       const amCost = Decimal.fromMantissaExponent(1, Math.floor(Currency.antimatter.exponent / 20000) * 20000);
       Currency.antimatter.subtract(amCost);
       player.noTheoremPurchases = false;

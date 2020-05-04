@@ -39,7 +39,10 @@ Vue.component("normal-dim-tab-progress-bar", {
           EternityChallenge.isRunning ? "Percentage to Eternity Challenge goal" : "Percentage to Eternity"
         );
       } else {
-        setProgress(Currency.antimatter.value, InfinityDimensions.next().requirement, "Percentage to next dimension unlock");
+        setProgress(
+          Currency.antimatter.value,
+          InfinityDimensions.next().requirement,
+          "Percentage to next dimension unlock");
       }
     }
   },

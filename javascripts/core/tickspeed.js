@@ -61,7 +61,7 @@ function buyTickSpeed() {
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
     Tickspeed.multiplySameCosts();
   }
-  Currency.antimatter.purchase(Tickspeed.cost);
+  Currency.antimatter.subtract(Tickspeed.cost);
   player.totalTickBought++;
   player.thisInfinityLastBuyTime = player.thisInfinityTime;
   player.secretUnlocks.why++;
@@ -122,7 +122,7 @@ const Tickspeed = {
 
   get isAvailableForPurchase() {
     return this.isUnlocked &&
-      NormalDimension(3).isAvailableForPurchase &&
+      Currency.antimatter.lt(Player.infinityLimit) &&
       !EternityChallenge(9).isRunning &&
       !Laitela.continuumActive &&
       (player.break || this.cost.lt(Decimal.NUMBER_MAX_VALUE));

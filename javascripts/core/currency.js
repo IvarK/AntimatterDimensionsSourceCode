@@ -153,10 +153,6 @@ class Currency {
     return true;
   }
 
-  integrate(perSecond, deltaTime) {
-    this.add(this.operations.multiply(perSecond * deltaTime));
-  }
-
   bumpTo(value) {
     this.value = this.operations.max(this.value, value);
   }

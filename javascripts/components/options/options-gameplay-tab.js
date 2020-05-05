@@ -65,15 +65,15 @@ Vue.component("options-gameplay-tab", {
         <primary-button-on-off-custom
           v-model="hotkeys"
           class="o-primary-btn--option l-options-grid__button"
-          on="Disable hotkeys"
-          off="Enable hotkeys"
+          on="Hotkeys: Enabled"
+          off="Hotkeys: Disabled"
         />
       </div>
       <div class="l-options-grid__row">
         <options-button
-          class="o-primary-btn--option_font-large"
+          class="o-primary-btn--option"
           onclick="Modal.confirmationOptions.show()"
-        >Confirmations</options-button>
+        >Open Confirmation Options</options-button>
         <div class="o-primary-btn o-primary-btn--option o-primary-btn--update-rate l-options-grid__button"> 
           <b>Offline ticks: {{ offlineTicks }}</b>
           <input

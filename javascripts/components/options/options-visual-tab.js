@@ -92,8 +92,8 @@ Vue.component("options-visual-tab", {
         />
         <options-button
           class="o-primary-btn--option_font-large"
-          onclick="Modal.animationOptions.show();"
-        >Animations</options-button>
+          onclick="GameOptions.toggleNews()"
+        >{{ newsOnOffLabel }}</options-button>
       </div>
       <div class="l-options-grid__row">
         <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
@@ -111,19 +111,19 @@ Vue.component("options-visual-tab", {
         <primary-button-on-off-custom
           v-model="commas"
           class="o-primary-btn--option l-options-grid__button"
-          on="Commas on exponents"
-          off="Notation on exponents"
+          on="Exponent formatting: Commas"
+          off="Exponent formatting: Notation"
         />
       </div>
       <div class="l-options-grid__row"> 
         <options-button
-          class="o-primary-btn--option_font-large"
-          onclick="Modal.infoDisplayOptions.show()"
-        >Info Displays</options-button>
+          class="o-primary-btn--option"
+          onclick="Modal.animationOptions.show();"
+        >Open Animation Options</options-button>
         <options-button
-          class="o-primary-btn--option_font-large"
-          onclick="GameOptions.toggleNews()"
-        >{{ newsOnOffLabel }}</options-button>
+          class="o-primary-btn--option"
+          onclick="Modal.infoDisplayOptions.show()"
+        >Open Info Display Options</options-button>
       </div>
       <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
         Press <kbd>?</kbd> to open shortcut list.

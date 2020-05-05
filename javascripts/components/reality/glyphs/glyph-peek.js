@@ -26,8 +26,8 @@ Vue.component("glyph-peek", {
   },
   methods: {
     update() {
-      this.canPeek = Perk.glyphPeek1.isBought;
-      this.isVisible = (Perk.glyphPeek1.isBought && TimeStudy.reality.isBought) || Perk.glyphPeek2.isBought;
+      this.canPeek = Perk.glyphPeek.isBought;
+      this.isVisible = Perk.glyphPeek.isBought && TimeStudy.reality.isBought;
       if (this.canRefresh && gainedGlyphLevel().actualLevel !== this.level) {
         this.refreshGlyphs();
       }

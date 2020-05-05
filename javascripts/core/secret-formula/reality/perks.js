@@ -122,6 +122,18 @@ GameDatabase.reality.perks = {
       " by your highest glyph level.",
     effect: () => player.bestGlyphLevel * player.realities
   },
+  glyphPeek1: {
+    id: 26,
+    label: "GV1",
+    family: PERK_FAMILY.REALITY,
+    description: "You can view the glyph choices you will get (without needing to choose one) as soon as you unlock Reality."
+  },
+  glyphPeek2: {
+    id: 27,
+    label: "GV2",
+    family: PERK_FAMILY.REALITY,
+    description: "You can view the glyph choices you will get (without needing to choose one) at any time."
+  },
   dimboostNonReset: {
     id: 30,
     label: "DBNR",
@@ -436,7 +448,8 @@ GameDatabase.reality.perkConnections = (function() {
     [p.glyphLevelIncrease2, p.glyphRarityIncrease],
     [p.glyphChoice4, p.glyphLevelIncrease1, p.glyphUncommonGuarantee],
     [p.glyphRarityIncrease, p.glyphLevelIncrease2, p.glyphUncommonGuarantee],
-    [p.glyphUncommonGuarantee, p.glyphRarityIncrease, p.glyphChoice4, p.realityMachineGain],
+    [p.glyphUncommonGuarantee, p.glyphRarityIncrease, p.glyphChoice4, p.realityMachineGain, p.glyphPeek1],
+    [p.glyphPeek1, p.glyphPeek2],
     [p.autounlockEU1, p.autounlockEU2],
     [p.autounlockEU2, p.autounlockEU1, p.autobuyerDilation],
     [p.autounlockDilation1, p.autounlockDilation2],

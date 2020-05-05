@@ -55,6 +55,8 @@ const Perk = (function() {
     glyphRarityIncrease: new PerkState(db.glyphRarityIncrease),
     glyphUncommonGuarantee: new PerkState(db.glyphUncommonGuarantee),
     realityMachineGain: new PerkState(db.realityMachineGain),
+    glyphPeek1: new PerkState(db.glyphPeek1),
+    glyphPeek2: new PerkState(db.glyphPeek2),
     dimboostNonReset: new PerkState(db.dimboostNonReset),
     studyPassive1: new PerkState(db.studyPassive1),
     studyPassive2: new PerkState(db.studyPassive2),

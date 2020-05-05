@@ -27,7 +27,8 @@ Vue.component("game-ui", {
           <component :is="page" />
         </component>
         <modal-popup v-if="view.modal.current" :modal="view.modal.current"/>
-        <modal-glyph-selection v-if="view.modal.glyphSelection" />
+        <modal-glyph-selection :isChoosingGlyph=true v-if="view.modal.glyphSelection" />
+        <modal-glyph-selection :isChoosingGlyph=false v-if="view.modal.glyphPeek" />
         <modal-progress-bar v-if="view.modal.progressBar" />
         <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
         <help-me />

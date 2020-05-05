@@ -57,7 +57,7 @@ const GlyphSelection = {
     this.glyphs.randomElement().strength = newStrength;
   },
 
-  generate(count, realityProps) {
+  generate(count, realityProps, isChoosingGlyph) {
     this.glyphs = [];
     this.realityProps = realityProps;
     const level = realityProps.gainedGlyphLevel;
@@ -73,9 +73,15 @@ const GlyphSelection = {
       }
       this.glyphs.push(glyph);
     }
-    ui.view.modal.glyphSelection = true;
+    if (isChoosingGlyph) {
+      ui.view.modal.glyphSelection = true;  
+    } else {
+      ui.view.modal.glyphPeek = true;
+    }
     if (Perk.glyphUncommonGuarantee.isBought) this.glyphUncommonGuarantee(rng);
-    rng.finalize();
+    if (isChoosingGlyph) {
+      rng.finalize();
+    }
   },
 
   update(level) {
@@ -159,7 +165,7 @@ function requestManualReality() {
     triggerManualReality(realityProps);
     return;
   }
-  GlyphSelection.generate(GlyphSelection.choiceCount, realityProps);
+  GlyphSelection.generate(GlyphSelection.choiceCount, realityProps, true);
 }
 
 function triggerManualReality(realityProps) {

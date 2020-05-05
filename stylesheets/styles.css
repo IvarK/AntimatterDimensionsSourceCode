@@ -586,6 +586,11 @@ button:focus {
   margin-bottom: 1rem;
 }
 
+.l-reality-glyph-peek-button {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 [draggable] {
     -moz-user-select: none;
     -khtml-user-select: none;

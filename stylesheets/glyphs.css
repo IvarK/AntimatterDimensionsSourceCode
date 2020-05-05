@@ -340,14 +340,14 @@
   left: 100%;
   margin-left: -0.5rem;
   margin-top: -1rem;
-  border-color: transparent transparent #4a4a4a transparent;
+  border-color: transparent transparent #4a4a4a;
 }
 
 .l-glyph-tooltip--down-left::after {
   top: 0;
   left: 100%;
   margin-left: -0.5rem;
-  border-color: #4a4a4a transparent transparent transparent;
+  border-color: #4a4a4a transparent transparent;
 }
 
 .l-glyph-tooltip--up-right::after {
@@ -355,14 +355,14 @@
   left: 0;
   margin-left: -0.5rem;
   margin-top: -1rem;
-  border-color: transparent transparent #4a4a4a transparent;
+  border-color: transparent transparent #4a4a4a;
 }
 
 .l-glyph-tooltip--down-right::after {
   top: 0;
   left: 0;
   margin-left: -0.5rem;
-  border-color: #4a4a4a transparent transparent transparent;
+  border-color: #4a4a4a transparent transparent;
 }
 
 .c-glyph-tooltip__description {

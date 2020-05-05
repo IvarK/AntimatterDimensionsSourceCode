@@ -28,7 +28,6 @@ Vue.component("glyph-peek", {
     class="c-glyph-peek"
     :show="isVisible"
     :text="'Glyph choices for this Reality:'"
-    :noLevelOverride="true"
     :glyphs="glyphs"/>
   <span v-else-if="canPeek"
     class="c-glyph-peek">

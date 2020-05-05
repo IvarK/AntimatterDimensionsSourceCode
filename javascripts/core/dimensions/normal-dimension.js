@@ -656,6 +656,9 @@ const NormalDimensions = {
     for (let tier = maxTierProduced; tier >= 1; --tier) {
       NormalDimension(tier + nextTierOffset).produceDimensions(NormalDimension(tier), diff / 10);
     }
+    if (NormalDimension(1).amount.gt(0)) {
+      player.noFirstDimensions = false;
+    }
     NormalDimension(1).produceCurrency(Currency.antimatter, diff);
     if (NormalChallenge(12).isRunning) {
       NormalDimension(2).produceCurrency(Currency.antimatter, diff);

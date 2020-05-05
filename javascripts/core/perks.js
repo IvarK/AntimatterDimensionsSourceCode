@@ -30,7 +30,7 @@ class PerkState extends SetPurchasableMechanicState {
   }
 
   onPurchased() {
-    if (this.config.bumpResource !== undefined) this.config.bumpResource();
+    if (this.config.bumpCurrency !== undefined) this.config.bumpCurrency();
     GameCache.achievementPeriod.invalidate();
     GameCache.buyablePerks.invalidate();
     EventHub.dispatch(GAME_EVENT.PERK_BOUGHT);

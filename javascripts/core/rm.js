@@ -765,7 +765,7 @@ const Glyphs = {
     const undoData = {
       oldIndex,
       targetSlot,
-      am: new Decimal(player.antimatter),
+      am: new Decimal(Currency.antimatter.value),
       ip: new Decimal(player.infinityPoints),
       ep: new Decimal(player.eternityPoints),
       tt: player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost() - TimeTheorems.totalPurchased()),
@@ -790,7 +790,7 @@ const Glyphs = {
       glyphUndo: true,
       restoreCelestialState: true,
     });
-    player.antimatter.fromValue(undoData.am);
+    Currency.antimatter.value = new Decimal(undoData.am);
     player.infinityPoints.fromValue(undoData.ip);
     player.eternityPoints.fromValue(undoData.ep);
     player.timestudy.theorem.fromValue(undoData.tt);
@@ -1139,7 +1139,7 @@ const GlyphSacrificeHandler = {
 // Gives a maximum resource total possible, based on the highest level glyph in recent realities. This doesn't
 // actually enforce any special behavior, but instead only affects various UI properties.
 function estimatedAlchemyCap() {
-  return GlyphSacrificeHandler.levelAlchemyCap(player.lastTenRealities.map(([, , , lvl]) => lvl).max());
+  return GlyphSacrificeHandler.levelAlchemyCap(player.lastTenRealities.map(([, , , , lvl]) => lvl).max());
 }
 
 function autoAdjustGlyphWeights() {

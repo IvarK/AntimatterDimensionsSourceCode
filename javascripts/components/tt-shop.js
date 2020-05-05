@@ -92,7 +92,7 @@ Vue.component("tt-shop", {
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
       this.ttAutobuyerOn = player.ttbuyer;
       const budget = this.budget;
-      budget.am.copyFrom(player.antimatter);
+      budget.am.copyFrom(Currency.antimatter);
       budget.ip.copyFrom(player.infinityPoints);
       budget.ep.copyFrom(player.eternityPoints);
       const costs = this.costs;
@@ -112,7 +112,7 @@ Vue.component("tt-shop", {
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
           <p id="timetheorems">
             <span class="c-tt-amount">
-              {{ formattedTheorems }} 
+              {{ formattedTheorems }}
               {{ "Time Theorem" | pluralize(theoremAmount, "Time Theorems") }}
             </span>
             <span v-if="showST">

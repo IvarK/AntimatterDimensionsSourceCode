@@ -47,7 +47,7 @@ const Laitela = {
     return "";
   },
   get matterExtraPurchaseFactor() {
-    return (1 + Math.pow(Decimal.pLog10(this.celestial.maxMatter) / 
+    return (1 + Math.pow(Decimal.pLog10(this.celestial.maxMatter) /
       Math.log10(Number.MAX_VALUE), 0.8) * (1 + SingularityMilestone(1).effectValue) / 2);
   },
   get realityReward() {
@@ -56,7 +56,7 @@ const Laitela = {
   },
   // Note that entropy goes from 0 to 1, with 1 being completion
   get entropyGainPerSecond() {
-    return Math.clamp(Math.pow(player.antimatter.log10() / 1e11, 2), 0, 100) / 100;
+    return Math.clamp(Math.pow(Currency.antimatter.value.log10() / 1e11, 2), 0, 100) / 100;
   },
   get maxAllowedDimension() {
     return 8 - player.celestials.laitela.difficultyTier;

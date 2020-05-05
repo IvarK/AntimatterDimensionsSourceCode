@@ -32,8 +32,7 @@ const TimeTheorems = {
 
   buyWithAntimatter(auto = false) {
     if (!this.checkForBuying(auto)) return false;
-    if (player.antimatter.lt(player.timestudy.amcost)) return false;
-    player.antimatter = player.antimatter.minus(player.timestudy.amcost);
+    if (!Currency.antimatter.purchase(player.timestudy.amcost)) return false;
     player.timestudy.amcost = player.timestudy.amcost.times(TimeTheorems.costMultipliers.AM);
     player.timestudy.theorem = player.timestudy.theorem.plus(1);
     player.noTheoremPurchases = false;
@@ -63,11 +62,12 @@ const TimeTheorems = {
   buyMax(auto = false) {
     if (!this.checkForBuying(auto)) return;
     const AMowned = player.timestudy.amcost.e / 20000 - 1;
-    if (player.antimatter.gte(player.timestudy.amcost)) {
-      player.timestudy.amcost.e = Math.floor(player.antimatter.e / 20000 + 1) * 20000;
-      player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.antimatter.e / 20000) - AMowned);
-      player.antimatter =
-        player.antimatter.minus(Decimal.fromMantissaExponent(1, Math.floor(player.antimatter.e / 20000) * 20000));
+    if (Currency.antimatter.gte(player.timestudy.amcost)) {
+      player.timestudy.amcost.e = Math.floor(Currency.antimatter.exponent / 20000 + 1) * 20000;
+      const boughtAmount = Math.floor(Currency.antimatter.exponent / 20000) - AMowned;
+      player.timestudy.theorem = player.timestudy.theorem.plus(boughtAmount);
+      const amCost = Decimal.fromMantissaExponent(1, Math.floor(Currency.antimatter.exponent / 20000) * 20000);
+      Currency.antimatter.subtract(amCost);
       player.noTheoremPurchases = false;
     }
     const IPowned = player.timestudy.ipcost.e / 100;
@@ -217,8 +217,8 @@ function studiesUntil(id) {
   if (id < 151) {
     // This click is choosing a path
     buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy(id).path], id);
-  } 
-  
+  }
+
   if (pacePaths.length === 1) {
     // We've chosen a path already
     buyTimeStudyListUntilID(NormalTimeStudies.paths[pacePaths[0]], id);

@@ -113,7 +113,7 @@ Vue.component("game-header", {
       }
       this.isInLaitela = Laitela.isRunning;
       if (this.isInLaitela) {
-        if (player.celestials.laitela.entropy > 0) { 
+        if (player.celestials.laitela.entropy > 0) {
           this.laitelaEntropy = `${formatPercents(player.celestials.laitela.entropy, 2, 2)}`;
           this.laitelaTimer = Time.thisRealityRealTime.toStringShort();
         } else {
@@ -121,8 +121,8 @@ Vue.component("game-header", {
           this.laitelaTimer = TimeSpan.fromSeconds(player.celestials.laitela.thisCompletion).toStringShort();
         }
       }
-      this.antimatter.copyFrom(player.antimatter);
-      this.antimatterPerSec.copyFrom(Player.antimatterPerSecond);
+      this.antimatter.copyFrom(Currency.antimatter);
+      this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
     }
   },
   template:

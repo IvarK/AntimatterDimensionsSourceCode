@@ -274,7 +274,7 @@ function buyUntilTen(tier) {
 }
 
 function maxAll() {
-  if (Laitela.continuumActive || player.antimatter.gt(Player.infinityLimit)) return;
+  if (Laitela.continuumActive || Currency.antimatter.gt(Player.infinityLimit)) return;
 
   player.usedMaxAll = true;
 
@@ -301,8 +301,7 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   const multBefore = Decimal.pow(NormalDimensions.buyTenMultiplier, dimension.bought / 10);
 
   // Buy any remaining until 10 before attempting to bulk-buy
-  if (cost.lt(player.antimatter)) {
-    player.antimatter = player.antimatter.minus(cost);
+  if (Currency.antimatter.purchase(cost)) {
     buyUntilTen(tier);
     bulkLeft--;
   }
@@ -310,7 +309,7 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   // Buy in a while loop in order to properly trigger abnormal price increases
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
     while (dimension.isAffordableUntil10 && dimension.cost.lt(goal) && bulkLeft > 0) {
-      player.antimatter = player.antimatter.minus(dimension.costUntil10);
+      Currency.antimatter.subtract(dimension.costUntil10);
       buyUntilTen(tier);
       bulkLeft--;
     }
@@ -337,7 +336,7 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
 
 
 function canAfford(cost) {
-  return (player.break || cost.lt(new Decimal("1.79e308"))) && cost.lte(player.antimatter);
+  return (player.break || cost.lt(Decimal.NUMBER_MAX_VALUE)) && Currency.antimatter.gte(cost);
 }
 
 class NormalDimensionState extends DimensionState {
@@ -452,7 +451,7 @@ class NormalDimensionState extends DimensionState {
   get currencyAmount() {
     return this.tier >= 3 && NormalChallenge(6).isRunning
       ? NormalDimension(this.tier - 2).amount
-      : player.antimatter;
+      : Currency.antimatter.value;
   }
 
   /**
@@ -461,7 +460,7 @@ class NormalDimensionState extends DimensionState {
   set currencyAmount(value) {
     return this.tier >= 3 && NormalChallenge(6).isRunning
       ? NormalDimension(this.tier - 2).amount = value
-      : player.antimatter = value;
+      : Currency.antimatter.value = value;
   }
 
   /**
@@ -469,7 +468,7 @@ class NormalDimensionState extends DimensionState {
    */
   get continuumValue() {
     if (!this.isAvailableForPurchase) return 0;
-    return this.costScale.getContinuumValue(player.antimatter) * Laitela.matterExtraPurchaseFactor;
+    return this.costScale.getContinuumValue(Currency.antimatter.value) * Laitela.matterExtraPurchaseFactor;
   }
 
   /**
@@ -479,7 +478,7 @@ class NormalDimensionState extends DimensionState {
     if (!Laitela.continuumActive) return 0;
     return Math.floor(10 * this.continuumValue);
   }
-  
+
   /**
    * Continuum doesn't continually update dimension amount because that would require making the code
    * significantly messier to handle it properly. Instead an effective amount is calculated here, which
@@ -516,7 +515,7 @@ class NormalDimensionState extends DimensionState {
   }
 
   get isAvailableForPurchase() {
-    if (player.antimatter.gt(Player.infinityLimit)) return false;
+    if (Currency.antimatter.gt(Player.infinityLimit)) return false;
     if (this.tier > DimBoost.totalBoosts + 4) return false;
     const hasPrevTier = this.tier === 1 ||
       (Laitela.continuumActive
@@ -646,7 +645,7 @@ const NormalDimensions = {
     // Stop producing antimatter at Big Crunch goal because all the game elements
     // are hidden when pre-break Big Crunch button is on screen.
     const hasBigCrunchGoal = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
-    if (hasBigCrunchGoal && Currency.antimatter.isAffordable(Player.infinityGoal)) return;
+    if (hasBigCrunchGoal && Currency.antimatter.gte(Player.infinityGoal)) return;
 
     let maxTierProduced = EternityChallenge(3).isRunning ? 3 : 7;
     let nextTierOffset = 1;
@@ -660,13 +659,9 @@ const NormalDimensions = {
     if (NormalDimension(1).amount.gt(0)) {
       player.noFirstDimensions = false;
     }
-    let amRate = NormalDimension(1).productionPerSecond;
-    if (NormalChallenge(12).isRunning) amRate = amRate.plus(NormalDimension(2).productionPerSecond);
-    const amProduced = amRate.times(diff / 1000);
-    player.antimatter = player.antimatter.plus(amProduced);
-    player.totalAntimatter = player.totalAntimatter.plus(amProduced);
-    player.thisInfinityMaxAM = player.thisInfinityMaxAM.max(player.antimatter);
-    player.thisEternityMaxAM = player.thisEternityMaxAM.max(player.antimatter);
-    if (amProduced.gt(0)) player.noAntimatterProduced = false;
+    NormalDimension(1).produceCurrency(Currency.antimatter, diff);
+    if (NormalChallenge(12).isRunning) {
+      NormalDimension(2).produceCurrency(Currency.antimatter, diff);
+    }
   }
 };

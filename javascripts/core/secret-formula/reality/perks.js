@@ -23,7 +23,7 @@ GameDatabase.reality.perks = {
     label: "SAM1",
     family: PERK_FAMILY.NORMAL,
     description: "Start every reset with 1e15 antimatter.",
-    bumpResource: () => player.antimatter = player.antimatter.clampMin(1e15),
+    bumpCurrency: () => Currency.antimatter.bumpTo(1e15),
     effect: 1e15
   },
   startAM2: {
@@ -31,7 +31,7 @@ GameDatabase.reality.perks = {
     label: "SAM2",
     family: PERK_FAMILY.NORMAL,
     description: "Start every reset with 1e130 antimatter.",
-    bumpResource: () => player.antimatter = player.antimatter.clampMin(1e130),
+    bumpCurrency: () => Currency.antimatter.bumpTo(1e130),
     effect: 1e130
   },
   startIP1: {
@@ -39,7 +39,7 @@ GameDatabase.reality.perks = {
     label: "SIP1",
     family: PERK_FAMILY.INFINITY,
     description: "Start every Eternity and Reality with 2e15 Infinity Points.",
-    bumpResource: () => player.infinityPoints = player.infinityPoints.clampMin(2e15),
+    bumpCurrency: () => player.infinityPoints = player.infinityPoints.clampMin(2e15),
     effect: 2e15
   },
   startIP2: {
@@ -47,7 +47,7 @@ GameDatabase.reality.perks = {
     label: "SIP2",
     family: PERK_FAMILY.INFINITY,
     description: "Start every Eternity and Reality with 2e130 Infinity Points.",
-    bumpResource: () => player.infinityPoints = player.infinityPoints.clampMin(2e130),
+    bumpCurrency: () => player.infinityPoints = player.infinityPoints.clampMin(2e130),
     effect: 2e130
   },
   startEP1: {
@@ -55,7 +55,7 @@ GameDatabase.reality.perks = {
     label: "SEP1",
     family: PERK_FAMILY.ETERNITY,
     description: "Start every Reality with 10 Eternity Points.",
-    bumpResource: () => player.eternityPoints = player.eternityPoints.clampMin(10),
+    bumpCurrency: () => player.eternityPoints = player.eternityPoints.clampMin(10),
     effect: 10
   },
   startEP2: {
@@ -63,7 +63,7 @@ GameDatabase.reality.perks = {
     label: "SEP2",
     family: PERK_FAMILY.ETERNITY,
     description: "Start every Reality with 2000 Eternity Points.",
-    bumpResource: () => player.eternityPoints = player.eternityPoints.clampMin(2000),
+    bumpCurrency: () => player.eternityPoints = player.eternityPoints.clampMin(2000),
     effect: 2000
   },
   startEP3: {
@@ -71,7 +71,7 @@ GameDatabase.reality.perks = {
     label: "SEP3",
     family: PERK_FAMILY.ETERNITY,
     description: "Start every Reality with 1e9 Eternity Points.",
-    bumpResource: () => player.eternityPoints = player.eternityPoints.clampMin(1e9),
+    bumpCurrency: () => player.eternityPoints = player.eternityPoints.clampMin(1e9),
     effect: 1e9
   },
   startTP: {
@@ -278,7 +278,7 @@ GameDatabase.reality.perks = {
     id: 72,
     label: "ECR",
     family: PERK_FAMILY.ETERNITY,
-    description: "Remove non-TT requirements for unlocking Eternity Challenges."
+    description: "Remove non–Time Theorem requirements for unlocking Eternity Challenges."
   },
   studyECBulk: {
     id: 73,

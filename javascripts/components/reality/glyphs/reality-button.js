@@ -76,9 +76,9 @@ Vue.component("reality-button", {
       const teresaReward = this.formatScalingMultiplierText(
         "Glyph sacrifice",
         Teresa.runRewardMultiplier,
-        Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(player.antimatter)));
+        Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(Currency.antimatter.value)));
       const teresaThreshold = this.formatThresholdText(
-        Teresa.rewardMultiplier(player.antimatter) > Teresa.runRewardMultiplier,
+        Teresa.rewardMultiplier(Currency.antimatter.value) > Teresa.runRewardMultiplier,
         player.celestials.teresa.bestRunAM,
         "antimatter");
       this.celestialRunText = [

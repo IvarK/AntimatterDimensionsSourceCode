@@ -211,7 +211,7 @@ GameDatabase.celestials.navigation = (function() {
         if (EffarigUnlock.infinity.isUnlocked) return 1;
         if (!Effarig.isRunning) return 0;
 
-        return player.antimatter.pLog10() / Decimal.MAX_NUMBER.log10();
+        return Currency.antimatter.value.pLog10() / Decimal.MAX_NUMBER.log10();
       },
       node: {
         completeClass: "c-celestial-nav__effarig",
@@ -224,7 +224,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Effarig's Infinity";
-            const am = Effarig.isRunning ? player.antimatter : 0;
+            const am = Effarig.isRunning ? Currency.antimatter.value : 0;
             return [
               "Effarig's Infinity",
               `Reach ${format(am, 2)} / ${format(Number.MAX_VALUE, 2)} Antimatter inside Effarig's Reality.`

@@ -7,13 +7,13 @@ function canEternity() {
 function giveEternityRewards(auto) {
   player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
   player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
-  
+
   const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
   if (player.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
   }
-  
+
   addEternityTime(
     player.thisEternity,
     player.thisEternityRealTime,
@@ -115,9 +115,9 @@ function eternity(force, auto, specialConditions = {}) {
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
   applyRealityUpgradesAfterEternity();
-  player.antimatter = Player.startingAM;
-  player.thisInfinityMaxAM = Player.startingAM;
-  player.thisEternityMaxAM = Player.startingAM;
+  player.thisInfinityMaxAM = new Decimal(0);
+  player.thisEternityMaxAM = new Decimal(0);
+  Currency.antimatter.reset();
 
   EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_AFTER);
   return true;

@@ -302,10 +302,10 @@ let player = {
     rebuyablesAuto: [false, false, false, false, false],
     upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false, 
+              false, false, false, false, false,
+              false, false, false, false, false,
+              false, false, false, false, false,
+              false, false, false, false, false,
               false, false, false, false, false],
     perks: new Set(),
     respec: false,
@@ -583,12 +583,6 @@ const Player = {
     return new Decimal(0);
   },
 
-  get antimatterPerSecond() {
-    const basePerSecond = NormalDimension(1).productionPerRealSecond
-      .plus(NormalChallenge(12).isRunning ? NormalDimension(2).productionPerRealSecond : 0);
-    return basePerSecond;
-  },
-
   get bestRunIPPM() {
     return GameCache.bestRunIPPM.value;
   },
@@ -609,7 +603,7 @@ const Player = {
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     return challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
   },
-  
+
   get infinityLimit() {
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     return challenge === undefined ? Decimal.MAX_VALUE : challenge.goal;
@@ -619,19 +613,6 @@ const Player = {
     return EternityChallenge.isRunning
       ? EternityChallenge.current.currentGoal
       : Decimal.NUMBER_MAX_VALUE;
-  },
-
-  get startingAM() {
-    return Effects.max(
-      10,
-      Perk.startAM1,
-      Perk.startAM2,
-      Achievement(21),
-      Achievement(37),
-      Achievement(54),
-      Achievement(55),
-      Achievement(78).effects.antimatter
-    ).toDecimal();
   },
 
   get startingIP() {

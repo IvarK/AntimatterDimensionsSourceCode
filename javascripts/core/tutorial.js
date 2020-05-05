@@ -17,7 +17,7 @@ const tutorialStates = [
   {
     // Highlight the 2nd dim button
     id: TUTORIAL_STATE.DIM2,
-    condition: () => player.antimatter.gte(100)
+    condition: () => Currency.antimatter.gte(100)
   },
   {
     id: TUTORIAL_STATE.DIMSHIFT,

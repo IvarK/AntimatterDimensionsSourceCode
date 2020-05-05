@@ -21,7 +21,7 @@ Vue.component("replicanti-tab", {
     replicantiChanceSetup() {
       return new ReplicantiUpgradeButtonSetup(ReplicantiUpgrade.chance,
         value => `Replicate chance: ${formatPercents(value)}`,
-        cost => `+${formatPercents(0.01)} Costs: ${format(cost, 0, 0)} IP`
+        cost => `+${formatPercents(0.01)} Costs: ${format(cost)} IP`
       );
     },
     replicantiIntervalSetup() {
@@ -37,7 +37,7 @@ Vue.component("replicanti-tab", {
       }
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => `Interval: ${formatInterval(value)}`,
-        cost => `➜ ${formatInterval(upgrade.nextValue)} Costs: ${format(cost, 0, 0)} IP`
+        cost => `➜ ${formatInterval(upgrade.nextValue)} Costs: ${format(cost)} IP`
       );
     },
     maxGalaxySetup() {

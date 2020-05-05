@@ -28,7 +28,8 @@ Vue.component("glyph-peek", {
     class="c-glyph-peek"
     :show="isVisible"
     :text="'Glyph choices for this Reality:'"
-    :glyphs="glyphs"/>
+    :glyphs="glyphs"
+    :flipTooltip="true"/>
   <span v-else-if="canPeek"
     class="c-glyph-peek">
       Purchase the Reality study to see

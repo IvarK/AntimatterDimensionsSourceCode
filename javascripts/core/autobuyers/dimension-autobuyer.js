@@ -31,7 +31,12 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get bulk() {
-    return this.data.bulk;
+    // Use 1e100 to avoid issues with Infinity.
+    return this.hasUnlimitedBulk ? 1e100 : this.data.bulk;
+  }
+  
+  get hasUnlimitedBulk() {
+    return Achievement(61).isUnlocked;
   }
 
   get hasMaxedBulk() {
@@ -82,7 +87,6 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
     this.data.bulk = Math.clampMax(this.bulk * 2, 1e100);
     this.data.cost = Math.ceil(2.4 * this.cost);
     Achievement(61).tryUnlock();
-    SecretAchievement(38).tryUnlock();
     GameUI.update();
   }
 

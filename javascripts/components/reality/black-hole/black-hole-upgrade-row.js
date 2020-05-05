@@ -6,7 +6,8 @@ Vue.component("black-hole-upgrade-row", {
   },
   data() {
     return {
-      isUnlocked: false
+      isUnlocked: false,
+      isPermanent: false
     };
   },
   computed: {
@@ -41,13 +42,14 @@ Vue.component("black-hole-upgrade-row", {
   methods: {
     update() {
       this.isUnlocked = this.blackHole.isUnlocked;
+      this.isPermanent = this.blackHole.isPermanent;
     }
   },
   template: `
     <div v-if="isUnlocked" class="l-black-hole-upgrade-grid__row">
-      <black-hole-upgrade-button :config="intervalConfig" />
+      <black-hole-upgrade-button v-if="!isPermanent" :config="intervalConfig" />
       <black-hole-upgrade-button :config="powerConfig" />
-      <black-hole-upgrade-button :config="durationConfig" />
+      <black-hole-upgrade-button v-if="!isPermanent" :config="durationConfig" />
     </div>
   `
 });

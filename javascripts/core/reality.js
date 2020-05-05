@@ -79,6 +79,7 @@ const GlyphSelection = {
   },
 
   generate(count, realityProps) {
+    EventHub.dispatch(GAME_EVENT.GLYPH_CHOICES_GENERATED);
     this.realityProps = realityProps;
     this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel, true);
     ui.view.modal.glyphSelection = true;

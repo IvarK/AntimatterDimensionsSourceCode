@@ -79,9 +79,7 @@ const GlyphSelection = {
     this.realityProps = realityProps;
     this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel);
     ui.view.modal.glyphSelection = true;  
-    if (isChoosingGlyph) {
-      rng.finalize();
-    }
+    rng.finalize();
   },
 
   update(level) {

@@ -79,7 +79,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e850"),
     goalIncrease: new Decimal("1e250"),
     reward: {
-      description: "Reduce the dimension cost multiplier growth",
+      description: "Reduce Normal Dimension cost multiplier growth",
       effect: completions => completions * 0.2,
       formatEffect: value => {
         const base = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward));

@@ -48,7 +48,7 @@ Vue.component("normal-achievements-tab", {
         <span @click="swapImages()" style="cursor: pointer">{{ swapImagesButton }}</span>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">
-        Next automatic achievement in {{timeDisplayNoDecimals(achCountdown)}}.
+        Automatically gain the next missing achievement in {{timeDisplayNoDecimals(achCountdown)}}.
       </div>
       <div v-if="showAutoAchieve">
         <primary-button-on-off

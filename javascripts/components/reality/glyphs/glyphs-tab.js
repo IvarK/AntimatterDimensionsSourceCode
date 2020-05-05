@@ -37,6 +37,8 @@ Vue.component("glyphs-tab", {
   template:
   `<div class="l-glyphs-tab">
     <div class="l-reality-button-column">
+      <glyph-peek />
+      <br/>
       <reality-button />
       <div v-if="isInCelestialReality">
         <input type="checkbox"
@@ -47,7 +49,6 @@ Vue.component("glyphs-tab", {
         <label for="autoRestart">Repeat this celestial's Reality</label>
       </div>
       <reality-amplify-button />
-      <glyph-peek />
       <div v-if="showInstability">
         Glyphs are becoming unstable.
         <br>

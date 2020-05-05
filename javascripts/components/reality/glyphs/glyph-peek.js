@@ -6,11 +6,14 @@ Vue.component("glyph-peek", {
       glyphs: [],
       level: 0,
       seed: 0,
+      canPeek: false,
+      isVisible: false,
     };
   },
   methods: {
     update() {
-      this.isUnlocked = (Perk.glyphPeek1.isBought && TimeStudy.reality.isBought) || Perk.glyphPeek2.isBought;
+      this.canPeek = Perk.glyphPeek1.isBought;
+      this.isVisible = (Perk.glyphPeek1.isBought && TimeStudy.reality.isBought) || Perk.glyphPeek2.isBought;
       const newLevel = gainedGlyphLevel().actualLevel;
       const newSeed = player.reality.seed;
       if (newLevel !== this.level || newSeed !== this.seed) {
@@ -21,6 +24,17 @@ Vue.component("glyph-peek", {
     }
   },
   template: `
-  <glyph-set-preview :show="isUnlocked" :text="'Glyph choices on Reality'" :noLevelOverride="true" :glyphs="glyphs"/>
+  <glyph-set-preview v-if="isVisible"
+    class="c-glyph-peek"
+    :show="isVisible"
+    :text="'Glyph choices for this Reality:'"
+    :noLevelOverride="true"
+    :glyphs="glyphs"/>
+  <span v-else-if="canPeek"
+    class="c-glyph-peek">
+      Purchase the Reality study to see
+      <br>
+      this Reality's glyph choices
+  </span>
   `,
 });

@@ -527,6 +527,18 @@
   margin-top: 2rem;
 }
 
+.c-glyph-peek {
+  border: 0.1rem solid rgb(184, 184, 184);
+  border-radius: 0.5rem;
+  padding: 1.2rem;
+  margin-top: 0;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-bottom: 0;
+  height: 7.5rem;
+  width: 30rem;
+}
+
 .c-sacrificed-glyphs {
   border: 0.1rem solid rgb(184, 184, 184);
   border-radius: 0.5rem;

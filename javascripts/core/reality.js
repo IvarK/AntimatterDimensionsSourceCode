@@ -14,8 +14,7 @@ const GlyphSelection = {
   get choiceCount() {
     let baseChoices = Effects.max(
       1,
-      Perk.glyphChoice4,
-      Perk.glyphChoice3
+      Perk.glyphChoice4
     );
     // TODO Make Ra follow GMS pattern so this isn't as dumb as it is right now
     if (Ra.has(RA_UNLOCKS.GLYPH_CHOICES)) baseChoices *= 2;
@@ -71,7 +70,7 @@ const GlyphSelection = {
       }
       glyphList.push(glyph);
     }
-    if (Perk.glyphUncommonGuarantee.isBought) this.glyphUncommonGuarantee(glyphList, rng);
+    this.glyphUncommonGuarantee(glyphList, rng);
     if (isChoosingGlyph) {
       rng.finalize();
     }

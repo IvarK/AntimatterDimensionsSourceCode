@@ -26,8 +26,10 @@ Vue.component("glyph-peek", {
   },
   methods: {
     update() {
-      this.canPeek = Perk.glyphPeek.isBought;
-      this.isVisible = Perk.glyphPeek.isBought && TimeStudy.reality.isBought;
+      // Hide this before first reality since then it'll confuse the player,
+      // and due to pre-selected first glyph might well be incorrect anyway.
+      this.isVisible = player.realities > 0 && TimeStudy.reality.isBought;
+      this.canPeek = player.realities > 0;
       if (this.canRefresh && gainedGlyphLevel().actualLevel !== this.level) {
         this.refreshGlyphs();
       }

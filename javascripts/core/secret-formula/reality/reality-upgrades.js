@@ -100,14 +100,14 @@ GameDatabase.reality.upgrades = (function() {
       name: "Linguistically Expand",
       id: 9,
       cost: 15,
-      requirement: () => `Reality using only a single level ${formatInt(3)}+ glyph.`,
+      requirement: () => `Reality using only a single level ${formatInt(4)}+ glyph.`,
       hasFailed: () => {
         const invalidEquippedGlyphs = Glyphs.activeList.length > 1 ||
-          (Glyphs.activeList.length === 1 && Glyphs.activeList[0].level < 3);
-        const hasValidGlyphInInventory = Glyphs.inventory.countWhere(g => g && g.level >= 3) > 0;
+          (Glyphs.activeList.length === 1 && Glyphs.activeList[0].level < 4);
+        const hasValidGlyphInInventory = Glyphs.inventory.countWhere(g => g && g.level >= 4) > 0;
         return invalidEquippedGlyphs || (Glyphs.activeList.length === 0 && !hasValidGlyphInInventory);
       },
-      checkRequirement: () => Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
+      checkRequirement: () => Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 4,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain another glyph slot",
       effect: () => 1
@@ -290,9 +290,9 @@ GameDatabase.reality.upgrades = (function() {
       name: "Synthetic Symbolism",
       id: 24,
       cost: 100000,
-      requirement: () => `Reality for ${formatInt(6666)} RM without glyphs`,
+      requirement: () => `Reality for ${formatInt(5000)} RM without glyphs`,
       hasFailed: () => Glyphs.activeList.length > 0,
-      checkRequirement: () => gainedRealityMachines().gte(6666) && Glyphs.activeList.length === 0,
+      checkRequirement: () => gainedRealityMachines().gte(5000) && Glyphs.activeList.length === 0,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain another glyph slot",
       effect: () => 1

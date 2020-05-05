@@ -57,7 +57,7 @@ const GlyphSelection = {
     glyphList[Math.floor(rng.uniform() * glyphList.length)].strength = newStrength;
   },
   
-  glyphList(count, level) {
+  glyphList(count, level, isChoosingGlyph) {
     const glyphList = [];
     const rng = new GlyphGenerator.RealGlyphRNG();
     for (let out = 0; out < count; ++out) {
@@ -72,14 +72,16 @@ const GlyphSelection = {
       glyphList.push(glyph);
     }
     if (Perk.glyphUncommonGuarantee.isBought) this.glyphUncommonGuarantee(glyphList, rng);
+    if (isChoosingGlyph) {
+      rng.finalize();
+    }
     return glyphList;
   },
 
   generate(count, realityProps) {
     this.realityProps = realityProps;
-    this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel);
-    ui.view.modal.glyphSelection = true;  
-    rng.finalize();
+    this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel, true);
+    ui.view.modal.glyphSelection = true;
   },
 
   update(level) {

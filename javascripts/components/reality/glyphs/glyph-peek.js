@@ -14,7 +14,7 @@ Vue.component("glyph-peek", {
       const newLevel = gainedGlyphLevel().actualLevel;
       const newSeed = player.reality.seed;
       if (newLevel !== this.level || newSeed !== this.seed) {
-        this.glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel());
+        this.glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(), false);
         this.level = newLevel;
         this.seed = newSeed;
       }

@@ -1,9 +1,6 @@
 "use strict";
 
 Vue.component("modal-glyph-selection", {
-  props: {
-    isChoosingGlyph: Boolean
-  },
   data() {
     return {
       glyphs: GlyphSelection.glyphs.map(GlyphGenerator.copy),
@@ -31,18 +28,13 @@ Vue.component("modal-glyph-selection", {
       this.levelDifference = Math.abs(player.bestGlyphLevel - this.glyphs[0].level);
     },
     select(index) {
-      if (this.isChoosingGlyph) {
-        GlyphSelection.select(index, false);
-      }
+      GlyphSelection.select(index, false);
     },
     trashGlyphs() {
       if (!player.options.confirmations.glyphTrash ||
         confirm("Are you sure you want to sacrifice a random one of these glyphs?")) {
         GlyphSelection.select(Math.floor(Math.random() * GlyphSelection.choiceCount), true);
       }
-    },
-    closePeek() {
-      ui.view.modal.glyphPeek = false;
     }
   },
   template: `
@@ -57,7 +49,7 @@ Vue.component("modal-glyph-selection", {
                         @click.native="select(index)"/>
       </div>
       <button class="o-primary-btn o-primary-btn--glyph-trash"
-        v-if="canTrashGlyphs && isChoosingGlyph"
+        v-if="canTrashGlyphs"
         v-on:click="trashGlyphs()">
           I don't want any of these glyphs,
           <br>
@@ -66,7 +58,6 @@ Vue.component("modal-glyph-selection", {
           (these are {{ formatInt(levelDifference) }} {{"level" | pluralize(levelDifference)}}
           {{ direction }} than your best)
       </button>
-      <button class="o-primary-btn" v-if="!isChoosingGlyph" v-on:click="closePeek()">OK</button>
     </div>
   </div>`,
 });

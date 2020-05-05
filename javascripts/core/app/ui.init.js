@@ -8,7 +8,6 @@ let ui = {
       current: undefined,
       cloudConflicts: [],
       glyphSelection: false,
-      glyphPeek: false,
       progressBar: undefined,
     },
     tabs: {

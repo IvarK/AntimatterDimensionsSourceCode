@@ -47,7 +47,7 @@ Vue.component("glyphs-tab", {
         <label for="autoRestart">Repeat this celestial's Reality</label>
       </div>
       <reality-amplify-button />
-      <reality-peek-button />
+      <glyph-peek />
       <div v-if="showInstability">
         Glyphs are becoming unstable.
         <br>

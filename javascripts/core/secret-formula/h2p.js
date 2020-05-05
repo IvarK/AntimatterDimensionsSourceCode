@@ -730,8 +730,8 @@ a second Black Hole. The time spent for this requirement is itself affected by t
 takes much less than ${formatInt(2)} actual real-time years.
 <br>
 <br>
-Once the interval upgrade goes below ${formatInt(100)} ms of inactive time, it drops to ${formatInt(0)} ms
-and the Black Hole becomes permanently active. This is tracked separately for the two Black Holes.
+Once the Black Hole is active at least ${formatPercents(0.9999, 2)} of the time, it becomes permanently active.
+This is tracked separately for the two Black Holes.
 <br>
 <br>
 The timer on the second Black Hole only advances when the first Black Hole is active. So, for example, if the first

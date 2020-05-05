@@ -126,7 +126,8 @@ GameDatabase.reality.perks = {
     id: 26,
     label: "GV1",
     family: PERK_FAMILY.REALITY,
-    description: "You can view the glyph choices you will get (without needing to choose one) as soon as you unlock Reality."
+    description: "You can view the glyph choices you will get (without needing to choose one) as soon" +
+      " as you unlock Reality."
   },
   glyphPeek2: {
     id: 27,

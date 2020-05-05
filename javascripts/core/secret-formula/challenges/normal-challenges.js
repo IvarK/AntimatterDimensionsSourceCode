@@ -13,7 +13,7 @@ GameDatabase.challenges.normal = [
     id: 2,
     legacyId: 2,
     isQuickResettable: false,
-    description: "Buying anything halts your production, gradually coming back over 3 minutes.",
+    description: () => `Buying anything halts your production, gradually coming back over ${formatInt(3)} minutes.`,
     name: "Second Dimension Autobuyer",
     reward: "Upgradeable Second Dimension Autobuyer interval"
   },
@@ -39,7 +39,7 @@ GameDatabase.challenges.normal = [
     id: 5,
     legacyId: 6,
     isQuickResettable: false,
-    description: "Tickspeed starts at 7%.",
+    description: () => `Tickspeed starts at ${formatPercents(0.07)}.`,
     name: "Fifth Dimension Autobuyer",
     reward: "Upgradeable Fifth Dimension Autobuyer interval"
   },
@@ -47,7 +47,7 @@ GameDatabase.challenges.normal = [
     id: 6,
     legacyId: 10,
     isQuickResettable: false,
-    description: "Each dimension costs the dimension 2 before it, " +
+    description: () => `Each dimension costs the dimension ${formatInt(2)} before it, ` +
       "instead of antimatter. Dimension prices are modified.",
     name: "Sixth Dimension Autobuyer",
     reward: "Upgradeable Sixth Dimension Autobuyer interval"
@@ -56,8 +56,8 @@ GameDatabase.challenges.normal = [
     id: 7,
     legacyId: 9,
     isQuickResettable: false,
-    description: "The multiplier from buying 10 dimensions is reduced to 1x, but is increased by 0.2x per " +
-      "Dimension Shift/Boost, up to a maximum of 2x.",
+    description: () => `The multiplier from buying ${formatInt(10)} dimensions is reduced to ${formatX(1)}, ` +
+      `but is increased by ${formatX(0.2, 1, 1)} per Dimension Shift/Boost, up to a maximum of ${formatX(2)}.`,
     name: "Seventh Dimension Autobuyer",
     reward: "Upgradeable Seventh Dimension Autobuyer interval"
   },
@@ -74,7 +74,7 @@ GameDatabase.challenges.normal = [
     id: 9,
     legacyId: 5,
     isQuickResettable: true,
-    description: "Whenever you buy 10 of a dimension or tickspeed, " +
+    description: () => `Whenever you buy ${formatInt(10)} of a dimension or tickspeed, ` +
       "everything else of equal cost will increase to its next cost step.",
     name: "Tickspeed Autobuyer",
     reward: "Upgradeable Tickspeed Autobuyer interval"
@@ -83,7 +83,8 @@ GameDatabase.challenges.normal = [
     id: 10,
     legacyId: 4,
     isQuickResettable: false,
-    description: "There are only 6 dimensions, with Dimension Boost and Antimatter Galaxy costs modified.",
+    description: () => `There are only ${formatInt(6)} dimensions, with Dimension Boost ` +
+      "and Antimatter Galaxy costs modified.",
     name: "Automated Dimension Boosts",
     reward: "Automated Dimension Boosts"
   },
@@ -91,7 +92,7 @@ GameDatabase.challenges.normal = [
     id: 11,
     legacyId: 12,
     isQuickResettable: true,
-    description: "There's normal matter which rises once you have at least 1 2nd Dimension. " +
+    description: () => `There's normal matter which rises once you have at least ${formatInt(1)} 2nd Dimension. ` +
       "If it exceeds your antimatter, it will Dimension Boost without giving the bonus.",
     name: "Automated Antimatter Galaxies",
     reward: "Automated Antimatter Galaxies"
@@ -100,7 +101,7 @@ GameDatabase.challenges.normal = [
     id: 12,
     legacyId: 7,
     isQuickResettable: false,
-    description: "Each dimension produces the dimension 2 below it (1st Dimensions still " +
+    description: () => `Each dimension produces the dimension ${formatInt(2)} below it (1st Dimensions still ` +
       "produce antimatter). Dimensions 2, 4, and 6 are made stronger to compensate.",
     name: "Automated Big Crunches",
     reward: "Automated Big Crunches"

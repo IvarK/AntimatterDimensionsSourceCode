@@ -37,7 +37,7 @@ Vue.component("ra-level-chevron", {
     :style="levelPosition"
     :class="classList">
     <span v-if="isImportantLevel || level === goal">
-      {{level}}
+      {{formatInt(level)}}
     </span>
   </div>
   `

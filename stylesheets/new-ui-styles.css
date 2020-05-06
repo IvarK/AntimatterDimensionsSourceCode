@@ -471,8 +471,7 @@ body.t-normal {
 }
 
 .o-infinity-upgrade-btn--bought {
-  border: 0.1rem solid var(--color-accent);
-  background: var(--color-good);
+  border-color: var(--color-accent);
 }
 
 .o-primary-btn--option, .o-primary-btn--option-wide, .c-select-theme__item, .c-select-notation__item {

@@ -314,7 +314,8 @@ const GlyphGenerator = {
       result = GlyphGenerator.gaussianBellCurve(rng);
     } while (result <= minimumValue);
     result *= GlyphGenerator.strengthMultiplier;
-    const increasedRarity = rng.uniform() * Effarig.maxRarityBoost + GlyphSacrifice.effarig.effectValue;
+    const relicShardFactor = Ra.has(RA_UNLOCKS.RELIC_SHARD_RARITY_ALWAYS_MAX) ? 1 : rng.uniform();
+    const increasedRarity = relicShardFactor * Effarig.maxRarityBoost + GlyphSacrifice.effarig.effectValue;
     // Each rarity% is 0.025 strength.
     result += increasedRarity / 40;
     return Math.min(result, rarityToStrength(100));

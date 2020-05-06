@@ -184,7 +184,8 @@ Vue.component("perks-tab", {
   },
   watch: {
     showHintText(newValue) {
-      PerkNetwork.setLabelVisibility(newValue);
+      if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
+      else PerkNetwork.setLabelVisibility(newValue);
     }
   },
   created() {

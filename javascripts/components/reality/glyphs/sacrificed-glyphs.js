@@ -108,31 +108,40 @@ Vue.component("sacrificed-glyphs", {
     },
   },
   template: `
-  <div v-show="anySacrifices"
-       class="c-sacrificed-glyphs l-sacrificed-glyphs"
-       :class="{'c-sacrificed-glyphs--dragover': hasDragover}"
-       @dragover="dragover"
-       @dragleave="dragleave"
-       @drop="drop">
-    <div v-if="hasAlteration">
-      Glyph types will have one of their effects<br>
-      improved when their sacrifice values are above:
-      <br><br>
-      {{ format(addThreshold) }} - an additional secondary effect<br>
-      {{ format(empowerThreshold) }} - formula drastically improved<br>
-      {{ format(boostThreshold) }} - a boost depending on glyph sacrifice
-      <br><br>
-    </div>
-    <div class="c-sacrificed-glyphs__header">Sacrifices:</div>
-    <div>
-      (Multiplied by {{ formatX(teresaMult, 2, 2) }}; Teresa last done at {{ format(lastRMTeresa, 2) }} RM)
-    </div>
-    <template v-for="type in types">
-      <type-sacrifice :type="type" :hasDragover="hasDragover"/>
-    </template>
+  <div
+      class="c-current-glyph-effects l-current-glyph-effects"
+      :class="{'c-sacrificed-glyphs--dragover': hasDragover}"
+      @dragover="dragover"
+      @dragleave="dragleave"
+      @drop="drop">
     <div class="l-sacrificed-glyphs__help">
       <div>Drag glyphs here or shift-click to sacrifice.</div>
       <div>Ctrl-shift-click to sacrifice without confirmation</div>
+    </div>
+    <div class="c-sacrificed-glyphs__header">Glyph Sacrifice Boosts:</div>
+    <div
+    <div v-if="teresaMult > 1">
+      (Multiplied by {{ formatX(teresaMult, 2, 2) }}; Teresa last done at {{ format(lastRMTeresa, 2) }} RM)
+    </div>
+    <div v-if="anySacrifices">
+      <template v-for="type in types">
+        <type-sacrifice :type="type" :hasDragover="hasDragover"/>
+      </template>
+      <div v-if="hasAlteration">
+        <br>
+        <b>Altered Glyphs</b>
+        <br>
+        Glyph types will have one of their effects<br>
+        improved when their sacrifice values are above:
+        <br><br>
+        {{ format(addThreshold) }} - an additional secondary effect<br>
+        {{ format(empowerThreshold) }} - formula drastically improved<br>
+        {{ format(boostThreshold) }} - a boost depending on glyph sacrifice
+        <br><br>
+      </div>
+    </div>
+    <div v-else>
+      You haven't sacrificed any glyphs yet!
     </div>
   </div>`,
 });

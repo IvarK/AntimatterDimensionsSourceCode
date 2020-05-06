@@ -526,6 +526,9 @@
   margin-left: 1rem;
   margin-right: 1rem;
   margin-bottom: 0;
+  height: 30rem;
+  width: 50rem;
+  overflow: auto;
 }
 
 .t-s8 .c-current-glyph-effects {
@@ -539,8 +542,26 @@
   margin-bottom: 2rem;
 }
 
+.l-glyph-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center
+}
+
+.l-glyph-info-options {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  margin-bottom: 1rem;
+  width: 90%;
+}
+
+.l-glyph-info-button {
+  width: 60%;
+}
+
 .l-sacrificed-glyphs {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .c-glyph-peek {
@@ -606,7 +627,7 @@
 }
 
 .l-sacrificed-glyphs__help {
-  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .c-sacrificed-glyphs__confirm {

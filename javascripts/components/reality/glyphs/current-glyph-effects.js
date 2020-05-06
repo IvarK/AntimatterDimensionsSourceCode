@@ -58,8 +58,9 @@ Vue.component("current-glyph-effects", {
   template: `
   <div class="c-current-glyph-effects l-current-glyph-effects">
     <div>
-      Currently active glyph effects:
+      <b>Currently active glyph effects:</b>
     </div>
+    <br>
     <div v-if="isSoftcapActive" class="l-current-glyph-effects__capped-header">
       <span class="c-current-glyph-effects__effect--capped">Colored</span> effects have been slightly reduced
       due to a softcap

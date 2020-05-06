@@ -309,6 +309,7 @@ let player = {
               false, false, false, false, false],
     perks: new Set(),
     respec: false,
+    showGlyphSacrifice: false,
     tdbuyers: [false, false, false, false, false, false, false, false],
     epmultbuyer: false,
     autoAutoClean: false,

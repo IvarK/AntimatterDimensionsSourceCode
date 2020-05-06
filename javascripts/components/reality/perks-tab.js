@@ -194,7 +194,8 @@ Vue.component("perks-tab", {
   },
   mounted() {
     PerkNetwork.initializeIfNeeded();
-    PerkNetwork.setLabelVisibility(ui.view.shiftDown || player.options.showHintText.perks);
+    if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
+    else PerkNetwork.setLabelVisibility(ui.view.shiftDown || player.options.showHintText.perks);
     PerkNetwork.updatePerkColors();
     PerkNetwork.resetPosition();
     this.$refs.tab.appendChild(PerkNetwork.container);

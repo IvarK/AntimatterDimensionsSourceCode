@@ -154,8 +154,8 @@ GameDatabase.infinity.upgrades = (function() {
         if (Teresa.isRunning || V.isRunning) return "Disabled in this reality";
         const income = format(value, 2, 0);
         const period = player.bestInfinityTime >= 999999999999
-          ? "hundred or so years"
-          : Time.bestInfinity.times(10);
+          ? "∞"
+          : Time.bestInfinity.times(10).toStringShort();
         return `${income} every ${period}`;
       },
       charged: {

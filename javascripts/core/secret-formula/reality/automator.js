@@ -327,7 +327,7 @@ GameDatabase.reality.automator = {
       rep - replicanti amount <br>
       tt - time theorem amount <br>
       total tt - TOTAL time theorems, includes all forms of generated TT <br>
-      completions - amount of total EC completions <br>
+      completions - amount of current EC completions <br>
       ecx completions - amount of EC completions for a certain EC <br>
       `,
       examples: [

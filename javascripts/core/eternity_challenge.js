@@ -161,11 +161,7 @@ class EternityChallengeState extends GameMechanicState {
   start(auto) {
     if (!this.isUnlocked || EternityChallenge.isRunning) return false;
     if (!auto && player.options.confirmations.challenges) {
-      const confirmation =
-        "You will start over with just your time studies, " +
-        "eternity upgrades and achievements. " +
-        "You need to reach a set IP with special conditions.";
-      if (!confirm(confirmation)) return false;
+      Modal.startEternityChallenge.show();
     }
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
@@ -182,7 +178,7 @@ class EternityChallengeState extends GameMechanicState {
       if (this.id === 6 && this.completions === 5) EnslavedProgress.ec6.giveProgress();
       if (EnslavedProgress.challengeCombo.hasProgress) Tab.challenges.normal.show();
     }
-    startEternityChallenge();
+    // StartEternityChallenge();
     return true;
   }
 

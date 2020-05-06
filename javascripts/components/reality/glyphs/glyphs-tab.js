@@ -37,6 +37,8 @@ Vue.component("glyphs-tab", {
   template:
   `<div class="l-glyphs-tab">
     <div class="l-reality-button-column">
+      <glyph-peek />
+      <br/>
       <reality-button />
       <div v-if="isInCelestialReality">
         <input type="checkbox"

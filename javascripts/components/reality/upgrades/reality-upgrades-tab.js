@@ -19,6 +19,8 @@ Vue.component("reality-upgrades-tab", {
       <br>
       These requirements, once completed, permanently unlock the ability to purchase the upgrades at any point.
       <br>
+      Each complete row of purchased upgrades adds {{ formatInt(1) }} to your glyph level.
+      <br>
       Red upgrades are impossible to unlock this Reality, while yellow upgrades are still possible.
       <br>
       Locked upgrades show their requirement and effect by default; unlocked ones show

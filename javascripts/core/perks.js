@@ -40,7 +40,7 @@ class PerkState extends SetPurchasableMechanicState {
 const Perk = (function() {
   const db = GameDatabase.reality.perks;
   return {
-    glyphChoice3: new PerkState(db.glyphChoice3),
+    glyphChoice4: new PerkState(db.glyphChoice4),
     startAM1: new PerkState(db.startAM1),
     startAM2: new PerkState(db.startAM2),
     startIP1: new PerkState(db.startIP1),
@@ -49,12 +49,6 @@ const Perk = (function() {
     startEP2: new PerkState(db.startEP2),
     startEP3: new PerkState(db.startEP3),
     startTP: new PerkState(db.startTP),
-    glyphLevelIncrease1: new PerkState(db.glyphLevelIncrease1),
-    glyphLevelIncrease2: new PerkState(db.glyphLevelIncrease2),
-    glyphChoice4: new PerkState(db.glyphChoice4),
-    glyphRarityIncrease: new PerkState(db.glyphRarityIncrease),
-    glyphUncommonGuarantee: new PerkState(db.glyphUncommonGuarantee),
-    realityMachineGain: new PerkState(db.realityMachineGain),
     dimboostNonReset: new PerkState(db.dimboostNonReset),
     studyPassive1: new PerkState(db.studyPassive1),
     studyPassive2: new PerkState(db.studyPassive2),
@@ -115,6 +109,17 @@ const Perks = {
 
 for (const perk of Perks.all) {
   perk.initializeConnections();
+}
+
+function refundGlyphPerks() {
+  const newPerks = new Set([...player.reality.perks].filter(x => x < 20 || x > 25));
+  const gainedPerkPoints = player.reality.perks.size - newPerks.size;
+  player.reality.pp += gainedPerkPoints;
+  player.reality.perks = newPerks;
+  if (gainedPerkPoints > 0) {
+    Modal.message.show(
+      "Some of your perks (glyph perks) were removed. The perk points you spent on them have been refunded.");
+  }
 }
 
 function checkPerkValidity() {

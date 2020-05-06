@@ -307,9 +307,9 @@ const GlyphGenerator = {
   randomStrength(rng) {
     if (Ra.has(RA_UNLOCKS.MAX_RARITY)) return rarityToStrength(100);
     let result;
-    // Divide the extra minimum rarity by the strength multiplier
+    // Divide the extra minimum rarity (also from Reality Upgrade 16) by the strength multiplier
     // since we'll multiply by the strength multiplier later.
-    const minimumValue = 1 + (Perk.glyphRarityIncrease.isBought ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
+    const minimumValue = 1 + (RealityUpgrade(16).isBought ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
     do {
       result = GlyphGenerator.gaussianBellCurve(rng);
     } while (result <= minimumValue);
@@ -1225,16 +1225,16 @@ function getGlyphLevelInputs() {
     scaledLevel = hyperInstabilityScaleBegin + 0.5 * hyperInstabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
   }
   const scalePenalty = scaledLevel > 0 ? baseLevel / scaledLevel : 1;
-  const perkFactor = Effects.sum(
-    Perk.glyphLevelIncrease1,
-    Perk.glyphLevelIncrease2
-  );
+  const rowFactor = [Array.range(1, 5).every(x => RealityUpgrade(x).boughtAmount > 0)]
+    .concat(Array.range(1, 4).map(x => Array.range(1, 5).every(y => RealityUpgrade(5 * x + y).isBought)))
+    .filter(x => x)
+    .length;
   const achievementFactor = Effects.sum(
     Achievement(148),
     Achievement(157)
   );
-  baseLevel += perkFactor + achievementFactor;
-  scaledLevel += perkFactor + achievementFactor;
+  baseLevel += rowFactor + achievementFactor;
+  scaledLevel += rowFactor + achievementFactor;
   // Temporary runaway prevention (?)
   const levelHardcap = 1000000;
   const levelCapped = scaledLevel > levelHardcap;
@@ -1246,7 +1246,7 @@ function getGlyphLevelInputs() {
     eterEffect,
     perkShop: perkShopEffect,
     scalePenalty,
-    perkFactor,
+    rowFactor,
     achievementFactor,
     shardFactor,
     rawLevel: baseLevel,

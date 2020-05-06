@@ -4,7 +4,9 @@ Vue.component("glyph-set-preview", {
   props: {
     show: Boolean,
     text: String,
-    glyphs: Array
+    glyphs: Array,
+    noLevelOverride: Boolean,
+    flipTooltip: Boolean
   },
   template:
     `<div v-if="show">
@@ -20,6 +22,8 @@ Vue.component("glyph-set-preview", {
           :showSacrifice="false"
           :draggable="false"
           :circular="true"
+          :noLevelOverride="noLevelOverride"
+          :flipTooltip="flipTooltip"
           size="2.8rem"
           :textProportion="0.6"
           glowBlur="0.2rem"

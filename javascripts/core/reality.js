@@ -14,8 +14,7 @@ const GlyphSelection = {
   get choiceCount() {
     let baseChoices = Effects.max(
       1,
-      Perk.glyphChoice4,
-      Perk.glyphChoice3
+      Perk.glyphChoice4
     );
     // TODO Make Ra follow GMS pattern so this isn't as dumb as it is right now
     if (Ra.has(RA_UNLOCKS.GLYPH_CHOICES)) baseChoices *= 2;
@@ -31,10 +30,10 @@ const GlyphSelection = {
    * glyph if the score exceeds the specified threshold for every glyph already in the list.
    * This uniqueness score is equal to the number of effects that exactly one of the glyphs has.
    */
-  checkUniqueGlyph(glyphToCheck) {
+  checkUniqueGlyph(glyphList, glyphToCheck) {
     const uniquenessThreshold = 3;
     const checkEffects = glyphToCheck.effects;
-    for (const currGlyph of this.glyphs) {
+    for (const currGlyph of glyphList) {
       const currEffects = currGlyph.effects;
       // eslint-disable-next-line no-bitwise
       const union = checkEffects | currEffects;
@@ -45,22 +44,20 @@ const GlyphSelection = {
     return true;
   },
 
-  glyphUncommonGuarantee(rng) {
+  glyphUncommonGuarantee(glyphList, rng) {
     // If no choices are rare enough and the player has the uncommon glyph perk, randomly generate
     // rarities until the threshold is passed and then assign that rarity to a random glyph
     const strengthThreshold = 1.5;
-    if (this.glyphs.some(e => e.strength >= strengthThreshold)) return;
+    if (glyphList.some(e => e.strength >= strengthThreshold)) return;
     let newStrength;
     do {
       newStrength = GlyphGenerator.randomStrength(rng);
     } while (newStrength < strengthThreshold);
-    this.glyphs.randomElement().strength = newStrength;
+    glyphList[Math.floor(rng.uniform() * glyphList.length)].strength = newStrength;
   },
-
-  generate(count, realityProps) {
-    this.glyphs = [];
-    this.realityProps = realityProps;
-    const level = realityProps.gainedGlyphLevel;
+  
+  glyphList(count, level, isChoosingGlyph) {
+    const glyphList = [];
     const rng = new GlyphGenerator.RealGlyphRNG();
     for (let out = 0; out < count; ++out) {
       let glyph;
@@ -69,13 +66,22 @@ const GlyphSelection = {
       // for some reason and forget about the uniqueness check
       for (let tries = 0; tries < 100; ++tries) {
         glyph = GlyphGenerator.randomGlyph(level, rng);
-        if (this.checkUniqueGlyph(glyph)) break;
+        if (this.checkUniqueGlyph(glyphList, glyph)) break;
       }
-      this.glyphs.push(glyph);
+      glyphList.push(glyph);
     }
+    this.glyphUncommonGuarantee(glyphList, rng);
+    if (isChoosingGlyph) {
+      rng.finalize();
+    }
+    return glyphList;
+  },
+
+  generate(count, realityProps) {
+    EventHub.dispatch(GAME_EVENT.GLYPH_CHOICES_GENERATED);
+    this.realityProps = realityProps;
+    this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel, true);
     ui.view.modal.glyphSelection = true;
-    if (Perk.glyphUncommonGuarantee.isBought) this.glyphUncommonGuarantee(rng);
-    rng.finalize();
   },
 
   update(level) {

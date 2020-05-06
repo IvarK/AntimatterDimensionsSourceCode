@@ -96,7 +96,6 @@ function gainedRealityMachines() {
   // Increase base RM gain if <10 RM
   if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
   rmGain = rmGain.times(getRealityMachineMultiplier());
-  rmGain = rmGain.plusEffectOf(Perk.realityMachineGain);
   // This happens around ee10 and is necessary to reach e9e15 antimatter without having to deal with the various
   // potential problems associated with having ee9 RM, of which there are lots (both balance-wise and design-wise).
   // The softcap here squishes every additional OoM in the exponent into another factor of e1000 RM, putting e9e15

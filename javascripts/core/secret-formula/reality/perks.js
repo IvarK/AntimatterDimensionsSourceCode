@@ -11,12 +11,12 @@ const PERK_FAMILY = {
 };
 
 GameDatabase.reality.perks = {
-  glyphChoice3: {
+  glyphChoice4: {
     id: 0,
-    label: "GC3",
+    label: "GC4",
     family: PERK_FAMILY.REALITY,
-    description: "You can now choose from 3 different glyphs on Reality.",
-    effect: 3,
+    description: "You can now choose from 4 different glyphs on Reality.",
+    effect: 4,
   },
   startAM1: {
     id: 10,
@@ -80,47 +80,6 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.DILATION,
     description: "After unlocking Dilation, gain 10 Tachyon Particles.",
     effect: () => (Enslaved.isRunning ? 1 : 10)
-  },
-  glyphLevelIncrease1: {
-    id: 20,
-    label: "GL1",
-    family: PERK_FAMILY.REALITY,
-    description: "Increase glyph level by 1.",
-    effect: 1
-  },
-  glyphLevelIncrease2: {
-    id: 21,
-    label: "GL2",
-    family: PERK_FAMILY.REALITY,
-    description: "Increase glyph level by 1.",
-    effect: 1
-  },
-  glyphChoice4: {
-    id: 22,
-    label: "GC4",
-    family: PERK_FAMILY.REALITY,
-    description: "Increase the number of glyphs you can choose from to 4.",
-    effect: 4,
-  },
-  glyphRarityIncrease: {
-    id: 23,
-    label: "GRP",
-    family: PERK_FAMILY.REALITY,
-    description: "Increase the minimum glyph rarity by 5%."
-  },
-  glyphUncommonGuarantee: {
-    id: 24,
-    label: "GRT",
-    family: PERK_FAMILY.REALITY,
-    description: "One glyph choice is guaranteed to have uncommon or better rarity."
-  },
-  realityMachineGain: {
-    id: 25,
-    label: "RM",
-    family: PERK_FAMILY.REALITY,
-    description: "Every reality, gain additional RM equal to your current reality count multiplied" +
-      " by your highest glyph level.",
-    effect: () => player.bestGlyphLevel * player.realities
   },
   dimboostNonReset: {
     id: 30,
@@ -422,9 +381,7 @@ GameDatabase.reality.perkConnections = (function() {
   const p = GameDatabase.reality.perks;
   // First item is the start, other items are the ends
   const groups = [
-    [p.glyphChoice3,
-      p.achievementGroup1, p.startAM1, p.glyphLevelIncrease1, p.glyphLevelIncrease2,
-      p.autounlockEU1, p.bypassEC5Lock],
+    [p.glyphChoice4, p.achievementGroup1, p.startAM1, p.autounlockEU1, p.bypassEC5Lock],
     [p.startAM1, p.startAM2, p.startIP1],
     [p.startAM2, p.startEP1, p.dimboostNonReset],
     [p.startIP1, p.startIP2, p.startEP1, p.autobuyerFasterID],
@@ -432,11 +389,6 @@ GameDatabase.reality.perkConnections = (function() {
     [p.startEP1, p.startEP2, p.startTP],
     [p.startEP2, p.startEP3],
     [p.startTP, p.startEP1, p.retroactiveTP1],
-    [p.glyphLevelIncrease1, p.glyphChoice4],
-    [p.glyphLevelIncrease2, p.glyphRarityIncrease],
-    [p.glyphChoice4, p.glyphLevelIncrease1, p.glyphUncommonGuarantee],
-    [p.glyphRarityIncrease, p.glyphLevelIncrease2, p.glyphUncommonGuarantee],
-    [p.glyphUncommonGuarantee, p.glyphRarityIncrease, p.glyphChoice4, p.realityMachineGain],
     [p.autounlockEU1, p.autounlockEU2],
     [p.autounlockEU2, p.autounlockEU1, p.autobuyerDilation],
     [p.autounlockDilation1, p.autounlockDilation2],

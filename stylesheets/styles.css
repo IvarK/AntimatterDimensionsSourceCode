@@ -3172,7 +3172,7 @@ screen and (max-width: 480px) {
 .t-s6 .o-infinity-upgrade-btn {
   color: white;
   background-color: black;
-  box-shadow: 0 0 7px 2px #111111;
+  box-shadow: 0 0 0.7rem 0.2rem #111111;
 }
 
 .o-infinity-upgrade-btn:hover {
@@ -3382,18 +3382,6 @@ screen and (max-width: 480px) {
   border-color: black;
 }
 
-.t-metro .o-infinity-upgrade-btn--bought,
-.t-inverted-metro .o-infinity-upgrade-btn--bought,
-.t-s8 .o-infinity-upgrade-btn--bought {
-  background-color: #66bb6a;
-  border-color: black;
-}
-
-.t-s1 .o-infinity-upgrade-btn--bought {
-  background-color: #4baf4e;
-  border-color: black;
-}
-
 /*#endregion o-infinity-upgrade-btn--bought*/
 
 .o-infinity-upgrade-btn--chargeable {
@@ -3414,6 +3402,11 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-upgrade-btn--charged {
+  background-color: #25e8e6;
+}
+
+.t-dark .o-infinity-upgrade-btn--charged,
+.t-s6 .o-infinity-upgrade-btn--charged {
   background-color: #25e8e6;
 }
 

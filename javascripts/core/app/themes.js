@@ -69,7 +69,8 @@ Theme.secretThemeIndex = function(name) {
     "cb72e4a679254df5f99110dc7a93924628b916d2e069e3ad206db92068cb0883",
     "c8fac64da08d674123c32c936b14115ab384fe556fd24e431eb184a8dde21137",
     "da3b3c152083f0c70245f104f06331497b97b52ac80edec05e26a33ee704cae7",
-    "1bbc0800145e72dfea5bfb218eba824c52510488b3a05ee88feaaa6683322d19"
+    "1bbc0800145e72dfea5bfb218eba824c52510488b3a05ee88feaaa6683322d19",
+    "dba8336cd3224649d07952b00045a6ec3c8df277aa8a0a0e3e7c2aaa77f1fbb9"
   ];
   const sha = sha512_256(name.toUpperCase());
   return secretThemes.indexOf(sha);
@@ -125,7 +126,8 @@ const Themes = {
         Theme.light("S5"),
         Theme.dark("S6"),
         Theme.light("S7"),
-        Theme.light("S8")
+        Theme.light("S8"),
+        Theme.light("S9")
     ],
 
     available() {

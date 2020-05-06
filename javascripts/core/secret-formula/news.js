@@ -1339,6 +1339,7 @@ GameDatabase.news = [
           "colors pull you in and fully immerse you into the game.",
         S7: "I always had fond memories of that background from my childhood.",
         S8: "it makes it a lot easier to sneak in a little gameplay at the office.",
+        S9: "lol you can't even ever see this in the game",
       };
       const reason = reasons[Theme.current().name.replace(/\s/gu, "")];
       return `Ah, a fellow ${theme} theme user. I see that you have impeccable taste.

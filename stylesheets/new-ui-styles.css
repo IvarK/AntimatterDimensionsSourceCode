@@ -7,7 +7,8 @@
   outline: none;
 }
 
-.t-normal #ui-container {
+.t-normal #ui-container,
+.t-s9 #ui-container {
   --color-text: white;
   --color-base: #1d1b22;
   --color-accent: rgb(223, 80, 80);
@@ -94,9 +95,9 @@ body.t-normal {
 }
 
 .t-dark #antimatter {animation: a-game-header__antimatter--glow 25s infinite;}
-.o-sidebar-infinity-button  { color: var(--color-infinity) !important }
-.o-sidebar-eternity-button  { color: var(--color-eternity) !important }
-.o-sidebar-reality-button { color: var(--color-reality) !important }
+.o-sidebar-infinity-button  { color: var(--color-infinity) }
+.o-sidebar-eternity-button  { color: var(--color-eternity) }
+.resource .o-sidebar-reality-button { color: var(--color-reality) }
 
 .resource-infinity-canreset,
 .resource-eternity-canreset {
@@ -470,8 +471,7 @@ body.t-normal {
 }
 
 .o-infinity-upgrade-btn--bought {
-  border: 0.1rem solid var(--color-accent);
-  background: var(--color-good);
+  border-color: var(--color-accent);
 }
 
 .o-primary-btn--option, .o-primary-btn--option-wide, .c-select-theme__item, .c-select-notation__item {

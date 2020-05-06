@@ -158,8 +158,8 @@ class EternityChallengeState extends GameMechanicState {
     }
   }
 
-  start(auto, force = false) {
-    if ((!this.isUnlocked && !force) || EternityChallenge.isRunning) return false;
+  start(auto) {
+    if (!this.isUnlocked || EternityChallenge.isRunning) return false;
     if (!auto && player.options.confirmations.challenges) {
       EternityChallenges.starting = this.id;
       Modal.startEternityChallenge.show();

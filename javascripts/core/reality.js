@@ -283,6 +283,8 @@ function giveRealityRewards(realityProps) {
     if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
       player.celestials.teresa.bestRunAM = Currency.antimatter.value;
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+      player.celestials.teresa.lastRepeatedRM = player.celestials.teresa.lastRepeatedRM
+        .clampMin(player.reality.realityMachines);
     }
     Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
   }

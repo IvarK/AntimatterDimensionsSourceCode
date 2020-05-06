@@ -72,6 +72,8 @@ Vue.component("sacrificed-glyphs", {
       addThreshold: 0,
       empowerThreshold: 0,
       boostThreshold: 0,
+      teresaMult: 0,
+      lastRMTeresa: new Decimal(0),
     };
   },
   computed: {
@@ -84,6 +86,8 @@ Vue.component("sacrificed-glyphs", {
       this.addThreshold = GlyphAlteration.additionThreshold;
       this.empowerThreshold = GlyphAlteration.empowermentThreshold;
       this.boostThreshold = GlyphAlteration.boostingThreshold;
+      this.teresaMult = Teresa.runRewardMultiplier;
+      this.lastRMTeresa.copyFrom(player.celestials.teresa.lastRepeatedRM);
     },
     dragover(event) {
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
@@ -120,6 +124,9 @@ Vue.component("sacrificed-glyphs", {
       <br><br>
     </div>
     <div class="c-sacrificed-glyphs__header">Sacrifices:</div>
+    <div>
+      (Multiplied by {{ formatX(teresaMult, 2, 2) }}; Teresa last done at {{ format(lastRMTeresa, 2) }} RM)
+    </div>
     <template v-for="type in types">
       <type-sacrifice :type="type" :hasDragover="hasDragover"/>
     </template>

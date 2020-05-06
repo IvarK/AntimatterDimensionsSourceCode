@@ -1032,8 +1032,8 @@ GameDatabase.achievements.normal = [
         .filter(effect => effect.isGenerated).length
     ).max() >= 4,
     checkEvent: GAME_EVENT.GLYPHS_CHANGED,
-    reward: () => `${formatX(2)} glyph choices and ${formatPercents(0.5)} ➜ ${formatPercents(1)} ` +
-      `chance of an additional effect on glyphs.`,
+    reward: () => `${formatX(2)} glyph choices and Duplicity of Potency has a ${formatPercents(1)} ` +
+      `chance of giving an additional effect on glyphs rather than ${formatPercents(0.5)}.`,
     effects: {
       choices: 2,
       effectChance: 1

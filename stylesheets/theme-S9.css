@@ -8,6 +8,10 @@
   color: transparent;
 }
 
+::placeholder {
+  opacity: 0;
+}
+
 .o-achievement--normal,
 .o-achievement--secret {
   background-image: none;

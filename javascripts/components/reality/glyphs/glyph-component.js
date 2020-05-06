@@ -279,6 +279,10 @@ Vue.component("glyph-component", {
     draggable: {
       type: Boolean,
       default: false,
+    },
+    flipTooltip: {
+      type: Boolean,
+      default: false,
     }
   },
   data() {
@@ -364,8 +368,20 @@ Vue.component("glyph-component", {
       return this.$viewModel.tabs.reality.currentGlyphTooltip === this.componentID;
     },
     tooltipDirectionClass() {
-      return this.$viewModel.tabs.reality.glyphTooltipDirection === 1
-        ? "l-glyph-tooltip--up-left" : "l-glyph-tooltip--down-left";
+      let directionID = this.$viewModel.tabs.reality.glyphTooltipDirection;
+      if (this.flipTooltip) directionID += 1;
+      switch (directionID) {
+        case -1:
+          return "l-glyph-tooltip--down-left";
+        case 0:
+          return "l-glyph-tooltip--down-right";
+        case 1:
+          return "l-glyph-tooltip--up-left";
+        case 2:
+          return "l-glyph-tooltip--up-right";
+        default:
+          return "";
+      }
     },
   },
   created() {

@@ -54,7 +54,7 @@ Vue.component("reality-button", {
         return;
       }
       function EPforRM(rm) {
-        const adjusted = Decimal.divide(rm.minusEffectOf(Perk.realityMachineGain), getRealityMachineMultiplier());
+        const adjusted = Decimal.divide(rm, getRealityMachineMultiplier());
         if (adjusted.lte(1)) return Decimal.pow10(4000);
         if (adjusted.lte(10)) return Decimal.pow10(4000 / 27 * (adjusted.toNumber() + 26));
         let result = Decimal.pow10(4000 * (adjusted.log10() / 3 + 1));

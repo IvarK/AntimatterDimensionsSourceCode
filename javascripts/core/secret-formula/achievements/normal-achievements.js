@@ -1032,8 +1032,12 @@ GameDatabase.achievements.normal = [
         .filter(effect => effect.isGenerated).length
     ).max() >= 4,
     checkEvent: GAME_EVENT.GLYPHS_CHANGED,
-    reward: "Gained glyph level is increased by number of distinct glyph effects equipped.",
-    effect: () => Effarig.glyphEffectAmount,
+    reward: () => `${formatX(2)} glyph choices and ${formatPercents(0.5)} ➜ ${formatPercents(1)} ` +
+      `chance of an additional effect on glyphs.`,
+    effects: {
+      choices: 2,
+      effectChance: 1
+    }
   },
   {
     id: 158,

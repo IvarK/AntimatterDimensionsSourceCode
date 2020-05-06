@@ -211,7 +211,8 @@ GameDatabase.reality.upgrades = (function() {
       },
       checkRequirement: () => Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2) === 4,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-      description: "50% chance to get an additional effect on glyphs",
+      description: () => `${formatPercents(0.5)} chance to get an additional effect on glyphs`,
+      effect: 0.5,
       formatCost: value => format(value, 1, 0)
     },
     {

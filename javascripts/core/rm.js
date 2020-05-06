@@ -327,7 +327,9 @@ const GlyphGenerator = {
     let num = Math.min(
       maxEffects,
       Math.floor(Math.pow(rng.uniform(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1));
-    if (RealityUpgrade(17).isBought && rng.uniform() > 0.5) num = Math.min(num + 1, maxEffects);
+    if (rng.uniform() < Effects.max(0, RealityUpgrade(17), Achievement(157).effects.effectChance)) {
+      num = Math.min(num + 1, maxEffects);
+    }
     if (Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) num = Math.max(num, 4);
     return num;
   },
@@ -1229,10 +1231,7 @@ function getGlyphLevelInputs() {
     .concat(Array.range(1, 4).map(x => Array.range(1, 5).every(y => RealityUpgrade(5 * x + y).isBought)))
     .filter(x => x)
     .length;
-  const achievementFactor = Effects.sum(
-    Achievement(148),
-    Achievement(157)
-  );
+  const achievementFactor = Achievement(148).effectOrDefault(0);
   baseLevel += rowFactor + achievementFactor;
   scaledLevel += rowFactor + achievementFactor;
   // Temporary runaway prevention (?)

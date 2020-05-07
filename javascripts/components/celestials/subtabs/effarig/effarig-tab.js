@@ -85,7 +85,7 @@ Vue.component("effarig-tab", {
       this.runUnlocked = EffarigUnlock.run.isUnlocked;
       this.isRunning = Effarig.isRunning;
       this.vIsFlipped = V.isFlipped;
-      this.relicShardRarityAlwaysMax = Ra.has(RA_UNLOCKS.RELIC_SHARD_RARITY_ALWAYS_MAX);
+      this.relicShardRarityAlwaysMax = Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX);
     },
     startRun() {
       if (!resetReality()) return;

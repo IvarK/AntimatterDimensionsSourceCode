@@ -330,7 +330,7 @@ const GlyphGenerator = {
       Math.floor(Math.pow(rng.uniform(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1));
     // We only apply Achievement 157 reward if Duplicity of Potency is bought.
     if (RealityUpgrade(17).isBought &&
-      rng.uniform() < Effects.max(RealityUpgrade(17), Achievement(157).effects.effectChance)) {
+      rng.uniform() < Effects.max(0, RealityUpgrade(17), Achievement(157).effects.effectChance)) {
       num = Math.min(num + 1, maxEffects);
     }
     if (Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) num = Math.max(num, 4);

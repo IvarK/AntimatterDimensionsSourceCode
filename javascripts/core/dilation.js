@@ -19,16 +19,6 @@ function startDilatedEternity(auto) {
   return true;
 }
 
-// @param {Name of the ugrade} id
-// @param {Cost of the upgrade} cost
-// @param {Cost increase for the upgrade, only for rebuyables} costInc
-// id 1-3 are rebuyables
-// id 2 resets your dilated time and free galaxies
-
-const DIL_UPG_COSTS = [null, [1e5, 10, Number.MAX_VALUE], [1e6, 100, 33], [1e7, 20, Number.MAX_VALUE],
-                        5e6, 1e9, 5e7,
-                        2e12, 1e10, 1e11,
-                        1e15];
 const DIL_UPG_NAMES = [
   null, "dtGain", "galaxyThreshold", "tachyonGain", "doubleGalaxies", "tdMultReplicanti",
   "ndMultDT", "ipMultDT", "timeStudySplit", "dilationPenalty", "ttGenerator"
@@ -56,7 +46,7 @@ function buyDilationUpgrade(id, bulk, extraFactor) {
     if (!bulk) {
       buying = Math.clampMax(buying, 1);
     }
-    const cost = Decimal.sumGeometricSeries(buying, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount);
+    const cost = Decimal.sumGeometricSeries(buying, upgrade.config.initialCost, upgrade.config.increment, upgAmount);
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost);
     player.dilation.rebuyables[id] += buying;
     if (id === 2) {

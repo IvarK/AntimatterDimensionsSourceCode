@@ -12,13 +12,8 @@ const GlyphSelection = {
   },
 
   get choiceCount() {
-    let baseChoices = Effects.max(
-      1,
-      Perk.glyphChoice4
-    );
-    // TODO Make Ra follow GMS pattern so this isn't as dumb as it is right now
-    if (Ra.has(RA_UNLOCKS.GLYPH_CHOICES)) baseChoices *= 2;
-    return baseChoices;
+    return Effects.max(1, Perk.glyphChoice4) *
+      (Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX) ? 2 : 1);
   },
 
   /**

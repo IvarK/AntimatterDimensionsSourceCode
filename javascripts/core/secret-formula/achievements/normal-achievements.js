@@ -1031,9 +1031,7 @@ GameDatabase.achievements.normal = [
       glyph => getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
         .filter(effect => effect.isGenerated).length
     ).max() >= 4,
-    checkEvent: GAME_EVENT.GLYPHS_CHANGED,
-    reward: "Gained glyph level is increased by number of distinct glyph effects equipped.",
-    effect: () => Effarig.glyphEffectAmount,
+    checkEvent: GAME_EVENT.GLYPHS_CHANGED
   },
   {
     id: 158,

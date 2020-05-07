@@ -111,17 +111,6 @@ for (const perk of Perks.all) {
   perk.initializeConnections();
 }
 
-function refundGlyphPerks() {
-  const newPerks = new Set([...player.reality.perks].filter(x => x < 20 || x > 25));
-  const gainedPerkPoints = player.reality.perks.size - newPerks.size;
-  player.reality.pp += gainedPerkPoints;
-  player.reality.perks = newPerks;
-  if (gainedPerkPoints > 0) {
-    Modal.message.show(
-      "Some of your perks (glyph perks) were removed. The perk points you spent on them have been refunded.");
-  }
-}
-
 function checkPerkValidity() {
   if (player.reality.perks.every(id => Perks.find(id) !== undefined)) return;
   dev.respecPerks();

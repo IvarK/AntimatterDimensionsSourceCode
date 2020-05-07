@@ -314,7 +314,8 @@ const GlyphGenerator = {
       result = GlyphGenerator.gaussianBellCurve(rng);
     } while (result <= minimumValue);
     result *= GlyphGenerator.strengthMultiplier;
-    const increasedRarity = rng.uniform() * Effarig.maxRarityBoost + GlyphSacrifice.effarig.effectValue;
+    const relicShardFactor = Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX) ? 1 : rng.uniform();
+    const increasedRarity = relicShardFactor * Effarig.maxRarityBoost + GlyphSacrifice.effarig.effectValue;
     // Each rarity% is 0.025 strength.
     result += increasedRarity / 40;
     return Math.min(result, rarityToStrength(100));
@@ -327,7 +328,11 @@ const GlyphGenerator = {
     let num = Math.min(
       maxEffects,
       Math.floor(Math.pow(rng.uniform(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1));
-    if (RealityUpgrade(17).isBought && rng.uniform() > 0.5) num = Math.min(num + 1, maxEffects);
+    // If we do decide to add anything else that boosts chance of an extra effect, keeping the code like this
+    // makes it easier to do (add it to the Effects.max).
+    if (RealityUpgrade(17).isBought && rng.uniform() < Effects.max(0, RealityUpgrade(17))) {
+      num = Math.min(num + 1, maxEffects);
+    }
     if (Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) num = Math.max(num, 4);
     return num;
   },
@@ -1229,10 +1234,7 @@ function getGlyphLevelInputs() {
     .concat(Array.range(1, 4).map(x => Array.range(1, 5).every(y => RealityUpgrade(5 * x + y).isBought)))
     .filter(x => x)
     .length;
-  const achievementFactor = Effects.sum(
-    Achievement(148),
-    Achievement(157)
-  );
+  const achievementFactor = Achievement(148).effectOrDefault(0);
   baseLevel += rowFactor + achievementFactor;
   scaledLevel += rowFactor + achievementFactor;
   // Temporary runaway prevention (?)

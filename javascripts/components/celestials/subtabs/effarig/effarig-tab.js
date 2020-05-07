@@ -43,7 +43,8 @@ Vue.component("effarig-tab", {
       runUnlocked: false,
       quote: "",
       isRunning: false,
-      vIsFlipped: false
+      vIsFlipped: false,
+      relicShardRarityAlwaysMax: false
     };
   },
   computed: {
@@ -84,6 +85,7 @@ Vue.component("effarig-tab", {
       this.runUnlocked = EffarigUnlock.run.isUnlocked;
       this.isRunning = Effarig.isRunning;
       this.vIsFlipped = V.isFlipped;
+      this.relicShardRarityAlwaysMax = Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX);
     },
     startRun() {
       if (!resetReality()) return;
@@ -114,7 +116,8 @@ Vue.component("effarig-tab", {
         <div class="l-effarig-shop">
           <div class="c-effarig-relics">
             You have {{ format(relicShards, 2, 0) }} Relic Shards, which increases <br>
-            the rarity of new glyphs by up to +{{ format(shardRarityBoost, 2, 2) }}%.
+            the rarity of new glyphs by {{ relicShardRarityAlwaysMax ? "" : "up to" }}
+            +{{ format(shardRarityBoost, 2, 2) }}%.
           </div>
           <div class="c-effarig-relic-description">
             You will gain {{ format(shardsGained, 2, 0) }} Relic Shards next reality. More EP slightly increases <br>

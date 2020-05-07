@@ -136,7 +136,6 @@ const GameStorage = {
     ui.view.tutorialActive = player.tutorialActive;
 
     recalculateAllGlyphs();
-    refundGlyphPerks();
     checkPerkValidity();
     V.updateTotalRunUnlocks();
     Enslaved.boostReality = false;

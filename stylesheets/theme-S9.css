@@ -13,7 +13,8 @@
 }
 
 .o-achievement--normal,
-.o-achievement--secret {
+.o-achievement--secret,
+.o-achievement--cancer {
   background-image: none;
 }
 

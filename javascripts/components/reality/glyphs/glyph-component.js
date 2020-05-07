@@ -587,14 +587,14 @@ Vue.component("glyph-component", {
         <div v-if="$viewModel.shiftDown || showGlyphEffectDots" v-for="x in glyphEffects"
           :style="glyphEffectIcon(x)"/>
         <glyph-tooltip v-if="hasTooltip && tooltipLoaded"
-                       v-show="isCurrentTooltip"
-                       ref="tooltip"
-                       v-bind="glyph"
-                       :class="tooltipDirectionClass"
-                       :sacrificeReward="sacrificeReward"
-                       :showDeletionText="showSacrifice"
-                       :levelOverride="levelOverride"
-                       :component="componentID"/>
+          v-show="isCurrentTooltip"
+          ref="tooltip"
+          v-bind="glyph"
+          :class="tooltipDirectionClass"
+          :sacrificeReward="sacrificeReward"
+          :showDeletionText="showSacrifice"
+          :levelOverride="levelOverride"
+          :component="componentID"/>
       </div>
       <div ref="over"
            :style="overStyle"

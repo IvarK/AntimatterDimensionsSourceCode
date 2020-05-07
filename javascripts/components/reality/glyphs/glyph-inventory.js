@@ -112,12 +112,12 @@ Vue.component("glyph-inventory", {
            @dragover="allowDrag"
            @drop="drop(toIndex(row, col), $event)">
         <glyph-component v-if="inventory[toIndex(row, col)]"
-                         :glyph="inventory[toIndex(row, col)]"
-                         :showSacrifice="true"
-                         :draggable="true"
-                         @shiftClicked="removeGlyph($event, false)"
-                         @ctrlShiftClicked="removeGlyph($event, true)"
-                         @clicked="clickGlyph(col, $event)"/>
+          :glyph="inventory[toIndex(row, col)]"
+          :showSacrifice="glyphSacrificeUnlocked"
+          :draggable="true"
+          @shiftClicked="removeGlyph($event, false)"
+          @ctrlShiftClicked="removeGlyph($event, true)"
+          @clicked="clickGlyph(col, $event)"/>
       </div>
     </div>
     <div>

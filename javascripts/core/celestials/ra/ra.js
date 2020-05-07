@@ -450,10 +450,11 @@ const RA_UNLOCKS = {
     level: 15,
     displayIcon: `<span class="fas fa-fire"></span>`
   },
-  MAX_RARITY: {
+  MAX_RARITY_AND_SHARD_SACRIFICE_BOOST: {
     id: 13,
     description: "Get Effarig to level 25",
-    reward: () => `Glyphs are always generated with ${formatPercents(1)} rarity`,
+    reward: () => `Glyphs are always generated with ${formatPercents(1)} rarity and ` +
+      `glyph sacrifice gain is raised to a power based on relic shards`,
     pet: Ra.pets.effarig,
     level: 25,
     displayIcon: `<i class="fas fa-ankh"></i>`

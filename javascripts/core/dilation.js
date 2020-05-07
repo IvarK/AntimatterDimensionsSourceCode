@@ -25,7 +25,7 @@ function startDilatedEternity(auto) {
 // id 1-3 are rebuyables
 // id 2 resets your dilated time and free galaxies
 
-const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
+const DIL_UPG_COSTS = [null, [1e5, 10, Number.MAX_VALUE], [1e6, 100, 33], [1e7, 20, Number.MAX_VALUE],
                         5e6, 1e9, 5e7,
                         2e12, 1e10, 1e11,
                         1e15];
@@ -43,11 +43,12 @@ function buyDilationUpgrade(id, bulk, extraFactor) {
   } else {
     const upgAmount = player.dilation.rebuyables[id];
     const realCost = new Decimal(DIL_UPG_COSTS[id][0]).times(Decimal.pow(DIL_UPG_COSTS[id][1], (upgAmount)));
-    if (player.dilation.dilatedTime.lt(realCost)) return false;
+    if (player.dilation.dilatedTime.lt(realCost) || upgAmount >= DIL_UPG_COSTS[id][2]) return false;
 
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
       DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
     buying = Math.clampMax(buying, Effects.max(1, PerkShopUpgrade.bulkDilation) * extraFactor);
+    buying = Math.clampMax(buying, DIL_UPG_COSTS[id][2] - upgAmount);
     if (!bulk) {
       buying = Math.clampMax(buying, 1);
     }
@@ -194,6 +195,10 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
 
   set isAutobuyerOn(value) {
     player.dilation.auto[this.autobuyerId] = value;
+  }
+  
+  get isCapped() {
+    return this.config.reachedCapFn();
   }
 
   purchase(bulk, extraFactor = 1) {

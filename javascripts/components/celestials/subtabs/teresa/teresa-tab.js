@@ -73,9 +73,14 @@ Vue.component("teresa-tab", {
             Start Teresa's Reality. Glyph TT generation is disabled and
             you gain less IP and EP (x^{{format(0.55, 2, 2)}}).
             <br><br>
-            Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
-            <br><br>
-            You last did Teresa's Reality at {{ format(lastRM, 2) }} RM.
+            <div v-if="bestAM.gt(0)">
+              Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
+              <br><br>
+              You last did Teresa's Reality at {{ format(lastRM, 2) }} RM.
+            </div>
+            <div v-else>
+              You have not completed Teresa's Reality yet.
+            </div>
           </div>
           <div class="c-teresa-unlock" v-if="hasReality">
             Teresa Reality reward: Glyph sacrifice power {{ formatX(runReward, 2, 2) }}

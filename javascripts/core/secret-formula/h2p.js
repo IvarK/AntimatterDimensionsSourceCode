@@ -806,8 +806,12 @@ allow you to filter them based on their effects and rarity when you are doing fu
 <br>
 <br>
 Effarig's final unlock is its own Reality at ${format(GameDatabase.celestials.effarig.unlocks.run.cost)} Relic
-Shards. Its Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer before
-getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial.
+Shards. 
+${EffarigUnlock.run.isUnlocked
+  ? "Its Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer before " +
+    "getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial."
+  : "<font color=\"#e21717\">(unlock Effarig's Reality to see this text)</font>."
+}
 <br>
 <br>
 Completing Effarig's Reality unlocks
@@ -1007,7 +1011,7 @@ Teresa unlocks the ability to charge your Infinity Upgrades, making them much st
 improves your glyph effects once you reach certain thresholds in glyph sacrifice value.
 <br>
 <br>
-Effarig unlocks 
+At level ${formatInt(2)}, Effarig unlocks 
 ${Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)
   ? "a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually removing almost " +
     "all random elements of glyph generation. This also has its own How To Play entry."

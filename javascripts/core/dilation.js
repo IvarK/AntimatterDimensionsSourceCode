@@ -29,26 +29,30 @@ const DIL_UPG_COSTS = [null, [1e5, 10, Number.MAX_VALUE], [1e6, 100, 33], [1e7, 
                         5e6, 1e9, 5e7,
                         2e12, 1e10, 1e11,
                         1e15];
+const DIL_UPG_NAMES = [
+  null, "dtGain", "galaxyThreshold", "tachyonGain", "doubleGalaxies", "tdMultReplicanti",
+  "ndMultDT", "ipMultDT", "timeStudySplit", "dilationPenalty", "ttGenerator"
+];
 
 function buyDilationUpgrade(id, bulk, extraFactor) {
+  const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
   // If a tick is really long (perhaps due to the player going offline), they can be automatically bought
   // several times in one tick, which is what the extraFactor variable is used for.
   if (id > 3) {
-    if (player.dilation.dilatedTime.lt(DIL_UPG_COSTS[id])) return false;
+    if (player.dilation.dilatedTime.lt(upgrade.cost)) return false;
     if (player.dilation.upgrades.has(id)) return false;
-    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(DIL_UPG_COSTS[id]);
+    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(upgrade.cost);
     player.dilation.upgrades.add(id);
     if (id === 4) player.dilation.freeGalaxies *= 2;
   } else {
     const upgAmount = player.dilation.rebuyables[id];
-    const realCost = new Decimal(DIL_UPG_COSTS[id][0]).times(Decimal.pow(DIL_UPG_COSTS[id][1], (upgAmount)));
-    if (player.dilation.dilatedTime.lt(realCost) || upgAmount >= DIL_UPG_COSTS[id][2]) return false;
+    if (player.dilation.dilatedTime.lt(upgrade.cost) || upgAmount >= upgrade.config.purchaseCap) return false;
 
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
-      DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
+      upgrade.config.initialCost, upgrade.config.increment, upgAmount).toNumber();
     buying = Math.clampMax(buying, Effects.max(1, PerkShopUpgrade.bulkDilation) * extraFactor);
-    buying = Math.clampMax(buying, DIL_UPG_COSTS[id][2] - upgAmount);
+    buying = Math.clampMax(buying, upgrade.config.purchaseCap - upgAmount);
     if (!bulk) {
       buying = Math.clampMax(buying, 1);
     }

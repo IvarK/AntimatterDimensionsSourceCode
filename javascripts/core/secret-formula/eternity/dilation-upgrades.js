@@ -8,10 +8,13 @@ GameDatabase.eternity.dilation = (function() {
     return {
       id: config.id,
       cost: () => rebuyableCost(config.initialCost, config.increment, config.id),
+      initialCost: config.initialCost,
+      increment: config.increment,
       description: config.description,
       effect: () => config.effect(player.dilation.rebuyables[config.id]),
       formatEffect: config.formatEffect,
       formatCost: config.formatCost,
+      purchaseCap: config.purchaseCap,
       reachedCapFn: () => player.dilation.rebuyables[config.id] >= config.purchaseCap,
       rebuyable: true
     };
@@ -38,11 +41,11 @@ GameDatabase.eternity.dilation = (function() {
         (Perk.bypassDGReset.isBought
         ? "Reset Dilated Galaxies, but lower their threshold"
         : "Reset Dilated Time and Dilated Galaxies, but lower their threshold"),
-      // The 33rd purchase is at 1e7, and is the last purchase.
-      effect: bought => (bought < 33 ? Math.pow(0.8, bought) : 0),
+      // The 38th purchase is at 1e80, and is the last purchase.
+      effect: bought => (bought < 38 ? Math.pow(0.8, bought) : 0),
       formatEffect: () => format(getFreeGalaxyMult(), 3, 3),
       formatCost: value => format(value, 2, 0),
-      purchaseCap: 33
+      purchaseCap: 38
     }),
     tachyonGain: rebuyable({
       id: 3,

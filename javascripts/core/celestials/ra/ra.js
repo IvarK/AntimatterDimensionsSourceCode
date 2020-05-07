@@ -401,10 +401,11 @@ const RA_UNLOCKS = {
     level: 25,
     displayIcon: `<i class="far fa-dot-circle"></i>`
   },
-  RELIC_SHARD_RARITY_ALWAYS_MAX: {
+  EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX: {
     id: 7,
     description: "Unlock Effarig",
-    reward: "The bonus to glyph rarity from relic shards is always its maximum value",
+    reward: () => `Get ${formatX(2)} glyph choices and the bonus to glyph rarity from relic shards
+      is always its maximum value`,
     pet: Ra.pets.effarig,
     level: 1,
     displayIcon: `<i class="fas fa-grip-horizontal"></i>`

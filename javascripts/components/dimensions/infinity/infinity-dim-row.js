@@ -11,7 +11,6 @@ Vue.component("infinity-dim-row", {
       baseAmount: 0,
       amount: new Decimal(0),
       purchases: 0,
-      hasRateOfChange: false,
       rateOfChange: new Decimal(0),
       isAutobuyerUnlocked: false,
       cost: new Decimal(0),
@@ -35,9 +34,7 @@ Vue.component("infinity-dim-row", {
       return InfinityDimension(this.tier).shortDisplayName;
     },
     rateOfChangeDisplay() {
-      return this.hasRateOfChange
-        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
-        : "";
+      return ` (+${format(this.rateOfChange, 2, 2)}%/s)`;
     },
     costDisplay() {
       const requirement = InfinityDimension(this.tier).requirement;
@@ -72,10 +69,7 @@ Vue.component("infinity-dim-row", {
       this.baseAmount = dimension.baseAmount;
       this.purchases = dimension.purchases;
       this.amount.copyFrom(dimension.amount);
-      this.hasRateOfChange = dimension.hasRateOfChange;
-      if (this.hasRateOfChange) {
-        this.rateOfChange.copyFrom(dimension.rateOfChange);
-      }
+      this.rateOfChange.copyFrom(dimension.rateOfChange);
       this.isAutobuyerUnlocked = dimension.isAutobuyerUnlocked;
       this.cost.copyFrom(dimension.cost);
       this.isAvailableForPurchase = dimension.isAvailableForPurchase;

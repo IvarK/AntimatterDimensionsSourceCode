@@ -94,7 +94,15 @@ Vue.component("sacrificed-glyphs", {
       event.preventDefault();
       this.hasDragover = true;
     },
-    dragleave() {
+    dragleave(event) {
+      if (
+        event.relatedTarget.classList.contains("c-current-glyph-effects") ||
+        event.relatedTarget.classList.contains("c-sacrificed-glyphs__header") ||
+        event.relatedTarget.classList.contains("l-sacrificed-glyphs__type") ||
+        event.relatedTarget.classList.contains("l-sacrificed-glyphs__type-symbol") ||
+        event.relatedTarget.classList.contains("l-sacrificed-glyphs__type-amount") ||
+        event.relatedTarget.classList.contains("c-sacrificed-glyphs__type-new-amount") ||
+        event.relatedTarget.classList.length === 0) return;
       this.hasDragover = false;
     },
     drop(event) {

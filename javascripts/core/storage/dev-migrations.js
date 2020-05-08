@@ -598,7 +598,7 @@ GameStorage.devMigrations = {
     player => {
       for (let i = 0; i < player.celestials.ra.alchemy.length; i++) {
         player.celestials.ra.alchemy[i].amount = Math.clampMax(
-          player.celestials.ra.alchemy[i].amount, 25000);
+          player.celestials.ra.alchemy[i].amount, Ra.alchemyResourceCap);
       }
     },
     player => {

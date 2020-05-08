@@ -159,22 +159,23 @@ Vue.component("laitela-tab", {
       return this.milestoneIds.map(id => SingularityMilestone(id));
     },
     singularityText() {
-      const formText = this.singularitiesGained === 1 ? "Form a Singularity"
-        : `Form ${format(this.singularitiesGained, 2, 0)} Singularities`;
-
+      const formText = this.singularitiesGained === 1 ? "form a Singularity"
+        : `form ${format(this.singularitiesGained, 2, 0)} Singularities`;
+      const singularityTime = TimeSpan
+        .fromSeconds((this.singularityCap - this.darkEnergy) / this.darkEnergyGainPerSecond)
+        .toStringShort(false);
       if (!this.canPerformSingularity) {
         return `Reach ${format(this.singularityCap)} Dark Energy to \
-          ${formText}`;
+          ${formText} (in ${singularityTime})`;
       }
-
-      if (this.singularitiesGained === 1) {
-        return "Form a Singularity";
-      }
-
-      return formText;
+      // Capitalize the string
+      return `${formText.charAt(0).toUpperCase()}${formText.slice(1)}`;
     },
     completionTime() {
       return TimeSpan.fromSeconds(this.realityTime).toStringShort();
+    },
+    fullSingularityTime() {
+      return TimeSpan.fromSeconds(this.singularityCap / this.darkEnergyGainPerSecond).toStringShort(false);
     }
   },
   template: `
@@ -194,9 +195,6 @@ Vue.component("laitela-tab", {
       giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from continuum.</div>
       <div class="o-laitela-matter-amount">
         You have {{ format(darkEnergy, 2, 4) }} Dark Energy. (+{{ format(darkEnergyGainPerSecond, 2, 4) }}/s)
-      </div>
-      <div v-if="annihilated">
-        You have a {{ formatX(darkMatterMult, 2, 2) }} multiplier to Dark Matter production from prestige.
       </div>
       <div class="l-laitela-singularity-container">
         <div class="l-laitela-singularity-container--left">
@@ -218,6 +216,8 @@ Vue.component("laitela-tab", {
           <button class="c-laitela-singularity__cap-control" @click="decreaseCap">
             Decrease Singularity cap.
           </button>
+          <br>
+          Total time to cap: {{ fullSingularityTime }}
           <div v-if="autoCapUnlocked">
             <input type="text" v-model="autoCapInput" @change="handleAutoCapInputChange()"/><br>
             <label>Seconds to reach Singularity, after cap is raised automatically</label>
@@ -268,6 +268,10 @@ Vue.component("laitela-tab", {
         @click="annihilate()" 
         :style="{ visibility: showReset ? 'visible' : 'hidden' }">
         <h2>Annihilation</h2>
+        <span v-if="annihilated">
+          Current multiplier: {{ formatX(darkMatterMult, 2, 2) }}
+          <br><br>
+        </span>
         <p v-if="annihilated">
           Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 
           but multiply the Dark Matter multiplier from prestige by

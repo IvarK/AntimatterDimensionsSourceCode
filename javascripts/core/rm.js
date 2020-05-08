@@ -305,7 +305,7 @@ const GlyphGenerator = {
   },
 
   randomStrength(rng) {
-    if (Ra.has(RA_UNLOCKS.MAX_RARITY)) return rarityToStrength(100);
+    if (Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST)) return rarityToStrength(100);
     let result;
     // Divide the extra minimum rarity (also from Reality Upgrade 16) by the strength multiplier
     // since we'll multiply by the strength multiplier later.
@@ -1063,8 +1063,9 @@ const GlyphSacrificeHandler = {
     if (glyph.type === "reality") return 0.01 * glyph.level * Achievement(171).effectOrDefault(1);
     const pre10kFactor = Math.pow(Math.clampMax(glyph.level, 10000) + 10, 2.5);
     const post10kFactor = 1 + Math.clampMin(glyph.level - 10000, 0) / 100;
-    return pre10kFactor * post10kFactor * glyph.strength *
-      Teresa.runRewardMultiplier * Achievement(171).effectOrDefault(1);
+    const power = Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST) ? 1 + Effarig.maxRarityBoost / 100 : 1;
+    return Math.pow(pre10kFactor * post10kFactor * glyph.strength *
+      Teresa.runRewardMultiplier * Achievement(171).effectOrDefault(1), power);
   },
   sacrificeGlyph(glyph, force = false) {
     if (glyph.type === "cursed") {
@@ -1234,7 +1235,7 @@ function getGlyphLevelInputs() {
     .concat(Array.range(1, 4).map(x => Array.range(1, 5).every(y => RealityUpgrade(5 * x + y).isBought)))
     .filter(x => x)
     .length;
-  const achievementFactor = Achievement(148).effectOrDefault(0);
+  const achievementFactor = Effects.sum(Achievement(148), Achievement(166));
   baseLevel += rowFactor + achievementFactor;
   scaledLevel += rowFactor + achievementFactor;
   // Temporary runaway prevention (?)

@@ -4456,7 +4456,7 @@ screen and (max-width: 480px) {
   background-color: white;
 }
 
-.o-dilation-upgrade--bought {
+.o-dilation-upgrade--bought,  .o-dilation-upgrade--capped {
   color: black;
   background-color: #64dd17;
   border-color: black;
@@ -4525,7 +4525,7 @@ screen and (max-width: 480px) {
   color: #64ddad;
 }
 
-.t-dark .o-dilation-upgrade--bought {
+.t-dark .o-dilation-upgrade--bought, .t-dark .o-dilation-upgrade--capped {
   background-color: #64dd17;
 }
 
@@ -4549,7 +4549,7 @@ screen and (max-width: 480px) {
   animation: a-dilation-btn-glow--cancer 10s infinite;
 }
 
-.t-s6 .o-dilation-upgrade--bought {
+.t-s6 .o-dilation-upgrade--bought, .t-s6 .o-dilation-upgrade--capped {
   background: #64dd17;
 }
 

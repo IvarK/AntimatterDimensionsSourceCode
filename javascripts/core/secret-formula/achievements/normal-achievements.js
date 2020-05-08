@@ -1089,7 +1089,9 @@ GameDatabase.achievements.normal = [
     name: "Nicenice.",
     tooltip: () => `Get a glyph with level exactly ${formatInt(6969)}.`,
     checkRequirement: () => gainedGlyphLevel().actualLevel === 6969,
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
+    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+    reward: () => `+${formatInt(69)} to glyph level.`,
+    effect: 69
   },
   {
     id: 167,

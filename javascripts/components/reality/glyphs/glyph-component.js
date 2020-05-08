@@ -336,6 +336,7 @@ Vue.component("glyph-component", {
         "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
         "border-radius": this.circular ? "50%" : "0",
         animation: this.isRealityGlyph ? "a-reality-glyph-outer-cycle 10s infinite" : undefined,
+        "-webkit-user-drag": this.draggable ? "" : "none"
       };
     },
     innerStyle() {

@@ -284,8 +284,8 @@ Vue.component("enslaved-tab", {
                 <div v-for="x in 25" class="o-enslaved-run-button__glitch"
                                     :style="glitchStyle(x)"/>
               </div>
-              <p>Glyph levels will be boosted to a minimum of 5000</p>
-              <p>Infinity, time, and 8th dimension purchases are limited to 1 each.</p>
+              <p>Glyph levels will be boosted to a minimum of {{ formatInt(5000) }}</p>
+              <p>Infinity, time, and 8th dimension purchases are limited to {{ formatInt(1) }} each.</p>
               <p>Normal dimension multipliers are always dilated (the glyph effect still only
                 applies in actual dilation)</p>
               <p>Time study 192 (uncapped replicanti) is locked</p>
@@ -293,7 +293,7 @@ Vue.component("enslaved-tab", {
               <p>Tachyon production and dilated time production are severely reduced</p>
               <p>Time theorem generation from dilation glyphs is disabled</p>
               <p>Certain challenge goals have been increased</p>
-              <p>Stored time is effectively dilated (exponent^0.5)</p>
+              <p>Stored time is effectively dilated (exponent^{{ format(0.55, 2, 2) }})</p>
               <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps
               (see Infinity Dimension tab)</b>
             </div>
@@ -309,9 +309,9 @@ Vue.component("enslaved-tab", {
           </primary-button>
           <div class="l-enslaved-top-container">
             <div class="l-enslaved-top-container__half">
-              While charging, the black hole's speed boost is {{ canAdjustStoredTime ? "decreased" : "disabled" }}, and
-              the lost speed is converted into stored time. Discharging the black hole allows you to skip forward in time.
-              Stored time is also used to unlock certain upgrades.
+              While charging, the black hole's speed boost is {{ canAdjustStoredTime ? "decreased" : "disabled" }},
+              and the lost speed is converted into stored time. Discharging the black hole allows you to skip
+              forward in time. Stored time is also used to unlock certain upgrades.
               <button :class="['o-enslaved-mechanic-button',
                               {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
                       @click="toggleStoreBlackHole">
@@ -324,9 +324,9 @@ Vue.component("enslaved-tab", {
               </button>
             </div>
             <div class="l-enslaved-top-container__half">
-              Storing real time completely halts all production, setting game speed to 0. You can use stored real time to
-              "amplify" a reality, simulating repeated runs of it. Amplified realities give all the rewards that normal
-              realities do.
+              Storing real time completely halts all production, setting game speed to {{ formatInt(0) }}.
+              You can use stored real time to "amplify" a reality, simulating repeated runs of it.
+              Amplified realities give all the rewards that normal realities do.
               <button :class="['o-enslaved-mechanic-button',
                               {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
                       @click="toggleStoreReal">

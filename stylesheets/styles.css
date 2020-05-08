@@ -2547,6 +2547,12 @@ screen and (max-width: 480px) {
 
 /*#region c-achievements-tab*/
 
+.l-achievements-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .c-achievements-tab__header {
   font-size: 1.6rem;
   margin-top: 0.6rem;

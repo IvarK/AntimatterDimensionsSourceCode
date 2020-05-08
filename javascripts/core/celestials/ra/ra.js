@@ -404,7 +404,7 @@ const RA_UNLOCKS = {
   RELIC_SHARD_RARITY_ALWAYS_MAX: {
     id: 7,
     description: "Unlock Effarig",
-    reward: "The bonus to glyph rarity from relic shards is always its maximum value",
+    reward: "The bonus to glyph rarity from Relic Shards is always its maximum value",
     pet: Ra.pets.effarig,
     level: 1,
     displayIcon: `<i class="fas fa-grip-horizontal"></i>`
@@ -444,7 +444,7 @@ const RA_UNLOCKS = {
   SHARD_LEVEL_BOOST: {
     id: 12,
     description: "Get Effarig to level 15",
-    reward: "Glyph level is increased based on relic shards gained",
+    reward: "Glyph level is increased based on Relic Shards gained",
     effect: () => 100 * Math.pow(Math.log10(Math.max(Effarig.shardsGained, 1)), 2),
     pet: Ra.pets.effarig,
     level: 15,
@@ -454,7 +454,7 @@ const RA_UNLOCKS = {
     id: 13,
     description: "Get Effarig to level 25",
     reward: () => `Glyphs are always generated with ${formatPercents(1)} rarity and ` +
-      `glyph sacrifice gain is raised to a power based on relic shards`,
+      `glyph sacrifice gain is raised to a power based on Relic Shards`,
     pet: Ra.pets.effarig,
     level: 25,
     displayIcon: `<i class="fas fa-ankh"></i>`

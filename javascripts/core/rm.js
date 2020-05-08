@@ -706,18 +706,15 @@ const Glyphs = {
         (g.level >= glyph.level || g.strength >= glyph.strength) &&
         // eslint-disable-next-line no-bitwise
         ((g.effects & glyph.effects) === glyph.effects));
-    let compareThreshold;
-    if (thresholdOverride === undefined) {
-      compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
-    } else {
-      compareThreshold = thresholdOverride;
-    }
+    let compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
+    compareThreshold = Math.clampMax(compareThreshold, thresholdOverride);
     if (toCompare.length < compareThreshold) return false;
     const comparedEffects = getGlyphEffectsFromBitmask(glyph.effects).filter(x => x.id.startsWith(glyph.type));
     const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
     return betterCount >= compareThreshold;
   },
-  autoClean(thresholdOverride) {
+  autoClean(thresholdIn) {
+    const thresholdOverride = thresholdIn === undefined ? 5 : thresholdIn;
     // If the player hasn't unlocked sacrifice yet, we warn them.
     if (!GlyphSacrificeHandler.canSacrifice &&
       // eslint-disable-next-line prefer-template
@@ -730,7 +727,7 @@ const Glyphs = {
     }
     // If the player has unlocked sacrifice (so has not gotten the above warning) and auto clean could remove
     // useful glyphs, we warn them.
-    if (GlyphSacrificeHandler.canSacrifice && thresholdOverride !== undefined &&
+    if (GlyphSacrificeHandler.canSacrifice && thresholdIn !== undefined &&
       player.options.confirmations.harshAutoClean &&
       // eslint-disable-next-line prefer-template
       !confirm("This could delete glyphs in your inventory that are good enough that you might want to use them " +
@@ -740,7 +737,9 @@ const Glyphs = {
     // We look in backwards order so that later glyphs get cleaned up first
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
-      if (glyph === null || glyph.color !== undefined) continue;
+      // Don't auto-clean custom glyphs (eg. music glyphs) unless it's harsh or delete all
+      const isCustomGlyph = glyph !== null && (glyph.color !== undefined || glyph.symbol !== undefined);
+      if (glyph === null || (isCustomGlyph && thresholdOverride > 1)) continue;
       // If the threshold for better glyphs needed is zero, the glyph is definitely getting deleted
       // no matter what (well, unless it can't be gotten rid of in current glyph removal mode).
       if (thresholdOverride === 0 || this.isObjectivelyUseless(glyph, thresholdOverride)) {

@@ -15,9 +15,9 @@ function startEternityChallenge() {
   player.bestEPminThisEternity = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
-  player.antimatter = Player.startingAM;
-  player.thisInfinityMaxAM = Player.startingAM;
-  player.thisEternityMaxAM = Player.startingAM;
+  player.thisInfinityMaxAM = new Decimal(0);
+  player.thisEternityMaxAM = new Decimal(0);
+  Currency.antimatter.reset();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
 }

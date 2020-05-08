@@ -10,6 +10,7 @@ Vue.component("glyph-inventory", {
       showAutoAutoClean: false,
       isAutoAutoCleanOn: false,
       glyphSacrificeUnlocked: false,
+      hasPerkShop: false,
     };
   },
   computed: {
@@ -28,6 +29,7 @@ Vue.component("glyph-inventory", {
   methods: {
     update() {
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
+      this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
       this.showScoreFilter = EffarigUnlock.basicFilter.isUnlocked;
       this.showAutoAutoClean = V.has(V_UNLOCKS.AUTO_AUTOCLEAN);
       this.isAutoAutoCleanOn = player.reality.autoAutoClean;
@@ -104,7 +106,7 @@ Vue.component("glyph-inventory", {
   <div class="l-glyph-inventory">
     Click and drag or double-click to equip glyphs.
     <br>
-    The top two rows of slots are unaffected by glyph sorting and auto clean.
+    The top two rows of slots are protected slots and are unaffected by glyph sorting and auto clean.
     <div v-for="row in rowCount" class="l-glyph-inventory__row">
       <div v-for="col in colCount"
            class="l-glyph-inventory__slot"
@@ -112,12 +114,12 @@ Vue.component("glyph-inventory", {
            @dragover="allowDrag"
            @drop="drop(toIndex(row, col), $event)">
         <glyph-component v-if="inventory[toIndex(row, col)]"
-                         :glyph="inventory[toIndex(row, col)]"
-                         :showSacrifice="true"
-                         :draggable="true"
-                         @shiftClicked="removeGlyph($event, false)"
-                         @ctrlShiftClicked="removeGlyph($event, true)"
-                         @clicked="clickGlyph(col, $event)"/>
+          :glyph="inventory[toIndex(row, col)]"
+          :showSacrifice="glyphSacrificeUnlocked"
+          :draggable="true"
+          @shiftClicked="removeGlyph($event, false)"
+          @ctrlShiftClicked="removeGlyph($event, true)"
+          @clicked="clickGlyph(col, $event)"/>
       </div>
     </div>
     <div>
@@ -140,19 +142,21 @@ Vue.component("glyph-inventory", {
       <br/>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
             :ach-tooltip="(glyphSacrificeUnlocked ? 'Sacrifice' : 'Delete') +
-              ' glyphs that are worse in every way than enough other glyphs'"
+              ' glyphs that are worse in every way than enough other glyphs' +
+              (hasPerkShop ? ' (ignores music glyphs)' : '')"
             @click="autoClean">
        Auto clean
       </button>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
             :ach-tooltip="(glyphSacrificeUnlocked ? 'Sacrifice' : 'Delete') +
-              ' glyphs that are worse in every way than any other glyph'"
+              ' glyphs that are worse in every way than ANY other glyph' +
+              (hasPerkShop ? ' (can remove music glyphs)' : '')"
             @click="harshAutoClean">
        Harsh auto clean
       </button>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
             @click="deleteAllUnprotected">
-       {{ glyphSacrificeUnlocked ? "Sacrifice" : "Delete" }} all glyphs not in first two rows
+       {{ glyphSacrificeUnlocked ? "Sacrifice" : "Delete" }} all unprotected glyphs
       </button>
       <primary-button-on-off
         v-if="showAutoAutoClean"

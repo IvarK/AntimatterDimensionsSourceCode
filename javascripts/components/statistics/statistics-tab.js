@@ -83,7 +83,7 @@ Vue.component("statistics-tab", {
         reality.bestRate.copyFrom(player.bestRMmin);
         reality.bestRarity = strengthToRarity(player.bestGlyphStrength);
       }
-      this.matterScale = MatterScale.estimate(player.antimatter);
+      this.matterScale = MatterScale.estimate(Currency.antimatter.value);
       this.recordGlyphInfo = [
         [true, Glyphs.copyForRecords(player.bestRMminSet), `Best RM/min: ${format(player.bestRMmin, 2, 2)} RM/min`],
         [true, Glyphs.copyForRecords(player.bestGlyphLevelSet),

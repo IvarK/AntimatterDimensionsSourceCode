@@ -33,8 +33,8 @@ Vue.component("new-ui", {
   },
   methods: {
     update() {
-      this.antimatter.copyFrom(player.antimatter);
-      this.antimatterPerSec.copyFrom(Player.antimatterPerSecond);
+      this.antimatter.copyFrom(Currency.antimatter);
+      this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
       this.breakInfinity = player.break;
       this.realities = player.realities;
 
@@ -69,7 +69,7 @@ Vue.component("new-ui", {
       }
       this.isInLaitela = Laitela.isRunning;
       if (this.isInLaitela) {
-        if (player.celestials.laitela.entropy > 0) { 
+        if (player.celestials.laitela.entropy > 0) {
           this.laitelaEntropy = `${formatPercents(player.celestials.laitela.entropy, 2, 2)}`;
           this.laitelaTimer = Time.thisRealityRealTime.toStringShort();
         } else {
@@ -81,7 +81,7 @@ Vue.component("new-ui", {
       this.updateCelestial();
       this.updateChallengeDisplay();
 
-      const canCrunch = player.antimatter.gte(Player.infinityGoal);
+      const canCrunch = Currency.antimatter.gte(Player.infinityGoal);
       const challenge = NormalChallenge.current || InfinityChallenge.current;
       if (!canCrunch || Tabs.current !== Tab.dimensions || (player.break && challenge === undefined)) {
         this.bigCrunch = false;
@@ -163,7 +163,7 @@ Vue.component("new-ui", {
           <br><span v-if="isChallengePowerVisible">{{challengePower}}</span>
           <black-hole-header-row />
         </div>
-        <button 
+        <button
         class="btn-big-crunch btn-big-crunch--small"
         onclick="bigCrunchResetRequest()"
         v-if="smallCrunch && !bigCrunch">Big Crunch</button>

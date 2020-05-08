@@ -96,7 +96,6 @@ function gainedRealityMachines() {
   // Increase base RM gain if <10 RM
   if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
   rmGain = rmGain.times(getRealityMachineMultiplier());
-  rmGain = rmGain.plusEffectOf(Perk.realityMachineGain);
   // This happens around ee10 and is necessary to reach e9e15 antimatter without having to deal with the various
   // potential problems associated with having ee9 RM, of which there are lots (both balance-wise and design-wise).
   // The softcap here squishes every additional OoM in the exponent into another factor of e1000 RM, putting e9e15
@@ -412,7 +411,7 @@ function gameLoop(diff, options = {}) {
 
   slowerAutobuyers(realDiff);
   Autobuyers.tick();
-  
+
   if (Achievement(165).isUnlocked && player.celestials.effarig.autoAdjustGlyphWeights) {
     autoAdjustGlyphWeights();
   }
@@ -479,7 +478,7 @@ function gameLoop(diff, options = {}) {
   // IP generation is broken into a couple of places in gameLoop; changing that might change the
   // behavior of eternity farming.
   preProductionGenerateIP(diff);
-  
+
   let eternitiedGain = 0;
   if (RealityUpgrade(14).isBought) {
     eternitiedGain = Effects.product(
@@ -586,7 +585,7 @@ function gameLoop(diff, options = {}) {
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
-  if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN)) {
+  if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted) {
     player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;
     if (player.celestials.enslaved.hintUnlockProgress >= TimeSpan.fromHours(5).totalMilliseconds) {
       EnslavedProgress.hintsUnlocked.giveProgress();
@@ -632,7 +631,7 @@ function laitelaRealityTick(realDiff) {
     }
     Modal.message.show(completionText);
   }
-  if (laitelaInfo.entropy < 0) player.antimatter = new Decimal(0);
+  if (laitelaInfo.entropy < 0) Currency.antimatter.value = new Decimal(0);
 }
 
 // This gives IP/EP/RM from the respective upgrades that reward the prestige currencies continuously
@@ -747,12 +746,12 @@ function afterSimulation(seconds, playerStart) {
     }
     Modal.message.show(popupString);
   }
-  
+
   GameUI.notify.showBlackHoles = true;
 }
 
 function simulateTime(seconds, real, fast) {
-  // The game is simulated at a base 50ms update rate, with a max of 
+  // The game is simulated at a base 50ms update rate, with a max of
   // player.options.offlineTicks ticks. additional ticks are converted
   // into a higher diff per tick
   // warning: do not call this function with real unless you know what you're doing
@@ -901,7 +900,7 @@ function slowerAutobuyers(realDiff) {
     autoBuyDilationUpgrades(Math.floor(player.auto.dilUpgradeTimer / dilUpgradePeriod));
     player.auto.dilUpgradeTimer %= dilUpgradePeriod;
   }
-  
+
   TimeTheorems.autoBuyMaxTheorems(ampDiff);
   Tutorial.tutorialLoop();
 

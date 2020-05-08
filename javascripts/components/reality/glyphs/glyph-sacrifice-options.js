@@ -22,7 +22,8 @@ const AutoSacAdvancedTab = {
     },
     descStyle() {
       return {
-        "border-color": this.typeConfig.color,
+        "color": this.typeConfig.color,
+        "border-color": this.typeConfig.color
       };
     },
     minScoreInputStyle() {
@@ -107,11 +108,12 @@ const AutoSacEffectTab = {
     },
     descStyle() {
       return {
-        "border-color": this.typeConfig.color,
+        "color": this.typeConfig.color,
+        "border-color": this.typeConfig.color
       };
     },
     questionmarkTooltip() {
-      return `Glyph score is rarity, minus 200 for every missing effect. 
+      return `Glyph score is rarity, minus ${formatInt(200)} for every missing effect. 
         Glyphs with less than the specified rarity are sacrificed.`;
     }
   },
@@ -127,13 +129,7 @@ const AutoSacEffectTab = {
       if (!isNaN(inputValue)) {
         this.autoSacrificeSettings.effectCount = Math.clamp(inputValue, 0, 8);
       }
-    },
-    effectClass(effect) {
-      return {
-        "c-glyph-sacrifice-options__option--active": this.autoSacrificeSettings.effectChoices[effect.id],
-        "c-glyph-sacrifice-options__option--inactive": !this.autoSacrificeSettings.effectChoices[effect.id],
-      };
-    },
+    }
   },
   template: `
     <div class="c-glyph-sacrifice-options__advanced">
@@ -176,10 +172,7 @@ Vue.component("selected-effect-toggle", {
         : this.effect.genericDesc;
     },
     classObject() {
-      return {
-        "c-glyph-sacrifice-options__option--active": this.isActive,
-        "c-glyph-sacrifice-options__option--inactive": !this.isActive,
-      };
+      return this.isActive ? "c-auto-sac-type-tab__effect-desc--active" : "c-auto-sac-type-tab__effect-desc--inactive";
     }
   },
   methods: {

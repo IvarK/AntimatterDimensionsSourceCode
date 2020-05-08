@@ -279,6 +279,10 @@ Vue.component("glyph-component", {
     draggable: {
       type: Boolean,
       default: false,
+    },
+    flipTooltip: {
+      type: Boolean,
+      default: false,
     }
   },
   data() {
@@ -332,6 +336,7 @@ Vue.component("glyph-component", {
         "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
         "border-radius": this.circular ? "50%" : "0",
         animation: this.isRealityGlyph ? "a-reality-glyph-outer-cycle 10s infinite" : undefined,
+        "-webkit-user-drag": this.draggable ? "" : "none"
       };
     },
     innerStyle() {
@@ -364,8 +369,20 @@ Vue.component("glyph-component", {
       return this.$viewModel.tabs.reality.currentGlyphTooltip === this.componentID;
     },
     tooltipDirectionClass() {
-      return this.$viewModel.tabs.reality.glyphTooltipDirection === 1
-        ? "l-glyph-tooltip--up-left" : "l-glyph-tooltip--down-left";
+      let directionID = this.$viewModel.tabs.reality.glyphTooltipDirection;
+      if (this.flipTooltip) directionID += 1;
+      switch (directionID) {
+        case -1:
+          return "l-glyph-tooltip--down-left";
+        case 0:
+          return "l-glyph-tooltip--down-right";
+        case 1:
+          return "l-glyph-tooltip--up-left";
+        case 2:
+          return "l-glyph-tooltip--up-right";
+        default:
+          return "";
+      }
     },
   },
   created() {
@@ -379,7 +396,7 @@ Vue.component("glyph-component", {
     update() {
       this.isRealityGlyph = this.glyph.type === "reality";
       this.glyphEffects = this.extractGlyphEffects();
-      this.showGlyphEffectDots = player.options.showGlyphEffectDots;
+      this.showGlyphEffectDots = player.options.showHintText.glyphEffectDots;
     },
     // This finds all the effects of a glyph and shifts all their IDs so that type's lowest-ID effect is 0 and all
     // other effects count up to 3 (or 6 for effarig). Used to add dots in unique positions on glyphs to show effects.
@@ -551,7 +568,7 @@ Vue.component("glyph-component", {
         background: `${this.glyph.color || getRarity(this.glyph.strength).color}`,
         transform: `translate(${dx}rem, ${dy}rem)`,
         animation: this.glyph.type === "reality" ? "a-reality-glyph-dot-cycle 10s infinite" : "none",
-        opacity: 0.8
+        opacity: Theme.current().name === "S9" ? 0 : 0.8
       };
     }
   },
@@ -568,17 +585,17 @@ Vue.component("glyph-component", {
            :style="innerStyle"
            :class="['l-glyph-component', 'c-glyph-component']">
         {{symbol}}
-        <div v-if="showGlyphEffectDots" v-for="x in glyphEffects"
+        <div v-if="$viewModel.shiftDown || showGlyphEffectDots" v-for="x in glyphEffects"
           :style="glyphEffectIcon(x)"/>
         <glyph-tooltip v-if="hasTooltip && tooltipLoaded"
-                       v-show="isCurrentTooltip"
-                       ref="tooltip"
-                       v-bind="glyph"
-                       :class="tooltipDirectionClass"
-                       :sacrificeReward="sacrificeReward"
-                       :showDeletionText="showSacrifice"
-                       :levelOverride="levelOverride"
-                       :component="componentID"/>
+          v-show="isCurrentTooltip"
+          ref="tooltip"
+          v-bind="glyph"
+          :class="tooltipDirectionClass"
+          :sacrificeReward="sacrificeReward"
+          :showDeletionText="showSacrifice"
+          :levelOverride="levelOverride"
+          :component="componentID"/>
       </div>
       <div ref="over"
            :style="overStyle"

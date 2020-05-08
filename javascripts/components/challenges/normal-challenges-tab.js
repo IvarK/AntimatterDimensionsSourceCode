@@ -17,12 +17,15 @@ Vue.component("normal-challenges-tab", {
         challenge() {
           return NormalChallenge(this.challengeId);
         },
+        config() {
+          return this.challenge.config;
+        },
         name() {
           return `C${this.challengeId}`;
         },
         overrideLabel() {
           return this.isBroken ? "Broken" : "";
-        }
+        },
       },
       methods: {
         update() {
@@ -42,7 +45,7 @@ Vue.component("normal-challenges-tab", {
           class="c-challenge-box--normal"
           @start="challenge.start()"
         >
-          <span slot="top">{{challenge.config.description}}</span>
+          <description-display :config="config" slot="top" />
           <span slot="bottom">Reward: {{challenge.config.reward}}</span>
         </challenge-box>`
     }

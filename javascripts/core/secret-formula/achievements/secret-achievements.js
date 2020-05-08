@@ -139,8 +139,7 @@ GameDatabase.achievements.secret = [
   {
     id: 38,
     name: "Professional bodybuilder",
-    tooltip: () => `Get all your dimension bulk buyers to ${format(1e100, 0, 0)}.`,
-    checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.hasMaxedBulk) === 0
+    tooltip: "This one is getting replaced due to a recent PR."
   },
   {
     id: 41,

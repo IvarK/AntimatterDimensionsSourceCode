@@ -61,7 +61,7 @@ GameDatabase.celestials.v = {
         unlocking Time Dilation.`,
       values: [400e6, 450e6, 500e6, 600e6, 700e6, 800e6],
       condition: () => V.isRunning && EternityChallenge(12).isRunning && !PlayerProgress.dilationUnlocked(),
-      currentValue: () => player.antimatter.log10(),
+      currentValue: () => Currency.antimatter.value.log10(),
       formatRecord: x => format(Decimal.pow10(x)),
       shardReduction: tiers => 50e6 * tiers,
       maxShardReduction: goal => goal - 400e6,
@@ -99,7 +99,7 @@ GameDatabase.celestials.v = {
       id: 6,
       name: "Requiem for a Glyph",
       description: value => `Unlock Reality with at most ${-value} glyphs equipped for the entire reality.
-        <div ach-tooltip="Each equipped cursed glyph counts as -3 glyphs">
+        <div ach-tooltip="Each equipped cursed glyph counts as ${formatInt(-3)} glyphs">
           <i class="fas fa-question-circle"></i>
         </div>`,
       // This achievement has internally negated values since the check is always greater than

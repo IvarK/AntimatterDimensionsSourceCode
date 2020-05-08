@@ -11,19 +11,19 @@ const PERK_FAMILY = {
 };
 
 GameDatabase.reality.perks = {
-  glyphChoice3: {
+  glyphChoice4: {
     id: 0,
-    label: "GC3",
+    label: "GC4",
     family: PERK_FAMILY.REALITY,
-    description: "You can now choose from 3 different glyphs on Reality.",
-    effect: 3,
+    description: "You can now choose from 4 different glyphs on Reality.",
+    effect: 4,
   },
   startAM1: {
     id: 10,
     label: "SAM1",
     family: PERK_FAMILY.NORMAL,
     description: "Start every reset with 1e15 antimatter.",
-    bumpResource: () => player.antimatter = player.antimatter.clampMin(1e15),
+    bumpCurrency: () => Currency.antimatter.bumpTo(1e15),
     effect: 1e15
   },
   startAM2: {
@@ -31,7 +31,7 @@ GameDatabase.reality.perks = {
     label: "SAM2",
     family: PERK_FAMILY.NORMAL,
     description: "Start every reset with 1e130 antimatter.",
-    bumpResource: () => player.antimatter = player.antimatter.clampMin(1e130),
+    bumpCurrency: () => Currency.antimatter.bumpTo(1e130),
     effect: 1e130
   },
   startIP1: {
@@ -39,7 +39,7 @@ GameDatabase.reality.perks = {
     label: "SIP1",
     family: PERK_FAMILY.INFINITY,
     description: "Start every Eternity and Reality with 2e15 Infinity Points.",
-    bumpResource: () => player.infinityPoints = player.infinityPoints.clampMin(2e15),
+    bumpCurrency: () => player.infinityPoints = player.infinityPoints.clampMin(2e15),
     effect: 2e15
   },
   startIP2: {
@@ -47,7 +47,7 @@ GameDatabase.reality.perks = {
     label: "SIP2",
     family: PERK_FAMILY.INFINITY,
     description: "Start every Eternity and Reality with 2e130 Infinity Points.",
-    bumpResource: () => player.infinityPoints = player.infinityPoints.clampMin(2e130),
+    bumpCurrency: () => player.infinityPoints = player.infinityPoints.clampMin(2e130),
     effect: 2e130
   },
   startEP1: {
@@ -55,7 +55,7 @@ GameDatabase.reality.perks = {
     label: "SEP1",
     family: PERK_FAMILY.ETERNITY,
     description: "Start every Reality with 10 Eternity Points.",
-    bumpResource: () => player.eternityPoints = player.eternityPoints.clampMin(10),
+    bumpCurrency: () => player.eternityPoints = player.eternityPoints.clampMin(10),
     effect: 10
   },
   startEP2: {
@@ -63,7 +63,7 @@ GameDatabase.reality.perks = {
     label: "SEP2",
     family: PERK_FAMILY.ETERNITY,
     description: "Start every Reality with 2000 Eternity Points.",
-    bumpResource: () => player.eternityPoints = player.eternityPoints.clampMin(2000),
+    bumpCurrency: () => player.eternityPoints = player.eternityPoints.clampMin(2000),
     effect: 2000
   },
   startEP3: {
@@ -71,7 +71,7 @@ GameDatabase.reality.perks = {
     label: "SEP3",
     family: PERK_FAMILY.ETERNITY,
     description: "Start every Reality with 1e9 Eternity Points.",
-    bumpResource: () => player.eternityPoints = player.eternityPoints.clampMin(1e9),
+    bumpCurrency: () => player.eternityPoints = player.eternityPoints.clampMin(1e9),
     effect: 1e9
   },
   startTP: {
@@ -80,47 +80,6 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.DILATION,
     description: "After unlocking Dilation, gain 10 Tachyon Particles.",
     effect: () => (Enslaved.isRunning ? 1 : 10)
-  },
-  glyphLevelIncrease1: {
-    id: 20,
-    label: "GL1",
-    family: PERK_FAMILY.REALITY,
-    description: "Increase glyph level by 1.",
-    effect: 1
-  },
-  glyphLevelIncrease2: {
-    id: 21,
-    label: "GL2",
-    family: PERK_FAMILY.REALITY,
-    description: "Increase glyph level by 1.",
-    effect: 1
-  },
-  glyphChoice4: {
-    id: 22,
-    label: "GC4",
-    family: PERK_FAMILY.REALITY,
-    description: "Increase the number of glyphs you can choose from to 4.",
-    effect: 4,
-  },
-  glyphRarityIncrease: {
-    id: 23,
-    label: "GRP",
-    family: PERK_FAMILY.REALITY,
-    description: "Increase the minimum glyph rarity by 5%."
-  },
-  glyphUncommonGuarantee: {
-    id: 24,
-    label: "GRT",
-    family: PERK_FAMILY.REALITY,
-    description: "One glyph choice is guaranteed to have uncommon or better rarity."
-  },
-  realityMachineGain: {
-    id: 25,
-    label: "RM",
-    family: PERK_FAMILY.REALITY,
-    description: "Every reality, gain additional RM equal to your current reality count multiplied" +
-      " by your highest glyph level.",
-    effect: () => player.bestGlyphLevel * player.realities
   },
   dimboostNonReset: {
     id: 30,
@@ -278,7 +237,7 @@ GameDatabase.reality.perks = {
     id: 72,
     label: "ECR",
     family: PERK_FAMILY.ETERNITY,
-    description: "Remove non-TT requirements for unlocking Eternity Challenges."
+    description: "Remove non–Time Theorem requirements for unlocking Eternity Challenges."
   },
   studyECBulk: {
     id: 73,
@@ -422,9 +381,7 @@ GameDatabase.reality.perkConnections = (function() {
   const p = GameDatabase.reality.perks;
   // First item is the start, other items are the ends
   const groups = [
-    [p.glyphChoice3,
-      p.achievementGroup1, p.startAM1, p.glyphLevelIncrease1, p.glyphLevelIncrease2,
-      p.autounlockEU1, p.bypassEC5Lock],
+    [p.glyphChoice4, p.achievementGroup1, p.startAM1, p.autounlockEU1, p.bypassEC5Lock],
     [p.startAM1, p.startAM2, p.startIP1],
     [p.startAM2, p.startEP1, p.dimboostNonReset],
     [p.startIP1, p.startIP2, p.startEP1, p.autobuyerFasterID],
@@ -432,11 +389,6 @@ GameDatabase.reality.perkConnections = (function() {
     [p.startEP1, p.startEP2, p.startTP],
     [p.startEP2, p.startEP3],
     [p.startTP, p.startEP1, p.retroactiveTP1],
-    [p.glyphLevelIncrease1, p.glyphChoice4],
-    [p.glyphLevelIncrease2, p.glyphRarityIncrease],
-    [p.glyphChoice4, p.glyphLevelIncrease1, p.glyphUncommonGuarantee],
-    [p.glyphRarityIncrease, p.glyphLevelIncrease2, p.glyphUncommonGuarantee],
-    [p.glyphUncommonGuarantee, p.glyphRarityIncrease, p.glyphChoice4, p.realityMachineGain],
     [p.autounlockEU1, p.autounlockEU2],
     [p.autounlockEU2, p.autounlockEU1, p.autobuyerDilation],
     [p.autounlockDilation1, p.autounlockDilation2],

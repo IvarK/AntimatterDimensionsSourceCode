@@ -241,7 +241,7 @@ dev.togglePerformanceStats = function() {
 // Buys all perks, will end up buying semi-randomly if not enough pp
 dev.buyAllPerks = function() {
   const visited = [];
-  const toVisit = [Perk.glyphChoice3];
+  const toVisit = [Perk.glyphChoice4];
   while (toVisit.length > 0) {
     if (player.reality.pp < 1) break;
     const perk = toVisit.shift();
@@ -268,7 +268,7 @@ dev.buyAllPerks = function() {
 
 // This should help for balancing different glyph types, strong rounding of values is intentional
 dev.printResourceTotals = function() {
-  console.log(`Antimatter: e${player.antimatter.exponent.toPrecision(3)}`);
+  console.log(`Antimatter: e${Currency.antimatter.exponent.toPrecision(3)}`);
   console.log(`RM: e${Math.round(gainedRealityMachines().log10())}`);
   console.log(`Glyph level: ${100 * Math.floor(gainedGlyphLevel().actualLevel / 100 + 0.5)}`);
 
@@ -532,7 +532,7 @@ dev.testGlyphs = function(config) {
     const gl = padString(gainedGlyphLevel().actualLevel, 4);
     const ep = padString(player.eternityPoints.exponent.toString(), 6);
     const ip = padString(player.infinityPoints.exponent.toString(), 8);
-    const am = padString(player.antimatter.exponent.toString(), 12);
+    const am = padString(Currency.antimatter.exponent.toString(), 12);
     const dimboosts = DimBoost.purchasedBoosts;
     const galaxies = Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies;
     const glyphData = glyphSets[index].map(glyphToShortString).sum();

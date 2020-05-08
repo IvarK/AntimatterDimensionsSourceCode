@@ -12,14 +12,8 @@ const GlyphSelection = {
   },
 
   get choiceCount() {
-    let baseChoices = Effects.max(
-      1,
-      Perk.glyphChoice4,
-      Perk.glyphChoice3
-    );
-    // TODO Make Ra follow GMS pattern so this isn't as dumb as it is right now
-    if (Ra.has(RA_UNLOCKS.GLYPH_CHOICES)) baseChoices *= 2;
-    return baseChoices;
+    return Effects.max(1, Perk.glyphChoice4) *
+      (Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX) ? 2 : 1);
   },
 
   /**
@@ -31,10 +25,10 @@ const GlyphSelection = {
    * glyph if the score exceeds the specified threshold for every glyph already in the list.
    * This uniqueness score is equal to the number of effects that exactly one of the glyphs has.
    */
-  checkUniqueGlyph(glyphToCheck) {
+  checkUniqueGlyph(glyphList, glyphToCheck) {
     const uniquenessThreshold = 3;
     const checkEffects = glyphToCheck.effects;
-    for (const currGlyph of this.glyphs) {
+    for (const currGlyph of glyphList) {
       const currEffects = currGlyph.effects;
       // eslint-disable-next-line no-bitwise
       const union = checkEffects | currEffects;
@@ -45,22 +39,20 @@ const GlyphSelection = {
     return true;
   },
 
-  glyphUncommonGuarantee(rng) {
+  glyphUncommonGuarantee(glyphList, rng) {
     // If no choices are rare enough and the player has the uncommon glyph perk, randomly generate
     // rarities until the threshold is passed and then assign that rarity to a random glyph
     const strengthThreshold = 1.5;
-    if (this.glyphs.some(e => e.strength >= strengthThreshold)) return;
+    if (glyphList.some(e => e.strength >= strengthThreshold)) return;
     let newStrength;
     do {
       newStrength = GlyphGenerator.randomStrength(rng);
     } while (newStrength < strengthThreshold);
-    this.glyphs.randomElement().strength = newStrength;
+    glyphList[Math.floor(rng.uniform() * glyphList.length)].strength = newStrength;
   },
-
-  generate(count, realityProps) {
-    this.glyphs = [];
-    this.realityProps = realityProps;
-    const level = realityProps.gainedGlyphLevel;
+  
+  glyphList(count, level, isChoosingGlyph) {
+    const glyphList = [];
     const rng = new GlyphGenerator.RealGlyphRNG();
     for (let out = 0; out < count; ++out) {
       let glyph;
@@ -69,13 +61,22 @@ const GlyphSelection = {
       // for some reason and forget about the uniqueness check
       for (let tries = 0; tries < 100; ++tries) {
         glyph = GlyphGenerator.randomGlyph(level, rng);
-        if (this.checkUniqueGlyph(glyph)) break;
+        if (this.checkUniqueGlyph(glyphList, glyph)) break;
       }
-      this.glyphs.push(glyph);
+      glyphList.push(glyph);
     }
+    this.glyphUncommonGuarantee(glyphList, rng);
+    if (isChoosingGlyph) {
+      rng.finalize();
+    }
+    return glyphList;
+  },
+
+  generate(count, realityProps) {
+    EventHub.dispatch(GAME_EVENT.GLYPH_CHOICES_GENERATED);
+    this.realityProps = realityProps;
+    this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel, true);
     ui.view.modal.glyphSelection = true;
-    if (Perk.glyphUncommonGuarantee.isBought) this.glyphUncommonGuarantee(rng);
-    rng.finalize();
   },
 
   update(level) {
@@ -274,9 +275,11 @@ function giveRealityRewards(realityProps) {
   }
 
   if (Teresa.isRunning) {
-    if (player.antimatter.gt(player.celestials.teresa.bestRunAM)) {
-      player.celestials.teresa.bestRunAM = player.antimatter;
+    if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
+      player.celestials.teresa.bestRunAM = Currency.antimatter.value;
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+      player.celestials.teresa.lastRepeatedRM = player.celestials.teresa.lastRepeatedRM
+        .clampMin(player.reality.realityMachines);
     }
     Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
   }
@@ -333,7 +336,7 @@ function finishProcessReality(realityProps) {
     player.bestEP = new Decimal(finalEP);
     player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
-  
+
   const isReset = realityProps.reset;
   if (!isReset) giveRealityRewards(realityProps);
   if (!realityProps.glyphUndo) {
@@ -428,9 +431,9 @@ function finishProcessReality(realityProps) {
     2: 0,
     3: 0
   };
-  player.antimatter = Player.startingAM;
-  player.thisInfinityMaxAM = Player.startingAM;
-  player.thisEternityMaxAM = Player.startingAM;
+  player.thisInfinityMaxAM = new Decimal(0);
+  player.thisEternityMaxAM = new Decimal(0);
+  Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
   player.celestials.laitela.entropy = 0;
 
@@ -492,15 +495,13 @@ function restoreCelestialRuns(celestialRunState) {
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
 function applyRUPG10() {
   NormalChallenges.completeAll();
-
-  const hasMaxBulkSecretAch = SecretAchievement(38).isUnlocked;
+  
   player.auto.dimensions = player.auto.dimensions.map(() => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
-    cost: hasMaxBulkSecretAch ? 5e133 : 2e126,
+    cost: 5e133,
     interval: 100,
-    // Only completely max bulk if the relevant secret achievement has already been unlocked
-    bulk: hasMaxBulkSecretAch ? 1e100 : 1e90,
+    bulk: 1e100,
     mode: AUTOBUYER_MODE.BUY_10,
     priority: 1,
     isActive: true,

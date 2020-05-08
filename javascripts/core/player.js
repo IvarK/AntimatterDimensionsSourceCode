@@ -302,13 +302,14 @@ let player = {
     rebuyablesAuto: [false, false, false, false, false],
     upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false, 
+              false, false, false, false, false,
+              false, false, false, false, false,
+              false, false, false, false, false,
+              false, false, false, false, false,
               false, false, false, false, false],
     perks: new Set(),
     respec: false,
+    showGlyphSacrifice: false,
     tdbuyers: [false, false, false, false, false, false, false, false],
     epmultbuyer: false,
     autoAutoClean: false,
@@ -358,7 +359,8 @@ let player = {
       run: false,
       bestRunAM: new Decimal(1),
       bestAMSet: [],
-      perkShop: Array.repeat(0, 5)
+      perkShop: Array.repeat(0, 5),
+      lastRepeatedRM: new Decimal(0)
     },
     effarig: {
       relicShards: 0,
@@ -499,7 +501,7 @@ let player = {
     showAllChallenges: false,
     bulkOn: true,
     autobuyersOn: true,
-    cloud: true,
+    cloudEnabled: true,
     hotkeys: true,
     theme: "Normal",
     commas: true,
@@ -507,7 +509,6 @@ let player = {
     newUI: true,
     offlineProgress: true,
     automaticTabSwitching: true,
-    showGlyphEffectDots: true,
     respecIntoProtected: false,
     offlineTicks: 1000,
     showLastTenRunsGainPerTime: false,
@@ -516,6 +517,7 @@ let player = {
       achievements: false,
       challenges: false,
       studies: false,
+      glyphEffectDots: true,
       realityUpgrades: false,
       perks: false,
       alchemy: false,
@@ -583,12 +585,6 @@ const Player = {
     return new Decimal(0);
   },
 
-  get antimatterPerSecond() {
-    const basePerSecond = NormalDimension(1).productionPerRealSecond
-      .plus(NormalChallenge(12).isRunning ? NormalDimension(2).productionPerRealSecond : 0);
-    return basePerSecond;
-  },
-
   get bestRunIPPM() {
     return GameCache.bestRunIPPM.value;
   },
@@ -609,7 +605,7 @@ const Player = {
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     return challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
   },
-  
+
   get infinityLimit() {
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     return challenge === undefined ? Decimal.MAX_VALUE : challenge.goal;
@@ -619,19 +615,6 @@ const Player = {
     return EternityChallenge.isRunning
       ? EternityChallenge.current.currentGoal
       : Decimal.NUMBER_MAX_VALUE;
-  },
-
-  get startingAM() {
-    return Effects.max(
-      10,
-      Perk.startAM1,
-      Perk.startAM2,
-      Achievement(21),
-      Achievement(37),
-      Achievement(54),
-      Achievement(55),
-      Achievement(78).effects.antimatter
-    ).toDecimal();
   },
 
   get startingIP() {

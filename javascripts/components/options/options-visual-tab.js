@@ -1,6 +1,6 @@
 "use strict";
-// User interface subtab
-Vue.component("options-button-grid", {
+
+Vue.component("options-visual-tab", {
   components: {
     "options-button": {
       template:
@@ -79,7 +79,8 @@ Vue.component("options-button-grid", {
     }
   }, 
   template: `
-  <div class="l-options-grid">
+  <div class="l-options-tab">
+    <div class="l-options-grid">
       <div class="l-options-grid__row">
         <options-button
           class="o-primary-btn--option_font-large"
@@ -90,11 +91,11 @@ Vue.component("options-button-grid", {
           oninput="GameOptions.refreshUpdateRate()"
         />
         <options-button
-        class="o-primary-btn--option_font-large"
-        onclick="Modal.animationOptions.show();"
-      >Animations</options-button>
-        </div>
-        <div class="l-options-grid__row">
+          class="o-primary-btn--option_font-large"
+          onclick="GameOptions.toggleNews()"
+        >{{ newsOnOffLabel }}</options-button>
+      </div>
+      <div class="l-options-grid__row">
         <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
           <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
             {{themeLabel}}
@@ -108,22 +109,25 @@ Vue.component("options-button-grid", {
           <select-notation slot="dropdown" />
         </expanding-control-box>
         <primary-button-on-off-custom
-        v-model="commas"
-        class="o-primary-btn--option l-options-grid__button"
-        on="Commas on exponents"
-        off="Notation on exponents"
-      />
-        </div>
-        <div class="l-options-grid__row"> 
+          v-model="commas"
+          class="o-primary-btn--option l-options-grid__button"
+          on="Exponent formatting: Commas"
+          off="Exponent formatting: Notation"
+        />
+      </div>
+      <div class="l-options-grid__row"> 
         <options-button
-        style="visibility:hidden"
-        ></options-button>
+          class="o-primary-btn--option"
+          onclick="Modal.animationOptions.show();"
+        >Open Animation Options</options-button>
         <options-button
-        class="o-primary-btn--option_font-large"
-        onclick="GameOptions.toggleNews()"
-      >{{ newsOnOffLabel }}</options-button>
+          class="o-primary-btn--option"
+          onclick="Modal.infoDisplayOptions.show()"
+        >Open Info Display Options</options-button>
+      </div>
+      <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
+        Press <kbd>?</kbd> to open shortcut list.
+      </p>
     </div>
-      </div>
-      </div>
-    </div>`
+  </div>`
 });

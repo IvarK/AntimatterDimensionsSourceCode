@@ -81,7 +81,7 @@ GameDatabase.achievements.normal = [
     id: 24,
     name: "Antimatter Apocalypse",
     tooltip: () => `Get over ${format(1e80, 0, 0)} antimatter.`,
-    checkRequirement: () => player.antimatter.exponent >= 80,
+    checkRequirement: () => Currency.antimatter.exponent >= 80,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
@@ -192,8 +192,8 @@ GameDatabase.achievements.normal = [
     name: "Super Sanic",
     tooltip: () => `Have antimatter/sec exceed your current antimatter above ${format(1e63, 0, 0)}.`,
     checkRequirement: () =>
-      player.antimatter.exponent >= 63 &&
-      NormalDimension(1).productionPerSecond.gt(player.antimatter),
+      Currency.antimatter.exponent >= 63 &&
+      Currency.antimatter.productionPerSecond.gt(Currency.antimatter.value),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
@@ -211,7 +211,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Have antimatter/sec exceed your current antimatter
       for ${formatInt(30)} consecutive seconds.`,
     checkRequirement: () => AchievementTimers.marathon1
-      .check(NormalDimension(1).productionPerSecond.gt(player.antimatter), 30),
+      .check(Currency.antimatter.productionPerSecond.gt(Currency.antimatter.value), 30),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
   },
   {
@@ -319,9 +319,10 @@ GameDatabase.achievements.normal = [
   {
     id: 61,
     name: "Bulked Up",
-    tooltip: () => `Get all of your Dimension bulk buyers to ${formatInt(512)} or higher.`,
+    tooltip: () => `Get all of your Dimension Autobuyer bulk amounts to ${formatInt(512)} or higher.`,
     checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0,
-    checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
+    checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
+    reward: "Dimension Autobuyer bulks are unlimited."
   },
   {
     id: 62,
@@ -409,10 +410,10 @@ GameDatabase.achievements.normal = [
     id: 73,
     name: "THIS ACHIEVEMENT DOESN'T EXIST",
     tooltip: () => `Get ${formatPostBreak("9.9999e9999", 4, 0)} antimatter.`,
-    checkRequirement: () => player.antimatter.gte("9.9999e9999"),
+    checkRequirement: () => Currency.antimatter.gte("9.9999e9999"),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Dimensions are stronger the more unspent antimatter you have.",
-    effect: () => player.antimatter.pow(0.00002).plus(1)
+    effect: () => Currency.antimatter.value.pow(0.00002).plus(1)
   },
   {
     id: 74,
@@ -500,10 +501,10 @@ GameDatabase.achievements.normal = [
     id: 84,
     name: "I got a few to spare",
     tooltip: () => `Reach ${formatPostBreak("1e35000", 0, 0)} antimatter.`,
-    checkRequirement: () => player.antimatter.exponent >= 35000,
+    checkRequirement: () => Currency.antimatter.exponent >= 35000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Dimensions are stronger the more unspent antimatter you have.",
-    effect: () => player.antimatter.pow(0.00002).plus(1)
+    effect: () => Currency.antimatter.value.pow(0.00002).plus(1)
   },
   {
     id: 85,
@@ -1030,9 +1031,7 @@ GameDatabase.achievements.normal = [
       glyph => getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
         .filter(effect => effect.isGenerated).length
     ).max() >= 4,
-    checkEvent: GAME_EVENT.GLYPHS_CHANGED,
-    reward: "Gained glyph level is increased by number of distinct glyph effects equipped.",
-    effect: () => Effarig.glyphEffectAmount,
+    checkEvent: GAME_EVENT.GLYPHS_CHANGED
   },
   {
     id: 158,
@@ -1047,7 +1046,7 @@ GameDatabase.achievements.normal = [
     id: 161,
     name: "that's where you're wrong kiddo",
     tooltip: () => `Get ${format("1e100000000", 0, 0)} antimatter while Dilated.`,
-    checkRequirement: () => player.antimatter.gte("1e100000000") && player.dilation.active,
+    checkRequirement: () => Currency.antimatter.exponent >= 100000000 && player.dilation.active,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
@@ -1090,7 +1089,9 @@ GameDatabase.achievements.normal = [
     name: "Nicenice.",
     tooltip: () => `Get a glyph with level exactly ${formatInt(6969)}.`,
     checkRequirement: () => gainedGlyphLevel().actualLevel === 6969,
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE
+    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+    reward: () => `+${formatInt(69)} to glyph level.`,
+    effect: 69
   },
   {
     id: 167,

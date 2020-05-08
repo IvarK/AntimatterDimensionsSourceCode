@@ -67,8 +67,8 @@ Decimal.maxReducer = function(a, b) {
 };
 
 Decimal.prototype.copyFrom = function(decimal) {
-  if (!(decimal instanceof Decimal)) {
-    throw "Copy value is not Decimal";
+  if (!(decimal instanceof Decimal) && !(decimal instanceof DecimalCurrency)) {
+    throw "Copy value is not Decimal or DecimalCurrency";
   }
   this.mantissa = decimal.mantissa;
   this.exponent = decimal.exponent;

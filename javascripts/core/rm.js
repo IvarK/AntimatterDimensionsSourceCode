@@ -116,6 +116,12 @@ const AutoGlyphProcessor = {
       .glyph;
   },
   getRidOfGlyph(glyph) {
+    // Auto clean calls this function too, which chokes without a special case for these types
+    if (glyph.type === "cursed" || glyph.type === "companion") {
+      GlyphSacrificeHandler.deleteGlyph(glyph, true);
+      return;
+    }
+
     switch (this.sacMode) {
       case AUTO_GLYPH_REJECT.SACRIFICE:
         GlyphSacrificeHandler.sacrificeGlyph(glyph, true);
@@ -305,16 +311,17 @@ const GlyphGenerator = {
   },
 
   randomStrength(rng) {
-    if (Ra.has(RA_UNLOCKS.MAX_RARITY)) return rarityToStrength(100);
+    if (Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST)) return rarityToStrength(100);
     let result;
-    // Divide the extra minimum rarity by the strength multiplier
+    // Divide the extra minimum rarity (also from Reality Upgrade 16) by the strength multiplier
     // since we'll multiply by the strength multiplier later.
-    const minimumValue = 1 + (Perk.glyphRarityIncrease.isBought ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
+    const minimumValue = 1 + (RealityUpgrade(16).isBought ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
     do {
       result = GlyphGenerator.gaussianBellCurve(rng);
     } while (result <= minimumValue);
     result *= GlyphGenerator.strengthMultiplier;
-    const increasedRarity = rng.uniform() * Effarig.maxRarityBoost + GlyphSacrifice.effarig.effectValue;
+    const relicShardFactor = Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX) ? 1 : rng.uniform();
+    const increasedRarity = relicShardFactor * Effarig.maxRarityBoost + GlyphSacrifice.effarig.effectValue;
     // Each rarity% is 0.025 strength.
     result += increasedRarity / 40;
     return Math.min(result, rarityToStrength(100));
@@ -327,7 +334,11 @@ const GlyphGenerator = {
     let num = Math.min(
       maxEffects,
       Math.floor(Math.pow(rng.uniform(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1));
-    if (RealityUpgrade(17).isBought && rng.uniform() > 0.5) num = Math.min(num + 1, maxEffects);
+    // If we do decide to add anything else that boosts chance of an extra effect, keeping the code like this
+    // makes it easier to do (add it to the Effects.max).
+    if (RealityUpgrade(17).isBought && rng.uniform() < Effects.max(0, RealityUpgrade(17))) {
+      num = Math.min(num + 1, maxEffects);
+    }
     if (Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) num = Math.max(num, 4);
     return num;
   },
@@ -701,18 +712,16 @@ const Glyphs = {
         (g.level >= glyph.level || g.strength >= glyph.strength) &&
         // eslint-disable-next-line no-bitwise
         ((g.effects & glyph.effects) === glyph.effects));
-    let compareThreshold;
-    if (thresholdOverride === undefined) {
-      compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
-    } else {
-      compareThreshold = thresholdOverride;
-    }
+    let compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
+    compareThreshold = Math.clampMax(compareThreshold, thresholdOverride);
     if (toCompare.length < compareThreshold) return false;
     const comparedEffects = getGlyphEffectsFromBitmask(glyph.effects).filter(x => x.id.startsWith(glyph.type));
     const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
     return betterCount >= compareThreshold;
   },
-  autoClean(thresholdOverride) {
+  autoClean(thresholdIn) {
+    const thresholdOverride = thresholdIn === undefined ? 5 : thresholdIn;
+    const isHarsh = thresholdOverride < 5;
     // If the player hasn't unlocked sacrifice yet, we warn them.
     if (!GlyphSacrificeHandler.canSacrifice &&
       // eslint-disable-next-line prefer-template
@@ -725,8 +734,7 @@ const Glyphs = {
     }
     // If the player has unlocked sacrifice (so has not gotten the above warning) and auto clean could remove
     // useful glyphs, we warn them.
-    if (GlyphSacrificeHandler.canSacrifice && thresholdOverride !== undefined &&
-      player.options.confirmations.harshAutoClean &&
+    if (GlyphSacrificeHandler.canSacrifice && isHarsh && player.options.confirmations.harshAutoClean &&
       // eslint-disable-next-line prefer-template
       !confirm("This could delete glyphs in your inventory that are good enough that you might want to use them " +
         "later. Are you sure you want to do this?")) {
@@ -735,7 +743,10 @@ const Glyphs = {
     // We look in backwards order so that later glyphs get cleaned up first
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
-      if (glyph === null || glyph.color !== undefined) continue;
+      if (glyph === null) continue;
+      // Don't auto-clean custom glyphs (eg. music glyphs) unless it's harsh or delete all
+      const isCustomGlyph = glyph.color !== undefined || glyph.symbol !== undefined;
+      if (isCustomGlyph && !isHarsh) continue;
       // If the threshold for better glyphs needed is zero, the glyph is definitely getting deleted
       // no matter what (well, unless it can't be gotten rid of in current glyph removal mode).
       if (thresholdOverride === 0 || this.isObjectivelyUseless(glyph, thresholdOverride)) {
@@ -765,7 +776,7 @@ const Glyphs = {
     const undoData = {
       oldIndex,
       targetSlot,
-      am: new Decimal(player.antimatter),
+      am: new Decimal(Currency.antimatter.value),
       ip: new Decimal(player.infinityPoints),
       ep: new Decimal(player.eternityPoints),
       tt: player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost() - TimeTheorems.totalPurchased()),
@@ -790,7 +801,7 @@ const Glyphs = {
       glyphUndo: true,
       restoreCelestialState: true,
     });
-    player.antimatter.fromValue(undoData.am);
+    Currency.antimatter.value = new Decimal(undoData.am);
     player.infinityPoints.fromValue(undoData.ip);
     player.eternityPoints.fromValue(undoData.ep);
     player.timestudy.theorem.fromValue(undoData.tt);
@@ -1058,8 +1069,9 @@ const GlyphSacrificeHandler = {
     if (glyph.type === "reality") return 0.01 * glyph.level * Achievement(171).effectOrDefault(1);
     const pre10kFactor = Math.pow(Math.clampMax(glyph.level, 10000) + 10, 2.5);
     const post10kFactor = 1 + Math.clampMin(glyph.level - 10000, 0) / 100;
-    return pre10kFactor * post10kFactor * glyph.strength *
-      Teresa.runRewardMultiplier * Achievement(171).effectOrDefault(1);
+    const power = Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST) ? 1 + Effarig.maxRarityBoost / 100 : 1;
+    return Math.pow(pre10kFactor * post10kFactor * glyph.strength *
+      Teresa.runRewardMultiplier * Achievement(171).effectOrDefault(1), power);
   },
   sacrificeGlyph(glyph, force = false) {
     if (glyph.type === "cursed") {
@@ -1139,7 +1151,7 @@ const GlyphSacrificeHandler = {
 // Gives a maximum resource total possible, based on the highest level glyph in recent realities. This doesn't
 // actually enforce any special behavior, but instead only affects various UI properties.
 function estimatedAlchemyCap() {
-  return GlyphSacrificeHandler.levelAlchemyCap(player.lastTenRealities.map(([, , , lvl]) => lvl).max());
+  return GlyphSacrificeHandler.levelAlchemyCap(player.lastTenRealities.map(([, , , , lvl]) => lvl).max());
 }
 
 function autoAdjustGlyphWeights() {
@@ -1225,16 +1237,13 @@ function getGlyphLevelInputs() {
     scaledLevel = hyperInstabilityScaleBegin + 0.5 * hyperInstabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
   }
   const scalePenalty = scaledLevel > 0 ? baseLevel / scaledLevel : 1;
-  const perkFactor = Effects.sum(
-    Perk.glyphLevelIncrease1,
-    Perk.glyphLevelIncrease2
-  );
-  const achievementFactor = Effects.sum(
-    Achievement(148),
-    Achievement(157)
-  );
-  baseLevel += perkFactor + achievementFactor;
-  scaledLevel += perkFactor + achievementFactor;
+  const rowFactor = [Array.range(1, 5).every(x => RealityUpgrade(x).boughtAmount > 0)]
+    .concat(Array.range(1, 4).map(x => Array.range(1, 5).every(y => RealityUpgrade(5 * x + y).isBought)))
+    .filter(x => x)
+    .length;
+  const achievementFactor = Effects.sum(Achievement(148), Achievement(166));
+  baseLevel += rowFactor + achievementFactor;
+  scaledLevel += rowFactor + achievementFactor;
   // Temporary runaway prevention (?)
   const levelHardcap = 1000000;
   const levelCapped = scaledLevel > levelHardcap;
@@ -1246,7 +1255,7 @@ function getGlyphLevelInputs() {
     eterEffect,
     perkShop: perkShopEffect,
     scalePenalty,
-    perkFactor,
+    rowFactor,
     achievementFactor,
     shardFactor,
     rawLevel: baseLevel,

@@ -27,7 +27,7 @@ Vue.component("new-dimension-row", {
       return NormalDimension(this.tier).shortDisplayName;
     },
     costDisplay() {
-      return this.buyUntil10 ? format(this.until10Cost, 0, 0) : format(this.singleCost, 0, 0);
+      return this.buyUntil10 ? format(this.until10Cost) : format(this.singleCost);
     },
     amountDisplay() {
       return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
@@ -104,7 +104,7 @@ Vue.component("new-dimension-row", {
     </div>
     <div class="c-dim-row__label c-dim-row__label--growable">
       {{amountDisplay}}
-      <span class="c-dim-row__label--small">{{rateOfChangeDisplay}}</span>
+      <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
     </div>
     <button class="o-primary-btn o-primary-btn--new" @click="buy"
       :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }">

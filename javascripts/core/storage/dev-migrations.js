@@ -657,6 +657,21 @@ GameStorage.devMigrations = {
     player => {
       player.bestGlyphStrength = player.reality.glyphs.active.concat(
         player.reality.glyphs.inventory).map(g => g.strength).max();
+    },
+    player => {
+      player.options.showHintText.glyphEffectDots = player.options.showGlyphEffectDots;
+      delete player.options.showGlyphEffectDots;
+      GameStorage.migrations.renameCloudVariable(player);
+    },
+    player => {
+      const newPerks = new Set([...player.reality.perks].filter(x => x < 20 || x > 25));
+      const gainedPerkPoints = player.reality.perks.size - newPerks.size;
+      player.reality.pp += gainedPerkPoints;
+      player.reality.perks = newPerks;
+      if (gainedPerkPoints > 0) {
+        Modal.message.show(
+          "Some of your perks (glyph perks) were removed. The perk points you spent on them have been refunded.");
+      }
     }
   ],
 

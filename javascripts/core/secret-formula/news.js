@@ -952,7 +952,7 @@ GameDatabase.news = [
     id: "a186",
     text:
       "<span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span style='animation: text-grow 1s infinite" +
-      "'>\\(^_^)\\</span> <span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span style='animation: " + 
+      "'>\\(^_^)\\</span> <span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span style='animation: " +
       "text-grow 1s infinite'>\\(^_^)\\</span> <span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span " +
       "style='animation: text-grow 1s infinite'>\\(^_^)\\</span>"
   },
@@ -1137,7 +1137,7 @@ GameDatabase.news = [
         "Please, that's nothing."
       ];
       const diss = disses.randomElement();
-      return `Only ${format(player.antimatter, 2, 0)} antimatter? ${diss}`;
+      return `Only ${format(Currency.antimatter.value, 2, 0)} antimatter? ${diss}`;
     },
   },
   {
@@ -1185,7 +1185,7 @@ GameDatabase.news = [
       "like 8.5 or 8.76, I'm taking about an integer between 8 and 9. Now all this may sound crazy to you, and it " +
       "kinda is, but what if, we've missed a number? We've all been taught that 2 comes after 1 and 3 comes after " +
       "2, but what if the number that comes after 8 isn't 9? After years of research and experimentation, we've " +
-      "finally found the number. It is dangerous, even knowing its existence will let it consume your mind, but " + 
+      "finally found the number. It is dangerous, even knowing its existence will let it consume your mind, but " +
       "fortunately, we've developed a reverse-containment cell, meaning it's everywhere except here. Our brain has " +
       "a protection system, that specifically filters out any information regarding this number, that's how we've " +
       "been able to survive for this long, and why others like us went extinct in the past, but the number has been " +
@@ -1243,7 +1243,7 @@ GameDatabase.news = [
   {
     id: "a230",
     get text() {
-      return "You started playing this game nearly " + 
+      return "You started playing this game nearly " +
         `${TimeSpan.fromMilliseconds(player.realTimePlayed).toString()} ago. Thank you for playing!`;
     },
     dynamic: true
@@ -1339,6 +1339,7 @@ GameDatabase.news = [
           "colors pull you in and fully immerse you into the game.",
         S7: "I always had fond memories of that background from my childhood.",
         S8: "it makes it a lot easier to sneak in a little gameplay at the office.",
+        S9: "lol you can't even ever see this in the game",
       };
       const reason = reasons[Theme.current().name.replace(/\s/gu, "")];
       return `Ah, a fellow ${theme} theme user. I see that you have impeccable taste.
@@ -1759,7 +1760,7 @@ GameDatabase.news = [
     get text() {
       return `You just made your first ${formatInt(1e15)} antimatter. This one tastes like chicken.`;
     },
-    get unlocked() { return player.antimatter.e === 15; }
+    get unlocked() { return Currency.antimatter.exponent === 15; }
   },
   {
     id: "l2",
@@ -1952,7 +1953,7 @@ GameDatabase.news = [
     text:
       "If you wrote down 3 numbers a second, it would take you less time to write down your antimatter " +
       "amount than it would Hevipelle to update the game.",
-    get unlocked() { return player.antimatter.gt("1e100000"); }
+    get unlocked() { return Currency.antimatter.exponent >= 100000; }
   },
   {
     id: "l30",
@@ -2182,7 +2183,7 @@ GameDatabase.news = [
     id: "j2",
     text: "Legend says the ninth dimension is supposed to be found here, but I don't see anything.",
     get unlocked() {
-      return player.antimatter.e >= 41900 &&
+      return Currency.antimatter.exponent >= 41900 &&
       !Replicanti.areUnlocked &&
       !PlayerProgress.eternityUnlocked();
     }
@@ -2195,9 +2196,9 @@ GameDatabase.news = [
   {
     id: "j4",
     text: "Whale is bad at making smart purchases.",
-    get unlocked() { 
-      return ShopPurchase.IPPurchases.currentMult > 500 && 
-      ShopPurchase.dimPurchases.currentMult < 5e307; 
+    get unlocked() {
+      return ShopPurchase.IPPurchases.currentMult > 500 &&
+      ShopPurchase.dimPurchases.currentMult < 5e307;
     }
   },
   {

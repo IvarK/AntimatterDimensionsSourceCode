@@ -211,7 +211,8 @@ GameDatabase.reality.upgrades = (function() {
       },
       checkRequirement: () => Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2) === 4,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-      description: "50% chance to get an additional effect on glyphs",
+      description: () => `${formatPercents(0.5)} chance to get an additional effect on glyphs`,
+      effect: 0.5,
       formatCost: value => format(value, 1, 0)
     },
     {
@@ -290,9 +291,9 @@ GameDatabase.reality.upgrades = (function() {
       name: "Synthetic Symbolism",
       id: 24,
       cost: 100000,
-      requirement: () => `Reality for ${formatInt(6666)} RM without glyphs`,
+      requirement: () => `Reality for ${formatInt(5000)} RM without glyphs`,
       hasFailed: () => Glyphs.activeList.length > 0,
-      checkRequirement: () => gainedRealityMachines().gte(6666) && Glyphs.activeList.length === 0,
+      checkRequirement: () => gainedRealityMachines().gte(5000) && Glyphs.activeList.length === 0,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain another glyph slot",
       effect: () => 1

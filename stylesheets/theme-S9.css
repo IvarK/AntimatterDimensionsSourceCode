@@ -1,0 +1,41 @@
+* {
+  color: transparent !important;
+  text-shadow: none !important;
+  user-select: none;
+}
+
+[ach-tooltip]:before {
+  color: transparent;
+}
+
+::placeholder {
+  opacity: 0;
+}
+
+.o-achievement--normal,
+.o-achievement--secret,
+.o-achievement--cancer {
+  background-image: none;
+}
+
+.o-prestige-btn--big-crunch:hover span,
+.o-prestige-btn--eternity:hover span {
+  color: transparent !important;
+}
+
+@keyframes a-reality-glyph-icon-cycle {
+  0% { color: transparent; }
+}
+
+@keyframes a-reality-glyph-description-cycle {
+  0% { color: transparent; }
+}
+
+@keyframes a-reality-glyph-dot-cycle {
+  from { background: none; }
+  to { background: none; }
+}
+
+.o-celestial-nav__legend-text {
+  fill: transparent !important;
+}

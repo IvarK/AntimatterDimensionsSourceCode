@@ -83,7 +83,7 @@ Vue.component("infinity-dim-tab", {
         @click="buyTesseract">
         <p>Buy a Tesseract</p>
         <p>Increase dimension caps by {{ format(nextDimCapIncrease, 2) }}</p>
-        <p><b>Costs: {{ format(tesseractCost, 0, 0) }} IP</b></p>
+        <p><b>Costs: {{ format(tesseractCost) }} IP</b></p>
       </button>
     </div>
     <div v-if="isEnslavedRunning">

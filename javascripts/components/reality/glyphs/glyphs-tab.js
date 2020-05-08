@@ -9,6 +9,8 @@ Vue.component("glyphs-tab", {
     isInCelestialReality: false,
     autoRestartCelestialRuns: false,
     hasAlchemy: false,
+    sacrificeUnlocked: false,
+    sacrificeDisplayed: false,
   }),
   computed: {
     showEnslavedHint() {
@@ -24,6 +26,8 @@ Vue.component("glyphs-tab", {
       this.autoRestartCelestialRuns = player.options.retryCelestial;
       this.enslavedHint = "";
       this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      this.sacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
+      this.sacrificeDisplayed = player.reality.showGlyphSacrifice;
       if (!Enslaved.isRunning) return;
       const haveBoost = Glyphs.activeList.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
       if (haveBoost) {
@@ -32,11 +36,20 @@ Vue.component("glyphs-tab", {
     },
     toggleAutoRestartCelestial() {
       player.options.retryCelestial = !player.options.retryCelestial;
+    },
+    glyphInfoClass(isSacrificeOption) {
+      if (this.sacrificeDisplayed === isSacrificeOption) return "c-glyph-info-button--active";
+      return "";
+    },
+    setInfoState(state) {
+      player.reality.showGlyphSacrifice = state;
     }
   },
   template:
   `<div class="l-glyphs-tab">
     <div class="l-reality-button-column">
+      <glyph-peek />
+      <br/>
       <reality-button />
       <div v-if="isInCelestialReality">
         <input type="checkbox"
@@ -61,13 +74,29 @@ Vue.component("glyphs-tab", {
       </expanding-control-box>
       <glyph-sacrifice-options />
       <glyph-auto-pick-options v-if="hasAlchemy" />
-      <sacrificed-glyphs />
     </div>
     <div class="l-player-glyphs-column">
       <div v-if="showEnslavedHint" class="o-teresa-quotes" v-html="enslavedHint" />
       <div class="l-equipped-glyphs-wrapper">
         <equipped-glyphs />
-        <current-glyph-effects />
+        <div class="l-glyph-info-wrapper">
+          <div class="c-glyph-info-options"
+            v-if="sacrificeUnlocked">
+              <div class="c-glyph-info-button"
+                :class="glyphInfoClass(false)"
+                @click="setInfoState(false)"
+                style="border-right: 0.1rem solid #b8b8b8;">
+                  Current glyph effects
+              </div>
+              <div class="c-glyph-info-button"
+                :class="glyphInfoClass(true)"
+                @click="setInfoState(true)">
+                  Glyph sacrifice totals
+              </div>
+          </div>
+          <sacrificed-glyphs v-if="sacrificeUnlocked && sacrificeDisplayed" />
+          <current-glyph-effects v-else />
+        </div>
       </div>
       <glyph-inventory />
     </div>

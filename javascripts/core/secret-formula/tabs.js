@@ -38,22 +38,22 @@ GameDatabase.tabs = [
     name: "Options",
     subtabs: [
       {
-        key: "options",
-        name: "User Interface",
-        symbol: "<i class='fas fa-user-cog'></i>",
-        component: "options-tab"
-      },
-      {
         key: "saving",
         name: "Saving",
         symbol: "<i class='fas fa-save'></i>",
         component: "options-saving-tab"
       },
       {
-        key: "customizability",
-        name: "Customizability",
-        symbol: "<i class='fas fa-cogs'></i>",
-        component: "options-customizability-tab"
+        key: "visual",
+        name: "Visual",
+        symbol: "<i class='fas fa-palette'></i>",
+        component: "options-visual-tab"
+      },
+      {
+        key: "gameplay",
+        name: "Gameplay",
+        symbol: "<i class='fas fa-wrench'></i>",
+        component: "options-gameplay-tab"
       }
     ]
   },
@@ -126,7 +126,7 @@ GameDatabase.tabs = [
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
-          player.antimatter.e >= 2000 ||
+          Currency.antimatter.exponent >= 2000 ||
           player.postChallUnlocked > 0
       },
       {

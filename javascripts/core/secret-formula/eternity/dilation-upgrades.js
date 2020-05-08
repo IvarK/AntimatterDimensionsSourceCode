@@ -8,10 +8,14 @@ GameDatabase.eternity.dilation = (function() {
     return {
       id: config.id,
       cost: () => rebuyableCost(config.initialCost, config.increment, config.id),
+      initialCost: config.initialCost,
+      increment: config.increment,
       description: config.description,
       effect: () => config.effect(player.dilation.rebuyables[config.id]),
       formatEffect: config.formatEffect,
       formatCost: config.formatCost,
+      purchaseCap: config.purchaseCap,
+      reachedCapFn: () => player.dilation.rebuyables[config.id] >= config.purchaseCap,
       rebuyable: true
     };
   }
@@ -26,7 +30,8 @@ GameDatabase.eternity.dilation = (function() {
         return Decimal.pow(base, bought);
       },
       formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => format(value, 2, 0)
+      formatCost: value => format(value, 2, 0),
+      purchaseCap: Number.MAX_VALUE
     }),
     galaxyThreshold: rebuyable({
       id: 2,
@@ -36,9 +41,11 @@ GameDatabase.eternity.dilation = (function() {
         (Perk.bypassDGReset.isBought
         ? "Reset Dilated Galaxies, but lower their threshold"
         : "Reset Dilated Time and Dilated Galaxies, but lower their threshold"),
-      effect: bought => Math.pow(0.8, bought),
+      // The 38th purchase is at 1e80, and is the last purchase.
+      effect: bought => (bought < 38 ? Math.pow(0.8, bought) : 0),
       formatEffect: () => format(getFreeGalaxyMult(), 3, 3),
-      formatCost: value => format(value, 2, 0)
+      formatCost: value => format(value, 2, 0),
+      purchaseCap: 38
     }),
     tachyonGain: rebuyable({
       id: 3,
@@ -49,7 +56,8 @@ GameDatabase.eternity.dilation = (function() {
         : "Triple the amount of Tachyon Particles gained."),
       effect: bought => Decimal.pow(3, bought),
       formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => format(value, 2, 0)
+      formatCost: value => format(value, 2, 0),
+      purchaseCap: Number.MAX_VALUE
     }),
     doubleGalaxies: {
       id: 4,

@@ -19,39 +19,34 @@ function startDilatedEternity(auto) {
   return true;
 }
 
-// @param {Name of the ugrade} id
-// @param {Cost of the upgrade} cost
-// @param {Cost increase for the upgrade, only for rebuyables} costInc
-// id 1-3 are rebuyables
-// id 2 resets your dilated time and free galaxies
-
-const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
-                        5e6, 1e9, 5e7,
-                        2e12, 1e10, 1e11,
-                        1e15];
+const DIL_UPG_NAMES = [
+  null, "dtGain", "galaxyThreshold", "tachyonGain", "doubleGalaxies", "tdMultReplicanti",
+  "ndMultDT", "ipMultDT", "timeStudySplit", "dilationPenalty", "ttGenerator"
+];
 
 function buyDilationUpgrade(id, bulk, extraFactor) {
+  const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
   // If a tick is really long (perhaps due to the player going offline), they can be automatically bought
   // several times in one tick, which is what the extraFactor variable is used for.
   if (id > 3) {
-    if (player.dilation.dilatedTime.lt(DIL_UPG_COSTS[id])) return false;
+    if (player.dilation.dilatedTime.lt(upgrade.cost)) return false;
     if (player.dilation.upgrades.has(id)) return false;
-    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(DIL_UPG_COSTS[id]);
+    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(upgrade.cost);
     player.dilation.upgrades.add(id);
     if (id === 4) player.dilation.freeGalaxies *= 2;
   } else {
     const upgAmount = player.dilation.rebuyables[id];
-    const realCost = new Decimal(DIL_UPG_COSTS[id][0]).times(Decimal.pow(DIL_UPG_COSTS[id][1], (upgAmount)));
-    if (player.dilation.dilatedTime.lt(realCost)) return false;
+    if (player.dilation.dilatedTime.lt(upgrade.cost) || upgAmount >= upgrade.config.purchaseCap) return false;
 
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
-      DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
+      upgrade.config.initialCost, upgrade.config.increment, upgAmount).toNumber();
     buying = Math.clampMax(buying, Effects.max(1, PerkShopUpgrade.bulkDilation) * extraFactor);
+    buying = Math.clampMax(buying, upgrade.config.purchaseCap - upgAmount);
     if (!bulk) {
       buying = Math.clampMax(buying, 1);
     }
-    const cost = Decimal.sumGeometricSeries(buying, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount);
+    const cost = Decimal.sumGeometricSeries(buying, upgrade.config.initialCost, upgrade.config.increment, upgAmount);
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost);
     player.dilation.rebuyables[id] += buying;
     if (id === 2) {
@@ -119,7 +114,7 @@ function tachyonGainMultiplier() {
 }
 
 function rewardTP() {
-  player.dilation.tachyonParticles = Decimal.max(player.dilation.tachyonParticles, getTP(player.antimatter));
+  player.dilation.tachyonParticles = Decimal.max(player.dilation.tachyonParticles, getTP(Currency.antimatter.value));
 }
 
 // Returns the TP that would be gained this run
@@ -133,7 +128,7 @@ function getTP(antimatter) {
 
 // Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
 function getTachyonGain() {
-  return getTP(player.antimatter).minus(player.dilation.tachyonParticles).clampMin(0);
+  return getTP(Currency.antimatter.value).minus(player.dilation.tachyonParticles).clampMin(0);
 }
 
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
@@ -194,6 +189,10 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
 
   set isAutobuyerOn(value) {
     player.dilation.auto[this.autobuyerId] = value;
+  }
+  
+  get isCapped() {
+    return this.config.reachedCapFn();
   }
 
   purchase(bulk, extraFactor = 1) {

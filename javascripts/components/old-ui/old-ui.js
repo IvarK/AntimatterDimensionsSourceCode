@@ -20,7 +20,7 @@ Vue.component("old-ui", {
   },
   methods: {
     update() {
-      const canCrunch = player.antimatter.gte(Player.infinityGoal);
+      const canCrunch = Currency.antimatter.gte(Player.infinityGoal);
       const challenge = NormalChallenge.current || InfinityChallenge.current;
       if (!canCrunch || (player.break && challenge === undefined)) {
         this.bigCrunch = false;

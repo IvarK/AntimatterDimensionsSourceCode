@@ -144,10 +144,6 @@ class InfinityDimensionState extends DimensionState {
     return player.infinityPoints.gte(this.cost);
   }
 
-  get hasRateOfChange() {
-    return this.tier < 8 || EternityChallenge(7).completions > 0;
-  }
-
   get rateOfChange() {
     const tier = this.tier;
     let toGain = new Decimal(0);

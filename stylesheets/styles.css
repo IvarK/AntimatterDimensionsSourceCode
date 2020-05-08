@@ -1026,25 +1026,25 @@ screen and (max-width: 480px) {
 }
 
 .infotooltip {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .infotooltip .infotooltiptext {
-    visibility: hidden;
-    background-color: black;
-    color: #fff;
-    text-align: left;
-    padding: 5px;
-    border-radius: 5px;
-    position: absolute;
-    z-index: 2;
-    white-space: nowrap;
-    left: 105%
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: left;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  position: absolute;
+  z-index: 2;
+  white-space: nowrap;
+  left: 105%
 }
 
 .infotooltip:hover .infotooltiptext {
-    visibility: visible;
+  visibility: visible;
 }
 
 /*******

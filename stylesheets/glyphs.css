@@ -589,6 +589,11 @@
   border-color: black;
 }
 
+.c-current-glyph-effects__header {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
 .l-equipped-glyphs-wrapper {
   display: flex;
   flex-direction: row;

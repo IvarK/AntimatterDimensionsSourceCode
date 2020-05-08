@@ -3,13 +3,13 @@
 // There is a little too much stuff about glyph effects to put in constants.
 
 // The last glyph type you can only get if you got effarig reality
-const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig",
+const GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig",
   "reality", "cursed", "companion"];
-const BASIC_GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power"];
-const ALCHEMY_BASIC_GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig"];
-const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω",
+const BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation"];
+const ALCHEMY_BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig"];
+const GLYPH_SYMBOLS = { power: "Ω", infinity: "∞", replication: "Ξ", time: "Δ", dilation: "Ψ",
   effarig: "Ϙ", reality: "Ϟ", cursed: "⸸", companion: "♥" };
-const CANCER_GLYPH_SYMBOLS = { time: "🕟", dilation: "☎", replication: "⚤", infinity: "8", power: "⚡",
+const CANCER_GLYPH_SYMBOLS = { power: "⚡", infinity: "8", replication: "⚤", time: "🕟", dilation: "☎", 
   effarig: "🦒", reality: "⛧", cursed: "☠", companion: "³" };
 
 const GlyphCombiner = Object.freeze({

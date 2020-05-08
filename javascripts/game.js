@@ -623,7 +623,7 @@ function laitelaRealityTick(realDiff) {
     clearCelestialRuns();
     if (Time.thisRealityRealTime.totalSeconds < 30) {
       laitelaInfo.difficultyTier++;
-      laitelaInfo.fastestCompletion = 600;
+      laitelaInfo.fastestCompletion = 300;
       // This causes display oddities at 3 or lower but I don't expect the player to get that far legitimately (?)
       completionText += `<br><br>Lai'tela's Reality will now disable production from all
         ${Laitela.maxAllowedDimension + 1}th dimensions during future runs, but the reward will be

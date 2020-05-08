@@ -7,12 +7,14 @@ Vue.component("laitela-tab", {
       maxMatter: new Decimal(0),
       nextUnlock: "",
       matterExtraPurchasePercentage: 0,
+      realityTime: 0,
       maxDimTier: 0,
       activeDimensions: [],
       showReset: false,
       darkMatterMult: 0,
       darkMatterMultGain: 0,
       darkEnergy: 0,
+      darkEnergyGainPerSecond: 0,
       annihilated: false,
       isRunning: 0,
       realityReward: 1,
@@ -35,6 +37,7 @@ Vue.component("laitela-tab", {
       this.maxMatter.copyFrom(player.celestials.laitela.maxMatter);
       this.nextUnlock = Laitela.nextMatterDimensionThreshold;
       this.matterExtraPurchasePercentage = Laitela.matterExtraPurchaseFactor - 1;
+      this.realityTime = player.celestials.laitela.fastestCompletion;
       this.maxDimTier = Laitela.maxAllowedDimension;
       this.realityReward = Laitela.realityReward;
       this.activeDimensions = Array.range(0, 4).filter(i => MatterDimension(i + 1).amount.neq(0));
@@ -43,6 +46,11 @@ Vue.component("laitela-tab", {
       this.annihilated = player.celestials.laitela.annihilated;
       this.showReset = this.annihilated || this.darkMatterMultGain >= 1;
       this.darkEnergy = player.celestials.laitela.darkEnergy;
+      this.darkEnergyGainPerSecond = Array.range(1, 4)
+        .map(n => MatterDimension(n))
+        .filter(d => d.amount.gt(0))
+        .map(d => d.powerDE * 1000 / d.interval)
+        .sum();
       this.isRunning = Laitela.isRunning;
       this.realityReward = Laitela.realityReward;
       this.milestoneIds = SingularityMilestones.nextFive.map(m => m.id);
@@ -164,6 +172,9 @@ Vue.component("laitela-tab", {
       }
 
       return formText;
+    },
+    completionTime() {
+      return TimeSpan.fromSeconds(this.realityTime).toStringShort();
     }
   },
   template: `
@@ -181,8 +192,8 @@ Vue.component("laitela-tab", {
       <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter.</div>
       <div class="o-laitela-matter-amount">Your maximum Dark Matter ever is {{ format(maxMatter.floor(), 2, 0) }},
       giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from continuum.</div>
-      <div>
-        <div class="o-laitela-matter-amount">You have {{ format(darkEnergy, 2, 4) }} Dark Energy.</div>
+      <div class="o-laitela-matter-amount">
+        You have {{ format(darkEnergy, 2, 4) }} Dark Energy. (+{{ format(darkEnergyGainPerSecond, 2, 4) }}/s)
       </div>
       <div v-if="annihilated">
         You have a {{ formatX(darkMatterMult, 2, 2) }} multiplier to Dark Matter production from prestige.
@@ -221,6 +232,14 @@ Vue.component("laitela-tab", {
             <b>All DM multipliers are {{ formatX(realityReward, 2, 2) }} higher</b>
             <br>
             <br>
+            Fastest Completion: {{ completionTime }}
+            <br>
+            <br>
+            <span v-if="maxDimTier <= 7">
+              Highest active dimension: {{ formatInt(maxDimTier) }}
+            </span>
+            <br>
+            <br>
           </div>
           IP and EP gain are dilated. Game speed is reduced to 1 and gradually comes back over 10 minutes,
           Black Hole discharging and pulsing are disabled.
@@ -229,18 +248,6 @@ Vue.component("laitela-tab", {
           Antimatter generates entropy inside of this Reality. At 100% entropy, the Reality becomes destabilized and
           you gain a reward based on how quickly you reached 100%. If you can destabilize in less than 30 seconds,
           the Reality becomes more difficult but also gives a stronger reward.
-          <div v-if="maxDimTier === 7">
-            <br>
-            <b>Additional limitation:</b>
-            <br>
-            Production is disabled for all 8th dimensions.
-          </div>
-          <div v-else-if="maxDimTier < 7">
-            <br>
-            <b>Additional limitation:</b>
-            <br>
-            Production is disabled for all dimensions {{ maxDimTier + 1 }} or higher.
-          </div>
         </button>
         <div>
           <matter-dimension-row

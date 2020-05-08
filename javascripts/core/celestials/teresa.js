@@ -143,8 +143,14 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
       Autobuyer.reality.bumpAmount(2);
     }
     if (this.id === 4) {
-      Glyphs.addToInventory(GlyphGenerator.musicGlyph());
-      GameUI.notify.success("Created a music glyph");
+      if (Glyphs.freeInventorySpace === 0) {
+        // Refund the perk point if they didn't actually get a glyph
+        player.reality.pp++;
+        GameUI.notify.error("You have no empty inventory space!");
+      } else {
+        Glyphs.addToInventory(GlyphGenerator.musicGlyph());
+        GameUI.notify.success("Created a music glyph");
+      }
     }
   }
 }

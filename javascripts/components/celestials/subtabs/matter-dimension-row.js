@@ -83,7 +83,8 @@ Vue.component("matter-dimension-row", {
         DE {{ formatX(powerDE, 4, 4) }} <br>Cost: {{ format(powerDECost, 2, 0) }}
       </button>
     </div>
-    <span v-if="interval > 200">Tick: {{ formatInt(timer) }} ms ({{ formatPercents(timerPercent, 1) }}%)</span>
+    <div v-if="interval > 200">Tick: {{ formatInt(timer) }} ms ({{ formatPercents(timerPercent, 1) }})</div>
+    <div>DE: {{ format(powerDE * 1000 / interval, 2, 4) }}/s</div>
   </div>
 
   `

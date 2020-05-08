@@ -5598,8 +5598,12 @@ kbd {
 
 .l-enslaved-celestial-tab {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-enslaved-celestial-tab--inner {
+  display: flex;
 }
 
 .l-enslaved-upgrades-column {
@@ -6422,8 +6426,8 @@ kbd {
 }
 
 .o-laitela-matter-amount {
-  font-size: 2rem;
-  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .c-matter-dimension-container {

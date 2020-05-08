@@ -757,6 +757,11 @@ body.t-normal {
   justify-content: flex-end;
 }
 
+.t-normal .c-sacrificed-glyphs--dragover {
+  border-color: rgb(255, 255, 255);
+  box-shadow: 0 0 0.1rem 0.1rem  rgb(255, 255, 255);
+}
+
 .l-help-me {
   position: absolute;
   top: 4.9rem;

@@ -38,8 +38,8 @@ Vue.component("glyphs-tab", {
       player.options.retryCelestial = !player.options.retryCelestial;
     },
     glyphInfoClass(isSacrificeOption) {
-      if (this.sacrificeDisplayed === isSacrificeOption) return "c-glyph-sacrifice-options__option--active";
-      return "c-glyph-sacrifice-options__option--inactive";
+      if (this.sacrificeDisplayed === isSacrificeOption) return "c-glyph-info-button--active";
+      return "";
     },
     setInfoState(state) {
       player.reality.showGlyphSacrifice = state;
@@ -80,14 +80,15 @@ Vue.component("glyphs-tab", {
       <div class="l-equipped-glyphs-wrapper">
         <equipped-glyphs />
         <div class="l-glyph-info-wrapper">
-          <div class="l-glyph-info-options l-glyph-sacrifice-options c-glyph-sacrifice-options"
+          <div class="c-glyph-info-options"
             v-if="sacrificeUnlocked">
-              <div class="c-glyph-sacrifice-options__option l-glyph-info-button"
+              <div class="c-glyph-info-button"
                 :class="glyphInfoClass(false)"
-                @click="setInfoState(false)">
+                @click="setInfoState(false)"
+                style="border-right: 0.1rem solid #b8b8b8;">
                   Current glyph effects
               </div>
-              <div class="c-glyph-sacrifice-options__option l-glyph-info-button"
+              <div class="c-glyph-info-button"
                 :class="glyphInfoClass(true)"
                 @click="setInfoState(true)">
                   Glyph sacrifice totals

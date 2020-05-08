@@ -22,10 +22,21 @@
   padding: 2rem;
   margin-top: 2rem;
   position: relative;
+  width: 27rem;
 }
 
 .c-glyph-sacrifice-options {
   background: black;
+  border: 0.2rem solid var(--color-reality);
+  border-radius: 0.5rem;
+}
+
+.t-metro .c-glyph-sacrifice-options,
+.t-dark-metro .c-glyph-sacrifice-options,
+.t-inverted-metro .c-glyph-sacrifice-options,
+.t-s8 .c-glyph-sacrifice-options {
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 .l-glyph-sacrifice-options__help {
@@ -46,20 +57,30 @@
 }
 
 .c-glyph-sacrifice-options__option {
+  cursor: pointer;
   font-weight: bold;
-  padding-bottom: 0.5em;
-  padding-top: 0.5em;
-  padding-left: 1em;
-  padding-right: 1em;
+  padding: 0.5rem;
   border-width: 0.1rem 0.2rem;
   border-style: solid;
+  margin-bottom: -0.1rem;
+  transition: color 0.2s;
+}
+
+.t-metro .c-glyph-sacrifice-options__option,
+.t-dark-metro .c-glyph-sacrifice-options__option,
+.t-inverted-metro .c-glyph-sacrifice-options__option,
+.t-s8 .c-glyph-sacrifice-options__option {
+  border-width: 0.1rem;
+}
+
+.c-glyph-sacrifice-options__option:hover {
+  color: #d5ffd7;
 }
 
 .c-glyph-sacrifice-options__option--active {
   color: #d5ffd7;
   border-color: #d5ffd7;
-  box-shadow: 0 0 0.1rem 0.1rem #d5ffd7;
-  z-index: 2;
+  z-index: 1;
 }
 
 .c-glyph-sacrifice-options__option--inactive {
@@ -75,7 +96,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
   width: 19rem;
@@ -194,6 +215,24 @@
   min-height: 3em;
 }
 
+.c-auto-sac-type-tab__effect-desc--active {
+  cursor: pointer;
+  opacity: 1;
+  font-weight: bold;
+  text-shadow: 0 0 0.3rem;
+}
+
+.c-auto-sac-type-tab__effect-desc--inactive {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.c-auto-sac-type-tab__effect-desc--inactive:hover {
+  opacity: 0.8;
+  text-shadow: 0 0 0.3rem;
+}
+
 .l-specified-effect-tab__effect-desc {
   display: inline-flex;
   width: 22rem;
@@ -231,6 +270,9 @@
   height: 2.5rem;
   margin: 1rem 0.25rem 0.25rem;
   font-family: Typewriter;
+  cursor: pointer;
+  line-height: 0.1rem;
+  transition-duration: 0.15s;
 }
 
 .c-glyph-sacrifice-options__advanced-type-select:hover {
@@ -254,20 +296,23 @@
 }
 
 .c-glyph-auto-pick-options__option {
+  cursor: pointer;
   font-weight: bold;
-  padding-bottom: 0.5em;
-  padding-top: 0.5em;
-  padding-left: 1em;
-  padding-right: 1em;
+  padding: 0.5rem;
   border-width: 0.1rem 0.2rem;
   border-style: solid;
+  margin-bottom: -0.1rem;
+  transition: color 0.2s;
+}
+
+.c-glyph-auto-pick-options__option:hover {
+  color: #d5ffd7;
 }
 
 .c-glyph-auto-pick-options__option--active {
   color: #d5ffd7;
   border-color: #d5ffd7;
-  box-shadow: 0 0 0.1rem 0.1rem #d5ffd7;
-  z-index: 2;
+  z-index: 1;
 }
 
 .c-glyph-auto-pick-options__option--inactive {
@@ -519,8 +564,10 @@
 }
 
 .c-current-glyph-effects {
-  border: 0.1rem solid rgb(184, 184, 184);
+  border: 0.1rem solid #b8b8b8;
   border-radius: 0.5rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   padding: 1.2rem;
   margin-top: 0;
   margin-left: 1rem;
@@ -529,6 +576,13 @@
   height: 30rem;
   width: 50rem;
   overflow: auto;
+}
+
+.t-metro .c-current-glyph-effects,
+.t-dark-metro .c-current-glyph-effects,
+.t-inverted-metro .c-current-glyph-effects,
+.t-s8 .c-current-glyph-effects {
+  border-radius: 0;
 }
 
 .t-s8 .c-current-glyph-effects {
@@ -548,16 +602,51 @@
   align-items: center
 }
 
-.l-glyph-info-options {
+.c-glyph-info-options {
   display: flex;
   flex-direction: row;
-  align-items: stretch;
-  margin-bottom: 1rem;
-  width: 90%;
+  width: 50rem;
+  height: 3rem;
+  margin-bottom: -0.1rem;
+  border: 0.1rem solid #b8b8b8;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 }
 
-.l-glyph-info-button {
-  width: 60%;
+.t-metro .c-glyph-info-options,
+.t-dark-metro .c-glyph-info-options,
+.t-inverted-metro .c-glyph-info-options,
+.t-s8 .c-glyph-info-options {
+  border-radius: 0;
+}
+
+.t-s8 .c-glyph-info-options {
+  border-color: black;
+}
+
+.c-glyph-info-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-text);
+  font-size: 1.2rem;
+  width: 50%;
+  cursor: pointer;
+  transition: font-size 0.2s;
+}
+
+.t-s8 .c-glyph-info-button {
+  border-color: black !important;
+}
+
+.c-glyph-info-button--active {
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: default;
+}
+
+.c-glyph-info-button:hover {
+  font-size: 1.25rem;
 }
 
 .l-sacrificed-glyphs {
@@ -565,7 +654,7 @@
 }
 
 .c-glyph-peek {
-  border: 0.1rem solid rgb(184, 184, 184);
+  border: 0.1rem solid #b8b8b8;
   border-radius: 0.5rem;
   padding: 1.2rem;
   margin-top: 0;
@@ -576,10 +665,15 @@
   width: 30rem;
 }
 
-.c-sacrificed-glyphs {
-  border: 0.1rem solid rgb(184, 184, 184);
-  border-radius: 0.5rem;
-  padding-bottom: 1rem;
+.t-metro .c-glyph-peek,
+.t-dark-metro .c-glyph-peek,
+.t-inverted-metro .c-glyph-peek,
+.t-s8 .c-glyph-peek {
+  border-radius: 0;
+}
+
+.t-s8 .c-glyph-peek {
+  border-color: black;
 }
 
 .c-sacrificed-glyphs--dragover {
@@ -676,5 +770,6 @@
 .l-glyph-inventory__sort {
   width: auto;
   height: auto;
-  padding: 0.5em;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
 }

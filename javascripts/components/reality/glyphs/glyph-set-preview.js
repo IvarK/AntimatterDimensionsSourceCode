@@ -6,7 +6,11 @@ Vue.component("glyph-set-preview", {
     text: String,
     glyphs: Array,
     noLevelOverride: Boolean,
-    flipTooltip: Boolean
+    flipTooltip: Boolean,
+    showSacrifice: {
+      type: Boolean,
+      default: false
+    },
   },
   template:
     `<div v-if="show">
@@ -19,7 +23,7 @@ Vue.component("glyph-set-preview", {
           :key="idx"
           style="margin: 0.2rem;"
           :glyph="g"
-          :showSacrifice="false"
+          :showSacrifice="showSacrifice"
           :draggable="false"
           :circular="true"
           :noLevelOverride="noLevelOverride"

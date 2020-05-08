@@ -99,7 +99,7 @@ Vue.component("normal-dim-row", {
       </div>
       <div class="c-dim-row__label c-dim-row__label--growable">
         {{amountDisplay}} ({{formatInt(boughtBefore10)}})
-        <span class="c-dim-row__label--small">{{rateOfChangeDisplay}}</span>
+        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
       </div>
       <primary-button
         v-if="!isContinuumActive"

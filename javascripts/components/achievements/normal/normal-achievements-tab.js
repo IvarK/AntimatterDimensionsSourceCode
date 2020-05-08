@@ -41,23 +41,22 @@ Vue.component("normal-achievements-tab", {
       }
     }
   },
-  template:
-    `<div>
+  template: `
+    <div class="l-achievements-tab">
+      <div class="c-subtab-option-container" v-if="showAutoAchieve">
+        <primary-button-on-off
+          v-model="isAutoAchieveActive"
+          class="o-primary-btn--subtab-option"
+          text="Auto achievement:"
+        />
+      </div>
       <div class="c-achievements-tab__header">
         Current achievement multiplier on each Dimension: {{ formatX(achievementPower, 2, 3) }}
         <span @click="swapImages()" style="cursor: pointer">{{ swapImagesButton }}</span>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">
-        Next automatic achievement in {{timeDisplayNoDecimals(achCountdown)}}.
-      </div>
-      <div v-if="showAutoAchieve">
-        <primary-button-on-off
-          v-model="isAutoAchieveActive"
-          class="o-primary-btn"
-          text="Auto achievement:"
-        />
-        <br>
-        <br>
+        Automatically gain the next missing achievement in {{timeDisplayNoDecimals(achCountdown)}}.
+        (left-to-right, top-to-bottom)
       </div>
       <div class="l-achievement-grid">
         <normal-achievement-row v-for="(row, i) in rows" :key="i" :row="row" />

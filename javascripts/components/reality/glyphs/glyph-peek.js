@@ -7,7 +7,8 @@ Vue.component("glyph-peek", {
       level: 0,
       canPeek: false,
       isVisible: false,
-      canRefresh: false
+      canRefresh: false,
+      canSacrifice: false,
     };
   },
   created() {
@@ -26,6 +27,7 @@ Vue.component("glyph-peek", {
   },
   methods: {
     update() {
+      this.canSacrifice = GlyphSacrificeHandler.canSacrifice;
       // Hide this before first reality since then it'll confuse the player,
       // and due to pre-selected first glyph might well be incorrect anyway.
       this.isVisible = player.realities > 0 && TimeStudy.reality.isBought;
@@ -47,6 +49,7 @@ Vue.component("glyph-peek", {
     :text="'Glyph choices for this Reality:'"
     :glyphs="glyphs"
     :noLevelOverride="true"
+    :showSacrifice="canSacrifice"
     :flipTooltip="true"/>
   <span v-else-if="canPeek"
     class="c-glyph-peek">

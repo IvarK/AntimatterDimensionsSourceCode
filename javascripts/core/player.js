@@ -309,6 +309,7 @@ let player = {
               false, false, false, false, false],
     perks: new Set(),
     respec: false,
+    showGlyphSacrifice: false,
     tdbuyers: [false, false, false, false, false, false, false, false],
     epmultbuyer: false,
     autoAutoClean: false,
@@ -358,7 +359,8 @@ let player = {
       run: false,
       bestRunAM: new Decimal(1),
       bestAMSet: [],
-      perkShop: Array.repeat(0, 5)
+      perkShop: Array.repeat(0, 5),
+      lastRepeatedRM: new Decimal(0)
     },
     effarig: {
       relicShards: 0,

@@ -99,7 +99,7 @@ GameDatabase.celestials.v = {
       id: 6,
       name: "Requiem for a Glyph",
       description: value => `Unlock Reality with at most ${-value} glyphs equipped for the entire reality.
-        <div ach-tooltip="Each equipped cursed glyph counts as -3 glyphs">
+        <div ach-tooltip="Each equipped cursed glyph counts as ${formatInt(-3)} glyphs">
           <i class="fas fa-question-circle"></i>
         </div>`,
       // This achievement has internally negated values since the check is always greater than

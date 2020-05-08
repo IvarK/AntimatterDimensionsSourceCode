@@ -727,7 +727,7 @@ increased by ${formatPercents(0.3)} per upgrade.
 <br>
 Once you reach ${formatInt(1)} year of game playtime, you unlock a Reality upgrade that allows you to have
 a second Black Hole. The time spent for this requirement is itself affected by the first Black Hole, so it
-takes much less than ${formatInt(2)} actual real-time years.
+takes much less than ${formatInt(1)} actual real-time year.
 <br>
 <br>
 Once the Black Hole is active at least ${formatPercents(0.9999, 2)} of the time, it becomes permanently active.
@@ -778,8 +778,11 @@ container for a Reality Machine multiplier. RM which has been poured into the co
 When you reach ${format(TERESA_UNLOCKS.RUN.price)} RM inside of the container, you unlock Teresa's Reality.
 <br>
 <br>
-When you complete Teresa's Reality, your Glyph Sacrifice is multiplied based on the amount of antimatter gained during
-the run. Completing Teresa's Reality is only part of the story; you need to keep pouring RM in order to progress. Once
+When you complete Teresa's Reality,
+${Teresa.runCompleted
+  ? "your Glyph Sacrifice is multiplied based on the amount of antimatter gained during the run"
+  : "<div style='color: var(--color-bad);'>(complete Teresa's Reality to see this text)</div>"}. 
+Completing Teresa's Reality is only part of the story; you need to keep pouring RM in order to progress. Once
 you are at ${format(TERESA_UNLOCKS.EFFARIG.price)} RM in the container, you will unlock the next Celestial.
 `,
       isUnlocked: () => RealityUpgrades.allBought,
@@ -803,13 +806,22 @@ allow you to filter them based on their effects and rarity when you are doing fu
 <br>
 <br>
 Effarig's final unlock is its own Reality at ${format(GameDatabase.celestials.effarig.unlocks.run.cost)} Relic
-Shards. Its Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer before
-getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial.
+Shards. 
+${EffarigUnlock.run.isUnlocked
+  ? "Its Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer before " +
+    "getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial."
+  : "<div style='color: var(--color-bad);'>(unlock Effarig's Reality to see this text)</div>"
+}
 <br>
 <br>
-Completing Effarig's Reality unlocks a new Glyph type: <font color="#e21717">Effarig</font> Glyphs. Effarig Glyphs have
-${formatInt(7)} different possible effects, which you can view in the "Advanced Mode" settings. You can only have one
-Effarig Glyph equipped at a time, and they can still only have at most ${formatInt(4)} effects.
+Completing Effarig's Reality unlocks
+${EffarigUnlock.reality.isUnlocked
+  // Can't really make a nested template here without generally making a mess of the code
+  // eslint-disable-next-line prefer-template
+  ? "a new Glyph type: <div style='color: var(--color-bad);'>Effarig</div> Glyphs. Effarig Glyphs have " +
+    formatInt(7) + " different possible effects, which you can view in the \"Advanced Mode\" settings. You can only " +
+    "have one Effarig Glyph equipped at a time, and they can still only have at most " + formatInt(4) + " effects."
+  : "<div style='color: var(--color-bad);'>(complete Effarig's Reality to see this text)</div>"}
 `,
       isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
       tags: ["glyph", "sacrifice", "shards", "reality", "spectralflame", "lategame", "endgame"],
@@ -875,8 +887,9 @@ Stored game time is also used as a currency for purchasing unlocks from The Ensl
 <br>
 Charging your Black Hole gives you stored time, which it does at the expense of setting your game speed to
 ${formatInt(1)}. The game is in effect using your increased game speed in order to store time itself. Its
-main use is to discharge the Black Hole, which takes your stored time and applies it all at once in a single tick,
-making the game run as if you had an effective game speed even higher than you normally have for a single instant.
+main use is to discharge the Black Hole, which takes uses your stored time to skip forward in time by a duration
+equal to the time stored. This is different than regular game speed multipliers in that discharging is not subject to
+any modifiers to game speed when it is used, only when it is stored.
 <br>
 <br>
 Storing real time completely stops all production, effectively pausing your game. For every real-time second that
@@ -897,8 +910,11 @@ by ${format(1e5)} tickspeed upgrades.
 <br>
 <br>
 At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years, you are able to finally unlock
-their Reality. The reward for completing The Enslaved Ones' Reality is unlocking Tesseracts. The Enslaved Ones will not
-directly unlock the next Celestial.
+their Reality. The reward for completing The Enslaved Ones' Reality is 
+${Enslaved.isCompleted
+  ? "unlocking Tesseracts, which have their own How To Play entry."
+  : "<div style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see this text)</div>"}
+The Enslaved Ones will not directly unlock the next Celestial.
 `,
       isUnlocked: () => EffarigUnlock.eternity.isUnlocked,
       tags: ["reality", "time", "blackhole", "lategame", "endgame", "testers",
@@ -995,16 +1011,24 @@ Teresa unlocks the ability to charge your Infinity Upgrades, making them much st
 improves your glyph effects once you reach certain thresholds in glyph sacrifice value.
 <br>
 <br>
-Effarig unlocks a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually
-removing almost all random elements of glyph generation.
+At level ${formatInt(2)}, Effarig unlocks 
+${Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)
+  ? "a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually removing almost " +
+    "all random elements of glyph generation. This also has its own How To Play entry."
+  : "<div style='color: var(--color-bad);'>(unlock Effarig within Ra to see this text)</div>"}
 <br>
 <br>
-Enslaved makes your Black Holes significantly stronger and unlocks additional mechanics related to charging
-the Black Holes.
+The Enslaved Ones unlocks 
+${Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK)
+  ? "additional mechanics related to charging the Black Holes, as well as making them significantly stronger."
+  : "<div style='color: var(--color-bad);'>(unlock The Enslaved Ones within Ra to see this text)</div>"}
 <br>
 <br>
-V unlocks Triad Studies, which are time studies near the bottom of the tree which cost Space Theorems.
-She also unlocks a smaller set of more difficult V achievements to complete for additional Space Theorems.
+V unlocks 
+${Ra.has(RA_UNLOCKS.V_UNLOCK)
+  ? "Triad Studies, which are time studies near the bottom of the tree which cost Space Theorems. " +
+    "She also unlocks a smaller set of more difficult V achievements to complete for additional Space Theorems."
+  : "<div style='color: var(--color-bad);'>(unlock V within Ra to see this text)</div>"}
 <br>
 <br>
 Having a total of ${formatInt(RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels)} levels across all four Celestials

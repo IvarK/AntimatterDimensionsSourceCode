@@ -336,6 +336,7 @@ Vue.component("glyph-component", {
         "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
         "border-radius": this.circular ? "50%" : "0",
         animation: this.isRealityGlyph ? "a-reality-glyph-outer-cycle 10s infinite" : undefined,
+        "-webkit-user-drag": this.draggable ? "" : "none"
       };
     },
     innerStyle() {
@@ -587,14 +588,14 @@ Vue.component("glyph-component", {
         <div v-if="$viewModel.shiftDown || showGlyphEffectDots" v-for="x in glyphEffects"
           :style="glyphEffectIcon(x)"/>
         <glyph-tooltip v-if="hasTooltip && tooltipLoaded"
-                       v-show="isCurrentTooltip"
-                       ref="tooltip"
-                       v-bind="glyph"
-                       :class="tooltipDirectionClass"
-                       :sacrificeReward="sacrificeReward"
-                       :showDeletionText="showSacrifice"
-                       :levelOverride="levelOverride"
-                       :component="componentID"/>
+          v-show="isCurrentTooltip"
+          ref="tooltip"
+          v-bind="glyph"
+          :class="tooltipDirectionClass"
+          :sacrificeReward="sacrificeReward"
+          :showDeletionText="showSacrifice"
+          :levelOverride="levelOverride"
+          :component="componentID"/>
       </div>
       <div ref="over"
            :style="overStyle"

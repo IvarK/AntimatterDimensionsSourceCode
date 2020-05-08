@@ -10,6 +10,7 @@ Vue.component("teresa-tab", {
       percentage: "",
       rmMult: 0,
       bestAM: new Decimal(0),
+      lastRM: new Decimal(0),
       runReward: 0,
       pp: 0,
       hasReality: false,
@@ -45,6 +46,7 @@ Vue.component("teresa-tab", {
       this.hasEPGen = Teresa.has(TERESA_UNLOCKS.EPGEN);
       this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
+      this.lastRM.copyFrom(player.celestials.teresa.lastRepeatedRM);
       this.runReward = Teresa.runRewardMultiplier;
       this.pp = player.reality.pp;
       this.rm.copyFrom(player.reality.realityMachines);
@@ -71,7 +73,14 @@ Vue.component("teresa-tab", {
             Start Teresa's Reality. Glyph TT generation is disabled and
             you gain less IP and EP (x^{{format(0.55, 2, 2)}}).
             <br><br>
-            Highest antimatter in Teresa's Reality: {{ format(bestAM, 2, 0) }}
+            <div v-if="bestAM.gt(0)">
+              Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
+              <br><br>
+              You last did Teresa's Reality at {{ format(lastRM, 2) }} RM.
+            </div>
+            <div v-else>
+              You have not completed Teresa's Reality yet.
+            </div>
           </div>
           <div class="c-teresa-unlock" v-if="hasReality">
             Teresa Reality reward: Glyph sacrifice power {{ formatX(runReward, 2, 2) }}

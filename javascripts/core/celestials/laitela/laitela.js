@@ -51,8 +51,8 @@ const Laitela = {
       Math.log10(Number.MAX_VALUE), 0.8) * (1 + SingularityMilestone(1).effectValue) / 2);
   },
   get realityReward() {
-    return Math.clampMin(Math.pow(10, player.celestials.laitela.difficultyTier) *
-      (360 / player.celestials.laitela.fastestCompletion), 1);
+    return Math.clampMin(Math.pow(100, player.celestials.laitela.difficultyTier) *
+      Math.pow(360 / player.celestials.laitela.fastestCompletion, 2), 1);
   },
   // Note that entropy goes from 0 to 1, with 1 being completion
   get entropyGainPerSecond() {

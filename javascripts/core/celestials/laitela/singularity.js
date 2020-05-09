@@ -94,8 +94,8 @@ const SingularityMilestones = {
     });
   },
 
-  get nextFive() {
-    return this.sortedForCompletions.slice(0, 5);
+  get nextMilestoneGroup() {
+    return this.sortedForCompletions.slice(0, 6);
   }
 };
 

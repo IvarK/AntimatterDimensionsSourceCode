@@ -7,10 +7,9 @@ Vue.component("matter-dimension-row", {
   data() {
     return {
       tier: 0,
-      interval: new Decimal(0),
-      baseInterval: new Decimal(0),
+      interval: 0,
       powerDM: new Decimal(0),
-      powerDE: new Decimal(0),
+      powerDE: 0,
       intervalCost: 0,
       powerDMCost: 0,
       powerDECost: 0,
@@ -18,9 +17,9 @@ Vue.component("matter-dimension-row", {
       canBuyInterval: false,
       canBuyPowerDM: false,
       canBuyPowerDE: false,
+      isIntervalCapped: false,
       timer: 0,
       timerPecent: 0,
-      intervalCap: 0
     };
   },
   computed: {
@@ -54,9 +53,9 @@ Vue.component("matter-dimension-row", {
       this.canBuyInterval = this.dimension.canBuyInterval;
       this.canBuyPowerDM = this.dimension.canBuyPowerDM;
       this.canBuyPowerDE = this.dimension.canBuyPowerDE;
+      this.isIntervalCapped = this.dimension.baseInterval <= this.dimension.intervalPurchaseCap;
       this.timer = this.dimension.timeSinceLastUpdate;
       this.timerPercent = this.timer / this.interval;
-      this.intervalCap = this.dimension.intervalPurchaseCap;
     }
   },
   template:
@@ -67,20 +66,19 @@ Vue.component("matter-dimension-row", {
         @click="dimension.buyInterval()" 
         class="o-matter-dimension-button" 
         :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> 
-        {{ format(interval, 2, 2) }}ms <span v-if="baseInterval > intervalCap">
-        <br>Cost: {{ format(intervalCost, 2, 0) }}</span>
+        {{ format(interval, 2, 2) }}ms<span v-if="!isIntervalCapped"><br>Cost: {{ format(intervalCost, 2, 0) }}</span>
       </button>
       <button
         @click="dimension.buyPowerDM()"
         class="o-matter-dimension-button"
         :class="{ 'o-matter-dimension-button--available': canBuyPowerDM }">
-        DM {{ formatX(powerDM, 2, 2) }} <br>Cost: {{ format(powerDMCost, 2, 0) }}
+        DM {{ formatX(powerDM, 2, 2) }}<br>Cost: {{ format(powerDMCost, 2, 0) }}
       </button>
       <button
         @click="dimension.buyPowerDE()"
         class="o-matter-dimension-button"
         :class="{ 'o-matter-dimension-button--available': canBuyPowerDE }">
-        DE {{ formatX(powerDE, 4, 4) }} <br>Cost: {{ format(powerDECost, 2, 0) }}
+        DE {{ formatX(powerDE, 2, 4) }}<br>Cost: {{ format(powerDECost, 2, 0) }}
       </button>
     </div>
     <div v-if="interval > 200">Tick: {{ formatInt(timer) }} ms ({{ formatPercents(timerPercent, 1) }})</div>

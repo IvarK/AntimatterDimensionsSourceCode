@@ -39,20 +39,20 @@ Vue.component("singularity-milestone", {
   },
   template: `
     <div class="c-laitela-milestone" :class="{ 'c-laitela-milestone--completed': isUnique && isMaxed }">
-        <div class="c-laitela-milestone__progress" :style="milestoneProgressStyles"></div>
-        <b v-if="!isMaxed">
-          In {{ format(remainingSingularities, 2, 0) }} 
-          {{ "Singularity" | pluralize(remainingSingularities, "Singularities")}}
-        </b>
-        <p> {{ description }}</p>
-        <br>
-        <b>
-            {{ effectDisplay }} 
-            <span v-if="!isUnique && !isMaxed">-> {{ nextEffectDisplay }}</span>
-        </b>
-        <div class="c-laitela-milestone__completions">
-            {{ completionsDisplay }}
-        </div>
+      <div class="c-laitela-milestone__progress" :style="milestoneProgressStyles"></div>
+      <b v-if="!isMaxed">
+        In {{ format(remainingSingularities, 2, 0) }} 
+        {{ "Singularity" | pluralize(remainingSingularities, "Singularities")}}
+      </b>
+      <p> {{ description }}</p>
+      <br>
+      <b>
+        {{ effectDisplay }} 
+        <span v-if="!isUnique && !isMaxed">-> {{ nextEffectDisplay }}</span>
+      </b>
+      <div class="c-laitela-milestone__completions">
+        {{ completionsDisplay }}
+      </div>
     </div>
     `
 });

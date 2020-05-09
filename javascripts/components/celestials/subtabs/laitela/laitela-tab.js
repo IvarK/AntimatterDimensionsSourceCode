@@ -44,7 +44,7 @@ Vue.component("laitela-tab", {
       this.darkMatterMult = Laitela.darkMatterMult;
       this.darkMatterMultGain = Laitela.darkMatterMultGain;
       this.annihilated = player.celestials.laitela.annihilated;
-      this.showReset = this.annihilated || this.darkMatterMultGain >= 1;
+      this.showReset = this.annihilated || !MatterDimensionState.list.some(d => d.amount.eq(0));
       this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.darkEnergyGainPerSecond = Array.range(1, 4)
         .map(n => MatterDimension(n))
@@ -53,7 +53,7 @@ Vue.component("laitela-tab", {
         .sum();
       this.isRunning = Laitela.isRunning;
       this.realityReward = Laitela.realityReward;
-      this.milestoneIds = SingularityMilestones.nextFive.map(m => m.id);
+      this.milestoneIds = SingularityMilestones.nextMilestoneGroup.map(m => m.id);
       this.singularities = player.celestials.laitela.singularities;
       this.singularityCapIncreases = player.celestials.laitela.singularityCapIncreases;
       this.canPerformSingularity = Singularity.capIsReached;
@@ -210,17 +210,20 @@ Vue.component("laitela-tab", {
           </button>
         </div>
         <div class="l-laitela-singularity-container--right">
-          <button class="c-laitela-singularity__cap-control" @click="increaseCap">
-            Increase Singularity cap.
-          </button>
           <button class="c-laitela-singularity__cap-control" @click="decreaseCap">
             Decrease Singularity cap.
           </button>
+          <button class="c-laitela-singularity__cap-control" @click="increaseCap">
+            Increase Singularity cap.
+          </button>
           <br>
-          Total time to cap: {{ fullSingularityTime }}
+          Total time to current Singulrity cap: {{ fullSingularityTime }}
+          <br>
+          <br>
           <div v-if="autoCapUnlocked">
-            <input type="text" v-model="autoCapInput" @change="handleAutoCapInputChange()"/><br>
-            <label>Seconds to reach Singularity, after cap is raised automatically</label>
+            Increase Singularity cap if cap is reached within 
+            <input type="text" v-model="autoCapInput" @change="handleAutoCapInputChange()" style="width: 5rem;"/>
+            seconds or less.
           </div>
         </div>
       </div>
@@ -255,41 +258,47 @@ Vue.component("laitela-tab", {
             :key="i"
             :dimension="dimensions[i]"
             />
-          <div>{{ nextUnlock }}</div>
+          <div>
+            {{ nextUnlock }}
+          </div>
+          <button class="c-laitela-annihilation-button" 
+            @click="annihilate()" 
+            :style="{ visibility: showReset ? 'visible' : 'hidden' }">
+            <h2>Annihilation</h2>
+            <span v-if="annihilated">
+              Current multiplier to all DM multipliers: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
+              <br><br>
+            </span>
+            Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 
+            <span v-if="annihilated && matter.gte(1e20)">
+              but adds <b>{{ format(darkMatterMultGain, 2, 2) }}</b> to your Annihilation multiplier.
+              (<b>{{ formatX(darkMatterMultRatio, 2, 2) }}</b> from previous multiplier)
+            </span>
+            <span v-else-if="annihilated">
+              adding to your current Annihilation multiplier (requires {{ format(1e20, 0, 0) }} Dark Matter).
+            </span>
+            <span v-else-if="matter.gte(1e20)">
+              multiplying DM multipliers by <b>{{ formatX(1 + darkMatterMultGain, 2, 2) }}</b>.
+            </span>
+            <span v-else>
+              giving a multiplier to all DM multipliers (requires {{ format(1e20, 0, 0) }} Dark Matter).
+            </span>
+            <div :style="{ visibility: autoAnnihilationUnlocked ? 'visible' : 'hidden' }">
+              <br>
+              Auto-Annihilate when multiplier reaches: 
+              <input type="text"
+                v-model="autoAnnihilationInput"
+                @change="handleAutoAnnihilationInputChange()"
+                style="width: 7rem;"/>
+            </div>
+          </button>
         </div>
         <div class="c-laitela-next-milestones">
-          <singularity-milestone v-for="milestone in nextMilestones" :key="milestone.id" :milestone="milestone"/>
           <div class="o-laitela-singularity-modal-button" onclick="Modal.singularityMilestones.show()">
             Show all milestones
           </div>
+          <singularity-milestone v-for="milestone in nextMilestones" :key="milestone.id" :milestone="milestone"/>
         </div>
-      </div>
-      <button class="c-laitela-annihilation-button" 
-        @click="annihilate()" 
-        :style="{ visibility: showReset ? 'visible' : 'hidden' }">
-        <h2>Annihilation</h2>
-        <span v-if="annihilated">
-          Current multiplier: {{ formatX(darkMatterMult, 2, 2) }}
-          <br><br>
-        </span>
-        <p v-if="annihilated">
-          Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 
-          but multiply the Dark Matter multiplier from prestige by
-          <b>{{ formatX(darkMatterMultRatio, 2, 2) }}</b> 
-        </p>
-        <p v-else-if="darkMatterMultGain >= 1">
-          Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, but add
-          <b>{{ format(darkMatterMultGain, 2, 2) }}</b> 
-          to the Dark Matter multiplier from prestige.
-        </p>
-        <p v-else>
-          Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy
-          (requires {{ format(1e20, 0, 0) }} Dark Matter).
-        </p>
-      </button>
-      <div :style="{ visibility: autoAnnihilationUnlocked ? 'visible' : 'hidden' }">
-        <input type="text" v-model="autoAnnihilationInput" @change="handleAutoAnnihilationInputChange()"/><br>
-        <label>Multiplier on the Dark Matter multiplier, after Annihilating</label>
       </div>
     </div>`
 });

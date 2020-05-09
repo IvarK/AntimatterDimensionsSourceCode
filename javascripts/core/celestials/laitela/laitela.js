@@ -78,7 +78,7 @@ const Laitela = {
     return (this.celestial.darkMatterMult + this.darkMatterMultGain) / this.celestial.darkMatterMult;
   },
   annihilate(force) {
-    if (!force && this.darkMatterMultGain <= 0) return false;
+    if (!force && this.matter.lt(1e20)) return false;
     this.celestial.autoAnnihilationTimer = 0;
     this.celestial.darkMatterMult += this.darkMatterMultGain;
     this.celestial.dimensions = this.celestial.dimensions.map(

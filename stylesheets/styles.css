@@ -6420,7 +6420,7 @@ kbd {
   font-family: Typewriter;
   font-size: 1.2rem;
   cursor: pointer;
-  height: 73.1rem;
+  height: 84rem;
   margin-right: 1rem;
 }
 
@@ -6432,12 +6432,12 @@ kbd {
 .c-matter-dimension-container {
   border: 0.2rem solid gainsboro;
   background: whitesmoke;
-  width: 52rem;
+  width: 50rem;
   margin: auto;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
-  height: 17.5rem;
+  height: 15rem;
 }
 
 .o-matter-dimension-amount {
@@ -6446,9 +6446,18 @@ kbd {
   margin-bottom: 1rem;
 }
 
+.c-matter-dimension-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 47.5rem;
+  height: 6rem;
+}
+
 .o-matter-dimension-button {
-  padding: 1rem;
   width: 15rem;
+  height: 5rem;
+  margin-bottom: 1rem;
   font-family: Typewriter;
   background: white;
   border: 0.1rem solid grey;
@@ -6512,16 +6521,16 @@ kbd {
 }
 
 .c-laitela-milestone {
+  height: 16%;
   width: 22rem;
   background: white;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
+  padding: 0.8rem;
+  margin: 1rem 0 0;
   border-radius: 0.5rem;
   border: .2rem solid black;
   position: relative;
   z-index: -2;
   color: black;
-  margin-right: 1rem;
 }
 
 .l-singularity-milestone-modal-container .c-laitela-milestone {
@@ -6543,13 +6552,13 @@ kbd {
 
 .l-laitela-singularity-container {
   background: white;
-  width: 70rem;
+  width: 96rem;
   margin: auto;
   border: 0.2rem solid black;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   padding: 1rem;
   margin-top: 1rem;
@@ -6604,20 +6613,26 @@ kbd {
   color: white;
 }
 
-.l-singularity-milestone-modal-container {
+.l-singularity-milestone-modal-container-outer {
+  height: 50rem;
+  overflow-y: scroll;
+}
+
+.l-singularity-milestone-modal-container-inner {
   display: flex;
   flex-wrap: wrap;
-  overflow-y: scroll;
-  height: 70rem;
-  width: 95rem;
+  height: 120rem;
+  width: 90rem;
 }
 
 .o-laitela-singularity-modal-button {
   background: white;
-  padding: .5rem;
+  padding: 0.6rem;
+  margin: 0;
   color: black;
   font-weight: bold;
   width: 22rem;
+  height: 4%;
   border-radius: .5rem;
   border: .2rem solid black;
   cursor: pointer;
@@ -6633,7 +6648,7 @@ kbd {
   margin-left: 1rem;
   display: flex;
   flex-direction: column;
-  height: 73.1rem;
+  height: 84rem;
 }
 
 @keyframes a-dark-energy-glow {
@@ -6700,8 +6715,9 @@ kbd {
 }
 
 .c-laitela-annihilation-button {
-  padding: 2rem;
+  padding: 1rem;
   width: 50rem;
+  height: 20rem;
   background: white;
   border: 0.2rem solid black;
   border-radius: 0.5rem;
@@ -6709,8 +6725,6 @@ kbd {
   cursor: pointer;
   transition-duration: 0.3s;
   display: block;
-  margin: auto;
-  margin-bottom: 1rem;
 }
 
 .c-laitela-annihilation-button h2 {

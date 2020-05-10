@@ -65,7 +65,7 @@ GameDatabase.celestials.singularityMilestones = [
     start: 8,
     repeat: 8,
     limit: 8,
-    description: "Automatically creates a Singularity after reaching the cap (with a delay)",
+    description: "Automatically condense Singularities after reaching the cap (with a delay)",
     effect: completions => [Infinity, 20, 15, 10, 5, 3, 2, 1, 0][completions],
     effectFormat: x => `${formatInt(x)}s`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,

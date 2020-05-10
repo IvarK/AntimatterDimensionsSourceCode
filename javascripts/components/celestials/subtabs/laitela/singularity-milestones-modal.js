@@ -2,16 +2,11 @@
 
 Vue.component("singularity-milestones-modal", {
   data: () => ({
-    milestoneIds: []
+    milestones: []
   }),
   methods: {
     update() {
-      this.milestoneIds = SingularityMilestones.sortedForCompletions.map(m => m.id);
-    }
-  },
-  computed: {
-    milestones() {
-      return this.milestoneIds.map(id => SingularityMilestone(id));
+      this.milestones = SingularityMilestones.sortedForCompletions;
     }
   },
   template: `

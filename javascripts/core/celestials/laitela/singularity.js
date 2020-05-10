@@ -78,10 +78,32 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 }
 
-const SingularityMilestone = SingularityMilestoneState.createAccessor(GameDatabase.celestials.singularityMilestones);
+const SingularityMilestone =  (function() {
+  const db = GameDatabase.celestials.singularityMilestones;
+  return {
+    continuumMult: new SingularityMilestoneState(db.continuumMult),
+    darkMatterMult: new SingularityMilestoneState(db.darkMatterMult),
+    darkEnergyMult: new SingularityMilestoneState(db.darkEnergyMult),
+    darkDimensionCostReduction: new SingularityMilestoneState(db.darkDimensionCostReduction),
+    singularityMult: new SingularityMilestoneState(db.singularityMult),
+    autoCondense: new SingularityMilestoneState(db.autoCondense),
+    darkDimensionIntervalReduction: new SingularityMilestoneState(db.darkDimensionIntervalReduction),
+    darkDimensionAutobuyers: new SingularityMilestoneState(db.darkDimensionAutobuyers),
+    darkMatterFromTesseracts: new SingularityMilestoneState(db.darkMatterFromTesseracts),
+    dilatedTimeFromSingularities: new SingularityMilestoneState(db.dilatedTimeFromSingularities),
+    darkEnergyFromGlyphLevel: new SingularityMilestoneState(db.darkEnergyFromGlyphLevel),
+    momentumFromSingularities: new SingularityMilestoneState(db.momentumFromSingularities),
+    darkMultiplierFromAnnihilation: new SingularityMilestoneState(db.darkMultiplierFromAnnihilation),
+    annihilationBoostFromSingularities: new SingularityMilestoneState(db.annihilationBoostFromSingularities),
+    darkEnergyFromGamespeed: new SingularityMilestoneState(db.darkEnergyFromGamespeed),
+    glyphLevelFromSingularities: new SingularityMilestoneState(db.glyphLevelFromSingularities),
+    darkMatterFromDilatedTime: new SingularityMilestoneState(db.darkMatterFromDilatedTime),
+    tesseractMultFromSingularities: new SingularityMilestoneState(db.tesseractMultFromSingularities),
+  };
+}());
 
 const SingularityMilestones = {
-  all: SingularityMilestone.index.compact(),
+  all: Object.values(SingularityMilestone),
 
   get sorted() {
     return this.all.sort((a, b) => a.remainingSingularities - b.remainingSingularities);
@@ -105,7 +127,8 @@ const Singularity = {
   },
 
   get singularitiesGained() {
-    return Math.pow(20, player.celestials.laitela.singularityCapIncreases) * SingularityMilestone(5).effectValue;
+    return Math.pow(20, player.celestials.laitela.singularityCapIncreases) *
+      SingularityMilestone.singularityMult.effectOrDefault(1);
   },
 
   get capIsReached() {
@@ -139,7 +162,7 @@ const Singularity = {
   autobuyerLoop(diff) {
     const laitela = player.celestials.laitela;
 
-    for (let i = 1; i <= SingularityMilestone(8).effectValue; i++) {
+    for (let i = 1; i <= SingularityMilestone.darkDimensionAutobuyers.effectValue; i++) {
       MatterDimension(i).buyInterval();
       MatterDimension(i).buyPowerDM();
       MatterDimension(i).buyPowerDE();
@@ -151,7 +174,7 @@ const Singularity = {
 
     if (this.capIsReached) {
       laitela.secondsSinceReachedSingularity += diff / 1000;
-      if (laitela.secondsSinceReachedSingularity >= SingularityMilestone(6).effectValue) {
+      if (laitela.secondsSinceReachedSingularity >= SingularityMilestone.autoCondense.effectValue) {
         this.perform();
       }
     }

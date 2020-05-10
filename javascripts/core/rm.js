@@ -1101,7 +1101,7 @@ const GlyphSacrificeHandler = {
     return Math.pow(level, 3) / 1e8;
   },
   levelAlchemyCap(level) {
-    return Math.clampMax(25000, this.levelRefinementValue(level));
+    return Math.clampMax(Ra.alchemyResourceCap, this.levelRefinementValue(level));
   },
   // Refined glyphs give this proportion of their maximum attainable value from their level
   glyphRefinementEfficiency: 0.2,

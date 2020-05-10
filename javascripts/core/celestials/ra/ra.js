@@ -281,7 +281,7 @@ const Ra = {
     }
   },
   get alchemyResourceCap() {
-    return 1000000;
+    return 25000;
   }
 };
 

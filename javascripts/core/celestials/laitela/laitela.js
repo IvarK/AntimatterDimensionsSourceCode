@@ -39,13 +39,6 @@ const Laitela = {
     // Make it unlock at Lai'tela unlock for now.
     return Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK);
   },
-  get nextMatterDimensionThreshold() {
-    for (let i = 1; i <= 3; i++) {
-      const d = MatterDimension(i + 1);
-      if (d.amount.eq(0)) return `Next dimension at ${format(d.adjustedStartingCost)} Dark Matter`;
-    }
-    return "";
-  },
   get matterExtraPurchaseFactor() {
     return (1 + Math.pow(Decimal.pLog10(this.celestial.maxMatter) /
       Math.log10(Number.MAX_VALUE), 0.8) * (1 + SingularityMilestone(1).effectValue) / 2);

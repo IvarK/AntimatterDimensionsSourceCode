@@ -39,17 +39,23 @@ class MatterDimensionState {
     return this.baseInterval * SingularityMilestone.darkDimensionIntervalReduction.effectValue;
   }
 
+  get commonDarkMult() {
+    return new Decimal(1).timesEffectsOf(
+      SingularityMilestone.darkFromTesseracts,
+      SingularityMilestone.darkFromGlyphLevel,
+      SingularityMilestone.darkFromTheorems,
+      SingularityMilestone.darkFromDM4,
+      SingularityMilestone.darkFromGamespeed,
+      SingularityMilestone.darkFromDilatedTime
+    );
+  }
+
   get powerDM() {
     return new Decimal(1 + 2 * Math.pow(1.15, this.dimension.powerDMUpgrades))
       .times(Laitela.realityReward)
       .times(Laitela.darkMatterMult)
-      .timesEffectsOf(
-        SingularityMilestone.darkMatterMult,
-        SingularityMilestone.darkMatterFromTesseracts,
-        SingularityMilestone.darkMatterFromDilatedTime,
-        SingularityMilestone.darkFromTheorems,
-        SingularityMilestone.darkFromDM4
-      )
+      .times(this.commonDarkMult)
+      .timesEffectsOf(SingularityMilestone.darkMatterMult)
       .dividedBy(Math.pow(10, this._tier));
   }
   
@@ -57,13 +63,8 @@ class MatterDimensionState {
     const tierFactor = Math.pow(4, this._tier);
     return new Decimal(((1 + this.dimension.powerDEUpgrades * 0.1) * 
       Math.pow(1.005, this.dimension.powerDEUpgrades)) * tierFactor / 1000)
-      .timesEffectsOf(
-        SingularityMilestone.darkEnergyMult,
-        SingularityMilestone.darkEnergyFromGlyphLevel,
-        SingularityMilestone.darkEnergyFromGamespeed,
-        SingularityMilestone.darkFromTheorems,
-        SingularityMilestone.darkFromDM4
-      ).toNumber();
+        .times(this.commonDarkMult)
+        .timesEffectsOf(SingularityMilestone.darkEnergyMult).toNumber();
   }
 
   get adjustedStartingCost() {

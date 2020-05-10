@@ -46,8 +46,9 @@ class MatterDimensionState {
       .timesEffectsOf(
         SingularityMilestone.darkMatterMult,
         SingularityMilestone.darkMatterFromTesseracts,
-        SingularityMilestone.darkMultiplierFromAnnihilation,
-        SingularityMilestone.darkMatterFromDilatedTime
+        SingularityMilestone.darkMatterFromDilatedTime,
+        SingularityMilestone.darkFromTheorems,
+        SingularityMilestone.darkFromDM4
       )
       .dividedBy(Math.pow(10, this._tier));
   }
@@ -59,8 +60,9 @@ class MatterDimensionState {
       .timesEffectsOf(
         SingularityMilestone.darkEnergyMult,
         SingularityMilestone.darkEnergyFromGlyphLevel,
-        SingularityMilestone.darkMultiplierFromAnnihilation,
-        SingularityMilestone.darkEnergyFromGamespeed
+        SingularityMilestone.darkEnergyFromGamespeed,
+        SingularityMilestone.darkFromTheorems,
+        SingularityMilestone.darkFromDM4
       ).toNumber();
   }
 

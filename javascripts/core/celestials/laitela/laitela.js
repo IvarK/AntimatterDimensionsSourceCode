@@ -61,8 +61,7 @@ const Laitela = {
     this.celestial.matter = x;
   },
   get darkMatterMultGain() {
-    return Decimal.pow(this.matter.dividedBy(1e20).plus(1).log10(), 1.5)
-      .timesEffectsOf(SingularityMilestone.annihilationBoostFromSingularities).toNumber();
+    return Decimal.pow(this.matter.dividedBy(1e20).plus(1).log10(), 1.5).toNumber();
   },
   get darkMatterMult() {
     return this.celestial.darkMatterMult;
@@ -108,6 +107,10 @@ const Laitela = {
         }
         d.timeSinceLastUpdate -= d.interval * ticks;
       }
+    }
+    if (SingularityMilestone.dim4Generation.isUnlocked) {
+      MatterDimension(4).amount = MatterDimension(4).amount
+        .plus(SingularityMilestone.dim4Generation.effectValue * realDiff / 1000);
     }
   },
   reset() {

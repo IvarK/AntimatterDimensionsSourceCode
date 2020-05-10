@@ -42,7 +42,7 @@ class MatterDimensionState {
   get powerDM() {
     return new Decimal(1 + 2 * Math.pow(1.15, this.dimension.powerDMUpgrades))
       .times(Laitela.realityReward)
-      .times(Math.max(Laitela.darkMatterMult, 1))
+      .times(Laitela.darkMatterMult)
       .timesEffectsOf(
         SingularityMilestone(2),
         SingularityMilestone(11),

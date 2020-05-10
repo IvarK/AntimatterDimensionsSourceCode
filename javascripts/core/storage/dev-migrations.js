@@ -672,6 +672,15 @@ GameStorage.devMigrations = {
         Modal.message.show(
           "Some of your perks (glyph perks) were removed. The perk points you spent on them have been refunded.");
       }
+    },
+    player => {
+      delete player.celestials.laitela.reachedSingularityCapLimit;
+      delete player.celestials.laitela.secondsSinceCappedTime;
+      delete player.celestials.laitela.singularityAutoCapLimit;
+      delete player.celestials.laitela.singularityTime;
+      delete player.celestials.laitela.autoAnnihilationTimer;
+      delete player.celestials.laitela.annihilated;
+      player.celestials.laitela.darkMatterMult = Math.clampMin(player.celestials.laitela.darkMatterMult, 1);
     }
   ],
 

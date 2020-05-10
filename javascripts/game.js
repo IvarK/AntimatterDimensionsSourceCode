@@ -686,8 +686,14 @@ function getTTPerSecond() {
   const dilationTT = DilationUpgrade.ttGenerator.isBought
     ? DilationUpgrade.ttGenerator.effectValue.times(ttMult)
     : new Decimal(0);
+  
+  // Lai'tela TT power
+  let finalTT = dilationTT.add(glyphTT);
+  if (SingularityMilestone.theoremPowerFromSingularities.isUnlocked && finalTT.gt(1)) {
+    finalTT = finalTT.pow(SingularityMilestone.theoremPowerFromSingularities.effectValue);
+  }
 
-  return dilationTT.add(glyphTT);
+  return finalTT;
 }
 
 function recursiveTimeOut(fn, iterations, endFn) {

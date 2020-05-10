@@ -7,10 +7,9 @@ const LAITELA_UPGRADE_DIRECTION = {
   BOOSTS_LAITELA: 2
 };
 
-GameDatabase.celestials.singularityMilestones = [
+GameDatabase.celestials.singularityMilestones = {
   // Infinite
-  {
-    id: 1,
+  continuumMult: {
     start: 1,
     repeat: 5,
     limit: 0,
@@ -19,8 +18,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(1 + x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
-  {
-    id: 2,
+  darkMatterMult: {
     start: 2,
     repeat: 20,
     limit: 0,
@@ -29,8 +27,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
-    id: 3,
+  darkEnergyMult: {
     start: 3,
     repeat: 30,
     limit: 0,
@@ -39,8 +36,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
-    id: 4,
+  darkDimensionCostReduction: {
     start: 4,
     repeat: 40,
     limit: 0,
@@ -49,7 +45,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatPercents(1 - x),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
+  singularityMult: {
     id: 5,
     start: 50,
     repeat: 1000,
@@ -60,8 +56,7 @@ GameDatabase.celestials.singularityMilestones = [
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   // Limited
-  {
-    id: 6,
+  autoCondense: {
     start: 8,
     repeat: 8,
     limit: 8,
@@ -70,8 +65,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => `${formatInt(x)}s`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
-    id: 7,
+  darkDimensionIntervalReduction: {
     start: 12,
     repeat: 40,
     limit: 5,
@@ -80,8 +74,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
-    id: 8,
+  darkDimensionAutobuyers: {
     start: 30,
     repeat: 10,
     limit: 4,
@@ -90,29 +83,8 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => ((x === 0) ? "No autobuyers" : `Dimension ${x} autobuyer`),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
-    id: 9,
-    start: 40,
-    repeat: 8,
-    limit: 8,
-    description: "[Placeholder milestone to replace annihilation autobuyer raising]",
-    effect: completions => [Infinity, 20, 15, 10, 5, 3, 2, 1, 0][completions],
-    effectFormat: x => `${formatInt(x)}s`,
-    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
-  },
-  {
-    id: 10,
-    start: 250,
-    repeat: 10,
-    limit: 8,
-    description: "[Placeholder milestone to replace auto-cap raising]",
-    effect: completions => [Infinity, 20, 15, 10, 5, 3, 2, 1, 0][completions],
-    effectFormat: x => `${formatInt(x)}s`,
-    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
-  },
   // Unique
-  {
-    id: 11,
+  darkMatterFromTesseracts: {
     start: 10,
     repeat: 0,
     limit: 1,
@@ -121,8 +93,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
-  {
-    id: 12,
+  dilatedTimeFromSingularities: {
     start: 100,
     repeat: 0,
     limit: 1,
@@ -131,8 +102,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
-  {
-    id: 13,
+  darkEnergyFromGlyphLevel: {
     start: 1000,
     repeat: 0,
     limit: 1,
@@ -141,8 +111,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
-  {
-    id: 14,
+  momentumFromSingularities: {
     start: 1e4,
     repeat: 0,
     limit: 1,
@@ -151,8 +120,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
-  {
-    id: 15,
+  darkMultiplierFromAnnihilation: {
     start: 1e5,
     repeat: 0,
     limit: 1,
@@ -161,8 +129,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
-    id: 16,
+  annihilationBoostFromSingularities: {
     start: 1e6,
     repeat: 0,
     limit: 1,
@@ -171,8 +138,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
-    id: 17,
+  darkEnergyFromGamespeed: {
     start: 1e7,
     repeat: 0,
     limit: 1,
@@ -181,8 +147,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
-  {
-    id: 18,
+  glyphLevelFromSingularities: {
     start: 1e8,
     repeat: 0,
     limit: 1,
@@ -191,8 +156,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
-  {
-    id: 19,
+  darkMatterFromDilatedTime: {
     start: 1e9,
     repeat: 0,
     limit: 1,
@@ -201,8 +165,7 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
-  {
-    id: 20,
+  tesseractMultFromSingularities: {
     start: 1e10,
     repeat: 0,
     limit: 1,
@@ -211,4 +174,4 @@ GameDatabase.celestials.singularityMilestones = [
     effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   }
-];
+};

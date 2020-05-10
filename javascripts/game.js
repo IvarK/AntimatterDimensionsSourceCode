@@ -321,7 +321,9 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.MOMENTUM)) {
-    const milestoneFactor = SingularityMilestone(14).canBeApplied ? SingularityMilestone(14).effectValue : 1;
+    const milestoneFactor = SingularityMilestone.momentumFromSingularities.canBeApplied
+      ? SingularityMilestone.momentumFromSingularities.effectValue
+      : 1;
     factor *= Math.clampMax(1e30,
       Math.pow(AlchemyResource.momentum.effectValue, Time.thisRealityRealTime.totalMinutes * milestoneFactor));
   }

@@ -105,7 +105,7 @@ Vue.component("singularity-container", {
       this.canPerformSingularity = Singularity.capIsReached;
       this.singularityCap = Singularity.cap;
       this.singularitiesGained = Singularity.singularitiesGained;
-      this.autoSingularityDelay = SingularityMilestone(6).effectValue;
+      this.autoSingularityDelay = SingularityMilestone.autoCondense.effectValue;
       this.timeToAutoSingularity = this.autoSingularityDelay - laitela.secondsSinceReachedSingularity;
     },
     doSingularity() {
@@ -354,24 +354,19 @@ Vue.component("annihilation-button", {
 Vue.component("singularity-milestone-pane", {
   data() {
     return {
-      milestoneIds: [],
+      milestones: [],
     };
   },
   methods: {
     update() {
-      this.milestoneIds = SingularityMilestones.nextMilestoneGroup.map(m => m.id);
+      this.milestones = SingularityMilestones.nextMilestoneGroup;
     },
-  },
-  computed: {
-    nextMilestones() {
-      return this.milestoneIds.map(id => SingularityMilestone(id));
-    }
   },
   template: `
     <div class="c-laitela-next-milestones">
       <div class="o-laitela-singularity-modal-button" onclick="Modal.singularityMilestones.show()">
         Show all milestones
       </div>
-      <singularity-milestone v-for="milestone in nextMilestones" :key="milestone.id" :milestone="milestone"/>
+      <singularity-milestone v-for="milestone in milestones" :key="milestone.id" :milestone="milestone"/>
     </div>`
 });

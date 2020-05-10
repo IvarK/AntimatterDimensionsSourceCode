@@ -36,7 +36,7 @@ class MatterDimensionState {
 
   // In milliseconds; if this is 10 then you can no longer buy it, but it can get lower with other upgrades
   get interval() {
-    return this.baseInterval * SingularityMilestone(7).effectValue;
+    return this.baseInterval * SingularityMilestone.darkDimensionIntervalReduction.effectValue;
   }
 
   get powerDM() {
@@ -44,10 +44,10 @@ class MatterDimensionState {
       .times(Laitela.realityReward)
       .times(Laitela.darkMatterMult)
       .timesEffectsOf(
-        SingularityMilestone(2),
-        SingularityMilestone(11),
-        SingularityMilestone(15),
-        SingularityMilestone(19)
+        SingularityMilestone.darkMatterMult,
+        SingularityMilestone.darkMatterFromTesseracts,
+        SingularityMilestone.darkMultiplierFromAnnihilation,
+        SingularityMilestone.darkMatterFromDilatedTime
       )
       .dividedBy(Math.pow(10, this._tier));
   }
@@ -57,10 +57,10 @@ class MatterDimensionState {
     return new Decimal(((1 + this.dimension.powerDEUpgrades * 0.1) * 
       Math.pow(1.005, this.dimension.powerDEUpgrades)) * tierFactor / 1000)
       .timesEffectsOf(
-        SingularityMilestone(3),
-        SingularityMilestone(13),
-        SingularityMilestone(15),
-        SingularityMilestone(17)
+        SingularityMilestone.darkEnergyMult,
+        SingularityMilestone.darkEnergyFromGlyphLevel,
+        SingularityMilestone.darkMultiplierFromAnnihilation,
+        SingularityMilestone.darkEnergyFromGamespeed
       ).toNumber();
   }
 
@@ -71,17 +71,20 @@ class MatterDimensionState {
 
   get intervalCost() {
     return Decimal.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades)
-      .times(this.adjustedStartingCost).times(INTERVAL_START_COST).times(SingularityMilestone(4).effectValue).floor();
+      .times(this.adjustedStartingCost).times(INTERVAL_START_COST)
+      .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
   }
 
   get powerDMCost() {
     return Decimal.pow(POWER_DM_COST_MULT, this.dimension.powerDMUpgrades)
-      .times(this.adjustedStartingCost).times(POWER_DM_START_COST).times(SingularityMilestone(4).effectValue).floor();
+      .times(this.adjustedStartingCost).times(POWER_DM_START_COST)
+      .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
   }
   
   get powerDECost() {
     return Decimal.pow(POWER_DE_COST_MULTS[this._tier], this.dimension.powerDEUpgrades)
-      .times(this.adjustedStartingCost).times(POWER_DE_START_COST).times(SingularityMilestone(4).effectValue).floor();
+      .times(this.adjustedStartingCost).times(POWER_DE_START_COST)
+      .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
   }
 
   get amount() {

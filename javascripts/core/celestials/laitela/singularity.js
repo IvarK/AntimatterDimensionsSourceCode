@@ -131,7 +131,6 @@ const Singularity = {
 
     laitela.darkEnergy = 0;
     laitela.singularities += this.singularitiesGained;
-    laitela.singularityTime = 0;
     laitela.secondsSinceReachedSingularity = 0;
     
     EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_AFTER);
@@ -139,7 +138,6 @@ const Singularity = {
 
   autobuyerLoop(diff) {
     const laitela = player.celestials.laitela;
-    laitela.singularityTime += diff / 1000;
 
     for (let i = 1; i <= SingularityMilestone(8).effectValue; i++) {
       MatterDimension(i).buyInterval();
@@ -147,31 +145,8 @@ const Singularity = {
       MatterDimension(i).buyPowerDE();
     }
 
-    
-    if (laitela.singularityTime <= laitela.singularityAutoCapLimit && 
-        this.capIsReached && 
-        SingularityMilestone(10).isUnlocked) {
-      laitela.reachedSingularityCapLimit = true;
-    }
-
-    if (laitela.reachedSingularityCapLimit && SingularityMilestone(10).isUnlocked) {
-      laitela.secondsSinceCappedTime += diff / 1000;
-      if (laitela.secondsSinceCappedTime >= SingularityMilestone(10).effectValue) {
-        this.increaseCap();
-        laitela.reachedSingularityCapLimit = false;
-        laitela.secondsSinceCappedTime = 0;
-      }
-    }
-
-    if (SingularityMilestone(9).isUnlocked) {
-      if (Laitela.darkMatterMultRatio >= laitela.autoAnnihilationSetting) {
-        laitela.autoAnnihilationTimer += diff / 1000;
-        if (laitela.autoAnnihilationTimer >= SingularityMilestone(9).effectValue) {
-          Laitela.annihilate();
-        }
-      } else {
-        laitela.autoAnnihilationTimer = 0;
-      }
+    if (Laitela.darkMatterMultGain >= laitela.autoAnnihilationSetting && Laitela.darkMatterMult > 1) {
+      Laitela.annihilate();
     }
 
     if (this.capIsReached) {

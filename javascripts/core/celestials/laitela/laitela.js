@@ -79,7 +79,6 @@ const Laitela = {
   },
   annihilate(force) {
     if (!force && this.matter.lt(1e20)) return false;
-    this.celestial.autoAnnihilationTimer = 0;
     this.celestial.darkMatterMult += this.darkMatterMultGain;
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
@@ -95,7 +94,6 @@ const Laitela = {
     this.celestial.dimensions[0].amount = new Decimal(1);
     this.celestial.matter = new Decimal(0);
     this.celestial.darkEnergy = 0;
-    this.celestial.annihilated = true;
     return true;
   },
   tickDarkMatter(realDiff) {
@@ -122,7 +120,6 @@ const Laitela = {
   reset() {
     this.annihilate(true);
     this.celestial.darkMatterMult = 1;
-    this.celestial.annihilated = false;
     this.celestial.maxMatter = new Decimal(0);
     this.celestial.fastestCompletion = 3600;
     this.celestial.difficultyTier = 0;

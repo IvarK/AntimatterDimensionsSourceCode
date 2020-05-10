@@ -472,19 +472,13 @@ let player = {
       thisCompletion: 3600,
       fastestCompletion: 3600,
       difficultyTier: 0,
-      annihilated: false,
       upgrades: {},
-      darkMatterMult: 0,
+      darkMatterMult: 1,
       darkEnergy: 0,
       singularities: 0,
       singularityCapIncreases: 0,
       secondsSinceReachedSingularity: 0,
-      singularityAutoCapLimit: 30,
-      singularityTime: 99999999999,
-      secondsSinceCappedTime: 0,
-      reachedSingularityCapLimit: false,
-      autoAnnihilationSetting: 5,
-      autoAnnihilationTimer: 0
+      autoAnnihilationSetting: 5
     }
   },
   tabNotifications: new Set(),

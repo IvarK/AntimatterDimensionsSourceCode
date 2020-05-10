@@ -15,7 +15,6 @@ Vue.component("laitela-tab", {
       darkMatterMultGain: 0,
       darkEnergy: 0,
       darkEnergyGainPerSecond: 0,
-      annihilated: false,
       isRunning: 0,
       realityReward: 1,
       milestoneIds: [],
@@ -24,11 +23,10 @@ Vue.component("laitela-tab", {
       canPerformSingularity: false,
       singularityCap: 0,
       singularitiesGained: 0,
-      autoCapInput: player.celestials.laitela.singularityAutoCapLimit,
-      autoCapUnlocked: false,
-      autoAnnihilationUnlocked: false,
+      hasAnnihilated: false,
       darkMatterMultRatio: 0,
-      autoAnnihilationInput: player.celestials.laitela.autoAnnihilationSetting
+      autoAnnihilationInput: player.celestials.laitela.autoAnnihilationSetting,
+      timeToAutoSingularity: 0
     };
   },
   methods: {
@@ -43,8 +41,8 @@ Vue.component("laitela-tab", {
       this.activeDimensions = Array.range(0, 4).filter(i => MatterDimension(i + 1).amount.neq(0));
       this.darkMatterMult = Laitela.darkMatterMult;
       this.darkMatterMultGain = Laitela.darkMatterMultGain;
-      this.annihilated = player.celestials.laitela.annihilated;
-      this.showReset = this.annihilated || !MatterDimensionState.list.some(d => d.amount.eq(0));
+      this.hasAnnihilated = Laitela.darkMatterMult > 1;
+      this.showReset = this.hasAnnihilated || !MatterDimensionState.list.some(d => d.amount.eq(0));
       this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.darkEnergyGainPerSecond = Array.range(1, 4)
         .map(n => MatterDimension(n))
@@ -59,9 +57,9 @@ Vue.component("laitela-tab", {
       this.canPerformSingularity = Singularity.capIsReached;
       this.singularityCap = Singularity.cap;
       this.singularitiesGained = Singularity.singularitiesGained;
-      this.autoCapUnlocked = SingularityMilestone(10).isUnlocked;
-      this.autoAnnihilationUnlocked = SingularityMilestone(9).isUnlocked;
       this.darkMatterMultRatio = Laitela.darkMatterMultRatio;
+      this.timeToAutoSingularity = SingularityMilestone(6).effectValue -
+        player.celestials.laitela.secondsSinceReachedSingularity;
     },
     startRun() {
       if (!resetReality()) return;
@@ -135,14 +133,6 @@ Vue.component("laitela-tab", {
       Modal.h2p.show();
       ui.view.h2pActive = true;
     },
-    handleAutoCapInputChange() {
-      const float = parseFloat(this.autoCapInput);
-      if (isNaN(float)) {
-        this.autoCapInput = player.celestials.laitela.singularityAutoCapLimit;
-      } else {
-        player.celestials.laitela.singularityAutoCapLimit = float;
-      }
-    },
     handleAutoAnnihilationInputChange() {
       const float = parseFloat(this.autoAnnihilationInput);
       if (isNaN(float)) {
@@ -164,12 +154,15 @@ Vue.component("laitela-tab", {
       const singularityTime = TimeSpan
         .fromSeconds((this.singularityCap - this.darkEnergy) / this.darkEnergyGainPerSecond)
         .toStringShort(false);
-      if (!this.canPerformSingularity) {
-        return `Reach ${format(this.singularityCap)} Dark Energy to \
-          ${formText} (in ${singularityTime})`;
+      if (this.canPerformSingularity) {
+        const capitalized = `${formText.charAt(0).toUpperCase()}${formText.slice(1)}`;
+        const autoTime = Number.isFinite(this.timeToAutoSingularity)
+          ? `(Auto-singularity in ${TimeSpan.fromSeconds(this.timeToAutoSingularity).toStringShort(false)})`
+          : "";
+        return `${capitalized} ${autoTime}`;
       }
-      // Capitalize the string
-      return `${formText.charAt(0).toUpperCase()}${formText.slice(1)}`;
+      return `Reach ${format(this.singularityCap)} Dark Energy to \
+          ${formText} (in ${singularityTime})`;
     },
     completionTime() {
       return TimeSpan.fromSeconds(this.realityTime).toStringShort();
@@ -218,13 +211,6 @@ Vue.component("laitela-tab", {
           </button>
           <br>
           Total time to current Singulrity cap: {{ fullSingularityTime }}
-          <br>
-          <br>
-          <div v-if="autoCapUnlocked">
-            Increase Singularity cap if cap is reached within 
-            <input type="text" v-model="autoCapInput" @change="handleAutoCapInputChange()" style="width: 5rem;"/>
-            seconds or less.
-          </div>
         </div>
       </div>
       <div class="l-laitela-mechanics-container">
@@ -265,16 +251,16 @@ Vue.component("laitela-tab", {
             @click="annihilate()" 
             :style="{ visibility: showReset ? 'visible' : 'hidden' }">
             <h2>Annihilation</h2>
-            <span v-if="annihilated">
+            <span v-if="hasAnnihilated">
               Current multiplier to all DM multipliers: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
               <br><br>
             </span>
             Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 
-            <span v-if="annihilated && matter.gte(1e20)">
+            <span v-if="hasAnnihilated && matter.gte(1e20)">
               but adds <b>{{ format(darkMatterMultGain, 2, 2) }}</b> to your Annihilation multiplier.
               (<b>{{ formatX(darkMatterMultRatio, 2, 2) }}</b> from previous multiplier)
             </span>
-            <span v-else-if="annihilated">
+            <span v-else-if="hasAnnihilated">
               adding to your current Annihilation multiplier (requires {{ format(1e20, 0, 0) }} Dark Matter).
             </span>
             <span v-else-if="matter.gte(1e20)">
@@ -283,13 +269,14 @@ Vue.component("laitela-tab", {
             <span v-else>
               giving a multiplier to all DM multipliers (requires {{ format(1e20, 0, 0) }} Dark Matter).
             </span>
-            <div :style="{ visibility: autoAnnihilationUnlocked ? 'visible' : 'hidden' }">
+            <div :style="{ visibility: hasAnnihilated ? 'visible' : 'hidden' }">
               <br>
-              Auto-Annihilate when multiplier reaches: 
+              Auto-Annihilate when adding 
               <input type="text"
                 v-model="autoAnnihilationInput"
                 @change="handleAutoAnnihilationInputChange()"
-                style="width: 7rem;"/>
+                style="width: 6rem;"/>
+              to the multiplier.
             </div>
           </button>
         </div>

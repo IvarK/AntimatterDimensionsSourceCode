@@ -88,7 +88,8 @@ Vue.component("singularity-container", {
       singularityCap: 0,
       singularitiesGained: 0,
       autoSingularityDelay: 0,
-      timeToAutoSingularity: 0
+      timeToAutoSingularity: 0,
+      perStepFactor: 0,
     };
   },
   methods: {
@@ -107,6 +108,7 @@ Vue.component("singularity-container", {
       this.singularitiesGained = Singularity.singularitiesGained;
       this.autoSingularityDelay = SingularityMilestone.autoCondense.effectValue;
       this.timeToAutoSingularity = this.autoSingularityDelay - laitela.secondsSinceReachedSingularity;
+      this.perStepFactor = Singularity.gainPerCapIncrease;
     },
     doSingularity() {
       Singularity.perform();
@@ -137,7 +139,7 @@ Vue.component("singularity-container", {
           ? `(Auto-condensing in ${TimeSpan.fromSeconds(this.timeToAutoSingularity).toStringShort(false)})`
           : "";
       }
-      return `(Enough energy in ${singularityTime})`;
+      return `(Enough Dark Energy in ${singularityTime})`;
 
     },
     fullSingularityTime() {
@@ -179,6 +181,11 @@ Vue.component("singularity-container", {
         <button class="c-laitela-singularity__cap-control" @click="increaseCap">
           Increase Singularity cap.
         </button>
+        <br>
+        Each step increases the required Dark Energy by {{ formatX(10) }}
+        <br>
+        but also increases gained Singularities by {{ formatX(perStepFactor) }}.
+        <br>
         <br>
         Total time to condense {{ "Singularity" | pluralize(singularitiesGained, "Singularities")}}:
         {{ fullSingularityTime }}

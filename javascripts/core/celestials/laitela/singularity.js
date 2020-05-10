@@ -78,7 +78,7 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 }
 
-const SingularityMilestone =  (function() {
+const SingularityMilestone = (function() {
   const db = GameDatabase.celestials.singularityMilestones;
   return {
     continuumMult: new SingularityMilestoneState(db.continuumMult),
@@ -89,17 +89,18 @@ const SingularityMilestone =  (function() {
     darkDimensionIntervalReduction: new SingularityMilestoneState(db.darkDimensionIntervalReduction),
     autoCondense: new SingularityMilestoneState(db.autoCondense),
     darkDimensionAutobuyers: new SingularityMilestoneState(db.darkDimensionAutobuyers),
-    darkMatterFromTesseracts: new SingularityMilestoneState(db.darkMatterFromTesseracts),
+    improvedSingularityCap: new SingularityMilestoneState(db.improvedSingularityCap),
+    darkFromTesseracts: new SingularityMilestoneState(db.darkFromTesseracts),
     dilatedTimeFromSingularities: new SingularityMilestoneState(db.dilatedTimeFromSingularities),
-    darkEnergyFromGlyphLevel: new SingularityMilestoneState(db.darkEnergyFromGlyphLevel),
+    darkFromGlyphLevel: new SingularityMilestoneState(db.darkFromGlyphLevel),
     momentumFromSingularities: new SingularityMilestoneState(db.momentumFromSingularities),
     darkFromTheorems: new SingularityMilestoneState(db.darkFromTheorems),
     dim4Generation: new SingularityMilestoneState(db.dim4Generation),
     darkFromDM4: new SingularityMilestoneState(db.darkFromDM4),
     theoremPowerFromSingularities: new SingularityMilestoneState(db.theoremPowerFromSingularities),
-    darkEnergyFromGamespeed: new SingularityMilestoneState(db.darkEnergyFromGamespeed),
+    darkFromGamespeed: new SingularityMilestoneState(db.darkFromGamespeed),
     glyphLevelFromSingularities: new SingularityMilestoneState(db.glyphLevelFromSingularities),
-    darkMatterFromDilatedTime: new SingularityMilestoneState(db.darkMatterFromDilatedTime),
+    darkFromDilatedTime: new SingularityMilestoneState(db.darkFromDilatedTime),
     tesseractMultFromSingularities: new SingularityMilestoneState(db.tesseractMultFromSingularities),
   };
 }());
@@ -128,9 +129,13 @@ const Singularity = {
     return 2e3 * Math.pow(10, player.celestials.laitela.singularityCapIncreases);
   },
 
+  get gainPerCapIncrease() {
+    return SingularityMilestone.improvedSingularityCap.effectValue;
+  },
+
   get singularitiesGained() {
-    return Math.pow(20, player.celestials.laitela.singularityCapIncreases) *
-      SingularityMilestone.singularityMult.effectOrDefault(1);
+    return Math.floor(Math.pow(this.gainPerCapIncrease, player.celestials.laitela.singularityCapIncreases) *
+        SingularityMilestone.singularityMult.effectOrDefault(1));
   },
 
   get capIsReached() {

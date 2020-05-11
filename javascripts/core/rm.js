@@ -211,7 +211,6 @@ const GlyphGenerator = {
   /* eslint-enable lines-between-class-members */
 
   startingGlyph(level) {
-    player.reality.glyphs.last = "power";
     const initialStrength = 1.5;
     return {
       id: undefined,

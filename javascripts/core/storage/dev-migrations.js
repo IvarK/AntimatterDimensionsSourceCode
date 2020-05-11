@@ -672,6 +672,9 @@ GameStorage.devMigrations = {
         Modal.message.show(
           "Some of your perks (glyph perks) were removed. The perk points you spent on them have been refunded.");
       }
+    },
+    player => {
+      delete player.reality.glyphs.last;
     }
   ],
 

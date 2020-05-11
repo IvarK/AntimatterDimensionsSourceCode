@@ -61,7 +61,7 @@ const Laitela = {
     this.celestial.matter = x;
   },
   get darkMatterMultGain() {
-    return Decimal.pow(this.matter.dividedBy(1e20).plus(1).log10(), 1.5).toNumber();
+    return Decimal.pow(this.matter.dividedBy(this.annihilationDMRequirement).plus(1).log10(), 1.5).toNumber();
   },
   get darkMatterMult() {
     return this.celestial.darkMatterMult;
@@ -69,8 +69,11 @@ const Laitela = {
   get darkMatterMultRatio() {
     return (this.celestial.darkMatterMult + this.darkMatterMultGain) / this.celestial.darkMatterMult;
   },
+  get annihilationDMRequirement() {
+    return 1e20;
+  },
   annihilate(force) {
-    if (!force && this.matter.lt(1e20)) return false;
+    if (!force && this.matter.lt(this.annihilationDMRequirement)) return false;
     this.celestial.darkMatterMult += this.darkMatterMultGain;
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (

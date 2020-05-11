@@ -274,6 +274,7 @@ Vue.component("annihilation-button", {
       darkMatterMultGain: 0,
       hasAnnihilated: false,
       showAnnihilation: false,
+      matterRequirement: 0,
       darkMatterMultRatio: 0,
       autoAnnihilationInput: player.celestials.laitela.autoAnnihilationSetting,
       isEnabled: true
@@ -286,6 +287,7 @@ Vue.component("annihilation-button", {
       this.darkMatterMultGain = Laitela.darkMatterMultGain;
       this.hasAnnihilated = Laitela.darkMatterMult > 1;
       this.showAnnihilation = this.hasAnnihilated || !MatterDimensionState.list.some(d => d.amount.eq(0));
+      this.matterRequirement = Laitela.annihilationDMRequirement;
       this.darkMatterMultRatio = Laitela.darkMatterMultRatio;
       this.isEnabled = player.celestials.laitela.automation.annihilation;
     },
@@ -319,18 +321,18 @@ Vue.component("annihilation-button", {
           <br><br>
         </span>
         Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 
-        <span v-if="hasAnnihilated && matter.gte(1e20)">
+        <span v-if="hasAnnihilated && matter.gte(matterRequirement)">
           but adds <b>{{ format(darkMatterMultGain, 2, 2) }}</b> to your Annihilation multiplier.
           (<b>{{ formatX(darkMatterMultRatio, 2, 2) }}</b> from previous multiplier)
         </span>
         <span v-else-if="hasAnnihilated">
-          adding to your current Annihilation multiplier (requires {{ format(1e20, 0, 0) }} Dark Matter).
+          adding to your current Annihilation multiplier (requires {{ format(matterRequirement) }} Dark Matter).
         </span>
-        <span v-else-if="matter.gte(1e20)">
+        <span v-else-if="matter.gte(matterRequirement)">
           multiplying DM multipliers by <b>{{ formatX(1 + darkMatterMultGain, 2, 2) }}</b>.
         </span>
         <span v-else>
-          giving a multiplier to all DM multipliers (requires {{ format(1e20, 0, 0) }} Dark Matter).
+          giving a multiplier to all DM multipliers (requires {{ format(matterRequirement) }} Dark Matter).
         </span>
         <div v-if="hasAnnihilated">
           <br>

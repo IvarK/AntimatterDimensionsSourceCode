@@ -110,7 +110,7 @@ Vue.component("matter-dimension-row", {
         @click="dimension.buyPowerDE()"
         class="o-matter-dimension-button"
         :class="{ 'o-matter-dimension-button--available': canBuyPowerDE }">
-          DE {{ formatX(powerDE, 2, 4) }}<br>Cost: {{ format(powerDECost, 2, 0) }}
+          DE +{{ format(powerDE, 2, 4) }}<br>Cost: {{ format(powerDECost, 2, 0) }}
       </button>
     </div>
     <div v-if="interval > 200">Tick: {{ formatInt(timer) }} ms ({{ formatPercents(timerPercent, 1) }})</div>

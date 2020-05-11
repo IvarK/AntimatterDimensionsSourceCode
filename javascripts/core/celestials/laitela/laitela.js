@@ -151,18 +151,23 @@ const Laitela = {
     const interval = SingularityMilestone.darkAutobuyerSpeed.effectValue;
     laitela.darkAutobuyerTimer += realDiff / 1000;
     if (laitela.darkAutobuyerTimer >= interval) {
-      this.maxAllDMDimensions(SingularityMilestone.darkDimensionAutobuyers.effectValue);
-      for (let i = 1; i <= SingularityMilestone.autoAscend.effectValue; i++) {
-        MatterDimension(i).ascend();
+      if (laitela.automation.dimensions) {
+        this.maxAllDMDimensions(SingularityMilestone.darkDimensionAutobuyers.effectValue);
+      }
+      if (laitela.automation.ascension) {
+        for (let i = 1; i <= SingularityMilestone.autoAscend.effectValue; i++) {
+          MatterDimension(i).ascend();
+        }
       }
     }
     if (interval !== 0) laitela.darkAutobuyerTimer %= interval;
 
-    if (this.darkMatterMultGain >= laitela.autoAnnihilationSetting && this.darkMatterMult > 1) {
-      this.annihilate();
+    if (this.darkMatterMultGain >= laitela.autoAnnihilationSetting && this.darkMatterMult > 1 &&
+      laitela.automation.annihilation) {
+        this.annihilate();
     }
 
-    if (Singularity.capIsReached) {
+    if (Singularity.capIsReached && laitela.automation.singularity) {
       laitela.secondsSinceReachedSingularity += realDiff / 1000;
       if (laitela.secondsSinceReachedSingularity >= SingularityMilestone.autoCondense.effectValue) {
         Singularity.perform();

@@ -69,7 +69,7 @@ GameDatabase.celestials.singularityMilestones = {
     start: 5,
     repeat: 50,
     limit: 7,
-    description: "Dark Matter Dimensions Interval Ascension increases less",
+    description: "Dark Matter Dimensions Ascension increases the interval less",
     effect: completions => 10000 - 1000 * completions,
     effectFormat: x => `×${formatInt(x)}`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,

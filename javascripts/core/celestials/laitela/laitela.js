@@ -79,7 +79,8 @@ const Laitela = {
           intervalUpgrades: 0,
           powerDMUpgrades: 0,
           powerDEUpgrades: 0,
-          timeSinceLastUpdate: 0
+          timeSinceLastUpdate: 0,
+          ascensionCount: 0
         }
       )
     );
@@ -111,6 +112,61 @@ const Laitela = {
     if (SingularityMilestone.dim4Generation.isUnlocked) {
       MatterDimension(4).amount = MatterDimension(4).amount
         .plus(SingularityMilestone.dim4Generation.effectValue * realDiff / 1000);
+    }
+  },
+  // Greedily buys the cheapest available upgrade until none are affordable
+  maxAllDMDimensions(maxTier) {
+    let cheapestPrice = new Decimal(0);
+    // Note that _tier is 0-indexed, so calling with maxTier = 3 will buy up to and including DM3 for example
+    const unlockedDimensions = MatterDimensionState.list.filter(d => d.amount.gt(0) && d._tier < maxTier);
+    while (player.celestials.laitela.matter.gte(cheapestPrice)) {
+      const sortedUpgradeInfo = unlockedDimensions
+        .map(d => [
+          [d.intervalCost, d.canBuyInterval, "interval", d._tier],
+          [d.powerDMCost, d.canBuyPowerDM, "powerDM", d._tier],
+          [d.powerDECost, d.canBuyPowerDE, "powerDE", d._tier]])
+        .flat(1)
+        .filter(a => a[1])
+        .sort((a, b) => a[0].div(b[0]).log10())
+        .map(d => [d[0], d[2], d[3]]);
+      const cheapestUpgrade = sortedUpgradeInfo[0];
+      if (cheapestUpgrade === undefined) break;
+      cheapestPrice = cheapestUpgrade[0];
+      switch (cheapestUpgrade[1]) {
+        case "interval":
+          MatterDimensionState.list[cheapestUpgrade[2]].buyInterval();
+          break;
+        case "powerDM":
+          MatterDimensionState.list[cheapestUpgrade[2]].buyPowerDM();
+          break;
+        case "powerDE":
+          MatterDimensionState.list[cheapestUpgrade[2]].buyPowerDE();
+          break;
+      }
+    }
+  },
+  autobuyerLoop(realDiff) {
+    const laitela = player.celestials.laitela;
+
+    const interval = SingularityMilestone.darkAutobuyerSpeed.effectValue;
+    laitela.darkAutobuyerTimer += realDiff / 1000;
+    if (laitela.darkAutobuyerTimer >= interval) {
+      this.maxAllDMDimensions(SingularityMilestone.darkDimensionAutobuyers.effectValue);
+      for (let i = 1; i <= SingularityMilestone.autoAscend.effectValue; i++) {
+        MatterDimension(i).ascend();
+      }
+    }
+    if (interval !== 0) laitela.darkAutobuyerTimer %= interval;
+
+    if (this.darkMatterMultGain >= laitela.autoAnnihilationSetting && this.darkMatterMult > 1) {
+      this.annihilate();
+    }
+
+    if (Singularity.capIsReached) {
+      laitela.secondsSinceReachedSingularity += realDiff / 1000;
+      if (laitela.secondsSinceReachedSingularity >= SingularityMilestone.autoCondense.effectValue) {
+        Singularity.perform();
+      }
     }
   },
   reset() {

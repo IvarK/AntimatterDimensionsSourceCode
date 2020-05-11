@@ -87,8 +87,11 @@ const SingularityMilestone = (function() {
     darkDimensionCostReduction: new SingularityMilestoneState(db.darkDimensionCostReduction),
     singularityMult: new SingularityMilestoneState(db.singularityMult),
     darkDimensionIntervalReduction: new SingularityMilestoneState(db.darkDimensionIntervalReduction),
+    ascensionIntervalScaling: new SingularityMilestoneState(db.ascensionIntervalScaling),
     autoCondense: new SingularityMilestoneState(db.autoCondense),
     darkDimensionAutobuyers: new SingularityMilestoneState(db.darkDimensionAutobuyers),
+    darkAutobuyerSpeed: new SingularityMilestoneState(db.darkAutobuyerSpeed),
+    autoAscend: new SingularityMilestoneState(db.autoAscend),
     improvedSingularityCap: new SingularityMilestoneState(db.improvedSingularityCap),
     darkFromTesseracts: new SingularityMilestoneState(db.darkFromTesseracts),
     dilatedTimeFromSingularities: new SingularityMilestoneState(db.dilatedTimeFromSingularities),
@@ -164,26 +167,5 @@ const Singularity = {
     laitela.secondsSinceReachedSingularity = 0;
     
     EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_AFTER);
-  },
-
-  autobuyerLoop(diff) {
-    const laitela = player.celestials.laitela;
-
-    for (let i = 1; i <= SingularityMilestone.darkDimensionAutobuyers.effectValue; i++) {
-      MatterDimension(i).buyInterval();
-      MatterDimension(i).buyPowerDM();
-      MatterDimension(i).buyPowerDE();
-    }
-
-    if (Laitela.darkMatterMultGain >= laitela.autoAnnihilationSetting && Laitela.darkMatterMult > 1) {
-      Laitela.annihilate();
-    }
-
-    if (this.capIsReached) {
-      laitela.secondsSinceReachedSingularity += diff / 1000;
-      if (laitela.secondsSinceReachedSingularity >= SingularityMilestone.autoCondense.effectValue) {
-        this.perform();
-      }
-    }
   }
 };

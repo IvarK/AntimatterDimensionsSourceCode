@@ -1083,67 +1083,93 @@ that the reaction can't proceed due to not having enough of that reagent to get 
       name: "Lai'tela, Celestial of Dimensions",
       alias: "Lai'tela",
       info: () => `
-Lai'tela is the sixth Celestial, unlocked by getting ${formatInt(80)} total Ra levels. When you unlock Lai'tela,
-your normal dimensions and tickspeed switch to a new mode of production called Continuum, which gives the same effect
-but allows for buying fractions of dimensions or tickspeed upgrades. Lai'tela gives a new currency called Dark Matter
-which gives a multiplier to purchases of dimensions and tickspeed upgrades from Continuum (e.g., if the multiplier
-was ${format(1.1, 1, 1)} and you would normally have ${format(1e6, 2, 2)} purchases, Continuum would instead give you
-${format(1.1e6, 2, 2)} purchases). There are four Dark Matter Dimensions; each generates the previous, except the first
-which generates Dark Matter. You cannot buy Dark Matter Dimensions; instead you start with one of the
-First Dark Matter Dimension, and get one of the Second, Third, and Fourth Dark Matter Dimensions at
-${format(1e4, 0, 0)}, ${format(1e7, 0, 0)}, and ${format(1e10, 0, 0)} Dark Matter respectively.
+Lai'tela is the sixth Celestial, unlocked by getting ${formatInt(RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels)}
+total Ra levels.
 <br>
 <br>
-Each Dark Matter Dimension, every so often, generates a certain amount of Dark Matter or the previous
-Dark Matter Dimension (how much is based on the amount of the generating Dark Matter Dimension), and also
-generates another currency called Dark Energy to be explained later (independent of the amount of the generating
-Dark Matter Dimension). The time between generations is called the interval. The amount of Dark Matter or
-the previous Dark Matter Dimension generated per Dark Matter Dimension is called the Dark Matter power.
-The amount of Dark Energy generated is called the Dark Energy power. The Dark Matter Dimensions start with intervals
-${formatInt(1)}, ${formatInt(4)}, ${formatInt(16)}, and ${formatInt(64)} seconds respectively. Each has a repeatable
-upgrade decreasing its interval by ${formatPercents(0.08)}, and increasing in cost by ${formatX(3.2, 1, 1)} each time
-it's purchased. The Dark Matter Dimensions all start with Dark Matter power ${formatInt(2)}. Each has a repeatable
-upgrade increasing its power and increasing in cost ${formatX(1.4, 1, 1)} each time it's purchased.
-The base Dark Matter power of a Dark Matter Dimension is ${formatInt(1)} +
-${format(1.05, 2, 2)}<sup>purchases</sup>. The Dark Matter Dimensions all start
-with Dark Energy power ${format(2e-4, 4, 4)}. Each has a repeatable upgrade increasing its power and
-increasing in cost ${formatX(1.35, 2, 2)}, ${formatX(1.3, 2, 2)}, ${formatX(1.28, 2, 2)}, and
-${formatX(1.27, 2, 2)} (respectively) each time it's purchased. The base Dark Energy power of
-a Dark Matter Dimension is (${formatInt(1)} + times power upgrade has been purchased /
-${formatInt(10)}) / ${formatInt(1e3)}.
+When you unlock Lai'tela, your normal dimensions and tickspeed switch to a new mode of production called Continuum, 
+which gives the same effect as previously but allows for buying fractions of dimensions or tickspeed upgrades. 
+Additionally, these fractional purchases are given for free without spending your antimatter. This makes your 
+autobuyers for Normal Dimensions obsolete, which is noted on the autobuyers page.
 <br>
 <br>
-Dark Energy gives a multiplier to Dark Matter Dimensions' Dark Matter power
-(but not their Dark Energy power) based on its amount and the amount of 8th Dimensions. So this multiplier boosts
-production of Dark Matter Dimensions and of Dark Matter, but not of Dark Energy.
-This is the only effect Dark Energy has.
+Lai'tela gives a new currency called Dark Matter, which gives a multiplier to purchases of dimensions and tickspeed
+upgrades from Continuum based on the highest amount of Dark Matter you have ever had. Dark Matter is produced by 
+Dark Matter Dimensions, in a similar way to all other types of dimensions in the game. There are four Dark Matter 
+Dimensions; you start with the first one unlocked immediately and the higher ones are unlocked at increasing amounts
+of Dark Matter. When unlocking dimensions, you are given ${formatInt(1)} of the dimension and cannot gain more without 
+having it produced from the next tier up.
 <br>
 <br>
-When you get ${format(1e30, 0, 0)} Dark Matter, you unlock a prestige layer called Annihilation.
-Annihilation resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, but adds to a multiplier
-(initially ${formatX(1)}) to Dark Energy. The amount added to the multiplier is
-(Dark Matter / ${format(1e30, 0, 0)})^${format(0.1, 1, 1)}. You can Annihilate
-multiple times, the additions to the multiplier stack additively, and there is no need
-to annihilate for a greater addition each time.
+Each Dark Matter Dimension, after a certain interval of time, generates two things: Dark Matter or the next lower 
+Dark Matter Dimension and another currency called Dark Energy. Dark Matter and Dark Matter Dimension production 
+per interval is equal to the product of your Dark Matter multiplier and the number of dimensions you have, while 
+Dark Energy production is independent of your dimension amount. Dark Energy is used to produce Singularities, which 
+have their own How to Play entry.
 <br>
 <br>
-Lai'tela has a Reality that is described on a button in Lai'tela's tab. Based on how well
-you do in this Reality, you will get a multiplier to Dark Matter Dimensions' Dark Matter power,
-similar in effect to the multiplier described above from Dark Energy.
+Dark Matter Dimensions can have their intervals upgraded down to a minimum of ${formatInt(10)}ms, at which point 
+you cannot upgrade the interval any further. You can choose to ascend Dark Matter Dimensions which reach 
+that point, which multiplies Dark Matter and Dark Energy values for that Dimension by ${formatInt(1000)}. The interval 
+gets multiplied ${formatInt(10000)} (can be reduced with more progress in Lai'tela), but can be upgraded once again. 
+Reaching ${formatInt(10)}ms again allows you to ascend again if you choose to.
 <br>
 <br>
-Formulas:
+When you get ${format(Laitela.annihilationDMRequirement)} Dark Matter, you unlock a prestige called Annihilation. 
+Annihilation resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, but adds to a permanent multiplier
+to Dark Matter. You can Annihilate multiple times, the additions to the multiplier stack additively, and there is 
+no need to annihilate for a greater addition each time.
 <br>
 <br>
-Dark Matter boost to Continuum = ${formatInt(1)} + ln(${formatInt(1)} + log10(Dark Matter) / ${formatInt(100)})
+Lai'tela has a Reality which gives a multiplier to Dark Matter Dimensions' Dark Matter power based on how well you
+do in the Reality.
 <br>
 <br>
-Multiplier to Dark Matter power based on Dark Energy = (${formatInt(1)} + Dark Energy)^(log10(${formatInt(1)} +
-8th Dimensions / ${format(1e6, 0, 0)}) / ${formatInt(4)})
+<b>Dark Matter Dimension unlock thresholds (Dark Matter):</b> ${Array.range(1, 4)
+  // DM1 is 10 instead of 0 here, so make a special case to display it properly
+  .map(tier => format(tier === 1 ? 0 : MatterDimension(tier).adjustedStartingCost))
+  .join(", ")}
+<br>
+<b>Dark Matter Dimension initial interval (seconds):</b> ${Array.range(1, 4)
+  .map(tier => formatInt(Math.pow(4, tier)))
+  .join(", ")}
 `,
       isUnlocked: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
-      tags: ["omsi", "reality", "matter", "dimensions", "lategame", "endgame"],
+      tags: ["omsi", "reality", "dark", "matter", "dimensions", "lategame", "endgame", "ascend"],
       tab: "celestials/laitela"
+    }, {
+      name: "Singularities",
+      info: () => `
+Singularities are a new resource which you can obtain using features within Lai'tela.
+<br>
+<br>
+In order to obtain Singularities, you need to reach ${format(2e4)} Dark Energy. When you do, you get the option to 
+condense all your Dark Energy into a Singularity, resetting it back to zero. Any extra Dark Energy above this amount 
+does not carry over, and is thus wasted. Note that only Dark Energy is reset, the status of your Dark Matter and its
+dimensions stays the same when condensing Singularities.
+<br>
+<br>
+At any point, you can freely increase or decrease the Dark Energy requirement to condense Singularities by a factor of 
+${formatInt(10)} (with a minimum of ${format(2e4)}). This increases or decreases the number of Singularities gained 
+from resetting at the cap by <i>more than</i> a factor of ${formatInt(10)}, making higher caps worth more if you 
+are willing to wait.
+<br>
+<br>
+Reaching a certain number of Singularities will unlock Singularity milestones, which act similarly to Eternity 
+milestones. Unlocking these milestones simply requires you to reach the total number of Singularities specified. 
+There are three types of milestones - one-time milestones, milestones repeatable a limited number of times, and 
+milestones which can be repeated indefinitely. Additionally, milestones also have an icon indicating what kind of 
+upgrade they generally give:
+<br>
+<b>ᛝ</b> These milestones help mechanics specific to Lai'tela
+<br>
+<i class="fas fa-arrows-alt"></i> These milestones let a resource in Lai'tela affect the rest of the game
+<br>
+<i class="fas fa-compress-arrows-alt"></i> These milestones improve Lai'tela based on something outside of Lai'tela
+`,
+      isUnlocked: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
+      tags: ["reality", "lategame", "endgame", "laitela", "dark"],
+      tab: "celestials/singularity"
     }, {
       name: "Pelle, Celestial of Antimatter",
       alias: "Pelle",

@@ -480,7 +480,13 @@ let player = {
       singularities: 0,
       singularityCapIncreases: 0,
       secondsSinceReachedSingularity: 0,
-      autoAnnihilationSetting: 5
+      autoAnnihilationSetting: 5,
+      automation: {
+        dimensions: true,
+        ascension: true,
+        singularity: true,
+        annihilation: true
+      }
     }
   },
   tabNotifications: new Set(),

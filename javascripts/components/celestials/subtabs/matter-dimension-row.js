@@ -21,6 +21,7 @@ Vue.component("matter-dimension-row", {
       isIntervalCapped: false,
       timer: 0,
       timerPecent: 0,
+      intervalAscensionBump: 10000,
     };
   },
   computed: {
@@ -52,6 +53,10 @@ Vue.component("matter-dimension-row", {
     intervalText() {
       if (this.interval > 1000) return `${format(this.interval / 1000, 2, 2)}s`;
       return `${format(this.interval, 2, 2)}ms`;
+    },
+    ascensionTooltip() {
+      return `Multiply interval by ${formatInt(this.intervalAscensionBump)}
+        and both multipliers by ${formatInt(1000)}, but gain the ability to upgrade interval even further`;
     }
   },
   methods: {
@@ -59,7 +64,6 @@ Vue.component("matter-dimension-row", {
       this.tier = this.dimension._tier;
       this.ascension = this.dimension.ascensions;
       this.interval = this.dimension.interval;
-      this.baseInterval = this.dimension.baseInterval;
       this.powerDM.copyFrom(this.dimension.powerDM);
       this.powerDE = this.dimension.powerDE;
       this.intervalCost = this.dimension.intervalCost;
@@ -69,9 +73,10 @@ Vue.component("matter-dimension-row", {
       this.canBuyInterval = this.dimension.canBuyInterval;
       this.canBuyPowerDM = this.dimension.canBuyPowerDM;
       this.canBuyPowerDE = this.dimension.canBuyPowerDE;
-      this.isIntervalCapped = this.dimension.baseInterval <= this.dimension.intervalPurchaseCap;
+      this.isIntervalCapped = this.dimension.interval <= this.dimension.intervalPurchaseCap;
       this.timer = this.dimension.timeSinceLastUpdate;
       this.timerPercent = this.timer / this.interval;
+      this.intervalAscensionBump = SingularityMilestone.ascensionIntervalScaling.effectValue;
     },
     handleIntervalClick() {
       if (this.isIntervalCapped) this.dimension.ascend();
@@ -87,7 +92,12 @@ Vue.component("matter-dimension-row", {
         class="o-matter-dimension-button" 
         :class="intervalClassObject"> 
           {{ intervalText }}
-          <span v-if="isIntervalCapped"><br>Ascend!</span>
+          <span v-if="isIntervalCapped">
+            <br>Ascend!
+            <span :ach-tooltip="ascensionTooltip">
+              <i class="fas fa-question-circle"></i>
+            </span>
+          </span>
           <span v-else><br>Cost: {{ format(intervalCost, 2, 0) }}</span>
       </button>
       <button

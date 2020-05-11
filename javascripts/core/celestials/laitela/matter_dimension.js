@@ -35,16 +35,13 @@ class MatterDimensionState {
     return 10;
   }
 
-  get baseInterval() {
+  get interval() {
     const perUpgrade = 0.92;
     const tierFactor = Math.pow(4, this._tier);
     return Math.clampMin(this.intervalPurchaseCap, 1000 * tierFactor *
       Math.pow(perUpgrade, this.dimension.intervalUpgrades) *
-      Math.pow(SingularityMilestone.ascensionIntervalScaling.effectValue, this.dimension.ascensionCount));
-  }
-
-  get interval() {
-    return this.baseInterval * SingularityMilestone.darkDimensionIntervalReduction.effectValue;
+      Math.pow(SingularityMilestone.ascensionIntervalScaling.effectValue, this.dimension.ascensionCount) *
+      SingularityMilestone.darkDimensionIntervalReduction.effectValue);
   }
 
   get commonDarkMult() {
@@ -117,7 +114,7 @@ class MatterDimensionState {
   }
 
   get canBuyInterval() {
-    return this.intervalCost.lte(player.celestials.laitela.matter) && this.baseInterval > this.intervalPurchaseCap;
+    return this.intervalCost.lte(player.celestials.laitela.matter) && this.interval > this.intervalPurchaseCap;
   }
 
   get canBuyPowerDM() {
@@ -150,7 +147,7 @@ class MatterDimensionState {
   }
 
   ascend() {
-    if (this.baseInterval > this.intervalPurchaseCap) return;
+    if (this.interval > this.intervalPurchaseCap) return;
     this.dimension.ascensionCount++;
   }
 }

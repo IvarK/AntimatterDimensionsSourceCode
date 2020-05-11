@@ -47,6 +47,7 @@ Vue.component("laitela-tab", {
         </div>
         <singularity-milestone-pane />
       </div>
+      <laitela-autobuyer-settings />
     </div>`
 });
 
@@ -63,6 +64,7 @@ Vue.component("singularity-container", {
       autoSingularityDelay: 0,
       timeToAutoSingularity: 0,
       perStepFactor: 0,
+      isAutoEnabled: false,
     };
   },
   methods: {
@@ -82,6 +84,7 @@ Vue.component("singularity-container", {
       this.autoSingularityDelay = SingularityMilestone.autoCondense.effectValue;
       this.timeToAutoSingularity = this.autoSingularityDelay - laitela.secondsSinceReachedSingularity;
       this.perStepFactor = Singularity.gainPerCapIncrease;
+      this.isAutoEnabled = laitela.automation.singularity && SingularityMilestone.autoCondense.isUnlocked;
     },
     doSingularity() {
       Singularity.perform();
@@ -108,7 +111,7 @@ Vue.component("singularity-container", {
         .fromSeconds((this.singularityCap - this.darkEnergy) / this.darkEnergyGainPerSecond)
         .toStringShort(false);
       if (this.canPerformSingularity) {
-        return Number.isFinite(this.timeToAutoSingularity)
+        return this.isAutoEnabled
           ? `(Auto-condensing in ${TimeSpan.fromSeconds(this.timeToAutoSingularity).toStringShort(false)})`
           : "";
       }
@@ -140,7 +143,7 @@ Vue.component("singularity-container", {
           :class="{ 'c-laitela-singularity--active' : canPerformSingularity }"
           @click="doSingularity">
           <h2>{{ singularityFormText }}</h2>
-          <br>
+          <br v-if="singularityWaitText !== ''">
           <h2>{{ singularityWaitText }}</h2>
         </button>
       </div>
@@ -272,7 +275,8 @@ Vue.component("annihilation-button", {
       hasAnnihilated: false,
       showAnnihilation: false,
       darkMatterMultRatio: 0,
-      autoAnnihilationInput: player.celestials.laitela.autoAnnihilationSetting
+      autoAnnihilationInput: player.celestials.laitela.autoAnnihilationSetting,
+      isEnabled: true
     };
   },
   methods: {
@@ -283,6 +287,7 @@ Vue.component("annihilation-button", {
       this.hasAnnihilated = Laitela.darkMatterMult > 1;
       this.showAnnihilation = this.hasAnnihilated || !MatterDimensionState.list.some(d => d.amount.eq(0));
       this.darkMatterMultRatio = Laitela.darkMatterMultRatio;
+      this.isEnabled = player.celestials.laitela.automation.annihilation;
     },
     annihilate() {
       Laitela.annihilate();
@@ -296,38 +301,46 @@ Vue.component("annihilation-button", {
       }
     }
   },
+  computed: {
+    annihilationInputStyle() {
+      return {
+        width: "6rem",
+        "background-color": this.isEnabled ? "" : "var(--color-disabled)",
+      };
+    }
+  },
   template: `
     <button class="c-laitela-annihilation-button" 
       @click="annihilate()" 
-      :style="{ visibility: showAnnihilation ? 'visible' : 'hidden' }">
-      <h2>Annihilation</h2>
-      <span v-if="hasAnnihilated">
-        Current multiplier to all DM multipliers: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
-        <br><br>
-      </span>
-      Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 
-      <span v-if="hasAnnihilated && matter.gte(1e20)">
-        but adds <b>{{ format(darkMatterMultGain, 2, 2) }}</b> to your Annihilation multiplier.
-        (<b>{{ formatX(darkMatterMultRatio, 2, 2) }}</b> from previous multiplier)
-      </span>
-      <span v-else-if="hasAnnihilated">
-        adding to your current Annihilation multiplier (requires {{ format(1e20, 0, 0) }} Dark Matter).
-      </span>
-      <span v-else-if="matter.gte(1e20)">
-        multiplying DM multipliers by <b>{{ formatX(1 + darkMatterMultGain, 2, 2) }}</b>.
-      </span>
-      <span v-else>
-        giving a multiplier to all DM multipliers (requires {{ format(1e20, 0, 0) }} Dark Matter).
-      </span>
-      <div :style="{ visibility: hasAnnihilated ? 'visible' : 'hidden' }">
-        <br>
-        Auto-Annihilate when adding 
-        <input type="text"
-          v-model="autoAnnihilationInput"
-          @change="handleAutoAnnihilationInputChange()"
-          style="width: 6rem;"/>
-        to the multiplier.
-      </div>
+      v-if="showAnnihilation">
+        <h2>Annihilation</h2>
+        <span v-if="hasAnnihilated">
+          Current multiplier to all DM multipliers: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
+          <br><br>
+        </span>
+        Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 
+        <span v-if="hasAnnihilated && matter.gte(1e20)">
+          but adds <b>{{ format(darkMatterMultGain, 2, 2) }}</b> to your Annihilation multiplier.
+          (<b>{{ formatX(darkMatterMultRatio, 2, 2) }}</b> from previous multiplier)
+        </span>
+        <span v-else-if="hasAnnihilated">
+          adding to your current Annihilation multiplier (requires {{ format(1e20, 0, 0) }} Dark Matter).
+        </span>
+        <span v-else-if="matter.gte(1e20)">
+          multiplying DM multipliers by <b>{{ formatX(1 + darkMatterMultGain, 2, 2) }}</b>.
+        </span>
+        <span v-else>
+          giving a multiplier to all DM multipliers (requires {{ format(1e20, 0, 0) }} Dark Matter).
+        </span>
+        <div v-if="hasAnnihilated">
+          <br>
+          Auto-Annihilate when adding 
+          <input type="text"
+            v-model="autoAnnihilationInput"
+            @change="handleAutoAnnihilationInputChange()"
+            :style="annihilationInputStyle"/>
+          to the multiplier.
+        </div>
     </button>`
 });
 
@@ -348,5 +361,67 @@ Vue.component("singularity-milestone-pane", {
         Show all milestones
       </div>
       <singularity-milestone v-for="milestone in milestones" :key="milestone.id" :milestone="milestone"/>
+    </div>`
+});
+
+Vue.component("laitela-autobuyer-settings", {
+  data() {
+    return {
+      hasDimension: false,
+      hasAscension: false,
+      hasSingularity: false,
+      dimension: false,
+      ascension: false,
+      singularity: false,
+      annihilation: false,
+    };
+  },
+  methods: {
+    update() {
+      this.hasDimension = SingularityMilestone.darkDimensionAutobuyers.isUnlocked;
+      this.hasAscension = SingularityMilestone.autoAscend.isUnlocked;
+      this.hasSingularity = SingularityMilestone.autoCondense.isUnlocked;
+      const auto = player.celestials.laitela.automation;
+      this.dimension = auto.dimensions;
+      this.ascension = auto.ascension;
+      this.singularity = auto.singularity;
+      this.annihilation = auto.annihilation;
+    },
+  },
+  watch: {
+    dimension(newValue) {
+      player.celestials.laitela.automation.dimensions = newValue;
+    },
+    ascension(newValue) {
+      player.celestials.laitela.automation.ascension = newValue;
+    },
+    singularity(newValue) {
+      player.celestials.laitela.automation.singularity = newValue;
+    },
+    annihilation(newValue) {
+      player.celestials.laitela.automation.annihilation = newValue;
+    },
+  },
+  template: `
+    <div class="l-laitela-singularity-container">
+      <primary-button-on-off
+        v-if="hasDimension"
+        v-model="dimension"
+        class="c-laitela-automation-toggle"
+        text="Auto-buy DM Dimensions:" />
+      <primary-button-on-off
+        v-if="hasAscension"
+        v-model="ascension"
+        class="c-laitela-automation-toggle"
+        text="Auto-Ascend:" />
+      <primary-button-on-off
+        v-if="hasSingularity"
+        v-model="singularity"
+        class="c-laitela-automation-toggle"
+        text="Auto-Singularity:" />
+      <primary-button-on-off
+        v-model="annihilation"
+        class="c-laitela-automation-toggle"
+        text="Automatic Annihilation:" />
     </div>`
 });

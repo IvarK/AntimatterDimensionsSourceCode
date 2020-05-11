@@ -14,35 +14,8 @@ Vue.component("laitela-tab", {
       this.maxMatter.copyFrom(player.celestials.laitela.maxMatter);
       this.matterExtraPurchasePercentage = Laitela.matterExtraPurchaseFactor - 1;
     },
-    // Greedily buys the cheapest available upgrade until none are affordable
     maxAll() {
-      let cheapestPrice = new Decimal(0);
-      const unlockedDimensions = MatterDimensionState.list.filter(d => d.amount.gt(0));
-      while (player.celestials.laitela.matter.gte(cheapestPrice)) {
-        const sortedUpgradeInfo = unlockedDimensions
-          .map(d => [
-            [d.intervalCost, d.canBuyInterval, "interval", d._tier],
-            [d.powerDMCost, d.canBuyPowerDM, "powerDM", d._tier],
-            [d.powerDECost, d.canBuyPowerDE, "powerDE", d._tier]])
-          .flat(1)
-          .filter(a => a[1])
-          .sort((a, b) => a[0].div(b[0]).log10())
-          .map(d => [d[0], d[2], d[3]]);
-        const cheapestUpgrade = sortedUpgradeInfo[0];
-        if (cheapestUpgrade === undefined) break;
-        cheapestPrice = cheapestUpgrade[0];
-        switch (cheapestUpgrade[1]) {
-          case "interval":
-            MatterDimensionState.list[cheapestUpgrade[2]].buyInterval();
-            break;
-          case "powerDM":
-            MatterDimensionState.list[cheapestUpgrade[2]].buyPowerDM();
-            break;
-          case "powerDE":
-            MatterDimensionState.list[cheapestUpgrade[2]].buyPowerDE();
-            break;
-        }
-      }
+      Laitela.maxAllDMDimensions(4);
     },
     showLaitelaHowTo() {
       ui.view.h2pForcedTab = GameDatabase.h2p.tabs.filter(tab => tab.name === "Lai'tela")[0];
@@ -187,9 +160,9 @@ Vue.component("singularity-container", {
         but also increases gained Singularities by {{ formatX(perStepFactor) }}.
         <br>
         <br>
-        Total time to condense {{ "Singularity" | pluralize(singularitiesGained, "Singularities")}}:
+        Total time to <span v-if="Number.isFinite(autoSingularityDelay)">(auto-)</span>condense:
         {{ fullSingularityTime }}
-        <span v-if="autoSingularityDelay !== 0">
+        <span v-if="Number.isFinite(autoSingularityDelay) && autoSingularityDelay !== 0">
           (+{{ formatInt(autoSingularityDelay) }} seconds)
         </span>
         <br>

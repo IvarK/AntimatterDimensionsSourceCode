@@ -466,8 +466,10 @@ let player = {
         intervalUpgrades: 0,
         powerDMUpgrades: 0,
         powerDEUpgrades: 0,
-        timeSinceLastUpdate: 0
+        timeSinceLastUpdate: 0,
+        ascensionCount: 0
       })),
+      darkAutobuyerTimer: 0,
       entropy: 0,
       thisCompletion: 3600,
       fastestCompletion: 3600,

@@ -684,6 +684,8 @@ GameStorage.devMigrations = {
       delete player.celestials.laitela.autoAnnihilationTimer;
       delete player.celestials.laitela.annihilated;
       player.celestials.laitela.darkMatterMult = Math.clampMin(player.celestials.laitela.darkMatterMult, 1);
+      // Forcing annihilation is the easiest way to ensure that the proper DM dimension props are initialized
+      Laitela.annihilate(true);
     }
   ],
 

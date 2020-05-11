@@ -12,6 +12,10 @@ const INTERVAL_START_COST = 10;
 const POWER_DM_START_COST = 10;
 const POWER_DE_START_COST = 10;
 
+// No constant for interval since it's tied to a milestone
+const POWER_DM_PER_ASCENSION = 1000;
+const POWER_DE_PER_ASCENSION = 1000;
+
 const COST_MULT_PER_TIER = 1e3;
 
 class MatterDimensionState {
@@ -23,6 +27,10 @@ class MatterDimensionState {
     return player.celestials.laitela.dimensions[this._tier];
   }
 
+  get ascensions() {
+    return this.dimension.ascensionCount;
+  }
+
   get intervalPurchaseCap() {
     return 10;
   }
@@ -30,11 +38,11 @@ class MatterDimensionState {
   get baseInterval() {
     const perUpgrade = 0.92;
     const tierFactor = Math.pow(4, this._tier);
-    return Math.clampMin(this.intervalPurchaseCap,
-      Math.pow(perUpgrade, this.dimension.intervalUpgrades) * tierFactor * 1000);
+    return Math.clampMin(this.intervalPurchaseCap, 1000 * tierFactor *
+      Math.pow(perUpgrade, this.dimension.intervalUpgrades) *
+      Math.pow(SingularityMilestone.ascensionIntervalScaling.effectValue, this.dimension.ascensionCount));
   }
 
-  // In milliseconds; if this is 10 then you can no longer buy it, but it can get lower with other upgrades
   get interval() {
     return this.baseInterval * SingularityMilestone.darkDimensionIntervalReduction.effectValue;
   }
@@ -55,6 +63,7 @@ class MatterDimensionState {
       .times(Laitela.realityReward)
       .times(Laitela.darkMatterMult)
       .times(this.commonDarkMult)
+      .times(Math.pow(POWER_DM_PER_ASCENSION, this.dimension.ascensionCount))
       .timesEffectsOf(SingularityMilestone.darkMatterMult)
       .dividedBy(Math.pow(10, this._tier));
   }
@@ -64,6 +73,7 @@ class MatterDimensionState {
     return new Decimal(((1 + this.dimension.powerDEUpgrades * 0.1) * 
       Math.pow(1.005, this.dimension.powerDEUpgrades)) * tierFactor / 1000)
         .times(this.commonDarkMult)
+        .times(Math.pow(POWER_DE_PER_ASCENSION, this.dimension.ascensionCount))
         .timesEffectsOf(SingularityMilestone.darkEnergyMult).toNumber();
   }
 
@@ -137,6 +147,11 @@ class MatterDimensionState {
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.powerDECost);
     this.dimension.powerDEUpgrades++;
     return true;
+  }
+
+  ascend() {
+    if (this.baseInterval > this.intervalPurchaseCap) return;
+    this.dimension.ascensionCount++;
   }
 }
 

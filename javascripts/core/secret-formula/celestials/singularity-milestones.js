@@ -65,6 +65,15 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   // Limited
+  ascensionIntervalScaling: {
+    start: 5,
+    repeat: 50,
+    limit: 7,
+    description: "Dark Matter Dimensions Interval Ascension increases less",
+    effect: completions => 10000 - 1000 * completions,
+    effectFormat: x => `×${formatInt(x)}`,
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
+  },
   autoCondense: {
     start: 8,
     repeat: 80,
@@ -81,6 +90,24 @@ GameDatabase.celestials.singularityMilestones = {
     description: "Dark Matter Dimension Autobuyers",
     effect: completions => completions,
     effectFormat: x => ((x === 0) ? "No autobuyers" : `Autobuy up to DM ${x}`),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
+  },
+  darkAutobuyerSpeed: {
+    start: 40,
+    repeat: 150,
+    limit: 8,
+    description: "All Dark Dimension Autobuyers trigger faster",
+    effect: completions => [30, 20, 15, 10, 5, 3, 2, 1, 0][completions],
+    effectFormat: x => `${formatInt(x)}s`,
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
+  },
+  autoAscend: {
+    start: 65,
+    repeat: 10000,
+    limit: 4,
+    description: "Auto-Ascension for Dark Matter Dimensions",
+    effect: completions => completions,
+    effectFormat: x => ((x === 0) ? "No Auto-ascension" : `Auto-ascend up to DM ${x}`),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   improvedSingularityCap: {

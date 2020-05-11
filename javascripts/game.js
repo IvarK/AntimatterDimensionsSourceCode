@@ -601,7 +601,7 @@ function gameLoop(diff, options = {}) {
   Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
 
-  Singularity.autobuyerLoop(realDiff);
+  Laitela.autobuyerLoop(realDiff);
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);
   GameUI.update();

@@ -6477,6 +6477,29 @@ kbd {
   background: white;
 }
 
+.o-matter-dimension-button--ascend {
+  background: black;
+  color: white;
+  cursor: pointer;
+  border-color: black;
+  animation: 3s a-laitela-flash infinite;
+}
+
+@keyframes a-laitela-flash {
+  0% {
+    color: black;
+    background: white;
+  }
+  50% {
+    color: white;
+    background: black;
+  }
+  100% {
+    color: black;
+    background: white;
+  }
+}
+
 .l-laitela-unlocks-container {
   width: 52rem;
   display: flex;

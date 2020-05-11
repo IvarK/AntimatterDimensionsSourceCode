@@ -43,27 +43,26 @@ const GlyphSelection = {
     // If no choices are rare enough and the player has the uncommon glyph perk, randomly generate
     // rarities until the threshold is passed and then assign that rarity to a random glyph
     const strengthThreshold = 1.5;
-    if (glyphList.some(e => e.strength >= strengthThreshold)) return;
+    // Do RNG stuff now so getting a strength-boosting upgrade in this reality
+    // can't influence the RNG of the next one.
+    const random = rng.uniform();
     let newStrength;
     do {
       newStrength = GlyphGenerator.randomStrength(rng);
     } while (newStrength < strengthThreshold);
-    glyphList[Math.floor(rng.uniform() * glyphList.length)].strength = newStrength;
+    if (glyphList.some(e => e.strength >= strengthThreshold)) return;
+    glyphList[Math.floor(random * glyphList.length)].strength = newStrength;
   },
   
   glyphList(count, level, isChoosingGlyph) {
     const glyphList = [];
     const rng = new GlyphGenerator.RealGlyphRNG();
+    let types = [];
     for (let out = 0; out < count; ++out) {
-      let glyph;
-      // Attempt to generate a unique glyph, but give up after 100 tries so the game doesn't
-      // get stuck in an infinite loop if we decide to increase the number of glyph choices
-      // for some reason and forget about the uniqueness check
-      for (let tries = 0; tries < 100; ++tries) {
-        glyph = GlyphGenerator.randomGlyph(level, rng);
-        if (this.checkUniqueGlyph(glyphList, glyph)) break;
-      }
-      glyphList.push(glyph);
+      types.push(GlyphGenerator.randomType(rng, types));
+    }
+    for (let out = 0; out < count; ++out) {
+      glyphList.push(GlyphGenerator.randomGlyph(level, rng, types[out]));
     }
     this.glyphUncommonGuarantee(glyphList, rng);
     if (isChoosingGlyph) {

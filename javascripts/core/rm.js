@@ -320,9 +320,10 @@ const GlyphGenerator = {
     // Technically getting this upgrade really changes glyph gen but at this point almost all
     // the RNG is gone anyway.
     if (Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST)) return rarityToStrength(100);
-    let result = GlyphGenerator.gaussianBellCurve(rng) *  GlyphGenerator.strengthMultiplier;
+    let result = GlyphGenerator.gaussianBellCurve(rng) * GlyphGenerator.strengthMultiplier;
     const relicShardFactor = Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX) ? 1 : rng.uniform();
-    const increasedRarity = relicShardFactor * Effarig.maxRarityBoost + Effects.sum(Achievement(146), GlyphSacrifice.effarig);
+    const increasedRarity = relicShardFactor * Effarig.maxRarityBoost +
+      Effects.sum(Achievement(146), GlyphSacrifice.effarig);
     // Each rarity% is 0.025 strength.
     result += increasedRarity / 40;
     return Math.min(result, rarityToStrength(100));
@@ -369,14 +370,14 @@ const GlyphGenerator = {
       effectValues[unincluded] = -1;
     }
     // This is timepow/infinitypow/powerpow
-    for (let i in [0, 12, 16]) {
+    for (const i of [0, 12, 16]) {
       if (i in effectValues) {
         effectValues[i] = 2;
       }
     }
     // Sort from highest to lowest value.
-    let effects = Object.keys(effectValues).sort((a, b) => effectValues[b] - effectValues[a]).slice(0, count);
-    return effects.map(i => +i).toBitmask();
+    const effects = Object.keys(effectValues).sort((a, b) => effectValues[b] - effectValues[a]).slice(0, count);
+    return effects.map(Number).toBitmask();
   },
 
   randomType(rng, typesSoFar = []) {

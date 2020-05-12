@@ -5,20 +5,6 @@ function startChallenge() {
   if (!Enslaved.isRunning) Tab.dimensions.normal.show();
 }
 
-function askChallengeConfirmation(goal, startCallback) {
-  if (!player.options.confirmations.challenges) {
-    startCallback();
-    return;
-  }
-  const message = `You will Big Crunch, if possible, and will start a new` + 
-  `Infinity within the challenge, with all the restrictions and modifiers that` + 
-  `entails. Upon reaching Infinity, you can complete the Challenge, which grants` + 
-  `you the reward. You do not start with any Dimensions or Galaxies, regardless of other upgrades.`;
-  if (goal === "a set goal") return Modal.startInfinityChallenge.show();
-  if (goal === "Infinity") return confirm(message);
-  return true;
-}
-
 function tryUnlockInfinityChallenges() {
   while (player.postChallUnlocked < 8 &&
     player.thisEternityMaxAM.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
@@ -74,9 +60,18 @@ class NormalChallengeState extends GameMechanicState {
     return player.challenge.normal.current === this.id || (isPartOfIC1 && InfinityChallenge(1).isRunning);
   }
 
+  requestStart() {
+    if (!this.isUnlocked) return;
+    if (!player.options.confirmations.challenges) {
+      this.start();
+      return;
+    }
+    Modal.startNormalChallenge.show(this.id);
+  }
+
   start() {
     if (this.id === 1) return;
-    if (!askChallengeConfirmation("infinity")) return;
+    if (!this.isUnlocked) return;
 
     player.challenge.normal.current = this.id;
     player.challenge.infinity.current = 0;
@@ -189,19 +184,18 @@ class InfinityChallengeState extends GameMechanicState {
 
   requestStart() {
     if (!this.isUnlocked) return;
-    askChallengeConfirmation("a set goal", () => this.start());
+    if (!player.options.confirmations.challenges) {
+      this.start();
+      return;
+    }
+    Modal.startInfinityChallenge.show(this.id);
   }
 
   start() {
     if (!this.isUnlocked) return;
-    if (player.options.confirmations.challenges) {
-      InfinityChallenges.starting = this.id;
-      Modal.startInfinityChallenge.show();
-      return;
-    }
-    InfinityChallenges.starting = this.id;
 
     player.challenge.normal.current = 0;
+    player.challenge.infinity.current = this.id;
 
     startChallenge();
     player.break = true;
@@ -280,7 +274,6 @@ const InfinityChallenges = {
    * @type {InfinityChallengeState[]}
    */
   all: InfinityChallenge.index.compact(),
-  starting: 0,
   completeAll() {
     for (const challenge of InfinityChallenges.all) challenge.complete();
   },

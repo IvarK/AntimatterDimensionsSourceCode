@@ -1,23 +1,23 @@
 "use strict";
 
-Vue.component("modal-start-infinity-challenge", {
+Vue.component("modal-start-normal-challenge", {
   computed: {
     modal() {
       return this.$viewModel.modal.current;
     },
     message() {
         return "You will Big Crunch, if possible, and will start a new Infinity within the challenge, " + 
-        "with all the restrictions and modifiers that entails. Upon reaching the goal, " +
-        "you can complete the Infinity Challenge, which grants you the reward. " + 
+        "with all the restrictions and modifiers that entails. Upon reaching Infinity, " +
+        "you can complete the Challenge, which grants you the reward. " + 
         "You do not start with any Dimensions or Galaxies, regardless of other upgrades.";
     },
-    enteringWhatIC() {
-      return `You are about to enter Infinity Challenge ${this.modal.id}`;
+    enteringWhatC() {
+      return `You are about to enter Challenge ${this.modal.id}`;
     }
   },
   methods: {
     handleYesClick() {
-        InfinityChallenge(this.modal.id).start();
+        startChallenge(this.modal.id);
         this.emitClose();
     },
     handleNoClick() {
@@ -26,7 +26,7 @@ Vue.component("modal-start-infinity-challenge", {
   },
   template:
     `<div class="c-modal-message l-modal-content--centered">
-    <h2>{{ enteringWhatIC }}</h2>
+    <h2>{{ enteringWhatC }}</h2>
       <div class="c-modal-message__text">
         {{ message }}
       </div>

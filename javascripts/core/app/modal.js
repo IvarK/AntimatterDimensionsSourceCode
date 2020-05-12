@@ -38,6 +38,14 @@ class Modal {
   }
 }
 
+class ChallengeConfirmationModal extends Modal {
+  show(id) {
+    this.id = id;
+    super.show();
+  }
+}
+
+
 Modal.h2p = new Modal("modal-h2p");
 Modal.shortcuts = new Modal("modal-shortcuts");
 Modal.animationOptions = new Modal("modal-animation-options");
@@ -53,7 +61,8 @@ Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");
 Modal.startEternityChallenge = new Modal("modal-start-eternity-challenge");
-Modal.startInfinityChallenge = new Modal("modal-start-infinity-challenge");
+Modal.startInfinityChallenge = new ChallengeConfirmationModal("modal-start-infinity-challenge");
+Modal.startNormalChallenge = new ChallengeConfirmationModal("modal-start-normal-challenge");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;

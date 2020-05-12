@@ -10,7 +10,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
   "realityglyphlevel", "realitygalaxies", "realitydimboost", "realityrow1pow",
   "companiondescription", "companionEP", "companionreduction"];
-const generatedTypes = ["power", "infinity", "time", "replication", "dilation", "effarig"];
+const generatedTypes = ["power", "infinity", "replication", "time", "dilation", "effarig"];
 
 // eslint-disable-next-line no-unused-vars
 const GlyphEffectOrder = orderedEffectList.mapToObject(e => e, (e, idx) => idx);
@@ -147,9 +147,9 @@ const AutoGlyphProcessor = {
  * using it, call finalize on it to write the seed out.
  */
 class GlyphRNG {
-  constructor(seed) {
+  constructor(seed, secondGaussian) {
     this.seed = seed;
-    this.secondGaussian = undefined;
+    this.secondGaussian = secondGaussian;
   }
 
   uniform() {
@@ -159,9 +159,9 @@ class GlyphRNG {
   }
 
   normal() {
-    if (this.secondGaussian !== undefined) {
+    if (this.secondGaussian !== null) {
       const toReturn = this.secondGaussian;
-      this.secondGaussian = undefined;
+      this.secondGaussian = null;
       return toReturn;
     }
     let u = 0, v = 0, s = 0;
@@ -188,24 +188,29 @@ class GlyphRNG {
 }
 
 const GlyphGenerator = {
-  lastFake: "power",
   fakeSeed: Date.now() % Math.pow(2, 32),
+  fakeSecondGaussian: null,
   /* eslint-disable lines-between-class-members */
   RealGlyphRNG: class extends GlyphRNG {
-    constructor() { super(player.reality.seed); }
-    finalize() { player.reality.seed = this.seed; }
+    constructor() { super(player.reality.seed, player.reality.secondGaussian); }
+    finalize() {
+      player.reality.seed = this.seed;
+      player.reality.secondGaussian = this.secondGaussian;
+    }
     get isFake() { return false; }
   },
 
   FakeGlyphRNG: class extends GlyphRNG {
-    constructor() { super(GlyphGenerator.fakeSeed); }
-    finalize() { GlyphGenerator.fakeSeed = this.seed; }
+    constructor() { super(GlyphGenerator.fakeSeed, GlyphGenerator.fakeSecondGaussian); }
+    finalize() {
+      GlyphGenerator.fakeSeed = this.seed;
+      GlyphGenerator.fakeSecondGaussian = this.secondGaussian;
+    }
     get isFake() { return true; }
   },
   /* eslint-enable lines-between-class-members */
 
   startingGlyph(level) {
-    player.reality.glyphs.last = "power";
     const initialStrength = 1.5;
     return {
       id: undefined,
@@ -219,10 +224,10 @@ const GlyphGenerator = {
     };
   },
 
-  randomGlyph(level, rngIn) {
+  randomGlyph(level, rngIn, typeIn = null) {
     const rng = rngIn || new GlyphGenerator.RealGlyphRNG();
     const strength = this.randomStrength(rng);
-    const type = this.randomType(rng);
+    const type = typeIn || this.randomType(rng);
     let numEffects = this.randomNumberOfEffects(type, strength, level.actualLevel, rng);
     if (type !== "effarig" && numEffects > 4) numEffects = 4;
     const effectBitmask = this.generateEffects(type, numEffects, rng);
@@ -311,17 +316,13 @@ const GlyphGenerator = {
   },
 
   randomStrength(rng) {
+    // Technically getting this upgrade really changes glyph gen but at this point almost all
+    // the RNG is gone anyway.
     if (Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST)) return rarityToStrength(100);
-    let result;
-    // Divide the extra minimum rarity (also from Reality Upgrade 16) by the strength multiplier
-    // since we'll multiply by the strength multiplier later.
-    const minimumValue = 1 + (RealityUpgrade(16).isBought ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
-    do {
-      result = GlyphGenerator.gaussianBellCurve(rng);
-    } while (result <= minimumValue);
-    result *= GlyphGenerator.strengthMultiplier;
+    let result = GlyphGenerator.gaussianBellCurve(rng) * GlyphGenerator.strengthMultiplier;
     const relicShardFactor = Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX) ? 1 : rng.uniform();
-    const increasedRarity = relicShardFactor * Effarig.maxRarityBoost + GlyphSacrifice.effarig.effectValue;
+    const increasedRarity = relicShardFactor * Effarig.maxRarityBoost +
+      Effects.sum(Achievement(146), GlyphSacrifice.effarig);
     // Each rarity% is 0.025 strength.
     result += increasedRarity / 40;
     return Math.min(result, rarityToStrength(100));
@@ -329,14 +330,19 @@ const GlyphGenerator = {
 
   // eslint-disable-next-line max-params
   randomNumberOfEffects(type, strength, level, rng) {
+    // Call the RNG twice before anything else to advance the RNG seed properly, even if the whole method returns early.
+    // This prevents the position of effarig glyphs in the choice list from affecting the choices themselves, as well
+    // as preventing all of the glyphs changing drastically when RU17 is purchased.
+    const random1 = rng.uniform();
+    const random2 = rng.uniform();
     if (type !== "effarig" && Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) return 4;
     const maxEffects = Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT) ? 7 : 4;
     let num = Math.min(
       maxEffects,
-      Math.floor(Math.pow(rng.uniform(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1));
+      Math.floor(Math.pow(random1, 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1));
     // If we do decide to add anything else that boosts chance of an extra effect, keeping the code like this
     // makes it easier to do (add it to the Effects.max).
-    if (RealityUpgrade(17).isBought && rng.uniform() < Effects.max(0, RealityUpgrade(17))) {
+    if (RealityUpgrade(17).isBought && random2 < Effects.max(0, RealityUpgrade(17))) {
       num = Math.min(num + 1, maxEffects);
     }
     if (Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) num = Math.max(num, 4);
@@ -353,57 +359,32 @@ const GlyphGenerator = {
     return sortedRealityEffects.slice(0, numberOfEffects);
   },
 
-  /**
-    Since we have bitmasks representing effect types, we can randomly select a bitmask to
-    select effects. This is a table -- first by glyph type, then by effect count -- of valid
-    effect bitmasks.
-  */
-  randomEffectTables: (function() {
-    return GlyphTypes.list
-      .filter(typeObj => typeObj !== GlyphTypes.reality)
-      .mapToObject(
-        typeObj => typeObj.id,
-        typeObj => {
-          const effects = typeObj.effects;
-          let allCombos = [];
-          // Recursively generate all possible combinations of effects. This fills allCombos
-          // with first, all combos that don't have the effect at effectStartIndex, then with
-          // all the combos that do.
-          function populateCombos(baseSet = [], effectStartIndex = 0) {
-            if (effectStartIndex === effects.length) {
-              allCombos.push(baseSet);
-              return;
-            }
-            populateCombos(baseSet, effectStartIndex + 1);
-            populateCombos([...baseSet, effects[effectStartIndex].id], effectStartIndex + 1);
-          }
-          populateCombos();
-          // Filter out invalid effect combinations -- those that don't have the "primary" effect, if specified,
-          // and those effarig glyphs that have both RM and glyph instability (pre-Ra upgrade)
-          if (typeObj.primaryEffect) allCombos = allCombos.filter(e => e.includes(typeObj.primaryEffect));
-          if (typeObj === GlyphTypes.effarig) {
-            allCombos = allCombos.filter(e => e.length > 4 || !e.includes("effarigrm") || !e.includes("effarigglyph"));
-          }
-          // Divide up the combo list by number of effects, and turn the effect arrays into masks
-          const maskArrays = Array.range(0, effects.length + 1).map(() => []);
-          allCombos.map(combo => maskArrays[combo.length].push(makeGlyphEffectBitmask(combo)));
-          return maskArrays;
-        });
-  }()),
-
   generateEffects(type, count, rng) {
-    const effectTables = GlyphGenerator.randomEffectTables[type];
-    const table = effectTables[Math.min(count, effectTables.length - 1)];
-    return table.length === 1 ? table[0] : table[Math.floor(rng.uniform() * table.length)];
+    const effectValues = GlyphTypes[type].effects.mapToObject(x => x.bitmaskIndex, () => rng.uniform());
+    // Get a bunch of random numbers so that we always use 7 here.
+    Array.range(0, 7 - GlyphTypes[type].effects.length).forEach(() => rng.uniform());
+    if (type === "effarig") {
+      // This is effarigrm/effarigglyph
+      const unincluded = effectValues[21] < effectValues[22] ? 21 : 22;
+      effectValues[unincluded] = -1;
+    }
+    // This is timepow/infinitypow/powerpow
+    for (const i of [0, 12, 16]) {
+      if (i in effectValues) {
+        effectValues[i] = 2;
+      }
+    }
+    // Sort from highest to lowest value.
+    const effects = Object.keys(effectValues).sort((a, b) => effectValues[b] - effectValues[a]).slice(0, count);
+    return effects.map(Number).toBitmask();
   },
 
-  randomType(rng) {
-    if (rng.isFake) {
-      GlyphGenerator.lastFake = GlyphTypes.random(rng, GlyphGenerator.lastFake);
-      return GlyphGenerator.lastFake;
-    }
-    player.reality.glyphs.last = GlyphTypes.random(rng, player.reality.glyphs.last);
-    return player.reality.glyphs.last;
+  randomType(rng, typesSoFar = []) {
+    const generatable = generatedTypes.filter(x => EffarigUnlock.reality.isUnlocked || x !== "effarig");
+    const maxOfSameTypeSoFar = generatable.map(x => typesSoFar.countWhere(y => y === x)).max();
+    const blacklisted = typesSoFar.length === 0
+        ? [] : generatable.filter(x => typesSoFar.countWhere(y => y === x) === maxOfSameTypeSoFar);
+    return GlyphTypes.random(rng, blacklisted);
   },
 
   getRNG(fake) {
@@ -659,7 +640,7 @@ const Glyphs = {
   sort(sortFunction) {
     const glyphsToSort = player.reality.glyphs.inventory.filter(g => g.idx >= this.protectedSlots);
     const freeSpace = this.freeInventorySpace;
-    const sortOrder = ["power", "infinity", "time", "replication", "dilation", "effarig",
+    const sortOrder = ["power", "infinity", "replication", "time", "dilation", "effarig",
       "reality", "cursed", "companion"];
     const byType = sortOrder.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
     for (const g of glyphsToSort) byType[g.type].glyphs.push(g);

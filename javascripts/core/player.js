@@ -279,7 +279,6 @@ let player = {
     glyphs: {
       active: [],
       inventory: [],
-      last: "",
       sac: {
         power: 0,
         infinity: 0,
@@ -292,6 +291,7 @@ let player = {
       undo: [],
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
+    secondGaussian: null,
     rebuyables: {
       1: 0,
       2: 0,

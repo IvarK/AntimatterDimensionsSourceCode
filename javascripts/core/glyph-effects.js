@@ -902,16 +902,10 @@ const GlyphTypes = {
     * @param {string} [blacklisted] Do not return the specified type
     * @returns {string | null}
     */
-  random(rng, blacklisted = "") {
-    const types = ["time", "dilation", "replication", "infinity", "power", "effarig"];
-    if (!blacklisted) {
-      const available = EffarigUnlock.reality.isUnlocked ? types.length : types.length - 1;
-      return types[Math.floor(rng.uniform() * available)];
-    }
-    const available = EffarigUnlock.reality.isUnlocked ? types.length - 1 : types.length - 2;
-    const typeIndex = Math.floor(rng.uniform() * available);
-    if (typeIndex >= types.indexOf(blacklisted)) return types[typeIndex + 1];
-    return types[typeIndex];
+  random(rng, blacklisted = []) {
+    const types = generatedTypes.filter(
+      x => (EffarigUnlock.reality.isUnlocked || x !== "effarig") && !blacklisted.includes(x));
+    return types[Math.floor(rng.uniform() * types.length)];
   },
   get list() {
     return GLYPH_TYPES.map(e => GlyphTypes[e]);

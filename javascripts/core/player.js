@@ -481,12 +481,14 @@ let player = {
       singularityCapIncreases: 0,
       secondsSinceReachedSingularity: 0,
       autoAnnihilationSetting: 5,
+      // These have inconsistent starting values because default-on isn't necessarily the best behavior for all
       automation: {
         dimensions: true,
-        ascension: true,
+        ascension: false,
         singularity: true,
-        annihilation: true
-      }
+        annihilation: false
+      },
+      lastCheckedMilestones: 0
     }
   },
   tabNotifications: new Set(),

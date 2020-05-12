@@ -9,6 +9,9 @@ Vue.component("singularity-milestones-modal", {
       this.milestones = SingularityMilestones.sortedForCompletions;
     }
   },
+  beforeDestroy() {
+    player.celestials.laitela.lastCheckedMilestones = player.celestials.laitela.singularities;
+  },
   template: `
     <div>
       <modal-close-button @click="emitClose"/>

@@ -350,19 +350,33 @@ Vue.component("singularity-milestone-pane", {
   data() {
     return {
       milestones: [],
+      hasNew: false,
     };
   },
   methods: {
     update() {
       this.milestones = SingularityMilestones.nextMilestoneGroup;
+      this.hasNew = SingularityMilestones.unseenMilestones.length !== 0;
     },
+  },
+  computed: {
+    glowStyle() {
+      if (this.hasNew) return { "box-shadow": "inset 0 0 1rem 0.5rem var(--color-infinity)" };
+      return {};
+    }
   },
   template: `
     <div class="c-laitela-next-milestones">
-      <div class="o-laitela-singularity-modal-button" onclick="Modal.singularityMilestones.show()">
-        Show all milestones
+      <div class="o-laitela-singularity-modal-button"
+        onclick="Modal.singularityMilestones.show()"
+        :style="glowStyle">
+          Show all milestones
       </div>
-      <singularity-milestone v-for="milestone in milestones" :key="milestone.id" :milestone="milestone"/>
+      <singularity-milestone
+        v-for="milestone in milestones"
+        :key="milestone.id"
+        :milestone="milestone"
+        :suppressGlow="true"/>
     </div>`
 });
 

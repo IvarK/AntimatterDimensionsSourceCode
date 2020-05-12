@@ -5,12 +5,18 @@ function startChallenge() {
   if (!Enslaved.isRunning) Tab.dimensions.normal.show();
 }
 
-function askChallengeConfirmation(goal) {
-  if (!player.options.confirmations.challenges) return true;
-  const message = "You will start over with just your infinity upgrades, and achievements. " +
-        `You need to reach ${goal} with special conditions. ` +
-        "NOTE: The rightmost infinity upgrade column doesn't work on challenges.";
-  return confirm(message);
+function askChallengeConfirmation(goal, startCallback) {
+  if (!player.options.confirmations.challenges) {
+    startCallback();
+    return;
+  }
+  const message = `You will Big Crunch, if possible, and will start a new` + 
+  `Infinity within the challenge, with all the restrictions and modifiers that` + 
+  `entails. Upon reaching Infinity, you can complete the Challenge, which grants` + 
+  `you the reward. You do not start with any Dimensions or Galaxies, regardless of other upgrades.`;
+  if (goal === "a set goal") return Modal.startInfinityChallenge.show();
+  if (goal === "Infinity") return confirm(message);
+  return true;
 }
 
 function tryUnlockInfinityChallenges() {
@@ -31,8 +37,8 @@ function updateNormalAndInfinityChallenges(diff) {
       player.matter = player.matter
         .times(Decimal.pow((1.03 + DimBoost.totalBoosts / 200 + player.galaxies / 100), diff / 100));
     }
-    if (player.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning) {
-      Modal.message.show(`Your ${format(Currency.antimatter.value, 2, 2)} antimatter was annhiliated by ` +
+    if (player.matter.gt(player.antimatter) && NormalChallenge(11).isRunning) {
+      Modal.message.show(`Your ${format(player.antimatter, 2, 2)} antimatter was annhiliated by ` +
         `${format(player.matter, 2, 2)} matter.`);
       softReset(0);
     }
@@ -147,6 +153,7 @@ const NormalChallenges = {
    * @type {NormalChallengeState[]}
    */
   all: NormalChallenge.index.compact(),
+  starting: 0,
   completeAll() {
     for (const challenge of NormalChallenges.all) challenge.complete();
   },
@@ -180,12 +187,21 @@ class InfinityChallengeState extends GameMechanicState {
     return player.challenge.infinity.current === this.id;
   }
 
+  requestStart() {
+    if (!this.isUnlocked) return;
+    askChallengeConfirmation("a set goal", () => this.start());
+  }
+
   start() {
     if (!this.isUnlocked) return;
-    if (!askChallengeConfirmation("a set goal")) return;
+    if (player.options.confirmations.challenges) {
+      InfinityChallenges.starting = this.id;
+      Modal.startInfinityChallenge.show();
+      return;
+    }
+    InfinityChallenges.starting = this.id;
 
     player.challenge.normal.current = 0;
-    player.challenge.infinity.current = this.id;
 
     startChallenge();
     player.break = true;
@@ -264,6 +280,7 @@ const InfinityChallenges = {
    * @type {InfinityChallengeState[]}
    */
   all: InfinityChallenge.index.compact(),
+  starting: 0,
   completeAll() {
     for (const challenge of InfinityChallenges.all) challenge.complete();
   },

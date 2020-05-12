@@ -12,13 +12,13 @@ Vue.component("modal-start-eternity-challenge", {
         "You can complete Eternity Challenges up to 5 times, with increasing goals, to get higher bonuses.";
     },
     enteringWhatEC() {
-      return `You are about to enter Eternity Challenge ${EternityChallenges.starting}`;
+      return `You are about to enter Eternity Challenge ${this.modal.id}`;
     }
   },
   methods: {
     handleYesClick() {
+        EternityChallenge(this.modal.id).start(true);
         this.emitClose();
-        EternityChallenge(EternityChallenges.starting).start(true);
     },
     handleNoClick() {
       this.emitClose();

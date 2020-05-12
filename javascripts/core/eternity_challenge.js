@@ -158,13 +158,19 @@ class EternityChallengeState extends GameMechanicState {
     }
   }
 
+  requestStart() {
+    if (!Tab.challenges.eternity.isAvailable) return;
+    if (!player.options.confirmations.challenges) {
+      this.start();
+      return;
+    }
+    if (this.isUnlocked) {
+    Modal.startEternityChallenge.show(this.id);
+    }
+  }
+
   start(auto) {
     if (!this.isUnlocked || EternityChallenge.isRunning) return false;
-    if (!auto && player.options.confirmations.challenges) {
-      EternityChallenges.starting = this.id;
-      Modal.startEternityChallenge.show();
-      return false;
-    }
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.
@@ -248,7 +254,6 @@ const EternityChallenges = {
    * @type {EternityChallengeState[]}
    */
   all: EternityChallenge.index.compact(),
-  starting: 0,
 
   get completions() {
     return EternityChallenges.all

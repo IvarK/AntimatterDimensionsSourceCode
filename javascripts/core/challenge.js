@@ -148,7 +148,6 @@ const NormalChallenges = {
    * @type {NormalChallengeState[]}
    */
   all: NormalChallenge.index.compact(),
-  starting: 0,
   completeAll() {
     for (const challenge of NormalChallenges.all) challenge.complete();
   },

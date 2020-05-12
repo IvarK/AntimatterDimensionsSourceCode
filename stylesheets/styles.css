@@ -6645,7 +6645,9 @@ kbd {
   display: flex;
   flex-wrap: wrap;
   height: 120rem;
-  width: 90rem;
+  width: 93rem;
+  justify-content: space-evenly;
+  padding-bottom: 2rem;
 }
 
 .o-laitela-singularity-modal-button {

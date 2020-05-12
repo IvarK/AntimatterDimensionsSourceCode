@@ -66,7 +66,7 @@ GameDatabase.celestials.singularityMilestones = {
   },
   // Limited
   ascensionIntervalScaling: {
-    start: 5,
+    start: 25,
     repeat: 50,
     limit: 7,
     description: "Dark Matter Dimensions Ascension increases the interval less",
@@ -93,7 +93,7 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   darkAutobuyerSpeed: {
-    start: 40,
+    start: 45,
     repeat: 150,
     limit: 8,
     description: "All Dark Dimension Autobuyers trigger faster",

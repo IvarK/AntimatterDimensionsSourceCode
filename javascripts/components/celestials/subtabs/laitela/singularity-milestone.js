@@ -1,7 +1,7 @@
 "use strict";
 
 Vue.component("singularity-milestone", {
-  props: ["milestone"],
+  props: ["milestone", "suppressGlow"],
   data: () => ({
     isMaxed: false,
     progressToNext: "",
@@ -10,6 +10,7 @@ Vue.component("singularity-milestone", {
     effectDisplay: "",
     isUnique: false,
     nextEffectDisplay: "",
+    start: 0,
     completions: 0,
     limit: 0
   }),
@@ -51,6 +52,16 @@ Vue.component("singularity-milestone", {
         "background-color": color
       };
     },
+    newGlowStyle() {
+      if (this.suppressGlow) return {};
+      const newMilestones = SingularityMilestones.unseenMilestones;
+      for (let rep = 0; this.completions === 0 || rep < this.completions; rep++) {
+        const thisLevel = this.milestone.start * Math.pow(this.milestone.repeat, rep);
+        if (newMilestones.includes(thisLevel)) return { "box-shadow": "0 0 0.3rem 0.3rem var(--color-infinity)" };
+        if (thisLevel > player.celestials.laitela.singularities) break;
+      }
+      return {};
+    },
     upgradeDirectionIcon() {
       switch (this.milestone.config.upgradeDirection) {
         case LAITELA_UPGRADE_DIRECTION.SELF_BOOST:
@@ -72,7 +83,7 @@ Vue.component("singularity-milestone", {
   template: `
     <div class="c-laitela-milestone"
       :class="{ 'c-laitela-milestone--completed': isUnique && isMaxed }"
-      :style="backgroundStyle">
+      :style="[backgroundStyle, newGlowStyle]">
         <div class="c-laitela-milestone__progress" :style="barProgressStyle"/>
         <b v-if="!isMaxed">
           In {{ format(remainingSingularities, 2, 0) }} 

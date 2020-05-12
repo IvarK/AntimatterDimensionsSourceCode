@@ -124,8 +124,24 @@ const SingularityMilestones = {
 
   get nextMilestoneGroup() {
     return this.sortedForCompletions.slice(0, 6);
+  },
+
+  get unseenMilestones() {
+    const laitela = player.celestials.laitela;
+    return SingularityMilestoneThresholds
+      .filter(s => s > laitela.lastCheckedMilestones && s <= laitela.singularities);
   }
 };
+
+// Sorted list of all the values where a singularity milestone exists, used for "new milestone" styling
+const SingularityMilestoneThresholds = (function() {
+  return Object.values(GameDatabase.celestials.singularityMilestones)
+    .map(m => Array.range(0, m.limit === 0 ? 50 : m.limit)
+      .map(r => m.start * Math.pow(m.repeat, r)))
+    .flat(Infinity)
+    .filter(n => n < 1e100)
+    .sort((a, b) => a - b);
+}());
 
 const Singularity = {
   get cap() {

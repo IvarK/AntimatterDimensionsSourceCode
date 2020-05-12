@@ -31,27 +31,23 @@ const GlyphSelection = {
     glyphList[Math.floor(random * glyphList.length)].strength = newStrength;
   },
   
-  glyphList(count, level, isChoosingGlyph) {
-    const glyphList = [];
+  glyphList(countIn, level, isChoosingGlyph) {
+    // Always generate at least 4 choices so that the RNG never diverges based on
+    // the 4-choice perk.
+    const count = Math.clampMin(countIn, 4);
+    let glyphList = [];
     const rng = new GlyphGenerator.RealGlyphRNG();
     const types = [];
-    // Always generate at least 4 types so that the RNG only starts diverging
-    // based on the 4-choice perk once glyphs are generated. This means that
-    // you don't get a free extra choice second reality by waiting to buy
-    // the 4-choice perk until you see your option without the perk.
-    for (let out = 0; out < Math.clampMin(count, 4); ++out) {
+    for (let out = 0; out < count; ++out) {
       types.push(GlyphGenerator.randomType(rng, types));
     }
     for (let out = 0; out < count; ++out) {
       glyphList.push(GlyphGenerator.randomGlyph(level, rng, types[out]));
     }
-    // There's a somewhat similar issue to that above; the 4-choice perk here might
-    // make the uncommon choice not the first, making it better not to get the perk
-    // if you'd take the first choice and it's common pre-guarantee. So, we don't
-    // apply the perk if there's only one choice.
-    if (count > 1) {
-      this.glyphUncommonGuarantee(glyphList, rng);
-    }
+    this.glyphUncommonGuarantee(glyphList, rng);
+    // If we generated extra choices due to always generating at least 4 choices,
+    // we remove the extra choices here.
+    glyphList = glyphList.slice(0, countIn);
     if (isChoosingGlyph) {
       rng.finalize();
     }

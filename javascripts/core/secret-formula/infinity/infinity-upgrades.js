@@ -169,25 +169,26 @@ GameDatabase.infinity.upgrades = (function() {
     skipReset1: {
       id: "skipReset1",
       cost: 20,
-      description: "You start with the 5th Dimension unlocked",
+      description: "You start with 1 Dimension Shift, which unlocks the ability to purchase 5th Dimensions",
       bannedFromCharging: true
     },
     skipReset2: {
       id: "skipReset2",
       cost: 40,
-      description: "You start with the 6th Dimension unlocked",
+      description: "You start with 2 Dimension Shifts, which unlocks the ability to purchase 6th Dimensions",
       bannedFromCharging: true
     },
     skipReset3: {
       id: "skipReset3",
       cost: 80,
-      description: "You start with the 7th Dimension unlocked",
+      description: "You start with 3 Dimension Shifts, which unlocks the ability to purchase 7th Dimensions",
       bannedFromCharging: true
     },
     skipResetGalaxy: {
       id: "skipResetGalaxy",
       cost: 300,
-      description: "You start with the 8th Dimension unlocked, and an Antimatter Galaxy",
+      description: "ou start with 4 Dimension Shifts, which unlocks the ability to purchase 8th Dimensions," + 
+      " and you start with an Antimatter Galaxy",
       bannedFromCharging: true
     },
     ipOffline: {

@@ -6506,8 +6506,8 @@ kbd {
 }
 
 .o-matter-dimension-button--available {
-  background: #AAA;
-  color: var(--color-laitela--accent);
+  color: var(--color-laitela--base);
+  background: var(--color-laitela--accent);
   border-color: var(--color-laitela--accent);
   box-shadow: 0 0 0.5rem 0.1rem inset, 0 0 0.3rem 0;
   cursor: pointer;
@@ -6515,9 +6515,8 @@ kbd {
 }
 
 .o-matter-dimension-button--available:hover {
-  color: var(--color-laitela--base);
-  background: var(--color-laitela--accent);
-  text-shadow: 0 0 0.3rem;
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
   box-shadow: none;
 }
 
@@ -6547,8 +6546,9 @@ kbd {
 }
 
 .o-matter-dimension-button--ascend:hover {
-  color: var(--color-laitela--base);
-  background: var(--color-laitela--accent);
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
+  box-shadow: none;
   animation: none;
 }
 

@@ -54,6 +54,9 @@ dev.giveAllAchievements = function() {
   for (const achievement of allAchievements) achievement.unlock();
 };
 
+// Know that both dev.doubleEverything and dev.tripleEverything are both broken
+// with this error https://i.imgur.com/ZMEBNTv.png
+
 dev.doubleEverything = function() {
   Object.keys(player).forEach(key => {
     if (typeof player[key] === "number") player[key] *= 2;
@@ -63,6 +66,20 @@ dev.doubleEverything = function() {
         if (typeof player[key][key2] === "number") player[key][key2] *= 2;
         if (typeof player[key][key2] === "object" && player[key][key2].constructor !== Object)
           player[key][key2] = player[key][key2].times(2);
+      });
+    }
+  });
+};
+
+dev.tripleEverything = function() {
+  Object.keys(player).forEach(key => {
+    if (typeof player[key] === "number") player[key] *= 3;
+    if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(3);
+    if (typeof player[key] === "object" && !isFinite(player[key])) {
+      Object.keys(player[key]).forEach(key3 => {
+        if (typeof player[key][key3] === "number") player[key][key3] *= 3;
+        if (typeof player[key][key3] === "object" && player[key][key3].constructor !== Object)
+          player[key][key3] = player[key][key3].times(3);
       });
     }
   });

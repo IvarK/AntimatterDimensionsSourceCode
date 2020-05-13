@@ -151,6 +151,7 @@ function applyNDPowers(mult, tier) {
   }
 
   multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier);
+  multiplier = multiplier.pow(Ra.momentumValue);
 
   multiplier = multiplier
     .powEffectsOf(

@@ -169,6 +169,7 @@ class TimeDimensionState extends DimensionState {
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
     mult = mult.powEffectOf(AlchemyResource.time);
+    mult = mult.pow(Ra.momentumValue);
 
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);

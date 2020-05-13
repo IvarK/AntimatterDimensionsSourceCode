@@ -448,7 +448,7 @@ let player = {
           amount: 0,
           reaction: false
         })),
-      momentumUnlockTime: 0,
+      momentumTime: 0,
       unlocksBits: 0,
       run: false,
       charged: new Set(),

@@ -708,8 +708,9 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: () => `DT scaling for next glyph level: ^${format(1.3, 1, 1)}
       ➜ ^(${format(1.3, 1, 1)} + {value})`,
     genericDesc: "DT scaling for glyph level",
-    effect: level => Math.pow(level, 0.1) / 20,
-    formatEffect: x => format(x, 3, 3),
+    // You can only get this effect on level 25000 reality glyphs anyway, might as well make it look nice
+    effect: () => 0.15,
+    formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.add,
   }, {
     id: "companiondescription",

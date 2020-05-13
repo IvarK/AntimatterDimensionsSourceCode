@@ -378,6 +378,7 @@ function gameLoop(diff, options = {}) {
   // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.
   // This is in order to prevent players from using time inside of Ra's reality for amplification as well
   Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
+  if (AlchemyResource.momentum.isUnlocked) player.celestials.ra.momentumTime += realDiff;
 
   // Lai'tela mechanics should bypass stored real time entirely
   Laitela.handleMatterDimensionUnlocks();

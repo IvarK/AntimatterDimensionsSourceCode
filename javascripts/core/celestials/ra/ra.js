@@ -93,8 +93,6 @@ class RaPetState {
       // TODO Change this once we have a proper fix for things happening before the UI is initialized
       if (GameUI.initialized) {
         GameUI.notify.success(`${this.name} has leveled up to level ${this.level}!`);
-        // Momentum unlock
-        if (this.name === "Effarig" && this.level === 15) player.celestials.ra.momentumUnlockTime = Date.now();
       }
       // All Ra unlocks require a pet to gain a level so it suffices to do this here.
       Ra.checkForUnlocks();
@@ -286,8 +284,7 @@ const Ra = {
     return 25000;
   },
   get momentumValue() {
-    if (player.celestials.ra.momentumUnlockTime === 0) return 1;
-    const hoursFromUnlock = TimeSpan.fromMilliseconds(Date.now() - player.celestials.ra.momentumUnlockTime).totalHours;
+    const hoursFromUnlock = TimeSpan.fromMilliseconds(player.celestials.ra.momentumTime).totalHours;
     return Math.clampMax(1 + 0.002 * hoursFromUnlock, AlchemyResource.momentum.effectValue);
   }
 };

@@ -5,6 +5,8 @@ Vue.component("game-header-gamespeed-display", {
     return {
       baseSpeed: 0,
       pulsedSpeed: 0,
+      isStopped: false,
+      isEC12: false,
       isPulsing: false,
     };
   },
@@ -12,7 +14,9 @@ Vue.component("game-header-gamespeed-display", {
     update() {
       this.baseSpeed = getGameSpeedupFactor();
       this.pulsedSpeed = getGameSpeedupForDisplay();
-      this.isPulsing = this.baseSpeed !== this.pulsedSpeed;
+      this.isStopped = Enslaved.isStoringRealTime;
+      this.isEC12 = EternityChallenge(12).isRunning;
+      this.isPulsing = (this.baseSpeed !== this.pulsedSpeed) && Enslaved.canRelease(true);
     },
     formatNumber(num) {
       if (num >= 0.001 && num < 10000 && num !== 1) {
@@ -26,11 +30,11 @@ Vue.component("game-header-gamespeed-display", {
   },
   computed: {
     baseSpeedText() {
-      if (Enslaved.isStoringRealTime) {
+      if (this.isStopped) {
         return "Stopped (storing real time)";
       }
       const speed = this.formatNumber(this.baseSpeed);
-      if (EternityChallenge(12).isRunning) {
+      if (this.isEC12) {
         return `${speed} (fixed)`;
       }
       return `${speed}`;

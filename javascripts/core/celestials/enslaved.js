@@ -84,7 +84,8 @@ const Enslaved = {
     return diffMs - used;
   },
   canRelease(auto) {
-    return !EternityChallenge(12).isRunning && !Laitela.isRunning && !(Enslaved.isRunning && auto);
+    return !Enslaved.isStoringRealTime && !EternityChallenge(12).isRunning && !Laitela.isRunning &&
+      !(Enslaved.isRunning && auto);
   },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {

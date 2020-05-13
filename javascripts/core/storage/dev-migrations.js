@@ -678,7 +678,9 @@ GameStorage.devMigrations = {
     },
     player => {
       if (player.reality.secondGaussian === null) {
-        player.reality.secondGaussian = SECOND_GAUSSIAN_DEFAULT_VALUE;
+        // Future-proof against potential changes to the default value
+        // (as a special case of not using state accessors).
+        player.reality.secondGaussian = 1e6;
       }
     }
   ],

@@ -2,11 +2,6 @@
 
 const defaultMaxTime = TimeSpan.fromDays(31).totalMilliseconds;
 
-// Our current Gaussian code outputting this is impossible;
-// any accurate Gaussian code outputting this is on the order of
-// a 1 in ee10 event, at least.
-const SECOND_GAUSSIAN_DEFAULT_VALUE = 1e6;
-
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const
 let player = {
@@ -296,7 +291,7 @@ let player = {
       undo: [],
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
-    secondGaussian: SECOND_GAUSSIAN_DEFAULT_VALUE,
+    secondGaussian: 1e6,
     rebuyables: {
       1: 0,
       2: 0,

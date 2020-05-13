@@ -147,6 +147,10 @@ const AutoGlyphProcessor = {
  * using it, call finalize on it to write the seed out.
  */
 class GlyphRNG {
+  static get SECOND_GAUSSIAN_DEFAULT_VALUE() {
+    return 1e6;
+  }
+
   constructor(seed, secondGaussian) {
     this.seed = seed;
     this.secondGaussian = secondGaussian;
@@ -159,9 +163,9 @@ class GlyphRNG {
   }
 
   normal() {
-    if (this.secondGaussian !== SECOND_GAUSSIAN_DEFAULT_VALUE) {
+    if (this.secondGaussian !== GlyphRNG.SECOND_GAUSSIAN_DEFAULT_VALUE) {
       const toReturn = this.secondGaussian;
-      this.secondGaussian = SECOND_GAUSSIAN_DEFAULT_VALUE;
+      this.secondGaussian = GlyphRNG.SECOND_GAUSSIAN_DEFAULT_VALUE;
       return toReturn;
     }
     let u = 0, v = 0, s = 0;

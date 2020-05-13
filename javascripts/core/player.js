@@ -291,7 +291,7 @@ let player = {
       undo: [],
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
-    secondGaussian: null,
+    secondGaussian: 1e6,
     rebuyables: {
       1: 0,
       2: 0,

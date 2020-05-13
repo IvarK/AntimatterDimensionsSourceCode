@@ -677,6 +677,13 @@ GameStorage.devMigrations = {
       delete player.reality.glyphs.last;
     },
     player => {
+      if (player.reality.secondGaussian === null) {
+        // Future-proof against potential changes to the default value
+        // (as a special case of not using state accessors).
+        player.reality.secondGaussian = 1e6;
+      }
+    },
+    player => {
       delete player.celestials.laitela.reachedSingularityCapLimit;
       delete player.celestials.laitela.secondsSinceCappedTime;
       delete player.celestials.laitela.singularityAutoCapLimit;

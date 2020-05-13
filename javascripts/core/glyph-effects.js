@@ -710,7 +710,7 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "DT scaling for glyph level",
     effect: level => Math.pow(level, 0.1) / 20,
     formatEffect: x => format(x, 3, 3),
-    combine: GlyphCombiner.multiply,
+    combine: GlyphCombiner.add,
   }, {
     id: "companiondescription",
     bitmaskIndex: 8,

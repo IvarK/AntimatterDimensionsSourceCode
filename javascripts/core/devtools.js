@@ -463,8 +463,8 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
       }
     }
     doReplicantiTicks();
-    player.antimatter = new Decimal('1e309');
-    player.thisInfinityMaxAM = new Decimal('1e309');
+    player.antimatter = new Decimal("1e309");
+    player.thisInfinityMaxAM = new Decimal("1e309");
     bigCrunchReset();
     doReplicantiTicks();
   };
@@ -491,7 +491,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     debugger;
   }
   return hash;
-}
+};
 
 dev.testGlyphs = function(config) {
   const glyphLevel = config.glyphLevel || 6500;

@@ -675,6 +675,13 @@ GameStorage.devMigrations = {
     },
     player => {
       delete player.reality.glyphs.last;
+    },
+    player => {
+      if (player.reality.secondGaussian === null) {
+        // Future-proof against potential changes to the default value
+        // (as a special case of not using state accessors).
+        player.reality.secondGaussian = 1e6;
+      }
     }
   ],
 

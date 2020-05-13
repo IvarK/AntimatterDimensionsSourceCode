@@ -279,7 +279,6 @@ let player = {
     glyphs: {
       active: [],
       inventory: [],
-      last: "",
       sac: {
         power: 0,
         infinity: 0,
@@ -292,6 +291,7 @@ let player = {
       undo: [],
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
+    secondGaussian: null,
     rebuyables: {
       1: 0,
       2: 0,
@@ -448,6 +448,7 @@ let player = {
           amount: 0,
           reaction: false
         })),
+      momentumUnlockTime: 0,
       unlocksBits: 0,
       run: false,
       charged: new Set(),
@@ -479,7 +480,6 @@ let player = {
       darkEnergy: 0,
       singularities: 0,
       singularityCapIncreases: 0,
-      secondsSinceReachedSingularity: 0,
       autoAnnihilationSetting: 5,
       // These have inconsistent starting values because default-on isn't necessarily the best behavior for all
       automation: {

@@ -100,14 +100,17 @@ const Laitela = {
         const ticks = Math.floor(d.timeSinceLastUpdate / d.interval);
         const productionDM = d.amount.times(ticks).times(d.powerDM);
         if (i === 1) {
-          player.celestials.laitela.matter = player.celestials.laitela.matter.plus(productionDM);
+          player.celestials.laitela.matter = player.celestials.laitela.matter
+            .plus(productionDM)
+            .clampMax(Number.MAX_VALUE);
           player.celestials.laitela.maxMatter = player.celestials.laitela.maxMatter.max(
             player.celestials.laitela.matter);
         } else {
           MatterDimension(i - 1).amount = MatterDimension(i - 1).amount.plus(productionDM);
         }
         if (MatterDimension(i).amount.gt(0)) {
-          player.celestials.laitela.darkEnergy += ticks * d.powerDE;
+          player.celestials.laitela.darkEnergy =
+            Math.clampMax(player.celestials.laitela.darkEnergy + ticks * d.powerDE, Number.MAX_VALUE);
         }
         d.timeSinceLastUpdate -= d.interval * ticks;
       }
@@ -158,7 +161,7 @@ const Laitela = {
         this.maxAllDMDimensions(SingularityMilestone.darkDimensionAutobuyers.effectValue);
       }
       if (laitela.automation.ascension) {
-        for (let i = 1; i <= SingularityMilestone.autoAscend.effectValue; i++) {
+        for (let i = 1; i <= SingularityMilestone.darkDimensionAutobuyers.effectValue; i++) {
           MatterDimension(i).ascend();
         }
       }
@@ -170,11 +173,9 @@ const Laitela = {
         this.annihilate();
     }
 
-    if (Singularity.capIsReached && laitela.automation.singularity) {
-      laitela.secondsSinceReachedSingularity += realDiff / 1000;
-      if (laitela.secondsSinceReachedSingularity >= SingularityMilestone.autoCondense.effectValue) {
+    if (Singularity.capIsReached && laitela.automation.singularity && 
+      laitela.darkEnergy / Singularity.cap >= SingularityMilestone.autoCondense.effectValue) {
         Singularity.perform();
-      }
     }
   },
   reset() {

@@ -96,7 +96,7 @@ const SingularityMilestone = (function() {
     darkFromTesseracts: new SingularityMilestoneState(db.darkFromTesseracts),
     dilatedTimeFromSingularities: new SingularityMilestoneState(db.dilatedTimeFromSingularities),
     darkFromGlyphLevel: new SingularityMilestoneState(db.darkFromGlyphLevel),
-    momentumFromSingularities: new SingularityMilestoneState(db.momentumFromSingularities),
+    gamespeedFromSingularities: new SingularityMilestoneState(db.gamespeedFromSingularities),
     darkFromTheorems: new SingularityMilestoneState(db.darkFromTheorems),
     dim4Generation: new SingularityMilestoneState(db.dim4Generation),
     darkFromDM4: new SingularityMilestoneState(db.darkFromDM4),
@@ -164,7 +164,6 @@ const Singularity = {
   increaseCap() {
     if (player.celestials.laitela.singularityCapIncreases >= 96) return;
     player.celestials.laitela.singularityCapIncreases++;
-    player.celestials.laitela.secondsSinceReachedSingularity = 0;
   },
 
   decreaseCap() {
@@ -180,7 +179,6 @@ const Singularity = {
 
     laitela.darkEnergy = 0;
     laitela.singularities += this.singularitiesGained;
-    laitela.secondsSinceReachedSingularity = 0;
     
     EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_AFTER);
   }

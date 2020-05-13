@@ -276,7 +276,7 @@ const GAME_SPEED_EFFECT = {
   TIME_GLYPH: 2,
   BLACK_HOLE: 3,
   TIME_STORAGE: 4,
-  MOMENTUM: 5,
+  SINGULARITY_MILESTONE: 5,
   NERFS: 6
 };
 
@@ -290,7 +290,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
   let effects;
   if (effectsToConsider === undefined) {
     effects = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH, GAME_SPEED_EFFECT.BLACK_HOLE,
-      GAME_SPEED_EFFECT.TIME_STORAGE, GAME_SPEED_EFFECT.MOMENTUM, GAME_SPEED_EFFECT.NERFS];
+      GAME_SPEED_EFFECT.TIME_STORAGE, GAME_SPEED_EFFECT.SINGULARITY_MILESTONE, GAME_SPEED_EFFECT.NERFS];
   } else {
     effects = effectsToConsider;
   }
@@ -320,12 +320,10 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
     }
   }
 
-  if (effects.includes(GAME_SPEED_EFFECT.MOMENTUM)) {
-    const milestoneFactor = SingularityMilestone.momentumFromSingularities.canBeApplied
-      ? SingularityMilestone.momentumFromSingularities.effectValue
+  if (effects.includes(GAME_SPEED_EFFECT.SINGULARITY_MILESTONE)) {
+    factor *= SingularityMilestone.gamespeedFromSingularities.canBeApplied
+      ? SingularityMilestone.gamespeedFromSingularities.effectValue
       : 1;
-    factor *= Math.clampMax(1e30,
-      Math.pow(AlchemyResource.momentum.effectValue, Time.thisRealityRealTime.totalMinutes * milestoneFactor));
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
@@ -384,6 +382,7 @@ function gameLoop(diff, options = {}) {
   // Lai'tela mechanics should bypass stored real time entirely
   Laitela.handleMatterDimensionUnlocks();
   Laitela.tickDarkMatter(realDiff);
+  Laitela.autobuyerLoop(realDiff);
 
   // When storing real time, skip everything else having to do with production once stats are updated
   if (Enslaved.isStoringRealTime) {
@@ -442,12 +441,13 @@ function gameLoop(diff, options = {}) {
       // These variables are the actual game speed used and the game speed unaffected by time storage, respectively
       const reducedTimeFactor = getGameSpeedupFactor();
       const totalTimeFactor = getGameSpeedupFactor([GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
-        GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.MOMENTUM]);
+        GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.SINGULARITY_MILESTONE]);
       const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
         ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
         : 1;
       Enslaved.currentBlackHoleStoreAmountPerMs = Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
-      player.celestials.enslaved.stored += diff * Enslaved.currentBlackHoleStoreAmountPerMs;
+      player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored + 
+        diff * Enslaved.currentBlackHoleStoreAmountPerMs, Enslaved.timeCap);
       speedFactor = reducedTimeFactor;
     }
     diff *= speedFactor;
@@ -601,8 +601,6 @@ function gameLoop(diff, options = {}) {
   Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
 
-  Laitela.autobuyerLoop(realDiff);
-
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);
   GameUI.update();
   player.lastUpdate = thisUpdate;
@@ -629,7 +627,7 @@ function laitelaRealityTick(realDiff) {
       // This causes display oddities at 3 or lower but I don't expect the player to get that far legitimately (?)
       completionText += `<br><br>Lai'tela's Reality will now disable production from all
         ${Laitela.maxAllowedDimension + 1}th dimensions during future runs, but the reward will be
-        ${formatInt(20)} times stronger than before.`;
+        ${formatInt(100)} times stronger than before.`;
     }
     Modal.message.show(completionText);
   }

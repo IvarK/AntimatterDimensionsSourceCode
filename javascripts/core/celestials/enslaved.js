@@ -28,6 +28,7 @@ const Enslaved = {
   isReleaseTick: false,
   autoReleaseTick: 0,
   autoReleaseSpeed: 0,
+  timeCap: 1e300,
   glyphLevelMin: 5000,
   currentBlackHoleStoreAmountPerMs: 0,
   tachyonNerf: 0.3,
@@ -96,7 +97,7 @@ const Enslaved = {
       if (Time.thisReality.totalYears > 1) EnslavedProgress.storedTime.giveProgress();
     }
     if (autoRelease) release *= 0.01;
-    this.nextTickDiff = release;
+    this.nextTickDiff = Math.clampMax(release, this.timeCap);
     this.isReleaseTick = true;
     // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
     const effectiveGamespeed = release / 50;

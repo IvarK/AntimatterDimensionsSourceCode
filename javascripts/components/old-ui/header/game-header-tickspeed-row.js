@@ -87,6 +87,6 @@ Vue.component("game-header-tickspeed-row", {
             <span v-else>Buy Max</span>
         </primary-button>
       </div>
-      <div>{{tickspeedDisplay}} <game-header-gamma-display v-if="!isGameSpeedNormal"/></div>
+      <div>{{tickspeedDisplay}} <game-header-gamespeed-display v-if="!isGameSpeedNormal"/></div>
     </div>`
 });

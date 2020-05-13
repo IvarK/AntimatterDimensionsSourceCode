@@ -114,7 +114,7 @@ class DimBoost {
   }
 
   static get totalBoosts() {
-    return Math.floor((this.purchasedBoosts + this.freeBoosts) * getAdjustedGlyphEffect("realitydimboost"));
+    return Math.floor(this.purchasedBoosts + this.freeBoosts);
   }
 }
 

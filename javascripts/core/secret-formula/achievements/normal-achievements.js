@@ -954,7 +954,9 @@ GameDatabase.achievements.normal = [
     name: "Perks of living",
     tooltip: "Have all perks bought.",
     checkRequirement: () => player.reality.perks.size === Perks.all.length,
-    checkEvent: GAME_EVENT.PERK_BOUGHT
+    checkEvent: GAME_EVENT.PERK_BOUGHT,
+    reward: () => `+${formatPercents(0.01)} glyph rarity.`,
+    effect: 1
   },
   {
     id: 147,

@@ -674,14 +674,19 @@ GameStorage.devMigrations = {
       }
     },
     player => {
+      delete player.reality.glyphs.last;
+    },
+    player => {
       delete player.celestials.laitela.reachedSingularityCapLimit;
       delete player.celestials.laitela.secondsSinceCappedTime;
       delete player.celestials.laitela.singularityAutoCapLimit;
       delete player.celestials.laitela.singularityTime;
       delete player.celestials.laitela.autoAnnihilationTimer;
       delete player.celestials.laitela.annihilated;
+      delete player.celestials.laitela.secondsSinceReachedSingularity;
       player.celestials.laitela.darkMatterMult = Math.clampMin(player.celestials.laitela.darkMatterMult, 1);
       player.celestials.laitela.dimensions.forEach(d => d.ascensionCount = 0);
+      if (AlchemyResource.momentum.isUnlocked) player.celestials.ra.momentumUnlockTime = Date.now();
     }
   ],
 

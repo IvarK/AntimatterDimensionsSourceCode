@@ -60,11 +60,12 @@ Vue.component("singularity-container", {
       singularityCapIncreases: 0,
       canPerformSingularity: false,
       singularityCap: 0,
+      baseTimeToSingularity: 0,
       singularitiesGained: 0,
-      autoSingularityDelay: 0,
-      timeToAutoSingularity: 0,
+      autoSingularityFactor: 0,
       perStepFactor: 0,
       isAutoEnabled: false,
+      hasAutoSingularity: false,
     };
   },
   methods: {
@@ -80,11 +81,12 @@ Vue.component("singularity-container", {
       this.singularityCapIncreases = laitela.singularityCapIncreases;
       this.canPerformSingularity = Singularity.capIsReached;
       this.singularityCap = Singularity.cap;
+      this.baseTimeToSingularity = this.singularityCap / this.darkEnergyGainPerSecond;
       this.singularitiesGained = Singularity.singularitiesGained;
-      this.autoSingularityDelay = SingularityMilestone.autoCondense.effectValue;
-      this.timeToAutoSingularity = this.autoSingularityDelay - laitela.secondsSinceReachedSingularity;
+      this.autoSingularityFactor = SingularityMilestone.autoCondense.effectValue;
       this.perStepFactor = Singularity.gainPerCapIncrease;
       this.isAutoEnabled = laitela.automation.singularity && SingularityMilestone.autoCondense.isUnlocked;
+      this.hasAutoSingularity = Number.isFinite(this.autoSingularityFactor);
     },
     doSingularity() {
       Singularity.perform();
@@ -95,6 +97,11 @@ Vue.component("singularity-container", {
     decreaseCap() {
       Singularity.decreaseCap();
     },
+    formatRate(rate) {
+      if (rate < 1 / 60) return `${format(3600 * rate, 2, 3)} per hour`;
+      if (rate < 1) return `${format(60 * rate, 2, 3)} per minute`;
+      return `${format(rate, 2, 3)} per second`;
+    }
   },
   computed: {
     singularityFormText() {
@@ -107,29 +114,29 @@ Vue.component("singularity-container", {
       return `Reach ${format(this.singularityCap)} Dark Energy to ${formText}`;
     },
     singularityWaitText() {
-      const singularityTime = TimeSpan
-        .fromSeconds((this.singularityCap - this.darkEnergy) / this.darkEnergyGainPerSecond)
-        .toStringShort(false);
+      let singularityTime = (this.singularityCap - this.darkEnergy) / this.darkEnergyGainPerSecond;
       if (this.canPerformSingularity) {
+        singularityTime += this.singularityCap * (this.autoSingularityFactor - 1) / this.darkEnergyGainPerSecond;
         return this.isAutoEnabled
-          ? `(Auto-condensing in ${TimeSpan.fromSeconds(this.timeToAutoSingularity).toStringShort(false)})`
+          ? `(Auto-condensing in ${TimeSpan.fromSeconds(singularityTime).toStringShort(false)})`
           : "";
       }
-      return `(Enough Dark Energy in ${singularityTime})`;
-
+      return `(Enough Dark Energy in ${TimeSpan.fromSeconds(singularityTime).toStringShort(false)})`;
     },
-    fullSingularityTime() {
-      return TimeSpan.fromSeconds(this.singularityCap / this.darkEnergyGainPerSecond).toStringShort(false);
+    baseSingularityTime() {
+      return TimeSpan.fromSeconds(this.baseTimeToSingularity).toStringShort(false);
     },
-    delayTime() {
-      return TimeSpan.fromSeconds(this.autoSingularityDelay).toStringShort(false);
+    additionalSingularityTime() {
+      return TimeSpan.fromSeconds(this.baseTimeToSingularity * (this.autoSingularityFactor - 1))
+        .toStringShort(false);
     },
-    singularityRate() {
-      const totalTime = this.singularityCap / this.darkEnergyGainPerSecond + this.autoSingularityDelay;
-      const singularitiesPerSecond = this.singularitiesGained / totalTime;
-      if (singularitiesPerSecond < 1 / 60) return `${format(3600 * singularitiesPerSecond, 2, 3)} per hour`;
-      if (singularitiesPerSecond < 1) return `${format(60 * singularitiesPerSecond, 2, 3)} per minute`;
-      return `${format(singularitiesPerSecond, 2, 3)} per second`;
+    manualSingularityRate() {
+      const totalTime = this.singularityCap / this.darkEnergyGainPerSecond;
+      return this.formatRate(this.singularitiesGained / totalTime);
+    },
+    autoSingularityRate() {
+      const totalTime = this.singularityCap / this.darkEnergyGainPerSecond * this.autoSingularityFactor;
+      return this.formatRate(this.singularitiesGained / totalTime);
     }
   },
   template: `
@@ -163,13 +170,18 @@ Vue.component("singularity-container", {
         but also increases gained Singularities by {{ formatX(perStepFactor) }}.
         <br>
         <br>
-        Total time to <span v-if="Number.isFinite(autoSingularityDelay)">(auto-)</span>condense:
-        {{ fullSingularityTime }}
-        <span v-if="Number.isFinite(autoSingularityDelay) && autoSingularityDelay !== 0">
-          (+{{ formatInt(autoSingularityDelay) }} seconds)
+        Total time to <span v-if="hasAutoSingularity">(auto-)</span>condense:
+        {{ baseSingularityTime }}
+        <span v-if="hasAutoSingularity && autoSingularityFactor !== 1">
+          (+{{ additionalSingularityTime }})
         </span>
         <br>
-        Singularity gain rate: {{ singularityRate }}
+        <span v-if="hasAutoSingularity && autoSingularityFactor !== 1">Manual </span>
+        Singularity gain rate: {{ manualSingularityRate }}
+        <br>
+        <span v-if="hasAutoSingularity && autoSingularityFactor !== 1">
+          Automatic Singularity gain rate: {{ autoSingularityRate }}
+        </span>
       </div>
     </div>`
 });
@@ -395,7 +407,7 @@ Vue.component("laitela-autobuyer-settings", {
   methods: {
     update() {
       this.hasDimension = SingularityMilestone.darkDimensionAutobuyers.isUnlocked;
-      this.hasAscension = SingularityMilestone.autoAscend.isUnlocked;
+      this.hasAscension = SingularityMilestone.darkDimensionAutobuyers.isUnlocked;
       this.hasSingularity = SingularityMilestone.autoCondense.isUnlocked;
       const auto = player.celestials.laitela.automation;
       this.dimension = auto.dimensions;

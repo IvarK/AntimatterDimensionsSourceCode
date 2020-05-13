@@ -479,7 +479,6 @@ let player = {
       darkEnergy: 0,
       singularities: 0,
       singularityCapIncreases: 0,
-      secondsSinceReachedSingularity: 0,
       autoAnnihilationSetting: 5,
       // These have inconsistent starting values because default-on isn't necessarily the best behavior for all
       automation: {

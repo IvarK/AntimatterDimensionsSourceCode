@@ -158,7 +158,7 @@ const Laitela = {
         this.maxAllDMDimensions(SingularityMilestone.darkDimensionAutobuyers.effectValue);
       }
       if (laitela.automation.ascension) {
-        for (let i = 1; i <= SingularityMilestone.autoAscend.effectValue; i++) {
+        for (let i = 1; i <= SingularityMilestone.darkDimensionAutobuyers.effectValue; i++) {
           MatterDimension(i).ascend();
         }
       }
@@ -170,11 +170,9 @@ const Laitela = {
         this.annihilate();
     }
 
-    if (Singularity.capIsReached && laitela.automation.singularity) {
-      laitela.secondsSinceReachedSingularity += realDiff / 1000;
-      if (laitela.secondsSinceReachedSingularity >= SingularityMilestone.autoCondense.effectValue) {
+    if (Singularity.capIsReached && laitela.automation.singularity && 
+      laitela.darkEnergy / Singularity.cap >= SingularityMilestone.autoCondense.effectValue) {
         Singularity.perform();
-      }
     }
   },
   reset() {

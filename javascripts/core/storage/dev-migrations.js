@@ -683,6 +683,7 @@ GameStorage.devMigrations = {
       delete player.celestials.laitela.singularityTime;
       delete player.celestials.laitela.autoAnnihilationTimer;
       delete player.celestials.laitela.annihilated;
+      delete player.celestials.laitela.secondsSinceReachedSingularity;
       player.celestials.laitela.darkMatterMult = Math.clampMin(player.celestials.laitela.darkMatterMult, 1);
       player.celestials.laitela.dimensions.forEach(d => d.ascensionCount = 0);
     }

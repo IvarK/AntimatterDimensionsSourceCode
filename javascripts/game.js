@@ -446,7 +446,8 @@ function gameLoop(diff, options = {}) {
         ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
         : 1;
       Enslaved.currentBlackHoleStoreAmountPerMs = Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
-      player.celestials.enslaved.stored += diff * Enslaved.currentBlackHoleStoreAmountPerMs;
+      player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored + 
+        diff * Enslaved.currentBlackHoleStoreAmountPerMs, Enslaved.timeCap);
       speedFactor = reducedTimeFactor;
     }
     diff *= speedFactor;

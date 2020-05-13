@@ -689,18 +689,8 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => formatPercents(x - 1, 2),
     combine: GlyphCombiner.multiply,
   }, {
-    id: "realitydimboost",
-    bitmaskIndex: 6,
-    isGenerated: false,
-    glyphTypes: ["reality"],
-    singleDesc: "Dimension Boost count +{value}",
-    totalDesc: "{value} more Dimension Boosts",
-    effect: level => 1 + Math.pow(level / 100000, 0.5),
-    formatEffect: x => formatPercents(x - 1, 2),
-    combine: GlyphCombiner.multiply,
-  }, {
     id: "realityrow1pow",
-    bitmaskIndex: 7,
+    bitmaskIndex: 6,
     isGenerated: false,
     glyphTypes: ["reality"],
     singleDesc: "Multiplier from Reality Upgrade Amplifiers ^{value}",
@@ -708,6 +698,19 @@ GameDatabase.reality.glyphEffects = [
     effect: level => 1 + level / 125000,
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.addExponents,
+  }, {
+    id: "realityDTglyph",
+    bitmaskIndex: 7,
+    isGenerated: false,
+    glyphTypes: ["reality"],
+    singleDesc: () => `DT scaling for next glyph level: \n^${format(1.3, 1, 1)}
+      ➜ ^(${format(1.3, 1, 1)} + {value})`,
+    totalDesc: () => `DT scaling for next glyph level: ^${format(1.3, 1, 1)}
+      ➜ ^(${format(1.3, 1, 1)} + {value})`,
+    genericDesc: "DT scaling for glyph level",
+    effect: level => Math.pow(level, 0.1) / 20,
+    formatEffect: x => format(x, 3, 3),
+    combine: GlyphCombiner.multiply,
   }, {
     id: "companiondescription",
     bitmaskIndex: 8,

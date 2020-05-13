@@ -134,7 +134,8 @@ GameDatabase.celestials.singularityMilestones = {
     repeat: 0,
     limit: 1,
     description: "Singularities improve the repeatable Dilated Time multiplier upgrade",
-    effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 100,
+    // Note that at ~2.15x this causes a runaway purely because of cost scaling
+    effect: () => 1 + Math.clampMax(Math.log10(player.celestials.laitela.singularities) / 100, 0.8),
     effectFormat: x => `${formatX(2)} ➜ ${formatX(2 * Math.clampMin(x, 1), 2, 2)}`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },

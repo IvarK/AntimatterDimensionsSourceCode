@@ -159,9 +159,9 @@ class GlyphRNG {
   }
 
   normal() {
-    if (this.secondGaussian !== null) {
+    if (this.secondGaussian !== SECOND_GAUSSIAN_DEFAULT_VALUE) {
       const toReturn = this.secondGaussian;
-      this.secondGaussian = null;
+      this.secondGaussian = SECOND_GAUSSIAN_DEFAULT_VALUE;
       return toReturn;
     }
     let u = 0, v = 0, s = 0;

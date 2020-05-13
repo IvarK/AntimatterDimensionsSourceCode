@@ -39,6 +39,9 @@ html {
   --color-reality: #0b600e;
   --color-reality-light: #0ba00e;
   --color-celestials: #5151ec;
+
+  --color-laitela--base: white;
+  --color-laitela--accent: black;
 }
 
 .t-metro #ui-container, /* csslint allow: empty-rules */
@@ -66,6 +69,9 @@ html {
   --color-accent: #1565C0;
 
   --color-infinity: #FF9800;
+
+  --color-laitela--base: black;
+  --color-laitela--accent: white;
 }
 
 .t-dark-metro #ui-container { /* csslint allow: empty-rules */
@@ -81,6 +87,9 @@ html {
   --color-infinity: #FF9800;
   --color-eternity: #673AB7;
   --color-celestials: #00bcd4;
+
+  --color-laitela--base: black;
+  --color-laitela--accent: white;
 }
 
 .t-s1 #ui-container { /* csslint allow: empty-rules */
@@ -114,6 +123,9 @@ html {
   --color-text-inverted: black;
   --color-base: black;
   --color-accent: #1565C0;
+
+  --color-laitela--base: black;
+  --color-laitela--accent: white;
 }
 
 /* end css vars */
@@ -6415,13 +6427,22 @@ kbd {
   width: 22rem;
   padding: 2rem;
   border-radius: 0.5rem;
-  border: 0.2rem solid black;
-  background: white;
+  color: var(--color-laitela--accent);
+  border: 0.2rem solid var(--color-laitela--accent);
+  background: var(--color-laitela--base);
   font-family: Typewriter;
   font-size: 1.2rem;
   cursor: pointer;
   height: 84rem;
   margin-right: 1rem;
+}
+
+.t-metro .o-laitela-run-button,
+.t-dark-metro .o-laitela-run-button,
+.t-inverted-metro .o-laitela-run-button,
+.t-s8 .o-laitela-run-button {
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 .o-laitela-matter-amount {
@@ -6430,14 +6451,23 @@ kbd {
 }
 
 .c-matter-dimension-container {
-  border: 0.2rem solid gainsboro;
-  background: whitesmoke;
+  color: var(--color-laitela--accent);
+  border: 0.2rem solid var(--color-laitela--accent);
+  background: var(--color-laitela--base);
   width: 50rem;
   margin: auto;
   padding: 1rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   height: 15rem;
+}
+
+.t-metro .c-matter-dimension-container,
+.t-dark-metro .c-matter-dimension-container,
+.t-inverted-metro .c-matter-dimension-container,
+.t-s8 .c-matter-dimension-container {
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 .o-matter-dimension-amount {
@@ -6459,45 +6489,66 @@ kbd {
   height: 5rem;
   margin-bottom: 1rem;
   font-family: Typewriter;
-  background: white;
-  border: 0.1rem solid grey;
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
+  border: 0.2rem solid var(--color-laitela--accent);
   border-radius: 0.5rem;
   transition-duration: 0.15s;
 }
 
+.t-metro .o-matter-dimension-button,
+.t-dark-metro .o-matter-dimension-button,
+.t-inverted-metro .o-matter-dimension-button,
+.t-s8 .o-matter-dimension-button {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
 .o-matter-dimension-button--available {
-  background: black;
-  color: white;
+  background: var(--color-laitela--base);
+  color: var(--color-laitela--accent);
+  border-color: var(--color-laitela--accent);
+  box-shadow: 0 0 0.5rem 0.1rem inset, 0 0 0.3rem 0;
   cursor: pointer;
-  border-color: black;
+  font-weight: bold;
 }
 
 .o-matter-dimension-button--available:hover {
-  color: black;
-  background: white;
+  color: var(--color-laitela--base);
+  background: var(--color-laitela--accent);
+  text-shadow: 0 0 0.3rem;
+  box-shadow: none;
 }
 
 .o-matter-dimension-button--ascend {
-  background: black;
-  color: white;
+  color: var(--color-laitela--base);
+  background: var(--color-laitela--accent);
+  border-color: var(--color-laitela--accent);
+  box-shadow: 0 0 0.5rem 0.1rem inset, 0 0 0.3rem 0;
   cursor: pointer;
-  border-color: black;
+  font-weight: bold;
   animation: 3s a-laitela-flash infinite;
 }
 
 @keyframes a-laitela-flash {
   0% {
-    color: black;
-    background: white;
+    color: var(--color-laitela--base);
+    background: var(--color-laitela--accent);
   }
   50% {
-    color: white;
-    background: black;
+    color: var(--color-laitela--accent);
+    background: var(--color-laitela--base);
   }
   100% {
-    color: black;
-    background: white;
+    color: var(--color-laitela--base);
+    background: var(--color-laitela--accent);
   }
+}
+
+.o-matter-dimension-button--ascend:hover {
+  color: var(--color-laitela--base);
+  background: var(--color-laitela--accent);
+  animation: none;
 }
 
 .l-laitela-unlocks-container {
@@ -6531,32 +6582,28 @@ kbd {
   margin: 0 0.5rem;
 }
 
-.o-laitela-shop-button {
-  width: 22rem;
-  padding: 1rem;
-  background: white;
-  border: 0.2rem solid black;
-  border-radius: 0.5rem;
-  margin-left: 1rem;
-  margin-bottom: 2rem;
-  font-family: Typewriter;
-  min-height: 17.8rem;
-}
-
 .c-laitela-milestone {
   height: 16%;
   width: 22rem;
-  background: white;
+  background: var(--color-laitela--base);
   padding: 0.6rem;
   margin: 1rem 0 0;
   border-radius: 0.5rem;
-  border: .2rem solid black;
+  border: 0.2rem solid;
   position: relative;
   z-index: -2;
-  color: black;
+  color: var(--color-laitela--accent);
 }
 
-.l-singularity-milestone-modal-container .c-laitela-milestone {
+.t-metro .c-laitela-milestone,
+.t-dark-metro .c-laitela-milestone,
+.t-inverted-metro .c-laitela-milestone,
+.t-s8 .c-laitela-milestone {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.l-singularity-milestone-modal-container-inner .c-laitela-milestone {
   box-shadow: 0.1rem 0.1rem 0.3rem black;
 }
 
@@ -6572,11 +6619,12 @@ kbd {
   box-shadow: none;
 }
 
-.l-laitela-singularity-container {
-  background: white;
+.c-laitela-singularity-container {
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
   width: 96rem;
   margin: auto;
-  border: 0.2rem solid black;
+  border: 0.2rem solid var(--color-laitela--accent);
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   display: flex;
@@ -6586,14 +6634,34 @@ kbd {
   margin-top: 1rem;
 }
 
+.t-metro .c-laitela-singularity-container,
+.t-dark-metro .c-laitela-singularity-container,
+.t-inverted-metro .c-laitela-singularity-container,
+.t-s8 .c-laitela-singularity-container {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.c-laitela-singularity-container h2 {
+  color: var(--color-laitela--accent);
+}
+
 .c-laitela-singularity {
   padding: 2rem;
   width: 40rem;
   height: 11rem;
   background: black;
-  border: .2rem solid transparent;
+  border: 0.2rem solid white;
   border-radius: 0.5rem;
   transition-duration: 0.15s;
+}
+
+.t-metro .c-laitela-singularity,
+.t-dark-metro .c-laitela-singularity,
+.t-inverted-metro .c-laitela-singularity,
+.t-s8 .c-laitela-singularity {
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 .c-laitela-singularity h2 {
@@ -6610,7 +6678,7 @@ kbd {
 
 .c-laitela-singularity--active:hover {
   background: white;
-  border: .2rem solid black;
+  border-color: black;
 }
 
 .c-laitela-singularity--active:hover h2 {
@@ -6618,11 +6686,12 @@ kbd {
 }
 
 .c-laitela-singularity__cap-control {
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
   padding: 1rem;
   width: 20rem;
   margin-bottom: 1rem;
-  background: white;
-  border: .2rem solid black;
+  border: 0.2rem solid var(--color-laitela--accent);
   border-radius: .5rem;
   cursor: pointer;
   font-family: Typewriter;
@@ -6631,9 +6700,17 @@ kbd {
   transition-duration: 0.15s;
 }
 
+.t-metro .c-laitela-singularity__cap-control,
+.t-dark-metro .c-laitela-singularity__cap-control,
+.t-inverted-metro .c-laitela-singularity__cap-control,
+.t-s8 .c-laitela-singularity__cap-control {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
 .c-laitela-singularity__cap-control:hover {
-  background: black;
-  color: white;
+  color: var(--color-laitela--base);
+  background: var(--color-laitela--accent);
 }
 
 .l-singularity-milestone-modal-container-outer {
@@ -6651,22 +6728,30 @@ kbd {
 }
 
 .o-laitela-singularity-modal-button {
-  background: white;
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
   padding: 0.6rem;
   margin: 0;
-  color: black;
   font-weight: bold;
   width: 22rem;
   height: 4%;
   border-radius: .5rem;
-  border: .2rem solid black;
+  border: 0.2rem solid var(--color-laitela--accent);
   cursor: pointer;
   transition-duration: 0.15s;
 }
 
+.t-metro .o-laitela-singularity-modal-button,
+.t-dark-metro .o-laitela-singularity-modal-button,
+.t-inverted-metro .o-laitela-singularity-modal-button,
+.t-s8 .o-laitela-singularity-modal-button {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
 .o-laitela-singularity-modal-button:hover {
-  color: white;
-  background: black;
+  color: var(--color-laitela--base);
+  background: var(--color-laitela--accent);
 }
 
 .c-laitela-next-milestones {
@@ -6682,45 +6767,18 @@ kbd {
   100% { box-shadow: 0 0 0 rgb(53, 10, 53); }
 }
 
-.o-laitela-shop-button--dark-energy {
-  width: 22rem;
-  padding: 1rem;
-  background: white;
-  border: 0.2rem solid black;
-  border-radius: 0.5rem;
-  margin-left: 1rem;
-  margin-bottom: 2rem;
-  font-family: Typewriter;
-  animation: 5s a-dark-energy-glow infinite;
-}
-
-.o-laitela-shop-button--available {
-  background: black;
-  color: white;
-  cursor: pointer;
-}
-
-.o-laitela-shop-button--bought {
-  background: #16c55e;
-}
-
 .o-laitela-run-button__icon {
   height: 12rem;
   width: 12rem;
   border-radius: 50%;
-  background-color: #000000;
-  display: flex;
+  background-color: black;
   background-image: url(../images/laitela-icon.svg);
   background-position: center;
   background-repeat-x: no-repeat;
-  justify-content: center;
-  background-size: 49.5px;
+  background-size: 4.95rem;
   align-items: center;
-  font-size: 11rem;
   margin: 1.5rem auto;
-  border: 4px solid black;
-  color: white;
-  text-shadow: 1px 1px 10px black;
+  border: 0.4rem solid var(--color-laitela--accent);
   animation: a-laitela-run-button__icon--scroll 15s infinite linear;
   transition-duration: 0.2s;
 }
@@ -6766,11 +6824,12 @@ kbd {
 }
 
 .c-laitela-automation-toggle {
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
   padding: 0.5rem;
   width: 20rem;
   height: 3rem;
-  background: white;
-  border: .2rem solid black;
+  border: 0.2rem solid var(--color-laitela--accent);
   border-radius: .5rem;
   cursor: pointer;
   font-family: Typewriter;
@@ -6780,7 +6839,8 @@ kbd {
 }
 
 .c-laitela-automation-toggle:hover {
-  background: black;
+  color: var(--color-laitela--base) !important;
+  background: var(--color-laitela--accent) !important;
 }
 
 /* #endregion laitela tab*/

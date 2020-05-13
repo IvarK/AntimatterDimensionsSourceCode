@@ -133,8 +133,8 @@ Vue.component("singularity-container", {
     }
   },
   template: `
-    <div class="l-laitela-singularity-container">
-      <div class="l-laitela-singularity-container--left">
+    <div class="c-laitela-singularity-container">
+      <div>
         <h2>
           You have {{ format(singularities, 2, 0) }} {{ "Singularity" | pluralize(singularities, "Singularities")}}
         </h2>
@@ -147,7 +147,7 @@ Vue.component("singularity-container", {
           <h2>{{ singularityWaitText }}</h2>
         </button>
       </div>
-      <div class="l-laitela-singularity-container--right">
+      <div>
         <div class="o-laitela-matter-amount">
           You have {{ format(darkEnergy, 2, 4) }} Dark Energy. (+{{ format(darkEnergyGainPerSecond, 2, 4) }}/s)
         </div>
@@ -419,7 +419,7 @@ Vue.component("laitela-autobuyer-settings", {
     },
   },
   template: `
-    <div class="l-laitela-singularity-container">
+    <div class="c-laitela-singularity-container">
       <primary-button-on-off
         v-if="hasDimension"
         v-model="dimension"

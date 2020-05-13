@@ -14,6 +14,9 @@
   --color-accent: rgb(223, 80, 80);
   --color-good: #1bbb36;
   --color-good-dark: #138626;
+
+  --color-laitela--base: black;
+  --color-laitela--accent: white;
 }
 
 body.t-normal {
@@ -196,15 +199,7 @@ body.t-normal {
 .game-container h4, 
 .game-container h5,
 .game-container h6 {
-  color: var(--color-text);;
-}
-
-.c-laitela-singularity h2 {
-  color: white;
-}
-
-.c-laitela-singularity--active:hover h2 {
-  color: black;
+  color: var(--color-text);
 }
 
 .l-reset-buttons-container {
@@ -497,6 +492,20 @@ body.t-normal {
 .c-subtab-option-container {
   border-color: var(--color-good);
   border-width: 0.1rem;
+}
+
+.c-laitela-singularity h2 {
+  color: white;
+}
+
+.c-laitela-singularity--active:hover h2 {
+  color: black;
+}
+
+.c-laitela-automation-toggle {
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
+  border-color: var(--color-laitela--accent);
 }
 
 .c-challenge-box--normal {

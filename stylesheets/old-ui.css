@@ -55,6 +55,7 @@
   font-size: 5rem;
   width: 36rem;
   height: 10rem;
+  z-index: 1;
 }
 
 .l-old-ui-normal-dim-tab {

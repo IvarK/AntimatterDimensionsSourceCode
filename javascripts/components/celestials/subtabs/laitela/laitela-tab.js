@@ -289,7 +289,8 @@ Vue.component("annihilation-button", {
       matterRequirement: 0,
       darkMatterMultRatio: 0,
       autoAnnihilationInput: player.celestials.laitela.autoAnnihilationSetting,
-      isEnabled: true
+      isEnabled: true,
+      isMouseoverDisabled: false
     };
   },
   methods: {
@@ -304,6 +305,7 @@ Vue.component("annihilation-button", {
       this.isEnabled = player.celestials.laitela.automation.annihilation;
     },
     annihilate() {
+      if (this.isMouseoverDisabled) return;
       Laitela.annihilate();
     },
     handleAutoAnnihilationInputChange() {
@@ -352,6 +354,8 @@ Vue.component("annihilation-button", {
           <input type="text"
             v-model="autoAnnihilationInput"
             @change="handleAutoAnnihilationInputChange()"
+            @mouseover="isMouseoverDisabled = true"
+            @mouseleave="isMouseoverDisabled = false"
             :style="annihilationInputStyle"/>
           to the multiplier.
         </div>

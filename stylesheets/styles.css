@@ -6552,14 +6552,6 @@ kbd {
   animation: none;
 }
 
-.o-matter-dimension-button--ascend {
-  background: black;
-  color: white;
-  cursor: pointer;
-  border-color: black;
-  animation: 3s a-laitela-flash infinite;
-}
-
 @keyframes a-laitela-flash {
   0% {
     color: black;
@@ -6575,35 +6567,10 @@ kbd {
   }
 }
 
-.l-laitela-unlocks-container {
-  width: 52rem;
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .l-laitela-mechanics-container {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-}
-
-.l-laitela-mechanics-lower {
-  display: flex;
-  justify-content: center;
-}
-
-.l-laitela-buttons-container {
-  display: flex;
-}
-
-.l-laitela-dark-energy-upgrades {
-  width: 52rem;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.l-laitela-buttons-container > * {
-  margin: 0 0.5rem;
 }
 
 .c-laitela-milestone {
@@ -6798,7 +6765,7 @@ kbd {
   background-color: black;
   background-image: url(../images/laitela-icon.svg);
   background-position: center;
-  background-repeat-x: no-repeat;
+  background-repeat: repeat-y;
   background-size: 4.95rem;
   align-items: center;
   margin: 1.5rem auto;

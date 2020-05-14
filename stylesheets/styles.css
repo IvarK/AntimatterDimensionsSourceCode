@@ -6822,16 +6822,25 @@ kbd {
 }
 
 .c-laitela-annihilation-button {
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
   padding: 1rem;
   width: 50rem;
   height: 20rem;
-  background: white;
-  border: 0.2rem solid black;
+  border: 0.2rem solid var(--color-laitela--accent);
   border-radius: 0.5rem;
   font-family: Typewriter, serif;
   cursor: pointer;
   transition-duration: 0.3s;
   display: block;
+}
+
+.t-metro .c-laitela-annihilation-button,
+.t-dark-metro .c-laitela-annihilation-button,
+.t-inverted-metro .c-laitela-annihilation-button
+.t-s8 .c-laitela-annihilation-button {
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 .c-laitela-annihilation-button h2 {
@@ -6843,8 +6852,8 @@ kbd {
 }
 
 .c-laitela-annihilation-button:hover {
-  background: black;
-  color: white !important; /* h2 color overrides this */
+  background: var(--color-laitela--accent);
+  color: var(--color-laitela--base) !important; /* h2 color overrides this */
 }
 
 .c-laitela-automation-toggle {

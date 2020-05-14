@@ -37,7 +37,7 @@ Vue.component("laitela-tab", {
       </div>
       <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter.</div>
       <div class="o-laitela-matter-amount">Your maximum Dark Matter ever is {{ format(maxMatter.floor(), 2, 0) }},
-      giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from continuum.</div>
+      giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from Continuum.</div>
       <singularity-container />
       <div class="l-laitela-mechanics-container">
         <laitela-run-button />
@@ -118,10 +118,10 @@ Vue.component("singularity-container", {
       if (this.canPerformSingularity) {
         singularityTime += this.singularityCap * (this.autoSingularityFactor - 1) / this.darkEnergyGainPerSecond;
         return this.isAutoEnabled
-          ? `(Auto-condensing in ${TimeSpan.fromSeconds(singularityTime).toStringShort(false)})`
+          ? `(auto-condensing in ${TimeSpan.fromSeconds(singularityTime).toStringShort(false)})`
           : "";
       }
-      return `(Enough Dark Energy in ${TimeSpan.fromSeconds(singularityTime).toStringShort(false)})`;
+      return `(enough Dark Energy in ${TimeSpan.fromSeconds(singularityTime).toStringShort(false)})`;
     },
     baseSingularityTime() {
       return TimeSpan.fromSeconds(this.baseTimeToSingularity).toStringShort(false);
@@ -165,7 +165,7 @@ Vue.component("singularity-container", {
           Increase Singularity cap.
         </button>
         <br>
-        Each step increases the required Dark Energy by {{ formatX(10) }}
+        Each step increases the required Dark Energy by {{ formatX(10) }},
         <br>
         but also increases gained Singularities by {{ formatX(perStepFactor) }}.
         <br>
@@ -235,8 +235,8 @@ Vue.component("laitela-run-button", {
         <br>
         <br>
       </div>
-      IP and EP gain are dilated. Game speed is reduced to 1 and gradually comes back over 10 minutes,
-      Black Hole discharging and pulsing are disabled.
+      Infinity Point and Eternity Point gain are dilated. Game speed is reduced to 1 and gradually comes back over 
+      10 minutes, and Black Hole discharging and pulsing is disabled.
       <br>
       <br>
       Antimatter generates entropy inside of this Reality. At 100% entropy, the Reality becomes destabilized and

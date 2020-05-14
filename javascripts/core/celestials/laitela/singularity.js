@@ -61,7 +61,7 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get effectDisplay() {
-    if (this.effectValue === Infinity) return "N/A";
+    if (this.effectValue === Infinity || this.effectValue === -Infinity) return "N/A";
     return this.config.effectFormat(this.effectValue);
   }
 

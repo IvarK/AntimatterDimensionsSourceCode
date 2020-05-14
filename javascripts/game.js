@@ -544,7 +544,7 @@ function gameLoop(diff, options = {}) {
   player.totalTickGained += gain;
 
   const currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinityRealTime.totalMinutes);
-  if (currentIPmin.gt(player.bestIPminThisInfinity) && canCrunch()) player.bestIPminThisInfinity = currentIPmin;
+  if (currentIPmin.gt(player.bestIPminThisInfinity) && Player.canCrunch) player.bestIPminThisInfinity = currentIPmin;
 
   tryUnlockInfinityChallenges();
 
@@ -559,7 +559,7 @@ function gameLoop(diff, options = {}) {
   if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
 
   const currentEPmin = gainedEternityPoints().dividedBy(Time.thisEternityRealTime.totalMinutes);
-  if (currentEPmin.gt(player.bestEPminThisEternity) && canEternity()) player.bestEPminThisEternity = currentEPmin;
+  if (currentEPmin.gt(player.bestEPminThisEternity) && Player.canEternity) player.bestEPminThisEternity = currentEPmin;
 
   if (PlayerProgress.dilationUnlocked()) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));

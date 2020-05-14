@@ -21,7 +21,8 @@ Vue.component("old-ui", {
   methods: {
     update() {
       const challenge = NormalChallenge.current || InfinityChallenge.current;
-      if (!this.canCrunch() || (player.break && challenge === undefined)) {
+      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
+      if (!Player.canCrunch || Tabs.current !== Tab.dimensions || inBrokenChallenge || (player.break && challenge === undefined)) {
         this.bigCrunch = false;
         this.smallCrunch = false;
         return;
@@ -29,15 +30,6 @@ Vue.component("old-ui", {
       this.smallCrunch = true;
       const endOfChallenge = challenge !== undefined && !player.options.retryChallenge;
       this.bigCrunch = endOfChallenge || Time.thisInfinityRealTime.totalMinutes > 1;
-    },
-    canCrunch() {
-      if (Enslaved.isRunning && NormalChallenge.isRunning &&
-        !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(NormalChallenge.current.id)) {
-        return true;
-      }
-      const challenge = NormalChallenge.current || InfinityChallenge.current;
-      const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
-      return player.thisInfinityMaxAM.gte(goal);
     }
   },
   template: `

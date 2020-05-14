@@ -81,9 +81,9 @@ Vue.component("new-ui", {
       this.updateCelestial();
       this.updateChallengeDisplay();
 
-      const canCrunch = this.canCrunch();
       const challenge = NormalChallenge.current || InfinityChallenge.current;
-      if (!canCrunch || Tabs.current !== Tab.dimensions || (player.break && challenge === undefined)) {
+      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
+      if (!Player.canCrunch || Tabs.current !== Tab.dimensions || inBrokenChallenge || (player.break && challenge === undefined)) {
         this.bigCrunch = false;
         this.smallCrunch = false;
         return;
@@ -123,15 +123,6 @@ Vue.component("new-ui", {
       else if (PlayerProgress.infinityUnlocked()) {
         this.challengeDisplay = "the Antimatter Universe (no active challenges)";
       } else this.challengeDisplay = "";
-    },
-    canCrunch() {
-      if (Enslaved.isRunning && NormalChallenge.isRunning &&
-        !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(NormalChallenge.current.id)) {
-        return true;
-      }
-      const challenge = NormalChallenge.current || InfinityChallenge.current;
-      const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
-      return player.thisInfinityMaxAM.gte(goal);
     }
   },
   template:

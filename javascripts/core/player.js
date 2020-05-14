@@ -589,6 +589,17 @@ const Player = {
     return new Decimal(0);
   },
 
+  get canCrunch() {
+    if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)) return true
+    const challenge = NormalChallenge.current || InfinityChallenge.current;
+    const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
+    return player.thisInfinityMaxAM.gte(goal);
+  },
+
+  get canEternity() {
+    return player.infinityPoints.gte(Player.eternityGoal);
+  },
+
   get bestRunIPPM() {
     return GameCache.bestRunIPPM.value;
   },

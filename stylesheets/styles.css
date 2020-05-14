@@ -662,14 +662,8 @@ button:focus {
     opacity: 1;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    color: #222;
-    margin: 0 0 20px;
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 1rem;
 }
 
 p,
@@ -680,25 +674,12 @@ dl {
     margin: 0 0 3px;
 }
 
-h1,
-h2,
-h3 {
-    line-height: 1.1;
+h1, h2, h3 {
+  line-height: 1.1;
 }
 
 h1 {
     font-size: 28px;
-}
-
-h2 {
-    color: #393939;
-}
-
-h3,
-h4,
-h5,
-h6 {
-    color: #494949;
 }
 
 a {
@@ -4737,7 +4718,7 @@ screen and (max-width: 480px) {
 /*#region c-modal-import*/
 
 .c-modal-import {
-  width: 47.5rem;
+  width: 48rem;
 }
 
 .c-modal-import__save-info > div {
@@ -4761,7 +4742,7 @@ screen and (max-width: 480px) {
 /*#region c-modal-import-tree*/
 
 .c-modal-import-tree {
-  width: 47.5rem;
+  width: 48rem;
 }
 
 .l-modal-import-tree__tree-info-line {

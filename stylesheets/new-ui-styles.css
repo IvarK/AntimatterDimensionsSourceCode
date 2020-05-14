@@ -107,6 +107,11 @@ body.t-normal {
   background-color: rgb(49, 49, 49)
 }
 
+.t-normal .c-modal {
+  background-color: #1d1b22;
+  box-shadow: 0 0 1.5rem 0 black;
+}
+
 .o-tab-btn {
   height: 4.6rem;
   border-width: 0.1rem;

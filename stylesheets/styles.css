@@ -807,8 +807,7 @@ header ul a:active {
 }
 
 strong {
-    color: #222;
-    font-weight: 700;
+  font-weight: 700;
 }
 
 header ul li+li+li {
@@ -4612,11 +4611,11 @@ screen and (max-width: 480px) {
 /*#region c-modal*/
 
 .c-modal {
-  border: 0.3rem solid black;
+  color: var(--color-text);
   background-color: #e0e0e0;
+  border: 0.3rem solid black;
   border-radius: 0.6rem;
   text-align: center;
-  color: black;
   font-family: Typewriter, serif;
   font-size: 1.4rem;
   padding: 1rem;
@@ -4667,7 +4666,8 @@ screen and (max-width: 480px) {
 .t-dark-metro .c-modal,
 .t-inverted-metro .c-modal,
 .t-s8 .c-modal {
-  border: 0.1rem solid black;
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 /*#endregion t-metro t-dark-metro t-inverted-metro t-s8 */

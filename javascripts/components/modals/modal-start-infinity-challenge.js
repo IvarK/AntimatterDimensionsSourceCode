@@ -2,28 +2,34 @@
 
 Vue.component("modal-start-infinity-challenge", {
   computed: {
+    challengeIsCompleted() {
+      return InfinityChallenge(this.modal.id).isCompleted;
+    },
     modal() {
       return this.$viewModel.modal.current;
     },
     message() {
         return "You will Big Crunch, if possible, and will start a new Infinity within the challenge, " + 
-        `with all the restrictions and modifiers that entails. Upon reaching ` +
-        `${format(InfinityChallenge(this.modal.id).goal)} Antimatter, ` + 
-        `you can Big Crunch for the reward. ` +
-        "You do not start with any Dimensions or Galaxies, regardless of other upgrades." +
-        ` The reward for completing Infinity Challenge ${this.modal.id} is:`;
+        "with all the restrictions and modifiers that entails. Upon reaching the goal " +
+        `(${format(InfinityChallenge(this.modal.id).goal)} Antimatter for this challenge), ` + 
+        `you can Big Crunch${this.challengeIsCompleted ? "" : " for the reward"}. ` +
+        "You do not start with any dimensions or galaxies, regardless of upgrades.";
     },
-    enteringWhatIC() {
+    entranceLabel() {
       return `You are about to enter Infinity Challenge ${this.modal.id}`;
     },
-    ICReward() {
-      return `${InfinityChallenge(2).reward._config.description}`;
+    reward() {
+      let rewardDescription = InfinityChallenge(this.modal.id)._config.reward.description;
+      if (typeof rewardDescription === "function") {
+        rewardDescription = rewardDescription();
+      }
+      return `The reward for completing this challenge is: ${rewardDescription}`;
     }
   },
   methods: {
     handleYesClick() {
-        InfinityChallenge(this.modal.id).start();
-        this.emitClose();
+      InfinityChallenge(this.modal.id).start();
+      this.emitClose();
     },
     handleNoClick() {
       this.emitClose();
@@ -31,13 +37,14 @@ Vue.component("modal-start-infinity-challenge", {
   },
   template:
     `<div class="c-modal-message l-modal-content--centered">
-    <h2>{{ enteringWhatIC }}</h2>
+    <h2>{{ entranceLabel }}</h2>
       <div class="c-modal-message__text">
         {{ message }}
       </div>
+      <div v-if="!challengeIsCompleted" class="c-modal-message__text">
       <br>
-      <div class="c-modal=message__text">
-      {{ ICReward }}
+      {{ reward }}
+      </div>
       <div class="l-options-grid__row">
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
@@ -47,7 +54,6 @@ Vue.component("modal-start-infinity-challenge", {
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleYesClick"
         >Begin</primary-button>
-        </div>
       </div>
     </div>`
 });

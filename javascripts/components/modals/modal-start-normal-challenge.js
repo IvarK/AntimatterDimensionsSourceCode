@@ -2,6 +2,9 @@
 
 Vue.component("modal-start-normal-challenge", {
   computed: {
+    challengeIsCompleted() {
+      return NormalChallenge(this.modal.id).isCompleted;
+    },
     modal() {
       return this.$viewModel.modal.current;
     },
@@ -9,20 +12,19 @@ Vue.component("modal-start-normal-challenge", {
         return "You will Big Crunch, if possible, and will start a new Infinity within the challenge, " + 
         "with all the restrictions and modifiers that entails. Upon reaching Infinity, " +
         "you can complete the Challenge, which grants you the reward. " + 
-        "You do not start with any Dimensions or Galaxies, regardless of other upgrades. " +
-        "When you complete the challenge, your reward is:";
+        "You do not start with any dimensions or galaxies, regardless of upgrades.";
     },
-    enteringWhatC() {
+    entranceLabel() {
       return `You are about to enter Challenge ${this.modal.id}`;
     },
-    CReward() {
-      return `${NormalChallenge(this.modal.id)._config.reward}`;
+    reward() {
+      return `The reward for completing this challenge is: ${NormalChallenge(this.modal.id)._config.reward}`;
     }
   },
   methods: {
     handleYesClick() {
-        NormalChallenge(this.modal.id).start();
-        this.emitClose();
+      NormalChallenge(this.modal.id).start();
+      this.emitClose();
     },
     handleNoClick() {
       this.emitClose();
@@ -30,12 +32,13 @@ Vue.component("modal-start-normal-challenge", {
   },
   template:
     `<div class="c-modal-message l-modal-content--centered">
-    <h2>{{ enteringWhatC }}</h2>
+    <h2>{{ entranceLabel }}</h2>
       <div class="c-modal-message__text">
         {{ message }}
       </div>
-      <div class="c-modal-message__text">
-      {{ CReward }}
+      <div v-if="!challengeIsCompleted" class="c-modal-message__text">
+      <br>
+      {{ reward }}
       </div>
       <div class="l-options-grid__row">
         <primary-button

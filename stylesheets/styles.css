@@ -4710,7 +4710,7 @@ screen and (max-width: 480px) {
 }
 
 .c-modal-message__okay-btn {
-  margin-top: 1rem;
+  margin: 1rem 0.5rem 0;
 }
 
 /*#endregion c-modal-message*/

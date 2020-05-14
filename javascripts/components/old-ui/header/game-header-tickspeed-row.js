@@ -74,17 +74,18 @@ Vue.component("game-header-tickspeed-row", {
         <primary-button
           :enabled="isAffordable"
           class="o-primary-btn--tickspeed"
+          :style="{ width: isContinuumActive ? '25rem' : ''}"
           onclick="buyTickSpeed()">
-          <span v-if="isContinuumActive">Cont: {{continuumString}}</span>
-          <span v-else-if="showCostTitle">Cost: {{format(cost)}}</span>
-          <span v-else>{{format(cost)}}<br></span>
+            <span v-if="isContinuumActive">Continuum: {{continuumString}}</span>
+            <span v-else-if="showCostTitle">Cost: {{format(cost)}}</span>
+            <span v-else>{{format(cost)}}<br></span>
         </primary-button>
         <primary-button
+          v-if="!isContinuumActive"
           :enabled="isAffordable"
           class="o-primary-btn--buy-max"
           onclick="buyMaxTickSpeed()">
-            <span v-if="isContinuumActive">Continuum</span>
-            <span v-else>Buy Max</span>
+            Buy Max
         </primary-button>
       </div>
       <div>{{tickspeedDisplay}} <game-header-gamespeed-display v-if="!isGameSpeedNormal"/></div>

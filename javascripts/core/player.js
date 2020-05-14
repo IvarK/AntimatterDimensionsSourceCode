@@ -505,6 +505,7 @@ let player = {
     showAllChallenges: false,
     bulkOn: true,
     autobuyersOn: true,
+    disableContinuum: false,
     cloudEnabled: true,
     hotkeys: true,
     theme: "Normal",

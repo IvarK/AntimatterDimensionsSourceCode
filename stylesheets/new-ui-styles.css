@@ -198,15 +198,6 @@ body.t-normal {
   border-radius: 0 !important;
 }
 
-.game-container h1, 
-.game-container h2, 
-.game-container h3, 
-.game-container h4, 
-.game-container h5,
-.game-container h6 {
-  color: var(--color-text);
-}
-
 .l-reset-buttons-container {
   position: relative;
   min-height: 8rem;
@@ -497,14 +488,6 @@ body.t-normal {
 .c-subtab-option-container {
   border-color: var(--color-good);
   border-width: 0.1rem;
-}
-
-.c-laitela-singularity h2 {
-  color: white;
-}
-
-.c-laitela-singularity--active:hover h2 {
-  color: black;
 }
 
 .c-laitela-automation-toggle {

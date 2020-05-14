@@ -6647,15 +6647,12 @@ kbd {
   border-radius: 0;
 }
 
-.c-laitela-singularity-container h2 {
-  color: var(--color-laitela--accent);
-}
-
 .c-laitela-singularity {
+  color: white;
+  background: black;
   padding: 2rem;
   width: 40rem;
   height: 11rem;
-  background: black;
   border: 0.2rem solid white;
   border-radius: 0.5rem;
   transition-duration: 0.15s;
@@ -6671,10 +6668,8 @@ kbd {
 
 .c-laitela-singularity h2 {
   margin: 0;
-  color: white;
   font-family: Typewriter;
   font-size: 1.5rem;
-  transition-duration: 0.15s;
 }
 
 .c-laitela-singularity--active {
@@ -6682,12 +6677,9 @@ kbd {
 }
 
 .c-laitela-singularity--active:hover {
+  color: black;
   background: white;
   border-color: black;
-}
-
-.c-laitela-singularity--active:hover h2 {
-  color: black;
 }
 
 .c-laitela-singularity__cap-control {

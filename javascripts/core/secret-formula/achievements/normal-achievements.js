@@ -1135,8 +1135,8 @@ GameDatabase.achievements.normal = [
   {
     id: 173,
     name: "The First Antihistorian",
-    tooltip: () => `Get ${formatInt(25000)} of all alchemy resources.`,
-    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= 25000),
+    tooltip: () => `Get ${formatInt(Ra.alchemyResourceCap)} of all alchemy resources.`,
+    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {

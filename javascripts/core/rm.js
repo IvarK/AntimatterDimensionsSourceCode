@@ -8,7 +8,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
-  "realityglyphlevel", "realitygalaxies", "realitydimboost", "realityrow1pow",
+  "realityglyphlevel", "realitygalaxies", "realityrow1pow", "realityDTglyph",
   "companiondescription", "companionEP", "companionreduction"];
 const generatedTypes = ["power", "infinity", "replication", "time", "dilation", "effarig"];
 
@@ -1160,7 +1160,8 @@ function getGlyphLevelSources() {
   // 0.025148668593658708 comes from 1/Math.sqrt(100000 / Math.sqrt(4000)), but really, the
   // factors assigned to repl and dt can be arbitrarily tuned
   const replBase = Math.pow(Math.max(1, player.replicanti.amount.log10()), replPow) * 0.02514867;
-  const dtBase = Math.pow(Math.max(1, player.dilation.dilatedTime.pLog10()), 1.3) * 0.02514867;
+  const dtPow = 1.3 + getAdjustedGlyphEffect("realityDTglyph");
+  const dtBase = Math.pow(Math.max(1, player.dilation.dilatedTime.pLog10()), dtPow) * 0.02514867;
   const eterBase = Effects.max(1, RealityUpgrade(18));
   return { epBase, replBase, dtBase, eterBase };
 }
@@ -1204,7 +1205,9 @@ function getGlyphLevelInputs() {
   const shardFactor = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) ? RA_UNLOCKS.SHARD_LEVEL_BOOST.effect() : 0;
   let baseLevel = epEffect * replEffect * dtEffect * eterEffect * perkShopEffect + shardFactor;
 
-  const singularityEffect = SingularityMilestone(18).isUnlocked ? SingularityMilestone(18).effectValue : 1;
+  const singularityEffect = SingularityMilestone.glyphLevelFromSingularities.isUnlocked
+    ? SingularityMilestone.glyphLevelFromSingularities.effectValue
+    : 1;
   baseLevel *= singularityEffect;
 
   let scaledLevel = baseLevel;

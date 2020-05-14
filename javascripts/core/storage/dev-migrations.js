@@ -598,7 +598,7 @@ GameStorage.devMigrations = {
     player => {
       for (let i = 0; i < player.celestials.ra.alchemy.length; i++) {
         player.celestials.ra.alchemy[i].amount = Math.clampMax(
-          player.celestials.ra.alchemy[i].amount, 25000);
+          player.celestials.ra.alchemy[i].amount, Ra.alchemyResourceCap);
       }
     },
     player => {
@@ -682,6 +682,17 @@ GameStorage.devMigrations = {
         // (as a special case of not using state accessors).
         player.reality.secondGaussian = 1e6;
       }
+    },
+    player => {
+      delete player.celestials.laitela.reachedSingularityCapLimit;
+      delete player.celestials.laitela.secondsSinceCappedTime;
+      delete player.celestials.laitela.singularityAutoCapLimit;
+      delete player.celestials.laitela.singularityTime;
+      delete player.celestials.laitela.autoAnnihilationTimer;
+      delete player.celestials.laitela.annihilated;
+      delete player.celestials.laitela.secondsSinceReachedSingularity;
+      player.celestials.laitela.darkMatterMult = Math.clampMin(player.celestials.laitela.darkMatterMult, 1);
+      player.celestials.laitela.dimensions.forEach(d => d.ascensionCount = 0);
     }
   ],
 

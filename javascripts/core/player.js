@@ -448,6 +448,7 @@ let player = {
           amount: 0,
           reaction: false
         })),
+      momentumTime: 0,
       unlocksBits: 0,
       run: false,
       charged: new Set(),
@@ -466,25 +467,28 @@ let player = {
         intervalUpgrades: 0,
         powerDMUpgrades: 0,
         powerDEUpgrades: 0,
-        timeSinceLastUpdate: 0
+        timeSinceLastUpdate: 0,
+        ascensionCount: 0
       })),
+      darkAutobuyerTimer: 0,
       entropy: 0,
       thisCompletion: 3600,
       fastestCompletion: 3600,
       difficultyTier: 0,
-      annihilated: false,
       upgrades: {},
-      darkMatterMult: 0,
+      darkMatterMult: 1,
       darkEnergy: 0,
       singularities: 0,
       singularityCapIncreases: 0,
-      secondsSinceReachedSingularity: 0,
-      singularityAutoCapLimit: 30,
-      singularityTime: 99999999999,
-      secondsSinceCappedTime: 0,
-      reachedSingularityCapLimit: false,
       autoAnnihilationSetting: 5,
-      autoAnnihilationTimer: 0
+      // These have inconsistent starting values because default-on isn't necessarily the best behavior for all
+      automation: {
+        dimensions: true,
+        ascension: false,
+        singularity: true,
+        annihilation: false
+      },
+      lastCheckedMilestones: 0
     }
   },
   tabNotifications: new Set(),

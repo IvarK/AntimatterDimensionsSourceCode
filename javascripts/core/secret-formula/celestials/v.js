@@ -159,15 +159,16 @@ GameDatabase.celestials.v = {
       id: 2,
       STCost: 12,
       requirement: [223, 224, 232],
-      description: "Multiply the distant galaxy scaling threshold by 2x",
-      effect: 2,
+      description: () => `Distant galaxy scaling threshold starts another ${formatInt(3000)} later`,
+      effect: 3000,
       unlocked: () => Ra.pets.v.level >= 10
     },
     {
       id: 3,
       STCost: 12,
       requirement: [225, 226, 233],
-      description: "Your extra RGs are multiplied by 1.5x",
+      description: () => `Gain ${formatPercents(0.5)} more extra RGs from Studies 225 and 226, 
+        and from Effarig's Infinity`,
       effect: 1.5,
       unlocked: () => Ra.pets.v.level >= 15
     },

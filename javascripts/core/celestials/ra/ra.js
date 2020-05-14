@@ -282,6 +282,10 @@ const Ra = {
   },
   get alchemyResourceCap() {
     return 25000;
+  },
+  get momentumValue() {
+    const hoursFromUnlock = TimeSpan.fromMilliseconds(player.celestials.ra.momentumTime).totalHours;
+    return Math.clampMax(1 + 0.002 * hoursFromUnlock, AlchemyResource.momentum.effectValue);
   }
 };
 

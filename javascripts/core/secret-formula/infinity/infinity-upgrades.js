@@ -187,7 +187,7 @@ GameDatabase.infinity.upgrades = (function() {
     skipResetGalaxy: {
       id: "skipResetGalaxy",
       cost: 300,
-      description: "ou start with 4 Dimension Shifts, which unlocks the ability to purchase 8th Dimensions," + 
+      description: "You start with 4 Dimension Shifts, which unlocks the ability to purchase 8th Dimensions," + 
       " and you start with an Antimatter Galaxy",
       bannedFromCharging: true
     },

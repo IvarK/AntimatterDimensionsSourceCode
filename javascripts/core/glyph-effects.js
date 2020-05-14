@@ -607,7 +607,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 26,
     isGenerated: true,
     glyphTypes: ["effarig"],
-    singleDesc: () => `Antimatter production: ${formatInt(10)}^x -> ${formatInt(10)}^(x^{value})`,
+    singleDesc: () => `Antimatter production: ${formatInt(10)}^x ➜ ${formatInt(10)}^(x^{value})`,
     genericDesc: "Antimatter production exponent",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 5000,
     formatEffect: x => format(x, 4, 4),
@@ -689,18 +689,8 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => formatPercents(x - 1, 2),
     combine: GlyphCombiner.multiply,
   }, {
-    id: "realitydimboost",
-    bitmaskIndex: 6,
-    isGenerated: false,
-    glyphTypes: ["reality"],
-    singleDesc: "Dimension Boost count +{value}",
-    totalDesc: "{value} more Dimension Boosts",
-    effect: level => 1 + Math.pow(level / 100000, 0.5),
-    formatEffect: x => formatPercents(x - 1, 2),
-    combine: GlyphCombiner.multiply,
-  }, {
     id: "realityrow1pow",
-    bitmaskIndex: 7,
+    bitmaskIndex: 6,
     isGenerated: false,
     glyphTypes: ["reality"],
     singleDesc: "Multiplier from Reality Upgrade Amplifiers ^{value}",
@@ -708,6 +698,20 @@ GameDatabase.reality.glyphEffects = [
     effect: level => 1 + level / 125000,
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.addExponents,
+  }, {
+    id: "realityDTglyph",
+    bitmaskIndex: 7,
+    isGenerated: false,
+    glyphTypes: ["reality"],
+    singleDesc: () => `DT scaling for next glyph level: \n^${format(1.3, 1, 1)}
+      ➜ ^(${format(1.3, 1, 1)} + {value})`,
+    totalDesc: () => `DT scaling for next glyph level: ^${format(1.3, 1, 1)}
+      ➜ ^(${format(1.3, 1, 1)} + {value})`,
+    genericDesc: "DT scaling for glyph level",
+    // You can only get this effect on level 25000 reality glyphs anyway, might as well make it look nice
+    effect: () => 0.15,
+    formatEffect: x => format(x, 2, 2),
+    combine: GlyphCombiner.add,
   }, {
     id: "companiondescription",
     bitmaskIndex: 8,
@@ -902,16 +906,10 @@ const GlyphTypes = {
     * @param {string} [blacklisted] Do not return the specified type
     * @returns {string | null}
     */
-  random(rng, blacklisted = "") {
-    const types = ["time", "dilation", "replication", "infinity", "power", "effarig"];
-    if (!blacklisted) {
-      const available = EffarigUnlock.reality.isUnlocked ? types.length : types.length - 1;
-      return types[Math.floor(rng.uniform() * available)];
-    }
-    const available = EffarigUnlock.reality.isUnlocked ? types.length - 1 : types.length - 2;
-    const typeIndex = Math.floor(rng.uniform() * available);
-    if (typeIndex >= types.indexOf(blacklisted)) return types[typeIndex + 1];
-    return types[typeIndex];
+  random(rng, blacklisted = []) {
+    const types = generatedTypes.filter(
+      x => (EffarigUnlock.reality.isUnlocked || x !== "effarig") && !blacklisted.includes(x));
+    return types[Math.floor(rng.uniform() * types.length)];
   },
   get list() {
     return GLYPH_TYPES.map(e => GlyphTypes[e]);

@@ -216,13 +216,13 @@ GameDatabase.celestials.alchemy = {
       name: "Momentum",
       symbol: "μ",
       isBaseResource: false,
-      effect: amount => 1 + amount / 2000000,
+      effect: amount => 1 + amount / 125000,
       tier: 3,
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 15,
       lockText: "Effarig Level 15",
-      formatEffect: value => `Game speed ${formatX(value, 5, 5)} per real-time minute in this reality
-        (${formatX(1e30, 0, 0)} cap)`,
+      formatEffect: value => `All dimensions ${formatPow(Ra.momentumValue, 4, 4)}, increasing by ${format(0.002, 3, 3)} 
+        per hour (real-time, never resets), up to a maximum of ${formatPow(value, 4, 4)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -359,7 +359,8 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 16,
       lockText: "Effarig Level 16",
-      formatEffect: value => `Each reality simulates ${format(value, 2, 3)} additional realities`,
+      formatEffect: value => `Each reality simulates ${format(value, 2, 3)} additional realities, giving all 
+        the same rewards as if it was amplified`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.ALTERNATION,

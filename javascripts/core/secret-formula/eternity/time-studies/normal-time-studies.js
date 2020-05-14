@@ -243,7 +243,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       effect: () => (Perk.studyActiveEP.isBought
         ? 50
         : Math.clamp(250 / Player.averageRealTimePerEternity, 1, 50)),
-      formatEffect: value => (Perk.studyActiveEP.isBought ? undefined : formatX(value, 1, 1))
+      formatEffect: value => (Perk.studyActiveEP.isBought ? undefined : formatX(value, 1, 1)),
+      cap: 50
     },
     {
       id: 122,

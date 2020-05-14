@@ -954,7 +954,9 @@ GameDatabase.achievements.normal = [
     name: "Perks of living",
     tooltip: "Have all perks bought.",
     checkRequirement: () => player.reality.perks.size === Perks.all.length,
-    checkEvent: GAME_EVENT.PERK_BOUGHT
+    checkEvent: GAME_EVENT.PERK_BOUGHT,
+    reward: () => `+${formatPercents(0.01)} glyph rarity.`,
+    effect: 1
   },
   {
     id: 147,
@@ -1133,8 +1135,8 @@ GameDatabase.achievements.normal = [
   {
     id: 173,
     name: "The First Antihistorian",
-    tooltip: () => `Get ${formatInt(25000)} of all alchemy resources.`,
-    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= 25000),
+    tooltip: () => `Get ${formatInt(Ra.alchemyResourceCap)} of all alchemy resources.`,
+    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {

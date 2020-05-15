@@ -39,7 +39,7 @@ Vue.component("infinity-dim-row", {
     costDisplay() {
       const requirement = InfinityDimension(this.tier).requirement;
       if (this.isUnlocked) {
-        return this.isCapped ? "Capped!" : `Cost: ${format(this.cost)} IP`;
+        return this.isCapped ? "Capped" : `Cost: ${format(this.cost)} IP`;
       }
       
       if (this.requirementReached) {

@@ -108,7 +108,7 @@ Vue.component("normal-dim-row", {
         :class="tutorialClass()"
         :ach-tooltip="cappedTooltip"
         @click="buySingle">
-        <span v-if="isCapped">Capped!</span>
+        <span v-if="isCapped">Capped</span>
         <template v-else>
           <span v-if="showCostTitle(singleCost)">Cost: </span>{{format(singleCost)}}
         </template>
@@ -118,7 +118,7 @@ Vue.component("normal-dim-row", {
         class="o-primary-btn--buy-nd o-primary-btn--buy-10-nd l-dim-row__button"
         :ach-tooltip="cappedTooltip"
         @click="buyUntil10">
-        <span v-if="isCapped">Capped!</span>
+        <span v-if="isCapped">Capped</span>
         <span v-else-if="isContinuumActive">Continuum: {{continuumString}}</span>
         <template v-else>
           Until {{formatInt(10)}}, <span v-if="showCostTitle(until10Cost)">

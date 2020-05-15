@@ -235,7 +235,7 @@ Vue.component("laitela-run-button", {
         <br>
         <br>
       </div>
-      Infinity Point and Eternity Point gain are dilated. Game speed is reduced to {{ formatInt(1) }}
+      Infinity Point and Eternity Point gain are Dilated. Game speed is reduced to {{ formatInt(1) }}
       and gradually comes back over {{ formatInt(10) }} minutes, and Black Hole discharging and pulsing
       is disabled.
       <br>

@@ -85,7 +85,7 @@ Vue.component("teresa-tab", {
           <div class="c-teresa-unlock" v-if="hasReality">
             Teresa Reality reward: Glyph sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
-          <div class="c-teresa-unlock" v-if="hasEPGen">You gain 1% of your peaked EP/min every second.</div>
+          <div class="c-teresa-unlock" v-if="hasEPGen">You gain {{ formatPercents(0.01) }} of your peaked EP/min every second.</div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">
           <button class="o-primary-btn c-teresa-pour"

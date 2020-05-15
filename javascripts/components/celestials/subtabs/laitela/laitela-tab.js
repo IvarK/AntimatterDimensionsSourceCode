@@ -235,13 +235,15 @@ Vue.component("laitela-run-button", {
         <br>
         <br>
       </div>
-      Infinity Point and Eternity Point gain are dilated. Game speed is reduced to 1 and gradually comes back over 
-      10 minutes, and Black Hole discharging and pulsing is disabled.
+      Infinity Point and Eternity Point gain are dilated. Game speed is reduced to {{ formatInt(1) }}
+      and gradually comes back over {{ formatInt(10) }} minutes, and Black Hole discharging and pulsing
+      is disabled.
       <br>
       <br>
-      Antimatter generates entropy inside of this Reality. At 100% entropy, the Reality becomes destabilized and
-      you gain a reward based on how quickly you reached 100%. If you can destabilize in less than 30 seconds,
-      the Reality becomes more difficult but also gives a stronger reward.
+      Antimatter generates entropy inside of this Reality. At {{ formatPercents(1) }} entropy, the Reality
+      becomes destabilized and you gain a reward based on how quickly you reached {{ formatPercents(1) }}.
+      If you can destabilize in less than {{ formatInt(30) }} seconds, the Reality becomes more difficult
+      but also gives a stronger reward.
     </button>`
 });
 

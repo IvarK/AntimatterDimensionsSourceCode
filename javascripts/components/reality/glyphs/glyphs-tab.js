@@ -72,6 +72,8 @@ Vue.component("glyphs-tab", {
           container-class="c-glyph-level-factors-dropdown-header">
         <glyph-levels-and-weights slot="dropdown" />
       </expanding-control-box>
+      <br>
+      <glyph-clean-options />
       <glyph-sacrifice-options />
       <glyph-auto-pick-options v-if="hasAlchemy" />
     </div>

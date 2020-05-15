@@ -10,6 +10,8 @@ Vue.component("equipped-glyphs", {
       respecIntoProtected: player.options.respecIntoProtected,
       undoAvailable: false,
       undoVisible: false,
+      showAutoAutoClean: false,
+      isAutoAutoCleanOn: false,
     };
   },
   computed: {
@@ -88,6 +90,8 @@ Vue.component("equipped-glyphs", {
       this.respecIntoProtected = player.options.respecIntoProtected;
       this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
       this.undoAvailable = this.undoVisible && player.reality.glyphs.undo.length > 0;
+      this.showAutoAutoClean = V.has(V_UNLOCKS.AUTO_AUTOCLEAN);
+      this.isAutoAutoCleanOn = player.reality.autoAutoClean;
     },
     glyphsChanged() {
       this.glyphs = Glyphs.active.map(GlyphGenerator.copy);
@@ -115,6 +119,11 @@ Vue.component("equipped-glyphs", {
         drop: $event => this.drop($event, idx),
       };
     },
+  },
+  watch: {
+    isAutoAutoCleanOn(newValue) {
+      player.reality.autoAutoClean = newValue;
+    }
   },
   template: `
   <div class="l-equipped-glyphs">
@@ -159,10 +168,16 @@ Vue.component("equipped-glyphs", {
               @click="toggleRespecIntoProtected">
         Unequip glyphs to:
         <br>
-        <span v-if="respecIntoProtected">first two rows of inventory</span>
-        <span v-else>main inventory</span>
+        <span v-if="respecIntoProtected">Protected slots</span>
+        <span v-else>Main inventory</span>
       </button>
     </div>
+    <primary-button-on-off
+      v-if="showAutoAutoClean"
+      v-model="isAutoAutoCleanOn"
+      class="l-glyph-inventory__sort c-reality-upgrade-btn"
+      text="Auto auto-clean:"
+    />
   </div>
   `,
 });

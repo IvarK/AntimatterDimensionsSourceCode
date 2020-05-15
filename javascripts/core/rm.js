@@ -745,6 +745,21 @@ const Glyphs = {
   deleteAllUnprotected() {
     this.autoClean(0);
   },
+  deleteAllRejected() {
+    for (const glyph of Glyphs.inventory) {
+      if (glyph !== null && glyph.idx >= this.protectedSlots && !AutoGlyphProcessor.wouldKeep(glyph)) {
+        AutoGlyphProcessor.getRidOfGlyph(glyph);
+      }
+    }
+  },
+  collapseEmptySlots() {
+    const unprotectedGlyphs = player.reality.glyphs.inventory
+      .filter(g => g.idx >= this.protectedSlots)
+      .sort((a, b) => a.idx - b.idx);
+    for (let index = 0; index < unprotectedGlyphs.length; index++) {
+      this.moveToSlot(unprotectedGlyphs[index], this.protectedSlots + index);
+    }
+  },
   get levelCap() {
     return 1000000;
   },

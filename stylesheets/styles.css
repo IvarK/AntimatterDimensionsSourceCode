@@ -2901,6 +2901,10 @@ screen and (max-width: 480px) {
   background-color: var(--color-good);
 }
 
+.o-challenge-btn--unenterable {
+  cursor: default;
+}
+
 .o-challenge-btn--running {
   color: white;
   background-color: #1f1f1f;
@@ -2910,7 +2914,6 @@ screen and (max-width: 480px) {
   color: black;
   background-color: #5c5c5c;
   border-color: #881d1d;
-  cursor: default;
 }
 
 .o-challenge-btn--redo {

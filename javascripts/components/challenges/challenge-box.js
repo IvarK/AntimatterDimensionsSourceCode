@@ -35,6 +35,10 @@ Vue.component("challenge-box", {
       } else {
         classObject["o-challenge-btn--locked"] = true;
       }
+      // ECs can be not unlocked and also not locked, because they're fully completed or running,
+      // but in that case you can't enter them (or in the "running" case, re-enter them) and so
+      // it's important to give them a property that disables cursor on hover.
+      classObject["o-challenge-btn--unenterable"] = !this.isUnlocked || (this.isEC && this.isRunning);
       return classObject;
     },
     buttonText() {

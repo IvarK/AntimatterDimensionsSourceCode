@@ -18,7 +18,7 @@ Vue.component("options-visual-tab", {
       },
       template:
         `<div class="o-primary-btn o-primary-btn--option o-primary-btn--update-rate l-options-grid__button"> 
-          <b>Update rate: {{ value }} ms</b>
+          <b>Update rate: {{ formatInt(value) }} ms</b>
           <input
             :value="value"
             class="o-primary-btn--update-rate__slider"

@@ -117,9 +117,6 @@ const GlyphTooltipComponent = {
     rarityInfo() {
       return getRarity(this.strength);
     },
-    roundedRarity() {
-      return 0.1 * Math.floor(strengthToRarity(this.strength) * 10 + 0.5);
-    },
     descriptionStyle() {
       return {
         color: this.rarityInfo.color,
@@ -135,7 +132,7 @@ const GlyphTooltipComponent = {
       if (this.type === "companion") return "Companion Glyph";
       if (this.type === "cursed") return "Cursed Glyph";
       const name = this.type === "reality" ? "Pure" : this.rarityInfo.name;
-      const rarity = this.type === "reality" ? "" : `(${this.roundedRarity.toFixed(1)}%)`;
+      const rarity = this.type === "reality" ? "" : `(${formatPercents(strengthToRarity(this.strength) / 100, 1)})`;
       return `${name} Glyph of ${this.type.charAt(0).toUpperCase()}${this.type.slice(1)} ${rarity}`;
     },
     isLevelCapped() {

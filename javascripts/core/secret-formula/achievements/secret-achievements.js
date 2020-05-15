@@ -43,7 +43,7 @@ GameDatabase.achievements.secret = [
   {
     id: 18,
     name: "Do you feel lucky? Well do ya punk?",
-    tooltip: () => `You have a 1/${formatInt(1e5)} chance of getting this achievement every second.`
+    tooltip: () => `You have a ${formatInt(1)}/${formatInt(1e5)} chance of getting this achievement every second.`
   },
   {
     id: 21,
@@ -103,7 +103,7 @@ GameDatabase.achievements.secret = [
   {
     id: 32,
     name: "Less than or equal to 0.001",
-    tooltip: () => `Get a fastest infinity or eternity time of less than or equal to 0.001 seconds.`,
+    tooltip: () => `Get a fastest infinity or eternity time of less than or equal to ${format(0.001, 3, 3)} seconds.`,
     checkRequirement: () =>
       Time.bestInfinity.totalMilliseconds <= 1 ||
       Time.bestEternity.totalMilliseconds <= 1,

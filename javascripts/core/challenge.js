@@ -70,7 +70,7 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   start() {
-    if (this.id === 1) return;
+    if (this.id === 1 || this.isRunning) return;
     if (!Tab.challenges.isAvailable) return;
 
     player.challenge.normal.current = this.id;
@@ -191,7 +191,7 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   start() {
-    if (!this.isUnlocked) return;
+    if (!this.isUnlocked || this.isRunning) return;
 
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = this.id;

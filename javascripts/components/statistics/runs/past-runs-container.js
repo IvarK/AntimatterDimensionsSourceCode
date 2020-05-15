@@ -86,7 +86,7 @@ Vue.component("past-runs-container", {
         >
         <span class="o-run-drop-down-icon" v-html="dropDown" />
         <span>
-          <h3>Past 10 {{ plural }}</h3>
+          <h3>Past {{ formatInt(10) }} {{ plural }}</h3>
         </span>
       </div>
       <div v-show="shown">

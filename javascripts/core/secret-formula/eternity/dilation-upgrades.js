@@ -114,7 +114,7 @@ GameDatabase.eternity.dilation = (function() {
     dilationPenalty: {
       id: 9,
       cost: 1e11,
-      description: "Reduce the Dilation penalty. (^1.05 after reduction)",
+      description: () => `Reduce the Dilation penalty. (${formatPow(1.05, 2, 2)} after reduction)`,
       effect: 1.05,
     },
     ttGenerator: {

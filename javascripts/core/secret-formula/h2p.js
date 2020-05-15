@@ -601,7 +601,7 @@ currency that can be spent in the Perks subtab on different Perks.
 <br>
 Reality Machines scale purely off of EP, and the Reality button will tell you how much EP you need in order to gain
 the next one. The first ${formatInt(10)} RM scale linearly in the exponent between
-${formatPostBreak(new Decimal("1e4000"))} EP and ${formatPostBreak(new Decimal("1e5334"))} EP, and then past that
+${formatPostBreak(new Decimal("1e4000"))} EP and ${formatPostBreak(Decimal.pow(10, 16000 / 3))} EP, and then past that
 RM = ${formatInt(1000)}<sup>log<sub>${formatInt(10)}</sub>(EP)/${formatInt(4000)}-${formatInt(1)}</sup>.
 <br>
 <br>

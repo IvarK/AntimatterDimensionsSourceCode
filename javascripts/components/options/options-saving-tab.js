@@ -19,7 +19,7 @@ Vue.component("options-saving-tab", {
       template: 
       `
       <div class="o-primary-btn o-primary-btn--option o-primary-btn--autosave-slider l-options-grid__button">
-      <b>Autosave interval: {{ value }}s</b>
+      <b>Autosave interval: {{ formatInt(value) }}s</b>
       <input
       :value="value"
       class="o-primary-btn--autosave-slider"

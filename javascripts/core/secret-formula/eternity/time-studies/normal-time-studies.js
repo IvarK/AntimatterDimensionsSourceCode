@@ -386,14 +386,14 @@ GameDatabase.eternity.timeStudies.normal = (function() {
           (EternityChallenge(1).completions > 0 || Perk.bypassEC1Lock.isBought) &&
           (EternityChallenge(2).completions > 0 || Perk.bypassEC2Lock.isBought) &&
           (EternityChallenge(3).completions > 0 || Perk.bypassEC3Lock.isBought),
-      description: "You gain 1% of your IP gained on crunch each second",
+      description: () => `You gain ${formatPercents(0.01)} of your IP gained on crunch each second`,
       effect: () => gainedInfinityPoints().times(Time.deltaTime / 100).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige())
     },
     {
       id: 191,
       cost: 400,
       requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0,
-      description: "After Eternity you permanently keep 5% of your Infinities",
+      description: () => `After Eternity you permanently keep ${formatPercents(0.05)} of your Infinities`,
       effect: () => player.infinitied.times(0.05).floor()
     },
     {

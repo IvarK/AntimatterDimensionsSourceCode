@@ -46,6 +46,15 @@ Vue.component("challenges-header", {
         this.untilAllEC.setFrom(untilNextEC + (autoECInterval * (remainingCompletions - 1)));
       }
     },
+    restartChallenge() {
+      const current = NormalChallenge.current ||
+        InfinityChallenge.current ||
+        EternityChallenge.current;
+      if (current !== undefined) {
+        current.exit();
+        current.start();
+      }
+    },
     exitChallenge() {
       const current = NormalChallenge.current ||
         InfinityChallenge.current ||
@@ -68,6 +77,12 @@ Vue.component("challenges-header", {
         class="o-primary-btn--subtab-option"
         text="Auto EC:"
       />
+      <primary-button v-if="isInChallenge"
+        class="o-primary-btn--subtab-option"
+        @click="restartChallenge"
+      >
+        Restart Challenge
+      </primary-button>
       <primary-button v-if="isInChallenge"
         class="o-primary-btn--subtab-option"
         @click="exitChallenge"

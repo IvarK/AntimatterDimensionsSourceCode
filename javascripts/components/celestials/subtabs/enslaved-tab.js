@@ -286,14 +286,14 @@ Vue.component("enslaved-tab", {
               </div>
               <p>Glyph levels will be boosted to a minimum of {{ formatInt(5000) }}</p>
               <p>Infinity, time, and 8th dimension purchases are limited to {{ formatInt(1) }} each</p>
-              <p>Normal dimension multipliers are always dilated (the glyph effect still only
+              <p>Normal dimension multipliers are always Dilated (the glyph effect still only
                 applies in actual dilation)</p>
               <p>Time study 192 (uncapped replicanti) is locked</p>
               <p>The black hole is disabled</p>
-              <p>Tachyon production and dilated time production are severely reduced</p>
+              <p>Tachyon production and Dilated Time production are severely reduced</p>
               <p>Time theorem generation from dilation glyphs is disabled</p>
               <p>Certain challenge goals have been increased</p>
-              <p>Stored time is effectively dilated (exponent^{{ format(0.55, 2, 2) }})</p>
+              <p>Stored time is effectively Dilated (exponent^{{ format(0.55, 2, 2) }})</p>
               <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps
               (see Infinity Dimension tab)</b>
             </div>

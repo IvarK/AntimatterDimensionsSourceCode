@@ -58,7 +58,7 @@ Vue.component("v-tab", {
         : milestone.reward;
     },
     reduceGoals(hex) {
-      if (this.pp < hex.reductionCost) return;
+      if (player.reality.pp < hex.reductionCost) return;
       player.reality.pp -= hex.reductionCost;
       const steps = hex.config.reductionStepSize ? hex.config.reductionStepSize : 1;
       player.celestials.v.goalReductionSteps[hex.id] += steps;

@@ -312,6 +312,8 @@ let player = {
     showGlyphSacrifice: false,
     tdbuyers: [false, false, false, false, false, false, false, false],
     epmultbuyer: false,
+    autoSort: 0,
+    autoCollapse: false,
     autoAutoClean: false,
     pp: 0,
     autoEC: true,

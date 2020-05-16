@@ -11,19 +11,13 @@ Vue.component("glyph-sort-options", {
       this.showScoreFilter = EffarigUnlock.basicFilter.isUnlocked;
     },
     sortByPower() {
-      Glyphs.sort((a, b) => -a.level * a.strength + b.level * b.strength);
+      Glyphs.sortByPower();
     },
     sortByScore() {
-      Glyphs.sort((a, b) => -AutoGlyphProcessor.filterValue(a) + AutoGlyphProcessor.filterValue(b));
+      Glyphs.sortByScore();
     },
     sortByEffect() {
-      function reverseBitstring(eff) {
-        // eslint-disable-next-line no-bitwise
-        return parseInt(((1 << 30) + (eff >>> 0)).toString(2).split("").reverse().join(""), 2);
-      }
-      // The bitwise reversal is so that the effects with the LOWER id are valued higher in the sorting.
-      // This primarily meant for effarig glyph effect sorting, which makes it prioritize timespeed pow highest.
-      Glyphs.sort((a, b) => -reverseBitstring(a.effects) + reverseBitstring(b.effects));
+      Glyphs.sortByEffect();
     },
     collapseEmpty() {
       Glyphs.collapseEmptySlots();

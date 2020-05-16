@@ -68,6 +68,13 @@ const GlyphRarities = [
   },
 ];
 
+const AUTO_SORT_MODE = {
+  NONE: 0,
+  POWER: 1,
+  EFFECT: 2,
+  SCORE: 3
+};
+
 const AUTO_GLYPH_SCORE = {
   LOWEST_SACRIFICE: 0,
   EFFECT_COUNT: 1,

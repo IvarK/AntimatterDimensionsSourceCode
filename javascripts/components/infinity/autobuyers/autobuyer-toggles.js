@@ -5,6 +5,7 @@ Vue.component("autobuyer-toggles", {
     return {
       autobuyersOn: false,
       bulkOn: false,
+      showContinuum: false,
       disableContinuum: false,
     };
   },
@@ -23,6 +24,7 @@ Vue.component("autobuyer-toggles", {
     update() {
       this.autobuyersOn = player.options.autobuyersOn;
       this.bulkOn = player.options.bulkOn;
+      this.showContinuum = Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK);
       this.disableContinuum = player.options.disableContinuum;
     },
     toggleAllAutobuyers() {
@@ -58,6 +60,7 @@ Vue.component("autobuyer-toggles", {
         class="o-primary-btn--subtab-option"
       />
       <primary-button-on-off-custom
+        v-if="showContinuum"
         v-model="disableContinuum"
         on="Enable Continuum"
         off="Disable Continuum"

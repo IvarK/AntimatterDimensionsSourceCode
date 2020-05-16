@@ -1,9 +1,5 @@
 "use strict";
 
-function canEternity() {
-  return player.infinityPoints.gte(Player.eternityGoal);
-}
-
 function giveEternityRewards(auto) {
   player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
   player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
@@ -60,14 +56,14 @@ function giveEternityRewards(auto) {
 }
 
 function eternity(force, auto, specialConditions = {}) {
-  if (specialConditions.switchingDilation && !canEternity()) {
+  if (specialConditions.switchingDilation && !Player.canEternity) {
     // eslint-disable-next-line no-param-reassign
     force = true;
   }
   if (force) {
     player.challenge.eternity.current = 0;
   } else {
-    if (!canEternity()) return false;
+    if (!Player.canEternity) return false;
     if (!auto && !askEternityConfirmation()) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     giveEternityRewards(auto);

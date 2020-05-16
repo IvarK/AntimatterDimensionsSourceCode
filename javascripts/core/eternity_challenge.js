@@ -170,7 +170,7 @@ class EternityChallengeState extends GameMechanicState {
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.
-    if (canEternity()) eternity(false, auto, { enteringEC: true });
+    if (Player.canEternity) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
       if (V.isRunning && player.minNegativeBlackHoleThisReality < 1) {

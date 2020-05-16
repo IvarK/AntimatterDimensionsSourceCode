@@ -23,7 +23,7 @@ const ENSLAVED_UNLOCKS = {
 const Enslaved = {
   displayName: "Enslaved",
   boostReality: false,
-  BROKEN_CHALLENGE_EXEMPTIONS: [1, 6, 9],
+  BROKEN_CHALLENGES: [2, 3, 4, 5, 7, 8, 10, 11, 12],
   nextTickDiff: 50,
   isReleaseTick: false,
   autoReleaseTick: 0,

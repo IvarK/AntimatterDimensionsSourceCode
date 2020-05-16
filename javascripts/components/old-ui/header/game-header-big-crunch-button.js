@@ -50,10 +50,10 @@ Vue.component("game-header-big-crunch-button", {
   methods: {
     update() {
       this.isVisible = player.break &&
-        Currency.antimatter.gte(Decimal.NUMBER_MAX_VALUE) &&
+        player.thisInfinityMaxAM.gte(Decimal.NUMBER_MAX_VALUE) &&
         !InfinityChallenge.isRunning;
       if (NormalChallenge.isRunning) {
-        if (!Enslaved.isRunning || Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(NormalChallenge.current.id)) {
+        if (!Enslaved.isRunning || !Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current.id)) {
           this.isVisible = false;
         }
       }

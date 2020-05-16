@@ -560,7 +560,9 @@ const Glyphs = {
       this.levelBoost = 0;
       return;
     }
-    this.levelBoost = getAdjustedGlyphEffect("realityglyphlevel");
+    // The cache at this point may not be correct yet (if we're importing a save),
+    // so we use the uncached value.
+    this.levelBoost = getAdjustedGlyphEffectUncached("realityglyphlevel");
   },
   moveToSlot(glyph, targetSlot) {
     if (this.inventory[targetSlot] === null) this.moveToEmpty(glyph, targetSlot);

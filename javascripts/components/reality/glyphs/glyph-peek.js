@@ -46,7 +46,7 @@ Vue.component("glyph-peek", {
   <glyph-set-preview v-if="isVisible"
     class="c-glyph-peek"
     :show="isVisible"
-    :text="'Glyph choices for this Reality:'"
+    :text="'Upcoming glyph selection:'"
     :glyphs="glyphs"
     :noLevelOverride="true"
     :showSacrifice="canSacrifice"

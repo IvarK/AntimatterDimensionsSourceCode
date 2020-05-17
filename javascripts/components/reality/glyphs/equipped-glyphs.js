@@ -159,8 +159,8 @@ Vue.component("equipped-glyphs", {
               @click="toggleRespecIntoProtected">
         Unequip glyphs to:
         <br>
-        <span v-if="respecIntoProtected">first two rows of inventory</span>
-        <span v-else>main inventory</span>
+        <span v-if="respecIntoProtected">Protected slots</span>
+        <span v-else>Main inventory</span>
       </button>
     </div>
   </div>

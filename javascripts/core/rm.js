@@ -678,6 +678,22 @@ const Glyphs = {
       }
       outIndex += t.padding;
     }
+    if (player.reality.autoCollapse) this.collapseEmptySlots();
+  },
+  sortByPower() {
+    this.sort((a, b) => -a.level * a.strength + b.level * b.strength);
+  },
+  sortByScore() {
+    this.sort((a, b) => -AutoGlyphProcessor.filterValue(a) + AutoGlyphProcessor.filterValue(b));
+  },
+  sortByEffect() {
+    function reverseBitstring(eff) {
+      // eslint-disable-next-line no-bitwise
+      return parseInt(((1 << 30) + (eff >>> 0)).toString(2).split("").reverse().join(""), 2);
+    }
+    // The bitwise reversal is so that the effects with the LOWER id are valued higher in the sorting.
+    // This primarily meant for effarig glyph effect sorting, which makes it prioritize timespeed pow highest.
+    this.sort((a, b) => -reverseBitstring(a.effects) + reverseBitstring(b.effects));
   },
   // If there are enough glyphs that are better than the specified glyph, in every way, then
   // the glyph is objectively a useless piece of garbage.
@@ -740,12 +756,47 @@ const Glyphs = {
         AutoGlyphProcessor.getRidOfGlyph(glyph);
       }
     }
+    if (player.reality.autoCollapse) this.collapseEmptySlots();
   },
   harshAutoClean() {
     this.autoClean(1);
   },
   deleteAllUnprotected() {
     this.autoClean(0);
+  },
+  deleteAllRejected() {
+    for (const glyph of Glyphs.inventory) {
+      if (glyph !== null && glyph.idx >= this.protectedSlots && !AutoGlyphProcessor.wouldKeep(glyph)) {
+        AutoGlyphProcessor.getRidOfGlyph(glyph);
+      }
+    }
+    if (player.reality.autoCollapse) this.collapseEmptySlots();
+  },
+  collapseEmptySlots() {
+    const unprotectedGlyphs = player.reality.glyphs.inventory
+      .filter(g => g.idx >= this.protectedSlots)
+      .sort((a, b) => a.idx - b.idx);
+    for (let index = 0; index < unprotectedGlyphs.length; index++) {
+      this.moveToSlot(unprotectedGlyphs[index], this.protectedSlots + index);
+    }
+  },
+  processSortingAfterReality() {
+    if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) this.autoClean();
+    switch (player.reality.autoSort) {
+      case AUTO_SORT_MODE.NONE:
+        break;
+      case AUTO_SORT_MODE.POWER:
+        this.sortByPower();
+        break;
+      case AUTO_SORT_MODE.EFFECT:
+        this.sortByEffect();
+        break;
+      case AUTO_SORT_MODE.SCORE:
+        this.sortByScore();
+        break;
+      default:
+        throw new Error("Unrecognized auto-sort mode");
+    }
   },
   get levelCap() {
     return 1000000;

@@ -36,8 +36,7 @@ const Laitela = {
     return this.celestial.run;
   },
   get continuumActive() {
-    // Make it unlock at Lai'tela unlock for now.
-    return Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK);
+    return Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK) && !player.options.disableContinuum;
   },
   get matterExtraPurchaseFactor() {
     return (1 + Math.pow(Decimal.pLog10(this.celestial.maxMatter) /

@@ -89,7 +89,7 @@ Vue.component("replicanti-tab", {
         <div v-if="isInEC8">You have {{formatInt(ec8Purchases)}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
         <div v-if="hasRaisedCap">
           Your replicanti cap without study 192 has been raised to {{format(replicantiCap, 2)}}
-          and is giving you {{formatInt(effarigInfinityBonusRG)}} extra RG due to Effarig Infinity.
+          and is giving you {{formatInt(effarigInfinityBonusRG)}} extra RG due to Effarig's Infinity.
           (Next RG at {{format(nextEffarigRGThreshold, 2)}})
         </div>
         <p class="c-replicanti-description">

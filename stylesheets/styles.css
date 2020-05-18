@@ -5560,7 +5560,7 @@ kbd {
   flex-direction: column;
   align-items: center;
   margin-left: 3rem;
-  width: 500px;
+  width: 520px;
 }
 
 .c-effarig-run-description {
@@ -5571,7 +5571,8 @@ kbd {
 .l-effarig-tab__reward {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: left;
+  width: 100%;
   margin: 0.5rem;
 }
 

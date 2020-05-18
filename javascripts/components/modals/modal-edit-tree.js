@@ -1,6 +1,13 @@
 "use strict";
 
 Vue.component("modal-edit-tree", {
+  computed: {
+    getInput() {
+      return {
+        input: this.modal.editingTree
+      };
+    }
+  },
   data() {
     return {
       input: ""
@@ -8,7 +15,7 @@ Vue.component("modal-edit-tree", {
   },
   methods: {
     update() {
-      this.input = "";
+      this.input = `{{ getInput }}`;
     },
   },
   template:

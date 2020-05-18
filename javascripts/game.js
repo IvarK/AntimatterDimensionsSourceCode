@@ -34,6 +34,9 @@ function gainedInfinityPoints() {
   let ip = player.break
     ? Decimal.pow10(player.thisInfinityMaxAM.log10() / div - 0.75)
     : new Decimal(308 / div);
+  if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
+    ip = ip.min(1e200);
+  }
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
     ip = ip.pow(0.55);

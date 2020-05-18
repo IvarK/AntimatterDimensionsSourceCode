@@ -70,10 +70,12 @@ Vue.component("effarig-tab", {
       return this.isRunning
         ? `All dimension multipliers, gamespeed, and tickspeed are severely lowered, like dilation. Infinity power
           reduces the production and gamespeed penalties and time shards reduce the tickspeed penalty. Glyph levels
-          are temporarily capped to ${Effarig.glyphLevelCap}, rarity is unaffected.`
+          are temporarily capped to ${Effarig.glyphLevelCap}, rarity is unaffected. You will exit Effarig's reality
+          when you complete a Layer of it.`
         : `Start Effarig's Reality; all dimension multipliers, gamespeed, and tickspeed are severely lowered, like
           dilation. Infinity power reduces the production and gamespeed penalties and time shards reduce the tickspeed
-          penalty. Glyph levels are temporarily capped, rarity is unaffected.`;
+          penalty. Glyph levels are temporarily capped, rarity is unaffected. You will exit Effarig's reality when you
+          complete a Layer of it.`;
     }
   },
   methods: {

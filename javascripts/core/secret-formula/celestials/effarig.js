@@ -28,6 +28,7 @@ GameDatabase.celestials.effarig = {
       description:
         "Infinitied stat raises the replicanti cap\n" +
         "Infinitied stat increases your max RG\n" +
+        "Base IP gain is capped at 1e200 in Effarig Reality\n" +
         "Each type of IP multiplier is capped at 1e50 in Effarig Reality"
     },
     eternity: {
@@ -36,7 +37,7 @@ GameDatabase.celestials.effarig = {
       description: "Eternitied stat generates Infinitied stat\n" +
         "You have unlocked The Enslaved Ones\n" +
         "Free tickspeed upgrade softcap is 100,000 larger\n" +
-        "IP mults are no longer limited in Effarig Reality"
+        "IP mults and base IP are no longer limited in Effarig Reality"
     },
     reality: {
       id: 6,

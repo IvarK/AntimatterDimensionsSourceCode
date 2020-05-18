@@ -201,7 +201,7 @@ Vue.component("tt-save-load-button", {
       copyToClipboardAndNotify(this.preset.studies);
     },
     edit() {
-      const newValue = prompt("Edit time study list", this.preset.studies);
+      const newValue = TimeStudyTreeEditModal.editTree.show(this.preset.studies);
       this.hideContextMenu();
       if (newValue !== null) this.preset.studies = newValue;
     }

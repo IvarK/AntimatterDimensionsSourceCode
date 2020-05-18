@@ -45,6 +45,13 @@ class ChallengeConfirmationModal extends Modal {
   }
 }
 
+class TimeStudyTreeEditModal extends Modal {
+  show(editingTree) {
+    this.editingTree = editingTree;
+    super.show();
+  }
+}
+
 
 Modal.h2p = new Modal("modal-h2p");
 Modal.shortcuts = new Modal("modal-shortcuts");
@@ -56,6 +63,7 @@ Modal.uiChoice = new Modal("modal-ui-choice");
 Modal.import = new Modal("modal-import");
 Modal.shop = new Modal("modal-std-store");
 Modal.importTree = new Modal("modal-import-tree");
+Modal.editTree = new TimeStudyTreeEditModal("modal-edit-tree");
 Modal.deleteCompanion = new Modal("modal-delete-companion");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");

@@ -1,19 +1,14 @@
 "use strict";
 
 Vue.component("modal-edit-tree", {
- computed: {
-    modal() {
-        return this.$viewModel.modal.current;
-      },
-    },
   data() {
     return {
-      input: this.modal.editingTree
+      input: ""
     };
   },
   methods: {
     update() {
-      this.input = this.modal.editingTree;
+      this.input = "";
     },
   },
   template:
@@ -25,16 +20,12 @@ Vue.component("modal-edit-tree", {
         ref="input"
         type="text"
         class="c-modal-input c-modal-import-tree__input"
-        @keyup.enter="importTree"
         @keyup.esc="emitClose"
       />
-        </template>
-        <div v-if="hasInput">Not a valid tree</div>
-      </div>
       <primary-button
-        v-if="inputIsValid"
         class="o-primary-btn--width-medium c-modal-import-tree__import-btn"
-        @click="importTree"
-      >Import</primary-button>
+        @click="emitClose"
+      >Confirm</primary-button>
     </div>`
 });
+// We goin to flavortown USA

@@ -31,7 +31,8 @@ Vue.component("glyph-set-preview", {
           size="2.8rem"
           :textProportion="0.6"
           glowBlur="0.2rem"
-          glowSpread="0.1rem" />
+          glowSpread="0.1rem"
+          bottomPadding="0.4rem" />
       </span>
       <span v-else>
         (No glyphs equipped)

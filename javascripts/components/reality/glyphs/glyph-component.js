@@ -265,6 +265,10 @@ Vue.component("glyph-component", {
       type: String,
       default: "0.2rem"
     },
+    bottomPadding: {
+      type: String,
+      default: "0.3rem"
+    },
     textProportion: {
       type: Number,
       default: 0.5
@@ -346,6 +350,7 @@ Vue.component("glyph-component", {
         "text-shadow": `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
         animation: this.isRealityGlyph ? "a-reality-glyph-icon-cycle 10s infinite" : undefined,
+        "padding-bottom": this.bottomPadding
       };
     },
     mouseEventHandlers() {

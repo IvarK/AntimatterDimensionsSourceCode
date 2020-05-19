@@ -6,6 +6,9 @@ Vue.component("modal-edit-tree", {
       return {
         input: this.modal.editingTree
       };
+    },
+    modal() {
+      return this.$viewModel.modal.current;
     }
   },
   data() {
@@ -14,8 +17,8 @@ Vue.component("modal-edit-tree", {
     };
   },
   methods: {
-    update() {
-      this.input = `{{ getInput }}`;
+    created() {
+      this.input = this.modal.editingTree;
     },
   },
   template:
@@ -35,4 +38,8 @@ Vue.component("modal-edit-tree", {
       >Confirm</primary-button>
     </div>`
 });
+
 // We goin to flavortown USA
+// hi i'm guy fieri and we're rolling out
+// looking for america's greatest
+// diners, drive-ins, and dives.

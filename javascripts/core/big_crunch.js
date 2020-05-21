@@ -421,5 +421,5 @@ function preProductionGenerateIP(diff) {
     }
   }
   player.infinityPoints = player.infinityPoints
-    .plus(BreakInfinityUpgrade.ipGen.effectOrDefault(new Decimal(0)).div(20).times(diff / 60000));
+    .plus(BreakInfinityUpgrade.ipGen.effectOrDefault(new Decimal(0)).times(diff / 60000));
 }

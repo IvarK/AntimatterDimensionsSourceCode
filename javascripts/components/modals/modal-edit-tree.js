@@ -1,30 +1,37 @@
 "use strict";
 
 Vue.component("modal-edit-tree", {
+  props: {
+    saveslot: Number
+  },
   computed: {
-    getInput() {
-      return {
-        input: this.modal.editingTree
-      };
-    },
     modal() {
       return this.$viewModel.modal.current;
+    },
+    editLabel() {
+      return `Editing ${this.name}`;
     }
   },
   data() {
     return {
-      input: ""
+      input: "",
+      name: "",
     };
   },
   methods: {
     created() {
       this.input = this.modal.editingTree;
+      this.name = player.timestudy.presets[this.saveslot - 1].name;
     },
+    confirmEdits() {
+      this.emitClose();
+
+    }
   },
   template:
     `<div class="c-modal-import-tree l-modal-content--centered">
       <modal-close-button @click="emitClose"/>
-      <h3>Edit your tree</h3>
+      <h3>{{ editLabel }}</h3>
       <input
         v-model="input"
         ref="input"
@@ -43,3 +50,7 @@ Vue.component("modal-edit-tree", {
 // hi i'm guy fieri and we're rolling out
 // looking for america's greatest
 // diners, drive-ins, and dives.
+
+
+// this.hideContextMenu();
+// if (newValue !== null) this.preset.studies = newValue;

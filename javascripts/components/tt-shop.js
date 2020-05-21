@@ -201,9 +201,7 @@ Vue.component("tt-save-load-button", {
       copyToClipboardAndNotify(this.preset.studies);
     },
     edit() {
-      const newValue = TimeStudyTreeEditModal.editTree.show(this.preset.studies);
-      this.hideContextMenu();
-      if (newValue !== null) this.preset.studies = newValue;
+      TimeStudyTreeEditModal.editTree.show(this.preset.studies, player.timestudy.presets[this.saveslot - 1], this.name);
     }
   },
   template: `

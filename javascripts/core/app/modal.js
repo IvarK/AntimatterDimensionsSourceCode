@@ -46,8 +46,10 @@ class ChallengeConfirmationModal extends Modal {
 }
 
 class TimeStudyTreeEditModal extends Modal {
-  show(editingTree) {
+  show(editingTree, saveslot, name) {
     this.editingTree = editingTree;
+    this.saveslot = saveslot;
+    this.name = name;
     super.show();
   }
 }

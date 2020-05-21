@@ -78,7 +78,9 @@ class TabState {
     
     // Makes it so that the glyph tooltip doesn't stay on tab change
     ui.view.tabs.reality.currentGlyphTooltip = -1;
-    Modal.hide();
+    if (manual) {
+      Modal.hide();
+    }
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
 
     if (this.config.key === "reality" && 

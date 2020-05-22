@@ -84,7 +84,7 @@ GameDatabase.celestials.v = {
     {
       id: 5,
       name: "Matterception",
-      description: value => `Get ${formatInt(value)} Dimensional Boosts while dilating time, inside EC5.`,
+      description: value => `Get ${formatInt(value)} Dimensional Boosts while Dilated and inside Eternity Challenge 5.`,
       values: [51, 52, 53, 54, 55, 56],
       condition: () => V.isRunning && player.dilation.active && EternityChallenge(5).isRunning,
       currentValue: () => DimBoost.purchasedBoosts,

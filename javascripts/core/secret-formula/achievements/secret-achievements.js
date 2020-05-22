@@ -48,7 +48,7 @@ GameDatabase.achievements.secret = [
   {
     id: 21,
     name: "Go study in real life instead",
-    tooltip: "Purchase the secret time study."
+    tooltip: "Purchase the secret Time Study."
   },
   {
     id: 22,

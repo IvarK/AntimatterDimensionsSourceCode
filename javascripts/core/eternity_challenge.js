@@ -162,8 +162,8 @@ class EternityChallengeState extends GameMechanicState {
     if (!this.isUnlocked || this.isRunning) return false;
     if (!auto && player.options.confirmations.challenges) {
       const confirmation =
-        "You will start over with just your time studies, " +
-        "eternity upgrades and achievements. " +
+        "You will start over with just your Time Studies, " +
+        "Eternity Upgrades and achievements. " +
         "You need to reach a set IP with special conditions.";
       if (!confirm(confirmation)) return false;
     }

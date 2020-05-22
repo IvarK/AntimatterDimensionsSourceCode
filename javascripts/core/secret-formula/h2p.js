@@ -534,7 +534,7 @@ amount of Time Theorems to enter, plus a secondary requirement which you must me
 <br>
 When you enter an Eternity Challenge, your goal becomes reaching a certain target IP. After completing the challenge,
 you do not need to have the Eternity Challenge's study unlocked for the reward to take effect. The rewards for these
-challenges are similar to time studies, but often even stronger and permanent since they don't require you to spend
+challenges are similar to Time Studies, but often even stronger and permanent since they don't require you to spend
 theorems to have their effects.
 <br>
 <br>
@@ -582,7 +582,7 @@ can be repeatedly purchased as many times as you can afford them.
       name: "Reality",
       info: () => `
 When you reach ${format(5e9)} time theorems, ${formatPostBreak(new Decimal("1e4000"))} EP, and have completed the first
-${formatInt(13)} rows of achievements, you will be able to purchase the time study that unlocks Reality.
+${formatInt(13)} rows of achievements, you will be able to purchase the Time Study that unlocks Reality.
 Unlocking it opens a new tab, where you can find the button to make a new Reality. Starting a new Reality
 will reset everything you have done so far except challenge times and total antimatter, but in exchange gives
 you a new currency known as Reality Machines, a Glyph, and a Perk Point.
@@ -974,10 +974,10 @@ to spend any resources.
 - Each V-achievement also gives you one Space Theorem.
 <br>
 <br>
-Space Theorems allow you to purchase time studies which are normally forbidden, such as multiple paths in the
-split after the improved IP formula, or both time studies within a black/white pair near the bottom. Like Time
+Space Theorems allow you to purchase Time Studies which are normally forbidden, such as multiple paths in the
+split after the improved IP formula, or both Time Studies within a black/white pair near the bottom. Like Time
 Theorems, they are freely given back every time you respec your studies.
-With enough Space Theorems you will eventually be able to purchase every single time study at once!
+With enough Space Theorems you will eventually be able to purchase every single Time Study at once!
 <br>
 <br>
 Reaching 36 V-achievements (and therefore completing all of V's achievements) unlocks the next Celestial.
@@ -1026,7 +1026,7 @@ ${Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK)
 <br>
 V unlocks 
 ${Ra.has(RA_UNLOCKS.V_UNLOCK)
-  ? "Triad Studies, which are time studies near the bottom of the tree which cost Space Theorems. " +
+  ? "Triad Studies, which are Time Studies near the bottom of the tree which cost Space Theorems. " +
     "She also unlocks a smaller set of more difficult V achievements to complete for additional Space Theorems."
   : "<div style='color: var(--color-bad);'>(unlock V within Ra to see this text)</div>"}
 <br>

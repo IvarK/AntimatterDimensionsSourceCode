@@ -245,7 +245,7 @@ GameDatabase.reality.automator = {
     {
       id: 12,
       keyword: "studies respec",
-      name: "<b>studies respec</b> - respec time studies on next eternity",
+      name: "<b>studies respec</b> - respec Time Studies on next Eternity",
       syntax: `<b>studies respec</b>`,
       examples: [
         `studies respec`,
@@ -266,10 +266,10 @@ GameDatabase.reality.automator = {
     {
       id: 14,
       keyword: "studies",
-      name: "<b>studies</b> - Purchase time studies",
+      name: "<b>studies</b> - Purchase Time Studies",
       syntax: `<b>studies [nowait] <i>[study list]</i></b>`,
-      description: `Purchase time studies specified. If <b>nowait</b> is present, then
-        the automator will purchase as many studies as possible at the moment, and move on
+      description: `Purchase Time Studies specified. If <b>nowait</b> is present, then
+        the automator will purchase as many Time Studies as possible at the moment, and move on
         to the next command.<br>
         If <b>nowait</b> is <i>not</i> present, then the automator will buy the studies in order,
         waiting for them to become available/affordable if necessary.<br>
@@ -277,7 +277,7 @@ GameDatabase.reality.automator = {
         studies (for example, <i>11-62</i>) and the following aliases:<br>
         <blockquote><b>normal, infinity, time, active, passive, idle</b></blockquote>
         A variable name may be used in place of study list, see <b>define</b>
-        The string produced by "export" in the time study tab can be used with this command.`,
+        The string produced by "export" in the Time Study tab can be used with this command.`,
       examples: [
         "studies nowait 11,21,31",
         "studies 11-62, normal, 111, idle",

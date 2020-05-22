@@ -41,7 +41,7 @@ GameDatabase.celestials.enslaved = {
       id: 5,
       progress: "Found some extra secret Time Theorems",
       hint: "Time Study 12? What's that?",
-      condition: "Clicked the secret time study",
+      condition: "Clicked the secret Time Study",
     },
     storedTime: {
       id: 6,

@@ -816,7 +816,7 @@ GameDatabase.achievements.normal = [
   {
     id: 128,
     name: "What do I have to do to get rid of you",
-    tooltip: () => `Reach ${formatPostBreak("1e22000", 0, 0)} IP without any time studies.`,
+    tooltip: () => `Reach ${formatPostBreak("1e22000", 0, 0)} IP without any Time Studies.`,
     checkRequirement: () => player.infinityPoints.exponent >= 22000 && player.timestudy.studies.length === 0,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Time Dimensions are multiplied by the number of studies you have.",
@@ -890,13 +890,13 @@ GameDatabase.achievements.normal = [
   {
     id: 138,
     name: "This is what I have to do to get rid of you.",
-    tooltip: () => `Reach ${formatPostBreak("1e26000", 0, 0)} IP without any time studies while Dilated.`,
+    tooltip: () => `Reach ${formatPostBreak("1e26000", 0, 0)} IP without any Time Studies while Dilated.`,
     checkRequirement: () =>
       player.timestudy.studies.length === 0 &&
       player.dilation.active &&
       player.infinityPoints.exponent >= 26000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Removes the downsides from the active and idle time study paths."
+    reward: "Removes the downsides from the active and idle Time Study paths."
   },
   {
     id: 141,
@@ -1142,7 +1142,7 @@ GameDatabase.achievements.normal = [
   {
     id: 174,
     name: "Don't you already have two of these?",
-    tooltip: "Get a singularity.",
+    tooltip: "Get a Singularity.",
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.SINGULARITY_RESET_BEFORE
   },

@@ -15,9 +15,6 @@ Vue.component("reality-button", {
     };
   },
   computed: {
-    buttonHeader() {
-      return this.canReality ? "Make a new reality" : "Start reality over";
-    },
     formatMachinesGained() {
       return `Machines gained: ${format(this.machinesGained, 2, 0)}`;
     },
@@ -86,10 +83,7 @@ Vue.component("reality-button", {
         [Teresa.isRunning, teresaReward, teresaThreshold]];
     },
     handleClick() {
-      if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {
-        if (player.realities === 0) return;
-        resetReality();
-      } else {
+      if (TimeStudy.reality.isBought && player.eternityPoints.gte("1e4000")) {
         requestManualReality();
       }
     },
@@ -106,8 +100,8 @@ Vue.component("reality-button", {
                    canReality ? 'c-reality-button--good' : 'c-reality-button--bad']"
           @click="handleClick">
     <div class="l-reality-button__contents">
-      <div class="c-reality-button__header">{{buttonHeader}}</div>
       <template v-if="canReality">
+      <div class="c-reality-button__header">Make a new Reality</div>
         <div>{{formatMachinesGained}}</div>
         <div>{{formatMachineStats}}</div>
         <div>{{formatGlyphLevel}}</div>
@@ -116,7 +110,7 @@ Vue.component("reality-button", {
         <div>Get {{format("1e4000", 0, 0)}} EP to unlock a new reality</div>
       </template>
       <template v-else>
-        <div>Purchase the study in the eternity tab to unlock a new reality</div>
+        <div>Purchase the study in the Eternity tab to unlock a new Reality</div>
       </template>
       <div class="infotooltiptext" v-if="canReality">
         <div>Other resources gained:</div>

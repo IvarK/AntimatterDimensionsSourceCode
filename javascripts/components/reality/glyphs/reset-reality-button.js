@@ -16,9 +16,9 @@ Vue.component("reset-reality-button", {
   },
   template: `
   <button :class="['l-reset-reality-button', 'c-reset-reality-button', 'c-reality-button--bad']"
-          @click="resetReality" :style="canReality ? '' : 'visibility: hidden;'">
+          @click="resetReality">
     <div class="l-reality-button__contents">
-      Start reality over
+      Start this Reality over
     </div>
   </button>
   `

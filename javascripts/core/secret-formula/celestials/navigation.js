@@ -496,7 +496,7 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => EffarigUnlock.reality.isUnlocked,
       complete: () => {
         if (Achievement(151).isUnlocked) return 1;
-        if (NormalDimension(8).amount.gt(0)) return 0;
+        if (!player.noEighthDimensions) return 0;
 
         return player.galaxies / 800;
       },
@@ -513,12 +513,14 @@ GameDatabase.celestials.navigation = (function() {
             const goal = 800;
             if (complete >= 1) return [
               "V's achievement",
-              `Reach ${formatInt(goal)} Antimatter Galaxies without any 8th dimensions.`
+              `Reach ${formatInt(goal)} Antimatter Galaxies without buying`,
+              "8th Dimensions in your current Infinity"
             ];
-            const galaxies = NormalDimension(8).amount.eq(0) ? player.galaxies : 0;
+            const galaxies = player.noEighthDimensions ? player.galaxies : 0;
             return [
               "V's achievement",
-              `Reach ${formatInt(galaxies)} / ${formatInt(goal)} Antimatter Galaxies without any 8th dimensions.`
+              `Reach ${formatInt(galaxies)} / ${formatInt(goal)} Antimatter Galaxies without buying`,
+              "8th Dimensions in your current Infinity"
             ];
           },
           angle: -135,

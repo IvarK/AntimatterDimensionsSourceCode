@@ -456,7 +456,7 @@ GameDatabase.achievements.normal = [
     },
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => "Each Dimension gains a boost proportional to tier " +
-      `(8th dimension gets ${formatPercents(0.08)}, 7th gets ${formatPercents(0.07)}, etc.)`,
+      `(8th Dimension gets ${formatPercents(0.08)}, 7th gets ${formatPercents(0.07)}, etc.)`,
   },
   {
     id: 78,

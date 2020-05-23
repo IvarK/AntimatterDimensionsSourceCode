@@ -975,7 +975,7 @@ to spend any resources.
 <br>
 <br>
 Space Theorems allow you to purchase Time Studies which are normally forbidden, such as multiple paths in the
-split after the improved IP formula, or both Time Studies within a black/white pair near the bottom. Like Time
+split after the improved IP formula, or both Time Studies within a dark/light pair near the bottom. Like Time
 Theorems, they are freely given back every time you respec your studies.
 With enough Space Theorems you will eventually be able to purchase every single Time Study at once!
 <br>

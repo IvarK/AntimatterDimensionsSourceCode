@@ -291,7 +291,7 @@ Vue.component("enslaved-tab", {
               <p>Time study 192 (uncapped Replicanti) is locked</p>
               <p>The Black Hole is disabled</p>
               <p>Tachyon production and Dilated Time production are severely reduced</p>
-              <p>Time Theorem generation from dilation glyphs is disabled</p>
+              <p>Time Theorem generation from Dilation glyphs is disabled</p>
               <p>Certain challenge goals have been increased</p>
               <p>Stored time is effectively Dilated (exponent^{{ format(0.55, 2, 2) }})</p>
               <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps

@@ -615,7 +615,8 @@ button:focus {
   border-style: solid;
 }
 
-.c-reset-reality-button:hover, .c-reset-reality-button.force-hover {
+.c-reset-reality-button:hover, .c-reset-reality-button.force-hover,
+.t-s6 .c-reset-reality-button:hover, .t-s6 .c-reset-reality-button.force-hover {
   color: white;
   background: var(--color-bad);
 }

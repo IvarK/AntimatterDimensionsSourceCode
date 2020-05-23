@@ -284,6 +284,8 @@ function beginProcessReality(realityProps) {
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_BEFORE);
   const glyphsToProcess = realityProps.simulatedRealities + (realityProps.alreadyGotGlyph ? 0 : 1);
   const rng = GlyphGenerator.getRNG(false);
+  // Do this before processing glyphs so that we don't try to reality again while async is running.
+  finishProcessReality(realityProps);
   Async.run(() => processAutoGlyph(realityProps.gainedGlyphLevel, rng),
     glyphsToProcess,
     {
@@ -307,7 +309,6 @@ function beginProcessReality(realityProps) {
       },
       then: () => {
         rng.finalize();
-        finishProcessReality(realityProps);
       }
     });
 }

@@ -551,7 +551,6 @@ button:focus {
   font-family: Typewriter;
   border-radius: 0.4rem;
   transition-duration: 0.2s;
-  cursor: pointer;
   width: 21rem;
   height: 8rem;
   font-size: 1.2rem;
@@ -573,24 +572,26 @@ button:focus {
   background: black;
 }
 
-.c-reality-button--good {
+.c-reality-button--unlocked {
   color: var(--color-reality);
   border-color: var(--color-reality);
+  cursor: pointer;
 }
 
-.c-reality-button--bad {
-  color: var(--color-bad);
+.c-reality-button--locked {
+  color: #181818;
+  background-color: #5f5f5f;
   border-color: var(--color-bad);
 }
 
-.c-reality-button--good:hover, .c-reality-button--good.force-hover {
+.c-reality-button--unlocked:hover, .c-reality-button--unlocked.force-hover {
   color: white;
   background: var(--color-reality);
 }
 
-.c-reality-button--bad:hover, .c-reality-button--bad.force-hover {
-  color: white;
-  background: var(--color-bad);
+.c-reality-button--locked:hover {
+  color: #1d1d1d;
+  background-color: var(--color-bad);
 }
 
 .l-reset-reality-button {
@@ -607,9 +608,16 @@ button:focus {
   height: 4rem;
   font-size: 1.2rem;
   font-weight: bold;
+  color: var(--color-bad);
+  border-color: var(--color-bad);
   background: white;
   border-width: 0.2rem;
   border-style: solid;
+}
+
+.c-reset-reality-button:hover, .c-reset-reality-button.force-hover {
+  color: white;
+  background: var(--color-bad);
 }
 
 .t-dark-metro .c-reset-reality-button,

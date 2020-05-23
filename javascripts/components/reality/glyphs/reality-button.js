@@ -97,7 +97,7 @@ Vue.component("reality-button", {
   },
   template: `
   <button :class="['l-reality-button', 'c-reality-button', 'infotooltip',
-                   canReality ? 'c-reality-button--good' : 'c-reality-button--bad']"
+                   canReality ? 'c-reality-button--unlocked' : 'c-reality-button--locked']"
           @click="handleClick">
     <div class="l-reality-button__contents">
       <template v-if="canReality">
@@ -107,7 +107,7 @@ Vue.component("reality-button", {
         <div>{{formatGlyphLevel}}</div>
       </template>
       <template v-else-if="hasRealityStudy">
-        <div>Get {{format("1e4000", 0, 0)}} EP to unlock a new reality</div>
+        <div>Get {{format("1e4000", 0, 0)}} EP to unlock a new Reality</div>
       </template>
       <template v-else>
         <div>Purchase the study in the Eternity tab to unlock a new Reality</div>

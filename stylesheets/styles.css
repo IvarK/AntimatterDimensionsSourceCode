@@ -593,6 +593,37 @@ button:focus {
   background: var(--color-bad);
 }
 
+.l-reset-reality-button {
+  display: block;
+  margin-bottom: 2rem;
+}
+
+.c-reset-reality-button {
+  font-family: Typewriter;
+  border-radius: 0.4rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  width: 21rem;
+  height: 4rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: white;
+  border-width: 0.2rem;
+  border-style: solid;
+}
+
+.t-dark-metro .c-reset-reality-button,
+.t-inverted-metro .c-reset-reality-button,
+.t-metro .c-reset-reality-button,
+.t-s8 .c-reset-reality-button {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.t-s6 .c-reset-reality-button {
+  background: black;
+}
+
 .l-reality-amplify-button {
   margin-top: 1rem;
   margin-bottom: 1rem;

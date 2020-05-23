@@ -53,6 +53,7 @@ Vue.component("glyphs-tab", {
         <glyph-peek />
         <br/>
         <reality-button />
+        <reset-reality-button />
         <div v-if="isInCelestialReality">
           <input type="checkbox"
             id="autoRestart"

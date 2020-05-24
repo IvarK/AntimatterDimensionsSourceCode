@@ -15,7 +15,7 @@ const ENSLAVED_UNLOCKS = {
       const hasRarityRequirement = strengthToRarity(player.bestGlyphStrength) >= 100;
       return hasLevelRequirement && hasRarityRequirement;
     },
-    description: () => `Unlock The Enslaved Ones' reality (requires
+    description: () => `Unlock The Enslaved Ones' Reality (requires
       a level ${formatInt(5000)} glyph and a rarity ${formatPercents(1, 1)} glyph)`,
   }
 };

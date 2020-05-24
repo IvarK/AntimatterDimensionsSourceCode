@@ -101,7 +101,7 @@ GameDatabase.challenges.infinity = [
     effect: () => Decimal.pow(0.8446303389034288,
       Math.max(0, player.thisInfinityTime - player.thisInfinityLastBuyTime)),
     reward: {
-      description: "You get a multiplier to dimensions 2-7 based on 1st and 8th dimension multipliers.",
+      description: "You get a multiplier to Dimensions 2-7 based on 1st and 8th Dimension multipliers.",
       effect: () => NormalDimension(1).multiplier.times(NormalDimension(8).multiplier).pow(0.02),
       formatEffect: value => formatX(value, 2, 2)
     },

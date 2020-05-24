@@ -7,6 +7,13 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     const cappedInfinity = Math.min(Math.pow(scaledInfinity, 0.125), 500);
     return Decimal.pow(15, Math.log(scaledInfinity) * cappedInfinity);
   };
+  const passiveIPMult = () => {
+    const isEffarigLimited = Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY;
+    const normalValue = Perk.studyPassive1.isBought ? 1e100 : 1e25;
+    return isEffarigLimited
+      ? Math.min(normalValue, Effarig.eternityCap.toNumber())
+      : normalValue;
+  };
   return [
     {
       id: 11,
@@ -325,14 +332,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 2,
       requirement: () => TimeStudy(132).isBought && !TimeStudy(141).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(132).isBought && (TimeStudy(141).isBought || TimeStudy(143).isBought),
-      description: () => `You gain ${formatX(Perk.studyPassive1.isBought ? 1e100 : 1e25, 0, 0)} more IP`,
-      effect: () => {
-        const isEffarigLimited = Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY;
-        const normalValue = Perk.studyPassive1.isBought ? 1e100 : 1e25;
-        return isEffarigLimited
-          ? Math.min(normalValue, Effarig.eternityCap.toNumber())
-          : normalValue;
-        },
+      description: () => `You gain ${formatX(passiveIPMult(), 0, 0)} more IP`,
+      effect: passiveIPMult,
       cap: () => (Effarig.eternityCap === undefined ? undefined : Effarig.eternityCap.toNumber())
     },
     {

@@ -292,6 +292,8 @@ let player = {
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
     secondGaussian: 1e6,
+    musicSeed: Math.floor(Date.now() * Math.random() + 0xABCDEF),
+    musicSecondGaussian: 1e6,
     rebuyables: {
       1: 0,
       2: 0,

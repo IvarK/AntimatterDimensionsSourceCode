@@ -58,6 +58,14 @@ function formatPercents(value, places) {
   return `${format(value * 100, 2, places)}%`;
 }
 
+function formatRarity(rarity) {
+  // Typically we want one place of precision for rarity. However, after 99.95%, one digit
+  // of precision would lead to rarity being displayed as 100.0%. We'd like to avoid that.
+  // So we start displaying 2 digits of precision at 99.9%, 3 at 99.99%, and so on.
+  const places = rarity === 100 ? 1 : Math.clampMin(1, Math.floor(1 - Math.log10(100 - rarity)));
+  return `${format(rarity, 2, places)}%`;
+}
+
 function timeDisplay(ms) {
   return TimeSpan.fromMilliseconds(ms).toString();
 }

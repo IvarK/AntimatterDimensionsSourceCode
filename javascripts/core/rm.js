@@ -212,6 +212,15 @@ const GlyphGenerator = {
     }
     get isFake() { return true; }
   },
+  
+  MusicGlyphRNG: class extends GlyphRNG {
+    constructor() { super(player.reality.musicSeed, player.reality.musicSecondGaussian); }
+    finalize() {
+      player.reality.musicSeed = this.seed;
+      player.reality.musicSecondGaussian = this.secondGaussian;
+    }
+    get isFake() { return false; }
+  },
   /* eslint-enable lines-between-class-members */
 
   startingGlyph(level) {
@@ -298,10 +307,12 @@ const GlyphGenerator = {
   },
 
   musicGlyph() {
-      const glyph = this.randomGlyph({ actualLevel: Math.floor(player.bestGlyphLevel * 0.8), rawLevel: 1 });
-      glyph.symbol = "key266b";
-      glyph.color = "#FF80AB";
-      return glyph;
+    const rng = new GlyphGenerator.MusicGlyphRNG();
+    const glyph = this.randomGlyph({ actualLevel: Math.floor(player.bestGlyphLevel * 0.8), rawLevel: 1 }, rng);
+    rng.finalize();
+    glyph.symbol = "key266b";
+    glyph.color = "#FF80AB";
+    return glyph;
   },
 
   // Generates a unique ID for glyphs, used for deletion and drag-and-drop.  Non-unique IDs can cause buggy behavior.

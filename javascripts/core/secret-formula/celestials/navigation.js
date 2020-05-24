@@ -410,7 +410,7 @@ GameDatabase.celestials.navigation = (function() {
     "enslaved-unlock-glyph-rarity": {
       visible: () => EffarigUnlock.eternity.isUnlocked,
       complete: () => {
-        const bestRarity = strengthToRarity(Glyphs.activeList.concat(Glyphs.inventoryList).map(g => g.strength).max());
+        const bestRarity = strengthToRarity(player.bestGlyphStrength);
         return bestRarity / 100;
       },
       drawOrder: -1,

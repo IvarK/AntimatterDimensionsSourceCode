@@ -38,7 +38,7 @@ Vue.component("glyph-peek", {
     },
     refreshGlyphs() {
       this.canRefresh = true;
-      this.glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(), false);
+      this.glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false });
       this.level = gainedGlyphLevel().actualLevel;
     },
   },

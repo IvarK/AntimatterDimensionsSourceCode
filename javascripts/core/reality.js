@@ -31,12 +31,12 @@ const GlyphSelection = {
     glyphList[Math.floor(random * glyphList.length)].strength = newStrength;
   },
   
-  glyphList(countIn, level, isChoosingGlyph, rngIn) {
+  glyphList(countIn, level, config) {
     // Always generate at least 4 choices so that the RNG never diverges based on
     // the 4-choice perk.
     const count = Math.clampMin(countIn, 4);
     let glyphList = [];
-    const rng = rngIn || new GlyphGenerator.RealGlyphRNG();
+    const rng = config.rng || new GlyphGenerator.RealGlyphRNG();
     const types = [];
     for (let out = 0; out < count; ++out) {
       types.push(GlyphGenerator.randomType(rng, types));
@@ -49,7 +49,7 @@ const GlyphSelection = {
     // we remove the extra choices here.
     glyphList = glyphList.slice(0, countIn);
     // If we passed an explicit RNG in, we assume it'll get finalized later.
-    if (isChoosingGlyph && !rngIn) {
+    if (!config.rng && config.isChoosingGlyph) {
       rng.finalize();
     }
     return glyphList;
@@ -58,7 +58,7 @@ const GlyphSelection = {
   generate(count, realityProps) {
     EventHub.dispatch(GAME_EVENT.GLYPH_CHOICES_GENERATED);
     this.realityProps = realityProps;
-    this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel, true);
+    this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel, { isChoosingGlyph: true });
     ui.view.modal.glyphSelection = true;
   },
 
@@ -140,7 +140,7 @@ function requestManualReality() {
     } else {
       // We can't get a random glyph directly here because that disturbs the RNG
       // (makes it depend on whether you got first perk or not).
-      Glyphs.addToInventory(GlyphSelection.glyphList(1, realityProps.gainedGlyphLevel, true)[0]);
+      Glyphs.addToInventory(GlyphSelection.glyphList(1, realityProps.gainedGlyphLevel, { isChoosingGlyph: true })[0]);
     }
     triggerManualReality(realityProps);
     return;
@@ -179,7 +179,7 @@ function processAutoGlyph(gainedLevel, rng) {
   let newGlyph;
   // Always generate a list of glyphs to avoid RNG diverging based on whether
   // a reality is done automatically.
-  const glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedLevel, true, rng);
+  const glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedLevel, { rng: rng });
   if (EffarigUnlock.basicFilter.isUnlocked) {
     newGlyph = AutoGlyphProcessor.pick(glyphs);
     if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {

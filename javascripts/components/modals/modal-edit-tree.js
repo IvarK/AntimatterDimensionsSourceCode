@@ -1,31 +1,27 @@
 "use strict";
 
 Vue.component("modal-edit-tree", {
-  props: {
-    saveslot: Number
-  },
   computed: {
     modal() {
       return this.$viewModel.modal.current;
     },
     editLabel() {
       return `Editing ${this.name}`;
-    }
+    },
   },
   data() {
     return {
       input: "",
-      name: "",
     };
   },
   methods: {
-    created() {
-      this.input = this.modal.editingTree;
-      this.name = player.timestudy.presets[this.saveslot - 1].name;
-    },
     confirmEdits() {
       this.emitClose();
-
+    },
+    update() {
+      const preset = player.timestudy.preset[this.modal.id];
+      this.name = preset.name;
+      this.input = preset.studies;
     }
   },
   template:

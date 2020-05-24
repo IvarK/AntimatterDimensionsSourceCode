@@ -201,7 +201,7 @@ Vue.component("tt-save-load-button", {
       copyToClipboardAndNotify(this.preset.studies);
     },
     edit() {
-      TimeStudyTreeEditModal.editTree.show(this.preset.studies, player.timestudy.presets[this.saveslot - 1], this.name);
+      Modal.editTree.show(player.timestudy.presets[this.saveslot - 1]);
     }
   },
   template: `

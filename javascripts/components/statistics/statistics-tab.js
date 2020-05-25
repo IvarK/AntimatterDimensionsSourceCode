@@ -176,7 +176,7 @@ Vue.component("statistics-tab", {
             <div>
               Your best RM/min is {{ format(reality.bestRate, 2, 2) }}.
             </div>
-            <div>Your best glyph rarity is {{ formatPercents(reality.bestRarity / 100, 1) }}.</div>
+            <div>Your best glyph rarity is {{ formatRarity(reality.bestRarity) }}.</div>
             <br>
           <glyph-set-preview
             v-for="(set, idx) in recordGlyphInfo"

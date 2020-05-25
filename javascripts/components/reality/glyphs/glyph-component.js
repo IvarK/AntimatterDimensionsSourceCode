@@ -132,7 +132,7 @@ const GlyphTooltipComponent = {
       if (this.type === "companion") return "Companion Glyph";
       if (this.type === "cursed") return "Cursed Glyph";
       const name = this.type === "reality" ? "Pure" : this.rarityInfo.name;
-      const rarity = this.type === "reality" ? "" : `(${formatPercents(strengthToRarity(this.strength) / 100, 1)})`;
+      const rarity = this.type === "reality" ? "" : `(${formatRarity(strengthToRarity(this.strength))})`;
       return `${name} Glyph of ${this.type.charAt(0).toUpperCase()}${this.type.slice(1)} ${rarity}`;
     },
     isLevelCapped() {

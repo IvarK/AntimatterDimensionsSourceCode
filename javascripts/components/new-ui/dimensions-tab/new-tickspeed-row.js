@@ -9,6 +9,7 @@ Vue.component("new-tickspeed-row", {
       isAffordable: false,
       tickspeed: new Decimal(0),
       gameSpeedMult: 1,
+      galaxyCount: 0,
       isContinuumActive: false,
       continuumValue: 0
     };
@@ -56,6 +57,7 @@ Vue.component("new-tickspeed-row", {
       this.isAffordable = !isEC9Running && canAfford(Tickspeed.cost);
       this.tickspeed.copyFrom(Tickspeed.current);
       this.gameSpeedMult = getGameSpeedupForDisplay();
+      this.galaxyCount = player.galaxies;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
     }

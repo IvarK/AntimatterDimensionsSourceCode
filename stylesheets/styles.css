@@ -5849,11 +5849,10 @@ kbd {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 81.25rem;
+  width: 81.25rem;
   margin: auto;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  width: 70%;
   box-sizing: border-box;
   overflow: hidden;
 }

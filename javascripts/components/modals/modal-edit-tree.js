@@ -12,6 +12,7 @@ Vue.component("modal-edit-tree", {
   data() {
     return {
       input: "",
+      name: player.timestudy.preset[this.modal.id].name,
     };
   },
   watch: {

@@ -20,7 +20,7 @@ GameDatabase.celestials.enslaved = {
     },
     feelEternity: {
       id: 2,
-      progress: "Tried to Fix Infinity, but then experenced Eternity",
+      progress: "Tried to Fix Infinity, but then experienced Eternity",
       hint: "Infinity seems to be more broken than usual in this Reality, but is that even fixable?",
       condition: "Clicked the FEEL ETERNITY button",
     },

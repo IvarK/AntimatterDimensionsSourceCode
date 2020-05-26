@@ -159,6 +159,13 @@ dev.giveRealityGlyph = function(level) {
   Glyphs.addToInventory(GlyphGenerator.realityGlyph(level));
 };
 
+dev.setCompanionGlyphEP = function(eternityPoints) {
+  const glyph = player.reality.glyphs.active
+    .concat(player.reality.glyphs.inventory)
+    .filter(g => g.type === "companion")[0];
+  glyph.strength = rarityToStrength(eternityPoints.log10() / 1e6);
+}
+
 dev.decriminalize = function() {
   SecretAchievement(23).lock();
   EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);

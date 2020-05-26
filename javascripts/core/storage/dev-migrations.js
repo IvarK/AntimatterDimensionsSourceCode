@@ -695,9 +695,10 @@ GameStorage.devMigrations = {
       player.celestials.laitela.dimensions.forEach(d => d.ascensionCount = 0);
     },
     player => {
-      const allGlyphs = player.reality.glyphs.active
-        .concat(player.reality.glyphs.inventory);
-      for (const glyph of allGlyphs) {
+      const allRandomGlyphs = player.reality.glyphs.active
+        .concat(player.reality.glyphs.inventory)
+        .filter(i => i.type !== "companion");
+      for (const glyph of allRandomGlyphs) {
         glyph.strength = Math.ceil(glyph.strength * 400) / 400;
       }
     }

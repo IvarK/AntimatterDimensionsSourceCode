@@ -14,6 +14,11 @@ Vue.component("modal-edit-tree", {
       input: "",
     };
   },
+  watch: {
+    changeInInput(newValue) {
+      this.input = newValue;
+    }
+  },
   methods: {
     confirmEdits() {
       this.emitClose();
@@ -47,6 +52,6 @@ Vue.component("modal-edit-tree", {
 // looking for america's greatest
 // diners, drive-ins, and dives.
 
-
+// This was code from the old edit thing in tt-shop.js
 // this.hideContextMenu();
 // if (newValue !== null) this.preset.studies = newValue;

@@ -81,8 +81,8 @@ you can make your Dimensions produce faster, as if multiple ticks occur in each 
 boosting production as if part of a game tick has passed.
 <br>
 <br>
-<b>Cost:</b> The cost of antimatter for reducing the time between ticks by the % displayed above
-(Without any Galaxies, this is -${formatPercents(0.11)} per purchase)
+<b>Cost:</b> The cost of antimatter for multiplying ticks/sec by the displayed multiplier.
+(without any Galaxies, this is ${formatX(1.125, 0, 3)} per purchase)
 <br>
 <br>
 <b>Buy Max:</b> This will buy the maximum amount of tickspeed upgrades available
@@ -123,8 +123,8 @@ the Second Dimension ${formatX(4)}, the Third Dimension ${formatX(2)}, and all o
       name: "Antimatter Galaxies",
       info: () => `
 Purchasing an Antimatter Galaxy will reset your game back to the point where only ${formatInt(4)} Dimensions are
-available, but will increase the effect of your tickspeed upgrades by +${formatPercents(0.015, 1)} for your first two
-galaxies. As you get more galaxies, the reduction will continue becoming stronger and stronger.
+available, but will increase the effect of your tickspeed upgrades by +${format(0.02, 0, 2)} for your first two
+galaxies. As you get more galaxies, the multiplier will continue becoming stronger and stronger.
 <br>
 <br>
 Though it will have very little impact for the first few purchases,

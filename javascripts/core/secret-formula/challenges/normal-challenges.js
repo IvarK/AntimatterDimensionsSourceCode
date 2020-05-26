@@ -39,7 +39,7 @@ GameDatabase.challenges.normal = [
     id: 5,
     legacyId: 6,
     isQuickResettable: false,
-    description: () => `Tickspeed starts at ${formatPercents(0.07)}.`,
+    description: () => `Tickspeed starts at ${formatX(1.080, 0, 3)}.`,
     name: "Fifth Dimension Autobuyer",
     reward: "Upgradeable Fifth Dimension Autobuyer interval"
   },

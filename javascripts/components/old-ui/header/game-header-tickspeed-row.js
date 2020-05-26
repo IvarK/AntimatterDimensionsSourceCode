@@ -25,12 +25,7 @@ Vue.component("game-header-tickspeed-row", {
       if (InfinityChallenge(3).isRunning) return `Multiply all Normal Dimensions by
         ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)}`;
       const tickmult = this.mult;
-      if (tickmult.lte(1e-9)) return `Divide the tick interval by ${format(tickmult.reciprocal(), 2, 0)}.`;
-
-      const asNumber = tickmult.toNumber();
-      let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
-      if (this.galaxyCount === 1) places = Math.max(places, 1);
-      return `Reduce the tick interval by ${formatPercents(1 - asNumber, places)}.`;
+      return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade.`;
     },
     tickspeedDisplay() {
       return `Tickspeed: ${format(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;

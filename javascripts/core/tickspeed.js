@@ -20,10 +20,16 @@ function getTickSpeedMultiplier() {
   freeGalaxies *= 1 + Math.max(0, player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
   let galaxies = player.galaxies + replicantiGalaxies + freeGalaxies;
   if (galaxies < 3) {
-      let baseMultiplier = 0.9;
-      if (player.galaxies === 0) baseMultiplier = 0.89;
-      if (player.galaxies === 1) baseMultiplier = 0.895;
-      if (NormalChallenge(5).isRunning) baseMultiplier = 0.93;
+      // Magic numbers are to retain balancing from before while displaying
+      // them now as positive multipliers rather than negative percentages
+      let baseMultiplier = 1 / 1.1245;
+      if (player.galaxies === 1) baseMultiplier = 1 / 1.119367;
+      if (player.galaxies === 2) baseMultiplier = 1 / 1.11267177;
+      if (NormalChallenge(5).isRunning) {
+        baseMultiplier = 1 / 1.08;
+        if (player.galaxies === 1) baseMultiplier = 1 / 1.07632;
+        if (player.galaxies === 2) baseMultiplier = 1 / 1.072;
+      }
       const perGalaxy = 0.02 * Effects.product(
         InfinityUpgrade.galaxyBoost,
         InfinityUpgrade.galaxyBoost.chargedEffect,

@@ -21,14 +21,10 @@ Vue.component("new-tickspeed-row", {
       };
     },
     multiplierDisplay() {
+      if (InfinityChallenge(3).isRunning) return `Multiply all Normal Dimensions by
+        ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)}`;
       const tickmult = this.mult;
-      if (tickmult.lte(1e-9)) {
-        return `${formatX(tickmult.reciprocal(), 2, 0)} faster / upgrade.`;
-      }
-      const asNumber = tickmult.toNumber();
-      let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
-      if (player.galaxies === 1) places = Math.max(places, 1);
-      return `-${((1 - asNumber) * 100).toFixed(places)}% / upgrade`;
+      return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade.`;
     },
     tickspeedDisplay() {
       return `Tickspeed: ${format(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;

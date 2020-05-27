@@ -176,9 +176,9 @@ Each achievement has conditions that must be met before they are earned.
 Some are very simple, and some are significantly trickier.
 <br>
 <br>
-You will recieve a ${formatX(1.03, 2, 2)} multiplier to all Antimatter Dimensions for each completed achievement, as well
-as an additional ${formatX(1.25, 2, 2)} for each fully completed row. In addition, many achievements have their own
-rewards.
+You will recieve a ${formatX(1.03, 2, 2)} multiplier to all Antimatter Dimensions for each completed achievement, as
+well as an additional ${formatX(1.25, 2, 2)} for each fully completed row. In addition, many achievements have their
+own rewards.
 `,
       isUnlocked: () => true,
       tags: ["earlygame", "awards", "earlygame"],

@@ -69,8 +69,8 @@ GameStorage.migrations = {
       }
     },
     12.1: player => {
-      for (const achievements of player.achievements) {
-        if (achievements.includes("s") && achievements.length <= 3) {
+      for (const achievement of player.achievements) {
+        if (achievement.includes("s") && achievement.length <= 3) {
           player.achievements.splice(player.achievements.indexOf("r36"), 1);
           break;
         }

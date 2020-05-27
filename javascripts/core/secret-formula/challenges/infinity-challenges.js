@@ -57,7 +57,7 @@ GameDatabase.challenges.infinity = [
     description:
       "When buying Antimatter Dimensions 1-4, Antimatter Dimensions with costs smaller or equal increase in cost. " +
       "When buying Antimatter Dimensions 5-8, Antimatter Dimensions with costs larger or equal increase in cost. " +
-      "When buying tickspeed, Antimatter Dimensions with the same cost increase.",
+      "When buying tickspeed, Antimatter Dimensions with the same cost increase in cost.",
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {

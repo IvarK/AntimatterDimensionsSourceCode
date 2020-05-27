@@ -41,7 +41,8 @@ GameDatabase.challenges.normal = [
     id: 5,
     legacyId: 6,
     isQuickResettable: false,
-    description: () => `Tickspeed starts at ${formatX(1.080, 0, 3)}.`,
+    description:
+      () => `The tickspeed purchase multiplier starts at ${formatX(1.080, 0, 3)} instead of ${formatX(1.125, 0, 3)}.`,
     name: "5th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 5th Antimatter Dimension Autobuyer"
   },

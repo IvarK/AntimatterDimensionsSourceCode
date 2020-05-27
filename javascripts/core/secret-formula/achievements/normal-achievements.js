@@ -520,8 +520,8 @@ GameDatabase.achievements.normal = [
   {
     id: 86,
     name: "Do you even bend time bro?",
-    tooltip: () => `Reach ${formatX(999.9, 0, 1)} ticks/second per tickspeed upgrade.`,
-    checkRequirement: () => Tickspeed.multiplier.recip().gte(999.9),
+    tooltip: () => `Reach ${formatX(1000)} ticks/second per tickspeed upgrade.`,
+    checkRequirement: () => Tickspeed.multiplier.recip().gte(1000),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => `Galaxies are ${formatPercents(0.01)} stronger.`,
     effect: 1.01

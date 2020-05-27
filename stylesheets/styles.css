@@ -1179,6 +1179,10 @@ screen and (max-width: 480px) {
   margin-right: 0.8rem;
 }
 
+.o-primary-btn--sacrifice--large {
+  width: 37rem;
+}
+
 .o-primary-btn--buy-ad {
   font-size: 1rem;
 }

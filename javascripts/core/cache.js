@@ -82,23 +82,17 @@ const GameCache = {
 
   buyablePerks: new Lazy(() => Perks.all.filter(p => p.canBeBought)),
 
-  antimatterDimensionCommonMultiplier: new Lazy(() => {
-    // The effect is defined in normal_dimensions.js because that's where the non-cached
-    // code originally lived.
-    return antimatterDimensionCommonMultiplier();
-  }),
+  // The effect is defined in normal_dimensions.js because that's where the non-cached
+  // code originally lived.
+  antimatterDimensionCommonMultiplier: new Lazy(() => antimatterDimensionCommonMultiplier()),
 
   // 0 will cause a crash if invoked; this way the tier can be used as an index
   antimatterDimensionFinalMultipliers: Array.range(0, 9)
     .map(tier => new Lazy(() => getDimensionFinalMultiplierUncached(tier))),
 
-  infinityDimensionCommonMultiplier: new Lazy(() => {
-    return infinityDimensionCommonMultiplier();
-  }),
+  infinityDimensionCommonMultiplier: new Lazy(() => infinityDimensionCommonMultiplier()),
 
-  timeDimensionCommonMultiplier: new Lazy(() => {
-    return timeDimensionCommonMultiplier();
-  }),
+  timeDimensionCommonMultiplier: new Lazy(() => timeDimensionCommonMultiplier()),
 
   glyphEffects: new Lazy(() => orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k))),
 

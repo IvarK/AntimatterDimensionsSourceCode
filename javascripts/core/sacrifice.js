@@ -14,8 +14,8 @@ class Sacrifice {
 
   static get disabledCondition() {
     if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
-    if (DimBoost.totalBoosts <= DimBoost.maxShiftTier - 4) return "Requires a boost";
-    if (AntimatterDimension(8).totalAmount.eq(0)) return "No 8th Dimensions";
+    if (DimBoost.totalBoosts <= DimBoost.maxShiftTier - 4) return "requires a boost";
+    if (AntimatterDimension(8).totalAmount.eq(0)) return "no 8th Antimatter Dimensions";
     if (this.nextBoost.lte(1)) return `${formatX(1)} multiplier`;
     return "";
   }

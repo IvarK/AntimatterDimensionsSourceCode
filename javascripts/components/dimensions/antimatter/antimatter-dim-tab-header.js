@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("normal-dim-tab-header", {
+Vue.component("antimatter-dim-tab-header", {
   data() {
     return {
       isSacrificeUnlocked: false,
@@ -12,7 +12,7 @@ Vue.component("normal-dim-tab-header", {
   },
   computed: {
     sacrificeTooltip() {
-      return `Boosts 8th Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
+      return `Boosts 8th Antimatter Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
     },
   },
   methods: {
@@ -33,7 +33,7 @@ Vue.component("normal-dim-tab-header", {
     }
   },
   template:
-    `<div class="l-normal-dim-tab__header">
+    `<div class="l-antimatter-dim-tab__header">
       <primary-button
         v-show="isSacrificeUnlocked"
         v-tooltip="sacrificeTooltip"

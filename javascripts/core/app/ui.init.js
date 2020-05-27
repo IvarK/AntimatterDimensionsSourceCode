@@ -12,7 +12,7 @@ let ui = {
     },
     tabs: {
       dimensions: {
-        normal: {
+        antimatter: {
           floatingText: Array.from({ length: 9 }, () => [])
         },
       },
@@ -41,7 +41,7 @@ let ui = {
     draggingUIID: -1,
     currentContextMenu: null,
     tab: "dimensions",
-    subtab: "normal",
+    subtab: "antimatter",
     newUI: false,
     news: false,
     initialized: false,

@@ -22,7 +22,7 @@ Vue.component("new-tickspeed-row", {
       };
     },
     multiplierDisplay() {
-      if (InfinityChallenge(3).isRunning) return `Multiply all Normal Dimensions by
+      if (InfinityChallenge(3).isRunning) return `Multiply all Antimatter Dimensions by
         ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)}`;
       const tickmult = this.mult;
       return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade.`;

@@ -113,12 +113,12 @@
   border-color: black;
 }
 
-.o-time-study-normal-dim--available {
+.o-time-study-antimatter-dim--available {
   color: #22aa48;
   border-color: #198036;
 }
 
-.o-time-study-normal-dim--available:hover {
+.o-time-study-antimatter-dim--available:hover {
   color: #eeeeee;
   background-color: #22aa48;
 }
@@ -252,7 +252,7 @@
   border-color: var(--color-bad);
 }
 
-.o-time-study-normal-dim--unavailable {
+.o-time-study-antimatter-dim--unavailable {
   background-color: #94a89a;
 }
 
@@ -306,7 +306,7 @@
   background-color: var(--color-eternity);
 }
 
-.o-time-study-normal-dim--bought {
+.o-time-study-antimatter-dim--bought {
   color: black;
   border-color: black;
   background-color: #22aa48;
@@ -378,8 +378,8 @@
   border-color: black;
 }
 
-.t-dark .o-time-study-normal-dim--bought,
-.t-s6 .o-time-study-normal-dim--bought {
+.t-dark .o-time-study-antimatter-dim--bought,
+.t-s6 .o-time-study-antimatter-dim--bought {
   border-color: #198036;
 }
 
@@ -439,7 +439,7 @@
   transition: stroke 0.3s;
 }
 
-.o-time-study-connection--normal-dim {
+.o-time-study-connection--antimatter-dim {
   stroke: #37533f;
 }
 
@@ -481,7 +481,7 @@
   stroke: #bbbbbb;
 }
 
-.o-time-study-connection--bought.o-time-study-connection--normal-dim {
+.o-time-study-connection--bought.o-time-study-connection--antimatter-dim {
   stroke: #22aa48;
 }
 

@@ -92,7 +92,7 @@ function eternity(force, auto, specialConditions = {}) {
   InfinityDimensions.fullReset();
   Replicanti.reset();
   resetChallengeStuff();
-  NormalDimensions.reset();
+  AntimatterDimensions.reset();
 
   if (!specialConditions.enteringEC && player.respec) {
     respecTimeStudies(auto);

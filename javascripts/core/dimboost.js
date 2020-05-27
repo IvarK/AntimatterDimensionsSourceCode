@@ -7,7 +7,7 @@ class DimBoostRequirement {
   }
 
   get isSatisfied() {
-    const dimension = NormalDimension(this.tier);
+    const dimension = AntimatterDimension(this.tier);
     return dimension.totalAmount.gte(this.amount);
   }
 }
@@ -67,7 +67,7 @@ class DimBoost {
 
   static get lockText() {
     if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) {
-      return "Locked (8th Dimension Autobuyer Challenge)";
+      return "Locked (8th Antimatter Dimension Autobuyer Challenge)";
     }
     if (Ra.isRunning) return "Locked (Ra's reality)";
     return null;
@@ -124,7 +124,7 @@ function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
     player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
     resetChallengeStuff();
     if (forcedNDReset || !Perk.dimboostNonReset.isBought) {
-      NormalDimensions.reset();
+      AntimatterDimensions.reset();
       player.sacrificed = new Decimal(0);
       resetTickspeed();
     }
@@ -178,7 +178,7 @@ function maxBuyDimBoosts() {
   // Linearly extrapolate dimboost costs. req1 = a * 1 + b, req2 = a * 2 + b
   // so a = req2 - req1, b = req1 - a = 2 req1 - req2, num = (dims - b) / a
   const increase = req2.amount - req1.amount;
-  const dim = NormalDimension(req1.tier);
+  const dim = AntimatterDimension(req1.tier);
   let maxBoosts = Math.min(Number.MAX_VALUE,
     1 + Math.floor((dim.totalAmount.toNumber() - req1.amount) / increase));
   if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) {

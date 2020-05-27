@@ -4,7 +4,7 @@ GameDatabase.shopPurchases = {
   dimPurchases: {
     key: "dimPurchases",
     cost: 30,
-    description: "Double all your normal dimension multipliers (dimensions 1-8). Forever.",
+    description: "Double all your Antimatter Dimension multipliers (dimensions 1-8). Forever.",
     multiplier: purchases => Math.pow(2, purchases)
   },
   IPPurchases: {
@@ -22,7 +22,7 @@ GameDatabase.shopPurchases = {
   allDimPurchases: {
     key: "allDimPurchases",
     cost: 60,
-    description: "Double ALL the dimension multipliers (Normal, Infinity, Time) (multiplicative until 32x). Forever. ",
+    description: "Double ALL Dimension multipliers (Antimatter, Infinity, Time) (multiplicative until 32x). Forever. ",
     multiplier: purchases => (purchases > 4 ? 32 * (purchases - 4) : Math.pow(2, purchases)),
   }
 };

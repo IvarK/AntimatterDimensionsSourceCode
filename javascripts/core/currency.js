@@ -190,9 +190,9 @@ Currency.antimatter = new class extends DecimalCurrency {
   }
 
   get productionPerSecond() {
-    let production = NormalDimension(1).productionPerRealSecond;
+    let production = AntimatterDimension(1).productionPerRealSecond;
     if (NormalChallenge(12).isRunning) {
-      production = production.plus(NormalDimension(2).productionPerRealSecond);
+      production = production.plus(AntimatterDimension(2).productionPerRealSecond);
     }
     return production;
   }

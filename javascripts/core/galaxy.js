@@ -13,7 +13,7 @@ class GalaxyRequirement {
   }
 
   get isSatisfied() {
-    const dimension = NormalDimension(this.tier);
+    const dimension = AntimatterDimension(this.tier);
     return dimension.totalAmount.gte(this.amount);
   }
 }
@@ -125,7 +125,7 @@ class Galaxy {
     if (this.canBeBought) return null;
     if (EternityChallenge(6).isRunning) return "Locked (Eternity Challenge 6)";
     if (InfinityChallenge(7).isRunning) return "Locked (Infinity Challenge 7)";
-    if (NormalChallenge(8).isRunning) return "Locked (8th Dimension Autobuyer Challenge)";
+    if (NormalChallenge(8).isRunning) return "Locked (8th Antimatter Dimension Autobuyer Challenge)";
     return null;
   }
 
@@ -175,7 +175,7 @@ function maxBuyGalaxies(limit = Number.MAX_VALUE) {
   // Check for ability to buy one galaxy (which is pretty efficient)
   const req = Galaxy.requirement;
   if (!req.isSatisfied) return false;
-  const dim = NormalDimension(req.tier);
+  const dim = AntimatterDimension(req.tier);
   const newGalaxies = Math.clampMax(
     Galaxy.buyableGalaxies(Math.round(dim.totalAmount.toNumber())),
     limit);

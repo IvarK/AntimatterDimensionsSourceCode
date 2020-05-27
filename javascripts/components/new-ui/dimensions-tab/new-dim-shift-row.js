@@ -19,7 +19,7 @@ Vue.component("new-dim-shift-row", {
       return this.isShift ? "Shift" : "Boost";
     },
     dimName() {
-      return NormalDimension(this.requirement.tier).shortDisplayName;
+      return AntimatterDimension(this.requirement.tier).shortDisplayName;
     },
     buttonText() {
       return this.lockText === null

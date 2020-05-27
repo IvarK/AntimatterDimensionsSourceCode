@@ -83,7 +83,7 @@ GameDatabase.eternity.milestones = {
   },
   unlockAllND: {
     eternities: 30,
-    reward: "Start with all Normal Dimensions available for purchase"
+    reward: "Start with all Antimatter Dimensions available for purchase"
   },
   autobuyerReplicantiChance: {
     eternities: 40,

@@ -488,7 +488,17 @@ GameStorage.devMigrations = {
       player.celestials.teresa.perkShop[4] = tempMusic;
     },
     GameStorage.migrations.convertAchievementsToBits,
-    GameStorage.migrations.removePower,
+    player => {
+      for (const dimension of player.dimensions.antimatter) {
+        delete dimension.power;
+      }
+      for (const dimension of player.dimensions.infinity) {
+        delete dimension.power;
+      }
+      for (const dimension of player.dimensions.time) {
+        delete dimension.power;
+      }
+    },
     player => {
       const cursedMask = 15;
       const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
@@ -700,6 +710,15 @@ GameStorage.devMigrations = {
       for (const glyph of allGlyphs) {
         glyph.strength = Math.ceil(glyph.strength * 400) / 400;
       }
+    },
+    player => {
+      for (let i = 0; i < player.dimensions.normal.length; i++) {
+        const dimension = player.dimensions.normal[i];
+        player.dimensions.antimatter[i].bought = dimension.bought;
+        player.dimensions.antimatter[i].costBumps = dimension.costBumps;
+        player.dimensions.antimatter[i].amount = new Decimal(dimension.amount);
+      }
+      delete player.dimensions.normal;
     }
   ],
 

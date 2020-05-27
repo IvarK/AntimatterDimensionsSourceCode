@@ -4,53 +4,53 @@ GameDatabase.achievements.normal = [
   {
     id: 11,
     name: "You gotta start somewhere",
-    tooltip: "Buy a 1st Dimension.",
+    tooltip: "Buy a 1st Antimatter Dimension.",
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 12,
     name: "100 antimatter is a lot",
-    tooltip: "Buy a 2nd Dimension.",
+    tooltip: "Buy a 2nd Antimatter Dimension.",
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 13,
     name: "Half life 3 CONFIRMED",
-    tooltip: "Buy a 3rd Dimension.",
+    tooltip: "Buy a 3rd Antimatter Dimension.",
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 14,
     name: "L4D: Left 4 Dimensions",
-    tooltip: "Buy a 4th Dimension.",
+    tooltip: "Buy a 4th Antimatter Dimension.",
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 15,
     name: "5 Dimension Antimatter Punch",
-    tooltip: "Buy a 5th Dimension.",
+    tooltip: "Buy a 5th Antimatter Dimension.",
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 16,
     name: "We couldn't afford 9",
     tooltip: () => (Enslaved.isRunning
-      ? "Buy a 6th Dimension (they never amount to anything)"
-      : "Buy a 6th Dimension."),
+      ? "Buy a 6th Antimatter Dimension (they never amount to anything)"
+      : "Buy a 6th Antimatter Dimension."),
       checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
     },
   {
     id: 17,
     name: "Not a luck related achievement",
-    tooltip: "Buy a 7th Dimension.",
+    tooltip: "Buy a 7th Antimatter Dimension.",
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
   },
   {
     id: 18,
     name: "90 degrees to infinity",
     tooltip: () => (Enslaved.isRunning
-      ? "Buy an 8th Dimension (don't get used to it)"
-      : "Buy an 8th Dimension."),
+      ? "Buy an 8th Antimatter Dimension (don't get used to it)"
+      : "Buy an 8th Antimatter Dimension."),
       checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
     },
   {
@@ -72,9 +72,9 @@ GameDatabase.achievements.normal = [
   {
     id: 23,
     name: "The 9th Dimension is a lie",
-    tooltip: () => `Have exactly ${formatInt(99)} 8th Dimensions.`,
-    checkRequirement: () => NormalDimension(8).amount.eq(99),
-    reward: () => `8th Dimensions are ${formatPercents(0.1)} stronger.`,
+    tooltip: () => `Have exactly ${formatInt(99)} 8th Antimatter Dimensions.`,
+    checkRequirement: () => AntimatterDimension(8).amount.eq(99),
+    reward: () => `8th Antimatter Dimensions are ${formatPercents(0.1)} stronger.`,
     effect: 1.1
   },
   {
@@ -108,19 +108,19 @@ GameDatabase.achievements.normal = [
   {
     id: 28,
     name: "There's no point in doing that...",
-    tooltip: () => `Buy a single 1st Dimension when you have over ${format(1e150)} of them.`,
-    checkRequirement: () => NormalDimension(1).amount.exponent >= 150,
+    tooltip: () => `Buy a single 1st Antimatter Dimension when you have over ${format(1e150)} of them.`,
+    checkRequirement: () => AntimatterDimension(1).amount.exponent >= 150,
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
-    reward: () => `1st Dimensions are ${formatPercents(0.1)} stronger.`,
+    reward: () => `1st Antimatter Dimensions are ${formatPercents(0.1)} stronger.`,
     effect: 1.1
   },
   {
     id: 31,
     name: "I forgot to nerf that",
-    tooltip: () => `Get any Dimension multiplier over ${format(1e31)}.`,
-    checkRequirement: () => NormalDimensions.all.find(x => x.multiplier.exponent >= 31) !== undefined,
+    tooltip: () => `Get any Antimatter Dimension multiplier over ${format(1e31)}.`,
+    checkRequirement: () => AntimatterDimensions.all.find(x => x.multiplier.exponent >= 31) !== undefined,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: () => `1st Dimensions are ${formatPercents(0.05)} stronger.`,
+    reward: () => `1st Antimatter Dimensions are ${formatPercents(0.05)} stronger.`,
     effect: 1.05
   },
   {
@@ -142,8 +142,8 @@ GameDatabase.achievements.normal = [
   {
     id: 34,
     name: "You didn't need it anyway",
-    tooltip: "Go Infinite without having any 8th Dimensions.",
-    checkRequirement: () => NormalDimension(8).amount.eq(0),
+    tooltip: "Go Infinite without having any 8th Antimatter Dimensions.",
+    checkRequirement: () => AntimatterDimension(8).amount.eq(0),
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     reward: () => `Dimensions 1-7 are ${formatPercents(0.02)} stronger.`,
     effect: 1.02
@@ -202,7 +202,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Get to Infinity without Dimension shifts, boosts or Antimatter Galaxies in a challenge.",
     checkRequirement: () => player.galaxies === 0 && DimBoost.purchasedBoosts === 0 && NormalChallenge.isRunning,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: () => `Dimensions 1-4 are ${formatPercents(0.25)} stronger.`,
+    reward: () => `Antimatter Dimensions 1-4 are ${formatPercents(0.25)} stronger.`,
     effect: 1.25
   },
   {
@@ -220,14 +220,14 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get more than ${format(1e29)} ticks per second.`,
     checkRequirement: () => Tickspeed.current.exponent <= -26,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: () => `Reduces starting tick interval by ${formatPercents(0.02)}.`,
+    reward: () => `Multiply starting tickspeed by ${formatX(1.02, 0, 2)}.`,
     effect: 0.98
   },
   {
     id: 46,
     name: "Multidimensional",
-    tooltip: () => `Reach ${format(1e12)} of all Dimensions except the 8th.`,
-    checkRequirement: () => NormalDimension(7).amount.exponent >= 12,
+    tooltip: () => `Reach ${format(1e12)} of all Antimatter Dimensions except the 8th.`,
+    checkRequirement: () => AntimatterDimension(7).amount.exponent >= 12,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
@@ -291,17 +291,17 @@ GameDatabase.achievements.normal = [
   {
     id: 56,
     name: "Many Deaths",
-    tooltip: () => `Complete the Second Dimension Autobuyer challenge in ${formatInt(3)} minutes or less.`,
+    tooltip: () => `Complete the 2nd Antimatter Dimension Autobuyer challenge in ${formatInt(3)} minutes or less.`,
     checkRequirement: () => NormalChallenge(2).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: () => `All Dimensions are stronger in the first ${formatInt(3)} minutes of Infinities.`,
+    reward: () => `All Antimatter Dimensions are stronger in the first ${formatInt(3)} minutes of Infinities.`,
     effect: () => 6 / (Time.thisInfinity.totalMinutes + 3),
     effectCondition: () => Time.thisInfinity.totalMinutes < 3
   },
   {
     id: 57,
     name: "Gift from the Gods",
-    tooltip: () => `Complete the Eighth Dimension Autobuyer challenge in ${formatInt(3)} minutes or less.`,
+    tooltip: () => `Complete the 8th Antimatter Dimension Autobuyer challenge in ${formatInt(3)} minutes or less.`,
     checkRequirement: () => NormalChallenge(8).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     reward: "Dimensional sacrifices are a lot stronger.",
@@ -313,13 +313,13 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Complete the Tickspeed Autobuyer challenge in ${formatInt(3)} minutes or less.`,
     checkRequirement: () => NormalChallenge(9).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: () => `Boost per buying ${formatInt(10)} Dimensions +${formatPercents(0.01)}.`,
+    reward: () => `Boost per buying ${formatInt(10)} Antimatter Dimensions +${formatPercents(0.01)}.`,
     effect: 1.01
   },
   {
     id: 61,
     name: "Bulked Up",
-    tooltip: () => `Get all of your Dimension Autobuyer bulk amounts to ${formatInt(512)} or higher.`,
+    tooltip: () => `Get all of your Antimatter Dimension Autobuyer bulk amounts to ${formatInt(512)} or higher.`,
     checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0,
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
     reward: "Dimension Autobuyer bulks are unlimited."
@@ -351,7 +351,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get the sum of all of your challenge times under ${formatInt(3)} minutes.`,
     checkRequirement: () => Time.challengeSum.totalMinutes < 3,
     checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER],
-    reward: () => `All Dimensions are stronger in the first ${formatInt(3)} minutes of infinities,
+    reward: () => `All Antimatter Dimensions are stronger in the first ${formatInt(3)} minutes of Infinities,
       but only in challenges.`,
     effect: () => Math.max(4 / (Time.thisInfinity.totalMinutes + 1), 1),
     effectCondition: () => (NormalChallenge.isRunning || InfinityChallenge.isRunning) &&
@@ -363,7 +363,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get more than ${format(1e58, 0, 0)} ticks per second.`,
     checkRequirement: () => Tickspeed.current.exponent <= -55,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: () => `Reduces starting tick interval by ${formatPercents(0.02)}.`,
+    reward: () => `Multiply starting tickspeed by ${formatX(1.02, 0, 2)}.`,
     effect: 0.98
   },
   {
@@ -376,34 +376,34 @@ GameDatabase.achievements.normal = [
   {
     id: 68,
     name: "You did this again just for the achievement right?",
-    tooltip: () => `Complete the Third Dimension Autobuyer challenge in ${formatInt(10)} seconds or less.`,
+    tooltip: () => `Complete the 3rd Antimatter Dimension Autobuyer challenge in ${formatInt(10)} seconds or less.`,
     checkRequirement: () => NormalChallenge(3).isRunning && Time.thisInfinityRealTime.totalSeconds <= 10,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: () => `1st Dimensions are ${formatPercents(0.5)} stronger.`,
+    reward: () => `1st Antimatter Dimensions are ${formatPercents(0.5)} stronger.`,
     effect: 1.5
   },
   {
     id: 71,
     name: "ERROR 909: Dimension not found",
-    tooltip: "Get to Infinity with only a single 1st Dimension without Dimension Boosts/Shifts " +
-      "or Antimatter Galaxies, while in the Second Dimension Autobuyer Challenge.",
+    tooltip: "Get to Infinity with only a single 1st Antimatter Dimension without Dimension Boosts/Shifts " +
+      "or Antimatter Galaxies, while in the 2nd Antimatter Dimension Autobuyer Challenge.",
     checkRequirement: () =>
       NormalChallenge(2).isRunning &&
-      NormalDimension(1).amount.eq(1) &&
+      AntimatterDimension(1).amount.eq(1) &&
       DimBoost.purchasedBoosts === 0 &&
       player.galaxies === 0,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: () => `1st Dimensions are ${formatInt(3)} times stronger.`,
+    reward: () => `1st Antimatter Dimensions are ${formatInt(3)} times stronger.`,
     effect: 3
   },
   {
     id: 72,
     name: "Can't hold all these infinities",
-    tooltip: () => `Get all Dimension multipliers over ${format(1e308)}.`,
+    tooltip: () => `Get all Antimatter Dimension multipliers over ${format(1e308)}.`,
     checkRequirement: () => Array.range(1, 8)
-      .every(tier => NormalDimension(tier).multiplier.exponent >= 308),
+      .every(tier => AntimatterDimension(tier).multiplier.exponent >= 308),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: () => `All Dimensions are ${formatPercents(0.1)} stronger.`,
+    reward: () => `All Antimatter Dimensions are ${formatPercents(0.1)} stronger.`,
     effect: 1.1
   },
   {
@@ -412,7 +412,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get ${formatPostBreak("9.9999e9999", 4, 0)} antimatter.`,
     checkRequirement: () => Currency.antimatter.gte("9.9999e9999"),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Dimensions are stronger the more unspent antimatter you have.",
+    reward: "Antimatter Dimensions are stronger the more unspent antimatter you have.",
     effect: () => Currency.antimatter.value.pow(0.00002).plus(1)
   },
   {
@@ -421,7 +421,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get the sum of all best challenge times under ${formatInt(5)} seconds.`,
     checkRequirement: () => Time.challengeSum.totalSeconds < 5,
     checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER],
-    reward: () => `All Dimensions are ${formatPercents(0.4)} stronger, but only in challenges.`,
+    reward: () => `All Antimatter Dimensions are ${formatPercents(0.4)} stronger, but only in challenges.`,
     effect: 1.4,
     effectCondition: () => NormalChallenge.isRunning || InfinityChallenge.isRunning
   },
@@ -440,23 +440,25 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Play for ${formatInt(8)} days.`,
     checkRequirement: () => Time.totalTimePlayed.totalDays >= 8,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Extremely small multiplier to Dimensions based on time played.",
+    reward: "Extremely small multiplier to Antimatter Dimensions based on time played.",
     effect: () => Math.pow(Time.totalTimePlayed.totalDays / 2, 0.05)
   },
   {
     id: 77,
     name: "How the antitables have turned..",
-    tooltip: "Get the 8th Dimension multiplier to be highest, 7th Dimension multiplier second highest, etc.",
+    tooltip:
+      "Get the 8th Antimatter Dimension multiplier to be highest, 7th Antimatter Dimension multiplier " +
+      " second highest, etc.",
     checkRequirement: () => {
-      const multipliers = Array.range(1, 8).map(tier => NormalDimension(tier).multiplier);
+      const multipliers = Array.range(1, 8).map(tier => AntimatterDimension(tier).multiplier);
       for (let i = 0; i < multipliers.length - 1; i++) {
         if (multipliers[i].gte(multipliers[i + 1])) return false;
       }
       return true;
     },
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: () => "Each Dimension gains a boost proportional to tier " +
-      `(8th Dimension gets ${formatPercents(0.08)}, 7th gets ${formatPercents(0.07)}, etc.)`,
+    reward: () => "Each Antimatter Dimension gains a boost proportional to tier " +
+      `(8th gets ${formatPercents(0.08)}, 7th gets ${formatPercents(0.07)}, etc.)`,
   },
   {
     id: 78,
@@ -464,8 +466,8 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get to Infinity in under ${formatInt(200)} milliseconds.`,
     checkRequirement: () => Time.thisInfinityRealTime.totalMilliseconds <= 200,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: () => `Start with ${format(2e25, 0, 0)} antimatter ` +
-      `and all Dimensions are stronger in the first ${formatInt(300)}ms of Infinities.`,
+    reward: () => `Start with ${format(2e25, 0, 0)} antimatter and all ` +
+      `Antimatter Dimensions are stronger in the first ${formatInt(300)}ms of Infinities.`,
     effects: {
       dimensionMult: {
         effect: () => 330 / (Time.thisInfinity.totalMilliseconds + 30),
@@ -503,7 +505,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Reach ${formatPostBreak("1e35000", 0, 0)} antimatter.`,
     checkRequirement: () => Currency.antimatter.exponent >= 35000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Dimensions are stronger the more unspent antimatter you have.",
+    reward: "Antimatter Dimensions are stronger the more unspent antimatter you have.",
     effect: () => Currency.antimatter.value.pow(0.00002).plus(1)
   },
   {
@@ -518,8 +520,8 @@ GameDatabase.achievements.normal = [
   {
     id: 86,
     name: "Do you even bend time bro?",
-    tooltip: () => `Reach -${formatPercents(0.999, 1)} tickspeed per upgrade.`,
-    checkRequirement: () => getTickSpeedMultiplier().lt(0.001),
+    tooltip: () => `Reach ${formatX(999.9, 0, 1)} ticks/second per tickspeed upgrade.`,
+    checkRequirement: () => Tickspeed.multiplier.recip().gte(999.9),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => `Galaxies are ${formatPercents(0.01)} stronger.`,
     effect: 1.01
@@ -550,7 +552,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Big Crunch for ${format(1e200, 0, 0)} IP in ${formatInt(2)} seconds or less.`,
     checkRequirement: () => gainedInfinityPoints().exponent >= 200 && Time.thisInfinityRealTime.totalSeconds <= 2,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: () => `All Dimensions are significantly stronger in the
+    reward: () => `All Antimatter Dimensions are significantly stronger in the
       first ${formatInt(5)} seconds of Infinities.`,
     effect: () => Math.max((5 - Time.thisInfinity.totalSeconds) * 60, 1),
     effectCondition: () => Time.thisInfinity.totalSeconds < 5
@@ -561,7 +563,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Big Crunch for ${format(1e250, 0, 0)} IP in ${formatInt(20)} seconds or less.`,
     checkRequirement: () => gainedInfinityPoints().exponent >= 250 && Time.thisInfinityRealTime.totalSeconds <= 20,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: () => `All Dimensions are significantly stronger in the
+    reward: () => `All Antimatter Dimensions are significantly stronger in the
       first ${formatInt(60)} seconds of Infinities.`,
     effect: () => Math.max((1 - Time.thisInfinity.totalMinutes) * 100, 1),
     effectCondition: () => Time.thisInfinity.totalMinutes < 1
@@ -621,7 +623,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Bulk buy ${formatInt(750)} Dimension Boosts at once.`,
     checkRequirement: ([bulk]) => bulk >= 750,
     checkEvent: GAME_EVENT.DIMBOOST_AFTER,
-    reward: () => `Dimension Boosts are ${formatPercents(0.01)} stronger (to Normal Dimensions).`,
+    reward: () => `Dimension Boosts are ${formatPercents(0.01)} stronger (to Antimatter Dimensions).`,
     effect: 1.01
   },
   {
@@ -742,7 +744,7 @@ GameDatabase.achievements.normal = [
   {
     id: 117,
     name: "8 nobody got time for that",
-    tooltip: "Eternity without buying Dimensions 1-7.",
+    tooltip: "Eternity without buying Antimatter Dimensions 1-7.",
     checkRequirement: () => player.onlyEighthDimensions,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },
@@ -752,7 +754,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get a total sacrifice multiplier of ${formatPostBreak("1e9000", 0, 0)}.`,
     checkRequirement: () => Sacrifice.totalBoost.exponent >= 9000,
     checkEvent: GAME_EVENT.SACRIFICE_RESET_AFTER,
-    reward: "Sacrifice doesn't reset your Dimensions.",
+    reward: "Sacrifice doesn't reset your Antimatter Dimensions.",
   },
   {
     id: 121,
@@ -764,7 +766,7 @@ GameDatabase.achievements.normal = [
   {
     id: 122,
     name: "You're already dead.",
-    tooltip: "Eternity without buying Dimensions 2-8.",
+    tooltip: "Eternity without buying Antimatter Dimensions 2-8.",
     checkRequirement: () => player.onlyFirstDimensions,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },
@@ -786,7 +788,7 @@ GameDatabase.achievements.normal = [
     id: 125,
     name: "Like feasting on a behind",
     tooltip: () => `Reach ${format(1e90, 0, 0)} IP without having any Infinities ` +
-      "or buying any 1st Dimensions in your current Eternity.",
+      "or buying any 1st Antimatter Dimensions in your current Eternity.",
     checkRequirement: () => player.infinityPoints.exponent >= 90 &&
       player.noFirstDimensions && player.infinitied.eq(0),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -905,7 +907,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     reward: () => `${formatX(4)} IP gain, and boost from
-      buying ${formatInt(10)} Dimensions +${format(0.1, 0, 1)}.`,
+      buying ${formatInt(10)} Antimatter Dimensions +${format(0.1, 0, 1)}.`,
     effects: {
       ipGain: 4,
       buyTenMult: 0.1
@@ -980,7 +982,7 @@ GameDatabase.achievements.normal = [
     id: 151,
     name: "You really didn't need it anyway",
     tooltip: () => `Get ${formatInt(800)} Antimatter Galaxies without
-      buying 8th Dimensions in your current Infinity.`,
+      buying 8th Antimatter Dimensions in your current Infinity.`,
     checkRequirement: () => player.galaxies >= 800 && player.noEighthDimensions,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
     reward: "Unlock V, the Celestial of Achievements."

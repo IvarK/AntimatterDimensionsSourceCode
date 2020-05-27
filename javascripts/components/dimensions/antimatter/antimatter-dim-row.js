@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("normal-dim-row", {
+Vue.component("antimatter-dim-row", {
   props: {
     floatingText: Array,
     tier: Number
@@ -23,7 +23,7 @@ Vue.component("normal-dim-row", {
   },
   computed: {
     name() {
-      return NormalDimension(this.tier).shortDisplayName;
+      return AntimatterDimension(this.tier).shortDisplayName;
     },
     amountDisplay() {
       return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
@@ -45,12 +45,12 @@ Vue.component("normal-dim-row", {
   methods: {
     update() {
       const tier = this.tier;
-      const isUnlocked = NormalDimension(tier).isAvailableForPurchase;
+      const isUnlocked = AntimatterDimension(tier).isAvailableForPurchase;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
-      const dimension = NormalDimension(tier);
+      const dimension = AntimatterDimension(tier);
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 1;
-      this.multiplier.copyFrom(NormalDimension(tier).multiplier);
+      this.multiplier.copyFrom(AntimatterDimension(tier).multiplier);
       this.amount.copyFrom(dimension.totalAmount);
       this.boughtBefore10 = dimension.boughtBefore10;
       this.singleCost.copyFrom(dimension.cost);
@@ -93,7 +93,7 @@ Vue.component("normal-dim-row", {
     }
   },
   template:
-    `<div v-show="isUnlocked" class="c-normal-dim-row">
+    `<div v-show="isUnlocked" class="c-antimatter-dim-row">
       <div class="c-dim-row__label c-dim-row__name">
         {{name}} Antimatter Dimension {{formatX(multiplier, 1, 1)}}
       </div>
@@ -104,7 +104,7 @@ Vue.component("normal-dim-row", {
       <primary-button
         v-if="!isContinuumActive"
         :enabled="isAffordable && !isCapped"
-        class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd l-dim-row__button"
+        class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
         :class="tutorialClass()"
         :ach-tooltip="cappedTooltip"
         @click="buySingle">
@@ -115,7 +115,7 @@ Vue.component("normal-dim-row", {
       </primary-button>
       <primary-button
         :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped"
-        class="o-primary-btn--buy-nd o-primary-btn--buy-10-nd l-dim-row__button"
+        class="o-primary-btn--buy-ad o-primary-btn--buy-10-ad l-dim-row__button"
         :ach-tooltip="cappedTooltip"
         @click="buyUntil10">
         <span v-if="isCapped">Capped</span>
@@ -128,7 +128,7 @@ Vue.component("normal-dim-row", {
       <div
         v-for="text in floatingText"
         :key="text.key"
-        class='c-normal-dim-row__floating-text'
+        class='c-antimatter-dim-row__floating-text'
       >{{text.text}}</div>
     </div>`,
 });

@@ -309,9 +309,9 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 7,
     isGenerated: true,
     glyphTypes: ["dilation"],
-    singleDesc: "Normal Dimension power +{value} while Dilated",
-    totalDesc: "Normal Dimension multipliers ^{value} while Dilated",
-    genericDesc: "Normal Dimensions ^x while Dilated",
+    singleDesc: "Antimatter Dimension power +{value} while Dilated",
+    totalDesc: "Antimatter Dimension multipliers ^{value} while Dilated",
+    genericDesc: "Antimatter Dimensions ^x while Dilated",
     effect: (level, strength) => 1.1 + Math.pow(level, 0.7) * Math.pow(strength, 0.7) / 25,
     formatEffect: x => format(x, 2, 2),
     formatSingleEffect: x => format(x - 1, 2, 2),
@@ -465,14 +465,14 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     glyphTypes: ["power"],
     singleDesc: () => (GlyphAlteration.isAdded("power")
-      ? "Normal Dimension power +{value}\n[and Antimatter Galaxy cost ×]{value2}"
-      : "Normal Dimension power +{value}"),
+      ? "Antimatter Dimension power +{value}\n[and Antimatter Galaxy cost ×]{value2}"
+      : "Antimatter Dimension power +{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("power")
-      ? "ND multipliers ^{value} and galaxy cost x{value2}"
-      : "Normal Dimension multipliers ^{value}"),
+      ? "AD multipliers ^{value} and galaxy cost x{value2}"
+      : "Antimatter Dimension multipliers ^{value}"),
     genericDesc: () => (GlyphAlteration.isAdded("power")
-      ? "ND multipliers ^x and galaxy cost multiplier"
-      : "Normal Dimension multipliers ^x"),
+      ? "AD multipliers ^x and galaxy cost multiplier"
+      : "Antimatter Dimension multipliers ^x"),
     effect: (level, strength) => 1.015 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75,
     formatEffect: x => format(x, 3, 3),
     formatSingleEffect: x => format(x - 1, 3, 3),
@@ -486,7 +486,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 17,
     isGenerated: true,
     glyphTypes: ["power"],
-    singleDesc: "Normal Dimension multipliers ×{value}",
+    singleDesc: "Antimatter Dimension multipliers ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("power")
       ? Decimal.pow(11111, level * 220)
       : Decimal.pow(level * strength * 10, level * strength * 10)),

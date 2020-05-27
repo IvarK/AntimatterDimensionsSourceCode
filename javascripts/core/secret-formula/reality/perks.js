@@ -1,7 +1,7 @@
 "use strict";
 
 const PERK_FAMILY = {
-  NORMAL: "NORMAL",
+  ANTIMATTER: "ANTIMATTER",
   INFINITY: "INFINITY",
   ETERNITY: "ETERNITY",
   DILATION: "DILATION",
@@ -21,7 +21,7 @@ GameDatabase.reality.perks = {
   startAM1: {
     id: 10,
     label: "SAM1",
-    family: PERK_FAMILY.NORMAL,
+    family: PERK_FAMILY.ANTIMATTER,
     description: "Start every reset with 1e15 antimatter.",
     bumpCurrency: () => Currency.antimatter.bumpTo(1e15),
     effect: 1e15
@@ -29,7 +29,7 @@ GameDatabase.reality.perks = {
   startAM2: {
     id: 11,
     label: "SAM2",
-    family: PERK_FAMILY.NORMAL,
+    family: PERK_FAMILY.ANTIMATTER,
     description: "Start every reset with 1e130 antimatter.",
     bumpCurrency: () => Currency.antimatter.bumpTo(1e130),
     effect: 1e130
@@ -84,8 +84,8 @@ GameDatabase.reality.perks = {
   dimboostNonReset: {
     id: 30,
     label: "DBNR",
-    family: PERK_FAMILY.NORMAL,
-    description: "Dimboosts no longer reset normal dimensions, tickspeed, or sacrifice."
+    family: PERK_FAMILY.ANTIMATTER,
+    description: "Dimboosts no longer reset Antimatter Dimensions, tickspeed, or sacrifice."
   },
   studyPassive1: {
     id: 31,

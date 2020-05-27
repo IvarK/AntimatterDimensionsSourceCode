@@ -47,7 +47,7 @@ function bigCrunchReset() {
   handleChallengeCompletion();
 
   if (earlyGame || (challenge && !player.options.retryChallenge)) {
-    Tab.dimensions.normal.show();
+    Tab.dimensions.antimatter.show();
   }
   const infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);

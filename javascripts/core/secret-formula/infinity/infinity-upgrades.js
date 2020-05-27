@@ -190,7 +190,7 @@ GameDatabase.infinity.upgrades = (function() {
       cost: 300,
       description:
         "You start with 4 Dimension Shifts, automatically unlocking the 8th Antimatter Dimension; " +
-        "and you start with an Antimatter galaxy",
+        "and you start with an Antimatter Galaxy",
       bannedFromCharging: true
     },
     ipOffline: {

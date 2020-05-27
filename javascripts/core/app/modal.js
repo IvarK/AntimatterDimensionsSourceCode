@@ -61,6 +61,7 @@ Modal.uiChoice = new Modal("modal-ui-choice");
 Modal.import = new Modal("modal-import");
 Modal.shop = new Modal("modal-std-store");
 Modal.importTree = new Modal("modal-import-tree");
+Modal.editTree = new Modal("modal-edit-tree");
 Modal.deleteCompanion = new Modal("modal-delete-companion");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
@@ -86,13 +87,6 @@ Modal.celestialQuote = new class extends Modal {
     this.lines = newLines;
   }
 }("modal-celestial-quote", true);
-
-Modal.editTree = new class extends Modal {
-  show(id) {
-    this.id = id;
-    super.show();
-  }
-}("modal-edit-tree", false);
 
 Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");
 Modal.cloudLoadConflict = new Modal("modal-cloud-load-conflict");

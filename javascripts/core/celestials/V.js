@@ -132,7 +132,7 @@ const V_UNLOCKS = {
     description: "Have 10 V-achievements",
     effect: () => Achievements.power,
     // Base rate is 60 ECs at 30 minutes each
-    format: x => TimeSpan.fromSeconds(60 * 30 * 60 / x).toStringShort(false),
+    format: x => `${TimeSpan.fromSeconds(60 * 30 * 60 / x).toStringShort(false)} for full completion`,
     requirement: () => V.spaceTheorems >= 10
   },
   AUTO_AUTOCLEAN: {

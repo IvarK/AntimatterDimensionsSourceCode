@@ -4,10 +4,12 @@ class Modal {
   constructor(component, bare = false) {
     this._component = component;
     this._bare = bare;
+    this._modalConfig = {};
   }
 
-  show() {
+  show(modalConfig) {
     if (!GameUI.initialized) return;
+    this._props = Object.assign({}, modalConfig || {});
     if (ui.view.modal.queue.length === 0) ui.view.modal.current = this;
     // New modals go to the back of the queue (shown last).
     if (!ui.view.modal.queue.includes(this)) ui.view.modal.queue.push(this);
@@ -23,6 +25,10 @@ class Modal {
 
   get isBare() {
     return this._bare;
+  }
+
+  get props() {
+    return this._props;
   }
 
   static hide() {

@@ -10,24 +10,21 @@ let player = {
   thisInfinityMaxAM: new Decimal(0),
   thisEternityMaxAM: new Decimal(0),
   dimensions: {
-    normal: Array.range(0, 8).map(() => ({
+    antimatter: Array.range(0, 8).map(() => ({
       bought: 0,
       costBumps: 0,
-      amount: new Decimal(0),
-      power: new Decimal(1)
+      amount: new Decimal(0)
     })),
     infinity: Array.range(0, 8).map(tier => ({
       isUnlocked: false,
       bought: 0,
       amount: new Decimal(0),
-      power: new Decimal(1),
       cost: new Decimal([1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280][tier]),
       baseAmount: 0
     })),
     time: Array.range(0, 8).map(tier => ({
       cost: new Decimal([1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"][tier]),
       amount: new Decimal(0),
-      power: new Decimal(1),
       bought: 0
     }))
   },

@@ -2,7 +2,7 @@
 
 function startChallenge() {
   secondSoftReset(true);
-  if (!Enslaved.isRunning) Tab.dimensions.normal.show();
+  if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
 }
 
 function askChallengeConfirmation(goal) {
@@ -26,7 +26,7 @@ function tryUnlockInfinityChallenges() {
 
 function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
-    if (NormalDimension(2).amount.neq(0)) {
+    if (AntimatterDimension(2).amount.neq(0)) {
       if (player.matter.eq(0)) player.matter = new Decimal(1);
       player.matter = player.matter
         .times(Decimal.pow((1.03 + DimBoost.totalBoosts / 200 + player.galaxies / 100), diff / 100));
@@ -48,7 +48,7 @@ function updateNormalAndInfinityChallenges(diff) {
 
   if (InfinityChallenge(2).isRunning) {
     if (player.ic2Count >= 8) {
-      if (NormalDimension(8).amount.gt(0)) {
+      if (AntimatterDimension(8).amount.gt(0)) {
         sacrificeReset();
       }
       player.ic2Count = 0;
@@ -119,7 +119,7 @@ class NormalChallengeState extends GameMechanicState {
   exit() {
     player.challenge.normal.current = 0;
     secondSoftReset(true);
-    if (!Enslaved.isRunning) Tab.dimensions.normal.show();
+    if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }
 
@@ -236,7 +236,7 @@ class InfinityChallengeState extends GameMechanicState {
   exit() {
     player.challenge.infinity.current = 0;
     secondSoftReset(true);
-    if (!Enslaved.isRunning) Tab.dimensions.normal.show();
+    if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }
 

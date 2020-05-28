@@ -183,7 +183,7 @@ const AutomatorLexer = (() => {
   createInCategory(StudyPath, "Idle", /idle/i, { $studyPath: TIME_STUDY_PATH.IDLE });
   createInCategory(StudyPath, "Passive", /passive/i, { $studyPath: TIME_STUDY_PATH.PASSIVE });
   createInCategory(StudyPath, "Active", /active/i, { $studyPath: TIME_STUDY_PATH.ACTIVE });
-  createInCategory(StudyPath, "Normal", /normal/i, { $studyPath: TIME_STUDY_PATH.NORMAL_DIM });
+  createInCategory(StudyPath, "Antimatter", /antimatter/i, { $studyPath: TIME_STUDY_PATH.ANTIMATTER_DIM });
   createInCategory(StudyPath, "Time", /time/i, { $studyPath: TIME_STUDY_PATH.TIME_DIM });
 
   createInCategory(TimeUnit, "Milliseconds", /ms/i, {

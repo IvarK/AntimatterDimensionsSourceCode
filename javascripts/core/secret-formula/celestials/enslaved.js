@@ -33,8 +33,8 @@ GameDatabase.celestials.enslaved = {
     },
     c10: {
       id: 4,
-      progress: "Gained some Antimatter Galaxies using 6th dimensions",
-      hint: "Is there a way to get Antimatter Galaxies without 8th Dimensions?",
+      progress: "Gained some Antimatter Galaxies using 6th Antimatter Dimensions",
+      hint: "Is there a way to get Antimatter Galaxies without 8th Antimatter Dimensions?",
       condition: "Used Challenge 10 to get more than one Antimatter Galaxy",
     },
     secretStudy: {

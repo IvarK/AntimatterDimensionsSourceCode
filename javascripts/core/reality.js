@@ -431,7 +431,7 @@ function finishProcessReality(realityProps) {
   InfinityDimensions.fullReset();
   fullResetTimeDimensions();
   resetChallengeStuff();
-  NormalDimensions.reset();
+  AntimatterDimensions.reset();
   secondSoftReset();
   player.celestials.ra.peakGamespeed = 1;
 
@@ -450,7 +450,7 @@ function finishProcessReality(realityProps) {
   player.infinityPoints = Player.startingIP;
 
   if (RealityUpgrade(10).isBought) applyRUPG10();
-  else Tab.dimensions.normal.show();
+  else Tab.dimensions.antimatter.show();
 
   Lazy.invalidateAll();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);

@@ -514,13 +514,13 @@ GameDatabase.celestials.navigation = (function() {
             if (complete >= 1) return [
               "V's achievement",
               `Reach ${formatInt(goal)} Antimatter Galaxies without buying`,
-              "8th Dimensions in your current Infinity"
+              "8th Antimatter Dimensions in your current Infinity"
             ];
             const galaxies = player.noEighthDimensions ? player.galaxies : 0;
             return [
               "V's achievement",
               `Reach ${formatInt(galaxies)} / ${formatInt(goal)} Antimatter Galaxies without buying`,
-              "8th Dimensions in your current Infinity"
+              "8th Antimatter Dimensions in your current Infinity"
             ];
           },
           angle: -135,

@@ -275,12 +275,12 @@ GameDatabase.reality.automator = {
         waiting for them to become available/affordable if necessary.<br>
         The study list can consist of study numbers, separated by spaces or commas, ranges of
         studies (for example, <i>11-62</i>) and the following aliases:<br>
-        <blockquote><b>normal, infinity, time, active, passive, idle</b></blockquote>
+        <blockquote><b>antimatter, infinity, time, active, passive, idle</b></blockquote>
         A variable name may be used in place of study list, see <b>define</b>
         The string produced by "export" in the Time Study tab can be used with this command.`,
       examples: [
         "studies nowait 11,21,31",
-        "studies 11-62, normal, 111, idle",
+        "studies 11-62, antimatter, 111, idle",
         "studies nowait ec6Studies",
       ]
     },

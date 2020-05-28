@@ -66,7 +66,7 @@ Vue.component("ec-time-study", {
         Requirement:
         <br v-if="needsFirstLinebreak">
         <span v-if="id === 12">Use only the Time Dimension path</span>
-        <span v-else-if="id === 11">Use only the Normal Dimension path</span>
+        <span v-else-if="id === 11">Use only the Antimatter Dimension path</span>
         <span v-else>
           {{formatValue(requirement.current)}}/{{formatValue(requirement.total)}}
           <br v-if="needsSecondLinebreak">

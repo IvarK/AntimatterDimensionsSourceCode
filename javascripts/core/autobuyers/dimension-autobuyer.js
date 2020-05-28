@@ -69,7 +69,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
 
   tick() {
     const tier = this._tier;
-    if (!NormalDimension(tier).isAvailableForPurchase) return;
+    if (!AntimatterDimension(tier).isAvailableForPurchase) return;
     super.tick();
     switch (this.mode) {
       case AUTOBUYER_MODE.BUY_SINGLE:

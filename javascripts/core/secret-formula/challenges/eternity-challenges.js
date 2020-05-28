@@ -79,7 +79,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e850"),
     goalIncrease: new Decimal("1e250"),
     reward: {
-      description: "Reduce Normal Dimension cost multiplier growth",
+      description: "Reduce Antimatter Dimension cost multiplier growth",
       effect: completions => completions * 0.2,
       formatEffect: value => {
         const base = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward));
@@ -90,8 +90,9 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 7,
-    description: "1st Time Dimension produces 8th Infinity Dimension, and 1st Infinity Dimension " +
-      "produces 7th Dimensions. Tickspeed affects all dimensions normally.",
+    description:
+      "1st Time Dimension produces 8th Infinity Dimensions, and 1st Infinity Dimension produces " +
+      "7th Antimatter Dimensions. Tickspeed also directly applies to Infinity and Time dimensions.",
     goal: new Decimal("1e2000"),
     goalIncrease: new Decimal("1e530"),
     reward: {
@@ -132,7 +133,7 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
-        Infinitied stat to normal dimensions (infinitied^${formatInt(950)}).`;
+        Infinitied stat to Antimatter Dimensions (infinitied^${formatInt(950)}).`;
       EternityChallenge(10).applyEffect(v => description += ` Currently: ${formatX(v, 2, 1)}`);
       return description;
     },
@@ -151,7 +152,7 @@ GameDatabase.challenges.eternity = [
   {
     id: 11,
     description: "All dimension multipliers and powers are disabled except for the multipliers from " +
-      "Infinity Power and Dimension Boosts (to normal dimensions).",
+      "Infinity Power and Dimension Boosts (to Antimatter Dimensions).",
     goal: new Decimal("1e500"),
     goalIncrease: new Decimal("1e200"),
     reward: {

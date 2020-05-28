@@ -71,7 +71,7 @@ GameStorage.migrations = {
     12.1: player => {
       for (const achievement of player.achievements) {
         if (achievement.includes("s") && achievement.length <= 3) {
-          player.achievements.delete("s36");
+          player.achievements.splice(player.achievements.indexOf("r36"), 1);
           break;
         }
       }
@@ -134,7 +134,6 @@ GameStorage.migrations = {
       GameStorage.migrations.removeDimensionCosts(player);
       GameStorage.migrations.changeC8Handling(player);
       GameStorage.migrations.convertAchievementsToBits(player);
-      GameStorage.migrations.removePower(player);
       GameStorage.migrations.setNoInfinitiesOrEternitiesThisReality(player);
       GameStorage.migrations.setTutorialState(player);
       GameStorage.migrations.migrateLastTenRuns(player);
@@ -445,7 +444,7 @@ GameStorage.migrations = {
   },
 
   removeDimensionCosts(player) {
-    for (const dimension of player.dimensions.normal) {
+    for (const dimension of player.dimensions.antimatter) {
       delete dimension.cost;
       delete dimension.costMultiplier;
     }
@@ -478,11 +477,10 @@ GameStorage.migrations = {
         bought: `${name}Bought`,
         pow: `${name}Pow`
       };
-      const dimension = player.dimensions.normal[tier - 1];
+      const dimension = player.dimensions.antimatter[tier - 1];
       dimension.cost = new Decimal(player[oldProps.cost]);
       dimension.amount = new Decimal(player[oldProps.amount]);
       dimension.bought = player[oldProps.bought];
-      dimension.power = new Decimal(player[oldProps.pow]);
       if (player.costmultipliers) {
         dimension.costMultiplier = new Decimal(player.costMultipliers[tier - 1]);
       }
@@ -500,7 +498,6 @@ GameStorage.migrations = {
         const old = player[oldName];
         dimension.cost = new Decimal(old.cost);
         dimension.amount = new Decimal(old.amount);
-        dimension.power = new Decimal(old.power);
         dimension.bought = old.bought;
         dimension.baseAmount = old.baseAmount;
         dimension.isUnlocked = player.infDimensionsUnlocked[tier - 1];
@@ -517,7 +514,6 @@ GameStorage.migrations = {
         if (old !== undefined) {
           dimension.cost = new Decimal(old.cost);
           dimension.amount = new Decimal(old.amount);
-          dimension.power = new Decimal(old.power);
           dimension.bought = old.bought;
           delete player[oldName];
         }
@@ -680,18 +676,6 @@ GameStorage.migrations = {
     player.secretAchievementBits = Array.repeat(0, 4);
     convertAchievementArray(player.secretAchievementBits, player.secretAchievements);
     delete player.secretAchievements;
-  },
-
-  removePower(player) {
-    for (const dimension of player.dimensions.normal) {
-      delete dimension.power;
-    }
-    for (const dimension of player.dimensions.infinity) {
-      delete dimension.power;
-    }
-    for (const dimension of player.dimensions.time) {
-      delete dimension.power;
-    }
   },
   
   setNoInfinitiesOrEternitiesThisReality(player) {

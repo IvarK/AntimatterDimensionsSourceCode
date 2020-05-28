@@ -46,7 +46,7 @@ const GameStorage = {
     // Save current slot to make sure no changes are lost
     this.save(true);
     this.loadPlayerObject(this.saves[slot]);
-    Tab.dimensions.normal.show();
+    Tab.dimensions.antimatter.show();
     GameUI.notify.info("Game loaded");
   },
 
@@ -96,7 +96,7 @@ const GameStorage = {
   hardReset() {
     this.loadPlayerObject(Player.defaultStart);
     this.save();
-    Tab.dimensions.normal.show();
+    Tab.dimensions.antimatter.show();
   },
 
   loadPlayerObject(playerObject, overrideLastUpdate = undefined) {

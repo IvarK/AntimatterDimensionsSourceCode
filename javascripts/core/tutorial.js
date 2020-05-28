@@ -21,11 +21,11 @@ const tutorialStates = [
   },
   {
     id: TUTORIAL_STATE.DIMSHIFT,
-    condition: () => NormalDimension(4).amount.gte(20)
+    condition: () => AntimatterDimension(4).amount.gte(20)
   },
   {
     id: TUTORIAL_STATE.GALAXY,
-    condition: () => NormalDimension(8).amount.gte(80)
+    condition: () => AntimatterDimension(8).amount.gte(80)
   }
 ];
 

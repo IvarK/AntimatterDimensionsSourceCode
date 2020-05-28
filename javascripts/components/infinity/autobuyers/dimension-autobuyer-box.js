@@ -71,7 +71,7 @@ Vue.component("dimension-autobuyer-box", {
       return Autobuyer.dimension(this.tier);
     },
     name() {
-      return `${NormalDimension(this.tier).displayName} Dimension Autobuyer`;
+      return `${AntimatterDimension(this.tier).displayName} Dimension Autobuyer`;
     },
     modeDisplay() {
       switch (this.mode) {

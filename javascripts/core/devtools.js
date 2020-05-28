@@ -280,11 +280,11 @@ dev.printResourceTotals = function() {
   console.log(`Galaxies: ${aGalaxy}+${rGalaxy}+${dGalaxy} (${aGalaxy + rGalaxy + dGalaxy})`);
   console.log(`Tick reduction: e${-Math.round(getTickSpeedMultiplier().log10())}`);
 
-  let NDmults = new Decimal(1);
+  let ADmults = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
-    NDmults = NDmults.times(NormalDimension(i).multiplier);
+    ADmults = ADmults.times(AntimatterDimension(i).multiplier);
   }
-  console.log(`ND mults: e${NDmults.log10().toPrecision(3)}`);
+  console.log(`AD mults: e${ADmults.log10().toPrecision(3)}`);
   let IDmults = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
     IDmults = IDmults.times(InfinityDimension(i).multiplier);

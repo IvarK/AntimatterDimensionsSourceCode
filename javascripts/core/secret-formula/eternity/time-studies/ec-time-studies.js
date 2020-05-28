@@ -25,8 +25,8 @@ GameDatabase.eternity.timeStudies.ec = [
     id: 3,
     cost: 40,
     requirement: {
-      resource: "8th Dimensions",
-      current: () => NormalDimension(8).amount,
+      resource: "8th Antimatter Dimensions",
+      current: () => AntimatterDimension(8).amount,
       required: completions => new Decimal(17300 + completions * 1250),
       formatValue: value => formatInt(Math.floor(value.toNumber()))
     }

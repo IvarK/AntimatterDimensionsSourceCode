@@ -34,7 +34,7 @@ Vue.component("modal-import-tree", {
           }
         }
         switch (study.path) {
-          case TIME_STUDY_PATH.NORMAL_DIM: firstSplitPaths.add("Normal Dims");
+          case TIME_STUDY_PATH.ANTIMATTER_DIM: firstSplitPaths.add("Antimatter Dims");
             break;
           case TIME_STUDY_PATH.INFINITY_DIM: firstSplitPaths.add("Infinity Dims");
             break;

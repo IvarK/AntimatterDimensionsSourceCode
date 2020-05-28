@@ -285,8 +285,8 @@ Vue.component("enslaved-tab", {
                                     :style="glitchStyle(x)"/>
               </div>
               <p>Glyph levels will be boosted to a minimum of {{ formatInt(5000) }}</p>
-              <p>Infinity, Time, and 8th Dimension purchases are limited to {{ formatInt(1) }} each</p>
-              <p>Normal Dimension multipliers are always Dilated (the glyph effect still only
+              <p>Infinity, Time, and 8th Antimatter Dimension purchases are limited to {{ formatInt(1) }} each</p>
+              <p>Antimatter Dimension multipliers are always Dilated (the glyph effect still only
                 applies in actual Dilation)</p>
               <p>Time study 192 (uncapped Replicanti) is locked</p>
               <p>The Black Hole is disabled</p>

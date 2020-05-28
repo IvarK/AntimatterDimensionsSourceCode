@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("normal-dim-tab-progress-bar", {
+Vue.component("antimatter-dim-tab-progress-bar", {
   data() {
     return {
       fill: 0,

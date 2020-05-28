@@ -423,8 +423,8 @@ function gameLoop(diff, options = {}) {
 
   // We do these after autobuyers, since it's possible something there might
   // change a multiplier.
-  GameCache.normalDimensionCommonMultiplier.invalidate();
-  GameCache.normalDimensionFinalMultipliers.invalidate();
+  GameCache.antimatterDimensionCommonMultiplier.invalidate();
+  GameCache.antimatterDimensionFinalMultipliers.invalidate();
   GameCache.infinityDimensionCommonMultiplier.invalidate();
   GameCache.timeDimensionCommonMultiplier.invalidate();
   GameCache.totalIPMult.invalidate();
@@ -541,7 +541,7 @@ function gameLoop(diff, options = {}) {
 
   TimeDimensions.tick(diff);
   InfinityDimensions.tick(diff);
-  NormalDimensions.tick(diff);
+  AntimatterDimensions.tick(diff);
 
   const gain = Math.clampMin(FreeTickspeed.fromShards(player.timeShards).newAmount - player.totalTickGained, 0);
   player.totalTickGained += gain;
@@ -962,7 +962,7 @@ function setHoldingR(x) {
 function init() {
   // eslint-disable-next-line no-console
   console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
-  Tab.dimensions.normal.show();
+  Tab.dimensions.antimatter.show();
   GameStorage.load();
   kong.init();
 }

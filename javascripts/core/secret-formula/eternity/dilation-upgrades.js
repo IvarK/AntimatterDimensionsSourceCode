@@ -95,7 +95,7 @@ GameDatabase.eternity.dilation = (function() {
     ndMultDT: {
       id: 6,
       cost: 5e7,
-      description: "Normal Dimension multiplier based on Dilated Time, unaffected by Time Dilation.",
+      description: "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation.",
       effect: () => player.dilation.dilatedTime.pow(308).clampMin(1),
       formatEffect: value => formatX(value, 2, 1)
     },

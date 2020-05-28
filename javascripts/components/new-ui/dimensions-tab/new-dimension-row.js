@@ -24,7 +24,7 @@ Vue.component("new-dimension-row", {
   },
   computed: {
     name() {
-      return NormalDimension(this.tier).shortDisplayName;
+      return AntimatterDimension(this.tier).shortDisplayName;
     },
     costDisplay() {
       return this.buyUntil10 ? format(this.until10Cost) : format(this.singleCost);
@@ -49,13 +49,13 @@ Vue.component("new-dimension-row", {
   methods: {
     update() {
       const tier = this.tier;
-      const isUnlocked = NormalDimension(tier).isAvailableForPurchase;
+      const isUnlocked = AntimatterDimension(tier).isAvailableForPurchase;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
       const buyUntil10 = player.buyUntil10;
-      const dimension = NormalDimension(tier);
+      const dimension = AntimatterDimension(tier);
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 10;
-      this.multiplier.copyFrom(NormalDimension(tier).multiplier);
+      this.multiplier.copyFrom(AntimatterDimension(tier).multiplier);
       this.amount.copyFrom(dimension.totalAmount);
       this.boughtBefore10 = dimension.boughtBefore10;
       this.howManyCanBuy = buyUntil10 ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1);
@@ -98,9 +98,9 @@ Vue.component("new-dimension-row", {
     }
   },
   template:
-  `<div v-show="isUnlocked" class="c-normal-dim-row">
+  `<div v-show="isUnlocked" class="c-antimatter-dim-row">
     <div class="c-dim-row__label c-dim-row__name">
-      {{name}} Antimatter D <span class="c-normal-dim-row__multiplier">{{formatX(multiplier, 1, 1)}}</span>
+      {{name}} Antimatter D <span class="c-antimatter-dim-row__multiplier">{{formatX(multiplier, 1, 1)}}</span>
     </div>
     <div class="c-dim-row__label c-dim-row__label--growable">
       {{amountDisplay}}
@@ -131,7 +131,7 @@ Vue.component("new-dimension-row", {
     <div
       v-for="text in floatingText"
       :key="text.key"
-      class='c-normal-dim-row__floating-text'
+      class='c-antimatter-dim-row__floating-text'
     >{{text.text}}</div>
   </div>`
 });

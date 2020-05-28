@@ -82,23 +82,17 @@ const GameCache = {
 
   buyablePerks: new Lazy(() => Perks.all.filter(p => p.canBeBought)),
 
-  normalDimensionCommonMultiplier: new Lazy(() => {
-    // The effect is defined in normal_dimensions.js because that's where the non-cached
-    // code originally lived.
-    return normalDimensionCommonMultiplier();
-  }),
+  // The effect is defined in normal_dimensions.js because that's where the non-cached
+  // code originally lived.
+  antimatterDimensionCommonMultiplier: new Lazy(() => antimatterDimensionCommonMultiplier()),
 
   // 0 will cause a crash if invoked; this way the tier can be used as an index
-  normalDimensionFinalMultipliers: Array.range(0, 9)
+  antimatterDimensionFinalMultipliers: Array.range(0, 9)
     .map(tier => new Lazy(() => getDimensionFinalMultiplierUncached(tier))),
 
-  infinityDimensionCommonMultiplier: new Lazy(() => {
-    return infinityDimensionCommonMultiplier();
-  }),
+  infinityDimensionCommonMultiplier: new Lazy(() => infinityDimensionCommonMultiplier()),
 
-  timeDimensionCommonMultiplier: new Lazy(() => {
-    return timeDimensionCommonMultiplier();
-  }),
+  timeDimensionCommonMultiplier: new Lazy(() => timeDimensionCommonMultiplier()),
 
   glyphEffects: new Lazy(() => orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k))),
 
@@ -113,6 +107,6 @@ EventHub.logic.on(GAME_EVENT.GLYPHS_CHANGED, () => {
   GameCache.glyphEffects.invalidate();
 }, GameCache.glyphEffects);
 
-GameCache.normalDimensionFinalMultipliers.invalidate = function() {
+GameCache.antimatterDimensionFinalMultipliers.invalidate = function() {
   for (const x of this) x.invalidate();
 };

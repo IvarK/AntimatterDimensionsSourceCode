@@ -44,7 +44,7 @@ Vue.component("time-study", {
       switch (this.study.type) {
         case TimeStudyType.NORMAL:
           switch (this.setup.path) {
-            case TIME_STUDY_PATH.NORMAL_DIM: return "o-time-study-normal-dim";
+            case TIME_STUDY_PATH.ANTIMATTER_DIM: return "o-time-study-antimatter-dim";
             case TIME_STUDY_PATH.INFINITY_DIM: return "o-time-study-infinity-dim";
             case TIME_STUDY_PATH.TIME_DIM: return "o-time-study-time-dim";
             case TIME_STUDY_PATH.ACTIVE: return "o-time-study-active";

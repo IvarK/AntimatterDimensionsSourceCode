@@ -55,11 +55,11 @@ first Dimension until it can't anymore, then second, and so on.
 <br>
 <br>
 <b>Dimension base prices:</b> ${Array.range(1, 8)
-  .map(tier => format(NormalDimension(tier)._baseCost, 2, 2))
+  .map(tier => format(AntimatterDimension(tier)._baseCost, 2, 2))
   .join(", ")}
 <br>
 <b>Base per ${formatInt(10)} bought dimension price increases:</b> ${Array.range(1, 8)
-  .map(tier => format(NormalDimension(tier)._baseCostMultiplier, 2, 2))
+  .map(tier => format(AntimatterDimension(tier)._baseCostMultiplier, 2, 2))
   .join(", ")}
 <br>
 <br>
@@ -68,8 +68,8 @@ first Dimension until it can't anymore, then second, and so on.
 ${formatInt(1)} instead of ${formatInt(10)}), <b>M</b> for Max all
 `,
       isUnlocked: () => true,
-      tags: ["dims", "normal", "antimatter", "nd"],
-      tab: "dimensions/normal"
+      tags: ["dims", "normal", "antimatter", "ad"],
+      tab: "dimensions/antimatter"
     }, {
       name: "Tickspeed",
       info: () => `
@@ -81,8 +81,8 @@ you can make your Dimensions produce faster, as if multiple ticks occur in each 
 boosting production as if part of a game tick has passed.
 <br>
 <br>
-<b>Cost:</b> The cost of antimatter for reducing the time between ticks by the % displayed above
-(Without any Galaxies, this is -${formatPercents(0.11)} per purchase)
+<b>Cost:</b> The cost of antimatter for multiplying ticks/sec by the displayed multiplier.
+(without any Galaxies, this is ${formatX(1.1245, 0, 3)} per purchase)
 <br>
 <br>
 <b>Buy Max:</b> This will buy the maximum amount of tickspeed upgrades available
@@ -95,7 +95,7 @@ in the Options tab.
 `,
       isUnlocked: () => Tickspeed.isUnlocked,
       tags: ["dimension", "earlygame", "time"],
-      tab: "dimensions/normal"
+      tab: "dimensions/antimatter"
     }, {
       name: "Dimension Shift/Boost",
       info: () => `
@@ -118,13 +118,13 @@ the Second Dimension ${formatX(4)}, the Third Dimension ${formatX(2)}, and all o
 `,
       isUnlocked: () => true,
       tags: ["dimboost", "dimshift", "reset", "earlygame"],
-      tab: "dimensions/normal"
+      tab: "dimensions/antimatter"
     }, {
       name: "Antimatter Galaxies",
       info: () => `
 Purchasing an Antimatter Galaxy will reset your game back to the point where only ${formatInt(4)} Dimensions are
-available, but will increase the effect of your tickspeed upgrades by +${formatPercents(0.015, 1)} for your first two
-galaxies. As you get more galaxies, the reduction will continue becoming stronger and stronger.
+available, but will increase the effect of your tickspeed upgrades by +${format(0.02, 0, 2)} for your first two
+galaxies. As you get more galaxies, the multiplier will continue becoming stronger and stronger.
 <br>
 <br>
 Though it will have very little impact for the first few purchases,
@@ -145,7 +145,7 @@ ${formatPercents(0.002, 1)} per Galaxy, on top of Distant scaling.
 `,
       isUnlocked: () => true,
       tags: ["8th", "reset", "earlygame"],
-      tab: "dimensions/normal"
+      tab: "dimensions/antimatter"
     }, {
       name: "Dimensional Sacrifice",
       info: () => `
@@ -167,7 +167,7 @@ ${formatX(8)} then ${formatX(5)}; in both cases you will end up with a total sac
 `,
       isUnlocked: () => Sacrifice.isVisible,
       tags: ["8th", "reset", "earlygame", "gods", "earlygame"],
-      tab: "dimensions/normal"
+      tab: "dimensions/antimatter"
     }, {
       name: "Achievements",
       // This one could use some work!
@@ -176,9 +176,9 @@ Each achievement has conditions that must be met before they are earned.
 Some are very simple, and some are significantly trickier.
 <br>
 <br>
-You will recieve a ${formatX(1.03, 2, 2)} multiplier to all normal Dimensions for each completed achievement, as well
-as an additional ${formatX(1.25, 2, 2)} for each fully completed row. In addition, many achievements have their own
-rewards.
+You will recieve a ${formatX(1.03, 2, 2)} multiplier to all Antimatter Dimensions for each completed achievement, as
+well as an additional ${formatX(1.25, 2, 2)} for each fully completed row. In addition, many achievements have their
+own rewards.
 `,
       isUnlocked: () => true,
       tags: ["earlygame", "awards", "earlygame"],
@@ -321,7 +321,7 @@ Infinity Points. They give a permanent multiplier per purchase, similar to the o
 applied depends on which Infinity Dimension you purchase. <!-- Sorry Garnet :/ -->
 <br>
 <br>
-<b>Infinity Dimension Production:</b> Just like Normal Dimensions, each Infinity Dimension produces the
+<b>Infinity Dimension Production:</b> Just like Antimatter Dimensions, each Infinity Dimension produces the
 next highest Infinity Dimension.
 <br>
 <br>
@@ -347,7 +347,7 @@ of Infinity Dimensions doesn't carry between crunches, all the multipliers you g
 <br>
 <br>
 Instead of antimatter, the First Infinity Dimension produces Infinity Power, which translates to a multiplier applied
-to all Normal Dimensions. This multiplier is equal to (power<sup>${formatInt(7)}</sup>). Infinity Dimensions are not
+to all Antimatter Dimensions. This multiplier is equal to (power<sup>${formatInt(7)}</sup>). Infinity Dimensions are not
 affected by tickspeed upgrades.
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked(),
@@ -555,7 +555,7 @@ having to complete the secondary requirement again.
       info: () => `
 Time Dilation is unlocked when you purchase the ${formatInt(5000)} TT time study after
 beating both EC11 and EC12 five times, and after acquiring a total of ${formatInt(13000)} TT.
-Dilating time will start a modified Eternity, called Time Dilation, in which all of your Normal/Infinity/Time
+Dilating time will start a modified Eternity, called Time Dilation, in which all of your Antimatter/Infinity/Time
 Dimension multipliers’ <i>exponents</i> and the tickspeed multipliers’ <i>exponent</i> will raised to the power of
 ${format(0.75, 2, 2)}, significantly reducing them.
 <br>
@@ -946,7 +946,7 @@ V is a special Celestial in the sense that she is not unlocked by another Celest
 but is instead unlocked by completing a certain achievement.
 She is unlocked by completing achievement ID 151 (row ${formatInt(15)}, column ${formatInt(1)},
 "You really didn't need it anyway"), which requires you to get ${formatInt(800)} Antimatter Galaxies
-without buying 8th Dimensions in your current Infinity.
+without buying 8th Antimatter Dimensions in your current Infinity.
 <br>
 <br>
 After being unlocked from the achievement, you are met with another set of requirements to fully unlock V.
@@ -1087,10 +1087,10 @@ Lai'tela is the sixth Celestial, unlocked by getting ${formatInt(RA_UNLOCKS.RA_L
 total Ra levels.
 <br>
 <br>
-When you unlock Lai'tela, your normal dimensions and tickspeed switch to a new mode of production called Continuum, 
+When you unlock Lai'tela, your Antimatter Dimensions and tickspeed switch to a new mode of production called Continuum, 
 which gives the same effect as previously but allows for buying fractions of dimensions or tickspeed upgrades. 
 Additionally, these fractional purchases are given for free without spending your antimatter. This makes your 
-autobuyers for Normal Dimensions obsolete, which is noted on the autobuyers page.
+autobuyers for Antimatter Dimensions obsolete, which is noted on the autobuyers page.
 <br>
 <br>
 Lai'tela gives a new currency called Dark Matter, which gives a multiplier to purchases of dimensions and tickspeed

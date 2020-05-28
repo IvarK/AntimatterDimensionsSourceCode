@@ -3,7 +3,7 @@
 // Primary is lifted from the study tree (mostly),
 // secondary is primary -15% l in hsl, apart from reality which is -10%
 const perkColors = {
-  [PERK_FAMILY.NORMAL]: {
+  [PERK_FAMILY.ANTIMATTER]: {
     primary: "#22aa48",
     secondary: "#156a2d"
   },

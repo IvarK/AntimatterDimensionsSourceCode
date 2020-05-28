@@ -12,7 +12,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 1,
       isUnlocked: () => Ra.pets.effarig.level >= 2,
       lockText: "Effarig Level 2",
-      formatEffect: value => `Normal Dimensions ${formatPow(value, 4, 4)}`
+      formatEffect: value => `Antimatter Dimension multipliers ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.INFINITY]: {
       name: "Infinity",
@@ -23,7 +23,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 2,
       isUnlocked: () => Ra.pets.effarig.level >= 3,
       lockText: "Effarig Level 3",
-      formatEffect: value => `Infinity Dimensions ${formatPow(value, 4, 4)}`
+      formatEffect: value => `Infinity Dimension multipliers ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.TIME]: {
       name: "Time",
@@ -34,7 +34,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 4,
       lockText: "Effarig Level 4",
-      formatEffect: value => `Time Dimensions ${formatPow(value, 4, 4)}`
+      formatEffect: value => `Time Dimension multipliers ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.REPLICATION]: {
       name: "Replication",
@@ -133,7 +133,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 11,
       lockText: "Effarig Level 11",
-      formatEffect: value => `${formatPow(1.05, 2, 2)} for normal dimension multipliers above ${format(value)}`,
+      formatEffect: value => `${formatPow(1.05, 2, 2)} for Antimatter Dimension multipliers above ${format(value)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.POWER,
@@ -292,7 +292,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 2,
       isUnlocked: () => Ra.pets.effarig.level >= 17,
       lockText: "Effarig Level 17",
-      formatEffect: value => `Multiply normal dimensions by RM${formatPow(value, 2, 2)}`,
+      formatEffect: value => `Multiply Antimatter Dimensions by RM${formatPow(value, 2, 2)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.DIMENSIONALITY,

@@ -1179,15 +1179,19 @@ screen and (max-width: 480px) {
   margin-right: 0.8rem;
 }
 
-.o-primary-btn--buy-nd {
+.o-primary-btn--sacrifice--large {
+  width: 37rem;
+}
+
+.o-primary-btn--buy-ad {
   font-size: 1rem;
 }
 
-.o-primary-btn--buy-single-nd {
+.o-primary-btn--buy-single-ad {
   width: 13.5rem;
 }
 
-.o-primary-btn--buy-10-nd {
+.o-primary-btn--buy-10-ad {
   width: 21rem;
 }
 
@@ -1982,23 +1986,23 @@ screen and (max-width: 480px) {
 
 /*#endregion Dimensions*/
 
-/*#region Normal Dimensions*/
+/*#region Antimatter Dimensions*/
 
-/*#region l-normal-dim-tab*/
+/*#region l-antimatter-dim-tab*/
 
-.l-normal-dim-tab > * {
+.l-antimatter-dim-tab > * {
   flex-shrink: 0;
 }
 
-.l-normal-dim-tab__progress_bar {
+.l-antimatter-dim-tab__progress_bar {
   margin: 1rem 0;
 }
 
-/*#endregion l-normal-dim-tab*/
+/*#endregion l-antimatter-dim-tab*/
 
-/*#region l-normal-dim-tab-header*/
+/*#region l-antimatter-dim-tab-header*/
 
-.l-normal-dim-tab__header {
+.l-antimatter-dim-tab__header {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -2006,11 +2010,11 @@ screen and (max-width: 480px) {
   padding-top: 0.5rem;
 }
 
-/*#endregion l-normal-dim-tab-header*/
+/*#endregion l-antimatter-dim-tab-header*/
 
-/*#region c-normal-dim-row*/
+/*#region c-antimatter-dim-row*/
 
-.c-normal-dim-row {
+.c-antimatter-dim-row {
   /* relative because floating text is 'position: absolute' */
   position: relative;
   display: flex;
@@ -2020,7 +2024,7 @@ screen and (max-width: 480px) {
   margin-top: 1rem;
 }
 
-.c-normal-dim-row__floating-text {
+.c-antimatter-dim-row__floating-text {
   position: absolute;
   bottom: 2rem;
   left: 15rem;
@@ -2095,7 +2099,7 @@ screen and (max-width: 480px) {
 
 /*#endregion c-progress-bar*/
 
-/*#endregion Normal Dimensions*/
+/*#endregion Antimatter Dimensions*/
 
 /*#region Infinity Dimensions*/
 
@@ -2610,8 +2614,9 @@ screen and (max-width: 480px) {
 }
 
 .c-achievements-tab__header {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   margin-top: 0.6rem;
+  width: 60rem;
   position: relative;
   display: flex;
   flex-direction: row;
@@ -2623,8 +2628,9 @@ screen and (max-width: 480px) {
   content: "you can click the period at the end of this in any other theme to turn on these achievement images";
   font-size: 0.8rem;
   position: absolute;
-  margin-left: 32.5rem;
+  margin-left: 23rem;
   width: 19rem;
+  margin-top: -1.6rem;
 }
 
 .c-achievements-tab__timer {
@@ -5849,11 +5855,10 @@ kbd {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 81.25rem;
+  width: 81.25rem;
   margin: auto;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  width: 70%;
   box-sizing: border-box;
   overflow: hidden;
 }

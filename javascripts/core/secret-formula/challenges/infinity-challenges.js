@@ -15,7 +15,7 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 2,
-    description: () => `Automatically sacrifice every ${formatInt(8)} ticks once you have an 8th Dimension.`,
+    description: () => `Automatically sacrifice every ${formatInt(8)} ticks once you have an 8th Antimatter Dimension.`,
     goal: new Decimal("1e10500"),
     isQuickResettable: false,
     reward: {
@@ -26,13 +26,13 @@ GameDatabase.challenges.infinity = [
   {
     id: 3,
     description: "Tickspeed interval decrease is always 0%. For every tickspeed purchase, you instead get a static " +
-      "multiplier on all normal dimensions which increases with Antimatter Galaxies.",
+      "multiplier on all Antimatter Dimensions which increases with Antimatter Galaxies.",
     goal: new Decimal("1e5000"),
     isQuickResettable: false,
     effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
     formatEffect: value => formatX(value, 2, 2),
     reward: {
-      description: "Static multiplier on each tickspeed purchase based on Antimatter Galaxies",
+      description: "Antimatter Dimension multiplier based on Antimatter Galaxies and tickspeed purchases",
       effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
       formatEffect: value => formatX(value, 2, 2),
     },
@@ -40,22 +40,24 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 4,
-    description: () => `Only the latest bought dimension's production is normal, all other dimensions produce less
-      (${formatPow(0.25, 2, 2)}).`,
+    description:
+      () => `Only the latest bought Antimatter Dimension's production is normal, all other Antimatter Dimensions 
+      produce less (${formatPow(0.25, 2, 2)}).`,
     goal: new Decimal("1e13000"),
     isQuickResettable: true,
     effect: 0.25,
     reward: {
-      description: () => `All normal dimension multipliers become multiplier${formatPow(1.05, 2, 2)}`,
+      description: () => `All Antimatter Dimension multipliers become multiplier${formatPow(1.05, 2, 2)}`,
       effect: 1.05
     },
     unlockAM: new Decimal("1e14000"),
   },
   {
     id: 5,
-    description: "When buying dimensions 1-4, dimensions with costs smaller or equal increase in cost. " +
-      "When buying dimensions 5-8, dimensions with costs larger or equal increase in cost. " +
-      "When buying tickspeed, dimensions with the same cost increase.",
+    description:
+      "When buying Antimatter Dimensions 1-4, Antimatter Dimensions with costs smaller or equal increase in cost. " +
+      "When buying Antimatter Dimensions 5-8, Antimatter Dimensions with costs larger or equal increase in cost. " +
+      "When buying tickspeed, Antimatter Dimensions with the same cost increase in cost.",
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {
@@ -67,8 +69,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 6,
-    description: () => `Once you have at least ${formatInt(1)} 2nd Dimension, exponentially rising matter
-      divides the multiplier on all of your dimensions.`,
+    description: () => `Once you have at least ${formatInt(1)} 2nd Antimatter Dimension, exponentially rising matter
+      divides the multiplier on all of your Antimatter Dimensions.`,
     goal: new Decimal("2e22222"),
     isQuickResettable: true,
     effect: () => player.matter.clampMin(1),
@@ -101,8 +103,9 @@ GameDatabase.challenges.infinity = [
     effect: () => Decimal.pow(0.8446303389034288,
       Math.max(0, player.thisInfinityTime - player.thisInfinityLastBuyTime)),
     reward: {
-      description: "You get a multiplier to Dimensions 2-7 based on 1st and 8th Dimension multipliers.",
-      effect: () => NormalDimension(1).multiplier.times(NormalDimension(8).multiplier).pow(0.02),
+      description:
+        "You get a multiplier to Antimatter Dimensions 2-7 based on 1st and 8th Antimatter Dimension multipliers.",
+      effect: () => AntimatterDimension(1).multiplier.times(AntimatterDimension(8).multiplier).pow(0.02),
       formatEffect: value => formatX(value, 2, 2)
     },
     unlockAM: new Decimal("1e28000"),

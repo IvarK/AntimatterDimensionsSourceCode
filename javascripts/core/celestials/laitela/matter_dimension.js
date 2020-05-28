@@ -156,7 +156,7 @@ MatterDimensionState.list = Array.range(1, 4).map(tier => new MatterDimensionSta
 
 /**
  * @param {number} tier
- * @return {NormalDimensionState}
+ * @return {AntimatterDimensionState}
  */
 function MatterDimension(tier) {
   return MatterDimensionState.list[tier - 1];

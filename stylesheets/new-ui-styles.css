@@ -210,13 +210,13 @@ body.t-normal {
   position: relative;
 }
 
-.tab-container > .l-normal-dim-tab {
+.tab-container > .l-antimatter-dim-tab {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.l-normal-dim-tab {
+.l-antimatter-dim-tab {
   flex-grow: 1;
 }
 
@@ -554,7 +554,7 @@ body.t-normal {
   font-size: 2rem;
 }
 
-.c-normal-dim-row,
+.c-antimatter-dim-row,
 .c-infinity-dim-row,
 .c-time-dim-row {
   color: var(--color-text);
@@ -564,17 +564,17 @@ body.t-normal {
   border-radius: 0.5rem;
 }
 
-.c-normal-dim-row:nth-child(even) {
+.c-antimatter-dim-row:nth-child(even) {
   background-color: rgba(223, 80, 80, 0.3);
 }
 
-.t-metro .c-normal-dim-row:nth-child(even),
-.t-inverted-metro .c-normal-dim-row:nth-child(even),
-.t-s8 .c-normal-dim-row:nth-child(even) {
+.t-metro .c-antimatter-dim-row:nth-child(even),
+.t-inverted-metro .c-antimatter-dim-row:nth-child(even),
+.t-s8 .c-antimatter-dim-row:nth-child(even) {
   background-color: rgba(33, 150, 243, 0.3);
 }
 
-.c-normal-dim-row__multiplier {
+.c-antimatter-dim-row__multiplier {
   font-size: 1.4rem
 }
 

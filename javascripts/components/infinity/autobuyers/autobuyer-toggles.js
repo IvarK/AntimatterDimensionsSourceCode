@@ -4,7 +4,9 @@ Vue.component("autobuyer-toggles", {
   data() {
     return {
       autobuyersOn: false,
-      bulkOn: false
+      bulkOn: false,
+      showContinuum: false,
+      disableContinuum: false,
     };
   },
   watch: {
@@ -13,12 +15,17 @@ Vue.component("autobuyer-toggles", {
     },
     bulkOn(newValue) {
       player.options.bulkOn = newValue;
+    },
+    disableContinuum(newValue) {
+      player.options.disableContinuum = newValue;
     }
   },
   methods: {
     update() {
       this.autobuyersOn = player.options.autobuyersOn;
       this.bulkOn = player.options.bulkOn;
+      this.showContinuum = Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK);
+      this.disableContinuum = player.options.disableContinuum;
     },
     toggleAllAutobuyers() {
       const allAutobuyersDisabled = Autobuyers.unlocked.every(autobuyer => !autobuyer.isActive);
@@ -50,6 +57,13 @@ Vue.component("autobuyer-toggles", {
         v-model="bulkOn"
         on="Disable bulk buy"
         off="Enable bulk buy"
+        class="o-primary-btn--subtab-option"
+      />
+      <primary-button-on-off-custom
+        v-if="showContinuum"
+        v-model="disableContinuum"
+        on="Enable Continuum"
+        off="Disable Continuum"
         class="o-primary-btn--subtab-option"
       />
     </div>`

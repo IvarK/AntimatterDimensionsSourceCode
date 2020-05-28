@@ -7,6 +7,13 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     const cappedInfinity = Math.min(Math.pow(scaledInfinity, 0.125), 500);
     return Decimal.pow(15, Math.log(scaledInfinity) * cappedInfinity);
   };
+  const passiveIPMult = () => {
+    const isEffarigLimited = Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY;
+    const normalValue = Perk.studyPassive1.isBought ? 1e100 : 1e25;
+    return isEffarigLimited
+      ? Math.min(normalValue, Effarig.eternityCap.toNumber())
+      : normalValue;
+  };
   return [
     {
       id: 11,
@@ -108,7 +115,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
         if (TimeStudy(201).isBought) return rowCount < 2;
         return rowCount === 0;
       },
-      description: "Sacrifice affects all other Normal Dimensions with reduced effect",
+      description: "Sacrifice affects all other Antimatter Dimensions with reduced effect",
       effect: () => Sacrifice.totalBoost.pow(0.25).clampMin(1),
       cap: new Decimal("1e210000"),
       formatEffect: value => formatX(value, 2, 1)
@@ -175,7 +182,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 91,
       cost: 4,
       requirement: 81,
-      description: "Normal Dimension multiplier based on time spent in this Eternity",
+      description: "Antimatter Dimension multiplier based on time spent in this Eternity",
       effect: () => Decimal.pow10(Math.min(Time.thisEternity.totalMinutes, 20) * 15),
       cap: new Decimal("1e300"),
       formatEffect: value => formatX(value, 2, 1)
@@ -201,7 +208,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 101,
       cost: 4,
       requirement: 91,
-      description: "Normal Dimension multiplier equal to Replicanti amount",
+      description: "Antimatter Dimension multiplier equal to Replicanti amount",
       effect: () => Decimal.max(player.replicanti.amount, 1),
       formatEffect: value => formatX(value, 2, 1)
     },
@@ -325,14 +332,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 2,
       requirement: () => TimeStudy(132).isBought && !TimeStudy(141).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(132).isBought && (TimeStudy(141).isBought || TimeStudy(143).isBought),
-      description: () => `You gain ${formatX(Perk.studyPassive1.isBought ? 1e100 : 1e25, 0, 0)} more IP`,
-      effect: () => {
-        const isEffarigLimited = Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY;
-        const normalValue = Perk.studyPassive1.isBought ? 1e100 : 1e25;
-        return isEffarigLimited
-          ? Math.min(normalValue, Effarig.eternityCap.toNumber())
-          : normalValue;
-        },
+      description: () => `You gain ${formatX(passiveIPMult(), 0, 0)} more IP`,
+      effect: passiveIPMult,
       cap: () => (Effarig.eternityCap === undefined ? undefined : Effarig.eternityCap.toNumber())
     },
     {
@@ -361,7 +362,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 161,
       cost: 7,
       requirement: 151,
-      description: () => `${formatX("1e616", 0, 0)} multiplier on all Normal Dimensions`,
+      description: () => `${formatX("1e616", 0, 0)} multiplier on all Antimatter Dimensions`,
       effect: () => new Decimal("1e616")
     },
     {
@@ -408,7 +409,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 193,
       cost: 300,
       requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0,
-      description: "Normal Dimension boost based on Eternities",
+      description: "Antimatter Dimension multiplier based on Eternities",
       // This effect is a bit wonky because 1.0285^eternities doesn't even fit in break_infinity once you have a bit
       // past e308 eternities, and once this threshold is passed the formula actually just returns zero. Rewriting it
       // to have an explicit conditional makes sure that this doesn't happen; in practice the cap hits just past 1e6.
@@ -452,7 +453,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 214,
       cost: 120,
       requirement: 193,
-      description: "Sacrifice boosts the 8th Dimension even more",
+      description: "Sacrifice boosts the 8th Antimatter Dimension even more",
       effect: () => {
         const totalBoost = Sacrifice.totalBoost;
         const firstPart = totalBoost.pow(7.6).clampMaxExponent(44000);
@@ -580,9 +581,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 5,
       requirement: () => (TimeStudy(227).isBought || TimeStudy(228).isBought) && !TimeStudy(233).isBought,
       requirementV: () => (TimeStudy(227).isBought || TimeStudy(228).isBought) && TimeStudy(233).isBought,
-      description: "Sacrifice boosts First Dimension",
+      description: "Sacrifice applies to 1st Antimatter Dimension",
       effect: () => Sacrifice.totalBoost,
-      formatEffect: value => formatX(value, 0, 0)
     },
   ];
 }());

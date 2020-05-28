@@ -48,7 +48,7 @@ GameDatabase.achievements.secret = [
   {
     id: 21,
     name: "Go study in real life instead",
-    tooltip: "Purchase the secret time study."
+    tooltip: "Purchase the secret Time Study."
   },
   {
     id: 22,
@@ -154,7 +154,7 @@ GameDatabase.achievements.secret = [
   {
     id: 43,
     name: "Time fixes everything",
-    tooltip: "Fix infinity while dilated.",
+    tooltip: "Fix infinity while Dilated.",
     checkRequirement: () => player.dilation.active,
     checkEvent: GAME_EVENT.FIX_INFINITY
   },

@@ -31,12 +31,12 @@ const GlyphSelection = {
     glyphList[Math.floor(random * glyphList.length)].strength = newStrength;
   },
   
-  glyphList(countIn, level, isChoosingGlyph) {
+  glyphList(countIn, level, config) {
     // Always generate at least 4 choices so that the RNG never diverges based on
     // the 4-choice perk.
     const count = Math.clampMin(countIn, 4);
     let glyphList = [];
-    const rng = new GlyphGenerator.RealGlyphRNG();
+    const rng = config.rng || new GlyphGenerator.RealGlyphRNG();
     const types = [];
     for (let out = 0; out < count; ++out) {
       types.push(GlyphGenerator.randomType(rng, types));
@@ -48,7 +48,8 @@ const GlyphSelection = {
     // If we generated extra choices due to always generating at least 4 choices,
     // we remove the extra choices here.
     glyphList = glyphList.slice(0, countIn);
-    if (isChoosingGlyph) {
+    // If we passed an explicit RNG in, we assume it'll get finalized later.
+    if (!config.rng && config.isChoosingGlyph) {
       rng.finalize();
     }
     return glyphList;
@@ -57,7 +58,7 @@ const GlyphSelection = {
   generate(count, realityProps) {
     EventHub.dispatch(GAME_EVENT.GLYPH_CHOICES_GENERATED);
     this.realityProps = realityProps;
-    this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel, true);
+    this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel, { isChoosingGlyph: true });
     ui.view.modal.glyphSelection = true;
   },
 
@@ -128,7 +129,7 @@ function requestManualReality() {
   const realityProps = getRealityProps(false, false);
   if (simulatedRealityCount(false) > 0) {
     triggerManualReality(realityProps);
-    if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) Glyphs.autoClean();
+    Glyphs.processSortingAfterReality();
     return;
   }
   realityProps.alreadyGotGlyph = true;
@@ -137,7 +138,9 @@ function requestManualReality() {
       Glyphs.addToInventory(GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel));
       Glyphs.addToInventory(GlyphGenerator.companionGlyph(player.eternityPoints));
     } else {
-      Glyphs.addToInventory(GlyphGenerator.randomGlyph(realityProps.gainedGlyphLevel));
+      // We can't get a random glyph directly here because that disturbs the RNG
+      // (makes it depend on whether you got first perk or not).
+      Glyphs.addToInventory(GlyphSelection.glyphList(1, realityProps.gainedGlyphLevel, { isChoosingGlyph: true })[0]);
     }
     triggerManualReality(realityProps);
     return;
@@ -174,16 +177,19 @@ function runRealityAnimation() {
 
 function processAutoGlyph(gainedLevel, rng) {
   let newGlyph;
+  // Always generate a list of glyphs to avoid RNG diverging based on whether
+  // a reality is done automatically.
+  const glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedLevel, { rng });
   if (EffarigUnlock.basicFilter.isUnlocked) {
-    const glyphs = Array.range(0, GlyphSelection.choiceCount)
-      .map(() => GlyphGenerator.randomGlyph(gainedLevel, rng));
     newGlyph = AutoGlyphProcessor.pick(glyphs);
     if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
       AutoGlyphProcessor.getRidOfGlyph(newGlyph);
       newGlyph = null;
     }
   } else {
-    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, rng);
+    // It really doesn't matter which we pick since they're random,
+    // so we might as well take the first one.
+    newGlyph = glyphs[0];
   }
   if (newGlyph && Glyphs.freeInventorySpace > 0) {
     Glyphs.addToInventory(newGlyph);
@@ -211,7 +217,7 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   beginProcessReality(getRealityProps(false, false));
-  if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) Glyphs.autoClean();
+  Glyphs.processSortingAfterReality();
 }
 
 function updateRealityRecords(realityProps) {
@@ -284,6 +290,8 @@ function beginProcessReality(realityProps) {
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_BEFORE);
   const glyphsToProcess = realityProps.simulatedRealities + (realityProps.alreadyGotGlyph ? 0 : 1);
   const rng = GlyphGenerator.getRNG(false);
+  // Do this before processing glyphs so that we don't try to reality again while async is running.
+  finishProcessReality(realityProps);
   Async.run(() => processAutoGlyph(realityProps.gainedGlyphLevel, rng),
     glyphsToProcess,
     {
@@ -307,7 +315,6 @@ function beginProcessReality(realityProps) {
       },
       then: () => {
         rng.finalize();
-        finishProcessReality(realityProps);
       }
     });
 }
@@ -424,7 +431,7 @@ function finishProcessReality(realityProps) {
   InfinityDimensions.fullReset();
   fullResetTimeDimensions();
   resetChallengeStuff();
-  NormalDimensions.reset();
+  AntimatterDimensions.reset();
   secondSoftReset();
   player.celestials.ra.peakGamespeed = 1;
 
@@ -443,7 +450,7 @@ function finishProcessReality(realityProps) {
   player.infinityPoints = Player.startingIP;
 
   if (RealityUpgrade(10).isBought) applyRUPG10();
-  else Tab.dimensions.normal.show();
+  else Tab.dimensions.antimatter.show();
 
   Lazy.invalidateAll();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);

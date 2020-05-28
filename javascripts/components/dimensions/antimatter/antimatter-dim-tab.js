@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("normal-dim-tab", {
+Vue.component("antimatter-dim-tab", {
   data() {
     return {
       isChallengePowerVisible: false,
@@ -38,19 +38,19 @@ Vue.component("normal-dim-tab", {
     }
   },
   template:
-    `<div class="l-old-ui-normal-dim-tab">
+    `<div class="l-old-ui-antimatter-dim-tab">
       <span v-if="isSacrificeUnlocked">Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
-      <normal-dim-tab-header />
+      <antimatter-dim-tab-header />
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
       <div class="l-dimensions-container">
-        <normal-dim-row
+        <antimatter-dim-row
           v-for="tier in 8"
           :key="tier"
           :tier="tier"
-          :floatingText="$viewModel.tabs.dimensions.normal.floatingText[tier]"
+          :floatingText="$viewModel.tabs.dimensions.antimatter.floatingText[tier]"
         />
-        <normal-dim-shift-row />
-        <normal-dim-galaxy-row />
+        <antimatter-dim-shift-row />
+        <antimatter-dim-galaxy-row />
       </div>
       <primary-button
         v-if="isQuickResetAvailable"
@@ -58,6 +58,6 @@ Vue.component("normal-dim-tab", {
         @click="quickReset"
       >Lose a reset, returning to the start of the reset</primary-button>
       <div style="flex: 1 0" />
-      <normal-dim-tab-progress-bar class="l-normal-dim-tab__progress_bar" />
+      <antimatter-dim-tab-progress-bar class="l-antimatter-dim-tab__progress_bar" />
     </div>`
 });

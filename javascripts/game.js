@@ -34,6 +34,9 @@ function gainedInfinityPoints() {
   let ip = player.break
     ? Decimal.pow10(player.thisInfinityMaxAM.log10() / div - 0.75)
     : new Decimal(308 / div);
+  if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
+    ip = ip.min(1e200);
+  }
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
     ip = ip.pow(0.55);
@@ -420,8 +423,8 @@ function gameLoop(diff, options = {}) {
 
   // We do these after autobuyers, since it's possible something there might
   // change a multiplier.
-  GameCache.normalDimensionCommonMultiplier.invalidate();
-  GameCache.normalDimensionFinalMultipliers.invalidate();
+  GameCache.antimatterDimensionCommonMultiplier.invalidate();
+  GameCache.antimatterDimensionFinalMultipliers.invalidate();
   GameCache.infinityDimensionCommonMultiplier.invalidate();
   GameCache.timeDimensionCommonMultiplier.invalidate();
   GameCache.totalIPMult.invalidate();
@@ -538,13 +541,13 @@ function gameLoop(diff, options = {}) {
 
   TimeDimensions.tick(diff);
   InfinityDimensions.tick(diff);
-  NormalDimensions.tick(diff);
+  AntimatterDimensions.tick(diff);
 
   const gain = Math.clampMin(FreeTickspeed.fromShards(player.timeShards).newAmount - player.totalTickGained, 0);
   player.totalTickGained += gain;
 
   const currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinityRealTime.totalMinutes);
-  if (currentIPmin.gt(player.bestIPminThisInfinity) && canCrunch()) player.bestIPminThisInfinity = currentIPmin;
+  if (currentIPmin.gt(player.bestIPminThisInfinity) && Player.canCrunch) player.bestIPminThisInfinity = currentIPmin;
 
   tryUnlockInfinityChallenges();
 
@@ -559,7 +562,7 @@ function gameLoop(diff, options = {}) {
   if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
 
   const currentEPmin = gainedEternityPoints().dividedBy(Time.thisEternityRealTime.totalMinutes);
-  if (currentEPmin.gt(player.bestEPminThisEternity) && canEternity()) player.bestEPminThisEternity = currentEPmin;
+  if (currentEPmin.gt(player.bestEPminThisEternity) && Player.canEternity) player.bestEPminThisEternity = currentEPmin;
 
   if (PlayerProgress.dilationUnlocked()) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
@@ -959,7 +962,7 @@ function setHoldingR(x) {
 function init() {
   // eslint-disable-next-line no-console
   console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
-  Tab.dimensions.normal.show();
+  Tab.dimensions.antimatter.show();
   GameStorage.load();
   kong.init();
 }

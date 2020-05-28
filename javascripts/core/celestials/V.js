@@ -120,7 +120,7 @@ const V_UNLOCKS = {
   },
   ND_POW: {
     id: 2,
-    reward: "Normal dimension power based on Space Theorems.",
+    reward: "Antimatter Dimension power based on Space Theorems.",
     description: "Have 5 V-achievements",
     effect: () => 1 + Math.sqrt(V.spaceTheorems) / 100,
     format: x => formatPow(x, 3, 3),

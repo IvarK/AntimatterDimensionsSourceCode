@@ -6,10 +6,10 @@ GameDatabase.tabs = [
     name: "Dimensions",
     subtabs: [
       {
-        key: "normal",
+        key: "antimatter",
         name: "Dimensions",
         symbol: "Ω",
-        component: "normal-dim-tab",
+        component: "antimatter-dim-tab",
         newUIComponent: "new-dimensions-tab"
       },
       {

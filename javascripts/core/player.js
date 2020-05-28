@@ -10,24 +10,21 @@ let player = {
   thisInfinityMaxAM: new Decimal(0),
   thisEternityMaxAM: new Decimal(0),
   dimensions: {
-    normal: Array.range(0, 8).map(() => ({
+    antimatter: Array.range(0, 8).map(() => ({
       bought: 0,
       costBumps: 0,
-      amount: new Decimal(0),
-      power: new Decimal(1)
+      amount: new Decimal(0)
     })),
     infinity: Array.range(0, 8).map(tier => ({
       isUnlocked: false,
       bought: 0,
       amount: new Decimal(0),
-      power: new Decimal(1),
       cost: new Decimal([1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280][tier]),
       baseAmount: 0
     })),
     time: Array.range(0, 8).map(tier => ({
       cost: new Decimal([1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"][tier]),
       amount: new Decimal(0),
-      power: new Decimal(1),
       bought: 0
     }))
   },
@@ -292,6 +289,8 @@ let player = {
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
     secondGaussian: 1e6,
+    musicSeed: Math.floor(Date.now() * Math.random() + 0xBCDDECCB),
+    musicSecondGaussian: 1e6,
     rebuyables: {
       1: 0,
       2: 0,
@@ -312,6 +311,8 @@ let player = {
     showGlyphSacrifice: false,
     tdbuyers: [false, false, false, false, false, false, false, false],
     epmultbuyer: false,
+    autoSort: 0,
+    autoCollapse: false,
     autoAutoClean: false,
     pp: 0,
     autoEC: true,
@@ -505,6 +506,7 @@ let player = {
     showAllChallenges: false,
     bulkOn: true,
     autobuyersOn: true,
+    disableContinuum: false,
     cloudEnabled: true,
     hotkeys: true,
     theme: "Normal",
@@ -587,6 +589,17 @@ const Player = {
       return Decimal.pow(player.matter, 20);
     }
     return new Decimal(0);
+  },
+
+  get canCrunch() {
+    if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)) return true
+    const challenge = NormalChallenge.current || InfinityChallenge.current;
+    const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
+    return player.thisInfinityMaxAM.gte(goal);
+  },
+
+  get canEternity() {
+    return player.infinityPoints.gte(Player.eternityGoal);
   },
 
   get bestRunIPPM() {

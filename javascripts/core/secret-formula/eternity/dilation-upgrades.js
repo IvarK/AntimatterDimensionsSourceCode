@@ -95,7 +95,7 @@ GameDatabase.eternity.dilation = (function() {
     ndMultDT: {
       id: 6,
       cost: 5e7,
-      description: "Normal Dimension multiplier based on Dilated Time, unaffected by Time Dilation.",
+      description: "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation.",
       effect: () => player.dilation.dilatedTime.pow(308).clampMin(1),
       formatEffect: value => formatX(value, 2, 1)
     },
@@ -104,7 +104,8 @@ GameDatabase.eternity.dilation = (function() {
       cost: 2e12,
       description: "Gain a multiplier to IP based on Dilated Time.",
       effect: () => player.dilation.dilatedTime.pow(1000).clampMin(1),
-      formatEffect: value => formatX(value, 2, 1)
+      formatEffect: value => formatX(value, 2, 1),
+      cap: () => Effarig.eternityCap
     },
     timeStudySplit: {
       id: 8,

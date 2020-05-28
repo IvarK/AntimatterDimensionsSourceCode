@@ -84,7 +84,7 @@ GameDatabase.celestials.v = {
     {
       id: 5,
       name: "Matterception",
-      description: value => `Get ${formatInt(value)} Dimensional Boosts while dilating time, inside EC5.`,
+      description: value => `Get ${formatInt(value)} Dimensional Boosts while Dilated and inside Eternity Challenge 5.`,
       values: [51, 52, 53, 54, 55, 56],
       condition: () => V.isRunning && player.dilation.active && EternityChallenge(5).isRunning,
       currentValue: () => DimBoost.purchasedBoosts,
@@ -176,9 +176,8 @@ GameDatabase.celestials.v = {
       id: 4,
       STCost: 12,
       requirement: [227, 228, 234],
-      description: "Sacrifice boosts all normal dimensions.",
+      description: "Sacrifice applies to all Antimatter Dimensions",
       effect: () => Sacrifice.totalBoost,
-      formatEffect: value => formatX(value, 2, 1),
       unlocked: () => Ra.pets.v.level >= 20
     }
   ]

@@ -1597,7 +1597,7 @@ GameDatabase.news = [
     id: "a283",
     text:
       "A strange phenomenon occurs when you attempt to shift to a higher dimension when you are in the 8th " +
-      "Dimension. There is no higher dimension, so the universe ejects you back into the 8th Dimension with " +
+      "dimension. There is no higher dimension, so the universe ejects you back into the 8th dimension with " +
       "an incredible velocity. This technique, known as a Dimension Boost, is used by starship pilots and " +
       "antimatter enthusiasts everywhere."
   },
@@ -1770,17 +1770,17 @@ GameDatabase.news = [
   {
     id: "l3",
     text: "What do you mean, more than two dimensions??? We're on a screen, clearly there are only 2 dimensions.",
-    get unlocked() { return NormalDimension(3).amount.gt(0) || DimBoost.totalBoosts > 0; }
+    get unlocked() { return AntimatterDimension(3).amount.gt(0) || DimBoost.totalBoosts > 0; }
   },
   {
     id: "l4",
     text: "How much is Infinity? -literally everyone at least once",
-    get unlocked() { return NormalDimension(8).amount.eq(190) || player.infinitied.gt(0); }
+    get unlocked() { return AntimatterDimension(8).amount.eq(190) || player.infinitied.gt(0); }
   },
   {
     id: "l5",
     text: "Eh, the Fourth Dimension is alright...",
-    get unlocked() { return NormalDimension(4).amount.gt(0) && NormalDimension(5).amount.eq(0); }
+    get unlocked() { return AntimatterDimension(4).amount.gt(0) && AntimatterDimension(5).amount.eq(0); }
   },
   {
     id: "l6",
@@ -2149,17 +2149,17 @@ GameDatabase.news = [
       "The Holy trinity of Hevipelle, Antimatter, Infinity Points, and Eternity Points. These 3 resources let us " +
       "access Hevi’s gift, Time Theorems. And with these Time Theorems, we reach out to Hevi, and call, “Hevi, bless " +
       "us on this fine day!” And Hevi does. He give us the blessing of Time Studies. These Time Studies were " +
-      "blessings so powerful, Hevi restricted their power. He said, “ I will give you a choice of three paths” and " +
-      "then humanity chose. The short, cheap route of Normal Dimensions, giving instant gratification, the powerful " +
-      "choice of Infinity Dimensions, which were a fast, middle ground path, or Time Dimension, the long wait, and " +
-      "struggle, of humanity. Then, as humanity chose, a crack broke the earth. A serpent snaked out and sneered to " +
-      "humanity, “I will offer the powerful choice of a ninth dimension! I am Slabdrill, lord of all Unhevi. " +
-      "Humanity rose and said “ Begone Slabdrill! We want none of your foul Heresy!” And Hevi rose as well, and " +
-      "smote Slabdrill with his godlike power. As Slabdrill’s corpse fell into the earth, he cried “ this will not " +
-      "be the last of me! Hevi will betr-“ and he fell in the Abyss of matter. Hevi gifted humanity with Eternity " +
-      "upgrades, which boosted infinity dimensions and time dimensions. And Hevi gave humanity his greatest gift. " +
-      "EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 25 times. Use " +
-      "them wisely. And Humanity journeyed off with their new power, as Slabdrill’s words echoed in their heads.",
+      "blessings so powerful, Hevi restricted their power. He said, “I will give you a choice of three paths” and " +
+      "then humanity chose. The short, cheap route of Antimatter Dimensions, giving instant gratification, the " +
+      "powerful choice of Infinity Dimensions, which were a fast, middle ground path, or Time Dimension, the long " +
+      "wait, and struggle, of humanity. Then, as humanity chose, a crack broke the earth. A serpent snaked out and " +
+      "sneered to humanity, “I will offer the powerful choice of a ninth dimension! I am Slabdrill, lord of all " +
+      "Unhevi. Humanity rose and said “ Begone Slabdrill! We want none of your foul Heresy!” And Hevi rose as well, " +
+      "and smote Slabdrill with his godlike power. As Slabdrill’s corpse fell into the earth, he cried “ this will " +
+      "not be the last of me! Hevi will betr-“ and he fell in the Abyss of matter. Hevi gifted humanity with " +
+      "Eternity upgrades, which boosted infinity dimensions and time dimensions. And Hevi gave humanity his greatest " +
+      "gift. EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 25 times. " +
+      "Use them wisely. And Humanity journeyed off with their new power, as Slabdrill’s words echoed in their heads.",
     get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {

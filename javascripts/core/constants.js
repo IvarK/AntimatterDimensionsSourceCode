@@ -68,6 +68,13 @@ const GlyphRarities = [
   },
 ];
 
+const AUTO_SORT_MODE = {
+  NONE: 0,
+  POWER: 1,
+  EFFECT: 2,
+  SCORE: 3
+};
+
 const AUTO_GLYPH_SCORE = {
   LOWEST_SACRIFICE: 0,
   EFFECT_COUNT: 1,
@@ -86,7 +93,7 @@ const AUTO_GLYPH_REJECT = {
 
 const TIME_STUDY_PATH = {
   NONE: 0,
-  NORMAL_DIM: 1,
+  ANTIMATTER_DIM: 1,
   INFINITY_DIM: 2,
   TIME_DIM: 3,
   ACTIVE: 4,

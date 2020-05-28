@@ -24,7 +24,7 @@ Vue.component("new-inf-dimensions-tab", {
       return formatX(this.sacrificeBoost, 2, 2);
     },
     sacrificeTooltip() {
-      return `Boosts 8th Dimension by ${this.sacrificeBoostDisplay}`;
+      return `Boosts 8th Antimatter Dimension by ${this.sacrificeBoostDisplay}`;
     },
   },
   methods: {

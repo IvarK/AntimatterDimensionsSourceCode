@@ -3,7 +3,7 @@
 const NormalTimeStudies = {};
 
 NormalTimeStudies.pathList = [
-  { path: TIME_STUDY_PATH.NORMAL_DIM, studies: [71, 81, 91, 101] },
+  { path: TIME_STUDY_PATH.ANTIMATTER_DIM, studies: [71, 81, 91, 101] },
   { path: TIME_STUDY_PATH.INFINITY_DIM, studies: [72, 82, 92, 102] },
   { path: TIME_STUDY_PATH.TIME_DIM, studies: [73, 83, 93, 103] },
   { path: TIME_STUDY_PATH.ACTIVE, studies: [121, 131, 141] },
@@ -147,7 +147,7 @@ function unlockDilation(quiet) {
 
 function getSelectedDimensionStudyPaths() {
   const paths = [];
-  if (TimeStudy(71).isBought) paths.push(TIME_STUDY_PATH.NORMAL_DIM);
+  if (TimeStudy(71).isBought) paths.push(TIME_STUDY_PATH.ANTIMATTER_DIM);
   if (TimeStudy(72).isBought) paths.push(TIME_STUDY_PATH.INFINITY_DIM);
   if (TimeStudy(73).isBought) paths.push(TIME_STUDY_PATH.TIME_DIM);
   return paths;

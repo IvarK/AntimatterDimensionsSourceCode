@@ -22,15 +22,10 @@ Vue.component("game-header-tickspeed-row", {
       };
     },
     multiplierDisplay() {
-      if (InfinityChallenge(3).isRunning) return `Multiply all Normal Dimensions by
+      if (InfinityChallenge(3).isRunning) return `Multiply all Antimatter Dimensions by
         ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)}`;
       const tickmult = this.mult;
-      if (tickmult.lte(1e-9)) return `Divide the tick interval by ${format(tickmult.reciprocal(), 2, 0)}.`;
-
-      const asNumber = tickmult.toNumber();
-      let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
-      if (this.galaxyCount === 1) places = Math.max(places, 1);
-      return `Reduce the tick interval by ${formatPercents(1 - asNumber, places)}.`;
+      return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade.`;
     },
     tickspeedDisplay() {
       return `Tickspeed: ${format(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
@@ -74,17 +69,18 @@ Vue.component("game-header-tickspeed-row", {
         <primary-button
           :enabled="isAffordable"
           class="o-primary-btn--tickspeed"
+          :style="{ width: isContinuumActive ? '25rem' : ''}"
           onclick="buyTickSpeed()">
-          <span v-if="isContinuumActive">Cont: {{continuumString}}</span>
-          <span v-else-if="showCostTitle">Cost: {{format(cost)}}</span>
-          <span v-else>{{format(cost)}}<br></span>
+            <span v-if="isContinuumActive">Continuum: {{continuumString}}</span>
+            <span v-else-if="showCostTitle">Cost: {{format(cost)}}</span>
+            <span v-else>{{format(cost)}}<br></span>
         </primary-button>
         <primary-button
+          v-if="!isContinuumActive"
           :enabled="isAffordable"
           class="o-primary-btn--buy-max"
           onclick="buyMaxTickSpeed()">
-            <span v-if="isContinuumActive">Continuum</span>
-            <span v-else>Buy Max</span>
+            Buy Max
         </primary-button>
       </div>
       <div>{{tickspeedDisplay}} <game-header-gamespeed-display v-if="!isGameSpeedNormal"/></div>

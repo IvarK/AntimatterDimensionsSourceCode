@@ -15,15 +15,15 @@ const ENSLAVED_UNLOCKS = {
       const hasRarityRequirement = strengthToRarity(player.bestGlyphStrength) >= 100;
       return hasLevelRequirement && hasRarityRequirement;
     },
-    description: () => `Unlock The Enslaved Ones' reality (requires
-      a level ${formatInt(5000)} glyph and a rarity ${formatPercents(1, 1)} glyph)`,
+    description: () => `Unlock The Enslaved Ones' Reality (requires
+      a level ${formatInt(5000)} glyph and a ${formatRarity(100)} rarity glyph)`,
   }
 };
 
 const Enslaved = {
   displayName: "Enslaved",
   boostReality: false,
-  BROKEN_CHALLENGE_EXEMPTIONS: [1, 6, 9],
+  BROKEN_CHALLENGES: [2, 3, 4, 5, 7, 8, 10, 11, 12],
   nextTickDiff: 50,
   isReleaseTick: false,
   autoReleaseTick: 0,

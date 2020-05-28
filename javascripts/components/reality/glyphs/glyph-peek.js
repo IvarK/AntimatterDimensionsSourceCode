@@ -38,7 +38,8 @@ Vue.component("glyph-peek", {
     },
     refreshGlyphs() {
       this.canRefresh = true;
-      this.glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(), false);
+      this.glyphs = GlyphSelection.glyphList(
+        GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false });
       this.level = gainedGlyphLevel().actualLevel;
     },
   },
@@ -46,7 +47,7 @@ Vue.component("glyph-peek", {
   <glyph-set-preview v-if="isVisible"
     class="c-glyph-peek"
     :show="isVisible"
-    :text="'Glyph choices for this Reality:'"
+    :text="'Upcoming glyph selection:'"
     :glyphs="glyphs"
     :noLevelOverride="true"
     :showSacrifice="canSacrifice"

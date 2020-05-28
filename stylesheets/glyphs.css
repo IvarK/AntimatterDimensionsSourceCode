@@ -9,7 +9,6 @@
 .c-glyph-component {
   font-family: Typewriter;
   background: black;
-  padding-bottom: 0.2em;
 }
 
 .c-glyph-component--dragging {
@@ -529,7 +528,7 @@
 
 .l-equipped-glyphs__respec-location {
   width: 15rem;
-  height: 4.5rem;
+  height: 4rem;
   margin: auto;
   margin-top: 1rem;
   margin-bottom: 1rem;

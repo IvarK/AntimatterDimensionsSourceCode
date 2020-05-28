@@ -30,8 +30,7 @@ Vue.component("normal-challenges-tab", {
       methods: {
         update() {
           this.isRunning = this.challenge.isRunning;
-          this.isBroken = Enslaved.isRunning &&
-            !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(this.challengeId);
+          this.isBroken = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(this.challengeId);
           this.isCompleted = this.challenge.isCompleted && !this.isBroken;
         }
       },

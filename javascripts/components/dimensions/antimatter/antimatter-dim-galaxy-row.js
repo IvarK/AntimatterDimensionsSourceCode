@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("normal-dim-galaxy-row", {
+Vue.component("antimatter-dim-galaxy-row", {
   data() {
     return {
       type: GALAXY_TYPE.NORMAL,
@@ -20,7 +20,7 @@ Vue.component("normal-dim-galaxy-row", {
   },
   computed: {
     dimName() {
-      return NormalDimension(this.requirement.tier).displayName;
+      return AntimatterDimension(this.requirement.tier).displayName;
     },
     buttonText() {
       return this.lockText === null
@@ -82,7 +82,7 @@ Vue.component("normal-dim-galaxy-row", {
     },
   },
   template:
-    `<div class="c-normal-dim-row">
+    `<div class="c-antimatter-dim-row">
       <div class="c-dim-row__label c-dim-row__label--growable" style="height: 6rem;">
         {{typeName}} ({{sumText}}):
         requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions

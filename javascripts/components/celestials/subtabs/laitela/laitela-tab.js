@@ -291,7 +291,8 @@ Vue.component("annihilation-button", {
       matterRequirement: 0,
       darkMatterMultRatio: 0,
       autoAnnihilationInput: player.celestials.laitela.autoAnnihilationSetting,
-      isEnabled: true
+      isEnabled: true,
+      isMouseoverDisabled: false
     };
   },
   methods: {
@@ -306,6 +307,7 @@ Vue.component("annihilation-button", {
       this.isEnabled = player.celestials.laitela.automation.annihilation;
     },
     annihilate() {
+      if (this.isMouseoverDisabled) return;
       Laitela.annihilate();
     },
     handleAutoAnnihilationInputChange() {
@@ -335,6 +337,9 @@ Vue.component("annihilation-button", {
           <br><br>
         </span>
         Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 
+        <span v-if="!hasAnnihilated">
+          unlocking Auto-Annihilation, and
+        </span>
         <span v-if="hasAnnihilated && matter.gte(matterRequirement)">
           but adds <b>{{ format(darkMatterMultGain, 2, 2) }}</b> to your Annihilation multiplier.
           (<b>{{ formatX(darkMatterMultRatio, 2, 2) }}</b> from previous multiplier)
@@ -354,6 +359,8 @@ Vue.component("annihilation-button", {
           <input type="text"
             v-model="autoAnnihilationInput"
             @change="handleAutoAnnihilationInputChange()"
+            @mouseover="isMouseoverDisabled = true"
+            @mouseleave="isMouseoverDisabled = false"
             :style="annihilationInputStyle"/>
           to the multiplier.
         </div>
@@ -400,6 +407,7 @@ Vue.component("laitela-autobuyer-settings", {
       hasDimension: false,
       hasAscension: false,
       hasSingularity: false,
+      hasAnnihilated: false,
       dimension: false,
       ascension: false,
       singularity: false,
@@ -411,6 +419,7 @@ Vue.component("laitela-autobuyer-settings", {
       this.hasDimension = SingularityMilestone.darkDimensionAutobuyers.isUnlocked;
       this.hasAscension = SingularityMilestone.darkDimensionAutobuyers.isUnlocked;
       this.hasSingularity = SingularityMilestone.autoCondense.isUnlocked;
+      this.hasAnnihilated = Laitela.darkMatterMult > 1;
       const auto = player.celestials.laitela.automation;
       this.dimension = auto.dimensions;
       this.ascension = auto.ascension;
@@ -450,8 +459,9 @@ Vue.component("laitela-autobuyer-settings", {
         class="c-laitela-automation-toggle"
         text="Auto-Singularity:" />
       <primary-button-on-off
+        v-if="hasAnnihilated"
         v-model="annihilation"
         class="c-laitela-automation-toggle"
-        text="Automatic Annihilation:" />
+        text="Auto-Annihilation:" />
     </div>`
 });

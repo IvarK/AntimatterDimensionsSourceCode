@@ -9,7 +9,7 @@ function startDilatedEternity(auto) {
   if (!auto && player.options.confirmations.dilation) {
     const confirmationMessage = "Dilating time will start a new eternity, and all of your Dimension/Infinity" +
       " Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to" +
-      " ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your" +
+      " ^ 0.75. If you can eternity while Dilated, you'll be rewarded with tachyon particles based on your" +
       " antimatter and tachyon particles.";
     if (!confirm(confirmationMessage)) return false;
   }

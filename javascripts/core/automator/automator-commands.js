@@ -111,7 +111,7 @@ const AutomatorCommands = ((() => {
           autobuyer.isActive = on;
           if (duration !== undefined) {
             autobuyer.mode = durationMode;
-            autobuyer.time = 1e-3 * duration;
+            autobuyer.time = duration / 1000;
           } else if (xLast !== undefined) {
             autobuyer.mode = xLastMode;
             autobuyer.xLast = new Decimal(xLast);

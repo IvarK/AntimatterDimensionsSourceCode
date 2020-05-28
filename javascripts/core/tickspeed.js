@@ -20,10 +20,16 @@ function getTickSpeedMultiplier() {
   freeGalaxies *= 1 + Math.max(0, player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
   let galaxies = player.galaxies + replicantiGalaxies + freeGalaxies;
   if (galaxies < 3) {
-      let baseMultiplier = 0.9;
-      if (player.galaxies === 0) baseMultiplier = 0.89;
-      if (player.galaxies === 1) baseMultiplier = 0.895;
-      if (NormalChallenge(5).isRunning) baseMultiplier = 0.93;
+      // Magic numbers are to retain balancing from before while displaying
+      // them now as positive multipliers rather than negative percentages
+      let baseMultiplier = 1 / 1.1245;
+      if (player.galaxies === 1) baseMultiplier = 1 / 1.11888888;
+      if (player.galaxies === 2) baseMultiplier = 1 / 1.11267177;
+      if (NormalChallenge(5).isRunning) {
+        baseMultiplier = 1 / 1.08;
+        if (player.galaxies === 1) baseMultiplier = 1 / 1.07632;
+        if (player.galaxies === 2) baseMultiplier = 1 / 1.072;
+      }
       const perGalaxy = 0.02 * Effects.product(
         InfinityUpgrade.galaxyBoost,
         InfinityUpgrade.galaxyBoost.chargedEffect,
@@ -117,7 +123,7 @@ function resetTickspeed() {
 const Tickspeed = {
 
   get isUnlocked() {
-    return NormalDimension(2).amount.gt(0) || player.eternities.gte(30);
+    return AntimatterDimension(2).amount.gt(0) || player.eternities.gte(30);
   },
 
   get isAvailableForPurchase() {
@@ -176,7 +182,7 @@ const Tickspeed = {
   },
 
   multiplySameCosts() {
-    for (const dimension of NormalDimensions.all) {
+    for (const dimension of AntimatterDimensions.all) {
       if (dimension.cost.e === this.cost.e) dimension.costBumps++;
     }
   }

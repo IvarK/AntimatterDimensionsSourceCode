@@ -331,7 +331,7 @@ const InfinityDimensions = {
 
     if (EternityChallenge(7).isRunning) {
       if (!NormalChallenge(10).isRunning) {
-        InfinityDimension(1).produceDimensions(NormalDimension(7), diff);
+        InfinityDimension(1).produceDimensions(AntimatterDimension(7), diff);
       }
     } else {
       InfinityDimension(1).produceCurrency(Currency.infinityPower, diff);

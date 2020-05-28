@@ -70,7 +70,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
   }
 
   tick() {
-    if (canCrunch()) super.tick();
+    if (Player.canCrunch) super.tick();
     if (Currency.antimatter.lt(Decimal.NUMBER_MAX_VALUE)) return;
     let proc = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
     if (!proc) {

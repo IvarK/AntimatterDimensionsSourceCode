@@ -4,7 +4,7 @@ GameDatabase.shopPurchases = {
   dimPurchases: {
     key: "dimPurchases",
     cost: 30,
-    description: "Double all your Antimatter Dimension multipliers (dimensions 1-8). Forever.",
+    description: "Double all your Antimatter Dimension multipliers. Forever.",
     multiplier: purchases => Math.pow(2, purchases)
   },
   IPPurchases: {

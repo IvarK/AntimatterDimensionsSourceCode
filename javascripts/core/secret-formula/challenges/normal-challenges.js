@@ -23,8 +23,9 @@ GameDatabase.challenges.normal = [
     id: 3,
     legacyId: 3,
     isQuickResettable: false,
-    description: "The 1st Antimatter Dimension is heavily weakened, but gets " +
-      "an exponentially increasing bonus that resets on reset.",
+    description:
+      "The 1st Antimatter Dimension is heavily weakened, but gets an exponentially " +
+      "increasing bonus that The 1st Antimatter Dimension is heavily weakened.",
     name: "3rd Antimatter Dimension",
     reward: "Upgradeable 3rd Antimatter Dimension Autobuyer"
   },
@@ -42,7 +43,7 @@ GameDatabase.challenges.normal = [
     legacyId: 6,
     isQuickResettable: false,
     description:
-      () => `The tickspeed purchase multiplier starts at ${formatX(1.080, 0, 3)} instead of ${formatX(1.125, 0, 3)}.`,
+      () => `The tickspeed purchase multiplier starts at ${formatX(1.080, 0, 3)} instead of ${formatX(1.1245, 0, 3)}.`,
     name: "5th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 5th Antimatter Dimension Autobuyer"
   },

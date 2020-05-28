@@ -82,7 +82,7 @@ boosting production as if part of a game tick has passed.
 <br>
 <br>
 <b>Cost:</b> The cost of antimatter for multiplying ticks/sec by the displayed multiplier.
-(without any Galaxies, this is ${formatX(1.125, 0, 3)} per purchase)
+(without any Galaxies, this is ${formatX(1.1245, 0, 3)} per purchase)
 <br>
 <br>
 <b>Buy Max:</b> This will buy the maximum amount of tickspeed upgrades available

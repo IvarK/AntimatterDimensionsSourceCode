@@ -7,13 +7,23 @@ Vue.component("normal-achievements-tab", {
       achCountdown: 0,
       showAutoAchieve: false,
       isAutoAchieveActive: false,
-      isCancer: 0
+      isCancer: 0,
+      achMultToIDS: false,
+      achMultToTDS: false
     };
   },
   computed: {
     rows: () => Achievements.allRows,
     swapImagesButton() {
       return Theme.current().name === "S4" || this.isCancer ? "😂" : ".";
+    },
+    achievementMultiplierText() {
+      let text = "Current achievement multiplier on all Antimatter";
+      if (this.achMultToIDS && this.achMultToTDS) text += ", Infinity, and Time";
+      else if (this.achMultToTDS) text += "and Infinity";
+      else if (this.achMultToIDS) text += "and Time";
+      text += " Dimensions:";
+      return text;
     }
   },
   watch: {
@@ -28,6 +38,8 @@ Vue.component("normal-achievements-tab", {
       this.showAutoAchieve = player.realities > 0 && !Perk.achievementGroup6.isBought;
       this.isAutoAchieveActive = player.reality.autoAchieve;
       this.isCancer = player.secretUnlocks.cancerAchievements;
+      this.achMultToIDS = Achievement(75).isUnlocked;
+      this.achMultToTDS = EternityUpgrade.tdMultAchs.isBought;
     },
     timeDisplay(value) {
       return timeDisplay(value);
@@ -51,7 +63,7 @@ Vue.component("normal-achievements-tab", {
         />
       </div>
       <div class="c-achievements-tab__header">
-        Current achievement multiplier on all Antimatter Dimensions: {{ formatX(achievementPower, 2, 3) }}
+        {{ achievementMultiplierText }} {{ formatX(achievementPower, 2, 3) }}
         <span @click="swapImages()" style="cursor: pointer">{{ swapImagesButton }}</span>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">

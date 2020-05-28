@@ -2614,7 +2614,7 @@ screen and (max-width: 480px) {
 }
 
 .c-achievements-tab__header {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   margin-top: 0.6rem;
   position: relative;
   display: flex;
@@ -2627,8 +2627,9 @@ screen and (max-width: 480px) {
   content: "you can click the period at the end of this in any other theme to turn on these achievement images";
   font-size: 0.8rem;
   position: absolute;
-  margin-left: 32.5rem;
+  margin-left: 23rem;
   width: 19rem;
+  margin-top: -1.6rem;
 }
 
 .c-achievements-tab__timer {

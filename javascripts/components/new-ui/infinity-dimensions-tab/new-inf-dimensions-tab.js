@@ -79,9 +79,9 @@ Vue.component("new-inf-dimensions-tab", {
         <p>
           You have
           <span class="c-infinity-dim-description__accent">{{format(infinityPower, 2, 1)}}</span> infinity power,
-          translated to
+          translated to a
           <span class="c-infinity-dim-description__accent">{{format(dimMultiplier, 2, 1)}}</span>x
-          multiplier on all dimensions
+          multiplier on all Antimatter Dimensions
         </p>
       </div>
       <div class="l-infinity-dim-tab__enslaved-reward-container" v-if="enslavedCompleted">

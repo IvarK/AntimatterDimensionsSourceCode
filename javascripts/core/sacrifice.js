@@ -108,9 +108,9 @@ function sacrificeReset(auto) {
 function sacrificeBtnClick() {
   if (!Sacrifice.isVisible || !Sacrifice.canSacrifice) return false;
   if (player.options.confirmations.sacrifice) {
-    if (!confirm("Dimensional Sacrifice will remove all of your first to seventh dimensions " +
-      "with the cost and multiplier unchanged) for a boost to the Eighth Dimension based on the total " +
-      "amount of first dimensions sacrificed. It will take time to regain production.")) {
+    if (!confirm("Dimensional Sacrifice will remove all of your 1st through 7th Antimatter Dimensions " +
+      "(with the cost and multiplier unchanged), for a boost to the 8th Antimatter Dimension based on the total " +
+      "amount of 1st Antimatter Dimensions sacrificed. It will take time to regain production.")) {
       return false;
     }
   }

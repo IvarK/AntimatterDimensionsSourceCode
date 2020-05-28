@@ -112,7 +112,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 1,
       isUnlocked: () => Ra.pets.effarig.level >= 10,
       lockText: "Effarig Level 10",
-      formatEffect: value => `All dimensions ${formatX(value)}`,
+      formatEffect: value => `All Dimensions ${formatX(value)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.POWER,
@@ -221,7 +221,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 15,
       lockText: "Effarig Level 15",
-      formatEffect: value => `All dimensions ${formatPow(Ra.momentumValue, 4, 4)}, increasing by ${format(0.002, 3, 3)} 
+      formatEffect: value => `All Dimensions ${formatPow(Ra.momentumValue, 4, 4)}, increasing by ${format(0.002, 3, 3)} 
         per hour (real-time, never resets), up to a maximum of ${formatPow(value, 4, 4)}`,
       reagents: [
         {

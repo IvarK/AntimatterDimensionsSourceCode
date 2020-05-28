@@ -30,7 +30,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e600"),
     goalIncrease: new Decimal("1e75"),
     reward: {
-      description: () => `Increase the multiplier for buying ${formatInt(10)} dimensions`,
+      description: () => `Increase the multiplier for buying ${formatInt(10)} Antimatter Dimensions`,
       effect: completions => completions * 0.72,
       formatEffect: value => `+${format(value, 2, 2)}`
     }
@@ -92,7 +92,7 @@ GameDatabase.challenges.eternity = [
     id: 7,
     description:
       "1st Time Dimension produces 8th Infinity Dimensions, and 1st Infinity Dimension produces " +
-      "7th Antimatter Dimensions. Tickspeed also directly applies to Infinity and Time dimensions.",
+      "7th Antimatter Dimensions. Tickspeed also directly applies to Infinity and Time Dimensions.",
     goal: new Decimal("1e2000"),
     goalIncrease: new Decimal("1e530"),
     reward: {
@@ -118,8 +118,8 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 9,
-    description: "You can't buy tickspeed upgrades. Infinity power instead multiplies " +
-      "time dimensions with greatly reduced effect.",
+    description: "You can't buy tickspeed upgrades. Infinity Power instead multiplies " +
+      "Time Dimensions with greatly reduced effect.",
     goal: new Decimal("1e1750"),
     goalIncrease: new Decimal("1e250"),
     reward: {

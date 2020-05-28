@@ -82,7 +82,7 @@ const GameCache = {
 
   buyablePerks: new Lazy(() => Perks.all.filter(p => p.canBeBought)),
 
-  // The effect is defined in normal_dimensions.js because that's where the non-cached
+  // The effect is defined in antimatter_dimensions.js because that's where the non-cached
   // code originally lived.
   antimatterDimensionCommonMultiplier: new Lazy(() => antimatterDimensionCommonMultiplier()),
 

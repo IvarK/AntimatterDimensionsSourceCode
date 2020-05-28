@@ -10,7 +10,7 @@ Vue.component("normal-achievements-tab", {
       isCancer: 0,
       achMultToIDS: false,
       achMultToTDS: false,
-      achMultToHD: false
+      achMultToBH: false
     };
   },
   computed: {

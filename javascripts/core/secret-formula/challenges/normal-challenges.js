@@ -24,8 +24,8 @@ GameDatabase.challenges.normal = [
     legacyId: 3,
     isQuickResettable: false,
     description:
-      "The 1st Antimatter Dimension is heavily weakened, but gets an exponentially " +
-      "increasing bonus that The 1st Antimatter Dimension is heavily weakened.",
+      "The 1st Antimatter Dimension is heavily weakened, but gets an exponentially increasing " +
+      "bonus that resets after Dimension Shifts/Boosts and Antimatter Galaxies.",
     name: "3rd Antimatter Dimension",
     reward: "Upgradeable 3rd Antimatter Dimension Autobuyer"
   },

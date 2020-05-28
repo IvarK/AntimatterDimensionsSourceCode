@@ -2616,6 +2616,7 @@ screen and (max-width: 480px) {
 .c-achievements-tab__header {
   font-size: 1.5rem;
   margin-top: 0.6rem;
+  width: 60rem;
   position: relative;
   display: flex;
   flex-direction: row;

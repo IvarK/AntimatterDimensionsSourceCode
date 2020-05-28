@@ -91,7 +91,7 @@ GameDatabase.challenges.eternity = [
   {
     id: 7,
     description:
-      "1st Time Dimension produces 8th Infinity Dimension, and 1st Infinity Dimension produces " +
+      "1st Time Dimension produces 8th Infinity Dimensions, and 1st Infinity Dimension produces " +
       "7th Antimatter Dimensions. Tickspeed also directly applies to Infinity and Time dimensions.",
     goal: new Decimal("1e2000"),
     goalIncrease: new Decimal("1e530"),

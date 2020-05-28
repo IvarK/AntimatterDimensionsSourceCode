@@ -9,7 +9,8 @@ Vue.component("normal-achievements-tab", {
       isAutoAchieveActive: false,
       isCancer: 0,
       achMultToIDS: false,
-      achMultToTDS: false
+      achMultToTDS: false,
+      achMultToHD: false
     };
   },
   computed: {
@@ -18,10 +19,13 @@ Vue.component("normal-achievements-tab", {
       return Theme.current().name === "S4" || this.isCancer ? "😂" : ".";
     },
     achievementMultiplierText() {
-      let text = "Current achievement multiplier on all Antimatter";
-      if (this.achMultToIDS && this.achMultToTDS) text += ", Infinity, and Time";
-      else if (this.achMultToTDS) text += "and Infinity";
-      else if (this.achMultToIDS) text += "and Time";
+      let text = "Current achievement multiplier on ";
+      if (this.achMultToIDS && this.achMultToTDS && this.achMultToBH)
+        text += "Black Hole power, Antimatter, Infinity, and Time";
+      else if (this.achMultToTDS && this.achMultToIDS) text += "Antimatter, Infinity, and Time";
+      else if (this.achMultToTDS) text += "Antimatter and Time";
+      else if (this.achMultToIDS) text += "Antimatter and Infinity";
+      else text += "Antimatter";
       text += " Dimensions:";
       return text;
     }
@@ -40,6 +44,7 @@ Vue.component("normal-achievements-tab", {
       this.isCancer = player.secretUnlocks.cancerAchievements;
       this.achMultToIDS = Achievement(75).isUnlocked;
       this.achMultToTDS = EternityUpgrade.tdMultAchs.isBought;
+      this.achMultToBH = V.has(V_UNLOCKS.ACHIEVEMENT_BH);
     },
     timeDisplay(value) {
       return timeDisplay(value);
@@ -63,8 +68,10 @@ Vue.component("normal-achievements-tab", {
         />
       </div>
       <div class="c-achievements-tab__header">
-        {{ achievementMultiplierText }} {{ formatX(achievementPower, 2, 3) }}
-        <span @click="swapImages()" style="cursor: pointer">{{ swapImagesButton }}</span>
+        <span>
+          {{ achievementMultiplierText }} {{ formatX(achievementPower, 2, 3) }}<span 
+          @click="swapImages()" style="cursor: pointer">{{ swapImagesButton }}</span>
+        </span>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">
         Automatically gain the next missing achievement in {{timeDisplayNoDecimals(achCountdown)}}.

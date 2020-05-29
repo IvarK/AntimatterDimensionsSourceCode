@@ -6099,6 +6099,7 @@ kbd {
   border-radius: 3rem;
   border: 0.1rem solid #111;
   margin: 0 0.3rem;
+  user-select: none;
 }
 
 .c-ra-upgrade-icon--inactive {

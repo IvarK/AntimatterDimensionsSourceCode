@@ -771,7 +771,7 @@ All Celestials have their own Celestial Reality, but how the Reality is relevant
       name: "Teresa, Celestial of Reality",
       alias: "Teresa",
       info: () => `
-Teresa is the first Celestial. It is unlocked by obtaining all of the Reality upgrades.
+Teresa is the first Celestial. They are unlocked by obtaining all of the Reality upgrades.
 <br>
 On the main screen, there is a bar with a button above it that says "Pour RM". This allows you to put your RM into the
 container for a Reality Machine multiplier. RM which has been poured into the container can't be retrieved.
@@ -793,7 +793,7 @@ you are at ${format(TERESA_UNLOCKS.EFFARIG.price)} RM in the container, you will
       alias: "Effarig",
       info: () => `
 Effarig is the second Celestial you encounter.
-It is unlocked by pouring at least ${format(TERESA_UNLOCKS.EFFARIG.price)} RM into Teresa's container.
+They are unlocked by pouring at least ${format(TERESA_UNLOCKS.EFFARIG.price)} RM into Teresa's container.
 <br>
 Effarig introduces a currency called Relic Shards, which are obtained by using different kinds of Glyph effects during
 a Reality. The number of distinct effects active during the Reality very strongly affects Relic Shard gain, and EP
@@ -805,11 +805,11 @@ Using Relic Shards, you can purchase multiple upgrades (see "Advanced Glyph Mech
 allow you to filter them based on their effects and rarity when you are doing fully automated Realities.
 <br>
 <br>
-Effarig's final unlock is its own Reality at ${format(GameDatabase.celestials.effarig.unlocks.run.cost)} Relic
+Effarig's final unlock is their own Reality at ${format(GameDatabase.celestials.effarig.unlocks.run.cost)} Relic
 Shards. 
 ${EffarigUnlock.run.isUnlocked
-  ? "Its Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer before " +
-    "getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial."
+  ? "Their Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer " +
+    "before getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial."
   : "<div style='color: var(--color-bad);'>(unlock Effarig's Reality to see this text)</div>"
 }
 <br>
@@ -942,9 +942,9 @@ to reach the IP cost again in order to take advantage of the raised cap in later
       name: "V, Celestial of Achievements",
       alias: "V",
       info: () => `
-V is a special Celestial in the sense that she is not unlocked by another Celestial,
-but is instead unlocked by completing a certain achievement.
-She is unlocked by completing achievement ID 151 (row ${formatInt(15)}, column ${formatInt(1)},
+V is a special Celestial in the sense that they are not unlocked by another Celestial,
+but are instead unlocked by completing a certain achievement.
+They are unlocked by completing achievement ID 151 (row ${formatInt(15)}, column ${formatInt(1)},
 "You really didn't need it anyway"), which requires you to get ${formatInt(800)} Antimatter Galaxies
 without buying 8th Antimatter Dimensions in your current Infinity.
 <br>
@@ -990,7 +990,7 @@ Reaching 36 V-achievements (and therefore completing all of V's achievements) un
       name: "Ra, Celestial of the Forgotten",
       alias: "Ra",
       info: () => `
-Ra is the fifth Celestial, unlocked by fully completing all of V's achievements. He brings back mechanics from
+Ra is the fifth Celestial, unlocked by fully completing all of V's achievements. They bring back mechanics from
 older Celestials in a stronger way, by using their memories. Over time, you will unlock the previous four
 Celestials <i>within</i> Ra, with each Celestial offering additional upgrades related to their original themes.
 <br>
@@ -1007,8 +1007,8 @@ You start Ra with only Teresa unlocked, and each successive Celestial is unlocke
 with the previous Celestial. Levels have no cap, but are significantly harder to gain above ${formatInt(25)}.
 <br>
 <br>
-Teresa unlocks the ability to charge your Infinity Upgrades, making them much stronger. She also
-improves your glyph effects once you reach certain thresholds in glyph sacrifice value.
+Teresa unlocks the ability to charge your Infinity Upgrades, making them much stronger. They also
+improve your glyph effects once you reach certain thresholds in glyph sacrifice value.
 <br>
 <br>
 At level ${formatInt(2)}, Effarig unlocks 
@@ -1027,7 +1027,7 @@ ${Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK)
 V unlocks 
 ${Ra.has(RA_UNLOCKS.V_UNLOCK)
   ? "Triad Studies, which are Time Studies near the bottom of the tree which cost Space Theorems. " +
-    "She also unlocks a smaller set of more difficult V achievements to complete for additional Space Theorems."
+    "They also unlock a smaller set of more difficult V achievements to complete for additional Space Theorems."
   : "<div style='color: var(--color-bad);'>(unlock V within Ra to see this text)</div>"}
 <br>
 <br>

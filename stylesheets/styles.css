@@ -6636,7 +6636,7 @@ kbd {
   border-radius: 0.5rem;
   border: 0.2rem solid;
   position: relative;
-  z-index: -2;
+  z-index: 0;
   color: var(--color-laitela--accent);
 }
 

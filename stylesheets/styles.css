@@ -5200,8 +5200,8 @@ kbd {
   flex-direction: row;
   align-items: stretch;
   justify-content: space-evenly;
-  margin: 1.5rem 0;
-  width: 80rem;
+  margin: 1rem 0;
+  width: 70rem;
 }
 
 .l-celestial-quote-history__lines {
@@ -5222,12 +5222,12 @@ kbd {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   margin: 1rem 0 0.5rem 1.5rem;
 }
 
 .c-celestial-quote-history__button {
   font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .c-celestial-quote-history__button--enabled {
@@ -5601,7 +5601,6 @@ kbd {
 }
 
 .l-effarig-shop-and-run {
-  margin-top: 2rem;
   display: inline-flex;
   flex-direction: row;
 }

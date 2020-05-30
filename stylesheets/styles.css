@@ -1720,7 +1720,7 @@ screen and (max-width: 480px) {
 }
 
 .l--spoon-btn-group__little-spoon-reality-btn {
-  width: 25rem;
+  width: 20rem;
   align-self: center;
   margin-top: -0.9rem;
   margin-bottom: 1.2rem;
@@ -1765,7 +1765,8 @@ screen and (max-width: 480px) {
 }
 
 .l-hint-text--reality-upgrade {
-  top: -2rem;
+  font-size: 1.25rem;
+  top: -1.7rem;
 }
 
 .c-hint-text--reality-upgrade {
@@ -7263,13 +7264,13 @@ kbd {
 
 .l-reality-upgrade-btn {
   height: 10rem;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   position: relative;
-  width: 25rem;
+  width: 20rem;
   margin: 1.2rem;
 }
 

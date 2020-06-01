@@ -45,6 +45,7 @@ Vue.component("modal-edit-tree", {
         type="text"
         class="c-modal-input c-modal-import-tree__input"
         @keyup.esc="emitClose"
+        @keyup.enter="confirmEdits"
       />
       <div v-if="!inputIsValid">Invalid tree</div>
       <primary-button

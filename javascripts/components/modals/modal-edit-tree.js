@@ -30,6 +30,7 @@ Vue.component("modal-edit-tree", {
     confirmEdits() {
       if (this.inputIsValid) { 
         player.timestudy.presets[this.modalConfig.id].studies = this.input;
+        GameUI.notify.info(`Study tree ${this.name} successfully edited.`);
         this.emitClose();
       }
     },

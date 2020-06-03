@@ -654,9 +654,9 @@ button:focus {
   }
 
 @keyframes a-existence-glow {
-  0% { text-shadow: 1px 1px 2px black; }
-  50% { text-shadow: 1px 1px 8px black; }
-  100% { text-shadow: 1px 1px 2px black; }
+  0% { color: var(--color-text-inverted); text-shadow: 0.1rem 0.1rem 0.2rem var(--color-text); }
+  50% { color: var(--color-text-inverted); text-shadow: 0.1rem 0.1rem 0.8rem var(--color-text); }
+  100% { color: var(--color-text-inverted); text-shadow: 0.1rem 0.1rem 0.2rem var(--color-text); }
 }
 
 [ach-tooltip] {

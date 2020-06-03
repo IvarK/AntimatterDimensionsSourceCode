@@ -1255,6 +1255,10 @@ screen and (max-width: 480px) {
   box-sizing: border-box;
 }
 
+.o-primary-btn--option_font-med {
+  font-size: 1.4rem;
+}
+
 .o-primary-btn--option_font-large {
   font-size: 1.8rem;
 }
@@ -1263,14 +1267,12 @@ screen and (max-width: 480px) {
   font-size: 2rem;
 }
 
-.o-primary-btn--update-rate {
-  font-size: 1.4rem;
-  text-align: center;
-  cursor: default;
+.o-primary-btn--slider__slider {
+  width: 100%;
 }
 
-.o-primary-btn--update-rate__slider {
-  width: 100%;
+.o-primary-btn--slider {
+  cursor: default;
 }
 
 .o-primary-btn--modal-close {

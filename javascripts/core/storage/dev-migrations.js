@@ -720,6 +720,14 @@ GameStorage.devMigrations = {
         player.dimensions.antimatter[i].amount = new Decimal(dimension.amount);
       }
       delete player.dimensions.normal;
+    },
+    player => {
+      player.options.news = {
+        enabled: player.options.news,
+        repeatBuffer: 40,
+        AIChance: 0,
+        speed: 1
+      };
     }
   ],
 

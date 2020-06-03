@@ -16,20 +16,18 @@ Vue.component("options-saving-tab", {
           default: 30
         },
       },
-      template: 
-      `
-      <div class="o-primary-btn o-primary-btn--option o-primary-btn--autosave-slider l-options-grid__button">
-      <b>Autosave interval: {{ formatInt(value) }}s</b>
-      <input
-      :value="value"
-      class="o-primary-btn--autosave-slider"
-      type="range"
-      min="10"
-      max="60"
-      @input="emitInput(parseInt($event.target.value))"
-      />
-      </div>
-      `
+      template: `
+      <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button">
+        <b>Autosave interval: {{ formatInt(value) }}s</b>
+        <input
+        :value="value"
+        class="o-primary-btn--slider__slider"
+        type="range"
+        min="10"
+        max="60"
+        @input="emitInput(parseInt($event.target.value))"
+        />
+      </div>`
     }
   },
   data() {

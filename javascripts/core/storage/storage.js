@@ -130,7 +130,7 @@ const GameStorage = {
       NormalChallenge(1).complete();
     }
 
-    ui.view.news = player.options.news;
+    ui.view.news = player.options.news.enabled;
     ui.view.newUI = player.options.newUI;
     ui.view.tutorialState = player.tutorialState;
     ui.view.tutorialActive = player.tutorialActive;

@@ -40,6 +40,7 @@ class Modal {
 
 Modal.h2p = new Modal("modal-h2p");
 Modal.shortcuts = new Modal("modal-shortcuts");
+Modal.newsOptions = new Modal("modal-news-options");
 Modal.animationOptions = new Modal("modal-animation-options");
 Modal.confirmationOptions = new Modal("modal-confirmation-options");
 Modal.infoDisplayOptions = new Modal("modal-info-display-options");

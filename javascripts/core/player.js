@@ -499,7 +499,12 @@ let player = {
   saveOverThresholdFlag: false,
   saveOverThresholdFlagModalDisplayed: false,
   options: {
-    news: true,
+    news: {
+      enabled: true,
+      repeatBuffer: 40,
+      AIChance: 0,
+      speed: 1
+    },
     notation: "Mixed scientific",
     retryChallenge: false,
     retryCelestial: false,

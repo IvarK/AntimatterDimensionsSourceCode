@@ -439,7 +439,7 @@ GameStorage.migrations = {
   },
 
   renameNewsOption(player) {
-    player.options.news = !player.options.newsHidden;
+    player.options.news.enabled = !player.options.newsHidden;
     delete player.options.newsHidden;
   },
 

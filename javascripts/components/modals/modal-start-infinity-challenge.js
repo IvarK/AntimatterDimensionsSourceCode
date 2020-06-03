@@ -12,7 +12,8 @@ Vue.component("modal-start-infinity-challenge", {
         return "You will Big Crunch, if possible, and will start a new Infinity within the challenge, " + 
         "with all the restrictions and modifiers that entails. Upon reaching the goal " +
         `(${format(InfinityChallenge(this.modal.id).goal)} Antimatter for this challenge), ` + 
-        `you can Big Crunch${this.challengeIsCompleted ? " to complete the challenge" : " to complete the challenge and gain the reward"}. ` +
+        `you can Big Crunch${this.challengeIsCompleted ? " to complete the challenge" : 
+        " to complete the challenge and gain the reward"}. ` +
         "You do not start with any dimensions or galaxies, regardless of upgrades.";
     },
     entranceLabel() {
@@ -24,7 +25,7 @@ Vue.component("modal-start-infinity-challenge", {
         rewardDescription = rewardDescription();
       }
       return `The reward for completing this challenge is: ${rewardDescription}`;
-    }
+    },
   },
   methods: {
     handleYesClick() {

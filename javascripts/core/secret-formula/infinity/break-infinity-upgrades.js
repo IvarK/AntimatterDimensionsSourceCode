@@ -80,7 +80,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     autobuyerSpeed: {
       id: "autoBuyerUpgrade",
       cost: 1e15,
-      description: "Autobuyers work twice as fast"
+      description: "Autobuyers purchased with antimatter or unlocked from Normal Challenges work twice as fast"
     },
     tickspeedCostMult: rebuyable({
       id: 0,

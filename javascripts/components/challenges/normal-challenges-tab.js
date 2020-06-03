@@ -42,7 +42,7 @@ Vue.component("normal-challenges-tab", {
           :isCompleted="isCompleted"
           :overrideLabel="overrideLabel"
           class="c-challenge-box--normal"
-          @start="challenge.start()"
+          @start="challenge.requestStart()"
         >
           <description-display :config="config" slot="top" />
           <span slot="bottom">Reward: {{challenge.config.reward}}</span>

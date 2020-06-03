@@ -148,6 +148,12 @@ GameDatabase.tabs = [
     before: "infinity-points-header",
     subtabs: [
       {
+        key: "autobuyers",
+        name: "Autobuyers",
+        symbol: "<i class='fas fa-cog'></i>",
+        component: "autobuyers-tab"
+      },
+      {
         key: "upgrades",
         name: "Infinity Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
@@ -156,12 +162,6 @@ GameDatabase.tabs = [
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
           PlayerProgress.infinityUnlocked()
-      },
-      {
-        key: "autobuyers",
-        name: "Autobuyers",
-        symbol: "<i class='fas fa-cog'></i>",
-        component: "autobuyers-tab"
       },
       {
         key: "break",

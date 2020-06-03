@@ -158,15 +158,19 @@ class EternityChallengeState extends GameMechanicState {
     }
   }
 
-  start(auto) {
-    if (!this.isUnlocked || this.isRunning) return false;
-    if (!auto && player.options.confirmations.challenges) {
-      const confirmation =
-        "You will start over with just your Time Studies, " +
-        "Eternity Upgrades and achievements. " +
-        "You need to reach a set IP with special conditions.";
-      if (!confirm(confirmation)) return false;
+  requestStart() {
+    if (!Tab.challenges.eternity.isAvailable || this.isRunning) return;
+    if (!player.options.confirmations.challenges) {
+      this.start();
+      return;
     }
+    if (this.isUnlocked) {
+    Modal.startEternityChallenge.show(this.id);
+    }
+  }
+
+  start(auto) {
+    if (!this.isUnlocked || EternityChallenge.isRunning) return false;
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.

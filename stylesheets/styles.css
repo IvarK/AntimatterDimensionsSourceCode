@@ -718,14 +718,8 @@ button:focus {
     opacity: 1;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    color: #222;
-    margin: 0 0 20px;
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 1rem;
 }
 
 p,
@@ -736,25 +730,12 @@ dl {
     margin: 0 0 3px;
 }
 
-h1,
-h2,
-h3 {
-    line-height: 1.1;
+h1, h2, h3 {
+  line-height: 1.1;
 }
 
 h1 {
     font-size: 28px;
-}
-
-h2 {
-    color: #393939;
-}
-
-h3,
-h4,
-h5,
-h6 {
-    color: #494949;
 }
 
 a {
@@ -863,8 +844,7 @@ header ul a:active {
 }
 
 strong {
-    color: #222;
-    font-weight: 700;
+  font-weight: 700;
 }
 
 header ul li+li+li {
@@ -4678,11 +4658,11 @@ screen and (max-width: 480px) {
 /*#region c-modal*/
 
 .c-modal {
-  border: 0.3rem solid black;
+  color: var(--color-text);
   background-color: #e0e0e0;
+  border: 0.3rem solid black;
   border-radius: 0.6rem;
   text-align: center;
-  color: black;
   font-family: Typewriter, serif;
   font-size: 1.4rem;
   padding: 1rem;
@@ -4733,7 +4713,8 @@ screen and (max-width: 480px) {
 .t-dark-metro .c-modal,
 .t-inverted-metro .c-modal,
 .t-s8 .c-modal {
-  border: 0.1rem solid black;
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 /*#endregion t-metro t-dark-metro t-inverted-metro t-s8 */
@@ -4795,7 +4776,7 @@ screen and (max-width: 480px) {
 }
 
 .c-modal-message__okay-btn {
-  margin-top: 1rem;
+  margin: 1rem 0.5rem 0;
 }
 
 /*#endregion c-modal-message*/
@@ -4803,7 +4784,7 @@ screen and (max-width: 480px) {
 /*#region c-modal-import*/
 
 .c-modal-import {
-  width: 47.5rem;
+  width: 48rem;
 }
 
 .c-modal-import__save-info > div {
@@ -4827,7 +4808,7 @@ screen and (max-width: 480px) {
 /*#region c-modal-import-tree*/
 
 .c-modal-import-tree {
-  width: 47.5rem;
+  width: 48rem;
 }
 
 .l-modal-import-tree__tree-info-line {
@@ -6687,15 +6668,12 @@ kbd {
   border-radius: 0;
 }
 
-.c-laitela-singularity-container h2 {
-  color: var(--color-laitela--accent);
-}
-
 .c-laitela-singularity {
+  color: white;
+  background: black;
   padding: 2rem;
   width: 40rem;
   height: 11rem;
-  background: black;
   border: 0.2rem solid white;
   border-radius: 0.5rem;
   transition-duration: 0.15s;
@@ -6711,10 +6689,8 @@ kbd {
 
 .c-laitela-singularity h2 {
   margin: 0;
-  color: white;
   font-family: Typewriter;
   font-size: 1.5rem;
-  transition-duration: 0.15s;
 }
 
 .c-laitela-singularity--active {
@@ -6722,12 +6698,9 @@ kbd {
 }
 
 .c-laitela-singularity--active:hover {
+  color: black;
   background: white;
   border-color: black;
-}
-
-.c-laitela-singularity--active:hover h2 {
-  color: black;
 }
 
 .c-laitela-singularity__cap-control {

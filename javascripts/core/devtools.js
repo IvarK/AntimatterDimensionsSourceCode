@@ -45,13 +45,17 @@ const specialGlyphSymbols = {
   key26e8: "⛨", key26e9: "⛩", key26ea: "⛪", key26eb: "⛫", key26ec: "⛬", key26ed: "⛭",
   key26ee: "⛮", key26ef: "⛯", key26f0: "⛰", key26f1: "⛱", key26f2: "⛲", key26f3: "⛳",
   key26f4: "⛴", key26f5: "⛵", key26f6: "⛶", key26f7: "⛷", key26f8: "⛸", key26f9: "⛹",
-  key26fa: "⛺", key26fb: "⛻", key26fc: "⛼", key26fd: "⛽", key26fe: "⛾", key26ff: "⛿"
+  key26fa: "⛺", key26fb: "⛻", key26fc: "⛼", key26fd: "⛽", key26fe: "⛾", key26ff: "⛿",
+  key2700: "🌎", key2701: "🦒", key2702: "👻"
 };
 
 dev.giveAllAchievements = function() {
   const allAchievements = Achievements.all.concat(SecretAchievements.all);
   for (const achievement of allAchievements) achievement.unlock();
 };
+
+// Know that both dev.doubleEverything and dev.tripleEverything are both broken
+// with this error https://i.imgur.com/ZMEBNTv.png
 
 dev.doubleEverything = function() {
   Object.keys(player).forEach(key => {
@@ -62,6 +66,20 @@ dev.doubleEverything = function() {
         if (typeof player[key][key2] === "number") player[key][key2] *= 2;
         if (typeof player[key][key2] === "object" && player[key][key2].constructor !== Object)
           player[key][key2] = player[key][key2].times(2);
+      });
+    }
+  });
+};
+
+dev.tripleEverything = function() {
+  Object.keys(player).forEach(key => {
+    if (typeof player[key] === "number") player[key] *= 3;
+    if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(3);
+    if (typeof player[key] === "object" && !isFinite(player[key])) {
+      Object.keys(player[key]).forEach(key3 => {
+        if (typeof player[key][key3] === "number") player[key][key3] *= 3;
+        if (typeof player[key][key3] === "object" && player[key][key3].constructor !== Object)
+          player[key][key3] = player[key][key3].times(3);
       });
     }
   });
@@ -452,8 +470,8 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
       }
     }
     doReplicantiTicks();
-    player.antimatter = new Decimal('1e309');
-    player.thisInfinityMaxAM = new Decimal('1e309');
+    player.antimatter = new Decimal("1e309");
+    player.thisInfinityMaxAM = new Decimal("1e309");
     bigCrunchReset();
     doReplicantiTicks();
   };
@@ -480,7 +498,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     debugger;
   }
   return hash;
-}
+};
 
 dev.testGlyphs = function(config) {
   const glyphLevel = config.glyphLevel || 6500;

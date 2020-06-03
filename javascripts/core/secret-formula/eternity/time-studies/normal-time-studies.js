@@ -49,7 +49,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 3,
       requirement: 21,
       description: () => `Powers up bonuses that are based on your Infinitied stat
-        (Infinitied^${formatInt(4)})`,
+        (Bonuses^${formatInt(4)})`,
       effect: 4
     },
     {

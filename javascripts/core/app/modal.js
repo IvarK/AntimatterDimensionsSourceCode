@@ -4,10 +4,12 @@ class Modal {
   constructor(component, bare = false) {
     this._component = component;
     this._bare = bare;
+    this._modalConfig = {};
   }
 
-  show() {
+  show(modalConfig) {
     if (!GameUI.initialized) return;
+    this._props = Object.assign({}, modalConfig || {});
     if (ui.view.modal.queue.length === 0) ui.view.modal.current = this;
     // New modals go to the back of the queue (shown last).
     if (!ui.view.modal.queue.includes(this)) ui.view.modal.queue.push(this);
@@ -25,6 +27,10 @@ class Modal {
     return this._bare;
   }
 
+  get props() {
+    return this._props;
+  }
+
   static hide() {
     if (!GameUI.initialized) return;
     ui.view.modal.queue.shift();
@@ -38,6 +44,13 @@ class Modal {
   }
 }
 
+class ChallengeConfirmationModal extends Modal {
+  show(id) {
+    this.id = id;
+    super.show();
+  }
+}
+
 Modal.h2p = new Modal("modal-h2p");
 Modal.shortcuts = new Modal("modal-shortcuts");
 Modal.animationOptions = new Modal("modal-animation-options");
@@ -48,10 +61,14 @@ Modal.uiChoice = new Modal("modal-ui-choice");
 Modal.import = new Modal("modal-import");
 Modal.shop = new Modal("modal-std-store");
 Modal.importTree = new Modal("modal-import-tree");
+Modal.editTree = new Modal("modal-edit-tree");
 Modal.deleteCompanion = new Modal("modal-delete-companion");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");
+Modal.startEternityChallenge = new ChallengeConfirmationModal("modal-start-eternity-challenge");
+Modal.startInfinityChallenge = new ChallengeConfirmationModal("modal-start-infinity-challenge");
+Modal.startNormalChallenge = new ChallengeConfirmationModal("modal-start-normal-challenge");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;

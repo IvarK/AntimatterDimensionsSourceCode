@@ -110,6 +110,11 @@ body.t-normal {
   background-color: rgb(49, 49, 49)
 }
 
+.t-normal .c-modal {
+  background-color: #1d1b22;
+  box-shadow: 0 0 1.5rem 0 black;
+}
+
 .o-tab-btn {
   height: 4.6rem;
   border-width: 0.1rem;
@@ -191,15 +196,6 @@ body.t-normal {
 
 .t-s4 .game-container {
   border-radius: 0 !important;
-}
-
-.game-container h1, 
-.game-container h2, 
-.game-container h3, 
-.game-container h4, 
-.game-container h5,
-.game-container h6 {
-  color: var(--color-text);
 }
 
 .l-reset-buttons-container {
@@ -492,14 +488,6 @@ body.t-normal {
 .c-subtab-option-container {
   border-color: var(--color-good);
   border-width: 0.1rem;
-}
-
-.c-laitela-singularity h2 {
-  color: white;
-}
-
-.c-laitela-singularity--active:hover h2 {
-  color: black;
 }
 
 .c-laitela-automation-toggle {

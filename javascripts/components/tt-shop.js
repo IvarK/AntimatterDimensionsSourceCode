@@ -198,7 +198,9 @@ Vue.component("tt-save-load-button", {
     },
     handleExport() {
       this.hideContextMenu();
-      copyToClipboardAndNotify(this.preset.studies);
+      copyToClipboard(this.preset.studies);
+      const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
+      GameUI.notify.info(`${presetName} exported from slot ${this.saveslot} to your clipboard`);
     },
     edit() {
       Modal.editTree.show({ id: this.saveslot - 1 });

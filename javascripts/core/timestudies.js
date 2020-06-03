@@ -275,7 +275,8 @@ function studyTreeExportString() {
 }
 
 function exportStudyTree() {
-  copyToClipboardAndNotify(studyTreeExportString());
+  copyToClipboard(studyTreeExportString());
+  GameUI.notify.info("Exported current Time Studies to your clipboard");
 }
 
 function importStudyTree(input, auto) {

@@ -90,7 +90,8 @@ const GameStorage = {
 
   export() {
     const save = GameSaveSerializer.serialize(player);
-    copyToClipboardAndNotify(save);
+    copyToClipboard(save);
+    GameUI.notify.info("Exported current savefile to your clipboard");
   },
 
   hardReset() {

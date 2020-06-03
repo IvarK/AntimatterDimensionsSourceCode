@@ -92,12 +92,6 @@ const copyToClipboard = (function() {
   };
 }());
 
-function copyToClipboardAndNotify(str) {
-    if (copyToClipboard(str)) {
-        GameUI.notify.info("Exported to clipboard");
-    }
-}
-
 function safeCall(fn) {
     if (fn) fn();
 }

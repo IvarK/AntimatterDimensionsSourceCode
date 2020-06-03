@@ -3688,7 +3688,7 @@ GameDatabase.news = [
   },
   {
     id: "ai255",
-    text: "What's Antimatter going to do?${SPACES_BETWEEN_NEWSTICKERS}Ah ha, I'm back."
+    text: "What's Antimatter going to do?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ah ha, I'm back."
   },
   {
     id: "ai256",

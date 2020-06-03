@@ -1759,6 +1759,165 @@ GameDatabase.news = [
       "in the universe, including human beings, into either paperclips or machines which manufacture paperclips."
   },
   {
+    id: "a308",
+    get text() {
+      const nameList = [
+        "Antinology",
+        "Infinifection",
+        "Eternal Light",
+        "Galaxia",
+        "Duplicanti",
+        "Dimensional Explorer",
+        "Techyon",
+        "Realistic",
+        "Celestar",
+        "ERCGDM",
+        "NRG+",
+        "Looty Box",
+        "Symbolic",
+        "Minisofa",
+        "IDEAL",
+        "Appange",
+        "Goggles",
+        "Interval",
+        "Newstar",
+        "HeavyPellet",
+        "Marsa",
+        "Zoology",
+        "Photoric",
+        "Jacfoz",
+        "Orism",
+        "EDIK",
+        "Fision",
+        "Gamma",
+        "Fractiled",
+        "Imnesia",
+        "Fermic",
+        "The Automizers"
+      ];
+      const names = [];
+      while (names.length < 3) {
+        const name = nameList.randomElement();
+        if (!names.includes(name)) names[names.length] = name;
+      }
+      const prices = [
+        Math.floor(Math.random() * 11) / 100,
+        Math.floor(Math.random() * 11) / 100,
+        Math.floor(Math.random() * 11) / 100
+      ];
+      for (let i = 0; i < 3; i++) {
+        const price = prices[i];
+        if (price === 0) prices[i] = `<span style="color: blue">0.00 ◄►</span>`;
+        else if (Math.random() > 0.5) prices[i] = `<span style="color: green">+${price} ▲</span>`;
+        else prices[i] = `<span style="color: red">-${price} ▼</span>`;
+      }
+      return `${names[0]} ${prices[0]}&nbsp;&nbsp;&nbsp;
+        ${names[1]} ${prices[1]}&nbsp;&nbsp;&nbsp;
+        ${names[2]} ${prices[2]}&nbsp;&nbsp;&nbsp;`;
+    }
+  },
+  {
+    id: "a309",
+    text:
+      `Your daily shades of the sky forecast: Monday: <span style="color: turquoise">Turquoise</span>
+      Tuesday: <span style="color: #d2c6ba">Taupe</span>
+      Wednesday: <span style="animation: a-game-header__antimatter--glow 3s infinite">Blurple</span>
+      Thursday: <span style="color: turquoise">Turquoise</span>/<span style="color: #d2c6ba">taupe</span>
+      Friday: <span style="color: #222">Coal dust</span> Saturday: <span style="color: #222">Coal dust</span>
+      with chances of <span style="color: indigo">indigo</span> in the late afternoon
+      Sunday: <span style="color: white; animation: a-existence-glow 3s infinite">Void</span>`
+  },
+  {
+    id: "a310",
+    text:
+      `You have reached the automated Antimatter Dimensions support hotline. If you are experiencing a bug in the
+      game try closing and reopening the app. If that doesn't work, press 1 for web, or 2 for mobile. If you need
+      advice, press 3. If you need to max all, press m. To support the developers, press 4. To access the FAQ,
+      press 5. To fix a broken save, press 6. To get an invite to the Discord server, press 7. To see the change
+      log, press 8. Press 9 to repeat.`
+  },
+  {
+    id: "a311",
+    text:
+      `This message has been copyrighted by The Walt Disney Company. Your
+      account will be charged $9.99 upon viewing this message.`
+  },
+  {
+    id: "a312",
+    text:
+      `But before we start, today's video is brought to you by Antimatter Dimensions™! It's got over 100,000
+      downloads, and it's completely redefined what a mobile game can do for me. It's got great mechanics, 5
+      prestige layers, unique and original challenges, a deep skill tree, and the largest numbers I've ever seen.
+      Like, seriously, look at them. And the best part is, it's free! Yes, that's right. Free. And if you use the
+      link in the description, you'll start the game with 10 septillion antimatter. Yes, that's right, 10
+      septillion. So what are you waiting for, click the link in the description and start playing Antimatter
+      Dimensions™ today!`
+  },
+  {
+    id: "a313",
+    text:
+      `"...And then, once you get to level 9,000, you can ascend. Not really sure why you'd want to do that, it
+      just resets all of your hard earned xp for some small buffs, mechanics like this will never catch on."
+      - some random guy, circa 2012`
+  },
+  {
+    id: "a314",
+    get text() {
+      const lawID = Math.floor(Math.random * 8901) + 100;
+      return `Warning: Law ${lawID}-B, drafted by the AI "duskscarf", alternatively referred to as "the giant
+        space rabbit legislation" is now in effect in your galactic area. This list of laws and regulation
+        forbids, among other things; the illegal catching of wild space rabbits, the pacification of tamed
+        space rabbits, and further scientific research with "planet grazing" unless an exception is given
+        directly by duskscarf. You can find the list of exceptions burned into your eyelids now. In addition,
+        the genetic modification of giant space rabbits is limited to very specific fields - size alterations
+        (increasing in size), and cryptobiosis exaggeration. No other genetic modification is allowed outside
+        of military applications. Thank you for your cooperation. Messages repeats in- Warning: Law ${lawID}-`;
+    }
+  },
+  {
+    id: "a315",
+    text:
+      `The developers of the game have announced that a new notation, "Truest Blind", will be released. They
+      report that it will remove the UI, allowing for a more streamlined user experience.`
+  },
+  {
+    id: "a316",
+    text: "Some people choose to see the ugliness in this world. The disarray. I choose to see the numbers."
+  },
+  {
+    id: "a317",
+    get text() {
+      return `${format(Number.MAX_VALUE, 2, 0)}? Doesn't look like anything to me.)`;
+    }
+  },
+  {
+    id: "a318",
+    text:
+      `We can't define consciousness because consciousness does not exist. Humans fancy that there's
+      something special about the way we perceive the world, and yet we follow guides as tight as the
+      bots do, seldom questioning our choices, content, for the most part, to be told what to do next.`
+  },
+  {
+    id: "a319",
+    text: "Please disregard any undeserved compliments."
+  },
+  {
+    id: "a320",
+    text: "Introducing the aphone 10: The world's first completely water soluble mobile device!"
+  },
+  {
+    id: "a321",
+    text:
+      `It must be hard being on your phone all alone. But don't worry; we are still here.
+      Listening and watching your every step.`
+  },
+  {
+    id: "a322",
+    text:
+      `Hevipelle announces an Antimatter Dimensions spinoff where you gamble matter in a game of
+      poker in Dutch mansions: "Ante matter d'mansions"`
+  },
+  {
     id: "l1",
     get text() {
       return `You just made your first ${formatInt(1e15)} antimatter. This one tastes like chicken.`;
@@ -2172,6 +2331,107 @@ GameDatabase.news = [
       "by Team \"Also Replicanti\", and many of their dimensions were stolen. Team \"The Plural Is Replicantis\" " +
       "is still lying low after their plan to hack the dictionary failed.",
       get unlocked() { return player.replicanti.unl; }
+  },
+  {
+    id: "l60",
+    get text() { 
+      return `Breaking News! Time Shard mine collapses! ${Math.floor(20 + Math.random() * 236)} miners trapped inside!`;
+    },
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l61",
+    text:
+      `Millenials are killing the challenge industry, say antimatter experts; "Nowadays they start with
+      challenges completed and infinity broken; it's just not how it used to be".`,
+    get unlocked() { return PlayerProgress.infinityUnlocked(); }
+  },
+  {
+    id: "l62",
+    text:
+      `Computer scientists are outraged, "What even are Infinity Points? IP stands for Internet Protocol!".
+      Debates continue to intensify, more at 7.`,
+      get unlocked() { return PlayerProgress.infinityUnlocked(); }
+  },
+  {
+    id: "l63",
+    text:
+      `Do you feel that time has been going slower? Study reveals that 1 second now last approximately 1.3 seconds.
+      Scientists are calling this phenomenon Time Dilation.`,
+      get unlocked() { return PlayerProgress.dilationUnlocked(); }
+  },
+  {
+    id: "l64",
+    text:
+      `Injustice in the Antimatter Academia: Beginners are only allowed to choose one field of study while the elite
+      can pick all three. "Its just not fair, man. How come they can do it?" Questions frustrated student.`,
+      get unlocked() { return PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l65",
+    text:
+      `It turns out that nobody actually knows what Infinity Points look like. Even the people who work on storing
+      them are specifically told not to look at them because they apparently "kill anyone who even looks at them",
+      to the point of sometimes working with blindfolds on. But today that will change. I am right here, in front
+      of an Infinity Point Depot, ready to tell all of you what they look like in 3, 2, 1-`,
+    get unlocked() { return PlayerProgress.infinityUnlocked(); }
+  },
+  {
+    id: "l66",
+    text:
+      `Humanity shocked as failed Time Dilation experiment causes a visual glitch in spacetime. It is now visible
+      in the night sky just above the Celestial Equator.`,
+    get unlocked() { return PlayerProgress.dilationUnlocked(); }
+  },
+  {
+    id: "l67",
+    text:
+      `Snorting crushed up Time Shards is slowly turning into a fad challenge amongst the most bored of people. It's
+      said that the high it gives makes them experience as if the world itself is speeding up around you, which is
+      why it's been called The <span style="color: var(--color-eternity)">Timelapse Challenge</span>. &nbsp;&nbsp
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      Dehydration deaths are through the roof as people mysteriously forget to drink water for several days.
+      Trace amounts of Time Shards are being found in their bodies.`,
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l68",
+    get text() { 
+      let protestText = "";
+      if (InfinityChallenge(4).isRunning)
+        protestText =
+          `Let's take it to this guy, who's part of the side that believes it's Infinity Challenge 4. What do you have
+          to say? "Obviously Infinity Challenge 4 is the worst one, I mean, what am I even supposed to do? I keep
+          trying but every time I keep getting stuck and nowhere close to the end! How are you even supposed to do it?"
+          What a passionate man. This is your local news host, and we'll come back with further information later.`;
+      else if (InfinityChallenge(5).isRunning)
+        protestText =
+          `So up next let's talk to this guy is holding a sign that says "IC5 Unfair". What is the point your group
+          is trying to make? "Can't you read the sign? If your comprehension is that bad then Infinity Challenge 5
+          will squash you without even giving you a fair chan-" How... Interesting. This is your local news host,
+          and we'll come back with further information later.`;
+      else
+        protestText =
+          `Finally, let's chat with this woman who doesn't seem to be in either side. What's your opinion on the
+          matter? "Personally, I thought Tickspeed Autobuyer Challenge was worse than both-" "GET HER!!" "WAIT NO-"
+          Well, seems like this just took a turn, so I'm getting as far away as I possibly can. This is your local
+          news host, and we'll come back with further information... someday.`;
+      return `Hello, this is your local always reliable news source, and today people are taking over the streets
+        as they fight over which Infinity Challenge is worse. ${protestText}`;
+    },
+    get unlocked() { return InfinityChallenge(1).isUnlocked || PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l69",
+    text: "Friendship ended with Replicanti, now Replicanti Galaxies is my new best friend.",
+    get unlocked() { return Replicanti.areUnlocked || PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l70",
+    text:
+      `"Zurkrbarg, Celestial of Privacy" has announced their plans to release a new version
+      of their popular social media universe, "All".`,
+    get unlocked() { return RealityUpgrades.allBought; }
   },
   {
     id: "j1",

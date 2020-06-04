@@ -54,7 +54,7 @@ Vue.component("news-ticker", {
       } else {
         const isAI = Math.random() < player.options.news.AIChance;
         this.currentNews = GameDatabase.news
-          .filter(message => message.id.includes("ai") == isAI)
+          .filter(message => message.id.includes("ai") === isAI)
           .filter(message => !this.recentTickers.includes(message) && isUnlocked(message))
           .randomElement();
         // Prevent tickers from repeating if they were seen recently

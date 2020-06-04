@@ -1887,7 +1887,7 @@ GameDatabase.news = [
   {
     id: "a317",
     get text() {
-      return `${format(Number.MAX_VALUE, 2, 0)}? Doesn't look like anything to me.)`;
+      return `${format(Number.MAX_VALUE, 2, 0)}? Doesn't look like anything to me.`;
     }
   },
   {

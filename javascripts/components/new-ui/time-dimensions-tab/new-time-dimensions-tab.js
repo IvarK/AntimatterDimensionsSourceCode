@@ -37,8 +37,19 @@ Vue.component("new-time-dimensions-tab", {
       toggleAllTimeDims();
     }
   },
-  template:
-    `<div class="l-time-dim-tab l-centered-vertical-tab">
+  template: `
+    <div class="l-time-dim-tab l-centered-vertical-tab">
+      <div class="c-subtab-option-container">
+        <primary-button
+          class="o-primary-btn--subtab-option"
+          @click="maxAll"
+        >Max all</primary-button>
+        <primary-button
+          v-if="areAutobuyersUnlocked"
+          class="o-primary-btn--subtab-option"
+          @click="toggleAllAutobuyers"
+        >Toggle all autobuyers</primary-button>
+      </div>
       <div>
         <p>You've gained {{totalUpgradesDisplay}} tickspeed upgrades.</p>
         <p>
@@ -53,11 +64,7 @@ Vue.component("new-time-dimensions-tab", {
         increasing above {{formatInt(tickspeedSoftcap)}} upgrades.
       </div>
       <div>You are getting {{format(shardsPerSecond, 2, 0)}} {{incomeType}} per second.</div>
-      <primary-button
-        class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
-        @click="maxAll"
-      >Max all</primary-button>
-      <div class="l-time-dim-tab__row-container">
+      <div class="l-dimensions-container">
         <new-time-dimension-row
           v-for="tier in 8"
           :key="tier"
@@ -65,11 +72,6 @@ Vue.component("new-time-dimensions-tab", {
           :areAutobuyersUnlocked="areAutobuyersUnlocked"
         />
       </div>
-      <primary-button
-        v-if="areAutobuyersUnlocked"
-        class="o-primary-btn--td-all-autobuyers l-time-dim-tab__all-autobuyers"
-        @click="toggleAllAutobuyers"
-      >Toggle all ON/OFF</primary-button>
       <div>
         Time Dimension costs jump at {{format(costIncreases[0], 2, 2)}} EP and {{format(costIncreases[1])}} EP,
         <br>

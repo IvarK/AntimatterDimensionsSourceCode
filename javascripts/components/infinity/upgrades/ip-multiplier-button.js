@@ -23,6 +23,9 @@ Vue.component("ip-multiplier-button", {
       this.isAutoUnlocked = EternityMilestone.autobuyerIPMult.isReached;
       this.isAutobuyerOn = player.infMultBuyer;
       this.isCapped = this.upgrade.isCapped;
+    },
+    buyMaxIPMult() {
+      InfinityUpgrade.ipMult.autobuyerTick();
     }
   },
   template:
@@ -36,6 +39,10 @@ Vue.component("ip-multiplier-button", {
           <span>(Capped at {{format(upgrade.config.costCap, 0, 0)}} IP)</span>
         </template>
       </infinity-upgrade-button>
+      <primary-button
+        class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
+        @click="buyMaxIPMult()"
+      >Max IP mult</primary-button>
       <primary-button-on-off
         v-if="isAutoUnlocked"
         v-model="isAutobuyerOn"

@@ -17,18 +17,12 @@ Vue.component("dilation-time-study", {
     },
     id() {
       return this.study.id;
-    },
-    classObject() {
-      return {
-        "o-time-study--dilation": this.id !== 6,
-        "o-time-study--reality": this.id === 6
-      };
     }
   },
   created() {
     if (this.id === 1) {
       this.requirement = `Requirement: ${formatInt(5)} EC11 and EC12 completions
-        and ${formatInt(13000)} total theorems`;
+        and ${formatInt(13000)} total Time Theorems`;
     }
     if (this.id === 6) {
       if (player.realities > 0) {
@@ -49,7 +43,7 @@ Vue.component("dilation-time-study", {
     }
   },
   template:
-    `<time-study :setup="setup" :showCost="showCost" :class="classObject">
+    `<time-study :setup="setup" :showCost="showCost">
       <description-display :config="study.config" />
       <template v-if="showRequirement">
         <br>

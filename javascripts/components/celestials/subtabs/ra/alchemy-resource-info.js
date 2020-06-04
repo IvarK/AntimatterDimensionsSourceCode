@@ -39,6 +39,9 @@ Vue.component("alchemy-resource-info", {
         effect: () => resource.config.effect(resource.amount),
         formatEffect: resource.config.formatEffect
       };
+    },
+    resourceAmount() {
+      return formatFloat(this.amount, 1);
     }
   },
   methods: {
@@ -55,7 +58,7 @@ Vue.component("alchemy-resource-info", {
   template: `
     <div class="c-alchemy-resource-info">
       <span>{{isUnlocked ? resource.symbol : "?"}} {{resource.name}}</span>
-      <span>Current: {{ isUnlocked ? format(amount, 3, 1) : "Locked!" }}</span>
+      <span>Current: {{ isUnlocked ? resourceAmount : "Locked!" }}</span>
       <span v-if="isBaseResource">Base Resource</span>
       <span v-else>Reaction: {{isReactionActive ? "Active" : "Inactive"}} ({{isUnlocked ? reactionText : "???"}})</span>
       <span v-if="isUnlocked"><effect-display title="Effect" :config="effectConfig" /></span>

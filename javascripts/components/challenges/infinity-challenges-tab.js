@@ -39,7 +39,7 @@ Vue.component("infinity-challenges-tab", {
           :isRunning="isRunning"
           :isCompleted="isCompleted"
           class="c-challenge-box--infinity"
-          @start="challenge.start()"
+          @start="challenge.requestStart()"
         >
           <template slot="top">
             <description-display :config="config" />

@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("normal-dim-row", {
+Vue.component("antimatter-dim-row", {
   props: {
     floatingText: Array,
     tier: Number
@@ -23,7 +23,7 @@ Vue.component("normal-dim-row", {
   },
   computed: {
     name() {
-      return NormalDimension(this.tier).displayName;
+      return AntimatterDimension(this.tier).shortDisplayName;
     },
     amountDisplay() {
       return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
@@ -39,18 +39,18 @@ Vue.component("normal-dim-row", {
         : null;
     },
     continuumString() {
-      return formatContinuum(this.continuumValue);
+      return formatFloat(this.continuumValue, 2);
     }
   },
   methods: {
     update() {
       const tier = this.tier;
-      const isUnlocked = NormalDimension(tier).isAvailableForPurchase;
+      const isUnlocked = AntimatterDimension(tier).isAvailableForPurchase;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
-      const dimension = NormalDimension(tier);
+      const dimension = AntimatterDimension(tier);
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 1;
-      this.multiplier.copyFrom(NormalDimension(tier).multiplier);
+      this.multiplier.copyFrom(AntimatterDimension(tier).multiplier);
       this.amount.copyFrom(dimension.totalAmount);
       this.boughtBefore10 = dimension.boughtBefore10;
       this.singleCost.copyFrom(dimension.cost);
@@ -65,14 +65,14 @@ Vue.component("normal-dim-row", {
     },
     buySingle() {
       if (this.isContinuumActive) return;
-      buyOneDimensionBtnClick(this.tier);
+      buyOneDimension(this.tier);
       if (this.tier === 2) {
         Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
       } 
     },
     buyUntil10() {
       if (this.isContinuumActive) return;
-      buyManyDimensionsBtnClick(this.tier);
+      buyManyDimension(this.tier);
       if (this.tier === 2) {
         Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
       } 
@@ -93,31 +93,32 @@ Vue.component("normal-dim-row", {
     }
   },
   template:
-    `<div v-show="isUnlocked" class="c-normal-dim-row">
-      <div class="c-normal-dim-row__label c-normal-dim-row__name">
-        {{name}} Dimension {{formatX(multiplier, 1, 1)}}
+    `<div v-show="isUnlocked" class="c-antimatter-dim-row">
+      <div class="c-dim-row__label c-dim-row__name">
+        {{name}} Antimatter Dimension {{formatX(multiplier, 1, 1)}}
       </div>
-      <div class="c-normal-dim-row__label c-normal-dim-row__label--growable">
-        {{amountDisplay}} ({{formatInt(boughtBefore10)}}){{rateOfChangeDisplay}}
+      <div class="c-dim-row__label c-dim-row__label--growable">
+        {{amountDisplay}} ({{formatInt(boughtBefore10)}})
+        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
       </div>
       <primary-button
         v-if="!isContinuumActive"
-        :enabled="isAffordable"
-        class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd c-normal-dim-row__buy-button"
+        :enabled="isAffordable && !isCapped"
+        class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
         :class="tutorialClass()"
         :ach-tooltip="cappedTooltip"
         @click="buySingle">
-        <span v-if="isCapped">Capped!</span>
+        <span v-if="isCapped">Capped</span>
         <template v-else>
           <span v-if="showCostTitle(singleCost)">Cost: </span>{{format(singleCost)}}
         </template>
       </primary-button>
       <primary-button
-        :enabled="isAffordableUntil10 || isContinuumActive"
-        class="o-primary-btn--buy-nd o-primary-btn--buy-10-nd c-normal-dim-row__buy-button"
+        :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped"
+        class="o-primary-btn--buy-ad o-primary-btn--buy-10-ad l-dim-row__button"
         :ach-tooltip="cappedTooltip"
         @click="buyUntil10">
-        <span v-if="isCapped">Capped!</span>
+        <span v-if="isCapped">Capped</span>
         <span v-else-if="isContinuumActive">Continuum: {{continuumString}}</span>
         <template v-else>
           Until {{formatInt(10)}}, <span v-if="showCostTitle(until10Cost)">
@@ -127,7 +128,7 @@ Vue.component("normal-dim-row", {
       <div
         v-for="text in floatingText"
         :key="text.key"
-        class='c-normal-dim-row__floating-text'
+        class='c-antimatter-dim-row__floating-text'
       >{{text.text}}</div>
     </div>`,
 });

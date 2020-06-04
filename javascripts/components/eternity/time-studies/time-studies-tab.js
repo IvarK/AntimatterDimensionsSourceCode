@@ -194,11 +194,8 @@ class TimeStudyTreeLayout {
     if (this._instances === undefined) {
       this._instances = [];
     }
-    let layout = this._instances[type];
-    if (layout === undefined) {
-      layout = new TimeStudyTreeLayout(type);
-      this._instances[type] = layout;
-    }
+    const layout = new TimeStudyTreeLayout(type);
+    this._instances[type] = layout;
     return layout;
   }
 }
@@ -226,11 +223,16 @@ Vue.component("time-studies-tab", {
     return {
       respec: player.respec,
       layoutType: STUDY_TREE_LAYOUT_TYPE.NORMAL,
+      vLevel: 0
     };
   },
   watch: {
     respec(newValue) {
       player.respec = newValue;
+    },
+    vLevel() {
+      // When vLevel changes, we recompute the study tree because of triad studies
+      this.$recompute("layout");
     }
   },
   computed: {
@@ -245,7 +247,7 @@ Vue.component("time-studies-tab", {
     },
     respecClassObject() {
       return {
-        "o-primary-btn--time-study-options": true,
+        "o-primary-btn--subtab-option": true,
         "o-primary-btn--respec-active": this.respec
       };
     }
@@ -254,6 +256,7 @@ Vue.component("time-studies-tab", {
     update() {
       this.respec = player.respec;
       this.layoutType = STUDY_TREE_LAYOUT_TYPE.current;
+      this.vLevel = Ra.pets.v.level;
     },
     studyComponent(study) {
       switch (study.type) {
@@ -267,9 +270,9 @@ Vue.component("time-studies-tab", {
   },
   template:
     `<div class="l-time-studies-tab">
-      <div class="l-time-study-options">
+      <div class="c-subtab-option-container">
         <primary-button
-          class="o-primary-btn--time-study-options"
+          class="o-primary-btn--subtab-option"
           onclick="exportStudyTree()"
         >Export tree</primary-button>
         <primary-button
@@ -277,7 +280,7 @@ Vue.component("time-studies-tab", {
           @click="respec = !respec"
         >Respec time studies on next Eternity</primary-button>
         <primary-button
-          class="o-primary-btn--time-study-options"
+          class="o-primary-btn--subtab-option"
           onclick="Modal.importTree.show()"
         >Import tree</primary-button>
       </div>
@@ -298,6 +301,5 @@ Vue.component("time-studies-tab", {
           <secret-time-study-connection :setup="layout.secretStudyConnection" />
         </svg>
       </div>
-      <tt-shop class="l-time-studies-tab__tt-shop" />
     </div>`
 });

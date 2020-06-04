@@ -9,5 +9,12 @@ body.t-s5 {
   color: black;
   text-shadow: 0.5px 0.5px 0 black;
   background: none;
+}
+
+.t-s5 #container,
+.t-s5 #page,
+.t-s5 .l-notification-container,
+.t-s5 .c-modal,
+.t-s5 #TTbuttons {
   filter: sepia(100%) hue-rotate(0deg) saturate(100%);
 }

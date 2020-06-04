@@ -11,7 +11,6 @@ Vue.component("infinity-dim-row", {
       baseAmount: 0,
       amount: new Decimal(0),
       purchases: 0,
-      hasRateOfChange: false,
       rateOfChange: new Decimal(0),
       isAutobuyerUnlocked: false,
       cost: new Decimal(0),
@@ -32,17 +31,15 @@ Vue.component("infinity-dim-row", {
   },
   computed: {
     name() {
-      return InfinityDimension(this.tier).displayName;
+      return InfinityDimension(this.tier).shortDisplayName;
     },
     rateOfChangeDisplay() {
-      return this.hasRateOfChange
-        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
-        : "";
+      return ` (+${format(this.rateOfChange, 2, 2)}%/s)`;
     },
     costDisplay() {
       const requirement = InfinityDimension(this.tier).requirement;
       if (this.isUnlocked) {
-        return this.isCapped ? "Capped!" : `Cost: ${format(this.cost)} IP`;
+        return this.isCapped ? "Capped" : `Cost: ${format(this.cost)} IP`;
       }
       
       if (this.requirementReached) {
@@ -72,10 +69,7 @@ Vue.component("infinity-dim-row", {
       this.baseAmount = dimension.baseAmount;
       this.purchases = dimension.purchases;
       this.amount.copyFrom(dimension.amount);
-      this.hasRateOfChange = dimension.hasRateOfChange;
-      if (this.hasRateOfChange) {
-        this.rateOfChange.copyFrom(dimension.rateOfChange);
-      }
+      this.rateOfChange.copyFrom(dimension.rateOfChange);
       this.isAutobuyerUnlocked = dimension.isAutobuyerUnlocked;
       this.cost.copyFrom(dimension.cost);
       this.isAvailableForPurchase = dimension.isAvailableForPurchase;
@@ -107,28 +101,29 @@ Vue.component("infinity-dim-row", {
   template:
     `<div v-show="showRow" class="c-infinity-dim-row"
       :class="{ 'c-infinity-dim-row--not-reached': !isUnlocked && !requirementReached }">
-      <div class="c-infinity-dim-row__label c-infinity-dim-row__name">
+      <div class="c-dim-row__label c-dim-row__name">
         {{name}} Infinity Dimension {{formatX(multiplier, 2, 1)}}
       </div>
-      <div class="c-infinity-dim-row__label c-infinity-dim-row__label--growable">
-        {{format(amount, 2, 0)}} {{rateOfChangeDisplay}}
+      <div class="c-dim-row__label c-dim-row__label--growable">
+        {{format(amount, 2, 0)}}
+        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
       </div>
       <primary-button
         v-tooltip="capTooltip"
-        :enabled="isAvailableForPurchase"
-        class="o-primary-btn--buy-id l-infinity-dim-row__button"
+        :enabled="isAvailableForPurchase && !isCapped"
+        class="o-primary-btn--buy-id l-dim-row__button"
         @click="buyManyInfinityDimension"
       >{{costDisplay}}</primary-button>
       <primary-button-on-off
         v-if="isAutobuyerUnlocked && !isEC8Running"
         v-model="isAutobuyerOn"
-        class="o-primary-btn--id-autobuyer l-infinity-dim-row__button"
+        class="o-primary-btn--id-autobuyer l-dim-row__button"
         text="Auto:"
       />
       <primary-button
         v-else
         :enabled="isAvailableForPurchase && isUnlocked"
-        class="o-primary-btn--buy-id-max l-infinity-dim-row__button"
+        class="o-primary-btn--buy-id-max l-dim-row__button"
         @click="buyMaxInfinityDimension"
       >Buy Max</primary-button>
     </div>`,

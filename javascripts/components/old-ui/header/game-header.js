@@ -62,6 +62,10 @@ Vue.component("game-header", {
         isVisible() {
           return this.infinityUnlocked || this.activeChallengeNames.length > 0;
         },
+        isInFailableEC() {
+          return this.activeChallengeNames.includes("Eternity Challenge 4") ||
+            this.activeChallengeNames.includes("Eternity Challenge 12");
+        },
         challengeDisplay() {
           if (this.activeChallengeNames.length === 0) {
             return "the Antimatter Universe (no active challenges)";
@@ -76,7 +80,9 @@ Vue.component("game-header", {
         }
       },
       template: `
-        <div v-if="isVisible">You are currently in {{challengeDisplay}}</div>
+        <div v-if="isVisible">
+          You are currently in {{challengeDisplay}} <failable-ec-text v-if="isInFailableEC"/>
+        </div>
       `
     }
   },
@@ -107,7 +113,7 @@ Vue.component("game-header", {
       }
       this.isInLaitela = Laitela.isRunning;
       if (this.isInLaitela) {
-        if (player.celestials.laitela.entropy > 0) { 
+        if (player.celestials.laitela.entropy > 0) {
           this.laitelaEntropy = `${formatPercents(player.celestials.laitela.entropy, 2, 2)}`;
           this.laitelaTimer = Time.thisRealityRealTime.toStringShort();
         } else {
@@ -115,8 +121,8 @@ Vue.component("game-header", {
           this.laitelaTimer = TimeSpan.fromSeconds(player.celestials.laitela.thisCompletion).toStringShort();
         }
       }
-      this.antimatter.copyFrom(player.antimatter);
-      this.antimatterPerSec.copyFrom(Player.antimatterPerSecond);
+      this.antimatter.copyFrom(Currency.antimatter);
+      this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
     }
   },
   template:

@@ -12,7 +12,7 @@ const Effarig = {
     clearCelestialRuns();
     player.celestials.effarig.run = true;
     recalculateAllGlyphs();
-    Tab.reality.glyphs.show();
+    Tab.reality.glyphs.show(false);
     Modal.message.show(`Your glyph levels have been limited to ${Effarig.glyphLevelCap}. ` +
       "Infinity power reduces the nerf to multipliers and game speed, and time shards reduce the nerf to tickspeed.");
   },
@@ -73,7 +73,7 @@ const Effarig = {
         c = 1500;
         break;
       case EFFARIG_STAGES.ETERNITY:
-        c = 29;
+        c = 29.29;
         break;
       case EFFARIG_STAGES.REALITY:
         c = 25;
@@ -128,7 +128,8 @@ const Effarig = {
       id: 6,
       lines: [
         "* You have completed Effarig's Infinity.",
-        "This is the first threshold. It only gets worse from here."
+        "This is the first threshold. It only gets worse from here.",
+        "None but me know enough about my domain to get further.",
       ]
     },
     COMPLETE_ETERNITY: {
@@ -136,7 +137,8 @@ const Effarig = {
       lines: [
         "* You have completed Effarig's Eternity.",
         "This is the limit. I don’t want you to proceed past this point.",
-        "I'll just wait here until you give up."
+        "You won't finish this in your lifetime.",
+        "I'll just wait here until you give up.",
       ]
     },
     COMPLETE_REALITY: {

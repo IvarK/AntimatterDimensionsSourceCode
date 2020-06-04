@@ -13,7 +13,7 @@ class GalaxyRequirement {
   }
 
   get isSatisfied() {
-    const dimension = NormalDimension(this.tier);
+    const dimension = AntimatterDimension(this.tier);
     return dimension.totalAmount.gte(this.amount);
   }
 }
@@ -35,13 +35,13 @@ class Galaxy {
     // Separate because it's applied post remote scaling:
     const finalOffset = Effects.sum(InfinityUpgrade.resetBoost) +
       (InfinityChallenge(5).isCompleted ? 1 : 0);
-      
+
     const costDivision = GlyphAlteration.isAdded("power") ? getSecondaryGlyphEffect("powerpow") : 1;
-    
+
     const quantity = (currency / costDivision - constantTerm + finalOffset) / linearTerm;
-    
+
     let unroundedGalaxyAmount;
-    
+
     if (quantity < quadraticBegin) {
       unroundedGalaxyAmount = quantity;
     } else {
@@ -55,13 +55,13 @@ class Galaxy {
       unroundedGalaxyAmount = (-linearCoefficient + Math.sqrt(
         Math.pow(linearCoefficient, 2) - 4 * quadraticCoefficient * constantCoefficient)) / (2 * quadraticCoefficient);
     }
-    
+
     let galaxyAmount = Math.round(unroundedGalaxyAmount);
-    
+
     if (this.requirementAt(galaxyAmount).amount > currency) {
       galaxyAmount -= 1;
     }
-    
+
     if (galaxyAmount >= 800 && !RealityUpgrade(21).isBought) {
       // We haven't considered remote scaling, give up and do binary search.
       const bulk = bulkBuyBinarySearch(new Decimal(currency), {
@@ -73,7 +73,7 @@ class Galaxy {
       // a quantity. So we add 1 when we return
       return 800 + bulk.quantity;
     }
-    
+
     return galaxyAmount + 1;
   }
 
@@ -95,9 +95,9 @@ class Galaxy {
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
     if (InfinityChallenge(5).isCompleted) amount -= 1;
-    
+
     if (GlyphAlteration.isAdded("power")) amount *= getSecondaryGlyphEffect("powerpow");
-    
+
     amount = Math.floor(amount);
     const tier = Galaxy.requiredTier;
     return new GalaxyRequirement(tier, amount);
@@ -118,24 +118,24 @@ class Galaxy {
   static get canBeBought() {
     if (EternityChallenge(6).isRunning && !Enslaved.isRunning) return false;
     if (NormalChallenge(8).isRunning || InfinityChallenge(7).isRunning) return false;
-    return player.break || player.antimatter.lt(Decimal.NUMBER_MAX_VALUE);
+    return player.break || Currency.antimatter.lt(Decimal.NUMBER_MAX_VALUE);
   }
-  
+
   static get lockText() {
     if (this.canBeBought) return null;
     if (EternityChallenge(6).isRunning) return "Locked (Eternity Challenge 6)";
     if (InfinityChallenge(7).isRunning) return "Locked (Infinity Challenge 7)";
-    if (NormalChallenge(8).isRunning) return "Locked (8th Dimension Autobuyer Challenge)";
+    if (NormalChallenge(8).isRunning) return "Locked (8th Antimatter Dimension Autobuyer Challenge)";
     return null;
   }
 
   static get costScalingStart() {
-    return (100 + Effects.sum(
+    return 100 + TriadStudy(2).effectOrDefault(0) + Effects.sum(
       TimeStudy(223),
       TimeStudy(224),
       EternityChallenge(5).reward,
       GlyphSacrifice.power
-    )) * TriadStudy(2).effectOrDefault(1);
+    );
   }
 
   static get type() {
@@ -175,7 +175,7 @@ function maxBuyGalaxies(limit = Number.MAX_VALUE) {
   // Check for ability to buy one galaxy (which is pretty efficient)
   const req = Galaxy.requirement;
   if (!req.isSatisfied) return false;
-  const dim = NormalDimension(req.tier);
+  const dim = AntimatterDimension(req.tier);
   const newGalaxies = Math.clampMax(
     Galaxy.buyableGalaxies(Math.round(dim.totalAmount.toNumber())),
     limit);

@@ -13,7 +13,7 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
     return Player.defaultStart.auto.tickspeed.interval;
   }
 
-  
+
   get isBought() {
     return this.data.isBought;
   }
@@ -63,14 +63,15 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
   }
 
   purchase() {
-    if (!Currency.antimatter.isAffordable(this.antimatterCost)) return;
-    Currency.antimatter.subtract(this.antimatterCost);
+    if (!Currency.antimatter.purchase(this.antimatterCost)) return;
     this.data.isBought = true;
   }
 
   reset() {
     super.reset();
     if (EternityMilestone.keepAutobuyers.isReached) return;
+    this.data.mode = AUTOBUYER_MODE.BUY_SINGLE;
     this.data.isUnlocked = false;
+    this.data.isBought = false;
   }
 }();

@@ -46,7 +46,7 @@ const GameStorage = {
     // Save current slot to make sure no changes are lost
     this.save(true);
     this.loadPlayerObject(this.saves[slot]);
-    Tab.dimensions.normal.show();
+    Tab.dimensions.antimatter.show();
     GameUI.notify.info("Game loaded");
   },
 
@@ -90,13 +90,14 @@ const GameStorage = {
 
   export() {
     const save = GameSaveSerializer.serialize(player);
-    copyToClipboardAndNotify(save);
+    copyToClipboard(save);
+    GameUI.notify.info("Exported current savefile to your clipboard");
   },
 
   hardReset() {
     this.loadPlayerObject(Player.defaultStart);
     this.save();
-    Tab.dimensions.normal.show();
+    Tab.dimensions.antimatter.show();
   },
 
   loadPlayerObject(playerObject, overrideLastUpdate = undefined) {
@@ -130,7 +131,7 @@ const GameStorage = {
       NormalChallenge(1).complete();
     }
 
-    ui.view.news = player.options.news;
+    ui.view.news = player.options.news.enabled;
     ui.view.newUI = player.options.newUI;
     ui.view.tutorialState = player.tutorialState;
     ui.view.tutorialActive = player.tutorialActive;
@@ -155,7 +156,7 @@ const GameStorage = {
       if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
         diff = Enslaved.autoStoreRealTime(diff);
       }
-      if (diff > 1000) {
+      if (diff > 10000) {
         // The third parameter is a `fast` parameter that we use to only
         // simulate at most 50 ticks if the player was offline for less
         // than 50 seconds.

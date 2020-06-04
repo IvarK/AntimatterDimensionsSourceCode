@@ -4,11 +4,8 @@ Vue.component("glyph-inventory", {
   data() {
     return {
       inventory: [],
-      showScoreFilter: false,
       doubleClickTimeOut: null,
       clickedGlyphId: null,
-      showAutoAutoClean: false,
-      isAutoAutoCleanOn: false,
       glyphSacrificeUnlocked: false,
     };
   },
@@ -20,17 +17,9 @@ Vue.component("glyph-inventory", {
     this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
   },
-  watch: {
-    isAutoAutoCleanOn(newValue) {
-      player.reality.autoAutoClean = newValue;
-    }
-  },
   methods: {
     update() {
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
-      this.showScoreFilter = EffarigUnlock.basicFilter.isUnlocked;
-      this.showAutoAutoClean = V.has(V_UNLOCKS.AUTO_AUTOCLEAN);
-      this.isAutoAutoCleanOn = player.reality.autoAutoClean;
     },
     toIndex(row, col) {
       return (row - 1) * this.colCount + (col - 1);
@@ -72,24 +61,6 @@ Vue.component("glyph-inventory", {
     glyphsChanged() {
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);
     },
-    sortByPower() {
-      Glyphs.sort((a, b) => -a.level * a.strength + b.level * b.strength);
-    },
-    sortByScore() {
-      Glyphs.sort((a, b) => -AutoGlyphProcessor.filterValue(a) + AutoGlyphProcessor.filterValue(b));
-    },
-    sortByEffect() {
-      function reverseBitstring(eff) {
-        // eslint-disable-next-line no-bitwise
-        return parseInt(((1 << 30) + (eff >>> 0)).toString(2).split("").reverse().join(""), 2);
-      }
-      // The bitwise reversal is so that the effects with the LOWER id are valued higher in the sorting.
-      // This primarily meant for effarig glyph effect sorting, which makes it prioritize timespeed pow highest.
-      Glyphs.sort((a, b) => -reverseBitstring(a.effects) + reverseBitstring(b.effects));
-    },
-    autoClean() {
-      Glyphs.autoClean();
-    },
     slotClass(index) {
       return index < Glyphs.protectedSlots ? "c-glyph-inventory__protected-slot" : "c-glyph-inventory__slot";
     }
@@ -98,7 +69,12 @@ Vue.component("glyph-inventory", {
   <div class="l-glyph-inventory">
     Click and drag or double-click to equip glyphs.
     <br>
-    The top two rows of slots are unaffected by glyph sorting and auto clean.
+    The top two rows of slots are protected slots and are
+    <br>
+    unaffected by anything which may move or delete glyphs.
+    <div>
+      <glyph-sort-options />
+    </div>
     <div v-for="row in rowCount" class="l-glyph-inventory__row">
       <div v-for="col in colCount"
            class="l-glyph-inventory__slot"
@@ -106,43 +82,13 @@ Vue.component("glyph-inventory", {
            @dragover="allowDrag"
            @drop="drop(toIndex(row, col), $event)">
         <glyph-component v-if="inventory[toIndex(row, col)]"
-                         :glyph="inventory[toIndex(row, col)]"
-                         :showSacrifice="true"
-                         :draggable="true"
-                         @shiftClicked="removeGlyph($event, false)"
-                         @ctrlShiftClicked="removeGlyph($event, true)"
-                         @clicked="clickGlyph(col, $event)"/>
+          :glyph="inventory[toIndex(row, col)]"
+          :showSacrifice="glyphSacrificeUnlocked"
+          :draggable="true"
+          @shiftClicked="removeGlyph($event, false)"
+          @ctrlShiftClicked="removeGlyph($event, true)"
+          @clicked="clickGlyph(col, $event)"/>
       </div>
-    </div>
-    <div>
-      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="Arranges by decreasing level×rarity"
-        @click="sortByPower">
-          Sort by power
-      </button>
-      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="Group glyphs together based on effects"
-        @click="sortByEffect">
-          Sort by effect
-      </button>
-      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        v-if="showScoreFilter"
-        ach-tooltip="Arranges by decreasing glyph filter score"
-        @click="sortByScore">
-          Sort by score
-      </button>
-      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-            :ach-tooltip="(glyphSacrificeUnlocked ? 'Sacrifice' : 'Delete') +
-              ' glyphs that are worse in every way than enough other glyphs'"
-            @click="autoClean">
-       Auto clean
-      </button>
-      <primary-button-on-off
-        v-if="showAutoAutoClean"
-        v-model="isAutoAutoCleanOn"
-        class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        text="Auto auto-clean:"
-      />
     </div>
   </div>
   `,

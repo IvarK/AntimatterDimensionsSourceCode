@@ -40,11 +40,17 @@ Vue.component("effect-display", {
         this.updateFn = isNumber
           ? () => this.effectValue = effect()
           : () => this.effectValue.copyFrom(effect());
-        const cap = config.cap;
+        // If the config has a reachedCapFn, we assume its effect value calculation
+        // takes account of the cap itself, so we don't have to.
+        const cap = config.reachedCapFn === undefined ? config.cap : () => this.effectValue;
         if (cap === undefined) return;
+        if (config.reachedCapFn) {
+          this.reachedCapFn = config.reachedCapFn;
+        } else {
         this.reachedCapFn = isNumber
           ? () => this.effectValue >= this.cap
           : () => this.effectValue.gte(this.cap);
+        }
         if (typeof cap !== "function") {
           this.hasCap = true;
           this.cap = isNumber ? cap : Decimal.fromDecimal(cap);
@@ -68,7 +74,7 @@ Vue.component("effect-display", {
       return this.reachedCapFn();
     },
     titleDisplay() {
-      if (this.config.staticEffect) return undefined;
+      if (this.config.noTitle) return "";
       return `${this.hasCap && this.reachedCap ? "Capped" : this.title}: `;
     },
     effectDisplay() {

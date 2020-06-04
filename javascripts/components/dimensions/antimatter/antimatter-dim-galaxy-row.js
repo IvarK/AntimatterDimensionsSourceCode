@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("normal-dim-galaxy-row", {
+Vue.component("antimatter-dim-galaxy-row", {
   data() {
     return {
       type: GALAXY_TYPE.NORMAL,
@@ -20,7 +20,7 @@ Vue.component("normal-dim-galaxy-row", {
   },
   computed: {
     dimName() {
-      return NormalDimension(this.requirement.tier).displayName;
+      return AntimatterDimension(this.requirement.tier).displayName;
     },
     buttonText() {
       return this.lockText === null
@@ -82,16 +82,15 @@ Vue.component("normal-dim-galaxy-row", {
     },
   },
   template:
-    `<div class="c-normal-dim-row">
-      <div
-        class="c-normal-dim-row__label c-normal-dim-row__label--growable"
-      >{{typeName}} ({{sumText}}):
+    `<div class="c-antimatter-dim-row">
+      <div class="c-dim-row__label c-dim-row__label--growable" style="height: 6rem;">
+        {{typeName}} ({{sumText}}):
         requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions
-        <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
+        <div style="height: 2rem;">{{ hasIncreasedScaling ? costScalingText : "" }}</div>
       </div>
       <primary-button
         :enabled="canBeBought"
-        class="o-primary-btn--galaxy c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
+        class="o-primary-btn--galaxy l-dim-row__button l-dim-row__button--right-offset"
         :class="tutorialClass"
         @click.exact="buyGalaxy(true)"
         @click.shift.exact="buyGalaxy(false)"

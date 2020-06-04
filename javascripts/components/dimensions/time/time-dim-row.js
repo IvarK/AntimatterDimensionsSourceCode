@@ -19,7 +19,7 @@ Vue.component("time-dim-row", {
   },
   computed: {
     name() {
-      return TimeDimension(this.tier).displayName;
+      return TimeDimension(this.tier).shortDisplayName;
     },
     rateOfChangeDisplay() {
       return this.tier < 8
@@ -61,27 +61,28 @@ Vue.component("time-dim-row", {
   },
   template:
     `<div v-show="isUnlocked" class="c-time-dim-row">
-      <div class="c-time-dim-row__label c-time-dim-row__name">
+      <div class="c-dim-row__label c-dim-row__name">
         {{name}} Time Dimension {{formatX(multiplier, 2, 1)}}
       </div>
-      <div class="c-time-dim-row__label c-time-dim-row__label--growable">
-        {{format(amount, 2, 0)}}{{rateOfChangeDisplay}}
+      <div class="c-dim-row__label c-dim-row__label--growable">
+        {{format(amount, 2, 0)}}
+        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
       </div>
       <primary-button
-        :enabled="isAffordable"
-        class="o-primary-btn--buy-td l-time-dim-row__button"
+        :enabled="isAffordable && !isCapped"
+        class="o-primary-btn--buy-td l-dim-row__button"
         @click="buyTimeDimension"
       >{{buttonContents}}</primary-button>
       <primary-button-on-off
         v-if="areAutobuyersUnlocked"
         v-model="isAutobuyerOn"
-        class="o-primary-btn--td-autobuyer l-time-dim-row__button"
+        class="o-primary-btn--td-autobuyer l-dim-row__button"
         text="Auto:"
       />
       <primary-button
         v-else
-        :enabled="isAffordable"
-        class="o-primary-btn--buy-td-max l-time-dim-row__button"
+        :enabled="isAffordable && !isCapped"
+        class="o-primary-btn--buy-td-max l-dim-row__button"
         @click="buyMaxTimeDimension"
       >Buy Max</primary-button>
     </div>`,

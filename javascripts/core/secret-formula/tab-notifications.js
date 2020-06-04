@@ -97,8 +97,19 @@ GameDatabase.tabNotifications = {
     ],
     condition: () => !PlayerProgress.realityUnlocked()
   },
-  blackHoleUnlock: {
+  realityUnlock: {
     id: 7,
+    tabsToHighLight: [
+      {
+        parent: "eternity",
+        tab: "studies"
+      }
+    ],
+    condition: () => !PlayerProgress.realityUnlocked() && TimeStudy.reality.canBeBought,
+    events: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION]
+  },
+  blackHoleUnlock: {
+    id: 8,
     tabsToHighLight: [
       {
         parent: "reality",
@@ -109,7 +120,7 @@ GameDatabase.tabNotifications = {
     events: [GAME_EVENT.REALITY_RESET_AFTER]
   },
   automatorUnlock: {
-    id: 8,
+    id: 9,
     tabsToHighLight: [
       {
         parent: "reality",

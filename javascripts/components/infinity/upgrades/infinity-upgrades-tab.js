@@ -4,7 +4,8 @@ Vue.component("infinity-upgrades-tab", {
   data() {
     return {
       chargeUnlocked: false,
-      chargesLeft: 0,
+      totalCharges: 0,
+      chargesUsed: 0,
       disCharge: false,
       ipMultSoftCap: 0,
       ipMultHardCap: 0,
@@ -46,7 +47,7 @@ Vue.component("infinity-upgrades-tab", {
     },
     disChargeClassObject() {
       return {
-        "o-primary-btn--respec-options": true,
+        "o-primary-btn--subtab-option": true,
         "o-primary-btn--respec-active": this.disCharge
       };
     },
@@ -55,7 +56,8 @@ Vue.component("infinity-upgrades-tab", {
   methods: {
     update() {
       this.chargeUnlocked = Ra.chargeUnlocked;
-      this.chargesLeft = Ra.chargesLeft;
+      this.totalCharges = Ra.totalCharges;
+      this.chargesUsed = Ra.totalCharges - Ra.chargesLeft;
       this.disCharge = player.celestials.ra.disCharge;
       this.ipMultSoftCap = GameDatabase.infinity.upgrades.ipMult.costIncreaseThreshold;
       this.ipMultHardCap = GameDatabase.infinity.upgrades.ipMult.costCap;
@@ -71,17 +73,19 @@ Vue.component("infinity-upgrades-tab", {
       return classObject;
     }
   },
-  template:
-    `<div class="l-infinity-upgrades-tab">
-      <div v-if="chargeUnlocked">
-          <div>
-            You can charge {{ formatInt(chargesLeft) }} more {{ "upgrade" | pluralize(chargesLeft) }}.
-          </div>
-          <primary-button
-          :class="disChargeClassObject"
-          @click="disCharge = !disCharge"
-        >Un-charge all upgrades on next Reality</primary-button>
+  template: `
+    <div class="l-infinity-upgrades-tab">
+      <div class="c-subtab-option-container" v-if="chargeUnlocked">
+        <primary-button
+        :class="disChargeClassObject"
+        @click="disCharge = !disCharge"
+        >
+        Un-charge all upgrades on next Reality ({{ formatInt(chargesUsed) }}/{{ formatInt(totalCharges) }} used)
+        </primary-button>
       </div>
+      Each upgrade requires the one above it to be purchased first.
+      The bottom two upgrades require the other {{formatInt(16)}} to already be purchased.
+      <br>
       <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">
         <div v-for="(column, columnId) in grid" class="l-infinity-upgrade-grid__column">
           <infinity-upgrade-button

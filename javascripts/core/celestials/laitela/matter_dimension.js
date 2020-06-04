@@ -12,6 +12,10 @@ const INTERVAL_START_COST = 10;
 const POWER_DM_START_COST = 10;
 const POWER_DE_START_COST = 10;
 
+// No constant for interval since it's tied to a milestone
+const POWER_DM_PER_ASCENSION = 1000;
+const POWER_DE_PER_ASCENSION = 1000;
+
 const COST_MULT_PER_TIER = 1e3;
 
 class MatterDimensionState {
@@ -23,32 +27,41 @@ class MatterDimensionState {
     return player.celestials.laitela.dimensions[this._tier];
   }
 
+  get ascensions() {
+    return this.dimension.ascensionCount;
+  }
+
   get intervalPurchaseCap() {
     return 10;
   }
 
-  get baseInterval() {
+  get interval() {
     const perUpgrade = 0.92;
     const tierFactor = Math.pow(4, this._tier);
-    return Math.clampMin(this.intervalPurchaseCap,
-      Math.pow(perUpgrade, this.dimension.intervalUpgrades) * tierFactor * 1000);
+    return Math.clampMin(this.intervalPurchaseCap, 1000 * tierFactor *
+      Math.pow(perUpgrade, this.dimension.intervalUpgrades) *
+      Math.pow(SingularityMilestone.ascensionIntervalScaling.effectValue, this.dimension.ascensionCount) *
+      SingularityMilestone.darkDimensionIntervalReduction.effectValue);
   }
 
-  // In milliseconds; if this is 10 then you can no longer buy it, but it can get lower with other upgrades
-  get interval() {
-    return this.baseInterval * SingularityMilestone(7).effectValue;
+  get commonDarkMult() {
+    return new Decimal(1).timesEffectsOf(
+      SingularityMilestone.darkFromTesseracts,
+      SingularityMilestone.darkFromGlyphLevel,
+      SingularityMilestone.darkFromTheorems,
+      SingularityMilestone.darkFromDM4,
+      SingularityMilestone.darkFromGamespeed,
+      SingularityMilestone.darkFromDilatedTime
+    );
   }
 
   get powerDM() {
     return new Decimal(1 + 2 * Math.pow(1.15, this.dimension.powerDMUpgrades))
       .times(Laitela.realityReward)
-      .times(Math.max(Laitela.darkMatterMult, 1))
-      .timesEffectsOf(
-        SingularityMilestone(2),
-        SingularityMilestone(11),
-        SingularityMilestone(15),
-        SingularityMilestone(19)
-      )
+      .times(Laitela.darkMatterMult)
+      .times(this.commonDarkMult)
+      .times(Math.pow(POWER_DM_PER_ASCENSION, this.dimension.ascensionCount))
+      .timesEffectsOf(SingularityMilestone.darkMatterMult)
       .dividedBy(Math.pow(10, this._tier));
   }
   
@@ -56,12 +69,9 @@ class MatterDimensionState {
     const tierFactor = Math.pow(4, this._tier);
     return new Decimal(((1 + this.dimension.powerDEUpgrades * 0.1) * 
       Math.pow(1.005, this.dimension.powerDEUpgrades)) * tierFactor / 1000)
-      .timesEffectsOf(
-        SingularityMilestone(3),
-        SingularityMilestone(13),
-        SingularityMilestone(15),
-        SingularityMilestone(17)
-      ).toNumber();
+        .times(this.commonDarkMult)
+        .times(Math.pow(POWER_DE_PER_ASCENSION, this.dimension.ascensionCount))
+        .timesEffectsOf(SingularityMilestone.darkEnergyMult).toNumber();
   }
 
   get adjustedStartingCost() {
@@ -71,17 +81,20 @@ class MatterDimensionState {
 
   get intervalCost() {
     return Decimal.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades)
-      .times(this.adjustedStartingCost).times(INTERVAL_START_COST).times(SingularityMilestone(4).effectValue).floor();
+      .times(this.adjustedStartingCost).times(INTERVAL_START_COST)
+      .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
   }
 
   get powerDMCost() {
     return Decimal.pow(POWER_DM_COST_MULT, this.dimension.powerDMUpgrades)
-      .times(this.adjustedStartingCost).times(POWER_DM_START_COST).times(SingularityMilestone(4).effectValue).floor();
+      .times(this.adjustedStartingCost).times(POWER_DM_START_COST)
+      .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
   }
   
   get powerDECost() {
     return Decimal.pow(POWER_DE_COST_MULTS[this._tier], this.dimension.powerDEUpgrades)
-      .times(this.adjustedStartingCost).times(POWER_DE_START_COST).times(SingularityMilestone(4).effectValue).floor();
+      .times(this.adjustedStartingCost).times(POWER_DE_START_COST)
+      .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
   }
 
   get amount() {
@@ -101,7 +114,7 @@ class MatterDimensionState {
   }
 
   get canBuyInterval() {
-    return this.intervalCost.lte(player.celestials.laitela.matter) && this.baseInterval > this.intervalPurchaseCap;
+    return this.intervalCost.lte(player.celestials.laitela.matter) && this.interval > this.intervalPurchaseCap;
   }
 
   get canBuyPowerDM() {
@@ -132,13 +145,18 @@ class MatterDimensionState {
     this.dimension.powerDEUpgrades++;
     return true;
   }
+
+  ascend() {
+    if (this.interval > this.intervalPurchaseCap) return;
+    this.dimension.ascensionCount++;
+  }
 }
 
 MatterDimensionState.list = Array.range(1, 4).map(tier => new MatterDimensionState(tier - 1));
 
 /**
  * @param {number} tier
- * @return {NormalDimensionState}
+ * @return {AntimatterDimensionState}
  */
 function MatterDimension(tier) {
   return MatterDimensionState.list[tier - 1];

@@ -21,7 +21,7 @@ Vue.component("replicanti-tab", {
     replicantiChanceSetup() {
       return new ReplicantiUpgradeButtonSetup(ReplicantiUpgrade.chance,
         value => `Replicate chance: ${formatPercents(value)}`,
-        cost => `+1% Costs: ${format(cost, 0, 0)} IP`
+        cost => `+${formatPercents(0.01)} Costs: ${format(cost)} IP`
       );
     },
     replicantiIntervalSetup() {
@@ -37,14 +37,14 @@ Vue.component("replicanti-tab", {
       }
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => `Interval: ${formatInterval(value)}`,
-        cost => `➜ ${formatInterval(upgrade.nextValue)} Costs: ${format(cost, 0, 0)} IP`
+        cost => `➜ ${formatInterval(upgrade.nextValue)} Costs: ${format(cost)} IP`
       );
     },
     maxGalaxySetup() {
       const upgrade = ReplicantiUpgrade.galaxies;
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => {
-          let description = `Max Replicanti galaxies: ${formatInt(value)}`;
+          let description = `Max Replicanti Galaxies: ${formatInt(value)}`;
           const extra = upgrade.extra;
           if (extra > 0) {
             description += `+${formatInt(extra)}`;
@@ -89,8 +89,8 @@ Vue.component("replicanti-tab", {
         <div v-if="isInEC8">You have {{formatInt(ec8Purchases)}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
         <div v-if="hasRaisedCap">
           Your replicanti cap without study 192 has been raised to {{format(replicantiCap, 2)}}
-          and is giving you {{formatInt(effarigInfinityBonusRG)}} extra RG due to Effarig Infinity.
-          (Next RG at {{format(nextEffarigRGThreshold, 2)}})
+          and is giving you {{formatInt(effarigInfinityBonusRG)}} extra RG due to the reward from
+          Effarig's Infinity. (Next RG at {{format(nextEffarigRGThreshold, 2)}})
         </div>
         <p class="c-replicanti-description">
           You have

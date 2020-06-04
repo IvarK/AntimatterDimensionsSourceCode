@@ -12,6 +12,7 @@ Vue.component("new-dimension-row", {
       multiplier: new Decimal(0),
       amount: new Decimal(0),
       boughtBefore10: 0,
+      rateOfChange: new Decimal(0),
       singleCost: new Decimal(0),
       until10Cost: new Decimal(0),
       isAffordable: false,
@@ -23,13 +24,18 @@ Vue.component("new-dimension-row", {
   },
   computed: {
     name() {
-      return NormalDimension(this.tier).shortDisplayName;
+      return AntimatterDimension(this.tier).shortDisplayName;
     },
     costDisplay() {
-      return this.buyUntil10 ? format(this.until10Cost, 0, 0) : format(this.singleCost, 0, 0);
+      return this.buyUntil10 ? format(this.until10Cost) : format(this.singleCost);
     },
     amountDisplay() {
       return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
+    },
+    rateOfChangeDisplay() {
+      return this.tier < 8
+        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
+        : "";
     },
     cappedTooltip() {
       return this.isCapped
@@ -37,24 +43,27 @@ Vue.component("new-dimension-row", {
         : null;
     },
     continuumString() {
-      return formatContinuum(this.continuumValue);
+      return formatFloat(this.continuumValue, 2);
     }
   },
   methods: {
     update() {
       const tier = this.tier;
-      const isUnlocked = NormalDimension(tier).isAvailableForPurchase;
+      const isUnlocked = AntimatterDimension(tier).isAvailableForPurchase;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
       const buyUntil10 = player.buyUntil10;
-      const dimension = NormalDimension(tier);
+      const dimension = AntimatterDimension(tier);
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 10;
-      this.multiplier.copyFrom(NormalDimension(tier).multiplier);
+      this.multiplier.copyFrom(AntimatterDimension(tier).multiplier);
       this.amount.copyFrom(dimension.totalAmount);
       this.boughtBefore10 = dimension.boughtBefore10;
       this.howManyCanBuy = buyUntil10 ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1);
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.cost.times(Math.max(dimension.howManyCanBuy, 1)));
+      if (tier < 8) {
+        this.rateOfChange.copyFrom(dimension.rateOfChange);
+      }
       this.isAffordable = dimension.isAffordable;
       this.buyUntil10 = buyUntil10;
       this.isContinuumActive = Laitela.continuumActive;
@@ -64,9 +73,9 @@ Vue.component("new-dimension-row", {
       if (this.isContinuumActive) return;
       // TODO: Buy Until is on
       if (this.buyUntil10) {
-        buyAsManyAsYouCanBuyBtnClick(this.tier);
+        buyAsManyAsYouCanBuy(this.tier);
       } else {
-        buyOneDimensionBtnClick(this.tier);
+        buyOneDimension(this.tier);
       }
       
       if (this.tier === 2) {
@@ -89,12 +98,13 @@ Vue.component("new-dimension-row", {
     }
   },
   template:
-  `<div v-show="isUnlocked" class="c-normal-dim-row">
-    <div class="c-normal-dim-row__label c-normal-dim-row__name">
-      {{name}} D <span class="c-normal-dim-row__multiplier">{{formatX(multiplier, 1, 1)}}</span>
+  `<div v-show="isUnlocked" class="c-antimatter-dim-row">
+    <div class="c-dim-row__label c-dim-row__name">
+      {{name}} Antimatter D <span class="c-antimatter-dim-row__multiplier">{{formatX(multiplier, 1, 1)}}</span>
     </div>
-    <div class="c-normal-dim-row__label c-normal-dim-row__label--growable">
+    <div class="c-dim-row__label c-dim-row__label--growable">
       {{amountDisplay}}
+      <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
     </div>
     <button class="o-primary-btn o-primary-btn--new" @click="buy"
       :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }">
@@ -121,7 +131,7 @@ Vue.component("new-dimension-row", {
     <div
       v-for="text in floatingText"
       :key="text.key"
-      class='c-normal-dim-row__floating-text'
+      class='c-antimatter-dim-row__floating-text'
     >{{text.text}}</div>
   </div>`
 });

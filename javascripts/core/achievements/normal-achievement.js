@@ -48,14 +48,18 @@ class AchievementState extends GameMechanicState {
     player.achievementBits[this.row - 1] &= this._inverseBitmask;
   }
 
-  unlock() {
+  unlock(auto) {
     if (this.isUnlocked) return;
     // eslint-disable-next-line no-bitwise
     player.achievementBits[this.row - 1] |= this._bitmask;
     if (this.id === 85 || this.id === 93) {
       Autobuyer.bigCrunch.bumpAmount(4);
     }
-    GameUI.notify.success(this.name);
+    if (auto) {
+      GameUI.notify.reality(`Automatically unlocked: ${this.name}`);
+    } else {
+      GameUI.notify.success(this.name);
+    }
     Achievements._power.invalidate();
     EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
   }
@@ -109,7 +113,7 @@ const Achievements = {
     if (Achievements.preReality.every(a => a.isUnlocked)) return;
     if (Perk.achievementGroup6.isBought) {
       for (const achievement of Achievements.preReality) {
-        achievement.unlock();
+        achievement.unlock(true);
       }
       return;
     }
@@ -118,7 +122,7 @@ const Achievements = {
     if (player.reality.achTimer < this.period) return;
 
     for (const achievement of Achievements.preReality.filter(a => !a.isUnlocked)) {
-      achievement.unlock();
+      achievement.unlock(true);
       player.reality.achTimer -= this.period;
       if (player.reality.achTimer < this.period) break;
     }

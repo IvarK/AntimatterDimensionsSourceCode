@@ -12,70 +12,54 @@ const GlyphSelection = {
   },
 
   get choiceCount() {
-    let baseChoices = Effects.max(
-      1,
-      Perk.glyphChoice4,
-      Perk.glyphChoice3
-    );
-    // TODO Make Ra follow GMS pattern so this isn't as dumb as it is right now
-    if (Ra.has(RA_UNLOCKS.GLYPH_CHOICES)) baseChoices *= 2;
-    return baseChoices;
+    return Effects.max(1, Perk.glyphChoice4) *
+      (Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX) ? 2 : 1);
   },
 
-  /**
-   * Checks that a given glyph is sufficiently different from the current selection.
-   *
-   * If the list doesn't already contain a glyph of the specified type, it is automatically
-   * considered unique.  If not, it then checks the effects of glyphs that have the same type.
-   * It calculates a pairwise uniqueness score to each glyph it checks and only adds the new
-   * glyph if the score exceeds the specified threshold for every glyph already in the list.
-   * This uniqueness score is equal to the number of effects that exactly one of the glyphs has.
-   */
-  checkUniqueGlyph(glyphToCheck) {
-    const uniquenessThreshold = 3;
-    const checkEffects = glyphToCheck.effects;
-    for (const currGlyph of this.glyphs) {
-      const currEffects = currGlyph.effects;
-      // eslint-disable-next-line no-bitwise
-      const union = checkEffects | currEffects;
-      // eslint-disable-next-line no-bitwise
-      const intersection = checkEffects & currEffects;
-      if (countEffectsFromBitmask(union - intersection) < uniquenessThreshold) return false;
-    }
-    return true;
-  },
-
-  glyphUncommonGuarantee(rng) {
+  glyphUncommonGuarantee(glyphList, rng) {
     // If no choices are rare enough and the player has the uncommon glyph perk, randomly generate
     // rarities until the threshold is passed and then assign that rarity to a random glyph
     const strengthThreshold = 1.5;
-    if (this.glyphs.some(e => e.strength >= strengthThreshold)) return;
+    // Do RNG stuff now so getting a strength-boosting upgrade in this reality
+    // can't influence the RNG of the next one.
+    const random = rng.uniform();
     let newStrength;
     do {
       newStrength = GlyphGenerator.randomStrength(rng);
     } while (newStrength < strengthThreshold);
-    this.glyphs.randomElement().strength = newStrength;
+    if (glyphList.some(e => e.strength >= strengthThreshold)) return;
+    glyphList[Math.floor(random * glyphList.length)].strength = newStrength;
+  },
+  
+  glyphList(countIn, level, config) {
+    // Always generate at least 4 choices so that the RNG never diverges based on
+    // the 4-choice perk.
+    const count = Math.clampMin(countIn, 4);
+    let glyphList = [];
+    const rng = config.rng || new GlyphGenerator.RealGlyphRNG();
+    const types = [];
+    for (let out = 0; out < count; ++out) {
+      types.push(GlyphGenerator.randomType(rng, types));
+    }
+    for (let out = 0; out < count; ++out) {
+      glyphList.push(GlyphGenerator.randomGlyph(level, rng, types[out]));
+    }
+    this.glyphUncommonGuarantee(glyphList, rng);
+    // If we generated extra choices due to always generating at least 4 choices,
+    // we remove the extra choices here.
+    glyphList = glyphList.slice(0, countIn);
+    // If we passed an explicit RNG in, we assume it'll get finalized later.
+    if (!config.rng && config.isChoosingGlyph) {
+      rng.finalize();
+    }
+    return glyphList;
   },
 
   generate(count, realityProps) {
-    this.glyphs = [];
+    EventHub.dispatch(GAME_EVENT.GLYPH_CHOICES_GENERATED);
     this.realityProps = realityProps;
-    const level = realityProps.gainedGlyphLevel;
-    const rng = new GlyphGenerator.RealGlyphRNG();
-    for (let out = 0; out < count; ++out) {
-      let glyph;
-      // Attempt to generate a unique glyph, but give up after 100 tries so the game doesn't
-      // get stuck in an infinite loop if we decide to increase the number of glyph choices
-      // for some reason and forget about the uniqueness check
-      for (let tries = 0; tries < 100; ++tries) {
-        glyph = GlyphGenerator.randomGlyph(level, rng);
-        if (this.checkUniqueGlyph(glyph)) break;
-      }
-      this.glyphs.push(glyph);
-    }
+    this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel, { isChoosingGlyph: true });
     ui.view.modal.glyphSelection = true;
-    if (Perk.glyphUncommonGuarantee.isBought) this.glyphUncommonGuarantee(rng);
-    rng.finalize();
   },
 
   update(level) {
@@ -145,7 +129,7 @@ function requestManualReality() {
   const realityProps = getRealityProps(false, false);
   if (simulatedRealityCount(false) > 0) {
     triggerManualReality(realityProps);
-    if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) Glyphs.autoClean();
+    Glyphs.processSortingAfterReality();
     return;
   }
   realityProps.alreadyGotGlyph = true;
@@ -154,7 +138,9 @@ function requestManualReality() {
       Glyphs.addToInventory(GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel));
       Glyphs.addToInventory(GlyphGenerator.companionGlyph(player.eternityPoints));
     } else {
-      Glyphs.addToInventory(GlyphGenerator.randomGlyph(realityProps.gainedGlyphLevel));
+      // We can't get a random glyph directly here because that disturbs the RNG
+      // (makes it depend on whether you got first perk or not).
+      Glyphs.addToInventory(GlyphSelection.glyphList(1, realityProps.gainedGlyphLevel, { isChoosingGlyph: true })[0]);
     }
     triggerManualReality(realityProps);
     return;
@@ -191,16 +177,19 @@ function runRealityAnimation() {
 
 function processAutoGlyph(gainedLevel, rng) {
   let newGlyph;
+  // Always generate a list of glyphs to avoid RNG diverging based on whether
+  // a reality is done automatically.
+  const glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedLevel, { rng });
   if (EffarigUnlock.basicFilter.isUnlocked) {
-    const glyphs = Array.range(0, GlyphSelection.choiceCount)
-      .map(() => GlyphGenerator.randomGlyph(gainedLevel, rng));
     newGlyph = AutoGlyphProcessor.pick(glyphs);
     if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
       AutoGlyphProcessor.getRidOfGlyph(newGlyph);
       newGlyph = null;
     }
   } else {
-    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, rng);
+    // It really doesn't matter which we pick since they're random,
+    // so we might as well take the first one.
+    newGlyph = glyphs[0];
   }
   if (newGlyph && Glyphs.freeInventorySpace > 0) {
     Glyphs.addToInventory(newGlyph);
@@ -228,7 +217,7 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   beginProcessReality(getRealityProps(false, false));
-  if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) Glyphs.autoClean();
+  Glyphs.processSortingAfterReality();
 }
 
 function updateRealityRecords(realityProps) {
@@ -254,7 +243,9 @@ function giveRealityRewards(realityProps) {
   const gainedRM = realityProps.gainedRM;
   player.reality.realityMachines = player.reality.realityMachines.plus(gainedRM.times(multiplier));
   updateRealityRecords(realityProps);
-  addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRM, realityProps.gainedGlyphLevel.actualLevel);
+  addRealityTime(
+    player.thisReality, player.thisRealityRealTime, gainedRM,
+    realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier);
   player.realities += realityAndPPMultiplier;
   player.reality.pp += realityAndPPMultiplier;
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
@@ -272,9 +263,11 @@ function giveRealityRewards(realityProps) {
   }
 
   if (Teresa.isRunning) {
-    if (player.antimatter.gt(player.celestials.teresa.bestRunAM)) {
-      player.celestials.teresa.bestRunAM = player.antimatter;
+    if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
+      player.celestials.teresa.bestRunAM = Currency.antimatter.value;
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+      player.celestials.teresa.lastRepeatedRM = player.celestials.teresa.lastRepeatedRM
+        .clampMin(player.reality.realityMachines);
     }
     Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
   }
@@ -297,6 +290,8 @@ function beginProcessReality(realityProps) {
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_BEFORE);
   const glyphsToProcess = realityProps.simulatedRealities + (realityProps.alreadyGotGlyph ? 0 : 1);
   const rng = GlyphGenerator.getRNG(false);
+  // Do this before processing glyphs so that we don't try to reality again while async is running.
+  finishProcessReality(realityProps);
   Async.run(() => processAutoGlyph(realityProps.gainedGlyphLevel, rng),
     glyphsToProcess,
     {
@@ -320,7 +315,6 @@ function beginProcessReality(realityProps) {
       },
       then: () => {
         rng.finalize();
-        finishProcessReality(realityProps);
       }
     });
 }
@@ -331,7 +325,7 @@ function finishProcessReality(realityProps) {
     player.bestEP = new Decimal(finalEP);
     player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
-  
+
   const isReset = realityProps.reset;
   if (!isReset) giveRealityRewards(realityProps);
   if (!realityProps.glyphUndo) {
@@ -348,11 +342,11 @@ function finishProcessReality(realityProps) {
 
   lockAchievementsOnReality();
 
-  NormalChallenges.clearCompletions();
-  InfinityChallenges.clearCompletions();
+  // Because initializeChallengeCompletions has some code that completes normal challenges with 2 eternities,
+  // and we haven't reset eternities yet (and I'm nervous about changing the order of this code),
+  // add a flag to indicate that this is a reality reset.
+  initializeChallengeCompletions(true);
 
-  player.challenge.normal.current = 0;
-  player.challenge.infinity.current = 0;
   player.infinityUpgrades.clear();
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
@@ -367,8 +361,7 @@ function finishProcessReality(realityProps) {
   player.break = false;
   player.infMult = new Decimal(1);
   player.infMultCost = new Decimal(10);
-  player.infinityRebuyables = [0, 0];
-  player.postChallUnlocked = 0;
+  player.infinityRebuyables = [0, 0, 0];
   player.infinityPower = new Decimal(1);
   player.infDimBuyers = Array.repeat(false, 8);
   player.timeShards = new Decimal(0);
@@ -385,8 +378,6 @@ function finishProcessReality(realityProps) {
   player.bestEternity = 999999999999;
   player.eternityUpgrades.clear();
   player.totalTickGained = 0;
-  player.offlineProd = 0;
-  player.offlineProdCost = 1e7;
   player.eternityChalls = {};
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
@@ -406,6 +397,7 @@ function finishProcessReality(realityProps) {
   player.noTheoremPurchases = true;
   player.noInfinitiesThisReality = true;
   player.noEternitiesThisReality = true;
+  player.noReplicantiGalaxies = true;
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
   player.timestudy.theorem = new Decimal(0);
@@ -428,8 +420,9 @@ function finishProcessReality(realityProps) {
     2: 0,
     3: 0
   };
-  player.antimatter = Player.startingAM;
-  player.thisInfinityMaxAM = Player.startingAM;
+  player.thisInfinityMaxAM = new Decimal(0);
+  player.thisEternityMaxAM = new Decimal(0);
+  Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
   player.celestials.laitela.entropy = 0;
 
@@ -438,11 +431,10 @@ function finishProcessReality(realityProps) {
   InfinityDimensions.fullReset();
   fullResetTimeDimensions();
   resetChallengeStuff();
-  NormalDimensions.reset();
+  AntimatterDimensions.reset();
   secondSoftReset();
   player.celestials.ra.peakGamespeed = 1;
 
-  player.reality.upgReqChecks = [true];
   InfinityDimensions.resetAmount();
   player.bestIPminThisInfinity = new Decimal(0);
   player.bestIPminThisEternity = new Decimal(0);
@@ -458,7 +450,7 @@ function finishProcessReality(realityProps) {
   player.infinityPoints = Player.startingIP;
 
   if (RealityUpgrade(10).isBought) applyRUPG10();
-  else Tab.dimensions.normal.show();
+  else Tab.dimensions.antimatter.show();
 
   Lazy.invalidateAll();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
@@ -492,15 +484,13 @@ function restoreCelestialRuns(celestialRunState) {
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
 function applyRUPG10() {
   NormalChallenges.completeAll();
-
-  const hasMaxBulkSecretAch = SecretAchievement(38).isUnlocked;
+  
   player.auto.dimensions = player.auto.dimensions.map(() => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
-    cost: hasMaxBulkSecretAch ? 5e133 : 2e126,
+    cost: 5e133,
     interval: 100,
-    // Only completely max bulk if the relevant secret achievement has already been unlocked
-    bulk: hasMaxBulkSecretAch ? 1e100 : 1e90,
+    bulk: 1e100,
     mode: AUTOBUYER_MODE.BUY_10,
     priority: 1,
     isActive: true,
@@ -523,10 +513,8 @@ function applyRUPG10() {
   player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
-  player.infinityRebuyables = [8, 7];
+  player.infinityRebuyables = [8, 7, 10];
   player.infDimBuyers = Array.repeat(true, 8);
-  player.offlineProd = 50;
-  player.offlineProdCost = 1e17;
   player.infMultBuyer = true;
   player.eternities = player.eternities.plus(100);
   player.replicanti.amount = player.replicanti.amount.clampMin(1);

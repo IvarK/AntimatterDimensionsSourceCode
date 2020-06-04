@@ -2,16 +2,19 @@
 
 GameDatabase.infinity.breakUpgrades = (function() {
   function rebuyable(config) {
-    const maxUpgrades = config.maxUpgrades;
+    const effectFunction = config.effect || (x => x);
     return {
       id: config.id,
       cost: () => config.initialCost * Math.pow(config.costIncrease, player.infinityRebuyables[config.id]),
-      maxUpgrades,
+      maxUpgrades: config.maxUpgrades,
       description: config.description,
-      effect: () => player.infinityRebuyables[config.id],
-      formatEffect: value => (value === maxUpgrades ? `10x ➜ ${10 - value}x` : `10x ➜ ${10 - value - 1}x`),
-      staticEffect: true,
-      formatCost: value => format(value, 2, 0)
+      effect: () => effectFunction(player.infinityRebuyables[config.id]),
+      formatEffect: config.formatEffect || (value => (value === config.maxUpgrades
+        ? `Default: ${formatX(10)} | Currently: ${formatX(10 - value)}`
+        : `Default: ${formatX(10)} | Currently: ${formatX(10 - value)} Next: ${formatX(10 - value - 1)}`
+      )),
+      formatCost: value => format(value, 2, 0),
+      noTitle: !config.title
     };
   }
 
@@ -19,48 +22,48 @@ GameDatabase.infinity.breakUpgrades = (function() {
     totalAMMult: {
       id: "totalMult",
       cost: 1e4,
-      description: "Normal dimensions gain a multiplier based on total antimatter produced",
+      description: "Antimatter Dimensions gain a multiplier based on total antimatter produced",
       effect: () => Math.pow(player.totalAntimatter.exponent + 1, 0.5),
       formatEffect: value => formatX(value, 2, 2)
     },
     currentAMMult: {
       id: "currentMult",
       cost: 5e4,
-      description: "Normal dimensions gain a multiplier based on current antimatter",
-      effect: () => Math.pow(player.antimatter.exponent + 1, 0.5),
+      description: "Antimatter Dimensions gain a multiplier based on current antimatter",
+      effect: () => Math.pow(Currency.antimatter.exponent + 1, 0.5),
       formatEffect: value => formatX(value, 2, 2)
     },
     galaxyBoost: {
       id: "postGalaxy",
       cost: 5e11,
-      description: "Galaxies are 50% stronger",
+      description: () => `Galaxies are ${formatPercents(0.5)} stronger`,
       effect: 1.5
     },
     infinitiedMult: {
       id: "infinitiedMult",
       cost: 1e5,
-      description: "Normal dimensions gain a multiplier based on infinitied stat",
+      description: "Antimatter Dimensions gain a multiplier based on Infinitied stat",
       effect: () => 1 + Player.totalInfinitied.pLog10() * 10,
       formatEffect: value => formatX(value, 2, 2)
     },
     achievementMult: {
       id: "achievementMult",
       cost: 1e6,
-      description: "Normal dimensions gain a multiplier based on achievements completed",
+      description: "Antimatter Dimensions gain a multiplier based on achievements completed",
       effect: () => Math.max(Math.pow((Achievements.effectiveCount - 30), 3) / 40, 1),
       formatEffect: value => formatX(value, 2, 2)
     },
     slowestChallengeMult: {
       id: "challengeMult",
       cost: 1e7,
-      description: "Normal dimensions gain a multiplier based on slowest challenge run",
+      description: "Antimatter Dimensions gain a multiplier based on slowest challenge run",
       effect: () => Decimal.max(50 / Time.worstChallenge.totalMinutes, 1),
       formatEffect: value => formatX(value, 2, 2)
     },
     infinitiedGen: {
       id: "infinitiedGeneration",
       cost: 2e7,
-      description: "Passively generate infinitied stat based on your fastest infinity",
+      description: "Passively generate Infinitied stat based on your fastest Infinity",
       effect: () => player.bestInfinityTime,
       formatEffect: value => {
         const period = value >= 999999999999
@@ -77,36 +80,39 @@ GameDatabase.infinity.breakUpgrades = (function() {
     autobuyerSpeed: {
       id: "autoBuyerUpgrade",
       cost: 1e15,
-      description: "Autobuyers work twice as fast"
+      description: "Autobuyers purchased with antimatter or unlocked from Normal Challenges work twice as fast"
     },
     tickspeedCostMult: rebuyable({
       id: 0,
-      initialCost: 3e6,
+      initialCost: 1e6,
       costIncrease: 5,
       maxUpgrades: 8,
-      description: "Post-infinity tickspeed cost multiplier increase",
-
+      description: "Reduce post-infinity tickspeed cost multiplier scaling",
+      title: false,
     }),
     dimCostMult: rebuyable({
       id: 1,
-      initialCost: 1e8,
+      initialCost: 1e7,
       costIncrease: 5e3,
       maxUpgrades: 7,
-      description: "Post-infinity dimension cost multiplier increase"
+      description: "Reduce post-infinity Antimatter Dimension cost multiplier scaling",
+      title: false,
     }),
-    ipGen: {
-      cost: () => player.offlineProdCost,
+    ipGen: rebuyable({
+      id: 2,
+      initialCost: 1e7,
+      costIncrease: 10,
+      maxUpgrades: 10,
+      effect: value => Player.bestRunIPPM.times(value / 20),
       description: () => {
-        let generation = `Generate ${player.offlineProd}%`;
-        if (!BreakInfinityUpgrade.ipGen.isMaxed) {
-          generation += ` ➜ ${player.offlineProd + 5}%`;
+        let generation = `Generate ${formatInt(5 * player.infinityRebuyables[2])}%`;
+        if (!BreakInfinityUpgrade.ipGen.isCapped) {
+          generation += ` ➜ ${formatInt(5 * (1 + player.infinityRebuyables[2]))}%`;
         }
         return `${generation} of your best IP/min from last 10 infinities, works offline`;
       },
-      // Cutting corners: this is not actual effect (player.offlineProd is), but
-      // it is actual IPPM that is displyed on upgrade
-      effect: () => Player.bestRunIPPM.times(player.offlineProd / 100),
-      formatEffect: value => `${format(value, 2, 1)} IP/min`
-    }
+      formatEffect: value => `${format(value, 2, 1)} IP/min`,
+      title: true
+    })
   };
 }());

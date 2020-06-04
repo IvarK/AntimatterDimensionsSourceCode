@@ -19,7 +19,7 @@ Vue.component("new-dim-shift-row", {
       return this.isShift ? "Shift" : "Boost";
     },
     dimName() {
-      return NormalDimension(this.requirement.tier).shortDisplayName;
+      return AntimatterDimension(this.requirement.tier).shortDisplayName;
     },
     buttonText() {
       return this.lockText === null
@@ -59,8 +59,9 @@ Vue.component("new-dim-shift-row", {
   },
   template:
   `<div class="reset-container dimboost">
-    <h4>Dimensional {{name}} ({{boostCountText}})</h4>
-    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} D</span>
+    <div style="height: 4rem;"><h4>Dimensional {{name}} ({{boostCountText}})</h4></div>
+    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} Antimatter D</span>
+    <div style="height: 2rem;"/> <!-- Padding to match with Galaxy text/button -->
     <button
       class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
       :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"

@@ -1,22 +1,21 @@
 "use strict";
 
-function canEternity() {
-  return player.infinityPoints.gte(Player.eternityGoal);
-}
-
 function giveEternityRewards(auto) {
   player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
   player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
-  addEternityTime(
-    player.thisEternity,
-    player.thisEternityRealTime,
-    gainedEternityPoints()
-  );
+
   const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
   if (player.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
   }
+
+  addEternityTime(
+    player.thisEternity,
+    player.thisEternityRealTime,
+    gainedEternityPoints(),
+    newEternities
+  );
 
   player.eternities = player.eternities.add(newEternities);
 
@@ -36,7 +35,7 @@ function giveEternityRewards(auto) {
   }
 
   player.bestEternitiesPerMs = player.bestEternitiesPerMs.clampMin(
-    RealityUpgrade(3).effectOrDefault(1) / player.thisEternityRealTime
+    RealityUpgrade(3).effectOrDefault(1) / Math.clampMin(33, player.thisEternityRealTime)
   );
   player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
 
@@ -57,14 +56,14 @@ function giveEternityRewards(auto) {
 }
 
 function eternity(force, auto, specialConditions = {}) {
-  if (specialConditions.switchingDilation && !canEternity()) {
+  if (specialConditions.switchingDilation && !Player.canEternity) {
     // eslint-disable-next-line no-param-reassign
     force = true;
   }
   if (force) {
     player.challenge.eternity.current = 0;
   } else {
-    if (!canEternity()) return false;
+    if (!Player.canEternity) return false;
     if (!auto && !askEternityConfirmation()) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     giveEternityRewards(auto);
@@ -93,7 +92,7 @@ function eternity(force, auto, specialConditions = {}) {
   InfinityDimensions.fullReset();
   Replicanti.reset();
   resetChallengeStuff();
-  NormalDimensions.reset();
+  AntimatterDimensions.reset();
 
   if (!specialConditions.enteringEC && player.respec) {
     respecTimeStudies(auto);
@@ -107,27 +106,30 @@ function eternity(force, auto, specialConditions = {}) {
   player.bestIPminThisEternity = new Decimal(0);
   player.bestInfinitiesPerMs = new Decimal(0);
   player.bestIpPerMsWithoutMaxAll = new Decimal(0);
-  player.thisEternityMaxAM = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
   applyRealityUpgradesAfterEternity();
-  player.antimatter = Player.startingAM;
-  player.thisInfinityMaxAM = Player.startingAM;
+  player.thisInfinityMaxAM = new Decimal(0);
+  player.thisEternityMaxAM = new Decimal(0);
+  Currency.antimatter.reset();
 
   EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_AFTER);
   return true;
 }
 
-function initializeChallengeCompletions() {
+function initializeChallengeCompletions(isReality) {
   NormalChallenges.clearCompletions();
   InfinityChallenges.clearCompletions();
-  if (EternityMilestone.keepAutobuyers.isReached) {
+  if (!isReality && EternityMilestone.keepAutobuyers.isReached) {
     NormalChallenges.completeAll();
   }
   if (Achievement(133).isUnlocked) {
+    player.postChallUnlocked = 8;
     InfinityChallenges.completeAll();
+  } else {
+    player.postChallUnlocked = 0;
   }
   player.challenge.normal.current = 0;
   player.challenge.infinity.current = 0;
@@ -151,12 +153,10 @@ function initializeResourcesAfterEternity() {
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.totalTickGained = 0;
-  player.offlineProd = EternityMilestone.keepBreakUpgrades.isReached ? player.offlineProd : 0;
-  player.offlineProdCost = EternityMilestone.keepBreakUpgrades.isReached ? player.offlineProdCost : 1e7;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
   if (!EternityMilestone.keepBreakUpgrades.isReached) {
-    player.infinityRebuyables = [0, 0];
+    player.infinityRebuyables = [0, 0, 0];
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();
   }
@@ -165,7 +165,7 @@ function initializeResourcesAfterEternity() {
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
   player.noFirstDimensions = true;
-  player.postChallUnlocked = Achievement(133).isUnlocked ? 8 : 0;
+  player.noReplicantiGalaxies = true;
 }
 
 function applyRealityUpgradesAfterEternity(buySingleTD = false) {

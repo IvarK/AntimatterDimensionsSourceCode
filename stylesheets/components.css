@@ -26,6 +26,7 @@ This file is for styles that are part of Vue components.
 }
 
 .l-expanding-control-box__button {
+  cursor: pointer;
   display: block;
   width: 100%;
   white-space: nowrap;

@@ -12,7 +12,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 1,
       isUnlocked: () => Ra.pets.effarig.level >= 2,
       lockText: "Effarig Level 2",
-      formatEffect: value => `Normal dimensions ${formatPow(value, 4, 4)}`
+      formatEffect: value => `Antimatter Dimension multipliers ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.INFINITY]: {
       name: "Infinity",
@@ -23,7 +23,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 2,
       isUnlocked: () => Ra.pets.effarig.level >= 3,
       lockText: "Effarig Level 3",
-      formatEffect: value => `Infinity dimensions ${formatPow(value, 4, 4)}`
+      formatEffect: value => `Infinity Dimension multipliers ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.TIME]: {
       name: "Time",
@@ -34,7 +34,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 4,
       lockText: "Effarig Level 4",
-      formatEffect: value => `Time dimensions ${formatPow(value, 4, 4)}`
+      formatEffect: value => `Time Dimension multipliers ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.REPLICATION]: {
       name: "Replication",
@@ -112,7 +112,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 1,
       isUnlocked: () => Ra.pets.effarig.level >= 10,
       lockText: "Effarig Level 10",
-      formatEffect: value => `All dimensions ${formatX(value)}`,
+      formatEffect: value => `All Dimensions ${formatX(value)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.POWER,
@@ -133,7 +133,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 11,
       lockText: "Effarig Level 11",
-      formatEffect: value => `${formatPow(1.05, 2, 2)} for normal dimension multipliers above ${format(value)}`,
+      formatEffect: value => `${formatPow(1.05, 2, 2)} for Antimatter Dimension multipliers above ${format(value)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.POWER,
@@ -216,13 +216,13 @@ GameDatabase.celestials.alchemy = {
       name: "Momentum",
       symbol: "μ",
       isBaseResource: false,
-      effect: amount => 1 + amount / 2000000,
+      effect: amount => 1 + amount / 125000,
       tier: 3,
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 15,
       lockText: "Effarig Level 15",
-      formatEffect: value => `Game speed ${formatX(value, 5, 5)} per real-time minute in this reality
-        (${formatX(1e30, 0, 0)} cap)`,
+      formatEffect: value => `All Dimensions ${formatPow(Ra.momentumValue, 4, 4)}, increasing by ${format(0.002, 3, 3)} 
+        per hour (real-time, never resets), up to a maximum of ${formatPow(value, 4, 4)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -292,7 +292,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 2,
       isUnlocked: () => Ra.pets.effarig.level >= 17,
       lockText: "Effarig Level 17",
-      formatEffect: value => `Multiply normal dimensions by RM${formatPow(value, 2, 2)}`,
+      formatEffect: value => `Multiply Antimatter Dimensions by RM${formatPow(value, 2, 2)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.DIMENSIONALITY,
@@ -359,7 +359,8 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 16,
       lockText: "Effarig Level 16",
-      formatEffect: value => `Each reality simulates ${format(value, 2, 3)} additional realities`,
+      formatEffect: value => `Each reality simulates ${format(value, 2, 3)} additional realities, giving all 
+        the same rewards as if it was amplified`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.ALTERNATION,

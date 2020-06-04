@@ -6,10 +6,10 @@ GameDatabase.tabs = [
     name: "Dimensions",
     subtabs: [
       {
-        key: "normal",
+        key: "antimatter",
         name: "Dimensions",
         symbol: "Ω",
-        component: "normal-dim-tab",
+        component: "antimatter-dim-tab",
         newUIComponent: "new-dimensions-tab"
       },
       {
@@ -38,10 +38,22 @@ GameDatabase.tabs = [
     name: "Options",
     subtabs: [
       {
-        key: "options",
-        name: "Options",
+        key: "saving",
+        name: "Saving",
+        symbol: "<i class='fas fa-save'></i>",
+        component: "options-saving-tab"
+      },
+      {
+        key: "visual",
+        name: "Visual",
+        symbol: "<i class='fas fa-palette'></i>",
+        component: "options-visual-tab"
+      },
+      {
+        key: "gameplay",
+        name: "Gameplay",
         symbol: "<i class='fas fa-wrench'></i>",
-        component: "options-tab"
+        component: "options-gameplay-tab"
       }
     ]
   },
@@ -114,7 +126,7 @@ GameDatabase.tabs = [
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
-          player.antimatter.e >= 2000 ||
+          Currency.antimatter.exponent >= 2000 ||
           player.postChallUnlocked > 0
       },
       {
@@ -136,20 +148,20 @@ GameDatabase.tabs = [
     before: "infinity-points-header",
     subtabs: [
       {
+        key: "autobuyers",
+        name: "Autobuyers",
+        symbol: "<i class='fas fa-cog'></i>",
+        component: "autobuyers-tab"
+      },
+      {
         key: "upgrades",
-        name: "Upgrades",
+        name: "Infinity Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
         component: "infinity-upgrades-tab",
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
           PlayerProgress.infinityUnlocked()
-      },
-      {
-        key: "autobuyers",
-        name: "Autobuyers",
-        symbol: "<i class='fas fa-cog'></i>",
-        component: "autobuyers-tab"
       },
       {
         key: "break",
@@ -184,25 +196,25 @@ GameDatabase.tabs = [
     subtabs: [
       {
         key: "studies",
-        name: "Time studies",
+        name: "Time Studies",
         symbol: "<i class='fas fa-book'></i>",
         component: "time-studies-tab"
       },
       {
         key: "upgrades",
-        name: "Eternity upgrades",
+        name: "Eternity Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
         component: "eternity-upgrades-tab"
       },
       {
         key: "milestones",
-        name: "Eternity milestones",
+        name: "Eternity Milestones",
         symbol: "<i class='fas fa-trophy'></i>",
         component: "eternity-milestones-tab"
       },
       {
         key: "dilation",
-        name: "Time dilation",
+        name: "Time Dilation",
         symbol: "Ψ",
         component: "time-dilation-tab",
         condition: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked()
@@ -224,7 +236,7 @@ GameDatabase.tabs = [
       },
       {
         key: "upgrades",
-        name: "Reality upgrades",
+        name: "Reality Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
         component: "reality-upgrades-tab"
       },
@@ -248,7 +260,7 @@ GameDatabase.tabs = [
       },
       {
         key: "alchemy",
-        name: "Glyph alchemy",
+        name: "Glyph Alchemy",
         symbol: "<i class='fas fa-vial'></i>",
         component: "alchemy-tab",
         condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)

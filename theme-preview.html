@@ -14,6 +14,7 @@
   <link id="S6" rel="stylesheet" type="text/css" href="stylesheets/theme-S6.css">
   <link id="S7" rel="stylesheet" type="text/css" href="stylesheets/theme-S7.css">
   <link id="S8" rel="stylesheet" type="text/css" href="stylesheets/theme-S8.css">
+  <link id="S9" rel="stylesheet" type="text/css" href="stylesheets/theme-S9.css">
   <link rel="stylesheet" type="text/css" href="stylesheets/time-studies.css">
   <style>
     body {
@@ -22,7 +23,7 @@
 
     .c-component-block {
       padding: 10px;
-      border: 1px solid black;
+      border: 0.1rem solid black;
     }
 
     .c-component-block,
@@ -317,22 +318,22 @@
         <br>
         Cost: 308 Time Theorems
       </button>
-      <button class="o-time-study o-time-study--normal-dim">
-        Available Normal Dimension Study
+      <button class="o-time-study o-time-study--antimatter-dim">
+        Available Antimatter Dimension Study
         <br>
         Currently: 1e308
         <br>
         Cost: 308 Time Theorems
       </button>
-      <button class="o-time-study o-time-study--normal-dim o-time-study--bought">
-        Bought Normal Dimension Study
+      <button class="o-time-study o-time-study--antimatter-dim o-time-study--bought">
+        Bought Antimatter Dimension Study
         <br>
         Currently: 1e308
         <br>
         Cost: 308 Time Theorems
       </button>
-      <button class="o-time-study o-time-study--normal-dim o-time-study--unavailable">
-        Unavailable Normal Dimension Study
+      <button class="o-time-study o-time-study--antimatter-dim o-time-study--unavailable">
+        Unavailable Antimatter Dimension Study
         <br>
         Currently: 1e308
         <br>
@@ -548,12 +549,12 @@
           <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought"></line>
         </svg>
 
-        <span>Normal Dim</span>
+        <span>Antimatter Dim</span>
         <svg class="c-time-study-connection-svg">
-          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--normal-dim"></line>
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--antimatter-dim"></line>
         </svg>
         <svg class="c-time-study-connection-svg">
-          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought o-time-study-connection--normal-dim"></line>
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought o-time-study-connection--antimatter-dim"></line>
         </svg>
 
         <span>Infinity Dim</span>
@@ -789,6 +790,7 @@
     'S6',
     'S7',
     'S8',
+    'S9',
   ];
   const buttonContainer = document.getElementById("themes");
   for (let theme of themes) {

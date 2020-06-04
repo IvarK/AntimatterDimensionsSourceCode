@@ -61,7 +61,7 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get effectDisplay() {
-    if (this.effectValue === Infinity) return "N/A";
+    if (this.effectValue === Infinity || this.effectValue === -Infinity) return "N/A";
     return this.config.effectFormat(this.effectValue);
   }
 
@@ -78,10 +78,38 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 }
 
-const SingularityMilestone = SingularityMilestoneState.createAccessor(GameDatabase.celestials.singularityMilestones);
+const SingularityMilestone = (function() {
+  const db = GameDatabase.celestials.singularityMilestones;
+  return {
+    continuumMult: new SingularityMilestoneState(db.continuumMult),
+    darkMatterMult: new SingularityMilestoneState(db.darkMatterMult),
+    darkEnergyMult: new SingularityMilestoneState(db.darkEnergyMult),
+    darkDimensionCostReduction: new SingularityMilestoneState(db.darkDimensionCostReduction),
+    singularityMult: new SingularityMilestoneState(db.singularityMult),
+    darkDimensionIntervalReduction: new SingularityMilestoneState(db.darkDimensionIntervalReduction),
+    ascensionIntervalScaling: new SingularityMilestoneState(db.ascensionIntervalScaling),
+    autoCondense: new SingularityMilestoneState(db.autoCondense),
+    darkDimensionAutobuyers: new SingularityMilestoneState(db.darkDimensionAutobuyers),
+    darkAutobuyerSpeed: new SingularityMilestoneState(db.darkAutobuyerSpeed),
+    autoAscend: new SingularityMilestoneState(db.autoAscend),
+    improvedSingularityCap: new SingularityMilestoneState(db.improvedSingularityCap),
+    darkFromTesseracts: new SingularityMilestoneState(db.darkFromTesseracts),
+    dilatedTimeFromSingularities: new SingularityMilestoneState(db.dilatedTimeFromSingularities),
+    darkFromGlyphLevel: new SingularityMilestoneState(db.darkFromGlyphLevel),
+    gamespeedFromSingularities: new SingularityMilestoneState(db.gamespeedFromSingularities),
+    darkFromTheorems: new SingularityMilestoneState(db.darkFromTheorems),
+    dim4Generation: new SingularityMilestoneState(db.dim4Generation),
+    darkFromDM4: new SingularityMilestoneState(db.darkFromDM4),
+    theoremPowerFromSingularities: new SingularityMilestoneState(db.theoremPowerFromSingularities),
+    darkFromGamespeed: new SingularityMilestoneState(db.darkFromGamespeed),
+    glyphLevelFromSingularities: new SingularityMilestoneState(db.glyphLevelFromSingularities),
+    darkFromDilatedTime: new SingularityMilestoneState(db.darkFromDilatedTime),
+    tesseractMultFromSingularities: new SingularityMilestoneState(db.tesseractMultFromSingularities),
+  };
+}());
 
 const SingularityMilestones = {
-  all: SingularityMilestone.index.compact(),
+  all: Object.values(SingularityMilestone),
 
   get sorted() {
     return this.all.sort((a, b) => a.remainingSingularities - b.remainingSingularities);
@@ -94,18 +122,39 @@ const SingularityMilestones = {
     });
   },
 
-  get nextFive() {
-    return this.sortedForCompletions.slice(0, 5);
+  get nextMilestoneGroup() {
+    return this.sortedForCompletions.slice(0, 6);
+  },
+
+  get unseenMilestones() {
+    const laitela = player.celestials.laitela;
+    return SingularityMilestoneThresholds
+      .filter(s => s > laitela.lastCheckedMilestones && s <= laitela.singularities);
   }
 };
+
+// Sorted list of all the values where a singularity milestone exists, used for "new milestone" styling
+const SingularityMilestoneThresholds = (function() {
+  return Object.values(GameDatabase.celestials.singularityMilestones)
+    .map(m => Array.range(0, m.limit === 0 ? 50 : m.limit)
+      .map(r => m.start * Math.pow(m.repeat, r)))
+    .flat(Infinity)
+    .filter(n => n < 1e100)
+    .sort((a, b) => a - b);
+}());
 
 const Singularity = {
   get cap() {
     return 2e3 * Math.pow(10, player.celestials.laitela.singularityCapIncreases);
   },
 
+  get gainPerCapIncrease() {
+    return SingularityMilestone.improvedSingularityCap.effectValue;
+  },
+
   get singularitiesGained() {
-    return Math.pow(20, player.celestials.laitela.singularityCapIncreases) * SingularityMilestone(5).effectValue;
+    return Math.floor(Math.pow(this.gainPerCapIncrease, player.celestials.laitela.singularityCapIncreases) *
+        SingularityMilestone.singularityMult.effectOrDefault(1));
   },
 
   get capIsReached() {
@@ -115,7 +164,6 @@ const Singularity = {
   increaseCap() {
     if (player.celestials.laitela.singularityCapIncreases >= 96) return;
     player.celestials.laitela.singularityCapIncreases++;
-    player.celestials.laitela.secondsSinceReachedSingularity = 0;
   },
 
   decreaseCap() {
@@ -131,54 +179,7 @@ const Singularity = {
 
     laitela.darkEnergy = 0;
     laitela.singularities += this.singularitiesGained;
-    laitela.singularityTime = 0;
-    laitela.secondsSinceReachedSingularity = 0;
     
     EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_AFTER);
-  },
-
-  autobuyerLoop(diff) {
-    const laitela = player.celestials.laitela;
-    laitela.singularityTime += diff / 1000;
-
-    for (let i = 1; i <= SingularityMilestone(8).effectValue; i++) {
-      MatterDimension(i).buyInterval();
-      MatterDimension(i).buyPowerDM();
-      MatterDimension(i).buyPowerDE();
-    }
-
-    
-    if (laitela.singularityTime <= laitela.singularityAutoCapLimit && 
-        this.capIsReached && 
-        SingularityMilestone(10).isUnlocked) {
-      laitela.reachedSingularityCapLimit = true;
-    }
-
-    if (laitela.reachedSingularityCapLimit && SingularityMilestone(10).isUnlocked) {
-      laitela.secondsSinceCappedTime += diff / 1000;
-      if (laitela.secondsSinceCappedTime >= SingularityMilestone(10).effectValue) {
-        this.increaseCap();
-        laitela.reachedSingularityCapLimit = false;
-        laitela.secondsSinceCappedTime = 0;
-      }
-    }
-
-    if (SingularityMilestone(9).isUnlocked) {
-      if (Laitela.darkMatterMultRatio >= laitela.autoAnnihilationSetting) {
-        laitela.autoAnnihilationTimer += diff / 1000;
-        if (laitela.autoAnnihilationTimer >= SingularityMilestone(9).effectValue) {
-          Laitela.annihilate();
-        }
-      } else {
-        laitela.autoAnnihilationTimer = 0;
-      }
-    }
-
-    if (this.capIsReached) {
-      laitela.secondsSinceReachedSingularity += diff / 1000;
-      if (laitela.secondsSinceReachedSingularity >= SingularityMilestone(6).effectValue) {
-        this.perform();
-      }
-    }
   }
 };

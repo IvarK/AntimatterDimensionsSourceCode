@@ -31,7 +31,7 @@ Vue.component("tab-button", {
     <div 
       v-if="isAvailable"
       class="l-tab-btn-inner"
-      @click="tab.show()"
+      @click="tab.show(true)"
     >
       {{ tab.name }} <i v-if="hasNotification" class="fas fa-exclamation"></i>
     </div>
@@ -41,7 +41,7 @@ Vue.component("tab-button", {
         v-if="subtabVisibilities[index]"
         class="o-tab-btn o-tab-btn--subtab"
         :class="tab.config.UIClass"
-        @click="subtab.show()">
+        @click="subtab.show(true)">
         <span v-html="subtab.symbol">
           <i v-if="subtab.hasNotification" class="fas fa-exclamation"></i>
         </span>

@@ -83,7 +83,7 @@ Vue.component("eternity-challenges-tab", {
           this.enslavedSpanOverride = Enslaved.isRunning && this.challenge.id === 1;
         },
         start() {
-          this.challenge.start();
+          this.challenge.requestStart();
         },
         goalAtCompletions(completions) {
           return format(this.challenge.goalAtCompletions(completions), 2, 1);

@@ -33,6 +33,7 @@ const TabNotification = (function() {
     breakInfinity: new TabNotificationState(db.breakInfinity),
     firstEternity: new TabNotificationState(db.firstEternity),
     dilationAfterUnlock: new TabNotificationState(db.dilationAfterUnlock),
+    realityUnlock: new TabNotificationState(db.realityUnlock),
     blackHoleUnlock: new TabNotificationState(db.blackHoleUnlock),
     automatorUnlock: new TabNotificationState(db.automatorUnlock)
   };

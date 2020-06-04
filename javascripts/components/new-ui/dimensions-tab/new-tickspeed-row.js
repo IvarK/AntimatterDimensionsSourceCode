@@ -9,6 +9,7 @@ Vue.component("new-tickspeed-row", {
       isAffordable: false,
       tickspeed: new Decimal(0),
       gameSpeedMult: 1,
+      galaxyCount: 0,
       isContinuumActive: false,
       continuumValue: 0
     };
@@ -16,19 +17,15 @@ Vue.component("new-tickspeed-row", {
   computed: {
     classObject() {
       return {
-        "c-game-header__tickspeed-row": true,
-        "c-game-header__tickspeed-row--hidden": !this.isVisible
+        "l-tickspeed-container": true,
+        "l-tickspeed-container--hidden": !this.isVisible
       };
     },
     multiplierDisplay() {
+      if (InfinityChallenge(3).isRunning) return `Multiply all Antimatter Dimensions by
+        ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)}`;
       const tickmult = this.mult;
-      if (tickmult.lte(1e-9)) {
-        return `${formatX(tickmult.reciprocal(), 2, 0)} faster / upgrade.`;
-      }
-      const asNumber = tickmult.toNumber();
-      let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
-      if (player.galaxies === 1) places = Math.max(places, 1);
-      return `-${((1 - asNumber) * 100).toFixed(places)}% / upgrade`;
+      return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade.`;
     },
     tickspeedDisplay() {
       return `Tickspeed: ${format(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
@@ -47,7 +44,7 @@ Vue.component("new-tickspeed-row", {
       return this.cost.exponent < 1000000;
     },
     continuumString() {
-      return formatContinuum(this.continuumValue);
+      return formatFloat(this.continuumValue, 2);
     }
   },
   methods: {
@@ -60,14 +57,15 @@ Vue.component("new-tickspeed-row", {
       this.isAffordable = !isEC9Running && canAfford(Tickspeed.cost);
       this.tickspeed.copyFrom(Tickspeed.current);
       this.gameSpeedMult = getGameSpeedupForDisplay();
+      this.galaxyCount = player.galaxies;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
     }
   },
   template:
-  `<div class="tickspeed-container" v-show="isVisible">
+  `<div :class="classObject">
       <div class="tickspeed-labels">
-        <span>{{ tickspeedDisplay }} <game-header-gamma-display v-if="!isGameSpeedNormal"/></span>
+        <span>{{ tickspeedDisplay }} <game-header-gamespeed-display v-if="!isGameSpeedNormal"/></span>
         <span>{{ multiplierDisplay }}</span>
       </div>
       <div class="tickspeed-buttons">

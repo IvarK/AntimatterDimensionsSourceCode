@@ -33,6 +33,7 @@ GameUI.notify = (function() {
     success: text => showNotification(text, "o-notification--success"),
     error: text => showNotification(text, "o-notification--error"),
     info: text => showNotification(text, "o-notification--info"),
+    reality: text => showNotification(text, "o-notification--reality"),
     blackHole: text => showNotification(text, "o-notification--black-hole"),
     showBlackHoles: true
   };

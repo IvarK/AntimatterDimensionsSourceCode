@@ -35,7 +35,8 @@
 }
 
 .l-old-ui__footer {
-  padding-bottom: 0.9rem
+  padding-bottom: 1rem;
+  padding-top: 2.5rem;
 }
 
 .l-old-ui-page {
@@ -54,9 +55,10 @@
   font-size: 5rem;
   width: 36rem;
   height: 10rem;
+  z-index: 1;
 }
 
-.l-old-ui-normal-dim-tab {
+.l-old-ui-antimatter-dim-tab {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -88,6 +90,20 @@
   font-size: 1.3rem;
   width: 17.5rem;
   height: 2.5rem;
+  margin: 0.5rem 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.c-subtab-button-container {
+  border-bottom: 0.2rem solid var(--color-accent);
+  margin-bottom: 0.8rem;
+}
+
+.t-metro .c-subtab-button-container,
+.t-dark-metro .c-subtab-button-container,
+.t-inverted-metro .c-subtab-button-container,
+.t-s8 .c-subtab-button-container {
+  border-width: 0.1rem;
 }
 
 .c-news-ticker {

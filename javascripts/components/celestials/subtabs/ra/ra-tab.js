@@ -108,7 +108,7 @@ Vue.component("ra-tab", {
           <br>
           <h1 :style="petStyle">Recollection</h1>
           <span :style="petStyle">
-            Whichever celestial has recollection will get {{formatInt(recollectionMult)}}x memory chunk gain.
+            Whichever celestial has recollection will get {{formatX(recollectionMult)}} memory chunk gain.
           </span>
           <div class="l-ra-recollection-unlock-inner" v-if="hasRecollection">
             <ra-pet-recollection-button

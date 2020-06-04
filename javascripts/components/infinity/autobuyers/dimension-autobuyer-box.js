@@ -10,6 +10,8 @@ Vue.component("dimension-autobuyer-box", {
         return {
           hasMaxedInterval: false,
           hasMaxedBulk: false,
+          isUnlocked: false,
+          bulkUnlimited: false,
           bulk: 1,
           cost: 1
         };
@@ -20,14 +22,16 @@ Vue.component("dimension-autobuyer-box", {
           if (!this.hasMaxedBulk) {
             bulk = Math.min(bulk * 2, 1e100);
           }
-          return `${format(bulk, 2, 0)}x bulk purchase`;
+          return `${formatX(bulk, 2, 0)} bulk purchase`;
         }
       },
       methods: {
         update() {
           const autobuyer = this.autobuyer;
           this.hasMaxedInterval = autobuyer.hasMaxedInterval;
+          this.isUnlocked = autobuyer.isUnlocked;
           this.hasMaxedBulk = autobuyer.hasMaxedBulk;
+          this.bulkUnlimited = autobuyer.hasUnlimitedBulk;
           this.bulk = autobuyer.bulk;
           this.cost = autobuyer.cost;
         },
@@ -37,7 +41,7 @@ Vue.component("dimension-autobuyer-box", {
       },
       template:
         `<button
-          v-if="hasMaxedInterval"
+          v-if="hasMaxedInterval && !bulkUnlimited && isUnlocked"
           class="o-autobuyer-btn"
           @click="upgradeBulk"
         >
@@ -46,6 +50,11 @@ Vue.component("dimension-autobuyer-box", {
           <br>
           <span>Cost: {{format(cost, 2, 0)}} IP</span>
         </template>
+        </button>
+        <button 
+          v-else-if="hasMaxedInterval && !bulkUnlimited"
+          class="o-autobuyer-btn l-autobuyer-box__button">
+          Complete the challenge to upgrade bulk
         </button>`
     }
   },
@@ -62,7 +71,7 @@ Vue.component("dimension-autobuyer-box", {
       return Autobuyer.dimension(this.tier);
     },
     name() {
-      return `${NormalDimension(this.tier).displayName} Dimension Autobuyer`;
+      return `${AntimatterDimension(this.tier).displayName} Dimension Autobuyer`;
     },
     modeDisplay() {
       switch (this.mode) {

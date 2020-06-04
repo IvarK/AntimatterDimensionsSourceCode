@@ -87,7 +87,7 @@ Vue.component("statistics-tab", {
       this.recordGlyphInfo = [
         [true, Glyphs.copyForRecords(player.bestRMminSet), `Best RM/min: ${format(player.bestRMmin, 2, 2)} RM/min`],
         [true, Glyphs.copyForRecords(player.bestGlyphLevelSet),
-          `Best glyph level: ${formatInt(player.bestGlyphLevel)}`],
+          `Best Glyph level: ${formatInt(player.bestGlyphLevel)}`],
         [true, Glyphs.copyForRecords(player.bestEPSet), `Best EP: ${format(player.bestEP, 2, 2)} EP`],
         [true, Glyphs.copyForRecords(player.bestSpeedSet),
           `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
@@ -176,7 +176,7 @@ Vue.component("statistics-tab", {
             <div>
               Your best RM/min is {{ format(reality.bestRate, 2, 2) }}.
             </div>
-            <div>Your best glyph rarity is {{ formatRarity(reality.bestRarity) }}.</div>
+            <div>Your best Glyph rarity is {{ formatRarity(reality.bestRarity) }}.</div>
             <br>
           <glyph-set-preview
             v-for="(set, idx) in recordGlyphInfo"

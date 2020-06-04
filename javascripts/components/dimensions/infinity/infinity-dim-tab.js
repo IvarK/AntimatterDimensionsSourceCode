@@ -70,7 +70,7 @@ Vue.component("infinity-dim-tab", {
     <div>
       <p>
         You have
-        <span class="c-infinity-dim-description__accent">{{format(infinityPower, 2, 1)}}</span> infinity power,
+        <span class="c-infinity-dim-description__accent">{{format(infinityPower, 2, 1)}}</span> Infinity Power,
         translated to a
         <span class="c-infinity-dim-description__accent">{{formatX(dimMultiplier, 2, 1)}}</span>
         multiplier on all Antimatter Dimensions (^{{ format(conversionRate, 2, 3) }}).

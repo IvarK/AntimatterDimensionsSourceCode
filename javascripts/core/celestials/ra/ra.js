@@ -374,7 +374,7 @@ const RA_UNLOCKS = {
   ALTERED_GLYPHS: {
     id: 3,
     description: "Get Teresa to level 8",
-    reward: "Unlock Altered Glyphs (effects improved based on glyph sacrifice; see Glyphs tab)",
+    reward: "Unlock Altered Glyphs (effects improved based on Glyph Sacrifice; see Glyphs tab)",
     pet: Ra.pets.teresa,
     level: 8,
     displayIcon: `<span class="fas fa-bolt"></span>`
@@ -459,7 +459,7 @@ const RA_UNLOCKS = {
     id: 13,
     description: "Get Effarig to level 25",
     reward: () => `Glyphs are always generated with ${formatPercents(1)} rarity and ` +
-      `glyph sacrifice gain is raised to a power based on Relic Shards`,
+      `Glyph Sacrifice gain is raised to a power based on Relic Shards`,
     pet: Ra.pets.effarig,
     level: 25,
     displayIcon: `<i class="fas fa-ankh"></i>`
@@ -520,8 +520,8 @@ const RA_UNLOCKS = {
   ALWAYS_GAMESPEED: {
     id: 20,
     description: "Get Enslaved to level 25",
-    reward: `All basic glyphs gain the increased game speed effect from time glyphs,
-      and time glyphs gain an additional effect`,
+    reward: `All basic Glyphs gain the increased game speed effect from time Glyphs,
+      and time Glyphs gain an additional effect`,
     pet: Ra.pets.enslaved,
     level: 25,
     displayIcon: `<span class="fas fa-clock"></span>`

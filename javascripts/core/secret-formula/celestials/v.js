@@ -18,7 +18,7 @@ GameDatabase.celestials.v = {
     {
       id: 0,
       name: "Glyph Knight",
-      description: value => `Unlock Reality with at most ${-value} ${pluralize("glyph", -value)} equipped.`,
+      description: value => `Unlock Reality with at most ${-value} ${pluralize("Glyph", -value)} equipped.`,
       // This achievement has internally negated values since the check is always greater than
       values: [-5, -4, -3, -2, -1, 0],
       condition: () => V.isRunning && TimeStudy.reality.isBought,
@@ -98,8 +98,8 @@ GameDatabase.celestials.v = {
     {
       id: 6,
       name: "Requiem for a Glyph",
-      description: value => `Unlock Reality with at most ${-value} glyphs equipped for the entire reality.
-        <div ach-tooltip="Each equipped cursed glyph counts as ${formatInt(-3)} glyphs">
+      description: value => `Unlock Reality with at most ${-value} Glyphs equipped for the entire reality.
+        <div ach-tooltip="Each equipped cursed glyph counts as ${formatInt(-3)} Glyphs">
           <i class="fas fa-question-circle"></i>
         </div>`,
       // This achievement has internally negated values since the check is always greater than

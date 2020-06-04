@@ -709,7 +709,7 @@ function afterSimulation(seconds, playerStart) {
     const offlineIncreases = [];
     // OoM increase
     const oomVarNames = ["antimatter", "infinityPower", "timeShards"];
-    const oomResourceNames = ["antimatter", "infinity power", "time shards"];
+    const oomResourceNames = ["Antimatter", "Infinity Power", "Time Shards"];
     for (let i = 0; i < oomVarNames.length; i++) {
       const varName = oomVarNames[i];
       const oomIncrease = player[varName].log10() - playerStart[varName].log10();

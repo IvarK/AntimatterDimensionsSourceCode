@@ -742,9 +742,9 @@ const Glyphs = {
     if (!GlyphSacrificeHandler.canSacrifice &&
       // eslint-disable-next-line prefer-template
       !confirm("This will not give you any benefit" +
-        (RealityUpgrade(19).isAvailableForPurchase ? "" : " and may reduce the number of glyphs in your inventory. " +
-        "It may be hard to get more glyphs. The Reality upgrade to unlock glyph sacrifice requires 30 glyphs") +
-        ". Also, when you unlock glyph sacrifice, you will not be able to later sacrifice glyphs you delete now. " +
+        (RealityUpgrade(19).isAvailableForPurchase ? "" : " and may reduce the number of Glyphs in your inventory. " +
+        "It may be hard to get more Glyphs. The Reality upgrade to unlock Glyph Sacrifice requires 30 Glyphs") +
+        ". Also, when you unlock Glyph Sacrifice, you will not be able to later Sacrifice Glyphs you delete now. " +
         "Are you sure you want to do this?")) {
       return;
     }
@@ -752,7 +752,7 @@ const Glyphs = {
     // useful glyphs, we warn them.
     if (GlyphSacrificeHandler.canSacrifice && isHarsh && player.options.confirmations.harshAutoClean &&
       // eslint-disable-next-line prefer-template
-      !confirm("This could delete glyphs in your inventory that are good enough that you might want to use them " +
+      !confirm("This could delete Glyphs in your inventory that are good enough that you might want to use them " +
         "later. Are you sure you want to do this?")) {
       return;
     }
@@ -1133,7 +1133,7 @@ const GlyphSacrificeHandler = {
     const toGain = this.glyphSacrificeGain(glyph);
     const askConfirmation = !force && player.options.confirmations.glyphSacrifice;
     if (askConfirmation) {
-      if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} ` +
+      if (!confirm(`Do you really want to Sacrifice this glyph? Your total power of sacrificed ${glyph.type} ` +
         `glyphs will increase from ${format(player.reality.glyphs.sac[glyph.type], 2, 2)} to ` +
         `${format(player.reality.glyphs.sac[glyph.type] + toGain, 2, 2)}.`)) {
           return;

@@ -195,7 +195,7 @@ GameDatabase.celestials.alchemy = {
           return baseEffect;
         }
         const increasedYield = formatPercents(value * Effects.sum(GlyphSacrifice.reality), 2, 2);
-        return `${baseEffect} (${increasedYield} after glyph sacrifice)`;
+        return `${baseEffect} (${increasedYield} after Glyph Sacrifice)`;
       },
       reagents: [
         {
@@ -408,7 +408,7 @@ GameDatabase.celestials.alchemy = {
       tier: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 25,
       lockText: "Effarig Level 25",
-      formatEffect: value => `Consume all Reality resource to create a level ${formatInt(value)} Reality glyph`,
+      formatEffect: value => `Consume all Reality resource to create a level ${formatInt(value)} Reality Glyph`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EXPONENTIAL,

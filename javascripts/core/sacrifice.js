@@ -108,12 +108,31 @@ function sacrificeReset(auto) {
 function sacrificeBtnClick() {
   if (!Sacrifice.isVisible || !Sacrifice.canSacrifice) return false;
   if (player.options.confirmations.sacrifice) {
-    if (!confirm("Dimensional Sacrifice will remove all of your 1st through 7th Antimatter Dimensions " +
+    if (!Achievement(118).isUnlocked && !NormalChallenge(8).isRunning) {
+      if (!confirm("Dimensional Sacrifice will remove all of your 1st through 7th Antimatter Dimensions " +
       "(with the cost and multiplier unchanged), for a boost to the 8th Antimatter Dimension based on the total " +
       "amount of 1st Antimatter Dimensions sacrificed. It will take time to regain production.")) {
       return false;
+      } 
+  } else if (!NormalChallenge(8).isRunning && Achievement(118).isUnlocked) {
+    if (!confirm("Dimensional Sacrifice will give you a boost to your 8th Antimatter Dimension " + 
+    "based on the total amount of 1st Antimatter Dimensions Sacrificed.")) {
+      return false;
+    }
+  } else if (NormalChallenge(8).isRunning && !Achievement(118).isUnlocked) {
+    if (!confirm("When you Dimensional Sacrifice, you gain the displayed bonus to your 8th Dimension. " +
+    "This bonus is calculated based on the number of 1st Dimensions you would sacrifice. As a cost, " + 
+    "however, all Dimensions will be removed, and costs and multipliers reset. Your tickspeed upgrades will remain.")) {
+      return false;
+    }
+  } else if (NormalChallenge(8).isRunning && Achievement(118).isUnlocked) {
+    if (!confirm("When you Dimensional Sacrifice, you gain the displayed bonus to your 8th Dimension. " +
+    "This bonus is calculated based on the number of 1st Dimensions you would sacrifice. Your tickspeed " +
+    "upgrades will remain.")) {
+      return false;
     }
   }
-
+  return sacrificeReset();
+}
   return sacrificeReset();
 }

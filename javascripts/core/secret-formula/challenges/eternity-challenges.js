@@ -26,7 +26,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 3,
-    description: "Dimensions 5-8 don't produce anything. Dimensional sacrifice is disabled.",
+    description: "Dimensions 5-8 don't produce anything. Dimensional Sacrifice is disabled.",
     goal: new Decimal("1e600"),
     goalIncrease: new Decimal("1e75"),
     reward: {

@@ -32,6 +32,7 @@ Vue.component("glyphs-tab", {
       const haveBoost = Glyphs.activeList.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
       if (haveBoost) {
         this.enslavedHint = "done... what little... I can... with glyphs...";
+        // Glyphs stays uncapitalized here to stay in theme with enslaved
       }
     },
     toggleAutoRestartCelestial() {
@@ -96,7 +97,7 @@ Vue.component("glyphs-tab", {
                 <div class="c-glyph-info-button"
                   :class="glyphInfoClass(true)"
                   @click="setInfoState(true)">
-                    Glyph sacrifice totals
+                    Glyph Sacrifice totals
                 </div>
             </div>
             <sacrificed-glyphs v-if="sacrificeUnlocked && sacrificeDisplayed" />

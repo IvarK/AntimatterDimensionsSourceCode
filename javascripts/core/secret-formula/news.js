@@ -2561,7 +2561,7 @@ GameDatabase.news = [
   },
   {
     id: "e10",
-    text: "Dilation glyph TT generation has been replaced by a more all-at-once source.",
+    text: "Dilation Glyph TT generation has been replaced by a more all-at-once source.",
     get unlocked() {
       return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
     }

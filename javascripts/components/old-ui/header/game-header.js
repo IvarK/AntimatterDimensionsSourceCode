@@ -68,7 +68,7 @@ Vue.component("game-header", {
         },
         challengeDisplay() {
           if (this.activeChallengeNames.length === 0) {
-            return "the Antimatter Universe (no active challenges)";
+            return "the Antimatter Universe (no active Challenges)";
           }
           return this.activeChallengeNames.join(" + ");
         }

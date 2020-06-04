@@ -388,7 +388,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const goal = 5000;
-            return [`Reach glyph level ${formatInt(complete * goal)}/${formatInt(goal)}`];
+            return [`Reach Glyph level ${formatInt(complete * goal)}/${formatInt(goal)}`];
           },
           angle: -45,
           diagonal: 16,
@@ -428,7 +428,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const goal = 100;
-            return [`Reach glyph rarity
+            return [`Reach Glyph rarity
             ${formatPercents(complete * goal / 100, 1)}/${formatPercents(goal / 100, 1)}`];
           },
           angle: 135,

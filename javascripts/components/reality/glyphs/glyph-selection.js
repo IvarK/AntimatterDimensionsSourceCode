@@ -32,7 +32,7 @@ Vue.component("modal-glyph-selection", {
     },
     trashGlyphs() {
       if (!player.options.confirmations.glyphSacrifice ||
-        confirm("Are you sure you want to sacrifice a random one of these glyphs?")) {
+        confirm("Are you sure you want to Sacrifice a random one of these Glyphs?")) {
         GlyphSelection.select(Math.floor(Math.random() * GlyphSelection.choiceCount), true);
       }
     }
@@ -51,9 +51,9 @@ Vue.component("modal-glyph-selection", {
       <button class="o-primary-btn o-primary-btn--glyph-trash"
         v-if="canTrashGlyphs"
         v-on:click="trashGlyphs()">
-          I don't want any of these glyphs,
+          I don't want any of these Glyphs,
           <br>
-          pick and sacrifice one at random.
+          pick and Sacrifice one at random.
           <br>
           (these are {{ formatInt(levelDifference) }} {{"level" | pluralize(levelDifference)}}
           {{ direction }} than your best)

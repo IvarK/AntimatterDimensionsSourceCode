@@ -15,7 +15,7 @@ GameDatabase.reality.perks = {
     id: 0,
     label: "GC4",
     family: PERK_FAMILY.REALITY,
-    description: "You can now choose from 4 different glyphs on Reality.",
+    description: "You can now choose from 4 different Glyphs on Reality.",
     effect: 4,
   },
   startAM1: {
@@ -85,7 +85,7 @@ GameDatabase.reality.perks = {
     id: 30,
     label: "DBNR",
     family: PERK_FAMILY.ANTIMATTER,
-    description: "Dimboosts no longer reset Antimatter Dimensions, tickspeed, or sacrifice."
+    description: "Dimboosts no longer reset Antimatter Dimensions, Tickspeed, or Sacrifice."
   },
   studyPassive1: {
     id: 31,

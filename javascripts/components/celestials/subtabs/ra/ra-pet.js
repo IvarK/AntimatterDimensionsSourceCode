@@ -56,11 +56,11 @@ Vue.component("ra-pet", {
         case "Teresa":
           return "Based on current RM";
         case "Effarig":
-          return "Based on best glyph level";
+          return "Based on best Glyph level";
         case "Enslaved":
           return "Based on total time played";
         case "V":
-          return "Based on total celestial levels";
+          return "Based on total Celestial levels";
         default:
           throw new Error(`Unrecognized celestial ${this.petConfig.pet.name} in Ra UI`);
       }

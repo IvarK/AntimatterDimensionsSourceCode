@@ -540,7 +540,7 @@ GameDatabase.achievements.normal = [
   {
     id: 88,
     name: "Yet another infinity reference",
-    tooltip: () => `Get a ${formatX(Decimal.NUMBER_MAX_VALUE, 1, 0)} multiplier in a single sacrifice.`,
+    tooltip: () => `Get a ${formatX(Decimal.NUMBER_MAX_VALUE, 1, 0)} multiplier in a single Sacrifice.`,
     checkRequirement: () => Sacrifice.nextBoost.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.SACRIFICE_RESET_BEFORE,
     reward: "Sacrifices are stronger.",
@@ -751,7 +751,7 @@ GameDatabase.achievements.normal = [
   {
     id: 118,
     name: "IT'S OVER 9000",
-    tooltip: () => `Get a total sacrifice multiplier of ${formatPostBreak("1e9000", 0, 0)}.`,
+    tooltip: () => `Get a total Sacrifice multiplier of ${formatPostBreak("1e9000", 0, 0)}.`,
     checkRequirement: () => Sacrifice.totalBoost.exponent >= 9000,
     checkEvent: GAME_EVENT.SACRIFICE_RESET_AFTER,
     reward: "Sacrifice doesn't reset your Antimatter Dimensions.",
@@ -990,7 +990,7 @@ GameDatabase.achievements.normal = [
   {
     id: 152,
     name: "Y'all got any more of them glyphs?",
-    tooltip: () => `Have ${formatInt(100)} glyphs in your inventory.`,
+    tooltip: () => `Have ${formatInt(100)} Glyphs in your inventory.`,
     checkRequirement: () => Glyphs.inventoryList.length >= 100,
     checkEvent: GAME_EVENT.GLYPHS_CHANGED
   },
@@ -1121,14 +1121,14 @@ GameDatabase.achievements.normal = [
     tooltip: "Sacrifice every sacrificable glyph type at least once.",
     checkRequirement: () => Object.values(player.reality.glyphs.sac).every(s => s > 0),
     checkEvent: GAME_EVENT.GLYPHS_CHANGED,
-    reward: () => `Glyph sacrifice is ${formatX(2)} stronger.`,
+    reward: () => `Glyph Sacrifice is ${formatX(2)} stronger.`,
     effect: 2,
   },
   {
     id: 172,
     name: "Hitchhiker's Guide to Reality",
     tooltip: () => `Reality for ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} RM without having
-      any charged Infinity Upgrades, having any equipped glyphs, or buying any Triad Studies.`,
+      any charged Infinity Upgrades, having any equipped Glyphs, or buying any Triad Studies.`,
     checkRequirement: () => gainedRealityMachines().gte(Decimal.NUMBER_MAX_VALUE) &&
       player.celestials.ra.charged.size === 0 && Glyphs.activeList.length === 0 &&
       player.noTriadStudies,

@@ -34,7 +34,7 @@ GameDatabase.challenges.normal = [
     legacyId: 8,
     isQuickResettable: false,
     description: "Buying an Antimatter Dimension automatically erases all lower tier Antimatter Dimensions, " +
-      "like a sacrifice without the boost.",
+      "like a Sacrifice without the boost.",
     name: "4th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 4th Antimatter Dimension Autobuyer"
   },
@@ -71,7 +71,7 @@ GameDatabase.challenges.normal = [
     legacyId: 11,
     isQuickResettable: false,
     description: "Dimension Boosts and galaxies are useless, but " +
-      "sacrifice is immensely stronger and resets everything except tickspeed.",
+      "Sacrifice is immensely stronger and resets everything except tickspeed.",
     name: "8th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 8th Antimatter Dimension Autobuyer"
   },

@@ -35,7 +35,7 @@ Vue.component("glyph-set-preview", {
           bottomPadding="0.4rem" />
       </span>
       <span v-else>
-        (No glyphs equipped)
+        (No Glyphs equipped)
       </span>
     </div>`
 });

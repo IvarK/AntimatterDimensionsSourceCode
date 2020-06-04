@@ -72,7 +72,7 @@ Vue.component("reality-button", {
       this.shardsGained = Effarig.shardsGained * multiplier;
 
       const teresaReward = this.formatScalingMultiplierText(
-        "Glyph sacrifice",
+        "Glyph Sacrifice",
         Teresa.runRewardMultiplier,
         Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(Currency.antimatter.value)));
       const teresaThreshold = this.formatThresholdText(

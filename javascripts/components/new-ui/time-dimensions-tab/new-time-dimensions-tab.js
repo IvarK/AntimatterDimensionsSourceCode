@@ -54,8 +54,8 @@ Vue.component("new-time-dimensions-tab", {
         <p>You've gained {{totalUpgradesDisplay}} tickspeed upgrades.</p>
         <p>
           You have
-          <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> time shards.
-          Next tickspeed upgrade at
+          <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> Time Shards.
+          Next Tickspeed upgrade at
           <span class="c-time-dim-description__accent">{{format(upgradeThreshold, 2, 1)}}.</span>
         </p>
       </div>

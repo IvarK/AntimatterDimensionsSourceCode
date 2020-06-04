@@ -157,10 +157,10 @@ multiplier or the current cost. In return, it will multiply the Eighth Dimension
 It will take time to get back to the production you previously had, but you will end up with a net increase.
 <br>
 <br>
-The Dimensional Sacrifice multiplier scales with the number of First Dimensions you had at the time of sacrifice,
+The Dimensional Sacrifice multiplier scales with the number of First Dimensions you had at the time of Sacrifice,
 and the scaling can be improved by completing certain achievements and challenges. The multiplier is kept between
 sacrifices, meaning that sacrificing once at ${formatX(10)} and then once at ${formatX(4)} will be the same as
-${formatX(8)} then ${formatX(5)}; in both cases you will end up with a total sacrifice multiplier of ${formatX(40)}.
+${formatX(8)} then ${formatX(5)}; in both cases you will end up with a total Sacrifice multiplier of ${formatX(40)}.
 <br>
 <br>
 <b>Hotkey: S</b>
@@ -641,7 +641,7 @@ Active Glyphs can't be unequipped or swapped with other Glyphs without restartin
 equip Glyphs into <i>empty</i> active slots at any time during a Reality.
 <br>
 <br>
-The slots in the first rows of your inventory are "protected" slots. New glyphs will never be placed into them (even if
+The slots in the first rows of your inventory are "protected" slots. New Glyphs will never be placed into them (even if
 there is no more room in your inventory), and they are unaffected by the Sort and Auto clean buttons.
 <br>
 <br>
@@ -661,7 +661,7 @@ improvements which you can choose your own path through. All Perks only require 
 <br>
 <br>
 Each Reality you gain ${formatInt(1)} Perk Point which can be spent on a upgrade on the tree, starting with
-"You can now choose from ${formatInt(3)} glyphs on Reality". You can only unlock Perks which are directly adjacent
+"You can now choose from ${formatInt(3)} Glyphs on Reality". You can only unlock Perks which are directly adjacent
 to Perks you already have, although there are loops in the tree which you can go through in either direction.
 `,
       isUnlocked: () => PlayerProgress.realityUnlocked(),
@@ -839,12 +839,12 @@ Relic Shards. This system uses one of many methods to assign a score to your gly
 with the highest score. After picking this glyph, it checks the score against a threshold and either keeps it if the
 score is above the threshold, or sacrifices it instead. Initially there are three modes:
 <br>
-<b>Lowest total sacrifice</b> - Glyphs are given a score based on how much sacrifice value you have of that
-particular glyph's type. Glyphs of the type you have the least sacrifice value in will have the highest score.
-This mode doesn't have a threshold and always sacrifices your glyphs.
+<b>Lowest total Sacrifice</b> - Glyphs are given a score based on how much Sacrifice value you have of that
+particular glyph's type. Glyphs of the type you have the least Sacrifice value in will have the highest score.
+This mode doesn't have a threshold and always sacrifices your Glyphs.
 <br>
 <b>Number of effects</b> - Glyphs are given a score equal to the number of effects they have, and when multiple
-glyphs have the same effect count, glyphs with higher rarity will be picked. The threshold they are
+Glyphs have the same effect count, Glyphs with higher rarity will be picked. The threshold they are
 compared to is specified by your input in the text box.
 <br>
 <b>Rarity Threshold Mode</b> - Glyphs are given a score equal to their rarity percent. The comparison threshold
@@ -1008,12 +1008,12 @@ with the previous Celestial. Levels have no cap, but are significantly harder to
 <br>
 <br>
 Teresa unlocks the ability to charge your Infinity Upgrades, making them much stronger. They also
-improve your glyph effects once you reach certain thresholds in glyph sacrifice value.
+improve your glyph effects once you reach certain thresholds in Glyph Sacrifice value.
 <br>
 <br>
 At level ${formatInt(2)}, Effarig unlocks 
 ${Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)
-  ? "a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually removing almost " +
+  ? "a new mechanic called Glyph Alchemy and also makes Effarig Glyphs stronger while gradually removing almost " +
     "all random elements of glyph generation. This also has its own How To Play entry."
   : "<div style='color: var(--color-bad);'>(unlock Effarig within Ra to see this text)</div>"}
 <br>
@@ -1042,25 +1042,25 @@ in Ra unlocks the next Celestial.
       name: "Glyph Alchemy",
       info: () => `
 Glyph Alchemy is a mechanic unlocked by reaching Effarig level ${formatInt(2)} in Ra. It unlocks the ability to
-use up your glyphs by refining them into alchemy resources associated with their type. Each resource gives some
+use up your Glyphs by refining them into alchemy resources associated with their type. Each resource gives some
 kind of a boost to certain parts of the game based on how much of them you have.
 <br>
 <br>
 The amount of a resource you get from a glyph is based on the cube of the glyph's level, scaled so that level
-${formatInt(10000)} glyphs correspond to ${formatInt(10000)} alchemy resources. A single glyph itself,
+${formatInt(10000)} Glyphs correspond to ${formatInt(10000)} alchemy resources. A single glyph itself,
 however, only gives ${formatPercents(GlyphSacrificeHandler.glyphRefinementEfficiency)} of this maximum value, and
 also can't give you more resources than the cap. This cap is applied per glyph, and you will never lose resources
 when you try to refine a glyph.
 <br>
 (This calculation applies for perfect ${formatPercents(1)}
-rarity glyphs. Glyphs of lesser rarity still have the same cap, but give less resources.)
+rarity Glyphs. Glyphs of lesser rarity still have the same cap, but give less resources.)
 <br>
 <br>
 As an example of how the cap works, a level ${formatInt(10000)} glyph is worth
 ${formatInt(10000 * GlyphSacrificeHandler.glyphRefinementEfficiency)} resources normally, but will be worth less if you
 already have at least ${formatInt(10000 * (1 - GlyphSacrificeHandler.glyphRefinementEfficiency))} of that resource
 (bringing you up to a maximum of ${formatInt(10000)} after refinement). The glyph is worth nothing at all if you
-already have ${formatInt(10000)} resources or more, as that is the cap for level ${formatInt(10000)} glyphs.
+already have ${formatInt(10000)} resources or more, as that is the cap for level ${formatInt(10000)} Glyphs.
 <br>
 <br>
 Alchemy resources can be combined together in certain combinations in order to create new compound resources, which

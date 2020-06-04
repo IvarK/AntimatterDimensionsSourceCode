@@ -37,20 +37,20 @@ Vue.component("glyph-clean-options", {
       return this.glyphSacrificeUnlocked ? "Sacrifice" : "Delete";
     },
     autoCleanTooltip() {
-      return `${this.glyphSacrificeUnlocked ? "Sacrifice" : "Delete"} glyphs that are worse in every way than 
-        enough other glyphs${this.hasPerkShop ? " (ignores music glyphs)" : ""}`;
+      return `${this.glyphSacrificeUnlocked ? "Sacrifice" : "Delete"} Glyphs that are worse in every way than 
+        enough other Glyphs${this.hasPerkShop ? " (ignores music Glyphs)" : ""}`;
     },
     harshAutoCleanTooltip() {
-      return `${this.glyphSacrificeUnlocked ? "Sacrifice" : "Delete"} glyphs that are worse in every way than 
-        ANY other glyph${this.hasPerkShop ? " (can remove music glyphs)" : ""}`;
+      return `${this.glyphSacrificeUnlocked ? "Sacrifice" : "Delete"} Glyphs that are worse in every way than 
+        ANY other Glyph${this.hasPerkShop ? " (can remove music Glyphs)" : ""}`;
     },
     deleteRejectedTooltip() {
       const removeCount = this.inventory
         .filter(g => g !== null && g.idx >= Glyphs.protectedSlots && !AutoGlyphProcessor.wouldKeep(g))
         .length;
       return removeCount === 0
-        ? `This will not remove any glyphs, adjust your filter settings to remove some.`
-        : `This will remove ${formatInt(removeCount)} ${pluralize("glyph", removeCount)}!`;
+        ? `This will not remove any Glyphs, adjust your filter settings to remove some.`
+        : `This will remove ${formatInt(removeCount)} ${pluralize("Glyph", removeCount)}!`;
     }
   },
   template: `
@@ -68,14 +68,14 @@ Vue.component("glyph-clean-options", {
       <br>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
         @click="deleteAllUnprotected">
-          {{ removeString }} all unprotected glyphs
+          {{ removeString }} all unprotected Glyphs
       </button>
       <br>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
         v-if="hasFilter"
         :ach-tooltip="deleteRejectedTooltip"
         @click="deleteAllRejected">
-          {{ removeString }} all glyphs rejected by filtering
+          {{ removeString }} all Glyphs rejected by filtering
       </button>
     </div>
   `,

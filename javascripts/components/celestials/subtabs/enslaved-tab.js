@@ -118,7 +118,7 @@ Vue.component("modal-enslaved-hints", {
           <button class="o-primary-btn"
             :class="{ 'o-primary-btn--disabled': glyphHintsLeft <= 0 || !canGetHint }"
             v-on:click="giveGlyphHint(glyphHintsLeft)">
-              Get a hint on what glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
+              Get a hint on what Glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
           </button>
         </div>
         <div v-else>
@@ -286,12 +286,12 @@ Vue.component("enslaved-tab", {
               </div>
               <p>Glyph levels will be boosted to a minimum of {{ formatInt(5000) }}</p>
               <p>Infinity, Time, and 8th Antimatter Dimension purchases are limited to {{ formatInt(1) }} each</p>
-              <p>Antimatter Dimension multipliers are always Dilated (the glyph effect still only
+              <p>Antimatter Dimension multipliers are always Dilated (the Glyph effect still only
                 applies in actual Dilation)</p>
               <p>Time study 192 (uncapped Replicanti) is locked</p>
               <p>The Black Hole is disabled</p>
               <p>Tachyon production and Dilated Time production are severely reduced</p>
-              <p>Time Theorem generation from Dilation glyphs is disabled</p>
+              <p>Time Theorem generation from Dilation Glyphs is disabled</p>
               <p>Certain challenge goals have been increased</p>
               <p>Stored time is effectively Dilated (exponent^{{ format(0.55, 2, 2) }})</p>
               <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps

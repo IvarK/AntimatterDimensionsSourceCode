@@ -9,12 +9,12 @@ GameDatabase.celestials.effarig = {
     },
     basicFilter: {
       id: 1,
-      description: "Basic glyph filtering",
+      description: "Basic Glyph filtering",
       cost: 2e8
     },
     advancedFilter: {
       id: 2,
-      description: "Advanced glyph filtering",
+      description: "Advanced Glyph filtering",
       cost: 3e9
     },
     run: {

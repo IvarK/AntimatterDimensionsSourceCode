@@ -20,7 +20,7 @@ Vue.component("modal-reality-glyph-creation", {
     },
     createRealityGlyph() {
       if (Glyphs.freeInventorySpace === 0) {
-        Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
+        Modal.message.show("Inventory cannot hold new Glyphs. Delete/sacrifice (shift-click) some Glyphs.");
         return;
       }
       Glyphs.addToInventory(GlyphGenerator.realityGlyph(this.realityGlyphLevel));
@@ -28,7 +28,7 @@ Vue.component("modal-reality-glyph-creation", {
       this.emitClose();
     },
     formatGlyphEffect(effect) {
-      if (this.realityGlyphLevel < effect[0]) return `(Requires glyph level ${formatInt(effect[0])})`;
+      if (this.realityGlyphLevel < effect[0]) return `(Requires Glyph level ${formatInt(effect[0])})`;
       const config = GameDatabase.reality.glyphEffects[effect[1]];
       const value = config.effect(this.realityGlyphLevel, rarityToStrength(100));
       const effectTemplate = typeof config.singleDesc === "function"
@@ -41,10 +41,10 @@ Vue.component("modal-reality-glyph-creation", {
     <div class="c-reality-glyph-creation">
       <modal-close-button @click="emitClose"/>
       <div>
-        Create a level {{ formatInt(realityGlyphLevel) }} reality glyph. Rarity will always be 100% and level
+        Create a level {{ formatInt(realityGlyphLevel) }} reality Glyph. Rarity will always be 100% and level
         scales on your current reality resource amount (which is all consumed). All other alchemy resources will be
-        unaffected. Reality glyphs have unique effects, some of which are only available with higher level glyphs.
-        Reality glyphs can also be sacrificed to increase the yield from alchemy reactions. Like Effarig glyphs,
+        unaffected. Reality Glyphs have unique effects, some of which are only available with higher level Glyphs.
+        Reality Glyphs can also be sacrificed to increase the yield from alchemy reactions. Like Effarig Glyphs,
         you cannot equip more than one at the same time.
       </div><br>
       <div>
@@ -53,6 +53,6 @@ Vue.component("modal-reality-glyph-creation", {
       <div v-for="effect in possibleEffects">
         {{ formatGlyphEffect(effect) }}
       </div><br>
-        <button class="o-primary-btn" v-on:click="createRealityGlyph()">Create a Reality glyph!</button>
+        <button class="o-primary-btn" v-on:click="createRealityGlyph()">Create a Reality Glyph!</button>
     </div>`,
 });

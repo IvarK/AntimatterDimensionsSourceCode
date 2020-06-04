@@ -15,11 +15,11 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 2,
-    description: () => `Automatically sacrifice every ${formatInt(8)} ticks once you have an 8th Antimatter Dimension.`,
+    description: () => `Automatically Sacrifice every ${formatInt(8)} ticks once you have an 8th Antimatter Dimension.`,
     goal: new Decimal("1e10500"),
     isQuickResettable: false,
     reward: {
-      description: "Sacrifice autobuyer and stronger sacrifice"
+      description: "Sacrifice autobuyer and stronger Sacrifice"
     },
     unlockAM: new Decimal("1e11000"),
   },

@@ -16,18 +16,18 @@ Vue.component("options-visual-tab", {
           default: 50
         },
       },
-      template:
-        `<div class="o-primary-btn o-primary-btn--option o-primary-btn--update-rate l-options-grid__button"> 
+      template: `
+        <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button">
           <b>Update rate: {{ formatInt(value) }} ms</b>
           <input
             :value="value"
-            class="o-primary-btn--update-rate__slider"
+            class="o-primary-btn--slider__slider"
             type="range"
             min="33"
             max="200"
             @input="emitInput(parseInt($event.target.value))"
           />
-         </div>`
+        </div>`
     },
   },
   data() {
@@ -36,7 +36,6 @@ Vue.component("options-visual-tab", {
       notation: "",
       commas: false,
       updateRate: 0,
-      news: true,
       autosaveInterval: 3000,
     };
   },
@@ -58,9 +57,6 @@ Vue.component("options-visual-tab", {
     },
     UILabel() {
       return `UI: ${this.$viewModel.newUI ? "New" : "Old"}`;
-    },
-    newsOnOffLabel() {
-      return `News: ${this.news ? "On" : "Off"}`;
     }
   },
   methods: {
@@ -70,7 +66,6 @@ Vue.component("options-visual-tab", {
       this.notation = options.notation;
       this.commas = options.commas;
       this.updateRate = options.updateRate;
-      this.news = options.news;
     },
     hardReset() {
       if (confirm("Do you really want to erase all your progress?")) {
@@ -91,9 +86,9 @@ Vue.component("options-visual-tab", {
           oninput="GameOptions.refreshUpdateRate()"
         />
         <options-button
-          class="o-primary-btn--option_font-large"
-          onclick="GameOptions.toggleNews()"
-        >{{ newsOnOffLabel }}</options-button>
+          class="o-primary-btn--option"
+          onclick="Modal.newsOptions.show();"
+        >Open News Options</options-button>
       </div>
       <div class="l-options-grid__row">
         <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">

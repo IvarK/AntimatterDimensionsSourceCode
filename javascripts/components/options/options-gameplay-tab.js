@@ -74,11 +74,11 @@ Vue.component("options-gameplay-tab", {
           class="o-primary-btn--option"
           onclick="Modal.confirmationOptions.show()"
         >Open Confirmation Options</options-button>
-        <div class="o-primary-btn o-primary-btn--option o-primary-btn--update-rate l-options-grid__button"> 
-          <b>Offline ticks: {{ formatInt(offlineTicks) }}</b>
+        <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button">
+          <b>Offline ticks: {{ formatInt(parseInt(offlineTicks)) }}</b>
           <input
             v-model="offlineTicks"
-            class="o-primary-btn--update-rate__slider"
+            class="o-primary-btn--slider__slider"
             type="range"
             min="100"
             step="100"

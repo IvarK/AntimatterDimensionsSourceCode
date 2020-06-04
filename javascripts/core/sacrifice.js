@@ -32,14 +32,14 @@ class Sacrifice {
     } else if (f('InfinityChallenge2isCompleted', InfinityChallenge(2).isCompleted)) {
       factor = 1 / 120;
       places = 3;
-      base = "AD1"
+      base = "AD1";
     } else {
       factor = 2;
       places = 1;
       base = `(log₁₀(AD1)/${formatInt(10)})`;
     }
     
-    let exponent = (1 +
+    const exponent = (1 +
       (f('Achievement32', Achievement(32).isEffectActive) ? Achievement(32).config.effect : 0) +
       (f('Achievement57', Achievement(57).isEffectActive) ? Achievement(57).config.effect : 0)
     ) * (1 +

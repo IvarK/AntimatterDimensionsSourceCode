@@ -6008,17 +6008,87 @@ kbd {
   font-size: 1.5rem;
 }
 
-.o-v-run-button {
+.c-v-run-button {
   color: black;
   background: #ead584;
   font-family: Typewriter;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   cursor: pointer;
+  padding: 0.5rem;
   transition-duration: 0.2s;
 }
 
-.o-v-run-button:hover {
+.c-v-run-button:hover,
+.c-v-run-button--running {
   background: indianred;
+}
+
+.c-v-run-button__line {
+  width: 10rem;
+  height: 2rem;
+  position: absolute;
+  background: #e3c759;
+  z-index: -1;
+  transition-duration: 0.2s;
+}
+
+.c-v-run-button:hover .c-v-run-button__line,
+.c-v-run-button--running .c-v-run-button__line {
+  background: #bb3a3a;
+}
+
+.c-v-run-button__line--1 {
+  top: 19.5rem;
+  left: 10.5rem;
+  transform: rotate(-30deg);
+}
+
+.c-v-run-button__line--2 {
+  top: 12rem;
+  left: -2.5rem;
+  transform: rotate(90deg);
+}
+
+.c-v-run-button__line--3 {
+  top: 4.5rem;
+  left: 10.5rem;
+  transform: rotate(30deg);
+}
+
+.c-v-run-button--running .c-v-run-button__line--1 {
+  animation: a-c-v-run-button__line--1--move 3s infinite cubic-bezier(0.9, 0, 0, 0.9), a-c-v-run-button__line--burst 3s infinite cubic-bezier(0.9, 0, 0, 0.9);
+}
+
+.c-v-run-button--running .c-v-run-button__line--2 {
+  animation: a-c-v-run-button__line--2--move 3s infinite cubic-bezier(0.9, 0, 0, 0.9), a-c-v-run-button__line--burst 3s infinite cubic-bezier(0.9, 0, 0, 0.9);
+}
+
+.c-v-run-button--running .c-v-run-button__line--3 {
+  animation: a-c-v-run-button__line--3--move 3s infinite cubic-bezier(0.9, 0, 0, 0.9), a-c-v-run-button__line--burst 3s infinite cubic-bezier(0.9, 0, 0, 0.9);
+}
+
+@keyframes a-c-v-run-button__line--1--move {
+  0% {top: 19.5rem; left: 10.5rem;; transform: rotate(-30deg);}
+  50% {top: 19.5rem; left: 1.5rem; transform: rotate(30deg);}
+  100% {top: 19.5rem; left: 10.5rem;; transform: rotate(-30deg);}
+}
+
+@keyframes a-c-v-run-button__line--2--move {
+  0% {top: 12rem; left: -2.5rem; transform: rotate(90deg);}
+  50% {top: 4.5rem; left: 2rem; transform: rotate(150deg);}
+  100% {top: 12rem; left: -2.5rem; transform: rotate(90deg);}
+}
+
+@keyframes a-c-v-run-button__line--3--move {
+  0% {top: 4.5rem; left: 10.5rem; transform: rotate(30deg);}
+  50% {top: 12rem; left: 14.5rem; transform: rotate(90deg);}
+  100% {top: 4.5rem; left: 10.5rem; transform: rotate(30deg);}
+}
+
+@keyframes a-c-v-run-button__line--burst {
+  0% {box-shadow: 0 0 3rem black;}
+  50% {box-shadow: 0 0 0rem black;}
+  100% {box-shadow: 0 0 3rem black;}
 }
 
 /* #endregion v tab*/

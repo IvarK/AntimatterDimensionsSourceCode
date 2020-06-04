@@ -21,7 +21,7 @@ class Sacrifice {
   }
   
   static getSacrificeDescription(changes) {
-    let f = (name, condition) => name in changes ? changes[name] : condition;
+    const f = (name, condition) => (name in changes ? changes[name] : condition);
     let factor;
     let places;
     let base;

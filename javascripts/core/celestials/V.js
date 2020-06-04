@@ -131,8 +131,8 @@ const V_UNLOCKS = {
     reward: "Achievement multiplier affects auto EC completion time.",
     description: "Have 10 V-achievements",
     effect: () => Achievements.power,
-    // Base rate is 60 ECs at 30 minutes each
-    format: x => TimeSpan.fromSeconds(60 * 30 * 60 / x).toStringShort(false),
+    // Base rate is 60 ECs at 20 minutes each
+    format: x => `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort(false)} for full completion`,
     requirement: () => V.spaceTheorems >= 10
   },
   AUTO_AUTOCLEAN: {

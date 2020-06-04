@@ -134,7 +134,7 @@ Vue.component("enslaved-tab", {
     autoStoreReal: false,
     canAdjustStoredTime: false,
     storedFraction: 0,
-    inEnslaved: false,
+    isRunning: false,
     completed: false,
     storedBlackHole: 0,
     storedReal: 0,
@@ -162,7 +162,7 @@ Vue.component("enslaved-tab", {
       return Enslaved.storedTimeInsideEnslaved(this.storedBlackHole);
     },
     realityTitle() {
-      return this.inEnslaved
+      return this.isRunning
         ? "You're inside Enslaved Ones' Reality"
         : "Start Enslaved One's Reality";
     },
@@ -178,6 +178,12 @@ Vue.component("enslaved-tab", {
         width: "60rem",
         tooltip: false
       };
+    },
+    runButtonClassObject() {
+      return {
+        "c-enslaved-run-button__icon": true,
+        "c-enslaved-run-button__icon--running": this.isRunning,
+      };
     }
   },
   watch: {
@@ -192,7 +198,7 @@ Vue.component("enslaved-tab", {
       this.isStoringReal = Enslaved.isStoringRealTime;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
-      this.inEnslaved = Enslaved.isRunning;
+      this.isRunning = Enslaved.isRunning;
       this.completed = Enslaved.isCompleted;
       this.storedReal = player.celestials.enslaved.storedReal;
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
@@ -276,12 +282,12 @@ Vue.component("enslaved-tab", {
       <div class="l-enslaved-celestial-tab--inner">
         <div class="l-enslaved-run-container">
           <div v-if="hasUnlock(unlocksInfo.RUN)">
-            <div class="o-enslaved-run-box">
-              <div class="o-enslaved-run-box__title">{{realityTitle}}</div>
+            <div class="c-enslaved-run-button">
+              <div class="c-enslaved-run-button__title">{{realityTitle}}</div>
               <div v-if="completed"><b>(Completed)</b></div>
-              <div class="o-enslaved-run-button" @click="startRun">
-                <div class="o-enslaved-run-button__sigil fas fa-link" />
-                <div v-for="x in 25" class="o-enslaved-run-button__glitch"
+              <div :class="runButtonClassObject" @click="startRun">
+                <div class="c-enslaved-run-button__icon__sigil fas fa-link" />
+                <div v-if="isRunning" v-for="x in 25" class="c-enslaved-run-button__icon__glitch"
                                     :style="glitchStyle(x)"/>
               </div>
               <p>Glyph levels will be boosted to a minimum of {{ formatInt(5000) }}</p>
@@ -320,7 +326,7 @@ Vue.component("enslaved-tab", {
               </button>
               <button class="o-enslaved-mechanic-button" @click="useStored">
                 Discharge Black Hole
-                <p v-if="inEnslaved">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
+                <p v-if="isRunning">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
               </button>
             </div>
             <div class="l-enslaved-top-container__half">

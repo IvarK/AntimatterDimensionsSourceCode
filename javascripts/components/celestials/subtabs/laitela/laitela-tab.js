@@ -219,9 +219,9 @@ Vue.component("laitela-run-button", {
     }
   },
   template: `
-    <button class="o-laitela-run-button" @click="startRun">
+    <button class="o-laitela-run-button">
       <b>Start Lai'tela's Reality</b>
-      <div v-bind:class="runButtonClassObject()"></div>
+      <div :class="runButtonClassObject()" @click="startRun"></div>
       <div v-if="realityReward > 1">
         <b>All DM multipliers are {{ formatX(realityReward, 2, 2) }} higher</b>
         <br>

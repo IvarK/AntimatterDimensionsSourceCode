@@ -5317,13 +5317,62 @@ kbd {
 .c-teresa-run-button {
   color: var(--color-celestials);
   border: 0.2rem solid var(--color-celestials);
-  cursor: pointer;
   background-color: white;
 }
 
-.c-teresa-run-button:hover {
+.c-teresa-run-button__icon {
+  color: var(--color-celestials);
+  font-weight: bold;
+  font-size: 7rem;
+  text-shadow: 0.1rem 0.1rem 0.5rem;
+  cursor: pointer;
+  height: 12rem;
+  width: 12rem;
+  border-radius: 50%;
+  background-color: white;
+  align-items: center;
+  margin: 1.5rem auto;
+  border: 0.4rem solid var(--color-celestials);
+  animation: a-teresa-run-button__icon--glow 3s infinite;
+  transition-duration: 0.2s;
+}
+
+.c-teresa-run-button__icon:hover {
   color: white;
   background-color: var(--color-celestials);
+}
+
+.c-teresa-run-button__icon--running {
+  color: white;
+  background-color: var(--color-celestials);
+  border-color: white;
+  animation: a-teresa-run-button__icon--super-glow 1.2s infinite, a-teresa-run-button__icon--spin 5s infinite;
+}
+
+@keyframes a-teresa-run-button__icon--glow {
+  0% {text-shadow: 0.1rem 0.1rem 0.3rem;}
+  50% {text-shadow: 0.1rem 0.1rem 0.8rem;}
+  100% {text-shadow: 0.1rem 0.1rem 0.3rem;}
+}
+
+@keyframes a-teresa-run-button__icon--super-glow {
+  0% {text-shadow: 0.1rem 0.1rem 0.3rem; box-shadow: 0 0 0.3rem var(--color-celestials);}
+  50% {text-shadow: 0.1rem 0.1rem 0.9rem; box-shadow: 0 0 1rem var(--color-celestials);}
+  100% {text-shadow: 0.1rem 0.1rem 0.3rem; box-shadow: 0 0 0.3rem var(--color-celestials);}
+}
+
+@keyframes a-teresa-run-button__icon--spin {
+  0% {transform: rotate(61deg);}
+  10% {transform: rotate(322deg);}
+  20% {transform: rotate(235deg);}
+  30% {transform: rotate(222deg);}
+  40% {transform: rotate(105deg);}
+  50% {transform: rotate(33deg);}
+  60% {transform: rotate(103deg);}
+  70% {transform: rotate(158deg);}
+  80% {transform: rotate(41deg);}
+  90% {transform: rotate(73deg);}
+  100% {transform: rotate(61deg);}
 }
 
 .c-teresa-shop {
@@ -5763,7 +5812,7 @@ kbd {
   pointer-events: none;
 }
 
-.o-enslaved-run-box {
+.c-enslaved-run-button {
   width: 40rem;
   padding: 2rem;
   border-radius: 0.5rem;
@@ -5778,26 +5827,26 @@ kbd {
   align-items: center;
 }
 
-.t-metro .o-enslaved-run-box,
-.t-dark-metro .o-enslaved-run-box,
-.t-inverted-metro .o-enslaved-run-box,
-.t-s8 .o-enslaved-run-box {
+.t-metro .c-enslaved-run-button,
+.t-dark-metro .c-enslaved-run-button,
+.t-inverted-metro .c-enslaved-run-button,
+.t-s8 .c-enslaved-run-button {
   border-radius: 0;
 }
 
-.o-enslaved-run-box__title {
+.c-enslaved-run-button__title {
   font-weight: bold;
   font-size: larger;
   margin-bottom: 0.5rem;
 }
 
-.o-enslaved-run-button {
+.c-enslaved-run-button__icon {
   border-radius: 50%;
-  background: #f1aa7f;
-  width: 15rem;
-  height: 15rem;
+  background: black;
+  width: 16rem;
+  height: 16rem;
   margin: 1.5rem;
-  color: black;
+  color: #f1aa7f;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -5805,29 +5854,45 @@ kbd {
   justify-content: center;
   position: relative;
   overflow: hidden;
+  border: 0.4rem solid #f1aa7f;
+  transition-duration: 0.2s;
+  animation: a-enslaved-run-button--spin 120s infinite linear;
 }
 
-.o-enslaved-run-button:hover {
-  color: #bebdb8;
-  background: black;
+.c-enslaved-run-button__icon:hover {
+  color: black;
+  background: #f1aa7f;
+  border-color: black;
 }
 
-.o-enslaved-run-button__sigil {
+.c-enslaved-run-button__icon--running {
+  animation: a-enslaved-run-button--spin 15s infinite linear;
+}
+
+.c-enslaved-run-button__icon__sigil {
   font-size: 12rem;
   transform: rotate(45deg);
 }
 
-.o-enslaved-run-button__glitch {
+.c-enslaved-run-button__icon__glitch {
   position: absolute;
-  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%, black 20%, black 80%, rgba(0,0,0,0) 100%);
-  /*background: black;*/
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%, #f1aa7f 20%, #f1aa7f 80%, rgba(0,0,0,0) 100%);
   border: none;
-  width: 1px;
+  width: 0.1rem;
+}
+
+.c-enslaved-run-button__icon:hover .c-enslaved-run-button__icon__glitch {
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%, black 20%, black 80%, rgba(0,0,0,0) 100%);
 }
 
 .o-enslaved-release-header-button {
   font-size: 1rem;
   width: 20rem;
+}
+
+@keyframes a-enslaved-run-button--spin {
+  0% {transform: rotate(0deg)}
+  100% {transform: rotate(360deg)}
 }
 
 /* #endregion enslaved tab*/

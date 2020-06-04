@@ -16,6 +16,7 @@ Vue.component("teresa-tab", {
       hasReality: false,
       hasEPGen: false,
       hasPerkShop: false,
+      isRunning: false
     };
   },
   computed: {
@@ -29,6 +30,12 @@ Vue.component("teresa-tab", {
         PerkShopUpgrade.autoSpeed,
         PerkShopUpgrade.musicGlyph,
       ];
+    },
+    runButtonClassObject() {
+      return {
+        "c-teresa-run-button__icon": true,
+        "c-teresa-run-button__icon--running": this.isRunning,
+      };
     }
   },
   methods: {
@@ -50,6 +57,7 @@ Vue.component("teresa-tab", {
       this.runReward = Teresa.runRewardMultiplier;
       this.pp = player.reality.pp;
       this.rm.copyFrom(player.reality.realityMachines);
+      this.isRunning = Teresa.isRunning;
     },
     startRun() {
       if (!resetReality()) return;
@@ -63,13 +71,14 @@ Vue.component("teresa-tab", {
       };
     },
   },
-  template:
-    `<div class="l-teresa-celestial-tab">
+  template: `
+    <div class="l-teresa-celestial-tab">
       <celestial-quote-history celestial="teresa"/>
       <div>You have {{format(rm, 2, 2)}} {{"Reality Machine" | pluralize(rm)}}.</div>
       <div class="l-mechanics-container">
         <div class="l-teresa-mechanic-container">
-          <div class="c-teresa-unlock c-teresa-run-button" v-if="hasReality" @click="startRun()">
+          <div class="c-teresa-unlock c-teresa-run-button" v-if="hasReality">
+            <div :class="runButtonClassObject" @click="startRun()">Ϟ</div>
             Start Teresa's Reality. Glyph TT generation is disabled and
             you gain less IP and EP (x^{{format(0.55, 2, 2)}}).
             <br><br>

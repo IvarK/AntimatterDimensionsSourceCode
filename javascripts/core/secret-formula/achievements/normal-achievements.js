@@ -130,7 +130,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => !NormalChallenge(8).isRunning && Sacrifice.totalBoost.gte(600),
     checkEvent: GAME_EVENT.SACRIFICE_RESET_AFTER,
     reward: "Sacrifice is slightly stronger.",
-    effect: 0.2
+    effect: 0.1
   },
   {
     id: 33,
@@ -305,7 +305,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => NormalChallenge(8).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     reward: "Dimensional sacrifices are a lot stronger.",
-    effect: 0.2
+    effect: 0.1
   },
   {
     id: 58,
@@ -544,7 +544,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Sacrifice.nextBoost.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.SACRIFICE_RESET_BEFORE,
     reward: "Sacrifices are stronger.",
-    effect: 0.011,
+    effect: 0.1,
   },
   {
     id: 91,

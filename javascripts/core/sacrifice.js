@@ -19,59 +19,93 @@ class Sacrifice {
     if (this.nextBoost.lte(1)) return `${formatX(1)} multiplier`;
     return "";
   }
+  
+  static getSacrificeDescription(changes) {
+    let f = (name, condition) => name in changes ? changes[name] : condition;
+    let factor;
+    let places;
+    let base;
+    if (f('Challenge8isRunning', NormalChallenge(8).isRunning)) {
+      factor = 1;
+      places = 1;
+      base = "x";
+    } else if (f('InfinityChallenge2isCompleted', InfinityChallenge(2).isCompleted)) {
+      factor = 1 / 120;
+      places = 3;
+      base = "AD1"
+    } else {
+      factor = 2;
+      places = 1;
+      base = `(log₁₀(AD1)/${formatInt(10)})`;
+    }
+    
+    let exponent = (1 +
+      (f('Achievement32', Achievement(32).isEffectActive) ? Achievement(32).config.effect : 0) +
+      (f('Achievement57', Achievement(57).isEffectActive) ? Achievement(57).config.effect : 0)
+    ) * (1 +
+      (f('Achievement88', Achievement(88).isEffectActive) ? Achievement(88).config.effect : 0) +
+      (f('TimeStudy228', TimeStudy(228).isEffectActive) ? TimeStudy(228).config.effect : 0)
+    ) * factor;
+    return base + (exponent === 1 ? "" : formatPow(exponent, places, places));
+  }
+  
+  static get sacrificeExponent() {
+    let factor;
+    if (NormalChallenge(8).isRunning) {
+      factor = 1;
+    } else if (InfinityChallenge(2).isCompleted) {
+      factor = 1 / 120;
+    } else {
+      factor = 2;
+    }
+    
+    return (1 + Effects.sum(
+      Achievement(32),
+      Achievement(57)
+    )) * (1 + Effects.sum(
+      Achievement(88),
+      TimeStudy(228)
+    )) * factor;
+  }
 
   static get nextBoost() {
     const nd1Amount = AntimatterDimension(1).amount;
-    const sacrificed = player.sacrificed.clampMin(1);
     if (nd1Amount.eq(0)) return new Decimal(1);
-    if (InfinityChallenge(2).isCompleted) {
-      const sacrificePow = Effects.max(
-        0.01,
-        Achievement(88),
-        TimeStudy(228)
-      );
-      return nd1Amount.dividedBy(sacrificed).pow(sacrificePow).clampMin(1);
-    }
-
+    const sacrificed = player.sacrificed.clampMin(1);
+    let prePowerSacrificeMult;
     // Pre-reality update C8 works really weirdly - every sacrifice, the current sacrifice multiplier gets applied to
     // ND8, then sacrificed amount is updated, and then the updated sacrifice multiplier then gets applied to a
     // different variable that is only applied during C8. However since sacrifice only depends on sacrificed ND1, this
     // can actually be done in a single calculation in order to handle C8 in a less hacky way.
     if (NormalChallenge(8).isRunning) {
-      return nd1Amount.pow(0.05).dividedBy(sacrificed.pow(0.04)).clampMin(1)
-        .times(nd1Amount.pow(0.05).dividedBy(sacrificed.plus(nd1Amount).pow(0.04)).clampMin(1));
+      prePowerSacrificeMult = nd1Amount.pow(0.05).dividedBy(sacrificed.pow(0.04)).clampMin(1)
+        .times(nd1Amount.pow(0.05).dividedBy(sacrificed.plus(nd1Amount).pow(0.04)));
+    } else if (InfinityChallenge(2).isCompleted) {
+      prePowerSacrificeMult = nd1Amount.dividedBy(sacrificed);
+    } else {
+      prePowerSacrificeMult = new Decimal((nd1Amount.log10() / 10) / Math.max(sacrificed.log10() / 10, 1));
     }
-
-    const sacrificePow = 2 + Effects.sum(
-      Achievement(32),
-      Achievement(57)
-    );
-    return Decimal.pow((nd1Amount.log10() / 10) / Math.max(sacrificed.log10() / 10, 1), sacrificePow).clampMin(1);
+    
+    return prePowerSacrificeMult.clampMin(1).pow(this.sacrificeExponent);
   }
 
   static get totalBoost() {
     if (player.sacrificed.eq(0)) return new Decimal(1);
-
-    if (InfinityChallenge(2).isCompleted) {
-      const scale = Effects.max(
-        0.01,
-        Achievement(88),
-        TimeStudy(228)
-      );
-      return player.sacrificed.pow(scale).clampMin(1);
-    }
-
     // C8 uses a variable that keeps track of a sacrifice boost that persists across sacrifice-resets and isn't
-    // used anywhere else
+    // used anywhere else, which also naturally takes account of the exponent from achievements and time studies.
     if (NormalChallenge(8).isRunning) {
       return player.chall8TotalSacrifice;
     }
+    
+    let prePowerBoost;
 
-    const sacrificePow = 2 + Effects.sum(
-      Achievement(32),
-      Achievement(57)
-    );
-    return Decimal.pow(player.sacrificed.log10() / 10.0, sacrificePow);
+    if (InfinityChallenge(2).isCompleted) {
+      prePowerBoost = player.sacrificed;
+    } else {
+      prePowerBoost = new Decimal(player.sacrificed.log10() / 10);
+    }
+
+    return prePowerBoost.clampMin(1).pow(this.sacrificeExponent);
   }
 }
 

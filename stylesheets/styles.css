@@ -6231,22 +6231,65 @@ kbd {
   display: flex;
 }
 
-.l-ra-reality-container {
-  height: 25rem;
-  background: radial-gradient(ellipse at center, #35d035 55%, gainsboro);
+.c-ra-run-button {
+  height: 33rem;
+  color: #9575cd;
+  background: black;
+  border: 0.2rem solid #9575cd;
   border-radius: 2rem;
-  flex: none none 20rem;
   width: 30rem;
   margin: 2rem;
-  cursor: pointer;
+  padding: 0.5rem;
+  font-family: Typewriter;
 }
 
-.l-ra-reality-inner {
-  font-family: Typewriter;
-  margin: 2rem;
+.c-ra-run-button__icon {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  color: #9575cd;
+  font-size: 3rem;
+  text-shadow: 0rem 0rem 1rem;
+  cursor: pointer;
+  height: 12rem;
+  width: 12rem;
+  border-radius: 50%;
+  background-color: black;
+  margin: 1.5rem auto;
+  border: 0.4rem solid #9575cd;
+  box-shadow: 0 0 0.7rem #9575cd, 0 0 0.7rem #9575cd inset;
+  transition-duration: 0.2s;
+}
+
+.c-ra-run-button__icon:hover {
+  font-size: 7.5rem;
+  color: black;
+  background-color: #9575cd;
+  border-color: black;
+}
+
+.c-ra-run-button__icon--running {
+  font-size: 7.5rem;
+  color: black;
+  background-color: #9575cd;
+  border-color: black;
+  box-shadow: 0 0 1.5rem #9575cd, 0 0 1.5rem #9575cd inset;
+}
+
+.c-ra-run-button__icon--running .c-ra-run-button__icon__sigil {
+  animation: a-c-ra-run-button__icon__sigil--undulate 0.6s infinite ease-in-out, a-c-ra-run-button__icon__sigil--glow 3s infinite ease-in-out;
+}
+
+@keyframes a-c-ra-run-button__icon__sigil--undulate {
+  0% {transform: scale(0.9)}
+  50% {transform: scale(1)}
+  100% {transform: scale(0.9)}
+}
+
+@keyframes a-c-ra-run-button__icon__sigil--glow {
+  0% {text-shadow: 0 0 1rem;}
+  50% {text-shadow: 0 0 3rem;}
+  100% {text-shadow: 0 0 1rem;}
 }
 
 .c-ra-rewards {

@@ -11,7 +11,8 @@ Vue.component("ra-tab", {
       recollectionMult: 1,
       showLaitela: false,
       laitelaReq: 0,
-      petWithRecollection: ""
+      petWithRecollection: "",
+      isRunning: false
     };
   },
   methods: {
@@ -24,6 +25,7 @@ Vue.component("ra-tab", {
       this.showLaitela = Ra.pets.v.isUnlocked;
       this.laitelaReq = RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels;
       this.petWithRecollection = Ra.petWithRecollection;
+      this.isRunning = Ra.isRunning;
     },
     startRun() {
       if (!resetReality()) return;
@@ -72,6 +74,12 @@ Vue.component("ra-tab", {
           ? "white"
           : this.pets.find(pet => pet.pet.name === this.petWithRecollection).pet.color,
       };
+    },
+    runButtonClassObject() {
+      return {
+        "c-ra-run-button__icon": true,
+        "c-ra-run-button__icon--running": this.isRunning,
+      };
     }
   },
   template: `
@@ -93,14 +101,15 @@ Vue.component("ra-tab", {
         <ra-pet v-for="(pet, i) in pets" :key="i" :petConfig="pet" />
       </div>
       <div class="l-ra-non-pets">
-        <button @click="startRun" class="l-ra-reality-container">
-          <div class="l-ra-reality-inner">
-            <h2> Start Ra's Reality </h2>
-            You can't dimension boost and tick reduction is fixed at 11%.
-            <br>
-            <br>
-            Inside of Ra's reality, some resources will generate memory chunks based on their amount.
+        <button class="c-ra-run-button">
+          <h2> Start Ra's Reality </h2>
+          <div :class="runButtonClassObject" @click="startRun">
+            <span class="c-ra-run-button__icon__sigil fas fa-sun"></span>
           </div>
+          You can't Dimension Boost, and the Tickspeed purchase multiplier is fixed at {{ formatX(1.1245, 0, 3) }}.
+          <br>
+          <br>
+          Inside of Ra's reality, some resources will generate memory chunks based on their amount.
         </button>
         <div class="l-ra-recollection-unlock">
           <br>

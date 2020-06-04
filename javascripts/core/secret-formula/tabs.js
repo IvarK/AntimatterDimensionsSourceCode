@@ -276,7 +276,7 @@ GameDatabase.tabs = [
       {
         key: "celestial-navigation",
         name: "Celestial Navigation",
-        symbol: "N",
+        symbol: "<i class='fas fa-map-marked-alt'></i>",
         component: "celestial-navigation"
       },
       {
@@ -309,7 +309,7 @@ GameDatabase.tabs = [
       {
         key: "ra",
         name: "Ra",
-        symbol: "☼",
+        symbol: "<i class='fas fa-sun'></i>",
         component: "ra-tab",
         condition: () => V.has(V_UNLOCKS.RA_UNLOCK)
       },

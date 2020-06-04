@@ -22,21 +22,16 @@ class Sacrifice {
   
   static getSacrificeDescription(changes) {
     const f = (name, condition) => (name in changes ? changes[name] : condition);
-    let factor;
-    let places;
-    let base;
+    let factor = 2;
+    let places = 1;
+    let base = `(log₁₀(AD1)/${formatInt(10)})`;
     if (f('Challenge8isRunning', NormalChallenge(8).isRunning)) {
       factor = 1;
-      places = 1;
       base = "x";
     } else if (f('InfinityChallenge2isCompleted', InfinityChallenge(2).isCompleted)) {
       factor = 1 / 120;
       places = 3;
       base = "AD1";
-    } else {
-      factor = 2;
-      places = 1;
-      base = `(log₁₀(AD1)/${formatInt(10)})`;
     }
     
     const exponent = (1 +

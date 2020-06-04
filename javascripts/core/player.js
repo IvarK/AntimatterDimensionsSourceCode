@@ -117,7 +117,7 @@ let player = {
       amount: new Decimal(1),
       time: 1,
       xLast: new Decimal(1),
-      isActive: true
+      isActive: false
     },
     reality: {
       mode: 0,

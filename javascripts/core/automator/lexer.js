@@ -126,17 +126,19 @@ const AutomatorLexer = (() => {
     $autocomplete: "tt",
     $getter: () => player.timestudy.theorem,
   });
-  createInCategory(Currency, "Completions", /completions/i, {
+  createInCategory(Currency, "Total_TT", /total tt/i, {
+    $autocomplete: "total tt",
+    $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
+  });
+
+  createInCategory(Currency, "PendingCompletions", /pending[ \t]+completions/i, {
+    $autocomplete: "pending completions",
     $getter: () => {
       // If we are not in an EC, pretend like we have a ton of completions so any check for sufficient
       // completions returns true
       if (!EternityChallenge.isRunning) return Decimal.NUMBER_MAX_VALUE;
       return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
     }
-  });
-  createInCategory(Currency, "Total_TT", /total tt/i, {
-    $autocomplete: "total tt",
-    $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
   });
   for (let i = 1; i <= 12; ++i) {
     const id = i;

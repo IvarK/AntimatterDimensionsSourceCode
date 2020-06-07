@@ -23,17 +23,21 @@ GameDatabase.reality.automator = {
               `
             },
             {
-              header: "<i>completions</i> <i>comparison</i> <i>number</i>",
+              header: "<b>pending completions</b> <i>comparison</i> <i>number</i>",
               description: `
-                Wait for a certain <b>total</b> number of EC completions that you'd get at eternity.<br>
-                You can also use "ECX Completions", where X is an EC number.
-                <b>Comparisons</b>: >, >=
+                Wait for a certain <b>total</b> number of EC completions that you'd get at eternity.
+              `
+            },
+            {
+              header: "<b>EC</b><i>number</i> <b>completions</b> <i>comparison</i> <i>number</i>",
+              description: `
+                Wait for a certain <b>total</b> number of completions of that EC.
               `
             },
             {
               header: "<i>prestige</i>",
               description: `
-                Wait until certain prestige has been triggered.<br>
+                Wait until that prestige has been triggered.<br>
                 <b>Prestiges</b>: infinity, eternity, reality
               `
             }
@@ -182,11 +186,12 @@ GameDatabase.reality.automator = {
       id: 8,
       keyword: "if",
       name: "<b>if</b> - compares your amount to the game's amount of something, such as a currency",
-      syntax: "<b>if</b> [am|ip|ep|dt|tp|rg|rep|tt|total tt|completions|ecx completions] (comparison) [number]",
+      syntax: "<b>if</b> [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ec[number] completions] (comparison) [number]",
       examples: [
         "if ep <= 1e3000",
         "if dt >= 1e50",
-        "if ip < 1e1500000"
+        "if ip < 1e1500000",
+        "if ec10 completions < 5"
       ]
     },
     {
@@ -227,7 +232,7 @@ GameDatabase.reality.automator = {
         <blockquote>commands</blockquote>
       }<br>
       <b>condition</b>: [quantity] (comparison) [number]<br>
-      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|completions|ecx completions]<br>
+      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ecx completions]<br>
       <b>event</b>: [infinity|eternity|reality] (can happen at any time after loop starts)`,
       description: `Commands are repeated; the condition is checked at the start and every
       time the loop repeats. If an event is specified, then the loop will repeat until the
@@ -248,7 +253,7 @@ GameDatabase.reality.automator = {
       syntax: `<b>while</b> [quantity] (comparison) [number]{<br>
         <blockquote>commands</blockquote>
       }<br>
-      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|completions|ecx completions]<br>
+      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ec[number] completions]<br>
       <b>comparison</b>: [<|<=|>=|>]<br>
       <b>number</b>: Number in normal or scientific notation`,
       description: `Commands are repeated; the condition is checked at the start and every
@@ -332,11 +337,11 @@ GameDatabase.reality.automator = {
       rep - replicanti amount <br>
       tt - time theorem amount <br>
       total tt - TOTAL time theorems, includes all forms of generated TT <br>
-      completions - amount of current EC completions <br>
-      ecx completions - amount of EC completions for a certain EC <br>
+      pending completions - total completions of current EC at eternity <br>
+      ec[number] completions - amount of EC completions for a certain EC <br>
       `,
       examples: [
-        `if total tt >= 5 
+        `if total tt >= 5
         <blockquote>commands</blockquote>
         `,
         `while ec10 completions >= 1

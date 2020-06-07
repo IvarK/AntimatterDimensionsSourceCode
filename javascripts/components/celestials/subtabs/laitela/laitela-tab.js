@@ -382,7 +382,7 @@ Vue.component("singularity-milestone-pane", {
   },
   computed: {
     glowStyle() {
-      if (this.hasNew) return { "box-shadow": "inset 0 0 1rem 0.5rem var(--color-infinity)" };
+      if (this.hasNew) return { "box-shadow": "inset 0 0 1rem 0.5rem var(--color-celestials)" };
       return {};
     }
   },

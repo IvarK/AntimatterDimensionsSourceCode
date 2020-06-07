@@ -16,7 +16,8 @@ Vue.component("teresa-tab", {
       hasReality: false,
       hasEPGen: false,
       hasPerkShop: false,
-      isRunning: false
+      isRunning: false,
+      canUnlockNextPour: false
     };
   },
   computed: {
@@ -35,6 +36,14 @@ Vue.component("teresa-tab", {
       return {
         "c-teresa-run-button__icon": true,
         "c-teresa-run-button__icon--running": this.isRunning,
+      };
+    },
+    pourButtonClassObject() {
+      return {
+        "o-teresa-shop-button": true,
+        "o-teresa-shop-button--available": true,
+        "c-teresa-pour": true,
+        "c-teresa-pour--unlock-available": this.canUnlockNextPour
       };
     }
   },
@@ -58,6 +67,8 @@ Vue.component("teresa-tab", {
       this.pp = player.reality.pp;
       this.rm.copyFrom(player.reality.realityMachines);
       this.isRunning = Teresa.isRunning;
+      this.canUnlockNextPour = Object.entries(TERESA_UNLOCKS)
+        .filter(unlock => this.rm.gte(unlock[1].price) && !Teresa.has(unlock[1])).length > 0;
     },
     startRun() {
       if (!resetReality()) return;
@@ -99,7 +110,7 @@ Vue.component("teresa-tab", {
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">
-          <button class="o-primary-btn c-teresa-pour"
+          <button :class="pourButtonClassObject"
             @mousedown="pour = true"
             @touchstart="pour = true"
             @mouseup="pour = false"

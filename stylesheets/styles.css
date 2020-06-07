@@ -40,6 +40,13 @@ html {
   --color-reality-light: #0ba00e;
   --color-celestials: #5151ec;
 
+  --color-teresa--base: #5151ec;
+  --color-teresa--accent: white;
+
+  --color-effarig--base: #d13737;
+
+  --color-v--base: #ead584;
+
   --color-laitela--base: white;
   --color-laitela--accent: black;
 }
@@ -70,6 +77,8 @@ html {
 
   --color-infinity: #FF9800;
 
+  --color-teresa--accent: black;
+
   --color-laitela--base: black;
   --color-laitela--accent: white;
 }
@@ -87,6 +96,8 @@ html {
   --color-infinity: #FF9800;
   --color-eternity: #673AB7;
   --color-celestials: #00bcd4;
+
+  --color-teresa--accent: black;
 
   --color-laitela--base: black;
   --color-laitela--accent: white;
@@ -123,6 +134,8 @@ html {
   --color-text-inverted: black;
   --color-base: black;
   --color-accent: #1565C0;
+
+  --color-teresa--accent: black;
 
   --color-laitela--base: black;
   --color-laitela--accent: white;
@@ -5256,7 +5269,7 @@ kbd {
 
 .c-rm-store-inner {
   position: absolute;
-  background: green;
+  background: var(--color-teresa--base);
   bottom: 0;
   left: 0;
   width: 100%;
@@ -5266,23 +5279,16 @@ kbd {
   position: absolute;
   bottom: 0;
   width: 100%;
-  color: green;
-  mix-blend-mode: difference;
+  color: black;
   font-weight: bold;
 }
 
-.c-teresa-pour {
-  width: 13rem;
-  height: 4rem;
-  margin-bottom: 1rem
-}
-
 .c-teresa-unlock-description {
+  color: var(--color-text);
+  border-bottom: 0.1rem solid var(--color-text);
   position: absolute;
-  left: 13.1rem;
+  left: 12.9rem;
   width: 20rem;
-  border-bottom: 0.1rem solid black;
-  margin-bottom: -0.1rem
 }
 
 .o-teresa-quotes {
@@ -5308,20 +5314,22 @@ kbd {
   margin: auto;
   transition-duration: 0.15s;
   user-select: none;
-  background-color: var(--color-celestials);
+  background-color: var(--color-teresa--base);
+  font-weight: bold;
   border: none;
-  color: white;
+  color: var(--color-teresa--accent);
   margin-bottom: 1rem;
 }
 
 .c-teresa-run-button {
-  color: var(--color-celestials);
-  border: 0.2rem solid var(--color-celestials);
-  background-color: white;
+  color: var(--color-teresa--base);
+  border: 0.2rem solid var(--color-teresa--base);
+  background-color: var(--color-teresa--accent);
+  font-weight: bold;
 }
 
 .c-teresa-run-button__icon {
-  color: var(--color-celestials);
+  color: var(--color-teresa--base);
   font-weight: bold;
   font-size: 7rem;
   text-shadow: 0.1rem 0.1rem 0.5rem;
@@ -5329,23 +5337,23 @@ kbd {
   height: 12rem;
   width: 12rem;
   border-radius: 50%;
-  background-color: white;
+  background-color: var(--color-teresa--accent);
   align-items: center;
   margin: 1.5rem auto;
-  border: 0.4rem solid var(--color-celestials);
+  border: 0.4rem solid var(--color-teresa--base);
   animation: a-teresa-run-button__icon--glow 3s infinite;
   transition-duration: 0.2s;
 }
 
 .c-teresa-run-button__icon:hover {
-  color: white;
-  background-color: var(--color-celestials);
+  color: var(--color-teresa--accent);
+  background-color: var(--color-teresa--base);
 }
 
 .c-teresa-run-button__icon--running {
-  color: white;
-  background-color: var(--color-celestials);
-  border-color: white;
+  color: var(--color-teresa--accent);
+  background-color: var(--color-teresa--base);
+  border-color: var(--color-teresa--accent);
   animation: a-teresa-run-button__icon--super-glow 1.2s infinite, a-teresa-run-button__icon--spin 5s infinite;
 }
 
@@ -5356,9 +5364,9 @@ kbd {
 }
 
 @keyframes a-teresa-run-button__icon--super-glow {
-  0% {text-shadow: 0.1rem 0.1rem 0.3rem; box-shadow: 0 0 0.3rem var(--color-celestials);}
-  50% {text-shadow: 0.1rem 0.1rem 0.9rem; box-shadow: 0 0 1rem var(--color-celestials);}
-  100% {text-shadow: 0.1rem 0.1rem 0.3rem; box-shadow: 0 0 0.3rem var(--color-celestials);}
+  0% {text-shadow: 0.1rem 0.1rem 0.3rem; box-shadow: 0 0 0.3rem var(--color-teresa--base);}
+  50% {text-shadow: 0.1rem 0.1rem 0.9rem; box-shadow: 0 0 1rem var(--color-teresa--base);}
+  100% {text-shadow: 0.1rem 0.1rem 0.3rem; box-shadow: 0 0 0.3rem var(--color-teresa--base);}
 }
 
 @keyframes a-teresa-run-button__icon--spin {
@@ -5382,38 +5390,49 @@ kbd {
 }
 
 .o-teresa-shop-button {
-  background-color: white;
-  color: var(--color-celestials);
+  color: black;
+  background-color: var(--color-disabled);
   padding: 1rem;
-  border: 0.2rem solid var(--color-celestials);
+  border: 0.2rem solid var(--color-teresa--base);
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   font-family: Typewriter, serif;
   font-size: 1rem;
-  cursor: pointer;
+  font-weight: bold;
   transition-duration: 0.15s;
 }
 
-.o-teresa-shop-button:hover {
-  color: white;
-  background-color: var(--color-celestials);
+.o-teresa-shop-button--available {
+  color: var(--color-teresa--base);
+  background-color: var(--color-teresa--accent);
+  cursor: pointer;
 }
 
-.o-teresa-shop-button--disabled {
-  color: var(--color-text);
-  background-color: var(--color-disabled);
-  cursor: default;
-}
-
-.o-teresa-shop-button--disabled:hover {
-  color: var(--color-text);
-  background-color: var(--color-disabled);
+.o-teresa-shop-button--available:hover {
+  color: var(--color-teresa--accent);
+  background-color: var(--color-teresa--base);
 }
 
 .o-teresa-shop-button--capped {
-  color: white;
-  background-color: var(--color-celestials);
-  cursor: default;
+  color: var(--color-teresa--accent);
+  background-color: var(--color-teresa--base);
+}
+
+.c-teresa-pour {
+  font-size: 2rem;
+  width: 13rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem
+}
+
+.c-teresa-pour--unlock-available {
+  animation: a-teresa-pour--unlock-available 3s infinite;
+}
+
+@keyframes a-teresa-pour--unlock-available {
+  0% {box-shadow: 0 0 0.3rem var(--color-teresa--base) inset;}
+  50% {box-shadow: 0 0 1rem var(--color-teresa--base) inset;}
+  100% {box-shadow: 0 0 0.3rem var(--color-teresa--base) inset;}
 }
 
 .t-metro .c-teresa-run-button, .t-metro .c-teresa-unlock, .t-metro .o-teresa-shop-button,
@@ -5433,7 +5452,7 @@ kbd {
 
 /* #region effarig tab */
 
-.o-effarig-shop-button {
+.c-effarig-shop-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5442,24 +5461,32 @@ kbd {
   width: 35rem;
   padding: 1rem;
   font-size: 2rem;
-  background-color: #5151ec;
-  color: white;
+  background: var(--color-disabled);
+  color: black;
   border: none;
   border-radius: 0.5rem;
   margin: 1rem;
-  cursor: pointer;
-  transition-duration: 0.15s;
+  transition-duration: 0.2s;
 }
 
-.o-effarig-shop-button:hover {
-  background-color: #d0d0d0;
-  color: #5151ec;
-}
-
-.effarig-unlock-bought {
-  background-color: #d0d0d0;
-  color: #5151ec;
+.c-effarig-shop-button--bought {
+  background-color: var(--color-effarig--base);
+  color: black;
   cursor: default;
+  border: 0.2rem solid black;
+  box-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.7);
+}
+
+.c-effarig-shop-button--available {
+  color: white;
+  background-color: var(--color-effarig--base);
+  box-shadow: 0 0 0.5rem var(--color-effarig--base), 0 0 0.5rem var(--color-effarig--base) inset;
+  cursor: pointer;
+}
+
+.c-effarig-shop-button--available:hover {
+  background-color: black;
+  color: var(--color-effarig--base);
 }
 
 .l-effarig-run-button {
@@ -5481,11 +5508,12 @@ kbd {
   font-weight: bold;
   user-select: none;
   cursor: pointer;
+  transition-duration: 0.2s;
 }
 
 
 .c-effarig-run-button--not-running {
-  background-color: #5151ec;
+  background-color: var(--color-effarig--base);
   color: white;
   z-index: 0;
   -webkit-animation: a-effarig-run-button--not-running-glow 2s ease-in-out infinite alternate;
@@ -5499,12 +5527,12 @@ kbd {
 
 @keyframes a-effarig-run-button--not-running-glow {
   from {
-    text-shadow: 0 0 1rem #fff, 0 0 2rem #fff, 0 0 3rem #1000b0, 0 0 4rem #1000b0, 0 0 5rem #1000b0, 0 0 6rem #1000b0, 0 0 7rem #1000b0;
-    box-shadow: 0 0 0.5rem #1000b0, 0 0 1rem #1000b0, 0 0 1.5rem #1000b0;
+    text-shadow: 0 0 1rem black, 0 0 2rem black, 0 0 3rem #cb1a1a, 0 0 4rem #cb1a1a, 0 0 5rem #cb1a1a, 0 0 6rem #cb1a1a, 0 0 7rem #cb1a1a;
+    box-shadow: 0 0 0.5rem #cb1a1a, 0 0 1rem #cb1a1a, 0 0 1.5rem #cb1a1a;
   }
   to {
-    text-shadow: 0 0 2rem #fff, 0 0 3rem #2512d0, 0 0 4rem #2512d0, 0 0 5rem #2512d0, 0 0 6rem #2512d0, 0 0 7rem #2512d0, 0 0 8rem #2512d0;
-    box-shadow: 0 0 0.5rem #2512d0, 0 0 1rem #2512d0, 0 0 1.5rem #2512d0, 0 0 2rem #2512d0;
+    text-shadow: 0 0 2rem black, 0 0 3rem #bf0404, 0 0 4rem #bf0404, 0 0 5rem #bf0404, 0 0 6rem #bf0404, 0 0 7rem #bf0404, 0 0 8rem #bf0404;
+    box-shadow: 0 0 0.5rem #bf0404, 0 0 1rem #bf0404, 0 0 1.5rem #bf0404, 0 0 2rem #bf0404;
   }
 }
 
@@ -5599,10 +5627,10 @@ kbd {
 
 @keyframes a-effarig-run-button--running-glow {
   from {
-    box-shadow: 0 0 0.5rem #c20707 inset, 0 0 1rem #c20707 inset, 0 0 1.5rem #c20707 inset;
+    box-shadow: 0 0 0.5rem #c20707 inset, 0 0 1rem #c20707 inset, 0 0 1.5rem #c20707 inset, 0 0 1.5rem #c20707, 0 0 1.5rem #c20707, 0 0 1.5rem #c20707;
   }
   to {
-    box-shadow: 0 0 0.5rem #e21717 inset, 0 0 1rem #e21717 inset, 0 0 1.5rem #e21717 inset, 0 0 2rem #e21717 inset;
+    box-shadow: 0 0 0.5rem #e21717 inset, 0 0 1rem #e21717 inset, 0 0 1.5rem #e21717 inset, 0 0 1.5rem #e21717, 0 0 1.5rem #e21717, 0 0 1.5rem #e21717, 0 0 2rem #e21717 inset, 0 0 2rem #e21717;
   }
 }
 
@@ -5682,10 +5710,10 @@ kbd {
   cursor: grabbing;
 }
 
-.t-metro .o-effarig-shop-button,
-.t-dark-metro .o-effarig-shop-button,
-.t-inverted-metro .o-effarig-shop-button,
-.t-s8 .o-effarig-shop-button {
+.t-metro .c-effarig-shop-button,
+.t-dark-metro .c-effarig-shop-button,
+.t-inverted-metro .c-effarig-shop-button,
+.t-s8 .c-effarig-shop-button {
   border-radius: 0;
 }
 
@@ -5972,11 +6000,13 @@ kbd {
 }
 
 .o-v-milestone {
+  color: black;
+  background: #6b5f2e;
   width: 25rem;
   height: 10rem;
   padding: 1rem;
-  border: 2px solid gainsboro;
-  margin-right: 10px;
+  border: 0.2rem solid #473f1f;
+  margin-right: 1rem;
   border-radius: 0.5rem;
   font-size: 1.2rem;
   display: flex;
@@ -5984,8 +6014,17 @@ kbd {
   justify-content: space-around;
 }
 
-.o-v-milestone-unlocked {
-  background: lightgreen;
+.t-metro .o-v-milestone,
+.t-dark-metro .o-v-milestone,
+.t-inverted-metro .o-v-milestone,
+.t-s8 .o-v-milestone {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.o-v-milestone--unlocked {
+  background: var(--color-v--base);
+  border-color: #b89c2e;
 }
 
 .l-v-hexagon {
@@ -6010,7 +6049,7 @@ kbd {
 
 .c-v-run-button {
   color: black;
-  background: #ead584;
+  background: var(--color-v--base);
   font-family: Typewriter;
   font-size: 1.3rem;
   cursor: pointer;
@@ -6204,17 +6243,16 @@ kbd {
 }
 
 .c-ra-upgrade-icon {
-  box-sizing: border-box;
+  display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 3.9rem;
   font-size: 2.3rem;
   font-weight: bold;
   box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.7);
   width: 4rem;
   height: 4rem;
   background: #222;
-  border-radius: 3rem;
+  border-radius: 50%;
   border: 0.1rem solid #111;
   margin: 0 0.3rem;
   user-select: none;
@@ -6347,11 +6385,11 @@ kbd {
   pointer-events: none;
 }
 @keyframes a-ra-color-shift {
-  0% { background-color: #86ea84; }
+  0% { background-color: #8596ea; }
   25% { background-color: #ea8585; }
   50% { background-color: #f1aa7f; }
   75% { background-color: #ead584; }
-  100% { background-color: #86ea84; }
+  100% { background-color: #8596ea; }
 }
 
 .l-ra-laitela-unlock-inner {

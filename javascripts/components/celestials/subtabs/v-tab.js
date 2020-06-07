@@ -211,7 +211,7 @@ Vue.component("v-tab", {
           <div v-for="row in runMilestones" class="l-v-milestones-grid__row">
             <div class="o-v-milestone"
               v-for="milestone in row"
-              :class="{'o-v-milestone-unlocked':
+              :class="{'o-v-milestone--unlocked':
               has(milestone)}">
                 <p>{{ milestone.description }}</p>
                 <p>Reward: {{ rewardText(milestone) }}</p>

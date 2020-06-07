@@ -57,7 +57,7 @@ Vue.component("singularity-milestone", {
       const newMilestones = SingularityMilestones.unseenMilestones;
       for (let rep = 0; this.completions === 0 || rep < this.completions; rep++) {
         const thisLevel = this.milestone.start * Math.pow(this.milestone.repeat, rep);
-        if (newMilestones.includes(thisLevel)) return { "box-shadow": "0 0 0.3rem 0.3rem var(--color-infinity)" };
+        if (newMilestones.includes(thisLevel)) return { "box-shadow": "0 0 0.3rem 0.3rem var(--color-celestials)" };
         if (thisLevel > player.celestials.laitela.singularities) break;
       }
       return {};

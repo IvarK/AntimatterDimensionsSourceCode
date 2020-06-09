@@ -124,7 +124,7 @@ Vue.component("ra-tab", {
               :petConfig="pet" />
           </div>
           <div v-else class="l-ra-recollection-unlock-inner">
-            Unlocked by getting {{ formatInt(recollectionReq) }} total celestial levels
+            Unlocked by getting {{ formatInt(recollectionReq) }} total Celestial Memory levels
             (you need {{formatInt(recollectionReq - totalLevels)}} more)
           </div>
         </div>
@@ -133,7 +133,7 @@ Vue.component("ra-tab", {
             <h1> Lai'tela: </h1>
             <h2> The Celestial of Dimensions </h2>
             <p>
-              Unlocked by getting {{ formatInt(laitelaReq) }} total celestial levels
+              Unlocked by getting {{ formatInt(laitelaReq) }} total Celestial Memory levels
               <span v-if="totalLevels < laitelaReq">
                 (you need {{formatInt(laitelaReq - totalLevels)}} more)
               </span>

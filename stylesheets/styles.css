@@ -190,6 +190,11 @@ body {
   src: url('Runescape.ttf');
 }
 
+@font-face {
+  font-family: Font Awesome;
+  src: url('fa-solid-900.ttf');
+}
+
 /* Background for s6 is not displayed by default */
 #stars {
   display: none;
@@ -7936,11 +7941,11 @@ input.o-automator-block-input {
 }
 
 .c-celestial-nav__test-complete {
-  fill: #4EF;
+  fill: #5151ec;
 }
 
 .c-celestial-nav__effarig {
-  fill: #5151ec;
+  fill: #d13737;
 }
 
 .c-celestial-nav__test-incomplete {
@@ -7949,7 +7954,8 @@ input.o-automator-block-input {
 
 .o-celestial-nav__symbol {
   text-anchor: middle;
-  font-family: sans-serif;
+  font-weight: bold;
+  font-family: Font Awesome;
 }
 
 .o-celestial-nav__legend-arrow {
@@ -7983,6 +7989,7 @@ input.o-automator-block-input {
 .o-celestial-nav__legend-text {
   fill: rgb(238, 135, 17);
   font-weight: bold;
+  text-shadow: 0 0 0.1rem black, 0 0 0.1rem black, 0 0 0.1rem black;
 }
 
 .o-celestial-nav__hoverable:hover .o-celestial-nav__legend-text {

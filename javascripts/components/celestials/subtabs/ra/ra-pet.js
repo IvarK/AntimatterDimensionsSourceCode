@@ -60,7 +60,7 @@ Vue.component("ra-pet", {
         case "Enslaved":
           return "Based on total time played";
         case "V":
-          return "Based on total celestial levels";
+          return "Based on total Celestial Memory levels";
         default:
           throw new Error(`Unrecognized celestial ${this.petConfig.pet.name} in Ra UI`);
       }

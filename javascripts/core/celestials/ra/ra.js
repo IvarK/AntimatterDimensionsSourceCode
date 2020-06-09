@@ -597,14 +597,14 @@ const RA_UNLOCKS = {
   },
   RA_RECOLLECTION_UNLOCK: {
     id: 28,
-    description: "Get 20 total celestial levels",
+    description: "Get 20 total Celestial Memory levels",
     reward: "Unlock Recollection",
     effect: 3,
     totalLevels: 20,
   },
   RA_LAITELA_UNLOCK: {
     id: 29,
-    description: "Get 100 total celestial levels",
+    description: "Get 100 total Celestial Memory levels",
     reward: "Unlock Lai'tela, the Celestial of Dimensions",
     totalLevels: 100,
   }

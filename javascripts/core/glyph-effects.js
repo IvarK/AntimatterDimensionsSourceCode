@@ -278,9 +278,14 @@ GameDatabase.reality.glyphEffects = [
     effect: (level, strength) => 1 - Math.pow(level, 0.17) * Math.pow(strength, 0.35) / 100 -
       GlyphAlteration.sacrificeBoost("dilation") / 50,
     formatEffect: x => format(x, 3, 3),
-    combine: GlyphCombiner.multiply,
     alteredColor: () => GlyphAlteration.getBoostColor("dilation"),
-    alterationType: ALTERATION_TYPE.BOOST
+    alterationType: ALTERATION_TYPE.BOOST,
+    combine: effects => {
+      const prod = effects.reduce(Number.prodReducer, 1);
+      return prod < 0.4
+        ? { value: 0.4 - Math.pow(0.4 - prod, 1.7), capped: true }
+        : { value: prod, capped: false };
+    },
   }, {
     // TTgen slowly generates TT, value amount is per second, displayed per hour
     id: "dilationTTgen",

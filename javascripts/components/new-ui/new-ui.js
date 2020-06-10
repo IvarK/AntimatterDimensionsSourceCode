@@ -83,7 +83,7 @@ Vue.component("new-ui", {
 
       const challenge = NormalChallenge.current || InfinityChallenge.current;
       const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
-      if (!Player.canCrunch || Tabs.current !== Tab.dimensions || inBrokenChallenge || (player.break && challenge === undefined)) {
+      if (!Player.canCrunch || inBrokenChallenge || (player.break && challenge === undefined)) {
         this.bigCrunch = false;
         this.smallCrunch = false;
         return;

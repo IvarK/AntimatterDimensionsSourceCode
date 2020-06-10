@@ -6112,9 +6112,9 @@ kbd {
 }
 
 @keyframes a-c-v-run-button__line--1--move {
-  0% {top: 19.5rem; left: 10.5rem;; transform: rotate(-30deg);}
+  0% {top: 19.5rem; left: 10.5rem; transform: rotate(-30deg);}
   50% {top: 19.5rem; left: 1.5rem; transform: rotate(30deg);}
-  100% {top: 19.5rem; left: 10.5rem;; transform: rotate(-30deg);}
+  100% {top: 19.5rem; left: 10.5rem; transform: rotate(-30deg);}
 }
 
 @keyframes a-c-v-run-button__line--2--move {
@@ -6131,7 +6131,7 @@ kbd {
 
 @keyframes a-c-v-run-button__line--burst {
   0% {box-shadow: 0 0 3rem black;}
-  50% {box-shadow: 0 0 0rem black;}
+  50% {box-shadow: 0 0 0 black;}
   100% {box-shadow: 0 0 3rem black;}
 }
 
@@ -6292,7 +6292,7 @@ kbd {
   justify-content: center;
   color: #9575cd;
   font-size: 3rem;
-  text-shadow: 0rem 0rem 1rem;
+  text-shadow: 0 0 1rem;
   cursor: pointer;
   height: 12rem;
   width: 12rem;

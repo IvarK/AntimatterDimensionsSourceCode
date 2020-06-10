@@ -19,7 +19,8 @@ Vue.component("challenge-box", {
   computed: {
     update() {
       this.isEC = this.name.startsWith("EC");
-      this.inC1 = this.name === "C1" && !this.isCompleted && NormalChallenge.current === undefined;
+      this.inC1 = this.name === "C1" && !this.isCompleted && NormalChallenge.current === undefined &&
+        InfinityChallenge.current === undefined;
     },
     buttonClassObject() {
       const classObject = {

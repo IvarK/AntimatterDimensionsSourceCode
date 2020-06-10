@@ -1461,7 +1461,7 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: [
-            "Destabalize Lai'Tela's Reality",
+            "Destabalize Lai'tela's Reality",
             "To the point where you can",
             "Only use 4 Dimensions"
           ],

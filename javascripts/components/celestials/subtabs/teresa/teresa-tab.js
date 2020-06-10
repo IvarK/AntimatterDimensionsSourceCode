@@ -67,8 +67,8 @@ Vue.component("teresa-tab", {
       this.pp = player.reality.pp;
       this.rm.copyFrom(player.reality.realityMachines);
       this.isRunning = Teresa.isRunning;
-      this.canUnlockNextPour = Object.entries(TERESA_UNLOCKS)
-        .filter(unlock => this.rm.plus(this.rmStore).gte(unlock[1].price) && !Teresa.has(unlock[1])).length > 0;
+      this.canUnlockNextPour = Object.values(TERESA_UNLOCKS)
+        .filter(unlock => this.rm.plus(this.rmStore).gte(unlock.price) && !Teresa.has(unlock)).length > 0;
     },
     startRun() {
       if (!resetReality()) return;

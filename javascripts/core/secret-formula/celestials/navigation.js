@@ -1271,7 +1271,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-2nd-dim": {
       visible: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
-      complete: () => Laitela.maxMatter.log10() / Math.log10(MatterDimension(2).adjustedStartingCost),
+      complete: () => Laitela.maxMatter.clampMin(1).log10() / Math.log10(MatterDimension(2).adjustedStartingCost),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         fill: "white",
@@ -1304,7 +1304,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-3rd-dim": {
       visible: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
-      complete: () => Laitela.maxMatter.div(MatterDimension(2).adjustedStartingCost).log10() /
+      complete: () => Laitela.maxMatter.clampMin(1).div(MatterDimension(2).adjustedStartingCost).log10() /
         Math.log10(MatterDimension(3).adjustedStartingCost / MatterDimension(2).adjustedStartingCost),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1338,7 +1338,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-4th-dim-left": {
       visible: () => Laitela.maxMatter.gte(MatterDimension(3).adjustedStartingCost),
-      complete: () => Laitela.maxMatter.div(MatterDimension(3).adjustedStartingCost).log10() /
+      complete: () => Laitela.maxMatter.clampMin(1).div(MatterDimension(3).adjustedStartingCost).log10() /
         Math.log10(MatterDimension(4).adjustedStartingCost / MatterDimension(3).adjustedStartingCost),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1372,7 +1372,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-4th-dim-right": {
       visible: () => Laitela.maxMatter.gte(MatterDimension(3).adjustedStartingCost),
-      complete: () => Laitela.maxMatter.div(MatterDimension(3).adjustedStartingCost).log10() /
+      complete: () => Laitela.maxMatter.clampMin(1).div(MatterDimension(3).adjustedStartingCost).log10() /
         Math.log10(MatterDimension(4).adjustedStartingCost / MatterDimension(3).adjustedStartingCost),
       node: {
         fill: "white",

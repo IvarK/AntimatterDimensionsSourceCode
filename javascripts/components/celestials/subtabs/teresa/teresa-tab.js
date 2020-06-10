@@ -68,7 +68,7 @@ Vue.component("teresa-tab", {
       this.rm.copyFrom(player.reality.realityMachines);
       this.isRunning = Teresa.isRunning;
       this.canUnlockNextPour = Object.entries(TERESA_UNLOCKS)
-        .filter(unlock => this.rm.gte(unlock[1].price) && !Teresa.has(unlock[1])).length > 0;
+        .filter(unlock => this.rm.plus(this.rmStore).gte(unlock[1].price) && !Teresa.has(unlock[1])).length > 0;
     },
     startRun() {
       if (!resetReality()) return;
@@ -87,8 +87,8 @@ Vue.component("teresa-tab", {
       <celestial-quote-history celestial="teresa"/>
       <div>You have {{format(rm, 2, 2)}} {{"Reality Machine" | pluralize(rm)}}.</div>
       <div class="l-mechanics-container">
-        <div class="l-teresa-mechanic-container">
-          <div class="c-teresa-unlock c-teresa-run-button" v-if="hasReality">
+        <div class="l-teresa-mechanic-container" v-if="hasReality">
+          <div class="c-teresa-unlock c-teresa-run-button">
             <div :class="runButtonClassObject" @click="startRun()">Ϟ</div>
             Start Teresa's Reality. Glyph TT generation is disabled and
             you gain less IP and EP (x^{{format(0.55, 2, 2)}}).
@@ -102,7 +102,7 @@ Vue.component("teresa-tab", {
               You have not completed Teresa's Reality yet.
             </div>
           </div>
-          <div class="c-teresa-unlock" v-if="hasReality">
+          <div class="c-teresa-unlock">
             Teresa Reality reward: Glyph sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
           <div class="c-teresa-unlock" v-if="hasEPGen">

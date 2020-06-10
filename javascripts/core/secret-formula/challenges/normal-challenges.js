@@ -5,7 +5,8 @@ GameDatabase.challenges.normal = [
     id: 1,
     legacyId: 1,
     isQuickResettable: false,
-    description() { return PlayerProgress.eternityUnlocked()
+    description() {
+      return PlayerProgress.eternityUnlocked()
       ? "Reach Infinity for the first time outside of a challenge."
       : "Reach Infinity for the first time.";
     },

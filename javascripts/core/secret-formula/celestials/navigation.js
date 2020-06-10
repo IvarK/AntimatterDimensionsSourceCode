@@ -513,11 +513,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const goal = 800;
-            if (complete >= 1) return [
-              "V's unlock achievement",
-              `Reach ${formatInt(goal)} Antimatter Galaxies without buying`,
-              "8th Antimatter Dimensions in your current Infinity"
-            ];
+            if (complete >= 1) return "V's unlock achievement";
             const galaxies = player.noEighthDimensions ? player.galaxies : 0;
             return [
               "V's unlock achievement",

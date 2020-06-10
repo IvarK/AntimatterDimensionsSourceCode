@@ -6407,6 +6407,8 @@ kbd {
 }
 
 .l-ra-all-pets-container {
+  display: flex;
+  flex-wrap: wrap;
   margin: auto;
   width: 80rem;
   height: 100%;

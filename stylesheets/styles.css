@@ -2953,7 +2953,7 @@ screen and (max-width: 480px) {
 }
 
 .o-challenge-btn--unenterable {
-  cursor: default;
+  pointer-events: none;
 }
 
 .o-challenge-btn--running {

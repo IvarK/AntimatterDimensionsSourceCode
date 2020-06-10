@@ -8,10 +8,10 @@ function bigCrunchAnimation() {
 }
 
 function handleChallengeCompletion() {
-  if (!NormalChallenge(1).isCompleted) {
+  const challenge = NormalChallenge.current || InfinityChallenge.current;
+  if (!challenge && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
   }
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
   if (!challenge) return;
   challenge.complete();
   challenge.updateChallengeTime();

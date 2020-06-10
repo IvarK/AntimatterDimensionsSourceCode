@@ -151,7 +151,11 @@ GameDatabase.achievements.normal = [
   {
     id: 35,
     name: "Don't you dare sleep",
-    tooltip: () => `Be offline for over ${formatInt(6)} hours in a row.`,
+    tooltip() {
+      return player.realities > 0
+      ? `Be offline for a period of over ${formatInt(6)} hours (real time).`
+      : `Be offline for a period of over ${formatInt(6)} hours.`;
+    },
     checkRequirement: () => Date.now() - player.lastUpdate >= 21600000,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE
   },

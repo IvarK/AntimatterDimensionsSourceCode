@@ -3946,8 +3946,8 @@ screen and (max-width: 480px) {
   margin-top: 2rem;
 }
 
-.v-feel-eternity-btn {
-  background-color: #540c70;
+.o-infinity-upgrade-btn--feel-eternity {
+  background-color: #540c70 !important;
   animation: a-time-study 1.5s infinite;
 }
 

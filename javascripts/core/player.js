@@ -138,6 +138,7 @@ let player = {
   totalTimePlayed: 0,
   realTimePlayed: 0,
   bestInfinityTime: 999999999999,
+  bestInfinityRealTime: 999999999999,
   thisInfinityTime: 0,
   thisInfinityRealTime: 0,
   thisInfinityLastBuyTime: 0,

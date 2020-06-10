@@ -120,6 +120,19 @@ const Time = {
     this.toMilliseconds(timespan, value => player.bestInfinityTime = value);
   },
 
+    /**
+   * @returns {TimeSpan}
+   */
+  get bestInfinityRealTime() {
+    return this.fromMilliseconds(() => player.bestInfinityRealTime);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set bestInfinityRealTime(timespan) {
+    this.toMilliseconds(timespan, value => player.bestInfinityRealTime = value);
+  },
+
   /**
    * @returns {TimeSpan}
    */

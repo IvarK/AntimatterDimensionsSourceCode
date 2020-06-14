@@ -16,6 +16,8 @@ Vue.component("teresa-tab", {
       hasReality: false,
       hasEPGen: false,
       hasPerkShop: false,
+      isRunning: false,
+      canUnlockNextPour: false
     };
   },
   computed: {
@@ -29,6 +31,20 @@ Vue.component("teresa-tab", {
         PerkShopUpgrade.autoSpeed,
         PerkShopUpgrade.musicGlyph,
       ];
+    },
+    runButtonClassObject() {
+      return {
+        "c-teresa-run-button__icon": true,
+        "c-teresa-run-button__icon--running": this.isRunning,
+      };
+    },
+    pourButtonClassObject() {
+      return {
+        "o-teresa-shop-button": true,
+        "o-teresa-shop-button--available": true,
+        "c-teresa-pour": true,
+        "c-teresa-pour--unlock-available": this.canUnlockNextPour
+      };
     }
   },
   methods: {
@@ -50,6 +66,9 @@ Vue.component("teresa-tab", {
       this.runReward = Teresa.runRewardMultiplier;
       this.pp = player.reality.pp;
       this.rm.copyFrom(player.reality.realityMachines);
+      this.isRunning = Teresa.isRunning;
+      this.canUnlockNextPour = Object.values(TERESA_UNLOCKS)
+        .filter(unlock => this.rm.plus(this.rmStore).gte(unlock.price) && !Teresa.has(unlock)).length > 0;
     },
     startRun() {
       if (!resetReality()) return;
@@ -63,13 +82,14 @@ Vue.component("teresa-tab", {
       };
     },
   },
-  template:
-    `<div class="l-teresa-celestial-tab">
+  template: `
+    <div class="l-teresa-celestial-tab">
       <celestial-quote-history celestial="teresa"/>
       <div>You have {{format(rm, 2, 2)}} {{"Reality Machine" | pluralize(rm)}}.</div>
       <div class="l-mechanics-container">
-        <div class="l-teresa-mechanic-container">
-          <div class="c-teresa-unlock c-teresa-run-button" v-if="hasReality" @click="startRun()">
+        <div class="l-teresa-mechanic-container" v-if="hasReality">
+          <div class="c-teresa-unlock c-teresa-run-button">
+            <div :class="runButtonClassObject" @click="startRun()">Ϟ</div>
             Start Teresa's Reality. Glyph TT generation is disabled and
             you gain less IP and EP (x^{{format(0.55, 2, 2)}}).
             <br><br>
@@ -82,7 +102,7 @@ Vue.component("teresa-tab", {
               You have not completed Teresa's Reality yet.
             </div>
           </div>
-          <div class="c-teresa-unlock" v-if="hasReality">
+          <div class="c-teresa-unlock">
             Teresa Reality reward: Glyph sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
           <div class="c-teresa-unlock" v-if="hasEPGen">
@@ -90,7 +110,7 @@ Vue.component("teresa-tab", {
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">
-          <button class="o-primary-btn c-teresa-pour"
+          <button :class="pourButtonClassObject"
             @mousedown="pour = true"
             @touchstart="pour = true"
             @mouseup="pour = false"

@@ -113,7 +113,7 @@ const Ra = {
       get data() { return player.celestials.ra.pets.teresa; }
       get requiredUnlock() { return undefined; }
       get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.eternityPoints.pLog10() / 1e4, 3); }
-      get color() { return "#86ea84"; }
+      get color() { return "#8596ea"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.TERESA_XP)
           ? 1 + Math.pow(player.reality.realityMachines.pLog10() / 100, 0.5)
@@ -597,14 +597,14 @@ const RA_UNLOCKS = {
   },
   RA_RECOLLECTION_UNLOCK: {
     id: 28,
-    description: "Get 20 total celestial levels",
+    description: "Get 20 total Celestial Memory levels",
     reward: "Unlock Recollection",
     effect: 3,
     totalLevels: 20,
   },
   RA_LAITELA_UNLOCK: {
     id: 29,
-    description: "Get 100 total celestial levels",
+    description: "Get 100 total Celestial Memory levels",
     reward: "Unlock Lai'tela, the Celestial of Dimensions",
     totalLevels: 100,
   }

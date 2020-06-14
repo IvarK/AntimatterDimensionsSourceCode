@@ -181,6 +181,10 @@ const V = {
         unlock.tryComplete();
       }
     }
+
+    if (V.has(V_UNLOCKS.RA_UNLOCK) && !Ra.has(RA_UNLOCKS.AUTO_TP)) {
+      Ra.checkForUnlocks();
+    }
   },
   has(info) {
     // eslint-disable-next-line no-bitwise

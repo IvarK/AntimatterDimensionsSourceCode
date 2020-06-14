@@ -1143,14 +1143,14 @@ do in the Reality.
 Singularities are a new resource which you can obtain using features within Lai'tela.
 <br>
 <br>
-In order to obtain Singularities, you need to reach ${format(2e4)} Dark Energy. When you do, you get the option to 
+In order to obtain Singularities, you need to reach ${format(2e3)} Dark Energy. When you do, you get the option to 
 condense all your Dark Energy into a Singularity, resetting it back to zero. Any extra Dark Energy above this amount 
 does not carry over, and is thus wasted. Note that only Dark Energy is reset, the status of your Dark Matter and its
 dimensions stays the same when condensing Singularities.
 <br>
 <br>
 At any point, you can freely increase or decrease the Dark Energy requirement to condense Singularities by a factor of 
-${formatInt(10)} (with a minimum of ${format(2e4)}). This increases or decreases the number of Singularities gained 
+${formatInt(10)} (with a minimum of ${format(2e3)}). This increases or decreases the number of Singularities gained 
 from resetting at the cap by <i>more than</i> a factor of ${formatInt(10)}, making higher caps worth more if you 
 are willing to wait.
 <br>

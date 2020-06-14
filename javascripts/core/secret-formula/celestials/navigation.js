@@ -202,7 +202,7 @@ GameDatabase.celestials.navigation = (function() {
         pathStart: 0,
         pathEnd: 1,
         path: LinearPath.connectCircles(new Vector(300, 0), 24 - 1, new Vector(400, 50), 16 - 1),
-        fill: "#5151ec",
+        fill: "#d13737",
       }
     },
     "effarig-infinity": {
@@ -240,7 +240,7 @@ GameDatabase.celestials.navigation = (function() {
         pathStart: 0,
         pathEnd: 1,
         path: LinearPath.connectCircles(new Vector(400, 50), 16 - 1, new Vector(550, 25), 60 - 1),
-        fill: "#5151ec",
+        fill: "#d13737",
       }
     },
     "effarig-eternity": {
@@ -286,7 +286,7 @@ GameDatabase.celestials.navigation = (function() {
           path,
           pathPadStart,
           pathPadEnd,
-          fill: "#5151ec"
+          fill: "#d13737"
         };
       }())
     },
@@ -336,7 +336,7 @@ GameDatabase.celestials.navigation = (function() {
           path,
           pathPadStart,
           pathPadEnd,
-          fill: "#5151ec"
+          fill: "#d13737"
         };
       }())
     },
@@ -357,8 +357,8 @@ GameDatabase.celestials.navigation = (function() {
         alwaysShowLegend: false,
         legend: {
           text: "Enslaved",
-          angle: -55,
-          diagonal: 16,
+          angle: -90,
+          diagonal: 20,
           horizontal: 16,
         },
       },
@@ -386,9 +386,9 @@ GameDatabase.celestials.navigation = (function() {
           gapAngleDeg: 0,
         },
         legend: {
-          text: complete => {
+          text() {
             const goal = 5000;
-            return [`Reach glyph level ${formatInt(complete * goal)}/${formatInt(goal)}`];
+            return `Reach glyph level ${formatInt(Math.min(player.bestGlyphLevel, goal))}/${formatInt(goal)}`;
           },
           angle: -45,
           diagonal: 16,
@@ -503,28 +503,26 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        symbol: "⌬",
+        symbolOffset: "0.25rem",
+        fill: "#ffe066",
         position: new Vector(400, 350 + 50 * Math.sqrt(3)),
         ring: {
-          rMajor: 16,
+          rMajor: 20,
         },
         legend: {
           text: complete => {
             const goal = 800;
-            if (complete >= 1) return [
-              "V's achievement",
-              `Reach ${formatInt(goal)} Antimatter Galaxies without buying`,
-              "8th Antimatter Dimensions in your current Infinity"
-            ];
+            if (complete >= 1) return "V's unlock achievement";
             const galaxies = player.noEighthDimensions ? player.galaxies : 0;
             return [
-              "V's achievement",
+              "V's unlock achievement",
               `Reach ${formatInt(galaxies)} / ${formatInt(goal)} Antimatter Galaxies without buying`,
               "8th Antimatter Dimensions in your current Infinity"
             ];
           },
           angle: -135,
-          diagonal: 16,
+          diagonal: 25,
           horizontal: 16,
         },
       },
@@ -546,7 +544,7 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        fill: "#ffe066",
         position: new Vector(450, 350),
         ring: {
           rMajor: 0,
@@ -572,7 +570,7 @@ GameDatabase.celestials.navigation = (function() {
         path: new LinearPath(
           new Vector(400, 350 + 50 * Math.sqrt(3)),
           new Vector(450, 350)),
-        fill: "#6ef36e",
+        fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
@@ -586,7 +584,7 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        fill: "#ffe066",
         position: new Vector(500, 350 + 50 * Math.sqrt(3)),
         ring: {
           rMajor: 0,
@@ -612,7 +610,7 @@ GameDatabase.celestials.navigation = (function() {
         path: new LinearPath(
           new Vector(400, 350 + 50 * Math.sqrt(3)),
           new Vector(500, 350 + 50 * Math.sqrt(3))),
-        fill: "#6ef36e",
+        fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
@@ -627,7 +625,7 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        fill: "#ffe066",
         position: new Vector(450, 350 + 100 * Math.sqrt(3)),
         ring: {
           rMajor: 0,
@@ -653,7 +651,7 @@ GameDatabase.celestials.navigation = (function() {
         path: new LinearPath(
           new Vector(400, 350 + 50 * Math.sqrt(3)),
           new Vector(450, 350 + 100 * Math.sqrt(3))),
-        fill: "#6ef36e",
+        fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
@@ -668,7 +666,7 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        fill: "#ffe066",
         position: new Vector(350, 350 + 100 * Math.sqrt(3)),
         ring: {
           rMajor: 0,
@@ -694,7 +692,7 @@ GameDatabase.celestials.navigation = (function() {
         path: new LinearPath(
           new Vector(400, 350 + 50 * Math.sqrt(3)),
           new Vector(350, 350 + 100 * Math.sqrt(3))),
-        fill: "#6ef36e",
+        fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
@@ -709,7 +707,7 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        fill: "#ffe066",
         position: new Vector(300, 350 + 50 * Math.sqrt(3)),
         ring: {
           rMajor: 0,
@@ -735,7 +733,7 @@ GameDatabase.celestials.navigation = (function() {
         path: new LinearPath(
           new Vector(400, 350 + 50 * Math.sqrt(3)),
           new Vector(300, 350 + 50 * Math.sqrt(3))),
-        fill: "#6ef36e",
+        fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
@@ -750,7 +748,7 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        fill: "#ffe066",
         position: new Vector(350, 350),
         ring: {
           rMajor: 0,
@@ -776,7 +774,7 @@ GameDatabase.celestials.navigation = (function() {
         path: new LinearPath(
           new Vector(400, 350 + 50 * Math.sqrt(3)),
           new Vector(350, 350)),
-        fill: "#6ef36e",
+        fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
@@ -788,7 +786,7 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        fill: "#ffe066",
         position: new Vector(350, 350),
         ring: {
           rMajor: 8,
@@ -796,10 +794,10 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const name = VRunUnlocks.all[0].config.name;
-            if (complete >= 1) return `V's Achievement (${name})`;
+            if (complete >= 1) return `V-achievement "${name}"`;
             const completions = player.celestials.v.runUnlocks[0];
             return [
-              "V's achievement",
+              "V-achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },
@@ -814,7 +812,7 @@ GameDatabase.celestials.navigation = (function() {
         path: new LinearPath(
           new Vector(300, 350 + 50 * Math.sqrt(3)),
           new Vector(350, 350)),
-        fill: "#6ef36e",
+        fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
@@ -825,7 +823,7 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        fill: "#ffe066",
         position: new Vector(450, 350),
         ring: {
           rMajor: 8,
@@ -833,14 +831,14 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const name = VRunUnlocks.all[1].config.name;
-            if (complete >= 1) return `V's Achievement (${name})`;
+            if (complete >= 1) return `V-achievement "${name}"`;
             const completions = player.celestials.v.runUnlocks[1];
             return [
-              "V's achievement",
+              "V-achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },
-          angle: -45,
+          angle: 20,
           diagonal: 16,
           horizontal: 16,
         },
@@ -851,7 +849,7 @@ GameDatabase.celestials.navigation = (function() {
         path: new LinearPath(
           new Vector(350, 350),
           new Vector(450, 350)),
-        fill: "#6ef36e",
+        fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
@@ -862,7 +860,7 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        fill: "#ffe066",
         position: new Vector(300, 350 + 50 * Math.sqrt(3)),
         ring: {
           rMajor: 8,
@@ -870,14 +868,14 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const name = VRunUnlocks.all[2].config.name;
-            if (complete >= 1) return `V's Achievement (${name})`;
+            if (complete >= 1) return `V-achievement "${name}"`;
             const completions = player.celestials.v.runUnlocks[2];
             return [
-              "V's achievement",
+              "V-achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },
-          angle: 135,
+          angle: 225,
           diagonal: 16,
           horizontal: 16,
         },
@@ -888,7 +886,7 @@ GameDatabase.celestials.navigation = (function() {
         path: new LinearPath(
           new Vector(350, 350 + 100 * Math.sqrt(3)),
           new Vector(300, 350 + 50 * Math.sqrt(3))),
-        fill: "#6ef36e",
+        fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
@@ -899,7 +897,7 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        fill: "#ffe066",
         position: new Vector(500, 350 + 50 * Math.sqrt(3)),
         ring: {
           rMajor: 8,
@@ -907,10 +905,10 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const name = VRunUnlocks.all[3].config.name;
-            if (complete >= 1) return `V's Achievement (${name})`;
+            if (complete >= 1) return `V-achievement "${name}"`;
             const completions = player.celestials.v.runUnlocks[3];
             return [
-              "V's achievement",
+              "V-achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },
@@ -925,7 +923,7 @@ GameDatabase.celestials.navigation = (function() {
         path: new LinearPath(
           new Vector(450, 350),
           new Vector(500, 350 + 50 * Math.sqrt(3))),
-        fill: "#6ef36e",
+        fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
@@ -936,7 +934,7 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        fill: "#ffe066",
         position: new Vector(350, 350 + 100 * Math.sqrt(3)),
         ring: {
           rMajor: 8,
@@ -944,14 +942,14 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const name = VRunUnlocks.all[4].config.name;
-            if (complete >= 1) return `V's Achievement (${name})`;
+            if (complete >= 1) return `V-achievement "${name}"`;
             const completions = player.celestials.v.runUnlocks[4];
             return [
-              "V's achievement",
+              "V-achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },
-          angle: 135,
+          angle: 45,
           diagonal: 16,
           horizontal: 16,
         },
@@ -962,7 +960,7 @@ GameDatabase.celestials.navigation = (function() {
         path: new LinearPath(
           new Vector(450, 350 + 100 * Math.sqrt(3)),
           new Vector(350, 350 + 100 * Math.sqrt(3))),
-        fill: "#6ef36e",
+        fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
@@ -973,7 +971,7 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#6ef36e",
+        fill: "#ffe066",
         position: new Vector(450, 350 + 100 * Math.sqrt(3)),
         ring: {
           rMajor: 8,
@@ -981,10 +979,10 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const name = VRunUnlocks.all[5].config.name;
-            if (complete >= 1) return `V's Achievement (${name})`;
+            if (complete >= 1) return `V-achievement "${name}"`;
             const completions = player.celestials.v.runUnlocks[5];
             return [
-              "V's achievement",
+              "V-achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },
@@ -999,7 +997,7 @@ GameDatabase.celestials.navigation = (function() {
         path: new LinearPath(
           new Vector(500, 350 + 50 * Math.sqrt(3)),
           new Vector(450, 350 + 100 * Math.sqrt(3))),
-        fill: "#6ef36e",
+        fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
@@ -1009,16 +1007,17 @@ GameDatabase.celestials.navigation = (function() {
       complete: () => 1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        symbol: "☼",
-        fill: "#d10043",
+        symbol: "\uf185",
+        symbolOffset: "0.25rem",
+        fill: "#9063de",
         position: new Vector(400, 200),
         ring: {
           rMajor: 24,
         },
         legend: {
           text: "Ra, celestial of the Forgotten",
-          angle: 135,
-          diagonal: 96,
+          angle: 142,
+          diagonal: 85,
           horizontal: 16,
         },
       }
@@ -1029,8 +1028,9 @@ GameDatabase.celestials.navigation = (function() {
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        symbol: "",
-        fill: "#d10043",
+        symbol: "\uf185",
+        fill: "#9063de",
+        isStacked: true,
         position: new Vector(400, 200),
         ring: {
           rMajor: 24,
@@ -1039,11 +1039,11 @@ GameDatabase.celestials.navigation = (function() {
           text: () => {
             const level = Ra.pets.teresa.level;
             return [
-              `Ra's pet Teresa level ${formatInt(level)} / ${formatInt(25)}.`
+              `Ra's Teresa Memory level ${formatInt(level)} / ${formatInt(25)}`
             ];
           },
-          angle: 135,
-          diagonal: 96,
+          angle: 142,
+          diagonal: 85,
           horizontal: 16,
         },
       },
@@ -1057,13 +1057,14 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "effarig-pet": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+      visible: () => Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK),
       complete: () => Ra.pets.effarig.level / 25,
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        symbol: "",
-        fill: "#d10043",
+        symbol: "\uf185",
+        fill: "#9063de",
+        isStacked: true,
         position: new Vector(400, 200),
         ring: {
           rMajor: 24,
@@ -1072,11 +1073,11 @@ GameDatabase.celestials.navigation = (function() {
           text: () => {
             const level = Ra.pets.effarig.level;
             return [
-              `Ra's pet Effarig level ${formatInt(level)} / ${formatInt(25)}.`
+              `Ra's Effarig Memory level ${formatInt(level)} / ${formatInt(25)}`
             ];
           },
-          angle: 135,
-          diagonal: 96,
+          angle: 142,
+          diagonal: 85,
           horizontal: 16,
         },
       },
@@ -1090,13 +1091,14 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "enslaved-pet": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+      visible: () => Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),
       complete: () => Ra.pets.enslaved.level / 25,
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        symbol: "",
-        fill: "#d10043",
+        symbol: "\uf185",
+        fill: "#9063de",
+        isStacked: true,
         position: new Vector(400, 200),
         ring: {
           rMajor: 24,
@@ -1105,11 +1107,11 @@ GameDatabase.celestials.navigation = (function() {
           text: () => {
             const level = Ra.pets.enslaved.level;
             return [
-              `Ra's pet Enslaved level ${formatInt(level)} / ${formatInt(25)}.`
+              `Ra's Enslaved Memory level ${formatInt(level)} / ${formatInt(25)}`
             ];
           },
-          angle: 135,
-          diagonal: 96,
+          angle: 142,
+          diagonal: 85,
           horizontal: 16,
         },
       },
@@ -1123,13 +1125,14 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-pet": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
+      visible: () => Ra.has(RA_UNLOCKS.V_UNLOCK),
       complete: () => Ra.pets.v.level / 25,
       drawOrder: -1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        symbol: "",
-        fill: "#d10043",
+        symbol: "\uf185",
+        fill: "#9063de",
+        isStacked: true,
         position: new Vector(400, 200),
         ring: {
           rMajor: 24,
@@ -1138,11 +1141,11 @@ GameDatabase.celestials.navigation = (function() {
           text: () => {
             const level = Ra.pets.v.level;
             return [
-              `Ra's pet V level ${formatInt(level)} / ${formatInt(25)}.`
+              `Ra's V Memory level ${formatInt(level)} / ${formatInt(25)}`
             ];
           },
-          angle: 135,
-          diagonal: 96,
+          angle: 142,
+          diagonal: 85,
           horizontal: 16,
         },
       },
@@ -1155,47 +1158,12 @@ GameDatabase.celestials.navigation = (function() {
         incompleteWidth: 4,
       }
     },
-    "laitela-unlock": {
-      visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => Ra.totalPetLevel / 100,
-      drawOrder: -1,
-      node: {
-        incompleteClass: "c-celestial-nav__test-incomplete",
-        symbol: "",
-        fill: "#d10043",
-        position: new Vector(100, 500),
-        ring: {
-          rMajor: 0,
-        },
-        legend: {
-          text: () => {
-            const level = Ra.totalPetLevel;
-            return [
-              "Lai'tela unlock",
-              `Total Ra pet levels ${formatInt(level)} / ${formatInt(100)}.`
-            ];
-          },
-          angle: 135,
-          diagonal: 96,
-          horizontal: 16,
-        },
-      },
-      connector: {
-        pathStart: 0.05,
-        pathEnd: 1,
-        path: new LinearPath(new Vector(400, 200), new Vector(100, 500)),
-        fill: "url(#gradRaV)",
-        completeWidth: 6,
-        incompleteWidth: 4,
-      }
-    },
     "ra-ring-1": {
       visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
       complete: () => 1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        symbol: "",
-        fill: "#d10043",
+        fill: "#9063de",
         position: new Vector(400, 200),
         ring: {
           rMajor: 90,
@@ -1210,8 +1178,7 @@ GameDatabase.celestials.navigation = (function() {
       complete: () => 1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        symbol: "",
-        fill: "#d10043",
+        fill: "#9063de",
         position: new Vector(400, 200),
         ring: {
           rMajor: 90,
@@ -1226,8 +1193,7 @@ GameDatabase.celestials.navigation = (function() {
       complete: () => 1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        symbol: "",
-        fill: "#d10043",
+        fill: "#9063de",
         position: new Vector(400, 200),
         ring: {
           rMajor: 90,
@@ -1242,8 +1208,7 @@ GameDatabase.celestials.navigation = (function() {
       complete: () => 1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        symbol: "",
-        fill: "#d10043",
+        fill: "#9063de",
         position: new Vector(400, 200),
         ring: {
           rMajor: 90,
@@ -1258,8 +1223,7 @@ GameDatabase.celestials.navigation = (function() {
       complete: () => 1,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
-        symbol: "",
-        fill: "#d10043",
+        fill: "#9063de",
         position: new Vector(400, 200),
         ring: {
           rMajor: 90,
@@ -1267,6 +1231,272 @@ GameDatabase.celestials.navigation = (function() {
           gapCenterDeg: -12,
           gapDeg: 320,
         },
+      }
+    },
+    "laitela-unlock": {
+      visible: () => Ra.has(RA_UNLOCKS.V_UNLOCK),
+      complete: () => Ra.totalPetLevel / 100,
+      drawOrder: -1,
+      node: {
+        incompleteClass: "c-celestial-nav__test-incomplete",
+        symbol: "ᛝ",
+        symbolScale: 1.6,
+        symbolOffset: "0.1rem",
+        fill: "white",
+        position: new Vector(150, 450),
+        ring: {
+          rMajor: 15,
+        },
+        legend: {
+          text: () => {
+            const level = Ra.totalPetLevel;
+            return [
+              "Lai'tela unlock",
+              `Total Celestial Memory levels ${formatInt(level)} / ${formatInt(100)}.`
+            ];
+          },
+          angle: 260,
+          diagonal: 12,
+          horizontal: 8,
+        },
+      },
+      connector: {
+        pathStart: 0.05,
+        pathEnd: 1,
+        path: new LinearPath(new Vector(400, 200), new Vector(150, 450)),
+        fill: "url(#gradRaLaitela)",
+        completeWidth: 6,
+        incompleteWidth: 4,
+      }
+    },
+    "laitela-2nd-dim": {
+      visible: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
+      complete: () => Laitela.maxMatter.clampMin(1).log10() / Math.log10(MatterDimension(2).adjustedStartingCost),
+      node: {
+        incompleteClass: "c-celestial-nav__test-incomplete",
+        fill: "white",
+        position: new Vector(100, 500),
+        ring: {
+          rMajor: 8,
+        },
+        legend: {
+          text: complete => {
+            const goal = MatterDimension(2).adjustedStartingCost;
+            const places = complete >= 1 ? 0 : 2;
+            return [
+            "2nd Dark Matter Dimension",
+            `Dark Matter ${format(Laitela.maxMatter.min(goal), places)} / ${format(goal)}`
+            ];
+          },
+          angle: 135,
+          diagonal: 30,
+          horizontal: 16,
+        },
+      },
+      connector: {
+        pathStart: 0.17,
+        pathEnd: 0.89,
+        path: new LinearPath(new Vector(150, 450), new Vector(100, 500)),
+        fill: "white",
+        completeWidth: 6,
+        incompleteWidth: 4,
+      }
+    },
+    "laitela-3rd-dim": {
+      visible: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
+      complete: () => Laitela.maxMatter.clampMin(1).div(MatterDimension(2).adjustedStartingCost).log10() /
+        Math.log10(MatterDimension(3).adjustedStartingCost / MatterDimension(2).adjustedStartingCost),
+      node: {
+        incompleteClass: "c-celestial-nav__test-incomplete",
+        fill: "white",
+        position: new Vector(200, 500),
+        ring: {
+          rMajor: 8,
+        },
+        legend: {
+          text: complete => {
+            const goal = MatterDimension(3).adjustedStartingCost;
+            const places = complete >= 1 ? 0 : 2;
+            return [
+            "3rd Dark Matter Dimension",
+            `Dark Matter ${format(Laitela.maxMatter.min(goal), places)} / ${format(goal)}`
+            ];
+          },
+          angle: 45,
+          diagonal: 65,
+          horizontal: 16,
+        },
+      },
+      connector: {
+        pathStart: 0.17,
+        pathEnd: 0.89,
+        path: new LinearPath(new Vector(150, 450), new Vector(200, 500)),
+        fill: "white",
+        completeWidth: 6,
+        incompleteWidth: 4,
+      }
+    },
+    "laitela-4th-dim-left": {
+      visible: () => Laitela.maxMatter.gte(MatterDimension(3).adjustedStartingCost),
+      complete: () => Laitela.maxMatter.clampMin(1).div(MatterDimension(3).adjustedStartingCost).log10() /
+        Math.log10(MatterDimension(4).adjustedStartingCost / MatterDimension(3).adjustedStartingCost),
+      node: {
+        incompleteClass: "c-celestial-nav__test-incomplete",
+        fill: "white",
+        position: new Vector(150, 550),
+        ring: {
+          rMajor: 8,
+        },
+        legend: {
+          text: complete => {
+            const goal = MatterDimension(4).adjustedStartingCost;
+            const places = complete >= 1 ? 0 : 2;
+            return [
+            "4th Dark Matter Dimension",
+            `Dark Matter ${format(Laitela.maxMatter.min(goal), places)} / ${format(goal)}`
+            ];
+          },
+          angle: 15,
+          diagonal: 30,
+          horizontal: 16,
+        },
+      },
+      connector: {
+        pathStart: 0.11,
+        pathEnd: 0.89,
+        path: new LinearPath(new Vector(100, 500), new Vector(150, 550)),
+        fill: "white",
+        completeWidth: 6,
+        incompleteWidth: 4,
+      }
+    },
+    "laitela-4th-dim-right": {
+      visible: () => Laitela.maxMatter.gte(MatterDimension(3).adjustedStartingCost),
+      complete: () => Laitela.maxMatter.clampMin(1).div(MatterDimension(3).adjustedStartingCost).log10() /
+        Math.log10(MatterDimension(4).adjustedStartingCost / MatterDimension(3).adjustedStartingCost),
+      node: {
+        fill: "white",
+        position: new Vector(150, 550),
+        isStacked: true,
+        ring: {
+          rMajor: 0,
+        }
+      },
+      connector: {
+        pathStart: 0.11,
+        pathEnd: 0.89,
+        path: new LinearPath(new Vector(200, 500), new Vector(150, 550)),
+        fill: "white",
+        completeWidth: 6,
+        incompleteWidth: 4,
+      }
+    },
+    "laitela-annihilation": {
+      visible: () => Laitela.maxMatter.gte(MatterDimension(4).adjustedStartingCost),
+      complete: () => Number(Laitela.darkMatterMult > 1),
+      node: {
+        incompleteClass: "c-celestial-nav__test-incomplete",
+        fill: "white",
+        position: new Vector(100, 600),
+        ring: {
+          rMajor: 8,
+        },
+        legend: {
+          text: [
+            "Annihilate your",
+            "Dark Matter Dimensions"
+          ],
+          angle: 135,
+          diagonal: 30,
+          horizontal: 16,
+        },
+      },
+      connector: {
+        pathStart: 0.11,
+        pathEnd: 0.89,
+        path: new LinearPath(new Vector(150, 550), new Vector(100, 600)),
+        fill: "white",
+        completeWidth: 6,
+        incompleteWidth: 4,
+      },
+    },
+    "laitela-singularity": {
+      visible: () => Laitela.maxMatter.gte(MatterDimension(4).adjustedStartingCost),
+      complete: () => player.celestials.laitela.singularities,
+      node: {
+        incompleteClass: "c-celestial-nav__test-incomplete",
+        fill: "white",
+        position: new Vector(200, 600),
+        ring: {
+          rMajor: 8,
+        },
+        legend: {
+          text: [
+            "Condense your Dark Energy",
+            "Into a Singularity"
+          ],
+          angle: 45,
+          diagonal: 30,
+          horizontal: 16,
+        },
+      },
+      connector: {
+        pathStart: 0.11,
+        pathEnd: 0.89,
+        path: new LinearPath(new Vector(150, 550), new Vector(200, 600)),
+        fill: "white",
+        completeWidth: 6,
+        incompleteWidth: 4,
+      },
+    },
+    "laitela-destabilization-left": {
+      visible: () => player.celestials.laitela.singularities > 0 && Laitela.darkMatterMult > 1,
+      complete: () => -Laitela.maxAllowedDimension / 4 + 2,
+      node: {
+        incompleteClass: "c-celestial-nav__test-incomplete",
+        fill: "white",
+        position: new Vector(150, 650),
+        ring: {
+          rMajor: 15,
+        },
+        legend: {
+          text: [
+            "Destabalize Lai'tela's Reality",
+            "To the point where you can",
+            "Only use 4 Dimensions"
+          ],
+          angle: 135,
+          diagonal: 25,
+          horizontal: 16,
+        },
+      },
+      connector: {
+        pathStart: 0.11,
+        pathEnd: 0.83,
+        path: new LinearPath(new Vector(100, 600), new Vector(150, 650)),
+        fill: "white",
+        completeWidth: 6,
+        incompleteWidth: 4,
+      }
+    },
+    "laitela-destabilization-right": {
+      visible: () => player.celestials.laitela.singularities > 0 && Laitela.darkMatterMult > 1,
+      complete: () => -Laitela.maxAllowedDimension / 4 + 2,
+      node: {
+        fill: "white",
+        position: new Vector(150, 6500),
+        isStacked: true,
+        ring: {
+          rMajor: 0,
+        }
+      },
+      connector: {
+        pathStart: 0.11,
+        pathEnd: 0.83,
+        path: new LinearPath(new Vector(200, 600), new Vector(150, 650)),
+        fill: "white",
+        completeWidth: 6,
+        incompleteWidth: 4,
       }
     }
   };

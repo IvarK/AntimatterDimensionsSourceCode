@@ -15,7 +15,8 @@ Vue.component("v-tab", {
       showReduction: false,
       runRecords: [],
       runGlyphs: [],
-      isFlipped: false
+      isFlipped: false,
+      isRunning: false
     };
   },
   methods: {
@@ -33,6 +34,7 @@ Vue.component("v-tab", {
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
+      this.isRunning = V.isRunning;
     },
     startRun() {
       if (!resetReality()) return;
@@ -109,9 +111,16 @@ Vue.component("v-tab", {
       ];
     },
     db: () => GameDatabase.celestials.v,
+    runButtonClassObject() {
+      return {
+        "l-v-hexagon": true,
+        "c-v-run-button": true,
+        "c-v-run-button--running": this.isRunning,
+      };
+    }
   },
-  template:
-    `<div class="l-v-celestial-tab">
+  template: `
+    <div class="l-v-celestial-tab">
       <div v-if="!mainUnlock">
         {{ format(rm, 2, 0) }} / {{ format(db.mainUnlock.rm, 2, 0) }} RM
         <br>
@@ -144,7 +153,7 @@ Vue.component("v-tab", {
           You have {{ format(pp, 2, 0) }} {{ "Perk Point" | pluralize(pp) }}.
         </div>
         <div class="l-v-unlocks-container">
-          <li v-for="hex in hexGrid">
+          <li v-for="hex in hexGrid" :style= "[hex.isRunButton ? {} : {zIndex: -1}]">
             <div v-if="hex.config"
               class="l-v-hexagon c-v-unlock"
               :class="{ 'c-v-unlock-completed': hex.completions === hex.config.values.length }">
@@ -175,11 +184,14 @@ Vue.component("v-tab", {
                   </div>
                 </div>
             </div>
-            <div v-else-if="hex.isRunButton" @click="startRun()" class="l-v-hexagon o-v-run-button">
-              <p>
-              Start V's Reality.<br/>All dimension multipliers, EP gain, IP gain, and Dilated Time gain per second
+            <div v-else-if="hex.isRunButton" @click="startRun()" :class="runButtonClassObject">
+              <b style="font-size: 1.5rem">Start V's Reality.</b>
+              <br/>
+              All dimension multipliers, EP gain, IP gain, and Dilated Time gain per second
               are square-rooted, and Replicanti interval is squared.
-              </p>
+              <div class="c-v-run-button__line c-v-run-button__line--1"></div>
+              <div class="c-v-run-button__line c-v-run-button__line--2"></div>
+              <div class="c-v-run-button__line c-v-run-button__line--3"></div>
             </div>
             <div v-else>
               <div style="opacity: 0" class="l-v-hexagon"></div>
@@ -199,7 +211,7 @@ Vue.component("v-tab", {
           <div v-for="row in runMilestones" class="l-v-milestones-grid__row">
             <div class="o-v-milestone"
               v-for="milestone in row"
-              :class="{'o-v-milestone-unlocked':
+              :class="{'o-v-milestone--unlocked':
               has(milestone)}">
                 <p>{{ milestone.description }}</p>
                 <p>Reward: {{ rewardText(milestone) }}</p>

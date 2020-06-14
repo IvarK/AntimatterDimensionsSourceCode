@@ -224,14 +224,14 @@
 
 .o-time-study-triad--available {
   border-color: black;
-  color: #ead584;
+  color: var(--color-v--base);
   background: black;
   animation: a-time-study 1.5s infinite;
 }
 
 .o-time-study-triad--available:hover {
   color: black;
-  background: #ead584;
+  background: var(--color-v--base);
 }
 
 @keyframes a-time-study-dilation {
@@ -374,7 +374,7 @@
 
 .o-time-study-triad--bought {
   color: black;
-  background-color: #ead584;
+  background-color: var(--color-v--base);
   border-color: black;
 }
 

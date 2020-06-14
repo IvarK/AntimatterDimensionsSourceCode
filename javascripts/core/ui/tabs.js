@@ -17,13 +17,17 @@ class SubtabState {
   get isAvailable() {
     return this.config.condition === undefined || this.config.condition();
   }
+  
+  get hasNotification() {
+    return player.tabNotifications.has(this._parent.config.key + this.key);
+  }
 
   get key() {
     return this.config.key;
   }
 
-  show() {
-    this._parent.show(this);
+  show(manual) {
+    this._parent.show(manual, this);
   }
 
   get isOpen() {
@@ -42,7 +46,7 @@ class TabState {
       subtabs.push(subtab);
     }
     this.subtabs = subtabs;
-    this._currentSubtab = subtabs[0];
+    this._currentSubtab = subtabs.filter(tab => tab.isAvailable)[0];
   }
 
   get name() {
@@ -57,19 +61,40 @@ class TabState {
     return ui.view.tab === this.config.key;
   }
 
-  show(subtab = undefined) {
+  get hasNotification() {
+    return this.subtabs.some(tab => tab.hasNotification);
+  }
+
+  show(manual, subtab = undefined) {
+    if (!manual && !player.options.automaticTabSwitching) return;
     ui.view.tab = this.config.key;
     if (subtab !== undefined) {
       this._currentSubtab = subtab;
     }
     if (!this._currentSubtab.isAvailable) this.resetCurrentSubtab();
     ui.view.subtab = this._currentSubtab.key;
-    Modal.hide();
-    EventHub.dispatch(GameEvent.TAB_CHANGED, ui.view.tab, ui.view.subtab);
+    const tabNotificationKey = this.config.key + this._currentSubtab.key;
+    if (player.tabNotifications.has(tabNotificationKey)) player.tabNotifications.delete(tabNotificationKey);
+    
+    // Makes it so that the glyph tooltip doesn't stay on tab change
+    ui.view.tabs.reality.currentGlyphTooltip = -1;
+    if (manual) {
+      Modal.hide();
+    }
+    EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
+
+    if (this.config.key === "reality" && 
+        player.saveOverThresholdFlag && 
+        !player.saveOverThresholdFlagModalDisplayed) {
+      Modal.message.show(`Your save seems to be over ${format(new Decimal("1e6000"))} EP. 
+        There have been nerfs past that in the update, so for the first Reality your EP gives fewer RM
+        past ${format(new Decimal("1e6000"))} EP.`);
+      player.saveOverThresholdFlagModalDisplayed = true;
+    }
   }
 
   resetCurrentSubtab() {
-    this._currentSubtab = this.subtabs[0];
+    this._currentSubtab = this.subtabs.filter(tab => tab.isAvailable)[0];
   }
 }
 
@@ -87,7 +112,7 @@ const Tabs = (function() {
   };
 }());
 
-EventHub.logic.on(GameEvent.GAME_LOAD, () => {
+EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => {
   for (const tab of Tabs.all) {
     tab.resetCurrentSubtab();
   }

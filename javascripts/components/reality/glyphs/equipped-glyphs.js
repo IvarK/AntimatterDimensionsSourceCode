@@ -4,8 +4,10 @@ Vue.component("equipped-glyphs", {
   data() {
     return {
       glyphs: [],
+      copiedGlyphs: [],
       dragoverIndex: -1,
       respec: player.reality.respec,
+      respecIntoProtected: player.options.respecIntoProtected,
       undoAvailable: false,
       undoVisible: false,
     };
@@ -32,23 +34,32 @@ Vue.component("equipped-glyphs", {
     },
   },
   created() {
-    this.on$(GameEvent.GLYPHS_CHANGED, this.glyphsChanged);
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
   },
   methods: {
     glyphPositionStyle(idx) {
       return {
         position: "absolute",
-        left: `calc(50% + ${this.glyphX(idx)}rem)`,
-        top: `calc(50% + ${this.glyphY(idx)}rem)`,
+        left: `calc(50% + ${this.glyphX(idx, 1)}rem)`,
+        top: `calc(50% + ${this.glyphY(idx, 1)}rem)`,
+        "z-index": 1,
       };
     },
-    glyphX(idx) {
-      return -this.GLYPH_SIZE / 2 + this.arrangementRadius *
+    copyPositionStyle(glyph) {
+      return {
+        position: "absolute",
+        left: `calc(50% + ${this.glyphX(glyph.idx, 1.4)}rem)`,
+        top: `calc(50% + ${this.glyphY(glyph.idx, 1.4)}rem)`,
+        opacity: 0.4,
+      };
+    },
+    glyphX(idx, scale) {
+      return -this.GLYPH_SIZE / 2 + this.arrangementRadius * scale *
         Math.sin(2 * Math.PI * idx / this.slotCount);
     },
-    glyphY(idx) {
-      return -this.GLYPH_SIZE / 2 + this.arrangementRadius *
+    glyphY(idx, scale) {
+      return -this.GLYPH_SIZE / 2 + this.arrangementRadius * scale *
         Math.cos(2 * Math.PI * idx / this.slotCount);
     },
     dragover(event, idx) {
@@ -69,8 +80,12 @@ Vue.component("equipped-glyphs", {
     toggleRespec() {
       player.reality.respec = !player.reality.respec;
     },
+    toggleRespecIntoProtected() {
+      player.options.respecIntoProtected = !player.options.respecIntoProtected;
+    },
     update() {
       this.respec = player.reality.respec;
+      this.respecIntoProtected = player.options.respecIntoProtected;
       this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
       this.undoAvailable = this.undoVisible && player.reality.glyphs.undo.length > 0;
     },
@@ -83,11 +98,11 @@ Vue.component("equipped-glyphs", {
         // eslint-disable-next-line prefer-template
         !confirm("The last equipped glyph will be removed. Reality will be reset, but some things will" +
           " be restored to what they were when it equipped:\n" +
-          " - antimmatter, infinity points, and eternity points;\n" +
-          " - dilation upgrades, tachyon particles, and dilated time;\n" +
-          " - time theorems and EC completions;\n" +
-          " - time dimension and reality unlocks;\n" +
-          " - time in current reality" +
+          " - antimatter, Infinity Points, and Eternity Points;\n" +
+          " - Dilation Upgrades, Tachyon Particles, and Dilated Time;\n" +
+          " - Time Theorems and EC completions;\n" +
+          " - Time Dimension and Reality unlocks;\n" +
+          " - time in current Reality" +
           (Enslaved.isUnlocked ? ";\n - stored game time" : ""))) {
         return;
       }
@@ -113,17 +128,23 @@ Vue.component("equipped-glyphs", {
         <glyph-component v-if="glyph"
                          :key="idx"
                          :glyph="glyph"
-                         :circular="true"/>
+                         :circular="true"
+                         style="-webkit-user-drag: none;"/>
         <div v-else
              :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
                       {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]" />
+      </div>
+      <div v-for="glyph in copiedGlyphs" :style="copyPositionStyle(glyph)">
+        <glyph-component v-if="glyph"
+                          :glyph="glyph"
+                          :circular="true"/>
       </div>
     </div>
     <div class="l-equipped-glyphs__buttons">
       <button :class="['l-equipped-glyphs__respec', 'c-reality-upgrade-btn', {'c-reality-upgrade-btn--bought': respec}]"
               :ach-tooltip="respecTooltip"
               @click="toggleRespec">
-        Clear glyph slots on Reality
+        Unequip glyphs on Reality
       </button>
       <button v-if="undoVisible"
               class="l-equipped-glyphs__undo c-reality-upgrade-btn"
@@ -131,6 +152,15 @@ Vue.component("equipped-glyphs", {
               :ach-tooltip="undoTooltip"
               @click="undo">
         Undo
+      </button>
+    </div>
+    <div class="l-equipped-glyphs__buttons">
+      <button :class="['l-equipped-glyphs__respec-location', 'c-reality-upgrade-btn']"
+              @click="toggleRespecIntoProtected">
+        Unequip glyphs to:
+        <br>
+        <span v-if="respecIntoProtected">Protected slots</span>
+        <span v-else>Main inventory</span>
       </button>
     </div>
   </div>

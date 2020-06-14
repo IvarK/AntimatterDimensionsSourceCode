@@ -4,14 +4,15 @@ GameDatabase.eternity.upgrades = {
   idMultEP: {
     id: 1,
     cost: 5,
-    description: "Infinity Dimensions multiplier based on unspent EP (x+1)",
+    description: () => `Infinity Dimensions multiplier based on unspent EP (x+${formatInt(1)})`,
     effect: () => player.eternityPoints.plus(1),
-    formatEffect: value => `${shortenMoney(value)}x`
+    formatEffect: value => formatX(value, 2, 1)
   },
   idMultEternities: {
     id: 2,
     cost: 10,
-    description: () => `Infinity Dimension multiplier based on Eternities ((x/200)^log4(2x), softcap at ${shorten(1e5)})`,
+    description: () => `Infinity Dimension multiplier based on Eternities
+      ((x/${formatInt(200)})^log4(${formatInt(2)}x), softcap at ${format(1e5)})`,
     effect() {
       const log4 = Math.log4;
       const eterPreCap = player.eternities.clampMax(1e5).toNumber();
@@ -24,40 +25,35 @@ GameDatabase.eternity.upgrades = {
       const multPostCap = mult1.times(mult2).clampMin(1);
       return multPostCap.times(multPreCap);
     },
-    formatEffect: value => `${shortenMoney(value)}x`
+    formatEffect: value => formatX(value, 2, 1)
   },
   idMultICRecords: {
     id: 3,
     cost: 5e4,
     description: "Infinity Dimensions multiplier based on sum of Infinity Challenge times",
-    effect() {
-      const sumOfRecords = Math.max(
-        Time.infinityChallengeSum.totalMilliseconds,
-        Effects.min(750, Achievement(112))
-      );
-      return Decimal.pow(2, 30000 / sumOfRecords);
-    },
-    formatEffect: value => `${shortenMoney(value)}x`
+    effect: () => Decimal.pow(2, 30 / Time.infinityChallengeSum.totalSeconds),
+    cap: Decimal.pow(2, 30 / 0.61),
+    formatEffect: value => formatX(value, 2, 1)
   },
   tdMultAchs: {
     id: 4,
     cost: 1e16,
     description: "Your achievement bonus affects Time Dimensions",
-    effect: () => Player.achievementPower,
-    formatEffect: value => `${shortenMoney(value)}x`
+    effect: () => Achievements.power,
+    formatEffect: value => formatX(value, 2, 1)
   },
   tdMultTheorems: {
     id: 5,
     cost: 1e40,
     description: "Time Dimensions are multiplied by your unspent Time Theorems",
     effect: () => Decimal.max(player.timestudy.theorem, 1),
-    formatEffect: value => `${shortenMoney(value)}x`
+    formatEffect: value => formatX(value, 2, 1)
   },
   tdMultRealTime: {
     id: 6,
     cost: 1e50,
     description: "Time Dimensions are multiplied by days played",
     effect: () => Time.totalTimePlayed.totalDays,
-    formatEffect: value => `${shortenMoney(value)}x`
+    formatEffect: value => formatX(value, 2, 1)
   }
 };

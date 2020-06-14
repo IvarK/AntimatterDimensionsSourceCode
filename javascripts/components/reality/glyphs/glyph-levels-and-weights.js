@@ -10,8 +10,11 @@ Vue.component("glyph-levels-and-weights", {
       eternityVisible: false,
       perkShopVisible: false,
       penaltyVisible: false,
-      perkVisible: false,
+      rowVisible: false,
+      achievementVisible: false,
       shardVisible: false,
+      showAutoAdjustWeights: false,
+      isAutoAdjustWeightsOn: false,
       factors: getGlyphLevelInputs(),
       weights: Object.assign({}, player.celestials.effarig.glyphWeights),
       rows: 3,
@@ -46,19 +49,25 @@ Vue.component("glyph-levels-and-weights", {
       return this.makeRowStyle(4);
     },
     rowStylePerkShop() {
-      // Perk shop will only ever show up with eternities unlocked
       return this.makeRowStyle(5);
     },
-    rowStylePenalty() {
-      // Perk shop will only ever show up with eternities unlocked
+    rowStyleShard() {
       return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible);
     },
-    rowStylePerk() {
-      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.penaltyVisible);
+    rowStylePenalty() {
+      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible);
     },
-    rowStyleShard() {
-      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.penaltyVisible +
-        this.perkVisible);
+    rowStyleRow() {
+      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible +
+        this.penaltyVisible);
+    },
+    rowStyleAchievement() {
+      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible +
+        this.penaltyVisible + this.rowVisible);
+    },
+    adjustOutlineStyle() {
+      const rows = 5 + (this.showAutoAdjustWeights ? 1 : 0);
+      return `grid-row: 1 / ${rows + 1}; -ms-grid-row: 1; -ms-grid-row-span: ${rows};`;
     },
     formatPerkShop() {
       return `${(100 * (this.factors.perkShop - 1)).toFixed(1)}%`;
@@ -85,13 +94,19 @@ Vue.component("glyph-levels-and-weights", {
       return this.weights.ep + this.weights.repl + this.weights.dt + this.weights.eternities;
     }
   },
+  watch: {
+    isAutoAdjustWeightsOn(newValue) {
+      player.celestials.effarig.autoAdjustGlyphWeights = newValue;
+    }
+  },
   methods: {
     update() {
       this.adjustVisible = EffarigUnlock.adjuster.isUnlocked;
       this.eternityVisible = RealityUpgrade(18).isBought;
       const glyphFactors = getGlyphLevelInputs();
       this.perkShopVisible = glyphFactors.perkShop !== 1;
-      this.perkVisible = glyphFactors.perkFactor > 0;
+      this.rowVisible = glyphFactors.rowFactor > 0;
+      this.achievementVisible = glyphFactors.achievementFactor > 0;
       this.shardVisible = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) && Effarig.shardsGained !== 0;
       if (glyphFactors.scalePenalty !== 1) {
         this.penaltyVisible = true;
@@ -99,19 +114,30 @@ Vue.component("glyph-levels-and-weights", {
       } else if (this.penaltyVisible) {
         if (Date.now() - this.lastInstability > 2000) this.penaltyVisible = false;
       }
-      this.rows = 3 + this.eternityVisible + this.perkShopVisible + this.perkVisible + this.penaltyVisible;
+      this.rows = 3 + this.eternityVisible + this.perkShopVisible + this.rowVisible + this.penaltyVisible;
       if (this.adjustVisible && this.rows < 6) {
         // Keep UI from getting crammed
         this.rows = 6;
       }
       this.factors = glyphFactors;
-      _GLYPH_WEIGHT_FIELDS.forEach(e => this.weights[e] = player.celestials.effarig.glyphWeights[e]);
+      let same = true;
+      _GLYPH_WEIGHT_FIELDS.forEach(e => {
+        if (this.weights[e] !== player.celestials.effarig.glyphWeights[e]) same = false;
+        this.weights[e] = player.celestials.effarig.glyphWeights[e];
+      });
+      if (!same) {
+        // In this case, some other code reset the weights, probably (hopefully)
+        // the achievement reward that automatically adjusts weights.
+        this.resetSavedWeights();
+      }
+      this.showAutoAdjustWeights = Achievement(165).isUnlocked;
+      this.isAutoAdjustWeightsOn = player.celestials.effarig.autoAdjustGlyphWeights;
     },
     formatFactor(x) {
       // Not applied to + perks since it's always whole; for factors < 1, the slice makes the
       // factor be fixed point.
-      return Notations.current.isPainful
-        ? shorten(x, 2, 2)
+      return Notations.current.isPainful || x > 1000
+        ? format(x, 2, 2)
         : x.toPrecision(5).slice(0, 6);
     },
     makeRowStyle(r) {
@@ -187,6 +213,13 @@ Vue.component("glyph-levels-and-weights", {
           {{formatFactor(factors.eterEffect)}}
         </div>
       </template>
+      <template v-if="shardVisible">
+        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__factor">Shards</div>
+        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__operator">+</div>
+        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__factor-val">
+          {{formatFactor(factors.shardFactor)}}
+        </div>
+      </template>
       <template v-if="perkShopVisible">
         <div :style="rowStylePerkShop" class="l-glyph-levels-and-weights__factor">Perk shop</div>
         <div :style="rowStylePerkShop" class="l-glyph-levels-and-weights__operator">+</div>
@@ -199,32 +232,40 @@ Vue.component("glyph-levels-and-weights", {
           {{formatFactor(factors.scalePenalty)}}
         </div>
       </template>
-      <template v-if="perkVisible">
-        <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor">Perks</div>
-        <div :style="rowStylePerk" class="l-glyph-levels-and-weights__operator">+</div>
-        <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor-val">
-          {{factors.perkFactor}}&nbsp;&nbsp;&nbsp;&nbsp;
+      <template v-if="rowVisible">
+        <div :style="rowStyleRow" class="l-glyph-levels-and-weights__factor">Rows</div>
+        <div :style="rowStyleRow" class="l-glyph-levels-and-weights__operator">+</div>
+        <div :style="rowStyleRow" class="l-glyph-levels-and-weights__factor-val">
+          {{formatInt(factors.rowFactor)}}&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
       </template>
-      <template v-if="shardVisible">
-        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__factor">Shards</div>
-        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__operator">+</div>
-        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__factor-val">
-          {{formatFactor(factors.shardFactor)}}
+      <template v-if="achievementVisible">
+        <div :style="rowStyleAchievement" class="l-glyph-levels-and-weights__factor">Achievements</div>
+        <div :style="rowStyleAchievement" class="l-glyph-levels-and-weights__operator">+</div>
+        <div :style="rowStyleAchievement" class="l-glyph-levels-and-weights__factor-val">
+          {{formatInt(factors.achievementFactor)}}&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
       </template>
       <template v-if="adjustVisible">
-        <div class="l-glyph-levels-and-weights__adjust-outline"></div>
+        <div :style="adjustOutlineStyle" class="l-glyph-levels-and-weights__adjust-outline"></div>
         <div class="l-glyph-levels-and-weights__adjust-label">
           Adjust weights
           <div class="l-glyph-levels-and-weights__reset-btn-outer">
-            <div 
+            <div
               class="l-glyph-levels-and-weights__reset-btn c-glyph-levels-and-weights__reset-btn"
               @click="resetWeights"
             >
               Reset
             </div>
           </div>
+        </div>
+        <div class="l-glyph-levels-and-weights__adjust-auto">
+          <primary-button-on-off
+            v-if="showAutoAdjustWeights"
+            v-model="isAutoAdjustWeightsOn"
+            class="l-glyph-levels-and-weights__auto-btn c-glyph-levels-and-weights__auto-btn"
+            text="Auto weight adjustment:"
+          />
         </div>
         <div class="l-glyph-levels-and-weights__slider" :style="rowStyleEP">
           <ad-slider-component

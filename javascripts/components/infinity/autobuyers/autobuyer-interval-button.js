@@ -7,13 +7,15 @@ Vue.component("autobuyer-interval-button", {
   data() {
     return {
       cost: 0,
-      isMaxed: false
+      isMaxed: false,
+      isUnlocked: false
     };
   },
   methods: {
     update() {
       this.cost = this.autobuyer.cost;
       this.isMaxed = this.autobuyer.hasMaxedInterval;
+      this.isUnlocked = this.autobuyer.isUnlocked;
     },
     upgradeInterval() {
       this.autobuyer.upgradeInterval();
@@ -21,8 +23,13 @@ Vue.component("autobuyer-interval-button", {
   },
   template:
     `<button
-      v-if="!isMaxed"
+      v-if="!isMaxed && isUnlocked"
       class="o-autobuyer-btn l-autobuyer-box__button"
       @click="upgradeInterval"
-    >40% smaller interval<br>Cost: {{shortenDimensions(cost)}} IP</button>`
+    >{{formatPercents(0.4)}} smaller interval<br>Cost: {{format(cost, 2, 0)}} IP</button>
+    <button 
+      v-else-if="!isMaxed"
+      class="o-autobuyer-btn l-autobuyer-box__button">
+      Complete the challenge to upgrade interval
+    </button>`
 });

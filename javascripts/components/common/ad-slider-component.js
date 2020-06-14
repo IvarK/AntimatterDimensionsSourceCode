@@ -982,7 +982,9 @@ Vue.component("ad-slider-component", {
       }
     },
     dotContents() {
-      return this.valueInDot ? '' + this.getValue() : '';
+      // Doesn't work if the slider needs to show more precision than integers,
+      // but I don't think we have any such sliders.
+      return this.valueInDot ? Math.round(this.getValue()) : '';
     },
   },
   mounted() {

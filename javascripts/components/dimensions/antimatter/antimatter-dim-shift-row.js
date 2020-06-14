@@ -1,0 +1,75 @@
+"use strict";
+
+Vue.component("antimatter-dim-shift-row", {
+  data() {
+    return {
+      requirement: {
+        tier: 1,
+        amount: 0
+      },
+      isShift: false,
+      isBuyable: false,
+      purchasedBoosts: 0,
+      freeBoosts: 0,
+      lockText: null
+    };
+  },
+  computed: {
+    name() {
+      return this.isShift ? "Shift" : "Boost";
+    },
+    dimName() {
+      return AntimatterDimension(this.requirement.tier).displayName;
+    },
+    buttonText() {
+      return this.lockText === null
+        ? `Reset your Dimensions for a ${this.isShift ? "new Dimension" : "boost"}`
+        : this.lockText;
+    },
+    boostCountText() {
+      const parts = [this.purchasedBoosts];
+      if (this.freeBoosts !== 0) {
+        parts.push(this.freeBoosts);
+      }
+      const sum = parts.map(formatInt).join(" + ");
+      if (parts.length >= 2) {
+        return `${sum} = ${formatInt(parts.sum())}`;
+      }
+      return sum;
+    },
+    tutorialClass() {
+      return Tutorial.glowingClass(TUTORIAL_STATE.DIMSHIFT, this.isBuyable);
+    }
+  },
+  methods: {
+    update() {
+      const requirement = DimBoost.requirement;
+      this.requirement.tier = requirement.tier;
+      this.requirement.amount = requirement.amount;
+      this.isBuyable = requirement.isSatisfied && DimBoost.canBeBought;
+      this.isShift = DimBoost.isShift;
+      this.purchasedBoosts = DimBoost.purchasedBoosts;
+      this.freeBoosts = DimBoost.freeBoosts;
+      this.lockText = DimBoost.lockText;
+    },
+    softReset() {
+      softResetBtnClick();
+      Tutorial.turnOffEffect(TUTORIAL_STATE.DIMSHIFT);
+    }
+  },
+  template:
+    `<div class="c-antimatter-dim-row">
+      <div
+        class="c-dim-row__label c-dim-row__label--growable"
+      >
+        Dimension {{name}} ({{boostCountText}}):
+        requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions
+      </div>
+      <primary-button
+        :enabled="isBuyable"
+        class="o-primary-btn--dimboost l-dim-row__button l-dim-row__button--right-offset"
+        :class=tutorialClass
+        @click="softReset"
+      >{{buttonText}}</primary-button>
+    </div>`
+});

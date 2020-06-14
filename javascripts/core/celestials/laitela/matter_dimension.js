@@ -4,13 +4,19 @@
  * Constants for easily adjusting values
  */
 
-const CHANCE_COST_MULT = 1.5;
-const INTERVAL_COST_MULT = 2.5;
-const POWER_COST_MULT = 3;
+const INTERVAL_COST_MULT = 5;
+const POWER_DM_COST_MULT = 10;
+const POWER_DE_COST_MULTS = [1.65, 1.6, 1.55, 1.5];
 
-const CHANCE_START_COST = 20;
-const INTERVAL_START_COST = 5;
-const POWER_START_COST = 10;
+const INTERVAL_START_COST = 10;
+const POWER_DM_START_COST = 10;
+const POWER_DE_START_COST = 10;
+
+// No constant for interval since it's tied to a milestone
+const POWER_DM_PER_ASCENSION = 1000;
+const POWER_DE_PER_ASCENSION = 1000;
+
+const COST_MULT_PER_TIER = 1e3;
 
 class MatterDimensionState {
   constructor(tier) {
@@ -21,53 +27,75 @@ class MatterDimensionState {
     return player.celestials.laitela.dimensions[this._tier];
   }
 
-  // In percents
-  get chance() {
-    return Math.min(5 - this._tier + this.dimension.chanceUpgrades +
-      Math.floor(100 * AlchemyResource.unpredictability.effectValue), 100);
+  get ascensions() {
+    return this.dimension.ascensionCount;
   }
 
-  // If this is 50 then you can no longer buy it, but it can get lower with other upgrades
-  get baseInterval() {
-    return Decimal.pow(0.89 - AnnihilationUpgrade.intervalPower.effect, this.dimension.intervalUpgrades)
-     .times(Decimal.pow(2, this._tier))
-     .times(1000);
+  get intervalPurchaseCap() {
+    return 10;
   }
 
-  // In milliseconds
   get interval() {
-    return this.baseInterval.clampMin(50)
-      .divide(Effects.max(1, CompressionUpgrade.matterBoost));
+    const perUpgrade = 0.92;
+    const tierFactor = Math.pow(4, this._tier);
+    return Math.clampMin(this.intervalPurchaseCap, 1000 * tierFactor *
+      Math.pow(perUpgrade, this.dimension.intervalUpgrades) *
+      Math.pow(SingularityMilestone.ascensionIntervalScaling.effectValue, this.dimension.ascensionCount) *
+      SingularityMilestone.darkDimensionIntervalReduction.effectValue);
   }
 
-  get power() {
-    let base = Decimal.pow(1.1, this.dimension.powerUpgrades).times(Laitela.realityReward);
-    if (GlyphAlteration.isAdded("power")) base = base.times(getSecondaryGlyphEffect("powerpow"));
-    if (DarkEnergyUpgrade.matterDimensionMult.isBought) {
-      base = base.times(DarkEnergyUpgrade.matterDimensionMult.effect);
-    }
-
-    return base;
+  get commonDarkMult() {
+    return new Decimal(1).timesEffectsOf(
+      SingularityMilestone.darkFromTesseracts,
+      SingularityMilestone.darkFromGlyphLevel,
+      SingularityMilestone.darkFromTheorems,
+      SingularityMilestone.darkFromDM4,
+      SingularityMilestone.darkFromGamespeed,
+      SingularityMilestone.darkFromDilatedTime
+    );
   }
 
-  get chanceCost() {
-    return Decimal.pow(CHANCE_COST_MULT, 
-      this.dimension.chanceUpgrades + Math.max((this.dimension.chanceUpgrades - 15) * 2, 0))
-      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(CHANCE_START_COST);
+  get powerDM() {
+    return new Decimal(1 + 2 * Math.pow(1.15, this.dimension.powerDMUpgrades))
+      .times(Laitela.realityReward)
+      .times(Laitela.darkMatterMult)
+      .times(this.commonDarkMult)
+      .times(Math.pow(POWER_DM_PER_ASCENSION, this.dimension.ascensionCount))
+      .timesEffectsOf(SingularityMilestone.darkMatterMult)
+      .dividedBy(Math.pow(10, this._tier));
+  }
+  
+  get powerDE() {
+    const tierFactor = Math.pow(4, this._tier);
+    return new Decimal(((1 + this.dimension.powerDEUpgrades * 0.1) * 
+      Math.pow(1.005, this.dimension.powerDEUpgrades)) * tierFactor / 1000)
+        .times(this.commonDarkMult)
+        .times(Math.pow(POWER_DE_PER_ASCENSION, this.dimension.ascensionCount))
+        .timesEffectsOf(SingularityMilestone.darkEnergyMult).toNumber();
+  }
+
+  get adjustedStartingCost() {
+    const tiers = [0, 1, 3, 5];
+    return 10 * Math.pow(COST_MULT_PER_TIER, tiers[this._tier]);
   }
 
   get intervalCost() {
-    return Decimal.pow(INTERVAL_COST_MULT, 
-      this.dimension.intervalUpgrades + Math.max((this.dimension.intervalUpgrades - 9) * 2, 0))
-      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST);
+    return Decimal.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades)
+      .times(this.adjustedStartingCost).times(INTERVAL_START_COST)
+      .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
   }
 
-  get powerCost() {
-    return Decimal.pow(POWER_COST_MULT, 
-      this.dimension.powerUpgrades + Math.max((this.dimension.powerUpgrades - 8) * 2, 0))
-      .times(Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_START_COST);
+  get powerDMCost() {
+    return Decimal.pow(POWER_DM_COST_MULT, this.dimension.powerDMUpgrades)
+      .times(this.adjustedStartingCost).times(POWER_DM_START_COST)
+      .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
   }
-
+  
+  get powerDECost() {
+    return Decimal.pow(POWER_DE_COST_MULTS[this._tier], this.dimension.powerDEUpgrades)
+      .times(this.adjustedStartingCost).times(POWER_DE_START_COST)
+      .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
+  }
 
   get amount() {
     return this.dimension.amount;
@@ -85,23 +113,16 @@ class MatterDimensionState {
     this.dimension.timeSinceLastUpdate = ms;
   }
 
-  get canBuyChance() {
-    return this.chanceCost.lte(player.celestials.laitela.matter) && this.chance !== 100;
-  }
-
   get canBuyInterval() {
-    return this.intervalCost.lte(player.celestials.laitela.matter) && !this.interval.eq(50);
+    return this.intervalCost.lte(player.celestials.laitela.matter) && this.interval > this.intervalPurchaseCap;
   }
 
-  get canBuyPower() {
-    return this.powerCost.lte(player.celestials.laitela.matter);
+  get canBuyPowerDM() {
+    return this.powerDMCost.lte(player.celestials.laitela.matter);
   }
-
-  buyChance() {
-    if (!this.canBuyChance) return false;
-    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.chanceCost);
-    this.dimension.chanceUpgrades++;
-    return true;
+  
+  get canBuyPowerDE() {
+    return this.powerDECost.lte(player.celestials.laitela.matter);
   }
 
   buyInterval() {
@@ -111,62 +132,32 @@ class MatterDimensionState {
     return true;
   }
 
-  buyPower() {
-    if (!this.canBuyPower) return false;
-    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.powerCost);
-    this.dimension.powerUpgrades++;
+  buyPowerDM() {
+    if (!this.canBuyPowerDM) return false;
+    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.powerDMCost);
+    this.dimension.powerDMUpgrades++;
+    return true;
+  }
+  
+  buyPowerDE() {
+    if (!this.canBuyPowerDE) return false;
+    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.powerDECost);
+    this.dimension.powerDEUpgrades++;
     return true;
   }
 
+  ascend() {
+    if (this.interval > this.intervalPurchaseCap) return;
+    this.dimension.ascensionCount++;
+  }
 }
 
 MatterDimensionState.list = Array.range(1, 4).map(tier => new MatterDimensionState(tier - 1));
 
 /**
  * @param {number} tier
- * @return {NormalDimensionState}
+ * @return {AntimatterDimensionState}
  */
 function MatterDimension(tier) {
   return MatterDimensionState.list[tier - 1];
-}
-
-
-/**
- * This will be called in a loop
- * if interval >= updaterate -> if lastupdate + interval is smaller than now it will be called
- * if interval < updaterate it will be called with diff each update
- */
-function getMatterDimensionProduction(tier, ticks) {
-  const d = MatterDimension(tier);
-  // The multiple ticks act just like more binomial samples
-  const produced = binomialDistribution(d.amount.times(ticks), (d.chance / 100)).times(d.power);
-  return produced;
-}
-
-function getDarkEnergyProduction(tier, ticks) {
-  const d = MatterDimension(tier);
-  // The multiple ticks act just like more binomial samples
-  const produced = binomialDistribution(ticks.times(d.amount.log10()), Laitela.darkEnergyChance);
-
-  // Idk why but for some reason binomialDistribution sometimes returns Decimal and sometimes a number.
-  if (typeof produced === "number") return produced * AnnihilationUpgrade.darkEnergyMult.effect;
-  return produced.times(AnnihilationUpgrade.darkEnergyMult.effect).toNumber();
-}
-
-function matterDimensionLoop(realDiff) {
-  for (let i = 1; i <= 4; i++) {
-    const d = MatterDimension(i);
-    d.timeSinceLastUpdate += realDiff;
-    if (d.interval.lt(d.timeSinceLastUpdate)) {
-      const ticks = Decimal.floor(Decimal.div(d.timeSinceLastUpdate, d.interval));
-      const production = getMatterDimensionProduction(i, ticks);
-      if (i === 1) player.celestials.laitela.matter = player.celestials.laitela.matter.plus(production);
-      else MatterDimension(i - 1).amount = MatterDimension(i - 1).amount.plus(production);
-
-      player.celestials.laitela.darkEnergy += getDarkEnergyProduction(i, ticks);
-
-      d.timeSinceLastUpdate = Decimal.minus(d.timeSinceLastUpdate, d.interval.times(ticks)).toNumber();
-    }
-  }
-
 }

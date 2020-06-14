@@ -3,16 +3,16 @@
 Vue.component("eternity-autobuyer-box", {
   data() {
     return {
-      mode: AutoEternityMode.AMOUNT,
+      mode: AUTO_ETERNITY_MODE.AMOUNT,
       hasAdditionalModes: false
     };
   },
   computed: {
     autobuyer: () => Autobuyer.eternity,
     modes: () => [
-      AutoEternityMode.AMOUNT,
-      AutoEternityMode.TIME,
-      AutoEternityMode.X_LAST
+      AUTO_ETERNITY_MODE.AMOUNT,
+      AUTO_ETERNITY_MODE.TIME,
+      AUTO_ETERNITY_MODE.X_LAST
     ]
   },
   methods: {
@@ -22,21 +22,21 @@ Vue.component("eternity-autobuyer-box", {
     },
     modeProps(mode) {
       switch (mode) {
-        case AutoEternityMode.AMOUNT: return {
+        case AUTO_ETERNITY_MODE.AMOUNT: return {
           title: "Eternity at X EP",
           input: {
             property: "amount",
             type: "decimal"
           },
         };
-        case AutoEternityMode.TIME: return {
+        case AUTO_ETERNITY_MODE.TIME: return {
           title: "Seconds between eternities",
           input: {
             property: "time",
             type: "float"
           },
         };
-        case AutoEternityMode.X_LAST: return {
+        case AUTO_ETERNITY_MODE.X_LAST: return {
           title: "X times last eternity",
           input: {
             property: "xLast",
@@ -54,12 +54,12 @@ Vue.component("eternity-autobuyer-box", {
   },
   template:
     `<autobuyer-box :autobuyer="autobuyer" name="Automatic Eternity">
-      <div>
+      <template slot="intervalSlot">
         <select
           v-if="hasAdditionalModes"
-          class="c-autobuyer-box__mode-select l-autobuyer-box__mode-select"
+          class="c-autobuyer-box__mode-select"
           @change="changeMode"
-        >
+          >
           <option
             v-for="optionMode in modes"
             :value="optionMode"
@@ -67,11 +67,13 @@ Vue.component("eternity-autobuyer-box", {
           >{{modeProps(optionMode).title}}</option>
         </select>
         <span v-else>{{modeProps(mode).title}}:</span>
+      </template>
+      <template slot="toggleSlot">
         <autobuyer-input
-         :autobuyer="autobuyer"
-         :key="mode"
-         v-bind="modeProps(mode).input"
+          :autobuyer="autobuyer"
+          :key="mode"
+          v-bind="modeProps(mode).input"
         />
-      </div>
+      </template>
     </autobuyer-box>`
 });

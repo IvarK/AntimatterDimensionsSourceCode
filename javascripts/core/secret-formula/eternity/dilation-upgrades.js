@@ -8,10 +8,14 @@ GameDatabase.eternity.dilation = (function() {
     return {
       id: config.id,
       cost: () => rebuyableCost(config.initialCost, config.increment, config.id),
+      initialCost: config.initialCost,
+      increment: config.increment,
       description: config.description,
       effect: () => config.effect(player.dilation.rebuyables[config.id]),
       formatEffect: config.formatEffect,
       formatCost: config.formatCost,
+      purchaseCap: config.purchaseCap,
+      reachedCapFn: () => player.dilation.rebuyables[config.id] >= config.purchaseCap,
       rebuyable: true
     };
   }
@@ -20,12 +24,19 @@ GameDatabase.eternity.dilation = (function() {
       id: 1,
       initialCost: 1e5,
       increment: 10,
-      description: () => (CompressionUpgrade.improvedDTMult.canBeApplied
-       ? "Multiply Dilated Time gain by 2.2x"
-       : "Double Dilated Time gain."),
-      effect: bought => Decimal.pow(Effects.max(2, CompressionUpgrade.improvedDTMult), bought),
+      description: () =>
+        (SingularityMilestone.dilatedTimeFromSingularities.isUnlocked
+          ? `${formatX(2 * SingularityMilestone.dilatedTimeFromSingularities.effectValue, 2, 2)} Dilated Time gain.`
+          : "Double Dilated Time gain."),
+      effect: bought => {
+        const base = SingularityMilestone.dilatedTimeFromSingularities.isUnlocked
+          ? 2 * SingularityMilestone.dilatedTimeFromSingularities.effectValue
+          : 2;
+        return Decimal.pow(base, bought);
+      },
       formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => shorten(value, 2, 0)
+      formatCost: value => format(value, 2, 0),
+      purchaseCap: Number.MAX_VALUE
     }),
     galaxyThreshold: rebuyable({
       id: 2,
@@ -35,9 +46,11 @@ GameDatabase.eternity.dilation = (function() {
         (Perk.bypassDGReset.isBought
         ? "Reset Dilated Galaxies, but lower their threshold"
         : "Reset Dilated Time and Dilated Galaxies, but lower their threshold"),
-      effect: bought => Math.pow(0.8, bought),
-      formatEffect: () => getFreeGalaxyMult().toFixed(3),
-      formatCost: value => shorten(value, 2, 0)
+      // The 38th purchase is at 1e80, and is the last purchase.
+      effect: bought => (bought < 38 ? Math.pow(0.8, bought) : 0),
+      formatEffect: () => format(getFreeGalaxyMult(), 3, 3),
+      formatCost: value => format(value, 2, 0),
+      purchaseCap: 38
     }),
     tachyonGain: rebuyable({
       id: 3,
@@ -48,15 +61,13 @@ GameDatabase.eternity.dilation = (function() {
         : "Triple the amount of Tachyon Particles gained."),
       effect: bought => Decimal.pow(3, bought),
       formatEffect: value => formatX(value, 2, 0),
-      formatCost: value => shorten(value, 2, 0)
+      formatCost: value => format(value, 2, 0),
+      purchaseCap: Number.MAX_VALUE
     }),
     doubleGalaxies: {
       id: 4,
       cost: 5e6,
-      description: () => (CompressionUpgrade.freeGalaxySoftcap.canBeApplied
-        ? `Gain twice as many free galaxies, up to
-          ${shortenSmallInteger(CompressionUpgrade.freeGalaxySoftcap.effectValue)}.`
-        : `Gain twice as many free galaxies, up to ${shortenSmallInteger(1000)}.`),
+      description: () => `Gain twice as many free galaxies, up to ${formatInt(1000)}.`,
       effect: 2
     },
     tdMultReplicanti: {
@@ -71,7 +82,8 @@ GameDatabase.eternity.dilation = (function() {
             multiplier = ratio.toFixed(2);
           }
         }
-        return `Time Dimensions are affected by Replicanti multiplier ^${shorten(multiplier, 1, 2)}.`;
+        return `Time Dimensions are affected by Replicanti multiplier ${formatPow(multiplier, 1, 3)}, reduced
+          effect above ${formatX(new Decimal("1e9000"))}`;
       },
       effect: () => {
         let rep10 = replicantiMult().pLog10() * 0.1;
@@ -83,7 +95,7 @@ GameDatabase.eternity.dilation = (function() {
     ndMultDT: {
       id: 6,
       cost: 5e7,
-      description: "Normal Dimension multiplier based on Dilated Time, unaffected by Time Dilation.",
+      description: "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation.",
       effect: () => player.dilation.dilatedTime.pow(308).clampMin(1),
       formatEffect: value => formatX(value, 2, 1)
     },
@@ -92,7 +104,8 @@ GameDatabase.eternity.dilation = (function() {
       cost: 2e12,
       description: "Gain a multiplier to IP based on Dilated Time.",
       effect: () => player.dilation.dilatedTime.pow(1000).clampMin(1),
-      formatEffect: value => formatX(value, 2, 1)
+      formatEffect: value => formatX(value, 2, 1),
+      cap: () => Effarig.eternityCap
     },
     timeStudySplit: {
       id: 8,
@@ -102,7 +115,7 @@ GameDatabase.eternity.dilation = (function() {
     dilationPenalty: {
       id: 9,
       cost: 1e11,
-      description: "Reduce the Dilation penalty. (^1.05 after reduction)",
+      description: () => `Reduce the Dilation penalty. (${formatPow(1.05, 2, 2)} after reduction)`,
       effect: 1.05,
     },
     ttGenerator: {
@@ -110,7 +123,7 @@ GameDatabase.eternity.dilation = (function() {
       cost: 1e15,
       description: "Generate Time Theorems based on Tachyon Particles.",
       effect: () => player.dilation.tachyonParticles.div(20000),
-      formatEffect: value => formatX(value, 2, 1)
+      formatEffect: value => `${format(value, 2, 1)}/sec`
     }
   };
 }());

@@ -11,13 +11,19 @@
 
 GameKeyboard.bindRepeatableHotkey("m", () => maxAll());
 GameKeyboard.bindRepeatableHotkey("d", () => softResetBtnClick());
-GameKeyboard.bindRepeatableHotkey("g", () => galaxyResetBtnClick(true));
+GameKeyboard.bindRepeatableHotkey("g", () => requestGalaxyReset(true));
+GameKeyboard.bindRepeatableHotkey("shift+g", () => requestGalaxyReset(false));
 GameKeyboard.bindRepeatableHotkey("s", () => sacrificeBtnClick());
 GameKeyboard.bindRepeatableHotkey("r", () => replicantiGalaxy());
 GameKeyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());
 GameKeyboard.bindRepeatableHotkey("shift+t", () => buyTickSpeed());
 GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
 GameKeyboard.bindRepeatableHotkey("e", () => eternity());
+
+// We need to know whether the player is holding R or not for the
+// replicanti galaxy
+GameKeyboard.bind("r", () => setHoldingR(true), "keydown");
+GameKeyboard.bind("r", () => setHoldingR(false), "keyup");
 
 (function() {
   function bindDimensionHotkeys(tier) {
@@ -34,7 +40,7 @@ GameKeyboard.bindHotkey("u", () => {
     AutomatorBackend.pause();
   }
   else if (AutomatorBackend.isOn) {
-    AutomatorBackend.mode = AutomatorMode.RUN;
+    AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
   }
 });
 
@@ -42,7 +48,7 @@ GameKeyboard.bindHotkey("esc", () => {
   if (Modal.isOpen) {
     Modal.hide();
   } else {
-    Tab.options.show();
+    Tab.options.show(true);
   }
 });
 
@@ -66,7 +72,7 @@ GameKeyboard.bindHotkey("h", () => {
 });
 
 GameKeyboard.bindHotkey(["ctrl+s", "meta+s"], () => {
-  GameStorage.save();
+  GameStorage.save(false, true);
   return false;
 });
 GameKeyboard.bindHotkey(["ctrl+e", "meta+e"], () => {
@@ -86,9 +92,7 @@ GameKeyboard.bind(
 
 GameKeyboard.bind("up up down down left right left right b a", () => {
   SecretAchievement(17).unlock();
-  if (player.antimatter.lt(30)) {
-    player.antimatter = new Decimal(30);
-  }
+  Currency.antimatter.bumpTo(30);
 });
 
 GameKeyboard.bindRepeatable("f", () => {

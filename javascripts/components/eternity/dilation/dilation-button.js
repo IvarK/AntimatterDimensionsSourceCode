@@ -14,10 +14,10 @@ Vue.component("dilation-button", {
   },
   methods: {
     update() {
-      this.isUnlocked = TimeStudy.dilation.isBought;
+      this.isUnlocked = PlayerProgress.dilationUnlocked();
       this.isRunning = player.dilation.active;
       if (!this.isRunning) return;
-      this.canEternity = player.infinityPoints.gte(Player.eternityGoal);
+      this.canEternity = Player.canEternity;
       this.hasGain = getTachyonGain().gt(0);
       if (this.canEternity && this.hasGain) {
         this.tachyonGain.copyFrom(getTachyonGain());
@@ -35,19 +35,19 @@ Vue.component("dilation-button", {
       <span v-if="!isUnlocked">Purchase the dilation time study to unlock.</span>
       <span v-else-if="!isRunning">Dilate time.</span>
       <span v-else-if="canEternity && hasGain">
-        Disable dilation.
+        Disable Dilation.
         <br>
-        Gain {{shortenMoney(tachyonGain)}} Tachyon Particles.
+        Gain {{format(tachyonGain, 2, 1)}} Tachyon Particles.
       </span>
       <span v-else-if="hasGain">
-        Disable dilation.
+        Disable Dilation.
         <br>
-        Reach {{shorten(eternityGoal, 1, 0)}} IP to eternity and gain Tachyon Particles.
+        Reach {{format(eternityGoal, 1, 0)}} IP to eternity and gain Tachyon Particles.
       </span>
       <span v-else>
-        Disable dilation.
+        Disable Dilation.
         <br>
-        Reach {{shortenMoney(requiredForGain)}} antimatter to gain more Tachyon Particles.
+        Reach {{format(requiredForGain, 2, 1)}} antimatter to gain more Tachyon Particles.
       </span>
     </button>`
 });

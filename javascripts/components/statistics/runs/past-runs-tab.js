@@ -3,61 +3,65 @@
 Vue.component("past-runs-tab", {
   data() {
     return {
-      isRealityUnlocked: false,
-      runs: Array.repeat(0, 10).map(() => [0, new Decimal(0), 0, 0])
+      layers: {
+        reality: {
+          name: "Reality",
+          plural: "Realities",
+          currency: "RM",
+          condition: () => PlayerProgress.realityUnlocked(),
+          getRuns: () => player.lastTenRealities,
+          reward: (runGain, run, average) => (average
+            ? `${runGain} ${pluralize("Reality Machine", run[1])}`
+            : `${runGain} ${pluralize("Reality Machine", run[1])}, a level ${formatInt(run[4])} glyph,`),
+          // Note that runGain is a string so we can't use it for pluralize
+          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Reality", run[2], "Realities")}`,
+        },
+        eternity: {
+          name: "Eternity",
+          plural: "Eternities",
+          currency: "EP",
+          condition: () => PlayerProgress.eternityUnlocked(),
+          getRuns: () => player.lastTenEternities,
+          reward: runGain => `${runGain} EP`,
+          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Eternity", run[2], "Eternities")}`,
+        },
+        infinity: {
+          name: "Infinity",
+          plural: "Infinities",
+          currency: "IP",
+          condition: () => PlayerProgress.infinityUnlocked(),
+          getRuns: () => player.lastTenRuns,
+          reward: runGain => `${runGain} IP`,
+          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Infinity", run[2], "Infinities")}`,
+        },
+      },
+      showLastTenRunsGainPerTime: false
     };
   },
-  props: {
-    getRuns: Function,
-    singular: String,
-    plural: String,
-    points: String,
-    reward: Function,
-  },
-  computed: {
-    averageRun() {
-      return averageRun(this.runs);
+  watch: {
+    showLastTenRunsGainPerTime(newValue) {
+      player.options.showLastTenRunsGainPerTime = newValue;
     }
   },
   methods: {
     update() {
-      this.runs = this.clone(this.getRuns());
-      this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
-    },
-    clone(runs) {
-      return runs.map(run =>
-        run.map(item =>
-          (item instanceof Decimal ? Decimal.fromDecimal(item) : item)
-        )
-      );
-    },
-    averageRunGain(run) {
-      const amount = run[1];
-      const time = run[2];
-      const rpm = ratePerMinute(amount, time);
-      return Decimal.lt(rpm, 1)
-        ? `${shorten(Decimal.mul(rpm, 60), 2, 2)} ${this.points}/hour`
-        : `${shorten(rpm, 2, 2)} ${this.points}/min`;
-    },
-    runTime: run => timeDisplayShort(run[0]),
-    runGain: run => shorten(run[1], 2, 0),
-    realRunTime: run => (run[2] === undefined ? "unrecorded" : timeDisplayShort(run[2]))
+      this.showLastTenRunsGainPerTime = player.options.showLastTenRunsGainPerTime;
+    }
   },
-  template:
-    `<div class="c-stats-tab">
-      <br>
-      <div v-for="(run, index) in runs" :key="index">
-        <span>
-          The {{ singular }} {{ shortenSmallInteger(index + 1) }}
-          {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }}
-        </span>
-        <span v-if="isRealityUnlocked"> ({{ realRunTime(run) }} real time) </span>
-        <span>and gave {{ reward(runGain(run), run) }}. {{ averageRunGain(run) }}</span>
+  template: `
+    <div class="c-stats-tab">
+      <div class="c-subtab-option-container">
+        <primary-button-on-off-custom
+          v-model="showLastTenRunsGainPerTime"
+          on="Show resource gain"
+          off="Show resource gain/time"
+          class="o-primary-btn--subtab-option"
+        />
       </div>
-      <br>
-      <div>
-        <span>Last {{ shortenSmallInteger(10) }} {{ plural }} average time: {{ runTime(averageRun) }}. </span>
-        <span>Average {{ points }} gain: {{ averageRunGain(averageRun) }}.</span>
-      </div>
+      <past-runs-container
+        v-for="layer in layers"
+        :key="layer.name"
+        :layer="layer"
+      />
     </div>`
 });

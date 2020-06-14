@@ -169,41 +169,45 @@ function getRootFromChunks(chunks) {
   ));
 }
 
-// if both of them are the same, undefined will be returned
+// If both of them are the same, undefined will be returned
 function newestSave(first, second) {
-    function getSaveInfo(save) {
-        return {
-            infinities: save ? save.infinitied : 0,
-            eternities: save ? save.eternities : 0
-        }
-    }
-    let firstInfo = getSaveInfo(first);
-    let secondInfo = getSaveInfo(second);
-    if (firstInfo.eternities === secondInfo.eternities && firstInfo.infinities === secondInfo.infinities) {
-        return undefined;
-    }
-    if (firstInfo.eternities > secondInfo.eternities) {
-        return first;
-    }
-    if (firstInfo.infinities > secondInfo.infinities) {
-        return first;
-    }
-    return second;
+  function getSaveInfo(save) {
+    if (!save) return { infinitied: new Decimal(0), eternities: new Decimal(0) };
+    const deepCopy = { ...save };
+    return {
+      infinitied: typeof deepCopy.infinitied === "object" ? deepCopy.infinitied : new Decimal(deepCopy.infinitied),
+      eternities: typeof deepCopy.eternities === "object" ? deepCopy.eternities : new Decimal(deepCopy.eternities)
+    };
+  }
+  const firstInfo = getSaveInfo(first);
+  const secondInfo = getSaveInfo(second);
+  if (firstInfo.eternities.eq(secondInfo.eternities) && firstInfo.infinitied.eq(secondInfo.infinitied)) {
+    return undefined;
+  }
+  if (firstInfo.eternities.gt(secondInfo.eternities)) {
+    return first;
+  }
+  if (firstInfo.infinitied.gt(secondInfo.infinitied)) {
+    return first;
+  }
+  return second;
 }
 
 function playFabLoadCheck() {
-  loadFromPlayFab(function(cloudRoot) {
+  loadFromPlayFab(cloudRoot => {
     GameUI.notify.info("Loaded from cloud");
 
-    for (var i = 0; i < 3; i++) {
-      let saveId = i;
-      let cloudSave = cloudRoot.saves[saveId];
-      let localSave = GameStorage.saves[saveId];
-      let newestSave = newestSave(cloudSave, localSave);
-      function overwriteLocalSave() {
-          GameStorage.overwriteSlot(saveId, cloudSave);
-      }
-      if (newestSave === localSave) {
+    for (let i = 0; i < 3; i++) {
+      const saveId = i;
+      const cloudSave = cloudRoot.saves[saveId];
+      const localSave = GameStorage.saves[saveId];
+      const newestSaveCheck = newestSave(cloudSave, localSave);
+
+      const overwriteLocalSave = () => {
+        GameStorage.overwriteSlot(saveId, cloudSave);
+      };
+
+      if (newestSaveCheck === localSave) {
           Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteLocalSave);
           Modal.cloudLoadConflict.show();
       } else {
@@ -214,28 +218,33 @@ function playFabLoadCheck() {
 }
 
 function playFabSaveCheck() {
-  loadFromPlayFab(function(cloudRoot) {
-    for (var i = 0; i < 3; i++) {
-      let saveId = i;
-      let cloudSave = cloudRoot.saves[saveId];
-      let localSave = GameStorage.saves[saveId];
-      let newestSave = newestSave(cloudSave, localSave);
+  loadFromPlayFab(cloudRoot => {
+
+    for (let i = 0; i < 3; i++) {
+      const saveId = i;
+      const cloudSave = cloudRoot.saves[saveId];
+      const localSave = GameStorage.saves[saveId];
+      const newestSaveCheck = newestSave(cloudSave, localSave);
       let isConflicted = false;
-      function overwriteCloudSave() {
-          cloudRoot.saves[saveId] = GameStorage.saves[saveId];
-      }
-      function sendCloudSave() {
-          saveToPlayFab(cloudRoot);
-      }
-      if (newestSave === cloudSave) {
-          isConflicted = true;
-          Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
-          Modal.cloudSaveConflict.show();
+
+      const overwriteCloudSave = () => {
+        cloudRoot.saves[saveId] = GameStorage.saves[saveId];
+      };
+
+      const sendCloudSave = () => {
+        saveToPlayFab(cloudRoot);
+      };
+
+      if (newestSaveCheck === cloudSave) {
+        isConflicted = true;
+        Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
+        Modal.cloudSaveConflict.show();
       } else {
-          overwriteCloudSave();
+        overwriteCloudSave();
       }
-      if (!isConflicted){
-          sendCloudSave();
+
+      if (!isConflicted) {
+        sendCloudSave();
       }
     }
   });

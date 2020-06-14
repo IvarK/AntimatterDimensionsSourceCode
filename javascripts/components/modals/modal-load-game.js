@@ -23,11 +23,11 @@ Vue.component("modal-load-game", {
           Modal.hide();
         },
         formatAntimatter(antimatter) {
-          return this.shortenPostBreak(antimatter, 2, 1);
+          return formatPostBreak(antimatter, 2, 1);
         },
         update() {
           if (this.isSelected) {
-            this.antimatter.copyFrom(player.antimatter);
+            this.antimatter.copyFrom(Currency.antimatter);
           }
         }
       },

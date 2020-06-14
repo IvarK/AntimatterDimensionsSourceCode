@@ -84,7 +84,7 @@
     studiesList: [
       commentRule,
       { sol: true, next: "start" },
-      { regex: /normal(?=[\s,]|$)|infinity(?=[\s,]|$)|time(?=[\s,]|$)/ui, token: "variable-2" },
+      { regex: /antimatter(?=[\s,]|$)|infinity(?=[\s,]|$)|time(?=[\s,]|$)/ui, token: "variable-2" },
       { regex: /active(?=[\s,]|$)|passive(?=[\s,]|$)|idle(?=[\s,]|$)/ui, token: "variable-2" },
       { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable", next: "commandDone" },
       { regex: /[1-9][0-9]+/ui, token: "number" },
@@ -128,7 +128,7 @@
       { regex: /nowait(\s|$)/ui, token: "property" },
       { regex: /on(\s|$)|off(\s|$)|dilation(\s|$)|load(\s|$)|respec(\s|$)/ui, token: "variable-2" },
       { regex: /preset(\s|$)|eternity(\s|$)|reality(\s|$)|use(\s|$)/ui, token: "variable-2" },
-      { regex: /normal(\s|$|(?=,))|infinity(\s|$|(?=,))|time(\s|$|(?=,))/ui, token: "variable-2" },
+      { regex: /antimatter(\s|$|(?=,))|infinity(\s|$|(?=,))|time(\s|$|(?=,))/ui, token: "variable-2" },
       { regex: /x[\t ]+last(\s|$)/ui, token: "variable-2" },
       { regex: /completions(\s|$)|ec(1[0-2]|[1-9]) completions(\s|$)/ui, token: "variable-2" },
       {

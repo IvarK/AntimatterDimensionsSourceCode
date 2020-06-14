@@ -54,85 +54,59 @@ const GameCache = {
       .reduce(Decimal.maxReducer)
   ),
 
-  averageEPPerRun: new Lazy(() => {
-    return player.lastTenEternities
-      .map(run => run[1])
-      .reduce(Decimal.sumReducer)
-      .dividedBy(player.lastTenEternities.length);
-  }),
+  averageRealTimePerEternity: new Lazy(() => player.lastTenEternities
+      .map(run => run[3])
+      .reduce(Number.sumReducer) / (1000 * player.lastTenEternities.length)),
 
-  tickSpeedMultDecrease: new Lazy(() => {
-    return 10 - Effects.sum(
+  tickSpeedMultDecrease: new Lazy(() => 10 - Effects.sum(
       BreakInfinityUpgrade.tickspeedCostMult,
       EternityChallenge(11).reward
-    );
-  }),
+    )),
 
-  dimensionMultDecrease: new Lazy(() => {
-    return 10 - Effects.sum(
+  dimensionMultDecrease: new Lazy(() => 10 - Effects.sum(
       BreakInfinityUpgrade.dimCostMult,
       EternityChallenge(6).reward
-    );
-  }),
+    )),
 
-  timeStudies: new Lazy(() => {
-    return NormalTimeStudyState.studies
-      .map(s => player.timestudy.studies.includes(s.id));
-  }),
+  timeStudies: new Lazy(() => NormalTimeStudyState.studies
+      .map(s => player.timestudy.studies.includes(s.id))),
 
-  achSkipPerkCount: new Lazy(() => {
-    return Effects.max(
-      0,
-      Perk.achievementRowGroup1,
-      Perk.achievementRowGroup2,
-      Perk.achievementRowGroup3,
-      Perk.achievementRowGroup4,
-      Perk.achievementRowGroup5,
-      Perk.achievementRowGroup6
-    );
-  }),
+  achievementPeriod: new Lazy(() => TimeSpan.fromMinutes(30 - Effects.sum(
+      Perk.achievementGroup1,
+      Perk.achievementGroup2,
+      Perk.achievementGroup3,
+      Perk.achievementGroup4,
+      Perk.achievementGroup5,
+      Perk.achievementGroup6
+    )).totalMilliseconds),
 
   buyablePerks: new Lazy(() => Perks.all.filter(p => p.canBeBought)),
 
-  normalDimensionCommonMultiplier: new Lazy(() => {
-    // The effect is defined in normal_dimensions.js because that's where the non-cached
-    // code originally lived.
-    return normalDimensionCommonMultiplier();
-  }),
+  // The effect is defined in antimatter_dimensions.js because that's where the non-cached
+  // code originally lived.
+  antimatterDimensionCommonMultiplier: new Lazy(() => antimatterDimensionCommonMultiplier()),
 
   // 0 will cause a crash if invoked; this way the tier can be used as an index
-  normalDimensionFinalMultipliers: Array.range(0, 9)
+  antimatterDimensionFinalMultipliers: Array.range(0, 9)
     .map(tier => new Lazy(() => getDimensionFinalMultiplierUncached(tier))),
 
-  infinityDimensionCommonMultiplier: new Lazy(() => {
-    return infinityDimensionCommonMultiplier();
-  }),
+  infinityDimensionCommonMultiplier: new Lazy(() => infinityDimensionCommonMultiplier()),
 
-  timeDimensionCommonMultiplier: new Lazy(() => {
-    return timeDimensionCommonMultiplier();
-  }),
+  timeDimensionCommonMultiplier: new Lazy(() => timeDimensionCommonMultiplier()),
 
   glyphEffects: new Lazy(() => orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k))),
 
   totalIPMult: new Lazy(() => totalIPMult()),
 
-  achievementPower: new Lazy(() => Decimal.pow(
-    1.25,
-    Array.range(1, 14)
-      .map(Achievements.row)
-      .countWhere(row => row.every(ach => ach.isEnabled))
-  ).times(Math.pow(1.03, Achievements.effectiveCount))),
-
   challengeTimeSum: new Lazy(() => player.challenge.normal.bestTimes.sum()),
 
   infinityChallengeTimeSum: new Lazy(() => player.challenge.infinity.bestTimes.sum()),
-
 };
 
-EventHub.logic.on(GameEvent.GLYPHS_CHANGED, () => {
+EventHub.logic.on(GAME_EVENT.GLYPHS_CHANGED, () => {
   GameCache.glyphEffects.invalidate();
 }, GameCache.glyphEffects);
 
-GameCache.normalDimensionFinalMultipliers.invalidate = function() {
+GameCache.antimatterDimensionFinalMultipliers.invalidate = function() {
   for (const x of this) x.invalidate();
 };

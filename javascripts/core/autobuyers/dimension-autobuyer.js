@@ -18,8 +18,25 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
     return NormalChallenge(this._tier).isCompleted;
   }
 
+  get isBought() {
+    return this.data.isBought;
+  }
+
+  get antimatterCost() {
+    return Decimal.pow(1e10, this._tier - 1).times(1e40);
+  }
+
+  get canBeBought() {
+    return true;
+  }
+
   get bulk() {
-    return this.data.bulk;
+    // Use 1e100 to avoid issues with Infinity.
+    return this.hasUnlimitedBulk ? 1e100 : this.data.bulk;
+  }
+  
+  get hasUnlimitedBulk() {
+    return Achievement(61).isUnlocked;
   }
 
   get hasMaxedBulk() {
@@ -44,21 +61,21 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
 
   toggleMode() {
     this.mode = [
-      AutobuyerMode.BUY_SINGLE,
-      AutobuyerMode.BUY_10
+      AUTOBUYER_MODE.BUY_SINGLE,
+      AUTOBUYER_MODE.BUY_10
     ]
       .nextSibling(this.mode);
   }
 
   tick() {
     const tier = this._tier;
-    if (!NormalDimension(tier).isAvailable) return;
+    if (!AntimatterDimension(tier).isAvailableForPurchase) return;
     super.tick();
     switch (this.mode) {
-      case AutobuyerMode.BUY_SINGLE:
+      case AUTOBUYER_MODE.BUY_SINGLE:
         buyOneDimension(tier);
         break;
-      case AutobuyerMode.BUY_10:
+      case AUTOBUYER_MODE.BUY_10:
         buyMaxDimension(tier, player.options.bulkOn ? this.bulk : 1, true);
         break;
     }
@@ -66,19 +83,23 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
 
   upgradeBulk() {
     if (this.hasMaxedBulk) return;
-    if (!Currency.infinityPoints.isAffordable(this.cost)) return;
-    Currency.infinityPoints.subtract(this.cost);
+    if (!Currency.infinityPoints.purchase(this.cost)) return;
     this.data.bulk = Math.clampMax(this.bulk * 2, 1e100);
     this.data.cost = Math.ceil(2.4 * this.cost);
     Achievement(61).tryUnlock();
-    SecretAchievement(38).tryUnlock();
     GameUI.update();
+  }
+
+  purchase() {
+    if (!Currency.antimatter.purchase(this.antimatterCost)) return;
+    this.data.isBought = true;
   }
 
   reset() {
     super.reset();
     if (EternityMilestone.keepAutobuyers.isReached) return;
     this.data.isUnlocked = false;
+    this.data.isBought = false;
     this.data.bulk = 1;
   }
 }

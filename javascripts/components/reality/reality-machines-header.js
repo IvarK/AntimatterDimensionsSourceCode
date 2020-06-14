@@ -12,9 +12,9 @@ Vue.component("reality-machines-header", {
     }
   },
   template: `
-    <div class="l-rm-amount__desc c-rm-amount__desc">
+    <div class="c-reality-tab__header">
       You have
-      <span class="c-rm-amount">{{ shortenDimensions(realityMachines) }}</span>
+      <span class="c-reality-tab__reality-machines">{{ format(realityMachines, 2, 0) }}</span>
       {{ "Reality Machine" | pluralize(realityMachines) }}.
     </div>
   `

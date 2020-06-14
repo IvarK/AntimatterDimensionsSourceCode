@@ -11,7 +11,8 @@ Vue.component("old-ui-tab-bar", {
       Tab.infinity,
       Tab.eternity,
       Tab.reality,
-      Tab.celestials
+      Tab.celestials,
+      Tab.shop
     ]
   },
   template: `

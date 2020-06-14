@@ -21,16 +21,19 @@ Vue.component("game-ui", {
     }
   },
   template: `
-    <div v-if="view.initialized" id="ui" class="c-game-ui">
-      <component :is="uiLayout">
-        <component :is="page" />
-      </component>
-      <modal-popup v-if="view.modal.current" />
-      <modal-glyph-selection v-if="view.modal.glyphSelection" />
-      <modal-progress-bar v-if="view.modal.progressBar" />
-      <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
+    <div id="ui-container" style="display: flex; justify-content: center;">
+      <div v-if="view.initialized" id="ui" class="c-game-ui">
+        <component :is="uiLayout">
+          <component :is="page" />
+        </component>
+        <modal-popup v-if="view.modal.current" :modal="view.modal.current"/>
+        <modal-glyph-selection v-if="view.modal.glyphSelection" />
+        <modal-progress-bar v-if="view.modal.progressBar" />
+        <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
+        <help-me />
+      </div>
       <div id="notification-container" class="l-notification-container" />
-      <help-me />
+      <tt-shop v-if="view.subtab === 'studies'" class="l-time-studies-tab__tt-shop" />
     </div>
   `
 });

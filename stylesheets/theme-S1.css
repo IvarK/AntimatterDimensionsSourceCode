@@ -4,23 +4,17 @@ html {
     align-content: center;
     background-size: 100%;
     background-color: #d72621;
-    color: black !important;
     background-attachment:fixed;
     background-position:center bottom;
 }
 
-body {
-    background: none !important;
+body.t-s1 {
+  color: black;
+  background: none;
 }
 
 #container.container {
     color: black !important;
-}
-
-input {
-    background-color: #9a921d !important;
-    border: 1px solid black !important;
-    border-radius: 3px !important;
 }
 
 .t-s1 .c-tt-buy-button--unlocked {

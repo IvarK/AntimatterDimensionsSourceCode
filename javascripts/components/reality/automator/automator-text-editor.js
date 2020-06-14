@@ -33,7 +33,7 @@ const AutomatorTextUI = {
       const scriptID = ui.view.tabs.reality.automator.editorScriptID;
       AutomatorBackend.saveScript(scriptID, editor.getDoc().getValue());
     });
-    EventHub.ui.on(GameEvent.GAME_LOAD, () => this.documents = {});
+    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.documents = {});
   }
 };
 
@@ -62,9 +62,7 @@ Vue.component("automator-text-editor", {
     currentScriptID: {
       handler(id, oldId) {
         const storedScripts = player.reality.automator.scripts;
-        if (this.UI.documents[id] === undefined) {
-          this.UI.documents[id] = CodeMirror.Doc(storedScripts[id].content, "automato");
-        }
+        this.UI.documents[id] = CodeMirror.Doc(storedScripts[id].content, "automato");
         this.UI.editor.swapDoc(this.UI.documents[id]);
         // When a script gets deleted, get rid of the old document object
         if (this.UI.documents[oldId] !== undefined && storedScripts[oldId] === undefined) {
@@ -93,7 +91,7 @@ Vue.component("automator-text-editor", {
   },
   created() {
     AutomatorTextUI.initialize();
-    EventHub.ui.on(GameEvent.GAME_LOAD, () => this.onGameLoad(), this);
+    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
   },
   mounted() {
     this.$refs.container.appendChild(this.UI.container);

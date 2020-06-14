@@ -15,13 +15,13 @@ Vue.component("replicanti-galaxy-button", {
   computed: {
     resetActionDisplay() {
       return this.isDivideUnlocked
-        ? `Divide Replicanti by ${shorten(Number.MAX_VALUE, 1, 1)}`
+        ? `Divide Replicanti by ${format(Number.MAX_VALUE, 1, 1)}`
         : "Reset Replicanti amount";
     },
     galaxyCountDisplay() {
       const bought = this.boughtGalaxies;
       const extra = this.extraGalaxies;
-      const galaxyCount = extra > 0 ? `${shortenSmallInteger(bought)}+${shortenSmallInteger(extra)}` : bought;
+      const galaxyCount = extra > 0 ? `${formatInt(bought)}+${formatInt(extra)}` : formatInt(bought);
       return `Currently: ${galaxyCount}`;
     },
     autobuyer() {
@@ -39,7 +39,7 @@ Vue.component("replicanti-galaxy-button", {
       this.isAvailable = Replicanti.galaxies.canBuyMore;
       this.boughtGalaxies = Replicanti.galaxies.bought;
       this.extraGalaxies = Replicanti.galaxies.extra;
-      this.isDivideUnlocked = Achievement(126).isEnabled;
+      this.isDivideUnlocked = Achievement(126).isUnlocked;
       this.isAutoUnlocked = this.autobuyer.isUnlocked;
       this.isAutoOn = this.autobuyer.isOn;
       this.isAutoEnabled = this.autobuyer.isEnabled;

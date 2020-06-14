@@ -29,14 +29,6 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends IntervaledAutobuyerSta
     this.data.maxGalaxies = value;
   }
 
-  get buyMax() {
-    return this.data.buyMax;
-  }
-
-  set buyMax(value) {
-    this.data.buyMax = value;
-  }
-
   get buyMaxInterval() {
     return this.data.buyMaxInterval;
   }
@@ -49,12 +41,8 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends IntervaledAutobuyerSta
     return EternityMilestone.autobuyMaxGalaxies.isReached;
   }
 
-  get isBuyMaxActive() {
-    return this.isBuyMaxUnlocked && this.buyMax;
-  }
-
   get interval() {
-    return this.isBuyMaxActive
+    return this.isBuyMaxUnlocked
       ? TimeSpan.fromSeconds(this.buyMaxInterval).totalMilliseconds
       : super.interval;
   }
@@ -62,11 +50,7 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends IntervaledAutobuyerSta
   tick() {
     if (!Galaxy.requirement.isSatisfied) return;
     super.tick();
-    if (this.limitGalaxies && player.galaxies >= this.maxGalaxies) return;
-    if (this.isBuyMaxActive) {
-      maxBuyGalaxies();
-      return;
-    }
-    galaxyResetBtnClick(true);
+    const limit = this.limitGalaxies ? this.maxGalaxies : Number.MAX_VALUE;
+    requestGalaxyReset(this.isBuyMaxUnlocked, limit);
   }
 }();

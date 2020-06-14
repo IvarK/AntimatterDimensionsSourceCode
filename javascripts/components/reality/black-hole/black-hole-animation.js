@@ -6,7 +6,7 @@ const BlackHoleAnimation = (function() {
   const PARTICLE_COUNT = 120;
   // Basically orbit size in pixels
   const SEMIMAJOR_AXIS = 100;
-  // Black hole active time approximately corresponds to time with >2x
+  // Black Hole active time approximately corresponds to time with >2x
   const ACTIVE_THRESHOLD = 2;
 
   let holeSize;
@@ -200,7 +200,7 @@ const BlackHoleAnimation = (function() {
       }
       this.eccentricity = eccentricity;
 
-      // Black hole size, calculated from orbit shape in order to give the right max boost
+      // Black Hole size, calculated from orbit shape in order to give the right max boost
       holeSize = SEMIMAJOR_AXIS * (1 - eccentricity) * (1 - Math.pow(BlackHole(1).power, -2));
       // Prevent planet + hole overlapping
       this.hole = new Hole((holeSize - PLANET_SIZE) / 2);
@@ -218,23 +218,23 @@ const BlackHoleAnimation = (function() {
       }
       const delta = time - this.lastFrame;
       this.lastFrame = time;
-
-      if (BlackHoles.arePaused) return;
-
+      
       this.planet.update(this.totalPhase(), this.eccentricity, this.period);
-
-      // Time dilation factor (Realistic formula, but only actually used for particle speed)
-      const dilationFactor = 1 / Math.sqrt(1 - holeSize / this.planet.distance);
-      for (const particle of this.particles) {
-        particle.update(delta, dilationFactor);
-      }
 
       this.context.clearRect(0, 0, 400, 400);
       this.hole.draw(this.context);
       for (const particle of this.particles) {
         particle.draw(this.context);
       }
-      this.planet.draw(this.context);
+
+      if (BlackHoles.arePaused) return;
+
+
+      // Time dilation factor (Realistic formula, but only actually used for particle speed)
+      const dilationFactor = 1 / Math.sqrt(1 - holeSize / this.planet.distance);
+      for (const particle of this.particles) {
+        particle.update(delta, dilationFactor);
+      }
     }
 
     // Code was originally written to use phase over a cycle of active+inactive time and

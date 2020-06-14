@@ -13,6 +13,19 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
     return Player.defaultStart.auto.tickspeed.interval;
   }
 
+
+  get isBought() {
+    return this.data.isBought;
+  }
+
+  get antimatterCost() {
+    return new Decimal(1e140);
+  }
+
+  get canBeBought() {
+    return true;
+  }
+
   get priority() {
     return this.data.priority;
   }
@@ -31,8 +44,8 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
 
   toggleMode() {
     this.mode = [
-      AutobuyerMode.BUY_SINGLE,
-      AutobuyerMode.BUY_MAX
+      AUTOBUYER_MODE.BUY_SINGLE,
+      AUTOBUYER_MODE.BUY_MAX
     ]
       .nextSibling(this.mode);
   }
@@ -40,18 +53,25 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
   tick() {
     super.tick();
     switch (this.mode) {
-      case AutobuyerMode.BUY_SINGLE:
+      case AUTOBUYER_MODE.BUY_SINGLE:
         buyTickSpeed();
         break;
-      case AutobuyerMode.BUY_MAX:
+      case AUTOBUYER_MODE.BUY_MAX:
         buyMaxTickSpeed();
         break;
     }
   }
 
+  purchase() {
+    if (!Currency.antimatter.purchase(this.antimatterCost)) return;
+    this.data.isBought = true;
+  }
+
   reset() {
     super.reset();
     if (EternityMilestone.keepAutobuyers.isReached) return;
+    this.data.mode = AUTOBUYER_MODE.BUY_SINGLE;
     this.data.isUnlocked = false;
+    this.data.isBought = false;
   }
 }();

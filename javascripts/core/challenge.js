@@ -2,22 +2,15 @@
 
 function startChallenge() {
   secondSoftReset(true);
-  if (!Enslaved.isRunning) Tab.dimensions.normal.show();
-}
-
-function askChallengeConfirmation(goal) {
-  if (!player.options.confirmations.challenges) return true;
-  const message = "You will start over with just your infinity upgrades, and achievements. " +
-        `You need to reach ${goal} with special conditions. ` +
-        "NOTE: The rightmost infinity upgrade column doesn't work on challenges.";
-  return confirm(message);
+  if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
 }
 
 function tryUnlockInfinityChallenges() {
   while (player.postChallUnlocked < 8 &&
-    player.antimatter.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
+    player.thisEternityMaxAM.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
     ++player.postChallUnlocked;
-    if (player.eternities.gte(7)) {
+    TabNotification.ICUnlock.tryTrigger();
+    if (EternityMilestone.autoIC.isReached) {
       InfinityChallenge(player.postChallUnlocked).complete();
     }
   }
@@ -25,20 +18,20 @@ function tryUnlockInfinityChallenges() {
 
 function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
-    if (NormalDimension(2).amount.neq(0)) {
+    if (AntimatterDimension(2).amount.neq(0)) {
       if (player.matter.eq(0)) player.matter = new Decimal(1);
       player.matter = player.matter
         .times(Decimal.pow((1.03 + DimBoost.totalBoosts / 200 + player.galaxies / 100), diff / 100));
     }
-    if (player.matter.gt(player.antimatter) && NormalChallenge(11).isRunning) {
-      Modal.message.show(`Your ${shorten(player.antimatter, 2, 2)} antimatter was annhiliated by ` +
-        `${shorten(player.matter, 2, 2)} matter.`);
+   if (player.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning) {
+      Modal.message.show(`Your ${format(Currency.antimatter.value, 2, 2)} antimatter was annhiliated by ` +
+        `${format(player.matter, 2, 2)} matter.`);
       softReset(0);
     }
   }
 
   if (NormalChallenge(3).isRunning) {
-    player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)).clampMax(Decimal.MAX_NUMBER);
+    player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)).clampMax(Decimal.NUMBER_MAX_VALUE);
   }
 
   if (NormalChallenge(2).isRunning) {
@@ -47,7 +40,7 @@ function updateNormalAndInfinityChallenges(diff) {
 
   if (InfinityChallenge(2).isRunning) {
     if (player.ic2Count >= 8) {
-      if (NormalDimension(8).amount.gt(0)) {
+      if (AntimatterDimension(8).amount.gt(0)) {
         sacrificeReset();
       }
       player.ic2Count = 0;
@@ -67,14 +60,26 @@ class NormalChallengeState extends GameMechanicState {
     return player.challenge.normal.current === this.id || (isPartOfIC1 && InfinityChallenge(1).isRunning);
   }
 
+  requestStart() {
+    if (!Tab.challenges.isAvailable) return;
+    if (!player.options.confirmations.challenges) {
+      this.start();
+      return;
+    }
+    Modal.startNormalChallenge.show(this.id);
+  }
+
   start() {
-    if (this.id === 1) return;
-    if (!askChallengeConfirmation("infinity")) return;
+    if (this.id === 1 || this.isRunning) return;
+    if (!Tab.challenges.isAvailable) return;
 
     player.challenge.normal.current = this.id;
     player.challenge.infinity.current = 0;
 
-    if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) Enslaved.showEC6C10Hint();
+    if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) {
+      EnslavedProgress.challengeCombo.giveProgress();
+      Enslaved.quotes.show(Enslaved.quotes.EC6C10);
+    }
 
     startChallenge();
   }
@@ -87,13 +92,18 @@ class NormalChallengeState extends GameMechanicState {
   complete() {
     // eslint-disable-next-line no-bitwise
     player.challenge.normal.completedBits |= 1 << this.id;
+    // Since breaking infinity maxes even autobuyers that aren't unlocked,
+    // it's possible to get r52 or r53 from completing a challenge
+    // and thus unlocking an autobuyer.
+    Achievement(52).tryUnlock();
+    Achievement(53).tryUnlock();
   }
 
   get goal() {
-    if (Enslaved.isRunning && !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(this.id)) {
+    if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(this.id)) {
       return Decimal.pow10(1e15);
     }
-    return Decimal.MAX_NUMBER;
+    return Decimal.NUMBER_MAX_VALUE;
   }
 
   updateChallengeTime() {
@@ -110,17 +120,15 @@ class NormalChallengeState extends GameMechanicState {
   exit() {
     player.challenge.normal.current = 0;
     secondSoftReset(true);
-    if (!Enslaved.isRunning) Tab.dimensions.normal.show();
+    if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }
-
-NormalChallengeState.createIndex(GameDatabase.challenges.normal);
 
 /**
  * @param {number} id
  * @return {NormalChallengeState}
  */
-const NormalChallenge = id => NormalChallengeState.index[id];
+const NormalChallenge = NormalChallengeState.createAccessor(GameDatabase.challenges.normal);
 
 /**
  * @returns {NormalChallengeState}
@@ -139,7 +147,7 @@ const NormalChallenges = {
   /**
    * @type {NormalChallengeState[]}
    */
-  all: NormalChallengeState.index.compact(),
+  all: NormalChallenge.index.compact(),
   completeAll() {
     for (const challenge of NormalChallenges.all) challenge.complete();
   },
@@ -154,7 +162,7 @@ class InfinityChallengeRewardState extends GameMechanicState {
     this._challenge = challenge;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this._challenge.isCompleted;
   }
 }
@@ -173,9 +181,17 @@ class InfinityChallengeState extends GameMechanicState {
     return player.challenge.infinity.current === this.id;
   }
 
-  start() {
+  requestStart() {
     if (!this.isUnlocked) return;
-    if (!askChallengeConfirmation("a set goal")) return;
+    if (!player.options.confirmations.challenges) {
+      this.start();
+      return;
+    }
+    Modal.startInfinityChallenge.show(this.id);
+  }
+
+  start() {
+    if (!this.isUnlocked || this.isRunning) return;
 
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = this.id;
@@ -194,9 +210,10 @@ class InfinityChallengeState extends GameMechanicState {
   complete() {
     // eslint-disable-next-line no-bitwise
     player.challenge.infinity.completedBits |= 1 << this.id;
+    EventHub.dispatch(GAME_EVENT.INFINITY_CHALLENGE_COMPLETED);
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isRunning;
   }
 
@@ -228,17 +245,15 @@ class InfinityChallengeState extends GameMechanicState {
   exit() {
     player.challenge.infinity.current = 0;
     secondSoftReset(true);
-    if (!Enslaved.isRunning) Tab.dimensions.normal.show();
+    if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }
-
-InfinityChallengeState.createIndex(GameDatabase.challenges.infinity);
 
 /**
  * @param {number} id
  * @return {InfinityChallengeState}
  */
-const InfinityChallenge = id => InfinityChallengeState.index[id];
+const InfinityChallenge = InfinityChallengeState.createAccessor(GameDatabase.challenges.infinity);
 
 /**
  * @returns {InfinityChallengeState}
@@ -257,7 +272,7 @@ const InfinityChallenges = {
   /**
    * @type {InfinityChallengeState[]}
    */
-  all: InfinityChallengeState.index.compact(),
+  all: InfinityChallenge.index.compact(),
   completeAll() {
     for (const challenge of InfinityChallenges.all) challenge.complete();
   },

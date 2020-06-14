@@ -3,31 +3,31 @@
 // Primary is lifted from the study tree (mostly),
 // secondary is primary -15% l in hsl, apart from reality which is -10%
 const perkColors = {
-  [PerkFamily.NORMAL]: {
+  [PERK_FAMILY.ANTIMATTER]: {
     primary: "#22aa48",
     secondary: "#156a2d"
   },
-  [PerkFamily.INFINITY]: {
+  [PERK_FAMILY.INFINITY]: {
     primary: "#b67f33",
     secondary: "#7b5623"
   },
-  [PerkFamily.ETERNITY]: {
+  [PERK_FAMILY.ETERNITY]: {
     primary: "#b241e3",
     secondary: "#8b1cba"
   },
-  [PerkFamily.DILATION]: {
+  [PERK_FAMILY.DILATION]: {
     primary: "#64dd17",
     secondary: "#449810"
   },
-  [PerkFamily.REALITY]: {
+  [PERK_FAMILY.REALITY]: {
     primary: "#0b600e",
     secondary: "#063207"
   },
-  [PerkFamily.AUTOMATION]: {
+  [PERK_FAMILY.AUTOMATION]: {
     primary: "#ff0000",
     secondary: "#b30000"
   },
-  [PerkFamily.ACHIEVEMENT]: {
+  [PERK_FAMILY.ACHIEVEMENT]: {
     primary: "#fdd835",
     secondary: "#e3ba02"
   },
@@ -178,21 +178,24 @@ const PerkNetwork = {
 
 Vue.component("perks-tab", {
   computed: {
-    shiftDown() {
-      return ui.view.shiftDown;
+    showHintText() {
+      return ui.view.shiftDown || player.options.showHintText.perks;
     }
   },
   watch: {
-    shiftDown(newValue) {
-      PerkNetwork.setLabelVisibility(newValue);
+    showHintText(newValue) {
+      if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
+      else PerkNetwork.setLabelVisibility(newValue);
     }
   },
   created() {
-    EventHub.ui.on(GameEvent.PERK_BOUGHT, () => PerkNetwork.updatePerkColors());
-    EventHub.ui.on(GameEvent.REALITY_RESET_AFTER, () => PerkNetwork.updatePerkColors());
+    EventHub.ui.on(GAME_EVENT.PERK_BOUGHT, () => PerkNetwork.updatePerkColors());
+    EventHub.ui.on(GAME_EVENT.REALITY_RESET_AFTER, () => PerkNetwork.updatePerkColors());
   },
   mounted() {
     PerkNetwork.initializeIfNeeded();
+    if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
+    else PerkNetwork.setLabelVisibility(ui.view.shiftDown || player.options.showHintText.perks);
     PerkNetwork.updatePerkColors();
     PerkNetwork.resetPosition();
     this.$refs.tab.appendChild(PerkNetwork.container);

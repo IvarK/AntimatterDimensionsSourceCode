@@ -5,8 +5,8 @@ Vue.component("autobuyer-toggles", {
     return {
       autobuyersOn: false,
       bulkOn: false,
-      isAutoRealityUnlocked: false,
-      autoRealityMode: AutoRealityMode.RM,
+      showContinuum: false,
+      disableContinuum: false,
     };
   },
   watch: {
@@ -15,45 +15,56 @@ Vue.component("autobuyer-toggles", {
     },
     bulkOn(newValue) {
       player.options.bulkOn = newValue;
-    }
-  },
-  computed: {
-    autoRealityModeDisplay() {
-      switch (this.autoRealityMode) {
-        case AutoRealityMode.RM: return "reality machines";
-        case AutoRealityMode.GLYPH: return "glyph level";
-        case AutoRealityMode.EITHER: return "either";
-        case AutoRealityMode.BOTH: return "both";
-      }
-      throw new Error("Unknown auto reality mode");
+    },
+    disableContinuum(newValue) {
+      player.options.disableContinuum = newValue;
     }
   },
   methods: {
     update() {
       this.autobuyersOn = player.options.autobuyersOn;
       this.bulkOn = player.options.bulkOn;
-      this.isAutoRealityUnlocked = Autobuyer.reality.isUnlocked;
-      this.autoRealityMode = Autobuyer.reality.mode;
+      this.showContinuum = Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK);
+      this.disableContinuum = player.options.disableContinuum;
+    },
+    toggleAllAutobuyers() {
+      const allAutobuyersDisabled = Autobuyers.unlocked.every(autobuyer => !autobuyer.isActive);
+      if (allAutobuyersDisabled) {
+        for (const autobuyer of Autobuyers.unlocked) {
+          autobuyer.isActive = true;
+        }
+      } else {
+        for (const autobuyer of Autobuyers.unlocked) {
+          autobuyer.isActive = false;
+        }
+      }
     }
   },
   template:
-    `<div class="l-autobuyer-toggles">
+    `<div class="c-subtab-option-container">
       <primary-button-on-off-custom
         v-model="autobuyersOn"
         on="Disable autobuyers"
         off="Enable autobuyers"
-        class="o-primary-btn--autobuyer-toggle"
+        class="o-primary-btn--subtab-option"
       />
+      <primary-button
+        class="o-primary-btn--subtab-option"
+        @click="toggleAllAutobuyers()">
+        Toggle all autobuyers
+      </primary-button>
       <primary-button-on-off-custom
         v-model="bulkOn"
         on="Disable bulk buy"
         off="Enable bulk buy"
-        class="o-primary-btn--autobuyer-toggle"
+        class="o-primary-btn--subtab-option"
       />
-      <primary-button
-        v-if="isAutoRealityUnlocked"
-        class="o-primary-btn--autobuyer-toggle"
-        onclick="Autobuyer.reality.toggleMode();"
-      >Auto reality mode: {{autoRealityModeDisplay}}</primary-button>
+      <primary-button-on-off-custom
+        v-if="showContinuum"
+        v-model="disableContinuum"
+        on="Enable Continuum"
+        off="Disable Continuum"
+        class="o-primary-btn--subtab-option"
+      />
     </div>`
 });

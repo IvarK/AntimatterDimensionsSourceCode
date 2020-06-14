@@ -4,11 +4,12 @@ Vue.component("new-time-dimensions-tab", {
   data() {
     return {
       totalUpgrades: 0,
+      multPerTickspeed: 0,
+      tickspeedSoftcap: 0,
       timeShards: new Decimal(0),
       upgradeThreshold: new Decimal(0),
       shardsPerSecond: new Decimal(0),
       incomeType: "",
-      showCostScaleTooltip: false,
       areAutobuyersUnlocked: false
     };
   },
@@ -16,48 +17,54 @@ Vue.component("new-time-dimensions-tab", {
     totalUpgradesDisplay() {
       return formatWithCommas(this.totalUpgrades);
     },
-    e6000Tooltip() {
-      return "TD costs start increasing faster after " + shortenDimensions(new Decimal("1e6000"));
-    },
-    costScaleTooltip() {
-      return this.showCostScaleTooltip ? this.e6000Tooltip : undefined;
-    }
+    costIncreases: () => TimeDimension(1).costIncreaseThresholds,
   },
   methods: {
     update() {
       this.totalUpgrades = player.totalTickGained;
+      this.multPerTickspeed = FreeTickspeed.multToNext;
+      this.tickspeedSoftcap = FreeTickspeed.softcap;
       this.timeShards.copyFrom(player.timeShards);
-      this.upgradeThreshold.copyFrom(player.tickThreshold);
+      this.upgradeThreshold.copyFrom(FreeTickspeed.fromShards(player.timeShards).nextShards);
       this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerSecond);
       this.incomeType = EternityChallenge(7).isRunning ? "Eighth Infinity Dimensions" : "time shards";
-      this.showCostScaleTooltip = player.eternityPoints.exponent > 6000;
       this.areAutobuyersUnlocked = RealityUpgrade(13).isBought;
     },
     maxAll() {
-      buyMaxTimeDimensions();
+      maxAllTimeDimensions();
     },
     toggleAllAutobuyers() {
       toggleAllTimeDims();
     }
   },
-  template:
-    `<div class="l-time-dim-tab l-centered-vertical-tab">
+  template: `
+    <div class="l-time-dim-tab l-centered-vertical-tab">
+      <div class="c-subtab-option-container">
+        <primary-button
+          class="o-primary-btn--subtab-option"
+          @click="maxAll"
+        >Max all</primary-button>
+        <primary-button
+          v-if="areAutobuyersUnlocked"
+          class="o-primary-btn--subtab-option"
+          @click="toggleAllAutobuyers"
+        >Toggle all autobuyers</primary-button>
+      </div>
       <div>
         <p>You've gained {{totalUpgradesDisplay}} tickspeed upgrades.</p>
         <p>
           You have
-          <span class="c-time-dim-description__accent">{{shortenMoney(timeShards)}}</span> time shards.
+          <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> time shards.
           Next tickspeed upgrade at
-          <span class="c-time-dim-description__accent">{{shortenMoney(upgradeThreshold)}}</span>
+          <span class="c-time-dim-description__accent">{{format(upgradeThreshold, 2, 1)}}.</span>
         </p>
-      </div>      
-      <div>You are getting {{shortenDimensions(shardsPerSecond)}} {{incomeType}} per second.</div>
-      <primary-button
-        v-tooltip="costScaleTooltip"
-        class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
-        @click="maxAll"
-      >Max all</primary-button>
-      <div class="l-time-dim-tab__row-container">
+      </div>
+      <div>
+        Each additional upgrade requires {{formatX(multPerTickspeed, 2, 2)}} more time shards. This will start
+        increasing above {{formatInt(tickspeedSoftcap)}} upgrades.
+      </div>
+      <div>You are getting {{format(shardsPerSecond, 2, 0)}} {{incomeType}} per second.</div>
+      <div class="l-dimensions-container">
         <new-time-dimension-row
           v-for="tier in 8"
           :key="tier"
@@ -65,10 +72,10 @@ Vue.component("new-time-dimensions-tab", {
           :areAutobuyersUnlocked="areAutobuyersUnlocked"
         />
       </div>
-      <primary-button
-        v-if="areAutobuyersUnlocked"
-        class="o-primary-btn--td-all-autobuyers l-time-dim-tab__all-autobuyers"
-        @click="toggleAllAutobuyers"
-      >Toggle all ON/OFF</primary-button>
+      <div>
+        Time Dimension costs jump at {{format(costIncreases[0], 2, 2)}} EP and {{format(costIncreases[1])}} EP,
+        <br>
+        and get expensive more quickly past {{format(costIncreases[2])}} EP
+      </div>
     </div>`
 });

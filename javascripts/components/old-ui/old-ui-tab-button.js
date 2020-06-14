@@ -6,12 +6,14 @@ Vue.component("old-ui-tab-button", {
   },
   data() {
     return {
-      isAvailable: false
+      isAvailable: false,
+      hasNotification: false
     };
   },
   methods: {
     update() {
       this.isAvailable = this.tab.isAvailable;
+      this.hasNotification = this.tab.hasNotification;
     }
   },
   template: `
@@ -20,7 +22,7 @@ Vue.component("old-ui-tab-button", {
       :class="tab.config.UIClass"
       class="o-tab-btn"
       style="margin: 0.2rem"
-      @click="tab.show()"
-    >{{tab.name}}</button>
+      @click="tab.show(true)"
+    >{{tab.name}} <i v-if="hasNotification" class="fas fa-exclamation"></i></button>
   `
 });

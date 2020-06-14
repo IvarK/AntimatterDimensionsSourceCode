@@ -6,7 +6,7 @@ Vue.component("perk-shop-upgrade", {
   },
   data() {
     return {
-      isAvailable: false,
+      isAvailableForPurchase: false,
       isCapped: false,
     };
   },
@@ -14,24 +14,23 @@ Vue.component("perk-shop-upgrade", {
     classObject() {
       return {
         "o-teresa-shop-button": true,
-        "o-teresa-shop-button--disabled": !this.isAvailable && !this.isCapped,
+        "o-teresa-shop-button--available": this.isAvailableForPurchase && !this.isCapped,
         "o-teresa-shop-button--capped": this.isCapped
       };
     }
   },
   methods: {
     update() {
-      this.isAvailable = this.upgrade.isAvailable;
+      this.isAvailableForPurchase = this.upgrade.isAvailableForPurchase;
       this.isCapped = this.upgrade.isCapped;
     }
   },
   template:
     `<div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()">
-        <description-display 
+        <description-display
           :config="upgrade.config"
           :length="70"
-          name="o-compression-upgrade__description"
         />
         <br>
         <effect-display :config="upgrade.config" />

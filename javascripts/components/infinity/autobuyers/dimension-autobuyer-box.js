@@ -10,6 +10,8 @@ Vue.component("dimension-autobuyer-box", {
         return {
           hasMaxedInterval: false,
           hasMaxedBulk: false,
+          isUnlocked: false,
+          bulkUnlimited: false,
           bulk: 1,
           cost: 1
         };
@@ -20,14 +22,16 @@ Vue.component("dimension-autobuyer-box", {
           if (!this.hasMaxedBulk) {
             bulk = Math.min(bulk * 2, 1e100);
           }
-          return `${shortenDimensions(bulk)}x bulk purchase`;
+          return `${formatX(bulk, 2, 0)} bulk purchase`;
         }
       },
       methods: {
         update() {
           const autobuyer = this.autobuyer;
           this.hasMaxedInterval = autobuyer.hasMaxedInterval;
+          this.isUnlocked = autobuyer.isUnlocked;
           this.hasMaxedBulk = autobuyer.hasMaxedBulk;
+          this.bulkUnlimited = autobuyer.hasUnlimitedBulk;
           this.bulk = autobuyer.bulk;
           this.cost = autobuyer.cost;
         },
@@ -37,15 +41,20 @@ Vue.component("dimension-autobuyer-box", {
       },
       template:
         `<button
-          v-if="hasMaxedInterval"
+          v-if="hasMaxedInterval && !bulkUnlimited && isUnlocked"
           class="o-autobuyer-btn"
           @click="upgradeBulk"
         >
         <span>{{bulkDisplay}}</span>
         <template v-if="!hasMaxedBulk">
           <br>
-          <span>Cost: {{shortenDimensions(cost)}} IP</span>
+          <span>Cost: {{format(cost, 2, 0)}} IP</span>
         </template>
+        </button>
+        <button 
+          v-else-if="hasMaxedInterval && !bulkUnlimited"
+          class="o-autobuyer-btn l-autobuyer-box__button">
+          Complete the challenge to upgrade bulk
         </button>`
     }
   },
@@ -54,7 +63,7 @@ Vue.component("dimension-autobuyer-box", {
   },
   data() {
     return {
-      mode: AutobuyerMode.BUY_SINGLE
+      mode: AUTOBUYER_MODE.BUY_SINGLE
     };
   },
   computed: {
@@ -62,12 +71,12 @@ Vue.component("dimension-autobuyer-box", {
       return Autobuyer.dimension(this.tier);
     },
     name() {
-      return `${DISPLAY_NAMES[this.tier]} Dimension Autobuyer`;
+      return `${AntimatterDimension(this.tier).displayName} Dimension Autobuyer`;
     },
     modeDisplay() {
       switch (this.mode) {
-        case AutobuyerMode.BUY_SINGLE: return "Buys singles";
-        case AutobuyerMode.BUY_10: return "Buys max";
+        case AUTOBUYER_MODE.BUY_SINGLE: return "Buys singles";
+        case AUTOBUYER_MODE.BUY_10: return "Buys max";
       }
       throw "Unknown dimension autobuyer mode";
     }
@@ -83,12 +92,15 @@ Vue.component("dimension-autobuyer-box", {
   },
   template:
     `<autobuyer-box :autobuyer="autobuyer" :name="name" showInterval>
-      <template slot="beforeInterval">
+      <template slot="intervalSlot">
         <bulk-button :autobuyer="autobuyer" />
         <autobuyer-interval-button :autobuyer="autobuyer" />
+      </template>
+      <template slot="toggleSlot">
         <button class="o-autobuyer-btn" @click="toggleMode">{{modeDisplay}}</button>
       </template>
-      <div class="l-autobuyer-box__fill" />
-      <autobuyer-priority-selector :autobuyer="autobuyer" class="l-autobuyer-box__priority-selector" />
+      <template slot="prioritySlot">
+        <autobuyer-priority-selector :autobuyer="autobuyer" class="l-autobuyer-box__priority-selector" />
+      </template>
     </autobuyer-box>`
 });

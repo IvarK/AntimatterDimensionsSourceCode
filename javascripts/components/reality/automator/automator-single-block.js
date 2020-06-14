@@ -23,12 +23,16 @@ Vue.component("automator-single-block", {
     this.b = this.block;
   },
   methods: {
+    parseRequest() {
+      BlockAutomator.parseTextFromBlocks();
+    },
     deleteBlockFromNest(id) {
       const idx = this.b.nest.findIndex(x => x.id === id);
       this.b.nest.splice(idx, 1);
     },
     updateBlockFromNest(block, id) {
       this.$set(this.b.nest, this.b.nest.findIndex(x => x.id === id), block);
+      this.parseRequest();
     },
     update() {
       this.currentBlockId = BlockAutomator.currentBlockId;
@@ -56,11 +60,11 @@ Vue.component("automator-single-block", {
   },
   computed: {
     hasInput() {
-      return this.b.hasInput && 
+      return this.b.hasInput &&
       (this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true);
     },
     hasSecondaryTargets() {
-      return this.b.secondaryTargets && 
+      return this.b.secondaryTargets &&
       (this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true);
     },
     isCurrentLine() {
@@ -76,7 +80,7 @@ Vue.component("automator-single-block", {
         .splice(this.validatorErrors.errors[0].startOffset - this.idxOffset, 0, span)
         .splice(this.validatorErrors.errors[0].endOffset + span.length + 1 - this.idxOffset, 0, "</span>");
       return {
-        content: 
+        content:
         `<div class="c-block-automator-error">
           <div>${content}</div>
           <div>${this.validatorErrors.errors[0].info}</div>
@@ -95,26 +99,26 @@ Vue.component("automator-single-block", {
         <select v-if="b.targets" @change="updateBlock(block, b.id)" v-model="b.target" class="o-automator-block-input">
           <option v-for="target in b.targets" :value="target">{{ target }}</option>
         </select>
-        <select 
-          v-if="hasSecondaryTargets" 
-          @change="updateBlock(block, b.id)" 
-          v-model="b.secondaryTarget" 
+        <select
+          v-if="hasSecondaryTargets"
+          @change="updateBlock(block, b.id)"
+          v-model="b.secondaryTarget"
           class="o-automator-block-input">
           <option v-for="target in b.secondaryTargets" :value="target">{{ target }}</option>
         </select>
-        <input 
-          v-if="hasInput" 
-          v-model="b.inputValue" 
-          @change="updateBlock(b, b.id)" 
-          @keyup="validateInput(b.inputValue)" 
+        <input
+          v-if="hasInput"
+          v-model="b.inputValue"
+          @change="updateBlock(b, b.id)"
+          @keyup="validateInput(b.inputValue)"
           class="o-automator-block-input"
           v-tooltip="errorTooltip"/>
-        
+
         <div @click="deleteBlock(b.id)" class="o-automator-block-delete">X</div>
       </div>
       <draggable v-if="block.nested" class="l-automator-nested-block" v-model="block.nest" group="code-blocks">
           <automator-single-block
-            v-for="(block, index) in block.nest" 
+            v-for="(block, index) in block.nest"
             :key="block.id"
             :lineNumber="index"
             :block="block"

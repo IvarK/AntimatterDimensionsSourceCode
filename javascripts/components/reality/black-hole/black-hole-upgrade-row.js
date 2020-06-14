@@ -6,14 +6,18 @@ Vue.component("black-hole-upgrade-row", {
   },
   data() {
     return {
-      isUnlocked: false
+      isUnlocked: false,
+      isPermanent: false
     };
   },
   computed: {
+    blackHoleDescription() {
+      return this.blackHole.description(false);
+    },
     intervalConfig() {
       return {
         upgrade: this.blackHole.intervalUpgrade,
-        description: "Reduce the black hole inactive time by 20%",
+        description: () => `Reduce ${this.blackHoleDescription}'s inactive time by ${formatPercents(0.2)}`,
         effectTitle: "Current interval",
         formatEffect: value => `${TimeSpan.fromSeconds(value).toStringShort(false)}`
       };
@@ -21,7 +25,7 @@ Vue.component("black-hole-upgrade-row", {
     powerConfig() {
       return {
         upgrade: this.blackHole.powerUpgrade,
-        description: "Make the black hole 35% more powerful",
+        description: () => `Make ${this.blackHoleDescription} ${formatPercents(0.35)} stronger`,
         effectTitle: "Current power",
         formatEffect: value => `${formatX(value, 2, 2)}`
       };
@@ -29,7 +33,7 @@ Vue.component("black-hole-upgrade-row", {
     durationConfig() {
       return {
         upgrade: this.blackHole.durationUpgrade,
-        description: "Extend the black hole duration by 30%",
+        description: () => `Extend ${this.blackHoleDescription}'s duration by ${formatPercents(0.3)}`,
         effectTitle: "Current duration",
         formatEffect: value => `${TimeSpan.fromSeconds(value).toStringShort(false)}`
       };
@@ -38,13 +42,14 @@ Vue.component("black-hole-upgrade-row", {
   methods: {
     update() {
       this.isUnlocked = this.blackHole.isUnlocked;
+      this.isPermanent = this.blackHole.isPermanent;
     }
   },
   template: `
     <div v-if="isUnlocked" class="l-black-hole-upgrade-grid__row">
-      <black-hole-upgrade-button :config="intervalConfig" />
+      <black-hole-upgrade-button v-if="!isPermanent" :config="intervalConfig" />
       <black-hole-upgrade-button :config="powerConfig" />
-      <black-hole-upgrade-button :config="durationConfig" />
+      <black-hole-upgrade-button v-if="!isPermanent" :config="durationConfig" />
     </div>
   `
 });

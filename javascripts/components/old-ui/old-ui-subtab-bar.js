@@ -18,7 +18,7 @@ Vue.component("old-ui-subtab-bar", {
     }
   },
   template: `
-    <div v-if="isVisible">
+    <div class="c-subtab-button-container" v-if="isVisible">
       <old-ui-subtab-button v-for="(subtab, i) in subtabs" :key="i" :subtab="subtab" />
     </div>
   `

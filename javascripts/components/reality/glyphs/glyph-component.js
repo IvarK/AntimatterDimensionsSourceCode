@@ -30,14 +30,18 @@ const GlyphTooltipEffect = {
       return this.boostColor ? `⯅${value}⯅` : value;
     },
     secondaryEffectText() {
-      const value = this.effectConfig.formatEffect(this.effectConfig.conversion(this.value));
+      const value = this.effectConfig.formatSingleSecondaryEffect(
+        this.effectConfig.conversion(this.value));
       return this.boostColor ? `⯅${value}⯅` : value;
     },
     textSplits() {
       const firstSplit = this.effectStringTemplate.split("{value}");
-      const secondSplit = firstSplit[1].split("{value2}");
+      const secondSplit = firstSplit[1] ? firstSplit[1].split("{value2}") : "";
       if (secondSplit.length !== 1) return [firstSplit[0]].concat(secondSplit);
       return firstSplit;
+    },
+    hasValue() {
+      return this.effectStringTemplate.includes("{value}");
     },
     hasSecondaryValue() {
       return this.textSplits[2] !== undefined;
@@ -67,7 +71,7 @@ const GlyphTooltipEffect = {
   template: `
     <div class="c-glyph-tooltip__effect">
       <span v-html="convertedParts[0]"/>
-      <span :style="valueStyle">{{primaryEffectText}}</span>
+      <span v-if="hasValue" :style="valueStyle">{{primaryEffectText}}</span>
       <span v-html="convertedParts[1]"/>
       <span v-if="hasSecondaryValue" :style="valueStyle">{{secondaryEffectText}}</span>
       <span v-if="hasSecondaryValue" v-html="convertedParts[2]"/>
@@ -106,13 +110,12 @@ const GlyphTooltipComponent = {
       return this.levelOverride ? this.levelOverride : this.level;
     },
     sortedEffects() {
-      return getGlyphEffectsFromBitmask(this.effects, this.effectiveLevel, this.strength);
+      return getGlyphEffectValuesFromBitmask(this.effects, this.effectiveLevel, this.strength)
+        .filter(effect =>
+          GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },
     rarityInfo() {
       return getRarity(this.strength);
-    },
-    roundedRarity() {
-      return 0.1 * Math.floor(strengthToRarity(this.strength) * 10);
     },
     descriptionStyle() {
       return {
@@ -126,8 +129,10 @@ const GlyphTooltipComponent = {
       };
     },
     description() {
+      if (this.type === "companion") return "Companion Glyph";
+      if (this.type === "cursed") return "Cursed Glyph";
       const name = this.type === "reality" ? "Pure" : this.rarityInfo.name;
-      const rarity = this.type === "reality" ? "" : `(${this.roundedRarity.toFixed(1)}%)`;
+      const rarity = this.type === "reality" ? "" : `(${formatRarity(strengthToRarity(this.strength))})`;
       return `${name} Glyph of ${this.type.charAt(0).toUpperCase()}${this.type.slice(1)} ${rarity}`;
     },
     isLevelCapped() {
@@ -137,9 +142,10 @@ const GlyphTooltipComponent = {
       return this.levelOverride && this.levelOverride > this.level;
     },
     levelText() {
+      if (this.type === "companion") return "";
       // eslint-disable-next-line no-nested-ternary
       const arrow = this.isLevelCapped ? "▼" : (this.isLevelBoosted ? "⯅" : "");
-      return `Level: ${arrow}${shortenSmallInteger(this.effectiveLevel)}${arrow}`;
+      return `Level: ${arrow}${formatInt(this.effectiveLevel)}${arrow}`;
     },
     levelStyle() {
       // eslint-disable-next-line no-nested-ternary
@@ -147,8 +153,11 @@ const GlyphTooltipComponent = {
       return { color };
     },
     sacrificeText() {
-      if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && this.type !== "reality") {
-        const refinementText = `${shorten(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+      if (this.type === "companion") return "";
+      if (this.type === "cursed") return "Gives nothing when sacrificed or refined";
+      if (GlyphSacrificeHandler.isRefining && this.type !== "reality") {
+        if (!AlchemyResource[this.type].isUnlocked) return "Cannot be refined (resource not unlocked)";
+        const refinementText = `${format(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
         const limitText = this.sacrificeReward === 0
           ? ` (limit reached)`
           : ``;
@@ -156,10 +165,15 @@ const GlyphTooltipComponent = {
           ? `Refine for ${refinementText}${limitText}`
           : `Can be refined for ${refinementText}${limitText}`;
       }
-      const powerText = `${shorten(this.sacrificeReward, 2, 2)} power`;
+      const powerText = `${format(this.sacrificeReward, 2, 2)} power`;
+      const showFilterScoreModes = [AUTO_GLYPH_SCORE.RARITY, AUTO_GLYPH_SCORE.RARITY_THRESHOLDS,
+        AUTO_GLYPH_SCORE.SPECIFIED_EFFECT, AUTO_GLYPH_SCORE.ADVANCED_MODE];
+      const filterScoreText = showFilterScoreModes.includes(AutoGlyphProcessor.scoreMode)
+        ? `\nGlyph Score: ${format(AutoGlyphProcessor.filterValue(this.$parent.glyph), 1, 1)}`
+        : "";
       return this.onTouchDevice
-        ? `Sacrifice for ${powerText}`
-        : `Can be sacrificed for ${powerText}`;
+        ? `Sacrifice for ${powerText}${filterScoreText}`
+        : `Can be sacrificed for ${powerText}${filterScoreText}`;
     },
     eventHandlers() {
       return GameUI.touchDevice ? {
@@ -189,14 +203,17 @@ const GlyphTooltipComponent = {
       ev.preventDefault();
       ev.stopPropagation();
     },
-    sacrificeGlyph() {
-      sacrificeGlyph(Glyphs.findById(this.id), false);
+    removeGlyph() {
+      GlyphSacrificeHandler.removeGlyph(Glyphs.findById(this.id), false);
     },
   },
   mounted() {
     // By attaching the tooltip to the body element, we make sure it ends up on top of anything
     // else, with no z order shenanigans
     document.body.appendChild(this.$el);
+  },
+  destroyed() {
+    document.body.removeChild(this.$el);
   },
   template: `
   <div class="l-glyph-tooltip c-glyph-tooltip"
@@ -215,7 +232,7 @@ const GlyphTooltipComponent = {
     </div>
     <div v-if="showDeletionText"
          :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
-         v-on="onTouchDevice ? { click: sacrificeGlyph } : {}">
+         v-on="onTouchDevice ? { click: removeGlyph } : {}">
       {{sacrificeText}}
     </div>
   </div>
@@ -248,6 +265,10 @@ Vue.component("glyph-component", {
       type: String,
       default: "0.2rem"
     },
+    bottomPadding: {
+      type: String,
+      default: "0.3rem"
+    },
     textProportion: {
       type: Number,
       default: 0.5
@@ -257,6 +278,10 @@ Vue.component("glyph-component", {
       default: false,
     },
     draggable: {
+      type: Boolean,
+      default: false,
+    },
+    flipTooltip: {
       type: Boolean,
       default: false,
     }
@@ -271,6 +296,9 @@ Vue.component("glyph-component", {
       sacrificeReward: 0,
       levelOverride: 0,
       isRealityGlyph: false,
+      glyphEffects: [],
+      // We use this to not create a ton of tooltip components as soon as the glyph tab loads.
+      tooltipLoaded: false,
     };
   },
   computed: {
@@ -309,6 +337,7 @@ Vue.component("glyph-component", {
         "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
         "border-radius": this.circular ? "50%" : "0",
         animation: this.isRealityGlyph ? "a-reality-glyph-outer-cycle 10s infinite" : undefined,
+        "-webkit-user-drag": this.draggable ? "" : "none"
       };
     },
     innerStyle() {
@@ -321,6 +350,7 @@ Vue.component("glyph-component", {
         "text-shadow": `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
         animation: this.isRealityGlyph ? "a-reality-glyph-icon-cycle 10s infinite" : undefined,
+        "padding-bottom": this.bottomPadding
       };
     },
     mouseEventHandlers() {
@@ -340,6 +370,22 @@ Vue.component("glyph-component", {
     isCurrentTooltip() {
       return this.$viewModel.tabs.reality.currentGlyphTooltip === this.componentID;
     },
+    tooltipDirectionClass() {
+      let directionID = this.$viewModel.tabs.reality.glyphTooltipDirection;
+      if (this.flipTooltip) directionID += 1;
+      switch (directionID) {
+        case -1:
+          return "l-glyph-tooltip--down-left";
+        case 0:
+          return "l-glyph-tooltip--down-right";
+        case 1:
+          return "l-glyph-tooltip--up-left";
+        case 2:
+          return "l-glyph-tooltip--up-right";
+        default:
+          return "";
+      }
+    },
   },
   created() {
     this.$on("tooltip-touched", () => this.hideTooltip());
@@ -351,24 +397,80 @@ Vue.component("glyph-component", {
   methods: {
     update() {
       this.isRealityGlyph = this.glyph.type === "reality";
+      this.glyphEffects = this.extractGlyphEffects();
+      this.showGlyphEffectDots = player.options.showHintText.glyphEffectDots;
+    },
+    // This finds all the effects of a glyph and shifts all their IDs so that type's lowest-ID effect is 0 and all
+    // other effects count up to 3 (or 6 for effarig). Used to add dots in unique positions on glyphs to show effects.
+    extractGlyphEffects() {
+      let minEffectID = 0;
+      switch (this.glyph.type) {
+        case "time":
+        case "cursed":
+        case "companion":
+          minEffectID = 0;
+          break;
+        case "dilation":
+        case "reality":
+          minEffectID = 4;
+          break;
+        case "replication":
+          minEffectID = 8;
+          break;
+        case "infinity":
+          minEffectID = 12;
+          break;
+        case "power":
+          minEffectID = 16;
+          break;
+        case "effarig":
+          minEffectID = 20;
+          break;
+        default:
+          throw new Error(`Unrecognized glyph type "${this.glyph.type}" in glyph effect icons`);
+      }
+      const effectIDs = [];
+      // eslint-disable-next-line no-bitwise
+      let remainingEffects = this.glyph.effects >> minEffectID;
+      for (let id = 0; remainingEffects > 0; id++) {
+        // eslint-disable-next-line no-bitwise
+        if ((remainingEffects & 1) === 1) effectIDs.push(id);
+        // eslint-disable-next-line no-bitwise
+        remainingEffects >>= 1;
+      }
+      return effectIDs;
     },
     hideTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },
     showTooltip() {
+      this.tooltipLoaded = true;
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
-        ? glyphRefinementGain(this.glyph)
-        : glyphSacrificeGain(this.glyph);
-      // eslint-disable-next-line no-nested-ternary
-      this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph.level);
+      this.sacrificeReward = GlyphSacrificeHandler.isRefining &&
+        ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+        ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
+        : GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
+      this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
     },
     moveTooltipTo(x, y) {
+      // If we are just creating the tooltip now, we can't move it yet.
+      if (!this.$refs.tooltip) {
+        this.$nextTick(() => this.moveTooltipTo(x, y));
+        return;
+      }
       const tooltipEl = this.$refs.tooltip.$el;
       if (tooltipEl) {
         const rect = document.body.getBoundingClientRect();
         tooltipEl.style.left = `${x - rect.left}px`;
         tooltipEl.style.top = `${y - rect.top}px`;
+        if (this.$viewModel.tabs.reality.glyphTooltipDirection === 1) {
+          // In case of a really short screen, don't flicker back and forth
+          if (y - tooltipEl.offsetHeight <= 0 && y + tooltipEl.offsetHeight < rect.height) {
+            this.$viewModel.tabs.reality.glyphTooltipDirection = -1;
+          }
+        } else if (y + tooltipEl.offsetHeight >= rect.height) {
+          this.$viewModel.tabs.reality.glyphTooltipDirection = 1;
+        }
       }
     },
     mouseEnter(ev) {
@@ -401,7 +503,7 @@ Vue.component("glyph-component", {
       const dragInfo = this.$viewModel.tabs.reality.draggingGlyphInfo;
       dragInfo.id = this.glyph.id;
       dragInfo.type = this.glyph.type;
-      dragInfo.sacrificeValue = glyphSacrificeGain(this.glyph);
+      dragInfo.sacrificeValue = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
     },
     dragEnd() {
       this.isDragging = false;
@@ -451,6 +553,26 @@ Vue.component("glyph-component", {
         this.drag(t);
       }
     },
+    glyphEffectIcon(id) {
+      if (this.glyph.type === "companion") return {};
+      // Place dots clockwise starting from the bottom left
+      const angle = this.glyph.type === "effarig"
+        ? (Math.PI / 4) * (id + 1)
+        : (Math.PI / 2) * (id + 0.5);
+      const scale = 0.3 * this.size.replace("rem", "");
+      const dx = -scale * Math.sin(angle);
+      const dy = scale * (Math.cos(angle) + 0.15);
+      return {
+        position: "absolute",
+        width: "0.3rem",
+        height: "0.3rem",
+        "border-radius": "50%",
+        background: `${this.glyph.color || getRarity(this.glyph.strength).color}`,
+        transform: `translate(${dx}rem, ${dy}rem)`,
+        animation: this.glyph.type === "reality" ? "a-reality-glyph-dot-cycle 10s infinite" : "none",
+        opacity: Theme.current().name === "S9" ? 0 : 0.8
+      };
+    }
   },
   template: `
   <!-- The naive approach with a border and box-shadow seems to have problems with
@@ -465,14 +587,17 @@ Vue.component("glyph-component", {
            :style="innerStyle"
            :class="['l-glyph-component', 'c-glyph-component']">
         {{symbol}}
-        <glyph-tooltip v-if="hasTooltip"
-                       v-show="isCurrentTooltip"
-                       ref="tooltip"
-                       v-bind="glyph"
-                       :sacrificeReward="sacrificeReward"
-                       :showDeletionText="showSacrifice"
-                       :levelOverride="levelOverride"
-                       :visible="isCurrentTooltip"/>
+        <div v-if="$viewModel.shiftDown || showGlyphEffectDots" v-for="x in glyphEffects"
+          :style="glyphEffectIcon(x)"/>
+        <glyph-tooltip v-if="hasTooltip && tooltipLoaded"
+          v-show="isCurrentTooltip"
+          ref="tooltip"
+          v-bind="glyph"
+          :class="tooltipDirectionClass"
+          :sacrificeReward="sacrificeReward"
+          :showDeletionText="showSacrifice"
+          :levelOverride="levelOverride"
+          :component="componentID"/>
       </div>
       <div ref="over"
            :style="overStyle"

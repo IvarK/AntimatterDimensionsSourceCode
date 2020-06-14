@@ -6,10 +6,10 @@ GameDatabase.tabs = [
     name: "Dimensions",
     subtabs: [
       {
-        key: "normal",
+        key: "antimatter",
         name: "Dimensions",
         symbol: "Ω",
-        component: "normal-dim-tab",
+        component: "antimatter-dim-tab",
         newUIComponent: "new-dimensions-tab"
       },
       {
@@ -31,13 +31,6 @@ GameDatabase.tabs = [
         newUIComponent: "new-time-dimensions-tab",
         condition: () => PlayerProgress.eternityUnlocked()
       },
-      {
-        key: "production",
-        name: "Production",
-        symbol: "<i class='fas fa-chart-line'></i>",
-        component: "dim-production-tab",
-        condition: () => PlayerProgress.eternityUnlocked() || PlayerProgress.infinityUnlocked()
-      }
     ]
   },
   {
@@ -45,10 +38,22 @@ GameDatabase.tabs = [
     name: "Options",
     subtabs: [
       {
-        key: "options",
-        name: "Options",
+        key: "saving",
+        name: "Saving",
+        symbol: "<i class='fas fa-save'></i>",
+        component: "options-saving-tab"
+      },
+      {
+        key: "visual",
+        name: "Visual",
+        symbol: "<i class='fas fa-palette'></i>",
+        component: "options-visual-tab"
+      },
+      {
+        key: "gameplay",
+        name: "Gameplay",
         symbol: "<i class='fas fa-wrench'></i>",
-        component: "options-tab"
+        component: "options-gameplay-tab"
       }
     ]
   },
@@ -70,29 +75,15 @@ GameDatabase.tabs = [
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
-          PlayerProgress.infinityUnlocked()
+          PlayerProgress.challengeCompleted()
       },
       {
-        key: "infinities",
-        name: "Past Infinities",
-        symbol: "∞",
-        component: "past-infinities-tab",
+        key: "prestige runs",
+        name: "Past Prestige Runs",
+        symbol: "<i class='fas fa-list-ol'></i>",
+        component: "past-runs-tab",
         condition: () => PlayerProgress.infinityUnlocked()
       },
-      {
-        key: "eternities",
-        name: "Past Eternities",
-        symbol: "Δ",
-        component: "past-eternities-tab",
-        condition: () => PlayerProgress.eternityUnlocked()
-      },
-      {
-        key: "realities",
-        name: "Past Realities",
-        symbol: "Ϟ",
-        component: "past-realities-tab",
-        condition: () => PlayerProgress.realityUnlocked()
-      }
     ]
   },
   {
@@ -135,7 +126,7 @@ GameDatabase.tabs = [
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
-          player.antimatter.e >= 2000 ||
+          Currency.antimatter.exponent >= 2000 ||
           player.postChallUnlocked > 0
       },
       {
@@ -154,18 +145,8 @@ GameDatabase.tabs = [
     key: "infinity",
     name: "Infinity",
     UIClass: "o-tab-btn--infinity",
-    condition: () =>
-      PlayerProgress.realityUnlocked() ||
-      PlayerProgress.eternityUnlocked() ||
-      PlayerProgress.infinityUnlocked(),
     before: "infinity-points-header",
     subtabs: [
-      {
-        key: "upgrades",
-        name: "Upgrades",
-        symbol: "<i class='fas fa-arrow-up'></i>",
-        component: "infinity-upgrades-tab"
-      },
       {
         key: "autobuyers",
         name: "Autobuyers",
@@ -173,16 +154,34 @@ GameDatabase.tabs = [
         component: "autobuyers-tab"
       },
       {
+        key: "upgrades",
+        name: "Infinity Upgrades",
+        symbol: "<i class='fas fa-arrow-up'></i>",
+        component: "infinity-upgrades-tab",
+        condition: () =>
+          PlayerProgress.realityUnlocked() ||
+          PlayerProgress.eternityUnlocked() ||
+          PlayerProgress.infinityUnlocked()
+      },
+      {
         key: "break",
         name: "Break Infinity",
-        symbol: "<i class='fas fa-infinity'></i>",
-        component: "break-infinity-tab"
+        symbol: "<i class='fab fa-skyatlas'></i>",
+        component: "break-infinity-tab",
+        condition: () =>
+          PlayerProgress.realityUnlocked() ||
+          PlayerProgress.eternityUnlocked() ||
+          PlayerProgress.infinityUnlocked()
       },
       {
         key: "replicanti",
         name: "Replicanti",
         symbol: "Ξ",
-        component: "replicanti-tab"
+        component: "replicanti-tab",
+        condition: () =>
+          PlayerProgress.realityUnlocked() ||
+          PlayerProgress.eternityUnlocked() ||
+          PlayerProgress.infinityUnlocked()
       }
     ],
   },
@@ -193,38 +192,32 @@ GameDatabase.tabs = [
     condition: () =>
       PlayerProgress.realityUnlocked() ||
       PlayerProgress.eternityUnlocked(),
+    before: "eternity-points-header",
     subtabs: [
       {
         key: "studies",
-        name: "Time studies",
+        name: "Time Studies",
         symbol: "<i class='fas fa-book'></i>",
         component: "time-studies-tab"
       },
       {
         key: "upgrades",
-        name: "Eternity upgrades",
+        name: "Eternity Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
         component: "eternity-upgrades-tab"
       },
       {
         key: "milestones",
-        name: "Eternity milestones",
+        name: "Eternity Milestones",
         symbol: "<i class='fas fa-trophy'></i>",
         component: "eternity-milestones-tab"
       },
       {
         key: "dilation",
-        name: "Time dilation",
+        name: "Time Dilation",
         symbol: "Ψ",
         component: "time-dilation-tab",
-        condition: () => TimeStudy.dilation.isBought || PlayerProgress.realityUnlocked()
-      },
-      {
-        key: "compression",
-        name: "Time compression",
-        symbol: "<i class='fas fa-compress-arrows-alt'></i>",
-        component: "time-compression-tab",
-        condition: () => Ra.pets.enslaved.level >= 25
+        condition: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked()
       }
     ],
   },
@@ -238,12 +231,12 @@ GameDatabase.tabs = [
       {
         key: "glyphs",
         name: "Glyphs",
-        symbol: "G",
+        symbol: "<i class='fas fa-clone'></i>",
         component: "glyphs-tab"
       },
       {
         key: "upgrades",
-        name: "Reality upgrades",
+        name: "Reality Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
         component: "reality-upgrades-tab"
       },
@@ -261,13 +254,13 @@ GameDatabase.tabs = [
       },
       {
         key: "hole",
-        name: "Black hole",
+        name: "Black Hole",
         symbol: "<i class='fas fa-circle'></i>",
         component: "black-hole-tab",
       },
       {
         key: "alchemy",
-        name: "Glyph alchemy",
+        name: "Glyph Alchemy",
         symbol: "<i class='fas fa-vial'></i>",
         component: "alchemy-tab",
         condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)
@@ -280,6 +273,12 @@ GameDatabase.tabs = [
     UIClass: "o-tab-btn--celestial",
     condition: () => RealityUpgrades.allBought,
     subtabs: [
+      {
+        key: "celestial-navigation",
+        name: "Celestial Navigation",
+        symbol: "<i class='fas fa-map-marked-alt'></i>",
+        component: "celestial-navigation"
+      },
       {
         key: "teresa",
         name: "Teresa",
@@ -305,28 +304,28 @@ GameDatabase.tabs = [
         name: "V",
         symbol: "⌬",
         component: "v-tab",
-        condition: () => Achievement(151).isEnabled
+        condition: () => Achievement(151).isUnlocked
       },
       {
         key: "ra",
         name: "Ra",
-        symbol: "☼",
+        symbol: "<i class='fas fa-sun'></i>",
         component: "ra-tab",
-        condition: () => V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])
+        condition: () => V.has(V_UNLOCKS.RA_UNLOCK)
       },
       {
         key: "laitela",
         name: "Lai'tela",
         symbol: "ᛝ",
         component: "laitela-tab",
-        condition: () => Ra.has(RA_LAITELA_UNLOCK)
+        condition: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK)
       },
       {
         key: "pelle",
         name: "The Pelle",
         symbol: "Ϛ",
         component: "pelle-tab",
-        condition: () => Laitela.has(LAITELA_UNLOCKS.PELLE)
+        condition: () => false
       }
     ]
   },
@@ -334,12 +333,13 @@ GameDatabase.tabs = [
     key: "shop",
     name: "Shop",
     newUIClass: "shop",
+    condition: () => kong.enabled || player.IAP.totalSTD > 0,
     subtabs: [
       {
         key: "shop",
         name: "Shop",
-        symbol: "ASS",
-        component: "achievements-tab"
+        symbol: "$",
+        component: "shop-tab"
       }
     ]
   }

@@ -17,7 +17,7 @@ function AutomatorCommand(id) {
   return AutomatorCommandInterface.all[id];
 }
 
-const AutomatorCommandStatus = Object.freeze({
+const AUTOMATOR_COMMAND_STATUS = Object.freeze({
   NEXT_INSTRUCTION: 0,
   NEXT_TICK_SAME_INSTRUCTION: 1,
   NEXT_TICK_NEXT_INSTRUCTION: 2,
@@ -25,21 +25,21 @@ const AutomatorCommandStatus = Object.freeze({
   SAME_INSTRUCTION: 3,
 });
 
-const AutomatorMode = Object.freeze({
+const AUTOMATOR_MODE = Object.freeze({
   PAUSE: 1,
   RUN: 2,
   SINGLE_STEP: 3,
 });
 
 
-const AutomatorVarTypes = {
+const AUTOMATOR_VAR_TYPES = {
   NUMBER: { id: 0, name: "number" },
   STUDIES: { id: 1, name: "studies" },
   DURATION: { id: 2, name: "duration" },
   UNKNOWN: { id: -1, name: "unknown" },
 };
 
-const AutomatorType = Object.freeze({
+const AUTOMATOR_TYPE = Object.freeze({
   TEXT: 0,
   BLOCK: 1
 });
@@ -176,7 +176,7 @@ const AutomatorBackend = {
   },
 
   /**
-  * @returns {AutomatorMode}
+  * @returns {AUTOMATOR_MODE}
   */
   get mode() {
     return this.state.mode;
@@ -187,7 +187,7 @@ const AutomatorBackend = {
   },
 
   get isRunning() {
-    return this.isOn && this.mode === AutomatorMode.RUN;
+    return this.isOn && this.mode === AUTOMATOR_MODE.RUN;
   },
 
   get currentLineNumber() {
@@ -195,19 +195,19 @@ const AutomatorBackend = {
   },
 
   get currentInterval() {
-    return Math.max(Math.pow(0.994, player.realities) * 500, 1);
+    return Math.clampMin(Math.pow(0.994, player.realities) * 500, 1);
   },
 
   update(diff) {
     if (!this.isOn) return;
     switch (this.mode) {
-      case AutomatorMode.PAUSE:
+      case AUTOMATOR_MODE.PAUSE:
         return;
-      case AutomatorMode.SINGLE_STEP:
+      case AUTOMATOR_MODE.SINGLE_STEP:
         this.singleStep();
-        this.state.mode = AutomatorMode.PAUSE;
+        this.state.mode = AUTOMATOR_MODE.PAUSE;
         return;
-      case AutomatorMode.RUN:
+      case AUTOMATOR_MODE.RUN:
         break;
       default:
         this.stop();
@@ -228,13 +228,13 @@ const AutomatorBackend = {
   step() {
     if (this.stack.isEmpty) return false;
     switch (this.runCurrentCommand()) {
-      case AutomatorCommandStatus.SAME_INSTRUCTION:
+      case AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION:
         return true;
-      case AutomatorCommandStatus.NEXT_INSTRUCTION:
+      case AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION:
         return this.nextCommand();
-      case AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION:
+      case AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION:
         return false;
-      case AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION:
+      case AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION:
         this.nextCommand();
         return false;
     }
@@ -246,7 +246,7 @@ const AutomatorBackend = {
     // SAME_INSTRUCTION is used to enter blocks; this means we've successfully
     // advanced a line. Otherwise, we always advance a line, regardless of return
     // state.
-    if (this.runCurrentCommand() !== AutomatorCommandStatus.SAME_INSTRUCTION) {
+    if (this.runCurrentCommand() !== AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION) {
       this.nextCommand();
     }
   },
@@ -265,7 +265,7 @@ const AutomatorBackend = {
         // With the debug output on, running short scripts gets very spammy, working around that
         // return false here makes sure that a single instruction script executes one tick at a time
         if (this.state.repeat) {
-          this.start(this.state.topLevelScript, AutomatorMode.RUN, false);
+          this.start(this.state.topLevelScript, AUTOMATOR_MODE.RUN, false);
           return false;
         }
         this.stop();
@@ -346,14 +346,14 @@ const AutomatorBackend = {
 
   stop() {
     this.stack.clear();
-    this.state.mode = AutomatorMode.PAUSE;
+    this.state.mode = AUTOMATOR_MODE.PAUSE;
   },
 
   pause() {
-    this.state.mode = AutomatorMode.PAUSE;
+    this.state.mode = AUTOMATOR_MODE.PAUSE;
   },
 
-  start(scriptID = this.state.topLevelScript, initialMode = AutomatorMode.RUN, compile = true) {
+  start(scriptID = this.state.topLevelScript, initialMode = AUTOMATOR_MODE.RUN, compile = true) {
     this.state.topLevelScript = scriptID;
     const scriptObject = this._scripts.find(s => s.id === scriptID);
     if (compile) scriptObject.compile();

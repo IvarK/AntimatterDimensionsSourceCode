@@ -81,16 +81,16 @@ Vue.component("expanding-control-box", {
     },
     updateBaseWidth() {
       if (this.widthSource === "content") {
-        this.$refs.container.style.width = this.$refs.dropdown.offsetWidth + "px";
-        this.$refs.root.style.width = this.$refs.dropdown.offsetWidth + "px";
+        this.$refs.container.style.width = `${this.$refs.dropdown.offsetWidth}px`;
+        this.$refs.root.style.width = `${this.$refs.dropdown.offsetWidth}px`;
       } else if (this.widthSource === "header") {
-        this.$refs.root.style.width = this.$refs.container.offsetWidth + "px";
+        this.$refs.root.style.width = `${this.$refs.container.offsetWidth}px`;
       }
     },
     updateHeightInfo() {
       const headerHeight = this.$refs.expandButton.offsetHeight;
-      this.closedHeight = headerHeight + "px";
-      this.openHeight = (headerHeight + this.$refs.dropdown.offsetHeight) + "px";
+      this.closedHeight = `${headerHeight}px`;
+      this.openHeight = `${headerHeight + this.$refs.dropdown.offsetHeight}px`;
     },
     transitionEnd(event) {
       if (event.propertyName !== "max-height") return;

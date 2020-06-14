@@ -4,29 +4,35 @@ const ENSLAVED_UNLOCKS = {
   FREE_TICKSPEED_SOFTCAP: {
     id: 0,
     price: TimeSpan.fromYears(1e35).totalMilliseconds,
-    description: "Increase the free tickspeed upgrade softcap by 100,000",
+    secondaryRequirement: () => true,
+    description: () => `Increase the free tickspeed upgrade softcap by ${formatInt(1e5)}`,
   },
   RUN: {
     id: 1,
     price: TimeSpan.fromYears(1e40).totalMilliseconds,
-    description: "Unlock The Enslaved One's reality.",
+    secondaryRequirement() {
+      const hasLevelRequirement = player.bestGlyphLevel >= 5000;
+      const hasRarityRequirement = strengthToRarity(player.bestGlyphStrength) >= 100;
+      return hasLevelRequirement && hasRarityRequirement;
+    },
+    description: () => `Unlock The Enslaved Ones' Reality (requires
+      a level ${formatInt(5000)} glyph and a ${formatRarity(100)} rarity glyph)`,
   }
 };
 
 const Enslaved = {
   displayName: "Enslaved",
   boostReality: false,
-  BROKEN_CHALLENGE_EXEMPTIONS: [1, 6, 9],
-  ec6c10timeHint: false,
+  BROKEN_CHALLENGES: [2, 3, 4, 5, 7, 8, 10, 11, 12],
   nextTickDiff: 50,
   isReleaseTick: false,
   autoReleaseTick: 0,
   autoReleaseSpeed: 0,
+  timeCap: 1e300,
   glyphLevelMin: 5000,
   currentBlackHoleStoreAmountPerMs: 0,
   tachyonNerf: 0.3,
   toggleStoreBlackHole() {
-    if (this.maxQuoteIdx === 6) player.celestials.enslaved.maxQuotes += 3;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
     player.celestials.enslaved.isStoringReal = false;
     if (!Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
@@ -40,23 +46,23 @@ const Enslaved = {
   toggleAutoStoreReal() {
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
+  get isStoringGameTime() {
+    return player.celestials.enslaved.isStoring && !BlackHoles.arePaused;
+  },
   get isStoringRealTime() {
     return player.celestials.enslaved.isStoringReal;
   },
   get storedRealTimeEfficiency() {
-    const addedEff = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
-      ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency()
-      : 0;
-    return Math.min(0.4 + addedEff, 1);
+    return 0.7;
   },
   get storedRealTimeCap() {
     const addedCap = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
       ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap()
       : 0;
-    return 1000 * 3600 * 4 + addedCap;
+    return 1000 * 3600 * 8 + addedCap;
   },
   get isAutoReleasing() {
-    return player.celestials.enslaved.isAutoReleasing;
+    return player.celestials.enslaved.isAutoReleasing && !BlackHoles.areNegative;
   },
   storeRealTime() {
     const thisUpdate = Date.now();
@@ -77,14 +83,22 @@ const Enslaved = {
     player.lastUpdate += used;
     return diffMs - used;
   },
+  canRelease(auto) {
+    return !Enslaved.isStoringRealTime && !EternityChallenge(12).isRunning && !Laitela.isRunning &&
+      !(Enslaved.isRunning && auto);
+  },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
-    if (EternityChallenge(12).isRunning || TimeCompression.isActive) return;
-    if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
+    if (!this.canRelease(autoRelease)) return;
+    if (EternityChallenge(12).isRunning) return;
+    player.minNegativeBlackHoleThisReality = 1;
     let release = player.celestials.enslaved.stored;
-    if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);
+    if (Enslaved.isRunning) {
+      release = Enslaved.storedTimeInsideEnslaved(release);
+      if (Time.thisReality.totalYears > 1) EnslavedProgress.storedTime.giveProgress();
+    }
     if (autoRelease) release *= 0.01;
-    this.nextTickDiff = release;
+    this.nextTickDiff = Math.clampMax(release, this.timeCap);
     this.isReleaseTick = true;
     // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
     const effectiveGamespeed = release / 50;
@@ -96,7 +110,7 @@ const Enslaved = {
     return player.celestials.enslaved.unlocks.includes(info.id);
   },
   canBuy(info) {
-    return player.celestials.enslaved.stored >= info.price && !this.has(info);
+    return player.celestials.enslaved.stored >= info.price && info.secondaryRequirement() && !this.has(info);
   },
   buyUnlock(info) {
     if (!this.canBuy(info)) return false;
@@ -105,13 +119,12 @@ const Enslaved = {
     player.celestials.enslaved.unlocks.push(info.id);
     return true;
   },
-  startRun() {
-    if (this.maxQuoteIdx === 13) player.celestials.enslaved.maxQuotes += 2;
-    player.celestials.enslaved.run = startRealityOver() || player.celestials.enslaved.run;
+  initializeRun() {
+    clearCelestialRuns();
+    player.celestials.enslaved.run = true;
     // Round to the nearest multiple of 2 to make the secret study hide
     player.secretUnlocks.secretTS += player.secretUnlocks.secretTS % 2;
-    this.quotes.forget(this.quotes.EC6C10);
-    this.ec6c10timeHint = false;
+    this.feltEternity = false;
     this.quotes.show(this.quotes.START_RUN);
   },
   get isRunning() {
@@ -136,16 +149,11 @@ const Enslaved = {
     if (stored <= 1e3) return stored;
     return Math.pow(10, Math.pow(Math.log10(stored / 1e3), 0.55)) * 1e3;
   },
-  showEC6C10Hint() {
-    Enslaved.quotes.show(this.quotes.EC6C10);
-  },
-  get foundEC6C10() {
-    return Enslaved.quotes.seen(this.quotes.EC6C10);
-  },
   feelEternity() {
     if (!this.feltEternity) {
+      EnslavedProgress.feelEternity.giveProgress();
       this.feltEternity = true;
-    Modal.message.show("Time in eternity will be scaled by number of eternities");
+      Modal.message.show("Time in eternity will be scaled by number of eternities");
     }
   },
   get feltEternity() {
@@ -153,6 +161,23 @@ const Enslaved = {
   },
   set feltEternity(value) {
     player.celestials.enslaved.feltEternity = value;
+  },
+  get nextHintCost() {
+    return TimeSpan.fromYears(1e40 * Math.pow(3, this.hintCostIncreases)).totalMilliseconds;
+  },
+  get hintCostIncreases() {
+    const hintTime = player.celestials.enslaved.zeroHintTime - Date.now();
+    return Math.clampMin(hintTime / TimeSpan.fromDays(1).totalMilliseconds, 0);
+  },
+  spendTimeForHint() {
+    if (player.celestials.enslaved.stored < this.nextHintCost) return false;
+      player.celestials.enslaved.stored -= this.nextHintCost;
+      if (Enslaved.hintCostIncreases === 0) {
+        player.celestials.enslaved.zeroHintTime = Date.now() + TimeSpan.fromDays(1).totalMilliseconds;
+      } else {
+        player.celestials.enslaved.zeroHintTime += TimeSpan.fromDays(1).totalMilliseconds;
+      }
+      return true;
   },
   get tesseractCost() {
     return Tesseracts.costs[player.celestials.enslaved.tesseracts];
@@ -176,6 +201,7 @@ const Enslaved = {
         "A visitor? I haven’t had one... eons.",
         "I am... had a name. It’s been lost... to this place.",
         "The others... won't let me rest. I do their work with time...",
+        "Place time ... into places ... that need it...",
         "Watch myself grow... pass and die.",
         "Perhaps you... will break these chains... I will wait",
       ]
@@ -207,35 +233,82 @@ const Enslaved = {
     EC6C10: CelestialQuotes.singleLine(
       5, "... did not ... underestimate you ..."
     ),
+    HINT_UNLOCK: {
+      id: 6,
+      lines: [
+        "... you need ... to look harder ...",
+        "I think ... I can help ...",
+        "* You have unlocked help from The Enslaved Ones"
+      ]
+    },
   }),
 };
 
+class EnslavedProgressState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
+  }
+
+  get hasProgress() {
+    // eslint-disable-next-line no-bitwise
+    return Boolean(player.celestials.enslaved.progressBits & (1 << this.id));
+  }
+
+  get hasHint() {
+    // eslint-disable-next-line no-bitwise
+    return this.hasProgress || Boolean(player.celestials.enslaved.hintBits & (1 << this.id));
+  }
+
+  giveProgress() {
+    // Bump the last hint time appropriately if the player found the hint
+    if (this.hasHint && !this.hasProgress) {
+      player.celestials.enslaved.zeroHintTime -= Math.log(2) / Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds;
+      GameUI.notify.success("You found a crack in The Enslaved Ones' Reality!");
+    }
+    // eslint-disable-next-line no-bitwise
+    player.celestials.enslaved.progressBits |= (1 << this.id);
+  }
+
+  giveHint() {
+    // eslint-disable-next-line no-bitwise
+    player.celestials.enslaved.hintBits |= (1 << this.id);
+  }
+}
+
+const EnslavedProgress = (function() {
+  const db = GameDatabase.celestials.enslaved.progress;
+  return {
+    hintsUnlocked: new EnslavedProgressState(db.hintsUnlocked),
+    ec1: new EnslavedProgressState(db.ec1),
+    feelEternity: new EnslavedProgressState(db.feelEternity),
+    ec6: new EnslavedProgressState(db.ec6),
+    c10: new EnslavedProgressState(db.c10),
+    secretStudy: new EnslavedProgressState(db.secretStudy),
+    storedTime: new EnslavedProgressState(db.storedTime),
+    challengeCombo: new EnslavedProgressState(db.challengeCombo),
+  };
+}());
 
 const Tesseracts = {
   costs: (function() {
-    const costs = [Decimal.pow10(20e6), Decimal.pow10(40e6), Decimal.pow10(60e6), Decimal.pow10(120e6)];
-
-    for (let i = 4; i < 31; i++) {
-      // Array.reduce can't be used just for 4 elements
-      const next = costs[i - 4]
-                    .times(costs[i - 3])
-                    .times(costs[i - 2])
-                    .times(costs[i - 1]);
-      costs.push(next);
+    const costs = [Decimal.pow10(20e6), Decimal.pow10(40e6), Decimal.pow10(60e6)];
+    for (let i = 0; i < 32; i++) {
+      costs.push(costs[i + 2].pow(2 * (i + 1)));
     }
-
     return costs;
   }()),
 
   increases: (function() {
-    const increases = [500e3, 500e3, 1e6];
-
-    for (let i = 3; i < 31; i++) {
-      // Array.reduce can't be used just for 4 elements
-      const next = increases[i - 3] + increases[i - 2] + increases[i - 1];
-      increases.push(next);
+    const increases = [];
+    for (let i = 0; i < 34; i++) {
+      increases.push(500e3 * Math.pow(2, i));
     }
-
+    increases.unshift(500e3);
     return increases;
   }())
 };
+
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
+  if (Tab.celestials.enslaved.isOpen) Enslaved.quotes.show(Enslaved.quotes.INITIAL);
+});

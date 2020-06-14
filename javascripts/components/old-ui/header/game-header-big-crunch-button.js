@@ -8,18 +8,19 @@ Vue.component("game-header-big-crunch-button", {
       currentIPPM: new Decimal(0),
       peakIPPM: new Decimal(0),
       currentIP: new Decimal(0),
+      tesseractUnlocked: false,
+      tesseractCost: new Decimal(0),
     };
   },
   computed: {
     peakIPPMThreshold: () => new Decimal("1e100"),
-    isPeakIPPMVisible() { 
+    isPeakIPPMVisible() {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     },
     amountStyle() {
-      if (this.currentIP.lt(1e50)) return undefined;
-
       // If the player is using a dark theme, it should be black instead of white when ratio is 1
-      const darkTheme = player.options.theme.includes("Dark");
+      const darkTheme = Theme.current().isDark && Theme.current().name !== "S6";
+      if (this.currentIP.lt(1e50)) return darkTheme ? { color: "black" } : { color: "white" };
 
       const ratio = this.gainedIP.log10() / this.currentIP.log10();
       let rgb;
@@ -39,13 +40,20 @@ Vue.component("game-header-big-crunch-button", {
         ];
       }
       return { color: `rgb(${rgb.join(",")})` };
-    }
+    },
+    classObject() {
+      return {
+        "c-game-header__tesseract-available": this.tesseractUnlocked && this.currentIP.gt(this.tesseractCost),
+      };
+    },
   },
   methods: {
     update() {
-      this.isVisible = player.break && player.antimatter.gte(Decimal.MAX_NUMBER) && !InfinityChallenge.isRunning;
+      this.isVisible = player.break &&
+        player.thisInfinityMaxAM.gte(Decimal.NUMBER_MAX_VALUE) &&
+        !InfinityChallenge.isRunning;
       if (NormalChallenge.isRunning) {
-        if (!Enslaved.isRunning || Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(NormalChallenge.current.id)) {
+        if (!Enslaved.isRunning || !Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current.id)) {
           this.isVisible = false;
         }
       }
@@ -57,22 +65,27 @@ Vue.component("game-header-big-crunch-button", {
       if (this.isPeakIPPMVisible) {
         this.currentIPPM.copyFrom(gainedIP.dividedBy(Time.thisInfinityRealTime.totalMinutes));
       }
+      this.tesseractUnlocked = Enslaved.isCompleted;
+      this.tesseractCost = Enslaved.tesseractCost;
     }
   },
   template:
     `<button
       v-if="isVisible"
       class="o-prestige-btn o-prestige-btn--big-crunch l-game-header__big-crunch-btn"
+      :class="classObject"
       onclick="bigCrunchResetRequest()"
     >
-      <b>Big Crunch for 
-      <span :style="amountStyle">{{shortenDimensions(gainedIP)}}</span> 
-      Infinity {{ "point" | pluralize(gainedIP) }}.</b>
+      <div v-if="!isPeakIPPMVisible"/>
+      <b>Big Crunch for
+      <span :style="amountStyle">{{format(gainedIP, 2, 0)}}</span>
+      Infinity {{ "Point" | pluralize(gainedIP) }}.</b>
       <template v-if="isPeakIPPMVisible">
         <br>
-        {{shortenDimensions(currentIPPM)}} IP/min
+        {{format(currentIPPM, 2, 0)}} IP/min
         <br>
-        Peaked at {{shortenDimensions(peakIPPM)}} IP/min
+        Peaked at {{format(peakIPPM, 2, 0)}} IP/min
       </template>
+      <div v-else/>
     </button>`
 });

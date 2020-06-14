@@ -5,37 +5,33 @@ function startEternityChallenge() {
   initializeResourcesAfterEternity();
   resetInfinityRuns();
   InfinityDimensions.fullReset();
-  eternityResetReplicanti();
+  Replicanti.reset();
   resetChallengeStuff();
-  NormalDimensions.reset();
+  AntimatterDimensions.reset();
   player.replicanti.galaxies = 0;
   player.infinityPoints = Player.startingIP;
   InfinityDimensions.resetAmount();
   player.bestIPminThisInfinity = new Decimal(0);
   player.bestEPminThisEternity = new Decimal(0);
   resetTimeDimensions();
-  // FIXME: Eternity count is now a Decimal, also why is this submitted twice?
-  // kong.submitStats("Eternities", player.eternities);
   resetTickspeed();
-  player.antimatter = Player.startingAM;
-  player.thisInfinityMaxAM = Player.startingAM;
+  player.thisInfinityMaxAM = new Decimal(0);
+  player.thisEternityMaxAM = new Decimal(0);
+  Currency.antimatter.reset();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
-  if (Enslaved.isRunning && Enslaved.foundEC6C10) Tab.challenges.normal.show();
-  return true;
 }
 
 class EternityChallengeRewardState extends GameMechanicState {
   constructor(config, challenge) {
-    super(config);
+    const effect = config.effect;
+    const configCopy = deepmerge.all([{}, config]);
+    configCopy.effect = () => effect(challenge.completions);
+    super(configCopy);
     this._challenge = challenge;
   }
 
-  get effectValue() {
-    return this.config.effect(this._challenge.completions);
-  }
-
-  get canBeApplied() {
+  get isEffectActive() {
     return this._challenge.completions > 0;
   }
 }
@@ -59,7 +55,7 @@ class EternityChallengeState extends GameMechanicState {
     return player.challenge.eternity.current === this.id;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isRunning;
   }
 
@@ -162,25 +158,36 @@ class EternityChallengeState extends GameMechanicState {
     }
   }
 
+  requestStart() {
+    if (!Tab.challenges.eternity.isAvailable || this.isRunning) return;
+    if (!player.options.confirmations.challenges) {
+      this.start();
+      return;
+    }
+    if (this.isUnlocked) {
+    Modal.startEternityChallenge.show(this.id);
+    }
+  }
+
   start(auto) {
     if (!this.isUnlocked || EternityChallenge.isRunning) return false;
-    if (!auto && player.options.confirmations.challenges) {
-      const confirmation =
-        "You will start over with just your time studies, " +
-        "eternity upgrades and achievements. " +
-        "You need to reach a set IP with special conditions.";
-      if (!confirm(confirmation)) return false;
-    }
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.
-    if (canEternity()) eternity(false, auto, { enteringEC: true });
+    if (Player.canEternity) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
-      if (TimeCompression.isActive) SecretAchievement(42).unlock();
-      TimeCompression.isActive = false;
+      if (V.isRunning && player.minNegativeBlackHoleThisReality < 1) {
+        SecretAchievement(42).unlock();
+      }
+      if (V.isRunning) player.minNegativeBlackHoleThisReality = 1;
     }
-    return startEternityChallenge();
+    if (Enslaved.isRunning) {
+      if (this.id === 6 && this.completions === 5) EnslavedProgress.ec6.giveProgress();
+      if (EnslavedProgress.challengeCombo.hasProgress) Tab.challenges.normal.show();
+    }
+    startEternityChallenge();
+    return true;
   }
 
   /**
@@ -211,7 +218,7 @@ class EternityChallengeState extends GameMechanicState {
   fail() {
     this.exit();
     Modal.message.show("You failed the challenge, you have now exited it.");
-    EventHub.dispatch(GameEvent.CHALLENGE_FAILED);
+    EventHub.dispatch(GAME_EVENT.CHALLENGE_FAILED);
   }
 
   tryFail() {
@@ -223,13 +230,11 @@ class EternityChallengeState extends GameMechanicState {
   }
 }
 
-EternityChallengeState.createIndex(GameDatabase.challenges.eternity);
-
 /**
  * @param id
  * @return {EternityChallengeState}
  */
-const EternityChallenge = id => EternityChallengeState.index[id];
+const EternityChallenge = EternityChallengeState.createAccessor(GameDatabase.challenges.eternity);
 
 /**
  * @returns {EternityChallengeState}
@@ -248,7 +253,7 @@ const EternityChallenges = {
   /**
    * @type {EternityChallengeState[]}
    */
-  all: EternityChallengeState.index.compact(),
+  all: EternityChallenge.index.compact(),
 
   get completions() {
     return EternityChallenges.all
@@ -270,7 +275,7 @@ const EternityChallenges = {
 
   autoComplete: {
     tick() {
-      if (!player.autoEcIsOn) return;
+      if (!player.reality.autoEC) return;
       if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
         let next = this.nextChallenge;
         while (next !== undefined) {
@@ -296,7 +301,8 @@ const EternityChallenges = {
     },
 
     get interval() {
-      let hours = Effects.min(
+      if (!Perk.autocompleteEC1.isBought) return Infinity;
+      let minutes = Effects.min(
         Number.MAX_VALUE,
         Perk.autocompleteEC1,
         Perk.autocompleteEC2,
@@ -304,8 +310,8 @@ const EternityChallenges = {
         Perk.autocompleteEC4,
         Perk.autocompleteEC5
       );
-      if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0])) hours /= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0].effect();
-      return hours === Number.MAX_VALUE ? Infinity : TimeSpan.fromHours(hours).totalMilliseconds;
+      if (V.has(V_UNLOCKS.FAST_AUTO_EC)) minutes /= V_UNLOCKS.FAST_AUTO_EC.effect();
+      return TimeSpan.fromMinutes(minutes).totalMilliseconds;
     }
   }
 };

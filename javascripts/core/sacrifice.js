@@ -8,18 +8,20 @@ class Sacrifice {
   }
 
   static get canSacrifice() {
-    return DimBoost.totalBoosts > 4 && NormalDimension(8).amount.gt(0) && !EternityChallenge(3).isRunning;
+    return DimBoost.totalBoosts > 4 && !EternityChallenge(3).isRunning && this.nextBoost.gt(1) &&
+      AntimatterDimension(8).totalAmount.gt(0);
   }
 
   static get disabledCondition() {
     if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
-    if (DimBoost.totalBoosts <= DimBoost.maxShiftTier - 4) return "Requires a boost";
-    if (NormalDimension(8).amount.eq(0)) return "No 8th dimensions";
+    if (DimBoost.totalBoosts <= DimBoost.maxShiftTier - 4) return "requires a boost";
+    if (AntimatterDimension(8).totalAmount.eq(0)) return "no 8th Antimatter Dimensions";
+    if (this.nextBoost.lte(1)) return `${formatX(1)} multiplier`;
     return "";
   }
 
   static get nextBoost() {
-    const nd1Amount = NormalDimension(1).amount;
+    const nd1Amount = AntimatterDimension(1).amount;
     const sacrificed = player.sacrificed.clampMin(1);
     if (nd1Amount.eq(0)) return new Decimal(1);
     if (InfinityChallenge(2).isCompleted) {
@@ -76,39 +78,39 @@ class Sacrifice {
 function sacrificeReset(auto) {
   if (!Sacrifice.canSacrifice) return false;
   if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
-    player.antimatter.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
+    Currency.antimatter.gt(Decimal.NUMBER_MAX_VALUE) && !Enslaved.isRunning) return false;
   if (
     !Enslaved.isRunning &&
     NormalChallenge(8).isRunning &&
-    (Sacrifice.totalBoost.gte(Decimal.MAX_NUMBER))
+    (Sacrifice.totalBoost.gte(Decimal.NUMBER_MAX_VALUE))
   ) {
     return false;
   }
-  EventHub.dispatch(GameEvent.SACRIFICE_RESET_BEFORE);
+  EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
-  if (!auto) floatText(8, `x${shorten(nextBoost, 2, 1)}`);
+  if (!auto) floatText(8, formatX(nextBoost, 2, 1));
   player.chall8TotalSacrifice = player.chall8TotalSacrifice.times(nextBoost);
-  player.sacrificed = player.sacrificed.plus(NormalDimension(1).amount);
-  const isAch118Enabled = Achievement(118).isEnabled;
+  player.sacrificed = player.sacrificed.plus(AntimatterDimension(1).amount);
+  const isAch118Unlocked = Achievement(118).isUnlocked;
   if (NormalChallenge(8).isRunning) {
-    if (!isAch118Enabled) {
-      NormalDimensions.reset();
+    if (!isAch118Unlocked) {
+      AntimatterDimensions.reset();
     }
-    player.antimatter = new Decimal(100);
-  } else if (!isAch118Enabled) {
-    clearDimensions(NormalChallenge(12).isRunning ? 6 : 7);
+    Currency.antimatter.reset();
+  } else if (!isAch118Unlocked) {
+    AntimatterDimensions.resetAmountUpToTier(NormalChallenge(12).isRunning ? 6 : 7);
   }
   player.noSacrifices = false;
-  EventHub.dispatch(GameEvent.SACRIFICE_RESET_AFTER);
+  EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_AFTER);
   return true;
 }
 
 function sacrificeBtnClick() {
   if (!Sacrifice.isVisible || !Sacrifice.canSacrifice) return false;
   if (player.options.confirmations.sacrifice) {
-    if (!confirm("Dimensional Sacrifice will remove all of your first to seventh dimensions " +
-      "with the cost and multiplier unchanged) for a boost to the Eighth Dimension based on the total " +
-      "amount of first dimensions sacrificed. It will take time to regain production.")) {
+    if (!confirm("Dimensional Sacrifice will remove all of your 1st through 7th Antimatter Dimensions " +
+      "(with the cost and multiplier unchanged), for a boost to the 8th Antimatter Dimension based on the total " +
+      "amount of 1st Antimatter Dimensions sacrificed. It will take time to regain production.")) {
       return false;
     }
   }

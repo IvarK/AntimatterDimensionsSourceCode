@@ -40,9 +40,22 @@ Vue.component("primary-button-on-off", {
     '<primary-button v-bind="$attrs" @click="emitInput(!value)">{{displayText}}</primary-button>',
   computed: {
     displayText() {
-      let text = this.text;
-      text = text && text.length > 0 ? text + " " : "";
-      return this.value ? text + "ON" : text + "OFF";
+      return `${this.text} ${this.value ? "ON" : "OFF"}`.trim();
+    }
+  }
+});
+
+Vue.component("primary-button-cycle", {
+  props: {
+    text: String,
+    labels: Array,
+    value: Number
+  },
+  template:
+    '<primary-button v-bind="$attrs" @click="emitInput((value + 1) % labels.length)">{{displayText}}</primary-button>',
+  computed: {
+    displayText() {
+      return `${this.text} ${this.labels[this.value]}`.trim();
     }
   }
 });

@@ -36,8 +36,11 @@ Vue.component("secret-time-study", {
         "l-time-study": true,
         "o-time-study": true,
         "o-time-study--bought": true,
-        "o-time-study--secret": true,
-        "o-time-study--secret-unlocked": this.isVisible
+        "o-time-study-normal": true,
+        "o-time-study-normal--bought": true,
+        "o-time-study--secret": !this.isEnslaved && !this.isVisible,
+        "o-time-study--secret-enslaved": this.isEnslaved && !this.isVisible,
+        "o-time-study--secret-unlocked": this.isVisible,
       };
     }
   },
@@ -67,6 +70,7 @@ Vue.component("secret-time-study", {
         }
         if (this.isEnslaved) {
           this.isVisible = true;
+          EnslavedProgress.secretStudy.giveProgress();
           player.timestudy.theorem = player.timestudy.theorem.plus(this.enslavedTT);
         }
       }
@@ -74,11 +78,13 @@ Vue.component("secret-time-study", {
   },
   template:
     `<button :class="classObject" :style="styleObject" @click="handleClick" ref="study">
-      {{description}}
-      <br>
-      {{hide}}
-      <br>
-      Cost: {{cost}} Time Theorems
+      <span>
+        {{description}}
+        <br>
+        {{hide}}
+        <br>
+        Cost: {{cost}} Time Theorems
+      </span>
     </button>`
 });
 

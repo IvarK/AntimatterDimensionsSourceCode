@@ -48,7 +48,7 @@ const Teresa = {
       if (!this.has(info) && this.rmStore >= info.price) {
         // eslint-disable-next-line no-bitwise
         player.celestials.teresa.unlockBits |= (1 << info.id);
-        EventHub.dispatch(GameEvent.CELESTIAL_UPGRADE_UNLOCKED, this, info);
+        EventHub.dispatch(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, this, info);
       }
     }
   },
@@ -57,8 +57,9 @@ const Teresa = {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.teresa.unlockBits & (1 << info.id));
   },
-  startRun() {
-    player.celestials.teresa.run = startRealityOver() || player.celestials.teresa.run;
+  initializeRun() {
+    clearCelestialRuns();
+    player.celestials.teresa.run = true;
   },
   rewardMultiplier(antimatter) {
     return Decimal.max(Decimal.pow(antimatter.plus(1).log10() / 1.5e8, 12), 1).toNumber();
@@ -80,6 +81,9 @@ const Teresa = {
   },
   get isRunning() {
     return player.celestials.teresa.run;
+  },
+  get runCompleted() {
+    return player.celestials.teresa.bestRunAM.gt(0);
   },
   quotes: new CelestialQuotes("teresa", {
     INITIAL: {
@@ -109,6 +113,11 @@ const Teresa = {
 };
 
 class PerkShopUpgradeState extends RebuyableMechanicState {
+  constructor(config) {
+    super(config);
+    this.costCap = config.costCap;
+  }
+
   get currency() {
     return Currency.perkPoints;
   }
@@ -121,25 +130,27 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     player.celestials.teresa.perkShop[this.id] = value;
   }
 
-  get cap() {
-    return this.config.cap();
-  }
-
   get isCapped() {
-    return this.cost === this.cap;
+    return this.cost === this.costCap(this.bought);
   }
 
-  get isAvailable() {
+  get isAvailableForPurchase() {
     return this.cost < this.currency.value;
   }
 
-  purchase() {
-    if (!super.purchase()) return;
+  onPurchased() {
     if (this.id === 1) {
       Autobuyer.reality.bumpAmount(2);
     }
     if (this.id === 4) {
-      Glyphs.addToInventory(GlyphGenerator.musicGlyph());
+      if (Glyphs.freeInventorySpace === 0) {
+        // Refund the perk point if they didn't actually get a glyph
+        player.reality.pp++;
+        GameUI.notify.error("You have no empty inventory space!");
+      } else {
+        Glyphs.addToInventory(GlyphGenerator.musicGlyph());
+        GameUI.notify.success("Created a music glyph");
+      }
     }
   }
 }
@@ -154,3 +165,16 @@ const PerkShopUpgrade = (function() {
     musicGlyph: new PerkShopUpgradeState(db.musicGlyph),
   };
 }());
+
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
+  if (Tab.celestials.teresa.isOpen) Teresa.quotes.show(Teresa.quotes.INITIAL);
+});
+
+EventHub.logic.on(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, ([celestial, upgradeInfo]) => {
+  if (celestial === Teresa) {
+    if (upgradeInfo === TERESA_UNLOCKS.RUN) Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY);
+    if (upgradeInfo === TERESA_UNLOCKS.EFFARIG) Teresa.quotes.show(Teresa.quotes.EFFARIG);
+  }
+});
+
+EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Teresa.checkForUnlocks());

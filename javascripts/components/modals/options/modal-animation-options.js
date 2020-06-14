@@ -41,7 +41,7 @@ Vue.component("modal-animation-options", {
   template:
     `<modal-options @close="emitClose">
       <on-off-button v-model="floatingText" text="Floating text:"/>
-      <on-off-button v-if="bigCrunchUnlocked" v-model="bigCrunch" text="Big crunch:"/>
+      <on-off-button v-if="infinityUnlocked" v-model="bigCrunch" text="Big crunch:"/>
       <on-off-button v-if="dilationUnlocked" v-model="tachyonParticles" text="Tachyon particles:"/>
       <on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:"/>
       <on-off-button

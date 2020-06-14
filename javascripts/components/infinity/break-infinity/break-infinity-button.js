@@ -15,17 +15,18 @@ Vue.component("break-infinity-button", {
         "o-infinity-upgrade-btn--color-2": true,
         "o-infinity-upgrade-btn--available": this.isUnlocked,
         "o-infinity-upgrade-btn--unavailable": !this.isUnlocked,
+        "o-infinity-upgrade-btn--feel-eternity": this.isEnslaved,
       };
     },
     tooltip() {
       if (this.isEnslaved) return "...eons stacked on eons stacked on eons stacked on eons stacked on ...";
-      return this.isUnlocked
+      return (this.isUnlocked && !this.isBroken)
         ? "Cost multipliers post-infinity will begin increasing faster, but so will the Infinity Point gain"
         : undefined;
     },
     text() {
       if (this.isEnslaved) return "FEEL ETERNITY";
-      return this.isBroken ? "FIX INFINITY" : "BREAK INFINITY"
+      return this.isBroken ? "FIX INFINITY" : "BREAK INFINITY";
     }
   },
   methods: {

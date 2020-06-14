@@ -15,7 +15,7 @@ Vue.component("current-glyph-effects", {
           const value1 = this.effectConfig.formatEffect(baseValue);
           const value2 = this.effectConfig.conversion === undefined
             ? ""
-            : this.effectConfig.formatEffect(this.effectConfig.conversion(baseValue));
+            : this.effectConfig.formatSecondaryEffect(this.effectConfig.conversion(baseValue));
           const desc = typeof this.effectConfig.totalDesc === "function"
             ? this.effectConfig.totalDesc()
             : this.effectConfig.totalDesc;
@@ -47,7 +47,7 @@ Vue.component("current-glyph-effects", {
     }
   },
   created() {
-    this.on$(GameEvent.GLYPHS_CHANGED, this.glyphsChanged);
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
   },
   methods: {
@@ -57,9 +57,10 @@ Vue.component("current-glyph-effects", {
   },
   template: `
   <div class="c-current-glyph-effects l-current-glyph-effects">
-    <div>
+    <div class="c-current-glyph-effects__header">
       Currently active glyph effects:
     </div>
+    <br>
     <div v-if="isSoftcapActive" class="l-current-glyph-effects__capped-header">
       <span class="c-current-glyph-effects__effect--capped">Colored</span> effects have been slightly reduced
       due to a softcap

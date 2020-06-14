@@ -10,6 +10,8 @@ Vue.component("game-header-tickspeed-row", {
       tickspeed: new Decimal(0),
       gameSpeedMult: 1,
       galaxyCount: 0,
+      isContinuumActive: false,
+      continuumValue: 0
     };
   },
   computed: {
@@ -20,18 +22,13 @@ Vue.component("game-header-tickspeed-row", {
       };
     },
     multiplierDisplay() {
-      if (InfinityChallenge(3).isRunning) return `Multiply all Normal Dimensions by 
+      if (InfinityChallenge(3).isRunning) return `Multiply all Antimatter Dimensions by
         ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)}`;
       const tickmult = this.mult;
-      if (tickmult.lte(1e-9)) return `Divide the tick interval by ${this.shorten(tickmult.reciprocal(), 2, 0)}.`;
-
-      const asNumber = tickmult.toNumber();
-      let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
-      if (this.galaxyCount === 1) places = Math.max(places, 1);
-      return `Reduce the tick interval by ${formatPercents(1 - asNumber, places)}.`;
+      return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade.`;
     },
     tickspeedDisplay() {
-      return `Tickspeed: ${shorten(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
+      return `Tickspeed: ${format(Decimal.divide(1000, this.tickspeed), 2, 3)} / sec`;
     },
     isGameSpeedNormal() {
       return this.gameSpeedMult === 1;
@@ -41,15 +38,13 @@ Vue.component("game-header-tickspeed-row", {
     },
     formattedFastSpeed() {
       const gameSpeedMult = this.gameSpeedMult;
-      return gameSpeedMult < 10000 ? gameSpeedMult.toFixed(3) : this.shortenDimensions(gameSpeedMult);
-    },
-    tooltip() {
-      if (this.isGameSpeedNormal) return undefined;
-      const displayValue = this.isGameSpeedSlow ? shorten(1 / this.gameSpeedMult, 2, 3) : this.formattedFastSpeed;
-      return `The game is running ${displayValue}x ${this.isGameSpeedSlow ? "slower." : "faster."}`;
+      return gameSpeedMult < 10000 ? format(gameSpeedMult, 3, 3) : format(gameSpeedMult, 2, 0);
     },
     showCostTitle() {
       return this.cost.exponent < 1000000;
+    },
+    continuumString() {
+      return formatFloat(this.continuumValue, 2);
     }
   },
   methods: {
@@ -63,6 +58,8 @@ Vue.component("game-header-tickspeed-row", {
       this.tickspeed.copyFrom(Tickspeed.current);
       this.gameSpeedMult = getGameSpeedupForDisplay();
       this.galaxyCount = player.galaxies;
+      this.isContinuumActive = Laitela.continuumActive;
+      if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
     }
   },
   template:
@@ -72,14 +69,20 @@ Vue.component("game-header-tickspeed-row", {
         <primary-button
           :enabled="isAffordable"
           class="o-primary-btn--tickspeed"
-          onclick="buyTickSpeed()"
-        ><span v-if="showCostTitle">Cost: </span>{{shortenCosts(cost)}}</primary-button>
+          :style="{ width: isContinuumActive ? '25rem' : ''}"
+          onclick="buyTickSpeed()">
+            <span v-if="isContinuumActive">Continuum: {{continuumString}}</span>
+            <span v-else-if="showCostTitle">Cost: {{format(cost)}}</span>
+            <span v-else>{{format(cost)}}<br></span>
+        </primary-button>
         <primary-button
+          v-if="!isContinuumActive"
           :enabled="isAffordable"
           class="o-primary-btn--buy-max"
-          onclick="buyMaxTickSpeed()"
-        >Buy Max</primary-button>
+          onclick="buyMaxTickSpeed()">
+            Buy Max
+        </primary-button>
       </div>
-      <div v-tooltip="tooltip">{{tickspeedDisplay}} <game-header-gamma-display v-if="!isGameSpeedNormal"/></div>
+      <div>{{tickspeedDisplay}} <game-header-gamespeed-display v-if="!isGameSpeedNormal"/></div>
     </div>`
 });

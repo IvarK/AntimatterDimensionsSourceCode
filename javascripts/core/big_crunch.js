@@ -7,28 +7,14 @@ function bigCrunchAnimation() {
   }, 2000);
 }
 
-function canCrunch() {
-  if (Enslaved.isRunning && NormalChallenge.isRunning &&
-    !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(NormalChallenge.current.id)) {
-    return true;
-  }
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
-  const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
-  if (player.thisInfinityMaxAM.lt(goal)) return false;
-  return true;
-}
-
 function handleChallengeCompletion() {
-  if (!NormalChallenge(1).isCompleted) {
+  const challenge = NormalChallenge.current || InfinityChallenge.current;
+  if (!challenge && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
   }
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
   if (!challenge) return;
   challenge.complete();
   challenge.updateChallengeTime();
-  if (NormalChallenge(9).isRunning) {
-    kong.submitStats("NormalChallenge 9 time record (ms)", Math.floor(player.thisInfinityTime));
-  }
   if (!player.options.retryChallenge) {
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = 0;
@@ -36,7 +22,7 @@ function handleChallengeCompletion() {
 }
 
 function bigCrunchResetRequest(disableAnimation = false) {
-  if (!canCrunch()) return;
+  if (!Player.canCrunch) return;
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   if (earlyGame && !disableAnimation && player.options.animations.bigCrunch) {
     bigCrunchAnimation();
@@ -47,28 +33,30 @@ function bigCrunchResetRequest(disableAnimation = false) {
 }
 
 function bigCrunchReset() {
-  if (!canCrunch()) return;
+  if (!Player.canCrunch) return;
   player.bestIPminThisEternity = player.bestIPminThisEternity.clampMin(player.bestIPminThisInfinity);
   player.bestIPminThisInfinity = new Decimal(0);
 
   player.bestInfinitiesPerMs = player.bestInfinitiesPerMs.clampMin(
     gainedInfinities().round().dividedBy(player.thisInfinityRealTime)
   );
-  
+
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   const challenge = NormalChallenge.current || InfinityChallenge.current;
-  EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
   handleChallengeCompletion();
 
   if (earlyGame || (challenge && !player.options.retryChallenge)) {
-    Tab.dimensions.normal.show();
+    Tab.dimensions.antimatter.show();
   }
   const infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
   addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints, gainedInfinities().round());
-
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
+  player.bestInfinityRealTime = Math.min(player.bestInfinityRealTime, player.thisInfinityRealTime);
+
+  player.noInfinitiesThisReality = false;
 
   if (!player.usedMaxAll) {
     const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(player.thisInfinityRealTime);
@@ -78,20 +66,22 @@ function bigCrunchReset() {
 
   if (EternityChallenge(4).tryFail()) return;
 
-  // FIXME: Infinitified is now Decimal so decide what happens here!
-  // kong.submitStats('Infinitied', Player.totalInfinitied);
-  kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime));
-
   const currentReplicanti = player.replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
   secondSoftReset(true);
 
-  if (Achievement(95).isEnabled) {
+  let remainingGalaxies = 0;
+  if (Achievement(95).isUnlocked) {
     player.replicanti.amount = currentReplicanti;
+    remainingGalaxies += Math.min(currentReplicantiGalaxies, 1);
   }
   if (TimeStudy(33).isBought) {
-    player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
+    remainingGalaxies += Math.floor(currentReplicantiGalaxies / 2);
   }
+
+  // I don't think this Math.clampMax is technically needed, but if we add another source
+  // of keeping Replicanti Galaxies then it might be.
+  player.replicanti.galaxies = Math.clampMax(remainingGalaxies, currentReplicantiGalaxies);
 
   if (EternityMilestone.autobuyerID(1).isReached &&
       !EternityChallenge(8).isRunning &&
@@ -111,15 +101,15 @@ function bigCrunchReset() {
     EffarigUnlock.infinity.unlock();
     beginProcessReality(getRealityProps(true));
   }
-  EventHub.dispatch(GameEvent.BIG_CRUNCH_AFTER);
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
 
 }
 
 function secondSoftReset(forcedNDReset = false) {
   player.dimensionBoosts = 0;
   player.galaxies = 0;
-  player.antimatter = Player.startingAM;
-  player.thisInfinityMaxAM = Player.startingAM;
+  player.thisInfinityMaxAM = new Decimal(0);
+  Currency.antimatter.reset();
   softReset(0, forcedNDReset);
   InfinityDimensions.resetAmount();
   if (player.replicanti.unl)
@@ -139,7 +129,7 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
     this._upgrade = upgrade;
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this._upgrade.isBought && this._upgrade.isCharged;
   }
 }
@@ -147,7 +137,13 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
 class InfinityUpgrade extends SetPurchasableMechanicState {
   constructor(config, requirement) {
     super(config);
-    this._requirement = requirement;
+    if (Array.isArray(requirement)) {
+      this._requirements = requirement;
+    } else if (requirement === undefined) {
+      this._requirements = [];
+    } else {
+      this._requirements = [requirement];
+    }
     if (config.charged) {
       this._chargedEffect = new ChargedInfinityUpgradeState(config.charged, this);
     }
@@ -161,11 +157,11 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
     return player.infinityUpgrades;
   }
 
-  get isAvailable() {
-    return this._requirement === undefined || this._requirement.isBought;
+  get isAvailableForPurchase() {
+    return this._requirements.every(x => x.isBought);
   }
 
-  get canBeApplied() {
+  get isEffectActive() {
     return this.isBought && !this.isCharged;
   }
 
@@ -204,7 +200,7 @@ function totalIPMult() {
     return new Decimal(1);
   }
   let ipMult = new Decimal(1)
-    .times(kongIPMult)
+    .times(ShopPurchase.IPPurchases.currentMult)
     .timesEffectsOf(
       TimeStudy(41),
       TimeStudy(51),
@@ -215,7 +211,7 @@ function totalIPMult() {
       Achievement(93),
       Achievement(116),
       Achievement(125),
-      Achievement(141),
+      Achievement(141).effects.ipGain,
       InfinityUpgrade.ipMult,
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
@@ -270,7 +266,10 @@ function disChargeAll() {
   InfinityUpgrade.skipReset3 = upgrade(db.skipReset3, InfinityUpgrade.skipReset2);
   InfinityUpgrade.skipResetGalaxy = upgrade(db.skipResetGalaxy, InfinityUpgrade.skipReset3);
 
-  InfinityUpgrade.ipOffline = upgrade(db.ipOffline, InfinityUpgrade.totalTimeMult);
+  InfinityUpgrade.ipOffline = upgrade(db.ipOffline, [
+    InfinityUpgrade.resetBoost, InfinityUpgrade.galaxyBoost,
+    InfinityUpgrade.ipGen, InfinityUpgrade.skipResetGalaxy
+  ]);
 }());
 
 class InfinityIPMultUpgrade extends GameMechanicState {
@@ -305,18 +304,14 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     return !this.isCapped && player.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
   }
 
-  get canBeApplied() {
-    return true;
-  }
-
   purchase(amount = 1) {
     if (!this.canBeBought) return;
-    const costIncrease = this.costIncrease;
     const mult = Decimal.pow(2, amount);
     player.infMult = player.infMult.times(mult);
     if (!TimeStudy(181).isBought) {
       Autobuyer.bigCrunch.bumpAmount(mult);
     }
+    const costIncrease = this.costIncrease;
     player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
     player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
     this.adjustToCap();
@@ -333,13 +328,15 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   autobuyerTick() {
     if (!this.canBeBought) return;
     if (!this.hasIncreasedCost) {
-      const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent);
+      // The purchase at 1e3000000 is considered post-softcap because that purchase increases the cost by 1e10x.
+      const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent - 1);
       const purchases = buyUntil - this.cost.exponent + 1;
       if (purchases <= 0) return;
       this.purchase(purchases);
     }
     // Do not replace it with `if else` - it's specifically designed to process two sides of threshold separately
-    // (for example, we have 1e4000000 IP and no mult - first it will go to 1e3000000 and then it will go in this part)
+    // (for example, we have 1e4000000 IP and no mult - first it will go to (but not including) 1e3000000 and then
+    // it will go in this part)
     if (this.hasIncreasedCost) {
       const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costCap.exponent);
       const purchases = Math.floor((buyUntil - player.infMultCost.exponent) / 10) + 1;
@@ -377,7 +374,7 @@ class BreakInfinityUpgrade extends SetPurchasableMechanicState {
   BreakInfinityUpgrade.autobuyerSpeed = upgrade(db.autobuyerSpeed);
 }());
 
-class BreakInfinityMultiplierCostUpgrade extends RebuyableMechanicState {
+class RebuyableBreakInfinityUpgradeState extends RebuyableMechanicState {
   get currency() {
     return Currency.infinityPoints;
   }
@@ -390,69 +387,39 @@ class BreakInfinityMultiplierCostUpgrade extends RebuyableMechanicState {
     player.infinityRebuyables[this.id] = value;
   }
 
-  get isMaxed() {
+  get isCapped() {
     return this.boughtAmount === this.config.maxUpgrades;
   }
+}
 
-  get isAvailable() {
-    return !this.isMaxed;
-  }
-
-  purchase() {
-    if (!super.purchase()) return false;
-    GameCache.dimensionMultDecrease.invalidate();
+BreakInfinityUpgrade.tickspeedCostMult = new class extends RebuyableBreakInfinityUpgradeState {
+  onPurchased() {
     GameCache.tickSpeedMultDecrease.invalidate();
-    return true;
   }
-}
+}(GameDatabase.infinity.breakUpgrades.tickspeedCostMult);
 
-BreakInfinityUpgrade.tickspeedCostMult = new BreakInfinityMultiplierCostUpgrade(
-  GameDatabase.infinity.breakUpgrades.tickspeedCostMult
-);
-
-BreakInfinityUpgrade.dimCostMult = new BreakInfinityMultiplierCostUpgrade(
-  GameDatabase.infinity.breakUpgrades.dimCostMult
-);
-
-class BreakInfinityIPGenUpgrade extends GameMechanicState {
-  get cost() {
-    return this.config.cost();
+BreakInfinityUpgrade.dimCostMult = new class extends RebuyableBreakInfinityUpgradeState {
+  onPurchased() {
+    GameCache.dimensionMultDecrease.invalidate();
   }
+}(GameDatabase.infinity.breakUpgrades.dimCostMult);
 
-  get isMaxed() {
-    return player.offlineProd === 50;
-  }
-
-  get isAffordable() {
-    return player.infinityPoints.gte(this.cost);
-  }
-
-  get canBeBought() {
-    return !this.isMaxed && this.isAffordable;
-  }
-
-  purchase() {
-    if (!this.canBeBought) return;
-    player.infinityPoints = player.infinityPoints.minus(player.offlineProdCost);
-    player.offlineProdCost *= 10;
-    player.offlineProd += 5;
-    GameUI.update();
-  }
-}
-
-BreakInfinityUpgrade.ipGen = new BreakInfinityIPGenUpgrade(GameDatabase.infinity.breakUpgrades.ipGen);
+BreakInfinityUpgrade.ipGen = new RebuyableBreakInfinityUpgradeState(GameDatabase.infinity.breakUpgrades.ipGen);
 
 function preProductionGenerateIP(diff) {
   if (InfinityUpgrade.ipGen.isBought) {
     const genPeriod = Time.bestInfinity.totalMilliseconds * 10;
     // Partial progress (fractions from 0 to 1) are stored in player.partInfinityPoint
-    player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
+    player.partInfinityPoint += diff / genPeriod;
     if (player.partInfinityPoint >= 1) {
       const genCount = Math.floor(player.partInfinityPoint);
-      player.infinityPoints = player.infinityPoints.plus(new Decimal(genCount).timesEffectOf(InfinityUpgrade.ipGen));
+      let gainedPerGen = InfinityUpgrade.ipGen.effectValue;
+      if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen);
+      const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
+      player.infinityPoints = player.infinityPoints.plus(gainedThisTick);
       player.partInfinityPoint -= genCount;
     }
   }
   player.infinityPoints = player.infinityPoints
-    .plus(Player.bestRunIPPM.times(player.offlineProd / 100).times(diff / 60000));
+    .plus(BreakInfinityUpgrade.ipGen.effectOrDefault(new Decimal(0)).times(diff / 60000));
 }

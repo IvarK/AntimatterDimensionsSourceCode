@@ -4,17 +4,23 @@ Vue.component("glyph-inventory", {
   data() {
     return {
       inventory: [],
+      doubleClickTimeOut: null,
+      clickedGlyphId: null,
+      glyphSacrificeUnlocked: false,
     };
   },
   computed: {
-    rowCount: () => 10,
+    rowCount: () => Glyphs.totalSlots / 10,
     colCount: () => 10,
   },
   created() {
-    this.on$(GameEvent.GLYPHS_CHANGED, this.glyphsChanged);
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
     this.glyphsChanged();
   },
   methods: {
+    update() {
+      this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
+    },
     toIndex(row, col) {
       return (row - 1) * this.colCount + (col - 1);
     },
@@ -28,24 +34,32 @@ Vue.component("glyph-inventory", {
       if (!glyph) return;
       Glyphs.moveToSlot(glyph, idx);
     },
-    deleteGlyph(id, force) {
-      deleteGlyph(id, force);
+    removeGlyph(id, force) {
+      GlyphSacrificeHandler.removeGlyph(Glyphs.findById(id), force);
     },
     clickGlyph(col, id) {
       const glyph = Glyphs.findById(id);
-      if (!glyph) return;
-      if (glyph.symbol === "key266b") {
-        new Audio(`audio/note${col}.mp3`).play();
+      // If single click
+      if (!this.doubleClickTimeOut) {
+        this.doubleClickTimeOut = setTimeout(() => { 
+          this.clickedGlyphId = null;
+          this.doubleClickTimeOut = null;
+        }, 200);
+        this.clickedGlyphId = id;
+        if (!glyph) return;
+        if (glyph.symbol === "key266b") {
+          new Audio(`audio/note${col}.mp3`).play();
+        }
+      // Else it's double click, so equip a glyph
+      } else if (this.clickedGlyphId === id) {
+        clearTimeout(this.doubleClickTimeOut);
+        this.doubleClickTimeOut = null;
+        const idx = Glyphs.active.indexOf(null);
+        if (idx !== -1) Glyphs.equip(glyph, idx);
       }
     },
     glyphsChanged() {
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);
-    },
-    sort() {
-      Glyphs.sort();
-    },
-    autoClean() {
-      Glyphs.autoClean();
     },
     slotClass(index) {
       return index < Glyphs.protectedSlots ? "c-glyph-inventory__protected-slot" : "c-glyph-inventory__slot";
@@ -53,6 +67,14 @@ Vue.component("glyph-inventory", {
   },
   template: `
   <div class="l-glyph-inventory">
+    Click and drag or double-click to equip glyphs.
+    <br>
+    The top two rows of slots are protected slots and are
+    <br>
+    unaffected by anything which may move or delete glyphs.
+    <div>
+      <glyph-sort-options />
+    </div>
     <div v-for="row in rowCount" class="l-glyph-inventory__row">
       <div v-for="col in colCount"
            class="l-glyph-inventory__slot"
@@ -60,25 +82,13 @@ Vue.component("glyph-inventory", {
            @dragover="allowDrag"
            @drop="drop(toIndex(row, col), $event)">
         <glyph-component v-if="inventory[toIndex(row, col)]"
-                         :glyph="inventory[toIndex(row, col)]"
-                         :showSacrifice="true"
-                         :draggable="true"
-                         @shiftClicked="deleteGlyph($event, false)"
-                         @ctrlShiftClicked="deleteGlyph($event, true)"
-                         @clicked="clickGlyph(col, $event)"/>
+          :glyph="inventory[toIndex(row, col)]"
+          :showSacrifice="glyphSacrificeUnlocked"
+          :draggable="true"
+          @shiftClicked="removeGlyph($event, false)"
+          @ctrlShiftClicked="removeGlyph($event, true)"
+          @clicked="clickGlyph(col, $event)"/>
       </div>
-    </div>
-    <div>
-      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-              ach-tooltip="Sort by type and level * rarity"
-              @click="sort">
-        Sort
-      </button>
-      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-             ach-tooltip="Sacrifice glyphs that are worse in every way than enough other glyphs"
-             @click="autoClean">
-       Auto clean
-      </button>
     </div>
   </div>
   `,

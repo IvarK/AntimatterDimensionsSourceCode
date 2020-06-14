@@ -10,12 +10,15 @@ Vue.component("black-hole-state-row", {
       isPermanent: false,
       isActive: false,
       isCharged: false,
-      duration: 0,
-      interval: 0,
-      phase: 0
+      nextChange: "",
+      nextChangeActive: "",
+      state: "",
     };
   },
   computed: {
+    description() {
+      return this.blackHole.description(true);
+    },
     id() {
       return this.blackHole.id;
     }
@@ -28,25 +31,30 @@ Vue.component("black-hole-state-row", {
       this.isPermanent = blackHole.isPermanent;
       this.isActive = blackHole.isActive;
       this.isCharged = blackHole.isCharged;
-      this.duration = blackHole.duration;
-      this.interval = blackHole.interval;
-      this.phase = blackHole.phase;
+      this.nextChange = TimeSpan.fromSeconds(
+        blackHole.timeToNextStateChange).toStringShort();
+      this.nextChangeActive = TimeSpan.fromSeconds(
+        blackHole.timeWithPreviousActiveToNextStateChange).toStringShort();
+      this.state = blackHole.displayState;
     }
   },
   template: `
     <h3 v-if="isUnlocked">
-      Black hole {{ id }}
+      {{ description }}
       <template v-if="isPermanent">
         is active permanently.
       </template>
       <template v-else-if="isActive">
-        is active for {{ (duration - phase).toFixed(1) }} more seconds.
+        is active for the next {{ nextChange }}.
       </template>
-      <template v-else-if="isCharged">
-        will activate with black hole {{ id - 1 }} (for {{ Math.max(0, duration - phase).toFixed(1) }} sec)
+      <template v-else-if="id === 2 && isCharged">
+        will activate in {{ nextChange }} (as soon as Black Hole 1 activates).
+      </template>
+      <template v-else-if="id === 2">
+        will activate in {{ nextChange }} ({{ nextChangeActive }} of Black Hole 1 active time).
       </template>
       <template v-else>
-        will activate in {{ (interval - phase).toFixed(1) }} seconds.
+        will activate in {{ nextChange }}.
       </template>
     </h3>
   `

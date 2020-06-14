@@ -1,57 +1,68 @@
 "use strict";
 
-function shortenRateOfChange(money) {
-  return shorten(money, 2, 2);
-}
-
-function shortenCosts(money) {
-  return shorten(money, 0, 0);
-}
-
-function shortenDimensions(money) {
-  return shorten(money, 2, 0);
-}
-
-function shortenMoney(money) {
-  return shorten(money, 2, 1);
-}
-
-function shortenMultiplier(money) {
-  return shorten(money, 1, 1);
-}
-
-function shorten(value, places, placesUnder1000) {
+function format(value, places, placesUnder1000) {
   return Notations.current.format(value, places, placesUnder1000);
 }
 
-function shortenSmallInteger(value) {
-  return Notations.current.isPainful
-    ? shorten(value, 2, 2)
-    : formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
+function formatInt(value) {
+  if (Notations.current.isPainful) {
+    return format(value, 2, 0);
+  }
+  return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
-function shortenPostBreak(value, places, placesUnder1000) {
-  const currentFormat = ui.formatPreBreak;
-  ui.formatPreBreak = false;
-  const shortened = shorten(value, places, placesUnder1000);
-  ui.formatPreBreak = currentFormat;
-  return shortened;
+function formatFloat(value, digits) {
+  if (Notations.current.isPainful) {
+    return format(value, Math.max(2, digits), digits);
+  }
+  return formatWithCommas(value.toFixed(digits));
 }
 
-function format(value, places, placesUnder1000) {
-  return shorten(value, places, placesUnder1000);
+function formatPostBreak(value, places, placesUnder1000) {
+  const notation = Notations.current;
+  // This is basically just a copy of the format method from notations library,
+  // with the pre-break case removed.
+  if (typeof value === "number" && !Number.isFinite(value)) {
+    return notation.infinite;
+  }
+
+  const decimal = Decimal.fromValue_noAlloc(value);
+
+  if (decimal.exponent < -300) {
+    return decimal.sign() < 0
+      ? notation.formatVerySmallNegativeDecimal(decimal.abs(), placesUnder1000)
+      : notation.formatVerySmallDecimal(decimal, placesUnder1000);
+  }
+
+  if (decimal.exponent < 3) {
+    const number = decimal.toNumber();
+    return number < 0
+      ? notation.formatNegativeUnder1000(Math.abs(number), placesUnder1000)
+      : notation.formatUnder1000(number, placesUnder1000);
+  }
+
+  return decimal.sign() < 0
+    ? notation.formatNegativeDecimal(decimal.abs(), places)
+    : notation.formatDecimal(decimal, places);
 }
 
 function formatX(value, places, placesUnder1000) {
-  return `${shorten(value, places, placesUnder1000)}x`;
+  return `×${format(value, places, placesUnder1000)}`;
 }
 
 function formatPow(value, places, placesUnder1000) {
-  return `^${shorten(value, places, placesUnder1000)}`;
+  return `^${format(value, places, placesUnder1000)}`;
 }
 
 function formatPercents(value, places) {
-  return `${shorten(value * 100, 2, places)}%`;
+  return `${format(value * 100, 2, places)}%`;
+}
+
+function formatRarity(value) {
+  // We can, annoyingly, have rounding error here, so even though only rarities
+  // are passed in, we can't trust our input to always be some integer divided by 10.
+  const places = value.toFixed(1).endsWith(".0") ? 0 : 1;
+  return `${format(value, 2, places)}%`;
 }
 
 function timeDisplay(ms) {

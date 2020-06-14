@@ -3,23 +3,13 @@
 Vue.component("glyph-auto-pick-options", {
   data() {
     return {
-      unlocked: false,
-      mode: AutoGlyphPickMode.RANDOM,
-      alchemyUnlocked: false,
-      sacMode: 0
+      mode: AUTO_GLYPH_REJECT.SACRIFICE,
     };
   },
   computed: {
     modes() {
-      return AutoGlyphPickMode;
+      return AUTO_GLYPH_REJECT;
     },
-    pickerText() {
-      switch (this.sacMode) {
-        case 1: return "Sacrifice";
-        case 4: return "Refine";
-        default: return "Auto pick";
-      }
-    }
   },
   methods: {
     optionClass(idx) {
@@ -32,31 +22,28 @@ Vue.component("glyph-auto-pick-options", {
       ];
     },
     update() {
-      this.unlocked = EffarigUnlock.autopicker.isUnlocked;
-      this.mode = AutoGlyphPicker.mode;
-      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
-      this.sacMode = AutoGlyphSacrifice.mode;
+      this.mode = AutoGlyphProcessor.sacMode;
     },
     setMode(m) {
-      AutoGlyphPicker.mode = m;
+      AutoGlyphProcessor.sacMode = m;
     },
   },
   template: `
-  <div v-if="unlocked" class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
-    <div :class="optionClass(modes.RANDOM)" @click="setMode(modes.RANDOM)">
-      {{ pickerText }} random
+  <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
+    <span class="c-glyph-sacrifice-options__advanced">
+      Behavior for deleted and filtered
+      <br>
+      glyphs in non-alchemy modes:
+    </span>
+    <br>
+    <div :class="optionClass(modes.SACRIFICE)" @click="setMode(modes.SACRIFICE)">
+      Always sacrifice
     </div>
-    <div :class="optionClass(modes.RARITY)" @click="setMode(modes.RARITY)">
-      {{ pickerText }} rarest
+    <div :class="optionClass(modes.ALWAYS_REFINE)" @click="setMode(modes.ALWAYS_REFINE)">
+      Always refine
     </div>
-    <div :class="optionClass(modes.ABOVE_SACRIFICE_THRESHOLD)" @click="setMode(modes.ABOVE_SACRIFICE_THRESHOLD)">
-      {{ pickerText }} farthest above threshold
-    </div>
-    <div 
-      v-if="alchemyUnlocked"
-      :class="optionClass(modes.LOWEST_ALCHEMY_RESOURCE)" 
-      @click="setMode(modes.LOWEST_ALCHEMY_RESOURCE)">
-      {{ pickerText }} lowest alchemy resource
+    <div :class="optionClass(modes.REFINE_TO_CAP)" @click="setMode(modes.REFINE_TO_CAP)">
+      Refine to cap, then sacrifice
     </div>
   </div>
   `

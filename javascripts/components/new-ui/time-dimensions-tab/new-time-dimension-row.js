@@ -19,15 +19,15 @@ Vue.component("new-time-dimension-row", {
   },
   computed: {
     name() {
-      return SHORT_DISPLAY_NAMES[this.tier];
+      return TimeDimension(this.tier).shortDisplayName;
     },
     rateOfChangeDisplay() {
       return this.tier < 8
-        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
         : "";
     },
     buttonContents() {
-      return this.isCapped ? "Capped" : `Cost: ${this.shortenDimensions(this.cost)} EP`;
+      return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2, 0)} EP`;
     }
   },
   watch: {
@@ -53,27 +53,37 @@ Vue.component("new-time-dimension-row", {
       this.isAutobuyerOn = player.reality.tdbuyers[this.tier - 1];
     },
     buyTimeDimension() {
-      buyTimeDimension(this.tier);
+      buySingleTimeDimension(this.tier);
+    },
+    buyMaxTimeDimension() {
+      buyMaxTimeDimension(this.tier);
     },
   },
   template:
     `<div v-show="isUnlocked" class="c-time-dim-row">
-      <div class="c-time-dim-row__label c-time-dim-row__name">
-        {{name}} Time D <span class="c-time-dim-row__multiplier">x{{shortenMoney(multiplier)}}</span>
+      <div class="c-dim-row__label c-dim-row__name">
+        {{name}} Time D <span class="c-time-dim-row__multiplier">{{formatX(multiplier, 2, 1)}}</span>
       </div>
-      <div class="c-time-dim-row__label c-time-dim-row__label--growable">
-        {{shortenDimensions(amount)}}
+      <div class="c-dim-row__label c-dim-row__label--growable">
+        {{format(amount, 2, 0)}}
+        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
       </div>
+      <primary-button
+        :enabled="isAffordable && !isCapped"
+        class="o-primary-btn--buy-td l-dim-row__button o-primary-btn o-primary-btn--new"
+        @click="buyTimeDimension"
+      >{{buttonContents}}</primary-button>
       <primary-button-on-off
         v-if="areAutobuyersUnlocked"
         v-model="isAutobuyerOn"
-        class="o-primary-btn--td-autobuyer l-time-dim-row__button"
+        class="o-primary-btn--td-autobuyer l-dim-row__button"
         text="Auto:"
       />
       <primary-button
-        :enabled="isAffordable"
-        class="o-primary-btn--buy-td l-time-dim-row__button o-primary-btn o-primary-btn--new"
-        @click="buyTimeDimension"
-      >{{buttonContents}}</primary-button>
+        v-else
+        :enabled="isAffordable && !isCapped"
+        class="o-primary-btn--buy-td-max l-dim-row__button"
+        @click="buyMaxTimeDimension"
+      >Buy Max</primary-button>
     </div>`,
 });

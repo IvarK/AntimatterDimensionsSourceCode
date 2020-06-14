@@ -39,10 +39,10 @@ Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
 
   toggleMode() {
     this.mode = [
-      AutoRealityMode.RM,
-      AutoRealityMode.GLYPH,
-      AutoRealityMode.EITHER,
-      AutoRealityMode.BOTH
+      AUTO_REALITY_MODE.RM,
+      AUTO_REALITY_MODE.GLYPH,
+      AUTO_REALITY_MODE.EITHER,
+      AUTO_REALITY_MODE.BOTH
     ]
       .nextSibling(this.mode);
   }
@@ -58,16 +58,16 @@ Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
     const rmProc = gainedRealityMachines().gte(this.rm);
     const glyphProc = gainedGlyphLevel().actualLevel >= Math.min(this.glyph, Glyphs.levelCap);
     switch (this.mode) {
-      case AutoRealityMode.RM:
+      case AUTO_REALITY_MODE.RM:
         proc = rmProc;
         break;
-      case AutoRealityMode.GLYPH:
+      case AUTO_REALITY_MODE.GLYPH:
         proc = glyphProc;
         break;
-      case AutoRealityMode.EITHER:
+      case AUTO_REALITY_MODE.EITHER:
         proc = rmProc || glyphProc;
         break;
-      case AutoRealityMode.BOTH:
+      case AUTO_REALITY_MODE.BOTH:
         proc = rmProc && glyphProc;
         break;
     }

@@ -1,47 +1,38 @@
 .t-s6 #stars {
-    display: block;
-    /* Make video to at least 100% wide and tall */
-    min-width: 100%;
-    min-height: 100%;
+  display: block;
+  /* Make video to at least 100% wide and tall */
+  min-width: 100%;
+  min-height: 100%;
 
-    /* Setting width & height to auto prevents the browser from stretching or squishing the video */
-    width: auto;
-    height: auto;
+  /* Setting width & height to auto prevents the browser from stretching or squishing the video */
+  width: auto;
+  height: auto;
 
-    /* Center the video */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: -1000;
-    transform: translate(-50%,-50%);
+  /* Center the video */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1000;
+  transform: translate(-50%,-50%);
 }
 
 body.t-s6 {
-    background: black;
-    background-image: url('../images/s6-bg.png');
-    background-size: 100%;
-    background-position: center;
-}
-
-.t-s6 input {
-    color: white;
-    background-color: black;
-    border: 1px solid grey;
-}
-
-.t-s6 .container {
-    color: #999;
+  color: #999;
+  background: black;
+  background-image: url('../images/s6-bg.png');
+  background-size: 100%;
+  background-position: center;
 }
 
 .t-s6 .c-tt-amount {
-    color: #64DD17;
-    text-shadow: 0 0 7px #64DD17;
+  color: #64DD17;
+  text-shadow: 0 0 7px #64DD17;
 }
 
 .t-s6 .c-tt-buy-button--unlocked {
   color: #3AACD6;
   background: black;
-  border: 1px solid #3AACD6;
+  border: 0.1rem solid #3AACD6;
 }
 
 .t-s6 .c-tt-buy-button--unlocked:hover {
@@ -52,19 +43,19 @@ body.t-s6 {
 .t-s6 .c-tt-buy-button--locked {
   color: grey;
   background: black;
-  border: 1px solid grey;
+  border: 0.1rem solid grey;
 }
 
 .t-s6 .c-tt-buy-button--locked:hover {
   color: black;
   background: var(--color-bad);
-  border: 1px solid var(--color-bad);
+  border: 0.1rem solid var(--color-bad);
 }
 
 .t-s6 .c-rm-amount__desc {
-    color: #999;
+  color: #999;
 }
 
 .t-s6 #realityanimbg {
-    filter: invert(1);
+  filter: invert(1);
 }

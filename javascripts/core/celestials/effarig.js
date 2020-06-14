@@ -8,11 +8,11 @@ const EFFARIG_STAGES = {
 
 const Effarig = {
   displayName: "Effarig",
-  startRun() {
-    if (!startRealityOver()) return;
+  initializeRun() {
+    clearCelestialRuns();
     player.celestials.effarig.run = true;
     recalculateAllGlyphs();
-    Tab.reality.glyphs.show();
+    Tab.reality.glyphs.show(false);
     Modal.message.show(`Your glyph levels have been limited to ${Effarig.glyphLevelCap}. ` +
       "Infinity power reduces the nerf to multipliers and game speed, and time shards reduce the nerf to tickspeed.");
   },
@@ -29,7 +29,7 @@ const Effarig = {
     return EFFARIG_STAGES.REALITY;
   },
   get eternityCap() {
-    return Effarig.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? new Decimal(1e50) : undefined;
+    return this.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? new Decimal(1e50) : undefined;
   },
   get glyphLevelCap() {
     switch (this.currentStage) {
@@ -43,9 +43,15 @@ const Effarig = {
     }
   },
   get glyphEffectAmount() {
-    // eslint-disable-next-line no-bitwise
-    const allEffectBitmask = Glyphs.activeList.reduce((prev, curr) => prev | curr.effects, 0);
-    return countEffectsFromBitmask(allEffectBitmask);
+    const genEffectBitmask = Glyphs.activeList
+      .filter(g => generatedTypes.includes(g.type))
+      // eslint-disable-next-line no-bitwise
+      .reduce((prev, curr) => prev | curr.effects, 0);
+    const nongenEffectBitmask = Glyphs.activeList
+      .filter(g => !generatedTypes.includes(g.type))
+      // eslint-disable-next-line no-bitwise
+      .reduce((prev, curr) => prev | curr.effects, 0);
+    return countEffectsFromBitmask(genEffectBitmask) + countEffectsFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
@@ -57,14 +63,17 @@ const Effarig = {
   get shardAmount() {
     return player.celestials.effarig.relicShards;
   },
+  get maxRarityBoost() {
+    return 5 * Math.log10(Math.log10(this.shardAmount + 10));
+  },
   nerfFactor(power) {
     let c;
     switch (this.currentStage) {
       case EFFARIG_STAGES.INFINITY:
         c = 1500;
         break;
-      case EFFARIG_STAGES.ETERNITY: 
-        c = 29;
+      case EFFARIG_STAGES.ETERNITY:
+        c = 29.29;
         break;
       case EFFARIG_STAGES.REALITY:
         c = 25;
@@ -101,10 +110,10 @@ const Effarig = {
     UNLOCK_WEIGHTS: CelestialQuotes.singleLine(
       2, "Do you like my little Stall? It’s not much, but it’s mine."
     ),
-    UNLOCK_AUTOSACRIFICE: CelestialQuotes.singleLine(
+    UNLOCK_BASIC_FILTER: CelestialQuotes.singleLine(
       3, "Thank you for your purchase, customer!"
     ),
-    UNLOCK_AUTOPICK: CelestialQuotes.singleLine(
+    UNLOCK_ADVANCED_FILTER: CelestialQuotes.singleLine(
       4, "Is that too much? I think it’s too much."
     ),
     UNLOCK_RUN: {
@@ -119,7 +128,8 @@ const Effarig = {
       id: 6,
       lines: [
         "* You have completed Effarig's Infinity.",
-        "This is the first threshold. It only gets worse from here."
+        "This is the first threshold. It only gets worse from here.",
+        "None but me know enough about my domain to get further.",
       ]
     },
     COMPLETE_ETERNITY: {
@@ -127,7 +137,8 @@ const Effarig = {
       lines: [
         "* You have completed Effarig's Eternity.",
         "This is the limit. I don’t want you to proceed past this point.",
-        "I'll just wait here until you give up."
+        "You won't finish this in your lifetime.",
+        "I'll just wait here until you give up.",
       ]
     },
     COMPLETE_REALITY: {
@@ -175,11 +186,11 @@ class EffarigUnlockState extends GameMechanicState {
       case EffarigUnlock.adjuster.id:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_WEIGHTS);
         break;
-      case EffarigUnlock.autosacrifice.id:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_AUTOSACRIFICE);
+      case EffarigUnlock.basicFilter.id:
+        Effarig.quotes.show(Effarig.quotes.UNLOCK_BASIC_FILTER);
         break;
-      case EffarigUnlock.autopicker.id:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_AUTOPICK);
+      case EffarigUnlock.advancedFilter.id:
+        Effarig.quotes.show(Effarig.quotes.UNLOCK_ADVANCED_FILTER);
         break;
       case EffarigUnlock.run.id:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_RUN);
@@ -194,8 +205,8 @@ const EffarigUnlock = (function() {
   const db = GameDatabase.celestials.effarig.unlocks;
   return {
     adjuster: new EffarigUnlockState(db.adjuster),
-    autosacrifice: new EffarigUnlockState(db.autosacrifice),
-    autopicker: new EffarigUnlockState(db.autopicker),
+    basicFilter: new EffarigUnlockState(db.basicFilter),
+    advancedFilter: new EffarigUnlockState(db.advancedFilter),
     run: new EffarigUnlockState(db.run),
     infinity: new EffarigUnlockState(db.infinity),
     eternity: new EffarigUnlockState(db.eternity),
@@ -203,12 +214,16 @@ const EffarigUnlock = (function() {
   };
 }());
 
-EventHub.logic.on(GameEvent.BIG_CRUNCH_BEFORE, () => {
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
+  if (Tab.celestials.effarig.isOpen) Effarig.quotes.show(Effarig.quotes.INITIAL);
+});
+
+EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_BEFORE, () => {
   if (!Effarig.isRunning) return;
   Effarig.quotes.show(Effarig.quotes.COMPLETE_INFINITY);
 });
 
-EventHub.logic.on(GameEvent.ETERNITY_RESET_BEFORE, () => {
+EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_BEFORE, () => {
   if (!Effarig.isRunning) return;
   Effarig.quotes.show(Effarig.quotes.COMPLETE_ETERNITY);
 });

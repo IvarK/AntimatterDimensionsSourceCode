@@ -1,6 +1,11 @@
 "use strict";
 
 Vue.component("news-ticker", {
+  data() {
+    return {
+      recentTickers: [],
+    };
+  },
   watch: {
     isHidden() {
       this.restart();
@@ -36,20 +41,34 @@ Vue.component("news-ticker", {
     prepareNextMessage() {
       const line = this.$refs.line;
       if (line === undefined) return;
+      
+      const isUnlocked = news => news.unlocked || news.unlocked === undefined;
 
-      if (this.currentNews && this.currentNews.id === "a236") {
-        this.currentNews = GameDatabase.news.find(message => message.id === "a216");
+      if (nextNewsMessageId && GameDatabase.news.find(message => message.id === nextNewsMessageId)) {
+        this.currentNews = GameDatabase.news.find(message => message.id === nextNewsMessageId);
+        nextNewsMessageId = undefined;
+      } else if (this.currentNews && this.currentNews.id === "a236") {
+        this.currentNews = GameDatabase.news
+          .filter(message => message.isAdvertising && isUnlocked(message))
+          .randomElement();
       } else {
-        const isUnlocked = news => news.unlocked || news.unlocked === undefined;
-        do {
-          this.currentNews = GameDatabase.news.randomElement();
-        } while (!isUnlocked(this.currentNews));
+        const isAI = Math.random() < player.options.news.AIChance;
+        this.currentNews = GameDatabase.news
+          .filter(message => message.id.includes("ai") === isAI)
+          .filter(message => !this.recentTickers.includes(message) && isUnlocked(message))
+          .randomElement();
+        // Prevent tickers from repeating if they were seen recently
+        this.recentTickers.push(this.currentNews.id);
+        while (this.recentTickers.length > player.options.news.repeatBuffer) this.recentTickers.shift();
+      }
+      if (this.currentNews.reset) {
+        this.currentNews.reset();
       }
 
       line.innerHTML = this.currentNews.text;
 
       line.style["transition-duration"] = "0ms";
-      if (this.currentNews && this.currentNews.id === "a244") {
+      if (this?.currentNews.id === "a244" || this?.currentNews.id === "ai63" ) {
         line.style.transform = "translateX(-100%)";
       } else {
         line.style.transform = "translateX(0)";
@@ -62,7 +81,7 @@ Vue.component("news-ticker", {
       const line = this.$refs.line;
 
       // SCROLL_SPEED is in pixels per second
-      const SCROLL_SPEED = 100;
+      const SCROLL_SPEED = player.options.news.speed * 100;
       const scrollDuration = (this.$refs.ticker.clientWidth + line.clientWidth) / SCROLL_SPEED;
 
       line.style["transition-duration"] = `${scrollDuration}s`;
@@ -78,38 +97,12 @@ Vue.component("news-ticker", {
       this.scrollTimeout = setTimeout(this.prepareNextMessage.bind(this), scrollDuration * 1000);
     },
     onLineClick() {
-      if (this.currentNews.id === "a130") {
+      if (this.currentNews.onClick !== undefined) {
         SecretAchievement(24).unlock();
-      }
-      if (this.currentNews.id === "a196") {
-        let random = Math.random();
-        // Golden ratio
-        random += 0.618033988749895;
-        random %= 1;
-        random *= 255;
-        const color = `hsl(${random}, 90%, 60%)`;
-          this.$refs.line.innerHTML =
-            `<span style='color: ${color}; text-shadow: 0 0 0.5rem ${color}; animation: text-grow 0.4s infinite;'>
-            Disco Time!</span>`;
-      }
-      if (this.currentNews.id === "a210") {
-        player.secretUnlocks.uselessNewsClicks++;
-        this.$refs.line.innerHTML = this.currentNews.text;
-      }
-      if (this.currentNews.id === "a247") {
-        if (this.$refs.line.innerHTML.includes("This")) {
-          this.$refs.line.innerHTML =
-            "¡uʍop ǝpᴉsdn ɯǝɥʇ dᴉlɟ oʇ sǝƃɐssǝɯ sʍǝu uo ʞɔᴉlɔ oʇ ʎʇᴉlᴉqɐ ǝɥʇ ǝʞᴉl sƃuᴉɥʇ ǝɹnʇɐǝɟ llᴉʍ 0˙ᄅ sʍǝN " +
-            "˙,,0˙ᄅ sʍǝN,, ɟo ʇsǝʇ ɐ sᴉ ǝƃɐssǝɯ sʍǝu sᴉɥ┴";
-        } else {
-          this.$refs.line.innerHTML =
-            "This news message is a test of \"News 2.0\". News 2.0 will feature things like the ability to click " +
-            "on news messages to flip them upside down!";
+        const updatedText = this.currentNews.onClick();
+        if (updatedText !== undefined) {
+          this.$refs.line.innerHTML = updatedText;
         }
-      }
-      if (this.currentNews.id === "a289") {
-        player.secretUnlocks.paperclips++;
-        GameOptions.toggleNews();
       }
     }
   },

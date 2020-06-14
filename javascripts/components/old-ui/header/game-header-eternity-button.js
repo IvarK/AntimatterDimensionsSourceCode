@@ -4,11 +4,13 @@ Vue.component("game-header-eternity-button", {
   data() {
     return {
       isVisible: false,
-      type: EPButtonDisplayType.FIRST_TIME,
+      type: EP_BUTTON_DISPLAY_TYPE.FIRST_TIME,
       gainedEP: new Decimal(0),
+      minIP: new Decimal(0),
       currentEP: new Decimal(0),
       currentEPPM: new Decimal(0),
       peakEPPM: new Decimal(0),
+      currentTachyons: new Decimal(0),
       gainedTachyons: new Decimal(0),
       challengeCompletions: 0,
       gainedCompletions: 0,
@@ -22,6 +24,9 @@ Vue.component("game-header-eternity-button", {
     isGainedEPAmountSmall() {
       return this.gainedEP.lt(1e6);
     },
+    isGainedEPAmountZero() {
+      return this.gainedEP.eq(0);
+    },
     peakEPPMThreshold: () => new Decimal("1e100"),
     isPeakEPPMVisible() {
       return this.currentEPPM.lte(this.peakEPPMThreshold);
@@ -32,11 +37,11 @@ Vue.component("game-header-eternity-button", {
         : "o-prestige-btn--eternity";
     },
     isDilation() {
-      return this.type === EPButtonDisplayType.DILATION ||
-        this.type === EPButtonDisplayType.DILATION_EXPLORE_NEW_CONTENT;
+      return this.type === EP_BUTTON_DISPLAY_TYPE.DILATION ||
+        this.type === EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT;
     },
     amountStyle() {
-      if (this.currentEP.lt(1e50)) return undefined;
+      if (this.currentEP.lt(1e50)) return { color: "var(--color-eternity)" };
       const ratio = this.gainedEP.log10() / this.currentEP.log10();
 
       const rgb = [
@@ -46,28 +51,48 @@ Vue.component("game-header-eternity-button", {
         : Math.round(255 - (1 - ratio) * 10 * 255)
       ];
       return { color: `rgb(${rgb.join(",")})` };
+    },
+    tachyonAmountStyle() {
+      // Note that Infinity and 0 can show up here. We have a special case for
+      // this.currentTachyons being 0 because dividing a Decimal by 0 returns 0.
+      let ratio;
+      if (this.currentTachyons.eq(0)) {
+        // In this case, make it always red or green.
+        // (Is it possible to gain 0 tachyons? Probably somehow it is.)
+        ratio = this.gainedTachyons.eq(0) ? 0 : Infinity;
+      } else {
+        ratio = this.gainedTachyons.div(this.currentTachyons).toNumber();
+      }
+
+      const rgb = [
+        Math.round(Math.clampMax(1 / ratio, 1) * 255),
+        Math.round(Math.clampMax(ratio, 1) * 255),
+        Math.round(Math.clampMax(ratio, 1 / ratio) * 255),
+      ];
+      return { color: `rgb(${rgb.join(",")})` };
     }
   },
   methods: {
     update() {
-      this.isVisible = player.infinityPoints.gte(Player.eternityGoal) && InfinityDimension(8).isUnlocked;
+      this.isVisible = player.infinityPoints.gte(Player.eternityGoal);
       if (!this.isVisible) return;
       if (!PlayerProgress.eternityUnlocked()) {
-        this.type = EPButtonDisplayType.FIRST_TIME;
+        this.type = EP_BUTTON_DISPLAY_TYPE.FIRST_TIME;
         return;
       }
 
       if (EternityChallenge.isRunning) {
         if (!Perk.studyECBulk.isBought) {
-          this.type = EPButtonDisplayType.CHALLENGE;
+          this.type = EP_BUTTON_DISPLAY_TYPE.CHALLENGE;
           return;
         }
-        this.type = EPButtonDisplayType.CHALLENGE_RUPG;
+        this.type = EP_BUTTON_DISPLAY_TYPE.CHALLENGE_RUPG;
         this.updateChallengeWithRUPG();
         return;
       }
 
       const gainedEP = gainedEternityPoints();
+      if (this.gainedEP.eq(0)) this.minIP = requiredIPForEP();
       this.currentEP.copyFrom(player.eternityPoints);
       this.gainedEP.copyFrom(gainedEP);
       const hasNewContent = player.realities === 0 &&
@@ -77,15 +102,16 @@ Vue.component("game-header-eternity-button", {
 
       if (player.dilation.active) {
         this.type = hasNewContent
-          ? EPButtonDisplayType.DILATION_EXPLORE_NEW_CONTENT
-          : EPButtonDisplayType.DILATION;
+          ? EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT
+          : EP_BUTTON_DISPLAY_TYPE.DILATION;
+        this.currentTachyons.copyFrom(player.dilation.tachyonParticles);
         this.gainedTachyons.copyFrom(getTachyonGain());
         return;
       }
 
       this.type = hasNewContent
-        ? EPButtonDisplayType.NORMAL_EXPLORE_NEW_CONTENT
-        : EPButtonDisplayType.NORMAL;
+        ? EP_BUTTON_DISPLAY_TYPE.NORMAL_EXPLORE_NEW_CONTENT
+        : EP_BUTTON_DISPLAY_TYPE.NORMAL;
       this.currentEPPM.copyFrom(gainedEP.dividedBy(
         TimeSpan.fromMilliseconds(player.thisEternityRealTime).totalMinutes)
       );
@@ -113,46 +139,52 @@ Vue.component("game-header-eternity-button", {
       <template v-if="type === 0">
         Other times await... I need to become Eternal
       </template>
-      
+
       <!-- Normal -->
       <template v-else-if="type === 1">
         <template v-if="isGainedEPAmountSmall">
-          <b>I need to become Eternal.</b>
+          I need to become Eternal.
           <br>
         </template>
-        Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 0)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <span :style="amountStyle">{{format(gainedEP, 2, 0)}}</span> Eternity {{ "Point" | pluralize(gainedEP) }}.
         <br>
-        <template v-if="isPeakEPPMVisible">
-          {{shorten(currentEPPM, 2, 2)}} EP/min
+        <template v-if="isGainedEPAmountZero">
+          Reach {{ format(minIP) }} IP to
           <br>
-          Peaked at {{shorten(peakEPPM, 2, 2)}} EP/min
+          gain Eternity Points.
+        </template>
+        <template v-else-if="isPeakEPPMVisible">
+          {{format(currentEPPM, 2, 2)}} EP/min
+          <br>
+          Peaked at {{format(peakEPPM, 2, 2)}} EP/min
         </template>
       </template>
-      
+
       <!-- Challenge -->
       <template v-else-if="type === 2">
         Other challenges await... I need to become Eternal
       </template>
-      
+
       <!-- Dilation -->
       <template v-else-if="type === 3">
-        Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <span :style="tachyonAmountStyle">{{format(gainedTachyons, 2, 1)}}</span>
+        Tachyon {{ "Particle" | pluralize(gainedTachyons) }}
         <br>
-        +{{shortenMoney(gainedTachyons)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}.
+        and {{format(gainedEP, 2, 2)}} Eternity {{ "Point" | pluralize(gainedEP) }}.
       </template>
-      
+
       <!-- New content available -->
       <template v-else-if="type === 4 || type === 5">
         <template v-if="type === 4">
-          Gain <b :style="amountStyle">{{shorten(gainedEP, 2, 2)}}</b> EP
+          Gain <span :style="amountStyle">{{format(gainedEP, 2, 2)}}</span> EP
         </template>
         <template v-else>
-          Gain <b>{{shortenMoney(gainedTachyons)}}</b> Tachyon {{ "particle" | pluralize(gainedTachyons) }}
+          Gain {{format(gainedTachyons, 2, 1)}} Tachyon {{ "Particle" | pluralize(gainedTachyons) }}
         </template>
         <br>
         You should explore a bit and look at new content before clicking me!
       </template>
-      
+
       <!-- Challenge with multiple completions -->
       <template v-else-if="type === 6">
         Other challenges await...
@@ -169,14 +201,14 @@ Vue.component("game-header-eternity-button", {
           </template>
           <template v-else-if="hasMoreCompletions">
             <br>
-            Next goal at {{shortenCosts(nextGoalAt)}} IP
+            Next goal at {{format(nextGoalAt, 0, 0)}} IP
           </template>
         </template>
       </template>
     </button>`
 });
 
-const EPButtonDisplayType = {
+const EP_BUTTON_DISPLAY_TYPE = {
   FIRST_TIME: 0,
   NORMAL: 1,
   CHALLENGE: 2,

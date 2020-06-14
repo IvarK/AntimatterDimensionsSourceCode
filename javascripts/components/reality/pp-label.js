@@ -8,10 +8,10 @@ Vue.component("pp-label", {
   },
   methods: {
     update() {
-      this.pp = player.reality.pp;
+      this.pp = Math.floor(player.reality.pp);
     }
   },
   template: `
-    <div class="c-pp-label">You have {{ shorten(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}}</div>
+    <div class="c-pp-label">You have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}}</div>
   `
 });

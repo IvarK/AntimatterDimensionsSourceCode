@@ -17,6 +17,12 @@ const BlockAutomator = {
     return this._idArray[AutomatorBackend.currentLineNumber - 1];
   },
 
+  parseTextFromBlocks() {
+    const content = this.parseLines(BlockAutomator.lines).join("\n");
+    const automatorID = ui.view.tabs.reality.automator.editorScriptID;
+    AutomatorBackend.saveScript(automatorID, content);
+  },
+
   fromText(scriptText) {
     const lines = AutomatorGrammar.blockifyTextAutomator(scriptText);
     if (lines) {
@@ -29,16 +35,16 @@ const BlockAutomator = {
 
   generateText(block, indentation = 0) {
     let parsed = "\t".repeat(indentation) + block.cmd;
-  
+
     parsed = parsed
       .replace("LOAD", "STUDIES LOAD PRESET")
       .replace("RESPEC", "STUDIES RESPEC");
-  
+
     if (block.target) parsed += ` ${block.target}`;
     if (block.secondaryTarget) parsed += ` ${block.secondaryTarget}`;
     if (block.inputValue) parsed += ` ${block.inputValue}`;
     if (block.cmd === "IF" || block.cmd === "WHILE" || block.cmd === "UNTIL") parsed += " {";
-  
+
     return parsed;
   },
 
@@ -51,7 +57,7 @@ const BlockAutomator = {
         lines.push(`${"\t".repeat(indentation)}}`);
       }
     }
-  
+
     return lines;
   },
 
@@ -85,23 +91,29 @@ Vue.component("automator-block-editor", {
     }
   },
   methods: {
+    parseRequest() {
+      BlockAutomator.parseTextFromBlocks();
+    },
     updateBlock(block, id) {
       this.lines[this.lines.findIndex(x => x.id === id)] = block;
+      this.parseRequest();
     },
     deleteBlock(id) {
       const idx = this.lines.findIndex(x => x.id === id);
       this.lines.splice(idx, 1);
+      this.parseRequest();
     },
   },
   template:
     `<div class="c-automator-block-editor">
-      <draggable 
-        v-model="lines" 
-        group="code-blocks" 
-        class="c-automator-blocks" 
+      <draggable
+        v-on:end="parseRequest"
+        v-model="lines"
+        group="code-blocks"
+        class="c-automator-blocks"
         ghost-class="c-automator-block-row-ghost">
-        <automator-single-block 
-          v-for="(block, index) in lines" 
+        <automator-single-block
+          v-for="(block, index) in lines"
           :key="block.id"
           :lineNumber="index"
           :block="block"

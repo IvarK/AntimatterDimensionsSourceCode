@@ -1,40 +1,32 @@
 "use strict";
 
-class SoundEffectState {
+class SoundEffectState extends GameMechanicState {
   constructor(config) {
-    if (!config) throw new Error("Must specify config for SoundEffectState");
-    this.config = config;
+    super(config);
+    this.registerEvents(config.checkEvent, args => this.tryPlay(args));
   }
 
-  static createIndex(gameData) {
-    this.index = mapGameData(gameData, config => new this(config));
-  }
-
-  play() {
-    const sound = new Audio(`audio/${this.config.fileName}.wav`);
+  tryPlay() {
+    const option = player.options.audio[this.config.name.camelize()];
+    if (option === 0) return;
+    const path = this.config.options
+      ? `audio/${this.config.name} ${this.config.options[option - 1].toLowerCase()}.wav`
+      : `audio/${this.config.name}.wav`;
+    const sound = new Audio(path);
     sound.volume = 0.5;
     sound.play();
   }
 }
 
-SoundEffectState.createIndex(GameDatabase.sounds);
-
 /**
  * @param {number} id
  * @returns {SoundEffectState}
  */
-const SoundEffect = id => SoundEffectState.index[id];
+const SoundEffect = SoundEffectState.createAccessor(GameDatabase.sounds);
 
 const SoundEffects = {
   /**
    * @type {SoundEffectState[]}
    */
-  all: SoundEffectState.index.compact()
+  all: SoundEffect.index.compact()
 };
-
-EventHub.registerStateCollectionEvents(
-  SoundEffects.all,
-  sound => sound.config.checkEvent,
-  // eslint-disable-next-line max-params
-  sound => sound.play()
-);

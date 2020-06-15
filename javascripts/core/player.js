@@ -506,6 +506,15 @@ let player = {
       AIChance: 0,
       speed: 1
     },
+    audio: {
+      dimensionBoost: 0,
+      antimatterGalaxy: 0,
+      glyphMoved: 0,
+      tabChanged: 0,
+      achievementUnlocked: 0,
+      breakInfinity: 0,
+      fixInfinity: 0
+    },
     notation: "Mixed scientific",
     retryChallenge: false,
     retryCelestial: false,

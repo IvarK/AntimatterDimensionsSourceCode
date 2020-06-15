@@ -541,6 +541,7 @@ const Glyphs = {
     this.updateRealityGlyphEffects();
     this.updateGlyphCountForV();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_MOVED);
     this.validate();
   },
   unequipAll() {
@@ -554,6 +555,7 @@ const Glyphs = {
     this.updateRealityGlyphEffects();
     this.updateGlyphCountForV();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_MOVED);
   },
   unequip(activeIndex, requestedInventoryIndex) {
     if (this.active[activeIndex] === null) return;
@@ -565,6 +567,7 @@ const Glyphs = {
     this.updateRealityGlyphEffects();
     this.updateGlyphCountForV();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_MOVED);
   },
   updateRealityGlyphEffects() {
     // There should only be one reality glyph; this picks one pseudo-randomly if multiple are cheated/glitched in
@@ -591,6 +594,7 @@ const Glyphs = {
       this.inventory[targetSlot] = glyph;
       glyph.idx = targetSlot;
       EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+      EventHub.dispatch(GAME_EVENT.GLYPHS_MOVED);
     } else {
       throw new Error("Attempted glyph move into non-empty slot");
     }
@@ -606,6 +610,7 @@ const Glyphs = {
     glyphB.idx = swapGlyph;
     this.validate();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
+    EventHub.dispatch(GAME_EVENT.GLYPHS_MOVED);
   },
   addToInventory(glyph, requestedInventoryIndex) {
     this.validate();

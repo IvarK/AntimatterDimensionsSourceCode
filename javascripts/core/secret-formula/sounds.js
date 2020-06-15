@@ -2,39 +2,32 @@
 
 GameDatabase.sounds = [
   {
-    id: 1,
-    fileName: "dimension_boost",
-    checkRequirement: () => true,
-    checkEvent: GameEvent.DIMBOOST_AFTER
+    name: "Dimension Boost",
+    checkEvent: GAME_EVENT.DIMBOOST_AFTER
   },
   {
-    id: 2,
-    fileName: "galaxy",
-    checkRequirement: () => true,
-    checkEvent: GameEvent.GALAXY_RESET_AFTER
+    name: "Antimatter Galaxy",
+    checkEvent: GAME_EVENT.GALAXY_RESET_AFTER
   },
   {
-    id: 3,
-    fileName: "glyphs_changed",
-    checkRequirement: () => true,
-    checkEvent: GameEvent.GLYPHS_CHANGED
+    name: "Glyph moved",
+    checkEvent: GAME_EVENT.GLYPHS_MOVED
   },
   {
-    id: 4,
-    fileName: "tab_change",
-    checkRequirement: () => true,
-    checkEvent: GameEvent.TAB_CHANGED
+    name: "Tab changed",
+    options: ["Clicky", "Deep"],
+    checkEvent: GAME_EVENT.TAB_CHANGED
   },
   {
-    id: 5,
-    fileName: "achievement_unlocked",
-    checkRequirement: () => true,
-    checkEvent: GameEvent.ACHIEVEMENT_UNLOCKED
+    name: "Achievement unlocked",
+    checkEvent: GAME_EVENT.ACHIEVEMENT_UNLOCKED
   },
   {
-    id: 6,
-    fileName: "break_infinity",
-    checkRequirement: () => true,
-    checkEvent: GameEvent.BREAK_INFINITY
+    name: "Break Infinity",
+    checkEvent: GAME_EVENT.BREAK_INFINITY
+  },
+  {
+    name: "Fix Infinity",
+    checkEvent: GAME_EVENT.FIX_INFINITY
   },
 ];

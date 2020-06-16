@@ -88,7 +88,10 @@ Vue.component("autobuyer-box", {
     },
     autobuyerBuyBoxClass() {
       return {
-        "c-autobuyer-buy-box--purchaseable": this.canBuy
+        "c-autobuyer-buy-box": true,
+        "o-primary-btn": true,
+        "o-primary-btn--enabled": this.canBuy,
+        "o-primary-btn--disabled": !this.canBuy
       };
     },
     autobuyerToggleClass() {
@@ -102,8 +105,8 @@ Vue.component("autobuyer-box", {
       };
     },
   },
-  template:
-    `<div v-if="isUnlocked || isBought" class="c-autobuyer-box-row">
+  template: `
+    <div v-if="isUnlocked || isBought" class="c-autobuyer-box-row">
       <div class="l-autobuyer-box__header">
         {{name}}
         <interval-label v-if="showInterval" :autobuyer="autobuyer"/>
@@ -126,7 +129,7 @@ Vue.component("autobuyer-box", {
         />
       </div>
     </div>
-    <div v-else-if="canBeBought" @click="purchase" class="c-autobuyer-buy-box" :class="autobuyerBuyBoxClass">
+    <div v-else-if="canBeBought" @click="purchase" :class="autobuyerBuyBoxClass">
       Buy the {{ name }} for {{ format(antimatterCost) }} antimatter
     </div>`
 });

@@ -3544,7 +3544,7 @@ screen and (max-width: 480px) {
 .t-s6 .o-autobuyer-input {
   color: white;
   background-color: black;
-  border: 0.1rem solid #888;
+  border: 0.1rem solid #ccc;
 }
 
 .o-autobuyer-input--invalid {
@@ -3609,7 +3609,7 @@ screen and (max-width: 480px) {
 }
 
 .t-s6 .o-autobuyer-toggle-checkbox__label {
-  border: 0.1rem solid #888;
+  border: 0.1rem solid #ccc;
 }
 
 .o-autobuyer-toggle-checkbox__label:hover {
@@ -3698,6 +3698,10 @@ screen and (max-width: 480px) {
   background-color: black;
 }
 
+.t-s6 .o-autobuyer-btn:hover {
+  background: var(--color-infinity);
+}
+
 /*#endregion o-autobuyer-btn*/
 
 /*#region autobuyer-box*/
@@ -3734,8 +3738,6 @@ screen and (max-width: 480px) {
 
 .c-autobuyer-box__small-text {
   font-size: 0.9rem;
-  height: 1.7rem;
-  vertical-align: text-bottom;
 }
 
 .c-autobuyer-box__mode-select {
@@ -3767,7 +3769,7 @@ screen and (max-width: 480px) {
 .t-s6 .c-autobuyer-box__mode-select {
   color: white;
   background-color: black;
-  border: 0.1rem solid #888;
+  border: 0.1rem solid #ccc;
 }
 
 .l-autobuyer-box {
@@ -3782,6 +3784,7 @@ screen and (max-width: 480px) {
   justify-content: center;
   align-items: center;
   position: relative;
+  color: var(--color-text);
   border: .2rem solid #383232;
   border-radius: .5rem;
   margin: .5rem;
@@ -3792,18 +3795,15 @@ screen and (max-width: 480px) {
 .t-metro .c-autobuyer-box-row,
 .t-inverted-metro .c-autobuyer-box-row,
 .t-s8 .c-autobuyer-box-row {
-  color: black;
   border: 0.1rem solid black;
   border-radius: 0;
 }
 
 .t-dark .c-autobuyer-box-row {
-  color: var(--color-text);
   border-color: var(--color-base);
 }
 
 .t-dark-metro .c-autobuyer-box-row {
-  color: var(--color-text);
   border: 0.1rem solid var(--color-base);
   border-radius: 0;
 }
@@ -3814,8 +3814,7 @@ screen and (max-width: 480px) {
 }
 
 .t-s6 .c-autobuyer-box-row {
-  color: white;
-  border: 0.1rem solid #888;
+  border: 0.1rem solid #ccc;
   background: black;
 }
 
@@ -8087,26 +8086,22 @@ input.o-automator-block-input {
   justify-content: center;
   align-items: center;
   height: 6.4rem;
-  font-weight: bold;
-  font-size: 1.4rem;
-  color: var(--color-text);
-  background-color: var(--color-disabled);
-  border: 0.2rem solid var(--color-bad);
-  transition-duration: 0.2s;
-  border-radius: .5rem;
-  margin: .5rem;
+  font-size: 1.5rem;
+  border-radius: 0.5rem;
+  border-width: 0.2rem;
+  margin: 0.5rem;
   padding: 1rem;
   width: 90rem;
-  cursor: default;
 }
 
-.c-autobuyer-buy-box--purchaseable:hover {
-  color: #FFF;
-  background-color: var(--color-good);
+.t-s6 .c-autobuyer-buy-box {
+  border-width: 0.1rem;
 }
 
-.c-autobuyer-buy-box--purchaseable {
-  background-color: var(--color-base);
-  border-color: var(--color-good);
-  cursor: pointer;
+.t-metro .c-autobuyer-buy-box,
+.t-dark-metro .c-autobuyer-buy-box,
+.t-inverted-metro .c-autobuyer-buy-box,
+.t-s6 .c-autobuyer-buy-box,
+.t-s8 .c-autobuyer-buy-box {
+  height: 6.2rem;
 }

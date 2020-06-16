@@ -1362,7 +1362,7 @@ GameDatabase.celestials.navigation = (function() {
         },
       },
       connector: {
-        pathStart: 0.11,
+        pathStart: 0.10,
         pathEnd: 0.89,
         path: new LinearPath(new Vector(100, 500), new Vector(150, 550)),
         fill: "white",
@@ -1383,7 +1383,7 @@ GameDatabase.celestials.navigation = (function() {
         }
       },
       connector: {
-        pathStart: 0.11,
+        pathStart: 0.10,
         pathEnd: 0.89,
         path: new LinearPath(new Vector(200, 500), new Vector(150, 550)),
         fill: "white",

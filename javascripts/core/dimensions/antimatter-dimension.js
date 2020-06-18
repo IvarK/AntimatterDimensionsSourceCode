@@ -204,7 +204,7 @@ const AntimatterDimensionGlyphPowerEffect = new EffectScope("Antimatter Dimensio
   scope.addMultipliers(
     new Effect(() => getAdjustedGlyphEffect("powerpow")),
     new Effect(() => getAdjustedGlyphEffect("effarigdimensions")),
-    new Effect(() => Ra.momentumValue),
+    new Effect(() => Ra.momentumValue)
   )
 );
 

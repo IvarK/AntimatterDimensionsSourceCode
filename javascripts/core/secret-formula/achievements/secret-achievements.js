@@ -43,12 +43,12 @@ GameDatabase.achievements.secret = [
   {
     id: 18,
     name: "Do you feel lucky? Well do ya punk?",
-    tooltip: () => `You have a 1/${formatInt(1e5)} chance of getting this achievement every second.`
+    tooltip: () => `You have a ${formatInt(1)}/${formatInt(1e5)} chance of getting this achievement every second.`
   },
   {
     id: 21,
     name: "Go study in real life instead",
-    tooltip: "Purchase the secret time study."
+    tooltip: "Purchase the secret Time Study."
   },
   {
     id: 22,
@@ -103,7 +103,7 @@ GameDatabase.achievements.secret = [
   {
     id: 32,
     name: "Less than or equal to 0.001",
-    tooltip: () => `Get a fastest infinity or eternity time of less than or equal to 0.001 seconds.`,
+    tooltip: () => `Get a fastest infinity or eternity time of less than or equal to ${format(0.001, 3, 3)} seconds.`,
     checkRequirement: () =>
       Time.bestInfinity.totalMilliseconds <= 1 ||
       Time.bestEternity.totalMilliseconds <= 1,
@@ -139,8 +139,7 @@ GameDatabase.achievements.secret = [
   {
     id: 38,
     name: "Professional bodybuilder",
-    tooltip: () => `Get all your dimension bulk buyers to ${format(1e100, 0, 0)}.`,
-    checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.hasMaxedBulk) === 0
+    tooltip: "This one is getting replaced due to a recent PR."
   },
   {
     id: 41,
@@ -155,7 +154,7 @@ GameDatabase.achievements.secret = [
   {
     id: 43,
     name: "Time fixes everything",
-    tooltip: "Fix infinity while dilated.",
+    tooltip: "Fix infinity while Dilated.",
     checkRequirement: () => player.dilation.active,
     checkEvent: GAME_EVENT.FIX_INFINITY
   },

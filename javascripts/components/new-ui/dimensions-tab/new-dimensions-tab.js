@@ -15,7 +15,7 @@ Vue.component("new-dimensions-tab", {
   },
   computed: {
     sacrificeTooltip() {
-      return `Boosts 8th Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
+      return `Boosts 8th Antimatter Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
     },
   },
   methods: {
@@ -49,8 +49,7 @@ Vue.component("new-dimensions-tab", {
     },
   },
   template:
-  `<div class="l-normal-dim-tab">
-    
+  `<div class="l-antimatter-dim-tab">
     <div class="modes-container">
       <button class="o-primary-btn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">
         {{ getUntil10Display() }}
@@ -84,6 +83,6 @@ Vue.component("new-dimensions-tab", {
         >Lose a reset, returning to the start of the reset</primary-button>
       <new-galaxy-row/>
     </div>
-    <normal-dim-tab-progress-bar/>
+    <antimatter-dim-tab-progress-bar/>
   </div>`
 });

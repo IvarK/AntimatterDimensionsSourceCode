@@ -49,9 +49,11 @@ Vue.component("game-header-big-crunch-button", {
   },
   methods: {
     update() {
-      this.isVisible = player.break && player.antimatter.gte(Decimal.NUMBER_MAX_VALUE) && !InfinityChallenge.isRunning;
+      this.isVisible = player.break &&
+        player.thisInfinityMaxAM.gte(Decimal.NUMBER_MAX_VALUE) &&
+        !InfinityChallenge.isRunning;
       if (NormalChallenge.isRunning) {
-        if (!Enslaved.isRunning || Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(NormalChallenge.current.id)) {
+        if (!Enslaved.isRunning || !Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current.id)) {
           this.isVisible = false;
         }
       }
@@ -74,6 +76,7 @@ Vue.component("game-header-big-crunch-button", {
       :class="classObject"
       onclick="bigCrunchResetRequest()"
     >
+      <div v-if="!isPeakIPPMVisible"/>
       <b>Big Crunch for
       <span :style="amountStyle">{{format(gainedIP, 2, 0)}}</span>
       Infinity {{ "Point" | pluralize(gainedIP) }}.</b>
@@ -83,5 +86,6 @@ Vue.component("game-header-big-crunch-button", {
         <br>
         Peaked at {{format(peakIPPM, 2, 0)}} IP/min
       </template>
+      <div v-else/>
     </button>`
 });

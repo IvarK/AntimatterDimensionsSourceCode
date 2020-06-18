@@ -9,7 +9,6 @@
 .c-glyph-component {
   font-family: Typewriter;
   background: black;
-  padding-bottom: 0.2em;
 }
 
 .c-glyph-component--dragging {
@@ -22,10 +21,21 @@
   padding: 2rem;
   margin-top: 2rem;
   position: relative;
+  width: 27rem;
 }
 
 .c-glyph-sacrifice-options {
   background: black;
+  border: 0.2rem solid var(--color-reality);
+  border-radius: 0.5rem;
+}
+
+.t-metro .c-glyph-sacrifice-options,
+.t-dark-metro .c-glyph-sacrifice-options,
+.t-inverted-metro .c-glyph-sacrifice-options,
+.t-s8 .c-glyph-sacrifice-options {
+  border-width: 0.1rem;
+  border-radius: 0;
 }
 
 .l-glyph-sacrifice-options__help {
@@ -46,20 +56,30 @@
 }
 
 .c-glyph-sacrifice-options__option {
+  cursor: pointer;
   font-weight: bold;
-  padding-bottom: 0.5em;
-  padding-top: 0.5em;
-  padding-left: 1em;
-  padding-right: 1em;
-  border-width: 0.1rem 0.2rem 0.1rem 0.2rem;
+  padding: 0.5rem;
+  border-width: 0.1rem 0.2rem;
   border-style: solid;
+  margin-bottom: -0.1rem;
+  transition: color 0.2s;
+}
+
+.t-metro .c-glyph-sacrifice-options__option,
+.t-dark-metro .c-glyph-sacrifice-options__option,
+.t-inverted-metro .c-glyph-sacrifice-options__option,
+.t-s8 .c-glyph-sacrifice-options__option {
+  border-width: 0.1rem;
+}
+
+.c-glyph-sacrifice-options__option:hover {
+  color: #d5ffd7;
 }
 
 .c-glyph-sacrifice-options__option--active {
   color: #d5ffd7;
   border-color: #d5ffd7;
-  box-shadow: 0 0 0.1rem 0.1rem #d5ffd7;
-  z-index: 2;
+  z-index: 1;
 }
 
 .c-glyph-sacrifice-options__option--inactive {
@@ -68,16 +88,14 @@
 }
 
 .l-glyph-sacrifice-options__rarity-sliders {
-  padding: 0.5rem 0.25rem 0.25rem 0.25rem;
+  padding: 0.5rem 0.25rem 0.25rem;
 }
-
-.c-glyph-sacrifice-options__rarity-sliders {}
 
 .l-glyph-sacrifice-options__rarity-slider-div {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
   width: 19rem;
@@ -115,11 +133,11 @@
   -moz-appearance: textfield;
 }
 
-.c-auto-sac-effect-tab__input::-webkit-inner-spin-button, 
-.c-auto-sac-effect-tab__input::-webkit-outer-spin-button { 
+.c-auto-sac-effect-tab__input::-webkit-inner-spin-button,
+.c-auto-sac-effect-tab__input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   -moz-appearance: textfield;
-  margin: 0; 
+  margin: 0;
 }
 
 .c-auto-sac-effect-tab__input {
@@ -169,8 +187,6 @@
   font-family: Typewriter, serif
 }
 
-.c-glyph-sacrifice-options__advanced-toggle {}
-
 .l-advanced-sac-options-for-glyph-type {
   display: flex;
   flex-direction: row;
@@ -187,15 +203,33 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 0.25rem 0.5rem 0.25rem 0.5rem;
+  margin: 0.25rem 0.5rem;
 }
 
 .c-auto-sac-type-tab__effect-desc {
   border-radius: 0.5em;
   border: 0.1rem solid;
-  padding: 0.25em 0.5em 0.25em 0.5em;
+  padding: 0.25em 0.5em;
   width: 12em;
   min-height: 3em;
+}
+
+.c-auto-sac-type-tab__effect-desc--active {
+  cursor: pointer;
+  opacity: 1;
+  font-weight: bold;
+  text-shadow: 0 0 0.3rem;
+}
+
+.c-auto-sac-type-tab__effect-desc--inactive {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.c-auto-sac-type-tab__effect-desc--inactive:hover {
+  opacity: 0.8;
+  text-shadow: 0 0 0.3rem;
 }
 
 .l-specified-effect-tab__effect-desc {
@@ -221,9 +255,6 @@
   font-size: 2em;
   width: 3em;
   height: 3em;
-}
-
-.l-glyph-sacrifice-options__advanced-type-select {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -236,8 +267,11 @@
   font-size: 2rem;
   width: 2.5rem;
   height: 2.5rem;
-  margin: 1rem 0.25rem 0.25rem 0.25rem;
+  margin: 1rem 0.25rem 0.25rem;
   font-family: Typewriter;
+  cursor: pointer;
+  line-height: 0.1rem;
+  transition-duration: 0.15s;
 }
 
 .c-glyph-sacrifice-options__advanced-type-select:hover {
@@ -261,20 +295,23 @@
 }
 
 .c-glyph-auto-pick-options__option {
+  cursor: pointer;
   font-weight: bold;
-  padding-bottom: 0.5em;
-  padding-top: 0.5em;
-  padding-left: 1em;
-  padding-right: 1em;
-  border-width: 0.1rem 0.2rem 0.1rem 0.2rem;
+  padding: 0.5rem;
+  border-width: 0.1rem 0.2rem;
   border-style: solid;
+  margin-bottom: -0.1rem;
+  transition: color 0.2s;
+}
+
+.c-glyph-auto-pick-options__option:hover {
+  color: #d5ffd7;
 }
 
 .c-glyph-auto-pick-options__option--active {
   color: #d5ffd7;
   border-color: #d5ffd7;
-  box-shadow: 0 0 0.1rem 0.1rem #d5ffd7;
-  z-index: 2;
+  z-index: 1;
 }
 
 .c-glyph-auto-pick-options__option--inactive {
@@ -296,7 +333,22 @@
   padding: 0.5rem 0;
   position: absolute;
   z-index: 6;
-  transform: translate(-50%, calc(-100% - 1rem));
+}
+
+.l-glyph-tooltip--up-left {
+  transform: translate(calc(-100% - 0.7rem), -100%);
+}
+
+.l-glyph-tooltip--down-left {
+  transform: translate(calc(-100% - 0.7rem), 0);
+}
+
+.l-glyph-tooltip--up-right {
+  transform: translate(calc(0.7rem), -100%);
+}
+
+.l-glyph-tooltip--down-right {
+  transform: translate(calc(0.7rem), 0);
 }
 
 .c-glyph-tooltip {
@@ -315,13 +367,39 @@
 .l-glyph-tooltip::after {
   content: "";
   position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -0.5rem;
   border-width: 0.5rem;
   border-style: solid;
-  border-color: #4a4a4a transparent transparent transparent;
   pointer-events: none;
+}
+
+.l-glyph-tooltip--up-left::after {
+  top: 100%;
+  left: 100%;
+  margin-left: -0.5rem;
+  margin-top: -1rem;
+  border-color: transparent transparent #4a4a4a;
+}
+
+.l-glyph-tooltip--down-left::after {
+  top: 0;
+  left: 100%;
+  margin-left: -0.5rem;
+  border-color: #4a4a4a transparent transparent;
+}
+
+.l-glyph-tooltip--up-right::after {
+  top: 100%;
+  left: 0;
+  margin-left: -0.5rem;
+  margin-top: -1rem;
+  border-color: transparent transparent #4a4a4a;
+}
+
+.l-glyph-tooltip--down-right::after {
+  top: 0;
+  left: 0;
+  margin-left: -0.5rem;
+  border-color: #4a4a4a transparent transparent;
 }
 
 .c-glyph-tooltip__description {
@@ -350,7 +428,7 @@
   color: #d4d4ff;
   border: 0.1rem solid #d4d4ff;
   border-radius: 0.5em;
-  padding: 0.25em 1em 0.25em 1em;
+  padding: 0.25em 1em;
 }
 
 .l-modal-glyph-selection {
@@ -448,6 +526,14 @@
   margin-left: 0.2rem;
 }
 
+.l-equipped-glyphs__respec-location {
+  width: 15rem;
+  height: 4rem;
+  margin: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 .c-current-glyph-effects__effect--capped {
   color: #ff8000;
 }
@@ -477,17 +563,34 @@
 }
 
 .c-current-glyph-effects {
-  border: 0.1rem solid rgb(184, 184, 184);
+  border: 0.1rem solid #b8b8b8;
   border-radius: 0.5rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   padding: 1.2rem;
   margin-top: 0;
   margin-left: 1rem;
   margin-right: 1rem;
   margin-bottom: 0;
+  height: 30rem;
+  width: 50rem;
+  overflow: auto;
+}
+
+.t-metro .c-current-glyph-effects,
+.t-dark-metro .c-current-glyph-effects,
+.t-inverted-metro .c-current-glyph-effects,
+.t-s8 .c-current-glyph-effects {
+  border-radius: 0;
 }
 
 .t-s8 .c-current-glyph-effects {
   border-color: black;
+}
+
+.c-current-glyph-effects__header {
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
 .l-equipped-glyphs-wrapper {
@@ -497,14 +600,84 @@
   margin-bottom: 2rem;
 }
 
-.l-sacrificed-glyphs {
-  margin-top: 2rem;
+.l-glyph-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center
 }
 
-.c-sacrificed-glyphs {
-  border: 0.1rem solid rgb(184, 184, 184);
+.c-glyph-info-options {
+  display: flex;
+  flex-direction: row;
+  width: 50rem;
+  height: 3rem;
+  margin-bottom: -0.1rem;
+  border: 0.1rem solid #b8b8b8;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.t-metro .c-glyph-info-options,
+.t-dark-metro .c-glyph-info-options,
+.t-inverted-metro .c-glyph-info-options,
+.t-s8 .c-glyph-info-options {
+  border-radius: 0;
+}
+
+.t-s8 .c-glyph-info-options {
+  border-color: black;
+}
+
+.c-glyph-info-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-text);
+  font-size: 1.2rem;
+  width: 50%;
+  cursor: pointer;
+  transition: font-size 0.2s;
+}
+
+.t-s8 .c-glyph-info-button {
+  border-color: black !important;
+}
+
+.c-glyph-info-button--active {
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: default;
+}
+
+.c-glyph-info-button:hover {
+  font-size: 1.25rem;
+}
+
+.l-sacrificed-glyphs {
+  margin-top: 1rem;
+}
+
+.c-glyph-peek {
+  border: 0.1rem solid #b8b8b8;
   border-radius: 0.5rem;
-  padding-bottom: 1rem;
+  padding: 1.2rem;
+  margin-top: 0;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-bottom: 0;
+  height: 7.5rem;
+  width: 30rem;
+}
+
+.t-metro .c-glyph-peek,
+.t-dark-metro .c-glyph-peek,
+.t-inverted-metro .c-glyph-peek,
+.t-s8 .c-glyph-peek {
+  border-radius: 0;
+}
+
+.t-s8 .c-glyph-peek {
+  border-color: black;
 }
 
 .c-sacrificed-glyphs--dragover {
@@ -552,7 +725,7 @@
 }
 
 .l-sacrificed-glyphs__help {
-  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .c-sacrificed-glyphs__confirm {
@@ -581,7 +754,7 @@
 .l-glyph-inventory__slot {
   width: 5rem;
   height: 5rem;
-  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+  margin: 0.5rem;
 }
 
 .c-glyph-inventory__protected-slot {
@@ -601,5 +774,6 @@
 .l-glyph-inventory__sort {
   width: auto;
   height: auto;
-  padding: 0.5em;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
 }

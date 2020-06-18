@@ -197,17 +197,42 @@ Vue.component("alchemy-tab", {
       Modal.h2p.show();
       ui.view.h2pActive = true;
     },
-    setAllReactions(value) {
-      for (const reaction of AlchemyReactions.all.compact()) {
-        reaction.isActive = value;
+    toggleAllReactions() {
+      const reactions = AlchemyReactions.all.compact().filter(r => r._product.isUnlocked);
+      const allReactionsDisabled = reactions.every(reaction => !reaction.isActive);
+      if (allReactionsDisabled) {
+        for (const reaction of reactions) {
+          reaction.isActive = true;
+        }
+      } else {
+        for (const reaction of reactions) {
+          reaction.isActive = false;
+        }
       }
     }
   },
-  template:
-    `<div class="l-ra-alchemy-tab">
-      <div @click="showAlchemyHowTo()" class="o-primary-btn">Click for alchemy info</div>
+  template: `
+    <div class="l-ra-alchemy-tab">
+      <div class="c-subtab-option-container">
+        <primary-button class="o-primary-btn--subtab-option" @click="showAlchemyHowTo()">
+          Click for alchemy info
+        </primary-button>
+        <primary-button class="o-primary-btn--subtab-option" @click="toggleAllReactions()">
+          Toggle all reactions
+        </primary-button>
+        <primary-button
+          v-if="realityCreationAvailable"
+          class="o-primary-btn--subtab-option"
+          onclick="Modal.realityGlyph.show()"
+        >
+          Create a Reality glyph
+        </primary-button>
+      </div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      Resource cap, based on glyph level in last 10 realities: {{ format(estimatedCap, 3, 2) }}
+      Resource cap, based on glyph level in last 10 realities: {{ format(estimatedCap, 3, 2) }}.
+      <span v-if="reactionsAvailable">
+        Reactions trigger once every time you reality.
+      </span>
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">
           <circle
@@ -241,15 +266,5 @@ Vue.component("alchemy-tab", {
           />
         </svg>
       </div>
-      <div v-if="reactionsAvailable">
-        <button class="o-primary-btn" @click="setAllReactions(true)">Turn on all reactions</button>
-        <button class="o-primary-btn" @click="setAllReactions(false)">Turn off all reactions</button>
-        <br>
-        Reactions trigger once every time you reality.
-      </div>
-      <primary-button
-        v-if="realityCreationAvailable"
-        class="o-primary-btn"
-        onclick="Modal.realityGlyph.show()">Create a Reality glyph</primary-button>
     </div>`
 });

@@ -10,7 +10,9 @@ Vue.component("ec-time-study", {
       requirement: {
         current: new Decimal(0),
         total: new Decimal(0)
-      }
+      },
+      completions: 0,
+      showTotalCompletions: false
     };
   },
   computed: {
@@ -28,12 +30,21 @@ Vue.component("ec-time-study", {
     },
     formatValue() {
       return this.config.requirement.formatValue;
+    },
+    // Linebreaks added to avoid twitching in scientific notation
+    needsFirstLinebreak() {
+      return this.study.id === 7;
+    },
+    needsSecondLinebreak() {
+      return [3, 4, 7].includes(this.study.id);
     }
   },
   methods: {
     update() {
       const id = this.id;
       this.hasRequirement = !Perk.studyECRequirement.isBought && player.etercreq !== id;
+      this.completions = EternityChallenge(id).completions;
+      this.showTotalCompletions = !Enslaved.isRunning || this.id !== 1;
       if (!this.hasRequirement || id > 10) return;
       const requirement = this.requirement;
       const study = this.study;
@@ -49,13 +60,16 @@ Vue.component("ec-time-study", {
   template:
     `<time-study :setup="setup">
       Eternity Challenge {{id}}
+      ({{formatInt(completions)}}<span v-if="showTotalCompletions">/{{formatInt(5)}}</span>)
       <template v-if="hasRequirement">
         <br>
         Requirement:
+        <br v-if="needsFirstLinebreak">
         <span v-if="id === 12">Use only the Time Dimension path</span>
-        <span v-else-if="id === 11">Use only the Normal Dimension path</span>
+        <span v-else-if="id === 11">Use only the Antimatter Dimension path</span>
         <span v-else>
           {{formatValue(requirement.current)}}/{{formatValue(requirement.total)}}
+          <br v-if="needsSecondLinebreak">
           {{config.requirement.resource}}
         </span>
       </template>

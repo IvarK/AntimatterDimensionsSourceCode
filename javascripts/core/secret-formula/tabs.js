@@ -6,10 +6,10 @@ GameDatabase.tabs = [
     name: "Dimensions",
     subtabs: [
       {
-        key: "normal",
+        key: "antimatter",
         name: "Dimensions",
         symbol: "Ω",
-        component: "normal-dim-tab",
+        component: "antimatter-dim-tab",
         newUIComponent: "new-dimensions-tab"
       },
       {
@@ -38,10 +38,22 @@ GameDatabase.tabs = [
     name: "Options",
     subtabs: [
       {
-        key: "options",
-        name: "Options",
+        key: "saving",
+        name: "Saving",
+        symbol: "<i class='fas fa-save'></i>",
+        component: "options-saving-tab"
+      },
+      {
+        key: "visual",
+        name: "Visual",
+        symbol: "<i class='fas fa-palette'></i>",
+        component: "options-visual-tab"
+      },
+      {
+        key: "gameplay",
+        name: "Gameplay",
         symbol: "<i class='fas fa-wrench'></i>",
-        component: "options-tab"
+        component: "options-gameplay-tab"
       }
     ]
   },
@@ -114,7 +126,7 @@ GameDatabase.tabs = [
         condition: () =>
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
-          player.antimatter.e >= 2000 ||
+          Currency.antimatter.exponent >= 2000 ||
           player.postChallUnlocked > 0
       },
       {
@@ -136,6 +148,12 @@ GameDatabase.tabs = [
     before: "infinity-points-header",
     subtabs: [
       {
+        key: "autobuyers",
+        name: "Autobuyers",
+        symbol: "<i class='fas fa-cog'></i>",
+        component: "autobuyers-tab"
+      },
+      {
         key: "upgrades",
         name: "Infinity Upgrades",
         symbol: "<i class='fas fa-arrow-up'></i>",
@@ -144,12 +162,6 @@ GameDatabase.tabs = [
           PlayerProgress.realityUnlocked() ||
           PlayerProgress.eternityUnlocked() ||
           PlayerProgress.infinityUnlocked()
-      },
-      {
-        key: "autobuyers",
-        name: "Autobuyers",
-        symbol: "<i class='fas fa-cog'></i>",
-        component: "autobuyers-tab"
       },
       {
         key: "break",

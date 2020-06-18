@@ -12,23 +12,23 @@ const ENSLAVED_UNLOCKS = {
     price: TimeSpan.fromYears(1e40).totalMilliseconds,
     secondaryRequirement() {
       const hasLevelRequirement = player.bestGlyphLevel >= 5000;
-      const hasRarityRequirement = strengthToRarity(
-        Glyphs.activeList.concat(Glyphs.inventoryList).map(g => g.strength).max()) >= 100;
+      const hasRarityRequirement = strengthToRarity(player.bestGlyphStrength) >= 100;
       return hasLevelRequirement && hasRarityRequirement;
     },
-    description: () => `Unlock The Enslaved Ones' reality (requires
-      a level ${formatInt(5000)} glyph and a rarity ${formatPercents(1, 1)} glyph)`,
+    description: () => `Unlock The Enslaved Ones' Reality (requires
+      a level ${formatInt(5000)} glyph and a ${formatRarity(100)} rarity glyph)`,
   }
 };
 
 const Enslaved = {
   displayName: "Enslaved",
   boostReality: false,
-  BROKEN_CHALLENGE_EXEMPTIONS: [1, 6, 9],
+  BROKEN_CHALLENGES: [2, 3, 4, 5, 7, 8, 10, 11, 12],
   nextTickDiff: 50,
   isReleaseTick: false,
   autoReleaseTick: 0,
   autoReleaseSpeed: 0,
+  timeCap: 1e300,
   glyphLevelMin: 5000,
   currentBlackHoleStoreAmountPerMs: 0,
   tachyonNerf: 0.3,
@@ -84,7 +84,8 @@ const Enslaved = {
     return diffMs - used;
   },
   canRelease(auto) {
-    return !EternityChallenge(12).isRunning && !Laitela.isRunning && !(Enslaved.isRunning && auto);
+    return !Enslaved.isStoringRealTime && !EternityChallenge(12).isRunning && !Laitela.isRunning &&
+      !(Enslaved.isRunning && auto);
   },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
@@ -97,7 +98,7 @@ const Enslaved = {
       if (Time.thisReality.totalYears > 1) EnslavedProgress.storedTime.giveProgress();
     }
     if (autoRelease) release *= 0.01;
-    this.nextTickDiff = release;
+    this.nextTickDiff = Math.clampMax(release, this.timeCap);
     this.isReleaseTick = true;
     // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
     const effectiveGamespeed = release / 50;
@@ -200,6 +201,7 @@ const Enslaved = {
         "A visitor? I haven’t had one... eons.",
         "I am... had a name. It’s been lost... to this place.",
         "The others... won't let me rest. I do their work with time...",
+        "Place time ... into places ... that need it...",
         "Watch myself grow... pass and die.",
         "Perhaps you... will break these chains... I will wait",
       ]

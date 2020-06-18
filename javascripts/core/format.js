@@ -11,12 +11,11 @@ function formatInt(value) {
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
-// There's probably a better way, but I basically needed formatInt behavior but with some decimal points
-function formatContinuum(value) {
+function formatFloat(value, digits) {
   if (Notations.current.isPainful) {
-    return format(value, 2, 0);
+    return format(value, Math.max(2, digits), digits);
   }
-  return formatWithCommas(value.toFixed(2));
+  return formatWithCommas(value.toFixed(digits));
 }
 
 function formatPostBreak(value, places, placesUnder1000) {
@@ -57,6 +56,13 @@ function formatPow(value, places, placesUnder1000) {
 
 function formatPercents(value, places) {
   return `${format(value * 100, 2, places)}%`;
+}
+
+function formatRarity(value) {
+  // We can, annoyingly, have rounding error here, so even though only rarities
+  // are passed in, we can't trust our input to always be some integer divided by 10.
+  const places = value.toFixed(1).endsWith(".0") ? 0 : 1;
+  return `${format(value, 2, places)}%`;
 }
 
 function timeDisplay(ms) {

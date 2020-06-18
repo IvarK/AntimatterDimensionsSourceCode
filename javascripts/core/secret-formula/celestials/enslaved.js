@@ -9,7 +9,8 @@ GameDatabase.celestials.enslaved = {
       id: 0,
       progress: "Unlocked Enslaved Hints",
       hint: "The Enslaved Ones want to help, but the help takes a while.",
-      condition: "Spent more than 4 real-time hours without completing the Reality",
+      condition: `Spent more than 5 real-time hours inside the Reality without completing it; time outside the reality
+        counts for 4% as much. The timer accumulates and only starts once Enslaved's reality is unlocked.`,
     },
     ec1: {
       id: 1,
@@ -19,7 +20,7 @@ GameDatabase.celestials.enslaved = {
     },
     feelEternity: {
       id: 2,
-      progress: "Tried to Fix Infinity, but then experenced Eternity",
+      progress: "Tried to Fix Infinity, but then experienced Eternity",
       hint: "Infinity seems to be more broken than usual in this Reality, but is that even fixable?",
       condition: "Clicked the FEEL ETERNITY button",
     },
@@ -32,15 +33,15 @@ GameDatabase.celestials.enslaved = {
     },
     c10: {
       id: 4,
-      progress: "Gained some Antimatter Galaxies using 6th dimensions",
-      hint: "Is there a way to get Antimatter Galaxies without 8th dimensions?",
+      progress: "Gained some Antimatter Galaxies using 6th Antimatter Dimensions",
+      hint: "Is there a way to get Antimatter Galaxies without 8th Antimatter Dimensions?",
       condition: "Used Challenge 10 to get more than one Antimatter Galaxy",
     },
     secretStudy: {
       id: 5,
       progress: "Found some extra secret Time Theorems",
       hint: "Time Study 12? What's that?",
-      condition: "Clicked the secret time study",
+      condition: "Clicked the secret Time Study",
     },
     storedTime: {
       id: 6,
@@ -60,5 +61,6 @@ GameDatabase.celestials.enslaved = {
     "Infinity and Dilation glyphs seem confined too tightly to be useful at all.",
     "Power and Time glyphs are particularly strong here.",
     "Effarig glyphs are only useful with the right effects, but you can complete the Reality without one. " +
-      "A Replication glyph is necessary, but they aren't quite as strong as Power and Time."]
+      "A Replication glyph is very helpful, but it's not strictly necessary or quite as strong " +
+      "as Power and Time."]
 };

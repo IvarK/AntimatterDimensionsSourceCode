@@ -20,9 +20,9 @@ Vue.component("old-ui", {
   },
   methods: {
     update() {
-      const canCrunch = player.antimatter.gte(Player.infinityGoal);
       const challenge = NormalChallenge.current || InfinityChallenge.current;
-      if (!canCrunch || (player.break && challenge === undefined)) {
+      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
+      if (!Player.canCrunch || Tabs.current !== Tab.dimensions || inBrokenChallenge || (player.break && challenge === undefined)) {
         this.bigCrunch = false;
         this.smallCrunch = false;
         return;

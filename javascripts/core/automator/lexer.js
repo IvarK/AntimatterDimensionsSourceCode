@@ -155,7 +155,7 @@ const AutomatorLexer = (() => {
     $autobuyerDurationMode: AUTO_CRUNCH_MODE.TIME,
     $autobuyerXLastMode: AUTO_CRUNCH_MODE.X_LAST,
     $autobuyerCurrencyMode: AUTO_CRUNCH_MODE.AMOUNT,
-    $prestigeAvailable: () => canCrunch(),
+    $prestigeAvailable: () => Player.canCrunch,
     $prestige: () => bigCrunchResetRequest(true),
     $prestigeLevel: 1,
     $prestigeCurrency: "IP",
@@ -166,7 +166,7 @@ const AutomatorLexer = (() => {
     $autobuyerDurationMode: AUTO_ETERNITY_MODE.TIME,
     $autobuyerXLastMode: AUTO_ETERNITY_MODE.X_LAST,
     $autobuyerCurrencyMode: AUTO_ETERNITY_MODE.AMOUNT,
-    $prestigeAvailable: () => canEternity(),
+    $prestigeAvailable: () => Player.canEternity,
     $prestigeLevel: 2,
     $prestigeCurrency: "EP",
     $prestige: () => eternity(false, true),
@@ -183,7 +183,7 @@ const AutomatorLexer = (() => {
   createInCategory(StudyPath, "Idle", /idle/i, { $studyPath: TIME_STUDY_PATH.IDLE });
   createInCategory(StudyPath, "Passive", /passive/i, { $studyPath: TIME_STUDY_PATH.PASSIVE });
   createInCategory(StudyPath, "Active", /active/i, { $studyPath: TIME_STUDY_PATH.ACTIVE });
-  createInCategory(StudyPath, "Normal", /normal/i, { $studyPath: TIME_STUDY_PATH.NORMAL_DIM });
+  createInCategory(StudyPath, "Antimatter", /antimatter/i, { $studyPath: TIME_STUDY_PATH.ANTIMATTER_DIM });
   createInCategory(StudyPath, "Time", /time/i, { $studyPath: TIME_STUDY_PATH.TIME_DIM });
 
   createInCategory(TimeUnit, "Milliseconds", /ms/i, {

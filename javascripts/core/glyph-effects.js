@@ -3,13 +3,13 @@
 // There is a little too much stuff about glyph effects to put in constants.
 
 // The last glyph type you can only get if you got effarig reality
-const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig",
+const GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig",
   "reality", "cursed", "companion"];
-const BASIC_GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power"];
-const ALCHEMY_BASIC_GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig"];
-const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω",
+const BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation"];
+const ALCHEMY_BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig"];
+const GLYPH_SYMBOLS = { power: "Ω", infinity: "∞", replication: "Ξ", time: "Δ", dilation: "Ψ",
   effarig: "Ϙ", reality: "Ϟ", cursed: "⸸", companion: "♥" };
-const CANCER_GLYPH_SYMBOLS = { time: "🕟", dilation: "☎", replication: "⚤", infinity: "8", power: "⚡",
+const CANCER_GLYPH_SYMBOLS = { power: "⚡", infinity: "8", replication: "⚤", time: "🕟", dilation: "☎", 
   effarig: "🦒", reality: "⛧", cursed: "☠", companion: "³" };
 
 const GlyphCombiner = Object.freeze({
@@ -309,9 +309,9 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 7,
     isGenerated: true,
     glyphTypes: ["dilation"],
-    singleDesc: "Normal Dimension power +{value} while dilated",
-    totalDesc: "Normal Dimension multipliers ^{value} while dilated",
-    genericDesc: "Normal Dimensions ^x while dilated",
+    singleDesc: "Antimatter Dimension power +{value} while Dilated",
+    totalDesc: "Antimatter Dimension multipliers ^{value} while Dilated",
+    genericDesc: "Antimatter Dimensions ^x while Dilated",
     effect: (level, strength) => 1.1 + Math.pow(level, 0.7) * Math.pow(strength, 0.7) / 25,
     formatEffect: x => format(x, 2, 2),
     formatSingleEffect: x => format(x - 1, 2, 2),
@@ -360,13 +360,14 @@ GameDatabase.reality.glyphEffects = [
       ? "DT+replicanti mult (log₁₀(replicanti))"
       : "DT gain multiplier (log₁₀(replicanti))"),
     effect: (level, strength) => 0.0003 * Math.pow(level, 0.3) * Math.pow(strength, 0.65),
-    formatEffect: x => format(x, 2, 3),
+    formatEffect: x => format(x, 5, 5),
     formatSingleEffect: x => format(x, 5, 5),
     // It's bad to stack this one additively (N glyphs acts as a DT mult of N) or multiplicatively (the raw number is
     // less than 1), so instead we do a multiplicative stacking relative to the "base" effect of a level 1, 0% glyph.
+    // We also introduce a 3x mult per glyph after the first, so that stacking level 1, 0% glyphs still has an effect.
     // This is still just a flat DT mult when stacking multiple glyphs, but at least it's bigger than 2 or 3.
     combine: effects => ({
-      value: effects.length === 0 ? 0 : effects.reduce(Number.prodReducer, Math.pow(0.0003, 1 - effects.length)),
+      value: effects.length === 0 ? 0 : effects.reduce(Number.prodReducer, Math.pow(0.0001, 1 - effects.length)),
       capped: false
     }),
     conversion: x => x,
@@ -464,14 +465,14 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     glyphTypes: ["power"],
     singleDesc: () => (GlyphAlteration.isAdded("power")
-      ? "Normal Dimension power +{value}\n[and Antimatter Galaxy cost ×]{value2}"
-      : "Normal Dimension power +{value}"),
+      ? "Antimatter Dimension power +{value}\n[and Antimatter Galaxy cost ×]{value2}"
+      : "Antimatter Dimension power +{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("power")
-      ? "ND multipliers ^{value} and galaxy cost x{value2}"
-      : "Normal Dimension multipliers ^{value}"),
+      ? "AD multipliers ^{value} and galaxy cost x{value2}"
+      : "Antimatter Dimension multipliers ^{value}"),
     genericDesc: () => (GlyphAlteration.isAdded("power")
-      ? "ND multipliers ^x and galaxy cost multiplier"
-      : "Normal Dimension multipliers ^x"),
+      ? "AD multipliers ^x and galaxy cost multiplier"
+      : "Antimatter Dimension multipliers ^x"),
     effect: (level, strength) => 1.015 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75,
     formatEffect: x => format(x, 3, 3),
     formatSingleEffect: x => format(x - 1, 3, 3),
@@ -485,7 +486,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 17,
     isGenerated: true,
     glyphTypes: ["power"],
-    singleDesc: "Normal Dimension multipliers ×{value}",
+    singleDesc: "Antimatter Dimension multipliers ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("power")
       ? Decimal.pow(11111, level * 220)
       : Decimal.pow(level * strength * 10, level * strength * 10)),
@@ -511,7 +512,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 19,
     isGenerated: true,
     glyphTypes: ["power"],
-    singleDesc: () => `Increase the bonus from buying ${formatInt(10)} dimensions by {value}`,
+    singleDesc: () => `Increase the bonus from buying ${formatInt(10)} Antimatter Dimensions by {value}`,
     totalDesc: () => `Multiplier from "Buy ${formatInt(10)}" ×{value}`,
     genericDesc: () => `"Buy ${formatInt(10)}" bonus increase`,
     effect: (level, strength) => 1 + level * strength / 12,
@@ -606,7 +607,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 26,
     isGenerated: true,
     glyphTypes: ["effarig"],
-    singleDesc: () => `Antimatter production: ${formatInt(10)}^x -> ${formatInt(10)}^(x^{value})`,
+    singleDesc: () => `Antimatter production: ${formatInt(10)}^x ➜ ${formatInt(10)}^(x^{value})`,
     genericDesc: "Antimatter production exponent",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 5000,
     formatEffect: x => format(x, 4, 4),
@@ -688,25 +689,29 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => formatPercents(x - 1, 2),
     combine: GlyphCombiner.multiply,
   }, {
-    id: "realitydimboost",
+    id: "realityrow1pow",
     bitmaskIndex: 6,
     isGenerated: false,
     glyphTypes: ["reality"],
-    singleDesc: "Dimension Boost count +{value}",
-    totalDesc: "{value} more Dimension Boosts",
-    effect: level => 1 + Math.pow(level / 100000, 0.5),
-    formatEffect: x => formatPercents(x - 1, 2),
-    combine: GlyphCombiner.multiply,
-  }, {
-    id: "realityrow1pow",
-    bitmaskIndex: 7,
-    isGenerated: false,
-    glyphTypes: ["reality"],
-    singleDesc: "Multiplier from first row Reality Upgrades ^{value}",
-    totalDesc: "First-row Reality Upgrade multiplier ^{value}",
+    singleDesc: "Multiplier from Reality Upgrade Amplifiers ^{value}",
+    totalDesc: "Reality Upgrade Amplifier multiplier ^{value}",
     effect: level => 1 + level / 125000,
     formatEffect: x => format(x, 3, 3),
     combine: GlyphCombiner.addExponents,
+  }, {
+    id: "realityDTglyph",
+    bitmaskIndex: 7,
+    isGenerated: false,
+    glyphTypes: ["reality"],
+    singleDesc: () => `DT scaling for next glyph level: \n^${format(1.3, 1, 1)}
+      ➜ ^(${format(1.3, 1, 1)} + {value})`,
+    totalDesc: () => `DT scaling for next glyph level: ^${format(1.3, 1, 1)}
+      ➜ ^(${format(1.3, 1, 1)} + {value})`,
+    genericDesc: "DT scaling for glyph level",
+    // You can only get this effect on level 25000 reality glyphs anyway, might as well make it look nice
+    effect: () => 0.15,
+    formatEffect: x => format(x, 2, 2),
+    combine: GlyphCombiner.add,
   }, {
     id: "companiondescription",
     bitmaskIndex: 8,
@@ -901,16 +906,10 @@ const GlyphTypes = {
     * @param {string} [blacklisted] Do not return the specified type
     * @returns {string | null}
     */
-  random(rng, blacklisted = "") {
-    const types = ["time", "dilation", "replication", "infinity", "power", "effarig"];
-    if (!blacklisted) {
-      const available = EffarigUnlock.reality.isUnlocked ? types.length : types.length - 1;
-      return types[Math.floor(rng.uniform() * available)];
-    }
-    const available = EffarigUnlock.reality.isUnlocked ? types.length - 1 : types.length - 2;
-    const typeIndex = Math.floor(rng.uniform() * available);
-    if (typeIndex >= types.indexOf(blacklisted)) return types[typeIndex + 1];
-    return types[typeIndex];
+  random(rng, blacklisted = []) {
+    const types = generatedTypes.filter(
+      x => (EffarigUnlock.reality.isUnlocked || x !== "effarig") && !blacklisted.includes(x));
+    return types[Math.floor(rng.uniform() * types.length)];
   },
   get list() {
     return GLYPH_TYPES.map(e => GlyphTypes[e]);

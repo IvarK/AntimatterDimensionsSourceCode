@@ -15,7 +15,7 @@ Vue.component("normal-time-study", {
     hintText() {
       const id = this.study.id;
       switch (this.setup.path) {
-        case TIME_STUDY_PATH.NORMAL_DIM: return `${id} Normal Dims`;
+        case TIME_STUDY_PATH.ANTIMATTER_DIM: return `${id} Antimatter Dims`;
         case TIME_STUDY_PATH.INFINITY_DIM: return `${id} Infinity Dims`;
         case TIME_STUDY_PATH.TIME_DIM: return `${id} Time Dims`;
         case TIME_STUDY_PATH.ACTIVE: return `${id} Active`;

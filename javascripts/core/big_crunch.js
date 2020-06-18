@@ -7,17 +7,6 @@ function bigCrunchAnimation() {
   }, 2000);
 }
 
-function canCrunch() {
-  if (Enslaved.isRunning && NormalChallenge.isRunning &&
-    !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(NormalChallenge.current.id)) {
-    return true;
-  }
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
-  const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
-  if (player.thisInfinityMaxAM.lt(goal)) return false;
-  return true;
-}
-
 function handleChallengeCompletion() {
   if (!NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
@@ -33,7 +22,7 @@ function handleChallengeCompletion() {
 }
 
 function bigCrunchResetRequest(disableAnimation = false) {
-  if (!canCrunch()) return;
+  if (!Player.canCrunch) return;
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   if (earlyGame && !disableAnimation && player.options.animations.bigCrunch) {
     bigCrunchAnimation();
@@ -44,7 +33,7 @@ function bigCrunchResetRequest(disableAnimation = false) {
 }
 
 function bigCrunchReset() {
-  if (!canCrunch()) return;
+  if (!Player.canCrunch) return;
   player.bestIPminThisEternity = player.bestIPminThisEternity.clampMin(player.bestIPminThisInfinity);
   player.bestIPminThisInfinity = new Decimal(0);
 
@@ -58,7 +47,7 @@ function bigCrunchReset() {
   handleChallengeCompletion();
 
   if (earlyGame || (challenge && !player.options.retryChallenge)) {
-    Tab.dimensions.normal.show();
+    Tab.dimensions.antimatter.show();
   }
   const infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
@@ -66,7 +55,7 @@ function bigCrunchReset() {
 
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
-  
+
   player.noInfinitiesThisReality = false;
 
   if (!player.usedMaxAll) {
@@ -81,12 +70,18 @@ function bigCrunchReset() {
   const currentReplicantiGalaxies = player.replicanti.galaxies;
   secondSoftReset(true);
 
+  let remainingGalaxies = 0;
   if (Achievement(95).isUnlocked) {
     player.replicanti.amount = currentReplicanti;
+    remainingGalaxies += Math.min(currentReplicantiGalaxies, 1);
   }
   if (TimeStudy(33).isBought) {
-    player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
+    remainingGalaxies += Math.floor(currentReplicantiGalaxies / 2);
   }
+
+  // I don't think this Math.clampMax is technically needed, but if we add another source
+  // of keeping Replicanti Galaxies then it might be.
+  player.replicanti.galaxies = Math.clampMax(remainingGalaxies, currentReplicantiGalaxies);
 
   if (EternityMilestone.autobuyerID(1).isReached &&
       !EternityChallenge(8).isRunning &&
@@ -113,8 +108,8 @@ function bigCrunchReset() {
 function secondSoftReset(forcedNDReset = false) {
   player.dimensionBoosts = 0;
   player.galaxies = 0;
-  player.antimatter = Player.startingAM;
-  player.thisInfinityMaxAM = Player.startingAM;
+  player.thisInfinityMaxAM = new Decimal(0);
+  Currency.antimatter.reset();
   softReset(0, forcedNDReset);
   InfinityDimensions.resetAmount();
   if (player.replicanti.unl)
@@ -142,7 +137,13 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
 class InfinityUpgrade extends SetPurchasableMechanicState {
   constructor(config, requirement) {
     super(config);
-    this._requirement = requirement;
+    if (Array.isArray(requirement)) {
+      this._requirements = requirement;
+    } else if (requirement === undefined) {
+      this._requirements = [];
+    } else {
+      this._requirements = [requirement];
+    }
     if (config.charged) {
       this._chargedEffect = new ChargedInfinityUpgradeState(config.charged, this);
     }
@@ -157,7 +158,7 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   get isAvailableForPurchase() {
-    return this._requirement === undefined || this._requirement.isBought;
+    return this._requirements.every(x => x.isBought);
   }
 
   get isEffectActive() {
@@ -265,7 +266,10 @@ function disChargeAll() {
   InfinityUpgrade.skipReset3 = upgrade(db.skipReset3, InfinityUpgrade.skipReset2);
   InfinityUpgrade.skipResetGalaxy = upgrade(db.skipResetGalaxy, InfinityUpgrade.skipReset3);
 
-  InfinityUpgrade.ipOffline = upgrade(db.ipOffline, InfinityUpgrade.totalTimeMult);
+  InfinityUpgrade.ipOffline = upgrade(db.ipOffline, [
+    InfinityUpgrade.resetBoost, InfinityUpgrade.galaxyBoost,
+    InfinityUpgrade.ipGen, InfinityUpgrade.skipResetGalaxy
+  ]);
 }());
 
 class InfinityIPMultUpgrade extends GameMechanicState {
@@ -370,7 +374,7 @@ class BreakInfinityUpgrade extends SetPurchasableMechanicState {
   BreakInfinityUpgrade.autobuyerSpeed = upgrade(db.autobuyerSpeed);
 }());
 
-class BreakInfinityMultiplierCostUpgrade extends RebuyableMechanicState {
+class RebuyableBreakInfinityUpgradeState extends RebuyableMechanicState {
   get currency() {
     return Currency.infinityPoints;
   }
@@ -383,57 +387,24 @@ class BreakInfinityMultiplierCostUpgrade extends RebuyableMechanicState {
     player.infinityRebuyables[this.id] = value;
   }
 
-  get isMaxed() {
+  get isCapped() {
     return this.boughtAmount === this.config.maxUpgrades;
   }
+}
 
-  get isAvailableForPurchase() {
-    return !this.isMaxed;
-  }
-
-  purchase() {
-    if (!super.purchase()) return false;
-    GameCache.dimensionMultDecrease.invalidate();
+BreakInfinityUpgrade.tickspeedCostMult = new class extends RebuyableBreakInfinityUpgradeState {
+  onPurchased() {
     GameCache.tickSpeedMultDecrease.invalidate();
-    return true;
   }
-}
+}(GameDatabase.infinity.breakUpgrades.tickspeedCostMult);
 
-BreakInfinityUpgrade.tickspeedCostMult = new BreakInfinityMultiplierCostUpgrade(
-  GameDatabase.infinity.breakUpgrades.tickspeedCostMult
-);
-
-BreakInfinityUpgrade.dimCostMult = new BreakInfinityMultiplierCostUpgrade(
-  GameDatabase.infinity.breakUpgrades.dimCostMult
-);
-
-class BreakInfinityIPGenUpgrade extends GameMechanicState {
-  get cost() {
-    return this.config.cost();
+BreakInfinityUpgrade.dimCostMult = new class extends RebuyableBreakInfinityUpgradeState {
+  onPurchased() {
+    GameCache.dimensionMultDecrease.invalidate();
   }
+}(GameDatabase.infinity.breakUpgrades.dimCostMult);
 
-  get isMaxed() {
-    return player.offlineProd === 50;
-  }
-
-  get isAffordable() {
-    return player.infinityPoints.gte(this.cost);
-  }
-
-  get canBeBought() {
-    return !this.isMaxed && this.isAffordable;
-  }
-
-  purchase() {
-    if (!this.canBeBought) return;
-    player.infinityPoints = player.infinityPoints.minus(player.offlineProdCost);
-    player.offlineProdCost *= 10;
-    player.offlineProd += 5;
-    GameUI.update();
-  }
-}
-
-BreakInfinityUpgrade.ipGen = new BreakInfinityIPGenUpgrade(GameDatabase.infinity.breakUpgrades.ipGen);
+BreakInfinityUpgrade.ipGen = new RebuyableBreakInfinityUpgradeState(GameDatabase.infinity.breakUpgrades.ipGen);
 
 function preProductionGenerateIP(diff) {
   if (InfinityUpgrade.ipGen.isBought) {
@@ -443,12 +414,12 @@ function preProductionGenerateIP(diff) {
     if (player.partInfinityPoint >= 1) {
       const genCount = Math.floor(player.partInfinityPoint);
       let gainedPerGen = InfinityUpgrade.ipGen.effectValue;
-      if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen, 1);
+      if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen);
       const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
       player.infinityPoints = player.infinityPoints.plus(gainedThisTick);
       player.partInfinityPoint -= genCount;
     }
   }
   player.infinityPoints = player.infinityPoints
-    .plus(Player.bestRunIPPM.times(player.offlineProd / 100).times(diff / 60000));
+    .plus(BreakInfinityUpgrade.ipGen.effectOrDefault(new Decimal(0)).times(diff / 60000));
 }

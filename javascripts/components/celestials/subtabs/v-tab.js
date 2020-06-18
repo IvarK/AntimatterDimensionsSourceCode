@@ -58,7 +58,7 @@ Vue.component("v-tab", {
         : milestone.reward;
     },
     reduceGoals(hex) {
-      if (this.pp < hex.reductionCost) return;
+      if (player.reality.pp < hex.reductionCost) return;
       player.reality.pp -= hex.reductionCost;
       const steps = hex.config.reductionStepSize ? hex.config.reductionStepSize : 1;
       player.celestials.v.goalReductionSteps[hex.id] += steps;
@@ -177,7 +177,7 @@ Vue.component("v-tab", {
             </div>
             <div v-else-if="hex.isRunButton" @click="startRun()" class="l-v-hexagon o-v-run-button">
               <p>
-              Start V's Reality.<br/>All dimension multipliers, EP gain, IP gain, and dilated time gain per second
+              Start V's Reality.<br/>All dimension multipliers, EP gain, IP gain, and Dilated Time gain per second
               are square-rooted, and Replicanti interval is squared.
               </p>
             </div>
@@ -187,12 +187,12 @@ Vue.component("v-tab", {
           </li>
         </div>
         <div>
-          V-achievements can only be completed within V's reality, but are permanent and do not reset upon leaving
-          and re-entering the reality.
+          V-achievements can only be completed within V's Reality, but are permanent and do not reset upon leaving
+          and re-entering the Reality.
         </div>
         <div>
           You have {{ formatInt(totalUnlocks) }} V-achievements done. You gain 1 Space Theorem for each completion,
-          allowing you to purchase time studies which are normally locked.
+          allowing you to purchase Time Studies which are normally locked.
         </div>
         <br>
         <div class="l-v-milestones-grid">

@@ -71,10 +71,7 @@ class BlackHoleState {
       id: this.id,
       getAmount: () => this._data.intervalUpgrades,
       setAmount: amount => this._data.intervalUpgrades = amount,
-      calculateValue: amount => {
-        const baseAmount = (3600 / (Math.pow(10, id))) * Math.pow(0.8, amount);
-        return baseAmount < 0.1 ? 0 : baseAmount;
-      },
+      calculateValue: amount => (3600 / (Math.pow(10, id))) * Math.pow(0.8, amount),
       initialCost: 15 * blackHoleCostMultipliers[id],
       costMult: 3.5,
       hasAutobuyer: false,
@@ -114,10 +111,17 @@ class BlackHoleState {
   }
 
   /**
+   * Exists to avoid recursion in calculation of whether the black hole is permanent.
+   */
+  get rawInterval() {
+    return this.intervalUpgrade.value * Achievement(145).effectOrDefault(1);
+  }
+
+  /**
    * Amount of time the black hole is inactive for between activations.
    */
   get interval() {
-    return this.intervalUpgrade.value * Achievement(145).effectOrDefault(1);
+    return this.isPermanent ? 0 : this.rawInterval;
   }
 
   /**
@@ -142,11 +146,13 @@ class BlackHoleState {
     return this._data.active;
   }
 
+  get timeWithPreviousActiveToNextStateChange() {
+    return this.isCharged ? this.duration - this.phase : this.interval - this.phase;
+  }
+
   // When inactive, returns time until active; when active, returns time until inactive (or paused for hole 2)
   get timeToNextStateChange() {
-    let remainingTime = this.isCharged
-      ? this.duration - this.phase
-      : this.interval - this.phase;
+    let remainingTime = this.timeWithPreviousActiveToNextStateChange;
 
     if (this.id === 1) return remainingTime;
 
@@ -205,7 +211,9 @@ class BlackHoleState {
   }
 
   get isPermanent() {
-    return this.interval === 0;
+    // If the black hole is active 99.99% of the time, the duration is exactly
+    // 9999 times longer than the interval.
+    return this.duration / this.rawInterval >= 9999;
   }
 
   /**
@@ -452,7 +460,7 @@ const BlackHoles = {
    */
   calculateSpeedups() {
     const effectsToConsider = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
-      GAME_SPEED_EFFECT.MOMENTUM, GAME_SPEED_EFFECT.NERFS];
+      GAME_SPEED_EFFECT.SINGULARITY_MILESTONE, GAME_SPEED_EFFECT.NERFS];
     const speedupWithoutBlackHole = getGameSpeedupFactor(effectsToConsider);
     const speedups = [1];
     effectsToConsider.push(GAME_SPEED_EFFECT.BLACK_HOLE);

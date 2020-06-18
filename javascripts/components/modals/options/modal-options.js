@@ -40,6 +40,16 @@ const modalOptionsMixin = {
           @input="emitInput"
           class="o-primary-btn--option"
         />`
+    },
+    "wide-on-off-button": {
+      props: ["value", "text"],
+      template:
+        `<primary-button-on-off
+          :value="value"
+          :text="text"
+          @input="emitInput"
+          class="o-primary-btn--option-wide"
+        />`
     }
   }
 };

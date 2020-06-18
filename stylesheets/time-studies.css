@@ -42,7 +42,7 @@
   background-color: black;
   font-weight: bold;
   font-family: Typewriter, serif;
-  width: 17rem;
+  width: 18rem;
   height: 8rem;
   transition-duration: 0.2s;
   border-radius: 0.4rem;
@@ -113,12 +113,12 @@
   border-color: black;
 }
 
-.o-time-study-normal-dim--available {
+.o-time-study-antimatter-dim--available {
   color: #22aa48;
   border-color: #198036;
 }
 
-.o-time-study-normal-dim--available:hover {
+.o-time-study-antimatter-dim--available:hover {
   color: #eeeeee;
   background-color: #22aa48;
 }
@@ -252,7 +252,7 @@
   border-color: var(--color-bad);
 }
 
-.o-time-study-normal-dim--unavailable {
+.o-time-study-antimatter-dim--unavailable {
   background-color: #94a89a;
 }
 
@@ -306,7 +306,7 @@
   background-color: var(--color-eternity);
 }
 
-.o-time-study-normal-dim--bought {
+.o-time-study-antimatter-dim--bought {
   color: black;
   border-color: black;
   background-color: #22aa48;
@@ -378,8 +378,8 @@
   border-color: black;
 }
 
-.t-dark .o-time-study-normal-dim--bought,
-.t-s6 .o-time-study-normal-dim--bought {
+.t-dark .o-time-study-antimatter-dim--bought,
+.t-s6 .o-time-study-antimatter-dim--bought {
   border-color: #198036;
 }
 
@@ -409,12 +409,14 @@
 }
 
 .o-time-study--secret {
+  transition: opacity 1s;
+  transition-delay: 1s;
   opacity: 0;
-  transition: opacity 2s 0.5s;
   cursor: pointer;
 }
 
 .o-time-study--secret-unlocked {
+  transition: opacity 1s;
   opacity: 1;
   transition-delay: 0s;
   cursor: default;
@@ -437,7 +439,7 @@
   transition: stroke 0.3s;
 }
 
-.o-time-study-connection--normal-dim {
+.o-time-study-connection--antimatter-dim {
   stroke: #37533f;
 }
 
@@ -479,7 +481,7 @@
   stroke: #bbbbbb;
 }
 
-.o-time-study-connection--bought.o-time-study-connection--normal-dim {
+.o-time-study-connection--bought.o-time-study-connection--antimatter-dim {
   stroke: #22aa48;
 }
 
@@ -512,11 +514,12 @@
 }
 
 .o-time-study-connection--secret {
-  transition: opacity 0.5s;
+  transition: opacity 1s;
   opacity: 0;
 }
 
 .o-time-study-connection--secret-unlocked {
-  transition-delay: 1.5s;
+  transition: opacity 1s;
+  transition-delay: 1s;
   opacity: 1;
 }

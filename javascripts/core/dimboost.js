@@ -7,7 +7,7 @@ class DimBoostRequirement {
   }
 
   get isSatisfied() {
-    const dimension = NormalDimension(this.tier);
+    const dimension = AntimatterDimension(this.tier);
     return dimension.totalAmount.gte(this.amount);
   }
 }
@@ -50,7 +50,7 @@ class DimBoost {
     // hence there are just 4 (or 2, if in Auto DimBoosts challenge) shifts
     return DimBoost.purchasedBoosts + 4 < this.maxShiftTier;
   }
-  
+
   static get challenge8MaxBoosts() {
     // In Challenge 8, the only boosts that are useful are the first 5
     // (the fifth unlocks sacrifice). In IC1 (Challenge 8 and Challenge 10
@@ -60,14 +60,14 @@ class DimBoost {
     // more boosts than this; it's just that boosts beyond this are pointless.
     return NormalChallenge(10).isRunning ? 2 : 5;
   }
-  
+
   static get canBeBought() {
     return !(NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) && !Ra.isRunning;
   }
-  
+
   static get lockText() {
     if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) {
-      return "Locked (8th Dimension Autobuyer Challenge)";
+      return "Locked (8th Antimatter Dimension Autobuyer Challenge)";
     }
     if (Ra.isRunning) return "Locked (Ra's reality)";
     return null;
@@ -114,29 +114,26 @@ class DimBoost {
   }
 
   static get totalBoosts() {
-    return Math.floor((this.purchasedBoosts + this.freeBoosts) * getAdjustedGlyphEffect("realitydimboost"));
+    return Math.floor(this.purchasedBoosts + this.freeBoosts);
   }
 }
 
 function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
-    if (!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return;
+    if (Currency.antimatter.gt(Player.infinityLimit)) return;
     EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
     player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
-
-    /**
-     * All reset stuff are in these functions now. (Hope this works)
-     */
     resetChallengeStuff();
     if (forcedNDReset || !Perk.dimboostNonReset.isBought) {
-      NormalDimensions.reset();
+      AntimatterDimensions.reset();
       player.sacrificed = new Decimal(0);
       resetTickspeed();
     }
     skipResetsIfPossible();
-    const currentAntimatter = player.antimatter;
-    player.antimatter = Player.startingAM;
-    if (!forcedAMReset && (Achievement(111).isUnlocked || Perk.dimboostNonReset.isBought)) {
-        player.antimatter = player.antimatter.max(currentAntimatter);
+    const canKeepAntimatter = Achievement(111).isUnlocked || Perk.dimboostNonReset.isBought;
+    if (!forcedAMReset && canKeepAntimatter) {
+      Currency.antimatter.bumpTo(Currency.antimatter.startingValue);
+    } else {
+      Currency.antimatter.reset();
     }
     EventHub.dispatch(GAME_EVENT.DIMBOOST_AFTER, bulk);
 }
@@ -154,7 +151,7 @@ function skipResetsIfPossible() {
 }
 
 function softResetBtnClick() {
-  if ((!player.break && player.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) || !DimBoost.requirement.isSatisfied) return;
+  if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
   if (!DimBoost.canBeBought) return;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
   else softReset(1);
@@ -181,7 +178,7 @@ function maxBuyDimBoosts() {
   // Linearly extrapolate dimboost costs. req1 = a * 1 + b, req2 = a * 2 + b
   // so a = req2 - req1, b = req1 - a = 2 req1 - req2, num = (dims - b) / a
   const increase = req2.amount - req1.amount;
-  const dim = NormalDimension(req1.tier);
+  const dim = AntimatterDimension(req1.tier);
   let maxBoosts = Math.min(Number.MAX_VALUE,
     1 + Math.floor((dim.totalAmount.toNumber() - req1.amount) / increase));
   if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) {

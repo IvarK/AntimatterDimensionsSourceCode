@@ -43,7 +43,8 @@ Vue.component("effarig-tab", {
       runUnlocked: false,
       quote: "",
       isRunning: false,
-      vIsFlipped: false
+      vIsFlipped: false,
+      relicShardRarityAlwaysMax: false
     };
   },
   computed: {
@@ -67,12 +68,14 @@ Vue.component("effarig-tab", {
     },
     runDescription() {
       return this.isRunning
-        ? `All dimension multipliers, gamespeed, and tickspeed are severely lowered, like dilation. Infinity power
+        ? `All dimension multipliers, gamespeed, and tickspeed are severely lowered, like Dilation. Infinity power
           reduces the production and gamespeed penalties and time shards reduce the tickspeed penalty. Glyph levels
-          are temporarily capped to ${Effarig.glyphLevelCap}, rarity is unaffected.`
+          are temporarily capped to ${Effarig.glyphLevelCap}, rarity is unaffected. You will exit Effarig's Reality
+          when you complete a Layer of it for the first time.`
         : `Start Effarig's Reality; all dimension multipliers, gamespeed, and tickspeed are severely lowered, like
-          dilation. Infinity power reduces the production and gamespeed penalties and time shards reduce the tickspeed
-          penalty. Glyph levels are temporarily capped, rarity is unaffected.`;
+          Dilation. Infinity power reduces the production and gamespeed penalties and time shards reduce the tickspeed
+          penalty. Glyph levels are temporarily capped, rarity is unaffected. You will exit Effarig's Reality when you
+          complete a Layer of it for the first time.`;
     }
   },
   methods: {
@@ -84,6 +87,7 @@ Vue.component("effarig-tab", {
       this.runUnlocked = EffarigUnlock.run.isUnlocked;
       this.isRunning = Effarig.isRunning;
       this.vIsFlipped = V.isFlipped;
+      this.relicShardRarityAlwaysMax = Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX);
     },
     startRun() {
       if (!resetReality()) return;
@@ -110,16 +114,17 @@ Vue.component("effarig-tab", {
   template:
     `<div class="l-teresa-celestial-tab">
       <celestial-quote-history celestial="effarig"/>
-      <div class="c-effarig-relics">
-        You have {{ format(relicShards, 2, 0) }} Relic Shards, which increases <br>
-        the rarity of new glyphs by up to +{{ format(shardRarityBoost, 2, 2) }}%.
-      </div>
-      <div class="c-effarig-relic-description">
-        You will gain {{ format(shardsGained, 2, 0) }} Relic Shards next reality. More EP slightly increases <br>
-        shards gained. More distinct glyph effects significantly increases shards gained.
-      </div>
       <div class="l-effarig-shop-and-run">
         <div class="l-effarig-shop">
+          <div class="c-effarig-relics">
+            You have {{ format(relicShards, 2, 0) }} Relic Shards, which increases <br>
+            the rarity of new glyphs by {{ relicShardRarityAlwaysMax ? "" : "up to" }}
+            +{{ format(shardRarityBoost, 2, 2) }}%.
+          </div>
+          <div class="c-effarig-relic-description">
+            You will gain {{ format(shardsGained, 2, 0) }} Relic Shards next reality. More EP slightly increases <br>
+            shards gained. More distinct glyph effects significantly increases shards gained.
+          </div>
           <effarig-unlock-button
            v-for="(unlock, i) in shopUnlocks"
            :key="i"

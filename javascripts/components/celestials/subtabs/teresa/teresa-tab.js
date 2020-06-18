@@ -10,6 +10,7 @@ Vue.component("teresa-tab", {
       percentage: "",
       rmMult: 0,
       bestAM: new Decimal(0),
+      lastRM: new Decimal(0),
       runReward: 0,
       pp: 0,
       hasReality: false,
@@ -45,6 +46,7 @@ Vue.component("teresa-tab", {
       this.hasEPGen = Teresa.has(TERESA_UNLOCKS.EPGEN);
       this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
+      this.lastRM.copyFrom(player.celestials.teresa.lastRepeatedRM);
       this.runReward = Teresa.runRewardMultiplier;
       this.pp = player.reality.pp;
       this.rm.copyFrom(player.reality.realityMachines);
@@ -66,24 +68,25 @@ Vue.component("teresa-tab", {
       <celestial-quote-history celestial="teresa"/>
       <div>You have {{format(rm, 2, 2)}} {{"Reality Machine" | pluralize(rm)}}.</div>
       <div class="l-mechanics-container">
-        <div class="l-teresa-unlocks l-teresa-mechanic-container">
+        <div class="l-teresa-mechanic-container">
           <div class="c-teresa-unlock c-teresa-run-button" v-if="hasReality" @click="startRun()">
             Start Teresa's Reality. Glyph TT generation is disabled and
             you gain less IP and EP (x^{{format(0.55, 2, 2)}}).
             <br><br>
-            Highest antimatter in Teresa's Reality: {{ format(bestAM, 2, 0) }}
+            <div v-if="bestAM.gt(0)">
+              Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
+              <br><br>
+              You last did Teresa's Reality at {{ format(lastRM, 2) }} RM.
+            </div>
+            <div v-else>
+              You have not completed Teresa's Reality yet.
+            </div>
           </div>
           <div class="c-teresa-unlock" v-if="hasReality">
             Teresa Reality reward: Glyph sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
-          <div class="c-teresa-unlock" v-if="hasEPGen">You gain 1% of your peaked EP/min every second.</div>
-          <div class="c-teresa-shop" v-if="hasPerkShop">
-            <span class="o-teresa-pp"> You have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}}.</span>
-            <perk-shop-upgrade
-              v-for="upgrade in upgrades"
-              :key="upgrade.id"
-              :upgrade="upgrade"
-            />
+          <div class="c-teresa-unlock" v-if="hasEPGen">
+            You gain {{ formatPercents(0.01) }} of your peaked EP/min every second.
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">
@@ -108,7 +111,15 @@ Vue.component("teresa-tab", {
             </div>
           </div>
         </div>
-        <div class="c-unlock-descriptions l-teresa-mechanic-container"></div>
+        <div class="l-rm-container-labels l-teresa-mechanic-container"/>
+        <div class="c-teresa-shop" v-if="hasPerkShop">
+          <span class="o-teresa-pp"> You have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}}.</span>
+          <perk-shop-upgrade
+            v-for="upgrade in upgrades"
+            :key="upgrade.id"
+            :upgrade="upgrade"
+          />
+        </div>
       </div>
     </div>`
 });

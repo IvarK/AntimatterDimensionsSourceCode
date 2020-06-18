@@ -61,7 +61,7 @@ GameDatabase.celestials.v = {
         unlocking Time Dilation.`,
       values: [400e6, 450e6, 500e6, 600e6, 700e6, 800e6],
       condition: () => V.isRunning && EternityChallenge(12).isRunning && !PlayerProgress.dilationUnlocked(),
-      currentValue: () => player.antimatter.log10(),
+      currentValue: () => Currency.antimatter.value.log10(),
       formatRecord: x => format(Decimal.pow10(x)),
       shardReduction: tiers => 50e6 * tiers,
       maxShardReduction: goal => goal - 400e6,
@@ -84,7 +84,7 @@ GameDatabase.celestials.v = {
     {
       id: 5,
       name: "Matterception",
-      description: value => `Get ${formatInt(value)} Dimensional Boosts while dilating time, inside EC5.`,
+      description: value => `Get ${formatInt(value)} Dimensional Boosts while Dilated and inside Eternity Challenge 5.`,
       values: [51, 52, 53, 54, 55, 56],
       condition: () => V.isRunning && player.dilation.active && EternityChallenge(5).isRunning,
       currentValue: () => DimBoost.purchasedBoosts,
@@ -99,7 +99,7 @@ GameDatabase.celestials.v = {
       id: 6,
       name: "Requiem for a Glyph",
       description: value => `Unlock Reality with at most ${-value} glyphs equipped for the entire reality.
-        <div ach-tooltip="Each equipped cursed glyph counts as -3 glyphs">
+        <div ach-tooltip="Each equipped cursed glyph counts as ${formatInt(-3)} glyphs">
           <i class="fas fa-question-circle"></i>
         </div>`,
       // This achievement has internally negated values since the check is always greater than
@@ -159,15 +159,16 @@ GameDatabase.celestials.v = {
       id: 2,
       STCost: 12,
       requirement: [223, 224, 232],
-      description: "Multiply the distant galaxy scaling threshold by 2x",
-      effect: 2,
+      description: () => `Distant galaxy scaling threshold starts another ${formatInt(3000)} later`,
+      effect: 3000,
       unlocked: () => Ra.pets.v.level >= 10
     },
     {
       id: 3,
       STCost: 12,
       requirement: [225, 226, 233],
-      description: "Your extra RGs are multiplied by 1.5x",
+      description: () => `Gain ${formatPercents(0.5)} more extra RGs from Studies 225 and 226, 
+        and from Effarig's Infinity`,
       effect: 1.5,
       unlocked: () => Ra.pets.v.level >= 15
     },
@@ -175,9 +176,8 @@ GameDatabase.celestials.v = {
       id: 4,
       STCost: 12,
       requirement: [227, 228, 234],
-      description: "Sacrifice boosts all normal dimensions.",
+      description: "Sacrifice applies to all Antimatter Dimensions",
       effect: () => Sacrifice.totalBoost,
-      formatEffect: value => formatX(value, 2, 1),
       unlocked: () => Ra.pets.v.level >= 20
     }
   ]

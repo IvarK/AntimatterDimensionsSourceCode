@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("normal-dim-shift-row", {
+Vue.component("antimatter-dim-shift-row", {
   data() {
     return {
       requirement: {
@@ -19,7 +19,7 @@ Vue.component("normal-dim-shift-row", {
       return this.isShift ? "Shift" : "Boost";
     },
     dimName() {
-      return NormalDimension(this.requirement.tier).displayName;
+      return AntimatterDimension(this.requirement.tier).displayName;
     },
     buttonText() {
       return this.lockText === null
@@ -58,7 +58,7 @@ Vue.component("normal-dim-shift-row", {
     }
   },
   template:
-    `<div class="c-normal-dim-row">
+    `<div class="c-antimatter-dim-row">
       <div
         class="c-dim-row__label c-dim-row__label--growable"
       >

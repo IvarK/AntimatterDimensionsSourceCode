@@ -26,8 +26,8 @@ class SubtabState {
     return this.config.key;
   }
 
-  show() {
-    this._parent.show(this);
+  show(manual) {
+    this._parent.show(manual, this);
   }
 
   get isOpen() {
@@ -65,7 +65,8 @@ class TabState {
     return this.subtabs.some(tab => tab.hasNotification);
   }
 
-  show(subtab = undefined) {
+  show(manual, subtab = undefined) {
+    if (!manual && !player.options.automaticTabSwitching) return;
     ui.view.tab = this.config.key;
     if (subtab !== undefined) {
       this._currentSubtab = subtab;
@@ -77,7 +78,9 @@ class TabState {
     
     // Makes it so that the glyph tooltip doesn't stay on tab change
     ui.view.tabs.reality.currentGlyphTooltip = -1;
-    Modal.hide();
+    if (manual) {
+      Modal.hide();
+    }
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
 
     if (this.config.key === "reality" && 

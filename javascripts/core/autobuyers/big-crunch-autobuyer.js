@@ -49,12 +49,13 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
     this.data.xLast = value;
   }
 
-  get autoInfinitiesAvailable() {
-    return EternityMilestone.autoInfinities.isReached &&
+  autoInfinitiesAvailable(considerMilestoneReached) {
+    return (considerMilestoneReached || EternityMilestone.autoInfinities.isReached) &&
+      !EternityChallenge(4).isRunning && !EternityChallenge(12).isRunning &&
       this.data.isActive &&
       this.mode === AUTO_CRUNCH_MODE.TIME &&
       this.time < 60 &&
-      !Autobuyer.eternity.autoEternitiesAvailable;
+      !Autobuyer.eternity.autoEternitiesAvailable();
   }
 
   upgradeInterval(free) {
@@ -69,8 +70,8 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
   }
 
   tick() {
-    if (canCrunch()) super.tick();
-    if (!player.antimatter.gte(Decimal.NUMBER_MAX_VALUE)) return;
+    if (Player.canCrunch) super.tick();
+    if (Currency.antimatter.lt(Decimal.NUMBER_MAX_VALUE)) return;
     let proc = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
     if (!proc) {
       switch (this.mode) {

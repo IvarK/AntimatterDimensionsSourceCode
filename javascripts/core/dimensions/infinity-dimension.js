@@ -192,15 +192,13 @@ class InfinityDimensionState extends DimensionState {
     return player.infinityPoints.gte(this.cost);
   }
 
-  get hasRateOfChange() {
-    return this.tier < 8 || EternityChallenge(7).completions > 0;
-  }
-
   get rateOfChange() {
     const tier = this.tier;
     let toGain = new Decimal(0);
     if (tier === 8) {
-      EternityChallenge(7).reward.applyEffect(v => toGain = v);
+      // We need a extra 10x here (since ID8 production is per-second and
+      // other ID production is per-10-seconds).
+      EternityChallenge(7).reward.applyEffect(v => toGain = v.times(10));
     } else {
       toGain = InfinityDimension(tier + 1).productionPerSecond;
     }
@@ -241,19 +239,15 @@ class InfinityDimensionState extends DimensionState {
       );
     mult = mult.times(Decimal.pow(this.powerMultiplier, Math.floor(this.baseAmount / 10)));
 
-    mult = mult.clampMin(0);
+    mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
+    mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
+    mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
+    mult = mult.powEffectOf(AlchemyResource.infinity);
+    mult = mult.pow(Ra.momentumValue);
 
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);
     }
-
-    mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
-
-    mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
-
-    mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
-
-    mult = mult.powEffectOf(AlchemyResource.infinity);
 
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);
@@ -368,7 +362,9 @@ const InfinityDimensions = {
   get capIncrease() {
     const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease *
       (1 + AlchemyResource.boundless.effectValue);
-    const milestoneEffect = SingularityMilestone(20).isUnlocked ? SingularityMilestone(20).effectValue : 1;
+    const milestoneEffect = SingularityMilestone.tesseractMultFromSingularities.isUnlocked
+      ? SingularityMilestone.tesseractMultFromSingularities.effectValue
+      : 1;
     return Math.floor(enslavedBoost * milestoneEffect);
   },
 
@@ -383,7 +379,7 @@ const InfinityDimensions = {
 
     if (EternityChallenge(7).isRunning) {
       if (!NormalChallenge(10).isRunning) {
-        InfinityDimension(1).produceDimensions(NormalDimension(7), diff);
+        InfinityDimension(1).produceDimensions(AntimatterDimension(7), diff);
       }
     } else {
       InfinityDimension(1).produceCurrency(Currency.infinityPower, diff);

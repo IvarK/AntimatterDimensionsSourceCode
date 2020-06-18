@@ -30,7 +30,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e600"),
     goalIncrease: new Decimal("1e75"),
     reward: {
-      description: "Increase the multiplier for buying 10 dimensions",
+      description: () => `Increase the multiplier for buying ${formatInt(10)} Antimatter Dimensions`,
       effect: completions => completions * 0.72,
       formatEffect: value => `+${format(value, 2, 2)}`
     }
@@ -58,7 +58,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e750"),
     goalIncrease: new Decimal("1e400"),
     reward: {
-      description: "Galaxy cost scaling starts later",
+      description: "Distant Galaxy cost scaling starts later",
       effect: completions => completions * 5,
       formatEffect: value => `${formatInt(value)} galaxies later`
     }
@@ -69,17 +69,17 @@ GameDatabase.challenges.eternity = [
       if (Enslaved.isRunning) {
         return Notations.current === Notation.shi
           ? "Y̶o̶u̶ ̶c̶a̶n̶'̶t̶ ̶g̶a̶i̶n̶ ̶A̶n̶t̶i̶m̶a̶t̶t̶e̶r̶ ̶G̶a̶l̶a̶x̶i̶e̶s̶ ̶n̶o̶r̶m̶a̶l̶l̶y̶,̶ ̶b̶u̶t̶ ̶the " +
-            " cost of upgrading your max Replicanti galaxies is massively reduced."
+            " cost of upgrading your max Replicanti Galaxies is massively reduced."
           : "You c㏰'퐚 gai鸭 Ant꟢matterﻪﶓa⁍axie㮾랜䂇rma㦂l the cost of upgrading your max Replicanti" +
-            " galaxies is massively reduced";
+            " Galaxies is massively reduced";
       }
       return "You can't gain Antimatter Galaxies normally, but the cost of upgrading your max Replicanti" +
-              " galaxies is massively reduced.";
+              " Galaxies is massively reduced.";
     },
     goal: new Decimal("1e850"),
     goalIncrease: new Decimal("1e250"),
     reward: {
-      description: "Reduce the dimension cost multiplier growth",
+      description: "Reduce Antimatter Dimension cost multiplier growth",
       effect: completions => completions * 0.2,
       formatEffect: value => {
         const base = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward));
@@ -90,8 +90,9 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 7,
-    description: "1st Time Dimension produces 8th Infinity Dimension, and 1st Infinity Dimension " +
-      "produces 7th Dimensions. Tickspeed affects all dimensions normally.",
+    description:
+      "1st Time Dimension produces 8th Infinity Dimensions, and 1st Infinity Dimension produces " +
+      "7th Antimatter Dimensions. Tickspeed also directly applies to Infinity and Time Dimensions.",
     goal: new Decimal("1e2000"),
     goalIncrease: new Decimal("1e530"),
     reward: {
@@ -117,8 +118,8 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 9,
-    description: "You can't buy tickspeed upgrades. Infinity power instead multiplies " +
-      "time dimensions with greatly reduced effect.",
+    description: "You can't buy tickspeed upgrades. Infinity Power instead multiplies " +
+      "Time Dimensions with greatly reduced effect.",
     goal: new Decimal("1e1750"),
     goalIncrease: new Decimal("1e250"),
     reward: {
@@ -132,7 +133,7 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
-        Infinitied stat to normal dimensions (infinitied^${formatInt(950)}).`;
+        Infinitied stat to Antimatter Dimensions (infinitied^${formatInt(950)}).`;
       EternityChallenge(10).applyEffect(v => description += ` Currently: ${formatX(v, 2, 1)}`);
       return description;
     },
@@ -150,8 +151,8 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 11,
-    description: "All dimension multipliers are disabled except for the multipliers from " +
-      "Infinity Power and Dimension Boosts (to normal dimensions).",
+    description: "All dimension multipliers and powers are disabled except for the multipliers from " +
+      "Infinity Power and Dimension Boosts (to Antimatter Dimensions).",
     goal: new Decimal("1e500"),
     goalIncrease: new Decimal("1e200"),
     reward: {

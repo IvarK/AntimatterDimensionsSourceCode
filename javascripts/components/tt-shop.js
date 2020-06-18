@@ -27,6 +27,16 @@ Vue.component("tt-shop", {
     minimized() {
       return this.minimizeAvailable && this.shopMinimized;
     },
+    formattedTheorems() {
+      if (this.theoremAmount.gte(1e9)) {
+        return format(this.theoremAmount, 2);
+      }
+      if (!(Teresa.isRunning || Enslaved.isRunning) &&
+        getAdjustedGlyphEffect("dilationTTgen") > 0 && !DilationUpgrade.ttGenerator.isBought) {
+        return formatFloat(this.theoremAmount, 2);
+      }
+      return formatInt(this.theoremAmount);
+    },
     TTgenRateText() {
       if (this.theoremGeneration.lt(1 / 3600)) {
         return `one TT every ${TimeSpan.fromSeconds(
@@ -82,7 +92,7 @@ Vue.component("tt-shop", {
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
       this.ttAutobuyerOn = player.ttbuyer;
       const budget = this.budget;
-      budget.am.copyFrom(player.antimatter);
+      budget.am.copyFrom(Currency.antimatter);
       budget.ip.copyFrom(player.infinityPoints);
       budget.ep.copyFrom(player.eternityPoints);
       const costs = this.costs;
@@ -102,7 +112,7 @@ Vue.component("tt-shop", {
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
           <p id="timetheorems">
             <span class="c-tt-amount">
-              {{ theoremAmount.gt(1e9) ? format(theoremAmount, 2) : formatInt(theoremAmount) }} 
+              {{ formattedTheorems }}
               {{ "Time Theorem" | pluralize(theoremAmount, "Time Theorems") }}
             </span>
             <span v-if="showST">
@@ -173,23 +183,27 @@ Vue.component("tt-save-load-button", {
     save() {
       this.hideContextMenu();
       this.preset.studies = studyTreeExportString();
+      const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
+      GameUI.notify.info(`${presetName} saved in slot ${this.saveslot}`);
     },
     load() {
       this.hideContextMenu();
       if (this.preset.studies) {
         importStudyTree(this.preset.studies);
+        const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
+        GameUI.notify.info(`${presetName} loaded from slot ${this.saveslot}`);
       } else {
         Modal.message.show("This time study list currently contains no studies.");
       }
     },
     handleExport() {
       this.hideContextMenu();
-      copyToClipboardAndNotify(this.preset.studies);
+      copyToClipboard(this.preset.studies);
+      const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
+      GameUI.notify.info(`${presetName} exported from slot ${this.saveslot} to your clipboard`);
     },
     edit() {
-      const newValue = prompt("Edit time study list", this.preset.studies);
-      this.hideContextMenu();
-      if (newValue !== null) this.preset.studies = newValue;
+      Modal.editTree.show({ id: this.saveslot - 1 });
     }
   },
   template: `

@@ -4,14 +4,16 @@ Vue.component("effarig-unlock-button", {
   props: {
     unlock: Object
   },
-  data: function() {
+  data() {
     return {
-      isBought: false
+      isBought: false,
+      isAvailable: false
     };
   },
   methods: {
     update() {
       this.isBought = this.unlock.isUnlocked;
+      this.isAvailable = Effarig.shardAmount >= this.unlock.cost;
     },
     purchase() {
       this.unlock.purchase();
@@ -20,14 +22,17 @@ Vue.component("effarig-unlock-button", {
   computed: {
     config() {
       return this.unlock.config;
+    },
+    classObject() {
+      return {
+        "c-effarig-shop-button": true,
+        "c-effarig-shop-button--bought": this.isBought,
+        "c-effarig-shop-button--available": this.isAvailable && !this.isBought
+      };
     }
   },
   template: `
-    <button
-      class="o-effarig-shop-button"
-      :class="{ 'effarig-unlock-bought': isBought }"
-      @click="purchase"
-    >
+    <button :class="classObject" @click="purchase">
       <description-display :config="config"/>
       <cost-display
         v-if="!isBought"

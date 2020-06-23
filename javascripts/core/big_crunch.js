@@ -8,10 +8,10 @@ function bigCrunchAnimation() {
 }
 
 function handleChallengeCompletion() {
-  if (!NormalChallenge(1).isCompleted) {
+  const challenge = NormalChallenge.current || InfinityChallenge.current;
+  if (!challenge && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
   }
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
   if (!challenge) return;
   challenge.complete();
   challenge.updateChallengeTime();
@@ -52,9 +52,9 @@ function bigCrunchReset() {
   const infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
   addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints, gainedInfinities().round());
-
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
+  player.bestInfinityRealTime = Math.min(player.bestInfinityRealTime, player.thisInfinityRealTime);
 
   player.noInfinitiesThisReality = false;
 

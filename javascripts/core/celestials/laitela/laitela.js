@@ -59,6 +59,9 @@ const Laitela = {
   set matter(x) {
     this.celestial.matter = x;
   },
+  get maxMatter() {
+    return this.celestial.maxMatter;
+  },
   get darkMatterMultGain() {
     return Decimal.pow(this.matter.dividedBy(this.annihilationDMRequirement).plus(1).log10(), 1.5).toNumber();
   },

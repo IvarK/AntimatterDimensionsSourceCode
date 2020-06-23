@@ -21,7 +21,8 @@ Vue.component("infinity-dim-row", {
       isEC8Running: false,
       hardcap: InfinityDimensions.HARDCAP_PURCHASES,
       requirementReached: false,
-      eternityReached: false
+      eternityReached: false,
+      showCostTitle: false
     };
   },
   watch: {
@@ -39,7 +40,8 @@ Vue.component("infinity-dim-row", {
     costDisplay() {
       const requirement = InfinityDimension(this.tier).requirement;
       if (this.isUnlocked) {
-        return this.isCapped ? "Capped" : `Cost: ${format(this.cost)} IP`;
+        if (this.isCapped) return "Capped";
+        return this.showCostTitle ? `Cost: ${format(this.cost)} IP` : `${format(this.cost)} IP`;
       }
       
       if (this.requirementReached) {
@@ -85,6 +87,7 @@ Vue.component("infinity-dim-row", {
       this.isAutobuyerOn = player.infDimBuyers[this.tier - 1];
       this.requirementReached = dimension.requirementReached;
       this.eternityReached = PlayerProgress.eternityUnlocked();
+      this.showCostTitle = this.cost.exponent < 1000000;
     },
     buyManyInfinityDimension() {
       if (!this.isUnlocked) {

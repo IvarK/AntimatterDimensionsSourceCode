@@ -151,7 +151,11 @@ GameDatabase.achievements.normal = [
   {
     id: 35,
     name: "Don't you dare sleep",
-    tooltip: () => `Be offline for over ${formatInt(6)} hours in a row.`,
+    tooltip() {
+      return player.realities > 0
+      ? `Be offline for a period of over ${formatInt(6)} hours (real time).`
+      : `Be offline for a period of over ${formatInt(6)} hours.`;
+    },
     checkRequirement: () => Date.now() - player.lastUpdate >= 21600000,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE
   },
@@ -1109,7 +1113,7 @@ GameDatabase.achievements.normal = [
   {
     id: 168,
     name: "Woah, we're halfway there",
-    tooltip: () => `Get ${formatInt(50)} total Ra levels.`,
+    tooltip: () => `Get ${formatInt(50)} total Ra Celestial Memory levels.`,
     checkRequirement: () => Ra.totalPetLevel >= 50,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => `Get ${formatPercents(0.1)} more memories.`,

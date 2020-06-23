@@ -728,6 +728,9 @@ GameStorage.devMigrations = {
         AIChance: 0,
         speed: 1
       };
+    },
+    player => {
+      delete player.options.confirmations.glyphTrash;
     }
   ],
 

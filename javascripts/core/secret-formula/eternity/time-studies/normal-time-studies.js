@@ -542,8 +542,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(214).isBought && !TimeStudy(227).isBought,
       requirementV: () => TimeStudy(214).isBought && TimeStudy(227).isBought,
       description: () => `Sacrifice formula scales better
-        x${formatPow(0.011, 0, 3)} ➜ x${formatPow(0.013, 0, 3)}`,
-      effect: 0.013
+        ${Sacrifice.getSacrificeDescription({ 'TimeStudy228': false })} ➜
+        ${Sacrifice.getSacrificeDescription({ 'TimeStudy228': true })}`,
+      effect: 0.2
     },
     {
       id: 231,

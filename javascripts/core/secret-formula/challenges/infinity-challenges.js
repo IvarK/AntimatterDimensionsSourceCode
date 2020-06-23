@@ -19,7 +19,9 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e10500"),
     isQuickResettable: false,
     reward: {
-      description: "Sacrifice autobuyer and stronger sacrifice"
+      description: () => `Sacrifice autobuyer and stronger sacrifice
+        ${Sacrifice.getSacrificeDescription({ "InfinityChallenge2isCompleted": false })} ➜
+        ${Sacrifice.getSacrificeDescription({ "InfinityChallenge2isCompleted": true })}`,
     },
     unlockAM: new Decimal("1e11000"),
   },

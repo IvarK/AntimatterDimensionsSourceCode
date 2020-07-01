@@ -85,6 +85,11 @@ dev.tripleEverything = function() {
   });
 };
 
+dev.barrelRoll = function() {
+  document.body.style.animation = "barrelRoll 5s 1";
+  setTimeout(() => document.body.style.animation = "", 5000);
+};
+
 dev.spin3d = function() {
   if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite";
   else document.body.style.animation = "";
@@ -110,11 +115,6 @@ dev.fixSave = function() {
   }
   GameStorage.loadPlayerObject(saveData);
   GameStorage.save();
-};
-
-dev.implode = function() {
-  document.body.style.animation = "implode 2s 1";
-  setTimeout(() => document.body.style.animation = "", 2000);
 };
 
 dev.updateTDCosts = function() {
@@ -182,7 +182,7 @@ dev.setCompanionGlyphEP = function(eternityPoints) {
     .concat(player.reality.glyphs.inventory)
     .filter(g => g.type === "companion")[0];
   glyph.strength = rarityToStrength(eternityPoints.log10() / 1e6);
-}
+};
 
 dev.decriminalize = function() {
   SecretAchievement(23).lock();
@@ -202,18 +202,24 @@ dev.setNextNewsMessage = function(id) {
   nextNewsMessageId = id;
 };
 
+dev.implode = function() {
+  bigCrunchAnimation();
+};
+
+dev.eternify = function() {
+  eternityAnimation();
+};
+
+dev.dilate = function() {
+  dilationAnimation();
+};
+
+dev.undilate = function() {
+  undilationAnimation();
+};
+
 dev.realize = function() {
-  document.getElementById("container").style.animation = "realize 10s 1";
-  document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
-  setTimeout(() => {
-    document.getElementById("realityanimbg").play();
-    document.getElementById("realityanimbg").currentTime = 0;
-    document.getElementById("realityanimbg").play();
-  }, 2000);
-  setTimeout(() => {
-    document.getElementById("container").style.animation = "";
-    document.getElementById("realityanimbg").style.animation = "";
-  }, 10000);
+  runRealityAnimation();
 };
 
 dev.respecPerks = function() {

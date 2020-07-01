@@ -30,7 +30,7 @@ function handleChallengeCompletion() {
 
 function bigCrunchResetRequest(disableAnimation = false) {
   if (!Player.canCrunch) return;
-  if (!disableAnimation && player.options.animations.bigCrunch) {
+  if (!disableAnimation && player.options.animations.bigCrunch && document.body.style.animation === "") {
     bigCrunchAnimation();
     setTimeout(bigCrunchReset, 1000);
   } else {

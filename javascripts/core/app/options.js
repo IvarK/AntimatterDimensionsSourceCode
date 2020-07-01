@@ -50,7 +50,7 @@ function isSecretImport(data) {
 
 function tryImportSecret(data) {
   const index = secretImportIndex(data);
-  if (index === 0) {
+  if (index === 0 && document.body.style.animation === "") {
     document.body.style.animation = "barrelRoll 5s 1";
     SecretAchievement(15).unlock();
     setTimeout(() => document.body.style.animation = "", 5000);

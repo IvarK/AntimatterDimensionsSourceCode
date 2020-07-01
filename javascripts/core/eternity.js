@@ -56,7 +56,7 @@ function giveEternityRewards(auto) {
 }
 
 function eternityAnimation() {
-  document.body.style.animation = "eternify 3s 1, shake 0.5s 4";
+  document.body.style.animation = "eternify 3s 1";
   setTimeout(() => {
       document.body.style.animation = "";
   }, 3000);
@@ -64,11 +64,14 @@ function eternityAnimation() {
 
 function eternityResetRequest() {
   if (!Player.canEternity) return;
-  if (player.options.animations.eternity) {
+  if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
+    undilationAnimation();
+    setTimeout(eternity, 1000);
+  } else if (player.options.animations.eternity && document.body.style.animation === "") {
     eternityAnimation();
-    setTimeout(eternity, 2000);
+    setTimeout(eternity, 2250);
   } else {
-    eternity(force, auto, specialConditions);
+    eternity();
   }
 }
 

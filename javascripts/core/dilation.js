@@ -1,7 +1,14 @@
 "use strict";
 
 function dilationAnimation() {
-  document.body.style.animation = "dilation 2s 1 linear";
+  document.body.style.animation = "dilate 2s 1 linear";
+  setTimeout(() => {
+      document.body.style.animation = "";
+  }, 2000);
+}
+
+function undilationAnimation() {
+  document.body.style.animation = "undilate 2s 1 linear";
   setTimeout(() => {
       document.body.style.animation = "";
   }, 2000);
@@ -9,11 +16,18 @@ function dilationAnimation() {
 
 function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
+  if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
+    undilationAnimation();
+    setTimeout(() => {
+      eternity(false, false, { switchingDilation: true });
+    }, 1000);
+    return;
+  }
   if (player.dilation.active) {
     eternity(false, false, { switchingDilation: true });
     return;
   }
-  if (player.options.animations.dilation) {
+  if (player.options.animations.dilation && document.body.style.animation === "") {
     dilationAnimation();
     setTimeout(startDilatedEternity, 1000);
   } else {

@@ -55,6 +55,23 @@ function giveEternityRewards(auto) {
   }
 }
 
+function eternityAnimation() {
+  document.body.style.animation = "eternify 3s 1, shake 0.5s 4";
+  setTimeout(() => {
+      document.body.style.animation = "";
+  }, 3000);
+}
+
+function eternityResetRequest() {
+  if (!Player.canEternity) return;
+  if (player.options.animations.eternity) {
+    eternityAnimation();
+    setTimeout(eternity, 2000);
+  } else {
+    eternity(force, auto, specialConditions);
+  }
+}
+
 function eternity(force, auto, specialConditions = {}) {
   if (specialConditions.switchingDilation && !Player.canEternity) {
     // eslint-disable-next-line no-param-reassign

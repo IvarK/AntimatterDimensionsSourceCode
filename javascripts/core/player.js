@@ -545,6 +545,7 @@ let player = {
       floatingText: true,
       bigCrunch: true,
       eternity: true,
+      dilation: true,
       tachyonParticles: true,
       reality: true,
       background: true

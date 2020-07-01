@@ -1001,48 +1001,89 @@ screen and (max-width: 480px) {
 }
 
 @keyframes barrelRoll {
-    0%  {transform: rotateZ(0deg);}
-    50% {transform: rotateZ(360deg);}
-    100% {transform: rotateZ(360deg);}
+  0%  {transform: rotateZ(0deg);}
+  50%,
+  100% {transform: rotateZ(360deg);}
 }
 
 @keyframes spin3d {
-    0%  {transform: rotate3d(5.2, -2.8, 1.4, 0deg);}
-    100% {transform: rotate3d(5.2, -2.8, 1.4, 360deg);}
+  0% {transform: rotate3d(5.2, -2.8, 1.4, 0deg);}
+  100% {transform: rotate3d(5.2, -2.8, 1.4, 360deg);}
 }
 
 @keyframes spin4d {
-    0%  {transform: scale(1) rotate3d(5.2, -2.8, 1.4, 0deg);}
-    50%  {transform: scale(0) rotate3d(5.2, -2.8, 1.4, 360deg);}
-    100% {transform: scale(1) rotate3d(5.2, -2.8, 1.4, 0deg);}
+  0%,
+  100% {transform: scale(1) rotate3d(5.2, -2.8, 1.4, 0deg);}
+  50% {transform: scale(0) rotate3d(5.2, -2.8, 1.4, 360deg);}
 }
 
 @keyframes float {
-    0% { bottom: 0; opacity: 0;}
-    50% {opacity: 1; }
-    100% { bottom: 50px; opacity: 0;}
+  0% { bottom: 0; opacity: 0;}
+  50% {opacity: 1; }
+  100% { bottom: 50px; opacity: 0;}
 }
 
 @keyframes implode {
-    0% {transform:scale(1); filter:blur(0)}
-    50% {transform:scale(0); filter:blur(5px)}
-    100% {transform:scale(1); filter:blur(0)}
+  0%,
+  100% {transform:scale(1); filter:blur(0)}
+  50% {transform:scale(0); filter:blur(5px)}
+}
+
+@keyframes eternify {
+  0% {transform:scale(1); filter:blur(0); opacity: 1;}
+  16% {transform:scale(1); filter:blur(1px); opacity: 0.75;}
+  33% {transform:scale(1); filter:blur(3px); opacity: 0.5;}
+  50% {transform:scale(1); filter:blur(3px); opacity: 0.25;}
+  66% {transform:scale(1); filter:blur(3px); opacity: 0;}
+  67% {transform:scale(10); filter:blur(5px); opacity: 0;}
+  100% {transform:scale(1); filter:blur(0); opacity: 1;}
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70% {
+    transform: translateX(-10px);
+  }
+  20%,
+  40%,
+  60% {
+    transform: translateX(10px);
+  }
+  80% {
+    transform: translateX(8px);
+  }
+  90% {
+    transform: translateX(-8px);
+  }
+}
+
+@keyframes dilation {
+  0% {transform: scale(1) rotateZ(0deg); opacity: 1}
+  50% {transform: scale(2) rotateZ(180deg); opacity: 0}
+  60% {transform: scale(1) rotateZ(0); opacity: 0}
+  100% {transform: scale(1) rotateZ(0); opacity: 1}
 }
 
 @keyframes realize {
-    0% {opacity: 1;}
-    20% {opacity: 0;}
-    80% {opacity: 0;}
-    100% {opacity: 1;}
+  0% {opacity: 1;}
+  20% {opacity: 0;}
+  80% {opacity: 0;}
+  100% {opacity: 1;}
 }
 
 @keyframes realizebg {
-    0% {opacity: 0;}
-    20% {opacity: 0;}
-    30% {opacity: 1;}
-    70% {opacity: 1;}
-    80% {opacity: 0;}
-    100% {opacity: 0;}
+  0% {opacity: 0;}
+  20% {opacity: 0;}
+  30% {opacity: 1;}
+  70% {opacity: 1;}
+  80% {opacity: 0;}
+  100% {opacity: 0;}
 }
 
 @keyframes text-grow {

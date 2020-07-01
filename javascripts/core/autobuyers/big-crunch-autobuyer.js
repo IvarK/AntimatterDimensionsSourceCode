@@ -87,7 +87,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
       }
     }
     if (proc) {
-      bigCrunchResetRequest();
+      bigCrunchResetRequest(true);
     }
   }
 

@@ -18,7 +18,7 @@ GameKeyboard.bindRepeatableHotkey("r", () => replicantiGalaxy());
 GameKeyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());
 GameKeyboard.bindRepeatableHotkey("shift+t", () => buyTickSpeed());
 GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
-GameKeyboard.bindRepeatableHotkey("e", () => eternity());
+GameKeyboard.bindRepeatableHotkey("e", () => eternityResetRequest());
 
 // We need to know whether the player is holding R or not for the
 // replicanti galaxy

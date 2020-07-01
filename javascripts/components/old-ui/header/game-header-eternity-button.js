@@ -133,7 +133,7 @@ Vue.component("game-header-eternity-button", {
       v-if="isVisible"
       :class="buttonTypeClass"
       class="o-prestige-btn l-game-header__eternity-btn"
-      onclick="eternity()"
+      onclick="eternityResetRequest()"
     >
       <!-- First time -->
       <template v-if="type === 0">

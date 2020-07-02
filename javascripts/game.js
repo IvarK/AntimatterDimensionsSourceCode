@@ -706,10 +706,55 @@ function recursiveTimeOut(fn, iterations, endFn) {
 
 function afterSimulation(seconds, playerStart) {
   if (seconds > 1000) {
-    const offlineIncreases = [];
-    // OoM increase
-    const oomVarNames = ["antimatter", "infinityPower", "timeShards"];
-    const oomResourceNames = ["antimatter", "infinity power", "time shards"];
+    Modal.awayProgress.show({ playerBefore: playerStart, playerAfter: player });
+    /*const resourceValues = {
+      antimatter: {
+        before: playerStart.antimatter,
+        after: player.antimatter,
+        get changed() { return this.before.eq(this.after); }
+      },
+      infinityPoints: {
+        before: playerStart.infinityPoints,
+        after: player.infinityPoints,
+        get changed() { return this.before.eq(this.after); }
+      },
+      eternityPoints: {
+        before: playerStart.eternityPoints,
+        after: player.eternityPoints,
+        get changed() { return this.before.eq(this.after); }
+      },
+      realityMachines: {
+        before: playerStart.reality.realityMachines,
+        after: player.reality.realityMachines,
+        get changed() { return this.before.eq(this.after); }
+      },
+      dilatedTime: {
+        before: playerStart.dilation.dilatedTime,
+        after: player.dilation.dilatedTime,
+        get changed() { return this.before.eq(this.after); }
+      },
+      infinities: {
+        before: playerStart.dilation.infinities,
+        after: player.dilation.infinities,
+        get changed() { return this.before.eq(this.after); }
+      },
+      eternities: {
+        before: playerStart.dilation.eternities,
+        after: player.dilation.eternities,
+        get changed() { return this.before.eq(this.after); }
+      },
+      realities: {
+        before: playerStart.dilation.realities,
+        after: player.dilation.realities,
+        get changed() { return this.before === this.after; }
+      },
+      singularities: {
+        before: playerStart.celestials.laitela.singularities,
+        after: player.celestials.laitela.singularities,
+        get changed() { return this.before === this.after; }
+      }
+    };
+    console.log(resourceValues);
     for (let i = 0; i < oomVarNames.length; i++) {
       const varName = oomVarNames[i];
       const oomIncrease = player[varName].log10() - playerStart[varName].log10();
@@ -717,21 +762,6 @@ function afterSimulation(seconds, playerStart) {
       if (player[varName].gt(playerStart[varName]) && Number.isFinite(oomIncrease)) {
         offlineIncreases.push(`your ${oomResourceNames[i]} increased by ` +
           `${format(oomIncrease, 2, 2)} orders of magnitude`);
-      }
-    }
-    // Linear increase
-    const linearVarNames = ["infinitied", "eternities"];
-    const linearResourceNames = ["infinities", "eternities"];
-    const prestigeReset = ["eternitied", "realitied"];
-    for (let i = 0; i < linearVarNames.length; i++) {
-      const varName = linearVarNames[i];
-      const linearIncrease = Decimal.sub(player[varName], playerStart[varName]);
-      if (linearIncrease.lessThan(0)) {
-        // This happens when a prestige autobuyer triggers offline and resets the value
-        offlineIncreases.push(`you ${prestigeReset[i]} and then generated ` +
-          `${format(player[varName], 2, 0)} more ${linearResourceNames[i]}`);
-      } else if (!Decimal.eq(player[varName], playerStart[varName])) {
-        offlineIncreases.push(`you generated ${format(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
       }
     }
     // Black Hole activations
@@ -754,7 +784,7 @@ function afterSimulation(seconds, playerStart) {
       const last = offlineIncreases.pop();
       popupString = `While you were away, <br>${offlineIncreases.join(", <br>")}, <br>and ${last}.`;
     }
-    Modal.message.show(popupString);
+    Modal.message.show(popupString);*/
   }
 
   GameUI.notify.showBlackHoles = true;

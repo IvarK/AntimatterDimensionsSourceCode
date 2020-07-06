@@ -11,9 +11,11 @@
 .t-s9 #ui-container {
   --color-text: white;
   --color-base: #1d1b22;
-  --color-accent: rgb(223, 80, 80);
+  --color-accent: #df5050;
   --color-good: #1bbb36;
   --color-good-dark: #138626;
+
+  --color-antimatter: #df5050;
 
   --color-teresa--accent: black;
 
@@ -21,7 +23,8 @@
   --color-laitela--accent: white;
 }
 
-body.t-normal {
+body.t-normal,
+body.t-s9 {
   position: relative;
   color: white;
   background-color: #111014;

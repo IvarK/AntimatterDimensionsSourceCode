@@ -561,6 +561,21 @@ let player = {
       glyphSacrifice: true,
       glyphTrash: true,
       glyphUndo: true,
+    },
+    awayProgress: {
+      antimatter: true,
+      infinityPoints: true,
+      eternityPoints: true,
+      realityMachines: true,
+      dilatedTime: true,
+      infinities: true,
+      eternities: true,
+      realities: true,
+      singularities: true,
+      darkMatter: true,
+      replicanti: true,
+      replicantiGalaxies: true,
+      celestialMemories: true
     }
   },
   IAP: {

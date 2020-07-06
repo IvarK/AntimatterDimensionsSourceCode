@@ -34,6 +34,7 @@ html {
   --color-good-dark: #127A20;
   --color-bad: #B84B5F;
 
+  --color-antimatter: #2196f3;
   --color-infinity: #B67F33;
   --color-eternity: #b341e0;
   --color-reality: #0b600e;
@@ -4824,6 +4825,108 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion c-modal-message*/
+
+/*#region c-modal-away-progress*/
+
+.c-modal-away-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 40rem;
+}
+
+.c-modal-away-progress__header {
+  width: 35rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.c-modal-away-progress__resources div {
+  margin-bottom: 0.2rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 0.1rem solid;
+}
+
+.c-modal-away-progress__resources div:last-of-type {
+  border: none;
+}
+
+.c-modal-away-progress b {
+  text-shadow:
+    0 0 0.2rem black,
+    0 0 0.2rem black,
+    0 0 0.2rem black,
+    0 0 0.2rem black;
+}
+
+.c-modal-away-progress__antimatter {
+  color: var(--color-antimatter)
+}
+
+.t-dark .c-modal-away-progress__antimatter,
+.t-s6 .c-modal-away-progress__antimatter {
+  animation: a-game-header__antimatter--glow 25s infinite;  
+}
+
+.c-modal-away-progress__infinity-points {
+  color: var(--color-infinity);
+}
+
+.c-modal-away-progress__eternity-points {
+  color: var(--color-eternity);
+}
+
+.c-modal-away-progress__reality-machines {
+  color: var(--color-reality);
+}
+
+.c-modal-away-progress__dilated-time {
+  color: #64dd17;
+}
+
+.c-modal-away-progress__infinities {
+  color: var(--color-infinity);
+}
+
+.c-modal-away-progress__eternities {
+  color: var(--color-eternity);
+}
+
+.c-modal-away-progress__realities {
+  color: var(--color-reality);
+}
+
+b.c-modal-away-progress__singularities {
+  color: var(--color-laitela--base);
+  text-shadow:
+    0 0 0.2rem var(--color-laitela--accent),
+    0 0 0.2rem var(--color-laitela--accent),
+    0 0 0.2rem var(--color-laitela--accent),
+    0 0 0.2rem var(--color-laitela--accent);
+}
+
+.c-modal-away-progress__replicanti {
+  color: #03a9f4;
+}
+
+.c-modal-away-progress__teresa {
+  color: #8596ea;
+}
+
+.c-modal-away-progress__effarig {
+  color: #ea8585;
+}
+
+.c-modal-away-progress__enslaved {
+  color: #f1aa7f;
+}
+
+.c-modal-away-progress__v {
+  color: #ead584;
+}
+
+/*#endregion c-modal-away-progress*/
 
 /*#region c-modal-import*/
 

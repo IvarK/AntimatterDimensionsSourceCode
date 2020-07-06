@@ -704,68 +704,12 @@ function recursiveTimeOut(fn, iterations, endFn) {
   else setTimeout(() => recursiveTimeOut(fn, iterations - 1, endFn), 0);
 }
 
-function afterSimulation(seconds, playerStart) {
-  if (seconds > 1000) {
-    Modal.awayProgress.show({ playerBefore: playerStart, playerAfter: player });
-    /*const resourceValues = {
-      antimatter: {
-        before: playerStart.antimatter,
-        after: player.antimatter,
-        get changed() { return this.before.eq(this.after); }
-      },
-      infinityPoints: {
-        before: playerStart.infinityPoints,
-        after: player.infinityPoints,
-        get changed() { return this.before.eq(this.after); }
-      },
-      eternityPoints: {
-        before: playerStart.eternityPoints,
-        after: player.eternityPoints,
-        get changed() { return this.before.eq(this.after); }
-      },
-      realityMachines: {
-        before: playerStart.reality.realityMachines,
-        after: player.reality.realityMachines,
-        get changed() { return this.before.eq(this.after); }
-      },
-      dilatedTime: {
-        before: playerStart.dilation.dilatedTime,
-        after: player.dilation.dilatedTime,
-        get changed() { return this.before.eq(this.after); }
-      },
-      infinities: {
-        before: playerStart.dilation.infinities,
-        after: player.dilation.infinities,
-        get changed() { return this.before.eq(this.after); }
-      },
-      eternities: {
-        before: playerStart.dilation.eternities,
-        after: player.dilation.eternities,
-        get changed() { return this.before.eq(this.after); }
-      },
-      realities: {
-        before: playerStart.dilation.realities,
-        after: player.dilation.realities,
-        get changed() { return this.before === this.after; }
-      },
-      singularities: {
-        before: playerStart.celestials.laitela.singularities,
-        after: player.celestials.laitela.singularities,
-        get changed() { return this.before === this.after; }
-      }
-    };
-    console.log(resourceValues);
-    for (let i = 0; i < oomVarNames.length; i++) {
-      const varName = oomVarNames[i];
-      const oomIncrease = player[varName].log10() - playerStart[varName].log10();
-      // Needs an isFinite check in case it's zero before or afterwards
-      if (player[varName].gt(playerStart[varName]) && Number.isFinite(oomIncrease)) {
-        offlineIncreases.push(`your ${oomResourceNames[i]} increased by ` +
-          `${format(oomIncrease, 2, 2)} orders of magnitude`);
-      }
-    }
+function afterSimulation(seconds, playerBefore) {
+  if (seconds > 600) {
+    const playerAfter = deepmerge.all([{}, player]);
+    Modal.awayProgress.show({ playerBefore, playerAfter, seconds });
     // Black Hole activations
-    for (let i = 0; i < player.blackHole.length; i++) {
+    /*for (let i = 0; i < player.blackHole.length; i++) {
       const currentActivations = player.blackHole[i].activations;
       const oldActivations = playerStart.blackHole[i].activations;
       const activationsDiff = currentActivations - oldActivations;

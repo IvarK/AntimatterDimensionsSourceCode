@@ -708,27 +708,6 @@ function afterSimulation(seconds, playerBefore) {
   if (seconds > 600) {
     const playerAfter = deepmerge.all([{}, player]);
     Modal.awayProgress.show({ playerBefore, playerAfter, seconds });
-    // Black Hole activations
-    /*for (let i = 0; i < player.blackHole.length; i++) {
-      const currentActivations = player.blackHole[i].activations;
-      const oldActivations = playerStart.blackHole[i].activations;
-      const activationsDiff = currentActivations - oldActivations;
-      const pluralSuffix = activationsDiff === 1 ? " time" : " times";
-      if (activationsDiff > 0 && !BlackHole(i + 1).isPermanent) {
-        offlineIncreases.push(`Black Hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
-      }
-    }
-    let popupString;
-    if (offlineIncreases.length === 0) {
-      popupString = "While you were away... Nothing happened.";
-      SecretAchievement(36).unlock();
-    } else if (offlineIncreases.length === 1) {
-      popupString = `While you were away, <br>${offlineIncreases[0]}.`;
-    } else {
-      const last = offlineIncreases.pop();
-      popupString = `While you were away, <br>${offlineIncreases.join(", <br>")}, <br>and ${last}.`;
-    }
-    Modal.message.show(popupString);*/
   }
 
   GameUI.notify.showBlackHoles = true;

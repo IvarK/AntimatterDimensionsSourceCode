@@ -4866,7 +4866,7 @@ screen and (max-width: 480px) {
 
 .t-dark .c-modal-away-progress__antimatter,
 .t-s6 .c-modal-away-progress__antimatter {
-  animation: a-game-header__antimatter--glow 25s infinite;  
+  animation: a-game-header__antimatter--glow 25s infinite;
 }
 
 .c-modal-away-progress__infinity-points {

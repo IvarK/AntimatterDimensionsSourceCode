@@ -4906,6 +4906,12 @@ b.c-modal-away-progress__singularities {
     0 0 0.2rem var(--color-laitela--accent);
 }
 
+b.c-modal-away-progress__black-hole {
+  text-shadow:
+    0 0 0.2rem #e67919,
+    0 0 0.3rem #e67919;
+}
+
 .c-modal-away-progress__replicanti {
   color: #03a9f4;
 }

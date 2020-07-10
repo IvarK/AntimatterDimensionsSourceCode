@@ -18,7 +18,8 @@ Vue.component("modal-away-progress", {
       darkMatter: false,
       replicanti: false,
       replicantiGalaxies: false,
-      celestialMemories: false
+      celestialMemories: false,
+      blackHole: false
     };
   },
   computed: {
@@ -44,7 +45,8 @@ Vue.component("modal-away-progress", {
           (!after.celestials.laitela.matter.gt(before.celestials.laitela.matter) || !this.darkMatter) &&
           (!after.replicanti.amount.gt(before.replicanti.amount) || !this.replicanti) &&
           (after.replicanti.galaxies <= before.replicanti.galaxies || !this.replicantiGalaxies) &&
-          !this.celestialMemoriesShown
+          !this.celestialMemoriesShown &&
+          !this.blackHoleShown
          ) {
         SecretAchievement(36).unlock();
         return `While you were away for ${TimeSpan.fromSeconds(this.modalConfig.seconds).toString()}...
@@ -56,6 +58,14 @@ Vue.component("modal-away-progress", {
       for (const petName in this.before.celestials.ra.pets) {
         if (this.after.celestials.ra.pets[petName].level > this.before.celestials.ra.pets[petName].level &&
             player.options.awayProgress.celestialMemories) return true;
+      }
+    return false;
+    },
+    blackHoleShown() {
+      if ((this.after.blackHole[0].activations > this.before.blackHole[0].activations ||
+          this.after.blackHole[1].activations > this.before.blackHole[1].activations) &&
+          player.options.awayProgress.blackHole) {
+        return true;
       }
     return false;
     }
@@ -78,11 +88,7 @@ Vue.component("modal-away-progress", {
       this.celestialMemories = options.celestialMemories;
     },
     formatPseudo(number) {
-      if (typeof number === "object") {
-        if (number.lt(1e9)) return formatInt(number);
-        return format(number, 2, 2);
-      }
-      if (number < 1e9) return formatInt(number);
+      if (Decimal.lt(number, 1e9)) return formatInt(number);
       return format(number, 2, 2);  
     }
   },
@@ -168,17 +174,32 @@ Vue.component("modal-away-progress", {
           <br>
           </span>
           <span v-if="after.celestials.ra.pets.enslaved.level > before.celestials.ra.pets.enslaved.level">
-          <b class="c-modal-away-progress__enslaved">Enslaved's  Celestial Memory</b> increased from
+          <b class="c-modal-away-progress__enslaved">Enslaved's Celestial Memory</b> increased from
           <br>
           level {{ formatInt(before.celestials.ra.pets.enslaved.level) }} to
           level {{ formatInt(after.celestials.ra.pets.enslaved.level) }}
           <br>
           </span>
           <span v-if="after.celestials.ra.pets.v.level > before.celestials.ra.pets.v.level">
-          <b class="c-modal-away-progress__v">V's  Celestial Memory</b> increased from
+          <b class="c-modal-away-progress__v">V's Celestial Memory</b> increased from
           <br>
           level {{ formatInt(before.celestials.ra.pets.v.level) }} to
           level {{ formatInt(after.celestials.ra.pets.v.level) }}
+          </span>
+        </div>
+        <div v-if="blackHoleShown">
+          <span v-if="after.blackHole[0].activations > before.blackHole[0].activations">
+          Your <span v-if="before.blackHole[1].unlocked">first </span>
+          <b class="c-modal-away-progress__black-hole">Black Hole</b>
+          activated {{ formatInt(after.blackHole[0].activations - before.blackHole[0].activations) }}
+          {{"time" | pluralize(after.blackHole[0].activations - before.blackHole[0].activations)}}
+          <br>
+          </span>
+          <span v-if="after.blackHole[1].activations > before.blackHole[1].activations">
+          Your second <b class="c-modal-away-progress__black-hole">Black Hole</b>
+          activated {{ formatInt(after.blackHole[1].activations - before.blackHole[1].activations) }}
+          {{"time" | pluralize(after.blackHole[1].activations - before.blackHole[1].activations)}}
+          <br>
           </span>
         </div>
       </div>

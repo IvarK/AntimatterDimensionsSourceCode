@@ -575,7 +575,8 @@ let player = {
       darkMatter: true,
       replicanti: true,
       replicantiGalaxies: true,
-      celestialMemories: true
+      celestialMemories: true,
+      blackHole: true
     }
   },
   IAP: {

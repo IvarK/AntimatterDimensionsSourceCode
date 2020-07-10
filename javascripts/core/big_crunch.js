@@ -7,13 +7,6 @@ function bigCrunchAnimation() {
   }, 2000);
 }
 
-function eternityAnimation() {
-  document.body.style.animation = "eternify 3s 1, shake 0.5s 4";
-  setTimeout(() => {
-      document.body.style.animation = "";
-  }, 3000);
-}
-
 function handleChallengeCompletion() {
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   if (!challenge && !NormalChallenge(1).isCompleted) {

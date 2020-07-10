@@ -16,6 +16,12 @@ function undilationAnimation() {
 
 function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
+  if (player.options.confirmations.dilation) {
+    if (!confirm(`Dilating time will start a new eternity, and all of your Dimension/Infinity
+    Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to
+    ^ 0.75. If you can eternity while Dilated, you'll be rewarded with tachyon particles based on your
+    antimatter and tachyon particles.`)) return;
+  }
   if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
     undilationAnimation();
     setTimeout(() => {
@@ -40,13 +46,6 @@ function startDilatedEternity(auto) {
   if (player.dilation.active) {
       eternity(false, auto, { switchingDilation: true });
       return;
-  }
-  if (!auto && player.options.confirmations.dilation) {
-    const confirmationMessage = "Dilating time will start a new eternity, and all of your Dimension/Infinity" +
-      " Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to" +
-      " ^ 0.75. If you can eternity while Dilated, you'll be rewarded with tachyon particles based on your" +
-      " antimatter and tachyon particles.";
-    if (!confirm(confirmationMessage)) return;
   }
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });

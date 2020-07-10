@@ -42,6 +42,7 @@ Vue.component("modal-animation-options", {
       this.floatingText = options.floatingText;
       this.bigCrunch = options.bigCrunch;
       this.eternity = options.eternity;
+      this.dilation = options.dilation;
       this.tachyonParticles = options.tachyonParticles;
       this.reality = options.reality;
       this.background = options.background;

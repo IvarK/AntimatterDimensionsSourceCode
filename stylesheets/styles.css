@@ -4926,6 +4926,10 @@ b.c-modal-away-progress__singularities {
   color: #ead584;
 }
 
+.c-modal-away-progress__black-hole {
+  color: black;
+}
+
 /*#endregion c-modal-away-progress*/
 
 /*#region c-modal-import*/

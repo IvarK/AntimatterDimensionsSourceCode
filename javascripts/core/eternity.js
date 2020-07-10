@@ -64,6 +64,7 @@ function eternityAnimation() {
 
 function eternityResetRequest() {
   if (!Player.canEternity) return;
+  if (!askEternityConfirmation()) return;
   if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
     undilationAnimation();
     setTimeout(eternity, 1000);
@@ -84,7 +85,6 @@ function eternity(force, auto, specialConditions = {}) {
     player.challenge.eternity.current = 0;
   } else {
     if (!Player.canEternity) return false;
-    if (!auto && !askEternityConfirmation()) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     giveEternityRewards(auto);
     // If somehow someone manages to force their first eternity

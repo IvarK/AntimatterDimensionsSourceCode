@@ -8,6 +8,7 @@ Vue.component("modal-away-progress-options", {
       dilationUnlocked: false,
       raUnlocked: false,
       laitelaUnlocked: false,
+      blackHoleUnlocked: false,
       antimatter: false,
       infinityPoints: false,
       eternityPoints: false,
@@ -20,7 +21,8 @@ Vue.component("modal-away-progress-options", {
       darkMatter: false,
       replicanti: false,
       replicantiGalaxies: false,
-      celestialMemories: false
+      celestialMemories: false,
+      blackHole: false
     };
   },
   watch: {
@@ -63,6 +65,9 @@ Vue.component("modal-away-progress-options", {
     celestialMemories(newValue) {
       player.options.awayProgress.celestialMemories = newValue;
     },
+    blackHole(newValue) {
+      player.options.awayProgress.blackHole = newValue;
+    },
   },
   methods: {
     update() {
@@ -70,6 +75,7 @@ Vue.component("modal-away-progress-options", {
       this.dilationUnlocked = PlayerProgress.dilationUnlocked();
       this.raUnlocked = V.has(V_UNLOCKS.RA_UNLOCK);
       this.laitelaUnlocked = Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK);
+      this.blackHoleUnlocked = BlackHoles.list[0].isUnlocked;
 
       const options = player.options.awayProgress;
       this.antimatter = options.antimatter;
@@ -85,6 +91,7 @@ Vue.component("modal-away-progress-options", {
       this.replicanti = options.replicanti;
       this.replicantiGalaxies = options.replicantiGalaxies;
       this.celestialMemories = options.celestialMemories;
+      this.blackHole = options.blackHole;
     }
   },
   template:
@@ -103,6 +110,7 @@ Vue.component("modal-away-progress-options", {
         <wide-on-off-button v-if="replicantiUnlocked" v-model="replicanti" text="Replicanti:"/>
         <wide-on-off-button v-if="replicantiUnlocked" v-model="replicantiGalaxies" text="Replicanti Galaxies:"/>
         <wide-on-off-button v-if="raUnlocked" v-model="celestialMemories" text="Celestial Memories:"/>
+        <wide-on-off-button v-if="blackHoleUnlocked" v-model="blackHole" text="Black Hole:"/>
       </div>
     Note: Selected resources will only show if they've increased.
     </modal-options>`

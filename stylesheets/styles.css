@@ -34,6 +34,7 @@ html {
   --color-good-dark: #127A20;
   --color-bad: #B84B5F;
 
+  --color-antimatter: #2196f3;
   --color-infinity: #B67F33;
   --color-eternity: #b341e0;
   --color-reality: #0b600e;
@@ -1001,48 +1002,73 @@ screen and (max-width: 480px) {
 }
 
 @keyframes barrelRoll {
-    0%  {transform: rotateZ(0deg);}
-    50% {transform: rotateZ(360deg);}
-    100% {transform: rotateZ(360deg);}
+  0%  {transform: rotateZ(0deg);}
+  50%,
+  100% {transform: rotateZ(360deg);}
 }
 
 @keyframes spin3d {
-    0%  {transform: rotate3d(5.2, -2.8, 1.4, 0deg);}
-    100% {transform: rotate3d(5.2, -2.8, 1.4, 360deg);}
+  0% {transform: rotate3d(5.2, -2.8, 1.4, 0deg);}
+  100% {transform: rotate3d(5.2, -2.8, 1.4, 360deg);}
 }
 
 @keyframes spin4d {
-    0%  {transform: scale(1) rotate3d(5.2, -2.8, 1.4, 0deg);}
-    50%  {transform: scale(0) rotate3d(5.2, -2.8, 1.4, 360deg);}
-    100% {transform: scale(1) rotate3d(5.2, -2.8, 1.4, 0deg);}
+  0%,
+  100% {transform: scale(1) rotate3d(5.2, -2.8, 1.4, 0deg);}
+  50% {transform: scale(0) rotate3d(5.2, -2.8, 1.4, 360deg);}
 }
 
 @keyframes float {
-    0% { bottom: 0; opacity: 0;}
-    50% {opacity: 1; }
-    100% { bottom: 50px; opacity: 0;}
+  0% { bottom: 0; opacity: 0;}
+  50% {opacity: 1; }
+  100% { bottom: 50px; opacity: 0;}
 }
 
 @keyframes implode {
-    0% {transform:scale(1); filter:blur(0)}
-    50% {transform:scale(0); filter:blur(5px)}
-    100% {transform:scale(1); filter:blur(0)}
+  0%,
+  100% {transform:scale(1); filter:blur(0)}
+  50% {transform:scale(0); filter:blur(5px)}
+}
+
+@keyframes eternify {
+  0% {opacity: 1; filter: blur(0);}
+  15% {opacity: 0.5; filter: blur(1px);}
+  30% {opacity: 0.75; filter: blur(0.5px);}
+  45% {opacity: 0.25; filter: blur(1.5px);}
+  60% {opacity: 0.5; filter: blur(1px);}
+  75% {opacity: 0; filter: blur(3px);}
+  85% {opacity: 0; filter: blur(3px);}
+  100% {opacity: 1; filter: blur(0);}
+}
+
+@keyframes dilate {
+  0% {transform: scaleX(1); opacity: 1}
+  50% {transform: scaleX(3); opacity: 0}
+  60% {transform: scaleX(1); opacity: 0}
+  100% {transform: scaleX(1); opacity: 1}
+}
+
+@keyframes undilate {
+  0% {transform: scaleX(1); opacity: 1}
+  50% {transform: scaleX(0.5); opacity: 0}
+  60% {transform: scaleX(1); opacity: 0}
+  100% {transform: scaleX(1); opacity: 1}
 }
 
 @keyframes realize {
-    0% {opacity: 1;}
-    20% {opacity: 0;}
-    80% {opacity: 0;}
-    100% {opacity: 1;}
+  0% {opacity: 1;}
+  20% {opacity: 0;}
+  80% {opacity: 0;}
+  100% {opacity: 1;}
 }
 
 @keyframes realizebg {
-    0% {opacity: 0;}
-    20% {opacity: 0;}
-    30% {opacity: 1;}
-    70% {opacity: 1;}
-    80% {opacity: 0;}
-    100% {opacity: 0;}
+  0% {opacity: 0;}
+  20% {opacity: 0;}
+  30% {opacity: 1;}
+  70% {opacity: 1;}
+  80% {opacity: 0;}
+  100% {opacity: 0;}
 }
 
 @keyframes text-grow {
@@ -4799,6 +4825,118 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion c-modal-message*/
+
+/*#region c-modal-away-progress*/
+
+.c-modal-away-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 40rem;
+}
+
+.c-modal-away-progress__header {
+  width: 35rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.c-modal-away-progress__resources div {
+  margin-bottom: 0.2rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 0.1rem solid;
+}
+
+.c-modal-away-progress__resources div:last-of-type {
+  border: none;
+}
+
+.c-modal-away-progress b {
+  text-shadow:
+    0 0 0.2rem black,
+    0 0 0.2rem black,
+    0 0 0.2rem black,
+    0 0 0.2rem black;
+}
+
+.c-modal-away-progress__antimatter {
+  color: var(--color-antimatter)
+}
+
+.t-dark .c-modal-away-progress__antimatter,
+.t-s6 .c-modal-away-progress__antimatter {
+  animation: a-game-header__antimatter--glow 25s infinite;
+}
+
+.c-modal-away-progress__infinity-points {
+  color: var(--color-infinity);
+}
+
+.c-modal-away-progress__eternity-points {
+  color: var(--color-eternity);
+}
+
+.c-modal-away-progress__reality-machines {
+  color: var(--color-reality);
+}
+
+.c-modal-away-progress__dilated-time {
+  color: #64dd17;
+}
+
+.c-modal-away-progress__infinities {
+  color: var(--color-infinity);
+}
+
+.c-modal-away-progress__eternities {
+  color: var(--color-eternity);
+}
+
+.c-modal-away-progress__realities {
+  color: var(--color-reality);
+}
+
+b.c-modal-away-progress__singularities {
+  color: var(--color-laitela--base);
+  text-shadow:
+    0 0 0.2rem var(--color-laitela--accent),
+    0 0 0.2rem var(--color-laitela--accent),
+    0 0 0.2rem var(--color-laitela--accent),
+    0 0 0.2rem var(--color-laitela--accent);
+}
+
+b.c-modal-away-progress__black-hole {
+  text-shadow:
+    0 0 0.2rem #e67919,
+    0 0 0.3rem #e67919;
+}
+
+.c-modal-away-progress__replicanti {
+  color: #03a9f4;
+}
+
+.c-modal-away-progress__teresa {
+  color: #8596ea;
+}
+
+.c-modal-away-progress__effarig {
+  color: #ea8585;
+}
+
+.c-modal-away-progress__enslaved {
+  color: #f1aa7f;
+}
+
+.c-modal-away-progress__v {
+  color: #ead584;
+}
+
+.c-modal-away-progress__black-hole {
+  color: black;
+}
+
+/*#endregion c-modal-away-progress*/
 
 /*#region c-modal-import*/
 

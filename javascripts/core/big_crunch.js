@@ -23,10 +23,9 @@ function handleChallengeCompletion() {
 
 function bigCrunchResetRequest(disableAnimation = false) {
   if (!Player.canCrunch) return;
-  const earlyGame = player.bestInfinityTime > 60000 && !player.break;
-  if (earlyGame && !disableAnimation && player.options.animations.bigCrunch) {
+  if (!disableAnimation && player.options.animations.bigCrunch && document.body.style.animation === "") {
     bigCrunchAnimation();
-    setTimeout(bigCrunchReset(), 1000);
+    setTimeout(bigCrunchReset, 1000);
   } else {
     bigCrunchReset();
   }

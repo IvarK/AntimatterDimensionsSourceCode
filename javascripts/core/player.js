@@ -545,6 +545,7 @@ let player = {
       floatingText: true,
       bigCrunch: true,
       eternity: true,
+      dilation: true,
       tachyonParticles: true,
       reality: true,
       background: true
@@ -559,6 +560,22 @@ let player = {
       glyphReplace: true,
       glyphSacrifice: true,
       glyphUndo: true,
+    },
+    awayProgress: {
+      antimatter: true,
+      infinityPoints: true,
+      eternityPoints: true,
+      realityMachines: true,
+      dilatedTime: true,
+      infinities: true,
+      eternities: true,
+      realities: true,
+      singularities: true,
+      darkMatter: true,
+      replicanti: true,
+      replicantiGalaxies: true,
+      celestialMemories: true,
+      blackHole: true
     }
   },
   IAP: {

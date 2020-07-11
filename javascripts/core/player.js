@@ -557,7 +557,6 @@ let player = {
       harshAutoClean: true,
       glyphReplace: true,
       glyphSacrifice: true,
-      glyphTrash: true,
       glyphUndo: true,
     },
     awayProgress: {

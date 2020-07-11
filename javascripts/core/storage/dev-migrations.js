@@ -730,6 +730,9 @@ GameStorage.devMigrations = {
       };
     },
     player => {
+      delete player.options.confirmations.glyphTrash;
+    },
+    player => {
       GameStorage.migrations.standardizeUncompletedTimes(player);
       if (player.bestReality === 999999999999) player.bestReality = Number.MAX_VALUE;
       if (player.bestRealityRealTime === 999999999999) player.bestRealityRealTime = Number.MAX_VALUE;

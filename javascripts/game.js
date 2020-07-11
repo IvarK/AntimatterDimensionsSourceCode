@@ -166,7 +166,7 @@ function addInfinityTime(time, realTime, ip, infinities) {
 function resetInfinityRuns() {
   player.lastTenRuns = Array.from(
     { length: 10 },
-    () => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]
+    () => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]
   );
   GameCache.bestRunIPPM.invalidate();
 }
@@ -189,7 +189,7 @@ function addEternityTime(time, realTime, ep, eternities) {
 function resetEternityRuns() {
   player.lastTenEternities = Array.from(
     { length: 10 },
-    () => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]
+    () => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]
   );
   GameCache.averageRealTimePerEternity.invalidate();
 }
@@ -759,9 +759,6 @@ function simulateTime(seconds, real, fast) {
       );
   }
 
-  ui.view.modal.progressBar = {};
-  ui.view.modal.progressBar.label = "Simulating offline time...";
-
   let loopFn = () => gameLoop(largeDiff);
   let remainingRealSeconds = seconds;
   // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
@@ -774,32 +771,44 @@ function simulateTime(seconds, real, fast) {
     };
   }
 
-  Async.run(loopFn,
-    ticks,
-    {
-      batchSize: 1,
-      maxTime: 60,
-      sleepTime: 1,
-      asyncEntry: doneSoFar => {
-        GameIntervals.stop();
-        ui.$viewModel.modal.progressBar = {
-          label: "Simulating offline time...",
-          current: doneSoFar,
-          max: ticks,
-        };
-      },
-      asyncProgress: doneSoFar => {
-        ui.$viewModel.modal.progressBar.current = doneSoFar;
-      },
-      asyncExit: () => {
-        ui.$viewModel.modal.progressBar = undefined;
-        // .postLoadStuff will restart GameIntervals
-        GameStorage.postLoadStuff();
-      },
-      then: () => {
-        afterSimulation(seconds, playerStart);
-      }
-    });
+  // We don't show the offline modal here or bother with async if doing a fast simulation
+  if (fast) {
+    GameIntervals.stop();
+    for (let i = 0; i < 50; i++) {
+      loopFn();
+    }
+    GameStorage.postLoadStuff();
+    afterSimulation(seconds, playerStart);
+  } else {
+    ui.view.modal.progressBar = {};
+    ui.view.modal.progressBar.label = "Simulating offline time...";
+    Async.run(loopFn,
+      ticks,
+      {
+        batchSize: 1,
+        maxTime: 60,
+        sleepTime: 1,
+        asyncEntry: doneSoFar => {
+          GameIntervals.stop();
+          ui.$viewModel.modal.progressBar = {
+            label: "Simulating offline time...",
+            current: doneSoFar,
+            max: ticks,
+          };
+        },
+        asyncProgress: doneSoFar => {
+          ui.$viewModel.modal.progressBar.current = doneSoFar;
+        },
+        asyncExit: () => {
+          ui.$viewModel.modal.progressBar = undefined;
+          // .postLoadStuff will restart GameIntervals
+          GameStorage.postLoadStuff();
+        },
+        then: () => {
+          afterSimulation(seconds, playerStart);
+        }
+      });
+  }
 }
 
 function autoBuyDilationUpgrades(extraFactor) {

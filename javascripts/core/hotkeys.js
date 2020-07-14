@@ -48,7 +48,6 @@ function toggleBuySingles(id) {
   return false;
 }
 
-
 GameKeyboard.bindHotkey("alt+t", () => toggleAutobuyer(8));
 GameKeyboard.bindHotkey("shift+alt+t", () => toggleBuySingles(8));
 GameKeyboard.bindHotkey("alt+d", () => toggleAutobuyer(9));
@@ -75,7 +74,10 @@ GameKeyboard.bindHotkey("alt+r", () => {
   for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);
 }());
 
-GameKeyboard.bindHotkey("a", () => Autobuyers.toggle());
+GameKeyboard.bindHotkey("a", () => {
+  Autobuyers.toggle();
+  GameUI.notify.info("Autobuyers " + ((player.options.autobuyersOn) ? "enabled" : "disabled"));
+});
 GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
 GameKeyboard.bindHotkey("u", () => {
   if (player.realities >= 5) { //Automator must be unlocked

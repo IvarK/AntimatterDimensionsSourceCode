@@ -56,7 +56,6 @@ function toggleBuySingles(id) {
 
 
 GameKeyboard.bindHotkey("alt+t", () => toggleAutobuyer(8));
-
 //GameKeyboard.bindHotkey("shift+alt+t", () => toggleBuySingles(8)); Disabled for now because you need to unlock buy max
 GameKeyboard.bindHotkey("alt+d", () => toggleAutobuyer(9));
 GameKeyboard.bindHotkey("alt+g", () => toggleAutobuyer(10));
@@ -84,11 +83,24 @@ GameKeyboard.bindHotkey("alt+r", () => {
 GameKeyboard.bindHotkey("a", () => Autobuyers.toggle());
 GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
 GameKeyboard.bindHotkey("u", () => {
-  if (AutomatorBackend.isRunning) {
-    AutomatorBackend.pause();
+  if (player.realities >= 5) { //Automator must be unlocked
+
+   if (AutomatorBackend.isRunning) {
+      AutomatorBackend.pause();
+      GameUI.notify.info("Pausing script \"" + AutomatorBackend.scriptName + "\" at line " + AutomatorBackend.currentLineNumber);
   }
-  else if (AutomatorBackend.isOn) {
-    AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
+    else if (AutomatorBackend.isOn) {
+      AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
+      GameUI.notify.info("Resuming script \"" + AutomatorBackend.scriptName + "\" from line " + AutomatorBackend.currentLineNumber);
+    }
+  }
+});
+GameKeyboard.bindHotkey("shift+u", () => {
+  if (player.realities >= 5) {
+    GameUI.notify.info((AutomatorBackend.isOn ? "Res" : "S") + "tarting script \"" + AutomatorBackend.scriptName + "\"");
+
+    AutomatorBackend.restart();
+    AutomatorBackend.start();
   }
 });
 

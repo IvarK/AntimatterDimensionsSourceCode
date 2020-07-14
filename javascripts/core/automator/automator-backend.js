@@ -190,6 +190,10 @@ const AutomatorBackend = {
     return this.isOn && this.mode === AUTOMATOR_MODE.RUN;
   },
 
+  get scriptName() {
+    return this.findScript(this.state.topLevelScript).name;
+  },
+
   get currentLineNumber() {
     return this.stack.top.lineNumber;
   },

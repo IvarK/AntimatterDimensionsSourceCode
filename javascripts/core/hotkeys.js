@@ -31,27 +31,21 @@ const AUTOBUYER_NAMES = ["1st Dimension", "2nd Dimension", "3rd Dimension", "4th
 
 // Toggle autobuyers
 function toggleAutobuyer(id) {
-  if (!player.options.autobuyersOn) {
-    return;
-  }
-  
   const buyer = Autobuyers.all[id];
-  if (buyer.isUnlocked) {
+  if (buyer.isUnlocked && player.options.autobuyersOn) {
     buyer.toggle();
     GameUI.notify.info(AUTOBUYER_NAMES[id] + " autobuyer " + ((buyer.isActive) ? "enabled" : "disabled"));
   }
+  return false;
 }
 
 function toggleBuySingles(id) {
-  if (!player.options.autobuyersOn) {
-    return;
-  }
-  
   const buyer = Autobuyers.all[id];
-  if (buyer.isUnlocked && buyer.toggleMode !== null) {
+  if (buyer.isUnlocked && player.options.autobuyersOn && buyer.toggleMode !== null) {
     buyer.toggleMode();
     GameUI.notify.info(AUTOBUYER_NAMES[id] + " autobuyer set to buy " + ((buyer.mode == 1) ? "singles" : "bulk"));
   }
+  return false;
 }
 
 
@@ -67,6 +61,7 @@ GameKeyboard.bindHotkey("alt+r", () => {
   if (buyer.isUnlocked) {
     buyer.toggle();
     GameUI.notify.info("Replicanti Galaxy autobuyer " + ((buyer.isOn) ? "enabled" : "disabled"));
+    return false;
   }
 });
 

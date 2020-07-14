@@ -50,7 +50,7 @@ function toggleBuySingles(id) {
 
 
 GameKeyboard.bindHotkey("alt+t", () => toggleAutobuyer(8));
-//GameKeyboard.bindHotkey("shift+alt+t", () => toggleBuySingles(8)); Disabled for now because you need to unlock buy max
+GameKeyboard.bindHotkey("shift+alt+t", () => toggleBuySingles(8));
 GameKeyboard.bindHotkey("alt+d", () => toggleAutobuyer(9));
 GameKeyboard.bindHotkey("alt+g", () => toggleAutobuyer(10));
 GameKeyboard.bindHotkey("alt+c", () => toggleAutobuyer(11));

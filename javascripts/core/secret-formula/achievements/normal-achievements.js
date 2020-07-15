@@ -237,8 +237,8 @@ GameDatabase.achievements.normal = [
   {
     id: 47,
     name: "Daredevil",
-    tooltip: () => `Complete ${formatInt(2)} challenges (not including the first one).`,
-    checkRequirement: () => NormalChallenges.all.slice(1).countWhere(c => c.isCompleted) >= 2,
+    tooltip: () => `Complete ${formatInt(3)} challenges.`,
+    checkRequirement: () => NormalChallenges.all.countWhere(c => c.isCompleted) >= 3,
     checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
   },
   {

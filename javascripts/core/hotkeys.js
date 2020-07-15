@@ -44,7 +44,7 @@ function toggleBuySingles(id) {
   const buyer = Autobuyers.all[id];
   if (buyer.isUnlocked && player.options.autobuyersOn && buyer.toggleMode !== null) {
     buyer.toggleMode();
-    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} autobuyer set to buy ${(buyer.mode == 1) ? "singles" : "bulk"}`);
+    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} autobuyer set to buy ${(buyer.mode === 1) ? "singles" : "bulk"}`);
   }
   return false;
 }

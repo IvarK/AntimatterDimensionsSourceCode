@@ -44,8 +44,8 @@ function toggleBuySingles(id) {
   const buyer = Autobuyers.all[id];
   if (buyer.isUnlocked && player.options.autobuyersOn && buyer.toggleMode !== null) {
     buyer.toggleMode();
-    let bulkname = (id === 8 || buyer.hasUnlimitedBulk) ? "max" : "10";
-    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} Autobuyer set to buy ${(buyer.mode === 1) ? "singles" : "bulk"}`);
+    const bulkname = (id === 8 || buyer.hasUnlimitedBulk) ? "max" : "10";
+    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} Autobuyer set to buy ${(buyer.mode === 1) ? "singles" : bulkname}`);
   }
   return false;
 }
@@ -90,8 +90,8 @@ GameKeyboard.bindHotkey("u", () => {
     else if (AutomatorBackend.isOn) {
       AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
     }
-    let action = AutomatorBackend.isOn ? "Restarting" : "Starting";
-    let linenum = AutomatorBackend.currentLineNumber;
+    const action = AutomatorBackend.isOn ? "Restarting" : "Starting";
+    const linenum = AutomatorBackend.currentLineNumber;
     GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
 
   }

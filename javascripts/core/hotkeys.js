@@ -90,7 +90,7 @@ GameKeyboard.bindHotkey("u", () => {
     else if (AutomatorBackend.isOn) {
       AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
     }
-    const action = AutomatorBackend.isOn ? "Resuming" : "Pausing";
+    const action = AutomatorBackend.isRunning ? "Resuming" : "Pausing";
     const linenum = AutomatorBackend.currentLineNumber;
     GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
 

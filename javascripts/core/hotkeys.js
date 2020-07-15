@@ -90,7 +90,7 @@ GameKeyboard.bindHotkey("u", () => {
     else if (AutomatorBackend.isOn) {
       AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
     }
-    const action = AutomatorBackend.isOn ? "Restarting" : "Starting";
+    const action = AutomatorBackend.isOn ? "Resuming" : "Pausing";
     const linenum = AutomatorBackend.currentLineNumber;
     GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
 
@@ -98,7 +98,8 @@ GameKeyboard.bindHotkey("u", () => {
 });
 GameKeyboard.bindHotkey("shift+u", () => {
   if (player.realities >= 5) {
-    GameUI.notify.info(`${AutomatorBackend.isOn ? "Res" : "S"}tarting script "${AutomatorBackend.scriptName}"`);
+    const action = AutomatorBackend.isOn ? "Restarting" : "Starting";
+    GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}"`);
 
     AutomatorBackend.restart();
     AutomatorBackend.start();

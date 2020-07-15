@@ -83,14 +83,14 @@ GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
 GameKeyboard.bindHotkey("u", () => {
   // Automator must be unlocked
   if (player.realities >= 5) {
-
-   if (AutomatorBackend.isRunning) {
+   linenum = AutomatorBackend.currentLineNumber;
+    if (AutomatorBackend.isRunning) {
       AutomatorBackend.pause();
-      GameUI.notify.info(`Pausing script "${AutomatorBackend.scriptName}" at line ${AutomatorBackend.currentLineNumber}`);
-  }
+      GameUI.notify.info(`Pausing script "${AutomatorBackend.scriptName}" at line ${linenum}`);
+    }
     else if (AutomatorBackend.isOn) {
       AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
-      GameUI.notify.info(`Resuming script "${AutomatorBackend.scriptName}" at line ${AutomatorBackend.currentLineNumber}`);
+      GameUI.notify.info(`Resuming script "${AutomatorBackend.scriptName}" at line ${linenum}`);
     }
   }
 });

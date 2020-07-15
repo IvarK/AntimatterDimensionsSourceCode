@@ -35,7 +35,7 @@ function toggleAutobuyer(id) {
   const buyer = Autobuyers.all[id];
   if (buyer.isUnlocked && player.options.autobuyersOn) {
     buyer.toggle();
-    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} autobuyer ${(buyer.isActive) ? "enabled" : "disabled"}`);
+    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} Autobuyer ${(buyer.isActive) ? "enabled" : "disabled"}`);
   }
   return false;
 }
@@ -44,7 +44,8 @@ function toggleBuySingles(id) {
   const buyer = Autobuyers.all[id];
   if (buyer.isUnlocked && player.options.autobuyersOn && buyer.toggleMode !== null) {
     buyer.toggleMode();
-    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} autobuyer set to buy ${(buyer.mode === 1) ? "singles" : "bulk"}`);
+    let bulkname = (id === 8 || buyer.hasUnlimitedBulk) ? "max" : "10";
+    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} Autobuyer set to buy ${(buyer.mode === 1) ? "singles" : "bulk"}`);
   }
   return false;
 }
@@ -83,15 +84,16 @@ GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
 GameKeyboard.bindHotkey("u", () => {
   // Automator must be unlocked
   if (player.realities >= 5) {
-   linenum = AutomatorBackend.currentLineNumber;
     if (AutomatorBackend.isRunning) {
       AutomatorBackend.pause();
-      GameUI.notify.info(`Pausing script "${AutomatorBackend.scriptName}" at line ${linenum}`);
     }
     else if (AutomatorBackend.isOn) {
       AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
-      GameUI.notify.info(`Resuming script "${AutomatorBackend.scriptName}" at line ${linenum}`);
     }
+    let action = AutomatorBackend.isOn ? "Restarting" : "Starting";
+    let linenum = AutomatorBackend.currentLineNumber;
+    GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
+
   }
 });
 GameKeyboard.bindHotkey("shift+u", () => {

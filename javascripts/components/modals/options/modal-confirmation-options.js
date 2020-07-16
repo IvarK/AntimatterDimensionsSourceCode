@@ -14,7 +14,7 @@ Vue.component("modal-confirmation-options", {
       glyphSacrifice: false,
       glyphSacrificeUnlocked: false,
       glyphUndo: false,
-      glyphUndoUnlocked: false,
+      glyphUndoUnlocked: false
     };
   },
   watch: {

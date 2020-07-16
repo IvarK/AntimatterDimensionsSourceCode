@@ -4,7 +4,7 @@ class Sacrifice {
   // This is tied to the "buying an 8th dimension" achievement in order to hide it from new players before they reach
   // sacrifice for the first time. It has the side-effect of hiding it in really early reality, which is probably fine.
   static get isVisible() {
-    return Achievement(18).isUnlocked;
+    return Achievement(18).isUnlocked || PlayerProgress.realityUnlocked();
   }
 
   static get canSacrifice() {

@@ -18,11 +18,13 @@ Vue.component("new-dim-boost-row", {
       return AntimatterDimension(this.requirement.tier).shortDisplayName;
     },
     buttonText() {
+      const boosts = this.purchasedBoosts;
+      const newDimension = boosts < 4 ? `unlock the ${boosts + 5}th Dimension, and` : "";
       let dimensionRange = "the 1st Dimension";
-      if (this.purchasedBoosts > 0) dimensionRange = `Dimensions 1-${Math.min(this.purchasedBoosts + 1, 8)}`;
-      if (this.purchasedBoosts >= 7) dimensionRange = `all Dimensions`;
+      if (boosts > 0) dimensionRange = `Dimensions 1-${Math.min(boosts + 1, 8)}`;
+      if (boosts >= 7) dimensionRange = `all Dimensions`;
       return this.lockText === null
-        ? `Reset your Dimensions for a new Dimension and a boost to ${dimensionRange}`
+        ? `Reset your Dimensions to ${newDimension} give a multiplier to ${dimensionRange}`
         : this.lockText;
     },
     boostCountText() {

@@ -115,13 +115,13 @@ const V_UNLOCKS = {
   SHARD_REDUCTION: {
     id: 1,
     reward: () => `You can spend perk points to reduce V-achievement requirements for later tiers.`,
-    description: "Have 2 V-achievements",
+    description: () => `Have ${formatInt(2)} V-achievements`,
     requirement: () => V.spaceTheorems >= 2
   },
   ND_POW: {
     id: 2,
     reward: "Antimatter Dimension power based on Space Theorems.",
-    description: "Have 5 V-achievements",
+    description: () => `Have ${formatInt(5)} V-achievements`,
     effect: () => 1 + Math.sqrt(V.spaceTheorems) / 100,
     format: x => formatPow(x, 3, 3),
     requirement: () => V.spaceTheorems >= 5
@@ -129,7 +129,7 @@ const V_UNLOCKS = {
   FAST_AUTO_EC: {
     id: 3,
     reward: "Achievement multiplier affects auto EC completion time.",
-    description: "Have 10 V-achievements",
+    description: () => `Have ${formatInt(10)} V-achievements`,
     effect: () => Achievements.power,
     // Base rate is 60 ECs at 20 minutes each
     format: x => `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort(false)} for full completion`,
@@ -138,13 +138,13 @@ const V_UNLOCKS = {
   AUTO_AUTOCLEAN: {
     id: 4,
     reward: "Glyph Auto-clean triggers automatically after every automatic reality.",
-    description: "Have 16 V-achievements",
+    description: () => `Have ${formatInt(16)} V-achievements`,
     requirement: () => V.spaceTheorems >= 16
   },
   ACHIEVEMENT_BH: {
     id: 5,
     reward: "Achievement multiplier affects Black Hole power.",
-    description: "Have 30 V-achievements",
+    description: () => `Have ${formatInt(30)} V-achievements`,
     effect: () => Achievements.power,
     format: x => formatX(x, 2, 0),
     requirement: () => V.spaceTheorems >= 30
@@ -152,7 +152,7 @@ const V_UNLOCKS = {
   RA_UNLOCK: {
     id: 6,
     reward: "Reduce the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
-    description: "Have 36 V-achievements",
+    description: () => `Have ${formatInt(36)} V-achievements`,
     requirement: () => V.spaceTheorems >= 36
   }
 };

@@ -979,7 +979,7 @@ Theorems, they are freely given back every time you respec your studies.
 With enough Space Theorems you will eventually be able to purchase every single Time Study at once!
 <br>
 <br>
-Reaching 36 V-achievements (and therefore completing all of V's achievements) unlocks the next Celestial.
+Reaching ${formatInt(36)} V-achievements (and therefore completing all of V's achievements) unlocks the next Celestial.
 `,
       isUnlocked: () => Achievement(151).isUnlocked,
       tags: ["reality", "lategame", "endgame", "girlfriend", "challenges", "achievement", "space", "theorems",

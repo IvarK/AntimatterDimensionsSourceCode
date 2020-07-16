@@ -64,7 +64,7 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {
-      description: () => `Galaxies are 10% stronger and reduce the requirements for them
+      description: () => `Galaxies are ${formatPercents(0.1)} stronger and reduce the requirements for them
         and Dimension Boosts by ${formatInt(1)}`,
       effect: 1.1
     },

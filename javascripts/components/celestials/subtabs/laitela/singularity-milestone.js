@@ -75,9 +75,9 @@ Vue.component("singularity-milestone", {
       }
     },
     completionsDisplay() {
-      if (this.limit === 0) return `${this.completions} ${pluralize("completion", this.completions)}`;
+      if (this.limit === 0) return `${formatInt(this.completions)} ${pluralize("completion", this.completions)}`;
       if (this.isUnique) return this.isMaxed ? "Completed" : "Not completed";
-      return `${this.completions}/${this.limit} ${pluralize("completion", this.completions)}`;
+      return `${formatInt(this.completions)}/${formatInt(this.limit)} ${pluralize("completion", this.completions)}`;
     }
   },
   template: `

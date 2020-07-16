@@ -74,7 +74,8 @@ GameDatabase.infinity.upgrades = (function() {
     resetBoost: {
       id: "resetBoost",
       cost: 1,
-      description: "Decrease the number of Dimensions needed for Dimension Boosts and Antimatter Galaxies by 9",
+      description: () =>
+        `Decrease the number of Dimensions needed for Dimension Boosts and Antimatter Galaxies by ${formatInt(9)}`,
       effect: 9,
       charged: {
         description: "Decrease Dimension Boost requirement based on Teresa level",
@@ -148,7 +149,7 @@ GameDatabase.infinity.upgrades = (function() {
     ipGen: {
       id: "passiveGen",
       cost: 10,
-      description: "Passively generate Infinity Points 10 times slower than your fastest Infinity",
+      description: () => `Passively generate Infinity Points ${formatInt(10)} times slower than your fastest Infinity`,
       // Cutting corners: this is not actual effect (player.infMult is), but
       // it is totalIPMult that is displyed on upgrade
       effect: () => (Teresa.isRunning || V.isRunning ? new Decimal(0) : GameCache.totalIPMult.value),
@@ -199,7 +200,7 @@ GameDatabase.infinity.upgrades = (function() {
     ipOffline: {
       id: "ipOffline",
       cost: 1000,
-      description: "Only while offline, gain 50% of your best IP/min without using Max All",
+      description: () => `Only while offline, gain ${formatPercents(0.5)} of your best IP/min without using Max All`,
       effect: () => player.bestIpPerMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
       formatEffect: value => `${format(value, 2, 2)} IP/min`,
       bannedFromCharging: true

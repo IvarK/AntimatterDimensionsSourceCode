@@ -24,7 +24,7 @@ Vue.component("new-galaxy-row", {
     },
     buttonText() {
       return this.lockText === null
-        ? "Reset your Dimensions and Dimension Boosts for a tickspeed boost"
+        ? "Reset your Dimensions and Dimension Boosts to increase the power of Tickspeed upgrades"
         : this.lockText;
     },
     sumText() {

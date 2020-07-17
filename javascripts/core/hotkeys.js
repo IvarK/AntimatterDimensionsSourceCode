@@ -10,7 +10,8 @@
 // https://craig.is/killing/mice
 
 GameKeyboard.bindRepeatableHotkey("m", () => maxAll());
-GameKeyboard.bindRepeatableHotkey("d", () => softResetBtnClick());
+GameKeyboard.bindRepeatableHotkey("d", () => requestDimensionBoost(true));
+GameKeyboard.bindRepeatableHotkey("shift+d", () => requestDimensionBoost(false));
 GameKeyboard.bindRepeatableHotkey("g", () => requestGalaxyReset(true));
 GameKeyboard.bindRepeatableHotkey("shift+g", () => requestGalaxyReset(false));
 GameKeyboard.bindRepeatableHotkey("s", () => sacrificeBtnClick());

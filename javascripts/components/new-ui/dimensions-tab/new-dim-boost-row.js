@@ -52,8 +52,8 @@ Vue.component("new-dim-boost-row", {
       this.freeBoosts = DimBoost.freeBoosts;
       this.lockText = DimBoost.lockText;
     },
-    softReset() {
-      softResetBtnClick();
+    dimensionBoost(bulk) {
+      requestDimensionBoost(bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
   },
@@ -66,7 +66,8 @@ Vue.component("new-dim-boost-row", {
       class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
       :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"
       :enabled="isBuyable"
-      @click="softReset"
+      @click.exact="dimensionBoost(true)"
+      @click.shift.exact="dimensionBoost(false)"
       >{{buttonText}}</button>
   </div>`
 });

@@ -58,8 +58,8 @@ Vue.component("antimatter-dim-boost-row", {
       this.freeBoosts = DimBoost.freeBoosts;
       this.lockText = DimBoost.lockText;
     },
-    softReset() {
-      softResetBtnClick();
+    dimensionBoost(bulk) {
+      requestDimensionBoost(bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
   },
@@ -75,7 +75,8 @@ Vue.component("antimatter-dim-boost-row", {
         :enabled="isBuyable"
         class="o-primary-btn--dimboost l-dim-row__button l-dim-row__button--right-offset"
         :class=tutorialClass
-        @click="softReset"
+        @click.exact="dimensionBoost(true)"
+        @click.shift.exact="dimensionBoost(false)"
       >{{buttonText}}</primary-button>
     </div>`
 });

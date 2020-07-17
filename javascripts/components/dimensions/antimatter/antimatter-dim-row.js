@@ -49,6 +49,7 @@ Vue.component("antimatter-dim-row", {
   methods: {
     update() {
       const tier = this.tier;
+      if (tier > DimBoost.maxDimensionsUnlockable) return;
       const dimension = AntimatterDimension(tier);
       this.isUnlocked = dimension.isAvailableForPurchase;
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 1;

@@ -53,6 +53,7 @@ Vue.component("new-dimension-row", {
   methods: {
     update() {
       const tier = this.tier;
+      if (tier > DimBoost.maxDimensionsUnlockable) return;
       const dimension = AntimatterDimension(tier);
       this.isUnlocked = dimension.isAvailableForPurchase;
       const buyUntil10 = player.buyUntil10;

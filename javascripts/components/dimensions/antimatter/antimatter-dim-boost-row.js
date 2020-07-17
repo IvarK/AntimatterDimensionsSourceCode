@@ -21,7 +21,9 @@ Vue.component("antimatter-dim-boost-row", {
       const boosts = this.purchasedBoosts;
       let newUnlock = "";
       if (boosts < DimBoost.maxDimensionsUnlockable - 4) newUnlock = `unlock the ${boosts + 5}th Dimension`;
-      if (boosts === 4 && DimBoost.maxDimensionsUnlockable === 8) newUnlock = "unlock Sacrifice";
+      if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
+        newUnlock = "unlock Sacrifice";
+      }
       let dimensionRange = "give a multiplier to the 1st Dimension";
       if (boosts > 0) dimensionRange = `give a multiplier to Dimensions 1-${Math.min(boosts + 1, 8)}`;
       if (boosts >= 7) dimensionRange = `give a multiplier to all Dimensions`;

@@ -139,6 +139,7 @@ GameStorage.migrations = {
       GameStorage.migrations.migrateLastTenRuns(player);
       GameStorage.migrations.migrateIPGen(player);
       GameStorage.migrations.renameCloudVariable(player);
+      GameStorage.migrations.standardizeUncompletedTimes(player);
 
       kong.migratePurchases();
       if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
@@ -709,6 +710,26 @@ GameStorage.migrations = {
   renameCloudVariable(player) {
     player.options.cloudEnabled = player.options.cloud;
     delete player.options.cloud;
+  },
+
+  standardizeUncompletedTimes(player) {
+    if (player.bestInfinityTime === 999999999999) player.bestInfinityTime = Number.MAX_VALUE;
+    if (player.bestInfinityRealTime === 999999999999) player.bestInfinityRealTime = Number.MAX_VALUE;
+    if (player.bestEternity === 999999999999) player.bestEternity = Number.MAX_VALUE;
+    for (let i = 0; i < player.challenge.normal.bestTimes.length; i++) {
+      if (player.challenge.normal.bestTimes[i] === 2678400000) player.challenge.normal.bestTimes[i] = Number.MAX_VALUE;
+    }
+    for (let i = 0; i < player.challenge.infinity.bestTimes.length; i++) {
+      if (player.challenge.infinity.bestTimes[i] === 2678400000) {
+        player.challenge.infinity.bestTimes[i] = Number.MAX_VALUE;
+      }
+    }
+    for (let i = 0; i < 10; i++) {
+      if (player.lastTenRuns[i][0] === 2678400000) player.lastTenRuns[i][0] = Number.MAX_VALUE;
+      if (player.lastTenRuns[i][3] === 26784000) player.lastTenRuns[i][3] = Number.MAX_VALUE;
+      if (player.lastTenEternities[i][0] === 2678400000) player.lastTenEternities[i][0] = Number.MAX_VALUE;
+      if (player.lastTenEternities[i][3] === 26784000) player.lastTenEternities[i][3] = Number.MAX_VALUE;
+    }
   },
 
   prePatch(saveData) {

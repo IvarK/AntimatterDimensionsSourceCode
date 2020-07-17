@@ -42,7 +42,7 @@ Vue.component("reality-button", {
       if (!isFinite(level)) level = 0;
       return glyphState.capped
         ? "Capped"
-        : `${Math.min(((level - Math.floor(level)) * 100), 99.9).toFixed(1)}%`;
+        : `${formatPercents(Math.min(((level - Math.floor(level))), 0.999), 1)}`;
     },
     update() {
       this.hasRealityStudy = TimeStudy.reality.isBought;

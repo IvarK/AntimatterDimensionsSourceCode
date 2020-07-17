@@ -28,8 +28,8 @@ GameDatabase.challenges.normal = [
     legacyId: 3,
     isQuickResettable: false,
     description:
-      "The 1st Antimatter Dimension is heavily weakened, but gets an exponentially increasing " +
-      "bonus that resets after Dimension Shifts/Boosts and Antimatter Galaxies.",
+      `The 1st Antimatter Dimension is heavily weakened, but gets an exponentially increasing
+      bonus that resets after Dimension Boosts and Antimatter Galaxies.`,
     name: "3rd Antimatter Dimension",
     reward: "Upgradeable 3rd Antimatter Dimension Autobuyer"
   },
@@ -64,9 +64,9 @@ GameDatabase.challenges.normal = [
     id: 7,
     legacyId: 9,
     isQuickResettable: false,
-    description: () => `The multiplier from buying ${formatInt(10)} Antimatter Dimensions is reduced ` +
-      `to ${formatX(1)}, but is increased by ${formatX(0.2, 1, 1)} per Dimension Shift/Boost, ` +
-      `up to a maximum of ${formatX(2)}.`,
+    description: () =>
+      `The multiplier from buying ${formatInt(10)} Antimatter Dimensions is reduced to ${formatX(1)}, but is increased
+      by ${formatX(0.2, 1, 1)} per Dimension Boost, up to a maximum of ${formatX(2)}.`,
     name: "7th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 7th Antimatter Dimension Autobuyer"
   },

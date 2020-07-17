@@ -18,6 +18,7 @@ Vue.component("options-gameplay-tab", {
       offlineTicks: 0,
       automaticTabSwitching: false,
       infinityUnlocked: false,
+      sacrificeUnlocked: false
     };
   },
   watch: {
@@ -46,6 +47,7 @@ Vue.component("options-gameplay-tab", {
       this.offlineTicks = options.offlineTicks;
       this.automaticTabSwitching = options.automaticTabSwitching;
       this.infinityUnlocked = PlayerProgress.current.isInfinityUnlocked;
+      this.sacrificeUnlocked = Sacrifice.isVisible;
     }
   },
   template: `
@@ -70,7 +72,7 @@ Vue.component("options-gameplay-tab", {
         />
       </div>
       <div class="l-options-grid__row">
-        <options-button
+        <options-button v-if="sacrificeUnlocked"
           class="o-primary-btn--option"
           onclick="Modal.confirmationOptions.show()"
         >Open Confirmation Options</options-button>

@@ -4,7 +4,7 @@ class Sacrifice {
   // This is tied to the "buying an 8th dimension" achievement in order to hide it from new players before they reach
   // sacrifice for the first time. It has the side-effect of hiding it in really early reality, which is probably fine.
   static get isVisible() {
-    return Achievement(18).isUnlocked;
+    return Achievement(18).isUnlocked || PlayerProgress.realityUnlocked();
   }
 
   static get canSacrifice() {
@@ -14,7 +14,7 @@ class Sacrifice {
 
   static get disabledCondition() {
     if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
-    if (DimBoost.totalBoosts <= DimBoost.maxShiftTier - 4) return "requires a boost";
+    if (DimBoost.totalBoosts < 5) return `requires ${formatInt(5)} Dimension Boosts`;
     if (AntimatterDimension(8).totalAmount.eq(0)) return "no 8th Antimatter Dimensions";
     if (this.nextBoost.lte(1)) return `${formatX(1)} multiplier`;
     return "";

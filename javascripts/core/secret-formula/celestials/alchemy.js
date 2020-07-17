@@ -190,7 +190,7 @@ GameDatabase.celestials.alchemy = {
       isUnlocked: () => Ra.pets.effarig.level >= 13,
       lockText: "Effarig Level 13",
       formatEffect(value) {
-        const baseEffect = `Alchemy reaction efficiency 30% ➜ ${formatPercents(value, 2, 2)}`;
+        const baseEffect = `Alchemy reaction efficiency ${formatPercents(0.3)} ➜ ${formatPercents(value, 2, 2)}`;
         if (player.reality.glyphs.sac.reality === 0) {
           return baseEffect;
         }

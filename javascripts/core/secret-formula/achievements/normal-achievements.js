@@ -203,7 +203,7 @@ GameDatabase.achievements.normal = [
   {
     id: 43,
     name: "Zero Deaths",
-    tooltip: "Get to Infinity without Dimension shifts, boosts or Antimatter Galaxies in a challenge.",
+    tooltip: "Get to Infinity without Dimension Boosts or Antimatter Galaxies while in a challenge.",
     checkRequirement: () => player.galaxies === 0 && DimBoost.purchasedBoosts === 0 && NormalChallenge.isRunning,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     reward: () => `Antimatter Dimensions 1-4 are ${formatPercents(0.25)} stronger.`,
@@ -237,8 +237,8 @@ GameDatabase.achievements.normal = [
   {
     id: 47,
     name: "Daredevil",
-    tooltip: () => `Complete ${formatInt(2)} challenges (not including the first one).`,
-    checkRequirement: () => NormalChallenges.all.slice(1).countWhere(c => c.isCompleted) >= 2,
+    tooltip: () => `Complete ${formatInt(3)} challenges.`,
+    checkRequirement: () => NormalChallenges.all.countWhere(c => c.isCompleted) >= 3,
     checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
   },
   {
@@ -389,8 +389,9 @@ GameDatabase.achievements.normal = [
   {
     id: 71,
     name: "ERROR 909: Dimension not found",
-    tooltip: "Get to Infinity with only a single 1st Antimatter Dimension without Dimension Boosts/Shifts " +
-      "or Antimatter Galaxies, while in the 2nd Antimatter Dimension Autobuyer Challenge.",
+    tooltip:
+      `Get to Infinity with only a single 1st Antimatter Dimension without Dimension Boosts
+      or Antimatter Galaxies, while in the 2nd Antimatter Dimension Autobuyer Challenge.`,
     checkRequirement: () =>
       NormalChallenge(2).isRunning &&
       AntimatterDimension(1).amount.eq(1) &&
@@ -698,7 +699,7 @@ GameDatabase.achievements.normal = [
       return true;
     },
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
-    reward: "Your antimatter doesn't reset on Dimension Boost/Shift/Galaxy."
+    reward: "Your Antimatter doesn't reset on Dimension Boosts or Antimatter Galaxies."
   },
   {
     id: 112,
@@ -850,7 +851,8 @@ GameDatabase.achievements.normal = [
   {
     id: 133,
     name: "I never liked this infinity stuff anyway",
-    tooltip: () => `Reach ${formatPostBreak("1e200000", 0, 0)} IP without buying IDs or IP multipliers.`,
+    tooltip: () =>
+      `Reach ${formatPostBreak("1e200000", 0, 0)} IP without buying any IDs or the ${formatX(2)} IP Infinity Upgrade.`,
     checkRequirement: () =>
       Array.dimensionTiers.map(InfinityDimension).every(dim => dim.baseAmount === 0) &&
       player.infMultCost.equals(10) &&
@@ -1017,7 +1019,7 @@ GameDatabase.achievements.normal = [
   {
     id: 155,
     name: "Achievement #15983",
-    tooltip: () => `Play for ${format(13.7e9, 2, 2)} years.`,
+    tooltip: () => `Play for ${formatFloat(13.7, 1)} billion years.`,
     checkRequirement: () => Time.totalTimePlayed.totalYears > 13.7e9,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => `Black Hole durations are ${formatPercents(0.1)} longer.`,

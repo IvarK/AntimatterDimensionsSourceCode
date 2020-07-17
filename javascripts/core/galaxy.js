@@ -118,7 +118,9 @@ class Galaxy {
   static get canBeBought() {
     if (EternityChallenge(6).isRunning && !Enslaved.isRunning) return false;
     if (NormalChallenge(8).isRunning || InfinityChallenge(7).isRunning) return false;
-    return player.break || Currency.antimatter.lt(Decimal.NUMBER_MAX_VALUE);
+    if (player.thisInfinityMaxAM.gt(Player.infinityGoal) &&
+       (!player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning)) return false;
+    return true;
   }
 
   static get lockText() {

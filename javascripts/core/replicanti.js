@@ -58,7 +58,7 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
     player.replicanti.amount = Decimal.min(uncappedAmount, replicantiCap());
     return remainingGain;
   }
-  
+
   const gainNeededPerRG = Decimal.NUMBER_MAX_VALUE.log10();
   const replicantiExponent = log10GainFactor.toNumber() + player.replicanti.amount.log10();
   const toBuy = Math.floor(Math.min(replicantiExponent / gainNeededPerRG,
@@ -135,7 +135,7 @@ function replicantiLoop(diff) {
   const interval = getReplicantiInterval(false);
   const isUncapped = TimeStudy(192).isBought;
   const areRGsBeingBought = Replicanti.galaxies.areBeingBought;
-  if (diff > 500 || interval.lessThan(player.options.updateRate) || isUncapped) {
+  if (diff > 500 || interval.lessThan(diff) || isUncapped) {
     // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
     let postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
      if (V.isRunning) {

@@ -19,12 +19,18 @@ Vue.component("new-dim-boost-row", {
     },
     buttonText() {
       const boosts = this.purchasedBoosts;
-      const newDimension = boosts < 4 ? `unlock the ${boosts + 5}th Dimension, and` : "";
-      let dimensionRange = "the 1st Dimension";
-      if (boosts > 0) dimensionRange = `Dimensions 1-${Math.min(boosts + 1, 8)}`;
-      if (boosts >= 7) dimensionRange = `all Dimensions`;
+      let newUnlock = "";
+      if (boosts < DimBoost.maxDimensionsUnlockable - 4) newUnlock = `unlock the ${boosts + 5}th Dimension`;
+      if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
+        newUnlock = "unlock Sacrifice";
+      }
+      let dimensionRange = "give a multiplier to the 1st Dimension";
+      if (boosts > 0) dimensionRange = `give a multiplier to Dimensions 1-${Math.min(boosts + 1, 8)}`;
+      if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `give a multiplier to all Dimensions`;
+      if (NormalChallenge(8).isRunning) dimensionRange = "";
+      if (newUnlock !== "" && dimensionRange !== "") dimensionRange = `, and ${dimensionRange}`;
       return this.lockText === null
-        ? `Reset your Dimensions to ${newDimension} give a multiplier to ${dimensionRange}`
+        ? `Reset your Dimensions to ${newUnlock}${dimensionRange}`
         : this.lockText;
     },
     boostCountText() {

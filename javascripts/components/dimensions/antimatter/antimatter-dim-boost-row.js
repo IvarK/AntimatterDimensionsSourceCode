@@ -26,7 +26,7 @@ Vue.component("antimatter-dim-boost-row", {
       }
       let dimensionRange = "give a multiplier to the 1st Dimension";
       if (boosts > 0) dimensionRange = `give a multiplier to Dimensions 1-${Math.min(boosts + 1, 8)}`;
-      if (boosts >= 7) dimensionRange = `give a multiplier to all Dimensions`;
+      if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `give a multiplier to all Dimensions`;
       if (NormalChallenge(8).isRunning) dimensionRange = "";
       if (newUnlock !== "" && dimensionRange !== "") dimensionRange = `, and ${dimensionRange}`;
       return this.lockText === null

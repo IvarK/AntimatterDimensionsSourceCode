@@ -1996,6 +1996,7 @@ screen and (max-width: 480px) {
 
 .c-dim-row__label--growable {
   flex-grow: 1;
+  width: 15rem;
 }
 
 .c-dim-row__label--small {

@@ -851,7 +851,8 @@ GameDatabase.achievements.normal = [
   {
     id: 133,
     name: "I never liked this infinity stuff anyway",
-    tooltip: () => `Reach ${formatPostBreak("1e200000", 0, 0)} IP without buying IDs or IP multipliers.`,
+    tooltip: () =>
+      `Reach ${formatPostBreak("1e200000", 0, 0)} IP without buying any IDs or the ${formatX(2)} IP Infinity Upgrade.`,
     checkRequirement: () =>
       Array.dimensionTiers.map(InfinityDimension).every(dim => dim.baseAmount === 0) &&
       player.infMultCost.equals(10) &&

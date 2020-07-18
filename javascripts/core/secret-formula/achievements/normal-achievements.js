@@ -1019,7 +1019,7 @@ GameDatabase.achievements.normal = [
   {
     id: 155,
     name: "Achievement #15983",
-    tooltip: () => `Play for ${format(13.7e9, 2, 2)} years.`,
+    tooltip: () => `Play for ${formatFloat(13.7, 1)} billion years.`,
     checkRequirement: () => Time.totalTimePlayed.totalYears > 13.7e9,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: () => `Black Hole durations are ${formatPercents(0.1)} longer.`,

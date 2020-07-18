@@ -291,6 +291,13 @@ body.t-s9 {
   overflow: hidden;
 }
 
+.o-primary-btn--dimension-reset {
+  display: flex;
+  align-items: center;
+  height: 5.6rem;
+  font-size: 1rem;
+}
+
 .button-content {
   position: absolute;
   top: 0;

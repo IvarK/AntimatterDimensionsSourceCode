@@ -61,7 +61,7 @@ Vue.component("new-dim-boost-row", {
     <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} Antimatter D</span>
     <div style="height: 2rem;"/> <!-- Padding to match with Galaxy text/button -->
     <button
-      class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
+      class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
       :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"
       :enabled="isBuyable"
       @click="softReset"

@@ -10,13 +10,17 @@ Vue.component("new-dimensions-tab", {
       sacrificeBoost: new Decimal(0),
       disabledCondition: "",
       isQuickResetAvailable: false,
-      isContinuumActive: false
+      isContinuumActive: false,
+      isLarge: false
     };
   },
   computed: {
     sacrificeTooltip() {
       return `Boosts 8th Antimatter Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
     },
+    classObject() {
+      return this.isLarge ? "o-primary-btn--sacrifice--large" : "";
+    }
   },
   methods: {
     maxAll() {
@@ -46,6 +50,7 @@ Vue.component("new-dimensions-tab", {
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
+      this.isLarge = this.disabledCondition.length > 20;
     },
   },
   template:
@@ -58,7 +63,8 @@ Vue.component("new-dimensions-tab", {
           v-show="isSacrificeUnlocked"
           v-tooltip="sacrificeTooltip"
           :enabled="isSacrificeAffordable"
-          class="o-primary-btn sacrifice-btn"
+          class="o-primary-btn--sacrifice"
+          :class="classObject"
           @click="sacrifice"
         >
         <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>

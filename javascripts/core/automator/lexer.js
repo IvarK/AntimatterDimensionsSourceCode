@@ -172,6 +172,9 @@ const AutomatorLexer = (() => {
     $prestigeLevel: 2,
     $prestigeCurrency: "EP",
     $prestige: () => eternity(false, true),
+    $respec: () => {
+      player.respec = true;
+    },
   });
   createInCategory(PrestigeEvent, "Reality", /reality/i, {
     $autobuyer: Autobuyer.reality,
@@ -180,6 +183,9 @@ const AutomatorLexer = (() => {
     $prestigeLevel: 3,
     $prestigeCurrency: "RM",
     $prestige: () => autoReality(),
+    $respec: () => {
+      player.reality.respec = true;
+    },
   });
 
   createInCategory(StudyPath, "Idle", /idle/i, { $studyPath: TIME_STUDY_PATH.IDLE });
@@ -262,7 +268,9 @@ const AutomatorLexer = (() => {
 
   createKeyword("Dilation", /dilation/i);
   createKeyword("EC", /ec/i);
-  createKeyword("XLast", /x[ \t]+last/i);
+  createKeyword("XLast", /x[ \t]+last/i, {
+    $autocomplete: "x last",
+  });
 
   // We allow ECLiteral to consume lots of digits because that makes error reporting more
   // clear (it's nice to say ec123 is an invalid ec)

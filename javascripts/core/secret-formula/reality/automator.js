@@ -64,10 +64,31 @@ GameDatabase.reality.automator = {
       id: 2,
       keyword: "infinity / eternity / reality",
       name: "<b>infinity|eternity|reality</b> - triggers Infinity, Eternity, or Reality",
-      syntax: "<b>infinity</b>,<br> <b>eternity</b>,<br> <b>reality</b>",
+      syntax: "<b>infinity [nowait]</b>,<br> <b>eternity [respec] [nowait]</b>,<br> <b>reality [respec] [nowait]</b>",
+      sections: [
+        {
+          name: "MODIFIERS",
+          items: [
+            {
+              header: "<i>respec</i>",
+              description: `
+                Eternity: respec studies and eternity.<br>
+                Reality: unequip glyphs and reality.
+              `
+            },
+            {
+              header: "<i>nowait</i>",
+              description: `
+                If it is not possible to prestige, move on to the next command.
+              `
+            },
+          ]
+        }
+      ],
       examples: [
         "infinity",
-        "reality",
+        "eternity respec",
+        "reality nowait",
       ]
     },
     {

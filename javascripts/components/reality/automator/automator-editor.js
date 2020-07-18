@@ -3,12 +3,16 @@
 Vue.component("automator-editor", {
   data() {
     return {
-      activeLine: 0,
+      activeLineRaw: 0,
       isRunning: false,
       isPaused: false,
       editingName: false,
       automatorType: 0,
       runningScriptID: 0,
+      activeLineInfo: {
+        lineNumber: 0,
+        scriptID: 0,
+      },
       scripts: [],
     };
   },
@@ -41,7 +45,10 @@ Vue.component("automator-editor", {
     },
     isBlockAutomator() {
       return this.automatorType === AUTOMATOR_TYPE.BLOCK;
-    }
+    },
+    activeLine() {
+      return AutomatorBackend.state.topLevelScript === this.currentScriptID ? this.activeLineRaw : 0;
+    },
   },
   methods: {
     update() {
@@ -49,11 +56,17 @@ Vue.component("automator-editor", {
       this.isPaused = AutomatorBackend.isOn && !this.isRunning;
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
       this.automatorType = player.reality.automator.type;
-      if (AutomatorBackend.state.topLevelScript !== this.currentScriptID || !AutomatorBackend.isOn) {
-        this.activeLine = 0;
-        return;
+      if (AutomatorBackend.isOn) {
+        this.activeLineInfo = {
+          lineNumber: AutomatorBackend.stack.top.lineNumber,
+          scriptID: AutomatorBackend.state.topLevelScript,
+        };
+      } else {
+        this.activeLineInfo = {
+          lineNumber: 0,
+          scriptID: "0",
+        };
       }
-      this.activeLine = AutomatorBackend.stack.top.lineNumber;
     },
     onGameLoad() {
       this.updateCurrentScriptID();
@@ -182,7 +195,8 @@ Vue.component("automator-editor", {
           />
       </div>
       <automator-text-editor :currentScriptID="currentScriptID"
-                             :activeLine="activeLine"
+                             :activeLineInfo="activeLineInfo"
+                             :runningScriptID="runningScriptID"
                              v-if="isTextAutomator"/>
       <automator-block-editor v-if="isBlockAutomator"/>
     </div>`

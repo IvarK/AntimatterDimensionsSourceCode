@@ -794,6 +794,7 @@ function simulateTime(seconds, real, fast) {
             label: "Simulating offline time...",
             current: doneSoFar,
             max: ticks,
+            startTime: Date.now()
           };
         },
         asyncProgress: doneSoFar => {

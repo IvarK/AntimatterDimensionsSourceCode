@@ -740,6 +740,12 @@ GameStorage.devMigrations = {
         if (player.lastTenRealities[i][0] === 2678400000) player.lastTenRealities[i][0] = Number.MAX_VALUE;
         if (player.lastTenRealities[i][3] === 26784000) player.lastTenRealities[i][3] = Number.MAX_VALUE;
       }
+    },
+    player => {
+      for (const script of Object.values(player.reality.automator.scripts)) {
+        script.content =
+          script.content.replace(/^([ \t]*)(wait|if|while|until)([\t ]+)(completions)/igmu, "$1$2$3pending $4");
+      }
     }
   ],
 

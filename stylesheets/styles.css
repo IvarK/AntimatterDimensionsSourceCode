@@ -2051,6 +2051,10 @@ screen and (max-width: 480px) {
   margin-top: 1rem;
 }
 
+.c-antimatter-dim-row--not-reached {
+  opacity: 0.5;
+}
+
 .c-antimatter-dim-row__floating-text {
   position: absolute;
   bottom: 2rem;

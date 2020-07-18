@@ -171,29 +171,29 @@ GameDatabase.infinity.upgrades = (function() {
       id: "skipReset1",
       cost: 20,
       description: () =>
-        `You start with ${formatInt(1)} Dimension Shift, automatically unlocking the 5th Antimatter Dimension`,
+        `Start every reset with ${formatInt(1)} Dimension Boosts, automatically unlocking the 5th Antimatter Dimension`,
       bannedFromCharging: true
     },
     skipReset2: {
       id: "skipReset2",
       cost: 40,
       description: () =>
-        `You start with ${formatInt(2)} Dimension Shifts, automatically unlocking the 6th Antimatter Dimension`,
+        `Start every reset with ${formatInt(2)} Dimension Boosts, automatically unlocking the 6th Antimatter Dimension`,
       bannedFromCharging: true
     },
     skipReset3: {
       id: "skipReset3",
       cost: 80,
       description: () =>
-        `You start with ${formatInt(3)} Dimension Shifts, automatically unlocking the 7th Antimatter Dimension`,
+        `Start every reset with ${formatInt(3)} Dimension Boosts, automatically unlocking the 7th Antimatter Dimension`,
       bannedFromCharging: true
     },
     skipResetGalaxy: {
       id: "skipResetGalaxy",
       cost: 300,
       description: () =>
-        `You start with ${formatInt(4)} Dimension Shifts, automatically unlocking the 8th Antimatter Dimension; ` +
-        "and you start with an Antimatter Galaxy",
+        `Start every reset with ${formatInt(4)} Dimension Boosts, automatically unlocking the 8th Antimatter Dimension;
+        and an Antimatter Galaxy`,
       bannedFromCharging: true
     },
     ipOffline: {

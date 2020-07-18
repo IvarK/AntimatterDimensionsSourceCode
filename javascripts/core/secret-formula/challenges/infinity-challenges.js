@@ -27,8 +27,9 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 3,
-    description: "Tickspeed interval decrease is always 0%. For every tickspeed purchase, you instead get a static " +
-      "multiplier on all Antimatter Dimensions which increases with Antimatter Galaxies.",
+    description: () =>
+      `Tickspeed upgrades are always ${formatX(1)}. For every tickspeed upgrade purchase, you instead get a static
+      multiplier on all Antimatter Dimensions which increases based on Antimatter Galaxies.`,
     goal: new Decimal("1e5000"),
     isQuickResettable: false,
     effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),

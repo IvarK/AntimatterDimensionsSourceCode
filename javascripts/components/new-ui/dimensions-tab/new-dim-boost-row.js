@@ -1,13 +1,12 @@
 "use strict";
 
-Vue.component("antimatter-dim-shift-row", {
+Vue.component("new-dim-boost-row", {
   data() {
     return {
       requirement: {
         tier: 1,
         amount: 0
       },
-      isShift: false,
       isBuyable: false,
       purchasedBoosts: 0,
       freeBoosts: 0,
@@ -15,15 +14,15 @@ Vue.component("antimatter-dim-shift-row", {
     };
   },
   computed: {
-    name() {
-      return this.isShift ? "Shift" : "Boost";
-    },
     dimName() {
-      return AntimatterDimension(this.requirement.tier).displayName;
+      return AntimatterDimension(this.requirement.tier).shortDisplayName;
     },
     buttonText() {
+      let dimensionRange = "the 1st Dimension";
+      if (this.purchasedBoosts > 0) dimensionRange = `Dimensions 1-${Math.min(this.purchasedBoosts + 1, 8)}`;
+      if (this.purchasedBoosts >= 7) dimensionRange = `all Dimensions`;
       return this.lockText === null
-        ? `Reset your Dimensions for a ${this.isShift ? "new Dimension" : "boost"}`
+        ? `Reset your Dimensions for a new Dimension and a boost to ${dimensionRange}`
         : this.lockText;
     },
     boostCountText() {
@@ -38,7 +37,7 @@ Vue.component("antimatter-dim-shift-row", {
       return sum;
     },
     tutorialClass() {
-      return Tutorial.glowingClass(TUTORIAL_STATE.DIMSHIFT, this.isBuyable);
+      return Tutorial.glowingClass(TUTORIAL_STATE.DIMBOOST, this.isBuyable);
     }
   },
   methods: {
@@ -47,29 +46,25 @@ Vue.component("antimatter-dim-shift-row", {
       this.requirement.tier = requirement.tier;
       this.requirement.amount = requirement.amount;
       this.isBuyable = requirement.isSatisfied && DimBoost.canBeBought;
-      this.isShift = DimBoost.isShift;
       this.purchasedBoosts = DimBoost.purchasedBoosts;
       this.freeBoosts = DimBoost.freeBoosts;
       this.lockText = DimBoost.lockText;
     },
     softReset() {
       softResetBtnClick();
-      Tutorial.turnOffEffect(TUTORIAL_STATE.DIMSHIFT);
+      Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
   },
   template:
-    `<div class="c-antimatter-dim-row">
-      <div
-        class="c-dim-row__label c-dim-row__label--growable"
-      >
-        Dimension {{name}} ({{boostCountText}}):
-        requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions
-      </div>
-      <primary-button
-        :enabled="isBuyable"
-        class="o-primary-btn--dimboost l-dim-row__button l-dim-row__button--right-offset"
-        :class=tutorialClass
-        @click="softReset"
-      >{{buttonText}}</primary-button>
-    </div>`
+  `<div class="reset-container dimboost">
+    <div style="height: 4rem;"><h4>Dimension Boost ({{boostCountText}})</h4></div>
+    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} Antimatter D</span>
+    <div style="height: 2rem;"/> <!-- Padding to match with Galaxy text/button -->
+    <button
+      class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
+      :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"
+      :enabled="isBuyable"
+      @click="softReset"
+      >{{buttonText}}</button>
+  </div>`
 });

@@ -203,7 +203,7 @@ GameDatabase.achievements.normal = [
   {
     id: 43,
     name: "Zero Deaths",
-    tooltip: "Get to Infinity without Dimension shifts, boosts or Antimatter Galaxies in a challenge.",
+    tooltip: "Get to Infinity without Dimension Boosts or Antimatter Galaxies while in a challenge.",
     checkRequirement: () => player.galaxies === 0 && DimBoost.purchasedBoosts === 0 && NormalChallenge.isRunning,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     reward: () => `Antimatter Dimensions 1-4 are ${formatPercents(0.25)} stronger.`,
@@ -389,8 +389,9 @@ GameDatabase.achievements.normal = [
   {
     id: 71,
     name: "ERROR 909: Dimension not found",
-    tooltip: "Get to Infinity with only a single 1st Antimatter Dimension without Dimension Boosts/Shifts " +
-      "or Antimatter Galaxies, while in the 2nd Antimatter Dimension Autobuyer Challenge.",
+    tooltip:
+      `Get to Infinity with only a single 1st Antimatter Dimension without Dimension Boosts
+      or Antimatter Galaxies, while in the 2nd Antimatter Dimension Autobuyer Challenge.`,
     checkRequirement: () =>
       NormalChallenge(2).isRunning &&
       AntimatterDimension(1).amount.eq(1) &&
@@ -698,7 +699,7 @@ GameDatabase.achievements.normal = [
       return true;
     },
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
-    reward: "Your antimatter doesn't reset on Dimension Boost/Shift/Galaxy."
+    reward: "Your Antimatter doesn't reset on Dimension Boosts or Antimatter Galaxies."
   },
   {
     id: 112,

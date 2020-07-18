@@ -41,14 +41,12 @@ class DimBoost {
     return DimBoost.power.pow(this.totalBoosts + 1 - tier).clampMin(1);
   }
 
-  static get maxShiftTier() {
+  static get maxDimensionsUnlockable() {
     return NormalChallenge(10).isRunning ? 6 : 8;
   }
 
-  static get isShift() {
-    // Player starts with 4 unlocked dimensions,
-    // hence there are just 4 (or 2, if in Auto DimBoosts challenge) shifts
-    return DimBoost.purchasedBoosts + 4 < this.maxShiftTier;
+  static get canUnlockNewDimension() {
+    return DimBoost.purchasedBoosts + 4 < DimBoost.maxDimensionsUnlockable;
   }
 
   static get challenge8MaxBoosts() {
@@ -79,7 +77,7 @@ class DimBoost {
 
   static bulkRequirement(bulk) {
     const targetResets = DimBoost.purchasedBoosts + bulk;
-    const tier = Math.min(targetResets + 3, this.maxShiftTier);
+    const tier = Math.min(targetResets + 3, this.maxDimensionsUnlockable);
     let amount = 20;
     const discount = Effects.sum(
       TimeStudy(211),
@@ -163,8 +161,8 @@ function softResetBtnClick() {
 }
 
 function maxBuyDimBoosts() {
-  // Shifts are bought one at a time, unlocking the next dimension
-  if (DimBoost.isShift) {
+  // Boosts that unlock new dims are bought one at a time, unlocking the next dimension
+  if (DimBoost.canUnlockNewDimension) {
     if (DimBoost.requirement.isSatisfied) softReset(1);
     return;
   }

@@ -97,21 +97,19 @@ in the Options tab.
       tags: ["dimension", "earlygame", "time"],
       tab: "dimensions/antimatter"
     }, {
-      name: "Dimension Shift/Boost",
+      name: "Dimension Boost",
       info: () => `
-<b>Dimension Shift:</b> This resets all of your Dimensions and your antimatter, but unlocks another Dimension for
-you to purchase. Each one requires ${formatInt(20)} of your highest unlocked Dimension.
+<b>Dimension Boost:</b> This resets all of your Dimensions and your Antimatter, but unlocks another Dimension for
+you to purchase and boosts your Dimension multipliers. The 1st Dimension Boost requires ${formatInt(20)} 4th
+Dimensions, the 2nd requires ${formatInt(20)} 5th Dimensions, etc. After unlocking all ${formatInt(8)} Dimensions,
+every additional boost will cost ${formatInt(15)} more 8th Dimensions than the previous Boost and will no longer
+unlock a Dimension, but will continue to increase your Dimension multipliers.
 <br>
 <br>
-<b>Dimension Boost:</b> A Dimension Shift, but you don't unlock a new Dimension. This happens after ${formatInt(4)}
-Dimension Shifts. The first Dimension Boost requires ${formatInt(20)} Eighth Dimensions and every additional boost
-will cost ${formatInt(15)} more than the previous Boost.
-<br>
-<br>
-You gain a ${formatX(2)} multiplier to the first Dimension for every Dimension Shift and Boost you have. Each higher
-dimension will have the multiplier applied one less time as the previous, down to a minimum of ${formatInt(0)}.
-For example, with ${formatInt(3)} Shifts, the First Dimension will gain ${formatX(8)},
-the Second Dimension ${formatX(4)}, the Third Dimension ${formatX(2)}, and all other Dimensions are unaffected.
+You gain a ${formatX(2)} multiplier to the 1st Dimension for every Dimension Boost you have. Each higher
+Dimension will have the multiplier applied one less time as the previous, down to a minimum of ${formatInt(0)}.
+For example, with ${formatInt(3)} Boosts, the 1st Dimension will gain ${formatX(8)}, the 2nd Dimension ${formatX(4)},
+the 3rd Dimension ${formatX(2)}, and all other Dimensions are unaffected.
 <br>
 <br>
 <b>Hotkey: D</b>
@@ -188,8 +186,9 @@ own rewards.
       info: () => `
 Once you have too much antimatter for the world to handle (${formatInt(2)}<sup>${formatInt(1024)}</sup>
 or about ${formatPostBreak(Number.MAX_VALUE, 6)},
-sometimes called "Infinity"), you’ll be forced to do a “Big Crunch”. This will reset your antimatter, Dimensions,
-Shifts/Boosts, and your Galaxies. Doing a Big Crunch is also sometimes referred to as "Infinitying".
+sometimes called "Infinity"), you’ll be forced to do a “Big Crunch”. This will reset your Antimatter, Antimatter
+Dimensions, Dimension Boosts, and your Antimatter Galaxies. Doing a Big Crunch is also sometimes referred to as
+"Infinitying".
 <br>
 <br>
 You will eventually be able to pass ${formatPostBreak(Number.MAX_VALUE, 6)}, but until then any larger numbers will
@@ -239,8 +238,8 @@ The rightmost row of Infinity Upgrades does not work in challenges.
 <b>Autobuyers:</b>
 <br>
 Autobuyers (awarded by completing challenges) allow the
-automatic purchase of Dimensions, Dimension Shifts/Boosts, Galaxies,
-tickspeed upgrades, Big Crunches, and Dimensional Sacrifice (later).
+automatic purchase of Dimensions, Dimension Boosts, Antimatter Galaxies,
+Tickspeed upgrades, Big Crunches, and Dimensional Sacrifice (later).
 They are located under the Infinity tab in "Autobuyers".
 <br>
 <br>
@@ -268,7 +267,7 @@ available.
 <b>Automatic Dimboost Customization:</b> With the Dimboost autobuyer you can set the max number of Boosts it will
 attempt to buy, a minimum number of Galaxies before Dimboosts are always auto-purchased, and (when unlocked) the
 ability to buy an exact number of Dimboosts in bulk. If you reach your specified Galaxy threshold, the autobuyer
-will ignore your max Boost limit. For the purposes of this autobuyer, your first four Shifts also count as Boosts.
+will ignore your max Boost limit.
 <br>
 <br>
 <b>Max Galaxies:</b> The highest amount of Galaxies the Galaxies autobuyer will buy.

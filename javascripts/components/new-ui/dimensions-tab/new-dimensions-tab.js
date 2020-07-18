@@ -75,7 +75,7 @@ Vue.component("new-dimensions-tab", {
         :tier="tier"/>
     </div>
     <div class="resets-container">
-      <new-dim-shift-row/>
+      <new-dim-boost-row/>
       <primary-button
           v-if="isQuickResetAvailable"
           class="o-primary-btn--quick-reset"

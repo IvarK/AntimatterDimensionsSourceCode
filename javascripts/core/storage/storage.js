@@ -166,10 +166,8 @@ const GameStorage = {
         this.postLoadStuff();
       }
     } else {
-      // This is adjusted so time played doesn't count the offline time.
-      player.gameCreatedTime += Date.now() - player.lastUpdate;
       // Try to unlock "Don't you dare sleep" (usually this check only happens
-      // during a game tick,, which makes the achievement impossible to get
+      // during a game tick, which makes the achievement impossible to get
       // with offline progress off)
       Achievement(35).tryUnlock();
       player.lastUpdate = Date.now();

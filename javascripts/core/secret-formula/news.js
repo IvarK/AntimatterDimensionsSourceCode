@@ -1247,7 +1247,7 @@ GameDatabase.news = [
     id: "a230",
     get text() {
       return "You started playing this game nearly " +
-        `${TimeSpan.fromMilliseconds(player.realTimePlayed).toString()} ago. Thank you for playing!`;
+        `${TimeSpan.fromMilliseconds(Date.now() - player.gameCreatedTime).toString()} ago. Thank you for playing!`;
     },
     dynamic: true
   },
@@ -2334,7 +2334,7 @@ GameDatabase.news = [
   },
   {
     id: "l60",
-    get text() { 
+    get text() {
       return `Breaking News! Time Shard mine collapses! ${Math.floor(20 + Math.random() * 236)} miners trapped inside!`;
     },
     get unlocked() { return PlayerProgress.eternityUnlocked(); }
@@ -2396,7 +2396,7 @@ GameDatabase.news = [
   },
   {
     id: "l68",
-    get text() { 
+    get text() {
       let protestText = "";
       if (InfinityChallenge(4).isRunning)
         protestText =

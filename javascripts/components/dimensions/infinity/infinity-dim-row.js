@@ -48,7 +48,7 @@ Vue.component("infinity-dim-row", {
         return "Unlock";
       }
 
-      return `Reach ${format(requirement)} AM`;
+      return `Reach ${formatPostBreak(requirement)} AM`;
     },
     hardcapPurchases() {
       return format(this.hardcap, 1, 1);
@@ -103,7 +103,7 @@ Vue.component("infinity-dim-row", {
   },
   template:
     `<div v-show="showRow" class="c-infinity-dim-row"
-      :class="{ 'c-infinity-dim-row--not-reached': !isUnlocked && !requirementReached }">
+      :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }">
       <div class="c-dim-row__label c-dim-row__name">
         {{name}} Infinity Dimension {{formatX(multiplier, 2, 1)}}
       </div>

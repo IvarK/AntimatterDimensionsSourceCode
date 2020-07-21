@@ -1986,6 +1986,10 @@ screen and (max-width: 480px) {
   width: 100%;
 }
 
+.c-dim-row--not-reached {
+  opacity: 0.5;
+}
+
 .c-dim-row__name {
   width: 40%;
 }
@@ -2050,10 +2054,6 @@ screen and (max-width: 480px) {
   align-items: center;
   font-size: 1.5rem;
   margin-top: 1rem;
-}
-
-.c-antimatter-dim-row--not-reached {
-  opacity: 0.5;
 }
 
 .c-antimatter-dim-row__floating-text {
@@ -2258,10 +2258,6 @@ screen and (max-width: 480px) {
   flex-direction: row;
   align-items: center;
   font-size: 1.6rem;
-}
-
-.c-infinity-dim-row--not-reached {
-  opacity: 0.5;
 }
 
 /*#endregion c-infinity-dim-row*/

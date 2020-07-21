@@ -99,7 +99,7 @@ Vue.component("antimatter-dim-row", {
   },
   template:
     `<div v-show="showRow" class="c-antimatter-dim-row"
-      :class="{ 'c-antimatter-dim-row--not-reached': !isUnlocked }">
+      :class="{ 'c-dim-row--not-reached': !isUnlocked }">
       <div class="c-dim-row__label c-dim-row__name">
         {{name}} Antimatter Dimension {{formatX(multiplier, 1, 1)}}
       </div>

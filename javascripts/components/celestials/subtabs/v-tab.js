@@ -213,7 +213,7 @@ Vue.component("v-tab", {
               v-for="milestone in row"
               :class="{'o-v-milestone--unlocked':
               has(milestone)}">
-                <p>{{ milestone.description }}</p>
+                <p>{{ milestone.description() }}</p>
                 <p>Reward: {{ rewardText(milestone) }}</p>
                 <p v-if="milestone.effect">Currently: <b>{{ milestone.format(milestone.effect()) }}</b></p>
             </div>

@@ -443,7 +443,7 @@ GameDatabase.achievements.normal = [
     id: 76,
     name: "One for each dimension",
     tooltip: () => `Play for ${formatInt(8)} days.`,
-    checkRequirement: () => TimeSpan.fromMilliseconds(Date.now() - player.gameCreatedTime).totalDays >= 8,
+    checkRequirement: () => TimeSpan.fromMilliseconds(player.totalTimePlayed).totalDays >= 8,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Extremely small multiplier to Antimatter Dimensions based on time played.",
     effect: () => Math.pow(Time.totalTimePlayed.totalDays / 2, 0.05)

@@ -1363,6 +1363,16 @@ screen and (max-width: 480px) {
   cursor: default;
 }
 
+.o-primary-btn--charged-respec-active {
+  color: var(--color-teresa--accent);
+  background-color: var(--color-teresa--base);
+}
+
+.o-primary-btn--charged-respec-active:hover {
+  color: var(--color-teresa--accent);
+  background-color: var(--color-teresa--base);
+}
+
 .o-primary-btn--glyph-trash {
   width: 30rem;
   height: 4.5rem;
@@ -3480,29 +3490,46 @@ screen and (max-width: 480px) {
 /*#endregion o-infinity-upgrade-btn--bought*/
 
 .o-infinity-upgrade-btn--chargeable {
-  background-color: #8596ea;
+  color: var(--color-teresa--base);
+  background-color: var(--color-teresa--accent);
   animation: a-charged-infinity-upgrade-glow 2s infinite;
 }
 
+.t-dark .o-infinity-upgrade-btn--chargeable,
+.t-s6 .o-infinity-upgrade-btn--chargeable {
+  color: var(--color-teresa--base);
+  background-color: var(--color-teresa--accent);
+}
+
+.o-infinity-upgrade-btn--chargeable:hover {
+  color: var(--color-teresa--base);
+}
+
 @keyframes a-charged-infinity-upgrade-glow {
-  0%   { box-shadow: inset 0  0  2rem   0}
-  13%  { box-shadow: inset 0  0  2rem   0.15rem}
-  25%  { box-shadow: inset 0  0  2rem   0.4rem}
-  38%  { box-shadow: inset 0  0  2rem   0.65rem}
-  50%  { box-shadow: inset 0  0  2rem   0.8rem}
-  63%  { box-shadow: inset 0  0  2rem   0.65rem}
-  75%  { box-shadow: inset 0  0  2rem   0.4rem}
-  88%  { box-shadow: inset 0  0  2rem   0.15rem}
-  100% { box-shadow: inset 0  0  2rem   0}
+  0%   { box-shadow: inset 0 0 2rem 0}
+  13%  { box-shadow: inset 0 0 2rem 0.15rem}
+  25%  { box-shadow: inset 0 0 2rem 0.4rem}
+  38%  { box-shadow: inset 0 0 2rem 0.65rem}
+  50%  { box-shadow: inset 0 0 2rem 0.8rem}
+  63%  { box-shadow: inset 0 0 2rem 0.65rem}
+  75%  { box-shadow: inset 0 0 2rem 0.4rem}
+  88%  { box-shadow: inset 0 0 2rem 0.15rem}
+  100% { box-shadow: inset 0 0 2rem 0}
 }
 
 .o-infinity-upgrade-btn--charged {
-  background-color: #8596ea;
+  color: var(--color-teresa--accent);
+  background-color: var(--color-teresa--base);
 }
 
 .t-dark .o-infinity-upgrade-btn--charged,
 .t-s6 .o-infinity-upgrade-btn--charged {
-  background-color: #8596ea;
+  color: var(--color-teresa--accent);
+  background-color: var(--color-teresa--base);
+}
+
+.o-infinity-upgrade-btn--charged:hover {
+  color: var(--color-teresa--accent);
 }
 
 /*#endregion o-infinity-upgrade-btn*/

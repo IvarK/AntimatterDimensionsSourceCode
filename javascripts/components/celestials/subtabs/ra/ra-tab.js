@@ -6,6 +6,7 @@ Vue.component("ra-tab", {
       memoriesPerChunk: 0,
       showReality: false,
       totalLevels: 0,
+      showRecollection: false,
       hasRecollection: false,
       recollectionReq: 0,
       recollectionMult: 1,
@@ -19,6 +20,7 @@ Vue.component("ra-tab", {
     update() {
       this.memoriesPerChunk = Ra.productionPerMemoryChunk();
       this.totalLevels = Ra.totalPetLevel;
+      this.showRecollection = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
       this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
       this.recollectionReq = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels;
       this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
@@ -111,8 +113,7 @@ Vue.component("ra-tab", {
           <br>
           Inside of Ra's reality, some resources will generate memory chunks based on their amount.
         </button>
-        <div class="c-ra-recollection-unlock">
-          <br>
+        <div v-if="showRecollection" class="c-ra-recollection-unlock">
           <h1 :style="petStyle">Recollection</h1>
           <span :style="petStyle">
             Whichever celestial has recollection will get {{formatX(recollectionMult)}} memory chunk gain.
@@ -128,18 +129,16 @@ Vue.component("ra-tab", {
             (you need {{formatInt(recollectionReq - totalLevels)}} more)
           </div>
         </div>
-        <button class="c-ra-laitela-unlock" v-if="showLaitela">
-          <div class="c-ra-laitela-unlock-inner">
-            <h1> Lai'tela: </h1>
-            <h2> The Celestial of Dimensions </h2>
-            <p>
-              Unlocked by getting {{ formatInt(laitelaReq) }} total Celestial Memory levels
-              <span v-if="totalLevels < laitelaReq">
-                (you need {{formatInt(laitelaReq - totalLevels)}} more)
-              </span>
-            </p>
-          </div>
-        </button>
+        <div class="c-ra-laitela-unlock" v-if="showLaitela">
+          <h1> Lai'tela: </h1>
+          <h2> The Celestial of Dimensions </h2>
+          <p>
+            Unlocked by getting {{ formatInt(laitelaReq) }} total Celestial Memory levels
+            <span v-if="totalLevels < laitelaReq">
+              (you need {{formatInt(laitelaReq - totalLevels)}} more)
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   `

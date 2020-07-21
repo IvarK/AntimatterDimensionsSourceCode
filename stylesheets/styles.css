@@ -6444,13 +6444,14 @@ kbd {
 }
 
 .l-ra-non-pets {
-  flex: 0.2 0 25rem;
-  justify-content: center;
-  flex-direction: row;
   display: flex;
+  justify-content: center;
 }
 
 .c-ra-run-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   height: 33rem;
   color: #9575cd;
   background: black;
@@ -6458,7 +6459,7 @@ kbd {
   border-radius: 2rem;
   width: 30rem;
   margin: 2rem;
-  padding: 0.5rem;
+  padding: 1rem;
   font-family: Typewriter;
 }
 
@@ -6531,13 +6532,17 @@ kbd {
 }
 
 .c-ra-recollection-unlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 25rem;
   color: white;
   background: linear-gradient(#333333, #464646);
   border-radius: 2rem;
-  flex: none none 20rem;
   width: 30rem;
   margin: 2rem;
+  padding: 1rem;
 }
 
 .t-metro .c-ra-recollection-unlock,
@@ -6549,24 +6554,19 @@ kbd {
 }
 
 .c-ra-recollection-unlock-inner {
-  font-family: Typewriter;
-  margin: 1rem 2.8rem;
-  flex-direction: row;
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-}
-
-.l-ra-pet-recollection-button-container {
-  float: left;
-  width: 48%;
-  height: 40%;
-  margin: 0.2rem 0.2rem;
+  margin-top: 1rem;
 }
 
 .c-ra-pet-recollection-button {
   font-size: 1.2rem;
   text-align: center;
   font-family: Typewriter;
+  width: 10rem;
   height: 6rem;
+  margin: 0.2rem;
   border-radius: 1rem;
   border: 0.1rem solid #222;
   user-select: none;
@@ -6581,13 +6581,18 @@ kbd {
 }
 
 .c-ra-laitela-unlock {
-  height: 25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Typewriter;
+  color: black;
+  height: 33rem;
   width: 30rem;
   margin: 2rem;
+  padding: 1rem;
   border-radius: 2rem;
-  flex: none none 20rem;
   animation: a-ra-color-shift 10s infinite;
-  pointer-events: none;
 }
 
 .t-metro .c-ra-laitela-unlock,
@@ -6606,18 +6611,10 @@ kbd {
   100% { background-color: #8596ea; }
 }
 
-.c-ra-laitela-unlock-inner {
-  font-family: Typewriter;
-  height: 15rem;
-  margin: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 .l-ra-all-pets-container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   margin: auto;
   width: 80rem;
   height: 100%;

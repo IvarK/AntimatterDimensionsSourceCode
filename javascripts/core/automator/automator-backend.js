@@ -269,6 +269,8 @@ const AutomatorBackend = {
           return false;
         }
         this.stop();
+      } else if (this.stack.top.commandState && this.stack.top.commandState.advanceOnPop) {
+        return this.nextCommand();
       }
     } else {
       S.commandState = null;

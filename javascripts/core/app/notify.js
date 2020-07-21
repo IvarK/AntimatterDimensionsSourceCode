@@ -5,7 +5,7 @@ GameUI.notify = (function() {
   template.classList.add("o-notification");
   const enterAnimation = "a-notification--enter";
   const leaveAnimation = "a-notification--leave";
-  function showNotification(text, elClass) {
+  function showNotification(text, elClass, elStyle) {
     const el = template.cloneNode();
     el.textContent = text;
     el.classList.add(elClass, enterAnimation);
@@ -35,6 +35,7 @@ GameUI.notify = (function() {
     info: text => showNotification(text, "o-notification--info"),
     reality: text => showNotification(text, "o-notification--reality"),
     blackHole: text => showNotification(text, "o-notification--black-hole"),
+    memory: (text, petName) => showNotification(text, `o-notification--memory-${petName.toLowerCase()}`),
     showBlackHoles: true
   };
 }());

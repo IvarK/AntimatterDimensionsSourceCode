@@ -5273,6 +5273,26 @@ kbd {
   border-color: black;
 }
 
+.o-notification--memory-teresa {
+  background-color: #8596ea;
+  border-color: #5970e3;
+}
+
+.o-notification--memory-effarig {
+  background-color: #ea8585;
+  border-color: #e35959;
+}
+
+.o-notification--memory-enslaved {
+  background-color: #f1aa7f;
+  border-color: #ec8c51;
+}
+
+.o-notification--memory-v {
+  background-color: #ead584;
+  border-color: #e3c759;
+}
+
 .t-metro .o-notification--success,
 .t-dark-metro .o-notification--success,
 .t-inverted-metro .o-notification--success,

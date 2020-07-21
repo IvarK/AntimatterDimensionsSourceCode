@@ -92,7 +92,7 @@ class RaPetState {
       this.level++;
       // TODO Change this once we have a proper fix for things happening before the UI is initialized
       if (GameUI.initialized) {
-        GameUI.notify.success(`${this.name} has leveled up to level ${this.level}!`);
+        GameUI.notify.memory(`${this.name}'s Celestial Memory has reached level ${this.level}!`, this.name);
       }
       // All Ra unlocks require a pet to gain a level so it suffices to do this here.
       Ra.checkForUnlocks();

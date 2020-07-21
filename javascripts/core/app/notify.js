@@ -5,7 +5,7 @@ GameUI.notify = (function() {
   template.classList.add("o-notification");
   const enterAnimation = "a-notification--enter";
   const leaveAnimation = "a-notification--leave";
-  function showNotification(text, elClass, elStyle) {
+  function showNotification(text, elClass) {
     const el = template.cloneNode();
     el.textContent = text;
     el.classList.add(elClass, enterAnimation);

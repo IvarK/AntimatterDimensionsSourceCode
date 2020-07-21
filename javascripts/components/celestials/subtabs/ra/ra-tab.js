@@ -111,25 +111,25 @@ Vue.component("ra-tab", {
           <br>
           Inside of Ra's reality, some resources will generate memory chunks based on their amount.
         </button>
-        <div class="l-ra-recollection-unlock">
+        <div class="c-ra-recollection-unlock">
           <br>
           <h1 :style="petStyle">Recollection</h1>
           <span :style="petStyle">
             Whichever celestial has recollection will get {{formatX(recollectionMult)}} memory chunk gain.
           </span>
-          <div class="l-ra-recollection-unlock-inner" v-if="hasRecollection">
+          <div class="c-ra-recollection-unlock-inner" v-if="hasRecollection">
             <ra-pet-recollection-button
               v-for="(pet, i) in pets"
               :key="i"
               :petConfig="pet" />
           </div>
-          <div v-else class="l-ra-recollection-unlock-inner">
+          <div v-else class="c-ra-recollection-unlock-inner">
             Unlocked by getting {{ formatInt(recollectionReq) }} total Celestial Memory levels
             (you need {{formatInt(recollectionReq - totalLevels)}} more)
           </div>
         </div>
-        <button class="l-ra-laitela-unlock" v-if="showLaitela">
-          <div class="l-ra-laitela-unlock-inner">
+        <button class="c-ra-laitela-unlock" v-if="showLaitela">
+          <div class="c-ra-laitela-unlock-inner">
             <h1> Lai'tela: </h1>
             <h2> The Celestial of Dimensions </h2>
             <p>

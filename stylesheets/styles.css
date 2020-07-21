@@ -5862,6 +5862,7 @@ kbd {
 .t-inverted-metro .c-effarig-shop-button,
 .t-s8 .c-effarig-shop-button {
   border-radius: 0;
+  border-width: 0.1rem;
 }
 
 /* #endregion effarig tab*/
@@ -6007,6 +6008,7 @@ kbd {
 .t-inverted-metro .c-enslaved-run-button,
 .t-s8 .c-enslaved-run-button {
   border-radius: 0;
+  border-width: 0.1rem;
 }
 
 .c-enslaved-run-button__title {
@@ -6295,6 +6297,14 @@ kbd {
   border-radius: 1.5rem;
 }
 
+.t-metro .c-ra-pet-header,
+.t-dark-metro .c-ra-pet-header,
+.t-inverted-metro .c-ra-pet-header,
+.t-s8 .c-ra-pet-header {
+  border-radius: 0;
+  border: 0.1rem solid black;
+}
+
 .c-ra-pet-title {
   font-size: 2.5rem;
 }
@@ -6405,6 +6415,14 @@ kbd {
   user-select: none;
 }
 
+.t-metro .c-ra-upgrade-icon,
+.t-dark-metro .c-ra-upgrade-icon,
+.t-inverted-metro .c-ra-upgrade-icon,
+.t-s8 .c-ra-upgrade-icon {
+  border-radius: 0;
+  border: 0.1rem solid black;
+}
+
 .c-ra-upgrade-icon--inactive {
   color: #555;
 }
@@ -6426,6 +6444,14 @@ kbd {
   margin: 2rem;
   padding: 0.5rem;
   font-family: Typewriter;
+}
+
+.t-metro .c-ra-run-button,
+.t-dark-metro .c-ra-run-button,
+.t-inverted-metro .c-ra-run-button,
+.t-s8 .c-ra-run-button {
+  border-radius: 0;
+  border-width: 0.1rem;
 }
 
 .c-ra-run-button__icon {
@@ -6488,7 +6514,7 @@ kbd {
   margin: 0 1rem;
 }
 
-.l-ra-recollection-unlock {
+.c-ra-recollection-unlock {
   height: 25rem;
   color: white;
   background: linear-gradient(#333333, #464646);
@@ -6498,9 +6524,17 @@ kbd {
   margin: 2rem;
 }
 
-.l-ra-recollection-unlock-inner {
+.t-metro .c-ra-recollection-unlock,
+.t-dark-metro .c-ra-recollection-unlock,
+.t-inverted-metro .c-ra-recollection-unlock,
+.t-s8 .c-ra-recollection-unlock {
+  border-radius: 0;
+  border: 0.1rem solid black;
+}
+
+.c-ra-recollection-unlock-inner {
   font-family: Typewriter;
-  margin: 1rem 3rem;
+  margin: 1rem 2.8rem;
   flex-direction: row;
   justify-content: center;
 }
@@ -6509,7 +6543,7 @@ kbd {
   float: left;
   width: 48%;
   height: 40%;
-  margin: 0.8% 0.2rem;
+  margin: 0.2rem 0.2rem;
 }
 
 .c-ra-pet-recollection-button {
@@ -6522,7 +6556,15 @@ kbd {
   user-select: none;
 }
 
-.l-ra-laitela-unlock {
+.t-metro .c-ra-pet-recollection-button,
+.t-dark-metro .c-ra-pet-recollection-button,
+.t-inverted-metro .c-ra-pet-recollection-button,
+.t-s8 .c-ra-pet-recollection-button {
+  border-radius: 0;
+  border: 0.1rem solid black;
+}
+
+.c-ra-laitela-unlock {
   height: 25rem;
   width: 30rem;
   margin: 2rem;
@@ -6531,6 +6573,15 @@ kbd {
   animation: a-ra-color-shift 10s infinite;
   pointer-events: none;
 }
+
+.t-metro .c-ra-laitela-unlock,
+.t-dark-metro .c-ra-laitela-unlock,
+.t-inverted-metro .c-ra-laitela-unlock,
+.t-s8 .c-ra-laitela-unlock {
+  border-radius: 0;
+  border: 0.1rem solid black;
+}
+
 @keyframes a-ra-color-shift {
   0% { background-color: #8596ea; }
   25% { background-color: #ea8585; }
@@ -6539,7 +6590,7 @@ kbd {
   100% { background-color: #8596ea; }
 }
 
-.l-ra-laitela-unlock-inner {
+.c-ra-laitela-unlock-inner {
   font-family: Typewriter;
   height: 15rem;
   margin: 2rem;

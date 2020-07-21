@@ -3480,7 +3480,7 @@ screen and (max-width: 480px) {
 /*#endregion o-infinity-upgrade-btn--bought*/
 
 .o-infinity-upgrade-btn--chargeable {
-  background-color: #25e8e6;
+  background-color: #8596ea;
   animation: a-charged-infinity-upgrade-glow 2s infinite;
 }
 
@@ -3497,12 +3497,12 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-upgrade-btn--charged {
-  background-color: #25e8e6;
+  background-color: #8596ea;
 }
 
 .t-dark .o-infinity-upgrade-btn--charged,
 .t-s6 .o-infinity-upgrade-btn--charged {
-  background-color: #25e8e6;
+  background-color: #8596ea;
 }
 
 /*#endregion o-infinity-upgrade-btn*/

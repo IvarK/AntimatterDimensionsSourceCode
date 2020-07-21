@@ -166,6 +166,10 @@ const GameStorage = {
         this.postLoadStuff();
       }
     } else {
+      // Try to unlock "Don't you dare sleep" (usually this check only happens
+      // during a game tick, which makes the achievement impossible to get
+      // with offline progress off)
+      Achievement(35).tryUnlock();
       player.lastUpdate = Date.now();
       this.postLoadStuff();
     }

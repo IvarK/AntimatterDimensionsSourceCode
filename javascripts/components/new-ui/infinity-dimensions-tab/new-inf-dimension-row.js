@@ -46,7 +46,7 @@ Vue.component("new-inf-dimension-row", {
         return "Unlock";
       }
 
-      return `Reach ${format(requirement)} AM`;
+      return `Reach ${formatPostBreak(requirement)} AM`;
     },
     capTooltip() {
       return this.isCapped
@@ -97,7 +97,7 @@ Vue.component("new-inf-dimension-row", {
   },
   template:
     `<div v-show="showRow" class="c-infinity-dim-row"
-      :class="{ 'c-infinity-dim-row--not-reached': !isUnlocked && !requirementReached }">
+      :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }">
       <div class="c-dim-row__label c-dim-row__name">
         {{name}} Infinity D <span class="c-infinity-dim-row__multiplier">{{formatX(multiplier, 2, 1)}}</span>
       </div>

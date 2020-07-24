@@ -17,7 +17,9 @@ Vue.component("game-header-eternity-button", {
       fullyCompleted: false,
       failedRestriction: undefined,
       hasMoreCompletions: false,
-      nextGoalAt: new Decimal(0)
+      nextGoalAt: new Decimal(0),
+      canEternity: false,
+      eternityGoal: new Decimal(0)
     };
   },
   computed: {
@@ -74,7 +76,7 @@ Vue.component("game-header-eternity-button", {
   },
   methods: {
     update() {
-      this.isVisible = player.infinityPoints.gte(Player.eternityGoal);
+      this.isVisible = player.infinityPoints.gte(Player.eternityGoal) || EternityChallenge.isRunning;
       if (!this.isVisible) return;
       if (!PlayerProgress.eternityUnlocked()) {
         this.type = EP_BUTTON_DISPLAY_TYPE.FIRST_TIME;
@@ -82,6 +84,8 @@ Vue.component("game-header-eternity-button", {
       }
 
       if (EternityChallenge.isRunning) {
+        this.canEternity = Player.canEternity;
+        this.eternityGoal.copyFrom(Player.eternityGoal);
         if (!Perk.studyECBulk.isBought) {
           this.type = EP_BUTTON_DISPLAY_TYPE.CHALLENGE;
           return;
@@ -128,8 +132,8 @@ Vue.component("game-header-eternity-button", {
       this.nextGoalAt.copyFrom(status.nextGoalAt);
     }
   },
-  template:
-    `<button
+  template: `
+    <button
       v-if="isVisible"
       :class="buttonTypeClass"
       class="o-prestige-btn l-game-header__eternity-btn"
@@ -143,7 +147,7 @@ Vue.component("game-header-eternity-button", {
       <!-- Normal -->
       <template v-else-if="type === 1">
         <template v-if="isGainedEPAmountSmall">
-          I need to become Eternal.
+          I need to become Eternal
           <br>
         </template>
         Gain <span :style="amountStyle">{{format(gainedEP, 2, 0)}}</span> Eternity {{ "Point" | pluralize(gainedEP) }}.
@@ -151,7 +155,7 @@ Vue.component("game-header-eternity-button", {
         <template v-if="isGainedEPAmountZero">
           Reach {{ format(minIP) }} IP to
           <br>
-          gain Eternity Points.
+          gain Eternity Points
         </template>
         <template v-else-if="isPeakEPPMVisible">
           {{format(currentEPPM, 2, 2)}} EP/min
@@ -161,8 +165,9 @@ Vue.component("game-header-eternity-button", {
       </template>
 
       <!-- Challenge -->
-      <template v-else-if="type === 2">
-        Other challenges await... I need to become Eternal
+      <template v-else-if="type === 2 || (type === 6 && !canEternity)">
+        <span v-if="canEternity">Other challenges await... I need to become Eternal</span>
+        <span v-else>Reach {{format(eternityGoal, 2, 2)}} IP to complete the current challenge</span>
       </template>
 
       <!-- Dilation -->
@@ -170,7 +175,7 @@ Vue.component("game-header-eternity-button", {
         Gain <span :style="tachyonAmountStyle">{{format(gainedTachyons, 2, 1)}}</span>
         Tachyon {{ "Particle" | pluralize(gainedTachyons) }}
         <br>
-        and {{format(gainedEP, 2, 2)}} Eternity {{ "Point" | pluralize(gainedEP) }}.
+        and {{format(gainedEP, 2, 2)}} Eternity {{ "Point" | pluralize(gainedEP) }}
       </template>
 
       <!-- New content available -->

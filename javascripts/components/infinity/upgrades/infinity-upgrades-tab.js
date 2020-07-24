@@ -48,7 +48,7 @@ Vue.component("infinity-upgrades-tab", {
     disChargeClassObject() {
       return {
         "o-primary-btn--subtab-option": true,
-        "o-primary-btn--respec-active": this.disCharge
+        "o-primary-btn--charged-respec-active": this.disCharge
       };
     },
     offlineIpUpgrade: () => InfinityUpgrade.ipOffline
@@ -80,7 +80,7 @@ Vue.component("infinity-upgrades-tab", {
         :class="disChargeClassObject"
         @click="disCharge = !disCharge"
         >
-        Un-charge all upgrades on next Reality ({{ formatInt(chargesUsed) }}/{{ formatInt(totalCharges) }} used)
+        Un-charge all upgrades on next Reality ({{ formatInt(chargesUsed) }}/{{ formatInt(totalCharges) }} charged)
         </primary-button>
       </div>
       Each upgrade requires the one above it to be purchased first.

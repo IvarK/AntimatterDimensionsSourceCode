@@ -343,21 +343,22 @@ body.t-s9 {
 .resets-container {
   display: flex;
   justify-content: space-around;
-  color: var(--color-text);
+  height: 16rem;
 }
 
 .reset-container h4 {
   margin: 0;
   font-size: 1.4rem;
-  color: var(--color-text);
 }
 
 .reset-container {
   width: 40%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
+  height: 16rem;
+  margin-top: 0.3rem;
 }
 
 .l-tickspeed-container {

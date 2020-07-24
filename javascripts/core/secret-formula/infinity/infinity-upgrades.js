@@ -78,7 +78,7 @@ GameDatabase.infinity.upgrades = (function() {
         `Decrease the number of Dimensions needed for Dimension Boosts and Antimatter Galaxies by ${formatInt(9)}`,
       effect: 9,
       charged: {
-        description: "Decrease Dimension Boost requirement based on Teresa level",
+        description: () => "Decrease Dimension Boost requirement based on Teresa level",
         effect: () => 1 / (1 + Math.sqrt(Ra.pets.teresa.level) / 10),
         formatEffect: value => `${formatX(value, 4, 4)}`
       }
@@ -162,8 +162,9 @@ GameDatabase.infinity.upgrades = (function() {
         return `${income} every ${period}`;
       },
       charged: {
-        description: "Gain a percentage of your RM gained on Reality each real-time second, " +
-          "percent increases with Teresa level",
+        description: () =>
+          `Gain a percentage of your RM gained on Reality each real-time second,
+          percent increases with Teresa level`,
         effect: () => Math.sqrt(Ra.pets.teresa.level) / 1000 * RA_UNLOCKS.TT_BOOST.effect.autoPrestige(),
         formatEffect: value => `${formatPercents(value, 2)}`
       }

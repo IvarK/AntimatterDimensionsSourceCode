@@ -46,8 +46,8 @@ Vue.component("reality-button", {
     },
     update() {
       this.hasRealityStudy = TimeStudy.reality.isBought;
-      if (!this.hasRealityStudy || player.eternityPoints.lt("1e4000")) {
-        this.canReality = false;
+      this.canReality = isRealityAvailable();
+      if (!this.canReality) {
         this.shardsGained = 0;
         return;
       }
@@ -61,7 +61,6 @@ Vue.component("reality-button", {
         }
         return result;
       }
-      this.canReality = true;
       const multiplier = simulatedRealityCount(false) + 1;
       this.machinesGained = gainedRealityMachines().times(multiplier);
       this.realityTime = Time.thisRealityRealTime.totalMinutes;

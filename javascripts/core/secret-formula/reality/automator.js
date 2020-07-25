@@ -349,17 +349,22 @@ GameDatabase.reality.automator = {
       syntax: "You can use these in any if, while, until, or wait command.",
       description: `This is a list of "currencies" or numbers that you can use.<br>
       Note that when used, most currencies will need to be in scientific notation.<br>
-      am - antimatter amount  <br>
-      ip - infinity point amount  <br>
-      ep - eternity point amount  <br>
-      dt - dilated time amount  <br>
-      tp - tachyon particle amount  <br>
-      rg - replicanti galaxy amount (does not use scientific)<br>
-      rep - replicanti amount <br>
-      tt - time theorem amount <br>
-      total tt - TOTAL time theorems, includes all forms of generated TT <br>
-      pending completions - total completions of current EC at eternity <br>
-      ec[number] completions - amount of EC completions for a certain EC <br>
+      <b>am</b> - antimatter amount  <br>
+      <b>ip</b> - current infinity point amount  <br>
+      <b>ep</b> - current eternity point amount  <br>
+      <b>rm</b> - current reality machine amount  <br>
+      <b>pending ip</b> - IP gained on crunch (0 if not available)<br>
+      <b>pending ep</b> - EP gained on eternity (0 if not available)<br>
+      <b>pending rm</b> - RM gained on reality (0 if not available)<br>
+      <b>glyph level</b> - glyph level gained on reality (0 if not available)<br>
+      <b>dt</b> - dilated time amount  <br>
+      <b>tp</b> - tachyon particle amount  <br>
+      <b>rg</b> - replicanti galaxy amount (does not use scientific)<br>
+      <b>rep</b> - replicanti amount <br>
+      <b>tt</b> - time theorem amount <br>
+      <b>total tt</b> - TOTAL time theorems, includes all forms of generated TT <br>
+      <b>pending completions</b> - total completions of current EC at eternity <br>
+      <b>ec[number] completions</b> - amount of EC completions for a certain EC <br>
       `,
       examples: [
         `if total tt >= 5

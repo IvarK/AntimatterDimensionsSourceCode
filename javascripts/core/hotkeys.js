@@ -89,7 +89,9 @@ GameKeyboard.bindHotkey("u", () => {
     } else if (AutomatorBackend.isOn) {
       AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
     } else {
-      GameUI.notify.info(`No Automator script is running!`);
+      GameUI.notify.info(`Starting script "${AutomatorBackend.scriptName}"`);
+      AutomatorBackend.restart();
+      AutomatorBackend.start();  
       return;
     }
     const action = AutomatorBackend.isRunning ? "Resuming" : "Pausing";

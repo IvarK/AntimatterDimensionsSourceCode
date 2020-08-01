@@ -61,8 +61,8 @@ Vue.component("modal-shortcuts", {
         </div>
         <span class="c-modal-shortcuts__shift-description">
           Alt is a modifier key that, when pressed in conjunction with any key that has a corresponding autobuyer,
-          will toggle said autobuyer. This includes all autobuyers in the Autobuyer tab besides the Reality autobuyer,
-          as well as the Replicanti Galaxy Autobuyer.
+          will toggle said autobuyer. This includes all autobuyers in the Autobuyer tab besides the
+          Reality autobuyer, as well as the Replicanti Galaxy Autobuyer.
           <br>
           When pressing both Alt and Shift, you can toggle buying singles or buying max for the Antimatter Dimension and Tickspeed Autobuyers instead.
         </span>

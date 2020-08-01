@@ -86,11 +86,9 @@ GameKeyboard.bindHotkey("u", () => {
   if (player.realities >= 5) {
     if (AutomatorBackend.isRunning) {
       AutomatorBackend.pause();
-    }
-    else if (AutomatorBackend.isOn) {
+    } else if (AutomatorBackend.isOn) {
       AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
-    }
-    else {
+    } else {
       GameUI.notify.info(`No Automator script is running!`);
       return;
     }

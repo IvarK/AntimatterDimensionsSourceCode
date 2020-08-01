@@ -33,16 +33,16 @@ const AUTOBUYER_NAMES = ["1st Dimension", "2nd Dimension", "3rd Dimension", "4th
 // Toggle autobuyers
 function toggleAutobuyer(id) {
   const buyer = Autobuyers.all[id];
-  if (buyer.isUnlocked && player.options.autobuyersOn) {
+  if (buyer.isUnlocked) {
     buyer.toggle();
-    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} Autobuyer ${(buyer.isActive) ? "enabled" : "disabled"}`);
+    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} Autobuyer toggled ${(buyer.isActive) ? "on" : "off"}`);
   }
   return false;
 }
 
 function toggleBuySingles(id) {
   const buyer = Autobuyers.all[id];
-  if (buyer.isUnlocked && player.options.autobuyersOn && buyer.toggleMode !== null) {
+  if (buyer.isUnlocked && buyer.toggleMode !== null) {
     buyer.toggleMode();
     const bulkname = (id === 8 || buyer.hasUnlimitedBulk) ? "max" : "10";
     GameUI.notify.info(`${AUTOBUYER_NAMES[id]} Autobuyer set to buy ${(buyer.mode === 1) ? "singles" : bulkname}`);
@@ -89,6 +89,10 @@ GameKeyboard.bindHotkey("u", () => {
     }
     else if (AutomatorBackend.isOn) {
       AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
+    }
+    else {
+      GameUI.notify.info(`No Automator script is running!`);
+      return;
     }
     const action = AutomatorBackend.isRunning ? "Resuming" : "Pausing";
     const linenum = AutomatorBackend.currentLineNumber;

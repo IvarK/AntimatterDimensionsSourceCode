@@ -195,6 +195,8 @@ const AutomatorBackend = {
   },
 
   get currentLineNumber() {
+    if (this.stack.top === null)
+      return -1;
     return this.stack.top.lineNumber;
   },
 

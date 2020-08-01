@@ -64,7 +64,8 @@ Vue.component("modal-shortcuts", {
           will toggle said autobuyer. This includes all autobuyers in the Autobuyer tab besides the
           Reality autobuyer, as well as the Replicanti Galaxy Autobuyer.
           <br>
-          When pressing both Alt and Shift, you can toggle buying singles or buying max for the Antimatter Dimension and Tickspeed Autobuyers instead.
+          When pressing both Alt and Shift, you can toggle buying singles or buying max for the Antimatter Dimension
+          and Tickspeed Autobuyers instead.
         </span>
       </div>
     </div>`

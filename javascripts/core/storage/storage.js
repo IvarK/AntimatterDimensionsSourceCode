@@ -94,6 +94,17 @@ const GameStorage = {
     GameUI.notify.info("Exported current savefile to your clipboard");
   },
 
+  exportAsFile() {
+    let count = 0;
+    const date = new Date(Date.now());
+    let month = date.getMonth();
+    let day = date.getDay();
+    count++;
+    month++;
+    day++;
+    download(`AD-Save-${date.getFullYear()}-${month}-${day}-${count}.txt`, GameSaveSerializer.serialize(player));
+  },
+
   hardReset() {
     this.loadPlayerObject(Player.defaultStart);
     this.save();
@@ -186,3 +197,17 @@ const GameStorage = {
     }
   }
 };
+
+function download(filename, text) {
+  const pom = document.createElement("a");
+  pom.setAttribute("href", `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`);
+  pom.setAttribute("download", filename);
+
+  if (document.createEvent) {
+      const event = document.createEvent("MouseEvents");
+      event.initEvent("click", true, true);
+      pom.dispatchEvent(event);
+  } else {
+      pom.click();
+  }
+}

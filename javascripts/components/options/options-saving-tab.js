@@ -102,6 +102,11 @@ Vue.component("options-saving-tab", {
           text="Automatic cloud saving/loading:"
         />
       </div>
+      <div class="l-options-grid__row">
+        <options-button
+          onclick="GameStorage.exportAsFile()"
+        >Export save as file</options-button>
+      </div>
       <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
         Press <kbd>?</kbd> to open shortcut list.
       </p>

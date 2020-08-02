@@ -118,16 +118,34 @@ const AutomatorLexer = (() => {
   createInCategory(Currency, "TP", /tp/i, { $getter: () => player.dilation.tachyonParticles });
   createInCategory(Currency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
   createInCategory(Currency, "RM", /rm/i, { $getter: () => player.reality.realityMachines });
+
+  createInCategory(Currency, "PendingIP", /pending[ \t]+ip/i, {
+    $autocomplete: "pending IP",
+    $getter: () => (Player.canCrunch ? gainedInfinityPoints() : new Decimal(0))
+  });
+  createInCategory(Currency, "PendingEP", /pending[ \t]+ep/i, {
+    $autocomplete: "pending EP",
+    $getter: () => (Player.canEternity ? gainedEternityPoints() : new Decimal(0))
+  });
+  createInCategory(Currency, "PendingRM", /pending[ \t]+rm/i, {
+    $autocomplete: "pending RM",
+    $getter: () => (isRealityAvailable() ? gainedRealityMachines() : new Decimal(0))
+  });
+  createInCategory(Currency, "GlyphLevel", /glyph[ \t]+level/i, {
+    $autocomplete: "glyph level",
+    $getter: () => new Decimal(isRealityAvailable() ? gainedGlyphLevel().actualLevel : 0),
+  });
+
   createInCategory(Currency, "Rep", /rep(licanti)?/i, {
     $autocomplete: "rep",
     $getter: () => player.replicanti.amount,
   });
   createInCategory(Currency, "TT", /(tt|time theorems?)/i, {
-    $autocomplete: "tt",
+    $autocomplete: "TT",
     $getter: () => player.timestudy.theorem,
   });
   createInCategory(Currency, "Total_TT", /total tt/i, {
-    $autocomplete: "total tt",
+    $autocomplete: "total TT",
     $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
   });
 

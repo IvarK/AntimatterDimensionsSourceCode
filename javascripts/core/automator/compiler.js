@@ -285,11 +285,9 @@
 
     comparison(ctx) {
       super.comparison(ctx);
-      if (!ctx.compareValue || ctx.compareValue[0].recoveredNode) {
+      if (!ctx.compareValue || ctx.compareValue[0].recoveredNode ||
+        ctx.compareValue.length != 2 || ctx.compareValue[1].recoveredNode) {
         this.addError(ctx, "Missing value for comparison");
-      }
-      if (!ctx.Currency || ctx.Currency[0].isInsertedInRecovery) {
-        this.addError(ctx, "Missing currency for comparison");
       }
       if (!ctx.ComparisonOperator || ctx.ComparisonOperator[0].isInsertedInRecovery) {
         this.addError(ctx, "Missing comparison operator (<, >, <=, >=)");
@@ -365,13 +363,12 @@
     }
 
     comparison(ctx) {
-      const flipped = ctx.Currency[0].startOffset > ctx.ComparisonOperator[0].startOffset;
-      const threshold = ctx.compareValue[0].children.$value;
-      const currencyGetter = ctx.Currency[0].tokenType.$getter;
+      const getters = ctx.compareValue.map(cv => (
+        cv.children.Currency ? cv.children.Currency[0].tokenType.$getter : () => cv.children.$value
+      ));
       const compareFun = ctx.ComparisonOperator[0].tokenType.$compare;
       return () => {
-        const currency = currencyGetter();
-        return flipped ? compareFun(threshold, currency) : compareFun(currency, threshold);
+        return compareFun(getters[0](), getters[1]());
       };
     }
 
@@ -410,11 +407,16 @@
     }
 
     comparison(ctx) {
-      const flipped = ctx.Currency[0].startOffset > ctx.ComparisonOperator[0].startOffset;
-      const valueChildren = ctx.compareValue[0].children
-      const isDecimalValue = Boolean(valueChildren.$value)
-      const value = isDecimalValue ? valueChildren.$value.toString() : valueChildren.NumberLiteral[0].image
-      let operator = ctx.ComparisonOperator[0].image
+      const isCurrency = ctx.compareValue.map(cv => Boolean(cv.children.Currency));
+      if (!(isCurrency[0] ^ isCurrency[1])) {
+        throw new Error("arbitrary comparisons are not supported in block mode yet");
+      }
+      const currencyIndex = isCurrency[0] ? 0 : 1;
+      const flipped = currencyIndex == 1;
+      const valueChildren = ctx.compareValue[1 - currencyIndex].children;
+      const isDecimalValue = Boolean(valueChildren.$value);
+      const value = isDecimalValue ? valueChildren.$value.toString() : valueChildren.NumberLiteral[0].image;
+      let operator = ctx.ComparisonOperator[0].image;
       if (flipped) {
         switch (operator) {
           case ">": operator = "<"; break;
@@ -424,10 +426,10 @@
         }
       }
       return {
-        target: ctx.Currency[0].image,
+        target: ctx.compareValue[currencyIndex].children.Currency[0].image,
         secondaryTarget: operator,
         inputValue: value,
-      }
+      };
     }
 
     script(ctx) {

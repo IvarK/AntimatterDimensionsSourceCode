@@ -8,6 +8,7 @@ const GameStorage = {
     2: undefined
   },
   saved: 0,
+  count: 0,
 
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
@@ -64,6 +65,12 @@ const GameStorage = {
     GameUI.notify.info("Game imported");
   },
 
+  importAsFile() {
+    const reader = new FileReader();
+    GameUI.notify.info("This thing does not work");
+  },
+
+
   overwriteSlot(slot, saveData) {
     this.saves[slot] = saveData;
     if (slot === this.currentSlot) {
@@ -95,14 +102,9 @@ const GameStorage = {
   },
 
   exportAsFile() {
-    let count = 0;
-    const date = new Date(Date.now());
-    let month = date.getMonth();
-    let day = date.getDay();
-    count++;
-    month++;
-    day++;
-    download(`AD-Save-${date.getFullYear()}-${month}-${day}-${count}.txt`, GameSaveSerializer.serialize(player));
+    GameStorage.count++;
+    download(`AD-Save-${GameStorage.count}.txt`, GameSaveSerializer.serialize(player));
+    GameUI.notify.info("Successfully downloaded current save file to your computer");
   },
 
   hardReset() {

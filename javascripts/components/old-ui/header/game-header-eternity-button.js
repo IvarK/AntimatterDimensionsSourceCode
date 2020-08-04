@@ -34,9 +34,13 @@ Vue.component("game-header-eternity-button", {
       return this.currentEPPM.lte(this.peakEPPMThreshold);
     },
     buttonTypeClass() {
-      return this.isDilation
-        ? "o-prestige-btn--dilation"
-        : "o-prestige-btn--eternity";
+      if (this.isDilation) {
+        return "o-prestige-btn--dilation";
+      }
+      if (!this.canEternity) {
+        return "o-prestige-btn--eternity o-prestige-btn--eternity--unavailable";
+      }
+      return "o-prestige-btn--eternity";
     },
     isDilation() {
       return this.type === EP_BUTTON_DISPLAY_TYPE.DILATION ||

@@ -1700,6 +1700,10 @@ screen and (max-width: 480px) {
   border-color: black;
 }
 
+.o-prestige-btn--eternity--unavailable {
+  cursor: default;
+}
+
 .o-prestige-btn--dilation {
   color: #64dd17;
   background-color: black;

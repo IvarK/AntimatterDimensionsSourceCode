@@ -1589,9 +1589,9 @@ screen and (max-width: 480px) {
 
 /*#endregion c-subtab-option-container*/
 
-/*#region o-prestige-btn*/
+/*#region o-prestige-button*/
 
-.o-prestige-btn {
+.o-prestige-button {
   border: 0.2rem solid;
   border-radius: 0.4rem;
   transition-duration: 0.2s;
@@ -1602,53 +1602,53 @@ screen and (max-width: 480px) {
   font-family: Typewriter, serif;
 }
 
-.o-prestige-btn br {
+.o-prestige-button br {
   pointer-events: none;
 }
 
-.o-prestige-btn b {
+.o-prestige-button b {
   pointer-events: none;
 }
 
 /*#region Big Crunch*/
 
-.o-prestige-btn--big-crunch {
+.o-infinity-button {
   color: white;
   background-color: black;
   border-color: var(--color-infinity);
 }
 
-.o-prestige-btn--big-crunch:hover {
+.o-infinity-button:hover {
   color: black;
   background-color: var(--color-infinity);
 }
 
-.o-prestige-btn--big-crunch span {
+.o-infinity-button span {
   transition-duration: 0.2s;
 }
 
-.o-prestige-btn--big-crunch:hover span {
+.o-infinity-button:hover span {
   color: black !important;
 }
 
-.t-dark .o-prestige-btn--big-crunch {
+.t-dark .o-infinity-button {
   color: black;
   background: white;
 }
 
-.t-dark .o-prestige-btn--big-crunch:hover {
+.t-dark .o-infinity-button:hover {
   background: var(--color-infinity);
 }
 
-.t-metro .o-prestige-btn--big-crunch,
-.t-inverted-metro .o-prestige-btn--big-crunch,
-.t-s8 .o-prestige-btn--big-crunch {
+.t-metro .o-infinity-button,
+.t-inverted-metro .o-infinity-button,
+.t-s8 .o-infinity-button {
   box-shadow: 0.1rem 0.1rem 0.1rem 0 #9e9e9e;
   border-width: 0.1rem;
   border-radius: 0;
 }
 
-.t-dark-metro .o-prestige-btn--big-crunch {
+.t-dark-metro .o-infinity-button {
   color: black;
   background: white;
   box-shadow: 1px 1px 1px 0 black;
@@ -1656,89 +1656,89 @@ screen and (max-width: 480px) {
   border-radius: 0;
 }
 
-.t-dark-metro .o-prestige-btn--big-crunch:hover {
+.t-dark-metro .o-infinity-button:hover {
   background: var(--color-infinity);
 }
 
 /*#region Eternity*/
 
-.o-prestige-btn--eternity {
+.o-eternity-button {
   color: var(--color-eternity);
   background-color: black;
   border-color: var(--color-eternity);
   font-weight: bold;
 }
 
-.o-prestige-btn--eternity:hover {
+.o-eternity-button:hover {
   color: var(--color-eternity);
   background-color: white;
 }
 
-.o-prestige-btn--eternity span {
+.o-eternity-buttonspan {
   transition-duration: 0.2s;
 }
 
-.o-prestige-btn--eternity:hover span {
+.o-eternity-button:hover span {
   color: var(--color-eternity) !important;
 }
 
-.t-s1 .o-prestige-btn--eternity:hover span {
+.t-s1 .o-eternity-button:hover span {
   color: var(--color-text) !important;
 }
 
-.t-metro .o-prestige-btn--eternity,
-.t-dark-metro .o-prestige-btn--eternity,
-.t-inverted-metro .o-prestige-btn--eternity,
-.t-s8 .o-prestige-btn--eternity {
+.t-metro .o-eternity-button,
+.t-dark-metro .o-eternity-button,
+.t-inverted-metro .o-eternity-button,
+.t-s8 .o-eternity-button {
   border-width: 0.1rem;
   border-radius: 0;
 }
 
-.t-s1 .o-prestige-btn--eternity:hover {
+.t-s1 .o-eternity-button:hover {
   color: black;
   background: var(--color-eternity);
   border-color: black;
 }
 
-.o-prestige-btn--eternity--unavailable {
-  cursor: default;
-}
-
-.o-prestige-btn--dilation {
+.o-eternity-button--dilation {
   color: #64dd17;
   background-color: black;
   border-color: #64dd17;
 }
 
-.o-prestige-btn--dilation:hover {
+.o-eternity-button--dilation:hover {
   color: #64dd17;
   background-color: white;
 }
 
-.o-prestige-btn--dilation span {
+.o-eternity-button--dilation span {
   transition-duration: 0.2s;
 }
 
-.o-prestige-btn--dilation:hover span {
+.o-eternity-button--dilation:hover span {
   color: #64dd17 !important;
 }
 
-.t-s1 .o-prestige-btn--dilation:hover span {
+.t-s1 .o-eternity-button--dilation:hover span {
   color: var(--color-text) !important;
 }
 
-.t-metro .o-prestige-btn--dilation,
-.t-dark-metro .o-prestige-btn--dilation,
-.t-inverted-metro .o-prestige-btn--dilation,
-.t-s8 .o-prestige-btn--dilation {
+.t-metro .o-eternity-button--dilation,
+.t-dark-metro .o-eternity-button--dilation,
+.t-inverted-metro .o-eternity-button--dilation,
+.t-s8 .o-eternity-button--dilation {
   border-width: 0.1rem;
   border-radius: 0;
 }
 
-.t-s1 .o-prestige-btn--dilation:hover {
+.t-s1 .o-eternity-button--dilation:hover {
   color: black;
   background: #64dd17;
   border-color: black;
+}
+
+.o-eternity-button--unavailable {
+  cursor: default;
 }
 
 /*#endregion Eternity*/

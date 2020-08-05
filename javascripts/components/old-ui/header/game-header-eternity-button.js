@@ -23,6 +23,13 @@ Vue.component("game-header-eternity-button", {
     };
   },
   computed: {
+    buttonClassObject() {
+      return {
+        "o-eternity-button": !this.isDilation,
+        "o-eternity-button--dilation": this.isDilation,
+        "o-eternity-button--unavailable": !this.isDilation && !this.canEternity
+      };
+    },
     isGainedEPAmountSmall() {
       return this.gainedEP.lt(1e6);
     },
@@ -32,15 +39,6 @@ Vue.component("game-header-eternity-button", {
     peakEPPMThreshold: () => new Decimal("1e100"),
     isPeakEPPMVisible() {
       return this.currentEPPM.lte(this.peakEPPMThreshold);
-    },
-    buttonTypeClass() {
-      if (this.isDilation) {
-        return "o-prestige-btn--dilation";
-      }
-      if (!this.canEternity) {
-        return "o-prestige-btn--eternity o-prestige-btn--eternity--unavailable";
-      }
-      return "o-prestige-btn--eternity";
     },
     isDilation() {
       return this.type === EP_BUTTON_DISPLAY_TYPE.DILATION ||
@@ -139,8 +137,8 @@ Vue.component("game-header-eternity-button", {
   template: `
     <button
       v-if="isVisible"
-      :class="buttonTypeClass"
-      class="o-prestige-btn l-game-header__eternity-btn"
+      :class="buttonClassObject"
+      class="o-prestige-button l-game-header__eternity-btn"
       onclick="eternityResetRequest()"
     >
       <!-- First time -->

@@ -56,6 +56,17 @@ Vue.component("options-saving-tab", {
       if (confirm("Do you really want to erase all your progress?")) {
         GameStorage.hardReset();
       }
+    },
+    exportAsFile() {
+      GameStorage.exportAsFile();
+    },
+    importAsFile(event) {
+        const file = new Blob(event.target.result);
+        const reader = new FileReader();
+        const text = reader.readAsText(file);
+        // This does absoultely nothing (outputs "undefined")
+        console.log(text);
+        GameStorage.import(text, true);
     }
   },
   template: `
@@ -104,10 +115,10 @@ Vue.component("options-saving-tab", {
       </div>
       <div class="l-options-grid__row">
         <options-button
-          onclick="GameStorage.exportAsFile()"
+          @click="exportAsFile"
         >Export save as file</options-button>
         <options-button
-          >Import save as file<input type="file" accept=".txt" @change="GameStorage.importAsFile()"></options-button>
+          >Import save as file<input type="file" accept=".txt" @change="importAsFile"></options-button>
       </div>
       <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
         Press <kbd>?</kbd> to open shortcut list.

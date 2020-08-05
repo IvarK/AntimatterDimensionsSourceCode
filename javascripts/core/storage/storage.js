@@ -9,7 +9,7 @@ const GameStorage = {
   },
   saved: 0,
   count: 0,
-
+  
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
   },
@@ -67,9 +67,9 @@ const GameStorage = {
 
   importAsFile() {
     const reader = new FileReader();
-    GameUI.notify.info("This thing does not work");
+    const text = reader.readAsText(file);
+    this.import(text);
   },
-
 
   overwriteSlot(slot, saveData) {
     this.saves[slot] = saveData;

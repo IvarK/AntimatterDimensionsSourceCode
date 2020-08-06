@@ -57,16 +57,12 @@ Vue.component("options-saving-tab", {
         GameStorage.hardReset();
       }
     },
-    exportAsFile() {
-      GameStorage.exportAsFile();
-    },
     importAsFile(event) {
-        const file = new Blob(event.target.result);
-        const reader = new FileReader();
-        const text = reader.readAsText(file);
-        // This does absoultely nothing (outputs "undefined")
-        console.log(text);
-        GameStorage.import(text, true);
+      const reader = new FileReader();
+      reader.onload = function() {
+        GameStorage.import(reader.result);
+      };
+      reader.readAsText(event.target.files[0]);
     }
   },
   template: `
@@ -115,7 +111,7 @@ Vue.component("options-saving-tab", {
       </div>
       <div class="l-options-grid__row">
         <options-button
-          @click="exportAsFile"
+          onclick="GameStorage.exportAsFile()"
         >Export save as file</options-button>
         <options-button
           >Import save as file<input type="file" accept=".txt" @change="importAsFile"></options-button>

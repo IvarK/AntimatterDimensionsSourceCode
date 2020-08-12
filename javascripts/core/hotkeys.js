@@ -26,22 +26,88 @@ GameKeyboard.bindRepeatableHotkey("e", () => eternityResetRequest());
 GameKeyboard.bind("r", () => setHoldingR(true), "keydown");
 GameKeyboard.bind("r", () => setHoldingR(false), "keyup");
 
+
+const AUTOBUYER_NAMES = ["1st Dimension", "2nd Dimension", "3rd Dimension", "4th Dimension", 
+                         "5th Dimension", "6th Dimension", "7th Dimension", "8th Dimension",
+                         "Tickspeed", "Dimension Boost", "Galaxy", "Big Crunch", "Sacrifice", "Eternity"];
+
+// Toggle autobuyers
+function toggleAutobuyer(id) {
+  const buyer = Autobuyers.all[id];
+  if (buyer.isUnlocked) {
+    buyer.toggle();
+    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} Autobuyer toggled ${(buyer.isActive) ? "on" : "off"}`);
+  }
+  return false;
+}
+
+function toggleBuySingles(id) {
+  const buyer = Autobuyers.all[id];
+  if (buyer.isUnlocked && buyer.toggleMode !== null) {
+    buyer.toggleMode();
+    const bulkname = (id === 8 || buyer.hasUnlimitedBulk) ? "max" : "10";
+    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} Autobuyer set to buy ${(buyer.mode === 1) ? "singles" : bulkname}`);
+  }
+  return false;
+}
+
+GameKeyboard.bindHotkey("alt+t", () => toggleAutobuyer(8));
+GameKeyboard.bindHotkey("shift+alt+t", () => toggleBuySingles(8));
+GameKeyboard.bindHotkey("alt+d", () => toggleAutobuyer(9));
+GameKeyboard.bindHotkey("alt+g", () => toggleAutobuyer(10));
+GameKeyboard.bindHotkey("alt+c", () => toggleAutobuyer(11));
+GameKeyboard.bindHotkey("alt+s", () => toggleAutobuyer(12));
+GameKeyboard.bindHotkey("alt+e", () => toggleAutobuyer(13));
+GameKeyboard.bindHotkey("alt+r", () => {
+  const buyer = Replicanti.galaxies.autobuyer;
+  if (buyer.isUnlocked) {
+    buyer.toggle();
+    GameUI.notify.info(`Replicanti Galaxy autobuyer ${(buyer.isOn) ? "enabled" : "disabled"}`);
+  }
+  return false;
+});
+
 (function() {
   function bindDimensionHotkeys(tier) {
     GameKeyboard.bindRepeatableHotkey(`${tier}`, () => buyManyDimension(tier));
     GameKeyboard.bindRepeatableHotkey(`shift+${tier}`, () => buyOneDimension(tier));
+    GameKeyboard.bindHotkey(`alt+${tier}`, () => toggleAutobuyer(tier - 1));
+    GameKeyboard.bindHotkey(`shift+alt+${tier}`, () => toggleBuySingles(tier - 1));
   }
   for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);
 }());
 
-GameKeyboard.bindHotkey("a", () => Autobuyers.toggle());
+GameKeyboard.bindHotkey("a", () => {
+  Autobuyers.toggle();
+  GameUI.notify.info(`Autobuyers ${(player.options.autobuyersOn) ? "enabled" : "disabled"}`);
+});
 GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
 GameKeyboard.bindHotkey("u", () => {
-  if (AutomatorBackend.isRunning) {
-    AutomatorBackend.pause();
+  // Automator must be unlocked
+  if (player.realities >= 5) {
+    if (AutomatorBackend.isRunning) {
+      AutomatorBackend.pause();
+    } else if (AutomatorBackend.isOn) {
+      AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
+    } else {
+      GameUI.notify.info(`Starting script "${AutomatorBackend.scriptName}"`);
+      AutomatorBackend.restart();
+      AutomatorBackend.start();  
+      return;
+    }
+    const action = AutomatorBackend.isRunning ? "Resuming" : "Pausing";
+    const linenum = AutomatorBackend.currentLineNumber;
+    GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
+
   }
-  else if (AutomatorBackend.isOn) {
-    AutomatorBackend.mode = AUTOMATOR_MODE.RUN;
+});
+GameKeyboard.bindHotkey("shift+u", () => {
+  if (player.realities >= 5) {
+    const action = AutomatorBackend.isOn ? "Restarting" : "Starting";
+    GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}"`);
+
+    AutomatorBackend.restart();
+    AutomatorBackend.start();
   }
 });
 

@@ -2339,6 +2339,25 @@ screen and (max-width: 480px) {
   cursor: pointer;
 }
 
+.c-file-import-button {
+  position: relative;
+}
+
+.c-file-import {
+  position: absolute;
+  width: 20rem;
+  height: 5.5rem;
+  margin: -1.9rem -2rem;
+  opacity: 0;
+}
+
+.c-file-import::before {
+  cursor: pointer;
+  font-size: 100rem;
+  padding: 10rem 20rem;
+  content: ' ';
+}
+
 /*#region l-options-grid*/
 
 .l-options-grid {

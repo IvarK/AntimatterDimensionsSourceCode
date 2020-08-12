@@ -110,11 +110,13 @@ Vue.component("options-saving-tab", {
         />
       </div>
       <div class="l-options-grid__row">
-        <options-button
-          onclick="GameStorage.exportAsFile()"
-        >Export save as file</options-button>
-        <options-button
-          >Import save as file<input type="file" accept=".txt" @change="importAsFile"></options-button>
+        <options-button onclick="GameStorage.exportAsFile()">
+          Export save as file
+        </options-button>
+        <options-button class="c-file-import-button">
+          <input class="c-file-import" type="file" accept=".txt" @change="importAsFile">
+          <label for="file">Import save from file</label>
+        </options-button>
       </div>
       <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
         Press <kbd>?</kbd> to open shortcut list.

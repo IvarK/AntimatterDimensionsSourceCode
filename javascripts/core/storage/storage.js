@@ -8,7 +8,6 @@ const GameStorage = {
     2: undefined
   },
   saved: 0,
-  count: 0,
   
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
@@ -102,8 +101,14 @@ const GameStorage = {
   },
 
   exportAsFile() {
-    GameStorage.count++;
-    download(`AD-Save-${GameStorage.count}.txt`, GameSaveSerializer.serialize(player));
+    player.options.exportedFileCount++;
+    this.save(true);
+    const dateObj = new Date();
+    const y = dateObj.getFullYear();
+    const m = dateObj.getMonth() + 1;
+    const d = dateObj.getDate();
+    download(`AD Save ${GameStorage.currentSlot + 1} #${player.options.exportedFileCount} (${y}-${m}-${d}).txt`,
+    GameSaveSerializer.serialize(player));
     GameUI.notify.info("Successfully downloaded current save file to your computer");
   },
 

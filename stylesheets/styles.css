@@ -2337,6 +2337,8 @@ screen and (max-width: 480px) {
 
 .c-options-tab__shortcuts-link {
   cursor: pointer;
+  width: 21rem;
+  align-self: center;
 }
 
 /*#region l-options-grid*/

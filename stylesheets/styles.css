@@ -4109,6 +4109,7 @@ screen and (max-width: 480px) {
 .o-eternity-upgrade--unavailable {
   color: #181818;
   background-color: #5f5f5f;
+  cursor: default;
 }
 
 .o-eternity-upgrade--unavailable:hover {

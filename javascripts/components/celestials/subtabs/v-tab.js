@@ -64,6 +64,9 @@ Vue.component("v-tab", {
       player.reality.pp -= hex.reductionCost;
       const steps = hex.config.reductionStepSize ? hex.config.reductionStepSize : 1;
       player.celestials.v.goalReductionSteps[hex.id] += steps;
+      for (const unlock of VRunUnlocks.all) {
+        unlock.tryComplete();
+      }
     },
     reductionTooltip(hex) {
       return `Spend ${format(hex.reductionCost, 2, 0)} PP to reduce goal by ${format(hex.config.perReductionStep)}`;

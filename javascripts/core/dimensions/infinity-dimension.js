@@ -8,6 +8,7 @@ function infinityDimensionCommonMultiplier() {
       TimeStudy(92),
       TimeStudy(162),
       InfinityChallenge(1).reward,
+      InfinityChallenge(6).reward,
       EternityChallenge(4).reward,
       EternityChallenge(9).reward,
       EternityUpgrade.idMultEP,
@@ -169,9 +170,7 @@ class InfinityDimensionState extends DimensionState {
     if (EternityChallenge(7).isRunning) {
       production = production.dividedBy(Tickspeed.current.dividedBy(1000));
     }
-    return production
-      .timesEffectOf(InfinityChallenge(6).reward)
-      .times(this.multiplier);
+    return production.times(this.multiplier);
   }
 
   get multiplier() {

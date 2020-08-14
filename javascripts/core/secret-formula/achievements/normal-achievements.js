@@ -662,7 +662,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Get ${formatInt(308)} tickspeed upgrades (in one Eternity) from Time Dimensions.`,
     checkRequirement: () => player.totalTickGained >= 308,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Time Dimensions are affected slightly by tickspeed.",
+    reward: "Time Dimensions gain a multiplier based on Tickspeed.",
     effect: () => Tickspeed.current.div(1000).pow(0.000005).reciprocate()
   },
   {

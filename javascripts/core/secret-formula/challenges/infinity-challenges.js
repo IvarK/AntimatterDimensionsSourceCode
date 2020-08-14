@@ -79,7 +79,7 @@ GameDatabase.challenges.infinity = [
     effect: () => player.matter.clampMin(1),
     formatEffect: value => formatX(value, 1, 2),
     reward: {
-      description: "Tickspeed affects Infinity Dimensions with reduced effect",
+      description: "Infinity Dimension multiplier based on Tickspeed",
       effect: () => Decimal.divide(1000, Tickspeed.current).pow(0.0005),
       formatEffect: value => formatX(value, 2, 2)
     },

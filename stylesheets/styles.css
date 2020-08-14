@@ -3689,14 +3689,14 @@ screen and (max-width: 480px) {
 /*#region o-autobuyer-btn*/
 
 .o-autobuyer-btn {
-  width: 16rem;
+  width: 17.5rem;
   height: 3.5rem;
   color: white;
   background: #1f1f1f;
   border: 0.1rem solid #ed85df;
-  font-family: Typewriter, serif;
+  font-family: Typewriter;
   font-weight: bold;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   border-radius: 0.4rem;
   margin-bottom: -0.1rem;
   transition-duration: 0.2s;

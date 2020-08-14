@@ -491,7 +491,7 @@ function applyRUPG10() {
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
     cost: 5e133,
     interval: 100,
-    bulk: 1e100,
+    bulk: 1e10,
     mode: AUTOBUYER_MODE.BUY_10,
     priority: 1,
     isActive: true,

@@ -91,7 +91,7 @@ Vue.component("infinity-dim-row", {
     },
     buyManyInfinityDimension() {
       if (!this.isUnlocked) {
-        InfinityDimension(this.tier).tryUnlock();
+        InfinityDimension(this.tier).tryUnlock(true);
         return;
       }
       buyManyInfinityDimension(this.tier);

@@ -659,7 +659,7 @@ GameDatabase.achievements.normal = [
   {
     id: 105,
     name: "Infinite Time",
-    tooltip: () => `Get ${formatInt(308)} tickspeed upgrades (in one Eternity) from Time Dimensions.`,
+    tooltip: () => `Have ${formatInt(308)} Tickspeed upgrades from Time Dimensions.`,
     checkRequirement: () => player.totalTickGained >= 308,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Time Dimensions gain a multiplier based on Tickspeed.",

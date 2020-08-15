@@ -679,62 +679,92 @@ button:focus {
 }
 
 [ach-tooltip] {
-    position: relative;
+  position: relative;
 }
 
 [ach-tooltip]:before,
 [ach-tooltip]:after {
-    visibility: hidden;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
-    opacity: 0;
-    pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 [ach-tooltip]:before {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    margin-bottom: 5px;
-    margin-left: -85px;
-    padding: 7px;
-    width: 160px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    background-color: #000;
-    background-color: hsla(0, 0%, 5%, 0.9);
-    color: #fff;
-    content: attr(ach-tooltip);
-    text-align: center;
-    font-size: 14px;
-    line-height: 1.2;
-    transition-duration: .5s;
-    z-index: 3;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-bottom: 0.5rem;
+  margin-left: -8.5rem;
+  padding: 0.7rem;
+  width: 16rem;
+  border-radius: 0.3rem;
+  background-color: hsla(0, 0%, 5%, 0.9);
+  color: #fff;
+  content: attr(ach-tooltip);
+  text-align: center;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  transition-duration: 0.4s;
+  z-index: 3;
+}
+
+.t-dark-metro [ach-tooltip]:before {
+  border-radius: 0;
 }
 
 [ach-tooltip]:after {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -5px;
-    width: 0;
-    border-top: 5px solid #000;
-    border-top: 5px solid hsla(0, 0%, 5%, 0.9);
-    border-right: 5px solid transparent;
-    border-left: 5px solid transparent;
-    content: " ";
-    font-size: 0;
-    line-height: 0;
-    transition-duration: .5s;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -0.5rem;
+  width: 0;
+  border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-right: 0.5rem solid transparent;
+  border-left: 0.5rem solid transparent;
+  content: " ";
+  font-size: 0;
+  line-height: 0;
+  transition-duration: 0.4s;
 }
 
 [ach-tooltip]:hover:before,
 [ach-tooltip]:hover:after {
-    visibility: visible;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
-    opacity: 1;
+  visibility: visible;
+  opacity: 1;
+}
+
+.c-ra-upgrade-icon::before {
+  background: #222;
+  box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.7);
+  border: 0.1rem solid black;
+  margin-bottom: 0.6rem;
+  transition-duration: 0.3s;
+}
+
+.c-ra-upgrade-icon::after {
+  border-top-color: black;
+  margin-bottom: 0.1rem;
+  transition-duration: 0.3s;
+}
+
+.c-ra-upgrade-icon--teresa::before {
+  color: #8596ea;
+}
+
+.c-ra-upgrade-icon--effarig::before {
+  color: #ea8585;
+}
+
+.c-ra-upgrade-icon--enslaved::before {
+  color: #f1aa7f;
+}
+
+.c-ra-upgrade-icon--v::before {
+  color: #ead584;
+}
+
+.c-ra-upgrade-icon--inactive::before {
+  color: #555;
 }
 
 h1, h2, h3, h4, h5, h6 {

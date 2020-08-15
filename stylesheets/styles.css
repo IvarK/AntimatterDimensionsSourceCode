@@ -7195,6 +7195,7 @@ kbd {
 .l-singularity-milestone-modal-container-outer {
   height: 50rem;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .l-singularity-milestone-modal-container-inner {

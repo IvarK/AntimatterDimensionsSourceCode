@@ -199,7 +199,7 @@ Vue.component("game-header-eternity-button", {
         </template>
         <template v-else>
           <br>
-          {{gainedCompletions}} {{ "completion" | pluralize(gainedCompletions) }} on Eternity
+          {{formatInt(gainedCompletions)}} {{ "completion" | pluralize(gainedCompletions) }} on Eternity
           <template v-if="failedRestriction">
             <br>
             {{failedRestriction}}

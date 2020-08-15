@@ -43,8 +43,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 4,
-    description:
-      () => `Only the latest bought Antimatter Dimension's production is normal, all other Antimatter Dimensions 
+    description: () =>
+      `Only the latest bought Antimatter Dimension's production is normal, all other Antimatter Dimensions 
       produce less (${formatPow(0.25, 2, 2)}).`,
     goal: new Decimal("1e13000"),
     isQuickResettable: true,
@@ -64,7 +64,8 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {
-      description: () => `Galaxies are ${formatPercents(0.1)} stronger and reduce the requirements for them
+      description: () =>
+        `Galaxies are ${formatPercents(0.1)} stronger and reduce the requirements for them
         and Dimension Boosts by ${formatInt(1)}`,
       effect: 1.1
     },
@@ -72,7 +73,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 6,
-    description: () => `Once you have at least ${formatInt(1)} 2nd Antimatter Dimension, exponentially rising matter
+    description: () =>
+      `Once you have at least ${formatInt(1)} 2nd Antimatter Dimension, exponentially rising matter
       divides the multiplier on all of your Antimatter Dimensions.`,
     goal: new Decimal("2e22222"),
     isQuickResettable: true,
@@ -87,7 +89,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 7,
-    description: () => `You can't get Antimatter Galaxies, but Dimension Boost multiplier
+    description: () =>
+      `You can't get Antimatter Galaxies, but Dimension Boost multiplier
       ${formatX(2.5, 1, 1)} ➜ ${formatX(10, 0, 0)}`,
     goal: new Decimal("1e10000"),
     isQuickResettable: false,
@@ -100,7 +103,9 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 8,
-    description: "Your production is at 100% after purchasing anything, after that it rapidly drops down.",
+    description: () =>
+      `Your production is at ${formatPercents(1)} after
+      purchasing anything, after that it rapidly drops down.`,
     goal: new Decimal("1e27000"),
     isQuickResettable: true,
     effect: () => Decimal.pow(0.8446303389034288,

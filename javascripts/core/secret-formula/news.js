@@ -102,7 +102,7 @@ GameDatabase.news = [
   },
   {
     id: "a22",
-    text: "This antimatter triggers me."
+    text: "One, two, skip a few, ninety-nine, NaN!"
   },
   {
     id: "a23",
@@ -160,7 +160,7 @@ GameDatabase.news = [
   },
   {
     id: "a36",
-    text: "If black lives matter, do white lives antimatter?"
+    text: "You feel like making antimatter. But nobody wants to eat your antimatter."
   },
   {
     id: "a37",
@@ -1903,7 +1903,8 @@ GameDatabase.news = [
   },
   {
     id: "a320",
-    text: "Introducing the aphone 10: The world's first completely water soluble mobile device!"
+    text: "Introducing the aphone 10: The world's first completely water soluble mobile device!",
+    isAdvertising: true
   },
   {
     id: "a321",
@@ -1916,6 +1917,67 @@ GameDatabase.news = [
     text:
       `Hevipelle announces an Antimatter Dimensions spinoff where you gamble matter in a game of
       poker in Dutch mansions: "Ante matter d'mansions"`
+  },
+  {
+    id: "a323",
+    text: `var i = "Omae wa mou shindeiru" console.log(i - 1 + "i?") NaNi?`
+  },
+  {
+    id: "a324",
+    text:
+      `If you have an idea for a news message, shout it into the void.
+      It won’t get your message into the game, but it’s fun!`
+  },
+  {
+    id: "a325",
+    text:
+      `After the accident at the antimatter reactor in Pripyat last month, concerns are rising about the safety of
+      antimattter reactors, and many are starting to believe we should return to safer means of energy generation,
+      such as nuclear.`
+  },
+  {
+    id: "a326",
+    text: "Antimatter Dimensions is like an ogre... it has layers."
+  },
+  (function() {
+    let wasClicked = false;
+    const normal = "Click here to restart your device.";
+    const clicked = "Please give Antimatter Dimensions admin access to your device.";
+    return {
+      id: "a327",
+      get text() {
+        return wasClicked ? clicked : normal;
+      },
+      reset() {
+        wasClicked = false;
+      },
+      onClick() {
+        if (wasClicked) return undefined;
+        wasClicked = true;
+        return this.text;
+      }
+    };
+  }()),
+  {
+    id: "a328",
+    text:
+      `News company no longer lets random people submit stories,
+      instead opting to using qualified writers. Riots ensue.`
+  },
+  {
+    id: "a329",
+    text:
+      `Introducing Morse Code+++ - the brand new Morse code, now with 20 new
+      characters, for everyone who wants to slide, zip, and swoosh!`,
+    isAdvertising: true
+  },
+  {
+    id: "a330",
+    text: "Any sufficiently primitive magic is indistinguishable from technology."
+  },
+  {
+    id: "a331",
+    text: "I have no nose, and I must sneeze!"
   },
   {
     id: "l1",
@@ -2432,6 +2494,12 @@ GameDatabase.news = [
       `"Zurkrbarg, Celestial of Privacy" has announced their plans to release a new version
       of their popular social media universe, "All".`,
     get unlocked() { return RealityUpgrades.allBought; }
+  },
+  {
+    id: "l71",
+    text:
+      "Other languages await... I need to become a programmer",
+    get unlocked() { return Player.canEternity || PlayerProgress.eternityUnlocked(); }
   },
   {
     id: "j1",

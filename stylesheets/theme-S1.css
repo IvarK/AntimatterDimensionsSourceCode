@@ -1,11 +1,11 @@
-html {
-    background: url('../images/s1-bg.svg') no-repeat;
-    background-size: contain;
-    align-content: center;
-    background-size: 100%;
-    background-color: #d72621;
-    background-attachment:fixed;
-    background-position:center bottom;
+#ui-container {
+  background: url('../images/s1-bg.svg') no-repeat;
+  background-size: contain;
+  align-content: center;
+  background-size: 100%;
+  background-color: #d72621;
+  background-attachment:fixed;
+  background-position:center bottom;
 }
 
 body.t-s1 {

@@ -243,7 +243,7 @@ function gainedInfinities() {
   if (isLocalEnvironment()) return;
   let commit;
   setInterval(() => {
-    const url = "https://api.github.com/repos/IvarK/HahaSlabWontGetHere/commits/master";
+    const url = "https://api.github.com/repos/IvarK/IToughtAboutCurseWordsButThatWouldBeMeanToOmsi/commits/master";
     const headers = new Headers();
     // Yes, this is my GitHub API key for reading private repo details
     headers.append("Authorization", `Basic ${btoa("Razenpok:9b15284a7c7a1142b5766f81967a96f90b7879a8")}`);

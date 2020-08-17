@@ -10,7 +10,8 @@ Vue.component("challenge-records-tab", {
   },
   methods: {
     update() {
-      this.infinityChallengesUnlocked = PlayerProgress.infinityChallengeCompleted();
+      this.infinityChallengesUnlocked = PlayerProgress.infinityChallengeCompleted() ||
+        PlayerProgress.eternityUnlocked();
       this.normalChallenges = player.challenge.normal.bestTimes.slice(0);
       this.infinityChallenges = player.challenge.infinity.bestTimes.slice(0);
     }

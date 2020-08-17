@@ -523,8 +523,10 @@ let player = {
     offlineTicks: 1000,
     showLastTenRunsGainPerTime: false,
     autosaveInterval: 30000, 
+    hideCompletedAchievementRows: false,
     showHintText: {
       achievements: false,
+      achievementUnlockStates: false,
       challenges: false,
       studies: false,
       glyphEffectDots: true,

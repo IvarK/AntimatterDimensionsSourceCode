@@ -3,8 +3,6 @@
 Vue.component("challenges-header", {
   data() {
     return {
-      isICTabUnlocked: false,
-      isECTabUnlocked: false,
       isInChallenge: false,
       isShowAllVisible: false,
       isAutoECVisible: false,
@@ -26,15 +24,8 @@ Vue.component("challenges-header", {
   methods: {
     update() {
       this.showAllChallenges = player.options.showAllChallenges;
-      const isECTabUnlocked = player.challenge.eternity.unlocked !== 0 ||
-        Object.keys(player.eternityChalls).length > 0;
-      this.isECTabUnlocked = isECTabUnlocked;
-      const isICTabUnlocked = isECTabUnlocked ||
-        Currency.antimatter.exponent >= 2000 ||
-        player.postChallUnlocked > 0;
-      this.isICTabUnlocked = isICTabUnlocked;
       this.isInChallenge = NormalChallenge.isRunning || InfinityChallenge.isRunning || EternityChallenge.isRunning;
-      this.isShowAllVisible = PlayerProgress.realityUnlocked() && (isECTabUnlocked || isICTabUnlocked);
+      this.isShowAllVisible = PlayerProgress.eternityUnlocked();
       this.isAutoECVisible = Perk.autocompleteEC1.isBought;
       this.autoEC = player.reality.autoEC;
       const remainingCompletions = EternityChallenges.remainingCompletions;
@@ -70,7 +61,7 @@ Vue.component("challenges-header", {
       <primary-button-on-off v-if="isShowAllVisible"
         v-model="showAllChallenges"
         class="o-primary-btn--subtab-option"
-        text="Show all challenges:"
+        text="Show all known challenges:"
       />
       <primary-button-on-off v-if="isAutoECVisible"
         v-model="autoEC"

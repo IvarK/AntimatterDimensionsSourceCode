@@ -737,8 +737,16 @@ button:focus {
   background: #222;
   box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.7);
   border: 0.1rem solid black;
+  border-radius: 1rem;
   margin-bottom: 0.6rem;
   transition-duration: 0.3s;
+}
+
+.t-metro .c-ra-upgrade-icon:before,
+.t-dark-metro .c-ra-upgrade-icon:before,
+.t-inverted-metro .c-ra-upgrade-icon:before,
+.t-s8 .c-ra-upgrade-icon:before {
+  border-radius: 0;
 }
 
 .c-ra-upgrade-icon:after {

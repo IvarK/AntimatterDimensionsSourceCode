@@ -454,7 +454,7 @@ body.t-s9 {
 /* FIXING OLD TABS */
 
 .l-achievement-grid__cell {
-  margin: 0.4rem 0.4rem;
+  margin: 0.4rem;
 }
 
 .t-normal .o-achievement__tooltip {

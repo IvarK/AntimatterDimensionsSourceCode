@@ -401,7 +401,54 @@ GameDatabase.news = [
   },
   {
     id: "a92",
-    text: "#DimensionLivesAntimatter"
+    get text() {
+      const games = [
+        {
+          name: "Antimatter Dimensions",
+          link: "https://ivark.github.io/"
+        },
+        {
+          name: "FE000000",
+          link: "https://dan-simon.github.io/misc/fe000000/"
+        },
+        {
+          name: "Trimps",
+          link: "https://trimps.github.io/"
+        },
+        {
+          name: "Mine Defense",
+          link: "http://scholtek.com/minedefense"
+        },
+        {
+          name: "Wizard and Minion Idle",
+          link: "https://www.kongregate.com/games/Oninou/wami"
+        },
+        {
+          // TODO: update this link because of the removal of flash from browsers
+          name: "Anti-Idle",
+          link: "https://www.kongregate.com/games/Tukkun/anti-idle-the-game"
+        },
+        {
+          name: "Synergism",
+          link: "https://pseudonian.github.io/SynergismOfficial/"
+        },
+        {
+          name: "Universal Paperclips",
+          link: "https://www.decisionproblem.com/paperclips/index2.html"
+        },
+        {
+          name: "Monies<sup>2</sup",
+          link: "https://sneekxy.nmtechgroup.com/monies2/"
+        },
+        {
+          name: "The First Alkahistorian stages 1, 2, and 3",
+          link: "https://nagshell.github.io/elemental-inception-incremental/"
+        }
+      ];
+      const game = games.randomElement();
+      return `An unidentified developer of Antimatter Dimensions would like to
+        recommend that you play <a href="${game.link}">${game.name}</a>`;
+    },
   },
   {
     id: "a93",

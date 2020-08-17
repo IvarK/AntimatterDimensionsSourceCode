@@ -457,6 +457,15 @@ body.t-s9 {
   margin: 0.4rem 0.4rem;
 }
 
+.t-normal .o-achievement__tooltip {
+  border: 0.1rem solid var(--color-accent);
+  background: var(--color-base);
+}
+
+.t-normal .o-achievement__tooltip:after {
+  border-top-color: var(--color-accent);
+}
+
 .o-infinity-upgrade-btn--unavailable {
   background: #525252;
   color: white;

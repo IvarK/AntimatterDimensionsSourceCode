@@ -8,6 +8,7 @@ Vue.component("secret-achievement", {
   data() {
     return {
       isUnlocked: false,
+      showUnlockState: false
     };
   },
   computed: {
@@ -30,7 +31,18 @@ Vue.component("secret-achievement", {
         "o-achievement--unlocked": this.isUnlocked,
         "o-achievement--secret": true
       };
-    }
+    },
+    indicator() {
+      const achievement = this.achievement;
+      if (achievement.isUnlocked) return "<i class='fas fa-check'></i>";
+      return "<i class='fas fa-times'></i>";
+    },
+    indicatorClassObject() {
+      return {
+        "o-achievement__indicator": true,
+        "o-achievement__indicator--secret": !this.isUnlocked
+      };
+    },
   },
   created() {
     this.on$(GAME_EVENT.ACHIEVEMENT_UNLOCKED, this.updateState);
@@ -39,6 +51,7 @@ Vue.component("secret-achievement", {
   methods: {
     updateState() {
       this.isUnlocked = this.achievement.isUnlocked;
+      this.showUnlockState = player.options.showHintText.achievementUnlockStates;
     },
     onClick() {
       if (this.achId === 11 && !this.isUnlocked) {

@@ -2753,6 +2753,17 @@ screen and (max-width: 480px) {
   border-color: #7d7d36;
 }
 
+.o-achievement__indicator--secret,
+.t-metro .o-achievement__indicator--secret,
+.t-dark-metro .o-achievement__indicator--secret,
+.t-inverted-metro .o-achievement__indicator--secret,
+.t-dark .o-achievement__indicator--secret,
+.t-s6 .o-achievement__indicator--secret,
+.t-s8 .o-achievement__indicator--secret {
+  background: #555;
+  border-color: black;
+}
+
 .t-metro .o-achievement__indicator,
 .t-dark-metro .o-achievement__indicator,
 .t-inverted-metro .o-achievement__indicator,

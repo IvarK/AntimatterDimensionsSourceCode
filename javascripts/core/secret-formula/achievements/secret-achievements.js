@@ -4,33 +4,35 @@ GameDatabase.achievements.secret = [
   {
     id: 11,
     name: "The first one's always free",
-    tooltip: "Click on this achievement."
+    description: "Click on this achievement."
   },
   {
     id: 12,
     name: "Just in case",
-    tooltip: () => `Save ${formatInt(100)} times without refreshing.`
+    get description() { return `Save ${formatInt(100)} times without refreshing.`; }
   },
   {
     id: 13,
     name: "It pays to have respect",
-    tooltip: "Pay respects."
+    description: "Pay respects."
   },
   {
     id: 14,
     name: "So do I",
-    tooltip: "Say something naughty."
+    description: "Say something naughty."
   },
   {
     id: 15,
     name: "Do a barrel roll!",
-    tooltip: "Do a barrel roll.",
+    description: "Do a barrel roll.",
   },
   {
     id: 16,
     name: "Do you enjoy pain?",
-    tooltip: () => `Use a "painful" notation for ${formatInt(10)} real-time minutes ` +
-      "after having eternitied at least once.",
+    get description() {
+      return `Use a "painful" notation for ${formatInt(10)} real-time minutes
+      after having eternitied at least once.`;
+    },
     checkRequirement: () => AchievementTimers.pain
       .check(PlayerProgress.eternityUnlocked() && Notations.current.isPainful, 600),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
@@ -38,45 +40,49 @@ GameDatabase.achievements.secret = [
   {
     id: 17,
     name: "30 Lives",
-    tooltip: "Input the konami code."
+    description: "Input the konami code."
   },
   {
     id: 18,
     name: "Do you feel lucky? Well do ya punk?",
-    tooltip: () => `You have a ${formatInt(1)}/${formatInt(1e5)} chance of getting this achievement every second.`
+    get description() {
+      return `You have a ${formatInt(1)}/${formatInt(1e5)} chance of getting this achievement every second.`;
+    }
   },
   {
     id: 21,
     name: "Go study in real life instead",
-    tooltip: "Purchase the secret Time Study."
+    description: "Purchase the secret Time Study."
   },
   {
     id: 22,
     name: "Cancer = Spread",
-    tooltip: () => `Buy ${formatInt(1e5)} Antimatter Galaxies in total while using cancer notation.`,
+    get description() { return `Buy ${formatInt(1e5)} Antimatter Galaxies in total while using cancer notation.`; },
     checkRequirement: () => player.spreadingCancer >= 1e5,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER
   },
   {
     id: 23,
     name: "Stop right there criminal scum!",
-    tooltip: "Open the console."
+    description: "Open the console."
   },
   {
     id: 24,
     name: "Real news",
-    tooltip: "Click on a news ticker message that does something when you click on it."
+    description: "Click on a news ticker message that does something when you click on it."
   },
   {
     id: 25,
     name: "Shhh... It's a secret",
-    tooltip: "Discover a secret theme."
+    description: "Discover a secret theme."
   },
   {
     id: 26,
     name: "You're a failure",
-    tooltip: () => `Fail eternity challenges ${formatInt(10)} times without refreshing. ` +
-      "What are you doing with your life...",
+    get description() {
+      return `Fail eternity challenges ${formatInt(10)} times without refreshing. 
+      What are you doing with your life...`;
+    },
     checkRequirement: (function() {
       let count = 0;
       return () => ++count >= 10;
@@ -86,24 +92,24 @@ GameDatabase.achievements.secret = [
   {
     id: 27,
     name: "It's not called matter dimensions is it?",
-    tooltip: "Get Infinite matter.",
+    description: "Get Infinite matter.",
     checkRequirement: () => Player.effectiveMatterAmount.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 28,
     name: "Nice.",
-    tooltip: "Don't act like you don't know what you did."
+    description: "Don't act like you don't know what you did."
   },
   {
     id: 31,
     name: "You should download some more RAM",
-    tooltip: () => `Set your update rate to ${formatInt(200)}ms.`
+    get description() { return `Set your update rate to ${formatInt(200)}ms.`; }
   },
   {
     id: 32,
     name: "Less than or equal to 0.001",
-    tooltip: () => `Get a fastest infinity or eternity time of less than or equal to ${format(0.001, 3, 3)} seconds.`,
+    get description() { return `Get a fastest infinity or eternity time of less than or equal to ${format(0.001, 3, 3)} seconds.`; },
     checkRequirement: () =>
       Time.bestInfinity.totalMilliseconds <= 1 ||
       Time.bestEternity.totalMilliseconds <= 1,
@@ -112,78 +118,78 @@ GameDatabase.achievements.secret = [
   {
     id: 33,
     name: "A sound financial decision",
-    tooltip: "Click on the donate link."
+    description: "Click on the donate link."
   },
   {
     id: 34,
     name: "You do know how these work, right?",
-    tooltip: "Respec with an empty study tree."
+    description: "Respec with an empty study tree."
   },
   {
     id: 35,
     name: "Should we tell them about buy max...",
-    tooltip: () => `Buy single tickspeed ${formatInt(1e5)} times.`,
+    get description() { return `Buy single tickspeed ${formatInt(1e5)} times.`; },
     checkRequirement: () => player.secretUnlocks.why >= 1e5,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 36,
     name: "While you were away... Nothing happened.",
-    tooltip: "Have nothing happen while you were away."
+    description: "Have nothing happen while you were away."
   },
   {
     id: 37,
     name: "You followed the instructions",
-    tooltip: "Follow instructions."
+    description: "Follow instructions."
   },
   {
     id: 38,
     name: "Professional bodybuilder",
-    tooltip: "This one is getting replaced due to a recent PR."
+    description: "This one is getting replaced due to a recent PR."
   },
   {
     id: 41,
     name: "That dimension doesn’t exist",
-    tooltip: "Try to purchase the 9th dimension."
+    description: "Try to purchase the 9th dimension."
   },
   {
     id: 42,
     name: "SHAME ON ME",
-    tooltip: "Try to use EC12 to speed up time."
+    description: "Try to use EC12 to speed up time."
   },
   {
     id: 43,
     name: "Time fixes everything",
-    tooltip: "Fix infinity while Dilated.",
+    description: "Fix infinity while Dilated.",
     checkRequirement: () => player.dilation.active,
     checkEvent: GAME_EVENT.FIX_INFINITY
   },
   {
     id: 44,
     name: "Are you statisfied now?",
-    tooltip: () => `Stare intently at the statistics tab for ${formatInt(15)} real-time minutes.`,
+    get description() { return `Stare intently at the statistics tab for ${formatInt(15)} real-time minutes.`; },
     checkRequirement: () => AchievementTimers.stats.check(Tab.statistics.isOpen, 900),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 45,
     name: "This dragging is dragging on",
-    tooltip: "Drag the perks around for a minute.",
+    description: "Drag the perks around for a minute.",
     checkRequirement: () => player.secretUnlocks.dragging++ / 100 >= 60
   },
   {
     id: 46,
     name: "s46",
-    tooltip: "s46"
+    description: "s46"
   },
   {
     id: 47,
     name: "s47",
-    tooltip: "s47"
+    description: "s47"
   },
   {
     id: 48,
     name: "s48",
-    tooltip: "s48"
+    description: "s48"
   },
 ];

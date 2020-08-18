@@ -30,13 +30,6 @@ Vue.component("secret-achievement", {
         "o-achievement--unlocked": this.isUnlocked,
         "o-achievement--secret": true
       };
-    },
-    tooltip() {
-      function evaluateText(prop) {
-        return typeof prop === "function" ? prop() : prop;
-      }
-      const config = this.achievement.config;
-      return this.isUnlocked ? evaluateText(config.tooltip) : config.name;
     }
   },
   created() {
@@ -57,9 +50,14 @@ Vue.component("secret-achievement", {
     `<div
       :class="classObject"
       :style="styleObject"
-      :ach-tooltip="tooltip"
       @click="onClick">
       <hint-text type="achievements" class="l-hint-text--achievement">S{{row}}{{column}}</hint-text>
-      <br>
+      <div class="o-achievement__tooltip">
+        <div class="o-achievement__tooltip__name">{{ this.achievement.config.name }} ({{ achId }})</div>
+        <div v-if="this.isUnlocked" class="o-achievement__tooltip__description">
+          {{ this.achievement.config.description }}
+        </div>
+      </div>
+      <div v-if="showUnlockState" :class="indicatorClassObject" v-html="indicator"></div>
      </div>`
 });

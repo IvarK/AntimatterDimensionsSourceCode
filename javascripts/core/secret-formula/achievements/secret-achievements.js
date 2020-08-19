@@ -109,7 +109,9 @@ GameDatabase.achievements.secret = [
   {
     id: 32,
     name: "Less than or equal to 0.001",
-    get description() { return `Get a fastest infinity or eternity time of less than or equal to ${format(0.001, 3, 3)} seconds.`; },
+    get description() {
+      return `Get a fastest infinity or eternity time of less than or equal to ${format(0.001, 3, 3)} seconds.`;
+    },
     checkRequirement: () =>
       Time.bestInfinity.totalMilliseconds <= 1 ||
       Time.bestEternity.totalMilliseconds <= 1,

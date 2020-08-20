@@ -92,7 +92,7 @@ GameDatabase.reality.perks = {
     label: "PASS1",
     family: PERK_FAMILY.ETERNITY,
     description: "Improve Time Study 122 to x100 Eternity Points and " +
-      "Time Study 124 to x1e100 Infinity Points."
+      "Time Study 142 to x1e100 Infinity Points."
   },
   studyPassive2: {
     id: 32,

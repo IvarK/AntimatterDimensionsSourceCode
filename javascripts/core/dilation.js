@@ -17,10 +17,7 @@ function undilationAnimation() {
 function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
   if (player.options.confirmations.dilation) {
-    if (!confirm(`Dilating time will start a new eternity, and all of your Dimension/Infinity
-    Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to
-    ^ 0.75. If you can eternity while Dilated, you'll be rewarded with tachyon particles based on your
-    antimatter and tachyon particles.`)) return;
+    Modal.enterDilation.show();
   }
   if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
     undilationAnimation();

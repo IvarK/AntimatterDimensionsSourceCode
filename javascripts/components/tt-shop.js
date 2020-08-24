@@ -88,7 +88,7 @@ Vue.component("tt-shop", {
       this.theoremAmount.copyFrom(player.timestudy.theorem);
       this.theoremGeneration.copyFrom(getTTPerSecond().times(getGameSpeedupFactor()));
       this.shopMinimized = player.timestudy.shopMinimized;
-      this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought;
+      this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought || Perk.autobuyerTT1.isBought;
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
       this.ttAutobuyerOn = player.ttbuyer;
       const budget = this.budget;

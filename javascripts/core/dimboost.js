@@ -41,14 +41,12 @@ class DimBoost {
     return DimBoost.power.pow(this.totalBoosts + 1 - tier).clampMin(1);
   }
 
-  static get maxShiftTier() {
+  static get maxDimensionsUnlockable() {
     return NormalChallenge(10).isRunning ? 6 : 8;
   }
 
-  static get isShift() {
-    // Player starts with 4 unlocked dimensions,
-    // hence there are just 4 (or 2, if in Auto DimBoosts challenge) shifts
-    return DimBoost.purchasedBoosts + 4 < this.maxShiftTier;
+  static get canUnlockNewDimension() {
+    return DimBoost.purchasedBoosts + 4 < DimBoost.maxDimensionsUnlockable;
   }
 
   static get challenge8MaxBoosts() {
@@ -62,7 +60,11 @@ class DimBoost {
   }
 
   static get canBeBought() {
-    return !(NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) && !Ra.isRunning;
+    if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) return false;
+    if (Ra.isRunning) return false;
+    if (player.thisInfinityMaxAM.gt(Player.infinityGoal) &&
+       (!player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning)) return false;
+    return true;
   }
 
   static get lockText() {
@@ -79,7 +81,7 @@ class DimBoost {
 
   static bulkRequirement(bulk) {
     const targetResets = DimBoost.purchasedBoosts + bulk;
-    const tier = Math.min(targetResets + 3, this.maxShiftTier);
+    const tier = Math.min(targetResets + 3, this.maxDimensionsUnlockable);
     let amount = 20;
     const discount = Effects.sum(
       TimeStudy(211),
@@ -150,10 +152,10 @@ function skipResetsIfPossible() {
   else if (InfinityUpgrade.skipReset1.isBought && player.dimensionBoosts < 1) player.dimensionBoosts = 1;
 }
 
-function softResetBtnClick() {
+function requestDimensionBoost(bulk) {
   if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
   if (!DimBoost.canBeBought) return;
-  if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
+  if (BreakInfinityUpgrade.bulkDimBoost.isBought && bulk) maxBuyDimBoosts(true);
   else softReset(1);
 
   for (let tier = 1; tier < 9; tier++) {
@@ -163,8 +165,8 @@ function softResetBtnClick() {
 }
 
 function maxBuyDimBoosts() {
-  // Shifts are bought one at a time, unlocking the next dimension
-  if (DimBoost.isShift) {
+  // Boosts that unlock new dims are bought one at a time, unlocking the next dimension
+  if (DimBoost.canUnlockNewDimension) {
     if (DimBoost.requirement.isSatisfied) softReset(1);
     return;
   }

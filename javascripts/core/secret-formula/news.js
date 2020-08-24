@@ -1247,7 +1247,7 @@ GameDatabase.news = [
     id: "a230",
     get text() {
       return "You started playing this game nearly " +
-        `${TimeSpan.fromMilliseconds(player.realTimePlayed).toString()} ago. Thank you for playing!`;
+        `${TimeSpan.fromMilliseconds(Date.now() - player.gameCreatedTime).toString()} ago. Thank you for playing!`;
     },
     dynamic: true
   },
@@ -2103,7 +2103,7 @@ GameDatabase.news = [
     id: "l27",
     text:
       "New strange material was been found. It seems to grow exponentially, but only helps with antimatter production.",
-    get unlocked() { return Replicanti.areUnlocked && player.replicanti.chance === 0.01; }
+    get unlocked() { return PlayerProgress.replicantiUnlocked() && player.replicanti.chance === 0.01; }
   },
   {
     id: "l28",
@@ -2334,7 +2334,7 @@ GameDatabase.news = [
   },
   {
     id: "l60",
-    get text() { 
+    get text() {
       return `Breaking News! Time Shard mine collapses! ${Math.floor(20 + Math.random() * 236)} miners trapped inside!`;
     },
     get unlocked() { return PlayerProgress.eternityUnlocked(); }
@@ -2396,7 +2396,7 @@ GameDatabase.news = [
   },
   {
     id: "l68",
-    get text() { 
+    get text() {
       let protestText = "";
       if (InfinityChallenge(4).isRunning)
         protestText =
@@ -2424,7 +2424,7 @@ GameDatabase.news = [
   {
     id: "l69",
     text: "Friendship ended with Replicanti, now Replicanti Galaxies is my new best friend.",
-    get unlocked() { return Replicanti.areUnlocked || PlayerProgress.eternityUnlocked(); }
+    get unlocked() { return PlayerProgress.replicantiUnlocked(); }
   },
   {
     id: "l70",
@@ -3161,7 +3161,7 @@ GameDatabase.news = [
   {
     id: "ai125",
     text: "Oh, god, there's replicanti in my peas.",
-    get unlocked() { return PlayerProgress.eternityUnlocked() || Replicanti.areUnlocked; }
+    get unlocked() { return PlayerProgress.replicantiUnlocked(); }
   },
   {
     id: "ai126",
@@ -5685,7 +5685,7 @@ GameDatabase.news = [
   {
     id: "ai752",
     text: "A new extension is now available that will let you watch replicanti grow!",
-    get unlocked() { return PlayerProgress.eternityUnlocked() || Replicanti.areUnlocked; }
+    get unlocked() { return PlayerProgress.replicantiUnlocked(); }
   },
   {
     id: "ai753",
@@ -5895,7 +5895,7 @@ GameDatabase.news = [
   {
     id: "ai804",
     text: "We should be able to make a replicanti-like structure out of antimatter, but we can't because it would blow up the entire universe",
-    get unlocked() { return PlayerProgress.eternityUnlocked() || Replicanti.areUnlocked; }
+    get unlocked() { return PlayerProgress.replicantiUnlocked(); }
   },
   {
     id: "ai805",
@@ -6265,7 +6265,7 @@ GameDatabase.news = [
   {
     id: "ai896",
     text: "Hevipelle uses replicanti to speed up game speed.",
-    get unlocked() { return PlayerProgress.eternityUnlocked() || Replicanti.areUnlocked; }
+    get unlocked() { return PlayerProgress.replicantiUnlocked(); }
   },
   {
     id: "ai897",

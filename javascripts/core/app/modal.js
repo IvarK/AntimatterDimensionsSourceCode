@@ -52,11 +52,13 @@ class ChallengeConfirmationModal extends Modal {
 }
 
 Modal.h2p = new Modal("modal-h2p");
+Modal.awayProgress = new Modal("modal-away-progress");
 Modal.shortcuts = new Modal("modal-shortcuts");
 Modal.newsOptions = new Modal("modal-news-options");
 Modal.animationOptions = new Modal("modal-animation-options");
 Modal.confirmationOptions = new Modal("modal-confirmation-options");
 Modal.infoDisplayOptions = new Modal("modal-info-display-options");
+Modal.awayProgressOptions = new Modal("modal-away-progress-options");
 Modal.loadGame = new Modal("modal-load-game");
 Modal.uiChoice = new Modal("modal-ui-choice");
 Modal.import = new Modal("modal-import");

@@ -91,17 +91,26 @@ Vue.component("past-runs-container", {
       </div>
       <div v-show="shown">
         <div v-for="(run, index) in runs" :key="index">
-          <span>
-            The {{ singular }} {{ formatInt(index + 1) }}
-            {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }}
-          </span>
-          <span v-if="isRealityUnlocked"> ({{ realRunTime(run) }} real time) </span>
-          <span>and gave </span>
-          <span v-if="showGainPerTime">
-            {{ averageRunGain(run, 1, points) }} and {{ averageRunGain(run, 2, prestigeCount) }}.
+          <span v-if="run[0] === Number.MAX_VALUE">
+            <span>
+              The {{ singular }} {{ formatInt(index + 1) }}
+              {{ index === 0 ? singular : plural }} ago hasn't happened yet.
+            </span>
           </span>
           <span v-else>
-            {{ reward(runGain(run), run, false) }} and {{ prestigeCountReward(runPrestigeCountGain(run, false), run) }}.
+            <span>
+              The {{ singular }} {{ formatInt(index + 1) }}
+              {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }}
+            </span>
+            <span v-if="isRealityUnlocked"> ({{ realRunTime(run) }} real time) </span>
+            <span>and gave </span>
+            <span v-if="showGainPerTime">
+              {{ averageRunGain(run, 1, points) }} and {{ averageRunGain(run, 2, prestigeCount) }}.
+            </span>
+            <span v-else>
+              {{ reward(runGain(run), run, false) }} and
+              {{ prestigeCountReward(runPrestigeCountGain(run, false), run) }}.
+            </span>
           </span>
         </div>
         <br>

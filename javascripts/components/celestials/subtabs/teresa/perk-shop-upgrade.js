@@ -14,7 +14,7 @@ Vue.component("perk-shop-upgrade", {
     classObject() {
       return {
         "o-teresa-shop-button": true,
-        "o-teresa-shop-button--disabled": !this.isAvailableForPurchase && !this.isCapped,
+        "o-teresa-shop-button--available": this.isAvailableForPurchase && !this.isCapped,
         "o-teresa-shop-button--capped": this.isCapped
       };
     }

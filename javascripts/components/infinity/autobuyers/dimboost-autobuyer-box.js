@@ -40,7 +40,7 @@ Vue.component("dimboost-autobuyer-box", {
       </template>
       <template :slot=" isBuyMaxUnlocked ? 'prioritySlot' : 'toggleSlot' ">
         <div class="c-autobuyer-box__small-text" style="height: 3rem;">
-          Galaxies required to always DimBoost,
+          Antimatter Galaxies required to always DimBoost,
           ignoring the limit:
         </div>
         <autobuyer-input

@@ -49,7 +49,7 @@ Vue.component("antimatter-dim-tab", {
           :tier="tier"
           :floatingText="$viewModel.tabs.dimensions.antimatter.floatingText[tier]"
         />
-        <antimatter-dim-shift-row />
+        <antimatter-dim-boost-row />
         <antimatter-dim-galaxy-row />
       </div>
       <primary-button

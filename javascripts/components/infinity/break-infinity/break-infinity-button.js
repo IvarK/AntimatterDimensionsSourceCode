@@ -15,7 +15,7 @@ Vue.component("break-infinity-button", {
         "o-infinity-upgrade-btn--color-2": true,
         "o-infinity-upgrade-btn--available": this.isUnlocked,
         "o-infinity-upgrade-btn--unavailable": !this.isUnlocked,
-        "v-feel-eternity-btn": this.isEnslaved,
+        "o-infinity-upgrade-btn--feel-eternity": this.isEnslaved,
       };
     },
     tooltip() {

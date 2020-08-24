@@ -21,7 +21,8 @@ Vue.component("infinity-dim-row", {
       isEC8Running: false,
       hardcap: InfinityDimensions.HARDCAP_PURCHASES,
       requirementReached: false,
-      eternityReached: false
+      eternityReached: false,
+      showCostTitle: false
     };
   },
   watch: {
@@ -39,14 +40,15 @@ Vue.component("infinity-dim-row", {
     costDisplay() {
       const requirement = InfinityDimension(this.tier).requirement;
       if (this.isUnlocked) {
-        return this.isCapped ? "Capped" : `Cost: ${format(this.cost)} IP`;
+        if (this.isCapped) return "Capped";
+        return this.showCostTitle ? `Cost: ${format(this.cost)} IP` : `${format(this.cost)} IP`;
       }
       
       if (this.requirementReached) {
         return "Unlock";
       }
 
-      return `Reach ${format(requirement)} AM`;
+      return `Reach ${formatPostBreak(requirement)} AM`;
     },
     hardcapPurchases() {
       return format(this.hardcap, 1, 1);
@@ -85,6 +87,7 @@ Vue.component("infinity-dim-row", {
       this.isAutobuyerOn = player.infDimBuyers[this.tier - 1];
       this.requirementReached = dimension.requirementReached;
       this.eternityReached = PlayerProgress.eternityUnlocked();
+      this.showCostTitle = this.cost.exponent < 1000000;
     },
     buyManyInfinityDimension() {
       if (!this.isUnlocked) {
@@ -100,7 +103,7 @@ Vue.component("infinity-dim-row", {
   },
   template:
     `<div v-show="showRow" class="c-infinity-dim-row"
-      :class="{ 'c-infinity-dim-row--not-reached': !isUnlocked && !requirementReached }">
+      :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }">
       <div class="c-dim-row__label c-dim-row__name">
         {{name}} Infinity Dimension {{formatX(multiplier, 2, 1)}}
       </div>

@@ -1,22 +1,55 @@
 "use strict";
 
+function dilationAnimation() {
+  document.body.style.animation = "dilate 2s 1 linear";
+  setTimeout(() => {
+      document.body.style.animation = "";
+  }, 2000);
+}
+
+function undilationAnimation() {
+  document.body.style.animation = "undilate 2s 1 linear";
+  setTimeout(() => {
+      document.body.style.animation = "";
+  }, 2000);
+}
+
+function startDilatedEternityRequest() {
+  if (!PlayerProgress.dilationUnlocked()) return;
+  if (player.options.confirmations.dilation) {
+    if (!confirm(`Dilating time will start a new eternity, and all of your Dimension/Infinity
+    Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to
+    ^ 0.75. If you can eternity while Dilated, you'll be rewarded with tachyon particles based on your
+    antimatter and tachyon particles.`)) return;
+  }
+  if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
+    undilationAnimation();
+    setTimeout(() => {
+      eternity(false, false, { switchingDilation: true });
+    }, 1000);
+    return;
+  }
+  if (player.dilation.active) {
+    eternity(false, false, { switchingDilation: true });
+    return;
+  }
+  if (player.options.animations.dilation && document.body.style.animation === "") {
+    dilationAnimation();
+    setTimeout(startDilatedEternity, 1000);
+  } else {
+    startDilatedEternity();
+  }
+}
+
 function startDilatedEternity(auto) {
-  if (!PlayerProgress.dilationUnlocked()) return false;
+  if (!PlayerProgress.dilationUnlocked()) return;
   if (player.dilation.active) {
       eternity(false, auto, { switchingDilation: true });
-      return false;
-  }
-  if (!auto && player.options.confirmations.dilation) {
-    const confirmationMessage = "Dilating time will start a new eternity, and all of your Dimension/Infinity" +
-      " Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to" +
-      " ^ 0.75. If you can eternity while Dilated, you'll be rewarded with tachyon particles based on your" +
-      " antimatter and tachyon particles.";
-    if (!confirm(confirmationMessage)) return false;
+      return;
   }
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
-  return true;
 }
 
 const DIL_UPG_NAMES = [

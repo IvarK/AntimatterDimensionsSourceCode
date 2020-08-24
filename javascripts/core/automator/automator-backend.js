@@ -190,7 +190,13 @@ const AutomatorBackend = {
     return this.isOn && this.mode === AUTOMATOR_MODE.RUN;
   },
 
+  get scriptName() {
+    return this.findScript(this.state.topLevelScript).name;
+  },
+
   get currentLineNumber() {
+    if (this.stack.top === null)
+      return -1;
     return this.stack.top.lineNumber;
   },
 
@@ -269,6 +275,8 @@ const AutomatorBackend = {
           return false;
         }
         this.stop();
+      } else if (this.stack.top.commandState && this.stack.top.commandState.advanceOnPop) {
+        return this.nextCommand();
       }
     } else {
       S.commandState = null;

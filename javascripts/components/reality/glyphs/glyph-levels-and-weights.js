@@ -70,7 +70,7 @@ Vue.component("glyph-levels-and-weights", {
       return `grid-row: 1 / ${rows + 1}; -ms-grid-row: 1; -ms-grid-row-span: ${rows};`;
     },
     formatPerkShop() {
-      return `${(100 * (this.factors.perkShop - 1)).toFixed(1)}%`;
+      return formatPercents(this.factors.perkShop - 1, 1);
     },
     sliderProps() {
       return {

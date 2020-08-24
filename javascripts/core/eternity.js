@@ -55,6 +55,27 @@ function giveEternityRewards(auto) {
   }
 }
 
+function eternityAnimation() {
+  document.body.style.animation = "eternify 3s 1";
+  setTimeout(() => {
+      document.body.style.animation = "";
+  }, 3000);
+}
+
+function eternityResetRequest() {
+  if (!Player.canEternity) return;
+  if (!askEternityConfirmation()) return;
+  if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
+    undilationAnimation();
+    setTimeout(eternity, 1000);
+  } else if (player.options.animations.eternity && document.body.style.animation === "") {
+    eternityAnimation();
+    setTimeout(eternity, 2250);
+  } else {
+    eternity();
+  }
+}
+
 function eternity(force, auto, specialConditions = {}) {
   if (specialConditions.switchingDilation && !Player.canEternity) {
     // eslint-disable-next-line no-param-reassign
@@ -64,7 +85,6 @@ function eternity(force, auto, specialConditions = {}) {
     player.challenge.eternity.current = 0;
   } else {
     if (!Player.canEternity) return false;
-    if (!auto && !askEternityConfirmation()) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     giveEternityRewards(auto);
     // If somehow someone manages to force their first eternity
@@ -138,7 +158,8 @@ function initializeChallengeCompletions(isReality) {
 function initializeResourcesAfterEternity() {
   player.sacrificed = new Decimal(0);
   player.infinitied = new Decimal(0);
-  player.bestInfinityTime = 9999999999;
+  player.bestInfinityTime = 999999999999;
+  player.bestInfinityRealTime = 999999999999;
   player.thisInfinityTime = 0;
   player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;

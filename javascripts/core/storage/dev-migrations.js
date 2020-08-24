@@ -728,6 +728,24 @@ GameStorage.devMigrations = {
         AIChance: 0,
         speed: 1
       };
+    },
+    player => {
+      delete player.options.confirmations.glyphTrash;
+    },
+    player => {
+      GameStorage.migrations.standardizeUncompletedTimes(player);
+      if (player.bestReality === 999999999999) player.bestReality = Number.MAX_VALUE;
+      if (player.bestRealityRealTime === 999999999999) player.bestRealityRealTime = Number.MAX_VALUE;
+      for (let i = 0; i < 10; i++) {
+        if (player.lastTenRealities[i][0] === 2678400000) player.lastTenRealities[i][0] = Number.MAX_VALUE;
+        if (player.lastTenRealities[i][3] === 26784000) player.lastTenRealities[i][3] = Number.MAX_VALUE;
+      }
+    },
+    player => {
+      for (const script of Object.values(player.reality.automator.scripts)) {
+        script.content =
+          script.content.replace(/^([ \t]*)(wait|if|while|until)([\t ]+)(completions)/igmu, "$1$2$3pending $4");
+      }
     }
   ],
 

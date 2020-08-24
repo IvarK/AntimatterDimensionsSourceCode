@@ -23,17 +23,21 @@ GameDatabase.reality.automator = {
               `
             },
             {
-              header: "<i>completions</i> <i>comparison</i> <i>number</i>",
+              header: "<b>pending completions</b> <i>comparison</i> <i>number</i>",
               description: `
-                Wait for a certain <b>total</b> number of EC completions that you'd get at eternity.<br>
-                You can also use "ECX Completions", where X is an EC number.
-                <b>Comparisons</b>: >, >=
+                Wait for a certain <b>total</b> number of EC completions that you'd get at eternity.
+              `
+            },
+            {
+              header: "<b>EC</b><i>number</i> <b>completions</b> <i>comparison</i> <i>number</i>",
+              description: `
+                Wait for a certain <b>total</b> number of completions of that EC.
               `
             },
             {
               header: "<i>prestige</i>",
               description: `
-                Wait until certain prestige has been triggered.<br>
+                Wait until that prestige has been triggered.<br>
                 <b>Prestiges</b>: infinity, eternity, reality
               `
             }
@@ -60,10 +64,31 @@ GameDatabase.reality.automator = {
       id: 2,
       keyword: "infinity / eternity / reality",
       name: "<b>infinity|eternity|reality</b> - triggers Infinity, Eternity, or Reality",
-      syntax: "<b>infinity</b>,<br> <b>eternity</b>,<br> <b>reality</b>",
+      syntax: "<b>infinity [nowait]</b>,<br> <b>eternity [respec] [nowait]</b>,<br> <b>reality [respec] [nowait]</b>",
+      sections: [
+        {
+          name: "MODIFIERS",
+          items: [
+            {
+              header: "<i>respec</i>",
+              description: `
+                Eternity: respec studies and eternity.<br>
+                Reality: unequip glyphs and reality.
+              `
+            },
+            {
+              header: "<i>nowait</i>",
+              description: `
+                If it is not possible to prestige, move on to the next command.
+              `
+            },
+          ]
+        }
+      ],
       examples: [
         "infinity",
-        "reality",
+        "eternity respec",
+        "reality nowait",
       ]
     },
     {
@@ -182,11 +207,12 @@ GameDatabase.reality.automator = {
       id: 8,
       keyword: "if",
       name: "<b>if</b> - compares your amount to the game's amount of something, such as a currency",
-      syntax: "<b>if</b> [am|ip|ep|dt|tp|rg|rep|tt|total tt|completions|ecx completions] (comparison) [number]",
+      syntax: "<b>if</b> [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ec[number] completions] (comparison) [number]",
       examples: [
         "if ep <= 1e3000",
         "if dt >= 1e50",
-        "if ip < 1e1500000"
+        "if ip < 1e1500000",
+        "if ec10 completions < 5"
       ]
     },
     {
@@ -227,7 +253,7 @@ GameDatabase.reality.automator = {
         <blockquote>commands</blockquote>
       }<br>
       <b>condition</b>: [quantity] (comparison) [number]<br>
-      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|completions|ecx completions]<br>
+      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ecx completions]<br>
       <b>event</b>: [infinity|eternity|reality] (can happen at any time after loop starts)`,
       description: `Commands are repeated; the condition is checked at the start and every
       time the loop repeats. If an event is specified, then the loop will repeat until the
@@ -248,7 +274,7 @@ GameDatabase.reality.automator = {
       syntax: `<b>while</b> [quantity] (comparison) [number]{<br>
         <blockquote>commands</blockquote>
       }<br>
-      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|completions|ecx completions]<br>
+      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|total tt|pending completions|ec[number] completions]<br>
       <b>comparison</b>: [<|<=|>=|>]<br>
       <b>number</b>: Number in normal or scientific notation`,
       description: `Commands are repeated; the condition is checked at the start and every
@@ -323,20 +349,25 @@ GameDatabase.reality.automator = {
       syntax: "You can use these in any if, while, until, or wait command.",
       description: `This is a list of "currencies" or numbers that you can use.<br>
       Note that when used, most currencies will need to be in scientific notation.<br>
-      am - antimatter amount  <br>
-      ip - infinity point amount  <br>
-      ep - eternity point amount  <br>
-      dt - dilated time amount  <br>
-      tp - tachyon particle amount  <br>
-      rg - replicanti galaxy amount (does not use scientific)<br>
-      rep - replicanti amount <br>
-      tt - time theorem amount <br>
-      total tt - TOTAL time theorems, includes all forms of generated TT <br>
-      completions - amount of current EC completions <br>
-      ecx completions - amount of EC completions for a certain EC <br>
+      <b>am</b> - antimatter amount  <br>
+      <b>ip</b> - current infinity point amount  <br>
+      <b>ep</b> - current eternity point amount  <br>
+      <b>rm</b> - current reality machine amount  <br>
+      <b>pending ip</b> - IP gained on crunch (0 if not available)<br>
+      <b>pending ep</b> - EP gained on eternity (0 if not available)<br>
+      <b>pending rm</b> - RM gained on reality (0 if not available)<br>
+      <b>glyph level</b> - glyph level gained on reality (0 if not available)<br>
+      <b>dt</b> - dilated time amount  <br>
+      <b>tp</b> - tachyon particle amount  <br>
+      <b>rg</b> - replicanti galaxy amount (does not use scientific)<br>
+      <b>rep</b> - replicanti amount <br>
+      <b>tt</b> - time theorem amount <br>
+      <b>total tt</b> - TOTAL time theorems, includes all forms of generated TT <br>
+      <b>pending completions</b> - total completions of current EC at eternity <br>
+      <b>ec[number] completions</b> - amount of EC completions for a certain EC <br>
       `,
       examples: [
-        `if total tt >= 5 
+        `if total tt >= 5
         <blockquote>commands</blockquote>
         `,
         `while ec10 completions >= 1

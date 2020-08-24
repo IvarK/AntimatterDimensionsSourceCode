@@ -10,7 +10,8 @@ Vue.component("normal-achievements-tab", {
       isCancer: 0,
       achMultToIDS: false,
       achMultToTDS: false,
-      achMultToBH: false
+      achMultToBH: false,
+      canSwapImages: false
     };
   },
   computed: {
@@ -19,7 +20,7 @@ Vue.component("normal-achievements-tab", {
       return Theme.current().name === "S4" || this.isCancer ? "😂" : ".";
     },
     achievementMultiplierText() {
-      let text = "Current achievement multiplier on ";
+      let text = "Current achievement multiplier to ";
       if (this.achMultToIDS && this.achMultToTDS && this.achMultToBH)
         text += "Black Hole power, Antimatter, Infinity, and Time";
       else if (this.achMultToTDS && this.achMultToIDS) text += "Antimatter, Infinity, and Time";
@@ -28,6 +29,12 @@ Vue.component("normal-achievements-tab", {
       else text += "Antimatter";
       text += " Dimensions:";
       return text;
+    },
+    imageSwapperStyleObject() {
+      if (this.canSwapImages) {
+        return { "cursor": "pointer" };
+      }
+      return {};
     }
   },
   watch: {
@@ -45,6 +52,7 @@ Vue.component("normal-achievements-tab", {
       this.achMultToIDS = Achievement(75).isUnlocked;
       this.achMultToTDS = EternityUpgrade.tdMultAchs.isBought;
       this.achMultToBH = V.has(V_UNLOCKS.ACHIEVEMENT_BH);
+      this.canSwapImages = Themes.available().find(v => v.name === "S4") !== undefined && Theme.current().name !== "S4";
     },
     timeDisplay(value) {
       return timeDisplay(value);
@@ -53,7 +61,7 @@ Vue.component("normal-achievements-tab", {
       return timeDisplayNoDecimals(value);
     },
     swapImages() {
-      if (Themes.available().find(v => v.name === "S4") !== undefined && Theme.current().name !== "S4") {
+      if (this.canSwapImages) {
         player.secretUnlocks.cancerAchievements = !player.secretUnlocks.cancerAchievements;
       }
     }
@@ -70,7 +78,7 @@ Vue.component("normal-achievements-tab", {
       <div class="c-achievements-tab__header">
         <span>
           {{ achievementMultiplierText }} {{ formatX(achievementPower, 2, 3) }}<span 
-          @click="swapImages()" style="cursor: pointer">{{ swapImagesButton }}</span>
+          @click="swapImages()" :style="imageSwapperStyleObject">{{ swapImagesButton }}</span>
         </span>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">

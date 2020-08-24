@@ -111,8 +111,8 @@ Vue.component("effarig-tab", {
       this.emitClose();
     }
   },
-  template:
-    `<div class="l-teresa-celestial-tab">
+  template: `
+    <div class="l-teresa-celestial-tab">
       <celestial-quote-history celestial="effarig"/>
       <div class="l-effarig-shop-and-run">
         <div class="l-effarig-shop">
@@ -130,7 +130,11 @@ Vue.component("effarig-tab", {
            :key="i"
            :unlock="unlock" />
           <effarig-unlock-button v-if="!runUnlocked" :unlock="runUnlock" />
-          <button class="o-effarig-shop-button" @click="createCursedGlyph" v-if="vIsFlipped">
+          <button
+            class="c-effarig-shop-button c-effarig-shop-button--available"
+            @click="createCursedGlyph"
+            v-if="vIsFlipped"
+            >
             Get a cursed glyph...
           </button>
         </div>

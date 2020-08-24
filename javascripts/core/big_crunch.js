@@ -8,10 +8,10 @@ function bigCrunchAnimation() {
 }
 
 function handleChallengeCompletion() {
-  if (!NormalChallenge(1).isCompleted) {
+  const challenge = NormalChallenge.current || InfinityChallenge.current;
+  if (!challenge && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
   }
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
   if (!challenge) return;
   challenge.complete();
   challenge.updateChallengeTime();
@@ -23,10 +23,9 @@ function handleChallengeCompletion() {
 
 function bigCrunchResetRequest(disableAnimation = false) {
   if (!Player.canCrunch) return;
-  const earlyGame = player.bestInfinityTime > 60000 && !player.break;
-  if (earlyGame && !disableAnimation && player.options.animations.bigCrunch) {
+  if (!disableAnimation && player.options.animations.bigCrunch && document.body.style.animation === "") {
     bigCrunchAnimation();
-    setTimeout(bigCrunchReset(), 1000);
+    setTimeout(bigCrunchReset, 1000);
   } else {
     bigCrunchReset();
   }
@@ -52,9 +51,9 @@ function bigCrunchReset() {
   const infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
   addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints, gainedInfinities().round());
-
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
+  player.bestInfinityRealTime = Math.min(player.bestInfinityRealTime, player.thisInfinityRealTime);
 
   player.noInfinitiesThisReality = false;
 

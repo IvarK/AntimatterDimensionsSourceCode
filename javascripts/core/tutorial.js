@@ -3,7 +3,7 @@
 const TUTORIAL_STATE = {
   DIM1: 0,
   DIM2: 1,
-  DIMSHIFT: 2,
+  DIMBOOST: 2,
   GALAXY: 3
 };
 
@@ -20,7 +20,7 @@ const tutorialStates = [
     condition: () => Currency.antimatter.gte(100)
   },
   {
-    id: TUTORIAL_STATE.DIMSHIFT,
+    id: TUTORIAL_STATE.DIMBOOST,
     condition: () => AntimatterDimension(4).amount.gte(20)
   },
   {

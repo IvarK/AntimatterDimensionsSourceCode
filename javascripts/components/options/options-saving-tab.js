@@ -56,6 +56,13 @@ Vue.component("options-saving-tab", {
       if (confirm("Do you really want to erase all your progress?")) {
         GameStorage.hardReset();
       }
+    },
+    importAsFile(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        GameStorage.import(reader.result);
+      };
+      reader.readAsText(event.target.files[0]);
     }
   },
   template: `
@@ -101,6 +108,15 @@ Vue.component("options-saving-tab", {
           v-model="cloudEnabled"
           text="Automatic cloud saving/loading:"
         />
+      </div>
+      <div class="l-options-grid__row">
+        <options-button onclick="GameStorage.exportAsFile()">
+          Export save as file
+        </options-button>
+        <options-button class="c-file-import-button">
+          <input class="c-file-import" type="file" accept=".txt" @change="importAsFile">
+          <label for="file">Import save from file</label>
+        </options-button>
       </div>
       <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
         Press <kbd>?</kbd> to open shortcut list.

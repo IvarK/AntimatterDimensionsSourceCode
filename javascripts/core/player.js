@@ -1,7 +1,5 @@
 "use strict";
 
-const defaultMaxTime = TimeSpan.fromDays(31).totalMilliseconds;
-
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const
 let player = {
@@ -39,12 +37,12 @@ let player = {
   challenge: {
     normal: {
       current: 0,
-      bestTimes: Array.repeat(defaultMaxTime, 11),
+      bestTimes: Array.repeat(Number.MAX_VALUE, 11),
       completedBits: 0,
     },
     infinity: {
       current: 0,
-      bestTimes: Array.repeat(defaultMaxTime, 8),
+      bestTimes: Array.repeat(Number.MAX_VALUE, 8),
       completedBits: 0,
     },
     eternity: {
@@ -137,7 +135,8 @@ let player = {
   gameCreatedTime: Date.now(),
   totalTimePlayed: 0,
   realTimePlayed: 0,
-  bestInfinityTime: 999999999999,
+  bestInfinityTime: Number.MAX_VALUE,
+  bestInfinityRealTime: Number.MAX_VALUE,
   thisInfinityTime: 0,
   thisInfinityRealTime: 0,
   thisInfinityLastBuyTime: 0,
@@ -170,9 +169,9 @@ let player = {
     Eternity: true,
     Infinity: true
   },
-  lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]),
-  lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]),
-  lastTenRealities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), 1, defaultMaxTime, 0]),
+  lastTenRuns: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
+  lastTenEternities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
+  lastTenRealities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), 1, Number.MAX_VALUE, 0]),
   bestIPminThisInfinity: new Decimal(0),
   bestIPminThisEternity: new Decimal(0),
   bestEPminThisEternity: new Decimal(0),
@@ -186,8 +185,8 @@ let player = {
   bestGlyphLevelSet: [],
   bestEP: new Decimal(0),
   bestEPSet: [],
-  bestReality: 999999999999,
-  bestRealityRealTime: 999999999999,
+  bestReality: Number.MAX_VALUE,
+  bestRealityRealTime: Number.MAX_VALUE,
   bestSpeedSet: [],
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
@@ -200,7 +199,7 @@ let player = {
   eternities: new Decimal(0),
   thisEternity: 0,
   thisEternityRealTime: 0,
-  bestEternity: 999999999999,
+  bestEternity: Number.MAX_VALUE,
   eternityUpgrades: new Set(),
   epmultUpgrades: 0,
   infDimBuyers: [false, false, false, false, false, false, false, false],
@@ -523,7 +522,8 @@ let player = {
     respecIntoProtected: false,
     offlineTicks: 1000,
     showLastTenRunsGainPerTime: false,
-    autosaveInterval: 30000, 
+    autosaveInterval: 30000,
+    exportedFileCount: 0,
     showHintText: {
       achievements: false,
       challenges: false,
@@ -544,6 +544,7 @@ let player = {
       floatingText: true,
       bigCrunch: true,
       eternity: true,
+      dilation: true,
       tachyonParticles: true,
       reality: true,
       background: true
@@ -557,8 +558,23 @@ let player = {
       harshAutoClean: true,
       glyphReplace: true,
       glyphSacrifice: true,
-      glyphTrash: true,
       glyphUndo: true,
+    },
+    awayProgress: {
+      antimatter: true,
+      infinityPoints: true,
+      eternityPoints: true,
+      realityMachines: true,
+      dilatedTime: true,
+      infinities: true,
+      eternities: true,
+      realities: true,
+      singularities: true,
+      darkMatter: true,
+      replicanti: true,
+      replicantiGalaxies: true,
+      celestialMemories: true,
+      blackHole: true
     }
   },
   IAP: {

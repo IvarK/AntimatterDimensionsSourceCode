@@ -11,15 +11,20 @@
 .t-s9 #ui-container {
   --color-text: white;
   --color-base: #1d1b22;
-  --color-accent: rgb(223, 80, 80);
+  --color-accent: #df5050;
   --color-good: #1bbb36;
   --color-good-dark: #138626;
+
+  --color-antimatter: #df5050;
+
+  --color-teresa--accent: black;
 
   --color-laitela--base: black;
   --color-laitela--accent: white;
 }
 
-body.t-normal {
+body.t-normal,
+body.t-s9 {
   position: relative;
   color: white;
   background-color: #111014;
@@ -286,6 +291,13 @@ body.t-normal {
   overflow: hidden;
 }
 
+.o-primary-btn--dimension-reset {
+  display: flex;
+  align-items: center;
+  height: 6rem;
+  font-size: 1rem;
+}
+
 .button-content {
   position: absolute;
   top: 0;
@@ -331,21 +343,22 @@ body.t-normal {
 .resets-container {
   display: flex;
   justify-content: space-around;
-  color: var(--color-text);
+  height: 16rem;
 }
 
 .reset-container h4 {
   margin: 0;
   font-size: 1.4rem;
-  color: var(--color-text);
 }
 
 .reset-container {
   width: 40%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
+  height: 16rem;
+  margin-top: 0.3rem;
 }
 
 .l-tickspeed-container {

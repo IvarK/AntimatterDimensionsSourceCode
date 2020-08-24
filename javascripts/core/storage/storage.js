@@ -8,7 +8,7 @@ const GameStorage = {
     2: undefined
   },
   saved: 0,
-
+  
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
   },
@@ -64,6 +64,12 @@ const GameStorage = {
     GameUI.notify.info("Game imported");
   },
 
+  importAsFile() {
+    const reader = new FileReader();
+    const text = reader.readAsText(file);
+    this.import(text);
+  },
+
   overwriteSlot(slot, saveData) {
     this.saves[slot] = saveData;
     if (slot === this.currentSlot) {
@@ -92,6 +98,18 @@ const GameStorage = {
     const save = GameSaveSerializer.serialize(player);
     copyToClipboard(save);
     GameUI.notify.info("Exported current savefile to your clipboard");
+  },
+
+  exportAsFile() {
+    player.options.exportedFileCount++;
+    this.save(true);
+    const dateObj = new Date();
+    const y = dateObj.getFullYear();
+    const m = dateObj.getMonth() + 1;
+    const d = dateObj.getDate();
+    download(`AD Save ${GameStorage.currentSlot + 1} #${player.options.exportedFileCount} (${y}-${m}-${d}).txt`,
+    GameSaveSerializer.serialize(player));
+    GameUI.notify.info("Successfully downloaded current save file to your computer");
   },
 
   hardReset() {
@@ -166,6 +184,10 @@ const GameStorage = {
         this.postLoadStuff();
       }
     } else {
+      // Try to unlock "Don't you dare sleep" (usually this check only happens
+      // during a game tick, which makes the achievement impossible to get
+      // with offline progress off)
+      Achievement(35).tryUnlock();
       player.lastUpdate = Date.now();
       this.postLoadStuff();
     }
@@ -182,3 +204,17 @@ const GameStorage = {
     }
   }
 };
+
+function download(filename, text) {
+  const pom = document.createElement("a");
+  pom.setAttribute("href", `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`);
+  pom.setAttribute("download", filename);
+
+  if (document.createEvent) {
+      const event = document.createEvent("MouseEvents");
+      event.initEvent("click", true, true);
+      pom.dispatchEvent(event);
+  } else {
+      pom.click();
+  }
+}

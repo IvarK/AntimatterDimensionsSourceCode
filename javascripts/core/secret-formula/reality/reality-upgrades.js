@@ -305,7 +305,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: () => `Reach ${format("1e11111")} EP`,
       checkRequirement: () => player.eternityPoints.exponent >= 11111,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: "Reality autobuyer"
+      description: "Reality autobuyer and automator command"
     },
   ];
 }());

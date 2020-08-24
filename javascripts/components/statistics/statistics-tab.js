@@ -43,7 +43,7 @@ Vue.component("statistics-tab", {
   methods: {
     update() {
       this.totalAntimatter.copyFrom(player.totalAntimatter);
-      this.realTimePlayed.setFrom(Date.now() - player.gameCreatedTime);
+      this.realTimePlayed.setFrom(player.realTimePlayed);
       this.newsMessagesSeen = player.news.size;
       const progress = PlayerProgress.current;
       const isInfinityUnlocked = progress.isInfinityUnlocked;

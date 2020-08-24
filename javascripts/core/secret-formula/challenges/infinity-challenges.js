@@ -19,14 +19,17 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e10500"),
     isQuickResettable: false,
     reward: {
-      description: "Sacrifice autobuyer and stronger sacrifice"
+      description: () => `Sacrifice autobuyer and stronger sacrifice
+        ${Sacrifice.getSacrificeDescription({ "InfinityChallenge2isCompleted": false })} ➜
+        ${Sacrifice.getSacrificeDescription({ "InfinityChallenge2isCompleted": true })}`,
     },
     unlockAM: new Decimal("1e11000"),
   },
   {
     id: 3,
-    description: "Tickspeed interval decrease is always 0%. For every tickspeed purchase, you instead get a static " +
-      "multiplier on all Antimatter Dimensions which increases with Antimatter Galaxies.",
+    description: () =>
+      `Tickspeed upgrades are always ${formatX(1)}. For every tickspeed upgrade purchase, you instead get a static
+      multiplier on all Antimatter Dimensions which increases based on Antimatter Galaxies.`,
     goal: new Decimal("1e5000"),
     isQuickResettable: false,
     effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
@@ -61,7 +64,7 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {
-      description: () => `Galaxies are 10% stronger and reduce the requirements for them
+      description: () => `Galaxies are ${formatPercents(0.1)} stronger and reduce the requirements for them
         and Dimension Boosts by ${formatInt(1)}`,
       effect: 1.1
     },

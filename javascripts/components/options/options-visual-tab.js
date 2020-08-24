@@ -119,6 +119,10 @@ Vue.component("options-visual-tab", {
           class="o-primary-btn--option"
           onclick="Modal.infoDisplayOptions.show()"
         >Open Info Display Options</options-button>
+        <options-button
+          class="o-primary-btn--option"
+          onclick="Modal.awayProgressOptions.show()"
+        >Open Away Progress Options</options-button>
       </div>
       <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
         Press <kbd>?</kbd> to open shortcut list.

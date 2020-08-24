@@ -480,8 +480,8 @@ button:focus {
 }
 
 .o-tab-btn--eternity:hover {
-  color: var(--color-eternity);
-  background: white;
+  color: black;
+  background: var(--color-eternity);
 }
 
 .t-s1 .o-tab-btn--eternity:hover {
@@ -490,14 +490,14 @@ button:focus {
 }
 
 .o-tab-btn--reality {
+  color: var(--color-reality);
   background: var(--color-base);
   border-color: var(--color-reality);
-  color: var(--color-reality);
 }
 
 .o-tab-btn--reality:hover {
-  color: black
   background: var(--color-reality);
+  color: black
 }
 
 .o-tab-btn--celestial {

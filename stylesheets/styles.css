@@ -2834,7 +2834,7 @@ screen and (max-width: 480px) {
 }
 
 .c-challenge-box--normal {
-  color: black;
+  color: var(--color-text);
   font-size: 1.05rem;
   background-color: #f2f2f2;
 }

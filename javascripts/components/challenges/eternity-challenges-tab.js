@@ -124,7 +124,8 @@ Vue.component("eternity-challenges-tab", {
   },
   data() {
     return {
-      unlockedCount: 0
+      unlockedCount: 0,
+      showAllChallenges: false
     };
   },
   methods: {
@@ -132,10 +133,13 @@ Vue.component("eternity-challenges-tab", {
       this.unlockedCount = [...Array(12).keys()]
         .filter(id => this.isChallengeVisible(id + 1))
         .length;
+      this.showAllChallenges = player.options.showAllChallenges;
     },
     isChallengeVisible(id) {
       const challenge = EternityChallenge(id);
-      return challenge.completions > 0 || challenge.isUnlocked;
+      return challenge.completions > 0 ||
+        challenge.isUnlocked ||
+        (this.showAllChallenges && PlayerProgress.realityUnlocked());
     }
   },
   template:

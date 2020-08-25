@@ -8,6 +8,7 @@ Vue.component("secret-achievement", {
   data() {
     return {
       isUnlocked: false,
+      showUnlockState: false
     };
   },
   computed: {
@@ -31,13 +32,17 @@ Vue.component("secret-achievement", {
         "o-achievement--secret": true
       };
     },
-    tooltip() {
-      function evaluateText(prop) {
-        return typeof prop === "function" ? prop() : prop;
-      }
-      const config = this.achievement.config;
-      return this.isUnlocked ? evaluateText(config.tooltip) : config.name;
-    }
+    indicator() {
+      const achievement = this.achievement;
+      if (achievement.isUnlocked) return "<i class='fas fa-check'></i>";
+      return "<i class='fas fa-times'></i>";
+    },
+    indicatorClassObject() {
+      return {
+        "o-achievement__indicator": true,
+        "o-achievement__indicator--secret": !this.isUnlocked
+      };
+    },
   },
   created() {
     this.on$(GAME_EVENT.ACHIEVEMENT_UNLOCKED, this.updateState);
@@ -46,6 +51,7 @@ Vue.component("secret-achievement", {
   methods: {
     updateState() {
       this.isUnlocked = this.achievement.isUnlocked;
+      this.showUnlockState = player.options.showHintText.achievementUnlockStates;
     },
     onClick() {
       if (this.achId === 11 && !this.isUnlocked) {
@@ -57,9 +63,14 @@ Vue.component("secret-achievement", {
     `<div
       :class="classObject"
       :style="styleObject"
-      :ach-tooltip="tooltip"
       @click="onClick">
       <hint-text type="achievements" class="l-hint-text--achievement">S{{row}}{{column}}</hint-text>
-      <br>
+      <div class="o-achievement__tooltip">
+        <div class="o-achievement__tooltip__name">{{ this.achievement.config.name }} ({{ achId }})</div>
+        <div v-if="this.isUnlocked" class="o-achievement__tooltip__description">
+          {{ this.achievement.config.description }}
+        </div>
+      </div>
+      <div v-if="showUnlockState" :class="indicatorClassObject" v-html="indicator"></div>
      </div>`
 });

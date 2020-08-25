@@ -16,7 +16,12 @@ Vue.component("eternity-upgrades-tab", {
         ]
       ];
     },
-    costIncreases: () => EternityUpgrade.epMult.costIncreaseThresholds.map(x => new Decimal(x)),
+    costIncreases: () => EternityUpgrade.epMult.costIncreaseThresholds.map(x => new Decimal(x))
+  },
+  methods: {
+    formatPostBreak(number, places) {
+      return formatPostBreak(number, places);
+    }
   },
   template:
     `<div class="l-eternity-upgrades-grid">
@@ -31,9 +36,9 @@ Vue.component("eternity-upgrades-tab", {
       <ep-multiplier-button />
       <div>
         The cost for the EP multiplier jumps at {{format(costIncreases[0])}} EP,
-        {{format(costIncreases[1], 2, 2)}} EP, and {{format(costIncreases[2])}} EP.
+        {{formatPostBreak(costIncreases[1], 2)}} EP, and {{formatPostBreak(costIncreases[2])}} EP.
         <br>
-        It gets expensive more quickly past {{format(costIncreases[3])}} EP.
+        It gets expensive more quickly past {{formatPostBreak(costIncreases[3])}} EP.
       </div>
     </div>`
 });

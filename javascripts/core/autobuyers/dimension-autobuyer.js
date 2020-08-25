@@ -40,7 +40,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get hasMaxedBulk() {
-    return this.bulk >= 1e100;
+    return this.bulk >= 1e10;
   }
 
   get priority() {
@@ -84,7 +84,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
   upgradeBulk() {
     if (this.hasMaxedBulk) return;
     if (!Currency.infinityPoints.purchase(this.cost)) return;
-    this.data.bulk = Math.clampMax(this.bulk * 2, 1e100);
+    this.data.bulk = Math.clampMax(this.bulk * 2, 1e10);
     this.data.cost = Math.ceil(2.4 * this.cost);
     Achievement(61).tryUnlock();
     GameUI.update();

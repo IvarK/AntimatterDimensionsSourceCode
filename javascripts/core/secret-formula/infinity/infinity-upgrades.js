@@ -173,7 +173,7 @@ GameDatabase.infinity.upgrades = (function() {
       id: "skipReset1",
       cost: 20,
       description: () =>
-        `Start every reset with ${formatInt(1)} Dimension Boosts, automatically unlocking the 5th Antimatter Dimension`,
+        `Start every reset with ${formatInt(1)} Dimension Boost, automatically unlocking the 5th Antimatter Dimension`,
       bannedFromCharging: true
     },
     skipReset2: {

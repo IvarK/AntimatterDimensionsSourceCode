@@ -26,7 +26,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 3,
-    description: "Dimensions 5-8 don't produce anything. Dimensional sacrifice is disabled.",
+    description: "Antimatter Dimensions 5-8 don't produce anything. Dimensional Sacrifice is disabled.",
     goal: new Decimal("1e600"),
     goalIncrease: new Decimal("1e75"),
     reward: {
@@ -118,8 +118,9 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 9,
-    description: "You can't buy tickspeed upgrades. Infinity Power instead multiplies " +
-      "Time Dimensions with greatly reduced effect.",
+    description:
+      `You can't buy Tickspeed upgrades. Infinity Power instead multiplies
+      Time Dimensions with greatly reduced effect.`,
     goal: new Decimal("1e1750"),
     goalIncrease: new Decimal("1e250"),
     reward: {
@@ -151,8 +152,9 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 11,
-    description: "All dimension multipliers and powers are disabled except for the multipliers from " +
-      "Infinity Power and Dimension Boosts (to Antimatter Dimensions).",
+    description:
+      `All dimension multipliers and powers are disabled except for the multipliers from
+      Infinity Power and Dimension Boosts (to Antimatter Dimensions).`,
     goal: new Decimal("1e500"),
     goalIncrease: new Decimal("1e200"),
     reward: {

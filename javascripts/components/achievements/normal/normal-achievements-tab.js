@@ -7,6 +7,7 @@ Vue.component("normal-achievements-tab", {
       achCountdown: 0,
       showAutoAchieve: false,
       isAutoAchieveActive: false,
+      hideCompletedRows: false,
       isCancer: 0,
       achMultToIDS: false,
       achMultToTDS: false,
@@ -40,6 +41,9 @@ Vue.component("normal-achievements-tab", {
   watch: {
     isAutoAchieveActive(newValue) {
       player.reality.autoAchieve = newValue;
+    },
+    hideCompletedRows(newValue) {
+      player.options.hideCompletedAchievementRows = newValue;
     }
   },
   methods: {
@@ -48,6 +52,7 @@ Vue.component("normal-achievements-tab", {
       this.achCountdown = Achievements.timeToNextAutoAchieve() / getGameSpeedupFactor();
       this.showAutoAchieve = player.realities > 0 && !Perk.achievementGroup6.isBought;
       this.isAutoAchieveActive = player.reality.autoAchieve;
+      this.hideCompletedRows = player.options.hideCompletedAchievementRows;
       this.isCancer = player.secretUnlocks.cancerAchievements;
       this.achMultToIDS = Achievement(75).isUnlocked;
       this.achMultToTDS = EternityUpgrade.tdMultAchs.isBought;
@@ -68,11 +73,17 @@ Vue.component("normal-achievements-tab", {
   },
   template: `
     <div class="l-achievements-tab">
-      <div class="c-subtab-option-container" v-if="showAutoAchieve">
+      <div class="c-subtab-option-container">
         <primary-button-on-off
+          v-model="hideCompletedRows"
+          class="o-primary-btn--subtab-option"
+          text="Hide completed rows:"
+        />
+        <primary-button-on-off
+          v-if="showAutoAchieve"
           v-model="isAutoAchieveActive"
           class="o-primary-btn--subtab-option"
-          text="Auto achievement:"
+          text="Auto achievements:"
         />
       </div>
       <div class="c-achievements-tab__header">

@@ -64,6 +64,9 @@ Vue.component("v-tab", {
       player.reality.pp -= hex.reductionCost;
       const steps = hex.config.reductionStepSize ? hex.config.reductionStepSize : 1;
       player.celestials.v.goalReductionSteps[hex.id] += steps;
+      for (const unlock of VRunUnlocks.all) {
+        unlock.tryComplete();
+      }
     },
     reductionTooltip(hex) {
       return `Spend ${format(hex.reductionCost, 2, 0)} PP to reduce goal by ${format(hex.config.perReductionStep)}`;
@@ -162,7 +165,9 @@ Vue.component("v-tab", {
                 <p class="o-v-unlock-goal-reduction" v-if="has(runMilestones[0]) && hex.isReduced">
                   Goal has been {{ mode(hex) }} by {{ reductionValue(hex) }}
                 </p>
-                <p class="o-v-unlock-amount">{{ hex.completions }}/{{hex.config.values.length}} done</p>
+                <p class="o-v-unlock-amount">
+                  {{ formatInt(hex.completions) }}/{{ formatInt(hex.config.values.length) }} done
+                </p>
                 <div v-if="showRecord(hex)">
                   <p class="o-v-unlock-record">
                     Best: {{ hex.config.formatRecord(runRecords[hex.id]) }}

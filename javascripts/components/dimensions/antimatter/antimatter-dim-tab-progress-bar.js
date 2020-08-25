@@ -13,7 +13,7 @@ Vue.component("antimatter-dim-tab-progress-bar", {
     },
     progressBarStyle() {
       return {
-        width: Notations.current.name === 'Blind' ? '0%' : `${(this.fill * 100).toFixed(2)}%`
+        width: `${(this.fill * 100).toFixed(2)}%`
       };
     }
   },

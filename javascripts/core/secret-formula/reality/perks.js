@@ -111,7 +111,7 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.ETERNITY,
     get description() {
       return `Improve Time Study 122 to ${formatX(100)} Eternity Points and
-        Time Study 124 to ${formatX(1e100)} Infinity Points.`;
+        Time Study 142 to ${formatX(1e100)} Infinity Points.`;
     }
   },
   studyPassive2: {

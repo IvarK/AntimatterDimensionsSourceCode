@@ -573,7 +573,7 @@ button:focus {
   height: 8rem;
   font-size: 1.2rem;
   font-weight: bold;
-  background: white;
+  background: black;
   border-width: 0.2rem;
   border-style: solid;
 }
@@ -607,7 +607,7 @@ button:focus {
 }
 
 .c-reality-button--unlocked:hover, .c-reality-button--unlocked.force-hover {
-  color: white;
+  color: black;
   background: var(--color-reality);
 }
 
@@ -1650,13 +1650,13 @@ screen and (max-width: 480px) {
 /*#region Big Crunch*/
 
 .o-infinity-button {
-  color: white;
+  color: var(--color-infinity);
   background-color: black;
   border-color: var(--color-infinity);
 }
 
 .o-infinity-button:hover {
-  color: black;
+  color: black !important;
   background-color: var(--color-infinity);
 }
 
@@ -1669,8 +1669,8 @@ screen and (max-width: 480px) {
 }
 
 .t-dark .o-infinity-button {
-  color: black;
-  background: white;
+  color: var(--color-infinity);
+  background: black;
 }
 
 .t-dark .o-infinity-button:hover {
@@ -1686,8 +1686,8 @@ screen and (max-width: 480px) {
 }
 
 .t-dark-metro .o-infinity-button {
-  color: black;
-  background: white;
+  color: var(--color-infinity);
+  background: black;
   box-shadow: 1px 1px 1px 0 black;
   border-width: 0.1rem;
   border-radius: 0;
@@ -1707,8 +1707,9 @@ screen and (max-width: 480px) {
 }
 
 .o-eternity-button:hover {
-  color: var(--color-eternity);
-  background-color: white;
+  color: black;
+  background-color: var(--color-eternity);
+  cursor: pointer;
 }
 
 .o-eternity-buttonspan {
@@ -1716,7 +1717,7 @@ screen and (max-width: 480px) {
 }
 
 .o-eternity-button:hover span {
-  color: var(--color-eternity) !important;
+  color: black !important;
 }
 
 .t-s1 .o-eternity-button:hover span {
@@ -3729,7 +3730,7 @@ screen and (max-width: 480px) {
 
 .o-infinity-upgrade-btn--bought {
   color: black;
-  background-color: var(--color-good);
+  background-color: var(--color-infinity);
   cursor: default;
 }
 
@@ -3755,7 +3756,7 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-upgrade-btn--chargeable:hover {
-  color: var(--color-teresa--base);
+  color: var(--color-teresa--good);
 }
 
 @keyframes a-charged-infinity-upgrade-glow {

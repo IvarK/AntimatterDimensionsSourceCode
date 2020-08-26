@@ -1391,23 +1391,21 @@ screen and (max-width: 480px) {
 }
 
 .o-primary-btn--respec-active {
-  background-color: var(--color-good);
+  background-color: var(--color-eternity) !important;
 }
 
 .o-primary-btn--respec-active:hover {
-  background-color: var(--color-good);
-  color: black;
-  cursor: default;
+  color: var(--color-base);
 }
 
 .o-primary-btn--charged-respec-active {
-  color: var(--color-teresa--accent);
-  background-color: var(--color-teresa--base);
+  color: var(--color-teresa--accent) !important;
+  background-color: var(--color-teresa--base) !important;
 }
 
 .o-primary-btn--charged-respec-active:hover {
-  color: var(--color-teresa--accent);
-  background-color: var(--color-teresa--base);
+  color: var(--color-teresa--accent) !important;
+  background-color: var(--color-teresa--base) !important;
 }
 
 .o-primary-btn--glyph-trash {

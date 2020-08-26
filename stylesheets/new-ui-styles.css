@@ -763,10 +763,6 @@ body.t-s9 {
   background-color: var(--color-good);
 }
 
-.o-primary-btn--respec-active:hover {
-  color: white;
-}
-
 .l-equipped-glyphs {
   justify-content: flex-end;
 }

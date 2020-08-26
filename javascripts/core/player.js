@@ -524,8 +524,10 @@ let player = {
     showLastTenRunsGainPerTime: false,
     autosaveInterval: 30000,
     exportedFileCount: 0,
+    hideCompletedAchievementRows: false,
     showHintText: {
       achievements: false,
+      achievementUnlockStates: false,
       challenges: false,
       studies: false,
       glyphEffectDots: true,

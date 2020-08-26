@@ -38,6 +38,7 @@ html {
   --color-infinity: #B67F33;
   --color-eternity: #b341e0;
   --color-reality: #0ba00e;
+  --color-reality-light: #d5ffd7;
   --color-celestials: #5151ec;
 
   --color-teresa--base: #5151ec;
@@ -7598,7 +7599,7 @@ kbd {
 }
 
 .c-glyph-level-factors-dropdown-header {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   width: auto;
   font-weight: bold;
   text-align: center;
@@ -7664,7 +7665,7 @@ kbd {
 .l-glyph-levels-and-weights__adjust-outline::after {
   content: '';
   position: absolute;
-  border: 0.2rem solid #d5ffd7;
+  border: 0.2rem solid var(--color-reality-light);
   border-radius: 0.5em;
   top: -0.5em;
   bottom: -0.5em;
@@ -7721,7 +7722,7 @@ kbd {
 }
 
 .c-glyph-levels-and-weights__slider-process {
-  background-color: #d5ffd7;
+  background-color: var(--color-reality-light);
 }
 
 .c-glyph-levels-and-weights__slider-bg {
@@ -7729,9 +7730,9 @@ kbd {
 }
 
 .c-glyph-levels-and-weights__slider-handle {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: black;
-  box-shadow: 0 0 0 0.1rem #d5ffd7;
+  box-shadow: 0 0 0 0.1rem var(--color-reality-light);
   border-radius: 0.8rem;
 }
 
@@ -7748,15 +7749,15 @@ kbd {
 }
 
 .c-glyph-levels-and-weights__reset-btn {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: black;
   border-radius: 0.5rem;
-  border: 0.1rem solid #d5ffd7;
+  border: 0.1rem solid var(--color-reality-light);
 }
 
 .c-glyph-levels-and-weights__reset-btn:hover {
   color: black;
-  background-color: #d5ffd7;
+  background-color: var(--color-reality-light);
 }
 
 .l-glyph-levels-and-weights__auto-btn {
@@ -7766,15 +7767,15 @@ kbd {
 }
 
 .c-glyph-levels-and-weights__auto-btn {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: black;
   border-radius: 0.5rem;
-  border: 0.1rem solid #d5ffd7;
+  border: 0.1rem solid var(--color-reality-light);
 }
 
 .c-glyph-levels-and-weights__auto-btn:hover {
   color: black;
-  background-color: #d5ffd7;
+  background-color: var(--color-reality-light);
 }
 
 .o-questionmark {
@@ -7962,7 +7963,7 @@ kbd {
   background-color: black;
   border: 0.2rem solid var(--color-reality);
   border-radius: 0.5rem;
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   cursor: pointer;
   transition-duration: 0.15s;
   text-align: center;
@@ -7976,7 +7977,7 @@ kbd {
 
 .c-reality-upgrade-btn:hover {
   color: black;
-  background-color: #d5ffd7;
+  background-color: var(--color-reality-light);
 }
 
 .c-reality-upgrade-btn--unavailable {
@@ -7986,7 +7987,7 @@ kbd {
 
 .c-reality-upgrade-btn--unavailable:hover {
   background-color: #656565;
-  color: #d5ffd7;
+  color: var(--color-reality-light);
 }
 
 .c-reality-upgrade-btn--bought {
@@ -7996,7 +7997,7 @@ kbd {
 }
 
 .c-reality-upgrade-btn--bought:hover {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: var(--color-reality);
 }
 
@@ -8007,7 +8008,7 @@ kbd {
 
 .c-reality-upgrade-btn--possible:hover {
   background-color: #8b8529;
-  color: #d5ffd7;
+  color: var(--color-reality-light);
 }
 
 .c-reality-upgrade-btn--locked {
@@ -8017,12 +8018,12 @@ kbd {
 
 .c-reality-upgrade-btn--locked:hover {
   background-color: #a53939;
-  color: #d5ffd7;
+  color: var(--color-reality-light);
 }
 
 .c-reality-upgrade-btn--black-hole-unlock {
   margin: auto;
-  text-shadow: -0.1rem 0.1rem 0.3rem #d5ffd7
+  text-shadow: -0.1rem 0.1rem 0.3rem var(--color-reality-light)
 }
 
 .t-metro .c-reality-upgrade-btn,
@@ -8034,22 +8035,22 @@ kbd {
 }
 
 .t-dark .c-reality-upgrade-btn--unavailable {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: #37474f;
 }
 
 .t-dark .c-reality-upgrade-btn--locked {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: var(--color-bad);
 }
 
 .t-s6.c-reality-upgrade-btn:hover {
-  background-color: #d5ffd7;
+  background-color: var(--color-reality-light);
 }
 
 .t-s6.c-reality-upgrade-btn--unavailable:hover {
   background-color: #656565;
-  color: #d5ffd7;
+  color: var(--color-reality-light);
 }
 
 .t-s6.c-reality-upgrade-btn--bought {
@@ -8058,7 +8059,7 @@ kbd {
 }
 
 .t-s6.c-reality-upgrade-btn--bought:hover {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: var(--color-reality);
 }
 

@@ -1194,7 +1194,7 @@ screen and (max-width: 480px) {
 }
 
 .o-primary-btn:hover {
-  color: #FFF;
+  color: var(--color-text-inverted);
   background-color: var(--color-good);
 }
 
@@ -3518,12 +3518,11 @@ screen and (max-width: 480px) {
 .t-s1 .o-infinity-upgrade-btn,
 .t-s6 .o-infinity-upgrade-btn,
 .t-s8 .o-infinity-upgrade-btn {
-  border-color: black;
+  border-color: var(--color-text-inverted);
 }
 
 .t-dark .o-infinity-upgrade-btn {
-  color: black;
-  background-color: whitesmoke;
+  color: var(--color-text);
 }
 
 .t-s6 .o-infinity-upgrade-btn {
@@ -3533,7 +3532,7 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-upgrade-btn:hover {
-  color: black;
+  color: var(--color-text-inverted);
 }
 
 /*#region o-infinity-upgrade-btn--available*/
@@ -3676,7 +3675,9 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-upgrade-btn--unavailable:hover {
-  background-color: white;
+  color: var(--color-text);
+  background-color: var(--color-text-inverted);
+  cursor: default;
 }
 
 .t-dark .o-infinity-upgrade-btn--unavailable {
@@ -3727,15 +3728,16 @@ screen and (max-width: 480px) {
 /*#region o-infinity-upgrade-btn--bought*/
 
 .o-infinity-upgrade-btn--bought {
-  color: black;
+  color: var(--color-text-inverted);
   background-color: var(--color-infinity);
+  border-color: var(--color-text-inverted);
   cursor: default;
 }
 
 .t-dark .o-infinity-upgrade-btn--bought,
 .t-dark-metro .o-infinity-upgrade-btn--bought,
 .t-s6 .o-infinity-upgrade-btn--bought{
-  background-color: #43a047;
+  background-color: var(--color-infinity);
   border-color: black;
 }
 
@@ -3744,6 +3746,7 @@ screen and (max-width: 480px) {
 .o-infinity-upgrade-btn--chargeable {
   color: var(--color-teresa--base);
   background-color: var(--color-teresa--accent);
+  border-color: var(--color-teresa--base);
   animation: a-charged-infinity-upgrade-glow 2s infinite;
 }
 
@@ -3754,7 +3757,7 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-upgrade-btn--chargeable:hover {
-  color: var(--color-teresa--good);
+  color: var(--color-teresa--base);
 }
 
 @keyframes a-charged-infinity-upgrade-glow {
@@ -3772,6 +3775,7 @@ screen and (max-width: 480px) {
 .o-infinity-upgrade-btn--charged {
   color: var(--color-teresa--accent);
   background-color: var(--color-teresa--base);
+  border-color: var(--color-infinity);
 }
 
 .t-dark .o-infinity-upgrade-btn--charged,
@@ -4352,8 +4356,8 @@ screen and (max-width: 480px) {
 }
 
 .o-eternity-upgrade--available:hover {
-  color: #511568;
-  background-color: white;
+  color: var(--color-text);
+  background-color: var(--color-eternity);
 }
 
 .o-eternity-upgrade--unavailable {
@@ -4414,8 +4418,8 @@ screen and (max-width: 480px) {
 
 .t-dark .o-eternity-upgrade--available:hover,
 .t-s6 .o-eternity-upgrade--available:hover {
-  color: black;
-  background-color: white;
+  color: var(--color-text);
+  background-color: var(--color-eternity);
 }
 
 .t-dark .o-eternity-upgrade--unavailable {
@@ -4440,8 +4444,8 @@ screen and (max-width: 480px) {
 
 .t-dark .o-eternity-upgrade--bought,
 .t-s6 .o-eternity-upgrade--bought {
-  color: #1e0830;
-  background-color: #8d48c3;
+  color: var(--color-text-inverted);
+  background-color: var(--color-eternity);
   border-color: #691fa5;
 }
 

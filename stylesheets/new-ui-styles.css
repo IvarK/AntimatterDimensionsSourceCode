@@ -475,11 +475,7 @@ body.t-s9 {
 
 .o-infinity-upgrade-btn--unavailable:hover {
   background: #525252;
-  color: white;
-}
-
-.o-infinity-upgrade-btn--bought {
-  border-color: var(--color-accent);
+  color: var(--color-text-inverted);
 }
 
 .o-primary-btn--option, .o-primary-btn--option-wide, .c-select-theme__item, .c-select-notation__item {

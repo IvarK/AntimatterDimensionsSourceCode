@@ -452,10 +452,15 @@ const Glyphs = {
     return 3 + Effects.sum(RealityUpgrade(9), RealityUpgrade(24));
   },
   get protectedSlots() {
-    return 20;
+    return 10 * player.reality.glyphs.protectedRows;
   },
   get totalSlots() {
     return 120;
+  },
+  // Always ensure at least one unprotected row for new glyphs, to prevent some potentially odd-looking behavior
+  changeProtectedRows(rowsToAdd) {
+    player.reality.glyphs.protectedRows = Math.clamp(player.reality.glyphs.protectedRows + rowsToAdd, 0, 11);
+    this.validate();
   },
   refreshActive() {
     this.active = new Array(this.activeSlotCount).fill(null);

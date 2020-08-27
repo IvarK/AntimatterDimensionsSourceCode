@@ -7,6 +7,7 @@ Vue.component("glyph-inventory", {
       doubleClickTimeOut: null,
       clickedGlyphId: null,
       glyphSacrificeUnlocked: false,
+      protected: 0,
     };
   },
   computed: {
@@ -20,6 +21,8 @@ Vue.component("glyph-inventory", {
   methods: {
     update() {
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
+      // This is used for key-changing in order to force the inventory to re-render if protected row count changes 
+      this.protected = Glyphs.protectedSlots;
     },
     toIndex(row, col) {
       return (row - 1) * this.colCount + (col - 1);
@@ -72,11 +75,12 @@ Vue.component("glyph-inventory", {
     The top two rows of slots are protected slots and are
     <br>
     unaffected by anything which may move or delete glyphs.
-    <div>
-      <glyph-sort-options />
-    </div>
-    <div v-for="row in rowCount" class="l-glyph-inventory__row">
-      <div v-for="col in colCount"
+    <glyph-protected-row-options />
+    <glyph-sort-options />
+    <div v-for="row in rowCount"
+      class="l-glyph-inventory__row"
+      :key="protected + row">
+        <div v-for="col in colCount"
            class="l-glyph-inventory__slot"
            :class="slotClass(toIndex(row, col))"
            @dragover="allowDrag"
@@ -91,5 +95,32 @@ Vue.component("glyph-inventory", {
       </div>
     </div>
   </div>
+  `,
+});
+
+Vue.component("glyph-protected-row-options", {
+  methods: {
+    update() {
+      this.showScoreFilter = EffarigUnlock.basicFilter.isUnlocked;
+    },
+    addRow() {
+      Glyphs.changeProtectedRows(1);
+    },
+    removeRow() {
+      Glyphs.changeProtectedRows(-1);
+    }
+  },
+  template: `
+    <div>
+      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        ach-tooltip="One row is permanently un-protected for new glyphs"
+        @click="addRow">
+          Add a protected row
+      </button>
+      <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
+        @click="removeRow">
+          Remove a protected row
+      </button>
+    </div>
   `,
 });

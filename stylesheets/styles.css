@@ -3701,6 +3701,7 @@ screen and (max-width: 480px) {
 .t-dark-metro .o-infinity-upgrade-btn--unavailable:hover,
 .t-inverted-metro .o-infinity-upgrade-btn--unavailable:hover,
 .t-s8 .o-infinity-upgrade-btn--unavailable:hover {
+  color: var(--color-text-inverted);
   background-color: #bdbdbd;
 }
 

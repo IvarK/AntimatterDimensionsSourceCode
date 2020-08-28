@@ -62,11 +62,11 @@ Vue.component("time-dilation-tab", {
         <span class="c-dilation-tab__dilated-time-income">+{{format(dilatedTimeIncome, 2, 1)}}/s</span>
       </span>
       <span>
-        Next free galaxy at
+        Next Tachyon Galaxy at
         <span class="c-dilation-tab__galaxy-threshold">{{format(galaxyThreshold, 2, 1)}}</span>
         Dilated Time, gained total of
         <span class="c-dilation-tab__galaxies">{{formatInt(galaxies)}}</span>
-        galaxies
+        Tachyon Galaxies
       </span>
       <div class="l-dilation-upgrades-grid">
         <div class="l-dilation-upgrades-grid__row">

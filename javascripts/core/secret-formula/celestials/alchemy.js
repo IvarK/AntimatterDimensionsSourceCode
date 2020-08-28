@@ -154,7 +154,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 4,
       isUnlocked: () => Ra.pets.effarig.level >= 12,
       lockText: "Effarig Level 12",
-      formatEffect: value => `Free galaxies are ${formatPercents(value, 2, 2)} stronger ` +
+      formatEffect: value => `Tachyon Galaxies are ${formatPercents(value, 2, 2)} stronger ` +
         `per ${format("1e1000000")} replicanti`,
       reagents: [
         {
@@ -221,7 +221,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 15,
       lockText: "Effarig Level 15",
-      formatEffect: value => `All Dimensions ${formatPow(Ra.momentumValue, 4, 4)}, increasing by ${format(0.002, 3, 3)} 
+      formatEffect: value => `All Dimensions ${formatPow(Ra.momentumValue, 4, 4)}, increasing by ${format(0.002, 3, 3)}
         per hour (real-time, never resets), up to a maximum of ${formatPow(value, 4, 4)}`,
       reagents: [
         {
@@ -359,7 +359,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 16,
       lockText: "Effarig Level 16",
-      formatEffect: value => `Each reality simulates ${format(value, 2, 3)} additional realities, giving all 
+      formatEffect: value => `Each reality simulates ${format(value, 2, 3)} additional realities, giving all
         the same rewards as if it was amplified`,
       reagents: [
         {

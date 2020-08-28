@@ -565,8 +565,8 @@ other resources. Instead, you can only gain more Tachyon Particles by passing yo
 Time Dilation, and you will only gain more based on your <i>new</i> highest antimatter from this new run.
 <br>
 <br>
-Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Dilated Galaxies by
-reaching thresholds similarly to free tickspeed upgrades from Time Dimensions. These Dilated Galaxies are like
+Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Tachyon Galaxies by
+reaching thresholds similarly to free tickspeed upgrades from Time Dimensions. These Tachyon Galaxies are like
 Replicanti Galaxies in that they affect tickspeed as if they were Antimatter Galaxies but they don't increase the cost
 of your next Antimatter Galaxy.
 <br>

@@ -56,7 +56,7 @@ Vue.component("replicanti-galaxy-button", {
         class="o-primary-btn--replicanti-galaxy"
         onclick="replicantiGalaxy()"
       >
-        {{resetActionDisplay}} for a free galaxy
+        {{resetActionDisplay}} for a Replicanti Galaxy
         <br>
         {{galaxyCountDisplay}}
       </primary-button>

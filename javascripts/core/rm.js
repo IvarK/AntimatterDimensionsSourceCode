@@ -556,6 +556,9 @@ const Glyphs = {
       this.active[glyph.idx] = null;
       this.addToInventory(glyph, freeIndex);
     }
+    if (player.reality.glyphs.active.length) {
+      Modal.message.show("Some of your glyphs could not be unequipped due to lack of inventory space.");
+    }
     this.updateRealityGlyphEffects();
     this.updateGlyphCountForV();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);

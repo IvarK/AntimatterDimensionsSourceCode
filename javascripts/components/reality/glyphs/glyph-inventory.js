@@ -7,7 +7,7 @@ Vue.component("glyph-inventory", {
       doubleClickTimeOut: null,
       clickedGlyphId: null,
       glyphSacrificeUnlocked: false,
-      protected: 0,
+      protectedRows: 0,
     };
   },
   computed: {
@@ -21,8 +21,7 @@ Vue.component("glyph-inventory", {
   methods: {
     update() {
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
-      // This is used for key-changing in order to force the inventory to re-render if protected row count changes 
-      this.protected = Glyphs.protectedSlots;
+      this.protectedRows = player.reality.glyphs.protectedRows;
     },
     toIndex(row, col) {
       return (row - 1) * this.colCount + (col - 1);
@@ -72,14 +71,15 @@ Vue.component("glyph-inventory", {
   <div class="l-glyph-inventory">
     Click and drag or double-click to equip glyphs.
     <br>
-    The top two rows of slots are protected slots and are
+    The top {{ format(protectedRows, 2, 0) }} {{ "row" | pluralize(protectedRows, "rows")}} 
+    of slots are protected slots and are unaffected by anything which
     <br>
-    unaffected by anything which may move or delete glyphs.
+    may move or delete glyphs.  New glyphs will never be inserted into these slots.
     <glyph-protected-row-options />
     <glyph-sort-options />
     <div v-for="row in rowCount"
       class="l-glyph-inventory__row"
-      :key="protected + row">
+      :key="protectedRows + row">
         <div v-for="col in colCount"
            class="l-glyph-inventory__slot"
            :class="slotClass(toIndex(row, col))"

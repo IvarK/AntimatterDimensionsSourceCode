@@ -3731,7 +3731,7 @@ screen and (max-width: 480px) {
 .o-infinity-upgrade-btn--bought {
   color: var(--color-text-inverted);
   background-color: var(--color-infinity);
-  border-color: var(--color-text-inverted);
+  border-color: var(--color-infinity);
   cursor: default;
 }
 
@@ -3759,6 +3759,7 @@ screen and (max-width: 480px) {
 
 .o-infinity-upgrade-btn--chargeable:hover {
   color: var(--color-teresa--base);
+  cursor: pointer;
 }
 
 @keyframes a-charged-infinity-upgrade-glow {

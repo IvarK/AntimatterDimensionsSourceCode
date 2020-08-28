@@ -95,7 +95,7 @@ Vue.component("effarig-tab", {
     },
     createCursedGlyph() {
       if (Glyphs.freeInventorySpace === 0) {
-        Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
+        Modal.message.show("Inventory cannot hold new glyphs. Sacrifice (shift-click) some glyphs.");
         return;
       }
       const cursedCount = player.reality.glyphs.active
@@ -103,7 +103,7 @@ Vue.component("effarig-tab", {
         .filter(g => g !== null && g.type === "cursed")
         .length;
       if (cursedCount >= 5) {
-        GameUI.notify.error("You don't need any more cursed glyphs!");
+        GameUI.notify.error(`You don't need more than ${format(5)} cursed glyphs!`);
       } else {
         Glyphs.addToInventory(GlyphGenerator.cursedGlyph());
         GameUI.notify.error("Created a cursed glyph");
@@ -122,8 +122,9 @@ Vue.component("effarig-tab", {
             +{{ format(shardRarityBoost, 2, 2) }}%.
           </div>
           <div class="c-effarig-relic-description">
-            You will gain {{ format(shardsGained, 2, 0) }} Relic Shards next reality. More EP slightly increases <br>
-            shards gained. More distinct glyph effects significantly increases shards gained.
+            You will gain {{ format(shardsGained, 2, 0) }} Relic Shards next Reality. More Eternity Points <br>
+            slightly increases Relic Shards gained. More distinct glyph <br>
+            effects significantly increases Relic Shards gained.
           </div>
           <effarig-unlock-button
            v-for="(unlock, i) in shopUnlocks"

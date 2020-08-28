@@ -4,12 +4,12 @@ const TERESA_UNLOCKS = {
   RUN: {
     id: 0,
     price: 1e14,
-    description: "unlock Teresa's reality.",
+    description: "unlock Teresa's Reality.",
   },
   EPGEN: {
     id: 1,
     price: 1e18,
-    description: "unlock Teresa's EP generation.",
+    description: "unlock Teresa's Eternity Point generation.",
   },
   EFFARIG: {
     id: 2,

@@ -44,7 +44,7 @@ GameDatabase.celestials.v = {
     {
       id: 2,
       name: "Se7en deadly matters",
-      description: value => `Get ${format(Decimal.pow10(value))} IP in Eternity Challenge 7.`,
+      description: value => `Get ${format(Decimal.pow10(value))} Infinity Points in Eternity Challenge 7.`,
       values: [6e5, 7.2e5, 8.4e5, 9.6e5, 1.08e6, 1.2e6],
       condition: () => V.isRunning && EternityChallenge(7).isRunning,
       currentValue: () => player.infinityPoints.log10(),
@@ -71,7 +71,7 @@ GameDatabase.celestials.v = {
     {
       id: 4,
       name: "Eternal Sunshine",
-      description: value => `Get ${format(Decimal.pow10(value))} EP.`,
+      description: value => `Get ${format(Decimal.pow10(value))} Eternity Points.`,
       values: [7000, 7600, 8200, 8800, 9400, 10000],
       condition: () => V.isRunning,
       currentValue: () => player.eternityPoints.log10(),
@@ -84,7 +84,7 @@ GameDatabase.celestials.v = {
     {
       id: 5,
       name: "Matterception",
-      description: value => `Get ${formatInt(value)} Dimensional Boosts while Dilated and inside Eternity Challenge 5.`,
+      description: value => `Get ${formatInt(value)} Dimension Boosts while Dilated and inside Eternity Challenge 5.`,
       values: [51, 52, 53, 54, 55, 56],
       condition: () => V.isRunning && player.dilation.active && EternityChallenge(5).isRunning,
       currentValue: () => DimBoost.purchasedBoosts,
@@ -115,7 +115,7 @@ GameDatabase.celestials.v = {
     {
       id: 7,
       name: "Post-destination",
-      description: value => `Get ${formatInt(200000)} TT with a /${format(Decimal.pow10(value), 2, 2)}
+      description: value => `Get ${formatInt(200000)} Time Theorems with a /${format(Decimal.pow10(value), 2, 2)}
         Black Hole or slower, without discharging or entering EC12.`,
       values: [50, 100, 150, 200, 250],
       condition: () => V.isRunning,
@@ -159,7 +159,7 @@ GameDatabase.celestials.v = {
       id: 2,
       STCost: 12,
       requirement: [223, 224, 232],
-      description: () => `Distant galaxy scaling threshold starts another ${formatInt(3000)} later`,
+      description: () => `Distant Galaxy scaling threshold starts another ${formatInt(3000)} later`,
       effect: 3000,
       unlocked: () => Ra.pets.v.level >= 10
     },
@@ -167,7 +167,7 @@ GameDatabase.celestials.v = {
       id: 3,
       STCost: 12,
       requirement: [225, 226, 233],
-      description: () => `Gain ${formatPercents(0.5)} more extra RGs from Studies 225 and 226, 
+      description: () => `Gain ${formatPercents(0.5)} more extra Replicanti Galaxies from Studies 225 and 226,
         and from Effarig's Infinity`,
       effect: 1.5,
       unlocked: () => Ra.pets.v.level >= 15

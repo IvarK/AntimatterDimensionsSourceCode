@@ -229,9 +229,9 @@ Vue.component("alchemy-tab", {
         </primary-button>
       </div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      Resource cap, based on glyph level in last 10 realities: {{ format(estimatedCap, 3, 2) }}.
+      Your resource cap is increased relative to the glyph level in the last 10 realities: {{ format(estimatedCap, 3, 2) }}.
       <span v-if="reactionsAvailable">
-        Reactions trigger once every time you reality.
+        Reactions trigger once every time you reality, unaffected by amplification from stored real time.
       </span>
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">

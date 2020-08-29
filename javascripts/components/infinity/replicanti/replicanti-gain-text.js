@@ -65,11 +65,11 @@ Vue.component("replicanti-gain-text", {
       }
       
       if (Replicanti.galaxies.max > 0) {
-        this.galaxyText = `You are gaining a galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
+        this.galaxyText = `You are gaining a Replicanti Galaxy every ${TimeSpan.fromSeconds(totalTime)}`;
         if (galaxiesPerSecond.gte(1)) {
-          this.galaxyText = `You are gaining ${format(galaxiesPerSecond, 2, 1)} galaxies per second`;
+          this.galaxyText = `You are gaining ${format(galaxiesPerSecond, 2, 1)} Replicanti ${pluralize("Galaxy", galaxiesPerSecond, "Galaxies")} per second`;
         }
-        this.galaxyText += ` (all galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
+        this.galaxyText += ` (all Replicanti Galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
       } else {
         this.galaxyText = ``;
       }

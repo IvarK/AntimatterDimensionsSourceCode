@@ -88,9 +88,9 @@ Vue.component("replicanti-tab", {
       <template v-else>
         <div v-if="isInEC8">You have {{formatInt(ec8Purchases)}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
         <div v-if="hasRaisedCap">
-          Your replicanti cap without study 192 has been raised to {{format(replicantiCap, 2)}}
-          and is giving you {{formatInt(effarigInfinityBonusRG)}} extra RG due to the reward from
-          Effarig's Infinity. (Next RG at {{format(nextEffarigRGThreshold, 2)}})
+          Your Replicanti cap without Time Study 192 has been raised to {{format(replicantiCap, 2)}}
+          and is giving you {{formatInt(effarigInfinityBonusRG)}} extra Replicanti {{ "Galaxy" | pluralize(effarigInfinityBonusRG, "Galaxies")}} due to the reward from
+          Effarig's Infinity. (Next Replicanti Galaxy at {{format(nextEffarigRGThreshold, 2)}})
         </div>
         <p class="c-replicanti-description">
           You have
@@ -106,9 +106,9 @@ Vue.component("replicanti-tab", {
           <replicanti-upgrade-button :setup="maxGalaxySetup" />
         </div>
         <div>
-          The Max Replicanti Galaxy upgrade can be purchased endlessly,
+          The Max Replicanti Galaxy upgrade can be purchased endlessly, but costs increase
           <br>
-          but costs increase more rapidly above {{formatInt(distantRG)}} RG and {{formatInt(remoteRG)}} RG.
+          more rapidly above {{formatInt(distantRG)}} Replicanti Galaxies and even more so above {{formatInt(remoteRG)}} Replicanti Galaxies.
         </div>
         <br>
         <br>

@@ -97,13 +97,13 @@ Vue.component("modal-enslaved-hints", {
           <br>
         </div>
         <div v-if="realityHintsLeft + glyphHintsLeft > 0">
-          You can spend some time looking for some more cracks in the Reality, but every hint you spend time on
-          will increase the time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
+          You can spend some time looking for some more cracks in the Reality, but every hint you spend Stored Time on
+          will increase the Stored Time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
           gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
           divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
           <br>
           <br>
-          The next hint requires {{ hintCost }} stored in your Black Hole, which will be used up.
+          The next hint will cost {{ hintCost }} Stored Time.
           <span v-if="currentStored < nextHintCost">
             You will reach this if you charge your Black Hole for {{ timeEstimate }}.
           </span>
@@ -294,12 +294,12 @@ Vue.component("enslaved-tab", {
               <p>Infinity, Time, and 8th Antimatter Dimension purchases are limited to {{ formatInt(1) }} each</p>
               <p>Antimatter Dimension multipliers are always Dilated (the glyph effect still only
                 applies in actual Dilation)</p>
-              <p>Time study 192 (uncapped Replicanti) is locked</p>
+              <p>Time Study 192 (uncapped Replicanti) is locked</p>
               <p>The Black Hole is disabled</p>
-              <p>Tachyon production and Dilated Time production are severely reduced</p>
+              <p>Tachyon Particle production and Dilated Time production are severely reduced</p>
               <p>Time Theorem generation from Dilation glyphs is disabled</p>
               <p>Certain challenge goals have been increased</p>
-              <p>Stored time is effectively Dilated (exponent^{{ format(0.55, 2, 2) }})</p>
+              <p>Stored Time is discharged at a reduced effectiveness (exponent^{{ format(0.55, 2, 2) }})</p>
               <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps
               (see Infinity Dimension tab)</b>
             </div>
@@ -316,8 +316,8 @@ Vue.component("enslaved-tab", {
           <div class="l-enslaved-top-container">
             <div class="l-enslaved-top-container__half">
               While charging, the Black Hole's speed boost is {{ canAdjustStoredTime ? "decreased" : "disabled" }},
-              and the lost speed is converted into stored time. Discharging the Black Hole allows you to skip
-              forward in time. Stored time is also used to unlock certain upgrades.
+              and the lost speed is converted into Stored Time. Discharging the Black Hole allows you to skip
+              forward in time. Stored Time is also used to unlock certain upgrades.
               <button :class="['o-enslaved-mechanic-button',
                               {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
                       @click="toggleStoreBlackHole">
@@ -326,13 +326,13 @@ Vue.component("enslaved-tab", {
               </button>
               <button class="o-enslaved-mechanic-button" @click="useStored">
                 Discharge Black Hole
-                <p v-if="isRunning">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
+                <p v-if="isRunning">{{timeDisplayShort(nerfedBlackHoleTime)}} in this Reality</p>
               </button>
             </div>
             <div class="l-enslaved-top-container__half">
               Storing real time completely halts all production, setting game speed to {{ formatInt(0) }}.
-              You can use stored real time to "amplify" a reality, simulating repeated runs of it.
-              Amplified realities give all the rewards that normal realities do.
+              You can use stored real time to "amplify" a Reality, simulating repeated runs of it.
+              Amplified Realities give all the rewards that normal realities do.
               <button :class="['o-enslaved-mechanic-button',
                               {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
                       @click="toggleStoreReal">

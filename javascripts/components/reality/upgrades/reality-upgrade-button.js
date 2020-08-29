@@ -71,8 +71,8 @@ Vue.component("reality-upgrade-button", {
           <effect-display :config="config" />
           <cost-display
             :config="config"
-            singular="RM"
-            plural="RM"
+            singular="Reality Machine"
+            plural="Reality Machines"
           />
         </template>
       </button>

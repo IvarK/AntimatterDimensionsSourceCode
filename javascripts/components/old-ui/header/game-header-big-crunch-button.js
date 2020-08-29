@@ -25,20 +25,13 @@ Vue.component("game-header-big-crunch-button", {
       const ratio = this.gainedIP.log10() / this.currentIP.log10();
       let rgb;
 
-      if (darkTheme) {
-        rgb = [
-          Math.round((1 - ratio) * 10 * 255),
-          Math.round((ratio - 1) * 10 * 255),
-          0
-        ];
-      } else {
-        rgb = [
-          Math.round(255 - (ratio - 1) * 10 * 255),
-          Math.round(255 - (1 - ratio) * 10 * 255),
-          ratio > 1 ? Math.round(255 - (ratio - 1) * 10 * 255)
-          : Math.round(255 - (1 - ratio) * 10 * 255)
-        ];
-      }
+      rgb = [
+        Math.round(255 - (ratio - 1) * 10 * 255),
+        Math.round(255 - (1 - ratio) * 10 * 255),
+        ratio > 1 ? Math.round(255 - (ratio - 1) * 10 * 255)
+        : Math.round(255 - (1 - ratio) * 10 * 255)
+      ];
+
       return { color: `rgb(${rgb.join(",")})` };
     },
     classObject() {

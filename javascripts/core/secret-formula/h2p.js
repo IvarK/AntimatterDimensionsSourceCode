@@ -115,7 +115,7 @@ the 3rd Dimension ${formatX(2)}, and all other Dimensions are unaffected.
 <b>Hotkey: D</b>
 `,
       isUnlocked: () => true,
-      tags: ["dimboost", "dimshift", "reset", "earlygame"],
+      tags: ["dimboost", "reset", "earlygame"],
       tab: "dimensions/antimatter"
     }, {
       name: "Antimatter Galaxies",

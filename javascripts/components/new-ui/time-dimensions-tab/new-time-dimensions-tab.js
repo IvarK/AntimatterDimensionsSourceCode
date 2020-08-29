@@ -70,9 +70,9 @@ Vue.component("new-time-dimensions-tab", {
         />
       </div>
       <div>
-        Time Dimension costs jump at {{format(costIncreases[0], 2, 2)}} EP and {{format(costIncreases[1])}} EP,
+        Time Dimension costs jump at {{format(costIncreases[0], 2, 2)}} and {{format(costIncreases[1])}} Eternity Points,
         <br>
-        and get expensive more quickly past {{format(costIncreases[2])}} EP
+        and costs increase much faster after {{format(costIncreases[2])}} Eternity Points.
       </div>
     </div>`
 });

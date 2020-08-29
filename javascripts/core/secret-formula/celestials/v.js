@@ -31,7 +31,7 @@ GameDatabase.celestials.v = {
     {
       id: 1,
       name: "AntiStellar",
-      description: value => `Have ${formatInt(value)} total galaxies from all types.`,
+      description: value => `Have ${formatInt(value)} total Galaxies from all types.`,
       values: [4000, 4300, 4600, 4900, 5200, 5500],
       condition: () => V.isRunning,
       currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies,
@@ -150,7 +150,7 @@ GameDatabase.celestials.v = {
       id: 1,
       STCost: 12,
       requirement: [221, 222, 231],
-      description: "Study 231 powers up the effect of study 221",
+      description: "Time Study 231 powers up the effect of Time Study 221",
       effect: () => TimeStudy(221).effectValue.pow(TimeStudy(231).effectValue.minus(1)).clampMin(1),
       formatEffect: value => formatX(value, 2, 1),
       unlocked: () => Ra.pets.v.level >= 5
@@ -159,7 +159,7 @@ GameDatabase.celestials.v = {
       id: 2,
       STCost: 12,
       requirement: [223, 224, 232],
-      description: () => `Distant Galaxy scaling threshold starts another ${formatInt(3000)} later`,
+      description: () => `Distant Galaxy scaling threshold starts another ${formatInt(3000)} Antimatter Galaxies later`,
       effect: 3000,
       unlocked: () => Ra.pets.v.level >= 10
     },
@@ -167,7 +167,7 @@ GameDatabase.celestials.v = {
       id: 3,
       STCost: 12,
       requirement: [225, 226, 233],
-      description: () => `Gain ${formatPercents(0.5)} more extra Replicanti Galaxies from Studies 225 and 226,
+      description: () => `Gain ${formatPercents(0.5)} more extra Replicanti Galaxies from Time Studies 225 and 226,
         and from Effarig's Infinity`,
       effect: 1.5,
       unlocked: () => Ra.pets.v.level >= 15

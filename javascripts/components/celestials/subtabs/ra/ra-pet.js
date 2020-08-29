@@ -40,7 +40,7 @@ Vue.component("ra-pet", {
     chunkTooltip() {
       switch (this.petConfig.pet.name) {
         case "Teresa":
-          return "Based on EP";
+          return "Based on Eternity Points";
         case "Effarig":
           return "Based on Relic Shards gained";
         case "Enslaved":
@@ -48,13 +48,13 @@ Vue.component("ra-pet", {
         case "V":
           return "Based on Infinity Power";
         default:
-          throw new Error(`Unrecognized celestial ${this.petConfig.pet.name} in Ra UI`);
+          throw new Error(`Unrecognized Celestial ${this.petConfig.pet.name} in Ra UI`);
       }
     },
     memoryGainTooltip() {
       switch (this.petConfig.pet.name) {
         case "Teresa":
-          return "Based on current RM";
+          return "Based on current Reality Machines";
         case "Effarig":
           return "Based on best glyph level";
         case "Enslaved":
@@ -121,7 +121,7 @@ Vue.component("ra-pet", {
         </div>
         <div v-if="level < 25">
           <div>
-            {{ format(exp, 2) }} / {{ format(requiredExp, 2) }} {{ name }} memories
+            {{ format(exp, 2) }} / {{ format(requiredExp, 2) }} {{ name }} Memories
           </div>
           <div>
             (next level in {{ nextLevelEstimate }})
@@ -136,10 +136,10 @@ Vue.component("ra-pet", {
         <ra-pet-level-bar :pet="petConfig.pet" />
         <div v-if="level < 25">
           <div>
-            {{ format(memoryChunks, 2, 2) }} memory chunks, {{ format(memoriesPerSecond, 2, 2) }} memories/sec
+            {{ format(memoryChunks, 2, 2) }} Memory Chunks, {{ format(memoriesPerSecond, 2, 2) }} Memories/sec
           </div>
           <div>
-            Gaining {{ format(memoryChunksPerSecond, 2, 2) }} memory chunks/sec
+            Gaining {{ format(memoryChunksPerSecond, 2, 2) }} Memory Chunks/sec
             <span :ach-tooltip="chunkTooltip">
               <i class="fas fa-question-circle"></i>
             </span>
@@ -151,7 +151,7 @@ Vue.component("ra-pet", {
           </div>
         </div>
         <div v-if="memoryMultiplier > 1">
-          Multiplying all memory production by {{ format(memoryMultiplier, 2, 3) }}
+          Multiplying all Memory production by {{ format(memoryMultiplier, 2, 3) }}
           <span :ach-tooltip="memoryGainTooltip">
             <i class="fas fa-question-circle"></i>
           </span>

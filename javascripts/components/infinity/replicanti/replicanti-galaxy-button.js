@@ -28,10 +28,10 @@ Vue.component("replicanti-galaxy-button", {
       return Replicanti.galaxies.autobuyer;
     },
     autobuyerOnTextDisplay() {
-      return this.isAutoEnabled ? "Auto galaxy ON" : "Auto galaxy ON (disabled)";
+      return this.isAutoEnabled ? "Auto Galaxy ON" : "Auto Galaxy ON (disabled)";
     },
     autobuyerOffTextDisplay() {
-      return this.isAutoEnabled ? "Auto galaxy OFF" : "Auto galaxy OFF (disabled)";
+      return this.isAutoEnabled ? "Auto Galaxy OFF" : "Auto Galaxy OFF (disabled)";
     }
   },
   methods: {

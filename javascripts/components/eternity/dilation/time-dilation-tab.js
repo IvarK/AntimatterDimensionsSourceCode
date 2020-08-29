@@ -66,7 +66,7 @@ Vue.component("time-dilation-tab", {
         <span class="c-dilation-tab__galaxy-threshold">{{format(galaxyThreshold, 2, 1)}}</span>
         Dilated Time, gained total of
         <span class="c-dilation-tab__galaxies">{{formatInt(galaxies)}}</span>
-        Tachyon Galaxies
+        Tachyon {{ "Galaxy" | pluralize(galaxies, "Galaxies")}}
       </span>
       <div class="l-dilation-upgrades-grid">
         <div class="l-dilation-upgrades-grid__row">

@@ -28,9 +28,9 @@ Vue.component("equipped-glyphs", {
     },
     undoTooltip() {
       return this.undoAvailable
-        ? ("Unequip the last equipped glyph and rewind reality to when you equipped it." +
+        ? ("Unequip the last equipped glyph and rewind Reality to when you equipped it." +
           " (Most resources will be fully reset)")
-        : "Undo is only available for glyphs equipped during this reality";
+        : "Undo is only available for glyphs equipped during this Reality";
     },
   },
   created() {
@@ -100,7 +100,7 @@ Vue.component("equipped-glyphs", {
           " be restored to what they were when it equipped:\n" +
           " - antimatter, Infinity Points, and Eternity Points;\n" +
           " - Dilation Upgrades, Tachyon Particles, and Dilated Time;\n" +
-          " - Time Theorems and EC completions;\n" +
+          " - Time Theorems and Eternity Challenge completions;\n" +
           " - Time Dimension and Reality unlocks;\n" +
           " - time in current Reality" +
           (Enslaved.isUnlocked ? ";\n - stored game time" : ""))) {

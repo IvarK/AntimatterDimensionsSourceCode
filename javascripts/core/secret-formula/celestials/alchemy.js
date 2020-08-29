@@ -195,7 +195,7 @@ GameDatabase.celestials.alchemy = {
           return baseEffect;
         }
         const increasedYield = formatPercents(value * Effects.sum(GlyphSacrifice.reality), 2, 2);
-        return `${baseEffect} (${increasedYield} after glyph sacrifice)`;
+        return `${baseEffect} (${increasedYield} after Glyph Sacrifice)`;
       },
       reagents: [
         {

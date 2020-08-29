@@ -75,7 +75,7 @@ GameDatabase.eternity.timeStudies.ec = [
     id: 8,
     cost: 115,
     requirement: {
-      resource: "IP",
+      resource: "Infinity Points",
       current: () => player.infinityPoints,
       required: completions => new Decimal("1e1000").pow(completions).times("1e4000"),
       formatValue: value => format(value, 0, 0)
@@ -85,7 +85,7 @@ GameDatabase.eternity.timeStudies.ec = [
     id: 9,
     cost: 415,
     requirement: {
-      resource: "infinity power",
+      resource: "Infinity Power",
       current: () => player.infinityPower,
       required: completions => new Decimal("1e2000").pow(completions).times("1e17500"),
       formatValue: value => format(value, 0, 0)
@@ -95,7 +95,7 @@ GameDatabase.eternity.timeStudies.ec = [
     id: 10,
     cost: 550,
     requirement: {
-      resource: "EP",
+      resource: "Eternity Points",
       current: () => player.eternityPoints,
       required: completions => new Decimal("1e20").pow(completions).times("1e100"),
       formatValue: value => format(value, 0, 0)

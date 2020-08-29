@@ -102,7 +102,7 @@ GameDatabase.eternity.dilation = (function() {
     ipMultDT: {
       id: 7,
       cost: 2e12,
-      description: "Gain a multiplier to IP based on Dilated Time.",
+      description: "Gain a multiplier to Infinity Points based on Dilated Time.",
       effect: () => player.dilation.dilatedTime.pow(1000).clampMin(1),
       formatEffect: value => formatX(value, 2, 1),
       cap: () => Effarig.eternityCap

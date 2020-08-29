@@ -45,12 +45,12 @@ Vue.component("ep-multiplier-button", {
         <br>
         Currently: {{formatX(multiplier, 2, 0)}}
         <br>
-        Cost: {{format(cost, 2, 0)}} EP
+        Cost: {{format(cost, 2, 0)}} Eternity Points
       </button>
       <primary-button
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
         @click="upgrade.buyMax()"
-      >Max EP mult</primary-button>
+      >Max Eternity Point mult</primary-button>
       <primary-button-on-off
         v-if="isAutoUnlocked"
         v-model="isAutobuyerOn"

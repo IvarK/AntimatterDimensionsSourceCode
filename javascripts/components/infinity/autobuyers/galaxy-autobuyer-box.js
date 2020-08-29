@@ -36,7 +36,7 @@ Vue.component("galaxy-autobuyer-box", {
       <template :slot=" isBuyMaxUnlocked ? 'toggleSlot' : 'intervalSlot' ">
         <div class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text" @click="limitGalaxies = !limitGalaxies">
           <input type="checkbox" :checked="limitGalaxies"/>
-          <span>Limit galaxies to:</span>
+          <span>Limit Antimatter Galaxies to:</span>
         </div>
         <autobuyer-input
          :autobuyer="autobuyer"

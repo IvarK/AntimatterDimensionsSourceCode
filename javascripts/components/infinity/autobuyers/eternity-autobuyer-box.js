@@ -23,28 +23,28 @@ Vue.component("eternity-autobuyer-box", {
     modeProps(mode) {
       switch (mode) {
         case AUTO_ETERNITY_MODE.AMOUNT: return {
-          title: "Eternity at X EP",
+          title: "Eternity at X Eternity Points",
           input: {
             property: "amount",
             type: "decimal"
           },
         };
         case AUTO_ETERNITY_MODE.TIME: return {
-          title: "Seconds between eternities",
+          title: "Seconds between Eternities",
           input: {
             property: "time",
             type: "float"
           },
         };
         case AUTO_ETERNITY_MODE.X_LAST: return {
-          title: "X times last eternity",
+          title: "X times last Eternity",
           input: {
             property: "xLast",
             type: "decimal"
           },
         };
       }
-      throw new Error("Unknown auto eternity mode");
+      throw new Error("Unknown Auto Eternity mode");
     },
     changeMode(event) {
       const mode = parseInt(event.target.value, 10);

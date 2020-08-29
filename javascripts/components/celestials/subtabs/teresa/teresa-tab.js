@@ -96,17 +96,17 @@ Vue.component("teresa-tab", {
             <div v-if="bestAM.gt(0)">
               Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
               <br><br>
-              You last did Teresa's Reality at {{ format(lastRM, 2) }} RM.
+              You last did Teresa's Reality at {{ format(lastRM, 2) }} Reality Machines.
             </div>
             <div v-else>
               You have not completed Teresa's Reality yet.
             </div>
           </div>
           <div class="c-teresa-unlock">
-            Teresa Reality reward: Glyph sacrifice power {{ formatX(runReward, 2, 2) }}
+            Teresa Reality reward: Glyph Sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
           <div class="c-teresa-unlock" v-if="hasEPGen">
-            You gain {{ formatPercents(0.01) }} of your peaked EP/min every second.
+            You gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute every second.
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">

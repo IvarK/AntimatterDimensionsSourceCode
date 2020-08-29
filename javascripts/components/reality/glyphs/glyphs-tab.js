@@ -60,7 +60,7 @@ Vue.component("glyphs-tab", {
             v-model="autoRestartCelestialRuns"
             :value="autoRestartCelestialRuns"
             @input="toggleAutoRestartCelestial()">
-          <label for="autoRestart">Repeat this celestial's Reality</label>
+          <label for="autoRestart">Repeat this Celestial's Reality</label>
         </div>
         <reality-amplify-button />
         <div v-if="showInstability">
@@ -96,7 +96,7 @@ Vue.component("glyphs-tab", {
                 <div class="c-glyph-info-button"
                   :class="glyphInfoClass(true)"
                   @click="setInfoState(true)">
-                    Glyph sacrifice totals
+                    Glyph Sacrifice totals
                 </div>
             </div>
             <sacrificed-glyphs v-if="sacrificeUnlocked && sacrificeDisplayed" />

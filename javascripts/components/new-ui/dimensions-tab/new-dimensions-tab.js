@@ -86,7 +86,7 @@ Vue.component("new-dimensions-tab", {
           v-if="isQuickResetAvailable"
           class="o-primary-btn--quick-reset"
           onclick="softReset(-1, true, true)"
-        >Lose a reset, returning to the start of the reset</primary-button>
+        >Perform a Dimension Boost reset and lose a Dimension Boost</primary-button>
       <new-galaxy-row/>
     </div>
     <antimatter-dim-tab-progress-bar/>

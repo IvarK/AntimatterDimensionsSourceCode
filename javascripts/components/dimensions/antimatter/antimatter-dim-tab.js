@@ -56,7 +56,7 @@ Vue.component("antimatter-dim-tab", {
         v-if="isQuickResetAvailable"
         class="o-primary-btn--quick-reset"
         @click="quickReset"
-      >Lose a reset, returning to the start of the reset</primary-button>
+      >Perform a Dimension Boost reset and lose a Dimension Boost</primary-button>
       <div style="flex: 1 0" />
       <antimatter-dim-tab-progress-bar class="l-antimatter-dim-tab__progress_bar" />
     </div>`

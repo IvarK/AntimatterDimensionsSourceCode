@@ -25,7 +25,7 @@ Vue.component("big-crunch-autobuyer-box", {
     modeProps(mode) {
       switch (mode) {
         case AUTO_CRUNCH_MODE.AMOUNT: return {
-          title: "Big Crunch at X Infinity Points",
+          title: "Big Crunch at X IP",
           input: {
             property: "amount",
             type: "decimal"

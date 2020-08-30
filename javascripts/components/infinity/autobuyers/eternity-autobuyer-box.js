@@ -23,7 +23,7 @@ Vue.component("eternity-autobuyer-box", {
     modeProps(mode) {
       switch (mode) {
         case AUTO_ETERNITY_MODE.AMOUNT: return {
-          title: "Eternity at X Eternity Points",
+          title: "Eternity at X EP",
           input: {
             property: "amount",
             type: "decimal"

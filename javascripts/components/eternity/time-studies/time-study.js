@@ -112,7 +112,7 @@ Vue.component("time-study", {
       />
       <div v-else-if="showSTCost">
         Cost: <span v-if="config.cost">
-          {{formatInt(config.cost)}} {{ "Time Theorem" | pluralize(config.cost, "Time Theorems")}} and 
+          {{formatInt(config.cost)}} {{ "Time Theorem" | pluralize(config.cost, "Time Theorems")}} and
         </span>
         {{ formatInt(STCost) }} {{ "Space Theorem" | pluralize(STCost, "Space Theorems")}}
       </div>

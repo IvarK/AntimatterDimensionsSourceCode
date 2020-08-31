@@ -4499,7 +4499,7 @@ screen and (max-width: 480px) {
 
 .o-eternity-milestone__reward {
   width: 25rem;
-  height: 6rem;
+  height: 8rem;
   color: black;
   font-weight: bold;
   border: 0.1rem solid var(--color-eternity);

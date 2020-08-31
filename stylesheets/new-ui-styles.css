@@ -648,13 +648,13 @@ body.t-s9 {
   height: 4.4rem;
 }
 
-.l-reality-upgrade-btn {
-  width: 15.6rem;
+ .l-reality-upgrade-btn {
+  width: 18rem;
   margin: 0.6rem 0.4rem;
 }
 
 .l--spoon-btn-group__little-spoon-reality-btn {
-  width: 15.6rem;
+  width: 18rem;
   align-self: center;
   margin-top: -0.2rem;
   margin-bottom: 0.6rem;

@@ -31,7 +31,7 @@ GameDatabase.eternity.milestones = {
   },
   autoIC: {
     eternities: 7,
-    reward: "You complete Infinity Challenges as soon as you unlock them (you get sacrifice autobuyer immediately)"
+    reward: "You complete Infinity Challenges as soon as you unlock them (and keep the Dimensional Sacrifice Autobuyer)"
   },
   keepBreakUpgrades: {
     eternities: 8,

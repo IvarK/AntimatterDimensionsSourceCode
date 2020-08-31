@@ -39,7 +39,7 @@ Vue.component("antimatter-dim-tab", {
   },
   template:
     `<div class="l-old-ui-antimatter-dim-tab">
-      <span v-if="isSacrificeUnlocked">Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
+      <span v-if="isSacrificeUnlocked">Dimensional Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
       <antimatter-dim-tab-header />
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
       <div class="l-dimensions-container">

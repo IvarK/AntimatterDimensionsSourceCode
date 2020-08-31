@@ -133,7 +133,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Get over ${formatX(600)} from Dimensional Sacrifice outside of Challenge 8.`; },
     checkRequirement: () => !NormalChallenge(8).isRunning && Sacrifice.totalBoost.gte(600),
     checkEvent: GAME_EVENT.SACRIFICE_RESET_AFTER,
-    reward: "Sacrifice is slightly stronger.",
+    reward: "Dimensional Sacrifice is slightly stronger.",
     effect: 0.1
   },
   {
@@ -184,7 +184,7 @@ GameDatabase.achievements.normal = [
   {
     id: 38,
     name: "I don't believe in Gods",
-    description: "Buy an Antimatter Galaxy without Sacrificing.",
+    description: "Buy an Antimatter Galaxy without ever Dimensional Sacrificing.",
     checkRequirement: () => player.noSacrifices,
     checkEvent: GAME_EVENT.GALAXY_RESET_BEFORE
   },
@@ -320,7 +320,7 @@ GameDatabase.achievements.normal = [
     },
     checkRequirement: () => NormalChallenge(8).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    reward: "Dimensional sacrifices are a lot stronger.",
+    reward: "Dimensional Sacrifice is a lot stronger.",
     effect: 0.1
   },
   {
@@ -569,10 +569,10 @@ GameDatabase.achievements.normal = [
   {
     id: 88,
     name: "Yet another infinity reference",
-    get description() { return `Get a ${formatX(Decimal.NUMBER_MAX_VALUE, 1, 0)} multiplier in a single sacrifice.`; },
+    get description() { return `Get a ${formatX(Decimal.NUMBER_MAX_VALUE, 1, 0)} multiplier in a single Dimensional Sacrifice.`; },
     checkRequirement: () => Sacrifice.nextBoost.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.SACRIFICE_RESET_BEFORE,
-    reward: "Sacrifices are stronger.",
+    reward: "Dimensional Sacrifices are stronger.",
     effect: 0.1,
   },
   {
@@ -788,10 +788,10 @@ GameDatabase.achievements.normal = [
   {
     id: 118,
     name: "IT'S OVER 9000",
-    get description() { return `Get a total sacrifice multiplier of ${formatPostBreak("1e9000", 0, 0)}.`; },
+    get description() { return `Get a total Dimensional Sacrifice multiplier of ${formatPostBreak("1e9000", 0, 0)}.`; },
     checkRequirement: () => Sacrifice.totalBoost.exponent >= 9000,
     checkEvent: GAME_EVENT.SACRIFICE_RESET_AFTER,
-    reward: "Sacrifice doesn't reset your Antimatter Dimensions.",
+    reward: "Dimensional Sacrifice doesn't reset your Antimatter Dimensions.",
   },
   {
     id: 121,

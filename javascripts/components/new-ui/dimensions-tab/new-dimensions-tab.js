@@ -68,11 +68,11 @@ Vue.component("new-dimensions-tab", {
           @click="sacrifice"
         >
         <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
-        <span v-else>Sacrifice Disabled ({{ disabledCondition }})</span>
+        <span v-else>Dimensional Sacrifice Disabled ({{ disabledCondition }})</span>
       </primary-button>
       <button class="o-primary-btn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">Max All (M)</button>
     </div>
-    <span v-if="isSacrificeUnlocked">Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
+    <span v-if="isSacrificeUnlocked">Dimensional Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
     <new-tickspeed-row/>
     <div class="l-dimensions-container">
       <new-dimension-row

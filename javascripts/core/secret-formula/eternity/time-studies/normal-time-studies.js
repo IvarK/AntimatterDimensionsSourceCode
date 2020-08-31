@@ -115,7 +115,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
         if (TimeStudy(201).isBought) return rowCount < 2;
         return rowCount === 0;
       },
-      description: "Sacrifice affects all other Antimatter Dimensions with reduced effect",
+      description: "Dimensional Sacrifice affects all other Antimatter Dimensions with reduced effect",
       effect: () => Sacrifice.totalBoost.pow(0.25).clampMin(1),
       cap: new Decimal("1e210000"),
       formatEffect: value => formatX(value, 2, 1)
@@ -132,7 +132,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
         if (TimeStudy(201).isBought) return rowCount < 2;
         return rowCount === 0;
       },
-      description: "Sacrifice affects 4th Infinity Dimension with greatly reduced effect",
+      description: "Dimensional Sacrifice affects 4th Infinity Dimension with greatly reduced effect",
       effect: () => Sacrifice.totalBoost.pow(0.04).clampMin(1),
       cap: new Decimal("1e30000"),
       formatEffect: value => formatX(value, 2, 1)
@@ -148,7 +148,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
         if (TimeStudy(201).isBought) return rowCount < 2;
         return rowCount === 0;
       },
-      description: "Sacrifice affects 3rd Time Dimension with greatly reduced effect",
+      description: "Dimensional Sacrifice affects 3rd Time Dimension with greatly reduced effect",
       effect: () => Sacrifice.totalBoost.pow(0.005).clampMin(1),
       cap: new Decimal("1e1300"),
       formatEffect: value => formatX(value, 2, 1)
@@ -453,7 +453,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 214,
       cost: 120,
       requirement: 193,
-      description: "Sacrifice boosts the 8th Antimatter Dimension even more",
+      description: "Dimensional Sacrifice boosts the 8th Antimatter Dimension even more",
       effect: () => {
         const totalBoost = Sacrifice.totalBoost;
         const firstPart = totalBoost.pow(7.6).clampMaxExponent(44000);
@@ -531,7 +531,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 4,
       requirement: () => TimeStudy(214).isBought && !TimeStudy(228).isBought,
       requirementV: () => TimeStudy(214).isBought && TimeStudy(228).isBought,
-      description: "Sacrifice affects 4th Time Dimension with reduced effect",
+      description: "Dimensional Sacrifice affects 4th Time Dimension with reduced effect",
       effect: () => Math.max(Math.pow(Sacrifice.totalBoost.pLog10(), 10), 1),
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -541,7 +541,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 4,
       requirement: () => TimeStudy(214).isBought && !TimeStudy(227).isBought,
       requirementV: () => TimeStudy(214).isBought && TimeStudy(227).isBought,
-      description: () => `Sacrifice formula scales better
+      description: () => `Dimensional Sacrifice formula scales better
         ${Sacrifice.getSacrificeDescription({ 'TimeStudy228': false })} ➜
         ${Sacrifice.getSacrificeDescription({ 'TimeStudy228': true })}`,
       effect: 0.2
@@ -582,7 +582,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 5,
       requirement: () => (TimeStudy(227).isBought || TimeStudy(228).isBought) && !TimeStudy(233).isBought,
       requirementV: () => (TimeStudy(227).isBought || TimeStudy(228).isBought) && TimeStudy(233).isBought,
-      description: "Sacrifice applies to 1st Antimatter Dimension",
+      description: "Dimensional Sacrifice applies to 1st Antimatter Dimension",
       effect: () => Sacrifice.totalBoost,
     },
   ];

@@ -4,7 +4,7 @@ GameDatabase.celestials.effarig = {
   unlocks: {
     adjuster: {
       id: 0,
-      description: "Glyph level weight adjustment",
+      description: "Adjustable Glyph level factor weights",
       cost: 1e7
     },
     basicFilter: {

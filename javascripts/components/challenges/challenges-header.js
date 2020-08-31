@@ -82,7 +82,7 @@ Vue.component("challenges-header", {
       </primary-button>
     </div>
     <div v-if="autoEC && isAutoECVisible">
-      Eternity Challenges are automatically completed in order, and must have all completions of an Eternity Challenge done to start completing the next.
+      Eternity Challenges are automatically completed sequentially, requiring all previous Eternity Challenges to be fully completed before any progress is made.
     </div>
     <div v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
          class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info">

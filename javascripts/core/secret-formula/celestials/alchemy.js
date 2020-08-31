@@ -56,7 +56,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 6,
       lockText: "Effarig Level 6",
-      formatEffect: value => `Dilated Time is increased by ${formatX(value, 2, 2)}`
+      formatEffect: value => `Dilated Time production is increased by ${formatX(value, 2, 2)}`
     },
 
     // T2 resources (combinations of pairs of T1 resources)
@@ -178,7 +178,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3.5,
       isUnlocked: () => Ra.pets.effarig.level >= 7,
       lockText: "Effarig Level 7",
-      formatEffect: value => `Relic Shards are increased ${formatX(value, 2, 2)}`
+      formatEffect: value => `Relic Shard gain is multiplied ${formatX(value, 2, 2)}`
     },
     [ALCHEMY_RESOURCE.SYNERGISM]: {
       name: "Synergism",

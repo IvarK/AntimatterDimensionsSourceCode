@@ -15,7 +15,7 @@ Vue.component("reality-upgrades-tab", {
       The first row of upgrades can be purchased endlessly, but costs increase much faster above {{ format(1e30) }}
       and {{ format(maxNumber, 1) }} Reality Machines.
       <br>
-      The rest of the upgrades are one-time upgrades which have an unlocking requirement in addition to an amount of Reality Machines.
+      The rest of the upgrades are one-time upgrades which have an unlocking requirement in addition to costing Reality Machines.
       <br>
       These requirements, once completed, permanently unlock the ability to purchase the upgrades at any point.
       <br>

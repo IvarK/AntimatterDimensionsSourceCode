@@ -5,7 +5,7 @@ Vue.component("secret-achievements-tab", {
   `<div class="l-achievements-tab">
     <div class="c-achievements-tab__header">
       <span>
-        Secret achievements are optional and give no bonuses
+        Secret achievements are optional and give no bonuses.
       </span>
     </div>
     <div class="l-achievement-grid">

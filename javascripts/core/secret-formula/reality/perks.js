@@ -103,7 +103,7 @@ GameDatabase.reality.perks = {
     id: 30,
     label: "DBNR",
     family: PERK_FAMILY.ANTIMATTER,
-    description: "Dimension Boosts no longer reset Antimatter Dimensions, Tickspeed, or Sacrifice."
+    description: "Dimension Boosts no longer reset Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice."
   },
   studyPassive1: {
     id: 31,

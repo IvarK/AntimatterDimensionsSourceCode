@@ -81,6 +81,9 @@ Vue.component("challenges-header", {
         Exit Challenge
       </primary-button>
     </div>
+    <div v-if="autoEC && isAutoECVisible">
+      Eternity Challenges are automatically completed in order, and must have all completions of an Eternity Challenge done to start completing the next.
+    </div>
     <div v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
          class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info">
       <div class="l-challenges-tab__auto-ec-timers">

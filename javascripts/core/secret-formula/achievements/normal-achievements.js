@@ -569,8 +569,8 @@ GameDatabase.achievements.normal = [
   {
     id: 88,
     name: "Yet another infinity reference",
-    get description() { return `Get a ${formatX(Decimal.NUMBER_MAX_VALUE, 1, 0)} multiplier in a
-    single Dimensional Sacrifice.`; },
+    get description()
+    { return `Get a ${formatX(Decimal.NUMBER_MAX_VALUE, 1, 0)} multiplier in asingle Dimensional Sacrifice.`; },
     checkRequirement: () => Sacrifice.nextBoost.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.SACRIFICE_RESET_BEFORE,
     reward: "Dimensional Sacrifices are stronger.",
@@ -872,8 +872,8 @@ GameDatabase.achievements.normal = [
     get description() { return `Get ${format(5e9)} Banked Infinities.`; },
     checkRequirement: () => player.infinitiedBank.gt(5e9),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-    get reward() { return `After Eternity you permanently keep ${formatPercents(0.05)} of your Infinities
-    as Banked Infinities.`; },
+    get reward()
+    { return `After Eternity you permanently keep ${formatPercents(0.05)} of your Infinities as Banked Infinities.`; },
     effect: () => player.infinitied.times(0.05).floor()
   },
   {

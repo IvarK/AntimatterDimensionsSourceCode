@@ -1237,12 +1237,13 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--sacrifice {
   font-size: 1.2rem;
-  width: 32rem;
+  min-width: 32rem;
   margin-right: 0.8rem;
 }
 
 .o-primary-btn--sacrifice--large {
-  width: 38rem;
+  min-width: 38rem;
+  max-width: 48rem;
 }
 
 .o-primary-btn--buy-ad {

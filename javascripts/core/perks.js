@@ -60,7 +60,7 @@ const Perk = (function() {
     autounlockTD: new PerkState(db.autounlockTD),
     autounlockReality: new PerkState(db.autounlockReality),
     bypassIDAntimatter: new PerkState(db.bypassIDAntimatter),
-    bypassDGReset: new PerkState(db.bypassDGReset),
+    bypassTGReset: new PerkState(db.bypassTGReset),
     bypassECDilation: new PerkState(db.bypassECDilation),
     bypassEC1Lock: new PerkState(db.bypassEC1Lock),
     bypassEC2Lock: new PerkState(db.bypassEC2Lock),

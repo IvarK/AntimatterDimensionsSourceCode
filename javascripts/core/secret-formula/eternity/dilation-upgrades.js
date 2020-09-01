@@ -43,7 +43,7 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e6,
       increment: 100,
       description: () =>
-        (Perk.bypassDGReset.isBought
+        (Perk.bypassTGReset.isBought
         ? "Reset Tachyon Galaxies, but lower their threshold"
         : "Reset Dilated Time and Tachyon Galaxies, but lower their threshold"),
       // The 38th purchase is at 1e80, and is the last purchase.

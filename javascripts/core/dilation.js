@@ -83,7 +83,7 @@ function buyDilationUpgrade(id, bulk, extraFactor) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost);
     player.dilation.rebuyables[id] += buying;
     if (id === 2) {
-      if (!Perk.bypassDGReset.isBought) player.dilation.dilatedTime = new Decimal(0);
+      if (!Perk.bypassTGReset.isBought) player.dilation.dilatedTime = new Decimal(0);
       player.dilation.nextThreshold = new Decimal(1000);
       player.dilation.baseFreeGalaxies = 0;
       player.dilation.freeGalaxies = 0;

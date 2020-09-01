@@ -33,7 +33,7 @@ Vue.component("ra-pet-level-bar", {
     },
     singleLevelStyle() {
       return {
-        width: `${100 * (this.exp / this.requiredExp)}%`
+        width: `${100 * Math.min(1, this.exp / this.requiredExp)}%`
       };
     },
     petStyle() {
@@ -50,8 +50,7 @@ Vue.component("ra-pet-level-bar", {
       return missingUpgrades.length === 0 ? 25 : missingUpgrades.min();
     },
     currentLevelGoal() {
-      if (this.shiftDown) return this.level + 1;
-      return this.nextGoal;
+      return this.level + 1;
     },
   },
   methods: {
@@ -70,25 +69,14 @@ Vue.component("ra-pet-level-bar", {
   template: `
     <div class="l-ra-bar-container">
       <div class="l-ra-exp-bar">
-        <div v-if="shiftDown">
-          <ra-level-chevron v-for="lvl in 2"
-            :key="currentLevelGoal - 2 + lvl"
-            :level="currentLevelGoal - 2 + lvl"
-            :goal="currentLevelGoal"
-            :singleLevel="true"
-            :isImportantLevel="isImportant(lvl)"
-          />
-        </div>
-        <div v-else>
-          <ra-level-chevron v-for="lvl in currentLevelGoal"
-            :key="lvl"
-            :minLevel="prevGoal"
-            :level="lvl"
-            :goal="currentLevelGoal"
-            :isImportantLevel="isImportant(lvl)"
-          />
-        </div>
-        <div class="l-ra-exp-bar-inner" :style="[shiftDown ? singleLevelStyle : multiLevelStyle, petStyle]" />
+        <ra-level-chevron v-for="lvl in 2"
+          :key="currentLevelGoal - 2 + lvl"
+          :level="currentLevelGoal - 2 + lvl"
+          :goal="currentLevelGoal"
+          :singleLevel="true"
+          :isImportantLevel="isImportant(lvl)"
+        />
+        <div class="l-ra-exp-bar-inner" :style="singleLevelStyle" />
       </div>
     </div>
   `

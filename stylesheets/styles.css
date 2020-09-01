@@ -6932,6 +6932,38 @@ kbd {
   position: relative;
 }
 
+.o-ra-pet-upgrade {
+  background: grey;
+  color: black;
+  padding: 0.1rem 1.5rem;
+  border: .2rem solid black;
+  border-radius: 3rem;
+  font-size: 1.3rem;
+  margin-bottom: .3rem;
+  box-shadow: .2rem .2rem .2rem black;
+}
+
+.c-ra-level-up {
+  background: grey;
+  color: black;
+  padding: 0.8rem 1.4rem;
+  border: 2px solid black;
+  border-radius: 1rem;
+  font-size: 2.1rem;
+  box-shadow: .2rem .2rem .2rem black;
+}
+
+.c-ra-pet-can-upgrade {
+  color: white;
+  cursor: pointer;
+}
+
+.c-ra-pet-middle-container {
+  display: flex;
+  align-items: center;
+}
+
+
 .c-alchemy-resource-info {
   display: flex;
   flex-direction: column;

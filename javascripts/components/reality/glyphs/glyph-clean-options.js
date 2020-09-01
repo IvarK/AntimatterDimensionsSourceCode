@@ -38,7 +38,7 @@ Vue.component("glyph-clean-options", {
   computed: {
     removeString() {
       if (this.isRefining) return "Refine";
-      else if (this.glyphSacrificeUnlocked) return "Sacrifice";
+      if (this.glyphSacrificeUnlocked) return "Sacrifice";
       return "Delete";
     },
     autoCleanTooltip() {

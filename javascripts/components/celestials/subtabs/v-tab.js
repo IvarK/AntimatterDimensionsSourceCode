@@ -69,7 +69,8 @@ Vue.component("v-tab", {
       }
     },
     reductionTooltip(hex) {
-      return `Spend ${format(hex.reductionCost, 2, 0)} Perk Points to reduce goal by ${format(hex.config.perReductionStep)}`;
+      return `Spend ${format(hex.reductionCost, 2, 0)} Perk Points
+      to reduce goal by ${format(hex.config.perReductionStep)}`;
     }
   },
   computed: {
@@ -208,7 +209,8 @@ Vue.component("v-tab", {
           and re-entering the Reality.
         </div>
         <div>
-          You have {{ formatInt(totalUnlocks) }} V-achievements done. You gain {{ formatInt(1) }} Space Theorem for each completion,
+          You have {{ formatInt(totalUnlocks) }} V-achievements done.
+          You gain {{ formatInt(1) }} Space Theorem for each completion,
           allowing you to purchase Time Studies which are normally locked.
         </div>
         <br>

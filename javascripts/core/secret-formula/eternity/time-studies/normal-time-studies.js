@@ -394,7 +394,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 191,
       cost: 400,
       requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0,
-      description: () => `After Eternity you permanently keep ${formatPercents(0.05)} of your Infinities as Banked Infinities`,
+      description: () => `After Eternity you permanently keep ${formatPercents(0.05)}
+      of your Infinities as Banked Infinities`,
       effect: () => player.infinitied.times(0.05).floor()
     },
     {

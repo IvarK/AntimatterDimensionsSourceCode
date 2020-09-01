@@ -84,7 +84,8 @@ Vue.component("infinity-upgrades-tab", {
         </primary-button>
       </div>
       <div v-if="chargeUnlocked">
-        You have charged {{formatInt(chargesUsed)}}/{{formatInt(totalCharges)}} Infinity Upgrades. Charged Infinity Upgrades have their effect altered.
+        You have charged {{formatInt(chargesUsed)}}/{{formatInt(totalCharges)}} Infinity Upgrades.
+        Charged Infinity Upgrades have their effect altered.
         <br>
         Hold shift to show Charged Infinity Upgrades. You can freely respec your choices on Reality.
       </div>
@@ -113,7 +114,8 @@ Vue.component("infinity-upgrades-tab", {
       <div>
         The Infinity Point multiplier can be bought repeatedly, but becomes more expensive
         <br>
-        above {{format(ipMultSoftCap)}} Infinity Points and cannot be purchased past {{format(ipMultHardCap)}} Infinity Points.
+        above {{format(ipMultSoftCap)}} Infinity Points and cannot be purchased past
+        {{format(ipMultHardCap)}} Infinity Points.
       </div>
     </div>`
 });

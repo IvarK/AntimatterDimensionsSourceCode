@@ -156,7 +156,8 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: () => `Unlock Time Dimension, ${formatX(5)} Eternity Point multiplier, and improved Eternity autobuyers`
+      description: () => `Unlock Time Dimension, ${formatX(5)} Eternity Point multiplier,
+      and improved Eternity autobuyers`
     },
     {
       name: "The Eternal Flow",
@@ -173,7 +174,8 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Paradoxical Forever",
       id: 15,
       cost: 50,
-      requirement: () => `Eternity for ${format(1e10)} Eternity Points without purchasing the ${formatX(5)} Eternity Point upgrade`,
+      requirement: () => `Eternity for ${format(1e10)} Eternity Points without purchasing
+      the ${formatX(5)} Eternity Point upgrade`,
       hasFailed: () => player.epmultUpgrades !== 0,
       checkRequirement: () => player.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,

@@ -133,7 +133,8 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 11,
       lockText: "Effarig Level 11",
-      formatEffect: value => `All Antimatter Dimension multipliers are ${formatPow(1.05, 2, 2)} if they are above ${format(value)} `,
+      formatEffect: value => `All Antimatter Dimension multipliers are ${formatPow(1.05, 2, 2)}
+      if they are above ${format(value)} `,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.POWER,

@@ -3,7 +3,8 @@
 GameDatabase.challenges.infinity = [
   {
     id: 1,
-    description: "All Normal Challenges, with the exception of Tickspeed (C9) and Big Crunch (C11) Challenges, are active at the same time.",
+    description: `All Normal Challenges, with the exception of
+    Tickspeed (C9) and Big Crunch (C11) Challenges, are active at the same time.`,
     goal: new Decimal("1e650"),
     isQuickResettable: true,
     reward: {

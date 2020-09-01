@@ -16,8 +16,8 @@ Vue.component("glyph-clean-options", {
       this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
       this.hasFilter = EffarigUnlock.basicFilter.isUnlocked;
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);
-      this.isRefining = AutoGlyphProcessor.sacMode == AUTO_GLYPH_REJECT.ALWAYS_REFINE ||
-        AutoGlyphProcessor.sacMode == AUTO_GLYPH_REJECT.REFINE_TO_CAP;
+      this.isRefining = AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.ALWAYS_REFINE ||
+        AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP;
     },
     autoClean() {
       Glyphs.autoClean();
@@ -39,7 +39,7 @@ Vue.component("glyph-clean-options", {
     removeString() {
       if (this.isRefining) return "Refine";
       else if (this.glyphSacrificeUnlocked) return "Sacrifice";
-      else return "Delete";
+      return "Delete";
     },
     autoCleanTooltip() {
       return `${this.removeString} glyphs that are worse in every way than

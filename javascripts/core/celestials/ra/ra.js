@@ -61,7 +61,7 @@ class RaPetState {
   get memoryChunksPerSecond() {
     let res = this.canGetMemoryChunks ? this.rawMemoryChunksPerSecond : 0;
     res *= RA_UNLOCKS.TT_BOOST.effect.memoryChunks();
-    res *= this.memoryUpgradeCurrentMult;
+    res *= this.chunkUpgradeCurrentMult;
     if (this.hasRecollection) res *= RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
     return res;
   }
@@ -225,7 +225,7 @@ const Ra = {
     if (level >= 25) return Infinity;
     const adjustedLevel = level + Math.pow(level, 2) / 10;
     const post15Scaling = Math.pow(1.5, Math.max(0, level - 15));
-    return Math.floor(Math.pow(adjustedLevel, 5.5) * post15Scaling * 2e6);
+    return Math.floor(Math.pow(adjustedLevel, 5.52) * post15Scaling * 1e6);
   },
   // Calculates the cumulative exp needed to REACH a level starting from nothing.
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized

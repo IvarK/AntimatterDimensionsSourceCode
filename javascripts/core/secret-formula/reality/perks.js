@@ -119,7 +119,7 @@ GameDatabase.reality.perks = {
     label: "PASS2",
     family: PERK_FAMILY.ETERNITY,
     get description() {
-      return `Time Study 132 also makes Replicanti ${formatX(5)} faster.`;
+      return `Time Study 132 also makes Replicanti ${format(5)} times faster.`;
     }
   },
   autounlockEU1: {

@@ -296,7 +296,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(122).isBought && (TimeStudy(131).isBought || TimeStudy(133).isBought),
       description: () => (Perk.studyPassive2.isBought
-        ? `Replicanti Galaxies are ${formatPercents(0.4)} stronger and Replicanti are ${formatX(5)} faster`
+        ? `Replicanti Galaxies are ${formatPercents(0.4)} stronger and Replicanti are ${format(5)} times faster`
         : `Replicanti Galaxies are ${formatPercents(0.4)} stronger`),
       effect: 0.4
     },
@@ -543,8 +543,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(214).isBought && !TimeStudy(227).isBought,
       requirementV: () => TimeStudy(214).isBought && TimeStudy(227).isBought,
       description: () => `Dimensional Sacrifice formula scales better
-        ${Sacrifice.getSacrificeDescription({ 'TimeStudy228': false })} ➜
-        ${Sacrifice.getSacrificeDescription({ 'TimeStudy228': true })}`,
+        ${Sacrifice.getSacrificeDescription({ "TimeStudy228": false })} ➜
+        ${Sacrifice.getSacrificeDescription({ "TimeStudy228": true })}`,
       effect: 0.2
     },
     {

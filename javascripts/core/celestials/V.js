@@ -128,7 +128,7 @@ const V_UNLOCKS = {
   },
   FAST_AUTO_EC: {
     id: 3,
-    reward: "Achievement multiplier affects auto EC completion time.",
+    reward: "Achievement multiplier affects Auto-EC completion time.",
     description: () => `Have ${formatInt(10)} V-achievements`,
     effect: () => Achievements.power,
     // Base rate is 60 ECs at 20 minutes each
@@ -137,7 +137,7 @@ const V_UNLOCKS = {
   },
   AUTO_AUTOCLEAN: {
     id: 4,
-    reward: "Glyph Auto-clean triggers automatically after every automatic reality.",
+    reward: "Unlock the ability to Auto Purge on Reality.",
     description: () => `Have ${formatInt(16)} V-achievements`,
     requirement: () => V.spaceTheorems >= 16
   },

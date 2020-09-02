@@ -155,7 +155,8 @@ Vue.component("equipped-glyphs", {
       </button>
     </div>
     <div class="l-equipped-glyphs__buttons">
-      <button :class="['l-equipped-glyphs__respec-location', 'c-reality-upgrade-btn']"
+      <button :class="['l-equipped-glyphs__respec-location', 'c-reality-upgrade-btn',
+      {'l-equipped-glyphs__respec-location-large' : undoVisible}]"
               @click="toggleRespecIntoProtected">
         Unequip glyphs to:
         <br>

@@ -377,7 +377,8 @@ body.t-s9 {
 
 .tickspeed-btn {
   padding: 0.5rem;
-  width: 15rem;
+  min-width: 15rem;
+  max-width: 20rem;
   height: 3rem;
   font-size: 1.1rem;
 }
@@ -684,7 +685,7 @@ body.t-s9 {
 .l-game-header__big-crunch-btn {
   top: 15%;
   left: 72%;
-} 
+}
 .l-game-header__eternity-btn {
   top: 15%;
   right: 72%;

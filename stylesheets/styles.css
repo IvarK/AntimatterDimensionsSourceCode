@@ -395,7 +395,8 @@ button:focus {
 
 .ttshop-container {
   padding: 0 0.5rem;
-  width: 55.5rem;
+  min-width: 60rem;
+  max-width: 80rem;
   display: flex;
   flex-direction: column;
   transition: all 0.25s ease-out;

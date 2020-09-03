@@ -163,7 +163,7 @@ class MatterDimensionState {
   
   buyManyInterval(x) {
     if (x > this.maxIntervalPurchases) return false;
-    let cost = this.rawIntervalCost.times(
+    const cost = this.rawIntervalCost.times(
       Decimal.pow(this.intervalCostIncrease, x).minus(1)).div(this.intervalCostIncrease - 1).floor();
     if (cost.gt(player.celestials.laitela.matter)) return false;
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(cost);
@@ -172,7 +172,7 @@ class MatterDimensionState {
   }
   
   buyManyPowerDM(x) {
-    let cost = this.rawPowerDMCost.times(
+    const cost = this.rawPowerDMCost.times(
       Decimal.pow(this.powerDMCostIncrease, x).minus(1)).div(this.powerDMCostIncrease - 1).floor();
     if (cost.gt(player.celestials.laitela.matter)) return false;
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(cost);
@@ -181,7 +181,7 @@ class MatterDimensionState {
   }
   
   buyManyPowerDE(x) {
-    let cost = this.rawPowerDECost.times(
+    const cost = this.rawPowerDECost.times(
       Decimal.pow(this.powerDECostIncrease, x).minus(1)).div(this.powerDECostIncrease - 1).floor();
     if (cost.gt(player.celestials.laitela.matter)) return false;
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(cost);

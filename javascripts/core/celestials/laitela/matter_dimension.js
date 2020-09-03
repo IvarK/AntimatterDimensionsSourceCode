@@ -13,10 +13,10 @@ const POWER_DM_START_COST = 10;
 const POWER_DE_START_COST = 10;
 
 // No constant for interval since it's tied to a milestone
-const POWER_DM_PER_ASCENSION = 1000;
-const POWER_DE_PER_ASCENSION = 1000;
+const POWER_DM_PER_ASCENSION = 500;
+const POWER_DE_PER_ASCENSION = 500;
 
-const COST_MULT_PER_TIER = 1e3;
+const COST_MULT_PER_TIER = 1200;
 
 class MatterDimensionState {
   constructor(tier) {
@@ -55,12 +55,16 @@ class MatterDimensionState {
     );
   }
 
+  get powerDMPerAscension() {
+    return POWER_DM_PER_ASCENSION + SingularityMilestone.improvedAscensionDM.effectValue;
+  }
+
   get powerDM() {
     return new Decimal(1 + 2 * Math.pow(1.15, this.dimension.powerDMUpgrades))
       .times(Laitela.realityReward)
       .times(Laitela.darkMatterMult)
       .times(this.commonDarkMult)
-      .times(Math.pow(POWER_DM_PER_ASCENSION, this.dimension.ascensionCount))
+      .times(Math.pow(this.powerDMPerAscension, this.dimension.ascensionCount))
       .timesEffectsOf(SingularityMilestone.darkMatterMult)
       .dividedBy(Math.pow(10, this._tier));
   }
@@ -71,7 +75,7 @@ class MatterDimensionState {
       Math.pow(1.005, this.dimension.powerDEUpgrades)) * tierFactor / 1000)
         .times(this.commonDarkMult)
         .times(Math.pow(POWER_DE_PER_ASCENSION, this.dimension.ascensionCount))
-        .timesEffectsOf(SingularityMilestone.darkEnergyMult).toNumber();
+        .timesEffectsOf(SingularityMilestone.darkEnergyMult, SingularityMilestone.realityDEMultiplier).toNumber();
   }
 
   get adjustedStartingCost() {
@@ -80,7 +84,9 @@ class MatterDimensionState {
   }
 
   get intervalCost() {
-    return Decimal.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades)
+    return Decimal.pow(
+      Math.pow(INTERVAL_COST_MULT, SingularityMilestone.intervalCostScalingReduction.effectValue), 
+      this.dimension.intervalUpgrades)
       .times(this.adjustedStartingCost).times(INTERVAL_START_COST)
       .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
   }

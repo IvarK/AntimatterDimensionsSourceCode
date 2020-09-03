@@ -6980,7 +6980,7 @@ kbd {
   z-index: 2;
   pointer-events: none;
   position: absolute;
-  bottom: 2.3rem;
+  bottom: 100%;
   box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.7);
 }
 
@@ -6989,7 +6989,6 @@ kbd {
 .t-inverted-metro .c-ra-pet-upgrade__tooltip,
 .t-s8 .c-ra-pet-upgrade__tooltip {
   border-radius: 0;
-  bottom: 2.2rem;
 }
 
 .c-ra-pet-upgrade__tooltip:after {
@@ -7007,25 +7006,17 @@ kbd {
   z-index: 0;
 }
 
-.l-ra-bar-container .c-ra-pet-upgrade__tooltip {
-  bottom: 4.8rem;
-}
-
 .c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip {
   opacity: 1;
-  bottom: 2.9rem;
+  bottom: calc(100% + 0.8rem);
 }
 
 .t-metro .c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip,
 .t-dark-metro .c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip,
 .t-inverted-metro .c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip,
 .t-s8 .c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip {
-  bottom: 3.1rem;
-}
-
-.c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip {
   opacity: 1;
-  bottom: 3rem;
+  bottom: calc(100% + 0.7rem);
 }
 
 .c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip:after {
@@ -7035,14 +7026,15 @@ kbd {
 
 .c-ra-level-up-btn:hover .c-ra-pet-upgrade__tooltip {
   opacity: 1;
-  bottom: 5.4rem;
+  bottom: calc(100% + 0.8rem);
 }
 
 .t-metro .c-ra-level-up-btn:hover .c-ra-pet-upgrade__tooltip,
 .t-dark-metro .c-ra-level-up-btn:hover .c-ra-pet-upgrade__tooltip,
 .t-inverted-metro .c-ra-level-up-btn:hover .c-ra-pet-upgrade__tooltip,
 .t-s8 .c-ra-level-up-btn:hover .c-ra-pet-upgrade__tooltip {
-  bottom: 5.6rem;
+  opacity: 1;
+  bottom: calc(100% + 0.7rem);
 }
 
 .c-ra-level-up-btn:hover .c-ra-pet-upgrade__tooltip:after {
@@ -7050,13 +7042,9 @@ kbd {
   margin-bottom: -0.7rem;
 }
 
-.c-ra-upgrade-icon .c-ra-pet-upgrade__tooltip {
-  bottom: 3.9rem;
-}
-
 .c-ra-upgrade-icon:hover .c-ra-pet-upgrade__tooltip {
   opacity: 1;
-  bottom: 4.5rem;
+  bottom: calc(100% + 0.7rem);
 }
 
 .c-ra-upgrade-icon:hover .c-ra-pet-upgrade__tooltip:after {

@@ -87,8 +87,8 @@ Vue.component("ra-tab", {
   template: `
     <div class="l-ra-celestial-tab">
       <div class="c-ra-memory-header">
-        Each memory chunk generates
-        {{ format(memoriesPerChunk, 2, 3) }} {{ "memory" | pluralize(memoriesPerChunk, "memories") }}
+        Each Memory Chunk generates a base of
+        {{ format(memoriesPerChunk, 2, 3) }} {{ "Memory" | pluralize(memoriesPerChunk, "Memories") }}
         per second.
       </div>
       <div>
@@ -108,12 +108,12 @@ Vue.component("ra-tab", {
           You can't Dimension Boost, and the Tickspeed purchase multiplier is fixed at {{ formatX(1.1245, 0, 3) }}.
           <br>
           <br>
-          Inside of Ra's reality, some resources will generate memory chunks based on their amount.
+          Inside of Ra's reality, some resources will generate Memory Chunks based on their amount.
         </button>
         <div v-if="showRecollection" class="c-ra-recollection-unlock">
           <h1 :style="petStyle">Recollection</h1>
           <span :style="petStyle">
-            Whichever celestial has recollection will get {{formatX(recollectionMult)}} memory chunk gain.
+            Whichever Celestial is being Recollected will get {{formatX(recollectionMult)}} Memory Chunk gain.
           </span>
           <div class="c-ra-recollection-unlock-inner" v-if="hasRecollection">
             <ra-pet-recollection-button

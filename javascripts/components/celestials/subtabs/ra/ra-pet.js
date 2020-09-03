@@ -44,7 +44,7 @@ Vue.component("ra-pet", {
     chunkTooltip() {
       switch (this.pet.name) {
         case "Teresa":
-          return "Based on EP";
+          return "Based on Eternity Points";
         case "Effarig":
           return "Based on Relic Shards gained";
         case "Enslaved":
@@ -58,7 +58,7 @@ Vue.component("ra-pet", {
     memoryGainTooltip() {
       switch (this.pet.name) {
         case "Teresa":
-          return "Based on current RM";
+          return "Based on current Reality Machines";
         case "Effarig":
           return "Based on best glyph level";
         case "Enslaved":
@@ -70,8 +70,8 @@ Vue.component("ra-pet", {
       }
     },
     chunkUpgradeTooltip() {
-      return `Gain 30% more chunks:
-      cost: ${format(this.chunkUpgradeCost, 2, 2)}
+      return `Gain 30% more Memory Chunks:
+      Cost: ${format(this.chunkUpgradeCost, 2, 2)}
       Current effect: ${formatX(this.currentChunkMult, 2, 2)}`;
     }
   },
@@ -152,7 +152,7 @@ Vue.component("ra-pet", {
         </div>
         <div v-if="level < 25">
           <div>
-            {{ format(exp, 2) }} / {{ format(requiredExp, 2) }} {{ name }} memories
+            {{ format(exp, 2) }} / {{ format(requiredExp, 2) }} {{ name }} Memories
           </div>
           <div>
             (next level in {{ nextLevelEstimate }})
@@ -169,7 +169,7 @@ Vue.component("ra-pet", {
                 <span class="fas fa-brain"></span>
                 <div class="c-ra-pet-upgrade__tooltip">
                   <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Recollection</div>
-                  <div class="c-ra-pet-upgrade__tooltip__description">Gain {{ formatPercents(0.3) }} more memories</div>
+                  <div class="c-ra-pet-upgrade__tooltip__description">Gain {{ formatPercents(0.3) }} more Memories</div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
                     Cost: {{ format(memoryUpgradeCost, 2, 2) }}
                     <br>
@@ -190,7 +190,9 @@ Vue.component("ra-pet", {
                 <span class="fas fa-dice-d6"></span>
                 <div class="c-ra-pet-upgrade__tooltip">
                   <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Fragmentation</div>
-                  <div class="c-ra-pet-upgrade__tooltip__description"> Gain {{ formatPercents(0.3) }} more chunks</div>
+                  <div class="c-ra-pet-upgrade__tooltip__description">
+                    Gain {{ formatPercents(0.3) }} more Memory Chunks
+                  </div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
                     Cost: {{ format(chunkUpgradeCost, 2, 2) }}
                     <br>
@@ -207,17 +209,17 @@ Vue.component("ra-pet", {
         </div>
         <div v-if="level < 25">
           <div>
-            {{ format(memoryChunks, 2, 2) }} memory chunks, {{ format(memoriesPerSecond, 2, 2) }} memories/sec
+            {{ format(memoryChunks, 2, 2) }} Memory Chunks, {{ format(memoriesPerSecond, 2, 2) }} Memories/sec
           </div>
           <div>
-            Gaining {{ format(memoryChunksPerSecond, 2, 2) }} memory chunks/sec
+            Gaining {{ format(memoryChunksPerSecond, 2, 2) }} Memory Chunks/sec
             <span :ach-tooltip="chunkTooltip">
               <i class="fas fa-question-circle"></i>
             </span>
           </div>
         </div>
         <div v-if="memoryMultiplier > 1">
-          Multiplying all memory production by {{ format(memoryMultiplier, 2, 3) }}
+          Multiplying all Memory production by {{ format(memoryMultiplier, 2, 3) }}
           <span :ach-tooltip="memoryGainTooltip">
             <i class="fas fa-question-circle"></i>
           </span>

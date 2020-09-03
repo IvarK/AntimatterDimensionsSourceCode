@@ -6711,6 +6711,7 @@ kbd {
 .c-ra-run-button {
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   height: 33rem;
   color: #9575cd;

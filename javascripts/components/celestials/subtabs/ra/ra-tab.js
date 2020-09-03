@@ -92,9 +92,6 @@ Vue.component("ra-tab", {
         per second.
       </div>
       <div>
-        Hold shift to see progress on your current level.
-      </div>
-      <div>
         Mouse-over the icons below the bar to see descriptions of upgrades,
         <br>
         and mouse-over <i class="fas fa-question-circle"></i> icons for specific resource information.

@@ -139,7 +139,7 @@ const Laitela = {
     };
     // Buy everything costing less than 0.02 of initial matter.
     const matter = this.matter;
-    for (let upgrade of upgradeInfo) {
+    for (const upgrade of upgradeInfo) {
       const purchases = Math.clamp(Math.floor(matter.times(0.02).div(upgrade[0]).log(upgrade[1])), 0, upgrade[2]);
       buy(upgrade, purchases);
     }

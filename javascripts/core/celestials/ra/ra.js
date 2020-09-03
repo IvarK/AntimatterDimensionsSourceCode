@@ -435,7 +435,7 @@ const RA_UNLOCKS = {
   START_TP: {
     id: 6,
     description: "Get Teresa to level 25",
-    reward: `When unlocking Time Dilation in non-celestial Realities, gain Techyon Particles as if you reached
+    reward: `When unlocking Time Dilation in non-celestial Realities, gain Tachyon Particles as if you reached
       the square root of your total antimatter in Dilation`,
     effect: () => player.totalAntimatter.pow(0.5),
     pet: Ra.pets.teresa,

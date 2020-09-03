@@ -127,30 +127,27 @@ const Laitela = {
     let cheapestPrice = new Decimal(0);
     // Note that _tier is 0-indexed, so calling with maxTier = 3 will buy up to and including DM3 for example
     const unlockedDimensions = MatterDimensionState.list.filter(d => d.amount.gt(0) && d._tier < maxTier);
-    while (player.celestials.laitela.matter.gte(cheapestPrice)) {
-      const sortedUpgradeInfo = unlockedDimensions
-        .map(d => [
-          [d.intervalCost, d.canBuyInterval, "interval", d._tier],
-          [d.powerDMCost, d.canBuyPowerDM, "powerDM", d._tier],
-          [d.powerDECost, d.canBuyPowerDE, "powerDE", d._tier]])
-        .flat(1)
-        .filter(a => a[1])
-        .sort((a, b) => a[0].div(b[0]).log10())
-        .map(d => [d[0], d[2], d[3]]);
-      const cheapestUpgrade = sortedUpgradeInfo[0];
-      if (cheapestUpgrade === undefined) break;
-      cheapestPrice = cheapestUpgrade[0];
-      switch (cheapestUpgrade[1]) {
-        case "interval":
-          MatterDimensionState.list[cheapestUpgrade[2]].buyInterval();
-          break;
-        case "powerDM":
-          MatterDimensionState.list[cheapestUpgrade[2]].buyPowerDM();
-          break;
-        case "powerDE":
-          MatterDimensionState.list[cheapestUpgrade[2]].buyPowerDE();
-          break;
-      }
+    const upgradeInfo = unlockedDimensions
+    .map(d => [
+      [d.intervalCost, d.intervalCostIncrease, d.maxIntervalPurchases, x => d.buyManyInterval(x)],
+      [d.powerDMCost, d.powerDMCostIncrease, Infinity, x => d.buyManyPowerDM(x)],
+      [d.powerDECost, d.powerDECostIncrease, Infinity, x => d.buyManyPowerDE(x)]])
+    .flat(1);
+    let buy = function (upgrade, purchases) {
+      upgrade[3](purchases);
+      upgrade[0] = upgrade[0].times(Decimal.pow(upgrade[1], purchases));
+      upgrade[2] -= purchases;
+    }
+    let matter = player.celestials.laitela.matter;
+    // Buy everything costing less than 0.02 of total matter.
+    for (let upgrade of upgradeInfo) {
+      let purchases = Math.min(Math.floor(
+        player.celestials.laitela.matter.times(0.02).div(upgrade[0]).log(upgrade[1])), upgrade[2]);
+      buy(upgrade, purchases);
+    }
+    while (upgradeInfo.some(upgrade => upgrade[0].lte(player.celestials.laitela.matter) && upgrade[2] > 0)) {
+      let upgrade = upgradeInfo.filter(upgrade => upgrade[2] > 0).sort((a, b) => a[0].minus(b[0]).sign())[0];
+      buy(upgrade, 1);
     }
   },
   autobuyerLoop(realDiff) {

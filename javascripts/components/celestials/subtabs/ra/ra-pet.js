@@ -6,6 +6,7 @@ Vue.component("ra-pet", {
   },
   data() {
     return {
+      pet: {},
       isUnlocked: false,
       name: "",
       level: 0,
@@ -32,16 +33,16 @@ Vue.component("ra-pet", {
     },
     petStyle() {
       return {
-        color: this.petConfig.pet.color
+        color: this.pet.color
       };
     },
     unlocks() {
       return Object.values(RA_UNLOCKS)
-        .filter(unlock => unlock.pet === this.petConfig.pet)
+        .filter(unlock => unlock.pet === this.pet)
         .sort((a, b) => a.level - b.level);
     },
     chunkTooltip() {
-      switch (this.petConfig.pet.name) {
+      switch (this.pet.name) {
         case "Teresa":
           return "Based on EP";
         case "Effarig":
@@ -51,11 +52,11 @@ Vue.component("ra-pet", {
         case "V":
           return "Based on Infinity Power";
         default:
-          throw new Error(`Unrecognized celestial ${this.petConfig.pet.name} in Ra UI`);
+          throw new Error(`Unrecognized celestial ${this.pet.name} in Ra UI`);
       }
     },
     memoryGainTooltip() {
-      switch (this.petConfig.pet.name) {
+      switch (this.pet.name) {
         case "Teresa":
           return "Based on current RM";
         case "Effarig":
@@ -65,13 +66,8 @@ Vue.component("ra-pet", {
         case "V":
           return "Based on total Celestial Memory levels";
         default:
-          throw new Error(`Unrecognized celestial ${this.petConfig.pet.name} in Ra UI`);
+          throw new Error(`Unrecognized celestial ${this.pet.name} in Ra UI`);
       }
-    },
-    memoryUpgradeTooltip() {
-      return `Gain 30% more memories:
-      cost: ${format(this.memoryUpgradeCost, 2, 2)}
-      Current effect: ${formatX(this.currentMemoryMult, 2, 2)}`;
     },
     chunkUpgradeTooltip() {
       return `Gain 30% more chunks:
@@ -81,7 +77,8 @@ Vue.component("ra-pet", {
   },
   methods: {
     update() {
-      const pet = this.petConfig.pet;
+      this.pet = this.petConfig.pet;
+      const pet = this.pet;
       this.isUnlocked = pet.isUnlocked;
       if (!this.isUnlocked) return;
       this.name = pet.name;
@@ -102,7 +99,7 @@ Vue.component("ra-pet", {
       this.nextLevelEstimate = this.timeToGoalString(leftThisLevel);
     },
     timeToGoalString(expToGain) {
-      const pet = this.petConfig.pet;
+      const pet = this.pet;
       // Quadratic formula for growth (uses constant growth for a = 0)
       const a = Ra.productionPerMemoryChunk() * this.currentMemoryMult * pet.memoryChunksPerSecond / 2;
       const b = Ra.productionPerMemoryChunk() * this.currentMemoryMult * pet.memoryChunks;
@@ -117,21 +114,35 @@ Vue.component("ra-pet", {
     },
     nextUnlockLevel() {
       const missingUpgrades = Object.values(RA_UNLOCKS)
-        .filter(unlock => unlock.pet === this.petConfig.pet)
+        .filter(unlock => unlock.pet === this.pet)
         .map(u => u.level)
         .filter(goal => goal > this.level);
       return missingUpgrades.length === 0 ? 25 : missingUpgrades.min();
     },
-    upgradeStyle(conditional) {
-      if (conditional) return { background: this.petConfig.pet.color };
-
-      return {};
-    }
+    upgradeClassObject(type) {
+      const available = type === "memory" ? this.memoryUpgradeCost <= this.exp : this.chunkUpgradeCost <= this.exp;
+      const pet = this.pet;
+      return {
+        "c-ra-pet-upgrade": true,
+        "c-ra-pet-btn--available": available,
+        "c-ra-pet-btn--teresa": available && pet.name === "Teresa",
+        "c-ra-pet-btn--effarig": available && pet.name === "Effarig",
+        "c-ra-pet-btn--enslaved": available && pet.name === "Enslaved",
+        "c-ra-pet-btn--v": available && pet.name === "V"
+      };
+    },
+    barStyle(type) {
+      const cost = type === "memory" ? this.memoryUpgradeCost : this.chunkUpgradeCost;
+      return {
+        width: `${100 * Math.min(1, this.exp / cost)}%`,
+        background: this.pet.color
+      };
+    },
   },
   template: `
     <div class="l-ra-pet-container" v-if="isUnlocked">
       <div class="c-ra-pet-header" :style="petStyle">
-        <div class="c-ra-pet-title">{{ name }} Level {{ formatInt(level) }}</div>
+        <div class="c-ra-pet-title">{{ name }} Level {{ formatInt(level) }}/{{ formatInt(25) }}</div>
         <div v-if="showScalingUpgrade"
           :key="level">
             {{ scalingUpgradeText }}
@@ -147,32 +158,52 @@ Vue.component("ra-pet", {
             (next level in {{ nextLevelEstimate }})
           </div>
         </div>
-        <div v-else>
-          <br>
-        </div>
-        <div class="c-ra-pet-middle-container">
-          <div class="c-ra-pet-upgrades">
-            <div 
-              class="o-ra-pet-upgrade" 
-              :class="{ 'c-ra-pet-can-upgrade': memoryUpgradeCost <= exp }"
-              :style="upgradeStyle(memoryUpgradeCost <= exp)"
-              @click="petConfig.pet.purchaseMemoryUpgrade()"
-              :ach-tooltip="memoryUpgradeTooltip"><i class="fas fa-expand-arrows-alt"></i></div>
-            <div 
-              class="o-ra-pet-upgrade" 
-              :class="{ 'c-ra-pet-can-upgrade': chunkUpgradeCost <= exp }"
-              :style="upgradeStyle(chunkUpgradeCost <= exp)"
-              @click="petConfig.pet.purchaseChunkUpgrade()"
-              :ach-tooltip="chunkUpgradeTooltip"><i class="fas fa-compress-arrows-alt"></i></div>
+        <div class="l-ra-pet-middle-container">
+          <div class="l-ra-pet-upgrade-container">
+            <div class="l-ra-pet-upgrade c-ra-pet-upgrade__top">
+              <div
+                :class="upgradeClassObject('memory')"
+                @click="petConfig.pet.purchaseMemoryUpgrade()"
+                style="border-top-right-radius: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0;"
+              >
+                <span class="fas fa-brain"></span>
+                <div class="c-ra-pet-upgrade__tooltip">
+                  <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Recollection</div>
+                  <div class="c-ra-pet-upgrade__tooltip__description">Gain {{ formatPercents(0.3) }} more memories</div>
+                  <div class="c-ra-pet-upgrade__tooltip__footer">
+                    Cost: {{ format(memoryUpgradeCost, 2, 2) }}
+                    <br>
+                    Currently: {{ formatX(currentMemoryMult, 2, 2) }}
+                  </div>
+                </div>
+              </div>
+              <div class="c-ra-upgrade-bar">
+                <div class="c-ra-upgrade-bar__inner" :style="barStyle('memory')"></div>
+              </div>
+            </div>
+            <div class="l-ra-pet-upgrade">
+              <div
+                :class="upgradeClassObject('chunk')"
+                @click="petConfig.pet.purchaseChunkUpgrade()"
+                style="border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;"
+              >
+                <span class="fas fa-dice-d6"></span>
+                <div class="c-ra-pet-upgrade__tooltip">
+                  <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Fragmentation</div>
+                  <div class="c-ra-pet-upgrade__tooltip__description"> Gain {{ formatPercents(0.3) }} more chunks</div>
+                  <div class="c-ra-pet-upgrade__tooltip__footer">
+                    Cost: {{ format(chunkUpgradeCost, 2, 2) }}
+                    <br>
+                    Currently: {{ formatX(currentChunkMult, 2, 2) }}
+                  </div>
+                </div>
+              </div>
+              <div class="c-ra-upgrade-bar c-ra-upgrade-bar--bottom">
+                <div class="c-ra-upgrade-bar__inner" :style="barStyle('chunk')"></div>
+              </div>
+            </div>
           </div>
-          <ra-pet-level-bar :pet="petConfig.pet" />
-          <div 
-            class="c-ra-level-up" 
-            @click="petConfig.pet.levelUp()" 
-            :class="{ 'c-ra-pet-can-upgrade': requiredExp <= exp }"
-            :style="upgradeStyle(requiredExp <= exp)">
-            <i class="fas fa-arrow-up"></i>
-          </div>
+          <ra-pet-level-bar v-if="level < 25" :petConfig="petConfig" />
         </div>
         <div v-if="level < 25">
           <div>
@@ -183,11 +214,6 @@ Vue.component("ra-pet", {
             <span :ach-tooltip="chunkTooltip">
               <i class="fas fa-question-circle"></i>
             </span>
-          </div>
-        </div>
-        <div v-else>
-          <div>
-            Capped at Level {{ formatInt(level) }}
           </div>
         </div>
         <div v-if="memoryMultiplier > 1">

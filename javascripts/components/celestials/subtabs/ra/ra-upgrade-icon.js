@@ -21,7 +21,7 @@ Vue.component("ra-upgrade-icon", {
       const rewardText = typeof this.unlock.reward === "function"
         ? this.unlock.reward()
         : this.unlock.reward;
-      this.description = `Level ${this.level}: ${rewardText}`;
+      this.description = rewardText;
       this.petName = this.unlock.pet.name;
     },
     classObject() {
@@ -36,10 +36,14 @@ Vue.component("ra-upgrade-icon", {
     }
   },
   template: `
-    <div
-      v-html="icon"
-      :ach-tooltip="description"
-      :class="classObject">
+    <div :class="classObject">
+      <div v-html="icon" style="font-weight: bold;"></div>
+      <div class="c-ra-pet-upgrade__tooltip">
+        <div class="c-ra-pet-upgrade__tooltip__name">{{ petName }} Level {{ formatInt(level) }}</div>
+        <div class="c-ra-pet-upgrade__tooltip__description">
+          {{ description }}
+        </div>
+      </div>
     </div>
   `
 });

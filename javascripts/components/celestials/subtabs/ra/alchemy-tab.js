@@ -112,6 +112,7 @@ Vue.component("alchemy-tab", {
       return `${(orbit.radius / maxRadius * 50)}%`;
     },
     handleMouseEnter(node) {
+      if (!resource.isUnlocked) return;
       this.infoResourceId = node.resource.id;
       this.focusedResourceId = node.resource.id;
     },

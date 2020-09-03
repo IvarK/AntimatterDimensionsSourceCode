@@ -107,6 +107,8 @@ const SingularityMilestone = (function() {
     improvedAscensionDM: new SingularityMilestoneState(db.improvedAscensionDM),
     realityDEMultiplier: new SingularityMilestoneState(db.realityDEMultiplier),
     intervalCostScalingReduction: new SingularityMilestoneState(db.intervalCostScalingReduction),
+    multFromInfinitied: new SingularityMilestoneState(db.multFromInfinitied),
+    infinitiedPow: new SingularityMilestoneState(db.infinitiedPow),
   };
 }());
 

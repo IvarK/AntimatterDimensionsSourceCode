@@ -147,6 +147,15 @@ GameDatabase.celestials.singularityMilestones = {
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
+  multFromInfinitied: {
+    start: 1e3,
+    repeat: 0,
+    limit: 1,
+    description: "Infinitied stat boosts Dark Matter and Dark Energy production",
+    effect: () => player.infinitied.plus(1).log10() / 400,
+    effectFormat: x => formatX(x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
+  },
   dilatedTimeFromSingularities: {
     start: 1e4,
     repeat: 0,
@@ -238,8 +247,17 @@ GameDatabase.celestials.singularityMilestones = {
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
-  tesseractMultFromSingularities: {
+  infinitiedPow: {
     start: 1e24,
+    repeat: 0,
+    limit: 1,
+    description: "Infinitied stat gain power effect based on singularities",
+    effect: () => 1 + Math.log10(player.celestials.laitela.singularities + 1) / 666,
+    effectFormat: x => formatPow(x, 2, 3),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
+  },
+  tesseractMultFromSingularities: {
+    start: 1e26,
     repeat: 0,
     limit: 1,
     description: "Singularities make Tesseracts stronger",

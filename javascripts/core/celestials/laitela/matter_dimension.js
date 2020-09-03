@@ -65,7 +65,7 @@ class MatterDimensionState {
       .times(Laitela.darkMatterMult)
       .times(this.commonDarkMult)
       .times(Math.pow(this.powerDMPerAscension, this.dimension.ascensionCount))
-      .timesEffectsOf(SingularityMilestone.darkMatterMult)
+      .timesEffectsOf(SingularityMilestone.darkMatterMult, SingularityMilestone.multFromInfinitied)
       .dividedBy(Math.pow(10, this._tier));
   }
   
@@ -75,7 +75,11 @@ class MatterDimensionState {
       Math.pow(1.005, this.dimension.powerDEUpgrades)) * tierFactor / 1000)
         .times(this.commonDarkMult)
         .times(Math.pow(POWER_DE_PER_ASCENSION, this.dimension.ascensionCount))
-        .timesEffectsOf(SingularityMilestone.darkEnergyMult, SingularityMilestone.realityDEMultiplier).toNumber();
+        .timesEffectsOf(
+          SingularityMilestone.darkEnergyMult, 
+          SingularityMilestone.realityDEMultiplier, 
+          SingularityMilestone.multFromInfinitied
+        ).toNumber();
   }
 
   get adjustedStartingCost() {

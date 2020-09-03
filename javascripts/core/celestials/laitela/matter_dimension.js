@@ -87,30 +87,42 @@ class MatterDimensionState {
     return 10 * Math.pow(COST_MULT_PER_TIER, tiers[this._tier]);
   }
 
-  get intervalCost() {
+  get rawIntervalCost() {
     return Decimal.pow(this.intervalCostIncrease, this.dimension.intervalUpgrades)
       .times(this.adjustedStartingCost).times(INTERVAL_START_COST)
-      .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
+      .times(SingularityMilestone.darkDimensionCostReduction.effectValue);
+  }
+  
+  get intervalCost() {
+    return this.rawIntervalCost.floor();
   }
   
   get intervalCostIncrease() {
     return Math.pow(INTERVAL_COST_MULT, SingularityMilestone.intervalCostScalingReduction.effectValue);
   }
 
-  get powerDMCost() {
+  get rawPowerDMCost() {
     return Decimal.pow(this.powerDMCostIncrease, this.dimension.powerDMUpgrades)
       .times(this.adjustedStartingCost).times(POWER_DM_START_COST)
-      .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
+      .times(SingularityMilestone.darkDimensionCostReduction.effectValue);
+  }
+  
+  get powerDMCost() {
+    return this.rawPowerDMCost.floor();
   }
   
   get powerDMCostIncrease() {
     return POWER_DM_COST_MULT;
   }
   
-  get powerDECost() {
+  get rawPowerDECost() {
     return Decimal.pow(this.powerDECostIncrease, this.dimension.powerDEUpgrades)
       .times(this.adjustedStartingCost).times(POWER_DE_START_COST)
-      .times(SingularityMilestone.darkDimensionCostReduction.effectValue).floor();
+      .times(SingularityMilestone.darkDimensionCostReduction.effectValue);
+  }
+  
+  get powerDECost() {
+    return this.rawPowerDECost.floor();
   }
   
   get powerDECostIncrease() {
@@ -151,7 +163,8 @@ class MatterDimensionState {
   
   buyManyInterval(x) {
     if (x > this.maxIntervalPurchases) return false;
-    let cost = this.intervalCost.times(Decimal.pow(this.intervalCostIncrease, x).minus(1)).div(this.intervalCostIncrease - 1);
+    let cost = this.rawIntervalCost.times(
+      Decimal.pow(this.intervalCostIncrease, x).minus(1)).div(this.intervalCostIncrease - 1).floor();
     if (cost.gt(player.celestials.laitela.matter)) return false;
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(cost);
     this.dimension.intervalUpgrades += x;
@@ -159,7 +172,8 @@ class MatterDimensionState {
   }
   
   buyManyPowerDM(x) {
-    let cost = this.powerDMCost.times(Decimal.pow(this.powerDMCostIncrease, x).minus(1)).div(this.powerDMCostIncrease - 1);
+    let cost = this.rawPowerDMCost.times(
+      Decimal.pow(this.powerDMCostIncrease, x).minus(1)).div(this.powerDMCostIncrease - 1).floor();
     if (cost.gt(player.celestials.laitela.matter)) return false;
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(cost);
     this.dimension.powerDMUpgrades += x;
@@ -167,7 +181,8 @@ class MatterDimensionState {
   }
   
   buyManyPowerDE(x) {
-    let cost = this.powerDECost.times(Decimal.pow(this.powerDECostIncrease, x).minus(1)).div(this.powerDECostIncrease - 1);
+    let cost = this.rawPowerDECost.times(
+      Decimal.pow(this.powerDECostIncrease, x).minus(1)).div(this.powerDECostIncrease - 1).floor();
     if (cost.gt(player.celestials.laitela.matter)) return false;
     player.celestials.laitela.matter = player.celestials.laitela.matter.minus(cost);
     this.dimension.powerDEUpgrades += x;

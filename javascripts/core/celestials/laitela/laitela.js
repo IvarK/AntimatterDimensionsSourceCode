@@ -129,9 +129,9 @@ const Laitela = {
     const unlockedDimensions = MatterDimensionState.list.filter(d => d.amount.gt(0) && d._tier < maxTier);
     const upgradeInfo = unlockedDimensions
     .map(d => [
-      [d.intervalCost, d.intervalCostIncrease, d.maxIntervalPurchases, x => d.buyManyInterval(x)],
-      [d.powerDMCost, d.powerDMCostIncrease, Infinity, x => d.buyManyPowerDM(x)],
-      [d.powerDECost, d.powerDECostIncrease, Infinity, x => d.buyManyPowerDE(x)]])
+      [d.rawIntervalCost, d.intervalCostIncrease, d.maxIntervalPurchases, x => d.buyManyInterval(x)],
+      [d.rawPowerDMCost, d.powerDMCostIncrease, Infinity, x => d.buyManyPowerDM(x)],
+      [d.rawPowerDECost, d.powerDECostIncrease, Infinity, x => d.buyManyPowerDE(x)]])
     .flat(1);
     let buy = function (upgrade, purchases) {
       upgrade[3](purchases);

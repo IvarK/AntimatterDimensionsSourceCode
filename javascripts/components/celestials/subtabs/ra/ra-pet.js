@@ -8,6 +8,7 @@ Vue.component("ra-pet", {
     return {
       pet: {},
       isUnlocked: false,
+      isRaCapped: false,
       name: "",
       level: 0,
       exp: 0,
@@ -77,6 +78,7 @@ Vue.component("ra-pet", {
   },
   methods: {
     update() {
+      this.isRaCapped = Ra.totalPetLevel === 100;
       this.pet = this.petConfig.pet;
       const pet = this.pet;
       this.isUnlocked = pet.isUnlocked;
@@ -158,7 +160,7 @@ Vue.component("ra-pet", {
             (next level in {{ nextLevelEstimate }})
           </div>
         </div>
-        <div class="l-ra-pet-middle-container">
+        <div class="l-ra-pet-middle-container" v-if="!(level===25)">
           <div class="l-ra-pet-upgrade-container">
             <div class="l-ra-pet-upgrade c-ra-pet-upgrade__top">
               <div
@@ -218,7 +220,7 @@ Vue.component("ra-pet", {
             </span>
           </div>
         </div>
-        <div v-if="memoryMultiplier > 1">
+        <div v-if="memoryMultiplier > 1 && !isRaCapped">
           Multiplying all Memory production by {{ format(memoryMultiplier, 2, 3) }}
           <span :ach-tooltip="memoryGainTooltip">
             <i class="fas fa-question-circle"></i>

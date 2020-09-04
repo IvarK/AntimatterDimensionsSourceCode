@@ -235,6 +235,7 @@ function gainedInfinities() {
     );
     infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
     infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
+    infGain = infGain.powEffectOf(SingularityMilestone.infinitiedPow);
     return infGain;
 }
 

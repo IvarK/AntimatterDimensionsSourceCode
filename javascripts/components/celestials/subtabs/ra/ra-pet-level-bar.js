@@ -99,6 +99,9 @@ Vue.component("ra-pet-level-bar", {
         return "You can purchase an additional Triad Study";
       }
       return "false";
+    },
+    reward() {
+      return (typeof this.nextUnlock.reward === "function") ? this.nextUnlock.reward() : this.nextUnlock.reward;
     }
   },
   methods: {
@@ -128,7 +131,7 @@ Vue.component("ra-pet-level-bar", {
         <div class="c-ra-pet-upgrade__tooltip">
           <div class="c-ra-pet-upgrade__tooltip__name">Level {{ pet.name }} to {{ formatInt(this.level + 1) }}</div>
           <div class="c-ra-pet-upgrade__tooltip__description">
-            {{ nextUnlock.reward }}
+            {{ reward }}
             <div v-if="showNextScalingUpgrade" :style="{ 'margin-top': nextUnlock.reward ? '0.6rem' : '0' }">
               {{ nextScalingUpgrade }}
             </div>

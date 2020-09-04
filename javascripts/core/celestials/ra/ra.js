@@ -253,9 +253,6 @@ const Ra = {
             Glyphs.applyGamespeed(glyph);
           }
         }
-        if (unl.id === RA_UNLOCKS.RA_LAITELA_UNLOCK.id) {
-          MatterDimension(1).amount = new Decimal(1);
-        }
       }
     }
   },
@@ -639,11 +636,5 @@ const RA_UNLOCKS = {
     reward: "Unlock Recollection",
     effect: 3,
     totalLevels: 20,
-  },
-  RA_LAITELA_UNLOCK: {
-    id: 29,
-    description: "Get 100 total Celestial Memory levels",
-    reward: "Unlock Lai'tela, the Celestial of Dimensions",
-    totalLevels: 100,
   }
 };

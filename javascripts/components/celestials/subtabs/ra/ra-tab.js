@@ -144,7 +144,8 @@ Vue.component("ra-tab", {
           <h1> Unlock Lai'tela </h1>
           <h2> The Celestial of Dimensions </h2>
           <p>
-            Requires {{ formatInt(laitelaLevelReq) }} total Celestial Memory level and a level {{ formatInt(laitelaGlyphLevelReq) }} Reality Glyph
+            Requires {{ formatInt(laitelaLevelReq) }} total Celestial Memory levels
+            and a level {{ formatInt(laitelaGlyphLevelReq) }} Reality Glyph
           </p>
           <p>
             Cost: {{ format(laitelaRealityMachineCost) }} Reality Machines

@@ -748,6 +748,7 @@ GameStorage.devMigrations = {
       }
     },
     player => {
+      // eslint-disable-next-line no-bitwise
       player.celestials.ra.unlockBits &= ~(1 << 29);
     }
   ],

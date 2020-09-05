@@ -91,7 +91,6 @@ const SingularityMilestone = (function() {
     autoCondense: new SingularityMilestoneState(db.autoCondense),
     darkDimensionAutobuyers: new SingularityMilestoneState(db.darkDimensionAutobuyers),
     darkAutobuyerSpeed: new SingularityMilestoneState(db.darkAutobuyerSpeed),
-    autoAscend: new SingularityMilestoneState(db.autoAscend),
     improvedSingularityCap: new SingularityMilestoneState(db.improvedSingularityCap),
     darkFromTesseracts: new SingularityMilestoneState(db.darkFromTesseracts),
     dilatedTimeFromSingularities: new SingularityMilestoneState(db.dilatedTimeFromSingularities),
@@ -105,6 +104,11 @@ const SingularityMilestone = (function() {
     glyphLevelFromSingularities: new SingularityMilestoneState(db.glyphLevelFromSingularities),
     darkFromDilatedTime: new SingularityMilestoneState(db.darkFromDilatedTime),
     tesseractMultFromSingularities: new SingularityMilestoneState(db.tesseractMultFromSingularities),
+    improvedAscensionDM: new SingularityMilestoneState(db.improvedAscensionDM),
+    realityDEMultiplier: new SingularityMilestoneState(db.realityDEMultiplier),
+    intervalCostScalingReduction: new SingularityMilestoneState(db.intervalCostScalingReduction),
+    multFromInfinitied: new SingularityMilestoneState(db.multFromInfinitied),
+    infinitiedPow: new SingularityMilestoneState(db.infinitiedPow),
   };
 }());
 

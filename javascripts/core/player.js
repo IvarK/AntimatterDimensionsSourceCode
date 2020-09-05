@@ -425,22 +425,30 @@ let player = {
         teresa: {
           level: 1,
           memoryChunks: 0,
-          exp: 0
+          exp: 0,
+          memoryUpgrades: 0,
+          chunkUpgrades: 0
         },
         effarig: {
           level: 1,
           memoryChunks: 0,
-          exp: 0
+          exp: 0,
+          memoryUpgrades: 0,
+          chunkUpgrades: 0
         },
         enslaved: {
           level: 1,
           memoryChunks: 0,
-          exp: 0
+          exp: 0,
+          memoryUpgrades: 0,
+          chunkUpgrades: 0
         },
         v: {
           level: 1,
           memoryChunks: 0,
-          exp: 0
+          exp: 0,
+          memoryUpgrades: 0,
+          chunkUpgrades: 0
         }
       },
       alchemy: Array.repeat(0, 21)

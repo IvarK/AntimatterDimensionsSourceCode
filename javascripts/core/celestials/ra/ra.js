@@ -61,6 +61,7 @@ class RaPetState {
   get memoryChunksPerSecond() {
     let res = this.canGetMemoryChunks ? this.rawMemoryChunksPerSecond : 0;
     res *= RA_UNLOCKS.TT_BOOST.effect.memoryChunks();
+    res *= this.chunkUpgradeCurrentMult;
     if (this.hasRecollection) res *= RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
     return res;
   }
@@ -72,6 +73,54 @@ class RaPetState {
   get hasRecollection() {
     return Ra.petWithRecollection === this.name;
   }
+
+  get memoryUpgradeCurrentMult() {
+    return Math.pow(1.3, this.data.memoryUpgrades);
+  }
+
+  get chunkUpgradeCurrentMult() {
+    return Math.pow(1.3, this.data.chunkUpgrades);
+    
+  }
+
+  get memoryUpgradeCost() {
+    return 1000 * Math.pow(5, this.data.memoryUpgrades);
+  }
+
+  get chunkUpgradeCost() {
+    return 5000 * Math.pow(8, this.data.chunkUpgrades);
+  }
+
+  get canBuyMemoryUpgrade() {
+    return this.memoryUpgradeCost <= this.exp;
+  }
+
+  get canBuyChunkUpgrade() {
+    return this.chunkUpgradeCost <= this.exp;
+  }
+  
+
+  purchaseMemoryUpgrade() {
+    if (!this.canBuyMemoryUpgrade) return;
+
+    this.exp -= this.memoryUpgradeCost;
+    this.data.memoryUpgrades++;
+  }
+
+  purchaseChunkUpgrade() {
+    if (!this.canBuyChunkUpgrade) return;
+
+    this.exp -= this.chunkUpgradeCost;
+    this.data.chunkUpgrades++;
+  }
+
+  levelUp() {
+    if (this.exp < this.requiredExp) return;
+
+    this.exp -= this.requiredExp;
+    this.level++;
+    Ra.checkForUnlocks();
+  }
   
   tick(realDiff, generateChunks) {
     const seconds = realDiff / 1000;
@@ -80,23 +129,10 @@ class RaPetState {
       : 0;
     // Adding memories from half of the gained chunks this tick results in the best mathematical behavior
     // for very long simulated ticks
-    const newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk();
+    const newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk() * 
+      this.memoryUpgradeCurrentMult;
     this.memoryChunks += newMemoryChunks;
-    this.addExp(newMemories);
-  }
-
-  addExp(exp) {
-    this.exp += exp;
-    while (this.exp >= this.requiredExp) {
-      this.exp -= this.requiredExp;
-      this.level++;
-      // TODO Change this once we have a proper fix for things happening before the UI is initialized
-      if (GameUI.initialized) {
-        GameUI.notify.memory(`${this.name}'s Celestial Memory has reached level ${this.level}!`, this.name);
-      }
-      // All Ra unlocks require a pet to gain a level so it suffices to do this here.
-      Ra.checkForUnlocks();
-    }
+    this.exp += newMemories;
   }
 
   reset() {
@@ -188,8 +224,8 @@ const Ra = {
   requiredExpForLevel(level) {
     if (level >= 25) return Infinity;
     const adjustedLevel = level + Math.pow(level, 2) / 10;
-    const post15Scaling = Math.pow(1.4, Math.max(0, level - 15));
-    return Math.floor(Math.pow(adjustedLevel, 4) * post15Scaling * 5e5);
+    const post15Scaling = Math.pow(1.5, Math.max(0, level - 15));
+    return Math.floor(Math.pow(adjustedLevel, 5.52) * post15Scaling * 1e6);
   },
   // Calculates the cumulative exp needed to REACH a level starting from nothing.
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized
@@ -359,7 +395,7 @@ const RA_UNLOCKS = {
     id: 1,
     description: "Get Teresa to level 2",
     reward: () => `Unlock Charged Infinity Upgrades. You get one more maximum
-    Charged Infinity Upgrade every ${formatInt(2)} levels`,
+      Charged Infinity Upgrade every ${formatInt(2)} levels`,
     pet: Ra.pets.teresa,
     level: 2,
     displayIcon: `<span class="fas fa-infinity"></span>`
@@ -399,8 +435,8 @@ const RA_UNLOCKS = {
   START_TP: {
     id: 6,
     description: "Get Teresa to level 25",
-    reward: `When unlocking Time Dilation in non-celestial Realities, gain Techyon Particles as if you reached
-    the square root of your total antimatter in Dilation`,
+    reward: `When unlocking Time Dilation in non-celestial Realities, gain Tachyon Particles as if you reached
+      the square root of your total antimatter in Dilation`,
     effect: () => player.totalAntimatter.pow(0.5),
     pet: Ra.pets.teresa,
     level: 25,
@@ -419,7 +455,7 @@ const RA_UNLOCKS = {
     id: 8,
     description: "Get Effarig to level 2",
     reward: `Unlock Glyph Alchemy, which adds alchemical resources you can increase
-    by refining glyphs (unlocks a new Reality tab)`,
+    by refining glyphs, and unlocking more resources through Effarig levels (unlocks a new Reality tab)`,
     pet: Ra.pets.effarig,
     level: 2,
     displayIcon: `<span class="fas fa-vial"></span>`
@@ -506,7 +542,7 @@ const RA_UNLOCKS = {
   V_UNLOCK: {
     id: 18,
     description: "Get Enslaved to level 10",
-    reward: "Unlock V's Memories.",
+    reward: "Unlock V's Memories",
     pet: Ra.pets.enslaved,
     level: 10,
     displayIcon: `⌬`
@@ -549,7 +585,7 @@ const RA_UNLOCKS = {
     id: 23,
     description: "Get V to level 5",
     reward: () => `All Memory Chunks produce more Memories based on total Celestial levels,
-      and unlock a Triad study every ${formatInt(5)} levels (see bottom of the Time Studies page)`,
+      and unlock a Triad Study every ${formatInt(5)} levels (see bottom of the Time Studies page)`,
     pet: Ra.pets.v,
     level: 5,
     displayIcon: `<span class="fas fa-book"></span>`
@@ -557,7 +593,7 @@ const RA_UNLOCKS = {
   HARD_V: {
     id: 24,
     description: "Get V to level 8",
-    reward: "Unlock more V-achievements (see V's tab)",
+    reward: "Unlock hard V-achievements",
     pet: Ra.pets.v,
     level: 8,
     displayIcon: `<span class="fas fa-trophy"></span>`

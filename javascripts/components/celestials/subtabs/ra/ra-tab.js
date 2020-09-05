@@ -5,6 +5,7 @@ Vue.component("ra-tab", {
     return {
       memoriesPerChunk: 0,
       showReality: false,
+      isRaCapped: false,
       totalLevels: 0,
       showRecollection: false,
       hasRecollection: false,
@@ -19,6 +20,7 @@ Vue.component("ra-tab", {
   methods: {
     update() {
       this.memoriesPerChunk = Ra.productionPerMemoryChunk();
+      this.isRaCapped = Ra.totalPetLevel === 100;
       this.totalLevels = Ra.totalPetLevel;
       this.showRecollection = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
       this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
@@ -57,7 +59,7 @@ Vue.component("ra-tab", {
       {
         pet: Ra.pets.enslaved,
         scalingUpgradeVisible: () => Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME),
-        scalingUpgradeText: () => `Stored Time
+        scalingUpgradeText: () => `Stored game time
           ${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)} and real time
           +${formatInt(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / (1000 * 3600))} hours`,
       },
@@ -86,13 +88,13 @@ Vue.component("ra-tab", {
   },
   template: `
     <div class="l-ra-celestial-tab">
-      <div class="c-ra-memory-header">
-        Each Memory Chunk generates
+      <div class="c-ra-memory-header" v-if=!isRaCapped>
+        Each Memory Chunk generates a base of
         {{ format(memoriesPerChunk, 2, 3) }} {{ "Memory" | pluralize(memoriesPerChunk, "Memories") }}
         per second.
       </div>
-      <div>
-        Hold shift to see progress on your current level.
+      <div class="c-ra-memory-header" v-else>
+        All Memories have been returned.
       </div>
       <div>
         Mouse-over the icons below the bar to see descriptions of upgrades,
@@ -113,10 +115,10 @@ Vue.component("ra-tab", {
           <br>
           Inside of Ra's reality, some resources will generate Memory Chunks based on their amount.
         </button>
-        <div v-if="showRecollection" class="c-ra-recollection-unlock">
+        <div v-if="showRecollection && !isRaCapped" class="c-ra-recollection-unlock">
           <h1 :style="petStyle">Recollection</h1>
           <span :style="petStyle">
-            Whichever Celestial has recollection will get {{formatX(recollectionMult)}} Memory Chunk gain.
+            Whichever Celestial is has Recollection will get {{formatX(recollectionMult)}} Memory Chunk gain.
           </span>
           <div class="c-ra-recollection-unlock-inner" v-if="hasRecollection">
             <ra-pet-recollection-button

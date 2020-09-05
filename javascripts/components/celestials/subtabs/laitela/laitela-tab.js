@@ -177,17 +177,24 @@ Vue.component("singularity-container", {
         <div class="o-laitela-matter-amount">
           You have {{ format(darkEnergy, 2, 4) }} Dark Energy. (+{{ format(darkEnergyGainPerSecond, 2, 4) }}/s)
         </div>
-        <button class="c-laitela-singularity__cap-control" @click="decreaseCap">
-          Decrease Singularity cap.
-        </button>
-        <button class="c-laitela-singularity__cap-control" @click="increaseCap">
-          Increase Singularity cap.
-        </button>
-        <br>
-        Each step increases the required Dark Energy by {{ formatX(10) }},
-        <br>
-        but also increases gained Singularities by {{ formatX(perStepFactor) }}.
-        <br>
+        <div v-if="singularities>=10">
+          <button class="c-laitela-singularity__cap-control" @click="decreaseCap">
+            Decrease Singularity cap.
+          </button>
+          <button class="c-laitela-singularity__cap-control" @click="increaseCap">
+            Increase Singularity cap.
+          </button>
+          <br>
+          Each step increases the required Dark Energy by {{ formatX(10) }},
+          <br>
+          but also increases gained Singularities by {{ formatX(perStepFactor) }}.
+        </div>
+        <h2 v-else>
+          Reach {{ format(10) }} singularities to unlock bulk
+          <br>
+          <br>
+          <br>
+        </h2>
         <br>
         Total time to <span v-if="hasAutoSingularity">(auto-)</span>condense:
         {{ baseSingularityTime }}
@@ -347,15 +354,15 @@ Vue.component("annihilation-button", {
     }
   },
   template: `
-    <button class="c-laitela-annihilation-button" 
-      @click="annihilate()" 
+    <button class="c-laitela-annihilation-button"
+      @click="annihilate()"
       v-if="showAnnihilation">
         <h2>Annihilation</h2>
         <span v-if="hasAnnihilated">
           Current multiplier to all DM multipliers: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
           <br><br>
         </span>
-        Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 
+        Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy,
         <span v-if="!hasAnnihilated">
           unlocking Auto-Annihilation, and
         </span>
@@ -374,7 +381,7 @@ Vue.component("annihilation-button", {
         </span>
         <div v-if="hasAnnihilated">
           <br>
-          Auto-Annihilate when adding 
+          Auto-Annihilate when adding
           <input type="text"
             v-model="autoAnnihilationInput"
             @change="handleAutoAnnihilationInputChange()"

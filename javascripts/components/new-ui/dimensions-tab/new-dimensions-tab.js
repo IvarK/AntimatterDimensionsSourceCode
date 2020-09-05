@@ -3,6 +3,7 @@
 Vue.component("new-dimensions-tab", {
   data() {
     return {
+      hasDimensionBoosts: false,
       buyUntil10: true,
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
@@ -37,6 +38,7 @@ Vue.component("new-dimensions-tab", {
       return this.buyUntil10 ? "Until 10" : "Buy 1";
     },
     update() {
+      this.hasDimensionBoosts = player.dimensionBoosts > 0;
       this.buyUntil10 = player.buyUntil10;
       this.isContinuumActive = Laitela.continuumActive;
       const challenge = NormalChallenge.current || InfinityChallenge.current;
@@ -86,7 +88,10 @@ Vue.component("new-dimensions-tab", {
           v-if="isQuickResetAvailable"
           class="o-primary-btn--quick-reset"
           onclick="softReset(-1, true, true)"
-        >Perform a Dimension Boost reset and lose a Dimension Boost</primary-button>
+        >Perform a Dimension Boost reset
+          <span v-if="hasDimensionBoosts"> but lose a Dimension Boost</span>
+          <span v-else> for no gain</span>
+        </primary-button>
       <new-galaxy-row/>
     </div>
     <antimatter-dim-tab-progress-bar/>

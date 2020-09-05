@@ -3,6 +3,7 @@
 Vue.component("antimatter-dim-tab", {
   data() {
     return {
+      hasDimensionBoosts: false,
       isChallengePowerVisible: false,
       challengePower: "",
       isQuickResetAvailable: false,
@@ -12,6 +13,7 @@ Vue.component("antimatter-dim-tab", {
   },
   methods: {
     update() {
+      this.hasDimensionBoosts = player.dimensionBoosts > 0;
       const isC2Running = NormalChallenge(2).isRunning;
       const isC3Running = NormalChallenge(3).isRunning;
       const isIC6Running = InfinityChallenge(6).isRunning;
@@ -56,7 +58,10 @@ Vue.component("antimatter-dim-tab", {
         v-if="isQuickResetAvailable"
         class="o-primary-btn--quick-reset"
         @click="quickReset"
-      >Perform a Dimension Boost reset and lose a Dimension Boost</primary-button>
+      >Perform a Dimension Boost reset
+        <span v-if="hasDimensionBoosts"> but lose a Dimension Boost</span>
+        <span v-else> for no gain</span>
+      </primary-button>
       <div style="flex: 1 0" />
       <antimatter-dim-tab-progress-bar class="l-antimatter-dim-tab__progress_bar" />
     </div>`

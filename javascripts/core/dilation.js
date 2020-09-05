@@ -17,7 +17,7 @@ function undilationAnimation() {
 function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
   if (player.options.confirmations.dilation) {
-    Modal.enterDilation.show();
+    Modal.enterDilation.show({ epSinceLastDilation: new Decimal(0), OldEPSinceLastDilation: new Decimal(0), hasDilated: Achievement(136).active() });
   }
   if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
     undilationAnimation();
@@ -28,13 +28,6 @@ function startDilatedEternityRequest() {
   }
   if (player.dilation.active) {
     eternity(false, false, { switchingDilation: true });
-    return;
-  }
-  if (player.options.animations.dilation && document.body.style.animation === "") {
-    dilationAnimation();
-    setTimeout(startDilatedEternity, 1000);
-  } else {
-    startDilatedEternity();
   }
 }
 

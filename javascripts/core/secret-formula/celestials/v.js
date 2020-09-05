@@ -119,7 +119,7 @@ GameDatabase.celestials.v = {
         Black Hole or slower, without discharging or entering EC12.`,
       values: [100, 150, 200, 250, 300],
       condition: () => V.isRunning,
-      currentValue: () => (player.timestudy.theorem.toNumber() > 200000
+      currentValue: () => (player.timestudy.theorem.toNumber() > 300000
         ? -Math.log10(player.minNegativeBlackHoleThisReality)
         : 0),
       formatRecord: x => `${formatInt(1)} / ${format(Math.pow(10, x))}`,

@@ -6977,7 +6977,7 @@ kbd {
   color: white;
   background: #222;
   width: 23rem;
-  margin-left: 0rem;
+  margin-left: 0;
   padding: 0.4rem;
   z-index: 2;
   pointer-events: none;
@@ -7081,14 +7081,11 @@ kbd {
 
 .c-ra-pet-upgrade__tooltip__description {
   font-size: 1.3rem;
+  margin-bottom: 0.3rem;
 }
 
 .c-ra-upgrade-icon .c-ra-pet-upgrade__tooltip__name {
   font-size: 1.8rem;
-}
-
-.c-ra-pet-upgrade__tooltip__description {
-  margin-bottom: 0.3rem;
 }
 
 .c-ra-pet-upgrade__tooltip__footer {
@@ -7169,7 +7166,7 @@ kbd {
   justify-content: center;
   margin: 1.5rem 0;
   height: 4rem;
-  padding: 0rem 1rem;
+  padding: 0 1rem;
 }
 
 

@@ -7726,6 +7726,27 @@ kbd {
   background: var(--color-laitela--accent);
 }
 
+.o-laitela-singularity-locked {
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
+  padding: 0.6rem;
+  margin: 0;
+  font-weight: bold;
+  width: 22rem;
+  height: 4%;
+  border-radius: .5rem;
+  border: 0.2rem solid var(--color-laitela--accent);
+  font-size: 20px;
+  padding-top: 10rem;
+}
+
+.t-metro .o-laitela-singularity-locked,
+.t-dark-metro .o-laitela-singularity-locked,
+.t-inverted-metro .o-laitela-singularity-locked,
+.t-s8 .o-laitela-singularity-locked {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
 .c-laitela-next-milestones {
   margin-left: 1rem;
   display: flex;

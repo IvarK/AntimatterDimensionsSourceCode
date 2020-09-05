@@ -5,7 +5,10 @@ Vue.component("laitela-tab", {
     return {
       matter: new Decimal(0),
       maxMatter: new Decimal(0),
-      matterExtraPurchasePercentage: 0
+      matterExtraPurchasePercentage: 0,
+      autobuyersUnlocked: false,
+      singularitiesUnlocked: false,
+      singularityWaitTime: 0,
     };
   },
   methods: {
@@ -13,6 +16,18 @@ Vue.component("laitela-tab", {
       this.matter.copyFrom(player.celestials.laitela.matter);
       this.maxMatter.copyFrom(player.celestials.laitela.maxMatter);
       this.matterExtraPurchasePercentage = Laitela.matterExtraPurchaseFactor - 1;
+      this.autobuyersUnlocked = SingularityMilestone.darkDimensionAutobuyers.isUnlocked ||
+        SingularityMilestone.darkDimensionAutobuyers.isUnlocked ||
+        SingularityMilestone.autoCondense.isUnlocked ||
+        Laitela.darkMatterMult > 1;
+      this.singularitiesUnlocked = Singularity.capIsReached || player.celestials.laitela.singularities > 0;
+      this.singularityWaitTime = TimeSpan.fromSeconds((Singularity.cap - player.celestials.laitela.darkEnergy) /
+        Array.range(1, 4)
+        .map(n => MatterDimension(n))
+        .filter(d => d.amount.gt(0))
+        .map(d => d.powerDE * 1000 / d.interval)
+        .sum())
+        .toStringShort(false);
     },
     maxAll() {
       Laitela.maxAllDMDimensions(4);
@@ -38,16 +53,20 @@ Vue.component("laitela-tab", {
       <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter.</div>
       <div class="o-laitela-matter-amount">Your maximum Dark Matter ever is {{ format(maxMatter.floor(), 2, 0) }},
       giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from Continuum.</div>
-      <singularity-container />
+      <h2 class="c-laitela-singularity-container" v-if="!singularitiesUnlocked">
+        Unlock singularities in {{ singularityWaitTime }}.
+      </h2>
+      <singularity-container v-if="singularitiesUnlocked" />
       <div class="l-laitela-mechanics-container">
         <laitela-run-button />
         <div>
           <dark-matter-dimension-group />
           <annihilation-button />
         </div>
-        <singularity-milestone-pane />
+        <singularity-milestone-pane v-if="singularitiesUnlocked"/>
+        <div class="c-laitela-next-milestones o-laitela-singularity-locked" v-else>Requires singularities</div>
       </div>
-      <laitela-autobuyer-settings />
+      <laitela-autobuyer-settings v-if="autobuyersUnlocked" />
     </div>`
 });
 
@@ -154,7 +173,7 @@ Vue.component("singularity-container", {
           <h2>{{ singularityWaitText }}</h2>
         </button>
       </div>
-      <div>
+      <div v-if="!(singularities === 0)">
         <div class="o-laitela-matter-amount">
           You have {{ format(darkEnergy, 2, 4) }} Dark Energy. (+{{ format(darkEnergyGainPerSecond, 2, 4) }}/s)
         </div>
@@ -274,7 +293,7 @@ Vue.component("dark-matter-dimension-group", {
         :dimension="dimensions[i]"
         />
       <div v-if="nextDimensionThreshold !== 0">
-        <b>Next dimension unlocks at {{ format(nextDimensionThreshold) }} Dark Matter.</b>
+        <b>Next Dark Matter Dimension unlocks at {{ format(nextDimensionThreshold) }} Dark Matter.</b>
         <br><br>
       </div>
     </span>`

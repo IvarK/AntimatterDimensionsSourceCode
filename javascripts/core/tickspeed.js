@@ -123,7 +123,7 @@ function resetTickspeed() {
 const Tickspeed = {
 
   get isUnlocked() {
-    return AntimatterDimension(2).amount.gt(0) || player.eternities.gte(30);
+    return AntimatterDimension(2).amount.gt(0) || player.eternities.gte(30) || player.realities > 0;
   },
 
   get isAvailableForPurchase() {

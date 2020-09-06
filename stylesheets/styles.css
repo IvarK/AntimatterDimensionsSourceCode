@@ -1895,6 +1895,15 @@ screen and (max-width: 480px) {
 }
 
 .c-game-header__tesseract-available {
+  border-width: 0.2rem solid;
+  border-radius: 0;
+  padding: 1rem;
+  margin-bottom: 1.2rem;
+  font-family: TypeWriter, serif;
+  background: #111117;
+  color: #2ebce6;
+  cursor: pointer;
+  transition-duration: 0.15s;
   animation: a-tesseract-shift 5s infinite;
 }
 
@@ -1904,6 +1913,18 @@ screen and (max-width: 480px) {
   background: #EEEEEE;
   animation: a-tesseract-shift-dark 5s infinite;
 }
+
+.c-infinity-dim-tab__tesseract-available:hover {
+  background: black;
+  color: #00c5ff;
+}
+
+.t-dark .c-infinity-dim-tab__tesseract-available:hover,
+.t-dark-metro .c-infinity-dim-tab__tesseract-available:hover,
+.t-s6 .c-infinity-dim-tab__tesseract-available:hover {
+  background: white;
+}
+
 
 .c-game-header__ip-amount {
   font-weight: bold;
@@ -2208,7 +2229,8 @@ screen and (max-width: 480px) {
   font-family: TypeWriter, serif;
   background: #111117;
   color: #2ebce6;
-  border: none;
+  border: 0.2rem solid;
+  border-radius: 0;
   cursor: pointer;
   transition-duration: 0.15s;
   animation: a-tesseract-shift 5s infinite;

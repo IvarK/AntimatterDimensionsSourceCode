@@ -437,6 +437,17 @@ body.t-s9 {
   color: black;
 }
 
+.t-normal .c-game-header__tesseract-available {
+  background: #EEEEEE;
+  animation: a-tesseract-shift-dark 5s infinite;
+}
+
+.t-normal .c-infinity-dim-tab__tesseract-button {
+  background: #EEEEEE;
+  animation: a-tesseract-shift-dark 5s infinite;
+}
+
+
 .l-new-ui-big-crunch__container {
   margin-top: 2rem;
 }

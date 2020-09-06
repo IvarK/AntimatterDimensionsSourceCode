@@ -10,6 +10,7 @@ Vue.component("game-header-big-crunch-button", {
       currentIP: new Decimal(0),
       tesseractUnlocked: false,
       tesseractCost: new Decimal(0),
+      tesseractAffordable: false,
     };
   },
   computed: {
@@ -34,11 +35,6 @@ Vue.component("game-header-big-crunch-button", {
 
       return { color: `rgb(${rgb.join(",")})` };
     },
-    classObject() {
-      return {
-        "c-game-header__tesseract-available": this.tesseractUnlocked && this.currentIP.gt(this.tesseractCost),
-      };
-    },
   },
   methods: {
     update() {
@@ -60,13 +56,16 @@ Vue.component("game-header-big-crunch-button", {
       }
       this.tesseractUnlocked = Enslaved.isCompleted;
       this.tesseractCost = Enslaved.tesseractCost;
-    }
+      this.tesseractAffordable = this.tesseractUnlocked && this.currentIP.gt(this.tesseractCost);
+    },
+    switchToInfinity() {
+      Tab.dimensions.infinity.show(true);
+    },
   },
   template:
     `<button
-      v-if="isVisible"
+      v-if="isVisible && !tesseractAffordable"
       class="o-prestige-button o-infinity-button l-game-header__big-crunch-btn"
-      :class="classObject"
       onclick="bigCrunchResetRequest()"
     >
       <div v-if="!isPeakIPPMVisible"/>
@@ -80,5 +79,14 @@ Vue.component("game-header-big-crunch-button", {
         Peaked at {{format(peakIPPM, 2, 0)}} IP/min
       </template>
       <div v-else/>
+    </button>
+    <button
+      v-else
+      class="o-prestige-button l-game-header__big-crunch-btn c-game-header__tesseract-available"
+      @click="switchToInfinity"
+    >
+      <b>
+        You have enough Infinity Points to buy a Tesseract
+      </b>
     </button>`
 });

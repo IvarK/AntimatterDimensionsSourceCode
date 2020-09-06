@@ -3,8 +3,7 @@
 Vue.component("modal-enter-dilation", {
   data() {
     return {
-      EPSinceLastDilation: new Decimal(0),
-      OldEPSinceLastDilation: new Decimal(0),
+      EPOnLastDilation: new Decimal(0),
       hasDilated: Achievement(136).isUnlocked
     };
   },
@@ -25,13 +24,15 @@ Vue.component("modal-enter-dilation", {
         if (!this.hasDilated) {
           return "This is your first Dilation";
         } 
-          return `You last attempted Dilation at ${format(this.OldEPSinceLastDilation, 2, 2)} EP`;
+          return `You last attempted Dilation at ${format(this.EPOnLastDilation, 2, 2)} EP`;
         },
   },
   methods: {
+    update() {
+      this.EPOnLastDilation.copyFrom(player.eternityPoints);
+    },
     handleYesClick() {
       if (player.dilation.active) return;
-      this.OldEPSinceLastDilation = this.OldEPSinceLastDilation.copyFrom(player.eternityPoints);
       if (player.options.animations.dilation && document.body.style.animation === "") {
         dilationAnimation();
         setTimeout(startDilatedEternity, 1000);

@@ -41,11 +41,16 @@ Vue.component("break-infinity-tab", {
         "l-infinity-upgrade-grid__cell": true,
         "o-infinity-upgrade-btn--multiplier": column === 3
       };
+    },
+    timeDisplayShort(time) {
+      return timeDisplayShort(time);
     }
   },
   template:
     `<div class="l-break-infinity-tab">
-      <div v-if="!isUnlocked">You need to get Automated Big Crunch interval to 0.1 to be able to Break Infinity</div>
+      <div v-if="!isUnlocked">
+        You need to get Automated Big Crunch interval to {{ format(0.1, 1, 1) }}s to be able to Break Infinity
+      </div>
       <break-infinity-button class="l-break-infinity-tab__break-btn" />
       <div v-if="isUnlocked" class="l-break-infinity-upgrade-grid l-break-infinity-tab__grid">
         <div v-for="(column, columnId) in grid" class="l-break-infinity-upgrade-grid__row">

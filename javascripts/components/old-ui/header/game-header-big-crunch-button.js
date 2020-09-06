@@ -24,9 +24,8 @@ Vue.component("game-header-big-crunch-button", {
       if (this.currentIP.lt(1e50)) return darkTheme ? { color: "black" } : { color: "white" };
 
       const ratio = this.gainedIP.log10() / this.currentIP.log10();
-      let rgb;
 
-      rgb = [
+      const rgb = [
         Math.round(255 - (ratio - 1) * 10 * 255),
         Math.round(255 - (1 - ratio) * 10 * 255),
         ratio > 1 ? Math.round(255 - (ratio - 1) * 10 * 255)
@@ -81,7 +80,7 @@ Vue.component("game-header-big-crunch-button", {
       <div v-else/>
     </button>
     <button
-      v-else
+      v-else-if="tesseractAffordable"
       class="o-prestige-button l-game-header__big-crunch-btn c-game-header__tesseract-available"
       @click="switchToInfinity"
     >

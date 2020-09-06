@@ -79,7 +79,7 @@ Vue.component("dimension-autobuyer-box", {
         case AUTOBUYER_MODE.BUY_SINGLE: return "Buys singles";
         case AUTOBUYER_MODE.BUY_10: return "Buys max";
       }
-      throw "Unknown dimension autobuyer mode";
+      throw "Unknown Dimension Autobuyer mode";
     }
   },
   methods: {

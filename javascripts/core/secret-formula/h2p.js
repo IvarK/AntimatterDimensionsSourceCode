@@ -115,7 +115,7 @@ the 3rd Dimension ${formatX(2)}, and all other Dimensions are unaffected.
 <b>Hotkey: D</b>
 `,
       isUnlocked: () => true,
-      tags: ["dimboost", "dimshift", "reset", "earlygame"],
+      tags: ["dimboost", "reset", "earlygame"],
       tab: "dimensions/antimatter"
     }, {
       name: "Antimatter Galaxies",
@@ -463,7 +463,7 @@ Dimensions, your production will be reset to the amount you purchased after ever
 upgrades to your multipliers you purchased.
 <br>
 <br>
-Each threshold to gain another tickspeed upgrade is ${formatPercents(0.33)} more time shards than the previous,
+Each threshold to gain another tickspeed upgrade is ${formatPercents(0.33)} more Time Shards than the previous,
 or ${formatPercents(0.25)} with the relevant time study. After ${formatInt(300000)} upgrades, each successive free
 tickspeed upgrade will start counting as an additional ${format(0.1, 1, 1)} upgrades for the purposes of calculating
 shard thresholds. For example, your ${formatInt(300010)}th upgrade will require
@@ -565,8 +565,8 @@ other resources. Instead, you can only gain more Tachyon Particles by passing yo
 Time Dilation, and you will only gain more based on your <i>new</i> highest antimatter from this new run.
 <br>
 <br>
-Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Dilated Galaxies by
-reaching thresholds similarly to free tickspeed upgrades from Time Dimensions. These Dilated Galaxies are like
+Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Tachyon Galaxies by
+reaching thresholds similarly to free tickspeed upgrades from Time Dimensions. These Tachyon Galaxies are like
 Replicanti Galaxies in that they affect tickspeed as if they were Antimatter Galaxies but they don't increase the cost
 of your next Antimatter Galaxy.
 <br>

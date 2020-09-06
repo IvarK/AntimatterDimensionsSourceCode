@@ -112,6 +112,7 @@ Vue.component("alchemy-tab", {
       return `${(orbit.radius / maxRadius * 50)}%`;
     },
     handleMouseEnter(node) {
+      if (!node.resource.isUnlocked) return;
       this.infoResourceId = node.resource.id;
       this.focusedResourceId = node.resource.id;
     },
@@ -229,9 +230,9 @@ Vue.component("alchemy-tab", {
         </primary-button>
       </div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      Resource cap, based on glyph level in last 10 realities: {{ format(estimatedCap, 3, 2) }}.
+      Your Alchemy resource cap, based on the glyph level of your last 10 Realities: {{ format(estimatedCap, 3, 2) }}.
       <span v-if="reactionsAvailable">
-        Reactions trigger once every time you reality.
+        Reactions trigger once every time you Reality, unaffected by amplification from stored real time.
       </span>
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">

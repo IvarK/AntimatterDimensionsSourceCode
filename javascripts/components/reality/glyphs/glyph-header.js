@@ -54,7 +54,7 @@ Vue.component("glyph-header", {
         v-if="showAutoAutoClean"
         v-model="autoAutoClean"
         class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        text="Auto auto-clean:"
+        text="Auto Purge on Realities:"
       />
     </div>
   `,

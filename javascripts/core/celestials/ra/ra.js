@@ -497,7 +497,7 @@ const RA_UNLOCKS = {
     id: 13,
     description: "Get Effarig to level 25",
     reward: () => `Glyphs are always generated with ${formatPercents(1)} rarity and ` +
-      `glyph sacrifice gain is raised to a power based on Relic Shards`,
+      `Glyph Sacrifice gain is raised to a power based on Relic Shards`,
     pet: Ra.pets.effarig,
     level: 25,
     displayIcon: `<i class="fas fa-ankh"></i>`

@@ -103,7 +103,7 @@ GameDatabase.reality.perks = {
     id: 30,
     label: "DBNR",
     family: PERK_FAMILY.ANTIMATTER,
-    description: "Dimension Boosts no longer reset Antimatter Dimensions, Tickspeed, or Sacrifice."
+    description: "Dimension Boosts no longer reset Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice."
   },
   studyPassive1: {
     id: 31,
@@ -119,7 +119,7 @@ GameDatabase.reality.perks = {
     label: "PASS2",
     family: PERK_FAMILY.ETERNITY,
     get description() {
-      return `Time Study 132 also makes Replicanti ${formatX(5)} faster.`;
+      return `Time Study 132 also makes Replicanti ${format(5)} times faster.`;
     }
   },
   autounlockEU1: {
@@ -173,9 +173,9 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.INFINITY,
     description: "Infinity Dimensions no longer have antimatter requirements."
   },
-  bypassDGReset: {
+  bypassTGReset: {
     id: 52,
-    label: "DGR",
+    label: "TGR",
     family: PERK_FAMILY.DILATION,
     description: "The 2nd rebuyable Dilation Upgrade no longer resets your Dilated Time."
   },
@@ -468,7 +468,7 @@ GameDatabase.reality.perkConnections = (function() {
     [p.autounlockDilation2, p.autounlockDilation3],
     [p.autounlockDilation3, p.autobuyerFasterDilation, p.autounlockTD],
     [p.autounlockTD, p.autounlockReality],
-    [p.bypassDGReset, p.autobuyerDilation, p.retroactiveTP1],
+    [p.bypassTGReset, p.autobuyerDilation, p.retroactiveTP1],
     [p.bypassEC1Lock, p.bypassEC2Lock, p.bypassEC3Lock, p.studyECRequirement],
     [p.bypassEC2Lock, p.studyActiveEP, p.bypassEC1Lock],
     [p.bypassEC3Lock, p.studyIdleEP, p.bypassEC1Lock],
@@ -482,10 +482,10 @@ GameDatabase.reality.perkConnections = (function() {
     [p.studyActiveEP, p.bypassEC2Lock, p.autobuyerTT1],
     [p.studyIdleEP, p.bypassEC3Lock, p.autocompleteEC1],
     [p.studyECRequirement, p.studyECBulk],
-    [p.retroactiveTP1, p.bypassDGReset, p.startTP, p.retroactiveTP2],
+    [p.retroactiveTP1, p.bypassTGReset, p.startTP, p.retroactiveTP2],
     [p.retroactiveTP2, p.retroactiveTP3],
     [p.retroactiveTP3, p.retroactiveTP4],
-    [p.autobuyerDilation, p.autounlockEU2, p.autounlockDilation1, p.bypassECDilation, p.bypassDGReset],
+    [p.autobuyerDilation, p.autounlockEU2, p.autounlockDilation1, p.bypassECDilation, p.bypassTGReset],
     [p.autobuyerFasterID],
     [p.autobuyerTT1, p.autobuyerTT2],
     [p.autobuyerTT2, p.autobuyerTT3],

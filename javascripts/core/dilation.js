@@ -17,10 +17,10 @@ function undilationAnimation() {
 function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
   if (player.options.confirmations.dilation) {
-    if (!confirm(`Dilating time will start a new eternity, and all of your Dimension/Infinity
+    if (!confirm(`Dilating time will start a new eternity, and all of your Antimatter Dimension/Infinity
     Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to
-    ^ 0.75. If you can eternity while Dilated, you'll be rewarded with tachyon particles based on your
-    antimatter and tachyon particles.`)) return;
+    ^ 0.75. If you can Eternity while Dilated, you'll be rewarded with Tachyon Particles based on your
+    antimatter and already held Tachyon Particles.`)) return;
   }
   if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
     undilationAnimation();
@@ -83,7 +83,7 @@ function buyDilationUpgrade(id, bulk, extraFactor) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost);
     player.dilation.rebuyables[id] += buying;
     if (id === 2) {
-      if (!Perk.bypassDGReset.isBought) player.dilation.dilatedTime = new Decimal(0);
+      if (!Perk.bypassTGReset.isBought) player.dilation.dilatedTime = new Decimal(0);
       player.dilation.nextThreshold = new Decimal(1000);
       player.dilation.baseFreeGalaxies = 0;
       player.dilation.freeGalaxies = 0;

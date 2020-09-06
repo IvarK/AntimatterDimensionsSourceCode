@@ -52,8 +52,8 @@ Vue.component("infinity-upgrade-button", {
       <cost-display br
         v-if="!isBought"
         :config="config"
-        singular="IP"
-        plural="IP"
+        singular="Infinity Point"
+        plural="Infinity Points"
       />
       <slot />
     </button>`

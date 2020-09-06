@@ -10,13 +10,13 @@ GameDatabase.shopPurchases = {
   IPPurchases: {
     key: "IPPurchases",
     cost: 40,
-    description: "Double your IP gain from all sources. (additive) ",
+    description: "Double your Infinity Point gain from all sources. (additive) ",
     multiplier: purchases => (purchases === 0 ? 1 : 2 * purchases),
   },
   EPPurchases: {
     key: "EPPurchases",
     cost: 50,
-    description: "Triple your EP gain from all sources. (additive) ",
+    description: "Triple your Eternity Point gain from all sources. (additive) ",
     multiplier: purchases => (purchases === 0 ? 1 : 3 * purchases),
   },
   allDimPurchases: {

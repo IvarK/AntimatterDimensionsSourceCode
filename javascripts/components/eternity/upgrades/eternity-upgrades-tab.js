@@ -35,10 +35,10 @@ Vue.component("eternity-upgrades-tab", {
       </div>
       <ep-multiplier-button />
       <div>
-        The cost for the EP multiplier jumps at {{format(costIncreases[0])}} EP,
-        {{formatPostBreak(costIncreases[1], 2)}} EP, and {{formatPostBreak(costIncreases[2])}} EP.
+        The cost for the {{formatX(5)}} multiplier jumps at {{format(costIncreases[0])}},
+        {{formatPostBreak(costIncreases[1], 2)}}, and {{formatPostBreak(costIncreases[2])}} Eternity Points.
         <br>
-        It gets expensive more quickly past {{formatPostBreak(costIncreases[3])}} EP.
+        The cost increases super-exponentially after {{formatPostBreak(costIncreases[3])}} Eternity Points.
       </div>
     </div>`
 });

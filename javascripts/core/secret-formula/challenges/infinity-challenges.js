@@ -3,7 +3,8 @@
 GameDatabase.challenges.infinity = [
   {
     id: 1,
-    description: "All previous challenges (except tickspeed challenge and automatic big crunch challenge) at once.",
+    description: `All Normal Challenges, with the exception of
+    Tickspeed (C9) and Big Crunch (C11) Challenges, are active at the same time.`,
     goal: new Decimal("1e650"),
     isQuickResettable: true,
     reward: {
@@ -15,11 +16,12 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 2,
-    description: () => `Automatically sacrifice every ${formatInt(8)} ticks once you have an 8th Antimatter Dimension.`,
+    description: () => `Automatically Dimensional Sacrifice every ${formatInt(8)} ticks once you have
+    an 8th Antimatter Dimension.`,
     goal: new Decimal("1e10500"),
     isQuickResettable: false,
     reward: {
-      description: () => `Sacrifice autobuyer and stronger sacrifice
+      description: () => `Dimensional Sacrifice autobuyer and stronger Dimensional Sacrifice
         ${Sacrifice.getSacrificeDescription({ "InfinityChallenge2isCompleted": false })} ➜
         ${Sacrifice.getSacrificeDescription({ "InfinityChallenge2isCompleted": true })}`,
     },
@@ -44,7 +46,7 @@ GameDatabase.challenges.infinity = [
   {
     id: 4,
     description: () =>
-      `Only the latest bought Antimatter Dimension's production is normal, all other Antimatter Dimensions 
+      `Only the latest bought Antimatter Dimension's production is normal, all other Antimatter Dimensions
       produce less (${formatPow(0.25, 2, 2)}).`,
     goal: new Decimal("1e13000"),
     isQuickResettable: true,

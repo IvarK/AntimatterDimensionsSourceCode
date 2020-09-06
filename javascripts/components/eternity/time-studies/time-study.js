@@ -111,10 +111,10 @@ Vue.component("time-study", {
         plural="Time Theorems"
       />
       <div v-else-if="showSTCost">
-        Cost: {{ formatInt(STCost) }} {{ "Space Theorem" | pluralize(STCost, "Space Theorems")}}
-        <span v-if="config.cost">
-          and {{formatInt(config.cost)}} TT
+        Cost: <span v-if="config.cost">
+          {{formatInt(config.cost)}} {{ "Time Theorem" | pluralize(config.cost, "Time Theorems")}} and 
         </span>
+        {{ formatInt(STCost) }} {{ "Space Theorem" | pluralize(STCost, "Space Theorems")}}
       </div>
     </button>`
 });

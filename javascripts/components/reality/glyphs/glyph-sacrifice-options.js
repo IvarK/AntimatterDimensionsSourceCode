@@ -318,7 +318,7 @@ Vue.component("glyph-sacrifice-options", {
         ❃.✮:▹ Advanced mode ◃:✮.❃
     </div>
     <div v-if="alchemyUnlocked" :class="optionClass(modes.LOWEST_ALCHEMY)" @click="setMode(modes.LOWEST_ALCHEMY)">
-      🜁 🜄 Lowest alchemy resource 🜃 🜂
+      🜁 🜄 Lowest Alchemy Resource 🜃 🜂
     </div>
     <div v-if="alchemyUnlocked" :class="optionClass(modes.ALCHEMY_VALUE)" @click="setMode(modes.ALCHEMY_VALUE)">
       🜁 🜄 Refinement value 🜃 🜂

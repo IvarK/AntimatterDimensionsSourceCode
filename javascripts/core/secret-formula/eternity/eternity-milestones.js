@@ -3,7 +3,7 @@
 GameDatabase.eternity.milestones = {
   autobuyerIPMult: {
     eternities: 1,
-    reward: "Unlock IP multiplier autobuyer"
+    reward: "Unlock the Infinity Point multiplier autobuyer"
   },
   keepAutobuyers: {
     eternities: 2,
@@ -11,71 +11,71 @@ GameDatabase.eternity.milestones = {
   },
   autobuyerReplicantiGalaxy: {
     eternities: 3,
-    reward: "Unlock Replicanti galaxy autobuyer"
+    reward: "Unlock the Replicanti Galaxy Autobuyer"
   },
   keepInfinityUpgrades: {
     eternities: 4,
-    reward: "You start Eternity with all infinity upgrades"
+    reward: "You start Eternity with all Infinity Upgrades"
   },
   bigCrunchModes: {
     eternities: 5,
-    reward: "Unlock more Big Crunch autobuyer options"
+    reward: "Unlock more Big Crunch Autobuyer options"
   },
   autoEP: {
     eternities: 6,
     reward: () => {
       const EPmin = getOfflineEPGain(TimeSpan.fromMinutes(1).totalMilliseconds);
-      return `While offline, gain ${formatPercents(0.25)} of your best EP/min from previous eternities.
-        (Currently ${format(EPmin, 2, 2)} EP/min)`;
+      return `While offline, gain ${formatPercents(0.25)} of your best Eternity Points per minute from previous
+      Eternities. (Currently ${format(EPmin, 2, 2)} EP/min)`;
     },
   },
   autoIC: {
     eternities: 7,
-    reward: "You complete Infinity Challenges as soon as you unlock them (you get sacrifice autobuyer immediately)"
+    reward: "You complete Infinity Challenges as soon as you unlock them (and keep the Dimensional Sacrifice Autobuyer)"
   },
   keepBreakUpgrades: {
     eternities: 8,
-    reward: "You keep your Breaking Infinity upgrades on Eternity"
+    reward: "You keep your Break Infinity Upgrades on Eternity"
   },
   autobuyMaxGalaxies: {
     eternities: 9,
-    reward: "Unlock autobuy max Antimatter Galaxies"
+    reward: "Unlock the buy max Antimatter Galaxies Autobuyer mode"
   },
   autobuyMaxDimboosts: {
     eternities: 10,
-    reward: "Unlock autobuy max Dimension Boosts"
+    reward: "Unlock the buy max Dimension Boost Autobuyer mode"
   },
   autobuyerID1: {
     eternities: 11,
-    reward: "Unlock autobuyer for the 1st Infinity Dimension"
+    reward: "Unlock the 1st Infinity Dimension Autobuyer"
   },
   autobuyerID2: {
     eternities: 12,
-    reward: "Unlock autobuyer for the 2nd Infinity Dimension"
+    reward: "Unlock the 2nd Infinity Dimension Autobuyer"
   },
   autobuyerID3: {
     eternities: 13,
-    reward: "Unlock autobuyer for the 3rd Infinity Dimension"
+    reward: "Unlock the 3rd Infinity Dimension Autobuyer"
   },
   autobuyerID4: {
     eternities: 14,
-    reward: "Unlock autobuyer for the 4th Infinity Dimension"
+    reward: "Unlock the 4th Infinity Dimension Autobuyer"
   },
   autobuyerID5: {
     eternities: 15,
-    reward: "Unlock autobuyer for the 5th Infinity Dimension"
+    reward: "Unlock the 5th Infinity Dimension Autobuyer"
   },
   autobuyerID6: {
     eternities: 16,
-    reward: "Unlock autobuyer for the 6th Infinity Dimension"
+    reward: "Unlock the 6th Infinity Dimension Autobuyer"
   },
   autobuyerID7: {
     eternities: 17,
-    reward: "Unlock autobuyer for the 7th Infinity Dimension"
+    reward: "Unlock the 7th Infinity Dimension Autobuyer"
   },
   autobuyerID8: {
     eternities: 18,
-    reward: "Unlock autobuyer for the 8th Infinity Dimension"
+    reward: "Unlock the 8th Infinity Dimension Autobuyer"
   },
   autoUnlockID: {
     eternities: 25,
@@ -87,7 +87,7 @@ GameDatabase.eternity.milestones = {
   },
   autobuyerReplicantiChance: {
     eternities: 40,
-    reward: "Unlock autobuyer for the Replicanti chance upgrade"
+    reward: "Unlock the Replicanti Chance Upgrade Autobuyer"
   },
   unlockReplicanti: {
     eternities: 50,
@@ -95,11 +95,11 @@ GameDatabase.eternity.milestones = {
   },
   autobuyerReplicantiInterval: {
     eternities: 60,
-    reward: "Unlock autobuyer for the Replicanti interval upgrade"
+    reward: "Unlock the Replicanti Interval Upgrade Autobuyer"
   },
   autobuyerReplicantiMaxGalaxies: {
     eternities: 80,
-    reward: "Unlock autobuyer for the Replicanti galaxy upgrade"
+    reward: "Unlock the Max Replicanti Galaxy Upgrade Autobuyer"
   },
   autobuyerEternity: {
     eternities: 100,

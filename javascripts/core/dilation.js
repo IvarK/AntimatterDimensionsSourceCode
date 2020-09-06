@@ -16,8 +16,8 @@ function undilationAnimation() {
 
 function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
-  if (player.options.confirmations.dilation) {
-    Modal.enterDilation.show({ epSinceLastDilation: new Decimal(0), OldEPSinceLastDilation: new Decimal(0), hasDilated: Achievement(136).active() });
+  if (player.options.confirmations.dilation && !player.dilation.active) {
+    Modal.enterDilation.show();
   }
   if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
     undilationAnimation();

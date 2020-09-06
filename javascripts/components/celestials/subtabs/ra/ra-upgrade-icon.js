@@ -10,6 +10,7 @@ Vue.component("ra-upgrade-icon", {
       level: 0,
       icon: "",
       description: "",
+      petName: ""
     };
   },
   computed: {
@@ -20,20 +21,29 @@ Vue.component("ra-upgrade-icon", {
       const rewardText = typeof this.unlock.reward === "function"
         ? this.unlock.reward()
         : this.unlock.reward;
-      this.description = `Level ${this.level}: ${rewardText}`;
+      this.description = rewardText;
+      this.petName = this.unlock.pet.name;
     },
     classObject() {
       return {
         "c-ra-upgrade-icon": true,
         "c-ra-upgrade-icon--inactive": !this.isUnlocked,
+        "c-ra-upgrade-icon--teresa": this.petName === "Teresa",
+        "c-ra-upgrade-icon--effarig": this.petName === "Effarig",
+        "c-ra-upgrade-icon--enslaved": this.petName === "Enslaved",
+        "c-ra-upgrade-icon--v": this.petName === "V"
       };
     }
   },
   template: `
-    <div
-      v-html="icon"
-      :ach-tooltip="description"
-      :class="classObject">
+    <div :class="classObject">
+      <div v-html="icon" style="font-weight: bold;"></div>
+      <div class="c-ra-pet-upgrade__tooltip">
+        <div class="c-ra-pet-upgrade__tooltip__name">{{ petName }} Level {{ formatInt(level) }}</div>
+        <div class="c-ra-pet-upgrade__tooltip__description">
+          {{ description }}
+        </div>
+      </div>
     </div>
   `
 });

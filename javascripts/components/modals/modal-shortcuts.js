@@ -6,7 +6,7 @@ Vue.component("modal-shortcuts", {
       { name: "Buy one Tickspeed", keys: ["shift", "t"] },
       { name: "Buy max Tickspeed", keys: ["t"] },
       { name: "Max all", keys: ["m"] },
-      { name: "Sacrifice", keys: ["s"] },
+      { name: "Dimensional Sacrifice", keys: ["s"] },
       { name: "Dimension Boost", keys: ["d"] },
       { name: "Antimatter Galaxy", keys: ["g"] },
       { name: "Big Crunch", keys: ["c"] },

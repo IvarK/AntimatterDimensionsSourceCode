@@ -56,7 +56,7 @@ Vue.component("teresa-tab", {
       }
       this.time = now;
       this.rmStore = player.celestials.teresa.rmStore;
-      this.percentage = Notations.current.name === "Blind" ? "0%" : `${(Teresa.fill * 100).toFixed(2)}%`;
+      this.percentage = `${(Teresa.fill * 100).toFixed(2)}%`;
       this.rmMult = Teresa.rmMultiplier;
       this.hasReality = Teresa.has(TERESA_UNLOCKS.RUN);
       this.hasEPGen = Teresa.has(TERESA_UNLOCKS.EPGEN);
@@ -90,23 +90,23 @@ Vue.component("teresa-tab", {
         <div class="l-teresa-mechanic-container" v-if="hasReality">
           <div class="c-teresa-unlock c-teresa-run-button">
             <div :class="runButtonClassObject" @click="startRun()">Ϟ</div>
-            Start Teresa's Reality. Glyph TT generation is disabled and
-            you gain less IP and EP (x^{{format(0.55, 2, 2)}}).
+            Start Teresa's Reality. Glyph Time Theorem generation is disabled and
+            you gain less Infinity Points and Eternity Points (x^{{format(0.55, 2, 2)}}).
             <br><br>
             <div v-if="bestAM.gt(0)">
               Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
               <br><br>
-              You last did Teresa's Reality at {{ format(lastRM, 2) }} RM.
+              You last did Teresa's Reality at {{ format(lastRM, 2) }} Reality Machines.
             </div>
             <div v-else>
               You have not completed Teresa's Reality yet.
             </div>
           </div>
           <div class="c-teresa-unlock">
-            Teresa Reality reward: Glyph sacrifice power {{ formatX(runReward, 2, 2) }}
+            Teresa Reality reward: Glyph Sacrifice power {{ formatX(runReward, 2, 2) }}
           </div>
           <div class="c-teresa-unlock" v-if="hasEPGen">
-            You gain {{ formatPercents(0.01) }} of your peaked EP/min every second.
+            You gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute every second.
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">

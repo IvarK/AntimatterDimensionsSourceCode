@@ -230,6 +230,7 @@ class BlackHoleState {
   }
 
   updatePhase(activePeriod) {
+    if (this.isPermanent) return;
     // Prevents a flickering black hole if phase gets set too high
     // (shouldn't ever happen in practice). Also, more importantly,
     // should work even if activePeriods[i] is very large. To check:

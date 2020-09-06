@@ -5,6 +5,7 @@ Vue.component("ra-tab", {
     return {
       memoriesPerChunk: 0,
       showReality: false,
+      isRaCapped: false,
       totalLevels: 0,
       showRecollection: false,
       hasRecollection: false,
@@ -19,6 +20,7 @@ Vue.component("ra-tab", {
   methods: {
     update() {
       this.memoriesPerChunk = Ra.productionPerMemoryChunk();
+      this.isRaCapped = Ra.totalPetLevel === 100;
       this.totalLevels = Ra.totalPetLevel;
       this.showRecollection = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
       this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
@@ -43,7 +45,7 @@ Vue.component("ra-tab", {
       {
         pet: Ra.pets.teresa,
         scalingUpgradeVisible: () => Ra.totalCharges > 0,
-        scalingUpgradeText: () => `You can charge ${formatInt(Ra.totalCharges)} 
+        scalingUpgradeText: () => `You can Charge ${formatInt(Ra.totalCharges)}
           Infinity ${pluralize("Upgrade", Ra.totalCharges)}.`,
       },
       {
@@ -51,13 +53,13 @@ Vue.component("ra-tab", {
         scalingUpgradeVisible: () => AlchemyResources.all.filter(r => r.isUnlocked).length > 0,
         scalingUpgradeText: () => {
           const resources = AlchemyResources.all.filter(r => r.isUnlocked).length;
-          return `You have unlocked ${formatInt(resources)} alchemy ${pluralize("resource", resources)}.`;
+          return `You have unlocked ${formatInt(resources)} Alchemy ${pluralize("Resource", resources)}.`;
         },
       },
       {
         pet: Ra.pets.enslaved,
         scalingUpgradeVisible: () => Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME),
-        scalingUpgradeText: () => `Stored game time 
+        scalingUpgradeText: () => `Stored game time
           ${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)} and real time
           +${formatInt(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / (1000 * 3600))} hours`,
       },
@@ -66,7 +68,7 @@ Vue.component("ra-tab", {
         scalingUpgradeVisible: () => Math.clampMax(Math.floor(Ra.pets.v.level / 5), 4) > 0,
         scalingUpgradeText: level => {
           const triadCount = Math.clampMax(Math.floor(level / 5), 4);
-          return `You have unlocked ${formatInt(triadCount)} triad ${pluralize("study", triadCount, "studies")}.`;
+          return `You have unlocked ${formatInt(triadCount)} Triad ${pluralize("Study", triadCount, "Studies")}.`;
         },
       }
     ],
@@ -86,13 +88,13 @@ Vue.component("ra-tab", {
   },
   template: `
     <div class="l-ra-celestial-tab">
-      <div class="c-ra-memory-header">
-        Each memory chunk generates
-        {{ format(memoriesPerChunk, 2, 3) }} {{ "memory" | pluralize(memoriesPerChunk, "memories") }}
+      <div class="c-ra-memory-header" v-if=!isRaCapped>
+        Each Memory Chunk generates a base of
+        {{ format(memoriesPerChunk, 2, 3) }} {{ "Memory" | pluralize(memoriesPerChunk, "Memories") }}
         per second.
       </div>
-      <div>
-        Hold shift to see progress on your current level.
+      <div class="c-ra-memory-header" v-else>
+        All Memories have been returned.
       </div>
       <div>
         Mouse-over the icons below the bar to see descriptions of upgrades,
@@ -111,12 +113,12 @@ Vue.component("ra-tab", {
           You can't Dimension Boost, and the Tickspeed purchase multiplier is fixed at {{ formatX(1.1245, 0, 3) }}.
           <br>
           <br>
-          Inside of Ra's reality, some resources will generate memory chunks based on their amount.
+          Inside of Ra's reality, some resources will generate Memory Chunks based on their amount.
         </button>
-        <div v-if="showRecollection" class="c-ra-recollection-unlock">
+        <div v-if="showRecollection && !isRaCapped" class="c-ra-recollection-unlock">
           <h1 :style="petStyle">Recollection</h1>
           <span :style="petStyle">
-            Whichever celestial has recollection will get {{formatX(recollectionMult)}} memory chunk gain.
+            Whichever Celestial is has Recollection will get {{formatX(recollectionMult)}} Memory Chunk gain.
           </span>
           <div class="c-ra-recollection-unlock-inner" v-if="hasRecollection">
             <ra-pet-recollection-button

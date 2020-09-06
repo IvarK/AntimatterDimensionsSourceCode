@@ -531,7 +531,7 @@ Vue.component("celestial-navigation", {
       </feMerge>
     </filter>
   </defs>
-  <image x="-250" y="-350" height="1503" width="1503" href="images/celestial-navigation-bg.png" />
+  <image x="-250" y="-350" height="1503" width="1503" href="images/celestial-navigation-bg.webp" />
   <g v-for="(obj, index) in drawOrder" :key="index" :visibility="nodeVisibility(obj)">
     <component :is="obj.is"
                :complete="nodeState[obj.nodeId].complete"

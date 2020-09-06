@@ -64,9 +64,13 @@ Vue.component("v-tab", {
       player.reality.pp -= hex.reductionCost;
       const steps = hex.config.reductionStepSize ? hex.config.reductionStepSize : 1;
       player.celestials.v.goalReductionSteps[hex.id] += steps;
+      for (const unlock of VRunUnlocks.all) {
+        unlock.tryComplete();
+      }
     },
     reductionTooltip(hex) {
-      return `Spend ${format(hex.reductionCost, 2, 0)} PP to reduce goal by ${format(hex.config.perReductionStep)}`;
+      return `Spend ${format(hex.reductionCost, 2, 0)} Perk Points
+      to reduce goal by ${format(hex.config.perReductionStep)}`;
     }
   },
   computed: {
@@ -162,7 +166,9 @@ Vue.component("v-tab", {
                 <p class="o-v-unlock-goal-reduction" v-if="has(runMilestones[0]) && hex.isReduced">
                   Goal has been {{ mode(hex) }} by {{ reductionValue(hex) }}
                 </p>
-                <p class="o-v-unlock-amount">{{ hex.completions }}/{{hex.config.values.length}} done</p>
+                <p class="o-v-unlock-amount">
+                  {{ formatInt(hex.completions) }}/{{ formatInt(hex.config.values.length) }} done
+                </p>
                 <div v-if="showRecord(hex)">
                   <p class="o-v-unlock-record">
                     Best: {{ hex.config.formatRecord(runRecords[hex.id]) }}
@@ -187,7 +193,7 @@ Vue.component("v-tab", {
             <div v-else-if="hex.isRunButton" @click="startRun()" :class="runButtonClassObject">
               <b style="font-size: 1.5rem">Start V's Reality.</b>
               <br/>
-              All dimension multipliers, EP gain, IP gain, and Dilated Time gain per second
+              All dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second
               are square-rooted, and Replicanti interval is squared.
               <div class="c-v-run-button__line c-v-run-button__line--1"></div>
               <div class="c-v-run-button__line c-v-run-button__line--2"></div>
@@ -203,7 +209,8 @@ Vue.component("v-tab", {
           and re-entering the Reality.
         </div>
         <div>
-          You have {{ formatInt(totalUnlocks) }} V-achievements done. You gain 1 Space Theorem for each completion,
+          You have {{ formatInt(totalUnlocks) }} V-achievements done.
+          You gain {{ formatInt(1) }} Space Theorem for each completion,
           allowing you to purchase Time Studies which are normally locked.
         </div>
         <br>

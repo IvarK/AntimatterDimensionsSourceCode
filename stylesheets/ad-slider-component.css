@@ -139,7 +139,7 @@ SOFTWARE.
   position: absolute;
   transition: all 0s;
   will-change: transform;
-  z-index: 2;
+  z-index: 3;
 }
 
 .c-ad-slider__dot {

@@ -11,6 +11,7 @@ Vue.component("glyphs-tab", {
     hasAlchemy: false,
     sacrificeUnlocked: false,
     sacrificeDisplayed: false,
+    resetRealityDisplayed: false,
   }),
   computed: {
     showEnslavedHint() {
@@ -19,6 +20,7 @@ Vue.component("glyphs-tab", {
   },
   methods: {
     update() {
+      this.resetRealityDisplayed = player.realities > 0;
       this.showInstability = player.bestGlyphLevel > 800;
       this.instabilityThreshold = Glyphs.instabilityThreshold;
       this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;
@@ -53,14 +55,14 @@ Vue.component("glyphs-tab", {
         <glyph-peek />
         <br/>
         <reality-button />
-        <reset-reality-button />
+        <reset-reality-button v-if = "resetRealityDisplayed" />
         <div v-if="isInCelestialReality">
           <input type="checkbox"
             id="autoRestart"
             v-model="autoRestartCelestialRuns"
             :value="autoRestartCelestialRuns"
             @input="toggleAutoRestartCelestial()">
-          <label for="autoRestart">Repeat this celestial's Reality</label>
+          <label for="autoRestart">Repeat this Celestial's Reality</label>
         </div>
         <reality-amplify-button />
         <div v-if="showInstability">
@@ -96,7 +98,7 @@ Vue.component("glyphs-tab", {
                 <div class="c-glyph-info-button"
                   :class="glyphInfoClass(true)"
                   @click="setInfoState(true)">
-                    Glyph sacrifice totals
+                    Glyph Sacrifice totals
                 </div>
             </div>
             <sacrificed-glyphs v-if="sacrificeUnlocked && sacrificeDisplayed" />

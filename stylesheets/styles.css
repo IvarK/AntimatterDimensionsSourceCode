@@ -395,7 +395,8 @@ button:focus {
 
 .ttshop-container {
   padding: 0 0.5rem;
-  width: 55.5rem;
+  min-width: 60rem;
+  max-width: 80rem;
   display: flex;
   flex-direction: column;
   transition: all 0.25s ease-out;
@@ -662,15 +663,15 @@ button:focus {
 }
 
 [draggable] {
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    /* Required to make elements draggable in old WebKit */
-    -khtml-user-drag: element;
-    -webkit-user-drag: element;
-  }
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Required to make elements draggable in old WebKit */
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
 
 @keyframes a-existence-glow {
   0% { color: var(--color-text-inverted); text-shadow: 0.1rem 0.1rem 0.2rem var(--color-text); }
@@ -679,62 +680,58 @@ button:focus {
 }
 
 [ach-tooltip] {
-    position: relative;
+  position: relative;
 }
 
 [ach-tooltip]:before,
 [ach-tooltip]:after {
-    visibility: hidden;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
-    opacity: 0;
-    pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 [ach-tooltip]:before {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    margin-bottom: 5px;
-    margin-left: -85px;
-    padding: 7px;
-    width: 160px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    background-color: #000;
-    background-color: hsla(0, 0%, 5%, 0.9);
-    color: #fff;
-    content: attr(ach-tooltip);
-    text-align: center;
-    font-size: 14px;
-    line-height: 1.2;
-    transition-duration: .5s;
-    z-index: 3;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-bottom: 0.5rem;
+  margin-left: -8.5rem;
+  padding: 0.7rem;
+  width: 16rem;
+  border-radius: 0.3rem;
+  background-color: hsla(0, 0%, 5%, 0.9);
+  color: #fff;
+  content: attr(ach-tooltip);
+  text-align: center;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  transition-duration: 0.4s;
+  z-index: 3;
+}
+
+.t-dark-metro [ach-tooltip]:before {
+  border-radius: 0;
 }
 
 [ach-tooltip]:after {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -5px;
-    width: 0;
-    border-top: 5px solid #000;
-    border-top: 5px solid hsla(0, 0%, 5%, 0.9);
-    border-right: 5px solid transparent;
-    border-left: 5px solid transparent;
-    content: " ";
-    font-size: 0;
-    line-height: 0;
-    transition-duration: .5s;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -0.5rem;
+  width: 0;
+  border-top: 0.5rem solid hsla(0, 0%, 5%, 0.9);
+  border-right: 0.5rem solid transparent;
+  border-left: 0.5rem solid transparent;
+  content: " ";
+  font-size: 0;
+  line-height: 0;
+  transition-duration: 0.4s;
 }
 
 [ach-tooltip]:hover:before,
 [ach-tooltip]:hover:after {
-    visibility: visible;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
-    opacity: 1;
+  visibility: visible;
+  opacity: 1;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -1199,12 +1196,13 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--sacrifice {
   font-size: 1.2rem;
-  width: 32rem;
+  min-width: 32rem;
   margin-right: 0.8rem;
 }
 
 .o-primary-btn--sacrifice--large {
-  width: 38rem;
+  min-width: 38rem;
+  max-width: 48rem;
 }
 
 .o-primary-btn--buy-ad {
@@ -2341,6 +2339,8 @@ screen and (max-width: 480px) {
 
 .c-options-tab__shortcuts-link {
   cursor: pointer;
+  width: 21rem;
+  align-self: center;
 }
 
 .c-file-import-button {
@@ -2508,6 +2508,7 @@ screen and (max-width: 480px) {
 /*#region o-achievement*/
 
 .o-achievement {
+  position: relative;
   width: 10.6rem;
   height: 10.6rem;
   border-radius: 0.8rem;
@@ -2542,6 +2543,11 @@ screen and (max-width: 480px) {
   border-color: #127a20;
 }
 
+.o-achievement--waiting {
+  background-color: #d1d161;
+  border-color: #acac39;
+}
+
 .o-achievement--hidden {
   background-image: url("../images/achhidden.png");
   background-color: #555;
@@ -2558,6 +2564,178 @@ screen and (max-width: 480px) {
   }
 }
 
+.o-achievement:hover .o-achievement__tooltip {
+  opacity: 1;
+  bottom: 11rem;
+}
+
+.o-achievement:hover .o-achievement__tooltip:after {
+  border-top-width: 0.7rem;
+  margin-bottom: -0.7rem;
+}
+
+.o-achievement__tooltip {
+  opacity: 0;
+  transition-duration: 0.3s;
+  font-size: 1.4rem;
+  border: 0.1rem solid black;
+  border-radius: 0.8rem;
+  color: var(--color-text);
+  background: var(--color-base);
+  width: 20rem;
+  margin-left: -5rem;
+  padding: 0.4rem;
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  bottom: 10.2rem
+}
+
+.o-achievement__tooltip:after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  margin-left: -0.7rem;
+  margin-bottom: 0;
+  width: 0;
+  border-top: 0 solid black;
+  border-right: 0.7rem solid transparent;
+  border-left: 0.7rem solid transparent;
+  content: " ";
+  transition-duration: 0.3s;
+  z-index: 0;
+}
+
+.t-dark .o-achievement__tooltip,
+.t-dark-metro .o-achievement__tooltip {
+  border: 0.1rem solid var(--color-text);
+  background: #111111;
+}
+
+.t-dark .o-achievement__tooltip:after,
+.t-dark-metro .o-achievement__tooltip:after {
+  border-top-color: var(--color-text);
+}
+
+.t-metro .o-achievement__tooltip,
+.t-dark-metro .o-achievement__tooltip,
+.t-inverted-metro .o-achievement__tooltip,
+.t-s8 .o-achievement__tooltip {
+  border-radius: 0;
+  bottom: 10.4rem;
+}
+
+.t-metro .o-achievement:hover .o-achievement__tooltip,
+.t-dark-metro .o-achievement:hover .o-achievement__tooltip,
+.t-inverted-metro .o-achievement:hover .o-achievement__tooltip,
+.t-s8 .o-achievement:hover .o-achievement__tooltip {
+  bottom: 11.1rem;
+}
+
+.t-s6 .o-achievement__tooltip {
+  border: 0.1rem solid white;
+  background: black;
+}
+
+.t-s6 .o-achievement__tooltip:after {
+  border-top-color: white;
+}
+
+.o-achievement__tooltip__name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.6rem;
+}
+
+.o-achievement__tooltip__description {
+  margin-bottom: 0.4rem;
+}
+
+.o-achievement__tooltip__reward {
+  font-size: 1.3rem;
+  font-style: italic;
+}
+
+.o-achievement__indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 1rem;
+  color: black;
+  background: #5ac467;
+  border-left: 0.2rem solid #127a20;
+  border-top: 0.2rem solid #127a20;
+  border-top-left-radius: 0.8rem;
+  border-bottom-right-radius: 0.6rem;
+}
+
+.t-metro .o-achievement__indicator,
+.t-inverted-metro .o-achievement__indicator,
+.t-s8 .o-achievement__indicator {
+  background: #66bb6a;
+  border-color: #43a047;
+}
+
+.t-dark-metro .o-achievement__indicator {
+  background: #4caf50;
+  border-color: #388e3c;
+}
+
+.o-achievement__indicator--locked {
+  background: #a3a3a3;
+  border-color: var(--color-bad);
+}
+
+.t-metro .o-achievement__indicator--locked,
+.t-inverted-metro .o-achievement__indicator--locked,
+.t-s8 .o-achievement__indicator--locked  {
+  background: #a3a3a3;
+  border-color: var(--color-bad);
+}
+
+.t-dark-metro .o-achievement__indicator--locked {
+  background: #9e9e9e;
+  border-color: var(--color-bad);
+}
+
+.o-achievement__indicator--waiting {
+  background: #d1d161;
+  border-color: #acac39;
+}
+
+.t-metro .o-achievement__indicator--waiting,
+.t-inverted-metro .o-achievement__indicator--waiting,
+.t-s8 .o-achievement__indicator--waiting {
+  background-color: #ffee58;
+  border-color: #757575;
+}
+
+.t-dark-metro .o-achievement__indicator--waiting {
+  background: #b9b946;
+  border-color: #7d7d36;
+}
+
+.o-achievement__indicator--secret,
+.t-metro .o-achievement__indicator--secret,
+.t-dark-metro .o-achievement__indicator--secret,
+.t-inverted-metro .o-achievement__indicator--secret,
+.t-dark .o-achievement__indicator--secret,
+.t-s6 .o-achievement__indicator--secret,
+.t-s8 .o-achievement__indicator--secret {
+  background: #555;
+  border-color: black;
+}
+
+.t-metro .o-achievement__indicator,
+.t-dark-metro .o-achievement__indicator,
+.t-inverted-metro .o-achievement__indicator,
+.t-s8 .o-achievement__indicator {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
 /*#region themes*/
 
 /*#region t-dark*/
@@ -2571,7 +2749,7 @@ screen and (max-width: 480px) {
 /*#region t-dark-metro*/
 
 .t-dark-metro .o-achievement {
-  border-width: 1px;
+  border-width: 0.1rem;
 }
 
 .t-dark-metro .o-achievement--unlocked {
@@ -2583,6 +2761,11 @@ screen and (max-width: 480px) {
   background-color: #9e9e9e;
 }
 
+.t-dark-metro .o-achievement--waiting {
+  background-color: #b9b946;
+  border-color: #7d7d36;
+}
+
 /*#endregion t-dark-metro*/
 
 /*#region t-metro t-inverted-metro t-s8*/
@@ -2591,7 +2774,7 @@ screen and (max-width: 480px) {
 .t-dark-metro .o-achievement,
 .t-inverted-metro .o-achievement,
 .t-s8 .o-achievement {
-  border-width: 1px;
+  border-width: 0.1rem;
   border-radius: 0;
 }
 
@@ -2606,6 +2789,14 @@ screen and (max-width: 480px) {
 .t-inverted-metro .o-achievement--locked,
 .t-s8 .o-achievement--locked  {
   background-color: #9e9e9e;
+  border-color: var(--color-bad);
+}
+
+.t-metro .o-achievement--waiting,
+.t-inverted-metro .o-achievement--waiting,
+.t-s8 .o-achievement--waiting  {
+  background-color: #ffee58;
+  border-color: #757575;
 }
 
 /*#endregion t-metro t-dark-metro t-s8*/
@@ -2724,7 +2915,7 @@ screen and (max-width: 480px) {
 }
 
 .l-achievement-grid__cell {
-  margin: 0.5rem 0.8rem;
+  margin: 0.6rem 0.8rem;
 }
 
 .c-achievement-grid__row--completed {
@@ -2842,7 +3033,7 @@ screen and (max-width: 480px) {
 }
 
 .c-challenge-box--infinity {
-  height: 16rem;
+  height: 18rem;
   color: white;
   background-color: #181818;
 }
@@ -3710,14 +3901,14 @@ screen and (max-width: 480px) {
 /*#region o-autobuyer-btn*/
 
 .o-autobuyer-btn {
-  width: 16rem;
+  width: 17.5rem;
   height: 3.5rem;
   color: white;
   background: #1f1f1f;
   border: 0.1rem solid #ed85df;
-  font-family: Typewriter, serif;
+  font-family: Typewriter;
   font-weight: bold;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   border-radius: 0.4rem;
   margin-bottom: -0.1rem;
   transition-duration: 0.2s;
@@ -4130,6 +4321,7 @@ screen and (max-width: 480px) {
 .o-eternity-upgrade--unavailable {
   color: #181818;
   background-color: #5f5f5f;
+  cursor: default;
 }
 
 .o-eternity-upgrade--unavailable:hover {
@@ -4267,7 +4459,7 @@ screen and (max-width: 480px) {
 
 .o-eternity-milestone__reward {
   width: 25rem;
-  height: 6rem;
+  height: 8rem;
   color: black;
   font-weight: bold;
   border: 0.1rem solid var(--color-eternity);
@@ -5049,7 +5241,6 @@ b.c-modal-away-progress__black-hole {
 }
 
 .c-modal-options .o-primary-btn--option, .o-primary-btn--option-wide {
-  height: 100%;
   padding: 0.5rem;
   margin-bottom: 1rem;
 }
@@ -6376,10 +6567,12 @@ kbd {
 }
 
 .l-ra-bar-container {
-  margin: 1rem 0 3.5rem;
+  display: flex;
+  margin: 0 0 2rem;
   width: 100%;
-  height: 3rem;
-  flex-direction: row nowrap;
+  height: 4rem;
+  margin-top: 1rem;
+  margin-left: -0.2rem;
 }
 
 .l-ra-lvl-chevron {
@@ -6429,28 +6622,46 @@ kbd {
   justify-content: center;
 }
 
-.l-ra-exp-bar {
+.c-ra-exp-bar {
   position: relative;
-  border: 0.2rem solid white;
-  border-radius: 0.5rem;
-  width: 80%;
+  border: 0.2rem solid black;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  width: 100%;
   height: 5rem;
-  margin: auto;
-  margin-bottom: 2rem;
   z-index: 1;
 }
 
-.t-dark .l-ra-exp-bar,
-.t-dark-metro .l-ra-exp-bar,
-.t-s6 .l-ra-exp-bar {
-  border-color: white;
+.t-metro .c-ra-exp-bar,
+.t-dark-metro .c-ra-exp-bar,
+.t-inverted-metro .c-ra-exp-bar,
+.t-s8 .c-ra-exp-bar {
+  height: 5.1rem;
+  border-width: 0.1rem;
+  margin-left: 0.1rem;
 }
 
-.l-ra-exp-bar-inner {
-  position: relative;
-  z-index: -1;
+.c-ra-exp-bar-inner {
   height: 100%;
-  background-color: #35d035;
+}
+
+.c-ra-upgrade-bar {
+  display: flex;
+  justify-content: flex-end;
+  border: 0.2rem solid black;
+  height: 2.6rem;
+  width: 5rem;
+}
+
+.t-metro .c-ra-upgrade-bar,
+.t-dark-metro .c-ra-upgrade-bar,
+.t-inverted-metro .c-ra-upgrade-bar,
+.t-s8 .c-ra-upgrade-bar {
+  border-width: 0.1rem;
+}
+
+.c-ra-upgrade-bar__inner {
+  height: 100%;
 }
 
 .l-ra-pet-container {
@@ -6470,7 +6681,6 @@ kbd {
   align-items: center;
   justify-content: center;
   font-size: 2.3rem;
-  font-weight: bold;
   box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.7);
   width: 4rem;
   height: 4rem;
@@ -6479,6 +6689,7 @@ kbd {
   border: 0.1rem solid #111;
   margin: 0 0.3rem;
   user-select: none;
+  position: relative;
 }
 
 .t-metro .c-ra-upgrade-icon,
@@ -6501,6 +6712,7 @@ kbd {
 .c-ra-run-button {
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   height: 33rem;
   color: #9575cd;
@@ -6699,6 +6911,264 @@ kbd {
   align-items: center;
   position: relative;
 }
+
+.l-ra-pet-upgrade-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.l-ra-pet-upgrade {
+  display: flex;
+}
+
+.c-ra-pet-upgrade {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.6rem;
+  width: 2.5rem;
+  background: grey;
+  color: black;
+  border: .2rem solid black;
+  border-radius: 1rem;
+  font-size: 1.3rem;
+  transition-duration: 0.2s;
+  position: relative;
+  margin-right: -0.2rem;
+}
+
+.t-metro .c-ra-pet-upgrade,
+.t-dark-metro .c-ra-pet-upgrade,
+.t-inverted-metro .c-ra-pet-upgrade,
+.t-s8 .c-ra-pet-upgrade {
+  border-radius: 0;
+  border-width: 0.1rem;
+  margin-right: -0.1rem;
+}
+
+.c-ra-pet-upgrade__right {
+  margin-left: -0.2rem;
+}
+
+.t-metro .c-ra-pet-upgrade__right,
+.t-dark-metro .c-ra-pet-upgrade__right,
+.t-inverted-metro .c-ra-pet-upgrade__right,
+.t-s8 .c-ra-pet-upgrade__right {
+  margin-left: -0.1rem;
+}
+
+.c-ra-pet-upgrade__top {
+  margin-bottom: -0.2rem;
+}
+
+.t-metro .c-ra-pet-upgrade__top,
+.t-dark-metro .c-ra-pet-upgrade__top,
+.t-inverted-metro .c-ra-pet-upgrade__top,
+.t-s8 .c-ra-pet-upgrade__top {
+  margin-bottom: -0.1rem;
+}
+
+.c-ra-pet-upgrade__tooltip {
+  opacity: 0;
+  transition-duration: 0.3s;
+  font-size: 1.4rem;
+  border: 0.1rem solid black;
+  border-radius: 0.8rem;
+  color: white;
+  background: #222;
+  width: 23rem;
+  margin-left: 0;
+  padding: 0.4rem;
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  bottom: 100%;
+  box-shadow: 0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.7);
+}
+
+.t-metro .c-ra-pet-upgrade__tooltip,
+.t-dark-metro .c-ra-pet-upgrade__tooltip,
+.t-inverted-metro .c-ra-pet-upgrade__tooltip,
+.t-s8 .c-ra-pet-upgrade__tooltip {
+  border-radius: 0;
+}
+
+.c-ra-pet-upgrade__tooltip:after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  margin-left: -0.7rem;
+  margin-bottom: 0;
+  width: 0;
+  border-top: 0 solid black;
+  border-right: 0.7rem solid transparent;
+  border-left: 0.7rem solid transparent;
+  content: " ";
+  transition-duration: 0.3s;
+  z-index: 0;
+}
+
+.c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip {
+  opacity: 1;
+  bottom: calc(100% + 0.8rem);
+}
+
+.t-metro .c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip,
+.t-dark-metro .c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip,
+.t-inverted-metro .c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip,
+.t-s8 .c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip {
+  opacity: 1;
+  bottom: calc(100% + 0.7rem);
+}
+
+.c-ra-pet-upgrade:hover .c-ra-pet-upgrade__tooltip:after {
+  border-top-width: 0.7rem;
+  margin-bottom: -0.7rem;
+}
+
+.c-ra-level-up-btn:hover .c-ra-pet-upgrade__tooltip {
+  opacity: 1;
+  bottom: calc(100% + 0.8rem);
+}
+
+.t-metro .c-ra-level-up-btn:hover .c-ra-pet-upgrade__tooltip,
+.t-dark-metro .c-ra-level-up-btn:hover .c-ra-pet-upgrade__tooltip,
+.t-inverted-metro .c-ra-level-up-btn:hover .c-ra-pet-upgrade__tooltip,
+.t-s8 .c-ra-level-up-btn:hover .c-ra-pet-upgrade__tooltip {
+  opacity: 1;
+  bottom: calc(100% + 0.7rem);
+}
+
+.c-ra-level-up-btn:hover .c-ra-pet-upgrade__tooltip:after {
+  border-top-width: 0.7rem;
+  margin-bottom: -0.7rem;
+}
+
+.c-ra-upgrade-icon:hover .c-ra-pet-upgrade__tooltip {
+  opacity: 1;
+  bottom: calc(100% + 0.7rem);
+}
+
+.c-ra-upgrade-icon:hover .c-ra-pet-upgrade__tooltip:after {
+  border-top-width: 0.7rem;
+  margin-bottom: -0.7rem;
+}
+
+.c-ra-upgrade-icon--teresa .c-ra-pet-upgrade__tooltip {
+  color: #8596ea;
+}
+
+.c-ra-upgrade-icon--effarig .c-ra-pet-upgrade__tooltip {
+  color: #ea8585;
+}
+
+.c-ra-upgrade-icon--enslaved .c-ra-pet-upgrade__tooltip{
+  color: #f1aa7f;
+}
+
+.c-ra-upgrade-icon--v .c-ra-pet-upgrade__tooltip {
+  color: #ead584;
+}
+
+.c-ra-upgrade-icon--inactive .c-ra-pet-upgrade__tooltip {
+  color: #888;
+}
+
+.c-ra-pet-upgrade__tooltip__name {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.c-ra-pet-upgrade__tooltip__description {
+  font-size: 1.3rem;
+  margin-bottom: 0.3rem;
+}
+
+.c-ra-upgrade-icon .c-ra-pet-upgrade__tooltip__name {
+  font-size: 1.8rem;
+}
+
+.c-ra-pet-upgrade__tooltip__footer {
+  font-size: 1.2rem;
+}
+
+.c-ra-level-up-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 5rem;
+  width: 3rem;
+  background: grey;
+  color: black;
+  border: 0.2rem solid black;
+  border-left: none;
+  border-radius: 1rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  font-size: 2rem;
+  transition-duration: 0.2s;
+  position: relative;
+}
+
+.t-metro .c-ra-level-up-btn,
+.t-dark-metro .c-ra-level-up-btn,
+.t-inverted-metro .c-ra-level-up-btn,
+.t-s8 .c-ra-level-up-btn {
+  height: 5.1rem;
+  border-radius: 0;
+  border-width: 0.1rem;
+}
+
+.c-ra-pet-btn--available {
+  cursor: pointer;
+  background: #222;
+}
+
+.c-ra-pet-btn--available:hover {
+  color: black;
+}
+
+.c-ra-pet-btn--teresa {
+  color: #8596ea;
+}
+
+.c-ra-pet-btn--teresa:hover {
+  background: #8596ea;
+}
+
+.c-ra-pet-btn--effarig {
+  color: #ea8585;
+}
+
+.c-ra-pet-btn--effarig:hover {
+  background: #ea8585;
+}
+
+.c-ra-pet-btn--enslaved {
+  color: #f1aa7f;
+}
+
+.c-ra-pet-btn--enslaved:hover {
+  background: #f1aa7f;
+}
+
+.c-ra-pet-btn--v {
+  color: #ead584;
+}
+
+.c-ra-pet-btn--v:hover {
+  background: #ead584;
+}
+
+.l-ra-pet-middle-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem 0;
+  height: 4rem;
+  padding: 0 1rem;
+}
+
 
 .c-alchemy-resource-info {
   display: flex;
@@ -7215,6 +7685,7 @@ kbd {
 .l-singularity-milestone-modal-container-outer {
   height: 50rem;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .l-singularity-milestone-modal-container-inner {

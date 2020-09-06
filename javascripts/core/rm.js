@@ -134,7 +134,7 @@ const AutoGlyphProcessor = {
         else GlyphSacrificeHandler.refineGlyph(glyph);
         break;
       default:
-        throw new Error("Unknown auto glyph sacrifice mode");
+        throw new Error("Unknown auto Glyph Sacrifice mode");
     }
   }
 };
@@ -743,8 +743,8 @@ const Glyphs = {
       // eslint-disable-next-line prefer-template
       !confirm("This will not give you any benefit" +
         (RealityUpgrade(19).isAvailableForPurchase ? "" : " and may reduce the number of glyphs in your inventory. " +
-        "It may be hard to get more glyphs. The Reality upgrade to unlock glyph sacrifice requires 30 glyphs") +
-        ". Also, when you unlock glyph sacrifice, you will not be able to later sacrifice glyphs you delete now. " +
+        "It may be hard to get more glyphs. The Reality upgrade to unlock Glyph Sacrifice requires 30 glyphs") +
+        ". Also, when you unlock Glyph Sacrifice, you will not be able to later sacrifice glyphs you delete now. " +
         "Are you sure you want to do this?")) {
       return;
     }

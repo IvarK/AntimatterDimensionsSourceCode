@@ -9,7 +9,7 @@ const BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation
 const ALCHEMY_BASIC_GLYPH_TYPES = ["power", "infinity", "replication", "time", "dilation", "effarig"];
 const GLYPH_SYMBOLS = { power: "Ω", infinity: "∞", replication: "Ξ", time: "Δ", dilation: "Ψ",
   effarig: "Ϙ", reality: "Ϟ", cursed: "⸸", companion: "♥" };
-const CANCER_GLYPH_SYMBOLS = { power: "⚡", infinity: "8", replication: "⚤", time: "🕟", dilation: "☎", 
+const CANCER_GLYPH_SYMBOLS = { power: "⚡", infinity: "8", replication: "⚤", time: "🕟", dilation: "☎",
   effarig: "🦒", reality: "⛧", cursed: "☠", companion: "³" };
 
 const GlyphCombiner = Object.freeze({
@@ -224,7 +224,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 2,
     isGenerated: true,
     glyphTypes: ["time"],
-    singleDesc: "Multiply eternitied stat gain by {value}",
+    singleDesc: "Multiply Eternitied stat gain by {value}",
     totalDesc: "Eternitied stat gain ×{value}",
     genericDesc: "Eternitied stat gain multiplier",
     effect: (level, strength) => Math.pow((strength + 3) * level, 0.9) *
@@ -239,14 +239,14 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     glyphTypes: ["time"],
     singleDesc: () => (GlyphAlteration.isAdded("time")
-      ? "EP gain ×{value} [and ^]{value2}"
-      : "Multiply EP gain by {value}"),
+      ? "Eternity Point gain ×{value} [and ^]{value2}"
+      : "Multiply Eternity Point gain by {value}"),
     totalDesc: () => (GlyphAlteration.isAdded("time")
-      ? "EP gain ×{value} and ^{value2}"
-      : "EP gain ×{value}"),
+      ? "Eternity Point gain ×{value} and ^{value2}"
+      : "Eterinty Point gain ×{value}"),
     genericDesc: () => (GlyphAlteration.isAdded("time")
-      ? "EP gain multiplier and power"
-      : "EP gain multiplier"),
+      ? "Eternity Point gain multiplier and power"
+      : "Eternity Point gain multiplier"),
     effect: (level, strength) => Math.pow(level * strength, 3) * 100,
     formatEffect: x => format(x, 2, 3),
     combine: GlyphCombiner.multiply,
@@ -260,7 +260,7 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     glyphTypes: ["dilation"],
     singleDesc: "Multiply Dilated Time gain by {value}",
-    totalDesc: "DT gain ×{value}",
+    totalDesc: "Dilated Time gain ×{value}",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("dilation")
       ? Decimal.pow(1.005, level).times(15)
       : Decimal.pow(level * strength, 1.5).times(2)),
@@ -273,8 +273,8 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 5,
     isGenerated: true,
     glyphTypes: ["dilation"],
-    singleDesc: "Free galaxy threshold multiplier ×{value}",
-    genericDesc: "Free galaxy cost multiplier",
+    singleDesc: "Tachyon Galaxy threshold multiplier ×{value}",
+    genericDesc: "Tachyon Galaxy cost multiplier",
     effect: (level, strength) => 1 - Math.pow(level, 0.17) * Math.pow(strength, 0.35) / 100 -
       GlyphAlteration.sacrificeBoost("dilation") / 50,
     formatEffect: x => format(x, 3, 3),
@@ -293,14 +293,14 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     glyphTypes: ["dilation"],
     singleDesc: () => (GlyphAlteration.isAdded("dilation")
-      ? "Generates {value} TT/hour [and\nmultiplies TT generation by] {value2}"
-      : "Generates {value} TT per hour"),
+      ? "Generates {value} Time Theorems/hour [and\nmultiplies Time Theorem generation by] {value2}"
+      : "Generates {value} Time Theorems per hour"),
     totalDesc: () => (GlyphAlteration.isAdded("dilation")
-      ? "Generating {value} TT/hour and TT generation x{value2}"
-      : "Generating {value} TT per hour"),
+      ? "Generating {value} Time Theorems/hour and Time Theorem generation x{value2}"
+      : "Generating {value} Time Theorems per hour"),
     genericDesc: () => (GlyphAlteration.isAdded("dilation")
-      ? "TT generation and multiplier"
-      : "TT generation"),
+      ? "Time Theorem generation and multiplier"
+      : "Time Theorem generation"),
     effect: (level, strength) => Math.pow(level * strength, 0.5) / 10000,
     /** @type {function(number): string} */
     formatEffect: x => format(3600 * x, 2, 2),
@@ -326,7 +326,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 8,
     isGenerated: true,
     glyphTypes: ["replication"],
-    singleDesc: "Multiply replication speed by {value}",
+    singleDesc: "Multiply Replication speed by {value}",
     totalDesc: "Replication speed ×{value}",
     genericDesc: "Replication speed multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("replication")
@@ -356,14 +356,14 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     glyphTypes: ["replication"],
     singleDesc: () => (GlyphAlteration.isAdded("replication")
-      ? "Multiply DT [and replicanti speed] by \nlog₁₀(replicanti)×{value}"
-      : "Multiply DT gain by \nlog₁₀(replicanti)×{value}"),
+      ? "Multiply Dilated Time [and Replicanti speed] by \nlog₁₀(replicanti)×{value}"
+      : "Multiply Dilated Time gain by \nlog₁₀(replicanti)×{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("replication")
-      ? "DT gain and replication speed ×(log₁₀(replicanti)×{value})"
-      : "DT gain ×(log₁₀(replicanti)×{value})"),
+      ? "Dilated Time gain and Replication speed ×(log₁₀(replicanti)×{value})"
+      : "Dilated Time gain ×(log₁₀(replicanti)×{value})"),
     genericDesc: () => (GlyphAlteration.isAdded("replication")
-      ? "DT+replicanti mult (log₁₀(replicanti))"
-      : "DT gain multiplier (log₁₀(replicanti))"),
+      ? "Dilated Time+Replicanti mult (log₁₀(replicanti))"
+      : "Dilated Time gain multiplier (log₁₀(replicanti))"),
     effect: (level, strength) => 0.0003 * Math.pow(level, 0.3) * Math.pow(strength, 0.65),
     formatEffect: x => format(x, 5, 5),
     formatSingleEffect: x => format(x, 5, 5),
@@ -418,11 +418,11 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 13,
     isGenerated: true,
     glyphTypes: ["infinity"],
-    singleDesc: () => `Infinity power conversion rate: \n^${formatInt(7)}
+    singleDesc: () => `Infinity Power conversion rate: \n^${formatInt(7)}
       ➜ ^(${formatInt(7)} + {value})`,
-    totalDesc: () => `Infinity power conversion rate: ^${formatInt(7)}
+    totalDesc: () => `Infinity Power conversion rate: ^${formatInt(7)}
       ➜ ^(${formatInt(7)} + {value})`,
-    genericDesc: "Infinity power conversion rate",
+    genericDesc: "Infinity Power conversion rate",
     effect: (level, strength) => Math.pow(level, 0.2) * Math.pow(strength, 0.4) * 0.04,
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.add,
@@ -432,14 +432,14 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     glyphTypes: ["infinity"],
     singleDesc: () => (GlyphAlteration.isAdded("infinity")
-      ? "IP gain ×{value} [and ^]{value2}"
-      : "Multiply IP gain by {value}"),
+      ? "Infinity Point gain ×{value} [and ^]{value2}"
+      : "Multiply Infinity Point gain by {value}"),
     totalDesc: () => (GlyphAlteration.isAdded("infinity")
-      ? "IP gain ×{value} and ^{value2}"
-      : "IP gain ×{value}"),
+      ? "Infinity Point gain ×{value} and ^{value2}"
+      : "Infinity Point gain ×{value}"),
     genericDesc: () => (GlyphAlteration.isAdded("infinity")
-      ? "IP gain multiplier and power"
-      : "IP gain multiplier"),
+      ? "Infinity Point gain multiplier and power"
+      : "Infinity Point gain multiplier"),
     effect: (level, strength) => Math.pow(level * (strength + 1), 6) * 10000,
     formatEffect: x => format(x, 2, 3),
     combine: GlyphCombiner.multiply,
@@ -473,10 +473,10 @@ GameDatabase.reality.glyphEffects = [
       ? "Antimatter Dimension power +{value}\n[and Antimatter Galaxy cost ×]{value2}"
       : "Antimatter Dimension power +{value}"),
     totalDesc: () => (GlyphAlteration.isAdded("power")
-      ? "AD multipliers ^{value} and galaxy cost x{value2}"
+      ? "Antimatter Dimension multipliers ^{value} and Antimatter Galaxy cost x{value2}"
       : "Antimatter Dimension multipliers ^{value}"),
     genericDesc: () => (GlyphAlteration.isAdded("power")
-      ? "AD multipliers ^x and galaxy cost multiplier"
+      ? "Antimatter Dimensions multipliers ^x and Antimatter Galaxy cost multiplier"
       : "Antimatter Dimension multipliers ^x"),
     effect: (level, strength) => 1.015 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75,
     formatEffect: x => format(x, 3, 3),
@@ -554,8 +554,8 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 22,
     isGenerated: true,
     glyphTypes: ["effarig"],
-    singleDesc: "Glyph instability starting level +{value}",
-    genericDesc: "Glyph instability delay",
+    singleDesc: "Glyph Instability starting level +{value}",
+    genericDesc: "Glyph Instability delay",
     effect: (level, strength) => Math.floor(10 * Math.pow(level * strength, 0.5)),
     formatEffect: x => formatInt(x),
     combine: GlyphCombiner.add,
@@ -583,10 +583,10 @@ GameDatabase.reality.glyphEffects = [
       ? `Buy ${formatInt(10)} multiplier ^{value} [and\nDimension Boost multiplier ^]{value2}`
       : `Bonus from buying ${formatInt(10)} Dimensions ^{value}`),
     totalDesc: () => (GlyphAlteration.isAdded("effarig")
-      ? `Multiplier from "Buy ${formatInt(10)}" ^{value} and dimboosts ^{value2}`
+      ? `Multiplier from "Buy ${formatInt(10)}" ^{value} and Dimension Boosts ^{value2}`
       : `Multiplier from "Buy ${formatInt(10)}" ^{value}`),
     genericDesc: () => (GlyphAlteration.isAdded("effarig")
-      ? `"Buy ${formatInt(10)}" and dimboost multipliers ^x`
+      ? `"Buy ${formatInt(10)}" and Dimension Boost multipliers ^x`
       : `"Buy ${formatInt(10)}" multiplier ^x`),
     effect: (level, strength) => 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4),
     formatEffect: x => format(x, 2, 2),
@@ -623,9 +623,9 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: true,
     // This gets explicitly added to time glyphs elsewhere (once unlocked)
     glyphTypes: [],
-    singleDesc: () => `Time shard power +{value}`,
-    totalDesc: "Time shard gain ^{value}",
-    genericDesc: "Time shards ^x",
+    singleDesc: () => `Time Shard power +{value}`,
+    totalDesc: "Time Shard gain ^{value}",
+    genericDesc: "Time Shards ^x",
     effect: (level, strength) => 1 + (strength / 3.5) * Math.pow(level, 0.35) / 400,
     formatEffect: x => format(x, 3, 3),
     formatSingleEffect: x => format(x - 1, 3, 3),
@@ -667,8 +667,8 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 3,
     isGenerated: false,
     glyphTypes: ["cursed"],
-    singleDesc: "Divide EP gain by {value}",
-    totalDesc: "EP gain / {value}",
+    singleDesc: "Divide Eternity Point gain by {value}",
+    totalDesc: "Eternity Point gain / {value}",
     // Divides e666.6 per glyph
     effect: (level, strength) => Decimal.pow10(-level / 10 * (strength / 3.5)),
     formatEffect: x => format(x.reciprocal()),
@@ -708,11 +708,11 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 7,
     isGenerated: false,
     glyphTypes: ["reality"],
-    singleDesc: () => `DT scaling for next glyph level: \n^${format(1.3, 1, 1)}
+    singleDesc: () => `Dilated Time scaling for next glyph level: \n^${format(1.3, 1, 1)}
       ➜ ^(${format(1.3, 1, 1)} + {value})`,
-    totalDesc: () => `DT scaling for next glyph level: ^${format(1.3, 1, 1)}
+    totalDesc: () => `Dilated Time scaling for next glyph level: ^${format(1.3, 1, 1)}
       ➜ ^(${format(1.3, 1, 1)} + {value})`,
-    genericDesc: "DT scaling for glyph level",
+    genericDesc: "Dilated Time scaling for glyph level",
     // You can only get this effect on level 25000 reality glyphs anyway, might as well make it look nice
     effect: () => 0.15,
     formatEffect: x => format(x, 2, 2),
@@ -733,7 +733,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 9,
     isGenerated: false,
     glyphTypes: ["companion"],
-    singleDesc: "Thanks for your dedication for the game! You reached {value} EP on your first Reality.",
+    singleDesc: "Thanks for your dedication for the game! You reached {value} Eternity Points on your first Reality.",
     totalDesc: () => (Enslaved.isRunning ? "Help me" : "Yay!"),
     // The EP value for this (and the next effect) are entirely encoded in rarity, but level needs to be present to
     // make sure the proper parameter is being used. The actual glyph level shouldn't do anything.
@@ -746,7 +746,7 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 10,
     isGenerated: false,
     glyphTypes: ["companion"],
-    singleDesc: "(Due to scaling changes from before the Reality update, this was reduced to {value} EP" +
+    singleDesc: "(Due to scaling changes from before the Reality update, this was reduced to {value} Eternity Points" +
       " for calculating Reality Machines gained)",
     totalDesc: " ",
     // eslint-disable-next-line no-unused-vars

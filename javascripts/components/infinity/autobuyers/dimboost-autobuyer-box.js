@@ -30,7 +30,7 @@ Vue.component("dimboost-autobuyer-box", {
         <div class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text" @click="limitDimBoosts = !limitDimBoosts" 
         style="margin-top: 1.2rem;">
           <input type="checkbox" :checked="limitDimBoosts"/>
-          <span>Limit dimboosts to:</span>
+          <span>Limit Dimension Boosts to:</span>
         </div>
         <autobuyer-input
           :autobuyer="autobuyer"
@@ -40,7 +40,7 @@ Vue.component("dimboost-autobuyer-box", {
       </template>
       <template :slot=" isBuyMaxUnlocked ? 'prioritySlot' : 'toggleSlot' ">
         <div class="c-autobuyer-box__small-text" style="height: 3rem;">
-          Antimatter Galaxies required to always DimBoost,
+          Antimatter Galaxies required to always Dimension Boost,
           ignoring the limit:
         </div>
         <autobuyer-input

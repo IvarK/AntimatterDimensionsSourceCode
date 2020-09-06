@@ -6,7 +6,8 @@ Vue.component("normal-achievement-row", {
   },
   data() {
     return {
-      isCompleted: false
+      isCompleted: false,
+      isHidden: false
     };
   },
   computed: {
@@ -20,10 +21,11 @@ Vue.component("normal-achievement-row", {
   methods: {
     update() {
       this.isCompleted = this.row.every(a => a.isUnlocked);
+      this.isHidden = this.isCompleted && player.options.hideCompletedAchievementRows;
     }
   },
   template:
-    `<div :class="classObject">
+    `<div v-if="!isHidden" :class="classObject">
       <normal-achievement
         v-for="(achievement, i) in row"
         :key="i"

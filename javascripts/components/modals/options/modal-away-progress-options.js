@@ -71,8 +71,9 @@ Vue.component("modal-away-progress-options", {
   },
   methods: {
     update() {
-      this.replicantiUnlocked = PlayerProgress.replicantiUnlocked();
-      this.dilationUnlocked = PlayerProgress.dilationUnlocked();
+      this.replicantiUnlocked = PlayerProgress.replicantiUnlocked() || PlayerProgress.realityUnlocked() ||
+      PlayerProgress.eternityUnlocked();
+      this.dilationUnlocked = PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked();
       this.raUnlocked = V.has(V_UNLOCKS.RA_UNLOCK);
       this.laitelaUnlocked = Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK);
       this.blackHoleUnlocked = BlackHoles.list[0].isUnlocked;

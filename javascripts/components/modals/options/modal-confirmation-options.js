@@ -71,7 +71,7 @@ Vue.component("modal-confirmation-options", {
       <on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:"/>
       <on-off-button v-if="realityUnlocked" v-model="harshAutoClean" text="Harsh auto clean:"/>
       <on-off-button v-if="realityUnlocked" v-model="glyphReplace" text="Glyph replace:"/>
-      <on-off-button v-if="glyphSacrificeUnlocked" v-model="glyphSacrifice" text="Glyph sacrifice:"/>
+      <on-off-button v-if="glyphSacrificeUnlocked" v-model="glyphSacrifice" text="Glyph Sacrifice:"/>
       <on-off-button v-if="glyphUndoUnlocked" v-model="glyphUndo" text="Glyph undo:"/>
     </modal-options>`
 });

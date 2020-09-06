@@ -12,7 +12,7 @@ const GlyphSelection = {
   },
 
   get choiceCount() {
-    return Effects.max(1, Perk.glyphChoice4) *
+    return Effects.max(1, Perk.firstPerk) *
       (Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX) ? 2 : 1);
   },
 

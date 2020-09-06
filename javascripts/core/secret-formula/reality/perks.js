@@ -11,12 +11,13 @@ const PERK_FAMILY = {
 };
 
 GameDatabase.reality.perks = {
-  glyphChoice4: {
+  firstPerk: {
     id: 0,
-    label: "GC4",
+    label: "START",
     family: PERK_FAMILY.REALITY,
     get description() {
-      return `You can now choose from ${formatInt(4)} different glyphs on Reality.`;
+      return `Remove the ${format(5e9)} Time Theorems and ${format(13)} rows of achevements requirements from
+      the Reality Time Study, and allow you to choose from ${formatInt(4)} different glyphs on Reality`;
     },
     effect: 4,
   },
@@ -454,7 +455,7 @@ GameDatabase.reality.perkConnections = (function() {
   const p = GameDatabase.reality.perks;
   // First item is the start, other items are the ends
   const groups = [
-    [p.glyphChoice4, p.achievementGroup1, p.startAM1, p.autounlockEU1, p.bypassEC5Lock],
+    [p.firstPerk, p.achievementGroup1, p.startAM1, p.autounlockEU1, p.bypassEC5Lock],
     [p.startAM1, p.startAM2, p.startIP1],
     [p.startAM2, p.startEP1, p.dimboostNonReset],
     [p.startIP1, p.startIP2, p.startEP1, p.autobuyerFasterID],

@@ -40,7 +40,7 @@ class PerkState extends SetPurchasableMechanicState {
 const Perk = (function() {
   const db = GameDatabase.reality.perks;
   return {
-    glyphChoice4: new PerkState(db.glyphChoice4),
+    firstPerk: new PerkState(db.firstPerk),
     startAM1: new PerkState(db.startAM1),
     startAM2: new PerkState(db.startAM2),
     startIP1: new PerkState(db.startIP1),

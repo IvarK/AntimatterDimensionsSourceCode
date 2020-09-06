@@ -272,7 +272,7 @@ dev.togglePerformanceStats = function() {
 // Buys all perks, will end up buying semi-randomly if not enough pp
 dev.buyAllPerks = function() {
   const visited = [];
-  const toVisit = [Perk.glyphChoice4];
+  const toVisit = [Perk.firstPerk];
   while (toVisit.length > 0) {
     if (player.reality.pp < 1) break;
     const perk = toVisit.shift();

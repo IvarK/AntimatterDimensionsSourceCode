@@ -158,7 +158,7 @@ Vue.component("v-tab", {
           You have {{ format(pp, 2, 0) }} {{ "Perk Point" | pluralize(pp) }}.
         </div>
         <div class="l-v-unlocks-container">
-          <li v-for="hex in hexGrid" :style= "[hex.isRunButton ? {} : {zIndex: -1}]">
+          <li v-for="hex in hexGrid" :style= "[hex.isRunButton ? {zIndex: 1} : {zIndex: 0}]">
             <div v-if="hex.config"
               class="l-v-hexagon c-v-unlock"
               :class="{ 'c-v-unlock-completed': hex.completions === hex.config.values.length }">

@@ -351,6 +351,10 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
       factor = Math.pow(factor, nerfModifier);
     }
   }
+  
+  // 1e-300 is now possible with max inverted BH, going below it would be possible with
+  // an effarig glyph.
+  factor = Math.clamp(factor, 1e-300, 1e300);
 
   // Dev speedup should always be active
   if (tempSpeedupToggle) {

@@ -50,6 +50,8 @@ class AlchemyResourceState extends GameMechanicState {
   }
 
   get effectValue() {
+    // Disable Exponential alchemy effect in V reality.
+    if (V.isRunning && AlchemyResource.exponential.id === 14) return 0;
     return this.config.effect(this.amount);
   }
 

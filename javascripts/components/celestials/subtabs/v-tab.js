@@ -16,7 +16,8 @@ Vue.component("v-tab", {
       runRecords: [],
       runGlyphs: [],
       isFlipped: false,
-      isRunning: false
+      isRunning: false,
+      hasAlchemy: false
     };
   },
   methods: {
@@ -35,6 +36,7 @@ Vue.component("v-tab", {
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
       this.isRunning = V.isRunning;
+      this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     },
     startRun() {
       if (!resetReality()) return;
@@ -192,8 +194,11 @@ Vue.component("v-tab", {
             <div v-else-if="hex.isRunButton" @click="startRun()" :class="runButtonClassObject">
               <b style="font-size: 1.5rem">Start V's Reality.</b>
               <br/>
-              All dimension multipliers, EP gain, IP gain, and Dilated Time gain per second
-              are square-rooted, and Replicanti interval is squared.
+              <div :style="{ 'font-size': hasAlchemy ? '1.1rem' : '' }">
+                All dimension multipliers, EP gain, IP gain, and Dilated Time gain per second
+                are square-rooted, and Replicanti interval is squared.
+                <span v-if="hasAlchemy">Exponential Glyph Alchemy effect is disabled.</span>
+              </div>
               <div class="c-v-run-button__line c-v-run-button__line--1"></div>
               <div class="c-v-run-button__line c-v-run-button__line--2"></div>
               <div class="c-v-run-button__line c-v-run-button__line--3"></div>

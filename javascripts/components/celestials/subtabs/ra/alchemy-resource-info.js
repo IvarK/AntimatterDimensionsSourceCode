@@ -36,7 +36,7 @@ Vue.component("alchemy-resource-info", {
     effectConfig() {
       const resource = this.resource;
       return {
-        effect: () => resource.config.effect(resource.amount),
+        effect: () => resource.effectValue,
         formatEffect: resource.config.formatEffect
       };
     },

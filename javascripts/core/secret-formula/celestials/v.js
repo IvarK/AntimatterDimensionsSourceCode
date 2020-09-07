@@ -103,7 +103,7 @@ GameDatabase.celestials.v = {
           <i class="fas fa-question-circle"></i>
         </div>`,
       // This achievement has internally negated values since the check is always greater than
-      values: [2, 4, 6, 8, 10],
+      values: [1, 4, 7, 10, 13],
       condition: () => V.isRunning && TimeStudy.reality.isBought,
       currentValue: () => -player.celestials.v.maxGlyphsThisRun,
       formatRecord: x => formatInt(-x),
@@ -115,11 +115,13 @@ GameDatabase.celestials.v = {
     {
       id: 7,
       name: "Post-destination",
-      description: value => `Get ${formatInt(200000)} Time Theorems with a /${format(Decimal.pow10(value), 2, 2)}
+      description: value => `Get ${formatInt(400000)} Time Theorems with a /${format(Decimal.pow10(value), 2, 2)}
         Black Hole or slower, without discharging or entering EC12.`,
-      values: [50, 100, 150, 200, 250],
+      values: [100, 150, 200, 250, 300],
       condition: () => V.isRunning,
-      currentValue: () => (player.timestudy.theorem.toNumber() > 200000
+      currentValue: () => (
+        // Dirty hack I know lmao
+        player.timestudy.theorem.toNumber() > 400000
         ? -Math.log10(player.minNegativeBlackHoleThisReality)
         : 0),
       formatRecord: x => `${formatInt(1)} / ${format(Math.pow(10, x))}`,
@@ -134,7 +136,7 @@ GameDatabase.celestials.v = {
       id: 8,
       name: "Shutter Glyph",
       description: value => `Reach a glyph of level ${formatInt(value)}.`,
-      values: [6000, 6500, 7000, 7500, 8000],
+      values: [6500, 7000, 8000, 9000, 10000],
       condition: () => V.isRunning,
       currentValue: () => gainedGlyphLevel().actualLevel,
       formatRecord: x => formatInt(x),

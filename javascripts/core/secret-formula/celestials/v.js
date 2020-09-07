@@ -115,11 +115,13 @@ GameDatabase.celestials.v = {
     {
       id: 7,
       name: "Post-destination",
-      description: value => `Get ${formatInt(300000)} TT with a /${format(Decimal.pow10(value), 2, 2)}
+      description: value => `Get ${formatInt(3000 * value)} TT with a /${format(Decimal.pow10(value), 2, 2)}
         Black Hole or slower, without discharging or entering EC12.`,
       values: [100, 150, 200, 250, 300],
       condition: () => V.isRunning,
-      currentValue: () => (player.timestudy.theorem.toNumber() > 300000
+      currentValue: completions => (
+        // Dirty hack I know lmao
+        player.timestudy.theorem.toNumber() > [100, 150, 200, 250, 300].map(x => x * 3000)[completions]
         ? -Math.log10(player.minNegativeBlackHoleThisReality)
         : 0),
       formatRecord: x => `${formatInt(1)} / ${format(Math.pow(10, x))}`,

@@ -67,7 +67,7 @@ class VRunUnlockState extends GameMechanicState {
 
   tryComplete() {
     const playerData = player.celestials.v;
-    const value = this.config.currentValue();
+    const value = this.config.currentValue(this.completions);
     if (this.config.condition() && Decimal.gte(value, playerData.runRecords[this.id])) {
       playerData.runRecords[this.id] = value;
       playerData.runGlyphs[this.id] = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));

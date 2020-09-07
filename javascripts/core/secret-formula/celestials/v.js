@@ -103,7 +103,7 @@ GameDatabase.celestials.v = {
           <i class="fas fa-question-circle"></i>
         </div>`,
       // This achievement has internally negated values since the check is always greater than
-      values: [3, 6, 9, 12, 15],
+      values: [1, 4, 7, 10, 13],
       condition: () => V.isRunning && TimeStudy.reality.isBought,
       currentValue: () => -player.celestials.v.maxGlyphsThisRun,
       formatRecord: x => formatInt(-x),
@@ -115,13 +115,13 @@ GameDatabase.celestials.v = {
     {
       id: 7,
       name: "Post-destination",
-      description: value => `Get ${formatInt(3000 * value)} TT with a /${format(Decimal.pow10(value), 2, 2)}
+      description: value => `Get ${formatInt(400000)} TT with a /${format(Decimal.pow10(value), 2, 2)}
         Black Hole or slower, without discharging or entering EC12.`,
       values: [100, 150, 200, 250, 300],
       condition: () => V.isRunning,
-      currentValue: completions => (
+      currentValue: () => (
         // Dirty hack I know lmao
-        player.timestudy.theorem.toNumber() > [100, 150, 200, 250, 300].map(x => x * 3000)[completions]
+        player.timestudy.theorem.toNumber() > 400000
         ? -Math.log10(player.minNegativeBlackHoleThisReality)
         : 0),
       formatRecord: x => `${formatInt(1)} / ${format(Math.pow(10, x))}`,

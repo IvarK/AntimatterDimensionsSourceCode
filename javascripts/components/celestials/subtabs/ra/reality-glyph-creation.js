@@ -53,6 +53,13 @@ Vue.component("modal-reality-glyph-creation", {
       <div v-for="effect in possibleEffects">
         {{ formatGlyphEffect(effect) }}
       </div><br>
-        <button class="o-primary-btn" v-on:click="createRealityGlyph()">Create a Reality glyph!</button>
+        <button
+        class="o-primary-btn"
+        v-on:click="createRealityGlyph()"
+        v-if="realityGlyphLevel!=0"
+        >Create a Reality glyph!</button>
+        <button class="o-primary-btn o-primary-btn--disabled" v-else>
+          Reality glyph level must be higher than {{ formatInt(0) }}
+        </button>
     </div>`,
 });

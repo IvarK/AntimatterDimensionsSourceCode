@@ -230,7 +230,7 @@ Vue.component("alchemy-tab", {
         </primary-button>
       </div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      Your Alchemy resource cap, based on the glyph level of your last 10 Realities: {{ format(estimatedCap, 3, 2) }}.
+      Your Alchemy resource cap, based on the glyph level of your last 10 Realities: {{ formatInt(estimatedCap) }}.
       <span v-if="reactionsAvailable">
         Reactions trigger once every time you Reality, unaffected by amplification from stored real time.
       </span>

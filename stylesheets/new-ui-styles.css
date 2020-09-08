@@ -525,10 +525,6 @@ body.t-s9 {
   border: 0.1rem solid var(--color-accent);
 }
 
-.c-stats-tab {
-  color: var(--color-text);
-}
-
 .o-autobuyer-input,
 .c-autobuyer-box__mode-select {
   background: var(--color-base);

@@ -2443,7 +2443,7 @@ screen and (max-width: 480px) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: black;
+  color: var(--color-text);
   font-size: 1.2rem;
 }
 
@@ -2461,6 +2461,24 @@ screen and (max-width: 480px) {
 
 .t-s6 .c-stats-tab {
   color: #e0e0e0;
+}
+
+.c-stats-tab-general {
+  color: var(--color-text);
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.c-stats-tab-infinity {
+  color: var(--color-infinity);
+}
+
+.c-stats-tab-eternity {
+  color: var(--color-eternity);
+}
+
+.c-stats-tab-reality {
+  color: var(--color-reality);
 }
 
 /*#endregion c-stats-tab*/

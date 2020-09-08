@@ -101,24 +101,25 @@ Vue.component("statistics-tab", {
   },
   template:
     `<div class="c-stats-tab">
-        <br>
-        <h3>General</h3>
-        <div>You have made a total of {{ format(totalAntimatter, 2, 1) }} antimatter.</div>
-        <div>You have played for {{ realTimePlayed }}.</div>
-        <div v-if="reality.isUnlocked">
-          Your existence has spanned {{ reality.totalTimePlayed }} of time.
-        </div>
-        <div>You have seen {{ formatInt(newsMessagesSeen) }} unique
-        news ticker {{ "message" | pluralize(newsMessagesSeen) }}.</div>
         <div>
+          <div class="c-stats-tab-general">General</div>
+          <div>You have made a total of {{ format(totalAntimatter, 2, 1) }} antimatter.</div>
+          <div>You have played for {{ realTimePlayed }}.</div>
+          <div v-if="reality.isUnlocked">
+            Your existence has spanned {{ reality.totalTimePlayed }} of time.
+          </div>
+          <div>You have seen {{ formatInt(newsMessagesSeen) }} unique
+          news ticker {{ "message" | pluralize(newsMessagesSeen) }}.</div>
+          <div>
+            <br>
+            <div
+              v-if="eternity.thisReal.totalSeconds > 1 && infinity.thisReal.totalSeconds > 1"
+              v-for="line in matterScale">{{line}}</div>
+          </div>
           <br>
-          <div
-            v-if="eternity.thisReal.totalSeconds > 1 && infinity.thisReal.totalSeconds > 1"
-            v-for="line in matterScale">{{line}}</div>
         </div>
-        <br>
         <div v-if="infinity.isUnlocked">
-            <h3>Infinity</h3>
+            <div class="c-stats-tab-general c-stats-tab-infinity">Infinity</div>
             <div v-if="infinity.count.gt(0)">
               You have infinitied
               {{ formatDecimalAmount(infinity.count) }}
@@ -143,7 +144,7 @@ Vue.component("statistics-tab", {
             <br>
         </div>
         <div v-if="eternity.isUnlocked">
-            <h3>Eternity</h3>
+            <div class="c-stats-tab-general c-stats-tab-eternity">Eternity</div>
             <div v-if="eternity.count.gt(0)">
               You have Eternitied
               {{ formatDecimalAmount(eternity.count) }}
@@ -165,7 +166,7 @@ Vue.component("statistics-tab", {
             <br>
         </div>
         <div v-if="reality.isUnlocked">
-            <h3>Reality</h3>
+            <div class="c-stats-tab-general c-stats-tab-reality">Reality</div>
             <div>You have Realitied {{formatInt(reality.count)}} {{"time" | pluralize(reality.count)}}.</div>
             <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
             <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>

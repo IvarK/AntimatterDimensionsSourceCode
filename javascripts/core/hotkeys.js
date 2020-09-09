@@ -20,6 +20,7 @@ GameKeyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());
 GameKeyboard.bindRepeatableHotkey("shift+t", () => buyTickSpeed());
 GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
 GameKeyboard.bindRepeatableHotkey("e", () => eternityResetRequest());
+GameKeyboard.bindRepeatableHotkey("y", () => autoReality());
 
 // We need to know whether the player is holding R or not for the
 // replicanti galaxy
@@ -29,7 +30,8 @@ GameKeyboard.bind("r", () => setHoldingR(false), "keyup");
 
 const AUTOBUYER_NAMES = ["1st Dimension", "2nd Dimension", "3rd Dimension", "4th Dimension", 
                          "5th Dimension", "6th Dimension", "7th Dimension", "8th Dimension",
-                         "Tickspeed", "Dimension Boost", "Galaxy", "Big Crunch", "Sacrifice", "Eternity"];
+                         "Tickspeed", "Dimension Boost", "Antimatter Galaxy", "Big Crunch", "Sacrifice",
+                         "Eternity", "Reality"];
 
 // Toggle autobuyers
 function toggleAutobuyer(id) {
@@ -58,6 +60,7 @@ GameKeyboard.bindHotkey("alt+g", () => toggleAutobuyer(10));
 GameKeyboard.bindHotkey("alt+c", () => toggleAutobuyer(11));
 GameKeyboard.bindHotkey("alt+s", () => toggleAutobuyer(12));
 GameKeyboard.bindHotkey("alt+e", () => toggleAutobuyer(13));
+GameKeyboard.bindHotkey("alt+y", () => toggleAutobuyer(14));
 GameKeyboard.bindHotkey("alt+r", () => {
   const buyer = Replicanti.galaxies.autobuyer;
   if (buyer.isUnlocked) {

@@ -40,6 +40,7 @@ html {
   --color-reality: #0ba00e;
   --color-reality-light: #d5ffd7;
   --color-celestials: #5151ec;
+  --color-prestige--accent: white;
 
   --color-teresa--base: #5151ec;
   --color-teresa--accent: white;
@@ -66,6 +67,7 @@ html {
 
   --color-infinity: #FF9800;
   --color-eternity: #673AB7;
+  --color-reality: #4caf50;
   --color-celestials: #00bcd4;
 }
 
@@ -77,6 +79,7 @@ html {
   --color-accent: #1565C0;
 
   --color-infinity: #FF9800;
+  --color-prestige--accent: black;
 
   --color-teresa--accent: black;
 
@@ -96,7 +99,9 @@ html {
 
   --color-infinity: #FF9800;
   --color-eternity: #673AB7;
+  --color-reality: #4caf50;
   --color-celestials: #00bcd4;
+  --color-prestige--accent: black;
 
   --color-teresa--accent: black;
 
@@ -118,6 +123,7 @@ html {
   --color-eternity: #639565;
   --color-reality: #AFA3A5;
   --color-celestials: #F2D6C1;
+  --color-prestige--accent: black;
 }
 
 .t-s4 #ui-container { /* csslint allow: empty-rules */
@@ -134,6 +140,8 @@ html {
   --color-text-inverted: black;
   --color-base: black;
   --color-accent: #1565C0;
+
+  --color-prestige--accent: black;
 
   --color-teresa--accent: black;
 
@@ -460,56 +468,45 @@ button:focus {
 
 .o-tab-btn--infinity {
   color: var(--color-infinity);
-  background: var(--color-base);
+  background: var(--color-prestige--accent);
   border-color: var(--color-infinity);
 }
 
-.t-dark .o-tab-btn--infinity,
-.t-dark-metro .o-tab-btn--infinity {
-  color: var(--color-infinity);
-  background: var(--color-base);
-}
-
 .o-tab-btn--infinity:hover {
-  color: black;
+  color: var(--color-prestige--accent);
   background: var(--color-infinity);
 }
 
 .o-tab-btn--eternity {
   color: var(--color-eternity);
-  background: var(--color-base);
+  background: var(--color-prestige--accent);
   border-color: var(--color-eternity);
 }
 
 .o-tab-btn--eternity:hover {
-  color: black;
-  background: var(--color-eternity);
-}
-
-.t-s1 .o-tab-btn--eternity:hover {
-  color: black;
+  color: var(--color-prestige--accent);
   background: var(--color-eternity);
 }
 
 .o-tab-btn--reality {
   color: var(--color-reality);
-  background: var(--color-base);
+  background: var(--color-prestige--accent);
   border-color: var(--color-reality);
 }
 
 .o-tab-btn--reality:hover {
-  color: black;
+  color: var(--color-prestige--accent);
   background: var(--color-reality);
 }
 
 .o-tab-btn--celestial {
   color: var(--color-celestials);
-  background: var(--color-base);
+  background: var(--color-prestige--accent);
   border-color: var(--color-celestials);
 }
 
 .o-tab-btn--celestial:hover {
-  color: black;
+  color: var(--color-prestige--accent);
   background: var(--color-celestials);
 }
 
@@ -3477,7 +3474,7 @@ screen and (max-width: 480px) {
   background-color: #1f1f1f;
   font-weight: bold;
   font-size:  1rem;
-  border: 0.1rem solid #ed85df;
+  border: 0.1rem solid black;
   width: 19rem;
   height: 9rem;
   transition-duration: 0.2s;
@@ -3493,23 +3490,7 @@ screen and (max-width: 480px) {
   border-radius: 0;
 }
 
-.t-dark .o-infinity-upgrade-btn,
-.t-metro .o-infinity-upgrade-btn,
-.t-dark-metro .o-infinity-upgrade-btn,
-.t-inverted-metro .o-infinity-upgrade-btn,
-.t-s1 .o-infinity-upgrade-btn,
-.t-s6 .o-infinity-upgrade-btn,
-.t-s8 .o-infinity-upgrade-btn {
-  border-color: var(--color-text-inverted);
-}
-
-.t-dark .o-infinity-upgrade-btn {
-  color: var(--color-text);
-}
-
 .t-s6 .o-infinity-upgrade-btn {
-  color: white;
-  background-color: black;
   box-shadow: 0 0 0.7rem 0.2rem #111111;
 }
 
@@ -3711,17 +3692,13 @@ screen and (max-width: 480px) {
 /*#region o-infinity-upgrade-btn--bought*/
 
 .o-infinity-upgrade-btn--bought {
-  color: var(--color-text-inverted);
+  color: black;
   background-color: var(--color-infinity);
-  border-color: var(--color-infinity);
   cursor: default;
 }
 
-.t-dark .o-infinity-upgrade-btn--bought,
-.t-dark-metro .o-infinity-upgrade-btn--bought,
-.t-s6 .o-infinity-upgrade-btn--bought{
-  background-color: var(--color-infinity);
-  border-color: black;
+.o-infinity-upgrade-btn--bought:hover {
+  color: black;
 }
 
 /*#endregion o-infinity-upgrade-btn--bought*/
@@ -3733,8 +3710,7 @@ screen and (max-width: 480px) {
   animation: a-charged-infinity-upgrade-glow 2s infinite;
 }
 
-.t-dark .o-infinity-upgrade-btn--chargeable,
-.t-s6 .o-infinity-upgrade-btn--chargeable {
+.t-dark .o-infinity-upgrade-btn--chargeable {
   color: var(--color-teresa--base);
   background-color: var(--color-teresa--accent);
 }
@@ -3759,7 +3735,6 @@ screen and (max-width: 480px) {
 .o-infinity-upgrade-btn--charged {
   color: var(--color-teresa--accent);
   background-color: var(--color-teresa--base);
-  border-color: var(--color-infinity);
 }
 
 .t-dark .o-infinity-upgrade-btn--charged,

@@ -74,7 +74,7 @@ html {
 .t-dark #ui-container { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
-  --color-base: #27343b;
+  --color-base: #455a64;
   --color-disabled: #37474f;
   --color-accent: #1565C0;
 
@@ -90,7 +90,7 @@ html {
 .t-dark-metro #ui-container { /* csslint allow: empty-rules */
   --color-text: #e0e0e0;
   --color-text-inverted: black;
-  --color-base: #27343b;
+  --color-base: #455a64;
   --color-disabled: #37474f;
   --color-accent: #2196F3;
   --color-good: #43a047;

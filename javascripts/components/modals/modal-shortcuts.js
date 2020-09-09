@@ -13,6 +13,7 @@ Vue.component("modal-shortcuts", {
       { name: "Toggle Autobuyers", keys: ["a"] },
       { name: "Replicanti Galaxy", keys: ["r"] },
       { name: "Eternity", keys: ["e"] },
+      { name: "Reality", keys: ["y"] },
       { name: "Start/Pause Automator", keys: ["u"] },
       { name: "Restart Automator", keys: ["shift", "u"] },
       { name: "Toggle Black Hole", keys: ["b"] },
@@ -61,8 +62,7 @@ Vue.component("modal-shortcuts", {
         </div>
         <span class="c-modal-shortcuts__shift-description">
           Alt is a modifier key that, when pressed in conjunction with any key that has a corresponding autobuyer,
-          will toggle said autobuyer. This includes all autobuyers in the Autobuyer tab besides the
-          Reality autobuyer, as well as the Replicanti Galaxy Autobuyer.
+          will toggle said autobuyer. This works for all autobuyers in the Autobuyer tab, but only if they are active.
           <br>
           When pressing both Alt and Shift, you can toggle buying singles or buying max for the Antimatter Dimension
           and Tickspeed Autobuyers instead.

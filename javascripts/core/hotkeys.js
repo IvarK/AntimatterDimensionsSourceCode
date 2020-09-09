@@ -112,10 +112,10 @@ GameKeyboard.bindHotkey("shift+u", () => {
 });
 
 GameKeyboard.bindHotkey("esc", () => {
-  if (Modal.isOpen) {
-    Modal.hide();
-  } else {
+  if (ui.view.modal.queue.length === 0) {
     Tab.options.show(true);
+  } else {
+    Modal.hide();
   }
 });
 

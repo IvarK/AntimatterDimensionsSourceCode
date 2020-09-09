@@ -6225,6 +6225,8 @@ kbd {
   justify-content: center;
   width: 65rem;
   margin: auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .o-enslaved-shop-button {

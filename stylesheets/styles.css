@@ -8351,9 +8351,12 @@ kbd {
 }
 
 .c-pp-label {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  align-items: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--color-reality);
+  margin-bottom: 1rem;
 }
 
 /*#region reality-tab*/

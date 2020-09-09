@@ -6473,6 +6473,11 @@ kbd {
   font-size: 1.5rem;
 }
 
+.c-v-info-text {
+  color: var(--color-text);
+  font-size: 1.2rem;
+}
+
 .c-v-run-button {
   color: black;
   background: var(--color-v--base);

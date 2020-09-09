@@ -16,6 +16,8 @@ Vue.component("v-tab", {
       runRecords: [],
       runGlyphs: [],
       isFlipped: false,
+      isFlippedVisible: false,
+      wantsFlipped: true,
       isRunning: false
     };
   },
@@ -34,6 +36,7 @@ Vue.component("v-tab", {
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
+      this.isFlippedVisible = this.isFlipped && this.wantsFlipped;
       this.isRunning = V.isRunning;
     },
     startRun() {
@@ -76,7 +79,7 @@ Vue.component("v-tab", {
   computed: {
     // If V is flipped, change the layout of the grid
     hexGrid() {
-      return this.isFlipped ? [
+      return this.isFlippedVisible ? [
         VRunUnlocks.all[6],
         {},
         {},
@@ -125,18 +128,18 @@ Vue.component("v-tab", {
   },
   template: `
     <div class="l-v-celestial-tab">
-      <div v-if="!mainUnlock">
-        {{ format(rm, 2, 0) }} / {{ format(db.mainUnlock.rm, 2, 0) }} RM
+      <div v-if="!mainUnlock" class="c-v-info-text">
+        {{ format(rm, 2, 0) }} / {{ format(db.mainUnlock.rm, 2, 0) }} Reality Machines
         <br>
-        {{ format(realities, 2, 0) }} / {{ format(db.mainUnlock.realities, 2, 0) }} realities
+        {{ format(realities, 2, 0) }} / {{ format(db.mainUnlock.realities, 2, 0) }} Realities
         <br>
-        {{ format(eternities, 2, 0) }} / {{ format(db.mainUnlock.eternities, 2, 0) }} eternities
+        {{ format(eternities, 2, 0) }} / {{ format(db.mainUnlock.eternities, 2, 0) }} Eternities
         <br>
-        {{ format(infinities, 2, 0) }} / {{ format(db.mainUnlock.infinities, 2, 0) }} infinities
+        {{ format(infinities, 2, 0) }} / {{ format(db.mainUnlock.infinities, 2, 0) }} Infinities
         <br>
-        {{ format(dilatedTime, 2, 0) }} / {{ format(db.mainUnlock.dilatedTime, 2, 0) }} dilated time
+        {{ format(dilatedTime, 2, 0) }} / {{ format(db.mainUnlock.dilatedTime, 2, 0) }} Dilated Time
         <br>
-        {{ format(replicanti, 2, 0) }} / {{ format(db.mainUnlock.replicanti, 2, 0) }} replicanti
+        {{ format(replicanti, 2, 0) }} / {{ format(db.mainUnlock.replicanti, 2, 0) }} Replicanti
         <br>
         <div class="l-v-milestones-grid__row">
           <div class="o-v-milestone">
@@ -146,14 +149,20 @@ Vue.component("v-tab", {
         </div>
       </div>
       <div v-else>
-        <div v-if="isFlipped">
+        <div v-if="isFlipped" class="c-v-info-text">
+          <primary-button
+            class="o-primary-btn--subtab-option"
+            @click="wantsFlipped = !wantsFlipped"
+          ><span v-if="wantsFlipped">Hide</span><span v-else>Show</span> Hard V</primary-button>
+          <br>
+          <br>
           Cursed glyphs can be created in the Effarig tab, and the Black Hole can now be used to slow down time.
           <br>
           Each hard V-achievement will award {{ formatInt(2) }} Space Theorems instead of {{ formatInt(1) }}.
           <br>
           Goal reduction is significantly more expensive for hard V-achievements.
         </div>
-        <div v-if="showReduction">
+        <div v-if="showReduction" class="c-v-info-text">
           You have {{ format(pp, 2, 0) }} {{ "Perk Point" | pluralize(pp) }}.
         </div>
         <div class="l-v-unlocks-container">
@@ -204,11 +213,11 @@ Vue.component("v-tab", {
             </div>
           </li>
         </div>
-        <div>
+        <div class="c-v-info-text">
           V-achievements can only be completed within V's Reality, but are permanent and do not reset upon leaving
           and re-entering the Reality.
         </div>
-        <div>
+        <div class="c-v-info-text">
           You have {{ formatInt(totalUnlocks) }} V-achievements done.
           You gain {{ formatInt(1) }} Space Theorem for each completion,
           allowing you to purchase Time Studies which are normally locked.

@@ -45,6 +45,10 @@ Vue.component("tab-button", {
         <span v-html="subtab.symbol">
           <i v-if="subtab.hasNotification" class="fas fa-exclamation"></i>
         </span>
+        <div class="o-subtab__tooltip">
+          {{ subtab.name }}
+        </div>
+      </div>
       </div>
     </div>
   </div>`

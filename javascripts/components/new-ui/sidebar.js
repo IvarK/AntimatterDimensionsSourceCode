@@ -25,13 +25,10 @@ Vue.component("sidebar", {
       Tab.statistics,
       Tab.options,
       Tab.shop
-    ],
-    topMargin() {
-      return this.newsEnabled ? "margin-top: 3.9rem" : "";
-    }
+    ]
   },
   template:
-  `<div class="sidebar" :style="topMargin">
+  `<div class="sidebar"">
     <sidebar-rm v-if="RMVisible" />
     <tab-button 
       v-for="tab in tabs"

@@ -47,6 +47,7 @@ body.t-s9 {
   display: flex;
   flex-direction: column;
   width: 12rem;
+  margin-top: 3.9rem;
   position: fixed;
   z-index: 5;
 }
@@ -271,6 +272,89 @@ body.t-s9 {
 
 .o-tab-btn--subtab .fa-link {
   transform: rotate(45deg)
+}
+
+.o-subtab__tooltip {
+  opacity: 0;
+  transition-duration: 0.2s;
+  font-size: 1.4rem;
+  font-weight: bold;
+  border: 0.1rem solid var(--color-accent);
+  color: var(--color-text);
+  background: var(--color-base);
+  width: 20rem;
+  height: 3rem;
+  line-height: 2.8rem;
+  margin-left: -7.7rem;
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  bottom: 100%;
+}
+
+.o-subtab__tooltip:after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  margin-left: -0.7rem;
+  margin-bottom: 0;
+  width: 0;
+  border-top: 0 solid var(--color-accent);
+  border-right: 0.7rem solid transparent;
+  border-left: 0.7rem solid transparent;
+  content: " ";
+  transition-duration: 0.2s;
+  z-index: 0;
+}
+
+.o-tab-btn--subtab:hover .o-subtab__tooltip {
+  opacity: 1;
+  bottom: calc(100% + 0.7rem)
+}
+
+.o-tab-btn--subtab:hover .o-subtab__tooltip:after {
+  border-top-width: 0.7rem;
+  margin-bottom: -0.7rem;
+}
+
+.o-tab-btn--infinity .o-subtab__tooltip {
+  color: var(--color-infinity);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-infinity);
+}
+
+.o-tab-btn--infinity .o-subtab__tooltip:after {
+  border-top-color: var(--color-infinity);
+}
+
+.o-tab-btn--eternity .o-subtab__tooltip {
+  color: var(--color-eternity);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-eternity);
+}
+
+.o-tab-btn--eternity .o-subtab__tooltip:after {
+  border-top-color: var(--color-eternity);
+}
+
+.o-tab-btn--reality .o-subtab__tooltip {
+  color: var(--color-reality);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-reality);
+}
+
+.o-tab-btn--reality .o-subtab__tooltip:after {
+  border-top-color: var(--color-reality);
+}
+
+.o-tab-btn--celestial .o-subtab__tooltip {
+  color: var(--color-celestials);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-celestials);
+}
+
+.o-tab-btn--celestial .o-subtab__tooltip:after {
+  border-top-color: var(--color-celestials);
 }
 
 .active {

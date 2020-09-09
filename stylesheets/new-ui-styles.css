@@ -438,6 +438,17 @@ body.t-s9 {
   color: black;
 }
 
+.t-normal .c-game-header__tesseract-available {
+  background: #EEEEEE;
+  animation: a-tesseract-shift-dark 5s infinite;
+}
+
+.t-normal .c-infinity-dim-tab__tesseract-button {
+  background: #EEEEEE;
+  animation: a-tesseract-shift-dark 5s infinite;
+}
+
+
 .l-new-ui-big-crunch__container {
   margin-top: 2rem;
 }
@@ -476,11 +487,7 @@ body.t-s9 {
 
 .o-infinity-upgrade-btn--unavailable:hover {
   background: #525252;
-  color: white;
-}
-
-.o-infinity-upgrade-btn--bought {
-  border-color: var(--color-accent);
+  color: var(--color-text-inverted);
 }
 
 .o-primary-btn--option, .o-primary-btn--option-wide, .c-select-theme__item, .c-select-notation__item {
@@ -762,10 +769,6 @@ body.t-s9 {
 
 .o-primary-btn--respec-active {
   background-color: var(--color-good);
-}
-
-.o-primary-btn--respec-active:hover {
-  color: white;
 }
 
 .l-equipped-glyphs {

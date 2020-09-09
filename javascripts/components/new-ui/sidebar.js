@@ -3,12 +3,14 @@
 Vue.component("sidebar", {
   data() {
     return {
-      RMVisible: false
+      RMVisible: false,
+      newsEnabled: false
     };
   },
   methods: {
     update() {
       this.RMVisible = PlayerProgress.realityUnlocked();
+      this.newsEnabled = player.options.news.enabled;
     }
   },
   computed: {
@@ -23,10 +25,13 @@ Vue.component("sidebar", {
       Tab.statistics,
       Tab.options,
       Tab.shop
-    ]
+    ],
+    topMargin() {
+      return this.newsEnabled ? "margin-top: 3.9rem" : "";
+    }
   },
   template:
-  `<div class="sidebar">
+  `<div class="sidebar" :style="topMargin">
     <sidebar-rm v-if="RMVisible" />
     <tab-button 
       v-for="tab in tabs"

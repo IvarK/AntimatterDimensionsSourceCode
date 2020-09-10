@@ -656,8 +656,8 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 2,
     isGenerated: false,
     glyphTypes: ["cursed"],
-    singleDesc: "Multiply free tickspeed threshold increase by ×{value}",
-    totalDesc: "Free tickspeed threshold ×{value}",
+    singleDesc: "The threshold for Tickspeed from Time Dimensions is multiplied by ×{value}",
+    totalDesc: "Tickspeed from Time Dimensions is increased by ×{value}",
     // Additive 3.82 per glyph
     effect: (level, strength) => Math.log10(level) * (strength / 3.5),
     formatEffect: x => format(x, 3, 3),

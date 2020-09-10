@@ -266,7 +266,7 @@ GameDatabase.achievements.normal = [
   {
     id: 52,
     name: "Age of Automation",
-    description: "Max dimension and tickspeed autobuyers.",
+    description: "Max Antimatter Dimension and Tickspeed upgrade autobuyers.",
     checkRequirement: () => Autobuyers.upgradeable
       .countWhere(a => a.isUnlocked && a.hasMaxedInterval) >= 9,
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT]
@@ -541,13 +541,13 @@ GameDatabase.achievements.normal = [
     get description() { return `Big Crunch for ${format(1e150, 0, 0)} Infinity Points.`; },
     checkRequirement: () => gainedInfinityPoints().exponent >= 150,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    get reward() { return `Additional ${formatX(4)} multiplier to IP.`; },
+    get reward() { return `Additional ${formatX(4)} multiplier to Infinity Points.`; },
     effect: 4
   },
   {
     id: 86,
     name: "Do you even bend time bro?",
-    get description() { return `Reach ${formatX(1000)} ticks/second per tickspeed upgrade.`; },
+    get description() { return `Reach ${formatX(1000)} ticks/second per Tickspeed upgrade.`; },
     checkRequirement: () => Tickspeed.multiplier.recip().gte(1000),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() { return `Galaxies are ${formatPercents(0.01)} stronger.`; },

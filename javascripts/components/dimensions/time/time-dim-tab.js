@@ -48,11 +48,11 @@ Vue.component("time-dim-tab", {
       >Toggle all autobuyers</primary-button>
     </div>
     <div>
-      <p>You've gained {{formatInt(totalUpgrades)}} tickspeed upgrades.</p>
+      <p>You've gained {{formatInt(totalUpgrades)}} Tickspeed upgrades.</p>
       <p>
         You have
         <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> Time Shards.
-        Next tickspeed upgrade at
+        Next Tickspeed upgrade at
         <span class="c-time-dim-description__accent">{{format(upgradeThreshold, 2, 1)}}.</span>
       </p>
     </div>

@@ -130,7 +130,7 @@ GameDatabase.achievements.secret = [
   {
     id: 35,
     name: "Should we tell them about buy max...",
-    get description() { return `Buy single tickspeed ${formatInt(1e5)} times.`; },
+    get description() { return `Buy single Tickspeed upgrades ${formatInt(1e5)} times.`; },
     checkRequirement: () => player.secretUnlocks.why >= 1e5,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },

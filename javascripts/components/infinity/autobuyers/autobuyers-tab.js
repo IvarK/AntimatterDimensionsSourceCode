@@ -21,9 +21,9 @@ Vue.component("autobuyers-tab", {
       <tickspeed-autobuyer-box v-if="!hasContinuum" />
       <sacrifice-autobuyer-box />
       <template v-if="hasContinuum">
-        Continuum makes Antimatter Dimension and tickspeed autobuyers obsolete, as you now automatically have a
+        Continuum makes Antimatter Dimension and Tickspeed autobuyers obsolete, as you now automatically have a
         <br>
-        certain amount of simulated Antimatter Dimension and tickspeed purchases based on your antimatter.
+        certain amount of simulated Antimatter Dimension and Tickspeed purchases based on your antimatter.
       </template>
     </div>`
 });

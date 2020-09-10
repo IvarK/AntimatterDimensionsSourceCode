@@ -48,7 +48,7 @@ Vue.component("new-time-dimensions-tab", {
         >Toggle all autobuyers</primary-button>
       </div>
       <div>
-        <p>You've gained {{formatInt(totalUpgrades)}} tickspeed upgrades.</p>
+        <p>You've gained {{formatInt(totalUpgrades)}} Tickspeed upgrades.</p>
         <p>
           You have
           <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> Time Shards.

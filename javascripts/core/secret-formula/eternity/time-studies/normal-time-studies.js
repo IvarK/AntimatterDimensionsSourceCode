@@ -376,7 +376,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 171,
       cost: 15,
       requirement: () => TimeStudy(161).isBought || TimeStudy(162).isBought,
-      description: () => `Time Shard requirement for the next free tickspeed upgrade goes up slower
+      description: () => `Time Shard requirement for the next Tickspeed upgrade goes up slower
         ${formatX(1.33, 0, 2)} ➜ ${formatX(1.25, 0, 2)}`,
       effect: () => TS171_MULTIPLIER
     },

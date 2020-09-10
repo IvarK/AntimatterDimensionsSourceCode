@@ -731,7 +731,7 @@ GameDatabase.achievements.normal = [
       return true;
     },
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
-    reward: "Your Antimatter doesn't reset on Dimension Boosts or Antimatter Galaxies."
+    reward: "Your antimatter doesn't reset on Dimension Boosts or Antimatter Galaxies."
   },
   {
     id: 112,

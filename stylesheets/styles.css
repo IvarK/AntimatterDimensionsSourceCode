@@ -6746,7 +6746,7 @@ kbd {
   width: 12rem;
   border-radius: 50%;
   background-color: black;
-  margin: 1.5rem auto;
+  margin: 1.5rem 0;
   border: 0.4rem solid #9575cd;
   box-shadow: 0 0 0.7rem #9575cd, 0 0 0.7rem #9575cd inset;
   transition-duration: 0.2s;

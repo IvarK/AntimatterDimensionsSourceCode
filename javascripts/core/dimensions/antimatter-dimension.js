@@ -26,7 +26,6 @@ function antimatterDimensionCommonMultiplier() {
     Achievement(73),
     Achievement(74),
     Achievement(76),
-    Achievement(78).effects.dimensionMult,
     Achievement(84),
     Achievement(91),
     Achievement(92),

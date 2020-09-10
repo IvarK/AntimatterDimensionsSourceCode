@@ -206,7 +206,7 @@ Currency.antimatter = new class extends DecimalCurrency {
       Achievement(37),
       Achievement(54),
       Achievement(55),
-      Achievement(78).effects.antimatter
+      Achievement(78)
     ).toDecimal();
   }
 

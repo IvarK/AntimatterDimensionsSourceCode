@@ -91,7 +91,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   purchase() {
-    if (!Currency.antimatter.purchase(this.antimatterCost)) return;
+    if (player.totalAntimatter.lt(this.antimatterCost)) return;
     this.data.isBought = true;
   }
 

@@ -5928,6 +5928,7 @@ kbd {
 
 .c-effarig-run-button--not-running:hover {
   background-color: black;
+  color: var(--color-effarig--base);
 }
 
 @keyframes a-effarig-run-button--not-running-glow {

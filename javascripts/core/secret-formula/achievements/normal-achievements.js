@@ -950,14 +950,14 @@ GameDatabase.achievements.normal = [
     id: 137,
     name: "Now you're thinking with dilation!",
     get description() {
-      return `Eternity for ${formatPostBreak("1e600", 0, 0)} Eternity Points
+      return `Get ${formatPostBreak("1e260000", 0, 0)} antimatter
       in ${formatInt(1)} minute or less while Dilated.`;
     },
     checkRequirement: () =>
-      gainedEternityPoints().exponent >= 600 &&
+      Currency.antimatter.exponent >= 260000 &&
       Time.thisEternity.totalMinutes <= 1 &&
       player.dilation.active,
-    checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() { return `Gain ${formatX(2)} Dilated Time and Time Theorems while Dilated.`; },
     effect: () => (player.dilation.active ? 2 : 1),
   },

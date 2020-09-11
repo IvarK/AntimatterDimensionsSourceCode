@@ -20,7 +20,7 @@ GameKeyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());
 GameKeyboard.bindRepeatableHotkey("shift+t", () => buyTickSpeed());
 GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
 GameKeyboard.bindRepeatableHotkey("e", () => eternityResetRequest());
-GameKeyboard.bindRepeatableHotkey("y", () => autoReality());
+GameKeyboard.bindRepeatableHotkey("y", () => requestManualReality());
 
 // We need to know whether the player is holding R or not for the
 // replicanti galaxy
@@ -28,7 +28,7 @@ GameKeyboard.bind("r", () => setHoldingR(true), "keydown");
 GameKeyboard.bind("r", () => setHoldingR(false), "keyup");
 
 
-const AUTOBUYER_NAMES = ["1st Dimension", "2nd Dimension", "3rd Dimension", "4th Dimension", 
+const AUTOBUYER_NAMES = ["1st Dimension", "2nd Dimension", "3rd Dimension", "4th Dimension",
                          "5th Dimension", "6th Dimension", "7th Dimension", "8th Dimension",
                          "Tickspeed", "Dimension Boost", "Antimatter Galaxy", "Big Crunch", "Sacrifice",
                          "Eternity", "Reality"];
@@ -95,7 +95,7 @@ GameKeyboard.bindHotkey("u", () => {
     } else {
       GameUI.notify.info(`Starting script "${AutomatorBackend.scriptName}"`);
       AutomatorBackend.restart();
-      AutomatorBackend.start();  
+      AutomatorBackend.start();
       return;
     }
     const action = AutomatorBackend.isRunning ? "Resuming" : "Pausing";

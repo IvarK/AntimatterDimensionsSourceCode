@@ -1334,10 +1334,11 @@ GameDatabase.news = [
   },
   {
     id: "a238",
-    text:
-      `AD Player: "How many orders of magnitude are you on?" Normal person: "Like, maybe 5 or 6 right now, my
+    get text() {
+      return `AD Player: "How many orders of magnitude are you on?" Normal person: "Like, maybe 5 or 6 right now, my
       dude." AD Player: "You are like a little baby. Watch this: <span style='animation: text-crunch ${newsAnimSpd(22)}s
-      1; font-size: 0;'>C R O N C H</span>"`
+      1; font-size: 0;'>C R O N C H</span>"`;
+    }
   },
   {
     id: "a239",
@@ -1475,7 +1476,9 @@ GameDatabase.news = [
   },
   {
     id: "a252",
-    text: `<span style='animation: text-stretch ${newsAnimSpd(30)}s 1'>This message is dilated.</span>`
+    get text() {
+      return `<span style='animation: text-stretch ${newsAnimSpd(30)}s 1'>This message is dilated.</span>`;
+    }
   },
   {
     id: "a253",
@@ -2066,11 +2069,12 @@ GameDatabase.news = [
   },
   {
     id: "a336",
-    text:
-      `Attention residents of zone 4 [commonly referred to as 'dark zone'], sector ϰ, (01,05). Do not leave your
-      places of residence. I repeat, do not leave your places of residence. Do not go outside. Earthology's finest
-      meteorological supercomputers, as well as many witches, are consistently claiming a 'generally weird vibe'
-      tomorrow and we quite frankly don't want to find out what that means.`
+    get text() {
+      return `Attention residents of zone ${formatInt(4)} [commonly referred to as 'dark zone'], sector ϰ, (01,05). Do
+      not leave your places of residence. I repeat, do not leave your places of residence. Do not go outside.
+      Earthology's finest meteorological supercomputers, as well as many witches, are consistently claiming a
+      'generally weird vibe' tomorrow and we quite frankly don't want to find out what that means.`;
+    }
   },
   {
     id: "a337",
@@ -2085,7 +2089,10 @@ GameDatabase.news = [
   },
   {
     id: "a338",
-    text: "Ancient cave paintings with the number 5 have been found. It's implied they were waiting for something."
+    get text() {
+      return `Ancient cave paintings with the number ${formatInt(5)} have been found.
+        It's implied they were waiting for something.`;
+    }
   },
   (function() {
     let wasClicked = false;
@@ -2142,9 +2149,10 @@ GameDatabase.news = [
   },
   {
     id: "l6",
-    text:
-      `Antimatter people seem to be even more afraid of 13 then we are. They destroyed entire galaxies just to
-      remove 13 from their percents.`,
+    get text() {
+      return `Antimatter people seem to be even more afraid of ${formatInt(13)} then we are. They destroyed
+        entire galaxies just to remove ${formatInt(13)} from their percents.`;
+    },
     get unlocked() { return player.galaxies > 0 || player.infinitied.gt(0); }
   },
   {

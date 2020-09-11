@@ -134,7 +134,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => !NormalChallenge(8).isRunning && Sacrifice.totalBoost.gte(600),
     checkEvent: GAME_EVENT.SACRIFICE_RESET_AFTER,
     get reward() {
-      return `Dimensional Sacrifice is slightly stronger.
+      return `Dimensional Sacrifice stronger.
       ${Sacrifice.getSacrificeDescription({ "Achievement32": false, "Achievement57": false, "Achievement88": false })} ➜
       ${Sacrifice.getSacrificeDescription({ "Achievement32": true, "Achievement57": false, "Achievement88": false })}`;
     },
@@ -326,7 +326,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => NormalChallenge(8).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() {
-      return `Dimensional Sacrifice is a lot stronger.
+      return `Dimensional Sacrifice is stronger.
       ${Sacrifice.getSacrificeDescription({ "Achievement32": true, "Achievement57": false, "Achievement88": false })} ➜
       ${Sacrifice.getSacrificeDescription({ "Achievement32": true, "Achievement57": true, "Achievement88": false })}`;
     },
@@ -582,7 +582,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Sacrifice.nextBoost.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.SACRIFICE_RESET_BEFORE,
     get reward() {
-      return `Dimensional Sacrifices are stronger.
+      return `Dimensional Sacrifice is stronger.
       ${Sacrifice.getSacrificeDescription({ "Achievement32": true, "Achievement57": true, "Achievement88": false })} ➜
       ${Sacrifice.getSacrificeDescription({ "Achievement32": true, "Achievement57": true, "Achievement88": true })}`;
     },
@@ -687,7 +687,9 @@ GameDatabase.achievements.normal = [
     get description() { return `Reach ${formatPostBreak("9.99999e999", 5, 0)} Infinity Points.`; },
     checkRequirement: () => player.infinityPoints.exponent >= 1000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Make the Infinity Point formula better. log(x/308) ➜ log(x/307.8)",
+    get reward() {
+      return `Make the Infinity Point formula better. log(x/${formatInt(308)}) ➜ log(x/${formatFloat(307.8, 1)})`;
+    },
     effect: 307.8
   },
   {
@@ -1212,7 +1214,7 @@ GameDatabase.achievements.normal = [
     id: 172,
     name: "Hitchhiker's Guide to Reality",
     get description() {
-      return `Reality for ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Reality Machines without having
+      return `Reality for ${formatPostBreak(Decimal.NUMBER_MAX_VALUE, 1, 0)} Reality Machines without having
       any Charged Infinity Upgrades, having any equipped glyphs, or buying any Triad Studies.`;
     },
     checkRequirement: () => gainedRealityMachines().gte(Decimal.NUMBER_MAX_VALUE) &&

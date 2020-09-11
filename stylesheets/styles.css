@@ -4948,7 +4948,7 @@ screen and (max-width: 480px) {
 
 .c-modal {
   color: var(--color-text);
-  background-color: #e0e0e0;
+  background-color: var(--color-base);
   border: 0.3rem solid black;
   border-radius: 0.6rem;
   text-align: center;
@@ -4974,11 +4974,6 @@ screen and (max-width: 480px) {
 /*#region themes*/
 
 /*#region t-dark t-dark-metro*/
-
-.t-dark .c-modal,
-.t-dark-metro .c-modal {
-  background-color: #27343b;
-}
 
 .t-dark .c-modal {
   box-shadow: 0 0 1.5rem 0 black;
@@ -5008,19 +5003,9 @@ screen and (max-width: 480px) {
 
 /*#endregion t-metro t-dark-metro t-inverted-metro t-s8 */
 
-/*#region t-s1*/
-
-.t-s1 .c-modal {
-  background-color: #dbd242;
-}
-
-/*#endregion t-s1*/
-
 /*#region t-s6*/
 
 .t-s6 .c-modal {
-  color: #e0e0e0;
-  background-color: black;
   border: 0.1rem solid #1b5e20;
   box-shadow: 0 0 1.5rem 0 black;
 }

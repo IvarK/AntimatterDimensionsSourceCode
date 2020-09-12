@@ -190,6 +190,11 @@ dev.decriminalize = function() {
 };
 
 dev.removeAch = function(name) {
+  if (name === "all") {
+    const allAchievements = Achievements.all.concat(SecretAchievements.all);
+    for (const achievement of allAchievements) achievement.lock();
+    return "removed all achievements";
+  }
   if (typeof (name) === "number") return Achievement(name).lock();
   if (name.startsWith("r")) return Achievement(parseInt(name.slice(1), 10)).lock();
   if (name.startsWith("s")) return SecretAchievement(parseInt(name.slice(1), 10)).lock();

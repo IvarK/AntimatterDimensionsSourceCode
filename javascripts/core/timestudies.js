@@ -123,7 +123,7 @@ const TimeTheorems = {
       totalCost += ecStudy.cost;
     }
     // Secret time study
-    if (Enslaved.isRunning && player.secretUnlocks.secretTS % 2 === 1) totalCost -= 100;
+    if (Enslaved.isRunning && player.secretUnlocks.viewSecretTS) totalCost -= 100;
     return totalCost;
   }
 };

@@ -7,7 +7,7 @@ Vue.component("secret-time-study", {
   },
   data() {
     return {
-      isVisible: player.secretUnlocks.secretTS % 2 === 1,
+      isVisible: player.secretUnlocks.viewSecretTS,
       lastClick: 0,
       isEnslaved: false,
     };
@@ -41,35 +41,38 @@ Vue.component("secret-time-study", {
         "o-time-study--secret": !this.isEnslaved && !this.isVisible,
         "o-time-study--secret-enslaved": this.isEnslaved && !this.isVisible,
         "o-time-study--secret-unlocked": this.isVisible,
+        "o-time-study--secret-enslaved-unlocked": this.isEnslaved && this.isVisible,
       };
     }
   },
   methods: {
     update() {
-      this.isVisible = player.secretUnlocks.secretTS % 2 === 1;
+      this.isVisible = player.secretUnlocks.viewSecretTS;
       this.isEnslaved = Enslaved.isRunning;
     },
     handleClick() {
       if (this.isVisible) {
         if (this.isEnslaved) return;
+        // Hide the secret time study on double click
         const clickTime = Date.now();
         if (clickTime - this.lastClick < 750) {
           this.lastClick = 0;
-          ++player.secretUnlocks.secretTS;
+          player.secretUnlocks.viewSecretTS = false;
         } else {
           this.lastClick = clickTime;
         }
       } else {
         // If a click made the study visible, it's not part of the double click to hide
         this.lastClick = 0;
-        if (++player.secretUnlocks.secretTS === 1) {
+        if (!player.secretUnlocks.viewSecretTS && !this.isEnslaved) {
+          player.secretUnlocks.viewSecretTS = true;
           this.$refs.study.addEventListener("transitionend", function achGiver(e) {
             SecretAchievement(21).unlock();
             e.target.removeEventListener(e.type, achGiver);
           });
         }
         if (this.isEnslaved) {
-          this.isVisible = true;
+          player.secretUnlocks.viewSecretTS = true;
           EnslavedProgress.secretStudy.giveProgress();
           player.timestudy.theorem = player.timestudy.theorem.plus(this.enslavedTT);
         }
@@ -94,7 +97,7 @@ Vue.component("secret-time-study-connection", {
   },
   data() {
     return {
-      isVisible: player.secretUnlocks.secretTS % 2 === 1,
+      isVisible: player.secretUnlocks.viewSecretTS,
     };
   },
   computed: {
@@ -109,7 +112,7 @@ Vue.component("secret-time-study-connection", {
   },
   methods: {
     update() {
-      this.isVisible = player.secretUnlocks.secretTS % 2 === 1;
+      this.isVisible = player.secretUnlocks.viewSecretTS;
     },
     percents(value) {
       return value * 100 + "%";

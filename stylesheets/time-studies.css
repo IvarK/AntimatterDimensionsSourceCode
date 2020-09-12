@@ -419,7 +419,7 @@
   transition: opacity 1s;
   opacity: 1;
   transition-delay: 0s;
-  cursor: default;
+  cursor: pointer;
 }
 
 .o-time-study--secret-enslaved {
@@ -428,6 +428,10 @@
   transition: opacity 2s 0.5s;
   cursor: pointer;
   animation: a-time-study 0.5s infinite;
+}
+
+.o-time-study--secret-enslaved-unlocked {
+  cursor: default;
 }
 
 /*#endregion o-time-study*/

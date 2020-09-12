@@ -158,7 +158,7 @@ let player = {
     dragging: 0,
     themes: new Set(),
     // Incremented every time secret time study toggles
-    secretTS: 0,
+    viewSecretTS: false,
     uselessNewsClicks: 0,
     cancerAchievements: false,
     paperclips: 0,

@@ -2069,12 +2069,10 @@ GameDatabase.news = [
   },
   {
     id: "a336",
-    get text() {
-      return `Attention residents of zone ${formatInt(4)} [commonly referred to as 'dark zone'], sector ϰ, (01,05). Do
+    text: `Attention residents of zone 4 [commonly referred to as 'dark zone'], sector ϰ, (01,05). Do
       not leave your places of residence. I repeat, do not leave your places of residence. Do not go outside.
       Earthology's finest meteorological supercomputers, as well as many witches, are consistently claiming a
-      'generally weird vibe' tomorrow and we quite frankly don't want to find out what that means.`;
-    }
+      'generally weird vibe' tomorrow and we quite frankly don't want to find out what that means.`
   },
   {
     id: "a337",
@@ -2089,10 +2087,7 @@ GameDatabase.news = [
   },
   {
     id: "a338",
-    get text() {
-      return `Ancient cave paintings with the number ${formatInt(5)} have been found.
-        It's implied they were waiting for something.`;
-    }
+    text: "Ancient cave paintings with the number 5 have been found. It's implied they were waiting for something."
   },
   (function() {
     let wasClicked = false;
@@ -2122,9 +2117,7 @@ GameDatabase.news = [
   },
   {
     id: "l1",
-    get text() {
-      return `You just made your ${formatInt(1e15)}th antimatter. This one tastes like chicken.`;
-    },
+    text: "You just made your 1,000,000,000,000,000th antimatter. This one tastes like chicken.",
     get unlocked() { return Currency.antimatter.exponent === 15; }
   },
   {
@@ -2149,10 +2142,9 @@ GameDatabase.news = [
   },
   {
     id: "l6",
-    get text() {
-      return `Antimatter people seem to be even more afraid of ${formatInt(13)} then we are. They destroyed
-        entire galaxies just to remove ${formatInt(13)} from their percents.`;
-    },
+    text:
+      `Antimatter people seem to be even more afraid of 13 then we are. They destroyed
+      entire galaxies just to remove 13 from their percents.`,
     get unlocked() { return player.galaxies > 0 || player.infinitied.gt(0); }
   },
   {
@@ -2702,10 +2694,9 @@ GameDatabase.news = [
   },
   {
     id: "e3",
-    get text() {
-      return `You can get Antimatter Galaxies the same way you can get more than
-        ${formatInt(2)} Antimatter Galaxies without Infinity being broken.`;
-    },
+    text:
+      `You can get Antimatter Galaxies the same way you can get more than
+      2 Antimatter Galaxies without Infinity being broken.`,
     get unlocked() {
       return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
     }
@@ -2722,19 +2713,16 @@ GameDatabase.news = [
   },
   {
     id: "e5",
-    get text() {
-      return `No, you can't decrease <span style='color: black; background: black;'>REDACTED</span>
-        to ${formatX(1.8, 1, 1)}, but it's still worth acting as if you could.`;
-    },
+    text:
+      `No, you can't decrease <span style='color: black; background: black;'>REDACTED</span>
+      to ×1.8, but it's still worth acting as if you could.`,
     get unlocked() {
       return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
     }
   },
   {
     id: "e6",
-    get text() {
-      return `Have you tried rotating your screen ${formatInt(14)} degrees counterclockwise?`;
-    },
+    text: "Have you tried rotating your screen 14 degrees counterclockwise?",
     get unlocked() {
       return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
     }

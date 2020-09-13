@@ -134,7 +134,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => !NormalChallenge(8).isRunning && Sacrifice.totalBoost.gte(600),
     checkEvent: GAME_EVENT.SACRIFICE_RESET_AFTER,
     get reward() {
-      return `Dimensional Sacrifice stronger.
+      return `Dimensional Sacrifice is stronger.
       ${Sacrifice.getSacrificeDescription({ "Achievement32": false, "Achievement57": false, "Achievement88": false })} ➜
       ${Sacrifice.getSacrificeDescription({ "Achievement32": true, "Achievement57": false, "Achievement88": false })}`;
     },

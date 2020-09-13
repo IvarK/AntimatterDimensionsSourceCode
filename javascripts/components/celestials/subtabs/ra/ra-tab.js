@@ -118,7 +118,7 @@ Vue.component("ra-tab", {
         <div v-if="showRecollection && !isRaCapped" class="c-ra-recollection-unlock">
           <h1 :style="petStyle">Recollection</h1>
           <span :style="petStyle">
-            Whichever Celestial is has Recollection will get {{formatX(recollectionMult)}} Memory Chunk gain.
+            Whichever Celestial has Recollection will get {{formatX(recollectionMult)}} Memory Chunk gain.
           </span>
           <div class="c-ra-recollection-unlock-inner" v-if="hasRecollection">
             <ra-pet-recollection-button

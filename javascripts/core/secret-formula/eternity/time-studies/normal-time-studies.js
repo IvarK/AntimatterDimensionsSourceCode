@@ -78,8 +78,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 42,
       cost: 6,
       requirement: 32,
-      description: () => `Antimatter Galaxy requirement goes up ${formatInt(52)}
-        8ths instead of ${formatInt(60)}`,
+      description: () => `Antimatter Galaxy requirement increases by ${formatInt(52)}
+        8th Dimensions instead of ${formatInt(60)}`,
       effect: 52
     },
     {

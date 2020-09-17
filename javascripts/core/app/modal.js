@@ -52,11 +52,13 @@ class ChallengeConfirmationModal extends Modal {
 }
 
 Modal.h2p = new Modal("modal-h2p");
+Modal.awayProgress = new Modal("modal-away-progress");
 Modal.shortcuts = new Modal("modal-shortcuts");
 Modal.newsOptions = new Modal("modal-news-options");
 Modal.animationOptions = new Modal("modal-animation-options");
 Modal.confirmationOptions = new Modal("modal-confirmation-options");
 Modal.infoDisplayOptions = new Modal("modal-info-display-options");
+Modal.awayProgressOptions = new Modal("modal-away-progress-options");
 Modal.loadGame = new Modal("modal-load-game");
 Modal.uiChoice = new Modal("modal-ui-choice");
 Modal.import = new Modal("modal-import");
@@ -67,6 +69,7 @@ Modal.deleteCompanion = new Modal("modal-delete-companion");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");
+Modal.enterDilation = new Modal("modal-enter-dilation");
 Modal.startEternityChallenge = new ChallengeConfirmationModal("modal-start-eternity-challenge");
 Modal.startInfinityChallenge = new ChallengeConfirmationModal("modal-start-infinity-challenge");
 Modal.startNormalChallenge = new ChallengeConfirmationModal("modal-start-normal-challenge");

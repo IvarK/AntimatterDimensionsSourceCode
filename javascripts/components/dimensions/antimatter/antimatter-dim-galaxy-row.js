@@ -24,7 +24,7 @@ Vue.component("antimatter-dim-galaxy-row", {
     },
     buttonText() {
       return this.lockText === null
-        ? "Reset your Dimensions and Dimension Boosts for a tickspeed boost"
+        ? "Reset your Dimensions and Dimension Boosts to increase the power of Tickspeed upgrades"
         : this.lockText;
     },
     sumText() {
@@ -51,9 +51,9 @@ Vue.component("antimatter-dim-galaxy-row", {
     costScalingText() {
       switch (this.type) {
         case GALAXY_TYPE.DISTANT:
-          return `Each galaxy is more expensive past ${formatInt(this.distantStart)} galaxies`;
+          return `Each Galaxy is more expensive past ${formatInt(this.distantStart)} Galaxies`;
         case GALAXY_TYPE.REMOTE:
-          return "Increased galaxy cost scaling: " +
+          return "Increased Galaxy cost scaling: " +
             `Quadratic past ${formatInt(this.distantStart)} (distant),
               exponential past ${formatInt(800)} (remote)`;
       }

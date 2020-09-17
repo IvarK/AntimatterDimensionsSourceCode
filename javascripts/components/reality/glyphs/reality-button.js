@@ -42,12 +42,12 @@ Vue.component("reality-button", {
       if (!isFinite(level)) level = 0;
       return glyphState.capped
         ? "Capped"
-        : `${Math.min(((level - Math.floor(level)) * 100), 99.9).toFixed(1)}%`;
+        : `${formatPercents(Math.min(((level - Math.floor(level))), 0.999), 1)}`;
     },
     update() {
       this.hasRealityStudy = TimeStudy.reality.isBought;
-      if (!this.hasRealityStudy || player.eternityPoints.lt("1e4000")) {
-        this.canReality = false;
+      this.canReality = isRealityAvailable();
+      if (!this.canReality) {
         this.shardsGained = 0;
         return;
       }
@@ -61,7 +61,6 @@ Vue.component("reality-button", {
         }
         return result;
       }
-      this.canReality = true;
       const multiplier = simulatedRealityCount(false) + 1;
       this.machinesGained = gainedRealityMachines().times(multiplier);
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
@@ -72,7 +71,7 @@ Vue.component("reality-button", {
       this.shardsGained = Effarig.shardsGained * multiplier;
 
       const teresaReward = this.formatScalingMultiplierText(
-        "Glyph sacrifice",
+        "Glyph Sacrifice",
         Teresa.runRewardMultiplier,
         Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(Currency.antimatter.value)));
       const teresaThreshold = this.formatThresholdText(
@@ -107,7 +106,7 @@ Vue.component("reality-button", {
         <div>{{formatGlyphLevel}}</div>
       </template>
       <template v-else-if="hasRealityStudy">
-        <div>Get {{format("1e4000", 0, 0)}} EP to unlock a new Reality</div>
+        <div>Get {{format("1e4000", 0, 0)}} Eternity Points to unlock a new Reality</div>
       </template>
       <template v-else>
         <div>Purchase the study in the Eternity tab to unlock a new Reality</div>

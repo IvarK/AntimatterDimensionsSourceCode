@@ -24,7 +24,7 @@ Vue.component("new-galaxy-row", {
     },
     buttonText() {
       return this.lockText === null
-        ? "Reset your Dimensions and Dimension Boosts for a tickspeed boost"
+        ? "Reset your Dimensions and Dimension Boosts to increase the power of Tickspeed upgrades"
         : this.lockText;
     },
     sumText() {
@@ -51,9 +51,9 @@ Vue.component("new-galaxy-row", {
     costScalingText() {
       switch (this.type) {
         case GALAXY_TYPE.DISTANT:
-          return `Each galaxy is more expensive past ${formatInt(this.distantStart)} galaxies`;
+          return `Each Galaxy is more expensive past ${formatInt(this.distantStart)} Galaxies`;
         case GALAXY_TYPE.REMOTE:
-          return "Increased galaxy cost scaling: " +
+          return "Increased Galaxy cost scaling: " +
             `Quadratic past ${formatInt(this.distantStart)} (distant), exponential past ${formatInt(800)} (remote)`;
       }
       return undefined;
@@ -82,11 +82,11 @@ Vue.component("new-galaxy-row", {
   },
   template:
   `<div class="reset-container galaxy">
-    <div style="height: 4rem;"><h4>{{typeName}} ({{sumText}})</h4></div>
+    <h4>{{typeName}} ({{sumText}})</h4>
     <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} Antimatter D</span>
-    <div style="height: 2rem;">{{ hasIncreasedScaling ? costScalingText : "" }}</div>
+    <span v-if="hasIncreasedScaling">{{ costScalingText }}</span>
     <button
-      class="o-primary-btn o-primary-btn--new" style="height: 56px; font-size: 1rem;"
+      class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
       :class="{ 'o-primary-btn--disabled': !canBeBought, ...tutorialClass }"
       @click.exact="buyGalaxy(true)"
       @click.shift.exact="buyGalaxy(false)"

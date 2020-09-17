@@ -76,7 +76,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "Innumerably Construct",
       id: 7,
       cost: 15,
-      requirement: "Complete your first Infinity with at most 1 galaxy",
+      requirement: "Complete your first Infinity with at most 1 Galaxy",
       hasFailed: () => !(player.galaxies <= 1 && player.noInfinitiesThisReality),
       checkRequirement: () => player.galaxies <= 1 && player.noInfinitiesThisReality,
       checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
@@ -116,7 +116,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "Existentially Prolong",
       id: 10,
       cost: 15,
-      requirement: () => `Complete your first Eternity with at least ${format("1e450")} IP`,
+      requirement: () => `Complete your first Eternity with at least ${format("1e450")} Infinity Points`,
       hasFailed: () => !player.noEternitiesThisReality,
       checkRequirement: () => player.infinityPoints.exponent >= 450 && player.noEternitiesThisReality,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
@@ -126,7 +126,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Boundless Flow",
       id: 11,
       cost: 50,
-      requirement: () => `${format(1e12)} banked Infinities`,
+      requirement: () => `${format(1e12)} Banked Infinities`,
       checkRequirement: () => player.infinitiedBank.exponent >= 12,
       checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
       description: "Every second, gain 10% of the Infinities you would normally gain by Infinitying",
@@ -137,11 +137,11 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Knowing Existence",
       id: 12,
       cost: 50,
-      requirement: () => `Eternity for ${format(1e70)} EP without Eternity Challenge 1`,
+      requirement: () => `Eternity for ${format(1e70)} Eternity Points without Eternity Challenge 1`,
       hasFailed: () => EternityChallenge(1).completions !== 0,
       checkRequirement: () => player.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: "EP multiplier based on Reality and Time Theorem count",
+      description: "Eternity Point multiplier based on Reality and Time Theorem count",
       effect: () => player.timestudy.theorem
         .minus(1e3).clampMin(2)
         .pow(Math.log2(Math.min(player.realities, 1e4))).clampMin(1),
@@ -151,12 +151,13 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Telemechanical Process",
       id: 13,
       cost: 50,
-      requirement: () => `Eternity for ${format("1e4000")} EP without Time Dimensions 5-8`,
+      requirement: () => `Eternity for ${format("1e4000")} Eternity Points without Time Dimensions 5-8`,
       hasFailed: () => !Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: () => `Unlock Time Dimension, ${formatX(5)} EP multiplier, and improved Eternity autobuyers`
+      description: () => `Unlock Time Dimension, ${formatX(5)} Eternity Point multiplier,
+      and improved Eternity autobuyers`
     },
     {
       name: "The Eternal Flow",
@@ -173,11 +174,12 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Paradoxical Forever",
       id: 15,
       cost: 50,
-      requirement: () => `Eternity for ${format(1e10)} EP without purchasing the ${formatX(5)} EP upgrade`,
+      requirement: () => `Eternity for ${format(1e10)} Eternity Points without purchasing
+      the ${formatX(5)} Eternity Point upgrade`,
       hasFailed: () => player.epmultUpgrades !== 0,
       checkRequirement: () => player.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: () => `Boost Tachyon Particle gain based on ${formatX(5)} EP multiplier`,
+      description: () => `Boost Tachyon Particle gain based on ${formatX(5)} Eternity Point multiplier`,
       effect: () => Math.max(Math.sqrt(Decimal.log10(EternityUpgrade.epMult.effectValue)) / 3, 1),
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -258,16 +260,16 @@ GameDatabase.reality.upgrades = (function() {
       name: "Cosmic Conglomerate",
       id: 21,
       cost: 100000,
-      requirement: () => `${formatInt(2800)} total galaxies from all types`,
+      requirement: () => `${formatInt(2800)} total Galaxies from all types`,
       checkRequirement: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= 2800,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-      description: "Remote galaxy scaling is removed"
+      description: "Remote Antimatter Galaxy scaling is removed"
     },
     {
       name: "Temporal Transcendence",
       id: 22,
       cost: 100000,
-      requirement: () => `${format("1e28000")} time shards`,
+      requirement: () => `${format("1e28000")} Time Shards`,
       checkRequirement: () => player.timeShards.exponent >= 28000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Time Dimension multiplier based on days spent in this Reality",
@@ -291,7 +293,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "Synthetic Symbolism",
       id: 24,
       cost: 100000,
-      requirement: () => `Reality for ${formatInt(5000)} RM without glyphs`,
+      requirement: () => `Reality for ${formatInt(5000)} Reality Machines without glyphs`,
       hasFailed: () => Glyphs.activeList.length > 0,
       checkRequirement: () => gainedRealityMachines().gte(5000) && Glyphs.activeList.length === 0,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
@@ -305,7 +307,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: () => `Reach ${format("1e11111")} EP`,
       checkRequirement: () => player.eternityPoints.exponent >= 11111,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-      description: "Reality autobuyer"
+      description: "Unlock the Reality autobuyer and automator command"
     },
   ];
 }());

@@ -14,9 +14,12 @@ Vue.component("infinity-upgrade-button", {
     };
   },
   computed: {
+    shiftDown() {
+      return ui.view.shiftDown;
+    },
     config() {
       const config = this.upgrade.config;
-      return (this.isCharged || this.showingCharged) ? config.charged : config;
+      return (this.isCharged || this.showingCharged || (this.shiftDown && this.canBeCharged)) ? config.charged : config;
     },
     classObject() {
       return {
@@ -24,7 +27,8 @@ Vue.component("infinity-upgrade-button", {
         "o-infinity-upgrade-btn--bought": this.isBought,
         "o-infinity-upgrade-btn--available": !this.isBought && this.canBeBought,
         "o-infinity-upgrade-btn--unavailable": !this.isBought && !this.canBeBought,
-        "o-infinity-upgrade-btn--chargeable": !this.isCharged && this.showingCharged && this.canBeCharged,
+        "o-infinity-upgrade-btn--chargeable": (!this.isCharged && this.showingCharged && this.canBeCharged) ||
+          (this.shiftDown && this.canBeCharged),
         "o-infinity-upgrade-btn--charged": this.isCharged,
       };
     }
@@ -48,8 +52,8 @@ Vue.component("infinity-upgrade-button", {
       <cost-display br
         v-if="!isBought"
         :config="config"
-        singular="IP"
-        plural="IP"
+        singular="Infinity Point"
+        plural="Infinity Points"
       />
       <slot />
     </button>`

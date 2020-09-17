@@ -93,8 +93,8 @@ function confirmReality() {
   return !player.options.confirmations.reality ||
     confirm("Reality will reset everything except challenge records. Your achievements are also reset, " +
       "but you will automatically get one back every 30 minutes. " +
-      "You will also gain reality machines based on your EP, a glyph with a power level " +
-      "based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of " +
+      "You will also gain Reality Machines based on your Eternity Points, a glyph with a power level " +
+      "based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend on quality of " +
       "life upgrades, and unlock various upgrades.");
 }
 
@@ -351,6 +351,7 @@ function finishProcessReality(realityProps) {
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
   player.bestInfinityTime = 999999999999;
+  player.bestInfinityRealTime = 999999999999;
   player.thisInfinityTime = 0;
   player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;
@@ -488,9 +489,9 @@ function applyRUPG10() {
   player.auto.dimensions = player.auto.dimensions.map(() => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
-    cost: 5e133,
+    cost: 1e14,
     interval: 100,
-    bulk: 1e100,
+    bulk: 1e10,
     mode: AUTOBUYER_MODE.BUY_10,
     priority: 1,
     isActive: true,

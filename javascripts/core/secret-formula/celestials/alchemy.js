@@ -45,7 +45,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 4,
       isUnlocked: () => Ra.pets.effarig.level >= 5,
       lockText: "Effarig Level 5",
-      formatEffect: value => `Replication speed ${formatX(value, 2, 2)}`
+      formatEffect: value => `Replication speed is increased by ${formatX(value, 2, 2)}`
     },
     [ALCHEMY_RESOURCE.DILATION]: {
       name: "Dilation",
@@ -56,7 +56,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 6,
       lockText: "Effarig Level 6",
-      formatEffect: value => `Dilated Time ${formatX(value, 2, 2)}`
+      formatEffect: value => `Dilated Time production is increased by ${formatX(value, 2, 2)}`
     },
 
     // T2 resources (combinations of pairs of T1 resources)
@@ -69,7 +69,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 8,
       lockText: "Effarig Level 8",
-      formatEffect: value => `Uncapped replicanti slowdown ${formatX(1.2, 1, 1)} ➜ ` +
+      formatEffect: value => `Replicanti interval increases slower ${formatX(1.2, 1, 1)} ➜ ` +
         `${formatX(value, 4, 4)} per ${format(Number.MAX_VALUE, 2)}`,
       reagents: [
         {
@@ -133,7 +133,8 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 11,
       lockText: "Effarig Level 11",
-      formatEffect: value => `${formatPow(1.05, 2, 2)} for Antimatter Dimension multipliers above ${format(value)}`,
+      formatEffect: value => `All Antimatter Dimension multipliers are ${formatPow(1.05, 2, 2)}
+      if they are above ${format(value)} `,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.POWER,
@@ -154,8 +155,8 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 4,
       isUnlocked: () => Ra.pets.effarig.level >= 12,
       lockText: "Effarig Level 12",
-      formatEffect: value => `Free galaxies are ${formatPercents(value, 2, 2)} stronger ` +
-        `per ${format("1e1000000")} replicanti`,
+      formatEffect: value => `Tachyon Galaxies are ${formatPercents(value, 2, 2)} stronger ` +
+        `per ${format("1e1000000")} Replicanti`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.REPLICATION,
@@ -178,7 +179,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3.5,
       isUnlocked: () => Ra.pets.effarig.level >= 7,
       lockText: "Effarig Level 7",
-      formatEffect: value => `Relic Shards ${formatX(value, 2, 2)}`
+      formatEffect: value => `Relic Shard gain is multiplied ${formatX(value, 2, 2)}`
     },
     [ALCHEMY_RESOURCE.SYNERGISM]: {
       name: "Synergism",
@@ -190,12 +191,12 @@ GameDatabase.celestials.alchemy = {
       isUnlocked: () => Ra.pets.effarig.level >= 13,
       lockText: "Effarig Level 13",
       formatEffect(value) {
-        const baseEffect = `Alchemy reaction efficiency 30% ➜ ${formatPercents(value, 2, 2)}`;
+        const baseEffect = `Alchemy reaction efficiency ${formatPercents(0.3)} ➜ ${formatPercents(value, 2, 2)}`;
         if (player.reality.glyphs.sac.reality === 0) {
           return baseEffect;
         }
         const increasedYield = formatPercents(value * Effects.sum(GlyphSacrifice.reality), 2, 2);
-        return `${baseEffect} (${increasedYield} after glyph sacrifice)`;
+        return `${baseEffect} (${increasedYield} after Glyph Sacrifice)`;
       },
       reagents: [
         {
@@ -221,8 +222,8 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 15,
       lockText: "Effarig Level 15",
-      formatEffect: value => `All Dimensions ${formatPow(Ra.momentumValue, 4, 4)}, increasing by ${format(0.002, 3, 3)} 
-        per hour (real-time, never resets), up to a maximum of ${formatPow(value, 4, 4)}`,
+      formatEffect: value => `All Dimensions ${formatPow(Ra.momentumValue, 4, 4)}, increasing by ${format(0.002, 3, 3)}
+        per hour (real-time, never decreases), up to a maximum of ${formatPow(value, 4, 4)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -248,7 +249,7 @@ GameDatabase.celestials.alchemy = {
       isUnlocked: () => Ra.pets.effarig.level >= 14,
       lockText: "Effarig Level 14",
       formatEffect: value => `Refined glyphs also give ${formatPercents(value, 2)} of their value ` +
-        "to other base resources",
+        "to all other base resources",
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -271,7 +272,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 2,
       isUnlocked: () => Ra.pets.effarig.level >= 18,
       lockText: "Effarig Level 18",
-      formatEffect: value => `IP multiplied by replicanti${formatPow(value, 2, 3)}`,
+      formatEffect: value => `Infinity Points multiplied by Replicanti${formatPow(value, 2, 3)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.INFLATION,
@@ -292,7 +293,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 2,
       isUnlocked: () => Ra.pets.effarig.level >= 17,
       lockText: "Effarig Level 17",
-      formatEffect: value => `Multiply Antimatter Dimensions by RM${formatPow(value, 2, 2)}`,
+      formatEffect: value => `Multiply Antimatter Dimensions by Reality Machines${formatPow(value, 2, 2)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.DIMENSIONALITY,
@@ -313,7 +314,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 19,
       lockText: "Effarig Level 19",
-      formatEffect: value => `Generate ${format(value, 2, 2)} Realities and perk points per second`,
+      formatEffect: value => `Generate ${format(value, 2, 2)} Realities and Perk Points per second`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.INFINITY,
@@ -359,7 +360,7 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 5,
       isUnlocked: () => Ra.pets.effarig.level >= 16,
       lockText: "Effarig Level 16",
-      formatEffect: value => `Each reality simulates ${format(value, 2, 3)} additional realities, giving all 
+      formatEffect: value => `Each Reality simulates ${format(value, 2, 3)} additional Realities, giving all
         the same rewards as if it was amplified`,
       reagents: [
         {

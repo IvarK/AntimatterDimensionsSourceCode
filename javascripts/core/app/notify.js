@@ -35,6 +35,7 @@ GameUI.notify = (function() {
     info: text => showNotification(text, "o-notification--info"),
     reality: text => showNotification(text, "o-notification--reality"),
     blackHole: text => showNotification(text, "o-notification--black-hole"),
+    memory: (text, petName) => showNotification(text, `o-notification--memory-${petName.toLowerCase()}`),
     showBlackHoles: true
   };
 }());

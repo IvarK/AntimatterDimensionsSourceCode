@@ -223,10 +223,10 @@ const AutomatorCommands = ((() => {
         const commands = C.visit(ctx.block);
         return {
           run: S => {
-            // We avoid running the same if condition twice by creating an empty object
-            // on the stack.
+            // If the commandState is empty, it means we haven't evaluated the if yet
             if (S.commandState !== null) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
-            S.commandState = {};
+            // We use this flag to make "single step" advance to the next command after the if when the block ends
+            S.commandState = { advanceOnPop: true };
             if (!evalComparison()) return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             AutomatorBackend.push(commands);
             return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
@@ -288,7 +288,8 @@ const AutomatorCommands = ((() => {
       id: "prestige",
       rule: $ => () => {
         $.CONSUME(T.PrestigeEvent);
-        $.OPTION(() => $.CONSUME(T.Nowait));
+        $.OPTION(() => $.CONSUME(T.Respec));
+        $.OPTION1(() => $.CONSUME(T.Nowait));
       },
       validate: (ctx, V) => {
         ctx.startLine = ctx.PrestigeEvent[0].startLine;
@@ -303,10 +304,14 @@ const AutomatorCommands = ((() => {
           return false;
         }
 
+        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity && ctx.Respec) {
+          V.addError(ctx.Respec, "There's no 'respec' for infinity");
+        }
         return true;
       },
       compile: ctx => {
         const nowait = ctx.Nowait !== undefined;
+        const respec = ctx.Respec !== undefined;
         const prestigeToken = ctx.PrestigeEvent[0].tokenType;
         return () => {
           const available = prestigeToken.$prestigeAvailable();
@@ -315,6 +320,7 @@ const AutomatorCommands = ((() => {
               ? AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
               : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
           }
+          if (respec) prestigeToken.$respec();
           prestigeToken.$prestige();
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         };

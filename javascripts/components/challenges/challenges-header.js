@@ -3,8 +3,6 @@
 Vue.component("challenges-header", {
   data() {
     return {
-      isICTabUnlocked: false,
-      isECTabUnlocked: false,
       isInChallenge: false,
       isShowAllVisible: false,
       isAutoECVisible: false,
@@ -26,15 +24,8 @@ Vue.component("challenges-header", {
   methods: {
     update() {
       this.showAllChallenges = player.options.showAllChallenges;
-      const isECTabUnlocked = player.challenge.eternity.unlocked !== 0 ||
-        Object.keys(player.eternityChalls).length > 0;
-      this.isECTabUnlocked = isECTabUnlocked;
-      const isICTabUnlocked = isECTabUnlocked ||
-        Currency.antimatter.exponent >= 2000 ||
-        player.postChallUnlocked > 0;
-      this.isICTabUnlocked = isICTabUnlocked;
       this.isInChallenge = NormalChallenge.isRunning || InfinityChallenge.isRunning || EternityChallenge.isRunning;
-      this.isShowAllVisible = PlayerProgress.realityUnlocked() && (isECTabUnlocked || isICTabUnlocked);
+      this.isShowAllVisible = PlayerProgress.eternityUnlocked();
       this.isAutoECVisible = Perk.autocompleteEC1.isBought;
       this.autoEC = player.reality.autoEC;
       const remainingCompletions = EternityChallenges.remainingCompletions;
@@ -70,12 +61,12 @@ Vue.component("challenges-header", {
       <primary-button-on-off v-if="isShowAllVisible"
         v-model="showAllChallenges"
         class="o-primary-btn--subtab-option"
-        text="Show all challenges:"
+        text="Show all known challenges:"
       />
       <primary-button-on-off v-if="isAutoECVisible"
         v-model="autoEC"
         class="o-primary-btn--subtab-option"
-        text="Auto EC:"
+        text="Auto Eternity Challenges:"
       />
       <primary-button v-if="isInChallenge"
         class="o-primary-btn--subtab-option"
@@ -90,11 +81,15 @@ Vue.component("challenges-header", {
         Exit Challenge
       </primary-button>
     </div>
+    <div v-if="autoEC && isAutoECVisible">
+      Eternity Challenges are automatically completed sequentially, requiring all previous
+      Eternity Challenges to be fully completed before any progress is made.
+    </div>
     <div v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
          class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info">
       <div class="l-challenges-tab__auto-ec-timers">
-        <span v-if="remainingECTiers > 1">next auto EC completion: {{untilNextEC}}</span>
-        <span>all auto EC completions: {{untilAllEC}}</span>
+        <span v-if="remainingECTiers > 1">Next Auto Eternity Challenge completion in: {{untilNextEC}}</span>
+        <span>All Auto Eternity Challenge completions in: {{untilAllEC}}</span>
       </div>
     </div>
   </div>

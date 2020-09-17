@@ -12,14 +12,15 @@ Vue.component("reality-upgrades-tab", {
   },
   template: `
     <div class="l-reality-upgrade-grid">
-      The first row of upgrades can be purchased endlessly, but get expensive more quickly above {{ format(1e30) }} RM
-      and {{ format(maxNumber, 1) }} RM.
+      The first row of upgrades can be purchased endlessly, but costs increase much faster above {{ format(1e30) }}
+      and {{ format(maxNumber, 1) }} Reality Machines.
       <br>
-      The rest of the upgrades are one-time upgrades which have an unlocking requirement in addition to an RM cost.
+      The rest of the upgrades are one-time upgrades which have an unlocking requirement in addition
+      to costing Reality Machines.
       <br>
       These requirements, once completed, permanently unlock the ability to purchase the upgrades at any point.
       <br>
-      Each complete row of purchased upgrades adds {{ formatInt(1) }} to your glyph level.
+      Every completed row of purchased upgrades increases your glyph level by {{ formatInt(1) }}.
       <br>
       Red upgrades are impossible to unlock this Reality, while yellow upgrades are still possible.
       <br>
@@ -33,7 +34,7 @@ Vue.component("reality-upgrades-tab", {
         <reality-upgrade-button
           v-for="column in 5"
           :key="id(row, column)"
-          :upgrade="upgrades[id(row, column)]" 
+          :upgrade="upgrades[id(row, column)]"
         />
       </div>
     </div>

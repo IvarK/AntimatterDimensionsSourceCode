@@ -72,7 +72,7 @@ Vue.component("game-header-big-crunch-button", {
   template:
     `<button
       v-if="isVisible"
-      class="o-prestige-btn o-prestige-btn--big-crunch l-game-header__big-crunch-btn"
+      class="o-prestige-button o-infinity-button l-game-header__big-crunch-btn"
       :class="classObject"
       onclick="bigCrunchResetRequest()"
     >

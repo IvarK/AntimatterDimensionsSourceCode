@@ -74,10 +74,11 @@ GameDatabase.infinity.upgrades = (function() {
     resetBoost: {
       id: "resetBoost",
       cost: 1,
-      description: "Decrease the number of Dimensions needed for Dimension Boosts and Antimatter Galaxies by 9",
+      description: () =>
+        `Decrease the number of Dimensions needed for Dimension Boosts and Antimatter Galaxies by ${formatInt(9)}`,
       effect: 9,
       charged: {
-        description: "Decrease Dimension Boost requirement based on Teresa level",
+        description: () => "Decrease Dimension Boost requirement based on Teresa level",
         effect: () => 1 / (1 + Math.sqrt(Ra.pets.teresa.level) / 10),
         formatEffect: value => `${formatX(value, 4, 4)}`
       }
@@ -85,11 +86,11 @@ GameDatabase.infinity.upgrades = (function() {
     buy10Mult: {
       id: "dimMult",
       cost: 1,
-      description: () => `Increase the multiplier for buying ${formatInt(10)} Dimensions`,
+      description: () => `Increase the multiplier for buying ${formatInt(10)} Antimatter Dimensions`,
       effect: () => 1.1,
       formatEffect: () => `${formatX(2, 0, 1)} ➜ ${formatX(2.2, 0, 1)}`,
       charged: {
-        description: () => `Multiplier for buying ${formatInt(10)} Dimensions gains ` +
+        description: () => `The multiplier for buying ${formatInt(10)} Antimatter Dimensions gains ` +
           "a power effect based on Teresa level",
         effect: () => 1 + Ra.pets.teresa.level / 200,
         formatEffect: value => formatPow(value, 3, 3)
@@ -148,7 +149,7 @@ GameDatabase.infinity.upgrades = (function() {
     ipGen: {
       id: "passiveGen",
       cost: 10,
-      description: "Passively generate Infinity Points 10 times slower than your fastest Infinity",
+      description: () => `Passively generate Infinity Points ${formatInt(10)} times slower than your fastest Infinity`,
       // Cutting corners: this is not actual effect (player.infMult is), but
       // it is totalIPMult that is displyed on upgrade
       effect: () => (Teresa.isRunning || V.isRunning ? new Decimal(0) : GameCache.totalIPMult.value),
@@ -161,8 +162,9 @@ GameDatabase.infinity.upgrades = (function() {
         return `${income} every ${period}`;
       },
       charged: {
-        description: "Gain a percentage of your RM gained on Reality each real-time second, " +
-          "percent increases with Teresa level",
+        description: () =>
+          `Gain a percentage of your Reality Machines gained on Reality each real-time second,
+          percent increases with Teresa level`,
         effect: () => Math.sqrt(Ra.pets.teresa.level) / 1000 * RA_UNLOCKS.TT_BOOST.effect.autoPrestige(),
         formatEffect: value => `${formatPercents(value, 2)}`
       }
@@ -171,35 +173,35 @@ GameDatabase.infinity.upgrades = (function() {
       id: "skipReset1",
       cost: 20,
       description: () =>
-        `You start with ${formatInt(1)} Dimension Shift, automatically unlocking the 5th Antimatter Dimension`,
+        `Start every reset with ${formatInt(1)} Dimension Boost, automatically unlocking the 5th Antimatter Dimension`,
       bannedFromCharging: true
     },
     skipReset2: {
       id: "skipReset2",
       cost: 40,
       description: () =>
-        `You start with ${formatInt(2)} Dimension Shifts, automatically unlocking the 6th Antimatter Dimension`,
+        `Start every reset with ${formatInt(2)} Dimension Boosts, automatically unlocking the 6th Antimatter Dimension`,
       bannedFromCharging: true
     },
     skipReset3: {
       id: "skipReset3",
       cost: 80,
       description: () =>
-        `You start with ${formatInt(3)} Dimension Shifts, automatically unlocking the 7th Antimatter Dimension`,
+        `Start every reset with ${formatInt(3)} Dimension Boosts, automatically unlocking the 7th Antimatter Dimension`,
       bannedFromCharging: true
     },
     skipResetGalaxy: {
       id: "skipResetGalaxy",
       cost: 300,
       description: () =>
-        `You start with ${formatInt(4)} Dimension Shifts, automatically unlocking the 8th Antimatter Dimension; ` +
-        "and you start with an Antimatter Galaxy",
+        `Start every reset with ${formatInt(4)} Dimension Boosts, automatically unlocking the 8th Antimatter Dimension;
+        and an Antimatter Galaxy`,
       bannedFromCharging: true
     },
     ipOffline: {
       id: "ipOffline",
       cost: 1000,
-      description: "Only while offline, gain 50% of your best IP/min without using Max All",
+      description: () => `Only while offline, gain ${formatPercents(0.5)} of your best IP/min without using Max All`,
       effect: () => player.bestIpPerMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
       formatEffect: value => `${format(value, 2, 2)} IP/min`,
       bannedFromCharging: true

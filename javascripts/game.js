@@ -166,7 +166,7 @@ function addInfinityTime(time, realTime, ip, infinities) {
 function resetInfinityRuns() {
   player.lastTenRuns = Array.from(
     { length: 10 },
-    () => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]
+    () => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]
   );
   GameCache.bestRunIPPM.invalidate();
 }
@@ -189,7 +189,7 @@ function addEternityTime(time, realTime, ep, eternities) {
 function resetEternityRuns() {
   player.lastTenEternities = Array.from(
     { length: 10 },
-    () => [defaultMaxTime, new Decimal(1), new Decimal(1), defaultMaxTime]
+    () => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]
   );
   GameCache.averageRealTimePerEternity.invalidate();
 }
@@ -235,6 +235,7 @@ function gainedInfinities() {
     );
     infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
     infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
+    infGain = infGain.powEffectOf(SingularityMilestone.infinitiedPow);
     return infGain;
 }
 
@@ -243,7 +244,7 @@ function gainedInfinities() {
   if (isLocalEnvironment()) return;
   let commit;
   setInterval(() => {
-    const url = "https://api.github.com/repos/IvarK/HahaSlabWontGetHere/commits/master";
+    const url = "https://api.github.com/repos/IvarK/IToughtAboutCurseWordsButThatWouldBeMeanToOmsi/commits/master";
     const headers = new Headers();
     // Yes, this is my GitHub API key for reading private repo details
     headers.append("Authorization", `Basic ${btoa("Razenpok:9b15284a7c7a1142b5766f81967a96f90b7879a8")}`);
@@ -350,6 +351,10 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
       factor = Math.pow(factor, nerfModifier);
     }
   }
+  
+  // 1e-300 is now possible with max inverted BH, going below it would be possible with
+  // an effarig glyph.
+  factor = Math.clamp(factor, 1e-300, 1e300);
 
   // Dev speedup should always be active
   if (tempSpeedupToggle) {
@@ -705,57 +710,10 @@ function recursiveTimeOut(fn, iterations, endFn) {
   else setTimeout(() => recursiveTimeOut(fn, iterations - 1, endFn), 0);
 }
 
-function afterSimulation(seconds, playerStart) {
-  if (seconds > 1000) {
-    const offlineIncreases = [];
-    // OoM increase
-    const oomVarNames = ["antimatter", "infinityPower", "timeShards"];
-    const oomResourceNames = ["antimatter", "infinity power", "time shards"];
-    for (let i = 0; i < oomVarNames.length; i++) {
-      const varName = oomVarNames[i];
-      const oomIncrease = player[varName].log10() - playerStart[varName].log10();
-      // Needs an isFinite check in case it's zero before or afterwards
-      if (player[varName].gt(playerStart[varName]) && Number.isFinite(oomIncrease)) {
-        offlineIncreases.push(`your ${oomResourceNames[i]} increased by ` +
-          `${format(oomIncrease, 2, 2)} orders of magnitude`);
-      }
-    }
-    // Linear increase
-    const linearVarNames = ["infinitied", "eternities"];
-    const linearResourceNames = ["infinities", "eternities"];
-    const prestigeReset = ["eternitied", "realitied"];
-    for (let i = 0; i < linearVarNames.length; i++) {
-      const varName = linearVarNames[i];
-      const linearIncrease = Decimal.sub(player[varName], playerStart[varName]);
-      if (linearIncrease.lessThan(0)) {
-        // This happens when a prestige autobuyer triggers offline and resets the value
-        offlineIncreases.push(`you ${prestigeReset[i]} and then generated ` +
-          `${format(player[varName], 2, 0)} more ${linearResourceNames[i]}`);
-      } else if (!Decimal.eq(player[varName], playerStart[varName])) {
-        offlineIncreases.push(`you generated ${format(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
-      }
-    }
-    // Black Hole activations
-    for (let i = 0; i < player.blackHole.length; i++) {
-      const currentActivations = player.blackHole[i].activations;
-      const oldActivations = playerStart.blackHole[i].activations;
-      const activationsDiff = currentActivations - oldActivations;
-      const pluralSuffix = activationsDiff === 1 ? " time" : " times";
-      if (activationsDiff > 0 && !BlackHole(i + 1).isPermanent) {
-        offlineIncreases.push(`Black Hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
-      }
-    }
-    let popupString;
-    if (offlineIncreases.length === 0) {
-      popupString = "While you were away... Nothing happened.";
-      SecretAchievement(36).unlock();
-    } else if (offlineIncreases.length === 1) {
-      popupString = `While you were away, <br>${offlineIncreases[0]}.`;
-    } else {
-      const last = offlineIncreases.pop();
-      popupString = `While you were away, <br>${offlineIncreases.join(", <br>")}, <br>and ${last}.`;
-    }
-    Modal.message.show(popupString);
+function afterSimulation(seconds, playerBefore) {
+  if (seconds > 600) {
+    const playerAfter = deepmerge.all([{}, player]);
+    Modal.awayProgress.show({ playerBefore, playerAfter, seconds });
   }
 
   GameUI.notify.showBlackHoles = true;
@@ -807,9 +765,6 @@ function simulateTime(seconds, real, fast) {
       );
   }
 
-  ui.view.modal.progressBar = {};
-  ui.view.modal.progressBar.label = "Simulating offline time...";
-
   let loopFn = () => gameLoop(largeDiff);
   let remainingRealSeconds = seconds;
   // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
@@ -822,32 +777,45 @@ function simulateTime(seconds, real, fast) {
     };
   }
 
-  Async.run(loopFn,
-    ticks,
-    {
-      batchSize: 1,
-      maxTime: 60,
-      sleepTime: 1,
-      asyncEntry: doneSoFar => {
-        GameIntervals.stop();
-        ui.$viewModel.modal.progressBar = {
-          label: "Simulating offline time...",
-          current: doneSoFar,
-          max: ticks,
-        };
-      },
-      asyncProgress: doneSoFar => {
-        ui.$viewModel.modal.progressBar.current = doneSoFar;
-      },
-      asyncExit: () => {
-        ui.$viewModel.modal.progressBar = undefined;
-        // .postLoadStuff will restart GameIntervals
-        GameStorage.postLoadStuff();
-      },
-      then: () => {
-        afterSimulation(seconds, playerStart);
-      }
-    });
+  // We don't show the offline modal here or bother with async if doing a fast simulation
+  if (fast) {
+    GameIntervals.stop();
+    for (let i = 0; i < 50; i++) {
+      loopFn();
+    }
+    GameStorage.postLoadStuff();
+    afterSimulation(seconds, playerStart);
+  } else {
+    ui.view.modal.progressBar = {};
+    ui.view.modal.progressBar.label = "Simulating offline time...";
+    Async.run(loopFn,
+      ticks,
+      {
+        batchSize: 1,
+        maxTime: 60,
+        sleepTime: 1,
+        asyncEntry: doneSoFar => {
+          GameIntervals.stop();
+          ui.$viewModel.modal.progressBar = {
+            label: "Simulating offline time...",
+            current: doneSoFar,
+            max: ticks,
+            startTime: Date.now()
+          };
+        },
+        asyncProgress: doneSoFar => {
+          ui.$viewModel.modal.progressBar.current = doneSoFar;
+        },
+        asyncExit: () => {
+          ui.$viewModel.modal.progressBar = undefined;
+          // .postLoadStuff will restart GameIntervals
+          GameStorage.postLoadStuff();
+        },
+        then: () => {
+          afterSimulation(seconds, playerStart);
+        }
+      });
+  }
 }
 
 function autoBuyDilationUpgrades(extraFactor) {

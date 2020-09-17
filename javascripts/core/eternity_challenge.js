@@ -217,7 +217,15 @@ class EternityChallengeState extends GameMechanicState {
 
   fail() {
     this.exit();
-    Modal.message.show("You failed the challenge, you have now exited it.");
+    let reason;
+    if (this.id === 4) {
+      reason = restriction => `having more than ${formatInt(restriction)} Infinities`;
+    } else if (this.id === 12) {
+      reason = restriction => `spending more than ${format(restriction, 0, 1)}
+        in-game ${restriction === 1 ? "second" : "seconds"} in it`;
+    }
+    Modal.message.show(`You failed Eternity Challenge ${this.id} due to
+      ${reason(this.config.restriction(this.completions))}; you have now exited it.`);
     EventHub.dispatch(GAME_EVENT.CHALLENGE_FAILED);
   }
 

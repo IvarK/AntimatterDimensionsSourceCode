@@ -26,7 +26,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 3,
-    description: "Dimensions 5-8 don't produce anything. Dimensional sacrifice is disabled.",
+    description: "Antimatter Dimensions 5-8 don't produce anything. Dimensional Sacrifice is disabled.",
     goal: new Decimal("1e600"),
     goalIncrease: new Decimal("1e75"),
     reward: {
@@ -45,7 +45,7 @@ GameDatabase.challenges.eternity = [
     formatRestriction: restriction => `in ${formatInt(restriction)} Infinities or less`,
     failedRestriction: "(Too many infinities for more)",
     reward: {
-      description: "Infinity Dimension multiplier based on unspent IP",
+      description: "Infinity Dimension multiplier based on unspent Infinity Points",
       effect: completions => player.infinityPoints.pow(0.003 + completions * 0.002),
       cap: new Decimal("1e200"),
       formatEffect: value => formatX(value, 2, 1)
@@ -53,14 +53,14 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 5,
-    description: () => `Galaxy cost increase scaling starts instantly (normally at ${formatInt(100)}
-      galaxies). Dimension Boost costs scaling is massively increased.`,
+    description: () => `Antimatter Galaxy cost increase scaling starts instantly (normally at ${formatInt(100)}
+      Galaxies). Dimension Boost costs scaling is massively increased.`,
     goal: new Decimal("1e750"),
     goalIncrease: new Decimal("1e400"),
     reward: {
       description: "Distant Galaxy cost scaling starts later",
       effect: completions => completions * 5,
-      formatEffect: value => `${formatInt(value)} galaxies later`
+      formatEffect: value => `${formatInt(value)} Antimatter Galaxies later`
     }
   },
   {
@@ -108,7 +108,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e1300"),
     goalIncrease: new Decimal("1e900"),
     reward: {
-      description: "Infinity Power strengthens Replicanti galaxies",
+      description: "Infinity Power strengthens Replicanti Galaxies",
       effect: completions => {
         const infinityPower = Math.log10(player.infinityPower.pLog10() + 1);
         return Math.max(0, Math.pow(infinityPower, 0.03 * completions) - 1);
@@ -118,12 +118,13 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 9,
-    description: "You can't buy tickspeed upgrades. Infinity Power instead multiplies " +
-      "Time Dimensions with greatly reduced effect.",
+    description:
+      `You can't buy Tickspeed upgrades. Infinity Power instead multiplies
+      Time Dimensions with greatly reduced effect.`,
     goal: new Decimal("1e1750"),
     goalIncrease: new Decimal("1e250"),
     reward: {
-      description: "Infinity Dimension multiplier based on time shards",
+      description: "Infinity Dimension multiplier based on Time Shards",
       effect: completions => player.timeShards.pow(completions * 0.1).clampMin(1),
       cap: new Decimal("1e400"),
       formatEffect: value => formatX(value, 2, 1)
@@ -133,7 +134,7 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
-        Infinitied stat to Antimatter Dimensions (infinitied^${formatInt(950)}).`;
+        Infinitied stat to Antimatter Dimensions (Infinitied^${formatInt(950)}).`;
       EternityChallenge(10).applyEffect(v => description += ` Currently: ${formatX(v, 2, 1)}`);
       return description;
     },
@@ -151,8 +152,9 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 11,
-    description: "All dimension multipliers and powers are disabled except for the multipliers from " +
-      "Infinity Power and Dimension Boosts (to Antimatter Dimensions).",
+    description:
+      `All dimension multipliers and powers are disabled except for the multipliers from
+      Infinity Power and Dimension Boosts (to Antimatter Dimensions).`,
     goal: new Decimal("1e500"),
     goalIncrease: new Decimal("1e200"),
     reward: {

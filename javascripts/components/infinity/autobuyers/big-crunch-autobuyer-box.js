@@ -46,7 +46,7 @@ Vue.component("big-crunch-autobuyer-box", {
           },
         };
       }
-      throw new Error("Unknown auto crunch mode");
+      throw new Error("Unknown Auto Crunch mode");
     },
     changeMode(event) {
       const mode = parseInt(event.target.value, 10);

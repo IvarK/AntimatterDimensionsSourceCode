@@ -4,7 +4,7 @@ GameDatabase.celestials.effarig = {
   unlocks: {
     adjuster: {
       id: 0,
-      description: "Glyph level weight adjustment",
+      description: "Adjustable Glyph level factor weights",
       cost: 1e7
     },
     basicFilter: {
@@ -25,24 +25,27 @@ GameDatabase.celestials.effarig = {
     infinity: {
       id: 4,
       label: "Infinity",
-      description:
-        "Infinitied stat raises the replicanti cap\n" +
-        "Infinitied stat increases your max RG\n" +
-        "Base IP gain is capped at 1e200 in Effarig's Reality\n" +
-        "Each type of IP multiplier is capped at 1e50 in Effarig's Reality"
+      get description() {
+        return ` Infinitied stat raises the Replicanti cap
+        Infinitied stat increases your max Replicanti Galaxies
+        Base Infinity Point gain is capped at ${format(1e200)} in Effarig's Reality
+        Each type of Infinity Point multiplier is capped at ${format(1e50)} in Effarig's Reality`;
+      },
     },
     eternity: {
       id: 5,
       label: "Eternity",
-      description: "Eternitied stat generates Infinitied stat\n" +
-        "Free tickspeed upgrade softcap is 100,000 larger\n" +
-        "IP is no longer limited in any way in Effarig's Reality\n" +
-        "You have unlocked The Enslaved Ones"
+      get description() {
+        return ` Eternitied stat generates Infinitied stat
+          Free tickspeed upgrade softcap is ${formatInt(100000)} larger
+          Infinity Points are no longer limited in any way in Effarig's Reality
+          You have unlocked The Enslaved Ones`;
+      },
     },
     reality: {
       id: 6,
       label: "Reality",
-      description: "You have unlocked Effarig Glyphs (You may equip at most one)"
+      description: " You have unlocked Effarig Glyphs (You may equip at most one)"
     }
   }
 };

@@ -5,6 +5,7 @@ Vue.component("tt-shop", {
     return {
       theoremAmount: new Decimal(0),
       theoremGeneration: new Decimal(0),
+      totalTimeTheorems: new Decimal(0),
       shopMinimized: false,
       minimizeAvailable: false,
       hasTTAutobuyer: false,
@@ -87,8 +88,9 @@ Vue.component("tt-shop", {
     update() {
       this.theoremAmount.copyFrom(player.timestudy.theorem);
       this.theoremGeneration.copyFrom(getTTPerSecond().times(getGameSpeedupFactor()));
+      this.totalTimeTheorems.copyFrom(player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()));
       this.shopMinimized = player.timestudy.shopMinimized;
-      this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought;
+      this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought || Perk.autobuyerTT1.isBought;
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
       this.ttAutobuyerOn = player.ttbuyer;
       const budget = this.budget;
@@ -127,6 +129,9 @@ Vue.component("tt-shop", {
             </div>
             <span v-if="theoremGeneration.gt(0)">
               You are gaining {{ TTgenRateText }}.
+            </span>
+            <span v-else>
+              You have {{ totalTimeTheorems }} total TT.
             </span>
           </div>
         </div>

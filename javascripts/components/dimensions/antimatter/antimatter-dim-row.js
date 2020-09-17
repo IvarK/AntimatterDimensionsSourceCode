@@ -18,7 +18,8 @@ Vue.component("antimatter-dim-row", {
       isAffordable: false,
       isAffordableUntil10: false,
       isContinuumActive: false,
-      continuumValue: 0
+      continuumValue: 0,
+      isShown: false
     };
   },
   computed: {
@@ -40,17 +41,19 @@ Vue.component("antimatter-dim-row", {
     },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
+    },
+    showRow() {
+      return this.isShown || this.isUnlocked || this.amount.gt(0);
     }
   },
   methods: {
     update() {
       const tier = this.tier;
-      const isUnlocked = AntimatterDimension(tier).isAvailableForPurchase;
-      this.isUnlocked = isUnlocked;
-      if (!isUnlocked) return;
+      if (tier > DimBoost.maxDimensionsUnlockable) return;
       const dimension = AntimatterDimension(tier);
+      this.isUnlocked = dimension.isAvailableForPurchase;
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 1;
-      this.multiplier.copyFrom(AntimatterDimension(tier).multiplier);
+      this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.totalAmount);
       this.boughtBefore10 = dimension.boughtBefore10;
       this.singleCost.copyFrom(dimension.cost);
@@ -62,6 +65,8 @@ Vue.component("antimatter-dim-row", {
       this.isAffordableUntil10 = dimension.isAffordableUntil10;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
+      this.isShown =
+        (DimBoost.totalBoosts > 0 && DimBoost.totalBoosts + 3 >= tier) || PlayerProgress.infinityUnlocked();
     },
     buySingle() {
       if (this.isContinuumActive) return;
@@ -93,7 +98,8 @@ Vue.component("antimatter-dim-row", {
     }
   },
   template:
-    `<div v-show="isUnlocked" class="c-antimatter-dim-row">
+    `<div v-show="showRow" class="c-antimatter-dim-row"
+      :class="{ 'c-dim-row--not-reached': !isUnlocked }">
       <div class="c-dim-row__label c-dim-row__name">
         {{name}} Antimatter Dimension {{formatX(multiplier, 1, 1)}}
       </div>
@@ -103,7 +109,7 @@ Vue.component("antimatter-dim-row", {
       </div>
       <primary-button
         v-if="!isContinuumActive"
-        :enabled="isAffordable && !isCapped"
+        :enabled="isAffordable && !isCapped && isUnlocked"
         class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
         :class="tutorialClass()"
         :ach-tooltip="cappedTooltip"
@@ -114,7 +120,7 @@ Vue.component("antimatter-dim-row", {
         </template>
       </primary-button>
       <primary-button
-        :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped"
+        :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
         class="o-primary-btn--buy-ad o-primary-btn--buy-10-ad l-dim-row__button"
         :ach-tooltip="cappedTooltip"
         @click="buyUntil10">

@@ -66,10 +66,17 @@ GameDatabase.infinity.breakUpgrades = (function() {
       description: "Passively generate Infinitied stat based on your fastest Infinity",
       effect: () => player.bestInfinityTime,
       formatEffect: value => {
-        const period = value >= 999999999999
-          ? "hundred or so years"
-          : Time.bestInfinity.times(5);
-        return `1 Infinity every ${period}`;
+        if (value === Number.MAX_VALUE) return "No Infinity generation";
+        let infinities = new Decimal(1);
+        infinities = infinities.timesEffectsOf(
+          RealityUpgrade(5),
+          RealityUpgrade(7)
+        );
+        infinities = infinities.times(getAdjustedGlyphEffect("infinityinfmult"));
+        infinities = infinities.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
+        return `${format(infinities)}
+          ${pluralize("Infinity", infinities, "Infinities")}
+          every ${Time.bestInfinity.times(5).toStringShort()}`;
       }
     },
     bulkDimBoost: {

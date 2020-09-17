@@ -48,7 +48,7 @@ Vue.component("infinity-upgrades-tab", {
     disChargeClassObject() {
       return {
         "o-primary-btn--subtab-option": true,
-        "o-primary-btn--respec-active": this.disCharge
+        "o-primary-btn--charged-respec-active": this.disCharge
       };
     },
     offlineIpUpgrade: () => InfinityUpgrade.ipOffline
@@ -80,11 +80,19 @@ Vue.component("infinity-upgrades-tab", {
         :class="disChargeClassObject"
         @click="disCharge = !disCharge"
         >
-        Un-charge all upgrades on next Reality ({{ formatInt(chargesUsed) }}/{{ formatInt(totalCharges) }} used)
+        Respec Charged Infinity Upgrades on next Reality
         </primary-button>
       </div>
-      Each upgrade requires the one above it to be purchased first.
-      The bottom two upgrades require the other {{formatInt(16)}} to already be purchased.
+      <div v-if="chargeUnlocked">
+        You have charged {{formatInt(chargesUsed)}}/{{formatInt(totalCharges)}} Infinity Upgrades.
+        Charged Infinity Upgrades have their effect altered.
+        <br>
+        Hold shift to show Charged Infinity Upgrades. You can freely respec your choices on Reality.
+      </div>
+      <div v-if="!chargeUnlocked">
+        Each upgrade requires the one above it to be purchased first.
+        The bottom two upgrades require the other {{formatInt(16)}} to already be purchased.
+      </div>
       <br>
       <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">
         <div v-for="(column, columnId) in grid" class="l-infinity-upgrade-grid__column">
@@ -104,9 +112,10 @@ Vue.component("infinity-upgrades-tab", {
         />
       </div>
       <div>
-        This IP multiplier can be bought repeatedly, but becomes more expensive
+        The Infinity Point multiplier can be bought repeatedly, but becomes more expensive
         <br>
-        above {{format(ipMultSoftCap)}} IP and cannot be purchased past {{format(ipMultHardCap)}} IP.
+        above {{format(ipMultSoftCap)}} Infinity Points and cannot be purchased past
+        {{format(ipMultHardCap)}} Infinity Points.
       </div>
     </div>`
 });

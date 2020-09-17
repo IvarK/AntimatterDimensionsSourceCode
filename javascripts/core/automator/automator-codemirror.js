@@ -130,7 +130,8 @@
       { regex: /preset(\s|$)|eternity(\s|$)|reality(\s|$)|use(\s|$)/ui, token: "variable-2" },
       { regex: /antimatter(\s|$|(?=,))|infinity(\s|$|(?=,))|time(\s|$|(?=,))/ui, token: "variable-2" },
       { regex: /x[\t ]+last(\s|$)/ui, token: "variable-2" },
-      { regex: /completions(\s|$)|ec(1[0-2]|[1-9]) completions(\s|$)/ui, token: "variable-2" },
+      { regex: /pending[\t ]+(completions|ip|ep|rm)(\s|$)|glyph[\t ]+level(\s|$)/ui, token: "variable-2" },
+      { regex: /ec(1[0-2]|[1-9])[\t ]+completions(\s|$)/ui, token: "variable-2" },
       {
         regex: /am(\s|$)|ip(\s|$)|ep(\s|$)|rm(\s|$)|rg(\s|$)|dt(\s|$)|tp(\s|$)|tt(\s|$)|max(\s|$)|total tt(\s|$)/ui,
         token: "variable-2",

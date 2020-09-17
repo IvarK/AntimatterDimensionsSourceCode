@@ -528,7 +528,7 @@ class AntimatterDimensionState extends DimensionState {
   /**
    * Continuum doesn't continually update dimension amount because that would require making the code
    * significantly messier to handle it properly. Instead an effective amount is calculated here, which
-   * is only used for production and checking for shift/boost/galaxy. Doesn't affect achievements.
+   * is only used for production and checking for boost/galaxy. Doesn't affect achievements.
    * Taking the max is kind of a hack but it seems to work in all cases. Obviously it works if
    * continuum isn't unlocked. If the dimension is being produced and the continuum is unlocked,
    * the dimension will be being produced in large numbers (since the save is endgame), so the amount

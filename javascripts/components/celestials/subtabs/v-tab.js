@@ -15,7 +15,9 @@ Vue.component("v-tab", {
       showReduction: false,
       runRecords: [],
       runGlyphs: [],
-      isFlipped: false
+      isFlipped: false,
+      isRunning: false,
+      hasAlchemy: false
     };
   },
   methods: {
@@ -33,6 +35,8 @@ Vue.component("v-tab", {
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
+      this.isRunning = V.isRunning;
+      this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     },
     startRun() {
       if (!resetReality()) return;
@@ -62,9 +66,13 @@ Vue.component("v-tab", {
       player.reality.pp -= hex.reductionCost;
       const steps = hex.config.reductionStepSize ? hex.config.reductionStepSize : 1;
       player.celestials.v.goalReductionSteps[hex.id] += steps;
+      for (const unlock of VRunUnlocks.all) {
+        unlock.tryComplete();
+      }
     },
     reductionTooltip(hex) {
-      return `Spend ${format(hex.reductionCost, 2, 0)} PP to reduce goal by ${format(hex.config.perReductionStep)}`;
+      return `Spend ${format(hex.reductionCost, 2, 0)} Perk Points
+      to reduce goal by ${format(hex.config.perReductionStep)}`;
     }
   },
   computed: {
@@ -109,9 +117,16 @@ Vue.component("v-tab", {
       ];
     },
     db: () => GameDatabase.celestials.v,
+    runButtonClassObject() {
+      return {
+        "l-v-hexagon": true,
+        "c-v-run-button": true,
+        "c-v-run-button--running": this.isRunning,
+      };
+    }
   },
-  template:
-    `<div class="l-v-celestial-tab">
+  template: `
+    <div class="l-v-celestial-tab">
       <div v-if="!mainUnlock">
         {{ format(rm, 2, 0) }} / {{ format(db.mainUnlock.rm, 2, 0) }} RM
         <br>
@@ -144,7 +159,7 @@ Vue.component("v-tab", {
           You have {{ format(pp, 2, 0) }} {{ "Perk Point" | pluralize(pp) }}.
         </div>
         <div class="l-v-unlocks-container">
-          <li v-for="hex in hexGrid">
+          <li v-for="hex in hexGrid" :style= "[hex.isRunButton ? {zIndex: 1} : {zIndex: 0}]">
             <div v-if="hex.config"
               class="l-v-hexagon c-v-unlock"
               :class="{ 'c-v-unlock-completed': hex.completions === hex.config.values.length }">
@@ -153,7 +168,9 @@ Vue.component("v-tab", {
                 <p class="o-v-unlock-goal-reduction" v-if="has(runMilestones[0]) && hex.isReduced">
                   Goal has been {{ mode(hex) }} by {{ reductionValue(hex) }}
                 </p>
-                <p class="o-v-unlock-amount">{{ hex.completions }}/{{hex.config.values.length}} done</p>
+                <p class="o-v-unlock-amount">
+                  {{ formatInt(hex.completions) }}/{{ formatInt(hex.config.values.length) }} done
+                </p>
                 <div v-if="showRecord(hex)">
                   <p class="o-v-unlock-record">
                     Best: {{ hex.config.formatRecord(runRecords[hex.id]) }}
@@ -175,11 +192,17 @@ Vue.component("v-tab", {
                   </div>
                 </div>
             </div>
-            <div v-else-if="hex.isRunButton" @click="startRun()" class="l-v-hexagon o-v-run-button">
-              <p>
-              Start V's Reality.<br/>All dimension multipliers, EP gain, IP gain, and Dilated Time gain per second
-              are square-rooted, and Replicanti interval is squared.
-              </p>
+            <div v-else-if="hex.isRunButton" @click="startRun()" :class="runButtonClassObject">
+              <b style="font-size: 1.5rem">Start V's Reality.</b>
+              <br/>
+              <div :style="{ 'font-size': hasAlchemy ? '1.1rem' : '' }">
+                All dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second
+                are square-rooted, and Replicanti interval is squared.
+                <span v-if="hasAlchemy">Exponential Glyph Alchemy effect is disabled.</span>
+              </div>
+              <div class="c-v-run-button__line c-v-run-button__line--1"></div>
+              <div class="c-v-run-button__line c-v-run-button__line--2"></div>
+              <div class="c-v-run-button__line c-v-run-button__line--3"></div>
             </div>
             <div v-else>
               <div style="opacity: 0" class="l-v-hexagon"></div>
@@ -191,7 +214,8 @@ Vue.component("v-tab", {
           and re-entering the Reality.
         </div>
         <div>
-          You have {{ formatInt(totalUnlocks) }} V-achievements done. You gain 1 Space Theorem for each completion,
+          You have {{ formatInt(totalUnlocks) }} V-achievements done.
+          You gain {{ formatInt(1) }} Space Theorem for each completion,
           allowing you to purchase Time Studies which are normally locked.
         </div>
         <br>
@@ -199,9 +223,9 @@ Vue.component("v-tab", {
           <div v-for="row in runMilestones" class="l-v-milestones-grid__row">
             <div class="o-v-milestone"
               v-for="milestone in row"
-              :class="{'o-v-milestone-unlocked':
+              :class="{'o-v-milestone--unlocked':
               has(milestone)}">
-                <p>{{ milestone.description }}</p>
+                <p>{{ milestone.description() }}</p>
                 <p>Reward: {{ rewardText(milestone) }}</p>
                 <p v-if="milestone.effect">Currently: <b>{{ milestone.format(milestone.effect()) }}</b></p>
             </div>

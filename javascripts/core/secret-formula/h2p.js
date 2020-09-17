@@ -97,27 +97,25 @@ in the Options tab.
       tags: ["dimension", "earlygame", "time"],
       tab: "dimensions/antimatter"
     }, {
-      name: "Dimension Shift/Boost",
+      name: "Dimension Boost",
       info: () => `
-<b>Dimension Shift:</b> This resets all of your Dimensions and your antimatter, but unlocks another Dimension for
-you to purchase. Each one requires ${formatInt(20)} of your highest unlocked Dimension.
+<b>Dimension Boost:</b> This resets all of your Dimensions and your Antimatter, but unlocks another Dimension for
+you to purchase and boosts your Dimension multipliers. The 1st Dimension Boost requires ${formatInt(20)} 4th
+Dimensions, the 2nd requires ${formatInt(20)} 5th Dimensions, etc. After unlocking all ${formatInt(8)} Dimensions,
+every additional boost will cost ${formatInt(15)} more 8th Dimensions than the previous Boost and will no longer
+unlock a Dimension, but will continue to increase your Dimension multipliers.
 <br>
 <br>
-<b>Dimension Boost:</b> A Dimension Shift, but you don't unlock a new Dimension. This happens after ${formatInt(4)}
-Dimension Shifts. The first Dimension Boost requires ${formatInt(20)} Eighth Dimensions and every additional boost
-will cost ${formatInt(15)} more than the previous Boost.
-<br>
-<br>
-You gain a ${formatX(2)} multiplier to the first Dimension for every Dimension Shift and Boost you have. Each higher
-dimension will have the multiplier applied one less time as the previous, down to a minimum of ${formatInt(0)}.
-For example, with ${formatInt(3)} Shifts, the First Dimension will gain ${formatX(8)},
-the Second Dimension ${formatX(4)}, the Third Dimension ${formatX(2)}, and all other Dimensions are unaffected.
+You gain a ${formatX(2)} multiplier to the 1st Dimension for every Dimension Boost you have. Each higher
+Dimension will have the multiplier applied one less time as the previous, down to a minimum of ${formatInt(0)}.
+For example, with ${formatInt(3)} Boosts, the 1st Dimension will gain ${formatX(8)}, the 2nd Dimension ${formatX(4)},
+the 3rd Dimension ${formatX(2)}, and all other Dimensions are unaffected.
 <br>
 <br>
 <b>Hotkey: D</b>
 `,
       isUnlocked: () => true,
-      tags: ["dimboost", "dimshift", "reset", "earlygame"],
+      tags: ["dimboost", "reset", "earlygame"],
       tab: "dimensions/antimatter"
     }, {
       name: "Antimatter Galaxies",
@@ -188,8 +186,9 @@ own rewards.
       info: () => `
 Once you have too much antimatter for the world to handle (${formatInt(2)}<sup>${formatInt(1024)}</sup>
 or about ${formatPostBreak(Number.MAX_VALUE, 6)},
-sometimes called "Infinity"), you’ll be forced to do a “Big Crunch”. This will reset your antimatter, Dimensions,
-Shifts/Boosts, and your Galaxies. Doing a Big Crunch is also sometimes referred to as "Infinitying".
+sometimes called "Infinity"), you’ll be forced to do a “Big Crunch”. This will reset your Antimatter, Antimatter
+Dimensions, Dimension Boosts, and your Antimatter Galaxies. Doing a Big Crunch is also sometimes referred to as
+"Infinitying".
 <br>
 <br>
 You will eventually be able to pass ${formatPostBreak(Number.MAX_VALUE, 6)}, but until then any larger numbers will
@@ -239,8 +238,8 @@ The rightmost row of Infinity Upgrades does not work in challenges.
 <b>Autobuyers:</b>
 <br>
 Autobuyers (awarded by completing challenges) allow the
-automatic purchase of Dimensions, Dimension Shifts/Boosts, Galaxies,
-tickspeed upgrades, Big Crunches, and Dimensional Sacrifice (later).
+automatic purchase of Dimensions, Dimension Boosts, Antimatter Galaxies,
+Tickspeed upgrades, Big Crunches, and Dimensional Sacrifice (later).
 They are located under the Infinity tab in "Autobuyers".
 <br>
 <br>
@@ -268,7 +267,7 @@ available.
 <b>Automatic Dimboost Customization:</b> With the Dimboost autobuyer you can set the max number of Boosts it will
 attempt to buy, a minimum number of Galaxies before Dimboosts are always auto-purchased, and (when unlocked) the
 ability to buy an exact number of Dimboosts in bulk. If you reach your specified Galaxy threshold, the autobuyer
-will ignore your max Boost limit. For the purposes of this autobuyer, your first four Shifts also count as Boosts.
+will ignore your max Boost limit.
 <br>
 <br>
 <b>Max Galaxies:</b> The highest amount of Galaxies the Galaxies autobuyer will buy.
@@ -464,7 +463,7 @@ Dimensions, your production will be reset to the amount you purchased after ever
 upgrades to your multipliers you purchased.
 <br>
 <br>
-Each threshold to gain another tickspeed upgrade is ${formatPercents(0.33)} more time shards than the previous,
+Each threshold to gain another tickspeed upgrade is ${formatPercents(0.33)} more Time Shards than the previous,
 or ${formatPercents(0.25)} with the relevant time study. After ${formatInt(300000)} upgrades, each successive free
 tickspeed upgrade will start counting as an additional ${format(0.1, 1, 1)} upgrades for the purposes of calculating
 shard thresholds. For example, your ${formatInt(300010)}th upgrade will require
@@ -566,8 +565,8 @@ other resources. Instead, you can only gain more Tachyon Particles by passing yo
 Time Dilation, and you will only gain more based on your <i>new</i> highest antimatter from this new run.
 <br>
 <br>
-Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Dilated Galaxies by
-reaching thresholds similarly to free tickspeed upgrades from Time Dimensions. These Dilated Galaxies are like
+Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Tachyon Galaxies by
+reaching thresholds similarly to free tickspeed upgrades from Time Dimensions. These Tachyon Galaxies are like
 Replicanti Galaxies in that they affect tickspeed as if they were Antimatter Galaxies but they don't increase the cost
 of your next Antimatter Galaxy.
 <br>
@@ -980,7 +979,7 @@ Theorems, they are freely given back every time you respec your studies.
 With enough Space Theorems you will eventually be able to purchase every single Time Study at once!
 <br>
 <br>
-Reaching 36 V-achievements (and therefore completing all of V's achievements) unlocks the next Celestial.
+Reaching ${formatInt(36)} V-achievements (and therefore completing all of V's achievements) unlocks the next Celestial.
 `,
       isUnlocked: () => Achievement(151).isUnlocked,
       tags: ["reality", "lategame", "endgame", "girlfriend", "challenges", "achievement", "space", "theorems",
@@ -1143,14 +1142,14 @@ do in the Reality.
 Singularities are a new resource which you can obtain using features within Lai'tela.
 <br>
 <br>
-In order to obtain Singularities, you need to reach ${format(2e4)} Dark Energy. When you do, you get the option to 
+In order to obtain Singularities, you need to reach ${format(2e3)} Dark Energy. When you do, you get the option to 
 condense all your Dark Energy into a Singularity, resetting it back to zero. Any extra Dark Energy above this amount 
 does not carry over, and is thus wasted. Note that only Dark Energy is reset, the status of your Dark Matter and its
 dimensions stays the same when condensing Singularities.
 <br>
 <br>
 At any point, you can freely increase or decrease the Dark Energy requirement to condense Singularities by a factor of 
-${formatInt(10)} (with a minimum of ${format(2e4)}). This increases or decreases the number of Singularities gained 
+${formatInt(10)} (with a minimum of ${format(2e3)}). This increases or decreases the number of Singularities gained 
 from resetting at the cap by <i>more than</i> a factor of ${formatInt(10)}, making higher caps worth more if you 
 are willing to wait.
 <br>

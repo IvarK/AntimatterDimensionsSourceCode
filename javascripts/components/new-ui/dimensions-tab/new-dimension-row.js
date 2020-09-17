@@ -19,7 +19,8 @@ Vue.component("new-dimension-row", {
       buyUntil10: true,
       howManyCanBuy: 0,
       isContinuumActive: false,
-      continuumValue: 0
+      continuumValue: 0,
+      isShown: false
     };
   },
   computed: {
@@ -44,16 +45,18 @@ Vue.component("new-dimension-row", {
     },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
+    },
+    showRow() {
+      return this.isShown || this.isUnlocked || this.amount.gt(0);
     }
   },
   methods: {
     update() {
       const tier = this.tier;
-      const isUnlocked = AntimatterDimension(tier).isAvailableForPurchase;
-      this.isUnlocked = isUnlocked;
-      if (!isUnlocked) return;
-      const buyUntil10 = player.buyUntil10;
+      if (tier > DimBoost.maxDimensionsUnlockable) return;
       const dimension = AntimatterDimension(tier);
+      this.isUnlocked = dimension.isAvailableForPurchase;
+      const buyUntil10 = player.buyUntil10;
       this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 10;
       this.multiplier.copyFrom(AntimatterDimension(tier).multiplier);
       this.amount.copyFrom(dimension.totalAmount);
@@ -68,6 +71,8 @@ Vue.component("new-dimension-row", {
       this.buyUntil10 = buyUntil10;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
+      this.isShown =
+        (DimBoost.totalBoosts > 0 && DimBoost.totalBoosts + 3 >= tier) || PlayerProgress.infinityUnlocked();
     },
     buy() {
       if (this.isContinuumActive) return;
@@ -98,7 +103,8 @@ Vue.component("new-dimension-row", {
     }
   },
   template:
-  `<div v-show="isUnlocked" class="c-antimatter-dim-row">
+  `<div v-show="showRow" class="c-antimatter-dim-row"
+    :class="{ 'c-dim-row--not-reached': !isUnlocked }">
     <div class="c-dim-row__label c-dim-row__name">
       {{name}} Antimatter D <span class="c-antimatter-dim-row__multiplier">{{formatX(multiplier, 1, 1)}}</span>
     </div>
@@ -107,7 +113,7 @@ Vue.component("new-dimension-row", {
       <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
     </div>
     <button class="o-primary-btn o-primary-btn--new" @click="buy"
-      :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }">
+      :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked}">
         <div class="button-content"
           :enabled="isAffordable || isContinuumActive"
           :ach-tooltip="cappedTooltip"
@@ -123,7 +129,7 @@ Vue.component("new-dimension-row", {
               Cost: {{ costDisplay }}
             </span>
         </div>
-        <div class="fill" v-if="!isContinuumActive">
+        <div class="fill" v-if="!isContinuumActive && isUnlocked && isAffordable">
           <div class="fill1" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
           <div class="fill2" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>
         </div>

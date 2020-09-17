@@ -18,8 +18,8 @@
   background-image: none;
 }
 
-.o-prestige-btn--big-crunch:hover span,
-.o-prestige-btn--eternity:hover span {
+.o-big-crunch-button:hover span,
+.o-eternity-button:hover span {
   color: transparent !important;
 }
 

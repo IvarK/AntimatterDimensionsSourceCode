@@ -75,9 +75,17 @@ Vue.component("celestial-navigation", {
           type: Number,
           default: 1.4
         },
+        symbolOffset: {
+          type: String,
+          default: "0"
+        },
         completeClass: String,
         incompleteClass: String,
         fill: String,
+        isStacked: {
+          type: Boolean,
+          default: false,
+        },
       },
       computed: {
         baseTransform() {
@@ -93,7 +101,7 @@ Vue.component("celestial-navigation", {
           return this.ring.rMajor * this.symbolScale;
         },
         ringFilter() {
-          return this.complete >= 1 ? "url(#completeGlow)" : "";
+          return this.complete >= 1 && !this.isStacked ? "url(#completeGlow)" : "";
         },
       },
       template: `
@@ -105,7 +113,8 @@ Vue.component("celestial-navigation", {
               class="o-celestial-nav__symbol o-no-mouse"
               fill="#000"
               dominant-baseline="middle"
-              :font-size="symbolFontSize">{{symbol}}</text>
+              :font-size="symbolFontSize"
+              :dy="symbolOffset">{{symbol}}</text>
       </g>
       `
     },
@@ -113,6 +122,10 @@ Vue.component("celestial-navigation", {
       props: {
         position: Vector,
         ring: Object,
+        isStacked: {
+          type: Boolean,
+          default: false,
+        },
       },
       computed: {
         ringBackgroundTransform() {
@@ -121,12 +134,15 @@ Vue.component("celestial-navigation", {
         ringBackgroundPath() {
           return svgRingPath(this.ring);
         },
+        ringBackgroundFilter() {
+          return this.isStacked ? "" : "url(#backgroundGlow)";
+        },
       },
       template: `
         <path :transform="ringBackgroundTransform"
               :d="ringBackgroundPath"
               fill="rgba(0,0,0,0.75)" stroke="none"
-              filter="url(#backgroundGlow)" />
+              :filter="ringBackgroundFilter" />
       `
     },
     "node-overlay": {
@@ -220,7 +236,7 @@ Vue.component("celestial-navigation", {
         },
         fill: {
           type: String,
-          default: "#4EF",
+          default: "#5151ec",
         },
         filterName: {
           type: String,
@@ -466,32 +482,36 @@ Vue.component("celestial-navigation", {
       <stop offset="1" stop-color="white" stop-opacity=".5"/>
     </linearGradient>
     <linearGradient id="gradTeresaEffarig" y2="0" x2="1" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#4EF"/>
-      <stop offset="1" stop-color="#5151ec"/>
+      <stop offset="0" stop-color="#5151ec"/>
+      <stop offset="1" stop-color="#d13737"/>
     </linearGradient>
     <linearGradient id="gradEffarigEnslaved" y2="0" x2="1" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#5151ec"/>
+      <stop offset="0" stop-color="#d13737"/>
       <stop offset="1" stop-color="#ffa337"/>
     </linearGradient>
     <linearGradient id="gradEnslavedV" y2="0" x2="1" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#ffa337"/>
-      <stop offset="1" stop-color="#6ef36e"/>
+      <stop offset="1" stop-color="#ffe066"/>
     </linearGradient>
     <linearGradient id="gradRaTeresa" y2="0" x2="1" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#d10043"/>
-      <stop offset="1" stop-color="#4EF"/>
-    </linearGradient>
-    <linearGradient id="gradRaEffarig" y2="0" x2="1" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#d10043"/>
+      <stop offset="0" stop-color="#9063de"/>
       <stop offset="1" stop-color="#5151ec"/>
     </linearGradient>
+    <linearGradient id="gradRaEffarig" y2="0" x2="1" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9063de"/>
+      <stop offset="1" stop-color="#d13737"/>
+    </linearGradient>
     <linearGradient id="gradRaEnslaved" y2="0" x2="1" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#d10043"/>
+      <stop offset="0" stop-color="#9063de"/>
       <stop offset="1" stop-color="#ffa337"/>
     </linearGradient>
     <linearGradient id="gradRaV" y2="0" x2="1" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#d10043"/>
-      <stop offset="1" stop-color="#6ef36e"/>
+      <stop offset="0" stop-color="#9063de"/>
+      <stop offset="1" stop-color="#ffe066"/>
+    </linearGradient>
+    <linearGradient id="gradRaLaitela" y2="0" x2="1" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9063de"/>
+      <stop offset="1" stop-color="white"/>
     </linearGradient>
     <mask id="fade" maskContentUnits="objectBoundingBox">
       <rect width="1" height="1" fill="url(#fadeGrad)"/>
@@ -511,7 +531,7 @@ Vue.component("celestial-navigation", {
       </feMerge>
     </filter>
   </defs>
-  <image x="-250" y="-350" height="1503" width="1503" href="images/celestial-navigation-bg.png" />
+  <image x="-250" y="-350" height="1503" width="1503" href="images/celestial-navigation-bg.webp" />
   <g v-for="(obj, index) in drawOrder" :key="index" :visibility="nodeVisibility(obj)">
     <component :is="obj.is"
                :complete="nodeState[obj.nodeId].complete"

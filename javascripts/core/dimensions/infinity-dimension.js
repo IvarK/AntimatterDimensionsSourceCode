@@ -8,6 +8,7 @@ function infinityDimensionCommonMultiplier() {
       TimeStudy(92),
       TimeStudy(162),
       InfinityChallenge(1).reward,
+      InfinityChallenge(6).reward,
       EternityChallenge(4).reward,
       EternityChallenge(9).reward,
       EternityUpgrade.idMultEP,
@@ -217,9 +218,7 @@ class InfinityDimensionState extends DimensionState {
     if (EternityChallenge(7).isRunning) {
       production = production.dividedBy(Tickspeed.current.dividedBy(1000));
     }
-    return production
-      .timesEffectOf(InfinityChallenge(6).reward)
-      .times(this.multiplier);
+    return production.times(this.multiplier);
   }
 
   get multiplier() {
@@ -306,12 +305,12 @@ class InfinityDimensionState extends DimensionState {
     this.isUnlocked = false;
   }
 
-  tryUnlock() {
+  tryUnlock(manual) {
     if (!Perk.bypassIDAntimatter.isBought && !this.requirementReached) return;
 
     this.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, this.tier);
-    if (player.infDimBuyers[this.tier - 1] &&
+    if (player.infDimBuyers[this.tier - 1] && !manual &&
       !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
       buyMaxInfDims(this.tier);
     }

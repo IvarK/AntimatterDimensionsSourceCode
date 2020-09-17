@@ -230,6 +230,7 @@ class BlackHoleState {
   }
 
   updatePhase(activePeriod) {
+    if (this.isPermanent) return;
     // Prevents a flickering black hole if phase gets set too high
     // (shouldn't ever happen in practice). Also, more importantly,
     // should work even if activePeriods[i] is very large. To check:
@@ -299,7 +300,7 @@ class BlackHoleState {
   
   description(capitalized) {
     if (RealityUpgrade(20).isBought) {
-      return `Black Hole ${this.id}`;
+      return `Black Hole ${formatInt(this.id)}`;
     }
     return capitalized ? "The Black Hole" : "the Black Hole";
   }

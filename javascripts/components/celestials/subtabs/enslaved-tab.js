@@ -97,13 +97,13 @@ Vue.component("modal-enslaved-hints", {
           <br>
         </div>
         <div v-if="realityHintsLeft + glyphHintsLeft > 0">
-          You can spend some time looking for some more cracks in the Reality, but every hint you spend time on
-          will increase the time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
+          You can spend some time looking for some more cracks in the Reality, but every hint you spend Stored Time on
+          will increase the Stored Time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
           gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
           divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
           <br>
           <br>
-          The next hint requires {{ hintCost }} stored in your Black Hole, which will be used up.
+          The next hint will cost {{ hintCost }} Stored Time.
           <span v-if="currentStored < nextHintCost">
             You will reach this if you charge your Black Hole for {{ timeEstimate }}.
           </span>
@@ -134,7 +134,7 @@ Vue.component("enslaved-tab", {
     autoStoreReal: false,
     canAdjustStoredTime: false,
     storedFraction: 0,
-    inEnslaved: false,
+    isRunning: false,
     completed: false,
     storedBlackHole: 0,
     storedReal: 0,
@@ -162,7 +162,7 @@ Vue.component("enslaved-tab", {
       return Enslaved.storedTimeInsideEnslaved(this.storedBlackHole);
     },
     realityTitle() {
-      return this.inEnslaved
+      return this.isRunning
         ? "You're inside Enslaved Ones' Reality"
         : "Start Enslaved One's Reality";
     },
@@ -178,6 +178,12 @@ Vue.component("enslaved-tab", {
         width: "60rem",
         tooltip: false
       };
+    },
+    runButtonClassObject() {
+      return {
+        "c-enslaved-run-button__icon": true,
+        "c-enslaved-run-button__icon--running": this.isRunning,
+      };
     }
   },
   watch: {
@@ -192,7 +198,7 @@ Vue.component("enslaved-tab", {
       this.isStoringReal = Enslaved.isStoringRealTime;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
-      this.inEnslaved = Enslaved.isRunning;
+      this.isRunning = Enslaved.isRunning;
       this.completed = Enslaved.isCompleted;
       this.storedReal = player.celestials.enslaved.storedReal;
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
@@ -264,105 +270,111 @@ Vue.component("enslaved-tab", {
       };
     }
   },
-  template:
-    `<div class="l-enslaved-celestial-tab">
-      <celestial-quote-history celestial="enslaved"/>
-      <primary-button
-        v-if="hintsUnlocked"
-        class="o-primary-btn"
-        onclick="Modal.enslavedHints.show()">
-          Examine the Reality more closely...
-      </primary-button>
-      <div class="l-enslaved-top-container">
-        <div class="l-enslaved-top-container__half">
-          Charging your black hole 
-          {{ canAdjustStoredTime ? "reduces your black hole speed" : "sets your game speed to 1" }}. You can use
-          time from charging to unlock Enslaved upgrades. You can also discharge it all in a single "supertick"
-          which acts as if it was the duration of all of your stored time.
-          <button :class="['o-enslaved-mechanic-button',
-                           {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
-                  @click="toggleStoreBlackHole">
-            <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedBlackHole) }}</div>
-            <div>{{ isStoringBlackHole ? "Charging black hole": "Charge black hole" }}</div>
-          </button>
-          <button class="o-enslaved-mechanic-button" @click="useStored">
-            Discharge black hole
-            <p v-if="inEnslaved">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
-          </button>
-        </div>
-        <div class="l-enslaved-top-container__half">
-          Storing real time completely halts all production, setting game speed to 0. You can use stored real time to
-          "amplify" a reality, simulating repeated runs of it. Amplified realities give all the rewards that normal
-          realities do.
-          <button :class="['o-enslaved-mechanic-button',
-                           {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
-                  @click="toggleStoreReal">
-            <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedReal) }}</div>
-            <div>{{ isStoringReal ? "Storing real time": "Store real time" }}</div>
-          </button>
-          <button :class="['o-enslaved-mechanic-button',
-                           {'o-enslaved-mechanic-button--storing-time': autoStoreReal}]"
-                  @click="toggleAutoStoreReal">
-            <div>{{ autoStoreReal ? "Offline time stored": "Offline time used for production" }}</div>
-          </button>
-          <div> Efficiency: {{ storedRealEfficiencyDesc }} </div>
-          <div> Maximum: {{ storedRealCapDesc }} </div>
-        </div>
-      </div>
-      <div v-if="canAdjustStoredTime" class="l-enslaved-top-container__half">
-        Black Hole charging rate: {{ storedTimeRate }}
-        <br>
-        <br>
-        <ad-slider-component
-            v-bind="sliderProps"
-            :value="storedFraction"
-            @input="adjustSlider($event)"
-          />
-      </div>
-      <br>
-      <div v-if="canAdjustStoredTime">
+  template: `
+    <div class="l-enslaved-celestial-tab">
+      <div class="c-subtab-option-container" v-if="canAdjustStoredTime">
         <primary-button-on-off
           v-model="autoRelease"
-          class="o-primary-btn"
-          text="Pulse black hole:"
+          class="o-primary-btn--subtab-option"
+          text="Pulse Black Hole:"
         />
       </div>
-      <div class="l-enslaved-shop-container">
-        <button
-          v-for="unlock in unlocksInfo"
-          :key="unlock.id"
-          class="o-enslaved-shop-button"
-          :class="unlockClassObject(unlock)"
-          @click="buyUnlock(unlock)"> 
-            {{ unlock.description() }}
-            <br> 
-            Costs: {{ timeDisplayShort(unlock.price) }}
-            <br>
-            <span v-if="isStoringBlackHole && !hasUnlock(unlock)">
-              Time to obtain: {{ timeDisplayShort(timeUntilBuy(unlock.price)) }}
-            </span>
-          </button>
-      </div>
-      <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">
-        <div class="o-enslaved-run-box">
-          <div class="o-enslaved-run-box__title">{{realityTitle}}</div>
-          <div v-if="completed"><b>(Completed)</b></div>
-          <div class="o-enslaved-run-button" @click="startRun">
-            <div class="o-enslaved-run-button__sigil fas fa-link" />
-            <div v-for="x in 25" class="o-enslaved-run-button__glitch"
-                                :style="glitchStyle(x)"/>
+      <div class="l-enslaved-celestial-tab--inner">
+        <div class="l-enslaved-run-container">
+          <div v-if="hasUnlock(unlocksInfo.RUN)">
+            <div class="c-enslaved-run-button">
+              <div class="c-enslaved-run-button__title">{{realityTitle}}</div>
+              <div v-if="completed"><b>(Completed)</b></div>
+              <div :class="runButtonClassObject" @click="startRun">
+                <div class="c-enslaved-run-button__icon__sigil fas fa-link" />
+                <div v-if="isRunning" v-for="x in 25" class="c-enslaved-run-button__icon__glitch"
+                                    :style="glitchStyle(x)"/>
+              </div>
+              <p>Glyph levels will be boosted to a minimum of {{ formatInt(5000) }}</p>
+              <p>Infinity, Time, and 8th Antimatter Dimension purchases are limited to {{ formatInt(1) }} each</p>
+              <p>Antimatter Dimension multipliers are always Dilated (the glyph effect still only
+                applies in actual Dilation)</p>
+              <p>Time Study 192 (uncapped Replicanti) is locked</p>
+              <p>The Black Hole is disabled</p>
+              <p>Tachyon Particle production and Dilated Time production are severely reduced</p>
+              <p>Time Theorem generation from Dilation glyphs is disabled</p>
+              <p>Certain challenge goals have been increased</p>
+              <p>Stored Time is discharged at a reduced effectiveness (exponent^{{ format(0.55, 2, 2) }})</p>
+              <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps
+              (see Infinity Dimension tab)</b>
+            </div>
           </div>
-          <p>Glyph levels will be boosted to a minimum of 5000</p>
-          <p>Infinity, time, and 8th dimension purchases are limited to 1 each.</p>
-          <p>Normal dimension multipliers are always dilated (the glyph effect still only
-             applies in actual dilation)</p>
-          <p>Time study 192 (uncapped replicanti) is locked</p>
-          <p>The black hole is disabled</p>
-          <p>Tachyon production and dilated time production are severely reduced</p>
-          <p>Time theorem generation from dilation glyphs is disabled</p>
-          <p>Certain challenge goals have been increased</p>
-          <p>Stored time is effectively dilated (exponent^0.5)</p>
-          <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps (see Infinity Dimension tab)</b>
+        </div>
+        <div class="l-enslaved-upgrades-column">
+          <celestial-quote-history celestial="enslaved"/>
+          <primary-button
+            v-if="hintsUnlocked"
+            class="o-primary-btn"
+            onclick="Modal.enslavedHints.show()">
+              Examine the Reality more closely...
+          </primary-button>
+          <div class="l-enslaved-top-container">
+            <div class="l-enslaved-top-container__half">
+              While charging, the Black Hole's speed boost is {{ canAdjustStoredTime ? "decreased" : "disabled" }},
+              and the lost speed is converted into Stored Time. Discharging the Black Hole allows you to skip
+              forward in time. Stored Time is also used to unlock certain upgrades.
+              <button :class="['o-enslaved-mechanic-button',
+                              {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
+                      @click="toggleStoreBlackHole">
+                <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedBlackHole) }}</div>
+                <div>{{ isStoringBlackHole ? "Charging Black Hole": "Charge Black Hole" }}</div>
+              </button>
+              <button class="o-enslaved-mechanic-button" @click="useStored">
+                Discharge Black Hole
+                <p v-if="isRunning">{{timeDisplayShort(nerfedBlackHoleTime)}} in this Reality</p>
+              </button>
+            </div>
+            <div class="l-enslaved-top-container__half">
+              Storing real time completely halts all production, setting game speed to {{ formatInt(0) }}.
+              You can use stored real time to "amplify" a Reality, simulating repeated runs of it.
+              Amplified Realities give all the rewards that normal realities do.
+              <button :class="['o-enslaved-mechanic-button',
+                              {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
+                      @click="toggleStoreReal">
+                <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedReal) }}</div>
+                <div>{{ isStoringReal ? "Storing real time": "Store real time" }}</div>
+              </button>
+              <button :class="['o-enslaved-mechanic-button',
+                              {'o-enslaved-mechanic-button--storing-time': autoStoreReal}]"
+                      @click="toggleAutoStoreReal">
+                <div>{{ autoStoreReal ? "Offline time stored": "Offline time used for production" }}</div>
+              </button>
+              <div> Efficiency: {{ storedRealEfficiencyDesc }} </div>
+              <div> Maximum stored real time: {{ storedRealCapDesc }} </div>
+            </div>
+          </div>
+          <div v-if="canAdjustStoredTime" class="l-enslaved-top-container__half">
+            Black Hole charging rate: {{ storedTimeRate }}
+            <br>
+            <br>
+            <ad-slider-component
+                v-bind="sliderProps"
+                :value="storedFraction"
+                @input="adjustSlider($event)"
+              />
+          </div>
+          <br>
+          <div class="l-enslaved-shop-container">
+            <button
+              v-for="unlock in unlocksInfo"
+              :key="unlock.id"
+              class="o-enslaved-shop-button"
+              :class="unlockClassObject(unlock)"
+              @click="buyUnlock(unlock)"> 
+                {{ unlock.description() }}
+                <br> 
+                Costs: {{ timeDisplayShort(unlock.price) }}
+                <br>
+                <span v-if="isStoringBlackHole && !hasUnlock(unlock)">
+                  Time to obtain: {{ timeDisplayShort(timeUntilBuy(unlock.price)) }}
+                </span>
+            </button>
+          </div>
         </div>
       </div>
     </div>`

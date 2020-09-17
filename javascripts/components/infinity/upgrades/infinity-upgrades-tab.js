@@ -4,7 +4,8 @@ Vue.component("infinity-upgrades-tab", {
   data() {
     return {
       chargeUnlocked: false,
-      chargesLeft: 0,
+      totalCharges: 0,
+      chargesUsed: 0,
       disCharge: false,
       ipMultSoftCap: 0,
       ipMultHardCap: 0,
@@ -46,8 +47,8 @@ Vue.component("infinity-upgrades-tab", {
     },
     disChargeClassObject() {
       return {
-        "o-primary-btn--respec-options": true,
-        "o-primary-btn--respec-active": this.disCharge
+        "o-primary-btn--subtab-option": true,
+        "o-primary-btn--charged-respec-active": this.disCharge
       };
     },
     offlineIpUpgrade: () => InfinityUpgrade.ipOffline
@@ -55,7 +56,8 @@ Vue.component("infinity-upgrades-tab", {
   methods: {
     update() {
       this.chargeUnlocked = Ra.chargeUnlocked;
-      this.chargesLeft = Ra.chargesLeft;
+      this.totalCharges = Ra.totalCharges;
+      this.chargesUsed = Ra.totalCharges - Ra.chargesLeft;
       this.disCharge = player.celestials.ra.disCharge;
       this.ipMultSoftCap = GameDatabase.infinity.upgrades.ipMult.costIncreaseThreshold;
       this.ipMultHardCap = GameDatabase.infinity.upgrades.ipMult.costCap;
@@ -71,17 +73,27 @@ Vue.component("infinity-upgrades-tab", {
       return classObject;
     }
   },
-  template:
-    `<div class="l-infinity-upgrades-tab">
-      <div v-if="chargeUnlocked">
-          <div>
-            You can charge {{ formatInt(chargesLeft) }} more {{ "upgrade" | pluralize(chargesLeft) }}.
-          </div>
-          <primary-button
-          :class="disChargeClassObject"
-          @click="disCharge = !disCharge"
-        >Un-charge all upgrades on next Reality</primary-button>
+  template: `
+    <div class="l-infinity-upgrades-tab">
+      <div class="c-subtab-option-container" v-if="chargeUnlocked">
+        <primary-button
+        :class="disChargeClassObject"
+        @click="disCharge = !disCharge"
+        >
+        Respec Charged Infinity Upgrades on next Reality
+        </primary-button>
       </div>
+      <div v-if="chargeUnlocked">
+        You have charged {{formatInt(chargesUsed)}}/{{formatInt(totalCharges)}} Infinity Upgrades.
+        Charged Infinity Upgrades have their effect altered.
+        <br>
+        Hold shift to show Charged Infinity Upgrades. You can freely respec your choices on Reality.
+      </div>
+      <div v-if="!chargeUnlocked">
+        Each upgrade requires the one above it to be purchased first.
+        The bottom two upgrades require the other {{formatInt(16)}} to already be purchased.
+      </div>
+      <br>
       <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">
         <div v-for="(column, columnId) in grid" class="l-infinity-upgrade-grid__column">
           <infinity-upgrade-button
@@ -100,9 +112,10 @@ Vue.component("infinity-upgrades-tab", {
         />
       </div>
       <div>
-        This IP multiplier can be bought repeatedly, but becomes more expensive
+        The Infinity Point multiplier can be bought repeatedly, but becomes more expensive
         <br>
-        above {{format(ipMultSoftCap)}} IP and cannot be purchased past {{format(ipMultHardCap)}} IP.
+        above {{format(ipMultSoftCap)}} Infinity Points and cannot be purchased past
+        {{format(ipMultHardCap)}} Infinity Points.
       </div>
     </div>`
 });

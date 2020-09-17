@@ -72,6 +72,8 @@ Vue.component("sacrificed-glyphs", {
       addThreshold: 0,
       empowerThreshold: 0,
       boostThreshold: 0,
+      teresaMult: 0,
+      lastRMTeresa: new Decimal(0),
     };
   },
   computed: {
@@ -84,13 +86,23 @@ Vue.component("sacrificed-glyphs", {
       this.addThreshold = GlyphAlteration.additionThreshold;
       this.empowerThreshold = GlyphAlteration.empowermentThreshold;
       this.boostThreshold = GlyphAlteration.boostingThreshold;
+      this.teresaMult = Teresa.runRewardMultiplier;
+      this.lastRMTeresa.copyFrom(player.celestials.teresa.lastRepeatedRM);
     },
     dragover(event) {
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
       event.preventDefault();
       this.hasDragover = true;
     },
-    dragleave() {
+    dragleave(event) {
+      if (
+        event.relatedTarget.classList.contains("c-current-glyph-effects") ||
+        event.relatedTarget.classList.contains("c-sacrificed-glyphs__header") ||
+        event.relatedTarget.classList.contains("l-sacrificed-glyphs__type") ||
+        event.relatedTarget.classList.contains("l-sacrificed-glyphs__type-symbol") ||
+        event.relatedTarget.classList.contains("l-sacrificed-glyphs__type-amount") ||
+        event.relatedTarget.classList.contains("c-sacrificed-glyphs__type-new-amount") ||
+        event.relatedTarget.classList.length === 0) return;
       this.hasDragover = false;
     },
     drop(event) {
@@ -104,28 +116,41 @@ Vue.component("sacrificed-glyphs", {
     },
   },
   template: `
-  <div v-show="anySacrifices"
-       class="c-sacrificed-glyphs l-sacrificed-glyphs"
-       :class="{'c-sacrificed-glyphs--dragover': hasDragover}"
-       @dragover="dragover"
-       @dragleave="dragleave"
-       @drop="drop">
-    <div v-if="hasAlteration">
-      Glyph types will have one of their effects<br>
-      improved when their sacrifice values are above:
-      <br><br>
-      {{ format(addThreshold) }} - an additional secondary effect<br>
-      {{ format(empowerThreshold) }} - formula drastically improved<br>
-      {{ format(boostThreshold) }} - a boost depending on glyph sacrifice
-      <br><br>
-    </div>
-    <div class="c-sacrificed-glyphs__header">Sacrifices:</div>
-    <template v-for="type in types">
-      <type-sacrifice :type="type" :hasDragover="hasDragover"/>
-    </template>
+  <div
+      class="c-current-glyph-effects l-current-glyph-effects"
+      :class="{'c-sacrificed-glyphs--dragover': hasDragover}"
+      @dragover="dragover"
+      @dragleave="dragleave"
+      @drop="drop">
     <div class="l-sacrificed-glyphs__help">
       <div>Drag glyphs here or shift-click to sacrifice.</div>
       <div>Ctrl-shift-click to sacrifice without confirmation</div>
+    </div>
+    <div class="c-sacrificed-glyphs__header">Glyph Sacrifice Boosts:</div>
+    <div
+    <div v-if="teresaMult > 1">
+      (Multiplied by {{ formatX(teresaMult, 2, 2) }}; Teresa last done at
+      {{ format(lastRMTeresa, 2) }} Reality Machines)
+    </div>
+    <div v-if="anySacrifices">
+      <template v-for="type in types">
+        <type-sacrifice :type="type" :hasDragover="hasDragover"/>
+      </template>
+      <div v-if="hasAlteration">
+        <br>
+        <b>Altered Glyphs</b>
+        <br>
+        Glyph types will have one of their effects<br>
+        improved when their sacrifice values are above:
+        <br><br>
+        {{ format(addThreshold) }} - an additional secondary effect<br>
+        {{ format(empowerThreshold) }} - formula drastically improved<br>
+        {{ format(boostThreshold) }} - a boost depending on Glyph Sacrifice
+        <br><br>
+      </div>
+    </div>
+    <div v-else>
+      You haven't sacrificed any glyphs yet!
     </div>
   </div>`,
 });

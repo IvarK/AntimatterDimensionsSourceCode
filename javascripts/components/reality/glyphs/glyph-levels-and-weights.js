@@ -10,7 +10,7 @@ Vue.component("glyph-levels-and-weights", {
       eternityVisible: false,
       perkShopVisible: false,
       penaltyVisible: false,
-      perkVisible: false,
+      rowVisible: false,
       achievementVisible: false,
       shardVisible: false,
       showAutoAdjustWeights: false,
@@ -57,16 +57,20 @@ Vue.component("glyph-levels-and-weights", {
     rowStylePenalty() {
       return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible);
     },
-    rowStylePerk() {
+    rowStyleRow() {
       return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible +
         this.penaltyVisible);
+    },
+    rowStyleAchievement() {
+      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.shardVisible +
+        this.penaltyVisible + this.rowVisible);
     },
     adjustOutlineStyle() {
       const rows = 5 + (this.showAutoAdjustWeights ? 1 : 0);
       return `grid-row: 1 / ${rows + 1}; -ms-grid-row: 1; -ms-grid-row-span: ${rows};`;
     },
     formatPerkShop() {
-      return `${(100 * (this.factors.perkShop - 1)).toFixed(1)}%`;
+      return formatPercents(this.factors.perkShop - 1, 1);
     },
     sliderProps() {
       return {
@@ -101,7 +105,7 @@ Vue.component("glyph-levels-and-weights", {
       this.eternityVisible = RealityUpgrade(18).isBought;
       const glyphFactors = getGlyphLevelInputs();
       this.perkShopVisible = glyphFactors.perkShop !== 1;
-      this.perkVisible = glyphFactors.perkFactor > 0;
+      this.rowVisible = glyphFactors.rowFactor > 0;
       this.achievementVisible = glyphFactors.achievementFactor > 0;
       this.shardVisible = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) && Effarig.shardsGained !== 0;
       if (glyphFactors.scalePenalty !== 1) {
@@ -110,7 +114,7 @@ Vue.component("glyph-levels-and-weights", {
       } else if (this.penaltyVisible) {
         if (Date.now() - this.lastInstability > 2000) this.penaltyVisible = false;
       }
-      this.rows = 3 + this.eternityVisible + this.perkShopVisible + this.perkVisible + this.penaltyVisible;
+      this.rows = 3 + this.eternityVisible + this.perkShopVisible + this.rowVisible + this.penaltyVisible;
       if (this.adjustVisible && this.rows < 6) {
         // Keep UI from getting crammed
         this.rows = 6;
@@ -228,18 +232,18 @@ Vue.component("glyph-levels-and-weights", {
           {{formatFactor(factors.scalePenalty)}}
         </div>
       </template>
-      <template v-if="perkVisible">
-        <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor">Perks</div>
-        <div :style="rowStylePerk" class="l-glyph-levels-and-weights__operator">+</div>
-        <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor-val">
-          {{factors.perkFactor}}&nbsp;&nbsp;&nbsp;&nbsp;
+      <template v-if="rowVisible">
+        <div :style="rowStyleRow" class="l-glyph-levels-and-weights__factor">Rows</div>
+        <div :style="rowStyleRow" class="l-glyph-levels-and-weights__operator">+</div>
+        <div :style="rowStyleRow" class="l-glyph-levels-and-weights__factor-val">
+          {{formatInt(factors.rowFactor)}}&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
       </template>
       <template v-if="achievementVisible">
-        <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor">Achievements</div>
-        <div :style="rowStylePerk" class="l-glyph-levels-and-weights__operator">+</div>
-        <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor-val">
-          {{factors.achievementFactor}}&nbsp;&nbsp;&nbsp;&nbsp;
+        <div :style="rowStyleAchievement" class="l-glyph-levels-and-weights__factor">Achievements</div>
+        <div :style="rowStyleAchievement" class="l-glyph-levels-and-weights__operator">+</div>
+        <div :style="rowStyleAchievement" class="l-glyph-levels-and-weights__factor-val">
+          {{formatInt(factors.achievementFactor)}}&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
       </template>
       <template v-if="adjustVisible">

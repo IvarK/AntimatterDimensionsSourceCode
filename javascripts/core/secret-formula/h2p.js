@@ -55,11 +55,11 @@ first Dimension until it can't anymore, then second, and so on.
 <br>
 <br>
 <b>Dimension base prices:</b> ${Array.range(1, 8)
-  .map(tier => format(NormalDimension(tier)._baseCost, 2, 2))
+  .map(tier => format(AntimatterDimension(tier)._baseCost, 2, 2))
   .join(", ")}
 <br>
 <b>Base per ${formatInt(10)} bought dimension price increases:</b> ${Array.range(1, 8)
-  .map(tier => format(NormalDimension(tier)._baseCostMultiplier, 2, 2))
+  .map(tier => format(AntimatterDimension(tier)._baseCostMultiplier, 2, 2))
   .join(", ")}
 <br>
 <br>
@@ -68,8 +68,8 @@ first Dimension until it can't anymore, then second, and so on.
 ${formatInt(1)} instead of ${formatInt(10)}), <b>M</b> for Max all
 `,
       isUnlocked: () => true,
-      tags: ["dims", "normal", "antimatter", "nd"],
-      tab: "dimensions/normal"
+      tags: ["dims", "normal", "antimatter", "ad"],
+      tab: "dimensions/antimatter"
     }, {
       name: "Tickspeed",
       info: () => `
@@ -81,8 +81,8 @@ you can make your Dimensions produce faster, as if multiple ticks occur in each 
 boosting production as if part of a game tick has passed.
 <br>
 <br>
-<b>Cost:</b> The cost of antimatter for reducing the time between ticks by the % displayed above
-(Without any Galaxies, this is -${formatPercents(0.11)} per purchase)
+<b>Cost:</b> The cost of antimatter for multiplying ticks/sec by the displayed multiplier.
+(without any Galaxies, this is ${formatX(1.1245, 0, 3)} per purchase)
 <br>
 <br>
 <b>Buy Max:</b> This will buy the maximum amount of tickspeed upgrades available
@@ -95,36 +95,34 @@ in the Options tab.
 `,
       isUnlocked: () => Tickspeed.isUnlocked,
       tags: ["dimension", "earlygame", "time"],
-      tab: "dimensions/normal"
+      tab: "dimensions/antimatter"
     }, {
-      name: "Dimension Shift/Boost",
+      name: "Dimension Boost",
       info: () => `
-<b>Dimension Shift:</b> This resets all of your Dimensions and your antimatter, but unlocks another Dimension for
-you to purchase. Each one requires ${formatInt(20)} of your highest unlocked Dimension.
+<b>Dimension Boost:</b> This resets all of your Dimensions and your Antimatter, but unlocks another Dimension for
+you to purchase and boosts your Dimension multipliers. The 1st Dimension Boost requires ${formatInt(20)} 4th
+Dimensions, the 2nd requires ${formatInt(20)} 5th Dimensions, etc. After unlocking all ${formatInt(8)} Dimensions,
+every additional boost will cost ${formatInt(15)} more 8th Dimensions than the previous Boost and will no longer
+unlock a Dimension, but will continue to increase your Dimension multipliers.
 <br>
 <br>
-<b>Dimension Boost:</b> A Dimension Shift, but you don't unlock a new Dimension. This happens after ${formatInt(4)}
-Dimension Shifts. The first Dimension Boost requires ${formatInt(20)} Eighth Dimensions and every additional boost
-will cost ${formatInt(15)} more than the previous Boost.
-<br>
-<br>
-You gain a ${formatX(2)} multiplier to the first Dimension for every Dimension Shift and Boost you have. Each higher
-dimension will have the multiplier applied one less time as the previous, down to a minimum of ${formatInt(0)}.
-For example, with ${formatInt(3)} Shifts, the First Dimension will gain ${formatX(8)},
-the Second Dimension ${formatX(4)}, the Third Dimension ${formatX(2)}, and all other Dimensions are unaffected.
+You gain a ${formatX(2)} multiplier to the 1st Dimension for every Dimension Boost you have. Each higher
+Dimension will have the multiplier applied one less time as the previous, down to a minimum of ${formatInt(0)}.
+For example, with ${formatInt(3)} Boosts, the 1st Dimension will gain ${formatX(8)}, the 2nd Dimension ${formatX(4)},
+the 3rd Dimension ${formatX(2)}, and all other Dimensions are unaffected.
 <br>
 <br>
 <b>Hotkey: D</b>
 `,
       isUnlocked: () => true,
-      tags: ["dimboost", "dimshift", "reset", "earlygame"],
-      tab: "dimensions/normal"
+      tags: ["dimboost", "reset", "earlygame"],
+      tab: "dimensions/antimatter"
     }, {
       name: "Antimatter Galaxies",
       info: () => `
 Purchasing an Antimatter Galaxy will reset your game back to the point where only ${formatInt(4)} Dimensions are
-available, but will increase the effect of your tickspeed upgrades by +${formatPercents(0.015, 1)} for your first two
-galaxies. As you get more galaxies, the reduction will continue becoming stronger and stronger.
+available, but will increase the effect of your tickspeed upgrades by +${format(0.02, 0, 2)} for your first two
+galaxies. As you get more galaxies, the multiplier will continue becoming stronger and stronger.
 <br>
 <br>
 Though it will have very little impact for the first few purchases,
@@ -138,14 +136,14 @@ Distant Galaxy scaling: Above ${formatInt(100)} Antimatter Galaxies the cost inc
 ${formatInt(2)} per Galaxy, making the next Galaxy cost ${formatInt(62)} more, then ${formatInt(64)} more, etc.
 <br>
 Remote Galaxy scaling: Above ${formatInt(800)} Antimatter Galaxies, the <i>total</i> cost increases by another
-${formatPercents(0.002)} per Galaxy, on top of Distant scaling.
+${formatPercents(0.002, 1)} per Galaxy, on top of Distant scaling.
 <br>
 <br>
 <b>Hotkey: G</b>
 `,
       isUnlocked: () => true,
       tags: ["8th", "reset", "earlygame"],
-      tab: "dimensions/normal"
+      tab: "dimensions/antimatter"
     }, {
       name: "Dimensional Sacrifice",
       info: () => `
@@ -167,7 +165,7 @@ ${formatX(8)} then ${formatX(5)}; in both cases you will end up with a total sac
 `,
       isUnlocked: () => Sacrifice.isVisible,
       tags: ["8th", "reset", "earlygame", "gods", "earlygame"],
-      tab: "dimensions/normal"
+      tab: "dimensions/antimatter"
     }, {
       name: "Achievements",
       // This one could use some work!
@@ -176,9 +174,9 @@ Each achievement has conditions that must be met before they are earned.
 Some are very simple, and some are significantly trickier.
 <br>
 <br>
-You will recieve a ${formatX(1.03, 2, 2)} multiplier to all normal Dimensions for each completed achievement, as well
-as an additional ${formatX(1.25, 2, 2)} for each fully completed row. In addition, many achievements have their own
-rewards.
+You will recieve a ${formatX(1.03, 2, 2)} multiplier to all Antimatter Dimensions for each completed achievement, as
+well as an additional ${formatX(1.25, 2, 2)} for each fully completed row. In addition, many achievements have their
+own rewards.
 `,
       isUnlocked: () => true,
       tags: ["earlygame", "awards", "earlygame"],
@@ -187,17 +185,18 @@ rewards.
       name: "Infinity",
       info: () => `
 Once you have too much antimatter for the world to handle (${formatInt(2)}<sup>${formatInt(1024)}</sup>
-or about ${format(Number.MAX_VALUE, 6)},
-sometimes called "Infinity"), you’ll be forced to do a “Big Crunch”. This will reset your antimatter, Dimensions,
-Shifts/Boosts, and your Galaxies. Doing a Big Crunch is also sometimes referred to as "Infinitying".
+or about ${formatPostBreak(Number.MAX_VALUE, 6)},
+sometimes called "Infinity"), you’ll be forced to do a “Big Crunch”. This will reset your Antimatter, Antimatter
+Dimensions, Dimension Boosts, and your Antimatter Galaxies. Doing a Big Crunch is also sometimes referred to as
+"Infinitying".
 <br>
 <br>
-You will eventually be able to pass ${format(Number.MAX_VALUE, 6)}, but until then any larger numbers will display
-as ${format(Infinity)}.
+You will eventually be able to pass ${formatPostBreak(Number.MAX_VALUE, 6)}, but until then any larger numbers will
+display as ${format(Infinity)}.
 <br>
 <br>
 Each Infinity completed will give an Infinity Point, which can be spent on upgrades in the new Infinity tab.
-You must purchase these upgrades from top to bottom. You will also gain one "infinitied stat", which is effectively
+You must purchase these upgrades from top to bottom. You will also gain one "Infinitied stat", which is effectively
 the number of times you have crunched.
 <br>
 <br>
@@ -215,8 +214,8 @@ You must buy all ${formatInt(16)} previous Infinity Upgrades to start purchasing
       name: "Challenges",
       info: () => `
 Challenges are unlocked after your first Infinity; they change in-game mechanics in different ways to create more
-difficult Infinity circumstances. To complete a challenge, you must reach ${format(Number.MAX_VALUE, 2)} antimatter
-again.
+difficult Infinity circumstances. To complete a challenge, you must reach ${formatPostBreak(Number.MAX_VALUE, 2)}
+antimatter again.
 <br>
 <br>
 Each completed challenge will award an autobuyer.
@@ -239,8 +238,8 @@ The rightmost row of Infinity Upgrades does not work in challenges.
 <b>Autobuyers:</b>
 <br>
 Autobuyers (awarded by completing challenges) allow the
-automatic purchase of Dimensions, Dimension Shifts/Boosts, Galaxies,
-tickspeed upgrades, Big Crunches, and Dimensional Sacrifice (later).
+automatic purchase of Dimensions, Dimension Boosts, Antimatter Galaxies,
+Tickspeed upgrades, Big Crunches, and Dimensional Sacrifice (later).
 They are located under the Infinity tab in "Autobuyers".
 <br>
 <br>
@@ -268,7 +267,7 @@ available.
 <b>Automatic Dimboost Customization:</b> With the Dimboost autobuyer you can set the max number of Boosts it will
 attempt to buy, a minimum number of Galaxies before Dimboosts are always auto-purchased, and (when unlocked) the
 ability to buy an exact number of Dimboosts in bulk. If you reach your specified Galaxy threshold, the autobuyer
-will ignore your max Boost limit. For the purposes of this autobuyer, your first four Shifts also count as Boosts.
+will ignore your max Boost limit.
 <br>
 <br>
 <b>Max Galaxies:</b> The highest amount of Galaxies the Galaxies autobuyer will buy.
@@ -292,18 +291,20 @@ individual autobuyer settings.
     }, {
       name: "Break Infinity",
       info: () => `
-Once you Break Infinity, you are no longer limited to ${format(Number.MAX_VALUE, 2)} antimatter and can start gaining
-more than ${formatInt(1)} IP per crunch depending on how much more antimatter you have when you crunch.
+Once you Break Infinity, you are no longer limited to ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter and can start
+gaining more than ${formatInt(1)} IP per crunch depending on how much more antimatter you have when you crunch.
 <br>
 <br>
-You now gain ~${format(1.78, 2, 2)} IP for crunching at ${format(Number.MAX_VALUE, 2)} antimatter. The IP you gain for
-crunching is multiplied by ${formatInt(10)} for every additional factor of ${format(Number.MAX_VALUE, 2)} antimatter
-you gain (in a continuous manner). This is rounded down to the nearest integer <i>after</i> all multipliers are applied.
+You now gain ~${format(1.78, 2, 2)} IP for crunching at ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter. The IP you
+gain for crunching is multiplied by ${formatInt(10)} for every additional factor of
+${formatPostBreak(Number.MAX_VALUE, 2)} antimatter you gain (in a continuous manner). This is rounded down to the
+nearest integer <i>after</i> all multipliers are applied.
 <br>
 <br>
-The antimatter costs of all Dimensions begin to increase faster after they pass ${format(Number.MAX_VALUE, 2)}. The
-cost <i>between</i> upgrades will increase by ${formatX(10)} <i>per upgrade</i> above ${format(Number.MAX_VALUE, 2)},
-and a similar scaling happens to tickspeed upgrade costs as well.
+The antimatter costs of all Dimensions begin to increase faster after they pass
+${formatPostBreak(Number.MAX_VALUE, 2)}. The cost <i>between</i> upgrades will increase by ${formatX(10)}
+<i>per upgrade</i> above ${formatPostBreak(Number.MAX_VALUE, 2)}, and a similar scaling happens to
+tickspeed upgrade costs as well.
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked(),
       tags: ["limit", "crunch", "upgrades", "midgame"],
@@ -319,7 +320,7 @@ Infinity Points. They give a permanent multiplier per purchase, similar to the o
 applied depends on which Infinity Dimension you purchase. <!-- Sorry Garnet :/ -->
 <br>
 <br>
-<b>Infinity Dimension Production:</b> Just like Normal Dimensions, each Infinity Dimension produces the
+<b>Infinity Dimension Production:</b> Just like Antimatter Dimensions, each Infinity Dimension produces the
 next highest Infinity Dimension.
 <br>
 <br>
@@ -328,7 +329,7 @@ of Infinity Dimensions doesn't carry between crunches, all the multipliers you g
 <br>
 <br>
 <b>Infinity Dimension unlock thresholds (antimatter):</b> ${Array.range(1, 8)
-  .map(tier => format(InfinityDimension(tier)._unlockRequirement))
+  .map(tier => formatPostBreak(InfinityDimension(tier)._unlockRequirement))
   .join(", ")}
 <br>
 <b>Infinity Dimension purchase multipliers:</b> ${Array.range(1, 8)
@@ -345,7 +346,7 @@ of Infinity Dimensions doesn't carry between crunches, all the multipliers you g
 <br>
 <br>
 Instead of antimatter, the First Infinity Dimension produces Infinity Power, which translates to a multiplier applied
-to all Normal Dimensions. This multiplier is equal to (power<sup>${formatInt(7)}</sup>). Infinity Dimensions are not
+to all Antimatter Dimensions. This multiplier is equal to (power<sup>${formatInt(7)}</sup>). Infinity Dimensions are not
 affected by tickspeed upgrades.
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked(),
@@ -364,7 +365,7 @@ amount of antimatter before you can attempt them.
 <br>
 <br>
 <b>Infinity Challenge unlock thresholds:</b> ${GameDatabase.challenges.infinity
-  .map(ic => format(ic.unlockAM)).join(", ")}
+  .map(ic => formatPostBreak(ic.unlockAM)).join(", ")}
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked(),
       tags: ["rewards", "break", "ic", "midgame"],
@@ -374,9 +375,9 @@ amount of antimatter before you can attempt them.
       info: () => `
 Replicanti are another resource you unlock at ${format(1e140)} IP. Rather
 than producing something else, Replicanti actually produces <i>itself</i> up to a maximum of
-${format(Number.MAX_VALUE, 2)}. Replicanti are produced at their own pace, unaffected by tickspeed upgrades. Each
-individual Replicanti has a certain chance (initially ${formatPercents(0.01)}) of producing another Replicanti every
-Replicanti tick (initially every second), and both of these can be upgraded by spending IP.
+${formatPostBreak(Number.MAX_VALUE, 2)}. Replicanti are produced at their own pace, unaffected by tickspeed upgrades.
+Each individual Replicanti has a certain chance (initially ${formatPercents(0.01)}) of producing another Replicanti
+every Replicanti tick (initially every second), and both of these can be upgraded by spending IP.
 <br>
 <br>
 If you have purchased a Replicanti Galaxy upgrade, then you can get a "free" Replicanti Galaxy in exchange for
@@ -387,7 +388,7 @@ Antimatter Galaxy, but it will not make your next Antimatter Galaxy more expensi
 <b>Hotkey: R</b> will buy a Replicanti Galaxy.
 <br>
 Replicanti give a multiplier to all Infinity Dimensions, which will reach a maximum of
-${formatX(Math.pow(2, 20), 2, 2)} at ${format(Number.MAX_VALUE, 2)} Replicanti.
+${formatX(Math.pow(2, 20), 2, 2)} at ${formatPostBreak(Number.MAX_VALUE, 2)} Replicanti.
 <br>
 <br>
 <b>Chance upgrade cost:</b> Base ${format(1e140)} IP, cost increment ${formatX(1e15)} IP
@@ -405,21 +406,21 @@ from quadratic to cubic, with the ${formatX(1e55)} multiplier itself increasing 
     }, {
       name: "Eternity",
       info: () => `
-Upon reaching ${format(Number.MAX_VALUE, 2)} IP, you can Eternity. Eternities will reset everything before this point
-except challenge times, achievements, and total antimatter. You will be able to access more content after your first
-Eternity.
+Upon reaching ${formatPostBreak(Number.MAX_VALUE, 2)} IP, you can Eternity. Eternities will reset everything before this
+point except challenge times, achievements, and total antimatter. You will be able to access more content after your
+first Eternity.
 <br>
 <br>
-You can pass ${format(Number.MAX_VALUE, 2)} IP without anything being forced upon you, unlike the first time you
-reached ${format(Number.MAX_VALUE, 2)} antimatter. You will recieve more Eternity Points the more Infinity Points you
-had before going Eternal. You will also gain one "eternitied stat" for completing an Eternity.
+You can pass ${formatPostBreak(Number.MAX_VALUE, 2)} IP without anything being forced upon you, unlike the first time
+you reached ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter. You will recieve more Eternity Points the more
+Infinity Points you had before going Eternal. You will also gain one "Eternitied stat" for completing an Eternity.
 <br>
 <br>
 Eternity Point gain scales similarly to Infinity Point gain, but scaling off of Infinity Points instead of antimatter.
-The base amount of EP gained at ${format(Number.MAX_VALUE, 2)} IP is ~${format(1.62, 2, 2)} EP, multiplied by
-${formatInt(5)} for every factor of ${format(Number.MAX_VALUE, 2)} more IP you have. This is always rounded down,
-which means that you will get ${formatInt(1)} EP at ${format(Number.MAX_VALUE, 2)} IP but will not reach
-${formatInt(2)} EP until ${format(new Decimal("1e349"))}.
+The base amount of EP gained at ${formatPostBreak(Number.MAX_VALUE, 2)} IP is ~${format(1.62, 2, 2)} EP, multiplied by
+${formatInt(5)} for every factor of ${formatPostBreak(Number.MAX_VALUE, 2)} more IP you have. This is always rounded
+down, which means that you will get ${formatInt(1)} EP at ${formatPostBreak(Number.MAX_VALUE, 2)} IP but will not reach
+${formatInt(2)} EP until ${formatPostBreak(new Decimal("1e349"))}.
 <b>Hotkey: E</b> will Eternity.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
@@ -462,12 +463,12 @@ Dimensions, your production will be reset to the amount you purchased after ever
 upgrades to your multipliers you purchased.
 <br>
 <br>
-Each threshold to gain another tickspeed upgrade is ${formatPercents(0.33)} more time shards than the previous,
-or ${formatPercents(0.25)} with the relevant time study. After ${format(300000)} upgrades, each successive free
+Each threshold to gain another tickspeed upgrade is ${formatPercents(0.33)} more Time Shards than the previous,
+or ${formatPercents(0.25)} with the relevant time study. After ${formatInt(300000)} upgrades, each successive free
 tickspeed upgrade will start counting as an additional ${format(0.1, 1, 1)} upgrades for the purposes of calculating
-shard thresholds. For example, your ${format(300010)}th upgrade will require
+shard thresholds. For example, your ${formatInt(300010)}th upgrade will require
 ${format(1.33, 2, 2)}<sup>${formatInt(2)}</sup> (or ${format(1.25, 2, 2)}<sup>${formatInt(2)}</sup>) times more
-shards than your ${format(300009)}th upgrade.
+shards than your ${formatInt(300009)}th upgrade.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["dims", "td", "shards", "eternity", "midgame"],
@@ -514,7 +515,7 @@ the middle of an Eternity.
 <br>
 <b>Costs multipliers per purchase:</b>
 <br>
-<b>Antimatter:</b> ${format(new Decimal("1e20000"))}
+<b>Antimatter:</b> ${formatPostBreak(new Decimal("1e20000"))}
 <br>
 <b>Infinity Points:</b> ${format(1e100)}
 <br>
@@ -532,7 +533,7 @@ amount of Time Theorems to enter, plus a secondary requirement which you must me
 <br>
 When you enter an Eternity Challenge, your goal becomes reaching a certain target IP. After completing the challenge,
 you do not need to have the Eternity Challenge's study unlocked for the reward to take effect. The rewards for these
-challenges are similar to time studies, but often even stronger and permanent since they don't require you to spend
+challenges are similar to Time Studies, but often even stronger and permanent since they don't require you to spend
 theorems to have their effects.
 <br>
 <br>
@@ -553,19 +554,19 @@ having to complete the secondary requirement again.
       info: () => `
 Time Dilation is unlocked when you purchase the ${formatInt(5000)} TT time study after
 beating both EC11 and EC12 five times, and after acquiring a total of ${formatInt(13000)} TT.
-Dilating time will start a modified Eternity, called Time Dilation, in which all of your Normal/Infinity/Time
+Dilating time will start a modified Eternity, called Time Dilation, in which all of your Antimatter/Infinity/Time
 Dimension multipliers’ <i>exponents</i> and the tickspeed multipliers’ <i>exponent</i> will raised to the power of
 ${format(0.75, 2, 2)}, significantly reducing them.
 <br>
 <br>
-If you can reach ${format(Number.MAX_VALUE, 2)} IP and then complete the Eternity while dilated, you will be rewarded
-with Tachyon Particles. You can dilate as many times as you want, but Tachyon Particles cannot be "farmed" like other
-resources. Instead, you can only gain more Tachyon Particles by passing your previous highest antimatter within Time
-Dilation, and you will only gain more based on your <i>new</i> highest antimatter from this new run.
+If you can reach ${formatPostBreak(Number.MAX_VALUE, 2)} IP and then complete the Eternity while Dilated, you will be
+rewarded with Tachyon Particles. You can dilate as many times as you want, but Tachyon Particles cannot be "farmed" like
+other resources. Instead, you can only gain more Tachyon Particles by passing your previous highest antimatter within
+Time Dilation, and you will only gain more based on your <i>new</i> highest antimatter from this new run.
 <br>
 <br>
-Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Dilated Galaxies by
-reaching thresholds similarly to free tickspeed upgrades from Time Dimensions. These Dilated Galaxies are like
+Tachyon Particles generate another currency called Dilated Time. Dilated Time is translated into Tachyon Galaxies by
+reaching thresholds similarly to free tickspeed upgrades from Time Dimensions. These Tachyon Galaxies are like
 Replicanti Galaxies in that they affect tickspeed as if they were Antimatter Galaxies but they don't increase the cost
 of your next Antimatter Galaxy.
 <br>
@@ -579,8 +580,8 @@ can be repeatedly purchased as many times as you can afford them.
     }, {
       name: "Reality",
       info: () => `
-When you reach ${format(5e9)} time theorems, ${format(new Decimal("1e4000"))} EP, and have completed the first
-${formatInt(13)} rows of achievements, you will be able to purchase the time study that unlocks Reality.
+When you reach ${format(5e9)} time theorems, ${formatPostBreak(new Decimal("1e4000"))} EP, and have completed the first
+${formatInt(13)} rows of achievements, you will be able to purchase the Time Study that unlocks Reality.
 Unlocking it opens a new tab, where you can find the button to make a new Reality. Starting a new Reality
 will reset everything you have done so far except challenge times and total antimatter, but in exchange gives
 you a new currency known as Reality Machines, a Glyph, and a Perk Point.
@@ -598,8 +599,8 @@ currency that can be spent in the Perks subtab on different Perks.
 <br>
 <br>
 Reality Machines scale purely off of EP, and the Reality button will tell you how much EP you need in order to gain
-the next one. The first ${formatInt(10)} RM scale linearly in the exponent between ${format(new Decimal("1e4000"))} EP
-and ${format(new Decimal("1e5334"))} EP, and then past that
+the next one. The first ${formatInt(10)} RM scale linearly in the exponent between
+${formatPostBreak(new Decimal("1e4000"))} EP and ${formatPostBreak(Decimal.pow(10, 16000 / 3))} EP, and then past that
 RM = ${formatInt(1000)}<sup>log<sub>${formatInt(10)}</sub>(EP)/${formatInt(4000)}-${formatInt(1)}</sup>.
 <br>
 <br>
@@ -723,19 +724,21 @@ Duration - How long each speed burst lasts before going back to normal speed,
 increased by ${formatPercents(0.3)} per upgrade.
 <br>
 <br>
-Once you reach ${formatInt(2)} years of game playtime, you unlock a Reality upgrade that allows you to have
+Once you reach ${formatInt(1)} year of game playtime, you unlock a Reality upgrade that allows you to have
 a second Black Hole. The time spent for this requirement is itself affected by the first Black Hole, so it
-takes much less than ${formatInt(2)} actual real-time years.
+takes much less than ${formatInt(1)} actual real-time year.
 <br>
 <br>
-Once the interval upgrade goes below ${formatInt(100)} ms of inactive time, it drops to ${formatInt(0)} ms
-and the Black Hole becomes permanently active. This is tracked separately for the two Black Holes.
+Once the Black Hole is active at least ${formatPercents(0.9999, 2)} of the time, it becomes permanently active.
+This is tracked separately for the two Black Holes.
 <br>
 <br>
 The timer on the second Black Hole only advances when the first Black Hole is active. So, for example, if the first
 Black Hole has a duration of ${formatInt(4)} minutes and the second has an interval of ${formatInt(8)} minutes, the
 second Black Hole will only activate once every two cycles of the first Black Hole regardless of how short the
-first Black Hole's interval is.
+first Black Hole's interval is. Note that the timer shown in the in-game header takes account of this and shows
+the actual time until the second Black Hole activates; in the Black Hole tab, you can see the amount of time with
+the first Black Hole active needed for the second Black Hole to activate.
 <br>
 <br>
 The Black Holes can be paused, completely halting their interval/duration cycle. However, when unpausing them, it will
@@ -767,15 +770,18 @@ All Celestials have their own Celestial Reality, but how the Reality is relevant
       name: "Teresa, Celestial of Reality",
       alias: "Teresa",
       info: () => `
-Teresa is the first Celestial. It is unlocked by obtaining all of the Reality upgrades.
+Teresa is the first Celestial. They are unlocked by obtaining all of the Reality upgrades.
 <br>
 On the main screen, there is a bar with a button above it that says "Pour RM". This allows you to put your RM into the
 container for a Reality Machine multiplier. RM which has been poured into the container can't be retrieved.
 When you reach ${format(TERESA_UNLOCKS.RUN.price)} RM inside of the container, you unlock Teresa's Reality.
 <br>
 <br>
-When you complete Teresa's Reality, your Glyph Sacrifice is multiplied based on the amount of antimatter gained during
-the run. Completing Teresa's Reality is only part of the story; you need to keep pouring RM in order to progress. Once
+When you complete Teresa's Reality,
+${Teresa.runCompleted
+  ? "your Glyph Sacrifice is multiplied based on the amount of antimatter gained during the run"
+  : "<div style='color: var(--color-bad);'>(complete Teresa's Reality to see this text)</div>"}. 
+Completing Teresa's Reality is only part of the story; you need to keep pouring RM in order to progress. Once
 you are at ${format(TERESA_UNLOCKS.EFFARIG.price)} RM in the container, you will unlock the next Celestial.
 `,
       isUnlocked: () => RealityUpgrades.allBought,
@@ -786,7 +792,7 @@ you are at ${format(TERESA_UNLOCKS.EFFARIG.price)} RM in the container, you will
       alias: "Effarig",
       info: () => `
 Effarig is the second Celestial you encounter.
-It is unlocked by pouring at least ${format(TERESA_UNLOCKS.EFFARIG.price)} RM into Teresa's container.
+They are unlocked by pouring at least ${format(TERESA_UNLOCKS.EFFARIG.price)} RM into Teresa's container.
 <br>
 Effarig introduces a currency called Relic Shards, which are obtained by using different kinds of Glyph effects during
 a Reality. The number of distinct effects active during the Reality very strongly affects Relic Shard gain, and EP
@@ -798,14 +804,23 @@ Using Relic Shards, you can purchase multiple upgrades (see "Advanced Glyph Mech
 allow you to filter them based on their effects and rarity when you are doing fully automated Realities.
 <br>
 <br>
-Effarig's final unlock is its own Reality at ${format(GameDatabase.celestials.effarig.unlocks.run.cost)} Relic
-Shards. Its Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer before
-getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial.
+Effarig's final unlock is their own Reality at ${format(GameDatabase.celestials.effarig.unlocks.run.cost)} Relic
+Shards. 
+${EffarigUnlock.run.isUnlocked
+  ? "Their Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer " +
+    "before getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial."
+  : "<div style='color: var(--color-bad);'>(unlock Effarig's Reality to see this text)</div>"
+}
 <br>
 <br>
-Completing Effarig's Reality unlocks a new Glyph type: <font color="#e21717">Effarig</font> Glyphs. Effarig Glyphs have
-${formatInt(7)} different possible effects, which you can view in the "Advanced Mode" settings. You can only have one
-Effarig Glyph equipped at a time, and they can still only have at most ${formatInt(4)} effects.
+Completing Effarig's Reality unlocks
+${EffarigUnlock.reality.isUnlocked
+  // Can't really make a nested template here without generally making a mess of the code
+  // eslint-disable-next-line prefer-template
+  ? "a new Glyph type: <div style='color: var(--color-bad);'>Effarig</div> Glyphs. Effarig Glyphs have " +
+    formatInt(7) + " different possible effects, which you can view in the \"Advanced Mode\" settings. You can only " +
+    "have one Effarig Glyph equipped at a time, and they can still only have at most " + formatInt(4) + " effects."
+  : "<div style='color: var(--color-bad);'>(complete Effarig's Reality to see this text)</div>"}
 `,
       isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
       tags: ["glyph", "sacrifice", "shards", "reality", "spectralflame", "lategame", "endgame"],
@@ -871,8 +886,9 @@ Stored game time is also used as a currency for purchasing unlocks from The Ensl
 <br>
 Charging your Black Hole gives you stored time, which it does at the expense of setting your game speed to
 ${formatInt(1)}. The game is in effect using your increased game speed in order to store time itself. Its
-main use is to discharge the Black Hole, which takes your stored time and applies it all at once in a single tick,
-making the game run as if you had an effective game speed even higher than you normally have for a single instant.
+main use is to discharge the Black Hole, which takes uses your stored time to skip forward in time by a duration
+equal to the time stored. This is different than regular game speed multipliers in that discharging is not subject to
+any modifiers to game speed when it is used, only when it is stored.
 <br>
 <br>
 Storing real time completely stops all production, effectively pausing your game. For every real-time second that
@@ -893,8 +909,11 @@ by ${format(1e5)} tickspeed upgrades.
 <br>
 <br>
 At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years, you are able to finally unlock
-their Reality. The reward for completing The Enslaved Ones' Reality is unlocking Tesseracts. The Enslaved Ones will not
-directly unlock the next Celestial.
+their Reality. The reward for completing The Enslaved Ones' Reality is 
+${Enslaved.isCompleted
+  ? "unlocking Tesseracts, which have their own How To Play entry."
+  : "<div style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see this text)</div>"}
+The Enslaved Ones will not directly unlock the next Celestial.
 `,
       isUnlocked: () => EffarigUnlock.eternity.isUnlocked,
       tags: ["reality", "time", "blackhole", "lategame", "endgame", "testers",
@@ -906,8 +925,8 @@ directly unlock the next Celestial.
 Tesseracts are a new resource you unlock for completing The Enslaved Ones' Reality.
 <br>
 <br>
-Infinity Dimensions are normally capped at ${format(InfinityDimensions.HARDCAP_PURCHASES)} total purchases, 
-which limits how large their multipliers can grow since eventually you can't upgrade them any more. 
+Infinity Dimensions are normally capped at ${format(InfinityDimensions.HARDCAP_PURCHASES)} total purchases,
+which limits how large their multipliers can grow since eventually you can't upgrade them any more.
 Tesseracts allow you to raise this cap by spending Infinity Points.
 <br>
 <br>
@@ -922,11 +941,11 @@ to reach the IP cost again in order to take advantage of the raised cap in later
       name: "V, Celestial of Achievements",
       alias: "V",
       info: () => `
-V is a special Celestial in the sense that she is not unlocked by another Celestial,
-but is instead unlocked by completing a certain achievement.
-She is unlocked by completing achievement ID 151 (row ${formatInt(15)}, column ${formatInt(1)},
+V is a special Celestial in the sense that they are not unlocked by another Celestial,
+but are instead unlocked by completing a certain achievement.
+They are unlocked by completing achievement ID 151 (row ${formatInt(15)}, column ${formatInt(1)},
 "You really didn't need it anyway"), which requires you to get ${formatInt(800)} Antimatter Galaxies
-without buying 8th Dimensions in your current Infinity.
+without buying 8th Antimatter Dimensions in your current Infinity.
 <br>
 <br>
 After being unlocked from the achievement, you are met with another set of requirements to fully unlock V.
@@ -934,18 +953,18 @@ You must have completed ${formatInt(GameDatabase.celestials.v.mainUnlock.realiti
 ${format(GameDatabase.celestials.v.mainUnlock.rm)} RM (which is not spent).
 Additionally you need to reach  ${format(GameDatabase.celestials.v.mainUnlock.eternities)} Eternities,
 ${format(GameDatabase.celestials.v.mainUnlock.infinities)} Infinities,
-${format(GameDatabase.celestials.v.mainUnlock.dilatedTime)} Dilated Time, and 
+${format(GameDatabase.celestials.v.mainUnlock.dilatedTime)} Dilated Time, and
 ${format(GameDatabase.celestials.v.mainUnlock.replicanti)} Replicanti, all in the same reality.
 <br>
 <br>
-When you meet all of those requirements, you will be able to access V's Reality. However, completing the 
-Reality itself is only the beginning. V has six different requirements, each of which require you to make a 
+When you meet all of those requirements, you will be able to access V's Reality. However, completing the
+Reality itself is only the beginning. V has six different requirements, each of which require you to make a
 certain amount of progress within V's Reality. Completing a requirement rewards you with a V-achievement.
 V-achievements are permanent and persist after exiting V's reality, and do not all need to be done simultaneously.
 <br>
 <br>
-After completing the requirement, the V-achievement threshold then increases and can be completed again 
-if you can reach the new goal.  You can complete each category of V-achievement up to six times. 
+After completing the requirement, the V-achievement threshold then increases and can be completed again
+if you can reach the new goal.  You can complete each category of V-achievement up to six times.
 Completed V-achievements do two things:
 <br>
 - Upon reaching certain totals of V-achievements, you automatically unlock upgrades on the V tab without needing
@@ -954,23 +973,23 @@ to spend any resources.
 - Each V-achievement also gives you one Space Theorem.
 <br>
 <br>
-Space Theorems allow you to purchase time studies which are normally forbidden, such as multiple paths in the 
-split after the improved IP formula, or both time studies within a black/white pair near the bottom. Like Time 
+Space Theorems allow you to purchase Time Studies which are normally forbidden, such as multiple paths in the
+split after the improved IP formula, or both Time Studies within a dark/light pair near the bottom. Like Time
 Theorems, they are freely given back every time you respec your studies.
-With enough Space Theorems you will eventually be able to purchase every single time study at once!
+With enough Space Theorems you will eventually be able to purchase every single Time Study at once!
 <br>
 <br>
-Reaching 36 V-achievements (and therefore completing all of V's achievements) unlocks the next Celestial.
+Reaching ${formatInt(36)} V-achievements (and therefore completing all of V's achievements) unlocks the next Celestial.
 `,
       isUnlocked: () => Achievement(151).isUnlocked,
-      tags: ["reality", "lategame", "endgame", "girlfriend", "challenges", "achievement", "space", "theorems", 
+      tags: ["reality", "lategame", "endgame", "girlfriend", "challenges", "achievement", "space", "theorems",
         "study", "triad"],
       tab: "celestials/v"
     }, {
       name: "Ra, Celestial of the Forgotten",
       alias: "Ra",
       info: () => `
-Ra is the fifth Celestial, unlocked by fully completing all of V's achievements. He brings back mechanics from
+Ra is the fifth Celestial, unlocked by fully completing all of V's achievements. They bring back mechanics from
 older Celestials in a stronger way, by using their memories. Over time, you will unlock the previous four
 Celestials <i>within</i> Ra, with each Celestial offering additional upgrades related to their original themes.
 <br>
@@ -984,23 +1003,31 @@ which allows you to choose a particular Celestial to gain more chunks while insi
 <br>
 <br>
 You start Ra with only Teresa unlocked, and each successive Celestial is unlocked by reaching level ${formatInt(10)}
-with the previous Celestial. Levels have no cap, but are significantly harder to gain above ${formatInt(25)}. 
+with the previous Celestial. Levels have no cap, but are significantly harder to gain above ${formatInt(25)}.
 <br>
 <br>
-Teresa unlocks the ability to charge your Infinity Upgrades, making them much stronger. She also
-improves your glyph effects once you reach certain thresholds in glyph sacrifice value.
+Teresa unlocks the ability to charge your Infinity Upgrades, making them much stronger. They also
+improve your glyph effects once you reach certain thresholds in glyph sacrifice value.
 <br>
 <br>
-Effarig unlocks a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually
-removing almost all random elements of glyph generation.
+At level ${formatInt(2)}, Effarig unlocks 
+${Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)
+  ? "a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually removing almost " +
+    "all random elements of glyph generation. This also has its own How To Play entry."
+  : "<div style='color: var(--color-bad);'>(unlock Effarig within Ra to see this text)</div>"}
 <br>
 <br>
-Enslaved makes your Black Holes significantly stronger and unlocks additional mechanics related to charging
-the Black Holes.
+The Enslaved Ones unlocks 
+${Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK)
+  ? "additional mechanics related to charging the Black Holes, as well as making them significantly stronger."
+  : "<div style='color: var(--color-bad);'>(unlock The Enslaved Ones within Ra to see this text)</div>"}
 <br>
 <br>
-V unlocks Triad Studies, which are time studies near the bottom of the tree which cost Space Theorems.
-She also unlocks a smaller set of more difficult V achievements to complete for additional Space Theorems.
+V unlocks 
+${Ra.has(RA_UNLOCKS.V_UNLOCK)
+  ? "Triad Studies, which are Time Studies near the bottom of the tree which cost Space Theorems. " +
+    "They also unlock a smaller set of more difficult V achievements to complete for additional Space Theorems."
+  : "<div style='color: var(--color-bad);'>(unlock V within Ra to see this text)</div>"}
 <br>
 <br>
 Having a total of ${formatInt(RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels)} levels across all four Celestials
@@ -1055,60 +1082,93 @@ that the reaction can't proceed due to not having enough of that reagent to get 
       name: "Lai'tela, Celestial of Dimensions",
       alias: "Lai'tela",
       info: () => `
-Lai'tela is the sixth Celestial, unlocked by getting ${formatInt(80)} total Ra levels. When you unlock Lai'tela,
-your normal dimensions and tickspeed switch to a new mode of production called Continuum, which gives the same effect
-but allows for buying fractions of dimensions or tickspeed upgrades. Lai'tela gives a new currency called Dark Matter
-which gives a multiplier to purchases of dimensions and tickspeed upgrades from Continuum (e.g., if the multiplier
-was ${format(1.1, 1, 1)} and you would normally have ${format(1e6, 2, 2)} purchases, Continuum would instead give you
-${format(1.1e6, 2, 2)} purchases). There are four Dark Matter Dimensions; each generates the previous, except the first
-which generates Dark Matter. You cannot buy Dark Matter Dimensions; instead you start with one of the
-First Dark Matter Dimension, and get one of the Second, Third, and Fourth Dark Matter Dimensions at
-${format(1e4, 0, 0)}, ${format(1e7, 0, 0)}, and ${format(1e10, 0, 0)} Dark Matter respectively.
-<br/>
-Each Dark Matter Dimension, every so often, generates a certain amount of Dark Matter or the previous
-Dark Matter Dimension (how much is based on the amount of the generating Dark Matter Dimension), and also
-generates another currency called Dark Energy to be explained later (independent of the amount of the generating
-Dark Matter Dimension). The time between generations is called the interval. The amount of Dark Matter or
-the previous Dark Matter Dimension generated per Dark Matter Dimension is called the Dark Matter power.
-The amount of Dark Energy generated is called the Dark Energy power. The Dark Matter Dimensions start with intervals
-${formatInt(1)}, ${formatInt(4)}, ${formatInt(16)}, and ${formatInt(64)} seconds respectively. Each has a repeatable
-upgrade decreasing its interval by 8%, and increasing in cost by ${format(3.2, 1, 1)}x each time it's purchased.
-The Dark Matter Dimensions all start with Dark Matter power ${formatInt(2)}. Each has a repeatable upgrade
-increasing its power and increasing in cost ${format(1.4, 1, 1)}x each time it's purchased.
-The base Dark Matter power of a Dark Matter Dimension is ${formatInt(1)} +
-${format(1.05, 2, 2)}^(times power upgrade has been purchased). The Dark Matter Dimensions all start
-with Dark Energy power ${format(2e-4, 4, 4)}. Each has a repeatable upgrade increasing its power and
-increasing in cost ${format(1.35, 2, 2)}x, ${format(1.3, 2, 2)}x, ${format(1.28, 2, 2)}x, and
-${format(1.27, 2, 2)}x (respectively) each time it's purchased. The base Dark Energy power of
-a Dark Matter Dimension is (${formatInt(1)} + times power upgrade has been purchased /
-${formatInt(10)}) / ${formatInt(1e3)}.
-<br/>
-Dark Energy gives a multiplier to Dark Matter Dimensions' Dark Matter power
-(but not their Dark Energy power) based on its amount and the amount of 8th Dimensions. So this multiplier boosts
-production of Dark Matter Dimensions and of Dark Matter, but not of Dark Energy.
-This is the only effect Dark Energy has.
-<br/>
-When you get ${format(1e30, 0, 0)} Dark Matter, you unlock a prestige layer called Annihilation.
-Annihilation resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, but adds to a multiplier
-(initially ${formatInt(1)}x) to Dark Energy. The amount added to the multiplier is
-(Dark Matter / ${format(1e30, 0, 0)})^${format(0.1, 1, 1)}. You can Annihilate
-multiple times, the additions to the multiplier stack additively, and there is no need
-to annihilate for a greater addition each time.
-<br/>
-Lai'tela has a Reality that is described on a button in Lai'tela's tab. Based on how well
-you do in this Reality, you will get a multiplier to Dark Matter Dimensions' Dark Matter power,
-similar in effect to the multiplier described above from Dark Energy.
-<br/>
-Formulas:
-<br/>
-Dark Matter boost to Continuum = ${formatInt(1)} + ln(${formatInt(1)} + log10(Dark Matter) / ${formatInt(100)})
-<br/>
-Multiplier to Dark Matter power based on Dark Energy = (${formatInt(1)} + Dark Energy)^(log10(${formatInt(1)} +
-8th Dimensions / ${format(1e6, 0, 0)}) / ${formatInt(4)})
+Lai'tela is the sixth Celestial, unlocked by getting ${formatInt(RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels)}
+total Ra levels.
+<br>
+<br>
+When you unlock Lai'tela, your Antimatter Dimensions and tickspeed switch to a new mode of production called Continuum, 
+which gives the same effect as previously but allows for buying fractions of dimensions or tickspeed upgrades. 
+Additionally, these fractional purchases are given for free without spending your antimatter. This makes your 
+autobuyers for Antimatter Dimensions obsolete, which is noted on the autobuyers page.
+<br>
+<br>
+Lai'tela gives a new currency called Dark Matter, which gives a multiplier to purchases of dimensions and tickspeed
+upgrades from Continuum based on the highest amount of Dark Matter you have ever had. Dark Matter is produced by 
+Dark Matter Dimensions, in a similar way to all other types of dimensions in the game. There are four Dark Matter 
+Dimensions; you start with the first one unlocked immediately and the higher ones are unlocked at increasing amounts
+of Dark Matter. When unlocking dimensions, you are given ${formatInt(1)} of the dimension and cannot gain more without 
+having it produced from the next tier up.
+<br>
+<br>
+Each Dark Matter Dimension, after a certain interval of time, generates two things: Dark Matter or the next lower 
+Dark Matter Dimension and another currency called Dark Energy. Dark Matter and Dark Matter Dimension production 
+per interval is equal to the product of your Dark Matter multiplier and the number of dimensions you have, while 
+Dark Energy production is independent of your dimension amount. Dark Energy is used to produce Singularities, which 
+have their own How to Play entry.
+<br>
+<br>
+Dark Matter Dimensions can have their intervals upgraded down to a minimum of ${formatInt(10)}ms, at which point 
+you cannot upgrade the interval any further. You can choose to ascend Dark Matter Dimensions which reach 
+that point, which multiplies Dark Matter and Dark Energy values for that Dimension by ${formatInt(1000)}. The interval 
+gets multiplied ${formatInt(10000)} (can be reduced with more progress in Lai'tela), but can be upgraded once again. 
+Reaching ${formatInt(10)}ms again allows you to ascend again if you choose to.
+<br>
+<br>
+When you get ${format(Laitela.annihilationDMRequirement)} Dark Matter, you unlock a prestige called Annihilation. 
+Annihilation resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, but adds to a permanent multiplier
+to Dark Matter. You can Annihilate multiple times, the additions to the multiplier stack additively, and there is 
+no need to annihilate for a greater addition each time.
+<br>
+<br>
+Lai'tela has a Reality which gives a multiplier to Dark Matter Dimensions' Dark Matter power based on how well you
+do in the Reality.
+<br>
+<br>
+<b>Dark Matter Dimension unlock thresholds (Dark Matter):</b> ${Array.range(1, 4)
+  // DM1 is 10 instead of 0 here, so make a special case to display it properly
+  .map(tier => format(tier === 1 ? 0 : MatterDimension(tier).adjustedStartingCost))
+  .join(", ")}
+<br>
+<b>Dark Matter Dimension initial interval (seconds):</b> ${Array.range(1, 4)
+  .map(tier => formatInt(Math.pow(4, tier)))
+  .join(", ")}
 `,
       isUnlocked: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
-      tags: ["omsi", "reality", "matter", "dimensions", "lategame", "endgame"],
+      tags: ["omsi", "reality", "dark", "matter", "dimensions", "lategame", "endgame", "ascend"],
       tab: "celestials/laitela"
+    }, {
+      name: "Singularities",
+      info: () => `
+Singularities are a new resource which you can obtain using features within Lai'tela.
+<br>
+<br>
+In order to obtain Singularities, you need to reach ${format(2e3)} Dark Energy. When you do, you get the option to 
+condense all your Dark Energy into a Singularity, resetting it back to zero. Any extra Dark Energy above this amount 
+does not carry over, and is thus wasted. Note that only Dark Energy is reset, the status of your Dark Matter and its
+dimensions stays the same when condensing Singularities.
+<br>
+<br>
+At any point, you can freely increase or decrease the Dark Energy requirement to condense Singularities by a factor of 
+${formatInt(10)} (with a minimum of ${format(2e3)}). This increases or decreases the number of Singularities gained 
+from resetting at the cap by <i>more than</i> a factor of ${formatInt(10)}, making higher caps worth more if you 
+are willing to wait.
+<br>
+<br>
+Reaching a certain number of Singularities will unlock Singularity milestones, which act similarly to Eternity 
+milestones. Unlocking these milestones simply requires you to reach the total number of Singularities specified. 
+There are three types of milestones - one-time milestones, milestones repeatable a limited number of times, and 
+milestones which can be repeated indefinitely. Additionally, milestones also have an icon indicating what kind of 
+upgrade they generally give:
+<br>
+<b>ᛝ</b> These milestones help mechanics specific to Lai'tela
+<br>
+<i class="fas fa-arrows-alt"></i> These milestones let a resource in Lai'tela affect the rest of the game
+<br>
+<i class="fas fa-compress-arrows-alt"></i> These milestones improve Lai'tela based on something outside of Lai'tela
+`,
+      isUnlocked: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
+      tags: ["reality", "lategame", "endgame", "laitela", "dark"],
+      tab: "celestials/singularity"
     }, {
       name: "Pelle, Celestial of Antimatter",
       alias: "Pelle",
@@ -1149,6 +1209,7 @@ Multiplier to Dark Matter power based on Dark Energy = (${formatInt(1)} + Dark E
   };
 
   const addPhrase = (phrase, tab) => {
+    addWord(phrase, tab);
     for (const part of phrase.split(" ")) {
       addWord(part, tab);
     }
@@ -1156,17 +1217,23 @@ Multiplier to Dark Matter power based on Dark Energy = (${formatInt(1)} + Dark E
 
   for (const tab of GameDatabase.h2p.tabs) {
     addPhrase(tab.name, tab);
+  }
+  for (const tab of GameDatabase.h2p.tabs) {
     for (const tag of tab.tags) {
       addPhrase(tag, tab);
     }
+  }
+  for (const tab of GameDatabase.h2p.tabs) {
     addPhrase(tab.alias, tab);
   }
 
   GameDatabase.h2p.search = query => {
     if (query === "") return GameDatabase.h2p.tabs;
-    const searchWords = query.toLowerCase().split(" ").filter(str => str !== "");
+    const words = query.toLowerCase().split(" ").filter(str => str !== "");
+    /* eslint-disable-next-line no-unused-vars*/
+    const searchTerms = words.map((_word, i, arr) => arr.slice(0, arr.length - i).join(" "));
     const result = new Set();
-    for (const searchWord of searchWords) {
+    for (const searchWord of searchTerms) {
       const matches = searchIndex[searchWord];
       if (matches === undefined) continue;
       for (const match of matches) {

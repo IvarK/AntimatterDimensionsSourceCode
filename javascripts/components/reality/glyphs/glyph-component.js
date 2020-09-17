@@ -110,15 +110,12 @@ const GlyphTooltipComponent = {
       return this.levelOverride ? this.levelOverride : this.level;
     },
     sortedEffects() {
-      return getGlyphEffectsFromBitmask(this.effects, this.effectiveLevel, this.strength)
+      return getGlyphEffectValuesFromBitmask(this.effects, this.effectiveLevel, this.strength)
         .filter(effect =>
           GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },
     rarityInfo() {
       return getRarity(this.strength);
-    },
-    roundedRarity() {
-      return 0.1 * Math.floor(strengthToRarity(this.strength) * 10 + 0.5);
     },
     descriptionStyle() {
       return {
@@ -135,7 +132,7 @@ const GlyphTooltipComponent = {
       if (this.type === "companion") return "Companion Glyph";
       if (this.type === "cursed") return "Cursed Glyph";
       const name = this.type === "reality" ? "Pure" : this.rarityInfo.name;
-      const rarity = this.type === "reality" ? "" : `(${this.roundedRarity.toFixed(1)}%)`;
+      const rarity = this.type === "reality" ? "" : `(${formatRarity(strengthToRarity(this.strength))})`;
       return `${name} Glyph of ${this.type.charAt(0).toUpperCase()}${this.type.slice(1)} ${rarity}`;
     },
     isLevelCapped() {
@@ -215,6 +212,9 @@ const GlyphTooltipComponent = {
     // else, with no z order shenanigans
     document.body.appendChild(this.$el);
   },
+  destroyed() {
+    document.body.removeChild(this.$el);
+  },
   template: `
   <div class="l-glyph-tooltip c-glyph-tooltip"
        :style="pointerEventStyle"
@@ -265,6 +265,10 @@ Vue.component("glyph-component", {
       type: String,
       default: "0.2rem"
     },
+    bottomPadding: {
+      type: String,
+      default: "0.3rem"
+    },
     textProportion: {
       type: Number,
       default: 0.5
@@ -274,6 +278,10 @@ Vue.component("glyph-component", {
       default: false,
     },
     draggable: {
+      type: Boolean,
+      default: false,
+    },
+    flipTooltip: {
       type: Boolean,
       default: false,
     }
@@ -289,6 +297,8 @@ Vue.component("glyph-component", {
       levelOverride: 0,
       isRealityGlyph: false,
       glyphEffects: [],
+      // We use this to not create a ton of tooltip components as soon as the glyph tab loads.
+      tooltipLoaded: false,
     };
   },
   computed: {
@@ -327,6 +337,7 @@ Vue.component("glyph-component", {
         "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
         "border-radius": this.circular ? "50%" : "0",
         animation: this.isRealityGlyph ? "a-reality-glyph-outer-cycle 10s infinite" : undefined,
+        "-webkit-user-drag": this.draggable ? "" : "none"
       };
     },
     innerStyle() {
@@ -339,6 +350,7 @@ Vue.component("glyph-component", {
         "text-shadow": `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
         animation: this.isRealityGlyph ? "a-reality-glyph-icon-cycle 10s infinite" : undefined,
+        "padding-bottom": this.bottomPadding
       };
     },
     mouseEventHandlers() {
@@ -358,6 +370,22 @@ Vue.component("glyph-component", {
     isCurrentTooltip() {
       return this.$viewModel.tabs.reality.currentGlyphTooltip === this.componentID;
     },
+    tooltipDirectionClass() {
+      let directionID = this.$viewModel.tabs.reality.glyphTooltipDirection;
+      if (this.flipTooltip) directionID += 1;
+      switch (directionID) {
+        case -1:
+          return "l-glyph-tooltip--down-left";
+        case 0:
+          return "l-glyph-tooltip--down-right";
+        case 1:
+          return "l-glyph-tooltip--up-left";
+        case 2:
+          return "l-glyph-tooltip--up-right";
+        default:
+          return "";
+      }
+    },
   },
   created() {
     this.$on("tooltip-touched", () => this.hideTooltip());
@@ -370,7 +398,7 @@ Vue.component("glyph-component", {
     update() {
       this.isRealityGlyph = this.glyph.type === "reality";
       this.glyphEffects = this.extractGlyphEffects();
-      this.showGlyphEffectDots = player.options.showGlyphEffectDots;
+      this.showGlyphEffectDots = player.options.showHintText.glyphEffectDots;
     },
     // This finds all the effects of a glyph and shifts all their IDs so that type's lowest-ID effect is 0 and all
     // other effects count up to 3 (or 6 for effarig). Used to add dots in unique positions on glyphs to show effects.
@@ -416,18 +444,33 @@ Vue.component("glyph-component", {
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },
     showTooltip() {
+      this.tooltipLoaded = true;
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = GlyphSacrificeHandler.isRefining && this.glyph.type !== "cursed"
+      this.sacrificeReward = GlyphSacrificeHandler.isRefining &&
+        ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
         ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
         : GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
       this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
     },
     moveTooltipTo(x, y) {
+      // If we are just creating the tooltip now, we can't move it yet.
+      if (!this.$refs.tooltip) {
+        this.$nextTick(() => this.moveTooltipTo(x, y));
+        return;
+      }
       const tooltipEl = this.$refs.tooltip.$el;
       if (tooltipEl) {
         const rect = document.body.getBoundingClientRect();
         tooltipEl.style.left = `${x - rect.left}px`;
         tooltipEl.style.top = `${y - rect.top}px`;
+        if (this.$viewModel.tabs.reality.glyphTooltipDirection === 1) {
+          // In case of a really short screen, don't flicker back and forth
+          if (y - tooltipEl.offsetHeight <= 0 && y + tooltipEl.offsetHeight < rect.height) {
+            this.$viewModel.tabs.reality.glyphTooltipDirection = -1;
+          }
+        } else if (y + tooltipEl.offsetHeight >= rect.height) {
+          this.$viewModel.tabs.reality.glyphTooltipDirection = 1;
+        }
       }
     },
     mouseEnter(ev) {
@@ -527,7 +570,7 @@ Vue.component("glyph-component", {
         background: `${this.glyph.color || getRarity(this.glyph.strength).color}`,
         transform: `translate(${dx}rem, ${dy}rem)`,
         animation: this.glyph.type === "reality" ? "a-reality-glyph-dot-cycle 10s infinite" : "none",
-        opacity: 0.8
+        opacity: Theme.current().name === "S9" ? 0 : 0.8
       };
     }
   },
@@ -544,17 +587,17 @@ Vue.component("glyph-component", {
            :style="innerStyle"
            :class="['l-glyph-component', 'c-glyph-component']">
         {{symbol}}
-        <div v-if="showGlyphEffectDots" v-for="x in glyphEffects"
+        <div v-if="$viewModel.shiftDown || showGlyphEffectDots" v-for="x in glyphEffects"
           :style="glyphEffectIcon(x)"/>
-        <glyph-tooltip v-if="hasTooltip"
-                       v-show="isCurrentTooltip"
-                       ref="tooltip"
-                       v-bind="glyph"
-                       :sacrificeReward="sacrificeReward"
-                       :showDeletionText="showSacrifice"
-                       :levelOverride="levelOverride"
-                       :visible="isCurrentTooltip"
-                       :key="isCurrentTooltip"/>
+        <glyph-tooltip v-if="hasTooltip && tooltipLoaded"
+          v-show="isCurrentTooltip"
+          ref="tooltip"
+          v-bind="glyph"
+          :class="tooltipDirectionClass"
+          :sacrificeReward="sacrificeReward"
+          :showDeletionText="showSacrifice"
+          :levelOverride="levelOverride"
+          :component="componentID"/>
       </div>
       <div ref="over"
            :style="overStyle"

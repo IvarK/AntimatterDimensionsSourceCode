@@ -1,187 +1,268 @@
 "use strict";
 
-GameDatabase.celestials.singularityMilestones = [
+// Used for UI purposes to give different theming for different kinds of upgrades
+const LAITELA_UPGRADE_DIRECTION = {
+  SELF_BOOST: 0,
+  BOOSTS_MAIN: 1,
+  BOOSTS_LAITELA: 2
+};
+
+GameDatabase.celestials.singularityMilestones = {
   // Infinite
-  {
-    id: 1,
+  continuumMult: {
     start: 1,
-    repeat: 5,
+    repeat: 125,
     limit: 0,
     description: "Continuum percentage multiplier",
     effect: completions => completions * 0.01,
-    effectFormat: x => formatX(1 + x, 2, 2)
+    effectFormat: x => formatX(1 + x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
-  {
-    id: 2,
+  darkMatterMult: {
     start: 2,
     repeat: 20,
     limit: 0,
     description: "Dark Matter production multiplier",
     effect: completions => Math.pow(1.5, completions),
-    effectFormat: x => formatX(x, 2, 2)
+    effectFormat: x => formatX(x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
-    id: 3,
+  darkEnergyMult: {
     start: 3,
     repeat: 30,
     limit: 0,
     description: "Dark Energy production multiplier",
     effect: completions => Math.pow(2, completions),
-    effectFormat: x => formatX(x, 2, 2)
+    effectFormat: x => formatX(x),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
-    id: 4,
+  darkDimensionCostReduction: {
     start: 4,
     repeat: 40,
     limit: 0,
     description: "Dark Matter Dimension upgrades are cheaper",
-    effect: completions => Math.pow(0.85, completions),
-    effectFormat: x => formatPercents(1 - x)
+    effect: completions => Math.pow(0.7, completions),
+    effectFormat: x => formatPercents(x, 3),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
+  singularityMult: {
     id: 5,
     start: 50,
     repeat: 1000,
     limit: 0,
     description: "You gain more Singularities",
     effect: completions => Math.pow(2, completions),
-    effectFormat: x => formatX(x, 2, 0)
+    effectFormat: x => formatX(x, 2, 0),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
+  },
+  darkDimensionIntervalReduction: {
+    start: 10,
+    repeat: 100,
+    limit: 0,
+    description: "Dark Matter Dimension interval decrease",
+    effect: completions => Math.pow(0.9, completions),
+    effectFormat: x => formatX(x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
+  },
+  improvedAscensionDM: {
+    start: 100,
+    repeat: 5000,
+    limit: 0,
+    description: "Ascension affects Dark Matter production more",
+    effect: completions => 100 * completions,
+    effectFormat: x => format(1000 + x, 2, 0),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   // Limited
-  {
-    id: 6,
+  ascensionIntervalScaling: {
+    start: 25,
+    repeat: 2400,
+    limit: 8,
+    description: "Dark Matter Dimensions Ascension increases the interval less",
+    effect: completions => 1200 - 50 * completions,
+    effectFormat: x => `×${formatInt(x)}`,
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
+  },
+  autoCondense: {
     start: 8,
-    repeat: 8,
+    repeat: 80,
     limit: 8,
-    description: "Automatically creates a Singularity after reaching the cap (with a delay)",
-    effect: completions => [Infinity, 20, 15, 10, 5, 3, 2, 1, 0][completions],
-    effectFormat: x => `${formatInt(x)}s`
+    description: "Automatically condense Singularities when reaching a threshold above the cap",
+    effect: completions => [Infinity, 1.3, 1.22, 1.15, 1.1, 1.06, 1.03, 1.01, 1][completions],
+    effectFormat: x => `Cap ${formatX(x, 2, 2)}`,
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
-    id: 7,
-    start: 12,
-    repeat: 40,
-    limit: 5,
-    description: "Dark Matter Dimension interval decrease",
-    effect: completions => Math.pow(0.75, completions),
-    effectFormat: x => formatX(x, 2, 2)
-  },
-  {
-    id: 8,
+  darkDimensionAutobuyers: {
     start: 30,
-    repeat: 10,
+    repeat: 170,
     limit: 4,
-    description: "Dark Matter Dimension autobuyers",
+    description: "Dark Matter Dimension Autobuyers",
     effect: completions => completions,
-    effectFormat: x => ((x === 0) ? "No autobuyers" : `Dimension ${x} autobuyer`)
+    effectFormat: x => ((x === 0) ? "No autobuyers" : `Autobuy up to DMD ${x}`),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
-    id: 9,
-    start: 40,
-    repeat: 8,
+  darkAutobuyerSpeed: {
+    start: 45,
+    repeat: 150,
     limit: 8,
-    description: "Annihilation autobuyer (with a delay)",
-    effect: completions => [Infinity, 20, 15, 10, 5, 3, 2, 1, 0][completions],
-    effectFormat: x => `${formatInt(x)}s`
+    description: "All Dark Matter Dimension Autobuyers trigger faster",
+    effect: completions => [30, 20, 15, 10, 5, 3, 2, 1, 0][completions],
+    effectFormat: x => `${formatInt(x)}s`,
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
-  {
-    id: 10,
-    start: 250,
-    repeat: 10,
-    limit: 8,
-    description: "Auto Singularity cap raiser (with a delay)",
-    effect: completions => [Infinity, 20, 15, 10, 5, 3, 2, 1, 0][completions],
-    effectFormat: x => `${formatInt(x)}s`
+  realityDEMultiplier: {
+    start: 1000,
+    repeat: 10000,
+    limit: 6,
+    description: "Dark Energy multiplier based on Lai'tela Reality completions",
+    effect: completions => Math.pow(1 + 0.05 * completions, player.celestials.laitela.difficultyTier),
+    effectFormat: x => formatX(x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
+  },
+  improvedSingularityCap: {
+    start: 150,
+    repeat: 10000,
+    limit: 4,
+    description: "Increased Singularity gain per cap increase",
+    effect: completions => 12 + 2 * completions,
+    effectFormat: x => `${formatX(x)}`,
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
+  },
+  intervalCostScalingReduction: {
+    start: 10000,
+    repeat: 20000,
+    limit: 5,
+    description: "Interval cost scaling is better",
+    effect: completions => 1 - 0.01 * completions,
+    effectFormat: x => `${formatPow(x, 2, 2)}`,
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   // Unique
-  {
-    id: 11,
-    start: 10,
-    repeat: 0,
-    limit: 1,
-    description: "Tesseracts boost Dark Matter production",
-    effect: () => Math.pow(1.20, player.celestials.enslaved.tesseracts),
-    effectFormat: x => formatX(x, 2, 2)
-  },
-  {
-    id: 12,
+  darkFromTesseracts: {
     start: 100,
     repeat: 0,
     limit: 1,
-    description: "Singularities improve the Dilated Time multiplier upgrade",
-    effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 21,
-    effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2)
+    description: "Tesseracts boost Dark Matter and Dark Energy production",
+    effect: () => Math.pow(1.1, player.celestials.enslaved.tesseracts),
+    effectFormat: x => formatX(x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
-  {
-    id: 13,
-    start: 1000,
+  multFromInfinitied: {
+    start: 1e3,
     repeat: 0,
     limit: 1,
-    description: "Highest glyph level boosts Dark Energy production",
-    effect: () => Math.clampMin((player.bestGlyphLevel - 10000) / 1000, 1),
-    effectFormat: x => formatX(x, 2, 2)
+    description: "Infinitied stat boosts Dark Matter and Dark Energy production",
+    effect: () => player.infinitied.plus(1).log10() / 666,
+    effectFormat: x => formatX(x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
-  {
-    id: 14,
+  dilatedTimeFromSingularities: {
     start: 1e4,
     repeat: 0,
     limit: 1,
-    description: "Singularities boost Alchemy Momentum buildup speed",
-    effect: () => Math.pow(Math.log10(player.celestials.laitela.singularities), 3),
-    effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2)
+    description: "Singularities improve the repeatable Dilated Time multiplier upgrade",
+    // Note that at ~2.15x this causes a runaway purely because of cost scaling
+    effect: () => 1 + Math.clampMax(Math.log10(player.celestials.laitela.singularities) / 100, 0.8),
+    effectFormat: x => `${formatX(2)} ➜ ${formatX(2 * Math.clampMin(x, 1), 2, 2)}`,
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
-  {
-    id: 15,
-    start: 1e5,
-    repeat: 0,
-    limit: 1,
-    description: "Annihilation boosts Dark Energy and Dark Matter production",
-    effect: () => Math.clampMin(Math.log10(Laitela.darkMatterMult), 1),
-    effectFormat: x => formatX(x, 2, 2)
-  },
-  {
-    id: 16,
+  darkFromGlyphLevel: {
     start: 1e6,
     repeat: 0,
     limit: 1,
-    description: "Singularities boost the Annihilation modifier",
-    effect: () => Math.log10(player.celestials.laitela.singularities),
-    effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2)
+    description: "Boost Dark Matter and Dark Energy production based on highest glyph level",
+    effect: () => Math.clampMin((player.bestGlyphLevel - 10000) / 2000, 1),
+    effectFormat: x => formatX(x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },
-  {
-    id: 17,
-    start: 1e7,
-    repeat: 0,
-    limit: 1,
-    description: "Gamespeed boosts Dark Energy production",
-    effect: () => Math.clampMin(Math.log10(getGameSpeedupFactor()) / 10 - 10, 1),
-    effectFormat: x => formatX(x, 2, 2)
-  },
-  {
-    id: 18,
+  gamespeedFromSingularities: {
     start: 1e8,
     repeat: 0,
     limit: 1,
-    description: "Singularities boost glyph level",
-    effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 20,
-    effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2)
+    description: "Singularities boost game speed",
+    effect: () => Math.clampMin(Math.pow(Math.log10(player.celestials.laitela.singularities), 4), 1),
+    effectFormat: x => formatX(x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
-  {
-    id: 19,
-    start: 1e9,
-    repeat: 0,
-    limit: 1,
-    description: "Dilated Time boosts Dark Matter production",
-    effect: () => Math.pow(2.2, Decimal.log10(player.dilation.dilatedTime.plus(1)) / 1000),
-    effectFormat: x => formatX(x, 2, 2)
-  },
-  {
-    id: 20,
+  darkFromTheorems: {
     start: 1e10,
     repeat: 0,
     limit: 1,
-    description: "Singularities make Tesseracts stronger",
+    description: "Time Theorems boost Dark Matter and Dark Energy gain",
+    effect: () => Math.sqrt(Math.clampMin((player.timestudy.theorem.log10() - 900) / 100, 1)),
+    effectFormat: x => formatX(x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
+  },
+  dim4Generation: {
+    start: 1e12,
+    repeat: 0,
+    limit: 1,
+    description: "Annihilation multiplier generates 4th Dark Matter Dimensions",
+    effect: () => Laitela.darkMatterMult,
+    effectFormat: x => `${format(x, 2, 1)}/s (real-time)`,
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
+  },
+  darkFromDM4: {
+    start: 1e14,
+    repeat: 0,
+    limit: 1,
+    description: "4th Dark Matter Dimension amount boosts Dark Matter and Dark Energy gain",
+    effect: () => Math.clampMin(MatterDimension(4).amount.pow(0.1).toNumber(), 1),
+    effectFormat: x => formatX(x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
+  },
+  theoremPowerFromSingularities: {
+    start: 1e16,
+    repeat: 0,
+    limit: 1,
+    description: "Singularities give a power effect to Time Theorem gain",
+    effect: () => 1 + Math.log10(1 + player.celestials.laitela.singularities) / 20,
+    effectFormat: x => formatPow(x, 2, 3),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
+  },
+  darkFromGamespeed: {
+    start: 1e18,
+    repeat: 0,
+    limit: 1,
+    description: "Gamespeed boosts Dark Matter and Dark Energy production",
+    effect: () => Math.clampMin(Math.log10(getGameSpeedupFactor()) / 25 - 5, 1),
+    effectFormat: x => formatX(x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
+  },
+  glyphLevelFromSingularities: {
+    start: 1e20,
+    repeat: 0,
+    limit: 1,
+    description: "Singularities boost pre-instability glyph level",
     effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 40,
-    effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2)
+    effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
+  },
+  darkFromDilatedTime: {
+    start: 1e22,
+    repeat: 0,
+    limit: 1,
+    description: "Dilated Time boosts Dark Matter production",
+    effect: () => Math.pow(1.3, Decimal.log10(player.dilation.dilatedTime.plus(1)) / 1000),
+    effectFormat: x => formatX(x, 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
+  },
+  infinitiedPow: {
+    start: 1e24,
+    repeat: 0,
+    limit: 1,
+    description: "Infinitied stat gain power effect based on singularities",
+    effect: () => 1 + Math.log10(player.celestials.laitela.singularities + 1) / 666,
+    effectFormat: x => formatPow(x, 2, 3),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
+  },
+  tesseractMultFromSingularities: {
+    start: 1e26,
+    repeat: 0,
+    limit: 1,
+    description: "Singularities make Tesseracts stronger",
+    effect: () => 1 + Math.log10(player.celestials.laitela.singularities) / 80,
+    effectFormat: x => formatX(Math.clampMin(x, 1), 2, 2),
+    upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   }
-];
+};

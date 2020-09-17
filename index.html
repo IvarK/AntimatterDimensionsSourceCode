@@ -62,7 +62,6 @@
 <script type="text/javascript" src="javascripts/lib/v-tooltip.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/mousetrap.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/break_infinity.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/chart.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/lz-string.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/vis-network.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/sha512.min.js"></script>
@@ -97,6 +96,7 @@
 
 <script type="text/javascript" src="javascripts/core/game-mechanics/effect.js"></script>
 <script type="text/javascript" src="javascripts/core/game-mechanics/effects.js"></script>
+<script type="text/javascript" src="javascripts/core/game-mechanics/effect-scopes.js"></script>
 <script type="text/javascript" src="javascripts/core/game-mechanics/game-mechanic.js"></script>
 <script type="text/javascript" src="javascripts/core/game-mechanics/puchasable.js"></script>
 <script type="text/javascript" src="javascripts/core/game-mechanics/set-purchasable.js"></script>
@@ -179,7 +179,7 @@
 <script type="text/javascript" src="javascripts/components/old-ui/header/game-header.js"></script>
 <script type="text/javascript" src="javascripts/components/old-ui/header/game-header-amounts-line.js"></script>
 <script type="text/javascript" src="javascripts/components/old-ui/header/game-header-tickspeed-row.js"></script>
-<script type="text/javascript" src="javascripts/components/old-ui/header/game-header-gamma-display.js"></script>
+<script type="text/javascript" src="javascripts/components/old-ui/header/game-header-gamespeed-display.js"></script>
 <script type="text/javascript" src="javascripts/components/old-ui/header/game-header-big-crunch-button.js"></script>
 <script type="text/javascript" src="javascripts/components/old-ui/header/game-header-new-dim-button.js"></script>
 <script type="text/javascript" src="javascripts/components/old-ui/header/game-header-eternity-button.js"></script>
@@ -189,20 +189,20 @@
 <script type="text/javascript" src="javascripts/components/old-ui/old-ui-subtab-button.js"></script>
 <script type="text/javascript" src="javascripts/components/old-ui/old-ui.js"></script>
 
-<script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-tab-header.js"></script>
-<script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-row.js"></script>
-<script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-shift-row.js"></script>
-<script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-galaxy-row.js"></script>
-<script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-tab-progress-bar.js"></script>
-<script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/antimatter/antimatter-dim-tab-header.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/antimatter/antimatter-dim-row.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/antimatter/antimatter-dim-boost-row.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/antimatter/antimatter-dim-galaxy-row.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/antimatter/antimatter-dim-tab-progress-bar.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/antimatter/antimatter-dim-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/dimensions/infinity/infinity-dim-row.js"></script>
 <script type="text/javascript" src="javascripts/components/dimensions/infinity/infinity-dim-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/dimensions/time/time-dim-row.js"></script>
 <script type="text/javascript" src="javascripts/components/dimensions/time/time-dim-tab.js"></script>
-<script type="text/javascript" src="javascripts/components/dimensions/dim-production-tab.js"></script>
 
-<script type="text/javascript" src="javascripts/components/options/options-tab.js"></script>
-<script type="text/javascript" src="javascripts/components/options/options-button-grid.js"></script>
+<script type="text/javascript" src="javascripts/components/options/options-saving-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/options/options-visual-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/options/options-gameplay-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/options/select-notation.js"></script>
 <script type="text/javascript" src="javascripts/components/options/select-theme.js"></script>
 
@@ -318,17 +318,22 @@
 <script type="text/javascript" src="javascripts/components/reality/upgrades/reality-upgrade-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyphs-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/reality-button.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/reset-reality-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-levels-and-weights.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-component.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-sacrifice-options.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-auto-pick-options.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-selection.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-set-preview.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-sort-options.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-clean-options.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-header.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/equipped-glyphs.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/current-glyph-effects.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/sacrificed-glyphs.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-inventory.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/reality-amplify-button.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-peek.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/black-hole/black-hole-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/black-hole/black-hole-animation.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/black-hole/black-hole-state-row.js"></script>
@@ -356,16 +361,23 @@
 <script type="text/javascript" src="javascripts/components/modals/modal-ui-choice.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-import.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-import-tree.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-edit-tree.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-load-game.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-std-store.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-h2p.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-progress-bar.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-away-progress.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-delete-companion.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-start-normal-challenge.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-start-infinity-challenge.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-start-eternity-challenge.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-enter-dilation.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/options/modal-options.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/options/modal-news-options.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/options/modal-animation-options.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/options/modal-confirmation-options.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/options/modal-info-display-options.js"></script>
-<script type="text/javascript" src="javascripts/components/modals/options/modal-miscellaneous-options.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/options/modal-away-progress-options.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/cloud/modal-cloud-conflict-record.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/cloud/modal-cloud-load-conflict.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/cloud/modal-cloud-save-conflict.js"></script>
@@ -379,7 +391,7 @@
 <script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-dimensions-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-dimension-row.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-tickspeed-row.js"></script>
-<script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-dim-shift-row.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-dim-boost-row.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/infinity-dimensions-tab/new-inf-dimension-row.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/infinity-dimensions-tab/new-inf-dimensions-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/time-dimensions-tab/new-time-dimension-row.js"></script>
@@ -389,6 +401,7 @@
 <script type="text/javascript" src="javascripts/components/new-ui/new-ui.js"></script>
 
 <script type="text/javascript" src="javascripts/components/common/news-ticker.js"></script>
+<script type="text/javascript" src="javascripts/components/failable-ec-text.js"></script>
 <script type="text/javascript" src="javascripts/components/game-ui.js"></script>
 <script type="text/javascript" src="javascripts/components/help-me.js"></script>
 
@@ -412,10 +425,9 @@
 <script type="text/javascript" src="javascripts/core/achievements/achievement-timer.js"></script>
 
 <script type="text/javascript" src="javascripts/core/time.js"></script>
-<script type="text/javascript" src="javascripts/core/chart.js"></script>
 <script type="text/javascript" src="javascripts/core/tickspeed.js"></script>
 <script type="text/javascript" src="javascripts/core/dimensions/dimension.js"></script>
-<script type="text/javascript" src="javascripts/core/dimensions/normal-dimension.js"></script>
+<script type="text/javascript" src="javascripts/core/dimensions/antimatter-dimension.js"></script>
 <script type="text/javascript" src="javascripts/core/dimensions/infinity-dimension.js"></script>
 <script type="text/javascript" src="javascripts/core/dimensions/time-dimension.js"></script>
 <script type="text/javascript" src="javascripts/core/dimboost.js"></script>

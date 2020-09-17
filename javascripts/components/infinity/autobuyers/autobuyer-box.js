@@ -8,21 +8,36 @@ Vue.component("autobuyer-box", {
       },
       data() {
         return {
-          interval: 0
+          interval: 0,
+          hasMaxedInterval: false,
+          bulk: 0,
+          bulkUnlocked: false,
+          bulkUnlimited: false,
         };
       },
       computed: {
         intervalDisplay() {
-          return TimeSpan.fromMilliseconds(this.interval).totalSeconds.toFixed(2);
+          return format(TimeSpan.fromMilliseconds(this.interval).totalSeconds, 2, 2);
         }
       },
       methods: {
         update() {
           this.interval = this.autobuyer.interval;
+          this.hasMaxedInterval = this.autobuyer.hasMaxedInterval;
+          this.bulk = this.autobuyer.bulk;
+          // If it's undefined, the autobuyer isn't the dimboost autobuyer
+          // and we don't have to worry about bulk being unlocked.
+          this.bulkUnlocked = this.autobuyer.isBulkBuyUnlocked !== false;
+          this.bulkUnlimited = this.autobuyer.hasUnlimitedBulk;
         }
       },
       template:
-        `<div class="c-autobuyer-box__small-text">Current interval: {{intervalDisplay}} seconds</div>`
+        `<div class="c-autobuyer-box__small-text">
+          Current interval: {{intervalDisplay}} seconds
+          <span v-if="hasMaxedInterval && bulkUnlocked && bulk">
+            <br>Current bulk: {{bulkUnlimited ? "Unlimited" : formatX(bulk, 2)}}
+          </span>
+        </div>`
     }
   },
   props: {
@@ -58,10 +73,9 @@ Vue.component("autobuyer-box", {
       this.canBeBought = this.autobuyer.canBeBought;
       this.antimatterCost = this.autobuyer.antimatterCost;
       this.isBought = this.autobuyer.isBought;
-      this.antimatter.copyFrom(player.antimatter);
+      this.antimatter.copyFrom(Currency.antimatter);
     },
     toggle() {
-      if (!this.globalToggle) return;
       this.isActive = !this.isActive;
     },
     purchase() {
@@ -74,15 +88,25 @@ Vue.component("autobuyer-box", {
     },
     autobuyerBuyBoxClass() {
       return {
-        "c-autobuyer-buy-box--purchaseable": this.canBuy
+        "c-autobuyer-buy-box": true,
+        "o-primary-btn": true,
+        "o-primary-btn--enabled": this.canBuy,
+        "o-primary-btn--disabled": !this.canBuy
       };
     },
     autobuyerToggleClass() {
-      return this.isActive ? "fas fa-play" : "fas fa-pause";
-    }
+      return this.isActive ? "fas fa-check" : "fas fa-times";
+    },
+    autobuyerStateClass() {
+      return {
+        "o-autobuyer-toggle-checkbox__label": true,
+        "o-autobuyer-toggle-checkbox__label--active": this.isActive,
+        "o-autobuyer-toggle-checkbox__label--disabled": !this.globalToggle
+      };
+    },
   },
-  template:
-    `<div v-if="isUnlocked || isBought" class="l-autobuyer-box-row">
+  template: `
+    <div v-if="isUnlocked || isBought" class="c-autobuyer-box-row">
       <div class="l-autobuyer-box__header">
         {{name}}
         <interval-label v-if="showInterval" :autobuyer="autobuyer"/>
@@ -92,10 +116,9 @@ Vue.component("autobuyer-box", {
       <div class="c-autobuyer-box-row__prioritySlot"><slot name="prioritySlot" /></div>
       <div class="c-autobuyer-box-row__optionSlot"><slot name="optionSlot" /></div>
       <div class="l-autobuyer-box__footer" @click="toggle">
-        <label 
-          :for="name" 
-          class="o-autobuyer-toggle-checkbox__label" 
-          :class="{ 'o-autobuyer-toggle-checkbox__label--active': isActive && globalToggle }">
+        <label
+          :for="name"
+          :class="autobuyerStateClass">
           <span :class="autobuyerToggleClass"></span>
         </label>
         <input
@@ -106,7 +129,7 @@ Vue.component("autobuyer-box", {
         />
       </div>
     </div>
-    <div v-else-if="canBeBought" @click="purchase" class="c-autobuyer-buy-box" :class="autobuyerBuyBoxClass">
+    <div v-else-if="canBeBought" @click="purchase" :class="autobuyerBuyBoxClass">
       Buy the {{ name }} for {{ format(antimatterCost) }} antimatter
     </div>`
 });

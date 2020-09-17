@@ -34,13 +34,16 @@ function gainedInfinityPoints() {
   let ip = player.break
     ? Decimal.pow10(player.thisInfinityMaxAM.log10() / div - 0.75)
     : new Decimal(308 / div);
+  if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
+    ip = ip.min(1e200);
+  }
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
     ip = ip.pow(0.55);
   } else if (V.isRunning) {
     ip = ip.pow(0.5);
   } else if (Laitela.isRunning) {
-    ip = dilatedValueOf(ip, 1);
+    ip = dilatedValueOf(ip);
   }
   if (GlyphAlteration.isAdded("infinity")) {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
@@ -70,7 +73,7 @@ function gainedEternityPoints() {
   } else if (V.isRunning) {
     ep = ep.pow(0.5);
   } else if (Laitela.isRunning) {
-    ep = dilatedValueOf(ep, 1);
+    ep = dilatedValueOf(ep);
   }
   if (GlyphAlteration.isAdded("time")) {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
@@ -96,7 +99,6 @@ function gainedRealityMachines() {
   // Increase base RM gain if <10 RM
   if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
   rmGain = rmGain.times(getRealityMachineMultiplier());
-  rmGain = rmGain.plusEffectOf(Perk.realityMachineGain);
   // This happens around ee10 and is necessary to reach e9e15 antimatter without having to deal with the various
   // potential problems associated with having ee9 RM, of which there are lots (both balance-wise and design-wise).
   // The softcap here squishes every additional OoM in the exponent into another factor of e1000 RM, putting e9e15
@@ -133,77 +135,87 @@ function ratePerMinute(amount, time) {
     return Decimal.divide(amount, time / (60 * 1000));
 }
 
-function averageRun(runs) {
-  const totalTime = runs
-    .map(run => run[0])
-    .reduce(Number.sumReducer);
+function averageRun(runs, name) {
+  const totalTime = runs.map(run => run[0]).sum();
   const totalAmount = runs
     .map(run => run[1])
     .reduce(Decimal.sumReducer);
-  const realTime = runs
+  const totalPrestigeGain = runs
     .map(run => run[2])
-    .reduce(Number.sumReducer);
-  return [
+    .reduce(name === "Reality" ? Number.sumReducer : Decimal.sumReducer);
+  const realTime = runs.map(run => run[3]).sum();
+  const average = [
     totalTime / runs.length,
     totalAmount.dividedBy(runs.length),
+    (name === "Reality") ? totalPrestigeGain / runs.length : totalPrestigeGain.dividedBy(runs.length),
     realTime / runs.length
   ];
+  if (name === "Reality") {
+    average.push(runs.map(x => x[4]).sum() / runs.length);
+  }
+  return average;
 }
 
 // eslint-disable-next-line max-params
 function addInfinityTime(time, realTime, ip, infinities) {
   player.lastTenRuns.pop();
-  player.lastTenRuns.unshift([time, ip, realTime, infinities]);
+  player.lastTenRuns.unshift([time, ip, infinities, realTime]);
   GameCache.bestRunIPPM.invalidate();
 }
 
 function resetInfinityRuns() {
   player.lastTenRuns = Array.from(
     { length: 10 },
-    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, new Decimal(1)]
+    () => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]
   );
   GameCache.bestRunIPPM.invalidate();
 }
 
 // Player gains 50% of infinitied stat they would get based on their best infinitied/hour crunch if they have the
 // milestone and turned on infinity autobuyer with 1 minute or less per crunch
-function getInfinitiedMilestoneReward(ms) {
-  return Autobuyer.bigCrunch.autoInfinitiesAvailable
+function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
+  return Autobuyer.bigCrunch.autoInfinitiesAvailable(considerMilestoneReached)
     ? Decimal.floor(player.bestInfinitiesPerMs.times(ms).dividedBy(2))
-    : 0;
+    : new Decimal(0);
 }
 
-function addEternityTime(time, realTime, ep) {
+// eslint-disable-next-line max-params
+function addEternityTime(time, realTime, ep, eternities) {
   player.lastTenEternities.pop();
-  player.lastTenEternities.unshift([time, ep, realTime]);
-  GameCache.averageEPPerRun.invalidate();
+  player.lastTenEternities.unshift([time, ep, eternities, realTime]);
+  GameCache.averageRealTimePerEternity.invalidate();
 }
 
 function resetEternityRuns() {
   player.lastTenEternities = Array.from(
     { length: 10 },
-    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]
+    () => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]
   );
-  GameCache.averageEPPerRun.invalidate();
+  GameCache.averageRealTimePerEternity.invalidate();
 }
 
 // Player gains 50% of the eternities they would get if they continuously repeated their fastest eternity, if they
 // have the auto-eternity milestone and turned on eternity autobuyer with 0 EP
-function getEternitiedMilestoneReward(ms) {
-  return Autobuyer.eternity.autoEternitiesAvailable
+function getEternitiedMilestoneReward(ms, considerMilestoneReached) {
+  return Autobuyer.eternity.autoEternitiesAvailable(considerMilestoneReached)
     ? Decimal.floor(player.bestEternitiesPerMs.times(ms).dividedBy(2))
-    : 0;
+    : new Decimal(0);
+}
+
+function isOfflineEPGainEnabled() {
+  return !Autobuyer.bigCrunch.autoInfinitiesAvailable() &&
+    !Autobuyer.eternity.autoEternitiesAvailable();
 }
 
 function getOfflineEPGain(ms) {
-  if (!EternityMilestone.autoEP.isReached) return new Decimal(0);
+  if (!EternityMilestone.autoEP.isReached || !isOfflineEPGainEnabled()) return new Decimal(0);
   return player.bestEPminThisReality.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 
 // eslint-disable-next-line max-params
-function addRealityTime(time, realTime, rm, level) {
+function addRealityTime(time, realTime, rm, level, realities) {
   player.lastTenRealities.pop();
-  player.lastTenRealities.unshift([time, rm, realTime, level]);
+  player.lastTenRealities.unshift([time, rm, realities, realTime, level]);
 }
 
 function gainedInfinities() {
@@ -223,6 +235,7 @@ function gainedInfinities() {
     );
     infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
     infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
+    infGain = infGain.powEffectOf(SingularityMilestone.infinitiedPow);
     return infGain;
 }
 
@@ -231,7 +244,7 @@ function gainedInfinities() {
   if (isLocalEnvironment()) return;
   let commit;
   setInterval(() => {
-    const url = "https://api.github.com/repos/IvarK/HahaSlabWontGetHere/commits/master";
+    const url = "https://api.github.com/repos/IvarK/IToughtAboutCurseWordsButThatWouldBeMeanToOmsi/commits/master";
     const headers = new Headers();
     // Yes, this is my GitHub API key for reading private repo details
     headers.append("Authorization", `Basic ${btoa("Razenpok:9b15284a7c7a1142b5766f81967a96f90b7879a8")}`);
@@ -267,7 +280,7 @@ const GAME_SPEED_EFFECT = {
   TIME_GLYPH: 2,
   BLACK_HOLE: 3,
   TIME_STORAGE: 4,
-  MOMENTUM: 5,
+  SINGULARITY_MILESTONE: 5,
   NERFS: 6
 };
 
@@ -281,7 +294,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
   let effects;
   if (effectsToConsider === undefined) {
     effects = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH, GAME_SPEED_EFFECT.BLACK_HOLE,
-      GAME_SPEED_EFFECT.TIME_STORAGE, GAME_SPEED_EFFECT.MOMENTUM, GAME_SPEED_EFFECT.NERFS];
+      GAME_SPEED_EFFECT.TIME_STORAGE, GAME_SPEED_EFFECT.SINGULARITY_MILESTONE, GAME_SPEED_EFFECT.NERFS];
   } else {
     effects = effectsToConsider;
   }
@@ -311,10 +324,10 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
     }
   }
 
-  if (effects.includes(GAME_SPEED_EFFECT.MOMENTUM)) {
-    const milestoneFactor = SingularityMilestone(14).canBeApplied ? SingularityMilestone(14).effectValue : 1;
-    factor *= Math.clampMax(1e30,
-      Math.pow(AlchemyResource.momentum.effectValue, Time.thisRealityRealTime.totalMinutes * milestoneFactor));
+  if (effects.includes(GAME_SPEED_EFFECT.SINGULARITY_MILESTONE)) {
+    factor *= SingularityMilestone.gamespeedFromSingularities.canBeApplied
+      ? SingularityMilestone.gamespeedFromSingularities.effectValue
+      : 1;
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
@@ -338,6 +351,10 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
       factor = Math.pow(factor, nerfModifier);
     }
   }
+  
+  // 1e-300 is now possible with max inverted BH, going below it would be possible with
+  // an effarig glyph.
+  factor = Math.clamp(factor, 1e-300, 1e300);
 
   // Dev speedup should always be active
   if (tempSpeedupToggle) {
@@ -369,10 +386,12 @@ function gameLoop(diff, options = {}) {
   // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.
   // This is in order to prevent players from using time inside of Ra's reality for amplification as well
   Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
+  if (AlchemyResource.momentum.isUnlocked) player.celestials.ra.momentumTime += realDiff;
 
   // Lai'tela mechanics should bypass stored real time entirely
   Laitela.handleMatterDimensionUnlocks();
   Laitela.tickDarkMatter(realDiff);
+  Laitela.autobuyerLoop(realDiff);
 
   // When storing real time, skip everything else having to do with production once stats are updated
   if (Enslaved.isStoringRealTime) {
@@ -402,15 +421,16 @@ function gameLoop(diff, options = {}) {
 
   slowerAutobuyers(realDiff);
   Autobuyers.tick();
-  
+
   if (Achievement(165).isUnlocked && player.celestials.effarig.autoAdjustGlyphWeights) {
     autoAdjustGlyphWeights();
   }
 
+  EffectScopes.update();
   // We do these after autobuyers, since it's possible something there might
   // change a multiplier.
-  GameCache.normalDimensionCommonMultiplier.invalidate();
-  GameCache.normalDimensionFinalMultipliers.invalidate();
+  GameCache.antimatterDimensionCommonMultiplier.invalidate();
+  GameCache.antimatterDimensionFinalMultipliers.invalidate();
   GameCache.infinityDimensionCommonMultiplier.invalidate();
   GameCache.timeDimensionCommonMultiplier.invalidate();
   GameCache.totalIPMult.invalidate();
@@ -431,12 +451,13 @@ function gameLoop(diff, options = {}) {
       // These variables are the actual game speed used and the game speed unaffected by time storage, respectively
       const reducedTimeFactor = getGameSpeedupFactor();
       const totalTimeFactor = getGameSpeedupFactor([GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
-        GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.MOMENTUM]);
+        GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.SINGULARITY_MILESTONE]);
       const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
         ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
         : 1;
       Enslaved.currentBlackHoleStoreAmountPerMs = Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
-      player.celestials.enslaved.stored += diff * Enslaved.currentBlackHoleStoreAmountPerMs;
+      player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored + 
+        diff * Enslaved.currentBlackHoleStoreAmountPerMs, Enslaved.timeCap);
       speedFactor = reducedTimeFactor;
     }
     diff *= speedFactor;
@@ -454,7 +475,7 @@ function gameLoop(diff, options = {}) {
   player.thisInfinityRealTime += realDiff;
   player.thisInfinityTime += diff;
   player.thisEternityRealTime += realDiff;
-  if (Enslaved.isRunning && Enslaved.feltEternity) {
+  if (Enslaved.isRunning && Enslaved.feltEternity && !EternityChallenge(12).isRunning) {
     player.thisEternity += diff * (1 + player.eternities.clampMax(1e66).toNumber());
   } else {
     player.thisEternity += diff;
@@ -469,7 +490,7 @@ function gameLoop(diff, options = {}) {
   // IP generation is broken into a couple of places in gameLoop; changing that might change the
   // behavior of eternity farming.
   preProductionGenerateIP(diff);
-  
+
   let eternitiedGain = 0;
   if (RealityUpgrade(14).isBought) {
     eternitiedGain = Effects.product(
@@ -526,13 +547,13 @@ function gameLoop(diff, options = {}) {
 
   TimeDimensions.tick(diff);
   InfinityDimensions.tick(diff);
-  NormalDimensions.tick(diff);
+  AntimatterDimensions.tick(diff);
 
   const gain = Math.clampMin(FreeTickspeed.fromShards(player.timeShards).newAmount - player.totalTickGained, 0);
   player.totalTickGained += gain;
 
   const currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinityRealTime.totalMinutes);
-  if (currentIPmin.gt(player.bestIPminThisInfinity) && canCrunch()) player.bestIPminThisInfinity = currentIPmin;
+  if (currentIPmin.gt(player.bestIPminThisInfinity) && Player.canCrunch) player.bestIPminThisInfinity = currentIPmin;
 
   tryUnlockInfinityChallenges();
 
@@ -547,7 +568,7 @@ function gameLoop(diff, options = {}) {
   if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
 
   const currentEPmin = gainedEternityPoints().dividedBy(Time.thisEternityRealTime.totalMinutes);
-  if (currentEPmin.gt(player.bestEPminThisEternity) && canEternity()) player.bestEPminThisEternity = currentEPmin;
+  if (currentEPmin.gt(player.bestEPminThisEternity) && Player.canEternity) player.bestEPminThisEternity = currentEPmin;
 
   if (PlayerProgress.dilationUnlocked()) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
@@ -556,7 +577,6 @@ function gameLoop(diff, options = {}) {
   updateFreeGalaxies();
   player.timestudy.theorem = player.timestudy.theorem.add(getTTPerSecond().times(diff / 1000));
   tryUnlockInfinityDimensions();
-  applyAutoprestige();
 
   BlackHoles.updatePhases(blackHoleDiff);
 
@@ -577,10 +597,12 @@ function gameLoop(diff, options = {}) {
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
-  if (Enslaved.isRunning && player.thisRealityRealTime > 4 * 3600 * 1000 &&
-    !EnslavedProgress.hintsUnlocked.hasProgress) {
+  if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted) {
+    player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;
+    if (player.celestials.enslaved.hintUnlockProgress >= TimeSpan.fromHours(5).totalMilliseconds) {
       EnslavedProgress.hintsUnlocked.giveProgress();
       Enslaved.quotes.show(Enslaved.quotes.HINT_UNLOCK);
+    }
   }
 
   laitelaRealityTick(realDiff);
@@ -588,8 +610,6 @@ function gameLoop(diff, options = {}) {
   V.checkForUnlocks();
   Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
-
-  Singularity.autobuyerLoop(realDiff);
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);
   GameUI.update();
@@ -613,15 +633,15 @@ function laitelaRealityTick(realDiff) {
     clearCelestialRuns();
     if (Time.thisRealityRealTime.totalSeconds < 30) {
       laitelaInfo.difficultyTier++;
-      laitelaInfo.fastestCompletion = 600;
+      laitelaInfo.fastestCompletion = 300;
       // This causes display oddities at 3 or lower but I don't expect the player to get that far legitimately (?)
       completionText += `<br><br>Lai'tela's Reality will now disable production from all
-        ${Laitela.maxAllowedDimension + 1}th dimensions during future runs, but the reward will be
-        ${formatInt(20)} times stronger than before.`;
+        ${Laitela.maxAllowedDimension + 1}th Dimensions during future runs, but the reward will be
+        ${formatInt(100)} times stronger than before.`;
     }
     Modal.message.show(completionText);
   }
-  if (laitelaInfo.entropy < 0) player.antimatter = new Decimal(0);
+  if (laitelaInfo.entropy < 0) Currency.antimatter.value = new Decimal(0);
 }
 
 // This gives IP/EP/RM from the respective upgrades that reward the prestige currencies continuously
@@ -666,7 +686,7 @@ function getTTPerSecond() {
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation
-  const glyphTT = Teresa.isRunning || Enslaved.isRunning || Laitela.isRunning
+  const glyphTT = Teresa.isRunning || Enslaved.isRunning
     ? 0
     : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
 
@@ -674,8 +694,14 @@ function getTTPerSecond() {
   const dilationTT = DilationUpgrade.ttGenerator.isBought
     ? DilationUpgrade.ttGenerator.effectValue.times(ttMult)
     : new Decimal(0);
+  
+  // Lai'tela TT power
+  let finalTT = dilationTT.add(glyphTT);
+  if (SingularityMilestone.theoremPowerFromSingularities.isUnlocked && finalTT.gt(1)) {
+    finalTT = finalTT.pow(SingularityMilestone.theoremPowerFromSingularities.effectValue);
+  }
 
-  return dilationTT.add(glyphTT);
+  return finalTT;
 }
 
 function recursiveTimeOut(fn, iterations, endFn) {
@@ -684,64 +710,22 @@ function recursiveTimeOut(fn, iterations, endFn) {
   else setTimeout(() => recursiveTimeOut(fn, iterations - 1, endFn), 0);
 }
 
-function afterSimulation(seconds, playerStart) {
-  if (seconds > 1000) {
-    const offlineIncreases = ["While you were away"];
-    // OoM increase
-    const oomVarNames = ["antimatter", "infinityPower", "timeShards"];
-    const oomResourceNames = ["antimatter", "infinity power", "time shards"];
-    for (let i = 0; i < oomVarNames.length; i++) {
-      const varName = oomVarNames[i];
-      const oomIncrease = player[varName].log10() - playerStart[varName].log10();
-      // Needs an isFinite check in case it's zero before or afterwards
-      if (player[varName].gt(playerStart[varName]) && Number.isFinite(oomIncrease)) {
-        offlineIncreases.push(`your ${oomResourceNames[i]} increased by ` +
-          `${format(oomIncrease, 2, 2)} orders of magnitude`);
-      }
-    }
-    // Linear increase
-    const linearVarNames = ["infinitied", "eternities"];
-    const linearResourceNames = ["infinities", "eternities"];
-    const prestigeReset = ["eternitied", "realitied"];
-    for (let i = 0; i < linearVarNames.length; i++) {
-      const varName = linearVarNames[i];
-      const linearIncrease = Decimal.sub(player[varName], playerStart[varName]);
-      if (linearIncrease.lessThan(0)) {
-        // This happens when a prestige autobuyer triggers offline and resets the value
-        offlineIncreases.push(`you ${prestigeReset[i]} and then generated ` +
-          `${format(player[varName], 2, 0)} more ${linearResourceNames[i]}`);
-      } else if (!Decimal.eq(player[varName], playerStart[varName])) {
-        offlineIncreases.push(`you generated ${format(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
-      }
-    }
-    // Black Hole activations
-    for (let i = 0; i < player.blackHole.length; i++) {
-      const currentActivations = player.blackHole[i].activations;
-      const oldActivations = playerStart.blackHole[i].activations;
-      const activationsDiff = currentActivations - oldActivations;
-      const pluralSuffix = activationsDiff === 1 ? " time" : " times";
-      if (activationsDiff > 0 && !BlackHole(i + 1).isPermanent) {
-        offlineIncreases.push(`Black Hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
-      }
-    }
-    let popupString = `${offlineIncreases.join(", <br>")}.`;
-    if (popupString === "While you were away.") {
-      popupString += ".. Nothing happened.";
-      SecretAchievement(36).unlock();
-    }
-    Modal.message.show(popupString);
+function afterSimulation(seconds, playerBefore) {
+  if (seconds > 600) {
+    const playerAfter = deepmerge.all([{}, player]);
+    Modal.awayProgress.show({ playerBefore, playerAfter, seconds });
   }
-  
+
   GameUI.notify.showBlackHoles = true;
 }
 
 function simulateTime(seconds, real, fast) {
-  // The game is simulated at a base 50ms update rate, with a max of 
+  // The game is simulated at a base 50ms update rate, with a max of
   // player.options.offlineTicks ticks. additional ticks are converted
   // into a higher diff per tick
   // warning: do not call this function with real unless you know what you're doing
   // calling it with fast will only simulate it with a max of 50 ticks
-  let ticks = seconds * 20;
+  let ticks = Math.floor(seconds * 20);
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)
@@ -750,13 +734,29 @@ function simulateTime(seconds, real, fast) {
   } else if (ticks > 50 && fast) {
     ticks = 50;
   }
-  const largeDiff = (player.options.offlineTicks * seconds) / ticks;
+  // 1000 * seconds is milliseconds so 1000 * seconds / ticks is milliseconds per tick.
+  const largeDiff = 1000 * seconds / ticks;
 
   const playerStart = deepmerge.all([{}, player]);
 
-  player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * 1000));
-  player.eternities = player.eternities.plus(getEternitiedMilestoneReward(seconds * 1000));
-  player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
+  let totalGameTime;
+
+  if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
+    totalGameTime = BlackHoles.calculateGameTimeFromRealTime(seconds, BlackHoles.calculateSpeedups());
+  } else {
+    totalGameTime = getGameSpeedupFactor() * seconds;
+  }
+
+  const infinitiedMilestone = getInfinitiedMilestoneReward(totalGameTime * 1000);
+  const eternitiedMilestone = getEternitiedMilestoneReward(totalGameTime * 1000);
+
+  if (eternitiedMilestone.gt(0)) {
+    player.eternities = player.eternities.plus(eternitiedMilestone);
+  } else if (infinitiedMilestone.gt(0)) {
+    player.infinitied = player.infinitied.plus(infinitiedMilestone);
+  } else {
+    player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(totalGameTime * 1000));
+  }
 
   if (InfinityUpgrade.ipOffline.isBought) {
     player.infinityPoints = player.infinityPoints
@@ -764,9 +764,6 @@ function simulateTime(seconds, real, fast) {
         .times(seconds * 1000 / 2)
       );
   }
-
-  ui.view.modal.progressBar = {};
-  ui.view.modal.progressBar.label = "Simulating offline time...";
 
   let loopFn = () => gameLoop(largeDiff);
   let remainingRealSeconds = seconds;
@@ -780,51 +777,53 @@ function simulateTime(seconds, real, fast) {
     };
   }
 
-  Async.run(loopFn,
-    ticks,
-    {
-      batchSize: 1,
-      maxTime: 60,
-      sleepTime: 1,
-      asyncEntry: doneSoFar => {
-        GameIntervals.stop();
-        ui.$viewModel.modal.progressBar = {
-          label: "Simulating offline time...",
-          current: doneSoFar,
-          max: ticks,
-        };
-      },
-      asyncProgress: doneSoFar => {
-        ui.$viewModel.modal.progressBar.current = doneSoFar;
-      },
-      asyncExit: () => {
-        ui.$viewModel.modal.progressBar = undefined;
-        GameIntervals.start();
-      },
-      then: () => {
-        afterSimulation(seconds, playerStart);
-      }
-    });
+  // We don't show the offline modal here or bother with async if doing a fast simulation
+  if (fast) {
+    GameIntervals.stop();
+    for (let i = 0; i < 50; i++) {
+      loopFn();
+    }
+    GameStorage.postLoadStuff();
+    afterSimulation(seconds, playerStart);
+  } else {
+    ui.view.modal.progressBar = {};
+    ui.view.modal.progressBar.label = "Simulating offline time...";
+    Async.run(loopFn,
+      ticks,
+      {
+        batchSize: 1,
+        maxTime: 60,
+        sleepTime: 1,
+        asyncEntry: doneSoFar => {
+          GameIntervals.stop();
+          ui.$viewModel.modal.progressBar = {
+            label: "Simulating offline time...",
+            current: doneSoFar,
+            max: ticks,
+            startTime: Date.now()
+          };
+        },
+        asyncProgress: doneSoFar => {
+          ui.$viewModel.modal.progressBar.current = doneSoFar;
+        },
+        asyncExit: () => {
+          ui.$viewModel.modal.progressBar = undefined;
+          // .postLoadStuff will restart GameIntervals
+          GameStorage.postLoadStuff();
+        },
+        then: () => {
+          afterSimulation(seconds, playerStart);
+        }
+      });
+  }
 }
 
-function updateChart(first) {
-    if (first !== true && (player.infinitied.gte(1) || player.eternities.gte(1)) && player.options.chart.on === true) {
-      addChartData(NormalDimension(1).productionPerSecond);
-    }
-    if (player.options.chart.updateRate) {
-        setTimeout(updateChart, player.options.chart.updateRate);
-    } else {
-        setTimeout(updateChart, 1000);
-    }
-}
-updateChart(true);
-
-function autoBuyDilationUpgrades() {
+function autoBuyDilationUpgrades(extraFactor) {
   if (Perk.autobuyerDilation.isBought) {
     const upgrades = [DilationUpgrade.dtGain, DilationUpgrade.galaxyThreshold, DilationUpgrade.tachyonGain].filter(
       upgrade => upgrade.isAutobuyerOn);
     for (const upgrade of upgrades) {
-      upgrade.purchase(true);
+      upgrade.purchase(true, extraFactor);
     }
   }
 }
@@ -873,10 +872,14 @@ function slowerAutobuyers(realDiff) {
   player.auto.dilUpgradeTimer += ampDiff;
   const dilUpgradePeriod = 1000 * Perk.autobuyerFasterDilation.effectOrDefault(1);
   if (player.auto.dilUpgradeTimer >= dilUpgradePeriod) {
-    player.auto.dilUpgradeTimer = Math.min(player.auto.dilUpgradeTimer - dilUpgradePeriod, dilUpgradePeriod);
-    autoBuyDilationUpgrades();
+    // Because the dilation upgrade autobuyers naturally buy singles, it helps to
+    // be able to trigger them multiple times in one long-enough tick, which is
+    // what we do here. (This is why this code looks a bit different from that for
+    // the other autobuyers, which buy max.)
+    autoBuyDilationUpgrades(Math.floor(player.auto.dilUpgradeTimer / dilUpgradePeriod));
+    player.auto.dilUpgradeTimer %= dilUpgradePeriod;
   }
-  
+
   TimeTheorems.autoBuyMaxTheorems(ampDiff);
   Tutorial.tutorialLoop();
 
@@ -921,10 +924,14 @@ function setShiftKey(isDown) {
   ui.view.shiftDown = isDown;
 }
 
+function setHoldingR(x) {
+  Replicanti.galaxies.isPlayerHoldingR = x;
+}
+
 function init() {
   // eslint-disable-next-line no-console
   console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
-  Tab.dimensions.normal.show();
+  Tab.dimensions.antimatter.show();
   GameStorage.load();
   kong.init();
 }

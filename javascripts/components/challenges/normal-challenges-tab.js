@@ -17,18 +17,20 @@ Vue.component("normal-challenges-tab", {
         challenge() {
           return NormalChallenge(this.challengeId);
         },
+        config() {
+          return this.challenge.config;
+        },
         name() {
           return `C${this.challengeId}`;
         },
         overrideLabel() {
           return this.isBroken ? "Broken" : "";
-        }
+        },
       },
       methods: {
         update() {
           this.isRunning = this.challenge.isRunning;
-          this.isBroken = Enslaved.isRunning &&
-            !Enslaved.BROKEN_CHALLENGE_EXEMPTIONS.includes(this.challengeId);
+          this.isBroken = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(this.challengeId);
           this.isCompleted = this.challenge.isCompleted && !this.isBroken;
         }
       },
@@ -40,9 +42,9 @@ Vue.component("normal-challenges-tab", {
           :isCompleted="isCompleted"
           :overrideLabel="overrideLabel"
           class="c-challenge-box--normal"
-          @start="challenge.start()"
+          @start="challenge.requestStart()"
         >
-          <span slot="top">{{challenge.config.description}}</span>
+          <description-display :config="config" slot="top" />
           <span slot="bottom">Reward: {{challenge.config.reward}}</span>
         </challenge-box>`
     }

@@ -3,8 +3,9 @@
 GameDatabase.challenges.infinity = [
   {
     id: 1,
-    description: "All previous challenges (except tickspeed challenge and automatic big crunch challenge) at once.",
-    goal: new Decimal("1e850"),
+    description: `All Normal Challenges, with the exception of
+    Tickspeed (C9) and Big Crunch (C11) Challenges, are active at the same time.`,
+    goal: new Decimal("1e650"),
     isQuickResettable: true,
     reward: {
       description: () => `${formatX(1.3, 1, 1)} on all Infinity Dimensions for each Infinity Challenge completed`,
@@ -15,24 +16,28 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 2,
-    description: () => `Automatically sacrifice every ${formatInt(8)} ticks once you have an 8th Dimension.`,
+    description: () => `Automatically Dimensional Sacrifice every ${formatInt(8)} ticks once you have
+    an 8th Antimatter Dimension.`,
     goal: new Decimal("1e10500"),
     isQuickResettable: false,
     reward: {
-      description: "Sacrifice autobuyer and stronger sacrifice"
+      description: () => `Dimensional Sacrifice autobuyer and stronger Dimensional Sacrifice
+        ${Sacrifice.getSacrificeDescription({ "InfinityChallenge2isCompleted": false })} ➜
+        ${Sacrifice.getSacrificeDescription({ "InfinityChallenge2isCompleted": true })}`,
     },
-    unlockAM: new Decimal("1e5000"),
+    unlockAM: new Decimal("1e11000"),
   },
   {
     id: 3,
-    description: "Tickspeed interval decrease is always 0%. For every tickspeed purchase, you instead get a static " +
-      "multiplier on all normal dimensions which increases with Antimatter Galaxies.",
+    description: () =>
+      `Tickspeed upgrades are always ${formatX(1)}. For every tickspeed upgrade purchase, you instead get a static
+      multiplier on all Antimatter Dimensions which increases based on Antimatter Galaxies.`,
     goal: new Decimal("1e5000"),
     isQuickResettable: false,
     effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
     formatEffect: value => formatX(value, 2, 2),
     reward: {
-      description: "Static multiplier on each tickspeed purchase based on Antimatter Galaxies",
+      description: "Antimatter Dimension multiplier based on Antimatter Galaxies and tickspeed purchases",
       effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
       formatEffect: value => formatX(value, 2, 2),
     },
@@ -40,26 +45,29 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 4,
-    description: () => `Only the latest bought dimension's production is normal, all other dimensions produce less
-      (${formatPow(0.25, 2, 2)}).`,
+    description: () =>
+      `Only the latest bought Antimatter Dimension's production is normal, all other Antimatter Dimensions
+      produce less (${formatPow(0.25, 2, 2)}).`,
     goal: new Decimal("1e13000"),
     isQuickResettable: true,
     effect: 0.25,
     reward: {
-      description: () => `All normal dimension multipliers become multiplier${formatPow(1.05, 2, 2)}`,
+      description: () => `All Antimatter Dimension multipliers become multiplier${formatPow(1.05, 2, 2)}`,
       effect: 1.05
     },
     unlockAM: new Decimal("1e14000"),
   },
   {
     id: 5,
-    description: "When buying dimensions 1-4, dimensions with costs smaller or equal increase in cost. " +
-      "When buying dimensions 5-8, dimensions with costs larger or equal increase in cost. " +
-      "When buying tickspeed, dimensions with the same cost increase.",
+    description:
+      "When buying Antimatter Dimensions 1-4, Antimatter Dimensions with costs smaller or equal increase in cost. " +
+      "When buying Antimatter Dimensions 5-8, Antimatter Dimensions with costs larger or equal increase in cost. " +
+      "When buying tickspeed, Antimatter Dimensions with the same cost increase in cost.",
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {
-      description: () => `Galaxies are 10% stronger and reduce the requirements for them
+      description: () =>
+        `Galaxies are ${formatPercents(0.1)} stronger and reduce the requirements for them
         and Dimension Boosts by ${formatInt(1)}`,
       effect: 1.1
     },
@@ -67,22 +75,24 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 6,
-    description: () => `Once you have at least ${formatInt(1)} 2nd Dimension, exponentially rising matter
-      divides the multiplier on all of your dimensions.`,
+    description: () =>
+      `Once you have at least ${formatInt(1)} 2nd Antimatter Dimension, exponentially rising matter
+      divides the multiplier on all of your Antimatter Dimensions.`,
     goal: new Decimal("2e22222"),
     isQuickResettable: true,
     effect: () => player.matter.clampMin(1),
     formatEffect: value => formatX(value, 1, 2),
     reward: {
-      description: "Tickspeed affects Infinity Dimensions with reduced effect",
+      description: "Infinity Dimension multiplier based on Tickspeed",
       effect: () => Decimal.divide(1000, Tickspeed.current).pow(0.0005),
       formatEffect: value => formatX(value, 2, 2)
     },
-    unlockAM: new Decimal("1e20000"),
+    unlockAM: new Decimal("1e22500"),
   },
   {
     id: 7,
-    description: () => `You can't get Antimatter Galaxies, but Dimension Boost multiplier
+    description: () =>
+      `You can't get Antimatter Galaxies, but Dimension Boost multiplier
       ${formatX(2.5, 1, 1)} ➜ ${formatX(10, 0, 0)}`,
     goal: new Decimal("1e10000"),
     isQuickResettable: false,
@@ -95,14 +105,17 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 8,
-    description: "Your production is at 100% after purchasing anything, after that it rapidly drops down.",
+    description: () =>
+      `Your production is at ${formatPercents(1)} after
+      purchasing anything, after that it rapidly drops down.`,
     goal: new Decimal("1e27000"),
     isQuickResettable: true,
     effect: () => Decimal.pow(0.8446303389034288,
       Math.max(0, player.thisInfinityTime - player.thisInfinityLastBuyTime)),
     reward: {
-      description: "You get a multiplier to dimensions 2-7 based on 1st and 8th dimension multipliers.",
-      effect: () => NormalDimension(1).multiplier.times(NormalDimension(8).multiplier).pow(0.02),
+      description:
+        "You get a multiplier to Antimatter Dimensions 2-7 based on 1st and 8th Antimatter Dimension multipliers.",
+      effect: () => AntimatterDimension(1).multiplier.times(AntimatterDimension(8).multiplier).pow(0.02),
       formatEffect: value => formatX(value, 2, 2)
     },
     unlockAM: new Decimal("1e28000"),

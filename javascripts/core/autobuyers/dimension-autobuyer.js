@@ -31,11 +31,16 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get bulk() {
-    return this.data.bulk;
+    // Use 1e100 to avoid issues with Infinity.
+    return this.hasUnlimitedBulk ? 1e100 : this.data.bulk;
+  }
+  
+  get hasUnlimitedBulk() {
+    return Achievement(61).isUnlocked;
   }
 
   get hasMaxedBulk() {
-    return this.bulk >= 1e100;
+    return this.bulk >= 1e10;
   }
 
   get priority() {
@@ -64,7 +69,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
 
   tick() {
     const tier = this._tier;
-    if (!NormalDimension(tier).isAvailableForPurchase) return;
+    if (!AntimatterDimension(tier).isAvailableForPurchase) return;
     super.tick();
     switch (this.mode) {
       case AUTOBUYER_MODE.BUY_SINGLE:
@@ -78,18 +83,15 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
 
   upgradeBulk() {
     if (this.hasMaxedBulk) return;
-    if (!Currency.infinityPoints.isAffordable(this.cost)) return;
-    Currency.infinityPoints.subtract(this.cost);
-    this.data.bulk = Math.clampMax(this.bulk * 2, 1e100);
+    if (!Currency.infinityPoints.purchase(this.cost)) return;
+    this.data.bulk = Math.clampMax(this.bulk * 2, 1e10);
     this.data.cost = Math.ceil(2.4 * this.cost);
     Achievement(61).tryUnlock();
-    SecretAchievement(38).tryUnlock();
     GameUI.update();
   }
 
   purchase() {
-    if (!Currency.antimatter.isAffordable(this.antimatterCost)) return;
-    Currency.antimatter.subtract(this.antimatterCost);
+    if (!Currency.antimatter.purchase(this.antimatterCost)) return;
     this.data.isBought = true;
   }
 

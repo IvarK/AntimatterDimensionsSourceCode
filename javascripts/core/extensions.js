@@ -67,8 +67,8 @@ Decimal.maxReducer = function(a, b) {
 };
 
 Decimal.prototype.copyFrom = function(decimal) {
-  if (!(decimal instanceof Decimal)) {
-    throw "Copy value is not Decimal";
+  if (!(decimal instanceof Decimal) && !(decimal instanceof DecimalCurrency)) {
+    throw "Copy value is not Decimal or DecimalCurrency";
   }
   this.mantissa = decimal.mantissa;
   this.exponent = decimal.exponent;
@@ -91,12 +91,6 @@ const copyToClipboard = (function() {
     }
   };
 }());
-
-function copyToClipboardAndNotify(str) {
-    if (copyToClipboard(str)) {
-        GameUI.notify.info("Exported to clipboard");
-    }
-}
 
 function safeCall(fn) {
     if (fn) fn();

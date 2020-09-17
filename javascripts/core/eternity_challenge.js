@@ -5,9 +5,9 @@ function startEternityChallenge() {
   initializeResourcesAfterEternity();
   resetInfinityRuns();
   InfinityDimensions.fullReset();
-  eternityResetReplicanti();
+  Replicanti.reset();
   resetChallengeStuff();
-  NormalDimensions.reset();
+  AntimatterDimensions.reset();
   player.replicanti.galaxies = 0;
   player.infinityPoints = Player.startingIP;
   InfinityDimensions.resetAmount();
@@ -15,8 +15,9 @@ function startEternityChallenge() {
   player.bestEPminThisEternity = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
-  player.antimatter = Player.startingAM;
-  player.thisInfinityMaxAM = Player.startingAM;
+  player.thisInfinityMaxAM = new Decimal(0);
+  player.thisEternityMaxAM = new Decimal(0);
+  Currency.antimatter.reset();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
 }
@@ -157,19 +158,23 @@ class EternityChallengeState extends GameMechanicState {
     }
   }
 
+  requestStart() {
+    if (!Tab.challenges.eternity.isAvailable || this.isRunning) return;
+    if (!player.options.confirmations.challenges) {
+      this.start();
+      return;
+    }
+    if (this.isUnlocked) {
+    Modal.startEternityChallenge.show(this.id);
+    }
+  }
+
   start(auto) {
     if (!this.isUnlocked || EternityChallenge.isRunning) return false;
-    if (!auto && player.options.confirmations.challenges) {
-      const confirmation =
-        "You will start over with just your time studies, " +
-        "eternity upgrades and achievements. " +
-        "You need to reach a set IP with special conditions.";
-      if (!confirm(confirmation)) return false;
-    }
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.
-    if (canEternity()) eternity(false, auto, { enteringEC: true });
+    if (Player.canEternity) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
       if (V.isRunning && player.minNegativeBlackHoleThisReality < 1) {
@@ -212,7 +217,15 @@ class EternityChallengeState extends GameMechanicState {
 
   fail() {
     this.exit();
-    Modal.message.show("You failed the challenge, you have now exited it.");
+    let reason;
+    if (this.id === 4) {
+      reason = restriction => `having more than ${formatInt(restriction)} Infinities`;
+    } else if (this.id === 12) {
+      reason = restriction => `spending more than ${format(restriction, 0, 1)}
+        in-game ${restriction === 1 ? "second" : "seconds"} in it`;
+    }
+    Modal.message.show(`You failed Eternity Challenge ${this.id} due to
+      ${reason(this.config.restriction(this.completions))}; you have now exited it.`);
     EventHub.dispatch(GAME_EVENT.CHALLENGE_FAILED);
   }
 
@@ -297,7 +310,7 @@ const EternityChallenges = {
 
     get interval() {
       if (!Perk.autocompleteEC1.isBought) return Infinity;
-      let hours = Effects.min(
+      let minutes = Effects.min(
         Number.MAX_VALUE,
         Perk.autocompleteEC1,
         Perk.autocompleteEC2,
@@ -305,8 +318,8 @@ const EternityChallenges = {
         Perk.autocompleteEC4,
         Perk.autocompleteEC5
       );
-      if (V.has(V_UNLOCKS.FAST_AUTO_EC)) hours /= V_UNLOCKS.FAST_AUTO_EC.effect();
-      return TimeSpan.fromHours(hours).totalMilliseconds;
+      if (V.has(V_UNLOCKS.FAST_AUTO_EC)) minutes /= V_UNLOCKS.FAST_AUTO_EC.effect();
+      return TimeSpan.fromMinutes(minutes).totalMilliseconds;
     }
   }
 };

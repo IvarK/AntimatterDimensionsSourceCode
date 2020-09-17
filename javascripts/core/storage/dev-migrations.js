@@ -488,7 +488,17 @@ GameStorage.devMigrations = {
       player.celestials.teresa.perkShop[4] = tempMusic;
     },
     GameStorage.migrations.convertAchievementsToBits,
-    GameStorage.migrations.removePower,
+    player => {
+      for (const dimension of player.dimensions.antimatter) {
+        delete dimension.power;
+      }
+      for (const dimension of player.dimensions.infinity) {
+        delete dimension.power;
+      }
+      for (const dimension of player.dimensions.time) {
+        delete dimension.power;
+      }
+    },
     player => {
       const cursedMask = 15;
       const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
@@ -598,7 +608,7 @@ GameStorage.devMigrations = {
     player => {
       for (let i = 0; i < player.celestials.ra.alchemy.length; i++) {
         player.celestials.ra.alchemy[i].amount = Math.clampMax(
-          player.celestials.ra.alchemy[i].amount, 25000);
+          player.celestials.ra.alchemy[i].amount, Ra.alchemyResourceCap);
       }
     },
     player => {
@@ -639,6 +649,102 @@ GameStorage.devMigrations = {
       if (player.celestials.v.ppSpent) {
         player.reality.pp += player.celestials.v.ppSpent;
         delete player.celestials.v.ppSpent;
+      }
+    },
+    player => {
+      player.thisEternityMaxAM = new Decimal(0);
+    },
+    player => {
+      GameStorage.migrations.migrateLastTenRuns(player);
+      //  Put in a default value of 1 for realities.
+      player.lastTenRealities = player.lastTenRealities.map(x => [x[0], x[1], 1, Number(x[2]), x[3]]);
+      GameStorage.migrations.migrateIPGen(player);
+    },
+    player => {
+      player.noReplicantiGalaxies = player.reality.upgReqChecks[0];
+      delete player.reality.upgReqChecks;
+    },
+    player => {
+      player.bestGlyphStrength = player.reality.glyphs.active.concat(
+        player.reality.glyphs.inventory).map(g => g.strength).max();
+    },
+    player => {
+      player.options.showHintText.glyphEffectDots = player.options.showGlyphEffectDots;
+      delete player.options.showGlyphEffectDots;
+      GameStorage.migrations.renameCloudVariable(player);
+    },
+    player => {
+      const newPerks = new Set([...player.reality.perks].filter(x => x < 20 || x > 25));
+      const gainedPerkPoints = player.reality.perks.size - newPerks.size;
+      player.reality.pp += gainedPerkPoints;
+      player.reality.perks = newPerks;
+      if (gainedPerkPoints > 0) {
+        Modal.message.show(
+          "Some of your perks (glyph perks) were removed. The perk points you spent on them have been refunded.");
+      }
+    },
+    player => {
+      delete player.reality.glyphs.last;
+    },
+    player => {
+      if (player.reality.secondGaussian === null) {
+        // Future-proof against potential changes to the default value
+        // (as a special case of not using state accessors).
+        player.reality.secondGaussian = 1e6;
+      }
+    },
+    player => {
+      delete player.celestials.laitela.reachedSingularityCapLimit;
+      delete player.celestials.laitela.secondsSinceCappedTime;
+      delete player.celestials.laitela.singularityAutoCapLimit;
+      delete player.celestials.laitela.singularityTime;
+      delete player.celestials.laitela.autoAnnihilationTimer;
+      delete player.celestials.laitela.annihilated;
+      delete player.celestials.laitela.secondsSinceReachedSingularity;
+      player.celestials.laitela.darkMatterMult = Math.clampMin(player.celestials.laitela.darkMatterMult, 1);
+      player.celestials.laitela.dimensions.forEach(d => d.ascensionCount = 0);
+    },
+    player => {
+      const allRandomGlyphs = player.reality.glyphs.active
+        .concat(player.reality.glyphs.inventory)
+        .filter(i => i.type !== "companion");
+      for (const glyph of allRandomGlyphs) {
+        glyph.strength = Math.ceil(glyph.strength * 400) / 400;
+      }
+    },
+    player => {
+      for (let i = 0; i < player.dimensions.normal.length; i++) {
+        const dimension = player.dimensions.normal[i];
+        player.dimensions.antimatter[i].bought = dimension.bought;
+        player.dimensions.antimatter[i].costBumps = dimension.costBumps;
+        player.dimensions.antimatter[i].amount = new Decimal(dimension.amount);
+      }
+      delete player.dimensions.normal;
+    },
+    player => {
+      player.options.news = {
+        enabled: player.options.news,
+        repeatBuffer: 40,
+        AIChance: 0,
+        speed: 1
+      };
+    },
+    player => {
+      delete player.options.confirmations.glyphTrash;
+    },
+    player => {
+      GameStorage.migrations.standardizeUncompletedTimes(player);
+      if (player.bestReality === 999999999999) player.bestReality = Number.MAX_VALUE;
+      if (player.bestRealityRealTime === 999999999999) player.bestRealityRealTime = Number.MAX_VALUE;
+      for (let i = 0; i < 10; i++) {
+        if (player.lastTenRealities[i][0] === 2678400000) player.lastTenRealities[i][0] = Number.MAX_VALUE;
+        if (player.lastTenRealities[i][3] === 26784000) player.lastTenRealities[i][3] = Number.MAX_VALUE;
+      }
+    },
+    player => {
+      for (const script of Object.values(player.reality.automator.scripts)) {
+        script.content =
+          script.content.replace(/^([ \t]*)(wait|if|while|until)([\t ]+)(completions)/igmu, "$1$2$3pending $4");
       }
     }
   ],

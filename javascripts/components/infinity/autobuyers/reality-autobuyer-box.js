@@ -30,7 +30,7 @@ Vue.component("reality-autobuyer-box", {
         case AUTO_REALITY_MODE.EITHER: return "Either";
         case AUTO_REALITY_MODE.BOTH: return "Both";
       }
-      throw new Error("Unknown auto reality mode");
+      throw new Error("Unknown Auto Reality mode");
     },
     changeMode(event) {
       const mode = parseInt(event.target.value, 10);
@@ -41,6 +41,7 @@ Vue.component("reality-autobuyer-box", {
   template:
     `<autobuyer-box :autobuyer="autobuyer" name="Automatic Reality">
       <template slot="intervalSlot">
+        <div class="c-autobuyer-box__small-text"></div>
         <select
           class="c-autobuyer-box__mode-select"
           @change="changeMode"
@@ -53,7 +54,7 @@ Vue.component("reality-autobuyer-box", {
         </select>
       </template>
       <template slot="toggleSlot">
-        <div>Target reality machines:</div>
+        <div>Target Reality Machines:</div>
         <autobuyer-input
          :autobuyer="autobuyer"
          type="decimal"

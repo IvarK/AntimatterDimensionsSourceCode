@@ -62,27 +62,15 @@ const AutomatorGrammar = (function() {
       ]), { resyncEnabled: false, });
 
       $.RULE("comparison", () => {
-        $.OR([
-          {
-            ALT: () => {
-              $.CONSUME(T.Currency);
-              $.CONSUME(T.ComparisonOperator);
-              $.SUBRULE($.compareValue);
-            }
-          },
-          {
-            ALT: () => {
-              $.SUBRULE1($.compareValue);
-              $.CONSUME1(T.ComparisonOperator);
-              $.CONSUME1(T.Currency);
-            }
-          },
-        ]);
+        $.SUBRULE($.compareValue);
+        $.CONSUME(T.ComparisonOperator);
+        $.SUBRULE2($.compareValue);
       });
 
       $.RULE("compareValue", () => $.OR([
         { ALT: () => $.CONSUME(T.NumberLiteral) },
         { ALT: () => $.CONSUME(T.Identifier) },
+        { ALT: () => $.CONSUME(T.Currency) },
       ]));
 
       $.RULE("duration", () => {
@@ -126,8 +114,7 @@ const AutomatorGrammar = (function() {
 
       $.RULE("xLast", () => {
         $.CONSUME(T.NumberLiteral);
-        $.CONSUME(T.CharX);
-        $.CONSUME(T.Last);
+        $.CONSUME(T.XLast);
       });
 
       $.RULE("currencyAmount", () => {

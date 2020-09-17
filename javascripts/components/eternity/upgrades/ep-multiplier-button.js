@@ -41,16 +41,16 @@ Vue.component("ep-multiplier-button", {
   template:
     `<div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()">
-        You gain {{formatInt(5)}} times more EP
+        Multiply Eternity Points from all sources by {{ formatX(5) }}
         <br>
-        Currently: {{format(multiplier, 2, 0)}}x
+        Currently: {{formatX(multiplier, 2, 0)}}
         <br>
-        Cost: {{format(cost, 2, 0)}} EP
+        Cost: {{format(cost, 2, 0)}} Eternity Points
       </button>
       <primary-button
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
         @click="upgrade.buyMax()"
-      >Max EP mult</primary-button>
+      >Max Eternity Point mult</primary-button>
       <primary-button-on-off
         v-if="isAutoUnlocked"
         v-model="isAutobuyerOn"

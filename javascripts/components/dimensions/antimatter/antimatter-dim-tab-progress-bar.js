@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("normal-dim-tab-progress-bar", {
+Vue.component("antimatter-dim-tab-progress-bar", {
   data() {
     return {
       fill: 0,
@@ -13,7 +13,7 @@ Vue.component("normal-dim-tab-progress-bar", {
     },
     progressBarStyle() {
       return {
-        width: Notations.current.name === 'Blind' ? '0%' : `${(this.fill * 100).toFixed(2)}%`
+        width: `${(this.fill * 100).toFixed(2)}%`
       };
     }
   },
@@ -25,9 +25,9 @@ Vue.component("normal-dim-tab-progress-bar", {
       };
       const challenge = NormalChallenge.current || InfinityChallenge.current;
       if (challenge) {
-        setProgress(player.antimatter, challenge.goal, "Percentage to challenge goal");
+        setProgress(Currency.antimatter.value, challenge.goal, "Percentage to challenge goal");
       } else if (!player.break) {
-        setProgress(player.antimatter, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
+        setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
       } else if (Enslaved.isCompleted) {
         setProgress(player.infinityPoints, Enslaved.tesseractCost, "Percentage to next Tesseract");
       } else if (PlayerProgress.dilationUnlocked()) {
@@ -39,7 +39,10 @@ Vue.component("normal-dim-tab-progress-bar", {
           EternityChallenge.isRunning ? "Percentage to Eternity Challenge goal" : "Percentage to Eternity"
         );
       } else {
-        setProgress(player.antimatter, InfinityDimensions.next().requirement, "Percentage to next dimension unlock");
+        setProgress(
+          Currency.antimatter.value,
+          InfinityDimensions.next().requirement,
+          "Percentage to next dimension unlock");
       }
     }
   },

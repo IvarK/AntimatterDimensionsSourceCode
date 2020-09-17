@@ -39,7 +39,7 @@ Vue.component("infinity-challenges-tab", {
           :isRunning="isRunning"
           :isCompleted="isCompleted"
           class="c-challenge-box--infinity"
-          @start="challenge.start()"
+          @start="challenge.requestStart()"
         >
           <template slot="top">
             <description-display :config="config" />
@@ -55,7 +55,8 @@ Vue.component("infinity-challenges-tab", {
   },
   data() {
     return {
-      postChallUnlocked: 0
+      postChallUnlocked: 0,
+      showAllChallenges: false
     };
   },
   computed: {
@@ -65,15 +66,16 @@ Vue.component("infinity-challenges-tab", {
         : undefined;
       return next === undefined
         ? "All Infinity Challenges unlocked"
-        : `Next challenge unlocks at ${format(next, 0, 0)} antimatter.`;
+        : `Next Infinity Challenge unlocks at ${format(next, 0, 0)} antimatter.`;
     }
   },
   methods: {
     update() {
       this.postChallUnlocked = player.postChallUnlocked;
+      this.showAllChallenges = player.options.showAllChallenges;
     },
     isChallengeVisible(id) {
-      return player.postChallUnlocked >= id;
+      return player.postChallUnlocked >= id || (this.showAllChallenges && PlayerProgress.eternityUnlocked());
     }
   },
   template:

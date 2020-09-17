@@ -118,25 +118,45 @@ const AutomatorLexer = (() => {
   createInCategory(Currency, "TP", /tp/i, { $getter: () => player.dilation.tachyonParticles });
   createInCategory(Currency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
   createInCategory(Currency, "RM", /rm/i, { $getter: () => player.reality.realityMachines });
+
+  createInCategory(Currency, "PendingIP", /pending[ \t]+ip/i, {
+    $autocomplete: "pending IP",
+    $getter: () => (Player.canCrunch ? gainedInfinityPoints() : new Decimal(0))
+  });
+  createInCategory(Currency, "PendingEP", /pending[ \t]+ep/i, {
+    $autocomplete: "pending EP",
+    $getter: () => (Player.canEternity ? gainedEternityPoints() : new Decimal(0))
+  });
+  createInCategory(Currency, "PendingRM", /pending[ \t]+rm/i, {
+    $autocomplete: "pending RM",
+    $getter: () => (isRealityAvailable() ? gainedRealityMachines() : new Decimal(0))
+  });
+  createInCategory(Currency, "GlyphLevel", /glyph[ \t]+level/i, {
+    $autocomplete: "glyph level",
+    $getter: () => new Decimal(isRealityAvailable() ? gainedGlyphLevel().actualLevel : 0),
+  });
+
   createInCategory(Currency, "Rep", /rep(licanti)?/i, {
     $autocomplete: "rep",
     $getter: () => player.replicanti.amount,
   });
   createInCategory(Currency, "TT", /(tt|time theorems?)/i, {
-    $autocomplete: "tt",
+    $autocomplete: "TT",
     $getter: () => player.timestudy.theorem,
   });
-  createInCategory(Currency, "Completions", /completions/i, {
+  createInCategory(Currency, "Total_TT", /total tt/i, {
+    $autocomplete: "total TT",
+    $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
+  });
+
+  createInCategory(Currency, "PendingCompletions", /pending[ \t]+completions/i, {
+    $autocomplete: "pending completions",
     $getter: () => {
       // If we are not in an EC, pretend like we have a ton of completions so any check for sufficient
       // completions returns true
       if (!EternityChallenge.isRunning) return Decimal.NUMBER_MAX_VALUE;
       return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
     }
-  });
-  createInCategory(Currency, "Total_TT", /total tt/i, {
-    $autocomplete: "total tt",
-    $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
   });
   for (let i = 1; i <= 12; ++i) {
     const id = i;
@@ -155,7 +175,7 @@ const AutomatorLexer = (() => {
     $autobuyerDurationMode: AUTO_CRUNCH_MODE.TIME,
     $autobuyerXLastMode: AUTO_CRUNCH_MODE.X_LAST,
     $autobuyerCurrencyMode: AUTO_CRUNCH_MODE.AMOUNT,
-    $prestigeAvailable: () => canCrunch(),
+    $prestigeAvailable: () => Player.canCrunch,
     $prestige: () => bigCrunchResetRequest(true),
     $prestigeLevel: 1,
     $prestigeCurrency: "IP",
@@ -166,10 +186,13 @@ const AutomatorLexer = (() => {
     $autobuyerDurationMode: AUTO_ETERNITY_MODE.TIME,
     $autobuyerXLastMode: AUTO_ETERNITY_MODE.X_LAST,
     $autobuyerCurrencyMode: AUTO_ETERNITY_MODE.AMOUNT,
-    $prestigeAvailable: () => canEternity(),
+    $prestigeAvailable: () => Player.canEternity,
     $prestigeLevel: 2,
     $prestigeCurrency: "EP",
     $prestige: () => eternity(false, true),
+    $respec: () => {
+      player.respec = true;
+    },
   });
   createInCategory(PrestigeEvent, "Reality", /reality/i, {
     $autobuyer: Autobuyer.reality,
@@ -178,12 +201,15 @@ const AutomatorLexer = (() => {
     $prestigeLevel: 3,
     $prestigeCurrency: "RM",
     $prestige: () => autoReality(),
+    $respec: () => {
+      player.reality.respec = true;
+    },
   });
 
   createInCategory(StudyPath, "Idle", /idle/i, { $studyPath: TIME_STUDY_PATH.IDLE });
   createInCategory(StudyPath, "Passive", /passive/i, { $studyPath: TIME_STUDY_PATH.PASSIVE });
   createInCategory(StudyPath, "Active", /active/i, { $studyPath: TIME_STUDY_PATH.ACTIVE });
-  createInCategory(StudyPath, "Normal", /normal/i, { $studyPath: TIME_STUDY_PATH.NORMAL_DIM });
+  createInCategory(StudyPath, "Antimatter", /antimatter/i, { $studyPath: TIME_STUDY_PATH.ANTIMATTER_DIM });
   createInCategory(StudyPath, "Time", /time/i, { $studyPath: TIME_STUDY_PATH.TIME_DIM });
 
   createInCategory(TimeUnit, "Milliseconds", /ms/i, {
@@ -260,8 +286,9 @@ const AutomatorLexer = (() => {
 
   createKeyword("Dilation", /dilation/i);
   createKeyword("EC", /ec/i);
-  createKeyword("CharX", /x/i);
-  createKeyword("Last", /last/i);
+  createKeyword("XLast", /x[ \t]+last/i, {
+    $autocomplete: "x last",
+  });
 
   // We allow ECLiteral to consume lots of digits because that makes error reporting more
   // clear (it's nice to say ec123 is an invalid ec)

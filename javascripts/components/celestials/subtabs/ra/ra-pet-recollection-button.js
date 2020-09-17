@@ -35,19 +35,17 @@ Vue.component("ra-pet-recollection-button", {
     }
   },
   template: `
-    <div class="l-ra-pet-recollection-button-container">
-      <button
-        class="c-ra-pet-recollection-button"
-        v-if="isUnlocked"
-        :style="petStyle"
-        @click="turnOnRecollection">
-          <span v-if="hasRecollection">
-            Recollection given to {{ name }}
-          </span>
-          <span v-else>
-            Give Recollection to {{ name }}
-          </span>
-      </button>
-    </div>
+    <button
+      class="c-ra-pet-recollection-button"
+      v-if="isUnlocked"
+      :style="petStyle"
+      @click="turnOnRecollection">
+        <span v-if="hasRecollection">
+          Recollection given to {{ name }}
+        </span>
+        <span v-else>
+          Give Recollection to {{ name }}
+        </span>
+    </button>
   `
 });

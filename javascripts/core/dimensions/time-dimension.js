@@ -94,7 +94,7 @@ function timeDimensionCommonMultiplier() {
       EternityUpgrade.tdMultAchs,
       EternityUpgrade.tdMultTheorems,
       EternityUpgrade.tdMultRealTime,
-      player.replicanti.unl && player.replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null,
+      Replicanti.areUnlocked && player.replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null,
       RealityUpgrade(22),
       AlchemyResource.dimensionality
     );
@@ -164,13 +164,12 @@ class TimeDimensionState extends DimensionState {
 
     const dim = TimeDimension(tier);
     mult = mult.times(Decimal.pow(dim.powerMultiplier, dim.bought));
-    mult = mult.clampMin(0).pow(getAdjustedGlyphEffect("timepow"));
-
+    
+    mult = mult.pow(getAdjustedGlyphEffect("timepow"));
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
-
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
-
     mult = mult.powEffectOf(AlchemyResource.time);
+    mult = mult.pow(Ra.momentumValue);
 
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);
@@ -264,7 +263,7 @@ const TimeDimensions = {
     }
 
     EternityChallenge(7).reward.applyEffect(production => {
-      InfinityDimension(8).amount = InfinityDimension(8).amount.plus(production.times(diff / 10));
+      InfinityDimension(8).amount = InfinityDimension(8).amount.plus(production.times(diff / 1000));
     });
   }
 };

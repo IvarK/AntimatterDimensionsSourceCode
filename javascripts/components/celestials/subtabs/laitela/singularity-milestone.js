@@ -1,7 +1,7 @@
 "use strict";
 
 Vue.component("singularity-milestone", {
-  props: ["milestone"],
+  props: ["milestone", "suppressGlow"],
   data: () => ({
     isMaxed: false,
     progressToNext: "",
@@ -10,6 +10,7 @@ Vue.component("singularity-milestone", {
     effectDisplay: "",
     isUnique: false,
     nextEffectDisplay: "",
+    start: 0,
     completions: 0,
     limit: 0
   }),
@@ -27,31 +28,75 @@ Vue.component("singularity-milestone", {
     },
   },
   computed: {
-    milestoneProgressStyles() {
-      if (this.isMaxed) return { background: "var(--color-good)", width: "100%" };
-      return { width: this.progressToNext };
+    barProgressStyle() {
+      let color;
+      if (this.isMaxed) color = "";
+      else if (this.isUnique) color = "var(--color-accent)";
+      else if (this.limit > 1) color = "var(--color-good-dark)";
+      else color = "var(--color-good)";
+      return { 
+        background: color,
+        width: this.progressToNext
+      };
+    },
+    backgroundStyle() {
+      let color;
+      if (this.isUnique && this.isMaxed) color = "var(--color-accent)";
+      else if (this.limit > 1 && this.completions >= 1) {
+        if (this.isMaxed) color = "var(--color-good-dark)";
+        else color = "var(--color-good)";
+      } else {
+        color = "";
+      }
+      return { 
+        "background-color": color
+      };
+    },
+    newGlowStyle() {
+      if (this.suppressGlow) return {};
+      const newMilestones = SingularityMilestones.unseenMilestones;
+      for (let rep = 0; this.completions === 0 || rep < this.completions; rep++) {
+        const thisLevel = this.milestone.start * Math.pow(this.milestone.repeat, rep);
+        if (newMilestones.includes(thisLevel)) return { "box-shadow": "0 0 0.3rem 0.3rem var(--color-celestials)" };
+        if (thisLevel > player.celestials.laitela.singularities) break;
+      }
+      return {};
+    },
+    upgradeDirectionIcon() {
+      switch (this.milestone.config.upgradeDirection) {
+        case LAITELA_UPGRADE_DIRECTION.SELF_BOOST:
+          return `<b>ᛝ</b>`;
+        case LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN:
+          return `<i class="fas fa-arrows-alt"></i>`;
+        case LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA:
+          return `<i class="fas fa-compress-arrows-alt"></i>`;
+        default:
+          throw new Error("Unspecified Lai'tela upgrade direction in singularity milestone");
+      }
     },
     completionsDisplay() {
-      return (this.limit === 0)
-        ? `${this.completions} ${pluralize("completion", this.completions)}`
-        : `${this.completions}/${this.limit} ${pluralize("completion", this.completions)}`;
+      if (this.limit === 0) return `${formatInt(this.completions)} ${pluralize("completion", this.completions)}`;
+      if (this.isUnique) return this.isMaxed ? "Completed" : "Not completed";
+      return `${formatInt(this.completions)}/${formatInt(this.limit)} ${pluralize("completion", this.completions)}`;
     }
   },
   template: `
-    <div class="c-laitela-milestone" :class="{ 'c-laitela-milestone--completed': isUnique && isMaxed }">
-        <div class="c-laitela-milestone__progress" :style="milestoneProgressStyles"></div>
+    <div class="c-laitela-milestone"
+      :class="{ 'c-laitela-milestone--completed': isUnique && isMaxed }"
+      :style="[backgroundStyle, newGlowStyle]">
+        <div class="c-laitela-milestone__progress" :style="barProgressStyle"/>
         <b v-if="!isMaxed">
           In {{ format(remainingSingularities, 2, 0) }} 
           {{ "Singularity" | pluralize(remainingSingularities, "Singularities")}}
         </b>
-        <p> {{ description }}</p>
+        <p> <span v-html="upgradeDirectionIcon"/> {{ description }}</p>
         <br>
         <b>
-            {{ effectDisplay }} 
-            <span v-if="!isUnique && !isMaxed">-> {{ nextEffectDisplay }}</span>
+          {{ effectDisplay }} 
+          <span v-if="!isUnique && !isMaxed">➜ {{ nextEffectDisplay }}</span>
         </b>
         <div class="c-laitela-milestone__completions">
-            {{ completionsDisplay }}
+          {{ completionsDisplay }}
         </div>
     </div>
     `

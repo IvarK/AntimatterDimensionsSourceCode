@@ -14,9 +14,9 @@ Vue.component("modal-popup", {
   },
   template:
     `<div v-if="!modal.isBare" class="c-modal l-modal">
-      <component :is="modal.component" @close="hide" />
+      <component :is="modal.component" :modalConfig="modal.props" @close="hide" />
     </div>
-    <component v-else :is="modal.component" />`
+    <component v-else :is="modal.component" :modalConfig="modal.props" />`
 });
 
 Vue.component("modal-close-button", {

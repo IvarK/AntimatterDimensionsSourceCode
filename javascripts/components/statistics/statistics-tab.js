@@ -5,6 +5,7 @@ Vue.component("statistics-tab", {
     return {
       totalAntimatter: new Decimal(0),
       realTimePlayed: TimeSpan.zero,
+      newsMessagesSeen: 0,
       infinity: {
         isUnlocked: false,
         count: new Decimal(0),
@@ -33,6 +34,7 @@ Vue.component("statistics-tab", {
         thisReal: TimeSpan.zero,
         totalTimePlayed: TimeSpan.zero,
         bestRate: new Decimal(0),
+        bestRarity: 0,
       },
       matterScale: [],
       recordGlyphInfo: [],
@@ -41,7 +43,8 @@ Vue.component("statistics-tab", {
   methods: {
     update() {
       this.totalAntimatter.copyFrom(player.totalAntimatter);
-      this.realTimePlayed.setFrom(Date.now() - player.gameCreatedTime);
+      this.realTimePlayed.setFrom(player.realTimePlayed);
+      this.newsMessagesSeen = player.news.size;
       const progress = PlayerProgress.current;
       const isInfinityUnlocked = progress.isInfinityUnlocked;
       const infinity = this.infinity;
@@ -78,8 +81,9 @@ Vue.component("statistics-tab", {
         eternity.thisReal.setFrom(player.thisEternityRealTime);
         reality.thisReal.setFrom(player.thisRealityRealTime);
         reality.bestRate.copyFrom(player.bestRMmin);
+        reality.bestRarity = strengthToRarity(player.bestGlyphStrength);
       }
-      this.matterScale = MatterScale.estimate(player.antimatter);
+      this.matterScale = MatterScale.estimate(Currency.antimatter.value);
       this.recordGlyphInfo = [
         [true, Glyphs.copyForRecords(player.bestRMminSet), `Best RM/min: ${format(player.bestRMmin, 2, 2)} RM/min`],
         [true, Glyphs.copyForRecords(player.bestGlyphLevelSet),
@@ -104,6 +108,8 @@ Vue.component("statistics-tab", {
         <div v-if="reality.isUnlocked">
           Your existence has spanned {{ reality.totalTimePlayed }} of time.
         </div>
+        <div>You have seen {{ formatInt(newsMessagesSeen) }} unique
+        news ticker {{ "message" | pluralize(newsMessagesSeen) }}.</div>
         <div>
           <br>
           <div
@@ -170,6 +176,7 @@ Vue.component("statistics-tab", {
             <div>
               Your best RM/min is {{ format(reality.bestRate, 2, 2) }}.
             </div>
+            <div>Your best glyph rarity is {{ formatRarity(reality.bestRarity) }}.</div>
             <br>
           <glyph-set-preview
             v-for="(set, idx) in recordGlyphInfo"

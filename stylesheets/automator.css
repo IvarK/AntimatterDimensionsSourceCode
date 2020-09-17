@@ -115,14 +115,14 @@
 
 .c-automator-editor__active-line {
   background: rgb(43, 6, 92);
-  outline: 1px solid rgb(68, 0, 255);
+  outline: 0.1rem solid rgb(68, 0, 255);
 }
 
 .c-automator-editor__active-line-gutter {
   font-weight: bold;
   background: rgb(43, 6, 92);
   filter: brightness(200%);
-  outline: 1px solid rgb(68, 0, 255);
+  outline: 0.1rem solid rgb(68, 0, 255);
 }
 
 .c-automator-editor {
@@ -181,7 +181,7 @@
 }
 
 .c-automator-docs-page__indented {
-  margin-left: 4rem;
+  margin-left: 2rem;
 }
 
 

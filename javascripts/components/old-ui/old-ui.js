@@ -20,16 +20,17 @@ Vue.component("old-ui", {
   },
   methods: {
     update() {
-      const canCrunch = player.antimatter.gte(Player.infinityGoal);
       const challenge = NormalChallenge.current || InfinityChallenge.current;
-      if (!canCrunch || (player.break && challenge === undefined)) {
+      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
+      if (!Player.canCrunch || inBrokenChallenge || (player.break && challenge === undefined)) {
         this.bigCrunch = false;
         this.smallCrunch = false;
         return;
       }
       this.smallCrunch = true;
       const endOfChallenge = challenge !== undefined && !player.options.retryChallenge;
-      this.bigCrunch = endOfChallenge || Time.thisInfinityRealTime.totalMinutes > 1;
+      this.bigCrunch = endOfChallenge ||
+        (Time.thisInfinity.totalMinutes > 1 && Time.bestInfinityRealTime.totalMinutes > 1);
     }
   },
   template: `

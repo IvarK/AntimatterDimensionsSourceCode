@@ -25,7 +25,7 @@ Vue.component("reality-amplify-button", {
                      {'o-enslaved-mechanic-button--storing-time': isActive}]"
             @click="toggleActive">
       <div>Amplify using stored real time</div>
-      <div>× {{formatInt(ratio)}}</div>
+      <div>×{{formatInt(ratio)}}</div>
     </button>
   </div>`
 });

@@ -8,7 +8,7 @@ const GameStorage = {
     2: undefined
   },
   saved: 0,
-
+  
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
   },
@@ -46,7 +46,7 @@ const GameStorage = {
     // Save current slot to make sure no changes are lost
     this.save(true);
     this.loadPlayerObject(this.saves[slot]);
-    Tab.dimensions.normal.show();
+    Tab.dimensions.antimatter.show();
     GameUI.notify.info("Game loaded");
   },
 
@@ -62,6 +62,12 @@ const GameStorage = {
     this.loadPlayerObject(player, overrideLastUpdate);
     this.save(true);
     GameUI.notify.info("Game imported");
+  },
+
+  importAsFile() {
+    const reader = new FileReader();
+    const text = reader.readAsText(file);
+    this.import(text);
   },
 
   overwriteSlot(slot, saveData) {
@@ -90,13 +96,26 @@ const GameStorage = {
 
   export() {
     const save = GameSaveSerializer.serialize(player);
-    copyToClipboardAndNotify(save);
+    copyToClipboard(save);
+    GameUI.notify.info("Exported current savefile to your clipboard");
+  },
+
+  exportAsFile() {
+    player.options.exportedFileCount++;
+    this.save(true);
+    const dateObj = new Date();
+    const y = dateObj.getFullYear();
+    const m = dateObj.getMonth() + 1;
+    const d = dateObj.getDate();
+    download(`AD Save ${GameStorage.currentSlot + 1} #${player.options.exportedFileCount} (${y}-${m}-${d}).txt`,
+    GameSaveSerializer.serialize(player));
+    GameUI.notify.info("Successfully downloaded current save file to your computer");
   },
 
   hardReset() {
     this.loadPlayerObject(Player.defaultStart);
     this.save();
-    Tab.dimensions.normal.show();
+    Tab.dimensions.antimatter.show();
   },
 
   loadPlayerObject(playerObject, overrideLastUpdate = undefined) {
@@ -111,7 +130,12 @@ const GameStorage = {
       player.lastUpdate = Date.now();
       if (isDevEnvironment()) this.devMigrations.setLatestTestVersion(player);
     } else {
+      const isPreviousVersionSave = playerObject.version < 13;
       player = this.migrations.patch(playerObject);
+      if (isPreviousVersionSave) {
+        // Needed to check some reality upgrades which are usually only checked on eternity.
+        EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
+      }
       this.devMigrations.patch(player);
     }
 
@@ -125,7 +149,7 @@ const GameStorage = {
       NormalChallenge(1).complete();
     }
 
-    ui.view.news = player.options.news;
+    ui.view.news = player.options.news.enabled;
     ui.view.newUI = player.options.newUI;
     ui.view.tutorialState = player.tutorialState;
     ui.view.tutorialActive = player.tutorialActive;
@@ -150,28 +174,47 @@ const GameStorage = {
       if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
         diff = Enslaved.autoStoreRealTime(diff);
       }
-      if (diff > 1000) {
+      if (diff > 10000) {
         // The third parameter is a `fast` parameter that we use to only
         // simulate at most 50 ticks if the player was offline for less
         // than 50 seconds.
         simulateTime(diff / 1000, false, diff < 50 * 1000);
+      } else {
+        // This is ugly, should fix how we deal with it...
+        this.postLoadStuff();
       }
     } else {
+      // Try to unlock "Don't you dare sleep" (usually this check only happens
+      // during a game tick, which makes the achievement impossible to get
+      // with offline progress off)
+      Achievement(35).tryUnlock();
       player.lastUpdate = Date.now();
+      this.postLoadStuff();
     }
-    // If simulateTime didn't run, we don't currently know if game intervals
-    // are off or on (could be off because the game was just loaded or on
-    // because a save was imported) so we need to restart rather than start
-    // (restart will always lead to starting and not throw an error).
+  },
+  postLoadStuff() {
+    // This is called from simulateTime, if that's called; otherwise, it gets called
+    // manually above
     GameIntervals.restart();
     Enslaved.nextTickDiff = player.options.updateRate;
     GameUI.update();
-    if (GameIntervals.gameLoop.isStarted) {
-      GameIntervals.gameLoop.restart();
-    }
 
     for (const resource of AlchemyResources.all) {
       resource.before = resource.amount;
     }
   }
 };
+
+function download(filename, text) {
+  const pom = document.createElement("a");
+  pom.setAttribute("href", `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`);
+  pom.setAttribute("download", filename);
+
+  if (document.createEvent) {
+      const event = document.createEvent("MouseEvents");
+      event.initEvent("click", true, true);
+      pom.dispatchEvent(event);
+  } else {
+      pom.click();
+  }
+}

@@ -4,27 +4,27 @@ const TERESA_UNLOCKS = {
   RUN: {
     id: 0,
     price: 1e14,
-    description: "unlock Teresa's reality.",
+    description: "Unlock Teresa's Reality.",
   },
   EPGEN: {
     id: 1,
     price: 1e18,
-    description: "unlock Teresa's EP generation.",
+    description: "Unlock Teresa's Eternity Point generation.",
   },
   EFFARIG: {
     id: 2,
     price: 1e21,
-    description: "unlock Effarig, Celestial of Ancient Relics.",
+    description: "Unlock Effarig, Celestial of Ancient Relics.",
   },
   SHOP: {
     id: 3,
     price: 1e24,
-    description: "unlock Perk Point Shop.",
+    description: "Unlock Perk Point Shop.",
   },
   UNDO: {
     id: 4,
     price: 1e10,
-    description: 'unlock "Undo" of equipping a glyph.',
+    description: "Unlock \"Undo\" of equipping a glyph.",
   }
 };
 
@@ -113,6 +113,11 @@ const Teresa = {
 };
 
 class PerkShopUpgradeState extends RebuyableMechanicState {
+  constructor(config) {
+    super(config);
+    this.costCap = config.costCap;
+  }
+
   get currency() {
     return Currency.perkPoints;
   }
@@ -126,20 +131,26 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
   }
 
   get isCapped() {
-    return this.cost === this.cap;
+    return this.cost === this.costCap(this.bought);
   }
 
   get isAvailableForPurchase() {
     return this.cost < this.currency.value;
   }
 
-  purchase() {
-    if (!super.purchase()) return;
+  onPurchased() {
     if (this.id === 1) {
       Autobuyer.reality.bumpAmount(2);
     }
     if (this.id === 4) {
-      Glyphs.addToInventory(GlyphGenerator.musicGlyph());
+      if (Glyphs.freeInventorySpace === 0) {
+        // Refund the perk point if they didn't actually get a glyph
+        player.reality.pp++;
+        GameUI.notify.error("You have no empty inventory space!");
+      } else {
+        Glyphs.addToInventory(GlyphGenerator.musicGlyph());
+        GameUI.notify.success("Created a music glyph");
+      }
     }
   }
 }

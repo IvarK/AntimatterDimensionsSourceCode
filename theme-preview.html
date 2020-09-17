@@ -14,6 +14,7 @@
   <link id="S6" rel="stylesheet" type="text/css" href="stylesheets/theme-S6.css">
   <link id="S7" rel="stylesheet" type="text/css" href="stylesheets/theme-S7.css">
   <link id="S8" rel="stylesheet" type="text/css" href="stylesheets/theme-S8.css">
+  <link id="S9" rel="stylesheet" type="text/css" href="stylesheets/theme-S9.css">
   <link rel="stylesheet" type="text/css" href="stylesheets/time-studies.css">
   <style>
     body {
@@ -22,7 +23,7 @@
 
     .c-component-block {
       padding: 10px;
-      border: 1px solid black;
+      border: 0.1rem solid black;
     }
 
     .c-component-block,
@@ -137,7 +138,7 @@
         <div class="c-game-header__infinity-points">
           You have <span class="c-game-header__ip-amount">1e308</span> Infinity points.
         </div>
-        <button class="o-prestige-btn o-prestige-btn--big-crunch">
+        <button class="o-prestige-button o-infinity-button">
           <b>Big Crunch for 1e308 Infinity Points.</b>
           <br>
           1e308 IP/min
@@ -149,7 +150,7 @@
         <div class="c-game-header__infinity-points">
           You have <span class="c-game-header__ip-amount">1e308</span> Infinity points.
         </div>
-        <button class="o-prestige-btn o-prestige-btn--big-crunch">
+        <button class="o-prestige-button o-infinity-button">
           <b>Big Crunch for 1e308 Infinity Points.</b>
         </button>
       </div>
@@ -157,7 +158,7 @@
         <div class="c-game-header__eternity-points">
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
-        <button class="o-prestige-btn o-prestige-btn--eternity">
+        <button class="o-prestige-button o-eternity-button">
           Other times await... I need to become Eternal
         </button>
       </div>
@@ -165,7 +166,7 @@
         <div class="c-game-header__eternity-points">
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
-        <button class="o-prestige-btn o-prestige-btn--eternity">
+        <button class="o-prestige-button o-eternity-button">
           I need to become Eternal.
           <br>
           Gain 1e308 Eternity points.
@@ -179,7 +180,7 @@
         <div class="c-game-header__eternity-points">
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
-        <button class="o-prestige-btn o-prestige-btn--eternity">
+        <button class="o-prestige-button o-eternity-button">
           Gain 1e308 Eternity points.
           <br>
           1e308 EP/min
@@ -191,7 +192,7 @@
         <div class="c-game-header__eternity-points">
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
-        <button class="o-prestige-btn o-prestige-btn--eternity">
+        <button class="o-prestige-button o-eternity-button">
           Other challenges await... I need to become Eternal
         </button>
       </div>
@@ -199,7 +200,7 @@
         <div class="c-game-header__eternity-points">
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
-        <button class="o-prestige-btn o-prestige-btn--eternity">
+        <button class="o-prestige-button o-eternity-button">
           Gain 1e308 Eternity points.
           <br>
           +1e308 Tachyon particles.
@@ -209,7 +210,7 @@
         <div class="c-game-header__eternity-points">
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
-        <button class="o-prestige-btn o-prestige-btn--eternity">
+        <button class="o-prestige-button o-eternity-button">
           Gain 1e308 EP
           <br>
           You should explore a bit and look at new content before clicking me!
@@ -219,7 +220,7 @@
         <div class="c-game-header__eternity-points">
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
-        <button class="o-prestige-btn o-prestige-btn--eternity">
+        <button class="o-prestige-button o-eternity-button">
           Gain 1e308 Tachyon particles
           <br>
           You should explore a bit and look at new content before clicking me!
@@ -229,7 +230,7 @@
         <div class="c-game-header__eternity-points">
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
-        <button class="o-prestige-btn o-prestige-btn--eternity">
+        <button class="o-prestige-button o-eternity-button">
           Other challenges await...
           <br>
           3 completions on Eternity.
@@ -239,7 +240,7 @@
         <div class="c-game-header__eternity-points">
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
-        <button class="o-prestige-btn o-prestige-btn--eternity">
+        <button class="o-prestige-button o-eternity-button">
           Other challenges await...
           <br>
           3 completions on Eternity.
@@ -251,7 +252,7 @@
         <div class="c-game-header__eternity-points">
           You have <span class="c-game-header__ep-amount">1e308</span> Eternity points.
         </div>
-        <button class="o-prestige-btn o-prestige-btn--eternity">
+        <button class="o-prestige-button o-eternity-button">
           Other challenges await...
           <br>
           3 completions on Eternity.
@@ -317,22 +318,22 @@
         <br>
         Cost: 308 Time Theorems
       </button>
-      <button class="o-time-study o-time-study--normal-dim">
-        Available Normal Dimension Study
+      <button class="o-time-study o-time-study--antimatter-dim">
+        Available Antimatter Dimension Study
         <br>
         Currently: 1e308
         <br>
         Cost: 308 Time Theorems
       </button>
-      <button class="o-time-study o-time-study--normal-dim o-time-study--bought">
-        Bought Normal Dimension Study
+      <button class="o-time-study o-time-study--antimatter-dim o-time-study--bought">
+        Bought Antimatter Dimension Study
         <br>
         Currently: 1e308
         <br>
         Cost: 308 Time Theorems
       </button>
-      <button class="o-time-study o-time-study--normal-dim o-time-study--unavailable">
-        Unavailable Normal Dimension Study
+      <button class="o-time-study o-time-study--antimatter-dim o-time-study--unavailable">
+        Unavailable Antimatter Dimension Study
         <br>
         Currently: 1e308
         <br>
@@ -548,12 +549,12 @@
           <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought"></line>
         </svg>
 
-        <span>Normal Dim</span>
+        <span>Antimatter Dim</span>
         <svg class="c-time-study-connection-svg">
-          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--normal-dim"></line>
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--antimatter-dim"></line>
         </svg>
         <svg class="c-time-study-connection-svg">
-          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought o-time-study-connection--normal-dim"></line>
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought o-time-study-connection--antimatter-dim"></line>
         </svg>
 
         <span>Infinity Dim</span>
@@ -659,7 +660,7 @@
         <span class="c-dilation-tab__dilated-time-income">+1e308/s</span>
       </span>
       <span>
-        Next free galaxy at
+        Next Tachyon Galaxy at
         <span class="c-dilation-tab__galaxy-threshold">1e308</span>
         Dilated Time, gained total of
         <span class="c-dilation-tab__galaxies">10</span>
@@ -721,7 +722,7 @@
         Translated to <span class="c-infinity-dim-description__accent">1e308</span>x multiplier on all dimensions
       </span>
       <span>
-        You have <span class="c-time-dim-description__accent">1e308</span> time shards.
+        You have <span class="c-time-dim-description__accent">1e308</span> Time Shards.
         Next tickspeed upgrade at <span class="c-time-dim-description__accent">1e308</span>
       </span>
       <span class="c-replicanti-description">
@@ -742,7 +743,7 @@
     <span>Teresa</span>
     <div class="c-component-block">
         <div style="display: flex; flex-direction: column">
-          <div class="c-teresa-unlock c-teresa-run-button">Start a new reality. TT generation is disabled and you gain less IP and EP (x^0.55). The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by 1e308x, based on realities.</div>
+          <div class="c-teresa-unlock c-teresa-run-button">Start a new reality. Time Theorem generation is disabled and you gain less Infinity Points and Eternity Points (x^0.55). The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by 1e308x, based on realities.</div>
           <div class="c-teresa-unlock">Teresa Reality Machine pour unlock</div>
           <div class="o-teresa-shop-button">Teresa perk point shop button</div>
           <button class="o-primary-btn c-teresa-pour">Pour RM</button>
@@ -751,9 +752,9 @@
         <div class="c-rm-store-inner" style="height: 100%;"><div class="c-rm-store-label"> 251.19x RM gain
           <br>1.00e24/1.00e24
           Leaking 0.00 RM/s</div></div> <div id="0" class="c-teresa-unlock-description" style="bottom: 58.33%;">
-          1.00e14: unlock Teresa's reality.
+          1.00e14: unlock Teresa's Reality.
         </div><div id="1" class="c-teresa-unlock-description" style="bottom: 75%;">
-          1.00e18: unlock Teresa's EP generation.
+          1.00e18: unlock Teresa's Eternity Point generation.
         </div><div id="2" class="c-teresa-unlock-description" style="bottom: 87.5%;">
           1.00e21: unlock Effarig, Celestial of Ancient Relics.
         </div><div id="3" class="c-teresa-unlock-description" style="bottom: 100%;">
@@ -789,6 +790,7 @@
     'S6',
     'S7',
     'S8',
+    'S9',
   ];
   const buttonContainer = document.getElementById("themes");
   for (let theme of themes) {

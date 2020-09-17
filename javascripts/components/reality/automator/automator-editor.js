@@ -3,12 +3,16 @@
 Vue.component("automator-editor", {
   data() {
     return {
-      activeLine: 0,
+      activeLineRaw: 0,
       isRunning: false,
       isPaused: false,
       editingName: false,
       automatorType: 0,
       runningScriptID: 0,
+      activeLineInfo: {
+        lineNumber: 0,
+        scriptID: 0,
+      },
       scripts: [],
     };
   },
@@ -29,13 +33,22 @@ Vue.component("automator-editor", {
       if (this.isPaused) return "Resume automator execution";
       return "Start automator";
     },
+    currentScriptContent() {
+      return player.reality.automator.scripts[this.currentScriptID].content;
+    },
+    currentScript() {
+      return CodeMirror.Doc(this.currentScriptContent, "automato").getValue();
+    },
     modeIconClass() { return this.automatorType === AUTOMATOR_TYPE.BLOCK ? "fa-cubes" : "fa-code"; },
     isTextAutomator() {
       return this.automatorType === AUTOMATOR_TYPE.TEXT;
     },
     isBlockAutomator() {
       return this.automatorType === AUTOMATOR_TYPE.BLOCK;
-    }
+    },
+    activeLine() {
+      return AutomatorBackend.state.topLevelScript === this.currentScriptID ? this.activeLineRaw : 0;
+    },
   },
   methods: {
     update() {
@@ -43,14 +56,17 @@ Vue.component("automator-editor", {
       this.isPaused = AutomatorBackend.isOn && !this.isRunning;
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
       this.automatorType = player.reality.automator.type;
-      if (AutomatorBackend.state.topLevelScript !== this.currentScriptID || !AutomatorBackend.isOn) {
-        this.activeLine = 0;
-        return;
+      if (AutomatorBackend.isOn) {
+        this.activeLineInfo = {
+          lineNumber: AutomatorBackend.stack.top.lineNumber,
+          scriptID: AutomatorBackend.state.topLevelScript,
+        };
+      } else {
+        this.activeLineInfo = {
+          lineNumber: 0,
+          scriptID: "0",
+        };
       }
-      this.activeLine = AutomatorBackend.stack.top.lineNumber;
-    },
-    currentScript() {
-      return CodeMirror.Doc(player.reality.automator.scripts[this.currentScriptID].content, "automato").getValue();
     },
     onGameLoad() {
       this.updateCurrentScriptID();
@@ -131,11 +147,13 @@ Vue.component("automator-editor", {
       if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
         BlockAutomator.parseTextFromBlocks();
         player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-      } else if (BlockAutomator.fromText(this.currentScript())) {
+      } else if (BlockAutomator.fromText(this.currentScriptContent)) {
         player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
       } else {
         Modal.message.show("Automator script has errors, cannot convert to blocks.");
       }
+
+      this.$recompute("currentScriptContent");
     }
   },
   created() {
@@ -177,7 +195,8 @@ Vue.component("automator-editor", {
           />
       </div>
       <automator-text-editor :currentScriptID="currentScriptID"
-                             :activeLine="activeLine"
+                             :activeLineInfo="activeLineInfo"
+                             :runningScriptID="runningScriptID"
                              v-if="isTextAutomator"/>
       <automator-block-editor v-if="isBlockAutomator"/>
     </div>`

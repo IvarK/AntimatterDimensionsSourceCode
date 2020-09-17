@@ -29,9 +29,8 @@ class PerkState extends SetPurchasableMechanicState {
     this.connectedPerks = GameDatabase.reality.perkConnections[this.id].map(id => Perks.find(id));
   }
 
-  purchase() {
-    if (!super.purchase()) return;
-    if (this.config.bumpResource !== undefined) this.config.bumpResource();
+  onPurchased() {
+    if (this.config.bumpCurrency !== undefined) this.config.bumpCurrency();
     GameCache.achievementPeriod.invalidate();
     GameCache.buyablePerks.invalidate();
     EventHub.dispatch(GAME_EVENT.PERK_BOUGHT);
@@ -41,7 +40,7 @@ class PerkState extends SetPurchasableMechanicState {
 const Perk = (function() {
   const db = GameDatabase.reality.perks;
   return {
-    glyphChoice3: new PerkState(db.glyphChoice3),
+    glyphChoice4: new PerkState(db.glyphChoice4),
     startAM1: new PerkState(db.startAM1),
     startAM2: new PerkState(db.startAM2),
     startIP1: new PerkState(db.startIP1),
@@ -50,12 +49,6 @@ const Perk = (function() {
     startEP2: new PerkState(db.startEP2),
     startEP3: new PerkState(db.startEP3),
     startTP: new PerkState(db.startTP),
-    glyphLevelIncrease1: new PerkState(db.glyphLevelIncrease1),
-    glyphLevelIncrease2: new PerkState(db.glyphLevelIncrease2),
-    glyphChoice4: new PerkState(db.glyphChoice4),
-    glyphRarityIncrease: new PerkState(db.glyphRarityIncrease),
-    glyphUncommonGuarantee: new PerkState(db.glyphUncommonGuarantee),
-    realityMachineGain: new PerkState(db.realityMachineGain),
     dimboostNonReset: new PerkState(db.dimboostNonReset),
     studyPassive1: new PerkState(db.studyPassive1),
     studyPassive2: new PerkState(db.studyPassive2),
@@ -67,7 +60,7 @@ const Perk = (function() {
     autounlockTD: new PerkState(db.autounlockTD),
     autounlockReality: new PerkState(db.autounlockReality),
     bypassIDAntimatter: new PerkState(db.bypassIDAntimatter),
-    bypassDGReset: new PerkState(db.bypassDGReset),
+    bypassTGReset: new PerkState(db.bypassTGReset),
     bypassECDilation: new PerkState(db.bypassECDilation),
     bypassEC1Lock: new PerkState(db.bypassEC1Lock),
     bypassEC2Lock: new PerkState(db.bypassEC2Lock),

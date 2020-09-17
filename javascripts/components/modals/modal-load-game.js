@@ -27,7 +27,7 @@ Vue.component("modal-load-game", {
         },
         update() {
           if (this.isSelected) {
-            this.antimatter.copyFrom(player.antimatter);
+            this.antimatter.copyFrom(Currency.antimatter);
           }
         }
       },

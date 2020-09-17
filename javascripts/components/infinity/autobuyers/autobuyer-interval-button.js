@@ -26,7 +26,7 @@ Vue.component("autobuyer-interval-button", {
       v-if="!isMaxed && isUnlocked"
       class="o-autobuyer-btn l-autobuyer-box__button"
       @click="upgradeInterval"
-    >40% smaller interval<br>Cost: {{format(cost, 2, 0)}} IP</button>
+    >{{formatPercents(0.4)}} smaller interval<br>Cost: {{format(cost, 2, 0)}} IP</button>
     <button 
       v-else-if="!isMaxed"
       class="o-autobuyer-btn l-autobuyer-box__button">

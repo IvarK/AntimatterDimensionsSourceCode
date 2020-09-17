@@ -3,7 +3,7 @@
 const TUTORIAL_STATE = {
   DIM1: 0,
   DIM2: 1,
-  DIMSHIFT: 2,
+  DIMBOOST: 2,
   GALAXY: 3
 };
 
@@ -17,15 +17,15 @@ const tutorialStates = [
   {
     // Highlight the 2nd dim button
     id: TUTORIAL_STATE.DIM2,
-    condition: () => player.antimatter.gte(100)
+    condition: () => Currency.antimatter.gte(100)
   },
   {
-    id: TUTORIAL_STATE.DIMSHIFT,
-    condition: () => NormalDimension(4).amount.gte(20)
+    id: TUTORIAL_STATE.DIMBOOST,
+    condition: () => AntimatterDimension(4).amount.gte(20)
   },
   {
     id: TUTORIAL_STATE.GALAXY,
-    condition: () => NormalDimension(8).amount.gte(80)
+    condition: () => AntimatterDimension(8).amount.gte(80)
   }
 ];
 

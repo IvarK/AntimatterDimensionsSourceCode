@@ -3,7 +3,7 @@
 GameDatabase.eternity.timeStudies.dilation = [
   {
     id: 1,
-    description: "Unlock time dilation",
+    description: "Unlock Time Dilation",
     cost: 5000,
     requirement: () => {
       const tsRequirement = [231, 232, 233, 234].some(id => TimeStudy(id).isBought);
@@ -39,7 +39,7 @@ GameDatabase.eternity.timeStudies.dilation = [
   },
   {
     id: 6,
-    description: "Unlock reality",
+    description: "Unlock Reality",
     cost: () => (player.realities > 0 ? 0 : 5000000000),
     requirement: () => TimeStudy.timeDimension(8).isBought &&
       player.eternityPoints.gte("1e4000") &&

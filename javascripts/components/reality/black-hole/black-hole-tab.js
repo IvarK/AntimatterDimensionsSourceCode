@@ -9,7 +9,7 @@ Vue.component("black-hole-tab", {
       isNegativeBHUnlocked: false,
       negativeSlider: 0,
       negativeBHDivisor: 1,
-      maxNegativeBlackHole: 250,
+      maxNegativeBlackHole: 300,
       detailedBH2: "",
     };
   },
@@ -84,13 +84,21 @@ Vue.component("black-hole-tab", {
       <div v-if="isEnslaved">
         The physics of this Reality do not permit singularities.
       </div>
-      <div v-else-if="!isUnlocked">
+      <div v-else-if="!isUnlocked" style="display: flex; flex-direction: column; align-items: center;">
         <black-hole-unlock-button @blackholeunlock="startAnimation"/>
         The Black Hole makes the entire game run significantly faster for a short period of time.
         <br>
         Starts at {{ formatX(180) }} faster for {{ formatInt(10) }} seconds, once per hour.
       </div>
       <template v-else>
+        <div class="c-subtab-option-container">
+          <button
+            class="o-primary-btn o-primary-btn--subtab-option"
+            @click="togglePause"
+          >
+            {{ isPaused ? "Resume" : "Pause" }} Black Hole
+          </button>
+        </div>
         <canvas class="c-black-hole-canvas" ref="canvas" width="400" height="400" />
         <div class="l-black-hole-upgrade-grid">
           <black-hole-state-row
@@ -100,8 +108,8 @@ Vue.component("black-hole-tab", {
           />
           {{ detailedBH2 }}
           <div v-if="isNegativeBHUnlocked" class="l-enslaved-shop-container">
-            Inverted black hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
-            This requires both black holes to be permanent and only works when paused.
+            Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
+            This requires both Black Holes to be permanent and only works when paused.
             <ad-slider-component
                 v-bind="sliderProps"
                 :value="negativeSlider"
@@ -113,12 +121,6 @@ Vue.component("black-hole-tab", {
             :key="'upgrades' + i"
             :blackHole="blackHole"
           />
-          <button
-            class="l-reality-upgrade-btn c-reality-upgrade-btn"
-            @click="togglePause"
-          >
-            {{ isPaused ? "Resume" : "Pause" }}
-          </button>
         </div>
       </template>
     </div>

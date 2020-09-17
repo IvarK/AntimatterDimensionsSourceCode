@@ -3,7 +3,7 @@
 // Primary is lifted from the study tree (mostly),
 // secondary is primary -15% l in hsl, apart from reality which is -10%
 const perkColors = {
-  [PERK_FAMILY.NORMAL]: {
+  [PERK_FAMILY.ANTIMATTER]: {
     primary: "#22aa48",
     secondary: "#156a2d"
   },
@@ -184,7 +184,8 @@ Vue.component("perks-tab", {
   },
   watch: {
     showHintText(newValue) {
-      PerkNetwork.setLabelVisibility(newValue);
+      if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
+      else PerkNetwork.setLabelVisibility(newValue);
     }
   },
   created() {
@@ -193,7 +194,8 @@ Vue.component("perks-tab", {
   },
   mounted() {
     PerkNetwork.initializeIfNeeded();
-    PerkNetwork.setLabelVisibility(ui.view.shiftDown || player.options.showHintText.perks);
+    if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
+    else PerkNetwork.setLabelVisibility(ui.view.shiftDown || player.options.showHintText.perks);
     PerkNetwork.updatePerkColors();
     PerkNetwork.resetPosition();
     this.$refs.tab.appendChild(PerkNetwork.container);

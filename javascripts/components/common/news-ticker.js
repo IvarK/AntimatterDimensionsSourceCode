@@ -41,20 +41,25 @@ Vue.component("news-ticker", {
     prepareNextMessage() {
       const line = this.$refs.line;
       if (line === undefined) return;
+      
+      const isUnlocked = news => news.unlocked || news.unlocked === undefined;
 
-      if (this.currentNews && this.currentNews.id === "a236") {
-        this.currentNews = GameDatabase.news.find(message => message.id === "a216");
+      if (nextNewsMessageId && GameDatabase.news.find(message => message.id === nextNewsMessageId)) {
+        this.currentNews = GameDatabase.news.find(message => message.id === nextNewsMessageId);
+        nextNewsMessageId = undefined;
+      } else if (this.currentNews && this.currentNews.id === "a236") {
+        this.currentNews = GameDatabase.news
+          .filter(message => message.isAdvertising && isUnlocked(message))
+          .randomElement();
       } else {
-        const isUnlocked = news => news.unlocked || news.unlocked === undefined;
-        let nextNews;
-        do {
-          nextNews = GameDatabase.news.randomElement();
-        } while (!isUnlocked(nextNews) && !this.recentTickers.includes(nextNews.id));
+        const isAI = Math.random() < player.options.news.AIChance;
+        this.currentNews = GameDatabase.news
+          .filter(message => message.id.includes("ai") === isAI)
+          .filter(message => !this.recentTickers.includes(message) && isUnlocked(message))
+          .randomElement();
         // Prevent tickers from repeating if they were seen recently
-        const repeatBuffer = 0.1 * GameDatabase.news.length;
-        this.recentTickers.push(nextNews.id);
-        if (this.recentTickers.length > repeatBuffer) this.recentTickers.shift();
-        this.currentNews = nextNews;
+        this.recentTickers.push(this.currentNews.id);
+        while (this.recentTickers.length > player.options.news.repeatBuffer) this.recentTickers.shift();
       }
       if (this.currentNews.reset) {
         this.currentNews.reset();
@@ -63,7 +68,7 @@ Vue.component("news-ticker", {
       line.innerHTML = this.currentNews.text;
 
       line.style["transition-duration"] = "0ms";
-      if (this.currentNews && this.currentNews.id === "a244") {
+      if (this?.currentNews.id === "a244" || this?.currentNews.id === "ai63" ) {
         line.style.transform = "translateX(-100%)";
       } else {
         line.style.transform = "translateX(0)";
@@ -76,7 +81,7 @@ Vue.component("news-ticker", {
       const line = this.$refs.line;
 
       // SCROLL_SPEED is in pixels per second
-      const SCROLL_SPEED = 100;
+      const SCROLL_SPEED = player.options.news.speed * 100;
       const scrollDuration = (this.$refs.ticker.clientWidth + line.clientWidth) / SCROLL_SPEED;
 
       line.style["transition-duration"] = `${scrollDuration}s`;

@@ -23,21 +23,24 @@ Vue.component("new-ui", {
       isInAnyChallenge: false,
       isChallengePowerVisible: false,
       challengePower: "",
+      isInFailableEC: false,
     };
   },
   computed: {
     news() {
       return this.$viewModel.news;
-    }
+    },
   },
   methods: {
     update() {
-      this.antimatter.copyFrom(player.antimatter);
-      this.antimatterPerSec.copyFrom(Player.antimatterPerSecond);
+      this.antimatter.copyFrom(Currency.antimatter);
+      this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
       this.breakInfinity = player.break;
       this.realities = player.realities;
 
       this.isInAnyChallenge = this.challengeDisplay.length !== 0;
+      this.currentEternityChallenge = EternityChallenge.current;
+      this.isInFailableEC = this.currentEternityChallenge && [4, 12].includes(this.currentEternityChallenge.id);
       const isC2Running = NormalChallenge(2).isRunning;
       const isC3Running = NormalChallenge(3).isRunning;
       const isIC6Running = InfinityChallenge(6).isRunning;
@@ -47,7 +50,7 @@ Vue.component("new-ui", {
       if (isChallengePowerVisible) {
         const powerArray = [];
         if (isC2Running) powerArray.push(`Production: ${formatPercents(player.chall2Pow, 2, 2)}`);
-        if (isC3Running) powerArray.push(`First dimension: ${formatX(player.chall3Pow, 2, 2)}`);
+        if (isC3Running) powerArray.push(`First dimension: ${formatX(player.chall3Pow, 3, 4)}`);
         if (isIC6Running) powerArray.push(`Matter: /
           ${format(new Decimal(1).timesEffectOf(InfinityChallenge(6)), 2, 2)}`);
         if (isIC8Running) powerArray.push(`Production: /
@@ -66,7 +69,7 @@ Vue.component("new-ui", {
       }
       this.isInLaitela = Laitela.isRunning;
       if (this.isInLaitela) {
-        if (player.celestials.laitela.entropy > 0) { 
+        if (player.celestials.laitela.entropy > 0) {
           this.laitelaEntropy = `${formatPercents(player.celestials.laitela.entropy, 2, 2)}`;
           this.laitelaTimer = Time.thisRealityRealTime.toStringShort();
         } else {
@@ -78,16 +81,17 @@ Vue.component("new-ui", {
       this.updateCelestial();
       this.updateChallengeDisplay();
 
-      const canCrunch = player.antimatter.gte(Player.infinityGoal);
       const challenge = NormalChallenge.current || InfinityChallenge.current;
-      if (!canCrunch || Tabs.current !== Tab.dimensions || (player.break && challenge === undefined)) {
+      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
+      if (!Player.canCrunch || inBrokenChallenge || (player.break && challenge === undefined)) {
         this.bigCrunch = false;
         this.smallCrunch = false;
         return;
       }
       this.smallCrunch = true;
       const endOfChallenge = challenge !== undefined && !player.options.retryChallenge;
-      this.bigCrunch = endOfChallenge || Time.thisInfinityRealTime.totalMinutes > 1;
+      this.bigCrunch = endOfChallenge ||
+        (Time.thisInfinity.totalMinutes > 1 && Time.bestInfinityRealTime.totalMinutes > 1);
     },
     updateCelestial() {
       if (Teresa.isRunning) this.currCelestial = "Teresa's";
@@ -108,7 +112,7 @@ Vue.component("new-ui", {
       if (inDilation) displayValue += " + Time Dilation";
 
       const normalChallenge = NormalChallenge.current;
-      if (normalChallenge !== undefined) displayValue += ` + ${normalChallenge.config.reward} Challenge `;
+      if (normalChallenge !== undefined) displayValue += ` + ${normalChallenge.config.name} Challenge `;
 
       const infinityChallenge = InfinityChallenge.current;
       if (infinityChallenge !== undefined) displayValue += ` + Infinity Challenge ${infinityChallenge.id}`;
@@ -144,7 +148,10 @@ Vue.component("new-ui", {
           <div>You are getting {{format(antimatterPerSec, 2, 0)}} antimatter per second.</div>
         </div>
         <div class="information-header" >
-          <span v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</span>
+          <span v-if="isInAnyChallenge">
+            You are currently in {{challengeDisplay}} <failable-ec-text v-if="isInFailableEC"/>
+          </span>
+          </span>
           <div v-if="isInEffarig">
             Gamespeed and multipliers dilated {{effarigMultNerfText}}
             <br>
@@ -157,7 +164,7 @@ Vue.component("new-ui", {
           <br><span v-if="isChallengePowerVisible">{{challengePower}}</span>
           <black-hole-header-row />
         </div>
-        <button 
+        <button
         class="btn-big-crunch btn-big-crunch--small"
         onclick="bigCrunchResetRequest()"
         v-if="smallCrunch && !bigCrunch">Big Crunch</button>

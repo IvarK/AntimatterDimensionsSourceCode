@@ -39,33 +39,25 @@ const AutomatorTextUI = {
 
 Vue.component("automator-text-editor", {
   props: {
-    activeLine: Number,
     currentScriptID: {
       Type: String,
       Default: "",
-    }
+    },
+  },
+  data() {
+    return {
+      markedLineNumber: 0,
+    };
   },
   watch: {
-    activeLine: {
-      handler(newVal, oldVal) {
-        if (oldVal > 0) {
-          this.UI.editor.removeLineClass(oldVal - 1, "background", "c-automator-editor__active-line");
-          this.UI.editor.removeLineClass(oldVal - 1, "gutter", "c-automator-editor__active-line-gutter");
-        }
-        if (newVal > 0 && newVal <= this.UI.editor.getDoc().lineCount()) {
-          this.UI.editor.addLineClass(newVal - 1, "background", "c-automator-editor__active-line");
-          this.UI.editor.addLineClass(newVal - 1, "gutter", "c-automator-editor__active-line-gutter");
-        }
-      },
-      immediate: true,
-    },
     currentScriptID: {
       handler(id, oldId) {
+        this.unmarkActiveLine();
         const storedScripts = player.reality.automator.scripts;
-        if (this.UI.documents[id] === undefined) {
+        if (!this.UI.documents[id] || this.UI.documents[id].getValue() !== storedScripts[id].content) {
           this.UI.documents[id] = CodeMirror.Doc(storedScripts[id].content, "automato");
         }
-        this.UI.editor.swapDoc(this.UI.documents[id]);
+        if (this.UI.editor.getDoc() !== this.UI.documents[id]) this.UI.editor.swapDoc(this.UI.documents[id]);
         // When a script gets deleted, get rid of the old document object
         if (this.UI.documents[oldId] !== undefined && storedScripts[oldId] === undefined) {
           delete this.UI.documents[oldId];
@@ -90,6 +82,40 @@ Vue.component("automator-text-editor", {
     onGameLoad() {
       this.UI.documents = {};
     },
+    unmarkActiveLine() {
+      if (this.markedLineNumber > 0) {
+        this.UI.editor.removeLineClass(this.markedLineNumber - 1, "background", "c-automator-editor__active-line");
+        this.UI.editor.removeLineClass(this.markedLineNumber - 1, "gutter", "c-automator-editor__active-line-gutter");
+      }
+      this.markedLineNumber = 0;
+    },
+    markActiveLine(lineNumber) {
+      if (this.markedLineNumber === lineNumber) return;
+      this.unmarkActiveLine();
+      if (lineNumber > 0) {
+        this.UI.editor.addLineClass(lineNumber - 1, "background", "c-automator-editor__active-line");
+        this.UI.editor.addLineClass(lineNumber - 1, "gutter", "c-automator-editor__active-line-gutter");
+        this.UI.editor.scrollIntoView({ line: lineNumber - 1, ch: 0 }, 16);
+        this.markedLineNumber = lineNumber;
+      }
+    },
+    clearActiveLineStyle(lineNumber) {
+      if (lineNumber > 0) {
+        this.UI.editor.removeLineClass(lineNumber - 1, "background", "c-automator-editor__active-line");
+        this.UI.editor.removeLineClass(lineNumber - 1, "gutter", "c-automator-editor__active-line-gutter");
+      }
+    },
+    update() {
+      if (AutomatorBackend.isOn) {
+        this.setActiveState(AutomatorBackend.state.topLevelScript, AutomatorBackend.stack.top.lineNumber);
+      } else {
+        this.setActiveState("", 0);
+      }
+    },
+    setActiveState(scriptID, lineNumber) {
+      if (this.currentScriptID === scriptID) this.markActiveLine(lineNumber);
+      else this.unmarkActiveLine();
+    },
   },
   created() {
     AutomatorTextUI.initialize();
@@ -103,10 +129,8 @@ Vue.component("automator-text-editor", {
     });
   },
   beforeDestroy() {
-    if (this.activeLine > 0) {
-      // This will stick around, otherwise
-      this.UI.editor.removeLineClass(this.activeLine - 1, "background", "c-automator-editor__active-line");
-    }
+    // This will stick around, otherwise
+    this.unmarkActiveLine();
     this.$refs.container.removeChild(this.UI.container);
     EventHub.ui.offAll(this);
   },

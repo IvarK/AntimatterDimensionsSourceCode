@@ -71,7 +71,7 @@ GameStorage.migrations = {
     12.1: player => {
       for (const achievement of player.achievements) {
         if (achievement.includes("s") && achievement.length <= 3) {
-          player.achievements.delete("s36");
+          player.achievements.splice(player.achievements.indexOf("r36"), 1);
           break;
         }
       }
@@ -134,16 +134,15 @@ GameStorage.migrations = {
       GameStorage.migrations.removeDimensionCosts(player);
       GameStorage.migrations.changeC8Handling(player);
       GameStorage.migrations.convertAchievementsToBits(player);
-      GameStorage.migrations.removePower(player);
       GameStorage.migrations.setNoInfinitiesOrEternitiesThisReality(player);
       GameStorage.migrations.setTutorialState(player);
+      GameStorage.migrations.migrateLastTenRuns(player);
+      GameStorage.migrations.migrateIPGen(player);
+      GameStorage.migrations.renameCloudVariable(player);
+      GameStorage.migrations.standardizeUncompletedTimes(player);
 
       kong.migratePurchases();
-      
       if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
-      
-      // Needed to check some reality upgrades which are usually only checked on eternity.
-      EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
     }
   },
 
@@ -225,7 +224,7 @@ GameStorage.migrations = {
   },
 
   convertAchivementsToNumbers(player) {
-    if (player.achievements.countWhere(e => typeof e !== "number") === 0) return;
+    if (player.achievements.length > 0 && player.achievements.every(e => typeof e === "number")) return;
     const old = player.achievements;
     // In this case, player.secretAchievements should be an empty set
     player.achievements = new Set();
@@ -254,7 +253,7 @@ GameStorage.migrations = {
   },
 
   adjustGameCreatedTime(player) {
-    player.gameCreatedTime = Date.now() - player.realTimePlayed;
+    player.gameCreatedTime = player.lastUpdate - player.realTimePlayed;
   },
 
   moveSavedStudyTrees(player) {
@@ -340,7 +339,14 @@ GameStorage.migrations = {
     delete player.dead;
     player.onlyEighthDimensions = player.dimlife;
     delete player.dimlife;
-    if (player.totalAntimatter.gt(0)) player.noAntimatterProduced = false;
+    // Just initialize all these to false, which is basically always correct.
+    player.noAntimatterProduced = false;
+    player.noFirstDimensions = false;
+    player.noEighthDimensions = false;
+    // If someone has 0 max replicanti galaxies, they can't have gotten any.
+    // If they have more than 0 max replicanti galaxies, we don't give them
+    // the benefit of the doubt.
+    player.noReplicantiGalaxies = player.replicanti.gal === 0;
     if (
       player.timestudy.theorem.gt(0) ||
       player.timestudy.studies.length > 0 ||
@@ -434,12 +440,12 @@ GameStorage.migrations = {
   },
 
   renameNewsOption(player) {
-    player.options.news = !player.options.newsHidden;
+    player.options.news.enabled = !player.options.newsHidden;
     delete player.options.newsHidden;
   },
 
   removeDimensionCosts(player) {
-    for (const dimension of player.dimensions.normal) {
+    for (const dimension of player.dimensions.antimatter) {
       delete dimension.cost;
       delete dimension.costMultiplier;
     }
@@ -472,11 +478,10 @@ GameStorage.migrations = {
         bought: `${name}Bought`,
         pow: `${name}Pow`
       };
-      const dimension = player.dimensions.normal[tier - 1];
+      const dimension = player.dimensions.antimatter[tier - 1];
       dimension.cost = new Decimal(player[oldProps.cost]);
       dimension.amount = new Decimal(player[oldProps.amount]);
       dimension.bought = player[oldProps.bought];
-      dimension.power = new Decimal(player[oldProps.pow]);
       if (player.costmultipliers) {
         dimension.costMultiplier = new Decimal(player.costMultipliers[tier - 1]);
       }
@@ -494,7 +499,6 @@ GameStorage.migrations = {
         const old = player[oldName];
         dimension.cost = new Decimal(old.cost);
         dimension.amount = new Decimal(old.amount);
-        dimension.power = new Decimal(old.power);
         dimension.bought = old.bought;
         dimension.baseAmount = old.baseAmount;
         dimension.isUnlocked = player.infDimensionsUnlocked[tier - 1];
@@ -511,7 +515,6 @@ GameStorage.migrations = {
         if (old !== undefined) {
           dimension.cost = new Decimal(old.cost);
           dimension.amount = new Decimal(old.amount);
-          dimension.power = new Decimal(old.power);
           dimension.bought = old.bought;
           delete player[oldName];
         }
@@ -675,18 +678,6 @@ GameStorage.migrations = {
     convertAchievementArray(player.secretAchievementBits, player.secretAchievements);
     delete player.secretAchievements;
   },
-
-  removePower(player) {
-    for (const dimension of player.dimensions.normal) {
-      delete dimension.power;
-    }
-    for (const dimension of player.dimensions.infinity) {
-      delete dimension.power;
-    }
-    for (const dimension of player.dimensions.time) {
-      delete dimension.power;
-    }
-  },
   
   setNoInfinitiesOrEternitiesThisReality(player) {
     player.noInfinitiesThisReality = player.infinitied.eq(0) && player.eternities.eq(0);
@@ -697,6 +688,48 @@ GameStorage.migrations = {
     if (player.infinitied.gt(0) || player.eternities.gt(0) || player.realities > 0 || player.galaxies > 0) {
       player.tutorialState = 4;
     } else if (player.dimensionBoosts > 0) player.tutorialState = TUTORIAL_STATE.GALAXY;
+  },
+
+  migrateLastTenRuns(player) {
+    // Move infinities before time in infinity, and make them Decimal.
+    // I know new Decimal(x).toNumber() can't actually be the best way of converting a value
+    // that might be either Decimal or number to number, but it's the best way I know.
+    player.lastTenRuns = player.lastTenRuns.map(
+      x => [x[0], x[1], new Decimal(x[3]), new Decimal(x[2]).toNumber()]);
+    // Put in a default value of 1 for eternities.
+    player.lastTenEternities = player.lastTenEternities.map(
+      x => [x[0], x[1], new Decimal(1), new Decimal(x[2]).toNumber()]);
+  },
+
+  migrateIPGen(player) {
+    player.infinityRebuyables.push(player.offlineProd / 5);
+    delete player.offlineProd;
+    delete player.offlineProdCost;
+  },
+
+  renameCloudVariable(player) {
+    player.options.cloudEnabled = player.options.cloud;
+    delete player.options.cloud;
+  },
+
+  standardizeUncompletedTimes(player) {
+    if (player.bestInfinityTime === 999999999999) player.bestInfinityTime = Number.MAX_VALUE;
+    if (player.bestInfinityRealTime === 999999999999) player.bestInfinityRealTime = Number.MAX_VALUE;
+    if (player.bestEternity === 999999999999) player.bestEternity = Number.MAX_VALUE;
+    for (let i = 0; i < player.challenge.normal.bestTimes.length; i++) {
+      if (player.challenge.normal.bestTimes[i] === 2678400000) player.challenge.normal.bestTimes[i] = Number.MAX_VALUE;
+    }
+    for (let i = 0; i < player.challenge.infinity.bestTimes.length; i++) {
+      if (player.challenge.infinity.bestTimes[i] === 2678400000) {
+        player.challenge.infinity.bestTimes[i] = Number.MAX_VALUE;
+      }
+    }
+    for (let i = 0; i < 10; i++) {
+      if (player.lastTenRuns[i][0] === 2678400000) player.lastTenRuns[i][0] = Number.MAX_VALUE;
+      if (player.lastTenRuns[i][3] === 26784000) player.lastTenRuns[i][3] = Number.MAX_VALUE;
+      if (player.lastTenEternities[i][0] === 2678400000) player.lastTenEternities[i][0] = Number.MAX_VALUE;
+      if (player.lastTenEternities[i][3] === 26784000) player.lastTenEternities[i][3] = Number.MAX_VALUE;
+    }
   },
 
   prePatch(saveData) {

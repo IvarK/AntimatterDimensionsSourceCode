@@ -1,8 +1,9 @@
 "use strict";
 
-Vue.component("normal-dim-tab", {
+Vue.component("antimatter-dim-tab", {
   data() {
     return {
+      hasDimensionBoosts: false,
       isChallengePowerVisible: false,
       challengePower: "",
       isQuickResetAvailable: false,
@@ -12,6 +13,7 @@ Vue.component("normal-dim-tab", {
   },
   methods: {
     update() {
+      this.hasDimensionBoosts = player.dimensionBoosts > 0;
       const isC2Running = NormalChallenge(2).isRunning;
       const isC3Running = NormalChallenge(3).isRunning;
       const isIC6Running = InfinityChallenge(6).isRunning;
@@ -21,7 +23,7 @@ Vue.component("normal-dim-tab", {
       if (isChallengePowerVisible) {
         const powerArray = [];
         if (isC2Running) powerArray.push(`Production: ${formatPercents(player.chall2Pow, 2, 2)}`);
-        if (isC3Running) powerArray.push(`First dimension: ${formatX(player.chall3Pow, 2, 2)}`);
+        if (isC3Running) powerArray.push(`First dimension: ${formatX(player.chall3Pow, 3, 4)}`);
         if (isIC6Running) powerArray.push(`Matter: /
           ${format(new Decimal(1).timesEffectOf(InfinityChallenge(6)), 2, 2)}`);
         if (isIC8Running) powerArray.push(`Production: /
@@ -38,26 +40,29 @@ Vue.component("normal-dim-tab", {
     }
   },
   template:
-    `<div class="l-old-ui-normal-dim-tab">
-      <span v-if="isSacrificeUnlocked">Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
-      <normal-dim-tab-header />
+    `<div class="l-old-ui-antimatter-dim-tab">
+      <span v-if="isSacrificeUnlocked">Dimensional Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
+      <antimatter-dim-tab-header />
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
-      <div class="l-normal-dim-tab__row-container l-normal-dim-row-container">
-        <normal-dim-row
+      <div class="l-dimensions-container">
+        <antimatter-dim-row
           v-for="tier in 8"
           :key="tier"
           :tier="tier"
-          :floatingText="$viewModel.tabs.dimensions.normal.floatingText[tier]"
+          :floatingText="$viewModel.tabs.dimensions.antimatter.floatingText[tier]"
         />
-        <normal-dim-shift-row />
-        <normal-dim-galaxy-row />
+        <antimatter-dim-boost-row />
+        <antimatter-dim-galaxy-row />
       </div>
       <primary-button
         v-if="isQuickResetAvailable"
         class="o-primary-btn--quick-reset"
         @click="quickReset"
-      >Lose a reset, returning to the start of the reset</primary-button>
+      >Perform a Dimension Boost reset
+        <span v-if="hasDimensionBoosts"> but lose a Dimension Boost</span>
+        <span v-else> for no gain</span>
+      </primary-button>
       <div style="flex: 1 0" />
-      <normal-dim-tab-progress-bar class="l-normal-dim-tab__progress_bar" />
+      <antimatter-dim-tab-progress-bar class="l-antimatter-dim-tab__progress_bar" />
     </div>`
 });

@@ -54,7 +54,7 @@ Vue.component("ra-tab", {
       {
         pet: Ra.pets.teresa,
         scalingUpgradeVisible: () => Ra.totalCharges > 0,
-        scalingUpgradeText: () => `You can charge ${formatInt(Ra.totalCharges)} 
+        scalingUpgradeText: () => `You can Charge ${formatInt(Ra.totalCharges)}
           Infinity ${pluralize("Upgrade", Ra.totalCharges)}.`,
       },
       {
@@ -62,7 +62,7 @@ Vue.component("ra-tab", {
         scalingUpgradeVisible: () => AlchemyResources.all.filter(r => r.isUnlocked).length > 0,
         scalingUpgradeText: () => {
           const resources = AlchemyResources.all.filter(r => r.isUnlocked).length;
-          return `You have unlocked ${formatInt(resources)} alchemy ${pluralize("resource", resources)}.`;
+          return `You have unlocked ${formatInt(resources)} Alchemy ${pluralize("Resource", resources)}.`;
         },
       },
       {
@@ -77,7 +77,7 @@ Vue.component("ra-tab", {
         scalingUpgradeVisible: () => Math.clampMax(Math.floor(Ra.pets.v.level / 5), 4) > 0,
         scalingUpgradeText: level => {
           const triadCount = Math.clampMax(Math.floor(level / 5), 4);
-          return `You have unlocked ${formatInt(triadCount)} triad ${pluralize("study", triadCount, "studies")}.`;
+          return `You have unlocked ${formatInt(triadCount)} Triad ${pluralize("Study", triadCount, "Studies")}.`;
         },
       }
     ],
@@ -127,7 +127,7 @@ Vue.component("ra-tab", {
         <div v-if="showRecollection && !isRaCapped" class="c-ra-recollection-unlock">
           <h1 :style="petStyle">Recollection</h1>
           <span :style="petStyle">
-            Whichever Celestial is being Recollected will get {{formatX(recollectionMult)}} Memory Chunk gain.
+            Whichever Celestial is has Recollection will get {{formatX(recollectionMult)}} Memory Chunk gain.
           </span>
           <div class="c-ra-recollection-unlock-inner" v-if="hasRecollection">
             <ra-pet-recollection-button

@@ -76,7 +76,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
         infinities = infinities.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
         return `${format(infinities)}
           ${pluralize("Infinity", infinities, "Infinities")}
-          every ${Time.bestInfinity.times(5)}`;
+          every ${Time.bestInfinity.times(5).toStringShort()}`;
       }
     },
     bulkDimBoost: {

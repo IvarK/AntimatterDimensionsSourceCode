@@ -48,7 +48,7 @@ Vue.component("antimatter-dim-tab-header", {
         @click="sacrifice"
       >
         <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
-        <span v-else>Sacrifice Disabled ({{ disabledCondition }})</span>
+        <span v-else>Dimensional Sacrifice Disabled ({{ disabledCondition }})</span>
       </primary-button>
       <primary-button
         class="o-primary-btn--buy-max"

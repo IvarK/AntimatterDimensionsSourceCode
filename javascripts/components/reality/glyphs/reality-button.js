@@ -71,7 +71,7 @@ Vue.component("reality-button", {
       this.shardsGained = Effarig.shardsGained * multiplier;
 
       const teresaReward = this.formatScalingMultiplierText(
-        "Glyph sacrifice",
+        "Glyph Sacrifice",
         Teresa.runRewardMultiplier,
         Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(Currency.antimatter.value)));
       const teresaThreshold = this.formatThresholdText(
@@ -106,7 +106,7 @@ Vue.component("reality-button", {
         <div>{{formatGlyphLevel}}</div>
       </template>
       <template v-else-if="hasRealityStudy">
-        <div>Get {{format("1e4000", 0, 0)}} EP to unlock a new Reality</div>
+        <div>Get {{format("1e4000", 0, 0)}} Eternity Points to unlock a new Reality</div>
       </template>
       <template v-else>
         <div>Purchase the study in the Eternity tab to unlock a new Reality</div>

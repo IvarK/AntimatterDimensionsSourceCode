@@ -70,7 +70,7 @@ Vue.component("infinity-dim-tab", {
     <div>
       <p>
         You have
-        <span class="c-infinity-dim-description__accent">{{format(infinityPower, 2, 1)}}</span> infinity power,
+        <span class="c-infinity-dim-description__accent">{{format(infinityPower, 2, 1)}}</span> Infinity Power,
         translated to a
         <span class="c-infinity-dim-description__accent">{{formatX(dimMultiplier, 2, 1)}}</span>
         multiplier on all Antimatter Dimensions (^{{ format(conversionRate, 2, 3) }}).
@@ -82,7 +82,7 @@ Vue.component("infinity-dim-tab", {
         :class="{ 'c-infinity-dim-tab__tesseract-button--disabled': !canBuyTesseract }"
         @click="buyTesseract">
         <p>Buy a Tesseract</p>
-        <p>Increase dimension caps by {{ format(nextDimCapIncrease, 2) }}</p>
+        <p>Increase Infinity Dimension caps by {{ format(nextDimCapIncrease, 2) }}</p>
         <p><b>Costs: {{ format(tesseractCost) }} IP</b></p>
       </button>
     </div>

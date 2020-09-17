@@ -24,7 +24,7 @@ Vue.component("time-dim-tab", {
       this.timeShards.copyFrom(player.timeShards);
       this.upgradeThreshold.copyFrom(FreeTickspeed.fromShards(player.timeShards).nextShards);
       this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerRealSecond);
-      this.incomeType = EternityChallenge(7).isRunning ? "Eighth Infinity Dimensions" : "time shards";
+      this.incomeType = EternityChallenge(7).isRunning ? "Eighth Infinity Dimensions" : "Time Shards";
       this.areAutobuyersUnlocked = RealityUpgrade(13).isBought;
     },
     maxAll() {
@@ -51,13 +51,13 @@ Vue.component("time-dim-tab", {
       <p>You've gained {{formatInt(totalUpgrades)}} tickspeed upgrades.</p>
       <p>
         You have
-        <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> time shards.
+        <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> Time Shards.
         Next tickspeed upgrade at
         <span class="c-time-dim-description__accent">{{format(upgradeThreshold, 2, 1)}}.</span>
       </p>
     </div>
     <div>
-      Each additional upgrade requires {{formatX(multPerTickspeed, 2, 2)}} more time shards. This will start
+      Each additional upgrade requires {{formatX(multPerTickspeed, 2, 2)}} more Time Shards. This will start
       increasing above {{formatInt(tickspeedSoftcap)}} upgrades.
     </div>
     <div>You are getting {{format(shardsPerSecond, 2, 0)}} {{incomeType}} per second.</div>
@@ -70,9 +70,10 @@ Vue.component("time-dim-tab", {
       />
     </div>
     <div>
-      Time Dimension costs jump at {{format(costIncreases[0], 2, 2)}} EP and {{format(costIncreases[1])}} EP,
+      Time Dimension costs jump at {{format(costIncreases[0], 2, 2)}} and
+      {{format(costIncreases[1])}} Eternity Points,
       <br>
-      and get expensive more quickly past {{format(costIncreases[2])}} EP
+      and costs increase much faster after {{format(costIncreases[2])}} Eternity Points.
     </div>
   </div>`
 });

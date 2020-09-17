@@ -55,7 +55,7 @@ Vue.component("black-hole-upgrade-button", {
       >
         <description-display :config="config" />
         <effect-display :config="effectConfig" :title="config.effectTitle" />
-        <cost-display v-if="!isCapped" :config="costConfig" singular="RM" plural="RM" />
+        <cost-display v-if="!isCapped" :config="costConfig" singular="Reality Machine" plural="Reality Machines" />
       </button>
       <primary-button-on-off
         v-if="isAutoUnlocked"

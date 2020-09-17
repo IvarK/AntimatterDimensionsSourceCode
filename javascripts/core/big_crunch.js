@@ -408,16 +408,19 @@ BreakInfinityUpgrade.ipGen = new RebuyableBreakInfinityUpgradeState(GameDatabase
 function preProductionGenerateIP(diff) {
   if (InfinityUpgrade.ipGen.isBought) {
     const genPeriod = Time.bestInfinity.totalMilliseconds * 10;
-    // Partial progress (fractions from 0 to 1) are stored in player.partInfinityPoint
-    player.partInfinityPoint += diff / genPeriod;
-    if (player.partInfinityPoint >= 1) {
-      const genCount = Math.floor(player.partInfinityPoint);
-      let gainedPerGen = InfinityUpgrade.ipGen.effectValue;
-      if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen);
-      const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
-      player.infinityPoints = player.infinityPoints.plus(gainedThisTick);
+    let genCount;
+    if (diff >= 1e300 * genPeriod) {
+      genCount = Decimal.div(diff, genPeriod);
+    } else {
+      // Partial progress (fractions from 0 to 1) are stored in player.partInfinityPoint
+      player.partInfinityPoint += diff / genPeriod;
+      genCount = Math.floor(player.partInfinityPoint);
       player.partInfinityPoint -= genCount;
     }
+    let gainedPerGen = InfinityUpgrade.ipGen.effectValue;
+    if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen);
+    const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
+    player.infinityPoints = player.infinityPoints.plus(gainedThisTick);
   }
   player.infinityPoints = player.infinityPoints
     .plus(BreakInfinityUpgrade.ipGen.effectOrDefault(new Decimal(0)).times(diff / 60000));

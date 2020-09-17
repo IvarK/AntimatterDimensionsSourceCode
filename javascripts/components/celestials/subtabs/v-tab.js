@@ -16,7 +16,8 @@ Vue.component("v-tab", {
       runRecords: [],
       runGlyphs: [],
       isFlipped: false,
-      isRunning: false
+      isRunning: false,
+      hasAlchemy: false
     };
   },
   methods: {
@@ -35,6 +36,7 @@ Vue.component("v-tab", {
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
       this.isRunning = V.isRunning;
+      this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     },
     startRun() {
       if (!resetReality()) return;
@@ -69,7 +71,8 @@ Vue.component("v-tab", {
       }
     },
     reductionTooltip(hex) {
-      return `Spend ${format(hex.reductionCost, 2, 0)} PP to reduce goal by ${format(hex.config.perReductionStep)}`;
+      return `Spend ${format(hex.reductionCost, 2, 0)} Perk Points
+      to reduce goal by ${format(hex.config.perReductionStep)}`;
     }
   },
   computed: {
@@ -156,7 +159,7 @@ Vue.component("v-tab", {
           You have {{ format(pp, 2, 0) }} {{ "Perk Point" | pluralize(pp) }}.
         </div>
         <div class="l-v-unlocks-container">
-          <li v-for="hex in hexGrid" :style= "[hex.isRunButton ? {} : {zIndex: -1}]">
+          <li v-for="hex in hexGrid" :style= "[hex.isRunButton ? {zIndex: 1} : {zIndex: 0}]">
             <div v-if="hex.config"
               class="l-v-hexagon c-v-unlock"
               :class="{ 'c-v-unlock-completed': hex.completions === hex.config.values.length }">
@@ -192,8 +195,11 @@ Vue.component("v-tab", {
             <div v-else-if="hex.isRunButton" @click="startRun()" :class="runButtonClassObject">
               <b style="font-size: 1.5rem">Start V's Reality.</b>
               <br/>
-              All dimension multipliers, EP gain, IP gain, and Dilated Time gain per second
-              are square-rooted, and Replicanti interval is squared.
+              <div :style="{ 'font-size': hasAlchemy ? '1.1rem' : '' }">
+                All dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second
+                are square-rooted, and Replicanti interval is squared.
+                <span v-if="hasAlchemy">Exponential Glyph Alchemy effect is disabled.</span>
+              </div>
               <div class="c-v-run-button__line c-v-run-button__line--1"></div>
               <div class="c-v-run-button__line c-v-run-button__line--2"></div>
               <div class="c-v-run-button__line c-v-run-button__line--3"></div>
@@ -208,7 +214,8 @@ Vue.component("v-tab", {
           and re-entering the Reality.
         </div>
         <div>
-          You have {{ formatInt(totalUnlocks) }} V-achievements done. You gain 1 Space Theorem for each completion,
+          You have {{ formatInt(totalUnlocks) }} V-achievements done.
+          You gain {{ formatInt(1) }} Space Theorem for each completion,
           allowing you to purchase Time Studies which are normally locked.
         </div>
         <br>

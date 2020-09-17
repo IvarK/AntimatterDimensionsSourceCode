@@ -7,7 +7,7 @@ Vue.component("sacrifice-autobuyer-box", {
   template:
     `<autobuyer-box :autobuyer="autobuyer" name="Automatic Sacrifice">
       <template slot="intervalSlot">
-        <span>Sacrifice at X multiplier:</span>
+        <span>Dimensional Sacrifice at X multiplier:</span>
         <autobuyer-input
          :autobuyer="autobuyer"
          type="decimal"

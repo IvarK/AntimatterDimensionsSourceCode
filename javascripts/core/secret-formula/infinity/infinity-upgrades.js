@@ -163,7 +163,7 @@ GameDatabase.infinity.upgrades = (function() {
       },
       charged: {
         description: () =>
-          `Gain a percentage of your RM gained on Reality each real-time second,
+          `Gain a percentage of your Reality Machines gained on Reality each real-time second,
           percent increases with Teresa level`,
         effect: () => Math.sqrt(Ra.pets.teresa.level) / 1000 * RA_UNLOCKS.TT_BOOST.effect.autoPrestige(),
         formatEffect: value => `${formatPercents(value, 2)}`

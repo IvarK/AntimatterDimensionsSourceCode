@@ -395,7 +395,8 @@ button:focus {
 
 .ttshop-container {
   padding: 0 0.5rem;
-  width: 55.5rem;
+  min-width: 60rem;
+  max-width: 80rem;
   display: flex;
   flex-direction: column;
   transition: all 0.25s ease-out;
@@ -1195,12 +1196,13 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--sacrifice {
   font-size: 1.2rem;
-  width: 32rem;
+  min-width: 32rem;
   margin-right: 0.8rem;
 }
 
 .o-primary-btn--sacrifice--large {
-  width: 38rem;
+  min-width: 38rem;
+  max-width: 48rem;
 }
 
 .o-primary-btn--buy-ad {
@@ -2913,7 +2915,7 @@ screen and (max-width: 480px) {
 }
 
 .l-achievement-grid__cell {
-  margin: 0.5rem 0.8rem;
+  margin: 0.6rem 0.8rem;
 }
 
 .c-achievement-grid__row--completed {
@@ -3031,7 +3033,7 @@ screen and (max-width: 480px) {
 }
 
 .c-challenge-box--infinity {
-  height: 16rem;
+  height: 18rem;
   color: white;
   background-color: #181818;
 }
@@ -4457,7 +4459,7 @@ screen and (max-width: 480px) {
 
 .o-eternity-milestone__reward {
   width: 25rem;
-  height: 6rem;
+  height: 8rem;
   color: black;
   font-weight: bold;
   border: 0.1rem solid var(--color-eternity);
@@ -5239,7 +5241,6 @@ b.c-modal-away-progress__black-hole {
 }
 
 .c-modal-options .o-primary-btn--option, .o-primary-btn--option-wide {
-  height: 100%;
   padding: 0.5rem;
   margin-bottom: 1rem;
 }
@@ -6976,7 +6977,7 @@ kbd {
   color: white;
   background: #222;
   width: 23rem;
-  margin-left: 0rem;
+  margin-left: 0;
   padding: 0.4rem;
   z-index: 2;
   pointer-events: none;
@@ -7080,14 +7081,11 @@ kbd {
 
 .c-ra-pet-upgrade__tooltip__description {
   font-size: 1.3rem;
+  margin-bottom: 0.3rem;
 }
 
 .c-ra-upgrade-icon .c-ra-pet-upgrade__tooltip__name {
   font-size: 1.8rem;
-}
-
-.c-ra-pet-upgrade__tooltip__description {
-  margin-bottom: 0.3rem;
 }
 
 .c-ra-pet-upgrade__tooltip__footer {
@@ -7168,7 +7166,7 @@ kbd {
   justify-content: center;
   margin: 1.5rem 0;
   height: 4rem;
-  padding: 0rem 1rem;
+  padding: 0 1rem;
 }
 
 

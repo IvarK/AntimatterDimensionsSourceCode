@@ -16,11 +16,8 @@ function undilationAnimation() {
 
 function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
-  if (player.options.confirmations.dilation) {
-    if (!confirm(`Dilating time will start a new eternity, and all of your Dimension/Infinity
-    Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to
-    ^ 0.75. If you can eternity while Dilated, you'll be rewarded with tachyon particles based on your
-    antimatter and tachyon particles.`)) return;
+  if (player.options.confirmations.dilation && !player.dilation.active) {
+    Modal.enterDilation.show();
   }
   if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
     undilationAnimation();
@@ -31,13 +28,6 @@ function startDilatedEternityRequest() {
   }
   if (player.dilation.active) {
     eternity(false, false, { switchingDilation: true });
-    return;
-  }
-  if (player.options.animations.dilation && document.body.style.animation === "") {
-    dilationAnimation();
-    setTimeout(startDilatedEternity, 1000);
-  } else {
-    startDilatedEternity();
   }
 }
 
@@ -83,7 +73,7 @@ function buyDilationUpgrade(id, bulk, extraFactor) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost);
     player.dilation.rebuyables[id] += buying;
     if (id === 2) {
-      if (!Perk.bypassDGReset.isBought) player.dilation.dilatedTime = new Decimal(0);
+      if (!Perk.bypassTGReset.isBought) player.dilation.dilatedTime = new Decimal(0);
       player.dilation.nextThreshold = new Decimal(1000);
       player.dilation.baseFreeGalaxies = 0;
       player.dilation.freeGalaxies = 0;

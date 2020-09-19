@@ -17,12 +17,36 @@ const Laitela = {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.laitela.unlockBits & (1 << info.id));
   },
+  get raLevelRequirement() {
+    return 100;
+  },
+  get realityGlyphLevelRequirement() {
+    return 25000;
+  },
+  get realityMachineCost() {
+    return new Decimal('1e2000');
+  },
+  get canUnlock() {
+    return Ra.totalPetLevel >= this.raLevelRequirement &&
+      player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(
+        x => x.type === "reality").map(x => x.level).max() >= this.realityGlyphLevelRequirement &&
+      player.reality.realityMachines.gte(this.realityMachineCost);
+  },
+  unlock() {
+    if (!this.canUnlock) return false;
+    player.reality.realityMachines = player.reality.realityMachines.minus(this.realityMachineCost);
+    MatterDimension(1).amount = new Decimal(1);
+    return true;
+  },
+  get isUnlocked() {
+    return MatterDimension(1).amount.gt(0);
+  },
   canBuyUnlock(info) {
     if (this.matter.lt(info.price)) return false;
     return !this.has(info);
   },
   buyUnlock(info) {
-    if (!this.canBuyUnlock) return false;
+    if (!this.canBuyUnlock(info)) return false;
     this.matter = this.matter.minus(info.price);
     // eslint-disable-next-line no-bitwise
     player.celestials.laitela.unlockBits |= (1 << info.id);
@@ -36,7 +60,7 @@ const Laitela = {
     return this.celestial.run;
   },
   get continuumActive() {
-    return Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK) && !player.options.disableContinuum;
+    return Laitela.isUnlocked && !player.options.disableContinuum;
   },
   get matterExtraPurchaseFactor() {
     return (1 + Math.pow(Decimal.pLog10(this.celestial.maxMatter) /

@@ -24,7 +24,7 @@ Vue.component("autobuyer-toggles", {
     update() {
       this.autobuyersOn = player.options.autobuyersOn;
       this.bulkOn = player.options.bulkOn;
-      this.showContinuum = Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK);
+      this.showContinuum = Laitela.isUnlocked;
       this.disableContinuum = player.options.disableContinuum;
     },
     toggleAllAutobuyers() {

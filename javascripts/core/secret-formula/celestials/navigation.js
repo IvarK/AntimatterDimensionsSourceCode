@@ -17,12 +17,15 @@ GameDatabase.celestials.navigation = (function() {
   const Positions = Object.freeze({
     teresa: new Vector(100, 100),
     teresaPerkPointShop: new Vector(0, -50),
+
     effarigShop: new Vector(300, 0),
     effarigRealityUnlock: new Vector(400, 50),
     effarigNode: new Vector(550, 25),
+
     enslavedReality: new Vector(650, 250),
     enslavedGlyphLevel: new Vector(650 + 75 * Math.cos(Math.PI / 180 * -60), 250 + 75 * Math.sin(Math.PI / 180 * -60)),
     enslavedGlyphRarity: new Vector(650 + 75 * Math.cos(Math.PI / 180 * 120), 250 + 75 * Math.sin(Math.PI / 180 * 120)),
+
     vUnlockAchievement: new Vector(400, 350 + 50 * Math.sqrt(3)),
     vAchievement1: new Vector(450, 350),
     vAchievement2: new Vector(500, 350 + 50 * Math.sqrt(3)),
@@ -30,11 +33,13 @@ GameDatabase.celestials.navigation = (function() {
     vAchievement4: new Vector(350, 350 + 100 * Math.sqrt(3)),
     vAchievement5: new Vector(300, 350 + 50 * Math.sqrt(3)),
     vAchievement6: new Vector(350, 350),
+
     raReality: new Vector(400, 200),
     raPetTeresa: new Vector(400 + 85 * Math.sin(Math.PI / 180 * 252), 200 + 85 * Math.cos(Math.PI / 180 * 252)),
     raPetEffarig: new Vector(400 + 85 * Math.sin(Math.PI / 180 * 140), 200 + 85 * Math.cos(Math.PI / 180 * 140)),
     raPetEnslaved: new Vector(400 + 85 * Math.sin(Math.PI / 180 * 78), 200 + 85 * Math.cos(Math.PI / 180 * 78)),
     raPetV: new Vector(400 + 85 * Math.sin(Math.PI / 180 * 0), 200 + 85 * Math.cos(Math.PI / 180 * 0)),
+
     laitelaFirstCenter: new Vector(150, 450),
     laitelaFirstLeft: new Vector(100, 500),
     laitelaFirstRight: new Vector(200, 500),
@@ -577,7 +582,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-unlock-1": {
-      visible: () => Achievement(151).isUnlocked,
+      visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
         return player.realities / GameDatabase.celestials.v.mainUnlock.realities;
@@ -616,7 +621,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-unlock-2": {
-      visible: () => Achievement(151).isUnlocked,
+      visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
         return emphasizeEnd(player.eternities.pLog10() / Math.log10(GameDatabase.celestials.v.mainUnlock.eternities));
@@ -656,7 +661,7 @@ GameDatabase.celestials.navigation = (function() {
     },
 
     "v-unlock-3": {
-      visible: () => Achievement(151).isUnlocked,
+      visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
         return emphasizeEnd(player.infinitied.pLog10() / Math.log10(GameDatabase.celestials.v.mainUnlock.infinities));
@@ -695,7 +700,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-unlock-4": {
-      visible: () => Achievement(151).isUnlocked,
+      visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
         return emphasizeEnd(player.dilation.dilatedTime.pLog10() /
@@ -735,7 +740,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-unlock-5": {
-      visible: () => Achievement(151).isUnlocked,
+      visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
         return (emphasizeEnd(player.replicanti.amount.pLog10() /
@@ -775,7 +780,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "v-unlock-6": {
-      visible: () => Achievement(151).isUnlocked,
+      visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
         return emphasizeEnd(player.reality.realityMachines.pLog10() /

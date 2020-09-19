@@ -5522,6 +5522,11 @@ kbd {
   border-color: #4980cc;
 }
 
+.o-notification--eternity {
+  background-color: var(--color-eternity);
+  border-color: var(--color-eternity);
+}
+
 .o-notification--reality {
   background-color: var(--color-reality-light);
   border-color: var(--color-reality-light);

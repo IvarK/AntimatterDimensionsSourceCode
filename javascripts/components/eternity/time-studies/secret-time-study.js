@@ -8,7 +8,6 @@ Vue.component("secret-time-study", {
   data() {
     return {
       isVisible: player.secretUnlocks.viewSecretTS,
-      lastClick: 0,
       isEnslaved: false,
     };
   },
@@ -51,30 +50,29 @@ Vue.component("secret-time-study", {
       this.isEnslaved = Enslaved.isRunning;
     },
     handleClick() {
-      if (this.isVisible) {
-        if (this.isEnslaved) return;
-        // Hide the secret time study on double click
+      if (this.isEnslaved && !this.isVisible) {
+        // If you're in Enslaved and haven't gotten the secret study
+        player.secretUnlocks.viewSecretTS = true;
+        EnslavedProgress.secretStudy.giveProgress();
+        player.timestudy.theorem = player.timestudy.theorem.plus(this.enslavedTT);
+      } else if (!this.isEnslaved && this.isVisible) {
+        // If you aren't in Enslaved, double clicking will hide the study
         const clickTime = Date.now();
-        if (clickTime - this.lastClick < 750) {
-          this.lastClick = 0;
+        if (clickTime - ui.lastClickTime < 750) {
+          ui.lastClickTime = 0;
           player.secretUnlocks.viewSecretTS = false;
         } else {
-          this.lastClick = clickTime;
+          ui.lastClickTime = clickTime;
         }
       } else {
-        // If a click made the study visible, it's not part of the double click to hide
-        this.lastClick = 0;
-        if (!player.secretUnlocks.viewSecretTS && !this.isEnslaved) {
+        // If you aren't in Enslaved and it isn't visible, show it and give the achievement
+        ui.lastClickTime = 0;
+        if (!player.secretUnlocks.viewSecretTS) {
           player.secretUnlocks.viewSecretTS = true;
           this.$refs.study.addEventListener("transitionend", function achGiver(e) {
             SecretAchievement(21).unlock();
             e.target.removeEventListener(e.type, achGiver);
           });
-        }
-        if (this.isEnslaved) {
-          player.secretUnlocks.viewSecretTS = true;
-          EnslavedProgress.secretStudy.giveProgress();
-          player.timestudy.theorem = player.timestudy.theorem.plus(this.enslavedTT);
         }
       }
     },
@@ -86,7 +84,7 @@ Vue.component("secret-time-study", {
         <br>
         {{hide}}
         <br>
-        Cost: {{cost}} Time Theorems
+        <span v-if="cost!==0">Cost: {{cost}} Time Theorems</span>
       </span>
     </button>`
 });
@@ -115,7 +113,7 @@ Vue.component("secret-time-study-connection", {
       this.isVisible = player.secretUnlocks.viewSecretTS;
     },
     percents(value) {
-      return value * 100 + "%";
+      return `${value * 100}%`;
     }
   },
   template:

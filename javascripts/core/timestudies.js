@@ -419,16 +419,32 @@ class ECTimeStudyState extends TimeStudyState {
   }
 
   purchase(auto) {
-    if (!this.canBeBought) return false;
-    if (player.challenge.eternity.unlocked === 0) {
+    const clickTime = Date.now();
+
+    if (this.isBought && player.challenge.eternity.current === 0) {
+      // If it is bought and you aren't in a Eternity Challenge, check
+      if (clickTime - ui.lastClickTime < 750) {
+        // If you last clicked on it within 3/4ths of a second, enter them in or ask confirmation if they have that on
+        ui.lastClickTime = 0;
+        EternityChallenge(this.id).requestStart();
+      } else {
+        // Otherwise, record it for the next time they click
+        ui.lastClickTime = clickTime;
+      }
+    } else if (!this.isBought && this.canBeBought) {
+      // If you haven't bought it and can buy it, reset the time of click, and
+      // send you into the EC, deduct your resources, and move you to the EC tab if that isn't disabled
+      ui.lastClickTime = 0;
+
       player.challenge.eternity.unlocked = this.id;
       if (!auto) {
         Tab.challenges.eternity.show();
       }
       if (this.id !== 11 && this.id !== 12) player.etercreq = this.id;
+      player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
+      return true;
     }
-    player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
-    return true;
+    return false;
   }
 
   purchaseUntil() {

@@ -8345,6 +8345,10 @@ kbd {
   align-items: center;
 }
 
+.l-black-hole-upgrade-permanent {
+  display: inline-flex;
+}
+
 .l-black-hole-upgrade-grid__row {
   display: flex;
   flex-direction: row;

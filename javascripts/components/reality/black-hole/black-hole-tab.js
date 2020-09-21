@@ -12,6 +12,7 @@ Vue.component("black-hole-tab", {
       maxNegativeBlackHole: 300,
       detailedBH2: "",
       storedFraction: 0,
+      isPermanent: false,
     };
   },
   computed: {
@@ -56,6 +57,7 @@ Vue.component("black-hole-tab", {
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
+      this.isPermanent = BlackHoles.arePermanent;
 
       if (!BlackHole(2).isUnlocked || BlackHole(1).isActive) this.detailedBH2 = " ";
       else if (BlackHole(2).timeToNextStateChange > BlackHole(1).cycleLength) {
@@ -97,6 +99,9 @@ Vue.component("black-hole-tab", {
     adjustSliderStoring(value) {
       this.storedFraction = value;
       player.celestials.enslaved.storedFraction = value / 1000;
+    },
+    gridStyle() {
+      return this.isPermanent ? "l-black-hole-upgrade-permanent" : "l-black-hole-upgrade-grid";
     },
   },
   template: `
@@ -144,6 +149,8 @@ Vue.component("black-hole-tab", {
                 @input="adjustSliderNegative($event)"
               />
           </div>
+        </div>
+        <div :class="gridStyle()">
           <black-hole-upgrade-row
             v-for="(blackHole, i) in blackHoles"
             :key="'upgrades' + i"

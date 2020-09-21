@@ -421,6 +421,7 @@ function finishProcessReality(realityProps) {
     2: 0,
     3: 0
   };
+  player.dilation.lastEP = new Decimal(-1);
   player.thisInfinityMaxAM = new Decimal(0);
   player.thisEternityMaxAM = new Decimal(0);
   Currency.antimatter.reset();

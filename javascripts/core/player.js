@@ -264,6 +264,7 @@ let player = {
       2: 0,
       3: 0,
     },
+    lastEP: new Decimal(-1),
     auto: [false, false, false]
   },
   realities: 0,

@@ -37,9 +37,10 @@ html {
   --color-antimatter: #2196f3;
   --color-infinity: #B67F33;
   --color-eternity: #b341e0;
-  --color-reality: #0b600e;
-  --color-reality-light: #0ba00e;
+  --color-reality: #0ba00e;
+  --color-reality-light: #d5ffd7;
   --color-celestials: #5151ec;
+  --color-prestige--accent: white;
 
   --color-teresa--base: #5151ec;
   --color-teresa--accent: white;
@@ -66,6 +67,7 @@ html {
 
   --color-infinity: #FF9800;
   --color-eternity: #673AB7;
+  --color-reality: #4caf50;
   --color-celestials: #00bcd4;
 }
 
@@ -77,6 +79,7 @@ html {
   --color-accent: #1565C0;
 
   --color-infinity: #FF9800;
+  --color-prestige--accent: black;
 
   --color-teresa--accent: black;
 
@@ -96,7 +99,9 @@ html {
 
   --color-infinity: #FF9800;
   --color-eternity: #673AB7;
+  --color-reality: #4caf50;
   --color-celestials: #00bcd4;
+  --color-prestige--accent: black;
 
   --color-teresa--accent: black;
 
@@ -117,8 +122,8 @@ html {
   --color-infinity: #7d3c1b;
   --color-eternity: #639565;
   --color-reality: #AFA3A5;
-  --color-reality-light: #AFA3A5;
   --color-celestials: #F2D6C1;
+  --color-prestige--accent: black;
 }
 
 .t-s4 #ui-container { /* csslint allow: empty-rules */
@@ -135,6 +140,8 @@ html {
   --color-text-inverted: black;
   --color-base: black;
   --color-accent: #1565C0;
+
+  --color-prestige--accent: black;
 
   --color-teresa--accent: black;
 
@@ -460,57 +467,46 @@ button:focus {
 }
 
 .o-tab-btn--infinity {
-  color: white;
-  background: black;
+  color: var(--color-infinity);
+  background: var(--color-prestige--accent);
   border-color: var(--color-infinity);
 }
 
-.t-dark .o-tab-btn--infinity,
-.t-dark-metro .o-tab-btn--infinity {
-  color: black;
-  background: white;
-}
-
 .o-tab-btn--infinity:hover {
-  color: black;
+  color: var(--color-prestige--accent);
   background: var(--color-infinity);
 }
 
 .o-tab-btn--eternity {
   color: var(--color-eternity);
-  background: black;
+  background: var(--color-prestige--accent);
   border-color: var(--color-eternity);
 }
 
 .o-tab-btn--eternity:hover {
-  color: var(--color-eternity);
-  background: white;
-}
-
-.t-s1 .o-tab-btn--eternity:hover {
-  color: black;
-  background: #639565;
+  color: var(--color-prestige--accent);
+  background: var(--color-eternity);
 }
 
 .o-tab-btn--reality {
-  background: white;
-  border-color: var(--color-reality);
   color: var(--color-reality);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-reality);
 }
 
 .o-tab-btn--reality:hover {
+  color: var(--color-prestige--accent);
   background: var(--color-reality);
-  color: white;
 }
 
 .o-tab-btn--celestial {
   color: var(--color-celestials);
-  background: white;
+  background: var(--color-prestige--accent);
   border-color: var(--color-celestials);
 }
 
 .o-tab-btn--celestial:hover {
-  color: white;
+  color: var(--color-prestige--accent);
   background: var(--color-celestials);
 }
 
@@ -575,7 +571,7 @@ button:focus {
   height: 8rem;
   font-size: 1.2rem;
   font-weight: bold;
-  background: white;
+  background: black;
   border-width: 0.2rem;
   border-style: solid;
 }
@@ -609,7 +605,7 @@ button:focus {
 }
 
 .c-reality-button--unlocked:hover, .c-reality-button--unlocked.force-hover {
-  color: white;
+  color: black;
   background: var(--color-reality);
 }
 
@@ -1154,7 +1150,7 @@ screen and (max-width: 480px) {
 }
 
 .o-primary-btn:hover {
-  color: #FFF;
+  color: var(--color-text-inverted);
   background-color: var(--color-good);
 }
 
@@ -1352,23 +1348,21 @@ screen and (max-width: 480px) {
 }
 
 .o-primary-btn--respec-active {
-  background-color: var(--color-good);
+  background-color: var(--color-eternity) !important;
 }
 
 .o-primary-btn--respec-active:hover {
-  background-color: var(--color-good);
-  color: black;
-  cursor: default;
+  color: var(--color-base);
 }
 
 .o-primary-btn--charged-respec-active {
-  color: var(--color-teresa--accent);
-  background-color: var(--color-teresa--base);
+  color: var(--color-teresa--accent) !important;
+  background-color: var(--color-teresa--base) !important;
 }
 
 .o-primary-btn--charged-respec-active:hover {
-  color: var(--color-teresa--accent);
-  background-color: var(--color-teresa--base);
+  color: var(--color-teresa--accent) !important;
+  background-color: var(--color-teresa--base) !important;
 }
 
 .o-primary-btn--glyph-trash {
@@ -1611,13 +1605,13 @@ screen and (max-width: 480px) {
 /*#region Big Crunch*/
 
 .o-infinity-button {
-  color: white;
+  color: var(--color-infinity);
   background-color: black;
   border-color: var(--color-infinity);
 }
 
 .o-infinity-button:hover {
-  color: black;
+  color: black !important;
   background-color: var(--color-infinity);
 }
 
@@ -1630,8 +1624,8 @@ screen and (max-width: 480px) {
 }
 
 .t-dark .o-infinity-button {
-  color: black;
-  background: white;
+  color: var(--color-infinity);
+  background: black;
 }
 
 .t-dark .o-infinity-button:hover {
@@ -1647,8 +1641,8 @@ screen and (max-width: 480px) {
 }
 
 .t-dark-metro .o-infinity-button {
-  color: black;
-  background: white;
+  color: var(--color-infinity);
+  background: black;
   box-shadow: 1px 1px 1px 0 black;
   border-width: 0.1rem;
   border-radius: 0;
@@ -1668,8 +1662,9 @@ screen and (max-width: 480px) {
 }
 
 .o-eternity-button:hover {
-  color: var(--color-eternity);
-  background-color: white;
+  color: black;
+  background-color: var(--color-eternity);
+  cursor: pointer;
 }
 
 .o-eternity-buttonspan {
@@ -1677,7 +1672,7 @@ screen and (max-width: 480px) {
 }
 
 .o-eternity-button:hover span {
-  color: var(--color-eternity) !important;
+  color: black !important;
 }
 
 .t-s1 .o-eternity-button:hover span {
@@ -1857,6 +1852,15 @@ screen and (max-width: 480px) {
 }
 
 .c-game-header__tesseract-available {
+  border-width: 0.2rem solid;
+  border-radius: 0;
+  padding: 1rem;
+  margin-bottom: 1.2rem;
+  font-family: TypeWriter, serif;
+  background: #111117;
+  color: #2ebce6;
+  cursor: pointer;
+  transition-duration: 0.15s;
   animation: a-tesseract-shift 5s infinite;
 }
 
@@ -1866,6 +1870,18 @@ screen and (max-width: 480px) {
   background: #EEEEEE;
   animation: a-tesseract-shift-dark 5s infinite;
 }
+
+.c-infinity-dim-tab__tesseract-available:hover {
+  background: black;
+  color: #00c5ff;
+}
+
+.t-dark .c-infinity-dim-tab__tesseract-available:hover,
+.t-dark-metro .c-infinity-dim-tab__tesseract-available:hover,
+.t-s6 .c-infinity-dim-tab__tesseract-available:hover {
+  background: white;
+}
+
 
 .c-game-header__ip-amount {
   font-weight: bold;
@@ -2170,7 +2186,8 @@ screen and (max-width: 480px) {
   font-family: TypeWriter, serif;
   background: #111117;
   color: #2ebce6;
-  border: none;
+  border: 0.2rem solid;
+  border-radius: 0;
   cursor: pointer;
   transition-duration: 0.15s;
   animation: a-tesseract-shift 5s infinite;
@@ -3027,7 +3044,7 @@ screen and (max-width: 480px) {
 }
 
 .c-challenge-box--normal {
-  color: black;
+  color: var(--color-text);
   font-size: 1.05rem;
   background-color: #f2f2f2;
 }
@@ -3055,7 +3072,7 @@ screen and (max-width: 480px) {
 /*#region t-dark*/
 
 .t-dark .c-challenge-box--normal {
-  background-color: #455a64;
+  background-color: #27343b;
 }
 
 /*#endregion t-dark*/
@@ -3092,7 +3109,7 @@ screen and (max-width: 480px) {
 }
 
 .t-dark-metro .c-challenge-box--normal {
-  background-color: #455a64;
+  background-color: #27343b;
 }
 
 /*#endregion t-metro t-dark-metro t-inverted-metro*/
@@ -3457,7 +3474,7 @@ screen and (max-width: 480px) {
   background-color: #1f1f1f;
   font-weight: bold;
   font-size:  1rem;
-  border: 0.1rem solid #ed85df;
+  border: 0.1rem solid black;
   width: 19rem;
   height: 9rem;
   transition-duration: 0.2s;
@@ -3473,29 +3490,12 @@ screen and (max-width: 480px) {
   border-radius: 0;
 }
 
-.t-dark .o-infinity-upgrade-btn,
-.t-metro .o-infinity-upgrade-btn,
-.t-dark-metro .o-infinity-upgrade-btn,
-.t-inverted-metro .o-infinity-upgrade-btn,
-.t-s1 .o-infinity-upgrade-btn,
-.t-s6 .o-infinity-upgrade-btn,
-.t-s8 .o-infinity-upgrade-btn {
-  border-color: black;
-}
-
-.t-dark .o-infinity-upgrade-btn {
-  color: black;
-  background-color: whitesmoke;
-}
-
 .t-s6 .o-infinity-upgrade-btn {
-  color: white;
-  background-color: black;
   box-shadow: 0 0 0.7rem 0.2rem #111111;
 }
 
 .o-infinity-upgrade-btn:hover {
-  color: black;
+  color: var(--color-text-inverted);
 }
 
 /*#region o-infinity-upgrade-btn--available*/
@@ -3638,7 +3638,9 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-upgrade-btn--unavailable:hover {
-  background-color: white;
+  color: var(--color-text);
+  background-color: var(--color-text-inverted);
+  cursor: default;
 }
 
 .t-dark .o-infinity-upgrade-btn--unavailable {
@@ -3662,6 +3664,7 @@ screen and (max-width: 480px) {
 .t-dark-metro .o-infinity-upgrade-btn--unavailable:hover,
 .t-inverted-metro .o-infinity-upgrade-btn--unavailable:hover,
 .t-s8 .o-infinity-upgrade-btn--unavailable:hover {
+  color: var(--color-text-inverted);
   background-color: #bdbdbd;
 }
 
@@ -3690,15 +3693,12 @@ screen and (max-width: 480px) {
 
 .o-infinity-upgrade-btn--bought {
   color: black;
-  background-color: var(--color-good);
+  background-color: var(--color-infinity);
   cursor: default;
 }
 
-.t-dark .o-infinity-upgrade-btn--bought,
-.t-dark-metro .o-infinity-upgrade-btn--bought,
-.t-s6 .o-infinity-upgrade-btn--bought{
-  background-color: #43a047;
-  border-color: black;
+.o-infinity-upgrade-btn--bought:hover {
+  color: black;
 }
 
 /*#endregion o-infinity-upgrade-btn--bought*/
@@ -3706,17 +3706,18 @@ screen and (max-width: 480px) {
 .o-infinity-upgrade-btn--chargeable {
   color: var(--color-teresa--base);
   background-color: var(--color-teresa--accent);
+  border-color: var(--color-teresa--base);
   animation: a-charged-infinity-upgrade-glow 2s infinite;
 }
 
-.t-dark .o-infinity-upgrade-btn--chargeable,
-.t-s6 .o-infinity-upgrade-btn--chargeable {
+.t-dark .o-infinity-upgrade-btn--chargeable {
   color: var(--color-teresa--base);
   background-color: var(--color-teresa--accent);
 }
 
 .o-infinity-upgrade-btn--chargeable:hover {
   color: var(--color-teresa--base);
+  cursor: pointer;
 }
 
 @keyframes a-charged-infinity-upgrade-glow {
@@ -4314,8 +4315,8 @@ screen and (max-width: 480px) {
 }
 
 .o-eternity-upgrade--available:hover {
-  color: #511568;
-  background-color: white;
+  color: var(--color-text);
+  background-color: var(--color-eternity);
 }
 
 .o-eternity-upgrade--unavailable {
@@ -4330,7 +4331,7 @@ screen and (max-width: 480px) {
 
 .o-eternity-upgrade--bought {
   color: #511568;
-  background-color: var(--color-good);
+  background-color: var(--color-eternity);
   cursor: default;
 }
 
@@ -4376,8 +4377,8 @@ screen and (max-width: 480px) {
 
 .t-dark .o-eternity-upgrade--available:hover,
 .t-s6 .o-eternity-upgrade--available:hover {
-  color: black;
-  background-color: white;
+  color: var(--color-text);
+  background-color: var(--color-eternity);
 }
 
 .t-dark .o-eternity-upgrade--unavailable {
@@ -4402,8 +4403,8 @@ screen and (max-width: 480px) {
 
 .t-dark .o-eternity-upgrade--bought,
 .t-s6 .o-eternity-upgrade--bought {
-  color: #1e0830;
-  background-color: #8d48c3;
+  color: var(--color-text-inverted);
+  background-color: var(--color-eternity);
   border-color: #691fa5;
 }
 
@@ -4947,7 +4948,7 @@ screen and (max-width: 480px) {
 
 .c-modal {
   color: var(--color-text);
-  background-color: #e0e0e0;
+  background-color: var(--color-base);
   border: 0.3rem solid black;
   border-radius: 0.6rem;
   text-align: center;
@@ -4973,11 +4974,6 @@ screen and (max-width: 480px) {
 /*#region themes*/
 
 /*#region t-dark t-dark-metro*/
-
-.t-dark .c-modal,
-.t-dark-metro .c-modal {
-  background-color: #455a64;
-}
 
 .t-dark .c-modal {
   box-shadow: 0 0 1.5rem 0 black;
@@ -5007,19 +5003,9 @@ screen and (max-width: 480px) {
 
 /*#endregion t-metro t-dark-metro t-inverted-metro t-s8 */
 
-/*#region t-s1*/
-
-.t-s1 .c-modal {
-  background-color: #dbd242;
-}
-
-/*#endregion t-s1*/
-
 /*#region t-s6*/
 
 .t-s6 .c-modal {
-  color: #e0e0e0;
-  background-color: black;
   border: 0.1rem solid #1b5e20;
   box-shadow: 0 0 1.5rem 0 black;
 }
@@ -5505,8 +5491,8 @@ kbd {
 }
 
 .o-notification--reality {
-  background-color: var(--color-reality-light);
-  border-color: var(--color-reality-light);
+  background-color: var(--color-reality);
+  border-color: var(--color-reality);
 }
 
 .o-notification--black-hole {
@@ -5927,6 +5913,7 @@ kbd {
 
 .c-effarig-run-button--not-running:hover {
   background-color: black;
+  color: var(--color-effarig--base);
 }
 
 @keyframes a-effarig-run-button--not-running-glow {
@@ -6745,7 +6732,7 @@ kbd {
   width: 12rem;
   border-radius: 50%;
   background-color: black;
-  margin: 1.5rem auto;
+  margin: 1.5rem 0;
   border: 0.4rem solid #9575cd;
   box-shadow: 0 0 0.7rem #9575cd, 0 0 0.7rem #9575cd inset;
   transition-duration: 0.2s;
@@ -7838,7 +7825,7 @@ kbd {
 }
 
 .c-glyph-level-factors-dropdown-header {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   width: auto;
   font-weight: bold;
   text-align: center;
@@ -7904,7 +7891,7 @@ kbd {
 .l-glyph-levels-and-weights__adjust-outline::after {
   content: '';
   position: absolute;
-  border: 0.2rem solid #d5ffd7;
+  border: 0.2rem solid var(--color-reality-light);
   border-radius: 0.5em;
   top: -0.5em;
   bottom: -0.5em;
@@ -7961,7 +7948,7 @@ kbd {
 }
 
 .c-glyph-levels-and-weights__slider-process {
-  background-color: #d5ffd7;
+  background-color: var(--color-reality-light);
 }
 
 .c-glyph-levels-and-weights__slider-bg {
@@ -7969,9 +7956,9 @@ kbd {
 }
 
 .c-glyph-levels-and-weights__slider-handle {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: black;
-  box-shadow: 0 0 0 0.1rem #d5ffd7;
+  box-shadow: 0 0 0 0.1rem var(--color-reality-light);
   border-radius: 0.8rem;
 }
 
@@ -7988,15 +7975,15 @@ kbd {
 }
 
 .c-glyph-levels-and-weights__reset-btn {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: black;
   border-radius: 0.5rem;
-  border: 0.1rem solid #d5ffd7;
+  border: 0.1rem solid var(--color-reality-light);
 }
 
 .c-glyph-levels-and-weights__reset-btn:hover {
   color: black;
-  background-color: #d5ffd7;
+  background-color: var(--color-reality-light);
 }
 
 .l-glyph-levels-and-weights__auto-btn {
@@ -8006,15 +7993,15 @@ kbd {
 }
 
 .c-glyph-levels-and-weights__auto-btn {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: black;
   border-radius: 0.5rem;
-  border: 0.1rem solid #d5ffd7;
+  border: 0.1rem solid var(--color-reality-light);
 }
 
 .c-glyph-levels-and-weights__auto-btn:hover {
   color: black;
-  background-color: #d5ffd7;
+  background-color: var(--color-reality-light);
 }
 
 .o-questionmark {
@@ -8202,7 +8189,7 @@ kbd {
   background-color: black;
   border: 0.2rem solid var(--color-reality);
   border-radius: 0.5rem;
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   cursor: pointer;
   transition-duration: 0.15s;
   text-align: center;
@@ -8216,7 +8203,7 @@ kbd {
 
 .c-reality-upgrade-btn:hover {
   color: black;
-  background-color: #d5ffd7;
+  background-color: var(--color-reality-light);
 }
 
 .c-reality-upgrade-btn--unavailable {
@@ -8226,7 +8213,7 @@ kbd {
 
 .c-reality-upgrade-btn--unavailable:hover {
   background-color: #656565;
-  color: #d5ffd7;
+  color: var(--color-reality-light);
 }
 
 .c-reality-upgrade-btn--bought {
@@ -8236,7 +8223,7 @@ kbd {
 }
 
 .c-reality-upgrade-btn--bought:hover {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: var(--color-reality);
 }
 
@@ -8247,7 +8234,7 @@ kbd {
 
 .c-reality-upgrade-btn--possible:hover {
   background-color: #8b8529;
-  color: #d5ffd7;
+  color: var(--color-reality-light);
 }
 
 .c-reality-upgrade-btn--locked {
@@ -8257,12 +8244,12 @@ kbd {
 
 .c-reality-upgrade-btn--locked:hover {
   background-color: #a53939;
-  color: #d5ffd7;
+  color: var(--color-reality-light);
 }
 
 .c-reality-upgrade-btn--black-hole-unlock {
   margin: auto;
-  text-shadow: -0.1rem 0.1rem 0.3rem #d5ffd7
+  text-shadow: -0.1rem 0.1rem 0.3rem var(--color-reality-light)
 }
 
 .t-metro .c-reality-upgrade-btn,
@@ -8274,22 +8261,22 @@ kbd {
 }
 
 .t-dark .c-reality-upgrade-btn--unavailable {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: #37474f;
 }
 
 .t-dark .c-reality-upgrade-btn--locked {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: var(--color-bad);
 }
 
 .t-s6.c-reality-upgrade-btn:hover {
-  background-color: #d5ffd7;
+  background-color: var(--color-reality-light);
 }
 
 .t-s6.c-reality-upgrade-btn--unavailable:hover {
   background-color: #656565;
-  color: #d5ffd7;
+  color: var(--color-reality-light);
 }
 
 .t-s6.c-reality-upgrade-btn--bought {
@@ -8298,7 +8285,7 @@ kbd {
 }
 
 .t-s6.c-reality-upgrade-btn--bought:hover {
-  color: #d5ffd7;
+  color: var(--color-reality-light);
   background-color: var(--color-reality);
 }
 

@@ -426,7 +426,7 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            if (complete >= 1) return "Broken the chain";
+            if (complete >= 1) return "Broken the chain with glyph level";
             const goal = 5000;
             return [
               "Break a chain",
@@ -471,7 +471,7 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            if (complete >= 1) return "Broken the chain";
+            if (complete >= 1) return "Broken the chain with glyph rarity";
             const goal = 100;
             return [
               "Break a chain",

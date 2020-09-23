@@ -497,6 +497,14 @@ let player = {
         annihilation: false
       },
       lastCheckedMilestones: 0
+    },
+    pelle: {
+      doomed: false,
+      upgrades: [],
+      unstableMatter: new Decimal(0),
+      famine: 0,
+      pestilence: 0,
+      chaos: 0
     }
   },
   tabNotifications: new Set(),

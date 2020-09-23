@@ -106,21 +106,14 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.ANTIMATTER,
     description: "Dimension Boosts no longer reset Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice."
   },
-  studyPassive1: {
+  studyPassive: {
     id: 31,
-    label: "PASS1",
+    label: "PASS",
     family: PERK_FAMILY.ETERNITY,
     get description() {
       return `Improve Time Study 122 to ${formatX(100)} Eternity Points and
-        Time Study 142 to ${formatX(1e100)} Infinity Points.`;
-    }
-  },
-  studyPassive2: {
-    id: 32,
-    label: "PASS2",
-    family: PERK_FAMILY.ETERNITY,
-    get description() {
-      return `Time Study 132 also makes Replicanti ${format(5)} times faster.`;
+        Time Study 142 to ${formatX(1e100)} Infinity Points.
+        In addition, Time Study 132 also makes Replicanti ${format(5)} times faster.`;
     }
   },
   autounlockEU1: {
@@ -473,9 +466,8 @@ GameDatabase.reality.perkConnections = (function() {
     [p.bypassEC1Lock, p.bypassEC2Lock, p.bypassEC3Lock, p.studyECRequirement],
     [p.bypassEC2Lock, p.studyActiveEP, p.bypassEC1Lock],
     [p.bypassEC3Lock, p.studyIdleEP, p.bypassEC1Lock],
-    [p.bypassEC5Lock, p.studyActiveEP, p.studyIdleEP, p.studyPassive1],
-    [p.studyPassive1, p.studyPassive2],
-    [p.studyPassive2, p.bypassEC1Lock],
+    [p.bypassEC5Lock, p.studyActiveEP, p.studyIdleEP, p.studyPassive],
+    [p.studyPassive, p.bypassEC1Lock],
     [p.autocompleteEC1, p.autocompleteEC2],
     [p.autocompleteEC2, p.autocompleteEC3],
     [p.autocompleteEC3, p.autocompleteEC4],

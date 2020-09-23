@@ -92,7 +92,7 @@ function getReplicantiInterval(overCapOverride, intervalIn) {
     RealityUpgrade(23)
   );
   interval = Decimal.divide(interval, preCelestialEffects);
-  if (TimeStudy(132).isBought && Perk.studyPassive2.isBought) {
+  if (TimeStudy(132).isBought && Perk.studyPassive.isBought) {
     interval = interval.divide(5);
   }
   if ((TimeStudy(133).isBought && !Achievement(138).isUnlocked) || overCap) {

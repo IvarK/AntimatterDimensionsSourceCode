@@ -3,12 +3,14 @@
 Vue.component("sidebar", {
   data() {
     return {
-      RMVisible: false
+      RMVisible: false,
+      newsEnabled: false
     };
   },
   methods: {
     update() {
       this.RMVisible = PlayerProgress.realityUnlocked();
+      this.newsEnabled = player.options.news.enabled;
     }
   },
   computed: {
@@ -26,7 +28,7 @@ Vue.component("sidebar", {
     ]
   },
   template:
-  `<div class="sidebar">
+  `<div class="sidebar"">
     <sidebar-rm v-if="RMVisible" />
     <tab-button 
       v-for="tab in tabs"

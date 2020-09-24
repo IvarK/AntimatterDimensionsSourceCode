@@ -130,6 +130,8 @@ Vue.component("autobuyer-box", {
       </div>
     </div>
     <div v-else-if="canBeBought" @click="purchase" :class="autobuyerBuyBoxClass">
-      Buy the {{ name }} for {{ format(antimatterCost) }} antimatter
+      {{ name }}
+      <br>
+      Requirement: {{ format(antimatterCost) }} total antimater
     </div>`
 });

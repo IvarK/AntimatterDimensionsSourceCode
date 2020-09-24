@@ -34,14 +34,14 @@ class TimeStudyTreeLayout {
     this.spacing = 4;
 
     const normalRowLayout = new TimeStudyRowLayout({
-      itemWidth: 17,
-      itemHeight: 8,
+      itemWidth: 18,
+      itemHeight: 10,
       spacing: 3
     });
 
     const wideRowLayout = new TimeStudyRowLayout({
       itemWidth: 12,
-      itemHeight: 8,
+      itemHeight: 10,
       spacing: 0.6
     });
     const normalRow = (...items) => new TimeStudyRow(normalRowLayout, items);

@@ -233,7 +233,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 12,
       requirement: () => TimeStudy(101).isBought || TimeStudy(102).isBought || TimeStudy(103).isBought,
       description: () => (Achievement(103).canBeApplied
-        ? `Make the Infinity Point formula better log(x/${format(307.8, 0, 1)}) ➜ log(x/${formatInt(285)})`
+        ? `Make the Infinity Point formula better log(x/${formatFloat(307.8, 1)}) ➜ log(x/${formatInt(285)})`
         : `Make the Infinity Point formula better log(x/${formatInt(308)}) ➜ log(x/${formatInt(285)})`),
       effect: 285
     },

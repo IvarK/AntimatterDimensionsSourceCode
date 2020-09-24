@@ -28,7 +28,7 @@ Vue.component("sidebar", {
     ]
   },
   template:
-  `<div class="sidebar"">
+  `<div class="sidebar">
     <sidebar-rm v-if="RMVisible" />
     <tab-button 
       v-for="tab in tabs"

@@ -322,7 +322,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
         ? `You gain ${formatX(1e45, 0, 0)} more Infinity Points`
         : "Multiplier to Infinity Points, which decays over this Infinity"),
       effect: () => (Perk.studyActiveEP.isBought
-        ? 1e45
+        ? new Decimal(1e45)
         : Decimal.divide(1e45, thisInfinityMult(Time.thisInfinity.totalSeconds)).clampMin(1)),
       formatEffect: value => (Perk.studyActiveEP.isBought ? undefined : formatX(value, 2, 1))
     },

@@ -658,7 +658,9 @@ GameDatabase.achievements.normal = [
     get description() { return `Bulk buy ${formatInt(750)} Dimension Boosts at once.`; },
     checkRequirement: ([bulk]) => bulk >= 750,
     checkEvent: GAME_EVENT.DIMBOOST_AFTER,
-    get reward() { return `Dimension Boosts are ${formatPercents(0.01)} stronger (to Antimatter Dimensions).`; },
+    get reward() {
+      return `The multiplier from Dimension Boosts to Antimatter Dimensions is ${formatPercents(0.01)} higher.`; 
+    },
     effect: 1.01
   },
   {

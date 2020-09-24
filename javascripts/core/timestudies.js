@@ -288,7 +288,7 @@ function importStudyTree(input, auto) {
 
   if (splitOnEC.length === 2) {
     const ecNumber = parseInt(splitOnEC[1], 10);
-    if (ecNumber !== 0 && !isNaN(ecNumber)) {
+    if (ecNumber !== 0 && !TimeStudy.eternityChallenge(ecNumber).isBought && !isNaN(ecNumber)) {
       TimeStudy.eternityChallenge(ecNumber).purchase(auto);
     }
   }
@@ -421,7 +421,7 @@ class ECTimeStudyState extends TimeStudyState {
   purchase(auto) {
     const clickTime = Date.now();
 
-    if (this.isBought && player.challenge.eternity.current === 0) {
+    if (this.isBought && player.challenge.eternity.current === 0 && !auto) {
       // If it is bought and you aren't in a Eternity Challenge, check
       if (clickTime - ui.lastClickTime < 750) {
         // If you last clicked on it within 3/4ths of a second, enter them in or ask confirmation if they have that on

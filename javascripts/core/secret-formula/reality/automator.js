@@ -363,6 +363,7 @@ GameDatabase.reality.automator = {
       <b>rep</b> - replicanti amount <br>
       <b>tt</b> - time theorem amount <br>
       <b>total tt</b> - TOTAL time theorems, includes all forms of generated TT <br>
+      <b>total completions</b> - total completions of all eternity challenges <br>
       <b>pending completions</b> - total completions of current EC at eternity <br>
       <b>ec[number] completions</b> - amount of EC completions for a certain EC <br>
       `,

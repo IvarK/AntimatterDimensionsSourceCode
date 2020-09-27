@@ -1339,7 +1339,9 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-unlock": {
       visible: () => Ra.has(RA_UNLOCKS.V_UNLOCK),
-      complete: () => (Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK) ? 1 : Math.clampMax(0.999, Ra.totalPetLevel / 100)),
+      complete: () => (Laitela.canUnlock || Laitela.isUnlocked
+        ? 1
+        : Math.clampMax(0.999, Ra.totalPetLevel / Laitela.raLevelRequirement)),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
@@ -1355,15 +1357,29 @@ GameDatabase.celestials.navigation = (function() {
         alwaysShowLegend: true,
         legend: {
           text: () => {
-            const level = Ra.totalPetLevel;
-            if (level === 100) return "Lai'tela's Reality";
-            return [
+            const raLevel = Ra.totalPetLevel;
+            const requiredRaLevel = Laitela.raLevelRequirement;
+            const rm = player.reality.realityMachines;
+            const realityGlyphLevel = player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(
+              x => x.type === "reality").map(x => x.level).max();
+
+            if (raLevel < requiredRaLevel) return [
               "Lai'tela unlock",
-              `Total Celestial Memory levels ${formatInt(level)} / ${formatInt(100)}.`
+              `Total Celestial Memory levels ${formatInt(raLevel)} / ${formatInt(requiredRaLevel)}.`
+            ];
+            if (raLevel === requiredRaLevel && !Laitela.isUnlocked) return [
+              "Lai'tela's Reality",
+              `Reality Glyph level ${formatInt(realityGlyphLevel)} /
+                ${formatInt(Laitela.realityGlyphLevelRequirement)}`,
+              `Reality Machine amount ${format(rm)} /
+                ${format(Laitela.realityMachineCost)}`
+            ];
+            return [
+              "Lai'tela's Reality"
             ];
           },
           angle: 260,
-          diagonal: 12,
+          diagonal: 15,
           horizontal: 8,
         },
       },
@@ -1391,6 +1407,9 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const goal = MatterDimension(2).adjustedStartingCost;
             const places = complete >= 1 ? 0 : 2;
+            if (complete !== 1) return [
+            "2nd Dark Matter Dimension",
+            ];
             return [
             "2nd Dark Matter Dimension",
             `Dark Matter ${format(Laitela.maxMatter.min(goal), places)} / ${format(goal)}`
@@ -1426,6 +1445,9 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const goal = MatterDimension(3).adjustedStartingCost;
             const places = complete >= 1 ? 0 : 2;
+            if (complete !== 1) return [
+            "3rd Dark Matter Dimension",
+            ];
             return [
             "3rd Dark Matter Dimension",
             `Dark Matter ${format(Laitela.maxMatter.min(goal), places)} / ${format(goal)}`
@@ -1461,6 +1483,9 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const goal = MatterDimension(4).adjustedStartingCost;
             const places = complete >= 1 ? 0 : 2;
+            if (complete !== 1) return [
+            "4th Dark Matter Dimension",
+            ];
             return [
             "4th Dark Matter Dimension",
             `Dark Matter ${format(Laitela.maxMatter.min(goal), places)} / ${format(goal)}`
@@ -1564,23 +1589,32 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-destabilization-left": {
       visible: () => player.celestials.laitela.singularities > 0 && Laitela.darkMatterMult > 1,
-      complete: () => -Laitela.maxAllowedDimension / 4 + 2,
+      complete: () => player.celestials.laitela.difficultyTier / 4,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
+        symbol: "ᛝ",
+        symbolScale: 1.6,
+        symbolOffset: "0.1rem",
         fill: "white",
         position: Positions.laitelaThirdCenter,
         ring: {
           rMajor: 15,
         },
+        alwaysShowLegend: true,
         legend: {
-          text: [
-            "Destabalize Lai'tela's Reality",
-            "To the point where you can",
-            "Only use 4 Dimensions"
-          ],
-          angle: 135,
-          diagonal: 25,
-          horizontal: 16,
+          text: complete => {
+            if (complete < 1) return [
+              "Destabalize Lai'tela's Reality",
+              "To the point where you can",
+              "Only use 4 Dimensions"
+            ];
+            return [
+              "Destabilized Lai'tela's Reality"
+            ];
+          },
+          angle: 100,
+          diagonal: 15,
+          horizontal: 8,
         },
       },
       connector: {
@@ -1594,7 +1628,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-destabilization-right": {
       visible: () => player.celestials.laitela.singularities > 0 && Laitela.darkMatterMult > 1,
-      complete: () => -Laitela.maxAllowedDimension / 4 + 2,
+      complete: () => player.celestials.laitela.difficultyTier / 4,
       node: {
         fill: "white",
         position: Positions.laitelaThirdCenter,

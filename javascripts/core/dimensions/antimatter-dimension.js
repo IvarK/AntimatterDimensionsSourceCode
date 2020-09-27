@@ -246,7 +246,7 @@ function buyAsManyAsYouCanBuy(tier) {
   const howMany = dimension.howManyCanBuy;
   const cost = dimension.cost.times(howMany);
 
-  if (tier === 8 && Enslaved.isRunning && AntimatterDimension(8).bought >= 1) return buyOneDimension(8);
+  if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
 
   dimension.currencyAmount = dimension.currencyAmount.minus(cost);
   dimension.challengeCostBump();

@@ -51,6 +51,7 @@ class ChallengeConfirmationModal extends Modal {
   }
 }
 
+Modal.hardReset = new Modal("modal-hard-reset");
 Modal.h2p = new Modal("modal-h2p");
 Modal.awayProgress = new Modal("modal-away-progress");
 Modal.shortcuts = new Modal("modal-shortcuts");

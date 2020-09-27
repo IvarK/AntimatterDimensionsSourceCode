@@ -53,9 +53,7 @@ Vue.component("options-saving-tab", {
       this.autosaveInterval = options.autosaveInterval / 1000;
     },
     hardReset() {
-      if (confirm("Do you really want to erase all your progress?")) {
-        GameStorage.hardReset();
-      }
+      Modal.hardReset.show();
     },
     importAsFile(event) {
       const reader = new FileReader();

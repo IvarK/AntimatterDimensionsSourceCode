@@ -286,6 +286,7 @@ let player = {
         reality: 0
       },
       undo: [],
+      protectedRows: 2,
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
     secondGaussian: 1e6,

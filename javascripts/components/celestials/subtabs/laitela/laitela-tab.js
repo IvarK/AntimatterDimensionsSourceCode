@@ -22,12 +22,7 @@ Vue.component("laitela-tab", {
         Laitela.darkMatterMult > 1;
       this.singularitiesUnlocked = Singularity.capIsReached || player.celestials.laitela.singularities > 0;
       this.singularityWaitTime = TimeSpan.fromSeconds((Singularity.cap - player.celestials.laitela.darkEnergy) /
-        Array.range(1, 4)
-        .map(n => MatterDimension(n))
-        .filter(d => d.amount.gt(0))
-        .map(d => d.powerDE * 1000 / d.interval)
-        .sum())
-        .toStringShort(false);
+      Laitela.darkEnergyPerSecond).toStringShort();
     },
     maxAll() {
       Laitela.maxAllDMDimensions(4);
@@ -91,11 +86,7 @@ Vue.component("singularity-container", {
     update() {
       const laitela = player.celestials.laitela;
       this.darkEnergy = laitela.darkEnergy;
-      this.darkEnergyGainPerSecond = Array.range(1, 4)
-        .map(n => MatterDimension(n))
-        .filter(d => d.amount.gt(0))
-        .map(d => d.powerDE * 1000 / d.interval)
-        .sum();
+      this.darkEnergyGainPerSecond = Laitela.darkEnergyPerSecond;
       this.singularities = laitela.singularities;
       this.singularityCapIncreases = laitela.singularityCapIncreases;
       this.canPerformSingularity = Singularity.capIsReached;

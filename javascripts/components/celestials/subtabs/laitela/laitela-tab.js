@@ -164,7 +164,7 @@ Vue.component("singularity-container", {
           <h2>{{ singularityWaitText }}</h2>
         </button>
       </div>
-      <div v-if="!(singularities === 0)">
+      <div v-if="singularities !== 0)">
         <div class="o-laitela-matter-amount">
           You have {{ format(darkEnergy, 2, 4) }} Dark Energy. (+{{ format(darkEnergyGainPerSecond, 2, 4) }}/s)
         </div>
@@ -181,7 +181,7 @@ Vue.component("singularity-container", {
           but also increases gained Singularities by {{ formatX(perStepFactor) }}.
         </div>
         <h2 v-else>
-          Reach {{ format(10) }} singularities to unlock bulk
+          Reach {{ format(10) }} singularities to unlock Bulk Singularities.
           <br>
           <br>
           <br>

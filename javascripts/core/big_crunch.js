@@ -82,7 +82,7 @@ function bigCrunchTabChange() {
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
   handleChallengeCompletion();
 
-  if (player.infinitied.eq(1) && !PlayerProgress.realityUnlocked()) {
+  if (player.infinityPoints.lte(10) && !PlayerProgress.eternityUnlocked()) {
     Tab.infinity.upgrades.show();
   } else if (earlyGame || (challenge && !player.options.retryChallenge)) {
     Tab.dimensions.antimatter.show();

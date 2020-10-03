@@ -76,6 +76,9 @@ Vue.component("options-gameplay-tab", {
           class="o-primary-btn--option"
           onclick="Modal.confirmationOptions.show()"
         >Open Confirmation Options</options-button>
+        <options-button v-else
+          class="o-primary-btn--options"
+        >You do not have anything that requires confirmation</options-button>
         <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button">
           <b>Offline ticks: {{ formatInt(parseInt(offlineTicks)) }}</b>
           <input
@@ -88,7 +91,6 @@ Vue.component("options-gameplay-tab", {
           />
         </div>
         <primary-button-on-off
-          v-if="infinityUnlocked"
           v-model="automaticTabSwitching"
           class="o-primary-btn--option l-options-grid__button"
           style="font-size: 12px;"

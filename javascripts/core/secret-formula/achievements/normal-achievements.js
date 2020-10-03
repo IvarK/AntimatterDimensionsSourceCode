@@ -212,7 +212,7 @@ GameDatabase.achievements.normal = [
     id: 42,
     name: "Super Sanic",
     get description() {
-      return `Have antimatter per second exceed your current antimatter above ${format(1e63, 0, 0)}.`;
+      return `Have antimatter per second exceed your current antimatter above ${format(1e63)}.`;
     },
     checkRequirement: () =>
       Currency.antimatter.exponent >= 63 &&
@@ -567,7 +567,7 @@ GameDatabase.achievements.normal = [
   {
     id: 86,
     name: "Do you even bend time bro?",
-    get description() { return `Reach ${formatX(1000)} ticks/second per Tickspeed upgrade.`; },
+    get description() { return `Reach ${formatX(1000)} faster per Tickspeed upgrade.`; },
     checkRequirement: () => Tickspeed.multiplier.recip().gte(1000),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() { return `Galaxies are ${formatPercents(0.01)} stronger.`; },
@@ -605,7 +605,7 @@ GameDatabase.achievements.normal = [
     id: 91,
     name: "Ludicrous Speed",
     get description() {
-      return `Big Crunch for ${format(1e200, 0, 0)} Infinity Points in ${formatInt(2)} seconds or less.`;
+      return `Big Crunch for ${format(1e200)} Infinity Points in ${formatInt(2)} seconds or less.`;
     },
     checkRequirement: () => gainedInfinityPoints().exponent >= 200 && Time.thisInfinityRealTime.totalSeconds <= 2,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
@@ -621,7 +621,7 @@ GameDatabase.achievements.normal = [
     id: 92,
     name: "I brake for NOBODY!",
     get description() {
-      return `Big Crunch for ${format(1e250, 0, 0)} Infinity Points in ${formatInt(20)} seconds or less.`;
+      return `Big Crunch for ${format(1e250)} Infinity Points in ${formatInt(20)} seconds or less.`;
     },
     checkRequirement: () => gainedInfinityPoints().exponent >= 250 && Time.thisInfinityRealTime.totalSeconds <= 20,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,

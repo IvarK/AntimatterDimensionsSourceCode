@@ -18,7 +18,7 @@ Vue.component("new-dimension-row", {
       isAffordable: false,
       buyUntil10: true,
       howManyCanBuy: 0,
-      isNotPrevented: true,
+      isPrevented: false,
       isContinuumActive: false,
       continuumValue: 0,
       isShown: false
@@ -70,7 +70,7 @@ Vue.component("new-dimension-row", {
       }
       this.isAffordable = dimension.isAffordable;
       this.buyUntil10 = buyUntil10;
-      this.isNotPrevented = this.tier === 8 && Enslaved.isRunning && AntimatterDimension(8).bought >= 1;
+      this.isPrevented = this.tier === 8 && Enslaved.isRunning && AntimatterDimension(8).bought >= 1;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
       this.isShown =
@@ -115,12 +115,12 @@ Vue.component("new-dimension-row", {
       <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
     </div>
     <button class="o-primary-btn o-primary-btn--new" @click="buy"
-      :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked || isNotPrevented}">
+      :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked || isPrevented}">
         <div class="button-content"
           :enabled="isAffordable || isContinuumActive"
           :ach-tooltip="cappedTooltip"
           :class="tutorialClass()">
-            <span v-if="isNotPrevented">
+            <span v-if="isPrevented">
               Shattered by Enslaved
             </span>
             <span v-else-if="isContinuumActive">
@@ -134,7 +134,7 @@ Vue.component("new-dimension-row", {
               Cost: {{ costDisplay }}
             </span>
         </div>
-        <div class="fill" v-if="!isContinuumActive && isUnlocked && isAffordable && !isNotPrevented">
+        <div class="fill" v-if="!isContinuumActive && isUnlocked && isAffordable && !isPrevented">
           <div class="fill1" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
           <div class="fill2" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>
         </div>

@@ -122,8 +122,7 @@ const Enslaved = {
   initializeRun() {
     clearCelestialRuns();
     player.celestials.enslaved.run = true;
-    // Round to the nearest multiple of 2 to make the secret study hide
-    player.secretUnlocks.viewSecretTS = !player.secretUnlocks.viewSecretTS;
+    player.secretUnlocks.viewSecretTS = false;
     this.feltEternity = false;
     this.quotes.show(this.quotes.START_RUN);
   },

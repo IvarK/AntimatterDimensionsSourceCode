@@ -9,12 +9,17 @@ Vue.component("modal-confirmation-options", {
       eternity: false,
       dilation: false,
       reality: false,
-      harshAutoClean: false,
+      resetReality: false,
       glyphReplace: false,
       glyphSacrifice: false,
-      glyphSacrificeUnlocked: false,
+      harshAutoClean: false,
       glyphUndo: false,
-      glyphUndoUnlocked: false
+      resetCelestial: false,
+
+      sacrificeUnlocked: false,
+      glyphSacrificeUnlocked: false,
+      glyphUndoUnlocked: false,
+      resetCelestialUnlocked: false,
     };
   },
   watch: {
@@ -33,8 +38,8 @@ Vue.component("modal-confirmation-options", {
     reality(newValue) {
       player.options.confirmations.reality = newValue;
     },
-    harshAutoClean(newValue) {
-      player.options.confirmations.harshAutoClean = newValue;
+    resetReality(newValue) {
+      player.options.confirmations.resetReality = newValue;
     },
     glyphReplace(newValue) {
       player.options.confirmations.glyphReplace = newValue;
@@ -42,8 +47,14 @@ Vue.component("modal-confirmation-options", {
     glyphSacrifice(newValue) {
       player.options.confirmations.glyphSacrifice = newValue;
     },
+    harshAutoClean(newValue) {
+      player.options.confirmations.harshAutoClean = newValue;
+    },
     glyphUndo(newValue) {
       player.options.confirmations.glyphUndo = newValue;
+    },
+    resetCelestial(newValue) {
+      player.options.confirmations.resetCelestial = newValue;
     },
   },
   methods: {
@@ -54,24 +65,32 @@ Vue.component("modal-confirmation-options", {
       this.eternity = options.eternity;
       this.dilation = options.dilation;
       this.reality = options.reality;
-      this.harshAutoClean = options.harshAutoClean;
+      this.resetReality = options.resetReality;
       this.glyphReplace = options.glyphReplace;
       this.glyphSacrifice = options.glyphSacrifice;
-      this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
+      this.harshAutoClean = options.harshAutoClean;
       this.glyphUndo = options.glyphUndo;
+      this.resetCelestial = options.resetCelestial;
+
+      this.sacrificeUnlocked = PlayerProgress.infinityUnlocked() || player.dimensionBoosts >= 5 || player.galaxies > 0;
+      this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.glyphUndoUnlocked = Teresa.has(TERESA_UNLOCKS.UNDO);
+      this.resetCelestialUnlocked = Teresa.has(TERESA_UNLOCKS.RUN);
     }
   },
+  // TODO: Actually implement both Reset Reality and Reset Celestial, right now they're just useless
   template:
     `<modal-options @close="emitClose">
-      <on-off-button v-model="sacrifice" text="Sacrifice:"/>
+      <on-off-button v-if="sacrificeUnlocked" v-model="sacrifice" text="Sacrifice:"/>
       <on-off-button v-if="infinityUnlocked" v-model="challenges" text="Challenges:"/>
       <on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:"/>
       <on-off-button v-if="dilationUnlocked" v-model="dilation" text="Dilation:"/>
       <on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:"/>
-      <on-off-button v-if="realityUnlocked" v-model="harshAutoClean" text="Harsh auto clean:"/>
+      <on-off-button v-if="realityUnlocked" v-model="resetReality" text="Reset Reality:"/>
       <on-off-button v-if="realityUnlocked" v-model="glyphReplace" text="Glyph replace:"/>
       <on-off-button v-if="glyphSacrificeUnlocked" v-model="glyphSacrifice" text="Glyph Sacrifice:"/>
+      <on-off-button v-if="glyphSacrificeUnlocked" v-model="harshAutoClean" text="Harsh auto clean:"/>
       <on-off-button v-if="glyphUndoUnlocked" v-model="glyphUndo" text="Glyph undo:"/>
+      <on-off-button v-if="resetCelestialUnlocked" v-model="resetCelestial" text="Reset Celestial:"/>
     </modal-options>`
 });

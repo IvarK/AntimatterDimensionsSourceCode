@@ -565,10 +565,12 @@ let player = {
       eternity: true,
       dilation: true,
       reality: true,
-      harshAutoClean: true,
+      resetReality: true,
       glyphReplace: true,
       glyphSacrifice: true,
+      harshAutoClean: true,
       glyphUndo: true,
+      resetCelestial: true,
     },
     awayProgress: {
       antimatter: true,

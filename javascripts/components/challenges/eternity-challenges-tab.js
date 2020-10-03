@@ -147,8 +147,11 @@ Vue.component("eternity-challenges-tab", {
       <challenges-header/>
       <div>Complete Eternity Challenges again for a bigger reward, maximum of {{formatInt(5)}} times.</div>
       <div v-if="!unlockedCount === 12">
-        (You have unlocked {{formatInt(unlockedCount)}}
-        out of {{formatInt(12)}} Eternity Challenges)
+        (You have unlocked {{ formatInt(unlockedCount) }}
+        out of {{ formatInt(12) }} Eternity Challenges)
+      </div>
+      <div v-else>
+        You have unlocked all {{ formatInt(12) }} Eternity Challenges
       </div>
       <challenge-grid :count="12" :isChallengeVisible="isChallengeVisible">
         <eternity-challenge-box slot-scope="slotProps" :challengeId="slotProps.challengeId" />

@@ -80,7 +80,7 @@ GameDatabase.achievements.secret = [
     id: 26,
     name: "You're a failure",
     get description() {
-      return `Fail eternity challenges ${formatInt(10)} times without refreshing. 
+      return `Fail Eternity Challenges ${formatInt(10)} times without refreshing.
       What are you doing with your life...`;
     },
     checkRequirement: (function() {

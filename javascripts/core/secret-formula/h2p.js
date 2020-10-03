@@ -156,7 +156,7 @@ It will take time to get back to the production you previously had, but you will
 <br>
 <br>
 The Dimensional Sacrifice multiplier scales with the number of First Dimensions you had at the time of sacrifice,
-and the scaling can be improved by completing certain achievements and challenges. The multiplier is kept between
+and the scaling can be improved by completing certain Achievements and challenges. The multiplier is kept between
 sacrifices, meaning that sacrificing once at ${formatX(10)} and then once at ${formatX(4)} will be the same as
 ${formatX(8)} then ${formatX(5)}; in both cases you will end up with a total sacrifice multiplier of ${formatX(40)}.
 <br>
@@ -170,12 +170,12 @@ ${formatX(8)} then ${formatX(5)}; in both cases you will end up with a total sac
       name: "Achievements",
       // This one could use some work!
       info: () => `
-Each achievement has conditions that must be met before they are earned.
+Each Achievement has conditions that must be met before they are earned.
 Some are very simple, and some are significantly trickier.
 <br>
 <br>
-You will recieve a ${formatX(1.03, 2, 2)} multiplier to all Antimatter Dimensions for each completed achievement, as
-well as an additional ${formatX(1.25, 2, 2)} for each fully completed row. In addition, many achievements have their
+You will recieve a ${formatX(1.03, 2, 2)} multiplier to all Antimatter Dimensions for each completed Achievement, as
+well as an additional ${formatX(1.25, 2, 2)} for each fully completed row. In addition, many Achievements have their
 own rewards.
 `,
       isUnlocked: () => true,
@@ -408,7 +408,7 @@ from quadratic to cubic, with the ${formatX(1e55)} multiplier itself increasing 
       name: "Eternity",
       info: () => `
 Upon reaching ${formatPostBreak(Number.MAX_VALUE, 2)} IP, you can Eternity. Eternities will reset everything before this
-point except challenge times, achievements, and total antimatter. You will be able to access more content after your
+point except challenge times, Achievements, and total antimatter. You will be able to access more content after your
 first Eternity.
 <br>
 <br>
@@ -581,15 +581,15 @@ can be repeatedly purchased as many times as you can afford them.
       name: "Reality",
       info: () => `
 When you reach ${format(5e9)} time theorems, ${formatPostBreak(new Decimal("1e4000"))} EP, and have completed the first
-${formatInt(13)} rows of achievements, you will be able to purchase the Time Study that unlocks Reality.
+${formatInt(13)} rows of Achievements, you will be able to purchase the Time Study that unlocks Reality.
 Unlocking it opens a new tab, where you can find the button to make a new Reality. Starting a new Reality
 will reset everything you have done so far except challenge times and total antimatter, but in exchange gives
 you a new currency known as Reality Machines, a Glyph, and a Perk Point.
 <br>
 <br>
-Unlike the other resets so far, you also lose the first ${formatInt(13)} rows of achievements - that is, all of
-the pre-Reality achievements and all of their associated rewards. You need to re-do them in order to get their
-rewards again, but you will also passively unlock the next incomplete achievement every half hour without any
+Unlike the other resets so far, you also lose the first ${formatInt(13)} rows of Achievements - that is, all of
+the pre-Reality Achievements and all of their associated rewards. You need to re-do them in order to get their
+rewards again, but you will also passively unlock the next incomplete Achievement every half hour without any
 effort even if you otherwise don't have the requirements to do so. This also happens offline at the same rate.
 <br>
 <br>
@@ -943,13 +943,13 @@ to reach the IP cost again in order to take advantage of the raised cap in later
       alias: "V",
       info: () => `
 V is a special Celestial in the sense that they are not unlocked by another Celestial,
-but are instead unlocked by completing a certain achievement.
-They are unlocked by completing achievement ID 151 (row ${formatInt(15)}, column ${formatInt(1)},
+but are instead unlocked by completing a certain Achievement.
+They are unlocked by completing Achievement ID 151 (row ${formatInt(15)}, column ${formatInt(1)},
 "You really didn't need it anyway"), which requires you to get ${formatInt(800)} Antimatter Galaxies
 without buying 8th Antimatter Dimensions in your current Infinity.
 <br>
 <br>
-After being unlocked from the achievement, you are met with another set of requirements to fully unlock V.
+After being unlocked from the Achievement, you are met with another set of requirements to fully unlock V.
 You must have completed ${formatInt(GameDatabase.celestials.v.mainUnlock.realities)} Realities and have
 ${format(GameDatabase.celestials.v.mainUnlock.rm)} RM (which is not spent).
 Additionally you need to reach  ${format(GameDatabase.celestials.v.mainUnlock.eternities)} Eternities,
@@ -960,18 +960,18 @@ ${format(GameDatabase.celestials.v.mainUnlock.replicanti)} Replicanti, all in th
 <br>
 When you meet all of those requirements, you will be able to access V's Reality. However, completing the
 Reality itself is only the beginning. V has six different requirements, each of which require you to make a
-certain amount of progress within V's Reality. Completing a requirement rewards you with a V-achievement.
-V-achievements are permanent and persist after exiting V's reality, and do not all need to be done simultaneously.
+certain amount of progress within V's Reality. Completing a requirement rewards you with a V-Achievement.
+V-Achievements are permanent and persist after exiting V's reality, and do not all need to be done simultaneously.
 <br>
 <br>
-After completing the requirement, the V-achievement threshold then increases and can be completed again
-if you can reach the new goal.  You can complete each category of V-achievement up to six times.
-Completed V-achievements do two things:
+After completing the requirement, the V-Achievement threshold then increases and can be completed again
+if you can reach the new goal.  You can complete each category of V-Achievement up to six times.
+Completed V-Achievements do two things:
 <br>
-- Upon reaching certain totals of V-achievements, you automatically unlock upgrades on the V tab without needing
+- Upon reaching certain totals of V-Achievements, you automatically unlock upgrades on the V tab without needing
 to spend any resources.
 <br>
-- Each V-achievement also gives you one Space Theorem.
+- Each V-Achievement also gives you one Space Theorem.
 <br>
 <br>
 Space Theorems allow you to purchase Time Studies which are normally forbidden, such as multiple paths in the
@@ -980,7 +980,7 @@ Theorems, they are freely given back every time you respec your studies.
 With enough Space Theorems you will eventually be able to purchase every single Time Study at once!
 <br>
 <br>
-Reaching ${formatInt(36)} V-achievements (and therefore completing all of V's achievements) unlocks the next Celestial.
+Reaching ${formatInt(36)} V-Achievements (and therefore completing all of V's Achievements) unlocks the next Celestial.
 `,
       isUnlocked: () => Achievement(151).isUnlocked,
       tags: ["reality", "lategame", "endgame", "girlfriend", "challenges", "achievement", "space", "theorems",
@@ -990,7 +990,7 @@ Reaching ${formatInt(36)} V-achievements (and therefore completing all of V's ac
       name: "Ra, Celestial of the Forgotten",
       alias: "Ra",
       info: () => `
-Ra is the fifth Celestial, unlocked by fully completing all of V's achievements. They bring back mechanics from
+Ra is the fifth Celestial, unlocked by fully completing all of V's Achievements. They bring back mechanics from
 older Celestials in a stronger way, by using their memories. Over time, you will unlock the previous four
 Celestials <i>within</i> Ra, with each Celestial offering additional upgrades related to their original themes.
 <br>
@@ -1027,7 +1027,7 @@ ${Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK)
 V unlocks
 ${Ra.has(RA_UNLOCKS.V_UNLOCK)
   ? "Triad Studies, which are Time Studies near the bottom of the tree which cost Space Theorems. " +
-    "They also unlock a smaller set of more difficult V achievements to complete for additional Space Theorems."
+    "They also unlock a smaller set of more difficult V Achievements to complete for additional Space Theorems."
   : "<div style='color: var(--color-bad);'>(unlock V within Ra to see this text)</div>"}
 <br>
 <br>

@@ -83,7 +83,7 @@ Vue.component("normal-achievements-tab", {
           v-if="showAutoAchieve"
           v-model="isAutoAchieveActive"
           class="o-primary-btn--subtab-option"
-          text="Auto achievements:"
+          text="Auto Achievements:"
         />
       </div>
       <div class="c-achievements-tab__header">
@@ -93,7 +93,7 @@ Vue.component("normal-achievements-tab", {
         </span>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">
-        Automatically gain the next missing achievement in {{timeDisplayNoDecimals(achCountdown)}}.
+        Automatically gain the next missing Achievement in {{timeDisplayNoDecimals(achCountdown)}}.
         (left-to-right, top-to-bottom)
       </div>
       <div class="l-achievement-grid">

@@ -28,7 +28,7 @@ Vue.component("dilation-time-study", {
       if (player.realities > 0) {
         this.requirement = `Requirement: ${format("1e4000")} Eternity Points`;
       } else {
-        this.requirement = `Requirement: ${format("1e4000")} Eternity Points and ${formatInt(13)} rows of achievements`;
+        this.requirement = `Requirement: ${format("1e4000")} Eternity Points and ${formatInt(13)} rows of Achievements`;
       }
       this.showRequirement = true;
     }

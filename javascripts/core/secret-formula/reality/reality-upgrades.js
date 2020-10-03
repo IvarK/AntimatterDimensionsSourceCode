@@ -88,11 +88,11 @@ GameDatabase.reality.upgrades = (function() {
       name: "Paradoxically Attain",
       id: 8,
       cost: 15,
-      requirement: "Get to Eternity without any automatic achievements",
+      requirement: "Get to Eternity without any automatic Achievements",
       hasFailed: () => player.reality.gainedAutoAchievements,
       checkRequirement: () => !player.reality.gainedAutoAchievements,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
-      description: "Tachyon Particle gain is boosted based on achievement multiplier",
+      description: "Tachyon Particle gain is boosted based on Achievement multiplier",
       effect: () => Math.sqrt(Achievements.power),
       formatEffect: value => formatX(value, 2, 2)
     },

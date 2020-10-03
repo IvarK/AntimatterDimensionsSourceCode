@@ -49,7 +49,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     achievementMult: {
       id: "achievementMult",
       cost: 1e6,
-      description: "Antimatter Dimensions gain a multiplier based on achievements completed",
+      description: "Additional multiplier to Antimatter Dimensions based on Achievements completed",
       effect: () => Math.max(Math.pow((Achievements.effectiveCount - 30), 3) / 40, 1),
       formatEffect: value => formatX(value, 2, 2)
     },

@@ -211,8 +211,8 @@ function askEternityConfirmation() {
     if (!player.options.confirmations.eternity) {
         return true;
     }
-    const message = "Eternity will reset everything except achievements and challenge records. " +
-        "You will also gain an Eternity point and unlock various upgrades.";
+    const message = "Eternity will reset everything except Achievements and challenge records. " +
+        "You will also gain an Eternity Point and unlock various upgrades.";
     return confirm(message);
 }
 

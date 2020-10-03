@@ -160,9 +160,9 @@ Vue.component("v-tab", {
           <br>
           Cursed glyphs can be created in the Effarig tab, and the Black Hole can now be used to slow down time.
           <br>
-          Each hard V-achievement will award {{ formatInt(2) }} Space Theorems instead of {{ formatInt(1) }}.
+          Each hard V-Achievement will award {{ formatInt(2) }} Space Theorems instead of {{ formatInt(1) }}.
           <br>
-          Goal reduction is significantly more expensive for hard V-achievements.
+          Goal reduction is significantly more expensive for hard V-Achievements.
         </div>
         <div v-if="showReduction" class="c-v-info-text">
           You have {{ format(pp, 2, 0) }} {{ "Perk Point" | pluralize(pp) }}.
@@ -219,11 +219,11 @@ Vue.component("v-tab", {
           </li>
         </div>
         <div class="c-v-info-text">
-          V-achievements can only be completed within V's Reality, but are permanent and do not reset upon leaving
+          V-Achievements can only be completed within V's Reality, but are permanent and do not reset upon leaving
           and re-entering the Reality.
         </div>
         <div class="c-v-info-text">
-          You have {{ formatInt(totalUnlocks) }} V-achievements done.
+          You have {{ formatInt(totalUnlocks) }} V-Achievements done.
           You gain {{ formatInt(1) }} Space Theorem for each completion,
           allowing you to purchase Time Studies which are normally locked.
         </div>

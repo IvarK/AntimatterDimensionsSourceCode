@@ -562,7 +562,7 @@ GameDatabase.celestials.navigation = (function() {
             if (complete >= 1) return "V's Reality";
             const galaxies = player.noEighthDimensions ? player.galaxies : 0;
             return [
-              "V's unlock achievement",
+              "V's unlock Achievement",
               `Reach ${formatInt(galaxies)} / ${formatInt(goal)} Antimatter Galaxies without buying`,
               "8th Antimatter Dimensions in your current Infinity"
             ];
@@ -836,10 +836,10 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const name = VRunUnlocks.all[1].config.name;
-            if (complete >= 1) return `V-achievement "${name}"`;
+            if (complete >= 1) return `V-Achievement "${name}"`;
             const completions = player.celestials.v.runUnlocks[1];
             return [
-              "V-achievement",
+              "V-Achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },
@@ -872,10 +872,10 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const name = VRunUnlocks.all[3].config.name;
-            if (complete >= 1) return `V-achievement "${name}"`;
+            if (complete >= 1) return `V-Achievement "${name}"`;
             const completions = player.celestials.v.runUnlocks[3];
             return [
-              "V-achievement",
+              "V-Achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },
@@ -908,10 +908,10 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const name = VRunUnlocks.all[5].config.name;
-            if (complete >= 1) return `V-achievement "${name}"`;
+            if (complete >= 1) return `V-Achievement "${name}"`;
             const completions = player.celestials.v.runUnlocks[5];
             return [
-              "V-achievement",
+              "V-Achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },
@@ -944,10 +944,10 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const name = VRunUnlocks.all[4].config.name;
-            if (complete >= 1) return `V-achievement "${name}"`;
+            if (complete >= 1) return `V-Achievement "${name}"`;
             const completions = player.celestials.v.runUnlocks[4];
             return [
-              "V-achievement",
+              "V-Achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },
@@ -980,10 +980,10 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const name = VRunUnlocks.all[2].config.name;
-            if (complete >= 1) return `V-achievement "${name}"`;
+            if (complete >= 1) return `V-Achievement "${name}"`;
             const completions = player.celestials.v.runUnlocks[2];
             return [
-              "V-achievement",
+              "V-Achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },
@@ -1016,10 +1016,10 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             const name = VRunUnlocks.all[0].config.name;
-            if (complete >= 1) return `V-achievement "${name}"`;
+            if (complete >= 1) return `V-Achievement "${name}"`;
             const completions = player.celestials.v.runUnlocks[0];
             return [
-              "V-achievement",
+              "V-Achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
             ];
           },

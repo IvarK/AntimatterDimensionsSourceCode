@@ -4,7 +4,7 @@ GameDatabase.achievements.secret = [
   {
     id: 11,
     name: "The first one's always free",
-    description: "Click on this achievement."
+    description: "Click on this Achievement."
   },
   {
     id: 12,

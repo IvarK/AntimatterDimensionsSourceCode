@@ -77,7 +77,7 @@ class VRunUnlockState extends GameMechanicState {
       Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
         if (!V.isFlipped && this.config.isHard) continue;
         this.completions++;
-        GameUI.notify.success(`You have unlocked V-achievement '${this.config.name}' tier ${this.completions}`);
+        GameUI.notify.success(`You have unlocked V-Achievement '${this.config.name}' tier ${this.completions}`);
         V.updateTotalRunUnlocks();
     }
   }
@@ -114,14 +114,14 @@ const V_UNLOCKS = {
   },
   SHARD_REDUCTION: {
     id: 1,
-    reward: () => `You can spend perk points to reduce V-achievement requirements for later tiers.`,
-    get description() { return `Have ${formatInt(2)} V-achievements`; },
+    reward: () => `You can spend perk points to reduce V-Achievement requirements for later tiers.`,
+    get description() { return `Have ${formatInt(2)} V-Achievements`; },
     requirement: () => V.spaceTheorems >= 2
   },
   ND_POW: {
     id: 2,
     reward: "Antimatter Dimension power based on Space Theorems.",
-    get description() { return `Have ${formatInt(5)} V-achievements`; },
+    get description() { return `Have ${formatInt(5)} V-Achievements`; },
     effect: () => 1 + Math.sqrt(V.spaceTheorems) / 100,
     format: x => formatPow(x, 3, 3),
     requirement: () => V.spaceTheorems >= 5
@@ -129,7 +129,7 @@ const V_UNLOCKS = {
   FAST_AUTO_EC: {
     id: 3,
     reward: "Achievement multiplier affects Auto-EC completion time.",
-    get description() { return `Have ${formatInt(10)} V-achievements`; },
+    get description() { return `Have ${formatInt(10)} V-Achievements`; },
     effect: () => Achievements.power,
     // Base rate is 60 ECs at 20 minutes each
     format: x => `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort(false)} for full completion`,
@@ -138,13 +138,13 @@ const V_UNLOCKS = {
   AUTO_AUTOCLEAN: {
     id: 4,
     reward: "Unlock the ability to Auto Purge on Reality.",
-    get description() { return `Have ${formatInt(16)} V-achievements`; },
+    get description() { return `Have ${formatInt(16)} V-Achievements`; },
     requirement: () => V.spaceTheorems >= 16
   },
   ACHIEVEMENT_BH: {
     id: 5,
     reward: "Achievement multiplier affects Black Hole power.",
-    get description() { return `Have ${formatInt(30)} V-achievements`; },
+    get description() { return `Have ${formatInt(30)} V-Achievements`; },
     effect: () => Achievements.power,
     format: x => formatX(x, 2, 0),
     requirement: () => V.spaceTheorems >= 30
@@ -152,7 +152,7 @@ const V_UNLOCKS = {
   RA_UNLOCK: {
     id: 6,
     reward: "Reduce the Space Theorem cost of studies by 2. Unlock Ra, Celestial of the Forgotten.",
-    get description() { return `Have ${formatInt(36)} V-achievements`; },
+    get description() { return `Have ${formatInt(36)} V-Achievements`; },
     requirement: () => V.spaceTheorems >= 36
   }
 };

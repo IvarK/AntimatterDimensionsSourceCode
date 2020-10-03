@@ -390,8 +390,8 @@ GameDatabase.reality.perks = {
     label: "ACH1",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the achievement timer to ${formatInt(20)} minutes per
-        achievement (${formatInt(10)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(20)} minutes per
+        Achievement (${formatInt(10)} minute decrease).`;
     },
     effect: 10
   },
@@ -400,8 +400,8 @@ GameDatabase.reality.perks = {
     label: "ACH2",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the achievement timer to ${formatInt(14)} minutes per
-        achievement (${formatInt(6)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(14)} minutes per
+        Achievement (${formatInt(6)} minute decrease).`;
     },
     effect: 6
   },
@@ -410,8 +410,8 @@ GameDatabase.reality.perks = {
     label: "ACH3",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the achievement timer to ${formatInt(9)} minutes per
-        achievement (${formatInt(5)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(9)} minutes per
+        Achievement (${formatInt(5)} minute decrease).`;
     },
     effect: 5
   },
@@ -420,8 +420,8 @@ GameDatabase.reality.perks = {
     label: "ACH4",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the achievement timer to ${formatInt(5)} minutes per
-        achievement (${formatInt(4)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(5)} minutes per
+        Achievement (${formatInt(4)} minute decrease).`;
     },
     effect: 4
   },
@@ -430,8 +430,8 @@ GameDatabase.reality.perks = {
     label: "ACH5",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the achievement timer to ${formatInt(2)} minutes per
-        achievement (${formatInt(3)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(2)} minutes per
+        Achievement (${formatInt(3)} minute decrease).`;
     },
     effect: 3
   },
@@ -439,7 +439,7 @@ GameDatabase.reality.perks = {
     id: 206,
     label: "ACHNR",
     family: PERK_FAMILY.ACHIEVEMENT,
-    description: "Reality no longer resets your achievements.",
+    description: "Reality no longer resets your Achievements.",
     effect: 2
   }
 };

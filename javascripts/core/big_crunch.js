@@ -34,13 +34,15 @@ function bigCrunchResetRequest(disableAnimation = false) {
 function bigCrunchReset() {
   if (!Player.canCrunch) return;
 
+  const firstInfinity = !PlayerProgress.infinityUnlocked();
+
   bigCrunchUpdateStatistics();
 
   const infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
 
-  bigCrunchTabChange();
+  bigCrunchTabChange(firstInfinity);
   bigCrunchReplicanti();
   bigCrunchCheckUnlocks();
 
@@ -76,13 +78,13 @@ function bigCrunchUpdateStatistics() {
   player.usedMaxAll = false;
 }
 
-function bigCrunchTabChange() {
+function bigCrunchTabChange(firstInfinity) {
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
   handleChallengeCompletion();
 
-  if (player.infinityPoints.lte(10) && !PlayerProgress.eternityUnlocked()) {
+  if (firstInfinity) {
     Tab.infinity.upgrades.show();
   } else if (earlyGame || (challenge && !player.options.retryChallenge)) {
     Tab.dimensions.antimatter.show();

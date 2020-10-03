@@ -33,6 +33,21 @@ function bigCrunchResetRequest(disableAnimation = false) {
 
 function bigCrunchReset() {
   if (!Player.canCrunch) return;
+
+  bigCrunchUpdateStatistics();
+
+  const infinityPoints = gainedInfinityPoints();
+  player.infinityPoints = player.infinityPoints.plus(infinityPoints);
+  player.infinitied = player.infinitied.plus(gainedInfinities().round());
+
+  bigCrunchTabChange();
+  bigCrunchReplicanti();
+  bigCrunchCheckUnlocks();
+
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
+}
+
+function bigCrunchUpdateStatistics() {
   player.bestIPminThisEternity = player.bestIPminThisEternity.clampMin(player.bestIPminThisInfinity);
   player.bestIPminThisInfinity = new Decimal(0);
 
@@ -40,18 +55,15 @@ function bigCrunchReset() {
     gainedInfinities().round().dividedBy(player.thisInfinityRealTime)
   );
 
-  const earlyGame = player.bestInfinityTime > 60000 && !player.break;
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
-  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
-  handleChallengeCompletion();
-
-  if (earlyGame || (challenge && !player.options.retryChallenge)) {
-    Tab.dimensions.antimatter.show();
-  }
   const infinityPoints = gainedInfinityPoints();
-  player.infinityPoints = player.infinityPoints.plus(infinityPoints);
-  addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints, gainedInfinities().round());
-  player.infinitied = player.infinitied.plus(gainedInfinities().round());
+
+  addInfinityTime(
+    player.thisInfinityTime,
+    player.thisInfinityRealTime,
+    infinityPoints,
+    gainedInfinities().round()
+  );
+
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
   player.bestInfinityRealTime = Math.min(player.bestInfinityRealTime, player.thisInfinityRealTime);
 
@@ -62,9 +74,22 @@ function bigCrunchReset() {
     player.bestIpPerMsWithoutMaxAll = Decimal.max(bestIpPerMsWithoutMaxAll, player.bestIpPerMsWithoutMaxAll);
   }
   player.usedMaxAll = false;
+}
 
-  if (EternityChallenge(4).tryFail()) return;
+function bigCrunchTabChange() {
+  const earlyGame = player.bestInfinityTime > 60000 && !player.break;
+  const challenge = NormalChallenge.current || InfinityChallenge.current;
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
+  handleChallengeCompletion();
 
+  if (player.infinitied.eq(1) && !PlayerProgress.realityUnlocked()) {
+    Tab.infinity.upgrades.show();
+  } else if (earlyGame || (challenge && !player.options.retryChallenge)) {
+    Tab.dimensions.antimatter.show();
+  }
+}
+
+function bigCrunchReplicanti() {
   const currentReplicanti = player.replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
   secondSoftReset(true);
@@ -77,10 +102,15 @@ function bigCrunchReset() {
   if (TimeStudy(33).isBought) {
     remainingGalaxies += Math.floor(currentReplicantiGalaxies / 2);
   }
-
   // I don't think this Math.clampMax is technically needed, but if we add another source
   // of keeping Replicanti Galaxies then it might be.
   player.replicanti.galaxies = Math.clampMax(remainingGalaxies, currentReplicantiGalaxies);
+
+  autoBuyReplicantiUpgrades();
+}
+
+function bigCrunchCheckUnlocks() {
+  if (EternityChallenge(4).tryFail()) return;
 
   if (EternityMilestone.autobuyerID(1).isReached &&
       !EternityChallenge(8).isRunning &&
@@ -94,14 +124,10 @@ function bigCrunchReset() {
     }
   }
 
-  autoBuyReplicantiUpgrades();
-
   if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
     EffarigUnlock.infinity.unlock();
     beginProcessReality(getRealityProps(true));
   }
-  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
-
 }
 
 function secondSoftReset(forcedNDReset = false) {

@@ -15,8 +15,8 @@ Vue.component("modal-enter-dilation", {
     message() {
         return `Dilating time will start a new Eternity, and all of your Dimension/Infinity
         Dimension/Time Dimension multiplier's exponents and Tickspeed multiplier's exponent will be reduced to
-        ^ ${format(0.75, 2, 2)}. If you can Eternity while Dilated, 
-        you'll be rewarded with Tachyon Particles based on your antimatter and Tachyon Particles.`; 
+        ^ ${format(0.75, 2, 2)}. If you can Eternity while Dilated,
+        you'll be rewarded with Tachyon Particles based on your antimatter and Tachyon Particles.`;
 },
     entranceLabel() {
       return `You are about to enter Dilation`;
@@ -58,7 +58,7 @@ Vue.component("modal-enter-dilation", {
           @click="handleNoClick"
         >Cancel</primary-button>
         <primary-button
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >Enter</primary-button>
         </div>

@@ -27,11 +27,11 @@ Vue.component("modal-ui-choice", {
       </div>
       <primary-button
         class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleYesClick"
-      >Yes</primary-button>
-      <primary-button
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
         @click="handleNoClick"
       >No</primary-button>
+      <primary-button
+        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+        @click="handleYesClick"
+      >Yes</primary-button>
     </div>`
 });

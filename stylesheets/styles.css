@@ -4984,6 +4984,14 @@ screen and (max-width: 480px) {
   right: -0.5rem;
 }
 
+.c-modal__confirm-btn {
+  background-color: var(--color-good) !important;
+}
+
+.c-modal__confirm-btn:hover {
+  background-color: var(--color-good-dark) !important;
+}
+
 /*#region themes*/
 
 /*#region t-dark t-dark-metro*/
@@ -5067,6 +5075,27 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion c-modal-message*/
+
+/*#region c-modal-hard-reset*/
+
+.c-modal-hard-reset-danger {
+  color: var(--color-bad);
+  font-weight: bold;
+}
+
+.c-modal-hard-reset-btn {
+  margin-top: 0.3rem;
+}
+
+.c-modal-hard-reset-info > div {
+  margin-top: 0.2rem;
+}
+
+.c-modal-hard-reset__input {
+  width: 45rem;
+}
+
+/*#endregion c-modal-hard-reset*/
 
 /*#region c-modal-away-progress*/
 

@@ -56,7 +56,7 @@ Vue.component("modal-away-progress", {
     },
     celestialMemoriesShown() {
       for (const petName in this.before.celestials.ra.pets) {
-        if (this.after.celestials.ra.pets[petName].level > this.before.celestials.ra.pets[petName].level &&
+        if (this.after.celestials.ra.pets[petName].exp > this.before.celestials.ra.pets[petName].exp &&
             player.options.awayProgress.celestialMemories) return true;
       }
     return false;
@@ -162,29 +162,29 @@ Vue.component("modal-away-progress", {
           <span v-if="after.celestials.ra.pets.teresa.level > before.celestials.ra.pets.teresa.level">
           <b class="c-modal-away-progress__teresa">Teresa's Celestial Memory</b> increased from
           <br>
-          level {{ formatInt(before.celestials.ra.pets.teresa.level) }} to
-          level {{ formatInt(after.celestials.ra.pets.teresa.level) }}
+          memories {{ format(before.celestials.ra.pets.teresa.level) }} to
+          memories {{ format(after.celestials.ra.pets.teresa.level) }}
           <br>
           </span>
           <span v-if="after.celestials.ra.pets.effarig.level > before.celestials.ra.pets.effarig.level">
           <b class="c-modal-away-progress__effarig">Effarig's Celestial Memory</b> increased from
           <br>
-          level {{ formatInt(before.celestials.ra.pets.effarig.level) }} to
-          level {{ formatInt(after.celestials.ra.pets.effarig.level) }}
+          memories {{ format(before.celestials.ra.pets.effarig.level) }} to
+          memories {{ format(after.celestials.ra.pets.effarig.level) }}
           <br>
           </span>
           <span v-if="after.celestials.ra.pets.enslaved.level > before.celestials.ra.pets.enslaved.level">
           <b class="c-modal-away-progress__enslaved">Enslaved's Celestial Memory</b> increased from
           <br>
-          level {{ formatInt(before.celestials.ra.pets.enslaved.level) }} to
-          level {{ formatInt(after.celestials.ra.pets.enslaved.level) }}
+          memories {{ format(before.celestials.ra.pets.enslaved.level) }} to
+          memories {{ format(after.celestials.ra.pets.enslaved.level) }}
           <br>
           </span>
           <span v-if="after.celestials.ra.pets.v.level > before.celestials.ra.pets.v.level">
           <b class="c-modal-away-progress__v">V's Celestial Memory</b> increased from
           <br>
-          level {{ formatInt(before.celestials.ra.pets.v.level) }} to
-          level {{ formatInt(after.celestials.ra.pets.v.level) }}
+          memories {{ format(before.celestials.ra.pets.v.level) }} to
+          memories {{ format(after.celestials.ra.pets.v.level) }}
           </span>
         </div>
         <div v-if="blackHoleShown">

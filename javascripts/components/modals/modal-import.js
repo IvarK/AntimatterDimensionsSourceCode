@@ -31,7 +31,7 @@ Vue.component("modal-import", {
       </div>
       <primary-button
         v-if="inputIsValid"
-        class="o-primary-btn--width-medium c-modal-import__import-btn"
+        class="o-primary-btn--width-medium c-modal-import__import-btn c-modal__confirm-btn"
         @click="importSave"
       >Import</primary-button>
     </div>`,

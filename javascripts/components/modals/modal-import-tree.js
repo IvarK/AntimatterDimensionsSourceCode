@@ -178,7 +178,7 @@ Vue.component("modal-import-tree", {
       </div>
       <primary-button
         v-if="inputIsValid"
-        class="o-primary-btn--width-medium c-modal-import-tree__import-btn"
+        class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
         @click="importTree"
       >Import</primary-button>
     </div>`

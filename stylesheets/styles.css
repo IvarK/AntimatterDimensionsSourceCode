@@ -2900,8 +2900,7 @@ screen and (max-width: 480px) {
   margin-top: 0.6rem;
   width: 60rem;
   position: relative;
-  display: flex;
-  flex-direction: row;
+  display: inline;
   justify-content: center;
   user-select: none;
 }

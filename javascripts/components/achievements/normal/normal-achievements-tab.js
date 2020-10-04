@@ -4,14 +4,18 @@ Vue.component("normal-achievements-tab", {
   data() {
     return {
       achievementPower: 0,
+      achPowerWithBreak: 0,
+      achTPeffect: 0,
       achCountdown: 0,
       showAutoAchieve: false,
       isAutoAchieveActive: false,
       hideCompletedRows: false,
       isCancer: 0,
+      achMultBreak: false,
       achMultToIDS: false,
       achMultToTDS: false,
       achMultToBH: false,
+      achMultToTP: false,
       canSwapImages: false
     };
   },
@@ -21,14 +25,30 @@ Vue.component("normal-achievements-tab", {
       return Theme.current().name === "S4" || this.isCancer ? "😂" : ".";
     },
     achievementMultiplierText() {
-      let text = "Current achievement multiplier to ";
-      if (this.achMultToIDS && this.achMultToTDS && this.achMultToBH)
-        text += "Black Hole power, Antimatter, Infinity, and Time";
-      else if (this.achMultToTDS && this.achMultToIDS) text += "Antimatter, Infinity, and Time";
-      else if (this.achMultToTDS) text += "Antimatter and Time";
-      else if (this.achMultToIDS) text += "Antimatter and Infinity";
-      else text += "Antimatter";
-      text += " Dimensions:";
+      let text = `Your Achievements provide a multiplier to`;
+
+      if (this.achMultBreak) {
+        text += `<br>Antimatter Dimensions: ${formatX(this.achPowerWithBreak, 2, 3)}`;
+      } else {
+        text += `<br>Antimatter Dimensions: ${formatX(this.achievementPower, 2, 3)}`;
+      }
+
+      if (this.achMultToIDS && !this.achMultToTDS) {
+        text += `<br>Infinity Dimensions: ${formatX(this.achievementPower, 2, 3)}`;
+      } else if (this.achMultToTDS && !this.achMultToIDS) {
+        text += `<br>Time Dimensions: ${formatX(this.achievementPower, 2, 3)}`;
+      } else if (this.achMultToIDS && this.achMultToTDS) {
+        text += `<br>Infinity and Time Dimensions: ${formatX(this.achievementPower, 2, 3)}`;
+      }
+
+      if (this.achMultToTP) {
+        text += `<br>Tachyon Particles: ${formatX(this.achTPeffect, 2, 3)}`;
+      }
+
+      if (this.achMultToBH) {
+        text += `<br>Black Hole Power: ${formatX(this.achievementPower, 2, 3)}`;
+      }
+
       return text;
     },
     imageSwapperStyleObject() {
@@ -49,13 +69,17 @@ Vue.component("normal-achievements-tab", {
   methods: {
     update() {
       this.achievementPower = Achievements.power;
+      this.achPowerWithBreak = BreakInfinityUpgrade.achievementMult.config.effect() * Achievements.power;
+      this.achTPeffect = RealityUpgrade(8).config.effect();
       this.achCountdown = Achievements.timeToNextAutoAchieve() / getGameSpeedupFactor();
       this.showAutoAchieve = player.realities > 0 && !Perk.achievementGroup6.isBought;
       this.isAutoAchieveActive = player.reality.autoAchieve;
       this.hideCompletedRows = player.options.hideCompletedAchievementRows;
       this.isCancer = player.secretUnlocks.cancerAchievements;
+      this.achMultBreak = BreakInfinityUpgrade.achievementMult.canBeApplied;
       this.achMultToIDS = Achievement(75).isUnlocked;
       this.achMultToTDS = EternityUpgrade.tdMultAchs.isBought;
+      this.achMultToTP = RealityUpgrade(8).isBought;
       this.achMultToBH = V.has(V_UNLOCKS.ACHIEVEMENT_BH);
       this.canSwapImages = Themes.available().find(v => v.name === "S4") !== undefined && Theme.current().name !== "S4";
     },
@@ -87,10 +111,8 @@ Vue.component("normal-achievements-tab", {
         />
       </div>
       <div class="c-achievements-tab__header">
-        <span>
-          {{ achievementMultiplierText }} {{ formatX(achievementPower, 2, 3) }}<span 
-          @click="swapImages()" :style="imageSwapperStyleObject">{{ swapImagesButton }}</span>
-        </span>
+        <span v-html="achievementMultiplierText" /><span
+        @click="swapImages()" :style="imageSwapperStyleObject">{{ swapImagesButton }}</span>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">
         Automatically gain the next missing Achievement in {{timeDisplayNoDecimals(achCountdown)}}.

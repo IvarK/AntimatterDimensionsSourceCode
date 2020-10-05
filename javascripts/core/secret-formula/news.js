@@ -1194,7 +1194,6 @@ GameDatabase.news = [
       const diss = disses.randomElement();
       return `Only ${format(Currency.antimatter.value, 2, 0)} antimatter? ${diss}`;
     },
-    dynamic: true
   },
   {
     id: "a212",

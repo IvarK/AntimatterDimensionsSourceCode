@@ -149,10 +149,10 @@ GameDatabase.celestials.navigation = (function() {
             const cost = TERESA_UNLOCKS.SHOP.price;
             return [
               "Perk Point Shop",
-              `Pour ${format(rm, 2)} / ${format(cost, 2)} RM`
+              `Pour ${format(rm, 2)} / ${format(cost, 2)} Reality Machines`
             ];
           },
-          angle: -135,
+          angle: -35,
           diagonal: 16,
           horizontal: 16,
         },

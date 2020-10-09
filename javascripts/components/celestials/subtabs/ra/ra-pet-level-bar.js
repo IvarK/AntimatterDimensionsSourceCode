@@ -11,6 +11,7 @@ Vue.component("ra-pet-level-bar", {
       level: 0,
       exp: 0,
       requiredExp: 0,
+      nextLevelEstimate: 0,
     };
   },
   computed: {
@@ -113,18 +114,33 @@ Vue.component("ra-pet-level-bar", {
       this.exp = pet.exp;
       this.level = pet.level;
       this.requiredExp = pet.requiredExp;
+      this.nextLevelEstimate = this.timeToGoalString((this.requiredExp - this.exp));
     },
     isImportant(level) {
       return this.importantLevels.includes(level);
-    }
+    },
+    timeToGoalString(expToGain) {
+      const pet = this.pet;
+      // Quadratic formula for growth (uses constant growth for a = 0)
+      const a = Ra.productionPerMemoryChunk() * pet.memoryUpgradeCurrentMult * pet.memoryChunksPerSecond / 2;
+      const b = Ra.productionPerMemoryChunk() * pet.memoryUpgradeCurrentMult * pet.memoryChunks;
+      const c = -expToGain;
+      const estimate = a === 0
+        ? -c / b
+        : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
+      if (Number.isFinite(estimate)) {
+        return TimeSpan.fromSeconds(estimate).toStringShort();
+      }
+      return "never";
+    },
   },
   template: `
     <div class="l-ra-bar-container">
       <div class="c-ra-exp-bar">
         <div class="c-ra-exp-bar-inner" :style="barStyle"></div>
       </div>
-      <div 
-        :class="classObject" 
+      <div
+        :class="classObject"
         @click="pet.levelUp()"
       >
         <span class="fas fa-arrow-up"></span>
@@ -135,6 +151,10 @@ Vue.component("ra-pet-level-bar", {
             <div v-if="showNextScalingUpgrade" :style="{ 'margin-top': nextUnlock.reward ? '0.6rem' : '0' }">
               {{ nextScalingUpgrade }}
             </div>
+          </div>
+          <div class="c-ra-pet-upgrade__tooltip__footer">
+            {{ format(requiredExp, 2, 2) }} Memories
+            <span v-if="exp <= requiredExp">in {{ nextLevelEstimate }}</span>
           </div>
         </div>
       </div>

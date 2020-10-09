@@ -70,10 +70,10 @@ Vue.component("infinity-dim-tab", {
     <div>
       <p>
         You have
-        <span class="c-infinity-dim-description__accent">{{format(infinityPower, 2, 1)}}</span> Infinity Power,
-        translated to a
+        <span class="c-infinity-dim-description__accent">{{format(infinityPower, 2, 1)}}</span> Infinity Power,<br>
+        increased by <span class="c-infinity-dim-description__accent">^{{ format(conversionRate, 2, 3) }}</span> to a
         <span class="c-infinity-dim-description__accent">{{formatX(dimMultiplier, 2, 1)}}</span>
-        multiplier on all Antimatter Dimensions (^{{ format(conversionRate, 2, 3) }}).
+        multiplier on all Antimatter Dimensions.
       </p>
     </div>
     <div class="l-infinity-dim-tab__enslaved-reward-container" v-if="enslavedCompleted">

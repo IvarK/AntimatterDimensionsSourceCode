@@ -237,7 +237,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "effarig-infinity": {
-      visible: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
+      visible: () => Effarig.run.isUnlocked,
       complete: () => {
         if (EffarigUnlock.infinity.isUnlocked) return 1;
         if (!Effarig.isRunning) return 0;
@@ -256,6 +256,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Effarig's Infinity";
+            if (complete === 0) return "Unlock Effarig's Reality";
             const am = Effarig.isRunning ? Currency.antimatter.value : 0;
             return [
               "Effarig's Infinity",

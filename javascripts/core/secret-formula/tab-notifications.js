@@ -116,7 +116,7 @@ GameDatabase.tabNotifications = {
         tab: "hole"
       }
     ],
-    condition: () => player.reality.realityMachines.gte(100),
+    condition: () => !BlackHoles.areUnlocked && player.reality.realityMachines.gte(100),
     events: [GAME_EVENT.REALITY_RESET_AFTER]
   },
   automatorUnlock: {
@@ -127,7 +127,22 @@ GameDatabase.tabNotifications = {
         tab: "automator"
       }
     ],
-    condition: () => player.realities >= 5,
+    condition: () => player.realities === 5,
     events: [GAME_EVENT.REALITY_RESET_AFTER]
+  },
+  teresaUnlock: {
+    id: 10,
+    tabsToHighLight: [
+      {
+        parent: "celestials",
+        tab: "navigation"
+      },
+      {
+        parent: "celestials",
+        tab: "teresa"
+      }
+    ],
+    condition: () => player.celestials.teresa.rmStore !== 0 && RealityUpgrades.allBought,
+    events: [GAME_EVENT.REALITY_UPGRADE_BOUGHT]
   },
 };

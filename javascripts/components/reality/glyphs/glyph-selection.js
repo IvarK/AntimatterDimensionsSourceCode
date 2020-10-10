@@ -4,7 +4,7 @@ Vue.component("modal-glyph-selection", {
   data() {
     return {
       glyphs: GlyphSelection.glyphs.map(GlyphGenerator.copy),
-      canTrashGlyphs: false,
+      canSacrifice: false,
       levelDifference: 0,
     };
   },
@@ -24,8 +24,8 @@ Vue.component("modal-glyph-selection", {
         currentGlyph.level = newGlyph.level;
         currentGlyph.effects = newGlyph.effects;
       }
-      this.canTrashGlyphs = RealityUpgrades.allBought;
       this.levelDifference = Math.abs(player.bestGlyphLevel - this.glyphs[0].level);
+      this.canSacrifice = RealityUpgrades(19).isEffectActive;
     },
     select(index) {
       GlyphSelection.select(index, false);
@@ -46,10 +46,11 @@ Vue.component("modal-glyph-selection", {
                         :key="index"
                         :glyph="glyph"
                         :noLevelOverride="true"
+                        :showSacrifice="canSacrifice"
                         @click.native="select(index)"/>
       </div>
       <button class="o-primary-btn o-primary-btn--glyph-trash"
-        v-if="canTrashGlyphs"
+        v-if="canSacrifice"
         v-on:click="trashGlyphs()">
           I don't want any of these glyphs,
           <br>

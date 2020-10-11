@@ -222,18 +222,18 @@ function autoReality() {
 
 function updateRealityRecords(realityProps) {
   const thisRunRMmin = realityProps.gainedRM.dividedBy(Time.thisRealityRealTime.totalMinutes);
-  if (player.bestRMmin.lt(thisRunRMmin)) {
-    player.bestRMmin = thisRunRMmin;
-    player.bestRMminSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  if (player.records.bestReality.RMmin.lt(thisRunRMmin)) {
+    player.records.bestReality.RMmin = thisRunRMmin;
+    player.records.bestReality.RMminSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
-  if (player.bestGlyphLevel < realityProps.gainedGlyphLevel.actualLevel) {
-    player.bestGlyphLevel = realityProps.gainedGlyphLevel.actualLevel;
-    player.bestGlyphLevelSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  if (player.records.bestReality.glyphLevel < realityProps.gainedGlyphLevel.actualLevel) {
+    player.records.bestReality.glyphLevel = realityProps.gainedGlyphLevel.actualLevel;
+    player.records.bestReality.glyphLevelSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
-  player.bestReality = Math.min(player.thisReality, player.bestReality);
-  if (player.thisRealityRealTime < player.bestRealityRealTime) {
-    player.bestRealityRealTime = player.thisRealityRealTime;
-    player.bestSpeedSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  player.records.bestReality.time = Math.min(player.records.thisReality.time, player.records.bestReality.time);
+  if (player.records.thisReality.realTime < player.records.bestReality.realTime) {
+    player.records.bestReality.realTime = player.records.thisReality.realTime;
+    player.records.bestReality.speedSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }
 
@@ -244,7 +244,7 @@ function giveRealityRewards(realityProps) {
   player.reality.realityMachines = player.reality.realityMachines.plus(gainedRM.times(multiplier));
   updateRealityRecords(realityProps);
   addRealityTime(
-    player.thisReality, player.thisRealityRealTime, gainedRM,
+    player.records.thisReality.time, player.records.thisReality.realTime, gainedRM,
     realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier);
   player.realities += realityAndPPMultiplier;
   player.reality.pp += realityAndPPMultiplier;
@@ -321,9 +321,9 @@ function beginProcessReality(realityProps) {
 
 function finishProcessReality(realityProps) {
   const finalEP = player.eternityPoints.plus(gainedEternityPoints());
-  if (player.bestEP.lt(finalEP)) {
-    player.bestEP = new Decimal(finalEP);
-    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  if (player.records.bestReality.bestEP.lt(finalEP)) {
+    player.records.bestReality.bestEP = new Decimal(finalEP);
+    player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 
   const isReset = realityProps.reset;
@@ -350,11 +350,11 @@ function finishProcessReality(realityProps) {
   player.infinityUpgrades.clear();
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
-  player.bestInfinityTime = 999999999999;
-  player.bestInfinityRealTime = 999999999999;
-  player.thisInfinityTime = 0;
-  player.thisInfinityLastBuyTime = 0;
-  player.thisInfinityRealTime = 0;
+  player.records.bestInfinity.time = 999999999999;
+  player.records.bestInfinity.realTime = 999999999999;
+  player.records.thisInfinity.time = 0;
+  player.records.thisInfinity.lastBuyTime = 0;
+  player.records.thisInfinity.realTime = 0;
   player.dimensionBoosts = 0;
   player.galaxies = 0;
   player.partInfinityPoint = 0;
@@ -374,9 +374,10 @@ function finishProcessReality(realityProps) {
   // This has to be reset before player.eternities to make the bumpLimit logic work correctly
   EternityUpgrade.epMult.reset();
   player.eternities = new Decimal(0);
-  player.thisEternity = 0;
-  player.thisEternityRealTime = 0;
-  player.bestEternity = 999999999999;
+  player.records.thisEternity.time = 0;
+  player.records.thisEternity.realTime = 0;
+  player.records.bestEternity.time = 999999999999;
+  player.records.bestEternity.realTime = 999999999999;
   player.eternityUpgrades.clear();
   player.totalTickGained = 0;
   player.eternityChalls = {};
@@ -399,8 +400,8 @@ function finishProcessReality(realityProps) {
   player.noInfinitiesThisReality = true;
   player.noEternitiesThisReality = true;
   player.noReplicantiGalaxies = true;
-  player.thisReality = 0;
-  player.thisRealityRealTime = 0;
+  player.records.thisReality.time = 0;
+  player.records.thisReality.realTime = 0;
   player.timestudy.theorem = new Decimal(0);
   player.timestudy.amcost = new Decimal("1e20000");
   player.timestudy.ipcost = new Decimal(1);
@@ -421,8 +422,8 @@ function finishProcessReality(realityProps) {
     2: 0,
     3: 0
   };
-  player.thisInfinityMaxAM = new Decimal(0);
-  player.thisEternityMaxAM = new Decimal(0);
+  player.records.thisInfinity.maxAM = new Decimal(0);
+  player.records.thisEternity.maxAM = new Decimal(0);
   Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
   player.celestials.laitela.entropy = 0;
@@ -437,13 +438,13 @@ function finishProcessReality(realityProps) {
   player.celestials.ra.peakGamespeed = 1;
 
   InfinityDimensions.resetAmount();
-  player.bestIPminThisInfinity = new Decimal(0);
-  player.bestIPminThisEternity = new Decimal(0);
-  player.bestEPminThisEternity = new Decimal(0);
-  player.bestEPminThisReality = new Decimal(0);
-  player.bestInfinitiesPerMs = new Decimal(0);
-  player.bestEternitiesPerMs = new Decimal(0);
-  player.bestIpPerMsWithoutMaxAll = new Decimal(0);
+  player.records.thisInfinity.bestIPmin = new Decimal(0);
+  player.records.bestInfinity.bestIPminEternity = new Decimal(0);
+  player.records.thisEternity.bestEPmin = new Decimal(0);
+  player.records.thisEternity.bestInfinitiesPerMs = new Decimal(0);
+  player.records.thisEternity.bestIPMsWithoutMaxAll = new Decimal(0);
+  player.records.bestEternity.bestEPminReality = new Decimal(0);
+  player.records.thisReality.bestEternitiesPerMs = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
   playerInfinityUpgradesOnEternity();

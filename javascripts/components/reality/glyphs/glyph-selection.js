@@ -10,7 +10,7 @@ Vue.component("modal-glyph-selection", {
   },
   computed: {
     direction() {
-      if (this.glyphs[0].level > player.bestGlyphLevel) return "higher";
+      if (this.glyphs[0].level > player.records.bestReality.glyphLevel) return "higher";
       return "lower";
     }
   },
@@ -24,8 +24,8 @@ Vue.component("modal-glyph-selection", {
         currentGlyph.level = newGlyph.level;
         currentGlyph.effects = newGlyph.effects;
       }
-      this.levelDifference = Math.abs(player.bestGlyphLevel - this.glyphs[0].level);
       this.canSacrifice = RealityUpgrades(19).isEffectActive;
+      this.levelDifference = Math.abs(player.records.bestReality.glyphLevel - this.glyphs[0].level);
     },
     select(index) {
       GlyphSelection.select(index, false);

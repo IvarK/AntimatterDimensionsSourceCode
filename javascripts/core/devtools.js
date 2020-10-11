@@ -482,7 +482,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     }
     doReplicantiTicks();
     player.antimatter = new Decimal("1e309");
-    player.thisInfinityMaxAM = new Decimal("1e309");
+    player.records.thisInfinity.maxAM = new Decimal("1e309");
     bigCrunchReset();
     doReplicantiTicks();
   };

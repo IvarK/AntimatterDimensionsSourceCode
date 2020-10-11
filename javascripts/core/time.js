@@ -59,156 +59,183 @@ const Time = {
    * @returns {TimeSpan}
    */
   get totalTimePlayed() {
-    return this.fromMilliseconds(() => player.totalTimePlayed);
+    return this.fromMilliseconds(() => player.records.totalTimePlayed);
   },
   /**
    * @param {TimeSpan} timespan
    */
   set totalTimePlayed(timespan) {
-    this.toMilliseconds(timespan, value => player.totalTimePlayed = value);
+    this.toMilliseconds(timespan, value => player.records.totalTimePlayed = value);
   },
 
   /**
    * @returns {TimeSpan}
    */
   get realTimePlayed() {
-    return this.fromMilliseconds(() => player.realTimePlayed);
+    return this.fromMilliseconds(() => player.records.realTimePlayed);
   },
   /**
    * @param {TimeSpan} timespan
    */
   set realTimePlayed(timespan) {
-    this.toMilliseconds(timespan, value => player.realTimePlayed = value);
+    this.toMilliseconds(timespan, value => player.records.realTimePlayed = value);
   },
 
   /**
    * @returns {TimeSpan}
    */
   get thisInfinity() {
-    return this.fromMilliseconds(() => player.thisInfinityTime);
+    return this.fromMilliseconds(() => player.records.thisInfinity.time);
   },
   /**
    * @param {TimeSpan} timespan
    */
   set thisInfinity(timespan) {
-    this.toMilliseconds(timespan, value => player.thisInfinityTime = value);
+    this.toMilliseconds(timespan, value => player.records.thisInfinity.time = value);
   },
 
   /**
    * @returns {TimeSpan}
    */
   get thisInfinityRealTime() {
-    return this.fromMilliseconds(() => player.thisInfinityRealTime);
+    return this.fromMilliseconds(() => player.records.thisInfinity.realTime);
   },
   /**
    * @param {TimeSpan} timespan
    */
   set thisInfinityRealTime(timespan) {
-    this.toMilliseconds(timespan, value => player.thisInfinityRealTime = value);
+    this.toMilliseconds(timespan, value => player.records.thisInfinity.realTime = value);
   },
 
   /**
    * @returns {TimeSpan}
    */
   get bestInfinity() {
-    return this.fromMilliseconds(() => player.bestInfinityTime);
+    return this.fromMilliseconds(() => player.records.bestInfinity.time);
   },
   /**
    * @param {TimeSpan} timespan
    */
   set bestInfinity(timespan) {
-    this.toMilliseconds(timespan, value => player.bestInfinityTime = value);
+    this.toMilliseconds(timespan, value => player.records.bestInfinity.time = value);
   },
 
     /**
    * @returns {TimeSpan}
    */
   get bestInfinityRealTime() {
-    return this.fromMilliseconds(() => player.bestInfinityRealTime);
+    return this.fromMilliseconds(() => player.records.bestInfinity.realTime);
   },
   /**
    * @param {TimeSpan} timespan
    */
   set bestInfinityRealTime(timespan) {
-    this.toMilliseconds(timespan, value => player.bestInfinityRealTime = value);
+    this.toMilliseconds(timespan, value => player.records.bestInfinity.realTime = value);
   },
 
   /**
    * @returns {TimeSpan}
    */
   get thisEternity() {
-    return this.fromMilliseconds(() => player.thisEternity);
+    return this.fromMilliseconds(() => player.records.thisEternity.time);
   },
   /**
    * @param {TimeSpan} timespan
    */
   set thisEternity(timespan) {
-    this.toMilliseconds(timespan, value => player.thisEternity = value);
+    this.toMilliseconds(timespan, value => player.records.thisEternity.time = value);
   },
 
   /**
    * @returns {TimeSpan}
    */
   get thisEternityRealTime() {
-    return this.fromMilliseconds(() => player.thisEternityRealTime);
+    return this.fromMilliseconds(() => player.records.thisEternity.realTime);
   },
   /**
    * @param {TimeSpan} timespan
    */
   set thisEternityRealTime(timespan) {
-    this.toMilliseconds(timespan, value => player.thisEternityRealTime = value);
+    this.toMilliseconds(timespan, value => player.records.thisEternity.realTime = value);
   },
 
   /**
    * @returns {TimeSpan}
    */
   get bestEternity() {
-    return this.fromMilliseconds(() => player.bestEternity);
+    return this.fromMilliseconds(() => player.records.bestEternity.time);
   },
   /**
    * @param {TimeSpan} timespan
    */
   set bestEternity(timespan) {
-    this.toMilliseconds(timespan, value => player.bestEternity = value);
+    this.toMilliseconds(timespan, value => player.records.bestEternity.time = value);
   },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get bestEternityRealTime() {
+    return this.fromMilliseconds(() => player.records.bestEternity.realTime);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set bestEternityRealTime(timespan) {
+    this.toMilliseconds(timespan, value => player.records.bestEternity.realTime = value);
+  },
+
 
   /**
    * @returns {TimeSpan}
    */
   get thisReality() {
-    return this.fromMilliseconds(() => player.thisReality);
+    return this.fromMilliseconds(() => player.records.thisReality.time);
   },
   /**
    * @param {TimeSpan} timespan
    */
   set thisReality(timespan) {
-    this.toMilliseconds(timespan, value => player.thisReality = value);
-  },
-
-  /**
-   * @returns {TimeSpan}
-   */
-  get bestReality() {
-    return this.fromMilliseconds(() => player.bestReality);
-  },
-  /**
-   * @param {TimeSpan} timespan
-   */
-  set bestReality(timespan) {
-    this.toMilliseconds(timespan, value => player.bestReality = value);
+    this.toMilliseconds(timespan, value => player.records.thisReality.time = value);
   },
 
   /**
    * @returns {TimeSpan}
    */
   get thisRealityRealTime() {
-    return this.fromMilliseconds(() => player.thisRealityRealTime);
+    return this.fromMilliseconds(() => player.records.thisReality.realTime);
   },
   /**
    * @param {TimeSpan} timespan
    */
   set thisRealityRealTime(timespan) {
-    this.toMilliseconds(timespan, value => player.thisRealityRealTime = value);
+    this.toMilliseconds(timespan, value => player.records.thisReality.realTime = value);
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get bestReality() {
+    return this.fromMilliseconds(() => player.records.bestReality.time);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set bestReality(timespan) {
+    this.toMilliseconds(timespan, value => player.records.bestReality.time = value);
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get bestRealityRealTime() {
+    return this.fromMilliseconds(() => player.records.bestReality.realTime);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set bestRealityRealTime(timespan) {
+    this.toMilliseconds(timespan, value => player.records.bestReality.realTime = value);
   },
 
   /**

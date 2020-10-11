@@ -164,7 +164,7 @@ const Ra = {
       get color() { return "#ea8585"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.EFFARIG_XP)
-          ? 1 + player.bestGlyphLevel / 7000
+          ? 1 + player.records.bestReality.glyphLevel / 7000
           : 1;
       }
     }(),
@@ -207,7 +207,7 @@ const Ra = {
   // TODO update/delete this function when we get back to alchemy, it's outdated since it's not linear any more
   fillAlchemyResources() {
     for (const resource of AlchemyResources.base) {
-      resource.amount = Math.min(this.alchemyResourceCap, player.bestGlyphLevel);
+      resource.amount = Math.min(this.alchemyResourceCap, player.records.bestReality.glyphLevel);
     }
   },
   memoryTick(realDiff, generateChunks) {
@@ -434,7 +434,7 @@ const RA_UNLOCKS = {
     description: "Get Teresa to level 25",
     reward: `When unlocking Time Dilation in non-celestial Realities, gain Tachyon Particles as if you reached
       the square root of your total antimatter in Dilation`,
-    effect: () => player.totalAntimatter.pow(0.5),
+    effect: () => player.records.totalAntimatter.pow(0.5),
     pet: Ra.pets.teresa,
     level: 25,
     displayIcon: `<i class="far fa-dot-circle"></i>`

@@ -69,7 +69,7 @@ function buyTickSpeed() {
   }
   Currency.antimatter.subtract(Tickspeed.cost);
   player.totalTickBought++;
-  player.thisInfinityLastBuyTime = player.thisInfinityTime;
+  player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
   player.secretUnlocks.why++;
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
   GameUI.update();
@@ -96,7 +96,7 @@ function buyMaxTickSpeed() {
       }
       Currency.antimatter.subtract(costScale.calculateCost(player.totalTickBought + costBumps));
       player.totalTickBought++;
-      player.thisInfinityLastBuyTime = player.thisInfinityTime;
+      player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
       if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
       if (costScale.calculateCost(player.totalTickBought + costBumps).gte(Decimal.NUMBER_MAX_VALUE) &&
         !inCostScalingChallenge &&

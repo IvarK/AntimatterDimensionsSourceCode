@@ -140,6 +140,8 @@ GameStorage.migrations = {
       GameStorage.migrations.migrateIPGen(player);
       GameStorage.migrations.renameCloudVariable(player);
       GameStorage.migrations.standardizeUncompletedTimes(player);
+      GameStorage.migrations.makeRecords(player);
+      GameStorage.migrations.deleteOldRecords(player);
 
       kong.migratePurchases();
       if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
@@ -754,5 +756,33 @@ GameStorage.migrations = {
       player.version = version;
     }
     return player;
-  }
+  },
+
+  makeRecords(player) {
+    player.records.gameCreatedTime = player.gameCreatedTime;
+    player.records.totalTimePlayed = player.totalTimePlayed;
+    player.records.realTimePlayed = player.realTimePlayed;
+    player.records.totalAntimatter = new Decimal(player.totalAntimatter);
+    player.records.lastTenInfinities = player.lastTenRuns;
+    player.records.lastTenEternities = player.lastTenEternities;
+    player.records.thisInfinity.time = player.thisInfinityTime;
+    player.records.bestInfinity.time = player.bestInfinityTime;
+    player.records.thisEternity.time = player.thisEternity;
+    player.records.bestEternity.time = player.bestEternity;
+    player.records.thisReality.time = player.thisReality;
+  },
+
+  deleteOldRecords(player) {
+    delete player.gameCreatedTime;
+    delete player.totalTimePlayed;
+    delete player.realTimePlayed;
+    delete player.totalAntimatter;
+    delete player.lastTenRuns;
+    delete player.lastTenEternities;
+    delete player.thisInfinityTime;
+    delete player.bestInfinityTime;
+    delete player.thisEternity;
+    delete player.bestEternity;
+    delete player.thisReality;
+  },
 };

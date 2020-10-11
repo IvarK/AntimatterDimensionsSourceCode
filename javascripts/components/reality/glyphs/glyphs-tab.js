@@ -21,7 +21,7 @@ Vue.component("glyphs-tab", {
   methods: {
     update() {
       this.resetRealityDisplayed = player.realities > 0;
-      this.showInstability = player.bestGlyphLevel > 800;
+      this.showInstability = player.records.bestReality.glyphLevel > 800;
       this.instabilityThreshold = Glyphs.instabilityThreshold;
       this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;
       this.isInCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);

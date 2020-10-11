@@ -4,9 +4,6 @@
 // eslint-disable-next-line prefer-const
 let player = {
   antimatter: new Decimal(10),
-  totalAntimatter: new Decimal(0),
-  thisInfinityMaxAM: new Decimal(0),
-  thisEternityMaxAM: new Decimal(0),
   dimensions: {
     antimatter: Array.range(0, 8).map(() => ({
       bought: 0,
@@ -32,7 +29,6 @@ let player = {
   secretAchievementBits: Array.repeat(0, 4),
   infinityUpgrades: new Set(),
   usedMaxAll: false,
-  bestIpPerMsWithoutMaxAll: new Decimal(0),
   infinityRebuyables: [0, 0, 0],
   challenge: {
     normal: {
@@ -132,14 +128,6 @@ let player = {
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
   infinitiedBank: new Decimal(0),
-  gameCreatedTime: Date.now(),
-  totalTimePlayed: 0,
-  realTimePlayed: 0,
-  bestInfinityTime: Number.MAX_VALUE,
-  bestInfinityRealTime: Number.MAX_VALUE,
-  thisInfinityTime: 0,
-  thisInfinityRealTime: 0,
-  thisInfinityLastBuyTime: 0,
   dimensionBoosts: 0,
   galaxies: 0,
   news: new Set(),
@@ -157,7 +145,6 @@ let player = {
     why: 0,
     dragging: 0,
     themes: new Set(),
-    // Incremented every time secret time study toggles
     viewSecretTS: false,
     uselessNewsClicks: 0,
     cancerAchievements: false,
@@ -169,25 +156,62 @@ let player = {
     Eternity: true,
     Infinity: true
   },
-  lastTenRuns: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
-  lastTenEternities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
-  lastTenRealities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), 1, Number.MAX_VALUE, 0]),
-  bestIPminThisInfinity: new Decimal(0),
-  bestIPminThisEternity: new Decimal(0),
-  bestEPminThisEternity: new Decimal(0),
-  bestEPminThisReality: new Decimal(0),
-  bestInfinitiesPerMs: new Decimal(0),
-  bestEternitiesPerMs: new Decimal(0),
-  bestRMmin: new Decimal(0),
-  bestRMminSet: [],
-  bestGlyphLevel: 0,
-  bestGlyphStrength: 0,
-  bestGlyphLevelSet: [],
-  bestEP: new Decimal(0),
-  bestEPSet: [],
-  bestReality: Number.MAX_VALUE,
-  bestRealityRealTime: Number.MAX_VALUE,
-  bestSpeedSet: [],
+  records: {
+    gameCreatedTime: Date.now(),
+    totalTimePlayed: 0,
+    realTimePlayed: 0,
+    totalAntimatter: new Decimal(0),
+    lastTenInfinities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
+    lastTenEternities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
+    lastTenRealities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), 1, Number.MAX_VALUE, 0]),
+    thisInfinity: {
+      time: 0,
+      realTime: 0,
+      lastBuyTime: 0,
+      maxAM: new Decimal(0),
+      bestIPmin: new Decimal(0),
+    },
+    bestInfinity: {
+      time: Number.MAX_VALUE,
+      realTime: Number.MAX_VALUE,
+      bestIPminEternity: new Decimal(0),
+      bestIPminReality: new Decimal(0),
+    },
+    thisEternity: {
+      time: 0,
+      realTime: 0,
+      maxAM: new Decimal(0),
+      maxIP: new Decimal(0),
+      bestIPMsWithoutMaxAll: new Decimal(0),
+      bestEPmin: new Decimal(0),
+      bestInfinitiesPerMs: new Decimal(0),
+    },
+    bestEternity: {
+      time: Number.MAX_VALUE,
+      realTime: Number.MAX_VALUE,
+      bestEPminReality: new Decimal(0),
+    },
+    thisReality: {
+      time: 0,
+      realTime: 0,
+      maxAM: new Decimal(0),
+      maxIP: new Decimal(0),
+      maxEP: new Decimal(0),
+      bestEternitiesPerMs: new Decimal(0),
+    },
+    bestReality: {
+      time: Number.MAX_VALUE,
+      realTime: Number.MAX_VALUE,
+      glyphStrength: 0,
+      RMmin: new Decimal(0),
+      RMminSet: [],
+      glyphLevel: 0,
+      glyphLevelSet: [],
+      bestEP: new Decimal(0),
+      bestEPSet: [],
+      speedSet: [],
+    },
+  },
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
   version: 13,
@@ -197,9 +221,6 @@ let player = {
   postC4Tier: 0,
   eternityPoints: new Decimal(0),
   eternities: new Decimal(0),
-  thisEternity: 0,
-  thisEternityRealTime: 0,
-  bestEternity: Number.MAX_VALUE,
   eternityUpgrades: new Set(),
   epmultUpgrades: 0,
   infDimBuyers: [false, false, false, false, false, false, false, false],
@@ -268,8 +289,6 @@ let player = {
   },
   realities: 0,
   partSimulatedReality: 0,
-  thisReality: 0,
-  thisRealityRealTime: 0,
   reality: {
     realityMachines: new Decimal(0),
     glyphs: {
@@ -628,7 +647,7 @@ const Player = {
     if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)) return true
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
-    return player.thisInfinityMaxAM.gte(goal);
+    return player.records.thisInfinity.maxAM.gte(goal);
   },
 
   get canEternity() {

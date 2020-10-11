@@ -308,7 +308,8 @@ const GlyphGenerator = {
 
   musicGlyph() {
     const rng = new GlyphGenerator.MusicGlyphRNG();
-    const glyph = this.randomGlyph({ actualLevel: Math.floor(player.bestGlyphLevel * 0.8), rawLevel: 1 }, rng);
+    const glyph =
+      this.randomGlyph({ actualLevel: Math.floor(player.records.bestReality.glyphLevel * 0.8), rawLevel: 1 }, rng);
     rng.finalize();
     glyph.symbol = "key266b";
     glyph.color = "#FF80AB";
@@ -627,7 +628,7 @@ const Glyphs = {
     // This should only apply to glyphs you actually choose, so can't be done in glyph generation.
     // Sometimes a glyph you already have is added to the inventory (for example, unequipping),
     // but that's not an issue because then this line just won't do anything, which is fine.
-    player.bestGlyphStrength = Math.clampMin(player.bestGlyphStrength, glyph.strength);
+    player.records.bestReality.glyphStrength = Math.clampMin(player.records.bestReality.glyphStrength, glyph.strength);
 
     player.reality.glyphs.inventory.push(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
@@ -832,8 +833,8 @@ const Glyphs = {
       ep: new Decimal(player.eternityPoints),
       tt: player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost() - TimeTheorems.totalPurchased()),
       ecs: EternityChallenges.all.map(e => e.completions),
-      thisReality: player.thisReality,
-      thisRealityRealTime: player.thisRealityRealTime,
+      thisRealityTime: player.records.thisReality.time,
+      thisRealityRealTime: player.records.thisReality.realTime,
       storedTime: player.celestials.enslaved.stored,
       dilationStudies: player.dilation.studies.toBitmask(),
       dilationUpgrades: player.dilation.upgrades.toBitmask(),
@@ -857,8 +858,8 @@ const Glyphs = {
     player.eternityPoints.fromValue(undoData.ep);
     player.timestudy.theorem.fromValue(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
-    player.thisReality = undoData.thisReality;
-    player.thisRealityRealTime = undoData.thisRealityRealTime;
+    player.records.thisReality.time = undoData.thisRealityTime;
+    player.records.thisReality.realTime = undoData.thisRealityRealTime;
     player.celestials.enslaved.stored = undoData.storedTime || 0;
     if (undoData.dilationStudies) {
       player.dilation.studies = Array.fromBitmask(undoData.dilationStudies);
@@ -1202,7 +1203,7 @@ const GlyphSacrificeHandler = {
 // Gives a maximum resource total possible, based on the highest level glyph in recent realities. This doesn't
 // actually enforce any special behavior, but instead only affects various UI properties.
 function estimatedAlchemyCap() {
-  return GlyphSacrificeHandler.levelAlchemyCap(player.lastTenRealities.map(([, , , , lvl]) => lvl).max());
+  return GlyphSacrificeHandler.levelAlchemyCap(player.records.lastTenRealities.map(([, , , , lvl]) => lvl).max());
 }
 
 function autoAdjustGlyphWeights() {

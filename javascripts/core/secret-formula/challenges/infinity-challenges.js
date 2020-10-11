@@ -111,7 +111,7 @@ GameDatabase.challenges.infinity = [
     goal: new Decimal("1e27000"),
     isQuickResettable: true,
     effect: () => Decimal.pow(0.8446303389034288,
-      Math.max(0, player.thisInfinityTime - player.thisInfinityLastBuyTime)),
+      Math.max(0, player.records.thisInfinity.time - player.records.thisInfinity.lastBuyTime)),
     reward: {
       description:
         "You get a multiplier to Antimatter Dimensions 2-7 based on 1st and 8th Antimatter Dimension multipliers.",

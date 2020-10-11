@@ -411,7 +411,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "enslaved-unlock-glyph-level": {
       visible: () => EffarigUnlock.eternity.isUnlocked,
-      complete: () => player.bestGlyphLevel / 5000,
+      complete: () => player.records.bestReality.glyphLevel / 5000,
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.enslaved.show(true),
@@ -431,7 +431,7 @@ GameDatabase.celestials.navigation = (function() {
             const goal = 5000;
             return [
               "Break a chain",
-              `Reach glyph level ${formatInt(Math.min(player.bestGlyphLevel, goal))}/${formatInt(goal)}`
+              `Reach glyph level ${formatInt(Math.min(player.records.bestReality.glyphLevel, goal))}/${formatInt(goal)}`
             ];
           },
           angle: -45,
@@ -454,7 +454,7 @@ GameDatabase.celestials.navigation = (function() {
     "enslaved-unlock-glyph-rarity": {
       visible: () => EffarigUnlock.eternity.isUnlocked,
       complete: () => {
-        const bestRarity = strengthToRarity(player.bestGlyphStrength);
+        const bestRarity = strengthToRarity(player.records.bestReality.glyphStrength);
         return bestRarity / 100;
       },
       drawOrder: -1,

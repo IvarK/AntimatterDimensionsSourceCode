@@ -104,7 +104,7 @@ Vue.component("alchemy-tab", {
       this.reactionsAvailable = AlchemyResources.all.filter(res => !res.isBaseResource && res.isUnlocked).length !== 0;
       this.realityCreationVisible = Ra.pets.effarig.level === 25;
       const animationTime = 800;
-      this.reactionProgress = (player.realTimePlayed % animationTime) / animationTime;
+      this.reactionProgress = (player.records.realTimePlayed % animationTime) / animationTime;
       this.estimatedCap = estimatedAlchemyCap();
     },
     orbitSize(orbit) {

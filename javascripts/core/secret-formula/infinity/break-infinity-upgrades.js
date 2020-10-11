@@ -23,7 +23,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "totalMult",
       cost: 1e4,
       description: "Antimatter Dimensions gain a multiplier based on total antimatter produced",
-      effect: () => Math.pow(player.totalAntimatter.exponent + 1, 0.5),
+      effect: () => Math.pow(player.records.totalAntimatter.exponent + 1, 0.5),
       formatEffect: value => formatX(value, 2, 2)
     },
     currentAMMult: {
@@ -64,7 +64,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "infinitiedGeneration",
       cost: 2e7,
       description: "Passively generate Infinitied stat based on your fastest Infinity",
-      effect: () => player.bestInfinityTime,
+      effect: () => player.records.bestInfinity.time,
       formatEffect: value => {
         if (value === Number.MAX_VALUE) return "No Infinity generation";
         let infinities = new Decimal(1);

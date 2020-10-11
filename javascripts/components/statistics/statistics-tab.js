@@ -42,8 +42,8 @@ Vue.component("statistics-tab", {
   },
   methods: {
     update() {
-      this.totalAntimatter.copyFrom(player.totalAntimatter);
-      this.realTimePlayed.setFrom(player.realTimePlayed);
+      this.totalAntimatter.copyFrom(player.records.totalAntimatter);
+      this.realTimePlayed.setFrom(player.records.realTimePlayed);
       this.newsMessagesSeen = player.news.size;
       const progress = PlayerProgress.current;
       const isInfinityUnlocked = progress.isInfinityUnlocked;
@@ -52,45 +52,47 @@ Vue.component("statistics-tab", {
       if (isInfinityUnlocked) {
         infinity.count.copyFrom(player.infinitied);
         infinity.banked.copyFrom(player.infinitiedBank);
-        infinity.hasBest = player.bestInfinityTime < 999999999999;
-        infinity.best.setFrom(player.bestInfinityTime);
-        infinity.this.setFrom(player.thisInfinityTime);
-        infinity.bestRate.copyFrom(player.bestIPminThisEternity);
+        infinity.hasBest = player.records.bestInfinity.time < 999999999999;
+        infinity.best.setFrom(player.records.bestInfinity.time);
+        infinity.this.setFrom(player.records.thisInfinity.time);
+        infinity.bestRate.copyFrom(player.records.bestInfinity.bestIPminEternity);
       }
       const isEternityUnlocked = progress.isEternityUnlocked;
       const eternity = this.eternity;
       eternity.isUnlocked = isEternityUnlocked;
       if (isEternityUnlocked) {
         eternity.count.copyFrom(player.eternities);
-        eternity.hasBest = player.bestEternity < 999999999999;
-        eternity.best.setFrom(player.bestEternity);
-        eternity.this.setFrom(player.thisEternity);
-        eternity.bestRate.copyFrom(player.bestEPminThisReality);
+        eternity.hasBest = player.records.bestEternity.time < 999999999999;
+        eternity.best.setFrom(player.records.bestEternity.time);
+        eternity.this.setFrom(player.records.thisEternity.time);
+        eternity.bestRate.copyFrom(player.records.bestEternity.bestEPminReality);
       }
       const isRealityUnlocked = progress.isRealityUnlocked;
       const reality = this.reality;
       reality.isUnlocked = isRealityUnlocked;
       if (isRealityUnlocked) {
         reality.count = Math.floor(player.realities);
-        reality.best.setFrom(player.bestReality);
-        reality.bestReal.setFrom(player.bestRealityRealTime);
-        reality.this.setFrom(player.thisReality);
-        reality.totalTimePlayed.setFrom(player.totalTimePlayed);
+        reality.best.setFrom(player.records.bestReality.time);
+        reality.bestReal.setFrom(player.records.bestReality.realTime);
+        reality.this.setFrom(player.records.thisReality.time);
+        reality.totalTimePlayed.setFrom(player.records.totalTimePlayed);
         // Real time tracking is only a thing once reality is unlocked:
-        infinity.thisReal.setFrom(player.thisInfinityRealTime);
-        eternity.thisReal.setFrom(player.thisEternityRealTime);
-        reality.thisReal.setFrom(player.thisRealityRealTime);
-        reality.bestRate.copyFrom(player.bestRMmin);
-        reality.bestRarity = strengthToRarity(player.bestGlyphStrength);
+        infinity.thisReal.setFrom(player.records.thisInfinity.realTime);
+        eternity.thisReal.setFrom(player.records.thisEternity.realTime);
+        reality.thisReal.setFrom(player.records.thisReality.realTime);
+        reality.bestRate.copyFrom(player.records.bestReality.RMmin);
+        reality.bestRarity = strengthToRarity(player.records.bestReality.glyphStrength);
       }
       this.matterScale = MatterScale.estimate(Currency.antimatter.value);
       this.recordGlyphInfo = [
-        [true, Glyphs.copyForRecords(player.bestRMminSet), `Best RM/min: ${format(player.bestRMmin, 2, 2)} RM/min`],
-        [true, Glyphs.copyForRecords(player.bestGlyphLevelSet),
-          `Best glyph level: ${formatInt(player.bestGlyphLevel)}`],
-        [true, Glyphs.copyForRecords(player.bestEPSet), `Best EP: ${format(player.bestEP, 2, 2)} EP`],
-        [true, Glyphs.copyForRecords(player.bestSpeedSet),
-          `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
+        [true, Glyphs.copyForRecords(player.records.bestReality.RMminSet),
+          `Best RM/min: ${format(player.records.bestReality.RMmin, 2, 2)} RM/min`],
+        [true, Glyphs.copyForRecords(player.records.bestReality.glyphLevelSet),
+          `Best glyph level: ${formatInt(player.records.bestReality.glyphLevel)}`],
+        [true, Glyphs.copyForRecords(player.records.bestReality.bestEPSet),
+          `Best EP: ${format(player.records.bestReality.bestEP, 2, 2)} EP`],
+        [true, Glyphs.copyForRecords(player.records.bestReality.speedSet),
+          `Fastest Reality (real time): ${player.records.bestReality.time}`],
         [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
           `Best AM in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)}`]
       ];

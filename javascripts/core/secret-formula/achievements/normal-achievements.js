@@ -759,7 +759,7 @@ GameDatabase.achievements.normal = [
       ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} times higher Infinity Points than the previous one.`;
     },
     checkRequirement: () => {
-      const infinities = player.lastTenRuns.map(run => run[1]);
+      const infinities = player.records.lastTenInfinities.map(run => run[1]);
       for (let i = 0; i < infinities.length - 1; i++) {
         if (infinities[i].lt(infinities[i + 1].times(Decimal.NUMBER_MAX_VALUE)) || infinities[i].eq(0)) return false;
       }
@@ -1027,7 +1027,7 @@ GameDatabase.achievements.normal = [
       ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} times higher Eternity Points than the previous one.`;
     },
     checkRequirement: () => {
-      const eternities = player.lastTenEternities.map(run => run[1]);
+      const eternities = player.records.lastTenEternities.map(run => run[1]);
       for (let i = 0; i < eternities.length - 1; i++) {
         if (eternities[i].lt(eternities[i + 1].times(Decimal.NUMBER_MAX_VALUE)) || eternities[i].eq(0)) return false;
       }

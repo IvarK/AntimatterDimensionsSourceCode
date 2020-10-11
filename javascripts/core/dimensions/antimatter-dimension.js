@@ -178,7 +178,7 @@ function onBuyDimension(tier) {
   }
 
   player.postC4Tier = tier;
-  player.thisInfinityLastBuyTime = player.thisInfinityTime;
+  player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
   if (tier !== 8) player.onlyEighthDimensions = false;
   if (tier !== 1) player.onlyFirstDimensions = false;
   if (tier === 8) player.noEighthDimensions = false;

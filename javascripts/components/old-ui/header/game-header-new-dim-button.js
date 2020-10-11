@@ -16,7 +16,7 @@ Vue.component("game-header-new-dim-button", {
       if (!this.isVisible) return;
       const requirement = InfinityDimensions.next().requirement;
       this.requirement.copyFrom(requirement);
-      this.isAffordable = player.thisEternityMaxAM.gte(requirement);
+      this.isAffordable = player.records.thisEternity.maxAM.gte(requirement);
       this.anyInfinityDimensionUnlocked = InfinityDimension(1).isUnlocked;
     }
   },

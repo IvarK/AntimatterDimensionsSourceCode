@@ -750,7 +750,103 @@ GameStorage.devMigrations = {
     player => {
       // eslint-disable-next-line no-bitwise
       player.celestials.ra.unlockBits &= ~(1 << 29);
-    }
+    },
+    player => {
+      console.log(player.celestials.ra.pets.teresa.exp);
+      player.records.gameCreatedTime = player.gameCreatedTime;
+      player.records.totalTimePlayed = player.totalTimePlayed;
+      player.records.realTimePlayed = player.realTimePlayed;
+      player.records.totalAntimatter = new Decimal(player.totalAntimatter);
+      for (let i = 0; i < 10; i++) {
+        player.records.lastTenInfinities[i][0] = player.lastTenRuns[i][0];
+        player.records.lastTenEternities[i][0] = player.lastTenEternities[i][0];
+        player.records.lastTenRealities[i][0] = player.lastTenRealities[i][0];
+      }
+
+      player.records.thisInfinity.time = player.thisInfinityTime;
+      player.records.thisInfinity.realTime = player.thisInfinityRealTime;
+      player.records.thisInfinity.lastBuyTime = player.thisInfinityLastBuyTime;
+      player.records.thisInfinity.maxAM = new Decimal(player.thisInfinityMaxAM);
+      player.records.thisInfinity.bestIPmin = new Decimal(player.bestIPminThisInfinity);
+
+      player.records.bestInfinity.time = player.bestInfinityTime;
+      player.records.bestInfinity.realTime = player.bestInfinityRealTime;
+      player.records.bestInfinity.bestIPminEternity = new Decimal(player.bestIPminThisEternity);
+      player.records.bestInfinity.bestIPminReality = new Decimal(player.bestEPThisReality);
+
+      player.records.thisEternity.time = player.thisEternity;
+      player.records.thisEternity.realTime = player.thisEternityRealTime;
+      player.records.thisEternity.maxAM = new Decimal(player.thisEternityMaxAM);
+      player.records.thisEternity.maxIP = new Decimal(player.thisEternityMaxIP);
+      player.records.thisEternity.bestIPMsWithoutMaxAll = new Decimal(player.bestIpPerMsWithoutMaxAll);
+      player.records.thisEternity.bestEPmin = new Decimal(player.bestEPminThisEternity);
+      player.records.thisEternity.bestInfinitiesPerMs = new Decimal(player.bestInfinitiesPerMs);
+
+      player.records.bestEternity.time = player.bestEternity;
+      // I have no idea where real time best Eternity is, not sure if it exists?
+      player.records.bestEternity.bestEPminReality = new Decimal(player.bestEPminThisReality);
+
+      player.records.thisReality.time = player.thisReality;
+      player.records.thisReality.realTime = player.thisRealityRealTime;
+      player.records.thisReality.bestEternitiesPerMs = new Decimal(player.bestEternitiesPerMs);
+
+      player.records.bestReality.RMmin = new Decimal(player.bestRMmin);
+      player.records.bestReality.RMminSet = player.bestRMminSet;
+      player.records.bestReality.glyphLevel = player.bestGlyphLevel;
+      player.records.bestReality.glyphStrength = player.bestGlyphStrength;
+      player.records.bestReality.glyphLevelSet = player.bestGlyphLevelSet;
+      player.records.bestReality.bestEP = new Decimal(player.bestEP);
+      player.records.bestReality.bestEPSet = player.bestEPSet;
+      player.records.bestReality.time = player.bestReality;
+      player.records.bestReality.realTime = player.bestRealityRealTime;
+      player.records.bestReality.speedSet = player.bestSpeedSet;
+
+      delete player.gameCreatedTime;
+      delete player.totalTimePlayed;
+      delete player.realTimePlayed;
+      delete player.totalAntimatter;
+      delete player.lastTenRuns;
+      delete player.lastTenEternities;
+      delete player.lastTenRealities;
+
+      delete player.thisInfinityTime;
+      delete player.thisInfinityRealTime;
+      delete player.thisInfinityLastBuyTime;
+      delete player.thisInfinityMaxAM;
+      delete player.bestIPminThisInfinity;
+
+      delete player.bestInfinityTime;
+      delete player.bestInfinityRealTime;
+      delete player.bestIPminThisEternity;
+
+      delete player.thisEternity;
+      delete player.thisEternityRealTime;
+      delete player.thisEternityMaxAM;
+      delete player.thisEternityMaxIP;
+      delete player.bestIpPerMsWithoutMaxAll;
+      delete player.bestEPminThisEternity;
+      delete player.bestInfinitiesPerMs;
+      delete player.bestIPminThisEternity;
+
+      delete player.bestEternity;
+      delete player.bestEPminThisReality;
+
+      delete player.thisReality;
+      delete player.thisRealityRealTime;
+      delete player.bestEternitiesPerMs;
+      delete player.bestEPThisReality;
+
+      delete player.bestRMmin;
+      delete player.bestRMminSet;
+      delete player.bestGlyphLevel;
+      delete player.bestGlyphStrength;
+      delete player.bestGlyphLevelSet;
+      delete player.bestEP;
+      delete player.bestEPSet;
+      delete player.bestReality;
+      delete player.bestRealityRealTime;
+      delete player.bestSpeedSet;
+    },
   ],
 
   patch(player) {

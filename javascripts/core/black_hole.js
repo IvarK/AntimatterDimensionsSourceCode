@@ -345,13 +345,14 @@ const BlackHoles = {
     if (!BlackHoles.areUnlocked) return;
     if (player.blackHolePause) player.minNegativeBlackHoleThisReality = 1;
     player.blackHolePause = !player.blackHolePause;
-    player.blackHolePauseTime = player.realTimePlayed;
+    player.blackHolePauseTime = player.records.realTimePlayed;
     const pauseType = BlackHoles.areNegative ? "inverted" : "paused";
     GameUI.notify.blackHole(player.blackHolePause ? `Black Hole ${pauseType}` : "Black Hole unpaused");
   },
 
   get unpauseAccelerationFactor() {
-    return Math.clamp((player.realTimePlayed - player.blackHolePauseTime) / (1000 * this.ACCELERATION_TIME), 0, 1);
+    return Math.clamp((player.records.realTimePlayed - player.blackHolePauseTime) /
+    (1000 * this.ACCELERATION_TIME), 0, 1);
   },
 
   get arePaused() {

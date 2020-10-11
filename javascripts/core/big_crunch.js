@@ -50,36 +50,40 @@ function bigCrunchReset() {
 }
 
 function bigCrunchUpdateStatistics() {
-  player.bestIPminThisEternity = player.bestIPminThisEternity.clampMin(player.bestIPminThisInfinity);
-  player.bestIPminThisInfinity = new Decimal(0);
+  player.records.bestInfinity.bestIPminEternity =
+    player.records.bestInfinity.bestIPminEternity.clampMin(player.records.thisInfinity.bestIPmin);
+  player.records.thisInfinity.bestIPmin = new Decimal(0);
 
-  player.bestInfinitiesPerMs = player.bestInfinitiesPerMs.clampMin(
-    gainedInfinities().round().dividedBy(player.thisInfinityRealTime)
+  player.records.thisEternity.bestInfinitiesPerMs = player.records.thisEternity.bestInfinitiesPerMs.clampMin(
+    gainedInfinities().round().dividedBy(player.records.thisInfinity.realTime)
   );
 
   const infinityPoints = gainedInfinityPoints();
 
   addInfinityTime(
-    player.thisInfinityTime,
-    player.thisInfinityRealTime,
+    player.records.thisInfinity.time,
+    player.records.thisInfinity.realTime,
     infinityPoints,
     gainedInfinities().round()
   );
 
-  player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
-  player.bestInfinityRealTime = Math.min(player.bestInfinityRealTime, player.thisInfinityRealTime);
+  player.records.bestInfinity.time =
+    Math.min(player.records.bestInfinity.time, player.records.bestInfinity.time);
+  player.records.bestInfinity.realTime =
+    Math.min(player.records.bestInfinity.realTime, player.records.bestInfinity.realTime);
 
   player.noInfinitiesThisReality = false;
 
   if (!player.usedMaxAll) {
-    const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(player.thisInfinityRealTime);
-    player.bestIpPerMsWithoutMaxAll = Decimal.max(bestIpPerMsWithoutMaxAll, player.bestIpPerMsWithoutMaxAll);
+    const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(player.records.thisInfinity.realTime);
+    player.records.thisEternity.bestIPMsWithoutMaxAll =
+      Decimal.max(bestIpPerMsWithoutMaxAll, player.records.thisEternity.bestIPMsWithoutMaxAll);
   }
   player.usedMaxAll = false;
 }
 
 function bigCrunchTabChange(firstInfinity) {
-  const earlyGame = player.bestInfinityTime > 60000 && !player.break;
+  const earlyGame = player.records.bestInfinity.time > 60000 && !player.break;
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
   handleChallengeCompletion();
@@ -135,16 +139,16 @@ function bigCrunchCheckUnlocks() {
 function secondSoftReset(forcedNDReset = false) {
   player.dimensionBoosts = 0;
   player.galaxies = 0;
-  player.thisInfinityMaxAM = new Decimal(0);
+  player.records.thisInfinity.maxAM = new Decimal(0);
   Currency.antimatter.reset();
   softReset(0, forcedNDReset);
   InfinityDimensions.resetAmount();
   if (player.replicanti.unl)
     player.replicanti.amount = new Decimal(1);
   player.replicanti.galaxies = 0;
-  player.thisInfinityTime = 0;
-  player.thisInfinityLastBuyTime = 0;
-  player.thisInfinityRealTime = 0;
+  player.records.thisInfinity.time = 0;
+  player.records.thisInfinity.lastBuyTime = 0;
+  player.records.thisInfinity.realTime = 0;
   player.noEighthDimensions = true;
   player.noSacrifices = true;
   AchievementTimers.marathon2.reset();

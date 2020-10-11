@@ -1299,7 +1299,8 @@ GameDatabase.news = [
     id: "a230",
     get text() {
       return `You started playing this game nearly
-        ${TimeSpan.fromMilliseconds(Date.now() - player.gameCreatedTime).toString()} ago. Thank you for playing!`;
+        ${TimeSpan.fromMilliseconds(Date.now() - player.records.gameCreatedTime).toString()}
+        ago. Thank you for playing!`;
     },
     dynamic: true
   },
@@ -2159,7 +2160,7 @@ GameDatabase.news = [
   {
     id: "l9",
     text: "Antimatter ice cream stand has recently opened- they have octillions of flavors!",
-    get unlocked() { return player.totalAntimatter.e >= 27; }
+    get unlocked() { return player.records.totalAntimatter.e >= 27; }
   },
   {
     id: "l10",
@@ -2385,12 +2386,12 @@ GameDatabase.news = [
   {
     id: "l43",
     text: "You do know that you won't reach Infinity in -1 seconds, right?",
-    get unlocked() { return player.bestInfinityTime === 0.1; }
+    get unlocked() { return player.records.bestInfinity.time === 0.1; }
   },
   {
     id: "l44",
     text: "Where does Antimatter Nemo live? In a NNnNeMI-NNnNe.",
-    get unlocked() { return player.totalAntimatter.e >= 3e6; }
+    get unlocked() { return player.records.totalAntimatter.e >= 3e6; }
   },
   {
     id: "l45",
@@ -2430,7 +2431,7 @@ GameDatabase.news = [
   {
     id: "l52",
     text: "Timing is key.",
-    get unlocked() { return player.thisEternity < 10; }
+    get unlocked() { return player.records.thisEternity.realTime < 10; }
   },
   {
     id: "l53",
@@ -2681,14 +2682,14 @@ GameDatabase.news = [
       return "Sometimes you want to break things, sometimes you want to use broken things.";
     },
     get unlocked() {
-      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
+      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromHours(2).totalMilliseconds;
     }
   },
   {
     id: "e2",
     text: "Keep in mind, V, the Celestial of Achievements, is the next celestial.",
     get unlocked() {
-      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
+      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromHours(2).totalMilliseconds;
     }
   },
   {
@@ -2697,7 +2698,7 @@ GameDatabase.news = [
       `You can get Antimatter Galaxies the same way you can get more than
       2 Antimatter Galaxies without Infinity being broken.`,
     get unlocked() {
-      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
+      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromHours(2).totalMilliseconds;
     }
   },
   {
@@ -2707,7 +2708,7 @@ GameDatabase.news = [
         You couldn't get those anyway, why do you care?`;
     },
     get unlocked() {
-      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromHours(2).totalMilliseconds;
+      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromHours(2).totalMilliseconds;
     }
   },
   {
@@ -2716,14 +2717,14 @@ GameDatabase.news = [
       `No, you can't decrease <span style='color: black; background: black;'>REDACTED</span>
       to ×1.8, but it's still worth acting as if you could.`,
     get unlocked() {
-      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
     }
   },
   {
     id: "e6",
     text: "Have you tried rotating your screen 14 degrees counterclockwise?",
     get unlocked() {
-      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
     }
   },
   {
@@ -2732,7 +2733,7 @@ GameDatabase.news = [
       return `${format(new Decimal("1e201600"), 0, 0)} IP? I'm finally done!`;
     },
     get unlocked() {
-      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
     }
   },
   {
@@ -2746,35 +2747,35 @@ GameDatabase.news = [
     <span style='color: black; background: black;'>RED</span>
     <span style='color: black; background: black;'>REDACTED</span>`,
     get unlocked() {
-      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
     }
   },
   {
     id: "e9",
     text: "Social distancing with regard to Eternity is not encouraged.",
     get unlocked() {
-      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
     }
   },
   {
     id: "e10",
     text: "Dilation glyph TT generation has been replaced by a more all-at-once source.",
     get unlocked() {
-      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
     }
   },
   {
     id: "e11",
     text: "To get to Reality, release stored time in EC10. Oh, sorry, that one was for a different celestial.",
     get unlocked() {
-      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
     }
   },
   {
     id: "e12",
     text: "Introducing a new feature: Reality Studies! Get in-game benefits for studying in real life!",
     get unlocked() {
-      return Enslaved.isRunning && player.thisRealityRealTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
+      return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;
     }
   },
   {

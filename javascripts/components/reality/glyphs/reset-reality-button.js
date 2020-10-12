@@ -8,15 +8,6 @@ Vue.component("reset-reality-button", {
       isInCelestialReality: false,
     };
   },
-  computed: {
-    classObject() {
-      return {
-        "l-reset-reality-button": true,
-        "c-reset-reality-button": true,
-        "c-reset-reality-button-celestial": this.isInCelestialReality,
-      };
-    }
-  },
   methods: {
     update() {
       this.canReality = TimeStudy.reality.isBought && player.eternityPoints.gte("1e4000");
@@ -37,7 +28,9 @@ Vue.component("reset-reality-button", {
     },
   },
   template: `
-  <button :class="classObject"
+  <button :class="['l-reset-reality-button',
+          'c-reset-reality-button',
+          {'c-reset-reality-button-celestial': isInCelestialReality}]"
           @click="resetReality">
     <div class="l-reality-button__contents">{{ resetText() }}</div>
   </button>

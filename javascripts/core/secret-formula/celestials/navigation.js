@@ -237,7 +237,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "effarig-infinity": {
-      visible: () => Effarig.run.isUnlocked,
+      visible: () => EffarigUnlock.run.isUnlocked,
       complete: () => {
         if (EffarigUnlock.infinity.isUnlocked) return 1;
         if (!Effarig.isRunning) return 0;

@@ -653,6 +653,29 @@ button:focus {
   background: black;
 }
 
+.c-reset-reality-button-celestial {
+  color: var(--color-celestials);
+  border-color: var(--color-celestials);
+}
+
+.c-reset-reality-button-celestial:hover, .c-reset-reality-button-celestial.force-hover,
+.t-s6 .c-reset-reality-button-celestial:hover, .t-s6 .c-reset-reality-button-celestial.force-hover {
+  color: white;
+  background: var(--color-celestials);
+}
+
+.t-dark-metro .c-reset-reality-button-celestial,
+.t-inverted-metro .c-reset-reality-button-celestial,
+.t-metro .c-reset-reality-button-celestial,
+.t-s8 .c-reset-reality-button-celestial {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.t-s6 .c-reset-reality-button-celestial {
+  background: black;
+}
+
 .l-reality-amplify-button {
   margin-top: 1rem;
   margin-bottom: 1rem;

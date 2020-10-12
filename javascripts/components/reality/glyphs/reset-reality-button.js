@@ -19,10 +19,10 @@ Vue.component("reset-reality-button", {
     },
     resetText() {
       if (this.isInCelestialReality && !this.resetCelestial) {
-        return "Exit Celestial early";
+        return "Exit this Celestial early";
       }
       if (this.isInCelestialReality && this.resetCelestial) {
-        return "Start this Celestial over";
+        return "Restart this Celestial";
       }
       return "Start this Reality over";
     },

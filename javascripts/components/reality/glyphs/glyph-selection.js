@@ -24,7 +24,7 @@ Vue.component("modal-glyph-selection", {
         currentGlyph.level = newGlyph.level;
         currentGlyph.effects = newGlyph.effects;
       }
-      this.canSacrifice = RealityUpgrades(19).isEffectActive;
+      this.canSacrifice = RealityUpgrade(19).isEffectActive;
       this.levelDifference = Math.abs(player.records.bestReality.glyphLevel - this.glyphs[0].level);
     },
     select(index) {

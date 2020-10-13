@@ -9,6 +9,9 @@
 // GameKeyboard class uses Mousetrap under the hood, so for more details visit
 // https://craig.is/killing/mice
 
+// Free keys:
+// i, j, k, l, n, o, p, q, v, w, x, z
+
 GameKeyboard.bindRepeatableHotkey("m", () => maxAll());
 GameKeyboard.bindRepeatableHotkey("d", () => requestDimensionBoost(true));
 GameKeyboard.bindRepeatableHotkey("shift+d", () => requestDimensionBoost(false));

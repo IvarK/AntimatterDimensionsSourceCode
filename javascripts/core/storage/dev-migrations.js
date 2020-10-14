@@ -752,7 +752,6 @@ GameStorage.devMigrations = {
       player.celestials.ra.unlockBits &= ~(1 << 29);
     },
     player => {
-      console.log(player.celestials.ra.pets.teresa.exp);
       player.records.gameCreatedTime = player.gameCreatedTime;
       player.records.totalTimePlayed = player.totalTimePlayed;
       player.records.realTimePlayed = player.realTimePlayed;

@@ -30,7 +30,7 @@ const GlyphSelection = {
     if (glyphList.some(e => e.strength >= strengthThreshold)) return;
     glyphList[Math.floor(random * glyphList.length)].strength = newStrength;
   },
-  
+
   glyphList(countIn, level, config) {
     // Always generate at least 4 choices so that the RNG never diverges based on
     // the 4-choice perk.
@@ -487,7 +487,7 @@ function restoreCelestialRuns(celestialRunState) {
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
 function applyRUPG10() {
   NormalChallenges.completeAll();
-  
+
   player.auto.dimensions = player.auto.dimensions.map(() => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
@@ -497,7 +497,7 @@ function applyRUPG10() {
     mode: AUTOBUYER_MODE.BUY_10,
     priority: 1,
     isActive: true,
-    lastTick: player.realTimePlayed
+    lastTick: player.records.realTimePlayed
   }));
   for (const autobuyer of Autobuyers.all) {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;

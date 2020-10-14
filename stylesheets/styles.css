@@ -47,6 +47,8 @@ html {
 
   --color-effarig--base: #d13737;
 
+  --color-enslaved-base: #f1aa7f;
+
   --color-v--base: #ead584;
 
   --color-ra-pet-teresa: #8596ea;
@@ -6343,6 +6345,7 @@ kbd {
   width: 16rem;
   height: 16rem;
   margin: 1.5rem;
+  color: var(--color-enslaved-base);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -6350,14 +6353,14 @@ kbd {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  border: 0.4rem solid #f1aa7f;
+  border: 0.4rem solid var(--color-enslaved-base);
   transition-duration: 0.2s;
   animation: a-enslaved-run-button--spin 120s infinite linear;
 }
 
 .c-enslaved-run-button__icon:hover {
   color: black;
-  background: #f1aa7f;
+  background: var(--color-enslaved-base);
   border-color: black;
 }
 
@@ -6372,7 +6375,7 @@ kbd {
 
 .c-enslaved-run-button__icon__glitch {
   position: absolute;
-  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%, #f1aa7f 20%, #f1aa7f 80%, rgba(0,0,0,0) 100%);
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%, var(--color-enslaved-base) 20%, var(--color-enslaved-base) 80%, rgba(0,0,0,0) 100%);
   border: none;
   width: 0.1rem;
 }

@@ -7202,7 +7202,7 @@ kbd {
   color: var(--color-ra-pet-teresa);
 }
 
-.c-ra-pet-btn--teresa:hover {
+.c-ra-pet-btn--teresa:hover, .c-ra-pet-btn--teresa__capped {
   background: var(--color-ra-pet-teresa);
 }
 
@@ -7210,7 +7210,7 @@ kbd {
   color: var(--color-ra-pet-effarig);
 }
 
-.c-ra-pet-btn--effarig:hover {
+.c-ra-pet-btn--effarig:hover, .c-ra-pet-btn--effarig__capped {
   background: var(--color-ra-pet-effarig);
 }
 
@@ -7218,7 +7218,7 @@ kbd {
   color: var(--color-ra-pet-enslaved);
 }
 
-.c-ra-pet-btn--enslaved:hover {
+.c-ra-pet-btn--enslaved:hover, .c-ra-pet-btn--enslaved__capped {
   background: var(--color-ra-pet-enslaved);
 }
 
@@ -7226,29 +7226,13 @@ kbd {
   color: var(--color-ra-pet-v);
 }
 
-.c-ra-pet-btn--v:hover {
+.c-ra-pet-btn--v:hover, .c-ra-pet-btn--v__capped {
   background: var(--color-ra-pet-v);
 }
 
 .c-ra-pet-btn--available__capped {
   cursor: default;
   color: black;
-}
-
-.c-ra-pet-btn--teresa__capped {
-  background: var(--color-ra-pet-teresa);
-}
-
-.c-ra-pet-btn--effarig__capped {
-  background: var(--color-ra-pet-effarig);
-}
-
-.c-ra-pet-btn--enslaved__capped {
-  background: var(--color-ra-pet-enslaved);
-}
-
-.c-ra-pet-btn--v__capped {
-  background: var(--color-ra-pet-v);
 }
 
 .l-ra-pet-middle-container {

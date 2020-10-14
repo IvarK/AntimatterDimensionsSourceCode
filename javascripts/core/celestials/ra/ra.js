@@ -35,7 +35,7 @@ class RaPetState {
   set exp(value) {
     this.data.exp = value;
   }
-  
+
   get memoryChunks() {
     return this.data.memoryChunks;
   }
@@ -47,7 +47,7 @@ class RaPetState {
   get requiredExp() {
     return Ra.requiredExpForLevel(this.level);
   }
-  
+
   /**
    * @abstract
    */
@@ -57,7 +57,7 @@ class RaPetState {
    * @abstract
    */
   get color() { throw new NotImplementedError(); }
-  
+
   get memoryChunksPerSecond() {
     let res = this.canGetMemoryChunks ? this.rawMemoryChunksPerSecond : 0;
     res *= RA_UNLOCKS.TT_BOOST.effect.memoryChunks();
@@ -65,11 +65,11 @@ class RaPetState {
     if (this.hasRecollection) res *= RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
     return res;
   }
-  
+
   get canGetMemoryChunks() {
     return this.isUnlocked && Ra.isRunning;
   }
-  
+
   get hasRecollection() {
     return Ra.petWithRecollection === this.name;
   }
@@ -80,7 +80,7 @@ class RaPetState {
 
   get chunkUpgradeCurrentMult() {
     return Math.pow(1.3, this.data.chunkUpgrades);
-    
+
   }
 
   get memoryUpgradeCost() {
@@ -98,17 +98,24 @@ class RaPetState {
   get canBuyChunkUpgrade() {
     return this.chunkUpgradeCost <= this.exp;
   }
-  
+
+  get memoryUpgradeCapped() {
+    return this.data.memoryUpgrades === 22;
+  }
+
+  get chunkUpgradeCapped() {
+    return this.data.chunkUpgrades === 17;
+  }
 
   purchaseMemoryUpgrade() {
-    if (!this.canBuyMemoryUpgrade) return;
+    if (!this.canBuyMemoryUpgrade || this.memoryUpgradeCapped) return;
 
     this.exp -= this.memoryUpgradeCost;
     this.data.memoryUpgrades++;
   }
 
   purchaseChunkUpgrade() {
-    if (!this.canBuyChunkUpgrade) return;
+    if (!this.canBuyChunkUpgrade || this.chunkUpgradeCapped) return;
 
     this.exp -= this.chunkUpgradeCost;
     this.data.chunkUpgrades++;
@@ -121,7 +128,7 @@ class RaPetState {
     this.level++;
     Ra.checkForUnlocks();
   }
-  
+
   tick(realDiff, generateChunks) {
     const seconds = realDiff / 1000;
     const newMemoryChunks = generateChunks
@@ -129,7 +136,7 @@ class RaPetState {
       : 0;
     // Adding memories from half of the gained chunks this tick results in the best mathematical behavior
     // for very long simulated ticks
-    const newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk() * 
+    const newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk() *
       this.memoryUpgradeCurrentMult;
     this.memoryChunks += newMemoryChunks;
     this.exp += newMemories;
@@ -139,6 +146,8 @@ class RaPetState {
     this.data.level = 1;
     this.data.exp = 0;
     this.data.memoryChunks = 0;
+    this.data.memoryUpgrades = 0;
+    this.data.chunkUpgrades = 0;
   }
 }
 
@@ -176,7 +185,7 @@ const Ra = {
       get color() { return "#f1aa7f"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.ENSLAVED_XP)
-          ? 1 + Math.log10(player.totalTimePlayed) / 200
+          ? 1 + Math.log10(player.records.totalTimePlayed) / 200
           : 1;
       }
     }(),

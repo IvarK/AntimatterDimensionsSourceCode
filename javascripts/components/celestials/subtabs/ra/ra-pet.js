@@ -21,6 +21,8 @@ Vue.component("ra-pet", {
       canGetMemoryChunks: false,
       memoryUpgradeCost: 0,
       chunkUpgradeCost: 0,
+      memoryUpgradeCapped: false,
+      chunkUpgradeCapped: false,
       currentMemoryMult: 0,
       currentChunkMult: 0,
       nextMemoryUpgradeEstimate: "",
@@ -72,20 +74,6 @@ Vue.component("ra-pet", {
           throw new Error(`Unrecognized celestial ${this.pet.name} in Ra UI`);
       }
     },
-    memoryUpgradeTooltip() {
-      if (this.nextMemoryUpgradeEstimate === "purchasable") {
-        return `Cost: ${format(this.memoryUpgradeCost, 2, 2)}
-        <br>Currently: ${formatX(this.currentMemoryMult, 2, 2)}`;
-      }
-      return `Cost: ${format(this.memoryUpgradeCost, 2, 2)}
-      in: ${this.nextMemoryUpgradeEstimate}
-      <br>Currently: ${formatX(this.currentMemoryMult, 2, 2)}`;
-    },
-    chunkUpgradeTooltip() {
-      return `Cost: ${format(this.chunkUpgradeCost, 2, 2)} Memories
-      <span v-if="this.exp <= this.chunkUpgradeCost">in ${this.nextMemoryChunkUpgradeEstimate}</span>
-      <br>Current effect: ${formatX(this.currentChunkMult, 2, 2)}`;
-    }
   },
   methods: {
     update() {
@@ -106,6 +94,8 @@ Vue.component("ra-pet", {
       this.memoryMultiplier = pet.memoryProductionMultiplier;
       this.memoryUpgradeCost = pet.memoryUpgradeCost;
       this.chunkUpgradeCost = pet.chunkUpgradeCost;
+      this.memoryUpgradeCapped = pet.memoryUpgradeCapped;
+      this.chunkUpgradeCapped = pet.chunkUpgradeCapped;
       this.currentMemoryMult = pet.memoryUpgradeCurrentMult;
       this.currentChunkMult = pet.chunkUpgradeCurrentMult;
 
@@ -134,6 +124,7 @@ Vue.component("ra-pet", {
     },
     upgradeClassObject(type) {
       const available = type === "memory" ? this.memoryUpgradeCost <= this.exp : this.chunkUpgradeCost <= this.exp;
+      const capped = type === "memory" ? this.memoryUpgradeCapped : this.chunkUpgradeCapped;
       const pet = this.pet;
       return {
         "c-ra-pet-upgrade": true,
@@ -141,13 +132,21 @@ Vue.component("ra-pet", {
         "c-ra-pet-btn--teresa": available && pet.name === "Teresa",
         "c-ra-pet-btn--effarig": available && pet.name === "Effarig",
         "c-ra-pet-btn--enslaved": available && pet.name === "Enslaved",
-        "c-ra-pet-btn--v": available && pet.name === "V"
+        "c-ra-pet-btn--v": available && pet.name === "V",
+        "c-ra-pet-btn--available__capped": capped,
+        "c-ra-pet-btn--teresa__capped": capped && pet.name === "Teresa",
+        "c-ra-pet-btn--effarig__capped": capped && pet.name === "Effarig",
+        "c-ra-pet-btn--enslaved__capped": capped && pet.name === "Enslaved",
+        "c-ra-pet-btn--v__capped": capped && pet.name === "V"
       };
     },
     barStyle(type) {
       const cost = type === "memory" ? this.memoryUpgradeCost : this.chunkUpgradeCost;
+      const gone = (type === "memory" && this.memoryUpgradeCapped || type === "chunk" && this.chunkUpgradeCapped)
+      ? cost
+      : this.exp;
       return {
-        width: `${100 * Math.min(1, this.exp / cost)}%`,
+        width: `${100 * Math.min(1, gone / cost)}%`,
         background: this.pet.color
       };
     },
@@ -177,14 +176,20 @@ Vue.component("ra-pet", {
                 style="border-top-right-radius: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0;"
               >
                 <span class="fas fa-brain"></span>
-                <div class="c-ra-pet-upgrade__tooltip">
+                <div class="c-ra-pet-upgrade__tooltip" v-if="!memoryUpgradeCapped">
                   <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Recollection</div>
                   <div class="c-ra-pet-upgrade__tooltip__description">Gain {{ formatPercents(0.3) }} more Memories</div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
                     Cost: {{ format(memoryUpgradeCost, 2, 2) }} Memories
                     <span v-if="exp <= memoryUpgradeCost">in {{ nextMemoryUpgradeEstimate }}</span>
                     <br>
-                    Current effect: {{ formatX(currentMemoryMult, 2, 2) }}
+                    Currently: {{ formatX(currentMemoryMult, 2, 2) }}
+                  </div>
+                </div>
+                <div class="c-ra-pet-upgrade__tooltip" v-else>
+                  <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Recollection</div>
+                  <div class="c-ra-pet-upgrade__tooltip__description">
+                    Capped: {{ formatX(currentMemoryMult, 2, 2) }}
                   </div>
                 </div>
               </div>
@@ -199,7 +204,7 @@ Vue.component("ra-pet", {
                 style="border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;"
               >
                 <span class="fas fa-dice-d6"></span>
-                <div class="c-ra-pet-upgrade__tooltip">
+                <div class="c-ra-pet-upgrade__tooltip" v-if="!chunkUpgradeCapped">
                   <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Fragmentation</div>
                   <div class="c-ra-pet-upgrade__tooltip__description">
                     Gain {{ formatPercents(0.3) }} more Memory Chunks
@@ -208,7 +213,13 @@ Vue.component("ra-pet", {
                     Cost: {{ format(chunkUpgradeCost, 2, 2) }} Memories
                     <span v-if="exp <= chunkUpgradeCost">in {{ nextMemoryChunkUpgradeEstimate }}</span>
                     <br>
-                    Current effect: {{ formatX(currentChunkMult, 2, 2) }}
+                    Currently: {{ formatX(currentChunkMult, 2, 2) }}
+                  </div>
+                </div>
+                <div class="c-ra-pet-upgrade__tooltip" v-else>
+                  <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Fragmentation</div>
+                  <div class="c-ra-pet-upgrade__tooltip__description">
+                    Capped: {{ formatX(currentChunkMult, 2, 2) }}
                   </div>
                 </div>
               </div>

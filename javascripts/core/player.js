@@ -230,14 +230,14 @@ let player = {
   offlineProd: 0,
   offlineProdCost: 1e7,
   replicanti: {
-    amount: new Decimal(0),
     unl: false,
+    amount: new Decimal(0),
     chance: 0.01,
     chanceCost: new Decimal(1e150),
     interval: 1000,
     intervalCost: new Decimal(1e140),
-    gal: 0,
-    galaxies: 0,
+    boughtGalaxyCap: 0,
+    totalGalaxyCap: 0,
     galCost: new Decimal(1e170),
     auto: [false, false, false],
     timer: 0,
@@ -334,7 +334,7 @@ let player = {
     autoSort: 0,
     autoCollapse: false,
     autoAutoClean: false,
-    pp: 0,
+    perkPoints: 0,
     autoEC: true,
     lastAutoEC: 0,
     partEternitied: new Decimal(0),
@@ -374,7 +374,7 @@ let player = {
   ttbuyer: false,
   celestials: {
     teresa: {
-      rmStore: 0,
+      pouredAmount: 0,
       quotes: [],
       unlockBits: 0,
       run: false,
@@ -445,29 +445,29 @@ let player = {
       pets: {
         teresa: {
           level: 1,
+          memories: 0,
           memoryChunks: 0,
-          exp: 0,
           memoryUpgrades: 0,
           chunkUpgrades: 0
         },
         effarig: {
           level: 1,
+          memories: 0,
           memoryChunks: 0,
-          exp: 0,
           memoryUpgrades: 0,
           chunkUpgrades: 0
         },
         enslaved: {
           level: 1,
+          memories: 0,
           memoryChunks: 0,
-          exp: 0,
           memoryUpgrades: 0,
           chunkUpgrades: 0
         },
         v: {
           level: 1,
+          memories: 0,
           memoryChunks: 0,
-          exp: 0,
           memoryUpgrades: 0,
           chunkUpgrades: 0
         }
@@ -486,8 +486,8 @@ let player = {
       petWithRecollection: ""
     },
     laitela: {
-      matter: new Decimal(0),
-      maxMatter: new Decimal(0),
+      darkMatter: new Decimal(0),
+      maxDarkMatter: new Decimal(0),
       run: false,
       unlockBits: 0,
       dimensions: Array.range(0, 4).map(() =>

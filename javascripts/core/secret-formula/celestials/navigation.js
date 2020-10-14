@@ -72,7 +72,7 @@ GameDatabase.celestials.navigation = (function() {
     "teresa-reality-unlock": {
       visible: () => true,
       complete: () => (Teresa.has(TERESA_UNLOCKS.RUN)
-        ? 1 : Decimal.pLog10(Teresa.rmStore) / Math.log10(TERESA_UNLOCKS.RUN.price)),
+        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TERESA_UNLOCKS.RUN.price)),
       node: {
         completeClass: "c-celestial-nav__test-complete",
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -84,7 +84,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           hideWhenCompleted: true,
           text: () => {
-            const rm = Teresa.rmStore;
+            const rm = Teresa.pouredAmount;
             const cost = TERESA_UNLOCKS.RUN.price;
             return `Pour ${format(rm, 2)} / ${format(cost, 2)} RM`;
           },
@@ -132,7 +132,7 @@ GameDatabase.celestials.navigation = (function() {
     "teresa-pp-shop": {
       visible: () => true,
       complete: () => (Teresa.has(TERESA_UNLOCKS.SHOP)
-        ? 1 : Decimal.pLog10(Teresa.rmStore) / Math.log10(TERESA_UNLOCKS.SHOP.price)),
+        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TERESA_UNLOCKS.SHOP.price)),
       node: {
         clickAction: () => Tab.celestials.teresa.show(true),
         completeClass: "c-celestial-nav__test-complete",
@@ -145,7 +145,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Perk Point Shop";
-            const rm = Teresa.rmStore;
+            const rm = Teresa.pouredAmount;
             const cost = TERESA_UNLOCKS.SHOP.price;
             return [
               "Perk Point Shop",
@@ -168,7 +168,7 @@ GameDatabase.celestials.navigation = (function() {
     "effarig-shop": {
       visible: () => true,
       complete: () => (Teresa.has(TERESA_UNLOCKS.EFFARIG)
-        ? 1 : Decimal.pLog10(Teresa.rmStore) / Math.log10(TERESA_UNLOCKS.EFFARIG.price)),
+        ? 1 : Decimal.pLog10(Teresa.pouredAmount) / Math.log10(TERESA_UNLOCKS.EFFARIG.price)),
       node: {
         clickAction: () => Tab.celestials.effarig.show(true),
         completeClass: "c-celestial-nav__effarig",
@@ -180,7 +180,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Effarig's Shop";
-            const rm = Teresa.rmStore;
+            const rm = Teresa.pouredAmount;
             const cost = TERESA_UNLOCKS.EFFARIG.price;
             return [
               "Effarig",
@@ -1395,7 +1395,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-2nd-dim": {
       visible: () => Laitela.isUnlocked,
-      complete: () => Laitela.maxMatter.clampMin(1).log10() / Math.log10(MatterDimension(2).adjustedStartingCost),
+      complete: () => Laitela.maxDarkMatter.clampMin(1).log10() / Math.log10(MatterDimension(2).adjustedStartingCost),
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1413,7 +1413,7 @@ GameDatabase.celestials.navigation = (function() {
             ];
             return [
             "2nd Dark Matter Dimension",
-            `Dark Matter ${format(Laitela.maxMatter.min(goal), places)} / ${format(goal)}`
+            `Dark Matter ${format(Laitela.maxDarkMatter.min(goal), places)} / ${format(goal)}`
             ];
           },
           angle: 135,
@@ -1432,7 +1432,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-3rd-dim": {
       visible: () => Laitela.isUnlocked,
-      complete: () => Laitela.maxMatter.clampMin(1).div(MatterDimension(2).adjustedStartingCost).log10() /
+      complete: () => Laitela.maxDarkMatter.clampMin(1).div(MatterDimension(2).adjustedStartingCost).log10() /
         Math.log10(MatterDimension(3).adjustedStartingCost / MatterDimension(2).adjustedStartingCost),
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
@@ -1451,7 +1451,7 @@ GameDatabase.celestials.navigation = (function() {
             ];
             return [
             "3rd Dark Matter Dimension",
-            `Dark Matter ${format(Laitela.maxMatter.min(goal), places)} / ${format(goal)}`
+            `Dark Matter ${format(Laitela.maxDarkMatter.min(goal), places)} / ${format(goal)}`
             ];
           },
           angle: 45,
@@ -1469,8 +1469,8 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "laitela-4th-dim-left": {
-      visible: () => Laitela.maxMatter.gte(MatterDimension(3).adjustedStartingCost),
-      complete: () => Laitela.maxMatter.clampMin(1).div(MatterDimension(3).adjustedStartingCost).log10() /
+      visible: () => Laitela.maxDarkMatter.gte(MatterDimension(3).adjustedStartingCost),
+      complete: () => Laitela.maxDarkMatter.clampMin(1).div(MatterDimension(3).adjustedStartingCost).log10() /
         Math.log10(MatterDimension(4).adjustedStartingCost / MatterDimension(3).adjustedStartingCost),
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
@@ -1489,7 +1489,7 @@ GameDatabase.celestials.navigation = (function() {
             ];
             return [
             "4th Dark Matter Dimension",
-            `Dark Matter ${format(Laitela.maxMatter.min(goal), places)} / ${format(goal)}`
+            `Dark Matter ${format(Laitela.maxDarkMatter.min(goal), places)} / ${format(goal)}`
             ];
           },
           angle: 15,
@@ -1507,8 +1507,8 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "laitela-4th-dim-right": {
-      visible: () => Laitela.maxMatter.gte(MatterDimension(3).adjustedStartingCost),
-      complete: () => Laitela.maxMatter.clampMin(1).div(MatterDimension(3).adjustedStartingCost).log10() /
+      visible: () => Laitela.maxDarkMatter.gte(MatterDimension(3).adjustedStartingCost),
+      complete: () => Laitela.maxDarkMatter.clampMin(1).div(MatterDimension(3).adjustedStartingCost).log10() /
         Math.log10(MatterDimension(4).adjustedStartingCost / MatterDimension(3).adjustedStartingCost),
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
@@ -1529,7 +1529,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "laitela-annihilation": {
-      visible: () => Laitela.maxMatter.gte(MatterDimension(4).adjustedStartingCost),
+      visible: () => Laitela.maxDarkMatter.gte(MatterDimension(4).adjustedStartingCost),
       complete: () => Number(Laitela.darkMatterMult > 1),
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
@@ -1559,7 +1559,7 @@ GameDatabase.celestials.navigation = (function() {
       },
     },
     "laitela-singularity": {
-      visible: () => Laitela.maxMatter.gte(MatterDimension(4).adjustedStartingCost),
+      visible: () => Laitela.maxDarkMatter.gte(MatterDimension(4).adjustedStartingCost),
       complete: () => player.celestials.laitela.singularities,
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),

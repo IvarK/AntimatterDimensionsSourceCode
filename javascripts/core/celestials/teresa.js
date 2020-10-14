@@ -32,20 +32,20 @@ const Teresa = {
   timePoured: 0,
   unlockInfo: TERESA_UNLOCKS,
   lastUnlock: "SHOP",
-  rmStoreMax: 1e24,
+  pouredAmountCap: 1e24,
   displayName: "Teresa",
   pourRM(diff) {
-    if (this.rmStore >= Teresa.rmStoreMax) return;
+    if (this.pouredAmount >= Teresa.pouredAmountCap) return;
     this.timePoured += diff;
     const rm = player.reality.realityMachines;
-    const rmPoured = Math.min((this.rmStore + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber());
-    this.rmStore += Math.min(rmPoured, Teresa.rmStoreMax - this.rmStore);
+    const rmPoured = Math.min((this.pouredAmount + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber());
+    this.pouredAmount += Math.min(rmPoured, Teresa.pouredAmountCap - this.pouredAmount);
     player.reality.realityMachines = rm.minus(rmPoured);
     this.checkForUnlocks();
   },
   checkForUnlocks() {
     for (const info of Object.values(Teresa.unlockInfo)) {
-      if (!this.has(info) && this.rmStore >= info.price) {
+      if (!this.has(info) && this.pouredAmount >= info.price) {
         // eslint-disable-next-line no-bitwise
         player.celestials.teresa.unlockBits |= (1 << info.id);
         EventHub.dispatch(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, this, info);
@@ -64,17 +64,17 @@ const Teresa = {
   rewardMultiplier(antimatter) {
     return Decimal.max(Decimal.pow(antimatter.plus(1).log10() / 1.5e8, 12), 1).toNumber();
   },
-  get rmStore() {
-    return player.celestials.teresa.rmStore;
+  get pouredAmount() {
+    return player.celestials.teresa.pouredAmount;
   },
-  set rmStore(amount) {
-    player.celestials.teresa.rmStore = amount;
+  set pouredAmount(amount) {
+    player.celestials.teresa.pouredAmount = amount;
   },
   get fill() {
-    return Math.min(Math.log10(this.rmStore) / 24, 1);
+    return Math.min(Math.log10(this.pouredAmount) / 24, 1);
   },
   get rmMultiplier() {
-    return Math.max(Math.pow(this.rmStore, 0.1), 1);
+    return Math.max(Math.pow(this.pouredAmount, 0.1), 1);
   },
   get runRewardMultiplier() {
     return this.rewardMultiplier(player.celestials.teresa.bestRunAM);
@@ -145,7 +145,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     if (this.id === 4) {
       if (Glyphs.freeInventorySpace === 0) {
         // Refund the perk point if they didn't actually get a glyph
-        player.reality.pp++;
+        player.reality.perkPoints++;
         GameUI.notify.error("You have no empty inventory space!");
       } else {
         Glyphs.addToInventory(GlyphGenerator.musicGlyph());

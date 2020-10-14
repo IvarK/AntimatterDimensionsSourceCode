@@ -9,8 +9,8 @@ Vue.component("ra-pet-level-bar", {
       pet: {},
       isUnlocked: false,
       level: 0,
-      exp: 0,
-      requiredExp: 0,
+      memories: 0,
+      requiredMemories: 0,
       nextLevelEstimate: 0,
     };
   },
@@ -26,7 +26,7 @@ Vue.component("ra-pet-level-bar", {
     },
     barStyle() {
       return {
-        width: `${100 * Math.min(1, this.exp / this.requiredExp)}%`,
+        width: `${100 * Math.min(1, this.memories / this.requiredMemories)}%`,
         background: this.pet.color
       };
     },
@@ -47,7 +47,7 @@ Vue.component("ra-pet-level-bar", {
       return this.level + 1;
     },
     classObject() {
-      const available = this.exp >= this.requiredExp;
+      const available = this.memories >= this.requiredMemories;
       const pet = this.pet;
       return {
         "c-ra-level-up-btn": true,
@@ -111,10 +111,10 @@ Vue.component("ra-pet-level-bar", {
       const pet = this.pet;
       this.isUnlocked = pet.isUnlocked;
       if (!this.isUnlocked) return;
-      this.exp = pet.exp;
+      this.memories = pet.memories;
       this.level = pet.level;
-      this.requiredExp = pet.requiredExp;
-      this.nextLevelEstimate = this.timeToGoalString((this.requiredExp - this.exp));
+      this.requiredMemories = pet.requiredMemories;
+      this.nextLevelEstimate = this.timeToGoalString((this.requiredMemories - this.memories));
     },
     isImportant(level) {
       return this.importantLevels.includes(level);
@@ -153,8 +153,8 @@ Vue.component("ra-pet-level-bar", {
             </div>
           </div>
           <div class="c-ra-pet-upgrade__tooltip__footer">
-            {{ format(requiredExp, 2, 2) }} Memories
-            <span v-if="exp <= requiredExp">in {{ nextLevelEstimate }}</span>
+            {{ format(requiredMemories, 2, 2) }} Memories
+            <span v-if="memories <= requiredMemories">in {{ nextLevelEstimate }}</span>
           </div>
         </div>
       </div>

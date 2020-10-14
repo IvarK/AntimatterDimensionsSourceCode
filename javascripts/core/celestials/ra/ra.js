@@ -28,12 +28,12 @@ class RaPetState {
     this.data.level = value;
   }
 
-  get exp() {
-    return this.data.exp;
+  get memories() {
+    return this.data.memories;
   }
 
-  set exp(value) {
-    this.data.exp = value;
+  set memories(value) {
+    this.data.memories = value;
   }
 
   get memoryChunks() {
@@ -44,8 +44,8 @@ class RaPetState {
     this.data.memoryChunks = value;
   }
 
-  get requiredExp() {
-    return Ra.requiredExpForLevel(this.level);
+  get requiredMemories() {
+    return Ra.requiredMemoriesForLevel(this.level);
   }
 
   /**
@@ -92,11 +92,11 @@ class RaPetState {
   }
 
   get canBuyMemoryUpgrade() {
-    return this.memoryUpgradeCost <= this.exp;
+    return this.memoryUpgradeCost <= this.memories;
   }
 
   get canBuyChunkUpgrade() {
-    return this.chunkUpgradeCost <= this.exp;
+    return this.chunkUpgradeCost <= this.memories;
   }
 
   get memoryUpgradeCapped() {
@@ -110,21 +110,21 @@ class RaPetState {
   purchaseMemoryUpgrade() {
     if (!this.canBuyMemoryUpgrade || this.memoryUpgradeCapped) return;
 
-    this.exp -= this.memoryUpgradeCost;
+    this.memories -= this.memoryUpgradeCost;
     this.data.memoryUpgrades++;
   }
 
   purchaseChunkUpgrade() {
     if (!this.canBuyChunkUpgrade || this.chunkUpgradeCapped) return;
 
-    this.exp -= this.chunkUpgradeCost;
+    this.memories -= this.chunkUpgradeCost;
     this.data.chunkUpgrades++;
   }
 
   levelUp() {
-    if (this.exp < this.requiredExp) return;
+    if (this.memories < this.requiredMemories) return;
 
-    this.exp -= this.requiredExp;
+    this.memories -= this.requiredMemories;
     this.level++;
     Ra.checkForUnlocks();
   }
@@ -139,12 +139,12 @@ class RaPetState {
     const newMemories = seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk() *
       this.memoryUpgradeCurrentMult;
     this.memoryChunks += newMemoryChunks;
-    this.exp += newMemories;
+    this.memories += newMemories;
   }
 
   reset() {
     this.data.level = 1;
-    this.data.exp = 0;
+    this.data.memories = 0;
     this.data.memoryChunks = 0;
     this.data.memoryUpgrades = 0;
     this.data.chunkUpgrades = 0;
@@ -230,7 +230,7 @@ const Ra = {
     return res;
   },
   // This is the exp required ON "level" in order to reach "level + 1"
-  requiredExpForLevel(level) {
+  requiredMemoriesForLevel(level) {
     if (level >= 25) return Infinity;
     const adjustedLevel = level + Math.pow(level, 2) / 10;
     const post15Scaling = Math.pow(1.5, Math.max(0, level - 15));
@@ -240,7 +240,7 @@ const Ra = {
   // TODO mathematically optimize this once Ra exp curves and balancing are finalized
   totalExpForLevel(maxLevel) {
     let runningTotal = 0;
-    for (let lv = 1; lv < maxLevel; lv++) runningTotal += this.requiredExpForLevel(lv);
+    for (let lv = 1; lv < maxLevel; lv++) runningTotal += this.requiredMemoriesForLevel(lv);
     return runningTotal;
   },
   get totalPetLevel() {

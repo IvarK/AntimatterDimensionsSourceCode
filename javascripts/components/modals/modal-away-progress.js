@@ -42,9 +42,9 @@ Vue.component("modal-away-progress", {
           (!after.eternities.gt(before.eternities) || !this.eternities) &&
           (after.realities <= before.realities || !this.realities) &&
           (after.celestials.laitela.singularities <= before.celestials.laitela.singularities || !this.singularities) &&
-          (!after.celestials.laitela.matter.gt(before.celestials.laitela.matter) || !this.darkMatter) &&
+          (!after.celestials.laitela.darkMatter.gt(before.celestials.laitela.darkMatter) || !this.darkMatter) &&
           (!after.replicanti.amount.gt(before.replicanti.amount) || !this.replicanti) &&
-          (after.replicanti.galaxies <= before.replicanti.galaxies || !this.replicantiGalaxies) &&
+          (after.replicanti.totalGalaxyCap <= before.replicanti.totalGalaxyCap || !this.replicantiGalaxies) &&
           !this.celestialMemoriesShown &&
           !this.blackHoleShown
          ) {
@@ -56,7 +56,7 @@ Vue.component("modal-away-progress", {
     },
     celestialMemoriesShown() {
       for (const petName in this.before.celestials.ra.pets) {
-        if (this.after.celestials.ra.pets[petName].exp > this.before.celestials.ra.pets[petName].exp &&
+        if (this.after.celestials.ra.pets[petName].memories > this.before.celestials.ra.pets[petName].memories &&
             player.options.awayProgress.celestialMemories) return true;
       }
     return false;
@@ -89,7 +89,7 @@ Vue.component("modal-away-progress", {
     },
     formatPseudo(number) {
       if (Decimal.lt(number, 1e9)) return formatInt(number);
-      return format(number, 2, 2);  
+      return format(number, 2, 2);
     }
   },
   template: `
@@ -143,20 +143,21 @@ Vue.component("modal-away-progress", {
           {{ formatPseudo(before.celestials.laitela.singularities) }} to
           {{ formatPseudo(after.celestials.laitela.singularities) }}
         </div>
-        <div v-if="after.celestials.laitela.matter.gt(before.celestials.laitela.matter) && darkMatter">
+        <div v-if="after.celestials.laitela.darkMatter.gt(before.celestials.laitela.darkMatter) && darkMatter">
           <b class="c-modal-away-progress__singularities">Dark Matter</b> increased from
           <br>
-          {{ format(before.celestials.laitela.matter, 2, 2) }} to {{ format(after.celestials.laitela.matter, 2, 2) }}
+          {{ format(before.celestials.laitela.darkMatter, 2, 2) }} to
+          {{ format(after.celestials.laitela.darkMatter, 2, 2) }}
         </div>
         <div v-if="after.replicanti.amount.gt(before.replicanti.amount) && replicanti">
           <b class="c-modal-away-progress__replicanti">Replicanti</b> increased from
           <br>
           {{ format(before.replicanti.amount, 2, 2) }} to {{ format(after.replicanti.amount, 2, 2) }}
         </div>
-        <div v-if="after.replicanti.galaxies > before.replicanti.galaxies && replicantiGalaxies">
+        <div v-if="after.replicanti.totalGalaxyCap > before.replicanti.totalGalaxyCap && replicantiGalaxies">
           <b class="c-modal-away-progress__replicanti">Replicanti Galaxies</b> increased from
           <br>
-          {{ formatInt(before.replicanti.galaxies) }} to {{ formatInt(after.replicanti.galaxies) }}
+          {{ formatInt(before.replicanti.totalGalaxyCap) }} to {{ formatInt(after.replicanti.totalGalaxyCap) }}
         </div>
         <div v-if="celestialMemoriesShown">
           <span v-if="after.celestials.ra.pets.teresa.level > before.celestials.ra.pets.teresa.level">

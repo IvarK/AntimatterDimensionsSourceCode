@@ -12,8 +12,8 @@ Vue.component("ra-pet", {
       isCapped: false,
       name: "",
       level: 0,
-      exp: 0,
-      requiredExp: 0,
+      memories: 0,
+      requiredMemories: 0,
       memoryChunks: 0,
       memoryChunksPerSecond: 0,
       memoriesPerSecond: 0,
@@ -85,8 +85,8 @@ Vue.component("ra-pet", {
       if (!this.isUnlocked) return;
       this.name = pet.name;
       this.level = pet.level;
-      this.exp = pet.exp;
-      this.requiredExp = pet.requiredExp;
+      this.memories = pet.memories;
+      this.requiredMemories = pet.requiredMemories;
       this.memoryChunks = pet.memoryChunks;
       this.memoryChunksPerSecond = pet.memoryChunksPerSecond;
       this.memoriesPerSecond = pet.memoryChunks * Ra.productionPerMemoryChunk() * this.currentMemoryMult;
@@ -99,8 +99,8 @@ Vue.component("ra-pet", {
       this.currentMemoryMult = pet.memoryUpgradeCurrentMult;
       this.currentChunkMult = pet.chunkUpgradeCurrentMult;
 
-      this.nextMemoryUpgradeEstimate = this.timeToGoalString((this.memoryUpgradeCost - this.exp));
-      this.nextMemoryChunkUpgradeEstimate = this.timeToGoalString((this.chunkUpgradeCost - this.exp));
+      this.nextMemoryUpgradeEstimate = this.timeToGoalString((this.memoryUpgradeCost - this.memories));
+      this.nextMemoryChunkUpgradeEstimate = this.timeToGoalString((this.chunkUpgradeCost - this.memories));
     },
     timeToGoalString(expToGain) {
       // Quadratic formula for growth (uses constant growth for a = 0)
@@ -123,7 +123,9 @@ Vue.component("ra-pet", {
       return missingUpgrades.length === 0 ? 25 : missingUpgrades.min();
     },
     upgradeClassObject(type) {
-      const available = type === "memory" ? this.memoryUpgradeCost <= this.exp : this.chunkUpgradeCost <= this.exp;
+      const available = type === "memory"
+        ? this.memoryUpgradeCost <= this.memories
+        : this.chunkUpgradeCost <= this.memories;
       const capped = type === "memory" ? this.memoryUpgradeCapped : this.chunkUpgradeCapped;
       const pet = this.pet;
       return {
@@ -144,7 +146,7 @@ Vue.component("ra-pet", {
       const cost = type === "memory" ? this.memoryUpgradeCost : this.chunkUpgradeCost;
       const gone = (type === "memory" && this.memoryUpgradeCapped || type === "chunk" && this.chunkUpgradeCapped)
       ? cost
-      : this.exp;
+      : this.memories;
       return {
         width: `${100 * Math.min(1, gone / cost)}%`,
         background: this.pet.color
@@ -164,7 +166,7 @@ Vue.component("ra-pet", {
         </div>
         <div v-if="!isCapped">
           <div>
-            {{ name }} has {{ format(exp, 2) }} Memories
+            {{ name }} has {{ format(memories, 2) }} Memories
           </div>
         </div>
         <div class="l-ra-pet-middle-container" v-if="!isCapped">
@@ -181,7 +183,7 @@ Vue.component("ra-pet", {
                   <div class="c-ra-pet-upgrade__tooltip__description">Gain {{ formatPercents(0.3) }} more Memories</div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
                     Cost: {{ format(memoryUpgradeCost, 2, 2) }} Memories
-                    <span v-if="exp <= memoryUpgradeCost">in {{ nextMemoryUpgradeEstimate }}</span>
+                    <span v-if="memories <= memoryUpgradeCost">in {{ nextMemoryUpgradeEstimate }}</span>
                     <br>
                     Currently: {{ formatX(currentMemoryMult, 2, 2) }}
                   </div>
@@ -211,7 +213,7 @@ Vue.component("ra-pet", {
                   </div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
                     Cost: {{ format(chunkUpgradeCost, 2, 2) }} Memories
-                    <span v-if="exp <= chunkUpgradeCost">in {{ nextMemoryChunkUpgradeEstimate }}</span>
+                    <span v-if="memories <= chunkUpgradeCost">in {{ nextMemoryChunkUpgradeEstimate }}</span>
                     <br>
                     Currently: {{ formatX(currentChunkMult, 2, 2) }}
                   </div>

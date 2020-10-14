@@ -8,7 +8,7 @@ Vue.component("pp-label", {
   },
   methods: {
     update() {
-      this.pp = Math.floor(player.reality.pp);
+      this.pp = Math.floor(player.reality.perkPoints);
     }
   },
   template: `

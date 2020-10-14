@@ -351,7 +351,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
       factor = Math.pow(factor, nerfModifier);
     }
   }
-  
+
   // 1e-300 is now possible with max inverted BH, going below it would be possible with
   // an effarig glyph.
   factor = Math.clamp(factor, 1e-300, 1e300);
@@ -455,7 +455,7 @@ function gameLoop(diff, options = {}) {
         ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
         : 1;
       Enslaved.currentBlackHoleStoreAmountPerMs = Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
-      player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored + 
+      player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored +
         diff * Enslaved.currentBlackHoleStoreAmountPerMs, Enslaved.timeCap);
       speedFactor = reducedTimeFactor;
     }
@@ -537,7 +537,7 @@ function gameLoop(diff, options = {}) {
 
   const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
   player.realities += uncountabilityGain;
-  player.reality.pp += uncountabilityGain;
+  player.reality.perkPoints += uncountabilityGain;
 
   if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
 
@@ -695,7 +695,7 @@ function getTTPerSecond() {
   const dilationTT = DilationUpgrade.ttGenerator.isBought
     ? DilationUpgrade.ttGenerator.effectValue.times(ttMult)
     : new Decimal(0);
-  
+
   // Lai'tela TT power
   let finalTT = dilationTT.add(glyphTT);
   if (SingularityMilestone.theoremPowerFromSingularities.isUnlocked && finalTT.gt(1)) {
@@ -833,8 +833,8 @@ function autoBuyInfDims() {
   if (EternityMilestone.autobuyerID(1).isReached && !EternityChallenge(8).isRunning) {
     for (let i = 1; i <= player.eternities.sub(10).clampMax(8).toNumber(); i++) {
       if (player.infDimBuyers[i - 1]) {
-        buyMaxInfDims(i)
-        buyManyInfinityDimension(i)
+        buyMaxInfDims(i);
+        buyManyInfinityDimension(i);
       }
     }
   }

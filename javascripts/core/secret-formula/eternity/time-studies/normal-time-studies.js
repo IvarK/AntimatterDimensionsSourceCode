@@ -33,7 +33,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 21,
       cost: 3,
       requirement: 11,
-      description: () => `Improve replicanti multiplier formula to 
+      description: () => `Improve replicanti multiplier formula to
       (log2(x)^${formatInt(2)})+x${formatPow(0.032, 3, 3)}`,
       effect: () => player.replicanti.amount.pow(0.032)
     },
@@ -217,7 +217,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 6,
       requirement: 92,
       description: "Replicanti Galaxies boost Replicanti multiplier",
-      effect: () => Decimal.pow(5, player.replicanti.galaxies),
+      effect: () => Decimal.pow(5, player.replicanti.totalGalaxyCap),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -225,7 +225,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 6,
       requirement: 93,
       description: "Time Dimension multiplier equal to Replicanti Galaxy amount",
-      effect: () => Math.max(player.replicanti.galaxies, 1),
+      effect: () => Math.max(player.replicanti.totalGalaxyCap, 1),
       formatEffect: value => formatX(value, 2, 0)
     },
     {
@@ -287,7 +287,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       description: () => (Achievement(138).isUnlocked
         ? `You can get ${formatPercents(0.5)} more Replicanti Galaxies`
         : `Automatic Replicanti Galaxies are disabled, but you can get ${formatPercents(0.5)} more`),
-      effect: () => Math.floor(player.replicanti.gal / 2)
+      effect: () => Math.floor(player.replicanti.boughtGalaxyCap / 2)
     },
     {
       id: 132,
@@ -523,7 +523,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(213).isBought && !TimeStudy(225).isBought,
       requirementV: () => TimeStudy(213).isBought && TimeStudy(225).isBought,
       description: "You gain extra Replicanti Galaxies based on their max",
-      effect: () => Math.floor(player.replicanti.gal / 15),
+      effect: () => Math.floor(player.replicanti.boughtGalaxyCap / 15),
       formatEffect: value => `+${formatInt(value)} ${pluralize("RG", value)}`
     },
     {

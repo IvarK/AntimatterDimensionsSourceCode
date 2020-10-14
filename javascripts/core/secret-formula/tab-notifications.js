@@ -142,7 +142,7 @@ GameDatabase.tabNotifications = {
         tab: "teresa"
       }
     ],
-    condition: () => player.celestials.teresa.rmStore !== 0 && RealityUpgrades.allBought,
+    condition: () => player.celestials.teresa.pouredAmount !== 0 && RealityUpgrades.allBought,
     events: [GAME_EVENT.REALITY_UPGRADE_BOUGHT]
   },
 };

@@ -5,14 +5,14 @@ Vue.component("teresa-tab", {
     return {
       pour: false,
       time: new Date().getTime(),
-      rmStore: 0,
+      pouredAmount: 0,
       rm: new Decimal(0),
       percentage: "",
       rmMult: 0,
       bestAM: new Decimal(0),
       lastRM: new Decimal(0),
       runReward: 0,
-      pp: 0,
+      perkPoints: 0,
       hasReality: false,
       hasEPGen: false,
       hasPerkShop: false,
@@ -22,7 +22,7 @@ Vue.component("teresa-tab", {
   },
   computed: {
     unlockInfo: () => Teresa.unlockInfo,
-    rmStoreMax: () => Teresa.rmStoreMax,
+    pouredAmountCap: () => Teresa.pouredAmountCap,
     upgrades() {
       return [
         PerkShopUpgrade.glyphLevel,
@@ -55,7 +55,7 @@ Vue.component("teresa-tab", {
         Teresa.pourRM(diff);
       }
       this.time = now;
-      this.rmStore = player.celestials.teresa.rmStore;
+      this.pouredAmount = player.celestials.teresa.pouredAmount;
       this.percentage = `${(Teresa.fill * 100).toFixed(2)}%`;
       this.rmMult = Teresa.rmMultiplier;
       this.hasReality = Teresa.has(TERESA_UNLOCKS.RUN);
@@ -64,11 +64,11 @@ Vue.component("teresa-tab", {
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.lastRM.copyFrom(player.celestials.teresa.lastRepeatedRM);
       this.runReward = Teresa.runRewardMultiplier;
-      this.pp = player.reality.pp;
+      this.perkPoints = player.reality.reality.perkPoints;
       this.rm.copyFrom(player.reality.realityMachines);
       this.isRunning = Teresa.isRunning;
       this.canUnlockNextPour = Object.values(TERESA_UNLOCKS)
-        .filter(unlock => this.rm.plus(this.rmStore).gte(unlock.price) && !Teresa.has(unlock)).length > 0;
+        .filter(unlock => this.rm.plus(this.pouredAmount).gte(unlock.price) && !Teresa.has(unlock)).length > 0;
     },
     startRun() {
       if (!resetReality()) return;
@@ -120,7 +120,7 @@ Vue.component("teresa-tab", {
           <div class="c-rm-store">
             <div class="c-rm-store-inner" :style="{ height: percentage}">
               <div class="c-rm-store-label"> {{ formatX(rmMult, 2, 2) }} RM gain
-                <br>{{ format(rmStore, 2, 2) }}/{{ format(rmStoreMax, 2, 2) }}
+                <br>{{ format(pouredAmount, 2, 2) }}/{{ format(pouredAmountCap, 2, 2) }}
               </div>
             </div>
             <div v-for="unlockInfo in unlockInfo"
@@ -133,7 +133,9 @@ Vue.component("teresa-tab", {
         </div>
         <div class="l-rm-container-labels l-teresa-mechanic-container"/>
         <div class="c-teresa-shop" v-if="hasPerkShop">
-          <span class="o-teresa-pp"> You have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}}.</span>
+          <span class="o-teresa-pp">
+            You have {{ format(perkPoints, 2, 0) }} {{"Perk Point" | pluralize(perkPoints)}}.
+          </span>
           <perk-shop-upgrade
             v-for="upgrade in upgrades"
             :key="upgrade.id"

@@ -247,7 +247,7 @@ function giveRealityRewards(realityProps) {
     player.records.thisReality.time, player.records.thisReality.realTime, gainedRM,
     realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier);
   player.realities += realityAndPPMultiplier;
-  player.reality.pp += realityAndPPMultiplier;
+  player.reality.perkPoints += realityAndPPMultiplier;
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
     player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
   }

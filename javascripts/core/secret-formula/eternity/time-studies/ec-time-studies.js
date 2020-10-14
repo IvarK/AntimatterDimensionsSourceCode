@@ -56,7 +56,7 @@ GameDatabase.eternity.timeStudies.ec = [
     cost: 85,
     requirement: {
       resource: "Replicanti Galaxies",
-      current: () => player.replicanti.galaxies,
+      current: () => player.replicanti.totalGalaxyCap,
       required: completions => 40 + completions * 5,
       formatValue: formatInt
     }

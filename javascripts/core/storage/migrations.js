@@ -142,6 +142,7 @@ GameStorage.migrations = {
       GameStorage.migrations.standardizeUncompletedTimes(player);
       GameStorage.migrations.makeRecords(player);
       GameStorage.migrations.deleteOldRecords(player);
+      GameStorage.migrations.migratePlayerVars(player);
 
       kong.migratePurchases();
       if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
@@ -680,7 +681,7 @@ GameStorage.migrations = {
     convertAchievementArray(player.secretAchievementBits, player.secretAchievements);
     delete player.secretAchievements;
   },
-  
+
   setNoInfinitiesOrEternitiesThisReality(player) {
     player.noInfinitiesThisReality = player.infinitied.eq(0) && player.eternities.eq(0);
     player.noEternitiesThisReality = player.eternities.eq(0);
@@ -784,5 +785,13 @@ GameStorage.migrations = {
     delete player.thisEternity;
     delete player.bestEternity;
     delete player.thisReality;
+  },
+
+  migratePlayerVars(player) {
+    player.replicanti.boughtGalaxyCap = player.replicanti.gal;
+    player.replicanti.totalGalaxyCap = player.replicanti.galaxies;
+
+    delete player.replicanti.gal;
+    delete player.replicanti.galaxies;
   },
 };

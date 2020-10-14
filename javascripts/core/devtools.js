@@ -228,7 +228,7 @@ dev.realize = function() {
 };
 
 dev.respecPerks = function() {
-  player.reality.pp += player.reality.perks.size;
+  player.reality.perkPoints += player.reality.perks.size;
   player.reality.perks = new Set();
   GameCache.achievementPeriod.invalidate();
   GameCache.buyablePerks.invalidate();
@@ -279,7 +279,7 @@ dev.buyAllPerks = function() {
   const visited = [];
   const toVisit = [Perk.firstPerk];
   while (toVisit.length > 0) {
-    if (player.reality.pp < 1) break;
+    if (player.reality.perkPoints < 1) break;
     const perk = toVisit.shift();
     visited.push(perk);
     toVisit.push(...perk.connectedPerks.filter(p => !visited.includes(p)));
@@ -443,11 +443,11 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
-        player.replicanti.gal = 100;
+        player.replicanti.boughtGalaxyCap = 100;
       },
       function() {
-        player.replicanti.gal = 100;
-        player.replicanti.galaxies = 50;
+        player.replicanti.boughtGalaxyCap = 100;
+        player.replicanti.totalGalaxyCap = 50;
       }
     ],
     [
@@ -476,7 +476,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
       for (let j = 0; j <= 5; j++) {
         replicantiLoop(Math.pow(10, j));
         resultList.push(Notation.scientific.formatDecimal(player.replicanti.amount, 5, 5));
-        resultList.push(player.replicanti.galaxies);
+        resultList.push(player.replicanti.totalGalaxyCap);
         resultList.push(Replicanti.galaxies.total);
       }
     }

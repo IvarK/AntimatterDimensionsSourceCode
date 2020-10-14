@@ -846,6 +846,30 @@ GameStorage.devMigrations = {
       delete player.bestRealityRealTime;
       delete player.bestSpeedSet;
     },
+    player => {
+      player.replicanti.boughtGalaxyCap = player.replicanti.gal;
+      player.replicanti.totalGalaxyCap = player.replicanti.galaxies;
+      player.reality.perkPoints = player.reality.pp;
+      player.celestials.teresa.pouredAmount = player.celestials.teresa.rmStore;
+      player.celestials.laitela.darkMatter = new Decimal(player.celestials.laitela.matter);
+      player.celestials.laitela.maxDarkMatter = new Decimal(player.celestials.laitela.maxMatter);
+      player.celestials.ra.pets.teresa.memories = player.celestials.ra.pets.teresa.exp;
+      player.celestials.ra.pets.effarig.memories = player.celestials.ra.pets.effarig.exp;
+      player.celestials.ra.pets.enslaved.memories = player.celestials.ra.pets.enslaved.exp;
+      player.celestials.ra.pets.v.memories = player.celestials.ra.pets.v.exp;
+
+      delete player.replicanti.gal;
+      delete player.replicanti.galaxies;
+      delete player.reality.pp;
+      delete player.celestials.teresa.rmStore;
+      delete player.celestials.laitela.matter;
+      delete player.celestials.laitela.maxMatter;
+      delete player.celestials.ra.pets.teresa.exp;
+      delete player.celestials.ra.pets.effarig.exp;
+      delete player.celestials.ra.pets.enslaved.exp;
+      delete player.celestials.ra.pets.v.exp;
+
+    },
   ],
 
   patch(player) {

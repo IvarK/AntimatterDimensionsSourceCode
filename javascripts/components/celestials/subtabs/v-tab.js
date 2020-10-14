@@ -32,7 +32,7 @@ Vue.component("v-tab", {
       this.dilatedTime.copyFrom(player.dilation.dilatedTime);
       this.replicanti.copyFrom(player.replicanti.amount);
       this.rm.copyFrom(player.reality.realityMachines);
-      this.pp = player.reality.pp;
+      this.pp = player.reality.perkPoints;
       this.showReduction = V.has(V_UNLOCKS.SHARD_REDUCTION);
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
@@ -65,8 +65,8 @@ Vue.component("v-tab", {
         : milestone.reward;
     },
     reduceGoals(hex) {
-      if (player.reality.pp < hex.reductionCost) return;
-      player.reality.pp -= hex.reductionCost;
+      if (player.reality.perkPoints < hex.reductionCost) return;
+      player.reality.perkPoints -= hex.reductionCost;
       const steps = hex.config.reductionStepSize ? hex.config.reductionStepSize : 1;
       player.celestials.v.goalReductionSteps[hex.id] += steps;
       for (const unlock of VRunUnlocks.all) {

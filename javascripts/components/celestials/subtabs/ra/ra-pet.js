@@ -249,10 +249,11 @@ Vue.component("ra-pet", {
             <i class="fas fa-question-circle"></i>
           </span>
         </div>
-        <div v-else>
+        <div v-else-if="!isRaCapped">
           <br>
         </div>
-        <br>
+        <br v-if="!isRaCapped">
+        <div v-else style="margin-bottom: 0.8rem;"></div>
         <div style="display: flex; justify-content: center;">
           <!-- This choice of key forces a UI update every level up -->
           <ra-upgrade-icon v-for="(unlock, i) in unlocks"

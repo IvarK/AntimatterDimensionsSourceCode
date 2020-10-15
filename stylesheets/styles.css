@@ -8836,6 +8836,50 @@ input.o-automator-block-input {
 
 /* STD-shop */
 
+#shop {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.c-shop-disclaimer {
+  color: black;
+  background: var(--color-bad);
+  width: 100rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  border: 0.2rem solid black;
+  border-radius: 1rem;
+  margin-top: 0.8rem;
+}
+
+.c-shop-disclaimer {
+  color: black;
+  background: var(--color-bad);
+  width: 100rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  border: 0.2rem solid black;
+  border-radius: 1rem;
+  margin-top: 0.8rem;
+}
+
+.t-metro .c-shop-disclaimer,
+.t-dark-metro .c-shop-disclaimer,
+.t-inverted-metro .c-shop-disclaimer,
+.t-s8 .c-shop-disclaimer {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.t-s1 .c-shop-disclaimer,
+.t-s6 .c-shop-disclaimer {
+  color: var(--color-bad);
+  background: black;
+  border-color: var(--color-bad);
+}
+
 .c-shop-header {
   display: flex;
   justify-content: center;

@@ -742,28 +742,6 @@ GameStorage.migrations = {
     }
   },
 
-    // previous versions and which could be overwritten by deepmerge
-    saveData.totalAntimatter = saveData.totalAntimatter || saveData.totalmoney || saveData.money;
-    saveData.thisEternity = saveData.thisEternity || saveData.totalTimePlayed;
-    saveData.version = saveData.version || 0;
-  },
-
-  patch(saveData) {
-    this.prePatch(saveData);
-    // This adds all the undefined properties to the save which are in player.js
-    const player = deepmerge.all([Player.defaultStart, saveData]);
-    const versions = Object.keys(this.patches)
-      .map(parseFloat)
-      .sort();
-    let version;
-    while ((version = versions.find(v => player.version < v)) !== undefined) {
-      const patch = this.patches[version];
-      patch(player);
-      player.version = version;
-    }
-    return player;
-  },
-
   makeRecords(player) {
     player.records.gameCreatedTime = player.gameCreatedTime;
     player.records.totalTimePlayed = player.totalTimePlayed;
@@ -795,8 +773,34 @@ GameStorage.migrations = {
   migratePlayerVars(player) {
     player.replicanti.boughtGalaxyCap = player.replicanti.gal;
     player.replicanti.totalGalaxyCap = player.replicanti.galaxies;
+    player.dilation.totalTachyonGalaxies = player.dilation.freeGalaxies;
 
     delete player.replicanti.gal;
     delete player.replicanti.galaxies;
+    delete player.dilation.freeGalaxies;
+  },
+
+  prePatch(saveData) {
+    // Initialize all possibly undefined properties that were not present in
+    // previous versions and which could be overwritten by deepmerge
+    saveData.totalAntimatter = saveData.totalAntimatter || saveData.totalmoney || saveData.money;
+    saveData.thisEternity = saveData.thisEternity || saveData.totalTimePlayed;
+    saveData.version = saveData.version || 0;
+  },
+
+  patch(saveData) {
+    this.prePatch(saveData);
+    // This adds all the undefined properties to the save which are in player.js
+    const player = deepmerge.all([Player.defaultStart, saveData]);
+    const versions = Object.keys(this.patches)
+      .map(parseFloat)
+      .sort();
+    let version;
+    while ((version = versions.find(v => player.version < v)) !== undefined) {
+      const patch = this.patches[version];
+      patch(player);
+      player.version = version;
+    }
+    return player;
   },
 };

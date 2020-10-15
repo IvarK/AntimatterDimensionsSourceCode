@@ -12,6 +12,7 @@ Vue.component("ra-pet-level-bar", {
       memories: 0,
       requiredMemories: 0,
       nextLevelEstimate: 0,
+      displayLevelEstimate: false,
     };
   },
   computed: {
@@ -115,6 +116,7 @@ Vue.component("ra-pet-level-bar", {
       this.level = pet.level;
       this.requiredMemories = pet.requiredMemories;
       this.nextLevelEstimate = this.timeToGoalString((this.requiredMemories - this.memories));
+      this.displayLevelEstimate = this.memories <= this.requiredMemories && this.nextLevelEstimate !== "never";
     },
     isImportant(level) {
       return this.importantLevels.includes(level);
@@ -154,7 +156,7 @@ Vue.component("ra-pet-level-bar", {
           </div>
           <div class="c-ra-pet-upgrade__tooltip__footer">
             {{ format(requiredMemories, 2, 2) }} Memories
-            <span v-if="memories <= requiredMemories">in {{ nextLevelEstimate }}</span>
+            <span v-if="displayLevelEstimate">in {{ nextLevelEstimate }}</span>
           </div>
         </div>
       </div>

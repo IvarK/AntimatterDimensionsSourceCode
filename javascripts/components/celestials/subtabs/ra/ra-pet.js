@@ -23,6 +23,8 @@ Vue.component("ra-pet", {
       chunkUpgradeCost: 0,
       memoryUpgradeCapped: false,
       chunkUpgradeCapped: false,
+      displayMemoryUpgradeEstimate: false,
+      displayChunkUpgradeEstimate: false,
       currentMemoryMult: 0,
       currentChunkMult: 0,
       nextMemoryUpgradeEstimate: "",
@@ -96,6 +98,10 @@ Vue.component("ra-pet", {
       this.chunkUpgradeCost = pet.chunkUpgradeCost;
       this.memoryUpgradeCapped = pet.memoryUpgradeCapped;
       this.chunkUpgradeCapped = pet.chunkUpgradeCapped;
+      this.displayMemoryUpgradeEstimate =
+        this.memories <= this.memoryUpgradeCost && this.nextMemoryUpgradeEstimate !== "never";
+      this.displayChunkUpgradeEstimate =
+        this.memories <= this.chunkUpgradeCost && this.nextMemoryChunkUpgradeEstimate !== "never";
       this.currentMemoryMult = pet.memoryUpgradeCurrentMult;
       this.currentChunkMult = pet.chunkUpgradeCurrentMult;
 
@@ -183,7 +189,7 @@ Vue.component("ra-pet", {
                   <div class="c-ra-pet-upgrade__tooltip__description">Gain {{ formatPercents(0.3) }} more Memories</div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
                     Cost: {{ format(memoryUpgradeCost, 2, 2) }} Memories
-                    <span v-if="memories <= memoryUpgradeCost">in {{ nextMemoryUpgradeEstimate }}</span>
+                    <span v-if="displayMemoryUpgradeEstimate">in {{ nextMemoryUpgradeEstimate }}</span>
                     <br>
                     Currently: {{ formatX(currentMemoryMult, 2, 2) }}
                   </div>
@@ -213,7 +219,7 @@ Vue.component("ra-pet", {
                   </div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
                     Cost: {{ format(chunkUpgradeCost, 2, 2) }} Memories
-                    <span v-if="memories <= chunkUpgradeCost">in {{ nextMemoryChunkUpgradeEstimate }}</span>
+                    <span v-if="displayChunkUpgradeEstimate">in {{ nextMemoryChunkUpgradeEstimate }}</span>
                     <br>
                     Currently: {{ formatX(currentChunkMult, 2, 2) }}
                   </div>

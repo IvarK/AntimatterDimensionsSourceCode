@@ -24,33 +24,6 @@ Vue.component("normal-achievements-tab", {
     swapImagesButton() {
       return Theme.current().name === "S4" || this.isCancer ? "😂" : ":";
     },
-    achievementMultiplierText() {
-      let text = `Your Achievements provide a multiplier to`;
-
-      if (this.achMultBreak) {
-        text += `<br>Antimatter Dimensions: ${formatX(this.achPowerWithBreak, 2, 3)}`;
-      } else {
-        text += `<br>Antimatter Dimensions: ${formatX(this.achievementPower, 2, 3)}`;
-      }
-
-      if (this.achMultToIDS && !this.achMultToTDS) {
-        text += `<br>Infinity Dimensions: ${formatX(this.achievementPower, 2, 3)}`;
-      } else if (this.achMultToTDS && !this.achMultToIDS) {
-        text += `<br>Time Dimensions: ${formatX(this.achievementPower, 2, 3)}`;
-      } else if (this.achMultToIDS && this.achMultToTDS) {
-        text += `<br>Infinity and Time Dimensions: ${formatX(this.achievementPower, 2, 3)}`;
-      }
-
-      if (this.achMultToTP) {
-        text += `<br>Tachyon Particles: ${formatX(this.achTPeffect, 2, 3)}`;
-      }
-
-      if (this.achMultToBH) {
-        text += `<br>Black Hole Power: ${formatX(this.achievementPower, 2, 3)}`;
-      }
-
-      return text;
-    },
     imageSwapperStyleObject() {
       if (this.canSwapImages) {
         return { "cursor": "pointer" };

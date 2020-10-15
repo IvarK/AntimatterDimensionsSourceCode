@@ -187,7 +187,7 @@ Currency.antimatter = new class extends DecimalCurrency {
   add(amount) {
     super.add(amount);
     player.records.totalAntimatter = player.records.totalAntimatter.plus(amount);
-    if (amount.gt(0)) player.noAntimatterProduced = false;
+    if (amount.gt(0)) player.achievementChecks.noAntimatterProduced = false;
   }
 
   get productionPerSecond() {

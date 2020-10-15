@@ -857,6 +857,19 @@ GameStorage.devMigrations = {
       player.celestials.ra.pets.effarig.memories = player.celestials.ra.pets.effarig.exp;
       player.celestials.ra.pets.enslaved.memories = player.celestials.ra.pets.enslaved.exp;
       player.celestials.ra.pets.v.memories = player.celestials.ra.pets.v.exp;
+      player.achievementChecks.noSacrifices = player.noSacrifices;
+      player.achievementChecks.onlyEighthDimensions = player.onlyEighthDimensions;
+      player.achievementChecks.onlyFirstDimensions = player.onlyFirstDimensions;
+      player.achievementChecks.noEighthDimensions = player.noEighthDimensions;
+      player.achievementChecks.noFirstDimensions = player.noFirstDimensions;
+      player.achievementChecks.noAntimatterProduced = player.noAntimatterProduced;
+      player.achievementChecks.noTriadStudies = player.noTriadStudies;
+      player.achievementChecks.noTheoremPurchases = player.noTheoremPurchases;
+      player.achievementChecks.noInfinitiesThisReality = player.noInfinitiesThisReality;
+      player.achievementChecks.noEternitiesThisReality = player.noEternitiesThisReality;
+      player.achievementChecks.noReplicantiGalaxies = player.noReplicantiGalaxies;
+      player.dilation.baseTachyonGalaxies = player.dilation.baseFreeGalaxies;
+      player.dilation.totalTachyonGalaxies = player.dilation.freeGalaxies;
 
       delete player.replicanti.gal;
       delete player.replicanti.galaxies;
@@ -868,7 +881,19 @@ GameStorage.devMigrations = {
       delete player.celestials.ra.pets.effarig.exp;
       delete player.celestials.ra.pets.enslaved.exp;
       delete player.celestials.ra.pets.v.exp;
-
+      delete player.noSacrifices;
+      delete player.onlyEighthDimensions;
+      delete player.onlyFirstDimensions;
+      delete player.noEighthDimensions;
+      delete player.noFirstDimensions;
+      delete player.noAntimatterProduced;
+      delete player.noTriadStudies;
+      delete player.noTheoremPurchases;
+      delete player.noInfinitiesThisReality;
+      delete player.noEternitiesThisReality;
+      delete player.noReplicantiGalaxies;
+      delete player.dilation.baseFreeGalaxies;
+      delete player.dilation.freeGalaxies;
     },
   ],
 

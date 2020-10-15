@@ -34,7 +34,7 @@ GameDatabase.celestials.v = {
       description: value => `Have ${formatInt(value)} total Galaxies from all types.`,
       values: [4000, 4300, 4600, 4900, 5200, 5500],
       condition: () => V.isRunning,
-      currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies,
+      currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies,
       formatRecord: x => formatInt(x),
       shardReduction: tiers => Math.floor(300 * tiers),
       maxShardReduction: goal => goal - 4000,

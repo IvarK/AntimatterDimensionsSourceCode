@@ -48,7 +48,7 @@ GameDatabase.eternity.dilation = (function() {
         : "Reset Dilated Time and Tachyon Galaxies, but lower their threshold"),
       // The 38th purchase is at 1e80, and is the last purchase.
       effect: bought => (bought < 38 ? Math.pow(0.8, bought) : 0),
-      formatEffect: () => format(getFreeGalaxyMult(), 3, 3),
+      formatEffect: () => format(getTachyonGalaxyMult(), 3, 3),
       formatCost: value => format(value, 2, 0),
       purchaseCap: 38
     }),

@@ -65,8 +65,10 @@ GameDatabase.reality.upgrades = (function() {
       id: 6,
       cost: 15,
       requirement: "Complete your first Eternity without using Replicanti Galaxies",
-      hasFailed: () => !(player.noReplicantiGalaxies && player.noEternitiesThisReality),
-      checkRequirement: () => player.noReplicantiGalaxies && player.noEternitiesThisReality,
+      hasFailed: () => !(player.achievementChecks.noReplicantiGalaxies &&
+        player.achievementChecks.noEternitiesThisReality),
+      checkRequirement: () => player.achievementChecks.noReplicantiGalaxies &&
+        player.achievementChecks.noEternitiesThisReality,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: "Replicanti speed is multiplied based on Replicanti Galaxies",
       effect: () => 1 + Replicanti.galaxies.total / 50,
@@ -77,8 +79,8 @@ GameDatabase.reality.upgrades = (function() {
       id: 7,
       cost: 15,
       requirement: "Complete your first Infinity with at most 1 Galaxy",
-      hasFailed: () => !(player.galaxies <= 1 && player.noInfinitiesThisReality),
-      checkRequirement: () => player.galaxies <= 1 && player.noInfinitiesThisReality,
+      hasFailed: () => !(player.galaxies <= 1 && player.achievementChecks.noInfinitiesThisReality),
+      checkRequirement: () => player.galaxies <= 1 && player.achievementChecks.noInfinitiesThisReality,
       checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
       description: "Infinitied stat gain is boosted from Antimatter Galaxy count",
       effect: () => 1 + player.galaxies / 30,
@@ -117,8 +119,8 @@ GameDatabase.reality.upgrades = (function() {
       id: 10,
       cost: 15,
       requirement: () => `Complete your first Eternity with at least ${format("1e450")} Infinity Points`,
-      hasFailed: () => !player.noEternitiesThisReality,
-      checkRequirement: () => player.infinityPoints.exponent >= 450 && player.noEternitiesThisReality,
+      hasFailed: () => !player.achievementChecks.noEternitiesThisReality,
+      checkRequirement: () => player.infinityPoints.exponent >= 450 && player.achievementChecks.noEternitiesThisReality,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`
     },
@@ -261,7 +263,8 @@ GameDatabase.reality.upgrades = (function() {
       id: 21,
       cost: 100000,
       requirement: () => `${formatInt(2800)} total Galaxies from all types`,
-      checkRequirement: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= 2800,
+      checkRequirement: () =>
+        Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies >= 2800,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Remote Antimatter Galaxy scaling is removed"
     },

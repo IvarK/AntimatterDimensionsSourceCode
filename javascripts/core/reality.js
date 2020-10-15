@@ -389,17 +389,17 @@ function finishProcessReality(realityProps) {
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  player.noSacrifices = true;
-  player.onlyEighthDimensions = true;
-  player.onlyFirstDimensions = true;
-  player.noEighthDimensions = true;
-  player.noFirstDimensions = true;
-  player.noAntimatterProduced = true;
-  player.noTriadStudies = true;
-  player.noTheoremPurchases = true;
-  player.noInfinitiesThisReality = true;
-  player.noEternitiesThisReality = true;
-  player.noReplicantiGalaxies = true;
+  player.achievementChecks.noSacrifices = true;
+  player.achievementChecks.onlyEighthDimensions = true;
+  player.achievementChecks.onlyFirstDimensions = true;
+  player.achievementChecks.noEighthDimensions = true;
+  player.achievementChecks.noFirstDimensions = true;
+  player.achievementChecks.noAntimatterProduced = true;
+  player.achievementChecks.noTriadStudies = true;
+  player.achievementChecks.noTheoremPurchases = true;
+  player.achievementChecks.noInfinitiesThisReality = true;
+  player.achievementChecks.noEternitiesThisReality = true;
+  player.achievementChecks.noReplicantiGalaxies = true;
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
   player.timestudy.theorem = new Decimal(0);
@@ -414,8 +414,8 @@ function finishProcessReality(realityProps) {
   player.dilation.tachyonParticles = new Decimal(0);
   player.dilation.dilatedTime = new Decimal(0);
   player.dilation.nextThreshold = new Decimal(1000);
-  player.dilation.baseFreeGalaxies = 0;
-  player.dilation.freeGalaxies = 0;
+  player.dilation.baseTachyonGalaxies = 0;
+  player.dilation.totalTachyonGalaxies = 0;
   player.dilation.upgrades.clear();
   player.dilation.rebuyables = {
     1: 0,

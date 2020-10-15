@@ -161,7 +161,7 @@ function galaxyReset() {
   if (!Achievement(143).isUnlocked) player.dimensionBoosts = 0;
   softReset(0);
   if (Notations.current === Notation.cancer) player.spreadingCancer += 1;
-  player.noSacrifices = true;
+  player.achievementChecks.noSacrifices = true;
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_AFTER);
 }
 

@@ -72,7 +72,7 @@ function bigCrunchUpdateStatistics() {
   player.records.bestInfinity.realTime =
     Math.min(player.records.bestInfinity.realTime, player.records.bestInfinity.realTime);
 
-  player.noInfinitiesThisReality = false;
+  player.achievementChecks.noInfinitiesThisReality = false;
 
   if (!player.usedMaxAll) {
     const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(player.records.thisInfinity.realTime);
@@ -149,8 +149,8 @@ function secondSoftReset(forcedNDReset = false) {
   player.records.thisInfinity.time = 0;
   player.records.thisInfinity.lastBuyTime = 0;
   player.records.thisInfinity.realTime = 0;
-  player.noEighthDimensions = true;
-  player.noSacrifices = true;
+  player.achievementChecks.noEighthDimensions = true;
+  player.achievementChecks.noSacrifices = true;
   AchievementTimers.marathon2.reset();
 }
 

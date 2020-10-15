@@ -44,7 +44,7 @@ Vue.component("time-dilation-tab", {
       this.dilatedTime.copyFrom(player.dilation.dilatedTime);
       this.dilatedTimeIncome.copyFrom(getDilationGainPerSecond().times(getGameSpeedupForDisplay()));
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
-      this.galaxies = player.dilation.freeGalaxies;
+      this.galaxies = player.dilation.totalTachyonGalaxies;
       this.animateTachyons = player.options.animations.tachyonParticles;
       if (this.galaxies < 1000 && DilationUpgrade.doubleGalaxies.isBought) {
         this.tachyonGalaxyGain = DilationUpgrade.doubleGalaxies.effectValue;

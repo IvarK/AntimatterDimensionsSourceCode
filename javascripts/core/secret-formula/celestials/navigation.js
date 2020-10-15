@@ -541,7 +541,7 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => EffarigUnlock.reality.isUnlocked,
       complete: () => {
         if (Achievement(151).isUnlocked) return 1;
-        if (!player.noEighthDimensions) return 0;
+        if (!player.achievementChecks.noEighthDimensions) return 0;
 
         return player.galaxies / 800;
       },
@@ -561,7 +561,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             const goal = 800;
             if (complete >= 1) return "V's Reality";
-            const galaxies = player.noEighthDimensions ? player.galaxies : 0;
+            const galaxies = player.achievementChecks.noEighthDimensions ? player.galaxies : 0;
             return [
               "V's unlock Achievement",
               `Reach ${formatInt(galaxies)} / ${formatInt(goal)} Antimatter Galaxies without buying`,

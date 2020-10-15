@@ -575,7 +575,7 @@ function gameLoop(diff, options = {}) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
   }
 
-  updateFreeGalaxies();
+  updateTachyonGalaxies();
   player.timestudy.theorem = player.timestudy.theorem.add(getTTPerSecond().times(diff / 1000));
   tryUnlockInfinityDimensions();
 
@@ -667,16 +667,17 @@ function applyAutoprestige(diff) {
   }
 }
 
-function updateFreeGalaxies() {
-  const freeGalaxyMult = Effects.max(1, DilationUpgrade.doubleGalaxies);
-  const freeGalaxyThreshold = 1000;
-  const thresholdMult = getFreeGalaxyMult();
-  player.dilation.baseFreeGalaxies = Math.max(player.dilation.baseFreeGalaxies,
+function updateTachyonGalaxies() {
+  const tachyonGalaxyMult = Effects.max(1, DilationUpgrade.doubleGalaxies);
+  const tachyonGalaxyThreshold = 1000;
+  const thresholdMult = getTachyonGalaxyMult();
+  player.dilation.baseTachyonGalaxies = Math.max(player.dilation.baseTachyonGalaxies,
     1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), thresholdMult)));
   player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult)
-    .pow(player.dilation.baseFreeGalaxies));
-  player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, freeGalaxyThreshold) +
-    Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - freeGalaxyThreshold, 0) / freeGalaxyMult;
+    .pow(player.dilation.baseTachyonGalaxies));
+  player.dilation.totalTachyonGalaxies =
+    Math.min(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult, tachyonGalaxyThreshold) +
+    Math.max(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult - tachyonGalaxyThreshold, 0) / tachyonGalaxyMult;
 }
 
 function getTTPerSecond() {

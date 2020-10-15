@@ -14,7 +14,7 @@ const ReplicantiGrowth = {
 function addReplicantiGalaxies(newGalaxies) {
   if (newGalaxies > 0) {
     player.replicanti.totalGalaxyCap += newGalaxies;
-    player.noReplicantiGalaxies = false;
+    player.achievementChecks.noReplicantiGalaxies = false;
   }
 }
 

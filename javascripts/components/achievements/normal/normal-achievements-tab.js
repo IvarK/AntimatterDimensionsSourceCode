@@ -4,7 +4,6 @@ Vue.component("normal-achievements-tab", {
   data() {
     return {
       achievementPower: 0,
-      achPowerWithBreak: 0,
       achTPeffect: 0,
       achCountdown: 0,
       showAutoAchieve: false,
@@ -42,7 +41,6 @@ Vue.component("normal-achievements-tab", {
   methods: {
     update() {
       this.achievementPower = Achievements.power;
-      this.achPowerWithBreak = BreakInfinityUpgrade.achievementMult.config.effect() * Achievements.power;
       this.achTPeffect = RealityUpgrade(8).config.effect();
       this.achCountdown = Achievements.timeToNextAutoAchieve() / getGameSpeedupFactor();
       this.showAutoAchieve = player.realities > 0 && !Perk.achievementGroup6.isBought;
@@ -91,7 +89,7 @@ Vue.component("normal-achievements-tab", {
             Antimatter<span v-if="achMultToTDS && achMultToIDS">, Infinity, and Time</span>
             <span v-else-if="achMultToTDS"> and Time</span>
             <span v-else-if="achMultToIDS"> and Infinity</span>
-            Dimensions: {{ achMultBreak ? formatX(achPowerWithBreak, 2, 3) : formatX(achievementPower, 2, 3) }}
+            Dimensions: {{ formatX(achievementPower, 2, 3) }}
           </span>
           <br>
           <span v-if="this.achMultToTP"> Tachyon Particles: {{ formatX(this.achTPeffect, 2, 3) }} </span>

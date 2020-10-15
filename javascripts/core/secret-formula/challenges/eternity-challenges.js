@@ -8,7 +8,8 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e200"),
     reward: {
       description: "Time Dimension multiplier based on time spent this Eternity",
-      effect: completions => Decimal.pow(Math.max(player.records.thisEternity.time / 10, 0.9), 0.3 + (completions * 0.05)),
+      effect: completions =>
+        Decimal.pow(Math.max(player.records.thisEternity.time / 10, 0.9), 0.3 + (completions * 0.05)),
       formatEffect: value => formatX(value, 2, 1)
     }
   },

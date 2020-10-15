@@ -123,12 +123,12 @@ function applyNDMultipliers(mult, tier) {
   multiplier = multiplier.timesEffectsOf(
     tier === 8 ? Achievement(23) : null,
     tier < 8 ? Achievement(34) : null,
-    tier <= 4 ? Achievement(43) : null,
+    tier <= 4 ? Achievement(64) : null,
     tier < 8 ? TimeStudy(71) : null,
     tier === 8 ? TimeStudy(214) : null,
     tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
   );
-  if (Achievement(77).isUnlocked) {
+  if (Achievement(43).isUnlocked) {
     multiplier = multiplier.times(1 + tier / 100);
   }
 
@@ -179,10 +179,10 @@ function onBuyDimension(tier) {
 
   player.postC4Tier = tier;
   player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
-  if (tier !== 8) player.onlyEighthDimensions = false;
-  if (tier !== 1) player.onlyFirstDimensions = false;
-  if (tier === 8) player.noEighthDimensions = false;
-  if (tier === 1) player.noFirstDimensions = false;
+  if (tier !== 8) player.achievementChecks.onlyEighthDimensions = false;
+  if (tier !== 1) player.achievementChecks.onlyFirstDimensions = false;
+  if (tier === 8) player.achievementChecks.noEighthDimensions = false;
+  if (tier === 1) player.achievementChecks.noFirstDimensions = false;
 }
 
 function floatText(tier, text) {
@@ -280,7 +280,7 @@ function maxAll() {
   for (let tier = 1; tier < 9; tier++) {
     buyMaxDimension(tier);
   }
-  
+
   // Do this here because tickspeed might not have been unlocked before
   // (and maxAll might have unlocked it by buying dimensions).
   buyMaxTickSpeed();
@@ -658,7 +658,7 @@ const AntimatterDimensions = {
       AntimatterDimension(tier + nextTierOffset).produceDimensions(AntimatterDimension(tier), diff / 10);
     }
     if (AntimatterDimension(1).amount.gt(0)) {
-      player.noFirstDimensions = false;
+      player.achievementChecks.noFirstDimensions = false;
     }
     AntimatterDimension(1).produceCurrency(Currency.antimatter, diff);
     if (NormalChallenge(12).isRunning) {

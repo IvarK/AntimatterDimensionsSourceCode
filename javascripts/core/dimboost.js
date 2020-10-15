@@ -29,7 +29,7 @@ class DimBoost {
       .timesEffectsOf(
         TimeStudy(83),
         TimeStudy(231),
-        Achievement(101),
+        Achievement(117),
         Achievement(142),
         GlyphEffect.dimBoostPower
       ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);

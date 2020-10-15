@@ -338,24 +338,24 @@ GameStorage.migrations = {
   },
 
   adjustAchievementVars(player) {
-    player.onlyFirstDimensions = player.dead;
+    player.achievementChecks.onlyFirstDimensions = player.dead;
     delete player.dead;
-    player.onlyEighthDimensions = player.dimlife;
+    player.achievementChecks.onlyEighthDimensions = player.dimlife;
     delete player.dimlife;
     // Just initialize all these to false, which is basically always correct.
-    player.noAntimatterProduced = false;
-    player.noFirstDimensions = false;
-    player.noEighthDimensions = false;
+    player.achievementChecks.noAntimatterProduced = false;
+    player.achievementChecks.noFirstDimensions = false;
+    player.achievementChecks.noEighthDimensions = false;
     // If someone has 0 max replicanti galaxies, they can't have gotten any.
     // If they have more than 0 max replicanti galaxies, we don't give them
     // the benefit of the doubt.
-    player.noReplicantiGalaxies = player.replicanti.gal === 0;
+    player.achievementChecks.noReplicantiGalaxies = player.replicanti.gal === 0;
     if (
       player.timestudy.theorem.gt(0) ||
       player.timestudy.studies.length > 0 ||
       player.challenge.eternity.unlocked !== 0
-    ) player.noTheoremPurchases = false;
-    if (player.sacrificed.gt(0)) player.noSacrifices = false;
+    ) player.achievementChecks.noTheoremPurchases = false;
+    if (player.sacrificed.gt(0)) player.achievementChecks.noSacrifices = false;
   },
 
   adjustThemes(player) {
@@ -664,10 +664,17 @@ GameStorage.migrations = {
   },
 
   convertAchievementsToBits(player) {
+    // Also switches achievement positions
+    const swaps = { "4,3": "6,4", "6,4": "7,7", "7,7": "4,3", "10,1": "11,7", "11,7": "10,1" };
     const convertAchievementArray = (newAchievements, oldAchievements) => {
       for (const oldId of oldAchievements) {
-        const row = Math.floor(oldId / 10);
-        const column = oldId % 10;
+        let row = Math.floor(oldId / 10);
+        let column = oldId % 10;
+        // eslint-disable-next-line no-bitwise
+        if (
+          [row, column].join(",") in swaps) {
+          [row, column] = swaps[[row, column].join(",")].split(",");
+        }
         // eslint-disable-next-line no-bitwise
         newAchievements[row - 1] |= (1 << (column - 1));
       }
@@ -683,8 +690,8 @@ GameStorage.migrations = {
   },
 
   setNoInfinitiesOrEternitiesThisReality(player) {
-    player.noInfinitiesThisReality = player.infinitied.eq(0) && player.eternities.eq(0);
-    player.noEternitiesThisReality = player.eternities.eq(0);
+    player.achievementChecks.noInfinitiesThisReality = player.infinitied.eq(0) && player.eternities.eq(0);
+    player.achievementChecks.noEternitiesThisReality = player.eternities.eq(0);
   },
 
   setTutorialState(player) {
@@ -735,8 +742,6 @@ GameStorage.migrations = {
     }
   },
 
-  prePatch(saveData) {
-    // Initialize all possibly undefined properties that were not present in
     // previous versions and which could be overwritten by deepmerge
     saveData.totalAntimatter = saveData.totalAntimatter || saveData.totalmoney || saveData.money;
     saveData.thisEternity = saveData.thisEternity || saveData.totalTimePlayed;

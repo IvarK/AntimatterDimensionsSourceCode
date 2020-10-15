@@ -198,7 +198,7 @@ GameDatabase.achievements.normal = [
       : `Buy an Antimatter Galaxy without ever Dimensional Sacrificing.
         Your Antimatter Galaxies are reset on Infinity.`;
     },
-    checkRequirement: () => player.noSacrifices,
+    checkRequirement: () => player.achievementChecks.noSacrifices,
     checkEvent: GAME_EVENT.GALAXY_RESET_BEFORE
   },
   {
@@ -221,12 +221,22 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 43,
-    name: "Zero Deaths",
-    description: "Get to Infinity without Dimension Boosts or Antimatter Galaxies while in a Normal Challenge.",
-    checkRequirement: () => player.galaxies === 0 && DimBoost.purchasedBoosts === 0 && NormalChallenge.isRunning,
-    checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    get reward() { return `Antimatter Dimensions 1-4 are ${formatPercents(0.25)} stronger.`; },
-    effect: 1.25
+    name: "How the antitables have turned..",
+    description:
+      "Get the 8th Antimatter Dimension multiplier to be highest, 7th Antimatter Dimension multiplier " +
+      " second highest, etc.",
+    checkRequirement: () => {
+      const multipliers = Array.range(1, 8).map(tier => AntimatterDimension(tier).multiplier);
+      for (let i = 0; i < multipliers.length - 1; i++) {
+        if (multipliers[i].gte(multipliers[i + 1])) return false;
+      }
+      return true;
+    },
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    get reward() {
+      return `Each Antimatter Dimension gains a boost proportional to tier
+      (8th gets ${formatPercents(0.08)}, 7th gets ${formatPercents(0.07)}, etc.)`;
+    }
   },
   {
     id: 44,
@@ -380,10 +390,12 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 64,
-    name: "1 Million is a lot",
-    get description() { return `Reach ${format(1e6)} Infinity Power.`; },
-    checkRequirement: () => player.infinityPower.exponent >= 6,
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+    name: "Zero Deaths",
+    description: "Get to Infinity without Dimension Boosts or Antimatter Galaxies while in a Normal Challenge.",
+    checkRequirement: () => player.galaxies === 0 && DimBoost.purchasedBoosts === 0 && NormalChallenge.isRunning,
+    checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
+    get reward() { return `Antimatter Dimensions 1-4 are ${formatPercents(0.25)} stronger.`; },
+    effect: 1.25
   },
   {
     id: 65,
@@ -493,22 +505,10 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 77,
-    name: "How the antitables have turned..",
-    description:
-      "Get the 8th Antimatter Dimension multiplier to be highest, 7th Antimatter Dimension multiplier " +
-      " second highest, etc.",
-    checkRequirement: () => {
-      const multipliers = Array.range(1, 8).map(tier => AntimatterDimension(tier).multiplier);
-      for (let i = 0; i < multipliers.length - 1; i++) {
-        if (multipliers[i].gte(multipliers[i + 1])) return false;
-      }
-      return true;
-    },
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    get reward() {
-      return `Each Antimatter Dimension gains a boost proportional to tier
-      (8th gets ${formatPercents(0.08)}, 7th gets ${formatPercents(0.07)}, etc.)`;
-    }
+    name: "1 Million is a lot",
+    get description() { return `Reach ${format(1e6)} Infinity Power.`; },
+    checkRequirement: () => player.infinityPower.exponent >= 6,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 78,
@@ -657,7 +657,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Gain ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Replicanti in ${formatInt(1)} hour.`; },
     get reward() { return `You keep your Replicanti and ${formatInt(1)} Replicanti Galaxy on Infinity.`; },
     checkRequirement: () =>
-      (player.replicanti.amount.eq(Decimal.NUMBER_MAX_VALUE) || player.replicanti.galaxies > 0) &&
+      (player.replicanti.amount.eq(Decimal.NUMBER_MAX_VALUE) || player.replicanti.totalGalaxyCap > 0) &&
       Time.thisInfinityRealTime.totalHours <= 1,
     checkEvent: GAME_EVENT.REPLICANTI_TICK_AFTER
   },
@@ -684,14 +684,10 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 101,
-    name: "Costco sells Dimboosts now!",
-    get description() { return `Bulk buy ${formatInt(750)} Dimension Boosts at once.`; },
-    checkRequirement: ([bulk]) => bulk >= 750,
-    checkEvent: GAME_EVENT.DIMBOOST_AFTER,
-    get reward() {
-      return `The multiplier from Dimension Boosts to Antimatter Dimensions is ${formatPercents(0.01)} higher.`;
-    },
-    effect: 1.01
+    name: "8 nobody got time for that",
+    description: "Eternity without buying Antimatter Dimensions 1-7.",
+    checkRequirement: () => player.achievementChecks.onlyEighthDimensions,
+    checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },
   {
     id: 102,
@@ -818,10 +814,14 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 117,
-    name: "8 nobody got time for that",
-    description: "Eternity without buying Antimatter Dimensions 1-7.",
-    checkRequirement: () => player.onlyEighthDimensions,
-    checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
+    name: "Costco sells Dimboosts now!",
+    get description() { return `Bulk buy ${formatInt(750)} Dimension Boosts at once.`; },
+    checkRequirement: ([bulk]) => bulk >= 750,
+    checkEvent: GAME_EVENT.DIMBOOST_AFTER,
+    get reward() {
+      return `The multiplier from Dimension Boosts to Antimatter Dimensions is ${formatPercents(0.01)} higher.`;
+    },
+    effect: 1.01
   },
   {
     id: 118,
@@ -842,7 +842,7 @@ GameDatabase.achievements.normal = [
     id: 122,
     name: "You're already dead.",
     description: "Eternity without buying Antimatter Dimensions 2-8.",
-    checkRequirement: () => player.onlyFirstDimensions,
+    checkRequirement: () => player.achievementChecks.onlyFirstDimensions,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },
   {
@@ -867,7 +867,7 @@ GameDatabase.achievements.normal = [
       or buying any 1st Antimatter Dimensions in your current Eternity.`;
     },
     checkRequirement: () => player.infinityPoints.exponent >= 90 &&
-      player.noFirstDimensions && player.infinitied.eq(0),
+      player.achievementChecks.noFirstDimensions && player.infinitied.eq(0),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Infinity Point multiplier based on time spent this Infinity.",
     effect() {
@@ -923,7 +923,7 @@ GameDatabase.achievements.normal = [
       return `Have ${formatInt(569)} Antimatter Galaxies without getting any
       Replicanti Galaxies in your current Eternity.`;
     },
-    checkRequirement: () => player.galaxies >= 569 && player.noReplicantiGalaxies,
+    checkRequirement: () => player.galaxies >= 569 && player.achievementChecks.noReplicantiGalaxies,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
     reward: "Gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies.",
     effect: () => Math.max(Math.pow(player.galaxies, 0.04), 1),
@@ -1085,7 +1085,7 @@ GameDatabase.achievements.normal = [
       return `Get ${formatInt(800)} Antimatter Galaxies without
       buying 8th Antimatter Dimensions in your current Infinity.`;
     },
-    checkRequirement: () => player.galaxies >= 800 && player.noEighthDimensions,
+    checkRequirement: () => player.galaxies >= 800 && player.achievementChecks.noEighthDimensions,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
     reward: "Unlock V, the Celestial of Achievements."
   },
@@ -1100,7 +1100,7 @@ GameDatabase.achievements.normal = [
     id: 153,
     name: "More like \"reallydoesn'tmatter\"",
     description: "Reality without producing antimatter.",
-    checkRequirement: () => player.noAntimatterProduced,
+    checkRequirement: () => player.achievementChecks.noAntimatterProduced,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
   },
   {
@@ -1125,7 +1125,7 @@ GameDatabase.achievements.normal = [
     id: 156,
     name: "College Dropout",
     description: "Reality without buying Time Theorems.",
-    checkRequirement: () => player.noTheoremPurchases,
+    checkRequirement: () => player.achievementChecks.noTheoremPurchases,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     reward: "Free coupon to McDonalds™️."
   },
@@ -1238,7 +1238,7 @@ GameDatabase.achievements.normal = [
     },
     checkRequirement: () => gainedRealityMachines().gte(Decimal.NUMBER_MAX_VALUE) &&
       player.celestials.ra.charged.size === 0 && Glyphs.activeList.length === 0 &&
-      player.noTriadStudies,
+      player.achievementChecks.noTriadStudies,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
   },
   {

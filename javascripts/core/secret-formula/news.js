@@ -2276,12 +2276,12 @@ GameDatabase.news = [
   {
     id: "l23",
     text: "If this game was made by Valve, Zero Deaths would be impossible.",
-    get unlocked() { return Achievement(43).isUnlocked; }
+    get unlocked() { return Achievement(64).isUnlocked; }
   },
   {
     id: "l24",
     text: "Florida man attempts to get Zero Deaths on first run, is stopped by heat death of the universe.",
-    get unlocked() { return Achievement(43).isUnlocked; }
+    get unlocked() { return Achievement(64).isUnlocked; }
   },
   {
     id: "l25",
@@ -2639,7 +2639,7 @@ GameDatabase.news = [
     id: "j1",
     text: "How dare you actually get zero deaths on a first run?",
     get unlocked() {
-      return Achievement(43).isUnlocked &&
+      return Achievement(64).isUnlocked &&
       player.infinitied.eq(1) &&
       !PlayerProgress.eternityUnlocked();
     }

@@ -454,6 +454,7 @@ button:focus {
 .o-tab-btn {
   color: var(--color-text);
   background-color: var(--color-base);
+  white-space: nowrap;
   font-weight: bold;
   border: 0.2rem solid var(--color-accent);
   border-radius: 0.4rem;

@@ -22,7 +22,7 @@ Vue.component("normal-achievements-tab", {
   computed: {
     rows: () => Achievements.allRows,
     swapImagesButton() {
-      return Theme.current().name === "S4" || this.isCancer ? "😂" : ".";
+      return Theme.current().name === "S4" || this.isCancer ? "😂" : ":";
     },
     achievementMultiplierText() {
       let text = `Your Achievements provide a multiplier to`;
@@ -111,8 +111,20 @@ Vue.component("normal-achievements-tab", {
         />
       </div>
       <div class="c-achievements-tab__header">
-        <span v-html="achievementMultiplierText" /><span
-        @click="swapImages()" :style="imageSwapperStyleObject">{{ swapImagesButton }}</span>
+        Your Achievements provide a multiplier
+        to<span @click="swapImages()" :style="imageSwapperStyleObject">{{ swapImagesButton }}</span>
+        <div>
+          <span>
+            Antimatter<span v-if="achMultToTDS && achMultToIDS">, Infinity, and Time</span>
+            <span v-else-if="achMultToTDS"> and Time</span>
+            <span v-else-if="achMultToIDS"> and Infinity</span>
+            Dimensions: {{ achMultBreak ? formatX(achPowerWithBreak, 2, 3) : formatX(achievementPower, 2, 3) }}
+          </span>
+          <br>
+          <span v-if="this.achMultToTP"> Tachyon Particles: {{ formatX(this.achTPeffect, 2, 3) }} </span>
+          <br>
+          <span v-if="this.achMultToBH"> Black Hole Power: {{ formatX(this.achievementPower, 2, 3) }} </span>
+        </div>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">
         Automatically gain the next missing Achievement in {{timeDisplayNoDecimals(achCountdown)}}.

@@ -25,13 +25,15 @@ Vue.component("modal-ui-choice", {
         We noticed that you've loaded an old save, would you like to swap to the new UI?
         (you can change this at any time in the options tab)
       </div>
-      <primary-button
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="handleNoClick"
-      >No</primary-button>
-      <primary-button
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="handleYesClick"
-      >Yes</primary-button>
+      <div class="l-options-grid__row">
+        <primary-button
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          @click="handleNoClick"
+        >No</primary-button>
+        <primary-button
+          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+          @click="handleYesClick"
+        >Yes</primary-button>
+      </div>
     </div>`
 });

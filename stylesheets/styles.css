@@ -4373,8 +4373,9 @@ screen and (max-width: 480px) {
 }
 
 .o-eternity-upgrade--bought {
-  color: #511568;
+  color: black;
   background-color: var(--color-eternity);
+  border-color: black;
   cursor: default;
 }
 
@@ -6445,7 +6446,7 @@ kbd {
 }
 
 .c-v-unlock-completed {
-  background: lightgreen;
+  background: var(--color-v--base);
 }
 
 .o-v-unlock-name {
@@ -7047,7 +7048,7 @@ kbd {
   border-radius: 0.8rem;
   color: white;
   background: #222;
-  width: 23rem;
+  width: 24rem;
   margin-left: 0;
   padding: 0.4rem;
   z-index: 2;
@@ -8410,13 +8411,13 @@ kbd {
   border-radius: 50%;
 }
 
-.c-pp-label {
-  position: relative;
-  align-items: center;
-  font-size: 2rem;
-  font-weight: bold;
-  color: var(--color-reality);
+.c-perk-tab__header {
+  font-size: 1.5rem;
   margin-bottom: 1rem;
+}
+
+.c-perk-tab__perk-points {
+  color: var(--color-reality);
 }
 
 /*#region reality-tab*/

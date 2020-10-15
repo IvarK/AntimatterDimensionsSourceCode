@@ -160,9 +160,9 @@ Vue.component("v-tab", {
           <br>
           Cursed glyphs can be created in the Effarig tab, and the Black Hole can now be used to slow down time.
           <br>
-          Each hard V-Achievement will award {{ formatInt(2) }} Space Theorems instead of {{ formatInt(1) }}.
+          Each Hard V-Achievement will award {{ formatInt(2) }} Space Theorems instead of {{ formatInt(1) }}.
           <br>
-          Goal reduction is significantly more expensive for hard V-Achievements.
+          Goal reduction is significantly more expensive for Hard V-Achievements.
         </div>
         <div v-if="showReduction" class="c-v-info-text">
           You have {{ format(pp, 2, 0) }} {{ "Perk Point" | pluralize(pp) }}.

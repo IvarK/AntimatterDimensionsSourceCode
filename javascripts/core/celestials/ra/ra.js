@@ -79,7 +79,7 @@ class RaPetState {
   }
 
   get chunkUpgradeCurrentMult() {
-    return Math.pow(1.3, this.data.chunkUpgrades);
+    return Math.pow(1.5, this.data.chunkUpgrades);
 
   }
 
@@ -88,7 +88,7 @@ class RaPetState {
   }
 
   get chunkUpgradeCost() {
-    return 5000 * Math.pow(8, this.data.chunkUpgrades);
+    return 5000 * Math.pow(25, this.data.chunkUpgrades);
   }
 
   get canBuyMemoryUpgrade() {
@@ -100,11 +100,11 @@ class RaPetState {
   }
 
   get memoryUpgradeCapped() {
-    return this.data.memoryUpgrades === 22;
+    return this.memoryUpgradeCost >= 0.5 * Ra.requiredMemoriesForLevel(24);
   }
 
   get chunkUpgradeCapped() {
-    return this.data.chunkUpgrades === 17;
+    return this.chunkUpgradeCost >= 0.5 * Ra.requiredMemoriesForLevel(24);
   }
 
   purchaseMemoryUpgrade() {

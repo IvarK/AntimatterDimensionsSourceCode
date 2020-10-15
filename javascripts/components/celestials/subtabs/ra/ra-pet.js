@@ -209,7 +209,7 @@ Vue.component("ra-pet", {
                 <div class="c-ra-pet-upgrade__tooltip" v-if="!chunkUpgradeCapped">
                   <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Fragmentation</div>
                   <div class="c-ra-pet-upgrade__tooltip__description">
-                    Gain {{ formatPercents(0.3) }} more Memory Chunks
+                    Gain {{ formatPercents(0.5) }} more Memory Chunks
                   </div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
                     Cost: {{ format(chunkUpgradeCost, 2, 2) }} Memories

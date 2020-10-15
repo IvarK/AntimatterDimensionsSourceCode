@@ -64,7 +64,7 @@ Vue.component("teresa-tab", {
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.lastRM.copyFrom(player.celestials.teresa.lastRepeatedRM);
       this.runReward = Teresa.runRewardMultiplier;
-      this.perkPoints = player.reality.reality.perkPoints;
+      this.perkPoints = player.reality.perkPoints;
       this.rm.copyFrom(player.reality.realityMachines);
       this.isRunning = Teresa.isRunning;
       this.canUnlockNextPour = Object.values(TERESA_UNLOCKS)

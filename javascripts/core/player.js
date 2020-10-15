@@ -250,7 +250,7 @@ let player = {
     interval: 1000,
     intervalCost: new Decimal(1e140),
     boughtGalaxyCap: 0,
-    totalGalaxyCap: 0,
+    replicantiGalaxies: 0,
     galCost: new Decimal(1e170),
     auto: [false, false, false],
     timer: 0,

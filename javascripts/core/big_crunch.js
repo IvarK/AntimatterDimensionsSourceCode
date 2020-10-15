@@ -97,7 +97,7 @@ function bigCrunchTabChange(firstInfinity) {
 
 function bigCrunchReplicanti() {
   const currentReplicanti = player.replicanti.amount;
-  const currentReplicantiGalaxies = player.replicanti.totalGalaxyCap;
+  const currentReplicantiGalaxies = player.replicanti.replicantiGalaxies;
   secondSoftReset(true);
 
   let remainingGalaxies = 0;
@@ -110,7 +110,7 @@ function bigCrunchReplicanti() {
   }
   // I don't think this Math.clampMax is technically needed, but if we add another source
   // of keeping Replicanti Galaxies then it might be.
-  player.replicanti.totalGalaxyCap = Math.clampMax(remainingGalaxies, currentReplicantiGalaxies);
+  player.replicanti.replicantiGalaxies = Math.clampMax(remainingGalaxies, currentReplicantiGalaxies);
 
   autoBuyReplicantiUpgrades();
 }
@@ -145,7 +145,7 @@ function secondSoftReset(forcedNDReset = false) {
   InfinityDimensions.resetAmount();
   if (player.replicanti.unl)
     player.replicanti.amount = new Decimal(1);
-  player.replicanti.totalGalaxyCap = 0;
+  player.replicanti.replicantiGalaxies = 0;
   player.records.thisInfinity.time = 0;
   player.records.thisInfinity.lastBuyTime = 0;
   player.records.thisInfinity.realTime = 0;

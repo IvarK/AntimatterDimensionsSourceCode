@@ -13,7 +13,7 @@ const ReplicantiGrowth = {
 
 function addReplicantiGalaxies(newGalaxies) {
   if (newGalaxies > 0) {
-    player.replicanti.totalGalaxyCap += newGalaxies;
+    player.replicanti.replicantiGalaxies += newGalaxies;
     player.achievementChecks.noReplicantiGalaxies = false;
   }
 }
@@ -24,7 +24,7 @@ function replicantiGalaxy() {
   let galaxyGain = 1;
   if (Achievement(126).isUnlocked) {
     // Attempt to buy bulk if RG divides by e308 instead of resetting
-    const maxGain = Replicanti.galaxies.max - player.replicanti.totalGalaxyCap;
+    const maxGain = Replicanti.galaxies.max - player.replicanti.replicantiGalaxies;
     const logReplicanti = player.replicanti.amount.log10();
     galaxyGain = Math.min(maxGain, Math.floor(logReplicanti / LOG10_MAX_VALUE));
     // In the unlikely case of different rounding error between canBuyMore and the above
@@ -45,7 +45,7 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
   // Checking for uncapped equaling zero is because Decimal.pow returns zero for overflow for some reason
   if (log10GainFactor.gt(Number.MAX_VALUE) || uncappedAmount.eq(0)) {
     if (isAutobuyerActive) {
-      addReplicantiGalaxies(Replicanti.galaxies.max - player.replicanti.totalGalaxyCap);
+      addReplicantiGalaxies(Replicanti.galaxies.max - player.replicanti.replicantiGalaxies);
     }
     player.replicanti.amount = replicantiCap();
     // Basically we've used nothing.
@@ -62,7 +62,7 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
   const gainNeededPerRG = Decimal.NUMBER_MAX_VALUE.log10();
   const replicantiExponent = log10GainFactor.toNumber() + player.replicanti.amount.log10();
   const toBuy = Math.floor(Math.min(replicantiExponent / gainNeededPerRG,
-    Replicanti.galaxies.max - player.replicanti.totalGalaxyCap));
+    Replicanti.galaxies.max - player.replicanti.replicantiGalaxies));
   const maxUsedGain = gainNeededPerRG * toBuy + replicantiCap().log10() - player.replicanti.amount.log10();
   const remainingGain = log10GainFactor.minus(maxUsedGain).clampMin(0);
   player.replicanti.amount = Decimal.pow10(replicantiExponent - gainNeededPerRG * toBuy)
@@ -428,7 +428,7 @@ const Replicanti = {
     player.replicanti.interval = 1000;
     player.replicanti.intervalCost = new Decimal(1e140);
     player.replicanti.boughtGalaxyCap = 0;
-    player.replicanti.totalGalaxyCap = 0;
+    player.replicanti.replicantiGalaxies = 0;
     player.replicanti.galCost = new Decimal(1e170);
     if (force ||
       (EternityMilestone.autobuyerReplicantiGalaxy.isReached && player.replicanti.galaxybuyer === undefined)) {
@@ -453,7 +453,7 @@ const Replicanti = {
   galaxies: {
     isPlayerHoldingR: false,
     get bought() {
-      return player.replicanti.totalGalaxyCap;
+      return player.replicanti.replicantiGalaxies;
     },
     get extra() {
       return Math.floor((Effects.sum(

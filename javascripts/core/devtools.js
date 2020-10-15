@@ -447,7 +447,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
       },
       function() {
         player.replicanti.boughtGalaxyCap = 100;
-        player.replicanti.totalGalaxyCap = 50;
+        player.replicanti.replicantiGalaxies = 50;
       }
     ],
     [
@@ -476,7 +476,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
       for (let j = 0; j <= 5; j++) {
         replicantiLoop(Math.pow(10, j));
         resultList.push(Notation.scientific.formatDecimal(player.replicanti.amount, 5, 5));
-        resultList.push(player.replicanti.totalGalaxyCap);
+        resultList.push(player.replicanti.replicantiGalaxies);
         resultList.push(Replicanti.galaxies.total);
       }
     }

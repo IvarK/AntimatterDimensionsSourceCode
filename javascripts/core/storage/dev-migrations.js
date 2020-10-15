@@ -848,7 +848,7 @@ GameStorage.devMigrations = {
     },
     player => {
       player.replicanti.boughtGalaxyCap = player.replicanti.gal;
-      player.replicanti.totalGalaxyCap = player.replicanti.galaxies;
+      player.replicanti.replicantiGalaxies = player.replicanti.galaxies;
       player.reality.perkPoints = player.reality.pp;
       player.celestials.teresa.pouredAmount = player.celestials.teresa.rmStore;
       player.celestials.laitela.darkMatter = new Decimal(player.celestials.laitela.matter);

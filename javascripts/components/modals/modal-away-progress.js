@@ -44,7 +44,7 @@ Vue.component("modal-away-progress", {
           (after.celestials.laitela.singularities <= before.celestials.laitela.singularities || !this.singularities) &&
           (!after.celestials.laitela.darkMatter.gt(before.celestials.laitela.darkMatter) || !this.darkMatter) &&
           (!after.replicanti.amount.gt(before.replicanti.amount) || !this.replicanti) &&
-          (after.replicanti.totalGalaxyCap <= before.replicanti.totalGalaxyCap || !this.replicantiGalaxies) &&
+          (after.replicanti.replicantiGalaxies <= before.replicanti.replicantiGalaxies || !this.replicantiGalaxies) &&
           !this.celestialMemoriesShown &&
           !this.blackHoleShown
          ) {
@@ -154,10 +154,10 @@ Vue.component("modal-away-progress", {
           <br>
           {{ format(before.replicanti.amount, 2, 2) }} to {{ format(after.replicanti.amount, 2, 2) }}
         </div>
-        <div v-if="after.replicanti.totalGalaxyCap > before.replicanti.totalGalaxyCap && replicantiGalaxies">
+        <div v-if="after.replicanti.replicantiGalaxies > before.replicanti.replicantiGalaxies && replicantiGalaxies">
           <b class="c-modal-away-progress__replicanti">Replicanti Galaxies</b> increased from
           <br>
-          {{ formatInt(before.replicanti.totalGalaxyCap) }} to {{ formatInt(after.replicanti.totalGalaxyCap) }}
+          {{ formatInt(before.replicanti.replicantiGalaxies) }} to {{ formatInt(after.replicanti.replicantiGalaxies) }}
         </div>
         <div v-if="celestialMemoriesShown">
           <span v-if="after.celestials.ra.pets.teresa.level > before.celestials.ra.pets.teresa.level">

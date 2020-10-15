@@ -772,7 +772,7 @@ GameStorage.migrations = {
 
   migratePlayerVars(player) {
     player.replicanti.boughtGalaxyCap = player.replicanti.gal;
-    player.replicanti.totalGalaxyCap = player.replicanti.galaxies;
+    player.replicanti.replicantiGalaxies = player.replicanti.galaxies;
     player.dilation.totalTachyonGalaxies = player.dilation.freeGalaxies;
 
     delete player.replicanti.gal;

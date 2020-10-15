@@ -218,7 +218,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 6,
       requirement: 92,
       description: "Replicanti Galaxies boost Replicanti multiplier",
-      effect: () => Decimal.pow(5, player.replicanti.totalGalaxyCap),
+      effect: () => Decimal.pow(5, player.replicanti.replicantiGalaxies),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -226,7 +226,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 6,
       requirement: 93,
       description: "Time Dimension multiplier equal to Replicanti Galaxy amount",
-      effect: () => Math.max(player.replicanti.totalGalaxyCap, 1),
+      effect: () => Math.max(player.replicanti.replicantiGalaxies, 1),
       formatEffect: value => formatX(value, 2, 0)
     },
     {

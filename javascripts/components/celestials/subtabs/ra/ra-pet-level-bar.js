@@ -128,10 +128,10 @@ Vue.component("ra-pet-level-bar", {
       const estimate = a === 0
         ? -c / b
         : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
-      if (Number.isFinite(estimate)) {
-        return TimeSpan.fromSeconds(estimate).toStringShort();
-      }
-      return "never";
+        if (Number.isFinite(estimate)) {
+          return `in ${TimeSpan.fromSeconds(estimate).toStringShort(false)}`;
+        }
+        return "";
     },
   },
   template: `
@@ -153,8 +153,8 @@ Vue.component("ra-pet-level-bar", {
             </div>
           </div>
           <div class="c-ra-pet-upgrade__tooltip__footer">
-            {{ format(requiredMemories, 2, 2) }} Memories
-            <span v-if="memories <= requiredMemories">in {{ nextLevelEstimate }}</span>
+            Cost: {{ format(requiredMemories, 2, 2) }} Memories
+            <span v-if="memories <= requiredMemories">{{ nextLevelEstimate }}</span>
           </div>
         </div>
       </div>

@@ -761,6 +761,8 @@ GameStorage.devMigrations = {
         player.records.lastTenEternities[i][0] = player.lastTenEternities[i][0];
         player.records.lastTenRealities[i][0] = player.lastTenRealities[i][0];
       }
+      player.options.showLastTenInfinitiesGainPerTime = player.options.showLastTenRunsGainPerTime;
+      delete player.options.showLastTenRunsGainPerTime;
 
       player.records.thisInfinity.time = player.thisInfinityTime;
       player.records.thisInfinity.realTime = player.thisInfinityRealTime;

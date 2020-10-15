@@ -111,9 +111,9 @@ Vue.component("ra-pet", {
         ? -c / b
         : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
       if (Number.isFinite(estimate)) {
-        return TimeSpan.fromSeconds(estimate).toStringShort();
+        return `in ${TimeSpan.fromSeconds(estimate).toStringShort(false)}`;
       }
-      return "never";
+      return "";
     },
     nextUnlockLevel() {
       const missingUpgrades = Object.values(RA_UNLOCKS)
@@ -183,7 +183,7 @@ Vue.component("ra-pet", {
                   <div class="c-ra-pet-upgrade__tooltip__description">Gain {{ formatPercents(0.3) }} more Memories</div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
                     Cost: {{ format(memoryUpgradeCost, 2, 2) }} Memories
-                    <span v-if="memories <= memoryUpgradeCost">in {{ nextMemoryUpgradeEstimate }}</span>
+                    <span v-if="memories <= memoryUpgradeCost">{{ nextMemoryUpgradeEstimate }}</span>
                     <br>
                     Currently: {{ formatX(currentMemoryMult, 2, 2) }}
                   </div>
@@ -213,7 +213,7 @@ Vue.component("ra-pet", {
                   </div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
                     Cost: {{ format(chunkUpgradeCost, 2, 2) }} Memories
-                    <span v-if="memories <= chunkUpgradeCost">in {{ nextMemoryChunkUpgradeEstimate }}</span>
+                    <span v-if="memories <= chunkUpgradeCost">{{ nextMemoryChunkUpgradeEstimate }}</span>
                     <br>
                     Currently: {{ formatX(currentChunkMult, 2, 2) }}
                   </div>

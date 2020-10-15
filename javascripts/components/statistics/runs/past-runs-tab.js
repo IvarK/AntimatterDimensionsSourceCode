@@ -35,24 +35,24 @@ Vue.component("past-runs-tab", {
           prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Infinity", run[2], "Infinities")}`,
         },
       },
-      showLastTenRunsGainPerTime: false
+      showLastTenInfinitiesGainPerTime: false
     };
   },
   watch: {
-    showLastTenRunsGainPerTime(newValue) {
-      player.options.showLastTenRunsGainPerTime = newValue;
+    showLastTenInfinitiesGainPerTime(newValue) {
+      player.options.showLastTenInfinitiesGainPerTime = newValue;
     }
   },
   methods: {
     update() {
-      this.showLastTenRunsGainPerTime = player.options.showLastTenRunsGainPerTime;
+      this.showLastTenInfinitiesGainPerTime = player.options.showLastTenInfinitiesGainPerTime;
     }
   },
   template: `
     <div class="c-stats-tab">
       <div class="c-subtab-option-container">
         <primary-button-on-off-custom
-          v-model="showLastTenRunsGainPerTime"
+          v-model="showLastTenInfinitiesGainPerTime"
           on="Show resource gain"
           off="Show resource gain/time"
           class="o-primary-btn--subtab-option"

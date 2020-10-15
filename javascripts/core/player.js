@@ -552,7 +552,7 @@ let player = {
     automaticTabSwitching: true,
     respecIntoProtected: false,
     offlineTicks: 1000,
-    showLastTenRunsGainPerTime: false,
+    showLastTenInfinitiesGainPerTime: false,
     autosaveInterval: 30000,
     exportedFileCount: 0,
     hideCompletedAchievementRows: false,

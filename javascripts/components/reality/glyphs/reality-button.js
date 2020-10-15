@@ -28,7 +28,7 @@ Vue.component("reality-button", {
       return "";
     },
     formatGlyphLevel() {
-      if (this.glyphLevel >= 100000) return `Glyph level: ${formatInt(this.glyphLevel)}`;
+      if (this.glyphLevel >= 10000) return `Glyph level: ${formatInt(this.glyphLevel)}`;
       return `Glyph level: ${formatInt(this.glyphLevel)}  (${this.nextGlyphPercent})`;
     },
     shardsGainedText() {

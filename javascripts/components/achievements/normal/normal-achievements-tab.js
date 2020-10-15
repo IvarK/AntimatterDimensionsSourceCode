@@ -15,6 +15,7 @@ Vue.component("normal-achievements-tab", {
       achMultToTDS: false,
       achMultToBH: false,
       achMultToTP: false,
+      achMultToTT: false,
       canSwapImages: false
     };
   },
@@ -52,6 +53,7 @@ Vue.component("normal-achievements-tab", {
       this.achMultToTDS = EternityUpgrade.tdMultAchs.isBought;
       this.achMultToTP = RealityUpgrade(8).isBought;
       this.achMultToBH = V.has(V_UNLOCKS.ACHIEVEMENT_BH);
+      this.achMultToTT = Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT);
       this.canSwapImages = Themes.available().find(v => v.name === "S4") !== undefined && Theme.current().name !== "S4";
     },
     timeDisplay(value) {
@@ -95,6 +97,8 @@ Vue.component("normal-achievements-tab", {
           <span v-if="this.achMultToTP"> Tachyon Particles: {{ formatX(this.achTPeffect, 2, 3) }} </span>
           <br>
           <span v-if="this.achMultToBH"> Black Hole Power: {{ formatX(this.achievementPower, 2, 3) }} </span>
+          <br>
+          <span v-if="this.achMultToTT"> Time Theorem production: {{ formatX(this.achievementPower, 2, 3) }} </span>
         </div>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">

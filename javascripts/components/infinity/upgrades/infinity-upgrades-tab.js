@@ -9,6 +9,7 @@ Vue.component("infinity-upgrades-tab", {
       disCharge: false,
       ipMultSoftCap: 0,
       ipMultHardCap: 0,
+      eternityUnlocked: false
     };
   },
   watch: {
@@ -61,6 +62,7 @@ Vue.component("infinity-upgrades-tab", {
       this.disCharge = player.celestials.ra.disCharge;
       this.ipMultSoftCap = GameDatabase.infinity.upgrades.ipMult.costIncreaseThreshold;
       this.ipMultHardCap = GameDatabase.infinity.upgrades.ipMult.costCap;
+      this.eternityUnlocked = PlayerProgress.current.isEternityUnlocked;
     },
     btnClassObject(column) {
       const classObject = {
@@ -111,11 +113,11 @@ Vue.component("infinity-upgrades-tab", {
           :class="btnClassObject(1)"
         />
       </div>
-      <div>
+      <div v-if="eternityUnlocked">
         The Infinity Point multiplier can be bought repeatedly, but becomes more expensive
         <br>
-        above {{format(ipMultSoftCap)}} Infinity Points and cannot be purchased past
-        {{format(ipMultHardCap)}} Infinity Points.
+        above {{formatPostBreak(ipMultSoftCap)}} Infinity Points and cannot be purchased past
+        {{formatPostBreak(ipMultHardCap)}} Infinity Points.
       </div>
     </div>`
 });

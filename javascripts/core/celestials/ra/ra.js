@@ -419,7 +419,7 @@ const RA_UNLOCKS = {
     description: "Get Teresa to level 8",
     reward: "Unlock Altered Glyphs, which grant new effects to glyphs based on Glyph Sacrifice",
     pet: Ra.pets.teresa,
-    level: 8,
+    level: 10,
     displayIcon: `<span class="fas fa-bolt"></span>`
   },
   EFFARIG_UNLOCK: {
@@ -427,7 +427,7 @@ const RA_UNLOCKS = {
     description: "Get Teresa to level 10",
     reward: "Unlock Effarig's Memories",
     pet: Ra.pets.teresa,
-    level: 10,
+    level: 8,
     displayIcon: `Ϙ`
   },
   PERK_SHOP_INCREASE: {
@@ -479,7 +479,7 @@ const RA_UNLOCKS = {
     description: "Get Effarig to level 8",
     reward: () => `Glyphs always have ${formatInt(4)} effects, and Effarig glyphs can now have up to ${formatInt(7)}`,
     pet: Ra.pets.effarig,
-    level: 8,
+    level: 10,
     displayIcon: `<span class="fas fa-braille"></span>`
   },
   ENSLAVED_UNLOCK: {
@@ -487,7 +487,7 @@ const RA_UNLOCKS = {
     description: "Get Effarig to level 10",
     reward: "Unlock Enslaved's Memories",
     pet: Ra.pets.effarig,
-    level: 10,
+    level: 8,
     displayIcon: `<span class="fas fa-link"></span>`
   },
   SHARD_LEVEL_BOOST: {
@@ -542,7 +542,7 @@ const RA_UNLOCKS = {
     reward: () => `Black Hole charging can be done at an adjustable rate and automatically
       pulsed every ${formatInt(5)} ticks (new features in The Enslaved Ones' tab)`,
     pet: Ra.pets.enslaved,
-    level: 8,
+    level: 10,
     displayIcon: `<span class="fas fa-expand-arrows-alt"></span>`
   },
   V_UNLOCK: {
@@ -550,7 +550,7 @@ const RA_UNLOCKS = {
     description: "Get Enslaved to level 10",
     reward: "Unlock V's Memories",
     pet: Ra.pets.enslaved,
-    level: 10,
+    level: 8,
     displayIcon: `⌬`
   },
   PEAK_GAMESPEED: {

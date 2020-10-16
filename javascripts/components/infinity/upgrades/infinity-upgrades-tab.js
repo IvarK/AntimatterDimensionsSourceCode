@@ -114,9 +114,9 @@ Vue.component("infinity-upgrades-tab", {
         />
       </div>
       <div v-if="eternityUnlocked">
-        The Infinity Point multiplier can be bought repeatedly, but becomes more expensive
+        The Infinity Point multiplier becomes more expensive
         <br>
-        above {{formatPostBreak(ipMultSoftCap)}} Infinity Points and cannot be purchased past
+        above {{formatPostBreak(ipMultSoftCap)}} Infinity Points, and cannot be purchased past
         {{formatPostBreak(ipMultHardCap)}} Infinity Points.
       </div>
     </div>`

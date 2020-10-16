@@ -749,6 +749,10 @@ GameStorage.migrations = {
     player.records.totalAntimatter = new Decimal(player.totalAntimatter);
     player.records.lastTenInfinities = player.lastTenRuns;
     player.records.lastTenEternities = player.lastTenEternities;
+    for (let i = 0; i < 10; i++) {
+      player.records.lastTenInfinities[i][1] = new Decimal(player.lastTenRuns[i][1]);
+      player.records.lastTenEternities[i][1] = new Decimal(player.lastTenEternities[i][1]);
+    }
     player.records.thisInfinity.time = player.thisInfinityTime;
     player.records.bestInfinity.time = player.bestInfinityTime;
     player.records.thisEternity.time = player.thisEternity;

@@ -91,7 +91,9 @@ Vue.component("ra-pet-level-bar", {
       if (this.pet.name === "Effarig") {
         return `Unlock the ${AlchemyResources.all.filter(
           res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1
-        )[0]._config.name} resource in Glyph Alchemy`;
+        )[0]._config.name} resource in Glyph Alchemy, which ${AlchemyResources.all.filter(
+          res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1
+        )[0]._config.description}`;
       }
       if (this.pet.name === "Enslaved") {
         return `+${formatFloat(0.01, 2)} to stored game time power, and you can store an additional hour of real time`;

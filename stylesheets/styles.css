@@ -8854,17 +8854,6 @@ input.o-automator-block-input {
   margin-top: 0.8rem;
 }
 
-.c-shop-disclaimer {
-  color: black;
-  background: var(--color-bad);
-  width: 100rem;
-  font-size: 1.8rem;
-  font-weight: bold;
-  border: 0.2rem solid black;
-  border-radius: 1rem;
-  margin-top: 0.8rem;
-}
-
 .t-metro .c-shop-disclaimer,
 .t-dark-metro .c-shop-disclaimer,
 .t-inverted-metro .c-shop-disclaimer,

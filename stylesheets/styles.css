@@ -7250,13 +7250,24 @@ kbd {
 .c-alchemy-resource-info {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  text-align: center;
   border: 0.1rem solid black;
   padding: 0.25rem 1rem;
   width: 60rem;
   height: 10rem;
   font-size: 1.2rem;
-  text-align: left;
   margin-top: 0.5rem;
+}
+
+.c-alchemy-resource-info--locked {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.c-alchemy-resource-info__title {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .c-reality-glyph-creation {

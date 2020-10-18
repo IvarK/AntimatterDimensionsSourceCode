@@ -44,7 +44,7 @@ GameDatabase.challenges.eternity = [
     restriction: completions => Math.max(16 - 4 * completions, 0),
     checkRestriction: restriction => player.infinitied.lte(restriction),
     formatRestriction: restriction => `in ${formatInt(restriction)} Infinities or less`,
-    failedRestriction: "(Too many infinities for more)",
+    failedRestriction: "(Too many Infinities for more)",
     reward: {
       description: "Infinity Dimension multiplier based on unspent Infinity Points",
       effect: completions => player.infinityPoints.pow(0.003 + completions * 0.002),

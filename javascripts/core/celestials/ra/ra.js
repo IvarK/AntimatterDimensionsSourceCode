@@ -540,7 +540,7 @@ const RA_UNLOCKS = {
     id: 17,
     description: "Get Enslaved to level 8",
     reward: () => `Black Hole charging can be done at an adjustable rate and automatically
-      pulsed every ${formatInt(5)} ticks (new features in The Enslaved Ones' tab)`,
+      pulsed every ${formatInt(5)} ticks. You can change these in the Black Hole and The Enslaved Ones' tabs`,
     pet: Ra.pets.enslaved,
     level: 10,
     displayIcon: `<span class="fas fa-expand-arrows-alt"></span>`
@@ -591,7 +591,8 @@ const RA_UNLOCKS = {
     id: 23,
     description: "Get V to level 5",
     reward: () => `All Memory Chunks produce more Memories based on total Celestial levels,
-      and unlock a Triad Study every ${formatInt(5)} levels (see bottom of the Time Studies page)`,
+      and unlock a Triad Study every ${formatInt(5)} levels.
+      Triad Studies are located at the bottom of the Time Studies page`,
     pet: Ra.pets.v,
     level: 5,
     displayIcon: `<span class="fas fa-book"></span>`

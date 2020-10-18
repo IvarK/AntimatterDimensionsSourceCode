@@ -152,7 +152,7 @@ const Enslaved = {
     if (!this.feltEternity) {
       EnslavedProgress.feelEternity.giveProgress();
       this.feltEternity = true;
-      Modal.message.show("Time in eternity will be scaled by number of eternities");
+      Modal.message.show("Time in Eternity will be scaled by number of Eternities");
     }
   },
   get feltEternity() {

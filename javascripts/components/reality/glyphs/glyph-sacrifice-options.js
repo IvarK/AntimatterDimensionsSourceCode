@@ -382,7 +382,7 @@ Vue.component("glyph-sacrifice-options", {
     </div>
     <div v-if="mode === modes.LOWEST_ALCHEMY" class="c-glyph-sacrifice-options__advanced">
       <br> Glyph score is assigned based
-      <br> on current alchemy resource totals.
+      <br> on current Alchemy Resource totals.
       <br> (this mode never keeps glyphs)
     </div>
     <div v-if="mode === modes.ALCHEMY_VALUE" class="c-glyph-sacrifice-options__advanced">

@@ -129,7 +129,7 @@ Vue.component("statistics-tab", {
             </div>
             <div v-else>You haven't infinitied<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
             <div v-if="infinity.banked.gt(0)">
-              You have {{ formatDecimalAmount(infinity.banked) }} banked infinities.
+              You have {{ formatDecimalAmount(infinity.banked) }} Banked Infinities.
             </div>
             <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best.toStringShort() }}.</div>
             <div v-else>You have no fastest Infinity<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>

@@ -263,11 +263,11 @@
       };
       if (ctx.ECNumber) {
         if (ctx.ECNumber.isInsertedInRecovery) {
-          this.addError(ctx.Pipe[0], "Missing eternity challenge number");
+          this.addError(ctx.Pipe[0], "Missing Eternity Challenge number");
         }
         const ecNumber = parseFloat(ctx.ECNumber[0].image);
         if (!Number.isInteger(ecNumber) || ecNumber < 0 || ecNumber > 12) {
-          this.addError(ctx.ECNumber, `Invalid eternity challenge ID ${ecNumber}`);
+          this.addError(ctx.ECNumber, `Invalid Eternity Challenge ID ${ecNumber}`);
         }
         ctx.$cached.ec = ecNumber;
       }
@@ -314,11 +314,11 @@
         ecNumber = parseFloat(ctx.NumberLiteral[0].image);
         errToken = ctx.NumberLiteral[0];
       } else {
-        this.addError(ctx, "Missing eternity challenge number");
+        this.addError(ctx, "Missing Eternity Challenge number");
         return;
       }
       if (!Number.isInteger(ecNumber) || ecNumber < 1 || ecNumber > 12) {
-        this.addError(errToken, `Invalid eternity challenge ID ${ecNumber}`);
+        this.addError(errToken, `Invalid Eternity Challenge ID ${ecNumber}`);
       }
       ctx.$ecNumber = ecNumber;
     }

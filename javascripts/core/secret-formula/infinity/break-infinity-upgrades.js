@@ -116,7 +116,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
         if (!BreakInfinityUpgrade.ipGen.isCapped) {
           generation += ` ➜ ${formatInt(5 * (1 + player.infinityRebuyables[2]))}%`;
         }
-        return `${generation} of your best IP/min from last 10 infinities, works offline`;
+        return `${generation} of your best IP/min from last 10 Infinities, works offline`;
       },
       formatEffect: value => `${format(value, 2, 1)} IP/min`,
       title: true

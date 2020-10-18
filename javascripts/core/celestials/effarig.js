@@ -120,7 +120,7 @@ const Effarig = {
       id: 5,
       lines: [
         "You bought out my entire stock... well, at least I‘m rich now.",
-        "The heart of my reality is suffering. Each Layer is harder than the last.",
+        "The heart of my Reality is suffering. Each Layer is harder than the last.",
         "I hope you never complete it.",
       ]
     },

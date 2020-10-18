@@ -10,7 +10,7 @@ GameDatabase.celestials.enslaved = {
       progress: "Unlocked Enslaved Hints",
       hint: "The Enslaved Ones want to help, but the help takes a while.",
       condition: `Spent more than 5 real-time hours inside the Reality without completing it; time outside the reality
-        counts for 4% as much. The timer accumulates and only starts once Enslaved's reality is unlocked.`,
+        counts for 4% as much. The timer accumulates and only starts once Enslaved's Reality is unlocked.`,
     },
     ec1: {
       id: 1,

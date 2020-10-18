@@ -332,7 +332,7 @@ Vue.component("enslaved-tab", {
             <div class="l-enslaved-top-container__half">
               Storing real time completely halts all production, setting game speed to {{ formatInt(0) }}.
               You can use stored real time to "amplify" a Reality, simulating repeated runs of it.
-              Amplified Realities give all the rewards that normal realities do.
+              Amplified Realities give all the rewards that normal Realities do.
               <button :class="['o-enslaved-mechanic-button',
                               {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
                       @click="toggleStoreReal">

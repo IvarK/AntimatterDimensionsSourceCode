@@ -1053,7 +1053,7 @@ GameDatabase.achievements.normal = [
   {
     id: 146,
     name: "Perks of living",
-    description: "Have all perks bought.",
+    description: "Have all Perks bought.",
     checkRequirement: () => player.reality.perks.size === Perks.all.length,
     checkEvent: GAME_EVENT.PERK_BOUGHT,
     get reward() { return `+${formatPercents(0.01)} Glyph rarity.`; },

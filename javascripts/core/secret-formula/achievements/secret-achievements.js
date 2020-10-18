@@ -176,7 +176,7 @@ GameDatabase.achievements.secret = [
   {
     id: 45,
     name: "This dragging is dragging on",
-    description: "Drag the perks around for a minute.",
+    description: "Drag the Perks around for a minute.",
     checkRequirement: () => player.secretUnlocks.dragging++ / 100 >= 60
   },
   {

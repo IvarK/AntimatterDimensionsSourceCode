@@ -134,8 +134,8 @@ const AutoSacEffectTab = {
   template: `
     <div class="c-glyph-sacrifice-options__advanced">
       <div>
-        at least 
         Selected Glyphs will have<br>
+        at least
         <input type="number" min="0" max="8" :value="effectCount"
                ref="effectCount" @blur="setEffectCount"
                class="c-auto-sac-effect-tab__input"/>

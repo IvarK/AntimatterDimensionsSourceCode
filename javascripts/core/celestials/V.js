@@ -114,7 +114,7 @@ const V_UNLOCKS = {
   },
   SHARD_REDUCTION: {
     id: 1,
-    reward: () => `You can spend perk points to reduce V-Achievement requirements for later tiers.`,
+    reward: () => `You can spend Perk Points to reduce V-Achievement requirements for later tiers.`,
     get description() { return `Have ${formatInt(2)} V-Achievements`; },
     requirement: () => V.spaceTheorems >= 2
   },

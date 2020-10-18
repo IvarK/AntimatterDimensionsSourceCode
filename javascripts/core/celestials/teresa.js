@@ -149,7 +149,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
         GameUI.notify.error("You have no empty inventory space!");
       } else {
         Glyphs.addToInventory(GlyphGenerator.musicGlyph());
-        GameUI.notify.success("Created a music glyph");
+        GameUI.notify.success("Created a Music Glyph");
       }
     }
   }

@@ -63,7 +63,9 @@ Vue.component("alchemy-resource-info", {
   },
   template: `
     <div :class="classObject" v-if="isUnlocked">
-      <span class="c-alchemy-resource-info__title">{{ resource.symbol }} {{ resource.name }} {{ resource.symbol }}</span>
+      <span class="c-alchemy-resource-info__title">
+        {{ resource.symbol }} {{ resource.name }} {{ resource.symbol }}
+      </span>
       <span>Current: {{ resourceAmount }}</span>
       <span v-if="isBaseResource">Base Resource</span>
       <span v-else>Reaction: {{isReactionActive ? "Active" : "Inactive"}} ({{ reactionText }})</span>

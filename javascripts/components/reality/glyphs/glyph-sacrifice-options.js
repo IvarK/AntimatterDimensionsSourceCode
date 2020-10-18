@@ -134,8 +134,8 @@ const AutoSacEffectTab = {
   template: `
     <div class="c-glyph-sacrifice-options__advanced">
       <div>
-        Selected glyphs will have<br>
         at least 
+        Selected Glyphs will have<br>
         <input type="number" min="0" max="8" :value="effectCount"
                ref="effectCount" @blur="setEffectCount"
                class="c-auto-sac-effect-tab__input"/>
@@ -246,8 +246,8 @@ Vue.component("glyph-sacrifice-options", {
       };
     },
     questionmarkTooltip() {
-      return "All glyph choices are given a score based on the chosen option, and the glyph with the highest score " + 
-        "is picked. If this glyph is below a mode-specific threshold, it will be sacrificed instead.";
+      return "All Glyph choices are given a score based on the chosen option, and the Glyph with the highest score " +
+        "is picked. If this Glyph is below a mode-specific threshold, it will be Sacrificed instead.";
     }
   },
   methods: {
@@ -328,7 +328,7 @@ Vue.component("glyph-sacrifice-options", {
       <br> type; the type you have the least
       <br> total sacrifice value of is given
       <br> the highest score.
-      <br> (this mode never keeps glyphs)
+      <br> (this mode never keeps Glyphs)
     </div>
     <div v-if="mode === modes.EFFECT_COUNT" class=" c-glyph-sacrifice-options__advanced">
       <br> Glyphs must have at least
@@ -336,12 +336,12 @@ Vue.component("glyph-sacrifice-options", {
         ref="effectCount" @blur="setEffectCount"
         class="c-auto-sac-effect-tab__input"/>
       <br> effects to be chosen. Rarer
-      <br> glyphs are preferred in ties.
+      <br> Glyphs are preferred in ties.
     </div>
     <div v-if="mode === modes.RARITY_THRESHOLD"
       class="l-glyph-sacrifice-options__rarity-sliders">
         <span class="c-glyph-sacrifice-options__advanced">
-          Any glyphs with rarity below these
+          Any Glyphs with rarity below these
           <br>
           thresholds will be sacrificed.
         </span>

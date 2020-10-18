@@ -31,18 +31,18 @@ Vue.component("glyph-sort-options", {
           Sort by power
       </button>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="Group glyphs together based on effects"
+        ach-tooltip="Group Glyphs together based on effects"
         @click="sortByEffect">
           Sort by effect
       </button>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
         v-if="showScoreFilter"
-        ach-tooltip="Arranges by decreasing glyph filter score"
+        ach-tooltip="Arranges by decreasing Glyph filter score"
         @click="sortByScore">
           Sort by score
       </button>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="Moves all glyphs to the earliest empty slots"
+        ach-tooltip="Moves all Glyphs to the earliest empty slots"
         @click="collapseEmpty">
           Collapse empty space
       </button>

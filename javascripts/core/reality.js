@@ -93,7 +93,7 @@ function confirmReality() {
   return !player.options.confirmations.reality ||
     confirm("Reality will reset everything except challenge records. Your Achievements are also reset, " +
       "but you will automatically get one back every 30 minutes. " +
-      "You will also gain Reality Machines based on your Eternity Points, a glyph with a power level " +
+      "You will also gain Reality Machines based on your Eternity Points, a Glyph with a power level " +
       "based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend on quality of " +
       "life upgrades, and unlock various upgrades.");
 }

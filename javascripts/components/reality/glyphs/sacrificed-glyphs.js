@@ -123,7 +123,7 @@ Vue.component("sacrificed-glyphs", {
       @dragleave="dragleave"
       @drop="drop">
     <div class="l-sacrificed-glyphs__help">
-      <div>Drag glyphs here or shift-click to sacrifice.</div>
+      <div>Drag Glyphs here or shift-click to sacrifice.</div>
       <div>Ctrl-shift-click to sacrifice without confirmation</div>
     </div>
     <div class="c-sacrificed-glyphs__header">Glyph Sacrifice Boosts:</div>
@@ -150,7 +150,7 @@ Vue.component("sacrificed-glyphs", {
       </div>
     </div>
     <div v-else>
-      You haven't sacrificed any glyphs yet!
+      You haven't sacrificed any Glyphs yet!
     </div>
   </div>`,
 });

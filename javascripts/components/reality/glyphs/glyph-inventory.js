@@ -69,12 +69,12 @@ Vue.component("glyph-inventory", {
   },
   template: `
   <div class="l-glyph-inventory">
-    Click and drag or double-click to equip glyphs.
+    Click and drag or double-click to equip Glyphs.
     <br>
     The top {{ format(protectedRows, 2, 0) }} {{ "row" | pluralize(protectedRows, "rows")}} 
     of slots are protected slots and are unaffected by anything which
     <br>
-    may move or delete glyphs.  New glyphs will never be inserted into these slots.
+    may move or delete Glyphs.  New Glyphs will never be inserted into these slots.
     <glyph-protected-row-options />
     <glyph-sort-options />
     <div v-for="row in rowCount"

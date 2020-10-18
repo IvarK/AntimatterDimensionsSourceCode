@@ -13,7 +13,7 @@ const Effarig = {
     player.celestials.effarig.run = true;
     recalculateAllGlyphs();
     Tab.reality.glyphs.show(false);
-    Modal.message.show(`Your glyph levels have been limited to ${Effarig.glyphLevelCap}. ` +
+    Modal.message.show(`Your Glyph levels have been limited to ${Effarig.glyphLevelCap}. ` +
       "Infinity Power reduces the nerf to multipliers and game speed, and Time Shards reduce the nerf to tickspeed.");
   },
   get isRunning() {

@@ -145,10 +145,10 @@ class GlyphEffectConfig {
     const emptyCombine = setup.combine([]);
     if (typeof emptyCombine !== "number" && !(emptyCombine instanceof Decimal)) {
       if (emptyCombine.value === undefined || emptyCombine.capped === undefined) {
-        throw new Error(`The combine function for glyph effect "${setup.id}" has invalid return type`);
+        throw new Error(`The combine function for Glyph effect "${setup.id}" has invalid return type`);
       }
       if (setup.softcap) {
-        throw new Error(`The combine function for glyph effect "${setup.id}" gives capped information, ` +
+        throw new Error(`The combine function for Glyph effect "${setup.id}" gives capped information, ` +
           `but there's also a softcap method`);
       }
     }
@@ -385,11 +385,11 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 11,
     isGenerated: true,
     glyphTypes: ["replication"],
-    singleDesc: () => `Replicanti scaling for next glyph level: \n^${format(0.4, 1, 1)}
+    singleDesc: () => `Replicanti scaling for next Glyph level: \n^${format(0.4, 1, 1)}
       ➜ ^(${format(0.4, 1, 1)} + {value})`,
-    totalDesc: () => `Replicanti scaling for next glyph level: ^${format(0.4, 1, 1)}
+    totalDesc: () => `Replicanti scaling for next Glyph level: ^${format(0.4, 1, 1)}
       ➜ ^(${format(0.4, 1, 1)} + {value})`,
-    genericDesc: "Replicanti scaling for glyph level",
+    genericDesc: "Replicanti scaling for Glyph level",
     effect: (level, strength) => Math.pow(Math.pow(level, 0.25) * Math.pow(strength, 0.4), 0.5) / 50,
     formatEffect: x => format(x, 3, 3),
     combine: effects => {
@@ -678,8 +678,8 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 4,
     isGenerated: false,
     glyphTypes: ["reality"],
-    singleDesc: "Increase the effective level of equipped basic glyphs by {value}",
-    totalDesc: "Equipped basic glyph level +{value}",
+    singleDesc: "Increase the effective level of equipped basic Glyphs by {value}",
+    totalDesc: "Equipped basic Glyph level +{value}",
     effect: level => Math.floor(Math.sqrt(level * 90)),
     formatEffect: x => formatInt(x),
     combine: GlyphCombiner.add,
@@ -708,11 +708,11 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 7,
     isGenerated: false,
     glyphTypes: ["reality"],
-    singleDesc: () => `Dilated Time scaling for next glyph level: \n^${format(1.3, 1, 1)}
+    singleDesc: () => `Dilated Time scaling for next Glyph level: \n^${format(1.3, 1, 1)}
       ➜ ^(${format(1.3, 1, 1)} + {value})`,
-    totalDesc: () => `Dilated Time scaling for next glyph level: ^${format(1.3, 1, 1)}
+    totalDesc: () => `Dilated Time scaling for next Glyph level: ^${format(1.3, 1, 1)}
       ➜ ^(${format(1.3, 1, 1)} + {value})`,
-    genericDesc: "Dilated Time scaling for glyph level",
+    genericDesc: "Dilated Time scaling for Glyph level",
     // You can only get this effect on level 25000 reality glyphs anyway, might as well make it look nice
     effect: () => 0.15,
     formatEffect: x => format(x, 2, 2),
@@ -723,7 +723,7 @@ GameDatabase.reality.glyphEffects = [
     isGenerated: false,
     glyphTypes: ["companion"],
     singleDesc: "It does nothing but sit there and cutely smile at you, whisper into your dreams politely, " +
-      "and plot the demise of all who stand against you. This one-of-a-kind glyph will never leave you.",
+      "and plot the demise of all who stand against you. This one-of-a-kind Glyph will never leave you.",
     totalDesc: "+{value} happiness",
     effect: () => (Enslaved.isRunning ? 0 : (0.4 + 0.6 * Math.random())),
     formatEffect: x => formatPercents(x, 2, 2),

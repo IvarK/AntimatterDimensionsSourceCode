@@ -33,7 +33,7 @@ Vue.component("glyphs-tab", {
       if (!Enslaved.isRunning) return;
       const haveBoost = Glyphs.activeList.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
       if (haveBoost) {
-        this.enslavedHint = "done... what little... I can... with glyphs...";
+        this.enslavedHint = "done... what little... I can... with Glyphs...";
       }
     },
     toggleAutoRestartCelestial() {
@@ -93,7 +93,7 @@ Vue.component("glyphs-tab", {
                   :class="glyphInfoClass(false)"
                   @click="setInfoState(false)"
                   style="border-right: 0.1rem solid #b8b8b8;">
-                    Current glyph effects
+                    Current Glyph effects
                 </div>
                 <div class="c-glyph-info-button"
                   :class="glyphInfoClass(true)"

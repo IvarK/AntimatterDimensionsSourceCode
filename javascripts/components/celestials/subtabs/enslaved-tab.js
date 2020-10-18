@@ -118,7 +118,7 @@ Vue.component("modal-enslaved-hints", {
           <button class="o-primary-btn"
             :class="{ 'o-primary-btn--disabled': glyphHintsLeft <= 0 || !canGetHint }"
             v-on:click="giveGlyphHint(glyphHintsLeft)">
-              Get a hint on what glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
+              Get a hint on what Glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
           </button>
         </div>
         <div v-else>
@@ -297,7 +297,7 @@ Vue.component("enslaved-tab", {
               <p>Time Study 192 (uncapped Replicanti) is locked</p>
               <p>The Black Hole is disabled</p>
               <p>Tachyon Particle production and Dilated Time production are severely reduced</p>
-              <p>Time Theorem generation from Dilation glyphs is disabled</p>
+              <p>Time Theorem generation from Dilation Glyphs is disabled</p>
               <p>Certain challenge goals have been increased</p>
               <p>Stored Time is discharged at a reduced effectiveness (exponent^{{ format(0.55, 2, 2) }})</p>
               <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps

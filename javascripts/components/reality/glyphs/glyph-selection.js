@@ -52,7 +52,7 @@ Vue.component("modal-glyph-selection", {
       <button class="o-primary-btn o-primary-btn--glyph-trash"
         v-if="canSacrifice"
         v-on:click="trashGlyphs()">
-          I don't want any of these glyphs,
+          I don't want any of these Glyphs,
           <br>
           pick and sacrifice one at random.
           <br>

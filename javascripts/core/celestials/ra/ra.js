@@ -417,7 +417,7 @@ const RA_UNLOCKS = {
   ALTERED_GLYPHS: {
     id: 3,
     description: "Get Teresa to level 8",
-    reward: "Unlock Altered Glyphs, which grant new effects to glyphs based on Glyph Sacrifice",
+    reward: "Unlock Altered Glyphs, which grant new effects to Glyphs based on Glyph Sacrifice",
     pet: Ra.pets.teresa,
     level: 10,
     displayIcon: `<span class="fas fa-bolt"></span>`
@@ -451,7 +451,7 @@ const RA_UNLOCKS = {
   EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX: {
     id: 7,
     description: "Unlock Effarig",
-    reward: () => `Get ${formatX(2)} glyph choices and the bonus to glyph rarity from Relic Shards
+    reward: () => `Get ${formatX(2)} Glyph choices and the bonus to Glyph rarity from Relic Shards
       is always its maximum value`,
     pet: Ra.pets.effarig,
     level: 1,
@@ -461,7 +461,7 @@ const RA_UNLOCKS = {
     id: 8,
     description: "Get Effarig to level 2",
     reward: `Unlock Glyph Alchemy, which adds alchemical resources you can increase
-    by refining glyphs, and unlocking more resources through Effarig levels (unlocks a new Reality tab)`,
+    by Refining Glyphs, and unlocking more resources through Effarig levels. Access through a new Reality tab.`,
     pet: Ra.pets.effarig,
     level: 2,
     displayIcon: `<span class="fas fa-vial"></span>`
@@ -469,7 +469,7 @@ const RA_UNLOCKS = {
   EFFARIG_XP: {
     id: 9,
     description: "Get Effarig to level 5",
-    reward: "All Memory Chunks produce more Memories based on highest glyph level",
+    reward: "All Memory Chunks produce more Memories based on highest Glyph level",
     pet: Ra.pets.effarig,
     level: 5,
     displayIcon: `<span class="fas fa-clone"></span>`
@@ -477,7 +477,7 @@ const RA_UNLOCKS = {
   GLYPH_EFFECT_COUNT: {
     id: 10,
     description: "Get Effarig to level 8",
-    reward: () => `Glyphs always have ${formatInt(4)} effects, and Effarig glyphs can now have up to ${formatInt(7)}`,
+    reward: () => `Glyphs always have ${formatInt(4)} effects, and Effarig Glyphs can now have up to ${formatInt(7)}`,
     pet: Ra.pets.effarig,
     level: 10,
     displayIcon: `<span class="fas fa-braille"></span>`
@@ -564,8 +564,8 @@ const RA_UNLOCKS = {
   ALWAYS_GAMESPEED: {
     id: 20,
     description: "Get Enslaved to level 25",
-    reward: `All basic glyphs gain the increased game speed effect from time glyphs,
-      and time glyphs gain an additional effect`,
+    reward: `All basic Glyphs gain the increased game speed effect from Time Glyphs,
+      and Time Glyphs gain an additional effect`,
     pet: Ra.pets.enslaved,
     level: 25,
     displayIcon: `<span class="fas fa-clock"></span>`

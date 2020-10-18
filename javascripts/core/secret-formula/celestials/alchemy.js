@@ -262,7 +262,7 @@ GameDatabase.celestials.alchemy = {
       isUnlocked: () => Ra.pets.effarig.level >= 14,
       lockText: "Effarig Level 14",
       description: "causes refining to give all basic Alchemy Resources",
-      formatEffect: value => `Refined glyphs also give ${formatPercents(value, 2)} of their value ` +
+      formatEffect: value => `Refined Glyphs also give ${formatPercents(value, 2)} of their value ` +
         "to all other base resources",
       reagents: [
         {
@@ -430,7 +430,7 @@ GameDatabase.celestials.alchemy = {
       isUnlocked: () => Ra.pets.effarig.level >= 25,
       lockText: "Effarig Level 25",
       description: "allows creation of Reality Glyphs",
-      formatEffect: value => `Consume all Reality resource to create a level ${formatInt(value)} Reality glyph`,
+      formatEffect: value => `Consume all Reality resource to create a level ${formatInt(value)} Reality Glyph`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EXPONENTIAL,

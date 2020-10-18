@@ -33,7 +33,7 @@ Vue.component("glyph-auto-pick-options", {
     <span class="c-glyph-sacrifice-options__advanced">
       Behavior for deleted and filtered
       <br>
-      glyphs in non-alchemy modes:
+      Glyphs in non-alchemy modes:
     </span>
     <br>
     <div :class="optionClass(modes.SACRIFICE)" @click="setMode(modes.SACRIFICE)">

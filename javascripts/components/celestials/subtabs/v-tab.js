@@ -158,7 +158,7 @@ Vue.component("v-tab", {
           ><span v-if="wantsFlipped">Hide</span><span v-else>Show</span> Hard V</primary-button>
           <br>
           <br>
-          Cursed glyphs can be created in the Effarig tab, and the Black Hole can now be used to slow down time.
+          Cursed Glyphs can be created in the Effarig tab, and the Black Hole can now be used to slow down time.
           <br>
           Each Hard V-Achievement will award {{ formatInt(2) }} Space Theorems instead of {{ formatInt(1) }}.
           <br>

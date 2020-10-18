@@ -42,19 +42,19 @@ Vue.component("glyph-clean-options", {
       return "Delete";
     },
     autoCleanTooltip() {
-      return `${this.removeString} glyphs that are worse in every way than
-        enough other glyphs${this.hasPerkShop ? " (ignores music glyphs)" : ""}`;
+      return `${this.removeString} Glyphs that are worse in every way than
+        enough other Glyphs${this.hasPerkShop ? " (ignores Music Glyphs)" : ""}`;
     },
     harshAutoCleanTooltip() {
-      return `${this.removeString} glyphs that are worse in every way than
-        ANY other glyph${this.hasPerkShop ? " (can remove music glyphs)" : ""}`;
+      return `${this.removeString} Glyphs that are worse in every way than
+        ANY other glyph${this.hasPerkShop ? " (includes Music Glyphs)" : ""}`;
     },
     deleteRejectedTooltip() {
       const removeCount = this.inventory
         .filter(g => g !== null && g.idx >= Glyphs.protectedSlots && !AutoGlyphProcessor.wouldKeep(g))
         .length;
       return removeCount === 0
-        ? `This will not remove any glyphs, adjust your filter settings to remove some.`
+        ? `This will not remove any Blyphs, adjust your filter settings to remove some.`
         : `This will remove ${formatInt(removeCount)} ${pluralize("glyph", removeCount)}!`;
     }
   },
@@ -80,7 +80,7 @@ Vue.component("glyph-clean-options", {
         v-if="hasFilter"
         :ach-tooltip="deleteRejectedTooltip"
         @click="deleteAllRejected">
-          {{ removeString }} all glyphs rejected by filtering
+          {{ removeString }} all Glyphs rejected by filtering
       </button>
     </div>
   `,

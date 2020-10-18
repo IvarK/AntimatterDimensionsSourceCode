@@ -16,7 +16,7 @@ const ENSLAVED_UNLOCKS = {
       return hasLevelRequirement && hasRarityRequirement;
     },
     description: () => `Unlock The Enslaved Ones' Reality (requires
-      a level ${formatInt(5000)} glyph and a ${formatRarity(100)} rarity glyph)`,
+      a level ${formatInt(5000)} Glyph and a ${formatRarity(100)} rarity Glyph)`,
   }
 };
 

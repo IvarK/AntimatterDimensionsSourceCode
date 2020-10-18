@@ -1056,7 +1056,7 @@ GameDatabase.achievements.normal = [
     description: "Have all perks bought.",
     checkRequirement: () => player.reality.perks.size === Perks.all.length,
     checkEvent: GAME_EVENT.PERK_BOUGHT,
-    get reward() { return `+${formatPercents(0.01)} glyph rarity.`; },
+    get reward() { return `+${formatPercents(0.01)} Glyph rarity.`; },
     effect: 1
   },
   {
@@ -1070,11 +1070,11 @@ GameDatabase.achievements.normal = [
   {
     id: 148,
     name: "Royal flush",
-    description: "Reality with one of each basic glyph type.",
+    description: "Reality with one of each basic Glyph type.",
     checkRequirement: () => BASIC_GLYPH_TYPES
       .every(type => Glyphs.activeList.some(g => g.type === type)),
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    reward: "Gained glyph level is increased by number of distinct glyph types equipped.",
+    reward: "Gained Glyph level is increased by number of distinct Glyph types equipped.",
     effect: () => (new Set(Glyphs.activeList.map(g => g.type))).size,
     formatEffect: value => `+${formatInt(value)}`
   },
@@ -1092,7 +1092,7 @@ GameDatabase.achievements.normal = [
   {
     id: 152,
     name: "Y'all got any more of them glyphs?",
-    get description() { return `Have ${formatInt(100)} glyphs in your inventory.`; },
+    get description() { return `Have ${formatInt(100)} Glyphs in your inventory.`; },
     checkRequirement: () => Glyphs.inventoryList.length >= 100,
     checkEvent: GAME_EVENT.GLYPHS_CHANGED
   },
@@ -1132,7 +1132,7 @@ GameDatabase.achievements.normal = [
   {
     id: 157,
     name: "It's super effective!",
-    get description() { return `Get a glyph with ${formatInt(4)} effects.`; },
+    get description() { return `Get a Glyph with ${formatInt(4)} effects.`; },
     checkRequirement: () => Glyphs.activeList.concat(Glyphs.inventoryList).map(
       glyph => getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
         .filter(effect => effect.isGenerated).length
@@ -1185,20 +1185,20 @@ GameDatabase.achievements.normal = [
   {
     id: 165,
     name: "Perfectly balanced",
-    get description() { return `Get a level ${formatInt(5000)} glyph with all glyph level factors equally weighted.`; },
+    get description() { return `Get a level ${formatInt(5000)} Glyph with all Glyph level factors equally weighted.`; },
     checkRequirement: () => gainedGlyphLevel().actualLevel >= 5000 &&
       ["repl", "dt", "eternities"].every(
         i => player.celestials.effarig.glyphWeights[i] === player.celestials.effarig.glyphWeights.ep),
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    reward: "Unlock optimal auto glyph level factor adjustment."
+    reward: "Unlock optimal automatic Glyph level factor adjustment."
   },
   {
     id: 166,
     name: "Nicenice.",
-    get description() { return `Get a glyph with level exactly ${formatInt(6969)}.`; },
+    get description() { return `Get a Glyph with level exactly ${formatInt(6969)}.`; },
     checkRequirement: () => gainedGlyphLevel().actualLevel === 6969,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    get reward() { return `+${formatInt(69)} to glyph level.`; },
+    get reward() { return `+${formatInt(69)} to Glyph level.`; },
     effect: 69
   },
   {
@@ -1223,7 +1223,7 @@ GameDatabase.achievements.normal = [
   {
     id: 171,
     name: "The god is delighted",
-    description: "Sacrifice every sacrificable glyph type at least once.",
+    description: "Sacrifice every sacrificable Glyph type at least once.",
     checkRequirement: () => Object.values(player.reality.glyphs.sac).every(s => s > 0),
     checkEvent: GAME_EVENT.GLYPHS_CHANGED,
     get reward() { return `Glyph sacrifice is ${formatX(2)} stronger.`; },
@@ -1234,7 +1234,7 @@ GameDatabase.achievements.normal = [
     name: "Hitchhiker's Guide to Reality",
     get description() {
       return `Reality for ${formatPostBreak(Decimal.NUMBER_MAX_VALUE, 1, 0)} Reality Machines without having
-      any Charged Infinity Upgrades, having any equipped glyphs, or buying any Triad Studies.`;
+      any Charged Infinity Upgrades, having any equipped Glyphs, or buying any Triad Studies.`;
     },
     checkRequirement: () => gainedRealityMachines().gte(Decimal.NUMBER_MAX_VALUE) &&
       player.celestials.ra.charged.size === 0 && Glyphs.activeList.length === 0 &&

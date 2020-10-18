@@ -156,9 +156,9 @@ Vue.component("new-ui", {
           </span>
           </span>
           <div v-if="isInEffarig">
-            Gamespeed and multipliers dilated {{effarigMultNerfText}}
+            Gamespeed and multipliers are Dilated {{effarigMultNerfText}}
             <br>
-            Tickspeed dilated {{effarigTickNerfText}}
+            Tickspeed are Dilated {{effarigTickNerfText}}
           </div>
           <div v-if="isInLaitela">
             Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})

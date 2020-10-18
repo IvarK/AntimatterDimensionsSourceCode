@@ -32,7 +32,7 @@ Vue.component("dilation-button", {
     `<button class="o-dilation-btn"
              :class="isUnlocked ? 'o-dilation-btn--unlocked' : 'o-dilation-btn--locked'"
              onclick="startDilatedEternityRequest()">
-      <span v-if="!isUnlocked">Purchase the dilation time study to unlock.</span>
+      <span v-if="!isUnlocked">Purchase the Dilation Time Study to unlock.</span>
       <span v-else-if="!isRunning">Dilate time.</span>
       <span v-else-if="canEternity && hasGain">
         Disable Dilation.
@@ -42,7 +42,7 @@ Vue.component("dilation-button", {
       <span v-else-if="hasGain">
         Disable Dilation.
         <br>
-        Reach {{format(eternityGoal, 1, 0)}} IP to eternity and gain Tachyon Particles.
+        Reach {{format(eternityGoal, 1, 0)}} Infinity Points to Eternity and gain Tachyon Particles.
       </span>
       <span v-else>
         Disable Dilation.

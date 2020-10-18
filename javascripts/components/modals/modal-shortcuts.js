@@ -51,7 +51,7 @@ Vue.component("modal-shortcuts", {
           Shift is a modifier key that shows additional information on certain things
           and adjusts the function of certain buttons.
           <br>
-          You can hold shift while buying time studies to buy all up until that point,
+          You can hold shift while buying Time Studies to buy all up until that point,
           save study trees, and delete Glyphs.
         </span>
         <br>

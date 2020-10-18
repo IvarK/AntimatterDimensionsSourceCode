@@ -278,7 +278,7 @@ Vue.component("time-studies-tab", {
         <primary-button
           :class="respecClassObject"
           @click="respec = !respec"
-        >Respec time studies on next Eternity</primary-button>
+        >Respec Time Studies on next Eternity</primary-button>
         <primary-button
           class="o-primary-btn--subtab-option"
           onclick="Modal.importTree.show()"

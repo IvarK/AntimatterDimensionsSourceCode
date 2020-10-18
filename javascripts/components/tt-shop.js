@@ -203,7 +203,7 @@ Vue.component("tt-save-load-button", {
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
         GameUI.notify.info(`${presetName} loaded from slot ${this.saveslot}`);
       } else {
-        Modal.message.show("This time study list currently contains no studies.");
+        Modal.message.show("This Time Study list currently contains no Time Studies.");
       }
     },
     handleExport() {

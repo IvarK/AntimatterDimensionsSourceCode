@@ -109,7 +109,7 @@
     checkTimeStudyNumber(token) {
       const tsNumber = parseFloat(token.image);
       if (!TimeStudy(tsNumber)) {
-        this.addError(token, `Invalid time study identifier ${tsNumber}`);
+        this.addError(token, `Invalid Time Study identifier ${tsNumber}`);
         return 0;
       }
       return tsNumber;
@@ -219,7 +219,7 @@
     studyRange(ctx, studiesOut) {
       if (!ctx.firstStudy || ctx.firstStudy[0].isInsertedInRecovery ||
         !ctx.lastStudy || ctx.lastStudy[0].isInsertedInRecovery) {
-        this.addError(ctx, "Missing time study number in range");
+        this.addError(ctx, "Missing Time Study number in range");
         return;
       }
       const first = this.checkTimeStudyNumber(ctx.firstStudy[0]);
@@ -237,7 +237,7 @@
       }
       if (ctx.NumberLiteral) {
         if (ctx.NumberLiteral[0].isInsertedInRecovery) {
-          this.addError(ctx, "Missing time study number");
+          this.addError(ctx, "Missing Time Study number");
           return;
         }
         const id = this.checkTimeStudyNumber(ctx.NumberLiteral[0]);

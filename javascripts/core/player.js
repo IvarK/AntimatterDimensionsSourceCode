@@ -264,6 +264,7 @@ let player = {
       2: 0,
       3: 0,
     },
+    lastEP: new Decimal(-1),
     auto: [false, false, false]
   },
   realities: 0,
@@ -285,6 +286,7 @@ let player = {
         reality: 0
       },
       undo: [],
+      protectedRows: 2,
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
     secondGaussian: 1e6,

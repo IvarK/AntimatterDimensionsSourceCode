@@ -16,28 +16,30 @@ function undilationAnimation() {
 
 function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
-  if (player.options.confirmations.dilation && !player.dilation.active) {
-    Modal.enterDilation.show();
-  }
-  if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
-    undilationAnimation();
-    setTimeout(() => {
-      eternity(false, false, { switchingDilation: true });
-    }, 1000);
-    return;
-  }
   if (player.dilation.active) {
-    eternity(false, false, { switchingDilation: true });
+    if (player.options.animations.dilation && document.body.style.animation === "") {
+      undilationAnimation();
+      setTimeout(() => {
+        eternity(false, false, { switchingDilation: true });
+      }, 1000);
+    } else {
+      eternity(false, false, { switchingDilation: true });
+    }
+  } else if (player.options.confirmations.dilation) {
+    Modal.enterDilation.show();
+  } else {
+    startDilatedEternity();
   }
 }
 
 function startDilatedEternity(auto) {
   if (!PlayerProgress.dilationUnlocked()) return;
   if (player.dilation.active) {
-      eternity(false, auto, { switchingDilation: true });
-      return;
+    eternity(false, auto, { switchingDilation: true });
+    return;
   }
   Achievement(136).unlock();
+  player.dilation.lastEP = player.eternityPoints;
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
 }

@@ -68,7 +68,7 @@ function eternityResetRequest() {
   if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
     undilationAnimation();
     setTimeout(eternity, 1000);
-  } else if (player.options.animations.eternity && document.body.style.animation === "") {
+  } else if (!player.dilation.active && player.options.animations.eternity && document.body.style.animation === "") {
     eternityAnimation();
     setTimeout(eternity, 2250);
   } else {
@@ -86,7 +86,7 @@ function eternity(force, auto, specialConditions = {}) {
   } else {
     if (!Player.canEternity) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
-    giveEternityRewards(auto);
+    if (!player.dilation.active) giveEternityRewards(auto);
     // If somehow someone manages to force their first eternity
     // (e.g., by starting an EC), they haven't really eternitied yet.
     player.noEternitiesThisReality = false;

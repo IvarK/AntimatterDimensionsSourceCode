@@ -1270,7 +1270,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "laitela-2nd-dim": {
-      visible: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
+      visible: () => Laitela.isUnlocked,
       complete: () => Laitela.maxMatter.clampMin(1).log10() / Math.log10(MatterDimension(2).adjustedStartingCost),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1303,7 +1303,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "laitela-3rd-dim": {
-      visible: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
+      visible: () => Laitela.isUnlocked,
       complete: () => Laitela.maxMatter.clampMin(1).div(MatterDimension(2).adjustedStartingCost).log10() /
         Math.log10(MatterDimension(3).adjustedStartingCost / MatterDimension(2).adjustedStartingCost),
       node: {

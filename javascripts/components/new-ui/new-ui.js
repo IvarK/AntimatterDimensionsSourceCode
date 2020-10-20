@@ -30,6 +30,9 @@ Vue.component("new-ui", {
     news() {
       return this.$viewModel.news;
     },
+    topMargin() {
+      return this.$viewModel.news ? "" : "margin-top: 3.9rem"
+    }
   },
   methods: {
     update() {
@@ -130,7 +133,7 @@ Vue.component("new-ui", {
   `<div id="page">
     <link rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
     <sidebar />
-    <div class="game-container">
+    <div class="game-container" :style="topMargin">
       <news-ticker v-if="news"/>
       <div v-if="bigCrunch" class="l-new-ui-big-crunch__container">
         <h3>The world has collapsed due to excess antimatter.</h3>

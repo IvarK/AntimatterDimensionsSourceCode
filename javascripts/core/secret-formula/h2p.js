@@ -1030,9 +1030,8 @@ ${Ra.has(RA_UNLOCKS.V_UNLOCK)
   : "<div style='color: var(--color-bad);'>(unlock V within Ra to see this text)</div>"}
 <br>
 <br>
-Having a total of ${formatInt(RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels)} levels across all four Celestials
-in Ra unlocks the next Celestial.
-`,
+Having a level ${formatInt(25000)} Reality Glyph, a total of ${formatInt(100)} Ra levels, and
+${formatPostBreak(new Decimal("1e2000"))} Reality Machines will allow you to unlock the next Celestial.`,
       isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
       tags: ["reality", "memories", "razenpok", "levels", "glyphs", "lategame", "endgame",
         "effarig", "teresa", "enslaved", "v"],
@@ -1082,8 +1081,8 @@ that the reaction can't proceed due to not having enough of that reagent to get 
       name: "Lai'tela, Celestial of Dimensions",
       alias: "Lai'tela",
       info: () => `
-Lai'tela is the sixth Celestial, unlocked by getting ${formatInt(RA_UNLOCKS.RA_LAITELA_UNLOCK.totalLevels)}
-total Ra levels.
+Lai'tela is the sixth Celestial, unlocked by having a level ${formatInt(25000)} Reality Glyph,
+a total of ${formatInt(100)} Ra levels, and spending ${formatPostBreak(new Decimal("1e2000"))} Reality Machines.
 <br>
 <br>
 When you unlock Lai'tela, your Antimatter Dimensions and tickspeed switch to a new mode of production called Continuum, 
@@ -1133,7 +1132,7 @@ do in the Reality.
   .map(tier => formatInt(Math.pow(4, tier)))
   .join(", ")}
 `,
-      isUnlocked: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
+      isUnlocked: () => Laitela.isUnlocked,
       tags: ["omsi", "reality", "dark", "matter", "dimensions", "lategame", "endgame", "ascend"],
       tab: "celestials/laitela"
     }, {
@@ -1166,7 +1165,7 @@ upgrade they generally give:
 <br>
 <i class="fas fa-compress-arrows-alt"></i> These milestones improve Lai'tela based on something outside of Lai'tela
 `,
-      isUnlocked: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK),
+      isUnlocked: () => Laitela.isUnlocked,
       tags: ["reality", "lategame", "endgame", "laitela", "dark"],
       tab: "celestials/singularity"
     }, {

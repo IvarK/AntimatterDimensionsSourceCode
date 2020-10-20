@@ -746,6 +746,10 @@ GameStorage.devMigrations = {
         script.content =
           script.content.replace(/^([ \t]*)(wait|if|while|until)([\t ]+)(completions)/igmu, "$1$2$3pending $4");
       }
+    },
+    player => {
+      // eslint-disable-next-line no-bitwise
+      player.celestials.ra.unlockBits &= ~(1 << 29);
     }
   ],
 

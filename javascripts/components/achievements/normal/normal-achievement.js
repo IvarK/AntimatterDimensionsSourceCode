@@ -18,6 +18,9 @@ Vue.component("normal-achievement", {
     id() {
       return this.achievement.id;
     },
+    config() {
+      return this.achievement.config;
+    },
     styleObject() {
       return {
         "background-position": `-${(this.achievement.column - 1) * 104}px -${(this.achievement.row - 1) * 104}px`
@@ -61,9 +64,6 @@ Vue.component("normal-achievement", {
     },
     onMouseLeave() {
       this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 500);
-    },
-    getTooltip() {
-      return this.achievement.config.tooltip;
     }
   },
   template:
@@ -75,10 +75,11 @@ Vue.component("normal-achievement", {
     >
       <hint-text type="achievements" class="l-hint-text--achievement">{{id}}</hint-text>
       <div class="o-achievement__tooltip">
-        <div class="o-achievement__tooltip__name">{{ this.achievement.config.name }} ({{ id }})</div>
-        <div class="o-achievement__tooltip__description">{{ this.achievement.config.description }}</div>
-        <div v-if="this.achievement.config.reward" class="o-achievement__tooltip__reward">
-          Reward: {{ this.achievement.config.reward }}
+        <div class="o-achievement__tooltip__name">{{ config.name }} ({{ id }})</div>
+        <div class="o-achievement__tooltip__description">{{ config.description }}</div>
+        <div v-if="config.reward" class="o-achievement__tooltip__reward">
+          Reward: {{ config.reward }}
+          <effect-display br v-if="config.formatEffect" :config="config" />
         </div>
       </div>
       <div v-if="showUnlockState" :class="indicatorClassObject" v-html="indicator"></div>

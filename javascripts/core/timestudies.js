@@ -162,6 +162,7 @@ function getSelectedPacePaths() {
 }
 
 function buyTimeStudyRange(first, last) {
+  if (Pelle.isDisabled("studies")) return;
   for (let id = first; id <= last; ++id) {
     const study = TimeStudy(id);
     if (study) study.purchase();
@@ -169,6 +170,7 @@ function buyTimeStudyRange(first, last) {
 }
 
 function buyTimeStudyListUntilID(list, maxId) {
+  if (Pelle.isDisabled("studies")) return;
   for (const i of list) {
     if (i <= maxId) TimeStudy(i).purchase();
   }
@@ -176,6 +178,7 @@ function buyTimeStudyListUntilID(list, maxId) {
 
 // eslint-disable-next-line complexity
 function studiesUntil(id) {
+  if (Pelle.isDisabled("studies")) return;
   const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
   const study = TimeStudy(id);
   const requestedPath = study.path;
@@ -359,7 +362,7 @@ class NormalTimeStudyState extends TimeStudyState {
   }
 
   get canBeBought() {
-    return this.checkRequirement() || this.checkVRequirement();
+    return !Pelle.isDisabled("studies") && (this.checkRequirement() || this.checkVRequirement());
   }
 
   get isEffectActive() {
@@ -367,6 +370,7 @@ class NormalTimeStudyState extends TimeStudyState {
   }
 
   purchase() {
+    if (Pelle.isDisabled("studies")) return false;
     if (this.isBought || !this.isAffordable) return false;
     if (!this.checkRequirement()) {
       if (!this.checkVRequirement()) return false;

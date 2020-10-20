@@ -199,11 +199,15 @@ function applyRealityUpgradesAfterEternity(buySingleTD = false) {
       }
     }
   }
-  if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
-    for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);
-  }
-  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
-    for (const id of [4, 5, 6]) player.eternityUpgrades.add(id);
+  if (Pelle.isDoomed) {
+    player.eternityUpgrades = player.celestials.pelle.eternityUpgrades;
+  } else {
+    if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
+      for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);
+    }
+    if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
+      for (const id of [4, 5, 6]) player.eternityUpgrades.add(id);
+    }
   }
 }
 
@@ -271,6 +275,12 @@ class EternityUpgradeState extends SetPurchasableMechanicState {
 
   get set() {
     return player.eternityUpgrades;
+  }
+
+  purchase() {
+    if (super.purchase()) {
+      player.celestials.pelle.eternityUpgrades.add(this.config.id);
+    }
   }
 }
 

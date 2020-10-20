@@ -60,7 +60,9 @@ const Laitela = {
     return this.celestial.run;
   },
   get continuumActive() {
-    return Laitela.isUnlocked && !player.options.disableContinuum;
+    return Laitela.isUnlocked && 
+    !player.options.disableContinuum &&
+    !Pelle.isDisabled("continuum");
   },
   get matterExtraPurchaseFactor() {
     return (1 + Math.pow(Decimal.pLog10(this.celestial.maxMatter) /

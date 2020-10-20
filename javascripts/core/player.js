@@ -502,11 +502,15 @@ let player = {
     },
     pelle: {
       doomed: false,
-      upgrades: [],
+      upgrades: new Set(),
       unstableMatter: new Decimal(0),
       famine: 0,
       pestilence: 0,
-      chaos: 0
+      chaos: 0,
+      // For recording which ones you permanently have
+      infinityUpgrades: new Set(),
+      eternityUpgrades: new Set(),
+      lastArmageddonAt: Date.now()
     }
   },
   tabNotifications: new Set(),
@@ -676,6 +680,7 @@ const Player = {
   },
 
   get startingIP() {
+    if (Pelle.isDisabled()) return new Decimal(0);
     return Effects.max(
       0,
       Perk.startIP1,
@@ -685,6 +690,7 @@ const Player = {
   },
 
   get startingEP() {
+    if (Pelle.isDisabled()) return new Decimal(0);
     return Effects.max(
       0,
       Perk.startEP1,

@@ -501,17 +501,22 @@ function applyRUPG10() {
   for (const autobuyer of Autobuyers.all) {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
   }
-  player.infinityUpgrades = new Set(
-    ["timeMult", "dimMult", "timeMult2",
-    "skipReset1", "skipReset2", "unspentBonus",
-    "27Mult", "18Mult", "36Mult", "resetMult",
-    "skipReset3", "passiveGen", "45Mult",
-    "resetBoost", "galaxyBoost", "skipResetGalaxy",
-    "totalMult", "currentMult", "postGalaxy",
-    "challengeMult", "achievementMult", "infinitiedMult",
-    "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost",
-    "ipOffline"]
-  );
+  if (Pelle.isDoomed) {
+    player.infinityUpgrades = player.celestials.pelle.infinityUpgrades;
+  } else {
+    player.infinityUpgrades = new Set(
+      ["timeMult", "dimMult", "timeMult2",
+      "skipReset1", "skipReset2", "unspentBonus",
+      "27Mult", "18Mult", "36Mult", "resetMult",
+      "skipReset3", "passiveGen", "45Mult",
+      "resetBoost", "galaxyBoost", "skipResetGalaxy",
+      "totalMult", "currentMult", "postGalaxy",
+      "challengeMult", "achievementMult", "infinitiedMult",
+      "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost",
+      "ipOffline"]
+    );
+  }
+  
   player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;

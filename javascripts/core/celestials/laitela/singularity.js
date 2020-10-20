@@ -74,7 +74,7 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get canBeApplied() {
-    return this.isUnlocked;
+    return this.isUnlocked && !Pelle.isDisabled("singularity");
   }
 }
 

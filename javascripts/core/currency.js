@@ -198,6 +198,7 @@ Currency.antimatter = new class extends DecimalCurrency {
   }
 
   get startingValue() {
+    if (Pelle.isDisabled()) return new Decimal(100);
     return Effects.max(
       10,
       Perk.startAM1,

@@ -325,7 +325,7 @@ GameDatabase.tabs = [
         name: "The Pelle",
         symbol: "Ϛ",
         component: "pelle-tab",
-        condition: () => false
+        condition: () => player.celestials.laitela.singularities > 1e30
       }
     ]
   },

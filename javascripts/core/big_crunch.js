@@ -169,7 +169,10 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   purchase() {
-    if (super.purchase()) return true;
+    if (super.purchase()) {
+      if (Pelle.isDoomed) player.celestials.pelle.infinityUpgrades.add(this.id);
+      return true;
+    }
     if (this.canCharge) {
       this.charge();
       return true;

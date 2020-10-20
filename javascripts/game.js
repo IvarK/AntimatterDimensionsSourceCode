@@ -6,6 +6,7 @@ if (GlobalErrorHandler.handled) {
 GlobalErrorHandler.cleanStart = true;
 
 function playerInfinityUpgradesOnEternity() {
+  if (Pelle.isDisabled()) player.infinityUpgrades = player.celestials.pelle.infinityUpgrades;
   if (!EternityMilestone.keepInfinityUpgrades.isReached) player.infinityUpgrades.clear();
   else if (!EternityMilestone.keepBreakUpgrades.isReached) {
     player.infinityUpgrades = new Set(["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2",
@@ -26,6 +27,7 @@ function breakInfinity() {
 }
 
 function gainedInfinityPoints() {
+  if (Pelle.isDisabled("IPGain")) return new Decimal(0);
   const div = Effects.min(
     308,
     Achievement(103),
@@ -66,6 +68,7 @@ function totalEPMult() {
 }
 
 function gainedEternityPoints() {
+  if (Pelle.isDisabled("EPGain")) return new Decimal(0);
   let ep = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {
@@ -365,7 +368,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
 
 function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
-  if (Enslaved.isAutoReleasing && Enslaved.canRelease(true) && !BlackHoles.areNegative) {
+  if (Enslaved.isAutoReleasing && Enslaved.canRelease(true) && !BlackHoles.areNegative && !Pelle.isDisabled("blackhole")) {
     return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
   return speedFactor;
@@ -609,6 +612,7 @@ function gameLoop(diff, options = {}) {
   V.checkForUnlocks();
   Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
+  Pelle.gameLoop();
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);
   GameUI.update();

@@ -18,13 +18,19 @@ const Pelle = {
     finishProcessReality({ reset: true });
     this.cel.lastArmageddonAt = Date.now();
     if (gainStuff) {
-      this.cel.unstableMatter = this.cel.unstableMatter.plus(Math.log10(player.antimatter.log10()) ** 3);
+      this.cel.unstableMatter = this.cel.unstableMatter.plus(Math.log10(this.cel.maxAMThisArmageddon.log10()) ** 3);
     }
+
+    this.cel.maxAMThisArmageddon = new Decimal(0);
   },
 
   gameLoop() {
     if (Date.now() - this.cel.lastArmageddonAt > this.armageddonInterval) {
-      this.armageddon(true);
+      // this.armageddon(true);
+    }
+
+    if (this.isDoomed) {
+      this.cel.maxAMThisArmageddon = player.antimatter.max(this.cel.maxAMThisArmageddon);
     }
   },
 

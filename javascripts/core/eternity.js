@@ -145,7 +145,7 @@ function initializeChallengeCompletions(isReality) {
   if (!isReality && EternityMilestone.keepAutobuyers.isReached) {
     NormalChallenges.completeAll();
   }
-  if (Achievement(133).isUnlocked) {
+  if (Achievement(133).isUnlocked && !Pelle.isDoomed) {
     player.postChallUnlocked = 8;
     InfinityChallenges.completeAll();
   } else {

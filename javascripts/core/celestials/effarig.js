@@ -20,7 +20,7 @@ const Effarig = {
     return player.celestials.effarig.run;
   },
   get currentStage() {
-    if (!EffarigUnlock.infinity.isUnlocked) {
+    if (!EffarigUnlock.infinity.canBeApplied) {
       return EFFARIG_STAGES.INFINITY;
     }
     if (!EffarigUnlock.eternity.isUnlocked) {
@@ -167,6 +167,10 @@ class EffarigUnlockState extends GameMechanicState {
   get isUnlocked() {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.effarig.unlockBits & (1 << this.id));
+  }
+
+  get canBeApplied() {
+    return super.canBeApplied && !Pelle.isDisabled("effarig");
   }
 
   unlock() {

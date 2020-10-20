@@ -208,7 +208,7 @@ GameDatabase.celestials.navigation = (function() {
     "effarig-infinity": {
       visible: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
       complete: () => {
-        if (EffarigUnlock.infinity.isUnlocked) return 1;
+        if (EffarigUnlock.infinity.canBeApplied) return 1;
         if (!Effarig.isRunning) return 0;
 
         return Currency.antimatter.value.pLog10() / Decimal.NUMBER_MAX_VALUE.log10();
@@ -244,7 +244,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "effarig-eternity": {
-      visible: () => EffarigUnlock.infinity.isUnlocked,
+      visible: () => EffarigUnlock.infinity.canBeApplied,
       complete: () => {
         if (EffarigUnlock.eternity.isUnlocked) return 1;
         if (!Effarig.isRunning) return 0;

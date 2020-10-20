@@ -96,7 +96,7 @@ function bigCrunchReset() {
 
   autoBuyReplicantiUpgrades();
 
-  if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
+  if (Effarig.isRunning && !EffarigUnlock.infinity.canBeApplied) {
     EffarigUnlock.infinity.unlock();
     beginProcessReality(getRealityProps(true));
   }

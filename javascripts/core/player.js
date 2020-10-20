@@ -510,7 +510,8 @@ let player = {
       // For recording which ones you permanently have
       infinityUpgrades: new Set(),
       eternityUpgrades: new Set(),
-      lastArmageddonAt: Date.now()
+      lastArmageddonAt: Date.now(),
+      maxAMThisArmageddon: new Decimal(0)
     }
   },
   tabNotifications: new Set(),

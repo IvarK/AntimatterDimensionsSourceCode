@@ -522,7 +522,7 @@ function gameLoop(diff, options = {}) {
     if (RealityUpgrade(11).isBought) {
       infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
     }
-    if (EffarigUnlock.eternity.isUnlocked) {
+    if (EffarigUnlock.eternity.canBeApplied) {
       // We consider half of the eternities we gained above this tick
       // to have been gained before the infinities, and thus not to
       // count here. This gives us the desirable behavior that

@@ -146,6 +146,7 @@ const Achievements = {
   }),
 
   get power() {
+    if (Pelle.isDisabled("achievementMult")) return 1;
     return Achievements._power.value;
   }
 };

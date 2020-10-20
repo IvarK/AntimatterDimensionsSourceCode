@@ -68,7 +68,7 @@ Vue.component("replicanti-tab", {
       }
       this.amount.copyFrom(Replicanti.amount);
       this.mult.copyFrom(replicantiMult());
-      this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked;
+      this.hasRaisedCap = EffarigUnlock.infinity.canBeApplied;
       this.replicantiCap.copyFrom(replicantiCap());
       this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;
       this.remoteRG = ReplicantiUpgrade.galaxies.remoteRGStart;

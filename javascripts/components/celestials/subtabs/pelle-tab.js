@@ -21,6 +21,7 @@ Vue.component("pelle-tab", {
       Pelle.armageddon(false);
       Glyphs.unequipAll();
       respecTimeStudies(true);
+      disChargeAll();
     }
   },
   computed: {

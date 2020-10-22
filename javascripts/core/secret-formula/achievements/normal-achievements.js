@@ -570,7 +570,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Reach ${formatX(1000)} faster per Tickspeed upgrade.`; },
     checkRequirement: () => Tickspeed.multiplier.recip().gte(1000),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    get reward() { return `Galaxies are ${formatPercents(0.01)} stronger.`; },
+    get reward() { return `All Galaxies are ${formatPercents(0.01)} stronger.`; },
     effect: 1.01
   },
   {
@@ -1261,7 +1261,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Get ${formatInt(100000)} Antimatter Galaxies.`; },
     checkRequirement: () => player.galaxies >= 100000,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
-    get reward() { return `Galaxies are ${formatPercents(0.01)} stronger.`; },
+    get reward() { return `All Galaxies are ${formatPercents(0.01)} stronger.`; },
     effect: 1.01
   },
   {

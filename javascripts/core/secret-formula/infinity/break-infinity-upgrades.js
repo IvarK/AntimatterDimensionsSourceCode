@@ -36,7 +36,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     galaxyBoost: {
       id: "postGalaxy",
       cost: 5e11,
-      description: () => `Galaxies are ${formatPercents(0.5)} stronger`,
+      description: () => `All Galaxies are ${formatPercents(0.5)} stronger`,
       effect: 1.5
     },
     infinitiedMult: {

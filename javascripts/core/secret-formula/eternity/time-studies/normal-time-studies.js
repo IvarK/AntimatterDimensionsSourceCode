@@ -439,7 +439,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 212,
       cost: 150,
       requirement: 191,
-      description: "Galaxies are stronger based on your Time Shards",
+      description: "All Galaxies are stronger based on your Time Shards",
       effect: () => Math.pow(player.timeShards.clampMin(2).log2(), 0.005),
       cap: 1.1,
       formatEffect: value => `+${formatPercents(value - 1, 3)}`
@@ -564,7 +564,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 5,
       requirement: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && !TimeStudy(231).isBought,
       requirementV: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && TimeStudy(231).isBought,
-      description: "Galaxies are stronger based on Antimatter Galaxies",
+      description: "All Galaxies are stronger based on Antimatter Galaxies",
       effect: () => Math.pow(1 + player.galaxies / 1000, 0.2),
       formatEffect: value => `+${formatPercents(value - 1, 3)}`
     },

@@ -850,7 +850,6 @@ GameStorage.devMigrations = {
     },
     player => {
       player.replicanti.boughtGalaxyCap = player.replicanti.gal;
-      player.replicanti.replicantiGalaxies = player.replicanti.galaxies;
       player.reality.perkPoints = player.reality.pp;
       player.celestials.teresa.pouredAmount = player.celestials.teresa.rmStore;
       player.celestials.laitela.darkMatter = new Decimal(player.celestials.laitela.matter);
@@ -874,7 +873,6 @@ GameStorage.devMigrations = {
       player.dilation.totalTachyonGalaxies = player.dilation.freeGalaxies;
 
       delete player.replicanti.gal;
-      delete player.replicanti.galaxies;
       delete player.reality.pp;
       delete player.celestials.teresa.rmStore;
       delete player.celestials.laitela.matter;

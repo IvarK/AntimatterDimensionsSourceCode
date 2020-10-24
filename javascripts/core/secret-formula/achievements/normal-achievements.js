@@ -657,7 +657,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Gain ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Replicanti in ${formatInt(1)} hour.`; },
     get reward() { return `You keep your Replicanti and ${formatInt(1)} Replicanti Galaxy on Infinity.`; },
     checkRequirement: () =>
-      (player.replicanti.amount.eq(Decimal.NUMBER_MAX_VALUE) || player.replicanti.replicantiGalaxies > 0) &&
+      (player.replicanti.amount.eq(Decimal.NUMBER_MAX_VALUE) || player.replicanti.galaxies > 0) &&
       Time.thisInfinityRealTime.totalHours <= 1,
     checkEvent: GAME_EVENT.REPLICANTI_TICK_AFTER
   },

@@ -30,6 +30,7 @@ Vue.component("ra-pet", {
     };
   },
   computed: {
+    levelCap() { return Ra.levelCap; },
     showScalingUpgrade() {
       return this.petConfig.scalingUpgradeVisible(this.level);
     },
@@ -77,10 +78,10 @@ Vue.component("ra-pet", {
   },
   methods: {
     update() {
-      this.isRaCapped = Ra.totalPetLevel === 100;
+      this.isRaCapped = Ra.totalPetLevel === Ra.levelCap * 4;
       this.pet = this.petConfig.pet;
       const pet = this.pet;
-      this.isCapped = pet.level === 25;
+      this.isCapped = pet.level === Ra.levelCap;
       this.isUnlocked = pet.isUnlocked;
       if (!this.isUnlocked) return;
       this.name = pet.name;
@@ -156,7 +157,7 @@ Vue.component("ra-pet", {
   template: `
     <div class="l-ra-pet-container" v-if="isUnlocked">
       <div class="c-ra-pet-header" :style="petStyle">
-        <div class="c-ra-pet-title">{{ name }} Level {{ formatInt(level) }}/{{ formatInt(25) }}</div>
+        <div class="c-ra-pet-title">{{ name }} Level {{ formatInt(level) }}/{{ formatInt(levelCap) }}</div>
         <div v-if="showScalingUpgrade"
           :key="level">
             {{ scalingUpgradeText }}

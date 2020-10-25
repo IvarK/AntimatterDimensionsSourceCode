@@ -100,11 +100,11 @@ class RaPetState {
   }
 
   get memoryUpgradeCapped() {
-    return this.memoryUpgradeCost >= 0.5 * Ra.requiredMemoriesForLevel(24);
+    return this.memoryUpgradeCost >= 0.5 * Ra.requiredMemoriesForLevel(Ra.levelCap - 1);
   }
 
   get chunkUpgradeCapped() {
-    return this.chunkUpgradeCost >= 0.5 * Ra.requiredMemoriesForLevel(24);
+    return this.chunkUpgradeCost >= 0.5 * Ra.requiredMemoriesForLevel(Ra.levelCap - 1);
   }
 
   purchaseMemoryUpgrade() {
@@ -231,7 +231,7 @@ const Ra = {
   },
   // This is the exp required ON "level" in order to reach "level + 1"
   requiredMemoriesForLevel(level) {
-    if (level >= 25) return Infinity;
+    if (level >= Ra.levelCap) return Infinity;
     const adjustedLevel = level + Math.pow(level, 2) / 10;
     const post15Scaling = Math.pow(1.5, Math.max(0, level - 15));
     return Math.floor(Math.pow(adjustedLevel, 5.52) * post15Scaling * 1e6);
@@ -245,6 +245,9 @@ const Ra = {
   },
   get totalPetLevel() {
     return this.pets.all.map(pet => (pet.isUnlocked ? pet.level : 0)).sum();
+  },
+  get levelCap() {
+    return 25;
   },
   checkForUnlocks() {
     if (!V.has(V_UNLOCKS.RA_UNLOCK)) return;
@@ -521,7 +524,7 @@ const RA_UNLOCKS = {
     description: "Get Enslaved to level 2",
     reward: "Stored game time is amplified and you can store more real time, increasing with Enslaved levels",
     effect: {
-      gameTimeAmplification: () => 1 + Math.clampMax(Ra.pets.enslaved.level, 25) / 100,
+      gameTimeAmplification: () => 1 + Math.clampMax(Ra.pets.enslaved.level, Ra.levelCap) / 100,
       realTimeCap: () => 1000 * 3600 * Ra.pets.enslaved.level,
     },
     pet: Ra.pets.enslaved,

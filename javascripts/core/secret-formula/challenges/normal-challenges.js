@@ -75,7 +75,7 @@ GameDatabase.challenges.normal = [
     legacyId: 11,
     isQuickResettable: false,
     description: "Dimension Boosts provide no boost and Antimatter Galaxies cannot be bought, but " +
-      "Dimensional Sacrifice is significantly stronger and resets everything except Tickspeed.",
+      "Dimensional Sacrifice is significantly stronger and resets antimatter and all Antimatter Dimensions.",
     name: "8th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 8th Antimatter Dimension Autobuyer"
   },

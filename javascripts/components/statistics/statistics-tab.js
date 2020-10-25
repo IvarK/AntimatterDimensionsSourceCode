@@ -139,7 +139,7 @@ Vue.component("statistics-tab", {
               </span>
             </div>
             <div>
-              Your best IP/min
+              Your best Infinity Points per minute
               <span v-if="eternity.count.gt(0)">this Eternity </span>
               is {{ format(infinity.bestRate, 2, 2) }}.
             </div>
@@ -161,7 +161,7 @@ Vue.component("statistics-tab", {
               </span>
             </div>
             <div>
-              Your best EP/min
+              Your best Eternity Points per minute
               <span v-if="reality.isUnlocked">this Reality </span>
               is {{ format(eternity.bestRate, 2, 2) }}.
             </div>

@@ -201,6 +201,7 @@ function applyRealityUpgradesAfterEternity(buySingleTD = false) {
 function askEternityConfirmation() {
     if (!player.options.confirmations.eternity) {
       eternity();
+      return;
     }
     Modal.eternity.show();
 }

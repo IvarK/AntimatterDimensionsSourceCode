@@ -10,7 +10,7 @@ Vue.component("modal-eternity", {
             return `You will gain ${format(gainedEternityPoints(), 2)} Eternity Points on Eternity.`;
         },
         startWithIP() {
-            return Achievement(104).isUnlocked ? `You will start your next Eternity with ${format(2e25, 2)} IP.` : ``;
+            return Player.startingIP.gt(0) ? `You will start your next Eternity with ${format(Player.startingIP, 2)} IP.` : ``;
         }
     },
     methods: {

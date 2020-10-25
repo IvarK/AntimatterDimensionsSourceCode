@@ -33,7 +33,7 @@ GameKeyboard.bind("r", () => setHoldingR(false), "keyup");
 
 const AUTOBUYER_NAMES = ["1st Dimension", "2nd Dimension", "3rd Dimension", "4th Dimension",
                          "5th Dimension", "6th Dimension", "7th Dimension", "8th Dimension",
-                         "Tickspeed", "Dimension Boost", "Antimatter Galaxy", "Big Crunch", "Sacrifice",
+                         "Tickspeed", "Dimension Boost", "Antimatter Galaxy", "Big Crunch", "Dimensional Sacrifice",
                          "Eternity", "Reality"];
 
 // Toggle autobuyers

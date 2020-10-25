@@ -54,7 +54,7 @@ Vue.component("glyph-clean-options", {
         .filter(g => g !== null && g.idx >= Glyphs.protectedSlots && !AutoGlyphProcessor.wouldKeep(g))
         .length;
       return removeCount === 0
-        ? `This will not remove any Blyphs, adjust your filter settings to remove some.`
+        ? `This will not remove any Glyphs, adjust your filter settings to remove some.`
         : `This will remove ${formatInt(removeCount)} ${pluralize("glyph", removeCount)}!`;
     }
   },

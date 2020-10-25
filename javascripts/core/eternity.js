@@ -64,16 +64,7 @@ function eternityAnimation() {
 
 function eternityResetRequest() {
   if (!Player.canEternity) return;
-  if (!askEternityConfirmation()) return;
-  if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
-    undilationAnimation();
-    setTimeout(eternity, 1000);
-  } else if (!player.dilation.active && player.options.animations.eternity && document.body.style.animation === "") {
-    eternityAnimation();
-    setTimeout(eternity, 2250);
-  } else {
-    eternity();
-  }
+  askEternityConfirmation();
 }
 
 function eternity(force, auto, specialConditions = {}) {
@@ -209,11 +200,9 @@ function applyRealityUpgradesAfterEternity(buySingleTD = false) {
 
 function askEternityConfirmation() {
     if (!player.options.confirmations.eternity) {
-        return true;
+      eternity();
     }
-    const message = "Eternity will reset everything except achievements and challenge records. " +
-        "You will also gain an Eternity point and unlock various upgrades.";
-    return confirm(message);
+    Modal.eternity.show();
 }
 
 class EternityMilestoneState {

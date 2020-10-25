@@ -74,6 +74,7 @@ Modal.startEternityChallenge = new ChallengeConfirmationModal("modal-start-etern
 Modal.startInfinityChallenge = new ChallengeConfirmationModal("modal-start-infinity-challenge");
 Modal.startNormalChallenge = new ChallengeConfirmationModal("modal-start-normal-challenge");
 Modal.sacrifice = new Modal("modal-sacrifice");
+Modal.eternity = new Modal("modal-eternity");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;

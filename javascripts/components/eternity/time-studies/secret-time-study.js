@@ -84,7 +84,7 @@ Vue.component("secret-time-study", {
         <br>
         {{hide}}
         <br>
-        <span v-if="cost!==0">Cost: {{cost}} Time Theorems</span>
+        <span v-if="cost !== 0">Cost: {{cost}} Time Theorems</span>
       </span>
     </button>`
 });

@@ -56,7 +56,7 @@ Vue.component("modal-reality-glyph-creation", {
         <button
         class="o-primary-btn"
         v-on:click="createRealityGlyph()"
-        v-if="realityGlyphLevel!==0"
+        v-if="realityGlyphLevel !== 0"
         >
           Create a Reality Glyph!
         </button>

@@ -231,10 +231,10 @@ GameDatabase.reality.automator = {
           items: [
             {
             header: "<b>Undesirable effects</b>",
-            description: `This command may behave undesirably when it runs during` + 
-            `offline progress due to limited tick count. A 1-second pause that` + 
+            description: `This command may behave undesirably when it runs during` +
+            `offline progress due to limited tick count. A 1-second pause that` +
             `is usually 20-30 ticks might be only 1 game tick when processing` +
-             `8 hours of offline progress, which might not be enough for the` + 
+             `8 hours of offline progress, which might not be enough for the` +
              `resources needed for the next line of the script`,
             },
             {
@@ -336,7 +336,7 @@ GameDatabase.reality.automator = {
       keyword: "define",
       name: "<b>define</b> - defining constants",
       syntax: `<b>define [constant_name] = [constant]</b>`,
-      description: `Define constants for either numbers or study tree imports`,
+      description: `Define constants for either numbers or Time Study tree imports`,
       examples: [
         "define inf = 1e308",
         "define studytree = 11,21,22,31,32,33"

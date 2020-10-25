@@ -64,7 +64,7 @@ Vue.component("modal-reality-glyph-creation", {
         class="o-primary-btn o-primary-btn--disabled"
         v-else
         >
-          Reality glyph level must be higher than {{ formatInt(0) }}
+          Reality Glyph level must be higher than {{ formatInt(0) }}
         </button>
     </div>`,
 });

@@ -31,7 +31,7 @@ Vue.component("glyph-sort-options", {
           Sort by power
       </button>
       <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
-        ach-tooltip="Group Glyphs together based on effects"
+        ach-tooltip="Groups Glyphs together based on effects"
         @click="sortByEffect">
           Sort by effect
       </button>

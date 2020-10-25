@@ -86,15 +86,15 @@ Vue.component("statistics-tab", {
       this.matterScale = MatterScale.estimate(Currency.antimatter.value);
       this.recordGlyphInfo = [
         [true, Glyphs.copyForRecords(player.records.bestReality.RMminSet),
-          `Best RM/min: ${format(player.records.bestReality.RMmin, 2, 2)} RM/min`],
+          `Best Reality Machines per minute: ${format(player.records.bestReality.RMmin, 2, 2)} RM/min`],
         [true, Glyphs.copyForRecords(player.records.bestReality.glyphLevelSet),
-          `Best glyph level: ${formatInt(player.records.bestReality.glyphLevel)}`],
+          `Best Glyph level: ${formatInt(player.records.bestReality.glyphLevel)}`],
         [true, Glyphs.copyForRecords(player.records.bestReality.bestEPSet),
-          `Best EP: ${format(player.records.bestReality.bestEP, 2, 2)} EP`],
+          `Best Eternity Points: ${format(player.records.bestReality.bestEP, 2, 2)} Eternity Points`],
         [true, Glyphs.copyForRecords(player.records.bestReality.speedSet),
           `Fastest Reality (real time): ${player.records.bestReality.time}`],
         [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
-          `Best AM in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)}`]
+          `Best Antimatter in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)} Antimatter`]
       ];
     },
     formatDecimalAmount(value) {
@@ -123,11 +123,11 @@ Vue.component("statistics-tab", {
         <div v-if="infinity.isUnlocked">
             <div class="c-stats-tab-general c-stats-tab-infinity">Infinity</div>
             <div v-if="infinity.count.gt(0)">
-              You have infinitied
+              You have Infinitied
               {{ formatDecimalAmount(infinity.count) }}
               {{"time" | pluralize(infinity.count)}}<span v-if="eternity.isUnlocked"> this Eternity</span>.
             </div>
-            <div v-else>You haven't infinitied<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
+            <div v-else>You haven't Infinitied<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
             <div v-if="infinity.banked.gt(0)">
               You have {{ formatDecimalAmount(infinity.banked) }} Banked Infinities.
             </div>
@@ -154,7 +154,7 @@ Vue.component("statistics-tab", {
             </div>
             <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toStringShort() }}.</div>
-            <div v-else>You have no fastest eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
+            <div v-else>You have no fastest Eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div>You have spent {{ eternity.this.toStringShort() }} in this Eternity.
               <span v-if="reality.isUnlocked">
                 ({{eternity.thisReal.toStringShort()}} real time)

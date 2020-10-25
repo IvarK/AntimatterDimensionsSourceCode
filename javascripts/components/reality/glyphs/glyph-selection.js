@@ -54,7 +54,7 @@ Vue.component("modal-glyph-selection", {
         v-on:click="trashGlyphs()">
           I don't want any of these Glyphs,
           <br>
-          pick and sacrifice one at random.
+          pick and Sacrifice one at random.
           <br>
           (these are {{ formatInt(levelDifference) }} {{"level" | pluralize(levelDifference)}}
           {{ direction }} than your best)

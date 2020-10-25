@@ -52,7 +52,7 @@ Vue.component("modal-shortcuts", {
           and adjusts the function of certain buttons.
           <br>
           You can hold shift while buying Time Studies to buy all up until that point,
-          save study trees, and delete Glyphs.
+          save Time Study trees, and delete Glyphs.
         </span>
         <br>
         <br>

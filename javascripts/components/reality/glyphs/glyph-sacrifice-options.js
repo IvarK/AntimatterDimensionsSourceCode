@@ -113,7 +113,7 @@ const AutoSacEffectTab = {
       };
     },
     questionmarkTooltip() {
-      return `Glyph score is rarity, minus ${formatInt(200)} for every missing effect. 
+      return `Glyph score is rarity, minus ${formatInt(200)} for every missing effect.
         Glyphs with less than the specified rarity are sacrificed.`;
     }
   },
@@ -301,7 +301,7 @@ Vue.component("glyph-sacrifice-options", {
       <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
     </div>
     <div :class="optionClass(modes.LOWEST_SACRIFICE)" @click="setMode(modes.LOWEST_SACRIFICE)">
-      Lowest total sacrifice
+      Lowest total Glyph Sacrifice
     </div>
     <div :class="optionClass(modes.EFFECT_COUNT)" @click="setMode(modes.EFFECT_COUNT)">
       Number of effects
@@ -326,7 +326,7 @@ Vue.component("glyph-sacrifice-options", {
     <div v-if="mode === modes.LOWEST_SACRIFICE" class="c-glyph-sacrifice-options__advanced">
       <br> Glyph score is assigned based on
       <br> type; the type you have the least
-      <br> total sacrifice value of is given
+      <br> total Glyph Sacrifice value of is given
       <br> the highest score.
       <br> (this mode never keeps Glyphs)
     </div>
@@ -383,12 +383,12 @@ Vue.component("glyph-sacrifice-options", {
     <div v-if="mode === modes.LOWEST_ALCHEMY" class="c-glyph-sacrifice-options__advanced">
       <br> Glyph score is assigned based
       <br> on current Alchemy Resource totals.
-      <br> (this mode never keeps glyphs)
+      <br> (this mode never keeps Glyphs)
     </div>
     <div v-if="mode === modes.ALCHEMY_VALUE" class="c-glyph-sacrifice-options__advanced">
       <br> Glyphs will be assigned values
       <br> based on refinement value.
-      <br> (this mode never keeps glyphs)
+      <br> (this mode never keeps Glyphs)
     </div>
   </div>
   `

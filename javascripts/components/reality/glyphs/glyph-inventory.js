@@ -43,7 +43,7 @@ Vue.component("glyph-inventory", {
       const glyph = Glyphs.findById(id);
       // If single click
       if (!this.doubleClickTimeOut) {
-        this.doubleClickTimeOut = setTimeout(() => { 
+        this.doubleClickTimeOut = setTimeout(() => {
           this.clickedGlyphId = null;
           this.doubleClickTimeOut = null;
         }, 200);
@@ -71,10 +71,10 @@ Vue.component("glyph-inventory", {
   <div class="l-glyph-inventory">
     Click and drag or double-click to equip Glyphs.
     <br>
-    The top {{ format(protectedRows, 2, 0) }} {{ "row" | pluralize(protectedRows, "rows")}} 
+    The top {{ format(protectedRows, 2, 0) }} {{ "row" | pluralize(protectedRows, "rows")}}
     of slots are protected slots and are unaffected by anything which
     <br>
-    may move or delete Glyphs.  New Glyphs will never be inserted into these slots.
+    may move or delete Glyphs. New Glyphs will never be inserted into these slots.
     <glyph-protected-row-options />
     <glyph-sort-options />
     <div v-for="row in rowCount"

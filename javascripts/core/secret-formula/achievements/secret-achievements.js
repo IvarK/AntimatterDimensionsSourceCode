@@ -125,7 +125,7 @@ GameDatabase.achievements.secret = [
   {
     id: 34,
     name: "You do know how these work, right?",
-    description: "Respec with an empty study tree."
+    description: "Respec with an empty Time Study tree."
   },
   {
     id: 35,

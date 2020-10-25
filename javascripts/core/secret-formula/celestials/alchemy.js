@@ -234,9 +234,9 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 3,
       isUnlocked: () => Ra.pets.effarig.level >= 15,
       lockText: "Effarig Level 15",
-      description: "provides a multiplier to all dimensions based on real time",
+      description: "provides a multiplier to all dimensions based on real time since unlock",
       formatEffect: value => `All Dimensions ${formatPow(Ra.momentumValue, 4, 4)}, increasing by ${format(0.002, 3, 3)}
-        per hour (real-time, never decreases), up to a maximum of ${formatPow(value, 4, 4)}`,
+        per hour after the resource is unlocked, up to a maximum of ${formatPow(value, 4, 4)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,

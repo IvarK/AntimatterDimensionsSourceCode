@@ -226,10 +226,10 @@ Vue.component("alchemy-tab", {
           v-if="realityCreationVisible"
           class="o-primary-btn--subtab-option"
           onclick="Modal.realityGlyph.show()"
-        >View Reality glyph creation</primary-button>
+        >View Reality Glyph creation</primary-button>
       </div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      Your Alchemy resource cap, based on the glyph level of your last 10 Realities: {{ formatInt(estimatedCap) }}.
+      Your Alchemy Resource cap, based on the Glyph level of your last 10 Realities: {{ formatInt(estimatedCap) }}.
       <span v-if="reactionsAvailable">
         Reactions trigger once every time you Reality, unaffected by amplification from stored real time.
       </span>

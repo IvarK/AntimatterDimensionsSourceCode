@@ -92,7 +92,7 @@ Vue.component("statistics-tab", {
         [true, Glyphs.copyForRecords(player.records.bestReality.bestEPSet),
           `Best Eternity Points: ${format(player.records.bestReality.bestEP, 2, 2)} Eternity Points`],
         [true, Glyphs.copyForRecords(player.records.bestReality.speedSet),
-          `Fastest Reality (real time): ${player.records.bestReality.time}`],
+          `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
         [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
           `Best Antimatter in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)} Antimatter`]
       ];

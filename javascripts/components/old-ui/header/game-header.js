@@ -131,7 +131,7 @@ Vue.component("game-header", {
       <div v-if="isInEffarig">
         Gamespeed and multipliers are Dilated {{effarigMultNerfText}}
         <br>
-        Tickspeed are Dilated {{effarigTickNerfText}}
+        Tickspeed is Dilated {{effarigTickNerfText}}
       </div>
       <div v-if="isInLaitela">
         Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})

@@ -619,7 +619,9 @@ let player = {
     EPPurchases: 0,
     dimPurchases: 0,
     allDimPurchases: 0
-  }
+  },
+  // TODO: Remove everything with devMode in it, we (probably?) don't want this in release
+  devMode: false,
 };
 
 const Player = {

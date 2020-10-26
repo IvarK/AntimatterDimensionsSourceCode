@@ -46,7 +46,7 @@ Vue.component("statistics-tab", {
       this.realTimePlayed.setFrom(player.records.realTimePlayed);
       this.newsMessagesSeen = player.news.size;
       const progress = PlayerProgress.current;
-      const isInfinityUnlocked = progress.isInfinityUnlocked;
+      const isInfinityUnlocked = progress.isInfinityUnlocked || player.devMode;
       const infinity = this.infinity;
       infinity.isUnlocked = isInfinityUnlocked;
       if (isInfinityUnlocked) {
@@ -57,7 +57,7 @@ Vue.component("statistics-tab", {
         infinity.this.setFrom(player.records.thisInfinity.time);
         infinity.bestRate.copyFrom(player.records.bestInfinity.bestIPminEternity);
       }
-      const isEternityUnlocked = progress.isEternityUnlocked;
+      const isEternityUnlocked = progress.isEternityUnlocked || player.devMode;
       const eternity = this.eternity;
       eternity.isUnlocked = isEternityUnlocked;
       if (isEternityUnlocked) {
@@ -67,7 +67,7 @@ Vue.component("statistics-tab", {
         eternity.this.setFrom(player.records.thisEternity.time);
         eternity.bestRate.copyFrom(player.records.bestEternity.bestEPminReality);
       }
-      const isRealityUnlocked = progress.isRealityUnlocked;
+      const isRealityUnlocked = progress.isRealityUnlocked || player.devMode;
       const reality = this.reality;
       reality.isUnlocked = isRealityUnlocked;
       if (isRealityUnlocked) {

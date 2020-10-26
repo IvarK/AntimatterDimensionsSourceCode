@@ -586,3 +586,7 @@ dev.testGlyphs = function(config) {
   }
   runTrial(0);
 };
+
+dev.devMode = function() {
+  player.devMode = !player.devMode;
+};

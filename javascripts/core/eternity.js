@@ -204,13 +204,7 @@ function askEternityConfirmation() {
       eternity();
       return;
     }
-<<<<<<< HEAD
     Modal.eternity.show();
-=======
-    const message = "Eternity will reset everything except Achievements and challenge records. " +
-        "You will also gain an Eternity Point and unlock various upgrades.";
-    return confirm(message);
->>>>>>> origin/waitingidly-makes-some-changes
 }
 
 class EternityMilestoneState {

@@ -66,11 +66,11 @@ class IntervaledAutobuyerState extends AutobuyerState {
   }
 
   get timeSinceLastTick() {
-    return player.realTimePlayed - this.data.lastTick;
+    return player.records.realTimePlayed - this.data.lastTick;
   }
 
   tick() {
-    const realTimePlayed = player.realTimePlayed;
+    const realTimePlayed = player.records.realTimePlayed;
     const interval = this.interval;
     // Don't allow more than one interval worth of time to accumulate (at most one autobuyer tick)
     this.data.lastTick = Math.max(

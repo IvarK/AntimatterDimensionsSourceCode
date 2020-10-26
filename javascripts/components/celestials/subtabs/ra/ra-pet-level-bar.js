@@ -9,8 +9,9 @@ Vue.component("ra-pet-level-bar", {
       pet: {},
       isUnlocked: false,
       level: 0,
-      exp: 0,
-      requiredExp: 0,
+      memories: 0,
+      requiredMemories: 0,
+      nextLevelEstimate: 0,
     };
   },
   computed: {
@@ -25,7 +26,7 @@ Vue.component("ra-pet-level-bar", {
     },
     barStyle() {
       return {
-        width: `${100 * Math.min(1, this.exp / this.requiredExp)}%`,
+        width: `${100 * Math.min(1, this.memories / this.requiredMemories)}%`,
         background: this.pet.color
       };
     },
@@ -46,7 +47,7 @@ Vue.component("ra-pet-level-bar", {
       return this.level + 1;
     },
     classObject() {
-      const available = this.exp >= this.requiredExp;
+      const available = this.memories >= this.requiredMemories;
       const pet = this.pet;
       return {
         "c-ra-level-up-btn": true,
@@ -90,7 +91,9 @@ Vue.component("ra-pet-level-bar", {
       if (this.pet.name === "Effarig") {
         return `Unlock the ${AlchemyResources.all.filter(
           res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1
-        )[0]._config.name} resource in Glyph Alchemy`;
+        )[0]._config.name} resource in Glyph Alchemy, which ${AlchemyResources.all.filter(
+          res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1
+        )[0]._config.description}`;
       }
       if (this.pet.name === "Enslaved") {
         return `+${formatFloat(0.01, 2)} to stored game time power, and you can store an additional hour of real time`;
@@ -110,21 +113,36 @@ Vue.component("ra-pet-level-bar", {
       const pet = this.pet;
       this.isUnlocked = pet.isUnlocked;
       if (!this.isUnlocked) return;
-      this.exp = pet.exp;
+      this.memories = pet.memories;
       this.level = pet.level;
-      this.requiredExp = pet.requiredExp;
+      this.requiredMemories = pet.requiredMemories;
+      this.nextLevelEstimate = this.timeToGoalString((this.requiredMemories - this.memories));
     },
     isImportant(level) {
       return this.importantLevels.includes(level);
-    }
+    },
+    timeToGoalString(expToGain) {
+      const pet = this.pet;
+      // Quadratic formula for growth (uses constant growth for a = 0)
+      const a = Ra.productionPerMemoryChunk() * pet.memoryUpgradeCurrentMult * pet.memoryChunksPerSecond / 2;
+      const b = Ra.productionPerMemoryChunk() * pet.memoryUpgradeCurrentMult * pet.memoryChunks;
+      const c = -expToGain;
+      const estimate = a === 0
+        ? -c / b
+        : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
+        if (Number.isFinite(estimate)) {
+          return `in ${TimeSpan.fromSeconds(estimate).toStringShort(false)}`;
+        }
+        return "";
+    },
   },
   template: `
     <div class="l-ra-bar-container">
       <div class="c-ra-exp-bar">
         <div class="c-ra-exp-bar-inner" :style="barStyle"></div>
       </div>
-      <div 
-        :class="classObject" 
+      <div
+        :class="classObject"
         @click="pet.levelUp()"
       >
         <span class="fas fa-arrow-up"></span>
@@ -135,6 +153,10 @@ Vue.component("ra-pet-level-bar", {
             <div v-if="showNextScalingUpgrade" :style="{ 'margin-top': nextUnlock.reward ? '0.6rem' : '0' }">
               {{ nextScalingUpgrade }}
             </div>
+          </div>
+          <div class="c-ra-pet-upgrade__tooltip__footer">
+            Cost: {{ format(requiredMemories, 2, 2) }} Memories
+            <span v-if="memories <= requiredMemories">{{ nextLevelEstimate }}</span>
           </div>
         </div>
       </div>

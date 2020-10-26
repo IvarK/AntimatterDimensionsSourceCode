@@ -42,57 +42,59 @@ Vue.component("statistics-tab", {
   },
   methods: {
     update() {
-      this.totalAntimatter.copyFrom(player.totalAntimatter);
-      this.realTimePlayed.setFrom(player.realTimePlayed);
+      this.totalAntimatter.copyFrom(player.records.totalAntimatter);
+      this.realTimePlayed.setFrom(player.records.realTimePlayed);
       this.newsMessagesSeen = player.news.size;
       const progress = PlayerProgress.current;
-      const isInfinityUnlocked = progress.isInfinityUnlocked;
+      const isInfinityUnlocked = progress.isInfinityUnlocked || player.devMode;
       const infinity = this.infinity;
       infinity.isUnlocked = isInfinityUnlocked;
       if (isInfinityUnlocked) {
         infinity.count.copyFrom(player.infinitied);
         infinity.banked.copyFrom(player.infinitiedBank);
-        infinity.hasBest = player.bestInfinityTime < 999999999999;
-        infinity.best.setFrom(player.bestInfinityTime);
-        infinity.this.setFrom(player.thisInfinityTime);
-        infinity.bestRate.copyFrom(player.bestIPminThisEternity);
+        infinity.hasBest = player.records.bestInfinity.time < 999999999999;
+        infinity.best.setFrom(player.records.bestInfinity.time);
+        infinity.this.setFrom(player.records.thisInfinity.time);
+        infinity.bestRate.copyFrom(player.records.bestInfinity.bestIPminEternity);
       }
-      const isEternityUnlocked = progress.isEternityUnlocked;
+      const isEternityUnlocked = progress.isEternityUnlocked || player.devMode;
       const eternity = this.eternity;
       eternity.isUnlocked = isEternityUnlocked;
       if (isEternityUnlocked) {
         eternity.count.copyFrom(player.eternities);
-        eternity.hasBest = player.bestEternity < 999999999999;
-        eternity.best.setFrom(player.bestEternity);
-        eternity.this.setFrom(player.thisEternity);
-        eternity.bestRate.copyFrom(player.bestEPminThisReality);
+        eternity.hasBest = player.records.bestEternity.time < 999999999999;
+        eternity.best.setFrom(player.records.bestEternity.time);
+        eternity.this.setFrom(player.records.thisEternity.time);
+        eternity.bestRate.copyFrom(player.records.bestEternity.bestEPminReality);
       }
-      const isRealityUnlocked = progress.isRealityUnlocked;
+      const isRealityUnlocked = progress.isRealityUnlocked || player.devMode;
       const reality = this.reality;
       reality.isUnlocked = isRealityUnlocked;
       if (isRealityUnlocked) {
         reality.count = Math.floor(player.realities);
-        reality.best.setFrom(player.bestReality);
-        reality.bestReal.setFrom(player.bestRealityRealTime);
-        reality.this.setFrom(player.thisReality);
-        reality.totalTimePlayed.setFrom(player.totalTimePlayed);
+        reality.best.setFrom(player.records.bestReality.time);
+        reality.bestReal.setFrom(player.records.bestReality.realTime);
+        reality.this.setFrom(player.records.thisReality.time);
+        reality.totalTimePlayed.setFrom(player.records.totalTimePlayed);
         // Real time tracking is only a thing once reality is unlocked:
-        infinity.thisReal.setFrom(player.thisInfinityRealTime);
-        eternity.thisReal.setFrom(player.thisEternityRealTime);
-        reality.thisReal.setFrom(player.thisRealityRealTime);
-        reality.bestRate.copyFrom(player.bestRMmin);
-        reality.bestRarity = strengthToRarity(player.bestGlyphStrength);
+        infinity.thisReal.setFrom(player.records.thisInfinity.realTime);
+        eternity.thisReal.setFrom(player.records.thisEternity.realTime);
+        reality.thisReal.setFrom(player.records.thisReality.realTime);
+        reality.bestRate.copyFrom(player.records.bestReality.RMmin);
+        reality.bestRarity = strengthToRarity(player.records.bestReality.glyphStrength);
       }
       this.matterScale = MatterScale.estimate(Currency.antimatter.value);
       this.recordGlyphInfo = [
-        [true, Glyphs.copyForRecords(player.bestRMminSet), `Best RM/min: ${format(player.bestRMmin, 2, 2)} RM/min`],
-        [true, Glyphs.copyForRecords(player.bestGlyphLevelSet),
-          `Best glyph level: ${formatInt(player.bestGlyphLevel)}`],
-        [true, Glyphs.copyForRecords(player.bestEPSet), `Best EP: ${format(player.bestEP, 2, 2)} EP`],
-        [true, Glyphs.copyForRecords(player.bestSpeedSet),
+        [true, Glyphs.copyForRecords(player.records.bestReality.RMminSet),
+          `Best Reality Machines per minute: ${format(player.records.bestReality.RMmin, 2, 2)} RM/min`],
+        [true, Glyphs.copyForRecords(player.records.bestReality.glyphLevelSet),
+          `Best Glyph level: ${formatInt(player.records.bestReality.glyphLevel)}`],
+        [true, Glyphs.copyForRecords(player.records.bestReality.bestEPSet),
+          `Best Eternity Points: ${format(player.records.bestReality.bestEP, 2, 2)} Eternity Points`],
+        [true, Glyphs.copyForRecords(player.records.bestReality.speedSet),
           `Fastest Reality (real time): ${reality.bestReal.toStringShort()}`],
         [player.celestials.teresa.bestRunAM.gt(1), Glyphs.copyForRecords(player.celestials.teresa.bestAMSet),
-          `Best AM in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)}`]
+          `Best Antimatter in Teresa: ${format(player.celestials.teresa.bestRunAM, 2, 2)} Antimatter`]
       ];
     },
     formatDecimalAmount(value) {
@@ -101,32 +103,33 @@ Vue.component("statistics-tab", {
   },
   template:
     `<div class="c-stats-tab">
-        <br>
-        <h3>General</h3>
-        <div>You have made a total of {{ format(totalAntimatter, 2, 1) }} antimatter.</div>
-        <div>You have played for {{ realTimePlayed }}.</div>
-        <div v-if="reality.isUnlocked">
-          Your existence has spanned {{ reality.totalTimePlayed }} of time.
-        </div>
-        <div>You have seen {{ formatInt(newsMessagesSeen) }} unique
-        news ticker {{ "message" | pluralize(newsMessagesSeen) }}.</div>
         <div>
+          <div class="c-stats-tab-general">General</div>
+          <div>You have made a total of {{ format(totalAntimatter, 2, 1) }} antimatter.</div>
+          <div>You have played for {{ realTimePlayed }}.</div>
+          <div v-if="reality.isUnlocked">
+            Your existence has spanned {{ reality.totalTimePlayed }} of time.
+          </div>
+          <div>You have seen {{ formatInt(newsMessagesSeen) }} unique
+          news ticker {{ "message" | pluralize(newsMessagesSeen) }}.</div>
+          <div>
+            <br>
+            <div
+              v-if="eternity.thisReal.totalSeconds > 1 && infinity.thisReal.totalSeconds > 1"
+              v-for="line in matterScale">{{line}}</div>
+          </div>
           <br>
-          <div
-            v-if="eternity.thisReal.totalSeconds > 1 && infinity.thisReal.totalSeconds > 1"
-            v-for="line in matterScale">{{line}}</div>
         </div>
-        <br>
         <div v-if="infinity.isUnlocked">
-            <h3>Infinity</h3>
+            <div class="c-stats-tab-general c-stats-tab-infinity">Infinity</div>
             <div v-if="infinity.count.gt(0)">
-              You have infinitied
+              You have Infinitied
               {{ formatDecimalAmount(infinity.count) }}
               {{"time" | pluralize(infinity.count)}}<span v-if="eternity.isUnlocked"> this Eternity</span>.
             </div>
-            <div v-else>You haven't infinitied<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
+            <div v-else>You haven't Infinitied<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
             <div v-if="infinity.banked.gt(0)">
-              You have {{ formatDecimalAmount(infinity.banked) }} banked infinities.
+              You have {{ formatDecimalAmount(infinity.banked) }} Banked Infinities.
             </div>
             <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best.toStringShort() }}.</div>
             <div v-else>You have no fastest Infinity<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
@@ -136,14 +139,14 @@ Vue.component("statistics-tab", {
               </span>
             </div>
             <div>
-              Your best IP/min
+              Your best Infinity Points per minute
               <span v-if="eternity.count.gt(0)">this Eternity </span>
               is {{ format(infinity.bestRate, 2, 2) }}.
             </div>
             <br>
         </div>
         <div v-if="eternity.isUnlocked">
-            <h3>Eternity</h3>
+            <div class="c-stats-tab-general c-stats-tab-eternity">Eternity</div>
             <div v-if="eternity.count.gt(0)">
               You have Eternitied
               {{ formatDecimalAmount(eternity.count) }}
@@ -151,21 +154,21 @@ Vue.component("statistics-tab", {
             </div>
             <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toStringShort() }}.</div>
-            <div v-else>You have no fastest eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
+            <div v-else>You have no fastest Eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div>You have spent {{ eternity.this.toStringShort() }} in this Eternity.
               <span v-if="reality.isUnlocked">
                 ({{eternity.thisReal.toStringShort()}} real time)
               </span>
             </div>
             <div>
-              Your best EP/min
+              Your best Eternity Points per minute
               <span v-if="reality.isUnlocked">this Reality </span>
               is {{ format(eternity.bestRate, 2, 2) }}.
             </div>
             <br>
         </div>
         <div v-if="reality.isUnlocked">
-            <h3>Reality</h3>
+            <div class="c-stats-tab-general c-stats-tab-reality">Reality</div>
             <div>You have Realitied {{formatInt(reality.count)}} {{"time" | pluralize(reality.count)}}.</div>
             <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
             <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>

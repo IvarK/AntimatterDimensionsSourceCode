@@ -29,7 +29,7 @@ class DimBoost {
       .timesEffectsOf(
         TimeStudy(83),
         TimeStudy(231),
-        Achievement(101),
+        Achievement(117),
         Achievement(142),
         GlyphEffect.dimBoostPower
       ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);
@@ -62,7 +62,7 @@ class DimBoost {
   static get canBeBought() {
     if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) return false;
     if (Ra.isRunning) return false;
-    if (player.thisInfinityMaxAM.gt(Player.infinityGoal) &&
+    if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal) &&
        (!player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning)) return false;
     return true;
   }

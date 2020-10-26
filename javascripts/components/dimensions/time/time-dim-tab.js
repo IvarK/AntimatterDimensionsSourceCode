@@ -48,17 +48,20 @@ Vue.component("time-dim-tab", {
       >Toggle all autobuyers</primary-button>
     </div>
     <div>
-      <p>You've gained {{formatInt(totalUpgrades)}} tickspeed upgrades.</p>
-      <p>
-        You have
+      <p>You have gained
+        <span class="c-time-dim-description__accent">{{formatInt(totalUpgrades)}}</span> Tickspeed upgrades from
         <span class="c-time-dim-description__accent">{{format(timeShards, 2, 1)}}</span> Time Shards.
-        Next tickspeed upgrade at
-        <span class="c-time-dim-description__accent">{{format(upgradeThreshold, 2, 1)}}.</span>
+      </p>
+      <p>
+        Next Tickspeed upgrade at
+        <span class="c-time-dim-description__accent">{{format(upgradeThreshold, 2, 1)}}</span>, increasing by
+        <span class="c-time-dim-description__accent">{{formatX(multPerTickspeed, 2, 2)}}</span> per
+        Tickspeed upgrade gained.
       </p>
     </div>
     <div>
-      Each additional upgrade requires {{formatX(multPerTickspeed, 2, 2)}} more Time Shards. This will start
-      increasing above {{formatInt(tickspeedSoftcap)}} upgrades.
+      The amount each additional upgrade requires will start
+      increasing above {{formatInt(tickspeedSoftcap)}} Tickspeed upgrades.
     </div>
     <div>You are getting {{format(shardsPerSecond, 2, 0)}} {{incomeType}} per second.</div>
     <div class="l-dimensions-container">

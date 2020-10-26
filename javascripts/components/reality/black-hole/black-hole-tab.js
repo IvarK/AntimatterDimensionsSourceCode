@@ -11,14 +11,29 @@ Vue.component("black-hole-tab", {
       negativeBHDivisor: 1,
       maxNegativeBlackHole: 300,
       detailedBH2: "",
+      storedFraction: 0,
+      isPermanent: false,
     };
   },
   computed: {
     blackHoles: () => BlackHoles.list,
-    sliderProps() {
+    sliderPropsNegative() {
       return {
         min: 0,
         max: this.maxNegativeBlackHole,
+        interval: 1,
+        show: true,
+        width: "60rem",
+        tooltip: false
+      };
+    },
+    storedTimeRate() {
+      return formatPercents(this.storedFraction / 1000, 1);
+    },
+    sliderPropsStoring() {
+      return {
+        min: 0,
+        max: 1000,
         interval: 1,
         show: true,
         width: "60rem",
@@ -40,6 +55,9 @@ Vue.component("black-hole-tab", {
       this.isNegativeBHUnlocked = V.isFlipped && BlackHole(1).isPermanent && BlackHole(2).isPermanent;
       this.negativeSlider = -Math.log10(player.blackHoleNegative);
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
+      this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
+      this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
+      this.isPermanent = BlackHoles.arePermanent;
 
       if (!BlackHole(2).isUnlocked || BlackHole(1).isActive) this.detailedBH2 = " ";
       else if (BlackHole(2).timeToNextStateChange > BlackHole(1).cycleLength) {
@@ -52,7 +70,7 @@ Vue.component("black-hole-tab", {
       } else {
         const bh2Offset = BlackHole(2).timeToNextStateChange - BlackHole(1).timeToNextStateChange;
         const bh2Duration = Math.min(BlackHole(1).duration - bh2Offset, BlackHole(2).duration);
-        this.detailedBH2 = `Black Hole 2 will activate ${TimeSpan.fromSeconds(bh2Offset).toStringShort()} after 
+        this.detailedBH2 = `Black Hole 2 will activate ${TimeSpan.fromSeconds(bh2Offset).toStringShort()} after
           Black Hole 1, for ${TimeSpan.fromSeconds(bh2Duration).toStringShort()}.`;
       }
     },
@@ -63,7 +81,7 @@ Vue.component("black-hole-tab", {
       }
       this.update();
     },
-    adjustSlider(value) {
+    adjustSliderNegative(value) {
       this.negativeSlider = value;
       player.blackHoleNegative = Math.pow(10, -this.negativeSlider);
       player.minNegativeBlackHoleThisReality = Math.max(
@@ -77,7 +95,14 @@ Vue.component("black-hole-tab", {
           this.animation = new BlackHoleAnimation(this.$refs.canvas.getContext("2d"));
         }
       }, 1);
-    }
+    },
+    adjustSliderStoring(value) {
+      this.storedFraction = value;
+      player.celestials.enslaved.storedFraction = value / 1000;
+    },
+    gridStyle() {
+      return this.isPermanent ? "l-black-hole-upgrade-permanent" : "l-black-hole-upgrade-grid";
+    },
   },
   template: `
     <div class="l-black-hole-tab">
@@ -107,15 +132,25 @@ Vue.component("black-hole-tab", {
             :blackHole="blackHole"
           />
           {{ detailedBH2 }}
+          <div v-if="canAdjustStoredTime" class="l-enslaved-shop-container">
+            Black Hole charging rate: {{ storedTimeRate }}
+            <ad-slider-component
+                v-bind="sliderPropsStoring"
+                :value="storedFraction"
+                @input="adjustSliderStoring($event)"
+              />
+          </div>
           <div v-if="isNegativeBHUnlocked" class="l-enslaved-shop-container">
             Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
             This requires both Black Holes to be permanent and only works when paused.
             <ad-slider-component
-                v-bind="sliderProps"
+                v-bind="sliderPropsNegative"
                 :value="negativeSlider"
-                @input="adjustSlider($event)"
+                @input="adjustSliderNegative($event)"
               />
           </div>
+        </div>
+        <div :class="gridStyle()">
           <black-hole-upgrade-row
             v-for="(blackHole, i) in blackHoles"
             :key="'upgrades' + i"

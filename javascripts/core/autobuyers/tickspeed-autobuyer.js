@@ -63,7 +63,7 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
   }
 
   purchase() {
-    if (player.totalAntimatter.lt(this.antimatterCost)) return;
+    if (player.records.totalAntimatter.lt(this.antimatterCost)) return;
     this.data.isBought = true;
   }
 

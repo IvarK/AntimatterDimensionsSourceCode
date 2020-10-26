@@ -59,7 +59,7 @@ function buyDilationUpgrade(id, bulk, extraFactor) {
     if (player.dilation.upgrades.has(id)) return false;
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(upgrade.cost);
     player.dilation.upgrades.add(id);
-    if (id === 4) player.dilation.freeGalaxies *= 2;
+    if (id === 4) player.dilation.totalTachyonGalaxies *= 2;
   } else {
     const upgAmount = player.dilation.rebuyables[id];
     if (player.dilation.dilatedTime.lt(upgrade.cost) || upgAmount >= upgrade.config.purchaseCap) return false;
@@ -77,8 +77,8 @@ function buyDilationUpgrade(id, bulk, extraFactor) {
     if (id === 2) {
       if (!Perk.bypassTGReset.isBought) player.dilation.dilatedTime = new Decimal(0);
       player.dilation.nextThreshold = new Decimal(1000);
-      player.dilation.baseFreeGalaxies = 0;
-      player.dilation.freeGalaxies = 0;
+      player.dilation.baseTachyonGalaxies = 0;
+      player.dilation.totalTachyonGalaxies = 0;
     }
 
     if (id === 3) {
@@ -99,7 +99,7 @@ function buyDilationUpgrade(id, bulk, extraFactor) {
   return true;
 }
 
-function getFreeGalaxyMult() {
+function getTachyonGalaxyMult() {
   const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.35;
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
@@ -186,7 +186,7 @@ class DilationUpgradeState extends SetPurchasableMechanicState {
 
   onPurchased() {
     if (this.id === 4) {
-      player.dilation.freeGalaxies *= 2;
+      player.dilation.totalTachyonGalaxies *= 2;
     }
   }
 }
@@ -215,7 +215,7 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
   set isAutobuyerOn(value) {
     player.dilation.auto[this.autobuyerId] = value;
   }
-  
+
   get isCapped() {
     return this.config.reachedCapFn();
   }

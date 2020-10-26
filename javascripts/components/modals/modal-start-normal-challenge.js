@@ -46,7 +46,7 @@ Vue.component("modal-start-normal-challenge", {
           @click="handleNoClick"
         >Cancel</primary-button>
         <primary-button
-          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
         >Begin</primary-button>
         </div>

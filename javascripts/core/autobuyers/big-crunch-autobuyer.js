@@ -82,7 +82,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
           proc = Time.thisInfinityRealTime.totalSeconds > this.time;
           break;
         case AUTO_CRUNCH_MODE.X_LAST:
-          proc = gainedInfinityPoints().gte(player.lastTenRuns[0][1].times(this.xLast));
+          proc = gainedInfinityPoints().gte(player.records.lastTenInfinities[0][1].times(this.xLast));
           break;
       }
     }

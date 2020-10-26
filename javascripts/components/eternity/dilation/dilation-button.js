@@ -32,7 +32,7 @@ Vue.component("dilation-button", {
     `<button class="o-dilation-btn"
              :class="isUnlocked ? 'o-dilation-btn--unlocked' : 'o-dilation-btn--locked'"
              onclick="startDilatedEternityRequest()">
-      <span v-if="!isUnlocked">Purchase the Dilation Time Study to unlock.</span>
+      <span v-if="!isUnlocked">Purchase the Dilation Study to unlock.</span>
       <span v-else-if="!isRunning">Dilate time.</span>
       <span v-else-if="canEternity && hasGain">
         Disable Dilation.

@@ -301,10 +301,10 @@ GameDatabase.reality.automator = {
     {
       id: 13,
       keyword: "studies load preset",
-      name: "<b>studies load preset</b> - Load a saved study preset",
+      name: "<b>studies load preset</b> - Load a saved Time Study preset",
       syntax: `<b>studies load preset [name | number]</b>`,
-      description: `Loads a study preset, as if you'd clicked on the button in the time
-        study tab. Number is 1 to 6 (corresponding to slot). The given name can also be used.`,
+      description: `Loads a Time Study preset, as if you'd clicked on the button in the Time
+        Study tab. Number is 1 to 6 (corresponding to slot). The given name can also be used.`,
       examples: [
         `studies load preset 2`,
         `studies load preset dil`,
@@ -320,10 +320,10 @@ GameDatabase.reality.automator = {
         to the next command.<br>
         If <b>nowait</b> is <i>not</i> present, then the automator will buy the studies in order,
         waiting for them to become available/affordable if necessary.<br>
-        The study list can consist of study numbers, separated by spaces or commas, ranges of
+        The Time Study list can consist of Time Study numbers, separated by spaces or commas, ranges of
         studies (for example, <i>11-62</i>) and the following aliases:<br>
         <blockquote><b>antimatter, infinity, time, active, passive, idle</b></blockquote>
-        A variable name may be used in place of study list, see <b>define</b>
+        A variable name may be used in place of Time Study list, see <b>define</b>
         The string produced by "export" in the Time Study tab can be used with this command.`,
       examples: [
         "studies nowait 11,21,31",

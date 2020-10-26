@@ -47,7 +47,14 @@ html {
 
   --color-effarig--base: #d13737;
 
+  --color-enslaved-base: #f1aa7f;
+
   --color-v--base: #ead584;
+
+  --color-ra-pet-teresa: #8596ea;
+  --color-ra-pet-effarig: #ea8585;
+  --color-ra-pet-enslaved: #f1aa7f;
+  --color-ra-pet-v: #ead584;
 
   --color-laitela--base: white;
   --color-laitela--accent: black;
@@ -447,6 +454,7 @@ button:focus {
 .o-tab-btn {
   color: var(--color-text);
   background-color: var(--color-base);
+  white-space: nowrap;
   font-weight: bold;
   border: 0.2rem solid var(--color-accent);
   border-radius: 0.4rem;
@@ -650,6 +658,29 @@ button:focus {
 }
 
 .t-s6 .c-reset-reality-button {
+  background: black;
+}
+
+.c-reset-reality-button-celestial {
+  color: var(--color-celestials);
+  border-color: var(--color-celestials);
+}
+
+.c-reset-reality-button-celestial:hover, .c-reset-reality-button-celestial.force-hover,
+.t-s6 .c-reset-reality-button-celestial:hover, .t-s6 .c-reset-reality-button-celestial.force-hover {
+  color: white;
+  background: var(--color-celestials);
+}
+
+.t-dark-metro .c-reset-reality-button-celestial,
+.t-inverted-metro .c-reset-reality-button-celestial,
+.t-metro .c-reset-reality-button-celestial,
+.t-s8 .c-reset-reality-button-celestial {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.t-s6 .c-reset-reality-button-celestial {
   background: black;
 }
 
@@ -1192,13 +1223,8 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--sacrifice {
   font-size: 1.2rem;
-  min-width: 32rem;
+  width: 48rem;
   margin-right: 0.8rem;
-}
-
-.o-primary-btn--sacrifice--large {
-  min-width: 38rem;
-  max-width: 48rem;
 }
 
 .o-primary-btn--buy-ad {
@@ -2460,7 +2486,7 @@ screen and (max-width: 480px) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: black;
+  color: var(--color-text);
   font-size: 1.2rem;
 }
 
@@ -2478,6 +2504,24 @@ screen and (max-width: 480px) {
 
 .t-s6 .c-stats-tab {
   color: #e0e0e0;
+}
+
+.c-stats-tab-general {
+  color: var(--color-text);
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.c-stats-tab-infinity {
+  color: var(--color-infinity);
+}
+
+.c-stats-tab-eternity {
+  color: var(--color-eternity);
+}
+
+.c-stats-tab-reality {
+  color: var(--color-reality);
 }
 
 /*#endregion c-stats-tab*/
@@ -2887,8 +2931,7 @@ screen and (max-width: 480px) {
   margin-top: 0.6rem;
   width: 60rem;
   position: relative;
-  display: flex;
-  flex-direction: row;
+  display: inline;
   justify-content: center;
   user-select: none;
 }
@@ -4330,8 +4373,9 @@ screen and (max-width: 480px) {
 }
 
 .o-eternity-upgrade--bought {
-  color: #511568;
+  color: black;
   background-color: var(--color-eternity);
+  border-color: black;
   cursor: default;
 }
 
@@ -4971,6 +5015,14 @@ screen and (max-width: 480px) {
   right: -0.5rem;
 }
 
+.c-modal__confirm-btn {
+  background-color: var(--color-good) !important;
+}
+
+.c-modal__confirm-btn:hover {
+  background-color: var(--color-good-dark) !important;
+}
+
 /*#region themes*/
 
 /*#region t-dark t-dark-metro*/
@@ -5054,6 +5106,27 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion c-modal-message*/
+
+/*#region c-modal-hard-reset*/
+
+.c-modal-hard-reset-danger {
+  color: var(--color-bad);
+  font-weight: bold;
+}
+
+.c-modal-hard-reset-btn {
+  margin-top: 0.3rem;
+}
+
+.c-modal-hard-reset-info > div {
+  margin-top: 0.2rem;
+}
+
+.c-modal-hard-reset__input {
+  width: 45rem;
+}
+
+/*#endregion c-modal-hard-reset*/
 
 /*#region c-modal-away-progress*/
 
@@ -5146,19 +5219,19 @@ b.c-modal-away-progress__black-hole {
 }
 
 .c-modal-away-progress__teresa {
-  color: #8596ea;
+  color: var(--color-ra-pet-teresa);
 }
 
 .c-modal-away-progress__effarig {
-  color: #ea8585;
+  color: var(--color-ra-pet-effarig);
 }
 
 .c-modal-away-progress__enslaved {
-  color: #f1aa7f;
+  color: var(--color-ra-pet-enslaved);
 }
 
 .c-modal-away-progress__v {
-  color: #ead584;
+  color: var(--color-ra-pet-v);
 }
 
 .c-modal-away-progress__black-hole {
@@ -5490,6 +5563,11 @@ kbd {
   border-color: #4980cc;
 }
 
+.o-notification--eternity {
+  background-color: var(--color-eternity);
+  border-color: var(--color-eternity);
+}
+
 .o-notification--reality {
   background-color: var(--color-reality);
   border-color: var(--color-reality);
@@ -5501,22 +5579,22 @@ kbd {
 }
 
 .o-notification--memory-teresa {
-  background-color: #8596ea;
+  background-color: var(--color-ra-pet-teresa);
   border-color: #5970e3;
 }
 
 .o-notification--memory-effarig {
-  background-color: #ea8585;
+  background-color: var(--color-ra-pet-effarig);
   border-color: #e35959;
 }
 
 .o-notification--memory-enslaved {
-  background-color: #f1aa7f;
+  background-color: var(--color-ra-pet-enslaved);
   border-color: #ec8c51;
 }
 
 .o-notification--memory-v {
-  background-color: #ead584;
+  background-color: var(--color-ra-pet-v);
   border-color: #e3c759;
 }
 
@@ -6194,6 +6272,8 @@ kbd {
   justify-content: center;
   width: 65rem;
   margin: auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .o-enslaved-shop-button {
@@ -6267,7 +6347,7 @@ kbd {
   width: 16rem;
   height: 16rem;
   margin: 1.5rem;
-  color: #f1aa7f;
+  color: var(--color-enslaved-base);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -6275,14 +6355,14 @@ kbd {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  border: 0.4rem solid #f1aa7f;
+  border: 0.4rem solid var(--color-enslaved-base);
   transition-duration: 0.2s;
   animation: a-enslaved-run-button--spin 120s infinite linear;
 }
 
 .c-enslaved-run-button__icon:hover {
   color: black;
-  background: #f1aa7f;
+  background: var(--color-enslaved-base);
   border-color: black;
 }
 
@@ -6297,7 +6377,7 @@ kbd {
 
 .c-enslaved-run-button__icon__glitch {
   position: absolute;
-  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%, #f1aa7f 20%, #f1aa7f 80%, rgba(0,0,0,0) 100%);
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%, var(--color-enslaved-base) 20%, var(--color-enslaved-base) 80%, rgba(0,0,0,0) 100%);
   border: none;
   width: 0.1rem;
 }
@@ -6366,7 +6446,7 @@ kbd {
 }
 
 .c-v-unlock-completed {
-  background: lightgreen;
+  background: var(--color-v--base);
 }
 
 .o-v-unlock-name {
@@ -6438,6 +6518,11 @@ kbd {
   height: 3rem;
   border-radius: 50%;
   font-size: 1.5rem;
+}
+
+.c-v-info-text {
+  color: var(--color-text);
+  font-size: 1.2rem;
 }
 
 .c-v-run-button {
@@ -6853,11 +6938,11 @@ kbd {
 }
 
 @keyframes a-ra-color-shift {
-  0% { background-color: #8596ea; }
-  25% { background-color: #ea8585; }
-  50% { background-color: #f1aa7f; }
-  75% { background-color: #ead584; }
-  100% { background-color: #8596ea; }
+  0% { background-color: var(--color-ra-pet-teresa); }
+  25% { background-color: var(--color-ra-pet-effarig); }
+  50% { background-color: var(--color-ra-pet-enslaved); }
+  75% { background-color: var(--color-ra-pet-v); }
+  100% { background-color: var(--color-ra-pet-teresa); }
 }
 
 .l-ra-all-pets-container {
@@ -6963,7 +7048,7 @@ kbd {
   border-radius: 0.8rem;
   color: white;
   background: #222;
-  width: 23rem;
+  width: 24rem;
   margin-left: 0;
   padding: 0.4rem;
   z-index: 2;
@@ -7042,19 +7127,19 @@ kbd {
 }
 
 .c-ra-upgrade-icon--teresa .c-ra-pet-upgrade__tooltip {
-  color: #8596ea;
+  color: var(--color-ra-pet-teresa);
 }
 
 .c-ra-upgrade-icon--effarig .c-ra-pet-upgrade__tooltip {
-  color: #ea8585;
+  color: var(--color-ra-pet-effarig);
 }
 
 .c-ra-upgrade-icon--enslaved .c-ra-pet-upgrade__tooltip{
-  color: #f1aa7f;
+  color: var(--color-ra-pet-enslaved);
 }
 
 .c-ra-upgrade-icon--v .c-ra-pet-upgrade__tooltip {
-  color: #ead584;
+  color: var(--color-ra-pet-v);
 }
 
 .c-ra-upgrade-icon--inactive .c-ra-pet-upgrade__tooltip {
@@ -7116,35 +7201,40 @@ kbd {
 }
 
 .c-ra-pet-btn--teresa {
-  color: #8596ea;
+  color: var(--color-ra-pet-teresa);
 }
 
-.c-ra-pet-btn--teresa:hover {
-  background: #8596ea;
+.c-ra-pet-btn--teresa:hover, .c-ra-pet-btn--teresa__capped {
+  background: var(--color-ra-pet-teresa);
 }
 
 .c-ra-pet-btn--effarig {
-  color: #ea8585;
+  color: var(--color-ra-pet-effarig);
 }
 
-.c-ra-pet-btn--effarig:hover {
-  background: #ea8585;
+.c-ra-pet-btn--effarig:hover, .c-ra-pet-btn--effarig__capped {
+  background: var(--color-ra-pet-effarig);
 }
 
 .c-ra-pet-btn--enslaved {
-  color: #f1aa7f;
+  color: var(--color-ra-pet-enslaved);
 }
 
-.c-ra-pet-btn--enslaved:hover {
-  background: #f1aa7f;
+.c-ra-pet-btn--enslaved:hover, .c-ra-pet-btn--enslaved__capped {
+  background: var(--color-ra-pet-enslaved);
 }
 
 .c-ra-pet-btn--v {
-  color: #ead584;
+  color: var(--color-ra-pet-v);
 }
 
-.c-ra-pet-btn--v:hover {
-  background: #ead584;
+.c-ra-pet-btn--v:hover, .c-ra-pet-btn--v__capped {
+  background: var(--color-ra-pet-v);
+}
+
+.c-ra-pet-btn--available__capped {
+  cursor: default;
+  color: black;
 }
 
 .l-ra-pet-middle-container {
@@ -7160,13 +7250,24 @@ kbd {
 .c-alchemy-resource-info {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  text-align: center;
   border: 0.1rem solid black;
   padding: 0.25rem 1rem;
   width: 60rem;
   height: 10rem;
   font-size: 1.2rem;
-  text-align: left;
   margin-top: 0.5rem;
+}
+
+.c-alchemy-resource-info--locked {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.c-alchemy-resource-info__title {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .c-reality-glyph-creation {
@@ -8302,6 +8403,10 @@ kbd {
   align-items: center;
 }
 
+.l-black-hole-upgrade-permanent {
+  display: inline-flex;
+}
+
 .l-black-hole-upgrade-grid__row {
   display: flex;
   flex-direction: row;
@@ -8317,10 +8422,13 @@ kbd {
   border-radius: 50%;
 }
 
-.c-pp-label {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+.c-perk-tab__header {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.c-perk-tab__perk-points {
+  color: var(--color-reality);
 }
 
 /*#region reality-tab*/
@@ -8738,6 +8846,39 @@ input.o-automator-block-input {
 }
 
 /* STD-shop */
+
+#shop {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.c-shop-disclaimer {
+  color: black;
+  background: var(--color-bad);
+  width: 100rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  border: 0.2rem solid black;
+  border-radius: 1rem;
+  margin-top: 0.8rem;
+}
+
+.t-metro .c-shop-disclaimer,
+.t-dark-metro .c-shop-disclaimer,
+.t-inverted-metro .c-shop-disclaimer,
+.t-s8 .c-shop-disclaimer {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
+
+.t-s1 .c-shop-disclaimer,
+.t-s6 .c-shop-disclaimer {
+  color: var(--color-bad);
+  background: black;
+  border-color: var(--color-bad);
+}
 
 .c-shop-header {
   display: flex;

@@ -19,21 +19,21 @@ class Sacrifice {
     if (this.nextBoost.lte(1)) return `${formatX(1)} multiplier`;
     return "";
   }
-  
+
   static getSacrificeDescription(changes) {
     const f = (name, condition) => (name in changes ? changes[name] : condition);
     let factor = 2;
     let places = 1;
     let base = `(log₁₀(AD1)/${formatInt(10)})`;
-    if (f('Challenge8isRunning', NormalChallenge(8).isRunning)) {
+    if (f("Challenge8isRunning", NormalChallenge(8).isRunning)) {
       factor = 1;
       base = "x";
-    } else if (f('InfinityChallenge2isCompleted', InfinityChallenge(2).isCompleted)) {
+    } else if (f("InfinityChallenge2isCompleted", InfinityChallenge(2).isCompleted)) {
       factor = 1 / 120;
       places = 3;
       base = "AD1";
     }
-    
+
     const exponent = (1 +
       (f('Achievement32', Achievement(32).isEffectActive) ? Achievement(32).config.effect : 0) +
       (f('Achievement57', Achievement(57).isEffectActive) ? Achievement(57).config.effect : 0)
@@ -43,7 +43,7 @@ class Sacrifice {
     ) * factor;
     return base + (exponent === 1 ? "" : formatPow(exponent, places, places));
   }
-  
+
   static get sacrificeExponent() {
     let factor;
     if (NormalChallenge(8).isRunning) {
@@ -53,7 +53,7 @@ class Sacrifice {
     } else {
       factor = 2;
     }
-    
+
     return (1 + Effects.sum(
       Achievement(32),
       Achievement(57)
@@ -80,7 +80,7 @@ class Sacrifice {
     } else {
       prePowerSacrificeMult = new Decimal((nd1Amount.log10() / 10) / Math.max(sacrificed.log10() / 10, 1));
     }
-    
+
     return prePowerSacrificeMult.clampMin(1).pow(this.sacrificeExponent);
   }
 
@@ -91,7 +91,7 @@ class Sacrifice {
     if (NormalChallenge(8).isRunning) {
       return player.chall8TotalSacrifice;
     }
-    
+
     let prePowerBoost;
 
     if (InfinityChallenge(2).isCompleted) {
@@ -129,7 +129,7 @@ function sacrificeReset(auto) {
   } else if (!isAch118Unlocked) {
     AntimatterDimensions.resetAmountUpToTier(NormalChallenge(12).isRunning ? 6 : 7);
   }
-  player.noSacrifices = false;
+  player.achievementChecks.noSacrifices = false;
   EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_AFTER);
   return true;
 }

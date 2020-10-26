@@ -32,7 +32,7 @@ function gainedInfinityPoints() {
     TimeStudy(111)
   );
   let ip = player.break
-    ? Decimal.pow10(player.thisInfinityMaxAM.log10() / div - 0.75)
+    ? Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
     : new Decimal(308 / div);
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
     ip = ip.min(1e200);
@@ -158,13 +158,13 @@ function averageRun(runs, name) {
 
 // eslint-disable-next-line max-params
 function addInfinityTime(time, realTime, ip, infinities) {
-  player.lastTenRuns.pop();
-  player.lastTenRuns.unshift([time, ip, infinities, realTime]);
+  player.records.lastTenInfinities.pop();
+  player.records.lastTenInfinities.unshift([time, ip, infinities, realTime]);
   GameCache.bestRunIPPM.invalidate();
 }
 
 function resetInfinityRuns() {
-  player.lastTenRuns = Array.from(
+  player.records.lastTenInfinities = Array.from(
     { length: 10 },
     () => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]
   );
@@ -175,19 +175,19 @@ function resetInfinityRuns() {
 // milestone and turned on infinity autobuyer with 1 minute or less per crunch
 function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
   return Autobuyer.bigCrunch.autoInfinitiesAvailable(considerMilestoneReached)
-    ? Decimal.floor(player.bestInfinitiesPerMs.times(ms).dividedBy(2))
+    ? Decimal.floor(player.records.thisEternity.bestInfinitiesPerMs.times(ms).dividedBy(2))
     : new Decimal(0);
 }
 
 // eslint-disable-next-line max-params
 function addEternityTime(time, realTime, ep, eternities) {
-  player.lastTenEternities.pop();
-  player.lastTenEternities.unshift([time, ep, eternities, realTime]);
+  player.records.lastTenEternities.pop();
+  player.records.lastTenEternities.unshift([time, ep, eternities, realTime]);
   GameCache.averageRealTimePerEternity.invalidate();
 }
 
 function resetEternityRuns() {
-  player.lastTenEternities = Array.from(
+  player.records.lastTenEternities = Array.from(
     { length: 10 },
     () => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]
   );
@@ -198,7 +198,7 @@ function resetEternityRuns() {
 // have the auto-eternity milestone and turned on eternity autobuyer with 0 EP
 function getEternitiedMilestoneReward(ms, considerMilestoneReached) {
   return Autobuyer.eternity.autoEternitiesAvailable(considerMilestoneReached)
-    ? Decimal.floor(player.bestEternitiesPerMs.times(ms).dividedBy(2))
+    ? Decimal.floor(player.records.thisReality.bestEternitiesPerMs.times(ms).dividedBy(2))
     : new Decimal(0);
 }
 
@@ -209,13 +209,13 @@ function isOfflineEPGainEnabled() {
 
 function getOfflineEPGain(ms) {
   if (!EternityMilestone.autoEP.isReached || !isOfflineEPGainEnabled()) return new Decimal(0);
-  return player.bestEPminThisReality.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
+  return player.records.bestEternity.bestEPminReality.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 
 // eslint-disable-next-line max-params
 function addRealityTime(time, realTime, rm, level, realities) {
-  player.lastTenRealities.pop();
-  player.lastTenRealities.unshift([time, rm, realities, realTime, level]);
+  player.records.lastTenRealities.pop();
+  player.records.lastTenRealities.unshift([time, rm, realities, realTime, level]);
 }
 
 function gainedInfinities() {
@@ -351,7 +351,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
       factor = Math.pow(factor, nerfModifier);
     }
   }
-  
+
   // 1e-300 is now possible with max inverted BH, going below it would be possible with
   // an effarig glyph.
   factor = Math.clamp(factor, 1e-300, 1e300);
@@ -395,10 +395,10 @@ function gameLoop(diff, options = {}) {
 
   // When storing real time, skip everything else having to do with production once stats are updated
   if (Enslaved.isStoringRealTime) {
-    player.realTimePlayed += realDiff;
-    player.thisInfinityRealTime += realDiff;
-    player.thisEternityRealTime += realDiff;
-    player.thisRealityRealTime += realDiff;
+    player.records.realTimePlayed += realDiff;
+    player.records.thisInfinity.realTime += realDiff;
+    player.records.thisEternity.realTime += realDiff;
+    player.records.thisReality.realTime += realDiff;
     Enslaved.storeRealTime();
     GameUI.update();
     return;
@@ -455,7 +455,7 @@ function gameLoop(diff, options = {}) {
         ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
         : 1;
       Enslaved.currentBlackHoleStoreAmountPerMs = Math.pow(totalTimeFactor - reducedTimeFactor, amplification);
-      player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored + 
+      player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored +
         diff * Enslaved.currentBlackHoleStoreAmountPerMs, Enslaved.timeCap);
       speedFactor = reducedTimeFactor;
     }
@@ -469,18 +469,18 @@ function gameLoop(diff, options = {}) {
   // These need to all be done consecutively in order to minimize the chance of a reset occurring between real time
   // updating and game time updating.  This is only particularly noticeable when game speed is 1 and the player
   // expects to see identical numbers.
-  player.realTimePlayed += realDiff;
-  player.totalTimePlayed += diff;
-  player.thisInfinityRealTime += realDiff;
-  player.thisInfinityTime += diff;
-  player.thisEternityRealTime += realDiff;
+  player.records.realTimePlayed += realDiff;
+  player.records.totalTimePlayed += diff;
+  player.records.thisInfinity.realTime += realDiff;
+  player.records.thisInfinity.time += diff;
+  player.records.thisEternity.realTime += realDiff;
   if (Enslaved.isRunning && Enslaved.feltEternity && !EternityChallenge(12).isRunning) {
-    player.thisEternity += diff * (1 + player.eternities.clampMax(1e66).toNumber());
+    player.records.thisEternity.time += diff * (1 + player.eternities.clampMax(1e66).toNumber());
   } else {
-    player.thisEternity += diff;
+    player.records.thisEternity.time += diff;
   }
-  player.thisRealityRealTime += realDiff;
-  player.thisReality += diff;
+  player.records.thisReality.realTime += realDiff;
+  player.records.thisReality.time += diff;
 
   DeltaTimeState.update(realDiff, diff);
 
@@ -508,7 +508,7 @@ function gameLoop(diff, options = {}) {
     let infGen = new Decimal(0);
     if (BreakInfinityUpgrade.infinitiedGen.isBought) {
       // Multipliers are done this way to explicitly exclude ach87 and TS32
-      infGen = infGen.plus(0.2 * Time.deltaTimeMs / player.bestInfinityTime);
+      infGen = infGen.plus(0.2 * Time.deltaTimeMs / player.records.bestInfinity.time);
       infGen = infGen.timesEffectsOf(
         RealityUpgrade(5),
         RealityUpgrade(7)
@@ -537,7 +537,7 @@ function gameLoop(diff, options = {}) {
 
   const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
   player.realities += uncountabilityGain;
-  player.reality.pp += uncountabilityGain;
+  player.reality.perkPoints += uncountabilityGain;
 
   if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
 
@@ -552,7 +552,8 @@ function gameLoop(diff, options = {}) {
   player.totalTickGained += gain;
 
   const currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinityRealTime.totalMinutes);
-  if (currentIPmin.gt(player.bestIPminThisInfinity) && Player.canCrunch) player.bestIPminThisInfinity = currentIPmin;
+  if (currentIPmin.gt(player.records.thisInfinity.bestIPmin) && Player.canCrunch)
+    player.records.thisInfinity.bestIPmin = currentIPmin;
 
   tryUnlockInfinityChallenges();
 
@@ -567,13 +568,14 @@ function gameLoop(diff, options = {}) {
   if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
 
   const currentEPmin = gainedEternityPoints().dividedBy(Time.thisEternityRealTime.totalMinutes);
-  if (currentEPmin.gt(player.bestEPminThisEternity) && Player.canEternity) player.bestEPminThisEternity = currentEPmin;
+  if (currentEPmin.gt(player.records.thisEternity.bestEPmin) && Player.canEternity)
+    player.records.thisEternity.bestEPmin = currentEPmin;
 
   if (PlayerProgress.dilationUnlocked()) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
   }
 
-  updateFreeGalaxies();
+  updateTachyonGalaxies();
   player.timestudy.theorem = player.timestudy.theorem.add(getTTPerSecond().times(diff / 1000));
   tryUnlockInfinityDimensions();
 
@@ -648,7 +650,7 @@ function applyAutoprestige(diff) {
   player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
 
   if (Teresa.has(TERESA_UNLOCKS.EPGEN)) {
-    player.eternityPoints = player.eternityPoints.plus(player.bestEPminThisEternity.times(0.01)
+    player.eternityPoints = player.eternityPoints.plus(player.records.thisEternity.bestEPmin.times(0.01)
       .times(getGameSpeedupFactor() * diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
   }
 
@@ -659,22 +661,23 @@ function applyAutoprestige(diff) {
     player.reality.realityMachines = player.reality.realityMachines.add(addedRM);
   }
 
-  if (player.bestEP.lt(player.eternityPoints)) {
-    player.bestEP = new Decimal(player.eternityPoints);
-    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  if (player.records.bestReality.bestEP.lt(player.eternityPoints)) {
+    player.records.bestReality.bestEP = new Decimal(player.eternityPoints);
+    player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }
 
-function updateFreeGalaxies() {
-  const freeGalaxyMult = Effects.max(1, DilationUpgrade.doubleGalaxies);
-  const freeGalaxyThreshold = 1000;
-  const thresholdMult = getFreeGalaxyMult();
-  player.dilation.baseFreeGalaxies = Math.max(player.dilation.baseFreeGalaxies,
+function updateTachyonGalaxies() {
+  const tachyonGalaxyMult = Effects.max(1, DilationUpgrade.doubleGalaxies);
+  const tachyonGalaxyThreshold = 1000;
+  const thresholdMult = getTachyonGalaxyMult();
+  player.dilation.baseTachyonGalaxies = Math.max(player.dilation.baseTachyonGalaxies,
     1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), thresholdMult)));
   player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult)
-    .pow(player.dilation.baseFreeGalaxies));
-  player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, freeGalaxyThreshold) +
-    Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - freeGalaxyThreshold, 0) / freeGalaxyMult;
+    .pow(player.dilation.baseTachyonGalaxies));
+  player.dilation.totalTachyonGalaxies =
+    Math.min(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult, tachyonGalaxyThreshold) +
+    Math.max(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult - tachyonGalaxyThreshold, 0) / tachyonGalaxyMult;
 }
 
 function getTTPerSecond() {
@@ -693,7 +696,7 @@ function getTTPerSecond() {
   const dilationTT = DilationUpgrade.ttGenerator.isBought
     ? DilationUpgrade.ttGenerator.effectValue.times(ttMult)
     : new Decimal(0);
-  
+
   // Lai'tela TT power
   let finalTT = dilationTT.add(glyphTT);
   if (SingularityMilestone.theoremPowerFromSingularities.isUnlocked && finalTT.gt(1)) {
@@ -759,7 +762,7 @@ function simulateTime(seconds, real, fast) {
 
   if (InfinityUpgrade.ipOffline.isBought) {
     player.infinityPoints = player.infinityPoints
-      .plus(player.bestIpPerMsWithoutMaxAll
+      .plus(player.records.thisEternity.bestIPMsWithoutMaxAll
         .times(seconds * 1000 / 2)
       );
   }
@@ -831,8 +834,8 @@ function autoBuyInfDims() {
   if (EternityMilestone.autobuyerID(1).isReached && !EternityChallenge(8).isRunning) {
     for (let i = 1; i <= player.eternities.sub(10).clampMax(8).toNumber(); i++) {
       if (player.infDimBuyers[i - 1]) {
-        buyMaxInfDims(i)
-        buyManyInfinityDimension(i)
+        buyMaxInfDims(i);
+        buyManyInfinityDimension(i);
       }
     }
   }

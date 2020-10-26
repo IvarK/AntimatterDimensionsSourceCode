@@ -23,14 +23,14 @@ Vue.component("equipped-glyphs", {
     },
     respecTooltip() {
       return this.respec
-        ? "Respec is active and will place your currently - equipped glyphs into your inventory after reality."
-        : "Your currently-equipped glyphs will stay equipped on reality.";
+        ? "Respec is active and will place your currently - equipped Glyphs into your inventory after reality."
+        : "Your currently-equipped Glyphs will stay equipped on Reality.";
     },
     undoTooltip() {
       return this.undoAvailable
-        ? ("Unequip the last equipped glyph and rewind Reality to when you equipped it." +
+        ? ("Unequip the last equipped Glyph and rewind Reality to when you equipped it." +
           " (Most resources will be fully reset)")
-        : "Undo is only available for glyphs equipped during this Reality";
+        : "Undo is only available for Glyphs equipped during this Reality";
     },
   },
   created() {
@@ -96,7 +96,7 @@ Vue.component("equipped-glyphs", {
       if (!this.undoAvailable) return;
       if (player.options.confirmations.glyphUndo &&
         // eslint-disable-next-line prefer-template
-        !confirm("The last equipped glyph will be removed. Reality will be reset, but some things will" +
+        !confirm("The last equipped Glyph will be removed. Reality will be reset, but some things will" +
           " be restored to what they were when it equipped:\n" +
           " - antimatter, Infinity Points, and Eternity Points;\n" +
           " - Dilation Upgrades, Tachyon Particles, and Dilated Time;\n" +
@@ -144,7 +144,7 @@ Vue.component("equipped-glyphs", {
       <button :class="['l-equipped-glyphs__respec', 'c-reality-upgrade-btn', {'c-reality-upgrade-btn--bought': respec}]"
               :ach-tooltip="respecTooltip"
               @click="toggleRespec">
-        Unequip glyphs on Reality
+        Unequip Glyphs on Reality
       </button>
       <button v-if="undoVisible"
               class="l-equipped-glyphs__undo c-reality-upgrade-btn"
@@ -158,7 +158,7 @@ Vue.component("equipped-glyphs", {
       <button :class="['l-equipped-glyphs__respec-location', 'c-reality-upgrade-btn',
       {'l-equipped-glyphs__respec-location-large' : undoVisible}]"
               @click="toggleRespecIntoProtected">
-        Unequip glyphs to:
+        Unequip Glyphs to:
         <br>
         <span v-if="respecIntoProtected">Protected slots</span>
         <span v-else>Main inventory</span>

@@ -14,6 +14,12 @@ Vue.component("alchemy-resource-info", {
     };
   },
   computed: {
+    classObject() {
+      return {
+        "c-alchemy-resource-info": true,
+        "c-alchemy-resource-info--locked": !this.isUnlocked
+      };
+    },
     reaction() {
       return this.resource.reaction;
     },
@@ -56,13 +62,17 @@ Vue.component("alchemy-resource-info", {
     }
   },
   template: `
-    <div class="c-alchemy-resource-info">
-      <span>{{isUnlocked ? resource.symbol : "?"}} {{resource.name}}</span>
-      <span>Current: {{ isUnlocked ? resourceAmount : "Locked!" }}</span>
+    <div :class="classObject" v-if="isUnlocked">
+      <span class="c-alchemy-resource-info__title">
+        {{ resource.symbol }} {{ resource.name }} {{ resource.symbol }}
+      </span>
+      <span>Current: {{ resourceAmount }}</span>
       <span v-if="isBaseResource">Base Resource</span>
-      <span v-else>Reaction: {{isReactionActive ? "Active" : "Inactive"}} ({{isUnlocked ? reactionText : "???"}})</span>
-      <span v-if="isUnlocked"><effect-display title="Effect" :config="effectConfig" /></span>
-      <span v-else>Unlock requirement: {{unlockRequirement}}</span>
+      <span v-else>Reaction: {{isReactionActive ? "Active" : "Inactive"}} ({{ reactionText }})</span>
+      <span><effect-display title="Effect" :config="effectConfig" /></span>
+    </div>
+    <div :class="classObject" v-else>
+      <span>Unlock requirement: {{unlockRequirement}}</span>
     </div>
   `
 });

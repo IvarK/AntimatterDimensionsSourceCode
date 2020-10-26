@@ -151,8 +151,8 @@ dev.resetDilation = function() {
   player.dilation.rebuyables[1] = 0;
   player.dilation.rebuyables[2] = 0;
   player.dilation.rebuyables[3] = 0;
-  player.dilation.baseFreeGalaxies = 0;
-  player.dilation.freeGalaxies = 0;
+  player.dilation.baseTachyonGalaxies = 0;
+  player.dilation.totalTachyonGalaxies = 0;
 };
 
 // We want to give a large degree of options
@@ -190,6 +190,11 @@ dev.decriminalize = function() {
 };
 
 dev.removeAch = function(name) {
+  if (name === "all") {
+    const allAchievements = Achievements.all.concat(SecretAchievements.all);
+    for (const achievement of allAchievements) achievement.lock();
+    return "removed all achievements";
+  }
   if (typeof (name) === "number") return Achievement(name).lock();
   if (name.startsWith("r")) return Achievement(parseInt(name.slice(1), 10)).lock();
   if (name.startsWith("s")) return SecretAchievement(parseInt(name.slice(1), 10)).lock();
@@ -223,7 +228,7 @@ dev.realize = function() {
 };
 
 dev.respecPerks = function() {
-  player.reality.pp += player.reality.perks.size;
+  player.reality.perkPoints += player.reality.perks.size;
   player.reality.perks = new Set();
   GameCache.achievementPeriod.invalidate();
   GameCache.buyablePerks.invalidate();
@@ -272,9 +277,9 @@ dev.togglePerformanceStats = function() {
 // Buys all perks, will end up buying semi-randomly if not enough pp
 dev.buyAllPerks = function() {
   const visited = [];
-  const toVisit = [Perk.glyphChoice4];
+  const toVisit = [Perk.firstPerk];
   while (toVisit.length > 0) {
-    if (player.reality.pp < 1) break;
+    if (player.reality.perkPoints < 1) break;
     const perk = toVisit.shift();
     visited.push(perk);
     toVisit.push(...perk.connectedPerks.filter(p => !visited.includes(p)));
@@ -307,7 +312,7 @@ dev.printResourceTotals = function() {
   console.log(`Gamespeed: ${Math.pow(getGameSpeedupFactor(), 1.2).toPrecision(1)}`);
   const aGalaxy = 100 * Math.floor(player.galaxies / 100 + 0.5);
   const rGalaxy = 100 * Math.floor(Replicanti.galaxies.total / 100 + 0.5);
-  const dGalaxy = 100 * Math.floor(player.dilation.freeGalaxies / 100 + 0.5);
+  const dGalaxy = 100 * Math.floor(player.dilation.totalTachyonGalaxies / 100 + 0.5);
   console.log(`Galaxies: ${aGalaxy}+${rGalaxy}+${dGalaxy} (${aGalaxy + rGalaxy + dGalaxy})`);
   console.log(`Tick reduction: e${-Math.round(getTickSpeedMultiplier().log10())}`);
 
@@ -326,7 +331,7 @@ dev.printResourceTotals = function() {
     TDmults = TDmults.times(TimeDimension(i).multiplier);
   }
   console.log(`TD mults: e${TDmults.log10().toPrecision(3)}`);
-  console.log(`Free tickspeed: ${formatWithCommas(1000 * Math.floor(player.totalTickGained / 1000 + 0.5))}`);
+  console.log(`Tickspeed from TD: ${formatWithCommas(1000 * Math.floor(player.totalTickGained / 1000 + 0.5))}`);
 
   console.log(`Infinities: e${Math.round(player.infinitied.log10())}`);
   console.log(`Eternities: e${Math.round(player.eternities.log10())}`);
@@ -438,10 +443,10 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
-        player.replicanti.gal = 100;
+        player.replicanti.boughtGalaxyCap = 100;
       },
       function() {
-        player.replicanti.gal = 100;
+        player.replicanti.boughtGalaxyCap = 100;
         player.replicanti.galaxies = 50;
       }
     ],
@@ -477,7 +482,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     }
     doReplicantiTicks();
     player.antimatter = new Decimal("1e309");
-    player.thisInfinityMaxAM = new Decimal("1e309");
+    player.records.thisInfinity.maxAM = new Decimal("1e309");
     bigCrunchReset();
     doReplicantiTicks();
   };
@@ -565,7 +570,7 @@ dev.testGlyphs = function(config) {
     const ip = padString(player.infinityPoints.exponent.toString(), 8);
     const am = padString(Currency.antimatter.exponent.toString(), 12);
     const dimboosts = DimBoost.purchasedBoosts;
-    const galaxies = Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies;
+    const galaxies = Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies;
     const glyphData = glyphSets[index].map(glyphToShortString).sum();
     console.log(`${done} ${glyphData} rm=${rm} gl=${gl} ep=${ep} ip=${ip} am=${am} ` +
       `dimboosts=${dimboosts} galaxies=${galaxies}`);
@@ -580,4 +585,8 @@ dev.testGlyphs = function(config) {
     setTimeout(finishTrial, duration, index);
   }
   runTrial(0);
+};
+
+dev.devMode = function() {
+  player.devMode = !player.devMode;
 };

@@ -49,7 +49,7 @@ Vue.component("modal-edit-tree", {
       />
       <div v-if="!inputIsValid">Invalid tree</div>
       <primary-button
-        class="o-primary-btn--width-medium c-modal-import-tree__import-btn"
+        class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
         @click="confirmEdits"
         :enabled="inputIsValid"
       >Confirm</primary-button>

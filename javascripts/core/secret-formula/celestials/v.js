@@ -34,7 +34,7 @@ GameDatabase.celestials.v = {
       description: value => `Have ${formatInt(value)} total Galaxies from all types.`,
       values: [4000, 4300, 4600, 4900, 5200, 5500],
       condition: () => V.isRunning,
-      currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies,
+      currentValue: () => Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies,
       formatRecord: x => formatInt(x),
       shardReduction: tiers => Math.floor(300 * tiers),
       maxShardReduction: goal => goal - 4000,
@@ -98,8 +98,8 @@ GameDatabase.celestials.v = {
     {
       id: 6,
       name: "Requiem for a Glyph",
-      description: value => `Unlock Reality with at most ${formatInt(-value)} glyphs equipped for the entire reality.
-        <div ach-tooltip="Each equipped cursed glyph counts as ${formatInt(-3)} glyphs">
+      description: value => `Unlock Reality with at most ${formatInt(-value)} Glyphs equipped for the entire Reality.
+        <div ach-tooltip="Each equipped Cursed Glyph counts as ${formatInt(-3)} Glyphs">
           <i class="fas fa-question-circle"></i>
         </div>`,
       // This achievement has internally negated values since the check is always greater than
@@ -135,7 +135,7 @@ GameDatabase.celestials.v = {
     {
       id: 8,
       name: "Shutter Glyph",
-      description: value => `Reach a glyph of level ${formatInt(value)}.`,
+      description: value => `Reach a Glyph of level ${formatInt(value)}.`,
       values: [6500, 7000, 8000, 9000, 10000],
       condition: () => V.isRunning,
       currentValue: () => gainedGlyphLevel().actualLevel,

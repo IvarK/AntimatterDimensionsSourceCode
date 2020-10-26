@@ -19,7 +19,11 @@ Vue.component("modal-away-progress", {
       replicanti: false,
       replicantiGalaxies: false,
       celestialMemories: false,
-      blackHole: false
+      blackHole: false,
+      teresaMemoriesShown: false,
+      effarigMemoriesShown: false,
+      enslavedMemoriesShown: false,
+      vMemoriesShown: false,
     };
   },
   computed: {
@@ -42,10 +46,11 @@ Vue.component("modal-away-progress", {
           (!after.eternities.gt(before.eternities) || !this.eternities) &&
           (after.realities <= before.realities || !this.realities) &&
           (after.celestials.laitela.singularities <= before.celestials.laitela.singularities || !this.singularities) &&
-          (!after.celestials.laitela.matter.gt(before.celestials.laitela.matter) || !this.darkMatter) &&
+          (!after.celestials.laitela.darkMatter.gt(before.celestials.laitela.darkMatter) || !this.darkMatter) &&
           (!after.replicanti.amount.gt(before.replicanti.amount) || !this.replicanti) &&
           (after.replicanti.galaxies <= before.replicanti.galaxies || !this.replicantiGalaxies) &&
-          !this.celestialMemoriesShown &&
+          !this.teresaMemoriesShown && !this.effarigMemoriesShown &&
+          !this.enslavedMemoriesShown && !this.vMemoriesShown &&
           !this.blackHoleShown
          ) {
         SecretAchievement(36).unlock();
@@ -53,13 +58,6 @@ Vue.component("modal-away-progress", {
           Nothing happened.`;
       }
       return `While you were away for ${TimeSpan.fromSeconds(this.modalConfig.seconds).toString()}: `;
-    },
-    celestialMemoriesShown() {
-      for (const petName in this.before.celestials.ra.pets) {
-        if (this.after.celestials.ra.pets[petName].level > this.before.celestials.ra.pets[petName].level &&
-            player.options.awayProgress.celestialMemories) return true;
-      }
-    return false;
     },
     blackHoleShown() {
       if ((this.after.blackHole[0].activations > this.before.blackHole[0].activations ||
@@ -86,10 +84,22 @@ Vue.component("modal-away-progress", {
       this.replicanti = options.replicanti;
       this.replicantiGalaxies = options.replicantiGalaxies;
       this.celestialMemories = options.celestialMemories;
+      this.teresaMemoriesShown = (this.after.celestials.ra.pets.teresa.memories >
+        this.before.celestials.ra.pets.teresa.memories && this.before.celestials.ra.pets.teresa.level <
+        Ra.levelCap && options.celestialMemories);
+      this.effarigMemoriesShown = (this.after.celestials.ra.pets.effarig.memories >
+        this.before.celestials.ra.pets.effarig.memories && this.before.celestials.ra.pets.effarig.level <
+        Ra.levelCap && options.celestialMemories);
+      this.enslavedMemoriesShown = (this.after.celestials.ra.pets.enslaved.memories >
+        this.before.celestials.ra.pets.enslaved.memories && this.before.celestials.ra.pets.enslaved.level <
+        Ra.levelCap && options.celestialMemories);
+      this.vMemoriesShown = (this.after.celestials.ra.pets.v.memories >
+        this.before.celestials.ra.pets.v.memories && this.before.celestials.ra.pets.v.level <
+        Ra.levelCap && options.celestialMemories);
     },
     formatPseudo(number) {
       if (Decimal.lt(number, 1e9)) return formatInt(number);
-      return format(number, 2, 2);  
+      return format(number, 2, 2);
     }
   },
   template: `
@@ -143,10 +153,11 @@ Vue.component("modal-away-progress", {
           {{ formatPseudo(before.celestials.laitela.singularities) }} to
           {{ formatPseudo(after.celestials.laitela.singularities) }}
         </div>
-        <div v-if="after.celestials.laitela.matter.gt(before.celestials.laitela.matter) && darkMatter">
+        <div v-if="after.celestials.laitela.darkMatter.gt(before.celestials.laitela.darkMatter) && darkMatter">
           <b class="c-modal-away-progress__singularities">Dark Matter</b> increased from
           <br>
-          {{ format(before.celestials.laitela.matter, 2, 2) }} to {{ format(after.celestials.laitela.matter, 2, 2) }}
+          {{ format(before.celestials.laitela.darkMatter, 2, 2) }} to
+          {{ format(after.celestials.laitela.darkMatter, 2, 2) }}
         </div>
         <div v-if="after.replicanti.amount.gt(before.replicanti.amount) && replicanti">
           <b class="c-modal-away-progress__replicanti">Replicanti</b> increased from
@@ -158,33 +169,34 @@ Vue.component("modal-away-progress", {
           <br>
           {{ formatInt(before.replicanti.galaxies) }} to {{ formatInt(after.replicanti.galaxies) }}
         </div>
-        <div v-if="celestialMemoriesShown">
-          <span v-if="after.celestials.ra.pets.teresa.level > before.celestials.ra.pets.teresa.level">
-          <b class="c-modal-away-progress__teresa">Teresa's Celestial Memory</b> increased from
+        <div v-if="this.teresaMemoriesShown || this.effarigMemoriesShown ||
+          this.enslavedMemoriesShown || this.vMemoriesShown">
+          <span v-if="teresaMemoriesShown">
+          <b class="c-modal-away-progress__teresa">Teresa's Memories</b> increased from
           <br>
-          level {{ formatInt(before.celestials.ra.pets.teresa.level) }} to
-          level {{ formatInt(after.celestials.ra.pets.teresa.level) }}
-          <br>
-          </span>
-          <span v-if="after.celestials.ra.pets.effarig.level > before.celestials.ra.pets.effarig.level">
-          <b class="c-modal-away-progress__effarig">Effarig's Celestial Memory</b> increased from
-          <br>
-          level {{ formatInt(before.celestials.ra.pets.effarig.level) }} to
-          level {{ formatInt(after.celestials.ra.pets.effarig.level) }}
+          {{ format(before.celestials.ra.pets.teresa.memories) }} to
+          {{ format(after.celestials.ra.pets.teresa.memories) }}
           <br>
           </span>
-          <span v-if="after.celestials.ra.pets.enslaved.level > before.celestials.ra.pets.enslaved.level">
-          <b class="c-modal-away-progress__enslaved">Enslaved's Celestial Memory</b> increased from
+          <span v-if="effarigMemoriesShown">
+          <b class="c-modal-away-progress__effarig">Effarig's Memories</b> increased from
           <br>
-          level {{ formatInt(before.celestials.ra.pets.enslaved.level) }} to
-          level {{ formatInt(after.celestials.ra.pets.enslaved.level) }}
+          {{ format(before.celestials.ra.pets.effarig.memories) }} to
+          {{ format(after.celestials.ra.pets.effarig.memories) }}
           <br>
           </span>
-          <span v-if="after.celestials.ra.pets.v.level > before.celestials.ra.pets.v.level">
-          <b class="c-modal-away-progress__v">V's Celestial Memory</b> increased from
+          <span v-if="enslavedMemoriesShown">
+          <b class="c-modal-away-progress__enslaved">Enslaved's Memories</b> increased from
           <br>
-          level {{ formatInt(before.celestials.ra.pets.v.level) }} to
-          level {{ formatInt(after.celestials.ra.pets.v.level) }}
+          {{ format(before.celestials.ra.pets.enslaved.memories) }} to
+          {{ format(after.celestials.ra.pets.enslaved.memories) }}
+          <br>
+          </span>
+          <span v-if="vMemoriesShown">
+          <b class="c-modal-away-progress__v">V's Memories</b> increased from
+          <br>
+          {{ format(before.celestials.ra.pets.v.memories) }} to
+          {{ format(after.celestials.ra.pets.v.memories) }}
           </span>
         </div>
         <div v-if="blackHoleShown">

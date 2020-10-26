@@ -11,12 +11,12 @@ function startEternityChallenge() {
   player.replicanti.galaxies = 0;
   player.infinityPoints = Player.startingIP;
   InfinityDimensions.resetAmount();
-  player.bestIPminThisInfinity = new Decimal(0);
-  player.bestEPminThisEternity = new Decimal(0);
+  player.records.bestInfinity.bestIPminEternity = new Decimal(0);
+  player.records.thisEternity.bestEPmin = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
-  player.thisInfinityMaxAM = new Decimal(0);
-  player.thisEternityMaxAM = new Decimal(0);
+  player.records.thisInfinity.maxAM = new Decimal(0);
+  player.records.thisEternity.maxAM = new Decimal(0);
   Currency.antimatter.reset();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();

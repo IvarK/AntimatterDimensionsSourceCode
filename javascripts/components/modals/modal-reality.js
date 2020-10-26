@@ -3,8 +3,15 @@
 Vue.component("modal-reality", {
     computed: {
         message() {
-            return `Reality will reset everything except challenge records. Your achievements are also reset,
-                but you will automatically get one back every 30 minutes.
+            let c = 30;
+            if (Perk.achievementGroup1.isBought) c = 20;
+            if (Perk.achievementGroup2.isBought) c = 14;
+            if (Perk.achievementGroup3.isBought) c = 9;
+            if (Perk.achievementGroup4.isBought) c = 5;
+            if (Perk.achievementGroup5.isBought) c = 2;
+            let d = `Your achievements are also reset, but you will automatically get one back every ${c} minutes.`;
+            if (Perk.achievementGroup6.isBought) d = ``;
+            return `Reality will reset everything except challenge records. ${d}
                 You will also gain Reality Machines based on your Eternity Points, a glyph with a power level
                 based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend on quality of
                 life upgrades, and unlock various upgrades.`;
@@ -13,28 +20,28 @@ Vue.component("modal-reality", {
             return `You will gain ${format(gainedRealityMachines(), 2)} Reality Machines on Reality.`;
         },
         gainedPPAndRealitiesOnReality() {
-            const b = AlchemyResource.multiversal.effectValue;
+            const b = simulatedRealityCount();
             const a = `You will gain ${format(b, 2)} Perk ${pluralize("Point", b, "Points")} on Reality, 
             and ${format(b, 2)} ${pluralize("Reality", b, "Realities")} on Reality.`;
-            return AlchemyResource.multiversal.isEffectActive ? `${a}` : ``;
+            return b >= 1 ? `${a}` : ``;
         },
         startWithIP() {
-            return Player.startingIP.gte(2e15) ? `You will start your next Reality with 
+            return this.isPerkBought("startIP1") ? `You will start your next Reality with 
             ${format(Player.startingIP, 2)} Infinity Points.` : ``;
         },
         startWithEP() {
-            return Player.startingEP.gt(0) ? `You will start your next Reality with 
+            return this.isPerkBought("startEP1") ? `You will start your next Reality with 
             ${format(Player.startingEP, 2)} Eternity Points.` : ``;
         },
         startWithAM() {
-            return Currency.antimatter.startingValue.gte(1e15) ? `You will start your next Reality
-            with ${format(Currency.antimatter.startingValue, 2)}` : ``;
+            return this.isPerkBought("startAM1") || this.isPerkBought("achgroup6") ? `You will start your next Reality
+            with ${format(Currency.antimatter.startingValue, 2)} Antimatter.` : ``;
         },
         startWithEU() {
-            if (Perk.autounlockEU1.isBought && !Perk.autounlockEU2.isbought) {
+            if (this.isPerkBought("autounlockEU1") && !this.isPerkBought("autounlockEU2")) {
                 return `You will start your next Reality with the first row of Eternity Upgrades.`;
             }
-            if (Perk.autounlockEU2.isBought) {
+            if (this.isPerkBought("autounlockEU1") && this.isPerkBought("autounlockEU2")) {
                 return `You will start your next Reality with both rows of Eternity Upgrades.`;
             }
             return ``;
@@ -54,7 +61,19 @@ Vue.component("modal-reality", {
         handleYesClick() {
             this.emitClose();
             GameUI.notify.info("yes click on modal-reality");
-        }
+        },
+        simulatedRealityCount() {
+            return simulatedRealityCount() >= 1;
+        },
+        isPerkBought(perk) {
+            if (perk === "startAM1") return Perk.startAM1.isBought;
+            if (perk === "startIP1") return Perk.startIP1.isBought;
+            if (perk === "autounlockEU1") return Perk.autounlockEU1.isBought;
+            if (perk === "autounlockEU2") return Perk.autounlockEU2.isBought;
+            if (perk === "achgroup6") return Perk.achievementGroup6.isBought;
+            if (perk === "startEP1") return Perk.startEP1.isBought;
+            return `Undefined perk in method isPerkBought (${perk})`;
+        },
     },
     template: `
         <div class="c-modal-message l-modal-content--centered">
@@ -68,28 +87,27 @@ Vue.component("modal-reality", {
             {{ gainedRMOnReality }}
         </div>
         <br>
-         <div class="c-modal-message__text">
+         <div class="c-modal-message__text" v-if="simulatedRealityCount">
             {{ gainedPPAndRealitiesOnReality }}
+            <br>
         </div>
-        <br>
-        <div class="c-modal-message__text">
+        <div class="c-modal-message__text" v-if="isPerkBought('startAM1')">
             {{ startWithAM }}
+            <br>
         </div>
-        <br> 
-        <div class="c-modal-message__text">
+        <div class="c-modal-message__text" v-if="isPerkBought('startIP1')">
             {{ startWithIP }}
         </div>
-        <br>
-        <div class="c-modal-message__text">
+        <div class="c-modal-message__text" v-if="isPerkBought('startEP1')">
             {{ startWithEP }}
         </div>
-        <br>
-        <div class="c-modal-message__text">
+        <div class="c-modal-message__text" v-if="isPerkBought('autounlockEU1')">
             {{ startWithEU }}
+            <br>
         </div>
-        <br>
-        <div class="c-modal-message__text">
+        <div class="c-modal-message__text" v-if="isPerkBought('achgroup6')">
             {{ startWithAch }}
+            <br>
         </div>
             <div class="l-options-grid__row">
                 <primary-button

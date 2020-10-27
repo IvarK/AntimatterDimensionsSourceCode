@@ -53,9 +53,9 @@ function bigCrunchReset() {
   addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints, gainedInfinities().round());
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.clampMin(
-    getGameSpeedupFactor(), Math.min(player.bestInfinityTime, player.thisInfinityTime));
+    33 * getGameSpeedupFactor(), Math.min(player.bestInfinityTime, player.thisInfinityTime));
   player.bestInfinityRealTime = Math.clampMin(
-    1, Math.min(player.bestInfinityRealTime, player.thisInfinityRealTime));
+    33, Math.min(player.bestInfinityRealTime, player.thisInfinityRealTime));
 
   player.noInfinitiesThisReality = false;
 

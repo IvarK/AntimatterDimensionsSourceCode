@@ -1,7 +1,7 @@
 "use strict";
 
 function giveEternityRewards(auto) {
-  player.bestEternity = Math.clampMin(getGameSpeedupFactor(), Math.min(player.thisEternity, player.bestEternity));
+  player.bestEternity = Math.clampMin(33 * getGameSpeedupFactor(), Math.min(player.thisEternity, player.bestEternity));
   player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
 
   const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))

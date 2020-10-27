@@ -117,7 +117,7 @@ const Time = {
    * @param {TimeSpan} timespan
    */
   set bestInfinity(timespan) {
-    this.toMilliseconds(timespan, value => player.bestInfinityTime = value);
+    this.toMilliseconds(timespan, value => player.bestInfinityTime = Math.clampMin(getGameSpeedupFactor(), value));
   },
 
     /**
@@ -130,7 +130,7 @@ const Time = {
    * @param {TimeSpan} timespan
    */
   set bestInfinityRealTime(timespan) {
-    this.toMilliseconds(timespan, value => player.bestInfinityRealTime = value);
+    this.toMilliseconds(timespan, value => player.bestInfinityRealTime = Math.clampMin(1, value));
   },
 
   /**

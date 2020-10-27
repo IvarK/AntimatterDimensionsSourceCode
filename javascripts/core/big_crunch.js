@@ -37,7 +37,7 @@ function bigCrunchReset() {
   player.bestIPminThisInfinity = new Decimal(0);
 
   player.bestInfinitiesPerMs = player.bestInfinitiesPerMs.clampMin(
-    gainedInfinities().round().dividedBy(player.thisInfinityRealTime)
+    gainedInfinities().dividedBy(Math.clampMin(33, player.thisInfinityRealTime))
   );
 
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
@@ -52,8 +52,8 @@ function bigCrunchReset() {
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
   addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints, gainedInfinities().round());
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
-  player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
-  player.bestInfinityRealTime = Math.min(player.bestInfinityRealTime, player.thisInfinityRealTime);
+  player.bestInfinityTime = Math.clampMin(getGameSpeedupFactor(), Math.min(player.bestInfinityTime, player.thisInfinityTime));
+  player.bestInfinityRealTime = Math.clampMin(1, Math.min(player.bestInfinityRealTime, player.thisInfinityRealTime));
 
   player.noInfinitiesThisReality = false;
 

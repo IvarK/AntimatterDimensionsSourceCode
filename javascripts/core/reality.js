@@ -232,7 +232,7 @@ function updateRealityRecords(realityProps) {
   }
   player.bestReality = Math.min(player.thisReality, player.bestReality);
   if (player.thisRealityRealTime < player.bestRealityRealTime) {
-    player.bestRealityRealTime = player.thisRealityRealTime;
+    player.bestRealityRealTime = Math.clampMin(1, player.thisRealityRealTime);
     player.bestSpeedSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }

@@ -2386,7 +2386,7 @@ GameDatabase.news = [
   {
     id: "l43",
     text: "You do know that you won't reach Infinity in -1 seconds, right?",
-    get unlocked() { return player.bestInfinityTime === 0.1; }
+    get unlocked() { return player.bestInfinityTime <= 0.1; }
   },
   {
     id: "l44",

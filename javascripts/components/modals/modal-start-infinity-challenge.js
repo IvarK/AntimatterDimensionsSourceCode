@@ -26,6 +26,13 @@ Vue.component("modal-start-infinity-challenge", {
       }
       return `The reward for completing this challenge is: ${rewardDescription}`;
     },
+    condition() {
+      let conditionOfChallenge = InfinityChallenge(this.modal.id)._config.description;
+      if (typeof conditionOfChallenge === "function") {
+        conditionOfChallenge = conditionOfChallenge();
+      }
+      return `Inside this Eternity Challenge, the condition is: ${conditionOfChallenge}`;
+    }
   },
   methods: {
     handleYesClick() {
@@ -41,6 +48,10 @@ Vue.component("modal-start-infinity-challenge", {
     <h2>{{ entranceLabel }}</h2>
       <div class="c-modal-message__text">
         {{ message }}
+      </div>
+      <br>
+      <div class="c-modal-message__text">
+      {{ condition }}
       </div>
       <div v-if="!challengeIsCompleted" class="c-modal-message__text">
       <br>

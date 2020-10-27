@@ -60,7 +60,7 @@ Vue.component("modal-reality", {
         },
         handleYesClick() {
             this.emitClose();
-            GameUI.notify.info("yes click on modal-reality");
+            requestManualReality();
         },
         simulatedRealityCount() {
             return simulatedRealityCount() >= 1;

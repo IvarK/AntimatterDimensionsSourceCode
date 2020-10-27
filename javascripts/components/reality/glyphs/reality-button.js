@@ -83,7 +83,7 @@ Vue.component("reality-button", {
     },
     handleClick() {
       if (TimeStudy.reality.isBought && player.eternityPoints.gte("1e4000")) {
-        requestManualReality();
+        confirmReality();
       }
     },
     formatScalingMultiplierText(resource, before, after) {

@@ -67,15 +67,7 @@ Vue.component("effarig-tab", {
       return this.isRunning ? "c-effarig-run-button__inner--running" : "c-effarig-run-button__inner--not-running";
     },
     runDescription() {
-      return this.isRunning
-        ? `All dimension multipliers, gamespeed, and tickspeed are severely lowered, like Dilation. Infinity power
-          reduces the production and gamespeed penalties and Time Shards reduce the tickspeed penalty. Glyph levels
-          are temporarily capped to ${Effarig.glyphLevelCap}, rarity is unaffected. You will exit Effarig's Reality
-          when you complete a Layer of it for the first time.`
-        : `Start Effarig's Reality; all dimension multipliers, gamespeed, and tickspeed are severely lowered, like
-          Dilation. Infinity power reduces the production and gamespeed penalties and Time Shards reduce the tickspeed
-          penalty. Glyph levels are temporarily capped, rarity is unaffected. You will exit Effarig's Reality when you
-          complete a Layer of it for the first time.`;
+      return GameDatabase.celestials.descriptions[1].description();
     }
   },
   methods: {
@@ -90,8 +82,7 @@ Vue.component("effarig-tab", {
       this.relicShardRarityAlwaysMax = Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX);
     },
     startRun() {
-      if (!resetReality()) return;
-      Effarig.initializeRun();
+      Modal.celestials.show({ name: "Effarig's", number: 1 });
     },
     createCursedGlyph() {
       if (Glyphs.freeInventorySpace === 0) {
@@ -144,6 +135,7 @@ Vue.component("effarig-tab", {
             <div v-if="isRunning">
               You are in Effarig's Reality - give up?
             </div><br>
+            Enter Effarig's Reality, in which 
           {{runDescription}}
           </div>
           <div :class="['l-effarig-run-button', 'c-effarig-run-button', runButtonOuterClass]"

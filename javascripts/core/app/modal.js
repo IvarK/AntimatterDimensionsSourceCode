@@ -77,6 +77,7 @@ Modal.startNormalChallenge = new ChallengeConfirmationModal("modal-start-normal-
 Modal.sacrifice = new Modal("modal-sacrifice");
 Modal.eternity = new Modal("modal-eternity");
 Modal.reality = new Modal("modal-reality");
+Modal.celestials = new Modal("modal-celestials");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;

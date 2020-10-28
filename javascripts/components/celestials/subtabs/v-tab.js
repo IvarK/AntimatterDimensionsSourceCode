@@ -20,6 +20,7 @@ Vue.component("v-tab", {
       wantsFlipped: true,
       isRunning: false,
       hasAlchemy: false,
+      description: GameDatabase.celestials.descriptions[3].description()
     };
   },
   methods: {
@@ -42,8 +43,7 @@ Vue.component("v-tab", {
       this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     },
     startRun() {
-      if (!resetReality()) return;
-      V.initializeRun();
+      Modal.celestials.show({ name: "V's", number: 3 });
     },
     has(info) {
       return V.has(info);
@@ -205,9 +205,7 @@ Vue.component("v-tab", {
               <b style="font-size: 1.5rem">Start V's Reality.</b>
               <br/>
               <div :style="{ 'font-size': hasAlchemy ? '1.1rem' : '' }">
-                All dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second
-                are square-rooted, and Replicanti interval is squared.
-                <span v-if="hasAlchemy">Exponential Glyph Alchemy effect is disabled.</span>
+                {{ this.description }}
               </div>
               <div class="c-v-run-button__line c-v-run-button__line--1"></div>
               <div class="c-v-run-button__line c-v-run-button__line--2"></div>

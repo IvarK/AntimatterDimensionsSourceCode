@@ -17,7 +17,8 @@ Vue.component("teresa-tab", {
       hasEPGen: false,
       hasPerkShop: false,
       isRunning: false,
-      canUnlockNextPour: false
+      canUnlockNextPour: false,
+      description: GameDatabase.celestials.descriptions[0].description()
     };
   },
   computed: {
@@ -45,7 +46,7 @@ Vue.component("teresa-tab", {
         "c-teresa-pour": true,
         "c-teresa-pour--unlock-available": this.canUnlockNextPour
       };
-    }
+    },
   },
   methods: {
     update() {
@@ -71,8 +72,7 @@ Vue.component("teresa-tab", {
         .filter(unlock => this.rm.plus(this.pouredAmount).gte(unlock.price) && !Teresa.has(unlock)).length > 0;
     },
     startRun() {
-      if (!resetReality()) return;
-      Teresa.initializeRun();
+      Modal.celestials.show({ name: "Teresa's", number: 0 });
     },
     unlockDescriptionStyle(unlockInfo) {
       const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
@@ -90,8 +90,8 @@ Vue.component("teresa-tab", {
         <div class="l-teresa-mechanic-container" v-if="hasReality">
           <div class="c-teresa-unlock c-teresa-run-button">
             <div :class="runButtonClassObject" @click="startRun()">Ϟ</div>
-            Start Teresa's Reality. Glyph Time Theorem generation is disabled and
-            you gain less Infinity Points and Eternity Points (x^{{format(0.55, 2, 2)}}).
+            Start Teresa's Reality. 
+            {{ this.description }}
             <br><br>
             <div v-if="bestAM.gt(0)">
               Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}

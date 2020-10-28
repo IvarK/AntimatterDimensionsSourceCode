@@ -146,7 +146,8 @@ Vue.component("enslaved-tab", {
     buyableUnlocks: [],
     quote: "",
     currentSpeedUp: 0,
-    hintsUnlocked: false
+    hintsUnlocked: false,
+    description: GameDatabase.celestials.descriptions[2].description()
   }),
   computed: {
     storedRealEfficiencyDesc() {
@@ -184,7 +185,10 @@ Vue.component("enslaved-tab", {
         "c-enslaved-run-button__icon": true,
         "c-enslaved-run-button__icon--running": this.isRunning,
       };
-    }
+    },
+    descriptionLines() {
+      return this.description.split("\n");
+    },
   },
   watch: {
     autoRelease(newValue) {
@@ -234,10 +238,7 @@ Vue.component("enslaved-tab", {
       Enslaved.buyUnlock(info);
     },
     startRun() {
-      // This needs to be added here before the reset so that TD autobuyers don't buy too much on start
-      player.celestials.enslaved.run = true;
-      if (!resetReality()) return;
-      Enslaved.initializeRun();
+      Modal.celestials.show({ name: "The Enslaved Ones'", number: 2 });
     },
     hasUnlock(info) {
       return Enslaved.has(info);
@@ -290,16 +291,9 @@ Vue.component("enslaved-tab", {
                 <div v-if="isRunning" v-for="x in 25" class="c-enslaved-run-button__icon__glitch"
                                     :style="glitchStyle(x)"/>
               </div>
-              <p>Glyph levels will be boosted to a minimum of {{ formatInt(5000) }}</p>
-              <p>Infinity, Time, and 8th Antimatter Dimension purchases are limited to {{ formatInt(1) }} each</p>
-              <p>Antimatter Dimension multipliers are always Dilated (the glyph effect still only
-                applies in actual Dilation)</p>
-              <p>Time Study 192 (uncapped Replicanti) is locked</p>
-              <p>The Black Hole is disabled</p>
-              <p>Tachyon Particle production and Dilated Time production are severely reduced</p>
-              <p>Time Theorem generation from Dilation Glyphs is disabled</p>
-              <p>Certain challenge goals have been increased</p>
-              <p>Stored Time is discharged at a reduced effectiveness (exponent^{{ format(0.55, 2, 2) }})</p>
+              <div v-for="description in descriptionLines">
+              {{ description }}
+              </div>
               <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps
               (see Infinity Dimension tab)</b>
             </div>

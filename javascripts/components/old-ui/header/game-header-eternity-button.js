@@ -19,7 +19,8 @@ Vue.component("game-header-eternity-button", {
       hasMoreCompletions: false,
       nextGoalAt: new Decimal(0),
       canEternity: false,
-      eternityGoal: new Decimal(0)
+      eternityGoal: new Decimal(0),
+      hasRealitied: false,
     };
   },
   computed: {
@@ -119,9 +120,10 @@ Vue.component("game-header-eternity-button", {
         ? EP_BUTTON_DISPLAY_TYPE.NORMAL_EXPLORE_NEW_CONTENT
         : EP_BUTTON_DISPLAY_TYPE.NORMAL;
       this.currentEPPM.copyFrom(gainedEP.dividedBy(
-        TimeSpan.fromMilliseconds(player.thisEternityRealTime).totalMinutes)
+        TimeSpan.fromMilliseconds(player.records.thisEternity.realTime).totalMinutes)
       );
-      this.peakEPPM.copyFrom(player.bestEPminThisEternity);
+      this.peakEPPM.copyFrom(player.records.thisEternity.bestEPmin);
+      this.hasRealitied = PlayerProgress.realityUnlocked();
     },
     updateChallengeWithRUPG() {
       const ec = EternityChallenge.current;
@@ -148,7 +150,7 @@ Vue.component("game-header-eternity-button", {
 
       <!-- Normal -->
       <template v-else-if="type === 1">
-        <template v-if="isGainedEPAmountSmall">
+        <template v-if="isGainedEPAmountSmall && !hasRealitied">
           I need to become Eternal
           <br>
         </template>

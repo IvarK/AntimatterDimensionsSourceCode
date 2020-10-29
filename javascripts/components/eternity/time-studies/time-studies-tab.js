@@ -49,7 +49,7 @@ class TimeStudyTreeLayout {
 
     const TS = id => TimeStudy(id);
     const EC = id => TimeStudy.eternityChallenge(id);
-    const TrS = id => TriadStudy(id)
+    const TrS = id => TriadStudy(id);
 
     /**
      * @type {TimeStudyRow[]}
@@ -114,11 +114,11 @@ class TimeStudyTreeLayout {
     if (type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES) {
       const vLevel = Ra.pets.v.level;
       this.rows.push(
-        normalRow(    
-          vLevel >= 5 ? TrS(1) : null,           
-          vLevel >= 10 ? TrS(2) : null,           
-          vLevel >= 15 ? TrS(3) : null,           
-          vLevel >= 20 ? TrS(4) : null      
+        normalRow(
+          vLevel >= 5 ? TrS(1) : null,
+          vLevel >= 10 ? TrS(2) : null,
+          vLevel >= 15 ? TrS(3) : null,
+          vLevel >= 20 ? TrS(4) : null
         )
       );
     }
@@ -265,7 +265,7 @@ Vue.component("time-studies-tab", {
         case TimeStudyType.DILATION: return "dilation-time-study";
         case TimeStudyType.TRIAD: return "triad-time-study";
       }
-      throw "Unknown study type";
+      throw "Unknown Time Study type";
     }
   },
   template:
@@ -278,7 +278,7 @@ Vue.component("time-studies-tab", {
         <primary-button
           :class="respecClassObject"
           @click="respec = !respec"
-        >Respec time studies on next Eternity</primary-button>
+        >Respec Time Studies on next Eternity</primary-button>
         <primary-button
           class="o-primary-btn--subtab-option"
           onclick="Modal.importTree.show()"

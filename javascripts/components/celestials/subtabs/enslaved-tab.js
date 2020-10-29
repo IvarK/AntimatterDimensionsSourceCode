@@ -118,7 +118,7 @@ Vue.component("modal-enslaved-hints", {
           <button class="o-primary-btn"
             :class="{ 'o-primary-btn--disabled': glyphHintsLeft <= 0 || !canGetHint }"
             v-on:click="giveGlyphHint(glyphHintsLeft)">
-              Get a hint on what glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
+              Get a hint on what Glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
           </button>
         </div>
         <div v-else>
@@ -297,7 +297,7 @@ Vue.component("enslaved-tab", {
               <p>Time Study 192 (uncapped Replicanti) is locked</p>
               <p>The Black Hole is disabled</p>
               <p>Tachyon Particle production and Dilated Time production are severely reduced</p>
-              <p>Time Theorem generation from Dilation glyphs is disabled</p>
+              <p>Time Theorem generation from Dilation Glyphs is disabled</p>
               <p>Certain challenge goals have been increased</p>
               <p>Stored Time is discharged at a reduced effectiveness (exponent^{{ format(0.55, 2, 2) }})</p>
               <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps
@@ -332,7 +332,7 @@ Vue.component("enslaved-tab", {
             <div class="l-enslaved-top-container__half">
               Storing real time completely halts all production, setting game speed to {{ formatInt(0) }}.
               You can use stored real time to "amplify" a Reality, simulating repeated runs of it.
-              Amplified Realities give all the rewards that normal realities do.
+              Amplified Realities give all the rewards that normal Realities do.
               <button :class="['o-enslaved-mechanic-button',
                               {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
                       @click="toggleStoreReal">
@@ -367,9 +367,9 @@ Vue.component("enslaved-tab", {
               :class="unlockClassObject(unlock)"
               @click="buyUnlock(unlock)"> 
                 {{ unlock.description() }}
-                <br> 
-                Costs: {{ timeDisplayShort(unlock.price) }}
-                <br>
+                <div v-if="!hasUnlock(unlock)">
+                  Costs: {{ timeDisplayShort(unlock.price) }}
+                </div>
                 <span v-if="isStoringBlackHole && !hasUnlock(unlock)">
                   Time to obtain: {{ timeDisplayShort(timeUntilBuy(unlock.price)) }}
                 </span>

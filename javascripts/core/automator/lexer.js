@@ -149,6 +149,11 @@ const AutomatorLexer = (() => {
     $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
   });
 
+  createInCategory(Currency, "TotalCompletions", /total[ \t]+completions/i, {
+    $autocomplete: "total completions",
+    $getter: () => EternityChallenges.completions,
+  });
+
   createInCategory(Currency, "PendingCompletions", /pending[ \t]+completions/i, {
     $autocomplete: "pending completions",
     $getter: () => {

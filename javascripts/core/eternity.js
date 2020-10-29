@@ -1,7 +1,7 @@
 "use strict";
 
 function giveEternityRewards(auto) {
-  player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
+  player.records.bestEternity.time = Math.min(player.records.thisEternity.time, player.records.bestEternity.time);
   player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
 
   const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
@@ -11,8 +11,8 @@ function giveEternityRewards(auto) {
   }
 
   addEternityTime(
-    player.thisEternity,
-    player.thisEternityRealTime,
+    player.records.thisEternity.time,
+    player.records.thisEternity.realTime,
     gainedEternityPoints(),
     newEternities
   );
@@ -34,10 +34,11 @@ function giveEternityRewards(auto) {
     respecTimeStudies(auto);
   }
 
-  player.bestEternitiesPerMs = player.bestEternitiesPerMs.clampMin(
-    RealityUpgrade(3).effectOrDefault(1) / Math.clampMin(33, player.thisEternityRealTime)
+  player.records.thisReality.bestEternitiesPerMs = player.records.thisReality.bestEternitiesPerMs.clampMin(
+    RealityUpgrade(3).effectOrDefault(1) / Math.clampMin(33, player.records.thisEternity.realTime)
   );
-  player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
+  player.records.bestEternity.bestEPminReality =
+    player.records.bestEternity.bestEPminReality.max(player.records.thisEternity.bestEPmin);
 
   player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
     Achievement(131),
@@ -49,9 +50,9 @@ function giveEternityRewards(auto) {
     beginProcessReality(getRealityProps(true));
   }
 
-  if (player.bestEP.lt(player.eternityPoints)) {
-    player.bestEP = new Decimal(player.eternityPoints);
-    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  if (player.records.bestReality.bestEP.lt(player.eternityPoints)) {
+    player.records.bestReality.bestEP = new Decimal(player.eternityPoints);
+    player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }
 
@@ -89,7 +90,7 @@ function eternity(force, auto, specialConditions = {}) {
     if (!player.dilation.active) giveEternityRewards(auto);
     // If somehow someone manages to force their first eternity
     // (e.g., by starting an EC), they haven't really eternitied yet.
-    player.noEternitiesThisReality = false;
+    player.achievementChecks.noEternitiesThisReality = false;
   }
 
   if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
@@ -121,18 +122,18 @@ function eternity(force, auto, specialConditions = {}) {
 
   player.infinityPoints = Player.startingIP;
   InfinityDimensions.resetAmount();
-  player.bestEPminThisEternity = new Decimal(0);
-  player.bestIPminThisInfinity = new Decimal(0);
-  player.bestIPminThisEternity = new Decimal(0);
-  player.bestInfinitiesPerMs = new Decimal(0);
-  player.bestIpPerMsWithoutMaxAll = new Decimal(0);
+  player.records.thisInfinity.bestIPmin = new Decimal(0);
+  player.records.bestInfinity.bestIPminEternity = new Decimal(0);
+  player.records.thisEternity.bestEPmin = new Decimal(0);
+  player.records.thisEternity.bestInfinitiesPerMs = new Decimal(0);
+  player.records.thisEternity.bestIPMsWithoutMaxAll = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
   applyRealityUpgradesAfterEternity();
-  player.thisInfinityMaxAM = new Decimal(0);
-  player.thisEternityMaxAM = new Decimal(0);
+  player.records.thisInfinity.maxAM = new Decimal(0);
+  player.records.thisEternity.maxAM = new Decimal(0);
   Currency.antimatter.reset();
 
   EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_AFTER);
@@ -158,11 +159,11 @@ function initializeChallengeCompletions(isReality) {
 function initializeResourcesAfterEternity() {
   player.sacrificed = new Decimal(0);
   player.infinitied = new Decimal(0);
-  player.bestInfinityTime = 999999999999;
-  player.bestInfinityRealTime = 999999999999;
-  player.thisInfinityTime = 0;
-  player.thisInfinityLastBuyTime = 0;
-  player.thisInfinityRealTime = 0;
+  player.records.bestInfinity.time = 999999999999;
+  player.records.bestInfinity.realTime = 999999999999;
+  player.records.thisInfinity.time = 0;
+  player.records.thisInfinity.lastBuyTime = 0;
+  player.records.thisInfinity.realTime = 0;
   player.dimensionBoosts = (EternityMilestone.keepInfinityUpgrades.isReached) ? 4 : 0;
   player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
   player.partInfinityPoint = 0;
@@ -171,8 +172,8 @@ function initializeResourcesAfterEternity() {
   player.infMultCost = new Decimal(10);
   player.infinityPower = new Decimal(1);
   player.timeShards = new Decimal(0);
-  player.thisEternity = 0;
-  player.thisEternityRealTime = 0;
+  player.records.thisEternity.time = 0;
+  player.records.thisEternity.realTime = 0;
   player.totalTickGained = 0;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
@@ -181,12 +182,12 @@ function initializeResourcesAfterEternity() {
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();
   }
-  player.noSacrifices = true;
-  player.onlyEighthDimensions = true;
-  player.onlyFirstDimensions = true;
-  player.noEighthDimensions = true;
-  player.noFirstDimensions = true;
-  player.noReplicantiGalaxies = true;
+  player.achievementChecks.noSacrifices = true;
+  player.achievementChecks.onlyEighthDimensions = true;
+  player.achievementChecks.onlyFirstDimensions = true;
+  player.achievementChecks.noEighthDimensions = true;
+  player.achievementChecks.noFirstDimensions = true;
+  player.achievementChecks.noReplicantiGalaxies = true;
 }
 
 function applyRealityUpgradesAfterEternity(buySingleTD = false) {
@@ -211,8 +212,8 @@ function askEternityConfirmation() {
     if (!player.options.confirmations.eternity) {
         return true;
     }
-    const message = "Eternity will reset everything except achievements and challenge records. " +
-        "You will also gain an Eternity point and unlock various upgrades.";
+    const message = "Eternity will reset everything except Achievements and challenge records. " +
+        "You will also gain an Eternity Point and unlock various upgrades.";
     return confirm(message);
 }
 

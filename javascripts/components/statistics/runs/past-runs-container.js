@@ -50,7 +50,7 @@ Vue.component("past-runs-container", {
       this.runs = this.clone(this.getRuns());
       this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
       this.shown = player.shownRuns[this.singular];
-      this.showGainPerTime = player.options.showLastTenRunsGainPerTime;
+      this.showGainPerTime = player.options.showLastTenInfinitiesGainPerTime;
     },
     clone(runs) {
       return runs.map(run =>

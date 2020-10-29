@@ -9,7 +9,7 @@ class TabNotificationState {
       }
     }
   }
-  
+
   get triggered() {
     // eslint-disable-next-line no-bitwise
     return player.triggeredTabNotificationBits & (1 << this.config.id);
@@ -35,6 +35,7 @@ const TabNotification = (function() {
     dilationAfterUnlock: new TabNotificationState(db.dilationAfterUnlock),
     realityUnlock: new TabNotificationState(db.realityUnlock),
     blackHoleUnlock: new TabNotificationState(db.blackHoleUnlock),
-    automatorUnlock: new TabNotificationState(db.automatorUnlock)
+    automatorUnlock: new TabNotificationState(db.automatorUnlock),
+    teresaUnlock: new TabNotificationState(db.teresaUnlock),
   };
 }());

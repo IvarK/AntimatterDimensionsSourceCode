@@ -67,7 +67,7 @@ GameDatabase.celestials.perkShop = (function() {
       id: 4,
       initialCost: 1,
       increment: 1,
-      description: () => `Receive a music glyph of a random type that is ${formatPercents(0.8)} of your highest level.
+      description: () => `Receive a Music Glyph of a random type that is ${formatPercents(0.8)} of your highest level.
         (Try clicking it!)`,
       effect: bought => Decimal.pow(3, bought),
       formatCost: value => format(value, 2, 0),

@@ -52,11 +52,6 @@ Vue.component("options-saving-tab", {
       this.cloudEnabled = options.cloudEnabled;
       this.autosaveInterval = options.autosaveInterval / 1000;
     },
-    hardReset() {
-      if (confirm("Do you really want to erase all your progress?")) {
-        GameStorage.hardReset();
-      }
-    },
     importAsFile(event) {
       const reader = new FileReader();
       reader.onload = function() {
@@ -79,7 +74,7 @@ Vue.component("options-saving-tab", {
         >Import save</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"
-          @click="hardReset"
+          onclick="Modal.hardReset.show()"
         >RESET THE GAME</options-button>
       </div>
       <div class="l-options-grid__row">

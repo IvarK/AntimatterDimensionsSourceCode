@@ -38,7 +38,7 @@ Vue.component("game-header-big-crunch-button", {
   methods: {
     update() {
       this.isVisible = player.break &&
-        player.thisInfinityMaxAM.gte(Decimal.NUMBER_MAX_VALUE) &&
+        player.records.thisInfinity.maxAM.gte(Decimal.NUMBER_MAX_VALUE) &&
         !InfinityChallenge.isRunning;
       if (NormalChallenge.isRunning) {
         if (!Enslaved.isRunning || !Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current.id)) {
@@ -49,7 +49,7 @@ Vue.component("game-header-big-crunch-button", {
       const gainedIP = gainedInfinityPoints();
       this.currentIP.copyFrom(player.infinityPoints);
       this.gainedIP.copyFrom(gainedIP);
-      this.peakIPPM.copyFrom(player.bestIPminThisInfinity);
+      this.peakIPPM.copyFrom(player.records.thisInfinity.bestIPmin);
       if (this.isPeakIPPMVisible) {
         this.currentIPPM.copyFrom(gainedIP.dividedBy(Time.thisInfinityRealTime.totalMinutes));
       }

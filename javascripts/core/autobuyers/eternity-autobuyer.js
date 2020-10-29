@@ -68,7 +68,7 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
         proc = Time.thisEternityRealTime.totalSeconds > this.time;
         break;
       case AUTO_ETERNITY_MODE.X_LAST:
-        proc = gainedEternityPoints().gte(player.lastTenEternities[0][1].times(this.xLast));
+        proc = gainedEternityPoints().gte(player.records.lastTenEternities[0][1].times(this.xLast));
         break;
     }
     if (proc) eternity(false, true);

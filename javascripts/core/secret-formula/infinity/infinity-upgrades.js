@@ -99,10 +99,10 @@ GameDatabase.infinity.upgrades = (function() {
     galaxyBoost: {
       id: "galaxyBoost",
       cost: 2,
-      description: "Galaxies are twice as strong",
+      description: "All Galaxies are twice as strong",
       effect: 2,
       charged: {
-        description: "Galaxies are stronger based on Teresa level",
+        description: "All Galaxies are stronger based on Teresa level",
         effect: () => 2 + Math.sqrt(Ra.pets.teresa.level) / 100,
         formatEffect: value => `+${formatPercents(value - 1)}`
       }
@@ -156,7 +156,7 @@ GameDatabase.infinity.upgrades = (function() {
       formatEffect: value => {
         if (Teresa.isRunning || V.isRunning) return "Disabled in this reality";
         const income = format(value, 2, 0);
-        const period = player.bestInfinityTime >= 999999999999
+        const period = player.records.bestInfinity.time >= 999999999999
           ? "∞"
           : Time.bestInfinity.times(10).toStringShort();
         return `${income} every ${period}`;
@@ -202,7 +202,8 @@ GameDatabase.infinity.upgrades = (function() {
       id: "ipOffline",
       cost: 1000,
       description: () => `Only while offline, gain ${formatPercents(0.5)} of your best IP/min without using Max All`,
-      effect: () => player.bestIpPerMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
+      effect: () =>
+        player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
       formatEffect: value => `${format(value, 2, 2)} IP/min`,
       bannedFromCharging: true
     },

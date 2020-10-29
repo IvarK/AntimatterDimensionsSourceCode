@@ -21,7 +21,8 @@ Vue.component("tt-shop", {
         ep: new Decimal(0)
       },
       showST: false,
-      STamount: 0
+      STamount: 0,
+      showTTGen: false
     };
   },
   computed: {
@@ -47,6 +48,9 @@ Vue.component("tt-shop", {
         return `${format(this.theoremGeneration.times(3600), 2, 2)} TT/hour`;
       }
       return `${format(this.theoremGeneration, 2, 2)} TT/sec`;
+    },
+    totalTimeTheoremText() {
+      return `${format(this.totalTimeTheorems, 2, 2)} total Time Theorems`;
     },
     minimizeArrowStyle() {
       return {
@@ -103,6 +107,7 @@ Vue.component("tt-shop", {
       costs.ep.copyFrom(player.timestudy.epcost);
       this.showST = V.spaceTheorems > 0;
       this.STamount = V.availableST;
+      this.showTTGen = this.theoremGeneration.gt(0) && !ui.view.shiftDown;
     },
     toggleTTAutobuyer() {
       player.ttbuyer = !player.ttbuyer;
@@ -127,11 +132,11 @@ Vue.component("tt-shop", {
               <span class="c-ttshop__save-load-text">{{ saveLoadText }}</span>
               <tt-save-load-button v-for="saveslot in 6" :key="saveslot" :saveslot="saveslot"></tt-save-load-button>
             </div>
-            <span v-if="theoremGeneration.gt(0)">
+            <span v-if="showTTGen">
               You are gaining {{ TTgenRateText }}.
             </span>
             <span v-else>
-              You have {{ totalTimeTheorems }} total TT.
+              You have {{ totalTimeTheoremText }}.
             </span>
           </div>
         </div>
@@ -198,7 +203,7 @@ Vue.component("tt-save-load-button", {
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
         GameUI.notify.info(`${presetName} loaded from slot ${this.saveslot}`);
       } else {
-        Modal.message.show("This time study list currently contains no studies.");
+        Modal.message.show("This Time Study list currently contains no Time Studies.");
       }
     },
     handleExport() {

@@ -95,7 +95,7 @@ Vue.component("effarig-tab", {
     },
     createCursedGlyph() {
       if (Glyphs.freeInventorySpace === 0) {
-        Modal.message.show("Inventory cannot hold new glyphs. Sacrifice (shift-click) some glyphs.");
+        Modal.message.show("Inventory cannot hold new Glyphs. Sacrifice (shift-click) some Glyphs.");
         return;
       }
       const cursedCount = player.reality.glyphs.active
@@ -103,10 +103,10 @@ Vue.component("effarig-tab", {
         .filter(g => g !== null && g.type === "cursed")
         .length;
       if (cursedCount >= 5) {
-        GameUI.notify.error(`You don't need more than ${format(5)} cursed glyphs!`);
+        GameUI.notify.error(`You don't need more than ${format(5)} Cursed Glyphs!`);
       } else {
         Glyphs.addToInventory(GlyphGenerator.cursedGlyph());
-        GameUI.notify.error("Created a cursed glyph");
+        GameUI.notify.error("Created a Cursed Glyph");
       }
       this.emitClose();
     }
@@ -118,12 +118,12 @@ Vue.component("effarig-tab", {
         <div class="l-effarig-shop">
           <div class="c-effarig-relics">
             You have {{ format(relicShards, 2, 0) }} Relic Shards, which increases <br>
-            the rarity of new glyphs by {{ relicShardRarityAlwaysMax ? "" : "up to" }}
+            the rarity of new Glyphs by {{ relicShardRarityAlwaysMax ? "" : "up to" }}
             +{{ format(shardRarityBoost, 2, 2) }}%.
           </div>
           <div class="c-effarig-relic-description">
             You will gain {{ format(shardsGained, 2, 0) }} Relic Shards next Reality. More Eternity Points <br>
-            slightly increases Relic Shards gained. More distinct glyph <br>
+            slightly increases Relic Shards gained. More distinct Glyph <br>
             effects significantly increases Relic Shards gained.
           </div>
           <effarig-unlock-button
@@ -136,7 +136,7 @@ Vue.component("effarig-tab", {
             @click="createCursedGlyph"
             v-if="vIsFlipped"
             >
-            Get a cursed glyph...
+            Get a Cursed Glyph...
           </button>
         </div>
         <div v-if="runUnlocked" class="l-effarig-run">

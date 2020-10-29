@@ -70,6 +70,7 @@ Vue.component("reality-upgrade-button", {
         <template v-else>
           <effect-display :config="config" />
           <cost-display
+            v-if="!isBought"
             :config="config"
             singular="Reality Machine"
             plural="Reality Machines"

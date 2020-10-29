@@ -67,12 +67,7 @@ Vue.component("options-visual-tab", {
       this.commas = options.commas;
       this.updateRate = options.updateRate;
     },
-    hardReset() {
-      if (confirm("Do you really want to erase all your progress?")) {
-        GameStorage.hardReset();
-      }
-    }
-  }, 
+  },
   template: `
   <div class="l-options-tab">
     <div class="l-options-grid">

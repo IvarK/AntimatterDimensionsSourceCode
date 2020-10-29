@@ -21,17 +21,17 @@ Vue.component("modal-import", {
       <div class="c-modal-import__save-info">
         <div v-if="inputIsSecret">???</div>
         <template v-else-if="inputIsValidSave">
-          <div>Antimatter: {{ formatAntimatter(antimatter) }}</div>
-          <div v-if="progress.isInfinityUnlocked">Infinities: {{ format(player.infinitied, 2, 0) }}</div>
-          <div v-if="progress.isEternityUnlocked">Eternities: {{ format(player.eternities, 2, 0) }}</div>
-          <div v-if="progress.isRealityUnlocked">Realities: {{ format(player.realities, 2, 0) }}</div>
+          <div>Antimatter: {{ formatPostBreak(antimatter, 2, 1) }}</div>
+          <div v-if="progress.isInfinityUnlocked">Infinities: {{ formatPostBreak(player.infinitied, 2, 0) }}</div>
+          <div v-if="progress.isEternityUnlocked">Eternities: {{ formatPostBreak(player.eternities, 2, 0) }}</div>
+          <div v-if="progress.isRealityUnlocked">Realities: {{ formatPostBreak(player.realities, 2, 0) }}</div>
           <div class="c-modal-import__warning">(your current save file will be overwritten!)</div>
         </template>
         <div v-else-if="hasInput">Not a valid save</div>
       </div>
       <primary-button
         v-if="inputIsValid"
-        class="o-primary-btn--width-medium c-modal-import__import-btn"
+        class="o-primary-btn--width-medium c-modal-import__import-btn c-modal__confirm-btn"
         @click="importSave"
       >Import</primary-button>
     </div>`,
@@ -60,9 +60,6 @@ Vue.component("modal-import", {
     }
   },
   methods: {
-    formatAntimatter(antimatter) {
-      return formatPostBreak(antimatter, 2, 1);
-    },
     importSave() {
       if (!this.inputIsValid) return;
       Modal.hide();

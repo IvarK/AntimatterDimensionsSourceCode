@@ -9,7 +9,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
   };
   const passiveIPMult = () => {
     const isEffarigLimited = Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY;
-    const normalValue = Perk.studyPassive1.isBought ? 1e100 : 1e25;
+    const normalValue = Perk.studyPassive.isBought ? 1e100 : 1e25;
     return isEffarigLimited
       ? Math.min(normalValue, Effarig.eternityCap.toNumber())
       : normalValue;
@@ -33,7 +33,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 21,
       cost: 3,
       requirement: 11,
-      description: () => `Improve replicanti multiplier formula to 
+      description: () => `Improve replicanti multiplier formula to
       (log2(x)^${formatInt(2)})+x${formatPow(0.032, 3, 3)}`,
       effect: () => player.replicanti.amount.pow(0.032)
     },
@@ -71,15 +71,16 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 4,
       requirement: 31,
       description: () => `Each Galaxy gives a ${formatX(1.2, 1, 1)} multiplier on Infinity Points gained`,
-      effect: () => Decimal.pow(1.2, Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies),
+      effect: () =>
+        Decimal.pow(1.2, Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
       id: 42,
       cost: 6,
       requirement: 32,
-      description: () => `Antimatter Galaxy requirement goes up ${formatInt(52)}
-        8ths instead of ${formatInt(60)}`,
+      description: () => `Antimatter Galaxy requirement increases by ${formatInt(52)}
+        8th Dimensions instead of ${formatInt(60)}`,
       effect: 52
     },
     {
@@ -259,10 +260,10 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 2,
       requirement: () => TimeStudy(111).isBought && !TimeStudy(121).isBought && !TimeStudy(123).isBought,
       requirementV: () => TimeStudy(111).isBought && (TimeStudy(121).isBought || TimeStudy(123).isBought),
-      description: () => (Perk.studyPassive1.isBought
+      description: () => (Perk.studyPassive.isBought
         ? `You gain ${formatX(100)} more Eternity Points`
         : `You gain ${formatX(35)} more Eternity Points`),
-      effect: () => (Perk.studyPassive1.isBought ? 100 : 35)
+      effect: () => (Perk.studyPassive.isBought ? 100 : 35)
     },
     {
       id: 123,
@@ -287,7 +288,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       description: () => (Achievement(138).isUnlocked
         ? `You can get ${formatPercents(0.5)} more Replicanti Galaxies`
         : `Automatic Replicanti Galaxies are disabled, but you can get ${formatPercents(0.5)} more`),
-      effect: () => Math.floor(player.replicanti.gal / 2)
+      effect: () => Math.floor(player.replicanti.boughtGalaxyCap / 2)
     },
     {
       id: 132,
@@ -295,7 +296,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 8,
       requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(122).isBought && (TimeStudy(131).isBought || TimeStudy(133).isBought),
-      description: () => (Perk.studyPassive2.isBought
+      description: () => (Perk.studyPassive.isBought
         ? `Replicanti Galaxies are ${formatPercents(0.4)} stronger and Replicanti are ${format(5)} times faster`
         : `Replicanti Galaxies are ${formatPercents(0.4)} stronger`),
       effect: 0.4
@@ -322,7 +323,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
         ? `You gain ${formatX(1e45, 0, 0)} more Infinity Points`
         : "Multiplier to Infinity Points, which decays over this Infinity"),
       effect: () => (Perk.studyActiveEP.isBought
-        ? 1e45
+        ? new Decimal(1e45)
         : Decimal.divide(1e45, thisInfinityMult(Time.thisInfinity.totalSeconds)).clampMin(1)),
       formatEffect: value => (Perk.studyActiveEP.isBought ? undefined : formatX(value, 2, 1))
     },
@@ -376,7 +377,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 171,
       cost: 15,
       requirement: () => TimeStudy(161).isBought || TimeStudy(162).isBought,
-      description: () => `Time Shard requirement for the next free tickspeed upgrade goes up slower
+      description: () => `Time Shard requirement for the next Tickspeed upgrade goes up slower
         ${formatX(1.33, 0, 2)} ➜ ${formatX(1.25, 0, 2)}`,
       effect: () => TS171_MULTIPLIER
     },
@@ -438,7 +439,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 212,
       cost: 150,
       requirement: 191,
-      description: "Galaxies are stronger based on your Time Shards",
+      description: "All Galaxies are stronger based on your Time Shards",
       effect: () => Math.pow(player.timeShards.clampMin(2).log2(), 0.005),
       cap: 1.1,
       formatEffect: value => `+${formatPercents(value - 1, 3)}`
@@ -523,7 +524,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(213).isBought && !TimeStudy(225).isBought,
       requirementV: () => TimeStudy(213).isBought && TimeStudy(225).isBought,
       description: "You gain extra Replicanti Galaxies based on their max",
-      effect: () => Math.floor(player.replicanti.gal / 15),
+      effect: () => Math.floor(player.replicanti.boughtGalaxyCap / 15),
       formatEffect: value => `+${formatInt(value)} ${pluralize("RG", value)}`
     },
     {
@@ -563,7 +564,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       STCost: 5,
       requirement: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && !TimeStudy(231).isBought,
       requirementV: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && TimeStudy(231).isBought,
-      description: "Galaxies are stronger based on Antimatter Galaxies",
+      description: "All Galaxies are stronger based on Antimatter Galaxies",
       effect: () => Math.pow(1 + player.galaxies / 1000, 0.2),
       formatEffect: value => `+${formatPercents(value - 1, 3)}`
     },

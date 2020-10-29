@@ -18,7 +18,7 @@ GameDatabase.challenges.normal = [
     legacyId: 2,
     isQuickResettable: false,
     description:
-      () => "Buying Antimatter Dimensions or tickspeed halts your production, " +
+      () => "Buying Antimatter Dimensions or Tickspeed upgrades halts your production, " +
       `gradually coming back over ${formatInt(3)} minutes.`,
     name: "2nd Antimatter Dimension Autobuyer",
     reward: "Upgradeable 2nd Antimatter Dimension Autobuyer"
@@ -47,7 +47,7 @@ GameDatabase.challenges.normal = [
     legacyId: 6,
     isQuickResettable: false,
     description:
-      () => `The tickspeed purchase multiplier starts at ${formatX(1.080, 0, 3)} instead of ${formatX(1.1245, 0, 3)}.`,
+      () => `The Tickspeed purchase multiplier starts at ${formatX(1.080, 0, 3)} instead of ${formatX(1.1245, 0, 3)}.`,
     name: "5th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 5th Antimatter Dimension Autobuyer"
   },
@@ -74,8 +74,8 @@ GameDatabase.challenges.normal = [
     id: 8,
     legacyId: 11,
     isQuickResettable: false,
-    description: "Dimension Boosts and Antimatter Galaxies are useless, but " +
-      "Dimensional Sacrifice is significantly stronger and resets everything except tickspeed.",
+    description: "Dimension Boosts provide no boost and Antimatter Galaxies cannot be bought, but " +
+      "Dimensional Sacrifice is significantly stronger and resets antimatter and all Antimatter Dimensions.",
     name: "8th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 8th Antimatter Dimension Autobuyer"
   },
@@ -83,7 +83,7 @@ GameDatabase.challenges.normal = [
     id: 9,
     legacyId: 5,
     isQuickResettable: true,
-    description: () => `Whenever you buy tickspeed, or ${formatInt(10)} of an Antimatter Dimension, ` +
+    description: () => `Whenever you buy Tickspeed upgrades, or ${formatInt(10)} of an Antimatter Dimension, ` +
       "everything else of equal cost will increase to its next cost step.",
     name: "Tickspeed Autobuyer",
     reward: "Upgradeable Tickspeed Autobuyer"

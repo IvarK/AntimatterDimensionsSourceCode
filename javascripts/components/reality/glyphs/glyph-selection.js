@@ -4,13 +4,13 @@ Vue.component("modal-glyph-selection", {
   data() {
     return {
       glyphs: GlyphSelection.glyphs.map(GlyphGenerator.copy),
-      canTrashGlyphs: false,
+      canSacrifice: false,
       levelDifference: 0,
     };
   },
   computed: {
     direction() {
-      if (this.glyphs[0].level > player.bestGlyphLevel) return "higher";
+      if (this.glyphs[0].level > player.records.bestReality.glyphLevel) return "higher";
       return "lower";
     }
   },
@@ -24,8 +24,8 @@ Vue.component("modal-glyph-selection", {
         currentGlyph.level = newGlyph.level;
         currentGlyph.effects = newGlyph.effects;
       }
-      this.canTrashGlyphs = RealityUpgrades.allBought;
-      this.levelDifference = Math.abs(player.bestGlyphLevel - this.glyphs[0].level);
+      this.canSacrifice = RealityUpgrade(19).isEffectActive;
+      this.levelDifference = Math.abs(player.records.bestReality.glyphLevel - this.glyphs[0].level);
     },
     select(index) {
       GlyphSelection.select(index, false);
@@ -46,14 +46,15 @@ Vue.component("modal-glyph-selection", {
                         :key="index"
                         :glyph="glyph"
                         :noLevelOverride="true"
+                        :showSacrifice="canSacrifice"
                         @click.native="select(index)"/>
       </div>
       <button class="o-primary-btn o-primary-btn--glyph-trash"
-        v-if="canTrashGlyphs"
+        v-if="canSacrifice"
         v-on:click="trashGlyphs()">
-          I don't want any of these glyphs,
+          I don't want any of these Glyphs,
           <br>
-          pick and sacrifice one at random.
+          pick and Sacrifice one at random.
           <br>
           (these are {{ formatInt(levelDifference) }} {{"level" | pluralize(levelDifference)}}
           {{ direction }} than your best)

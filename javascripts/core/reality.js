@@ -12,7 +12,7 @@ const GlyphSelection = {
   },
 
   get choiceCount() {
-    return Effects.max(1, Perk.glyphChoice4) *
+    return Effects.max(1, Perk.firstPerk) *
       (Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX) ? 2 : 1);
   },
 
@@ -30,7 +30,7 @@ const GlyphSelection = {
     if (glyphList.some(e => e.strength >= strengthThreshold)) return;
     glyphList[Math.floor(random * glyphList.length)].strength = newStrength;
   },
-  
+
   glyphList(countIn, level, config) {
     // Always generate at least 4 choices so that the RNG never diverges based on
     // the 4-choice perk.
@@ -91,9 +91,9 @@ const GlyphSelection = {
 
 function confirmReality() {
   return !player.options.confirmations.reality ||
-    confirm("Reality will reset everything except challenge records. Your achievements are also reset, " +
+    confirm("Reality will reset everything except challenge records. Your Achievements are also reset, " +
       "but you will automatically get one back every 30 minutes. " +
-      "You will also gain Reality Machines based on your Eternity Points, a glyph with a power level " +
+      "You will also gain Reality Machines based on your Eternity Points, a Glyph with a power level " +
       "based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend on quality of " +
       "life upgrades, and unlock various upgrades.");
 }
@@ -222,18 +222,18 @@ function autoReality() {
 
 function updateRealityRecords(realityProps) {
   const thisRunRMmin = realityProps.gainedRM.dividedBy(Time.thisRealityRealTime.totalMinutes);
-  if (player.bestRMmin.lt(thisRunRMmin)) {
-    player.bestRMmin = thisRunRMmin;
-    player.bestRMminSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  if (player.records.bestReality.RMmin.lt(thisRunRMmin)) {
+    player.records.bestReality.RMmin = thisRunRMmin;
+    player.records.bestReality.RMminSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
-  if (player.bestGlyphLevel < realityProps.gainedGlyphLevel.actualLevel) {
-    player.bestGlyphLevel = realityProps.gainedGlyphLevel.actualLevel;
-    player.bestGlyphLevelSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  if (player.records.bestReality.glyphLevel < realityProps.gainedGlyphLevel.actualLevel) {
+    player.records.bestReality.glyphLevel = realityProps.gainedGlyphLevel.actualLevel;
+    player.records.bestReality.glyphLevelSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
-  player.bestReality = Math.min(player.thisReality, player.bestReality);
-  if (player.thisRealityRealTime < player.bestRealityRealTime) {
-    player.bestRealityRealTime = player.thisRealityRealTime;
-    player.bestSpeedSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  player.records.bestReality.time = Math.min(player.records.thisReality.time, player.records.bestReality.time);
+  if (player.records.thisReality.realTime < player.records.bestReality.realTime) {
+    player.records.bestReality.realTime = player.records.thisReality.realTime;
+    player.records.bestReality.speedSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }
 
@@ -244,10 +244,10 @@ function giveRealityRewards(realityProps) {
   player.reality.realityMachines = player.reality.realityMachines.plus(gainedRM.times(multiplier));
   updateRealityRecords(realityProps);
   addRealityTime(
-    player.thisReality, player.thisRealityRealTime, gainedRM,
+    player.records.thisReality.time, player.records.thisReality.realTime, gainedRM,
     realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier);
   player.realities += realityAndPPMultiplier;
-  player.reality.pp += realityAndPPMultiplier;
+  player.reality.perkPoints += realityAndPPMultiplier;
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
     player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
   }
@@ -321,9 +321,9 @@ function beginProcessReality(realityProps) {
 
 function finishProcessReality(realityProps) {
   const finalEP = player.eternityPoints.plus(gainedEternityPoints());
-  if (player.bestEP.lt(finalEP)) {
-    player.bestEP = new Decimal(finalEP);
-    player.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+  if (player.records.bestReality.bestEP.lt(finalEP)) {
+    player.records.bestReality.bestEP = new Decimal(finalEP);
+    player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 
   const isReset = realityProps.reset;
@@ -350,11 +350,11 @@ function finishProcessReality(realityProps) {
   player.infinityUpgrades.clear();
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
-  player.bestInfinityTime = 999999999999;
-  player.bestInfinityRealTime = 999999999999;
-  player.thisInfinityTime = 0;
-  player.thisInfinityLastBuyTime = 0;
-  player.thisInfinityRealTime = 0;
+  player.records.bestInfinity.time = 999999999999;
+  player.records.bestInfinity.realTime = 999999999999;
+  player.records.thisInfinity.time = 0;
+  player.records.thisInfinity.lastBuyTime = 0;
+  player.records.thisInfinity.realTime = 0;
   player.dimensionBoosts = 0;
   player.galaxies = 0;
   player.partInfinityPoint = 0;
@@ -374,9 +374,10 @@ function finishProcessReality(realityProps) {
   // This has to be reset before player.eternities to make the bumpLimit logic work correctly
   EternityUpgrade.epMult.reset();
   player.eternities = new Decimal(0);
-  player.thisEternity = 0;
-  player.thisEternityRealTime = 0;
-  player.bestEternity = 999999999999;
+  player.records.thisEternity.time = 0;
+  player.records.thisEternity.realTime = 0;
+  player.records.bestEternity.time = 999999999999;
+  player.records.bestEternity.realTime = 999999999999;
   player.eternityUpgrades.clear();
   player.totalTickGained = 0;
   player.eternityChalls = {};
@@ -388,19 +389,19 @@ function finishProcessReality(realityProps) {
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  player.noSacrifices = true;
-  player.onlyEighthDimensions = true;
-  player.onlyFirstDimensions = true;
-  player.noEighthDimensions = true;
-  player.noFirstDimensions = true;
-  player.noAntimatterProduced = true;
-  player.noTriadStudies = true;
-  player.noTheoremPurchases = true;
-  player.noInfinitiesThisReality = true;
-  player.noEternitiesThisReality = true;
-  player.noReplicantiGalaxies = true;
-  player.thisReality = 0;
-  player.thisRealityRealTime = 0;
+  player.achievementChecks.noSacrifices = true;
+  player.achievementChecks.onlyEighthDimensions = true;
+  player.achievementChecks.onlyFirstDimensions = true;
+  player.achievementChecks.noEighthDimensions = true;
+  player.achievementChecks.noFirstDimensions = true;
+  player.achievementChecks.noAntimatterProduced = true;
+  player.achievementChecks.noTriadStudies = true;
+  player.achievementChecks.noTheoremPurchases = true;
+  player.achievementChecks.noInfinitiesThisReality = true;
+  player.achievementChecks.noEternitiesThisReality = true;
+  player.achievementChecks.noReplicantiGalaxies = true;
+  player.records.thisReality.time = 0;
+  player.records.thisReality.realTime = 0;
   player.timestudy.theorem = new Decimal(0);
   player.timestudy.amcost = new Decimal("1e20000");
   player.timestudy.ipcost = new Decimal(1);
@@ -413,17 +414,17 @@ function finishProcessReality(realityProps) {
   player.dilation.tachyonParticles = new Decimal(0);
   player.dilation.dilatedTime = new Decimal(0);
   player.dilation.nextThreshold = new Decimal(1000);
-  player.dilation.baseFreeGalaxies = 0;
-  player.dilation.freeGalaxies = 0;
+  player.dilation.baseTachyonGalaxies = 0;
+  player.dilation.totalTachyonGalaxies = 0;
   player.dilation.upgrades.clear();
   player.dilation.rebuyables = {
     1: 0,
     2: 0,
     3: 0
   };
+  player.records.thisInfinity.maxAM = new Decimal(0);
+  player.records.thisEternity.maxAM = new Decimal(0);
   player.dilation.lastEP = new Decimal(-1);
-  player.thisInfinityMaxAM = new Decimal(0);
-  player.thisEternityMaxAM = new Decimal(0);
   Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
   player.celestials.laitela.entropy = 0;
@@ -438,13 +439,13 @@ function finishProcessReality(realityProps) {
   player.celestials.ra.peakGamespeed = 1;
 
   InfinityDimensions.resetAmount();
-  player.bestIPminThisInfinity = new Decimal(0);
-  player.bestIPminThisEternity = new Decimal(0);
-  player.bestEPminThisEternity = new Decimal(0);
-  player.bestEPminThisReality = new Decimal(0);
-  player.bestInfinitiesPerMs = new Decimal(0);
-  player.bestEternitiesPerMs = new Decimal(0);
-  player.bestIpPerMsWithoutMaxAll = new Decimal(0);
+  player.records.thisInfinity.bestIPmin = new Decimal(0);
+  player.records.bestInfinity.bestIPminEternity = new Decimal(0);
+  player.records.thisEternity.bestEPmin = new Decimal(0);
+  player.records.thisEternity.bestInfinitiesPerMs = new Decimal(0);
+  player.records.thisEternity.bestIPMsWithoutMaxAll = new Decimal(0);
+  player.records.bestEternity.bestEPminReality = new Decimal(0);
+  player.records.thisReality.bestEternitiesPerMs = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
@@ -486,7 +487,7 @@ function restoreCelestialRuns(celestialRunState) {
 // which might otherwise be higher. Most explicit values here are the values of upgrades at their caps.
 function applyRUPG10() {
   NormalChallenges.completeAll();
-  
+
   player.auto.dimensions = player.auto.dimensions.map(() => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
@@ -496,7 +497,7 @@ function applyRUPG10() {
     mode: AUTOBUYER_MODE.BUY_10,
     priority: 1,
     isActive: true,
-    lastTick: player.realTimePlayed
+    lastTick: player.records.realTimePlayed
   }));
   for (const autobuyer of Autobuyers.all) {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;

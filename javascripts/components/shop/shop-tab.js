@@ -32,8 +32,12 @@ Vue.component("shop-tab", {
       return this.kongEnabled ? "Buy More" : "Play in Kongregate to buy STDs";
     }
   },
-  template: 
-  `<div id="shop" class="tab">
+  template: `
+  <div id="shop" class="tab">
+    <div class="c-shop-disclaimer">
+      Disclaimer: These are not required to progress in the game, they are just for supporting the developer.
+      The game is balanced without the use of any microtranactions.
+    </div>
     <div class="c-shop-header">
       <span>You have {{ STD }}</span>
       <img src="images/std_coin.png" height="40">
@@ -58,9 +62,6 @@ Vue.component("shop-tab", {
           class="o-shop-button-button">Cost: 20 <img src="images/std_coin.png" height="40"></button>
       </div>
     </div>
-    <span style="font-size: 12px"><b>
-      Disclaimer: These are not required to progress in the game, they are just to help and support the developer.
-    </b></span>
   </div>
   `
 });

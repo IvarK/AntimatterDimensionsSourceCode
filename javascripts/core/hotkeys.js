@@ -9,6 +9,9 @@
 // GameKeyboard class uses Mousetrap under the hood, so for more details visit
 // https://craig.is/killing/mice
 
+// Free keys:
+// i, j, k, l, n, o, p, q, v, w, x, z
+
 GameKeyboard.bindRepeatableHotkey("m", () => maxAll());
 GameKeyboard.bindRepeatableHotkey("d", () => requestDimensionBoost(true));
 GameKeyboard.bindRepeatableHotkey("shift+d", () => requestDimensionBoost(false));
@@ -20,6 +23,7 @@ GameKeyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());
 GameKeyboard.bindRepeatableHotkey("shift+t", () => buyTickSpeed());
 GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
 GameKeyboard.bindRepeatableHotkey("e", () => eternityResetRequest());
+GameKeyboard.bindRepeatableHotkey("y", () => requestManualReality());
 
 // We need to know whether the player is holding R or not for the
 // replicanti galaxy
@@ -27,9 +31,10 @@ GameKeyboard.bind("r", () => setHoldingR(true), "keydown");
 GameKeyboard.bind("r", () => setHoldingR(false), "keyup");
 
 
-const AUTOBUYER_NAMES = ["1st Dimension", "2nd Dimension", "3rd Dimension", "4th Dimension", 
+const AUTOBUYER_NAMES = ["1st Dimension", "2nd Dimension", "3rd Dimension", "4th Dimension",
                          "5th Dimension", "6th Dimension", "7th Dimension", "8th Dimension",
-                         "Tickspeed", "Dimension Boost", "Galaxy", "Big Crunch", "Sacrifice", "Eternity"];
+                         "Tickspeed", "Dimension Boost", "Antimatter Galaxy", "Big Crunch", "Dimensional Sacrifice",
+                         "Eternity", "Reality"];
 
 // Toggle autobuyers
 function toggleAutobuyer(id) {
@@ -58,6 +63,7 @@ GameKeyboard.bindHotkey("alt+g", () => toggleAutobuyer(10));
 GameKeyboard.bindHotkey("alt+c", () => toggleAutobuyer(11));
 GameKeyboard.bindHotkey("alt+s", () => toggleAutobuyer(12));
 GameKeyboard.bindHotkey("alt+e", () => toggleAutobuyer(13));
+GameKeyboard.bindHotkey("alt+y", () => toggleAutobuyer(14));
 GameKeyboard.bindHotkey("alt+r", () => {
   const buyer = Replicanti.galaxies.autobuyer;
   if (buyer.isUnlocked) {
@@ -92,7 +98,7 @@ GameKeyboard.bindHotkey("u", () => {
     } else {
       GameUI.notify.info(`Starting script "${AutomatorBackend.scriptName}"`);
       AutomatorBackend.restart();
-      AutomatorBackend.start();  
+      AutomatorBackend.start();
       return;
     }
     const action = AutomatorBackend.isRunning ? "Resuming" : "Pausing";
@@ -112,10 +118,10 @@ GameKeyboard.bindHotkey("shift+u", () => {
 });
 
 GameKeyboard.bindHotkey("esc", () => {
-  if (Modal.isOpen) {
-    Modal.hide();
-  } else {
+  if (ui.view.modal.queue.length === 0) {
     Tab.options.show(true);
+  } else {
+    Modal.hide();
   }
 });
 

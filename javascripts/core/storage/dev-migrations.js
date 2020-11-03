@@ -895,6 +895,10 @@ GameStorage.devMigrations = {
       delete player.dilation.baseFreeGalaxies;
       delete player.dilation.freeGalaxies;
     },
+    player => {
+      player.auto.bigCrunch.xCurrent = player.auto.bigCrunch.xLast;
+      player.auto.eternity.xCurrent = player.auto.eternity.xLast;
+    },
   ],
 
   patch(player) {

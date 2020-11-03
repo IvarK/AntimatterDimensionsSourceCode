@@ -13,7 +13,7 @@ Vue.component("big-crunch-autobuyer-box", {
     modes: () => [
       AUTO_CRUNCH_MODE.AMOUNT,
       AUTO_CRUNCH_MODE.TIME,
-      AUTO_CRUNCH_MODE.X_LAST
+      AUTO_CRUNCH_MODE.X_CURRENT,
     ]
   },
   methods: {
@@ -38,10 +38,10 @@ Vue.component("big-crunch-autobuyer-box", {
             type: "float"
           },
         };
-        case AUTO_CRUNCH_MODE.X_LAST: return {
-          title: "X times last Crunch",
+        case AUTO_CRUNCH_MODE.X_CURRENT: return {
+          title: "X times current IP",
           input: {
-            property: "xLast",
+            property: "xCurrent",
             type: "decimal"
           },
         };

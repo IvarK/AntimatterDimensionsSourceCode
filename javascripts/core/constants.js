@@ -9,13 +9,13 @@ const AUTOBUYER_MODE = {
 const AUTO_CRUNCH_MODE = {
   AMOUNT: 0,
   TIME: 1,
-  X_LAST: 2
+  X_CURRENT: 2
 };
 
 const AUTO_ETERNITY_MODE = {
   AMOUNT: 0,
   TIME: 1,
-  X_LAST: 2
+  X_CURRENT: 2
 };
 
 const AUTO_REALITY_MODE = {

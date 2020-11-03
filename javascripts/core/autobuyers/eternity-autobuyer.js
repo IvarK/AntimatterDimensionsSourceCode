@@ -33,12 +33,12 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
     this.data.time = value;
   }
 
-  get xLast() {
-    return this.data.xLast;
+  get xCurrent() {
+    return this.data.xCurrent;
   }
 
-  set xLast(value) {
-    this.data.xLast = value;
+  set xCurrent(value) {
+    this.data.xCurrent = value;
   }
 
   get hasAdditionalModes() {
@@ -67,8 +67,8 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
       case AUTO_ETERNITY_MODE.TIME:
         proc = Time.thisEternityRealTime.totalSeconds > this.time;
         break;
-      case AUTO_ETERNITY_MODE.X_LAST:
-        proc = gainedEternityPoints().gte(player.records.lastTenEternities[0][1].times(this.xLast));
+      case AUTO_ETERNITY_MODE.X_CURRENT:
+        proc = gainedEternityPoints().gte(player.eternityPoints.times(this.xCurrent));
         break;
     }
     if (proc) eternity(false, true);

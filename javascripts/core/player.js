@@ -98,7 +98,7 @@ let player = {
       mode: 0,
       amount: new Decimal(1),
       time: 1,
-      xLast: new Decimal(1),
+      xCurrent: new Decimal(1),
       isActive: true,
       lastTick: 0
     },
@@ -110,7 +110,7 @@ let player = {
       mode: 0,
       amount: new Decimal(1),
       time: 1,
-      xLast: new Decimal(1),
+      xCurrent: new Decimal(1),
       isActive: false
     },
     reality: {

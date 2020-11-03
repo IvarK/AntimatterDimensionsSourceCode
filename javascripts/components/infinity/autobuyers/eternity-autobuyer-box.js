@@ -12,7 +12,7 @@ Vue.component("eternity-autobuyer-box", {
     modes: () => [
       AUTO_ETERNITY_MODE.AMOUNT,
       AUTO_ETERNITY_MODE.TIME,
-      AUTO_ETERNITY_MODE.X_LAST
+      AUTO_ETERNITY_MODE.X_CURRENT,
     ]
   },
   methods: {
@@ -36,10 +36,10 @@ Vue.component("eternity-autobuyer-box", {
             type: "float"
           },
         };
-        case AUTO_ETERNITY_MODE.X_LAST: return {
-          title: "X times last Eternity",
+        case AUTO_ETERNITY_MODE.X_CURRENT: return {
+          title: "X times current EP",
           input: {
-            property: "xLast",
+            property: "xCurrent",
             type: "decimal"
           },
         };

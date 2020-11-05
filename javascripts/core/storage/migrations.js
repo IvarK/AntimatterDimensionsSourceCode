@@ -164,6 +164,11 @@ GameStorage.migrations = {
     for (let i = 0; i < 10; i++) {
       player.lastTenEternities[i][0] *= 100;
       player.lastTenRuns[i][0] *= 100;
+      // Nowadays this would be player.lastTenEternities[i][3] *= 100;
+      // However, this migration is done so early that it was player.lastTenEternities[i][2]
+      // (but late enough that player.lastTenEternities[i][2] is defined).
+      player.lastTenEternities[i][2] *= 100;
+      player.lastTenRuns[i][2] *= 100;
     }
 
     if (player.challengeTimes) {

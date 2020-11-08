@@ -898,6 +898,9 @@ GameStorage.devMigrations = {
     player => {
       player.auto.bigCrunch.xCurrent = player.auto.bigCrunch.xLast;
       player.auto.eternity.xCurrent = player.auto.eternity.xLast;
+
+      delete player.auto.bigCrunch.xLast;
+      delete player.auto.eternity.xLast;
     },
   ],
 

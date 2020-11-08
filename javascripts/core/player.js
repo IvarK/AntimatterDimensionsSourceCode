@@ -97,6 +97,7 @@ let player = {
       interval: 150000,
       mode: 0,
       amount: new Decimal(1),
+      increaseWithMult: true,
       time: 1,
       xCurrent: new Decimal(1),
       isActive: true,
@@ -109,6 +110,7 @@ let player = {
     eternity: {
       mode: 0,
       amount: new Decimal(1),
+      increaseWithMult: true,
       time: 1,
       xCurrent: new Decimal(1),
       isActive: false

@@ -25,6 +25,14 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
     return EternityMilestone.bigCrunchModes.isReached;
   }
 
+  get increaseWithMult() {
+    return this.data.increaseWithMult;
+  }
+
+  set increaseWithMult(value) {
+    this.data.increaseWithMult = value;
+  }
+
   get amount() {
     return this.data.amount;
   }
@@ -64,7 +72,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
   }
 
   bumpAmount(mult) {
-    if (this.isUnlocked) {
+    if (this.isUnlocked && this.increaseWithMult) {
       this.amount = this.amount.times(mult);
     }
   }

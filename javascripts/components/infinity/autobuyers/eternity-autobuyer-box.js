@@ -4,8 +4,14 @@ Vue.component("eternity-autobuyer-box", {
   data() {
     return {
       mode: AUTO_ETERNITY_MODE.AMOUNT,
-      hasAdditionalModes: false
+      hasAdditionalModes: false,
+      increaseWithMult: true,
     };
+  },
+  watch: {
+    increaseWithMult(newValue) {
+      this.autobuyer.increaseWithMult = newValue;
+    }
   },
   computed: {
     autobuyer: () => Autobuyer.eternity,
@@ -19,6 +25,7 @@ Vue.component("eternity-autobuyer-box", {
     update() {
       this.mode = this.autobuyer.mode;
       this.hasAdditionalModes = this.autobuyer.hasAdditionalModes;
+      this.increaseWithMult = this.autobuyer.increaseWithMult;
     },
     modeProps(mode) {
       switch (mode) {
@@ -74,6 +81,15 @@ Vue.component("eternity-autobuyer-box", {
           :key="mode"
           v-bind="modeProps(mode).input"
         />
+      </template>
+      <template slot="prioritySlot" style="margin-top: 1.2rem;">
+        <span>Dynamic amount:</span>
+        <div
+            class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
+            @click="increaseWithMult = !increaseWithMult"
+          >
+          <input type="checkbox" :checked="increaseWithMult"/>
+        </div>
       </template>
     </autobuyer-box>`
 });

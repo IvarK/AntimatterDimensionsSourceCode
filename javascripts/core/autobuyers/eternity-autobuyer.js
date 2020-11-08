@@ -21,6 +21,14 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
     return this.data.amount;
   }
 
+  get increaseWithMult() {
+    return this.data.increaseWithMult;
+  }
+
+  set increaseWithMult(value) {
+    this.data.increaseWithMult = value;
+  }
+
   set amount(value) {
     this.data.amount = value;
   }
@@ -53,7 +61,7 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
   }
 
   bumpAmount(mult) {
-    if (this.isUnlocked) {
+    if (this.isUnlocked && this.increaseWithMult) {
       this.amount = this.amount.times(mult);
     }
   }

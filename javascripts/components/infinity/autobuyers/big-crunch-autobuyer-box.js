@@ -5,8 +5,14 @@ Vue.component("big-crunch-autobuyer-box", {
     return {
       postBreak: false,
       mode: AUTO_CRUNCH_MODE.AMOUNT,
-      hasAdditionalModes: false
+      hasAdditionalModes: false,
+      increaseWithMult: true,
     };
+  },
+  watch: {
+    increaseWithMult(newValue) {
+      this.autobuyer.increaseWithMult = newValue;
+    }
   },
   computed: {
     autobuyer: () => Autobuyer.bigCrunch,
@@ -21,6 +27,7 @@ Vue.component("big-crunch-autobuyer-box", {
       this.postBreak = player.break;
       this.mode = this.autobuyer.mode;
       this.hasAdditionalModes = this.autobuyer.hasAdditionalModes;
+      this.increaseWithMult = this.autobuyer.increaseWithMult;
     },
     modeProps(mode) {
       switch (mode) {
@@ -78,6 +85,15 @@ Vue.component("big-crunch-autobuyer-box", {
             :key="mode"
             v-bind="modeProps(mode).input"
           />
+        </template>
+        <template slot="prioritySlot" style="margin-top: 1.2rem;">
+          <span>Dynamic amount:</span>
+          <div
+              class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
+              @click="increaseWithMult = !increaseWithMult"
+            >
+            <input type="checkbox" :checked="increaseWithMult"/>
+          </div>
         </template>
       </template>
     </autobuyer-box>`

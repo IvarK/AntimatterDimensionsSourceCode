@@ -73,7 +73,7 @@ Vue.component("autobuyer-box", {
       this.canBeBought = this.autobuyer.canBeBought;
       this.antimatterCost = this.autobuyer.antimatterCost;
       this.isBought = this.autobuyer.isBought;
-      this.antimatter.copyFrom(Currency.antimatter);
+      this.antimatter.copyFrom(player.records.thisEternity.maxAM);
     },
     toggle() {
       this.isActive = !this.isActive;

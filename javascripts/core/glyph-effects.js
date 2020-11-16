@@ -583,7 +583,7 @@ GameDatabase.reality.glyphEffects = [
       ? `Buy ${formatInt(10)} multiplier ^{value} [and\nDimension Boost multiplier ^]{value2}`
       : `Bonus from buying ${formatInt(10)} Dimensions ^{value}`),
     totalDesc: () => (GlyphAlteration.isAdded("effarig")
-      ? `Multiplier from "Buy ${formatInt(10)}" ^{value} and Dimension Boosts ^{value2}`
+      ? `Multiplier from "Buy ${formatInt(10)}" ^{value} and Dimension Boost multiplier ^{value2}`
       : `Multiplier from "Buy ${formatInt(10)}" ^{value}`),
     genericDesc: () => (GlyphAlteration.isAdded("effarig")
       ? `"Buy ${formatInt(10)}" and Dimension Boost multipliers ^x`

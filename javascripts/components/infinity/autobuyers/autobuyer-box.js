@@ -69,7 +69,7 @@ Vue.component("autobuyer-box", {
       const autobuyer = this.autobuyer;
       this.isUnlocked = autobuyer.isUnlocked;
       this.isActive = autobuyer.isActive;
-      this.globalToggle = player.options.autobuyersOn;
+      this.globalToggle = player.auto.autobuyersOn;
       this.canBeBought = this.autobuyer.canBeBought;
       this.antimatterCost = this.autobuyer.antimatterCost;
       this.isBought = this.autobuyer.isBought;

@@ -142,6 +142,7 @@ GameStorage.migrations = {
       GameStorage.migrations.standardizeUncompletedTimes(player);
       GameStorage.migrations.makeRecords(player);
       GameStorage.migrations.deleteOldRecords(player);
+      GameStorage.migrations.migrateAutobuyers(player);
       GameStorage.migrations.migratePlayerVars(player);
 
       kong.migratePurchases();
@@ -772,6 +773,14 @@ GameStorage.migrations = {
     delete player.thisEternity;
     delete player.bestEternity;
     delete player.thisReality;
+  },
+
+  migrateAutobuyers(player) {
+    player.auto.bulkOn = player.options.bulkOn;
+    player.auto.autobuyerOn = player.options.autobuyerOn;
+
+    delete player.options.bulkOn;
+    delete player.options.autobuyerOn;
   },
 
   migratePlayerVars(player) {

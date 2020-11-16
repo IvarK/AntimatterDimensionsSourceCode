@@ -85,7 +85,7 @@ GameKeyboard.bindHotkey("alt+r", () => {
 
 GameKeyboard.bindHotkey("a", () => {
   Autobuyers.toggle();
-  GameUI.notify.info(`Autobuyers ${(player.options.autobuyersOn) ? "enabled" : "disabled"}`);
+  GameUI.notify.info(`Autobuyers ${(player.auto.autobuyersOn) ? "enabled" : "disabled"}`);
 });
 GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
 GameKeyboard.bindHotkey("u", () => {

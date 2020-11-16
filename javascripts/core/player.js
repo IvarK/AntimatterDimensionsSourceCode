@@ -51,6 +51,9 @@ let player = {
   },
   auto: {
     dimensions: Array.range(0, 8).map(tier => ({
+    bulkOn: true,
+    autobuyersOn: true,
+    disableContinuum: false,
       isUnlocked: false,
       cost: 1,
       interval: [500, 600, 700, 800, 900, 1000, 1100, 1200][tier],
@@ -541,9 +544,6 @@ let player = {
     retryChallenge: false,
     retryCelestial: false,
     showAllChallenges: false,
-    bulkOn: true,
-    autobuyersOn: true,
-    disableContinuum: false,
     cloudEnabled: true,
     hotkeys: true,
     theme: "Normal",

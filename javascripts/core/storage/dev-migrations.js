@@ -898,9 +898,15 @@ GameStorage.devMigrations = {
     player => {
       player.auto.bigCrunch.xCurrent = player.auto.bigCrunch.xLast;
       player.auto.eternity.xCurrent = player.auto.eternity.xLast;
+      player.auto.bulkOn = player.options.bulkOn;
+      player.auto.autobuyerOn = player.options.autobuyerOn;
+      player.auto.disableContinuum = player.options.disableContinuum;
 
       delete player.auto.bigCrunch.xLast;
       delete player.auto.eternity.xLast;
+      delete player.auto.bulkOn;
+      delete player.auto.autobuyerOn;
+      delete player.auto.disableContinuum;
     },
   ],
 

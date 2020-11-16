@@ -23,7 +23,7 @@ const Autobuyers = (function() {
     },
 
     toggle() {
-      player.options.autobuyersOn = !player.options.autobuyersOn;
+      player.auto.autobuyersOn = !player.auto.autobuyersOn;
     },
 
     tick() {

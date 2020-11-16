@@ -539,7 +539,7 @@
 }
 
 .c-current-glyph-effects__effect--capped {
-  color: #ff8000;
+  color: #ff8000 !important;
 }
 
 .l-current-glyph-effects__capped-header {
@@ -567,6 +567,7 @@
 }
 
 .c-current-glyph-effects {
+  background: #4a4a4a;
   border: 0.1rem solid #b8b8b8;
   border-radius: 0.5rem;
   border-top-left-radius: 0;

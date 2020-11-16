@@ -23,13 +23,24 @@ Vue.component("current-glyph-effects", {
             .replace("{value}", value1)
             .replace("{value2}", value2);
         },
+        textColor() {
+          const glyphName = this.effectConfig.id === "timeshardpow"
+          ? GlyphTypes.time
+          : GlyphTypes[this.effectConfig.glyphTypes];
+          return {
+            color: glyphName.id === "cursed" ? "#5151ec" : glyphName.color,
+            "text-shadow": `-1px 1px 1px black, 1px 1px 1px black,
+                            -1px -1px 1px black, 1px -1px 1px black, 0 0 3px ${glyphName.color}`,
+            animation: glyphName.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
+          };
+        },
         valueClass() {
           return this.effect.value.capped ? "c-current-glyph-effects__effect--capped" : "";
         }
       },
       template: `
         <div>
-          <span :class="valueClass">{{formatValue}}</span>
+          <span :style="textColor" :class="valueClass">{{formatValue}}</span>
         </div>`
     }
   },

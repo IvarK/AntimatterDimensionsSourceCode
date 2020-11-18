@@ -231,10 +231,10 @@ GameDatabase.reality.automator = {
           items: [
             {
             header: "<b>Undesirable effects</b>",
-            description: `This command may behave undesirably when it runs during` + 
-            `offline progress due to limited tick count. A 1-second pause that` + 
+            description: `This command may behave undesirably when it runs during` +
+            `offline progress due to limited tick count. A 1-second pause that` +
             `is usually 20-30 ticks might be only 1 game tick when processing` +
-             `8 hours of offline progress, which might not be enough for the` + 
+             `8 hours of offline progress, which might not be enough for the` +
              `resources needed for the next line of the script`,
             },
             {
@@ -301,10 +301,10 @@ GameDatabase.reality.automator = {
     {
       id: 13,
       keyword: "studies load preset",
-      name: "<b>studies load preset</b> - Load a saved study preset",
+      name: "<b>studies load preset</b> - Load a saved Time Study preset",
       syntax: `<b>studies load preset [name | number]</b>`,
-      description: `Loads a study preset, as if you'd clicked on the button in the time
-        study tab. Number is 1 to 6 (corresponding to slot). The given name can also be used.`,
+      description: `Loads a Time Study preset, as if you'd clicked on the button in the Time
+        Study tab. Number is 1 to 6 (corresponding to slot). The given name can also be used.`,
       examples: [
         `studies load preset 2`,
         `studies load preset dil`,
@@ -320,10 +320,10 @@ GameDatabase.reality.automator = {
         to the next command.<br>
         If <b>nowait</b> is <i>not</i> present, then the automator will buy the studies in order,
         waiting for them to become available/affordable if necessary.<br>
-        The study list can consist of study numbers, separated by spaces or commas, ranges of
+        The Time Study list can consist of Time Study numbers, separated by spaces or commas, ranges of
         studies (for example, <i>11-62</i>) and the following aliases:<br>
         <blockquote><b>antimatter, infinity, time, active, passive, idle</b></blockquote>
-        A variable name may be used in place of study list, see <b>define</b>
+        A variable name may be used in place of Time Study list, see <b>define</b>
         The string produced by "export" in the Time Study tab can be used with this command.`,
       examples: [
         "studies nowait 11,21,31",
@@ -336,7 +336,7 @@ GameDatabase.reality.automator = {
       keyword: "define",
       name: "<b>define</b> - defining constants",
       syntax: `<b>define [constant_name] = [constant]</b>`,
-      description: `Define constants for either numbers or study tree imports`,
+      description: `Define constants for either numbers or Time Study tree imports`,
       examples: [
         "define inf = 1e308",
         "define studytree = 11,21,22,31,32,33"
@@ -363,6 +363,7 @@ GameDatabase.reality.automator = {
       <b>rep</b> - replicanti amount <br>
       <b>tt</b> - time theorem amount <br>
       <b>total tt</b> - TOTAL time theorems, includes all forms of generated TT <br>
+      <b>total completions</b> - total completions of all eternity challenges <br>
       <b>pending completions</b> - total completions of current EC at eternity <br>
       <b>ec[number] completions</b> - amount of EC completions for a certain EC <br>
       `,

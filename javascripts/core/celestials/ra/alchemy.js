@@ -9,6 +9,10 @@ class AlchemyResourceState extends GameMechanicState {
     return this.config.symbol;
   }
 
+  get description() {
+    return this.config.description;
+  }
+
   get isBaseResource() {
     return this.config.isBaseResource === true;
   }

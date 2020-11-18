@@ -126,7 +126,7 @@ const GameStorage = {
       !this.verifyPlayerObject(playerObject)
     ) {
       player = deepmerge.all([{}, Player.defaultStart]);
-      player.gameCreatedTime = Date.now();
+      player.records.gameCreatedTime = Date.now();
       player.lastUpdate = Date.now();
       if (isDevEnvironment()) this.devMigrations.setLatestTestVersion(player);
     } else {

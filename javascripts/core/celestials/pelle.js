@@ -26,7 +26,7 @@ const Pelle = {
 
   gameLoop() {
     if (Date.now() - this.cel.lastArmageddonAt > this.armageddonInterval) {
-      // this.armageddon(true);
+      this.armageddon(true);
     }
 
     if (this.isDoomed) {

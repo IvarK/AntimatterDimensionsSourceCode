@@ -66,7 +66,7 @@ Vue.component("current-glyph-effects", {
       due to a softcap
     </div>
     <div v-if="noEffects">
-      None (equip glyphs to get their effects)
+      None (equip Glyphs to get their effects)
     </div>
     <current-effect v-for="effect in effects" :key="effect.id" :effect="effect"/>
   </div>`,

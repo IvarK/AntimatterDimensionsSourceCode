@@ -14,7 +14,7 @@ const ReplicantiGrowth = {
 function addReplicantiGalaxies(newGalaxies) {
   if (newGalaxies > 0) {
     player.replicanti.galaxies += newGalaxies;
-    player.noReplicantiGalaxies = false;
+    player.achievementChecks.noReplicantiGalaxies = false;
   }
 }
 
@@ -92,7 +92,7 @@ function getReplicantiInterval(overCapOverride, intervalIn) {
     RealityUpgrade(23)
   );
   interval = Decimal.divide(interval, preCelestialEffects);
-  if (TimeStudy(132).isBought && Perk.studyPassive2.isBought) {
+  if (TimeStudy(132).isBought && Perk.studyPassive.isBought) {
     interval = interval.divide(5);
   }
   if ((TimeStudy(133).isBought && !Achievement(138).isUnlocked) || overCap) {
@@ -332,8 +332,8 @@ const ReplicantiUpgrade = {
     }
   }(),
   galaxies: new class ReplicantiGalaxiesUpgrade extends ReplicantiUpgradeState {
-    get value() { return player.replicanti.gal; }
-    set value(value) { player.replicanti.gal = value; }
+    get value() { return player.replicanti.boughtGalaxyCap; }
+    set value(value) { player.replicanti.boughtGalaxyCap = value; }
 
     get nextValue() {
       return this.value + 1;
@@ -427,7 +427,7 @@ const Replicanti = {
     player.replicanti.chanceCost = new Decimal(1e150);
     player.replicanti.interval = 1000;
     player.replicanti.intervalCost = new Decimal(1e140);
-    player.replicanti.gal = 0;
+    player.replicanti.boughtGalaxyCap = 0;
     player.replicanti.galaxies = 0;
     player.replicanti.galCost = new Decimal(1e170);
     if (force ||

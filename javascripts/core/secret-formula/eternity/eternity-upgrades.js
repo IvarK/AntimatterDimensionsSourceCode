@@ -38,7 +38,7 @@ GameDatabase.eternity.upgrades = {
   tdMultAchs: {
     id: 4,
     cost: 1e16,
-    description: "Your achievement bonus affects Time Dimensions",
+    description: "Your Achievement bonus affects Time Dimensions",
     effect: () => Achievements.power,
     formatEffect: value => formatX(value, 2, 1)
   },

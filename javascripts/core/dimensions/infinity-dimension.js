@@ -130,7 +130,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get requirementReached() {
-    return player.thisEternityMaxAM.gte(this.requirement);
+    return player.records.thisEternity.maxAM.gte(this.requirement);
   }
 
   get isAutobuyerUnlocked() {
@@ -286,7 +286,7 @@ const InfinityDimensions = {
   unlockNext() {
     if (InfinityDimension(8).isUnlocked) return;
     const next = InfinityDimensions.next();
-    if (!Perk.bypassIDAntimatter.isBought && player.thisEternityMaxAM.lt(next.requirement)) return;
+    if (!Perk.bypassIDAntimatter.isBought && player.records.thisEternity.maxAM.lt(next.requirement)) return;
     next.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, next.tier);
   },

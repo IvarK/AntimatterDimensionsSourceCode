@@ -179,14 +179,15 @@ Currency.antimatter = new class extends DecimalCurrency {
 
   set value(value) {
     player.antimatter = value;
-    player.thisInfinityMaxAM = player.thisInfinityMaxAM.max(value);
-    player.thisEternityMaxAM = player.thisEternityMaxAM.max(value);
+    player.records.thisInfinity.maxAM = player.records.thisInfinity.maxAM.max(value);
+    player.records.thisEternity.maxAM = player.records.thisEternity.maxAM.max(value);
+    player.records.thisReality.maxAM = player.records.thisReality.maxAM.max(value);
   }
 
   add(amount) {
     super.add(amount);
-    player.totalAntimatter = player.totalAntimatter.plus(amount);
-    if (amount.gt(0)) player.noAntimatterProduced = false;
+    player.records.totalAntimatter = player.records.totalAntimatter.plus(amount);
+    if (amount.gt(0)) player.achievementChecks.noAntimatterProduced = false;
   }
 
   get productionPerSecond() {
@@ -223,7 +224,11 @@ Currency.infinityPower = new class extends DecimalCurrency {
 
 Currency.infinityPoints = new class extends DecimalCurrency {
   get value() { return player.infinityPoints; }
-  set value(value) { player.infinityPoints = value; }
+  set value(value) {
+    player.infinityPoints = value;
+    player.records.thisEternity.maxIP = player.records.thisEternity.maxIP.max(value);
+    player.records.thisReality.maxIP = player.records.thisReality.maxIP.max(value);
+  }
 }();
 
 Currency.timeShards = new class extends DecimalCurrency {
@@ -233,7 +238,10 @@ Currency.timeShards = new class extends DecimalCurrency {
 
 Currency.eternityPoints = new class extends DecimalCurrency {
   get value() { return player.eternityPoints; }
-  set value(value) { player.eternityPoints = value; }
+  set value(value) {
+    player.eternityPoints = value;
+    player.records.thisReality.maxEP = player.records.thisReality.maxEP.max(value);
+  }
 }();
 
 Currency.dilatedTime = new class extends DecimalCurrency {
@@ -247,6 +255,6 @@ Currency.realityMachines = new class extends DecimalCurrency {
 }();
 
 Currency.perkPoints = new class extends NumberCurrency {
-  get value() { return player.reality.pp; }
-  set value(value) { player.reality.pp = value; }
+  get value() { return player.reality.perkPoints; }
+  set value(value) { player.reality.perkPoints = value; }
 }();

@@ -13,8 +13,8 @@ const Effarig = {
     player.celestials.effarig.run = true;
     recalculateAllGlyphs();
     Tab.reality.glyphs.show(false);
-    Modal.message.show(`Your glyph levels have been limited to ${Effarig.glyphLevelCap}. ` +
-      "Infinity Power reduces the nerf to multipliers and game speed, and Time Shards reduce the nerf to tickspeed.");
+    Modal.message.show(`Your Glyph levels have been limited to ${Effarig.glyphLevelCap}. ` +
+      "Infinity Power reduces the nerf to multipliers and game speed, and Time Shards reduce the nerf to Tickspeed.");
   },
   get isRunning() {
     return player.celestials.effarig.run;
@@ -120,7 +120,7 @@ const Effarig = {
       id: 5,
       lines: [
         "You bought out my entire stock... well, at least I‘m rich now.",
-        "The heart of my reality is suffering. Each Layer is harder than the last.",
+        "The heart of my Reality is suffering. Each Layer is harder than the last.",
         "I hope you never complete it.",
       ]
     },

@@ -80,11 +80,12 @@ const AutoGlyphProcessor = {
       // Picked glyphs are never kept in Alchemy modes.
       // Glyphs for non-unlocked Alchemy Resources are assigned NEGATIVE_INFINITY
       // to make them picked last, because we can't refine them.
-      case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:
-        let resource = AlchemyResource[glyph.type];
+      case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY: {
+        const resource = AlchemyResource[glyph.type];
         return resource.isUnlocked 
           ? -resource.amount
           : Number.NEGATIVE_INFINITY;
+      }
       case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
         return AlchemyResource[glyph.type].isUnlocked 
           ? GlyphSacrificeHandler.glyphRefinementGain(glyph)

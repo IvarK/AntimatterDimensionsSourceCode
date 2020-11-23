@@ -79,10 +79,10 @@ const AutoGlyphProcessor = {
       }
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:
         // Picked glyphs are never kept in this mode
-        if (!AlchemyResource[glyph.type].isUnlocked) return 0;
+        if (!AlchemyResource[glyph.type].isUnlocked) return Number.NEGATIVE_INFINITY;
         return -AlchemyResource[glyph.type].amount;
       case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
-        if (!AlchemyResource[glyph.type].isUnlocked) return 0;
+        if (!AlchemyResource[glyph.type].isUnlocked) return Number.NEGATIVE_INFINITY;
         return GlyphSacrificeHandler.glyphRefinementGain(glyph);
       default:
         throw new Error("Unknown glyph score mode in score assignment");
@@ -214,7 +214,7 @@ const GlyphGenerator = {
     }
     get isFake() { return true; }
   },
-  
+
   MusicGlyphRNG: class extends GlyphRNG {
     constructor() { super(player.reality.musicSeed, player.reality.musicSecondGaussian); }
     finalize() {

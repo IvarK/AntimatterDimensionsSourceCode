@@ -79,8 +79,10 @@ const AutoGlyphProcessor = {
       }
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:
         // Picked glyphs are never kept in this mode
+        if (!AlchemyResource[glyph.type].isUnlocked) return 0;
         return -AlchemyResource[glyph.type].amount;
       case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
+        if (!AlchemyResource[glyph.type].isUnlocked) return 0;
         return GlyphSacrificeHandler.glyphRefinementGain(glyph);
       default:
         throw new Error("Unknown glyph score mode in score assignment");

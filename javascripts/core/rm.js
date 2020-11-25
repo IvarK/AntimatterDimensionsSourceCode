@@ -77,11 +77,19 @@ const AutoGlyphProcessor = {
         const effectScore = effectList.map(e => typeCfg.effectScores[e]).sum();
         return strengthToRarity(glyph.strength) + effectScore;
       }
-      case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:
-        // Picked glyphs are never kept in this mode
-        return -AlchemyResource[glyph.type].amount;
+      // Picked glyphs are never kept in Alchemy modes.
+      // Glyphs for non-unlocked Alchemy Resources are assigned NEGATIVE_INFINITY
+      // to make them picked last, because we can't refine them.
+      case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY: {
+        const resource = AlchemyResource[glyph.type];
+        return resource.isUnlocked 
+          ? -resource.amount
+          : Number.NEGATIVE_INFINITY;
+      }
       case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
-        return GlyphSacrificeHandler.glyphRefinementGain(glyph);
+        return AlchemyResource[glyph.type].isUnlocked 
+          ? GlyphSacrificeHandler.glyphRefinementGain(glyph)
+          : Number.NEGATIVE_INFINITY;
       default:
         throw new Error("Unknown glyph score mode in score assignment");
     }

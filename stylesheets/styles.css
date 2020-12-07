@@ -7912,6 +7912,60 @@ kbd {
 
 /* #endregion laitela tab*/
 
+/* #startregion pelle tab*/
+
+.pelle-currency--progress-bar {
+  border-radius: 1rem;
+  height: 3rem;
+  width: 20rem;
+  position: relative;
+  background: #ffcece;
+  margin: 2rem auto;
+}
+
+.pelle-currency--progress-bar--fill {
+  background: green;
+  height: 100%;
+  position: absolute;
+  content: "";
+  border-radius: 1rem;
+}
+
+.pelle-currency--progress-bar h2 {
+  position: absolute;
+  top: 0.5rem;
+  width: 100%;
+  color: black;
+}
+
+.pelle-upgrades--container {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100rem;
+  margin: auto;
+}
+
+.pelle-upgrade {
+  box-shadow: 0.3rem 0.3rem 0.5rem black;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 30rem;
+  margin: 1.5rem;
+  background: #3a2424;
+  color: whitesmoke;
+}
+
+.pelle-upgrade--canbuy {
+  background: #1b401b;
+  cursor: pointer;
+}
+
+.pelle-upgrade--isbought {
+  background: #670005;
+}
+
+/* #endregion pelle tab*/
+
 
 .c-performance-stats {
   width: 25rem;

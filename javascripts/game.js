@@ -614,7 +614,7 @@ function gameLoop(diff, options = {}) {
   V.checkForUnlocks();
   Ra.updateAlchemyFlow();
   AutomatorBackend.update(realDiff);
-  Pelle.gameLoop();
+  Pelle.gameLoop(realDiff);
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);
   GameUI.update();

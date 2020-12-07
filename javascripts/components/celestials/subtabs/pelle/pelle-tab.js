@@ -22,6 +22,13 @@ Vue.component("pelle-tab", {
       Glyphs.unequipAll();
       respecTimeStudies(true);
       disChargeAll();
+    },
+    upgradeClass(upg) {
+      return {
+        [`pelle-upgrade-${upg.config.currency}`]: true,
+        "pelle-upgrade--canbuy": upg.canBeBought,
+        "pelle-upgrade--isbought": upg.isBought
+      };
     }
   },
   computed: {
@@ -34,11 +41,21 @@ Vue.component("pelle-tab", {
       <button @click="getDoomed()">Doom your reality lol</button>
       <p>Armageddon is happenings every {{ armageddonInterval / 1000 }} seconds</p>
       <p>You have <b>{{ format(unstableMatter, 2, 2) }}</b> Unstable matter</p>
-      <div v-for="upg in upgrades">
-        <h3>{{ upg.description }}</h3>
-        <b>Cost: {{ upg.cost }} {{ upg.currencyDisplay }}</b>
-        <button @click="upg.purchase()">purchase lol</button>
+      <div class="c-pelle-currency-container">
+        <pelle-currency currency="famine" v-show="hasFamine"/>
+        <pelle-currency currency="chaos" v-show="false"/>
+        <pelle-currency currency="pestilence" v-show="false"/>
       </div>
-      <div v-if="hasFamine">You now have famine lol</div>
+      <div class="pelle-upgrades--container">
+        <div 
+          v-for="upg in upgrades" 
+          class="pelle-upgrade" 
+          :class="upgradeClass(upg)" 
+          @click="upg.purchase(upg)">
+          <h3>{{ upg.description }}</h3>
+          <b v-if="!upg.isBought">Cost: {{ format(upg.cost, 2, 0) }} {{ upg.currencyDisplay }}</b>
+          <p v-else-if="upg.config.effect"> Currently: {{ formatX(upg.effectValue, 2, 2) }}</p>
+        </div>
+      </div>
     </div>`
 });

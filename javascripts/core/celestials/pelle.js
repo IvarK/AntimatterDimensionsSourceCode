@@ -15,16 +15,21 @@ const Pelle = {
   },
 
   armageddon(gainStuff) {
+    const time = player.records.thisReality.realTime;
     finishProcessReality({ reset: true });
     this.cel.lastArmageddonAt = Date.now();
     if (gainStuff) {
-      this.cel.unstableMatter = this.cel.unstableMatter.plus(Math.log10(this.cel.maxAMThisArmageddon.log10()) ** 3);
+      let unstableMatterGain = Math.log10(this.cel.maxAMThisArmageddon.log10()) ** 3;
+      if (PelleUpgrade.timeMultToUnstable.canBeApplied) {
+        unstableMatterGain *= (time / 1000) ** 1.1;
+      }
+      this.cel.unstableMatter = this.cel.unstableMatter.plus(unstableMatterGain);
     }
 
     this.cel.maxAMThisArmageddon = new Decimal(0);
   },
 
-  gameLoop() {
+  gameLoop(diff) {
     if (Date.now() - this.cel.lastArmageddonAt > this.armageddonInterval) {
       this.armageddon(true);
     }
@@ -32,6 +37,29 @@ const Pelle = {
     if (this.isDoomed) {
       this.cel.maxAMThisArmageddon = player.antimatter.max(this.cel.maxAMThisArmageddon);
     }
+
+    const currencies = ['famine', 'pestilence', 'chaos'];
+
+    currencies.forEach(currency => {
+      this.cel[currency].timer += TimeSpan.fromMilliseconds(diff).totalSeconds;
+      if (this.cel[currency].timer > this[currency].fillTime) {
+        this.cel[currency].amount = this.cel[currency].amount.plus(this[currency].gain)
+        this.cel[currency].timer = 0
+      }
+    })
+  },
+
+  famine: {
+    get fillTime() { return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts) + 1) },
+    get gain() { return 1 }
+  },
+  pestilence: {
+    get fillTime() { return 10 },
+    get gain() { return 1 }
+  },
+  chaos: {
+    get fillTime() { return 10 },
+    get gain() { return 1 }
   },
 
   get cel() {
@@ -44,6 +72,7 @@ const Pelle = {
 
   // Milliseconds
   get armageddonInterval() {
+    if (PelleUpgrade.longerArmageddon.canBeApplied) return 5000;
     return 500;
   }
 };
@@ -55,7 +84,8 @@ class PelleUpgradeState extends SetPurchasableMechanicState {
   }
 
   get currency() {
-    return player.celestials.pelle[this.config.currency]
+    if (this.config.currency === "unstableMatter") return player.celestials.pelle[this.config.currency];
+    return player.celestials.pelle[this.config.currency].amount
   }
 
   get description() {

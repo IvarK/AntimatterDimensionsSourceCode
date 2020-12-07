@@ -525,9 +525,18 @@ let player = {
       doomed: false,
       upgrades: new Set(),
       unstableMatter: new Decimal(0),
-      famine: 0,
-      pestilence: 0,
-      chaos: 0,
+      famine: {
+        amount: new Decimal(0),
+        timer: 0
+      },
+      pestilence:  {
+        amount: new Decimal(0),
+        timer: 0
+      },
+      chaos:  {
+        amount: new Decimal(0),
+        timer: 0
+      },
       // For recording which ones you permanently have
       infinityUpgrades: new Set(),
       eternityUpgrades: new Set(),

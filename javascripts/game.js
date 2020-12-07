@@ -6,13 +6,13 @@ if (GlobalErrorHandler.handled) {
 GlobalErrorHandler.cleanStart = true;
 
 function playerInfinityUpgradesOnEternity() {
-  if (Pelle.isDisabled()) player.infinityUpgrades = player.celestials.pelle.infinityUpgrades;
   if (!EternityMilestone.keepInfinityUpgrades.isReached) player.infinityUpgrades.clear();
   else if (!EternityMilestone.keepBreakUpgrades.isReached) {
     player.infinityUpgrades = new Set(["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2",
       "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "skipReset3", "passiveGen",
       "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy", "ipOffline"]);
   }
+  if (Pelle.isDisabled()) player.infinityUpgrades = new Set(player.celestials.pelle.infinityUpgrades);
 }
 
 function breakInfinity() {

@@ -217,7 +217,11 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
   }
 
   get canCharge() {
-    return this.isBought && !this.isCharged && !this.config.bannedFromCharging && Ra.chargesLeft !== 0;
+    return this.isBought &&
+    !this.isCharged &&
+    !this.config.bannedFromCharging &&
+    Ra.chargesLeft !== 0 &&
+    !Pelle.isDoomed;
   }
 
   charge() {

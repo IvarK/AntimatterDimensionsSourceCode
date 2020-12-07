@@ -503,7 +503,7 @@ function applyRUPG10() {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
   }
   if (Pelle.isDoomed) {
-    player.infinityUpgrades = player.celestials.pelle.infinityUpgrades;
+    player.infinityUpgrades = new Set(player.celestials.pelle.infinityUpgrades);
   } else {
     player.infinityUpgrades = new Set(
       ["timeMult", "dimMult", "timeMult2",

@@ -26,6 +26,12 @@ GameDatabase.celestials.pelle = {
       description: "You can gain IP on Infinity again",
       cost: 3e4,
       currency: "unstableMatter"
+    },
+    infUpgRetain: {
+      id: 5,
+      description: "Retain your infinity upgrades through Armageddons",
+      cost: 200,
+      currency: "famine"
     }
   }
 };

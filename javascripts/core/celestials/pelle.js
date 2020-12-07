@@ -9,6 +9,10 @@ const Pelle = {
     switch (mechanic) {
 
       // case: "glyphs"
+
+      case "IPGain":
+        return !PelleUpgrade.ipGain.canBeApplied;
+
       default:
         return true;
     }
@@ -17,6 +21,7 @@ const Pelle = {
   armageddon(gainStuff) {
     const time = player.records.thisReality.realTime;
     finishProcessReality({ reset: true });
+    disChargeAll();
     this.cel.lastArmageddonAt = Date.now();
     if (gainStuff) {
       let unstableMatterGain = Math.log10(this.cel.maxAMThisArmageddon.log10()) ** 3;

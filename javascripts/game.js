@@ -368,7 +368,8 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
 
 function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
-  if (Enslaved.isAutoReleasing && Enslaved.canRelease(true) && !BlackHoles.areNegative && !Pelle.isDisabled("blackhole")) {
+  if (Enslaved.isAutoReleasing && Enslaved.canRelease(true) &&
+  !BlackHoles.areNegative && !Pelle.isDisabled("blackhole")) {
     return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
   return speedFactor;

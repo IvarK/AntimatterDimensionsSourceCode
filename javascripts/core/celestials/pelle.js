@@ -82,6 +82,22 @@ const Pelle = {
   }
 };
 
+class RebuyablePelleUpgradeState extends RebuyableMechanicState {
+
+  get currency() {
+    if (this.config.currency === "unstableMatter") return player.celestials.pelle[this.config.currency];
+    return player.celestials.pelle[this.config.currency].amount
+  }
+
+  get boughtAmount() {
+    return player.celestials.pelle.rebuyables[this.id];
+  }
+
+  set boughtAmount(value) {
+    player.celestials.pelle.rebuyables[this.id] = value;
+  }
+}
+
 class PelleUpgradeState extends SetPurchasableMechanicState {
 
   get set() {

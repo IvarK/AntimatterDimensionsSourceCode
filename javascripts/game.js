@@ -28,6 +28,9 @@ function breakInfinity() {
 
 function gainedInfinityPoints() {
   if (Pelle.isDisabled("IPGain")) return new Decimal(0);
+  if (Pelle.isDisabled("IPMults")) {
+    return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / 308 - 0.75).floor();
+  }
   const div = Effects.min(
     308,
     Achievement(103),

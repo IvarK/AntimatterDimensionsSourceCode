@@ -27,5 +27,25 @@ GameDatabase.celestials.pelle = {
       cost: 3e4,
       currency: "unstableMatter"
     }
+  },
+  rebuyables: {
+    permanentTickspeed: {
+      id: "permanentTickspeed",
+      cost: () => (player.celestials.pelle.rebuyables.permanentTickspeed + 1) * 5,
+      description: "Gain a permanent tickspeed upgrade",
+      currency: "famine",
+    },
+    permanentGalaxies: {
+      id: "permanentDimensionBoosts",
+      cost: () => (player.celestials.pelle.rebuyables.permanentDimensionBoosts + 1) * 25,
+      description: "Gain a permanent Dimension Boost",
+      currency: "pestilence",
+    },
+    permanentGalaxies: {
+      id: "permanentGalaxies",
+      cost: () => (player.celestials.pelle.rebuyables.permanentGalaxies + 1) * 100,
+      description: "Gain a permanent Galaxy",
+      currency: "chaos",
+    }
   }
 };

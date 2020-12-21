@@ -541,7 +541,12 @@ let player = {
       infinityUpgrades: new Set(),
       eternityUpgrades: new Set(),
       lastArmageddonAt: Date.now(),
-      maxAMThisArmageddon: new Decimal(0)
+      maxAMThisArmageddon: new Decimal(0),
+      rebuyables: {
+        permanentTickspeed: 0,
+        permanentDimensionBoosts: 0,
+        permanentGalaxies: 0
+      }
     }
   },
   tabNotifications: new Set(),

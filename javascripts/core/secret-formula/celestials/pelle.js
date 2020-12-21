@@ -19,7 +19,7 @@ GameDatabase.celestials.pelle = {
       description: "Get more unstable matter based on Armageddon duration",
       cost: 20,
       currency: "famine",
-      effect: () => player.records.thisReality.realTime / 1000 ** 1.1
+      effect: () => player.records.thisReality.realTime / 500 ** 1.1
     },
     ipGain: {
       id: 4,
@@ -35,7 +35,7 @@ GameDatabase.celestials.pelle = {
       description: "Gain a permanent tickspeed upgrade",
       currency: "famine",
     },
-    permanentGalaxies: {
+    permanentDimensionBoosts: {
       id: "permanentDimensionBoosts",
       cost: () => (player.celestials.pelle.rebuyables.permanentDimensionBoosts + 1) * 25,
       description: "Gain a permanent Dimension Boost",

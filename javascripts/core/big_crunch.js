@@ -394,6 +394,14 @@ class BreakInfinityUpgrade extends SetPurchasableMechanicState {
   get set() {
     return player.infinityUpgrades;
   }
+
+  purchase() {
+    if (super.purchase()) {
+      if (Pelle.isDoomed) player.celestials.pelle.infinityUpgrades.add(this.id);
+      return true;
+    }
+    return false;
+  }
 }
 
 (function() {

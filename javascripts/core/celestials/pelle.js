@@ -24,9 +24,9 @@ const Pelle = {
     disChargeAll();
     this.cel.lastArmageddonAt = Date.now();
     if (gainStuff) {
-      let unstableMatterGain = Math.log10(this.cel.maxAMThisArmageddon.log10()) ** 3;
+      let unstableMatterGain = Math.log10(this.cel.maxAMThisArmageddon.plus(1).log10() + 1) ** 3;
       if (PelleUpgrade.timeMultToUnstable.canBeApplied) {
-        unstableMatterGain *= (time / 1000) ** 1.1;
+        unstableMatterGain *= (time / 500) ** 1.1;
       }
       this.cel.unstableMatter = this.cel.unstableMatter.plus(unstableMatterGain);
     }
@@ -35,7 +35,7 @@ const Pelle = {
   },
 
   gameLoop(diff) {
-    if (Date.now() - this.cel.lastArmageddonAt > this.armageddonInterval) {
+    if (this.isDoomed && Date.now() - this.cel.lastArmageddonAt > this.armageddonInterval) {
       this.armageddon(true);
     }
 
@@ -46,6 +46,7 @@ const Pelle = {
     const currencies = ['famine', 'pestilence', 'chaos'];
 
     currencies.forEach(currency => {
+      if (!this[currency].unlocked) return;
       this.cel[currency].timer += TimeSpan.fromMilliseconds(diff).totalSeconds;
       if (this.cel[currency].timer > this[currency].fillTime) {
         this.cel[currency].amount = this.cel[currency].amount.plus(this[currency].gain)
@@ -56,15 +57,18 @@ const Pelle = {
 
   famine: {
     get fillTime() { return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts) + 1) },
-    get gain() { return 1 }
+    get gain() { return 1 },
+    get unlocked() { return PelleUpgrade.famineUnlock.canBeApplied }
   },
   pestilence: {
     get fillTime() { return 10 },
-    get gain() { return 1 }
+    get gain() { return 1 },
+    get unlocked() { return false }
   },
   chaos: {
     get fillTime() { return 10 },
-    get gain() { return 1 }
+    get gain() { return 1 },
+    get unlocked() { return false }
   },
 
   get cel() {
@@ -95,6 +99,10 @@ class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 
   set boughtAmount(value) {
     player.celestials.pelle.rebuyables[this.id] = value;
+  }
+
+  get cost() {
+    return this.config.cost()
   }
 }
 
@@ -136,6 +144,18 @@ class PelleUpgradeState extends SetPurchasableMechanicState {
 
 const PelleUpgrade = (function() {
   const db = GameDatabase.celestials.pelle.upgrades;
+  const obj = {}
+  Object.keys(db).forEach(key => {
+    obj[key] = new PelleUpgradeState(db[key]);
+  })
+  return {
+    all: Object.values(obj),
+    ...obj
+  }
+}());
+
+const PelleRebuyableUpgrade = (function() {
+  const db = GameDatabase.celestials.pelle.rebuyables;
   const obj = {}
   Object.keys(db).forEach(key => {
     obj[key] = new PelleUpgradeState(db[key]);

@@ -371,7 +371,8 @@ function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride) {
 
 function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
-  if (Enslaved.isAutoReleasing && Enslaved.canRelease(true) && !BlackHoles.areNegative && !Pelle.isDisabled("blackhole")) {
+  if (Enslaved.isAutoReleasing && Enslaved.canRelease(true) &&
+  !BlackHoles.areNegative && !Pelle.isDisabled("blackhole")) {
     return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
   return speedFactor;
@@ -496,54 +497,11 @@ function gameLoop(diff, options = {}) {
   // behavior of eternity farming.
   preProductionGenerateIP(diff);
 
-  let eternitiedGain = 0;
-  if (RealityUpgrade(14).isBought) {
-    eternitiedGain = Effects.product(
-      RealityUpgrade(3),
-      RealityUpgrade(14)
-    );
-    eternitiedGain = Decimal.times(eternitiedGain, getAdjustedGlyphEffect("timeetermult"));
-    eternitiedGain = new Decimal(Time.deltaTime).times(
-      Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue));
-    player.reality.partEternitied = player.reality.partEternitied.plus(eternitiedGain);
-    player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
-    player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
-  }
-
-  if (!EternityChallenge(4).isRunning) {
-    let infGen = new Decimal(0);
-    if (BreakInfinityUpgrade.infinitiedGen.isBought) {
-      // Multipliers are done this way to explicitly exclude ach87 and TS32
-      infGen = infGen.plus(0.2 * Time.deltaTimeMs / player.records.bestInfinity.time);
-      infGen = infGen.timesEffectsOf(
-        RealityUpgrade(5),
-        RealityUpgrade(7)
-      );
-      infGen = infGen.times(getAdjustedGlyphEffect("infinityinfmult"));
-      infGen = infGen.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
-    }
-    if (RealityUpgrade(11).isBought) {
-      infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
-    }
-    if (EffarigUnlock.eternity.canBeApplied) {
-      // We consider half of the eternities we gained above this tick
-      // to have been gained before the infinities, and thus not to
-      // count here. This gives us the desirable behavior that
-      // infinities and eternities gained overall will be the same
-      // for two ticks as for one tick of twice the length.
-      infGen = infGen.plus(gainedInfinities().times(
-        player.eternities.minus(eternitiedGain.div(2).floor())).times(Time.deltaTime));
-    }
-    infGen = infGen.plus(player.partInfinitied);
-    player.infinitied = player.infinitied.plus(infGen.floor());
-    player.partInfinitied = infGen.minus(infGen.floor()).toNumber();
+  if (!Pelle.isDisabled("passivePrestigeGen")) {
+    passivePrestigeGen();
   }
 
   applyAutoprestige(realDiff);
-
-  const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
-  player.realities += uncountabilityGain;
-  player.reality.perkPoints += uncountabilityGain;
 
   if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
 
@@ -623,6 +581,55 @@ function gameLoop(diff, options = {}) {
   GameUI.update();
   player.lastUpdate = thisUpdate;
   PerformanceStats.end("Game Update");
+}
+
+function passivePrestigeGen() {
+  let eternitiedGain = 0;
+  if (RealityUpgrade(14).isBought) {
+    eternitiedGain = Effects.product(
+      RealityUpgrade(3),
+      RealityUpgrade(14)
+    );
+    eternitiedGain = Decimal.times(eternitiedGain, getAdjustedGlyphEffect("timeetermult"));
+    eternitiedGain = new Decimal(Time.deltaTime).times(
+      Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue));
+    player.reality.partEternitied = player.reality.partEternitied.plus(eternitiedGain);
+    player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
+    player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
+  }
+
+  if (!EternityChallenge(4).isRunning) {
+    let infGen = new Decimal(0);
+    if (BreakInfinityUpgrade.infinitiedGen.isBought) {
+      // Multipliers are done this way to explicitly exclude ach87 and TS32
+      infGen = infGen.plus(0.2 * Time.deltaTimeMs / player.records.bestInfinity.time);
+      infGen = infGen.timesEffectsOf(
+        RealityUpgrade(5),
+        RealityUpgrade(7)
+      );
+      infGen = infGen.times(getAdjustedGlyphEffect("infinityinfmult"));
+      infGen = infGen.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
+    }
+    if (RealityUpgrade(11).isBought) {
+      infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
+    }
+    if (EffarigUnlock.eternity.canBeApplied) {
+      // We consider half of the eternities we gained above this tick
+      // to have been gained before the infinities, and thus not to
+      // count here. This gives us the desirable behavior that
+      // infinities and eternities gained overall will be the same
+      // for two ticks as for one tick of twice the length.
+      infGen = infGen.plus(gainedInfinities().times(
+        player.eternities.minus(eternitiedGain.div(2).floor())).times(Time.deltaTime));
+    }
+    infGen = infGen.plus(player.partInfinitied);
+    player.infinitied = player.infinitied.plus(infGen.floor());
+    player.partInfinitied = infGen.minus(infGen.floor()).toNumber();
+  }
+
+  const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
+  player.realities += uncountabilityGain;
+  player.reality.perkPoints += uncountabilityGain;
 }
 
 function laitelaRealityTick(realDiff) {

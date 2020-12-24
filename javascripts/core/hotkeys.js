@@ -83,6 +83,57 @@ GameKeyboard.bindHotkey("alt+r", () => {
   for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);
 }());
 
+// Requires Shift or Ctrl down to allow Konami Code
+GameKeyboard.bindRepeatableHotkey(["shift+up", "ctrl+up"], () => keyboardTabChange("up"));
+GameKeyboard.bindRepeatableHotkey(["shift+down", "ctrl+down"], () => keyboardTabChange("down"));
+GameKeyboard.bindRepeatableHotkey(["shift+left", "ctrl+left"], () => keyboardTabChange("left"));
+GameKeyboard.bindRepeatableHotkey(["shift+right", "ctrl+right"], () => keyboardTabChange("right"));
+
+function keyboardTabChange(direction) {
+  // Make an array of all the unlocked tabs
+  let tabs = [];
+  for (let i = 0; i < Tabs.all.length; i++) {
+    if (Tabs.all[i].isAvailable) {
+      tabs.push(Tabs.all[i].config.key);
+    }
+  }
+  // Reconfigure the tab order if its New UI
+  if (ui.view.newUI) {
+    tabs.splice(1, 3);
+    tabs.pop();
+    tabs = tabs.concat("achievements", "statistics", "options", "shop");
+  }
+  // Make an array for all the unlock subtabs in your current main tab
+  const subtabs = [];
+  for (let i = 0; i < Tabs.current.subtabs.length; i++) {
+    if (Tabs.current.subtabs[i].isAvailable) {
+      subtabs.push(Tabs.current.subtabs[i].key);
+    }
+  }
+  // Find the index of the tab and subtab we are on
+  let top = tabs.indexOf(Tabs.current.config.key);
+  let sub = subtabs.indexOf(Tabs.current._currentSubtab.key);
+  // Move in that direction, looping if needed
+  if (direction === "up") {
+    top -= 1;
+    if (top < 0) top = tabs.length - 1;
+  } else if (direction === "down") {
+    top += 1;
+    if (top > tabs.length - 1) top = 0;
+  } else if (direction === "left") {
+    sub -= 1;
+    if (sub < 0) sub = subtabs.length - 1;
+  } else if (direction === "right") {
+    sub += 1;
+    if (sub > subtabs.length - 1) sub = 0;
+  }
+  if (direction === "up" || direction === "down") {
+    Tab[tabs[top]].show(true);
+  } else {
+    Tab[tabs[top]][subtabs[sub]].show(true);
+  }
+}
+
 GameKeyboard.bindHotkey("a", () => {
   Autobuyers.toggle();
   GameUI.notify.info(`Autobuyers ${(player.auto.autobuyersOn) ? "enabled" : "disabled"}`);

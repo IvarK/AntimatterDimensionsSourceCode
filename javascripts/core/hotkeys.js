@@ -91,24 +91,13 @@ GameKeyboard.bindRepeatableHotkey(["shift+right", "ctrl+right"], () => keyboardT
 
 function keyboardTabChange(direction) {
   // Make an array of all the unlocked tabs
-  let tabs = [];
-  for (let i = 0; i < Tabs.all.length; i++) {
-    if (Tabs.all[i].isAvailable) {
-      tabs.push(Tabs.all[i].config.key);
-    }
-  }
+  const tabs = Tabs.all.filter(i => i.isAvailable && i.config.key !== "shop").map(i => i.config.key);
+  const subtabs = Tabs.current.subtabs.filter(i => i.isAvailable).map(i => i.key);
   // Reconfigure the tab order if its New UI
   if (ui.view.newUI) {
     tabs.splice(1, 3);
-    tabs.pop();
-    tabs = tabs.concat("achievements", "statistics", "options", "shop");
-  }
-  // Make an array for all the unlock subtabs in your current main tab
-  const subtabs = [];
-  for (let i = 0; i < Tabs.current.subtabs.length; i++) {
-    if (Tabs.current.subtabs[i].isAvailable) {
-      subtabs.push(Tabs.current.subtabs[i].key);
-    }
+    tabs.push("achievements", "statistics", "options");
+    if (Tab.shop.isAvailable) tabs.push("shop");
   }
   // Find the index of the tab and subtab we are on
   let top = tabs.indexOf(Tabs.current.config.key);

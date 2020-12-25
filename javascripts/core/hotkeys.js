@@ -84,10 +84,10 @@ GameKeyboard.bindHotkey("alt+r", () => {
 }());
 
 // Requires Shift or Ctrl down to allow Konami Code
-GameKeyboard.bindRepeatableHotkey(["shift+up", "ctrl+up"], () => keyboardTabChange("up"));
-GameKeyboard.bindRepeatableHotkey(["shift+down", "ctrl+down"], () => keyboardTabChange("down"));
-GameKeyboard.bindRepeatableHotkey(["shift+left", "ctrl+left"], () => keyboardTabChange("left"));
-GameKeyboard.bindRepeatableHotkey(["shift+right", "ctrl+right"], () => keyboardTabChange("right"));
+GameKeyboard.bindHotkey(["shift+up", "ctrl+up"], () => keyboardTabChange("up"));
+GameKeyboard.bindHotkey(["shift+down", "ctrl+down"], () => keyboardTabChange("down"));
+GameKeyboard.bindHotkey(["shift+left", "ctrl+left"], () => keyboardTabChange("left"));
+GameKeyboard.bindHotkey(["shift+right", "ctrl+right"], () => keyboardTabChange("right"));
 
 function keyboardTabChange(direction) {
   // Make an array of all the unlocked tabs
@@ -97,8 +97,8 @@ function keyboardTabChange(direction) {
   if (ui.view.newUI) {
     tabs.splice(1, 3);
     tabs.push("achievements", "statistics", "options");
-    if (Tab.shop.isAvailable) tabs.push("shop");
   }
+  if (Tab.shop.isAvailable) tabs.push("shop");
   // Find the index of the tab and subtab we are on
   let top = tabs.indexOf(Tabs.current.config.key);
   let sub = subtabs.indexOf(Tabs.current._currentSubtab.key);

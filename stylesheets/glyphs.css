@@ -567,7 +567,7 @@
 }
 
 .c-current-glyph-effects {
-  background: #4a4a4a;
+  background: rgb(110, 110, 110);
   border: 0.1rem solid #b8b8b8;
   border-radius: 0.5rem;
   border-top-left-radius: 0;
@@ -586,6 +586,7 @@
 .t-dark-metro .c-current-glyph-effects,
 .t-inverted-metro .c-current-glyph-effects,
 .t-s8 .c-current-glyph-effects {
+  background: #333;
   border-radius: 0;
 }
 

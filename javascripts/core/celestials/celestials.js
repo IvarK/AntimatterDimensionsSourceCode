@@ -18,14 +18,14 @@ GameDatabase.celestials.descriptions = [
     name: "Effarig",
     description() {
       return Effarig.isRunning
-        ? `all dimension multipliers, gamespeed, and tickspeed are severely lowered, like Dilation. Infinity power
-          reduces the production and gamespeed penalties and Time Shards reduce the tickspeed penalty. Glyph levels
-          are temporarily capped to ${Effarig.glyphLevelCap}, rarity is unaffected. You will exit Effarig's Reality
-          when you complete a Layer of it for the first time.`
-        : `all dimension multipliers, gamespeed, and tickspeed are severely lowered, like
-          Dilation. Infinity power reduces the production and gamespeed penalties and Time Shards reduce the tickspeed
-          penalty. Glyph levels are temporarily capped, rarity is unaffected. You will exit Effarig's Reality when you
-          complete a Layer of it for the first time.`;
+        ? `all dimension multipliers, gamespeed, and tickspeed are severely lowered, like Dilation.\n
+          Infinity power reduces the production and gamespeed penalties and Time Shards reduce the tickspeed penalty.\n
+          Glyph levels are temporarily capped to ${Effarig.glyphLevelCap}, rarity is unaffected.\n
+          You will exit Effarig's Reality when you complete a Layer of it for the first time.`
+        : `all dimension multipliers, gamespeed, and tickspeed are severely lowered, like Dilation.\n
+          Infinity power reduces the production and gamespeed penalties and Time Shards reduce the tickspeed penalty.\n
+          Glyph levels are temporarily capped, rarity is unaffected.\n
+          You will exit Effarig's Reality when you complete a Layer of it for the first time.`;
     }
   },
   {
@@ -47,7 +47,7 @@ GameDatabase.celestials.descriptions = [
     name: "V",
     description() {
       return `All dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second
-              are square-rooted, and Replicanti interval is squared.
+              are square-rooted, and Replicanti interval is squared.\n
               ${Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) ? ` Exponential Glyph Alchemy effect is disabled.` : ``}`;
     }
   }

@@ -14,8 +14,7 @@ Vue.component("modal-celestials", {
             return `${this.modalConfig.name} Reality.`;
         },
         message() {
-            return `Perform a Reality reset, and enter ${this.modalConfig.name} Reality, in which
-            ${isEnslaved ? `` : this.description}`;
+            return `Perform a Reality reset, and enter ${this.modalConfig.name} Reality, in which`;
         },
         goal() {
             return ``;
@@ -51,7 +50,7 @@ Vue.component("modal-celestials", {
             <h2>{{ topLabel }}</h2>
             <div class="c-modal-message__text">
                 {{ message }}
-            <div v-if="isEnslaved" v-for="description in descriptionLines">
+            <div v-for="description in descriptionLines">
                 {{ description }}
             </div>
                 <br>

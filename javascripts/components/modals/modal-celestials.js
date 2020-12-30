@@ -31,15 +31,30 @@ Vue.component("modal-celestials", {
     },
     methods: {
         handleYesClick() {
-            if (this.modalConfig.number === 0) Teresa.initializeRun();
-            if (this.modalConfig.number === 1) Effarig.initializeRun();
-            if (this.modalConfig.number === 2) {
-                // This needs to be added here before the reset so that TD autobuyers don't buy too much on start
-                player.celestials.enslaved.run = true;
-                Enslaved.initializeRun();
-            }
-            if (this.modalConfig.number === 3) V.initializeRun();
-            this.emitClose();
+          switch (this.modalConfig.number) {
+            case 0:
+              Teresa.initializeRun();
+              break;
+            case 1:
+              Effarig.initializeRun();
+              break;
+            case 2:
+              player.celestials.enslaved.run = true;
+              Enslaved.initializeRun();
+              break;
+            case 3:
+              V.initializeRun();
+              break;
+            case 4:
+              Ra.initializeRun();
+              break;
+            case 5:
+              Laitela.initializeRun();
+              break;
+            default:
+              throw new Error(`Attempted to start an Unknown Celestial in Celestial Modal Confirmation.`);
+          }
+          this.emitClose();
         },
         handleNoClick() {
             this.emitClose();

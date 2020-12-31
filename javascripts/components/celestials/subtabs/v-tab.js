@@ -205,7 +205,7 @@ Vue.component("v-tab", {
               <b style="font-size: 1.5rem">Start V's Reality.</b>
               <br/>
               <div :style="{ 'font-size': hasAlchemy ? '1.1rem' : '' }">
-                {{ this.description }}
+                {{ description }}
               </div>
               <div class="c-v-run-button__line c-v-run-button__line--1"></div>
               <div class="c-v-run-button__line c-v-run-button__line--2"></div>

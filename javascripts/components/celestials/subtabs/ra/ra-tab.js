@@ -115,7 +115,11 @@ Vue.component("ra-tab", {
       </div>
       <div class="l-ra-non-pets">
         <button class="c-ra-run-button">
-          <h2> Start Ra's Reality </h2>
+          <h2>
+            <span v-if="isRunning">You are in </span>
+            <span v-else>Start </span>
+            Ra's Reality
+          </h2>
           <div :class="runButtonClassObject" @click="startRun">
             <span class="c-ra-run-button__icon__sigil fas fa-sun"></span>
           </div>

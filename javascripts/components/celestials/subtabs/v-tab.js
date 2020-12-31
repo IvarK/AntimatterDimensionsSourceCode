@@ -202,7 +202,10 @@ Vue.component("v-tab", {
                 </div>
             </div>
             <div v-else-if="hex.isRunButton" @click="startRun()" :class="runButtonClassObject">
-              <b style="font-size: 1.5rem">Start V's Reality.</b>
+              <b style="font-size: 1.5rem">
+              <span v-if="isRunning">You are in </span>
+              <span v-else>Start </span>
+              V's Reality.</b>
               <br/>
               <div :style="{ 'font-size': hasAlchemy ? '1.1rem' : '' }">
                 {{ description }}

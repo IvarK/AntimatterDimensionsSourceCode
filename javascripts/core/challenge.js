@@ -64,7 +64,7 @@ class NormalChallengeState extends GameMechanicState {
     if (PlayerProgress.eternityUnlocked()) return true;
     if (this.id === 0) return true;
     const ip = GameDatabase.challenges.normal[this.id - 1].lockedAt;
-    return player.infinityPoints.gte(ip);
+    return player.infinitied.gte(ip);
   }
 
   get lockedAt() {

@@ -2,7 +2,7 @@
 
 // I tried to make it relatively simple to add more locks; the idea is that you give it a value here
 // and then it's all handled in the backend
-// If you need to lock a challenge, set lockedAt to a new Decimal variable reflective of a desired IP value
+// If you need to lock a challenge, set lockedAt to a new Decimal variable reflective of a desired number of Infinities
 // They will always be unlocked post-eternity
 
 GameDatabase.challenges.normal = [
@@ -109,7 +109,7 @@ GameDatabase.challenges.normal = [
     description: () => (NormalChallenge(10).isUnlocked
       ? `There are only ${formatInt(6)} Antimatter Dimensions, with Dimension Boost ` +
       "and Antimatter Galaxy costs modified."
-      : `Reach ${formatInt(GameDatabase.challenges.normal[9].lockedAt)} Infinity Points to unlock.`),
+      : `Infinity ${formatInt(GameDatabase.challenges.normal[9].lockedAt)} times to unlock.`),
     name: "Automated Dimension Boosts",
     reward: "Dimension Boosts Autobuyer",
     lockedAt: new Decimal(16),
@@ -121,7 +121,7 @@ GameDatabase.challenges.normal = [
     description: () => (NormalChallenge(11).isUnlocked
       ? `There's normal matter which rises once you have at least ${formatInt(1)} 2nd Antimatter ` +
       "Dimension. If it exceeds your antimatter, it will Dimension Boost without giving the bonus."
-      : `Reach ${formatInt(GameDatabase.challenges.normal[10].lockedAt)} Infinity Points to unlock.`),
+      : `Infinity ${formatInt(GameDatabase.challenges.normal[10].lockedAt)} times to unlock.`),
     name: "Automated Antimatter Galaxies",
     reward: "Antimatter Galaxies Autobuyer",
     lockedAt: new Decimal(16),
@@ -134,7 +134,7 @@ GameDatabase.challenges.normal = [
       ? `Each Antimatter Dimension produces the dimension ${formatInt(2)} dimensions below it (1st ` +
       "Antimatter Dimensions still produce antimatter). The 2nd, 4th, and 6th Antimatter Dimensions " +
       "are made stronger to compensate."
-      : `Reach ${formatInt(GameDatabase.challenges.normal[11].lockedAt)} Infinity Points to unlock.`),
+      : `Infinity ${formatInt(GameDatabase.challenges.normal[11].lockedAt)} times to unlock.`),
     name: "Automated Big Crunches",
     reward: "Big Crunches Autobuyer",
     lockedAt: new Decimal(16),

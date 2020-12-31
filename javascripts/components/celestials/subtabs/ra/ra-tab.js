@@ -16,7 +16,8 @@ Vue.component("ra-tab", {
       laitelaGlyphLevelReq: 0,
       laitelaRealityMachineCost: new Decimal(0),
       petWithRecollection: "",
-      isRunning: false
+      isRunning: false,
+      description: GameDatabase.celestials.descriptions[4].description().split("\n")
     };
   },
   methods: {
@@ -36,8 +37,7 @@ Vue.component("ra-tab", {
       this.isRunning = Ra.isRunning;
     },
     startRun() {
-      if (!resetReality()) return;
-      Ra.initializeRun();
+      Modal.celestials.show({ name: "Ra's", number: 4 });
     },
     unlockLaitela() {
       if (Laitela.unlock()) {
@@ -119,10 +119,9 @@ Vue.component("ra-tab", {
           <div :class="runButtonClassObject" @click="startRun">
             <span class="c-ra-run-button__icon__sigil fas fa-sun"></span>
           </div>
-          You can't Dimension Boost, and the Tickspeed purchase multiplier is fixed at {{ formatX(1.1245, 0, 3) }}.
-          <br>
-          <br>
-          Inside of Ra's reality, some resources will generate Memory Chunks based on their amount.
+          <span v-for="desc in description">
+            {{ desc }}
+          </span>
         </button>
         <div v-if="showRecollection && !isRaCapped" class="c-ra-recollection-unlock">
           <h1 :style="petStyle">Recollection</h1>

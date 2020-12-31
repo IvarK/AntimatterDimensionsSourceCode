@@ -6,7 +6,7 @@ Vue.component("modal-celestials", {
     },
     data() {
         return {
-            description: GameDatabase.celestials.descriptions[this.modalConfig.number].description()
+            description: GameDatabase.celestials.descriptions[this.modalConfig.number].description().split("\n"),
         };
     },
     computed: {
@@ -25,9 +25,28 @@ Vue.component("modal-celestials", {
         descriptionLines() {
             return this.description.split("\n");
         },
-        isEnslaved() {
-            return this.modalConfig.number === 2;
-        }
+        pets: () => [
+          {
+            pet: Ra.pets.teresa,
+            color: `color: ${Ra.pets.teresa.color}`,
+            memory: "Eternity Points"
+          },
+          {
+            pet: Ra.pets.effarig,
+            color: `color: ${Ra.pets.effarig.color}`,
+            memory: "Relic Shards gained"
+          },
+          {
+            pet: Ra.pets.enslaved,
+            color: `color: ${Ra.pets.enslaved.color}`,
+            memory: "Time Shards"
+          },
+          {
+            pet: Ra.pets.v,
+            color: `color: ${Ra.pets.v.color}`,
+            memory: "Infinity Power"
+          }
+        ],
     },
     methods: {
         handleYesClick() {
@@ -60,17 +79,21 @@ Vue.component("modal-celestials", {
         },
         handleNoClick() {
             this.emitClose();
-        }
+        },
     },
     template: `
         <div class="c-modal-message l-modal-content--centered">
             <h2>{{ topLabel }}</h2>
             <div class="c-modal-message__text">
                 {{ message }}
-            <div v-for="description in descriptionLines">
-                {{ description }}
+            <span v-for="desc in description">
+                {{ desc }} <br>
+            </span>
+            <div v-for="pet in pets" v-if="modalConfig.number === 4">
+              <span :style="pet.color" v-if="pet.pet.isUnlocked">
+              {{ pet.pet.name }} gains Memories Chunks based on {{ pet.memory}}.
+              <br></span>
             </div>
-                <br>
             </div>
             <div class="l-options-grid__row">
                 <primary-button

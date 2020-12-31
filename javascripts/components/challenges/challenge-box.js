@@ -14,25 +14,14 @@ Vue.component("challenge-box", {
   data() {
     return {
       isEC: false,
-      locks: {
-        isLocked: false,
-        lockedAt: new Decimal(0)
-      },
       challengeId: Number,
-      tempname: Array
     };
   },
   computed: {
     update() {
-      this.tempname = this.name.split("C");
-      this.challengeId = this.tempname[1];
       this.isEC = this.name.startsWith("EC");
       this.inC1 = this.name === "C1" && !this.isCompleted && NormalChallenge.current === undefined &&
         InfinityChallenge.current === undefined;
-      if (this.name.startsWith("C")) {
-        this.locks.isLocked = GameDatabase.challenges.normal[this.challengeId - 1].locked.isLocked;
-        this.locks.lockedAt = GameDatabase.challenges.normal[this.challengeId - 1].locked.lockedAt;
-      }
     },
     buttonClassObject() {
       const classObject = {
@@ -46,8 +35,6 @@ Vue.component("challenge-box", {
         classObject["o-challenge-btn--redo"] = true;
       } else if (this.isUnlocked) {
         classObject["o-challenge-btn--unlocked"] = true;
-      } else if (this.locks.isLocked) {
-        classObject["o-challenge-btn--locked"] = true;
       } else {
         classObject["o-challenge-btn--locked"] = true;
       }
@@ -66,8 +53,7 @@ Vue.component("challenge-box", {
         return "Completed";
       }
       if (this.isUnlocked) return "Start";
-      if (this.locks.isLocked) return "Locked";
-      return "What";
+      return "Locked";
     }
   },
   template:

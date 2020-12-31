@@ -2,8 +2,8 @@
 
 // I tried to make it relatively simple to add more locks; the idea is that you give it a value here
 // and then it's all handled in the backend
-// If it needs to be locked, set locked.isLocked to true and give it a number to be locked at
-// Locked at values are in TOTAL IP, meaning that they dont get relocked after eternity/reality
+// If you need to lock a challenge, set lockedAt to a new Decimal variable reflective of a desired IP value
+// They will always be unlocked post-eternity
 
 GameDatabase.challenges.normal = [
   {
@@ -17,10 +17,7 @@ GameDatabase.challenges.normal = [
     },
     name: "1st Antimatter Dimension Autobuyer",
     reward: "Upgradeable 1st Antimatter Dimension Autobuyer",
-    locked: {
-      isLocked: false,
-      lockedAt: new Decimal(0)
-    }
+    lockedAt: new Decimal(0),
   },
   {
     id: 2,
@@ -31,10 +28,7 @@ GameDatabase.challenges.normal = [
       `gradually coming back over ${formatInt(3)} minutes.`,
     name: "2nd Antimatter Dimension Autobuyer",
     reward: "Upgradeable 2nd Antimatter Dimension Autobuyer",
-    locked: {
-      isLocked: false,
-      lockedAt: new Decimal(0)
-    }
+    lockedAt: new Decimal(0),
   },
   {
     id: 3,
@@ -45,10 +39,7 @@ GameDatabase.challenges.normal = [
       bonus that resets after Dimension Boosts and Antimatter Galaxies.`,
     name: "3rd Antimatter Dimension",
     reward: "Upgradeable 3rd Antimatter Dimension Autobuyer",
-    locked: {
-      isLocked: false,
-      lockedAt: new Decimal(0)
-    }
+    lockedAt: new Decimal(0),
   },
   {
     id: 4,
@@ -58,10 +49,7 @@ GameDatabase.challenges.normal = [
       "like a sacrifice without the boost.",
     name: "4th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 4th Antimatter Dimension Autobuyer",
-    locked: {
-      isLocked: false,
-      lockedAt: new Decimal(0)
-    }
+    lockedAt: new Decimal(0),
   },
   {
     id: 5,
@@ -71,10 +59,7 @@ GameDatabase.challenges.normal = [
       () => `The Tickspeed purchase multiplier starts at ${formatX(1.080, 0, 3)} instead of ${formatX(1.1245, 0, 3)}.`,
     name: "5th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 5th Antimatter Dimension Autobuyer",
-    locked: {
-      isLocked: false,
-      lockedAt: new Decimal(0)
-    }
+    lockedAt: new Decimal(0),
   },
   {
     id: 6,
@@ -84,10 +69,7 @@ GameDatabase.challenges.normal = [
       "instead of antimatter. Antimatter Dimension prices are modified.",
     name: "6th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 6th Antimatter Dimension Autobuyer",
-    locked: {
-      isLocked: false,
-      lockedAt: new Decimal(0)
-    }
+    lockedAt: new Decimal(0),
   },
   {
     id: 7,
@@ -98,10 +80,7 @@ GameDatabase.challenges.normal = [
       by ${formatX(0.2, 1, 1)} per Dimension Boost, up to a maximum of ${formatX(2)}.`,
     name: "7th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 7th Antimatter Dimension Autobuyer",
-    locked: {
-      isLocked: false,
-      lockedAt: new Decimal(0)
-    }
+    lockedAt: new Decimal(0),
   },
   {
     id: 8,
@@ -111,10 +90,7 @@ GameDatabase.challenges.normal = [
       "Dimensional Sacrifice is significantly stronger and resets antimatter and all Antimatter Dimensions.",
     name: "8th Antimatter Dimension Autobuyer",
     reward: "Upgradeable 8th Antimatter Dimension Autobuyer",
-    locked: {
-      isLocked: false,
-      lockedAt: new Decimal(0)
-    }
+    lockedAt: new Decimal(0),
   },
   {
     id: 9,
@@ -124,55 +100,43 @@ GameDatabase.challenges.normal = [
       "everything else of equal cost will increase to its next cost step.",
     name: "Tickspeed Autobuyer",
     reward: "Upgradeable Tickspeed Autobuyer",
-    locked: {
-      isLocked: false,
-      lockedAt: new Decimal(0)
-    }
+    lockedAt: new Decimal(0),
   },
   {
     id: 10,
     legacyId: 4,
     isQuickResettable: false,
-    description: () => (GameDatabase.challenges.normal[9].locked.isLocked
-      ? `Reach ${formatInt(GameDatabase.challenges.normal[9].locked.lockedAt)} Infinity Points to unlock.`
-      : `There are only ${formatInt(6)} Antimatter Dimensions, with Dimension Boost ` +
-      "and Antimatter Galaxy costs modified."),
+    description: () => (NormalChallenge(10).isUnlocked
+      ? `There are only ${formatInt(6)} Antimatter Dimensions, with Dimension Boost ` +
+      "and Antimatter Galaxy costs modified."
+      : `Reach ${formatInt(GameDatabase.challenges.normal[9].lockedAt)} Infinity Points to unlock.`),
     name: "Automated Dimension Boosts",
     reward: "Dimension Boosts Autobuyer",
-    locked: {
-      isLocked: true,
-      lockedAt: new Decimal(16)
-    }
+    lockedAt: new Decimal(16),
   },
   {
     id: 11,
     legacyId: 12,
     isQuickResettable: true,
-    description: () => (GameDatabase.challenges.normal[10].locked.isLocked
-      ? `Reach ${formatInt(GameDatabase.challenges.normal[10].locked.lockedAt)} Infinity Points to unlock.`
-      : `There's normal matter which rises once you have at least ${formatInt(1)} 2nd Antimatter ` +
-      "Dimension. If it exceeds your antimatter, it will Dimension Boost without giving the bonus."),
+    description: () => (NormalChallenge(11).isUnlocked
+      ? `There's normal matter which rises once you have at least ${formatInt(1)} 2nd Antimatter ` +
+      "Dimension. If it exceeds your antimatter, it will Dimension Boost without giving the bonus."
+      : `Reach ${formatInt(GameDatabase.challenges.normal[10].lockedAt)} Infinity Points to unlock.`),
     name: "Automated Antimatter Galaxies",
     reward: "Antimatter Galaxies Autobuyer",
-    locked: {
-      isLocked: true,
-      lockedAt: new Decimal(16)
-    }
+    lockedAt: new Decimal(16),
   },
   {
     id: 12,
     legacyId: 7,
     isQuickResettable: false,
-    description: () => (GameDatabase.challenges.normal[11].locked.isLocked
-      ? `Reach ${formatInt(GameDatabase.challenges.normal[11].locked.lockedAt)} Infinity Points to unlock.`
-      : `Each Antimatter Dimension produces the dimension ${formatInt(2)} dimensions below it (1st ` +
+    description: () => (NormalChallenge(12).isUnlocked
+      ? `Each Antimatter Dimension produces the dimension ${formatInt(2)} dimensions below it (1st ` +
       "Antimatter Dimensions still produce antimatter). The 2nd, 4th, and 6th Antimatter Dimensions " +
-      "are made stronger to compensate."),
+      "are made stronger to compensate."
+      : `Reach ${formatInt(GameDatabase.challenges.normal[11].lockedAt)} Infinity Points to unlock.`),
     name: "Automated Big Crunches",
     reward: "Big Crunches Autobuyer",
-    locked: {
-      isLocked: true,
-      lockedAt: new Decimal(16)
-    }
+    lockedAt: new Decimal(16),
   }
 ];

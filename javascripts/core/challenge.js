@@ -60,13 +60,15 @@ class NormalChallengeState extends GameMechanicState {
     return player.challenge.normal.current === this.id || (isPartOfIC1 && InfinityChallenge(1).isRunning);
   }
 
-  get isLocked() {
-    if (player.infinityPoints.gte(this.lockedAt)) return false;
-    return GameDatabase.challenges.normal[this.id].locked.isLocked;
+  get isUnlocked() {
+    if (PlayerProgress.eternityUnlocked()) return true;
+    if (this.id === 0) return true;
+    const ip = GameDatabase.challenges.normal[this.id - 1].lockedAt;
+    return player.infinityPoints.gte(ip);
   }
 
   get lockedAt() {
-    return GameDatabase.challenges.normal[this.id].locked.lockedAt;
+    return GameDatabase.challenges.normal[this.id].lockedAt;
   }
 
   requestStart() {

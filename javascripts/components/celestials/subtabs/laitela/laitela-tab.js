@@ -336,7 +336,7 @@ Vue.component("annihilation-button", {
           Current multiplier to all DM multipliers: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
           <br><br>
         </span>
-        Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy,
+        <span>Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy,</span>
         <span v-if="!hasAnnihilated">
           unlocking Auto-Annihilation, and
         </span>

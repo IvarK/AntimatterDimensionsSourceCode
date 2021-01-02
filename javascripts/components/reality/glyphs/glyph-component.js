@@ -121,9 +121,10 @@ const GlyphTooltipComponent = {
       return {
         color: this.rarityInfo.color,
         "text-shadow": `-1px 1px 1px black, 1px 1px 1px black,
-                        -1px -1px 1px black, 1px -1px 1px black, 0 0 3px ${this.rarityInfo.color}`,
+                        -1px -1px 1px black, 1px -1px 1px black,
+                        0 0 3px ${this.rarityInfo.color}`,
         float: "left",
-        animation: this.type === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
+        animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined,
         "margin-top": this.type === "reality" ? "0.7rem" : undefined,
         "margin-left": this.type === "reality" ? "0.7rem" : undefined
       };
@@ -134,6 +135,7 @@ const GlyphTooltipComponent = {
       const name = this.type === "reality" ? "Pure" : this.rarityInfo.name;
       const rarity = this.type === "reality" ? "" : `(${formatRarity(strengthToRarity(this.strength))})`;
       return `${name} Glyph of ${this.type.charAt(0).toUpperCase()}${this.type.slice(1)} ${rarity}`;
+      }
     },
     isLevelCapped() {
       return this.levelOverride && this.levelOverride < this.level;

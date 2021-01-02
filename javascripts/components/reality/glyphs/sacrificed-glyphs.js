@@ -23,8 +23,9 @@ Vue.component("sacrificed-glyphs", {
         style() {
           return {
             color: this.typeConfig.color,
-            "text-shadow": `-1px 1px 1px black, 1px 1px 1px black,
-            -1px -1px 1px black, 1px -1px 1px black, 0 0 3px ${this.typeConfig.color}`,
+            "text-shadow": `-1px 1px 1px var(--color-text-inverted), 1px 1px 1px var(--color-text-inverted),
+                            -1px -1px 1px var(--color-text-inverted), 1px -1px 1px var(--color-text-inverted),
+                            0 0 3px ${this.typeConfig.color}`,
             animation: this.typeConfig.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
           };
         },

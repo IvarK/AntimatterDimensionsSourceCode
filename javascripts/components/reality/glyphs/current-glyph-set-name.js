@@ -179,8 +179,9 @@ Vue.component("current-glyph-set-name", {
       }
       return {
         color: nameColor,
-        "text-shadow": `-1px 1px 1px black, 1px 1px 1px black,
-                        -1px -1px 1px black, 1px -1px 1px black, 0 0 3px ${nameColor}`,
+        "text-shadow": `-1px 1px 1px var(--color-text-inverted), 1px 1px 1px var(--color-text-inverted),
+                        -1px -1px 1px var(--color-text-inverted), 1px -1px 1px var(--color-text-inverted),
+                        0 0 3px ${nameColor}`,
         animation: glyphName.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
       };
     },

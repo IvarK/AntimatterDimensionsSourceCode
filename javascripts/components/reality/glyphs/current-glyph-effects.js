@@ -29,8 +29,9 @@ Vue.component("current-glyph-effects", {
           : GlyphTypes[this.effectConfig.glyphTypes];
           return {
             color: glyphName.id === "cursed" ? "#5151ec" : glyphName.color,
-            "text-shadow": `-1px 1px 1px black, 1px 1px 1px black,
-                            -1px -1px 1px black, 1px -1px 1px black, 0 0 3px ${glyphName.color}`,
+            "text-shadow": `-1px 1px 1px var(--color-text-inverted), 1px 1px 1px var(--color-text-inverted),
+                            -1px -1px 1px var(--color-text-inverted), 1px -1px 1px var(--color-text-inverted),
+                            0 0 3px ${glyphName.color}`,
             animation: glyphName.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
           };
         },

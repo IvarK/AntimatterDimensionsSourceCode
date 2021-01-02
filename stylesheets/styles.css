@@ -8198,7 +8198,7 @@ kbd {
   }
 }
 
-@keyframes a-reality-glyph-description-cycle {
+@keyframes a-reality-glyph-name-cycle {
   0% {
     color: #b67f33;
     text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b67f33 0 0 3px
@@ -8224,6 +8224,40 @@ kbd {
     text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b67f33 0 0 3px
   }
 }
+
+@keyframes a-reality-glyph-description-cycle {
+  0% {
+    color: #b67f33;
+    text-shadow: var(--color-text-inverted) -1px 1px 1px, var(--color-text-inverted)
+    1px 1px 1px, var(--color-text-inverted) -1px -1px 1px, var(--color-text-inverted) 1px -1px 1px, #b67f33 0 0 3px
+  }
+  20% {
+    color: #64dd17;
+    text-shadow: var(--color-text-inverted) -1px 1px 1px, var(--color-text-inverted)
+    1px 1px 1px, var(--color-text-inverted) -1px -1px 1px, var(--color-text-inverted) 1px -1px 1px, #64dd17 0 0 3px
+  }
+  40% {
+    color: #22aa48;
+    text-shadow: var(--color-text-inverted) -1px 1px 1px, var(--color-text-inverted)
+    1px 1px 1px, var(--color-text-inverted) -1px -1px 1px, var(--color-text-inverted) 1px -1px 1px, #22aa48 0 0 3px
+  }
+  60% {
+    color: #03a9f4;
+    text-shadow: var(--color-text-inverted) -1px 1px 1px, var(--color-text-inverted)
+    1px 1px 1px, var(--color-text-inverted) -1px -1px 1px, var(--color-text-inverted) 1px -1px 1px, #03a9f4 0 0 3px
+  }
+  80% {
+    color: #b241e3;
+    text-shadow: var(--color-text-inverted) -1px 1px 1px, var(--color-text-inverted)
+    1px 1px 1px, var(--color-text-inverted) -1px -1px 1px, var(--color-text-inverted) 1px -1px 1px, #b241e3 0 0 3px
+  }
+  100% {
+    color: #b67f33;
+    text-shadow: var(--color-text-inverted) -1px 1px 1px, var(--color-text-inverted)
+    1px 1px 1px, var(--color-text-inverted) -1px -1px 1px, var(--color-text-inverted) 1px -1px 1px, #b67f33 0 0 3px
+  }
+}
+
 
 @keyframes a-reality-glyph-dot-cycle {
   0% {

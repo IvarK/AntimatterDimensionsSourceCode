@@ -130,11 +130,16 @@ const GlyphTooltipComponent = {
       };
     },
     description() {
-      if (this.type === "companion") return "Companion Glyph";
-      if (this.type === "cursed") return "Cursed Glyph";
-      const name = this.type === "reality" ? "Pure" : this.rarityInfo.name;
-      const rarity = this.type === "reality" ? "" : `(${formatRarity(strengthToRarity(this.strength))})`;
-      return `${name} Glyph of ${this.type.charAt(0).toUpperCase()}${this.type.slice(1)} ${rarity}`;
+      const glyphName = `${this.type.charAt(0).toUpperCase()}${this.type.slice(1)}`;
+      switch (this.type) {
+        case "companion":
+          return "Companion Glyph";
+        case "cursed":
+          return "Cursed Glyph";
+        case "reality":
+          return `Pure Glyph of ${glyphName}`;
+        default:
+          return `${this.rarityInfo.name} Glyph of ${glyphName} (${formatRarity(strengthToRarity(this.strength))})`;
       }
     },
     isLevelCapped() {

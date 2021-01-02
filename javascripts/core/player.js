@@ -558,6 +558,7 @@ let player = {
     autosaveInterval: 30000,
     exportedFileCount: 0,
     hideCompletedAchievementRows: false,
+    glyphTextColors: true,
     showHintText: {
       achievements: false,
       achievementUnlockStates: false,

@@ -16,6 +16,7 @@ const GLYPH_NAMES = {
 Vue.component("current-glyph-set-name", {
   data() {
     return {
+      isColored: true,
       musicGlyphs: 0,
       defaultOrder: ["power", "infinity", "replication", "time", "dilation"],
       multipleGlyphList: [
@@ -158,6 +159,7 @@ Vue.component("current-glyph-set-name", {
       return adding;
     },
     textColor() {
+      if (this.isColored) return { };
       let glyphName = GlyphTypes[this.multipleGlyphList[0].type];
       if (this.calculateGlyphPercent("cursed")) {
         glyphName = GlyphTypes.cursed;
@@ -179,8 +181,8 @@ Vue.component("current-glyph-set-name", {
       }
       return {
         color: nameColor,
-        "text-shadow": `-1px 1px 1px var(--color-text-inverted), 1px 1px 1px var(--color-text-inverted),
-                        -1px -1px 1px var(--color-text-inverted), 1px -1px 1px var(--color-text-inverted),
+        "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
+                        -1px -1px 1px var(--color-text-base), 1px -1px 1px var(--color-text-base),
                         0 0 3px ${nameColor}`,
         animation: glyphName.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
       };
@@ -191,6 +193,9 @@ Vue.component("current-glyph-set-name", {
     this.glyphsChanged();
   },
   methods: {
+    update() {
+      this.isColored = player.options.glyphTextColors;
+    },
     calculateGlyphPercent(name) {
       return (Glyphs.activeList.filter(i => i.type === name).length / Glyphs.activeSlotCount) * 100;
     },

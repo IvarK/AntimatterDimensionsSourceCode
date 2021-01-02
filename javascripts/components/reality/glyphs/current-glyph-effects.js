@@ -6,6 +6,11 @@ Vue.component("current-glyph-effects", {
       props: {
         effect: Object,
       },
+      data() {
+        return {
+          isColored: true,
+        };
+      },
       computed: {
         effectConfig() {
           return GameDatabase.reality.glyphEffects[this.effect.id];
@@ -24,13 +29,14 @@ Vue.component("current-glyph-effects", {
             .replace("{value2}", value2);
         },
         textColor() {
+          if (this.isColored) return { };
           const glyphName = this.effectConfig.id === "timeshardpow"
           ? GlyphTypes.time
           : GlyphTypes[this.effectConfig.glyphTypes];
           return {
             color: glyphName.id === "cursed" ? "#5151ec" : glyphName.color,
-            "text-shadow": `-1px 1px 1px var(--color-text-inverted), 1px 1px 1px var(--color-text-inverted),
-                            -1px -1px 1px var(--color-text-inverted), 1px -1px 1px var(--color-text-inverted),
+            "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
+                            -1px -1px 1px var(--color-text-base), 1px -1px 1px var(--color-text-base),
                             0 0 3px ${glyphName.color}`,
             animation: glyphName.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
           };
@@ -38,6 +44,11 @@ Vue.component("current-glyph-effects", {
         valueClass() {
           return this.effect.value.capped ? "c-current-glyph-effects__effect--capped" : "";
         }
+      },
+      methods: {
+        update() {
+          this.isColored = player.options.glyphTextColors;
+        },
       },
       template: `
         <div>

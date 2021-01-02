@@ -7,6 +7,7 @@ Vue.component("glyphs-tab", {
     instabilityThreshold: 0,
     hyperInstabilityThreshold: 0,
     isInCelestialReality: false,
+    glyphTextColors: true,
     autoRestartCelestialRuns: false,
     hasAlchemy: false,
     sacrificeUnlocked: false,
@@ -16,7 +17,14 @@ Vue.component("glyphs-tab", {
   computed: {
     showEnslavedHint() {
       return this.enslavedHint !== "";
-    }
+    },
+    glyphColorState() {
+      return {
+        "o-glyph-color-checkbox": true,
+        "o-glyph-color-checkbox--inactive": !this.glyphTextColors,
+        "o-glyph-color-checkbox--active": this.glyphTextColors,
+      };
+    },
   },
   methods: {
     update() {
@@ -26,6 +34,7 @@ Vue.component("glyphs-tab", {
       this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;
       this.isInCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
       this.autoRestartCelestialRuns = player.options.retryCelestial;
+      this.glyphTextColors = player.options.glyphTextColors;
       this.enslavedHint = "";
       this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
       this.sacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
@@ -38,6 +47,9 @@ Vue.component("glyphs-tab", {
     },
     toggleAutoRestartCelestial() {
       player.options.retryCelestial = !player.options.retryCelestial;
+    },
+    toggleGlyphTextColors() {
+      player.options.glyphTextColors = !player.options.glyphTextColors;
     },
     glyphInfoClass(isSacrificeOption) {
       if (this.sacrificeDisplayed === isSacrificeOption) return "c-glyph-info-button--active";
@@ -87,6 +99,14 @@ Vue.component("glyphs-tab", {
         <div class="l-equipped-glyphs-wrapper">
           <equipped-glyphs />
           <div class="l-glyph-info-wrapper">
+            <span class="l-glyph-color-box" @click="toggleGlyphTextColors">
+              <div class="l-glyph-color-position">
+                <label
+                  :class="glyphColorState">
+                  <span class="fas fa-palette"></span>
+                </label>
+              </div>
+            </span>
             <div class="c-glyph-info-options"
               v-if="sacrificeUnlocked">
                 <div class="c-glyph-info-button"

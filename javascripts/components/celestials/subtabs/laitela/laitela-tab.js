@@ -109,7 +109,7 @@ Vue.component("singularity-container", {
         : `condense all Dark Energy into ${format(this.singularitiesGained, 2, 0)} Singularities`;
       if (this.canPerformSingularity) {
         // Capitalize the string
-        return `${formText.charAt(0).toUpperCase()}${formText.slice(1)}`;
+        return `${formText.capitalize()}`;
       }
       return `Reach ${format(this.singularityCap)} Dark Energy to ${formText}`;
     },

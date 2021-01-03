@@ -130,7 +130,7 @@ const GlyphTooltipComponent = {
       };
     },
     description() {
-      const glyphName = `${this.type.charAt(0).toUpperCase()}${this.type.slice(1)}`;
+      const glyphName = `${this.type.capitalize()}`;
       switch (this.type) {
         case "companion":
           return "Companion Glyph";

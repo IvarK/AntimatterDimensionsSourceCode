@@ -37,6 +37,7 @@ html {
   --color-antimatter: #2196f3;
   --color-infinity: #B67F33;
   --color-eternity: #b341e0;
+  --color-dilation: #64dd17;
   --color-reality: #0ba00e;
   --color-reality-light: #d5ffd7;
   --color-celestials: #5151ec;
@@ -1382,12 +1383,12 @@ screen and (max-width: 480px) {
 }
 
 .o-primary-btn--charged-respec-active {
-  color: var(--color-teresa--accent) !important;
+  color: var(--color-teresa--accent);
   background-color: var(--color-teresa--base) !important;
 }
 
 .o-primary-btn--charged-respec-active:hover {
-  color: var(--color-teresa--accent) !important;
+  color: var(--color-teresa--accent);
   background-color: var(--color-teresa--base) !important;
 }
 
@@ -1637,7 +1638,7 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-button:hover {
-  color: black !important;
+  color: black;
   background-color: var(--color-infinity);
 }
 
@@ -1646,7 +1647,7 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-button:hover span {
-  color: black !important;
+  color: black;
 }
 
 .t-dark .o-infinity-button {
@@ -1693,16 +1694,16 @@ screen and (max-width: 480px) {
   cursor: pointer;
 }
 
-.o-eternity-buttonspan {
+.o-eternity-button span {
   transition-duration: 0.2s;
 }
 
 .o-eternity-button:hover span {
-  color: black !important;
+  color: black;
 }
 
 .t-s1 .o-eternity-button:hover span {
-  color: var(--color-text) !important;
+  color: var(--color-text);
 }
 
 .t-metro .o-eternity-button,
@@ -1715,19 +1716,19 @@ screen and (max-width: 480px) {
 
 .t-s1 .o-eternity-button:hover {
   color: black;
-  background: var(--color-eternity);
   border-color: black;
 }
 
 .o-eternity-button--dilation {
-  color: #64dd17;
+  color: var(--color-dilation);
   background-color: black;
-  border-color: #64dd17;
+  border-color: var(--color-dilation);
+  font-weight: bold;
 }
 
 .o-eternity-button--dilation:hover {
-  color: #64dd17;
-  background-color: white;
+  color: black;
+  background-color: var(--color-dilation);
 }
 
 .o-eternity-button--dilation span {
@@ -1735,11 +1736,11 @@ screen and (max-width: 480px) {
 }
 
 .o-eternity-button--dilation:hover span {
-  color: #64dd17 !important;
+  color: black;
 }
 
 .t-s1 .o-eternity-button--dilation:hover span {
-  color: var(--color-text) !important;
+  color: var(--color-text);
 }
 
 .t-metro .o-eternity-button--dilation,
@@ -1752,7 +1753,7 @@ screen and (max-width: 480px) {
 
 .t-s1 .o-eternity-button--dilation:hover {
   color: black;
-  background: #64dd17;
+  background: var(--color-dilation);
   border-color: black;
 }
 
@@ -2345,8 +2346,8 @@ screen and (max-width: 480px) {
 
 .t-dark .c-time-dim-description__accent,
 .t-s6 .c-time-dim-description__accent {
-  color: #64dd17;
-  text-shadow: 0 0 0.7rem #64dd17;
+  color: var(--color-dilation);
+  text-shadow: 0 0 0.7rem var(--color-dilation);
 }
 
 .t-metro .c-time-dim-description__accent,
@@ -4640,7 +4641,7 @@ screen and (max-width: 480px) {
 .t-s8 .c-dilation-tab__dilated-time-income,
 .t-s8 .c-dilation-tab__galaxy-threshold,
 .t-s8 .c-dilation-tab__galaxies {
-  color: #64dd17;
+  color: var(--color-dilation);
 }
 
 .t-dark .c-dilation-tab__dilated-time,
@@ -4651,7 +4652,7 @@ screen and (max-width: 480px) {
 .t-s6 .c-dilation-tab__dilated-time-income,
 .t-s6 .c-dilation-tab__galaxy-threshold,
 .t-s6 .c-dilation-tab__galaxies {
-  text-shadow: 0 0 0.7rem #64dd17;
+  text-shadow: 0 0 0.7rem var(--color-dilation);
 }
 
 /*#endregion c-dilation-tab*/
@@ -4680,7 +4681,7 @@ screen and (max-width: 480px) {
 .o-dilation-btn {
   font-weight: bold;
   font-size: 1.12rem;
-  border: 0.2rem solid #64dd17;
+  border: 0.2rem solid var(--color-dilation);
   width: 19rem;
   height: 9rem;
   transition-duration: 0.2s;
@@ -4696,7 +4697,7 @@ screen and (max-width: 480px) {
 }
 
 .o-dilation-btn--unlocked {
-  color: #64dd17;
+  color: var(--color-dilation);
   background-color: black;
   cursor: pointer;
   animation: a-dilation-btn-glow 10s infinite;
@@ -4707,13 +4708,13 @@ screen and (max-width: 480px) {
 }
 
 .t-dark .o-dilation-btn--unlocked {
-  color: #64dd17;
+  color: var(--color-dilation);
   background-color: black;
 }
 
 .t-dark .o-dilation-btn--unlocked:hover,
 .t-s6 .o-dilation-btn--unlocked:hover {
-  color: #64dd17;
+  color: var(--color-dilation);
   background-color: white;
 }
 
@@ -4822,8 +4823,8 @@ screen and (max-width: 480px) {
 }
 
 .o-dilation-upgrade--available {
-  color: #64dd17;
-  border-color: #64dd17;
+  color: var(--color-dilation);
+  border-color: var(--color-dilation);
   animation: a-dilation-btn-glow 10s infinite;
   cursor: pointer;
 }
@@ -4839,7 +4840,7 @@ screen and (max-width: 480px) {
 
 .o-dilation-upgrade--bought,  .o-dilation-upgrade--capped {
   color: black;
-  background-color: #64dd17;
+  background-color: var(--color-dilation);
   border-color: black;
 }
 
@@ -4897,7 +4898,7 @@ screen and (max-width: 480px) {
 
 .t-dark .o-dilation-upgrade--available:hover,
 .t-s6 .o-dilation-upgrade--available:hover {
-  color: #64dd17;
+  color: var(--color-dilation);
   background-color: white;
 }
 
@@ -4907,7 +4908,7 @@ screen and (max-width: 480px) {
 }
 
 .t-dark .o-dilation-upgrade--bought, .t-dark .o-dilation-upgrade--capped {
-  background-color: #64dd17;
+  background-color: var(--color-dilation);
 }
 
 .t-s6 .o-dilation-upgrade--unavailable {
@@ -4932,7 +4933,7 @@ screen and (max-width: 480px) {
 }
 
 .t-s6 .o-dilation-upgrade--bought, .t-s6 .o-dilation-upgrade--capped {
-  background: #64dd17;
+  background: var(--color-dilation);
 }
 
 /*#endregion o-dilation-upgrade*/
@@ -5184,7 +5185,7 @@ screen and (max-width: 480px) {
 }
 
 .c-modal-away-progress__dilated-time {
-  color: #64dd17;
+  color: var(--color-dilation);
 }
 
 .c-modal-away-progress__infinities {
@@ -7906,7 +7907,7 @@ kbd {
 }
 
 .c-laitela-automation-toggle:hover {
-  color: var(--color-laitela--base) !important;
+  color: var(--color-laitela--base);
   background: var(--color-laitela--accent) !important;
 }
 

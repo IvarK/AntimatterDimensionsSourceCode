@@ -21,6 +21,7 @@ Vue.component("game-header-eternity-button", {
       canEternity: false,
       eternityGoal: new Decimal(0),
       hasRealitied: false,
+      hover: false,
     };
   },
   computed: {
@@ -47,8 +48,9 @@ Vue.component("game-header-eternity-button", {
     },
     amountStyle() {
       if (this.currentEP.lt(1e50)) return { color: "var(--color-eternity)" };
-      const ratio = this.gainedEP.log10() / this.currentEP.log10();
+      if (this.hover) return { color: "black" };
 
+      const ratio = this.gainedEP.log10() / this.currentEP.log10();
       const rgb = [
         Math.round(255 - (ratio - 1) * 10 * 255),
         Math.round(255 - (1 - ratio) * 10 * 255),
@@ -58,6 +60,7 @@ Vue.component("game-header-eternity-button", {
       return { color: `rgb(${rgb.join(",")})` };
     },
     tachyonAmountStyle() {
+      if (this.hover) return { color: "black" };
       // Note that Infinity and 0 can show up here. We have a special case for
       // this.currentTachyons being 0 because dividing a Decimal by 0 returns 0.
       let ratio;
@@ -142,6 +145,8 @@ Vue.component("game-header-eternity-button", {
       :class="buttonClassObject"
       class="o-prestige-button l-game-header__eternity-btn"
       onclick="eternityResetRequest()"
+      @mouseover="hover = true"
+      @mouseleave="hover = false"
     >
       <!-- First time -->
       <template v-if="type === 0">

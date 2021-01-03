@@ -13,7 +13,8 @@ Vue.component("ec-time-study", {
       },
       completions: 0,
       showTotalCompletions: false,
-      isRunning: false
+      isRunning: false,
+      isUnlocked: false,
     };
   },
   computed: {
@@ -47,6 +48,7 @@ Vue.component("ec-time-study", {
       this.completions = EternityChallenge(id).completions;
       this.showTotalCompletions = !Enslaved.isRunning || this.id !== 1;
       this.isRunning = EternityChallenge.current?.id === this.study.id;
+      this.isUnlocked = EternityChallenge(this.study.id).isUnlocked;
       if (!this.hasRequirement || id > 10) return;
       const requirement = this.requirement;
       const study = this.study;
@@ -75,6 +77,6 @@ Vue.component("ec-time-study", {
           {{config.requirement.resource}}
         </span>
       </template>
-      <span v-if="isRunning">Currently running</span>
+      <span v-if="isUnlocked && !isRunning"><br>Double click to start</span>
     </time-study>`
 });

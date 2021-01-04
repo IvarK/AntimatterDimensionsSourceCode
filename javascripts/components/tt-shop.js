@@ -194,14 +194,14 @@ Vue.component("tt-save-load-button", {
       this.hideContextMenu();
       this.preset.studies = studyTreeExportString();
       const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
-      GameUI.notify.info(`${presetName} saved in slot ${this.saveslot}`);
+      GameUI.notify.eternity(`${presetName} saved in slot ${this.saveslot}`);
     },
     load() {
       this.hideContextMenu();
       if (this.preset.studies) {
         importStudyTree(this.preset.studies);
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
-        GameUI.notify.info(`${presetName} loaded from slot ${this.saveslot}`);
+        GameUI.notify.eternity(`${presetName} loaded from slot ${this.saveslot}`);
       } else {
         Modal.message.show("This Time Study list currently contains no Time Studies.");
       }
@@ -210,7 +210,7 @@ Vue.component("tt-save-load-button", {
       this.hideContextMenu();
       copyToClipboard(this.preset.studies);
       const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
-      GameUI.notify.info(`${presetName} exported from slot ${this.saveslot} to your clipboard`);
+      GameUI.notify.eternity(`${presetName} exported from slot ${this.saveslot} to your clipboard`);
     },
     edit() {
       Modal.editTree.show({ id: this.saveslot - 1 });

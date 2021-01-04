@@ -838,3 +838,159 @@
 .o-glyph-color-checkbox--active {
   color: var(--color-text);
 }
+
+@keyframes a-reality-glyph-outer-cycle {
+  0% {
+    background-color: #b67f33;
+    box-shadow: #b67f33 0 0 1rem 0.2rem;
+  }
+  20% {
+    background-color: #64dd17;
+    box-shadow: #64dd17 0 0 1rem 0.2rem;
+  }
+  40% {
+    background-color: #22aa48;
+    box-shadow: #22aa48 0 0 1rem 0.2rem;
+  }
+  60% {
+    background-color: #03a9f4;
+    box-shadow: #03a9f4 0 0 1rem 0.2rem;
+  }
+  80% {
+    background-color: #b241e3;
+    box-shadow: #b241e3 0 0 1rem 0.2rem;
+  }
+  100% {
+    background-color: #b67f33;
+    box-shadow: #b67f33 0 0 1rem 0.2rem;
+  }
+}
+
+@keyframes a-reality-glyph-over-cycle {
+  0% {
+    box-shadow: #b67f33 0 0 1rem calc(0.3rem) inset;
+  }
+  20% {
+    box-shadow: #64dd17 0 0 1rem calc(0.3rem) inset;
+  }
+  40% {
+    box-shadow: #22aa48 0 0 1rem calc(0.3rem) inset;
+  }
+  60% {
+    box-shadow: #03a9f4 0 0 1rem calc(0.3rem) inset;
+  }
+  80% {
+    box-shadow: #b241e3 0 0 1rem calc(0.3rem) inset;
+  }
+  100% {
+    box-shadow: #b67f33 0 0 1rem calc(0.3rem) inset;
+  }
+}
+
+@keyframes a-reality-glyph-icon-cycle {
+  0% {
+    color: #b67f33;
+    text-shadow: #b67f33 -0.04em 0.04em 0.08em;
+  }
+  20% {
+    color: #64dd17;
+    text-shadow: #64dd17 -0.04em 0.04em 0.08em;
+  }
+  40% {
+    color: #22aa48;
+    text-shadow: #22aa48 -0.04em 0.04em 0.08em;
+  }
+  60% {
+    color: #03a9f4;
+    text-shadow: #03a9f4 -0.04em 0.04em 0.08em;
+  }
+  80% {
+    color: #b241e3;
+    text-shadow: #b241e3 -0.04em 0.04em 0.08em;
+  }
+  100% {
+    color: #b67f33;
+    text-shadow: #b67f33 -0.04em 0.04em 0.08em;
+  }
+}
+
+@keyframes a-reality-glyph-name-cycle {
+  0% {
+    color: #b67f33;
+    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b67f33 0 0 3px
+  }
+  20% {
+    color: #64dd17;
+    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #64dd17 0 0 3px
+  }
+  40% {
+    color: #22aa48;
+    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #22aa48 0 0 3px
+  }
+  60% {
+    color: #03a9f4;
+    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #03a9f4 0 0 3px
+  }
+  80% {
+    color: #b241e3;
+    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b241e3 0 0 3px
+  }
+  100% {
+    color: #b67f33;
+    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b67f33 0 0 3px
+  }
+}
+
+@keyframes a-reality-glyph-description-cycle {
+  0% {
+    color: #b67f33;
+    text-shadow: var(--color-text-base) -1px 1px 1px, var(--color-text-base)
+    1px 1px 1px, var(--color-text-base) -1px -1px 1px, var(--color-text-base) 1px -1px 1px, #b67f33 0 0 3px
+  }
+  20% {
+    color: #64dd17;
+    text-shadow: var(--color-text-base) -1px 1px 1px, var(--color-text-base)
+    1px 1px 1px, var(--color-text-base) -1px -1px 1px, var(--color-text-base) 1px -1px 1px, #64dd17 0 0 3px
+  }
+  40% {
+    color: #22aa48;
+    text-shadow: var(--color-text-base) -1px 1px 1px, var(--color-text-base)
+    1px 1px 1px, var(--color-text-base) -1px -1px 1px, var(--color-text-base) 1px -1px 1px, #22aa48 0 0 3px
+  }
+  60% {
+    color: #03a9f4;
+    text-shadow: var(--color-text-base) -1px 1px 1px, var(--color-text-base)
+    1px 1px 1px, var(--color-text-base) -1px -1px 1px, var(--color-text-base) 1px -1px 1px, #03a9f4 0 0 3px
+  }
+  80% {
+    color: #b241e3;
+    text-shadow: var(--color-text-base) -1px 1px 1px, var(--color-text-base)
+    1px 1px 1px, var(--color-text-base) -1px -1px 1px, var(--color-text-base) 1px -1px 1px, #b241e3 0 0 3px
+  }
+  100% {
+    color: #b67f33;
+    text-shadow: var(--color-text-base) -1px 1px 1px, var(--color-text-base)
+    1px 1px 1px, var(--color-text-base) -1px -1px 1px, var(--color-text-base) 1px -1px 1px, #b67f33 0 0 3px
+  }
+}
+
+@keyframes a-reality-glyph-dot-cycle {
+  0% {
+    background: #b67f33;
+  }
+  20% {
+    background: #64dd17;
+  }
+  40% {
+    background: #22aa48;
+  }
+  60% {
+    background: #03a9f4;
+  }
+  80% {
+    background: #b241e3;
+  }
+  100% {
+    background: #b67f33;
+  }
+}

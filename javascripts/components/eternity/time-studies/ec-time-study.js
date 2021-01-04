@@ -78,5 +78,6 @@ Vue.component("ec-time-study", {
         </span>
       </template>
       <span v-if="isUnlocked && !isRunning"><br>Double click to start</span>
+      <span v-else-if="isRunning"><br>Currently Running</span>
     </time-study>`
 });

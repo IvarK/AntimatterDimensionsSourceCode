@@ -546,7 +546,8 @@ let player = {
         permanentTickspeed: 0,
         permanentDimensionBoosts: 0,
         permanentGalaxies: 0
-      }
+      },
+      infinityRebuyables: [0, 0, 0],
     }
   },
   tabNotifications: new Set(),

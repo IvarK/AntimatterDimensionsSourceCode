@@ -47,15 +47,7 @@ Vue.component("pelle-tab", {
         <pelle-currency currency="pestilence" v-show="false"/>
       </div>
       <div class="pelle-upgrades--container">
-        <div 
-          v-for="upg in upgrades" 
-          class="pelle-upgrade" 
-          :class="upgradeClass(upg)" 
-          @click="upg.purchase(upg)">
-          <h3>{{ upg.description }}</h3>
-          <b v-if="!upg.isBought">Cost: {{ format(upg.cost, 2, 0) }} {{ upg.currencyDisplay }}</b>
-          <p v-else-if="upg.config.effect"> Currently: {{ formatX(upg.effectValue, 2, 2) }}</p>
-        </div>
+        <pelle-upgrade v-for="upg in upgrades" :upgrade="upg" />
       </div>
     </div>`
 });

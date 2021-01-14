@@ -29,7 +29,7 @@ Vue.component("pelle-currency", {
     },
     barStyle() {
       return {
-        width: `${this.timer / this.fillTime * 100}%`
+        width: `${this.timer / 10 * 100}%`
       };
     }
   },
@@ -38,7 +38,6 @@ Vue.component("pelle-currency", {
       this.amount.copyFrom(player.celestials.pelle[this.currency].amount);
       this.timer = player.celestials.pelle[this.currency].timer;
 
-      // TODO: Change to some formula
       this.fillTime = Pelle[this.currency].fillTime;
     },
     descriptionDisplay() {

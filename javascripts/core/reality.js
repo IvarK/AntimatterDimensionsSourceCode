@@ -521,7 +521,11 @@ function applyRUPG10() {
   player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
-  player.infinityRebuyables = [8, 7, 10];
+  if (Pelle.isDoomed) {
+    player.infinityRebuyables = player.celestials.pelle.infinityRebuyables;
+  } else {
+    player.infinityRebuyables = [8, 7, 10];
+  }
   player.infDimBuyers = Array.repeat(true, 8);
   player.infMultBuyer = true;
   player.eternities = player.eternities.plus(100);

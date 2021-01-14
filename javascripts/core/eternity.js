@@ -177,8 +177,9 @@ function initializeResourcesAfterEternity() {
   player.totalTickGained = 0;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  if (!EternityMilestone.keepBreakUpgrades.isReached) {
+  if (!EternityMilestone.keepBreakUpgrades.isReached || Pelle.isDisabled()) {
     player.infinityRebuyables = [0, 0, 0];
+    if (Pelle.isDisabled()) player.infinityRebuyables = player.celestials.pelle.infinityRebuyables;
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();
   }

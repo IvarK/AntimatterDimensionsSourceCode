@@ -19,7 +19,8 @@ GameDatabase.celestials.pelle = {
       description: "Get more unstable matter based on Armageddon duration",
       cost: 20,
       currency: "famine",
-      effect: () => player.records.thisReality.realTime / 500 ** 1.1
+      effect: () => player.records.thisReality.realTime / 500 ** 1.1,
+      formatEffect: x => formatX(x, 2, 2)
     },
     ipGain: {
       id: 4,

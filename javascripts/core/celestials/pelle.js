@@ -47,8 +47,8 @@ const Pelle = {
 
     currencies.forEach(currency => {
       if (!this[currency].unlocked) return;
-      this.cel[currency].timer += TimeSpan.fromMilliseconds(diff).totalSeconds;
-      if (this.cel[currency].timer > this[currency].fillTime) {
+      this.cel[currency].timer += TimeSpan.fromMilliseconds(diff).totalSeconds * 10 / this[currency].fillTime;
+      if (this.cel[currency].timer > 10) {
         this.cel[currency].amount = this.cel[currency].amount.plus(this[currency].gain)
         this.cel[currency].timer = 0
       }
@@ -56,7 +56,7 @@ const Pelle = {
   },
 
   famine: {
-    get fillTime() { return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts) + 1) },
+    get fillTime() { return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts + 1) + 1) },
     get gain() { return 1 },
     get unlocked() { return PelleUpgrade.famineUnlock.canBeApplied }
   },
@@ -158,7 +158,7 @@ const PelleRebuyableUpgrade = (function() {
   const db = GameDatabase.celestials.pelle.rebuyables;
   const obj = {}
   Object.keys(db).forEach(key => {
-    obj[key] = new PelleUpgradeState(db[key]);
+    obj[key] = new RebuyablePelleUpgradeState(db[key]);
   })
   return {
     all: Object.values(obj),

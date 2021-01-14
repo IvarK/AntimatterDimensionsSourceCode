@@ -225,7 +225,7 @@ function addRealityTime(time, realTime, rm, level, realities) {
 }
 
 function gainedInfinities() {
-    if (EternityChallenge(4).isRunning) {
+    if (EternityChallenge(4).isRunning || Pelle.isDisabled("InfinitiedMults")) {
         return new Decimal(1);
     }
     let infGain = Effects.max(

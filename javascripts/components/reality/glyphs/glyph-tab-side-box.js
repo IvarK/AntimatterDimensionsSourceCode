@@ -5,43 +5,49 @@ Vue.component("glyph-tab-side-box", {
   data() {
     return {
       type: 0,
+      unlockedFilter: false,
       unlockedSets: false,
       unlockedAlchemy: false,
+      unlockedAny: false,
     };
   },
   methods: {
     update() {
       this.type = player.reality.showSidebarPanel;
-      this.unlockedSets = true;
+      this.unlockedFilter = EffarigUnlock.glyphFilter.isUnlocked;
+      this.unlockedSets = EffarigUnlock.setSaves.isUnlocked;
       this.unlockedAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      this.unlockedAny = this.unlockedFilter || this.unlockedSets || this.unlockedAlchemy;
     },
     setSidebarState(state) {
       player.reality.showSidebarPanel = state;
     }
   },
   template: `
-  <div>
+  <div v-if="unlockedAny">
     <div class="l-glyph-side-box-position">
-      <div class="l-glyph-side-box-button-position">
+      <div class="l-glyph-side-box-button-position"
+        v-if="unlockedFilter && unlockedSets">
         <button class="l-glyph-side-box-button c-reality-upgrade-btn"
-        @click="setSidebarState(0)">
+                v-if="unlockedFilter"
+                @click="setSidebarState(0)">
           Glyph Filter
         </button>
         <button class="l-glyph-side-box-button c-reality-upgrade-btn"
-        v-if="unlockedSets"
-        @click="setSidebarState(1)">
-          Glyph Sets
+                v-if="unlockedSets"
+                @click="setSidebarState(1)">
+          Glyph Set Saves
         </button>
         <button class="l-glyph-side-box-button c-reality-upgrade-btn"
-        v-if="unlockedAlchemy"
-        @click="setSidebarState(2)">
+                v-if="unlockedAlchemy"
+                @click="setSidebarState(2)">
           Sacrifice Type
         </button>
       </div>
     </div>
-    <glyph-auto-pick-options v-if="type===2 && unlockedAlchemy" />
+    <glyph-sacrifice-options v-if="type===0 && unlockedFilter" />
     <glyph-set-saves v-else-if="type===1 && unlockedSets" />
-    <glyph-sacrifice-options v-else />
+    <glyph-auto-pick-options v-if="type===2 && unlockedAlchemy" />
   </div>
   `
 });

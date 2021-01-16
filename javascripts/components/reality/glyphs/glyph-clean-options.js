@@ -14,7 +14,7 @@ Vue.component("glyph-clean-options", {
     update() {
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
-      this.hasFilter = EffarigUnlock.basicFilter.isUnlocked;
+      this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);
       this.isRefining = AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.ALWAYS_REFINE ||
         AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP;

@@ -180,7 +180,7 @@ function processAutoGlyph(gainedLevel, rng) {
   // Always generate a list of glyphs to avoid RNG diverging based on whether
   // a reality is done automatically.
   const glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedLevel, { rng });
-  if (EffarigUnlock.basicFilter.isUnlocked) {
+  if (EffarigUnlock.glyphFilter.isUnlocked) {
     newGlyph = AutoGlyphProcessor.pick(glyphs);
     if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
       AutoGlyphProcessor.getRidOfGlyph(newGlyph);

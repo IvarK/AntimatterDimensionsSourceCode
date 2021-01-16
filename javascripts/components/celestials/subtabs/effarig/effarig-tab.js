@@ -50,8 +50,8 @@ Vue.component("effarig-tab", {
   computed: {
     shopUnlocks: () => [
       EffarigUnlock.adjuster,
-      EffarigUnlock.basicFilter,
-      EffarigUnlock.advancedFilter
+      EffarigUnlock.glyphFilter,
+      EffarigUnlock.setSaves
     ],
     runUnlock: () => EffarigUnlock.run,
     runUnlocks: () => [

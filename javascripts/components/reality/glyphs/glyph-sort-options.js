@@ -8,7 +8,7 @@ Vue.component("glyph-sort-options", {
   },
   methods: {
     update() {
-      this.showScoreFilter = EffarigUnlock.basicFilter.isUnlocked;
+      this.showScoreFilter = EffarigUnlock.glyphFilter.isUnlocked;
     },
     sortByPower() {
       Glyphs.sortByPower();

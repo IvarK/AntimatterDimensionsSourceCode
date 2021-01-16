@@ -312,6 +312,7 @@ let player = {
         reality: 0
       },
       undo: [],
+      sets: [[], [], [], [], []],
       protectedRows: 2,
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
@@ -336,6 +337,7 @@ let player = {
     perks: new Set(),
     respec: false,
     showGlyphSacrifice: false,
+    showSidebarPanel: 0,
     tdbuyers: [false, false, false, false, false, false, false, false],
     epmultbuyer: false,
     autoSort: 0,
@@ -559,6 +561,8 @@ let player = {
     exportedFileCount: 0,
     hideCompletedAchievementRows: false,
     glyphTextColors: true,
+    loadGlyphLevel: true,
+    loadGlyphStrength: true,
     showHintText: {
       achievements: false,
       achievementUnlockStates: false,

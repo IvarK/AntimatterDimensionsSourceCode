@@ -9,7 +9,6 @@ Vue.component("glyphs-tab", {
     isInCelestialReality: false,
     glyphTextColors: true,
     autoRestartCelestialRuns: false,
-    hasAlchemy: false,
     sacrificeUnlocked: false,
     sacrificeDisplayed: false,
     resetRealityDisplayed: false,
@@ -36,7 +35,6 @@ Vue.component("glyphs-tab", {
       this.autoRestartCelestialRuns = player.options.retryCelestial;
       this.glyphTextColors = player.options.glyphTextColors;
       this.enslavedHint = "";
-      this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
       this.sacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.sacrificeDisplayed = player.reality.showGlyphSacrifice;
       if (!Enslaved.isRunning) return;
@@ -91,8 +89,7 @@ Vue.component("glyphs-tab", {
         </expanding-control-box>
         <br>
         <glyph-clean-options />
-        <glyph-sacrifice-options />
-        <glyph-auto-pick-options v-if="hasAlchemy" />
+        <glyph-tab-side-box />
       </div>
       <div class="l-player-glyphs-column">
         <div v-if="showEnslavedHint" class="o-teresa-quotes" v-html="enslavedHint" />

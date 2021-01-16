@@ -7,6 +7,10 @@ Vue.component("glyph-set-preview", {
     glyphs: Array,
     noLevelOverride: Boolean,
     flipTooltip: Boolean,
+    showName: {
+      type: Boolean,
+      default: true,
+    },
     showSacrifice: {
       type: Boolean,
       default: false
@@ -19,6 +23,10 @@ Vue.component("glyph-set-preview", {
         <br>
       </span>
       <span v-if="glyphs.length !== 0">
+        <glyph-set-name
+          v-if="showName"
+          :glyphSet="glyphs"
+          :forceColor="true" />
         <glyph-component v-for="(g, idx) in glyphs"
           :key="idx"
           style="margin: 0.2rem;"

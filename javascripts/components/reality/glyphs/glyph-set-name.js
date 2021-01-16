@@ -8,16 +8,19 @@ const GLYPH_NAMES = {
   cursed: { major: "Cursed", middling: "Hexed", minor: "Jinxed" },
   power: { major: "Power", middling: "Mastered", minor: "Potential" },
   infinity: { major: "Infinity", middling: "Boundless", minor: "Immense" },
-  replication: { major: "Replicantion", middling: "Simulated", minor: "Replicated" },
+  replication: { major: "Replication", middling: "Simulated", minor: "Replicated" },
   time: { major: "Time", middling: "Chronal", minor: "Temporal" },
   dilation: { major: "Dilation", middling: "Attenuated", minor: "Diluted" },
 };
 
-Vue.component("current-glyph-set-name", {
+Vue.component("glyph-set-name", {
+  props: {
+    glyphSet: Array,
+    forceColor: Boolean,
+  },
   data() {
     return {
-      isColored: true,
-      musicGlyphs: 0,
+      notColored: false,
       defaultOrder: ["power", "infinity", "replication", "time", "dilation"],
       multipleGlyphList: [
         { type: "power", perc: 0 },
@@ -30,6 +33,7 @@ Vue.component("current-glyph-set-name", {
   },
   computed: {
     setName() {
+      this.sortGlyphList();
       let nameString = "";
 
       // Start with companion and reality, add those to the start
@@ -41,17 +45,17 @@ Vue.component("current-glyph-set-name", {
       }
 
       // Music Glyphs are tricky to get, have to search .symbol === "key266b"
-      if (this.musicGlyphs === 5) {
+      if (this.musicGlyphs() === 5) {
         nameString += `${GLYPH_NAMES.music.major} `;
-      } else if (this.musicGlyphs >= 2) {
+      } else if (this.musicGlyphs() >= 2) {
         nameString += `${GLYPH_NAMES.music.middling} `;
-      } else if (this.musicGlyphs === 1) {
+      } else if (this.musicGlyphs() === 1) {
         nameString += `${GLYPH_NAMES.music.minor} `;
       }
 
       // Both, RM, Glyph, Neither each have unique results
-      const effarigRM = getActiveGlyphEffects().some(i => i.id === "effarigrm");
-      const effarigGlyph = getActiveGlyphEffects().some(i => i.id === "effarigglyph");
+      const effarigRM = this.glyphSet.some(i => getSingleGlyphEffectFromBitmask("effarigrm", i));
+      const effarigGlyph = this.glyphSet.some(i => getSingleGlyphEffectFromBitmask("effarigglyph", i));
       if (this.calculateGlyphPercent("effarig")) {
         if (effarigRM && effarigGlyph) nameString += `${GLYPH_NAMES.effarig.both} `;
         else if (effarigRM) nameString += `${GLYPH_NAMES.effarig.rm} `;
@@ -158,23 +162,20 @@ Vue.component("current-glyph-set-name", {
       }
       return adding;
     },
+    mainGlyphName() {
+      if (this.calculateGlyphPercent("cursed")) return GlyphTypes.cursed;
+      if (this.calculateGlyphPercent("reality")) return GlyphTypes.reality;
+      if (this.multipleGlyphList[0].perc >= 60) return GlyphTypes[this.multipleGlyphList[0].type];
+      if (this.calculateGlyphPercent("effarig")) return GlyphTypes.effarig;
+      if (this.calculateGlyphPercent("companion")) return GlyphTypes.companion;
+      return GlyphTypes[this.multipleGlyphList[0].type];
+    },
     textColor() {
-      if (this.isColored) return { };
-      let glyphName = GlyphTypes[this.multipleGlyphList[0].type];
-      if (this.calculateGlyphPercent("cursed")) {
-        glyphName = GlyphTypes.cursed;
-      } else if (this.calculateGlyphPercent("reality")) {
-        glyphName = GlyphTypes.reality;
-      } else if (this.multipleGlyphList[0].perc >= 60) {
-        glyphName = GlyphTypes[this.multipleGlyphList[0].type];
-      } else if (this.calculateGlyphPercent("effarig")) {
-        glyphName = GlyphTypes.effarig;
-      } else if (this.calculateGlyphPercent("companion")) {
-        glyphName = GlyphTypes.companion;
-      }
-      let nameColor = glyphName.color;
-      if (glyphName.id === "cursed") nameColor = "#5151EC";
-      else if (this.musicGlyphs >= 3) nameColor = "#FF80AB";
+      if (this.notColored && !this.forceColor) return {};
+
+      let nameColor = this.mainGlyphName.color;
+      if (this.mainGlyphName.id === "cursed") nameColor = "#5151EC";
+      else if (this.musicGlyphs() >= 3) nameColor = "#FF80AB";
       else if (this.multipleGlyphList[1].perc && this.multipleGlyphList[2].perc &&
         this.multipleGlyphList[0].perc <= 20) {
         nameColor = "#C46200";
@@ -184,23 +185,26 @@ Vue.component("current-glyph-set-name", {
         "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
                         -1px -1px 1px var(--color-text-base), 1px -1px 1px var(--color-text-base),
                         0 0 3px ${nameColor}`,
-        animation: glyphName.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
+        animation: this.mainGlyphName.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
       };
     },
+
   },
   created() {
-    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
-    this.glyphsChanged();
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.sortGlyphList);
+    this.sortGlyphList();
   },
   methods: {
     update() {
-      this.isColored = player.options.glyphTextColors;
+      this.notColored = player.options.glyphTextColors;
     },
     calculateGlyphPercent(name) {
-      return (Glyphs.activeList.filter(i => i.type === name).length / Glyphs.activeSlotCount) * 100;
+      return (this.glyphSet.filter(i => i.type === name).length / Glyphs.activeSlotCount) * 100;
     },
-    glyphsChanged() {
-      this.musicGlyphs = Glyphs.activeList.filter(i => i.symbol === "key266b").length;
+    musicGlyphs() {
+      return this.glyphSet.filter(i => i.symbol === "key266b").length;
+    },
+    sortGlyphList() {
       this.multipleGlyphList.forEach(i => i.perc = this.calculateGlyphPercent(i.type));
       this.multipleGlyphList.sort((a, b) => (a.perc === b.perc
         ? this.defaultOrder.indexOf(a.type) - this.defaultOrder.indexOf(b.type)

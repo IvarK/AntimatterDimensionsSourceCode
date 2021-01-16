@@ -509,6 +509,17 @@ const Glyphs = {
     this.validate();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
+  findByValues(finding, useLevel, useStrength) {
+    if (!useLevel && !useStrength) return player.reality.glyphs.inventory.find(glyph =>
+      glyph.effects === finding.effects && glyph.type === finding.type);
+    if (!useLevel) return player.reality.glyphs.inventory.find(glyph =>
+      glyph.effects === finding.effects && glyph.strength === finding.strength && glyph.type === finding.type);
+    if (!useStrength) return player.reality.glyphs.inventory.find(glyph =>
+      glyph.effects === finding.effects && glyph.level === finding.level && glyph.type === finding.type);
+    return player.reality.glyphs.inventory.find(glyph =>
+      glyph.effects === finding.effects && glyph.level === finding.level && glyph.strength === finding.strength &&
+      glyph.type === finding.type);
+  },
   findById(id) {
     return player.reality.glyphs.inventory.find(glyph => glyph.id === id);
   },
@@ -893,7 +904,9 @@ const Glyphs = {
         type: g.type,
         level: g.level,
         strength: g.strength,
-        effects: g.effects, }))
+        effects: g.effects,
+        color: g.color,
+        symbol: g.symbol, }))
       .sort((a, b) => b.effects - a.effects);
   },
   // Normal glyph count minus 3 for each cursed glyph, uses 4 instead of 3 in the calculation because cursed glyphs

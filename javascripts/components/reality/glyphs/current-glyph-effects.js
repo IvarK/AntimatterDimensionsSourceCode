@@ -8,7 +8,7 @@ Vue.component("current-glyph-effects", {
       },
       data() {
         return {
-          isColored: true,
+          notColored: true,
         };
       },
       computed: {
@@ -29,7 +29,7 @@ Vue.component("current-glyph-effects", {
             .replace("{value2}", value2);
         },
         textColor() {
-          if (this.isColored) return { };
+          if (this.notColored) return { };
           const glyphName = this.effectConfig.id === "timeshardpow"
           ? GlyphTypes.time
           : GlyphTypes[this.effectConfig.glyphTypes];
@@ -47,7 +47,7 @@ Vue.component("current-glyph-effects", {
       },
       methods: {
         update() {
-          this.isColored = player.options.glyphTextColors;
+          this.notColored = player.options.glyphTextColors;
         },
       },
       template: `
@@ -67,6 +67,9 @@ Vue.component("current-glyph-effects", {
     },
     noEffects() {
       return !this.effects.length;
+    },
+    glyphSet() {
+      return Glyphs.activeList;
     }
   },
   created() {
@@ -83,7 +86,7 @@ Vue.component("current-glyph-effects", {
     <div class="c-current-glyph-effects__header">
       Currently active glyph effects:
     </div>
-    <current-glyph-set-name />
+    <glyph-set-name :glyphSet="glyphSet" />
     <br>
     <div v-if="isSoftcapActive" class="l-current-glyph-effects__capped-header">
       <span class="c-current-glyph-effects__effect--capped">Colored</span> effects have been slightly reduced

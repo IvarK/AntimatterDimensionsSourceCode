@@ -509,16 +509,8 @@
   align-items: center;
 }
 
-.l-equipped-glyphs__respec {
-  width: 15rem;
-  height: 4rem;
-  margin: auto;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-}
-
-.l-equipped-glyphs__undo {
-  width: 5em;
+.l-equipped-glyphs__small {
+  width: 5rem;
   height: 4rem;
   margin: auto;
   margin-top: 2rem;
@@ -526,15 +518,21 @@
   margin-left: 0.2rem;
 }
 
-.l-equipped-glyphs__respec-location {
+.l-equipped-glyphs__large {
   width: 15rem;
   height: 4rem;
   margin: auto;
-  margin-top: 1rem;
+  margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
-.l-equipped-glyphs__respec-location-large {
+.c-glyph-set-save-button {
+  height: 2.5rem;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.l-equipped-glyphs__larger {
   width: 20.2rem;
 }
 
@@ -796,6 +794,24 @@
   top: 2.9rem;
   right: 25rem;
   width: 0%;
+}
+
+.l-glyph-side-box-position {
+  position: relative;
+}
+
+.l-glyph-side-box-button {
+  display: flex;
+  flex-direction: column;
+  width: 8rem;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.l-glyph-side-box-button-position {
+  position: absolute;
+  top: 2rem;
+  right: -9rem;
 }
 
 .o-glyph-color-checkbox {

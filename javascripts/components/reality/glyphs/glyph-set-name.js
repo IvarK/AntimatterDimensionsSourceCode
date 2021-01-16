@@ -44,7 +44,7 @@ Vue.component("glyph-set-name", {
         nameString += `${GLYPH_NAMES.reality.name} `;
       }
 
-      // Music Glyphs are tricky to get, have to search .symbol === "key266b"
+      // Now on to Music Glyphs - seperate from the others as they can be both Music and [type]
       if (this.musicGlyphPercent() === 100) {
         nameString += `${GLYPH_NAMES.music.major} `;
       } else if (this.musicGlyphPercent() >= 40) {
@@ -63,7 +63,7 @@ Vue.component("glyph-set-name", {
         else nameString += `${GLYPH_NAMES.effarig.none} `;
       }
 
-      // Cursed wants a different set than without Cursed
+      // Cursed wants a different method of generating names
       if (this.calculateGlyphPercent("cursed")) {
         nameString += this.cursedName;
       } else if (this.multipleGlyphList[0].perc) {
@@ -72,42 +72,28 @@ Vue.component("glyph-set-name", {
       return nameString;
     },
     cursedName() {
-      const cursedCount = this.calculateGlyphPercent("cursed");
+      const cursedPerc = this.calculateGlyphPercent("cursed");
       const fir = this.multipleGlyphList[0];
       const sec = this.multipleGlyphList[1];
       const thr = this.multipleGlyphList[2];
       let adding = "";
-      if (cursedCount === 100) {
-        adding += "Fully ";
-        adding += `${GLYPH_NAMES.cursed.major} `;
-      } else if (cursedCount >= 80) {
-        adding += `${GLYPH_NAMES.cursed.major} `;
-        if (fir.perc) {
-          adding += `${GLYPH_NAMES[fir.type].minor} `;
-        }
-      } else if (cursedCount >= 60) {
-        adding += `${GLYPH_NAMES.cursed.middling} `;
-        if (fir.perc) {
-          adding += `${GLYPH_NAMES[fir.type].minor} `;
-          if (sec.perc) {
-            adding += `${GLYPH_NAMES[sec.type].minor} `;
-          }
-        }
-      } else if (cursedCount >= 40) {
+      if (cursedPerc === 100) {
+        adding += `Fully ${GLYPH_NAMES.cursed.major}`;
+      } else if (cursedPerc >= 80) {
+        adding += `${GLYPH_NAMES.cursed.major} ${this.getName(fir, "minor")}`;
+      } else if (cursedPerc >= 60) {
+        adding += `${GLYPH_NAMES.cursed.middling} ${this.getName(fir, "minor")}${this.getName(sec, "minor")}`;
+      } else if (cursedPerc >= 40) {
         adding += `${GLYPH_NAMES.cursed.middling} `;
         if (fir.perc >= 60) {
-          adding += `${GLYPH_NAMES[fir.type].middling} `;
+          adding += `${this.getName(fir, "middling")}`;
         } else if (fir.perc >= 40) {
-          if (sec.perc) {
-            adding += `${GLYPH_NAMES[sec.type].middling} `;
-          }
-          adding += `${GLYPH_NAMES[fir.type].major} `;
-        } else if (fir.perc && sec.perc && thr.perc) {
+          adding += `${this.getName(sec, "middling")}${this.getName(fir, "major")}`;
+        } else if (thr.perc) {
           adding += "Irregularity";
         }
-      } else if (cursedCount) {
-        adding += `${GLYPH_NAMES.cursed.minor} `;
-        adding += "Jumble";
+      } else {
+        adding += `${GLYPH_NAMES.cursed.minor} ${this.normalName}`;
       }
       return adding;
     },
@@ -117,49 +103,35 @@ Vue.component("glyph-set-name", {
       const thr = this.multipleGlyphList[2];
       let adding = "";
       if (fir.perc === 100) {
-        adding += "Full ";
-        adding += `${GLYPH_NAMES[fir.type].major} `;
+        adding += `Full ${this.getName(fir, "major")}`;
       } else if (fir.perc >= 80) {
-        if (sec.perc) {
-          adding += `${GLYPH_NAMES[sec.type].middling} `;
-        }
-        adding += `${GLYPH_NAMES[fir.type].major} `;
+        adding += `${this.getName(sec, "middling")}${this.getName(fir, "major")}`;
       } else if (fir.perc >= 60) {
-        if (thr.perc) {
-          adding += `${GLYPH_NAMES[sec.type].minor} `;
-          adding += `${GLYPH_NAMES[thr.type].minor} `;
-        } else if (sec.perc) {
-          adding += `${GLYPH_NAMES[sec.type].middling} `;
-        }
-        adding += `${GLYPH_NAMES[fir.type].major} `;
+        adding += thr.perc
+          ? `${this.getName(sec, "minor")}${this.getName(thr, "minor")}`
+          : `${this.getName(sec, "middling")}`;
+        adding += `${this.getName(fir, "major")}`;
       } else if (fir.perc >= 40) {
         if (sec.perc >= 40) {
-          adding += `${GLYPH_NAMES[fir.type].minor} `;
-          adding += `${GLYPH_NAMES[sec.type].minor} `;
+          adding += `${this.getName(fir, "minor")}${this.getName(sec, "minor")}`;
           if (thr.perc) {
             adding += "Irregularity";
           }
         } else {
-          adding += `${GLYPH_NAMES[fir.type].middling} `;
-          if (thr.perc) {
-            adding += "Blend";
-          } else if (sec.perc) {
-            adding += `${GLYPH_NAMES[sec.type].minor} `;
-          }
+          adding += `${this.getName(fir, "middling")}`;
+          adding += thr.perc
+            ? "Blend"
+            : `${this.getName(sec, "minor")}`;
         }
-      } else if (fir.perc) {
-        if (thr.perc) {
-          if (!(this.calculateGlyphPercent("reality") && this.calculateGlyphPercent("effarig"))) {
+      } else if (thr.perc) {
+          if (!(this.calculateGlyphPercent("reality") || this.calculateGlyphPercent("effarig") ||
+                this.calculateGlyphPercent("cursed"))) {
             adding += "Irregular ";
           }
           adding += "Jumble";
         } else {
-          adding += `${GLYPH_NAMES[fir.type].minor} `;
-          if (sec.perc) {
-            adding += `${GLYPH_NAMES[sec.type].minor} `;
-          }
+          adding += `${this.getName(fir, "minor")}${this.getName(sec, "minor")}`;
         }
-      }
       return adding;
     },
     mainGlyphName() {
@@ -199,17 +171,24 @@ Vue.component("glyph-set-name", {
       this.notColored = player.options.glyphTextColors;
     },
     calculateGlyphPercent(name) {
+      // Take the amount of a type of glyph in the set, divide by the maximum number of glyphs, then * 100 to get %
       return (this.glyphSet.filter(i => i.type === name).length / Glyphs.activeSlotCount) * 100;
     },
     musicGlyphPercent() {
+      // Music Glyphs are tricky to get, have to search .symbol === "key266b"
       return (this.glyphSet.filter(i => i.symbol === "key266b").length / Glyphs.activeSlotCount) * 100;
     },
     sortGlyphList() {
+      // Get the percent for each type, then sort it based on type and then default order, to make it consistent
       this.multipleGlyphList.forEach(i => i.perc = this.calculateGlyphPercent(i.type));
       this.multipleGlyphList.sort((a, b) => (a.perc === b.perc
         ? this.defaultOrder.indexOf(a.type) - this.defaultOrder.indexOf(b.type)
         : b.perc - a.perc));
-    }
+    },
+    getName(position, type) {
+      if (!position.perc) return ``;
+      return `${GLYPH_NAMES[position.type][type]} `;
+    },
   },
   template: `
     <div>

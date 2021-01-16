@@ -75,7 +75,6 @@ Vue.component("glyph-set-name", {
       const cursedPerc = this.calculateGlyphPercent("cursed");
       const fir = this.multipleGlyphList[0];
       const sec = this.multipleGlyphList[1];
-      const thr = this.multipleGlyphList[2];
       let adding = "";
       if (cursedPerc === 100) {
         adding += `Fully ${GLYPH_NAMES.cursed.major}`;
@@ -89,7 +88,7 @@ Vue.component("glyph-set-name", {
           adding += `${this.getName(fir, "middling")}`;
         } else if (fir.perc >= 40) {
           adding += `${this.getName(sec, "middling")}${this.getName(fir, "major")}`;
-        } else if (thr.perc) {
+        } else if (this.multipleGlyphList[2].perc) {
           adding += "Irregularity";
         }
       } else {

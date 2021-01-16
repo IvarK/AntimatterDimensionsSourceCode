@@ -45,11 +45,11 @@ Vue.component("glyph-set-name", {
       }
 
       // Music Glyphs are tricky to get, have to search .symbol === "key266b"
-      if (this.musicGlyphs() === 5) {
+      if (this.musicGlyphPercent() === 100) {
         nameString += `${GLYPH_NAMES.music.major} `;
-      } else if (this.musicGlyphs() >= 2) {
+      } else if (this.musicGlyphPercent() >= 40) {
         nameString += `${GLYPH_NAMES.music.middling} `;
-      } else if (this.musicGlyphs() === 1) {
+      } else if (this.musicGlyphPercent()) {
         nameString += `${GLYPH_NAMES.music.minor} `;
       }
 
@@ -175,7 +175,7 @@ Vue.component("glyph-set-name", {
 
       let nameColor = this.mainGlyphName.color;
       if (this.mainGlyphName.id === "cursed") nameColor = "#5151EC";
-      else if (this.musicGlyphs() >= 3) nameColor = "#FF80AB";
+      else if (this.musicGlyphPercent() >= 60) nameColor = "#FF80AB";
       else if (this.multipleGlyphList[1].perc && this.multipleGlyphList[2].perc &&
         this.multipleGlyphList[0].perc <= 20) {
         nameColor = "#C46200";
@@ -201,8 +201,8 @@ Vue.component("glyph-set-name", {
     calculateGlyphPercent(name) {
       return (this.glyphSet.filter(i => i.type === name).length / Glyphs.activeSlotCount) * 100;
     },
-    musicGlyphs() {
-      return this.glyphSet.filter(i => i.symbol === "key266b").length;
+    musicGlyphPercent() {
+      return (this.glyphSet.filter(i => i.symbol === "key266b").length / Glyphs.activeSlotCount) * 100;
     },
     sortGlyphList() {
       this.multipleGlyphList.forEach(i => i.perc = this.calculateGlyphPercent(i.type));

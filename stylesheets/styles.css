@@ -1650,15 +1650,6 @@ screen and (max-width: 480px) {
   color: black;
 }
 
-.t-dark .o-infinity-button {
-  color: var(--color-infinity);
-  background: black;
-}
-
-.t-dark .o-infinity-button:hover {
-  background: var(--color-infinity);
-}
-
 .t-metro .o-infinity-button,
 .t-inverted-metro .o-infinity-button,
 .t-s8 .o-infinity-button {
@@ -1668,15 +1659,9 @@ screen and (max-width: 480px) {
 }
 
 .t-dark-metro .o-infinity-button {
-  color: var(--color-infinity);
-  background: black;
   box-shadow: 1px 1px 1px 0 black;
   border-width: 0.1rem;
   border-radius: 0;
-}
-
-.t-dark-metro .o-infinity-button:hover {
-  background: var(--color-infinity);
 }
 
 /*#region Eternity*/

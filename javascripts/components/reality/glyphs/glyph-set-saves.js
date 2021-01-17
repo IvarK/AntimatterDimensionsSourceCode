@@ -17,18 +17,18 @@ Vue.component("glyph-set-saves", {
   },
   watch: {
     rarity(newValue) {
-      player.options.loadGlyphRarity = newValue;
+      player.options.ignoreGlyphRarity = newValue;
     },
     level(newValue) {
-      player.options.loadGlyphLevel = newValue;
+      player.options.ignoreGlyphLevel = newValue;
     },
   },
   methods: {
     update() {
       this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g));
       this.hasEquipped = Glyphs.activeList.length > 0;
-      this.rarity = player.options.loadGlyphRarity;
-      this.level = player.options.loadGlyphLevel;
+      this.rarity = player.options.ignoreGlyphRarity;
+      this.level = player.options.ignoreGlyphLevel;
     },
     saveGlyphSet(id) {
       if (!this.hasEquipped || player.reality.glyphs.sets[id].length) return;
@@ -36,9 +36,9 @@ Vue.component("glyph-set-saves", {
     },
     loadGlyphSet(set) {
       if (this.hasEquipped || !set.length) return;
-      const useRarity = !Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST) && this.rarity;
+      const forceRarity = !Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST) && this.rarity;
       for (let i = 0; i < set.length; i++) {
-        const glyph = Glyphs.findByValues(set[i], this.level, useRarity);
+        const glyph = Glyphs.findByValues(set[i], this.level, forceRarity);
         if (!glyph) {
           GameUI.notify.error(`Could not load the Glyph Set due to missing glyph!`);
           return;
@@ -63,16 +63,18 @@ Vue.component("glyph-set-saves", {
         <br>
         Effects: Always
         <br>
-        <primary-button-on-off
+        <primary-button-on-off-custom
           class="o-primary-btn--reality-upgrade-toggle"
           v-model="level"
-          text="Level:"
+          on="Level: Disabled"
+          off="Level: Enabled"
         />
         <br>
-        <primary-button-on-off
+        <primary-button-on-off-custom
           class="o-primary-btn--reality-upgrade-toggle"
           v-model="rarity"
-          text="Rarity:"
+          on="Rarity: Disabled"
+          off="Rarity: Enabled"
         />
       </div>
       <div v-for="(set, id) in glyphSets">

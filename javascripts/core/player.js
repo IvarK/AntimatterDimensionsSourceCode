@@ -561,8 +561,8 @@ let player = {
     exportedFileCount: 0,
     hideCompletedAchievementRows: false,
     glyphTextColors: true,
-    loadGlyphLevel: true,
-    loadGlyphRarity: true,
+    ignoreGlyphLevel: true,
+    ignoreGlyphRarity: true,
     showHintText: {
       achievements: false,
       achievementUnlockStates: false,

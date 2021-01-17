@@ -509,12 +509,13 @@ const Glyphs = {
     this.validate();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
-  findByValues(finding, useLevel, useStrength) {
-    return player.reality.glyphs.inventory.find(glyph => {
-        const str = useStrength || glyph.strength === finding.strength;
-        const lvl = useLevel || glyph.level === finding.level;
-        return (glyph.type === finding.type && glyph.effects === finding.effects && str && lvl);
-      });
+  findByValues(finding, ignoreLevel, ignoreStrength) {
+    return this.inventoryList.filter(glyph => {
+        const str = ignoreStrength || glyph.strength === finding.strength;
+        const lvl = ignoreLevel || glyph.level === finding.level;
+        const sym = Boolean(glyph.symbol) || glyph.symbol === finding.symbol;
+        return (glyph.type === finding.type && glyph.effects === finding.effects && str && lvl && sym);
+      }).sort((a, b) => -a.level * a.strength + b.level * b.strength)[0];
   },
   findById(id) {
     return player.reality.glyphs.inventory.find(glyph => glyph.id === id);

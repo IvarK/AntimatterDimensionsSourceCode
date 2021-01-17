@@ -5,6 +5,8 @@ Vue.component("glyph-set-saves", {
     return {
       hasEquipped: true,
       glyphSets: [],
+      rarity: false,
+      level: false,
     };
   },
   computed: {
@@ -17,6 +19,8 @@ Vue.component("glyph-set-saves", {
     update() {
       this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g));
       this.hasEquipped = Glyphs.activeList.length > 0;
+      this.rarity = player.options.loadGlyphRarity;
+      this.level = player.options.loadGlyphLevel;
     },
     saveGlyphSet(set, id) {
       if (!this.hasEquipped || set.length) return;
@@ -24,10 +28,9 @@ Vue.component("glyph-set-saves", {
     },
     loadGlyphSet(set, id) {
       if (this.hasEquipped || !set.length) return;
-      const useLevel = player.options.loadGlyphLevel;
-      const useStrength = !Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST) && player.options.loadGlyphStrength;
+      const useRarity = !Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST) && this.rarity;
       for (let i = 0; i < set.length; i++) {
-        const glyph = Glyphs.findByValues(set[i], useLevel, useStrength);
+        const glyph = Glyphs.findByValues(set[i], this.level, useRarity);
         if (!glyph) {
           GameUI.notify.error(`Could not load Glyph Set ${id} due to missing glyph!`);
           return;
@@ -40,11 +43,28 @@ Vue.component("glyph-set-saves", {
       if (!set.length) return;
       player.reality.glyphs.sets[id] = [];
     },
+    toggleCheckRarity() {
+      player.options.loadGlyphRarity = !this.rarity;
+    },
+    toggleCheckLevel() {
+      player.options.loadGlyphLevel = !this.level;
+    },
   },
   template: `
     <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
       <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
         <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
+      </div>
+      When searching for glyphs to load, check:
+      <div>
+        <button class="c-reality-upgrade-btn c-glyph-set-save-button"
+                :class="{'c-reality-upgrade-btn--bought': level}"
+                @click="toggleCheckLevel()"
+        >Level</button>
+        <button class="c-reality-upgrade-btn c-glyph-set-save-button"
+                :class="{'c-reality-upgrade-btn--bought': rarity}"
+                @click="toggleCheckRarity()"
+        >Rarity</button>
       </div>
       <div v-for="(set, id) in glyphSets">
         <div>

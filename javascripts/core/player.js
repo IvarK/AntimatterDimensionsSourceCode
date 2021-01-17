@@ -562,7 +562,7 @@ let player = {
     hideCompletedAchievementRows: false,
     glyphTextColors: true,
     loadGlyphLevel: true,
-    loadGlyphStrength: true,
+    loadGlyphRarity: true,
     showHintText: {
       achievements: false,
       achievementUnlockStates: false,

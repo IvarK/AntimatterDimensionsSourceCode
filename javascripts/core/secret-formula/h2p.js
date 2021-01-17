@@ -863,11 +863,11 @@ the threshold to any value you want. One possible way you can use this behavior 
 ${formatInt(5)}, which allows you to keep Glyphs without that effect as long as they are rarer.
 <br>
 <br>
-Glyph Set Saves is purchasable for ${format(GameDatabase.celestials.effarig.unlocks.setSaves.cost)} Relic
-Shards. This unlocks ${formatInt(5)} slots for your currently equipped glyph set can be saved in. You cannot
-overwrite a set, you must delete it first. When you load a set, each glyph in it is found and equipped. If any
-are not found, it will display a warning, but equip all the rest regardless. You can only load a set when there
-are no equipped glyphs.
+Glyph Set Saves are purchasable for ${format(GameDatabase.celestials.effarig.unlocks.setSaves.cost)} Relic
+Shards. This unlocks ${formatInt(5)} slots that allow you to save your currently equipped glyphs into sets.
+You cannot overwrite a set, you must delete it first. When you load a set, each glyph in it is found and equipped.
+If any are not found, it will display a warning, but equip all the rest regardless. You can only load a set when
+there are no equipped glyphs.
 <br>
 <br>
 <i>Note: If desired, "Specified Effect Mode" and "Advanced Mode" can be used to filter out some Glyph types entirely;

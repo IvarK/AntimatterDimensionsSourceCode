@@ -11,9 +11,17 @@ Vue.component("glyph-set-saves", {
   },
   computed: {
     questionmarkTooltip() {
-      return `Save copies your current glyphs. Delete clears the set for a new save. Load finds the glyphs in your
-      inventory and equips them, but only if you have no glyphs equipped. `;
+      return `Save copies your current glyphs. Delete clears the set for a new save. Load searches through your
+      inventory, and equips the first one it finds. You can only load a set when you have no glyphs equipped.`;
     }
+  },
+  watch: {
+    rarity(newValue) {
+      player.options.loadGlyphRarity = newValue;
+    },
+    level(newValue) {
+      player.options.loadGlyphLevel = newValue;
+    },
   },
   methods: {
     update() {
@@ -22,32 +30,26 @@ Vue.component("glyph-set-saves", {
       this.rarity = player.options.loadGlyphRarity;
       this.level = player.options.loadGlyphLevel;
     },
-    saveGlyphSet(set, id) {
-      if (!this.hasEquipped || set.length) return;
+    saveGlyphSet(id) {
+      if (!this.hasEquipped || player.reality.glyphs.sets[id].length) return;
       player.reality.glyphs.sets[id] = Glyphs.active.filter(g => g !== null);
     },
-    loadGlyphSet(set, id) {
+    loadGlyphSet(set) {
       if (this.hasEquipped || !set.length) return;
       const useRarity = !Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST) && this.rarity;
       for (let i = 0; i < set.length; i++) {
         const glyph = Glyphs.findByValues(set[i], this.level, useRarity);
         if (!glyph) {
-          GameUI.notify.error(`Could not load Glyph Set ${id} due to missing glyph!`);
+          GameUI.notify.error(`Could not load the Glyph Set due to missing glyph!`);
           return;
         }
         const idx = Glyphs.active.indexOf(null);
         if (idx !== -1) Glyphs.equip(glyph, idx);
       }
     },
-    deleteGlyphSet(set, id) {
-      if (!set.length) return;
+    deleteGlyphSet(id) {
+      if (!player.reality.glyphs.sets[id].length) return;
       player.reality.glyphs.sets[id] = [];
-    },
-    toggleCheckRarity() {
-      player.options.loadGlyphRarity = !this.rarity;
-    },
-    toggleCheckLevel() {
-      player.options.loadGlyphLevel = !this.level;
     },
   },
   template: `
@@ -57,14 +59,21 @@ Vue.component("glyph-set-saves", {
       </div>
       When searching for glyphs to load, check:
       <div>
-        <button class="c-reality-upgrade-btn c-glyph-set-save-button"
-                :class="{'c-reality-upgrade-btn--bought': level}"
-                @click="toggleCheckLevel()"
-        >Level</button>
-        <button class="c-reality-upgrade-btn c-glyph-set-save-button"
-                :class="{'c-reality-upgrade-btn--bought': rarity}"
-                @click="toggleCheckRarity()"
-        >Rarity</button>
+        Type: Always
+        <br>
+        Effects: Always
+        <br>
+        <primary-button-on-off
+          class="o-primary-btn--reality-upgrade-toggle"
+          v-model="level"
+          text="Level:"
+        />
+        <br>
+        <primary-button-on-off
+          class="o-primary-btn--reality-upgrade-toggle"
+          v-model="rarity"
+          text="Rarity:"
+        />
       </div>
       <div v-for="(set, id) in glyphSets">
         <div>
@@ -76,15 +85,15 @@ Vue.component("glyph-set-saves", {
         </div>
         <button class="c-reality-upgrade-btn c-glyph-set-save-button"
                 :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"
-                @click="saveGlyphSet(set, id)"
+                @click="saveGlyphSet(id)"
         >Save</button>
         <button class="c-reality-upgrade-btn c-glyph-set-save-button"
                 :class="{'c-reality-upgrade-btn--unavailable': !set.length}"
-                @click="deleteGlyphSet(set, id)"
+                @click="deleteGlyphSet(id)"
         >Delete</button>
         <button class="c-reality-upgrade-btn c-glyph-set-save-button"
                 :class="{'c-reality-upgrade-btn--unavailable': hasEquipped || !set.length}"
-                @click="loadGlyphSet(set, id)"
+                @click="loadGlyphSet(set)"
         >Load</button>
       </div>
     </div>`,

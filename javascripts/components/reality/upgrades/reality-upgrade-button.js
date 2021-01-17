@@ -47,7 +47,7 @@ Vue.component("reality-upgrade-button", {
       this.isBought = !upgrade.isRebuyable && upgrade.isBought;
       this.isPossible = upgrade.isPossible;
       this.isAutoUnlocked = Ra.has(RA_UNLOCKS.AUTO_REALITY_UPGRADES);
-      this.isAutobuyerOn = this.upgrade.isAutobuyerOn;
+      this.isAutobuyerOn = upgrade.isAutobuyerOn;
     }
   },
   template: `

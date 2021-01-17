@@ -510,15 +510,11 @@ const Glyphs = {
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   findByValues(finding, useLevel, useStrength) {
-    if (!useLevel && !useStrength) return player.reality.glyphs.inventory.find(glyph =>
-      glyph.effects === finding.effects && glyph.type === finding.type);
-    if (!useLevel) return player.reality.glyphs.inventory.find(glyph =>
-      glyph.effects === finding.effects && glyph.strength === finding.strength && glyph.type === finding.type);
-    if (!useStrength) return player.reality.glyphs.inventory.find(glyph =>
-      glyph.effects === finding.effects && glyph.level === finding.level && glyph.type === finding.type);
-    return player.reality.glyphs.inventory.find(glyph =>
-      glyph.effects === finding.effects && glyph.level === finding.level && glyph.strength === finding.strength &&
-      glyph.type === finding.type);
+    return player.reality.glyphs.inventory.find(glyph => {
+        const str = useStrength || glyph.strength === finding.strength;
+        const lvl = useLevel || glyph.level === finding.level;
+        return (glyph.type === finding.type && glyph.effects === finding.effects && str && lvl);
+      });
   },
   findById(id) {
     return player.reality.glyphs.inventory.find(glyph => glyph.id === id);

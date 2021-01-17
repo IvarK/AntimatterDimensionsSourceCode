@@ -51,6 +51,7 @@ Vue.component("glyph-set-saves", {
           <glyph-set-preview
             :show=true
             :glyphs="set"
+            :flipTooltip=true
             style="height: 5rem" />
         </div>
         <button class="c-reality-upgrade-btn c-glyph-set-save-button"

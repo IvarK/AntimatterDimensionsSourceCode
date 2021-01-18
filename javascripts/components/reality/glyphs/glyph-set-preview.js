@@ -15,6 +15,10 @@ Vue.component("glyph-set-preview", {
       type: Boolean,
       default: false
     },
+    noneText: {
+      type: String,
+      default: "(No Glyphs equipped)"
+    }
   },
   template:
     `<div v-if="show">
@@ -43,7 +47,7 @@ Vue.component("glyph-set-preview", {
           bottomPadding="0.4rem" />
       </span>
       <span v-else>
-        (No Glyphs equipped)
+        {{ noneText }}
       </span>
     </div>`
 });

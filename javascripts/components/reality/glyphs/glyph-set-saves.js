@@ -13,7 +13,10 @@ Vue.component("glyph-set-saves", {
     questionmarkTooltip() {
       return `Save copies your current glyphs. Delete clears the set for a new save. Load searches through your
       inventory, and equips the first one it finds. You can only load a set when you have no glyphs equipped.`;
-    }
+    },
+    noSet() {
+      return `No Set Saved`;
+    },
   },
   watch: {
     rarity(newValue) {
@@ -80,10 +83,11 @@ Vue.component("glyph-set-saves", {
       <div v-for="(set, id) in glyphSets">
         <div>
           <glyph-set-preview
+            class="l-glyph-set-save-spacing"
             :show=true
             :glyphs="set"
             :flipTooltip=true
-            style="height: 5rem" />
+            :noneText=noSet />
         </div>
         <button class="c-reality-upgrade-btn c-glyph-set-save-button"
                 :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"

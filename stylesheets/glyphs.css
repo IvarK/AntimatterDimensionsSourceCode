@@ -532,6 +532,13 @@
   font-size: 1.3rem;
 }
 
+.l-glyph-set-save-spacing {
+  height: 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
 .l-equipped-glyphs__larger {
   width: 20.2rem;
 }

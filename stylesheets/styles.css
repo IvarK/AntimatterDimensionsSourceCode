@@ -8194,12 +8194,13 @@ kbd {
 
 .c-reality-upgrade-btn--possible {
   background-color: #8b8529;
+  color: black;
   cursor: default;
 }
 
 .c-reality-upgrade-btn--possible:hover {
   background-color: #8b8529;
-  color: var(--color-reality-light);
+  color: black;
 }
 
 .c-reality-upgrade-btn--locked {

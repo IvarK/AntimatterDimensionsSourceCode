@@ -867,7 +867,8 @@ Glyph Set Saves are purchasable for ${format(GameDatabase.celestials.effarig.unl
 Shards. This unlocks ${formatInt(5)} slots that allow you to save your currently equipped glyphs into sets.
 You cannot overwrite a set, you must delete it first. When you load a set, each glyph in it is found and equipped.
 If any are not found, it will display a warning, but equip all the rest regardless. You can only load a set when
-there are no equipped glyphs.
+there are no equipped glyphs. When loading a set, you can be Level and/or Rarity sensitive. The best glyph from
+the possible glyphs will always be the one equipped.  
 <br>
 <br>
 <i>Note: If desired, "Specified Effect Mode" and "Advanced Mode" can be used to filter out some Glyph types entirely;

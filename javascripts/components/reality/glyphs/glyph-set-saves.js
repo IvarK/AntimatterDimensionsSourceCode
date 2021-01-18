@@ -12,7 +12,8 @@ Vue.component("glyph-set-saves", {
   computed: {
     questionmarkTooltip() {
       return `Save copies your current glyphs. Delete clears the set for a new save. Load searches through your
-      inventory, and equips the first one it finds. You can only load a set when you have no glyphs equipped.`;
+      inventory, and equips the best glyph matching its search.
+      You can only load a set when you have no glyphs equipped.`;
     },
     noSet() {
       return `No Set Saved`;

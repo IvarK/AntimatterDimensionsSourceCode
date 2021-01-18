@@ -532,6 +532,10 @@
   font-size: 1.3rem;
 }
 
+.l-glyph-set-save-button-spacing {
+  margin-top: 0.4rem;
+}
+
 .l-glyph-set-save-spacing {
   height: 6rem;
   display: flex;

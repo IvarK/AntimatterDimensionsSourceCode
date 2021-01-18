@@ -90,18 +90,20 @@ Vue.component("glyph-set-saves", {
             :flipTooltip=true
             :noneText=noSet />
         </div>
-        <button class="c-reality-upgrade-btn c-glyph-set-save-button"
-                :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"
-                @click="saveGlyphSet(id)"
-        >Save</button>
-        <button class="c-reality-upgrade-btn c-glyph-set-save-button"
-                :class="{'c-reality-upgrade-btn--unavailable': !set.length}"
-                @click="deleteGlyphSet(id)"
-        >Delete</button>
-        <button class="c-reality-upgrade-btn c-glyph-set-save-button"
-                :class="{'c-reality-upgrade-btn--unavailable': hasEquipped || !set.length}"
-                @click="loadGlyphSet(set)"
-        >Load</button>
+        <div class="l-glyph-set-save-button-spacing">
+          <button class="c-reality-upgrade-btn c-glyph-set-save-button"
+                  :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"
+                  @click="saveGlyphSet(id)"
+          >Save</button>
+          <button class="c-reality-upgrade-btn c-glyph-set-save-button"
+                  :class="{'c-reality-upgrade-btn--unavailable': !set.length}"
+                  @click="deleteGlyphSet(id)"
+          >Delete</button>
+          <button class="c-reality-upgrade-btn c-glyph-set-save-button"
+                  :class="{'c-reality-upgrade-btn--unavailable': hasEquipped || !set.length}"
+                  @click="loadGlyphSet(set)"
+          >Load</button>
+        </div>
       </div>
     </div>`,
 });

@@ -1354,6 +1354,7 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--reality-upgrade-toggle {
   font-size: 1rem;
+  margin-top: 0.5rem;
 }
 
 .o-primary-btn--replicanti-galaxy {

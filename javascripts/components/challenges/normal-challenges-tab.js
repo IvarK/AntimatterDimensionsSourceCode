@@ -19,7 +19,11 @@ Vue.component("normal-challenges-tab", {
           return NormalChallenge(this.challengeId);
         },
         config() {
-          return this.challenge.config;
+          if (this.challenge.isUnlocked) return this.challenge.config;
+          return {
+            name: `${this.challenge.config.name}`,
+            description: `Infinity ${formatInt(this.challenge.config.lockedAt)} times to unlock.`
+          };
         },
         name() {
           return `C${this.challengeId}`;

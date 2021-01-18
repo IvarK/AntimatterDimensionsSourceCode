@@ -106,10 +106,8 @@ GameDatabase.challenges.normal = [
     id: 10,
     legacyId: 4,
     isQuickResettable: false,
-    description: () => (NormalChallenge(10).isUnlocked
-      ? `There are only ${formatInt(6)} Antimatter Dimensions, with Dimension Boost ` +
-      "and Antimatter Galaxy costs modified."
-      : `Infinity ${formatInt(GameDatabase.challenges.normal[9].lockedAt)} times to unlock.`),
+    description: () => (`There are only ${formatInt(6)} Antimatter Dimensions, with Dimension Boost ` +
+      "and Antimatter Galaxy costs modified."),
     name: "Automated Dimension Boosts",
     reward: "Dimension Boosts Autobuyer",
     lockedAt: new Decimal(16),
@@ -118,10 +116,8 @@ GameDatabase.challenges.normal = [
     id: 11,
     legacyId: 12,
     isQuickResettable: true,
-    description: () => (NormalChallenge(11).isUnlocked
-      ? `There's normal matter which rises once you have at least ${formatInt(1)} 2nd Antimatter ` +
-      "Dimension. If it exceeds your antimatter, it will Dimension Boost without giving the bonus."
-      : `Infinity ${formatInt(GameDatabase.challenges.normal[10].lockedAt)} times to unlock.`),
+    description: () => (`There's normal matter which rises once you have at least ${formatInt(1)} 2nd Antimatter ` +
+      "Dimension. If it exceeds your antimatter, it will Dimension Boost without giving the bonus."),
     name: "Automated Antimatter Galaxies",
     reward: "Antimatter Galaxies Autobuyer",
     lockedAt: new Decimal(16),
@@ -130,11 +126,9 @@ GameDatabase.challenges.normal = [
     id: 12,
     legacyId: 7,
     isQuickResettable: false,
-    description: () => (NormalChallenge(12).isUnlocked
-      ? `Each Antimatter Dimension produces the dimension ${formatInt(2)} dimensions below it (1st ` +
+    description: () => (`Each Antimatter Dimension produces the dimension ${formatInt(2)} dimensions below it (1st ` +
       "Antimatter Dimensions still produce antimatter). The 2nd, 4th, and 6th Antimatter Dimensions " +
-      "are made stronger to compensate."
-      : `Infinity ${formatInt(GameDatabase.challenges.normal[11].lockedAt)} times to unlock.`),
+      "are made stronger to compensate."),
     name: "Automated Big Crunches",
     reward: "Big Crunches Autobuyer",
     lockedAt: new Decimal(16),

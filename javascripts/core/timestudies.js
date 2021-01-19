@@ -98,8 +98,8 @@ const TimeTheorems = {
   },
 
   autoBuyMaxTheorems(realDiff) {
-    if (!player.ttbuyer) return;
-    player.auto.ttTimer += realDiff;
+    if (!player.auto.timeTheorems.buyer) return;
+    player.auto.timeTheorems.timer += realDiff;
     const period = Effects.min(
       Number.POSITIVE_INFINITY,
       Perk.autobuyerTT1,
@@ -108,9 +108,9 @@ const TimeTheorems = {
       Perk.autobuyerTT4
     );
     const milliseconds = TimeSpan.fromSeconds(period).totalMilliseconds;
-    if (player.auto.ttTimer > milliseconds) {
+    if (player.auto.timeTheorems.timer > milliseconds) {
       TimeTheorems.buyMax(true);
-      player.auto.ttTimer = Math.min(player.auto.ttTimer - milliseconds, milliseconds);
+      player.auto.timeTheorems.timer = Math.min(player.auto.timeTheorems.timer - milliseconds, milliseconds);
     }
   },
 

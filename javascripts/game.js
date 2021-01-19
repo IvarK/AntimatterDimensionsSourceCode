@@ -561,11 +561,11 @@ function gameLoop(diff, options = {}) {
 
   replicantiLoop(diff);
 
-  if (player.infMultBuyer) {
+  if (player.auto.infMultBuyer) {
     InfinityUpgrade.ipMult.autobuyerTick();
   }
 
-  if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
+  if (player.auto.epMultBuyer) EternityUpgrade.epMult.buyMax();
 
   const currentEPmin = gainedEternityPoints().dividedBy(Time.thisEternityRealTime.totalMinutes);
   if (currentEPmin.gt(player.records.thisEternity.bestEPmin) && Player.canEternity)
@@ -833,7 +833,7 @@ function autoBuyDilationUpgrades(extraFactor) {
 function autoBuyInfDims() {
   if (EternityMilestone.autobuyerID(1).isReached && !EternityChallenge(8).isRunning) {
     for (let i = 1; i <= player.eternities.sub(10).clampMax(8).toNumber(); i++) {
-      if (player.infDimBuyers[i - 1]) {
+      if (player.auto.infinityDims.buyer[i - 1]) {
         buyMaxInfDims(i);
         buyManyInfinityDimension(i);
       }
@@ -849,37 +849,38 @@ function autoBuyExtraTimeDims() {
 
 function slowerAutobuyers(realDiff) {
   const ampDiff = realDiff * PerkShopUpgrade.autoSpeed.effectOrDefault(1);
-  player.auto.infDimTimer += ampDiff;
+  player.auto.infinityDims.timer += ampDiff;
   const infDimPeriod = 1000 * Perk.autobuyerFasterID.effectOrDefault(1);
-  if (player.auto.infDimTimer >= infDimPeriod) {
+  if (player.auto.infinityDims.timer >= infDimPeriod) {
     // Note: we need to reset to a low number here, because we don't want a pile of these accumulating during offline
     // time and then releasing normally.
-    player.auto.infDimTimer = Math.min(player.auto.infDimTimer - infDimPeriod, infDimPeriod);
+    player.auto.infinityDims.timer = Math.min(player.auto.infinityDims.timer - infDimPeriod, infDimPeriod);
     autoBuyInfDims();
   }
-  player.auto.timeDimTimer += ampDiff;
+  player.auto.timeDims.timer += ampDiff;
   const timeDimPeriod = 1000;
-  if (player.auto.timeDimTimer >= timeDimPeriod) {
-    player.auto.timeDimTimer = Math.min(player.auto.timeDimTimer - timeDimPeriod, timeDimPeriod);
+  if (player.auto.timeDims.timer >= timeDimPeriod) {
+    player.auto.timeDims.timer = Math.min(player.auto.timeDims.timer - timeDimPeriod, timeDimPeriod);
     if (RealityUpgrade(13).isBought) {
       maxAllTimeDimensions(true);
     }
   }
-  player.auto.repUpgradeTimer += ampDiff;
+  player.auto.replicantiUpgrades.timer += ampDiff;
   const repUpgradePeriod = 1000 * Perk.autobuyerFasterReplicanti.effectOrDefault(1);
-  if (player.auto.repUpgradeTimer >= repUpgradePeriod) {
-    player.auto.repUpgradeTimer = Math.min(player.auto.repUpgradeTimer - repUpgradePeriod, repUpgradePeriod);
+  if (player.auto.replicantiUpgrades.timer >= repUpgradePeriod) {
+    player.auto.replicantiUpgrades.timer = Math.min(player.auto.replicantiUpgrades.timer - repUpgradePeriod,
+      repUpgradePeriod);
     autoBuyReplicantiUpgrades();
   }
-  player.auto.dilUpgradeTimer += ampDiff;
+  player.auto.dilation.timer += ampDiff;
   const dilUpgradePeriod = 1000 * Perk.autobuyerFasterDilation.effectOrDefault(1);
-  if (player.auto.dilUpgradeTimer >= dilUpgradePeriod) {
+  if (player.auto.dilation.timer >= dilUpgradePeriod) {
     // Because the dilation upgrade autobuyers naturally buy singles, it helps to
     // be able to trigger them multiple times in one long-enough tick, which is
     // what we do here. (This is why this code looks a bit different from that for
     // the other autobuyers, which buy max.)
-    autoBuyDilationUpgrades(Math.floor(player.auto.dilUpgradeTimer / dilUpgradePeriod));
-    player.auto.dilUpgradeTimer %= dilUpgradePeriod;
+    autoBuyDilationUpgrades(Math.floor(player.auto.dilation.timer / dilUpgradePeriod));
+    player.auto.dilation.timer %= dilUpgradePeriod;
   }
 
   TimeTheorems.autoBuyMaxTheorems(ampDiff);

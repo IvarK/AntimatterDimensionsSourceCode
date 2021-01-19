@@ -75,9 +75,9 @@ function buyMaxInfinityDimensions() {
 }
 
 function toggleAllInfDims() {
-  const areEnabled = player.infDimBuyers[0];
+  const areEnabled = player.auto.infinityDims.buyer[0];
   for (let i = 1; i < 9; i++) {
-    player.infDimBuyers[i - 1] = !areEnabled;
+    player.auto.infinityDims.buyer[i - 1] = !areEnabled;
   }
 }
 
@@ -262,7 +262,7 @@ class InfinityDimensionState extends DimensionState {
 
     this.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, this.tier);
-    if (player.infDimBuyers[this.tier - 1] && !manual &&
+    if (player.auto.infinityDims.buyer[this.tier - 1] && !manual &&
       !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
       buyMaxInfDims(this.tier);
     }

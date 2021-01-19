@@ -364,10 +364,10 @@ function finishProcessReality(realityProps) {
   player.infMultCost = new Decimal(10);
   player.infinityRebuyables = [0, 0, 0];
   player.infinityPower = new Decimal(1);
-  player.infDimBuyers = Array.repeat(false, 8);
+  player.auto.infinityDims.buyer = Array.repeat(false, 8);
   player.timeShards = new Decimal(0);
   Replicanti.reset(true);
-  player.replicanti.auto = Array.repeat(false, 3);
+  player.auto.replicantiUpgrades.buyer = Array.repeat(false, 3);
 
   player.eternityPoints = Player.startingEP;
 
@@ -385,7 +385,7 @@ function finishProcessReality(realityProps) {
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;
   player.etercreq = 0;
-  player.infMultBuyer = false;
+  player.auto.infMultBuyer = false;
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
@@ -488,7 +488,7 @@ function restoreCelestialRuns(celestialRunState) {
 function applyRUPG10() {
   NormalChallenges.completeAll();
 
-  player.auto.dimensions = player.auto.dimensions.map(() => ({
+  player.auto.antimatterDims = player.auto.antimatterDims.map(() => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
     cost: 1e14,
@@ -517,13 +517,13 @@ function applyRUPG10() {
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
   player.infinityRebuyables = [8, 7, 10];
-  player.infDimBuyers = Array.repeat(true, 8);
-  player.infMultBuyer = true;
+  player.auto.infinityDims.buyers = Array.repeat(true, 8);
+  player.auto.infMultBuyer = true;
   player.eternities = player.eternities.plus(100);
   player.replicanti.amount = player.replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
-  player.replicanti.galaxybuyer = true;
-  player.replicanti.auto = Array.repeat(true, 3);
+  player.auto.replicantiGalaxies.buyer = true;
+  player.auto.replicantiUpgrades.buyer = Array.repeat(true, 3);
   GameCache.tickSpeedMultDecrease.invalidate();
   GameCache.dimensionMultDecrease.invalidate();
 }

@@ -1446,11 +1446,11 @@ class RebuyableRealityUpgradeState extends RebuyableMechanicState {
   }
 
   get isAutobuyerOn() {
-    return player.reality.rebuyablesAuto[this.autobuyerId];
+    return player.auto.realityUpgrades.buyer[this.autobuyerId];
   }
 
   set isAutobuyerOn(value) {
-    player.reality.rebuyablesAuto[this.autobuyerId] = value;
+    player.auto.realityUpgrades.buyer[this.autobuyerId] = value;
   }
 }
 

@@ -96,7 +96,7 @@ Vue.component("tt-shop", {
       this.shopMinimized = player.timestudy.shopMinimized;
       this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought || Perk.autobuyerTT1.isBought;
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
-      this.ttAutobuyerOn = player.ttbuyer;
+      this.ttAutobuyerOn = player.auto.timeTheorems.buyer;
       const budget = this.budget;
       budget.am.copyFrom(Currency.antimatter);
       budget.ip.copyFrom(player.infinityPoints);
@@ -110,7 +110,7 @@ Vue.component("tt-shop", {
       this.showTTGen = this.theoremGeneration.gt(0) && !ui.view.shiftDown;
     },
     toggleTTAutobuyer() {
-      player.ttbuyer = !player.ttbuyer;
+      player.auto.timeTheorems = !player.auto.timeTheorems;
     }
   },
   template: `

@@ -20,7 +20,7 @@ function addReplicantiGalaxies(newGalaxies) {
 
 function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
-  player.replicanti.timer = 0;
+  player.auto.replicantiGalaxies.timer = 0;
   let galaxyGain = 1;
   if (Achievement(126).isUnlocked) {
     // Attempt to buy bulk if RG divides by e308 instead of resetting
@@ -72,7 +72,7 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
 }
 
 function replicantiGalaxyAutoToggle(forcestate) {
-  player.replicanti.galaxybuyer = !player.replicanti.galaxybuyer || forcestate === true;
+  player.auto.replicantiGalaxies.buyer = !player.auto.replicantiGalaxies.buyer || forcestate === true;
 }
 
 // When the amount is exactly the cap, there are two cases: the player can go
@@ -159,14 +159,14 @@ function replicantiLoop(diff) {
         Decimal.exp(remainingGain.div(LOG10_E).times(postScale).plus(1).ln() / postScale +
         player.replicanti.amount.clampMin(1).ln());
     }
-    player.replicanti.timer = 0;
-  } else if (interval.lte(player.replicanti.timer)) {
+    player.auto.replicantiGalaxies.timer = 0;
+  } else if (interval.lte(player.auto.replicantiGalaxies.timer)) {
     const reproduced = binomialDistribution(player.replicanti.amount, player.replicanti.chance);
     player.replicanti.amount = player.replicanti.amount.plus(reproduced);
     if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount);
-    player.replicanti.timer += diff - interval.toNumber();
+    player.auto.replicantiGalaxies.timer += diff - interval.toNumber();
   } else {
-    player.replicanti.timer += diff;
+    player.auto.replicantiGalaxies.timer += diff;
   }
 
   if (areRGsBeingBought && player.replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) {
@@ -224,8 +224,8 @@ class ReplicantiUpgradeState {
 
   get isAutobuyerUnlocked() { return this.autobuyerMilestone.isReached; }
 
-  get isAutobuyerOn() { return player.replicanti.auto[this.autobuyerId]; }
-  set isAutobuyerOn(value) { player.replicanti.auto[this.autobuyerId] = value; }
+  get isAutobuyerOn() { return player.auto.replicantiUpgrades.buyer[this.autobuyerId]; }
+  set isAutobuyerOn(value) { player.auto.replicantiUpgrades.buyer[this.autobuyerId] = value; }
 
   get canBeBought() {
     return !this.isCapped && player.infinityPoints.gte(this.cost) && player.eterc8repl !== 0;
@@ -422,7 +422,7 @@ const Replicanti = {
   reset(force = false) {
     player.replicanti.unl = force ? false : EternityMilestone.unlockReplicanti.isReached;
     player.replicanti.amount = player.replicanti.unl ? new Decimal(1) : new Decimal(0);
-    player.replicanti.timer = 0;
+    player.auto.replicantiGalaxies.timer = 0;
     player.replicanti.chance = 0.01;
     player.replicanti.chanceCost = new Decimal(1e150);
     player.replicanti.interval = 1000;
@@ -431,8 +431,8 @@ const Replicanti = {
     player.replicanti.galaxies = 0;
     player.replicanti.galCost = new Decimal(1e170);
     if (force ||
-      (EternityMilestone.autobuyerReplicantiGalaxy.isReached && player.replicanti.galaxybuyer === undefined)) {
-        player.replicanti.galaxybuyer = false;
+      (EternityMilestone.autobuyerReplicantiGalaxy.isReached && player.auto.replicantiGalaxies.buyer === undefined)) {
+        player.auto.replicantiGalaxies.buyer = false;
     }
   },
   unlock(freeUnlock = false) {
@@ -440,7 +440,7 @@ const Replicanti = {
     if (freeUnlock || player.infinityPoints.gte(1e140)) {
       if (!freeUnlock) player.infinityPoints = player.infinityPoints.minus(1e140);
       player.replicanti.unl = true;
-      player.replicanti.timer = 0;
+      player.auto.replicantiGalaxies.timer = 0;
       player.replicanti.amount = new Decimal(1);
     }
   },
@@ -479,10 +479,10 @@ const Replicanti = {
         return EternityMilestone.autobuyerReplicantiGalaxy.isReached;
       },
       get isOn() {
-        return player.replicanti.galaxybuyer;
+        return player.auto.replicantiGalaxies.buyer;
       },
       set isOn(value) {
-        player.replicanti.galaxybuyer = value;
+        player.auto.replicantiGalaxies.buyer = value;
       },
       toggle() {
         if (!this.isUnlocked) return;

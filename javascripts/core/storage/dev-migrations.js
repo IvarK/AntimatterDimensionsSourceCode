@@ -908,6 +908,45 @@ GameStorage.devMigrations = {
       delete player.auto.autobuyerOn;
       delete player.auto.disableContinuum;
     },
+    player => {
+      player.auto.antimatterDims = player.auto.dimensions;
+      player.auto.infinityDims.buyer = player.infDimBuyers;
+      player.auto.infinityDims.timer = player.auto.infDimTimer;
+      player.auto.timeDims.buyer = player.reality.tdbuyers;
+      player.auto.timeDims.timer = player.auto.timeDimTimer;
+      player.auto.replicantiGalaxies.buyer = player.replicanti.galaxybuyer;
+      player.auto.replicantiGalaxies.timer = player.replicanti.timer;
+      player.auto.replicantiUpgrades.buyer = player.replicanti.auto;
+      player.auto.replicantiUpgrades.timer = player.auto.repUpgradeTimer;
+      player.auto.timeTheorems.buyer = player.ttbuyer;
+      player.auto.timeTheorems.timer = player.auto.ttTimer;
+      player.auto.dilation.buyer = player.dilation.auto;
+      player.auto.dilation.timer = player.auto.dilUpgradeTimer;
+      player.auto.blackHoleUpgrades.buyer[0] = player.blackHole[0].autoPower;
+      player.auto.blackHoleUpgrades.buyer[1] = player.blackHole[1].autoPower;
+      player.auto.realityUpgrades.buyer = player.reality.rebuyablesAuto;
+      player.auto.epMultBuyer = player.reality.epmultbuyer;
+      player.auto.infMultBuyer = player.infMultBuyer;
+
+      delete player.auto.dimensions;
+      delete player.infDimBuyers;
+      delete player.auto.infDimTimer;
+      delete player.reality.tdbuyers;
+      delete player.auto.timeDimTimer;
+      delete player.replicanti.galaxybuyer;
+      delete player.replicanti.timer;
+      delete player.replicanti.auto;
+      delete player.auto.repUpgradeTimer;
+      delete player.ttbuyer;
+      delete player.auto.ttTimer;
+      delete player.dilation.auto;
+      delete player.auto.dilUpgradeTimer;
+      delete player.blackHole[0].autoPower;
+      delete player.blackHole[1].autoPower;
+      delete player.reality.rebuyablesAuto;
+      delete player.reality.epmultbuyer;
+      delete player.infMultBuyer;
+    }
   ],
 
   patch(player) {

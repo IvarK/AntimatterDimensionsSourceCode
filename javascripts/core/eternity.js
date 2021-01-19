@@ -192,9 +192,9 @@ function initializeResourcesAfterEternity() {
 
 function applyRealityUpgradesAfterEternity(buySingleTD = false) {
   if (RealityUpgrade(13).isBought) {
-    if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
+    if (player.auto.epMultBuyer) EternityUpgrade.epMult.buyMax();
     for (let i = 1; i < 9; i++) {
-      if (player.reality.tdbuyers[i - 1]) {
+      if (player.auto.timeDims.buyers[i - 1]) {
         if (buySingleTD) buySingleTimeDimension(i);
         else buyMaxTimeDimension(i);
       }
@@ -283,10 +283,10 @@ class EPMultiplierState extends GameMechanicState {
         return RealityUpgrade(13).isBought;
       },
       get isOn() {
-        return player.reality.epmultbuyer;
+        return player.auto.epMultBuyer;
       },
       set isOn(value) {
-        player.reality.epmultbuyer = value;
+        player.auto.epMultBuyer = value;
       }
     };
     this.cachedCost = new Lazy(() => this.costAfterCount(player.epmultUpgrades));

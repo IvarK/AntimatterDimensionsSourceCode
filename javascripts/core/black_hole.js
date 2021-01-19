@@ -29,21 +29,21 @@ class BlackHoleUpgradeState {
   get isAffordable() {
     return player.reality.realityMachines.gte(this.cost);
   }
-  
+
   get autobuyerId() {
     return this.id - 1;
   }
-  
+
   get isAutobuyerOn() {
     if (this.hasAutobuyer) {
-      return player.blackHole[this.autobuyerId].autoPower;
+      return player.auto.blackHoleUpgrades.buyer[this.autobuyerId];
     }
     throw new Error("Trying to get status of the autobuyer of a black hole upgrade without an autobuyer.");
   }
 
   set isAutobuyerOn(value) {
     if (this.hasAutobuyer) {
-      player.blackHole[this.autobuyerId].autoPower = value;
+      player.auto.blackHoleUpgrades.buyer[this.autobuyerId] = value;
     } else {
       throw new Error("Trying to set status of the autobuyer of a black hole upgrade without an autobuyer.");
     }
@@ -297,7 +297,7 @@ class BlackHoleState {
     }
     return this.cycleLength - this.phase;
   }
-  
+
   description(capitalized) {
     if (RealityUpgrade(20).isBought) {
       return `Black Hole ${formatInt(this.id)}`;

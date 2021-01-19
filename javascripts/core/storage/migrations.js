@@ -144,6 +144,7 @@ GameStorage.migrations = {
       GameStorage.migrations.deleteOldRecords(player);
       GameStorage.migrations.migrateAutobuyers(player);
       GameStorage.migrations.migratePlayerVars(player);
+      GameStorage.migrations.consolidateAuto(player);
 
       kong.migratePurchases();
       if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
@@ -794,6 +795,26 @@ GameStorage.migrations = {
 
     delete player.replicanti.gal;
     delete player.dilation.freeGalaxies;
+  },
+
+  consolidateAuto(player) {
+    player.auto.antimatterDims = player.auto.dimensions;
+    player.auto.infinityDims.buyer = player.infDimBuyers;
+    player.auto.infinityDims.timer = player.auto.infDimTimer;
+    player.auto.replicantiGalaxies.buyer = player.replicanti.galaxybuyer;
+    player.auto.replicantiGalaxies.timer = player.replicanti.timer;
+    player.auto.replicantiUpgrades.buyer = player.replicanti.auto;
+    player.auto.replicantiUpgrades.timer = player.auto.repUpgradeTimer;
+    player.auto.infMultBuyer = player.infMultBuyer;
+
+    delete player.auto.dimensions;
+    delete player.infDimBuyers;
+    delete player.auto.infDimTimer;
+    delete player.replicanti.galaxybuyer;
+    delete player.replicanti.timer;
+    delete player.replicanti.auto;
+    delete player.auto.repUpgradeTimer;
+    delete player.infMultBuyer;
   },
 
   prePatch(saveData) {

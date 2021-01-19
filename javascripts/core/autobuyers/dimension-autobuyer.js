@@ -7,7 +7,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get data() {
-    return player.auto.dimensions[this._tier - 1];
+    return player.auto.antimatterDims[this._tier - 1];
   }
 
   get baseInterval() {
@@ -34,7 +34,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
     // Use 1e100 to avoid issues with Infinity.
     return this.hasUnlimitedBulk ? 1e100 : this.data.bulk;
   }
-  
+
   get hasUnlimitedBulk() {
     return Achievement(61).isUnlocked;
   }

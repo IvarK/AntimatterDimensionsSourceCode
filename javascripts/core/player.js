@@ -50,38 +50,31 @@ let player = {
     upgradeBits: 0
   },
   auto: {
-    dimensions: Array.range(0, 8).map(tier => ({
     bulkOn: true,
     autobuyersOn: true,
     disableContinuum: false,
-      isUnlocked: false,
-      cost: 1,
-      interval: [500, 600, 700, 800, 900, 1000, 1100, 1200][tier],
-      bulk: 1,
-      mode: AUTOBUYER_MODE.BUY_10,
-      priority: 1,
-      isActive: true,
-      lastTick: 0,
-      isBought: false
-    })),
-    tickspeed: {
-      isUnlocked: false,
-      cost: 1,
-      interval: 500,
-      mode: AUTOBUYER_MODE.BUY_SINGLE,
-      priority: 1,
-      isActive: true,
-      lastTick: 0,
-      isBought: false
+    reality: {
+      mode: 0,
+      rm: new Decimal(1),
+      glyph: 0,
+      isActive: true
     },
-    dimBoost: {
+    eternity: {
+      mode: 0,
+      amount: new Decimal(1),
+      increaseWithMult: true,
+      time: 1,
+      xCurrent: new Decimal(1),
+      isActive: false
+    },
+    bigCrunch: {
       cost: 1,
-      interval: 4000,
-      limitDimBoosts: true,
-      maxDimBoosts: 1,
-      galaxies: 10,
-      bulk: 1,
-      buyMaxInterval: 0,
+      interval: 150000,
+      mode: 0,
+      amount: new Decimal(1),
+      increaseWithMult: true,
+      time: 1,
+      xCurrent: new Decimal(1),
       isActive: true,
       lastTick: 0
     },
@@ -95,40 +88,74 @@ let player = {
       isActive: true,
       lastTick: 0
     },
-    bigCrunch: {
+    dimBoost: {
       cost: 1,
-      interval: 150000,
-      mode: 0,
-      amount: new Decimal(1),
-      increaseWithMult: true,
-      time: 1,
-      xCurrent: new Decimal(1),
+      interval: 4000,
+      limitDimBoosts: true,
+      maxDimBoosts: 1,
+      galaxies: 10,
+      bulk: 1,
+      buyMaxInterval: 0,
       isActive: true,
       lastTick: 0
+    },
+    tickspeed: {
+      isUnlocked: false,
+      cost: 1,
+      interval: 500,
+      mode: AUTOBUYER_MODE.BUY_SINGLE,
+      priority: 1,
+      isActive: true,
+      lastTick: 0,
+      isBought: false
     },
     sacrifice: {
       multiplier: new Decimal(2),
       isActive: true
     },
-    eternity: {
-      mode: 0,
-      amount: new Decimal(1),
-      increaseWithMult: true,
-      time: 1,
-      xCurrent: new Decimal(1),
-      isActive: false
+    antimatterDims: Array.range(0, 8).map(tier => ({
+      isUnlocked: false,
+      cost: 1,
+      interval: [500, 600, 700, 800, 900, 1000, 1100, 1200][tier],
+      bulk: 1,
+      mode: AUTOBUYER_MODE.BUY_10,
+      priority: 1,
+      isActive: true,
+      lastTick: 0,
+      isBought: false
+    })),
+    infinityDims: {
+      buyers: [false, false, false, false, false, false, false, false],
+      timer: 0,
     },
-    reality: {
-      mode: 0,
-      rm: new Decimal(1),
-      glyph: 0,
-      isActive: true
+    timeDims: {
+      buyers: [false, false, false, false, false, false, false, false],
+      timer: 0,
     },
-    timeDimTimer: 0,
-    infDimTimer: 0,
-    repUpgradeTimer: 0,
-    dilUpgradeTimer: 0,
-    ttTimer: 0,
+    replicantiGalaxies: {
+      buyer: false,
+      timer: 0,
+    },
+    replicantiUpgrades: {
+      buyer: [false, false, false],
+      timer: 0,
+    },
+    timeTheorems: {
+      buyer: false,
+      timer: 0,
+    },
+    dilation: {
+      buyer: [false, false, false],
+      timer: 0,
+    },
+    blackHoleUpgrades: {
+      buyer: [false, false]
+    },
+    realityUpgrades: {
+      buyer: [false, false, false, false, false],
+    },
+    epMultBuyer: false,
+    infMultBuyer: false,
   },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
@@ -241,7 +268,6 @@ let player = {
   eternities: new Decimal(0),
   eternityUpgrades: new Set(),
   epmultUpgrades: 0,
-  infDimBuyers: [false, false, false, false, false, false, false, false],
   timeShards: new Decimal(0),
   totalTickGained: 0,
   totalTickBought: 0,
@@ -257,8 +283,6 @@ let player = {
     boughtGalaxyCap: 0,
     galaxies: 0,
     galCost: new Decimal(1e170),
-    auto: [false, false, false],
-    timer: 0,
   },
   timestudy: {
     theorem: new Decimal(0),
@@ -274,7 +298,6 @@ let player = {
   },
   eternityChalls: {},
   etercreq: 0,
-  infMultBuyer: false,
   respec: false,
   eterc8ids: 50,
   eterc8repl: 40,
@@ -293,7 +316,6 @@ let player = {
       3: 0,
     },
     lastEP: new Decimal(-1),
-    auto: [false, false, false]
   },
   realities: 0,
   partSimulatedReality: 0,
@@ -326,7 +348,6 @@ let player = {
       4: 0,
       5: 0,
     },
-    rebuyablesAuto: [false, false, false, false, false],
     upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
               false, false, false, false, false,
@@ -338,8 +359,6 @@ let player = {
     respec: false,
     showGlyphSacrifice: false,
     showSidebarPanel: 0,
-    tdbuyers: [false, false, false, false, false, false, false, false],
-    epmultbuyer: false,
     autoSort: 0,
     autoCollapse: false,
     autoAutoClean: false,
@@ -374,13 +393,11 @@ let player = {
     active: false,
     unlocked: false,
     activations: 0,
-    autoPower: false,
   })),
   blackHolePause: false,
   blackHolePauseTime: 0,
   blackHoleNegative: 1,
   minNegativeBlackHoleThisReality: 0,
-  ttbuyer: false,
   celestials: {
     teresa: {
       pouredAmount: 0,

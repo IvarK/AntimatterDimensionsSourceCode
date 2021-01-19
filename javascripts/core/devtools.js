@@ -433,7 +433,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
-        player.auto.replicantiGalaxies.buyer = true;
+        player.auto.replicantiGalaxies.active = true;
       }
     ],
     [

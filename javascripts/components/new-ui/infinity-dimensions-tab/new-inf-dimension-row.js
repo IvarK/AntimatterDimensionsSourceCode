@@ -26,7 +26,7 @@ Vue.component("new-inf-dimension-row", {
   },
   watch: {
     isAutobuyerOn(newValue) {
-      player.auto.infinityDims.buyer[this.tier - 1] = newValue;
+      player.auto.infinityDims.active[this.tier - 1] = newValue;
     }
   },
   computed: {
@@ -79,7 +79,7 @@ Vue.component("new-inf-dimension-row", {
         this.hardcap = dimension.purchaseCap;
       }
       this.isEC8Running = EternityChallenge(8).isRunning;
-      this.isAutobuyerOn = player.auto.infinityDims.buyer[this.tier - 1];
+      this.isAutobuyerOn = player.auto.infinityDims.active[this.tier - 1];
       this.requirementReached = dimension.requirementReached;
       this.eternityReached = PlayerProgress.eternityUnlocked();
     },

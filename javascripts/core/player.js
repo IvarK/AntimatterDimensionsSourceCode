@@ -125,34 +125,34 @@ let player = {
       isBought: false
     })),
     infinityDims: {
-      buyers: [false, false, false, false, false, false, false, false],
+      active: [false, false, false, false, false, false, false, false],
       timer: 0,
     },
     timeDims: {
-      buyers: [false, false, false, false, false, false, false, false],
+      active: [false, false, false, false, false, false, false, false],
       timer: 0,
     },
     replicantiGalaxies: {
-      buyer: false,
+      active: false,
       timer: 0,
     },
     replicantiUpgrades: {
-      buyer: [false, false, false],
+      active: [false, false, false],
       timer: 0,
     },
     timeTheorems: {
-      buyer: false,
+      active: false,
       timer: 0,
     },
     dilation: {
-      buyer: [false, false, false],
+      active: [false, false, false],
       timer: 0,
     },
     blackHoleUpgrades: {
-      buyer: [false, false]
+      active: [false, false]
     },
     realityUpgrades: {
-      buyer: [false, false, false, false, false],
+      active: [false, false, false, false, false],
     },
     epMultBuyer: false,
     infMultBuyer: false,

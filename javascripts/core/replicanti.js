@@ -72,7 +72,7 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
 }
 
 function replicantiGalaxyAutoToggle(forcestate) {
-  player.auto.replicantiGalaxies.buyer = !player.auto.replicantiGalaxies.buyer || forcestate === true;
+  player.auto.replicantiGalaxies.active = !player.auto.replicantiGalaxies.active || forcestate === true;
 }
 
 // When the amount is exactly the cap, there are two cases: the player can go
@@ -224,8 +224,8 @@ class ReplicantiUpgradeState {
 
   get isAutobuyerUnlocked() { return this.autobuyerMilestone.isReached; }
 
-  get isAutobuyerOn() { return player.auto.replicantiUpgrades.buyer[this.autobuyerId]; }
-  set isAutobuyerOn(value) { player.auto.replicantiUpgrades.buyer[this.autobuyerId] = value; }
+  get isAutobuyerOn() { return player.auto.replicantiUpgrades.active[this.autobuyerId]; }
+  set isAutobuyerOn(value) { player.auto.replicantiUpgrades.active[this.autobuyerId] = value; }
 
   get canBeBought() {
     return !this.isCapped && player.infinityPoints.gte(this.cost) && player.eterc8repl !== 0;
@@ -431,8 +431,8 @@ const Replicanti = {
     player.replicanti.galaxies = 0;
     player.replicanti.galCost = new Decimal(1e170);
     if (force ||
-      (EternityMilestone.autobuyerReplicantiGalaxy.isReached && player.auto.replicantiGalaxies.buyer === undefined)) {
-        player.auto.replicantiGalaxies.buyer = false;
+      (EternityMilestone.autobuyerReplicantiGalaxy.isReached && player.auto.replicantiGalaxies.active === undefined)) {
+        player.auto.replicantiGalaxies.active = false;
     }
   },
   unlock(freeUnlock = false) {
@@ -479,10 +479,10 @@ const Replicanti = {
         return EternityMilestone.autobuyerReplicantiGalaxy.isReached;
       },
       get isOn() {
-        return player.auto.replicantiGalaxies.buyer;
+        return player.auto.replicantiGalaxies.active;
       },
       set isOn(value) {
-        player.auto.replicantiGalaxies.buyer = value;
+        player.auto.replicantiGalaxies.active = value;
       },
       toggle() {
         if (!this.isUnlocked) return;

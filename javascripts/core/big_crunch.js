@@ -123,7 +123,7 @@ function bigCrunchCheckUnlocks() {
       !EternityChallenge(2).isRunning &&
       !EternityChallenge(10).isRunning) {
     for (let i = 1; i <= player.eternities.sub(10).clampMax(8).toNumber(); i++) {
-      if (player.auto.infinityDims.buyer[i - 1]) {
+      if (player.auto.infinityDims.active[i - 1]) {
         buyMaxInfDims(i);
         buyManyInfinityDimension(i);
       }

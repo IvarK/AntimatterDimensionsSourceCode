@@ -98,7 +98,7 @@ const TimeTheorems = {
   },
 
   autoBuyMaxTheorems(realDiff) {
-    if (!player.auto.timeTheorems.buyer) return;
+    if (!player.auto.timeTheorems.active) return;
     player.auto.timeTheorems.timer += realDiff;
     const period = Effects.min(
       Number.POSITIVE_INFINITY,

@@ -26,9 +26,9 @@ function fullResetTimeDimensions() {
 }
 
 function toggleAllTimeDims() {
-  const areEnabled = player.auto.timeDims.buyer[0];
+  const areEnabled = player.auto.timeDims.active[0];
   for (let i = 1; i < 9; i++) {
-    player.auto.timeDims.buyer[i - 1] = !areEnabled;
+    player.auto.timeDims.active[i - 1] = !areEnabled;
   }
 }
 
@@ -54,12 +54,12 @@ function maxAllTimeDimensions(checkAutobuyers = false) {
   // (reduces overhead at higher EP)
   if (player.eternityPoints.gte(1e10)) {
     for (let i = 8; i > 0; i--) {
-      if (!checkAutobuyers || player.auto.timeDims.buyer[i - 1]) buyMaxTimeDimension(i);
+      if (!checkAutobuyers || player.auto.timeDims.active[i - 1]) buyMaxTimeDimension(i);
     }
   } else {
     // Low EP behavior: Try to buy the highest affordable new dimension, then loop buying the cheapest possible
     for (let i = 4; i > 0 && TimeDimension(i).bought === 0; i--) {
-      if (!checkAutobuyers || player.auto.timeDims.buyer[i - 1]) buySingleTimeDimension(i);
+      if (!checkAutobuyers || player.auto.timeDims.active[i - 1]) buySingleTimeDimension(i);
     }
 
     // Should never take more than like 50 iterations; explicit infinite loops make me nervous
@@ -67,7 +67,7 @@ function maxAllTimeDimensions(checkAutobuyers = false) {
       let cheapestDim = 0;
       let cheapestCost = 1e10;
       for (let i = 1; i <= 4; i++) {
-        if (TimeDimension(i).cost.lte(cheapestCost) && (!checkAutobuyers || player.auto.timeDims.buyer[i - 1])) {
+        if (TimeDimension(i).cost.lte(cheapestCost) && (!checkAutobuyers || player.auto.timeDims.active[i - 1])) {
           cheapestDim = i;
           cheapestCost = TimeDimension(i).cost;
         }

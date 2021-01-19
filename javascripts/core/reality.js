@@ -364,10 +364,10 @@ function finishProcessReality(realityProps) {
   player.infMultCost = new Decimal(10);
   player.infinityRebuyables = [0, 0, 0];
   player.infinityPower = new Decimal(1);
-  player.auto.infinityDims.buyer = Array.repeat(false, 8);
+  player.auto.infinityDims.active = Array.repeat(false, 8);
   player.timeShards = new Decimal(0);
   Replicanti.reset(true);
-  player.auto.replicantiUpgrades.buyer = Array.repeat(false, 3);
+  player.auto.replicantiUpgrades.active = Array.repeat(false, 3);
 
   player.eternityPoints = Player.startingEP;
 
@@ -517,13 +517,13 @@ function applyRUPG10() {
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
   player.infinityRebuyables = [8, 7, 10];
-  player.auto.infinityDims.buyers = Array.repeat(true, 8);
+  player.auto.infinityDims.active = Array.repeat(true, 8);
   player.auto.infMultBuyer = true;
   player.eternities = player.eternities.plus(100);
   player.replicanti.amount = player.replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
-  player.auto.replicantiGalaxies.buyer = true;
-  player.auto.replicantiUpgrades.buyer = Array.repeat(true, 3);
+  player.auto.replicantiGalaxies.active = true;
+  player.auto.replicantiUpgrades.active = Array.repeat(true, 3);
   GameCache.tickSpeedMultDecrease.invalidate();
   GameCache.dimensionMultDecrease.invalidate();
 }

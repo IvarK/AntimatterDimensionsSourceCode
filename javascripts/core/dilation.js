@@ -209,11 +209,11 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
   }
 
   get isAutobuyerOn() {
-    return player.auto.dilation.buyer[this.autobuyerId];
+    return player.auto.dilation.active[this.autobuyerId];
   }
 
   set isAutobuyerOn(value) {
-    player.auto.dilation.buyer[this.autobuyerId] = value;
+    player.auto.dilation.active[this.autobuyerId] = value;
   }
 
   get isCapped() {

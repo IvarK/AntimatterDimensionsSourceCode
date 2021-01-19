@@ -96,7 +96,7 @@ Vue.component("tt-shop", {
       this.shopMinimized = player.timestudy.shopMinimized;
       this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought || Perk.autobuyerTT1.isBought;
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
-      this.ttAutobuyerOn = player.auto.timeTheorems.buyer;
+      this.ttAutobuyerOn = player.auto.timeTheorems.active;
       const budget = this.budget;
       budget.am.copyFrom(Currency.antimatter);
       budget.ip.copyFrom(player.infinityPoints);

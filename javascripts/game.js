@@ -833,7 +833,7 @@ function autoBuyDilationUpgrades(extraFactor) {
 function autoBuyInfDims() {
   if (EternityMilestone.autobuyerID(1).isReached && !EternityChallenge(8).isRunning) {
     for (let i = 1; i <= player.eternities.sub(10).clampMax(8).toNumber(); i++) {
-      if (player.auto.infinityDims.buyer[i - 1]) {
+      if (player.auto.infinityDims.active[i - 1]) {
         buyMaxInfDims(i);
         buyManyInfinityDimension(i);
       }

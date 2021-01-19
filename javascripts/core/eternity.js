@@ -194,7 +194,7 @@ function applyRealityUpgradesAfterEternity(buySingleTD = false) {
   if (RealityUpgrade(13).isBought) {
     if (player.auto.epMultBuyer) EternityUpgrade.epMult.buyMax();
     for (let i = 1; i < 9; i++) {
-      if (player.auto.timeDims.buyers[i - 1]) {
+      if (player.auto.timeDims.active[i - 1]) {
         if (buySingleTD) buySingleTimeDimension(i);
         else buyMaxTimeDimension(i);
       }

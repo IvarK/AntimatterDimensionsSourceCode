@@ -799,11 +799,11 @@ GameStorage.migrations = {
 
   consolidateAuto(player) {
     player.auto.antimatterDims = player.auto.dimensions;
-    player.auto.infinityDims.buyer = player.infDimBuyers;
+    player.auto.infinityDims.active = player.infDimBuyers;
     player.auto.infinityDims.timer = player.auto.infDimTimer;
-    player.auto.replicantiGalaxies.buyer = player.replicanti.galaxybuyer;
+    player.auto.replicantiGalaxies.active = player.replicanti.galaxybuyer;
     player.auto.replicantiGalaxies.timer = player.replicanti.timer;
-    player.auto.replicantiUpgrades.buyer = player.replicanti.auto;
+    player.auto.replicantiUpgrades.active = player.replicanti.auto;
     player.auto.replicantiUpgrades.timer = player.auto.repUpgradeTimer;
     player.auto.infMultBuyer = player.infMultBuyer;
 

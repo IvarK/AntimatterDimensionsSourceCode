@@ -561,7 +561,7 @@ function gameLoop(diff, options = {}) {
 
   replicantiLoop(diff);
 
-  if (player.auto.infMultBuyer) {
+  if (player.auto.ipMultBuyer) {
     InfinityUpgrade.ipMult.autobuyerTick();
   }
 

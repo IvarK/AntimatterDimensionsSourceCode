@@ -925,8 +925,8 @@ GameStorage.devMigrations = {
       player.auto.blackHoleUpgrades.active[0] = player.blackHole[0].autoPower;
       player.auto.blackHoleUpgrades.active[1] = player.blackHole[1].autoPower;
       player.auto.realityUpgrades.active = player.reality.rebuyablesAuto;
+      player.auto.ipMultBuyer = player.infMultBuyer;
       player.auto.epMultBuyer = player.reality.epmultbuyer;
-      player.auto.infMultBuyer = player.infMultBuyer;
 
       delete player.auto.dimensions;
       delete player.infDimBuyers;

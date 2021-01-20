@@ -385,7 +385,7 @@ function finishProcessReality(realityProps) {
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;
   player.etercreq = 0;
-  player.auto.infMultBuyer = false;
+  player.auto.ipMultBuyer = false;
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
@@ -518,7 +518,7 @@ function applyRUPG10() {
   player.break = true;
   player.infinityRebuyables = [8, 7, 10];
   player.auto.infinityDims.active = Array.repeat(true, 8);
-  player.auto.infMultBuyer = true;
+  player.auto.ipMultBuyer = true;
   player.eternities = player.eternities.plus(100);
   player.replicanti.amount = player.replicanti.amount.clampMin(1);
   Replicanti.unlock(true);

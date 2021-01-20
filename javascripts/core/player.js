@@ -154,8 +154,8 @@ let player = {
     realityUpgrades: {
       active: [false, false, false, false, false],
     },
+    ipMultBuyer: false,
     epMultBuyer: false,
-    infMultBuyer: false,
   },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),

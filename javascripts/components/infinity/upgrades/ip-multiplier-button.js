@@ -10,7 +10,7 @@ Vue.component("ip-multiplier-button", {
   },
   watch: {
     isAutobuyerOn(newValue) {
-      player.auto.infMultBuyer = newValue;
+      player.auto.ipMultBuyer = newValue;
     }
   },
   computed: {
@@ -21,7 +21,7 @@ Vue.component("ip-multiplier-button", {
   methods: {
     update() {
       this.isAutoUnlocked = EternityMilestone.autobuyerIPMult.isReached;
-      this.isAutobuyerOn = player.auto.infMultBuyer;
+      this.isAutobuyerOn = player.auto.ipMultBuyer;
       this.isCapped = this.upgrade.isCapped;
     },
     buyMaxIPMult() {

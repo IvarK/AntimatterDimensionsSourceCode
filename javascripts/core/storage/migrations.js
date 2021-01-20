@@ -805,7 +805,7 @@ GameStorage.migrations = {
     player.auto.replicantiGalaxies.timer = player.replicanti.timer;
     player.auto.replicantiUpgrades.active = player.replicanti.auto;
     player.auto.replicantiUpgrades.timer = player.auto.repUpgradeTimer;
-    player.auto.infMultBuyer = player.infMultBuyer;
+    player.auto.ipMultBuyer = player.infMultBuyer;
 
     delete player.auto.dimensions;
     delete player.infDimBuyers;

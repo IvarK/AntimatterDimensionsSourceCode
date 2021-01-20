@@ -78,7 +78,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "Innumerably Construct",
       id: 7,
       cost: 15,
-      requirement: "Complete your first Infinity with at most 1 Galaxy",
+      requirement: "Complete your first Infinity with at most 1 Antimatter Galaxy",
       hasFailed: () => !(player.galaxies <= 1 && player.achievementChecks.noInfinitiesThisReality),
       checkRequirement: () => player.galaxies <= 1 && player.achievementChecks.noInfinitiesThisReality,
       checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,

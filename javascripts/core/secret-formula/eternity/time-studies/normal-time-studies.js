@@ -70,7 +70,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 41,
       cost: 4,
       requirement: 31,
-      description: () => `Each Galaxy gives a ${formatX(1.2, 1, 1)} multiplier on Infinity Points gained`,
+      description: () => `All Galaxies give a ${formatX(1.2, 1, 1)} multiplier to Infinity Points gained`,
       effect: () =>
         Decimal.pow(1.2, Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies),
       formatEffect: value => formatX(value, 2, 1)

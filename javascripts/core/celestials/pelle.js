@@ -56,19 +56,26 @@ const Pelle = {
   },
 
   famine: {
-    get fillTime() { return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts + 1) + 1) },
+    get fillTime() { return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts + 2) + 1) },
     get gain() { return 1 },
-    get unlocked() { return PelleUpgrade.famineUnlock.canBeApplied }
+    get unlocked() { return PelleUpgrade.famineUnlock.canBeApplied },
+    get multiplierToAntimatter() { return Decimal.pow(1.1, player.celestials.pelle.famine.amount) },
+    get exponentToAntimatter() { return 1 + Math.log10(player.celestials.pelle.famine.amount.plus(1).log10() + 1) / 10 },
+    get bonusDescription() { 
+      return `Multiplies Antimatter Dimensions by ${formatX(this.multiplierToAntimatter, 2, 2)} and powers them up by ${formatPow(this.exponentToAntimatter, 2, 2)}`
+    }
   },
   pestilence: {
     get fillTime() { return 10 },
     get gain() { return 1 },
-    get unlocked() { return false }
+    get unlocked() { return false },
+    get bonusDescription() { return `` }
   },
   chaos: {
     get fillTime() { return 10 },
     get gain() { return 1 },
-    get unlocked() { return false }
+    get unlocked() { return false },
+    get bonusDescription() { return `` }
   },
 
   get cel() {
@@ -113,8 +120,7 @@ class PelleUpgradeState extends SetPurchasableMechanicState {
   }
 
   get currency() {
-    if (this.config.currency === "unstableMatter") return player.celestials.pelle[this.config.currency];
-    return player.celestials.pelle[this.config.currency].amount
+    return Currency[this.config.currency]
   }
 
   get description() {

@@ -258,3 +258,24 @@ Currency.perkPoints = new class extends NumberCurrency {
   get value() { return player.reality.perkPoints; }
   set value(value) { player.reality.perkPoints = value; }
 }();
+
+Currency.unstableMatter = new class extends DecimalCurrency {
+  get value() { return player.celestials.pelle.unstableMatter; }
+  set value(value) { player.celestials.pelle.unstableMatter = value; }
+}();
+
+Currency.famine = new class extends DecimalCurrency {
+  get value() { return player.celestials.pelle.famine.amount; }
+  set value(value) { player.celestials.pelle.famine.amount = value; }
+}();
+
+Currency.pestilence = new class extends DecimalCurrency {
+  get value() { return player.celestials.pelle.pestilence.amount; }
+  set value(value) { player.celestials.pelle.pestilence.amount = value; }
+}();
+
+Currency.chaos = new class extends DecimalCurrency {
+  get value() { return player.celestials.pelle.chaos.amount; }
+  set value(value) { player.celestials.pelle.chaos.amount = value; }
+}();
+

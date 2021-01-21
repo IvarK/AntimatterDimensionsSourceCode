@@ -8,7 +8,8 @@ Vue.component("pelle-currency", {
     return {
       amount: new Decimal(0),
       fillTime: 0,
-      timer: 0
+      timer: 0,
+      description: ""
     };
   },
   computed: {
@@ -39,6 +40,7 @@ Vue.component("pelle-currency", {
       this.timer = player.celestials.pelle[this.currency].timer;
 
       this.fillTime = Pelle[this.currency].fillTime;
+      this.description = Pelle[this.currency].bonusDescription;
     },
     descriptionDisplay() {
       switch (this.currency) {
@@ -66,6 +68,7 @@ Vue.component("pelle-currency", {
       <h2><b>{{ format(amount, 2, 0) }}</b> {{ currencyDisplay }}</h2>
     </div>
     <p>{{ descriptionDisplay() }}</p>
+    <p>{{ description }}</p>
   </div>
   `
 });

@@ -44,6 +44,7 @@ function antimatterDimensionCommonMultiplier() {
   multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
   multiplier = multiplier.times(getAdjustedGlyphEffect("powermult"));
   multiplier = multiplier.times(player.reality.realityMachines.powEffectOf(AlchemyResource.force));
+  multiplier = multiplier.times(Pelle.famine.multiplierToAntimatter);
 
   return multiplier;
 }
@@ -160,6 +161,7 @@ function applyNDPowers(mult, tier) {
     );
 
   multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));
+  multiplier = multiplier.pow(Pelle.famine.exponentToAntimatter);
 
   if (V.has(V_UNLOCKS.ND_POW)) {
     multiplier = multiplier.pow(V_UNLOCKS.ND_POW.effect());

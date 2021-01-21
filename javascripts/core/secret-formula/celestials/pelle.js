@@ -5,13 +5,13 @@ GameDatabase.celestials.pelle = {
     famineUnlock: {
       id: 1,
       description: "Unlock Famine",
-      cost: 2e3,
+      cost: 25,
       currency: "unstableMatter"
     },
     longerArmageddon: {
       id: 2,
       description: "Armageddon happens every 5 seconds",
-      cost: 1e4,
+      cost: 200,
       currency: "unstableMatter"
     },
     timeMultToUnstable: {

@@ -34,7 +34,7 @@ class AchievementState extends GameMechanicState {
   }
 
   get isEffectActive() {
-    return this.isUnlocked;
+    return this.isUnlocked && (!Pelle.isDisabled("achievements") || ![125, 92, 91].includes(this.id));
   }
 
   tryUnlock(args) {

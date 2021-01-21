@@ -516,10 +516,9 @@ function applyRUPG10() {
       "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost",
       "ipOffline"]
     );
+    player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
+    player.galaxies = Math.max(1, player.galaxies);
   }
-  
-  player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
-  player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
   if (Pelle.isDoomed) {
     player.infinityRebuyables = player.celestials.pelle.infinityRebuyables;

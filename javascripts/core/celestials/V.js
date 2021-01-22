@@ -103,13 +103,12 @@ const V_UNLOCKS = {
     description: "Meet all the above requirements simultaneously",
     requirement: () => {
       const db = GameDatabase.celestials.v.mainUnlock;
-      if (player.realities < db.realities) return false;
-      if (player.eternities.lt(db.eternities)) return false;
-      if (player.infinitied.plus(player.infinitiedBank).lt(db.infinities)) return false;
-      if (player.dilation.dilatedTime.lt(db.dilatedTime)) return false;
-      if (player.replicanti.amount.lt(db.replicanti)) return false;
-      if (player.reality.realityMachines.lt(db.rm)) return false;
-      return true;
+      return (player.realities >= db.realities &&
+              player.eternities.gte(db.eternities) &&
+              player.infinitied.plus(player.infinitiedBank).gte(db.infinities) &&
+              player.dilation.dilatedTime.gte(db.dilatedTime) &&
+              player.replicanti.amount.gte(db.replicanti) &&
+              player.reality.realityMachines.gte(db.rm));
     }
   },
   SHARD_REDUCTION: {

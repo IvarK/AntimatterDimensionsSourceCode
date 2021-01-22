@@ -60,12 +60,9 @@ Vue.component("modal-away-progress", {
       return `While you were away for ${TimeSpan.fromSeconds(this.modalConfig.seconds).toString()}: `;
     },
     blackHoleShown() {
-      if ((this.after.blackHole[0].activations > this.before.blackHole[0].activations ||
-          this.after.blackHole[1].activations > this.before.blackHole[1].activations) &&
-          player.options.awayProgress.blackHole) {
-        return true;
-      }
-    return false;
+      return ((this.after.blackHole[0].activations > this.before.blackHole[0].activations ||
+        this.after.blackHole[1].activations > this.before.blackHole[1].activations) &&
+        player.options.awayProgress.blackHole);
     }
   },
   methods: {

@@ -33,8 +33,12 @@ class AchievementState extends GameMechanicState {
     return (player.achievementBits[this.row - 1] & this._bitmask) !== 0;
   }
 
+  get isDisabled() {
+    return Pelle.isDisabled("achievements") && Pelle.disabledAchievements.includes(this.id);
+  }
+
   get isEffectActive() {
-    return this.isUnlocked && (!Pelle.isDisabled("achievements") || ![125, 92, 91].includes(this.id));
+    return this.isUnlocked && !this.isDisabled;
   }
 
   tryUnlock(args) {

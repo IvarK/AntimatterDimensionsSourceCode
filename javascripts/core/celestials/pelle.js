@@ -61,7 +61,7 @@ const Pelle = {
     get unlocked() { return PelleUpgrade.famineUnlock.canBeApplied },
     get multiplierToAntimatter() { return Decimal.pow(1.1, player.celestials.pelle.famine.amount) },
     get exponentToAntimatter() { return 1 + Math.log10(player.celestials.pelle.famine.amount.plus(1).log10() + 1) / 10 },
-    get bonusDescription() { 
+    get bonusDescription() {
       return `Multiplies Antimatter Dimensions by ${formatX(this.multiplierToAntimatter, 2, 2)} and powers them up by ${formatPow(this.exponentToAntimatter, 2, 2)}`
     }
   },
@@ -90,7 +90,11 @@ const Pelle = {
   get armageddonInterval() {
     if (PelleUpgrade.longerArmageddon.canBeApplied) return 5000;
     return 500;
-  }
+  },
+
+  get disabledAchievements() {
+    return [142, 141, 125, 117, 92, 91];
+  },
 };
 
 class RebuyablePelleUpgradeState extends RebuyableMechanicState {

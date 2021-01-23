@@ -584,7 +584,7 @@ function gameLoop(diff, options = {}) {
 }
 
 function passivePrestigeGen() {
-  let eternitiedGain = 0;
+  let eternitiedGain = new Decimal(0);
   if (RealityUpgrade(14).isBought) {
     eternitiedGain = Effects.product(
       RealityUpgrade(3),

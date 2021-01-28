@@ -22,6 +22,9 @@ const Pelle = {
       case "galaxies":
         return !PelleUpgrade.nerfedGalaxies.canBeApplied;
 
+      case "InfinitiedMults":
+        return !PelleUpgrade.infinitiedGain.canBeApplied;
+
       default:
         return true;
     }
@@ -71,7 +74,14 @@ const Pelle = {
     },
     get gain() { return PelleUpgrade.famineGain.canBeApplied ? 2 : 1 },
     get unlocked() { return PelleUpgrade.famineUnlock.canBeApplied },
-    get multiplierToAntimatter() { return Decimal.pow(1.1, player.celestials.pelle.famine.amount) },
+    get multiplierToAntimatter() {
+      let base = Decimal.pow(1.1, player.celestials.pelle.famine.amount);
+      if (base.gte(1e100)) {
+        // After 1e100 the effect is raised to ^1/3
+        base = base.dividedBy(base.dividedBy(1e100).pow(2/3));
+      }
+      return base
+    },
     get exponentToAntimatter() { return 1 + Math.log10(player.celestials.pelle.famine.amount.plus(1).log10() + 1) / 10 },
     get bonusDescription() {
       return `Multiplies Antimatter Dimensions by ${formatX(this.multiplierToAntimatter, 2, 2)} and powers them up by ${formatPow(this.exponentToAntimatter, 2, 2)}`

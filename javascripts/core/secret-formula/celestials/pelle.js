@@ -73,14 +73,14 @@ GameDatabase.celestials.pelle = {
     nerfedGalaxies: {
       id: 12,
       description: "You can buy galaxies, but they are only 1/3rd as effective",
-      cost: 3e5,
-      currency: "unstableMatter"
+      cost: 1000,
+      currency: "famine"
     },
-    nerfedGalaxies: {
-      id: 12,
-      description: "You can buy galaxies, but they are only 0.5x as effective",
-      cost: 3e5,
-      currency: "unstableMatter"
+    infinitiedGain: {
+      id: 13,
+      description: "You gain back the ability to gain multiple infinitied stat per Infinity",
+      cost: 1e30,
+      currency: "infinityPoints"
     }
   },
   rebuyables: {

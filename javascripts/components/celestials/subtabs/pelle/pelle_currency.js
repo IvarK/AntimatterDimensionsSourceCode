@@ -3,13 +3,16 @@
 Vue.component("pelle-currency", {
   props: {
     currency: String,
+    rebuyable: Object
   },
   data() {
     return {
       amount: new Decimal(0),
       fillTime: 0,
       timer: 0,
-      description: ""
+      description: "",
+      canBeBought: false,
+      showRebuyable: false
     };
   },
   computed: {
@@ -32,6 +35,14 @@ Vue.component("pelle-currency", {
       return {
         width: `${this.timer / 10 * 100}%`
       };
+    },
+    upgradeClass() {
+      return {
+        "pelle-upgrade--canbuy": this.canBeBought
+      };
+    },
+    config() {
+      return this.rebuyable.config;
     }
   },
   methods: {
@@ -41,6 +52,14 @@ Vue.component("pelle-currency", {
 
       this.fillTime = Pelle[this.currency].fillTime;
       this.description = Pelle[this.currency].bonusDescription;
+
+      this.canBeBought = this.rebuyable.canBeBought;
+
+      switch (this.config.id) {
+        case "permanentTickspeed":
+          this.showRebuyable = PelleUpgrade.famineRebuyable.canBeApplied;
+          break;
+      }
     },
     descriptionDisplay() {
       switch (this.currency) {
@@ -69,6 +88,19 @@ Vue.component("pelle-currency", {
     </div>
     <p>{{ descriptionDisplay() }}</p>
     <p>{{ description }}</p>
+    <div
+      v-if="showRebuyable"
+      class="pelle-upgrade"
+      :class="upgradeClass" 
+      @click="rebuyable.purchase()">
+      <description-display :config="config"/>
+      <effect-display br :config="config" />
+      <cost-display br
+        :config="config"
+        :singular="rebuyable.currencyDisplay"
+        :plural="rebuyable.currencyDisplay"
+      />
+    </div>
   </div>
   `
 });

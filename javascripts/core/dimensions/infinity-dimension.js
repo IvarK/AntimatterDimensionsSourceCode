@@ -298,6 +298,7 @@ const InfinityDimensions = {
   },
 
   resetAmount() {
+    if (Pelle.isDoomed && PelleUpgrade.infDimRetain.canBeApplied) return;
     player.infinityPower = new Decimal(0);
     for (const dimension of InfinityDimensions.all) {
       dimension.resetAmount();
@@ -305,6 +306,7 @@ const InfinityDimensions = {
   },
 
   fullReset() {
+    if (Pelle.isDoomed && PelleUpgrade.infDimRetain.canBeApplied) return;
     for (const dimension of InfinityDimensions.all) {
       dimension.fullReset();
     }

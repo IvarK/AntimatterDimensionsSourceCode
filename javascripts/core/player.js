@@ -548,6 +548,7 @@ let player = {
         permanentGalaxies: 0
       },
       infinityRebuyables: [0, 0, 0],
+      ipMult: new Decimal(1)
     }
   },
   tabNotifications: new Set(),

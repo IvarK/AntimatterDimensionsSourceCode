@@ -53,6 +53,10 @@ function gainedInfinityPoints() {
   if (GlyphAlteration.isAdded("infinity")) {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
+
+  if (Pelle.isDoomed) {
+    ip = ip.times(GameCache.totalIPMult.value.pow(-2 / 3));
+  }
   return ip.floor();
 }
 

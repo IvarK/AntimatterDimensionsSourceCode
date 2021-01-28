@@ -7950,7 +7950,7 @@ kbd {
   border-radius: 1rem;
   padding: 2rem;
   width: 30rem;
-  margin: 1.5rem;
+  margin: 1.5rem auto;
   background: #3a2424;
   color: whitesmoke;
 }

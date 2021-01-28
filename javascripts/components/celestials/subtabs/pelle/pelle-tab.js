@@ -34,6 +34,13 @@ Vue.component("pelle-tab", {
   computed: {
     upgrades() {
       return PelleUpgrade.all;
+    },
+    pelleRebuyable() {
+      return {
+        permanentTickspeed: PelleRebuyableUpgrade.permanentTickspeed,
+        permanentGalaxies: PelleRebuyableUpgrade.permanentGalaxies,
+        permanentDimensionBoosts: PelleRebuyableUpgrade.permanentDimensionBoosts,
+      };
     }
   },
   template:
@@ -42,9 +49,9 @@ Vue.component("pelle-tab", {
       <p>Armageddon is happenings every {{ armageddonInterval / 1000 }} seconds</p>
       <p>You have <b>{{ format(unstableMatter, 2, 2) }}</b> Unstable matter</p>
       <div class="c-pelle-currency-container">
-        <pelle-currency currency="famine" v-show="hasFamine"/>
-        <pelle-currency currency="chaos" v-show="false"/>
-        <pelle-currency currency="pestilence" v-show="false"/>
+        <pelle-currency currency="famine" :rebuyable="pelleRebuyable.permanentTickspeed" v-show="hasFamine"/>
+        <pelle-currency currency="chaos" :rebuyable="pelleRebuyable.permanentDimensionBoosts" v-show="false"/>
+        <pelle-currency currency="pestilence" :rebuyable="pelleRebuyable.permanentGalaxies" v-show="false"/>
       </div>
       <div class="pelle-upgrades--container">
         <pelle-upgrade v-for="upg in upgrades" :upgrade="upg" />

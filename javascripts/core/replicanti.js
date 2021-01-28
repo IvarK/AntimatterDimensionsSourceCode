@@ -82,6 +82,7 @@ function replicantiGalaxyAutoToggle(forcestate) {
 // the overCapOverride parameter, to tell us which case we are in.
 function getReplicantiInterval(overCapOverride, intervalIn) {
   let interval = intervalIn || player.replicanti.interval;
+  if (Pelle.isDisabled("replicantiIntervalMult")) return new Decimal(interval);
   const amount = player.replicanti.amount;
   const overCap = overCapOverride === undefined ? amount.gt(replicantiCap()) : overCapOverride;
   const preCelestialEffects = Effects.product(

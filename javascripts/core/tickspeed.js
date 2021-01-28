@@ -19,6 +19,7 @@ function getTickSpeedMultiplier() {
   let freeGalaxies = player.dilation.totalTachyonGalaxies;
   freeGalaxies *= 1 + Math.max(0, player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
   let galaxies = player.galaxies + replicantiGalaxies + freeGalaxies;
+  if (Pelle.isDoomed) galaxies /= 2;
   if (galaxies < 3) {
       // Magic numbers are to retain balancing from before while displaying
       // them now as positive multipliers rather than negative percentages
@@ -167,6 +168,10 @@ const Tickspeed = {
     return this.costScale.getContinuumValue(Currency.antimatter.value) * Laitela.matterExtraPurchaseFactor;
   },
 
+  get permanentTickspeed() {
+    return PelleRebuyableUpgrade.permanentTickspeed.effectValue;
+  },
+
   get baseValue() {
     let boughtTickspeed;
     if (Laitela.continuumActive) boughtTickspeed = this.continuumValue;
@@ -178,7 +183,7 @@ const Tickspeed = {
         Achievement(66),
         Achievement(83)
       )
-      .times(getTickSpeedMultiplier().pow(boughtTickspeed + player.totalTickGained));
+      .times(getTickSpeedMultiplier().pow(boughtTickspeed + player.totalTickGained + this.permanentTickspeed));
   },
 
   multiplySameCosts() {

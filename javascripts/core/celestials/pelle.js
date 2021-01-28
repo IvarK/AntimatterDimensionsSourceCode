@@ -13,6 +13,15 @@ const Pelle = {
       case "IPGain":
         return !PelleUpgrade.ipGain.canBeApplied;
 
+      case "achievements":
+        return !PelleUpgrade.achievementsBack.canBeApplied;
+
+      case "IPMults":
+        return !PelleUpgrade.nerfedIPMult.canBeApplied;
+
+      case "galaxies":
+        return !PelleUpgrade.nerfedGalaxies.canBeApplied;
+
       default:
         return true;
     }
@@ -56,8 +65,11 @@ const Pelle = {
   },
 
   famine: {
-    get fillTime() { return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts + 2) + 1) },
-    get gain() { return 1 },
+    get fillTime() {
+      let div = PelleUpgrade.famineGain.canBeApplied ? 2 : 1;
+      return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts + 2) + 1) / div;
+    },
+    get gain() { return PelleUpgrade.famineGain.canBeApplied ? 2 : 1 },
     get unlocked() { return PelleUpgrade.famineUnlock.canBeApplied },
     get multiplierToAntimatter() { return Decimal.pow(1.1, player.celestials.pelle.famine.amount) },
     get exponentToAntimatter() { return 1 + Math.log10(player.celestials.pelle.famine.amount.plus(1).log10() + 1) / 10 },
@@ -88,8 +100,9 @@ const Pelle = {
 
   // Milliseconds
   get armageddonInterval() {
-    if (PelleUpgrade.longerArmageddon.canBeApplied) return 5000;
-    return 500;
+    let base = PelleUpgrade.longerArmageddon.canBeApplied ? 5000 : 500;
+    if (PelleUpgrade.doubleArmageddon.canBeApplied) base *= 2;
+    return base;
   },
 
   get disabledAchievements() {
@@ -100,8 +113,7 @@ const Pelle = {
 class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 
   get currency() {
-    if (this.config.currency === "unstableMatter") return player.celestials.pelle[this.config.currency];
-    return player.celestials.pelle[this.config.currency].amount
+    return Currency[this.config.currency]
   }
 
   get boughtAmount() {
@@ -114,6 +126,22 @@ class RebuyablePelleUpgradeState extends RebuyableMechanicState {
 
   get cost() {
     return this.config.cost()
+  }
+
+  get currencyDisplay() {
+    switch(this.config.currency) {
+      case "unstableMatter":
+        return "Unstable Matter";
+
+      case "famine":
+        return "Famine";
+
+      case "pestilence":
+        return "Pestilence";
+
+      case "chaos":
+        return "Chaos";
+    }
   }
 }
 
@@ -148,6 +176,9 @@ class PelleUpgradeState extends SetPurchasableMechanicState {
 
       case "chaos":
         return "Chaos";
+
+      case "infinityPoints":
+        return "Infinity Points";
     }
   }
 }

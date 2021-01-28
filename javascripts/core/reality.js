@@ -360,8 +360,10 @@ function finishProcessReality(realityProps) {
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.break = false;
-  player.infMult = new Decimal(1);
-  player.infMultCost = new Decimal(10);
+  if (!Pelle.isDoomed || !PelleUpgrade.ipGain.canBeApplied) {
+    player.infMult = new Decimal(1);
+    player.infMultCost = new Decimal(10);
+  }
   player.infinityRebuyables = [0, 0, 0];
   player.infinityPower = new Decimal(1);
   player.infDimBuyers = Array.repeat(false, 8);
@@ -450,7 +452,9 @@ function finishProcessReality(realityProps) {
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
-  player.infinityPoints = Player.startingIP;
+  if (!Pelle.isDoomed || !PelleUpgrade.retainIP.canBeApplied) {
+    player.infinityPoints = Player.startingIP;
+  }
 
   if (RealityUpgrade(10).isBought) applyRUPG10();
   else Tab.dimensions.antimatter.show();

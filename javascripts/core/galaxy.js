@@ -120,6 +120,7 @@ class Galaxy {
     if (NormalChallenge(8).isRunning || InfinityChallenge(7).isRunning) return false;
     if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal) &&
        (!player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning)) return false;
+    if (Pelle.isDisabled("galaxies")) return false;
     return true;
   }
 

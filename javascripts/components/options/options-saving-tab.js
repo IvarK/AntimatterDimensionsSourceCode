@@ -113,9 +113,7 @@ Vue.component("options-saving-tab", {
           <label for="file">Import save from file</label>
         </options-button>
       </div>
-      <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
-        Press <kbd>?</kbd> to open shortcut list.
-      </p>
+      <open-modal-shortcuts />
     </div>
   </div>`
 });

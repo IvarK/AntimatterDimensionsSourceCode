@@ -1,5 +1,13 @@
 "use strict";
 
+Vue.component("open-modal-shortcuts", {
+  template: `
+    <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
+      Press <kbd>?</kbd> to open shortcut list.
+    </p>`
+});
+
+
 Vue.component("modal-shortcuts", {
   computed: {
     shortcuts: () => [

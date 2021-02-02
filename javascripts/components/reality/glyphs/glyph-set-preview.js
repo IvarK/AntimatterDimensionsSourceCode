@@ -11,6 +11,10 @@ Vue.component("glyph-set-preview", {
       type: Boolean,
       default: true,
     },
+    forceNameColor: {
+      type: Boolean,
+      default: true,
+    },
     showSacrifice: {
       type: Boolean,
       default: false
@@ -30,7 +34,7 @@ Vue.component("glyph-set-preview", {
         <glyph-set-name
           v-if="showName"
           :glyphSet="glyphs"
-          :forceColor="true" />
+          :forceColor="forceNameColor" />
         <glyph-component v-for="(g, idx) in glyphs"
           :key="idx"
           style="margin: 0.2rem;"

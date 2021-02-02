@@ -305,7 +305,7 @@ button:focus {
 
 .o-tt-autobuyer-button {
   height: 2.5rem;
-  font-size: 1rem;
+  font-size: 1rem !important;
   margin: 0.3rem;
   flex-grow: 0;
   flex-shrink: 0;

@@ -50,6 +50,27 @@ let player = {
     upgradeBits: 0
   },
   auto: {
+    // TODO: REMOVE COMMENTS
+    // Desired order of Autobuyer appearance.
+    // Reality
+    // ^Eternity
+    // ^Infinity (Big Crunch)
+    // Antimatter Galaxies
+    // Dimension Boosts
+    // ^Tickspeed Upgrades
+    // ^Sacrifice
+    // ^Antimatter Dimensions
+    // +Infinty Dimensions
+    // +Time Dimensions
+    // +Replicanti Upgrades (Percentage, Interval, Max Galaxies)
+    // +Replicanti Galaxies
+    // +Dilation Upgrades (DT gain, TG mult, TP gain)
+    // +Black Hole Power Upgrades
+    // +Rebuyable Reality Upgrades
+    // +IP Mult, EP Mult
+    //
+    // ^ = To change
+    // + = To add
     bulkOn: true,
     autobuyersOn: true,
     disableContinuum: false,
@@ -124,38 +145,37 @@ let player = {
       lastTick: 0,
       isBought: false
     })),
-    infinityDims: {
-      active: [false, false, false, false, false, false, false, false],
-      timer: 0,
-    },
-    timeDims: {
-      active: [false, false, false, false, false, false, false, false],
-      timer: 0,
-    },
+    infinityDims: Array.range(0, 8).map(() => ({
+      isActive: false,
+      lastTick: 0,
+    })),
+    timeDims: Array.range(0, 8).map(() => ({
+      isActive: false,
+      lastTick: 0,
+    })),
     replicantiGalaxies: {
-      active: false,
-      timer: 0,
+      isActive: false,
     },
-    replicantiUpgrades: {
-      active: [false, false, false],
-      timer: 0,
-    },
+    replicantiUpgrades: Array.range(0, 3).map(() => ({
+      isActive: false,
+      lastTick: 0,
+    })),
     timeTheorems: {
-      active: false,
-      timer: 0,
+      isActive: false,
+      lastTick: 0,
     },
-    dilation: {
-      active: [false, false, false],
-      timer: 0,
-    },
-    blackHoleUpgrades: {
-      active: [false, false]
-    },
-    realityUpgrades: {
-      active: [false, false, false, false, false],
-    },
-    ipMultBuyer: false,
-    epMultBuyer: false,
+    dilationUpgrades: Array.range(0, 3).map(() => ({
+      isActive: false,
+      lastTick: 0,
+    })),
+    blackHolePower: Array.range(0, 2).map(() => ({
+      isActive: false,
+    })),
+    realityUpgrades: Array.range(0, 5).map(() => ({
+      isActive: false,
+    })),
+    ipMultBuyer: { isActive: false, },
+    epMultBuyer: { isActive: false, },
   },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),

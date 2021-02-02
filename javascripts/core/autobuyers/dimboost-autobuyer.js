@@ -1,6 +1,6 @@
 "use strict";
 
-Autobuyer.dimboost = new class DimBoostAutobuyerState extends IntervaledAutobuyerState {
+Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
     return player.auto.dimBoost;
   }

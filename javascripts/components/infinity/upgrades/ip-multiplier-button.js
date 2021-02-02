@@ -3,14 +3,14 @@
 Vue.component("ip-multiplier-button", {
   data() {
     return {
-      isAutobuyerOn: false,
+      isAutobuyerActive: false,
       isAutoUnlocked: false,
       isCapped: false
     };
   },
   watch: {
-    isAutobuyerOn(newValue) {
-      player.auto.ipMultBuyer = newValue;
+    isAutobuyerActive(newValue) {
+      Autobuyer.ipMult.isActive = newValue;
     }
   },
   computed: {
@@ -20,12 +20,12 @@ Vue.component("ip-multiplier-button", {
   },
   methods: {
     update() {
-      this.isAutoUnlocked = EternityMilestone.autobuyerIPMult.isReached;
-      this.isAutobuyerOn = player.auto.ipMultBuyer;
+      this.isAutoUnlocked = Autobuyer.ipMult.isUnlocked;
+      this.isAutobuyerActive = Autobuyer.ipMult.isActive;
       this.isCapped = this.upgrade.isCapped;
     },
     buyMaxIPMult() {
-      InfinityUpgrade.ipMult.autobuyerTick();
+      InfinityUpgrade.ipMult.buyMax();
     }
   },
   template:
@@ -45,7 +45,7 @@ Vue.component("ip-multiplier-button", {
       >Max Infinity Point mult</primary-button>
       <primary-button-on-off
         v-if="isAutoUnlocked"
-        v-model="isAutobuyerOn"
+        v-model="isAutobuyerActive"
         text="Autobuy IP mult"
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
       />

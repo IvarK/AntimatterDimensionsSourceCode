@@ -1,6 +1,6 @@
 "use strict";
 
-class DimensionAutobuyerState extends IntervaledAutobuyerState {
+class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   constructor(tier) {
     super();
     this._tier = tier;
@@ -11,7 +11,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get baseInterval() {
-    return Player.defaultStart.auto.dimensions[this._tier - 1].interval;
+    return Player.defaultStart.auto.antimatterDims[this._tier - 1].interval;
   }
 
   get isUnlocked() {
@@ -104,6 +104,6 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 }
 
-DimensionAutobuyerState.index = Array.range(1, 8).map(tier => new DimensionAutobuyerState(tier));
+AntimatterDimensionAutobuyerState.index = Array.range(1, 8).map(tier => new AntimatterDimensionAutobuyerState(tier));
 
-Autobuyer.dimension = tier => DimensionAutobuyerState.index[tier - 1];
+Autobuyer.antimatterDimension = tier => AntimatterDimensionAutobuyerState.index[tier - 1];

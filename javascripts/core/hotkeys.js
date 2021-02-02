@@ -65,10 +65,10 @@ GameKeyboard.bindHotkey("alt+s", () => toggleAutobuyer(12));
 GameKeyboard.bindHotkey("alt+e", () => toggleAutobuyer(13));
 GameKeyboard.bindHotkey("alt+y", () => toggleAutobuyer(14));
 GameKeyboard.bindHotkey("alt+r", () => {
-  const buyer = Replicanti.galaxies.autobuyer;
+  const buyer = Autobuyer.replicantiGalaxy;
   if (buyer.isUnlocked) {
     buyer.toggle();
-    GameUI.notify.info(`Replicanti Galaxy autobuyer ${(buyer.isOn) ? "enabled" : "disabled"}`);
+    GameUI.notify.info(`Replicanti Galaxy autobuyer ${(buyer.isActive) ? "enabled" : "disabled"}`);
   }
   return false;
 });

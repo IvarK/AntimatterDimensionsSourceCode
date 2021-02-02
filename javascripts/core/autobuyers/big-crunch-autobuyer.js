@@ -1,6 +1,6 @@
 "use strict";
 
-Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobuyerState {
+Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
     return player.auto.bigCrunch;
   }

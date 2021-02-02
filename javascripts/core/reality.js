@@ -364,10 +364,8 @@ function finishProcessReality(realityProps) {
   player.infMultCost = new Decimal(10);
   player.infinityRebuyables = [0, 0, 0];
   player.infinityPower = new Decimal(1);
-  player.auto.infinityDims.active = Array.repeat(false, 8);
   player.timeShards = new Decimal(0);
   Replicanti.reset(true);
-  player.auto.replicantiUpgrades.active = Array.repeat(false, 3);
 
   player.eternityPoints = Player.startingEP;
 
@@ -385,7 +383,6 @@ function finishProcessReality(realityProps) {
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;
   player.etercreq = 0;
-  player.auto.ipMultBuyer = false;
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
@@ -459,7 +456,7 @@ function finishProcessReality(realityProps) {
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
   // This immediately gives eternity upgrades instead of after the first eternity
-  if (RealityUpgrades.allBought) applyRealityUpgradesAfterEternity(celestialRunState.enslaved);
+  if (RealityUpgrades.allBought) applyRealityUpgradesAfterEternity();
 
   if (!isReset) Ra.applyAlchemyReactions();
 
@@ -496,7 +493,6 @@ function applyRUPG10() {
     bulk: 1e10,
     mode: AUTOBUYER_MODE.BUY_10,
     priority: 1,
-    isActive: true,
     lastTick: player.records.realTimePlayed
   }));
   for (const autobuyer of Autobuyers.all) {
@@ -517,13 +513,9 @@ function applyRUPG10() {
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
   player.infinityRebuyables = [8, 7, 10];
-  player.auto.infinityDims.active = Array.repeat(true, 8);
-  player.auto.ipMultBuyer = true;
   player.eternities = player.eternities.plus(100);
   player.replicanti.amount = player.replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
-  player.auto.replicantiGalaxies.active = true;
-  player.auto.replicantiUpgrades.active = Array.repeat(true, 3);
   GameCache.tickSpeedMultDecrease.invalidate();
   GameCache.dimensionMultDecrease.invalidate();
 }

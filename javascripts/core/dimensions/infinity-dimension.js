@@ -75,9 +75,9 @@ function buyMaxInfinityDimensions() {
 }
 
 function toggleAllInfDims() {
-  const areEnabled = player.auto.infinityDims.active[0];
+  const areEnabled = Autobuyer.infinityDimension(1).isActive;
   for (let i = 1; i < 9; i++) {
-    player.auto.infinityDims.active[i - 1] = !areEnabled;
+    Autobuyer.infinityDimension(i).isActive = !areEnabled;
   }
 }
 
@@ -131,10 +131,6 @@ class InfinityDimensionState extends DimensionState {
 
   get requirementReached() {
     return player.records.thisEternity.maxAM.gte(this.requirement);
-  }
-
-  get isAutobuyerUnlocked() {
-    return player.eternities.gte(10 + this.tier);
   }
 
   get isAvailableForPurchase() {
@@ -262,7 +258,7 @@ class InfinityDimensionState extends DimensionState {
 
     this.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, this.tier);
-    if (player.auto.infinityDims.active[this.tier - 1] && !manual &&
+    if (Autobuyer.infinityDimension(this.tier).isActive && !manual &&
       !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
       buyMaxInfDims(this.tier);
     }

@@ -909,24 +909,34 @@ GameStorage.devMigrations = {
       delete player.auto.disableContinuum;
     },
     player => {
+      for (let i = 0; i < 8; i++) {
+        player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
+        player.auto.infinityDims[i].lastTick = player.auto.infDimTimer;
+      }
+      for (let i = 0; i < 8; i++) {
+        player.auto.timeDims[i].isActive = player.reality.tdbuyers[i];
+        player.auto.timeDims[i].lastTick = player.auto.timeDimTimer;
+      }
+      for (let i = 0; i < 3; i++) {
+        player.auto.replicantiUpgrades[i].isActive = player.replicanti.auto[i];
+        player.auto.replicantiUpgrades[i].lastTick = player.auto.repUpgradeTimer;
+      }
+      for (let i = 0; i < 3; i++) {
+        player.auto.dilationUpgrades[i].isActive = player.dilation.auto[i];
+        player.auto.dilationUpgrades[i].lastTick = player.auto.dilUpgradeTimer;
+      }
+      for (let i = 0; i < 2; i++) {
+        player.auto.blackHolePower[i].isActive = player.blackHole[i].autoPower;
+      }
+      for (let i = 0; i < 5; i++) {
+        player.auto.realityUpgrades[i].isActive = player.reality.rebuyablesAuto[i];
+      }
       player.auto.antimatterDims = player.auto.dimensions;
-      player.auto.infinityDims.active = player.infDimBuyers;
-      player.auto.infinityDims.timer = player.auto.infDimTimer;
-      player.auto.timeDims.active = player.reality.tdbuyers;
-      player.auto.timeDims.timer = player.auto.timeDimTimer;
-      player.auto.replicantiGalaxies.active = player.replicanti.galaxybuyer;
-      player.auto.replicantiGalaxies.timer = player.replicanti.timer;
-      player.auto.replicantiUpgrades.active = player.replicanti.auto;
-      player.auto.replicantiUpgrades.timer = player.auto.repUpgradeTimer;
-      player.auto.timeTheorems.active = player.ttbuyer;
-      player.auto.timeTheorems.timer = player.auto.ttTimer;
-      player.auto.dilation.active = player.dilation.auto;
-      player.auto.dilation.timer = player.auto.dilUpgradeTimer;
-      player.auto.blackHoleUpgrades.active[0] = player.blackHole[0].autoPower;
-      player.auto.blackHoleUpgrades.active[1] = player.blackHole[1].autoPower;
-      player.auto.realityUpgrades.active = player.reality.rebuyablesAuto;
-      player.auto.ipMultBuyer = player.infMultBuyer;
-      player.auto.epMultBuyer = player.reality.epmultbuyer;
+      player.auto.replicantiGalaxies.isActive = player.replicanti.galaxybuyer;
+      player.auto.ipMultBuyer.isActive = player.infMultBuyer;
+      player.auto.epMultBuyer.isActive = player.reality.epmultbuyer;
+      player.auto.timeTheorems.isActive = player.ttbuyer;
+      player.auto.timeTheorems.lastTick = player.auto.ttTimer;
 
       delete player.auto.dimensions;
       delete player.infDimBuyers;
@@ -934,7 +944,6 @@ GameStorage.devMigrations = {
       delete player.reality.tdbuyers;
       delete player.auto.timeDimTimer;
       delete player.replicanti.galaxybuyer;
-      delete player.replicanti.timer;
       delete player.replicanti.auto;
       delete player.auto.repUpgradeTimer;
       delete player.ttbuyer;

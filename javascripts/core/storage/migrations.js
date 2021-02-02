@@ -545,7 +545,7 @@ GameStorage.migrations = {
     for (let i = 0; i < 8; i++) {
       const old = player.autobuyers[i];
       if (old % 1 === 0) continue;
-      const autobuyer = player.auto.dimensions[i];
+      const autobuyer = player.auto.antimatterDims[i];
       autobuyer.cost = old.cost;
       autobuyer.interval = old.interval;
       autobuyer.bulk = old.bulk;
@@ -798,20 +798,18 @@ GameStorage.migrations = {
   },
 
   consolidateAuto(player) {
-    player.auto.antimatterDims = player.auto.dimensions;
-    player.auto.infinityDims.active = player.infDimBuyers;
-    player.auto.infinityDims.timer = player.auto.infDimTimer;
-    player.auto.replicantiGalaxies.active = player.replicanti.galaxybuyer;
-    player.auto.replicantiGalaxies.timer = player.replicanti.timer;
+    for (let i = 0; i < 8; i++) {
+      player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
+      player.auto.infinityDims[i].lastTick = player.auto.infDimTimer;
+    }
+    player.auto.replicantiGalaxies.isActive = player.replicanti.galaxybuyer;
     player.auto.replicantiUpgrades.active = player.replicanti.auto;
     player.auto.replicantiUpgrades.timer = player.auto.repUpgradeTimer;
-    player.auto.ipMultBuyer = player.infMultBuyer;
+    player.auto.ipMultBuyer.isActive = player.infMultBuyer;
 
-    delete player.auto.dimensions;
     delete player.infDimBuyers;
     delete player.auto.infDimTimer;
     delete player.replicanti.galaxybuyer;
-    delete player.replicanti.timer;
     delete player.replicanti.auto;
     delete player.auto.repUpgradeTimer;
     delete player.infMultBuyer;

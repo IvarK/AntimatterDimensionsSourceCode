@@ -1,22 +1,39 @@
 "use strict";
 
 const Autobuyers = (function() {
-  const dimensions = DimensionAutobuyerState.index;
-  const all = dimensions
-    .concat([
-      Autobuyer.tickspeed,
-      Autobuyer.dimboost,
-      Autobuyer.galaxy,
-      Autobuyer.bigCrunch,
-      Autobuyer.sacrifice,
-      Autobuyer.eternity,
-      Autobuyer.reality,
-    ]);
+  const antimatterDims = AntimatterDimensionAutobuyerState.index;
+  const infinityDims = InfinityDimensionAutobuyerState.index;
+  const timeDims = TimeDimensionAutobuyerState.index;
+  const dimensions = antimatterDims.concat(infinityDims, timeDims);
+  const prestige = [
+    Autobuyer.bigCrunch,
+    Autobuyer.eternity,
+    Autobuyer.reality,
+  ];
+  const single = [
+    Autobuyer.tickspeed,
+    Autobuyer.sacrifice,
+    Autobuyer.dimboost,
+    Autobuyer.galaxy,
+    Autobuyer.replicantiGalaxy,
+    Autobuyer.timeTheorem,
+    Autobuyer.ipMult,
+    Autobuyer.epMult,
+  ];
+  const other = BlackHolePowerAutobuyerState.index.concat(
+                RealityUpgradeAutobuyerState.index,
+                ReplicantiUpgradeAutobuyerState.index,
+                DilationUpgradeAutobuyerState.index
+    );
+  const all = dimensions.concat(prestige, single, other);
 
   return {
     all,
     dimensions,
-    upgradeable: dimensions.concat([Autobuyer.tickspeed]),
+    prestige,
+    single,
+    other,
+    upgradeable: antimatterDims.concat([Autobuyer.tickspeed]),
 
     get unlocked() {
       return Autobuyers.all.filter(a => a.isUnlocked || a.isBought);
@@ -30,17 +47,11 @@ const Autobuyers = (function() {
       PerformanceStats.start("Autobuyers");
 
       const priorityQueue = [Autobuyer.tickspeed]
-        .concat(dimensions)
+        .concat(antimatterDims)
         .sort((a, b) => a.priority - b.priority);
 
-      const autobuyers = [
-        Autobuyer.reality,
-        Autobuyer.bigCrunch,
-        Autobuyer.eternity,
-        Autobuyer.galaxy,
-        Autobuyer.dimboost,
-        Autobuyer.sacrifice
-      ]
+      const autobuyers = prestige
+        .concat(single, other, infinityDims, timeDims)
         .concat(priorityQueue)
         .filter(a => a.canTick);
 

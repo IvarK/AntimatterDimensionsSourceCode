@@ -19,7 +19,7 @@ Vue.component("dilation-upgrade", {
   },
   watch: {
     isAutobuyerOn(newValue) {
-      this.upgrade.isAutobuyerOn = newValue;
+      Autobuyer.dilationUpgrade(this.upgrade.id).isActive = newValue;
     }
   },
   computed: {
@@ -36,23 +36,25 @@ Vue.component("dilation-upgrade", {
   },
   methods: {
     update() {
+      const upgrade = this.upgrade;
       if (this.isRebuyable) {
-        this.isAffordable = this.upgrade.isAffordable;
-        this.isCapped = this.upgrade.isCapped;
-      } else {
-        this.isBought = this.upgrade.isBought;
-        if (!this.isBought) {
-          this.isAffordable = this.upgrade.isAffordable;
-        }
+        this.isAffordable = upgrade.isAffordable;
+        this.isCapped = upgrade.isCapped;
+        const autobuyer = Autobuyer.dilationUpgrade(upgrade.id);
+        this.isAutoUnlocked = autobuyer.isUnlocked;
+        this.isAutobuyerOn = autobuyer.isActive;
+        return;
       }
-      this.isAutoUnlocked = Perk.autobuyerDilation.isBought;
-      this.isAutobuyerOn = this.upgrade.isAutobuyerOn;
+      this.isBought = upgrade.isBought;
+      if (!this.isBought) {
+        this.isAffordable = upgrade.isAffordable;
+      }
     }
   },
   template:
     `<div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()">
-        <description-display 
+        <description-display
           :config="upgrade.config"
           :length="70"
           name="o-dilation-upgrade__description"

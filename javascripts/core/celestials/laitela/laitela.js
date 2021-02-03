@@ -59,8 +59,11 @@ const Laitela = {
   get isRunning() {
     return this.celestial.run;
   },
+  get continuumUnlocked() {
+    return Laitela.isUnlocked;
+  },
   get continuumActive() {
-    return Laitela.isUnlocked && !player.auto.disableContinuum;
+    return this.continuumUnlocked && !player.auto.disableContinuum;
   },
   get matterExtraPurchaseFactor() {
     return (1 + Math.pow(Decimal.pLog10(this.celestial.maxDarkMatter) /

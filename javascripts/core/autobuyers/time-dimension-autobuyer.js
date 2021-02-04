@@ -37,3 +37,4 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
 TimeDimensionAutobuyerState.index = Array.range(1, 8).map(tier => new TimeDimensionAutobuyerState(tier));
 
 Autobuyer.timeDimension = tier => TimeDimensionAutobuyerState.index[tier - 1];
+Autobuyer.timeDimension.index = TimeDimensionAutobuyerState.index;

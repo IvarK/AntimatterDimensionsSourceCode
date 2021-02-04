@@ -32,3 +32,4 @@ class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
 DilationUpgradeAutobuyerState.index = Array.range(1, 3).map(upgrade => new DilationUpgradeAutobuyerState(upgrade));
 
 Autobuyer.dilationUpgrade = upgrade => DilationUpgradeAutobuyerState.index[upgrade - 1];
+Autobuyer.dilationUpgrade.index = DilationUpgradeAutobuyerState.index;

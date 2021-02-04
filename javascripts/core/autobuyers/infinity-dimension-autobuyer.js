@@ -34,3 +34,4 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
 InfinityDimensionAutobuyerState.index = Array.range(1, 8).map(tier => new InfinityDimensionAutobuyerState(tier));
 
 Autobuyer.infinityDimension = tier => InfinityDimensionAutobuyerState.index[tier - 1];
+Autobuyer.infinityDimension.index = InfinityDimensionAutobuyerState.index;

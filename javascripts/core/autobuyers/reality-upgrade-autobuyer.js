@@ -26,4 +26,5 @@ class RealityUpgradeAutobuyerState extends AutobuyerState {
 
 RealityUpgradeAutobuyerState.index = Array.range(1, 5).map(upgrade => new RealityUpgradeAutobuyerState(upgrade));
 
-Autobuyer.realityUpgrades = upgrade => RealityUpgradeAutobuyerState.index[upgrade - 1];
+Autobuyer.realityUpgrade = upgrade => RealityUpgradeAutobuyerState.index[upgrade - 1];
+Autobuyer.realityUpgrade.index = RealityUpgradeAutobuyerState.index;

@@ -27,3 +27,4 @@ class BlackHolePowerAutobuyerState extends AutobuyerState {
 BlackHolePowerAutobuyerState.index = Array.range(1, 2).map(blackHole => new BlackHolePowerAutobuyerState(blackHole));
 
 Autobuyer.blackHolePower = blackHole => BlackHolePowerAutobuyerState.index[blackHole - 1];
+Autobuyer.blackHolePower.index = BlackHolePowerAutobuyerState.index;

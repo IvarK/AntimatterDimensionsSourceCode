@@ -71,10 +71,6 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
   return remainingGain;
 }
 
-function replicantiGalaxyAutoToggle(forcestate) {
-  player.auto.replicantiGalaxies.isActive = !player.auto.replicantiGalaxies.isActive || forcestate === true;
-}
-
 // When the amount is exactly the cap, there are two cases: the player can go
 // over cap (in which case interval should be as if over cap) or the player
 // has just crunched and is still at cap due to "Is this safe?" reward
@@ -415,10 +411,6 @@ const Replicanti = {
     player.replicanti.boughtGalaxyCap = 0;
     player.replicanti.galaxies = 0;
     player.replicanti.galCost = new Decimal(1e170);
-    if (player.auto.replicantiGalaxies.isActive === undefined &&
-        EternityMilestone.autobuyerReplicantiGalaxy.isReached) {
-        player.auto.replicantiGalaxies.isActive = false;
-    }
   },
   unlock(freeUnlock = false) {
     if (player.replicanti.unl) return;

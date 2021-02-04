@@ -437,7 +437,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
-        player.auto.replicantiGalaxies.isActive = true;
+        Autobuyer.replicantiGalaxy.isActive = true;
       }
     ],
     [

@@ -80,11 +80,10 @@ GameKeyboard.bindHotkey("alt+y", () => toggleAutobuyer("prestige", 2));
   for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);
 }());
 
-// Requires Shift or Ctrl down to allow Konami Code
-GameKeyboard.bindHotkey(["shift+up", "ctrl+up"], () => keyboardTabChange("up"));
-GameKeyboard.bindHotkey(["shift+down", "ctrl+down"], () => keyboardTabChange("down"));
-GameKeyboard.bindHotkey(["shift+left", "ctrl+left"], () => keyboardTabChange("left"));
-GameKeyboard.bindHotkey(["shift+right", "ctrl+right"], () => keyboardTabChange("right"));
+GameKeyboard.bindHotkey("up", () => keyboardTabChange("up"));
+GameKeyboard.bindHotkey("down", () => keyboardTabChange("down"));
+GameKeyboard.bindHotkey("left", () => keyboardTabChange("left"));
+GameKeyboard.bindHotkey("right", () => keyboardTabChange("right"));
 
 function keyboardTabChange(direction) {
   // Make an array of all the unlocked tabs
@@ -96,9 +95,11 @@ function keyboardTabChange(direction) {
     tabs.push("achievements", "statistics", "options");
   }
   if (Tab.shop.isAvailable) tabs.push("shop");
+
   // Find the index of the tab and subtab we are on
   let top = tabs.indexOf(Tabs.current.config.key);
   let sub = subtabs.indexOf(Tabs.current._currentSubtab.key);
+
   // Move in that direction, looping if needed
   if (direction === "up") {
     top -= 1;
@@ -118,6 +119,7 @@ function keyboardTabChange(direction) {
   } else {
     Tab[tabs[top]][subtabs[sub]].show(true);
   }
+  return false;
 }
 
 GameKeyboard.bindHotkey("a", () => {
@@ -200,7 +202,7 @@ GameKeyboard.bind(
   () => SecretAchievement(23).unlock()
 );
 
-GameKeyboard.bind("up up down down left right left right b a", () => {
+GameKeyboard.bind("enter up up down down left right left right b a", () => {
   SecretAchievement(17).unlock();
   Currency.antimatter.bumpTo(30);
 });

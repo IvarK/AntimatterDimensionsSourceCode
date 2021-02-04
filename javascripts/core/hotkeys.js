@@ -31,54 +31,51 @@ GameKeyboard.bind("r", () => setHoldingR(true), "keydown");
 GameKeyboard.bind("r", () => setHoldingR(false), "keyup");
 
 
-const AUTOBUYER_NAMES = ["1st Dimension", "2nd Dimension", "3rd Dimension", "4th Dimension",
-                         "5th Dimension", "6th Dimension", "7th Dimension", "8th Dimension",
-                         "Tickspeed", "Dimension Boost", "Antimatter Galaxy", "Big Crunch", "Dimensional Sacrifice",
-                         "Eternity", "Reality"];
+const AUTOBUYER_NAMES = {
+  antimatterDimensions: ["1st Dimension", "2nd Dimension", "3rd Dimension", "4th Dimension",
+               "5th Dimension", "6th Dimension", "7th Dimension", "8th Dimension"],
+  single: ["Tickspeed", "Dimensional Sacrifice", "Dimension Boost", "Antimatter Galaxy", "Replicanti Galaxy"],
+  prestige: ["Big Crunch", "Eternity", "Reality"]
+};
 
 // Toggle autobuyers
-function toggleAutobuyer(id) {
-  const buyer = Autobuyers.all[id];
+function toggleAutobuyer(type, id) {
+  const buyer = Autobuyers[type].flat()[id];
   if (buyer.isUnlocked) {
     buyer.toggle();
-    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} Autobuyer toggled ${(buyer.isActive) ? "on" : "off"}`);
+    GameUI.notify.info(`${AUTOBUYER_NAMES[type][id]} Autobuyer toggled ${(buyer.isActive) ? "on" : "off"}`);
   }
   return false;
 }
 
-function toggleBuySingles(id) {
-  const buyer = Autobuyers.all[id];
-  if (buyer.isUnlocked && buyer.toggleMode !== null) {
+function toggleBuySingles(type, id) {
+  const buyer = Autobuyers[type][id];
+  if (buyer.isUnlocked && buyer.toggleMode !== null && !Laitela.continuumActive) {
     buyer.toggleMode();
-    const bulkname = (id === 8 || buyer.hasUnlimitedBulk) ? "max" : "10";
-    GameUI.notify.info(`${AUTOBUYER_NAMES[id]} Autobuyer set to buy ${(buyer.mode === 1) ? "singles" : bulkname}`);
+    const name = AUTOBUYER_NAMES[type][id];
+    const bulkName = (name === "Tickspeed" || buyer.hasUnlimitedBulk) ? "max" : "10";
+    GameUI.notify.info(`${name} Autobuyer set to buy ${(buyer.mode === 1) ? "singles" : bulkName}`);
   }
   return false;
 }
 
-GameKeyboard.bindHotkey("alt+t", () => toggleAutobuyer(8));
-GameKeyboard.bindHotkey("shift+alt+t", () => toggleBuySingles(8));
-GameKeyboard.bindHotkey("alt+d", () => toggleAutobuyer(9));
-GameKeyboard.bindHotkey("alt+g", () => toggleAutobuyer(10));
-GameKeyboard.bindHotkey("alt+c", () => toggleAutobuyer(11));
-GameKeyboard.bindHotkey("alt+s", () => toggleAutobuyer(12));
-GameKeyboard.bindHotkey("alt+e", () => toggleAutobuyer(13));
-GameKeyboard.bindHotkey("alt+y", () => toggleAutobuyer(14));
-GameKeyboard.bindHotkey("alt+r", () => {
-  const buyer = Autobuyer.replicantiGalaxy;
-  if (buyer.isUnlocked) {
-    buyer.toggle();
-    GameUI.notify.info(`Replicanti Galaxy autobuyer ${(buyer.isActive) ? "enabled" : "disabled"}`);
-  }
-  return false;
-});
+GameKeyboard.bindHotkey("alt+t", () => toggleAutobuyer("single", 0));
+GameKeyboard.bindHotkey("shift+alt+t", () => toggleBuySingles("single", 0));
+GameKeyboard.bindHotkey("alt+s", () => toggleAutobuyer("single", 1));
+GameKeyboard.bindHotkey("alt+d", () => toggleAutobuyer("single", 2));
+GameKeyboard.bindHotkey("alt+g", () => toggleAutobuyer("single", 3));
+GameKeyboard.bindHotkey("alt+r", () => toggleAutobuyer("single", 4));
+
+GameKeyboard.bindHotkey("alt+c", () => toggleAutobuyer("prestige", 0));
+GameKeyboard.bindHotkey("alt+e", () => toggleAutobuyer("prestige", 1));
+GameKeyboard.bindHotkey("alt+y", () => toggleAutobuyer("prestige", 2));
 
 (function() {
   function bindDimensionHotkeys(tier) {
     GameKeyboard.bindRepeatableHotkey(`${tier}`, () => buyManyDimension(tier));
     GameKeyboard.bindRepeatableHotkey(`shift+${tier}`, () => buyOneDimension(tier));
-    GameKeyboard.bindHotkey(`alt+${tier}`, () => toggleAutobuyer(tier - 1));
-    GameKeyboard.bindHotkey(`shift+alt+${tier}`, () => toggleBuySingles(tier - 1));
+    GameKeyboard.bindHotkey(`alt+${tier}`, () => toggleAutobuyer("antimatterDimensions", tier - 1));
+    GameKeyboard.bindHotkey(`shift+alt+${tier}`, () => toggleBuySingles("antimatterDimensions", tier - 1));
   }
   for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);
 }());

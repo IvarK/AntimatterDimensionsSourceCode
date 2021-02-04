@@ -485,14 +485,15 @@ function restoreCelestialRuns(celestialRunState) {
 function applyRUPG10() {
   NormalChallenges.completeAll();
 
-  player.auto.antimatterDims = player.auto.antimatterDims.map(() => ({
+  player.auto.antimatterDims = player.auto.antimatterDims.map(current => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
     cost: 1e14,
     interval: 100,
     bulk: 1e10,
-    mode: AUTOBUYER_MODE.BUY_10,
-    priority: 1,
+    mode: current.mode,
+    priority: current.priority,
+    isActive: current.isActive,
     lastTick: player.records.realTimePlayed
   }));
   for (const autobuyer of Autobuyers.all) {
@@ -513,7 +514,7 @@ function applyRUPG10() {
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
   player.infinityRebuyables = [8, 7, 10];
-  player.eternities = player.eternities.plus(100);
+  player.eternities = player.eternities.clampMin(100);
   player.replicanti.amount = player.replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
   GameCache.tickSpeedMultDecrease.invalidate();

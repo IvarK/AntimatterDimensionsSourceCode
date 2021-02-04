@@ -6,6 +6,10 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
     this._tier = tier;
   }
 
+  get name() {
+    return `${AntimatterDimension(this._tier).displayName} Antimatter Dimension`;
+  }
+
   get data() {
     return player.auto.antimatterDims[this._tier - 1];
   }

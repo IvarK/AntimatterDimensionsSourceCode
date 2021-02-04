@@ -5,6 +5,10 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
     return player.auto.dimBoost;
   }
 
+  get name() {
+    return `Dimension Boost`;
+  }
+
   get isUnlocked() {
     return NormalChallenge(10).isCompleted;
   }

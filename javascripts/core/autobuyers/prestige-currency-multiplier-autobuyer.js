@@ -5,6 +5,10 @@ Autobuyer.ipMult = new class IPMultAutobuyerState extends AutobuyerState {
     return player.auto.ipMultBuyer;
   }
 
+  get name() {
+    return `Infinity Point Multiplier`;
+  }
+
   get isUnlocked() {
     return EternityMilestone.autobuyerIPMult.isReached;
   }
@@ -17,6 +21,10 @@ Autobuyer.ipMult = new class IPMultAutobuyerState extends AutobuyerState {
 Autobuyer.epMult = new class EPMultAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.epMultBuyer;
+  }
+
+  get name() {
+    return `Eternity Point Multiplier`;
   }
 
   get isUnlocked() {

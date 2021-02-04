@@ -10,6 +10,10 @@ class BlackHolePowerAutobuyerState extends AutobuyerState {
     return player.auto.blackHolePower[this._blackHole - 1];
   }
 
+  get name() {
+    return `Black Hole ${this._blackHole} Power`;
+  }
+
   get isUnlocked() {
     return Ra.has(RA_UNLOCKS.AUTO_BLACK_HOLE_POWER);
   }

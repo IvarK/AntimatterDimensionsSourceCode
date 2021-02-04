@@ -6,6 +6,10 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
     this._tier = tier;
   }
 
+  get name() {
+    return `${TimeDimension(this._tier).displayName} Time Dimension`;
+  }
+
   get data() {
     return player.auto.timeDims[this._tier - 1];
   }

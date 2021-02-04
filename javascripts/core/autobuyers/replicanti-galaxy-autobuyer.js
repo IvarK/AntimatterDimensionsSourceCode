@@ -5,6 +5,10 @@ Autobuyer.replicantiGalaxy = new class ReplicantiGalaxyAutobuyerState extends In
     return player.auto.replicantiGalaxies;
   }
 
+  get name() {
+    return `Replicanti Galaxy`;
+  }
+
   get isUnlocked() {
     return EternityMilestone.autobuyerReplicantiGalaxy.isReached;
   }

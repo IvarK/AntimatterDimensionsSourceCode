@@ -11,6 +11,10 @@ class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
     return player.auto.dilationUpgrades[this._upgrade - 1];
   }
 
+  get name() {
+    return [`Dilated Time Gain`, `Tachyon Galaxy Threshold`, "Tachyon Multiplier"][this._upgrade - 1];
+  }
+
   get interval() {
     return 1000 * Perk.autobuyerFasterDilation.effectOrDefault(1) / PerkShopUpgrade.autoSpeed.effectOrDefault(1);
   }

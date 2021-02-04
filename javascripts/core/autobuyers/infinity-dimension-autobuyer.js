@@ -6,6 +6,10 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
     this._tier = tier;
   }
 
+  get name() {
+    return `${InfinityDimension(this._tier).displayName} Infinity Dimension`;
+  }
+
   get data() {
     return player.auto.infinityDims[this._tier - 1];
   }

@@ -5,6 +5,10 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
     return player.auto.tickspeed;
   }
 
+  get name() {
+    return `Tickspeed`;
+  }
+
   get isUnlocked() {
     return NormalChallenge(9).isCompleted;
   }

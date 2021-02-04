@@ -5,6 +5,10 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
     return player.auto.eternity;
   }
 
+  get name() {
+    return `Eternity`;
+  }
+
   get isUnlocked() {
     return EternityMilestone.autobuyerEternity.isReached;
   }

@@ -5,6 +5,10 @@ Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
     return player.auto.reality;
   }
 
+  get name() {
+    return `Reality`;
+  }
+
   get isUnlocked() {
     return RealityUpgrade(25).isBought;
   }

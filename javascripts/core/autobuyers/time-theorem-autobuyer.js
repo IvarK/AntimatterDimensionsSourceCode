@@ -5,6 +5,10 @@ Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends IntervaledAu
     return player.auto.timeTheorems;
   }
 
+  get name() {
+    return `Time Theorem`;
+  }
+
   get interval() {
     const period = Effects.min(
       Number.POSITIVE_INFINITY,

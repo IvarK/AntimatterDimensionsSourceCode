@@ -5,6 +5,10 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
     return player.auto.bigCrunch;
   }
 
+  get name() {
+    return `Infinity`;
+  }
+
   get isUnlocked() {
     return NormalChallenge(12).isCompleted;
   }

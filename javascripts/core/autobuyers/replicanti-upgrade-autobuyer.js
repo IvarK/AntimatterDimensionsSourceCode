@@ -7,6 +7,10 @@ class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
     this._upgradeName = ["chance", "interval", "galaxies"][this._upgrade - 1];
   }
 
+  get name() {
+    return `Replicanti ${[`Chance`, `Interval`, `Max Galaxies`][this._upgrade - 1]}`;
+  }
+
   get data() {
     return player.auto.replicantiUpgrades[this._upgrade - 1];
   }

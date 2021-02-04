@@ -5,6 +5,10 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends UpgradeableAutobuyerSt
     return player.auto.galaxy;
   }
 
+  get name() {
+    return `Antimatter Galaxy`;
+  }
+
   get isUnlocked() {
     return NormalChallenge(11).isCompleted;
   }

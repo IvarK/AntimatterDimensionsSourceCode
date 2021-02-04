@@ -111,3 +111,4 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
 AntimatterDimensionAutobuyerState.index = Array.range(1, 8).map(tier => new AntimatterDimensionAutobuyerState(tier));
 
 Autobuyer.antimatterDimension = tier => AntimatterDimensionAutobuyerState.index[tier - 1];
+Autobuyer.antimatterDimension.index = AntimatterDimensionAutobuyerState.index;

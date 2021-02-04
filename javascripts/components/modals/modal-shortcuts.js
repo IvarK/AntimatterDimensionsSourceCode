@@ -75,6 +75,18 @@ Vue.component("modal-shortcuts", {
           When pressing both Alt and Shift, you can toggle buying singles or buying max for the Antimatter Dimension
           and Tickspeed Autobuyers instead.
         </span>
+        <br><br>
+        <div class="l-modal-shortcuts-row">
+          <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">Tab Movement</span>
+          <div>
+            <kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd>
+          </div>
+        </div>
+        <span class="c-modal-shortcuts__shift-description">
+          Using the Arrow Keys will cycle you through tabs.
+          The Up and Down arrows cycle you through tabs,
+          and the Left and Right arrows cycle you through that tab's subtabs.
+        </span>
       </div>
     </div>`
 });

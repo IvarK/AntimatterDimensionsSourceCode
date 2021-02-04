@@ -800,11 +800,11 @@ GameStorage.migrations = {
   consolidateAuto(player) {
     for (let i = 0; i < 8; i++) {
       player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
-      player.auto.infinityDims[i].lastTick = player.auto.infDimTimer;
+    }
+    for (let i = 0; i < 3; i++) {
+      player.auto.replicantiUpgrades[i].isActive = player.replicanti.auto[i];
     }
     player.auto.replicantiGalaxies.isActive = player.replicanti.galaxybuyer;
-    player.auto.replicantiUpgrades.active = player.replicanti.auto;
-    player.auto.replicantiUpgrades.timer = player.auto.repUpgradeTimer;
     player.auto.ipMultBuyer.isActive = player.infMultBuyer;
 
     delete player.infDimBuyers;

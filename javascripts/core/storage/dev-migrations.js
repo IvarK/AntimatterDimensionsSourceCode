@@ -911,19 +911,15 @@ GameStorage.devMigrations = {
     player => {
       for (let i = 0; i < 8; i++) {
         player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
-        player.auto.infinityDims[i].lastTick = player.auto.infDimTimer;
       }
       for (let i = 0; i < 8; i++) {
         player.auto.timeDims[i].isActive = player.reality.tdbuyers[i];
-        player.auto.timeDims[i].lastTick = player.auto.timeDimTimer;
       }
       for (let i = 0; i < 3; i++) {
         player.auto.replicantiUpgrades[i].isActive = player.replicanti.auto[i];
-        player.auto.replicantiUpgrades[i].lastTick = player.auto.repUpgradeTimer;
       }
       for (let i = 0; i < 3; i++) {
         player.auto.dilationUpgrades[i].isActive = player.dilation.auto[i];
-        player.auto.dilationUpgrades[i].lastTick = player.auto.dilUpgradeTimer;
       }
       for (let i = 0; i < 2; i++) {
         player.auto.blackHolePower[i].isActive = player.blackHole[i].autoPower;
@@ -936,7 +932,6 @@ GameStorage.devMigrations = {
       player.auto.ipMultBuyer.isActive = player.infMultBuyer;
       player.auto.epMultBuyer.isActive = player.reality.epmultbuyer;
       player.auto.timeTheorems.isActive = player.ttbuyer;
-      player.auto.timeTheorems.lastTick = player.auto.ttTimer;
 
       delete player.auto.dimensions;
       delete player.infDimBuyers;

@@ -346,8 +346,10 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     if (!this.canBeBought) return;
     const mult = Decimal.pow(2, amount);
     player.infMult = player.infMult.times(mult);
-    if (!TimeStudy(181).isBought) {
+    if (!TimeStudy(181).isBought && !Pelle.isDoomed) {
       Autobuyer.bigCrunch.bumpAmount(mult);
+    } else if (!Pelle.isDisabled("IPMults")) {
+      Autobuyer.bigCrunch.bumpAmount(mult.pow(0.3));
     }
     const costIncrease = this.costIncrease;
     player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));

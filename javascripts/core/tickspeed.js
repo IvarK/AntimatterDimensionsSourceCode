@@ -39,7 +39,8 @@ function getTickSpeedMultiplier() {
         TimeStudy(232),
         Achievement(86),
         Achievement(175),
-        InfinityChallenge(5).reward
+        InfinityChallenge(5).reward,
+        PelleUpgrade.antimatterGalaxyBoost
       );
       return new Decimal(Math.max(0.01, baseMultiplier - (galaxies * perGalaxy)));
   }
@@ -54,7 +55,8 @@ function getTickSpeedMultiplier() {
     TimeStudy(232),
     Achievement(86),
     Achievement(175),
-    InfinityChallenge(5).reward
+    InfinityChallenge(5).reward,
+    PelleUpgrade.antimatterGalaxyBoost
   );
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");

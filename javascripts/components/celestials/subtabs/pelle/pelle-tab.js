@@ -6,7 +6,8 @@ Vue.component("pelle-tab", {
       isDoomed: false,
       armageddonInterval: 0,
       unstableMatter: new Decimal(0),
-      hasFamine: false
+      hasFamine: false,
+      hasPestilence: false
     };
   },
   methods: {
@@ -15,6 +16,7 @@ Vue.component("pelle-tab", {
       this.armageddonInterval = Pelle.armageddonInterval;
       this.unstableMatter.copyFrom(player.celestials.pelle.unstableMatter);
       this.hasFamine = PelleUpgrade.famineUnlock.isBought;
+      this.hasPestilence = PelleUpgrade.pestilenceUnlock.isBought;
     },
     getDoomed() {
       player.celestials.pelle.doomed = true;
@@ -46,12 +48,12 @@ Vue.component("pelle-tab", {
   template:
     `<div class="l-pelle-celestial-tab">
       <button @click="getDoomed()">Doom your reality lol</button>
-      <p>Armageddon is happenings every {{ armageddonInterval / 1000 }} seconds</p>
+      <p>Armageddon is happenings every {{ format(armageddonInterval / 1000, 2, 2) }} seconds</p>
       <p>You have <b>{{ format(unstableMatter, 2, 2) }}</b> Unstable matter</p>
       <div class="c-pelle-currency-container">
         <pelle-currency currency="famine" :rebuyable="pelleRebuyable.permanentTickspeed" v-show="hasFamine"/>
+        <pelle-currency currency="pestilence" :rebuyable="pelleRebuyable.permanentGalaxies" v-show="hasPestilence"/>
         <pelle-currency currency="chaos" :rebuyable="pelleRebuyable.permanentDimensionBoosts" v-show="false"/>
-        <pelle-currency currency="pestilence" :rebuyable="pelleRebuyable.permanentGalaxies" v-show="false"/>
       </div>
       <div class="pelle-upgrades--container">
         <pelle-upgrade v-for="upg in upgrades" :upgrade="upg" />

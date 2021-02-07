@@ -77,6 +77,7 @@ function totalEPMult() {
 function gainedEternityPoints() {
   if (Pelle.isDisabled("EPGain")) return new Decimal(0);
   let ep = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
+  if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -501,7 +502,7 @@ function gameLoop(diff, options = {}) {
   // behavior of eternity farming.
   preProductionGenerateIP(diff);
 
-  if (!Pelle.isDisabled("passivePrestigeGen")) {
+  if (!Pelle.isDisabled("infinitiedGen")) {
     passivePrestigeGen();
   }
 
@@ -589,7 +590,7 @@ function gameLoop(diff, options = {}) {
 
 function passivePrestigeGen() {
   let eternitiedGain = new Decimal(0);
-  if (RealityUpgrade(14).isBought) {
+  if (RealityUpgrade(14).isBought && !Pelle.isDisabled("eternityGain")) {
     eternitiedGain = Effects.product(
       RealityUpgrade(3),
       RealityUpgrade(14)
@@ -667,7 +668,7 @@ function laitelaRealityTick(realDiff) {
 function applyAutoprestige(diff) {
   player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
 
-  if (Teresa.has(TERESA_UNLOCKS.EPGEN)) {
+  if (Teresa.has(TERESA_UNLOCKS.EPGEN) && !Pelle.isDisabled("EPgen")) {
     player.eternityPoints = player.eternityPoints.plus(player.records.thisEternity.bestEPmin.times(0.01)
       .times(getGameSpeedupFactor() * diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
   }

@@ -13,6 +13,9 @@ const Pelle = {
       case "IPGain":
         return !PelleUpgrade.ipGain.canBeApplied;
 
+      case "EPGain":
+        return !PelleUpgrade.epGain.canBeApplied;
+
       case "achievements":
         return !PelleUpgrade.achievementsBack.canBeApplied;
 
@@ -24,6 +27,12 @@ const Pelle = {
 
       case "InfinitiedMults":
         return !PelleUpgrade.infinitiedGain.canBeApplied;
+
+      case "infinitiedGen":
+        return !PelleUpgrade.passivePrestigeGain.canBeApplied;
+
+      case "studies":
+        return !PelleUpgrade.studiesUnlock.canBeApplied;
 
       default:
         return true;
@@ -72,26 +81,34 @@ const Pelle = {
       let div = PelleUpgrade.famineGain.canBeApplied ? 2 : 1;
       return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts + 2) + 1) / div;
     },
-    get gain() { return PelleUpgrade.famineGain.canBeApplied ? 2 : 1 },
+    get gain() {
+      let base = 1;
+      if (PelleUpgrade.famineGain.canBeApplied) base *= 2;
+      if (PelleUpgrade.moreFamine.canBeApplied) base *= 5;
+      if (PelleUpgrade.pestilenceUnlock.canBeApplied) base *= Pelle.pestilence.famineGainMult;
+      return base;
+    },
     get unlocked() { return PelleUpgrade.famineUnlock.canBeApplied },
     get multiplierToAntimatter() {
       let base = Decimal.pow(1.1, player.celestials.pelle.famine.amount);
       if (base.gte(1e100)) {
-        // After 1e100 the effect is raised to ^1/3
-        base = base.dividedBy(base.dividedBy(1e100).pow(2/3));
+        // After 1e100 the effect is raised to ^1/10
+        base = (new Decimal(1e100)).times(base.dividedBy(1e100).plus(1).log10() ** 5)
       }
       return base
     },
     get exponentToAntimatter() { return 1 + Math.log10(player.celestials.pelle.famine.amount.plus(1).log10() + 1) / 10 },
     get bonusDescription() {
-      return `Multiplies Antimatter Dimensions by ${formatX(this.multiplierToAntimatter, 2, 2)} and powers them up by ${formatPow(this.exponentToAntimatter, 2, 2)}`
+      return `Multiplies Antimatter Dimensions by ${formatX(this.multiplierToAntimatter, 2, 2)} ${this.multiplierToAntimatter.gte(1e100) ? "(softcapped)" : ""} and powers them up by ${formatPow(this.exponentToAntimatter, 2, 2)}`
     }
   },
   pestilence: {
-    get fillTime() { return 10 },
+    get fillTime() { return 10 / (Math.log10(Replicanti.amount.log10() + 1) + 1) },
     get gain() { return 1 },
-    get unlocked() { return false },
-    get bonusDescription() { return `` }
+    get unlocked() { return PelleUpgrade.pestilenceUnlock.canBeApplied },
+    get armageddonTimeMultiplier() { return player.celestials.pelle.pestilence.amount.plus(1).log10() },
+    get famineGainMult() { return player.celestials.pelle.pestilence.amount.pow(0.5).plus(1).toNumber() },
+    get bonusDescription() { return `Armageddon lasts ${formatX(this.armageddonTimeMultiplier, 2, 2)} longer, you gain ${formatX(this.famineGainMult, 2, 2)} more Famine.` }
   },
   chaos: {
     get fillTime() { return 10 },
@@ -112,6 +129,7 @@ const Pelle = {
   get armageddonInterval() {
     let base = PelleUpgrade.longerArmageddon.canBeApplied ? 5000 : 500;
     if (PelleUpgrade.doubleArmageddon.canBeApplied) base *= 2;
+    if (PelleUpgrade.pestilenceUnlock.canBeApplied) base *= Pelle.pestilence.armageddonTimeMultiplier;
     return base;
   },
 
@@ -135,7 +153,7 @@ class RebuyablePelleUpgradeState extends RebuyableMechanicState {
   }
 
   get cost() {
-    return this.config.cost()
+    return this.config.cost();
   }
 
   get currencyDisplay() {
@@ -173,6 +191,10 @@ class PelleUpgradeState extends SetPurchasableMechanicState {
     return this.config.cost;
   }
 
+  get isAvailableForPurchase() {
+    return Pelle.isDoomed;
+  }
+
   get currencyDisplay() {
     switch(this.config.currency) {
       case "unstableMatter":
@@ -189,6 +211,9 @@ class PelleUpgradeState extends SetPurchasableMechanicState {
 
       case "infinityPoints":
         return "Infinity Points";
+
+      case "antimatter":
+        return "Antimatter";
     }
   }
 }

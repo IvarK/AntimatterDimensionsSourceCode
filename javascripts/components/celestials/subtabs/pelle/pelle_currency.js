@@ -59,6 +59,10 @@ Vue.component("pelle-currency", {
         case "permanentTickspeed":
           this.showRebuyable = PelleUpgrade.famineRebuyable.canBeApplied;
           break;
+
+        case "permanentDimensionBoosts":
+          this.showRebuyable = PelleUpgrade.pestilenceRebuyable.canBeApplied;
+          break;
       }
     },
     descriptionDisplay() {

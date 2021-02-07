@@ -79,17 +79,76 @@ GameDatabase.celestials.pelle = {
     infinitiedGain: {
       id: 13,
       description: "You gain back the ability to gain multiple infinitied stat per Infinity",
-      cost: 1e30,
+      cost: 1e23,
       currency: "infinityPoints"
+    },
+    morePermanentTickspeed: {
+      id: 14,
+      description: "Gain 3x more permanent tickspeed upgrades from Famine buyable",
+      cost: 5e5,
+      currency: "unstableMatter"
+    },
+    moreFamine: {
+      id: 15,
+      description: "Gain 5x more Famine",
+      cost: 1e50,
+      currency: "infinityPoints"
+    },
+    antimatterGalaxyBoost: {
+      id: 16,
+      description: "Galaxies are 10% more effective",
+      cost: new Decimal("1e20000"),
+      currency: "antimatter",
+      effect: 1.1
+    },
+    pestilenceUnlock: {
+      id: 17,
+      description: "Unlock Pestilence",
+      cost: 3e3,
+      currency: "famine"
+    },
+    passivePrestigeGain: {
+      id: 18,
+      description: "Gain back infinitied stat generation",
+      cost: Number.MAX_VALUE,
+      currency: "infinityPoints"
+    },
+    epGain: {
+      id: 19,
+      description: "You can gain eternity points",
+      cost: new Decimal("1e100000"),
+      currency: "antimatter"
+    },
+    studiesUnlock: {
+      id: 20,
+      description: "You can buy Time Studies with Time Theorems, but they cost 3x as much",
+      cost: 1e5,
+      currency: "famine"
+    },
+    pestilenceRebuyable: {
+      id: 21,
+      description: "You can buy permanent dimension boosts with Pestilence",
+      cost: 100,
+      currency: "pestilence"
     }
   },
   rebuyables: {
     permanentTickspeed: {
       id: "permanentTickspeed",
-      cost: () => (player.celestials.pelle.rebuyables.permanentTickspeed + 1) * 15,
-      description: "Gain 10 permanent tickspeed upgrades",
+      cost: () => {
+        let base = (player.celestials.pelle.rebuyables.permanentTickspeed + 1) * 15;
+        if (player.celestials.pelle.rebuyables.permanentTickspeed > 50) {
+          base *= Math.pow(1.5, player.celestials.pelle.rebuyables.permanentTickspeed - 50)
+        }
+        return base;
+      },
+      description: () => `Gain ${PelleUpgrade.morePermanentTickspeed.canBeApplied ? 30 : 10} permanent tickspeed upgrades`,
       currency: "famine",
-      effect: () => player.celestials.pelle.rebuyables.permanentTickspeed * 10,
+      effect: () => {
+        let base = player.celestials.pelle.rebuyables.permanentTickspeed * 10
+        if (PelleUpgrade.morePermanentTickspeed.canBeApplied) base *= 3;
+        return base;
+      },
       formatEffect: x => format(x, 2, 0)
     },
     permanentDimensionBoosts: {

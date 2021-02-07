@@ -121,7 +121,7 @@ GameDatabase.celestials.pelle = {
     },
     studiesUnlock: {
       id: 20,
-      description: "You can buy Time Studies with Time Theorems, but they cost 3x as much",
+      description: "You can buy Time Studies with Time Theorems, but they cost 2x as much",
       cost: 1e5,
       currency: "famine"
     },
@@ -130,6 +130,42 @@ GameDatabase.celestials.pelle = {
       description: "You can buy permanent dimension boosts with Pestilence",
       cost: 100,
       currency: "pestilence"
+    },
+    retainTimeStudies: {
+      id: 22,
+      description: "You keep your Time Studies and Time Theorems on Armageddon",
+      cost: new Decimal("1e200000"),
+      currency: "antimatter"
+    },
+    retainEternityUpgrades: {
+      id: 23,
+      description: "You keep your Eternity Upgrades on Armageddon",
+      cost: 1e6,
+      currency: "unstableMatter"
+    },
+    retainTimeDimensions: {
+      id: 24,
+      description: "You keep your Time Dimensions on Armageddon",
+      cost: new Decimal("1e1000"),
+      currency: "infinityPoints"
+    },
+    retainEP: {
+      id: 25,
+      description: "You keep your Eternity Points on Armageddon",
+      cost: 500,
+      currency: "pestilence"
+    },
+    nerfedEPMult: {
+      id: 26,
+      description: "Get back your EP multipliers, but their effects are raised to the power of 0.2",
+      cost: 1e5,
+      currency: "eternityPoints"
+    },
+    eternityGain: {
+      id: 27,
+      description: "Get back passive Eternity gain",
+      cost: 3e5,
+      currency: "famine"
     }
   },
   rebuyables: {
@@ -153,17 +189,31 @@ GameDatabase.celestials.pelle = {
     },
     permanentDimensionBoosts: {
       id: "permanentDimensionBoosts",
-      cost: () => (player.celestials.pelle.rebuyables.permanentDimensionBoosts + 1) * 25,
-      description: "Gain 2 permanent Dimension Boosts",
+      cost: () => {
+        let base = (player.celestials.pelle.rebuyables.permanentDimensionBoosts + 1) * 25;
+        if (player.celestials.pelle.rebuyables.permanentDimensionBoosts > 25) {
+          base *= Math.pow(1.5, player.celestials.pelle.rebuyables.permanentDimensionBoosts - 25)
+        }
+        return base;
+      },
+      description: "Gain 10 permanent Dimension Boosts",
       currency: "pestilence",
-      effect: () => player.celestials.pelle.rebuyables.permanentDimensionBoosts * 2
+      effect: () => player.celestials.pelle.rebuyables.permanentDimensionBoosts * 10,
+      formatEffect: x => format(x, 2, 0)
     },
     permanentGalaxies: {
       id: "permanentGalaxies",
-      cost: () => (player.celestials.pelle.rebuyables.permanentGalaxies + 1) * 100,
+      cost: () => {
+        let base = (player.celestials.pelle.rebuyables.permanentGalaxies + 1) * 100;
+        if (player.celestials.pelle.rebuyables.permanentGalaxies > 10) {
+          base *= Math.pow(1.5, player.celestials.pelle.rebuyables.permanentGalaxies - 10)
+        }
+        return base;
+      },
       description: "Gain a permanent Galaxy",
       currency: "chaos",
-      effect: () => player.celestials.pelle.rebuyables.permanentGalaxies
+      effect: () => player.celestials.pelle.rebuyables.permanentGalaxies,
+      formatEffect: x => format(x, 2, 0)
     }
   }
 };

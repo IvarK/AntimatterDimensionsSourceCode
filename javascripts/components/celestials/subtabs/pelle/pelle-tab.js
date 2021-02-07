@@ -52,8 +52,8 @@ Vue.component("pelle-tab", {
       <p>You have <b>{{ format(unstableMatter, 2, 2) }}</b> Unstable matter</p>
       <div class="c-pelle-currency-container">
         <pelle-currency currency="famine" :rebuyable="pelleRebuyable.permanentTickspeed" v-show="hasFamine"/>
-        <pelle-currency currency="pestilence" :rebuyable="pelleRebuyable.permanentGalaxies" v-show="hasPestilence"/>
-        <pelle-currency currency="chaos" :rebuyable="pelleRebuyable.permanentDimensionBoosts" v-show="false"/>
+        <pelle-currency currency="pestilence" :rebuyable="pelleRebuyable.permanentDimensionBoosts" v-show="hasPestilence"/>
+        <pelle-currency currency="chaos" :rebuyable="pelleRebuyable.permanentGalaxies" v-show="false"/>
       </div>
       <div class="pelle-upgrades--container">
         <pelle-upgrade v-for="upg in upgrades" :upgrade="upg" />

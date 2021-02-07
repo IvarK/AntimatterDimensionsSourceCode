@@ -316,7 +316,7 @@ class TimeStudyState extends GameMechanicState {
 
   get cost() {
     let base = this.config.cost;
-    if (Pelle.isDoomed) base *= 3;
+    if (Pelle.isDoomed) base *= 2;
     return base;
   }
 

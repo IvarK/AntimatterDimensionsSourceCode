@@ -7914,6 +7914,15 @@ kbd {
 
 /* #startregion pelle tab*/
 
+.c-pelle-currency-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.pelle-currency {
+  width: 40rem;
+}
+
 .pelle-currency--progress-bar {
   border-radius: 1rem;
   height: 3rem;

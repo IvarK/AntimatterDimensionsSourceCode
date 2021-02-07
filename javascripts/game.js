@@ -89,6 +89,10 @@ function gainedEternityPoints() {
   if (GlyphAlteration.isAdded("time")) {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
+
+  if (Pelle.isDoomed) {
+    ep = ep.times(totalEPMult().pow(-4 / 5));
+  }
   return ep.floor();
 }
 

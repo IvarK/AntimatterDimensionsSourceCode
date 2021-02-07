@@ -112,7 +112,7 @@ class DimBoost {
 
   static get freeBoosts() {
     // This was originally used for Time Compression, probably use it for something in Lai'tela now
-    return 0;
+    return PelleRebuyableUpgrade.permanentDimensionBoosts.effectValue;
   }
 
   static get totalBoosts() {

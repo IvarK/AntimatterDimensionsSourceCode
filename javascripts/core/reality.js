@@ -370,17 +370,22 @@ function finishProcessReality(realityProps) {
   player.timeShards = new Decimal(0);
   Replicanti.reset(true);
   player.replicanti.auto = Array.repeat(false, 3);
+  if (!PelleUpgrade.retainEP.canBeApplied || !Pelle.isDoomed || !realityProps.armageddon) {
+    player.eternityPoints = Player.startingEP;
+  }
 
-  player.eternityPoints = Player.startingEP;
-
-  // This has to be reset before player.eternities to make the bumpLimit logic work correctly
-  EternityUpgrade.epMult.reset();
+  if (!PelleUpgrade.retainEternityUpgrades.canBeApplied || !Pelle.isDoomed) {
+    // This has to be reset before player.eternities to make the bumpLimit logic work correctly
+    EternityUpgrade.epMult.reset();
+  }
   player.eternities = new Decimal(0);
   player.records.thisEternity.time = 0;
   player.records.thisEternity.realTime = 0;
   player.records.bestEternity.time = 999999999999;
   player.records.bestEternity.realTime = 999999999999;
-  player.eternityUpgrades.clear();
+  if (!PelleUpgrade.retainEternityUpgrades.canBeApplied || !Pelle.isDoomed) {
+    player.eternityUpgrades.clear();
+  }
   player.totalTickGained = 0;
   player.eternityChalls = {};
   player.reality.lastAutoEC = 0;
@@ -404,14 +409,16 @@ function finishProcessReality(realityProps) {
   player.achievementChecks.noReplicantiGalaxies = true;
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
-  player.timestudy.theorem = new Decimal(0);
-  player.timestudy.amcost = new Decimal("1e20000");
-  player.timestudy.ipcost = new Decimal(1);
-  player.timestudy.epcost = new Decimal(1);
-  player.timestudy.studies = [];
-  player.celestials.v.triadStudies = [];
-  player.celestials.v.STSpent = 0;
-  player.dilation.studies = [];
+  if (!PelleUpgrade.retainTimeStudies.canBeApplied || !Pelle.isDoomed) {
+    player.timestudy.theorem = new Decimal(0);
+    player.timestudy.amcost = new Decimal("1e20000");
+    player.timestudy.ipcost = new Decimal(1);
+    player.timestudy.epcost = new Decimal(1);
+    player.timestudy.studies = [];
+    player.celestials.v.triadStudies = [];
+    player.celestials.v.STSpent = 0;
+    player.dilation.studies = [];
+  }
   player.dilation.active = false;
   player.dilation.tachyonParticles = new Decimal(0);
   player.dilation.dilatedTime = new Decimal(0);
@@ -434,7 +441,9 @@ function finishProcessReality(realityProps) {
   resetInfinityRuns();
   resetEternityRuns();
   InfinityDimensions.fullReset();
-  fullResetTimeDimensions();
+  if (!PelleUpgrade.retainTimeDimensions.canBeApplied || !Pelle.isDoomed) {
+    fullResetTimeDimensions();
+  }
   resetChallengeStuff();
   AntimatterDimensions.reset();
   secondSoftReset();

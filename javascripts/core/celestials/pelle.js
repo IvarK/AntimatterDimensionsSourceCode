@@ -22,6 +22,9 @@ const Pelle = {
       case "IPMults":
         return !PelleUpgrade.nerfedIPMult.canBeApplied;
 
+      case "EPMults":
+        return !PelleUpgrade.nerfedEPMult.canBeApplied;
+
       case "galaxies":
         return !PelleUpgrade.nerfedGalaxies.canBeApplied;
 
@@ -30,6 +33,9 @@ const Pelle = {
 
       case "infinitiedGen":
         return !PelleUpgrade.passivePrestigeGain.canBeApplied;
+
+      case "eternityGain":
+        return !PelleUpgrade.eternityGain.canBeApplied;
 
       case "studies":
         return !PelleUpgrade.studiesUnlock.canBeApplied;
@@ -41,7 +47,7 @@ const Pelle = {
 
   armageddon(gainStuff) {
     const time = player.records.thisReality.realTime;
-    finishProcessReality({ reset: true });
+    finishProcessReality({ reset: true, armageddon: true });
     disChargeAll();
     this.cel.lastArmageddonAt = Date.now();
     if (gainStuff) {
@@ -211,6 +217,9 @@ class PelleUpgradeState extends SetPurchasableMechanicState {
 
       case "infinityPoints":
         return "Infinity Points";
+
+      case "eternityPoints":
+        return "Eternity Points";
 
       case "antimatter":
         return "Antimatter";

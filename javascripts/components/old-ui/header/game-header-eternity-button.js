@@ -20,7 +20,6 @@ Vue.component("game-header-eternity-button", {
       nextGoalAt: new Decimal(0),
       canEternity: false,
       eternityGoal: new Decimal(0),
-      hasRealitied: false,
       hover: false,
     };
   },
@@ -31,9 +30,6 @@ Vue.component("game-header-eternity-button", {
         "o-eternity-button--dilation": this.isDilation,
         "o-eternity-button--unavailable": !this.isDilation && !this.canEternity
       };
-    },
-    isGainedEPAmountSmall() {
-      return this.gainedEP.lt(1e6);
     },
     isGainedEPAmountZero() {
       return this.gainedEP.eq(0);
@@ -47,8 +43,8 @@ Vue.component("game-header-eternity-button", {
         this.type === EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT;
     },
     amountStyle() {
-      if (this.currentEP.lt(1e50)) return { color: "var(--color-eternity)" };
       if (this.hover) return { color: "black" };
+      if (this.currentEP.lt(1e50)) return { color: "var(--color-eternity)" };
 
       const ratio = this.gainedEP.log10() / this.currentEP.log10();
       const rgb = [
@@ -126,7 +122,6 @@ Vue.component("game-header-eternity-button", {
         TimeSpan.fromMilliseconds(player.records.thisEternity.realTime).totalMinutes)
       );
       this.peakEPPM.copyFrom(player.records.thisEternity.bestEPmin);
-      this.hasRealitied = PlayerProgress.realityUnlocked();
     },
     updateChallengeWithRUPG() {
       const ec = EternityChallenge.current;
@@ -155,10 +150,6 @@ Vue.component("game-header-eternity-button", {
 
       <!-- Normal -->
       <template v-else-if="type === 1">
-        <template v-if="isGainedEPAmountSmall && !hasRealitied">
-          I need to become Eternal
-          <br>
-        </template>
         Eternity for
         <span :style="amountStyle">{{format(gainedEP, 2, 0)}}</span> Eternity {{ "Point" | pluralize(gainedEP) }}.
         <br>

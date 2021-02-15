@@ -638,7 +638,7 @@ GameDatabase.achievements.normal = [
     name: "MAXIMUM OVERDRIVE",
     get description() { return `Big Crunch for ${format(1e300, 0, 0)} Infinity Points.`; },
     checkRequirement: () => gainedInfinityPoints().exponent >= 300,
-    checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
+    checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() { return `Additional ${formatX(4)} multiplier to Infinity Points.`; },
     effect: 4
   },

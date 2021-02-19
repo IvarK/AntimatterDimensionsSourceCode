@@ -115,7 +115,7 @@ GameDatabase.celestials.singularityMilestones = {
     repeat: 10000,
     limit: 6,
     description: "Dark Energy multiplier based on Lai'tela Reality completions",
-    effect: completions => Math.pow(1 + 0.05 * completions, player.celestials.laitela.difficultyTier),
+    effect: completions => Math.pow(1 + 0.05 * completions, Laitela.difficultyTier),
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },

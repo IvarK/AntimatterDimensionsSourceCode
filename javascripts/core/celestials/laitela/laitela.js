@@ -62,6 +62,9 @@ const Laitela = {
   get difficultyTier() {
     return player.celestials.laitela.difficultyTier;
   },
+  set difficultyTier(tier) {
+    player.celestials.laitela.difficultyTier = tier;
+  },
   get maxAllowedDimension() {
     return 8 - this.difficultyTier;
   },

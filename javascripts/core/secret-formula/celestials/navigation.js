@@ -380,7 +380,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "enslaved": {
       visible: () => EffarigUnlock.eternity.isUnlocked,
-      complete: () => 1,
+      complete: () => (EffarigUnlock.eternity.isUnlocked ? 1 : 0),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.enslaved.show(true),
@@ -1041,7 +1041,7 @@ GameDatabase.celestials.navigation = (function() {
 
     "ra": {
       visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => 1,
+      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
       node: {
         clickAction: () => Tab.celestials.ra.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1063,7 +1063,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "teresa-pet": {
       visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => 1,
+      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.ra.show(true),
@@ -1265,7 +1265,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "ra-ring-1": {
       visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => 1,
+      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         fill: "#9063de",
@@ -1280,7 +1280,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "ra-ring-2": {
       visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => 1,
+      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         fill: "#9063de",
@@ -1295,7 +1295,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "ra-ring-3": {
       visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => 1,
+      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         fill: "#9063de",
@@ -1310,7 +1310,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "ra-ring-4": {
       visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => 1,
+      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         fill: "#9063de",
@@ -1325,7 +1325,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "ra-ring-5": {
       visible: () => V.has(V_UNLOCKS.RA_UNLOCK),
-      complete: () => 1,
+      complete: () => (V.has(V_UNLOCKS.RA_UNLOCK) ? 1 : 0),
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         fill: "#9063de",
@@ -1432,8 +1432,11 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-3rd-dim": {
       visible: () => Laitela.isUnlocked,
-      complete: () => Laitela.maxDarkMatter.clampMin(1).div(MatterDimension(2).adjustedStartingCost).log10() /
-        Math.log10(MatterDimension(3).adjustedStartingCost / MatterDimension(2).adjustedStartingCost),
+      complete: () => {
+        const cost2 = MatterDimension(2).adjustedStartingCost;
+        return Math.clampMin(Laitela.maxDarkMatter.clampMin(1).div(cost2).log10(), 0) /
+        Math.log10(MatterDimension(3).adjustedStartingCost / cost2);
+      },
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1470,8 +1473,11 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-4th-dim-left": {
       visible: () => Laitela.maxDarkMatter.gte(MatterDimension(3).adjustedStartingCost),
-      complete: () => Laitela.maxDarkMatter.clampMin(1).div(MatterDimension(3).adjustedStartingCost).log10() /
-        Math.log10(MatterDimension(4).adjustedStartingCost / MatterDimension(3).adjustedStartingCost),
+      complete: () => {
+        const cost3 = MatterDimension(3).adjustedStartingCost;
+        return Math.clampMin(Laitela.maxDarkMatter.clampMin(1).div(cost3).log10(), 0) /
+        Math.log10(MatterDimension(4).adjustedStartingCost / cost3);
+      },
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1508,8 +1514,11 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-4th-dim-right": {
       visible: () => Laitela.maxDarkMatter.gte(MatterDimension(3).adjustedStartingCost),
-      complete: () => Laitela.maxDarkMatter.clampMin(1).div(MatterDimension(3).adjustedStartingCost).log10() /
-        Math.log10(MatterDimension(4).adjustedStartingCost / MatterDimension(3).adjustedStartingCost),
+      complete: () => {
+        const cost3 = MatterDimension(3).adjustedStartingCost;
+        return Math.clampMin(Laitela.maxDarkMatter.clampMin(1).div(cost3).log10(), 0) /
+        Math.log10(MatterDimension(4).adjustedStartingCost / cost3);
+      },
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
         fill: "white",
@@ -1590,7 +1599,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-destabilization-left": {
       visible: () => player.celestials.laitela.singularities > 0 && Laitela.darkMatterMult > 1,
-      complete: () => player.celestials.laitela.difficultyTier / 4,
+      complete: () => Laitela.difficultyTier / 4,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
         symbol: "ᛝ",
@@ -1629,7 +1638,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-destabilization-right": {
       visible: () => player.celestials.laitela.singularities > 0 && Laitela.darkMatterMult > 1,
-      complete: () => player.celestials.laitela.difficultyTier / 4,
+      complete: () => Laitela.difficultyTier / 4,
       node: {
         fill: "white",
         position: Positions.laitelaThirdCenter,

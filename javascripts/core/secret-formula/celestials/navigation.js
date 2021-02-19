@@ -1569,7 +1569,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-singularity": {
       visible: () => Laitela.maxDarkMatter.gte(MatterDimension(4).adjustedStartingCost),
-      complete: () => player.celestials.laitela.singularities,
+      complete: () => Laitela.singularities,
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1598,7 +1598,7 @@ GameDatabase.celestials.navigation = (function() {
       },
     },
     "laitela-destabilization-left": {
-      visible: () => player.celestials.laitela.singularities > 0 && Laitela.darkMatterMult > 1,
+      visible: () => Laitela.singularities > 0 && Laitela.darkMatterMult > 1,
       complete: () => Laitela.difficultyTier / 4,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1637,7 +1637,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "laitela-destabilization-right": {
-      visible: () => player.celestials.laitela.singularities > 0 && Laitela.darkMatterMult > 1,
+      visible: () => Laitela.singularities > 0 && Laitela.darkMatterMult > 1,
       complete: () => Laitela.difficultyTier / 4,
       node: {
         fill: "white",

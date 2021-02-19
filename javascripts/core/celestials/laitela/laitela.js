@@ -101,6 +101,12 @@ const Laitela = {
   get darkMatterMultRatio() {
     return (this.celestial.darkMatterMult + this.darkMatterMultGain) / this.celestial.darkMatterMult;
   },
+  get singularities() {
+    return player.celestials.laitela.singularities;
+  },
+  set singularities(x) {
+    player.celestials.laitela.singularities = x;
+  },
   get annihilationDMRequirement() {
     return 1e20;
   },

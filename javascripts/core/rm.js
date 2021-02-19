@@ -763,19 +763,10 @@ const Glyphs = {
   autoClean(thresholdIn) {
     const thresholdOverride = thresholdIn === undefined ? 5 : thresholdIn;
     const isHarsh = thresholdOverride < 5;
-    // If the player hasn't unlocked sacrifice yet, we warn them.
-    if (!GlyphSacrificeHandler.canSacrifice &&
-      // eslint-disable-next-line prefer-template
-      !confirm("This will not give you any benefit" +
-        (RealityUpgrade(19).isAvailableForPurchase ? "" : " and may reduce the number of glyphs in your inventory. " +
-        "It may be hard to get more glyphs. The Reality upgrade to unlock Glyph Sacrifice requires 30 glyphs") +
-        ". Also, when you unlock Glyph Sacrifice, you will not be able to later sacrifice glyphs you delete now. " +
-        "Are you sure you want to do this?")) {
-      return;
-    }
-    // If the player has unlocked sacrifice (so has not gotten the above warning) and auto clean could remove
-    // useful glyphs, we warn them.
-    if (GlyphSacrificeHandler.canSacrifice && isHarsh && player.options.confirmations.harshAutoClean &&
+    // If the player hasn't unlocked sacrifice yet, prevent them from removing any glyphs.
+    if (!GlyphSacrificeHandler.canSacrifice) return;
+    // If auto clean could remove useful glyphs, we warn them.
+    if (isHarsh && player.options.confirmations.harshAutoClean &&
       // eslint-disable-next-line prefer-template
       !confirm("This could delete glyphs in your inventory that are good enough that you might want to use them " +
         "later. Are you sure you want to do this?")) {

@@ -322,7 +322,7 @@ const Glyphs = {
   },
   // If there are enough glyphs that are better than the specified glyph, in every way, then
   // the glyph is objectively a useless piece of garbage.
-  isObjectivelyUseless(glyph, thresholdOverride) {
+  isObjectivelyUseless(glyph, threshold) {
     function hasSomeBetterEffects(glyphA, glyphB, comparedEffects) {
       for (const effect of comparedEffects) {
         const c = effect.compareValues(
@@ -341,15 +341,14 @@ const Glyphs = {
         // eslint-disable-next-line no-bitwise
         ((g.effects & glyph.effects) === glyph.effects));
     let compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
-    compareThreshold = Math.clampMax(compareThreshold, thresholdOverride);
+    compareThreshold = Math.clampMax(compareThreshold, threshold);
     if (toCompare.length < compareThreshold) return false;
     const comparedEffects = getGlyphEffectsFromBitmask(glyph.effects).filter(x => x.id.startsWith(glyph.type));
     const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
     return betterCount >= compareThreshold;
   },
-  autoClean(thresholdIn) {
-    const thresholdOverride = thresholdIn === undefined ? 5 : thresholdIn;
-    const isHarsh = thresholdOverride < 5;
+  autoClean(threshold = 5) {
+    const isHarsh = threshold < 5;
     // If the player hasn't unlocked sacrifice yet, prevent them from removing any glyphs.
     if (!GlyphSacrificeHandler.canSacrifice) return;
     // If auto clean could remove useful glyphs, we warn them.
@@ -368,7 +367,7 @@ const Glyphs = {
       if (isCustomGlyph && !isHarsh) continue;
       // If the threshold for better glyphs needed is zero, the glyph is definitely getting deleted
       // no matter what (well, unless it can't be gotten rid of in current glyph removal mode).
-      if (thresholdOverride === 0 || this.isObjectivelyUseless(glyph, thresholdOverride)) {
+      if (threshold === 0 || this.isObjectivelyUseless(glyph, threshold)) {
         AutoGlyphProcessor.getRidOfGlyph(glyph);
       }
     }

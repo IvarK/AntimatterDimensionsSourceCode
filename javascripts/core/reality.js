@@ -249,7 +249,7 @@ function giveRealityRewards(realityProps) {
   player.realities += realityAndPPMultiplier;
   player.reality.perkPoints += realityAndPPMultiplier;
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
-    player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
+    Effarig.shardAmount += realityProps.gainedShards * multiplier;
   }
   if (multiplier > 1 && Enslaved.boostReality) {
     // Real time amplification is capped at 1 second of reality time; if it's faster then using all time at once would

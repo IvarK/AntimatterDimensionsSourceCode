@@ -54,14 +54,15 @@ const Effarig = {
     return countEffectsFromBitmask(genEffectBitmask) + countEffectsFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
-    if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
-      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount)) *
-        AlchemyResource.effarig.effectValue;
-    }
-    return 0;
+    if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) return 0;
+    return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount)) *
+      AlchemyResource.effarig.effectValue;
   },
   get shardAmount() {
     return player.celestials.effarig.relicShards;
+  },
+  set shardAmount(x) {
+    player.celestials.effarig.relicShards = x;
   },
   get maxRarityBoost() {
     return 5 * Math.log10(Math.log10(this.shardAmount + 10));
@@ -177,7 +178,7 @@ class EffarigUnlockState extends GameMechanicState {
   purchase() {
     if (this.isUnlocked || Effarig.shardAmount < this.cost) return;
     this.unlock();
-    player.celestials.effarig.relicShards -= this.cost;
+    Effarig.shardAmount -= this.cost;
     switch (this) {
       case EffarigUnlock.adjuster:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_WEIGHTS);

@@ -39,7 +39,7 @@ Vue.component("glyph-auto-pick-options", {
     <div :class="optionClass(modes.SACRIFICE)" @click="setMode(modes.SACRIFICE)">
       Always sacrifice
     </div>
-    <div :class="optionClass(modes.ALWAYS_REFINE)" @click="setMode(modes.ALWAYS_REFINE)">
+    <div :class="optionClass(modes.REFINE)" @click="setMode(modes.REFINE)">
       Always refine
     </div>
     <div :class="optionClass(modes.REFINE_TO_CAP)" @click="setMode(modes.REFINE_TO_CAP)">

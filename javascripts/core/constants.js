@@ -87,7 +87,7 @@ const AUTO_GLYPH_SCORE = {
 
 const AUTO_GLYPH_REJECT = {
   SACRIFICE: 0,
-  ALWAYS_REFINE: 1,
+  REFINE: 1,
   REFINE_TO_CAP: 2,
 };
 

@@ -16,7 +16,7 @@ Vue.component("glyph-clean-options", {
       this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
       this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);
-      this.isRefining = AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.ALWAYS_REFINE ||
+      this.isRefining = AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE ||
         AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP;
     },
     autoClean() {

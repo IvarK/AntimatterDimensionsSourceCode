@@ -83,7 +83,7 @@ Vue.component("modal-shortcuts", {
           </div>
         </div>
         <span class="c-modal-shortcuts__shift-description">
-          Using the Arrow Keys will cycle you through tabs.
+          Using the Arrow Keys will cycle you through the game's pages.
           The Up and Down arrows cycle you through tabs,
           and the Left and Right arrows cycle you through that tab's subtabs.
         </span>

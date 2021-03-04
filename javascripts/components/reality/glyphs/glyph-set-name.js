@@ -1,5 +1,6 @@
 "use strict";
 
+// If you change this, try to keep the syntaxes and tenses the same to avoid solecisms
 const GLYPH_NAMES = {
   companion: { name: "Huggable" },
   reality: { name: "Real" },
@@ -36,7 +37,7 @@ Vue.component("glyph-set-name", {
       this.sortGlyphList();
       let nameString = "";
 
-      // Start with companion and reality, add those to the start
+      // Start with Companion and Reality, add those to the start
       if (this.calculateGlyphPercent("companion")) {
         nameString += `${GLYPH_NAMES.companion.name} `;
       }
@@ -63,103 +64,121 @@ Vue.component("glyph-set-name", {
         else nameString += `${GLYPH_NAMES.effarig.none} `;
       }
 
-      // Cursed wants a different method of generating names
-      if (this.calculateGlyphPercent("cursed")) {
-        nameString += this.cursedName;
-      } else if (this.multipleGlyphList[0].perc) {
-        nameString += this.normalName;
-      }
+      // Cursed needs a special additional method of generating its names
+      if (this.calculateGlyphPercent("cursed")) nameString += this.cursedName;
+      else if (this.multipleGlyphList[0].perc) nameString += this.normalName;
+      
       return nameString;
     },
     cursedName() {
       const cursedPerc = this.calculateGlyphPercent("cursed");
+      const main = GLYPH_NAMES.cursed;
       const fir = this.multipleGlyphList[0];
       const sec = this.multipleGlyphList[1];
-      let adding = "";
+      const thr = this.multipleGlyphList[2];
       if (cursedPerc === 100) {
-        adding += `Fully ${GLYPH_NAMES.cursed.major}`;
-      } else if (cursedPerc >= 80) {
-        adding += `${GLYPH_NAMES.cursed.major} ${this.getName(fir, "minor")}`;
-      } else if (cursedPerc >= 60) {
-        adding += `${GLYPH_NAMES.cursed.middling} ${this.getName(fir, "minor")}${this.getName(sec, "minor")}`;
-      } else if (cursedPerc >= 40) {
-        adding += `${GLYPH_NAMES.cursed.middling} `;
-        if (fir.perc >= 60) {
-          adding += `${this.getName(fir, "middling")}`;
-        } else if (fir.perc >= 40) {
-          adding += `${this.getName(sec, "middling")}${this.getName(fir, "major")}`;
-        } else if (this.multipleGlyphList[2].perc) {
-          adding += "Irregularity";
-        }
-      } else {
-        adding += `${GLYPH_NAMES.cursed.minor} ${this.normalName}`;
+        // All Cursed Glyphs should get something special.
+        return `Fully ${main.major}`;
       }
-      return adding;
+      if (cursedPerc >= 75) {
+        // Mostly Cursed Glyphs, but should mention the other.
+        return `${main.major} ${this.getName(fir, "minor")}`;
+      }
+      if (cursedPerc >= 60) {
+        // Have less Cursed Glyphs, so the name's changed, and might have a second now so need a case for that.
+        return `${main.middling} ${this.getName(fir, "minor")}${this.getName(sec, "minor")}`;
+      }
+      if (cursedPerc >= 40) {
+        // If we have a third normal Glyph, lets call it an Irregularity, otherwise specify the types.
+        if (fir.perc >= 40) {
+          return `${main.middling} ${this.getName(sec, "middling")}${this.getName(fir, "major")}`;
+        }
+        if (thr.perc) {
+          return `${main.middling} Irregularity`;
+        }
+      }
+      // If we only have the one Cursed Glyph, lets just add the normal name to it and avoid repetition.
+      return `${main.minor} ${this.normalName}`;
     },
     normalName() {
       const fir = this.multipleGlyphList[0];
       const sec = this.multipleGlyphList[1];
       const thr = this.multipleGlyphList[2];
-      let adding = "";
       if (fir.perc === 100) {
-        adding += `Full ${this.getName(fir, "major")}`;
-      } else if (fir.perc >= 80) {
-        adding += `${this.getName(sec, "middling")}${this.getName(fir, "major")}`;
-      } else if (fir.perc >= 60) {
-        adding += thr.perc
+        // The only Glyph here is the one type so it should get a special name.
+        return `Full ${this.getName(fir, "major")}`;
+      }
+      if (fir.perc >= 75) {
+        // Two Glyphs, but its mainly the one type.
+        return `${this.getName(sec, "middling")}${this.getName(fir, "major")}`;
+      }
+      if (fir.perc >= 60) {
+        // Room for 2 other Glyphs off the main, so theres a case for each of them.
+        return `${thr.perc
           ? `${this.getName(sec, "minor")}${this.getName(thr, "minor")}`
-          : `${this.getName(sec, "middling")}`;
-        adding += `${this.getName(fir, "major")}`;
-      } else if (fir.perc >= 40) {
+          : `${this.getName(sec, "middling")}`
+        }${this.getName(fir, "major")}`;
+      }
+      if (fir.perc >= 40) {
         if (sec.perc >= 40) {
-          adding += `${this.getName(fir, "minor")}${this.getName(sec, "minor")}`;
           if (thr.perc) {
-            adding += "Irregularity";
+            // If we have a 3rd type, lets also call it an Irregularity
+            return `${this.getName(fir, "minor")}${this.getName(sec, "minor")}Irregularity`;
           }
-        } else {
-          adding += `${this.getName(fir, "middling")}`;
-          adding += thr.perc
-            ? "Blend"
-            : `${this.getName(sec, "minor")}`;
+          // Essentially means the same amount for both, so give them the same name.
+          return `${this.getName(fir, "minor")}${this.getName(sec, "minor")}`;
         }
-      } else if (thr.perc) {
-          if (!(this.calculateGlyphPercent("reality") || this.calculateGlyphPercent("effarig") ||
-                this.calculateGlyphPercent("cursed"))) {
-            adding += "Irregular ";
-          }
-          adding += "Jumble";
-        } else {
-          adding += `${this.getName(fir, "minor")}${this.getName(sec, "minor")}`;
+        // Second Glyph is less than the first meaning a different name, and if we also have a third, call it Blend.
+        return `${this.getName(fir, "middling")}${thr.perc ? "Blend" : `${this.getName(sec, "minor")}`}`;
+      }
+      if (thr.perc) {
+        // This means we have 3 different Glyphs, with only one Glyph of each.
+        if (!(this.calculateGlyphPercent("reality") || this.calculateGlyphPercent("effarig") ||
+              this.calculateGlyphPercent("cursed"))) {
+          // If it doesn't have Reality, Effarig, or Cursed Glyphs, call it Irregular Jumble, otherwise call it Jumble.
+          return "Irregular Jumble";
         }
-      return adding;
+        return "Jumble";
+      }
+      // This means we don't have 3 different Glyphs, but dont have 2 of one type.
+      return `${this.getName(fir, "minor")}${this.getName(sec, "minor")}`;
     },
     mainGlyphName() {
+      // This returns the type of Glyph that we want for color determinations.
+      // The priority is Cursed > Companion > Reality > 60% or more of normal Glyphs > Effarig > any normal Glyph.
       if (this.calculateGlyphPercent("cursed")) return GlyphTypes.cursed;
+      if (this.calculateGlyphPercent("companion")) return GlyphTypes.companion;
       if (this.calculateGlyphPercent("reality")) return GlyphTypes.reality;
       if (this.multipleGlyphList[0].perc >= 60) return GlyphTypes[this.multipleGlyphList[0].type];
       if (this.calculateGlyphPercent("effarig")) return GlyphTypes.effarig;
-      if (this.calculateGlyphPercent("companion")) return GlyphTypes.companion;
       return GlyphTypes[this.multipleGlyphList[0].type];
     },
     textColor() {
-      if (this.notColored && !this.forceColor) return {};
-
-      let nameColor = this.mainGlyphName.color;
-      if (this.mainGlyphName.id === "cursed") nameColor = "#5151EC";
-      else if (this.musicGlyphPercent() >= 60) nameColor = "#FF80AB";
-      else if (this.multipleGlyphList[1].perc && this.multipleGlyphList[2].perc &&
-        this.multipleGlyphList[0].perc <= 20) {
-        nameColor = "#C46200";
+      // If its cursed, we want its color to be #5151EC, because by default its black, which can be unreadable.
+      // If we have greater than or equal to 60% of our Glyphs as Music Glyphs, give us the Music Glyph color.
+      // If we have 3 types of Glyphs, and none of them have more than 25% total, lets get a copper color.
+      // And if we have none of the above (which is most common), lets get the color of the main Glyph.
+      if (this.mainGlyphName.id === "cursed") return "#5151EC";
+      if (this.musicGlyphPercent() >= 60) return "#FF80AB";
+      if (this.multipleGlyphList[1].perc && this.multipleGlyphList[2].perc && this.multipleGlyphList[0].perc <= 25) {
+        return "#C46200";
       }
+      return this.mainGlyphName.color;
+    },
+    textStyle() {
+      // If you have the player option to not show color enabled, and this isn't a special case forcing color, return {}
+      if (this.notColored && !this.forceColor) return {};
+      // Otherwise, lets set the shadow to be 4, each offset to a different corner, and bluring by 1px,
+      // then bluring by 3px with no offset with the same color as the text.
+      // If its a Reality Glyph, assign it Reality Glyph's animation.
       return {
-        color: nameColor,
+        color: this.textColor,
         "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
                         -1px -1px 1px var(--color-text-base), 1px -1px 1px var(--color-text-base),
-                        0 0 3px ${nameColor}`,
+                        0 0 3px ${this.textColor}`,
         animation: this.mainGlyphName.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
       };
-    },
-
+    }
   },
   created() {
     this.on$(GAME_EVENT.GLYPHS_CHANGED, this.sortGlyphList);
@@ -185,12 +204,13 @@ Vue.component("glyph-set-name", {
         : b.perc - a.perc));
     },
     getName(position, type) {
+      // If the position.perc is 0, return an empty string, and if it does, return a string from GLYPH_NAMES
       if (!position.perc) return ``;
       return `${GLYPH_NAMES[position.type][type]} `;
     },
   },
   template: `
     <div>
-      <span :style="textColor" class="c-current-glyph-effects__header">{{ setName }}</span>
+      <span :style="textStyle" class="c-current-glyph-effects__header">{{ setName }}</span>
     </div>`
 });

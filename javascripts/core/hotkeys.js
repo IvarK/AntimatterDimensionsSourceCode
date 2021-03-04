@@ -100,20 +100,28 @@ function keyboardTabChange(direction) {
   let top = tabs.indexOf(Tabs.current.config.key);
   let sub = subtabs.indexOf(Tabs.current._currentSubtab.key);
 
-  // Move in that direction, looping if needed
-  if (direction === "up") {
-    top -= 1;
-    if (top < 0) top = tabs.length - 1;
-  } else if (direction === "down") {
-    top += 1;
-    if (top > tabs.length - 1) top = 0;
-  } else if (direction === "left") {
-    sub -= 1;
-    if (sub < 0) sub = subtabs.length - 1;
-  } else if (direction === "right") {
-    sub += 1;
-    if (sub > subtabs.length - 1) sub = 0;
+  // Move in that direction
+  switch (direction) {
+    case "up":
+      top--;
+      break;
+    case "down":
+      top++;
+      break;
+    case "left":
+      sub--;
+      break;
+    case "right":
+      sub++;
+      break;
+    default:
+      throw new Error("Invalid keyboard movement direction");
   }
+  // Loop around if needed
+  top = (top + tabs.length) % tabs.length;
+  sub = (sub + subtabs.length) % subtabs.length;
+  
+  // And now we go there. Return false so the arrow keys don't do anything else
   if (direction === "up" || direction === "down") {
     Tab[tabs[top]].show(true);
   } else {

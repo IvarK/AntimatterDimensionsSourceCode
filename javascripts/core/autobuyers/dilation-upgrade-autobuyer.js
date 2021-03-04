@@ -12,7 +12,7 @@ class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get name() {
-    return [`Dilated Time Gain`, `Tachyon Galaxy Threshold`, "Tachyon Multiplier"][this._upgrade - 1];
+    return [`Dilated Time Multiplier`, `Tachyon Galaxy Threshold`, "Tachyon Particle Multiplier"][this._upgrade - 1];
   }
 
   get interval() {

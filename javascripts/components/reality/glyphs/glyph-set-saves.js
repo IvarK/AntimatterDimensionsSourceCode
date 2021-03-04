@@ -40,9 +40,8 @@ Vue.component("glyph-set-saves", {
     },
     loadGlyphSet(set) {
       if (this.hasEquipped || !set.length) return;
-      const forceRarity = !Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST) && this.rarity;
       for (let i = 0; i < set.length; i++) {
-        const glyph = Glyphs.findByValues(set[i], this.level, forceRarity);
+        const glyph = Glyphs.findByValues(set[i], this.level, this.rarity);
         if (!glyph) {
           GameUI.notify.error(`Could not load the Glyph Set due to missing glyph!`);
           return;

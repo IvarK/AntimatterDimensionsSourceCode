@@ -9,11 +9,12 @@ Vue.component("challenge-box", {
     overrideLabel: {
       type: String,
       default: "",
-    }
+    },
   },
   data() {
     return {
       isEC: false,
+      challengeId: Number,
     };
   },
   computed: {

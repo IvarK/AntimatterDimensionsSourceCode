@@ -74,6 +74,7 @@ Modal.enterDilation = new Modal("modal-enter-dilation");
 Modal.startEternityChallenge = new ChallengeConfirmationModal("modal-start-eternity-challenge");
 Modal.startInfinityChallenge = new ChallengeConfirmationModal("modal-start-infinity-challenge");
 Modal.startNormalChallenge = new ChallengeConfirmationModal("modal-start-normal-challenge");
+Modal.reality = new Modal("modal-reality");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;

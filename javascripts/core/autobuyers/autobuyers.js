@@ -23,10 +23,10 @@ const Autobuyers = (function() {
     [Autobuyer.galaxy],
   ].concat(singleBinary);
   const other = [
-    Autobuyer.replicantiUpgrade.index,
-    Autobuyer.dilationUpgrade.index,
-    Autobuyer.realityUpgrade.index,
-    Autobuyer.blackHolePower.index,
+    Autobuyer.replicantiUpgrade.array,
+    Autobuyer.dilationUpgrade.array,
+    Autobuyer.realityUpgrade.array,
+    Autobuyer.blackHolePower.array,
   ];
   const all = dimensions.concat(prestige, single, other);
 

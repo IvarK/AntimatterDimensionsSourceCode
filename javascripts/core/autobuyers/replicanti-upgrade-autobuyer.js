@@ -33,4 +33,4 @@ class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
 ReplicantiUpgradeAutobuyerState.index = Array.range(1, 3).map(upgrade => new ReplicantiUpgradeAutobuyerState(upgrade));
 
 Autobuyer.replicantiUpgrade = upgrade => ReplicantiUpgradeAutobuyerState.index[upgrade - 1];
-Autobuyer.replicantiUpgrade.index = ReplicantiUpgradeAutobuyerState.index;
+Autobuyer.replicantiUpgrade.array = ReplicantiUpgradeAutobuyerState.index;

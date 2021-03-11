@@ -100,7 +100,7 @@ Vue.component("teresa-tab", {
               <br><br>
               Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
               <br><br>
-              With this Glyph Set:
+              Glyph Set used:
               <glyph-set-preview
                 :show=true
                 :forceNameColor=false

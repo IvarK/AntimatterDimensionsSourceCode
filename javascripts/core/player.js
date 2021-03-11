@@ -50,27 +50,6 @@ let player = {
     upgradeBits: 0
   },
   auto: {
-    // TODO: REMOVE COMMENTS
-    // Desired order of Autobuyer appearance.
-    // Reality
-    // ^Eternity
-    // ^Infinity (Big Crunch)
-    // Antimatter Galaxies
-    // Dimension Boosts
-    // ^Tickspeed Upgrades
-    // ^Sacrifice
-    // ^Antimatter Dimensions
-    // +Infinty Dimensions
-    // +Time Dimensions
-    // +Replicanti Upgrades (Percentage, Interval, Max Galaxies)
-    // +Replicanti Galaxies
-    // +Dilation Upgrades (DT gain, TG mult, TP gain)
-    // +Black Hole Power Upgrades
-    // +Rebuyable Reality Upgrades
-    // +IP Mult, EP Mult
-    //
-    // ^ = To change
-    // + = To add
     bulkOn: true,
     autobuyersOn: true,
     disableContinuum: false,

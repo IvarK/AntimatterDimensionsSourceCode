@@ -896,19 +896,6 @@ GameStorage.devMigrations = {
       delete player.dilation.freeGalaxies;
     },
     player => {
-      player.auto.bigCrunch.xCurrent = player.auto.bigCrunch.xLast;
-      player.auto.eternity.xCurrent = player.auto.eternity.xLast;
-      player.auto.bulkOn = player.options.bulkOn;
-      player.auto.autobuyerOn = player.options.autobuyerOn;
-      player.auto.disableContinuum = player.options.disableContinuum;
-
-      delete player.auto.bigCrunch.xLast;
-      delete player.auto.eternity.xLast;
-      delete player.auto.bulkOn;
-      delete player.auto.autobuyerOn;
-      delete player.auto.disableContinuum;
-    },
-    player => {
       for (let i = 0; i < 8; i++) {
         player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
       }
@@ -932,6 +919,11 @@ GameStorage.devMigrations = {
       player.auto.ipMultBuyer.isActive = player.infMultBuyer;
       player.auto.epMultBuyer.isActive = player.reality.epmultbuyer;
       player.auto.timeTheorems.isActive = player.ttbuyer;
+      player.auto.bigCrunch.xCurrent = player.auto.bigCrunch.xLast;
+      player.auto.eternity.xCurrent = player.auto.eternity.xLast;
+      player.auto.bulkOn = player.options.bulkOn;
+      player.auto.autobuyerOn = player.options.autobuyerOn;
+      player.auto.disableContinuum = player.options.disableContinuum;
 
       delete player.auto.dimensions;
       delete player.infDimBuyers;
@@ -950,7 +942,12 @@ GameStorage.devMigrations = {
       delete player.reality.rebuyablesAuto;
       delete player.reality.epmultbuyer;
       delete player.infMultBuyer;
-    }
+      delete player.auto.bigCrunch.xLast;
+      delete player.auto.eternity.xLast;
+      delete player.auto.bulkOn;
+      delete player.auto.autobuyerOn;
+      delete player.auto.disableContinuum;
+    },
   ],
 
   patch(player) {

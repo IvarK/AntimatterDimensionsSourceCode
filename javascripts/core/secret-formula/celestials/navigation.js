@@ -27,12 +27,12 @@ GameDatabase.celestials.navigation = (function() {
     enslavedGlyphRarity: new Vector(650 + 75 * Math.cos(Math.PI / 180 * 120), 250 + 75 * Math.sin(Math.PI / 180 * 120)),
 
     vUnlockAchievement: new Vector(400, 350 + 50 * Math.sqrt(3)),
+    vAchievement0: new Vector(350, 350),
     vAchievement1: new Vector(450, 350),
     vAchievement2: new Vector(500, 350 + 50 * Math.sqrt(3)),
     vAchievement3: new Vector(450, 350 + 100 * Math.sqrt(3)),
     vAchievement4: new Vector(350, 350 + 100 * Math.sqrt(3)),
     vAchievement5: new Vector(300, 350 + 50 * Math.sqrt(3)),
-    vAchievement6: new Vector(350, 350),
 
     raReality: new Vector(400, 200),
     raPetTeresa: new Vector(400 + 85 * Math.sin(Math.PI / 180 * 252), 200 + 85 * Math.cos(Math.PI / 180 * 252)),
@@ -792,7 +792,7 @@ GameDatabase.celestials.navigation = (function() {
         clickAction: () => Tab.celestials.v.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
         fill: "#ffe066",
-        position: Positions.vAchievement6,
+        position: Positions.vAchievement0,
         ring: {
           rMajor: 8,
         },
@@ -814,13 +814,49 @@ GameDatabase.celestials.navigation = (function() {
       connector: {
         pathStart: 0,
         pathEnd: 1,
-        path: new LinearPath(Positions.vUnlockAchievement, Positions.vAchievement6),
+        path: new LinearPath(Positions.vUnlockAchievement, Positions.vAchievement0),
         fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
       }
     },
 
+    "v-achievement-0": {
+      visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
+      complete: () => VRunUnlocks.all[0].completions / 6,
+      drawOrder: -1,
+      node: {
+        clickAction: () => Tab.celestials.v.show(true),
+        incompleteClass: "c-celestial-nav__test-incomplete",
+        fill: "#ffe066",
+        position: Positions.vAchievement0,
+        ring: {
+          rMajor: 8,
+        },
+        legend: {
+          text: complete => {
+            const name = VRunUnlocks.all[0].config.name;
+            if (complete >= 1) return `V-Achievement "${name}"`;
+            const completions = VRunUnlocks.all[0].completions;
+            return [
+              "V-Achievement",
+              `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
+            ];
+          },
+          angle: -135,
+          diagonal: 16,
+          horizontal: 16,
+        },
+      },
+      connector: {
+        pathStart: 0,
+        pathEnd: 1,
+        path: new LinearPath(Positions.vAchievement5, Positions.vAchievement0),
+        fill: "#ffe066",
+        completeWidth: 6,
+        incompleteWidth: 4,
+      }
+    },
     "v-achievement-1": {
       visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => VRunUnlocks.all[1].completions / 6,
@@ -851,7 +887,7 @@ GameDatabase.celestials.navigation = (function() {
       connector: {
         pathStart: 0,
         pathEnd: 1,
-        path: new LinearPath(Positions.vAchievement6, Positions.vAchievement1),
+        path: new LinearPath(Positions.vAchievement0, Positions.vAchievement1),
         fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,
@@ -859,7 +895,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-achievement-2": {
       visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => VRunUnlocks.all[3].completions / 6,
+      complete: () => VRunUnlocks.all[2].completions / 6,
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -871,9 +907,9 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            const name = VRunUnlocks.all[3].config.name;
+            const name = VRunUnlocks.all[2].config.name;
             if (complete >= 1) return `V-Achievement "${name}"`;
-            const completions = VRunUnlocks.all[3].completions;
+            const completions = VRunUnlocks.all[2].completions;
             return [
               "V-Achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
@@ -895,7 +931,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-achievement-3": {
       visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => VRunUnlocks.all[5].completions / 6,
+      complete: () => VRunUnlocks.all[3].completions / 6,
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -907,9 +943,9 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            const name = VRunUnlocks.all[5].config.name;
+            const name = VRunUnlocks.all[3].config.name;
             if (complete >= 1) return `V-Achievement "${name}"`;
-            const completions = VRunUnlocks.all[5].completions;
+            const completions = VRunUnlocks.all[3].completions;
             return [
               "V-Achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
@@ -967,7 +1003,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "v-achievement-5": {
       visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => VRunUnlocks.all[2].completions / 6,
+      complete: () => VRunUnlocks.all[5].completions / 6,
       drawOrder: -1,
       node: {
         clickAction: () => Tab.celestials.v.show(true),
@@ -979,9 +1015,9 @@ GameDatabase.celestials.navigation = (function() {
         },
         legend: {
           text: complete => {
-            const name = VRunUnlocks.all[2].config.name;
+            const name = VRunUnlocks.all[5].config.name;
             if (complete >= 1) return `V-Achievement "${name}"`;
-            const completions = VRunUnlocks.all[2].completions;
+            const completions = VRunUnlocks.all[5].completions;
             return [
               "V-Achievement",
               `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
@@ -996,42 +1032,6 @@ GameDatabase.celestials.navigation = (function() {
         pathStart: 0,
         pathEnd: 1,
         path: new LinearPath(Positions.vAchievement4, Positions.vAchievement5),
-        fill: "#ffe066",
-        completeWidth: 6,
-        incompleteWidth: 4,
-      }
-    },
-    "v-achievement-6": {
-      visible: () => V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
-      complete: () => VRunUnlocks.all[0].completions / 6,
-      drawOrder: -1,
-      node: {
-        clickAction: () => Tab.celestials.v.show(true),
-        incompleteClass: "c-celestial-nav__test-incomplete",
-        fill: "#ffe066",
-        position: Positions.vAchievement6,
-        ring: {
-          rMajor: 8,
-        },
-        legend: {
-          text: complete => {
-            const name = VRunUnlocks.all[0].config.name;
-            if (complete >= 1) return `V-Achievement "${name}"`;
-            const completions = VRunUnlocks.all[0].completions;
-            return [
-              "V-Achievement",
-              `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
-            ];
-          },
-          angle: -135,
-          diagonal: 16,
-          horizontal: 16,
-        },
-      },
-      connector: {
-        pathStart: 0,
-        pathEnd: 1,
-        path: new LinearPath(Positions.vAchievement5, Positions.vAchievement6),
         fill: "#ffe066",
         completeWidth: 6,
         incompleteWidth: 4,

@@ -464,7 +464,8 @@ let player = {
       runGlyphs: [[], [], [], [], [], [], [], [], []],
       // The -10 is for glyph count, as glyph count for V is stored internally as a negative number
       runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0],
-      maxGlyphsThisRun: 0
+      maxGlyphsThisRun: 0,
+      wantsFlipped: true,
     },
     ra: {
       pets: {

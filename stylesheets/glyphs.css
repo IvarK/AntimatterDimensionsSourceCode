@@ -800,7 +800,13 @@
   position: relative;
 }
 
-.l-glyph-color-position {
+.l-glyph-color-position__top {
+  position: absolute;
+  right: 25rem;
+  width: 0%;
+}
+
+.l-glyph-color-position__low {
   position: absolute;
   top: 2.9rem;
   right: 25rem;

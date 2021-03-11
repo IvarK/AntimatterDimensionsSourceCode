@@ -55,6 +55,9 @@ Vue.component("glyphs-tab", {
     },
     setInfoState(state) {
       player.reality.showGlyphSacrifice = state;
+    },
+    glyphColorPosition() {
+      return this.sacrificeUnlocked ? "l-glyph-color-position__low" : "l-glyph-color-position__top";
     }
   },
   template:
@@ -97,7 +100,7 @@ Vue.component("glyphs-tab", {
           <equipped-glyphs />
           <div class="l-glyph-info-wrapper">
             <span class="l-glyph-color-box" @click="toggleGlyphTextColors">
-              <div class="l-glyph-color-position">
+              <div :class="glyphColorPosition()">
                 <label
                   :class="glyphColorState">
                   <span class="fas fa-palette"></span>

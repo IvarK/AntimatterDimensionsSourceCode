@@ -6,7 +6,7 @@ Autobuyer.sacrifice = new class SacrificeAutobuyerState extends AutobuyerState {
   }
 
   get name() {
-    return `Sacrifice`;
+    return `Dimensional Sacrifice`;
   }
 
   get isUnlocked() {

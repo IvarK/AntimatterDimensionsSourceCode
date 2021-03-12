@@ -1,46 +1,64 @@
 "use strict";
 
 const Autobuyers = (function() {
-  const dimensions = DimensionAutobuyerState.index;
-  const all = dimensions
-    .concat([
-      Autobuyer.tickspeed,
-      Autobuyer.dimboost,
-      Autobuyer.galaxy,
-      Autobuyer.bigCrunch,
-      Autobuyer.sacrifice,
-      Autobuyer.eternity,
-      Autobuyer.reality,
-    ]);
+  const antimatterDimensions = Autobuyer.antimatterDimension.index;
+  const infinityDimensions = Autobuyer.infinityDimension.index;
+  const timeDimensions = Autobuyer.timeDimension.index;
+  const dimensions = [antimatterDimensions, infinityDimensions, timeDimensions];
+  const prestige = [
+    [Autobuyer.bigCrunch],
+    [Autobuyer.eternity],
+    [Autobuyer.reality],
+  ];
+  const singleBinary = [
+    [Autobuyer.replicantiGalaxy],
+    [Autobuyer.timeTheorem],
+    [Autobuyer.ipMult],
+    [Autobuyer.epMult],
+  ];
+  const single = [
+    [Autobuyer.tickspeed],
+    [Autobuyer.sacrifice],
+    [Autobuyer.dimboost],
+    [Autobuyer.galaxy],
+  ].concat(singleBinary);
+  const other = [
+    Autobuyer.replicantiUpgrade.array,
+    Autobuyer.dilationUpgrade.array,
+    Autobuyer.realityUpgrade.array,
+    Autobuyer.blackHolePower.array,
+  ];
+  const all = dimensions.concat(prestige, single, other);
 
   return {
-    all,
+    all: all.flat(),
+    display: [dimensions, other, singleBinary],
+    antimatterDimensions,
+    infinityDimensions,
+    timeDimensions,
     dimensions,
-    upgradeable: dimensions.concat([Autobuyer.tickspeed]),
+    prestige,
+    single,
+    other,
+    upgradeable: antimatterDimensions.concat([Autobuyer.tickspeed]),
 
     get unlocked() {
       return Autobuyers.all.filter(a => a.isUnlocked || a.isBought);
     },
 
     toggle() {
-      player.options.autobuyersOn = !player.options.autobuyersOn;
+      player.auto.autobuyersOn = !player.auto.autobuyersOn;
     },
 
     tick() {
       PerformanceStats.start("Autobuyers");
 
       const priorityQueue = [Autobuyer.tickspeed]
-        .concat(dimensions)
+        .concat(antimatterDimensions)
         .sort((a, b) => a.priority - b.priority);
 
-      const autobuyers = [
-        Autobuyer.reality,
-        Autobuyer.bigCrunch,
-        Autobuyer.eternity,
-        Autobuyer.galaxy,
-        Autobuyer.dimboost,
-        Autobuyer.sacrifice
-      ]
+      const autobuyers = prestige.flat()
+        .concat(single.flat(), other.flat(), infinityDimensions, timeDimensions)
         .concat(priorityQueue)
         .filter(a => a.canTick);
 

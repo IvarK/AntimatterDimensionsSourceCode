@@ -452,7 +452,7 @@ GameDatabase.news = [
       ];
       const game = games.randomElement();
       return `An unidentified developer of Antimatter Dimensions would like to
-        recommend that you play <a href="${game.link}">${game.name}</a>`;
+        recommend that you play <a href="${game.link}" target="_blank">${game.name}</a>`;
     },
   },
   {
@@ -1597,7 +1597,7 @@ GameDatabase.news = [
     id: "a271",
     text:
       `<i style='border: 0.1rem solid black; border-radius: 50%; padding: 0.4rem; color: #2196F3; background: white;
-      cursor: pointer;' class='fas fa-volume-up' onclick='(function(){new Audio("audio/news.mp3").play();})();'>
+      cursor: pointer;' class='fas fa-volume-up' onClick='(function(){new Audio("audio/news.mp3").play();})();'>
       </i> This news message is a test of "News 2.0". News 2.0 will feature things like the ability to listen to
       an audio version of any news message!`
   },
@@ -2887,7 +2887,7 @@ GameDatabase.news = [
   {
     id: "ai11",
     text: "\"click here to buy a stack of paperclips\" (when clicked you get Rickroll)",
-    onclick() { window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; }
+    onClick() { window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ"); }
   },
   {
     id: "ai12",
@@ -3669,7 +3669,7 @@ GameDatabase.news = [
   {
     id: "ai202",
     text: "Click here to exit the news",
-    onclick() { GameOptions.toggleNews(); }
+    onClick() { GameOptions.toggleNews(); }
   },
   {
     id: "ai203",
@@ -3747,7 +3747,7 @@ GameDatabase.news = [
   {
     id: "ai221",
     text: "Click here to disassemble the news ticker for a trace amount of useless paperclips.",
-    onclick() {
+    onClick() {
       GameOptions.toggleNews();
       player.secretUnlocks.paperclips++;
     }
@@ -4812,7 +4812,7 @@ GameDatabase.news = [
   {
     id: "ai486",
     text: "\"Click here to unlock a secret achievement.\" (when clicked you get Rick rolled)",
-    onclick() { window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; }
+    onClick() { window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ"); }
   },
   {
     id: "ai487",

@@ -12,9 +12,7 @@ Vue.component("autobuyers-tab", {
   template:
     `<div class="l-autobuyers-tab">
       <autobuyer-toggles />
-      <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
-        Press <kbd>?</kbd> to open shortcut list.
-      </p>
+      <open-modal-shortcuts />
       <reality-autobuyer-box />
       <eternity-autobuyer-box />
       <big-crunch-autobuyer-box />

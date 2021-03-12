@@ -895,6 +895,59 @@ GameStorage.devMigrations = {
       delete player.dilation.baseFreeGalaxies;
       delete player.dilation.freeGalaxies;
     },
+    player => {
+      for (let i = 0; i < 8; i++) {
+        player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
+      }
+      for (let i = 0; i < 8; i++) {
+        player.auto.timeDims[i].isActive = player.reality.tdbuyers[i];
+      }
+      for (let i = 0; i < 3; i++) {
+        player.auto.replicantiUpgrades[i].isActive = player.replicanti.auto[i];
+      }
+      for (let i = 0; i < 3; i++) {
+        player.auto.dilationUpgrades[i].isActive = player.dilation.auto[i];
+      }
+      for (let i = 0; i < 2; i++) {
+        player.auto.blackHolePower[i].isActive = player.blackHole[i].autoPower;
+      }
+      for (let i = 0; i < 5; i++) {
+        player.auto.realityUpgrades[i].isActive = player.reality.rebuyablesAuto[i];
+      }
+      player.auto.antimatterDims = player.auto.dimensions;
+      player.auto.replicantiGalaxies.isActive = player.replicanti.galaxybuyer;
+      player.auto.ipMultBuyer.isActive = player.infMultBuyer;
+      player.auto.epMultBuyer.isActive = player.reality.epmultbuyer;
+      player.auto.timeTheorems.isActive = player.ttbuyer;
+      player.auto.bigCrunch.xCurrent = player.auto.bigCrunch.xLast;
+      player.auto.eternity.xCurrent = player.auto.eternity.xLast;
+      player.auto.bulkOn = player.options.bulkOn;
+      player.auto.autobuyerOn = player.options.autobuyerOn;
+      player.auto.disableContinuum = player.options.disableContinuum;
+
+      delete player.auto.dimensions;
+      delete player.infDimBuyers;
+      delete player.auto.infDimTimer;
+      delete player.reality.tdbuyers;
+      delete player.auto.timeDimTimer;
+      delete player.replicanti.galaxybuyer;
+      delete player.replicanti.auto;
+      delete player.auto.repUpgradeTimer;
+      delete player.ttbuyer;
+      delete player.auto.ttTimer;
+      delete player.dilation.auto;
+      delete player.auto.dilUpgradeTimer;
+      delete player.blackHole[0].autoPower;
+      delete player.blackHole[1].autoPower;
+      delete player.reality.rebuyablesAuto;
+      delete player.reality.epmultbuyer;
+      delete player.infMultBuyer;
+      delete player.auto.bigCrunch.xLast;
+      delete player.auto.eternity.xLast;
+      delete player.auto.bulkOn;
+      delete player.auto.autobuyerOn;
+      delete player.auto.disableContinuum;
+    },
   ],
 
   patch(player) {

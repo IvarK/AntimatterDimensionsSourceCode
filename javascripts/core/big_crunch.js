@@ -111,24 +111,10 @@ function bigCrunchReplicanti() {
   // I don't think this Math.clampMax is technically needed, but if we add another source
   // of keeping Replicanti Galaxies then it might be.
   player.replicanti.galaxies = Math.clampMax(remainingGalaxies, currentReplicantiGalaxies);
-
-  autoBuyReplicantiUpgrades();
 }
 
 function bigCrunchCheckUnlocks() {
   if (EternityChallenge(4).tryFail()) return;
-
-  if (EternityMilestone.autobuyerID(1).isReached &&
-      !EternityChallenge(8).isRunning &&
-      !EternityChallenge(2).isRunning &&
-      !EternityChallenge(10).isRunning) {
-    for (let i = 1; i <= player.eternities.sub(10).clampMax(8).toNumber(); i++) {
-      if (player.infDimBuyers[i - 1]) {
-        buyMaxInfDims(i);
-        buyManyInfinityDimension(i);
-      }
-    }
-  }
 
   if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
     EffarigUnlock.infinity.unlock();
@@ -356,7 +342,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     }
   }
 
-  autobuyerTick() {
+  buyMax() {
     if (!this.canBeBought) return;
     if (!this.hasIncreasedCost) {
       // The purchase at 1e3000000 is considered post-softcap because that purchase increases the cost by 1e10x.

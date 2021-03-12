@@ -370,7 +370,7 @@ GameDatabase.achievements.normal = [
     get description() {
       return `Get all of your Antimatter Dimension Autobuyer bulk amounts to ${formatInt(512)} or higher.`;
     },
-    checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0,
+    checkRequirement: () => Autobuyers.antimatterDimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0,
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
     reward: "Dimension Autobuyer bulks are unlimited."
   },
@@ -638,7 +638,7 @@ GameDatabase.achievements.normal = [
     name: "MAXIMUM OVERDRIVE",
     get description() { return `Big Crunch for ${format(1e300, 0, 0)} Infinity Points.`; },
     checkRequirement: () => gainedInfinityPoints().exponent >= 300,
-    checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
+    checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() { return `Additional ${formatX(4)} multiplier to Infinity Points.`; },
     effect: 4
   },

@@ -54,14 +54,15 @@ const Effarig = {
     return countEffectsFromBitmask(genEffectBitmask) + countEffectsFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
-    if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
-      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount)) *
-        AlchemyResource.effarig.effectValue;
-    }
-    return 0;
+    if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) return 0;
+    return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount)) *
+      AlchemyResource.effarig.effectValue;
   },
   get shardAmount() {
     return player.celestials.effarig.relicShards;
+  },
+  set shardAmount(x) {
+    player.celestials.effarig.relicShards = x;
   },
   get maxRarityBoost() {
     return 5 * Math.log10(Math.log10(this.shardAmount + 10));
@@ -110,10 +111,10 @@ const Effarig = {
     UNLOCK_WEIGHTS: CelestialQuotes.singleLine(
       2, "Do you like my little Stall? It’s not much, but it’s mine."
     ),
-    UNLOCK_BASIC_FILTER: CelestialQuotes.singleLine(
+    UNLOCK_GLYPH_FILTER: CelestialQuotes.singleLine(
       3, "Thank you for your purchase, customer!"
     ),
-    UNLOCK_ADVANCED_FILTER: CelestialQuotes.singleLine(
+    UNLOCK_SET_SAVES: CelestialQuotes.singleLine(
       4, "Is that too much? I think it’s too much."
     ),
     UNLOCK_RUN: {
@@ -177,22 +178,22 @@ class EffarigUnlockState extends GameMechanicState {
   purchase() {
     if (this.isUnlocked || Effarig.shardAmount < this.cost) return;
     this.unlock();
-    player.celestials.effarig.relicShards -= this.cost;
-    if (this === EffarigUnlock.adjuster) {
-      ui.view.tabs.reality.openGlyphWeights = true;
-      Tab.reality.glyphs.show();
-    }
-    switch (this.id) {
-      case EffarigUnlock.adjuster.id:
+    Effarig.shardAmount -= this.cost;
+    switch (this) {
+      case EffarigUnlock.adjuster:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_WEIGHTS);
+        ui.view.tabs.reality.openGlyphWeights = true;
+        Tab.reality.glyphs.show();
         break;
-      case EffarigUnlock.basicFilter.id:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_BASIC_FILTER);
+      case EffarigUnlock.glyphFilter:
+        Effarig.quotes.show(Effarig.quotes.UNLOCK_GLYPH_FILTER);
+        player.reality.showSidebarPanel = 0;
         break;
-      case EffarigUnlock.advancedFilter.id:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_ADVANCED_FILTER);
+      case EffarigUnlock.setSaves:
+        Effarig.quotes.show(Effarig.quotes.UNLOCK_SET_SAVES);
+        player.reality.showSidebarPanel = 1;
         break;
-      case EffarigUnlock.run.id:
+      case EffarigUnlock.run:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_RUN);
         break;
       default:
@@ -205,8 +206,8 @@ const EffarigUnlock = (function() {
   const db = GameDatabase.celestials.effarig.unlocks;
   return {
     adjuster: new EffarigUnlockState(db.adjuster),
-    basicFilter: new EffarigUnlockState(db.basicFilter),
-    advancedFilter: new EffarigUnlockState(db.advancedFilter),
+    glyphFilter: new EffarigUnlockState(db.glyphFilter),
+    setSaves: new EffarigUnlockState(db.setSaves),
     run: new EffarigUnlockState(db.run),
     infinity: new EffarigUnlockState(db.infinity),
     eternity: new EffarigUnlockState(db.eternity),

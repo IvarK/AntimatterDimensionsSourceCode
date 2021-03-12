@@ -15,7 +15,7 @@ class AutobuyerState {
   get isUnlocked() { throw new NotImplementedError(); }
 
   get canTick() {
-    return this.isActive && player.options.autobuyersOn && (this.isUnlocked || this.isBought);
+    return this.isActive && player.auto.autobuyersOn && (this.isUnlocked || this.isBought);
   }
 
   get isActive() {
@@ -42,7 +42,7 @@ class AutobuyerState {
 /**
  * @abstract
  */
-class IntervaledAutobuyerState extends AutobuyerState {
+class UpgradeableAutobuyerState extends AutobuyerState {
   /**
    * @abstract
    */
@@ -99,6 +99,36 @@ class IntervaledAutobuyerState extends AutobuyerState {
     this.data.interval = this.baseInterval;
     this.data.cost = 1;
   }
+}
+
+
+/**
+ * @abstract
+ */
+class IntervaledAutobuyerState extends AutobuyerState {
+  get interval() {
+    return this.data.interval;
+  }
+
+  get canTick() {
+    return super.canTick && this.timeSinceLastTick >= this.interval;
+  }
+
+  get timeSinceLastTick() {
+    return player.records.realTimePlayed - this.data.lastTick;
+  }
+
+  tick() {
+    const realTimePlayed = player.records.realTimePlayed;
+    const interval = this.interval;
+    // Don't allow more than one interval worth of time to accumulate (at most one autobuyer tick)
+    this.data.lastTick = Math.max(
+      Math.min(this.data.lastTick + interval, realTimePlayed),
+      realTimePlayed - interval);
+  }
+
+  // eslint-disable-next-line no-empty-function
+  reset() { }
 }
 
 const Autobuyer = {};

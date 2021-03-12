@@ -182,8 +182,8 @@ GameDatabase.reality.automator = {
                `Turn automator on and set it to trigger at the given interval`
             },
             {
-              header: "<i>number</i> x last",
-              description: 'Usable with infinity/eternity only. Turn automator on and sets it to "X times last" mode'
+              header: "<i>number</i> x current",
+              description: 'Usable with infinity/eternity only. Turn automator on and sets it to "X times current" mode'
             },
             {
               header: "<i>number currency</i>",
@@ -199,7 +199,7 @@ GameDatabase.reality.automator = {
         "auto eternity off",
         "auto infinity 30s",
         "auto eternity 10 seconds",
-        "auto eternity 1e100 x last",
+        "auto eternity 1e100 x current",
         "auto infinity 1e1e4 ip"
       ]
     },

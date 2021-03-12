@@ -5,6 +5,10 @@ Autobuyer.sacrifice = new class SacrificeAutobuyerState extends AutobuyerState {
     return player.auto.sacrifice;
   }
 
+  get name() {
+    return `Dimensional Sacrifice`;
+  }
+
   get isUnlocked() {
     return EternityMilestone.autoIC.isReached || InfinityChallenge(2).isCompleted;
   }

@@ -46,16 +46,16 @@ const AutomatorCommands = ((() => {
           { ALT: () => $.CONSUME(T.Off) },
           { ALT: () => $.OR1([
             { ALT: () => $.SUBRULE($.duration) },
-            { ALT: () => $.SUBRULE($.xLast) },
+            { ALT: () => $.SUBRULE($.xCurrent) },
             { ALT: () => $.SUBRULE($.currencyAmount) },
           ]) },
         ]);
       },
       validate: (ctx, V) => {
         ctx.startLine = ctx.Auto[0].startLine;
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && (ctx.duration || ctx.xLast)) {
-          V.addError((ctx.duration || ctx.xLast)[0],
-            "auto reality cannot be set to a duration or x last");
+        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && (ctx.duration || ctx.xCurrent)) {
+          V.addError((ctx.duration || ctx.xCurrent)[0],
+            "auto reality cannot be set to a duration or x current");
           return false;
         }
         if (ctx.PrestigeEvent && ctx.currencyAmount) {
@@ -67,16 +67,16 @@ const AutomatorCommands = ((() => {
           }
         }
 
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity && 
-          (ctx.duration || ctx.xLast) && !EternityMilestone.bigCrunchModes.isReached) {
-          V.addError((ctx.duration || ctx.xLast)[0],
+        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity &&
+          (ctx.duration || ctx.xCurrent) && !EternityMilestone.bigCrunchModes.isReached) {
+          V.addError((ctx.duration || ctx.xCurrent)[0],
             "Advanced Infinity autobuyer settings not unlocked");
           return false;
         }
 
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity && 
-          (ctx.duration || ctx.xLast) && !RealityUpgrade(13).isBought) {
-          V.addError((ctx.duration || ctx.xLast)[0],
+        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
+          (ctx.duration || ctx.xCurrent) && !RealityUpgrade(13).isBought) {
+          V.addError((ctx.duration || ctx.xCurrent)[0],
             "Advanced Eternity autobuyer settings not unlocked");
           return false;
         }
@@ -99,12 +99,12 @@ const AutomatorCommands = ((() => {
       },
       compile: ctx => {
         const isReality = ctx.PrestigeEvent[0].tokenType === T.Reality;
-        const on = Boolean(ctx.On || ctx.duration || ctx.xLast || ctx.currencyAmount);
+        const on = Boolean(ctx.On || ctx.duration || ctx.xCurrent || ctx.currencyAmount);
         const duration = ctx.duration ? ctx.duration[0].children.$value : undefined;
-        const xLast = ctx.xLast ? ctx.xLast[0].children.$value : undefined;
+        const xCurrent = ctx.xCurrent ? ctx.xCurrent[0].children.$value : undefined;
         const fixedAmount = ctx.currencyAmount ? ctx.currencyAmount[0].children.$value : undefined;
         const durationMode = ctx.PrestigeEvent[0].tokenType.$autobuyerDurationMode;
-        const xLastMode = ctx.PrestigeEvent[0].tokenType.$autobuyerXLastMode;
+        const xCurrentMode = ctx.PrestigeEvent[0].tokenType.$autobuyerXCurrentMode;
         const fixedMode = ctx.PrestigeEvent[0].tokenType.$autobuyerCurrencyMode;
         const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer;
         return () => {
@@ -112,9 +112,9 @@ const AutomatorCommands = ((() => {
           if (duration !== undefined) {
             autobuyer.mode = durationMode;
             autobuyer.time = duration / 1000;
-          } else if (xLast !== undefined) {
-            autobuyer.mode = xLastMode;
-            autobuyer.xLast = new Decimal(xLast);
+          } else if (xCurrent !== undefined) {
+            autobuyer.mode = xCurrentMode;
+            autobuyer.xCurrent = new Decimal(xCurrent);
           } else if (fixedAmount !== undefined) {
             autobuyer.mode = fixedMode;
             if (isReality) {
@@ -130,7 +130,7 @@ const AutomatorCommands = ((() => {
         const duration = ctx.duration
         ? `${ctx.duration[0].children.NumberLiteral[0].image} ${ctx.duration[0].children.TimeUnit[0].image}`
         : undefined;
-        const xLast = ctx.xLast ? ctx.xLast[0].children.$value : undefined;
+        const xCurrent = ctx.xCurrent ? ctx.xCurrent[0].children.$value : undefined;
         const fixedAmount = ctx.currencyAmount
         ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image} ${ctx.currencyAmount[0].children.Currency[0].image}`
         : undefined;
@@ -138,7 +138,7 @@ const AutomatorCommands = ((() => {
         let input = "";
 
         if (duration) input = duration;
-        else if (xLast) input = `${xLast} x last`;
+        else if (xCurrent) input = `${xCurrent} x current`;
         else if (fixedAmount) input = `${fixedAmount}`;
         else input = (on ? "ON" : "OFF");
 

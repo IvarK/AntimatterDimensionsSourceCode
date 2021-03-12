@@ -463,6 +463,7 @@ Vue.component("celestial-navigation", {
       return new Vector(x, y);
     },
     nodeVisibility(obj) {
+      if (player.devMode) return "visible";
       return this.nodeState[obj.nodeId].visible ? "visible" : "hidden";
     },
   },

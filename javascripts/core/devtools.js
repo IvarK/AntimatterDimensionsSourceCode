@@ -49,6 +49,10 @@ const specialGlyphSymbols = {
   key2700: "🌎", key2701: "🦒", key2702: "👻"
 };
 
+dev.hardReset = function() {
+  GameStorage.hardReset();
+};
+
 dev.giveAllAchievements = function() {
   const allAchievements = Achievements.all.concat(SecretAchievements.all);
   for (const achievement of allAchievements) achievement.unlock();
@@ -433,7 +437,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
-        player.replicanti.galaxybuyer = true;
+        Autobuyer.replicantiGalaxy.isActive = true;
       }
     ],
     [

@@ -40,7 +40,7 @@ Vue.component("infinity-upgrade-button", {
     update() {
       const upgrade = this.upgrade;
       this.isBought = upgrade.isBought || upgrade.isCapped;
-      this.chargePossible = Ra.chargeUnlocked && !this.upgrade.config.bannedFromCharging;
+      this.chargePossible = Ra.chargeUnlocked && (this.upgrade.config.charged !== undefined);
       this.canBeBought = upgrade.canBeBought;
       this.canBeCharged = upgrade.canCharge;
       this.isCharged = upgrade.isCharged;

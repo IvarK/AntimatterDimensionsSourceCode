@@ -174,21 +174,18 @@ GameDatabase.infinity.upgrades = (function() {
       cost: 20,
       description: () =>
         `Start every reset with ${formatInt(1)} Dimension Boost, automatically unlocking the 5th Antimatter Dimension`,
-      bannedFromCharging: true
     },
     skipReset2: {
       id: "skipReset2",
       cost: 40,
       description: () =>
         `Start every reset with ${formatInt(2)} Dimension Boosts, automatically unlocking the 6th Antimatter Dimension`,
-      bannedFromCharging: true
     },
     skipReset3: {
       id: "skipReset3",
       cost: 80,
       description: () =>
         `Start every reset with ${formatInt(3)} Dimension Boosts, automatically unlocking the 7th Antimatter Dimension`,
-      bannedFromCharging: true
     },
     skipResetGalaxy: {
       id: "skipResetGalaxy",
@@ -196,7 +193,6 @@ GameDatabase.infinity.upgrades = (function() {
       description: () =>
         `Start every reset with ${formatInt(4)} Dimension Boosts, automatically unlocking the 8th Antimatter Dimension;
         and an Antimatter Galaxy`,
-      bannedFromCharging: true
     },
     ipOffline: {
       id: "ipOffline",
@@ -205,7 +201,6 @@ GameDatabase.infinity.upgrades = (function() {
       effect: () =>
         player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
       formatEffect: value => `${format(value, 2, 2)} IP/min`,
-      bannedFromCharging: true
     },
     ipMult: {
       cost: () => player.infMultCost,
@@ -215,7 +210,6 @@ GameDatabase.infinity.upgrades = (function() {
       effect: () => player.infMult,
       cap: () => Effarig.eternityCap || new Decimal("1e1000000"),
       formatEffect: value => formatX(value, 2, 2),
-      bannedFromCharging: true
     }
   };
 }());

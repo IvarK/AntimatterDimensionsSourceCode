@@ -11,9 +11,9 @@ Vue.component("glyph-set-saves", {
   },
   computed: {
     questionmarkTooltip() {
-      return `Save copies your current glyphs. Delete clears the set for a new save. Load searches through your
-      inventory, and equips the best glyph matching its search.
-      You can only load a set when you have no glyphs equipped.`;
+      return `Save copies your current Glyphs. Delete clears the set for a new save. Load searches through your
+      inventory, and equips the best Glyph matching its search.
+      You can only load a set when you have no Glyphs equipped.`;
     },
     noSet() {
       return `No Set Saved`;
@@ -43,7 +43,7 @@ Vue.component("glyph-set-saves", {
       for (let i = 0; i < set.length; i++) {
         const glyph = Glyphs.findByValues(set[i], this.level, this.rarity);
         if (!glyph) {
-          GameUI.notify.error(`Could not load the Glyph Set due to missing glyph!`);
+          GameUI.notify.error(`Could not load the Glyph Set due to missing Glyph!`);
           return;
         }
         const idx = Glyphs.active.indexOf(null);
@@ -60,7 +60,7 @@ Vue.component("glyph-set-saves", {
       <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
         <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
       </div>
-      When searching for glyphs to load, check:
+      When searching for Glyphs to load, check:
       <div>
         Type: Always
         <br>

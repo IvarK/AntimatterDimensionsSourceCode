@@ -22,7 +22,7 @@ Vue.component("sacrificed-glyphs", {
           return GlyphSacrifice[this.type].config;
         },
         style() {
-          if (this.isColored) return { };
+          if (!this.isColored) return { };
           return {
             color: this.typeConfig.color,
             "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),

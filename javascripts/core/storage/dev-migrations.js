@@ -944,9 +944,9 @@ GameStorage.devMigrations = {
       delete player.infMultBuyer;
       delete player.auto.bigCrunch.xLast;
       delete player.auto.eternity.xLast;
-      delete player.auto.bulkOn;
-      delete player.auto.autobuyerOn;
-      delete player.auto.disableContinuum;
+      delete player.options.bulkOn;
+      delete player.options.autobuyerOn;
+      delete player.options.disableContinuum;
     },
   ],
 

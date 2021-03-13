@@ -21,7 +21,7 @@ Vue.component("glyph-set-name", {
   },
   data() {
     return {
-      notColored: false,
+      isColored: true,
       defaultOrder: ["power", "infinity", "replication", "time", "dilation"],
       multipleGlyphList: [
         { type: "power", perc: 0 },
@@ -67,7 +67,7 @@ Vue.component("glyph-set-name", {
       // Cursed needs a special additional method of generating its names
       if (this.calculateGlyphPercent("cursed")) nameString += this.cursedName;
       else if (this.multipleGlyphList[0].perc) nameString += this.normalName;
-      
+
       return nameString;
     },
     cursedName() {
@@ -167,7 +167,7 @@ Vue.component("glyph-set-name", {
     },
     textStyle() {
       // If you have the player option to not show color enabled, and this isn't a special case forcing color, return {}
-      if (this.notColored && !this.forceColor) return {};
+      if (!this.isColored && !this.forceColor) return {};
       // Otherwise, lets set the shadow to be 4, each offset to a different corner, and bluring by 1px,
       // then bluring by 3px with no offset with the same color as the text.
       // If its a Reality Glyph, assign it Reality Glyph's animation.
@@ -186,7 +186,7 @@ Vue.component("glyph-set-name", {
   },
   methods: {
     update() {
-      this.notColored = player.options.glyphTextColors;
+      this.isColored = player.options.glyphTextColors;
     },
     calculateGlyphPercent(name) {
       // Take the amount of a type of glyph in the set, divide by the maximum number of glyphs, then * 100 to get %

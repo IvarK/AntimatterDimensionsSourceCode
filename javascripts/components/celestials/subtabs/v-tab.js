@@ -16,7 +16,6 @@ Vue.component("v-tab", {
       runRecords: [],
       runGlyphs: [],
       isFlipped: false,
-      isFlippedVisible: false,
       wantsFlipped: true,
       isRunning: false,
       hasAlchemy: false,
@@ -37,7 +36,7 @@ Vue.component("v-tab", {
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
-      this.isFlippedVisible = this.isFlipped && this.wantsFlipped;
+      this.wantsFlipped = player.celestials.v.wantsFlipped;
       this.isRunning = V.isRunning;
       this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     },
@@ -76,12 +75,15 @@ Vue.component("v-tab", {
     reductionTooltip(hex) {
       return `Spend ${format(hex.reductionCost, 2, 0)} Perk Points
       to reduce goal by ${format(hex.config.perReductionStep)}`;
+    },
+    toggleFlipped() {
+      player.celestials.v.wantsFlipped = !this.wantsFlipped;
     }
   },
   computed: {
     // If V is flipped, change the layout of the grid
     hexGrid() {
-      return this.isFlippedVisible ? [
+      return this.isFlipped && this.wantsFlipped ? [
         VRunUnlocks.all[6],
         {},
         {},
@@ -96,11 +98,11 @@ Vue.component("v-tab", {
         VRunUnlocks.all[0],
         VRunUnlocks.all[1],
         {},
-        VRunUnlocks.all[2],
-        { isRunButton: true },
-        VRunUnlocks.all[3],
-        VRunUnlocks.all[4],
         VRunUnlocks.all[5],
+        { isRunButton: true },
+        VRunUnlocks.all[2],
+        VRunUnlocks.all[4],
+        VRunUnlocks.all[3],
         {}
       ];
     },
@@ -154,7 +156,7 @@ Vue.component("v-tab", {
         <div v-if="isFlipped" class="c-v-info-text">
           <primary-button
             class="o-primary-btn--subtab-option"
-            @click="wantsFlipped = !wantsFlipped"
+            @click="toggleFlipped"
           ><span v-if="wantsFlipped">Hide</span><span v-else>Show</span> Hard V</primary-button>
           <br>
           <br>

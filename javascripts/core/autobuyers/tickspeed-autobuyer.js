@@ -1,8 +1,12 @@
 "use strict";
 
-Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobuyerState {
+Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
     return player.auto.tickspeed;
+  }
+
+  get name() {
+    return `Tickspeed`;
   }
 
   get isUnlocked() {

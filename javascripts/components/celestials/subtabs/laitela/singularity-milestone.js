@@ -34,7 +34,7 @@ Vue.component("singularity-milestone", {
       else if (this.isUnique) color = "var(--color-accent)";
       else if (this.limit > 1) color = "var(--color-good-dark)";
       else color = "var(--color-good)";
-      return { 
+      return {
         background: color,
         width: this.progressToNext
       };
@@ -48,7 +48,7 @@ Vue.component("singularity-milestone", {
       } else {
         color = "";
       }
-      return { 
+      return {
         "background-color": color
       };
     },
@@ -58,7 +58,7 @@ Vue.component("singularity-milestone", {
       for (let rep = 0; this.completions === 0 || rep < this.completions; rep++) {
         const thisLevel = this.milestone.start * Math.pow(this.milestone.repeat, rep);
         if (newMilestones.includes(thisLevel)) return { "box-shadow": "0 0 0.3rem 0.3rem var(--color-celestials)" };
-        if (thisLevel > player.celestials.laitela.singularities) break;
+        if (thisLevel > Laitela.singularities) break;
       }
       return {};
     },
@@ -86,13 +86,13 @@ Vue.component("singularity-milestone", {
       :style="[backgroundStyle, newGlowStyle]">
         <div class="c-laitela-milestone__progress" :style="barProgressStyle"/>
         <b v-if="!isMaxed">
-          In {{ format(remainingSingularities, 2, 0) }} 
+          In {{ format(remainingSingularities, 2, 0) }}
           {{ "Singularity" | pluralize(remainingSingularities, "Singularities")}}
         </b>
         <p> <span v-html="upgradeDirectionIcon"/> {{ description }}</p>
         <br>
         <b>
-          {{ effectDisplay }} 
+          {{ effectDisplay }}
           <span v-if="!isUnique && !isMaxed">➜ {{ nextEffectDisplay }}</span>
         </b>
         <div class="c-laitela-milestone__completions">

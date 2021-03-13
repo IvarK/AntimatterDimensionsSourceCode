@@ -7,10 +7,22 @@ Vue.component("glyph-set-preview", {
     glyphs: Array,
     noLevelOverride: Boolean,
     flipTooltip: Boolean,
+    showName: {
+      type: Boolean,
+      default: true,
+    },
+    forceNameColor: {
+      type: Boolean,
+      default: true,
+    },
     showSacrifice: {
       type: Boolean,
       default: false
     },
+    noneText: {
+      type: String,
+      default: "(No Glyphs equipped)"
+    }
   },
   template:
     `<div v-if="show">
@@ -19,6 +31,10 @@ Vue.component("glyph-set-preview", {
         <br>
       </span>
       <span v-if="glyphs.length !== 0">
+        <glyph-set-name
+          v-if="showName"
+          :glyphSet="glyphs"
+          :forceColor="forceNameColor" />
         <glyph-component v-for="(g, idx) in glyphs"
           :key="idx"
           style="margin: 0.2rem;"
@@ -35,7 +51,7 @@ Vue.component("glyph-set-preview", {
           bottomPadding="0.4rem" />
       </span>
       <span v-else>
-        (No Glyphs equipped)
+        {{ noneText }}
       </span>
     </div>`
 });

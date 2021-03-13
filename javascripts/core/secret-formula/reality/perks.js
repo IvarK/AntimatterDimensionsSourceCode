@@ -16,8 +16,8 @@ GameDatabase.reality.perks = {
     label: "START",
     family: PERK_FAMILY.REALITY,
     get description() {
-      return `Remove the ${format(5e9)} Time Theorems and ${format(13)} rows of achevements requirements from
-      the Reality Time Study, and allow you to choose from ${formatInt(4)} different Glyphs on Reality`;
+      return `Remove the ${format(5e9)} Time Theorems and ${format(13)} rows of achievements requirements from
+      the Reality Study, and allow you to choose from ${formatInt(4)} different Glyphs on Reality`;
     },
     effect: 4,
   },

@@ -97,9 +97,7 @@ Vue.component("options-gameplay-tab", {
           text="Switch tabs on certain game events (such as entering challenges):"
         />
       </div>
-      <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
-        Press <kbd>?</kbd> to open shortcut list.
-      </p>
+      <open-modal-shortcuts />
     </div>
   </div>`
 });

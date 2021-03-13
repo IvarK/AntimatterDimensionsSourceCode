@@ -178,7 +178,7 @@ const AutomatorLexer = (() => {
     extraCategories: [StudyPath],
     $autobuyer: Autobuyer.bigCrunch,
     $autobuyerDurationMode: AUTO_CRUNCH_MODE.TIME,
-    $autobuyerXLastMode: AUTO_CRUNCH_MODE.X_LAST,
+    $autobuyerXCurrentMode: AUTO_CRUNCH_MODE.X_CURRENT,
     $autobuyerCurrencyMode: AUTO_CRUNCH_MODE.AMOUNT,
     $prestigeAvailable: () => Player.canCrunch,
     $prestige: () => bigCrunchResetRequest(true),
@@ -189,7 +189,7 @@ const AutomatorLexer = (() => {
   createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
     $autobuyer: Autobuyer.eternity,
     $autobuyerDurationMode: AUTO_ETERNITY_MODE.TIME,
-    $autobuyerXLastMode: AUTO_ETERNITY_MODE.X_LAST,
+    $autobuyerXCurrentMode: AUTO_ETERNITY_MODE.X_CURRENT,
     $autobuyerCurrencyMode: AUTO_ETERNITY_MODE.AMOUNT,
     $prestigeAvailable: () => Player.canEternity,
     $prestigeLevel: 2,
@@ -291,8 +291,8 @@ const AutomatorLexer = (() => {
 
   createKeyword("Dilation", /dilation/i);
   createKeyword("EC", /ec/i);
-  createKeyword("XLast", /x[ \t]+last/i, {
-    $autocomplete: "x last",
+  createKeyword("XCurrent", /x[ \t]+current/i, {
+    $autocomplete: "x current",
   });
 
   // We allow ECLiteral to consume lots of digits because that makes error reporting more

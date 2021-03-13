@@ -50,8 +50,8 @@ Vue.component("effarig-tab", {
   computed: {
     shopUnlocks: () => [
       EffarigUnlock.adjuster,
-      EffarigUnlock.basicFilter,
-      EffarigUnlock.advancedFilter
+      EffarigUnlock.glyphFilter,
+      EffarigUnlock.setSaves
     ],
     runUnlock: () => EffarigUnlock.run,
     runUnlocks: () => [
@@ -80,7 +80,7 @@ Vue.component("effarig-tab", {
   },
   methods: {
     update() {
-      this.relicShards = player.celestials.effarig.relicShards;
+      this.relicShards = Effarig.shardAmount;
       this.shardRarityBoost = Effarig.maxRarityBoost;
       this.shardsGained = Effarig.shardsGained;
       this.quote = Effarig.quote;

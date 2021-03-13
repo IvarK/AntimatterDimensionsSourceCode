@@ -26,11 +26,9 @@ const BlockAutomator = {
   fromText(scriptText) {
     const lines = AutomatorGrammar.blockifyTextAutomator(scriptText);
     if (lines) {
-      this.lines = AutomatorGrammar.blockifyTextAutomator(scriptText);
-      return true;
+      this.lines = lines;
     }
-
-    return false;
+    return lines;
   },
 
   generateText(block, indentation = 0) {

@@ -49,11 +49,9 @@ const DIL_UPG_NAMES = [
   "ndMultDT", "ipMultDT", "timeStudySplit", "dilationPenalty", "ttGenerator"
 ];
 
-function buyDilationUpgrade(id, bulk, extraFactor) {
-  const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
+function buyDilationUpgrade(id, bulk) {
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
-  // If a tick is really long (perhaps due to the player going offline), they can be automatically bought
-  // several times in one tick, which is what the extraFactor variable is used for.
+  const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
   if (id > 3) {
     if (player.dilation.dilatedTime.lt(upgrade.cost)) return false;
     if (player.dilation.upgrades.has(id)) return false;
@@ -66,7 +64,7 @@ function buyDilationUpgrade(id, bulk, extraFactor) {
 
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
       upgrade.config.initialCost, upgrade.config.increment, upgAmount).toNumber();
-    buying = Math.clampMax(buying, Effects.max(1, PerkShopUpgrade.bulkDilation) * extraFactor);
+    buying = Math.clampMax(buying, Effects.max(1, PerkShopUpgrade.bulkDilation));
     buying = Math.clampMax(buying, upgrade.config.purchaseCap - upgAmount);
     if (!bulk) {
       buying = Math.clampMax(buying, 1);
@@ -204,24 +202,12 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
     player.dilation.rebuyables[this.id] = value;
   }
 
-  get autobuyerId() {
-    return this.config.id - 1;
-  }
-
-  get isAutobuyerOn() {
-    return player.dilation.auto[this.autobuyerId];
-  }
-
-  set isAutobuyerOn(value) {
-    player.dilation.auto[this.autobuyerId] = value;
-  }
-
   get isCapped() {
     return this.config.reachedCapFn();
   }
 
-  purchase(bulk, extraFactor = 1) {
-    buyDilationUpgrade(this.config.id, bulk, extraFactor);
+  purchase(bulk) {
+    buyDilationUpgrade(this.config.id, bulk);
   }
 }
 

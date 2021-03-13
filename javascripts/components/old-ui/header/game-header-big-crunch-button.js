@@ -11,6 +11,7 @@ Vue.component("game-header-big-crunch-button", {
       tesseractUnlocked: false,
       tesseractCost: new Decimal(0),
       tesseractAffordable: false,
+      hover: false,
     };
   },
   computed: {
@@ -19,19 +20,16 @@ Vue.component("game-header-big-crunch-button", {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     },
     amountStyle() {
-      // If the player is using a dark theme, it should be black instead of white when ratio is 1
-      const darkTheme = Theme.current().isDark && Theme.current().name !== "S6";
-      if (this.currentIP.lt(1e50)) return darkTheme ? { color: "black" } : { color: "white" };
+      if (this.hover) return { color: "black" };
+      if (this.currentIP.lt(1e50)) return { color: "var(--color-infinity)" };
 
       const ratio = this.gainedIP.log10() / this.currentIP.log10();
-
       const rgb = [
         Math.round(255 - (ratio - 1) * 10 * 255),
         Math.round(255 - (1 - ratio) * 10 * 255),
         ratio > 1 ? Math.round(255 - (ratio - 1) * 10 * 255)
         : Math.round(255 - (1 - ratio) * 10 * 255)
       ];
-
       return { color: `rgb(${rgb.join(",")})` };
     },
   },
@@ -66,6 +64,8 @@ Vue.component("game-header-big-crunch-button", {
       v-if="isVisible && !tesseractAffordable"
       class="o-prestige-button o-infinity-button l-game-header__big-crunch-btn"
       onclick="bigCrunchResetRequest()"
+      @mouseover="hover = true"
+      @mouseleave="hover = false"
     >
       <div v-if="!isPeakIPPMVisible"/>
       <b>Big Crunch for

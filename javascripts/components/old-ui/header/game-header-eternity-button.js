@@ -20,7 +20,7 @@ Vue.component("game-header-eternity-button", {
       nextGoalAt: new Decimal(0),
       canEternity: false,
       eternityGoal: new Decimal(0),
-      hasRealitied: false,
+      hover: false,
     };
   },
   computed: {
@@ -30,9 +30,6 @@ Vue.component("game-header-eternity-button", {
         "o-eternity-button--dilation": this.isDilation,
         "o-eternity-button--unavailable": !this.isDilation && !this.canEternity
       };
-    },
-    isGainedEPAmountSmall() {
-      return this.gainedEP.lt(1e6);
     },
     isGainedEPAmountZero() {
       return this.gainedEP.eq(0);
@@ -46,9 +43,10 @@ Vue.component("game-header-eternity-button", {
         this.type === EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT;
     },
     amountStyle() {
+      if (this.hover) return { color: "black" };
       if (this.currentEP.lt(1e50)) return { color: "var(--color-eternity)" };
-      const ratio = this.gainedEP.log10() / this.currentEP.log10();
 
+      const ratio = this.gainedEP.log10() / this.currentEP.log10();
       const rgb = [
         Math.round(255 - (ratio - 1) * 10 * 255),
         Math.round(255 - (1 - ratio) * 10 * 255),
@@ -58,6 +56,7 @@ Vue.component("game-header-eternity-button", {
       return { color: `rgb(${rgb.join(",")})` };
     },
     tachyonAmountStyle() {
+      if (this.hover) return { color: "black" };
       // Note that Infinity and 0 can show up here. We have a special case for
       // this.currentTachyons being 0 because dividing a Decimal by 0 returns 0.
       let ratio;
@@ -123,7 +122,6 @@ Vue.component("game-header-eternity-button", {
         TimeSpan.fromMilliseconds(player.records.thisEternity.realTime).totalMinutes)
       );
       this.peakEPPM.copyFrom(player.records.thisEternity.bestEPmin);
-      this.hasRealitied = PlayerProgress.realityUnlocked();
     },
     updateChallengeWithRUPG() {
       const ec = EternityChallenge.current;
@@ -142,6 +140,8 @@ Vue.component("game-header-eternity-button", {
       :class="buttonClassObject"
       class="o-prestige-button l-game-header__eternity-btn"
       onclick="eternityResetRequest()"
+      @mouseover="hover = true"
+      @mouseleave="hover = false"
     >
       <!-- First time -->
       <template v-if="type === 0">
@@ -150,10 +150,6 @@ Vue.component("game-header-eternity-button", {
 
       <!-- Normal -->
       <template v-else-if="type === 1">
-        <template v-if="isGainedEPAmountSmall && !hasRealitied">
-          I need to become Eternal
-          <br>
-        </template>
         Eternity for
         <span :style="amountStyle">{{format(gainedEP, 2, 0)}}</span> Eternity {{ "Point" | pluralize(gainedEP) }}.
         <br>

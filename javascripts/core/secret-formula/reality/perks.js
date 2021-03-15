@@ -111,9 +111,9 @@ GameDatabase.reality.perks = {
     label: "PASS",
     family: PERK_FAMILY.ETERNITY,
     get description() {
-      return `Improve Time Study 122 to ${formatX(100)} Eternity Points and
-        Time Study 142 to ${formatX(1e100)} Infinity Points.
-        In addition, Time Study 132 also makes Replicanti ${format(5)} times faster.`;
+      return `Improve Time Study 122 to ${formatX(50)} Eternity Points and
+        Time Study 142 to ${formatX(1e50)} Infinity Points.
+        In addition, Time Study 132 also makes Replicanti ${format(3)} times faster.`;
     }
   },
   autounlockEU1: {

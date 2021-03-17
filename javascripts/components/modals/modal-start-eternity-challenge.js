@@ -36,7 +36,8 @@ Vue.component("modal-start-eternity-challenge", {
     },
   },
   template:
-    `<div class="c-modal-message l-modal-content--centered">
+    `<div class="l-modal-overlay c-modal-overlay" style="z-index: 8">
+    <div class="l-modal-content--centered c-modal-message c-modal">
     <h2>{{ entranceLabel }}</h2>
       <div class="c-modal-message__text">
         {{ message }}
@@ -55,6 +56,6 @@ Vue.component("modal-start-eternity-challenge", {
           @click="handleYesClick"
         >Begin</primary-button>
         </div>
-      </div>
+    </div>
     </div>`
 });

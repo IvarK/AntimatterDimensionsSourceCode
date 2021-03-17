@@ -115,7 +115,7 @@ const GlyphTooltipComponent = {
           GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },
     rarityInfo() {
-      return getRarity(this.strength);
+       return getRarity(this.strength);
     },
     descriptionStyle() {
       return {

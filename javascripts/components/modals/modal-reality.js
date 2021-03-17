@@ -3,6 +3,9 @@
 // This code is mostly just an amalgamation of glyph-peek and glyph selection. There's no new fancy ideas here at all.
 
 Vue.component("modal-reality", {
+  components: {
+    "glyph-tooltip": GlyphTooltipComponent,
+  },
   data() {
     return {
       glyphs: [],
@@ -61,6 +64,7 @@ Vue.component("modal-reality", {
       this.glyphs = GlyphSelection.glyphList(
         GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false });
       this.level = gainedGlyphLevel().actualLevel;
+      console.log(this.glyphs);
       this.grabEffects();
     },
     handleYesClick() {
@@ -69,8 +73,6 @@ Vue.component("modal-reality", {
       this.emitClose();
     },
     handleNoClick() {
-      console.log(this.glyphs);
-      console.log(this.grabbedEffects);
       this.emitClose();
     },
     update() {
@@ -103,17 +105,17 @@ Vue.component("modal-reality", {
     grabEffects() {
       if (!this.glyphs.length >= 4) return;
       for (let i = 0; i < this.glyphs.length; i++) {
-        console.log(this.glyphs[i]);
-        console.log(this.level);
-          this.grabbedEffects.push(getGlyphEffectValuesFromBitmask(this.glyphs[i].effects, this.level, this.glyphs[i].strength)
+        this.grabbedEffects.push(getGlyphEffectValuesFromBitmask(this.glyphs[i].effects,
+          this.level,
+          this.glyphs[i].strength)
           // eslint-disable-next-line no-loop-func
-          .filter(effect => GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.glyphs[i].type)));
-      } 
-      console.log(this.grabbedEffects);
+          .filter(effect =>
+            GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.glyphs[i].type)));
+      }
     }
   },
   template: 
-    `<div class="c-modal-message l-modal-content--centered">
+  `<div class="c-modal-message l-modal-content--centered l-modal-reality">
       <h2>You are about to Reality</h2>
       <div class="c-modal-message__text">
         {{ message }}
@@ -132,6 +134,11 @@ Vue.component("modal-reality", {
                         @click.native="select(index)"
                         />
       </div>
+      <div v-for="glyph in glyphs">
+      <glyph-tooltip
+        v-bind="glyph"
+         />
+      </div>
       <button class="o-primary-btn o-primary-btn--glyph-trash"
         v-if="canSacrifice"
         v-on:click="trashGlyphs()">
@@ -142,11 +149,6 @@ Vue.component("modal-reality", {
           (these are {{ formatInt(levelDifference) }} {{"level" | pluralize(levelDifference)}}
           {{ direction }} than your best)
       </button>
-      <div v-for="object in grabbedEffects">
-        <div v-for="effect in object">
-          {{  }}: {{  }}
-        </div>
-      </div>
         <div class="l-options-grid__row">
           <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"

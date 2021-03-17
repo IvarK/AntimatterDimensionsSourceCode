@@ -148,7 +148,7 @@ class TimeDimensionState extends DimensionState {
   }
 
   get isAvailableForPurchase() {
-    return this.isAffordable && this.isUnlocked;
+    return this.isAffordable;
   }
 
   get isAffordable() {
@@ -235,6 +235,16 @@ class TimeDimensionState extends DimensionState {
 
   get costIncreaseThresholds() {
     return this._costIncreaseThresholds;
+  }
+
+  get requirementReached() {
+    return this._tier < 5 ||
+      (TimeStudy.timeDimension(this._tier).isAffordable && TimeStudy.timeDimension(this._tier - 1).isBought);
+  }
+
+  tryUnlock() {
+    if (this.isUnlocked) return;
+    TimeStudy.timeDimension(this._tier).purchase();
   }
 }
 

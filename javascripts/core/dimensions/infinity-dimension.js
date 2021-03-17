@@ -334,8 +334,8 @@ const InfinityDimensions = {
   }
 };
 
-function tryUnlockInfinityDimensions() {
-  if (!EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked) return;
+function tryUnlockInfinityDimensions(auto) {
+  if (auto && (!EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked)) return;
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;
     InfinityDimension(tier).tryUnlock();

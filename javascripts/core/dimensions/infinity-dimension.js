@@ -307,12 +307,10 @@ const InfinityDimensions = {
   },
 
   get capIncrease() {
-    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease *
-      (1 + AlchemyResource.boundless.effectValue);
-    const milestoneEffect = SingularityMilestone.tesseractMultFromSingularities.isUnlocked
-      ? SingularityMilestone.tesseractMultFromSingularities.effectValue
-      : 1;
-    return Math.floor(enslavedBoost * milestoneEffect);
+    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease;
+    const boundlessEffect = AlchemyResource.boundless.effectOrDefault(1);
+    const milestoneEffect = SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1);
+    return Math.floor(enslavedBoost * boundlessEffect * milestoneEffect);
   },
 
   get totalDimCap() {

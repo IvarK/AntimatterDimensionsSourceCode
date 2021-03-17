@@ -177,8 +177,8 @@ GameDatabase.achievements.normal = [
     },
     checkRequirement: () => player.galaxies === 1,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    get reward() { return `Reduce starting tick interval by ${formatPercents(0.02)}.`; },
-    effect: 0.98
+    get reward() { return `Multiply starting tick speed by ${format(1.02, 2, 2)}.`; },
+    effect: 1 / 1.02
   },
   {
     id: 37,
@@ -193,10 +193,8 @@ GameDatabase.achievements.normal = [
     id: 38,
     name: "I don't believe in Gods",
     get description() {
-      return PlayerProgress.infinityUnlocked()
-      ? `Buy an Antimatter Galaxy without ever Dimensional Sacrificing.`
-      : `Buy an Antimatter Galaxy without ever Dimensional Sacrificing.
-        Your Antimatter Galaxies are reset on Infinity.`;
+      return `Buy an Antimatter Galaxy without Dimensional Sacrificing.
+        (Your Antimatter Galaxies are reset on Infinity.)`;
     },
     checkRequirement: () => player.achievementChecks.noSacrifices,
     checkEvent: GAME_EVENT.GALAXY_RESET_BEFORE
@@ -864,7 +862,7 @@ GameDatabase.achievements.normal = [
     name: "Like feasting on a behind",
     get description() {
       return `Reach ${format(1e90, 0, 0)} Infinity Points without having any Infinities
-      or buying any 1st Antimatter Dimensions in your current Eternity.`;
+      or any 1st Antimatter Dimensions in your current Eternity.`;
     },
     checkRequirement: () => player.infinityPoints.exponent >= 90 &&
       player.achievementChecks.noFirstDimensions && player.infinitied.eq(0),

@@ -281,3 +281,11 @@ const TimeDimensions = {
     });
   }
 };
+
+function tryUnlockTimeDimensions() {
+  if (TimeDimension(8).isUnlocked) return;
+  for (let tier = 5; tier <= 8; ++tier) {
+    if (TimeDimension(tier).isUnlocked) continue;
+    TimeDimension(tier).tryUnlock();
+  }
+}

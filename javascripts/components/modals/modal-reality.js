@@ -115,7 +115,7 @@ Vue.component("modal-reality", {
     }
   },
   template: 
-  `<div class="c-modal-message l-modal-content--centered l-modal-reality">
+  `<div class="l-modal-content--centered c-modal-message">
       <h2>You are about to Reality</h2>
       <div class="c-modal-message__text">
         {{ message }}

@@ -36,8 +36,7 @@ Vue.component("modal-start-eternity-challenge", {
     },
   },
   template:
-    `<div class="l-modal-overlay c-modal-overlay" style="z-index: 8">
-    <div class="l-modal-content--centered c-modal-message c-modal">
+    `<div class="l-modal-content--centered c-modal-message">
     <h2>{{ entranceLabel }}</h2>
       <div class="c-modal-message__text">
         {{ message }}

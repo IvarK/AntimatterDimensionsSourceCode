@@ -431,28 +431,6 @@
   padding: 0.25em 1em;
 }
 
-.l-modal-reality {
-  position: fixed;
-  flex-direction: column;
-  align-items: center;
-  transform: translate(-50%, -50%);
-  z-index: -7;
-  top: 50%;
-  left: 50%;
-  display: flex;
-  justify-content: center;
-  color: var(--color-text);
-  background-color: var(--color-base);
-  border: 0.3rem solid black;
-  border-radius: 0.6rem;
-  text-align: center;
-  font-family: Typewriter, serif;
-  font-size: 1.4rem;
-  padding: 1rem;
-  transition-duration: 0.2s;
-  overflow: hidden;
-}
-
 .l-modal-glyph-selection {
   position: fixed;
   display: flex;

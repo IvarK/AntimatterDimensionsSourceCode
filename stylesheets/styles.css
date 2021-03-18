@@ -4988,6 +4988,7 @@ screen and (max-width: 480px) {
   padding: 1rem;
   transition-duration: 0.2s;
   overflow: hidden;
+  z-index: 3;
 }
 
 .c-modal__close-btn {

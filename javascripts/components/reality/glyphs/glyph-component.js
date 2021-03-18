@@ -7,8 +7,6 @@ const GlyphTooltipEffect = {
   },
   computed: {
     effectConfig() {
-      console.log(this.effect);
-      console.log(this.value);
       return GameDatabase.reality.glyphEffects[this.effect];
     },
     boostColor() {
@@ -117,7 +115,7 @@ const GlyphTooltipComponent = {
           GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },
     rarityInfo() {
-       return getRarity(this.strength);
+      return getRarity(this.strength);
     },
     descriptionStyle() {
       return {

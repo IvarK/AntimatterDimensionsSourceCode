@@ -105,7 +105,7 @@ function simulatedRealityCount(advancePartSimCounters) {
  * process, if applicable. Auto sacrifice is never triggered.
  */
 function requestManualReality() {
-  if (!isRealityAvailable()) {
+  if (GlyphSelection.active || !isRealityAvailable()) {
     return;
   }
   if (Glyphs.freeInventorySpace === 0) {

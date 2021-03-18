@@ -4,7 +4,7 @@
 
 Vue.component("modal-reality", {
   components: {
-    "glyph-tooltip": GlyphTooltipComponent,
+    "effect-desc": GlyphTooltipEffect
   },
   data() {
     return {
@@ -18,7 +18,7 @@ Vue.component("modal-reality", {
       canRefresh: false,
       effects: GameDatabase.reality.glyphEffects,
       grabbedEffects: [],
-      sortedEffects: [],
+      types: [],
     };
   },
   created() {
@@ -64,7 +64,6 @@ Vue.component("modal-reality", {
       this.glyphs = GlyphSelection.glyphList(
         GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false });
       this.level = gainedGlyphLevel().actualLevel;
-      console.log(this.glyphs);
       this.grabEffects();
     },
     handleYesClick() {
@@ -111,6 +110,7 @@ Vue.component("modal-reality", {
           // eslint-disable-next-line no-loop-func
           .filter(effect =>
             GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.glyphs[i].type)));
+        this.types.push(this.glyphs[i].type);
       }
     }
   },
@@ -134,11 +134,17 @@ Vue.component("modal-reality", {
                         @click.native="select(index)"
                         />
       </div>
-      <div v-for="glyph in glyphs">
-      <glyph-tooltip
-        v-bind="glyph"
-         />
-      </div>
+     <div class="l-glyph-tooltip__effects">
+     <div v-for="glyph in grabbedEffects">
+     <div>Glyph {{ grabbedEffects.indexOf(glyph) + 1 }}
+     <br> Type: {{ types[grabbedEffects.indexOf(glyph)].capitalize() }}</div>
+     <br>
+      <effect-desc v-for="e in glyph"
+                   :key="e.id"
+                   :effect="e.id"
+                   :value="e.value"/>
+    </div>
+    </div>
       <button class="o-primary-btn o-primary-btn--glyph-trash"
         v-if="canSacrifice"
         v-on:click="trashGlyphs()">
@@ -160,6 +166,7 @@ Vue.component("modal-reality", {
           :enabled="can"
           >Reality</primary-button>
         </div>
+    </div>
     </div>`
 });
 

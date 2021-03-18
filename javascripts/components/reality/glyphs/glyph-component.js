@@ -7,6 +7,8 @@ const GlyphTooltipEffect = {
   },
   computed: {
     effectConfig() {
+      console.log(this.effect);
+      console.log(this.value);
       return GameDatabase.reality.glyphEffects[this.effect];
     },
     boostColor() {

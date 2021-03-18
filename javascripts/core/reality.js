@@ -6,10 +6,7 @@
 const GlyphSelection = {
   glyphs: [],
   realityProps: undefined,
-
-  get active() {
-    return ui.view.modal.glyphSelection;
-  },
+  active: false,
 
   get choiceCount() {
     return Effects.max(1, Perk.firstPerk) *
@@ -59,7 +56,6 @@ const GlyphSelection = {
     EventHub.dispatch(GAME_EVENT.GLYPH_CHOICES_GENERATED);
     this.realityProps = realityProps;
     this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel, { isChoosingGlyph: true });
-    ui.view.modal.glyphSelection = true;
   },
 
   update(level) {
@@ -77,7 +73,6 @@ const GlyphSelection = {
   },
 
   select(index, sacrifice) {
-    ui.view.modal.glyphSelection = false;
     if (sacrifice) {
       GlyphSacrificeHandler.removeGlyph(this.glyphs[index], true);
     } else {
@@ -110,7 +105,7 @@ function simulatedRealityCount(advancePartSimCounters) {
  * process, if applicable. Auto sacrifice is never triggered.
  */
 function requestManualReality() {
-  if (GlyphSelection.active || !isRealityAvailable()) {
+  if (!isRealityAvailable()) {
     return;
   }
   if (Glyphs.freeInventorySpace === 0) {

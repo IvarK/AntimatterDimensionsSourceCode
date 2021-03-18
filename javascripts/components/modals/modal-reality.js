@@ -34,6 +34,11 @@ Vue.component("modal-reality", {
     });
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.refreshGlyphs);
     this.getGlyphs();
+    GlyphSelection.realityProps = getRealityProps(false, false);
+    GlyphSelection.active = true;
+  },
+  destroyed() {
+    GlyphSelection.active = false;
   },
   computed: {
     message() {

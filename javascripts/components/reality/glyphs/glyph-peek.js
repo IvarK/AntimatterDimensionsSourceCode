@@ -48,7 +48,7 @@ Vue.component("glyph-peek", {
     class="c-glyph-peek"
     :show="isVisible"
     :showName="false"
-    :text="'Upcoming glyph selection:'"
+    :text="'Upcoming Glyph selection:'"
     :glyphs="glyphs"
     :noLevelOverride="true"
     :showSacrifice="canSacrifice"
@@ -57,7 +57,7 @@ Vue.component("glyph-peek", {
     class="c-glyph-peek">
       Purchase the Reality study to see
       <br>
-      this Reality's glyph choices
+      this Reality's Glyph choices
   </span>
   `,
 });

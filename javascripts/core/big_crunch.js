@@ -195,12 +195,16 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
     return false;
   }
 
+  get hasChargeEffect() {
+    return this.config.charged !== undefined;
+  }
+
   get isCharged() {
     return player.celestials.ra.charged.has(this.id);
   }
 
   get canCharge() {
-    return this.isBought && !this.isCharged && !this.config.bannedFromCharging && Ra.chargesLeft !== 0;
+    return this.isBought && this.hasChargeEffect && !this.isCharged && Ra.chargesLeft !== 0;
   }
 
   charge() {

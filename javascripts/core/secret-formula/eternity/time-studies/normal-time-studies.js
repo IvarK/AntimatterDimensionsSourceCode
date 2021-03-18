@@ -9,7 +9,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
   };
   const passiveIPMult = () => {
     const isEffarigLimited = Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY;
-    const normalValue = Perk.studyPassive.isBought ? 1e100 : 1e25;
+    const normalValue = Perk.studyPassive.isBought ? 1e50 : 1e25;
     return isEffarigLimited
       ? Math.min(normalValue, Effarig.eternityCap.toNumber())
       : normalValue;
@@ -261,9 +261,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(111).isBought && !TimeStudy(121).isBought && !TimeStudy(123).isBought,
       requirementV: () => TimeStudy(111).isBought && (TimeStudy(121).isBought || TimeStudy(123).isBought),
       description: () => (Perk.studyPassive.isBought
-        ? `You gain ${formatX(100)} more Eternity Points`
+        ? `You gain ${formatX(50)} more Eternity Points`
         : `You gain ${formatX(35)} more Eternity Points`),
-      effect: () => (Perk.studyPassive.isBought ? 100 : 35)
+      effect: () => (Perk.studyPassive.isBought ? 50 : 35)
     },
     {
       id: 123,
@@ -297,7 +297,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(122).isBought && (TimeStudy(131).isBought || TimeStudy(133).isBought),
       description: () => (Perk.studyPassive.isBought
-        ? `Replicanti Galaxies are ${formatPercents(0.4)} stronger and Replicanti are ${format(5)} times faster`
+        ? `Replicanti Galaxies are ${formatPercents(0.4)} stronger and Replicanti are ${format(3)} times faster`
         : `Replicanti Galaxies are ${formatPercents(0.4)} stronger`),
       effect: 0.4
     },

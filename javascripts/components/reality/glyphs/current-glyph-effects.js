@@ -8,7 +8,7 @@ Vue.component("current-glyph-effects", {
       },
       data() {
         return {
-          notColored: true,
+          isColored: true,
         };
       },
       computed: {
@@ -29,7 +29,7 @@ Vue.component("current-glyph-effects", {
             .replace("{value2}", value2);
         },
         textColor() {
-          if (this.notColored) return { };
+          if (!this.isColored) return { };
           const glyphName = this.effectConfig.id === "timeshardpow"
           ? GlyphTypes.time
           : GlyphTypes[this.effectConfig.glyphTypes];
@@ -47,7 +47,7 @@ Vue.component("current-glyph-effects", {
       },
       methods: {
         update() {
-          this.notColored = player.options.glyphTextColors;
+          this.isColored = player.options.glyphTextColors;
         },
       },
       template: `

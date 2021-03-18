@@ -20,8 +20,8 @@ Vue.component("glyphs-tab", {
     glyphColorState() {
       return {
         "o-glyph-color-checkbox": true,
-        "o-glyph-color-checkbox--inactive": !this.glyphTextColors,
         "o-glyph-color-checkbox--active": this.glyphTextColors,
+        "o-glyph-color-checkbox--inactive": !this.glyphTextColors,
       };
     },
   },

@@ -55,7 +55,21 @@ Vue.component("game-header", {
             const token = this.activityTokens[i];
             const part = this.parts[i];
             if (!part.isActive(token)) continue;
-            names.push(part.name(token));
+            if (part.name(token).includes("Eternity Challenge")) {
+              const currEC = player.challenge.eternity.current;
+              const nextCompletion = EternityChallenge(currEC).completions + 1;
+              let completionText = "";
+              if (Enslaved.isRunning && currEC === 1) {
+                completionText = `(${nextCompletion}/???)`;
+              } else if (nextCompletion === 6) {
+                completionText = `(already completed)`;
+              } else {
+                completionText = `(${nextCompletion}/${formatInt(5)})`;
+              }
+              names.push(`${part.name(token)} ${completionText}`);
+            } else {
+              names.push(part.name(token));
+            }
           }
           return names;
         },

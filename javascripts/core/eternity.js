@@ -315,7 +315,7 @@ class EPMultiplierState extends GameMechanicState {
       firstCost: this.cost,
     }, this.boughtAmount);
     if (!bulk) return false;
-    Currency.eternityPoints.subtract.minus(bulk.purchasePrice);
+    Currency.eternityPoints.subtract(bulk.purchasePrice);
     this.boughtAmount += bulk.quantity;
     return true;
   }

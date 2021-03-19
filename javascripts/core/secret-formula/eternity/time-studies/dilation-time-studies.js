@@ -42,7 +42,7 @@ GameDatabase.eternity.timeStudies.dilation = [
     description: "Unlock Reality",
     cost: () => (Perk.firstPerk.isBought ? 0 : 5000000000),
     requirement: () => TimeStudy.timeDimension(8).isBought &&
-      Currency.eternityPoints.exponenent >= 1e4000 &&
+      Currency.eternityPoints.exponent >= 4000 &&
       (Perk.firstPerk.isBought ? true : Achievements.preReality.every(a => a.isUnlocked))
   }
 ];

@@ -6402,7 +6402,7 @@ GameDatabase.news = [
   {
     id: "ai881",
     text: "You must get 33,333,333 IP to see this message",
-    get unlocked() { return player.infinityPoints.gte(33333333); }
+    get unlocked() { return Currency.infinityPoints.gte(33333333); }
   },
   {
     id: "ai882",

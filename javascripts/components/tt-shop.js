@@ -101,8 +101,8 @@ Vue.component("tt-shop", {
       this.isAutobuyerOn = Autobuyer.timeTheorem.isActive;
       const budget = this.budget;
       budget.am.copyFrom(Currency.antimatter);
-      budget.ip.copyFrom(player.infinityPoints);
-      budget.ep.copyFrom(player.eternityPoints);
+      budget.ip.copyFrom(Currency.infinityPoints);
+      budget.ep.copyFrom(Currency.eternityPoints);
       const costs = this.costs;
       costs.am.copyFrom(player.timestudy.amcost);
       costs.ip.copyFrom(player.timestudy.ipcost);

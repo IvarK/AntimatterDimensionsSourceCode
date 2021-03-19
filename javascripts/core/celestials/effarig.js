@@ -55,7 +55,7 @@ const Effarig = {
   },
   get shardsGained() {
     if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) return 0;
-    return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount)) *
+    return Math.floor(Math.pow(Currency.eternityPoints.exponent / 7500, this.glyphEffectAmount)) *
       AlchemyResource.effarig.effectValue;
   },
   get shardAmount() {
@@ -84,12 +84,12 @@ const Effarig = {
   },
   get tickspeed() {
     const base = 3 + Tickspeed.baseValue.reciprocal().log10();
-    const pow = 0.7 + 0.1 * this.nerfFactor(player.timeShards);
+    const pow = 0.7 + 0.1 * this.nerfFactor(Currency.timeShards.value);
     return Decimal.pow10(Math.pow(base, pow)).reciprocal();
   },
   multiplier(mult) {
     const base = new Decimal(mult).pLog10();
-    const pow = 0.25 + 0.25 * this.nerfFactor(player.infinityPower);
+    const pow = 0.25 + 0.25 * this.nerfFactor(Currency.infinityPower.value);
     return Decimal.pow10(Math.pow(base, pow));
   },
   get bonusRG() {

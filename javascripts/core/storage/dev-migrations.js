@@ -280,8 +280,8 @@ GameStorage.devMigrations = {
     player => {
       // Leftover stuff from dev.updateTestSave
       if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
-        player.reality.realityMachines =
-          player.reality.realityMachines.plus(player.celestials.teresa.rmStore - Teresa.rmStoreMax);
+        Currency.realityMachines.value =
+          Currency.realityMachines.value.plus(player.celestials.teresa.rmStore - Teresa.rmStoreMax);
         player.celestials.teresa.rmStore = Teresa.rmStoreMax;
       }
       if (player.reality.upg) {

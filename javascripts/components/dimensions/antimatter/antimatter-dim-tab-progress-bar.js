@@ -29,12 +29,12 @@ Vue.component("antimatter-dim-tab-progress-bar", {
       } else if (!player.break) {
         setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
       } else if (Enslaved.isCompleted) {
-        setProgress(player.infinityPoints, Enslaved.tesseractCost, "Percentage to next Tesseract");
+        setProgress(Currency.infinityPoints.value, Enslaved.tesseractCost, "Percentage to next Tesseract");
       } else if (PlayerProgress.dilationUnlocked()) {
-        setProgress(player.eternityPoints, new Decimal("1e4000"), "Percentage to Reality");
+        setProgress(Currency.eternityPoints.value, new Decimal("1e4000"), "Percentage to Reality");
       } else if (InfinityDimension(8).isUnlocked) {
         setProgress(
-          player.infinityPoints,
+          Currency.infinityPoints.value,
           Player.eternityGoal,
           EternityChallenge.isRunning ? "Percentage to Eternity Challenge goal" : "Percentage to Eternity"
         );

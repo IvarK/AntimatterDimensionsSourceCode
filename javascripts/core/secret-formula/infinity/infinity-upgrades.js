@@ -126,11 +126,11 @@ GameDatabase.infinity.upgrades = (function() {
       id: "unspentBonus",
       cost: 5,
       description: "Multiplier to 1st Antimatter Dimension based on unspent Infinity Points",
-      effect: () => player.infinityPoints.dividedBy(2).pow(1.5).plus(1),
+      effect: () => Currency.infinityPoints.value.dividedBy(2).pow(1.5).plus(1),
       formatEffect: value => formatX(value, 2, 2),
       charged: {
         description: "Multiplier to 1st Antimatter Dimension based on unspent Infinity Points, powered by Teresa level",
-        effect: () => player.infinityPoints.dividedBy(2).pow(Math.sqrt(Ra.pets.teresa.level) * 1.5).plus(1),
+        effect: () => Currency.infinityPoints.value.dividedBy(2).pow(Math.sqrt(Ra.pets.teresa.level) * 1.5).plus(1),
         formatEffect: value => formatX(value, 2, 2)
       }
     },

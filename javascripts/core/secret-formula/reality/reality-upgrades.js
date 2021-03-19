@@ -120,7 +120,8 @@ GameDatabase.reality.upgrades = (function() {
       cost: 15,
       requirement: () => `Complete your first Eternity with at least ${format("1e450")} Infinity Points`,
       hasFailed: () => !player.achievementChecks.noEternitiesThisReality,
-      checkRequirement: () => player.infinityPoints.exponent >= 450 && player.achievementChecks.noEternitiesThisReality,
+      checkRequirement: () => Currency.infinityPoints.exponent >= 450 &&
+        player.achievementChecks.noEternitiesThisReality,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
       description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`
     },
@@ -141,7 +142,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 50,
       requirement: () => `Eternity for ${format(1e70)} Eternity Points without Eternity Challenge 1`,
       hasFailed: () => EternityChallenge(1).completions !== 0,
-      checkRequirement: () => player.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
+      checkRequirement: () => Currency.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Eternity Point multiplier based on Reality and Time Theorem count",
       effect: () => player.timestudy.theorem
@@ -155,7 +156,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 50,
       requirement: () => `Eternity for ${format("1e4000")} Eternity Points without Time Dimensions 5-8`,
       hasFailed: () => !Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
-      checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
+      checkRequirement: () => Currency.eternityPoints.exponent >= 4000 &&
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: () => `Unlock Time Dimension, ${formatX(5)} Eternity Point multiplier,
@@ -179,7 +180,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: () => `Eternity for ${format(1e10)} Eternity Points without purchasing
       the ${formatX(5)} Eternity Point upgrade`,
       hasFailed: () => player.epmultUpgrades !== 0,
-      checkRequirement: () => player.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
+      checkRequirement: () => Currency.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: () => `Boost Tachyon Particle gain based on ${formatX(5)} Eternity Point multiplier`,
       effect: () => Math.max(Math.sqrt(Decimal.log10(EternityUpgrade.epMult.effectValue)) / 3, 1),
@@ -252,7 +253,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 20,
       cost: 1500,
       requirement: () => `${formatInt(1)} year total play time and the Black Hole unlocked`,
-      hasFailed: () => !BlackHole(1).isUnlocked && player.reality.realityMachines.lt(100),
+      hasFailed: () => !BlackHole(1).isUnlocked && Currency.realityMachines.lt(100),
       checkRequirement: () => Time.totalTimePlayed.totalYears >= 1 && BlackHole(1).isUnlocked,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Unlock Black Hole 2",
@@ -273,7 +274,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 22,
       cost: 100000,
       requirement: () => `${format("1e28000")} Time Shards`,
-      checkRequirement: () => player.timeShards.exponent >= 28000,
+      checkRequirement: () => Currency.timeShards.exponent >= 28000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Time Dimension multiplier based on days spent in this Reality",
       effect: () => Decimal.pow10(Math.pow(1 + 2 * Math.log10(Time.thisReality.totalDays + 1), 1.6)),
@@ -308,7 +309,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 25,
       cost: 100000,
       requirement: () => `Reach ${format("1e11111")} EP`,
-      checkRequirement: () => player.eternityPoints.exponent >= 11111,
+      checkRequirement: () => Currency.eternityPoints.exponent >= 11111,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Unlock the Reality autobuyer and automator command"
     },

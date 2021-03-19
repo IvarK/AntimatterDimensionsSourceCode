@@ -99,7 +99,7 @@ function confirmReality() {
 }
 
 function isRealityAvailable() {
-  return player.eternityPoints.gte("1e4000") && TimeStudy.reality.isBought;
+  return Currency.eternityPoints.exponent >= 1e4000 && TimeStudy.reality.isBought;
 }
 
 // Returns the number of "extra" realities from stored real time or Multiversal effects, should be called
@@ -136,7 +136,7 @@ function requestManualReality() {
   if (GlyphSelection.choiceCount === 1) {
     if (player.realities === 0) {
       Glyphs.addToInventory(GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel));
-      Glyphs.addToInventory(GlyphGenerator.companionGlyph(player.eternityPoints));
+      Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
     } else {
       // We can't get a random glyph directly here because that disturbs the RNG
       // (makes it depend on whether you got first perk or not).
@@ -241,13 +241,13 @@ function giveRealityRewards(realityProps) {
   const multiplier = realityProps.simulatedRealities + 1;
   const realityAndPPMultiplier = multiplier + binomialDistribution(multiplier, Achievement(154).effectOrDefault(0));
   const gainedRM = realityProps.gainedRM;
-  player.reality.realityMachines = player.reality.realityMachines.plus(gainedRM.times(multiplier));
+  Currency.realityMachines.add(gainedRM.times(multiplier));
   updateRealityRecords(realityProps);
   addRealityTime(
     player.records.thisReality.time, player.records.thisReality.realTime, gainedRM,
     realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier);
   player.realities += realityAndPPMultiplier;
-  player.reality.perkPoints += realityAndPPMultiplier;
+  Currency.perkPoints.add(realityAndPPMultiplier);
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
     Effarig.shardAmount += realityProps.gainedShards * multiplier;
   }
@@ -267,7 +267,7 @@ function giveRealityRewards(realityProps) {
       player.celestials.teresa.bestRunAM = Currency.antimatter.value;
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
       player.celestials.teresa.lastRepeatedRM = player.celestials.teresa.lastRepeatedRM
-        .clampMin(player.reality.realityMachines);
+        .clampMin(Currency.realityMachines.value);
     }
     Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
   }
@@ -320,7 +320,7 @@ function beginProcessReality(realityProps) {
 }
 
 function finishProcessReality(realityProps) {
-  const finalEP = player.eternityPoints.plus(gainedEternityPoints());
+  const finalEP = Currency.eternityPoints.value.plus(gainedEternityPoints());
   if (player.records.bestReality.bestEP.lt(finalEP)) {
     player.records.bestReality.bestEP = new Decimal(finalEP);
     player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
@@ -363,11 +363,11 @@ function finishProcessReality(realityProps) {
   player.infMult = new Decimal(1);
   player.infMultCost = new Decimal(10);
   player.infinityRebuyables = [0, 0, 0];
-  player.infinityPower = new Decimal(1);
-  player.timeShards = new Decimal(0);
+  Currency.infinityPower.reset();
+  Currency.timeShards.reset();
   Replicanti.reset(true);
 
-  player.eternityPoints = Player.startingEP;
+  Currency.eternityPoints.reset();
 
   // This has to be reset before player.eternities to make the bumpLimit logic work correctly
   EternityUpgrade.epMult.reset();
@@ -408,8 +408,8 @@ function finishProcessReality(realityProps) {
   player.celestials.v.STSpent = 0;
   player.dilation.studies = [];
   player.dilation.active = false;
-  player.dilation.tachyonParticles = new Decimal(0);
-  player.dilation.dilatedTime = new Decimal(0);
+  Currency.tachyonParticles.reset();
+  Currency.dilatedTime.reset();
   player.dilation.nextThreshold = new Decimal(1000);
   player.dilation.baseTachyonGalaxies = 0;
   player.dilation.totalTachyonGalaxies = 0;
@@ -447,7 +447,7 @@ function finishProcessReality(realityProps) {
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
-  player.infinityPoints = Player.startingIP;
+  Currency.infinityPoints.reset();
 
   if (RealityUpgrade(10).isBought) applyRUPG10();
   else Tab.dimensions.antimatter.show();

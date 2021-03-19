@@ -78,7 +78,7 @@ Vue.component("game-header-eternity-button", {
   },
   methods: {
     update() {
-      this.isVisible = player.infinityPoints.gte(Player.eternityGoal) || EternityChallenge.isRunning;
+      this.isVisible = Currency.infinityPoints.gte(Player.eternityGoal) || EternityChallenge.isRunning;
       if (!this.isVisible) return;
       if (!PlayerProgress.eternityUnlocked()) {
         this.type = EP_BUTTON_DISPLAY_TYPE.FIRST_TIME;
@@ -99,10 +99,10 @@ Vue.component("game-header-eternity-button", {
 
       const gainedEP = gainedEternityPoints();
       if (this.gainedEP.eq(0)) this.minIP = requiredIPForEP();
-      this.currentEP.copyFrom(player.eternityPoints);
+      this.currentEP.copyFrom(Currency.eternityPoints);
       this.gainedEP.copyFrom(gainedEP);
       const hasNewContent = player.realities === 0 &&
-        player.eternityPoints.exponent >= 4000 &&
+        Currency.eternityPoints.exponent >= 4000 &&
         player.timestudy.theorem.gt(5e9) &&
         player.replicanti.amount.exponent > 20000;
 
@@ -110,7 +110,7 @@ Vue.component("game-header-eternity-button", {
         this.type = hasNewContent
           ? EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT
           : EP_BUTTON_DISPLAY_TYPE.DILATION;
-        this.currentTachyons.copyFrom(player.dilation.tachyonParticles);
+        this.currentTachyons.copyFrom(Currency.tachyonParticles);
         this.gainedTachyons.copyFrom(getTachyonGain());
         return;
       }

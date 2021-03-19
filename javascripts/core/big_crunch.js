@@ -39,7 +39,7 @@ function bigCrunchReset() {
   bigCrunchUpdateStatistics();
 
   const infinityPoints = gainedInfinityPoints();
-  player.infinityPoints = player.infinityPoints.plus(infinityPoints);
+  Currency.infinityPoints.add(infinityPoints);
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
 
   bigCrunchTabChange(firstInfinity);
@@ -322,7 +322,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   }
 
   get canBeBought() {
-    return !this.isCapped && player.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
+    return !this.isCapped && Currency.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
   }
 
   purchase(amount = 1) {
@@ -334,7 +334,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     }
     const costIncrease = this.costIncrease;
     player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
-    player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
+    Currency.infinityPoints.subtract(this.cost.dividedBy(costIncrease));
     this.adjustToCap();
     GameUI.update();
   }
@@ -350,7 +350,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     if (!this.canBeBought) return;
     if (!this.hasIncreasedCost) {
       // The purchase at 1e3000000 is considered post-softcap because that purchase increases the cost by 1e10x.
-      const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent - 1);
+      const buyUntil = Math.min(Currency.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent - 1);
       const purchases = buyUntil - this.cost.exponent + 1;
       if (purchases <= 0) return;
       this.purchase(purchases);
@@ -359,7 +359,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     // (for example, we have 1e4000000 IP and no mult - first it will go to (but not including) 1e3000000 and then
     // it will go in this part)
     if (this.hasIncreasedCost) {
-      const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costCap.exponent);
+      const buyUntil = Math.min(Currency.infinityPoints.exponent, this.config.costCap.exponent);
       const purchases = Math.floor((buyUntil - player.infMultCost.exponent) / 10) + 1;
       if (purchases <= 0) return;
       this.purchase(purchases);
@@ -442,8 +442,7 @@ function preProductionGenerateIP(diff) {
     let gainedPerGen = InfinityUpgrade.ipGen.effectValue;
     if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen);
     const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
-    player.infinityPoints = player.infinityPoints.plus(gainedThisTick);
+    Currency.infinityPoints.add(gainedThisTick);
   }
-  player.infinityPoints = player.infinityPoints
-    .plus(BreakInfinityUpgrade.ipGen.effectOrDefault(new Decimal(0)).times(diff / 60000));
+  Currency.infinityPoints.add(BreakInfinityUpgrade.ipGen.effectOrDefault(new Decimal(0)).times(diff / 60000));
 }

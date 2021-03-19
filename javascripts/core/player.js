@@ -681,7 +681,7 @@ const Player = {
   },
 
   get canEternity() {
-    return player.infinityPoints.gte(Player.eternityGoal);
+    return Currency.infinityPoints.gte(Player.eternityGoal);
   },
 
   get bestRunIPPM() {
@@ -714,24 +714,6 @@ const Player = {
     return EternityChallenge.isRunning
       ? EternityChallenge.current.currentGoal
       : Decimal.NUMBER_MAX_VALUE;
-  },
-
-  get startingIP() {
-    return Effects.max(
-      0,
-      Perk.startIP1,
-      Perk.startIP2,
-      Achievement(104)
-    ).toDecimal();
-  },
-
-  get startingEP() {
-    return Effects.max(
-      0,
-      Perk.startEP1,
-      Perk.startEP2,
-      Perk.startEP3
-    ).toDecimal();
   },
 };
 

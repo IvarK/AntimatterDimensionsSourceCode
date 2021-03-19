@@ -26,7 +26,7 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
     const tier = this._tier;
     if (!TimeDimension(tier).isAvailableForPurchase) return;
     super.tick();
-    if (player.eternityPoints.gte(1e10)) {
+    if (Currency.eternityPoints.exponent >= 10) {
       buyMaxTimeDimension(tier);
     } else {
       buySingleTimeDimension(tier);

@@ -157,11 +157,11 @@ const Ra = {
       get name() { return "Teresa"; }
       get data() { return player.celestials.ra.pets.teresa; }
       get requiredUnlock() { return undefined; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.eternityPoints.pLog10() / 1e4, 3); }
+      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.eternityPoints.value.pLog10() / 1e4, 3); }
       get color() { return "#8596ea"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.TERESA_XP)
-          ? 1 + Math.pow(player.reality.realityMachines.pLog10() / 100, 0.5)
+          ? 1 + Math.pow(Currency.realityMachines.value.pLog10() / 100, 0.5)
           : 1;
       }
     }(),
@@ -181,7 +181,7 @@ const Ra = {
       get name() { return "Enslaved"; }
       get data() { return player.celestials.ra.pets.enslaved; }
       get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.timeShards.pLog10() / 3e5, 2); }
+      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.timeShards.value.pLog10() / 3e5, 2); }
       get color() { return "#f1aa7f"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.ENSLAVED_XP)
@@ -193,7 +193,7 @@ const Ra = {
       get name() { return "V"; }
       get data() { return player.celestials.ra.pets.v; }
       get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(player.infinityPower.pLog10() / 1e7, 1.5); }
+      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.infinityPower.value.pLog10() / 1e7, 1.5); }
       get color() { return "#ead584"; }
       get memoryProductionMultiplier() {
         return Ra.has(RA_UNLOCKS.V_XP)

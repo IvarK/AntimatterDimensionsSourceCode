@@ -102,22 +102,22 @@ const AutomatorLexer = (() => {
   createInCategory(Currency, "EP", /ep/i, {
     extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyWithEP(true),
-    $getter: () => player.eternityPoints
+    $getter: () => Currency.eternityPoints
   });
   createInCategory(Currency, "IP", /ip/i, {
     extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyWithIP(true),
-    $getter: () => player.infinityPoints
+    $getter: () => Currency.infinityPoints
   });
   createInCategory(Currency, "AM", /am/i, {
     extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyWithAntimatter(true),
-    $getter: () => player.antimatter
+    $getter: () => Currency.antimatter
   });
-  createInCategory(Currency, "DT", /dt/i, { $getter: () => player.dilation.dilatedTime });
-  createInCategory(Currency, "TP", /tp/i, { $getter: () => player.dilation.tachyonParticles });
+  createInCategory(Currency, "DT", /dt/i, { $getter: () => Currency.dilatedTime });
+  createInCategory(Currency, "TP", /tp/i, { $getter: () => Currency.tachyonParticles });
   createInCategory(Currency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
-  createInCategory(Currency, "RM", /rm/i, { $getter: () => player.reality.realityMachines });
+  createInCategory(Currency, "RM", /rm/i, { $getter: () => Currency.realityMachines });
 
   createInCategory(Currency, "PendingIP", /pending[ \t]+ip/i, {
     $autocomplete: "pending IP",

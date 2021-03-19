@@ -2,7 +2,7 @@
 
 function giveEternityRewards(auto) {
   player.records.bestEternity.time = Math.min(player.records.thisEternity.time, player.records.bestEternity.time);
-  player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
+  Currency.eternityPoints.add(gainedEternityPoints());
 
   const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
@@ -50,8 +50,8 @@ function giveEternityRewards(auto) {
     beginProcessReality(getRealityProps(true));
   }
 
-  if (player.records.bestReality.bestEP.lt(player.eternityPoints)) {
-    player.records.bestReality.bestEP = new Decimal(player.eternityPoints);
+  if (player.records.bestReality.bestEP.lt(Currency.eternityPoints.value)) {
+    player.records.bestReality.bestEP = new Decimal(Currency.eternityPoints.value);
     player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }
@@ -93,7 +93,7 @@ function eternity(force, auto, specialConditions = {}) {
     player.achievementChecks.noEternitiesThisReality = false;
   }
 
-  if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
+  if (player.dilation.active && (!force || Currency.infinityPoints.gte(Number.MAX_VALUE))) {
     rewardTP();
   }
 
@@ -120,7 +120,7 @@ function eternity(force, auto, specialConditions = {}) {
     player.respec = false;
   }
 
-  player.infinityPoints = Player.startingIP;
+  Currency.infinityPoints.reset();
   InfinityDimensions.resetAmount();
   player.records.thisInfinity.bestIPmin = new Decimal(0);
   player.records.bestInfinity.bestIPminEternity = new Decimal(0);
@@ -170,8 +170,8 @@ function initializeResourcesAfterEternity() {
   player.partInfinitied = 0;
   player.infMult = new Decimal(1);
   player.infMultCost = new Decimal(10);
-  player.infinityPower = new Decimal(1);
-  player.timeShards = new Decimal(0);
+  Currency.infinityPower.reset();
+  Currency.timeShards.reset();
   player.records.thisEternity.time = 0;
   player.records.thisEternity.realTime = 0;
   player.totalTickGained = 0;
@@ -274,7 +274,7 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   get isAffordable() {
-    return player.eternityPoints.gte(this.cost);
+    return Currency.eternityPoints.gte(this.cost);
   }
 
   get cost() {
@@ -303,19 +303,19 @@ class EPMultiplierState extends GameMechanicState {
 
   purchase() {
     if (!this.isAffordable) return false;
-    player.eternityPoints = player.eternityPoints.minus(this.cost);
+    Currency.eternityPoints.subtract(this.cost);
     ++this.boughtAmount;
     return true;
   }
 
   buyMax() {
-    const bulk = bulkBuyBinarySearch(player.eternityPoints, {
+    const bulk = bulkBuyBinarySearch(Currency.eternityPoints.value, {
       costFunction: this.costAfterCount,
       cumulative: true,
       firstCost: this.cost,
     }, this.boughtAmount);
     if (!bulk) return false;
-    player.eternityPoints = player.eternityPoints.minus(bulk.purchasePrice);
+    Currency.eternityPoints.subtract.minus(bulk.purchasePrice);
     this.boughtAmount += bulk.quantity;
     return true;
   }

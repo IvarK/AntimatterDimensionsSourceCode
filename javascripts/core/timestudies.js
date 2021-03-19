@@ -39,8 +39,7 @@ const TimeTheorems = {
 
   buyWithIP(auto = false) {
     if (!this.checkForBuying(auto)) return false;
-    if (player.infinityPoints.lt(player.timestudy.ipcost)) return false;
-    player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost);
+    if (Currency.infinityPoints.purchase(player.timestudy.ipcost)) return false;
     player.timestudy.ipcost = player.timestudy.ipcost.times(TimeTheorems.costMultipliers.IP);
     player.timestudy.theorem = player.timestudy.theorem.plus(1);
     player.achievementChecks.noTheoremPurchases = false;
@@ -49,8 +48,7 @@ const TimeTheorems = {
 
   buyWithEP(auto = false) {
     if (!this.checkForBuying(auto)) return false;
-    if (player.eternityPoints.lt(player.timestudy.epcost)) return false;
-    player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost);
+    if (Currency.eternityPoints.purchase(player.timestudy.epcost)) return false;
     player.timestudy.epcost = player.timestudy.epcost.times(TimeTheorems.costMultipliers.EP);
     player.timestudy.theorem = player.timestudy.theorem.plus(1);
     player.achievementChecks.noTheoremPurchases = false;
@@ -62,26 +60,27 @@ const TimeTheorems = {
     const AMowned = player.timestudy.amcost.e / 20000 - 1;
     if (Currency.antimatter.gte(player.timestudy.amcost)) {
       player.timestudy.amcost.e = Math.floor(Currency.antimatter.exponent / 20000 + 1) * 20000;
-      const boughtAmount = Math.floor(Currency.antimatter.exponent / 20000) - AMowned;
-      player.timestudy.theorem = player.timestudy.theorem.plus(boughtAmount);
+      const amAmount = Math.floor(Currency.antimatter.exponent / 20000) - AMowned;
+      player.timestudy.theorem = player.timestudy.theorem.plus(amAmount);
       const amCost = Decimal.fromMantissaExponent(1, Math.floor(Currency.antimatter.exponent / 20000) * 20000);
       Currency.antimatter.subtract(amCost);
       player.achievementChecks.noTheoremPurchases = false;
     }
     const IPowned = player.timestudy.ipcost.e / 100;
-    if (player.infinityPoints.gte(player.timestudy.ipcost)) {
-      player.timestudy.ipcost.e = Math.floor(player.infinityPoints.e / 100 + 1) * 100;
-      player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.infinityPoints.e / 100 + 1) - IPowned);
-      player.infinityPoints =
-        player.infinityPoints.minus(Decimal.fromMantissaExponent(1, Math.floor(player.infinityPoints.e / 100) * 100));
+    if (Currency.infinityPoints.gte(player.timestudy.ipcost)) {
+      player.timestudy.ipcost.e = Math.floor(Currency.infinityPoints.exponent / 100 + 1) * 100;
+      const ipAmount = Math.floor(Currency.infinityPoints.exponent / 100 + 1) - IPowned;
+      player.timestudy.theorem = player.timestudy.theorem.plus(ipAmount);
+      const ipCost = Decimal.fromMantissaExponent(1, Math.floor(Currency.infinityPoints.exponent / 100) * 100);
+      Currency.infinityPoints.subtract(ipCost);
       player.achievementChecks.noTheoremPurchases = false;
     }
-    if (player.eternityPoints.gte(player.timestudy.epcost)) {
+    if (Currency.eternityPoints.gte(player.timestudy.epcost)) {
       const EPowned = Math.round(player.timestudy.epcost.log2());
-      const finalEPCost = new Decimal(2).pow(Math.floor(player.eternityPoints.log2()));
+      const finalEPCost = new Decimal(2).pow(Math.floor(Currency.eternityPoints.value.log2()));
       const totalEPCost = finalEPCost.minus(player.timestudy.epcost);
       player.timestudy.epcost = finalEPCost;
-      player.eternityPoints = player.eternityPoints.minus(totalEPCost);
+      Currency.eternityPoints.subtract(totalEPCost);
       player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned);
       player.achievementChecks.noTheoremPurchases = false;
       // The above code block will sometimes buy one too few TT, but it never over-buys
@@ -119,9 +118,9 @@ function unlockDilation(quiet) {
   if (Perk.autounlockDilation2.isBought) {
     for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
   }
-  player.dilation.tachyonParticles = player.dilation.tachyonParticles.plusEffectOf(Perk.startTP);
+  Currency.tachyonParticles.bumpTo(Perk.startTP.effectOrDefault(0));
   if (Ra.has(RA_UNLOCKS.START_TP) && !isInCelestialReality()) {
-    player.dilation.tachyonParticles = getTP(RA_UNLOCKS.START_TP.effect());
+    Currency.tachyonParticles.bumpTo(getTP(RA_UNLOCKS.START_TP.effect()));
   }
   TabNotification.dilationAfterUnlock.tryTrigger();
 }

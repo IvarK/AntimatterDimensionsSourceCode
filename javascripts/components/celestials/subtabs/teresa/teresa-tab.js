@@ -66,8 +66,8 @@ Vue.component("teresa-tab", {
       this.bestAMSet = Glyphs.copyForRecords(player.celestials.teresa.bestAMSet);
       this.lastRM.copyFrom(player.celestials.teresa.lastRepeatedRM);
       this.runReward = Teresa.runRewardMultiplier;
-      this.perkPoints = player.reality.perkPoints;
-      this.rm.copyFrom(player.reality.realityMachines);
+      this.perkPoints = Currency.perkPoints.value;
+      this.rm.copyFrom(Currency.realityMachines);
       this.isRunning = Teresa.isRunning;
       this.canUnlockNextPour = Object.values(TERESA_UNLOCKS)
         .filter(unlock => this.rm.plus(this.pouredAmount).gte(unlock.price) && !Teresa.has(unlock)).length > 0;

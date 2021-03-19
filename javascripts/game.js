@@ -66,7 +66,8 @@ function totalEPMult() {
 }
 
 function gainedEternityPoints() {
-  let ep = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
+  let ep = Decimal.pow(5, Currency.infinityPoints.value.plus(
+    gainedInfinityPoints()).log10() / 308 - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -91,7 +92,7 @@ function getRealityMachineMultiplier() {
 }
 
 function gainedRealityMachines() {
-  let log10FinalEP = player.eternityPoints.plus(gainedEternityPoints()).log10();
+  let log10FinalEP = Currency.eternityPoints.value.plus(gainedEternityPoints()).log10();
   if (player.realities === 0 && log10FinalEP > 6000 && player.saveOverThresholdFlag) {
     log10FinalEP -= (log10FinalEP - 6000) * 0.75;
   }
@@ -539,7 +540,7 @@ function gameLoop(diff, options = {}) {
 
   const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
   player.realities += uncountabilityGain;
-  player.reality.perkPoints += uncountabilityGain;
+  Currency.perkPoints.add(uncountabilityGain);
 
   if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
 
@@ -550,7 +551,7 @@ function gameLoop(diff, options = {}) {
   InfinityDimensions.tick(diff);
   AntimatterDimensions.tick(diff);
 
-  const gain = Math.clampMin(FreeTickspeed.fromShards(player.timeShards).newAmount - player.totalTickGained, 0);
+  const gain = Math.clampMin(FreeTickspeed.fromShards(Currency.timeShards.value).newAmount - player.totalTickGained, 0);
   player.totalTickGained += gain;
 
   const currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinityRealTime.totalMinutes);
@@ -568,7 +569,7 @@ function gameLoop(diff, options = {}) {
     player.records.thisEternity.bestEPmin = currentEPmin;
 
   if (PlayerProgress.dilationUnlocked()) {
-    player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
+    Currency.dilatedTime.add(getDilationGainPerSecond().times(diff / 1000));
   }
 
   updateTachyonGalaxies();
@@ -643,10 +644,10 @@ function laitelaRealityTick(realDiff) {
 
 // This gives IP/EP/RM from the respective upgrades that reward the prestige currencies continuously
 function applyAutoprestige(diff) {
-  player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
+  Currency.infinityPoints.add(TimeStudy(181).effectOrDefault(1));
 
   if (Teresa.has(TERESA_UNLOCKS.EPGEN)) {
-    player.eternityPoints = player.eternityPoints.plus(player.records.thisEternity.bestEPmin.times(0.01)
+    Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(0.01)
       .times(getGameSpeedupFactor() * diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
   }
 
@@ -654,11 +655,11 @@ function applyAutoprestige(diff) {
     const addedRM = gainedRealityMachines()
       .timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
       .times(diff / 1000);
-    player.reality.realityMachines = player.reality.realityMachines.add(addedRM);
+    Currency.realityMachines.add(addedRM);
   }
 
-  if (player.records.bestReality.bestEP.lt(player.eternityPoints)) {
-    player.records.bestReality.bestEP = new Decimal(player.eternityPoints);
+  if (player.records.bestReality.bestEP.lt(Currency.eternityPoints.value)) {
+    player.records.bestReality.bestEP = new Decimal(Currency.eternityPoints.value);
     player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }
@@ -668,7 +669,7 @@ function updateTachyonGalaxies() {
   const tachyonGalaxyThreshold = 1000;
   const thresholdMult = getTachyonGalaxyMult();
   player.dilation.baseTachyonGalaxies = Math.max(player.dilation.baseTachyonGalaxies,
-    1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), thresholdMult)));
+    1 + Math.floor(Decimal.log(Currency.dilatedTime.value.dividedBy(1000), thresholdMult)));
   player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult)
     .pow(player.dilation.baseTachyonGalaxies));
   player.dilation.totalTachyonGalaxies =
@@ -753,14 +754,11 @@ function simulateTime(seconds, real, fast) {
   } else if (infinitiedMilestone.gt(0)) {
     player.infinitied = player.infinitied.plus(infinitiedMilestone);
   } else {
-    player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(totalGameTime * 1000));
+    Currency.eternityPoints.add(getOfflineEPGain(totalGameTime * 1000));
   }
 
   if (InfinityUpgrade.ipOffline.isBought) {
-    player.infinityPoints = player.infinityPoints
-      .plus(player.records.thisEternity.bestIPMsWithoutMaxAll
-        .times(seconds * 1000 / 2)
-      );
+    Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
   }
 
   let loopFn = () => gameLoop(largeDiff);

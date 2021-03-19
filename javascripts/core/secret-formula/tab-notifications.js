@@ -60,7 +60,7 @@ GameDatabase.tabNotifications = {
       }
     ],
     condition: () => !PlayerProgress.realityUnlocked() &&
-      !PlayerProgress.eternityUnlocked() && player.infinityPoints.gte(1e140),
+      !PlayerProgress.eternityUnlocked() && Currency.infinityPoints.gte(1e140),
     events: [GAME_EVENT.BIG_CRUNCH_AFTER]
   },
   firstEternity: {
@@ -116,7 +116,7 @@ GameDatabase.tabNotifications = {
         tab: "hole"
       }
     ],
-    condition: () => !BlackHoles.areUnlocked && player.reality.realityMachines.gte(100),
+    condition: () => !BlackHoles.areUnlocked && Currency.realityMachines.gte(100),
     events: [GAME_EVENT.REALITY_RESET_AFTER]
   },
   automatorUnlock: {

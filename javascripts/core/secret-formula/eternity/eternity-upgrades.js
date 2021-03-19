@@ -5,7 +5,7 @@ GameDatabase.eternity.upgrades = {
     id: 1,
     cost: 5,
     description: () => `Infinity Dimensions multiplier based on unspent Eternity Points (x+${formatInt(1)})`,
-    effect: () => player.eternityPoints.plus(1),
+    effect: () => Currency.eternityPoints.value.plus(1),
     formatEffect: value => formatX(value, 2, 1)
   },
   idMultEternities: {

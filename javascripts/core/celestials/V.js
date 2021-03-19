@@ -106,9 +106,9 @@ const V_UNLOCKS = {
       return (player.realities >= db.realities &&
               player.eternities.gte(db.eternities) &&
               player.infinitied.plus(player.infinitiedBank).gte(db.infinities) &&
-              player.dilation.dilatedTime.gte(db.dilatedTime) &&
+              Currency.dilatedTime.gte(db.dilatedTime) &&
               player.replicanti.amount.gte(db.replicanti) &&
-              player.reality.realityMachines.gte(db.rm));
+              Currency.realityMachines.gte(db.rm));
     }
   },
   SHARD_REDUCTION: {

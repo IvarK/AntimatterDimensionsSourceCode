@@ -82,7 +82,7 @@ Vue.component("reality-button", {
         [Teresa.isRunning, teresaReward, teresaThreshold]];
     },
     handleClick() {
-      if (TimeStudy.reality.isBought && player.eternityPoints.gte("1e4000")) {
+      if (TimeStudy.reality.isBought && Currency.eternityPoints.exponent >= 4000) {
         requestManualReality();
       }
     },

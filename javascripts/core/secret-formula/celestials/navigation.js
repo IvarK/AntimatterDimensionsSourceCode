@@ -283,7 +283,7 @@ GameDatabase.celestials.navigation = (function() {
         if (EffarigUnlock.eternity.isUnlocked) return 1;
         if (!Effarig.isRunning) return 0;
 
-        return player.infinityPoints.pLog10() / Decimal.NUMBER_MAX_VALUE.log10();
+        return Currency.infinityPoints.value.pLog10() / Decimal.NUMBER_MAX_VALUE.log10();
       },
       node: {
         clickAction: () => Tab.celestials.effarig.show(true),
@@ -298,7 +298,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Effarig's Eternity";
-            const ip = Effarig.isRunning ? player.infinityPoints : 0;
+            const ip = Effarig.isRunning ? Currency.infinityPoints.value : 0;
             return [
               "Effarig's Eternity",
               `Reach ${format(ip, 2)} / ${format(Number.MAX_VALUE, 2)}`,
@@ -332,7 +332,7 @@ GameDatabase.celestials.navigation = (function() {
         if (EffarigUnlock.reality.isUnlocked) return 1;
         if (!Effarig.isRunning) return 0;
 
-        return player.eternityPoints.pLog10() / 4000;
+        return Currency.eternityPoints.value.pLog10() / 4000;
       },
       node: {
         clickAction: () => Tab.celestials.effarig.show(true),
@@ -349,7 +349,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Effarig's Reality";
-            const ep = Effarig.isRunning ? player.eternityPoints : 0;
+            const ep = Effarig.isRunning ? Currency.eternityPoints.value : 0;
             const goal = new Decimal("1e4000");
             return [
               "Effarig's Reality",
@@ -499,7 +499,7 @@ GameDatabase.celestials.navigation = (function() {
         if (Enslaved.isCompleted) return 1;
         if (!Enslaved.isRunning) return 0;
 
-        return player.eternityPoints.pLog10() / 4000;
+        return Currency.eternityPoints.value.pLog10() / 4000;
       },
       node: {
         clickAction: () => Tab.celestials.enslaved.show(true),
@@ -516,7 +516,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "The Enslaved Ones' Reality";
-            const ep = Enslaved.isRunning ? player.eternityPoints : 0;
+            const ep = Enslaved.isRunning ? Currency.eternityPoints.value : 0;
             const goal = new Decimal("1e4000");
             return [
               "The Enslaved Ones' Reality",
@@ -704,7 +704,7 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(player.dilation.dilatedTime.pLog10() /
+        return emphasizeEnd(Currency.dilatedTime.value.pLog10() /
           GameDatabase.celestials.v.mainUnlock.dilatedTime.log10());
       },
       drawOrder: -1,
@@ -719,7 +719,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Dilated Time condition for V";
-            const dilatedTime = player.dilation.dilatedTime;
+            const dilatedTime = Currency.dilatedTime.value;
             const goal = GameDatabase.celestials.v.mainUnlock.dilatedTime;
             return [
               "V",
@@ -784,7 +784,7 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(player.reality.realityMachines.pLog10() /
+        return emphasizeEnd(Currency.realityMachines.value.pLog10() /
           Math.log10(GameDatabase.celestials.v.mainUnlock.rm));
       },
       drawOrder: -1,
@@ -799,7 +799,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Reality Machines condition for V";
-            const rm = player.reality.realityMachines;
+            const rm = Currency.realityMachines.value;
             const goal = GameDatabase.celestials.v.mainUnlock.rm;
             return [
               "V",
@@ -1359,7 +1359,7 @@ GameDatabase.celestials.navigation = (function() {
           text: () => {
             const raLevel = Ra.totalPetLevel;
             const requiredRaLevel = Laitela.raLevelRequirement;
-            const rm = player.reality.realityMachines;
+            const rm = Currency.realityMachines.value;
             const realityGlyphLevel = player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(
               x => x.type === "reality").map(x => x.level).max();
 

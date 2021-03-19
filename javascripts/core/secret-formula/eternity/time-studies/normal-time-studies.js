@@ -440,7 +440,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 150,
       requirement: 191,
       description: "All Galaxies are stronger based on your Time Shards",
-      effect: () => Math.pow(player.timeShards.clampMin(2).log2(), 0.005),
+      effect: () => Math.pow(Currency.timeShards.value.clampMin(2).log2(), 0.005),
       cap: 1.1,
       formatEffect: value => `+${formatPercents(value - 1, 3)}`
     },

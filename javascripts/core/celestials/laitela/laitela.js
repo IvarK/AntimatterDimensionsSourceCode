@@ -30,11 +30,11 @@ const Laitela = {
     return Ra.totalPetLevel >= this.raLevelRequirement &&
       player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(
         x => x.type === "reality").map(x => x.level).max() >= this.realityGlyphLevelRequirement &&
-      player.reality.realityMachines.gte(this.realityMachineCost);
+      Currency.realityMachines.gte(this.realityMachineCost);
   },
   unlock() {
     if (!this.canUnlock) return false;
-    player.reality.realityMachines = player.reality.realityMachines.minus(this.realityMachineCost);
+    Currency.realityMachines.purchase(this.realityMachineCost);
     MatterDimension(1).amount = new Decimal(1);
     return true;
   },

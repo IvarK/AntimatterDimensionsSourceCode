@@ -16,11 +16,11 @@ Vue.component("game-header-amounts-line", {
     update() {
       this.showInfinityPoints = Player.totalInfinitied.gt(0) || PlayerProgress.eternityUnlocked();
       if (this.showInfinityPoints) {
-        this.infinityPoints.copyFrom(player.infinityPoints.floor());
+        this.infinityPoints.copyFrom(Currency.infinityPoints.value.floor());
       }
       this.showEternityPoints = PlayerProgress.eternityUnlocked();
       if (this.showEternityPoints) {
-        this.eternityPoints.copyFrom(player.eternityPoints.floor());
+        this.eternityPoints.copyFrom(Currency.eternityPoints.value.floor());
       }
       this.isTesseractUnlocked = Enslaved.isCompleted;
       this.tesseractCost = Enslaved.tesseractCost;

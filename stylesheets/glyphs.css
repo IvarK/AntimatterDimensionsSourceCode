@@ -431,21 +431,11 @@
   padding: 0.25em 1em;
 }
 
-.l-modal-glyph-selection {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  left: 50vw;
-  top: 50vh;
-  transform: translate(-50%, -50%);
-}
-
-.l-modal-glyph-selection__row {
+.l-glyph-selection__row {
   flex-direction: row;
 }
 
-.l-modal-glyph-selection__glyph {
+.l-glyph-selection__glyph {
   margin: 1rem;
 }
 

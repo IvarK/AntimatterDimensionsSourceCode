@@ -44,19 +44,17 @@ Vue.component("modal-reality", {
     message() {
       return `Reality will reset everything except challenge records. Your Achievements are also reset, 
       but you will automatically get one back every 30 minutes. 
-      You will also gain Reality Machines based on your Eternity Points, a Glyph with a power 
-      level based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend 
+      You will also gain Reality Machines based on your Eternity Points, a
+      Glyph with a power level based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend 
       on quality of life upgrades, and unlock various upgrades.`;
     },
     gained() {
-      return `You will gain ${format(gainedRealityMachines(), 2, 0)} Reality Machines 
+      return `Your Glyph will be a level ${format(this.level, 2, 2)} Glyph.
+      You will gain ${format(gainedRealityMachines(), 2, 0)} Reality Machines
       and ${format(simulatedRealityCount() + 1, 2, 0)} Perk 
       ${pluralize("Point", simulatedRealityCount() + 1, "Points")} on Reality.
       ${Achievement(154).isUnlocked ? `You also have a ${formatPercents(0.1)} 
-      chance to multiply gained Perk Points due to Achievement 154.` : ""}`;
-    },
-    can() {
-      return isRealityAvailable();
+      chance to multiply gained Perk Points by ${formatX(2)} due to Achievement 154.` : ""}`;
     },
     direction() {
       if (this.glyphs[0].level > player.records.bestReality.glyphLevel) return "higher";
@@ -90,15 +88,9 @@ Vue.component("modal-reality", {
       }
       this.canSacrifice = RealityUpgrade(19).isEffectActive;
       this.levelDifference = Math.abs(player.records.bestReality.glyphLevel - this.glyphs[0].level);
-      
-      // Hide this before first reality since then it'll confuse the player,
-      // and due to pre-selected first glyph might well be incorrect anyway.
-      this.isVisible = player.realities > 0 && TimeStudy.reality.isBought;
-      this.canPeek = player.realities > 0;
     },
     select(index) {
       this.selectedGlyph = index;
-
     },
     trashGlyphs() {
       if (!player.options.confirmations.glyphSacrifice ||
@@ -129,9 +121,9 @@ Vue.component("modal-reality", {
       <div class="c-modal-message__text">
         {{ gained }}
       </div>
-      <div class="l-modal-glyph-selection__row">
+      <div class="l-glyph-selection__row">
         <glyph-component v-for="(glyph, index) in glyphs"
-                        class="l-modal-glyph-selection__glyph"
+                        class="l-glyph-selection__glyph"
                         :key="index"
                         :glyph="glyph"
                         :noLevelOverride="true"
@@ -168,7 +160,6 @@ Vue.component("modal-reality", {
           <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click.native="handleYesClick"
-          :enabled="can"
           >Reality</primary-button>
         </div>
     </div>

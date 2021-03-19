@@ -187,6 +187,9 @@ Currency.antimatter = new class extends DecimalCurrency {
   add(amount) {
     super.add(amount);
     player.records.totalAntimatter = player.records.totalAntimatter.plus(amount);
+    player.records.thisInfinity.maxAM = player.records.thisInfinity.maxAM.plus(amount);
+    player.records.thisEternity.maxAM = player.records.thisEternity.maxAM.plus(amount);
+    player.records.thisReality.maxAM = player.records.thisReality.maxAM.plus(amount);
     if (amount.gt(0)) player.achievementChecks.noAntimatterProduced = false;
   }
 
@@ -219,6 +222,10 @@ Currency.antimatter = new class extends DecimalCurrency {
 Currency.infinityPower = new class extends DecimalCurrency {
   get value() { return player.infinityPower; }
   set value(value) { player.infinityPower = value; }
+
+  reset() {
+    this.value = new Decimal(0);
+  }
 }();
 
 Currency.infinityPoints = new class extends DecimalCurrency {
@@ -228,11 +235,28 @@ Currency.infinityPoints = new class extends DecimalCurrency {
     player.records.thisEternity.maxIP = player.records.thisEternity.maxIP.max(value);
     player.records.thisReality.maxIP = player.records.thisReality.maxIP.max(value);
   }
+
+  get startingValue() {
+    return Effects.max(
+      0,
+      Perk.startIP1,
+      Perk.startIP2,
+      Achievement(104)
+    ).toDecimal();
+  }
+
+  reset() {
+    this.value = this.startingValue;
+  }
 }();
 
 Currency.timeShards = new class extends DecimalCurrency {
   get value() { return player.timeShards; }
   set value(value) { player.timeShards = value; }
+
+  reset() {
+    this.value = new Decimal(0);
+  }
 }();
 
 Currency.eternityPoints = new class extends DecimalCurrency {
@@ -241,19 +265,62 @@ Currency.eternityPoints = new class extends DecimalCurrency {
     player.eternityPoints = value;
     player.records.thisReality.maxEP = player.records.thisReality.maxEP.max(value);
   }
+
+  get startingValue() {
+    return Effects.max(
+      0,
+      Perk.startEP1,
+      Perk.startEP2,
+      Perk.startEP3
+    ).toDecimal();
+  }
+
+  reset() {
+    this.value = this.startingValue;
+  }
 }();
+
+Currency.tachyonParticles = new class extends DecimalCurrency {
+  get value() { return player.dilation.tachyonParticles; }
+  set value(value) { player.dilation.tachyonParticles = value; }
+
+  reset() {
+    this.value = new Decimal(0);
+  }
+}();
+
 
 Currency.dilatedTime = new class extends DecimalCurrency {
   get value() { return player.dilation.dilatedTime; }
   set value(value) { player.dilation.dilatedTime = value; }
+
+  reset() {
+    this.value = new Decimal(0);
+  }
 }();
 
 Currency.realityMachines = new class extends DecimalCurrency {
   get value() { return player.reality.realityMachines; }
   set value(value) { player.reality.realityMachines = value; }
+
+  get startingValue() {
+    return new Decimal(0);
+  }
+
+  reset() {
+    this.value = this.startingValue;
+  }
 }();
 
 Currency.perkPoints = new class extends NumberCurrency {
   get value() { return player.reality.perkPoints; }
   set value(value) { player.reality.perkPoints = value; }
+
+  get startingValue() {
+    return 0;
+  }
+
+  reset() {
+    this.value = this.startingValue;
+  }
 }();

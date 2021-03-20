@@ -9,7 +9,6 @@ Vue.component("modal-reality", {
   data() {
     return {
       glyphs: [],
-      canSacrifice: false,
       levelDifference: 0,
       selectedGlyph: Number,
       level: 0,
@@ -49,8 +48,7 @@ Vue.component("modal-reality", {
       on quality of life upgrades, and unlock various upgrades.`;
     },
     gained() {
-      return `Your Glyph will be a level ${format(this.level, 2, 2)} Glyph.
-      You will gain ${format(gainedRealityMachines(), 2, 0)} Reality Machines
+      return `You will gain ${format(gainedRealityMachines(), 2, 0)} Reality Machines
       and ${format(simulatedRealityCount() + 1, 2, 0)} Perk 
       ${pluralize("Point", simulatedRealityCount() + 1, "Points")} on Reality.
       ${Achievement(154).isUnlocked ? `You also have a ${formatPercents(0.1)} 
@@ -59,6 +57,12 @@ Vue.component("modal-reality", {
     direction() {
       if (this.glyphs[0].level > player.records.bestReality.glyphLevel) return "higher";
       return "lower";
+    },
+    confirmationOn() {
+      return player.options.confirmations.reality;
+    },
+    canSacrifice() {
+      return RealityUpgrade(19).isEffectActive;
     }
   },
   methods: {
@@ -86,7 +90,6 @@ Vue.component("modal-reality", {
         currentGlyph.level = newGlyph.level;
         currentGlyph.effects = newGlyph.effects;
       }
-      this.canSacrifice = RealityUpgrade(19).isEffectActive;
       this.levelDifference = Math.abs(player.records.bestReality.glyphLevel - this.glyphs[0].level);
     },
     select(index) {
@@ -95,7 +98,8 @@ Vue.component("modal-reality", {
     trashGlyphs() {
       if (!player.options.confirmations.glyphSacrifice ||
         confirm("Are you sure you want to sacrifice a random one of these glyphs?")) {
-        GlyphSelection.select(Math.floor(Math.random() * GlyphSelection.choiceCount), true);
+        console.log(this.glyphs);
+        GlyphSelection.select(this.glyphs[Math.floor(Math.random() * GlyphSelection.choiceCount)], true);
       }
     },
     grabEffects() {
@@ -114,12 +118,14 @@ Vue.component("modal-reality", {
   template: 
   `<div class="l-modal-content--centered c-modal-message">
       <h2>You are about to Reality</h2>
+      <div v-if="confirmationOn">
       <div class="c-modal-message__text">
         {{ message }}
       </div>
       <br>
       <div class="c-modal-message__text">
         {{ gained }}
+      </div>
       </div>
       <div class="l-glyph-selection__row">
         <glyph-component v-for="(glyph, index) in glyphs"
@@ -131,6 +137,8 @@ Vue.component("modal-reality", {
                         @click.native="select(index)"
                         />
       </div>
+      <div style="font-size: 1rem">(click a Glyph to choose it)</div>
+      <div style="font-size: 1rem">You will get a level {{ format(this.level) }} Glyph on Reality</div>
      <div class="l-glyph-tooltip__effects">
      <div v-for="glyph in grabbedEffects">
      <div>Glyph {{ grabbedEffects.indexOf(glyph) + 1 }}
@@ -142,6 +150,7 @@ Vue.component("modal-reality", {
                    :value="e.value"/>
     </div>
     </div>
+    <div class="l-options-grid__row">
       <button class="o-primary-btn o-primary-btn--glyph-trash"
         v-if="canSacrifice"
         v-on:click="trashGlyphs()">
@@ -152,6 +161,7 @@ Vue.component("modal-reality", {
           (these are {{ formatInt(levelDifference) }} {{"level" | pluralize(levelDifference)}}
           {{ direction }} than your best)
       </button>
+      </div>
         <div class="l-options-grid__row">
           <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"

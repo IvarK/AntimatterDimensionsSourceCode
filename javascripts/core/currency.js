@@ -236,6 +236,12 @@ Currency.infinityPoints = new class extends DecimalCurrency {
     player.records.thisReality.maxIP = player.records.thisReality.maxIP.max(value);
   }
 
+  add(amount) {
+    super.add(amount);
+    player.records.thisEternity.maxIP = player.records.thisEternity.maxIP.plus(amount);
+    player.records.thisReality.maxIP = player.records.thisReality.maxIP.plus(amount);
+  }
+
   get startingValue() {
     return Effects.max(
       0,
@@ -265,6 +271,12 @@ Currency.eternityPoints = new class extends DecimalCurrency {
     player.eternityPoints = value;
     player.records.thisReality.maxEP = player.records.thisReality.maxEP.max(value);
   }
+
+  add(amount) {
+    super.add(amount);
+    player.records.thisReality.maxEP = player.records.thisReality.maxEP.plus(amount);
+  }
+
 
   get startingValue() {
     return Effects.max(
@@ -303,12 +315,8 @@ Currency.realityMachines = new class extends DecimalCurrency {
   get value() { return player.reality.realityMachines; }
   set value(value) { player.reality.realityMachines = value; }
 
-  get startingValue() {
-    return new Decimal(0);
-  }
-
   reset() {
-    this.value = this.startingValue;
+    this.value = new Decimal(0);
   }
 }();
 
@@ -316,11 +324,16 @@ Currency.perkPoints = new class extends NumberCurrency {
   get value() { return player.reality.perkPoints; }
   set value(value) { player.reality.perkPoints = value; }
 
-  get startingValue() {
-    return 0;
+  reset() {
+    this.value = 0;
   }
+}();
+
+Currency.relicShards = new class extends NumberCurrency {
+  get value() { return player.celestials.effarig.relicShards; }
+  set value(value) { player.celestials.effarig.relicShards = value; }
 
   reset() {
-    this.value = this.startingValue;
+    this.value = 0;
   }
 }();

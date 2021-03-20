@@ -80,7 +80,7 @@ Vue.component("effarig-tab", {
   },
   methods: {
     update() {
-      this.relicShards = Effarig.shardAmount;
+      this.relicShards = Currency.relicShards.value;
       this.shardRarityBoost = Effarig.maxRarityBoost;
       this.shardsGained = Effarig.shardsGained;
       this.quote = Effarig.quote;

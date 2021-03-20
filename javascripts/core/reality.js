@@ -99,7 +99,7 @@ function confirmReality() {
 }
 
 function isRealityAvailable() {
-  return Currency.eternityPoints.exponent >= 1e4000 && TimeStudy.reality.isBought;
+  return Currency.eternityPoints.exponent >= 4000 && TimeStudy.reality.isBought;
 }
 
 // Returns the number of "extra" realities from stored real time or Multiversal effects, should be called
@@ -249,7 +249,7 @@ function giveRealityRewards(realityProps) {
   player.realities += realityAndPPMultiplier;
   Currency.perkPoints.add(realityAndPPMultiplier);
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
-    Effarig.shardAmount += realityProps.gainedShards * multiplier;
+    Currency.relicShards.add(realityProps.gainedShards * multiplier);
   }
   if (multiplier > 1 && Enslaved.boostReality) {
     // Real time amplification is capped at 1 second of reality time; if it's faster then using all time at once would

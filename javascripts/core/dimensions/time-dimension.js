@@ -263,7 +263,7 @@ const TimeDimensions = {
     if (EternityChallenge(7).isRunning) {
       TimeDimension(1).produceDimensions(InfinityDimension(8), diff);
     } else {
-      Currency.timeShards.add(TimeDimension(1).productionForDiff(diff));
+      TimeDimension(1).produceCurrency(Currency.timeShards, diff);
     }
 
     EternityChallenge(7).reward.applyEffect(production => {

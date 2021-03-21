@@ -121,7 +121,7 @@ GameDatabase.celestials.v = {
       condition: () => V.isRunning,
       currentValue: () => (
         // Dirty hack I know lmao
-        player.timestudy.theorem.toNumber() > 400000
+        Currency.timeTheorems.gte(400000)
         ? -Math.log10(player.minNegativeBlackHoleThisReality)
         : 0),
       formatRecord: x => `${formatInt(1)} / ${format(Math.pow(10, x))}`,

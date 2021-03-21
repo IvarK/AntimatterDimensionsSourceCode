@@ -32,7 +32,7 @@ const TimeTheorems = {
     if (!this.checkForBuying(auto)) return false;
     if (!Currency.antimatter.purchase(player.timestudy.amcost)) return false;
     player.timestudy.amcost = player.timestudy.amcost.times(TimeTheorems.costMultipliers.AM);
-    player.timestudy.theorem = player.timestudy.theorem.plus(1);
+    Currency.timeTheorems.add(1);
     player.achievementChecks.noTheoremPurchases = false;
     return true;
   },
@@ -41,7 +41,7 @@ const TimeTheorems = {
     if (!this.checkForBuying(auto)) return false;
     if (Currency.infinityPoints.purchase(player.timestudy.ipcost)) return false;
     player.timestudy.ipcost = player.timestudy.ipcost.times(TimeTheorems.costMultipliers.IP);
-    player.timestudy.theorem = player.timestudy.theorem.plus(1);
+    Currency.timeTheorems.add(1);
     player.achievementChecks.noTheoremPurchases = false;
     return true;
   },
@@ -50,7 +50,7 @@ const TimeTheorems = {
     if (!this.checkForBuying(auto)) return false;
     if (Currency.eternityPoints.purchase(player.timestudy.epcost)) return false;
     player.timestudy.epcost = player.timestudy.epcost.times(TimeTheorems.costMultipliers.EP);
-    player.timestudy.theorem = player.timestudy.theorem.plus(1);
+    Currency.timeTheorems.add(1);
     player.achievementChecks.noTheoremPurchases = false;
     return true;
   },
@@ -61,7 +61,7 @@ const TimeTheorems = {
     if (Currency.antimatter.gte(player.timestudy.amcost)) {
       player.timestudy.amcost.e = Math.floor(Currency.antimatter.exponent / 20000 + 1) * 20000;
       const amAmount = Math.floor(Currency.antimatter.exponent / 20000) - AMowned;
-      player.timestudy.theorem = player.timestudy.theorem.plus(amAmount);
+      Currency.timeTheorems.add(amAmount);
       const amCost = Decimal.fromMantissaExponent(1, Math.floor(Currency.antimatter.exponent / 20000) * 20000);
       Currency.antimatter.subtract(amCost);
       player.achievementChecks.noTheoremPurchases = false;
@@ -70,7 +70,7 @@ const TimeTheorems = {
     if (Currency.infinityPoints.gte(player.timestudy.ipcost)) {
       player.timestudy.ipcost.e = Math.floor(Currency.infinityPoints.exponent / 100 + 1) * 100;
       const ipAmount = Math.floor(Currency.infinityPoints.exponent / 100 + 1) - IPowned;
-      player.timestudy.theorem = player.timestudy.theorem.plus(ipAmount);
+      Currency.timeTheorems.add(ipAmount);
       const ipCost = Decimal.fromMantissaExponent(1, Math.floor(Currency.infinityPoints.exponent / 100) * 100);
       Currency.infinityPoints.subtract(ipCost);
       player.achievementChecks.noTheoremPurchases = false;
@@ -81,7 +81,7 @@ const TimeTheorems = {
       const totalEPCost = finalEPCost.minus(player.timestudy.epcost);
       player.timestudy.epcost = finalEPCost;
       Currency.eternityPoints.subtract(totalEPCost);
-      player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned);
+      Currency.timeTheorems.add(Math.round(player.timestudy.epcost.log2()) - EPowned);
       player.achievementChecks.noTheoremPurchases = false;
       // The above code block will sometimes buy one too few TT, but it never over-buys
       TimeTheorems.buyWithEP();
@@ -303,11 +303,11 @@ class TimeStudyState extends GameMechanicState {
   }
 
   refund() {
-    player.timestudy.theorem = player.timestudy.theorem.plus(this.cost);
+    Currency.timeTheorems.add(this.cost);
   }
 
   get isAffordable() {
-    return player.timestudy.theorem.gte(this.cost);
+    return Currency.timeTheorems.gte(this.cost);
   }
 
   get canBeBought() {
@@ -353,7 +353,7 @@ class NormalTimeStudyState extends TimeStudyState {
       player.celestials.v.STSpent += this.STCost;
     }
     player.timestudy.studies.push(this.id);
-    player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
+    Currency.timeTheorems.subtract(this.cost);
     GameCache.timeStudies.invalidate();
     return true;
   }
@@ -421,7 +421,7 @@ class ECTimeStudyState extends TimeStudyState {
         Tab.challenges.eternity.show();
       }
       if (this.id !== 11 && this.id !== 12) player.etercreq = this.id;
-      player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
+      Currency.timeTheorems.subtract(this.cost);
       return true;
     }
     return false;
@@ -545,7 +545,7 @@ class DilationTimeStudyState extends TimeStudyState {
       Tab.reality.glyphs.show();
     }
     player.dilation.studies.push(this.id);
-    player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
+    Currency.timeTheorems.subtract(this.cost);
     return true;
   }
 }

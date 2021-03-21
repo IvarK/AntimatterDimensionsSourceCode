@@ -145,7 +145,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => Currency.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Eternity Point multiplier based on Reality and Time Theorem count",
-      effect: () => player.timestudy.theorem
+      effect: () => Currency.timeTheorems.value
         .minus(1e3).clampMin(2)
         .pow(Math.log2(Math.min(player.realities, 1e4))).clampMin(1),
       formatEffect: value => formatX(value, 2, 2)

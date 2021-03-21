@@ -189,7 +189,7 @@ GameDatabase.celestials.singularityMilestones = {
     repeat: 0,
     limit: 1,
     description: "Time Theorems boost Dark Matter and Dark Energy gain",
-    effect: () => Math.sqrt(Math.clampMin((player.timestudy.theorem.log10() - 900) / 100, 1)),
+    effect: () => Math.sqrt(Math.clampMin((Currency.timeTheorems.value.log10() - 900) / 100, 1)),
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,
   },

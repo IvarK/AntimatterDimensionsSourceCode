@@ -289,7 +289,7 @@ const Ra = {
   // removing the hardcap of 10 may cause runaways.
   theoremBoostFactor() {
     if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
-    return Math.min(10, Math.max(0, player.timestudy.theorem.pLog10() - 350) / 50);
+    return Math.min(10, Math.max(0, Currency.timeTheorems.value.pLog10() - 350) / 50);
   },
   get isRunning() {
     return player.celestials.ra.run;

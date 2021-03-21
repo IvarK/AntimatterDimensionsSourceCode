@@ -399,7 +399,7 @@ function finishProcessReality(realityProps) {
   player.achievementChecks.noReplicantiGalaxies = true;
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
-  player.timestudy.theorem = new Decimal(0);
+  Currency.timeTheorems.reset();
   player.timestudy.amcost = new Decimal("1e20000");
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);

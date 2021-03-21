@@ -432,7 +432,7 @@ const Glyphs = {
       am: new Decimal(Currency.antimatter.value),
       ip: new Decimal(Currency.infinityPoints.value),
       ep: new Decimal(Currency.eternityPoints),
-      tt: player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost() - TimeTheorems.totalPurchased()),
+      tt: Currency.timeTheorems.value.plus(TimeTheorems.calculateTimeStudiesCost() - TimeTheorems.totalPurchased()),
       ecs: EternityChallenges.all.map(e => e.completions),
       thisRealityTime: player.records.thisReality.time,
       thisRealityRealTime: player.records.thisReality.realTime,
@@ -454,10 +454,10 @@ const Glyphs = {
       glyphUndo: true,
       restoreCelestialState: true,
     });
-    Currency.antimatter.value = new Decimal(undoData.am);
-    Currency.infinityPoints.value = new Decimal(undoData.ip);
+    Currency.antimatter = new Decimal(undoData.am);
+    Currency.infinityPoints = new Decimal(undoData.ip);
     Currency.eternityPoints = new Decimal(undoData.ep);
-    player.timestudy.theorem.fromValue(undoData.tt);
+    Currency.timeTheorems = new Decimal(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
     player.records.thisReality.time = undoData.thisRealityTime;
     player.records.thisReality.realTime = undoData.thisRealityRealTime;

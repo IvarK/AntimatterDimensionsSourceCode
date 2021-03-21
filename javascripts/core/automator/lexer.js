@@ -142,11 +142,11 @@ const AutomatorLexer = (() => {
   });
   createInCategory(Currency, "TT", /(tt|time theorems?)/i, {
     $autocomplete: "TT",
-    $getter: () => player.timestudy.theorem,
+    $getter: () => Currency.timeTheorems,
   });
   createInCategory(Currency, "Total_TT", /total tt/i, {
     $autocomplete: "total TT",
-    $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
+    $getter: () => Currency.timeTheorems.value.plus(TimeTheorems.calculateTimeStudiesCost()),
   });
 
   createInCategory(Currency, "TotalCompletions", /total[ \t]+completions/i, {

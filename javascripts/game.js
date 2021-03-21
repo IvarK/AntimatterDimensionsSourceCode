@@ -573,14 +573,14 @@ function gameLoop(diff, options = {}) {
   }
 
   updateTachyonGalaxies();
-  player.timestudy.theorem = player.timestudy.theorem.add(getTTPerSecond().times(diff / 1000));
+  Currency.timeTheorems.add(getTTPerSecond().times(diff / 1000));
   tryUnlockInfinityDimensions();
 
   BlackHoles.updatePhases(blackHoleDiff);
 
   // Code to auto-unlock dilation; 16617 is the cost for buying literally all time studies and unlocking dilation
   if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) &&
-    player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()).gte(16617)) {
+    Currency.timeTheorems.value.plus(TimeTheorems.calculateTimeStudiesCost()).gte(16617)) {
       TimeStudy.dilation.purchase(true);
   }
 

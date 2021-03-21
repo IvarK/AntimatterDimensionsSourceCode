@@ -269,7 +269,6 @@ Currency.eternityPoints = new class extends DecimalCurrency {
     player.records.thisReality.maxEP = player.records.thisReality.maxEP.plus(amount);
   }
 
-
   get startingValue() {
     return Effects.max(
       0,
@@ -278,6 +277,11 @@ Currency.eternityPoints = new class extends DecimalCurrency {
       Perk.startEP3
     ).toDecimal();
   }
+}();
+
+Currency.timeTheorems = new class extends DecimalCurrency {
+  get value() { return player.timestudy.theorem; }
+  set value(value) { player.timestudy.theorem = value; }
 }();
 
 Currency.tachyonParticles = new class extends DecimalCurrency {

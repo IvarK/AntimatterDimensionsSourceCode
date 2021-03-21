@@ -9,7 +9,7 @@ GameDatabase.eternity.timeStudies.dilation = [
       const tsRequirement = [231, 232, 233, 234].some(id => TimeStudy(id).isBought);
       if (Perk.bypassECDilation.isBought) return tsRequirement;
       const ecRequirement = EternityChallenge(11).isFullyCompleted && EternityChallenge(12).isFullyCompleted;
-      const ttRequirement = player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()).gte(13000);
+      const ttRequirement = Currency.timeTheorems.value.plus(TimeTheorems.calculateTimeStudiesCost()).gte(13000);
       return tsRequirement && ecRequirement && ttRequirement;
     }
   },

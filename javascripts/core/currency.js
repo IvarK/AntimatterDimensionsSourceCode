@@ -156,6 +156,12 @@ class Currency {
   bumpTo(value) {
     this.value = this.operations.max(this.value, value);
   }
+
+  get startingValue() { throw new NotImplementedError(); }
+
+  reset() {
+    this.value = this.startingValue;
+  }
 }
 
 /**
@@ -163,6 +169,7 @@ class Currency {
  */
 class NumberCurrency extends Currency {
   get operations() { return MathOperations.number; }
+  get startingValue() { return 0; }
 }
 
 /**
@@ -172,6 +179,7 @@ class DecimalCurrency extends Currency {
   get operations() { return MathOperations.decimal; }
   get mantissa() { return this.value.mantissa; }
   get exponent() { return this.value.exponent; }
+  get startingValue() { return new Decimal(0); }
 }
 
 Currency.antimatter = new class extends DecimalCurrency {
@@ -213,19 +221,11 @@ Currency.antimatter = new class extends DecimalCurrency {
       Achievement(78)
     ).toDecimal();
   }
-
-  reset() {
-    this.value = this.startingValue;
-  }
 }();
 
 Currency.infinityPower = new class extends DecimalCurrency {
   get value() { return player.infinityPower; }
   set value(value) { player.infinityPower = value; }
-
-  reset() {
-    this.value = new Decimal(0);
-  }
 }();
 
 Currency.infinityPoints = new class extends DecimalCurrency {
@@ -250,19 +250,11 @@ Currency.infinityPoints = new class extends DecimalCurrency {
       Achievement(104)
     ).toDecimal();
   }
-
-  reset() {
-    this.value = this.startingValue;
-  }
 }();
 
 Currency.timeShards = new class extends DecimalCurrency {
   get value() { return player.timeShards; }
   set value(value) { player.timeShards = value; }
-
-  reset() {
-    this.value = new Decimal(0);
-  }
 }();
 
 Currency.eternityPoints = new class extends DecimalCurrency {
@@ -286,56 +278,32 @@ Currency.eternityPoints = new class extends DecimalCurrency {
       Perk.startEP3
     ).toDecimal();
   }
-
-  reset() {
-    this.value = this.startingValue;
-  }
 }();
 
 Currency.tachyonParticles = new class extends DecimalCurrency {
   get value() { return player.dilation.tachyonParticles; }
   set value(value) { player.dilation.tachyonParticles = value; }
-
-  reset() {
-    this.value = new Decimal(0);
-  }
 }();
 
 
 Currency.dilatedTime = new class extends DecimalCurrency {
   get value() { return player.dilation.dilatedTime; }
   set value(value) { player.dilation.dilatedTime = value; }
-
-  reset() {
-    this.value = new Decimal(0);
-  }
 }();
 
 Currency.realityMachines = new class extends DecimalCurrency {
   get value() { return player.reality.realityMachines; }
   set value(value) { player.reality.realityMachines = value; }
-
-  reset() {
-    this.value = new Decimal(0);
-  }
 }();
 
 Currency.perkPoints = new class extends NumberCurrency {
   get value() { return player.reality.perkPoints; }
   set value(value) { player.reality.perkPoints = value; }
-
-  reset() {
-    this.value = 0;
-  }
 }();
 
 Currency.relicShards = new class extends NumberCurrency {
   get value() { return player.celestials.effarig.relicShards; }
   set value(value) { player.celestials.effarig.relicShards = value; }
-
-  reset() {
-    this.value = 0;
-  }
 }();
 
 Currency.darkMatter = new class extends DecimalCurrency {
@@ -347,10 +315,6 @@ Currency.darkMatter = new class extends DecimalCurrency {
 
   get max() { return player.celestials.laitela.maxDarkMatter; }
   set max(value) { player.celestials.laitela.maxDarkMatter = value; }
-
-  reset() {
-    this.value = new Decimal(0);
-  }
 }();
 
 Currency.darkEnergy = new class extends NumberCurrency {
@@ -364,10 +328,6 @@ Currency.darkEnergy = new class extends NumberCurrency {
       .map(d => d.powerDE * 1000 / d.interval)
       .sum();
   }
-
-  reset() {
-    this.value = 0;
-  }
 }();
 
 Currency.singularities = new class extends NumberCurrency {
@@ -375,8 +335,4 @@ Currency.singularities = new class extends NumberCurrency {
   set value(value) { player.celestials.laitela.singularities = value; }
 
   get timeUntil() { return Singularity.cap / Currency.darkEnergy.productionPerSecond; }
-
-  reset() {
-    this.value = 0;
-  }
 }();

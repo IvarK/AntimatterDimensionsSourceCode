@@ -337,3 +337,46 @@ Currency.relicShards = new class extends NumberCurrency {
     this.value = 0;
   }
 }();
+
+Currency.darkMatter = new class extends DecimalCurrency {
+  get value() { return player.celestials.laitela.darkMatter; }
+  set value(value) {
+    player.celestials.laitela.darkMatter = value;
+    player.celestials.laitela.maxDarkMatter = player.celestials.laitela.maxDarkMatter.max(value);
+  }
+
+  get max() { return player.celestials.laitela.maxDarkMatter; }
+  set max(value) { player.celestials.laitela.maxDarkMatter = value; }
+
+  reset() {
+    this.value = new Decimal(0);
+  }
+}();
+
+Currency.darkEnergy = new class extends NumberCurrency {
+  get value() { return player.celestials.laitela.darkEnergy; }
+  set value(value) { player.celestials.laitela.darkEnergy = value; }
+
+  get productionPerSecond() {
+    return Array.range(1, 4)
+      .map(n => MatterDimension(n))
+      .filter(d => d.amount.gt(0))
+      .map(d => d.powerDE * 1000 / d.interval)
+      .sum();
+  }
+
+  reset() {
+    this.value = 0;
+  }
+}();
+
+Currency.singularities = new class extends NumberCurrency {
+  get value() { return player.celestials.laitela.singularities; }
+  set value(value) { player.celestials.laitela.singularities = value; }
+
+  get timeUntil() { return Singularity.cap / Currency.darkEnergy.productionPerSecond; }
+
+  reset() {
+    this.value = 0;
+  }
+}();

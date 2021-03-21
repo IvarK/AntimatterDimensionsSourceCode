@@ -1394,7 +1394,7 @@ GameDatabase.celestials.navigation = (function() {
     },
     "laitela-2nd-dim": {
       visible: () => Laitela.isUnlocked,
-      complete: () => Laitela.maxDarkMatter.clampMin(1).log10() / Math.log10(MatterDimension(2).adjustedStartingCost),
+      complete: () => Currency.darkMatter.max.clampMin(1).log10() / Math.log10(MatterDimension(2).adjustedStartingCost),
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1409,7 +1409,7 @@ GameDatabase.celestials.navigation = (function() {
             const places = complete >= 1 ? 0 : 2;
             if (complete !== 1) return [
             "2nd Dark Matter Dimension",
-            `Dark Matter ${format(Laitela.maxDarkMatter.min(goal), places)} / ${format(goal)}`
+            `Dark Matter ${format(Currency.darkMatter.max.min(goal), places)} / ${format(goal)}`
             ];
             return [
             "2nd Dark Matter Dimension",
@@ -1433,7 +1433,7 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Laitela.isUnlocked,
       complete: () => {
         const cost2 = MatterDimension(2).adjustedStartingCost;
-        return Math.clampMin(Laitela.maxDarkMatter.clampMin(1).div(cost2).log10(), 0) /
+        return Math.clampMin(Currency.darkMatter.max.clampMin(1).div(cost2).log10(), 0) /
         Math.log10(MatterDimension(3).adjustedStartingCost / cost2);
       },
       node: {
@@ -1450,7 +1450,7 @@ GameDatabase.celestials.navigation = (function() {
             const places = complete >= 1 ? 0 : 2;
             if (complete !== 1) return [
             "3rd Dark Matter Dimension",
-            `Dark Matter ${format(Laitela.maxDarkMatter.min(goal), places)} / ${format(goal)}`
+            `Dark Matter ${format(Currency.darkMatter.max.min(goal), places)} / ${format(goal)}`
             ];
             return [
             "3rd Dark Matter Dimension",
@@ -1471,10 +1471,10 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "laitela-4th-dim-left": {
-      visible: () => Laitela.maxDarkMatter.gte(MatterDimension(3).adjustedStartingCost),
+      visible: () => Currency.darkMatter.max.gte(MatterDimension(3).adjustedStartingCost),
       complete: () => {
         const cost3 = MatterDimension(3).adjustedStartingCost;
-        return Math.clampMin(Laitela.maxDarkMatter.clampMin(1).div(cost3).log10(), 0) /
+        return Math.clampMin(Currency.darkMatter.max.clampMin(1).div(cost3).log10(), 0) /
         Math.log10(MatterDimension(4).adjustedStartingCost / cost3);
       },
       node: {
@@ -1491,7 +1491,7 @@ GameDatabase.celestials.navigation = (function() {
             const places = complete >= 1 ? 0 : 2;
             if (complete !== 1) return [
             "4th Dark Matter Dimension",
-            `Dark Matter ${format(Laitela.maxDarkMatter.min(goal), places)} / ${format(goal)}`
+            `Dark Matter ${format(Currency.darkMatter.max.min(goal), places)} / ${format(goal)}`
             ];
             return [
             "4th Dark Matter Dimension",
@@ -1512,10 +1512,10 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "laitela-4th-dim-right": {
-      visible: () => Laitela.maxDarkMatter.gte(MatterDimension(3).adjustedStartingCost),
+      visible: () => Currency.darkMatter.max.gte(MatterDimension(3).adjustedStartingCost),
       complete: () => {
         const cost3 = MatterDimension(3).adjustedStartingCost;
-        return Math.clampMin(Laitela.maxDarkMatter.clampMin(1).div(cost3).log10(), 0) /
+        return Math.clampMin(Currency.darkMatter.max.clampMin(1).div(cost3).log10(), 0) /
         Math.log10(MatterDimension(4).adjustedStartingCost / cost3);
       },
       node: {
@@ -1537,7 +1537,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "laitela-annihilation": {
-      visible: () => Laitela.maxDarkMatter.gte(MatterDimension(4).adjustedStartingCost),
+      visible: () => Currency.darkMatter.max.gte(MatterDimension(4).adjustedStartingCost),
       complete: () => Number(Laitela.darkMatterMult > 1),
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
@@ -1567,8 +1567,8 @@ GameDatabase.celestials.navigation = (function() {
       },
     },
     "laitela-singularity": {
-      visible: () => Laitela.maxDarkMatter.gte(MatterDimension(4).adjustedStartingCost),
-      complete: () => Laitela.singularities,
+      visible: () => Currency.darkMatter.max.gte(MatterDimension(4).adjustedStartingCost),
+      complete: () => Currency.singularities.value,
       node: {
         clickAction: () => Tab.celestials.laitela.show(true),
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1597,7 +1597,7 @@ GameDatabase.celestials.navigation = (function() {
       },
     },
     "laitela-destabilization-left": {
-      visible: () => Laitela.singularities > 0 && Laitela.darkMatterMult > 1,
+      visible: () => Currency.singularities.gt(0) && Laitela.darkMatterMult > 1,
       complete: () => Laitela.difficultyTier / 4,
       node: {
         incompleteClass: "c-celestial-nav__test-incomplete",
@@ -1636,7 +1636,7 @@ GameDatabase.celestials.navigation = (function() {
       }
     },
     "laitela-destabilization-right": {
-      visible: () => Laitela.singularities > 0 && Laitela.darkMatterMult > 1,
+      visible: () => Currency.singularities.gt(0) && Laitela.darkMatterMult > 1,
       complete: () => Laitela.difficultyTier / 4,
       node: {
         fill: "white",

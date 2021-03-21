@@ -10,8 +10,8 @@ Vue.component("laitela-tab", {
   },
   methods: {
     update() {
-      this.darkMatter.copyFrom(player.celestials.laitela.darkMatter);
-      this.maxDarkMatter.copyFrom(player.celestials.laitela.maxDarkMatter);
+      this.darkMatter.copyFrom(Currency.darkMatter);
+      this.maxDarkMatter.copyFrom(Currency.darkMatter.max);
       this.matterExtraPurchasePercentage = Laitela.matterExtraPurchaseFactor - 1;
     },
     maxAll() {
@@ -71,17 +71,13 @@ Vue.component("singularity-container", {
   methods: {
     update() {
       const laitela = player.celestials.laitela;
-      this.darkEnergy = laitela.darkEnergy;
-      this.darkEnergyGainPerSecond = Array.range(1, 4)
-        .map(n => MatterDimension(n))
-        .filter(d => d.amount.gt(0))
-        .map(d => d.powerDE * 1000 / d.interval)
-        .sum();
-      this.singularities = laitela.singularities;
+      this.darkEnergy = Currency.darkEnergy.value;
+      this.darkEnergyGainPerSecond = Currency.darkEnergy.productionPerSecond;
+      this.singularities = Currency.singularities.value;
       this.singularityCapIncreases = laitela.singularityCapIncreases;
       this.canPerformSingularity = Singularity.capIsReached;
       this.singularityCap = Singularity.cap;
-      this.baseTimeToSingularity = this.singularityCap / this.darkEnergyGainPerSecond;
+      this.baseTimeToSingularity = Currency.singularities.timeUntil;
       this.singularitiesGained = Singularity.singularitiesGained;
       this.autoSingularityFactor = SingularityMilestone.autoCondense.effectValue;
       this.perStepFactor = Singularity.gainPerCapIncrease;
@@ -297,7 +293,7 @@ Vue.component("annihilation-button", {
   },
   methods: {
     update() {
-      this.darkMatter.copyFrom(player.celestials.laitela.darkMatter);
+      this.darkMatter.copyFrom(Currency.darkMatter);
       this.darkMatterMult = Laitela.darkMatterMult;
       this.darkMatterMultGain = Laitela.darkMatterMultGain;
       this.hasAnnihilated = Laitela.darkMatterMult > 1;

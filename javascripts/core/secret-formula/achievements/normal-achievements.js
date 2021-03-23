@@ -171,9 +171,7 @@ GameDatabase.achievements.normal = [
     id: 36,
     name: "Claustrophobic",
     get description() {
-      return PlayerProgress.infinityUnlocked()
-      ? `Infinity with just ${formatInt(1)} Antimatter Galaxy.`
-      : `Infinity with just ${formatInt(1)} Antimatter Galaxy. Your Antimatter Galaxies are reset on Infinity.`;
+      return `Infinity with just ${formatInt(1)} Antimatter Galaxy. (Your Antimatter Galaxies are reset on Infinity.)`;
     },
     checkRequirement: () => player.galaxies === 1,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,

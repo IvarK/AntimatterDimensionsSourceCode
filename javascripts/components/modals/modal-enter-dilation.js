@@ -18,7 +18,7 @@ Vue.component("modal-enter-dilation", {
       if (player.dilation.lastEP.eq(-1)) {
         return "This is your first Dilation";
       } 
-      return `You last completed Dilation at ${format(player.dilation.lastEP, 2, 2)} EP`;
+      return `You last completed Dilation at ${format(player.dilation.lastEP, 2, 2)} Eternity Points`;
     }
   },
   methods: {

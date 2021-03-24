@@ -15,7 +15,7 @@ class TimeTheoremPurchaseType {
   set amount(value) { throw new NotImplementedError(); }
 
   add(amount) {
-    this.amount = this.amount + amount;
+    this.amount += amount;
   }
 
   /**

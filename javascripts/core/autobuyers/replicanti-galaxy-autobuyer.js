@@ -1,6 +1,6 @@
 "use strict";
 
-Autobuyer.replicantiGalaxy = new class ReplicantiGalaxyAutobuyerState extends IntervaledAutobuyerState {
+Autobuyer.replicantiGalaxy = new class ReplicantiGalaxyAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.replicantiGalaxies;
   }

@@ -948,6 +948,11 @@ GameStorage.devMigrations = {
       delete player.options.autobuyerOn;
       delete player.options.disableContinuum;
     },
+    player => {
+      player.timestudy.amBought = player.timestudy.amcost.exponent / 20000;
+      player.timestudy.ipBought = player.timestudy.ipcost.exponent / 100 + 1;
+      player.timestudy.epBought = Math.round(player.timestudy.epcost.log2());
+    },
   ],
 
   patch(player) {

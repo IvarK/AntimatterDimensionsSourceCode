@@ -145,6 +145,7 @@ GameStorage.migrations = {
       GameStorage.migrations.migrateAutobuyers(player);
       GameStorage.migrations.migratePlayerVars(player);
       GameStorage.migrations.consolidateAuto(player);
+      GameStorage.migrations.convertTimeTheoremPurchases(player);
 
       kong.migratePurchases();
       if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
@@ -813,6 +814,12 @@ GameStorage.migrations = {
     delete player.replicanti.auto;
     delete player.auto.repUpgradeTimer;
     delete player.infMultBuyer;
+  },
+
+  convertTimeTheoremPurchases(player) {
+    player.timestudy.amBought = player.timestudy.amcost.exponent / 20000;
+    player.timestudy.ipBought = player.timestudy.ipcost.exponent / 100 + 1;
+    player.timestudy.epBought = Math.round(player.timestudy.epcost.log2());
   },
 
   prePatch(saveData) {

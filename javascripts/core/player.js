@@ -285,10 +285,10 @@ let player = {
   },
   timestudy: {
     theorem: new Decimal(0),
-    amcost: new Decimal("1e20000"),
-    ipcost: new Decimal(1),
-    epcost: new Decimal(1),
     maxTheorem: new Decimal(0),
+    amBought: 0,
+    ipBought: 0,
+    epBought: 0,
     studies: [],
     shopMinimized: false,
     presets: new Array(6).fill({

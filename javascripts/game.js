@@ -580,7 +580,7 @@ function gameLoop(diff, options = {}) {
 
   // Code to auto-unlock dilation; 16617 is the cost for buying literally all time studies and unlocking dilation
   if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) &&
-    Currency.timeTheorems.value.plus(TimeTheorems.calculateTimeStudiesCost()).gte(16617)) {
+    Currency.timeTheorems.max.gte(16617)) {
       TimeStudy.dilation.purchase(true);
   }
 

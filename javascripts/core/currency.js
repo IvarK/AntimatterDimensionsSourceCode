@@ -281,14 +281,29 @@ Currency.eternityPoints = new class extends DecimalCurrency {
 
 Currency.timeTheorems = new class extends DecimalCurrency {
   get value() { return player.timestudy.theorem; }
-  set value(value) { player.timestudy.theorem = value; }
+  set value(value) {
+    player.timestudy.theorem = value;
+    player.timestudy.maxTheorem = value.plus(TimeTheorems.calculateTimeStudiesCost());
+  }
+
+  get max() { return player.timestudy.maxTheorem; }
+
+  add(amount) {
+    super.add(amount);
+    player.timestudy.maxTheorem = player.timestudy.maxTheorem.plus(amount);
+    player.achievementChecks.noTheoremPurchases = false;
+  }
+
+  reset() {
+    super.reset();
+    player.timestudy.maxTheorem = this.startingValue;
+  }
 }();
 
 Currency.tachyonParticles = new class extends DecimalCurrency {
   get value() { return player.dilation.tachyonParticles; }
   set value(value) { player.dilation.tachyonParticles = value; }
 }();
-
 
 Currency.dilatedTime = new class extends DecimalCurrency {
   get value() { return player.dilation.dilatedTime; }

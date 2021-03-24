@@ -288,6 +288,7 @@ let player = {
     amcost: new Decimal("1e20000"),
     ipcost: new Decimal(1),
     epcost: new Decimal(1),
+    maxTheorem: new Decimal(0),
     studies: [],
     shopMinimized: false,
     presets: new Array(6).fill({

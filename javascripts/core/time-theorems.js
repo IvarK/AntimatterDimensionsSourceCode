@@ -14,6 +14,10 @@ class TimeTheoremPurchaseType {
   */
   set amount(value) { throw new NotImplementedError(); }
 
+  add(amount) {
+    this.amount = this.amount + amount;
+  }
+
   /**
   * @abstract
   */
@@ -36,13 +40,14 @@ class TimeTheoremPurchaseType {
   purchase(bulk) {
     if (this.currency.lt(this.cost)) return false;
     if (bulk && this.bulkPossible) {
-      this.currency.purchase(this.cost.times(this.costIncrement.pow(this.bulkPossible)));
-      Currency.timeTheorems.add(this.bulkPossible);
-      this.amount = this.amount + this.bulkPossible;
+      if (this.currency.purchase(this.cost.times(this.costIncrement.pow(this.bulkPossible)))) {
+        Currency.timeTheorems.add(this.bulkPossible);
+        this.add(this.bulkPossible);
+      }
     }
     if (!this.currency.purchase(this.cost)) return bulk;
     Currency.timeTheorems.add(1);
-    this.amount = this.amount + 1;
+    this.add(1);
     return true;
   }
 
@@ -66,7 +71,7 @@ TimeTheoremPurchaseType.ip = new class extends TimeTheoremPurchaseType {
   get currency() { return Currency.infinityPoints; }
   get costBase() { return new Decimal(1); }
   get costIncrement() { return new Decimal(1e100); }
-  get bulkPossible() { return Math.floor(this.currency.exponent / this.costIncrement.e + 1) - this.amount; }
+  get bulkPossible() { return Math.floor(this.currency.exponent / this.costIncrement.e) - this.amount; }
 }();
 
 TimeTheoremPurchaseType.ep = new class extends TimeTheoremPurchaseType {

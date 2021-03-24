@@ -819,7 +819,11 @@ GameStorage.migrations = {
   convertTimeTheoremPurchases(player) {
     player.timestudy.amBought = player.timestudy.amcost.exponent / 20000;
     player.timestudy.ipBought = player.timestudy.ipcost.exponent / 100 + 1;
-    player.timestudy.epBought = Math.round(player.timestudy.epcost.log2());
+    player.timestudy.epBought = Math.round(new Decimal(player.timestudy.epcost).log2());
+
+    delete player.timestudy.amcost;
+    delete player.timestudy.ipcost;
+    delete player.timestudy.epcost;
   },
 
   prePatch(saveData) {

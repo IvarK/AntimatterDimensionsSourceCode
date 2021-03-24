@@ -400,9 +400,6 @@ function finishProcessReality(realityProps) {
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
   Currency.timeTheorems.reset();
-  player.timestudy.amcost = new Decimal("1e20000");
-  player.timestudy.ipcost = new Decimal(1);
-  player.timestudy.epcost = new Decimal(1);
   player.timestudy.studies = [];
   player.celestials.v.triadStudies = [];
   player.celestials.v.STSpent = 0;

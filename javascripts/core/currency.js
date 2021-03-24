@@ -296,6 +296,9 @@ Currency.timeTheorems = new class extends DecimalCurrency {
 
   reset() {
     super.reset();
+    TimeTheoremPurchaseType.am.reset();
+    TimeTheoremPurchaseType.ip.reset();
+    TimeTheoremPurchaseType.ep.reset();
     player.timestudy.maxTheorem = this.startingValue;
   }
 }();

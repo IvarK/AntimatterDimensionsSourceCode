@@ -54,6 +54,7 @@ Vue.component("autobuyer-box", {
       isActive: false,
       globalToggle: false,
       canBeBought: false,
+      isUnlockable: false,
       antimatterCost: new Decimal(0),
       isBought: false,
       antimatter: new Decimal(0)
@@ -70,9 +71,10 @@ Vue.component("autobuyer-box", {
       this.isUnlocked = autobuyer.isUnlocked;
       this.isActive = autobuyer.isActive;
       this.globalToggle = player.auto.autobuyersOn;
-      this.canBeBought = this.autobuyer.canBeBought;
-      this.antimatterCost = this.autobuyer.antimatterCost;
-      this.isBought = this.autobuyer.isBought;
+      this.canBeBought = autobuyer.canBeBought;
+      this.isUnlockable = autobuyer.canUnlockSlowVersion;
+      this.antimatterCost = autobuyer.antimatterCost;
+      this.isBought = autobuyer.isBought;
       this.antimatter.copyFrom(player.records.thisEternity.maxAM);
     },
     toggle() {
@@ -83,15 +85,12 @@ Vue.component("autobuyer-box", {
     }
   },
   computed: {
-    canBuy() {
-      return this.antimatter.gte(this.antimatterCost);
-    },
     autobuyerBuyBoxClass() {
       return {
         "c-autobuyer-buy-box": true,
         "o-primary-btn": true,
-        "o-primary-btn--enabled": this.canBuy,
-        "o-primary-btn--disabled": !this.canBuy
+        "o-primary-btn--enabled": this.isUnlockable,
+        "o-primary-btn--disabled": !this.isUnlockable
       };
     },
     autobuyerToggleClass() {
@@ -132,6 +131,6 @@ Vue.component("autobuyer-box", {
     <div v-else-if="canBeBought" @click="purchase" :class="autobuyerBuyBoxClass">
       {{ name }}
       <br>
-      Requirement: {{ format(antimatterCost) }} total antimater
+      Requirement: {{ format(antimatterCost) }} Total Antimatter (This Eternity)
     </div>`
 });

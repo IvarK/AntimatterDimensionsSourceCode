@@ -180,7 +180,7 @@ function processAutoGlyph(gainedLevel, rng) {
   // Always generate a list of glyphs to avoid RNG diverging based on whether
   // a reality is done automatically.
   const glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedLevel, { rng });
-  if (EffarigUnlock.basicFilter.isUnlocked) {
+  if (EffarigUnlock.glyphFilter.isUnlocked) {
     newGlyph = AutoGlyphProcessor.pick(glyphs);
     if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
       AutoGlyphProcessor.getRidOfGlyph(newGlyph);
@@ -249,7 +249,7 @@ function giveRealityRewards(realityProps) {
   player.realities += realityAndPPMultiplier;
   player.reality.perkPoints += realityAndPPMultiplier;
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
-    player.celestials.effarig.relicShards += realityProps.gainedShards * multiplier;
+    Effarig.shardAmount += realityProps.gainedShards * multiplier;
   }
   if (multiplier > 1 && Enslaved.boostReality) {
     // Real time amplification is capped at 1 second of reality time; if it's faster then using all time at once would
@@ -366,10 +366,8 @@ function finishProcessReality(realityProps) {
   }
   player.infinityRebuyables = [0, 0, 0];
   player.infinityPower = new Decimal(1);
-  player.infDimBuyers = Array.repeat(false, 8);
   player.timeShards = new Decimal(0);
   Replicanti.reset(true);
-  player.replicanti.auto = Array.repeat(false, 3);
   if (!PelleUpgrade.retainEP.canBeApplied || !Pelle.isDoomed || !realityProps.armageddon) {
     player.eternityPoints = Player.startingEP;
   }
@@ -392,7 +390,6 @@ function finishProcessReality(realityProps) {
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;
   player.etercreq = 0;
-  player.infMultBuyer = false;
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
@@ -472,7 +469,7 @@ function finishProcessReality(realityProps) {
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
   // This immediately gives eternity upgrades instead of after the first eternity
-  if (RealityUpgrades.allBought) applyRealityUpgradesAfterEternity(celestialRunState.enslaved);
+  if (RealityUpgrades.allBought) applyRealityUpgradesAfterEternity();
 
   if (!isReset) Ra.applyAlchemyReactions();
 
@@ -501,15 +498,15 @@ function restoreCelestialRuns(celestialRunState) {
 function applyRUPG10() {
   NormalChallenges.completeAll();
 
-  player.auto.dimensions = player.auto.dimensions.map(() => ({
+  player.auto.antimatterDims = player.auto.antimatterDims.map(current => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
     cost: 1e14,
     interval: 100,
     bulk: 1e10,
-    mode: AUTOBUYER_MODE.BUY_10,
-    priority: 1,
-    isActive: true,
+    mode: current.mode,
+    priority: current.priority,
+    isActive: current.isActive,
     lastTick: player.records.realTimePlayed
   }));
   for (const autobuyer of Autobuyers.all) {
@@ -538,13 +535,9 @@ function applyRUPG10() {
   } else {
     player.infinityRebuyables = [8, 7, 10];
   }
-  player.infDimBuyers = Array.repeat(true, 8);
-  player.infMultBuyer = true;
-  player.eternities = player.eternities.plus(100);
+  player.eternities = player.eternities.clampMin(100);
   player.replicanti.amount = player.replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
-  player.replicanti.galaxybuyer = true;
-  player.replicanti.auto = Array.repeat(true, 3);
   GameCache.tickSpeedMultDecrease.invalidate();
   GameCache.dimensionMultDecrease.invalidate();
 }

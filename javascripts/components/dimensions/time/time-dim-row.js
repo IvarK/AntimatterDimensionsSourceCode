@@ -37,7 +37,7 @@ Vue.component("time-dim-row", {
   },
   watch: {
     isAutobuyerOn(newValue) {
-      player.reality.tdbuyers[this.tier - 1] = newValue;
+      Autobuyer.timeDimension(this.tier).isActive = newValue;
     }
   },
   methods: {
@@ -53,7 +53,7 @@ Vue.component("time-dim-row", {
       }
       this.cost.copyFrom(dimension.cost);
       this.isAffordable = dimension.isAffordable;
-      this.isAutobuyerOn = player.reality.tdbuyers[tier - 1];
+      this.isAutobuyerOn = Autobuyer.timeDimension(this.tier).isActive;
       this.realityUnlocked = PlayerProgress.realityUnlocked();
     },
     buyTimeDimension() {

@@ -11,6 +11,7 @@ Vue.component("sacrificed-glyphs", {
         return {
           amount: 0,
           effectValue: 0,
+          isColored: true,
         };
       },
       computed: {
@@ -19,6 +20,16 @@ Vue.component("sacrificed-glyphs", {
         },
         sacConfig() {
           return GlyphSacrifice[this.type].config;
+        },
+        style() {
+          if (!this.isColored) return { };
+          return {
+            color: this.typeConfig.color,
+            "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
+                            -1px -1px 1px var(--color-text-base), 1px -1px 1px var(--color-text-base),
+                            0 0 3px ${this.typeConfig.color}`,
+            animation: this.typeConfig.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
+          };
         },
         symbol() {
           return this.typeConfig.symbol;
@@ -43,11 +54,13 @@ Vue.component("sacrificed-glyphs", {
         update() {
           this.amount = player.reality.glyphs.sac[this.type];
           this.effectValue = GlyphSacrifice[this.type].effectValue;
+          this.isColored = player.options.glyphTextColors;
         }
       },
       template: `
         <div v-if="amount > 0"
-             class="l-sacrificed-glyphs__type">
+             class="l-sacrificed-glyphs__type"
+             :style="style">
           <div>
             <div class="l-sacrificed-glyphs__type-symbol c-sacrificed-glyphs__type-symbol">
               {{symbol}}

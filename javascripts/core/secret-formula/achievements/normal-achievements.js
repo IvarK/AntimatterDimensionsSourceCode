@@ -355,7 +355,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 58,
-    name: "Is this hell?",
+    name: "This is fine.",
     get description() { return `Complete the Tickspeed Autobuyer Challenge in ${formatInt(3)} minutes or less.`; },
     checkRequirement: () => NormalChallenge(9).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
@@ -370,7 +370,7 @@ GameDatabase.achievements.normal = [
     get description() {
       return `Get all of your Antimatter Dimension Autobuyer bulk amounts to ${formatInt(512)} or higher.`;
     },
-    checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0,
+    checkRequirement: () => Autobuyers.antimatterDimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0,
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
     reward: "Dimension Autobuyer bulks are unlimited."
   },
@@ -476,7 +476,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 74,
-    name: "End me",
+    name: "Not a second lost",
     get description() { return `Get the sum of all best Normal Challenge times under ${formatInt(5)} seconds.`; },
     checkRequirement: () => Time.challengeSum.totalSeconds < 5,
     checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER],
@@ -523,7 +523,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 81,
-    name: "Hevipelle did nothing wrong",
+    name: "Game Design Is My Passion",
     get description() { return `Beat Infinity Challenge 5 in ${formatInt(15)} seconds or less.`; },
     checkRequirement: () => InfinityChallenge(5).isRunning && Time.thisInfinityRealTime.totalSeconds <= 15,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE
@@ -638,7 +638,7 @@ GameDatabase.achievements.normal = [
     name: "MAXIMUM OVERDRIVE",
     get description() { return `Big Crunch for ${format(1e300, 0, 0)} Infinity Points.`; },
     checkRequirement: () => gainedInfinityPoints().exponent >= 300,
-    checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
+    checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() { return `Additional ${formatX(4)} multiplier to Infinity Points.`; },
     effect: 4
   },
@@ -670,7 +670,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 97,
-    name: "YES This. Is. Hell.",
+    name: "Like jumping on a lego",
     get description() { return `Get the sum of Infinity Challenge times under ${format(6.66, 2, 2)} seconds.`; },
     checkRequirement: () => Time.infinityChallengeSum.totalSeconds < 6.66,
     checkEvent: [GAME_EVENT.BIG_CRUNCH_AFTER, GAME_EVENT.REALITY_RESET_AFTER],

@@ -15,7 +15,7 @@ class SubtabState {
   }
 
   get isAvailable() {
-    return this.config.condition === undefined || this.config.condition();
+    return this.config.condition === undefined || this.config.condition() || player.devMode;
   }
 
   get hasNotification() {
@@ -54,7 +54,7 @@ class TabState {
   }
 
   get isAvailable() {
-    return this.config.condition === undefined || this.config.condition();
+    return this.config.condition === undefined || this.config.condition() || player.devMode;
   }
 
   get isOpen() {

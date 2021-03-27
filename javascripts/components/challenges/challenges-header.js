@@ -81,6 +81,9 @@ Vue.component("challenges-header", {
         Exit Challenge
       </primary-button>
     </div>
+    <div>
+      Some Normal Challenges have requirements to be able to run that challenge.
+    </div>
     <div v-if="autoEC && isAutoECVisible">
       Eternity Challenges are automatically completed sequentially, requiring all previous
       Eternity Challenges to be fully completed before any progress is made.

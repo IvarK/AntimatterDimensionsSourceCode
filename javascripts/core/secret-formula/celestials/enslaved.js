@@ -26,7 +26,7 @@ GameDatabase.celestials.enslaved = {
     },
     ec6: {
       id: 3,
-      progress: "Took advantage of cheaper galaxy scaling in an Eternity Challenge",
+      progress: "Took advantage of cheaper Replicanti Galaxy scaling in an Eternity Challenge",
       hint: "Some challenges are hard but also boost something in exchange, I wonder if there's a challenge " +
         "that's just strictly better than normal here.",
       condition: "Entered EC6 again after completing it 5 times",

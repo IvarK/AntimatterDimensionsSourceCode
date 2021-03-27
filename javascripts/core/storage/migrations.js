@@ -142,7 +142,9 @@ GameStorage.migrations = {
       GameStorage.migrations.standardizeUncompletedTimes(player);
       GameStorage.migrations.makeRecords(player);
       GameStorage.migrations.deleteOldRecords(player);
+      GameStorage.migrations.migrateAutobuyers(player);
       GameStorage.migrations.migratePlayerVars(player);
+      GameStorage.migrations.consolidateAuto(player);
 
       kong.migratePurchases();
       if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
@@ -543,7 +545,7 @@ GameStorage.migrations = {
     for (let i = 0; i < 8; i++) {
       const old = player.autobuyers[i];
       if (old % 1 === 0) continue;
-      const autobuyer = player.auto.dimensions[i];
+      const autobuyer = player.auto.antimatterDims[i];
       autobuyer.cost = old.cost;
       autobuyer.interval = old.interval;
       autobuyer.bulk = old.bulk;
@@ -606,7 +608,7 @@ GameStorage.migrations = {
           autobuyer.time = condition.lt(Decimal.NUMBER_MAX_VALUE) ? condition.toNumber() : autobuyer.time;
           break;
         case "relative":
-          autobuyer.xLast = condition;
+          autobuyer.xCurrent = condition;
           break;
       }
       autobuyer.isActive = old.isOn;
@@ -779,12 +781,38 @@ GameStorage.migrations = {
     delete player.thisReality;
   },
 
+  migrateAutobuyers(player) {
+    player.auto.bulkOn = player.options.bulkOn;
+    player.auto.autobuyerOn = player.options.autobuyerOn;
+
+    delete player.options.bulkOn;
+    delete player.options.autobuyerOn;
+  },
+
   migratePlayerVars(player) {
     player.replicanti.boughtGalaxyCap = player.replicanti.gal;
     player.dilation.totalTachyonGalaxies = player.dilation.freeGalaxies;
 
     delete player.replicanti.gal;
     delete player.dilation.freeGalaxies;
+  },
+
+  consolidateAuto(player) {
+    for (let i = 0; i < 8; i++) {
+      player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
+    }
+    for (let i = 0; i < 3; i++) {
+      player.auto.replicantiUpgrades[i].isActive = player.replicanti.auto[i];
+    }
+    player.auto.replicantiGalaxies.isActive = player.replicanti.galaxybuyer;
+    player.auto.ipMultBuyer.isActive = player.infMultBuyer;
+
+    delete player.infDimBuyers;
+    delete player.auto.infDimTimer;
+    delete player.replicanti.galaxybuyer;
+    delete player.replicanti.auto;
+    delete player.auto.repUpgradeTimer;
+    delete player.infMultBuyer;
   },
 
   prePatch(saveData) {

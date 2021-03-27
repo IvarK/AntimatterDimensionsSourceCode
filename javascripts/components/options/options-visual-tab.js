@@ -105,7 +105,7 @@ Vue.component("options-visual-tab", {
           off="Exponent formatting: Notation"
         />
       </div>
-      <div class="l-options-grid__row"> 
+      <div class="l-options-grid__row">
         <options-button
           class="o-primary-btn--option"
           onclick="Modal.animationOptions.show();"
@@ -119,9 +119,7 @@ Vue.component("options-visual-tab", {
           onclick="Modal.awayProgressOptions.show()"
         >Open Away Progress Options</options-button>
       </div>
-      <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
-        Press <kbd>?</kbd> to open shortcut list.
-      </p>
+      <open-modal-shortcuts />
     </div>
   </div>`
 });

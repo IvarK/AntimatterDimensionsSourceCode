@@ -9,7 +9,7 @@ Vue.component("tt-shop", {
       shopMinimized: false,
       minimizeAvailable: false,
       hasTTAutobuyer: false,
-      ttAutobuyerOn: false,
+      isAutobuyerOn: false,
       budget: {
         am: new Decimal(0),
         ip: new Decimal(0),
@@ -24,6 +24,11 @@ Vue.component("tt-shop", {
       STamount: 0,
       showTTGen: false
     };
+  },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.timeTheorem.isActive = newValue;
+    }
   },
   computed: {
     minimized() {
@@ -60,9 +65,6 @@ Vue.component("tt-shop", {
     saveLoadText() {
       return this.$viewModel.shiftDown ? "save:" : "load:";
     },
-    autobuyerText() {
-      return this.ttAutobuyerOn ? "ON" : "OFF";
-    }
   },
   methods: {
     minimize() {
@@ -96,7 +98,7 @@ Vue.component("tt-shop", {
       this.shopMinimized = player.timestudy.shopMinimized;
       this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought || Perk.autobuyerTT1.isBought;
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
-      this.ttAutobuyerOn = player.ttbuyer;
+      this.isAutobuyerOn = Autobuyer.timeTheorem.isActive;
       const budget = this.budget;
       budget.am.copyFrom(Currency.antimatter);
       budget.ip.copyFrom(player.infinityPoints);
@@ -109,9 +111,6 @@ Vue.component("tt-shop", {
       this.STamount = V.availableST;
       this.showTTGen = this.theoremGeneration.gt(0) && !ui.view.shiftDown;
     },
-    toggleTTAutobuyer() {
-      player.ttbuyer = !player.ttbuyer;
-    }
   },
   template: `
     <div id="TTbuttons">
@@ -149,13 +148,12 @@ Vue.component("tt-shop", {
               @click="buyMaxTheorems">
               Buy max
             </button>
-            <button v-if="!minimized && hasTTAutobuyer"
-              class="o-tt-autobuyer-button
-              c-tt-buy-button
-              c-tt-buy-button--unlocked"
-              @click="toggleTTAutobuyer">
-              Auto: {{autobuyerText}}
-            </button>
+            <primary-button-on-off
+              v-if="!minimized && hasTTAutobuyer"
+              v-model="isAutobuyerOn"
+              class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
+              text="Auto:"
+            />
           </div>
         </div>
       </div>
@@ -194,14 +192,14 @@ Vue.component("tt-save-load-button", {
       this.hideContextMenu();
       this.preset.studies = studyTreeExportString();
       const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
-      GameUI.notify.info(`${presetName} saved in slot ${this.saveslot}`);
+      GameUI.notify.eternity(`${presetName} saved in slot ${this.saveslot}`);
     },
     load() {
       this.hideContextMenu();
       if (this.preset.studies) {
         importStudyTree(this.preset.studies);
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
-        GameUI.notify.info(`${presetName} loaded from slot ${this.saveslot}`);
+        GameUI.notify.eternity(`${presetName} loaded from slot ${this.saveslot}`);
       } else {
         Modal.message.show("This Time Study list currently contains no Time Studies.");
       }
@@ -210,7 +208,7 @@ Vue.component("tt-save-load-button", {
       this.hideContextMenu();
       copyToClipboard(this.preset.studies);
       const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
-      GameUI.notify.info(`${presetName} exported from slot ${this.saveslot} to your clipboard`);
+      GameUI.notify.eternity(`${presetName} exported from slot ${this.saveslot} to your clipboard`);
     },
     edit() {
       Modal.editTree.show({ id: this.saveslot - 1 });

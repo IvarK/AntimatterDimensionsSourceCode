@@ -20,7 +20,7 @@ Vue.component("glyph-header", {
   methods: {
     update() {
       this.autoSort = player.reality.autoSort;
-      this.showScoreFilter = EffarigUnlock.basicFilter.isUnlocked;
+      this.showScoreFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.autoCollapse = player.reality.autoCollapse;
       this.showAutoAutoClean = V.has(V_UNLOCKS.AUTO_AUTOCLEAN);
       this.autoAutoClean = player.reality.autoAutoClean;

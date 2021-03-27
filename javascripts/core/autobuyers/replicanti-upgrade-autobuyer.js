@@ -26,6 +26,7 @@ class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
   tick() {
     const upgradeName = this._upgradeName;
     if (EternityChallenge(8).isRunning) return;
+    super.tick();
     ReplicantiUpgrade[upgradeName].autobuyerTick();
   }
 }

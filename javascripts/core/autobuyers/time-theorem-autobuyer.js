@@ -25,6 +25,7 @@ Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends IntervaledAu
   }
 
   tick() {
+    super.tick();
     TimeTheorems.buyMax(true);
   }
 }();

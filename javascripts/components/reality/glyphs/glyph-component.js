@@ -85,6 +85,7 @@ const GlyphTooltipComponent = {
   },
   props: {
     type: String,
+    color: String,
     strength: Number,
     level: Number,
     effects: Number,
@@ -93,6 +94,11 @@ const GlyphTooltipComponent = {
       type: Number,
       default: 0,
     },
+    refineReward: {
+      type: Number,
+      default: 0,
+    },
+    currentAction: String,
     showDeletionText: {
       type: Boolean,
       default: true,
@@ -118,15 +124,13 @@ const GlyphTooltipComponent = {
       return getRarity(this.strength);
     },
     descriptionStyle() {
+      const color = this.color || this.rarityInfo.color;
       return {
-        color: this.rarityInfo.color,
-        "text-shadow": `-1px 1px 1px black, 1px 1px 1px black,
-                        -1px -1px 1px black, 1px -1px 1px black,
-                        0 0 3px ${this.rarityInfo.color}`,
-        float: "left",
-        animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined,
-        "margin-top": this.type === "reality" ? "0.7rem" : undefined,
-        "margin-left": this.type === "reality" ? "0.7rem" : undefined
+        color,
+        "text-shadow": `-0.1rem 0.1rem 0.1rem black, 0.1rem 0.1rem 0.1rem black,
+                        -0.1rem -0.1rem 0.1rem black, 0.1rem -0.1rem 0.1rem black,
+                        0 0 0.3rem ${color}`,
+        animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined
       };
     },
     description() {
@@ -139,7 +143,7 @@ const GlyphTooltipComponent = {
         case "reality":
           return `Pure Glyph of ${glyphName}`;
         default:
-          return `${this.rarityInfo.name} Glyph of ${glyphName} (${formatRarity(strengthToRarity(this.strength))})`;
+          return `${this.rarityInfo.name} Glyph of ${glyphName}`;
       }
     },
     isLevelCapped() {
@@ -148,39 +152,19 @@ const GlyphTooltipComponent = {
     isLevelBoosted() {
       return this.levelOverride && this.levelOverride > this.level;
     },
+    rarityText() {
+      if (this.type === "companion" || this.type === "reality") return "";
+      return `| Rarity: <span style="color: ${this.rarityInfo.color}">${formatRarity(strengthToRarity(this.strength))}</span>`;
+    },
     levelText() {
       if (this.type === "companion") return "";
       // eslint-disable-next-line no-nested-ternary
-      const arrow = this.isLevelCapped ? "▼" : (this.isLevelBoosted ? "⯅" : "");
-      return `Level: ${arrow}${formatInt(this.effectiveLevel)}${arrow}`;
-    },
-    levelStyle() {
-      // eslint-disable-next-line no-nested-ternary
-      const color = this.isLevelCapped ? "#FF1111" : (this.isLevelBoosted ? "#44FF44" : "");
-      return { color };
-    },
-    sacrificeText() {
-      if (this.type === "companion") return "";
-      if (this.type === "cursed") return "Gives nothing when sacrificed or refined";
-      if (GlyphSacrificeHandler.isRefining && this.type !== "reality") {
-        if (!AlchemyResource[this.type].isUnlocked) return "Cannot be refined (resource not unlocked)";
-        const refinementText = `${format(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
-        const limitText = this.sacrificeReward === 0
-          ? ` (limit reached)`
-          : ``;
-        return this.onTouchDevice
-          ? `Refine for ${refinementText}${limitText}`
-          : `Can be refined for ${refinementText}${limitText}`;
-      }
-      const powerText = `${format(this.sacrificeReward, 2, 2)} power`;
-      const showFilterScoreModes = [AUTO_GLYPH_SCORE.RARITY, AUTO_GLYPH_SCORE.RARITY_THRESHOLDS,
-        AUTO_GLYPH_SCORE.SPECIFIED_EFFECT, AUTO_GLYPH_SCORE.ADVANCED_MODE];
-      const filterScoreText = showFilterScoreModes.includes(AutoGlyphProcessor.scoreMode)
-        ? `\nGlyph Score: ${format(AutoGlyphProcessor.filterValue(this.$parent.glyph), 1, 1)}`
-        : "";
-      return this.onTouchDevice
-        ? `Sacrifice for ${powerText}${filterScoreText}`
-        : `Can be sacrificed for ${powerText}${filterScoreText}`;
+      const arrow = this.isLevelCapped
+        ? "<i class='fas fa-sort-down'></i>"
+        : (this.isLevelBoosted ? "<i class='fas fa-sort-up'></i>" : "");
+      return `Level: <span style="color: ${this.isLevelBoosted ? "#44FF44" : ""}">
+              ${arrow}${formatInt(this.effectiveLevel)}${arrow}
+              </span>`;
     },
     eventHandlers() {
       return GameUI.touchDevice ? {
@@ -189,10 +173,23 @@ const GlyphTooltipComponent = {
         dragEnd: this.dragEnd,
       } : {};
     },
-    pointerEventStyle() {
+    glyphTooltipStyle() {
       // With computer mice, it's nice to just totally disable mouse events on the tooltip,
       // which reduces the chances for stupidity
-      return this.onTouchDevice ? {} : { "pointer-events": "none" };
+      return {
+        "pointer-events": this.onTouchDevice ? undefined : "none",
+        "border-color": GlyphTypes[this.type].color,
+        "box-shadow": `0 0 0.5rem ${GlyphTypes[this.type].color}, 0 0 0.5rem ${GlyphTypes[this.type].color} inset`,
+        animation: this.type === "reality" ? "a-reality-glyph-tooltip-cycle 10s infinite" : undefined
+      };
+    },
+    glyphHeaderStyle() {
+      const color = this.color || this.rarityInfo.color;
+      return {
+        "border-color": color,
+        "box-shadow": `0 0 0.5rem 0.1rem ${color}, 0 0 0.8rem ${color} inset`,
+        animation: this.type === "reality" ? "a-reality-glyph-tooltip-header-cycle 10s infinite" : undefined
+      };
     }
   },
   methods: {
@@ -213,6 +210,24 @@ const GlyphTooltipComponent = {
     removeGlyph() {
       GlyphSacrificeHandler.removeGlyph(Glyphs.findById(this.id), false);
     },
+    sacrificeText() {
+      if (this.type === "companion" || this.type === "cursed") return "";
+      const powerText = `${format(this.sacrificeReward, 2, 2)}`;
+      const isCurrentAction = this.currentAction === "sacrifice";
+      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
+              Sacrifice: ${powerText}
+              </span>`;
+    },
+    refineText() {
+      if (this.type === "companion" || this.type === "cursed" || this.type === "reality") return "";
+      if (!AlchemyResource[this.type].isUnlocked) return "Refine: resource not unlocked";
+        const refinementText = `${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+        const isCurrentAction = this.currentAction === "refine";
+      const actionName = this.refineReward === 0 ? "Capped" : "Refine";
+      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
+              ${actionName}: ${refinementText}
+              </span>`;
+    },
   },
   mounted() {
     // By attaching the tooltip to the body element, we make sure it ends up on top of anything
@@ -224,23 +239,31 @@ const GlyphTooltipComponent = {
   },
   template: `
   <div class="l-glyph-tooltip c-glyph-tooltip"
-       :style="pointerEventStyle"
+       :style="glyphTooltipStyle"
        v-on="eventHandlers">
-    <div class="l-glyph-tooltip__header">
-      <span class="c-glyph-tooltip__description"
-            :style="descriptionStyle">{{description}}</span>
-      <span class="l-glyph-tooltip__level" :style="levelStyle">{{levelText}}</span>
+    <div class="c-glyph-tooltip__header" :style="glyphHeaderStyle">
+      <span class="c-glyph-tooltip__description" :style="descriptionStyle">
+        {{description}}
+      </span>
+      <span class="l-glyph-tooltip__info">
+        <span v-html="levelText"></span>
+        <span v-html="rarityText"></span>
+      </span>
+      <span v-if="showDeletionText" class="l-glyph-tooltip__sacrifice">
+        <span
+          :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
+          v-on="onTouchDevice ? { click: removeGlyph } : {}">
+          <span v-html="sacrificeText()"></span>
+          <span v-if="sacrificeText() && refineText()"> | </span>
+          <span v-html="refineText()"></span>
+        </span>
+      </span>
     </div>
     <div class="l-glyph-tooltip__effects">
       <effect-desc v-for="e in sortedEffects"
                    :key="e.id"
                    :effect="e.id"
                    :value="e.value"/>
-    </div>
-    <div v-if="showDeletionText"
-         :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
-         v-on="onTouchDevice ? { click: removeGlyph } : {}">
-      {{sacrificeText}}
     </div>
   </div>
   `,
@@ -301,6 +324,7 @@ Vue.component("glyph-component", {
       suppressTooltip: false,
       isTouched: false,
       sacrificeReward: 0,
+      refineReward: 0,
       levelOverride: 0,
       isRealityGlyph: false,
       glyphEffects: [],
@@ -453,10 +477,18 @@ Vue.component("glyph-component", {
     showTooltip() {
       this.tooltipLoaded = true;
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = GlyphSacrificeHandler.isRefining &&
-        ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+      this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
+      this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
         ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
-        : GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
+        : 0;
+      if (
+        AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE ||
+        (AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP && this.refineReward === 0)
+        ) {
+          this.currentAction = "sacrifice";
+      } else {
+        this.currentAction = "refine";
+      }
       this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
     },
     moveTooltipTo(x, y) {
@@ -602,6 +634,8 @@ Vue.component("glyph-component", {
           v-bind="glyph"
           :class="tooltipDirectionClass"
           :sacrificeReward="sacrificeReward"
+          :refineReward="refineReward"
+          :currentAction="currentAction"
           :showDeletionText="showSacrifice"
           :levelOverride="levelOverride"
           :component="componentID"/>

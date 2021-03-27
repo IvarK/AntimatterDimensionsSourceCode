@@ -365,6 +365,14 @@
   border: 0.2rem solid black;
 }
 
+.t-metro .c-glyph-tooltip,
+.t-dark-metro .c-glyph-tooltip,
+.t-inverted-metro .c-glyph-tooltip,
+.t-s8 .c-glyph-tooltip {
+  border-radius: 0;
+  border-width: 0.1rem;
+}
+
 .c-glyph-tooltip__description {
   font-size: 1.6rem;
 }
@@ -378,11 +386,19 @@
   flex-direction: column;
   width: calc(100% + 2.4rem);
   border: 0.2rem solid;
-  padding: 0.3rem 0 0.7rem;
+  padding: 0.3rem 1rem 0.7rem;
   font-weight: bold;
   margin-top: -4rem;
   background-color: black;
-  border-radius: 8px;
+  border-radius: 0.8rem;
+}
+
+.t-metro .c-glyph-tooltip__header,
+.t-dark-metro .c-glyph-tooltip__header,
+.t-inverted-metro .c-glyph-tooltip__header,
+.t-s8 .c-glyph-tooltip__header {
+  border-radius: 0;
+  border-width: 0.1rem;
 }
 
 .l-glyph-tooltip__effects {

@@ -92,7 +92,7 @@ Vue.component("tt-shop", {
       TimeTheorems.buyMax();
     },
     update() {
-      this.theoremAmount.copyFrom(Currency.timeTheorems.value);
+      this.theoremAmount.copyFrom(Currency.timeTheorems);
       this.theoremGeneration.copyFrom(getTTPerSecond().times(getGameSpeedupFactor()));
       this.totalTimeTheorems.copyFrom(Currency.timeTheorems.max);
       this.shopMinimized = player.timestudy.shopMinimized;

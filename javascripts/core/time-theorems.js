@@ -14,9 +14,7 @@ class TimeTheoremPurchaseType {
   */
   set amount(value) { throw new NotImplementedError(); }
 
-  add(amount) {
-    this.amount += amount;
-  }
+  add(amount) { this.amount += amount; }
 
   /**
   * @abstract
@@ -40,10 +38,9 @@ class TimeTheoremPurchaseType {
   purchase(bulk) {
     if (this.currency.lt(this.cost)) return false;
     if (bulk && this.bulkPossible) {
-      if (this.currency.purchase(this.cost.times(this.costIncrement.pow(this.bulkPossible)))) {
-        Currency.timeTheorems.add(this.bulkPossible);
-        this.add(this.bulkPossible);
-      }
+      if (!this.currency.purchase(this.cost.times(this.costIncrement.pow(this.bulkPossible)))) return false;
+      Currency.timeTheorems.add(this.bulkPossible);
+      this.add(this.bulkPossible);
     }
     if (!this.currency.purchase(this.cost)) return bulk;
     Currency.timeTheorems.add(1);
@@ -62,7 +59,7 @@ TimeTheoremPurchaseType.am = new class extends TimeTheoremPurchaseType {
   get currency() { return Currency.antimatter; }
   get costBase() { return new Decimal("1e20000"); }
   get costIncrement() { return new Decimal("1e20000"); }
-  get bulkPossible() { return Math.floor(this.currency.exponent / this.costIncrement.e) - this.amount; }
+  get bulkPossible() { return Math.max(Math.floor(this.currency.exponent / this.costIncrement.e) - this.amount, 0); }
 }();
 
 TimeTheoremPurchaseType.ip = new class extends TimeTheoremPurchaseType {
@@ -71,7 +68,7 @@ TimeTheoremPurchaseType.ip = new class extends TimeTheoremPurchaseType {
   get currency() { return Currency.infinityPoints; }
   get costBase() { return new Decimal(1); }
   get costIncrement() { return new Decimal(1e100); }
-  get bulkPossible() { return Math.floor(this.currency.exponent / this.costIncrement.e) - this.amount; }
+  get bulkPossible() { return Math.max(Math.floor(this.currency.exponent / this.costIncrement.e) - this.amount, 0); }
 }();
 
 TimeTheoremPurchaseType.ep = new class extends TimeTheoremPurchaseType {
@@ -80,7 +77,7 @@ TimeTheoremPurchaseType.ep = new class extends TimeTheoremPurchaseType {
   get currency() { return Currency.eternityPoints; }
   get costBase() { return new Decimal(1); }
   get costIncrement() { return new Decimal(2); }
-  get bulkPossible() { return Math.round(this.currency.value.log2()) - this.amount; }
+  get bulkPossible() { return Math.max(Math.round(this.currency.value.log2()) - this.amount, 0); }
 }();
 
 const TimeTheorems = {

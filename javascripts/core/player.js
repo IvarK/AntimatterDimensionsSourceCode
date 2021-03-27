@@ -551,15 +551,18 @@ let player = {
       unstableMatter: new Decimal(0),
       famine: {
         amount: new Decimal(0),
-        timer: 0
+        timer: 0,
+        speedUpgrades: 0
       },
       pestilence:  {
         amount: new Decimal(0),
-        timer: 0
+        timer: 0,
+        speedUpgrades: 0
       },
       chaos:  {
         amount: new Decimal(0),
-        timer: 0
+        timer: 0,
+        speedUpgrades: 0
       },
       // For recording which ones you permanently have
       infinityUpgrades: new Set(),

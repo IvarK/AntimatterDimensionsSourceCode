@@ -85,7 +85,8 @@ const Pelle = {
   famine: {
     get fillTime() {
       let div = PelleUpgrade.famineGain.canBeApplied ? 2 : 1;
-      return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts + 2) + 1) / div;
+      const speedUpgradeEffect = 1.2 ** player.celestials.pelle.famine.speedUpgrades;
+      return 2.5 * 1 / Math.log10(Math.log10(player.dimensionBoosts + 2) + 1) / div / speedUpgradeEffect;
     },
     get gain() {
       let base = 1;
@@ -109,15 +110,21 @@ const Pelle = {
     }
   },
   pestilence: {
-    get fillTime() { return 10 / (Math.log10(Replicanti.amount.log10() + 1) + 1) },
+    get fillTime() { 
+      const speedUpgradeEffect = 1.2 ** player.celestials.pelle.pestilence.speedUpgrades;
+      return 10 / (Math.log10(Replicanti.amount.log10() + 1) + 1) / speedUpgradeEffect
+    },
     get gain() { return 1 },
     get unlocked() { return PelleUpgrade.pestilenceUnlock.canBeApplied },
-    get armageddonTimeMultiplier() { return player.celestials.pelle.pestilence.amount.plus(1).log10() },
+    get armageddonTimeMultiplier() { return Math.max(player.celestials.pelle.pestilence.amount.plus(1).log10(), 1) },
     get famineGainMult() { return player.celestials.pelle.pestilence.amount.pow(0.5).plus(1).toNumber() },
     get bonusDescription() { return `Armageddon lasts ${formatX(this.armageddonTimeMultiplier, 2, 2)} longer, you gain ${formatX(this.famineGainMult, 2, 2)} more Famine.` }
   },
   chaos: {
-    get fillTime() { return 10 },
+    get fillTime() { 
+      const speedUpgradeEffect = 1.2 ** player.celestials.pelle.chaos.speedUpgrades;
+      return 10 / speedUpgradeEffect;
+    },
     get gain() { return 1 },
     get unlocked() { return false },
     get bonusDescription() { return `` }

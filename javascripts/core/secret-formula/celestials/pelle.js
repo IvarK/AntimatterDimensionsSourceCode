@@ -11,15 +11,15 @@ GameDatabase.celestials.pelle = {
     longerArmageddon: {
       id: 2,
       description: "Armageddon happens every 5 seconds",
-      cost: 200,
+      cost: 50,
       currency: "unstableMatter"
     },
     timeMultToUnstable: {
       id: 3,
-      description: "Get more unstable matter based on Armageddon duration",
-      cost: 20,
+      description: "Get more unstable matter based on Armageddon length",
+      cost: 10,
       currency: "famine",
-      effect: () => (player.records.thisReality.realTime / 500) ** 1.1,
+      effect: () => (Pelle.armageddonInterval / 500) ** 1.1,
       formatEffect: x => formatX(x, 2, 2)
     },
     ipGain: {

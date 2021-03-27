@@ -12,7 +12,9 @@ Vue.component("pelle-currency", {
       timer: 0,
       description: "",
       canBeBought: false,
-      showRebuyable: false
+      showRebuyable: false,
+      speedUpgrades: 0,
+      unstableMatter: new Decimal(0)
     };
   },
   computed: {
@@ -43,6 +45,22 @@ Vue.component("pelle-currency", {
     },
     config() {
       return this.rebuyable.config;
+    },
+    speedUpgradeConfig() {
+      return {
+        cost: 500 * (5 ** this.speedUpgrades),
+        description: `Gain ${this.currency} 20% faster.`,
+        effect: () => 1.2 ** this.speedUpgrades,
+        formatEffect: x => formatX(x, 2, 2)
+      }
+    },
+    canBuySpeedUpgrade() {
+      return this.unstableMatter.gte(this.speedUpgradeConfig.cost);
+    },
+    speedUpgradeClass() {
+      return {
+        "pelle-upgrade--canbuy": this.canBuySpeedUpgrade
+      };
     }
   },
   methods: {
@@ -54,6 +72,8 @@ Vue.component("pelle-currency", {
       this.description = Pelle[this.currency].bonusDescription;
 
       this.canBeBought = this.rebuyable.canBeBought;
+      this.speedUpgrades = player.celestials.pelle[this.currency].speedUpgrades;
+      this.unstableMatter.copyFrom(player.celestials.pelle.unstableMatter);
 
       switch (this.config.id) {
         case "permanentTickspeed":
@@ -83,6 +103,11 @@ Vue.component("pelle-currency", {
           return "";
       }
     },
+    purchaseSpeedUpgrade() {
+      if (!this.canBuySpeedUpgrade) return;
+      player.celestials.pelle.unstableMatter = player.celestials.pelle.unstableMatter.minus(this.speedUpgradeConfig.cost);
+      player.celestials.pelle[this.currency].speedUpgrades++;
+    }
   },
   template:
   `<div class="pelle-currency">
@@ -92,6 +117,18 @@ Vue.component("pelle-currency", {
     </div>
     <p>{{ descriptionDisplay() }}</p>
     <p>{{ description }}</p>
+    <div
+      class="pelle-upgrade"
+      :class="speedUpgradeClass" 
+      @click="purchaseSpeedUpgrade()">
+      <description-display :config="speedUpgradeConfig"/>
+      <effect-display br :config="speedUpgradeConfig" />
+      <cost-display br
+        :config="speedUpgradeConfig"
+        singular="Unstable Matter"
+        plural="Unstable Matter"
+      />
+    </div>
     <div
       v-if="showRebuyable"
       class="pelle-upgrade"

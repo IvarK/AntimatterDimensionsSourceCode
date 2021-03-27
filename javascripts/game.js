@@ -639,7 +639,7 @@ function laitelaRealityTick(realDiff) {
     }
     Modal.message.show(completionText);
   }
-  if (laitelaInfo.entropy < 0) Currency.antimatter.value = new Decimal(0);
+  if (laitelaInfo.entropy < 0) Currency.antimatter.dropTo(0);
 }
 
 // This gives IP/EP/RM from the respective upgrades that reward the prestige currencies continuously
@@ -656,11 +656,6 @@ function applyAutoprestige(diff) {
       .timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
       .times(diff / 1000);
     Currency.realityMachines.add(addedRM);
-  }
-
-  if (player.records.bestReality.bestEP.lt(Currency.eternityPoints.value)) {
-    player.records.bestReality.bestEP = new Decimal(Currency.eternityPoints.value);
-    player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }
 

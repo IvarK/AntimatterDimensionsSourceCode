@@ -40,7 +40,7 @@ const Teresa = {
     const rm = Currency.realityMachines.value;
     const rmPoured = Math.min((this.pouredAmount + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber());
     this.pouredAmount += Math.min(rmPoured, Teresa.pouredAmountCap - this.pouredAmount);
-    Currency.realityMachines.value = rm.minus(rmPoured);
+    Currency.realityMachines.subtract(rmPoured);
     this.checkForUnlocks();
   },
   checkForUnlocks() {

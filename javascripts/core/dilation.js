@@ -89,8 +89,7 @@ function buyDilationUpgrade(id, bulk) {
       if (Enslaved.isRunning) {
         retroactiveTPFactor = Math.pow(retroactiveTPFactor, Enslaved.tachyonNerf);
       }
-      Currency.tachyonParticles.value = Currency.tachyonParticles.value
-        .times(Decimal.pow(retroactiveTPFactor, buying));
+      Currency.tachyonParticles.multiply(Decimal.pow(retroactiveTPFactor, buying));
     }
   }
   return true;
@@ -136,7 +135,7 @@ function tachyonGainMultiplier() {
 }
 
 function rewardTP() {
-  Currency.tachyonParticles.value = Decimal.max(Currency.tachyonParticles.value, getTP(Currency.antimatter.value));
+  Currency.tachyonParticles.bumpTo(getTP(Currency.antimatter.value));
 }
 
 // Returns the TP that would be gained this run

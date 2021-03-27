@@ -127,6 +127,14 @@ class Currency {
     this.value = this.operations.max(this.operations.subtract(this.value, amount), 0);
   }
 
+  multiply(amount) {
+    this.value = this.operations.multiply(this.value, amount);
+  }
+
+  divide(amount) {
+    this.value = this.operations.divide(this.value, amount);
+  }
+
   eq(amount) {
     return this.operations.eq(this.value, amount);
   }
@@ -155,6 +163,10 @@ class Currency {
 
   bumpTo(value) {
     this.value = this.operations.max(this.value, value);
+  }
+
+  dropTo(value) {
+    this.value = this.operations.min(this.value, value);
   }
 
   get startingValue() { throw new NotImplementedError(); }
@@ -187,6 +199,7 @@ Currency.antimatter = new class extends DecimalCurrency {
 
   set value(value) {
     player.antimatter = value;
+    player.records.totalAntimatter = player.records.totalAntimatter.max(value);
     player.records.thisInfinity.maxAM = player.records.thisInfinity.maxAM.max(value);
     player.records.thisEternity.maxAM = player.records.thisEternity.maxAM.max(value);
     player.records.thisReality.maxAM = player.records.thisReality.maxAM.max(value);
@@ -194,10 +207,6 @@ Currency.antimatter = new class extends DecimalCurrency {
 
   add(amount) {
     super.add(amount);
-    player.records.totalAntimatter = player.records.totalAntimatter.plus(amount);
-    player.records.thisInfinity.maxAM = player.records.thisInfinity.maxAM.plus(amount);
-    player.records.thisEternity.maxAM = player.records.thisEternity.maxAM.plus(amount);
-    player.records.thisReality.maxAM = player.records.thisReality.maxAM.plus(amount);
     if (amount.gt(0)) player.achievementChecks.noAntimatterProduced = false;
   }
 
@@ -233,12 +242,6 @@ Currency.infinityPoints = new class extends DecimalCurrency {
     player.records.thisReality.maxIP = player.records.thisReality.maxIP.max(value);
   }
 
-  add(amount) {
-    super.add(amount);
-    player.records.thisEternity.maxIP = player.records.thisEternity.maxIP.plus(amount);
-    player.records.thisReality.maxIP = player.records.thisReality.maxIP.plus(amount);
-  }
-
   get startingValue() {
     return Effects.max(
       0,
@@ -259,11 +262,10 @@ Currency.eternityPoints = new class extends DecimalCurrency {
   set value(value) {
     player.eternityPoints = value;
     player.records.thisReality.maxEP = player.records.thisReality.maxEP.max(value);
-  }
-
-  add(amount) {
-    super.add(amount);
-    player.records.thisReality.maxEP = player.records.thisReality.maxEP.plus(amount);
+    if (player.records.bestReality.bestEP.lt(value)) {
+      player.records.bestReality.bestEP.copyFrom(Currency.eternityPoints);
+      player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
+    }
   }
 
   get startingValue() {
@@ -288,7 +290,7 @@ Currency.timeTheorems = new class extends DecimalCurrency {
   add(amount) {
     super.add(amount);
     player.timestudy.maxTheorem = player.timestudy.maxTheorem.plus(amount);
-    player.achievementChecks.noTheoremPurchases = false;
+    if (new Decimal(amount).gt(0)) player.achievementChecks.noTheoremPurchases = false;
   }
 
   reset() {
@@ -296,7 +298,7 @@ Currency.timeTheorems = new class extends DecimalCurrency {
     TimeTheoremPurchaseType.am.reset();
     TimeTheoremPurchaseType.ip.reset();
     TimeTheoremPurchaseType.ep.reset();
-    player.timestudy.maxTheorem = this.startingValue;
+    player.timestudy.maxTheorem = this.startingValue.plus(TimeTheorems.calculateTimeStudiesCost());
   }
 }();
 

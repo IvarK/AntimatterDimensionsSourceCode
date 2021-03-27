@@ -264,7 +264,7 @@ function giveRealityRewards(realityProps) {
 
   if (Teresa.isRunning) {
     if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
-      player.celestials.teresa.bestRunAM = Currency.antimatter.value;
+      player.celestials.teresa.bestRunAM.copyFrom(Currency.antimatter);
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
       player.celestials.teresa.lastRepeatedRM = player.celestials.teresa.lastRepeatedRM
         .clampMin(Currency.realityMachines.value);

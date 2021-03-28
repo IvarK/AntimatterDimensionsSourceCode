@@ -4,8 +4,9 @@ function giveEternityRewards(auto) {
   player.records.bestEternity.time = Math.min(player.records.thisEternity.time, player.records.bestEternity.time);
   player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
 
-  const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
+  let newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
+  if (Pelle.isDisabled("eternityMults")) newEternities = new Decimal(1);
   if (player.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
   }

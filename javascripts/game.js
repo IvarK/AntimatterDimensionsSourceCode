@@ -598,6 +598,7 @@ function passivePrestigeGen() {
     eternitiedGain = Decimal.times(eternitiedGain, getAdjustedGlyphEffect("timeetermult"));
     eternitiedGain = new Decimal(Time.deltaTime).times(
       Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue));
+    if (Pelle.isDisabled("eternityMults")) eternitiedGain = new Decimal(1);
     player.reality.partEternitied = player.reality.partEternitied.plus(eternitiedGain);
     player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
     player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());

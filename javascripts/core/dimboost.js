@@ -146,7 +146,7 @@ function skipResetsIfPossible() {
   }
   if (InfinityUpgrade.skipResetGalaxy.isBought && player.dimensionBoosts < 4) {
     player.dimensionBoosts = 4;
-    if (player.galaxies === 0) player.galaxies = 1;
+    if (player.galaxies === 0 && !Pelle.isDisabled("galaxies")) player.galaxies = 1;
   } else if (InfinityUpgrade.skipReset3.isBought && player.dimensionBoosts < 3) player.dimensionBoosts = 3;
   else if (InfinityUpgrade.skipReset2.isBought && player.dimensionBoosts < 2) player.dimensionBoosts = 2;
   else if (InfinityUpgrade.skipReset1.isBought && player.dimensionBoosts < 1) player.dimensionBoosts = 1;

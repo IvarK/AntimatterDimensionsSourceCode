@@ -16,7 +16,7 @@ GameDatabase.reality.glyphSacrifice = [
   }, {
     id: "infinity",
     effect: () => {
-      if (Pelle.isDisabled("glyphsac")) return 0;
+      if (Pelle.isDisabled("glyphsac")) return 1;
       return 1 + Math.log10(1 + Math.pow(player.reality.glyphs.sac.infinity, 0.2) / 100);
     },
     description: amount => {
@@ -26,7 +26,7 @@ GameDatabase.reality.glyphSacrifice = [
   }, {
     id: "time",
     effect: () => {
-      if (Pelle.isDisabled("glyphsac")) return 0;
+      if (Pelle.isDisabled("glyphsac")) return 1;
       return Math.pow(1 + Math.pow(player.reality.glyphs.sac.time, 0.2) / 100, 2);
     },
     description: amount => {

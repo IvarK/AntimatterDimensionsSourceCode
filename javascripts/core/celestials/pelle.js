@@ -37,6 +37,9 @@ const Pelle = {
       case "eternityGain":
         return !PelleUpgrade.eternityGain.canBeApplied;
 
+      case "eternityMults":
+        return true;
+
       case "studies":
         return !PelleUpgrade.studiesUnlock.canBeApplied;
 

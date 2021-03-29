@@ -3,11 +3,17 @@
 const AntimatterDimensionCommonMultiplier = new EffectScope("Antimatter Dimension Common Multipliers", scope =>
   scope.addMultipliers(
     // Make Inf pow its own Effect Scope
-    new Effect(
-      () => player.infinityPower.pow(getInfinityConversionRate()).max(1),
-      undefined,
-      () => !EternityChallenge(9).isRunning
-    ),
+    new EffectScope("Infinity Power Multiplier", scoped => {
+      scoped.addMultipliers(
+        new Effect(
+          () => player.infinityPower
+        )).addPowers(
+          new Effect(
+            getInfinityConversionRate
+          )
+      );
+      scoped.condition = () => !EternityChallenge(9).isRunning;
+    }),
     new Effect(() => Achievements.power),
     new Effect(() => ShopPurchase.dimPurchases.currentMult),
     new Effect(() => ShopPurchase.allDimPurchases.currentMult),

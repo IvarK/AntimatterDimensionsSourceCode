@@ -44,6 +44,10 @@ class EffectScope {
     this._conditional = callback;
   }
 
+  get base() {
+    return this._base;
+  }
+
   get name() {
     return this._name;
   }
@@ -51,6 +55,19 @@ class EffectScope {
   get value() {
     return this._value;
   }
+
+  get effects() {
+    return this._effects;
+  }
+
+  get effectValue() {
+    return this._value;
+  }
+
+  get canBeApplied() {
+    return this._conditional();
+  }
+
 
   /**
    * @param {EFFECT_TYPE} type
@@ -154,8 +171,8 @@ const EffectScopes = (function() {
     scopeList.push(scope);
   };
   return {
+    get all() { return compiled; },
     find: name => compiled.find(scope => name === scope.name),
-    all: () => compiled,
     add: scope => _add(scope),
     update: () => _update(),
   };

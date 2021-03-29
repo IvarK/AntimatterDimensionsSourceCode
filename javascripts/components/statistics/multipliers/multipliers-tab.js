@@ -2,6 +2,10 @@
 
 Vue.component("multipliers-tab", {
   data() {
+    return {
+    };
   },
-  template: ``
+  template: `
+    <multiplier-breakdown id="37"/>
+  `
 });

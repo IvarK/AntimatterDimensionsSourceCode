@@ -77,8 +77,7 @@ Vue.component("game-header", {
           return this.infinityUnlocked || this.activeChallengeNames.length > 0;
         },
         isInFailableEC() {
-          return this.activeChallengeNames.includes("Eternity Challenge 4") ||
-            this.activeChallengeNames.includes("Eternity Challenge 12");
+          return this.activeChallengeNames.some(str => str.match(/Eternity Challenge (4|12).*/gu));
         },
         challengeDisplay() {
           if (this.activeChallengeNames.length === 0) {

@@ -7,8 +7,10 @@ Vue.component("new-dimensions-tab", {
       buyUntil10: true,
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
+      buy10Mult: new Decimal(0),
       currentSacrifice: new Decimal(0),
       sacrificeBoost: new Decimal(0),
+      multiplierText: "",
       disabledCondition: "",
       isQuickResetAvailable: false,
       isContinuumActive: false,
@@ -46,8 +48,13 @@ Vue.component("new-dimensions-tab", {
       if (!isSacrificeUnlocked) return;
       this.isSacrificeAffordable = Sacrifice.canSacrifice;
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
+      this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
+
+      this.multiplierText = `Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
+      if (this.isSacrificeUnlocked) this.multiplierText +=
+        ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
     },
   },
   template:
@@ -68,7 +75,7 @@ Vue.component("new-dimensions-tab", {
       </primary-button>
       <button class="o-primary-btn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">Max All (M)</button>
     </div>
-    <span v-if="isSacrificeUnlocked">Dimensional Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
+    <span>{{ multiplierText }}</span>
     <new-tickspeed-row/>
     <div class="l-dimensions-container">
       <new-dimension-row

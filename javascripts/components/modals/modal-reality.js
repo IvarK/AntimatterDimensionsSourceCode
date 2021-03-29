@@ -10,7 +10,7 @@ Vue.component("modal-reality", {
     return {
       glyphs: [],
       levelDifference: 0,
-      selectedGlyph: Number,
+      selectedGlyph: undefined,
       level: 0,
       canPeek: false,
       isVisible: false,
@@ -73,10 +73,18 @@ Vue.component("modal-reality", {
       this.level = gainedGlyphLevel().actualLevel;
       this.grabEffects();
     },
-    handleYesClick() {
-      requestManualReality();
-      GlyphSelection.select(this.selectedGlyph, false);
-      this.emitClose();
+    handleYesClick(isSacrificing) {
+      if (isSacrificing) {
+        GlyphSelection.select(this.glyphs[Math.floor(Math.random() * GlyphSelection.choiceCount)], true);
+        triggerManualReality(getRealityProps(false, true));
+        this.emitClose();
+      } else if (this.selectedGlyph === undefined && !isSacrificing) {
+        GameUI.notify.error("Please select a Glyph.");
+      } else if (!isSacrificing && this.selectedGlyph !== undefined) {
+        GlyphSelection.select(this.glyphs[this.selectedGlyph], false);
+        triggerManualReality(getRealityProps(false, true));
+        this.emitClose();
+      }
     },
     handleNoClick() {
       this.emitClose();
@@ -98,8 +106,7 @@ Vue.component("modal-reality", {
     trashGlyphs() {
       if (!player.options.confirmations.glyphSacrifice ||
         confirm("Are you sure you want to sacrifice a random one of these glyphs?")) {
-        console.log(this.glyphs);
-        GlyphSelection.select(this.glyphs[Math.floor(Math.random() * GlyphSelection.choiceCount)], true);
+        this.handleYesClick(true);
       }
     },
     grabEffects() {
@@ -160,6 +167,10 @@ Vue.component("modal-reality", {
           <br>
           (these are {{ formatInt(levelDifference) }} {{"level" | pluralize(levelDifference)}}
           {{ direction }} than your best)
+          <br>
+          <span style="font-size: 0.75rem">
+          This button triggers reality!
+          </span>
       </button>
       </div>
         <div class="l-options-grid__row">
@@ -169,7 +180,7 @@ Vue.component("modal-reality", {
           >Cancel</primary-button>
           <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-          @click.native="handleYesClick"
+          @click.native="handleYesClick(false)"
           >Reality</primary-button>
         </div>
     </div>

@@ -72,14 +72,13 @@ const GlyphSelection = {
     }
   },
 
-  select(index, sacrifice) {
+  select(glyph, sacrifice) {
     if (sacrifice) {
-      GlyphSacrificeHandler.removeGlyph(this.glyphs[index], true);
+      GlyphSacrificeHandler.removeGlyph(glyph, true);
     } else {
-      Glyphs.addToInventory(this.glyphs[index]);
+      Glyphs.addToInventory(glyph);
     }
     this.glyphs = [];
-    triggerManualReality(this.realityProps);
     this.realityProps = undefined;
   }
 };

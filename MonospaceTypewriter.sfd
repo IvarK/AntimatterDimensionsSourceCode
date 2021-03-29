@@ -1,4 +1,4 @@
-SplineFontDB: 3.0
+SplineFontDB: 3.2
 FontName: MonospaceTypewriter
 FullName: MonospaceTypewriter
 FamilyName: MonospaceTypewriter
@@ -22,7 +22,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 0
 CreationTime: 1074936349
-ModificationTime: 1568640933
+ModificationTime: 1616467473
 PfmFamily: 17
 TTFWeight: 500
 TTFWidth: 5
@@ -81,7 +81,7 @@ NameList: AGL For New Fonts
 DisplaySize: -96
 AntiAlias: 1
 FitToEm: 0
-WinInfo: 11168 8 6
+WinInfo: 62496 8 6
 BeginPrivate: 0
 EndPrivate
 Grid
@@ -112,7 +112,7 @@ Grid
 294 -700 m 1024
   Named: "v293"
 EndSplineSet
-BeginChars: 65537 277
+BeginChars: 65537 285
 
 StartChar: .notdef
 Encoding: 65536 -1 0
@@ -9006,6 +9006,134 @@ Flags: WO
 LayerCount: 2
 Fore
 Refer: 275 11205 N 1 0 0 -1 0 766 2
+EndChar
+
+StartChar: uniF431
+Encoding: 62513 62513 277
+Width: 587
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+587 687 m 5,0,-1
+ 587 600 l 5,1,-1
+ 0 600 l 5,2,-1
+ 0 687 l 5,3,-1
+ 587 687 l 5,0,-1
+EndSplineSet
+EndChar
+
+StartChar: uniF432
+Encoding: 62514 62514 278
+Width: 587
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+0 500 m 5,0,-1
+ 0 700 l 5,1,-1
+ 587 700 l 5,2,-1
+ 587 500 l 5,3,-1
+ 0 500 l 5,0,-1
+EndSplineSet
+EndChar
+
+StartChar: uniF433
+Encoding: 62515 62515 279
+Width: 587
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+0 398 m 5,0,-1
+ 0 699 l 5,1,-1
+ 587 699 l 5,2,-1
+ 587 398 l 5,3,-1
+ 0 398 l 5,0,-1
+EndSplineSet
+EndChar
+
+StartChar: uniF434
+Encoding: 62516 62516 280
+Width: 587
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+0 298 m 5,0,-1
+ 0 701 l 5,1,-1
+ 587 701 l 5,2,-1
+ 587 298 l 5,3,-1
+ 0 298 l 5,0,-1
+EndSplineSet
+EndChar
+
+StartChar: uniF435
+Encoding: 62517 62517 281
+Width: 587
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+0 200 m 5,0,-1
+ 0 699 l 5,1,-1
+ 587 699 l 5,2,-1
+ 587 200 l 5,3,-1
+ 0 200 l 5,0,-1
+EndSplineSet
+EndChar
+
+StartChar: uniF436
+Encoding: 62518 62518 282
+Width: 587
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+0 100 m 1,0,-1
+ 0 700 l 1,1,-1
+ 587 700 l 1,2,-1
+ 587 100 l 1,3,-1
+ 0 100 l 1,0,-1
+EndSplineSet
+EndChar
+
+StartChar: uniF437
+Encoding: 62519 62519 283
+Width: 587
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+0 0 m 1,0,-1
+ 0 700 l 1,1,-1
+ 584 700 l 1,2,-1
+ 584 0 l 1,3,-1
+ 0 0 l 1,0,-1
+EndSplineSet
+EndChar
+
+StartChar: uniF438
+Encoding: 62520 62520 284
+Width: 587
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+0 -100 m 1,0,-1
+ 0 700 l 1,1,-1
+ 587 700 l 1,2,-1
+ 587 -100 l 1,3,-1
+ 0 -100 l 1,0,-1
+EndSplineSet
 EndChar
 EndChars
 EndSplineFont

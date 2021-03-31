@@ -81,8 +81,9 @@ function gainedEternityPoints() {
   return ep.floor();
 }
 
-function requiredIPForEP() {
-  return Decimal.pow10(Math.ceil(308 * (Decimal.log(totalEPMult().reciprocal(), 5) + 0.7)));
+function requiredIPForEP(epAmount) {
+  return Decimal.pow10(308 * (Decimal.log(totalEPMult().dividedBy(epAmount).reciprocal(), 5) + 0.7))
+    .clampMin(Number.MAX_VALUE);
 }
 
 function getRealityMachineMultiplier() {

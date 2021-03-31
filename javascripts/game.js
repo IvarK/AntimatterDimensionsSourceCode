@@ -584,13 +584,7 @@ function gameLoop(diff, options = {}) {
       TimeStudy.dilation.purchase(true);
   }
 
-  // TD5-8/Reality unlock and TTgen perk autobuy
-  autoBuyExtraTimeDims();
-  if (Perk.autounlockDilation3.isBought) {
-    buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
-  }
-  if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
-
+  applyAutoUnlockPerks();
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
@@ -613,6 +607,21 @@ function gameLoop(diff, options = {}) {
   GameUI.update();
   player.lastUpdate = thisUpdate;
   PerformanceStats.end("Game Update");
+}
+
+// Applies all perks which automatically unlock things when passing certain thresholds, needs to be checked every tick
+function applyAutoUnlockPerks() {
+  if (TimeDimension(8).bought === 0 && Perk.autounlockTD.isBought) {
+    for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
+  }
+  if (Perk.autounlockDilation3.isBought) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
+  if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
+  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
+    const secondRow = Object.values(EternityUpgrade).filter(u => u.id > 3);
+    for (const upgrade of secondRow) {
+      if (player.eternityPoints.gte(upgrade.cost / 1e10)) player.eternityUpgrades.add(upgrade.id);
+    }
+  }
 }
 
 function laitelaRealityTick(realDiff) {
@@ -814,12 +823,6 @@ function simulateTime(seconds, real, fast) {
           afterSimulation(seconds, playerStart);
         }
       });
-  }
-}
-
-function autoBuyExtraTimeDims() {
-  if (TimeDimension(8).bought === 0 && Perk.autounlockTD.isBought) {
-    for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
   }
 }
 

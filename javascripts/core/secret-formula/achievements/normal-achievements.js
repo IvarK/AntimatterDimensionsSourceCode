@@ -1014,7 +1014,7 @@ GameDatabase.achievements.normal = [
     id: 142,
     name: "How does this work?",
     description: "Unlock the automator.",
-    checkRequirement: () => Currency.realities.gte(5),
+    checkRequirement: () => Player.automatorUnlocked,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
     get reward() { return `Dimension Boosts are ${formatPercents(0.5)} stronger.`; },
     effect: 1.5,

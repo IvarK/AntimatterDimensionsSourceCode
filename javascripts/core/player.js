@@ -712,6 +712,10 @@ const Player = {
       ? EternityChallenge.current.currentGoal
       : Decimal.NUMBER_MAX_VALUE;
   },
+
+  get automatorUnlocked() {
+    return Currency.realities.gte(5);
+  }
 };
 
 function guardFromNaNValues(obj) {

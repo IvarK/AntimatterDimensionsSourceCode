@@ -14,7 +14,7 @@ Vue.component("game-header-amounts-line", {
   },
   methods: {
     update() {
-      this.showInfinityPoints = Player.totalInfinitied.gt(0) || PlayerProgress.eternityUnlocked();
+      this.showInfinityPoints = PlayerProgress.infinityUnlocked();
       if (this.showInfinityPoints) {
         this.infinityPoints.copyFrom(Currency.infinityPoints.value.floor());
       }

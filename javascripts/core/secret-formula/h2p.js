@@ -695,7 +695,7 @@ documentation pane into the script pane and drop it where you want the command t
 rearranged by dragging the blocks around if needed. Clicking the top-right button in block mode will switch back to
 text mode, and switching between block and text mode will automatically translate your script as well.
 `,
-      isUnlocked: () => Currency.realities.gte(5),
+      isUnlocked: () => Player.automatorUnlocked,
       tags: ["automation", "reality", "code", "script", "endgame", "lategame"],
       tab: "reality/automator"
     }, {

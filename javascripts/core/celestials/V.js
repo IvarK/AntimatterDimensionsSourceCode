@@ -103,9 +103,9 @@ const V_UNLOCKS = {
     description: "Meet all the above requirements simultaneously",
     requirement: () => {
       const db = GameDatabase.celestials.v.mainUnlock;
-      return (player.realities >= db.realities &&
-              player.eternities.gte(db.eternities) &&
-              player.infinitied.plus(player.infinitiedBank).gte(db.infinities) &&
+      return (Currency.realities.gte(db.realities) &&
+              Currency.eternities.gte(db.eternities) &&
+              Currency.infinities.gte(db.infinities) &&
               Currency.dilatedTime.gte(db.dilatedTime) &&
               player.replicanti.amount.gte(db.replicanti) &&
               Currency.realityMachines.gte(db.rm));

@@ -42,7 +42,7 @@ Vue.component("modal-away-progress", {
           (!after.eternityPoints.gt(before.eternityPoints) || !this.eternityPoints) &&
           (!after.reality.realityMachines.gt(before.reality.realityMachines) || !this.realityMachines) &&
           (!after.dilation.dilatedTime.gt(before.dilation.dilatedTime) || !this.dilatedTime) &&
-          (!after.infinitied.gt(before.infinitied) || !this.infinities) &&
+          (!after.infinities.gt(before.infinities) || !this.infinities) &&
           (!after.eternities.gt(before.eternities) || !this.eternities) &&
           (after.realities <= before.realities || !this.realities) &&
           (after.celestials.laitela.singularities <= before.celestials.laitela.singularities || !this.singularities) &&
@@ -81,23 +81,20 @@ Vue.component("modal-away-progress", {
       this.replicanti = options.replicanti;
       this.replicantiGalaxies = options.replicantiGalaxies;
       this.celestialMemories = options.celestialMemories;
-      this.teresaMemoriesShown = (this.after.celestials.ra.pets.teresa.memories >
-        this.before.celestials.ra.pets.teresa.memories && this.before.celestials.ra.pets.teresa.level <
-        Ra.levelCap && options.celestialMemories);
-      this.effarigMemoriesShown = (this.after.celestials.ra.pets.effarig.memories >
-        this.before.celestials.ra.pets.effarig.memories && this.before.celestials.ra.pets.effarig.level <
-        Ra.levelCap && options.celestialMemories);
-      this.enslavedMemoriesShown = (this.after.celestials.ra.pets.enslaved.memories >
-        this.before.celestials.ra.pets.enslaved.memories && this.before.celestials.ra.pets.enslaved.level <
-        Ra.levelCap && options.celestialMemories);
-      this.vMemoriesShown = (this.after.celestials.ra.pets.v.memories >
-        this.before.celestials.ra.pets.v.memories && this.before.celestials.ra.pets.v.level <
-        Ra.levelCap && options.celestialMemories);
+      this.teresaMemoriesShown = this.showMemoryGain("teresa");
+      this.effarigMemoriesShown = this.showMemoryGain("effarig");
+      this.enslavedMemoriesShown = this.showMemoryGain("enslaved");
+      this.vMemoriesShown = this.showMemoryGain("v");
     },
     formatPseudo(number) {
       if (Decimal.lt(number, 1e9)) return formatInt(number);
       return format(number, 2, 2);
-    }
+    },
+    showMemoryGain(pet) {
+      return player.options.awayProgress.celestialMemories &&
+        this.after.celestials.ra.pets[pet].memories > this.before.celestials.ra.pets[pet].memories &&
+        this.before.celestials.ra.pets[pet].level < Ra.levelCap;
+    },
   },
   template: `
     <div class="c-modal-away-progress">
@@ -129,10 +126,10 @@ Vue.component("modal-away-progress", {
           <br>
           {{ format(before.dilation.dilatedTime, 2, 2) }} to {{ format(after.dilation.dilatedTime, 2, 2) }}
         </div>
-        <div v-if="after.infinitied.gt(before.infinitied) && infinities">
+        <div v-if="after.infinities.gt(before.infinities) && infinities">
           <b class="c-modal-away-progress__infinities">Infinities</b> increased from
           <br>
-          {{ formatPseudo(before.infinitied) }} to {{ formatPseudo(after.infinitied) }}
+          {{ formatPseudo(before.infinities) }} to {{ formatPseudo(after.infinities) }}
         </div>
         <div v-if="after.eternities.gt(before.eternities) && eternities">
           <b class="c-modal-away-progress__eternities">Eternities</b> increased from

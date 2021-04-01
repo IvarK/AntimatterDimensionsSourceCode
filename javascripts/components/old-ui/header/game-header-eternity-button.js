@@ -101,7 +101,7 @@ Vue.component("game-header-eternity-button", {
       if (this.gainedEP.eq(0)) this.minIP = requiredIPForEP();
       this.currentEP.copyFrom(Currency.eternityPoints);
       this.gainedEP.copyFrom(gainedEP);
-      const hasNewContent = player.realities === 0 &&
+      const hasNewContent = !PlayerProgress.realityUnlocked() &&
         Currency.eternityPoints.exponent >= 4000 &&
         Currency.timeTheorems.gte(5e9) &&
         player.replicanti.amount.exponent > 20000;

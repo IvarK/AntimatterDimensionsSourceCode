@@ -229,9 +229,15 @@ Currency.antimatter = new class extends DecimalCurrency {
   }
 }();
 
-Currency.infinityPower = new class extends DecimalCurrency {
-  get value() { return player.infinityPower; }
-  set value(value) { player.infinityPower = value; }
+Currency.infinities = new class extends DecimalCurrency {
+  get rawValue() { return player.infinities; }
+  get value() { return player.infinities.plus(player.infinitiesBanked); }
+  set value(value) { player.infinities = value; }
+}();
+
+Currency.infinitiesBanked = new class extends DecimalCurrency {
+  get value() { return player.infinitiesBanked; }
+  set value(value) { player.infinitiesBanked = value; }
 }();
 
 Currency.infinityPoints = new class extends DecimalCurrency {
@@ -252,9 +258,14 @@ Currency.infinityPoints = new class extends DecimalCurrency {
   }
 }();
 
-Currency.timeShards = new class extends DecimalCurrency {
-  get value() { return player.timeShards; }
-  set value(value) { player.timeShards = value; }
+Currency.infinityPower = new class extends DecimalCurrency {
+  get value() { return player.infinityPower; }
+  set value(value) { player.infinityPower = value; }
+}();
+
+Currency.eternities = new class extends DecimalCurrency {
+  get value() { return player.eternities; }
+  set value(value) { player.eternities = value; }
 }();
 
 Currency.eternityPoints = new class extends DecimalCurrency {
@@ -276,6 +287,11 @@ Currency.eternityPoints = new class extends DecimalCurrency {
       Perk.startEP3
     ).toDecimal();
   }
+}();
+
+Currency.timeShards = new class extends DecimalCurrency {
+  get value() { return player.timeShards; }
+  set value(value) { player.timeShards = value; }
 }();
 
 Currency.timeTheorems = new class extends DecimalCurrency {
@@ -310,6 +326,11 @@ Currency.tachyonParticles = new class extends DecimalCurrency {
 Currency.dilatedTime = new class extends DecimalCurrency {
   get value() { return player.dilation.dilatedTime; }
   set value(value) { player.dilation.dilatedTime = value; }
+}();
+
+Currency.realities = new class extends NumberCurrency {
+  get value() { return player.realities; }
+  set value(value) { player.realities = value; }
 }();
 
 Currency.realityMachines = new class extends DecimalCurrency {

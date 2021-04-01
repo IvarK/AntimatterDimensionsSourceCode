@@ -42,7 +42,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e2750"),
     goalIncrease: new Decimal("1e550"),
     restriction: completions => Math.max(16 - 4 * completions, 0),
-    checkRestriction: restriction => player.infinitied.lte(restriction),
+    checkRestriction: restriction => Currency.infinities.rawValue.lte(restriction),
     formatRestriction: restriction => `in ${formatInt(restriction)} Infinities or less`,
     failedRestriction: "(Too many Infinities for more)",
     reward: {
@@ -170,7 +170,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 12,
-    description: () => (player.realities > 0
+    description: () => (PlayerProgress.realityUnlocked()
       ? `The game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled.`
       : `The game runs ×${formatInt(1000)} slower.`),
     goal: new Decimal("1e110000"),

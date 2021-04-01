@@ -247,7 +247,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       description: () => (Perk.studyActiveEP.isBought
         ? `You gain ${formatX(50)} more Eternity Points`
         : `You gain more EP based on how fast your last ten
-        Eternities were${player.realities > 0 ? " (real time)" : ""}`),
+        Eternities were${PlayerProgress.realityUnlocked() ? " (real time)" : ""}`),
       effect: () => (Perk.studyActiveEP.isBought
         ? 50
         : Math.clamp(250 / Player.averageRealTimePerEternity, 1, 50)),
@@ -397,7 +397,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0,
       description: () => `After Eternity you permanently keep ${formatPercents(0.05)}
       of your Infinities as Banked Infinities`,
-      effect: () => player.infinitied.times(0.05).floor()
+      effect: () => Currency.infinities.rawValue.times(0.05).floor()
     },
     {
       id: 192,
@@ -415,9 +415,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       // This effect is a bit wonky because 1.0285^eternities doesn't even fit in break_infinity once you have a bit
       // past e308 eternities, and once this threshold is passed the formula actually just returns zero. Rewriting it
       // to have an explicit conditional makes sure that this doesn't happen; in practice the cap hits just past 1e6.
-      effect: () => (player.eternities.gt(1e10)
+      effect: () => (Currency.eternities.gt(1e10)
         ? new Decimal("1e13000")
-        : Decimal.pow(1.0285, player.eternities)),
+        : Decimal.pow(1.0285, Currency.eternities.value)),
       cap: new Decimal("1e13000"),
       formatEffect: value => formatX(value, 2, 1)
     },

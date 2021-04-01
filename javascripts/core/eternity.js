@@ -6,7 +6,7 @@ function giveEternityRewards(auto) {
 
   const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
-  if (player.eternities.eq(0) && newEternities.lte(10)) {
+  if (Currency.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
   }
 
@@ -17,7 +17,7 @@ function giveEternityRewards(auto) {
     newEternities
   );
 
-  player.eternities = player.eternities.add(newEternities);
+  Currency.eternities.add(newEternities);
 
   if (EternityChallenge.isRunning) {
     const challenge = EternityChallenge.current;
@@ -40,7 +40,7 @@ function giveEternityRewards(auto) {
   player.records.bestEternity.bestEPminReality =
     player.records.bestEternity.bestEPminReality.max(player.records.thisEternity.bestEPmin);
 
-  player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
+  Currency.infinitiesBanked.value = Currency.infinitiesBanked.value.plusEffectsOf(
     Achievement(131),
     TimeStudy(191)
   );
@@ -153,7 +153,7 @@ function initializeChallengeCompletions(isReality) {
 
 function initializeResourcesAfterEternity() {
   player.sacrificed = new Decimal(0);
-  player.infinitied = new Decimal(0);
+  Currency.infinities.reset();
   player.records.bestInfinity.time = 999999999999;
   player.records.bestInfinity.realTime = 999999999999;
   player.records.thisInfinity.time = 0;
@@ -209,7 +209,7 @@ class EternityMilestoneState {
   }
 
   get isReached() {
-    return player.eternities.gte(this.config.eternities);
+    return Currency.eternities.gte(this.config.eternities);
   }
 }
 

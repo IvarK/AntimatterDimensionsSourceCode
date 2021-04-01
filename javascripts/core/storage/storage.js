@@ -8,7 +8,7 @@ const GameStorage = {
     2: undefined
   },
   saved: 0,
-  
+
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
   },
@@ -145,7 +145,7 @@ const GameStorage = {
       guardFromNaNValues(player);
     }
 
-    if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
+    if (Currency.infinities.gt(0) && !NormalChallenge(1).isCompleted) {
       NormalChallenge(1).complete();
     }
 

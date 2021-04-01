@@ -127,7 +127,7 @@ GameDatabase.tabNotifications = {
         tab: "automator"
       }
     ],
-    condition: () => player.realities === 5,
+    condition: () => Currency.realities.eq(5),
     events: [GAME_EVENT.REALITY_RESET_AFTER]
   },
   teresaUnlock: {

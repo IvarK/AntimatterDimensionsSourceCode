@@ -157,8 +157,8 @@ let player = {
     epMultBuyer: { isActive: false, },
   },
   infinityPoints: new Decimal(0),
-  infinitied: new Decimal(0),
-  infinitiedBank: new Decimal(0),
+  infinities: new Decimal(0),
+  infinitiesBanked: new Decimal(0),
   dimensionBoosts: 0,
   galaxies: 0,
   news: new Set(),
@@ -653,11 +653,11 @@ const Player = {
   defaultStart: deepmerge.all([{}, player]),
 
   get totalInfinitied() {
-    return player.infinitied.plus(player.infinitiedBank).clampMin(0);
+    return Currency.infinities.value.clampMin(0);
   },
 
   get gainedEternities() {
-    return RealityUpgrade(10).isBought ? player.eternities.sub(100) : player.eternities;
+    return RealityUpgrade(10).isBought ? Currency.eternities.value.sub(100) : Currency.eternities;
   },
 
   get isInMatterChallenge() {

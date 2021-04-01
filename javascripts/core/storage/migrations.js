@@ -110,6 +110,7 @@ GameStorage.migrations = {
       GameStorage.migrations.moveSavedStudyTrees(player);
       GameStorage.migrations.convertEPMult(player);
       GameStorage.migrations.moveChallengeInfo(player);
+      GameStorage.migrations.infinitiedConversion(player);
       GameStorage.migrations.adjustWhy(player);
       GameStorage.migrations.adjustThemes(player);
       GameStorage.migrations.removeAchPow(player);
@@ -698,12 +699,12 @@ GameStorage.migrations = {
   },
 
   setNoInfinitiesOrEternitiesThisReality(player) {
-    player.achievementChecks.noInfinitiesThisReality = player.infinitied.eq(0) && player.eternities.eq(0);
+    player.achievementChecks.noInfinitiesThisReality = player.infinities.eq(0) && player.eternities.eq(0);
     player.achievementChecks.noEternitiesThisReality = player.eternities.eq(0);
   },
 
   setTutorialState(player) {
-    if (player.infinitied.gt(0) || player.eternities.gt(0) || player.realities > 0 || player.galaxies > 0) {
+    if (player.infinities.gt(0) || player.eternities.gt(0) || player.realities > 0 || player.galaxies > 0) {
       player.tutorialState = 4;
     } else if (player.dimensionBoosts > 0) player.tutorialState = TUTORIAL_STATE.GALAXY;
   },
@@ -824,6 +825,14 @@ GameStorage.migrations = {
     delete player.timestudy.amcost;
     delete player.timestudy.ipcost;
     delete player.timestudy.epcost;
+  },
+
+  infinitiedConversion(player) {
+    player.infinities = new Decimal(player.infinitied);
+    player.infinitiesBanked = new Decimal(player.infinitiedBank);
+
+    delete player.infinitied;
+    delete player.infinitiedBank;
   },
 
   prePatch(saveData) {

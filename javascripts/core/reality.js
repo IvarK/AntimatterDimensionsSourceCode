@@ -134,13 +134,13 @@ function requestManualReality() {
   }
   realityProps.alreadyGotGlyph = true;
   if (GlyphSelection.choiceCount === 1) {
-    if (player.realities === 0) {
-      Glyphs.addToInventory(GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel));
-      Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
-    } else {
+    if (PlayerProgress.realityUnlocked()) {
       // We can't get a random glyph directly here because that disturbs the RNG
       // (makes it depend on whether you got first perk or not).
       Glyphs.addToInventory(GlyphSelection.glyphList(1, realityProps.gainedGlyphLevel, { isChoosingGlyph: true })[0]);
+    } else {
+      Glyphs.addToInventory(GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel));
+      Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
     }
     triggerManualReality(realityProps);
     return;
@@ -246,7 +246,7 @@ function giveRealityRewards(realityProps) {
   addRealityTime(
     player.records.thisReality.time, player.records.thisReality.realTime, gainedRM,
     realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier);
-  player.realities += realityAndPPMultiplier;
+  Currency.realities.add(realityAndPPMultiplier);
   Currency.perkPoints.add(realityAndPPMultiplier);
   if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
     Currency.relicShards.add(realityProps.gainedShards * multiplier);
@@ -348,8 +348,8 @@ function finishProcessReality(realityProps) {
   initializeChallengeCompletions(true);
 
   player.infinityUpgrades.clear();
-  player.infinitied = new Decimal(0);
-  player.infinitiedBank = new Decimal(0);
+  Currency.infinities.reset();
+  Currency.infinitiesBanked.reset();
   player.records.bestInfinity.time = 999999999999;
   player.records.bestInfinity.realTime = 999999999999;
   player.records.thisInfinity.time = 0;
@@ -371,7 +371,7 @@ function finishProcessReality(realityProps) {
 
   // This has to be reset before player.eternities to make the bumpLimit logic work correctly
   EternityUpgrade.epMult.reset();
-  player.eternities = new Decimal(0);
+  Currency.eternities.reset();
   player.records.thisEternity.time = 0;
   player.records.thisEternity.realTime = 0;
   player.records.bestEternity.time = 999999999999;
@@ -511,7 +511,7 @@ function applyRUPG10() {
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
   player.infinityRebuyables = [8, 7, 10];
-  player.eternities = player.eternities.clampMin(100);
+  Currency.eternities.bumpTo(100);
   player.replicanti.amount = player.replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
   GameCache.tickSpeedMultDecrease.invalidate();

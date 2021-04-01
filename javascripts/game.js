@@ -93,7 +93,7 @@ function getRealityMachineMultiplier() {
 
 function gainedRealityMachines() {
   let log10FinalEP = Currency.eternityPoints.value.plus(gainedEternityPoints()).log10();
-  if (player.realities === 0 && log10FinalEP > 6000 && player.saveOverThresholdFlag) {
+  if (!PlayerProgress.realityUnlocked() && log10FinalEP > 6000 && player.saveOverThresholdFlag) {
     log10FinalEP -= (log10FinalEP - 6000) * 0.75;
   }
   let rmGain = Decimal.pow(1000, log10FinalEP / 4000 - 1);
@@ -172,7 +172,7 @@ function resetInfinityRuns() {
   GameCache.bestRunIPPM.invalidate();
 }
 
-// Player gains 50% of infinitied stat they would get based on their best infinitied/hour crunch if they have the
+// Player gains 50% of infinities they would get based on their best infinitied/hour crunch if they have the
 // milestone and turned on infinity autobuyer with 1 minute or less per crunch
 function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
   return Autobuyer.bigCrunch.autoInfinitiesAvailable(considerMilestoneReached)
@@ -478,7 +478,7 @@ function gameLoop(diff, options = {}) {
   player.records.thisInfinity.time += diff;
   player.records.thisEternity.realTime += realDiff;
   if (Enslaved.isRunning && Enslaved.feltEternity && !EternityChallenge(12).isRunning) {
-    player.records.thisEternity.time += diff * (1 + player.eternities.clampMax(1e66).toNumber());
+    player.records.thisEternity.time += diff * (1 + Currency.eternities.value.clampMax(1e66).toNumber());
   } else {
     player.records.thisEternity.time += diff;
   }
@@ -503,7 +503,7 @@ function gameLoop(diff, options = {}) {
     eternitiedGain = new Decimal(Time.deltaTime).times(
       Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue));
     player.reality.partEternitied = player.reality.partEternitied.plus(eternitiedGain);
-    player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
+    Currency.eternities.add(player.reality.partEternitied.floor());
     player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
   }
 
@@ -529,17 +529,17 @@ function gameLoop(diff, options = {}) {
       // infinities and eternities gained overall will be the same
       // for two ticks as for one tick of twice the length.
       infGen = infGen.plus(gainedInfinities().times(
-        player.eternities.minus(eternitiedGain.div(2).floor())).times(Time.deltaTime));
+        Currency.eternities.value.minus(eternitiedGain.div(2).floor())).times(Time.deltaTime));
     }
     infGen = infGen.plus(player.partInfinitied);
-    player.infinitied = player.infinitied.plus(infGen.floor());
+    Currency.infinities.add(infGen.floor());
     player.partInfinitied = infGen.minus(infGen.floor()).toNumber();
   }
 
   applyAutoprestige(realDiff);
 
   const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
-  player.realities += uncountabilityGain;
+  Currency.realities.add(uncountabilityGain);
   Currency.perkPoints.add(uncountabilityGain);
 
   if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
@@ -745,9 +745,9 @@ function simulateTime(seconds, real, fast) {
   const eternitiedMilestone = getEternitiedMilestoneReward(totalGameTime * 1000);
 
   if (eternitiedMilestone.gt(0)) {
-    player.eternities = player.eternities.plus(eternitiedMilestone);
+    Currency.eternities.add(eternitiedMilestone);
   } else if (infinitiedMilestone.gt(0)) {
-    player.infinitied = player.infinitied.plus(infinitiedMilestone);
+    Currency.infinities.add(infinitiedMilestone);
   } else {
     Currency.eternityPoints.add(getOfflineEPGain(totalGameTime * 1000));
   }

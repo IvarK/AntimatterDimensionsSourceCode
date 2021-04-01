@@ -27,7 +27,7 @@ GameDatabase.infinity.upgrades = (function() {
       formatEffect: value => formatX(value, 1, 1),
       charged: {
         description: "1st and 8th Antimatter Dimensions gain a power effect based on Infinitied stat and Teresa level",
-        effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
+        effect: () => 1 + Math.log10(Math.max(1, Currency.infinities.value.pLog10())) *
         Math.sqrt(Ra.pets.teresa.level) / 150,
         formatEffect: value => formatPow(value, 4, 4)
       }
@@ -40,7 +40,7 @@ GameDatabase.infinity.upgrades = (function() {
       formatEffect: value => formatX(value, 1, 1),
       charged: {
         description: "2nd and 7th Antimatter Dimensions gain a power effect based on Infinitied stat and Teresa level",
-        effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
+        effect: () => 1 + Math.log10(Math.max(1, Currency.infinities.value.pLog10())) *
         Math.sqrt(Ra.pets.teresa.level) / 150,
         formatEffect: value => formatPow(value, 4, 4)
       }
@@ -53,7 +53,7 @@ GameDatabase.infinity.upgrades = (function() {
       formatEffect: value => formatX(value, 1, 1),
       charged: {
         description: "3rd and 6th Antimatter Dimensions gain a power effect based on Infinitied stat and Teresa level",
-        effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
+        effect: () => 1 + Math.log10(Math.max(1, Currency.infinities.value.pLog10())) *
         Math.sqrt(Ra.pets.teresa.level) / 150,
         formatEffect: value => formatPow(value, 4, 4)
       }
@@ -66,7 +66,7 @@ GameDatabase.infinity.upgrades = (function() {
       formatEffect: value => formatX(value, 1, 1),
       charged: {
         description: "4th and 5th Antimatter Dimensions gain a power effect based on Infinitied stat and Teresa level",
-        effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
+        effect: () => 1 + Math.log10(Math.max(1, Currency.infinities.value.pLog10())) *
         Math.sqrt(Ra.pets.teresa.level) / 150,
         formatEffect: value => formatPow(value, 4, 4)
       }

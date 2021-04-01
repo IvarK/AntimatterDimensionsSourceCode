@@ -130,7 +130,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 11,
       cost: 50,
       requirement: () => `${format(1e12)} Banked Infinities`,
-      checkRequirement: () => player.infinitiedBank.exponent >= 12,
+      checkRequirement: () => Currency.infinitiesBanked.exponent >= 12,
       checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
       description: "Every second, gain 10% of the Infinities you would normally gain by Infinitying",
       effect: () => gainedInfinities().times(0.1),
@@ -147,7 +147,7 @@ GameDatabase.reality.upgrades = (function() {
       description: "Eternity Point multiplier based on Reality and Time Theorem count",
       effect: () => Currency.timeTheorems.value
         .minus(1e3).clampMin(2)
-        .pow(Math.log2(Math.min(player.realities, 1e4))).clampMin(1),
+        .pow(Math.log2(Math.min(Currency.realities.value, 1e4))).clampMin(1),
       formatEffect: value => formatX(value, 2, 2)
     },
     {
@@ -167,10 +167,10 @@ GameDatabase.reality.upgrades = (function() {
       id: 14,
       cost: 50,
       requirement: () => `${format(1e7)} Eternities`,
-      checkRequirement: () => player.eternities.gte(1e7),
+      checkRequirement: () => Currency.eternities.gte(1e7),
       checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
       description: "Gain Eternities per second equal to your Reality count",
-      effect: () => player.realities * RA_UNLOCKS.TT_BOOST.effect.eternity(),
+      effect: () => Currency.realities.value * RA_UNLOCKS.TT_BOOST.effect.eternity(),
       formatEffect: value => `${format(value)} per second`
     },
     {
@@ -234,7 +234,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => Glyphs.activeList.countWhere(g => g.level >= 10) === 4,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Eternity count boosts Glyph level",
-      effect: () => Math.max(Math.sqrt(player.eternities.log10()) * 0.45, 1),
+      effect: () => Math.max(Math.sqrt(Currency.eternities.value.log10()) * 0.45, 1),
       formatCost: value => format(value, 1, 0)
     },
     {

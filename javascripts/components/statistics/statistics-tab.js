@@ -50,8 +50,8 @@ Vue.component("statistics-tab", {
       const infinity = this.infinity;
       infinity.isUnlocked = isInfinityUnlocked;
       if (isInfinityUnlocked) {
-        infinity.count.copyFrom(player.infinitied);
-        infinity.banked.copyFrom(player.infinitiedBank);
+        infinity.count.copyFrom(Currency.infinities);
+        infinity.banked.copyFrom(Currency.infinitiesBanked);
         infinity.hasBest = player.records.bestInfinity.time < 999999999999;
         infinity.best.setFrom(player.records.bestInfinity.time);
         infinity.this.setFrom(player.records.thisInfinity.time);
@@ -61,7 +61,7 @@ Vue.component("statistics-tab", {
       const eternity = this.eternity;
       eternity.isUnlocked = isEternityUnlocked;
       if (isEternityUnlocked) {
-        eternity.count.copyFrom(player.eternities);
+        eternity.count.copyFrom(Currency.eternities);
         eternity.hasBest = player.records.bestEternity.time < 999999999999;
         eternity.best.setFrom(player.records.bestEternity.time);
         eternity.this.setFrom(player.records.thisEternity.time);
@@ -71,7 +71,7 @@ Vue.component("statistics-tab", {
       const reality = this.reality;
       reality.isUnlocked = isRealityUnlocked;
       if (isRealityUnlocked) {
-        reality.count = Math.floor(player.realities);
+        reality.count = Math.floor(Currency.realities);
         reality.best.setFrom(player.records.bestReality.time);
         reality.bestReal.setFrom(player.records.bestReality.realTime);
         reality.this.setFrom(player.records.thisReality.time);

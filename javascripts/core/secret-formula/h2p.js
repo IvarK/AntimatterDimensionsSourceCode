@@ -695,7 +695,7 @@ documentation pane into the script pane and drop it where you want the command t
 rearranged by dragging the blocks around if needed. Clicking the top-right button in block mode will switch back to
 text mode, and switching between block and text mode will automatically translate your script as well.
 `,
-      isUnlocked: () => player.realities >= 5,
+      isUnlocked: () => Currency.realities.gte(5),
       tags: ["automation", "reality", "code", "script", "endgame", "lategame"],
       tab: "reality/automator"
     }, {
@@ -868,7 +868,7 @@ Shards. This unlocks ${formatInt(5)} slots that allow you to save your currently
 You cannot overwrite a set, you must delete it first. When you load a set, each glyph in it is found and equipped.
 If any are not found, it will display a warning, but equip all the rest regardless. You can only load a set when
 there are no equipped glyphs. When loading a set, you can be Level and/or Rarity sensitive. The best glyph from
-the possible glyphs will always be the one equipped.  
+the possible glyphs will always be the one equipped.
 <br>
 <br>
 <i>Note: If desired, "Specified Effect Mode" and "Advanced Mode" can be used to filter out some Glyph types entirely;

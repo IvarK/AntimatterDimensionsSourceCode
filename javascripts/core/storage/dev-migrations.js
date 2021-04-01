@@ -949,6 +949,7 @@ GameStorage.devMigrations = {
       delete player.options.disableContinuum;
     },
     GameStorage.migrations.convertTimeTheoremPurchases,
+    GameStorage.migrations.infinitiedConversion,
   ],
 
   patch(player) {

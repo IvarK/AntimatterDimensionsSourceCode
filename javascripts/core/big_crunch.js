@@ -40,7 +40,7 @@ function bigCrunchReset() {
 
   const infinityPoints = gainedInfinityPoints();
   Currency.infinityPoints.add(infinityPoints);
-  player.infinitied = player.infinitied.plus(gainedInfinities().round());
+  Currency.infinities.add(gainedInfinities().round());
 
   bigCrunchTabChange(firstInfinity);
   bigCrunchReplicanti();

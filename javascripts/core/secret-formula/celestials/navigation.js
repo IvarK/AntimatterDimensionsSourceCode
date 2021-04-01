@@ -586,7 +586,7 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return player.realities / GameDatabase.celestials.v.mainUnlock.realities;
+        return Currency.realities.value / GameDatabase.celestials.v.mainUnlock.realities;
       },
       drawOrder: -1,
       node: {
@@ -625,7 +625,8 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(player.eternities.pLog10() / Math.log10(GameDatabase.celestials.v.mainUnlock.eternities));
+        return emphasizeEnd(Currency.eternities.value.pLog10() /
+                Math.log10(GameDatabase.celestials.v.mainUnlock.eternities));
       },
       drawOrder: -1,
       node: {
@@ -639,7 +640,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Eternity condition for V";
-            const eternities = player.eternities;
+            const eternities = Currency.eternities.value;
             const goal = GameDatabase.celestials.v.mainUnlock.eternities;
             return [
               "V",
@@ -665,7 +666,8 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(player.infinitied.pLog10() / Math.log10(GameDatabase.celestials.v.mainUnlock.infinities));
+        return emphasizeEnd(Currency.infinities.value.pLog10() /
+                Math.log10(GameDatabase.celestials.v.mainUnlock.infinities));
       },
       drawOrder: -1,
       node: {
@@ -679,7 +681,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Infinity condition for V";
-            const infinities = player.infinitied;
+            const infinities = Currency.infinities.value;
             const goal = GameDatabase.celestials.v.mainUnlock.infinities;
             return [
               "V",

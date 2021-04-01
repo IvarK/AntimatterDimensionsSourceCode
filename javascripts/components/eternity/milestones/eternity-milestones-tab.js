@@ -18,7 +18,7 @@ Vue.component("eternity-milestones-tab", {
   },
   methods: {
     update() {
-      this.eternityCount.copyFrom(player.eternities);
+      this.eternityCount.copyFrom(Currency.eternities);
     },
     getMilestone(row, column) {
       return () => this.milestones[(row - 1) * 3 + column - 1];

@@ -25,7 +25,7 @@ Vue.component("dilation-time-study", {
         and ${formatInt(13000)} total Time Theorems`;
     }
     if (this.id === 6) {
-      if (player.realities > 0) {
+      if (PlayerProgress.realityUnlocked()) {
         this.requirement = `Requirement: ${format("1e4000")} Eternity Points`;
       } else {
         this.requirement = `Requirement: ${format("1e4000")} Eternity Points and ${formatInt(13)} rows of Achievements`;
@@ -36,7 +36,7 @@ Vue.component("dilation-time-study", {
   methods: {
     update() {
       const id = this.id;
-      this.showCost = id !== 6 || player.realities === 0;
+      this.showCost = id !== 6 || !PlayerProgress.realityUnlocked();
       if (id === 1) {
         this.showRequirement = !this.study.isBought && !Perk.bypassECDilation.isBought;
       }

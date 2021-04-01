@@ -6,7 +6,7 @@ GameDatabase.eternity.timeStudies.ec = [
     cost: 30,
     requirement: {
       resource: "Eternities",
-      current: () => player.eternities,
+      current: () => Currency.eternities.value,
       required: completions => new Decimal(20000 + completions * 20000),
       formatValue: formatInt
     }

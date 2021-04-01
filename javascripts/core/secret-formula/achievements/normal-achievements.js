@@ -144,7 +144,7 @@ GameDatabase.achievements.normal = [
     id: 33,
     name: "That's a lot of infinites",
     get description() { return `Reach Infinity ${formatInt(10)} times.`; },
-    checkRequirement: () => player.infinitied.gte(10),
+    checkRequirement: () => Currency.infinities.rawValue.gte(10),
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER
   },
   {
@@ -160,7 +160,7 @@ GameDatabase.achievements.normal = [
     id: 35,
     name: "Don't you dare sleep",
     get description() {
-      return player.realities > 0
+      return PlayerProgress.realityUnlocked()
       ? `Be offline for a period of over ${formatInt(6)} hours (real time).`
       : `Be offline for a period of over ${formatInt(6)} hours.`;
     },
@@ -577,7 +577,7 @@ GameDatabase.achievements.normal = [
     id: 87,
     name: "2 MILLION INFINITIES",
     get description() { return `Infinity ${format(2e6)} times.`; },
-    checkRequirement: () => player.infinitied.gt(2e6),
+    checkRequirement: () => Currency.infinities.rawValue.gt(2e6),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
       return `Infinities more than ${formatInt(5)} seconds long
@@ -737,7 +737,7 @@ GameDatabase.achievements.normal = [
     id: 107,
     name: "Do you really need a guide for this?",
     get description() { return `Eternity with less than ${formatInt(10)} Infinitied stat.`; },
-    checkRequirement: () => player.infinitied.lt(10),
+    checkRequirement: () => Currency.infinities.rawValue.lt(10),
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },
   {
@@ -805,7 +805,7 @@ GameDatabase.achievements.normal = [
     id: 116,
     name: "Do I really need to infinity",
     get description() { return `Eternity with only ${formatInt(1)} Infinity.`; },
-    checkRequirement: () => player.infinitied.lte(1),
+    checkRequirement: () => Currency.infinities.rawValue.lte(1),
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
     reward: "Multiplier to Infinity Points based on Infinities.",
     effect: () => Decimal.pow(Player.totalInfinitied.clampMin(1), LOG10_2 / 4).powEffectOf(TimeStudy(31)),
@@ -867,7 +867,7 @@ GameDatabase.achievements.normal = [
       or buying any 1st Antimatter Dimensions in your current Eternity.`;
     },
     checkRequirement: () => Currency.infinityPoints.exponent >= 90 &&
-      player.achievementChecks.noFirstDimensions && player.infinitied.eq(0),
+      player.achievementChecks.noFirstDimensions && Currency.infinities.rawValue.eq(0),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Infinity Point multiplier based on time spent this Infinity.",
     effect() {
@@ -909,12 +909,12 @@ GameDatabase.achievements.normal = [
     id: 131,
     name: "No ethical consumption",
     get description() { return `Get ${format(5e9)} Banked Infinities.`; },
-    checkRequirement: () => player.infinitiedBank.gt(5e9),
+    checkRequirement: () => Currency.infinitiesBanked.gt(5e9),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
     get reward() {
       return `After Eternity you permanently keep ${formatPercents(0.05)} of your Infinities as Banked Infinities.`;
     },
-    effect: () => player.infinitied.times(0.05).floor()
+    effect: () => Currency.infinities.rawValue.times(0.05).floor()
   },
   {
     id: 132,
@@ -1014,7 +1014,7 @@ GameDatabase.achievements.normal = [
     id: 142,
     name: "How does this work?",
     description: "Unlock the automator.",
-    checkRequirement: () => player.realities >= 5,
+    checkRequirement: () => Currency.realities.gte(5),
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
     get reward() { return `Dimension Boosts are ${formatPercents(0.5)} stronger.`; },
     effect: 1.5,
@@ -1177,7 +1177,7 @@ GameDatabase.achievements.normal = [
     id: 164,
     name: "Infinity times two",
     get description() { return `Get ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Infinities.`; },
-    checkRequirement: () => player.infinitied.gte(Decimal.NUMBER_MAX_VALUE),
+    checkRequirement: () => Currency.infinities.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() { return `Gain ×${formatInt(1024)} more Infinities.`; },
     effect: 1024

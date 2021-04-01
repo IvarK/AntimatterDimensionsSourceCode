@@ -115,8 +115,7 @@ function getReplicantiInterval(overCapOverride, intervalIn) {
 
 function replicantiCap() {
   return EffarigUnlock.infinity.isUnlocked
-    ? player.infinitied
-      .plus(player.infinitiedBank)
+    ? Currency.infinities.value
       .pow(TimeStudy(31).isBought ? 120 : 30)
       .clampMin(1)
       .times(Decimal.NUMBER_MAX_VALUE)

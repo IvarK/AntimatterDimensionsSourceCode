@@ -652,10 +652,6 @@ let player = {
 const Player = {
   defaultStart: deepmerge.all([{}, player]),
 
-  get totalInfinitied() {
-    return Currency.infinities.value.clampMin(0);
-  },
-
   get gainedEternities() {
     return RealityUpgrade(10).isBought ? Currency.eternities.value.sub(100) : Currency.eternities;
   },

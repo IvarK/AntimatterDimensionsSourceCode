@@ -36,7 +36,7 @@ GameDatabase.eternity.timeStudies.ec = [
     cost: 70,
     requirement: {
       resource: "Infinities",
-      current: () => Player.totalInfinitied,
+      current: () => Currency.infinities.value,
       required: completions => new Decimal(1e8 + completions * 5e7),
       formatValue: value => formatInt(Math.floor(value.toNumber()))
     }

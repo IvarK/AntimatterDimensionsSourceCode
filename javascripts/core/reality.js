@@ -369,7 +369,7 @@ function finishProcessReality(realityProps) {
 
   Currency.eternityPoints.reset();
 
-  // This has to be reset before player.eternities to make the bumpLimit logic work correctly
+  // This has to be reset before Currency.eternities to make the bumpLimit logic work correctly
   EternityUpgrade.epMult.reset();
   Currency.eternities.reset();
   player.records.thisEternity.time = 0;

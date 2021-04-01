@@ -39,7 +39,7 @@ Vue.component("new-ui", {
       this.antimatter.copyFrom(Currency.antimatter);
       this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
       this.breakInfinity = player.break;
-      this.realities = player.realities;
+      this.realities = Currency.realities.value;
 
       this.isInAnyChallenge = this.challengeDisplay.length !== 0;
       this.currentEternityChallenge = EternityChallenge.current;

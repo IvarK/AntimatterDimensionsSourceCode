@@ -600,7 +600,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Realities condition for V";
-            const realities = player.realities;
+            const realities = Currency.realities.value;
             const goal = GameDatabase.celestials.v.mainUnlock.realities;
             return [
               "V",

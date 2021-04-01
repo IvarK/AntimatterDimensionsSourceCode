@@ -133,7 +133,7 @@ const Laitela = {
         }
         if (MatterDimension(i).amount.gt(0)) {
           Currency.darkEnergy.value =
-            Math.clampMax(player.celestials.laitela.darkEnergy + ticks * d.powerDE, Number.MAX_VALUE);
+            Math.clampMax(Currency.darkEnergy.value + ticks * d.powerDE, Number.MAX_VALUE);
         }
         d.timeSinceLastUpdate -= d.interval * ticks;
       }

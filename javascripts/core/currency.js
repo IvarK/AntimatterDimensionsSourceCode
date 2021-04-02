@@ -266,6 +266,13 @@ Currency.infinityPower = new class extends DecimalCurrency {
 Currency.eternities = new class extends DecimalCurrency {
   get value() { return player.eternities; }
   set value(value) { player.eternities = value; }
+
+  get startingValue() {
+    return Effects.max(
+      0,
+      RealityUpgrade(10)
+    ).toDecimal();
+  }
 }();
 
 Currency.eternityPoints = new class extends DecimalCurrency {

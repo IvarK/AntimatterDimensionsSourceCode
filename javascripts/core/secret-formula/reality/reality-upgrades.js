@@ -123,7 +123,8 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => Currency.infinityPoints.exponent >= 450 &&
         player.achievementChecks.noEternitiesThisReality,
       checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
-      description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`
+      description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`,
+      effect: () => 100
     },
     {
       name: "The Boundless Flow",

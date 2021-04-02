@@ -8,8 +8,9 @@ Vue.component("new-inf-dimensions-tab", {
       powerPerSecond: new Decimal(0),
       incomeType: "",
       isEC8Running: false,
-      isEnslavedRunning: false,
       EC8PurchasesLeft: 0,
+      isEC9Running: false,
+      isEnslavedRunning: false,
       isAnyAutobuyerUnlocked: false,
       conversionRate: 0,
       nextDimCapIncrease: 0,
@@ -29,10 +30,11 @@ Vue.component("new-inf-dimensions-tab", {
   },
   methods: {
     update() {
+      this.isEC9Running = EternityChallenge(9).isRunning;
       const infinityPower = player.infinityPower;
       this.infinityPower.copyFrom(infinityPower);
       this.conversionRate = getInfinityConversionRate();
-      if (EternityChallenge(9).isRunning) {
+      if (this.isEC9Running) {
         this.dimMultiplier.copyFrom(Decimal.pow(Math.max(infinityPower.log2(), 1), 4).max(1));
       } else {
         this.dimMultiplier.copyFrom(infinityPower.pow(this.conversionRate).max(1));
@@ -44,7 +46,7 @@ Vue.component("new-inf-dimensions-tab", {
         this.EC8PurchasesLeft = player.eterc8ids;
       }
       this.isEnslavedRunning = Enslaved.isRunning;
-      this.isAnyAutobuyerUnlocked = InfinityDimension(1).isAutobuyerUnlocked;
+      this.isAnyAutobuyerUnlocked = Autobuyer.infinityDimension(1).isUnlocked;
       this.nextDimCapIncrease = Enslaved.nextDimCapIncrease;
       this.tesseractCost.copyFrom(Enslaved.tesseractCost);
       this.totalDimCap = InfinityDimensions.totalDimCap;
@@ -78,10 +80,21 @@ Vue.component("new-inf-dimensions-tab", {
       <div>
         <p>
           You have
-          <span class="c-infinity-dim-description__accent">{{format(infinityPower, 2, 1)}}</span> infinity power,
-          translated to a
+          <span class="c-infinity-dim-description__accent">{{format(infinityPower, 2, 1)}}</span>
+          Infinity Power,
+          <br>
+          <span v-if="!isEC9Running">
+          increased by
+          <span class="c-infinity-dim-description__accent">^{{ format(conversionRate, 2, 3) }}</span>
+          </span>
+          <span v-else>
+          translated
+          </span>
+          to a
           <span class="c-infinity-dim-description__accent">{{formatX(dimMultiplier, 2, 1)}}</span>
-          multiplier on all Antimatter Dimensions (^{{ format(conversionRate, 2, 3) }}).
+          multiplier on all
+          <span v-if="!isEC9Running">Antimatter Dimensions.</span>
+          <span v-else>Time Dimensions due to Eternity Challenge 9.</span>
         </p>
       </div>
       <div class="l-infinity-dim-tab__enslaved-reward-container" v-if="enslavedCompleted">

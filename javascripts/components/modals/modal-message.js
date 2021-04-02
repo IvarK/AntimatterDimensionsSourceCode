@@ -26,7 +26,7 @@ Vue.component("modal-message", {
         v-html="message"
       />
       <primary-button
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
+        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
         @click="handleClick"
       >Okay</primary-button>
     </div>`

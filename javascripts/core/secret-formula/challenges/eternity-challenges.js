@@ -8,7 +8,8 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e200"),
     reward: {
       description: "Time Dimension multiplier based on time spent this Eternity",
-      effect: completions => Decimal.pow(Math.max(player.thisEternity / 10, 0.9), 0.3 + (completions * 0.05)),
+      effect: completions =>
+        Decimal.pow(Math.max(player.records.thisEternity.time / 10, 0.9), 0.3 + (completions * 0.05)),
       formatEffect: value => formatX(value, 2, 1)
     }
   },
@@ -43,7 +44,7 @@ GameDatabase.challenges.eternity = [
     restriction: completions => Math.max(16 - 4 * completions, 0),
     checkRestriction: restriction => player.infinitied.lte(restriction),
     formatRestriction: restriction => `in ${formatInt(restriction)} Infinities or less`,
-    failedRestriction: "(Too many infinities for more)",
+    failedRestriction: "(Too many Infinities for more)",
     reward: {
       description: "Infinity Dimension multiplier based on unspent Infinity Points",
       effect: completions => player.infinityPoints.pow(0.003 + completions * 0.002),

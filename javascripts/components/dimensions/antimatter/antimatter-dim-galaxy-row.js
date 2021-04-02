@@ -68,7 +68,7 @@ Vue.component("antimatter-dim-galaxy-row", {
       this.type = Galaxy.type;
       this.galaxies.normal = player.galaxies;
       this.galaxies.replicanti = Replicanti.galaxies.total;
-      this.galaxies.dilation = player.dilation.freeGalaxies;
+      this.galaxies.dilation = player.dilation.totalTachyonGalaxies;
       const requirement = Galaxy.requirement;
       this.requirement.amount = requirement.amount;
       this.requirement.tier = requirement.tier;

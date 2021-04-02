@@ -123,9 +123,9 @@ function buyMaxInfinityDimensions() {
 }
 
 function toggleAllInfDims() {
-  const areEnabled = player.infDimBuyers[0];
+  const areEnabled = Autobuyer.infinityDimension(1).isActive;
   for (let i = 1; i < 9; i++) {
-    player.infDimBuyers[i - 1] = !areEnabled;
+    Autobuyer.infinityDimension(i).isActive = !areEnabled;
   }
 }
 
@@ -178,11 +178,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get requirementReached() {
-    return player.thisEternityMaxAM.gte(this.requirement);
-  }
-
-  get isAutobuyerUnlocked() {
-    return player.eternities.gte(10 + this.tier);
+    return player.records.thisEternity.maxAM.gte(this.requirement);
   }
 
   get isAvailableForPurchase() {
@@ -310,7 +306,7 @@ class InfinityDimensionState extends DimensionState {
 
     this.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, this.tier);
-    if (player.infDimBuyers[this.tier - 1] && !manual &&
+    if (Autobuyer.infinityDimension(this.tier).isActive && !manual &&
       !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
       buyMaxInfDims(this.tier);
     }
@@ -334,7 +330,7 @@ const InfinityDimensions = {
   unlockNext() {
     if (InfinityDimension(8).isUnlocked) return;
     const next = InfinityDimensions.next();
-    if (!Perk.bypassIDAntimatter.isBought && player.thisEternityMaxAM.lt(next.requirement)) return;
+    if (!Perk.bypassIDAntimatter.isBought && player.records.thisEternity.maxAM.lt(next.requirement)) return;
     next.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, next.tier);
   },

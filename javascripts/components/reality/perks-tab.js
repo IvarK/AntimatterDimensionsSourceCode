@@ -39,8 +39,11 @@ const PerkNetwork = {
   nodes: undefined,
   minScale: 0.2,
   maxScale: 4,
+  lastPerkNotation: "",
   initializeIfNeeded() {
-    if (this.container !== undefined) return;
+    const notation = Notations.current.name;
+    if (this.container !== undefined && notation === this.lastPerkNotation) return;
+    this.lastPerkNotation = notation;
 
     this.nodes = new vis.DataSet(Perks.all.map(perk => ({
       id: perk.id,
@@ -127,7 +130,7 @@ const PerkNetwork = {
     });
   },
   resetPosition() {
-    this.network.moveTo({ position: { x: 0, y: 0 }, scale: 0.8, offset: { x: 0, y: 0 } });
+    this.network.moveTo({ position: { x: -600, y: -300 }, scale: 0.8, offset: { x: 0, y: 0 } });
   },
   setLabelVisibility(areVisible) {
     const options = {

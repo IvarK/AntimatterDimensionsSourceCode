@@ -17,7 +17,7 @@ Vue.component("replicanti-upgrade-button", {
   },
   watch: {
     isAutobuyerOn(newValue) {
-      this.upgrade.isAutobuyerOn = newValue;
+      Autobuyer.replicantiUpgrade(this.upgrade.id).isActive = newValue;
     }
   },
   computed: {
@@ -35,8 +35,9 @@ Vue.component("replicanti-upgrade-button", {
       if (!this.isCapped) {
         this.costDescription = setup.formatCost(upgrade.cost);
       }
-      this.isAutoUnlocked = upgrade.isAutobuyerUnlocked;
-      this.isAutobuyerOn = upgrade.isAutobuyerOn;
+      const autobuyer = Autobuyer.replicantiUpgrade(upgrade.id);
+      this.isAutoUnlocked = autobuyer.isUnlocked;
+      this.isAutobuyerOn = autobuyer.isActive;
       this.isEC8Running = EternityChallenge(8).isRunning;
     }
   },

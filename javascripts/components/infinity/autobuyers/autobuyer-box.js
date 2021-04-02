@@ -69,11 +69,11 @@ Vue.component("autobuyer-box", {
       const autobuyer = this.autobuyer;
       this.isUnlocked = autobuyer.isUnlocked;
       this.isActive = autobuyer.isActive;
-      this.globalToggle = player.options.autobuyersOn;
+      this.globalToggle = player.auto.autobuyersOn;
       this.canBeBought = this.autobuyer.canBeBought;
       this.antimatterCost = this.autobuyer.antimatterCost;
       this.isBought = this.autobuyer.isBought;
-      this.antimatter.copyFrom(Currency.antimatter);
+      this.antimatter.copyFrom(player.records.thisEternity.maxAM);
     },
     toggle() {
       this.isActive = !this.isActive;
@@ -130,6 +130,8 @@ Vue.component("autobuyer-box", {
       </div>
     </div>
     <div v-else-if="canBeBought" @click="purchase" :class="autobuyerBuyBoxClass">
-      Buy the {{ name }} for {{ format(antimatterCost) }} antimatter
+      {{ name }}
+      <br>
+      Requirement: {{ format(antimatterCost) }} total antimater
     </div>`
 });

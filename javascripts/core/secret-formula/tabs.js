@@ -324,7 +324,7 @@ GameDatabase.tabs = [
         name: "Lai'tela",
         symbol: "ᛝ",
         component: "laitela-tab",
-        condition: () => Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK)
+        condition: () => Laitela.isUnlocked
       },
       {
         key: "pelle",

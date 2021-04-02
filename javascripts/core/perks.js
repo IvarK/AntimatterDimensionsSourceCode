@@ -40,7 +40,7 @@ class PerkState extends SetPurchasableMechanicState {
 const Perk = (function() {
   const db = GameDatabase.reality.perks;
   return {
-    glyphChoice4: new PerkState(db.glyphChoice4),
+    firstPerk: new PerkState(db.firstPerk),
     startAM1: new PerkState(db.startAM1),
     startAM2: new PerkState(db.startAM2),
     startIP1: new PerkState(db.startIP1),
@@ -50,8 +50,7 @@ const Perk = (function() {
     startEP3: new PerkState(db.startEP3),
     startTP: new PerkState(db.startTP),
     dimboostNonReset: new PerkState(db.dimboostNonReset),
-    studyPassive1: new PerkState(db.studyPassive1),
-    studyPassive2: new PerkState(db.studyPassive2),
+    studyPassive: new PerkState(db.studyPassive),
     autounlockEU1: new PerkState(db.autounlockEU1),
     autounlockEU2: new PerkState(db.autounlockEU2),
     autounlockDilation1: new PerkState(db.autounlockDilation1),
@@ -114,5 +113,10 @@ for (const perk of Perks.all) {
 function checkPerkValidity() {
   if (player.reality.perks.every(id => Perks.find(id) !== undefined)) return;
   dev.respecPerks();
-  Modal.message.show("Your old Reality perks were invalid, your perks have been reset and your perk points refunded.");
+  if (player.reality.perkPoints >= Perks.all.length) {
+    dev.buyAllPerks();
+    Modal.message.show("Some of your Perks were invalid, but you auto-bought all valid perks.");
+  } else {
+    Modal.message.show("Some of your Perks were invalid, so your Perks have been reset and your Perk Points refunded.");
+  }
 }

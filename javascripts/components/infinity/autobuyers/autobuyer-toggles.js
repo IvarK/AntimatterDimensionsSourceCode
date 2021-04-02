@@ -11,21 +11,21 @@ Vue.component("autobuyer-toggles", {
   },
   watch: {
     autobuyersOn(newValue) {
-      player.options.autobuyersOn = newValue;
+      player.auto.autobuyersOn = newValue;
     },
     bulkOn(newValue) {
-      player.options.bulkOn = newValue;
+      player.auto.bulkOn = newValue;
     },
     disableContinuum(newValue) {
-      player.options.disableContinuum = newValue;
+      player.auto.disableContinuum = newValue;
     }
   },
   methods: {
     update() {
-      this.autobuyersOn = player.options.autobuyersOn;
-      this.bulkOn = player.options.bulkOn;
-      this.showContinuum = Ra.has(RA_UNLOCKS.RA_LAITELA_UNLOCK);
-      this.disableContinuum = player.options.disableContinuum;
+      this.autobuyersOn = player.auto.autobuyersOn;
+      this.bulkOn = player.auto.bulkOn;
+      this.showContinuum = Laitela.isUnlocked;
+      this.disableContinuum = player.auto.disableContinuum;
     },
     toggleAllAutobuyers() {
       const allAutobuyersDisabled = Autobuyers.unlocked.every(autobuyer => !autobuyer.isActive);

@@ -11,12 +11,13 @@ const PERK_FAMILY = {
 };
 
 GameDatabase.reality.perks = {
-  glyphChoice4: {
+  firstPerk: {
     id: 0,
-    label: "GC4",
+    label: "START",
     family: PERK_FAMILY.REALITY,
     get description() {
-      return `You can now choose from ${formatInt(4)} different glyphs on Reality.`;
+      return `Remove the ${format(5e9)} Time Theorems and ${format(13)} rows of achievements requirements from
+      the Reality Study, and allow you to choose from ${formatInt(4)} different Glyphs on Reality`;
     },
     effect: 4,
   },
@@ -105,21 +106,14 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.ANTIMATTER,
     description: "Dimension Boosts no longer reset Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice."
   },
-  studyPassive1: {
+  studyPassive: {
     id: 31,
-    label: "PASS1",
+    label: "PASS",
     family: PERK_FAMILY.ETERNITY,
     get description() {
-      return `Improve Time Study 122 to ${formatX(100)} Eternity Points and
-        Time Study 142 to ${formatX(1e100)} Infinity Points.`;
-    }
-  },
-  studyPassive2: {
-    id: 32,
-    label: "PASS2",
-    family: PERK_FAMILY.ETERNITY,
-    get description() {
-      return `Time Study 132 also makes Replicanti ${format(5)} times faster.`;
+      return `Improve Time Study 122 to ${formatX(50)} Eternity Points and
+        Time Study 142 to ${formatX(1e50)} Infinity Points.
+        In addition, Time Study 132 also makes Replicanti ${format(3)} times faster.`;
     }
   },
   autounlockEU1: {
@@ -396,8 +390,8 @@ GameDatabase.reality.perks = {
     label: "ACH1",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the achievement timer to ${formatInt(20)} minutes per
-        achievement (${formatInt(10)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(20)} minutes per
+        Achievement (${formatInt(10)} minute decrease).`;
     },
     effect: 10
   },
@@ -406,8 +400,8 @@ GameDatabase.reality.perks = {
     label: "ACH2",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the achievement timer to ${formatInt(14)} minutes per
-        achievement (${formatInt(6)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(14)} minutes per
+        Achievement (${formatInt(6)} minute decrease).`;
     },
     effect: 6
   },
@@ -416,8 +410,8 @@ GameDatabase.reality.perks = {
     label: "ACH3",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the achievement timer to ${formatInt(9)} minutes per
-        achievement (${formatInt(5)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(9)} minutes per
+        Achievement (${formatInt(5)} minute decrease).`;
     },
     effect: 5
   },
@@ -426,8 +420,8 @@ GameDatabase.reality.perks = {
     label: "ACH4",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the achievement timer to ${formatInt(5)} minutes per
-        achievement (${formatInt(4)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(5)} minutes per
+        Achievement (${formatInt(4)} minute decrease).`;
     },
     effect: 4
   },
@@ -436,8 +430,8 @@ GameDatabase.reality.perks = {
     label: "ACH5",
     family: PERK_FAMILY.ACHIEVEMENT,
     get description() {
-      return `Reduce the achievement timer to ${formatInt(2)} minutes per
-        achievement (${formatInt(3)} minute decrease).`;
+      return `Reduce the Achievement timer to ${formatInt(2)} minutes per
+        Achievement (${formatInt(3)} minute decrease).`;
     },
     effect: 3
   },
@@ -445,7 +439,7 @@ GameDatabase.reality.perks = {
     id: 206,
     label: "ACHNR",
     family: PERK_FAMILY.ACHIEVEMENT,
-    description: "Reality no longer resets your achievements.",
+    description: "Reality no longer resets your Achievements.",
     effect: 2
   }
 };
@@ -454,7 +448,7 @@ GameDatabase.reality.perkConnections = (function() {
   const p = GameDatabase.reality.perks;
   // First item is the start, other items are the ends
   const groups = [
-    [p.glyphChoice4, p.achievementGroup1, p.startAM1, p.autounlockEU1, p.bypassEC5Lock],
+    [p.firstPerk, p.achievementGroup1, p.startAM1, p.autounlockEU1, p.bypassEC5Lock],
     [p.startAM1, p.startAM2, p.startIP1],
     [p.startAM2, p.startEP1, p.dimboostNonReset],
     [p.startIP1, p.startIP2, p.startEP1, p.autobuyerFasterID],
@@ -472,9 +466,8 @@ GameDatabase.reality.perkConnections = (function() {
     [p.bypassEC1Lock, p.bypassEC2Lock, p.bypassEC3Lock, p.studyECRequirement],
     [p.bypassEC2Lock, p.studyActiveEP, p.bypassEC1Lock],
     [p.bypassEC3Lock, p.studyIdleEP, p.bypassEC1Lock],
-    [p.bypassEC5Lock, p.studyActiveEP, p.studyIdleEP, p.studyPassive1],
-    [p.studyPassive1, p.studyPassive2],
-    [p.studyPassive2, p.bypassEC1Lock],
+    [p.bypassEC5Lock, p.studyActiveEP, p.studyIdleEP, p.studyPassive],
+    [p.studyPassive, p.bypassEC1Lock],
     [p.autocompleteEC1, p.autocompleteEC2],
     [p.autocompleteEC2, p.autocompleteEC3],
     [p.autocompleteEC3, p.autocompleteEC4],

@@ -746,7 +746,208 @@ GameStorage.devMigrations = {
         script.content =
           script.content.replace(/^([ \t]*)(wait|if|while|until)([\t ]+)(completions)/igmu, "$1$2$3pending $4");
       }
-    }
+    },
+    player => {
+      // eslint-disable-next-line no-bitwise
+      player.celestials.ra.unlockBits &= ~(1 << 29);
+    },
+    player => {
+      player.records.gameCreatedTime = player.gameCreatedTime;
+      player.records.totalTimePlayed = player.totalTimePlayed;
+      player.records.realTimePlayed = player.realTimePlayed;
+      player.records.totalAntimatter = new Decimal(player.totalAntimatter);
+      for (let i = 0; i < 10; i++) {
+        player.records.lastTenInfinities[i][0] = player.lastTenRuns[i][0];
+        player.records.lastTenEternities[i][0] = player.lastTenEternities[i][0];
+        player.records.lastTenRealities[i][0] = player.lastTenRealities[i][0];
+      }
+      player.options.showLastTenInfinitiesGainPerTime = player.options.showLastTenRunsGainPerTime;
+      delete player.options.showLastTenRunsGainPerTime;
+
+      player.records.thisInfinity.time = player.thisInfinityTime;
+      player.records.thisInfinity.realTime = player.thisInfinityRealTime;
+      player.records.thisInfinity.lastBuyTime = player.thisInfinityLastBuyTime;
+      player.records.thisInfinity.maxAM = new Decimal(player.thisInfinityMaxAM);
+      player.records.thisInfinity.bestIPmin = new Decimal(player.bestIPminThisInfinity);
+
+      player.records.bestInfinity.time = player.bestInfinityTime;
+      player.records.bestInfinity.realTime = player.bestInfinityRealTime;
+      player.records.bestInfinity.bestIPminEternity = new Decimal(player.bestIPminThisEternity);
+      player.records.bestInfinity.bestIPminReality = new Decimal(player.bestEPThisReality);
+
+      player.records.thisEternity.time = player.thisEternity;
+      player.records.thisEternity.realTime = player.thisEternityRealTime;
+      player.records.thisEternity.maxAM = new Decimal(player.thisEternityMaxAM);
+      player.records.thisEternity.maxIP = new Decimal(player.thisEternityMaxIP);
+      player.records.thisEternity.bestIPMsWithoutMaxAll = new Decimal(player.bestIpPerMsWithoutMaxAll);
+      player.records.thisEternity.bestEPmin = new Decimal(player.bestEPminThisEternity);
+      player.records.thisEternity.bestInfinitiesPerMs = new Decimal(player.bestInfinitiesPerMs);
+
+      player.records.bestEternity.time = player.bestEternity;
+      // I have no idea where real time best Eternity is, not sure if it exists?
+      player.records.bestEternity.bestEPminReality = new Decimal(player.bestEPminThisReality);
+
+      player.records.thisReality.time = player.thisReality;
+      player.records.thisReality.realTime = player.thisRealityRealTime;
+      player.records.thisReality.bestEternitiesPerMs = new Decimal(player.bestEternitiesPerMs);
+
+      player.records.bestReality.RMmin = new Decimal(player.bestRMmin);
+      player.records.bestReality.RMminSet = player.bestRMminSet;
+      player.records.bestReality.glyphLevel = player.bestGlyphLevel;
+      player.records.bestReality.glyphStrength = player.bestGlyphStrength;
+      player.records.bestReality.glyphLevelSet = player.bestGlyphLevelSet;
+      player.records.bestReality.bestEP = new Decimal(player.bestEP);
+      player.records.bestReality.bestEPSet = player.bestEPSet;
+      player.records.bestReality.time = player.bestReality;
+      player.records.bestReality.realTime = player.bestRealityRealTime;
+      player.records.bestReality.speedSet = player.bestSpeedSet;
+
+      delete player.gameCreatedTime;
+      delete player.totalTimePlayed;
+      delete player.realTimePlayed;
+      delete player.totalAntimatter;
+      delete player.lastTenRuns;
+      delete player.lastTenEternities;
+      delete player.lastTenRealities;
+
+      delete player.thisInfinityTime;
+      delete player.thisInfinityRealTime;
+      delete player.thisInfinityLastBuyTime;
+      delete player.thisInfinityMaxAM;
+      delete player.bestIPminThisInfinity;
+
+      delete player.bestInfinityTime;
+      delete player.bestInfinityRealTime;
+      delete player.bestIPminThisEternity;
+
+      delete player.thisEternity;
+      delete player.thisEternityRealTime;
+      delete player.thisEternityMaxAM;
+      delete player.thisEternityMaxIP;
+      delete player.bestIpPerMsWithoutMaxAll;
+      delete player.bestEPminThisEternity;
+      delete player.bestInfinitiesPerMs;
+      delete player.bestIPminThisEternity;
+
+      delete player.bestEternity;
+      delete player.bestEPminThisReality;
+
+      delete player.thisReality;
+      delete player.thisRealityRealTime;
+      delete player.bestEternitiesPerMs;
+      delete player.bestEPThisReality;
+
+      delete player.bestRMmin;
+      delete player.bestRMminSet;
+      delete player.bestGlyphLevel;
+      delete player.bestGlyphStrength;
+      delete player.bestGlyphLevelSet;
+      delete player.bestEP;
+      delete player.bestEPSet;
+      delete player.bestReality;
+      delete player.bestRealityRealTime;
+      delete player.bestSpeedSet;
+    },
+    player => {
+      player.replicanti.boughtGalaxyCap = player.replicanti.gal;
+      player.reality.perkPoints = player.reality.pp;
+      player.celestials.teresa.pouredAmount = player.celestials.teresa.rmStore;
+      player.celestials.laitela.darkMatter = new Decimal(player.celestials.laitela.matter);
+      player.celestials.laitela.maxDarkMatter = new Decimal(player.celestials.laitela.maxMatter);
+      player.celestials.ra.pets.teresa.memories = player.celestials.ra.pets.teresa.exp;
+      player.celestials.ra.pets.effarig.memories = player.celestials.ra.pets.effarig.exp;
+      player.celestials.ra.pets.enslaved.memories = player.celestials.ra.pets.enslaved.exp;
+      player.celestials.ra.pets.v.memories = player.celestials.ra.pets.v.exp;
+      player.achievementChecks.noSacrifices = player.noSacrifices;
+      player.achievementChecks.onlyEighthDimensions = player.onlyEighthDimensions;
+      player.achievementChecks.onlyFirstDimensions = player.onlyFirstDimensions;
+      player.achievementChecks.noEighthDimensions = player.noEighthDimensions;
+      player.achievementChecks.noFirstDimensions = player.noFirstDimensions;
+      player.achievementChecks.noAntimatterProduced = player.noAntimatterProduced;
+      player.achievementChecks.noTriadStudies = player.noTriadStudies;
+      player.achievementChecks.noTheoremPurchases = player.noTheoremPurchases;
+      player.achievementChecks.noInfinitiesThisReality = player.noInfinitiesThisReality;
+      player.achievementChecks.noEternitiesThisReality = player.noEternitiesThisReality;
+      player.achievementChecks.noReplicantiGalaxies = player.noReplicantiGalaxies;
+      player.dilation.baseTachyonGalaxies = player.dilation.baseFreeGalaxies;
+      player.dilation.totalTachyonGalaxies = player.dilation.freeGalaxies;
+
+      delete player.replicanti.gal;
+      delete player.reality.pp;
+      delete player.celestials.teresa.rmStore;
+      delete player.celestials.laitela.matter;
+      delete player.celestials.laitela.maxMatter;
+      delete player.celestials.ra.pets.teresa.exp;
+      delete player.celestials.ra.pets.effarig.exp;
+      delete player.celestials.ra.pets.enslaved.exp;
+      delete player.celestials.ra.pets.v.exp;
+      delete player.noSacrifices;
+      delete player.onlyEighthDimensions;
+      delete player.onlyFirstDimensions;
+      delete player.noEighthDimensions;
+      delete player.noFirstDimensions;
+      delete player.noAntimatterProduced;
+      delete player.noTriadStudies;
+      delete player.noTheoremPurchases;
+      delete player.noInfinitiesThisReality;
+      delete player.noEternitiesThisReality;
+      delete player.noReplicantiGalaxies;
+      delete player.dilation.baseFreeGalaxies;
+      delete player.dilation.freeGalaxies;
+    },
+    player => {
+      for (let i = 0; i < 8; i++) {
+        player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
+      }
+      for (let i = 0; i < 8; i++) {
+        player.auto.timeDims[i].isActive = player.reality.tdbuyers[i];
+      }
+      for (let i = 0; i < 3; i++) {
+        player.auto.replicantiUpgrades[i].isActive = player.replicanti.auto[i];
+      }
+      for (let i = 0; i < 3; i++) {
+        player.auto.dilationUpgrades[i].isActive = player.dilation.auto[i];
+      }
+      for (let i = 0; i < 2; i++) {
+        player.auto.blackHolePower[i].isActive = player.blackHole[i].autoPower;
+      }
+      for (let i = 0; i < 5; i++) {
+        player.auto.realityUpgrades[i].isActive = player.reality.rebuyablesAuto[i];
+      }
+      player.auto.antimatterDims = player.auto.dimensions;
+      player.auto.replicantiGalaxies.isActive = player.replicanti.galaxybuyer;
+      player.auto.ipMultBuyer.isActive = player.infMultBuyer;
+      player.auto.epMultBuyer.isActive = player.reality.epmultbuyer;
+      player.auto.timeTheorems.isActive = player.ttbuyer;
+      player.auto.bigCrunch.xCurrent = player.auto.bigCrunch.xLast;
+      player.auto.eternity.xCurrent = player.auto.eternity.xLast;
+      player.auto.bulkOn = player.options.bulkOn;
+      player.auto.autobuyerOn = player.options.autobuyerOn;
+      player.auto.disableContinuum = player.options.disableContinuum;
+
+      delete player.auto.dimensions;
+      delete player.infDimBuyers;
+      delete player.auto.infDimTimer;
+      delete player.reality.tdbuyers;
+      delete player.auto.timeDimTimer;
+      delete player.replicanti.galaxybuyer;
+      delete player.replicanti.auto;
+      delete player.auto.repUpgradeTimer;
+      delete player.ttbuyer;
+      delete player.auto.ttTimer;
+      delete player.dilation.auto;
+      delete player.auto.dilUpgradeTimer;
+      delete player.blackHole[0].autoPower;
+      delete player.blackHole[1].autoPower;
+      delete player.reality.rebuyablesAuto;
+      delete player.reality.epmultbuyer;
+      delete player.infMultBuyer;
+      delete player.auto.bigCrunch.xLast;
+      delete player.auto.eternity.xLast;
+      delete player.options.bulkOn;
+      delete player.options.autobuyerOn;
+      delete player.options.disableContinuum;
+    },
   ],
 
   patch(player) {

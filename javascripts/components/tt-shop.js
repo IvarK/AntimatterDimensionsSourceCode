@@ -9,7 +9,7 @@ Vue.component("tt-shop", {
       shopMinimized: false,
       minimizeAvailable: false,
       hasTTAutobuyer: false,
-      ttAutobuyerOn: false,
+      isAutobuyerOn: false,
       budget: {
         am: new Decimal(0),
         ip: new Decimal(0),
@@ -21,8 +21,14 @@ Vue.component("tt-shop", {
         ep: new Decimal(0)
       },
       showST: false,
-      STamount: 0
+      STamount: 0,
+      showTTGen: false
     };
+  },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.timeTheorem.isActive = newValue;
+    }
   },
   computed: {
     minimized() {
@@ -48,6 +54,9 @@ Vue.component("tt-shop", {
       }
       return `${format(this.theoremGeneration, 2, 2)} TT/sec`;
     },
+    totalTimeTheoremText() {
+      return `${format(this.totalTimeTheorems, 2, 2)} total Time Theorems`;
+    },
     minimizeArrowStyle() {
       return {
         transform: this.minimized ? "rotateX(180deg)" : "",
@@ -56,9 +65,6 @@ Vue.component("tt-shop", {
     saveLoadText() {
       return this.$viewModel.shiftDown ? "save:" : "load:";
     },
-    autobuyerText() {
-      return this.ttAutobuyerOn ? "ON" : "OFF";
-    }
   },
   methods: {
     minimize() {
@@ -92,7 +98,7 @@ Vue.component("tt-shop", {
       this.shopMinimized = player.timestudy.shopMinimized;
       this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought || Perk.autobuyerTT1.isBought;
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
-      this.ttAutobuyerOn = player.ttbuyer;
+      this.isAutobuyerOn = Autobuyer.timeTheorem.isActive;
       const budget = this.budget;
       budget.am.copyFrom(Currency.antimatter);
       budget.ip.copyFrom(player.infinityPoints);
@@ -103,10 +109,8 @@ Vue.component("tt-shop", {
       costs.ep.copyFrom(player.timestudy.epcost);
       this.showST = V.spaceTheorems > 0;
       this.STamount = V.availableST;
+      this.showTTGen = this.theoremGeneration.gt(0) && !ui.view.shiftDown;
     },
-    toggleTTAutobuyer() {
-      player.ttbuyer = !player.ttbuyer;
-    }
   },
   template: `
     <div id="TTbuttons">
@@ -127,11 +131,11 @@ Vue.component("tt-shop", {
               <span class="c-ttshop__save-load-text">{{ saveLoadText }}</span>
               <tt-save-load-button v-for="saveslot in 6" :key="saveslot" :saveslot="saveslot"></tt-save-load-button>
             </div>
-            <span v-if="theoremGeneration.gt(0)">
+            <span v-if="showTTGen">
               You are gaining {{ TTgenRateText }}.
             </span>
             <span v-else>
-              You have {{ totalTimeTheorems }} total TT.
+              You have {{ totalTimeTheoremText }}.
             </span>
           </div>
         </div>
@@ -144,13 +148,12 @@ Vue.component("tt-shop", {
               @click="buyMaxTheorems">
               Buy max
             </button>
-            <button v-if="!minimized && hasTTAutobuyer"
-              class="o-tt-autobuyer-button
-              c-tt-buy-button
-              c-tt-buy-button--unlocked"
-              @click="toggleTTAutobuyer">
-              Auto: {{autobuyerText}}
-            </button>
+            <primary-button-on-off
+              v-if="!minimized && hasTTAutobuyer"
+              v-model="isAutobuyerOn"
+              class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
+              text="Auto:"
+            />
           </div>
         </div>
       </div>
@@ -189,23 +192,23 @@ Vue.component("tt-save-load-button", {
       this.hideContextMenu();
       this.preset.studies = studyTreeExportString();
       const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
-      GameUI.notify.info(`${presetName} saved in slot ${this.saveslot}`);
+      GameUI.notify.eternity(`${presetName} saved in slot ${this.saveslot}`);
     },
     load() {
       this.hideContextMenu();
       if (this.preset.studies) {
         importStudyTree(this.preset.studies);
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
-        GameUI.notify.info(`${presetName} loaded from slot ${this.saveslot}`);
+        GameUI.notify.eternity(`${presetName} loaded from slot ${this.saveslot}`);
       } else {
-        Modal.message.show("This time study list currently contains no studies.");
+        Modal.message.show("This Time Study list currently contains no Time Studies.");
       }
     },
     handleExport() {
       this.hideContextMenu();
       copyToClipboard(this.preset.studies);
       const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
-      GameUI.notify.info(`${presetName} exported from slot ${this.saveslot} to your clipboard`);
+      GameUI.notify.eternity(`${presetName} exported from slot ${this.saveslot} to your clipboard`);
     },
     edit() {
       Modal.editTree.show({ id: this.saveslot - 1 });

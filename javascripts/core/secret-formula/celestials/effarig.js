@@ -7,14 +7,14 @@ GameDatabase.celestials.effarig = {
       description: "Adjustable Glyph level factor weights",
       cost: 1e7
     },
-    basicFilter: {
+    glyphFilter: {
       id: 1,
-      description: "Basic glyph filtering",
+      description: "Glyph Filtering",
       cost: 2e8
     },
-    advancedFilter: {
+    setSaves: {
       id: 2,
-      description: "Advanced glyph filtering",
+      description: "Glyph Set Saves",
       cost: 3e9
     },
     run: {
@@ -37,7 +37,7 @@ GameDatabase.celestials.effarig = {
       label: "Eternity",
       get description() {
         return ` Eternitied stat generates Infinitied stat
-          Free tickspeed upgrade softcap is ${formatInt(100000)} larger
+          The Tickspeed upgrades from Time Dimensions softcaps ${formatInt(100000)} later
           Infinity Points are no longer limited in any way in Effarig's Reality
           You have unlocked The Enslaved Ones`;
       },

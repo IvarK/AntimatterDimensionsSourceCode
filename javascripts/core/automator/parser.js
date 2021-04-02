@@ -112,9 +112,9 @@ const AutomatorGrammar = (function() {
         $.CONSUME1(T.NumberLiteral, { LABEL: "lastStudy" });
       });
 
-      $.RULE("xLast", () => {
+      $.RULE("xCurrent", () => {
         $.CONSUME(T.NumberLiteral);
-        $.CONSUME(T.XLast);
+        $.CONSUME(T.XCurrent);
       });
 
       $.RULE("currencyAmount", () => {

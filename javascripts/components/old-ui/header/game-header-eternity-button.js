@@ -19,7 +19,8 @@ Vue.component("game-header-eternity-button", {
       hasMoreCompletions: false,
       nextGoalAt: new Decimal(0),
       canEternity: false,
-      eternityGoal: new Decimal(0)
+      eternityGoal: new Decimal(0),
+      hover: false,
     };
   },
   computed: {
@@ -29,9 +30,6 @@ Vue.component("game-header-eternity-button", {
         "o-eternity-button--dilation": this.isDilation,
         "o-eternity-button--unavailable": !this.isDilation && !this.canEternity
       };
-    },
-    isGainedEPAmountSmall() {
-      return this.gainedEP.lt(1e6);
     },
     isGainedEPAmountZero() {
       return this.gainedEP.eq(0);
@@ -45,9 +43,10 @@ Vue.component("game-header-eternity-button", {
         this.type === EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT;
     },
     amountStyle() {
+      if (this.hover) return { color: "black" };
       if (this.currentEP.lt(1e50)) return { color: "var(--color-eternity)" };
-      const ratio = this.gainedEP.log10() / this.currentEP.log10();
 
+      const ratio = this.gainedEP.log10() / this.currentEP.log10();
       const rgb = [
         Math.round(255 - (ratio - 1) * 10 * 255),
         Math.round(255 - (1 - ratio) * 10 * 255),
@@ -57,6 +56,7 @@ Vue.component("game-header-eternity-button", {
       return { color: `rgb(${rgb.join(",")})` };
     },
     tachyonAmountStyle() {
+      if (this.hover) return { color: "black" };
       // Note that Infinity and 0 can show up here. We have a special case for
       // this.currentTachyons being 0 because dividing a Decimal by 0 returns 0.
       let ratio;
@@ -119,9 +119,9 @@ Vue.component("game-header-eternity-button", {
         ? EP_BUTTON_DISPLAY_TYPE.NORMAL_EXPLORE_NEW_CONTENT
         : EP_BUTTON_DISPLAY_TYPE.NORMAL;
       this.currentEPPM.copyFrom(gainedEP.dividedBy(
-        TimeSpan.fromMilliseconds(player.thisEternityRealTime).totalMinutes)
+        TimeSpan.fromMilliseconds(player.records.thisEternity.realTime).totalMinutes)
       );
-      this.peakEPPM.copyFrom(player.bestEPminThisEternity);
+      this.peakEPPM.copyFrom(player.records.thisEternity.bestEPmin);
     },
     updateChallengeWithRUPG() {
       const ec = EternityChallenge.current;
@@ -140,6 +140,8 @@ Vue.component("game-header-eternity-button", {
       :class="buttonClassObject"
       class="o-prestige-button l-game-header__eternity-btn"
       onclick="eternityResetRequest()"
+      @mouseover="hover = true"
+      @mouseleave="hover = false"
     >
       <!-- First time -->
       <template v-if="type === 0">
@@ -148,11 +150,8 @@ Vue.component("game-header-eternity-button", {
 
       <!-- Normal -->
       <template v-else-if="type === 1">
-        <template v-if="isGainedEPAmountSmall">
-          I need to become Eternal
-          <br>
-        </template>
-        Gain <span :style="amountStyle">{{format(gainedEP, 2, 0)}}</span> Eternity {{ "Point" | pluralize(gainedEP) }}.
+        Eternity for
+        <span :style="amountStyle">{{format(gainedEP, 2, 0)}}</span> Eternity {{ "Point" | pluralize(gainedEP) }}.
         <br>
         <template v-if="isGainedEPAmountZero">
           Reach {{ format(minIP) }} IP to
@@ -174,19 +173,17 @@ Vue.component("game-header-eternity-button", {
 
       <!-- Dilation -->
       <template v-else-if="type === 3">
-        Gain <span :style="tachyonAmountStyle">{{format(gainedTachyons, 2, 1)}}</span>
+        Eternity for <span :style="tachyonAmountStyle">{{format(gainedTachyons, 2, 1)}}</span>
         Tachyon {{ "Particle" | pluralize(gainedTachyons) }}
-        <br>
-        and {{format(gainedEP, 2, 2)}} Eternity {{ "Point" | pluralize(gainedEP) }}
       </template>
 
       <!-- New content available -->
       <template v-else-if="type === 4 || type === 5">
         <template v-if="type === 4">
-          Gain <span :style="amountStyle">{{format(gainedEP, 2, 2)}}</span> EP
+          Eternity for <span :style="amountStyle">{{format(gainedEP, 2, 2)}}</span> EP
         </template>
         <template v-else>
-          Gain {{format(gainedTachyons, 2, 1)}} Tachyon {{ "Particle" | pluralize(gainedTachyons) }}
+          Eternity for <span :style="tachyonAmountStyle">{{format(gainedTachyons, 2, 1)}}</span> TP
         </template>
         <br>
         You should explore a bit and look at new content before clicking me!

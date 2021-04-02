@@ -14,9 +14,9 @@ Vue.component("glyph-clean-options", {
     update() {
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
-      this.hasFilter = EffarigUnlock.basicFilter.isUnlocked;
+      this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);
-      this.isRefining = AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.ALWAYS_REFINE ||
+      this.isRefining = AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE ||
         AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP;
     },
     autoClean() {
@@ -42,19 +42,19 @@ Vue.component("glyph-clean-options", {
       return "Delete";
     },
     autoCleanTooltip() {
-      return `${this.removeString} glyphs that are worse in every way than
-        enough other glyphs${this.hasPerkShop ? " (ignores music glyphs)" : ""}`;
+      return `${this.removeString} Glyphs that are worse in every way than
+        enough other Glyphs${this.hasPerkShop ? " (ignores Music Glyphs)" : ""}`;
     },
     harshAutoCleanTooltip() {
-      return `${this.removeString} glyphs that are worse in every way than
-        ANY other glyph${this.hasPerkShop ? " (can remove music glyphs)" : ""}`;
+      return `${this.removeString} Glyphs that are worse in every way than
+        ANY other glyph${this.hasPerkShop ? " (includes Music Glyphs)" : ""}`;
     },
     deleteRejectedTooltip() {
       const removeCount = this.inventory
         .filter(g => g !== null && g.idx >= Glyphs.protectedSlots && !AutoGlyphProcessor.wouldKeep(g))
         .length;
       return removeCount === 0
-        ? `This will not remove any glyphs, adjust your filter settings to remove some.`
+        ? `This will not remove any Glyphs, adjust your filter settings to remove some.`
         : `This will remove ${formatInt(removeCount)} ${pluralize("glyph", removeCount)}!`;
     }
   },
@@ -80,7 +80,7 @@ Vue.component("glyph-clean-options", {
         v-if="hasFilter"
         :ach-tooltip="deleteRejectedTooltip"
         @click="deleteAllRejected">
-          {{ removeString }} all glyphs rejected by filtering
+          {{ removeString }} all Glyphs rejected by filtering
       </button>
     </div>
   `,

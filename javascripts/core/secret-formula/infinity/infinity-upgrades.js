@@ -99,10 +99,10 @@ GameDatabase.infinity.upgrades = (function() {
     galaxyBoost: {
       id: "galaxyBoost",
       cost: 2,
-      description: "Galaxies are twice as strong",
+      description: "All Galaxies are twice as strong",
       effect: 2,
       charged: {
-        description: "Galaxies are stronger based on Teresa level",
+        description: "All Galaxies are stronger based on Teresa level",
         effect: () => 2 + Math.sqrt(Ra.pets.teresa.level) / 100,
         formatEffect: value => `+${formatPercents(value - 1)}`
       }
@@ -156,7 +156,7 @@ GameDatabase.infinity.upgrades = (function() {
       formatEffect: value => {
         if (Teresa.isRunning || V.isRunning) return "Disabled in this reality";
         const income = format(value, 2, 0);
-        const period = player.bestInfinityTime >= 999999999999
+        const period = player.records.bestInfinity.time >= 999999999999
           ? "∞"
           : Time.bestInfinity.times(10).toStringShort();
         return `${income} every ${period}`;
@@ -174,21 +174,18 @@ GameDatabase.infinity.upgrades = (function() {
       cost: 20,
       description: () =>
         `Start every reset with ${formatInt(1)} Dimension Boost, automatically unlocking the 5th Antimatter Dimension`,
-      bannedFromCharging: true
     },
     skipReset2: {
       id: "skipReset2",
       cost: 40,
       description: () =>
         `Start every reset with ${formatInt(2)} Dimension Boosts, automatically unlocking the 6th Antimatter Dimension`,
-      bannedFromCharging: true
     },
     skipReset3: {
       id: "skipReset3",
       cost: 80,
       description: () =>
         `Start every reset with ${formatInt(3)} Dimension Boosts, automatically unlocking the 7th Antimatter Dimension`,
-      bannedFromCharging: true
     },
     skipResetGalaxy: {
       id: "skipResetGalaxy",
@@ -196,15 +193,14 @@ GameDatabase.infinity.upgrades = (function() {
       description: () =>
         `Start every reset with ${formatInt(4)} Dimension Boosts, automatically unlocking the 8th Antimatter Dimension;
         and an Antimatter Galaxy`,
-      bannedFromCharging: true
     },
     ipOffline: {
       id: "ipOffline",
       cost: 1000,
       description: () => `Only while offline, gain ${formatPercents(0.5)} of your best IP/min without using Max All`,
-      effect: () => player.bestIpPerMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
+      effect: () =>
+        player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
       formatEffect: value => `${format(value, 2, 2)} IP/min`,
-      bannedFromCharging: true
     },
     ipMult: {
       cost: () => player.infMultCost,
@@ -214,7 +210,6 @@ GameDatabase.infinity.upgrades = (function() {
       effect: () => player.infMult,
       cap: () => Effarig.eternityCap || new Decimal("1e1000000"),
       formatEffect: value => formatX(value, 2, 2),
-      bannedFromCharging: true
     }
   };
 }());

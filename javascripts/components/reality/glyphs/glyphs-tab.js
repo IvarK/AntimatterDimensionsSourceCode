@@ -7,8 +7,8 @@ Vue.component("glyphs-tab", {
     instabilityThreshold: 0,
     hyperInstabilityThreshold: 0,
     isInCelestialReality: false,
+    glyphTextColors: true,
     autoRestartCelestialRuns: false,
-    hasAlchemy: false,
     sacrificeUnlocked: false,
     sacrificeDisplayed: false,
     resetRealityDisplayed: false,
@@ -16,28 +16,38 @@ Vue.component("glyphs-tab", {
   computed: {
     showEnslavedHint() {
       return this.enslavedHint !== "";
-    }
+    },
+    glyphColorState() {
+      return {
+        "o-glyph-color-checkbox": true,
+        "o-glyph-color-checkbox--active": this.glyphTextColors,
+        "o-glyph-color-checkbox--inactive": !this.glyphTextColors,
+      };
+    },
   },
   methods: {
     update() {
       this.resetRealityDisplayed = player.realities > 0;
-      this.showInstability = player.bestGlyphLevel > 800;
+      this.showInstability = player.records.bestReality.glyphLevel > 800;
       this.instabilityThreshold = Glyphs.instabilityThreshold;
       this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;
       this.isInCelestialReality = Object.entries(player.celestials).map(x => x[1].run).includes(true);
       this.autoRestartCelestialRuns = player.options.retryCelestial;
+      this.glyphTextColors = player.options.glyphTextColors;
       this.enslavedHint = "";
-      this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
       this.sacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.sacrificeDisplayed = player.reality.showGlyphSacrifice;
       if (!Enslaved.isRunning) return;
       const haveBoost = Glyphs.activeList.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
       if (haveBoost) {
-        this.enslavedHint = "done... what little... I can... with glyphs...";
+        this.enslavedHint = "done... what little... I can... with Glyphs...";
       }
     },
     toggleAutoRestartCelestial() {
       player.options.retryCelestial = !player.options.retryCelestial;
+    },
+    toggleGlyphTextColors() {
+      player.options.glyphTextColors = !player.options.glyphTextColors;
     },
     glyphInfoClass(isSacrificeOption) {
       if (this.sacrificeDisplayed === isSacrificeOption) return "c-glyph-info-button--active";
@@ -45,6 +55,9 @@ Vue.component("glyphs-tab", {
     },
     setInfoState(state) {
       player.reality.showGlyphSacrifice = state;
+    },
+    glyphColorPosition() {
+      return this.sacrificeUnlocked ? "l-glyph-color-position__low" : "l-glyph-color-position__top";
     }
   },
   template:
@@ -79,21 +92,28 @@ Vue.component("glyphs-tab", {
         </expanding-control-box>
         <br>
         <glyph-clean-options />
-        <glyph-sacrifice-options />
-        <glyph-auto-pick-options v-if="hasAlchemy" />
+        <glyph-tab-side-box />
       </div>
       <div class="l-player-glyphs-column">
         <div v-if="showEnslavedHint" class="o-teresa-quotes" v-html="enslavedHint" />
         <div class="l-equipped-glyphs-wrapper">
           <equipped-glyphs />
           <div class="l-glyph-info-wrapper">
+            <span class="l-glyph-color-box" @click="toggleGlyphTextColors">
+              <div :class="glyphColorPosition()">
+                <label
+                  :class="glyphColorState">
+                  <span class="fas fa-palette"></span>
+                </label>
+              </div>
+            </span>
             <div class="c-glyph-info-options"
               v-if="sacrificeUnlocked">
                 <div class="c-glyph-info-button"
                   :class="glyphInfoClass(false)"
                   @click="setInfoState(false)"
                   style="border-right: 0.1rem solid #b8b8b8;">
-                    Current glyph effects
+                    Current Glyph effects
                 </div>
                 <div class="c-glyph-info-button"
                   :class="glyphInfoClass(true)"

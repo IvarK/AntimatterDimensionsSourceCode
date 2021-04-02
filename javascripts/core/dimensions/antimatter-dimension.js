@@ -32,7 +32,6 @@ const AntimatterDimensionCommonMultiplier = new EffectScope("Antimatter Dimensio
     Achievement(73),
     Achievement(74),
     Achievement(76),
-    Achievement(78).effects.dimensionMult,
     Achievement(84),
     Achievement(91),
     Achievement(92),
@@ -104,7 +103,7 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
           TimeStudy(31)
         )
       ),
-      Achievement(77).effects[tier]
+      Achievement(43).effects[tier]
     );
     if (tier === 1)
       scope.addMultipliers(
@@ -126,12 +125,20 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
     if (tier < 8)
       scope.addMultipliers(
         Achievement(23),
-        TimeStudy(214)
+        TimeStudy(214),
+        Achievement(34),
+        TimeStudy(71)
       );
     if (tier <= 4)
       scope.addMultipliers(
-        Achievement(43)
+        Achievement(64)
       );
+
+    if (tier > 1 && tier < 8) {
+      scope.addMultipliers(
+        InfinityChallenge(8).reward
+      );
+    }
 
     scope.addPowers(
       new Effect(
@@ -224,11 +231,11 @@ function onBuyDimension(tier) {
   }
 
   player.postC4Tier = tier;
-  player.thisInfinityLastBuyTime = player.thisInfinityTime;
-  if (tier !== 8) player.onlyEighthDimensions = false;
-  if (tier !== 1) player.onlyFirstDimensions = false;
-  if (tier === 8) player.noEighthDimensions = false;
-  if (tier === 1) player.noFirstDimensions = false;
+  player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
+  if (tier !== 8) player.achievementChecks.onlyEighthDimensions = false;
+  if (tier !== 1) player.achievementChecks.onlyFirstDimensions = false;
+  if (tier === 8) player.achievementChecks.noEighthDimensions = false;
+  if (tier === 1) player.achievementChecks.noFirstDimensions = false;
 }
 
 function floatText(tier, text) {
@@ -292,7 +299,7 @@ function buyAsManyAsYouCanBuy(tier) {
   const howMany = dimension.howManyCanBuy;
   const cost = dimension.cost.times(howMany);
 
-  if (tier === 8 && Enslaved.isRunning && AntimatterDimension(8).bought >= 1) return buyOneDimension(8);
+  if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
 
   dimension.currencyAmount = dimension.currencyAmount.minus(cost);
   dimension.challengeCostBump();
@@ -710,7 +717,7 @@ const AntimatterDimensions = {
       AntimatterDimension(tier + nextTierOffset).produceDimensions(AntimatterDimension(tier), diff / 10);
     }
     if (AntimatterDimension(1).amount.gt(0)) {
-      player.noFirstDimensions = false;
+      player.achievementChecks.noFirstDimensions = false;
     }
     AntimatterDimension(1).produceCurrency(Currency.antimatter, diff);
     if (NormalChallenge(12).isRunning) {

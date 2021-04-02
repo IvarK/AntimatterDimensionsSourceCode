@@ -10,6 +10,8 @@ Vue.component("game-header-big-crunch-button", {
       currentIP: new Decimal(0),
       tesseractUnlocked: false,
       tesseractCost: new Decimal(0),
+      tesseractAffordable: false,
+      hover: false,
     };
   },
   computed: {
@@ -18,39 +20,23 @@ Vue.component("game-header-big-crunch-button", {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     },
     amountStyle() {
-      // If the player is using a dark theme, it should be black instead of white when ratio is 1
-      const darkTheme = Theme.current().isDark && Theme.current().name !== "S6";
-      if (this.currentIP.lt(1e50)) return darkTheme ? { color: "black" } : { color: "white" };
+      if (this.hover) return { color: "black" };
+      if (this.currentIP.lt(1e50)) return { color: "var(--color-infinity)" };
 
       const ratio = this.gainedIP.log10() / this.currentIP.log10();
-      let rgb;
-
-      if (darkTheme) {
-        rgb = [
-          Math.round((1 - ratio) * 10 * 255),
-          Math.round((ratio - 1) * 10 * 255),
-          0
-        ];
-      } else {
-        rgb = [
-          Math.round(255 - (ratio - 1) * 10 * 255),
-          Math.round(255 - (1 - ratio) * 10 * 255),
-          ratio > 1 ? Math.round(255 - (ratio - 1) * 10 * 255)
-          : Math.round(255 - (1 - ratio) * 10 * 255)
-        ];
-      }
+      const rgb = [
+        Math.round(255 - (ratio - 1) * 10 * 255),
+        Math.round(255 - (1 - ratio) * 10 * 255),
+        ratio > 1 ? Math.round(255 - (ratio - 1) * 10 * 255)
+        : Math.round(255 - (1 - ratio) * 10 * 255)
+      ];
       return { color: `rgb(${rgb.join(",")})` };
-    },
-    classObject() {
-      return {
-        "c-game-header__tesseract-available": this.tesseractUnlocked && this.currentIP.gt(this.tesseractCost),
-      };
     },
   },
   methods: {
     update() {
       this.isVisible = player.break &&
-        player.thisInfinityMaxAM.gte(Decimal.NUMBER_MAX_VALUE) &&
+        player.records.thisInfinity.maxAM.gte(Decimal.NUMBER_MAX_VALUE) &&
         !InfinityChallenge.isRunning;
       if (NormalChallenge.isRunning) {
         if (!Enslaved.isRunning || !Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current.id)) {
@@ -61,20 +47,25 @@ Vue.component("game-header-big-crunch-button", {
       const gainedIP = gainedInfinityPoints();
       this.currentIP.copyFrom(player.infinityPoints);
       this.gainedIP.copyFrom(gainedIP);
-      this.peakIPPM.copyFrom(player.bestIPminThisInfinity);
+      this.peakIPPM.copyFrom(player.records.thisInfinity.bestIPmin);
       if (this.isPeakIPPMVisible) {
         this.currentIPPM.copyFrom(gainedIP.dividedBy(Time.thisInfinityRealTime.totalMinutes));
       }
       this.tesseractUnlocked = Enslaved.isCompleted;
       this.tesseractCost = Enslaved.tesseractCost;
-    }
+      this.tesseractAffordable = this.tesseractUnlocked && this.currentIP.gt(this.tesseractCost);
+    },
+    switchToInfinity() {
+      Tab.dimensions.infinity.show(true);
+    },
   },
   template:
     `<button
-      v-if="isVisible"
+      v-if="isVisible && !tesseractAffordable"
       class="o-prestige-button o-infinity-button l-game-header__big-crunch-btn"
-      :class="classObject"
       onclick="bigCrunchResetRequest()"
+      @mouseover="hover = true"
+      @mouseleave="hover = false"
     >
       <div v-if="!isPeakIPPMVisible"/>
       <b>Big Crunch for
@@ -87,5 +78,14 @@ Vue.component("game-header-big-crunch-button", {
         Peaked at {{format(peakIPPM, 2, 0)}} IP/min
       </template>
       <div v-else/>
+    </button>
+    <button
+      v-else-if="tesseractAffordable"
+      class="o-prestige-button l-game-header__big-crunch-btn c-game-header__tesseract-available"
+      @click="switchToInfinity"
+    >
+      <b>
+        You have enough Infinity Points to buy a Tesseract
+      </b>
     </button>`
 });

@@ -41,6 +41,7 @@ const Theme = function Theme(name, colors) {
         }
         player.options.theme = name;
         ui.view.theme = name;
+        window.getSelection().removeAllRanges();
     };
 
     this.isDark = colors.isDark;

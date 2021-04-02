@@ -9,7 +9,7 @@ Vue.component("past-runs-tab", {
           plural: "Realities",
           currency: "RM",
           condition: () => PlayerProgress.realityUnlocked(),
-          getRuns: () => player.lastTenRealities,
+          getRuns: () => player.records.lastTenRealities,
           reward: (runGain, run, average) => (average
             ? `${runGain} ${pluralize("Reality Machine", run[1])}`
             : `${runGain} ${pluralize("Reality Machine", run[1])}, a level ${formatInt(run[4])} glyph,`),
@@ -21,7 +21,7 @@ Vue.component("past-runs-tab", {
           plural: "Eternities",
           currency: "EP",
           condition: () => PlayerProgress.eternityUnlocked(),
-          getRuns: () => player.lastTenEternities,
+          getRuns: () => player.records.lastTenEternities,
           reward: runGain => `${runGain} EP`,
           prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Eternity", run[2], "Eternities")}`,
         },
@@ -30,29 +30,29 @@ Vue.component("past-runs-tab", {
           plural: "Infinities",
           currency: "IP",
           condition: () => PlayerProgress.infinityUnlocked(),
-          getRuns: () => player.lastTenRuns,
+          getRuns: () => player.records.lastTenInfinities,
           reward: runGain => `${runGain} IP`,
           prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Infinity", run[2], "Infinities")}`,
         },
       },
-      showLastTenRunsGainPerTime: false
+      showLastTenInfinitiesGainPerTime: false
     };
   },
   watch: {
-    showLastTenRunsGainPerTime(newValue) {
-      player.options.showLastTenRunsGainPerTime = newValue;
+    showLastTenInfinitiesGainPerTime(newValue) {
+      player.options.showLastTenInfinitiesGainPerTime = newValue;
     }
   },
   methods: {
     update() {
-      this.showLastTenRunsGainPerTime = player.options.showLastTenRunsGainPerTime;
+      this.showLastTenInfinitiesGainPerTime = player.options.showLastTenInfinitiesGainPerTime;
     }
   },
   template: `
     <div class="c-stats-tab">
       <div class="c-subtab-option-container">
         <primary-button-on-off-custom
-          v-model="showLastTenRunsGainPerTime"
+          v-model="showLastTenInfinitiesGainPerTime"
           on="Show resource gain"
           off="Show resource gain/time"
           class="o-primary-btn--subtab-option"

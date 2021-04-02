@@ -23,11 +23,9 @@ const TimeTheorems = {
   },
 
   checkForBuying(auto) {
-    if (player.realities === 0 && TimeDimension(1).bought < 1) {
-      if (!auto) Modal.message.show("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
-      return false;
-    }
-    return true;
+    if (PlayerProgress.realityUnlocked() || TimeDimension(1).bought) return true;
+    if (!auto) Modal.message.show("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
+    return false;
   },
 
   buyWithAntimatter(auto = false) {
@@ -35,7 +33,7 @@ const TimeTheorems = {
     if (!Currency.antimatter.purchase(player.timestudy.amcost)) return false;
     player.timestudy.amcost = player.timestudy.amcost.times(TimeTheorems.costMultipliers.AM);
     player.timestudy.theorem = player.timestudy.theorem.plus(1);
-    player.noTheoremPurchases = false;
+    player.achievementChecks.noTheoremPurchases = false;
     return true;
   },
 
@@ -45,7 +43,7 @@ const TimeTheorems = {
     player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost);
     player.timestudy.ipcost = player.timestudy.ipcost.times(TimeTheorems.costMultipliers.IP);
     player.timestudy.theorem = player.timestudy.theorem.plus(1);
-    player.noTheoremPurchases = false;
+    player.achievementChecks.noTheoremPurchases = false;
     return true;
   },
 
@@ -55,7 +53,7 @@ const TimeTheorems = {
     player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost);
     player.timestudy.epcost = player.timestudy.epcost.times(TimeTheorems.costMultipliers.EP);
     player.timestudy.theorem = player.timestudy.theorem.plus(1);
-    player.noTheoremPurchases = false;
+    player.achievementChecks.noTheoremPurchases = false;
     return true;
   },
 
@@ -68,7 +66,7 @@ const TimeTheorems = {
       player.timestudy.theorem = player.timestudy.theorem.plus(boughtAmount);
       const amCost = Decimal.fromMantissaExponent(1, Math.floor(Currency.antimatter.exponent / 20000) * 20000);
       Currency.antimatter.subtract(amCost);
-      player.noTheoremPurchases = false;
+      player.achievementChecks.noTheoremPurchases = false;
     }
     const IPowned = player.timestudy.ipcost.e / 100;
     if (player.infinityPoints.gte(player.timestudy.ipcost)) {
@@ -76,7 +74,7 @@ const TimeTheorems = {
       player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.infinityPoints.e / 100 + 1) - IPowned);
       player.infinityPoints =
         player.infinityPoints.minus(Decimal.fromMantissaExponent(1, Math.floor(player.infinityPoints.e / 100) * 100));
-      player.noTheoremPurchases = false;
+      player.achievementChecks.noTheoremPurchases = false;
     }
     if (player.eternityPoints.gte(player.timestudy.epcost)) {
       const EPowned = Math.round(player.timestudy.epcost.log2());
@@ -85,7 +83,7 @@ const TimeTheorems = {
       player.timestudy.epcost = finalEPCost;
       player.eternityPoints = player.eternityPoints.minus(totalEPCost);
       player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned);
-      player.noTheoremPurchases = false;
+      player.achievementChecks.noTheoremPurchases = false;
       // The above code block will sometimes buy one too few TT, but it never over-buys
       TimeTheorems.buyWithEP();
     }
@@ -97,23 +95,6 @@ const TimeTheorems = {
       Math.round(player.timestudy.epcost.log2());
   },
 
-  autoBuyMaxTheorems(realDiff) {
-    if (!player.ttbuyer) return;
-    player.auto.ttTimer += realDiff;
-    const period = Effects.min(
-      Number.POSITIVE_INFINITY,
-      Perk.autobuyerTT1,
-      Perk.autobuyerTT2,
-      Perk.autobuyerTT3,
-      Perk.autobuyerTT4
-    );
-    const milliseconds = TimeSpan.fromSeconds(period).totalMilliseconds;
-    if (player.auto.ttTimer > milliseconds) {
-      TimeTheorems.buyMax(true);
-      player.auto.ttTimer = Math.min(player.auto.ttTimer - milliseconds, milliseconds);
-    }
-  },
-
   calculateTimeStudiesCost() {
     let totalCost = TimeStudy.boughtNormalTS()
       .map(ts => ts.cost)
@@ -123,7 +104,7 @@ const TimeTheorems = {
       totalCost += ecStudy.cost;
     }
     // Secret time study
-    if (Enslaved.isRunning && player.secretUnlocks.secretTS % 2 === 1) totalCost -= 100;
+    if (Enslaved.isRunning && player.secretUnlocks.viewSecretTS) totalCost -= 100;
     return totalCost;
   }
 };
@@ -288,7 +269,7 @@ function importStudyTree(input, auto) {
 
   if (splitOnEC.length === 2) {
     const ecNumber = parseInt(splitOnEC[1], 10);
-    if (ecNumber !== 0 && !isNaN(ecNumber)) {
+    if (ecNumber !== 0 && !TimeStudy.eternityChallenge(ecNumber).isBought && !isNaN(ecNumber)) {
       TimeStudy.eternityChallenge(ecNumber).purchase(auto);
     }
   }
@@ -419,16 +400,32 @@ class ECTimeStudyState extends TimeStudyState {
   }
 
   purchase(auto) {
-    if (!this.canBeBought) return false;
-    if (player.challenge.eternity.unlocked === 0) {
+    const clickTime = Date.now();
+
+    if (this.isBought && player.challenge.eternity.current === 0 && !auto) {
+      // If it is bought and you aren't in a Eternity Challenge, check
+      if (clickTime - ui.lastClickTime < 750) {
+        // If you last clicked on it within 3/4ths of a second, enter them in or ask confirmation if they have that on
+        ui.lastClickTime = 0;
+        EternityChallenge(this.id).requestStart();
+      } else {
+        // Otherwise, record it for the next time they click
+        ui.lastClickTime = clickTime;
+      }
+    } else if (!this.isBought && this.canBeBought) {
+      // If you haven't bought it and can buy it, reset the time of click, and
+      // send you into the EC, deduct your resources, and move you to the EC tab if that isn't disabled
+      ui.lastClickTime = 0;
+
       player.challenge.eternity.unlocked = this.id;
       if (!auto) {
         Tab.challenges.eternity.show();
       }
       if (this.id !== 11 && this.id !== 12) player.etercreq = this.id;
+      player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
+      return true;
     }
-    player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
-    return true;
+    return false;
   }
 
   purchaseUntil() {
@@ -634,7 +631,7 @@ class TriadStudyState extends TimeStudyState {
     if (!this.canBeBought) return;
     player.celestials.v.triadStudies.push(this.config.id);
     player.celestials.v.STSpent += this.STCost;
-    player.noTriadStudies = false;
+    player.achievementChecks.noTriadStudies = false;
   }
 
   purchaseUntil() {

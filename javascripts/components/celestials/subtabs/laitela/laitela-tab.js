@@ -3,15 +3,15 @@
 Vue.component("laitela-tab", {
   data() {
     return {
-      matter: new Decimal(0),
-      maxMatter: new Decimal(0),
+      darkMatter: new Decimal(0),
+      maxDarkMatter: new Decimal(0),
       matterExtraPurchasePercentage: 0
     };
   },
   methods: {
     update() {
-      this.matter.copyFrom(player.celestials.laitela.matter);
-      this.maxMatter.copyFrom(player.celestials.laitela.maxMatter);
+      this.darkMatter.copyFrom(player.celestials.laitela.darkMatter);
+      this.maxDarkMatter.copyFrom(player.celestials.laitela.maxDarkMatter);
       this.matterExtraPurchasePercentage = Laitela.matterExtraPurchaseFactor - 1;
     },
     maxAll() {
@@ -35,8 +35,8 @@ Vue.component("laitela-tab", {
           @click="maxAll"
         >Max all Dark Matter Dimensions</primary-button>
       </div>
-      <div class="o-laitela-matter-amount">You have {{ format(matter.floor(), 2, 0) }} Dark Matter.</div>
-      <div class="o-laitela-matter-amount">Your maximum Dark Matter ever is {{ format(maxMatter.floor(), 2, 0) }},
+      <div class="o-laitela-matter-amount">You have {{ format(darkMatter.floor(), 2, 0) }} Dark Matter.</div>
+      <div class="o-laitela-matter-amount">Your maximum Dark Matter ever is {{ format(maxDarkMatter.floor(), 2, 0) }},
       giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from Continuum.</div>
       <singularity-container />
       <div class="l-laitela-mechanics-container">
@@ -109,7 +109,7 @@ Vue.component("singularity-container", {
         : `condense all Dark Energy into ${format(this.singularitiesGained, 2, 0)} Singularities`;
       if (this.canPerformSingularity) {
         // Capitalize the string
-        return `${formText.charAt(0).toUpperCase()}${formText.slice(1)}`;
+        return `${formText.capitalize()}`;
       }
       return `Reach ${format(this.singularityCap)} Dark Energy to ${formText}`;
     },
@@ -283,7 +283,7 @@ Vue.component("dark-matter-dimension-group", {
 Vue.component("annihilation-button", {
   data() {
     return {
-      matter: new Decimal(0),
+      darkMatter: new Decimal(0),
       darkMatterMult: 0,
       darkMatterMultGain: 0,
       hasAnnihilated: false,
@@ -297,7 +297,7 @@ Vue.component("annihilation-button", {
   },
   methods: {
     update() {
-      this.matter.copyFrom(player.celestials.laitela.matter);
+      this.darkMatter.copyFrom(player.celestials.laitela.darkMatter);
       this.darkMatterMult = Laitela.darkMatterMult;
       this.darkMatterMultGain = Laitela.darkMatterMultGain;
       this.hasAnnihilated = Laitela.darkMatterMult > 1;
@@ -328,26 +328,26 @@ Vue.component("annihilation-button", {
     }
   },
   template: `
-    <button class="c-laitela-annihilation-button" 
-      @click="annihilate()" 
+    <button class="c-laitela-annihilation-button"
+      @click="annihilate()"
       v-if="showAnnihilation">
         <h2>Annihilation</h2>
         <span v-if="hasAnnihilated">
           Current multiplier to all DM multipliers: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
           <br><br>
         </span>
-        Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy, 
+        <span>Resets your Dark Matter, Dark Matter Dimensions, and Dark Energy,</span>
         <span v-if="!hasAnnihilated">
           unlocking Auto-Annihilation, and
         </span>
-        <span v-if="hasAnnihilated && matter.gte(matterRequirement)">
+        <span v-if="hasAnnihilated && darkMatter.gte(matterRequirement)">
           but adds <b>{{ format(darkMatterMultGain, 2, 2) }}</b> to your Annihilation multiplier.
           (<b>{{ formatX(darkMatterMultRatio, 2, 2) }}</b> from previous multiplier)
         </span>
         <span v-else-if="hasAnnihilated">
           adding to your current Annihilation multiplier (requires {{ format(matterRequirement) }} Dark Matter).
         </span>
-        <span v-else-if="matter.gte(matterRequirement)">
+        <span v-else-if="darkMatter.gte(matterRequirement)">
           multiplying DM multipliers by <b>{{ formatX(1 + darkMatterMultGain, 2, 2) }}</b>.
         </span>
         <span v-else>
@@ -355,7 +355,7 @@ Vue.component("annihilation-button", {
         </span>
         <div v-if="hasAnnihilated">
           <br>
-          Auto-Annihilate when adding 
+          Auto-Annihilate when adding
           <input type="text"
             v-model="autoAnnihilationInput"
             @change="handleAutoAnnihilationInputChange()"

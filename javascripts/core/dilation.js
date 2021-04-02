@@ -16,28 +16,30 @@ function undilationAnimation() {
 
 function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked()) return;
-  if (player.options.confirmations.dilation && !player.dilation.active) {
-    Modal.enterDilation.show();
-  }
-  if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
-    undilationAnimation();
-    setTimeout(() => {
-      eternity(false, false, { switchingDilation: true });
-    }, 1000);
-    return;
-  }
   if (player.dilation.active) {
-    eternity(false, false, { switchingDilation: true });
+    if (player.options.animations.dilation && document.body.style.animation === "") {
+      undilationAnimation();
+      setTimeout(() => {
+        eternity(false, false, { switchingDilation: true });
+      }, 1000);
+    } else {
+      eternity(false, false, { switchingDilation: true });
+    }
+  } else if (player.options.confirmations.dilation) {
+    Modal.enterDilation.show();
+  } else {
+    startDilatedEternity();
   }
 }
 
 function startDilatedEternity(auto) {
   if (!PlayerProgress.dilationUnlocked()) return;
   if (player.dilation.active) {
-      eternity(false, auto, { switchingDilation: true });
-      return;
+    eternity(false, auto, { switchingDilation: true });
+    return;
   }
   Achievement(136).unlock();
+  player.dilation.lastEP = player.eternityPoints;
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
 }
@@ -47,24 +49,22 @@ const DIL_UPG_NAMES = [
   "ndMultDT", "ipMultDT", "timeStudySplit", "dilationPenalty", "ttGenerator"
 ];
 
-function buyDilationUpgrade(id, bulk, extraFactor) {
-  const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
+function buyDilationUpgrade(id, bulk) {
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
-  // If a tick is really long (perhaps due to the player going offline), they can be automatically bought
-  // several times in one tick, which is what the extraFactor variable is used for.
+  const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
   if (id > 3) {
     if (player.dilation.dilatedTime.lt(upgrade.cost)) return false;
     if (player.dilation.upgrades.has(id)) return false;
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(upgrade.cost);
     player.dilation.upgrades.add(id);
-    if (id === 4) player.dilation.freeGalaxies *= 2;
+    if (id === 4) player.dilation.totalTachyonGalaxies *= 2;
   } else {
     const upgAmount = player.dilation.rebuyables[id];
     if (player.dilation.dilatedTime.lt(upgrade.cost) || upgAmount >= upgrade.config.purchaseCap) return false;
 
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
       upgrade.config.initialCost, upgrade.config.increment, upgAmount).toNumber();
-    buying = Math.clampMax(buying, Effects.max(1, PerkShopUpgrade.bulkDilation) * extraFactor);
+    buying = Math.clampMax(buying, Effects.max(1, PerkShopUpgrade.bulkDilation));
     buying = Math.clampMax(buying, upgrade.config.purchaseCap - upgAmount);
     if (!bulk) {
       buying = Math.clampMax(buying, 1);
@@ -75,8 +75,8 @@ function buyDilationUpgrade(id, bulk, extraFactor) {
     if (id === 2) {
       if (!Perk.bypassTGReset.isBought) player.dilation.dilatedTime = new Decimal(0);
       player.dilation.nextThreshold = new Decimal(1000);
-      player.dilation.baseFreeGalaxies = 0;
-      player.dilation.freeGalaxies = 0;
+      player.dilation.baseTachyonGalaxies = 0;
+      player.dilation.totalTachyonGalaxies = 0;
     }
 
     if (id === 3) {
@@ -97,7 +97,7 @@ function buyDilationUpgrade(id, bulk, extraFactor) {
   return true;
 }
 
-function getFreeGalaxyMult() {
+function getTachyonGalaxyMult() {
   const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.35;
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
@@ -184,7 +184,7 @@ class DilationUpgradeState extends SetPurchasableMechanicState {
 
   onPurchased() {
     if (this.id === 4) {
-      player.dilation.freeGalaxies *= 2;
+      player.dilation.totalTachyonGalaxies *= 2;
     }
   }
 }
@@ -202,24 +202,12 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
     player.dilation.rebuyables[this.id] = value;
   }
 
-  get autobuyerId() {
-    return this.config.id - 1;
-  }
-
-  get isAutobuyerOn() {
-    return player.dilation.auto[this.autobuyerId];
-  }
-
-  set isAutobuyerOn(value) {
-    player.dilation.auto[this.autobuyerId] = value;
-  }
-  
   get isCapped() {
     return this.config.reachedCapFn();
   }
 
-  purchase(bulk, extraFactor = 1) {
-    buyDilationUpgrade(this.config.id, bulk, extraFactor);
+  purchase(bulk) {
+    buyDilationUpgrade(this.config.id, bulk);
   }
 }
 

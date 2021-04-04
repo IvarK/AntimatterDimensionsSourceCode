@@ -25,7 +25,7 @@ Vue.component("v-tab", {
     update() {
       this.mainUnlock = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
       this.totalUnlocks = V.spaceTheorems;
-      this.realities = Currency.realities;
+      this.realities = Currency.realities.value;
       this.infinities.copyFrom(Currency.infinities);
       this.eternities.copyFrom(Currency.eternities);
       this.dilatedTime.copyFrom(Currency.dilatedTime);

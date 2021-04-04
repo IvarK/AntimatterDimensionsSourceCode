@@ -644,7 +644,7 @@ function laitelaRealityTick(realDiff) {
 
 // This gives IP/EP/RM from the respective upgrades that reward the prestige currencies continuously
 function applyAutoprestige(diff) {
-  Currency.infinityPoints.add(TimeStudy(181).effectOrDefault(1));
+  Currency.infinityPoints.add(TimeStudy(181).effectOrDefault(0));
 
   if (Teresa.has(TERESA_UNLOCKS.EPGEN)) {
     Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(0.01)

@@ -318,10 +318,11 @@ Currency.timeTheorems = new class extends DecimalCurrency {
 
   reset() {
     super.reset();
+    respecTimeStudies(true);
     TimeTheoremPurchaseType.am.reset();
     TimeTheoremPurchaseType.ip.reset();
     TimeTheoremPurchaseType.ep.reset();
-    player.timestudy.maxTheorem = this.startingValue.plus(TimeTheorems.calculateTimeStudiesCost());
+    player.timestudy.maxTheorem = this.startingValue;
   }
 }();
 

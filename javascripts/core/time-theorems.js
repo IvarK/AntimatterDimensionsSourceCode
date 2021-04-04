@@ -35,17 +35,24 @@ class TimeTheoremPurchaseType {
 
   get bulkPossible() { throw new NotImplementedError(); }
 
+  bulkCost(amount) {
+    return this.cost.times(this.costIncrement.pow(amount - 1));
+  }
+
   purchase(bulk) {
     if (this.currency.lt(this.cost)) return false;
-    if (bulk && this.bulkPossible > 0) {
-      if (!this.currency.purchase(this.cost.times(this.costIncrement.pow(this.bulkPossible)))) return false;
-      Currency.timeTheorems.add(this.bulkPossible);
-      this.add(this.bulkPossible);
+    const amount = this.bulkPossible;
+    if (bulk && this.currency.purchase(this.bulkCost(amount))) {
+      Currency.timeTheorems.add(amount);
+      this.add(amount);
+      return true;
     }
-    if (!this.currency.purchase(this.cost)) return bulk;
-    Currency.timeTheorems.add(1);
-    this.add(1);
-    return true;
+    if (this.currency.purchase(this.cost)) {
+      Currency.timeTheorems.add(1);
+      this.add(1);
+      return true;
+    }
+    return false;
   }
 
   reset() {
@@ -56,28 +63,36 @@ class TimeTheoremPurchaseType {
 TimeTheoremPurchaseType.am = new class extends TimeTheoremPurchaseType {
   get amount() { return player.timestudy.amBought; }
   set amount(value) { player.timestudy.amBought = value; }
+
   get currency() { return Currency.antimatter; }
   get costBase() { return new Decimal("1e20000"); }
   get costIncrement() { return new Decimal("1e20000"); }
-  get bulkPossible() { return Math.floor(this.currency.exponent / this.costIncrement.e) - this.amount - 1; }
+
+  get bulkPossible() { return Math.floor(this.currency.exponent / this.costIncrement.e) - this.amount; }
 }();
 
 TimeTheoremPurchaseType.ip = new class extends TimeTheoremPurchaseType {
   get amount() { return player.timestudy.ipBought; }
   set amount(value) { player.timestudy.ipBought = value; }
+
   get currency() { return Currency.infinityPoints; }
   get costBase() { return new Decimal(1); }
   get costIncrement() { return new Decimal(1e100); }
-  get bulkPossible() { return Math.floor(this.currency.exponent / this.costIncrement.e) - this.amount; }
+
+  get bulkPossible() { return Math.floor(this.currency.exponent / this.costIncrement.e) - this.amount + 1; }
 }();
 
 TimeTheoremPurchaseType.ep = new class extends TimeTheoremPurchaseType {
   get amount() { return player.timestudy.epBought; }
   set amount(value) { player.timestudy.epBought = value; }
+
   get currency() { return Currency.eternityPoints; }
   get costBase() { return new Decimal(1); }
   get costIncrement() { return new Decimal(2); }
-  get bulkPossible() { return Math.round(this.currency.value.log2()) - this.amount - 1; }
+  
+  get bulkPossible() { return Math.round(this.currency.value.plus(this.cost).log2()) - this.amount; }
+
+  bulkCost(amount) { return this.costIncrement.pow(amount + this.amount - 1).subtract(this.cost); }
 }();
 
 const TimeTheorems = {

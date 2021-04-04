@@ -99,6 +99,7 @@ const GlyphTooltipComponent = {
       default: 0,
     },
     currentAction: String,
+    scoreMode: Number,
     showDeletionText: {
       type: Boolean,
       default: true,
@@ -124,12 +125,21 @@ const GlyphTooltipComponent = {
       return getRarity(this.strength);
     },
     descriptionStyle() {
-      const color = this.color || this.rarityInfo.color;
+      let color;
+      // Avoid pink tooltips for music glyphs
+      if (this.color === "#FF80AB") {
+        color = this.rarityInfo.color;
+      } else if (this.type === "cursed") {
+        color = "black";
+      } else {
+        color = this.color || this.rarityInfo.color;
+      }
       return {
         color,
-        "text-shadow": `-0.1rem 0.1rem 0.1rem black, 0.1rem 0.1rem 0.1rem black,
-                        -0.1rem -0.1rem 0.1rem black, 0.1rem -0.1rem 0.1rem black,
-                        0 0 0.3rem ${color}`,
+        "text-shadow": this.type === "cursed" ? undefined :
+                      `-0.1rem 0.1rem 0.1rem black, 0.1rem 0.1rem 0.1rem black,
+                      -0.1rem -0.1rem 0.1rem black, 0.1rem -0.1rem 0.1rem black,
+                      0 0 0.3rem ${color}`,
         animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined
       };
     },
@@ -143,6 +153,8 @@ const GlyphTooltipComponent = {
         case "reality":
           return `Pure Glyph of ${glyphName}`;
         default:
+          if (this.color === "#FF80AB")
+            return `${this.rarityInfo.name} Glyph of ${glyphName} <span style="color: #FF80AB">(♫)</span>`;
           return `${this.rarityInfo.name} Glyph of ${glyphName}`;
       }
     },
@@ -153,8 +165,9 @@ const GlyphTooltipComponent = {
       return this.levelOverride && this.levelOverride > this.level;
     },
     rarityText() {
-      if (this.type === "companion" || this.type === "reality") return "";
-      return `| Rarity: <span style="color: ${this.rarityInfo.color}">${formatRarity(strengthToRarity(this.strength))}</span>`;
+      if (this.type === "companion" || this.type === "reality" || this.type === "cursed") return "";
+      return `| Rarity:
+        <span style="color: ${this.rarityInfo.color}">${formatRarity(strengthToRarity(this.strength))}</span>`;
     },
     levelText() {
       if (this.type === "companion") return "";
@@ -180,15 +193,27 @@ const GlyphTooltipComponent = {
         "pointer-events": this.onTouchDevice ? undefined : "none",
         "border-color": GlyphTypes[this.type].color,
         "box-shadow": `0 0 0.5rem ${GlyphTypes[this.type].color}, 0 0 0.5rem ${GlyphTypes[this.type].color} inset`,
-        animation: this.type === "reality" ? "a-reality-glyph-tooltip-cycle 10s infinite" : undefined
+        animation: this.type === "reality" ? "a-reality-glyph-tooltip-cycle 10s infinite" : undefined,
+        color: this.type === "cursed" ? "black" : undefined,
+        background: this.type === "cursed" ? "white" : undefined
       };
     },
     glyphHeaderStyle() {
-      const color = this.color || this.rarityInfo.color;
+      let color;
+      // Music glyphs and cursed glyphs
+      if (this.color === "#FF80AB") {
+        color = this.rarityInfo.color;
+      } else if (this.type === "cursed") {
+        color = "black";
+      } else {
+        color = this.color || this.rarityInfo.color;
+      }
       return {
         "border-color": color,
         "box-shadow": `0 0 0.5rem 0.1rem ${color}, 0 0 0.8rem ${color} inset`,
-        animation: this.type === "reality" ? "a-reality-glyph-tooltip-header-cycle 10s infinite" : undefined
+        animation: this.type === "reality" ? "a-reality-glyph-tooltip-header-cycle 10s infinite" : undefined,
+        color: this.type === "cursed" ? "black" : undefined,
+        background: this.type === "cursed" ? "white" : undefined
       };
     }
   },
@@ -220,14 +245,19 @@ const GlyphTooltipComponent = {
     },
     refineText() {
       if (this.type === "companion" || this.type === "cursed" || this.type === "reality") return "";
-      if (!AlchemyResource[this.type].isUnlocked) return "Refine: resource not unlocked";
-        const refinementText = `${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
-        const isCurrentAction = this.currentAction === "refine";
+      if (!AlchemyResource[this.type].isUnlocked) return "";
+      const refinementText = `${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+      const isCurrentAction = this.currentAction === "refine";
       const actionName = this.refineReward === 0 ? "Capped" : "Refine";
       return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
               ${actionName}: ${refinementText}
               </span>`;
     },
+    scoreText() {
+      const showFilterScoreModes = [AUTO_GLYPH_SCORE.SPECIFIED_EFFECT, AUTO_GLYPH_SCORE.ADVANCED_MODE];
+      if (!showFilterScoreModes.includes(this.scoreMode)) return "";
+      return `Score: ${format(AutoGlyphProcessor.filterValue(this.$parent.glyph), 1, 1)}`;
+    }
   },
   mounted() {
     // By attaching the tooltip to the body element, we make sure it ends up on top of anything
@@ -242,14 +272,12 @@ const GlyphTooltipComponent = {
        :style="glyphTooltipStyle"
        v-on="eventHandlers">
     <div class="c-glyph-tooltip__header" :style="glyphHeaderStyle">
-      <span class="c-glyph-tooltip__description" :style="descriptionStyle">
-        {{description}}
-      </span>
+      <span class="c-glyph-tooltip__description" :style="descriptionStyle" v-html="description"></span>
       <span class="l-glyph-tooltip__info">
         <span v-html="levelText"></span>
         <span v-html="rarityText"></span>
       </span>
-      <span v-if="showDeletionText" class="l-glyph-tooltip__sacrifice">
+      <span v-if="showDeletionText">
         <span
           :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
           v-on="onTouchDevice ? { click: removeGlyph } : {}">
@@ -258,6 +286,7 @@ const GlyphTooltipComponent = {
           <span v-html="refineText()"></span>
         </span>
       </span>
+      <span class="c-glyph-tooltip__sacrifice">{{ scoreText() }}</span>
     </div>
     <div class="l-glyph-tooltip__effects">
       <effect-desc v-for="e in sortedEffects"
@@ -377,11 +406,12 @@ Vue.component("glyph-component", {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
-        color: rarityColor,
-        "text-shadow": `-0.04em 0.04em 0.08em ${rarityColor}`,
+        color: this.isCursedGlyph ? "black" : rarityColor,
+        "text-shadow": this.isCursedGlyph ? "-0.04em 0.04em 0.08em black" : `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
         animation: this.isRealityGlyph ? "a-reality-glyph-icon-cycle 10s infinite" : undefined,
-        "padding-bottom": this.bottomPadding
+        "padding-bottom": this.bottomPadding,
+        background: this.isCursedGlyph ? "white" : undefined
       };
     },
     mouseEventHandlers() {
@@ -428,6 +458,7 @@ Vue.component("glyph-component", {
   methods: {
     update() {
       this.isRealityGlyph = this.glyph.type === "reality";
+      this.isCursedGlyph = this.glyph.type === "cursed";
       this.glyphEffects = this.extractGlyphEffects();
       this.showGlyphEffectDots = player.options.showHintText.glyphEffectDots;
     },
@@ -489,6 +520,7 @@ Vue.component("glyph-component", {
       } else {
         this.currentAction = "refine";
       }
+      this.scoreMode = AutoGlyphProcessor.scoreMode;
       this.levelOverride = this.noLevelOverride ? 0 : getAdjustedGlyphLevel(this.glyph);
     },
     moveTooltipTo(x, y) {
@@ -606,9 +638,9 @@ Vue.component("glyph-component", {
         width: "0.3rem",
         height: "0.3rem",
         "border-radius": "50%",
-        background: `${this.glyph.color || getRarity(this.glyph.strength).color}`,
+        background: this.isCursedGlyph ? "black" : `${this.glyph.color || getRarity(this.glyph.strength).color}`,
         transform: `translate(${dx}rem, ${dy}rem)`,
-        animation: this.glyph.type === "reality" ? "a-reality-glyph-dot-cycle 10s infinite" : "none",
+        animation: this.isRealityGlyph ? "a-reality-glyph-dot-cycle 10s infinite" : "none",
         opacity: Theme.current().name === "S9" ? 0 : 0.8
       };
     }
@@ -636,6 +668,7 @@ Vue.component("glyph-component", {
           :sacrificeReward="sacrificeReward"
           :refineReward="refineReward"
           :currentAction="currentAction"
+          :scoreMode="scoreMode"
           :showDeletionText="showSacrifice"
           :levelOverride="levelOverride"
           :component="componentID"/>

@@ -92,7 +92,7 @@ TimeTheoremPurchaseType.ep = new class extends TimeTheoremPurchaseType {
   
   get bulkPossible() { return Math.round(this.currency.value.plus(this.cost).log2()) - this.amount; }
 
-  bulkCost(amount) { return this.costIncrement.pow(amount + this.amount - 1).subtract(this.cost); }
+  bulkCost(amount) { return this.costIncrement.pow(amount + this.amount).subtract(this.cost); }
 }();
 
 const TimeTheorems = {

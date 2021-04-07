@@ -24,7 +24,7 @@ Vue.component("challenges-header", {
   methods: {
     update() {
       this.showAllChallenges = player.options.showAllChallenges;
-      this.isInChallenge = NormalChallenge.isRunning || InfinityChallenge.isRunning || EternityChallenge.isRunning;
+      this.isInChallenge = Player.isInAnyChallenge;
       this.isShowAllVisible = PlayerProgress.eternityUnlocked();
       this.isAutoECVisible = Perk.autocompleteEC1.isBought;
       this.autoEC = player.reality.autoEC;

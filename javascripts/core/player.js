@@ -663,6 +663,14 @@ const Player = {
     return NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning;
   },
 
+  get isInAntimatterChallenge() {
+    return NormalChallenge.isRunning || InfinityChallenge.isRunning;
+  },
+
+  get isInAnyChallenge() {
+    return NormalChallenge.isRunning || InfinityChallenge.isRunning || EternityChallenge.isRunning;
+  },
+
   get effectiveMatterAmount() {
     if (NormalChallenge(11).isRunning) {
       return player.matter;

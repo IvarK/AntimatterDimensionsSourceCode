@@ -347,7 +347,6 @@ function finishProcessReality(realityProps) {
   // add a flag to indicate that this is a reality reset.
   initializeChallengeCompletions(true);
 
-  playerInfinityUpgradesOnReset();
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
   player.records.bestInfinity.time = 999999999999;
@@ -425,6 +424,7 @@ function finishProcessReality(realityProps) {
   Enslaved.autoReleaseTick = 0;
   player.celestials.laitela.entropy = 0;
 
+  playerInfinityUpgradesOnReset();
   resetInfinityRuns();
   resetEternityRuns();
   InfinityDimensions.fullReset();

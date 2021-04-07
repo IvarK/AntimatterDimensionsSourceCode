@@ -307,12 +307,10 @@ const InfinityDimensions = {
   },
 
   get capIncrease() {
-    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease *
-      (1 + AlchemyResource.boundless.effectValue);
-    const milestoneEffect = SingularityMilestone.tesseractMultFromSingularities.isUnlocked
-      ? SingularityMilestone.tesseractMultFromSingularities.effectValue
-      : 1;
-    return Math.floor(enslavedBoost * milestoneEffect);
+    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease;
+    const boundlessEffect = AlchemyResource.boundless.effectValue + 1;
+    const milestoneEffect = SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1);
+    return Math.floor(enslavedBoost * boundlessEffect * milestoneEffect);
   },
 
   get totalDimCap() {
@@ -334,8 +332,8 @@ const InfinityDimensions = {
   }
 };
 
-function tryUnlockInfinityDimensions() {
-  if (!EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked) return;
+function tryUnlockInfinityDimensions(auto) {
+  if (auto && (!EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked)) return;
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;
     InfinityDimension(tier).tryUnlock();

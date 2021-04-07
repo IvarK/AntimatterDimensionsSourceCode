@@ -573,7 +573,7 @@ function gameLoop(diff, options = {}) {
 
   updateTachyonGalaxies();
   player.timestudy.theorem = player.timestudy.theorem.add(getTTPerSecond().times(diff / 1000));
-  tryUnlockInfinityDimensions();
+  tryUnlockInfinityDimensions(true);
 
   BlackHoles.updatePhases(blackHoleDiff);
 

@@ -103,6 +103,11 @@ Vue.component("autobuyer-box", {
         "o-autobuyer-toggle-checkbox__label--disabled": !this.globalToggle
       };
     },
+    showEternity() {
+      return PlayerProgress.eternityUnlocked() || PlayerProgress.realityUnlocked()
+        ? "this Eternity"
+        : "";
+    }
   },
   template: `
     <div v-if="isUnlocked || isBought" class="c-autobuyer-box-row">
@@ -131,6 +136,6 @@ Vue.component("autobuyer-box", {
     <div v-else-if="canBeBought" @click="purchase" :class="autobuyerBuyBoxClass">
       {{ name }}
       <br>
-      Requirement: {{ format(antimatterCost) }} Total Antimatter (This Eternity)
+      Requirement: {{ format(antimatterCost) }} Total Antimatter {{ showEternity }}
     </div>`
 });

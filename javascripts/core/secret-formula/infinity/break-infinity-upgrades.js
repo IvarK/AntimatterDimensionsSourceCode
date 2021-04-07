@@ -57,8 +57,10 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "challengeMult",
       cost: 1e7,
       description: "Antimatter Dimensions gain a multiplier based on slowest challenge run",
-      effect: () => Decimal.max(50 / Time.worstChallenge.totalMinutes, 1),
-      formatEffect: value => formatX(value, 2, 2)
+      effect: () => Decimal.clampMin(50 / Time.worstChallenge.totalMinutes, 1),
+      formatEffect: value => formatX(value, 2, 2),
+      hasCap: true,
+      cap: new Decimal(3e4)
     },
     infinitiedGen: {
       id: "infinitiedGeneration",

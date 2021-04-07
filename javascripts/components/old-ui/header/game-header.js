@@ -55,7 +55,21 @@ Vue.component("game-header", {
             const token = this.activityTokens[i];
             const part = this.parts[i];
             if (!part.isActive(token)) continue;
-            names.push(part.name(token));
+            if (part.name(token).includes("Eternity Challenge")) {
+              const currEC = player.challenge.eternity.current;
+              const nextCompletion = EternityChallenge(currEC).completions + 1;
+              let completionText = "";
+              if (Enslaved.isRunning && currEC === 1) {
+                completionText = `(${nextCompletion}/???)`;
+              } else if (nextCompletion === 6) {
+                completionText = `(already completed)`;
+              } else {
+                completionText = `(${nextCompletion}/${formatInt(5)})`;
+              }
+              names.push(`${part.name(token)} ${completionText}`);
+            } else {
+              names.push(part.name(token));
+            }
           }
           return names;
         },
@@ -63,8 +77,7 @@ Vue.component("game-header", {
           return this.infinityUnlocked || this.activeChallengeNames.length > 0;
         },
         isInFailableEC() {
-          return this.activeChallengeNames.includes("Eternity Challenge 4") ||
-            this.activeChallengeNames.includes("Eternity Challenge 12");
+          return this.activeChallengeNames.some(str => str.match(/Eternity Challenge (4|12).*/gu));
         },
         challengeDisplay() {
           if (this.activeChallengeNames.length === 0) {

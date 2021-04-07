@@ -46,7 +46,7 @@ class Lazy {
 }
 
 const GameCache = {
-  worstChallengeTime: new Lazy(() => Math.max(player.challenge.normal.bestTimes.max(), 100)),
+  worstChallengeTime: new Lazy(() => player.challenge.normal.bestTimes.max()),
 
   bestRunIPPM: new Lazy(() =>
     player.records.lastTenInfinities

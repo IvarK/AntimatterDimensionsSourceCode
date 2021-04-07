@@ -39,7 +39,6 @@ function startDilatedEternity(auto) {
     return;
   }
   Achievement(136).unlock();
-  player.dilation.lastEP = player.eternityPoints;
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
 }
@@ -138,6 +137,7 @@ function tachyonGainMultiplier() {
 
 function rewardTP() {
   player.dilation.tachyonParticles = Decimal.max(player.dilation.tachyonParticles, getTP(Currency.antimatter.value));
+  player.dilation.lastEP = player.eternityPoints;
 }
 
 // Returns the TP that would be gained this run

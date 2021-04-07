@@ -450,7 +450,7 @@ const Replicanti = {
     },
     get areBeingBought() {
       const buyer = Autobuyer.replicantiGalaxy;
-      return (buyer.isActive && buyer.isEnabled) || this.isPlayerHoldingR;
+      return (buyer.canTick && buyer.isEnabled) || this.isPlayerHoldingR;
     },
   },
 };

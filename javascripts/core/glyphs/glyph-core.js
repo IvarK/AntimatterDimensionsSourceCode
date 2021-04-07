@@ -35,6 +35,9 @@ const Glyphs = {
   get activeList() {
     return player.reality.glyphs.active;
   },
+  get allGlyphs() {
+    return this.inventoryList.concat(this.activeList);
+  },
   findFreeIndex(useProtectedSlots) {
     this.validate();
     const isUsableIndex = index => (useProtectedSlots ? index < this.protectedSlots : index >= this.protectedSlots);

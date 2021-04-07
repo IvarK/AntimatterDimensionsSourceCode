@@ -63,6 +63,10 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
     this.data.mode = value;
   }
 
+  get canUnlockSlowVersion() {
+    return player.records.thisEternity.maxAM.gte(this.antimatterCost);
+  }
+
   toggleMode() {
     this.mode = [
       AUTOBUYER_MODE.BUY_SINGLE,
@@ -95,7 +99,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   purchase() {
-    if (player.records.thisEternity.maxAM.lt(this.antimatterCost)) return;
+    if (!this.canUnlockSlowVersion) return;
     this.data.isBought = true;
   }
 

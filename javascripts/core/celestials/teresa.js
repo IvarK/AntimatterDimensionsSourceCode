@@ -25,6 +25,11 @@ const TERESA_UNLOCKS = {
     id: 4,
     price: 1e10,
     description: "Unlock \"Undo\" of equipping a glyph.",
+  },
+  START_EU: {
+    id: 5,
+    price: 1e6,
+    description: "You start Reality with all Eternity Upgrades unlocked.",
   }
 };
 

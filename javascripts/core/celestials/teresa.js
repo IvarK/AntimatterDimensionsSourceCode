@@ -29,7 +29,7 @@ const TERESA_UNLOCKS = {
   START_EU: {
     id: 5,
     price: 1e6,
-    description: "You start Reality with all eternity upgrades unlocked.",
+    description: "You start Reality with all Eternity Upgrades unlocked.",
   }
 };
 

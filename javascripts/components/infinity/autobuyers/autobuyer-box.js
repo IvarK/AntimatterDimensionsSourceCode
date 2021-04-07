@@ -104,7 +104,7 @@ Vue.component("autobuyer-box", {
       };
     },
     showEternity() {
-      return PlayerProgress.eternityUnlocked() || PlayerProgress.realityUnlocked()
+      return PlayerProgress.eternityUnlocked()
         ? "this Eternity"
         : "";
     }

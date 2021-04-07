@@ -18,7 +18,7 @@ function startEternityChallenge() {
   player.records.thisInfinity.maxAM = new Decimal(0);
   player.records.thisEternity.maxAM = new Decimal(0);
   Currency.antimatter.reset();
-  playerInfinityUpgradesOnEternity();
+  playerInfinityUpgradesOnReset();
   AchievementTimers.marathon2.reset();
 }
 

@@ -347,7 +347,7 @@ function finishProcessReality(realityProps) {
   // add a flag to indicate that this is a reality reset.
   initializeChallengeCompletions(true);
 
-  player.infinityUpgrades.clear();
+  playerInfinityUpgradesOnReset();
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
   player.records.bestInfinity.time = 999999999999;
@@ -362,7 +362,6 @@ function finishProcessReality(realityProps) {
   player.break = false;
   player.infMult = new Decimal(1);
   player.infMultCost = new Decimal(10);
-  player.infinityRebuyables = [0, 0, 0];
   player.infinityPower = new Decimal(1);
   player.timeShards = new Decimal(0);
   Replicanti.reset(true);
@@ -445,7 +444,6 @@ function finishProcessReality(realityProps) {
   player.records.thisReality.bestEternitiesPerMs = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
-  playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
   player.infinityPoints = Player.startingIP;
 
@@ -499,26 +497,12 @@ function applyRUPG10() {
   for (const autobuyer of Autobuyers.all) {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
   }
-  player.infinityUpgrades = new Set(
-    ["timeMult", "dimMult", "timeMult2",
-    "skipReset1", "skipReset2", "unspentBonus",
-    "27Mult", "18Mult", "36Mult", "resetMult",
-    "skipReset3", "passiveGen", "45Mult",
-    "resetBoost", "galaxyBoost", "skipResetGalaxy",
-    "totalMult", "currentMult", "postGalaxy",
-    "challengeMult", "achievementMult", "infinitiedMult",
-    "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost",
-    "ipOffline"]
-  );
   player.dimensionBoosts = Math.max(4, player.dimensionBoosts);
   player.galaxies = Math.max(1, player.galaxies);
   player.break = true;
-  player.infinityRebuyables = [8, 7, 10];
   player.eternities = player.eternities.clampMin(100);
   player.replicanti.amount = player.replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
-  GameCache.tickSpeedMultDecrease.invalidate();
-  GameCache.dimensionMultDecrease.invalidate();
 }
 
 function clearCelestialRuns() {

@@ -181,21 +181,9 @@ function initializeResourcesAfterEternity() {
   player.achievementChecks.noReplicantiGalaxies = true;
 }
 
-function applyRealityUpgradesAfterEternity(buySingleTD = false) {
-  if (RealityUpgrade(13).isBought) {
-    if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
-    for (let i = 1; i < 9; i++) {
-      if (player.reality.tdbuyers[i - 1]) {
-        if (buySingleTD) buySingleTimeDimension(i);
-        else buyMaxTimeDimension(i);
-      }
-    }
-  }
+function applyRealityUpgradesAfterEternity() {
   if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
     for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);
-  }
-  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
-    for (const id of [4, 5, 6]) player.eternityUpgrades.add(id);
   }
 }
 
@@ -268,17 +256,6 @@ class EternityUpgradeState extends SetPurchasableMechanicState {
 class EPMultiplierState extends GameMechanicState {
   constructor() {
     super({});
-    this.autobuyer = {
-      get isUnlocked() {
-        return RealityUpgrade(13).isBought;
-      },
-      get isOn() {
-        return player.reality.epmultbuyer;
-      },
-      set isOn(value) {
-        player.reality.epmultbuyer = value;
-      }
-    };
     this.cachedCost = new Lazy(() => this.costAfterCount(player.epmultUpgrades));
     this.cachedEffectValue = new Lazy(() => Decimal.pow(5, player.epmultUpgrades));
   }

@@ -11,6 +11,7 @@ Vue.component("normal-challenges-tab", {
           isRunning: false,
           isCompleted: false,
           isBroken: false,
+          isUnlocked: false,
         };
       },
       computed: {
@@ -18,7 +19,11 @@ Vue.component("normal-challenges-tab", {
           return NormalChallenge(this.challengeId);
         },
         config() {
-          return this.challenge.config;
+          if (this.challenge.isUnlocked) return this.challenge.config;
+          return {
+            name: `${this.challenge.config.name}`,
+            description: `Infinity ${formatInt(this.challenge.config.lockedAt)} times to unlock.`
+          };
         },
         name() {
           return `C${this.challengeId}`;
@@ -29,6 +34,7 @@ Vue.component("normal-challenges-tab", {
       },
       methods: {
         update() {
+          this.isUnlocked = this.challenge.isUnlocked;
           this.isRunning = this.challenge.isRunning;
           this.isBroken = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(this.challengeId);
           this.isCompleted = this.challenge.isCompleted && !this.isBroken;
@@ -37,7 +43,7 @@ Vue.component("normal-challenges-tab", {
       template:
         `<challenge-box
           :name="name"
-          :isUnlocked="true"
+          :isUnlocked="isUnlocked"
           :isRunning="isRunning"
           :isCompleted="isCompleted"
           :overrideLabel="overrideLabel"

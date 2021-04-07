@@ -1,8 +1,12 @@
 "use strict";
 
-Autobuyer.galaxy = new class GalaxyAutobuyerState extends IntervaledAutobuyerState {
+Autobuyer.galaxy = new class GalaxyAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
     return player.auto.galaxy;
+  }
+
+  get name() {
+    return `Antimatter Galaxy`;
   }
 
   get isUnlocked() {

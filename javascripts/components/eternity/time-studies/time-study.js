@@ -6,7 +6,8 @@ Vue.component("time-study", {
     return {
       isBought: false,
       isAvailableForPurchase: false,
-      STCost: 0
+      STCost: 0,
+      eternityChallengeRunning: false,
     };
   },
   props: {
@@ -77,6 +78,9 @@ Vue.component("time-study", {
       }
       return pathClasses;
     },
+    eternityChallengeAnim() {
+      return this.eternityChallengeRunning ? "o-time-study-eternity-challenge--running" : ""
+    },
     config() {
       return {...this.study.config, formatCost: formatInt};
     }
@@ -85,6 +89,8 @@ Vue.component("time-study", {
     update() {
       const study = this.study;
       this.isBought = study.isBought;
+      this.eternityChallengeRunning = study.type === TimeStudyType.ETERNITY_CHALLENGE &&
+        EternityChallenge.current?.id === study.id;
       if (!this.isBought) {
         this.isAvailableForPurchase = study.canBeBought && study.isAffordable;
       }
@@ -99,7 +105,7 @@ Vue.component("time-study", {
     }
   },
   template:
-    `<button :class="[classObject, studyClass]"
+    `<button :class="[classObject, studyClass, eternityChallengeAnim]"
              :style="styleObject"
              @click.exact="handleClick"
              @click.shift.exact="shiftClick">
@@ -112,7 +118,7 @@ Vue.component("time-study", {
       />
       <div v-else-if="showSTCost">
         Cost: <span v-if="config.cost">
-          {{formatInt(config.cost)}} {{ "Time Theorem" | pluralize(config.cost, "Time Theorems")}} and 
+          {{formatInt(config.cost)}} {{ "Time Theorem" | pluralize(config.cost, "Time Theorems")}} and
         </span>
         {{ formatInt(STCost) }} {{ "Space Theorem" | pluralize(STCost, "Space Theorems")}}
       </div>

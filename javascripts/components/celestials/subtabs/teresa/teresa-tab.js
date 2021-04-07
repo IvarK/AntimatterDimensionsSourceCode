@@ -10,6 +10,7 @@ Vue.component("teresa-tab", {
       percentage: "",
       rmMult: 0,
       bestAM: new Decimal(0),
+      bestAMSet: [],
       lastRM: new Decimal(0),
       runReward: 0,
       perkPoints: 0,
@@ -63,6 +64,7 @@ Vue.component("teresa-tab", {
       this.hasEPGen = Teresa.has(TERESA_UNLOCKS.EPGEN);
       this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
+      this.bestAMSet = Glyphs.copyForRecords(player.celestials.teresa.bestAMSet);
       this.lastRM.copyFrom(player.celestials.teresa.lastRepeatedRM);
       this.runReward = Teresa.runRewardMultiplier;
       this.perkPoints = player.reality.perkPoints;
@@ -94,9 +96,15 @@ Vue.component("teresa-tab", {
             {{ this.description }}
             <br><br>
             <div v-if="bestAM.gt(0)">
+              You last did Teresa's Reality at {{ format(lastRM, 2) }} Reality Machines.
+              <br><br>
               Highest antimatter in Teresa's Reality: {{ format(bestAM, 2) }}
               <br><br>
-              You last did Teresa's Reality at {{ format(lastRM, 2) }} Reality Machines.
+              Glyph Set used:
+              <glyph-set-preview
+                :show=true
+                :forceNameColor=false
+                :glyphs="bestAMSet" />
             </div>
             <div v-else>
               You have not completed Teresa's Reality yet.

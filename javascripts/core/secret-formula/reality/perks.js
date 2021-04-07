@@ -16,8 +16,8 @@ GameDatabase.reality.perks = {
     label: "START",
     family: PERK_FAMILY.REALITY,
     get description() {
-      return `Remove the ${format(5e9)} Time Theorems and ${format(13)} rows of achevements requirements from
-      the Reality Time Study, and allow you to choose from ${formatInt(4)} different Glyphs on Reality`;
+      return `Remove the ${format(5e9)} Time Theorems and ${format(13)} rows of achievements requirements from
+      the Reality Study, and allow you to choose from ${formatInt(4)} different Glyphs on Reality`;
     },
     effect: 4,
   },
@@ -111,22 +111,25 @@ GameDatabase.reality.perks = {
     label: "PASS",
     family: PERK_FAMILY.ETERNITY,
     get description() {
-      return `Improve Time Study 122 to ${formatX(100)} Eternity Points and
-        Time Study 142 to ${formatX(1e100)} Infinity Points.
-        In addition, Time Study 132 also makes Replicanti ${format(5)} times faster.`;
+      return `Improve Time Study 122 to ${formatX(50)} Eternity Points and
+        Time Study 142 to ${formatX(1e50)} Infinity Points.
+        In addition, Time Study 132 also makes Replicanti ${format(3)} times faster.`;
     }
   },
   autounlockEU1: {
     id: 40,
     label: "EU1",
     family: PERK_FAMILY.ETERNITY,
-    description: "After the first Eternity of a Reality, auto-unlock the first row of Eternity Upgrades."
+    description: "The first row of eternity upgrades automatically unlock after the first Eternity of a Reality."
   },
   autounlockEU2: {
     id: 41,
     label: "EU2",
     family: PERK_FAMILY.ETERNITY,
-    description: "After the first Eternity of a Reality, auto-unlock the second row of Eternity Upgrades."
+    get description() {
+      return `The second row of eternity upgrades automatically unlock
+        at ${formatX(1e10)} times less than their original price`;
+    }
   },
   autounlockDilation1: {
     id: 42,

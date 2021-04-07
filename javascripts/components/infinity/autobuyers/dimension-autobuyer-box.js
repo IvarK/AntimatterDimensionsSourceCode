@@ -52,7 +52,7 @@ Vue.component("dimension-autobuyer-box", {
           <span>Cost: {{format(cost, 2, 0)}} IP</span>
         </template>
         </button>
-        <button 
+        <button
           v-else-if="hasMaxedInterval && !bulkUnlimited"
           class="o-autobuyer-btn l-autobuyer-box__button">
           Complete the challenge to upgrade bulk
@@ -69,7 +69,7 @@ Vue.component("dimension-autobuyer-box", {
   },
   computed: {
     autobuyer() {
-      return Autobuyer.dimension(this.tier);
+      return Autobuyer.antimatterDimension(this.tier);
     },
     name() {
       return `${AntimatterDimension(this.tier).displayName} Dimension Autobuyer`;

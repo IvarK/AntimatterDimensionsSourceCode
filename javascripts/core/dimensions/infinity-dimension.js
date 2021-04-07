@@ -75,9 +75,9 @@ function buyMaxInfinityDimensions() {
 }
 
 function toggleAllInfDims() {
-  const areEnabled = player.infDimBuyers[0];
+  const areEnabled = Autobuyer.infinityDimension(1).isActive;
   for (let i = 1; i < 9; i++) {
-    player.infDimBuyers[i - 1] = !areEnabled;
+    Autobuyer.infinityDimension(i).isActive = !areEnabled;
   }
 }
 
@@ -131,10 +131,6 @@ class InfinityDimensionState extends DimensionState {
 
   get requirementReached() {
     return player.records.thisEternity.maxAM.gte(this.requirement);
-  }
-
-  get isAutobuyerUnlocked() {
-    return player.eternities.gte(10 + this.tier);
   }
 
   get isAvailableForPurchase() {
@@ -262,7 +258,7 @@ class InfinityDimensionState extends DimensionState {
 
     this.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, this.tier);
-    if (player.infDimBuyers[this.tier - 1] && !manual &&
+    if (Autobuyer.infinityDimension(this.tier).isActive && !manual &&
       !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
       buyMaxInfDims(this.tier);
     }
@@ -311,12 +307,10 @@ const InfinityDimensions = {
   },
 
   get capIncrease() {
-    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease *
-      (1 + AlchemyResource.boundless.effectValue);
-    const milestoneEffect = SingularityMilestone.tesseractMultFromSingularities.isUnlocked
-      ? SingularityMilestone.tesseractMultFromSingularities.effectValue
-      : 1;
-    return Math.floor(enslavedBoost * milestoneEffect);
+    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease;
+    const boundlessEffect = AlchemyResource.boundless.effectValue + 1;
+    const milestoneEffect = SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1);
+    return Math.floor(enslavedBoost * boundlessEffect * milestoneEffect);
   },
 
   get totalDimCap() {
@@ -338,8 +332,8 @@ const InfinityDimensions = {
   }
 };
 
-function tryUnlockInfinityDimensions() {
-  if (!EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked) return;
+function tryUnlockInfinityDimensions(auto) {
+  if (auto && (!EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked)) return;
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;
     InfinityDimension(tier).tryUnlock();

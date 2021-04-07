@@ -1,17 +1,21 @@
 "use strict";
 
-class DimensionAutobuyerState extends IntervaledAutobuyerState {
+class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   constructor(tier) {
     super();
     this._tier = tier;
   }
 
+  get name() {
+    return `${AntimatterDimension(this._tier).displayName} Antimatter Dimension`;
+  }
+
   get data() {
-    return player.auto.dimensions[this._tier - 1];
+    return player.auto.antimatterDims[this._tier - 1];
   }
 
   get baseInterval() {
-    return Player.defaultStart.auto.dimensions[this._tier - 1].interval;
+    return Player.defaultStart.auto.antimatterDims[this._tier - 1].interval;
   }
 
   get isUnlocked() {
@@ -34,7 +38,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
     // Use 1e100 to avoid issues with Infinity.
     return this.hasUnlimitedBulk ? 1e100 : this.data.bulk;
   }
-  
+
   get hasUnlimitedBulk() {
     return Achievement(61).isUnlocked;
   }
@@ -59,6 +63,10 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
     this.data.mode = value;
   }
 
+  get canUnlockSlowVersion() {
+    return player.records.thisEternity.maxAM.gte(this.antimatterCost);
+  }
+
   toggleMode() {
     this.mode = [
       AUTOBUYER_MODE.BUY_SINGLE,
@@ -76,7 +84,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
         buyOneDimension(tier);
         break;
       case AUTOBUYER_MODE.BUY_10:
-        buyMaxDimension(tier, player.options.bulkOn ? this.bulk : 1, true);
+        buyMaxDimension(tier, player.auto.bulkOn ? this.bulk : 1, true);
         break;
     }
   }
@@ -91,7 +99,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   purchase() {
-    if (player.records.totalAntimatter.lt(this.antimatterCost)) return;
+    if (!this.canUnlockSlowVersion) return;
     this.data.isBought = true;
   }
 
@@ -104,6 +112,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 }
 
-DimensionAutobuyerState.index = Array.range(1, 8).map(tier => new DimensionAutobuyerState(tier));
+AntimatterDimensionAutobuyerState.index = Array.range(1, 8).map(tier => new AntimatterDimensionAutobuyerState(tier));
 
-Autobuyer.dimension = tier => DimensionAutobuyerState.index[tier - 1];
+Autobuyer.antimatterDimension = tier => AntimatterDimensionAutobuyerState.index[tier - 1];
+Autobuyer.antimatterDimension.index = AntimatterDimensionAutobuyerState.index;

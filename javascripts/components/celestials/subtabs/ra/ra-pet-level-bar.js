@@ -59,49 +59,42 @@ Vue.component("ra-pet-level-bar", {
       };
     },
     nextUnlock() {
-      const unlock = Object.values(RA_UNLOCKS)
-      .filter(unl => unl.pet === this.pet && unl.level === this.level + 1)[0];
-      if (unlock) return unlock;
-      return false;
+      const unlock = Object.values(RA_UNLOCKS).find(unl => unl.pet === this.pet && unl.level === this.level + 1);
+      return unlock ? unlock : false;
     },
     showNextScalingUpgrade() {
-      if (this.pet.name === "Teresa") {
-        const before = Math.min(12, Math.floor(this.level / 2));
-        const after = Math.min(12, Math.floor((this.level + 1) / 2));
-        return before !== after;
+      switch (this.pet.name) {
+        case "Teresa":
+          return Math.min(12, Math.floor(this.level / 2)) !== Math.min(12, Math.floor((this.level + 1) / 2));
+        case "Effarig":
+          return AlchemyResources.all.filter(
+            res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1).length > 0;
+        case "Enslaved":
+          return true;
+        case "V":
+          return Math.clampMax(Math.floor(this.level / 5), 4) !== Math.clampMax(Math.floor((this.level + 1) / 5), 4);
+        default:
+          return false;
       }
-      if (this.pet.name === "Effarig") {
-        return AlchemyResources.all.filter(
-          res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1).length > 0;
-      }
-      if (this.pet.name === "Enslaved") {
-        return true;
-      }
-      if (this.pet.name === "V") {
-        const before = Math.clampMax(Math.floor(this.level / 5), 4);
-        const after = Math.clampMax(Math.floor((this.level + 1) / 5), 4);
-        return before !== after;
-      }
-      return false;
     },
     nextScalingUpgrade() {
-      if (this.pet.name === "Teresa") {
-        return "You can charge an additional Infinity Upgrade";
+      switch (this.pet.name) {
+        case "Teresa":
+          return "You can charge an additional Infinity Upgrade";
+        case "Effarig":
+          return `Unlock the ${AlchemyResources.all.filter(
+            res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1
+          )[0]._config.name} resource in Glyph Alchemy, which ${AlchemyResources.all.filter(
+            res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1
+          )[0]._config.description}`;
+        case "Enslaved":
+          return `+${formatFloat(0.01, 2)} to stored game time power,
+            and you can store an additional hour of real time`;
+        case "V":
+          return "You can purchase an additional Triad Study";
+        default:
+          return "false";
       }
-      if (this.pet.name === "Effarig") {
-        return `Unlock the ${AlchemyResources.all.filter(
-          res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1
-        )[0]._config.name} resource in Glyph Alchemy, which ${AlchemyResources.all.filter(
-          res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1
-        )[0]._config.description}`;
-      }
-      if (this.pet.name === "Enslaved") {
-        return `+${formatFloat(0.01, 2)} to stored game time power, and you can store an additional hour of real time`;
-      }
-      if (this.pet.name === "V") {
-        return "You can purchase an additional Triad Study";
-      }
-      return "false";
     },
     reward() {
       return (typeof this.nextUnlock.reward === "function") ? this.nextUnlock.reward() : this.nextUnlock.reward;
@@ -121,6 +114,7 @@ Vue.component("ra-pet-level-bar", {
     isImportant(level) {
       return this.importantLevels.includes(level);
     },
+    // TODO: this exact segment is used in another place, we should really make this a function somewhere in Ra
     timeToGoalString(expToGain) {
       const pet = this.pet;
       // Quadratic formula for growth (uses constant growth for a = 0)

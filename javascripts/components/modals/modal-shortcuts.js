@@ -1,5 +1,13 @@
 "use strict";
 
+Vue.component("open-modal-shortcuts", {
+  template: `
+    <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
+      Press <kbd>?</kbd> to open shortcut list.
+    </p>`
+});
+
+
 Vue.component("modal-shortcuts", {
   computed: {
     shortcuts: () => [
@@ -66,6 +74,18 @@ Vue.component("modal-shortcuts", {
           <br>
           When pressing both Alt and Shift, you can toggle buying singles or buying max for the Antimatter Dimension
           and Tickspeed Autobuyers instead.
+        </span>
+        <br><br>
+        <div class="l-modal-shortcuts-row">
+          <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">Tab Movement</span>
+          <div>
+            <kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd>
+          </div>
+        </div>
+        <span class="c-modal-shortcuts__shift-description">
+          Using the Arrow Keys will cycle you through the game's pages.
+          The Up and Down arrows cycle you through tabs,
+          and the Left and Right arrows cycle you through that tab's subtabs.
         </span>
       </div>
     </div>`

@@ -46,7 +46,7 @@ Vue.component("new-inf-dimensions-tab", {
         this.EC8PurchasesLeft = player.eterc8ids;
       }
       this.isEnslavedRunning = Enslaved.isRunning;
-      this.isAnyAutobuyerUnlocked = InfinityDimension(1).isAutobuyerUnlocked;
+      this.isAnyAutobuyerUnlocked = Autobuyer.infinityDimension(1).isUnlocked;
       this.nextDimCapIncrease = Enslaved.nextDimCapIncrease;
       this.tesseractCost.copyFrom(Enslaved.tesseractCost);
       this.totalDimCap = InfinityDimensions.totalDimCap;
@@ -54,6 +54,7 @@ Vue.component("new-inf-dimensions-tab", {
       this.enslavedCompleted = Enslaved.isCompleted;
     },
     maxAll() {
+      tryUnlockInfinityDimensions(false);
       buyMaxInfinityDimensions();
     },
     toggleAllAutobuyers() {

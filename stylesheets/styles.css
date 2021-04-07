@@ -37,6 +37,7 @@ html {
   --color-antimatter: #2196f3;
   --color-infinity: #B67F33;
   --color-eternity: #b341e0;
+  --color-dilation: #64dd17;
   --color-reality: #0ba00e;
   --color-reality-light: #d5ffd7;
   --color-celestials: #5151ec;
@@ -304,7 +305,7 @@ button:focus {
 
 .o-tt-autobuyer-button {
   height: 2.5rem;
-  font-size: 1rem;
+  font-size: 1rem !important;
   margin: 0.3rem;
   flex-grow: 0;
   flex-shrink: 0;
@@ -1353,6 +1354,7 @@ screen and (max-width: 480px) {
 
 .o-primary-btn--reality-upgrade-toggle {
   font-size: 1rem;
+  margin-top: 0.5rem;
 }
 
 .o-primary-btn--replicanti-galaxy {
@@ -1382,12 +1384,12 @@ screen and (max-width: 480px) {
 }
 
 .o-primary-btn--charged-respec-active {
-  color: var(--color-teresa--accent) !important;
+  color: var(--color-teresa--accent);
   background-color: var(--color-teresa--base) !important;
 }
 
 .o-primary-btn--charged-respec-active:hover {
-  color: var(--color-teresa--accent) !important;
+  color: var(--color-teresa--accent);
   background-color: var(--color-teresa--base) !important;
 }
 
@@ -1637,7 +1639,7 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-button:hover {
-  color: black !important;
+  color: black;
   background-color: var(--color-infinity);
 }
 
@@ -1646,16 +1648,7 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-button:hover span {
-  color: black !important;
-}
-
-.t-dark .o-infinity-button {
-  color: var(--color-infinity);
-  background: black;
-}
-
-.t-dark .o-infinity-button:hover {
-  background: var(--color-infinity);
+  color: black;
 }
 
 .t-metro .o-infinity-button,
@@ -1667,15 +1660,9 @@ screen and (max-width: 480px) {
 }
 
 .t-dark-metro .o-infinity-button {
-  color: var(--color-infinity);
-  background: black;
   box-shadow: 1px 1px 1px 0 black;
   border-width: 0.1rem;
   border-radius: 0;
-}
-
-.t-dark-metro .o-infinity-button:hover {
-  background: var(--color-infinity);
 }
 
 /*#region Eternity*/
@@ -1693,16 +1680,16 @@ screen and (max-width: 480px) {
   cursor: pointer;
 }
 
-.o-eternity-buttonspan {
+.o-eternity-button span {
   transition-duration: 0.2s;
 }
 
 .o-eternity-button:hover span {
-  color: black !important;
+  color: black;
 }
 
 .t-s1 .o-eternity-button:hover span {
-  color: var(--color-text) !important;
+  color: var(--color-text);
 }
 
 .t-metro .o-eternity-button,
@@ -1715,19 +1702,19 @@ screen and (max-width: 480px) {
 
 .t-s1 .o-eternity-button:hover {
   color: black;
-  background: var(--color-eternity);
   border-color: black;
 }
 
 .o-eternity-button--dilation {
-  color: #64dd17;
+  color: var(--color-dilation);
   background-color: black;
-  border-color: #64dd17;
+  border-color: var(--color-dilation);
+  font-weight: bold;
 }
 
 .o-eternity-button--dilation:hover {
-  color: #64dd17;
-  background-color: white;
+  color: black;
+  background-color: var(--color-dilation);
 }
 
 .o-eternity-button--dilation span {
@@ -1735,11 +1722,11 @@ screen and (max-width: 480px) {
 }
 
 .o-eternity-button--dilation:hover span {
-  color: #64dd17 !important;
+  color: black;
 }
 
 .t-s1 .o-eternity-button--dilation:hover span {
-  color: var(--color-text) !important;
+  color: var(--color-text);
 }
 
 .t-metro .o-eternity-button--dilation,
@@ -1752,7 +1739,7 @@ screen and (max-width: 480px) {
 
 .t-s1 .o-eternity-button--dilation:hover {
   color: black;
-  background: #64dd17;
+  background: var(--color-dilation);
   border-color: black;
 }
 
@@ -2345,8 +2332,8 @@ screen and (max-width: 480px) {
 
 .t-dark .c-time-dim-description__accent,
 .t-s6 .c-time-dim-description__accent {
-  color: #64dd17;
-  text-shadow: 0 0 0.7rem #64dd17;
+  color: var(--color-dilation);
+  text-shadow: 0 0 0.7rem var(--color-dilation);
 }
 
 .t-metro .c-time-dim-description__accent,
@@ -4344,7 +4331,7 @@ screen and (max-width: 480px) {
   font-weight: bold;
   font-size: 1rem;
   border: 0.1rem solid var(--color-eternity);
-  width: 19rem;
+  width: 20rem;
   height: 9rem;
   transition-duration: 0.2s;
   cursor: pointer;
@@ -4640,7 +4627,7 @@ screen and (max-width: 480px) {
 .t-s8 .c-dilation-tab__dilated-time-income,
 .t-s8 .c-dilation-tab__galaxy-threshold,
 .t-s8 .c-dilation-tab__galaxies {
-  color: #64dd17;
+  color: var(--color-dilation);
 }
 
 .t-dark .c-dilation-tab__dilated-time,
@@ -4651,7 +4638,7 @@ screen and (max-width: 480px) {
 .t-s6 .c-dilation-tab__dilated-time-income,
 .t-s6 .c-dilation-tab__galaxy-threshold,
 .t-s6 .c-dilation-tab__galaxies {
-  text-shadow: 0 0 0.7rem #64dd17;
+  text-shadow: 0 0 0.7rem var(--color-dilation);
 }
 
 /*#endregion c-dilation-tab*/
@@ -4680,7 +4667,7 @@ screen and (max-width: 480px) {
 .o-dilation-btn {
   font-weight: bold;
   font-size: 1.12rem;
-  border: 0.2rem solid #64dd17;
+  border: 0.2rem solid var(--color-dilation);
   width: 19rem;
   height: 9rem;
   transition-duration: 0.2s;
@@ -4696,7 +4683,7 @@ screen and (max-width: 480px) {
 }
 
 .o-dilation-btn--unlocked {
-  color: #64dd17;
+  color: var(--color-dilation);
   background-color: black;
   cursor: pointer;
   animation: a-dilation-btn-glow 10s infinite;
@@ -4707,13 +4694,13 @@ screen and (max-width: 480px) {
 }
 
 .t-dark .o-dilation-btn--unlocked {
-  color: #64dd17;
+  color: var(--color-dilation);
   background-color: black;
 }
 
 .t-dark .o-dilation-btn--unlocked:hover,
 .t-s6 .o-dilation-btn--unlocked:hover {
-  color: #64dd17;
+  color: var(--color-dilation);
   background-color: white;
 }
 
@@ -4822,8 +4809,8 @@ screen and (max-width: 480px) {
 }
 
 .o-dilation-upgrade--available {
-  color: #64dd17;
-  border-color: #64dd17;
+  color: var(--color-dilation);
+  border-color: var(--color-dilation);
   animation: a-dilation-btn-glow 10s infinite;
   cursor: pointer;
 }
@@ -4839,7 +4826,7 @@ screen and (max-width: 480px) {
 
 .o-dilation-upgrade--bought,  .o-dilation-upgrade--capped {
   color: black;
-  background-color: #64dd17;
+  background-color: var(--color-dilation);
   border-color: black;
 }
 
@@ -4897,7 +4884,7 @@ screen and (max-width: 480px) {
 
 .t-dark .o-dilation-upgrade--available:hover,
 .t-s6 .o-dilation-upgrade--available:hover {
-  color: #64dd17;
+  color: var(--color-dilation);
   background-color: white;
 }
 
@@ -4907,7 +4894,7 @@ screen and (max-width: 480px) {
 }
 
 .t-dark .o-dilation-upgrade--bought, .t-dark .o-dilation-upgrade--capped {
-  background-color: #64dd17;
+  background-color: var(--color-dilation);
 }
 
 .t-s6 .o-dilation-upgrade--unavailable {
@@ -4932,7 +4919,7 @@ screen and (max-width: 480px) {
 }
 
 .t-s6 .o-dilation-upgrade--bought, .t-s6 .o-dilation-upgrade--capped {
-  background: #64dd17;
+  background: var(--color-dilation);
 }
 
 /*#endregion o-dilation-upgrade*/
@@ -5184,7 +5171,7 @@ screen and (max-width: 480px) {
 }
 
 .c-modal-away-progress__dilated-time {
-  color: #64dd17;
+  color: var(--color-dilation);
 }
 
 .c-modal-away-progress__infinities {
@@ -7906,7 +7893,7 @@ kbd {
 }
 
 .c-laitela-automation-toggle:hover {
-  color: var(--color-laitela--base) !important;
+  color: var(--color-laitela--base);
   background: var(--color-laitela--accent) !important;
 }
 
@@ -8123,129 +8110,6 @@ kbd {
   justify-content: center;
 }
 
-@keyframes a-reality-glyph-outer-cycle {
-  0% {
-    background-color: #b67f33;
-    box-shadow: #b67f33 0 0 1rem 0.2rem;
-  }
-  20% {
-    background-color: #64dd17;
-    box-shadow: #64dd17 0 0 1rem 0.2rem;
-  }
-  40% {
-    background-color: #22aa48;
-    box-shadow: #22aa48 0 0 1rem 0.2rem;
-  }
-  60% {
-    background-color: #03a9f4;
-    box-shadow: #03a9f4 0 0 1rem 0.2rem;
-  }
-  80% {
-    background-color: #b241e3;
-    box-shadow: #b241e3 0 0 1rem 0.2rem;
-  }
-  100% {
-    background-color: #b67f33;
-    box-shadow: #b67f33 0 0 1rem 0.2rem;
-  }
-}
-
-@keyframes a-reality-glyph-over-cycle {
-  0% {
-    box-shadow: #b67f33 0 0 1rem calc(0.3rem) inset;
-  }
-  20% {
-    box-shadow: #64dd17 0 0 1rem calc(0.3rem) inset;
-  }
-  40% {
-    box-shadow: #22aa48 0 0 1rem calc(0.3rem) inset;
-  }
-  60% {
-    box-shadow: #03a9f4 0 0 1rem calc(0.3rem) inset;
-  }
-  80% {
-    box-shadow: #b241e3 0 0 1rem calc(0.3rem) inset;
-  }
-  100% {
-    box-shadow: #b67f33 0 0 1rem calc(0.3rem) inset;
-  }
-}
-
-@keyframes a-reality-glyph-icon-cycle {
-  0% {
-    color: #b67f33;
-    text-shadow: #b67f33 -0.04em 0.04em 0.08em;
-  }
-  20% {
-    color: #64dd17;
-    text-shadow: #64dd17 -0.04em 0.04em 0.08em;
-  }
-  40% {
-    color: #22aa48;
-    text-shadow: #22aa48 -0.04em 0.04em 0.08em;
-  }
-  60% {
-    color: #03a9f4;
-    text-shadow: #03a9f4 -0.04em 0.04em 0.08em;
-  }
-  80% {
-    color: #b241e3;
-    text-shadow: #b241e3 -0.04em 0.04em 0.08em;
-  }
-  100% {
-    color: #b67f33;
-    text-shadow: #b67f33 -0.04em 0.04em 0.08em;
-  }
-}
-
-@keyframes a-reality-glyph-description-cycle {
-  0% {
-    color: #b67f33;
-    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b67f33 0 0 3px
-  }
-  20% {
-    color: #64dd17;
-    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #64dd17 0 0 3px
-  }
-  40% {
-    color: #22aa48;
-    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #22aa48 0 0 3px
-  }
-  60% {
-    color: #03a9f4;
-    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #03a9f4 0 0 3px
-  }
-  80% {
-    color: #b241e3;
-    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b241e3 0 0 3px
-  }
-  100% {
-    color: #b67f33;
-    text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, #b67f33 0 0 3px
-  }
-}
-
-@keyframes a-reality-glyph-dot-cycle {
-  0% {
-    background: #b67f33;
-  }
-  20% {
-    background: #64dd17;
-  }
-  40% {
-    background: #22aa48;
-  }
-  60% {
-    background: #03a9f4;
-  }
-  80% {
-    background: #b241e3;
-  }
-  100% {
-    background: #b67f33;
-  }
-}
-
 .l-reality-button-column {
   display: flex;
   flex-direction: column;
@@ -8330,12 +8194,13 @@ kbd {
 
 .c-reality-upgrade-btn--possible {
   background-color: #8b8529;
+  color: black;
   cursor: default;
 }
 
 .c-reality-upgrade-btn--possible:hover {
   background-color: #8b8529;
-  color: var(--color-reality-light);
+  color: black;
 }
 
 .c-reality-upgrade-btn--locked {

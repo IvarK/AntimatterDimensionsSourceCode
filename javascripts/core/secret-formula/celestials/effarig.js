@@ -7,14 +7,14 @@ GameDatabase.celestials.effarig = {
       description: "Adjustable Glyph level factor weights",
       cost: 1e7
     },
-    basicFilter: {
+    glyphFilter: {
       id: 1,
-      description: "Basic glyph filtering",
+      description: "Glyph Filtering",
       cost: 2e8
     },
-    advancedFilter: {
+    setSaves: {
       id: 2,
-      description: "Advanced glyph filtering",
+      description: "Glyph Set Saves",
       cost: 3e9
     },
     run: {

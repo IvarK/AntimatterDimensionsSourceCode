@@ -833,10 +833,10 @@ Shards. This allows you to set weights for each resource (EP, DT, Replicanti, Et
 level of Glyphs gained on Reality.
 <br>
 <br>
-Automatic Glyph Filtering is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.basicFilter.cost)}
+Automatic Glyph Filtering is purchaseable for ${format(GameDatabase.celestials.effarig.unlocks.glyphFilter.cost)}
 Relic Shards. This system uses one of many methods to assign a score to your glyph choices, and then picks the choice
 with the highest score. After picking this glyph, it checks the score against a threshold and either keeps it if the
-score is above the threshold, or sacrifices it instead. Initially there are three modes:
+score is above the threshold, or sacrifices it instead. There are three basic modes:
 <br>
 <b>Lowest total sacrifice</b> - Glyphs are given a score based on how much sacrifice value you have of that
 particular glyph's type. Glyphs of the type you have the least sacrifice value in will have the highest score.
@@ -850,8 +850,7 @@ compared to is specified by your input in the text box.
 can be set individually per glyph type.
 <br>
 <br>
-For ${format(GameDatabase.celestials.effarig.unlocks.advancedFilter.cost)} Relic Shards, you can unlock two more modes
-with some additional flexibility:
+Additionaly, there are two more advanced modes with some additional flexibility:
 <br>
 <b>Specified Effect Mode</b> - Glyphs are given a score equal to their rarity and checked against the rarity threshold
 you specify, but this score is modified based on your inputs for effects. The Glyph will be checked for having a minimum
@@ -864,12 +863,20 @@ the threshold to any value you want. One possible way you can use this behavior 
 ${formatInt(5)}, which allows you to keep Glyphs without that effect as long as they are rarer.
 <br>
 <br>
+Glyph Set Saves are purchasable for ${format(GameDatabase.celestials.effarig.unlocks.setSaves.cost)} Relic
+Shards. This unlocks ${formatInt(5)} slots that allow you to save your currently equipped glyphs into sets.
+You cannot overwrite a set, you must delete it first. When you load a set, each glyph in it is found and equipped.
+If any are not found, it will display a warning, but equip all the rest regardless. You can only load a set when
+there are no equipped glyphs. When loading a set, you can be Level and/or Rarity sensitive. The best glyph from
+the possible glyphs will always be the one equipped.  
+<br>
+<br>
 <i>Note: If desired, "Specified Effect Mode" and "Advanced Mode" can be used to filter out some Glyph types entirely;
 for example setting impossible conditions like "at least ${formatInt(6)} effects" or "Minimum score ${formatInt(999)}
 and all effects worth ${formatInt(0)}" on Power Glyphs will make it so that a Power Glyph is never picked.</i>
 `,
       isUnlocked: () => EffarigUnlock.adjuster.isUnlocked,
-      tags: ["glyph", "weight", "adjustment", "sacrifice", "filter", "advanced", "threshold", "reality", "lategame",
+      tags: ["glyph", "weight", "adjustment", "sacrifice", "filter", "threshold", "set", "save", "reality", "lategame",
         "endgame"],
       tab: "celestials/glyphfilter"
     }, {

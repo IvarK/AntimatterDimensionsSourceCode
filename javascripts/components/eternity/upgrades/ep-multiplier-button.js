@@ -3,7 +3,7 @@
 Vue.component("ep-multiplier-button", {
   data() {
     return {
-      isAutobuyerOn: false,
+      isAutobuyerActive: false,
       isAutoUnlocked: false,
       isAffordable: false,
       multiplier: new Decimal(0),
@@ -11,13 +11,16 @@ Vue.component("ep-multiplier-button", {
     };
   },
   watch: {
-    isAutobuyerOn(newValue) {
-      this.upgrade.autobuyer.isOn = newValue;
+    isAutobuyerActive(newValue) {
+      Autobuyer.epMult.isActive = newValue;
     }
   },
   computed: {
     upgrade() {
       return EternityUpgrade.epMult;
+    },
+    autobuyer() {
+      return Autobuyer.epMult;
     },
     classObject() {
       return {
@@ -30,9 +33,8 @@ Vue.component("ep-multiplier-button", {
   methods: {
     update() {
       const upgrade = this.upgrade;
-      const autobuyer = upgrade.autobuyer;
-      this.isAutoUnlocked = autobuyer.isUnlocked;
-      this.isAutobuyerOn = autobuyer.isOn;
+      this.isAutoUnlocked = this.autobuyer.isUnlocked;
+      this.isAutobuyerActive = this.autobuyer.isActive;
       this.multiplier.copyFrom(upgrade.effectValue);
       this.cost.copyFrom(upgrade.cost);
       this.isAffordable = upgrade.isAffordable;
@@ -53,7 +55,7 @@ Vue.component("ep-multiplier-button", {
       >Max Eternity Point mult</primary-button>
       <primary-button-on-off
         v-if="isAutoUnlocked"
-        v-model="isAutobuyerOn"
+        v-model="isAutobuyerActive"
         text="Autobuy EP mult"
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
       />

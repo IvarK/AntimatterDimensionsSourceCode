@@ -9,13 +9,13 @@ const AUTOBUYER_MODE = {
 const AUTO_CRUNCH_MODE = {
   AMOUNT: 0,
   TIME: 1,
-  X_LAST: 2
+  X_CURRENT: 2
 };
 
 const AUTO_ETERNITY_MODE = {
   AMOUNT: 0,
   TIME: 1,
-  X_LAST: 2
+  X_CURRENT: 2
 };
 
 const AUTO_REALITY_MODE = {
@@ -87,7 +87,7 @@ const AUTO_GLYPH_SCORE = {
 
 const AUTO_GLYPH_REJECT = {
   SACRIFICE: 0,
-  ALWAYS_REFINE: 1,
+  REFINE: 1,
   REFINE_TO_CAP: 2,
 };
 

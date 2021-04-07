@@ -81,8 +81,9 @@ function gainedEternityPoints() {
   return ep.floor();
 }
 
-function requiredIPForEP() {
-  return Decimal.pow10(Math.ceil(308 * (Decimal.log(totalEPMult().reciprocal(), 5) + 0.7)));
+function requiredIPForEP(epAmount) {
+  return Decimal.pow10(308 * (Decimal.log(totalEPMult().dividedBy(epAmount).reciprocal(), 5) + 0.7))
+    .clampMin(Number.MAX_VALUE);
 }
 
 function getRealityMachineMultiplier() {
@@ -374,6 +375,8 @@ function getGameSpeedupForDisplay() {
 // "diff" is in ms.  It is only unspecified when it's being called normally and not due to simulating time, in which
 // case it uses the gap between now and the last time the function was called.  This is on average equal to the update
 // rate.
+// TODO: Clean this up, remove the disable line
+// eslint-disable-next-line complexity
 function gameLoop(diff, options = {}) {
   PerformanceStats.start("Frame Time");
   PerformanceStats.start("Game Update");
@@ -419,8 +422,8 @@ function gameLoop(diff, options = {}) {
     diff = Enslaved.nextTickDiff;
   }
 
-  slowerAutobuyers(realDiff);
   Autobuyers.tick();
+  Tutorial.tutorialLoop();
 
   if (Achievement(165).isUnlocked && player.celestials.effarig.autoAdjustGlyphWeights) {
     autoAdjustGlyphWeights();
@@ -561,12 +564,6 @@ function gameLoop(diff, options = {}) {
 
   replicantiLoop(diff);
 
-  if (player.infMultBuyer) {
-    InfinityUpgrade.ipMult.autobuyerTick();
-  }
-
-  if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
-
   const currentEPmin = gainedEternityPoints().dividedBy(Time.thisEternityRealTime.totalMinutes);
   if (currentEPmin.gt(player.records.thisEternity.bestEPmin) && Player.canEternity)
     player.records.thisEternity.bestEPmin = currentEPmin;
@@ -577,7 +574,7 @@ function gameLoop(diff, options = {}) {
 
   updateTachyonGalaxies();
   player.timestudy.theorem = player.timestudy.theorem.add(getTTPerSecond().times(diff / 1000));
-  tryUnlockInfinityDimensions();
+  tryUnlockInfinityDimensions(true);
 
   BlackHoles.updatePhases(blackHoleDiff);
 
@@ -587,13 +584,7 @@ function gameLoop(diff, options = {}) {
       TimeStudy.dilation.purchase(true);
   }
 
-  // TD5-8/Reality unlock and TTgen perk autobuy
-  autoBuyExtraTimeDims();
-  if (Perk.autounlockDilation3.isBought) {
-    buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
-  }
-  if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
-
+  applyAutoUnlockPerks();
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
@@ -616,6 +607,21 @@ function gameLoop(diff, options = {}) {
   GameUI.update();
   player.lastUpdate = thisUpdate;
   PerformanceStats.end("Game Update");
+}
+
+// Applies all perks which automatically unlock things when passing certain thresholds, needs to be checked every tick
+function applyAutoUnlockPerks() {
+  if (!TimeDimension(8).isUnlocked && Perk.autounlockTD.isBought) {
+    for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
+  }
+  if (Perk.autounlockDilation3.isBought) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
+  if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
+  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
+    const secondRow = Object.values(EternityUpgrade).filter(u => u.id > 3);
+    for (const upgrade of secondRow) {
+      if (player.eternityPoints.gte(upgrade.cost / 1e10)) player.eternityUpgrades.add(upgrade.id);
+    }
+  }
 }
 
 function laitelaRealityTick(realDiff) {
@@ -817,88 +823,6 @@ function simulateTime(seconds, real, fast) {
           afterSimulation(seconds, playerStart);
         }
       });
-  }
-}
-
-function autoBuyDilationUpgrades(extraFactor) {
-  if (Perk.autobuyerDilation.isBought) {
-    const upgrades = [DilationUpgrade.dtGain, DilationUpgrade.galaxyThreshold, DilationUpgrade.tachyonGain].filter(
-      upgrade => upgrade.isAutobuyerOn);
-    for (const upgrade of upgrades) {
-      upgrade.purchase(true, extraFactor);
-    }
-  }
-}
-
-function autoBuyInfDims() {
-  if (EternityMilestone.autobuyerID(1).isReached && !EternityChallenge(8).isRunning) {
-    for (let i = 1; i <= player.eternities.sub(10).clampMax(8).toNumber(); i++) {
-      if (player.infDimBuyers[i - 1]) {
-        buyMaxInfDims(i);
-        buyManyInfinityDimension(i);
-      }
-    }
-  }
-}
-
-function autoBuyExtraTimeDims() {
-  if (TimeDimension(8).bought === 0 && Perk.autounlockTD.isBought) {
-    for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
-  }
-}
-
-function slowerAutobuyers(realDiff) {
-  const ampDiff = realDiff * PerkShopUpgrade.autoSpeed.effectOrDefault(1);
-  player.auto.infDimTimer += ampDiff;
-  const infDimPeriod = 1000 * Perk.autobuyerFasterID.effectOrDefault(1);
-  if (player.auto.infDimTimer >= infDimPeriod) {
-    // Note: we need to reset to a low number here, because we don't want a pile of these accumulating during offline
-    // time and then releasing normally.
-    player.auto.infDimTimer = Math.min(player.auto.infDimTimer - infDimPeriod, infDimPeriod);
-    autoBuyInfDims();
-  }
-  player.auto.timeDimTimer += ampDiff;
-  const timeDimPeriod = 1000;
-  if (player.auto.timeDimTimer >= timeDimPeriod) {
-    player.auto.timeDimTimer = Math.min(player.auto.timeDimTimer - timeDimPeriod, timeDimPeriod);
-    if (RealityUpgrade(13).isBought) {
-      maxAllTimeDimensions(true);
-    }
-  }
-  player.auto.repUpgradeTimer += ampDiff;
-  const repUpgradePeriod = 1000 * Perk.autobuyerFasterReplicanti.effectOrDefault(1);
-  if (player.auto.repUpgradeTimer >= repUpgradePeriod) {
-    player.auto.repUpgradeTimer = Math.min(player.auto.repUpgradeTimer - repUpgradePeriod, repUpgradePeriod);
-    autoBuyReplicantiUpgrades();
-  }
-  player.auto.dilUpgradeTimer += ampDiff;
-  const dilUpgradePeriod = 1000 * Perk.autobuyerFasterDilation.effectOrDefault(1);
-  if (player.auto.dilUpgradeTimer >= dilUpgradePeriod) {
-    // Because the dilation upgrade autobuyers naturally buy singles, it helps to
-    // be able to trigger them multiple times in one long-enough tick, which is
-    // what we do here. (This is why this code looks a bit different from that for
-    // the other autobuyers, which buy max.)
-    autoBuyDilationUpgrades(Math.floor(player.auto.dilUpgradeTimer / dilUpgradePeriod));
-    player.auto.dilUpgradeTimer %= dilUpgradePeriod;
-  }
-
-  TimeTheorems.autoBuyMaxTheorems(ampDiff);
-  Tutorial.tutorialLoop();
-
-  if (Ra.has(RA_UNLOCKS.AUTO_BLACK_HOLE_POWER)) {
-    for (let i = 1; i <= 2; i++) {
-      if (BlackHole(i).powerUpgrade.isAutobuyerOn) {
-        BlackHole(i).powerUpgrade.purchase();
-      }
-    }
-  }
-
-  if (Ra.has(RA_UNLOCKS.AUTO_REALITY_UPGRADES)) {
-    for (let i = 1; i <= 5; i++) {
-      if (RealityUpgrade(i).isAutobuyerOn) {
-        RealityUpgrade(i).purchase();
-      }
-    }
   }
 }
 

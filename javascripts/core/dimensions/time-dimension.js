@@ -26,9 +26,9 @@ function fullResetTimeDimensions() {
 }
 
 function toggleAllTimeDims() {
-  const areEnabled = player.reality.tdbuyers[0];
+  const areEnabled = Autobuyer.timeDimension(1).isActive;
   for (let i = 1; i < 9; i++) {
-    player.reality.tdbuyers[i - 1] = !areEnabled;
+    Autobuyer.timeDimension(i).isActive = !areEnabled;
   }
 }
 
@@ -54,12 +54,12 @@ function maxAllTimeDimensions(checkAutobuyers = false) {
   // (reduces overhead at higher EP)
   if (player.eternityPoints.gte(1e10)) {
     for (let i = 8; i > 0; i--) {
-      if (!checkAutobuyers || player.reality.tdbuyers[i - 1]) buyMaxTimeDimension(i);
+      if (!checkAutobuyers || Autobuyer.timeDimension(i).isActive) buyMaxTimeDimension(i);
     }
   } else {
     // Low EP behavior: Try to buy the highest affordable new dimension, then loop buying the cheapest possible
     for (let i = 4; i > 0 && TimeDimension(i).bought === 0; i--) {
-      if (!checkAutobuyers || player.reality.tdbuyers[i - 1]) buySingleTimeDimension(i);
+      if (!checkAutobuyers || Autobuyer.timeDimension(i).isActive) buySingleTimeDimension(i);
     }
 
     // Should never take more than like 50 iterations; explicit infinite loops make me nervous
@@ -67,7 +67,7 @@ function maxAllTimeDimensions(checkAutobuyers = false) {
       let cheapestDim = 0;
       let cheapestCost = 1e10;
       for (let i = 1; i <= 4; i++) {
-        if (TimeDimension(i).cost.lte(cheapestCost) && (!checkAutobuyers || player.reality.tdbuyers[i - 1])) {
+        if (TimeDimension(i).cost.lte(cheapestCost) && (!checkAutobuyers || Autobuyer.timeDimension(i).isActive)) {
           cheapestDim = i;
           cheapestCost = TimeDimension(i).cost;
         }
@@ -147,6 +147,10 @@ class TimeDimensionState extends DimensionState {
     return this._tier < 5 || TimeStudy.timeDimension(this._tier).isBought;
   }
 
+  get isAvailableForPurchase() {
+    return this.isAffordable;
+  }
+
   get isAffordable() {
     return player.eternityPoints.gte(this.cost);
   }
@@ -164,7 +168,7 @@ class TimeDimensionState extends DimensionState {
 
     const dim = TimeDimension(tier);
     mult = mult.times(Decimal.pow(dim.powerMultiplier, dim.bought));
-    
+
     mult = mult.pow(getAdjustedGlyphEffect("timepow"));
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
@@ -232,6 +236,16 @@ class TimeDimensionState extends DimensionState {
   get costIncreaseThresholds() {
     return this._costIncreaseThresholds;
   }
+
+  get requirementReached() {
+    return this._tier < 5 ||
+      (TimeStudy.timeDimension(this._tier).isAffordable && TimeStudy.timeDimension(this._tier - 1).isBought);
+  }
+
+  tryUnlock() {
+    if (this.isUnlocked) return;
+    TimeStudy.timeDimension(this._tier).purchase();
+  }
 }
 
 /**
@@ -267,3 +281,11 @@ const TimeDimensions = {
     });
   }
 };
+
+function tryUnlockTimeDimensions() {
+  if (TimeDimension(8).isUnlocked) return;
+  for (let tier = 5; tier <= 8; ++tier) {
+    if (TimeDimension(tier).isUnlocked) continue;
+    TimeDimension(tier).tryUnlock();
+  }
+}

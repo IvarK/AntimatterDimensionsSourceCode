@@ -113,5 +113,10 @@ for (const perk of Perks.all) {
 function checkPerkValidity() {
   if (player.reality.perks.every(id => Perks.find(id) !== undefined)) return;
   dev.respecPerks();
-  Modal.message.show("Your old Reality Perks were invalid, your Perks have been reset and your Perk Points refunded.");
+  if (player.reality.perkPoints >= Perks.all.length) {
+    dev.buyAllPerks();
+    Modal.message.show("Some of your Perks were invalid, but you auto-bought all valid perks.");
+  } else {
+    Modal.message.show("Some of your Perks were invalid, so your Perks have been reset and your Perk Points refunded.");
+  }
 }

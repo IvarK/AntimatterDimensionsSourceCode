@@ -101,7 +101,7 @@ Vue.component("glyph-inventory", {
 Vue.component("glyph-protected-row-options", {
   methods: {
     update() {
-      this.showScoreFilter = EffarigUnlock.basicFilter.isUnlocked;
+      this.showScoreFilter = EffarigUnlock.glyphFilter.isUnlocked;
     },
     addRow() {
       Glyphs.changeProtectedRows(1);

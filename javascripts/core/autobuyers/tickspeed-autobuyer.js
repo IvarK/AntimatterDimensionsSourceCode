@@ -1,8 +1,12 @@
 "use strict";
 
-Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobuyerState {
+Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
     return player.auto.tickspeed;
+  }
+
+  get name() {
+    return `Tickspeed`;
   }
 
   get isUnlocked() {
@@ -42,6 +46,10 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
     this.data.mode = value;
   }
 
+  get canUnlockSlowVersion() {
+    return player.records.thisEternity.maxAM.gte(this.antimatterCost);
+  }
+
   toggleMode() {
     this.mode = [
       AUTOBUYER_MODE.BUY_SINGLE,
@@ -63,7 +71,7 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
   }
 
   purchase() {
-    if (player.records.totalAntimatter.lt(this.antimatterCost)) return;
+    if (!this.canUnlockSlowVersion) return;
     this.data.isBought = true;
   }
 

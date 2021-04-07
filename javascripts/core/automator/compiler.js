@@ -158,7 +158,7 @@
       return ctx.$value;
     }
 
-    xLast(ctx) {
+    xCurrent(ctx) {
       if (ctx.$value) return ctx.$value;
       if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
         this.addError(ctx, "Missing multiplier");

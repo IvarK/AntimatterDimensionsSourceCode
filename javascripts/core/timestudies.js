@@ -23,11 +23,9 @@ const TimeTheorems = {
   },
 
   checkForBuying(auto) {
-    if (player.realities === 0 && TimeDimension(1).bought < 1) {
-      if (!auto) Modal.message.show("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
-      return false;
-    }
-    return true;
+    if (PlayerProgress.realityUnlocked() || TimeDimension(1).bought) return true;
+    if (!auto) Modal.message.show("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
+    return false;
   },
 
   buyWithAntimatter(auto = false) {
@@ -95,23 +93,6 @@ const TimeTheorems = {
     return player.timestudy.amcost.e / 20000 - 1 +
       player.timestudy.ipcost.e / 100 +
       Math.round(player.timestudy.epcost.log2());
-  },
-
-  autoBuyMaxTheorems(realDiff) {
-    if (!player.ttbuyer) return;
-    player.auto.ttTimer += realDiff;
-    const period = Effects.min(
-      Number.POSITIVE_INFINITY,
-      Perk.autobuyerTT1,
-      Perk.autobuyerTT2,
-      Perk.autobuyerTT3,
-      Perk.autobuyerTT4
-    );
-    const milliseconds = TimeSpan.fromSeconds(period).totalMilliseconds;
-    if (player.auto.ttTimer > milliseconds) {
-      TimeTheorems.buyMax(true);
-      player.auto.ttTimer = Math.min(player.auto.ttTimer - milliseconds, milliseconds);
-    }
   },
 
   calculateTimeStudiesCost() {

@@ -177,7 +177,7 @@ Vue.component("statistics-tab", {
               {{ reality.this.toStringShort() }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)
             </div>
             <div>
-              Your best RM/min is {{ format(reality.bestRate, 2, 2) }}.
+              Your best Reality Machines per minute is {{ format(reality.bestRate, 2, 2) }}.
             </div>
             <div>Your best glyph rarity is {{ formatRarity(reality.bestRarity) }}.</div>
             <br>

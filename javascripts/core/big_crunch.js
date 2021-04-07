@@ -8,7 +8,7 @@ function bigCrunchAnimation() {
 }
 
 function handleChallengeCompletion() {
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
+  const challenge = Player.antimatterChallenge;
   if (!challenge && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
   }
@@ -84,13 +84,13 @@ function bigCrunchUpdateStatistics() {
 
 function bigCrunchTabChange(firstInfinity) {
   const earlyGame = player.records.bestInfinity.time > 60000 && !player.break;
-  const challenge = NormalChallenge.current || InfinityChallenge.current;
+  const inAntimatterChallenge = Player.isInAntimatterChallenge;
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
   handleChallengeCompletion();
 
   if (firstInfinity) {
     Tab.infinity.upgrades.show();
-  } else if (earlyGame || (challenge && !player.options.retryChallenge)) {
+  } else if (earlyGame || (inAntimatterChallenge && !player.options.retryChallenge)) {
     Tab.dimensions.antimatter.show();
   }
 }

@@ -37,8 +37,7 @@ Vue.component("new-dimensions-tab", {
       this.hasDimensionBoosts = player.dimensionBoosts > 0;
       this.buyUntil10 = player.buyUntil10;
       this.isContinuumActive = Laitela.continuumActive;
-      const challenge = NormalChallenge.current || InfinityChallenge.current;
-      this.isQuickResetAvailable = challenge && challenge.isQuickResettable;
+      this.isQuickResetAvailable = Player.isInAntimatterChallenge && Player.antimatterChallenge.isQuickResettable;
 
       const isSacrificeUnlocked = Sacrifice.isVisible;
       this.isSacrificeUnlocked = isSacrificeUnlocked;

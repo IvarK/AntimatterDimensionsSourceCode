@@ -667,8 +667,16 @@ const Player = {
     return NormalChallenge.isRunning || InfinityChallenge.isRunning;
   },
 
+  get antimatterChallenge() {
+    return NormalChallenge.current || InfinityChallenge.current;
+  },
+
   get isInAnyChallenge() {
-    return NormalChallenge.isRunning || InfinityChallenge.isRunning || EternityChallenge.isRunning;
+    return this.isInAntimatterChallenge || EternityChallenge.isRunning;
+  },
+
+  get anyChallenge() {
+    return this.antimatterChallenge || EternityChallenge.current
   },
 
   get effectiveMatterAmount() {

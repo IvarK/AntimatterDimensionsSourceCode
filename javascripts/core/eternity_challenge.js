@@ -207,9 +207,8 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   exit() {
-    const nestedChallenge = NormalChallenge.current || InfinityChallenge.current;
-    if (nestedChallenge !== undefined) {
-      nestedChallenge.exit();
+    if (Player.isInAntimatterChallenge) {
+      Player.antimatterChallenge.exit();
     }
     player.challenge.eternity.current = 0;
     eternity(true);

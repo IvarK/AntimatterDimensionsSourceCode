@@ -38,19 +38,15 @@ Vue.component("challenges-header", {
       }
     },
     restartChallenge() {
-      const current = NormalChallenge.current ||
-        InfinityChallenge.current ||
-        EternityChallenge.current;
-      if (current !== undefined) {
+      const current = Player.anyChallenge;
+      if (Player.isInAnyChallenge) {
         current.exit();
         current.start();
       }
     },
     exitChallenge() {
-      const current = NormalChallenge.current ||
-        InfinityChallenge.current ||
-        EternityChallenge.current;
-      if (current !== undefined) {
+      const current = Player.anyChallenge;
+      if (Player.isInAnyChallenge) {
         current.exit();
       }
     },

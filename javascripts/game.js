@@ -611,7 +611,7 @@ function gameLoop(diff, options = {}) {
 
 // Applies all perks which automatically unlock things when passing certain thresholds, needs to be checked every tick
 function applyAutoUnlockPerks() {
-  if (TimeDimension(8).bought === 0 && Perk.autounlockTD.isBought) {
+  if (!TimeDimension(8).isUnlocked && Perk.autounlockTD.isBought) {
     for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
   }
   if (Perk.autounlockDilation3.isBought) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);

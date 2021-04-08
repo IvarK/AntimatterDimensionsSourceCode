@@ -3,9 +3,10 @@
 Vue.component("multipliers-tab", {
   data() {
     return {
+      id: EffectScopes.all.indexOf(EffectScopes.find("Antimatter Dimension 1 Multipliers"))
     };
   },
   template: `
-    <multiplier-breakdown id="37"/>
+    <multiplier-breakdown :id="id"/>
   `
 });

@@ -9,6 +9,10 @@ class PerkState extends SetPurchasableMechanicState {
     this.connectedPerks = [];
   }
 
+  get mechanicName() {
+    return "Perk";
+  }
+
   get currency() {
     return Currency.perkPoints;
   }

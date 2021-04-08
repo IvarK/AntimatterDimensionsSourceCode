@@ -146,6 +146,10 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
     this._upgrade = upgrade;
   }
 
+  get mechanicName() {
+    return "Charged Infinity Upgrade";
+  }
+
   get isEffectActive() {
     return this._upgrade.isBought && this._upgrade.isCharged;
   }
@@ -164,6 +168,10 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
     if (config.charged) {
       this._chargedEffect = new ChargedInfinityUpgradeState(config.charged, this);
     }
+  }
+
+  get mechanicName() {
+    return "Infinity Upgrade";
   }
 
   get currency() {
@@ -370,6 +378,10 @@ class InfinityIPMultUpgrade extends GameMechanicState {
 InfinityUpgrade.ipMult = new InfinityIPMultUpgrade(GameDatabase.infinity.upgrades.ipMult);
 
 class BreakInfinityUpgrade extends SetPurchasableMechanicState {
+  get mechanicName() {
+    return "Break Infinity Upgrade";
+  }
+
   get currency() {
     return Currency.infinityPoints;
   }

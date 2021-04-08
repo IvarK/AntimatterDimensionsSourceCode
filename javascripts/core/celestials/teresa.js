@@ -118,6 +118,10 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     this.costCap = config.costCap;
   }
 
+  get mechanicName() {
+    return "Perk Shop Upgrade";
+  }
+
   get currency() {
     return Currency.perkPoints;
   }

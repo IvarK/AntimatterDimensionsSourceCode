@@ -9,6 +9,10 @@ class SingularityMilestoneState extends GameMechanicState {
     this._rawEffect = effect;
   }
 
+  get mechanicName() {
+    return "Singularity Milestone";
+  }
+
   get start() {
     return this.config.start;
   }

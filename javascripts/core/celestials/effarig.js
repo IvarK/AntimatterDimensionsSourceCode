@@ -161,6 +161,10 @@ class EffarigUnlockState extends GameMechanicState {
     if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
   }
 
+  get mechanicName() {
+    return "Effarig Unlock";
+  }
+
   get cost() {
     return this.config.cost;
   }

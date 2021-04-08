@@ -2,14 +2,12 @@
 
 Vue.component("multiplier-row", {
   props: {
-    effectId: Number,
-    scopeId: [String, Number],
+    effect: Object,
     operation: String,
   },
   data() {
     return {
       value: new Decimal(0),
-      expand: false,
       innerId: -1
     };
   },
@@ -29,16 +27,18 @@ Vue.component("multiplier-row", {
   },
   methods: {
     update() {
-      const EFFECT = EffectScopes.all[this.scopeId].effects[this.operation][this.effectId];
+      const EFFECT = this.effect;
       this.value.copyFrom(new Decimal(EFFECT.effectValue));
       this.name = EFFECT.name;
-      this.innerId = EFFECT instanceof EffectScope ? EffectScopes.all.indexOf(EFFECT) : -1;
+      this.innerId = EFFECT && EFFECT instanceof EffectScope && Object.values(EFFECT.validEffects).reduce((acc, arr) =>
+        acc + arr.length
+      , 0) > 1 ? EffectScopes.all.indexOf(EFFECT) : -1;
     }
   },
   template: `
   <div>
-    <div @click="expand=!expand"> {{name}} : {{displayValue}} </div>
-    <multiplier-breakdown v-if="innerId > -1" v-show="expand" :id="innerId"/>
+    <multiplier-breakdown v-if="innerId > -1" :id="innerId"/>
+    <div v-else> {{name}} : {{displayValue}} </div>
   </div>
   `
 });

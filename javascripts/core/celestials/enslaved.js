@@ -249,6 +249,10 @@ class EnslavedProgressState extends GameMechanicState {
     if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
   }
 
+  get mechanicName() {
+    return "Enslaved Progress";
+  }
+
   get hasProgress() {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.enslaved.progressBits & (1 << this.id));

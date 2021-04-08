@@ -2,34 +2,56 @@
 
 Vue.component("multiplier-breakdown", {
   props: {
-    id: [String, Number],
+    id: Number,
+  },
+  data() {
+    return {
+      expand: false,
+    };
   },
   computed: {
+    scope() {
+      return EffectScopes.all[this.id];
+    },
     multipliers() {
-      return EffectScopes.all[this.id].effects.multipliers.map(
-        (effect, id) => (effect.canBeApplied && !new Decimal(effect.effectValue).eq(1) ? id : null)).filter(
-          val => val !== null);
+      return "multipliers" in this.scope.validEffects ? this.scope.validEffects.multipliers : [];
     },
     powers() {
-      return "powers" in EffectScopes.all[this.id].effects ? EffectScopes.all[this.id].effects.powers.map(
-        (effect, id) => (effect.canBeApplied && !new Decimal(effect.effectValue).eq(1) ? id : null)).filter(
-          val => val !== null) : [];
+      return "powers" in this.scope.validEffects ? this.scope.validEffects.powers : [];
+    },
+    name() {
+      return this.scope.name;
+    },
+    total() {
+      return format(this.scope.value, 2, 2);
+    }
+  },
+  methods: {
+    toggleExpand() {
+      this.expand = !this.expand;
     }
   },
   template: `
     <div>
-      <multiplier-row
-      v-for="effId in powers"
-          :key="'p' + effId"
-          :effectId="effId"
-          :scopeId="id"
-          operation="powers"/>
-      <multiplier-row
-        v-for="effId in multipliers"
-          :key="'m' + effId"
-          :effectId="effId"
-          :scopeId="id"
-          operation="multipliers"/>
+      <div v-if="expand">
+          <multiplier-row
+          v-for="(power, i) in powers"
+              :key="'p' + i"
+              :effect="power"
+              operation="powers"/>
+          <multiplier-row
+            v-for="(multiplier, i) in multipliers"
+              :key="'m' + i"
+              :effect="multiplier"
+              operation="multipliers"/>
+      </div>
+      <div class="c-past-runs-header" @click="toggleExpand">
+        <drop-down :shown.sync="expand" />
+        <span>
+          <h3 v-if="expand">{{name}} : {{total}}</h3>
+          <span v-else>{{name}} : {{total}}</span>
+        </span>
+      </div>
     </div>
   `
 });

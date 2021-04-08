@@ -12,6 +12,10 @@ class AchievementState extends GameMechanicState {
     this.registerEvents(config.checkEvent, args => this.tryUnlock(args));
   }
 
+  get mechanicName() {
+    return "Achievement";
+  }
+
   get name() {
     return this.config.name;
   }

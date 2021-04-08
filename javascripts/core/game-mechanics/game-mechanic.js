@@ -29,6 +29,14 @@ class GameMechanicState extends Effect {
     }
   }
 
+  get mechanicName() {
+    throw new Error("Game Mechanic has no name.");
+  }
+
+  get name() {
+    return `${this.mechanicName} ${this.id}`;
+  }
+
   get config() {
     return this._config;
   }

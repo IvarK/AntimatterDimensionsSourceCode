@@ -5,20 +5,22 @@ const AntimatterDimensionCommonMultiplier = new EffectScope("Antimatter Dimensio
     // Make Inf pow its own Effect Scope
     new EffectScope("Infinity Power Multiplier", scoped => {
       scoped.addMultipliers(
-        new Effect(
+        new CustomEffect(
+          "Infinity Power",
           () => player.infinityPower
         )).addPowers(
-          new Effect(
+          new CustomEffect(
+            "Infinity Power Conversion Rate",
             getInfinityConversionRate
           )
       );
       scoped.condition = () => !EternityChallenge(9).isRunning;
     }),
-    new Effect(() => Achievements.power),
-    new Effect(() => ShopPurchase.dimPurchases.currentMult),
-    new Effect(() => ShopPurchase.allDimPurchases.currentMult),
-    new Effect(() => getAdjustedGlyphEffect("powermult")),
-    new Effect(() => player.reality.realityMachines.powEffectOf(AlchemyResource.force)),
+    new CustomEffect("Achievement Multiplier", () => Achievements.power),
+    new CustomEffect("API 1", () => ShopPurchase.dimPurchases.currentMult),
+    new CustomEffect("API 2", () => ShopPurchase.allDimPurchases.currentMult),
+    new CustomEffect("Power Glyph", () => getAdjustedGlyphEffect("powermult")),
+    new CustomEffect("Alchemy Force", () => player.reality.realityMachines.powEffectOf(AlchemyResource.force)),
     BreakInfinityUpgrade.totalAMMult,
     BreakInfinityUpgrade.currentAMMult,
     BreakInfinityUpgrade.achievementMult,
@@ -54,7 +56,8 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
   return new EffectScope(`Antimatter Dimension ${tier} Multipliers`, scope => {
     // Make Overides Effect Scopes?
     scope.addOverides(
-      new Effect(
+      new CustomEffect(
+        "EC11",
         () =>
           player.infinityPower.pow(
             getInfinityConversionRate()
@@ -65,7 +68,8 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
     );
     if (tier > 6)
       scope.addOverides(
-        new Effect(
+        new CustomEffect(
+          "C10",
           () => new Decimal(1),
           undefined,
           () => NormalChallenge(10).isRunning
@@ -75,14 +79,16 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
       AntimatterDimensionCommonMultiplier,
       new EffectScope(`Antimatter Dimension ${tier} Buy10 Multiplier`, scoped =>
         scoped.addMultipliers(
-          new Effect(() => AntimatterDimensions.buyTenMultiplier)
+          new CustomEffect("Buy10 Multiplier", () => AntimatterDimensions.buyTenMultiplier)
         ).addPowers(
-          new Effect(
+          new CustomEffect(
+            "Continuum Amount",
             () => AntimatterDimension(tier).continuumValue,
             undefined,
             () => Laitela.continuumActive
           ),
-          new Effect(
+          new CustomEffect(
+            "Dimensions Bought",
             () => Math.floor(AntimatterDimension(tier).bought / 10),
             undefined,
             () => !Laitela.continuumActive
@@ -92,7 +98,10 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
       // Rework this to use effects on dimboost multis
       new EffectScope(`Antimatter Dimension ${tier} DimBoost Multiplier`, scoped =>
         scoped.addMultipliers(
-          new Effect(() => DimBoost.multiplierToNDTier(tier))
+          new CustomEffect(
+            "Dimension Boosts",
+            () => DimBoost.multiplierToNDTier(tier)
+          )
         )
       ),
       new EffectScope(`Antimatter Dimension ${tier} Infinitied Multiplier`, scoped =>
@@ -117,8 +126,7 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
       );
     if (tier === 8)
       scope.addMultipliers(
-        // Replace this with an effect scope instead of just being a wrapper effect
-        new Effect(() => Sacrifice.totalBoost),
+        new CustomEffect("Sacrifice", () => Sacrifice.totalBoost),
         Achievement(23),
         TimeStudy(214)
       );
@@ -141,7 +149,8 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
     }
 
     scope.addPowers(
-      new Effect(
+      new CustomEffect(
+        "Infinity Challenge 4",
         () => InfinityChallenge(4).effectValue,
         undefined,
         () => InfinityChallenge(4).isRunning && player.postC4Tier !== tier
@@ -152,13 +161,15 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
       InfinityUpgrade.totalTimeMult.chargedEffect,
       InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
       AlchemyResource.power,
-      new Effect(() => getAdjustedGlyphEffect("curseddimensions")),
-      new Effect(
+      new CustomEffect("Cursed Dimensions", () => getAdjustedGlyphEffect("curseddimensions")),
+      new CustomEffect(
+        "V Dimension Power",
         () => V_UNLOCKS.ND_POW.effect(),
         undefined,
         () => V.has(V_UNLOCKS.ND_POW)
       ),
-      new Effect(
+      new CustomEffect(
+        "Dilation Effect",
         () => getAdjustedGlyphEffect("dilationpow"),
         undefined,
         () => player.dilation.active && !Enslaved.isRunning
@@ -178,12 +189,14 @@ const AntimatterDimensionStandardMultipliers = Array.range(0, 9).map(tier => {
     );
 
     scope.addPowers(
-      new Effect(
+      new CustomEffect(
+        "V Celestial Penalty",
         () => 0.5,
         undefined,
         () => V.isRunning
       ),
-      new Effect(
+      new CustomEffect(
+        "Ra Things",
         () => 1.05,
         undefined,
         // This condition doesnt work right now
@@ -207,7 +220,9 @@ const EffarigDilationStrength = new EffectScope("Effarig Dilation Strength", sco
   scope.base = 0.25;
   scope.condition = () => Effarig.isRunning;
   scope.addMultipliers(
-    new Effect(
+    new CustomEffect(
+      // Needs a better Name
+      "Nerf Factor",
       () => Effarig.nerfFactor(player.infinityPower)
     )
   );
@@ -215,9 +230,18 @@ const EffarigDilationStrength = new EffectScope("Effarig Dilation Strength", sco
 
 const AntimatterDimensionGlyphPowerEffect = new EffectScope("Antimatter Dimension Glyph Power", scope =>
   scope.addMultipliers(
-    new Effect(() => getAdjustedGlyphEffect("powerpow")),
-    new Effect(() => getAdjustedGlyphEffect("effarigdimensions")),
-    new Effect(() => Ra.momentumValue)
+    new CustomEffect(
+      "Power Glyph",
+      () => getAdjustedGlyphEffect("powerpow")
+    ),
+    new CustomEffect(
+      "Effarig Glyph",
+      () => getAdjustedGlyphEffect("effarigdimensions")
+    ),
+    new CustomEffect(
+      "Ra Momentum",
+      () => Ra.momentumValue
+    )
   )
 );
 

@@ -174,6 +174,10 @@ function dilatedValueOf(value) {
 }
 
 class DilationUpgradeState extends SetPurchasableMechanicState {
+  get mechanicName() {
+    return "Dilation Upgrade";
+  }
+
   get currency() {
     return Currency.dilatedTime;
   }
@@ -190,6 +194,10 @@ class DilationUpgradeState extends SetPurchasableMechanicState {
 }
 
 class RebuyableDilationUpgradeState extends RebuyableMechanicState {
+  get mechanicName() {
+    return "Dilation Upgrade";
+  }
+
   get currency() {
     return Currency.dilatedTime;
   }

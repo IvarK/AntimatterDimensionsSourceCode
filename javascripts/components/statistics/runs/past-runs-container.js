@@ -16,9 +16,7 @@ Vue.component("past-runs-container", {
     averageRun() {
       return averageRun(this.runs, this.layer.name);
     },
-    dropDown() {
-      return this.shown ? `<i class="far fa-minus-square"></i>` : `<i class="far fa-plus-square"></i>`;
-    },
+
     points() {
       return this.layer.currency;
     },
@@ -84,7 +82,7 @@ Vue.component("past-runs-container", {
         class="c-past-runs-header"
         v-on:click="toggleShown"
         >
-        <span class="o-run-drop-down-icon" v-html="dropDown" />
+        <drop-down :shown.sync="shown" />
         <span>
           <h3>Past {{ formatInt(10) }} {{ plural }}</h3>
         </span>

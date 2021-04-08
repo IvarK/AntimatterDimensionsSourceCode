@@ -173,6 +173,10 @@ class InfinityChallengeRewardState extends GameMechanicState {
     this._challenge = challenge;
   }
 
+  get mechanicName() {
+    return "Infinity Challenge Reward";
+  }
+
   get isEffectActive() {
     return this._challenge.isCompleted;
   }

@@ -60,6 +60,17 @@ class EffectScope {
     return this._effects;
   }
 
+  get validEffects() {
+    return Object.fromEntries(
+      Object.entries(this.effects).map(([operation, effects]) =>
+        [operation, effects.filter(effect =>
+          effect.canBeApplied &&
+          (!new Decimal(effect.effectValue).eq(1) || !new Decimal(effect.effectValue).eq(0))
+        )]
+      ).filter(([, effects]) => effects.length > 0)
+    );
+  }
+
   get effectValue() {
     return this._value;
   }

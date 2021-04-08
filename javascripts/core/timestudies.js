@@ -292,6 +292,10 @@ class TimeStudyState extends GameMechanicState {
     this.incomingConnections = [];
   }
 
+  get mechanicName() {
+    return "Time Study";
+  }
+
   get cost() {
     return this.config.cost;
   }

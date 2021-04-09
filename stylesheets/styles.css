@@ -4331,7 +4331,7 @@ screen and (max-width: 480px) {
   font-weight: bold;
   font-size: 1rem;
   border: 0.1rem solid var(--color-eternity);
-  width: 19rem;
+  width: 20rem;
   height: 9rem;
   transition-duration: 0.2s;
   cursor: pointer;

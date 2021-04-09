@@ -93,8 +93,8 @@ Vue.component("past-runs-container", {
         <div v-for="(run, index) in runs" :key="index">
           <span v-if="run[0] === Number.MAX_VALUE">
             <span>
-              The {{ singular }} {{ formatInt(index + 1) }}
-              {{ index === 0 ? singular : plural }} ago hasn't happened yet.
+              You have not done {{ formatInt(index + 1) }}
+              {{ index === 0 ? singular : plural }} yet.
             </span>
           </span>
           <span v-else>

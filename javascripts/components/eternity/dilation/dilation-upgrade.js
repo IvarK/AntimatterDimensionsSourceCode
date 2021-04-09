@@ -15,6 +15,7 @@ Vue.component("dilation-upgrade", {
       isAffordable: false,
       isAutoUnlocked: false,
       isAutobuyerOn: false,
+      timeUntilCost: new Decimal(0),
     };
   },
   watch: {
@@ -32,11 +33,18 @@ Vue.component("dilation-upgrade", {
         "o-dilation-upgrade--bought": this.isBought,
         "o-dilation-upgrade--capped": this.isCapped,
       };
+    },
+    timeEstimate() {
+      // Don't show if less than 10 seconds or more than a year
+      return this.timeUntilCost.lt(10) || this.timeUntilCost.gt(86400 * 365.25) 
+        ? null
+        : TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toStringShort(false);
     }
   },
   methods: {
     update() {
       const upgrade = this.upgrade;
+      this.timeUntilCost = Decimal.sub(upgrade.cost, Currency.dilatedTime.value).div(getDilationGainPerSecond());
       if (this.isRebuyable) {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;
@@ -53,7 +61,7 @@ Vue.component("dilation-upgrade", {
   },
   template:
     `<div class="l-spoon-btn-group">
-      <button :class="classObject" @click="upgrade.purchase()">
+      <button :class="classObject" @click="upgrade.purchase()" :ach-tooltip="timeEstimate">
         <description-display
           :config="upgrade.config"
           :length="70"

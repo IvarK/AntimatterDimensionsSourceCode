@@ -54,7 +54,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 5,
-    description: () => `Antimatter Galaxy cost increase scaling starts instantly (normally at ${formatInt(100)}
+    description: () => `Antimatter Galaxy cost increase scaling starts immediately (normally at ${formatInt(100)}
       Galaxies). Dimension Boost costs scaling is massively increased.`,
     goal: new Decimal("1e750"),
     goalIncrease: new Decimal("1e400"),

@@ -130,7 +130,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Boundless Flow",
       id: 11,
       cost: 50,
-      requirement: () => `${format(1e12)} Banked Infinities`,
+      requirement: () => `${format(Currency.infinitiesBanked, 2)}/${format(1e12)} Banked Infinities`,
       checkRequirement: () => Currency.infinitiesBanked.exponent >= 12,
       checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
       description: "Every second, gain 10% of the Infinities you would normally gain by Infinitying",
@@ -167,7 +167,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Eternal Flow",
       id: 14,
       cost: 50,
-      requirement: () => `${format(1e7)} Eternities`,
+      requirement: () => `${format(Currency.eternities.value, 2)}/${format(1e7)} Eternities`,
       checkRequirement: () => Currency.eternities.gte(1e7),
       checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
       description: "Gain Eternities per second equal to your Reality count",
@@ -191,7 +191,8 @@ GameDatabase.reality.upgrades = (function() {
       name: "Disparity of Rarity",
       id: 16,
       cost: 1500,
-      requirement: () => `Reality with ${formatInt(4)} Glyphs equipped of uncommon or better rarity`,
+      requirement: () => `Reality with ${formatInt(4)} Glyphs equipped of uncommon or better rarity
+        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g && g.strength >= 1.5))})`,
       hasFailed: () => {
         const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.strength >= 1.5);
         const equipped = Glyphs.activeList.countWhere(g => g.strength >= 1.5);
@@ -208,7 +209,8 @@ GameDatabase.reality.upgrades = (function() {
       name: "Duplicity of Potency",
       id: 17,
       cost: 1500,
-      requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each having at least ${formatInt(2)} effects`,
+      requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each having at least ${formatInt(2)} effects
+        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g && countEffectsFromBitmask(g.effects) >= 2))})`,
       hasFailed: () => {
         const availableGlyphs = Glyphs.inventory.countWhere(g => g && countEffectsFromBitmask(g.effects) >= 2);
         const equipped = Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2);
@@ -225,7 +227,8 @@ GameDatabase.reality.upgrades = (function() {
       name: "Measure of Forever",
       id: 18,
       cost: 1500,
-      requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each at level ${formatInt(10)} or higher`,
+      requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each at level ${formatInt(10)} or higher
+        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g && g.level >= 10))})`,
       hasFailed: () => {
         const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.level >= 10);
         const equipped = Glyphs.activeList.countWhere(g => g.level >= 10);
@@ -242,9 +245,10 @@ GameDatabase.reality.upgrades = (function() {
       name: "Scour to Empower",
       id: 19,
       cost: 1500,
-      requirement: () => `Have a total of ${formatInt(30)} or more Glyphs at once`,
-      hasFailed: () => Glyphs.active.concat(Glyphs.inventory).countWhere(g => g) < 30,
-      checkRequirement: () => Glyphs.active.concat(Glyphs.inventory).countWhere(g => g) >= 30,
+      requirement: () => `Have a total of ${formatInt(30)} or more Glyphs at once
+        (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g))})`,
+      hasFailed: () => Glyphs.allGlyphs.countWhere(g => g) < 30,
+      checkRequirement: () => Glyphs.allGlyphs.countWhere(g => g) >= 30,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "You can sacrifice Glyphs for permanent bonuses (Shift + click)",
       formatCost: value => format(value, 1, 0)
@@ -253,7 +257,8 @@ GameDatabase.reality.upgrades = (function() {
       name: "Parity of Singularity",
       id: 20,
       cost: 1500,
-      requirement: () => `${formatInt(1)} year total play time and the Black Hole unlocked`,
+      requirement: () => `${formatInt(1)} year total play time and the Black Hole unlocked
+        (Currently: ${Time.totalTimePlayed.toStringShort(false)})`,
       hasFailed: () => !BlackHole(1).isUnlocked && Currency.realityMachines.lt(100),
       checkRequirement: () => Time.totalTimePlayed.totalYears >= 1 && BlackHole(1).isUnlocked,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -264,7 +269,8 @@ GameDatabase.reality.upgrades = (function() {
       name: "Cosmic Conglomerate",
       id: 21,
       cost: 100000,
-      requirement: () => `${formatInt(2800)} total Galaxies from all types`,
+      requirement: () => `${formatInt(Replicanti.galaxies.total + player.galaxies +
+        player.dilation.totalTachyonGalaxies)}/${formatInt(2800)} total Galaxies from all types`,
       checkRequirement: () =>
         Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies >= 2800,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -274,7 +280,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "Temporal Transcendence",
       id: 22,
       cost: 100000,
-      requirement: () => `${format("1e28000")} Time Shards`,
+      requirement: () => `${format(Currency.timeShards.value, 1)}/${format("1e28000")} Time Shards`,
       checkRequirement: () => Currency.timeShards.exponent >= 28000,
       checkEvent: GAME_EVENT.GAME_TICK_AFTER,
       description: "Time Dimension multiplier based on days spent in this Reality",
@@ -285,7 +291,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "Replicative Rapidity",
       id: 23,
       cost: 100000,
-      requirement: () => `Reality in under ${formatInt(15)} minutes`,
+      requirement: () => `Reality in under ${formatInt(15)} minutes (Best: ${Time.bestReality.toStringShort(false)})`,
       hasFailed: () => Time.thisReality.totalMinutes >= 15,
       checkRequirement: () => Time.thisReality.totalMinutes < 15,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
@@ -309,7 +315,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "Effortless Existence",
       id: 25,
       cost: 100000,
-      requirement: () => `Reach ${format("1e11111")} EP`,
+      requirement: () => `Reach ${format("1e11111")} EP (Best: ${format(player.records.bestReality.bestEP, 2)} EP)`,
       checkRequirement: () => Currency.eternityPoints.exponent >= 11111,
       checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
       description: "Unlock the Reality autobuyer and automator command"

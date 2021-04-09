@@ -53,6 +53,7 @@ Vue.component("new-inf-dimensions-tab", {
       this.enslavedCompleted = Enslaved.isCompleted;
     },
     maxAll() {
+      tryUnlockInfinityDimensions(false);
       buyMaxInfinityDimensions();
     },
     toggleAllAutobuyers() {

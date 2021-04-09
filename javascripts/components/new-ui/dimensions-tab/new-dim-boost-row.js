@@ -19,18 +19,25 @@ Vue.component("new-dim-boost-row", {
     },
     buttonText() {
       const boosts = this.purchasedBoosts;
+
       let newUnlock = "";
       if (boosts < DimBoost.maxDimensionsUnlockable - 4) newUnlock = `unlock the ${boosts + 5}th Dimension`;
-      if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
+      else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
         newUnlock = "unlock Sacrifice";
       }
-      let dimensionRange = "give a multiplier to the 1st Dimension";
-      if (boosts > 0) dimensionRange = `give a multiplier to Dimensions 1-${Math.min(boosts + 1, 8)}`;
-      if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `give a multiplier to all Dimensions`;
-      if (NormalChallenge(8).isRunning) dimensionRange = "";
-      if (newUnlock !== "" && dimensionRange !== "") dimensionRange = `, and ${dimensionRange}`;
+
+      const formattedMultText = `give a ${formatX(DimBoost.power, 2, 1)} multiplier `;
+      let dimensionRange = `to the 1st Dimension`;
+      if (boosts > 0) dimensionRange = `to Dimensions 1-${Math.min(boosts + 1, 8)}`;
+      if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `to all Dimensions`;
+
+      let boostEffects = "";
+      if (NormalChallenge(8).isRunning) boostEffects = newUnlock;
+      else if (newUnlock === "") boostEffects = `${formattedMultText} ${dimensionRange}`;
+      else boostEffects = `${newUnlock} and ${formattedMultText} ${dimensionRange}`;
+
       return this.lockText === null
-        ? `Reset your Dimensions to ${newUnlock}${dimensionRange}`
+        ? `Reset your Dimensions to ${boostEffects}`
         : this.lockText;
     },
     boostCountText() {

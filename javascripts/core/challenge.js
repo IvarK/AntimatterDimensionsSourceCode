@@ -39,13 +39,14 @@ function updateNormalAndInfinityChallenges(diff) {
   }
 
   if (InfinityChallenge(2).isRunning) {
-    if (player.ic2Count >= 8) {
+    if (player.ic2Count >= 400) {
       if (AntimatterDimension(8).amount.gt(0)) {
         sacrificeReset();
       }
-      player.ic2Count = 0;
+      player.ic2Count %= 400;
     } else {
-      player.ic2Count++;
+      // Do not change to diff, as this may lead to a sacrifice softlock with high gamespeed
+      player.ic2Count += Math.clamp(Date.now() - player.lastUpdate, 1, 21600000);
     }
   }
 }
@@ -207,6 +208,7 @@ class InfinityChallengeState extends GameMechanicState {
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = this.id;
 
+    bigCrunchReset();
     startChallenge();
     player.break = true;
 

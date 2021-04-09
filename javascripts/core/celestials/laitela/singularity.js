@@ -133,7 +133,7 @@ const SingularityMilestones = {
   get unseenMilestones() {
     const laitela = player.celestials.laitela;
     return SingularityMilestoneThresholds
-      .filter(s => s > laitela.lastCheckedMilestones && Currency.singularities.lte(s));
+      .filter(s => s > laitela.lastCheckedMilestones && Currency.singularities.gte(s));
   }
 };
 

@@ -318,7 +318,7 @@ const BlackHoles = {
   unlock() {
     if (!this.canBeUnlocked) return;
     player.blackHole[0].unlocked = true;
-    Currency.realityMachines.purcahse(100);
+    Currency.realityMachines.purchase(100);
     Achievement(144).unlock();
   },
 

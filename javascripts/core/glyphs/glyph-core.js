@@ -431,7 +431,7 @@ const Glyphs = {
       targetSlot,
       am: new Decimal(Currency.antimatter.value),
       ip: new Decimal(Currency.infinityPoints.value),
-      ep: new Decimal(Currency.eternityPoints),
+      ep: new Decimal(Currency.eternityPoints.value),
       tt: Currency.timeTheorems.max.minus(TimeTheorems.totalPurchased()),
       ecs: EternityChallenges.all.map(e => e.completions),
       thisRealityTime: player.records.thisReality.time,

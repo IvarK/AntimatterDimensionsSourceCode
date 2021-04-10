@@ -37,7 +37,8 @@ function bigCrunchReset() {
   const firstInfinity = !PlayerProgress.infinityUnlocked();
 
   bigCrunchUpdateStatistics();
-
+  
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
   const infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
@@ -85,7 +86,6 @@ function bigCrunchUpdateStatistics() {
 function bigCrunchTabChange(firstInfinity) {
   const earlyGame = player.records.bestInfinity.time > 60000 && !player.break;
   const inAntimatterChallenge = Player.isInAntimatterChallenge;
-  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
   handleChallengeCompletion();
 
   if (firstInfinity) {

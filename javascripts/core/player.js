@@ -81,7 +81,7 @@ let player = {
     galaxy: {
       cost: 1,
       interval: 20000,
-      limitGalaxies: true,
+      limitGalaxies: false,
       maxGalaxies: 1,
       buyMax: false,
       buyMaxInterval: 0,
@@ -91,7 +91,7 @@ let player = {
     dimBoost: {
       cost: 1,
       interval: 4000,
-      limitDimBoosts: true,
+      limitDimBoosts: false,
       maxDimBoosts: 1,
       galaxies: 10,
       bulk: 1,

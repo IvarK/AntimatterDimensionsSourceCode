@@ -21,7 +21,7 @@ Vue.component("game-header-big-crunch-button", {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     },
     amountStyle() {
-      if (this.headerTextColored || this.hover || this.currentIP.lt(1e50)) return {};
+      if (!this.headerTextColored || this.hover || this.currentIP.lt(1e50)) return {};
 
       const ratio = this.gainedIP.log10() / this.currentIP.log10();
       const rgb = [

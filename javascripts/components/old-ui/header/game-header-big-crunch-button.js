@@ -12,7 +12,7 @@ Vue.component("game-header-big-crunch-button", {
       tesseractCost: new Decimal(0),
       tesseractAffordable: false,
       hover: false,
-      headerTextNotColored: true,
+      headerTextColored: true,
     };
   },
   computed: {
@@ -21,7 +21,7 @@ Vue.component("game-header-big-crunch-button", {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     },
     amountStyle() {
-      if (this.headerTextNotColored || this.hover || this.currentIP.lt(1e50)) return {};
+      if (this.headerTextColored || this.hover || this.currentIP.lt(1e50)) return {};
 
       const ratio = this.gainedIP.log10() / this.currentIP.log10();
       const rgb = [
@@ -44,7 +44,7 @@ Vue.component("game-header-big-crunch-button", {
         }
       }
       if (!this.isVisible) return;
-      this.headerTextNotColored = player.options.headerTextNotColored;
+      this.headerTextColored = player.options.headerTextColored;
       const gainedIP = gainedInfinityPoints();
       this.currentIP.copyFrom(player.infinityPoints);
       this.gainedIP.copyFrom(gainedIP);

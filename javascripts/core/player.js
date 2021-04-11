@@ -578,7 +578,7 @@ let player = {
     exportedFileCount: 0,
     hideCompletedAchievementRows: false,
     glyphTextColors: true,
-    headerTextNotColored: false,
+    headerTextColored: false,
     ignoreGlyphLevel: true,
     ignoreGlyphRarity: true,
     showHintText: {

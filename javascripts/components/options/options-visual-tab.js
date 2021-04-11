@@ -37,7 +37,7 @@ Vue.component("options-visual-tab", {
       commas: false,
       updateRate: 0,
       autosaveInterval: 3000,
-      headerTextNotColored: true,
+      headerTextColored: true,
     };
   },
   watch: {
@@ -48,8 +48,8 @@ Vue.component("options-visual-tab", {
     updateRate(newValue) {
       player.options.updateRate = newValue;
     },
-    headerTextNotColored(newValue) {
-      player.options.headerTextNotColored = newValue;
+    headerTextColored(newValue) {
+      player.options.headerTextColored = newValue;
     },
   },
   computed: {
@@ -70,7 +70,7 @@ Vue.component("options-visual-tab", {
       this.notation = options.notation;
       this.commas = options.commas;
       this.updateRate = options.updateRate;
-      this.headerTextNotColored = options.headerTextNotColored;
+      this.headerTextColored = options.headerTextColored;
     },
   },
   template: `
@@ -126,7 +126,7 @@ Vue.component("options-visual-tab", {
       </div>
       <div class="l-options-grid__row">
         <primary-button-on-off
-          v-model="headerTextNotColored"
+          v-model="headerTextColored"
           class="o-primary-btn--option l-options-grid__button"
           text="Relative prestige gain text coloring:"
         />

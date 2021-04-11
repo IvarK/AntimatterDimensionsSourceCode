@@ -37,6 +37,7 @@ Vue.component("options-visual-tab", {
       commas: false,
       updateRate: 0,
       autosaveInterval: 3000,
+      headerTextNotColored: true,
     };
   },
   watch: {
@@ -46,7 +47,10 @@ Vue.component("options-visual-tab", {
     },
     updateRate(newValue) {
       player.options.updateRate = newValue;
-    }
+    },
+    headerTextNotColored(newValue) {
+      player.options.headerTextNotColored = newValue;
+    },
   },
   computed: {
     themeLabel() {
@@ -66,6 +70,7 @@ Vue.component("options-visual-tab", {
       this.notation = options.notation;
       this.commas = options.commas;
       this.updateRate = options.updateRate;
+      this.headerTextNotColored = options.headerTextNotColored;
     },
   },
   template: `
@@ -118,6 +123,13 @@ Vue.component("options-visual-tab", {
           class="o-primary-btn--option"
           onclick="Modal.awayProgressOptions.show()"
         >Open Away Progress Options</options-button>
+      </div>
+      <div class="l-options-grid__row">
+        <primary-button-on-off
+          v-model="headerTextNotColored"
+          class="o-primary-btn--option l-options-grid__button"
+          text="Relative prestige gain text coloring:"
+        />
       </div>
       <open-modal-shortcuts />
     </div>

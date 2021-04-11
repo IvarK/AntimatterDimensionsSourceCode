@@ -407,7 +407,7 @@ GameDatabase.achievements.normal = [
       return `All Antimatter Dimensions are stronger in the first ${formatInt(3)} minutes of Infinities,
       but only in Challenges.`;
     },
-    effect: () => Math.max(4 / (Time.thisInfinity.totalMinutes + 1), 1),
+    effect: () => (Player.isInAnyChallenge ? Math.max(4 / (Time.thisInfinity.totalMinutes + 1), 1) : 1),
     effectCondition: () => Player.isInAnyChallenge && Time.thisInfinity.totalMinutes < 3,
     formatEffect: value => `${formatX(value, 2, 2)}`
   },

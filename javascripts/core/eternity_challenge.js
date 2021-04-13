@@ -18,7 +18,7 @@ function startEternityChallenge() {
   player.records.thisInfinity.maxAM = new Decimal(0);
   player.records.thisEternity.maxAM = new Decimal(0);
   Currency.antimatter.reset();
-  playerInfinityUpgradesOnEternity();
+  playerInfinityUpgradesOnReset();
   AchievementTimers.marathon2.reset();
 }
 
@@ -207,9 +207,8 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   exit() {
-    const nestedChallenge = NormalChallenge.current || InfinityChallenge.current;
-    if (nestedChallenge !== undefined) {
-      nestedChallenge.exit();
+    if (Player.isInAntimatterChallenge) {
+      Player.antimatterChallenge.exit();
     }
     player.challenge.eternity.current = 0;
     eternity(true);

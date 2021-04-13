@@ -23,9 +23,8 @@ Vue.component("antimatter-dim-tab-progress-bar", {
         this.fill = Math.clampMax(current.pLog10() / Decimal.log10(goal), 1);
         this.tooltip = tooltip;
       };
-      const challenge = NormalChallenge.current || InfinityChallenge.current;
-      if (challenge) {
-        setProgress(Currency.antimatter.value, challenge.goal, "Percentage to challenge goal");
+      if (Player.isInAntimatterChallenge) {
+        setProgress(Currency.antimatter.value, Player.antimatterChallenge.goal, "Percentage to challenge goal");
       } else if (!player.break) {
         setProgress(Currency.antimatter.value, Decimal.NUMBER_MAX_VALUE, "Percentage to Infinity");
       } else if (Enslaved.isCompleted) {

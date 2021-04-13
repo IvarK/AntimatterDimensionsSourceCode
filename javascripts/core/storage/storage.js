@@ -8,7 +8,7 @@ const GameStorage = {
     2: undefined
   },
   saved: 0,
-  
+
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
   },
@@ -59,6 +59,7 @@ const GameStorage = {
       Modal.message.show("Could not load the save");
       return;
     }
+    Modal.hideAll();
     this.loadPlayerObject(player, overrideLastUpdate);
     this.save(true);
     GameUI.notify.info("Game imported");

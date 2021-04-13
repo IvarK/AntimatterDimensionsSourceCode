@@ -32,8 +32,7 @@ Vue.component("antimatter-dim-tab", {
           ${format(new Decimal(1).timesEffectOf(InfinityChallenge(8)).reciprocal(), 2, 2)}`);
         this.challengePower = powerArray.join(", ");
       }
-      const challenge = NormalChallenge.current || InfinityChallenge.current;
-      this.isQuickResetAvailable = challenge && challenge.isQuickResettable;
+      this.isQuickResetAvailable = Player.isInAntimatterChallenge && Player.antimatterChallenge.isQuickResettable;
       this.isSacrificeUnlocked = Sacrifice.isVisible;
       this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);

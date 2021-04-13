@@ -59,7 +59,7 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
 
   autoEternitiesAvailable(considerMilestoneReached) {
     return (considerMilestoneReached || EternityMilestone.autoEternities.isReached) &&
-      !EternityChallenge.isRunning &&
+      !Player.isInAnyChallenge && !player.dilation.active &&
       this.data.isActive &&
       this.amount.equals(0);
   }

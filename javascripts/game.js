@@ -5,13 +5,36 @@ if (GlobalErrorHandler.handled) {
 }
 GlobalErrorHandler.cleanStart = true;
 
-function playerInfinityUpgradesOnEternity() {
-  if (!EternityMilestone.keepInfinityUpgrades.isReached) player.infinityUpgrades.clear();
-  else if (!EternityMilestone.keepBreakUpgrades.isReached) {
-    player.infinityUpgrades = new Set(["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2",
-      "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "skipReset3", "passiveGen",
-      "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy", "ipOffline"]);
+function playerInfinityUpgradesOnReset() {
+  if (RealityUpgrade(10).isBought || EternityMilestone.keepBreakUpgrades.isReached) {
+    player.infinityUpgrades = new Set(
+      ["timeMult", "dimMult", "timeMult2",
+      "skipReset1", "skipReset2", "unspentBonus",
+      "27Mult", "18Mult", "36Mult", "resetMult",
+      "skipReset3", "passiveGen", "45Mult",
+      "resetBoost", "galaxyBoost", "skipResetGalaxy",
+      "totalMult", "currentMult", "postGalaxy",
+      "challengeMult", "achievementMult", "infinitiedMult",
+      "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost",
+      "ipOffline"]
+    );
+    player.infinityRebuyables = [8, 7, 10];
+  } else if (EternityMilestone.keepInfinityUpgrades.isReached) {
+    player.infinityUpgrades = new Set(
+      ["timeMult", "dimMult", "timeMult2",
+      "skipReset1", "skipReset2", "unspentBonus",
+      "27Mult", "18Mult", "36Mult", "resetMult",
+      "skipReset3", "passiveGen", "45Mult",
+      "resetBoost", "galaxyBoost", "skipResetGalaxy",
+      "ipOffline"]
+    );
+    player.infinityRebuyables = [0, 0, 0];
+  } else {
+    player.infinityUpgrades.clear();
+    player.infinityRebuyables = [0, 0, 0];
   }
+  GameCache.tickSpeedMultDecrease.invalidate();
+  GameCache.dimensionMultDecrease.invalidate();
 }
 
 function breakInfinity() {

@@ -292,7 +292,7 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   const cost = dimension.costUntil10;
   let bulkLeft = bulk;
   const goal = Player.infinityGoal;
-  if (dimension.cost.gt(goal) && (NormalChallenge.isRunning || InfinityChallenge.isRunning)) return;
+  if (dimension.cost.gt(goal) && Player.isInAntimatterChallenge) return;
 
   if (tier === 8 && Enslaved.isRunning) {
     buyOneDimension(8);
@@ -645,7 +645,7 @@ const AntimatterDimensions = {
   tick(diff) {
     // Stop producing antimatter at Big Crunch goal because all the game elements
     // are hidden when pre-break Big Crunch button is on screen.
-    const hasBigCrunchGoal = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
+    const hasBigCrunchGoal = !player.break || Player.isInAntimatterChallenge;
     if (hasBigCrunchGoal && Currency.antimatter.gte(Player.infinityGoal)) return;
 
     let maxTierProduced = EternityChallenge(3).isRunning ? 3 : 7;

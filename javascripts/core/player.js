@@ -81,7 +81,7 @@ let player = {
     galaxy: {
       cost: 1,
       interval: 20000,
-      limitGalaxies: true,
+      limitGalaxies: false,
       maxGalaxies: 1,
       buyMax: false,
       buyMaxInterval: 0,
@@ -91,7 +91,7 @@ let player = {
     dimBoost: {
       cost: 1,
       interval: 4000,
-      limitDimBoosts: true,
+      limitDimBoosts: false,
       maxDimBoosts: 1,
       galaxies: 10,
       bulk: 1,
@@ -579,6 +579,7 @@ let player = {
     exportedFileCount: 0,
     hideCompletedAchievementRows: false,
     glyphTextColors: true,
+    headerTextColored: false,
     ignoreGlyphLevel: true,
     ignoreGlyphRarity: true,
     showHintText: {
@@ -654,6 +655,22 @@ const Player = {
 
   get isInMatterChallenge() {
     return NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning;
+  },
+
+  get isInAntimatterChallenge() {
+    return NormalChallenge.isRunning || InfinityChallenge.isRunning;
+  },
+
+  get antimatterChallenge() {
+    return NormalChallenge.current || InfinityChallenge.current;
+  },
+
+  get isInAnyChallenge() {
+    return this.isInAntimatterChallenge || EternityChallenge.isRunning;
+  },
+
+  get anyChallenge() {
+    return this.antimatterChallenge || EternityChallenge.current
   },
 
   get effectiveMatterAmount() {

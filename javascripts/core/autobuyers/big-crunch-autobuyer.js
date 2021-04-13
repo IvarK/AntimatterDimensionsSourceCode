@@ -64,6 +64,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
   autoInfinitiesAvailable(considerMilestoneReached) {
     return (considerMilestoneReached || EternityMilestone.autoInfinities.isReached) &&
       !EternityChallenge(4).isRunning && !EternityChallenge(12).isRunning &&
+      !Player.isInAntimatterChallenge &&
       this.data.isActive &&
       this.mode === AUTO_CRUNCH_MODE.TIME &&
       this.time < 60 &&
@@ -84,7 +85,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
   tick() {
     if (Player.canCrunch) super.tick();
     if (Currency.antimatter.lt(Decimal.NUMBER_MAX_VALUE)) return;
-    let proc = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
+    let proc = !player.break || Player.isInAntimatterChallenge;
     if (!proc) {
       switch (this.mode) {
         case AUTO_CRUNCH_MODE.AMOUNT:

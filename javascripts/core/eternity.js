@@ -124,7 +124,7 @@ function eternity(force, auto, specialConditions = {}) {
   player.records.thisEternity.bestIPMsWithoutMaxAll = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
-  playerInfinityUpgradesOnEternity();
+  playerInfinityUpgradesOnReset();
   AchievementTimers.marathon2.reset();
   applyRealityUpgradesAfterEternity();
   player.records.thisInfinity.maxAM = new Decimal(0);
@@ -172,11 +172,6 @@ function initializeResourcesAfterEternity() {
   player.totalTickGained = 0;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  if (!EternityMilestone.keepBreakUpgrades.isReached) {
-    player.infinityRebuyables = [0, 0, 0];
-    GameCache.tickSpeedMultDecrease.invalidate();
-    GameCache.dimensionMultDecrease.invalidate();
-  }
   player.achievementChecks.noSacrifices = true;
   player.achievementChecks.onlyEighthDimensions = true;
   player.achievementChecks.onlyFirstDimensions = true;

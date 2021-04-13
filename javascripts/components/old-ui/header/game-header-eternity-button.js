@@ -21,6 +21,7 @@ Vue.component("game-header-eternity-button", {
       canEternity: false,
       eternityGoal: new Decimal(0),
       hover: false,
+      headerTextColored: true,
     };
   },
   computed: {
@@ -43,8 +44,7 @@ Vue.component("game-header-eternity-button", {
         this.type === EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT;
     },
     amountStyle() {
-      if (this.hover) return { color: "black" };
-      if (this.currentEP.lt(1e50)) return { color: "var(--color-eternity)" };
+      if (!this.headerTextColored || this.hover || this.currentEP.lt(1e50)) return {};
 
       const ratio = this.gainedEP.log10() / this.currentEP.log10();
       const rgb = [
@@ -80,6 +80,7 @@ Vue.component("game-header-eternity-button", {
     update() {
       this.isVisible = Currency.infinityPoints.gte(Player.eternityGoal) || EternityChallenge.isRunning;
       if (!this.isVisible) return;
+      this.headerTextColored = player.options.headerTextColored;
       if (!PlayerProgress.eternityUnlocked()) {
         this.type = EP_BUTTON_DISPLAY_TYPE.FIRST_TIME;
         return;

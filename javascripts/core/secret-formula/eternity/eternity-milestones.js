@@ -35,7 +35,7 @@ GameDatabase.eternity.milestones = {
   },
   keepBreakUpgrades: {
     eternities: 8,
-    reward: "You keep your Break Infinity Upgrades on Eternity"
+    reward: "You start Eternity with all Break Infinity Upgrades"
   },
   autobuyMaxGalaxies: {
     eternities: 9,

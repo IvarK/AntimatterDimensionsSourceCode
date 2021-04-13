@@ -36,12 +36,12 @@ Vue.component("eternity-milestones-tab", {
         />
       </div>
       <div>
-        Offline Eternities only generate outside of Eternity Challenges and when
-        your Eternity autobuyer is turned on and set to zero EP.
+        Offline Eternities only generate outside of all Challenges and Dilation,
+        and when your Eternity Autobuyer is turned on and set to zero EP.
       </div>
       <div>
-        Offline Infinities only generate outside of Eternity Challenges 4 and 12 and when
-        your infinity autobuyer is turned on and set to time mode with less than {{formatInt(60)}} seconds.
+        Offline Infinities only generate outside of Normal and Infinity Challenges and outside of EC4 and EC12,
+        and when your Infinity Autobuyer is turned on and set to time mode with less than {{formatInt(60)}} seconds.
       </div>
 
     </div>`

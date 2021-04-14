@@ -130,7 +130,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "The Boundless Flow",
       id: 11,
       cost: 50,
-      requirement: () => `${format(Currency.infinitiesBanked, 2)}/${format(1e12)} Banked Infinities`,
+      requirement: () => `${format(Currency.infinitiesBanked.value, 2)}/${format(1e12)} Banked Infinities`,
       checkRequirement: () => Currency.infinitiesBanked.exponent >= 12,
       checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
       description: "Every second, gain 10% of the Infinities you would normally gain by Infinitying",

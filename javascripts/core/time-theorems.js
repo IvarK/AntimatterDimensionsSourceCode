@@ -35,9 +35,9 @@ class TimeTheoremPurchaseType {
 
   get bulkPossible() {
     return Math.floor(
-      this.currency.value.times(this.costIncrement.sub(1)).div(this.costBase).plus(1).log10() /
+      this.currency.value.times(this.costIncrement.sub(1)).div(this.cost).plus(1).log10() /
       this.costIncrement.log10()
-    ) - this.amount;
+    );
   }
 
   bulkCost(amount) {

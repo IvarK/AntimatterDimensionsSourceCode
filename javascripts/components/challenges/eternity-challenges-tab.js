@@ -79,7 +79,7 @@ Vue.component("eternity-challenges-tab", {
           this.isRunning = challenge.isRunning;
           this.isCompleted = challenge.isFullyCompleted;
           this.completions = challenge.completions;
-          this.showGoalSpan = player.realities > 0;
+          this.showGoalSpan = PlayerProgress.realityUnlocked();
           this.enslavedSpanOverride = Enslaved.isRunning && this.challenge.id === 1;
         },
         start() {

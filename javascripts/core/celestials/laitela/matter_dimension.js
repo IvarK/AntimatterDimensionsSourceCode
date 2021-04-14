@@ -146,15 +146,15 @@ class MatterDimensionState {
   }
 
   get canBuyInterval() {
-    return this.intervalCost.lte(player.celestials.laitela.darkMatter) && this.interval > this.intervalPurchaseCap;
+    return Currency.darkMatter.gte(this.intervalCost) && this.interval > this.intervalPurchaseCap;
   }
 
   get canBuyPowerDM() {
-    return this.powerDMCost.lte(player.celestials.laitela.darkMatter);
+    return Currency.darkMatter.gte(this.powerDMCost);
   }
 
   get canBuyPowerDE() {
-    return this.powerDECost.lte(player.celestials.laitela.darkMatter);
+    return Currency.darkMatter.gte(this.powerDECost);
   }
 
   get maxIntervalPurchases() {
@@ -165,8 +165,7 @@ class MatterDimensionState {
     if (x > this.maxIntervalPurchases) return false;
     const cost = this.rawIntervalCost.times(
       Decimal.pow(this.intervalCostIncrease, x).minus(1)).div(this.intervalCostIncrease - 1).floor();
-    if (cost.gt(player.celestials.laitela.darkMatter)) return false;
-    player.celestials.laitela.darkMatter = player.celestials.laitela.darkMatter.minus(cost);
+    if (!Currency.darkMatter.purchase(cost)) return false;
     this.dimension.intervalUpgrades += x;
     return true;
   }
@@ -174,8 +173,7 @@ class MatterDimensionState {
   buyManyPowerDM(x) {
     const cost = this.rawPowerDMCost.times(
       Decimal.pow(this.powerDMCostIncrease, x).minus(1)).div(this.powerDMCostIncrease - 1).floor();
-    if (cost.gt(player.celestials.laitela.darkMatter)) return false;
-    player.celestials.laitela.darkMatter = player.celestials.laitela.darkMatter.minus(cost);
+    if (!Currency.darkMatter.purchase(cost)) return false;
     this.dimension.powerDMUpgrades += x;
     return true;
   }
@@ -183,8 +181,7 @@ class MatterDimensionState {
   buyManyPowerDE(x) {
     const cost = this.rawPowerDECost.times(
       Decimal.pow(this.powerDECostIncrease, x).minus(1)).div(this.powerDECostIncrease - 1).floor();
-    if (cost.gt(player.celestials.laitela.darkMatter)) return false;
-    player.celestials.laitela.darkMatter = player.celestials.laitela.darkMatter.minus(cost);
+    if (!Currency.darkMatter.purchase(cost)) return false;
     this.dimension.powerDEUpgrades += x;
     return true;
   }

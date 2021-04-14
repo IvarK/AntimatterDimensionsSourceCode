@@ -9,7 +9,7 @@ function startEternityChallenge() {
   resetChallengeStuff();
   AntimatterDimensions.reset();
   player.replicanti.galaxies = 0;
-  player.infinityPoints = Player.startingIP;
+  Currency.infinityPoints.reset();
   InfinityDimensions.resetAmount();
   player.records.bestInfinity.bestIPminEternity = new Decimal(0);
   player.records.thisEternity.bestEPmin = new Decimal(0);
@@ -103,7 +103,7 @@ class EternityChallengeState extends GameMechanicState {
       return status;
     }
 
-    let totalCompletions = this.completionsAtIP(player.infinityPoints);
+    let totalCompletions = this.completionsAtIP(Currency.infinityPoints.value);
     const maxValidCompletions = this.maxValidCompletions;
     if (totalCompletions > maxValidCompletions) {
       totalCompletions = maxValidCompletions;
@@ -129,7 +129,7 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   get isGoalReached() {
-    return player.infinityPoints.gte(this.currentGoal);
+    return Currency.infinityPoints.gte(this.currentGoal);
   }
 
   get canBeCompleted() {

@@ -110,6 +110,7 @@ GameStorage.migrations = {
       GameStorage.migrations.moveSavedStudyTrees(player);
       GameStorage.migrations.convertEPMult(player);
       GameStorage.migrations.moveChallengeInfo(player);
+      GameStorage.migrations.infinitiedConversion(player);
       GameStorage.migrations.adjustWhy(player);
       GameStorage.migrations.adjustThemes(player);
       GameStorage.migrations.removeAchPow(player);
@@ -145,6 +146,7 @@ GameStorage.migrations = {
       GameStorage.migrations.migrateAutobuyers(player);
       GameStorage.migrations.migratePlayerVars(player);
       GameStorage.migrations.consolidateAuto(player);
+      GameStorage.migrations.convertTimeTheoremPurchases(player);
 
       kong.migratePurchases();
       if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
@@ -697,12 +699,12 @@ GameStorage.migrations = {
   },
 
   setNoInfinitiesOrEternitiesThisReality(player) {
-    player.achievementChecks.noInfinitiesThisReality = player.infinitied.eq(0) && player.eternities.eq(0);
+    player.achievementChecks.noInfinitiesThisReality = player.infinities.eq(0) && player.eternities.eq(0);
     player.achievementChecks.noEternitiesThisReality = player.eternities.eq(0);
   },
 
   setTutorialState(player) {
-    if (player.infinitied.gt(0) || player.eternities.gt(0) || player.realities > 0 || player.galaxies > 0) {
+    if (player.infinities.gt(0) || player.eternities.gt(0) || player.realities > 0 || player.galaxies > 0) {
       player.tutorialState = 4;
     } else if (player.dimensionBoosts > 0) player.tutorialState = TUTORIAL_STATE.GALAXY;
   },
@@ -813,6 +815,24 @@ GameStorage.migrations = {
     delete player.replicanti.auto;
     delete player.auto.repUpgradeTimer;
     delete player.infMultBuyer;
+  },
+
+  convertTimeTheoremPurchases(player) {
+    player.timestudy.amBought = new Decimal(player.timestudy.amcost).exponent / 20000 - 1;
+    player.timestudy.ipBought = new Decimal(player.timestudy.ipcost).exponent / 100;
+    player.timestudy.epBought = Math.round(new Decimal(player.timestudy.epcost).log2());
+
+    delete player.timestudy.amcost;
+    delete player.timestudy.ipcost;
+    delete player.timestudy.epcost;
+  },
+
+  infinitiedConversion(player) {
+    player.infinities = new Decimal(player.infinitied);
+    player.infinitiesBanked = new Decimal(player.infinitiedBank);
+
+    delete player.infinitied;
+    delete player.infinitiedBank;
   },
 
   prePatch(saveData) {

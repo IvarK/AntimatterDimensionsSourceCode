@@ -40,8 +40,8 @@ Vue.component("time-dilation-tab", {
   },
   methods: {
     update() {
-      this.tachyons.copyFrom(player.dilation.tachyonParticles);
-      this.dilatedTime.copyFrom(player.dilation.dilatedTime);
+      this.tachyons.copyFrom(Currency.tachyonParticles);
+      this.dilatedTime.copyFrom(Currency.dilatedTime);
       this.dilatedTimeIncome.copyFrom(getDilationGainPerSecond().times(getGameSpeedupForDisplay()));
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
       this.galaxies = player.dilation.totalTachyonGalaxies;

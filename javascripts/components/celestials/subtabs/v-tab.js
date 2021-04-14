@@ -25,13 +25,13 @@ Vue.component("v-tab", {
     update() {
       this.mainUnlock = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
       this.totalUnlocks = V.spaceTheorems;
-      this.realities = player.realities;
-      this.infinities.copyFrom(player.infinitied);
-      this.eternities.copyFrom(player.eternities);
-      this.dilatedTime.copyFrom(player.dilation.dilatedTime);
+      this.realities = Currency.realities.value;
+      this.infinities.copyFrom(Currency.infinities);
+      this.eternities.copyFrom(Currency.eternities);
+      this.dilatedTime.copyFrom(Currency.dilatedTime);
       this.replicanti.copyFrom(player.replicanti.amount);
-      this.rm.copyFrom(player.reality.realityMachines);
-      this.pp = player.reality.perkPoints;
+      this.rm.copyFrom(Currency.realityMachines);
+      this.pp = Currency.perkPoints.value;
       this.showReduction = V.has(V_UNLOCKS.SHARD_REDUCTION);
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
@@ -64,8 +64,7 @@ Vue.component("v-tab", {
         : milestone.reward;
     },
     reduceGoals(hex) {
-      if (player.reality.perkPoints < hex.reductionCost) return;
-      player.reality.perkPoints -= hex.reductionCost;
+      if (!Currency.perkPoints.purchase(hex.reductionCost)) return;
       const steps = hex.config.reductionStepSize ? hex.config.reductionStepSize : 1;
       player.celestials.v.goalReductionSteps[hex.id] += steps;
       for (const unlock of VRunUnlocks.all) {

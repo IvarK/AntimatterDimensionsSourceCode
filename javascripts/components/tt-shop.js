@@ -74,39 +74,39 @@ Vue.component("tt-shop", {
       return `${format(am)} AM`;
     },
     buyWithAM() {
-      TimeTheorems.buyWithAntimatter();
+      TimeTheorems.buyOne(false, "am");
     },
     formatIP(ip) {
       return `${format(ip)} IP`;
     },
     buyWithIP() {
-      TimeTheorems.buyWithIP();
+      TimeTheorems.buyOne(false, "ip");
     },
     formatEP(ep) {
       return `${format(ep, 2, 0)} EP`;
     },
     buyWithEP() {
-      TimeTheorems.buyWithEP();
+      TimeTheorems.buyOne(false, "ep");
     },
     buyMaxTheorems() {
       TimeTheorems.buyMax();
     },
     update() {
-      this.theoremAmount.copyFrom(player.timestudy.theorem);
+      this.theoremAmount.copyFrom(Currency.timeTheorems);
       this.theoremGeneration.copyFrom(getTTPerSecond().times(getGameSpeedupFactor()));
-      this.totalTimeTheorems.copyFrom(player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()));
+      this.totalTimeTheorems.copyFrom(Currency.timeTheorems.max);
       this.shopMinimized = player.timestudy.shopMinimized;
-      this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought || Perk.autobuyerTT1.isBought;
-      this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
+      this.hasTTAutobuyer = Autobuyer.timeTheorem.isUnlocked;
       this.isAutobuyerOn = Autobuyer.timeTheorem.isActive;
+      this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought || this.hasTTAutobuyer;
       const budget = this.budget;
-      budget.am.copyFrom(Currency.antimatter);
-      budget.ip.copyFrom(player.infinityPoints);
-      budget.ep.copyFrom(player.eternityPoints);
+      budget.am.copyFrom(TimeTheoremPurchaseType.am.currency);
+      budget.ip.copyFrom(TimeTheoremPurchaseType.ip.currency);
+      budget.ep.copyFrom(TimeTheoremPurchaseType.ep.currency);
       const costs = this.costs;
-      costs.am.copyFrom(player.timestudy.amcost);
-      costs.ip.copyFrom(player.timestudy.ipcost);
-      costs.ep.copyFrom(player.timestudy.epcost);
+      costs.am.copyFrom(TimeTheoremPurchaseType.am.cost);
+      costs.ip.copyFrom(TimeTheoremPurchaseType.ip.cost);
+      costs.ep.copyFrom(TimeTheoremPurchaseType.ep.cost);
       this.showST = V.spaceTheorems > 0;
       this.STamount = V.availableST;
       this.showTTGen = this.theoremGeneration.gt(0) && !ui.view.shiftDown;

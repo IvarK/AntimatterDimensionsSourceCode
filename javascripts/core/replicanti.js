@@ -115,8 +115,7 @@ function getReplicantiInterval(overCapOverride, intervalIn) {
 
 function replicantiCap() {
   return EffarigUnlock.infinity.isUnlocked
-    ? player.infinitied
-      .plus(player.infinitiedBank)
+    ? Currency.infinities.value
       .pow(TimeStudy(31).isBought ? 120 : 30)
       .clampMin(1)
       .times(Decimal.NUMBER_MAX_VALUE)
@@ -212,12 +211,12 @@ class ReplicantiUpgradeState {
   get autobuyerMilestone() { throw new NotImplementedError(); }
 
   get canBeBought() {
-    return !this.isCapped && player.infinityPoints.gte(this.cost) && player.eterc8repl !== 0;
+    return !this.isCapped && Currency.infinityPoints.gte(this.cost) && player.eterc8repl !== 0;
   }
 
   purchase() {
     if (!this.canBeBought) return;
-    player.infinityPoints = player.infinityPoints.minus(this.cost);
+    Currency.infinityPoints.subtract(this.cost);
     this.baseCost = Decimal.times(this.baseCost, this.costIncrease);
     this.value = this.nextValue;
     if (EternityChallenge(8).isRunning) player.eterc8repl--;
@@ -266,11 +265,12 @@ const ReplicantiUpgrade = {
       // Fixed price increase of 1e15; so total cost for N upgrades is:
       // cost + cost * 1e15 + cost * 1e30 + ... + cost * 1e15^(N-1) == cost * (1e15^N - 1) / (1e15 - 1)
       // N = log(IP * (1e15 - 1) / cost + 1) / log(1e15)
-      let N = player.infinityPoints.times(this.costIncrease - 1).dividedBy(this.cost).plus(1).log(this.costIncrease);
+      let N = Currency.infinityPoints.value.times(this.costIncrease - 1)
+              .dividedBy(this.cost).plus(1).log(this.costIncrease);
       N = Math.round((Math.min(this.value + 0.01 * Math.floor(N), this.cap) - this.value) * 100);
       if (N <= 0) return;
       const totalCost = this.cost.times(Decimal.pow(this.costIncrease, N).minus(1).dividedBy(this.costIncrease - 1));
-      player.infinityPoints = player.infinityPoints.minus(totalCost);
+      Currency.infinityPoints.subtract(totalCost);
       this.baseCost = this.baseCost.times(Decimal.pow(this.costIncrease, N));
       this.value = this.nearestPercent(this.value + 0.01 * N);
     }
@@ -360,7 +360,7 @@ const ReplicantiUpgrade = {
 
     autobuyerTick() {
       // This isn't a hot enough autobuyer to worry about doing an actual inverse.
-      const bulk = bulkBuyBinarySearch(player.infinityPoints, {
+      const bulk = bulkBuyBinarySearch(Currency.infinityPoints.value, {
         costFunction: x => this.baseCostAfterCount(x).dividedByEffectOf(TimeStudy(233)),
         firstCost: this.cost,
         comulative: true,
@@ -414,8 +414,8 @@ const Replicanti = {
   },
   unlock(freeUnlock = false) {
     if (player.replicanti.unl) return;
-    if (freeUnlock || player.infinityPoints.gte(1e140)) {
-      if (!freeUnlock) player.infinityPoints = player.infinityPoints.minus(1e140);
+    if (freeUnlock || Currency.infinityPoints.exponent >= 1e140) {
+      if (!freeUnlock) Currency.infinityPoints.subtract(1e140);
       player.replicanti.unl = true;
       player.replicanti.timer = 0;
       player.replicanti.amount = new Decimal(1);

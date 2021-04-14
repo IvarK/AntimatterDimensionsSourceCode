@@ -96,14 +96,14 @@ GameDatabase.eternity.dilation = (function() {
       id: 6,
       cost: 5e7,
       description: "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation.",
-      effect: () => player.dilation.dilatedTime.pow(308).clampMin(1),
+      effect: () => Currency.dilatedTime.value.pow(308).clampMin(1),
       formatEffect: value => formatX(value, 2, 1)
     },
     ipMultDT: {
       id: 7,
       cost: 2e12,
       description: "Gain a multiplier to Infinity Points based on Dilated Time.",
-      effect: () => player.dilation.dilatedTime.pow(1000).clampMin(1),
+      effect: () => Currency.dilatedTime.value.pow(1000).clampMin(1),
       formatEffect: value => formatX(value, 2, 1),
       cap: () => Effarig.eternityCap
     },
@@ -122,7 +122,7 @@ GameDatabase.eternity.dilation = (function() {
       id: 10,
       cost: 1e15,
       description: "Generate Time Theorems based on Tachyon Particles.",
-      effect: () => player.dilation.tachyonParticles.div(20000),
+      effect: () => Currency.tachyonParticles.value.div(20000),
       formatEffect: value => `${format(value, 2, 1)}/sec`
     }
   };

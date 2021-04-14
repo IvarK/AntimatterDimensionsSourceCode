@@ -9,7 +9,7 @@ Vue.component("infinity-points-header", {
   },
   methods: {
     update() {
-      this.infinityPoints.copyFrom(player.infinityPoints);
+      this.infinityPoints.copyFrom(Currency.infinityPoints);
       this.isVisible = PlayerProgress.infinityUnlocked();
     }
   },

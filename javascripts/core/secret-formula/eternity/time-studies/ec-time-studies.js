@@ -6,7 +6,7 @@ GameDatabase.eternity.timeStudies.ec = [
     cost: 30,
     requirement: {
       resource: "Eternities",
-      current: () => player.eternities,
+      current: () => Currency.eternities.value,
       required: completions => new Decimal(20000 + completions * 20000),
       formatValue: formatInt
     }
@@ -36,7 +36,7 @@ GameDatabase.eternity.timeStudies.ec = [
     cost: 70,
     requirement: {
       resource: "Infinities",
-      current: () => Player.totalInfinitied,
+      current: () => Currency.infinities.value,
       required: completions => new Decimal(1e8 + completions * 5e7),
       formatValue: value => formatInt(Math.floor(value.toNumber()))
     }
@@ -76,7 +76,7 @@ GameDatabase.eternity.timeStudies.ec = [
     cost: 115,
     requirement: {
       resource: "Infinity Points",
-      current: () => player.infinityPoints,
+      current: () => Currency.infinityPoints.value,
       required: completions => new Decimal("1e1000").pow(completions).times("1e4000"),
       formatValue: value => format(value, 0, 0)
     }
@@ -86,7 +86,7 @@ GameDatabase.eternity.timeStudies.ec = [
     cost: 415,
     requirement: {
       resource: "Infinity Power",
-      current: () => player.infinityPower,
+      current: () => Currency.infinityPower.value,
       required: completions => new Decimal("1e2000").pow(completions).times("1e17500"),
       formatValue: value => format(value, 0, 0)
     }
@@ -96,7 +96,7 @@ GameDatabase.eternity.timeStudies.ec = [
     cost: 550,
     requirement: {
       resource: "Eternity Points",
-      current: () => player.eternityPoints,
+      current: () => Currency.eternityPoints.value,
       required: completions => new Decimal("1e20").pow(completions).times("1e100"),
       formatValue: value => format(value, 0, 0)
     }

@@ -157,8 +157,8 @@ let player = {
     epMultBuyer: { isActive: false, },
   },
   infinityPoints: new Decimal(0),
-  infinitied: new Decimal(0),
-  infinitiedBank: new Decimal(0),
+  infinities: new Decimal(0),
+  infinitiesBanked: new Decimal(0),
   dimensionBoosts: 0,
   galaxies: 0,
   news: new Set(),
@@ -285,9 +285,10 @@ let player = {
   },
   timestudy: {
     theorem: new Decimal(0),
-    amcost: new Decimal("1e20000"),
-    ipcost: new Decimal(1),
-    epcost: new Decimal(1),
+    maxTheorem: new Decimal(0),
+    amBought: 0,
+    ipBought: 0,
+    epBought: 0,
     studies: [],
     shopMinimized: false,
     presets: new Array(6).fill({
@@ -652,14 +653,6 @@ let player = {
 const Player = {
   defaultStart: deepmerge.all([{}, player]),
 
-  get totalInfinitied() {
-    return player.infinitied.plus(player.infinitiedBank).clampMin(0);
-  },
-
-  get gainedEternities() {
-    return RealityUpgrade(10).isBought ? player.eternities.sub(100) : player.eternities;
-  },
-
   get isInMatterChallenge() {
     return NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning;
   },
@@ -698,7 +691,7 @@ const Player = {
   },
 
   get canEternity() {
-    return player.infinityPoints.gte(Player.eternityGoal);
+    return Currency.infinityPoints.gte(Player.eternityGoal);
   },
 
   get bestRunIPPM() {
@@ -733,23 +726,9 @@ const Player = {
       : Decimal.NUMBER_MAX_VALUE;
   },
 
-  get startingIP() {
-    return Effects.max(
-      0,
-      Perk.startIP1,
-      Perk.startIP2,
-      Achievement(104)
-    ).toDecimal();
-  },
-
-  get startingEP() {
-    return Effects.max(
-      0,
-      Perk.startEP1,
-      Perk.startEP2,
-      Perk.startEP3
-    ).toDecimal();
-  },
+  get automatorUnlocked() {
+    return Currency.realities.gte(5);
+  }
 };
 
 function guardFromNaNValues(obj) {

@@ -27,7 +27,7 @@ Vue.component("glyphs-tab", {
   },
   methods: {
     update() {
-      this.resetRealityDisplayed = player.realities > 0;
+      this.resetRealityDisplayed = PlayerProgress.realityUnlocked();
       this.showInstability = player.records.bestReality.glyphLevel > 800;
       this.instabilityThreshold = Glyphs.instabilityThreshold;
       this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;

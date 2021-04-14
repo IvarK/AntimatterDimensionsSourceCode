@@ -6,9 +6,9 @@ class PlayerProgress {
   }
 
   get isInfinityUnlocked() {
-    // We add conversion to Decimal here since, when importing an old save, this._player.infinitied is a number,
-    // and when displaying progress of an imported save, this._player.infinitied is a string (I believe).
-    return new Decimal(this._player.infinitied).gt(0) || this.isEternityUnlocked;
+    // We add conversion to Decimal here since, when importing an old save, this._player.infinities is a number,
+    // and when displaying progress of an imported save, this._player.infinities is a string (I believe).
+    return new Decimal(this._player.infinities).gt(0) || this.isEternityUnlocked;
   }
 
   get isEternityUnlocked() {
@@ -56,4 +56,3 @@ class PlayerProgress {
     return InfinityChallenges.all.some(c => c.isCompleted);
   }
 }
-

@@ -26,7 +26,7 @@ Vue.component("failable-ec-text", {
         Math.round(Math.min(c * (1 - ratio), 1) * 255 * (darkTheme ? 1 : 0.7)),
         0
       ];
-      
+
       return { color: `rgb(${rgb.join(",")})` };
     },
     text() {
@@ -43,7 +43,7 @@ Vue.component("failable-ec-text", {
       if (EternityChallenge.current && [4, 12].includes(EternityChallenge.current.id)) {
         this.currentEternityChallengeId = EternityChallenge.current.id;
         if (this.currentEternityChallengeId === 4) {
-          this.currentResource.copyFrom(player.infinitied);
+          this.currentResource.copyFrom(Currency.infinities);
         } else {
           this.currentResource = new Decimal(Time.thisEternity.totalSeconds);
         }

@@ -95,7 +95,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
           proc = Time.thisInfinityRealTime.totalSeconds > this.time;
           break;
         case AUTO_CRUNCH_MODE.X_CURRENT:
-          proc = gainedInfinityPoints().gte(player.infinityPoints.times(this.xCurrent));
+          proc = gainedInfinityPoints().gte(Currency.infinityPoints.value.times(this.xCurrent));
           break;
       }
     }

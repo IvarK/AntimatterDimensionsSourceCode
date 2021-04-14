@@ -8,7 +8,7 @@ Vue.component("reality-machines-header", {
   },
   methods: {
     update() {
-      this.realityMachines.copyFrom(player.reality.realityMachines);
+      this.realityMachines.copyFrom(Currency.realityMachines);
     }
   },
   template: `

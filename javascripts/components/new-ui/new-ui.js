@@ -39,7 +39,7 @@ Vue.component("new-ui", {
       this.antimatter.copyFrom(Currency.antimatter);
       this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
       this.breakInfinity = player.break;
-      this.realities = player.realities;
+      this.realities = Currency.realities.value;
 
       this.isInAnyChallenge = this.challengeDisplay.length !== 0;
       this.currentEternityChallenge = EternityChallenge.current;
@@ -67,8 +67,8 @@ Vue.component("new-ui", {
       }
       this.isInEffarig = Effarig.isRunning;
       if (this.isInEffarig) {
-        this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(player.infinityPower), 0, 5)}`;
-        this.effarigTickNerfText = `${formatPow(0.7 + 0.1 * Effarig.nerfFactor(player.timeShards), 0, 5)}`;
+        this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(Currency.infinityPower.value), 0, 5)}`;
+        this.effarigTickNerfText = `${formatPow(0.7 + 0.1 * Effarig.nerfFactor(Currency.timeShards.value), 0, 5)}`;
       }
       this.isInLaitela = Laitela.isRunning;
       if (this.isInLaitela) {

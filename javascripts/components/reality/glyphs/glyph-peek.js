@@ -30,8 +30,8 @@ Vue.component("glyph-peek", {
       this.canSacrifice = GlyphSacrificeHandler.canSacrifice;
       // Hide this before first reality since then it'll confuse the player,
       // and due to pre-selected first glyph might well be incorrect anyway.
-      this.isVisible = player.realities > 0 && TimeStudy.reality.isBought;
-      this.canPeek = player.realities > 0;
+      this.isVisible = PlayerProgress.realityUnlocked() && TimeStudy.reality.isBought;
+      this.canPeek = PlayerProgress.realityUnlocked();
       if (this.canRefresh && gainedGlyphLevel().actualLevel !== this.level) {
         this.refreshGlyphs();
       }

@@ -146,7 +146,7 @@ const GameStorage = {
       guardFromNaNValues(player);
     }
 
-    if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
+    if (Currency.infinities.gt(0) && !NormalChallenge(1).isCompleted) {
       NormalChallenge(1).complete();
     }
 

@@ -20,7 +20,7 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e175"),
     reward: {
       description: "1st Infinity Dimension multiplier based on Infinity Power",
-      effect: completions => player.infinityPower.pow(1.5 / (700 - completions * 100)).clampMin(1),
+      effect: completions => Currency.infinityPower.value.pow(1.5 / (700 - completions * 100)).clampMin(1),
       cap: new Decimal("1e100"),
       formatEffect: value => formatX(value, 2, 1)
     }
@@ -42,12 +42,12 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e2750"),
     goalIncrease: new Decimal("1e550"),
     restriction: completions => Math.max(16 - 4 * completions, 0),
-    checkRestriction: restriction => player.infinitied.lte(restriction),
+    checkRestriction: restriction => Currency.infinities.rawValue.lte(restriction),
     formatRestriction: restriction => `in ${formatInt(restriction)} Infinities or less`,
     failedRestriction: "(Too many Infinities for more)",
     reward: {
       description: "Infinity Dimension multiplier based on unspent Infinity Points",
-      effect: completions => player.infinityPoints.pow(0.003 + completions * 0.002),
+      effect: completions => Currency.infinityPoints.value.pow(0.003 + completions * 0.002),
       cap: new Decimal("1e200"),
       formatEffect: value => formatX(value, 2, 1)
     }
@@ -111,7 +111,7 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Infinity Power strengthens Replicanti Galaxies",
       effect: completions => {
-        const infinityPower = Math.log10(player.infinityPower.pLog10() + 1);
+        const infinityPower = Math.log10(Currency.infinityPower.value.pLog10() + 1);
         return Math.max(0, Math.pow(infinityPower, 0.03 * completions) - 1);
       },
       formatEffect: value => formatPercents(value, 2)
@@ -126,7 +126,7 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e250"),
     reward: {
       description: "Infinity Dimension multiplier based on Time Shards",
-      effect: completions => player.timeShards.pow(completions * 0.1).clampMin(1),
+      effect: completions => Currency.timeShards.value.pow(completions * 0.1).clampMin(1),
       cap: new Decimal("1e400"),
       formatEffect: value => formatX(value, 2, 1)
     }
@@ -141,11 +141,11 @@ GameDatabase.challenges.eternity = [
     },
     goal: new Decimal("1e3000"),
     goalIncrease: new Decimal("1e300"),
-    effect: () => Decimal.pow(Player.totalInfinitied, 950).clampMin(1).pow(TimeStudy(31).effectOrDefault(1)),
+    effect: () => Decimal.pow(Currency.infinities.value, 950).clampMin(1).pow(TimeStudy(31).effectOrDefault(1)),
     reward: {
       description: "Time Dimension multiplier based on Infinitied stat",
       effect: completions => {
-        const mult = Player.totalInfinitied.times(2.783e-6).pow(0.4 + 0.1 * completions).clampMin(1);
+        const mult = Currency.infinities.value.times(2.783e-6).pow(0.4 + 0.1 * completions).clampMin(1);
         return mult.powEffectOf(TimeStudy(31));
       },
       formatEffect: value => formatX(value, 2, 1)
@@ -170,7 +170,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 12,
-    description: () => (player.realities > 0
+    description: () => (PlayerProgress.realityUnlocked()
       ? `The game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled.`
       : `The game runs ×${formatInt(1000)} slower.`),
     goal: new Decimal("1e110000"),

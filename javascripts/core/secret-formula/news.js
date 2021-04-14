@@ -2123,7 +2123,7 @@ GameDatabase.news = [
   {
     id: "l2",
     text: "Nerf the galaxies please.",
-    get unlocked() { return player.galaxies === 2 || player.infinitied.gt(0); }
+    get unlocked() { return player.galaxies === 2 || Currency.infinities.gt(0); }
   },
   {
     id: "l3",
@@ -2133,7 +2133,7 @@ GameDatabase.news = [
   {
     id: "l4",
     text: "How much is Infinity? -literally everyone at least once",
-    get unlocked() { return AntimatterDimension(8).amount.eq(190) || player.infinitied.gt(0); }
+    get unlocked() { return AntimatterDimension(8).amount.eq(190) || Currency.infinities.gt(0); }
   },
   {
     id: "l5",
@@ -2145,7 +2145,7 @@ GameDatabase.news = [
     text:
       `Antimatter people seem to be even more afraid of 13 then we are. They destroyed
       entire galaxies just to remove 13 from their percents.`,
-    get unlocked() { return player.galaxies > 0 || player.infinitied.gt(0); }
+    get unlocked() { return player.galaxies > 0 || Currency.infinities.gt(0); }
   },
   {
     id: "l7",
@@ -2167,7 +2167,7 @@ GameDatabase.news = [
     text:
       `The Heavenly Pelle has generated too much antimatter and needed to create another galaxy.
       This one can be seen in the southwestern sky.`,
-    get unlocked() { return player.galaxies > 0 || player.infinitied.gt(0); }
+    get unlocked() { return player.galaxies > 0 || Currency.infinities.gt(0); }
   },
   {
     id: "l11",
@@ -2266,7 +2266,7 @@ GameDatabase.news = [
   {
     id: "l21",
     text: "I've got 1.79e308 problems, but none of them antimatter.",
-    get unlocked() { return player.infinitied.gt(0) && !player.break; }
+    get unlocked() { return Currency.infinities.gt(0) && !player.break; }
   },
   {
     id: "l22",
@@ -2406,7 +2406,7 @@ GameDatabase.news = [
   {
     id: "l47",
     text: "The achievement is for two million, not two billion...",
-    get unlocked() { return player.infinitied.gt(2e9); }
+    get unlocked() { return Currency.infinities.gt(2e9); }
   },
   {
     id: "l48",
@@ -2416,12 +2416,12 @@ GameDatabase.news = [
   {
     id: "l49",
     text: "One day you will stop your incessant grind.",
-    get unlocked() { return player.eternities.gt(50000); }
+    get unlocked() { return Currency.eternities.gt(50000); }
   },
   {
     id: "l50",
     text: "You can probably stop farming for eternities now...",
-    get unlocked() { return player.eternities.gt(2000000); }
+    get unlocked() { return Currency.eternities.gt(2000000); }
   },
   {
     id: "l51",
@@ -2436,7 +2436,7 @@ GameDatabase.news = [
   {
     id: "l53",
     text: "If you want to farm infinitied, why don't you just get the time study?",
-    get unlocked() { return !TimeStudy(32).isBought && player.infinitied.gt(72000 * 168); }
+    get unlocked() { return !TimeStudy(32).isBought && Currency.infinities.gt(72000 * 168); }
   },
   {
     id: "l54",
@@ -2640,7 +2640,7 @@ GameDatabase.news = [
     text: "How dare you actually get zero deaths on a first run?",
     get unlocked() {
       return Achievement(64).isUnlocked &&
-      player.infinitied.eq(1) &&
+      Currency.infinities.rawValue.eq(1) &&
       !PlayerProgress.eternityUnlocked();
     }
   },
@@ -6402,7 +6402,7 @@ GameDatabase.news = [
   {
     id: "ai881",
     text: "You must get 33,333,333 IP to see this message",
-    get unlocked() { return player.infinityPoints.gte(33333333); }
+    get unlocked() { return Currency.infinityPoints.gte(33333333); }
   },
   {
     id: "ai882",

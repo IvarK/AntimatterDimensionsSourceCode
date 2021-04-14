@@ -46,18 +46,20 @@ class TimeTheoremPurchaseType {
 
   purchase(bulk) {
     if (this.currency.lt(this.cost)) return false;
+    let purchased = false;
     const amount = this.bulkPossible;
+    // This will sometimes buy one too few for EP, so we just have to buy 1 after.
     if (bulk && this.currency.purchase(this.bulkCost(amount))) {
       Currency.timeTheorems.add(amount);
       this.add(amount);
-      return true;
+      purchased = true;
     }
     if (this.currency.purchase(this.cost)) {
       Currency.timeTheorems.add(1);
       this.add(1);
-      return true;
+      purchased = true;
     }
-    return false;
+    return purchased;
   }
 
   reset() {

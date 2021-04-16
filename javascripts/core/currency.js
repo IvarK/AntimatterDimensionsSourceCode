@@ -341,8 +341,8 @@ Currency.timeTheorems = new class extends DecimalCurrency {
   }
 
   reset() {
-    super.reset();
     respecTimeStudies(true);
+    super.reset();
     TimeTheoremPurchaseType.am.reset();
     TimeTheoremPurchaseType.ip.reset();
     TimeTheoremPurchaseType.ep.reset();

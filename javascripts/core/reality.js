@@ -398,7 +398,6 @@ function finishProcessReality(realityProps) {
   player.records.thisReality.time = 0;
   player.records.thisReality.realTime = 0;
   Currency.timeTheorems.reset();
-  player.timestudy.studies = [];
   player.celestials.v.triadStudies = [];
   player.celestials.v.STSpent = 0;
   player.dilation.studies = [];

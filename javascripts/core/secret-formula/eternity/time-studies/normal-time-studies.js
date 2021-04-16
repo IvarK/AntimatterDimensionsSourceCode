@@ -57,7 +57,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: 22,
       description: () => `You gain more Infinities based on Dimension Boosts`,
       effect: () => Math.max(DimBoost.totalBoosts, 1),
-      formatEffect: value => formatX(value, 2, 1)
+      formatEffect: value => formatX(value)
     },
     {
       id: 33,

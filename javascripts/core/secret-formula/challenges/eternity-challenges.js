@@ -42,7 +42,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e2750"),
     goalIncrease: new Decimal("1e550"),
     restriction: completions => Math.max(16 - 4 * completions, 0),
-    checkRestriction: restriction => Currency.infinities.rawValue.lte(restriction),
+    checkRestriction: restriction => Currency.infinities.lte(restriction),
     formatRestriction: restriction => `in ${formatInt(restriction)} Infinities or less`,
     failedRestriction: "(Too many Infinities for more)",
     reward: {
@@ -141,11 +141,11 @@ GameDatabase.challenges.eternity = [
     },
     goal: new Decimal("1e3000"),
     goalIncrease: new Decimal("1e300"),
-    effect: () => Decimal.pow(Currency.infinities.value, 950).clampMin(1).pow(TimeStudy(31).effectOrDefault(1)),
+    effect: () => Decimal.pow(Currency.infinitiesTotal.value, 950).clampMin(1).pow(TimeStudy(31).effectOrDefault(1)),
     reward: {
       description: "Time Dimension multiplier based on Infinitied stat",
       effect: completions => {
-        const mult = Currency.infinities.value.times(2.783e-6).pow(0.4 + 0.1 * completions).clampMin(1);
+        const mult = Currency.infinitiesTotal.value.times(2.783e-6).pow(0.4 + 0.1 * completions).clampMin(1);
         return mult.powEffectOf(TimeStudy(31));
       },
       formatEffect: value => formatX(value, 2, 1)

@@ -37,7 +37,7 @@ function bigCrunchReset() {
   const firstInfinity = !PlayerProgress.infinityUnlocked();
 
   bigCrunchUpdateStatistics();
-  
+
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
   const infinityPoints = gainedInfinityPoints();
   Currency.infinityPoints.add(infinityPoints);

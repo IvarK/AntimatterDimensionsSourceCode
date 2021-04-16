@@ -2640,7 +2640,7 @@ GameDatabase.news = [
     text: "How dare you actually get zero deaths on a first run?",
     get unlocked() {
       return Achievement(64).isUnlocked &&
-      Currency.infinities.rawValue.eq(1) &&
+      Currency.infinities.eq(1) &&
       !PlayerProgress.eternityUnlocked();
     }
   },

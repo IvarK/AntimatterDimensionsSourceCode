@@ -105,7 +105,7 @@ const V_UNLOCKS = {
       const db = GameDatabase.celestials.v.mainUnlock;
       return (Currency.realities.gte(db.realities) &&
               Currency.eternities.gte(db.eternities) &&
-              Currency.infinities.gte(db.infinities) &&
+              Currency.infinitiesTotal.gte(db.infinities) &&
               Currency.dilatedTime.gte(db.dilatedTime) &&
               player.replicanti.amount.gte(db.replicanti) &&
               Currency.realityMachines.gte(db.rm));

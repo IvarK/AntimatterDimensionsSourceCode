@@ -43,7 +43,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "infinitiedMult",
       cost: 1e5,
       description: "Antimatter Dimensions gain a multiplier based on Infinitied stat",
-      effect: () => 1 + Currency.infinities.value.pLog10() * 10,
+      effect: () => 1 + Currency.infinitiesTotal.value.pLog10() * 10,
       formatEffect: value => formatX(value, 2, 2)
     },
     achievementMult: {

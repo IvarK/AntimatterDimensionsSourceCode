@@ -2,10 +2,10 @@
 
 GameDatabase.infinity.upgrades = (function() {
   function dimInfinityMult() {
-    return Currency.infinities.value.times(0.2).plus(1);
+    return Currency.infinitiesTotal.value.times(0.2).plus(1);
   }
   function chargedDimInfinityMult() {
-    return 1 + Math.log10(Math.max(1, Currency.infinities.value.pLog10())) * Math.sqrt(Ra.pets.teresa.level) / 150;
+    return 1 + Math.log10(Math.max(1, Currency.infinitiesTotal.value.pLog10())) * Math.sqrt(Ra.pets.teresa.level) / 150;
   }
   return {
     totalTimeMult: {

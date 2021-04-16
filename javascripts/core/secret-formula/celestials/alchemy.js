@@ -97,8 +97,8 @@ GameDatabase.celestials.alchemy = {
       uiOrder: 2,
       isUnlocked: () => Ra.pets.effarig.level >= 9,
       lockText: "Effarig Level 9",
-      description: "increases Eternitied stat generation",
-      formatEffect: value => `Eternitied stat generation ${formatPow(value, 4, 4)}`,
+      description: "increases Eternity generation",
+      formatEffect: value => `Eternity generation ${formatPow(value, 4, 4)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.TIME,

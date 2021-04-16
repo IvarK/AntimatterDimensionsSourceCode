@@ -731,7 +731,7 @@ GameDatabase.achievements.normal = [
   {
     id: 107,
     name: "Do you really need a guide for this?",
-    get description() { return `Eternity with less than ${formatInt(10)} Infinitied stat.`; },
+    get description() { return `Eternity with less than ${formatInt(10)} Infinities.`; },
     checkRequirement: () => Currency.infinities.lt(10),
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },

@@ -81,7 +81,7 @@ Vue.component("statistics-tab", {
         eternity.thisReal.setFrom(player.records.thisEternity.realTime);
         reality.thisReal.setFrom(player.records.thisReality.realTime);
         reality.bestRate.copyFrom(player.records.bestReality.RMmin);
-        reality.bestRarity = strengthToRarity(player.records.bestReality.glyphStrength);
+        reality.bestRarity = Math.max(strengthToRarity(player.records.bestReality.glyphStrength), 0);
       }
       this.matterScale = MatterScale.estimate(Currency.antimatter.value);
       this.recordGlyphInfo = [
@@ -123,13 +123,13 @@ Vue.component("statistics-tab", {
         <div v-if="infinity.isUnlocked">
             <div class="c-stats-tab-general c-stats-tab-infinity">Infinity</div>
             <div v-if="infinity.count.gt(0)">
-              You have Infinitied
-              {{ formatDecimalAmount(infinity.count) }}
-              {{"time" | pluralize(infinity.count)}}<span v-if="eternity.isUnlocked"> this Eternity</span>.
+              You have {{ formatDecimalAmount(infinity.count) }}
+              {{"Infinity" | pluralize(infinity.count, "Infinities")}}.
             </div>
             <div v-else>You haven't Infinitied<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
             <div v-if="infinity.banked.gt(0)">
-              You have {{ formatDecimalAmount(infinity.banked) }} Banked Infinities.
+              You have {{ formatDecimalAmount(infinity.banked) }} Banked
+              {{"Infinity" | pluralize(infinity.banked, "Infinities")}}.
             </div>
             <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best.toStringShort() }}.</div>
             <div v-else>You have no fastest Infinity<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
@@ -148,9 +148,8 @@ Vue.component("statistics-tab", {
         <div v-if="eternity.isUnlocked">
             <div class="c-stats-tab-general c-stats-tab-eternity">Eternity</div>
             <div v-if="eternity.count.gt(0)">
-              You have Eternitied
-              {{ formatDecimalAmount(eternity.count) }}
-              {{"time" | pluralize(eternity.count)}}<span v-if="reality.isUnlocked"> this Reality</span>.
+              You have {{ formatDecimalAmount(eternity.count) }}
+              {{"Eternity" | pluralize(eternity.count, "Eternities")}}.
             </div>
             <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toStringShort() }}.</div>
@@ -169,7 +168,7 @@ Vue.component("statistics-tab", {
         </div>
         <div v-if="reality.isUnlocked">
             <div class="c-stats-tab-general c-stats-tab-reality">Reality</div>
-            <div>You have Realitied {{formatInt(reality.count)}} {{"time" | pluralize(reality.count)}}.</div>
+            <div>You have {{formatInt(reality.count)}} {{"Reality" | pluralize(reality.count, "Realities")}}.</div>
             <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
             <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>
             <div>

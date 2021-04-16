@@ -2435,7 +2435,7 @@ GameDatabase.news = [
   },
   {
     id: "l53",
-    text: "If you want to farm infinitied, why don't you just get the time study?",
+    text: "If you want to farm infinities, why don't you just get the time study?",
     get unlocked() { return !TimeStudy(32).isBought && Currency.infinities.gt(72000 * 168); }
   },
   {

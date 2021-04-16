@@ -38,7 +38,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 4,
-    description: "All Infinitied stat multipliers and generators are disabled.",
+    description: "All Infinity multipliers and generators are disabled.",
     goal: new Decimal("1e2750"),
     goalIncrease: new Decimal("1e550"),
     restriction: completions => Math.max(16 - 4 * completions, 0),
@@ -135,7 +135,7 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = `Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from
-        Infinitied stat to Antimatter Dimensions (Infinitied^${formatInt(950)}).`;
+        Infinities to Antimatter Dimensions (Infinities^${formatInt(950)}).`;
       EternityChallenge(10).applyEffect(v => description += ` Currently: ${formatX(v, 2, 1)}`);
       return description;
     },
@@ -143,7 +143,7 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e300"),
     effect: () => Decimal.pow(Currency.infinitiesTotal.value, 950).clampMin(1).pow(TimeStudy(31).effectOrDefault(1)),
     reward: {
-      description: "Time Dimension multiplier based on Infinitied stat",
+      description: "Time Dimension multiplier based on Infinities",
       effect: completions => {
         const mult = Currency.infinitiesTotal.value.times(2.783e-6).pow(0.4 + 0.1 * completions).clampMin(1);
         return mult.powEffectOf(TimeStudy(31));

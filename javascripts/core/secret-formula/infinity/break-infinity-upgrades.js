@@ -42,7 +42,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     infinitiedMult: {
       id: "infinitiedMult",
       cost: 1e5,
-      description: "Antimatter Dimensions gain a multiplier based on Infinitied stat",
+      description: "Antimatter Dimensions gain a multiplier based on Infinities",
       effect: () => 1 + Currency.infinitiesTotal.value.pLog10() * 10,
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -65,7 +65,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     infinitiedGen: {
       id: "infinitiedGeneration",
       cost: 2e7,
-      description: "Passively generate Infinitied stat based on your fastest Infinity",
+      description: "Passively generate Infinities based on your fastest Infinity",
       effect: () => player.records.bestInfinity.time,
       formatEffect: value => {
         if (value === Number.MAX_VALUE) return "No Infinity generation";

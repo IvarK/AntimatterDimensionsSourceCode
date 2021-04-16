@@ -82,7 +82,7 @@ GameDatabase.reality.upgrades = (function() {
       hasFailed: () => !(player.galaxies <= 1 && player.achievementChecks.noInfinitiesThisReality),
       checkRequirement: () => player.galaxies <= 1 && player.achievementChecks.noInfinitiesThisReality,
       checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-      description: "Infinitied stat gain is boosted from Antimatter Galaxy count",
+      description: "Infinity gain is boosted from Antimatter Galaxy count",
       effect: () => 1 + player.galaxies / 30,
       formatEffect: value => formatX(value, 2, 2)
     },

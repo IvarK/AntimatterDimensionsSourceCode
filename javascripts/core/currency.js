@@ -241,7 +241,7 @@ Currency.infinitiesBanked = new class extends DecimalCurrency {
 
 Currency.infinitiesTotal = new class extends DecimalCurrency {
   get value() { return player.infinities.plus(player.infinitiesBanked); }
-  set value(value) { return player.infinities = value; }
+  set value(value) { player.infinities = value; }
 }();
 
 Currency.infinityPoints = new class extends DecimalCurrency {

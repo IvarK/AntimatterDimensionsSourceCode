@@ -414,7 +414,7 @@ const Replicanti = {
   },
   unlock(freeUnlock = false) {
     if (player.replicanti.unl) return;
-    if (freeUnlock || Currency.infinityPoints.exponent >= 1e140) {
+    if (freeUnlock || Currency.infinityPoints.gte(1e140)) {
       if (!freeUnlock) Currency.infinityPoints.subtract(1e140);
       player.replicanti.unl = true;
       player.replicanti.timer = 0;

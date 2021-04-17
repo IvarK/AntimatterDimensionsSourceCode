@@ -174,14 +174,21 @@ class Currency {
   reset() {
     this.value = this.startingValue;
   }
-}
 
+  /**
+  * @abstract
+  */
+/*  get gainedCurrency() { throw new NotImplementedError(); } */
+}
+/* eslint-disable capitalized-comments */
+/* eslint-disable multiline-comment-style */
 /**
  * @abstract
  */
 class NumberCurrency extends Currency {
   get operations() { return MathOperations.number; }
   get startingValue() { return 0; }
+//  get gainedCurrency() { return 0; }
 }
 
 /**
@@ -192,6 +199,7 @@ class DecimalCurrency extends Currency {
   get mantissa() { return this.value.mantissa; }
   get exponent() { return this.value.exponent; }
   get startingValue() { return new Decimal(0); }
+//  get gainedCurrency() { return new Decimal(0); }
 }
 
 Currency.antimatter = new class extends DecimalCurrency {
@@ -232,11 +240,34 @@ Currency.antimatter = new class extends DecimalCurrency {
 Currency.infinities = new class extends DecimalCurrency {
   get value() { return player.infinities; }
   set value(value) { player.infinities = value; }
+
+/*  get gainedCurrency() {
+    if (EternityChallenge(4).isRunning) return new Decimal(1);
+    let infGain = Effects.max(
+      1,
+      Achievement(87)
+    ).toDecimal();
+
+    infGain = infGain.timesEffectsOf(
+      TimeStudy(32),
+      RealityUpgrade(5),
+      RealityUpgrade(7),
+      Achievement(164)
+    );
+    infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
+    infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
+    infGain = infGain.powEffectOf(SingularityMilestone.infinitiedPow);
+    return infGain;
+  } */
 }();
 
 Currency.infinitiesBanked = new class extends DecimalCurrency {
   get value() { return player.infinitiesBanked; }
   set value(value) { player.infinitiesBanked = value; }
+
+/*  get gainedCurrency() {
+    return Achievement(131).effectOrDefault(0).plus(TimeStudy(191).effectOrDefault(0));
+  } */
 }();
 
 Currency.infinitiesTotal = new class extends DecimalCurrency {
@@ -260,6 +291,32 @@ Currency.infinityPoints = new class extends DecimalCurrency {
       Achievement(104)
     ).toDecimal();
   }
+
+/*  get gainedCurrency() {
+    const div = Effects.min(
+      308,
+      Achievement(103),
+      TimeStudy(111)
+    );
+    let ip = player.break
+      ? Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
+      : new Decimal(308 / div);
+    if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
+      ip = ip.min(1e200);
+    }
+    ip = ip.times(GameCache.totalIPMult.value);
+    if (Teresa.isRunning) {
+      ip = ip.pow(0.55);
+    } else if (V.isRunning) {
+      ip = ip.pow(0.5);
+    } else if (Laitela.isRunning) {
+      ip = dilatedValueOf(ip);
+    }
+    if (GlyphAlteration.isAdded("infinity")) {
+      ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
+    }
+    return ip.floor();
+  } */
 }();
 
 Currency.infinityPower = new class extends DecimalCurrency {
@@ -277,6 +334,10 @@ Currency.eternities = new class extends DecimalCurrency {
       RealityUpgrade(10)
     ).toDecimal();
   }
+
+/*  get gainedCurrency() {
+    return RealityUpgrade(3).effectValue;
+  } */
 }();
 
 Currency.eternityPoints = new class extends DecimalCurrency {
@@ -298,6 +359,34 @@ Currency.eternityPoints = new class extends DecimalCurrency {
       Perk.startEP3
     ).toDecimal();
   }
+
+/*  get gainedCurrency() {
+    let ep = Decimal.pow(5, Currency.infinityPoints.value.plus(gainedInfinityPoints()).log10() / 308 - 0.7).times(
+      getAdjustedGlyphEffect("cursedEP")
+        .times(ShopPurchase.EPPurchases.currentMult)
+        .timesEffectsOf(
+          EternityUpgrade.epMult,
+          TimeStudy(61),
+          TimeStudy(122),
+          TimeStudy(121),
+          TimeStudy(123),
+          RealityUpgrade(12),
+          GlyphEffect.epMult
+        )
+    );
+
+    if (Teresa.isRunning) {
+      ep = ep.pow(0.55);
+    } else if (V.isRunning) {
+      ep = ep.pow(0.5);
+    } else if (Laitela.isRunning) {
+      ep = dilatedValueOf(ep);
+    }
+    if (GlyphAlteration.isAdded("time")) {
+      ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
+    }
+    return ep.floor();
+  } */
 }();
 
 Currency.timeShards = new class extends DecimalCurrency {
@@ -348,6 +437,27 @@ Currency.realities = new class extends NumberCurrency {
 Currency.realityMachines = new class extends DecimalCurrency {
   get value() { return player.reality.realityMachines; }
   set value(value) { player.reality.realityMachines = value; }
+
+/*  get gainedCurrency() {
+    let log10FinalEP = Currency.eternityPoints.value.plus(gainedEternityPoints()).log10();
+    if (!PlayerProgress.realityUnlocked() && log10FinalEP > 6000 && player.saveOverThresholdFlag) {
+      log10FinalEP -= (log10FinalEP - 6000) * 0.75;
+    }
+    let rmGain = Decimal.pow(1000, log10FinalEP / 4000 - 1);
+    // Increase base RM gain if <10 RM
+    if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
+    rmGain = rmGain.times(getRealityMachineMultiplier());
+    // This happens around ee10 and is necessary to reach e9e15 antimatter without having to deal with the various
+    // potential problems associated with having ee9 RM, of which there are lots (both balance-wise and design-wise).
+    // The softcap here squishes every additional OoM in the exponent into another factor of e1000 RM, putting e9e15
+    // antimatter around e7000 RM instead of e1000000000 RM.
+    const softcapRM = new Decimal("1e1000");
+    if (rmGain.gt(softcapRM)) {
+      const exponentOOMAboveCap = Math.log10(rmGain.log10() / softcapRM.log10());
+      rmGain = softcapRM.pow(1 + exponentOOMAboveCap);
+    }
+    return Decimal.floor(rmGain);
+  } */
 }();
 
 Currency.perkPoints = new class extends NumberCurrency {

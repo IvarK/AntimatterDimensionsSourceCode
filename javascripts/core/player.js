@@ -673,6 +673,10 @@ const Player = {
     return this.antimatterChallenge || EternityChallenge.current
   },
 
+  get isInBrokenChallenge() {
+    return Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id);
+  },
+
   get effectiveMatterAmount() {
     if (NormalChallenge(11).isRunning) {
       return player.matter;
@@ -684,7 +688,7 @@ const Player = {
   },
 
   get canCrunch() {
-    if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)) return true
+    if (Player.isInBrokenChallenge) return true
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
     return player.records.thisInfinity.maxAM.gte(goal);

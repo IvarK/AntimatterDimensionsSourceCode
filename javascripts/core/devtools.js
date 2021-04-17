@@ -212,7 +212,7 @@ dev.setNextNewsMessage = function(id) {
 };
 
 dev.implode = function() {
-  bigCrunchAnimation();
+  BigCrunchReset.animation();
 };
 
 dev.eternify = function() {
@@ -487,7 +487,7 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     doReplicantiTicks();
     player.antimatter = new Decimal("1e309");
     player.records.thisInfinity.maxAM = new Decimal("1e309");
-    bigCrunchReset();
+    BigCrunchReset.request();
     doReplicantiTicks();
   };
   if (singleId === undefined) {

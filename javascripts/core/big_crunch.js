@@ -1,12 +1,5 @@
 "use strict";
 
-function bigCrunchAnimation() {
-  document.body.style.animation = "implode 2s 1";
-  setTimeout(() => {
-      document.body.style.animation = "";
-  }, 2000);
-}
-
 function handleChallengeCompletion() {
   const challenge = Player.antimatterChallenge;
   if (!challenge && !NormalChallenge(1).isCompleted) {
@@ -24,120 +17,11 @@ function handleChallengeCompletion() {
 function bigCrunchResetRequest(disableAnimation = false) {
   if (!Player.canCrunch) return;
   if (!disableAnimation && player.options.animations.bigCrunch && document.body.style.animation === "") {
-    bigCrunchAnimation();
-    setTimeout(bigCrunchReset, 1000);
+    BigCrunchReset.animation();
+    setTimeout(BigCrunchReset.request(), 1000);
   } else {
-    bigCrunchReset();
+    BigCrunchReset.request();
   }
-}
-
-function bigCrunchReset() {
-  if (!Player.canCrunch) return;
-
-  const firstInfinity = !PlayerProgress.infinityUnlocked();
-
-  bigCrunchUpdateStatistics();
-
-  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
-  const infinityPoints = gainedInfinityPoints();
-  Currency.infinityPoints.add(infinityPoints);
-  Currency.infinities.add(gainedInfinities().round());
-
-  bigCrunchTabChange(firstInfinity);
-  bigCrunchReplicanti();
-  bigCrunchCheckUnlocks();
-
-  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
-}
-
-function bigCrunchUpdateStatistics() {
-  player.records.bestInfinity.bestIPminEternity =
-    player.records.bestInfinity.bestIPminEternity.clampMin(player.records.thisInfinity.bestIPmin);
-  player.records.thisInfinity.bestIPmin = new Decimal(0);
-
-  player.records.thisEternity.bestInfinitiesPerMs = player.records.thisEternity.bestInfinitiesPerMs.clampMin(
-    gainedInfinities().round().dividedBy(player.records.thisInfinity.realTime)
-  );
-
-  const infinityPoints = gainedInfinityPoints();
-
-  addInfinityTime(
-    player.records.thisInfinity.time,
-    player.records.thisInfinity.realTime,
-    infinityPoints,
-    gainedInfinities().round()
-  );
-
-  player.records.bestInfinity.time =
-    Math.min(player.records.bestInfinity.time, player.records.thisInfinity.time);
-  player.records.bestInfinity.realTime =
-    Math.min(player.records.bestInfinity.realTime, player.records.thisInfinity.realTime);
-
-  player.achievementChecks.noInfinitiesThisReality = false;
-
-  if (!player.usedMaxAll) {
-    const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(player.records.thisInfinity.realTime);
-    player.records.thisEternity.bestIPMsWithoutMaxAll =
-      Decimal.max(bestIpPerMsWithoutMaxAll, player.records.thisEternity.bestIPMsWithoutMaxAll);
-  }
-  player.usedMaxAll = false;
-}
-
-function bigCrunchTabChange(firstInfinity) {
-  const earlyGame = player.records.bestInfinity.time > 60000 && !player.break;
-  const inAntimatterChallenge = Player.isInAntimatterChallenge;
-  handleChallengeCompletion();
-
-  if (firstInfinity) {
-    Tab.infinity.upgrades.show();
-  } else if (earlyGame || (inAntimatterChallenge && !player.options.retryChallenge)) {
-    Tab.dimensions.antimatter.show();
-  }
-}
-
-function bigCrunchReplicanti() {
-  const currentReplicanti = player.replicanti.amount;
-  const currentReplicantiGalaxies = player.replicanti.galaxies;
-  secondSoftReset(true);
-
-  let remainingGalaxies = 0;
-  if (Achievement(95).isUnlocked) {
-    player.replicanti.amount = currentReplicanti;
-    remainingGalaxies += Math.min(currentReplicantiGalaxies, 1);
-  }
-  if (TimeStudy(33).isBought) {
-    remainingGalaxies += Math.floor(currentReplicantiGalaxies / 2);
-  }
-  // I don't think this Math.clampMax is technically needed, but if we add another source
-  // of keeping Replicanti Galaxies then it might be.
-  player.replicanti.galaxies = Math.clampMax(remainingGalaxies, currentReplicantiGalaxies);
-}
-
-function bigCrunchCheckUnlocks() {
-  if (EternityChallenge(4).tryFail()) return;
-
-  if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
-    EffarigUnlock.infinity.unlock();
-    beginProcessReality(getRealityProps(true));
-  }
-}
-
-function secondSoftReset(forcedNDReset = false) {
-  player.dimensionBoosts = 0;
-  player.galaxies = 0;
-  player.records.thisInfinity.maxAM = new Decimal(0);
-  Currency.antimatter.reset();
-  softReset(0, forcedNDReset);
-  InfinityDimensions.resetAmount();
-  if (player.replicanti.unl)
-    player.replicanti.amount = new Decimal(1);
-  player.replicanti.galaxies = 0;
-  player.records.thisInfinity.time = 0;
-  player.records.thisInfinity.lastBuyTime = 0;
-  player.records.thisInfinity.realTime = 0;
-  player.achievementChecks.noEighthDimensions = true;
-  player.achievementChecks.noSacrifices = true;
-  AchievementTimers.marathon2.reset();
 }
 
 class ChargedInfinityUpgradeState extends GameMechanicState {

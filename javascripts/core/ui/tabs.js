@@ -27,6 +27,10 @@ class SubtabState {
   }
 
   show(manual) {
+    if (!this.isAvailable) {
+      Modal.message.show("The requested subtab is not available! This should be considered an issue.");
+      return;
+    }
     this._parent.show(manual, this);
   }
 

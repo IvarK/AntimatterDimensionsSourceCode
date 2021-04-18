@@ -42,12 +42,9 @@ const BigCrunchReset = new class BigCrunchReset extends PrestigeMechanic {
   }
 
   tabChange() {
-    const earlyGame = this.isEarlyGame;
-    const inAntimatterChallenge = Player.isInAntimatterChallenge;
-
     if (!PlayerProgress.infinityUnlocked()) {
       Tab.infinity.upgrades.show();
-    } else if (earlyGame || (inAntimatterChallenge && !player.options.retryChallenge)) {
+    } else if (this.isEarlyGame || (Player.isInAntimatterChallenge && !player.options.retryChallenge)) {
       Tab.dimensions.antimatter.show();
     }
   }

@@ -408,7 +408,6 @@
 
     comparison(ctx) {
       const isCurrency = ctx.compareValue.map(cv => Boolean(cv.children.AutomatorCurrency));
-      console.log(isCurrency);
       if (!(isCurrency[0] ^ isCurrency[1])) {
         throw new Error("arbitrary comparisons are not supported in block mode yet");
       }

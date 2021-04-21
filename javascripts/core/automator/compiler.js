@@ -364,7 +364,7 @@
 
     comparison(ctx) {
       const getters = ctx.compareValue.map(cv => (
-        cv.children.Currency ? cv.children.Currency[0].tokenType.$getter : () => cv.children.$value
+        cv.children.AutomatorCurrency ? cv.children.AutomatorCurrency[0].tokenType.$getter : () => cv.children.$value
       ));
       const compareFun = ctx.ComparisonOperator[0].tokenType.$compare;
       return () => {
@@ -407,7 +407,8 @@
     }
 
     comparison(ctx) {
-      const isCurrency = ctx.compareValue.map(cv => Boolean(cv.children.Currency));
+      const isCurrency = ctx.compareValue.map(cv => Boolean(cv.children.AutomatorCurrency));
+      console.log(isCurrency);
       if (!(isCurrency[0] ^ isCurrency[1])) {
         throw new Error("arbitrary comparisons are not supported in block mode yet");
       }
@@ -426,7 +427,7 @@
         }
       }
       return {
-        target: ctx.compareValue[currencyIndex].children.Currency[0].image,
+        target: ctx.compareValue[currencyIndex].children.AutomatorCurrency[0].image,
         secondaryTarget: operator,
         inputValue: value,
       };

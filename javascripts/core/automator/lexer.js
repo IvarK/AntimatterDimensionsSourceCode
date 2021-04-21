@@ -129,7 +129,7 @@ const AutomatorLexer = (() => {
   });
   createInCategory(AutomatorCurrency, "PendingRM", /pending[ \t]+rm/i, {
     $autocomplete: "pending RM",
-    $getter: () => (isRealityAvailable() ? gainedRealityMachines() : new Decimal(0))
+    $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : new Decimal(0))
   });
   createInCategory(AutomatorCurrency, "GlyphLevel", /glyph[ \t]+level/i, {
     $autocomplete: "glyph level",

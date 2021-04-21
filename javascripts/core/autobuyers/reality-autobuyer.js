@@ -59,7 +59,7 @@ Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
 
   tick() {
     let proc = false;
-    const rmProc = gainedRealityMachines().gte(this.rm);
+    const rmProc = MachineHandler.gainedRealityMachines.gte(this.rm);
     const glyphProc = gainedGlyphLevel().actualLevel >= Math.min(this.glyph, Glyphs.levelCap);
     switch (this.mode) {
       case AUTO_REALITY_MODE.RM:

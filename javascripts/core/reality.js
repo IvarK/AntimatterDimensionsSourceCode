@@ -203,7 +203,7 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
   });
   return Object.assign(defaults, {
     reset: false,
-    gainedRM: gainedRealityMachines(),
+    gainedRM: MachineHandler.gainedRealityMachines,
     gainedGlyphLevel: gainedGlyphLevel(),
     gainedShards: Effarig.shardsGained,
     simulatedRealities: simulatedRealityCount(true),

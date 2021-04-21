@@ -1231,7 +1231,7 @@ GameDatabase.achievements.normal = [
       return `Reality for ${formatPostBreak(Decimal.NUMBER_MAX_VALUE, 1, 0)} Reality Machines without having
       any Charged Infinity Upgrades, having any equipped Glyphs, or buying any Triad Studies.`;
     },
-    checkRequirement: () => gainedRealityMachines().gte(Decimal.NUMBER_MAX_VALUE) &&
+    checkRequirement: () => MachineHandler.gainedRealityMachines.gte(Decimal.NUMBER_MAX_VALUE) &&
       player.celestials.ra.charged.size === 0 && Glyphs.activeList.length === 0 &&
       player.achievementChecks.noTriadStudies,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,

@@ -55,7 +55,7 @@ Vue.component("reality-button", {
         return;
       }
       function EPforRM(rm) {
-        const adjusted = Decimal.divide(rm, getRealityMachineMultiplier());
+        const adjusted = Decimal.divide(rm, MachineHandler.realityMachineMultiplier);
         if (adjusted.lte(1)) return Decimal.pow10(4000);
         if (adjusted.lte(10)) return Decimal.pow10(4000 / 27 * (adjusted.toNumber() + 26));
         let result = Decimal.pow10(4000 * (adjusted.log10() / 3 + 1));
@@ -65,7 +65,7 @@ Vue.component("reality-button", {
         return result;
       }
       const multiplier = simulatedRealityCount(false) + 1;
-      this.machinesGained = gainedRealityMachines().times(multiplier);
+      this.machinesGained = MachineHandler.gainedRealityMachines.times(multiplier);
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = this.percentToNextGlyphLevelText();

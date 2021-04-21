@@ -306,7 +306,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 100000,
       requirement: () => `Reality for ${formatInt(5000)} Reality Machines without Glyphs`,
       hasFailed: () => Glyphs.activeList.length > 0,
-      checkRequirement: () => gainedRealityMachines().gte(5000) && Glyphs.activeList.length === 0,
+      checkRequirement: () => MachineHandler.gainedRealityMachines.gte(5000) && Glyphs.activeList.length === 0,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
       description: "Gain another Glyph slot",
       effect: () => 1

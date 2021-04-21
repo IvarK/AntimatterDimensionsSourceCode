@@ -64,7 +64,7 @@ const AutomatorLexer = (() => {
     pattern: Lexer.NA,
   });
 
-  const Currency = createCategory("Currency");
+  const AutomatorCurrency = createCategory("AutomatorCurrency");
   const PrestigeEvent = createCategory("PrestigeEvent");
   const StudyPath = createCategory("StudyPath");
   const TimeUnit = createCategory("TimeUnit");
@@ -99,62 +99,62 @@ const AutomatorLexer = (() => {
   });
   EqualSign.$compare = (a, b) => Decimal.eq(a, b);
 
-  createInCategory(Currency, "EP", /ep/i, {
+  createInCategory(AutomatorCurrency, "EP", /ep/i, {
     extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyWithEP(true),
-    $getter: () => Currency.eternityPoints
+    $getter: () => Currency.eternityPoints.value
   });
-  createInCategory(Currency, "IP", /ip/i, {
+  createInCategory(AutomatorCurrency, "IP", /ip/i, {
     extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyWithIP(true),
-    $getter: () => Currency.infinityPoints
+    $getter: () => Currency.infinityPoints.value
   });
-  createInCategory(Currency, "AM", /am/i, {
+  createInCategory(AutomatorCurrency, "AM", /am/i, {
     extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyWithAntimatter(true),
-    $getter: () => Currency.antimatter
+    $getter: () => Currency.antimatter.value
   });
-  createInCategory(Currency, "DT", /dt/i, { $getter: () => Currency.dilatedTime });
-  createInCategory(Currency, "TP", /tp/i, { $getter: () => Currency.tachyonParticles });
-  createInCategory(Currency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
-  createInCategory(Currency, "RM", /rm/i, { $getter: () => Currency.realityMachines });
+  createInCategory(AutomatorCurrency, "DT", /dt/i, { $getter: () => Currency.dilatedTime.value });
+  createInCategory(AutomatorCurrency, "TP", /tp/i, { $getter: () => Currency.tachyonParticles.value });
+  createInCategory(AutomatorCurrency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
+  createInCategory(AutomatorCurrency, "RM", /rm/i, { $getter: () => Currency.realityMachines.value });
 
-  createInCategory(Currency, "PendingIP", /pending[ \t]+ip/i, {
+  createInCategory(AutomatorCurrency, "PendingIP", /pending[ \t]+ip/i, {
     $autocomplete: "pending IP",
     $getter: () => (Player.canCrunch ? gainedInfinityPoints() : new Decimal(0))
   });
-  createInCategory(Currency, "PendingEP", /pending[ \t]+ep/i, {
+  createInCategory(AutomatorCurrency, "PendingEP", /pending[ \t]+ep/i, {
     $autocomplete: "pending EP",
     $getter: () => (Player.canEternity ? gainedEternityPoints() : new Decimal(0))
   });
-  createInCategory(Currency, "PendingRM", /pending[ \t]+rm/i, {
+  createInCategory(AutomatorCurrency, "PendingRM", /pending[ \t]+rm/i, {
     $autocomplete: "pending RM",
     $getter: () => (isRealityAvailable() ? gainedRealityMachines() : new Decimal(0))
   });
-  createInCategory(Currency, "GlyphLevel", /glyph[ \t]+level/i, {
+  createInCategory(AutomatorCurrency, "GlyphLevel", /glyph[ \t]+level/i, {
     $autocomplete: "glyph level",
     $getter: () => new Decimal(isRealityAvailable() ? gainedGlyphLevel().actualLevel : 0),
   });
 
-  createInCategory(Currency, "Rep", /rep(licanti)?/i, {
+  createInCategory(AutomatorCurrency, "Rep", /rep(licanti)?/i, {
     $autocomplete: "rep",
     $getter: () => player.replicanti.amount,
   });
-  createInCategory(Currency, "TT", /(tt|time theorems?)/i, {
+  createInCategory(AutomatorCurrency, "TT", /(tt|time theorems?)/i, {
     $autocomplete: "TT",
-    $getter: () => Currency.timeTheorems,
+    $getter: () => Currency.timeTheorems.value,
   });
-  createInCategory(Currency, "Total_TT", /total tt/i, {
+  createInCategory(AutomatorCurrency, "Total_TT", /total tt/i, {
     $autocomplete: "total TT",
     $getter: () => player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()),
   });
 
-  createInCategory(Currency, "TotalCompletions", /total[ \t]+completions/i, {
+  createInCategory(AutomatorCurrency, "TotalCompletions", /total[ \t]+completions/i, {
     $autocomplete: "total completions",
     $getter: () => EternityChallenges.completions,
   });
 
-  createInCategory(Currency, "PendingCompletions", /pending[ \t]+completions/i, {
+  createInCategory(AutomatorCurrency, "PendingCompletions", /pending[ \t]+completions/i, {
     $autocomplete: "pending completions",
     $getter: () => {
       // If we are not in an EC, pretend like we have a ton of completions so any check for sufficient
@@ -165,7 +165,7 @@ const AutomatorLexer = (() => {
   });
   for (let i = 1; i <= 12; ++i) {
     const id = i;
-    createInCategory(Currency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {
+    createInCategory(AutomatorCurrency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {
       $autocomplete: `ec${i} completions`,
       // eslint-disable-next-line no-loop-func
       $getter: () => EternityChallenge(id).completions
@@ -315,7 +315,7 @@ const AutomatorLexer = (() => {
     ComparisonOperator, ...tokenLists.ComparisonOperator,
     LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     NumberLiteral,
-    Currency, ...tokenLists.Currency,
+    AutomatorCurrency, ...tokenLists.AutomatorCurrency,
     ECLiteral,
     Keyword, ...keywordTokens,
     PrestigeEvent, ...tokenLists.PrestigeEvent,

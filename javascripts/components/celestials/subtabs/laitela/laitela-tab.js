@@ -223,7 +223,7 @@ Vue.component("laitela-run-button", {
       this.maxDimTier = Laitela.maxAllowedDimension;
       this.realityReward = Laitela.realityReward;
       this.isRunning = Laitela.isRunning;
-      this.singularitiesUnlocked = player.celestials.laitela.singularities > 0;
+      this.singularitiesUnlocked = Currency.singularities.gt(0);
     },
     startRun() {
       if (!resetReality()) return;

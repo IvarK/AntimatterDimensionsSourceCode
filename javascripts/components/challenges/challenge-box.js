@@ -24,12 +24,13 @@ Vue.component("challenge-box", {
       this.inC1 = this.name === "C1" && !this.isCompleted && !Player.isInAntimatterChallenge;
     },
     buttonClassObject() {
+      const challengeDone = this.isCompleted && ((this.isUnlocked && !this.isEC) || (!this.isUnlocked && this.isEC));
       const classObject = {
         "o-challenge-btn": true
       };
       if (this.isRunning || this.inC1) {
         classObject["o-challenge-btn--running"] = true;
-      } else if (this.isCompleted && ((this.isUnlocked && !this.isEC) || (!this.isUnlocked && this.isEC))) {
+      } else if (challengeDone) {
         classObject["o-challenge-btn--completed"] = true;
       } else if (this.isCompleted && this.isUnlocked && this.isEC) {
         classObject["o-challenge-btn--redo"] = true;
@@ -42,7 +43,7 @@ Vue.component("challenge-box", {
       // but in that case you can't enter them and so it's important to give them a property
       // that disables cursor on hover. The same thing happens with challenges that are running,
       // of any type, and with Challenge 1.
-      classObject["o-challenge-btn--unenterable"] = !(this.isUnlocked || this.canBeUnlocked) ||
+      classObject["o-challenge-btn--unenterable"] = challengeDone || !(this.isUnlocked || this.canBeUnlocked) ||
         this.isRunning || this.name === "C1";
       return classObject;
     },

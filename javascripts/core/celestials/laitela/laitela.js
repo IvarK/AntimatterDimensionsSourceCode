@@ -13,6 +13,13 @@ const Laitela = {
       }
     }
   },
+  get darkEnergyPerSecond() {
+    return Array.range(1, 4)
+    .map(n => MatterDimension(n))
+    .filter(d => d.amount.gt(0))
+    .map(d => d.powerDE * 1000 / d.interval)
+    .sum();
+  },
   has(info) {
     // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.laitela.unlockBits & (1 << info.id));

@@ -272,7 +272,7 @@ function gainedInfinities() {
     const url = "https://api.github.com/repos/IvarK/IToughtAboutCurseWordsButThatWouldBeMeanToOmsi/commits/master";
     const headers = new Headers();
     // Yes, this is my GitHub API key for reading private repo details
-    headers.append("Authorization", `Basic ${btoa("WaitingIdly: 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")}`);
+    headers.append("Authorization", `Basic ${btoa("WaitingIdly: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")}`);
 
     fetch(url, { method: "GET", headers })
       .then(response => response.json())

@@ -118,8 +118,8 @@ class Galaxy {
   static get canBeBought() {
     if (EternityChallenge(6).isRunning && !Enslaved.isRunning) return false;
     if (NormalChallenge(8).isRunning || InfinityChallenge(7).isRunning) return false;
-    if (player.thisInfinityMaxAM.gt(Player.infinityGoal) &&
-       (!player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning)) return false;
+    if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal) &&
+       (!player.break || Player.isInAntimatterChallenge)) return false;
     return true;
   }
 
@@ -161,7 +161,7 @@ function galaxyReset() {
   if (!Achievement(143).isUnlocked) player.dimensionBoosts = 0;
   softReset(0);
   if (Notations.current === Notation.cancer) player.spreadingCancer += 1;
-  player.noSacrifices = true;
+  player.achievementChecks.noSacrifices = true;
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_AFTER);
 }
 

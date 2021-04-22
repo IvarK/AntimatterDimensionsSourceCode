@@ -37,6 +37,7 @@ Vue.component("options-visual-tab", {
       commas: false,
       updateRate: 0,
       autosaveInterval: 3000,
+      headerTextColored: true,
     };
   },
   watch: {
@@ -46,7 +47,10 @@ Vue.component("options-visual-tab", {
     },
     updateRate(newValue) {
       player.options.updateRate = newValue;
-    }
+    },
+    headerTextColored(newValue) {
+      player.options.headerTextColored = newValue;
+    },
   },
   computed: {
     themeLabel() {
@@ -66,13 +70,9 @@ Vue.component("options-visual-tab", {
       this.notation = options.notation;
       this.commas = options.commas;
       this.updateRate = options.updateRate;
+      this.headerTextColored = options.headerTextColored;
     },
-    hardReset() {
-      if (confirm("Do you really want to erase all your progress?")) {
-        GameStorage.hardReset();
-      }
-    }
-  }, 
+  },
   template: `
   <div class="l-options-tab">
     <div class="l-options-grid">
@@ -110,7 +110,7 @@ Vue.component("options-visual-tab", {
           off="Exponent formatting: Notation"
         />
       </div>
-      <div class="l-options-grid__row"> 
+      <div class="l-options-grid__row">
         <options-button
           class="o-primary-btn--option"
           onclick="Modal.animationOptions.show();"
@@ -124,9 +124,14 @@ Vue.component("options-visual-tab", {
           onclick="Modal.awayProgressOptions.show()"
         >Open Away Progress Options</options-button>
       </div>
-      <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
-        Press <kbd>?</kbd> to open shortcut list.
-      </p>
+      <div class="l-options-grid__row">
+        <primary-button-on-off
+          v-model="headerTextColored"
+          class="o-primary-btn--option l-options-grid__button"
+          text="Relative prestige gain text coloring:"
+        />
+      </div>
+      <open-modal-shortcuts />
     </div>
   </div>`
 });

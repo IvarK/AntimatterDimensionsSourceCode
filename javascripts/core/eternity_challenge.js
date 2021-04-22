@@ -9,16 +9,16 @@ function startEternityChallenge() {
   resetChallengeStuff();
   AntimatterDimensions.reset();
   player.replicanti.galaxies = 0;
-  player.infinityPoints = Player.startingIP;
+  Currency.infinityPoints.reset();
   InfinityDimensions.resetAmount();
-  player.bestIPminThisInfinity = new Decimal(0);
-  player.bestEPminThisEternity = new Decimal(0);
+  player.records.bestInfinity.bestIPminEternity = new Decimal(0);
+  player.records.thisEternity.bestEPmin = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
-  player.thisInfinityMaxAM = new Decimal(0);
-  player.thisEternityMaxAM = new Decimal(0);
+  player.records.thisInfinity.maxAM = new Decimal(0);
+  player.records.thisEternity.maxAM = new Decimal(0);
   Currency.antimatter.reset();
-  playerInfinityUpgradesOnEternity();
+  playerInfinityUpgradesOnReset();
   AchievementTimers.marathon2.reset();
 }
 
@@ -103,7 +103,7 @@ class EternityChallengeState extends GameMechanicState {
       return status;
     }
 
-    let totalCompletions = this.completionsAtIP(player.infinityPoints);
+    let totalCompletions = this.completionsAtIP(Currency.infinityPoints.value);
     const maxValidCompletions = this.maxValidCompletions;
     if (totalCompletions > maxValidCompletions) {
       totalCompletions = maxValidCompletions;
@@ -129,7 +129,7 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   get isGoalReached() {
-    return player.infinityPoints.gte(this.currentGoal);
+    return Currency.infinityPoints.gte(this.currentGoal);
   }
 
   get canBeCompleted() {
@@ -207,9 +207,8 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   exit() {
-    const nestedChallenge = NormalChallenge.current || InfinityChallenge.current;
-    if (nestedChallenge !== undefined) {
-      nestedChallenge.exit();
+    if (Player.isInAntimatterChallenge) {
+      Player.antimatterChallenge.exit();
     }
     player.challenge.eternity.current = 0;
     eternity(true);

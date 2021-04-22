@@ -59,5 +59,14 @@ const SecretAchievements = {
   /**
    * @type {SecretAchievementState[]}
    */
-  all: SecretAchievement.index.compact()
+  all: SecretAchievement.index.compact(),
+
+  get allRows() {
+    const count = SecretAchievements.all.map(a => a.row).max();
+    return SecretAchievements.rows(1, count);
+  },
+
+  rows: (start, count) => Array.range(start, count).map(SecretAchievements.row),
+
+  row: row => Array.range(row * 10 + 1, 8).map(SecretAchievement),
 };

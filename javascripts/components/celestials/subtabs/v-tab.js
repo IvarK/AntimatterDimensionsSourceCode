@@ -16,25 +16,29 @@ Vue.component("v-tab", {
       runRecords: [],
       runGlyphs: [],
       isFlipped: false,
-      isRunning: false
+      wantsFlipped: true,
+      isRunning: false,
+      hasAlchemy: false,
     };
   },
   methods: {
     update() {
       this.mainUnlock = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
       this.totalUnlocks = V.spaceTheorems;
-      this.realities = player.realities;
-      this.infinities.copyFrom(player.infinitied);
-      this.eternities.copyFrom(player.eternities);
-      this.dilatedTime.copyFrom(player.dilation.dilatedTime);
+      this.realities = Currency.realities.value;
+      this.infinities.copyFrom(Currency.infinitiesTotal);
+      this.eternities.copyFrom(Currency.eternities);
+      this.dilatedTime.copyFrom(Currency.dilatedTime);
       this.replicanti.copyFrom(player.replicanti.amount);
-      this.rm.copyFrom(player.reality.realityMachines);
-      this.pp = player.reality.pp;
+      this.rm.copyFrom(Currency.realityMachines);
+      this.pp = Currency.perkPoints.value;
       this.showReduction = V.has(V_UNLOCKS.SHARD_REDUCTION);
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
+      this.wantsFlipped = player.celestials.v.wantsFlipped;
       this.isRunning = V.isRunning;
+      this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     },
     startRun() {
       if (!resetReality()) return;
@@ -60,8 +64,7 @@ Vue.component("v-tab", {
         : milestone.reward;
     },
     reduceGoals(hex) {
-      if (player.reality.pp < hex.reductionCost) return;
-      player.reality.pp -= hex.reductionCost;
+      if (!Currency.perkPoints.purchase(hex.reductionCost)) return;
       const steps = hex.config.reductionStepSize ? hex.config.reductionStepSize : 1;
       player.celestials.v.goalReductionSteps[hex.id] += steps;
       for (const unlock of VRunUnlocks.all) {
@@ -69,13 +72,17 @@ Vue.component("v-tab", {
       }
     },
     reductionTooltip(hex) {
-      return `Spend ${format(hex.reductionCost, 2, 0)} PP to reduce goal by ${format(hex.config.perReductionStep)}`;
+      return `Spend ${format(hex.reductionCost, 2, 0)} Perk Points
+      to reduce goal by ${format(hex.config.perReductionStep)}`;
+    },
+    toggleFlipped() {
+      player.celestials.v.wantsFlipped = !this.wantsFlipped;
     }
   },
   computed: {
     // If V is flipped, change the layout of the grid
     hexGrid() {
-      return this.isFlipped ? [
+      return this.isFlipped && this.wantsFlipped ? [
         VRunUnlocks.all[6],
         {},
         {},
@@ -90,11 +97,11 @@ Vue.component("v-tab", {
         VRunUnlocks.all[0],
         VRunUnlocks.all[1],
         {},
-        VRunUnlocks.all[2],
-        { isRunButton: true },
-        VRunUnlocks.all[3],
-        VRunUnlocks.all[4],
         VRunUnlocks.all[5],
+        { isRunButton: true },
+        VRunUnlocks.all[2],
+        VRunUnlocks.all[4],
+        VRunUnlocks.all[3],
         {}
       ];
     },
@@ -124,18 +131,18 @@ Vue.component("v-tab", {
   },
   template: `
     <div class="l-v-celestial-tab">
-      <div v-if="!mainUnlock">
-        {{ format(rm, 2, 0) }} / {{ format(db.mainUnlock.rm, 2, 0) }} RM
+      <div v-if="!mainUnlock" class="c-v-info-text">
+        {{ format(rm, 2, 0) }} / {{ format(db.mainUnlock.rm, 2, 0) }} Reality Machines
         <br>
-        {{ format(realities, 2, 0) }} / {{ format(db.mainUnlock.realities, 2, 0) }} realities
+        {{ format(realities, 2, 0) }} / {{ format(db.mainUnlock.realities, 2, 0) }} Realities
         <br>
-        {{ format(eternities, 2, 0) }} / {{ format(db.mainUnlock.eternities, 2, 0) }} eternities
+        {{ format(eternities, 2, 0) }} / {{ format(db.mainUnlock.eternities, 2, 0) }} Eternities
         <br>
-        {{ format(infinities, 2, 0) }} / {{ format(db.mainUnlock.infinities, 2, 0) }} infinities
+        {{ format(infinities, 2, 0) }} / {{ format(db.mainUnlock.infinities, 2, 0) }} Infinities
         <br>
-        {{ format(dilatedTime, 2, 0) }} / {{ format(db.mainUnlock.dilatedTime, 2, 0) }} dilated time
+        {{ format(dilatedTime, 2, 0) }} / {{ format(db.mainUnlock.dilatedTime, 2, 0) }} Dilated Time
         <br>
-        {{ format(replicanti, 2, 0) }} / {{ format(db.mainUnlock.replicanti, 2, 0) }} replicanti
+        {{ format(replicanti, 2, 0) }} / {{ format(db.mainUnlock.replicanti, 2, 0) }} Replicanti
         <br>
         <div class="l-v-milestones-grid__row">
           <div class="o-v-milestone">
@@ -145,18 +152,24 @@ Vue.component("v-tab", {
         </div>
       </div>
       <div v-else>
-        <div v-if="isFlipped">
-          Cursed glyphs can be created in the Effarig tab, and the Black Hole can now be used to slow down time.
+        <div v-if="isFlipped" class="c-v-info-text">
+          <primary-button
+            class="o-primary-btn--subtab-option"
+            @click="toggleFlipped"
+          ><span v-if="wantsFlipped">Hide</span><span v-else>Show</span> Hard V</primary-button>
           <br>
-          Each hard V-achievement will award {{ formatInt(2) }} Space Theorems instead of {{ formatInt(1) }}.
           <br>
-          Goal reduction is significantly more expensive for hard V-achievements.
+          Cursed Glyphs can be created in the Effarig tab, and the Black Hole can now be used to slow down time.
+          <br>
+          Each Hard V-Achievement will award {{ formatInt(2) }} Space Theorems instead of {{ formatInt(1) }}.
+          <br>
+          Goal reduction is significantly more expensive for Hard V-Achievements.
         </div>
-        <div v-if="showReduction">
+        <div v-if="showReduction" class="c-v-info-text">
           You have {{ format(pp, 2, 0) }} {{ "Perk Point" | pluralize(pp) }}.
         </div>
         <div class="l-v-unlocks-container">
-          <li v-for="hex in hexGrid" :style= "[hex.isRunButton ? {} : {zIndex: -1}]">
+          <li v-for="hex in hexGrid" :style= "[hex.isRunButton ? {zIndex: 1} : {zIndex: 0}]">
             <div v-if="hex.config"
               class="l-v-hexagon c-v-unlock"
               :class="{ 'c-v-unlock-completed': hex.completions === hex.config.values.length }">
@@ -192,8 +205,11 @@ Vue.component("v-tab", {
             <div v-else-if="hex.isRunButton" @click="startRun()" :class="runButtonClassObject">
               <b style="font-size: 1.5rem">Start V's Reality.</b>
               <br/>
-              All dimension multipliers, EP gain, IP gain, and Dilated Time gain per second
-              are square-rooted, and Replicanti interval is squared.
+              <div :style="{ 'font-size': hasAlchemy ? '1.1rem' : '' }">
+                All dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second
+                are square-rooted, and Replicanti interval is squared.
+                <span v-if="hasAlchemy">Exponential Glyph Alchemy effect is disabled.</span>
+              </div>
               <div class="c-v-run-button__line c-v-run-button__line--1"></div>
               <div class="c-v-run-button__line c-v-run-button__line--2"></div>
               <div class="c-v-run-button__line c-v-run-button__line--3"></div>
@@ -203,12 +219,13 @@ Vue.component("v-tab", {
             </div>
           </li>
         </div>
-        <div>
-          V-achievements can only be completed within V's Reality, but are permanent and do not reset upon leaving
+        <div class="c-v-info-text">
+          V-Achievements can only be completed within V's Reality, but are permanent and do not reset upon leaving
           and re-entering the Reality.
         </div>
-        <div>
-          You have {{ formatInt(totalUnlocks) }} V-achievements done. You gain 1 Space Theorem for each completion,
+        <div class="c-v-info-text">
+          You have {{ formatInt(totalUnlocks) }} V-Achievements done.
+          You gain {{ formatInt(1) }} Space Theorem for each completion,
           allowing you to purchase Time Studies which are normally locked.
         </div>
         <br>
@@ -218,7 +235,7 @@ Vue.component("v-tab", {
               v-for="milestone in row"
               :class="{'o-v-milestone--unlocked':
               has(milestone)}">
-                <p>{{ milestone.description() }}</p>
+                <p>{{ milestone.description }}</p>
                 <p>Reward: {{ rewardText(milestone) }}</p>
                 <p v-if="milestone.effect">Currently: <b>{{ milestone.format(milestone.effect()) }}</b></p>
             </div>

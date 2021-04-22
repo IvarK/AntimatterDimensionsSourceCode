@@ -15,11 +15,12 @@ Vue.component("dilation-upgrade", {
       isAffordable: false,
       isAutoUnlocked: false,
       isAutobuyerOn: false,
+      timeUntilCost: new Decimal(0),
     };
   },
   watch: {
     isAutobuyerOn(newValue) {
-      this.upgrade.isAutobuyerOn = newValue;
+      Autobuyer.dilationUpgrade(this.upgrade.id).isActive = newValue;
     }
   },
   computed: {
@@ -32,27 +33,36 @@ Vue.component("dilation-upgrade", {
         "o-dilation-upgrade--bought": this.isBought,
         "o-dilation-upgrade--capped": this.isCapped,
       };
+    },
+    timeEstimate() {
+      // Don't show if less than 10 seconds or more than a year
+      return this.timeUntilCost.lt(10) || this.timeUntilCost.gt(86400 * 365.25) 
+        ? null
+        : TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toStringShort(false);
     }
   },
   methods: {
     update() {
+      const upgrade = this.upgrade;
+      this.timeUntilCost = Decimal.sub(upgrade.cost, Currency.dilatedTime.value).div(getDilationGainPerSecond());
       if (this.isRebuyable) {
-        this.isAffordable = this.upgrade.isAffordable;
-        this.isCapped = this.upgrade.isCapped;
-      } else {
-        this.isBought = this.upgrade.isBought;
-        if (!this.isBought) {
-          this.isAffordable = this.upgrade.isAffordable;
-        }
+        this.isAffordable = upgrade.isAffordable;
+        this.isCapped = upgrade.isCapped;
+        const autobuyer = Autobuyer.dilationUpgrade(upgrade.id);
+        this.isAutoUnlocked = autobuyer.isUnlocked;
+        this.isAutobuyerOn = autobuyer.isActive;
+        return;
       }
-      this.isAutoUnlocked = Perk.autobuyerDilation.isBought;
-      this.isAutobuyerOn = this.upgrade.isAutobuyerOn;
+      this.isBought = upgrade.isBought;
+      if (!this.isBought) {
+        this.isAffordable = upgrade.isAffordable;
+      }
     }
   },
   template:
     `<div class="l-spoon-btn-group">
-      <button :class="classObject" @click="upgrade.purchase()">
-        <description-display 
+      <button :class="classObject" @click="upgrade.purchase()" :ach-tooltip="timeEstimate">
+        <description-display
           :config="upgrade.config"
           :length="70"
           name="o-dilation-upgrade__description"

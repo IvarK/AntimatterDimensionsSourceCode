@@ -34,8 +34,8 @@ Vue.component("eternity-upgrade-button", {
       <cost-display br
         v-if="!isBought"
         :config="upgrade.config"
-        singular="EP"
-        plural="EP"
+        singular="Eternity Point"
+        plural="Eternity Points"
       />
     </button>`
 });

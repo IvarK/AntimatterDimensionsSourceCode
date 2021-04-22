@@ -10,7 +10,7 @@ function antimatterDimensionCommonMultiplier() {
   multiplier = multiplier.times(ShopPurchase.allDimPurchases.currentMult);
 
   if (!EternityChallenge(9).isRunning) {
-    multiplier = multiplier.times(player.infinityPower.pow(getInfinityConversionRate()).max(1));
+    multiplier = multiplier.times(Currency.infinityPower.value.pow(getInfinityConversionRate()).max(1));
   }
   multiplier = multiplier.timesEffectsOf(
     BreakInfinityUpgrade.totalAMMult,
@@ -26,7 +26,6 @@ function antimatterDimensionCommonMultiplier() {
     Achievement(73),
     Achievement(74),
     Achievement(76),
-    Achievement(78).effects.dimensionMult,
     Achievement(84),
     Achievement(91),
     Achievement(92),
@@ -44,7 +43,7 @@ function antimatterDimensionCommonMultiplier() {
 
   multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
   multiplier = multiplier.times(getAdjustedGlyphEffect("powermult"));
-  multiplier = multiplier.times(player.reality.realityMachines.powEffectOf(AlchemyResource.force));
+  multiplier = multiplier.times(Currency.realityMachines.value.powEffectOf(AlchemyResource.force));
 
   return multiplier;
 }
@@ -53,7 +52,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   if (tier < 1 || tier > 8) throw new Error(`Invalid Antimatter Dimension tier ${tier}`);
   if (NormalChallenge(10).isRunning && tier > 6) return new Decimal(1);
   if (EternityChallenge(11).isRunning) {
-    return player.infinityPower.pow(
+    return Currency.infinityPower.value.pow(
       getInfinityConversionRate()
       ).max(1).times(DimBoost.multiplierToNDTier(tier));
   }
@@ -124,12 +123,12 @@ function applyNDMultipliers(mult, tier) {
   multiplier = multiplier.timesEffectsOf(
     tier === 8 ? Achievement(23) : null,
     tier < 8 ? Achievement(34) : null,
-    tier <= 4 ? Achievement(43) : null,
+    tier <= 4 ? Achievement(64) : null,
     tier < 8 ? TimeStudy(71) : null,
     tier === 8 ? TimeStudy(214) : null,
     tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
   );
-  if (Achievement(77).isUnlocked) {
+  if (Achievement(43).isUnlocked) {
     multiplier = multiplier.times(1 + tier / 100);
   }
 
@@ -179,11 +178,11 @@ function onBuyDimension(tier) {
   }
 
   player.postC4Tier = tier;
-  player.thisInfinityLastBuyTime = player.thisInfinityTime;
-  if (tier !== 8) player.onlyEighthDimensions = false;
-  if (tier !== 1) player.onlyFirstDimensions = false;
-  if (tier === 8) player.noEighthDimensions = false;
-  if (tier === 1) player.noFirstDimensions = false;
+  player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
+  if (tier !== 8) player.achievementChecks.onlyEighthDimensions = false;
+  if (tier !== 1) player.achievementChecks.onlyFirstDimensions = false;
+  if (tier === 8) player.achievementChecks.noEighthDimensions = false;
+  if (tier === 1) player.achievementChecks.noFirstDimensions = false;
 }
 
 function floatText(tier, text) {
@@ -247,7 +246,7 @@ function buyAsManyAsYouCanBuy(tier) {
   const howMany = dimension.howManyCanBuy;
   const cost = dimension.cost.times(howMany);
 
-  if (tier === 8 && Enslaved.isRunning && AntimatterDimension(8).bought >= 1) return buyOneDimension(8);
+  if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
 
   dimension.currencyAmount = dimension.currencyAmount.minus(cost);
   dimension.challengeCostBump();
@@ -281,7 +280,7 @@ function maxAll() {
   for (let tier = 1; tier < 9; tier++) {
     buyMaxDimension(tier);
   }
-  
+
   // Do this here because tickspeed might not have been unlocked before
   // (and maxAll might have unlocked it by buying dimensions).
   buyMaxTickSpeed();
@@ -293,7 +292,7 @@ function buyMaxDimension(tier, bulk = Infinity, auto = false) {
   const cost = dimension.costUntil10;
   let bulkLeft = bulk;
   const goal = Player.infinityGoal;
-  if (dimension.cost.gt(goal) && (NormalChallenge.isRunning || InfinityChallenge.isRunning)) return;
+  if (dimension.cost.gt(goal) && Player.isInAntimatterChallenge) return;
 
   if (tier === 8 && Enslaved.isRunning) {
     buyOneDimension(8);
@@ -646,7 +645,7 @@ const AntimatterDimensions = {
   tick(diff) {
     // Stop producing antimatter at Big Crunch goal because all the game elements
     // are hidden when pre-break Big Crunch button is on screen.
-    const hasBigCrunchGoal = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
+    const hasBigCrunchGoal = !player.break || Player.isInAntimatterChallenge;
     if (hasBigCrunchGoal && Currency.antimatter.gte(Player.infinityGoal)) return;
 
     let maxTierProduced = EternityChallenge(3).isRunning ? 3 : 7;
@@ -659,7 +658,7 @@ const AntimatterDimensions = {
       AntimatterDimension(tier + nextTierOffset).produceDimensions(AntimatterDimension(tier), diff / 10);
     }
     if (AntimatterDimension(1).amount.gt(0)) {
-      player.noFirstDimensions = false;
+      player.achievementChecks.noFirstDimensions = false;
     }
     AntimatterDimension(1).produceCurrency(Currency.antimatter, diff);
     if (NormalChallenge(12).isRunning) {

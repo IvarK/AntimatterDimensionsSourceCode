@@ -54,6 +54,7 @@ Vue.component("autobuyer-box", {
       isActive: false,
       globalToggle: false,
       canBeBought: false,
+      isUnlockable: false,
       antimatterCost: new Decimal(0),
       isBought: false,
       antimatter: new Decimal(0)
@@ -69,11 +70,12 @@ Vue.component("autobuyer-box", {
       const autobuyer = this.autobuyer;
       this.isUnlocked = autobuyer.isUnlocked;
       this.isActive = autobuyer.isActive;
-      this.globalToggle = player.options.autobuyersOn;
-      this.canBeBought = this.autobuyer.canBeBought;
-      this.antimatterCost = this.autobuyer.antimatterCost;
-      this.isBought = this.autobuyer.isBought;
-      this.antimatter.copyFrom(Currency.antimatter);
+      this.globalToggle = player.auto.autobuyersOn;
+      this.canBeBought = autobuyer.canBeBought;
+      this.isUnlockable = autobuyer.canUnlockSlowVersion;
+      this.antimatterCost = autobuyer.antimatterCost;
+      this.isBought = autobuyer.isBought;
+      this.antimatter.copyFrom(player.records.thisEternity.maxAM);
     },
     toggle() {
       this.isActive = !this.isActive;
@@ -83,15 +85,12 @@ Vue.component("autobuyer-box", {
     }
   },
   computed: {
-    canBuy() {
-      return this.antimatter.gte(this.antimatterCost);
-    },
     autobuyerBuyBoxClass() {
       return {
         "c-autobuyer-buy-box": true,
         "o-primary-btn": true,
-        "o-primary-btn--enabled": this.canBuy,
-        "o-primary-btn--disabled": !this.canBuy
+        "o-primary-btn--enabled": this.isUnlockable,
+        "o-primary-btn--disabled": !this.isUnlockable
       };
     },
     autobuyerToggleClass() {
@@ -104,6 +103,11 @@ Vue.component("autobuyer-box", {
         "o-autobuyer-toggle-checkbox__label--disabled": !this.globalToggle
       };
     },
+    showEternity() {
+      return PlayerProgress.eternityUnlocked()
+        ? "this Eternity"
+        : "";
+    }
   },
   template: `
     <div v-if="isUnlocked || isBought" class="c-autobuyer-box-row">
@@ -130,6 +134,8 @@ Vue.component("autobuyer-box", {
       </div>
     </div>
     <div v-else-if="canBeBought" @click="purchase" :class="autobuyerBuyBoxClass">
-      Buy the {{ name }} for {{ format(antimatterCost) }} antimatter
+      {{ name }}
+      <br>
+      Requirement: {{ format(antimatterCost) }} Total Antimatter {{ showEternity }}
     </div>`
 });

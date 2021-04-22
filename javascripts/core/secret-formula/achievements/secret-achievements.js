@@ -4,7 +4,7 @@ GameDatabase.achievements.secret = [
   {
     id: 11,
     name: "The first one's always free",
-    description: "Click on this achievement."
+    description: "Click on this Achievement."
   },
   {
     id: 12,
@@ -31,7 +31,7 @@ GameDatabase.achievements.secret = [
     name: "Do you enjoy pain?",
     get description() {
       return `Use a "painful" notation for ${formatInt(10)} real-time minutes
-      after having eternitied at least once.`;
+      after doing an Eternity.`;
     },
     checkRequirement: () => AchievementTimers.pain
       .check(PlayerProgress.eternityUnlocked() && Notations.current.isPainful, 600),
@@ -80,7 +80,7 @@ GameDatabase.achievements.secret = [
     id: 26,
     name: "You're a failure",
     get description() {
-      return `Fail eternity challenges ${formatInt(10)} times without refreshing. 
+      return `Fail Eternity Challenges ${formatInt(10)} times without refreshing.
       What are you doing with your life...`;
     },
     checkRequirement: (function() {
@@ -125,12 +125,12 @@ GameDatabase.achievements.secret = [
   {
     id: 34,
     name: "You do know how these work, right?",
-    description: "Respec with an empty study tree."
+    description: "Respec with an empty Time Study tree."
   },
   {
     id: 35,
     name: "Should we tell them about buy max...",
-    get description() { return `Buy single tickspeed ${formatInt(1e5)} times.`; },
+    get description() { return `Buy single Tickspeed upgrades ${formatInt(1e5)} times.`; },
     checkRequirement: () => player.secretUnlocks.why >= 1e5,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
@@ -176,7 +176,7 @@ GameDatabase.achievements.secret = [
   {
     id: 45,
     name: "This dragging is dragging on",
-    description: "Drag the perks around for a minute.",
+    description: "Drag the Perks around for a minute.",
     checkRequirement: () => player.secretUnlocks.dragging++ / 100 >= 60
   },
   {

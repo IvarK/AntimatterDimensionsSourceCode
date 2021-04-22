@@ -29,7 +29,7 @@ class DimBoost {
       .timesEffectsOf(
         TimeStudy(83),
         TimeStudy(231),
-        Achievement(101),
+        Achievement(117),
         Achievement(142),
         GlyphEffect.dimBoostPower
       ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);
@@ -62,8 +62,8 @@ class DimBoost {
   static get canBeBought() {
     if (NormalChallenge(8).isRunning && DimBoost.purchasedBoosts >= this.challenge8MaxBoosts) return false;
     if (Ra.isRunning) return false;
-    if (player.thisInfinityMaxAM.gt(Player.infinityGoal) &&
-       (!player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning)) return false;
+    if (player.records.thisInfinity.maxAM.gt(Player.infinityGoal) &&
+       (!player.break || Player.isInAntimatterChallenge)) return false;
     return true;
   }
 
@@ -141,9 +141,7 @@ function softReset(bulk, forcedNDReset = false, forcedAMReset = false) {
 }
 
 function skipResetsIfPossible() {
-  if (NormalChallenge.isRunning || InfinityChallenge.isRunning) {
-    return;
-  }
+  if (Player.isInAntimatterChallenge) return;
   if (InfinityUpgrade.skipResetGalaxy.isBought && player.dimensionBoosts < 4) {
     player.dimensionBoosts = 4;
     if (player.galaxies === 0) player.galaxies = 1;

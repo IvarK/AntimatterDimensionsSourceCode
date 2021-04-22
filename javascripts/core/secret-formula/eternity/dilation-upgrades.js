@@ -43,12 +43,12 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e6,
       increment: 100,
       description: () =>
-        (Perk.bypassDGReset.isBought
-        ? "Reset Dilated Galaxies, but lower their threshold"
-        : "Reset Dilated Time and Dilated Galaxies, but lower their threshold"),
+        (Perk.bypassTGReset.isBought
+        ? "Reset Tachyon Galaxies, but lower their threshold"
+        : "Reset Dilated Time and Tachyon Galaxies, but lower their threshold"),
       // The 38th purchase is at 1e80, and is the last purchase.
       effect: bought => (bought < 38 ? Math.pow(0.8, bought) : 0),
-      formatEffect: () => format(getFreeGalaxyMult(), 3, 3),
+      formatEffect: () => format(getTachyonGalaxyMult(), 3, 3),
       formatCost: value => format(value, 2, 0),
       purchaseCap: 38
     }),
@@ -67,7 +67,7 @@ GameDatabase.eternity.dilation = (function() {
     doubleGalaxies: {
       id: 4,
       cost: 5e6,
-      description: () => `Gain twice as many free galaxies, up to ${formatInt(1000)}.`,
+      description: () => `Gain twice as many Tachyon Galaxies, up to ${formatInt(1000)}.`,
       effect: 2
     },
     tdMultReplicanti: {
@@ -96,21 +96,21 @@ GameDatabase.eternity.dilation = (function() {
       id: 6,
       cost: 5e7,
       description: "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation.",
-      effect: () => player.dilation.dilatedTime.pow(308).clampMin(1),
+      effect: () => Currency.dilatedTime.value.pow(308).clampMin(1),
       formatEffect: value => formatX(value, 2, 1)
     },
     ipMultDT: {
       id: 7,
       cost: 2e12,
-      description: "Gain a multiplier to IP based on Dilated Time.",
-      effect: () => player.dilation.dilatedTime.pow(1000).clampMin(1),
+      description: "Gain a multiplier to Infinity Points based on Dilated Time.",
+      effect: () => Currency.dilatedTime.value.pow(1000).clampMin(1),
       formatEffect: value => formatX(value, 2, 1),
       cap: () => Effarig.eternityCap
     },
     timeStudySplit: {
       id: 8,
       cost: 1e10,
-      description: "Pick all the study paths from the first split."
+      description: "You can buy all three Time Study paths from the first split."
     },
     dilationPenalty: {
       id: 9,
@@ -122,7 +122,7 @@ GameDatabase.eternity.dilation = (function() {
       id: 10,
       cost: 1e15,
       description: "Generate Time Theorems based on Tachyon Particles.",
-      effect: () => player.dilation.tachyonParticles.div(20000),
+      effect: () => Currency.tachyonParticles.value.div(20000),
       formatEffect: value => `${format(value, 2, 1)}/sec`
     }
   };

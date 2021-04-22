@@ -110,6 +110,7 @@ GameStorage.migrations = {
       GameStorage.migrations.moveSavedStudyTrees(player);
       GameStorage.migrations.convertEPMult(player);
       GameStorage.migrations.moveChallengeInfo(player);
+      GameStorage.migrations.infinitiedConversion(player);
       GameStorage.migrations.adjustWhy(player);
       GameStorage.migrations.adjustThemes(player);
       GameStorage.migrations.removeAchPow(player);
@@ -140,6 +141,12 @@ GameStorage.migrations = {
       GameStorage.migrations.migrateIPGen(player);
       GameStorage.migrations.renameCloudVariable(player);
       GameStorage.migrations.standardizeUncompletedTimes(player);
+      GameStorage.migrations.makeRecords(player);
+      GameStorage.migrations.deleteOldRecords(player);
+      GameStorage.migrations.migrateAutobuyers(player);
+      GameStorage.migrations.migratePlayerVars(player);
+      GameStorage.migrations.consolidateAuto(player);
+      GameStorage.migrations.convertTimeTheoremPurchases(player);
 
       kong.migratePurchases();
       if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
@@ -161,6 +168,11 @@ GameStorage.migrations = {
     for (let i = 0; i < 10; i++) {
       player.lastTenEternities[i][0] *= 100;
       player.lastTenRuns[i][0] *= 100;
+      // Nowadays this would be player.lastTenEternities[i][3] *= 100;
+      // However, this migration is done so early that it was player.lastTenEternities[i][2]
+      // (but late enough that player.lastTenEternities[i][2] is defined).
+      player.lastTenEternities[i][2] *= 100;
+      player.lastTenRuns[i][2] *= 100;
     }
 
     if (player.challengeTimes) {
@@ -335,24 +347,24 @@ GameStorage.migrations = {
   },
 
   adjustAchievementVars(player) {
-    player.onlyFirstDimensions = player.dead;
+    player.achievementChecks.onlyFirstDimensions = player.dead;
     delete player.dead;
-    player.onlyEighthDimensions = player.dimlife;
+    player.achievementChecks.onlyEighthDimensions = player.dimlife;
     delete player.dimlife;
     // Just initialize all these to false, which is basically always correct.
-    player.noAntimatterProduced = false;
-    player.noFirstDimensions = false;
-    player.noEighthDimensions = false;
+    player.achievementChecks.noAntimatterProduced = false;
+    player.achievementChecks.noFirstDimensions = false;
+    player.achievementChecks.noEighthDimensions = false;
     // If someone has 0 max replicanti galaxies, they can't have gotten any.
     // If they have more than 0 max replicanti galaxies, we don't give them
     // the benefit of the doubt.
-    player.noReplicantiGalaxies = player.replicanti.gal === 0;
+    player.achievementChecks.noReplicantiGalaxies = player.replicanti.gal === 0;
     if (
       player.timestudy.theorem.gt(0) ||
       player.timestudy.studies.length > 0 ||
       player.challenge.eternity.unlocked !== 0
-    ) player.noTheoremPurchases = false;
-    if (player.sacrificed.gt(0)) player.noSacrifices = false;
+    ) player.achievementChecks.noTheoremPurchases = false;
+    if (player.sacrificed.gt(0)) player.achievementChecks.noSacrifices = false;
   },
 
   adjustThemes(player) {
@@ -535,7 +547,7 @@ GameStorage.migrations = {
     for (let i = 0; i < 8; i++) {
       const old = player.autobuyers[i];
       if (old % 1 === 0) continue;
-      const autobuyer = player.auto.dimensions[i];
+      const autobuyer = player.auto.antimatterDims[i];
       autobuyer.cost = old.cost;
       autobuyer.interval = old.interval;
       autobuyer.bulk = old.bulk;
@@ -598,7 +610,7 @@ GameStorage.migrations = {
           autobuyer.time = condition.lt(Decimal.NUMBER_MAX_VALUE) ? condition.toNumber() : autobuyer.time;
           break;
         case "relative":
-          autobuyer.xLast = condition;
+          autobuyer.xCurrent = condition;
           break;
       }
       autobuyer.isActive = old.isOn;
@@ -661,10 +673,17 @@ GameStorage.migrations = {
   },
 
   convertAchievementsToBits(player) {
+    // Also switches achievement positions
+    const swaps = { "4,3": "6,4", "6,4": "7,7", "7,7": "4,3", "10,1": "11,7", "11,7": "10,1" };
     const convertAchievementArray = (newAchievements, oldAchievements) => {
       for (const oldId of oldAchievements) {
-        const row = Math.floor(oldId / 10);
-        const column = oldId % 10;
+        let row = Math.floor(oldId / 10);
+        let column = oldId % 10;
+        // eslint-disable-next-line no-bitwise
+        if (
+          [row, column].join(",") in swaps) {
+          [row, column] = swaps[[row, column].join(",")].split(",");
+        }
         // eslint-disable-next-line no-bitwise
         newAchievements[row - 1] |= (1 << (column - 1));
       }
@@ -678,14 +697,14 @@ GameStorage.migrations = {
     convertAchievementArray(player.secretAchievementBits, player.secretAchievements);
     delete player.secretAchievements;
   },
-  
+
   setNoInfinitiesOrEternitiesThisReality(player) {
-    player.noInfinitiesThisReality = player.infinitied.eq(0) && player.eternities.eq(0);
-    player.noEternitiesThisReality = player.eternities.eq(0);
+    player.achievementChecks.noInfinitiesThisReality = player.infinities.eq(0) && player.eternities.eq(0);
+    player.achievementChecks.noEternitiesThisReality = player.eternities.eq(0);
   },
 
   setTutorialState(player) {
-    if (player.infinitied.gt(0) || player.eternities.gt(0) || player.realities > 0 || player.galaxies > 0) {
+    if (player.infinities.gt(0) || player.eternities.gt(0) || player.realities > 0 || player.galaxies > 0) {
       player.tutorialState = 4;
     } else if (player.dimensionBoosts > 0) player.tutorialState = TUTORIAL_STATE.GALAXY;
   },
@@ -732,6 +751,90 @@ GameStorage.migrations = {
     }
   },
 
+  makeRecords(player) {
+    player.records.gameCreatedTime = player.gameCreatedTime;
+    player.records.totalTimePlayed = player.totalTimePlayed;
+    player.records.realTimePlayed = player.realTimePlayed;
+    player.records.totalAntimatter = new Decimal(player.totalAntimatter);
+    player.records.lastTenInfinities = player.lastTenRuns;
+    player.records.lastTenEternities = player.lastTenEternities;
+    for (let i = 0; i < 10; i++) {
+      player.records.lastTenInfinities[i][1] = new Decimal(player.lastTenRuns[i][1]);
+      player.records.lastTenEternities[i][1] = new Decimal(player.lastTenEternities[i][1]);
+    }
+    player.records.thisInfinity.time = player.thisInfinityTime;
+    player.records.bestInfinity.time = player.bestInfinityTime;
+    player.records.thisEternity.time = player.thisEternity;
+    player.records.bestEternity.time = player.bestEternity;
+    player.records.thisReality.time = player.thisReality;
+  },
+
+  deleteOldRecords(player) {
+    delete player.gameCreatedTime;
+    delete player.totalTimePlayed;
+    delete player.realTimePlayed;
+    delete player.totalAntimatter;
+    delete player.lastTenRuns;
+    delete player.lastTenEternities;
+    delete player.thisInfinityTime;
+    delete player.bestInfinityTime;
+    delete player.thisEternity;
+    delete player.bestEternity;
+    delete player.thisReality;
+  },
+
+  migrateAutobuyers(player) {
+    player.auto.bulkOn = player.options.bulkOn;
+    player.auto.autobuyerOn = player.options.autobuyerOn;
+
+    delete player.options.bulkOn;
+    delete player.options.autobuyerOn;
+  },
+
+  migratePlayerVars(player) {
+    player.replicanti.boughtGalaxyCap = player.replicanti.gal;
+    player.dilation.totalTachyonGalaxies = player.dilation.freeGalaxies;
+
+    delete player.replicanti.gal;
+    delete player.dilation.freeGalaxies;
+  },
+
+  consolidateAuto(player) {
+    for (let i = 0; i < 8; i++) {
+      player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
+    }
+    for (let i = 0; i < 3; i++) {
+      player.auto.replicantiUpgrades[i].isActive = player.replicanti.auto[i];
+    }
+    player.auto.replicantiGalaxies.isActive = player.replicanti.galaxybuyer;
+    player.auto.ipMultBuyer.isActive = player.infMultBuyer;
+
+    delete player.infDimBuyers;
+    delete player.auto.infDimTimer;
+    delete player.replicanti.galaxybuyer;
+    delete player.replicanti.auto;
+    delete player.auto.repUpgradeTimer;
+    delete player.infMultBuyer;
+  },
+
+  convertTimeTheoremPurchases(player) {
+    player.timestudy.amBought = new Decimal(player.timestudy.amcost).exponent / 20000 - 1;
+    player.timestudy.ipBought = new Decimal(player.timestudy.ipcost).exponent / 100;
+    player.timestudy.epBought = Math.round(new Decimal(player.timestudy.epcost).log2());
+
+    delete player.timestudy.amcost;
+    delete player.timestudy.ipcost;
+    delete player.timestudy.epcost;
+  },
+
+  infinitiedConversion(player) {
+    player.infinities = new Decimal(player.infinitied);
+    player.infinitiesBanked = new Decimal(player.infinitiedBank);
+
+    delete player.infinitied;
+    delete player.infinitiedBank;
+  },
+
   prePatch(saveData) {
     // Initialize all possibly undefined properties that were not present in
     // previous versions and which could be overwritten by deepmerge
@@ -754,5 +857,5 @@ GameStorage.migrations = {
       player.version = version;
     }
     return player;
-  }
+  },
 };

@@ -2,7 +2,10 @@
 
 GameDatabase.infinity.upgrades = (function() {
   function dimInfinityMult() {
-    return Player.totalInfinitied.times(0.2).plus(1);
+    return Currency.infinitiesTotal.value.times(0.2).plus(1);
+  }
+  function chargedDimInfinityMult() {
+    return 1 + Math.log10(Math.max(1, Currency.infinitiesTotal.value.pLog10())) * Math.sqrt(Ra.pets.teresa.level) / 150;
   }
   return {
     totalTimeMult: {
@@ -22,52 +25,48 @@ GameDatabase.infinity.upgrades = (function() {
     dim18mult: {
       id: "18Mult",
       cost: 1,
-      description: "1st and 8th Antimatter Dimensions gain a multiplier based on Infinitied stat",
+      description: "1st and 8th Antimatter Dimensions gain a multiplier based on Infinities",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {
-        description: "1st and 8th Antimatter Dimensions gain a power effect based on Infinitied stat and Teresa level",
-        effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.sqrt(Ra.pets.teresa.level) / 150,
+        description: "1st and 8th Antimatter Dimensions gain a power effect based on Infinities and Teresa level",
+        effect: () => chargedDimInfinityMult(),
         formatEffect: value => formatPow(value, 4, 4)
       }
     },
     dim27mult: {
       id: "27Mult",
       cost: 1,
-      description: "2nd and 7th Antimatter Dimensions gain a multiplier based on Infinitied stat",
+      description: "2nd and 7th Antimatter Dimensions gain a multiplier based on Infinities",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {
-        description: "2nd and 7th Antimatter Dimensions gain a power effect based on Infinitied stat and Teresa level",
-        effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.sqrt(Ra.pets.teresa.level) / 150,
+        description: "2nd and 7th Antimatter Dimensions gain a power effect based on Infinities and Teresa level",
+        effect: () => chargedDimInfinityMult(),
         formatEffect: value => formatPow(value, 4, 4)
       }
     },
     dim36mult: {
       id: "36Mult",
       cost: 1,
-      description: "3rd and 6th Antimatter Dimensions gain a multiplier based on Infinitied stat",
+      description: "3rd and 6th Antimatter Dimensions gain a multiplier based on Infinities",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {
-        description: "3rd and 6th Antimatter Dimensions gain a power effect based on Infinitied stat and Teresa level",
-        effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.sqrt(Ra.pets.teresa.level) / 150,
+        description: "3rd and 6th Antimatter Dimensions gain a power effect based on Infinities and Teresa level",
+        effect: () => chargedDimInfinityMult(),
         formatEffect: value => formatPow(value, 4, 4)
       }
     },
     dim45mult: {
       id: "45Mult",
       cost: 1,
-      description: "4th and 5th Antimatter Dimensions gain a multiplier based on Infinitied stat",
+      description: "4th and 5th Antimatter Dimensions gain a multiplier based on Infinities",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {
-        description: "4th and 5th Antimatter Dimensions gain a power effect based on Infinitied stat and Teresa level",
-        effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.sqrt(Ra.pets.teresa.level) / 150,
+        description: "4th and 5th Antimatter Dimensions gain a power effect based on Infinities and Teresa level",
+        effect: () => chargedDimInfinityMult(),
         formatEffect: value => formatPow(value, 4, 4)
       }
     },
@@ -99,10 +98,10 @@ GameDatabase.infinity.upgrades = (function() {
     galaxyBoost: {
       id: "galaxyBoost",
       cost: 2,
-      description: "Galaxies are twice as strong",
+      description: "All Galaxies are twice as strong",
       effect: 2,
       charged: {
-        description: "Galaxies are stronger based on Teresa level",
+        description: "All Galaxies are stronger based on Teresa level",
         effect: () => 2 + Math.sqrt(Ra.pets.teresa.level) / 100,
         formatEffect: value => `+${formatPercents(value - 1)}`
       }
@@ -126,11 +125,11 @@ GameDatabase.infinity.upgrades = (function() {
       id: "unspentBonus",
       cost: 5,
       description: "Multiplier to 1st Antimatter Dimension based on unspent Infinity Points",
-      effect: () => player.infinityPoints.dividedBy(2).pow(1.5).plus(1),
+      effect: () => Currency.infinityPoints.value.dividedBy(2).pow(1.5).plus(1),
       formatEffect: value => formatX(value, 2, 2),
       charged: {
         description: "Multiplier to 1st Antimatter Dimension based on unspent Infinity Points, powered by Teresa level",
-        effect: () => player.infinityPoints.dividedBy(2).pow(Math.sqrt(Ra.pets.teresa.level) * 1.5).plus(1),
+        effect: () => Currency.infinityPoints.value.dividedBy(2).pow(Math.sqrt(Ra.pets.teresa.level) * 1.5).plus(1),
         formatEffect: value => formatX(value, 2, 2)
       }
     },
@@ -156,14 +155,14 @@ GameDatabase.infinity.upgrades = (function() {
       formatEffect: value => {
         if (Teresa.isRunning || V.isRunning) return "Disabled in this reality";
         const income = format(value, 2, 0);
-        const period = player.bestInfinityTime >= 999999999999
+        const period = player.records.bestInfinity.time >= 999999999999
           ? "∞"
           : Time.bestInfinity.times(10).toStringShort();
         return `${income} every ${period}`;
       },
       charged: {
         description: () =>
-          `Gain a percentage of your RM gained on Reality each real-time second,
+          `Gain a percentage of your Reality Machines gained on Reality each real-time second,
           percent increases with Teresa level`,
         effect: () => Math.sqrt(Ra.pets.teresa.level) / 1000 * RA_UNLOCKS.TT_BOOST.effect.autoPrestige(),
         formatEffect: value => `${formatPercents(value, 2)}`
@@ -174,21 +173,18 @@ GameDatabase.infinity.upgrades = (function() {
       cost: 20,
       description: () =>
         `Start every reset with ${formatInt(1)} Dimension Boost, automatically unlocking the 5th Antimatter Dimension`,
-      bannedFromCharging: true
     },
     skipReset2: {
       id: "skipReset2",
       cost: 40,
       description: () =>
         `Start every reset with ${formatInt(2)} Dimension Boosts, automatically unlocking the 6th Antimatter Dimension`,
-      bannedFromCharging: true
     },
     skipReset3: {
       id: "skipReset3",
       cost: 80,
       description: () =>
         `Start every reset with ${formatInt(3)} Dimension Boosts, automatically unlocking the 7th Antimatter Dimension`,
-      bannedFromCharging: true
     },
     skipResetGalaxy: {
       id: "skipResetGalaxy",
@@ -196,15 +192,14 @@ GameDatabase.infinity.upgrades = (function() {
       description: () =>
         `Start every reset with ${formatInt(4)} Dimension Boosts, automatically unlocking the 8th Antimatter Dimension;
         and an Antimatter Galaxy`,
-      bannedFromCharging: true
     },
     ipOffline: {
       id: "ipOffline",
       cost: 1000,
       description: () => `Only while offline, gain ${formatPercents(0.5)} of your best IP/min without using Max All`,
-      effect: () => player.bestIpPerMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
+      effect: () =>
+        player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
       formatEffect: value => `${format(value, 2, 2)} IP/min`,
-      bannedFromCharging: true
     },
     ipMult: {
       cost: () => player.infMultCost,
@@ -214,7 +209,6 @@ GameDatabase.infinity.upgrades = (function() {
       effect: () => player.infMult,
       cap: () => Effarig.eternityCap || new Decimal("1e1000000"),
       formatEffect: value => formatX(value, 2, 2),
-      bannedFromCharging: true
     }
   };
 }());

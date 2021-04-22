@@ -23,7 +23,7 @@ Vue.component("galaxy-autobuyer-box", {
     }
   },
   template:
-    `<autobuyer-box :autobuyer="autobuyer" name="Automatic Galaxies" :showInterval="!isBuyMaxUnlocked">
+    `<autobuyer-box :autobuyer="autobuyer" name="Automatic Antimatter Galaxies" :showInterval="!isBuyMaxUnlocked">
       <autobuyer-interval-button slot="intervalSlot" :autobuyer="autobuyer" />
       <template v-if="isBuyMaxUnlocked" slot="intervalSlot">
         <div class="c-autobuyer-box__small-text">Activates every X seconds:</div>
@@ -36,7 +36,7 @@ Vue.component("galaxy-autobuyer-box", {
       <template :slot=" isBuyMaxUnlocked ? 'toggleSlot' : 'intervalSlot' ">
         <div class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text" @click="limitGalaxies = !limitGalaxies">
           <input type="checkbox" :checked="limitGalaxies"/>
-          <span>Limit galaxies to:</span>
+          <span>Limit Antimatter Galaxies to:</span>
         </div>
         <autobuyer-input
          :autobuyer="autobuyer"

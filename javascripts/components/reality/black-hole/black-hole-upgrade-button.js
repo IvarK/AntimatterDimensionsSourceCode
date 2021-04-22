@@ -35,15 +35,16 @@ Vue.component("black-hole-upgrade-button", {
   },
   watch: {
     isAutobuyerOn(newValue) {
-      this.config.upgrade.isAutobuyerOn = newValue;
+      Autobuyer.blackHolePower(this.config.upgrade.id).isActive = newValue;
     }
   },
   methods: {
     update() {
-      this.isAffordable = this.config.upgrade.isAffordable && this.config.upgrade.value !== 0;
       this.isCapped = this.config.upgrade.value === 0;
-      this.isAutoUnlocked = this.config.upgrade.hasAutobuyer && Ra.has(RA_UNLOCKS.AUTO_BLACK_HOLE_POWER);
-      this.isAutobuyerOn = this.config.upgrade.hasAutobuyer && this.config.upgrade.isAutobuyerOn;
+      this.isAffordable = this.config.upgrade.isAffordable && !this.isCapped;
+      const hasAutobuyer = this.config.upgrade.hasAutobuyer;
+      this.isAutoUnlocked = hasAutobuyer && Ra.has(RA_UNLOCKS.AUTO_BLACK_HOLE_POWER);
+      this.isAutobuyerOn = hasAutobuyer && Autobuyer.blackHolePower(this.config.upgrade.id).isActive;
     }
   },
   template: `
@@ -55,7 +56,7 @@ Vue.component("black-hole-upgrade-button", {
       >
         <description-display :config="config" />
         <effect-display :config="effectConfig" :title="config.effectTitle" />
-        <cost-display v-if="!isCapped" :config="costConfig" singular="RM" plural="RM" />
+        <cost-display v-if="!isCapped" :config="costConfig" singular="Reality Machine" plural="Reality Machines" />
       </button>
       <primary-button-on-off
         v-if="isAutoUnlocked"

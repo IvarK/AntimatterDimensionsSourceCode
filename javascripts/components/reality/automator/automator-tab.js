@@ -28,7 +28,7 @@ Vue.component("automator-tab", {
   },
   methods: {
     update() {
-      this.automatorUnlocked = player.realities > 4;
+      this.automatorUnlocked = Player.automatorUnlocked;
       this.interval = AutomatorBackend.currentInterval;
     }
   },

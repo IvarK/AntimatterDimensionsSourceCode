@@ -5,18 +5,18 @@ const ENSLAVED_UNLOCKS = {
     id: 0,
     price: TimeSpan.fromYears(1e35).totalMilliseconds,
     secondaryRequirement: () => true,
-    description: () => `Increase the free tickspeed upgrade softcap by ${formatInt(1e5)}`,
+    description: () => `Increase the softcap to Tickspeed upgrades from Time Dimensions by ${formatInt(1e5)}`,
   },
   RUN: {
     id: 1,
     price: TimeSpan.fromYears(1e40).totalMilliseconds,
     secondaryRequirement() {
-      const hasLevelRequirement = player.bestGlyphLevel >= 5000;
-      const hasRarityRequirement = strengthToRarity(player.bestGlyphStrength) >= 100;
+      const hasLevelRequirement = player.records.bestReality.glyphLevel >= 5000;
+      const hasRarityRequirement = strengthToRarity(player.records.bestReality.glyphStrength) >= 100;
       return hasLevelRequirement && hasRarityRequirement;
     },
     description: () => `Unlock The Enslaved Ones' Reality (requires
-      a level ${formatInt(5000)} glyph and a ${formatRarity(100)} rarity glyph)`,
+      a level ${formatInt(5000)} Glyph and a ${formatRarity(100)} rarity Glyph)`,
   }
 };
 
@@ -122,8 +122,7 @@ const Enslaved = {
   initializeRun() {
     clearCelestialRuns();
     player.celestials.enslaved.run = true;
-    // Round to the nearest multiple of 2 to make the secret study hide
-    player.secretUnlocks.secretTS += player.secretUnlocks.secretTS % 2;
+    player.secretUnlocks.viewSecretTS = false;
     this.feltEternity = false;
     this.quotes.show(this.quotes.START_RUN);
   },
@@ -153,7 +152,7 @@ const Enslaved = {
     if (!this.feltEternity) {
       EnslavedProgress.feelEternity.giveProgress();
       this.feltEternity = true;
-      Modal.message.show("Time in eternity will be scaled by number of eternities");
+      Modal.message.show("Time in Eternity will be scaled by number of Eternities");
     }
   },
   get feltEternity() {
@@ -186,7 +185,7 @@ const Enslaved = {
     return Tesseracts.increases[player.celestials.enslaved.tesseracts];
   },
   get canBuyTesseract() {
-    return player.infinityPoints.gte(this.tesseractCost);
+    return Currency.infinityPoints.gte(this.tesseractCost);
   },
   buyTesseract() {
     if (!this.canBuyTesseract) return;

@@ -8,7 +8,7 @@ const GameStorage = {
     2: undefined
   },
   saved: 0,
-  
+
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
   },
@@ -59,6 +59,7 @@ const GameStorage = {
       Modal.message.show("Could not load the save");
       return;
     }
+    Modal.hideAll();
     this.loadPlayerObject(player, overrideLastUpdate);
     this.save(true);
     GameUI.notify.info("Game imported");
@@ -126,7 +127,7 @@ const GameStorage = {
       !this.verifyPlayerObject(playerObject)
     ) {
       player = deepmerge.all([{}, Player.defaultStart]);
-      player.gameCreatedTime = Date.now();
+      player.records.gameCreatedTime = Date.now();
       player.lastUpdate = Date.now();
       if (isDevEnvironment()) this.devMigrations.setLatestTestVersion(player);
     } else {
@@ -145,7 +146,7 @@ const GameStorage = {
       guardFromNaNValues(player);
     }
 
-    if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
+    if (Currency.infinities.gt(0) && !NormalChallenge(1).isCompleted) {
       NormalChallenge(1).complete();
     }
 

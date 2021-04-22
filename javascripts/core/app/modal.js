@@ -39,6 +39,12 @@ class Modal {
     ui.view.modal.cloudConflicts = [];
   }
 
+  static hideAll() {
+    if (!GameUI.initialized) return;
+    ui.view.modal.queue = [];
+    ui.view.modal.current = undefined;
+  }
+
   static get isOpen() {
     return ui.view.modal.current === this;
   }
@@ -51,6 +57,7 @@ class ChallengeConfirmationModal extends Modal {
   }
 }
 
+Modal.hardReset = new Modal("modal-hard-reset");
 Modal.h2p = new Modal("modal-h2p");
 Modal.awayProgress = new Modal("modal-away-progress");
 Modal.shortcuts = new Modal("modal-shortcuts");
@@ -69,6 +76,7 @@ Modal.deleteCompanion = new Modal("modal-delete-companion");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");
+Modal.enterDilation = new Modal("modal-enter-dilation");
 Modal.startEternityChallenge = new ChallengeConfirmationModal("modal-start-eternity-challenge");
 Modal.startInfinityChallenge = new ChallengeConfirmationModal("modal-start-infinity-challenge");
 Modal.startNormalChallenge = new ChallengeConfirmationModal("modal-start-normal-challenge");

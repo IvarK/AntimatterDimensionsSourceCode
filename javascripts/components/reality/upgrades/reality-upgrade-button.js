@@ -35,7 +35,7 @@ Vue.component("reality-upgrade-button", {
   },
   watch: {
     isAutobuyerOn(newValue) {
-      this.upgrade.isAutobuyerOn = newValue;
+      Autobuyer.realityUpgrade(this.upgrade.id).isActive = newValue;
     }
   },
   methods: {
@@ -47,7 +47,7 @@ Vue.component("reality-upgrade-button", {
       this.isBought = !upgrade.isRebuyable && upgrade.isBought;
       this.isPossible = upgrade.isPossible;
       this.isAutoUnlocked = Ra.has(RA_UNLOCKS.AUTO_REALITY_UPGRADES);
-      this.isAutobuyerOn = this.upgrade.isAutobuyerOn;
+      if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.realityUpgrade(upgrade.id).isActive;
     }
   },
   template: `
@@ -70,9 +70,10 @@ Vue.component("reality-upgrade-button", {
         <template v-else>
           <effect-display :config="config" />
           <cost-display
+            v-if="!isBought"
             :config="config"
-            singular="RM"
-            plural="RM"
+            singular="Reality Machine"
+            plural="Reality Machines"
           />
         </template>
       </button>

@@ -79,7 +79,7 @@ Vue.component("eternity-challenges-tab", {
           this.isRunning = challenge.isRunning;
           this.isCompleted = challenge.isFullyCompleted;
           this.completions = challenge.completions;
-          this.showGoalSpan = player.realities > 0;
+          this.showGoalSpan = PlayerProgress.realityUnlocked();
           this.enslavedSpanOverride = Enslaved.isRunning && this.challenge.id === 1;
         },
         start() {
@@ -146,9 +146,12 @@ Vue.component("eternity-challenges-tab", {
     `<div class="l-challenges-tab">
       <challenges-header/>
       <div>Complete Eternity Challenges again for a bigger reward, maximum of {{formatInt(5)}} times.</div>
-      <div>
-        (You have unlocked {{formatInt(unlockedCount)}}
-        out of {{formatInt(12)}} Eternity Challenges)
+      <div v-if="unlockedCount !== 12">
+        (You have unlocked {{ formatInt(unlockedCount) }}
+        out of {{ formatInt(12) }} Eternity Challenges)
+      </div>
+      <div v-else>
+        You have unlocked all {{ formatInt(12) }} Eternity Challenges
       </div>
       <challenge-grid :count="12" :isChallengeVisible="isChallengeVisible">
         <eternity-challenge-box slot-scope="slotProps" :challengeId="slotProps.challengeId" />

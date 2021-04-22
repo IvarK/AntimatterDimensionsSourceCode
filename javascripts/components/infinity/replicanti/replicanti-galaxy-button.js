@@ -5,7 +5,7 @@ Vue.component("replicanti-galaxy-button", {
     return {
       isAvailable: false,
       isAutoUnlocked: false,
-      isAutoOn: false,
+      isAutoActive: false,
       isAutoEnabled: false,
       isDivideUnlocked: false,
       boughtGalaxies: 0,
@@ -25,27 +25,28 @@ Vue.component("replicanti-galaxy-button", {
       return `Currently: ${galaxyCount}`;
     },
     autobuyer() {
-      return Replicanti.galaxies.autobuyer;
+      return Autobuyer.replicantiGalaxy;
     },
-    autobuyerOnTextDisplay() {
-      return this.isAutoEnabled ? "Auto galaxy ON" : "Auto galaxy ON (disabled)";
+    autobuyerTextDisplay() {
+      const auto = this.isAutoActive;
+      const disabled = !this.isAutoEnabled;
+      return `Auto Galaxy ${auto ? "ON" : "OFF"}${disabled ? " (disabled)" : ""}`;
     },
-    autobuyerOffTextDisplay() {
-      return this.isAutoEnabled ? "Auto galaxy OFF" : "Auto galaxy OFF (disabled)";
-    }
   },
   methods: {
     update() {
-      this.isAvailable = Replicanti.galaxies.canBuyMore;
-      this.boughtGalaxies = Replicanti.galaxies.bought;
-      this.extraGalaxies = Replicanti.galaxies.extra;
+      const rg = Replicanti.galaxies;
+      this.isAvailable = rg.canBuyMore;
+      this.boughtGalaxies = rg.bought;
+      this.extraGalaxies = rg.extra;
       this.isDivideUnlocked = Achievement(126).isUnlocked;
-      this.isAutoUnlocked = this.autobuyer.isUnlocked;
-      this.isAutoOn = this.autobuyer.isOn;
-      this.isAutoEnabled = this.autobuyer.isEnabled;
+      const auto = Autobuyer.replicantiGalaxy;
+      this.isAutoUnlocked = auto.isUnlocked;
+      this.isAutoActive = auto.isActive;
+      this.isAutoEnabled = auto.isEnabled;
     },
     handleAutoToggle(value) {
-      this.autobuyer.isOn = value;
+      Autobuyer.replicantiGalaxy.isActive = value;
       this.update();
     }
   },
@@ -56,15 +57,15 @@ Vue.component("replicanti-galaxy-button", {
         class="o-primary-btn--replicanti-galaxy"
         onclick="replicantiGalaxy()"
       >
-        {{resetActionDisplay}} for a free galaxy
+        {{resetActionDisplay}} for a Replicanti Galaxy
         <br>
         {{galaxyCountDisplay}}
       </primary-button>
       <primary-button-on-off-custom
         v-if="isAutoUnlocked"
-        :value="isAutoOn"
-        :on="autobuyerOnTextDisplay"
-        :off="autobuyerOffTextDisplay"
+        :value="isAutoActive"
+        :on="autobuyerTextDisplay"
+        :off="autobuyerTextDisplay"
         class="l--spoon-btn-group__little-spoon o-primary-btn--replicanti-galaxy-toggle"
         @input="handleAutoToggle"
       />

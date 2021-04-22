@@ -50,7 +50,7 @@ Vue.component("past-runs-container", {
       this.runs = this.clone(this.getRuns());
       this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
       this.shown = player.shownRuns[this.singular];
-      this.showGainPerTime = player.options.showLastTenRunsGainPerTime;
+      this.showGainPerTime = player.options.showLastTenInfinitiesGainPerTime;
     },
     clone(runs) {
       return runs.map(run =>
@@ -93,8 +93,8 @@ Vue.component("past-runs-container", {
         <div v-for="(run, index) in runs" :key="index">
           <span v-if="run[0] === Number.MAX_VALUE">
             <span>
-              The {{ singular }} {{ formatInt(index + 1) }}
-              {{ index === 0 ? singular : plural }} ago hasn't happened yet.
+              You have not done {{ formatInt(index + 1) }}
+              {{ index === 0 ? singular : plural }} yet.
             </span>
           </span>
           <span v-else>

@@ -23,7 +23,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "totalMult",
       cost: 1e4,
       description: "Antimatter Dimensions gain a multiplier based on total antimatter produced",
-      effect: () => Math.pow(player.totalAntimatter.exponent + 1, 0.5),
+      effect: () => Math.pow(player.records.totalAntimatter.exponent + 1, 0.5),
       formatEffect: value => formatX(value, 2, 2)
     },
     currentAMMult: {
@@ -36,20 +36,20 @@ GameDatabase.infinity.breakUpgrades = (function() {
     galaxyBoost: {
       id: "postGalaxy",
       cost: 5e11,
-      description: () => `Galaxies are ${formatPercents(0.5)} stronger`,
+      description: () => `All Galaxies are ${formatPercents(0.5)} stronger`,
       effect: 1.5
     },
     infinitiedMult: {
       id: "infinitiedMult",
       cost: 1e5,
-      description: "Antimatter Dimensions gain a multiplier based on Infinitied stat",
-      effect: () => 1 + Player.totalInfinitied.pLog10() * 10,
+      description: "Antimatter Dimensions gain a multiplier based on Infinities",
+      effect: () => 1 + Currency.infinitiesTotal.value.pLog10() * 10,
       formatEffect: value => formatX(value, 2, 2)
     },
     achievementMult: {
       id: "achievementMult",
       cost: 1e6,
-      description: "Antimatter Dimensions gain a multiplier based on achievements completed",
+      description: "Additional multiplier to Antimatter Dimensions based on Achievements completed",
       effect: () => Math.max(Math.pow((Achievements.effectiveCount - 30), 3) / 40, 1),
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -57,14 +57,16 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "challengeMult",
       cost: 1e7,
       description: "Antimatter Dimensions gain a multiplier based on slowest challenge run",
-      effect: () => Decimal.max(50 / Time.worstChallenge.totalMinutes, 1),
-      formatEffect: value => formatX(value, 2, 2)
+      effect: () => Decimal.clampMin(50 / Time.worstChallenge.totalMinutes, 1),
+      formatEffect: value => formatX(value, 2, 2),
+      hasCap: true,
+      cap: new Decimal(3e4)
     },
     infinitiedGen: {
       id: "infinitiedGeneration",
       cost: 2e7,
-      description: "Passively generate Infinitied stat based on your fastest Infinity",
-      effect: () => player.bestInfinityTime,
+      description: "Passively generate Infinities based on your fastest Infinity",
+      effect: () => player.records.bestInfinity.time,
       formatEffect: value => {
         if (value === Number.MAX_VALUE) return "No Infinity generation";
         let infinities = new Decimal(1);
@@ -76,7 +78,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
         infinities = infinities.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
         return `${format(infinities)}
           ${pluralize("Infinity", infinities, "Infinities")}
-          every ${Time.bestInfinity.times(5)}`;
+          every ${Time.bestInfinity.times(5).toStringShort()}`;
       }
     },
     bulkDimBoost: {
@@ -87,7 +89,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     autobuyerSpeed: {
       id: "autoBuyerUpgrade",
       cost: 1e15,
-      description: "Autobuyers purchased with antimatter or unlocked from Normal Challenges work twice as fast"
+      description: "Autobuyers unlocked or improved by Normal Challenges work twice as fast"
     },
     tickspeedCostMult: rebuyable({
       id: 0,
@@ -116,7 +118,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
         if (!BreakInfinityUpgrade.ipGen.isCapped) {
           generation += ` ➜ ${formatInt(5 * (1 + player.infinityRebuyables[2]))}%`;
         }
-        return `${generation} of your best IP/min from last 10 infinities, works offline`;
+        return `${generation} of your best IP/min from last 10 Infinities, works offline`;
       },
       formatEffect: value => `${format(value, 2, 1)} IP/min`,
       title: true

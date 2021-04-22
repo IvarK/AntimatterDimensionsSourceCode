@@ -76,7 +76,7 @@ Vue.component("alchemy-tab", {
       infoResourceId: 0,
       focusedResourceId: -1,
       reactionsAvailable: false,
-      realityCreationAvailable: false,
+      realityCreationVisible: false,
       reactionProgress: 0,
       estimatedCap: 0,
     };
@@ -102,9 +102,9 @@ Vue.component("alchemy-tab", {
   methods: {
     update() {
       this.reactionsAvailable = AlchemyResources.all.filter(res => !res.isBaseResource && res.isUnlocked).length !== 0;
-      this.realityCreationAvailable = AlchemyResource.reality.amount !== 0;
+      this.realityCreationVisible = Ra.pets.effarig.level === 25;
       const animationTime = 800;
-      this.reactionProgress = (player.realTimePlayed % animationTime) / animationTime;
+      this.reactionProgress = (player.records.realTimePlayed % animationTime) / animationTime;
       this.estimatedCap = estimatedAlchemyCap();
     },
     orbitSize(orbit) {
@@ -113,7 +113,9 @@ Vue.component("alchemy-tab", {
     },
     handleMouseEnter(node) {
       this.infoResourceId = node.resource.id;
-      this.focusedResourceId = node.resource.id;
+      if (node.resource.isUnlocked) {
+        this.focusedResourceId = node.resource.id;
+      }
     },
     handleMouseLeave() {
       this.focusedResourceId = -1;
@@ -221,17 +223,15 @@ Vue.component("alchemy-tab", {
           Toggle all reactions
         </primary-button>
         <primary-button
-          v-if="realityCreationAvailable"
+          v-if="realityCreationVisible"
           class="o-primary-btn--subtab-option"
           onclick="Modal.realityGlyph.show()"
-        >
-          Create a Reality glyph
-        </primary-button>
+        >View Reality Glyph creation</primary-button>
       </div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
-      Resource cap, based on glyph level in last 10 realities: {{ format(estimatedCap, 3, 2) }}.
+      Your Alchemy Resource cap, based on the Glyph level of your last 10 Realities: {{ formatInt(estimatedCap) }}.
       <span v-if="reactionsAvailable">
-        Reactions trigger once every time you reality.
+        Reactions trigger once every time you Reality, unaffected by amplification from stored real time.
       </span>
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">

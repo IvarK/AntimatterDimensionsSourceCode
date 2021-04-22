@@ -113,7 +113,7 @@ const AutoSacEffectTab = {
       };
     },
     questionmarkTooltip() {
-      return `Glyph score is rarity, minus ${formatInt(200)} for every missing effect. 
+      return `Glyph score is rarity, minus ${formatInt(200)} for every missing effect.
         Glyphs with less than the specified rarity are sacrificed.`;
     }
   },
@@ -134,8 +134,8 @@ const AutoSacEffectTab = {
   template: `
     <div class="c-glyph-sacrifice-options__advanced">
       <div>
-        Selected glyphs will have<br>
-        at least 
+        Selected Glyphs will have<br>
+        at least
         <input type="number" min="0" max="8" :value="effectCount"
                ref="effectCount" @blur="setEffectCount"
                class="c-auto-sac-effect-tab__input"/>
@@ -202,8 +202,6 @@ Vue.component("glyph-sacrifice-options", {
   },
   data() {
     return {
-      unlocked: false,
-      advancedFilterUnlocked: false,
       mode: AUTO_GLYPH_SCORE.NONE,
       effectCount: 0,
       lockedTypes: GlyphTypes.locked.map(e => e.id),
@@ -246,8 +244,8 @@ Vue.component("glyph-sacrifice-options", {
       };
     },
     questionmarkTooltip() {
-      return "All glyph choices are given a score based on the chosen option, and the glyph with the highest score " + 
-        "is picked. If this glyph is below a mode-specific threshold, it will be sacrificed instead.";
+      return "All Glyph choices are given a score based on the chosen option, and the Glyph with the highest score " +
+        "is picked. If this Glyph is below a mode-specific threshold, it will be Sacrificed instead.";
     }
   },
   methods: {
@@ -272,8 +270,6 @@ Vue.component("glyph-sacrifice-options", {
     },
     update() {
       this.effectCount = player.celestials.effarig.glyphScoreSettings.simpleEffectCount;
-      this.unlocked = EffarigUnlock.basicFilter.isUnlocked;
-      this.advancedFilterUnlocked = EffarigUnlock.advancedFilter.isUnlocked;
       this.mode = AutoGlyphProcessor.scoreMode;
       for (const type of generatedTypes) {
         this.rarityThresholds[type] = AutoGlyphProcessor.types[type].rarityThreshold;
@@ -296,12 +292,12 @@ Vue.component("glyph-sacrifice-options", {
     }
   },
   template: `
-  <div v-if="unlocked" class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
+  <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
     <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
       <div class="o-questionmark" v-tooltip="questionmarkTooltip">?</div>
     </div>
     <div :class="optionClass(modes.LOWEST_SACRIFICE)" @click="setMode(modes.LOWEST_SACRIFICE)">
-      Lowest total sacrifice
+      Lowest total Glyph Sacrifice
     </div>
     <div :class="optionClass(modes.EFFECT_COUNT)" @click="setMode(modes.EFFECT_COUNT)">
       Number of effects
@@ -309,16 +305,14 @@ Vue.component("glyph-sacrifice-options", {
     <div :class="optionClass(modes.RARITY_THRESHOLD)" @click="setMode(modes.RARITY_THRESHOLD)">
         Rarity Threshold Mode
     </div>
-    <div v-if="advancedFilterUnlocked"
-     :class="optionClass(modes.SPECIFIED_EFFECT)" @click="setMode(modes.SPECIFIED_EFFECT)">
+    <div :class="optionClass(modes.SPECIFIED_EFFECT)" @click="setMode(modes.SPECIFIED_EFFECT)">
         Specified effect mode
     </div>
-    <div v-if="advancedFilterUnlocked"
-      :class="optionClass(modes.ADVANCED_MODE)" @click="setMode(modes.ADVANCED_MODE)">
+    <div :class="optionClass(modes.ADVANCED_MODE)" @click="setMode(modes.ADVANCED_MODE)">
         ❃.✮:▹ Advanced mode ◃:✮.❃
     </div>
     <div v-if="alchemyUnlocked" :class="optionClass(modes.LOWEST_ALCHEMY)" @click="setMode(modes.LOWEST_ALCHEMY)">
-      🜁 🜄 Lowest alchemy resource 🜃 🜂
+      🜁 🜄 Lowest Alchemy Resource 🜃 🜂
     </div>
     <div v-if="alchemyUnlocked" :class="optionClass(modes.ALCHEMY_VALUE)" @click="setMode(modes.ALCHEMY_VALUE)">
       🜁 🜄 Refinement value 🜃 🜂
@@ -326,9 +320,9 @@ Vue.component("glyph-sacrifice-options", {
     <div v-if="mode === modes.LOWEST_SACRIFICE" class="c-glyph-sacrifice-options__advanced">
       <br> Glyph score is assigned based on
       <br> type; the type you have the least
-      <br> total sacrifice value of is given
+      <br> total Glyph Sacrifice value of is given
       <br> the highest score.
-      <br> (this mode never keeps glyphs)
+      <br> (this mode never keeps Glyphs)
     </div>
     <div v-if="mode === modes.EFFECT_COUNT" class=" c-glyph-sacrifice-options__advanced">
       <br> Glyphs must have at least
@@ -336,12 +330,12 @@ Vue.component("glyph-sacrifice-options", {
         ref="effectCount" @blur="setEffectCount"
         class="c-auto-sac-effect-tab__input"/>
       <br> effects to be chosen. Rarer
-      <br> glyphs are preferred in ties.
+      <br> Glyphs are preferred in ties.
     </div>
     <div v-if="mode === modes.RARITY_THRESHOLD"
       class="l-glyph-sacrifice-options__rarity-sliders">
         <span class="c-glyph-sacrifice-options__advanced">
-          Any glyphs with rarity below these
+          Any Glyphs with rarity below these
           <br>
           thresholds will be sacrificed.
         </span>
@@ -382,13 +376,13 @@ Vue.component("glyph-sacrifice-options", {
     </div>
     <div v-if="mode === modes.LOWEST_ALCHEMY" class="c-glyph-sacrifice-options__advanced">
       <br> Glyph score is assigned based
-      <br> on current alchemy resource totals.
-      <br> (this mode never keeps glyphs)
+      <br> on current Alchemy Resource totals.
+      <br> (this mode never keeps Glyphs)
     </div>
     <div v-if="mode === modes.ALCHEMY_VALUE" class="c-glyph-sacrifice-options__advanced">
       <br> Glyphs will be assigned values
       <br> based on refinement value.
-      <br> (this mode never keeps glyphs)
+      <br> (this mode never keeps Glyphs)
     </div>
   </div>
   `

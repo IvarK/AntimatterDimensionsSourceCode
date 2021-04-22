@@ -17,6 +17,8 @@
 
   --color-antimatter: #df5050;
 
+  --color-prestige--accent: black;
+
   --color-teresa--accent: black;
 
   --color-laitela--base: black;
@@ -45,6 +47,7 @@ body.t-s9 {
   display: flex;
   flex-direction: column;
   width: 12rem;
+  margin-top: 3.9rem;
   position: fixed;
   z-index: 5;
 }
@@ -230,10 +233,11 @@ body.t-s9 {
 }
 
 .c-news-ticker {
-  width: 100%;
+  width: calc(100% + 12rem);
   border-bottom: 0.1rem solid var(--color-accent);
   padding: 0.8rem 0;
   height: 3.9rem;
+  margin-left: -12rem;
 }
 
 .c-news-line {
@@ -268,6 +272,89 @@ body.t-s9 {
 
 .o-tab-btn--subtab .fa-link {
   transform: rotate(45deg)
+}
+
+.o-subtab__tooltip {
+  opacity: 0;
+  transition-duration: 0.2s;
+  font-size: 1.4rem;
+  font-weight: bold;
+  border: 0.1rem solid var(--color-accent);
+  color: var(--color-text);
+  background: var(--color-base);
+  width: 20rem;
+  height: 3rem;
+  line-height: 2.8rem;
+  margin-left: -7.7rem;
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  bottom: 100%;
+}
+
+.o-subtab__tooltip:after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  margin-left: -0.7rem;
+  margin-bottom: 0;
+  width: 0;
+  border-top: 0 solid var(--color-accent);
+  border-right: 0.7rem solid transparent;
+  border-left: 0.7rem solid transparent;
+  content: " ";
+  transition-duration: 0.2s;
+  z-index: 0;
+}
+
+.o-tab-btn--subtab:hover .o-subtab__tooltip {
+  opacity: 1;
+  bottom: calc(100% + 0.7rem)
+}
+
+.o-tab-btn--subtab:hover .o-subtab__tooltip:after {
+  border-top-width: 0.7rem;
+  margin-bottom: -0.7rem;
+}
+
+.o-tab-btn--infinity .o-subtab__tooltip {
+  color: var(--color-infinity);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-infinity);
+}
+
+.o-tab-btn--infinity .o-subtab__tooltip:after {
+  border-top-color: var(--color-infinity);
+}
+
+.o-tab-btn--eternity .o-subtab__tooltip {
+  color: var(--color-eternity);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-eternity);
+}
+
+.o-tab-btn--eternity .o-subtab__tooltip:after {
+  border-top-color: var(--color-eternity);
+}
+
+.o-tab-btn--reality .o-subtab__tooltip {
+  color: var(--color-reality);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-reality);
+}
+
+.o-tab-btn--reality .o-subtab__tooltip:after {
+  border-top-color: var(--color-reality);
+}
+
+.o-tab-btn--celestial .o-subtab__tooltip {
+  color: var(--color-celestials);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-celestials);
+}
+
+.o-tab-btn--celestial .o-subtab__tooltip:after {
+  border-top-color: var(--color-celestials);
 }
 
 .active {
@@ -377,7 +464,8 @@ body.t-s9 {
 
 .tickspeed-btn {
   padding: 0.5rem;
-  width: 15rem;
+  min-width: 15rem;
+  max-width: 20rem;
   height: 3rem;
   font-size: 1.1rem;
 }
@@ -437,6 +525,17 @@ body.t-s9 {
   color: black;
 }
 
+.t-normal .c-game-header__tesseract-available {
+  background: #EEEEEE;
+  animation: a-tesseract-shift-dark 5s infinite;
+}
+
+.t-normal .c-infinity-dim-tab__tesseract-button {
+  background: #EEEEEE;
+  animation: a-tesseract-shift-dark 5s infinite;
+}
+
+
 .l-new-ui-big-crunch__container {
   margin-top: 2rem;
 }
@@ -454,7 +553,7 @@ body.t-s9 {
 /* FIXING OLD TABS */
 
 .l-achievement-grid__cell {
-  margin: 0.4rem;
+  margin: 0.6rem 0.4rem;
 }
 
 .t-normal .o-achievement__tooltip {
@@ -475,11 +574,7 @@ body.t-s9 {
 
 .o-infinity-upgrade-btn--unavailable:hover {
   background: #525252;
-  color: white;
-}
-
-.o-infinity-upgrade-btn--bought {
-  border-color: var(--color-accent);
+  color: var(--color-text-inverted);
 }
 
 .o-primary-btn--option, .o-primary-btn--option-wide, .c-select-theme__item, .c-select-notation__item {
@@ -522,10 +617,6 @@ body.t-s9 {
   color: var(--color-text);
   background: var(--color-base);
   border: 0.1rem solid var(--color-accent);
-}
-
-.c-stats-tab {
-  color: var(--color-text);
 }
 
 .o-autobuyer-input,
@@ -648,13 +739,13 @@ body.t-s9 {
   height: 4.4rem;
 }
 
-.l-reality-upgrade-btn {
-  width: 15.6rem;
+ .l-reality-upgrade-btn {
+  width: 18rem;
   margin: 0.6rem 0.4rem;
 }
 
 .l--spoon-btn-group__little-spoon-reality-btn {
-  width: 15.6rem;
+  width: 18rem;
   align-self: center;
   margin-top: -0.2rem;
   margin-bottom: 0.6rem;
@@ -684,7 +775,7 @@ body.t-s9 {
 .l-game-header__big-crunch-btn {
   top: 15%;
   left: 72%;
-} 
+}
 .l-game-header__eternity-btn {
   top: 15%;
   right: 72%;
@@ -761,10 +852,6 @@ body.t-s9 {
 
 .o-primary-btn--respec-active {
   background-color: var(--color-good);
-}
-
-.o-primary-btn--respec-active:hover {
-  color: white;
 }
 
 .l-equipped-glyphs {

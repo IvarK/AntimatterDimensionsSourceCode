@@ -5,7 +5,7 @@ class SingularityMilestoneState extends GameMechanicState {
     const effect = config.effect;
     const configCopy = deepmerge.all([{}, config]);
     configCopy.effect = () => effect(this.completions);
-    super(configCopy); 
+    super(configCopy);
     this._rawEffect = effect;
   }
 
@@ -26,7 +26,7 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return player.celestials.laitela.singularities >= this.start;
+    return Currency.singularities.gte(this.start);
   }
 
   get previousGoal() {
@@ -43,17 +43,17 @@ class SingularityMilestoneState extends GameMechanicState {
     if (!this.isUnlocked) return 0;
 
     return Math.min(Math.floor(
-      1 + Math.log(player.celestials.laitela.singularities) /
+      1 + Math.log(Currency.singularities.value) /
         Math.log(this.repeat) - Math.log(this.start) / Math.log(this.repeat)
     ), this.limit === 0 ? Infinity : this.limit);
   }
 
   get remainingSingularities() {
-    return this.nextGoal - player.celestials.laitela.singularities;
+    return this.nextGoal - Currency.singularities.value;
   }
 
   get progressToNext() {
-    return formatPercents((player.celestials.laitela.singularities - this.previousGoal) / this.nextGoal);
+    return formatPercents((Currency.singularities.value - this.previousGoal) / this.nextGoal);
   }
 
   get isMaxed() {
@@ -133,7 +133,7 @@ const SingularityMilestones = {
   get unseenMilestones() {
     const laitela = player.celestials.laitela;
     return SingularityMilestoneThresholds
-      .filter(s => s > laitela.lastCheckedMilestones && s <= laitela.singularities);
+      .filter(s => s > laitela.lastCheckedMilestones && Currency.singularities.gte(s));
   }
 };
 
@@ -162,7 +162,7 @@ const Singularity = {
   },
 
   get capIsReached() {
-    return player.celestials.laitela.darkEnergy > this.cap;
+    return Currency.darkEnergy.gte(this.cap);
   },
 
   increaseCap() {
@@ -177,13 +177,12 @@ const Singularity = {
 
   perform() {
     if (!this.capIsReached) return;
-    const laitela = player.celestials.laitela;
-    
+
     EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_BEFORE);
 
-    laitela.darkEnergy = 0;
-    laitela.singularities += this.singularitiesGained;
-    
+    Currency.darkEnergy.reset();
+    Currency.singularities.add(this.singularitiesGained);
+
     EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_AFTER);
   }
 };

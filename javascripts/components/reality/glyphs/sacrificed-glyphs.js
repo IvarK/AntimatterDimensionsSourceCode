@@ -11,6 +11,7 @@ Vue.component("sacrificed-glyphs", {
         return {
           amount: 0,
           effectValue: 0,
+          isColored: true,
         };
       },
       computed: {
@@ -19,6 +20,16 @@ Vue.component("sacrificed-glyphs", {
         },
         sacConfig() {
           return GlyphSacrifice[this.type].config;
+        },
+        style() {
+          if (!this.isColored) return { };
+          return {
+            color: this.typeConfig.color,
+            "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
+                            -1px -1px 1px var(--color-text-base), 1px -1px 1px var(--color-text-base),
+                            0 0 3px ${this.typeConfig.color}`,
+            animation: this.typeConfig.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
+          };
         },
         symbol() {
           return this.typeConfig.symbol;
@@ -43,11 +54,13 @@ Vue.component("sacrificed-glyphs", {
         update() {
           this.amount = player.reality.glyphs.sac[this.type];
           this.effectValue = GlyphSacrifice[this.type].effectValue;
+          this.isColored = player.options.glyphTextColors;
         }
       },
       template: `
         <div v-if="amount > 0"
-             class="l-sacrificed-glyphs__type">
+             class="l-sacrificed-glyphs__type"
+             :style="style">
           <div>
             <div class="l-sacrificed-glyphs__type-symbol c-sacrificed-glyphs__type-symbol">
               {{symbol}}
@@ -123,13 +136,14 @@ Vue.component("sacrificed-glyphs", {
       @dragleave="dragleave"
       @drop="drop">
     <div class="l-sacrificed-glyphs__help">
-      <div>Drag glyphs here or shift-click to sacrifice.</div>
-      <div>Ctrl-shift-click to sacrifice without confirmation</div>
+      <div>Drag Glyphs here or shift-click to Sacrifice.</div>
+      <div>Ctrl-shift-click to Sacrifice without confirmation</div>
     </div>
     <div class="c-sacrificed-glyphs__header">Glyph Sacrifice Boosts:</div>
     <div
     <div v-if="teresaMult > 1">
-      (Multiplied by {{ formatX(teresaMult, 2, 2) }}; Teresa last done at {{ format(lastRMTeresa, 2) }} RM)
+      (Multiplied by {{ formatX(teresaMult, 2, 2) }}; Teresa last done at
+      {{ format(lastRMTeresa, 2) }} Reality Machines)
     </div>
     <div v-if="anySacrifices">
       <template v-for="type in types">
@@ -140,16 +154,16 @@ Vue.component("sacrificed-glyphs", {
         <b>Altered Glyphs</b>
         <br>
         Glyph types will have one of their effects<br>
-        improved when their sacrifice values are above:
+        improved when their Glyph Sacrifice values are above:
         <br><br>
         {{ format(addThreshold) }} - an additional secondary effect<br>
         {{ format(empowerThreshold) }} - formula drastically improved<br>
-        {{ format(boostThreshold) }} - a boost depending on glyph sacrifice
+        {{ format(boostThreshold) }} - a boost depending on Glyph Sacrifice
         <br><br>
       </div>
     </div>
     <div v-else>
-      You haven't sacrificed any glyphs yet!
+      You haven't Sacrificed any Glyphs yet!
     </div>
   </div>`,
 });

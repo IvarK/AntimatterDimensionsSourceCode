@@ -27,31 +27,12 @@ class BlackHoleUpgradeState {
   }
 
   get isAffordable() {
-    return player.reality.realityMachines.gte(this.cost);
-  }
-  
-  get autobuyerId() {
-    return this.id - 1;
-  }
-  
-  get isAutobuyerOn() {
-    if (this.hasAutobuyer) {
-      return player.blackHole[this.autobuyerId].autoPower;
-    }
-    throw new Error("Trying to get status of the autobuyer of a black hole upgrade without an autobuyer.");
-  }
-
-  set isAutobuyerOn(value) {
-    if (this.hasAutobuyer) {
-      player.blackHole[this.autobuyerId].autoPower = value;
-    } else {
-      throw new Error("Trying to set status of the autobuyer of a black hole upgrade without an autobuyer.");
-    }
+    return Currency.realityMachines.gte(this.cost);
   }
 
   purchase() {
     if (!this.isAffordable || this.value === 0) return;
-    player.reality.realityMachines = player.reality.realityMachines.minus(this.cost);
+    Currency.realityMachines.purchase(this.cost);
     this.incrementAmount();
     this._lazyValue.invalidate();
     this._lazyCost.invalidate();
@@ -297,7 +278,7 @@ class BlackHoleState {
     }
     return this.cycleLength - this.phase;
   }
-  
+
   description(capitalized) {
     if (RealityUpgrade(20).isBought) {
       return `Black Hole ${formatInt(this.id)}`;
@@ -327,7 +308,7 @@ const BlackHoles = {
   },
 
   get canBeUnlocked() {
-    return player.reality.realityMachines.gte(100) && !this.areUnlocked;
+    return Currency.realityMachines.gte(100) && !this.areUnlocked;
   },
 
   get areUnlocked() {
@@ -337,7 +318,7 @@ const BlackHoles = {
   unlock() {
     if (!this.canBeUnlocked) return;
     player.blackHole[0].unlocked = true;
-    player.reality.realityMachines = player.reality.realityMachines.minus(100);
+    Currency.realityMachines.purchase(100);
     Achievement(144).unlock();
   },
 
@@ -345,13 +326,14 @@ const BlackHoles = {
     if (!BlackHoles.areUnlocked) return;
     if (player.blackHolePause) player.minNegativeBlackHoleThisReality = 1;
     player.blackHolePause = !player.blackHolePause;
-    player.blackHolePauseTime = player.realTimePlayed;
+    player.blackHolePauseTime = player.records.realTimePlayed;
     const pauseType = BlackHoles.areNegative ? "inverted" : "paused";
     GameUI.notify.blackHole(player.blackHolePause ? `Black Hole ${pauseType}` : "Black Hole unpaused");
   },
 
   get unpauseAccelerationFactor() {
-    return Math.clamp((player.realTimePlayed - player.blackHolePauseTime) / (1000 * this.ACCELERATION_TIME), 0, 1);
+    return Math.clamp((player.records.realTimePlayed - player.blackHolePauseTime) /
+    (1000 * this.ACCELERATION_TIME), 0, 1);
   },
 
   get arePaused() {

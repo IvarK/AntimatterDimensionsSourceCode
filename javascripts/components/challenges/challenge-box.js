@@ -9,18 +9,18 @@ Vue.component("challenge-box", {
     overrideLabel: {
       type: String,
       default: "",
-    }
+    },
   },
   data() {
     return {
       isEC: false,
+      challengeId: Number,
     };
   },
   computed: {
     update() {
       this.isEC = this.name.startsWith("EC");
-      this.inC1 = this.name === "C1" && !this.isCompleted && NormalChallenge.current === undefined &&
-        InfinityChallenge.current === undefined;
+      this.inC1 = this.name === "C1" && !this.isCompleted && !Player.isInAntimatterChallenge;
     },
     buttonClassObject() {
       const classObject = {

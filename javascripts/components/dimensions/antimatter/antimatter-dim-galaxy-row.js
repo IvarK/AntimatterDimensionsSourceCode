@@ -51,9 +51,9 @@ Vue.component("antimatter-dim-galaxy-row", {
     costScalingText() {
       switch (this.type) {
         case GALAXY_TYPE.DISTANT:
-          return `Each galaxy is more expensive past ${formatInt(this.distantStart)} galaxies`;
+          return `Each Galaxy is more expensive past ${formatInt(this.distantStart)} Galaxies`;
         case GALAXY_TYPE.REMOTE:
-          return "Increased galaxy cost scaling: " +
+          return "Increased Galaxy cost scaling: " +
             `Quadratic past ${formatInt(this.distantStart)} (distant),
               exponential past ${formatInt(800)} (remote)`;
       }
@@ -68,7 +68,7 @@ Vue.component("antimatter-dim-galaxy-row", {
       this.type = Galaxy.type;
       this.galaxies.normal = player.galaxies;
       this.galaxies.replicanti = Replicanti.galaxies.total;
-      this.galaxies.dilation = player.dilation.freeGalaxies;
+      this.galaxies.dilation = player.dilation.totalTachyonGalaxies;
       const requirement = Galaxy.requirement;
       this.requirement.amount = requirement.amount;
       this.requirement.tier = requirement.tier;

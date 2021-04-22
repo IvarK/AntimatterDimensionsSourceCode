@@ -49,5 +49,6 @@ let ui = {
     tutorialActive: true
   },
   notationName: "",
-  formatPreBreak: false
+  formatPreBreak: false,
+  lastClickTime: 0,
 };

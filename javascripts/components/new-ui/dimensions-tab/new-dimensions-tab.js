@@ -3,24 +3,23 @@
 Vue.component("new-dimensions-tab", {
   data() {
     return {
+      hasDimensionBoosts: false,
       buyUntil10: true,
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
+      buy10Mult: new Decimal(0),
       currentSacrifice: new Decimal(0),
       sacrificeBoost: new Decimal(0),
+      multiplierText: "",
       disabledCondition: "",
       isQuickResetAvailable: false,
       isContinuumActive: false,
-      isLarge: false
     };
   },
   computed: {
     sacrificeTooltip() {
       return `Boosts 8th Antimatter Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
     },
-    classObject() {
-      return this.isLarge ? "o-primary-btn--sacrifice--large" : "";
-    }
   },
   methods: {
     maxAll() {
@@ -37,10 +36,10 @@ Vue.component("new-dimensions-tab", {
       return this.buyUntil10 ? "Until 10" : "Buy 1";
     },
     update() {
+      this.hasDimensionBoosts = player.dimensionBoosts > 0;
       this.buyUntil10 = player.buyUntil10;
       this.isContinuumActive = Laitela.continuumActive;
-      const challenge = NormalChallenge.current || InfinityChallenge.current;
-      this.isQuickResetAvailable = challenge && challenge.isQuickResettable;
+      this.isQuickResetAvailable = Player.isInAntimatterChallenge && Player.antimatterChallenge.isQuickResettable;
 
       const isSacrificeUnlocked = Sacrifice.isVisible;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
@@ -48,9 +47,13 @@ Vue.component("new-dimensions-tab", {
       if (!isSacrificeUnlocked) return;
       this.isSacrificeAffordable = Sacrifice.canSacrifice;
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
+      this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
-      this.isLarge = this.disabledCondition.length > 20;
+
+      this.multiplierText = `Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
+      if (this.isSacrificeUnlocked) this.multiplierText +=
+        ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
     },
   },
   template:
@@ -64,15 +67,14 @@ Vue.component("new-dimensions-tab", {
           v-tooltip="sacrificeTooltip"
           :enabled="isSacrificeAffordable"
           class="o-primary-btn--sacrifice"
-          :class="classObject"
           @click="sacrifice"
         >
         <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
-        <span v-else>Sacrifice Disabled ({{ disabledCondition }})</span>
+        <span v-else>Dimensional Sacrifice Disabled ({{ disabledCondition }})</span>
       </primary-button>
       <button class="o-primary-btn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">Max All (M)</button>
     </div>
-    <span v-if="isSacrificeUnlocked">Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
+    <span>{{ multiplierText }}</span>
     <new-tickspeed-row/>
     <div class="l-dimensions-container">
       <new-dimension-row
@@ -86,7 +88,10 @@ Vue.component("new-dimensions-tab", {
           v-if="isQuickResetAvailable"
           class="o-primary-btn--quick-reset"
           onclick="softReset(-1, true, true)"
-        >Lose a reset, returning to the start of the reset</primary-button>
+        >Perform a Dimension Boost reset
+          <span v-if="hasDimensionBoosts"> but lose a Dimension Boost</span>
+          <span v-else> for no gain</span>
+        </primary-button>
       <new-galaxy-row/>
     </div>
     <antimatter-dim-tab-progress-bar/>

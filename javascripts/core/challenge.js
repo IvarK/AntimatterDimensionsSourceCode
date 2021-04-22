@@ -7,7 +7,7 @@ function startChallenge() {
 
 function tryUnlockInfinityChallenges() {
   while (player.postChallUnlocked < 8 &&
-    player.thisEternityMaxAM.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
+    player.records.thisEternity.maxAM.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
     ++player.postChallUnlocked;
     TabNotification.ICUnlock.tryTrigger();
     if (EternityMilestone.autoIC.isReached) {
@@ -39,13 +39,14 @@ function updateNormalAndInfinityChallenges(diff) {
   }
 
   if (InfinityChallenge(2).isRunning) {
-    if (player.ic2Count >= 8) {
+    if (player.ic2Count >= 400) {
       if (AntimatterDimension(8).amount.gt(0)) {
         sacrificeReset();
       }
-      player.ic2Count = 0;
+      player.ic2Count %= 400;
     } else {
-      player.ic2Count++;
+      // Do not change to diff, as this may lead to a sacrifice softlock with high gamespeed
+      player.ic2Count += Math.clamp(Date.now() - player.lastUpdate, 1, 21600000);
     }
   }
 }
@@ -58,6 +59,17 @@ class NormalChallengeState extends GameMechanicState {
   get isRunning() {
     const isPartOfIC1 = this.id !== 9 && this.id !== 12;
     return player.challenge.normal.current === this.id || (isPartOfIC1 && InfinityChallenge(1).isRunning);
+  }
+
+  get isUnlocked() {
+    if (PlayerProgress.eternityUnlocked()) return true;
+    if (this.id === 0) return true;
+    const ip = GameDatabase.challenges.normal[this.id - 1].lockedAt;
+    return Currency.infinitiesTotal.gte(ip);
+  }
+
+  get lockedAt() {
+    return GameDatabase.challenges.normal[this.id].lockedAt;
   }
 
   requestStart() {
@@ -108,11 +120,11 @@ class NormalChallengeState extends GameMechanicState {
 
   updateChallengeTime() {
     const bestTimes = player.challenge.normal.bestTimes;
-    if (bestTimes[this.id - 2] <= player.thisInfinityTime) {
+    if (bestTimes[this.id - 2] <= player.records.thisInfinity.time) {
       return;
     }
     // TODO: remove splice once player.challenge.infinity.bestTimes is not reactive
-    bestTimes.splice(this.id - 2, 1, player.thisInfinityTime);
+    bestTimes.splice(this.id - 2, 1, player.records.thisInfinity.time);
     GameCache.challengeTimeSum.invalidate();
     GameCache.worstChallengeTime.invalidate();
   }
@@ -196,6 +208,7 @@ class InfinityChallengeState extends GameMechanicState {
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = this.id;
 
+    bigCrunchReset();
     startChallenge();
     player.break = true;
 
@@ -234,11 +247,11 @@ class InfinityChallengeState extends GameMechanicState {
 
   updateChallengeTime() {
     const bestTimes = player.challenge.infinity.bestTimes;
-    if (bestTimes[this.id - 1] <= player.thisInfinityTime) {
+    if (bestTimes[this.id - 1] <= player.records.thisInfinity.time) {
       return;
     }
     // TODO: remove splice once player.challenge.infinity.bestTimes is not reactive
-    bestTimes.splice(this.id - 1, 1, player.thisInfinityTime);
+    bestTimes.splice(this.id - 1, 1, player.records.thisInfinity.time);
     GameCache.infinityChallengeTimeSum.invalidate();
   }
 

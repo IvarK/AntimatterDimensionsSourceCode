@@ -70,7 +70,7 @@ const AutomatorGrammar = (function() {
       $.RULE("compareValue", () => $.OR([
         { ALT: () => $.CONSUME(T.NumberLiteral) },
         { ALT: () => $.CONSUME(T.Identifier) },
-        { ALT: () => $.CONSUME(T.Currency) },
+        { ALT: () => $.CONSUME(T.AutomatorCurrency) },
       ]));
 
       $.RULE("duration", () => {
@@ -112,14 +112,14 @@ const AutomatorGrammar = (function() {
         $.CONSUME1(T.NumberLiteral, { LABEL: "lastStudy" });
       });
 
-      $.RULE("xLast", () => {
+      $.RULE("xCurrent", () => {
         $.CONSUME(T.NumberLiteral);
-        $.CONSUME(T.XLast);
+        $.CONSUME(T.XCurrent);
       });
 
       $.RULE("currencyAmount", () => {
         $.CONSUME(T.NumberLiteral);
-        $.CONSUME(T.Currency);
+        $.CONSUME(T.AutomatorCurrency);
       });
 
       // Very important to call this after all the rules have been setup.

@@ -1,8 +1,12 @@
 "use strict";
 
-Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobuyerState {
+Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
     return player.auto.bigCrunch;
+  }
+
+  get name() {
+    return `Infinity`;
   }
 
   get isUnlocked() {
@@ -25,6 +29,14 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
     return EternityMilestone.bigCrunchModes.isReached;
   }
 
+  get increaseWithMult() {
+    return this.data.increaseWithMult;
+  }
+
+  set increaseWithMult(value) {
+    this.data.increaseWithMult = value;
+  }
+
   get amount() {
     return this.data.amount;
   }
@@ -41,17 +53,18 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
     this.data.time = value;
   }
 
-  get xLast() {
-    return this.data.xLast;
+  get xCurrent() {
+    return this.data.xCurrent;
   }
 
-  set xLast(value) {
-    this.data.xLast = value;
+  set xCurrent(value) {
+    this.data.xCurrent = value;
   }
 
   autoInfinitiesAvailable(considerMilestoneReached) {
     return (considerMilestoneReached || EternityMilestone.autoInfinities.isReached) &&
       !EternityChallenge(4).isRunning && !EternityChallenge(12).isRunning &&
+      !Player.isInAntimatterChallenge &&
       this.data.isActive &&
       this.mode === AUTO_CRUNCH_MODE.TIME &&
       this.time < 60 &&
@@ -64,7 +77,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
   }
 
   bumpAmount(mult) {
-    if (this.isUnlocked) {
+    if (this.isUnlocked && this.increaseWithMult) {
       this.amount = this.amount.times(mult);
     }
   }
@@ -72,7 +85,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
   tick() {
     if (Player.canCrunch) super.tick();
     if (Currency.antimatter.lt(Decimal.NUMBER_MAX_VALUE)) return;
-    let proc = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
+    let proc = !player.break || Player.isInAntimatterChallenge;
     if (!proc) {
       switch (this.mode) {
         case AUTO_CRUNCH_MODE.AMOUNT:
@@ -81,8 +94,8 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
         case AUTO_CRUNCH_MODE.TIME:
           proc = Time.thisInfinityRealTime.totalSeconds > this.time;
           break;
-        case AUTO_CRUNCH_MODE.X_LAST:
-          proc = gainedInfinityPoints().gte(player.lastTenRuns[0][1].times(this.xLast));
+        case AUTO_CRUNCH_MODE.X_CURRENT:
+          proc = gainedInfinityPoints().gte(Currency.infinityPoints.value.times(this.xCurrent));
           break;
       }
     }

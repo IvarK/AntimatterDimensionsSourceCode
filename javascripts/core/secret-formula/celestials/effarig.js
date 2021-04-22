@@ -4,17 +4,17 @@ GameDatabase.celestials.effarig = {
   unlocks: {
     adjuster: {
       id: 0,
-      description: "Glyph level weight adjustment",
+      description: "Adjustable Glyph level factor weights",
       cost: 1e7
     },
-    basicFilter: {
+    glyphFilter: {
       id: 1,
-      description: "Basic glyph filtering",
+      description: "Glyph Filtering",
       cost: 2e8
     },
-    advancedFilter: {
+    setSaves: {
       id: 2,
-      description: "Advanced glyph filtering",
+      description: "Glyph Set Saves",
       cost: 3e9
     },
     run: {
@@ -25,24 +25,27 @@ GameDatabase.celestials.effarig = {
     infinity: {
       id: 4,
       label: "Infinity",
-      description:
-        "Infinitied stat raises the replicanti cap\n" +
-        "Infinitied stat increases your max RG\n" +
-        "Base IP gain is capped at 1e200 in Effarig's Reality\n" +
-        "Each type of IP multiplier is capped at 1e50 in Effarig's Reality"
+      get description() {
+        return ` Infinities raise the Replicanti cap
+        Infinities increase your max Replicanti Galaxies
+        Base Infinity Point gain is capped at ${format(1e200)} in Effarig's Reality
+        Each type of Infinity Point multiplier is capped at ${format(1e50)} in Effarig's Reality`;
+      },
     },
     eternity: {
       id: 5,
       label: "Eternity",
-      description: "Eternitied stat generates Infinitied stat\n" +
-        "Free tickspeed upgrade softcap is 100,000 larger\n" +
-        "IP is no longer limited in any way in Effarig's Reality\n" +
-        "You have unlocked The Enslaved Ones"
+      get description() {
+        return ` Eternities generates Infinities
+          The Tickspeed upgrades from Time Dimensions softcaps ${formatInt(100000)} later
+          Infinity Points are no longer limited in any way in Effarig's Reality
+          You have unlocked The Enslaved Ones`;
+      },
     },
     reality: {
       id: 6,
       label: "Reality",
-      description: "You have unlocked Effarig Glyphs (You may equip at most one)"
+      description: " You have unlocked Effarig Glyphs (You may equip at most one)"
     }
   }
 };

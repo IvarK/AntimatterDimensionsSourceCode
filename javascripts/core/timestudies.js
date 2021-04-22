@@ -15,118 +15,6 @@ NormalTimeStudies.pathList = [
 
 NormalTimeStudies.paths = NormalTimeStudies.pathList.mapToObject(e => e.path, e => e.studies);
 
-const TimeTheorems = {
-  costMultipliers: {
-    AM: new Decimal("1e20000"),
-    IP: new Decimal(1e100),
-    EP: 2,
-  },
-
-  checkForBuying(auto) {
-    if (player.realities === 0 && TimeDimension(1).bought < 1) {
-      if (!auto) Modal.message.show("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
-      return false;
-    }
-    return true;
-  },
-
-  buyWithAntimatter(auto = false) {
-    if (!this.checkForBuying(auto)) return false;
-    if (!Currency.antimatter.purchase(player.timestudy.amcost)) return false;
-    player.timestudy.amcost = player.timestudy.amcost.times(TimeTheorems.costMultipliers.AM);
-    player.timestudy.theorem = player.timestudy.theorem.plus(1);
-    player.noTheoremPurchases = false;
-    return true;
-  },
-
-  buyWithIP(auto = false) {
-    if (!this.checkForBuying(auto)) return false;
-    if (player.infinityPoints.lt(player.timestudy.ipcost)) return false;
-    player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost);
-    player.timestudy.ipcost = player.timestudy.ipcost.times(TimeTheorems.costMultipliers.IP);
-    player.timestudy.theorem = player.timestudy.theorem.plus(1);
-    player.noTheoremPurchases = false;
-    return true;
-  },
-
-  buyWithEP(auto = false) {
-    if (!this.checkForBuying(auto)) return false;
-    if (player.eternityPoints.lt(player.timestudy.epcost)) return false;
-    player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost);
-    player.timestudy.epcost = player.timestudy.epcost.times(TimeTheorems.costMultipliers.EP);
-    player.timestudy.theorem = player.timestudy.theorem.plus(1);
-    player.noTheoremPurchases = false;
-    return true;
-  },
-
-  buyMax(auto = false) {
-    if (!this.checkForBuying(auto)) return;
-    const AMowned = player.timestudy.amcost.e / 20000 - 1;
-    if (Currency.antimatter.gte(player.timestudy.amcost)) {
-      player.timestudy.amcost.e = Math.floor(Currency.antimatter.exponent / 20000 + 1) * 20000;
-      const boughtAmount = Math.floor(Currency.antimatter.exponent / 20000) - AMowned;
-      player.timestudy.theorem = player.timestudy.theorem.plus(boughtAmount);
-      const amCost = Decimal.fromMantissaExponent(1, Math.floor(Currency.antimatter.exponent / 20000) * 20000);
-      Currency.antimatter.subtract(amCost);
-      player.noTheoremPurchases = false;
-    }
-    const IPowned = player.timestudy.ipcost.e / 100;
-    if (player.infinityPoints.gte(player.timestudy.ipcost)) {
-      player.timestudy.ipcost.e = Math.floor(player.infinityPoints.e / 100 + 1) * 100;
-      player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.infinityPoints.e / 100 + 1) - IPowned);
-      player.infinityPoints =
-        player.infinityPoints.minus(Decimal.fromMantissaExponent(1, Math.floor(player.infinityPoints.e / 100) * 100));
-      player.noTheoremPurchases = false;
-    }
-    if (player.eternityPoints.gte(player.timestudy.epcost)) {
-      const EPowned = Math.round(player.timestudy.epcost.log2());
-      const finalEPCost = new Decimal(2).pow(Math.floor(player.eternityPoints.log2()));
-      const totalEPCost = finalEPCost.minus(player.timestudy.epcost);
-      player.timestudy.epcost = finalEPCost;
-      player.eternityPoints = player.eternityPoints.minus(totalEPCost);
-      player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned);
-      player.noTheoremPurchases = false;
-      // The above code block will sometimes buy one too few TT, but it never over-buys
-      TimeTheorems.buyWithEP();
-    }
-  },
-
-  totalPurchased() {
-    return player.timestudy.amcost.e / 20000 - 1 +
-      player.timestudy.ipcost.e / 100 +
-      Math.round(player.timestudy.epcost.log2());
-  },
-
-  autoBuyMaxTheorems(realDiff) {
-    if (!player.ttbuyer) return;
-    player.auto.ttTimer += realDiff;
-    const period = Effects.min(
-      Number.POSITIVE_INFINITY,
-      Perk.autobuyerTT1,
-      Perk.autobuyerTT2,
-      Perk.autobuyerTT3,
-      Perk.autobuyerTT4
-    );
-    const milliseconds = TimeSpan.fromSeconds(period).totalMilliseconds;
-    if (player.auto.ttTimer > milliseconds) {
-      TimeTheorems.buyMax(true);
-      player.auto.ttTimer = Math.min(player.auto.ttTimer - milliseconds, milliseconds);
-    }
-  },
-
-  calculateTimeStudiesCost() {
-    let totalCost = TimeStudy.boughtNormalTS()
-      .map(ts => ts.cost)
-      .reduce(Number.sumReducer, 0);
-    const ecStudy = TimeStudy.eternityChallenge.current();
-    if (ecStudy !== undefined) {
-      totalCost += ecStudy.cost;
-    }
-    // Secret time study
-    if (Enslaved.isRunning && player.secretUnlocks.secretTS % 2 === 1) totalCost -= 100;
-    return totalCost;
-  }
-};
 
 function unlockDilation(quiet) {
   if (!quiet) {
@@ -138,9 +26,9 @@ function unlockDilation(quiet) {
   if (Perk.autounlockDilation2.isBought) {
     for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
   }
-  player.dilation.tachyonParticles = player.dilation.tachyonParticles.plusEffectOf(Perk.startTP);
+  Currency.tachyonParticles.bumpTo(Perk.startTP.effectOrDefault(0));
   if (Ra.has(RA_UNLOCKS.START_TP) && !isInCelestialReality()) {
-    player.dilation.tachyonParticles = getTP(RA_UNLOCKS.START_TP.effect());
+    Currency.tachyonParticles.bumpTo(getTP(RA_UNLOCKS.START_TP.effect()));
   }
   TabNotification.dilationAfterUnlock.tryTrigger();
 }
@@ -288,7 +176,7 @@ function importStudyTree(input, auto) {
 
   if (splitOnEC.length === 2) {
     const ecNumber = parseInt(splitOnEC[1], 10);
-    if (ecNumber !== 0 && !isNaN(ecNumber)) {
+    if (ecNumber !== 0 && !TimeStudy.eternityChallenge(ecNumber).isBought && !isNaN(ecNumber)) {
       TimeStudy.eternityChallenge(ecNumber).purchase(auto);
     }
   }
@@ -323,11 +211,11 @@ class TimeStudyState extends GameMechanicState {
   }
 
   refund() {
-    player.timestudy.theorem = player.timestudy.theorem.plus(this.cost);
+    Currency.timeTheorems.add(this.cost);
   }
 
   get isAffordable() {
-    return player.timestudy.theorem.gte(this.cost);
+    return Currency.timeTheorems.gte(this.cost);
   }
 
   get canBeBought() {
@@ -373,7 +261,7 @@ class NormalTimeStudyState extends TimeStudyState {
       player.celestials.v.STSpent += this.STCost;
     }
     player.timestudy.studies.push(this.id);
-    player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
+    Currency.timeTheorems.subtract(this.cost);
     GameCache.timeStudies.invalidate();
     return true;
   }
@@ -419,16 +307,32 @@ class ECTimeStudyState extends TimeStudyState {
   }
 
   purchase(auto) {
-    if (!this.canBeBought) return false;
-    if (player.challenge.eternity.unlocked === 0) {
+    const clickTime = Date.now();
+
+    if (this.isBought && player.challenge.eternity.current === 0 && !auto) {
+      // If it is bought and you aren't in a Eternity Challenge, check
+      if (clickTime - ui.lastClickTime < 750) {
+        // If you last clicked on it within 3/4ths of a second, enter them in or ask confirmation if they have that on
+        ui.lastClickTime = 0;
+        EternityChallenge(this.id).requestStart();
+      } else {
+        // Otherwise, record it for the next time they click
+        ui.lastClickTime = clickTime;
+      }
+    } else if (!this.isBought && this.canBeBought) {
+      // If you haven't bought it and can buy it, reset the time of click, and
+      // send you into the EC, deduct your resources, and move you to the EC tab if that isn't disabled
+      ui.lastClickTime = 0;
+
       player.challenge.eternity.unlocked = this.id;
       if (!auto) {
         Tab.challenges.eternity.show();
       }
       if (this.id !== 11 && this.id !== 12) player.etercreq = this.id;
+      Currency.timeTheorems.subtract(this.cost);
+      return true;
     }
-    player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
-    return true;
+    return false;
   }
 
   purchaseUntil() {
@@ -549,7 +453,7 @@ class DilationTimeStudyState extends TimeStudyState {
       Tab.reality.glyphs.show();
     }
     player.dilation.studies.push(this.id);
-    player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
+    Currency.timeTheorems.subtract(this.cost);
     return true;
   }
 }
@@ -634,7 +538,7 @@ class TriadStudyState extends TimeStudyState {
     if (!this.canBeBought) return;
     player.celestials.v.triadStudies.push(this.config.id);
     player.celestials.v.STSpent += this.STCost;
-    player.noTriadStudies = false;
+    player.achievementChecks.noTriadStudies = false;
   }
 
   purchaseUntil() {

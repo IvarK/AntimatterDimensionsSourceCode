@@ -8,10 +8,12 @@ Vue.component("pp-label", {
   },
   methods: {
     update() {
-      this.pp = Math.floor(player.reality.pp);
+      this.pp = Math.floor(Currency.perkPoints.value);
     }
   },
   template: `
-    <div class="c-pp-label">You have {{ format(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}}</div>
+    <div class="c-perk-tab__header">
+      You have <span class="c-perk-tab__perk-points">{{ format(pp, 2, 0) }}</span> {{"Perk Point" | pluralize(pp)}}.
+    </div>
   `
 });

@@ -4,32 +4,25 @@ Vue.component("normal-achievements-tab", {
   data() {
     return {
       achievementPower: 0,
+      achTPeffect: 0,
       achCountdown: 0,
       showAutoAchieve: false,
       isAutoAchieveActive: false,
       hideCompletedRows: false,
       isCancer: 0,
+      achMultBreak: false,
       achMultToIDS: false,
       achMultToTDS: false,
       achMultToBH: false,
+      achMultToTP: false,
+      achMultToTT: false,
       canSwapImages: false
     };
   },
   computed: {
     rows: () => Achievements.allRows,
     swapImagesButton() {
-      return Theme.current().name === "S4" || this.isCancer ? "😂" : ".";
-    },
-    achievementMultiplierText() {
-      let text = "Current achievement multiplier to ";
-      if (this.achMultToIDS && this.achMultToTDS && this.achMultToBH)
-        text += "Black Hole power, Antimatter, Infinity, and Time";
-      else if (this.achMultToTDS && this.achMultToIDS) text += "Antimatter, Infinity, and Time";
-      else if (this.achMultToTDS) text += "Antimatter and Time";
-      else if (this.achMultToIDS) text += "Antimatter and Infinity";
-      else text += "Antimatter";
-      text += " Dimensions:";
-      return text;
+      return Theme.current().name === "S4" || this.isCancer ? "😂" : ":";
     },
     imageSwapperStyleObject() {
       if (this.canSwapImages) {
@@ -49,14 +42,18 @@ Vue.component("normal-achievements-tab", {
   methods: {
     update() {
       this.achievementPower = Achievements.power;
+      this.achTPeffect = RealityUpgrade(8).config.effect();
       this.achCountdown = Achievements.timeToNextAutoAchieve() / getGameSpeedupFactor();
-      this.showAutoAchieve = player.realities > 0 && !Perk.achievementGroup6.isBought;
+      this.showAutoAchieve = PlayerProgress.realityUnlocked() && !Perk.achievementGroup6.isBought;
       this.isAutoAchieveActive = player.reality.autoAchieve;
       this.hideCompletedRows = player.options.hideCompletedAchievementRows;
       this.isCancer = player.secretUnlocks.cancerAchievements;
+      this.achMultBreak = BreakInfinityUpgrade.achievementMult.canBeApplied;
       this.achMultToIDS = Achievement(75).isUnlocked;
       this.achMultToTDS = EternityUpgrade.tdMultAchs.isBought;
+      this.achMultToTP = RealityUpgrade(8).isBought;
       this.achMultToBH = V.has(V_UNLOCKS.ACHIEVEMENT_BH);
+      this.achMultToTT = Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT);
       this.canSwapImages = Themes.available().find(v => v.name === "S4") !== undefined && Theme.current().name !== "S4";
     },
     timeDisplay(value) {
@@ -83,17 +80,29 @@ Vue.component("normal-achievements-tab", {
           v-if="showAutoAchieve"
           v-model="isAutoAchieveActive"
           class="o-primary-btn--subtab-option"
-          text="Auto achievements:"
+          text="Auto Achievements:"
         />
       </div>
       <div class="c-achievements-tab__header">
-        <span>
-          {{ achievementMultiplierText }} {{ formatX(achievementPower, 2, 3) }}<span 
-          @click="swapImages()" :style="imageSwapperStyleObject">{{ swapImagesButton }}</span>
-        </span>
+        Your Achievements provide a multiplier
+        to<span @click="swapImages()" :style="imageSwapperStyleObject">{{ swapImagesButton }}</span>
+        <div>
+          <span>
+            Antimatter<span v-if="achMultToTDS && achMultToIDS">, Infinity, and Time</span>
+            <span v-else-if="achMultToTDS"> and Time</span>
+            <span v-else-if="achMultToIDS"> and Infinity</span>
+            Dimensions: {{ formatX(achievementPower, 2, 3) }}
+          </span>
+          <br>
+          <span v-if="this.achMultToTP"> Tachyon Particles: {{ formatX(this.achTPeffect, 2, 3) }} </span>
+          <br>
+          <span v-if="this.achMultToBH"> Black Hole Power: {{ formatX(this.achievementPower, 2, 3) }} </span>
+          <br>
+          <span v-if="this.achMultToTT"> Time Theorem production: {{ formatX(this.achievementPower, 2, 3) }} </span>
+        </div>
       </div>
       <div v-if="achCountdown > 0" class="c-achievements-tab__header">
-        Automatically gain the next missing achievement in {{timeDisplayNoDecimals(achCountdown)}}.
+        Automatically gain the next missing Achievement in {{timeDisplayNoDecimals(achCountdown)}}.
         (left-to-right, top-to-bottom)
       </div>
       <div class="l-achievement-grid">

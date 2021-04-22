@@ -49,17 +49,19 @@ Vue.component("modal-animation-options", {
     }
   },
   template:
-    `<modal-options @close="emitClose">
-      <on-off-button v-model="floatingText" text="Floating text:"/>
-      <on-off-button v-if="infinityUnlocked" v-model="bigCrunch" text="Big crunch:"/>
-      <on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:"/>
-      <on-off-button v-if="dilationUnlocked" v-model="dilation" text="Dilation:"/>
-      <on-off-button v-if="dilationUnlocked" v-model="tachyonParticles" text="Tachyon particles:"/>
-      <on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:"/>
-      <on-off-button
-        v-if="animatedThemeUnlocked"
-        v-model="background"
-        onclick="Themes.find(player.options.theme).set();"
-        text="Background:"/>
+    `<modal-options @close="emitClose" style="width: 50rem">
+      <div>
+        <wide-on-off-button v-model="floatingText" text="Floating text:"/>
+        <wide-on-off-button v-if="infinityUnlocked" v-model="bigCrunch" text="Big crunch:"/>
+        <wide-on-off-button v-if="eternityUnlocked" v-model="eternity" text="Eternity:"/>
+        <wide-on-off-button v-if="dilationUnlocked" v-model="dilation" text="Dilation:"/>
+        <wide-on-off-button v-if="dilationUnlocked" v-model="tachyonParticles" text="Tachyon particles:"/>
+        <wide-on-off-button v-if="realityUnlocked" v-model="reality" text="Reality:"/>
+        <wide-on-off-button
+          v-if="animatedThemeUnlocked"
+          v-model="background"
+          onclick="Themes.find(player.options.theme).set();"
+          text="Background:"/>
+      </div>
     </modal-options>`
 });

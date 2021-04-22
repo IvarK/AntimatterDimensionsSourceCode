@@ -33,7 +33,7 @@ GameDatabase.celestials.perkShop = (function() {
       id: 1,
       initialCost: 1,
       increment: 2,
-      description: "Double RM gain",
+      description: "Double Reality Machine gain",
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => format(value, 2, 0),
@@ -55,7 +55,8 @@ GameDatabase.celestials.perkShop = (function() {
       id: 3,
       initialCost: 1000,
       increment: 2,
-      description: () => `ID, TD, TT, Dilation, and Replicanti autobuyers are ${formatX(2)} faster.`,
+      description: () => `Infinity Dimension, Time Dimension, Time Theorem, Dilation,
+      and Replicanti autobuyers are ${formatX(2)} faster.`,
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => format(value, 2, 0),
@@ -66,7 +67,7 @@ GameDatabase.celestials.perkShop = (function() {
       id: 4,
       initialCost: 1,
       increment: 1,
-      description: () => `Receive a music glyph; random type, ${formatPercents(0.8)} of your highest level.
+      description: () => `Receive a Music Glyph of a random type that is ${formatPercents(0.8)} of your highest level.
         (Try clicking it!)`,
       effect: bought => Decimal.pow(3, bought),
       formatCost: value => format(value, 2, 0),

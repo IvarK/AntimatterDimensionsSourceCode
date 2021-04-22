@@ -1,18 +1,27 @@
 "use strict";
 
+Vue.component("open-modal-shortcuts", {
+  template: `
+    <p onclick="Modal.shortcuts.show()" class="c-options-tab__shortcuts-link">
+      Press <kbd>?</kbd> to open shortcut list.
+    </p>`
+});
+
+
 Vue.component("modal-shortcuts", {
   computed: {
     shortcuts: () => [
       { name: "Buy one Tickspeed", keys: ["shift", "t"] },
       { name: "Buy max Tickspeed", keys: ["t"] },
       { name: "Max all", keys: ["m"] },
-      { name: "Sacrifice", keys: ["s"] },
+      { name: "Dimensional Sacrifice", keys: ["s"] },
       { name: "Dimension Boost", keys: ["d"] },
       { name: "Antimatter Galaxy", keys: ["g"] },
       { name: "Big Crunch", keys: ["c"] },
       { name: "Toggle Autobuyers", keys: ["a"] },
       { name: "Replicanti Galaxy", keys: ["r"] },
       { name: "Eternity", keys: ["e"] },
+      { name: "Reality", keys: ["y"] },
       { name: "Start/Pause Automator", keys: ["u"] },
       { name: "Restart Automator", keys: ["shift", "u"] },
       { name: "Toggle Black Hole", keys: ["b"] },
@@ -50,8 +59,8 @@ Vue.component("modal-shortcuts", {
           Shift is a modifier key that shows additional information on certain things
           and adjusts the function of certain buttons.
           <br>
-          You can hold shift while buying time studies to buy all up until that point,
-          save study trees, and delete glyphs.
+          You can hold shift while buying Time Studies to buy all up until that point,
+          save Time Study trees, and delete Glyphs.
         </span>
         <br>
         <br>
@@ -61,11 +70,22 @@ Vue.component("modal-shortcuts", {
         </div>
         <span class="c-modal-shortcuts__shift-description">
           Alt is a modifier key that, when pressed in conjunction with any key that has a corresponding autobuyer,
-          will toggle said autobuyer. This includes all autobuyers in the Autobuyer tab besides the
-          Reality autobuyer, as well as the Replicanti Galaxy Autobuyer.
+          will toggle said autobuyer. This works for all autobuyers in the Autobuyer tab, but only if they are active.
           <br>
           When pressing both Alt and Shift, you can toggle buying singles or buying max for the Antimatter Dimension
           and Tickspeed Autobuyers instead.
+        </span>
+        <br><br>
+        <div class="l-modal-shortcuts-row">
+          <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">Tab Movement</span>
+          <div>
+            <kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd>
+          </div>
+        </div>
+        <span class="c-modal-shortcuts__shift-description">
+          Using the Arrow Keys will cycle you through the game's pages.
+          The Up and Down arrows cycle you through tabs,
+          and the Left and Right arrows cycle you through that tab's subtabs.
         </span>
       </div>
     </div>`

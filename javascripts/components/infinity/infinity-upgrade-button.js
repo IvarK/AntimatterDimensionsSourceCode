@@ -7,6 +7,7 @@ Vue.component("infinity-upgrade-button", {
   data() {
     return {
       canBeBought: false,
+      chargePossible: false,
       canBeCharged: false,
       isBought: false,
       isCharged: false,
@@ -19,7 +20,9 @@ Vue.component("infinity-upgrade-button", {
     },
     config() {
       const config = this.upgrade.config;
-      return (this.isCharged || this.showingCharged || (this.shiftDown && this.canBeCharged)) ? config.charged : config;
+      return (this.chargePossible && (this.isCharged || this.showingCharged || this.shiftDown))
+      ? config.charged
+      : config;
     },
     classObject() {
       return {
@@ -27,8 +30,8 @@ Vue.component("infinity-upgrade-button", {
         "o-infinity-upgrade-btn--bought": this.isBought,
         "o-infinity-upgrade-btn--available": !this.isBought && this.canBeBought,
         "o-infinity-upgrade-btn--unavailable": !this.isBought && !this.canBeBought,
-        "o-infinity-upgrade-btn--chargeable": (!this.isCharged && this.showingCharged && this.canBeCharged) ||
-          (this.shiftDown && this.canBeCharged),
+        "o-infinity-upgrade-btn--chargeable": !this.isCharged && this.chargePossible &&
+          (this.showingCharged || this.shiftDown),
         "o-infinity-upgrade-btn--charged": this.isCharged,
       };
     }
@@ -37,6 +40,7 @@ Vue.component("infinity-upgrade-button", {
     update() {
       const upgrade = this.upgrade;
       this.isBought = upgrade.isBought || upgrade.isCapped;
+      this.chargePossible = Ra.chargeUnlocked && upgrade.hasChargeEffect;
       this.canBeBought = upgrade.canBeBought;
       this.canBeCharged = upgrade.canCharge;
       this.isCharged = upgrade.isCharged;
@@ -52,8 +56,8 @@ Vue.component("infinity-upgrade-button", {
       <cost-display br
         v-if="!isBought"
         :config="config"
-        singular="IP"
-        plural="IP"
+        singular="Infinity Point"
+        plural="Infinity Points"
       />
       <slot />
     </button>`

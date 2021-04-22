@@ -22,6 +22,10 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
     return RealityUpgrade(13).isBought;
   }
 
+  get resetTickOn() {
+    return PRESTIGE_EVENT.ETERNITY;
+  }
+
   tick() {
     const tier = this._tier;
     if (!TimeDimension(tier).isAvailableForPurchase) return;

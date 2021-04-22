@@ -51,6 +51,10 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends UpgradeableAutobuyerSt
       : super.interval;
   }
 
+  get resetTickOn() {
+    return PRESTIGE_EVENT.INFINITY;
+  }
+
   tick() {
     if (!Galaxy.requirement.isSatisfied) return;
     super.tick();

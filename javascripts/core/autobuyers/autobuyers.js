@@ -69,6 +69,12 @@ const Autobuyers = (function() {
       PerformanceStats.end();
     },
 
+    resetTick(prestigeEvent) {
+      for (const autobuyer of Autobuyers.all.filter(n => n.resetTick !== undefined)) {
+        autobuyer.resetTick(prestigeEvent);
+      }
+    },
+
     reset() {
       for (const autobuyer of Autobuyers.all) {
         autobuyer.reset();
@@ -79,3 +85,9 @@ const Autobuyers = (function() {
 
 EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => Autobuyers.reset());
 EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => Autobuyers.reset());
+
+EventHub.logic.on(GAME_EVENT.DIMBOOST_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.DIMENSION_BOOST));
+EventHub.logic.on(GAME_EVENT.GALAXY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.ANTIMATTER_GALAXY));
+EventHub.logic.on(GAME_EVENT.INFINITY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.INFINITY));
+EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.ETERNITY));
+EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.REALITY));

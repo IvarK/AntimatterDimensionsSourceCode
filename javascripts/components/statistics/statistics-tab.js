@@ -124,8 +124,8 @@ Vue.component("statistics-tab", {
             <div class="c-stats-tab-general c-stats-tab-infinity">Infinity</div>
             <div v-if="infinity.count.gt(0)">
               You have {{ formatDecimalAmount(infinity.count) }}
-              {{"Infinity" | pluralize(infinity.count, "Infinities")}}
-              <span v-if="eternity.isUnlocked">this Eternity</span>.
+              {{"Infinity" | pluralize(infinity.count, "Infinities")}}<span
+              v-if="eternity.isUnlocked"> this Eternity</span>.
             </div>
             <div v-else>You have no Infinities<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
             <div v-if="infinity.banked.gt(0)">
@@ -150,8 +150,8 @@ Vue.component("statistics-tab", {
             <div class="c-stats-tab-general c-stats-tab-eternity">Eternity</div>
             <div v-if="eternity.count.gt(0)">
               You have {{ formatDecimalAmount(eternity.count) }}
-              {{"Eternity" | pluralize(eternity.count, "Eternities")}}
-              <span v-if="reality.isUnlocked">this Reality</span>.
+              {{"Eternity" | pluralize(eternity.count, "Eternities")}}<span
+              v-if="reality.isUnlocked"> this Reality</span>.
             </div>
             <div v-else>You have no Eternities<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toStringShort() }}.</div>

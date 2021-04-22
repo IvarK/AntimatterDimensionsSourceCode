@@ -353,6 +353,10 @@ Currency.realities = new class extends NumberCurrency {
 Currency.realityMachines = new class extends DecimalCurrency {
   get value() { return player.reality.realityMachines; }
   set value(value) { player.reality.realityMachines = value; }
+  add(amount) {
+    super.add(amount);
+    player.reality.realityMachines = player.reality.realityMachines.clampMax(MachineHandler.hardcapRM);
+  }
 }();
 
 Currency.perkPoints = new class extends NumberCurrency {
@@ -363,6 +367,11 @@ Currency.perkPoints = new class extends NumberCurrency {
 Currency.relicShards = new class extends NumberCurrency {
   get value() { return player.celestials.effarig.relicShards; }
   set value(value) { player.celestials.effarig.relicShards = value; }
+}();
+
+Currency.imaginaryMachines = new class extends DecimalCurrency {
+  get value() { return player.reality.imaginaryMachines; }
+  set value(value) { player.reality.imaginaryMachines = value; }
 }();
 
 Currency.darkMatter = new class extends DecimalCurrency {

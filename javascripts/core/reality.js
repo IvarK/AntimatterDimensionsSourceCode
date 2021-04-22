@@ -204,6 +204,7 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
   return Object.assign(defaults, {
     reset: false,
     gainedRM: MachineHandler.gainedRealityMachines,
+    gainedIM: MachineHandler.gainedImaginaryMachines,
     gainedGlyphLevel: gainedGlyphLevel(),
     gainedShards: Effarig.shardsGained,
     simulatedRealities: simulatedRealityCount(true),
@@ -237,7 +238,9 @@ function giveRealityRewards(realityProps) {
   const multiplier = realityProps.simulatedRealities + 1;
   const realityAndPPMultiplier = multiplier + binomialDistribution(multiplier, Achievement(154).effectOrDefault(0));
   const gainedRM = realityProps.gainedRM;
+  const gainedIM = realityProps.gainedIM;
   Currency.realityMachines.add(gainedRM.times(multiplier));
+  Currency.imaginaryMachines.add(gainedIM.times(multiplier));
   updateRealityRecords(realityProps);
   addRealityTime(
     player.records.thisReality.time, player.records.thisReality.realTime, gainedRM,

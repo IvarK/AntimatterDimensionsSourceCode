@@ -6,6 +6,7 @@ Vue.component("reality-button", {
       canReality: false,
       hasRealityStudy: false,
       machinesGained: new Decimal(0),
+      imaginaryMachinesGained: new Decimal(0),
       realityTime: 0,
       glyphLevel: 0,
       nextGlyphPercent: 0,
@@ -16,16 +17,19 @@ Vue.component("reality-button", {
   },
   computed: {
     formatMachinesGained() {
-      return `Machines gained: ${format(this.machinesGained, 2, 0)}`;
+      const parts = [];
+      if (this.machinesGained.gt(0)) parts.push(`${format(this.machinesGained, 2, 0)}`);
+      if (this.imaginaryMachinesGained.gt(0)) parts.push(`${format(this.imaginaryMachinesGained, 2, 0)}i`);
+      return `Machines gained: ${parts.join(" + ")}`;
     },
     formatMachineStats() {
       if (!PlayerProgress.realityUnlocked() && this.nextMachineEP.gt("1e8000")) {
         return `RM this Reality is capped!`;
       }
-      if (this.machinesGained.lt(100)) {
+      if (this.machinesGained.lt(100) && this.imaginaryMachinesGained.eq(0)) {
         return `Next at ${format(this.nextMachineEP, 2)} EP`;
       }
-      if (this.machinesGained.lt(Number.MAX_VALUE)) {
+      if (this.machinesGained.lt(Number.MAX_VALUE) && this.imaginaryMachinesGained.eq(0)) {
         return `${format(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;
       }
       return "";
@@ -65,7 +69,9 @@ Vue.component("reality-button", {
         return result;
       }
       const multiplier = simulatedRealityCount(false) + 1;
-      this.machinesGained = MachineHandler.gainedRealityMachines.times(multiplier);
+      const availableRM = MachineHandler.hardcapRM.minus(Currency.realityMachines.value);
+      this.machinesGained = MachineHandler.gainedRealityMachines.times(multiplier).clampMax(availableRM);
+      this.imaginaryMachinesGained = MachineHandler.gainedImaginaryMachines.times(multiplier);
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = this.percentToNextGlyphLevelText();

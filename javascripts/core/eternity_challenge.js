@@ -170,7 +170,11 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   start(auto) {
-    if (!this.isUnlocked || EternityChallenge.isRunning) return false;
+    if (EternityChallenge.isRunning) return false;
+    if (!this.isUnlocked) {
+      if (!TimeStudy.eternityChallenge(this.id).purchase())
+        return false;
+    }
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.

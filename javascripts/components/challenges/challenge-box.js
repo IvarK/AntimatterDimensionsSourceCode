@@ -6,6 +6,7 @@ Vue.component("challenge-box", {
     isUnlocked: false,
     isRunning: false,
     isCompleted: false,
+    canBeUnlocked: false,
     overrideLabel: {
       type: String,
       default: "",
@@ -32,7 +33,7 @@ Vue.component("challenge-box", {
         classObject["o-challenge-btn--completed"] = true;
       } else if (this.isCompleted && this.isUnlocked && this.isEC) {
         classObject["o-challenge-btn--redo"] = true;
-      } else if (this.isUnlocked) {
+      } else if (this.isUnlocked || this.canBeUnlocked) {
         classObject["o-challenge-btn--unlocked"] = true;
       } else {
         classObject["o-challenge-btn--locked"] = true;
@@ -41,7 +42,8 @@ Vue.component("challenge-box", {
       // but in that case you can't enter them and so it's important to give them a property
       // that disables cursor on hover. The same thing happens with challenges that are running,
       // of any type, and with Challenge 1.
-      classObject["o-challenge-btn--unenterable"] = !this.isUnlocked || this.isRunning || this.name === "C1";
+      classObject["o-challenge-btn--unenterable"] = !(this.isUnlocked || this.canBeUnlocked) ||
+        this.isRunning || this.name === "C1";
       return classObject;
     },
     buttonText() {
@@ -52,6 +54,7 @@ Vue.component("challenge-box", {
         return "Completed";
       }
       if (this.isUnlocked) return "Start";
+      if (this.isEC && this.canBeUnlocked) return "Unlock";
       return "Locked";
     }
   },

@@ -11,6 +11,7 @@ Vue.component("eternity-challenges-tab", {
           isUnlocked: false,
           isRunning: false,
           isCompleted: false,
+          canBeUnlocked: false,
           completions: 0,
           showGoalSpan: false,
           enslavedSpanOverride: false,
@@ -80,7 +81,8 @@ Vue.component("eternity-challenges-tab", {
           this.isCompleted = challenge.isFullyCompleted;
           this.completions = challenge.completions;
           this.showGoalSpan = PlayerProgress.realityUnlocked();
-          this.enslavedSpanOverride = Enslaved.isRunning && this.challenge.id === 1;
+          this.enslavedSpanOverride = Enslaved.isRunning && challenge.id === 1;
+          this.canBeUnlocked = TimeStudy.eternityChallenge(challenge.id).canBeBought;
         },
         start() {
           this.challenge.requestStart();
@@ -95,6 +97,7 @@ Vue.component("eternity-challenges-tab", {
           :isUnlocked="isUnlocked"
           :isRunning="isRunning"
           :isCompleted="isCompleted"
+          :canBeUnlocked="canBeUnlocked"
           class="c-challenge-box--eternity"
           @start="start"
         >

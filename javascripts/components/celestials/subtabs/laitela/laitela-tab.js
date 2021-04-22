@@ -7,6 +7,7 @@ Vue.component("laitela-tab", {
       maxMatter: new Decimal(0),
       matterExtraPurchasePercentage: 0,
       autobuyersUnlocked: false,
+      singularityPanelVisible: false,
       singularitiesUnlocked: false,
       singularityWaitTime: 0,
     };
@@ -20,7 +21,8 @@ Vue.component("laitela-tab", {
         SingularityMilestone.darkDimensionAutobuyers.isUnlocked ||
         SingularityMilestone.autoCondense.isUnlocked ||
         Laitela.darkMatterMult > 1;
-      this.singularitiesUnlocked = Singularity.capIsReached || player.celestials.laitela.singularities > 0;
+      this.singularityPanelVisible = player.celestials.laitela.singularities > 0;
+      this.singularitiesUnlocked = Singularity.capIsReached || this.singularityPanelVisible;
       this.singularityWaitTime = TimeSpan.fromSeconds((Singularity.cap - player.celestials.laitela.darkEnergy) /
       Laitela.darkEnergyPerSecond).toStringShort();
     },
@@ -58,8 +60,7 @@ Vue.component("laitela-tab", {
           <dark-matter-dimension-group />
           <annihilation-button />
         </div>
-        <singularity-milestone-pane v-if="singularitiesUnlocked"/>
-        <div class="c-laitela-next-milestones o-laitela-singularity-locked" v-else>Requires singularities</div>
+        <singularity-milestone-pane v-if="singularityPanelVisible"/>
       </div>
       <laitela-autobuyer-settings v-if="autobuyersUnlocked" />
     </div>`
@@ -73,6 +74,7 @@ Vue.component("singularity-container", {
       singularities: 0,
       singularityCapIncreases: 0,
       canPerformSingularity: false,
+      unlockedBulkSingularity: false,
       singularityCap: 0,
       baseTimeToSingularity: 0,
       singularitiesGained: 0,
@@ -90,6 +92,7 @@ Vue.component("singularity-container", {
       this.singularities = laitela.singularities;
       this.singularityCapIncreases = laitela.singularityCapIncreases;
       this.canPerformSingularity = Singularity.capIsReached;
+      this.unlockedBulkSingularity = this.singularities >= 10;
       this.singularityCap = Singularity.cap;
       this.baseTimeToSingularity = this.singularityCap / this.darkEnergyGainPerSecond;
       this.singularitiesGained = Singularity.singularitiesGained;
@@ -168,7 +171,7 @@ Vue.component("singularity-container", {
         <div class="o-laitela-matter-amount">
           You have {{ format(darkEnergy, 2, 4) }} Dark Energy. (+{{ format(darkEnergyGainPerSecond, 2, 4) }}/s)
         </div>
-        <div v-if="singularities>=10">
+        <div v-if="unlockedBulkSingularity">
           <button class="c-laitela-singularity__cap-control" @click="decreaseCap">
             Decrease Singularity cap.
           </button>
@@ -180,12 +183,13 @@ Vue.component("singularity-container", {
           <br>
           but also increases gained Singularities by {{ formatX(perStepFactor) }}.
         </div>
-        <h2 v-else>
-          Reach {{ format(10) }} singularities to unlock Bulk Singularities.
+        <div v-else>
           <br>
+          Reach {{ format(10) }} Singularities
           <br>
+          to unlock Bulk Singularities.
           <br>
-        </h2>
+        </div>
         <br>
         Total time to <span v-if="hasAutoSingularity">(auto-)</span>condense:
         {{ baseSingularityTime }}
@@ -210,6 +214,7 @@ Vue.component("laitela-run-button", {
       maxDimTier: 0,
       isRunning: false,
       realityReward: 1,
+      singularitiesUnlocked: false,
     };
   },
   methods: {
@@ -218,10 +223,17 @@ Vue.component("laitela-run-button", {
       this.maxDimTier = Laitela.maxAllowedDimension;
       this.realityReward = Laitela.realityReward;
       this.isRunning = Laitela.isRunning;
+      this.singularitiesUnlocked = player.celestials.laitela.singularities > 0;
     },
     startRun() {
       if (!resetReality()) return;
       Laitela.initializeRun();
+    },
+    classObject() {
+      return {
+        "o-laitela-run-button": true,
+        "o-laitela-run-button--large": !this.singularitiesUnlocked
+      };
     },
     runButtonClassObject() {
       return {
@@ -236,7 +248,7 @@ Vue.component("laitela-run-button", {
     }
   },
   template: `
-    <button class="o-laitela-run-button">
+    <button :class="classObject()">
       <b>Start Lai'tela's Reality</b>
       <div :class="runButtonClassObject()" @click="startRun"></div>
       <div v-if="realityReward > 1">

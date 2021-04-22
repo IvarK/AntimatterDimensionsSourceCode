@@ -7434,6 +7434,10 @@ kbd {
   border-radius: 0;
 }
 
+.o-laitela-run-button--large {
+  width: 45rem;
+}
+
 .o-laitela-matter-amount {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;

@@ -224,9 +224,9 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 2,
     isGenerated: true,
     glyphTypes: ["time"],
-    singleDesc: "Multiply Eternitied stat gain by {value}",
-    totalDesc: "Eternitied stat gain ×{value}",
-    genericDesc: "Eternitied stat gain multiplier",
+    singleDesc: "Multiply Eternity gain by {value}",
+    totalDesc: "Eternity gain ×{value}",
+    genericDesc: "Eternity gain multiplier",
     effect: (level, strength) => Math.pow((strength + 3) * level, 0.9) *
      Math.pow(3, GlyphAlteration.sacrificeBoost("time")),
     formatEffect: x => format(x, 2, 2),
@@ -454,9 +454,9 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 15,
     isGenerated: true,
     glyphTypes: ["infinity"],
-    singleDesc: "Multiply Infinitied stat gain by {value}",
-    totalDesc: "Infinitied stat gain ×{value}",
-    genericDesc: "Infinitied stat gain multiplier",
+    singleDesc: "Multiply Infinity gain by {value}",
+    totalDesc: "Infinity gain ×{value}",
+    genericDesc: "Infinity gain multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("infinity")
       ? Decimal.pow(1.02, level)
       : Decimal.pow(level * strength, 1.5).times(2)),

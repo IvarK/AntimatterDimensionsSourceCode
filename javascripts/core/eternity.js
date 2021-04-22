@@ -84,7 +84,7 @@ function eternity(force, auto, specialConditions = {}) {
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     if (!player.dilation.active) giveEternityRewards(auto);
     // If somehow someone manages to force their first eternity
-    // (e.g., by starting an EC), they haven't really eternitied yet.
+    // (e.g., by starting an EC), they haven't really done an eternity yet.
     player.achievementChecks.noEternitiesThisReality = false;
   }
 

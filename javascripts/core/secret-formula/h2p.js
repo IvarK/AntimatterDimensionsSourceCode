@@ -196,7 +196,7 @@ display as ${format(Infinity)}.
 <br>
 <br>
 Each Infinity completed will give an Infinity Point, which can be spent on upgrades in the new Infinity tab.
-You must purchase these upgrades from top to bottom. You will also gain one "Infinitied stat", which is effectively
+You must purchase these upgrades from top to bottom. You will also gain one "Infinity", which is effectively
 the number of times you have crunched.
 <br>
 <br>
@@ -414,7 +414,7 @@ first Eternity.
 <br>
 You can pass ${formatPostBreak(Number.MAX_VALUE, 2)} IP without anything being forced upon you, unlike the first time
 you reached ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter. You will recieve more Eternity Points the more
-Infinity Points you had before going Eternal. You will also gain one "Eternitied stat" for completing an Eternity.
+Infinity Points you had before going Eternal. You will also gain one "Eternity" for completing an Eternity.
 <br>
 <br>
 Eternity Point gain scales similarly to Infinity Point gain, but scaling off of Infinity Points instead of antimatter.
@@ -430,7 +430,7 @@ ${formatInt(2)} EP until ${formatPostBreak(new Decimal("1e349"))}.
     }, {
       name: "Eternity Milestones",
       info: () => `
-To make Eternities faster and more convenient, you will unlock various buffs as you get more "eternitied stat". These
+To make Eternities faster and more convenient, you will unlock various buffs as you get more "Eternity". These
 buffs will generally let you start with certain upgrades you would otherwise lose after Eternity, give you new
 autobuyers for better automation, or give you a way to passively gain resources offline at a reduced rate.
 <br>

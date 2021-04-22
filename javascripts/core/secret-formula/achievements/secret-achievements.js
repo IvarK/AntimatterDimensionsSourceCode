@@ -31,7 +31,7 @@ GameDatabase.achievements.secret = [
     name: "Do you enjoy pain?",
     get description() {
       return `Use a "painful" notation for ${formatInt(10)} real-time minutes
-      after having eternitied at least once.`;
+      after doing an Eternity.`;
     },
     checkRequirement: () => AchievementTimers.pain
       .check(PlayerProgress.eternityUnlocked() && Notations.current.isPainful, 600),

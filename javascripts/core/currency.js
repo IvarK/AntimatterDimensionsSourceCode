@@ -230,38 +230,18 @@ Currency.antimatter = new class extends DecimalCurrency {
 }();
 
 Currency.infinities = new class extends DecimalCurrency {
-  get rawValue() { return player.infinities; }
-  get value() { return player.infinities.plus(player.infinitiesBanked); }
+  get value() { return player.infinities; }
   set value(value) { player.infinities = value; }
-  // TODO fix this very sorry
-  add(amount) {
-    this.value = this.operations.add(this.rawValue, amount);
-  }
-
-  subtract(amount) {
-    this.value = this.operations.max(this.operations.subtract(this.rawValue, amount), 0);
-  }
-
-  multiply(amount) {
-    this.value = this.operations.multiply(this.rawValue, amount);
-  }
-
-  divide(amount) {
-    this.value = this.operations.divide(this.rawValue, amount);
-  }
-
-  bumpTo(value) {
-    this.value = this.operations.max(this.rawValue, value);
-  }
-
-  dropTo(value) {
-    this.value = this.operations.min(this.rawValue, value);
-  }
 }();
 
 Currency.infinitiesBanked = new class extends DecimalCurrency {
   get value() { return player.infinitiesBanked; }
   set value(value) { player.infinitiesBanked = value; }
+}();
+
+Currency.infinitiesTotal = new class extends DecimalCurrency {
+  get value() { return player.infinities.plus(player.infinitiesBanked); }
+  set value(value) { player.infinities = value; }
 }();
 
 Currency.infinityPoints = new class extends DecimalCurrency {

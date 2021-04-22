@@ -144,7 +144,7 @@ GameDatabase.achievements.normal = [
     id: 33,
     name: "That's a lot of infinites",
     get description() { return `Reach Infinity ${formatInt(10)} times.`; },
-    checkRequirement: () => Currency.infinities.rawValue.gte(10),
+    checkRequirement: () => Currency.infinities.gte(10),
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER
   },
   {
@@ -572,7 +572,7 @@ GameDatabase.achievements.normal = [
     id: 87,
     name: "2 MILLION INFINITIES",
     get description() { return `Infinity ${format(2e6)} times.`; },
-    checkRequirement: () => Currency.infinities.rawValue.gt(2e6),
+    checkRequirement: () => Currency.infinities.gt(2e6),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
       return `Infinities more than ${formatInt(5)} seconds long
@@ -731,8 +731,8 @@ GameDatabase.achievements.normal = [
   {
     id: 107,
     name: "Do you really need a guide for this?",
-    get description() { return `Eternity with less than ${formatInt(10)} Infinitied stat.`; },
-    checkRequirement: () => Currency.infinities.rawValue.lt(10),
+    get description() { return `Eternity with less than ${formatInt(10)} Infinities.`; },
+    checkRequirement: () => Currency.infinities.lt(10),
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
   },
   {
@@ -800,10 +800,10 @@ GameDatabase.achievements.normal = [
     id: 116,
     name: "Do I really need to infinity",
     get description() { return `Eternity with only ${formatInt(1)} Infinity.`; },
-    checkRequirement: () => Currency.infinities.rawValue.lte(1),
+    checkRequirement: () => Currency.infinities.lte(1),
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
     reward: "Multiplier to Infinity Points based on Infinities.",
-    effect: () => Decimal.pow(Currency.infinities.value.clampMin(1), LOG10_2 / 4).powEffectOf(TimeStudy(31)),
+    effect: () => Decimal.pow(Currency.infinitiesTotal.value.clampMin(1), LOG10_2 / 4).powEffectOf(TimeStudy(31)),
     cap: () => Effarig.eternityCap,
     formatEffect: value => `${formatX(value, 2, 2)}`
   },
@@ -862,7 +862,7 @@ GameDatabase.achievements.normal = [
       or any 1st Antimatter Dimensions in your current Eternity.`;
     },
     checkRequirement: () => Currency.infinityPoints.exponent >= 90 &&
-      player.achievementChecks.noFirstDimensions && Currency.infinities.rawValue.eq(0),
+      player.achievementChecks.noFirstDimensions && Currency.infinities.eq(0),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Infinity Point multiplier based on time spent this Infinity.",
     effect() {
@@ -909,7 +909,7 @@ GameDatabase.achievements.normal = [
     get reward() {
       return `After Eternity you permanently keep ${formatPercents(0.05)} of your Infinities as Banked Infinities.`;
     },
-    effect: () => Currency.infinities.rawValue.times(0.05).floor()
+    effect: () => Currency.infinities.value.times(0.05).floor()
   },
   {
     id: 132,
@@ -1172,7 +1172,7 @@ GameDatabase.achievements.normal = [
     id: 164,
     name: "Infinity times two",
     get description() { return `Get ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Infinities.`; },
-    checkRequirement: () => Currency.infinities.gte(Decimal.NUMBER_MAX_VALUE),
+    checkRequirement: () => Currency.infinitiesTotal.gte(Decimal.NUMBER_MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() { return `Gain ×${formatInt(1024)} more Infinities.`; },
     effect: 1024

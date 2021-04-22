@@ -666,7 +666,7 @@ GameDatabase.celestials.navigation = (function() {
       visible: () => Achievement(151).isUnlocked || V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK),
       complete: () => {
         if (V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK)) return 1;
-        return emphasizeEnd(Currency.infinities.value.pLog10() /
+        return emphasizeEnd(Currency.infinitiesTotal.value.pLog10() /
                 Math.log10(GameDatabase.celestials.v.mainUnlock.infinities));
       },
       drawOrder: -1,
@@ -681,7 +681,7 @@ GameDatabase.celestials.navigation = (function() {
         legend: {
           text: complete => {
             if (complete >= 1) return "Infinity condition for V";
-            const infinities = Currency.infinities.value;
+            const infinities = Currency.infinitiesTotal.value;
             const goal = GameDatabase.celestials.v.mainUnlock.infinities;
             return [
               "V",

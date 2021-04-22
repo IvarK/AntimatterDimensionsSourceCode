@@ -196,7 +196,7 @@ function resetInfinityRuns() {
   GameCache.bestRunIPPM.invalidate();
 }
 
-// Player gains 50% of infinities they would get based on their best infinitied/hour crunch if they have the
+// Player gains 50% of infinities they would get based on their best infinities/hour crunch if they have the
 // milestone and turned on infinity autobuyer with 1 minute or less per crunch
 function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
   return Autobuyer.bigCrunch.autoInfinitiesAvailable(considerMilestoneReached)

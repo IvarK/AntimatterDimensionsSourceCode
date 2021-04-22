@@ -48,17 +48,16 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 31,
       cost: 3,
       requirement: 21,
-      description: () => `Powers up bonuses that are based on your Infinitied stat
-        (Bonuses^${formatInt(4)})`,
+      description: () => `Powers up bonuses that are based on your Infinities (Bonuses^${formatInt(4)})`,
       effect: 4
     },
     {
       id: 32,
       cost: 2,
       requirement: 22,
-      description: () => `You gain ×${formatInt(TimeStudy(32).effectValue)}
-        more Infinitied stat (based on Dimension Boosts)`,
-      effect: () => Math.max(DimBoost.totalBoosts, 1)
+      description: () => `You gain more Infinities based on Dimension Boosts`,
+      effect: () => Math.max(DimBoost.totalBoosts, 1),
+      formatEffect: value => formatX(value)
     },
     {
       id: 33,
@@ -397,7 +396,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0,
       description: () => `After Eternity you permanently keep ${formatPercents(0.05)}
       of your Infinities as Banked Infinities`,
-      effect: () => Currency.infinities.rawValue.times(0.05).floor()
+      effect: () => Currency.infinities.value.times(0.05).floor()
     },
     {
       id: 192,

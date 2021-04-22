@@ -64,7 +64,7 @@ const GameIntervals = (function() {
       kong.submitStats("NormalChallenge 9 time record (ms)", Math.floor(player.challenge.normal.bestTimes[8]));
       kong.submitStats("Fastest Infinity time (ms)", Math.floor(player.records.bestInfinity.time));
       // FIXME: Infinitified is now Decimal so decide what happens here!
-      // kong.submitStats('Infinitied', Currency.infinities);
+      // kong.submitStats('Infinitied', Currency.infinitiesTotal);
       // FIXME: Eternity count is now a Decimal.
       // kong.submitStats("Eternities", Currency.eternities);
       kong.submitStats("Achievements", Achievements.effectiveCount +

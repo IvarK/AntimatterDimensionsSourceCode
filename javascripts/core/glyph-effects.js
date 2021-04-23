@@ -741,18 +741,6 @@ GameDatabase.reality.glyphEffects = [
     effect: (level, strength) => Decimal.pow10(1e6 * strengthToRarity(strength)),
     formatEffect: x => formatPostBreak(x, 2),
     combine: GlyphCombiner.multiplyDecimal,
-  }, {
-    id: "companionreduction",
-    bitmaskIndex: 10,
-    isGenerated: false,
-    glyphTypes: ["companion"],
-    singleDesc: "(Due to scaling changes from before the Reality update, this was reduced to {value} Eternity Points" +
-      " for calculating Reality Machines gained)",
-    totalDesc: " ",
-    // eslint-disable-next-line no-unused-vars
-    effect: (level, strength) => Decimal.pow10(6000 + 0.25 * (1e6 * strengthToRarity(strength) - 6000)),
-    formatEffect: x => formatPostBreak(x, 2),
-    combine: GlyphCombiner.multiplyDecimal,
   }
 ].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));
 

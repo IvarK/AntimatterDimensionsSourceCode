@@ -153,7 +153,6 @@ const GlyphGenerator = {
     const str = rarityToStrength(eternityPoints.log10() / 1e6);
     const effects = orderedEffectList.filter(effect => effect.match("companion*"));
     // The last effect is the nerf reduction text, get rid of it if it doesn't apply
-    if (eternityPoints.lt("1e6000")) effects.pop();
     const effectBitmask = makeGlyphEffectBitmask(effects);
     return {
       id: undefined,

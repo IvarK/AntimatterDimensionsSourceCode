@@ -305,6 +305,13 @@ GameDatabase.tabs = [
         hidable: true,
       },
       {
+        key: "imag_upgrades",
+        name: "Imaginary Upgrades",
+        symbol: "<i class='fas fa-level-up-alt'></i>",
+        component: "imaginary-upgrades-tab",
+        condition: () => MachineHandler.isIMUnlocked,
+      },
+      {
         key: "perks",
         name: "Perks",
         symbol: "<i class='fas fa-project-diagram'></i>",

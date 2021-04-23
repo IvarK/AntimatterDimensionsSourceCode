@@ -27,6 +27,10 @@ const MachineHandler = {
     return this.uncappedRM.clampMax(this.hardcapRM);
   },
 
+  get isIMUnlocked() {
+    return true;
+  },
+
   get gainedImaginaryMachines() {
     return this.uncappedRM.gte(this.hardcapRM)
       ? new Decimal(1)

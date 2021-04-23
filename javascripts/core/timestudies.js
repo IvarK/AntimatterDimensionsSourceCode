@@ -87,7 +87,11 @@ function studiesUntil(id) {
   } else if (id > 103) {
     // If we haven't chosen dimension paths, and shift clicked something below
     // them, we don't buy anything until the player makes their selection
-    return;
+    if (TimeStudy.prefferedPaths(0)) {
+      buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy.prefferedPaths(0)], id);
+    } else {
+      return;
+    }
   } else {
     // We buy the requested path first
     buyTimeStudyListUntilID(NormalTimeStudies.paths[requestedPath], id);
@@ -101,12 +105,14 @@ function studiesUntil(id) {
   if (id >= 111) TimeStudy(111).purchase();
 
   if (id < 121) return;
-  const pacePaths = getSelectedPacePaths();
   if (id < 151) {
     // This click is choosing a path
     buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy(id).path], id);
+  } else {
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy.prefferedPaths(1)], id);
   }
 
+  const pacePaths = getSelectedPacePaths();
   if (pacePaths.length === 1) {
     // We've chosen a path already
     buyTimeStudyListUntilID(NormalTimeStudies.paths[pacePaths[0]], id);
@@ -295,6 +301,10 @@ function TimeStudy(id) {
  */
 TimeStudy.boughtNormalTS = function() {
   return player.timestudy.studies.map(id => TimeStudy(id));
+};
+
+TimeStudy.prefferedPaths = function(id) {
+  return player.timestudy.prefferedPaths[id];
 };
 
 class ECTimeStudyState extends TimeStudyState {

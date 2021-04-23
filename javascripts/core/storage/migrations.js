@@ -149,7 +149,6 @@ GameStorage.migrations = {
       GameStorage.migrations.convertTimeTheoremPurchases(player);
 
       kong.migratePurchases();
-      if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
     }
   },
 

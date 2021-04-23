@@ -82,16 +82,6 @@ class TabState {
       Modal.hide();
     }
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
-
-    if (this.config.key === "reality" &&
-        player.saveOverThresholdFlag &&
-        !player.saveOverThresholdFlagModalDisplayed) {
-      Modal.message.show(`Your save seems to be over ${format(new Decimal("1e6000"))} Eternity Points.
-        There have been nerfs past that in the update, so for the first Reality your
-        Eternity Points gives fewer Reality Machines
-        past ${format(new Decimal("1e6000"))} Eternity Points.`);
-      player.saveOverThresholdFlagModalDisplayed = true;
-    }
   }
 
   resetCurrentSubtab() {

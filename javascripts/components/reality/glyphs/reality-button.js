@@ -56,7 +56,7 @@ Vue.component("reality-button", {
         if (adjusted.lte(1)) return Decimal.pow10(4000);
         if (adjusted.lte(10)) return Decimal.pow10(4000 / 27 * (adjusted.toNumber() + 26));
         let result = Decimal.pow10(4000 * (adjusted.log10() / 3 + 1));
-        if (!PlayerProgress.realityUnlocked() && result.gte("1e6000") && player.saveOverThresholdFlag) {
+        if (!PlayerProgress.realityUnlocked() && result.gte("1e6000")) {
           result = result.div("1e6000").pow(4).times("1e6000");
         }
         return result;

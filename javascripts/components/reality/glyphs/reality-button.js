@@ -19,6 +19,9 @@ Vue.component("reality-button", {
       return `Machines gained: ${format(this.machinesGained, 2, 0)}`;
     },
     formatMachineStats() {
+      if (!PlayerProgress.realityUnlocked()) {
+        return `RM this Reality is capped!`;
+      }
       if (this.machinesGained.lt(100)) {
         return `Next at ${format(this.nextMachineEP, 2)} EP`;
       }

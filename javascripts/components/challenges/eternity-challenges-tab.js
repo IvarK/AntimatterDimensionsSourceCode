@@ -92,13 +92,12 @@ Vue.component("eternity-challenges-tab", {
         }
       },
       template:
-        `<challenge-box
+        `<eternity-challenge-box
           :name="name"
           :isUnlocked="isUnlocked"
           :isRunning="isRunning"
           :isCompleted="isCompleted"
           :canBeUnlocked="canBeUnlocked"
-          class="c-challenge-box--eternity"
           @start="start"
         >
           <description-display :config="config" slot="top" />
@@ -122,7 +121,7 @@ Vue.component("eternity-challenges-tab", {
               <effect-display v-if="completions < 5" :config="nextRewardConfig" title="Next" />
             </span>
           </template>
-        </challenge-box>`
+        </eternity-challenge-box>`
     }
   },
   data() {

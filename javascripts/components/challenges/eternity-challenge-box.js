@@ -34,7 +34,7 @@ Vue.component("eternity-challenge-box", {
         "o-challenge-btn--running": this.isRunning,
         "o-challenge-btn--completed": challengeDone,
         "o-challenge-btn--redo": challengeRedo,
-        "o-challenge-btn--unlocked": challengeUnlock,
+        "o-challenge-btn--unlocked": !challengeDone && challengeUnlock,
         "o-challenge-btn--locked": challengeLocked,
         "o-challenge-btn--unenterable": !challengeClickable,
       };

@@ -6,7 +6,6 @@ Vue.component("challenge-box", {
     isUnlocked: false,
     isRunning: false,
     isCompleted: false,
-    canBeUnlocked: false,
     overrideLabel: {
       type: String,
       default: "",
@@ -15,12 +14,15 @@ Vue.component("challenge-box", {
   data() {
     return {
       challengeId: Number,
+      inC1: Boolean,
     };
   },
-  computed: {
+  methods: {
     update() {
       this.inC1 = this.name === "C1" && !this.isCompleted && !Player.isInAntimatterChallenge;
     },
+  },
+  computed: {
     // eslint-disable-next-line complexity
     buttonClassObject() {
       const challengeDone = this.isCompleted && this.isUnlocked;
@@ -32,7 +34,7 @@ Vue.component("challenge-box", {
         "o-challenge-btn": true,
         "o-challenge-btn--running": this.isRunning || this.inC1,
         "o-challenge-btn--completed": challengeDone,
-        "o-challenge-btn--unlocked": this.isUnlocked,
+        "o-challenge-btn--unlocked": !challengeDone && this.isUnlocked,
         "o-challenge-btn--locked": challengeLocked,
         "o-challenge-btn--unenterable": challengeNotEnterable,
       };

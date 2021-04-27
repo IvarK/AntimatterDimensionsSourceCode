@@ -86,7 +86,10 @@ function studiesUntil(id) {
   } else if (id > 103) {
     // If we haven't chosen dimension paths, and shift clicked something below
     // them, we don't buy anything until the player makes their selection
-    if (TimeStudy.preferredPaths.dimensionPath.path === 0) return;
+    if (TimeStudy.preferredPaths.dimensionPath.path === 0) {
+      GameUI.notify.error("You haven't selected a preferred dimension path!");
+      return;
+    }
     // If we have a preferred path setup we should buy that one
     buyTimeStudyListUntilID(TimeStudy.preferredPaths.dimensionPath.studies, id);
   } else {
@@ -108,6 +111,8 @@ function studiesUntil(id) {
   } else if (TimeStudy.preferredPaths.pacePath.path) {
     // If we have a preferred path setup we should buy that one
     buyTimeStudyListUntilID(TimeStudy.preferredPaths.pacePath.studies, id);
+  } else {
+    GameUI.notify.error("You haven't selected a preferred pace path!");
   }
 
   const pacePaths = getSelectedPacePaths();

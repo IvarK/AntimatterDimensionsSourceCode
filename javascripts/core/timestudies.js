@@ -87,7 +87,7 @@ function studiesUntil(id) {
     // If we haven't chosen dimension paths, and shift clicked something below
     // them, we don't buy anything until the player makes their selection
     if (TimeStudy.preferredPaths.dimensionPath.path === 0) return;
-
+    // If we have a preferred path setup we should buy that one
     buyTimeStudyListUntilID(TimeStudy.preferredPaths.dimensionPath.studies, id);
   } else {
     // We buy the requested path first
@@ -105,7 +105,8 @@ function studiesUntil(id) {
   if (id < 151) {
     // This click is choosing a path
     buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy(id).path], id);
-  } else {
+  } else if (TimeStudy.preferredPaths.pacePath.path) {
+    // If we have a preferred path setup we should buy that one
     buyTimeStudyListUntilID(TimeStudy.preferredPaths.pacePath.studies, id);
   }
 
@@ -125,8 +126,15 @@ function studiesUntil(id) {
   }
 
   // Attempt to buy things below the pace split, up to the requested study
+  // First we buy up to 201 so we can buy the the second preferred path if needed
   if (!TimeStudy(141).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought) return;
-  buyTimeStudyRange(151, Math.min(lastInPrevRow, 214));
+  buyTimeStudyRange(151, Math.min(id, 201));
+
+  // If we have study 201 we should try and buy our second preferred path, granted we have one selected
+  if (TimeStudy(201).isBought && TimeStudy.preferredPaths.dimensionPath.path.length === 2)
+    buyTimeStudyListUntilID(TimeStudy.preferredPaths.dimensionPath.studies, id);
+
+  buyTimeStudyRange(151, Math.min(id, Math.min(lastInPrevRow, 214)));
   study.purchase();
 
   // Don't bother buying any more studies beyond row 22 unless the player has fully finished V,
@@ -304,12 +312,13 @@ TimeStudy.preferredPaths = {
   get dimensionPath() {
     return {
       path: player.timestudy.preferredPaths[0],
-      studies: NormalTimeStudies.paths[player.timestudy.preferredPaths[0]]
+      studies: player.timestudy.preferredPaths[0].reduce((acc, path) =>
+        acc.concat(NormalTimeStudies.paths[path]), [])
     };
   },
   set dimensionPath(value) {
     const options = [1, 2, 3];
-    player.timestudy.preferredPaths[0] = options.includes(value) ? value : 0;
+    player.timestudy.preferredPaths[0] = value.filter(id => options.includes(id));
   },
   get pacePath() {
     return {

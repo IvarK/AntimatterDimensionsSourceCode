@@ -8,7 +8,7 @@ Vue.component("modal-preferred-tree", {
     };
   },
   created() {
-    this.dimensionPath = TimeStudy.preferredPaths.dimensionPath.path;
+    this.dimensionPath = [...TimeStudy.preferredPaths.dimensionPath.path];
     this.pacePath = TimeStudy.preferredPaths.pacePath.path;
   },
   computed: {
@@ -26,13 +26,24 @@ Vue.component("modal-preferred-tree", {
         "Idle": TIME_STUDY_PATH.IDLE
       };
     },
+    usePriority() {
+      return TimeStudy(201).isBought || this.dimensionPath.length === 2 || DilationUpgrade.timeStudySplit.isBought;
+    }
   },
   methods: {
     isPreferred(name) {
-      return this.dimensionOptions[name] === this.dimensionPath || this.paceOptions[name] === this.pacePath;
+      return this.paceOptions[name] === this.pacePath || this.dimensionPath.indexOf(this.dimensionOptions[name]) + 1;
+    },
+    display(name) {
+      if (!this.usePriority || this.paceOptions[name] || !this.isPreferred(name)) return name;
+      return `${name} <br> (${this.isPreferred(name)})`;
     },
     select(name) {
-      if (this.dimensionOptions[name]) this.dimensionPath = this.dimensionOptions[name];
+      if (this.dimensionOptions[name]) {
+        if (!this.usePriority || this.dimensionPath.length > 1) this.dimensionPath.shift();
+        if (!this.dimensionPath.includes(this.dimensionOptions[name]))
+          this.dimensionPath.push(this.dimensionOptions[name]);
+      }
       if (this.paceOptions[name]) this.pacePath = this.paceOptions[name];
     },
     confirmPrefs() {
@@ -65,9 +76,9 @@ Vue.component("modal-preferred-tree", {
         v-for="(id, name) in dimensionOptions"
         @click="select(name)"
         :class="classList(name)"
-        style="font-size: 2rem"
+        style="font-size: 1.75rem"
+        v-html="display(name)"
       >
-      {{name}}
       </button>
     </div>
   <br>
@@ -77,9 +88,9 @@ Vue.component("modal-preferred-tree", {
         v-for="(id, name) in paceOptions"
         @click="select(name)"
         :class="classList(name)"
-        style="font-size: 2rem"
+        style="font-size: 1.75rem"
+        v-html="display(name)"
       >
-      {{name}}
       </button>
     </div>
   <primary-button

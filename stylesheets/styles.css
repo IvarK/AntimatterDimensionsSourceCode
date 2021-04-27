@@ -261,6 +261,72 @@ button:focus {
   cursor: pointer;
 }
 
+.c-tt-buy-button--unlocked__ad {
+  color: #22aa48;
+  background: #232028;
+  cursor: pointer;
+}
+
+.c-tt-buy-button--unlocked__ad:hover {
+  color: #232028;
+  background: #22aa48;
+}
+
+.c-tt-buy-button--unlocked__id {
+  color: #b67f33;
+  background: #232028;
+  cursor: pointer;
+}
+
+.c-tt-buy-button--unlocked__id:hover {
+  color: #232028;
+  background: #b67f33;
+}
+
+.c-tt-buy-button--unlocked__td {
+  color: #b241e3;
+  background: #232028;
+  cursor: pointer;
+}
+
+.c-tt-buy-button--unlocked__td:hover {
+  color: #232028;
+  background: #b241e3;
+}
+
+.c-tt-buy-button--unlocked__active {
+  color: #e60000;
+  background: #232028;
+  cursor: pointer;
+}
+
+.c-tt-buy-button--unlocked__active:hover {
+  color: #232028;
+  background: #e60000;
+}
+
+.c-tt-buy-button--unlocked__passive {
+  color: #5e33b6;
+  background: #232028;
+  cursor: pointer;
+}
+
+.c-tt-buy-button--unlocked__passive:hover {
+  color: #232028;
+  background: #5e33b6;
+}
+
+.c-tt-buy-button--unlocked__idle {
+  color: #0080ff;
+  background: #232028;
+  cursor: pointer;
+}
+
+.c-tt-buy-button--unlocked__idle:hover {
+  color: #232028;
+  background: #0080ff;
+}
+
 .c-tt-buy-button--unlocked:hover {
   color: #232028;
   background: #3AACD6;

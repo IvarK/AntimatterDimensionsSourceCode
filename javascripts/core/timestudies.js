@@ -86,9 +86,9 @@ function studiesUntil(id) {
   } else if (id > 103) {
     // If we haven't chosen dimension paths, and shift clicked something below
     // them, we don't buy anything until the player makes their selection
-    if (TimeStudy.prefferedPaths.dimensionPath.path === 0) return;
+    if (TimeStudy.preferredPaths.dimensionPath.path === 0) return;
 
-    buyTimeStudyListUntilID(TimeStudy.prefferedPaths.dimensionPath.studies, id);
+    buyTimeStudyListUntilID(TimeStudy.preferredPaths.dimensionPath.studies, id);
   } else {
     // We buy the requested path first
     buyTimeStudyListUntilID(NormalTimeStudies.paths[requestedPath], id);
@@ -106,7 +106,7 @@ function studiesUntil(id) {
     // This click is choosing a path
     buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy(id).path], id);
   } else {
-    buyTimeStudyListUntilID(TimeStudy.prefferedPaths.pacePath.studies, id);
+    buyTimeStudyListUntilID(TimeStudy.preferredPaths.pacePath.studies, id);
   }
 
   const pacePaths = getSelectedPacePaths();
@@ -300,26 +300,26 @@ TimeStudy.boughtNormalTS = function() {
   return player.timestudy.studies.map(id => TimeStudy(id));
 };
 
-TimeStudy.prefferedPaths = {
+TimeStudy.preferredPaths = {
   get dimensionPath() {
     return {
-      path: player.timestudy.prefferedPaths[0],
-      studies: NormalTimeStudies.paths[player.timestudy.prefferedPaths[0]]
+      path: player.timestudy.preferredPaths[0],
+      studies: NormalTimeStudies.paths[player.timestudy.preferredPaths[0]]
     };
   },
   set dimensionPath(value) {
     const options = [1, 2, 3];
-    player.timestudy.prefferedPaths[0] = options.includes(value) ? value : 0;
+    player.timestudy.preferredPaths[0] = options.includes(value) ? value : 0;
   },
   get pacePath() {
     return {
-      path: player.timestudy.prefferedPaths[1],
-      studies: NormalTimeStudies.paths[player.timestudy.prefferedPaths[1]]
+      path: player.timestudy.preferredPaths[1],
+      studies: NormalTimeStudies.paths[player.timestudy.preferredPaths[1]]
     };
   },
   set pacePath(value) {
     const options = [4, 5, 6];
-    player.timestudy.prefferedPaths[1] = options.includes(value) ? value : 0;
+    player.timestudy.preferredPaths[1] = options.includes(value) ? value : 0;
   }
 };
 

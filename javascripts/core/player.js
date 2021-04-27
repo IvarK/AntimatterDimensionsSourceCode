@@ -291,7 +291,7 @@ let player = {
     epBought: 0,
     studies: [],
     shopMinimized: false,
-    prefferedPaths: [0, 0],
+    preferredPaths: [0, 0],
     presets: new Array(6).fill({
       name: "",
       studies: "",

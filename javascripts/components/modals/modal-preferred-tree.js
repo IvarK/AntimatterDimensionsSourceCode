@@ -8,8 +8,8 @@ Vue.component("modal-preferred-tree", {
     };
   },
   created() {
-    this.dimensionPath = TimeStudy.prefferedPaths.dimensionPath.path;
-    this.pacePath = TimeStudy.prefferedPaths.pacePath.path;
+    this.dimensionPath = TimeStudy.preferredPaths.dimensionPath.path;
+    this.pacePath = TimeStudy.preferredPaths.pacePath.path;
   },
   computed: {
     dimensionOptions() {
@@ -36,8 +36,8 @@ Vue.component("modal-preferred-tree", {
       if (this.paceOptions[name]) this.pacePath = this.paceOptions[name];
     },
     confirmPrefs() {
-      TimeStudy.prefferedPaths.dimensionPath = this.dimensionPath;
-      TimeStudy.prefferedPaths.pacePath = this.pacePath;
+      TimeStudy.preferredPaths.dimensionPath = this.dimensionPath;
+      TimeStudy.preferredPaths.pacePath = this.pacePath;
       this.emitClose();
     },
     classList(name) {

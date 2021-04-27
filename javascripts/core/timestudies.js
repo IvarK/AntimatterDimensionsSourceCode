@@ -15,7 +15,6 @@ NormalTimeStudies.pathList = [
 
 NormalTimeStudies.paths = NormalTimeStudies.pathList.mapToObject(e => e.path, e => e.studies);
 
-
 function unlockDilation(quiet) {
   if (!quiet) {
     Tab.eternity.dilation.show();
@@ -87,11 +86,9 @@ function studiesUntil(id) {
   } else if (id > 103) {
     // If we haven't chosen dimension paths, and shift clicked something below
     // them, we don't buy anything until the player makes their selection
-    if (TimeStudy.prefferedPaths(0)) {
-      buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy.prefferedPaths(0)], id);
-    } else {
-      return;
-    }
+    if (TimeStudy.prefferedPaths.dimensionPath.path === 0) return;
+
+    buyTimeStudyListUntilID(TimeStudy.prefferedPaths.dimensionPath.studies, id);
   } else {
     // We buy the requested path first
     buyTimeStudyListUntilID(NormalTimeStudies.paths[requestedPath], id);
@@ -109,7 +106,7 @@ function studiesUntil(id) {
     // This click is choosing a path
     buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy(id).path], id);
   } else {
-    buyTimeStudyListUntilID(NormalTimeStudies.paths[TimeStudy.prefferedPaths(1)], id);
+    buyTimeStudyListUntilID(TimeStudy.prefferedPaths.pacePath.studies, id);
   }
 
   const pacePaths = getSelectedPacePaths();
@@ -303,8 +300,27 @@ TimeStudy.boughtNormalTS = function() {
   return player.timestudy.studies.map(id => TimeStudy(id));
 };
 
-TimeStudy.prefferedPaths = function(id) {
-  return player.timestudy.prefferedPaths[id];
+TimeStudy.prefferedPaths = {
+  get dimensionPath() {
+    return {
+      path: player.timestudy.prefferedPaths[0],
+      studies: NormalTimeStudies.paths[player.timestudy.prefferedPaths[0]]
+    };
+  },
+  set dimensionPath(value) {
+    const options = [1, 2, 3];
+    player.timestudy.prefferedPaths[0] = options.includes(value) ? value : 0;
+  },
+  get pacePath() {
+    return {
+      path: player.timestudy.prefferedPaths[1],
+      studies: NormalTimeStudies.paths[player.timestudy.prefferedPaths[1]]
+    };
+  },
+  set pacePath(value) {
+    const options = [4, 5, 6];
+    player.timestudy.prefferedPaths[1] = options.includes(value) ? value : 0;
+  }
 };
 
 class ECTimeStudyState extends TimeStudyState {

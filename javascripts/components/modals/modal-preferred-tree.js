@@ -3,60 +3,84 @@
 Vue.component("modal-preferred-tree", {
   data() {
     return {
-      isPreferred: [false, false, false, false, false, false]
+      dimensionPath: null,
+      pacePath: null
     };
   },
+  created() {
+    this.dimensionPath = TimeStudy.prefferedPaths.dimensionPath.path;
+    this.pacePath = TimeStudy.prefferedPaths.pacePath.path;
+  },
+  computed: {
+    dimensionOptions() {
+      return {
+        "Antimatter Dimensions": TIME_STUDY_PATH.ANTIMATTER_DIM,
+        "Infinity Dimensions": TIME_STUDY_PATH.INFINITY_DIM,
+        "Time Dimensions": TIME_STUDY_PATH.TIME_DIM,
+      };
+    },
+    paceOptions() {
+      return {
+        "Active": TIME_STUDY_PATH.ACTIVE,
+        "Passive": TIME_STUDY_PATH.PASSIVE,
+        "Idle": TIME_STUDY_PATH.IDLE
+      };
+    },
+  },
   methods: {
-    toggle(index) {
-      this.isPreferred[index] = true;
+    isPreferred(name) {
+      return this.dimensionOptions[name] === this.dimensionPath || this.paceOptions[name] === this.pacePath;
+    },
+    select(name) {
+      if (this.dimensionOptions[name]) this.dimensionPath = this.dimensionOptions[name];
+      if (this.paceOptions[name]) this.pacePath = this.paceOptions[name];
     },
     confirmPrefs() {
+      TimeStudy.prefferedPaths.dimensionPath = this.dimensionPath;
+      TimeStudy.prefferedPaths.pacePath = this.pacePath;
       this.emitClose();
-      // I have no idea how the backend works even after looking at it lolol
-    }
+    },
+    classList(name) {
+      const pref = this.isPreferred(name);
+      const types = {
+        "Antimatter Dimensions": "antimatter-dim",
+        "Infinity Dimensions": "infinity-dim",
+        "Time Dimensions": "time-dim",
+        "Active": "active",
+        "Passive": "passive",
+        "Idle": "idle"
+      };
+      return [
+        "o-time-study",
+        `o-time-study-${types[name]}--${pref ? "bought" : "available"}`,
+        `o-time-study--${pref ? "bought" : "available"}`
+      ];
+    },
   },
   template: `
   <div class="c-modal-message l-modal-content--centered">
   <h2>First split preference:</h2>
-  <div style="display: flex; flex-direction: column; align-items: left;">
-  <div style="display: flex; flex-direction: row; align-items: center;">
-    <button
-    class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked__ad"
-    @click="toggle(0)"
-    :preferred="this.isPreferred[0]"
-    >Antimatter Dimensions</button>
-    <button
-    class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked__id"
-    @click="toggle(1)"
-    :preferred="this.isPreferred[1]"
-    >Infinity Dimensions</button>
-    <button
-    class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked__td"
-    @click="toggle(2)"
-    :preferred="this.isPreferred[2]"
-    >Time Dimensions</button>
-    </div>
+    <div style="display: flex; flex-direction: row; align-items: center;">
+      <button
+        v-for="(id, name) in dimensionOptions"
+        @click="select(name)"
+        :class="classList(name)"
+        style="font-size: 2rem"
+      >
+      {{name}}
+      </button>
     </div>
   <br>
   <h2>Second split preference:</h2>
-  <div style="display: flex; flex-direction: column; align-items: left;">
-  <div style="display: flex; flex-direction: row; align-items: center;">
-    <button
-    class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked__active"
-    @click="toggle(3)"
-    :unlocked="this.isPreferred[3]"
-    >Active</button>
-    <button
-    class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked__passive"
-    @click="toggle(4)"
-    :preferred="this.isPreferred[4]"
-    >Passive</button>
-    <button
-    class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked__idle"
-    @click="toggle(5)"
-    :preferred="this.isPreferred[5]"
-    >Idle</button>
-    </div>
+    <div style="display: flex; flex-direction: row; align-items: center;">
+      <button
+        v-for="(id, name) in paceOptions"
+        @click="select(name)"
+        :class="classList(name)"
+        style="font-size: 2rem"
+      >
+      {{name}}
+      </button>
     </div>
   <primary-button
         class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"

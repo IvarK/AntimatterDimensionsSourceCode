@@ -23,7 +23,7 @@ Vue.component("eternity-challenge-box", {
       const challengeDone = this.isCompleted && !this.isUnlocked;
       const challengeRedo = this.isCompleted && this.isUnlocked && !this.isRunning;
       const challengeUnlock = this.isUnlocked || this.canBeUnlocked;
-      const challengeLocked = !(this.isCompleted || this.isRunning || challengeUnlock) && !challengeDone;
+      const challengeLocked = !this.isCompleted && this.isUnlocked && !this.isRunning && !this.canBeUnlocked;
       // ECs can be not unlocked and also not locked, because they're fully completed,
       // but in that case you can't enter them and so it's important to give them a property
       // that disables cursor on hover. The same thing happens if it is running.

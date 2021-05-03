@@ -18,7 +18,6 @@ Vue.component("eternity-challenge-box", {
     };
   },
   computed: {
-    // eslint-disable-next-line complexity
     buttonClassObject() {
       const challengeDone = this.isCompleted && !this.isUnlocked;
       const challengeRedo = this.isCompleted && this.isUnlocked && !this.isRunning;

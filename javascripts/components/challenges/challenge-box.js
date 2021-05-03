@@ -23,7 +23,6 @@ Vue.component("challenge-box", {
     },
   },
   computed: {
-    // eslint-disable-next-line complexity
     buttonClassObject() {
       const challengeLocked = !(this.isCompleted || this.isRunning || this.inC1 || this.isUnlocked);
       // It's important to disable the cursor for Normal Challenge 1, challenges that are running, or

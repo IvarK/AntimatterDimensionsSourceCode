@@ -23,7 +23,7 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get resetTickOn() {
-    return PRESTIGE_EVENT.ETERNITY;
+    return PRESTIGE_EVENT.REALITY;
   }
 
   tick() {

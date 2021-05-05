@@ -950,6 +950,10 @@ GameStorage.devMigrations = {
     },
     GameStorage.migrations.convertTimeTheoremPurchases,
     GameStorage.migrations.infinitiedConversion,
+    player => {
+      delete player.saveOverThresholdFlag;
+      delete player.saveOverThresholdFlagModalDisplayed;
+    },
   ],
 
   patch(player) {

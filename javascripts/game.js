@@ -117,8 +117,9 @@ function getRealityMachineMultiplier() {
 
 function gainedRealityMachines() {
   let log10FinalEP = Currency.eternityPoints.value.plus(gainedEternityPoints()).log10();
-  if (!PlayerProgress.realityUnlocked() && log10FinalEP > 6000 && player.saveOverThresholdFlag) {
-    log10FinalEP -= (log10FinalEP - 6000) * 0.75;
+  if (!PlayerProgress.realityUnlocked()) {
+    if (log10FinalEP > 8000) log10FinalEP = 8000;
+    if (log10FinalEP > 6000) log10FinalEP -= (log10FinalEP - 6000) * 0.75;
   }
   let rmGain = Decimal.pow(1000, log10FinalEP / 4000 - 1);
   // Increase base RM gain if <10 RM

@@ -6,7 +6,6 @@ Vue.component("dilation-time-study", {
   },
   data() {
     return {
-      showCost: true,
       showRequirement: false,
       requirement: ""
     };
@@ -36,14 +35,13 @@ Vue.component("dilation-time-study", {
   methods: {
     update() {
       const id = this.id;
-      this.showCost = id !== 6 || !PlayerProgress.realityUnlocked();
       if (id === 1) {
         this.showRequirement = !this.study.isBought && !Perk.bypassECDilation.isBought;
       }
     }
   },
   template:
-    `<time-study :setup="setup" :showCost="showCost">
+    `<time-study :setup="setup">
       <description-display :config="study.config" />
       <template v-if="showRequirement">
         <br>

@@ -551,8 +551,6 @@ let player = {
   triggeredTabNotificationBits: 0,
   tutorialState: 0,
   tutorialActive: true,
-  saveOverThresholdFlag: false,
-  saveOverThresholdFlagModalDisplayed: false,
   options: {
     news: {
       enabled: true,

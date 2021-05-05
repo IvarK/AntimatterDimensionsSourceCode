@@ -9,7 +9,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
   "realityglyphlevel", "realitygalaxies", "realityrow1pow", "realityDTglyph",
-  "companiondescription", "companionEP", "companionreduction"];
+  "companiondescription", "companionEP"];
 
 const generatedTypes = ["power", "infinity", "replication", "time", "dilation", "effarig"];
 

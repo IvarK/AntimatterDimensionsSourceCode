@@ -67,8 +67,7 @@ Vue.component("ra-pet-level-bar", {
         case "Teresa":
           return Math.min(12, Math.floor(this.level / 2)) !== Math.min(12, Math.floor((this.level + 1) / 2));
         case "Effarig":
-          return AlchemyResources.all.filter(
-            res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1).length > 0;
+          return AlchemyResources.all.filter(res => res.unlockedAt === this.level + 1).length > 0;
         case "Enslaved":
           return true;
         case "V":
@@ -78,15 +77,13 @@ Vue.component("ra-pet-level-bar", {
       }
     },
     nextScalingUpgrade() {
+      const effarigAlchemyResource = AlchemyResources.all.filter(res => res.unlockedAt === this.level + 1)[0];
       switch (this.pet.name) {
         case "Teresa":
           return "You can charge an additional Infinity Upgrade";
         case "Effarig":
-          return `Unlock the ${AlchemyResources.all.filter(
-            res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1
-          )[0]._config.name} resource in Glyph Alchemy, which ${AlchemyResources.all.filter(
-            res => parseInt(res._config.lockText.match(/\d+/gu)[0], 10) === this.level + 1
-          )[0]._config.description}`;
+          return `Unlock the ${effarigAlchemyResource.name} resource in Glyph Alchemy, which
+          ${effarigAlchemyResource.description}`;
         case "Enslaved":
           return `+${formatFloat(0.01, 2)} to stored game time power,
             and you can store an additional hour of real time`;

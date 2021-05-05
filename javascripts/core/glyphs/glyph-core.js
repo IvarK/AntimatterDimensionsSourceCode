@@ -32,6 +32,9 @@ const Glyphs = {
   get inventoryList() {
     return player.reality.glyphs.inventory;
   },
+  get sortedInventoryList() {
+    return this.inventoryList.sort((a, b) => -a.level * a.strength + b.level * b.strength);
+  },
   get activeList() {
     return player.reality.glyphs.active;
   },
@@ -100,12 +103,15 @@ const Glyphs = {
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   findByValues(finding, ignoreLevel, ignoreStrength) {
-    return this.inventoryList.filter(glyph => {
-        const str = ignoreStrength || glyph.strength === finding.strength;
-        const lvl = ignoreLevel || glyph.level === finding.level;
-        const sym = Boolean(glyph.symbol) || glyph.symbol === finding.symbol;
-        return (glyph.type === finding.type && glyph.effects === finding.effects && str && lvl && sym);
-      }).sort((a, b) => -a.level * a.strength + b.level * b.strength)[0];
+    for (const glyph of this.sortedInventoryList) {
+      const type = glyph.type === finding.type;
+      const effects = glyph.effects === finding.effects;
+      const str = ignoreStrength || glyph.strength === finding.strength;
+      const lvl = ignoreLevel || glyph.level === finding.level;
+      const sym = Boolean(glyph.symbol) || glyph.symbol === finding.symbol;
+      if (type && effects && str && lvl && sym) return glyph;
+    }
+    return undefined;
   },
   findById(id) {
     return player.reality.glyphs.inventory.find(glyph => glyph.id === id);

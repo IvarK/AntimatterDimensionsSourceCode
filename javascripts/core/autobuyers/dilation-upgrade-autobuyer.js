@@ -23,6 +23,10 @@ class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
     return Perk.autobuyerDilation.isEffectActive;
   }
 
+  get resetTickOn() {
+    return PRESTIGE_EVENT.REALITY;
+  }
+
   tick() {
     super.tick();
     const upgradeName = this._upgradeName;

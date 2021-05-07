@@ -45,15 +45,13 @@ GameDatabase.celestials.descriptions = [
     name: "V",
     description() {
       return `all dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second\
-      are square-rooted, and Replicanti interval is squared.\
-      ${Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) ? `\nThe Exponential Glyph Alchemy effect is disabled.` : ``}`;
+      are square-rooted, and Replicanti interval is squared.`;
     }
   },
   {
     name: "Ra",
     description() {
-      return `You can't Dimension Boost, and the Tickspeed purchase multiplier is fixed at ${formatX(1.1245, 0, 3)}.\n
-      Inside of Ra's reality, some resources will generate Memory Chunks based on their amount.`;
+      return `You can't Dimension Boost, and the Tickspeed purchase multiplier is fixed at ${formatX(1.1245, 0, 3)}.\n`;
     },
   },
   {

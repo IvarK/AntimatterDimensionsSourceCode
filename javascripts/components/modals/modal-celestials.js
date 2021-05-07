@@ -46,9 +46,6 @@ Vue.component("modal-celestials", {
     message() {
       return `Perform a Reality reset, and enter ${this.modalConfig.name} Reality, in which`;
     },
-    descriptionLines() {
-      return this.description.split("\n");
-    },
   },
   methods: {
     extraLine() {

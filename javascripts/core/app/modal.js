@@ -75,6 +75,7 @@ Modal.startEternityChallenge = new ChallengeConfirmationModal("modal-start-etern
 Modal.startInfinityChallenge = new ChallengeConfirmationModal("modal-start-infinity-challenge");
 Modal.startNormalChallenge = new ChallengeConfirmationModal("modal-start-normal-challenge");
 Modal.sacrifice = new Modal("modal-sacrifice");
+Modal.breakInfinity = new Modal("modal-break-infinity");
 Modal.eternity = new Modal("modal-eternity");
 Modal.reality = new Modal("modal-reality");
 Modal.celestials = new Modal("modal-celestials");

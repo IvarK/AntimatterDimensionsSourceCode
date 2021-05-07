@@ -27,16 +27,13 @@ Vue.component("modal-preferred-tree", {
       };
     },
     usePriority() {
-      return TimeStudy(201).isBought || this.dimensionPath.length === 2 || DilationUpgrade.timeStudySplit.isBought;
+      return TimeStudy(201).isBought || this.dimensionPath.length === 2 ||
+        DilationUpgrade.timeStudySplit.isBought || PlayerProgress.realityUnlocked();
     }
   },
   methods: {
     isPreferred(name) {
       return this.paceOptions[name] === this.pacePath || this.dimensionPath.indexOf(this.dimensionOptions[name]) + 1;
-    },
-    display(name) {
-      if (!this.usePriority || this.paceOptions[name] || !this.isPreferred(name)) return name;
-      return `${name} <br> (${this.isPreferred(name)})`;
     },
     select(name) {
       if (this.dimensionOptions[name]) {
@@ -62,7 +59,7 @@ Vue.component("modal-preferred-tree", {
         "Idle": "idle"
       };
       return [
-        "o-time-study",
+        "o-time-study-selection-btn",
         `o-time-study-${types[name]}--${pref ? "bought" : "available"}`,
         `o-time-study--${pref ? "bought" : "available"}`
       ];
@@ -76,9 +73,16 @@ Vue.component("modal-preferred-tree", {
         v-for="(id, name) in dimensionOptions"
         @click="select(name)"
         :class="classList(name)"
-        style="font-size: 1.75rem"
-        v-html="display(name)"
       >
+      <div
+      v-if="isPreferred(name)"
+      class="l-dim-path-priority o-hint-text"
+      >
+      {{isPreferred(name)}}
+      </div>
+      <div>
+      {{name}}
+      </div>
       </button>
     </div>
   <br>
@@ -88,9 +92,10 @@ Vue.component("modal-preferred-tree", {
         v-for="(id, name) in paceOptions"
         @click="select(name)"
         :class="classList(name)"
-        style="font-size: 1.75rem"
-        v-html="display(name)"
       >
+      <div>
+      {{name}}
+      </div>
       </button>
     </div>
   <primary-button

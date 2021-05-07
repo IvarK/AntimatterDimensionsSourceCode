@@ -58,7 +58,6 @@ Vue.component("modal-celestials", {
           Effarig.initializeRun();
           break;
         case 2:
-          player.celestials.enslaved.run = true;
           Enslaved.initializeRun();
           break;
         case 3:

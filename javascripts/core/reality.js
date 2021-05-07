@@ -543,15 +543,6 @@ function isInCelestialReality() {
     player.celestials.laitela.run;
 }
 
-function resetReality() {
-  if (confirm("This will put you at the start of your Reality and reset your progress in this Reality, " +
-    "giving you no rewards from your progress in your current Reality.  Are you sure you want to do this?")) {
-    beginProcessReality(getRealityProps(true));
-    return true;
-  }
-  return false;
-}
-
 function lockAchievementsOnReality() {
   if (Perk.achievementGroup6.isBought) return;
   for (const achievement of Achievements.preReality) {

@@ -78,6 +78,7 @@ Modal.sacrifice = new Modal("modal-sacrifice");
 Modal.breakInfinity = new Modal("modal-break-infinity");
 Modal.eternity = new Modal("modal-eternity");
 Modal.reality = new Modal("modal-reality");
+Modal.resetReality = new Modal("modal-reset-reality");
 Modal.celestials = new Modal("modal-celestials");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {

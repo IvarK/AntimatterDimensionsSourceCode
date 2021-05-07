@@ -66,6 +66,7 @@ Modal.import = new Modal("modal-import");
 Modal.shop = new Modal("modal-std-store");
 Modal.importTree = new Modal("modal-import-tree");
 Modal.editTree = new Modal("modal-edit-tree");
+Modal.automatorScriptDelete = new Modal("modal-automator-script-delete");
 Modal.deleteCompanion = new Modal("modal-delete-companion");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");

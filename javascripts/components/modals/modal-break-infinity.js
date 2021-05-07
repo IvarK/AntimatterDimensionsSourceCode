@@ -8,8 +8,8 @@ Vue.component("modal-break-infinity", {
         ? "." : `, and allow you to read numbers past ${infinity}.`}
       Dimensions and Tickspeed Upgrades will scale in cost faster after ${infinity} antimatter.
       You will gain additional Infinity Points on Big Crunch based on antimatter produced over ${infinity}.\
-      ${EternityMilestone.keepBreakUpgrades.isReached ? "" : "\nIt will also unlock Break Infinity Upgrades."}`
-        .split("\n");
+      ${EternityMilestone.keepAutobuyers.isReached ? "" : `\nIt will also unlock Break Infinity Upgrades and max\
+      all Normal Challenge Autobuyers.`}`.split("\n");
     },
   },
   methods: {

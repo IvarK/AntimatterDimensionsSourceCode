@@ -1,6 +1,36 @@
 "use strict";
 
 Vue.component("modal-celestials", {
+  components: {
+    "modal-ra-pet-display": {
+      props: {
+        petId: Number
+      },
+      data() {
+        return {
+          pet: Ra.pets.all[this.petId],
+          isUnlocked: Boolean,
+          name: String,
+          color: String,
+          chunkGain: String,
+        };
+      },
+      methods: {
+        update() {
+          const pet = this.pet;
+          this.isUnlocked = pet.isUnlocked;
+          this.name = pet.name;
+          this.color = `color: ${pet.color}`;
+          this.chunkGain = pet.chunkGain;
+        }
+      },
+      template: `
+        <span :style="color" v-if="isUnlocked">
+          {{ name }} gains Memories Chunks based on {{ chunkGain }}.
+          <br>
+        </span>`
+    },
+  },
   props: {
     modalConfig: Object,
   },
@@ -25,28 +55,6 @@ Vue.component("modal-celestials", {
     descriptionLines() {
       return this.description.split("\n");
     },
-    pets: () => [
-      {
-        pet: Ra.pets.teresa,
-        color: `color: ${Ra.pets.teresa.color}`,
-        memory: "Eternity Points"
-      },
-      {
-        pet: Ra.pets.effarig,
-        color: `color: ${Ra.pets.effarig.color}`,
-        memory: "Relic Shards gained"
-      },
-      {
-        pet: Ra.pets.enslaved,
-        color: `color: ${Ra.pets.enslaved.color}`,
-        memory: "Time Shards"
-      },
-      {
-        pet: Ra.pets.v,
-        color: `color: ${Ra.pets.v.color}`,
-        memory: "Infinity Power"
-      }
-    ],
   },
   methods: {
     handleYesClick() {
@@ -88,21 +96,17 @@ Vue.component("modal-celestials", {
         <span v-for="desc in description">
           {{ desc }} <br>
         </span>
-        <div v-for="pet in pets" v-if="modalConfig.number === 4">
-          <span :style="pet.color" v-if="pet.pet.isUnlocked">
-          {{ pet.pet.name }} gains Memories Chunks based on {{ pet.memory}}.
-          <br></span>
-        </div>
+        <modal-ra-pet-display v-if="modalConfig.number === 4" v-for="id in 4" :key="id" :petId="id - 1" />
       </div>
       <div class="l-options-grid__row">
         <primary-button
-            class="o-primary-btn--width-medium c-modal-message__okay-btn"
-            @click="handleNoClick"
-        >Cancel</primary-button>
+                class="o-primary-btn--width-medium c-modal-message__okay-btn"
+                @click="handleNoClick"
+                >Cancel</primary-button>
         <primary-button
-            class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-            @click="handleYesClick"
-        >Begin</primary-button>
+                class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+                @click="handleYesClick"
+                >Begin</primary-button>
       </div>
     </div>
   `

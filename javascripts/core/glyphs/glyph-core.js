@@ -463,10 +463,10 @@ const Glyphs = {
       glyphUndo: true,
       restoreCelestialState: true,
     });
-    Currency.antimatter = new Decimal(undoData.am);
-    Currency.infinityPoints = new Decimal(undoData.ip);
-    Currency.eternityPoints = new Decimal(undoData.ep);
-    Currency.timeTheorems = new Decimal(undoData.tt);
+    Currency.antimatter.value = new Decimal(undoData.am);
+    Currency.infinityPoints.value = new Decimal(undoData.ip);
+    Currency.eternityPoints.value = new Decimal(undoData.ep);
+    Currency.timeTheorems.value = new Decimal(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
     player.records.thisReality.time = undoData.thisRealityTime;
     player.records.thisReality.realTime = undoData.thisRealityRealTime;

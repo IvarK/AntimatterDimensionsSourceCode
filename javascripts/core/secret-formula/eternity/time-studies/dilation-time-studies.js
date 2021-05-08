@@ -9,7 +9,7 @@ GameDatabase.eternity.timeStudies.dilation = [
       const tsRequirement = [231, 232, 233, 234].some(id => TimeStudy(id).isBought);
       if (Perk.bypassECDilation.isBought) return tsRequirement;
       const ecRequirement = EternityChallenge(11).isFullyCompleted && EternityChallenge(12).isFullyCompleted;
-      const ttRequirement = player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost()).gte(13000);
+      const ttRequirement = Currency.timeTheorems.max.gte(13000);
       return tsRequirement && ecRequirement && ttRequirement;
     }
   },
@@ -40,9 +40,9 @@ GameDatabase.eternity.timeStudies.dilation = [
   {
     id: 6,
     description: "Unlock Reality",
-    cost: () => (Perk.firstPerk.isBought ? 0 : 5000000000),
+    cost: () => 1,
     requirement: () => TimeStudy.timeDimension(8).isBought &&
-      player.eternityPoints.gte("1e4000") &&
+      Currency.eternityPoints.exponent >= 4000 &&
       (Perk.firstPerk.isBought ? true : Achievements.preReality.every(a => a.isUnlocked))
   }
 ];

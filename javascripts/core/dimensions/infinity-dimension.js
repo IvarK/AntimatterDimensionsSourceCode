@@ -26,7 +26,7 @@ function infinityDimensionCommonMultiplier() {
 function buyManyInfinityDimension(tier) {
   if (!canBuyInfinityDimension(tier)) return false;
   const dim = InfinityDimension(tier);
-  player.infinityPoints = player.infinityPoints.minus(dim.cost);
+  Currency.infinityPoints.subtract(dim.cost);
   dim.cost = Decimal.round(dim.cost.times(dim.costMultiplier));
   // Because each ID purchase gives 10 IDs
   dim.amount = dim.amount.plus(10);
@@ -42,7 +42,7 @@ function buyMaxInfDims(tier) {
   if (!canBuyInfinityDimension(tier)) return false;
   const dim = InfinityDimension(tier);
   const costMult = dim.costMultiplier;
-  const exponentDifference = (player.infinityPoints.e - dim.cost.e);
+  const exponentDifference = (Currency.infinityPoints.exponent - dim.cost.e);
   let toBuy = exponentDifference === 0 ? 1 : Math.floor(exponentDifference / Math.log10(costMult));
   const purchasesUntilHardcap = dim.purchaseCap - dim.purchases;
   toBuy = Math.min(toBuy, purchasesUntilHardcap);
@@ -52,7 +52,7 @@ function buyMaxInfDims(tier) {
   }
 
   dim.cost = dim.cost.times(Decimal.pow(costMult, toBuy - 1));
-  player.infinityPoints = player.infinityPoints.minus(dim.cost);
+  Currency.infinityPoints.subtract(dim.cost);
   dim.cost = dim.cost.times(costMult);
   // Because each ID purchase gives 10 IDs
   dim.amount = dim.amount.plus(10 * toBuy);
@@ -138,7 +138,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get isAffordable() {
-    return player.infinityPoints.gte(this.cost);
+    return Currency.infinityPoints.gte(this.cost);
   }
 
   get rateOfChange() {
@@ -295,7 +295,7 @@ const InfinityDimensions = {
 
   resetAmount() {
     if (Pelle.isDoomed && PelleUpgrade.infDimRetain.canBeApplied) return;
-    player.infinityPower = new Decimal(0);
+    Currency.infinityPower.reset();
     for (const dimension of InfinityDimensions.all) {
       dimension.resetAmount();
     }
@@ -309,12 +309,10 @@ const InfinityDimensions = {
   },
 
   get capIncrease() {
-    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease *
-      (1 + AlchemyResource.boundless.effectValue);
-    const milestoneEffect = SingularityMilestone.tesseractMultFromSingularities.isUnlocked
-      ? SingularityMilestone.tesseractMultFromSingularities.effectValue
-      : 1;
-    return Math.floor(enslavedBoost * milestoneEffect);
+    const enslavedBoost = player.celestials.enslaved.totalDimCapIncrease;
+    const boundlessEffect = AlchemyResource.boundless.effectValue + 1;
+    const milestoneEffect = SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1);
+    return Math.floor(enslavedBoost * boundlessEffect * milestoneEffect);
   },
 
   get totalDimCap() {
@@ -336,8 +334,8 @@ const InfinityDimensions = {
   }
 };
 
-function tryUnlockInfinityDimensions() {
-  if (!EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked) return;
+function tryUnlockInfinityDimensions(auto) {
+  if (auto && (!EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked)) return;
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;
     InfinityDimension(tier).tryUnlock();

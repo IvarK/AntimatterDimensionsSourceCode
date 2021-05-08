@@ -22,11 +22,15 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
     return RealityUpgrade(13).isBought;
   }
 
+  get resetTickOn() {
+    return PRESTIGE_EVENT.REALITY;
+  }
+
   tick() {
     const tier = this._tier;
     if (!TimeDimension(tier).isAvailableForPurchase) return;
     super.tick();
-    if (player.eternityPoints.gte(1e10)) {
+    if (Currency.eternityPoints.exponent >= 10) {
       buyMaxTimeDimension(tier);
     } else {
       buySingleTimeDimension(tier);

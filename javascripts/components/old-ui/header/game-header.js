@@ -55,7 +55,21 @@ Vue.component("game-header", {
             const token = this.activityTokens[i];
             const part = this.parts[i];
             if (!part.isActive(token)) continue;
-            names.push(part.name(token));
+            if (part.name(token).includes("Eternity Challenge")) {
+              const currEC = player.challenge.eternity.current;
+              const nextCompletion = EternityChallenge(currEC).completions + 1;
+              let completionText = "";
+              if (Enslaved.isRunning && currEC === 1) {
+                completionText = `(${nextCompletion}/???)`;
+              } else if (nextCompletion === 6) {
+                completionText = `(already completed)`;
+              } else {
+                completionText = `(${nextCompletion}/${formatInt(5)})`;
+              }
+              names.push(`${part.name(token)} ${completionText}`);
+            } else {
+              names.push(part.name(token));
+            }
           }
           return names;
         },
@@ -63,8 +77,7 @@ Vue.component("game-header", {
           return this.infinityUnlocked || this.activeChallengeNames.length > 0;
         },
         isInFailableEC() {
-          return this.activeChallengeNames.includes("Eternity Challenge 4") ||
-            this.activeChallengeNames.includes("Eternity Challenge 12");
+          return this.activeChallengeNames.some(str => str.match(/Eternity Challenge (4|12).*/gu));
         },
         challengeDisplay() {
           if (this.activeChallengeNames.length === 0) {
@@ -108,8 +121,8 @@ Vue.component("game-header", {
       }
       this.isInEffarig = Effarig.isRunning;
       if (this.isInEffarig) {
-        this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(player.infinityPower), 0, 5)}`;
-        this.effarigTickNerfText = `${formatPow(0.7 + 0.1 * Effarig.nerfFactor(player.timeShards), 0, 5)}`;
+        this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(Currency.infinityPower.value), 0, 5)}`;
+        this.effarigTickNerfText = `${formatPow(0.7 + 0.1 * Effarig.nerfFactor(Currency.timeShards.value), 0, 5)}`;
       }
       this.isInLaitela = Laitela.isRunning;
       if (this.isInLaitela) {

@@ -25,6 +25,11 @@ const TERESA_UNLOCKS = {
     id: 4,
     price: 1e10,
     description: "Unlock \"Undo\" of equipping a glyph.",
+  },
+  START_EU: {
+    id: 5,
+    price: 1e6,
+    description: "You start Reality with all Eternity Upgrades unlocked.",
   }
 };
 
@@ -37,10 +42,10 @@ const Teresa = {
   pourRM(diff) {
     if (this.pouredAmount >= Teresa.pouredAmountCap) return;
     this.timePoured += diff;
-    const rm = player.reality.realityMachines;
+    const rm = Currency.realityMachines.value;
     const rmPoured = Math.min((this.pouredAmount + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber());
     this.pouredAmount += Math.min(rmPoured, Teresa.pouredAmountCap - this.pouredAmount);
-    player.reality.realityMachines = rm.minus(rmPoured);
+    Currency.realityMachines.subtract(rmPoured);
     this.checkForUnlocks();
   },
   checkForUnlocks() {
@@ -145,7 +150,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     if (this.id === 4) {
       if (Glyphs.freeInventorySpace === 0) {
         // Refund the perk point if they didn't actually get a glyph
-        player.reality.perkPoints++;
+        Currency.perkPoints.add(1);
         GameUI.notify.error("You have no empty inventory space!");
       } else {
         Glyphs.addToInventory(GlyphGenerator.musicGlyph());

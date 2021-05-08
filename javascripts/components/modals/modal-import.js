@@ -22,7 +22,7 @@ Vue.component("modal-import", {
         <div v-if="inputIsSecret">???</div>
         <template v-else-if="inputIsValidSave">
           <div>Antimatter: {{ formatPostBreak(antimatter, 2, 1) }}</div>
-          <div v-if="progress.isInfinityUnlocked">Infinities: {{ formatPostBreak(player.infinitied, 2, 0) }}</div>
+          <div v-if="progress.isInfinityUnlocked">Infinities: {{ formatPostBreak(player.infinities, 2, 0) }}</div>
           <div v-if="progress.isEternityUnlocked">Eternities: {{ formatPostBreak(player.eternities, 2, 0) }}</div>
           <div v-if="progress.isRealityUnlocked">Realities: {{ formatPostBreak(player.realities, 2, 0) }}</div>
           <div class="c-modal-import__warning">(your current save file will be overwritten!)</div>

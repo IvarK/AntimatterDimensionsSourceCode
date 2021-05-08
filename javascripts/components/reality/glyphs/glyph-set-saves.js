@@ -29,31 +29,40 @@ Vue.component("glyph-set-saves", {
   },
   methods: {
     update() {
-      this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g));
       this.hasEquipped = Glyphs.activeList.length > 0;
       this.rarity = player.options.ignoreGlyphRarity;
       this.level = player.options.ignoreGlyphLevel;
     },
+    refreshGlyphSets() {
+      this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g));
+    },
     saveGlyphSet(id) {
       if (!this.hasEquipped || player.reality.glyphs.sets[id].length) return;
       player.reality.glyphs.sets[id] = Glyphs.active.filter(g => g !== null);
+      EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
     loadGlyphSet(set) {
       if (this.hasEquipped || !set.length) return;
       for (let i = 0; i < set.length; i++) {
         const glyph = Glyphs.findByValues(set[i], this.level, this.rarity);
         if (!glyph) {
-          GameUI.notify.error(`Could not load the Glyph Set due to missing Glyph!`);
-          return;
+          GameUI.notify.error(`Could not fully load the Glyph Set due to missing Glyph!`);
+          continue;
         }
         const idx = Glyphs.active.indexOf(null);
         if (idx !== -1) Glyphs.equip(glyph, idx);
       }
+      EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
     deleteGlyphSet(id) {
       if (!player.reality.glyphs.sets[id].length) return;
       player.reality.glyphs.sets[id] = [];
+      EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
+  },
+  created() {
+    this.on$(GAME_EVENT.GLYPH_SET_SAVE_CHANGE, this.refreshGlyphSets);
+    this.refreshGlyphSets();
   },
   template: `
     <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">

@@ -185,7 +185,7 @@ const Enslaved = {
     return Tesseracts.increases[player.celestials.enslaved.tesseracts];
   },
   get canBuyTesseract() {
-    return player.infinityPoints.gte(this.tesseractCost);
+    return Currency.infinityPoints.gte(this.tesseractCost);
   },
   buyTesseract() {
     if (!this.canBuyTesseract) return;

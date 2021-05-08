@@ -55,17 +55,11 @@ const Effarig = {
   },
   get shardsGained() {
     if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) return 0;
-    return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount)) *
+    return Math.floor(Math.pow(Currency.eternityPoints.exponent / 7500, this.glyphEffectAmount)) *
       AlchemyResource.effarig.effectValue;
   },
-  get shardAmount() {
-    return player.celestials.effarig.relicShards;
-  },
-  set shardAmount(x) {
-    player.celestials.effarig.relicShards = x;
-  },
   get maxRarityBoost() {
-    return 5 * Math.log10(Math.log10(this.shardAmount + 10));
+    return 5 * Math.log10(Math.log10(Currency.relicShards.value + 10));
   },
   nerfFactor(power) {
     let c;
@@ -84,12 +78,12 @@ const Effarig = {
   },
   get tickspeed() {
     const base = 3 + Tickspeed.baseValue.reciprocal().log10();
-    const pow = 0.7 + 0.1 * this.nerfFactor(player.timeShards);
+    const pow = 0.7 + 0.1 * this.nerfFactor(Currency.timeShards.value);
     return Decimal.pow10(Math.pow(base, pow)).reciprocal();
   },
   multiplier(mult) {
     const base = new Decimal(mult).pLog10();
-    const pow = 0.25 + 0.25 * this.nerfFactor(player.infinityPower);
+    const pow = 0.25 + 0.25 * this.nerfFactor(Currency.infinityPower.value);
     return Decimal.pow10(Math.pow(base, pow));
   },
   get bonusRG() {
@@ -180,9 +174,8 @@ class EffarigUnlockState extends GameMechanicState {
   }
 
   purchase() {
-    if (this.isUnlocked || Effarig.shardAmount < this.cost) return;
+    if (this.isUnlocked || !Currency.relicShards.purchase(this.cost)) return;
     this.unlock();
-    Effarig.shardAmount -= this.cost;
     switch (this) {
       case EffarigUnlock.adjuster:
         Effarig.quotes.show(Effarig.quotes.UNLOCK_WEIGHTS);

@@ -196,7 +196,7 @@ display as ${format(Infinity)}.
 <br>
 <br>
 Each Infinity completed will give an Infinity Point, which can be spent on upgrades in the new Infinity tab.
-You must purchase these upgrades from top to bottom. You will also gain one "Infinitied stat", which is effectively
+You must purchase these upgrades from top to bottom. You will also gain one "Infinity", which is effectively
 the number of times you have crunched.
 <br>
 <br>
@@ -414,7 +414,7 @@ first Eternity.
 <br>
 You can pass ${formatPostBreak(Number.MAX_VALUE, 2)} IP without anything being forced upon you, unlike the first time
 you reached ${formatPostBreak(Number.MAX_VALUE, 2)} antimatter. You will recieve more Eternity Points the more
-Infinity Points you had before going Eternal. You will also gain one "Eternitied stat" for completing an Eternity.
+Infinity Points you had before going Eternal. You will also gain one "Eternity" for completing an Eternity.
 <br>
 <br>
 Eternity Point gain scales similarly to Infinity Point gain, but scaling off of Infinity Points instead of antimatter.
@@ -430,7 +430,7 @@ ${formatInt(2)} EP until ${formatPostBreak(new Decimal("1e349"))}.
     }, {
       name: "Eternity Milestones",
       info: () => `
-To make Eternities faster and more convenient, you will unlock various buffs as you get more "eternitied stat". These
+To make Eternities faster and more convenient, you will unlock various buffs as you get more "Eternity". These
 buffs will generally let you start with certain upgrades you would otherwise lose after Eternity, give you new
 autobuyers for better automation, or give you a way to passively gain resources offline at a reduced rate.
 <br>
@@ -695,7 +695,7 @@ documentation pane into the script pane and drop it where you want the command t
 rearranged by dragging the blocks around if needed. Clicking the top-right button in block mode will switch back to
 text mode, and switching between block and text mode will automatically translate your script as well.
 `,
-      isUnlocked: () => player.realities >= 5,
+      isUnlocked: () => Player.automatorUnlocked,
       tags: ["automation", "reality", "code", "script", "endgame", "lategame"],
       tab: "reality/automator"
     }, {
@@ -868,7 +868,7 @@ Shards. This unlocks ${formatInt(5)} slots that allow you to save your currently
 You cannot overwrite a set, you must delete it first. When you load a set, each glyph in it is found and equipped.
 If any are not found, it will display a warning, but equip all the rest regardless. You can only load a set when
 there are no equipped glyphs. When loading a set, you can be Level and/or Rarity sensitive. The best glyph from
-the possible glyphs will always be the one equipped.  
+the possible glyphs will always be the one equipped.
 <br>
 <br>
 <i>Note: If desired, "Specified Effect Mode" and "Advanced Mode" can be used to filter out some Glyph types entirely;

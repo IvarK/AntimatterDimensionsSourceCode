@@ -6,7 +6,9 @@ Vue.component("game-header-amounts-line", {
       showInfinityPoints: false,
       infinityPoints: new Decimal(0),
       showEternityPoints: false,
+      showNextEP: false,
       eternityPoints: new Decimal(0),
+      nextEP: new Decimal(0),
       isTesseractUnlocked: false,
       tesseractCost: new Decimal(0),
       tesseractText: "",
@@ -14,13 +16,16 @@ Vue.component("game-header-amounts-line", {
   },
   methods: {
     update() {
-      this.showInfinityPoints = Player.totalInfinitied.gt(0) || PlayerProgress.eternityUnlocked();
+      this.showInfinityPoints = PlayerProgress.infinityUnlocked();
       if (this.showInfinityPoints) {
-        this.infinityPoints.copyFrom(player.infinityPoints.floor());
+        this.infinityPoints.copyFrom(Currency.infinityPoints.value.floor());
       }
       this.showEternityPoints = PlayerProgress.eternityUnlocked();
       if (this.showEternityPoints) {
-        this.eternityPoints.copyFrom(player.eternityPoints.floor());
+        this.eternityPoints.copyFrom(Currency.eternityPoints.value.floor());
+        this.showNextEP = Player.canEternity && player.records.thisReality.maxEP.lt(100) &&
+          gainedEternityPoints().lt(100);
+        if (this.showNextEP) this.nextEP.copyFrom(requiredIPForEP(gainedEternityPoints().floor().toNumber() + 1));
       }
       this.isTesseractUnlocked = Enslaved.isCompleted;
       this.tesseractCost = Enslaved.tesseractCost;
@@ -50,6 +55,7 @@ Vue.component("game-header-amounts-line", {
         You have
         <span class="c-game-header__ep-amount">{{formatPoints(eternityPoints)}}</span>
         Eternity {{ "Point" | pluralize(eternityPoints) }}.
+        <span v-if="showNextEP">(Next EP at {{ format(nextEP, 1) }} IP)</span>
       </div>
     </div>`
 });

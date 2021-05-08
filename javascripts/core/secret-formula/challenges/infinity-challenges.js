@@ -16,8 +16,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 2,
-    description: () => `Automatically Dimensional Sacrifice every ${formatInt(8)} ticks once you have
-    an 8th Antimatter Dimension.`,
+    description: () => `Automatically Dimensional Sacrifice every ${formatInt(400)} milliseconds once you have
+      an 8th Antimatter Dimension.`,
     goal: new Decimal("1e10500"),
     isQuickResettable: false,
     reward: {
@@ -37,8 +37,11 @@ GameDatabase.challenges.infinity = [
     effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
     formatEffect: value => formatX(value, 2, 2),
     reward: {
-      description: "Antimatter Dimension multiplier based on Antimatter Galaxies and Tickspeed purchases",
-      effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
+      description: `Antimatter Dimension multiplier based on Antimatter Galaxies and Tickspeed purchases
+        (same as challenge multiplier)`,
+      effect: () => (Laitela.continuumActive
+        ? Decimal.pow(1.05 + (player.galaxies * 0.005), Tickspeed.continuumValue)
+        : Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought)),
       formatEffect: value => formatX(value, 2, 2),
     },
     unlockAM: new Decimal("1e12000"),
@@ -60,9 +63,8 @@ GameDatabase.challenges.infinity = [
   {
     id: 5,
     description:
-      "When buying Antimatter Dimensions 1-4, Antimatter Dimensions with costs smaller or equal increase in cost. " +
-      "When buying Antimatter Dimensions 5-8, Antimatter Dimensions with costs larger or equal increase in cost. " +
-      "When buying Tickspeed upgrades, Antimatter Dimensions with the same cost increase in cost.",
+      `Costs increase like in Tickspeed Challenge (C9), but additonally buying Antimatter Dimensions 1-4 causes all
+        smaller costs to increase and buying Antimatter Dimensions 5-8 causes all larger costs to increase.`,
     goal: new Decimal("1e16500"),
     isQuickResettable: true,
     reward: {

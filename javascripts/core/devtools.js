@@ -144,7 +144,7 @@ dev.refundDilStudies = function() {
     if (player.dilation.studies.includes(study.id)) {
       player.dilation.studies.splice(player.dilation.studies.indexOf(study.id), 1);
       console.log(document.getElementById(`removed dilstudy${study.id}`));
-      player.timestudy.theorem = player.timestudy.theorem.plus(study.cost);
+      Currency.timeTheorems.add(study.cost);
     }
   }
 };

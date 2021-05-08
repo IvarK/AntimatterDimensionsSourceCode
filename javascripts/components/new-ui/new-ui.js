@@ -39,7 +39,7 @@ Vue.component("new-ui", {
       this.antimatter.copyFrom(Currency.antimatter);
       this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
       this.breakInfinity = player.break;
-      this.realities = player.realities;
+      this.realities = Currency.realities.value;
 
       this.isInAnyChallenge = this.challengeDisplay.length !== 0;
       this.currentEternityChallenge = EternityChallenge.current;
@@ -67,8 +67,8 @@ Vue.component("new-ui", {
       }
       this.isInEffarig = Effarig.isRunning;
       if (this.isInEffarig) {
-        this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(player.infinityPower), 0, 5)}`;
-        this.effarigTickNerfText = `${formatPow(0.7 + 0.1 * Effarig.nerfFactor(player.timeShards), 0, 5)}`;
+        this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(Currency.infinityPower.value), 0, 5)}`;
+        this.effarigTickNerfText = `${formatPow(0.7 + 0.1 * Effarig.nerfFactor(Currency.timeShards.value), 0, 5)}`;
       }
       this.isInLaitela = Laitela.isRunning;
       if (this.isInLaitela) {
@@ -84,15 +84,14 @@ Vue.component("new-ui", {
       this.updateCelestial();
       this.updateChallengeDisplay();
 
-      const challenge = NormalChallenge.current || InfinityChallenge.current;
       const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
-      if (!Player.canCrunch || inBrokenChallenge || (player.break && challenge === undefined)) {
+      if (!Player.canCrunch || inBrokenChallenge || (player.break && !Player.isInAntimatterChallenge)) {
         this.bigCrunch = false;
         this.smallCrunch = false;
         return;
       }
       this.smallCrunch = true;
-      const endOfChallenge = challenge !== undefined && !player.options.retryChallenge;
+      const endOfChallenge = Player.isInAntimatterChallenge && !player.options.retryChallenge;
       this.bigCrunch = endOfChallenge ||
         (Time.thisInfinity.totalMinutes > 1 && Time.bestInfinityRealTime.totalMinutes > 1);
     },

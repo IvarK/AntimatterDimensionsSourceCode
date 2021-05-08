@@ -2,7 +2,10 @@
 
 GameDatabase.infinity.upgrades = (function() {
   function dimInfinityMult() {
-    return Player.totalInfinitied.times(0.2).plus(1);
+    return Currency.infinitiesTotal.value.times(0.2).plus(1);
+  }
+  function chargedDimInfinityMult() {
+    return 1 + Math.log10(Math.max(1, Currency.infinitiesTotal.value.pLog10())) * Math.sqrt(Ra.pets.teresa.level) / 150;
   }
   return {
     totalTimeMult: {
@@ -22,52 +25,48 @@ GameDatabase.infinity.upgrades = (function() {
     dim18mult: {
       id: "18Mult",
       cost: 1,
-      description: "1st and 8th Antimatter Dimensions gain a multiplier based on Infinitied stat",
+      description: "1st and 8th Antimatter Dimensions gain a multiplier based on Infinities",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {
-        description: "1st and 8th Antimatter Dimensions gain a power effect based on Infinitied stat and Teresa level",
-        effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.sqrt(Ra.pets.teresa.level) / 150,
+        description: "1st and 8th Antimatter Dimensions gain a power effect based on Infinities and Teresa level",
+        effect: () => chargedDimInfinityMult(),
         formatEffect: value => formatPow(value, 4, 4)
       }
     },
     dim27mult: {
       id: "27Mult",
       cost: 1,
-      description: "2nd and 7th Antimatter Dimensions gain a multiplier based on Infinitied stat",
+      description: "2nd and 7th Antimatter Dimensions gain a multiplier based on Infinities",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {
-        description: "2nd and 7th Antimatter Dimensions gain a power effect based on Infinitied stat and Teresa level",
-        effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.sqrt(Ra.pets.teresa.level) / 150,
+        description: "2nd and 7th Antimatter Dimensions gain a power effect based on Infinities and Teresa level",
+        effect: () => chargedDimInfinityMult(),
         formatEffect: value => formatPow(value, 4, 4)
       }
     },
     dim36mult: {
       id: "36Mult",
       cost: 1,
-      description: "3rd and 6th Antimatter Dimensions gain a multiplier based on Infinitied stat",
+      description: "3rd and 6th Antimatter Dimensions gain a multiplier based on Infinities",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {
-        description: "3rd and 6th Antimatter Dimensions gain a power effect based on Infinitied stat and Teresa level",
-        effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.sqrt(Ra.pets.teresa.level) / 150,
+        description: "3rd and 6th Antimatter Dimensions gain a power effect based on Infinities and Teresa level",
+        effect: () => chargedDimInfinityMult(),
         formatEffect: value => formatPow(value, 4, 4)
       }
     },
     dim45mult: {
       id: "45Mult",
       cost: 1,
-      description: "4th and 5th Antimatter Dimensions gain a multiplier based on Infinitied stat",
+      description: "4th and 5th Antimatter Dimensions gain a multiplier based on Infinities",
       effect: () => dimInfinityMult(),
       formatEffect: value => formatX(value, 1, 1),
       charged: {
-        description: "4th and 5th Antimatter Dimensions gain a power effect based on Infinitied stat and Teresa level",
-        effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.sqrt(Ra.pets.teresa.level) / 150,
+        description: "4th and 5th Antimatter Dimensions gain a power effect based on Infinities and Teresa level",
+        effect: () => chargedDimInfinityMult(),
         formatEffect: value => formatPow(value, 4, 4)
       }
     },
@@ -126,11 +125,11 @@ GameDatabase.infinity.upgrades = (function() {
       id: "unspentBonus",
       cost: 5,
       description: "Multiplier to 1st Antimatter Dimension based on unspent Infinity Points",
-      effect: () => player.infinityPoints.dividedBy(2).pow(1.5).plus(1),
+      effect: () => Currency.infinityPoints.value.dividedBy(2).pow(1.5).plus(1),
       formatEffect: value => formatX(value, 2, 2),
       charged: {
         description: "Multiplier to 1st Antimatter Dimension based on unspent Infinity Points, powered by Teresa level",
-        effect: () => player.infinityPoints.dividedBy(2).pow(Math.sqrt(Ra.pets.teresa.level) * 1.5).plus(1),
+        effect: () => Currency.infinityPoints.value.dividedBy(2).pow(Math.sqrt(Ra.pets.teresa.level) * 1.5).plus(1),
         formatEffect: value => formatX(value, 2, 2)
       }
     },

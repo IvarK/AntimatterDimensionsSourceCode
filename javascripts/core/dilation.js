@@ -39,7 +39,6 @@ function startDilatedEternity(auto) {
     return;
   }
   Achievement(136).unlock();
-  player.dilation.lastEP = player.eternityPoints;
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
 }
@@ -53,16 +52,15 @@ function buyDilationUpgrade(id, bulk) {
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
   const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
   if (id > 3) {
-    if (player.dilation.dilatedTime.lt(upgrade.cost)) return false;
     if (player.dilation.upgrades.has(id)) return false;
-    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(upgrade.cost);
+    if (!Currency.dilatedTime.purchase(upgrade.cost)) return false;
     player.dilation.upgrades.add(id);
     if (id === 4) player.dilation.totalTachyonGalaxies *= 2;
   } else {
     const upgAmount = player.dilation.rebuyables[id];
-    if (player.dilation.dilatedTime.lt(upgrade.cost) || upgAmount >= upgrade.config.purchaseCap) return false;
+    if (Currency.dilatedTime.lt(upgrade.cost) || upgAmount >= upgrade.config.purchaseCap) return false;
 
-    let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
+    let buying = Decimal.affordGeometricSeries(Currency.dilatedTime.value,
       upgrade.config.initialCost, upgrade.config.increment, upgAmount).toNumber();
     buying = Math.clampMax(buying, Effects.max(1, PerkShopUpgrade.bulkDilation));
     buying = Math.clampMax(buying, upgrade.config.purchaseCap - upgAmount);
@@ -70,10 +68,10 @@ function buyDilationUpgrade(id, bulk) {
       buying = Math.clampMax(buying, 1);
     }
     const cost = Decimal.sumGeometricSeries(buying, upgrade.config.initialCost, upgrade.config.increment, upgAmount);
-    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost);
+    Currency.dilatedTime.subtract(cost);
     player.dilation.rebuyables[id] += buying;
     if (id === 2) {
-      if (!Perk.bypassTGReset.isBought) player.dilation.dilatedTime = new Decimal(0);
+      if (!Perk.bypassTGReset.isBought) Currency.dilatedTime.reset();
       player.dilation.nextThreshold = new Decimal(1000);
       player.dilation.baseTachyonGalaxies = 0;
       player.dilation.totalTachyonGalaxies = 0;
@@ -90,8 +88,7 @@ function buyDilationUpgrade(id, bulk) {
       if (Enslaved.isRunning) {
         retroactiveTPFactor = Math.pow(retroactiveTPFactor, Enslaved.tachyonNerf);
       }
-      player.dilation.tachyonParticles = player.dilation.tachyonParticles
-        .times(Decimal.pow(retroactiveTPFactor, buying));
+      Currency.tachyonParticles.multiply(Decimal.pow(retroactiveTPFactor, buying));
     }
   }
   return true;
@@ -105,7 +102,7 @@ function getTachyonGalaxyMult() {
 }
 
 function getDilationGainPerSecond() {
-  let dtRate = new Decimal(player.dilation.tachyonParticles)
+  let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(
       DilationUpgrade.dtGain,
       Achievement(132),
@@ -137,7 +134,8 @@ function tachyonGainMultiplier() {
 }
 
 function rewardTP() {
-  player.dilation.tachyonParticles = Decimal.max(player.dilation.tachyonParticles, getTP(Currency.antimatter.value));
+  Currency.tachyonParticles.bumpTo(getTP(Currency.antimatter.value));
+  player.dilation.lastEP.copyFrom(Currency.eternityPoints);
 }
 
 // Returns the TP that would be gained this run
@@ -151,12 +149,12 @@ function getTP(antimatter) {
 
 // Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
 function getTachyonGain() {
-  return getTP(Currency.antimatter.value).minus(player.dilation.tachyonParticles).clampMin(0);
+  return getTP(Currency.antimatter.value).minus(Currency.tachyonParticles.value).clampMin(0);
 }
 
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
 function getTachyonReq() {
-  let effectiveTP = player.dilation.tachyonParticles;
+  let effectiveTP = Currency.tachyonParticles.value;
   if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
   return Decimal.pow10(
     effectiveTP

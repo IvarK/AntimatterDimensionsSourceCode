@@ -23,13 +23,12 @@ Vue.component("infinity-dim-tab", {
   methods: {
     update() {
       this.isEC9Running = EternityChallenge(9).isRunning;
-      const infinityPower = player.infinityPower;
-      this.infinityPower.copyFrom(infinityPower);
+      this.infinityPower.copyFrom(Currency.infinityPower);
       this.conversionRate = getInfinityConversionRate();
       if (this.isEC9Running) {
-        this.dimMultiplier.copyFrom(Decimal.pow(Math.max(infinityPower.log2(), 1), 4).max(1));
+        this.dimMultiplier.copyFrom(Decimal.pow(Math.max(this.infinityPower.log2(), 1), 4).max(1));
       } else {
-        this.dimMultiplier.copyFrom(infinityPower.pow(this.conversionRate).max(1));
+        this.dimMultiplier.copyFrom(this.infinityPower.pow(this.conversionRate).max(1));
       }
       this.powerPerSecond.copyFrom(InfinityDimension(1).productionPerRealSecond);
       this.incomeType = EternityChallenge(7).isRunning ? "Seventh Dimensions" : "Infinity Power";
@@ -46,6 +45,7 @@ Vue.component("infinity-dim-tab", {
       this.enslavedCompleted = Enslaved.isCompleted;
     },
     maxAll() {
+      tryUnlockInfinityDimensions(false);
       buyMaxInfinityDimensions();
     },
     toggleAllAutobuyers() {

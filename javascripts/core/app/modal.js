@@ -39,6 +39,12 @@ class Modal {
     ui.view.modal.cloudConflicts = [];
   }
 
+  static hideAll() {
+    if (!GameUI.initialized) return;
+    ui.view.modal.queue = [];
+    ui.view.modal.current = undefined;
+  }
+
   static get isOpen() {
     return ui.view.modal.current === this;
   }

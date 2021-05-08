@@ -45,8 +45,20 @@ class AlchemyResourceState extends GameMechanicState {
     this.config.flow = value;
   }
 
+  get unlockedWith() {
+    return Ra.pets.effarig;
+  }
+
+  get unlockedAt() {
+    return this.config.unlockedAt;
+  }
+
   get isUnlocked() {
-    return this.config.isUnlocked();
+    return this.unlockedWith.level >= this.unlockedAt;
+  }
+
+  get lockText() {
+    return `${this.unlockedWith.name} Level ${this.unlockedAt}`;
   }
 
   get isCustomEffect() {

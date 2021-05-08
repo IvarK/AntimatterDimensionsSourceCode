@@ -60,9 +60,9 @@ const AutomatorCommands = ((() => {
         }
         if (ctx.PrestigeEvent && ctx.currencyAmount) {
           const desired$ = ctx.PrestigeEvent[0].tokenType.$prestigeCurrency;
-          const specified$ = ctx.currencyAmount[0].children.Currency[0].tokenType.name;
+          const specified$ = ctx.currencyAmount[0].children.AutomatorCurrency[0].tokenType.name;
           if (desired$ !== specified$) {
-            V.addError(ctx.currencyAmount, `Currency doesn't match prestige (${desired$} vs ${specified$})`);
+            V.addError(ctx.currencyAmount, `AutomatorCurrency doesn't match prestige (${desired$} vs ${specified$})`);
             return false;
           }
         }
@@ -132,7 +132,8 @@ const AutomatorCommands = ((() => {
         : undefined;
         const xCurrent = ctx.xCurrent ? ctx.xCurrent[0].children.$value : undefined;
         const fixedAmount = ctx.currencyAmount
-        ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image} ${ctx.currencyAmount[0].children.Currency[0].image}`
+        ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image} 
+        ${ctx.currencyAmount[0].children.AutomatorCurrency[0].image}`
         : undefined;
         const on = Boolean(ctx.On);
         let input = "";

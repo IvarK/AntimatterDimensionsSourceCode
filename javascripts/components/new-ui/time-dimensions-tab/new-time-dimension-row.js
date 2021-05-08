@@ -13,8 +13,9 @@ Vue.component("new-time-dimension-row", {
       amount: new Decimal(0),
       rateOfChange: new Decimal(0),
       cost: new Decimal(0),
-      isAffordable: false,
+      isAvailableForPurchase: false,
       isAutobuyerOn: false,
+      requirementReached: false,
       realityUnlocked: false
     };
   },
@@ -32,7 +33,7 @@ Vue.component("new-time-dimension-row", {
       return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2)} EP`;
     },
     showRow() {
-      return this.isUnlocked || this.realityUnlocked;
+      return this.realityUnlocked || this.isUnlocked || this.requirementReached;
     }
   },
   watch: {
@@ -52,11 +53,19 @@ Vue.component("new-time-dimension-row", {
         this.rateOfChange.copyFrom(dimension.rateOfChange);
       }
       this.cost.copyFrom(dimension.cost);
-      this.isAffordable = dimension.isAffordable;
+      this.isAvailableForPurchase = dimension.isAvailableForPurchase;
+      if (!this.isUnlocked) {
+        this.isAvailableForPurchase = dimension.requirementReached;
+      }
+      this.requirementReached = dimension.requirementReached;
       this.isAutobuyerOn = Autobuyer.timeDimension(this.tier).isActive;
       this.realityUnlocked = PlayerProgress.realityUnlocked();
     },
     buyTimeDimension() {
+      if (!this.isUnlocked) {
+        TimeDimension(this.tier).tryUnlock();
+        return;
+      }
       buySingleTimeDimension(this.tier);
     },
     buyMaxTimeDimension() {
@@ -65,7 +74,7 @@ Vue.component("new-time-dimension-row", {
   },
   template: `
     <div v-show="showRow" class="c-time-dim-row"
-      :class="{ 'c-dim-row--not-reached': !isUnlocked }">
+      :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }">
       <div class="c-dim-row__label c-dim-row__name">
         {{name}} Time D <span class="c-time-dim-row__multiplier">{{formatX(multiplier, 2, 1)}}</span>
       </div>
@@ -74,7 +83,7 @@ Vue.component("new-time-dimension-row", {
         <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
       </div>
       <primary-button
-        :enabled="isAffordable && !isCapped && isUnlocked"
+        :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-td l-dim-row__button o-primary-btn o-primary-btn--new"
         @click="buyTimeDimension"
       >{{buttonContents}}</primary-button>
@@ -86,7 +95,7 @@ Vue.component("new-time-dimension-row", {
       />
       <primary-button
         v-else
-        :enabled="isAffordable && !isCapped && isUnlocked"
+        :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-td-max l-dim-row__button"
         @click="buyMaxTimeDimension"
       >Buy Max</primary-button>

@@ -87,7 +87,7 @@ GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
 
 GameKeyboard.bindHotkey("u", () => {
   // Automator must be unlocked
-  if (player.realities >= 5) {
+  if (Player.automatorUnlocked) {
     if (AutomatorBackend.isRunning) {
       AutomatorBackend.pause();
     } else if (AutomatorBackend.isOn) {
@@ -105,7 +105,7 @@ GameKeyboard.bindHotkey("u", () => {
   }
 });
 GameKeyboard.bindHotkey("shift+u", () => {
-  if (player.realities >= 5) {
+  if (Player.automatorUnlocked) {
     const action = AutomatorBackend.isOn ? "Restarting" : "Starting";
     GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}"`);
 

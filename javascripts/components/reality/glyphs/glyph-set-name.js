@@ -166,6 +166,7 @@ Vue.component("glyph-set-name", {
       return this.mainGlyphName.color;
     },
     textStyle() {
+      this.$recompute("mainGlyphName");
       // If you have the player option to not show color enabled, and this isn't a special case forcing color, return {}
       if (!this.isColored && !this.forceColor) return {};
       // Otherwise, lets set the shadow to be 4, each offset to a different corner, and bluring by 1px,

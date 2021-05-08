@@ -24,7 +24,12 @@ Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends IntervaledAu
     return Perk.autobuyerTT1.isBought;
   }
 
+  get resetTickOn() {
+    return PRESTIGE_EVENT.REALITY;
+  }
+
   tick() {
+    super.tick();
     TimeTheorems.buyMax(true);
   }
 }();

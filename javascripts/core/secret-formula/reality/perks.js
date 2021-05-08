@@ -16,8 +16,8 @@ GameDatabase.reality.perks = {
     label: "START",
     family: PERK_FAMILY.REALITY,
     get description() {
-      return `Remove the ${format(5e9)} Time Theorems and ${format(13)} rows of achievements requirements from
-      the Reality Study, and allow you to choose from ${formatInt(4)} different Glyphs on Reality`;
+      return `Remove the achievement requirement from the Reality Study
+      and allow you to choose from ${formatInt(4)} different Glyphs on Reality`;
     },
     effect: 4,
   },
@@ -48,7 +48,7 @@ GameDatabase.reality.perks = {
     get description() {
       return `Start every Eternity and Reality with ${format(2e15)} Infinity Points.`;
     },
-    bumpCurrency: () => player.infinityPoints = player.infinityPoints.clampMin(2e15),
+    bumpCurrency: () => Currency.infinityPoints.bumpTo(2e15),
     effect: 2e15
   },
   startIP2: {
@@ -58,7 +58,7 @@ GameDatabase.reality.perks = {
     get description() {
       return `Start every Eternity and Reality with ${format(2e130)} Infinity Points.`;
     },
-    bumpCurrency: () => player.infinityPoints = player.infinityPoints.clampMin(2e130),
+    bumpCurrency: () => Currency.infinityPoints.bumpTo(2e130),
     effect: 2e130
   },
   startEP1: {
@@ -68,7 +68,7 @@ GameDatabase.reality.perks = {
     get description() {
       return `Start every Reality with ${formatInt(10)} Eternity Points.`;
     },
-    bumpCurrency: () => player.eternityPoints = player.eternityPoints.clampMin(10),
+    bumpCurrency: () => Currency.eternityPoints.bumpTo(10),
     effect: 10
   },
   startEP2: {
@@ -78,7 +78,7 @@ GameDatabase.reality.perks = {
     get description() {
       return `Start every Reality with ${format(2000)} Eternity Points.`;
     },
-    bumpCurrency: () => player.eternityPoints = player.eternityPoints.clampMin(2000),
+    bumpCurrency: () => Currency.eternityPoints.bumpTo(2000),
     effect: 2000
   },
   startEP3: {
@@ -88,7 +88,7 @@ GameDatabase.reality.perks = {
     get description() {
       return `Start every Reality with ${format(1e9)} Eternity Points.`;
     },
-    bumpCurrency: () => player.eternityPoints = player.eternityPoints.clampMin(1e9),
+    bumpCurrency: () => Currency.eternityPoints.bumpTo(1e9),
     effect: 1e9
   },
   startTP: {
@@ -120,13 +120,16 @@ GameDatabase.reality.perks = {
     id: 40,
     label: "EU1",
     family: PERK_FAMILY.ETERNITY,
-    description: "After the first Eternity of a Reality, auto-unlock the first row of Eternity Upgrades."
+    description: "The first row of eternity upgrades automatically unlock after the first Eternity of a Reality."
   },
   autounlockEU2: {
     id: 41,
     label: "EU2",
     family: PERK_FAMILY.ETERNITY,
-    description: "After the first Eternity of a Reality, auto-unlock the second row of Eternity Upgrades."
+    get description() {
+      return `The second row of eternity upgrades automatically unlock
+        at ${formatX(1e10)} times less than their original price`;
+    }
   },
   autounlockDilation1: {
     id: 42,

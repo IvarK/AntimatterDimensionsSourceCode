@@ -8,7 +8,9 @@ Vue.component("antimatter-dim-tab", {
       challengePower: "",
       isQuickResetAvailable: false,
       isSacrificeUnlocked: false,
+      buy10Mult: new Decimal(0),
       currentSacrifice: new Decimal(0),
+      multiplierText: "",
     };
   },
   methods: {
@@ -30,10 +32,14 @@ Vue.component("antimatter-dim-tab", {
           ${format(new Decimal(1).timesEffectOf(InfinityChallenge(8)).reciprocal(), 2, 2)}`);
         this.challengePower = powerArray.join(", ");
       }
-      const challenge = NormalChallenge.current || InfinityChallenge.current;
-      this.isQuickResetAvailable = challenge && challenge.isQuickResettable;
+      this.isQuickResetAvailable = Player.isInAntimatterChallenge && Player.antimatterChallenge.isQuickResettable;
       this.isSacrificeUnlocked = Sacrifice.isVisible;
+      this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
+
+      this.multiplierText = `Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
+      if (this.isSacrificeUnlocked) this.multiplierText +=
+        ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
     },
     quickReset() {
       softReset(-1, true, true);
@@ -41,7 +47,7 @@ Vue.component("antimatter-dim-tab", {
   },
   template:
     `<div class="l-old-ui-antimatter-dim-tab">
-      <span v-if="isSacrificeUnlocked">Dimensional Sacrifice multiplier: {{ formatX(currentSacrifice, 2, 2) }}</span>
+      <span>{{ multiplierText }}</span>
       <antimatter-dim-tab-header />
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
       <div class="l-dimensions-container">

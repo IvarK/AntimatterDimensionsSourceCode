@@ -52,9 +52,10 @@ Vue.component("alchemy-resource-info", {
   },
   methods: {
     update() {
-      this.amount = this.resource.amount;
-      this.isUnlocked = this.resource.isUnlocked;
-      this.unlockRequirement = this.resource.config.lockText;
+      const resource = this.resource;
+      this.amount = resource.amount;
+      this.isUnlocked = resource.isUnlocked;
+      this.unlockRequirement = resource.lockText;
       if (!this.isBaseResource) {
         this.isReactionActive = this.reaction.isActive;
         this.reactionProduction = this.reaction.production;

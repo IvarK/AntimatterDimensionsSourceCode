@@ -47,8 +47,13 @@ Vue.component("pelle-currency", {
       return this.rebuyable.config;
     },
     speedUpgradeConfig() {
+      const multiplier = {
+        famine: 1,
+        pestilence: 100,
+        chaos: 1e4
+      }
       return {
-        cost: 500 * (5 ** this.speedUpgrades),
+        cost: 500 * multiplier[this.currency] * (5 ** this.speedUpgrades),
         description: `Gain ${this.currency} 20% faster.`,
         effect: () => 1.2 ** this.speedUpgrades,
         formatEffect: x => formatX(x, 2, 2)

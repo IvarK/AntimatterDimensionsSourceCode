@@ -25,7 +25,7 @@ GameDatabase.celestials.pelle = {
     ipGain: {
       id: 4,
       description: "You can gain IP on Infinity again",
-      cost: 1e4,
+      cost: 2e3,
       currency: "unstableMatter"
     },
     achievementsBack: {
@@ -85,7 +85,7 @@ GameDatabase.celestials.pelle = {
     morePermanentTickspeed: {
       id: 14,
       description: "Gain 3x more permanent tickspeed upgrades from Famine buyable",
-      cost: 5e5,
+      cost: 3e5,
       currency: "unstableMatter"
     },
     moreFamine: {
@@ -140,13 +140,13 @@ GameDatabase.celestials.pelle = {
     retainEternityUpgrades: {
       id: 23,
       description: "You keep your Eternity Upgrades on Armageddon",
-      cost: 1e6,
+      cost: 5e5,
       currency: "unstableMatter"
     },
     retainTimeDimensions: {
       id: 24,
       description: "You keep your Time Dimensions on Armageddon",
-      cost: new Decimal("1e1000"),
+      cost: new Decimal("1e750"),
       currency: "infinityPoints"
     },
     retainEP: {
@@ -166,6 +166,14 @@ GameDatabase.celestials.pelle = {
       description: "Get back passive Eternity gain",
       cost: 3e5,
       currency: "famine"
+    },
+    rgMultToUnstable: {
+      id: 28,
+      description: "Unstable Matter gain is multiplied by your current Replicated Galaxies",
+      cost: new Decimal("1e400000"),
+      currency: "antimatter",
+      effect: () => Math.max(Replicanti.galaxies.total, 1),
+      formatEffect: x => formatX(x, 2, 0)
     }
   },
   rebuyables: {

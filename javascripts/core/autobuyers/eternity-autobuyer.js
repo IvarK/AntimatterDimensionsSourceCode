@@ -66,7 +66,11 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
 
   bumpAmount(mult) {
     if (this.isUnlocked && this.increaseWithMult) {
-      this.amount = this.amount.times(mult);
+      if (!Pelle.isDoomed) {
+        this.amount = this.amount.times(mult);
+      } else if (!Pelle.isDisabled("EPMults")) {
+        this.amount = this.amount.times(new Decimal(mult).pow(0.3));
+      }
     }
   }
 

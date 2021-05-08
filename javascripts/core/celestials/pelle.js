@@ -58,6 +58,9 @@ const Pelle = {
       if (PelleUpgrade.timeMultToUnstable.canBeApplied) {
         unstableMatterGain *= (time / 500) ** 1.1;
       }
+      if (PelleUpgrade.rgMultToUnstable.canBeApplied) {
+        unstableMatterGain *= PelleUpgrade.rgMultToUnstable.effectValue
+      }
       this.cel.unstableMatter = this.cel.unstableMatter.plus(unstableMatterGain);
     }
 

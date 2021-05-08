@@ -174,6 +174,36 @@ GameDatabase.celestials.pelle = {
       currency: "antimatter",
       effect: () => Math.max(Replicanti.galaxies.total, 1),
       formatEffect: x => formatX(x, 2, 0)
+    },
+    morePermanentDimBoosts: {
+      id: 29,
+      description: "Gain 5x more permanent Dimension Boosts from the Pestilence buyable",
+      cost: new Decimal("1e1750"),
+      currency: "infinityPoints"
+    },
+    passiveUnstableMatter: {
+      id: 30,
+      description: "Gain 10% of Unstable Matter gained on Armageddon every second.",
+      cost: 2e7,
+      currency: "unstableMatter"
+    },
+    passiveEP: {
+      id: 31,
+      description: "Gain back the EP generation from Teresa.",
+      cost: 1e9,
+      currency: "eternityPoints"
+    },
+    chaosUnlock: {
+      id: 32,
+      description: "Unlock Chaos.",
+      cost: 5e3,
+      currency: "pestilence"
+    },
+    moreIPMultipliers: {
+      id: 33,
+      description: "IP multipliers are raised to the power of 0.6 instead of 0.3.",
+      cost: 2e6,
+      currency: "famine"
     }
   },
   rebuyables: {
@@ -204,9 +234,13 @@ GameDatabase.celestials.pelle = {
         }
         return base;
       },
-      description: "Gain 10 permanent Dimension Boosts",
+      description: () => `Gain ${PelleUpgrade.morePermanentDimBoosts.canBeApplied ? 50 : 10} permanent Dimension Boosts`,
       currency: "pestilence",
-      effect: () => player.celestials.pelle.rebuyables.permanentDimensionBoosts * 10,
+      effect: () => {
+        let base = player.celestials.pelle.rebuyables.permanentDimensionBoosts * 10;
+        if (PelleUpgrade.morePermanentDimBoosts.canBeApplied) base *= 5;
+        return base;
+      },
       formatEffect: x => format(x, 2, 0)
     },
     permanentGalaxies: {

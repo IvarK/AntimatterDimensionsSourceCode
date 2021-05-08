@@ -7,7 +7,10 @@ Vue.component("pelle-tab", {
       armageddonInterval: 0,
       unstableMatter: new Decimal(0),
       hasFamine: false,
-      hasPestilence: false
+      hasPestilence: false,
+      hasChaos: false,
+      unstableMatterGain: 0,
+      unstableMatterPerMinute: 0,
     };
   },
   methods: {
@@ -15,8 +18,11 @@ Vue.component("pelle-tab", {
       this.isDoomed = Pelle.isDoomed;
       this.armageddonInterval = Pelle.armageddonInterval;
       this.unstableMatter.copyFrom(player.celestials.pelle.unstableMatter);
-      this.hasFamine = PelleUpgrade.famineUnlock.isBought;
-      this.hasPestilence = PelleUpgrade.pestilenceUnlock.isBought;
+      this.hasFamine =  Pelle.famine.unlocked;
+      this.hasPestilence = Pelle.pestilence.unlocked;
+      this.hasChaos = Pelle.chaos.unlocked;
+      this.unstableMatterGain = Pelle.unstableMatterGain;
+      this.unstableMatterPerMinute = Pelle.unstableMatterGain / TimeSpan.fromMilliseconds(Pelle.armageddonInterval).totalMinutes;
     },
     getDoomed() {
       player.celestials.pelle.doomed = true;
@@ -49,14 +55,18 @@ Vue.component("pelle-tab", {
     `<div class="l-pelle-celestial-tab">
       <button @click="getDoomed()">Doom your reality lol</button>
       <p>Armageddon is happenings every {{ format(armageddonInterval / 1000, 2, 2) }} seconds</p>
-      <p>You have <b>{{ format(unstableMatter, 2, 2) }}</b> Unstable matter</p>
+      <p>
+        You have <b>{{ format(unstableMatter, 2, 2) }}</b>
+        Unstable matter, you will gain {{ format(unstableMatterGain, 2, 2) }} 
+        on next Armageddon ({{ format(unstableMatterPerMinute, 2, 2)}} / min).
+      </p>
       <div class="c-pelle-currency-container">
         <pelle-currency currency="famine" :rebuyable="pelleRebuyable.permanentTickspeed" v-show="hasFamine"/>
         <pelle-currency currency="pestilence" :rebuyable="pelleRebuyable.permanentDimensionBoosts" v-show="hasPestilence"/>
-        <pelle-currency currency="chaos" :rebuyable="pelleRebuyable.permanentGalaxies" v-show="false"/>
+        <pelle-currency currency="chaos" :rebuyable="pelleRebuyable.permanentGalaxies" v-show="hasChaos"/>
       </div>
       <div class="pelle-upgrades--container">
-        <pelle-upgrade v-for="upg in upgrades" :upgrade="upg" />
+        <pelle-upgrade v-for="upg in upgrades" :upgrade="upg" :key="upg.config.id"/>
       </div>
     </div>`
 });

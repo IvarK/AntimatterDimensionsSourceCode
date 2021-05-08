@@ -81,7 +81,8 @@ function gainedInfinityPoints() {
   }
 
   if (Pelle.isDoomed) {
-    ip = ip.times(GameCache.totalIPMult.value.pow(-2 / 3));
+    if (!PelleUpgrade.moreIPMultipliers.canBeApplied) ip = ip.times(GameCache.totalIPMult.value.pow(-2 / 3));
+    else ip = ip.times(GameCache.totalIPMult.value.pow(-1 / 3));
   }
   return ip.floor();
 }

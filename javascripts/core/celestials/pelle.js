@@ -43,25 +43,20 @@ const Pelle = {
       case "studies":
         return !PelleUpgrade.studiesUnlock.canBeApplied;
 
+      case "EPgen":
+        return !PelleUpgrade.passiveEP.canBeApplied;
+
       default:
         return true;
     }
   },
 
   armageddon(gainStuff) {
-    const time = player.records.thisReality.realTime;
     finishProcessReality({ reset: true, armageddon: true });
     disChargeAll();
     this.cel.lastArmageddonAt = Date.now();
     if (gainStuff) {
-      let unstableMatterGain = Math.log10(this.cel.maxAMThisArmageddon.plus(1).log10() + 1) ** 3;
-      if (PelleUpgrade.timeMultToUnstable.canBeApplied) {
-        unstableMatterGain *= (time / 500) ** 1.1;
-      }
-      if (PelleUpgrade.rgMultToUnstable.canBeApplied) {
-        unstableMatterGain *= PelleUpgrade.rgMultToUnstable.effectValue
-      }
-      this.cel.unstableMatter = this.cel.unstableMatter.plus(unstableMatterGain);
+      this.cel.unstableMatter = this.cel.unstableMatter.plus(this.unstableMatterGain);
     }
 
     this.cel.maxAMThisArmageddon = new Decimal(0);
@@ -86,6 +81,12 @@ const Pelle = {
         this.cel[currency].timer = 0
       }
     })
+
+    if (PelleUpgrade.passiveUnstableMatter.canBeApplied) {
+      this.cel.unstableMatter = this.cel.unstableMatter.plus(
+        this.unstableMatterGain.dividedBy(TimeSpan.fromMilliseconds(diff).totalSeconds * 10)
+      );
+    }
   },
 
   famine: {
@@ -120,7 +121,11 @@ const Pelle = {
       const speedUpgradeEffect = 1.2 ** player.celestials.pelle.pestilence.speedUpgrades;
       return 10 / (Math.log10(Replicanti.amount.log10() + 1) + 1) / speedUpgradeEffect
     },
-    get gain() { return 1 },
+    get gain() {
+      let gain = 1;
+      if (Pelle.chaos.unlocked) gain *= Pelle.chaos.pestilenceGainMult;
+      return gain 
+    },
     get unlocked() { return PelleUpgrade.pestilenceUnlock.canBeApplied },
     get armageddonTimeMultiplier() { return Math.max(player.celestials.pelle.pestilence.amount.plus(1).log10(), 1) },
     get famineGainMult() { return player.celestials.pelle.pestilence.amount.pow(0.5).plus(1).toNumber() },
@@ -129,11 +134,13 @@ const Pelle = {
   chaos: {
     get fillTime() { 
       const speedUpgradeEffect = 1.2 ** player.celestials.pelle.chaos.speedUpgrades;
-      return 10 / speedUpgradeEffect;
+      return 10 / (Currency.timeShards.value.plus(1).log10() ** 0.3 / 3) / speedUpgradeEffect;
     },
     get gain() { return 1 },
-    get unlocked() { return false },
-    get bonusDescription() { return `` }
+    get unlocked() { return PelleUpgrade.chaosUnlock.canBeApplied },
+    get dimensionDiscount() { return new Decimal(10).pow(Currency.chaos.value.pow(2)) },
+    get pestilenceGainMult() { return Currency.chaos.value.pow(0.5).plus(1).toNumber() },
+    get bonusDescription() { return `6th Antimatter Dimension is ${formatX(this.dimensionDiscount, 2, 2)} cheaper, you gain ${formatX(this.pestilenceGainMult, 2, 2)} more Pestilence. ` }
   },
 
   get cel() {
@@ -148,13 +155,24 @@ const Pelle = {
   get armageddonInterval() {
     let base = PelleUpgrade.longerArmageddon.canBeApplied ? 5000 : 500;
     if (PelleUpgrade.doubleArmageddon.canBeApplied) base *= 2;
-    if (PelleUpgrade.pestilenceUnlock.canBeApplied) base *= Pelle.pestilence.armageddonTimeMultiplier;
+    if (this.pestilence.unlocked) base *= Pelle.pestilence.armageddonTimeMultiplier;
     return base;
   },
 
   get disabledAchievements() {
     return [142, 141, 125, 117, 92, 91];
   },
+
+  get unstableMatterGain() {
+    let gain = Math.log10(this.cel.maxAMThisArmageddon.plus(1).log10() + 1) ** 3;
+    if (PelleUpgrade.timeMultToUnstable.canBeApplied) {
+      gain *= PelleUpgrade.timeMultToUnstable.effectValue;
+    }
+    if (PelleUpgrade.rgMultToUnstable.canBeApplied) {
+      gain *= PelleUpgrade.rgMultToUnstable.effectValue
+    }
+    return gain;
+  }
 };
 
 class RebuyablePelleUpgradeState extends RebuyableMechanicState {

@@ -123,6 +123,7 @@ const Glyphs = {
     return this.active[activeIndex];
   },
   equip(glyph, targetSlot) {
+    if (Pelle.isDisabled("equipGlyphs")) return;
     this.validate();
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {
       throw new Error("Inconsistent inventory indexing");

@@ -46,6 +46,9 @@ const Pelle = {
       case "EPgen":
         return !PelleUpgrade.passiveEP.canBeApplied;
 
+      case "equipGlyphs":
+        return true;
+
       default:
         return true;
     }

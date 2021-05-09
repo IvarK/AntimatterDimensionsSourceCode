@@ -193,18 +193,18 @@ Vue.component("statistics-tab", {
 });
 
 const MatterScale = {
-  proton: 2.82e-45,
+  proton: DC.D2_82EM45,
 
   estimate(matter) {
     if (!matter) return ["There is no antimatter yet."];
-    if (matter.gt(Decimal.fromMantissaExponent(1, 100000))) {
+    if (matter.gt(DC.E100000)) {
       return [
         `If you wrote ${formatInt(3)} numbers a second, it would take you`,
         TimeSpan.fromSeconds(matter.log10() / 3).toString(),
         "to write down your antimatter amount."
       ];
     }
-    const planck = 4.22419e-105;
+    const planck = DC.D4_22419EM105;
     const planckedMatter = matter.times(planck);
     if (planckedMatter.gt(this.proton)) {
       const scale = this.macroScale(planckedMatter);
@@ -236,7 +236,7 @@ const MatterScale = {
     let high = macro.length;
     while (low !== high) {
       const mid = Math.floor((low + high) / 2);
-      if (Decimal.lte(macro[mid].amount, matter)) {
+      if (macro[mid].amount.lte(matter)) {
         low = mid + 1;
       } else {
         high = mid;
@@ -246,42 +246,42 @@ const MatterScale = {
   },
 
   microObjects: [
-    { amount: 1e-54, name: "attometers cubed" },
-    { amount: 1e-63, name: "zeptometers cubed" },
-    { amount: 1e-72, name: "yoctometers cubed" },
-    { amount: 4.22419e-105, name: "planck volumes" }
+    { amount: DC.EM54, name: "attometers cubed" },
+    { amount: DC.EM63, name: "zeptometers cubed" },
+    { amount: DC.EM72, name: "yoctometers cubed" },
+    { amount: DC.D4_22419EM105, name: "planck volumes" }
   ],
 
   macroObjects: [
-    { amount: 2.82e-45, name: "protons", verb: "make" },
-    { amount: 1e-42, name: "nuclei", verb: "make" },
-    { amount: 7.23e-30, name: "Hydrogen atoms", verb: "make" },
-    { amount: 5e-21, name: "viruses", verb: "make" },
-    { amount: 9e-17, name: "red blood cells", verb: "make" },
-    { amount: 6.2e-11, name: "grains of sand", verb: "make" },
-    { amount: 5e-8, name: "grains of rice", verb: "make" },
-    { amount: 3.555e-6, name: "teaspoons", verb: "fill" },
-    { amount: 7.5e-4, name: "wine bottles", verb: "fill" },
-    { amount: 1, name: "fridge-freezers", verb: "fill" },
-    { amount: 2.5e3, name: "Olympic-sized swimming pools", verb: "fill" },
-    { amount: 2.6006e6, name: "Great Pyramids of Giza", verb: "make" },
-    { amount: 3.3e8, name: "Great Walls of China", verb: "make" },
-    { amount: 5e12, name: "large asteroids", verb: "make" },
-    { amount: 4.5e17, name: "dwarf planets", verb: "make" },
-    { amount: 1.08e21, name: "Earths", verb: "make" },
-    { amount: 1.53e24, name: "Jupiters", verb: "make" },
-    { amount: 1.41e27, name: "Suns", verb: "make" },
-    { amount: 5e32, name: "red giants", verb: "make" },
-    { amount: 8e36, name: "hypergiant stars", verb: "make" },
-    { amount: 1.7e45, name: "nebulas", verb: "make" },
-    { amount: 1.7e48, name: "Oort clouds", verb: "make" },
-    { amount: 3.3e55, name: "Local Bubbles", verb: "make" },
-    { amount: 3.3e61, name: "galaxies", verb: "make" },
-    { amount: 5e68, name: "Local Groups", verb: "make" },
-    { amount: 1e73, name: "Sculptor Voids", verb: "make" },
-    { amount: 3.4e80, name: "observable universes", verb: "make" },
-    { amount: 1e113, name: "Dimensions", verb: "make" },
-    { amount: Number.MAX_VALUE, name: "Infinity Dimensions", verb: "make" },
-    { amount: Decimal.fromMantissaExponent(1, 65000), name: "Time Dimensions", verb: "make" }
+    { amount: DC.D2_82EM45, name: "protons", verb: "make" },
+    { amount: DC.EM42, name: "nuclei", verb: "make" },
+    { amount: DC.D7_23EM30, name: "Hydrogen atoms", verb: "make" },
+    { amount: DC.D5EM21, name: "viruses", verb: "make" },
+    { amount: DC.D9EM17, name: "red blood cells", verb: "make" },
+    { amount: DC.D6_2EM11, name: "grains of sand", verb: "make" },
+    { amount: DC.D5EM8, name: "grains of rice", verb: "make" },
+    { amount: DC.D3_555EM6, name: "teaspoons", verb: "fill" },
+    { amount: DC.D7_5EM4, name: "wine bottles", verb: "fill" },
+    { amount: DC.D1, name: "fridge-freezers", verb: "fill" },
+    { amount: DC.D2_5E3, name: "Olympic-sized swimming pools", verb: "fill" },
+    { amount: DC.D2_6006E6, name: "Great Pyramids of Giza", verb: "make" },
+    { amount: DC.D3_3E8, name: "Great Walls of China", verb: "make" },
+    { amount: DC.D5E12, name: "large asteroids", verb: "make" },
+    { amount: DC.D4_5E17, name: "dwarf planets", verb: "make" },
+    { amount: DC.D1_08E21, name: "Earths", verb: "make" },
+    { amount: DC.D1_53E24, name: "Jupiters", verb: "make" },
+    { amount: DC.D1_41E27, name: "Suns", verb: "make" },
+    { amount: DC.D5E32, name: "red giants", verb: "make" },
+    { amount: DC.D8E36, name: "hypergiant stars", verb: "make" },
+    { amount: DC.D1_7E45, name: "nebulas", verb: "make" },
+    { amount: DC.D1_7E48, name: "Oort clouds", verb: "make" },
+    { amount: DC.D3_3E55, name: "Local Bubbles", verb: "make" },
+    { amount: DC.D3_3E61, name: "galaxies", verb: "make" },
+    { amount: DC.D5E68, name: "Local Groups", verb: "make" },
+    { amount: DC.E73, name: "Sculptor Voids", verb: "make" },
+    { amount: DC.D3_4E80, name: "observable universes", verb: "make" },
+    { amount: DC.E113, name: "Dimensions", verb: "make" },
+    { amount: DC.C2P1024, name: "Infinity Dimensions", verb: "make" },
+    { amount: DC.E65000, name: "Time Dimensions", verb: "make" }
   ]
 };

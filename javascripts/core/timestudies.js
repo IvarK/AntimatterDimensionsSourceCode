@@ -245,6 +245,7 @@ class NormalTimeStudyState extends TimeStudyState {
   }
 
   checkVRequirement() {
+    if (Pelle.isDisabled("V")) return false;
     const req = this.config.requirementV;
     return req === undefined
       ? false

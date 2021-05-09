@@ -96,7 +96,8 @@ function timeDimensionCommonMultiplier() {
       EternityUpgrade.tdMultRealTime,
       Replicanti.areUnlocked && player.replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null,
       RealityUpgrade(22),
-      AlchemyResource.dimensionality
+      AlchemyResource.dimensionality,
+      PelleUpgrade.timeDimMultiplier
     );
   if (EternityChallenge(9).isRunning) {
     mult = mult.times(

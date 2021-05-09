@@ -286,7 +286,7 @@ const EternityChallenges = {
   autoComplete: {
     tick() {
       if (!player.reality.autoEC || Pelle.isDisabled("autoec")) return;
-      if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
+      if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) && !Pelle.isDoomed) {
         let next = this.nextChallenge;
         while (next !== undefined) {
           while (!next.isFullyCompleted) {
@@ -312,6 +312,7 @@ const EternityChallenges = {
 
     get interval() {
       if (!Perk.autocompleteEC1.isBought || Pelle.isDisabled("autoec")) return Infinity;
+      if (Pelle.isDoomed) return TimeSpan.fromSeconds(3).totalMilliseconds;
       let minutes = Effects.min(
         Number.MAX_VALUE,
         Perk.autocompleteEC1,

@@ -41,6 +41,7 @@ Vue.component("glyph-inventory", {
     },
     clickGlyph(col, id) {
       const glyph = Glyphs.findById(id);
+      console.log("fdsafd")
       // If single click
       if (!this.doubleClickTimeOut) {
         this.doubleClickTimeOut = setTimeout(() => {

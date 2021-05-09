@@ -18,7 +18,8 @@ function getTickSpeedMultiplier() {
   replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
   let freeGalaxies = player.dilation.totalTachyonGalaxies;
   freeGalaxies *= 1 + Math.max(0, player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
-  let galaxies = player.galaxies + replicantiGalaxies + freeGalaxies;
+  let pelleGalaxies = PelleRebuyableUpgrade.permanentGalaxies.effectValue;
+  let galaxies = player.galaxies + replicantiGalaxies + freeGalaxies + pelleGalaxies;
   if (Pelle.isDoomed) galaxies /= 2;
   if (galaxies < 3) {
       // Magic numbers are to retain balancing from before while displaying

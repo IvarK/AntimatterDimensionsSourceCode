@@ -373,6 +373,7 @@ class AntimatterDimensionState extends DimensionState {
   get cost() {
     let cost = this.costScale.calculateCost(Math.floor(this.bought / 10) + this.costBumps)
     if (Pelle.chaos.unlocked && this.tier === 6) cost = cost.dividedBy(Pelle.chaos.dimensionDiscount)
+    else if (PelleUpgrade.chaosEffect1stAnd4th.canBeApplied && (this.tier === 1 || this.tier === 4)) cost = cost.dividedBy(Pelle.chaos.dimensionDiscount)
     return cost;
   }
 

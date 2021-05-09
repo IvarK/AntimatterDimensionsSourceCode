@@ -88,6 +88,10 @@ Vue.component("pelle-currency", {
         case "permanentDimensionBoosts":
           this.showRebuyable = PelleUpgrade.pestilenceRebuyable.canBeApplied;
           break;
+
+        case "permanentGalaxies":
+            this.showRebuyable = PelleUpgrade.chaosRebuyable.canBeApplied;
+            break;
       }
     },
     descriptionDisplay() {

@@ -183,8 +183,8 @@ GameDatabase.celestials.pelle = {
     },
     passiveUnstableMatter: {
       id: 30,
-      description: "Gain 10% of Unstable Matter gained on Armageddon every second.",
-      cost: 2e7,
+      description: "Gain 30% of Unstable Matter gained on Armageddon every second.",
+      cost: 1e8,
       currency: "unstableMatter"
     },
     passiveEP: {
@@ -204,7 +204,64 @@ GameDatabase.celestials.pelle = {
       description: "IP multipliers are raised to the power of 0.6 instead of 0.3.",
       cost: 2e6,
       currency: "famine"
-    }
+    },
+    infDimMultiplier: {
+      id: 34,
+      description: () => `Infinity Dimensions are ${formatX(1e200, 0, 0)} more effective.`,
+      cost: 100,
+      currency: "chaos",
+      effect: 1e200
+    },
+    unspentTTArmageddon: {
+      id: 35,
+      description: "Unspent Time Theorems increase the armageddon duration.",
+      cost: new Decimal("1e4250"),
+      currency: "infinityPoints",
+      effect: () => Currency.timeTheorems.value.pow(0.1).max(1).toNumber(),
+      formatEffect: x => formatX(x, 2, 2)
+    },
+    chaosEffect1stAnd4th: {
+      id: 36,
+      description: "Chaos affects 1st and 4th dimensions also.",
+      cost: new Decimal("1e1000000"),
+      currency: "antimatter"
+    },
+    chaosRebuyable: {
+      id: 37,
+      description: "You can buy permanent galaxies with Chaos.",
+      cost: 500,
+      currency: "chaos"
+    },
+    timeDimMultiplier: {
+      id: 38,
+      description: () => `Time Dimensions are ${formatX(1e20, 0, 0)} more effective.`,
+      cost: 1e17,
+      currency: "eternityPoints",
+      effect: 1e20
+    },
+    epMultiplierFromUnstableMatter: {
+      id: 39,
+      description: "Unstable matter multiplies EP gain",
+      cost: 3e8,
+      currency: "unstableMatter",
+      effect: () => Currency.unstableMatter.value.pow(0.5),
+      formatEffect: x => formatX(x, 2, 2)
+    },
+    chaosMultiplier: {
+      id: 40,
+      description: "Gain more Chaos based on EP",
+      cost: new Decimal("1e1500000"),
+      currency: "antimatter",
+      effect: () => Currency.eternityPoints.value.log10() ** 0.3,
+      formatEffect: x => formatX(x, 2, 2)
+    },
+    autoEc: {
+      id: 41,
+      description: "Automatically complete a single EC every 3 seconds",
+      cost: new Decimal("1e6500"),
+      currency: "infinityPoints",
+      effect: 3
+    },
   },
   rebuyables: {
     permanentTickspeed: {

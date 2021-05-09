@@ -14,7 +14,8 @@ function infinityDimensionCommonMultiplier() {
       EternityUpgrade.idMultEP,
       EternityUpgrade.idMultEternities,
       EternityUpgrade.idMultICRecords,
-      AlchemyResource.dimensionality
+      AlchemyResource.dimensionality,
+      PelleUpgrade.infDimMultiplier
     );
 
   if (Replicanti.areUnlocked && player.replicanti.amount.gt(1)) {

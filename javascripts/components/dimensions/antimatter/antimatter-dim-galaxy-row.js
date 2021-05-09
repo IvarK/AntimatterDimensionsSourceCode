@@ -7,7 +7,8 @@ Vue.component("antimatter-dim-galaxy-row", {
       galaxies: {
         normal: 0,
         replicanti: 0,
-        dilation: 0
+        dilation: 0,
+        pelle: 0
       },
       requirement: {
         tier: 1,
@@ -31,6 +32,7 @@ Vue.component("antimatter-dim-galaxy-row", {
       const parts = [this.galaxies.normal];
       if (this.galaxies.replicanti > 0) parts.push(this.galaxies.replicanti);
       if (this.galaxies.dilation > 0) parts.push(this.galaxies.dilation);
+      if (this.galaxies.pelle > 0) parts.push(this.galaxies.pelle);
       const sum = parts.map(formatInt).join(" + ");
       if (parts.length >= 2) {
         return `${sum} = ${formatInt(parts.sum())}`;
@@ -69,6 +71,7 @@ Vue.component("antimatter-dim-galaxy-row", {
       this.galaxies.normal = player.galaxies;
       this.galaxies.replicanti = Replicanti.galaxies.total;
       this.galaxies.dilation = player.dilation.totalTachyonGalaxies;
+      this.galaxies.pelle = PelleRebuyableUpgrade.permanentGalaxies.effectValue;
       const requirement = Galaxy.requirement;
       this.requirement.amount = requirement.amount;
       this.requirement.tier = requirement.tier;

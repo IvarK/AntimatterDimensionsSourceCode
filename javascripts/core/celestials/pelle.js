@@ -48,6 +48,9 @@ const Pelle = {
 
       case "autoec":
         return !PelleUpgrade.autoEc.canBeApplied;
+      
+      case "equipGlyphs":
+        return true;
 
       default:
         return true;

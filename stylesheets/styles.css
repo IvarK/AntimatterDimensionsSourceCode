@@ -449,10 +449,12 @@ button:focus {
 }
 
 /*#endregion TT shop*/
+
 .l-dim-path-priority {
   position: absolute;
   right: 0.5rem;
-  top: 0.5rem;
+  bottom: 0.5rem;
+  animation: weee 4s infinite;
 }
 
 .o-time-study-selection-btn {
@@ -460,13 +462,15 @@ button:focus {
   background-color: black;
   font-weight: bold;
   font-family: Typewriter, serif;
-  width: 18rem;
-  height: 10rem;
+  width: 20rem;
+  height: 6rem;
+  margin: 1rem;
   transition-duration: 0.2s;
   border-radius: 0.4rem;
-  font-size: 1.75rem;
+  font-size: 1.65rem;
   position:relative;
 }
+
 /*#region tab buttons*/
 
 .o-tab-btn {

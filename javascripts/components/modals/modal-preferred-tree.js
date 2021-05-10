@@ -14,9 +14,9 @@ Vue.component("modal-preferred-tree", {
   computed: {
     dimensionOptions() {
       return {
-        "Antimatter Dimensions": TIME_STUDY_PATH.ANTIMATTER_DIM,
-        "Infinity Dimensions": TIME_STUDY_PATH.INFINITY_DIM,
-        "Time Dimensions": TIME_STUDY_PATH.TIME_DIM,
+        "Antimatter": TIME_STUDY_PATH.ANTIMATTER_DIM,
+        "Infinity": TIME_STUDY_PATH.INFINITY_DIM,
+        "Time": TIME_STUDY_PATH.TIME_DIM,
       };
     },
     paceOptions() {
@@ -51,9 +51,9 @@ Vue.component("modal-preferred-tree", {
     classList(name) {
       const pref = this.isPreferred(name);
       const types = {
-        "Antimatter Dimensions": "antimatter-dim",
-        "Infinity Dimensions": "infinity-dim",
-        "Time Dimensions": "time-dim",
+        "Antimatter": "antimatter-dim",
+        "Infinity": "infinity-dim",
+        "Time": "time-dim",
         "Active": "active",
         "Passive": "passive",
         "Idle": "idle"
@@ -67,7 +67,9 @@ Vue.component("modal-preferred-tree", {
   },
   template: `
   <div class="c-modal-message l-modal-content--centered">
-  <h2>First split preference:</h2>
+  <modal-close-button @click="emitClose"/>
+  <br>
+  <h2>Dimension Split Preference</h2>
     <div style="display: flex; flex-direction: row; align-items: center;">
       <button
         v-for="(id, name) in dimensionOptions"
@@ -86,7 +88,7 @@ Vue.component("modal-preferred-tree", {
       </button>
     </div>
   <br>
-  <h2>Second split preference:</h2>
+  <h2>Pace split Preference</h2>
     <div style="display: flex; flex-direction: row; align-items: center;">
       <button
         v-for="(id, name) in paceOptions"
@@ -105,8 +107,3 @@ Vue.component("modal-preferred-tree", {
   </div>
   `
 });
-
-// So, to recap:
-// In the beginning, the universe was created.
-// This has made a lot of people very angry,
-// and has been widely regarded as a bad move.

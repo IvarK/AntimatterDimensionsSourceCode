@@ -31,52 +31,12 @@ class Galaxy {
    * @returns {number} Max number of galaxies (total)
    */
   static buyableGalaxies(currency) {
-    const constantTerm = Galaxy.baseCost;
-    const linearTerm = Galaxy.costMult;
-    const quadraticBegin = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart - 1;
-    // Separate because it's applied post remote scaling:
-    const finalOffset = Effects.sum(InfinityUpgrade.resetBoost) +
-      (InfinityChallenge(5).isCompleted ? 1 : 0);
-
-    const costDivision = GlyphAlteration.isAdded("power") ? getSecondaryGlyphEffect("powerpow") : 1;
-
-    const quantity = (currency / costDivision - constantTerm + finalOffset) / linearTerm;
-
-    let unroundedGalaxyAmount;
-
-    if (quantity < quadraticBegin) {
-      unroundedGalaxyAmount = quantity;
-    } else {
-      // Cost is x + ((x - quadraticBegin) ** 2 + x - quadraticBegin) / linearTerm =
-      // x + x ** 2 / linearTerm - 2 * x * quadraticBegin / linearTerm + quadraticBegin ** 2 / linearTerm +
-      // x / linearTerm - quadraticBegin / linearTerm = (1 / linearTerm) * x ** 2 +
-      // (1 + (-2 * quadraticBegin + 1) / linearTerm) * x + (quadraticBegin ** 2 - quadraticBegin) / linearTerm.
-      const quadraticCoefficient = 1 / linearTerm;
-      const linearCoefficient = 1 + (-2 * quadraticBegin + 1) / linearTerm;
-      const constantCoefficient = (Math.pow(quadraticBegin, 2) - quadraticBegin) / linearTerm - quantity;
-      unroundedGalaxyAmount = (-linearCoefficient + Math.sqrt(
-        Math.pow(linearCoefficient, 2) - 4 * quadraticCoefficient * constantCoefficient)) / (2 * quadraticCoefficient);
-    }
-
-    let galaxyAmount = Math.round(unroundedGalaxyAmount);
-
-    if (this.requirementAt(galaxyAmount).amount > currency) {
-      galaxyAmount -= 1;
-    }
-
-    if (galaxyAmount >= REMOTE_SCALING_START && !RealityUpgrade(21).isBought) {
-      // We haven't considered remote scaling, give up and do binary search.
-      const bulk = bulkBuyBinarySearch(new Decimal(currency), {
-        costFunction: x => this.requirementAt(x).amount,
-        cumulative: false,
-      }, REMOTE_SCALING_START);
-      if (!bulk) throw new Error("Unexpected failure to calculate galaxy purchase");
-      // The formula we are using is the formula for the price of the *next* galaxy, given
-      // a quantity. So we add 1 when we return
-      return REMOTE_SCALING_START + bulk.quantity;
-    }
-
-    return galaxyAmount + 1;
+    const bulk = bulkBuyBinarySearch(new Decimal(currency), {
+      costFunction: x => this.requirementAt(x).amount,
+      cumulative: false,
+    }, player.galaxies);
+    if (!bulk) throw new Error("Unexpected failure to calculate galaxy purchase");
+    return player.galaxies + bulk.quantity;
   }
 
   static requirementAt(galaxies) {

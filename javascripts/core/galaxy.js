@@ -6,7 +6,7 @@ const GALAXY_TYPE = {
   REMOTE: 2
 };
 
-const REMOTE_SCALING_START = 800
+const REMOTE_SCALING_START = 800;
 
 class GalaxyRequirement {
   constructor(tier, amount) {

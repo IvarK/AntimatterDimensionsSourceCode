@@ -92,7 +92,7 @@ class Galaxy {
     }
 
     if (type === GALAXY_TYPE.REMOTE) {
-      amount *= Math.pow(1.002, galaxies - REMOTE_SCALING_START);
+      amount *= Math.pow(1.002, galaxies - (REMOTE_SCALING_START - 1));
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);

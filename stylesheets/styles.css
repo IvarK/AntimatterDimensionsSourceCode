@@ -7347,6 +7347,10 @@ kbd {
   transition-duration: 0.2s;
 }
 
+.o-alchemy-reaction-path--not-focused {
+  opacity: 0.5;
+}
+
 .o-alchemy-node {
   color: black;
   position: absolute;

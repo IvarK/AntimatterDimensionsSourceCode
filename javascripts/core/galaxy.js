@@ -6,6 +6,8 @@ const GALAXY_TYPE = {
   REMOTE: 2
 };
 
+const REMOTE_SCALING_START = 800
+
 class GalaxyRequirement {
   constructor(tier, amount) {
     this.tier = tier;
@@ -62,16 +64,16 @@ class Galaxy {
       galaxyAmount -= 1;
     }
 
-    if (galaxyAmount >= 800 && !RealityUpgrade(21).isBought) {
+    if (galaxyAmount >= REMOTE_SCALING_START && !RealityUpgrade(21).isBought) {
       // We haven't considered remote scaling, give up and do binary search.
       const bulk = bulkBuyBinarySearch(new Decimal(currency), {
         costFunction: x => this.requirementAt(x).amount,
         cumulative: false,
-      }, 800);
+      }, REMOTE_SCALING_START);
       if (!bulk) throw new Error("Unexpected failure to calculate galaxy purchase");
       // The formula we are using is the formula for the price of the *next* galaxy, given
       // a quantity. So we add 1 when we return
-      return 800 + bulk.quantity;
+      return REMOTE_SCALING_START + bulk.quantity;
     }
 
     return galaxyAmount + 1;
@@ -90,7 +92,7 @@ class Galaxy {
     }
 
     if (type === GALAXY_TYPE.REMOTE) {
-      amount *= Math.pow(1.002, galaxies - 800);
+      amount *= Math.pow(1.002, galaxies - REMOTE_SCALING_START);
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
@@ -145,7 +147,7 @@ class Galaxy {
   }
 
   static typeAt(galaxies) {
-    if (galaxies >= 800 && !RealityUpgrade(21).isBought) {
+    if (galaxies >= REMOTE_SCALING_START && !RealityUpgrade(21).isBought) {
       return GALAXY_TYPE.REMOTE;
     }
     if (EternityChallenge(5).isRunning || galaxies >= this.costScalingStart) {

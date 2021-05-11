@@ -48,7 +48,10 @@ Vue.component("sacrificed-glyphs", {
         },
         formatNewAmount() {
           return format(this.currentSacrifice.sacrificeValue, 2, 2);
-        }
+        },
+        formatTotalAmount() {
+          return format(this.amount + this.currentSacrifice.sacrificeValue, 2, 2);
+        },
       },
       methods: {
         update() {
@@ -67,9 +70,8 @@ Vue.component("sacrificed-glyphs", {
             </div>
             <div class="l-sacrificed-glyphs__type-amount c-sacrificed-glyphs__type-amount">
               {{formatAmount}}
-              <span v-if="showNewSacrifice"
-                    class="c-sacrificed-glyphs__type-new-amount">
-                + {{formatNewAmount}}
+              <span v-if="showNewSacrifice" class="c-sacrificed-glyphs__type-new-amount">
+                + {{formatNewAmount}} ➜ {{formatTotalAmount}}
               </span>
             </div>
           </div>

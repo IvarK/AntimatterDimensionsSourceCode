@@ -116,6 +116,10 @@ Vue.component("tt-shop", {
     <div id="TTbuttons">
       <div class="ttshop-container ttshop-background">
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
+        <button
+        class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
+        onClick="Modal.preferredTree.show()"
+        ><i class='fas fa-cog'></i></button>
           <p id="timetheorems">
             <span class="c-tt-amount">
               {{ formattedTheorems }}

@@ -77,6 +77,7 @@ Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
 Modal.singularityMilestones = new Modal("singularity-milestones-modal");
 Modal.enterDilation = new Modal("modal-enter-dilation");
+Modal.preferredTree = new Modal("modal-preferred-tree");
 Modal.startEternityChallenge = new ChallengeConfirmationModal("modal-start-eternity-challenge");
 Modal.startInfinityChallenge = new ChallengeConfirmationModal("modal-start-infinity-challenge");
 Modal.startNormalChallenge = new ChallengeConfirmationModal("modal-start-normal-challenge");

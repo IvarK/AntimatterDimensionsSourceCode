@@ -86,7 +86,7 @@ function studiesUntil(id) {
   } else if (id > 103) {
     // If we haven't chosen dimension paths, and shift clicked something below
     // them, we don't buy anything until the player makes their selection
-    if (!TimeStudy.preferredPaths.dimensionPath.path) {
+    if (TimeStudy.preferredPaths.dimensionPath.path.length == 0) {
       GameUI.notify.error("You haven't selected a preferred dimension path!");
       return;
     }

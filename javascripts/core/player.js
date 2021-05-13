@@ -57,7 +57,7 @@ let player = {
       mode: 0,
       rm: new Decimal(1),
       glyph: 0,
-      isActive: true
+      isActive: false
     },
     eternity: {
       mode: 0,

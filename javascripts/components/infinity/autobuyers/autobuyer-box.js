@@ -16,8 +16,10 @@ Vue.component("autobuyer-box", {
         };
       },
       computed: {
+        // Rounds UP to the nearest 0.01 so that eg. 0.103 doesn't display as 0.10, appearing maxed when it isn't
         intervalDisplay() {
-          return format(TimeSpan.fromMilliseconds(this.interval).totalSeconds, 2, 2);
+          const sec = TimeSpan.fromMilliseconds(this.interval).totalSeconds;
+          return format(Math.ceil(100 * sec) / 100, 2, 2);
         }
       },
       methods: {

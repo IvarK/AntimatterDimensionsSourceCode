@@ -32,7 +32,7 @@ GameDatabase.eternity.upgrades = {
     cost: 5e4,
     description: "Infinity Dimensions multiplier based on sum of Infinity Challenge times",
     effect: () => Decimal.pow(2, 30 / Time.infinityChallengeSum.totalSeconds),
-    cap: Decimal.pow(2, 30 / 0.61),
+    cap: DC.D2P30D0_61,
     formatEffect: value => formatX(value, 2, 1)
   },
   tdMultAchs: {

@@ -45,7 +45,7 @@ class MatterDimensionState {
   }
 
   get commonDarkMult() {
-    return new Decimal(1).timesEffectsOf(
+    return DC.D1.timesEffectsOf(
       SingularityMilestone.darkFromTesseracts,
       SingularityMilestone.darkFromGlyphLevel,
       SingularityMilestone.darkFromTheorems,

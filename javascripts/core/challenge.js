@@ -19,7 +19,7 @@ function tryUnlockInfinityChallenges() {
 function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
     if (AntimatterDimension(2).amount.neq(0)) {
-      if (player.matter.eq(0)) player.matter = new Decimal(1);
+      if (player.matter.eq(0)) player.matter = DC.D1;
       player.matter = player.matter
         .times(Decimal.pow((1.03 + DimBoost.totalBoosts / 200 + player.galaxies / 100), diff / 100));
     }
@@ -113,7 +113,7 @@ class NormalChallengeState extends GameMechanicState {
 
   get goal() {
     if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(this.id)) {
-      return Decimal.pow10(1e15);
+      return DC.E1E15;
     }
     return Decimal.NUMBER_MAX_VALUE;
   }

@@ -291,7 +291,7 @@ const EnslavedProgress = (function() {
 
 const Tesseracts = {
   costs: (function() {
-    const costs = [Decimal.pow10(20e6), Decimal.pow10(40e6), Decimal.pow10(60e6)];
+    const costs = [DC.E2E7, DC.E4E7, DC.E6E7];
     for (let i = 0; i < 32; i++) {
       costs.push(costs[i + 2].pow(2 * (i + 1)));
     }
@@ -301,9 +301,9 @@ const Tesseracts = {
   increases: (function() {
     const increases = [];
     for (let i = 0; i < 34; i++) {
-      increases.push(500e3 * Math.pow(2, i));
+      increases.push(5e5 * Math.pow(2, i));
     }
-    increases.unshift(500e3);
+    increases.unshift(5e5);
     return increases;
   }())
 };

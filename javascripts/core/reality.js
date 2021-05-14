@@ -338,7 +338,7 @@ function finishProcessReality(realityProps) {
   recalculateAllGlyphs();
   Glyphs.updateGlyphCountForV(true);
 
-  player.sacrificed = new Decimal(0);
+  player.sacrificed = DC.D0;
 
   lockAchievementsOnReality();
 
@@ -359,8 +359,8 @@ function finishProcessReality(realityProps) {
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.break = false;
-  player.infMult = new Decimal(1);
-  player.infMultCost = new Decimal(10);
+  player.infMult = DC.D1;
+  player.infMultCost = DC.E1;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   Replicanti.reset(true);
@@ -404,7 +404,7 @@ function finishProcessReality(realityProps) {
   player.dilation.active = false;
   Currency.tachyonParticles.reset();
   Currency.dilatedTime.reset();
-  player.dilation.nextThreshold = new Decimal(1000);
+  player.dilation.nextThreshold = DC.E3;
   player.dilation.baseTachyonGalaxies = 0;
   player.dilation.totalTachyonGalaxies = 0;
   player.dilation.upgrades.clear();
@@ -413,9 +413,9 @@ function finishProcessReality(realityProps) {
     2: 0,
     3: 0
   };
-  player.records.thisInfinity.maxAM = new Decimal(0);
-  player.records.thisEternity.maxAM = new Decimal(0);
-  player.dilation.lastEP = new Decimal(-1);
+  player.records.thisInfinity.maxAM = DC.D0;
+  player.records.thisEternity.maxAM = DC.D0;
+  player.dilation.lastEP = DC.DM1;
   Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
   player.celestials.laitela.entropy = 0;
@@ -431,13 +431,13 @@ function finishProcessReality(realityProps) {
   player.celestials.ra.peakGamespeed = 1;
 
   InfinityDimensions.resetAmount();
-  player.records.thisInfinity.bestIPmin = new Decimal(0);
-  player.records.bestInfinity.bestIPminEternity = new Decimal(0);
-  player.records.thisEternity.bestEPmin = new Decimal(0);
-  player.records.thisEternity.bestInfinitiesPerMs = new Decimal(0);
-  player.records.thisEternity.bestIPMsWithoutMaxAll = new Decimal(0);
-  player.records.bestEternity.bestEPminReality = new Decimal(0);
-  player.records.thisReality.bestEternitiesPerMs = new Decimal(0);
+  player.records.thisInfinity.bestIPmin = DC.D0;
+  player.records.bestInfinity.bestIPminEternity = DC.D0;
+  player.records.thisEternity.bestEPmin = DC.D0;
+  player.records.thisEternity.bestInfinitiesPerMs = DC.D0;
+  player.records.thisEternity.bestIPMsWithoutMaxAll = DC.D0;
+  player.records.bestEternity.bestEPminReality = DC.D0;
+  player.records.thisReality.bestEternitiesPerMs = DC.D0;
   resetTimeDimensions();
   resetTickspeed();
   AchievementTimers.marathon2.reset();

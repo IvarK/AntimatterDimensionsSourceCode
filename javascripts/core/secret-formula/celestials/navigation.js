@@ -350,7 +350,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             if (complete >= 1) return "Effarig's Reality";
             const ep = Effarig.isRunning ? Currency.eternityPoints.value : 0;
-            const goal = new Decimal("1e4000");
+            const goal = DC.E4000;
             return [
               "Effarig's Reality",
               `Reach ${format(ep, 2)} / ${format(goal, 2)}`,
@@ -517,7 +517,7 @@ GameDatabase.celestials.navigation = (function() {
           text: complete => {
             if (complete >= 1) return "The Enslaved Ones' Reality";
             const ep = Enslaved.isRunning ? Currency.eternityPoints.value : 0;
-            const goal = new Decimal("1e4000");
+            const goal = DC.E4000;
             return [
               "The Enslaved Ones' Reality",
               `Reach ${format(ep, 2)} / ${format(goal, 2)}`,

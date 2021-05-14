@@ -23,7 +23,7 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
   }
 
   get antimatterCost() {
-    return new Decimal(1e140);
+    return DC.E140;
   }
 
   get canBeBought() {

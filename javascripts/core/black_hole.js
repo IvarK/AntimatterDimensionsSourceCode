@@ -10,7 +10,7 @@ class BlackHoleUpgradeState {
       initialCost,
       costMult,
       0.2,
-      new Decimal("1e310"),
+      DC.E310,
       1e5,
       10));
     this.id = config.id;

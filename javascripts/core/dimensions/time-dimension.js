@@ -20,7 +20,7 @@ function resetTimeDimensions() {
 function fullResetTimeDimensions() {
   for (const dim of TimeDimensions.all) {
     dim.cost = new Decimal(dim.baseCost);
-    dim.amount = new Decimal(0);
+    dim.amount = DC.D0;
     dim.bought = 0;
   }
 }
@@ -111,13 +111,13 @@ function timeDimensionCommonMultiplier() {
 class TimeDimensionState extends DimensionState {
   constructor(tier) {
     super(() => player.dimensions.time, tier);
-    const BASE_COSTS = [null, 1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"];
-    this._baseCost = new Decimal(BASE_COSTS[tier]);
+    const BASE_COSTS = [null, DC.D1, DC.D5, DC.E2, DC.E3, DC.E2350, DC.E2650, DC.E3000, DC.E3350];
+    this._baseCost = BASE_COSTS[tier];
     const COST_MULTS = [null, 3, 9, 27, 81, 24300, 72900, 218700, 656100];
     this._costMultiplier = COST_MULTS[tier];
     const E6000_SCALING_AMOUNTS = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456];
     this._e6000ScalingAmount = E6000_SCALING_AMOUNTS[tier];
-    const COST_THRESHOLDS = [Decimal.NUMBER_MAX_VALUE, "1e1300", "1e6000"];
+    const COST_THRESHOLDS = [Decimal.NUMBER_MAX_VALUE, DC.E1300, DC.E6000];
     this._costIncreaseThresholds = COST_THRESHOLDS;
   }
 
@@ -158,7 +158,7 @@ class TimeDimensionState extends DimensionState {
   get multiplier() {
     const tier = this._tier;
 
-    if (EternityChallenge(11).isRunning) return new Decimal(1);
+    if (EternityChallenge(11).isRunning) return DC.D1;
     let mult = GameCache.timeDimensionCommonMultiplier.value
       .timesEffectsOf(
         tier === 1 ? TimeStudy(11) : null,
@@ -191,7 +191,7 @@ class TimeDimensionState extends DimensionState {
   get productionPerSecond() {
     if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning ||
       (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
-        return new Decimal(0);
+        return DC.D0;
     }
 
     if (EternityChallenge(11).isRunning) {
@@ -210,7 +210,7 @@ class TimeDimensionState extends DimensionState {
   get rateOfChange() {
     const tier = this._tier;
     if (tier === 8) {
-      return new Decimal(0);
+      return DC.D0;
     }
     const toGain = TimeDimension(tier + 1).productionPerSecond;
     const current = Decimal.max(this.amount, 1);
@@ -226,7 +226,7 @@ class TimeDimensionState extends DimensionState {
   }
 
   get powerMultiplier() {
-    return new Decimal(4).timesEffectsOf(this._tier === 8 ? GlyphSacrifice.time : null);
+    return DC.D4.timesEffectsOf(this._tier === 8 ? GlyphSacrifice.time : null);
   }
 
   get e6000ScalingAmount() {

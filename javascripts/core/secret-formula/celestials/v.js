@@ -10,8 +10,8 @@ GameDatabase.celestials.v = {
     realities: 10000,
     eternities: 1e70,
     infinities: 1e160,
-    dilatedTime: new Decimal("1e320"),
-    replicanti: new Decimal("1e320000"),
+    dilatedTime: DC.E320,
+    replicanti: DC.E320000,
     rm: 1e60,
   },
   runUnlocks: [
@@ -51,7 +51,7 @@ GameDatabase.celestials.v = {
       formatRecord: x => format(Decimal.pow10(x), 2),
       shardReduction: tiers => 1.2e5 * tiers,
       maxShardReduction: goal => goal - 6e5,
-      perReductionStep: Decimal.pow10(1200),
+      perReductionStep: DC.E1200,
       mode: V_REDUCTION_MODE.DIVISION
     },
     {
@@ -65,7 +65,7 @@ GameDatabase.celestials.v = {
       formatRecord: x => format(Decimal.pow10(x)),
       shardReduction: tiers => 50e6 * tiers,
       maxShardReduction: goal => goal - 400e6,
-      perReductionStep: Decimal.pow10(5e5),
+      perReductionStep: DC.E500000,
       mode: V_REDUCTION_MODE.DIVISION
     },
     {

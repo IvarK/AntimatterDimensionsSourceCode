@@ -3,7 +3,7 @@
 // Multiplier applied to all Antimatter Dimensions, regardless of tier. This is cached using a Lazy
 // and invalidated every update.
 function antimatterDimensionCommonMultiplier() {
-  let multiplier = new Decimal(1);
+  let multiplier = DC.D1;
 
   multiplier = multiplier.times(Achievements.power);
   multiplier = multiplier.times(ShopPurchase.dimPurchases.currentMult);
@@ -50,14 +50,14 @@ function antimatterDimensionCommonMultiplier() {
 
 function getDimensionFinalMultiplierUncached(tier) {
   if (tier < 1 || tier > 8) throw new Error(`Invalid Antimatter Dimension tier ${tier}`);
-  if (NormalChallenge(10).isRunning && tier > 6) return new Decimal(1);
+  if (NormalChallenge(10).isRunning && tier > 6) return DC.D1;
   if (EternityChallenge(11).isRunning) {
     return Currency.infinityPower.value.pow(
       getInfinityConversionRate()
       ).max(1).times(DimBoost.multiplierToNDTier(tier));
   }
 
-  let multiplier = new Decimal(1);
+  let multiplier = DC.D1;
 
   multiplier = applyNDMultipliers(multiplier, tier);
   multiplier = applyNDPowers(multiplier, tier);
@@ -97,7 +97,7 @@ function applyNDMultipliers(mult, tier) {
   multiplier = multiplier.times(Decimal.pow(AntimatterDimensions.buyTenMultiplier, buy10Value));
   multiplier = multiplier.times(DimBoost.multiplierToNDTier(tier));
 
-  let infinitiedMult = new Decimal(1).timesEffectsOf(
+  let infinitiedMult = DC.D1.timesEffectsOf(
     AntimatterDimension(tier).infinityUpgrade,
     BreakInfinityUpgrade.infinitiedMult
   );
@@ -432,7 +432,7 @@ class AntimatterDimensionState extends DimensionState {
     if (tier === 8 ||
       (tier > 3 && EternityChallenge(3).isRunning) ||
       (tier > 6 && NormalChallenge(12).isRunning)) {
-      return new Decimal(0);
+      return DC.D0;
     }
 
     let toGain;
@@ -527,13 +527,13 @@ class AntimatterDimensionState extends DimensionState {
   }
 
   reset() {
-    this.amount = new Decimal(0);
+    this.amount = DC.D0;
     this.bought = 0;
     this.costBumps = 0;
   }
 
   resetAmount() {
-    this.amount = new Decimal(0);
+    this.amount = DC.D0;
   }
 
   challengeCostBump() {
@@ -568,12 +568,12 @@ class AntimatterDimensionState extends DimensionState {
     const postBreak = (player.break && !NormalChallenge.isRunning) ||
       InfinityChallenge.isRunning ||
       Enslaved.isRunning;
-    return postBreak ? Decimal.MAX_VALUE : new Decimal("1e315");
+    return postBreak ? Decimal.MAX_VALUE : DC.E315;
   }
 
   get productionPerSecond() {
     const tier = this.tier;
-    if (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension) return new Decimal(0);
+    if (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension) return DC.D0;
     let amount = this.totalAmount;
     if (NormalChallenge(12).isRunning) {
       if (tier === 2) amount = amount.pow(1.6);
@@ -625,9 +625,9 @@ const AntimatterDimensions = {
   },
 
   get buyTenMultiplier() {
-    if (NormalChallenge(7).isRunning) return new Decimal(2).min(1 + DimBoost.totalBoosts / 5);
+    if (NormalChallenge(7).isRunning) return DC.D2.min(1 + DimBoost.totalBoosts / 5);
 
-    let mult = new Decimal(2).plusEffectsOf(
+    let mult = DC.D2.plusEffectsOf(
       Achievement(141).effects.buyTenMult,
       EternityChallenge(3).reward
     );

@@ -67,7 +67,7 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "antimatter",
       current: () => Currency.antimatter.value,
-      required: completions => new Decimal("1e300000").pow(completions).times("1e500000"),
+      required: completions => DC.E300000.pow(completions).times(DC.E500000),
       formatValue: value => format(value, 0, 0)
     }
   },
@@ -77,7 +77,7 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "Infinity Points",
       current: () => Currency.infinityPoints.value,
-      required: completions => new Decimal("1e1000").pow(completions).times("1e4000"),
+      required: completions => DC.E1000.pow(completions).times(DC.E4000),
       formatValue: value => format(value, 0, 0)
     }
   },
@@ -87,7 +87,7 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "Infinity Power",
       current: () => Currency.infinityPower.value,
-      required: completions => new Decimal("1e2000").pow(completions).times("1e17500"),
+      required: completions => DC.E2000.pow(completions).times(DC.E17500),
       formatValue: value => format(value, 0, 0)
     }
   },
@@ -97,7 +97,7 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "Eternity Points",
       current: () => Currency.eternityPoints.value,
-      required: completions => new Decimal("1e20").pow(completions).times("1e100"),
+      required: completions => DC.E20.pow(completions).times(DC.E100),
       formatValue: value => format(value, 0, 0)
     }
   },

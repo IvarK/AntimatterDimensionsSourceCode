@@ -31,7 +31,7 @@ function replicantiGalaxy() {
     if (galaxyGain < 1) return;
     player.replicanti.amount = Decimal.pow10(logReplicanti - LOG10_MAX_VALUE * galaxyGain);
   } else {
-    player.replicanti.amount = new Decimal(1);
+    player.replicanti.amount = DC.D1;
   }
   addReplicantiGalaxies(galaxyGain);
 }
@@ -339,13 +339,13 @@ const ReplicantiUpgrade = {
     get costIncrease() {
       const galaxies = this.value;
       let increase = EternityChallenge(6).isRunning
-        ? Decimal.pow(1e2, galaxies).times(1e2)
-        : Decimal.pow(1e5, galaxies).times(1e25);
+        ? DC.E2.pow(galaxies).times(DC.E2)
+        : DC.E5.pow(galaxies).times(DC.E25);
       if (galaxies >= this.distantRGStart) {
-        increase = increase.times(Decimal.pow(1e50, galaxies - this.distantRGStart + 5));
+        increase = increase.times(DC.E50.pow(galaxies - this.distantRGStart + 5));
       }
       if (galaxies >= this.remoteRGStart) {
-        increase = increase.times(Decimal.pow(1e5, Math.pow(galaxies - this.remoteRGStart + 1, 2)));
+        increase = increase.times(DC.E5.pow(Math.pow(galaxies - this.remoteRGStart + 1, 2)));
       }
       return increase;
     }
@@ -402,23 +402,23 @@ const Replicanti = {
   },
   reset(force = false) {
     player.replicanti.unl = force ? false : EternityMilestone.unlockReplicanti.isReached;
-    player.replicanti.amount = player.replicanti.unl ? new Decimal(1) : new Decimal(0);
+    player.replicanti.amount = player.replicanti.unl ? DC.D1 : DC.D0;
     player.replicanti.timer = 0;
     player.replicanti.chance = 0.01;
-    player.replicanti.chanceCost = new Decimal(1e150);
+    player.replicanti.chanceCost = DC.E150;
     player.replicanti.interval = 1000;
-    player.replicanti.intervalCost = new Decimal(1e140);
+    player.replicanti.intervalCost = DC.E140;
     player.replicanti.boughtGalaxyCap = 0;
     player.replicanti.galaxies = 0;
-    player.replicanti.galCost = new Decimal(1e170);
+    player.replicanti.galCost = DC.E170;
   },
   unlock(freeUnlock = false) {
     if (player.replicanti.unl) return;
-    if (freeUnlock || Currency.infinityPoints.gte(1e140)) {
-      if (!freeUnlock) Currency.infinityPoints.subtract(1e140);
+    if (freeUnlock || Currency.infinityPoints.gte(DC.E140)) {
+      if (!freeUnlock) Currency.infinityPoints.subtract(DC.E140);
       player.replicanti.unl = true;
       player.replicanti.timer = 0;
-      player.replicanti.amount = new Decimal(1);
+      player.replicanti.amount = DC.D1;
     }
   },
   get amount() {

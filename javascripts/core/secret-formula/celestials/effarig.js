@@ -28,8 +28,8 @@ GameDatabase.celestials.effarig = {
       get description() {
         return ` Infinities raise the Replicanti cap
         Infinities increase your max Replicanti Galaxies
-        Base Infinity Point gain is capped at ${format(1e200)} in Effarig's Reality
-        Each type of Infinity Point multiplier is capped at ${format(1e50)} in Effarig's Reality`;
+        Base Infinity Point gain is capped at ${format(DC.E200)} in Effarig's Reality
+        Each type of Infinity Point multiplier is capped at ${format(DC.E50)} in Effarig's Reality`;
       },
     },
     eternity: {

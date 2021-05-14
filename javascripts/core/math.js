@@ -73,7 +73,7 @@ function bulkBuyBinarySearch(money, costInfo, alreadyBought) {
   if (!isCumulative) {
     return { quantity: canBuy, purchasePrice: baseCost };
   }
-  let otherCost = new Decimal(0);
+  let otherCost = DC.D0;
   // Account for costs leading up to that purchase; we are basically adding things
   // up until they are insignificant
   let count = 0;

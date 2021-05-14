@@ -121,15 +121,15 @@ const AutomatorLexer = (() => {
 
   createInCategory(AutomatorCurrency, "PendingIP", /pending[ \t]+ip/i, {
     $autocomplete: "pending IP",
-    $getter: () => (Player.canCrunch ? gainedInfinityPoints() : new Decimal(0))
+    $getter: () => (Player.canCrunch ? gainedInfinityPoints() : DC.D0)
   });
   createInCategory(AutomatorCurrency, "PendingEP", /pending[ \t]+ep/i, {
     $autocomplete: "pending EP",
-    $getter: () => (Player.canEternity ? gainedEternityPoints() : new Decimal(0))
+    $getter: () => (Player.canEternity ? gainedEternityPoints() : DC.D0)
   });
   createInCategory(AutomatorCurrency, "PendingRM", /pending[ \t]+rm/i, {
     $autocomplete: "pending RM",
-    $getter: () => (isRealityAvailable() ? gainedRealityMachines() : new Decimal(0))
+    $getter: () => (isRealityAvailable() ? gainedRealityMachines() : DC.D0)
   });
   createInCategory(AutomatorCurrency, "GlyphLevel", /glyph[ \t]+level/i, {
     $autocomplete: "glyph level",

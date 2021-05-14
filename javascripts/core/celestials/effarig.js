@@ -29,7 +29,7 @@ const Effarig = {
     return EFFARIG_STAGES.REALITY;
   },
   get eternityCap() {
-    return this.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? new Decimal(1e50) : undefined;
+    return this.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? DC.E50 : undefined;
   },
   get glyphLevelCap() {
     switch (this.currentStage) {

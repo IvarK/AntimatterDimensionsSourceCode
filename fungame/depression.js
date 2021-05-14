@@ -13,10 +13,10 @@ function updateUI() {
 }
 
 let game = {
-  amounts: [new Decimal(0)],
-  purchases: [new Decimal(0)],
-  depression: new Decimal(1),
-  prestige: [new Decimal(1)]
+  amounts: [DC.D0],
+  purchases: [DC.D0],
+  depression: DC.D1,
+  prestige: [DC.D1]
 };
 
 class StuffState {
@@ -71,9 +71,9 @@ class StuffState {
     game.depression = game.depression.minus(this.cost);
     const nextStuff = this.nextStuff;
     if (!nextStuff.isUnlocked) {
-      nextStuff.amount = new Decimal(0);
-      nextStuff.purchases = new Decimal(0);
-      nextStuff.prestige = new Decimal(1);
+      nextStuff.amount = DC.D0;
+      nextStuff.purchases = DC.D0;
+      nextStuff.prestige = DC.D1;
     }
     this.amount = this.amount.plus(1).max(this.amount.times(1.05).min(nextStuff.amount.times(10000)));
     this.purchases = this.purchases.plus(1);
@@ -99,9 +99,9 @@ class StuffState {
   doPrestige() {
     this.prestige = this.nextPrestige;
     game = {
-      amounts: [new Decimal(0)],
-      purchases: [new Decimal(0)],
-      depression: new Decimal(1),
+      amounts: [DC.D0],
+      purchases: [DC.D0],
+      depression: DC.D1,
       prestige: game.prestige
     };
     updateUI();
@@ -213,9 +213,9 @@ const StuffButton = {
     stuff: Object
   },
   data: () => ({
-    amount: new Decimal(0),
-    cost: new Decimal(0),
-    prestige: new Decimal(1)
+    amount: DC.D0,
+    cost: DC.D0,
+    prestige: DC.D1
   }),
   methods: {
     update() {
@@ -242,7 +242,7 @@ const PrestigeButton = {
   },
   data: () => ({
     canPrestige: false,
-    nextPrestige: new Decimal(1)
+    nextPrestige: DC.D1
   }),
   methods: {
     update() {
@@ -264,7 +264,7 @@ const Depression = {
     "prestige-button": PrestigeButton
   },
   data: () => ({
-    depression: new Decimal(1),
+    depression: DC.D1,
     stuffCount: 0
   }),
   computed: {

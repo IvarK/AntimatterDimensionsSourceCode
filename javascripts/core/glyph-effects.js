@@ -20,7 +20,7 @@ const GlyphCombiner = Object.freeze({
   // we have to add 1 - x.length to the actual sum, so that if all the exponents are close to 1 the result
   // is also close to 1 rather than close to x.length.
   addExponents: x => x.reduce(Number.sumReducer, 1 - x.length),
-  multiplyDecimal: x => x.reduce(Decimal.prodReducer, new Decimal(1))
+  multiplyDecimal: x => x.reduce(Decimal.prodReducer, DC.D1)
 });
 
 /**
@@ -458,7 +458,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Infinity gain ×{value}",
     genericDesc: "Infinity gain multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("infinity")
-      ? Decimal.pow(1.02, level)
+      ? DC.D1_02.pow(level)
       : Decimal.pow(level * strength, 1.5).times(2)),
     formatEffect: x => format(x, 2, 1),
     combine: GlyphCombiner.multiplyDecimal,

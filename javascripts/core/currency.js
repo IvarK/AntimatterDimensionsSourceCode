@@ -191,7 +191,7 @@ class DecimalCurrency extends Currency {
   get operations() { return MathOperations.decimal; }
   get mantissa() { return this.value.mantissa; }
   get exponent() { return this.value.exponent; }
-  get startingValue() { return new Decimal(0); }
+  get startingValue() { return DC.D0; }
 }
 
 Currency.antimatter = new class extends DecimalCurrency {

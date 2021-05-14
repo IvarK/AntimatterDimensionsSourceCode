@@ -53,7 +53,7 @@ function bigCrunchReset() {
 function bigCrunchUpdateStatistics() {
   player.records.bestInfinity.bestIPminEternity =
     player.records.bestInfinity.bestIPminEternity.clampMin(player.records.thisInfinity.bestIPmin);
-  player.records.thisInfinity.bestIPmin = new Decimal(0);
+  player.records.thisInfinity.bestIPmin = DC.D0;
 
   player.records.thisEternity.bestInfinitiesPerMs = player.records.thisEternity.bestInfinitiesPerMs.clampMin(
     gainedInfinities().round().dividedBy(player.records.thisInfinity.realTime)
@@ -125,12 +125,12 @@ function bigCrunchCheckUnlocks() {
 function secondSoftReset(forcedNDReset = false) {
   player.dimensionBoosts = 0;
   player.galaxies = 0;
-  player.records.thisInfinity.maxAM = new Decimal(0);
+  player.records.thisInfinity.maxAM = DC.D0;
   Currency.antimatter.reset();
   softReset(0, forcedNDReset);
   InfinityDimensions.resetAmount();
   if (player.replicanti.unl)
-    player.replicanti.amount = new Decimal(1);
+    player.replicanti.amount = DC.D1;
   player.replicanti.galaxies = 0;
   player.records.thisInfinity.time = 0;
   player.records.thisInfinity.lastBuyTime = 0;
@@ -218,9 +218,9 @@ class InfinityUpgrade extends SetPurchasableMechanicState {
 
 function totalIPMult() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {
-    return new Decimal(1);
+    return DC.D1;
   }
-  let ipMult = new Decimal(1)
+  let ipMult = DC.D1
     .times(ShopPurchase.IPPurchases.currentMult)
     .timesEffectsOf(
       TimeStudy(41),
@@ -444,5 +444,5 @@ function preProductionGenerateIP(diff) {
     const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
     Currency.infinityPoints.add(gainedThisTick);
   }
-  Currency.infinityPoints.add(BreakInfinityUpgrade.ipGen.effectOrDefault(new Decimal(0)).times(diff / 60000));
+  Currency.infinityPoints.add(BreakInfinityUpgrade.ipGen.effectOrDefault(DC.D0).times(diff / 60000));
 }

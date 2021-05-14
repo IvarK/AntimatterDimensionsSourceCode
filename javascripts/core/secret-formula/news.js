@@ -2421,7 +2421,7 @@ GameDatabase.news = [
   {
     id: "l50",
     text: "You can probably stop farming for eternities now...",
-    get unlocked() { return Currency.eternities.gt(2000000); }
+    get unlocked() { return Currency.eternities.gt(DC.D2E6); }
   },
   {
     id: "l51",
@@ -2730,7 +2730,7 @@ GameDatabase.news = [
   {
     id: "e7",
     get text() {
-      return `${format(new Decimal("1e201600"), 0, 0)} IP? I'm finally done!`;
+      return `${format(DC.E201600, 0, 0)} IP? I'm finally done!`;
     },
     get unlocked() {
       return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;

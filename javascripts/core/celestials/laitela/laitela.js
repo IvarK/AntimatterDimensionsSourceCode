@@ -8,7 +8,7 @@ const Laitela = {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);
       if (d.amount.eq(0) && Currency.darkMatter.gte(d.adjustedStartingCost)) {
-        d.amount = new Decimal(1);
+        d.amount = DC.D1;
         d.timeSinceLastUpdate = 0;
       }
     }
@@ -31,7 +31,7 @@ const Laitela = {
     return 25000;
   },
   get realityMachineCost() {
-    return new Decimal("1e2000");
+    return DC.E2000;
   },
   get canUnlock() {
     return Ra.totalPetLevel >= this.raLevelRequirement &&
@@ -42,7 +42,7 @@ const Laitela = {
   unlock() {
     if (!this.canUnlock) return false;
     Currency.realityMachines.purchase(this.realityMachineCost);
-    MatterDimension(1).amount = new Decimal(1);
+    MatterDimension(1).amount = DC.D1;
     return true;
   },
   get isUnlocked() {
@@ -112,7 +112,7 @@ const Laitela = {
     this.celestial.dimensions = this.celestial.dimensions.map(
       () => (
         {
-          amount: new Decimal(0),
+          amount: DC.D0,
           intervalUpgrades: 0,
           powerDMUpgrades: 0,
           powerDEUpgrades: 0,
@@ -121,7 +121,7 @@ const Laitela = {
         }
       )
     );
-    this.celestial.dimensions[0].amount = new Decimal(1);
+    this.celestial.dimensions[0].amount = DC.D1;
     Currency.darkMatter.reset();
     Currency.darkEnergy.reset();
     return true;

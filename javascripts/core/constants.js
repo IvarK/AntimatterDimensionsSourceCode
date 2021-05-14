@@ -17,7 +17,6 @@ const DC = {
   // C: Calculation. D - .div, P - .pow
 
   DM1: new Decimal("-1"),
-  // Use D0 for all Vue data objects initialization
   D0: new Decimal("0"),
 
   // This block of constants is exclusively used in statistics

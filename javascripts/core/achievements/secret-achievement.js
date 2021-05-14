@@ -39,7 +39,7 @@ class SecretAchievementState extends GameMechanicState {
     if (this.isUnlocked) return;
     // eslint-disable-next-line no-bitwise
     player.secretAchievementBits[this.row - 1] |= this._bitmask;
-    GameUI.notify.success(this.name);
+    GameUI.notify.success(`Secret Achievement: ${this.name}`);
     EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
   }
 

@@ -5565,26 +5565,6 @@ kbd {
   border-color: black;
 }
 
-.o-notification--memory-teresa {
-  background-color: var(--color-ra-pet-teresa);
-  border-color: #5970e3;
-}
-
-.o-notification--memory-effarig {
-  background-color: var(--color-ra-pet-effarig);
-  border-color: #e35959;
-}
-
-.o-notification--memory-enslaved {
-  background-color: var(--color-ra-pet-enslaved);
-  border-color: #ec8c51;
-}
-
-.o-notification--memory-v {
-  background-color: var(--color-ra-pet-v);
-  border-color: #e3c759;
-}
-
 .t-metro .o-notification--success,
 .t-dark-metro .o-notification--success,
 .t-inverted-metro .o-notification--success,

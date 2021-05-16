@@ -9,6 +9,8 @@ Vue.component("replicanti-tab", {
       ec8Purchases: 0,
       amount: new Decimal(0),
       mult: new Decimal(0),
+      hasTDMult: false,
+      multTD: new Decimal(0),
       hasRaisedCap: false,
       replicantiCap: new Decimal(0),
       distantRG: 0,
@@ -68,6 +70,8 @@ Vue.component("replicanti-tab", {
       }
       this.amount.copyFrom(Replicanti.amount);
       this.mult.copyFrom(replicantiMult());
+      this.hasTDMult = DilationUpgrade.tdMultReplicanti.isBought;
+      this.multTD.copyFrom(DilationUpgrade.tdMultReplicanti.effectValue);
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked;
       this.replicantiCap.copyFrom(replicantiCap());
       this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;
@@ -96,10 +100,15 @@ Vue.component("replicanti-tab", {
         </div>
         <p class="c-replicanti-description">
           You have
-          <span class="c-replicanti-description__accent">{{format(amount, 2, 0)}}</span> Replicanti.
-          Translated to
+          <span class="c-replicanti-description__accent">{{format(amount, 2, 0)}}</span>
+          Replicanti, translated to a <br>
           <span class="c-replicanti-description__accent">{{formatX(mult, 2, 2)}}</span>
-          multiplier on all Infinity Dimensions.
+          multiplier on all Infinity Dimensions
+          <span v-if="hasTDMult">
+            <br> and a 
+            <span class="c-replicanti-description__accent">{{formatX(multTD, 2, 2)}}</span>
+            multiplier on all Time Dimensions
+          </span>
         </p>
         <br>
         <div class="l-replicanti-upgrade-row">

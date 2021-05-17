@@ -135,8 +135,8 @@ another ${formatInt(60)} more.
 Distant Galaxy scaling: Above ${formatInt(100)} Antimatter Galaxies the cost increase between Galaxies will increase by
 ${formatInt(2)} per Galaxy, making the next Galaxy cost ${formatInt(62)} more, then ${formatInt(64)} more, etc.
 <br>
-Remote Galaxy scaling: Above ${formatInt(800)} Antimatter Galaxies, the <i>total</i> cost increases by another
-${formatPercents(0.002, 1)} per Galaxy, on top of Distant scaling.
+Remote Galaxy scaling: Above ${formatInt(REMOTE_SCALING_START)} Antimatter Galaxies, the <i>total</i> cost
+increases by another ${formatPercents(0.002, 1)} per Galaxy, on top of Distant scaling.
 <br>
 <br>
 <b>Hotkey: G</b>

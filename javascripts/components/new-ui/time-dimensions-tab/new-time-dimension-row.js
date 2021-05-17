@@ -20,6 +20,9 @@ Vue.component("new-time-dimension-row", {
     };
   },
   computed: {
+    shiftDown() {
+      return ui.view.shiftDown;
+    },
     name() {
       return TimeDimension(this.tier).shortDisplayName;
     },
@@ -29,7 +32,9 @@ Vue.component("new-time-dimension-row", {
         : "";
     },
     buttonContents() {
-      if (!this.isUnlocked) return "Purchase the study";
+      if (!this.isUnlocked && !this.shiftDown) {
+        return `Unlock: ${format(DilationTimeStudyState.studies[this.tier - 3].cost)} TT`;
+      }
       return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2)} EP`;
     },
     showRow() {

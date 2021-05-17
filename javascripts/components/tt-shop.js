@@ -35,7 +35,7 @@ Vue.component("tt-shop", {
       return this.minimizeAvailable && this.shopMinimized;
     },
     formattedTheorems() {
-      if (this.theoremAmount.gte(1e9)) {
+      if (this.theoremAmount.gte(1e6)) {
         return format(this.theoremAmount, 2);
       }
       if (!(Teresa.isRunning || Enslaved.isRunning) &&

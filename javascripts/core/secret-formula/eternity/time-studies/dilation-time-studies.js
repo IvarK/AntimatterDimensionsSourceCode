@@ -16,25 +16,25 @@ GameDatabase.eternity.timeStudies.dilation = [
   {
     id: 2,
     description: "Unlock the 5th Time Dimension",
-    cost: 1000000,
+    cost: 1e6,
     requirement: () => PlayerProgress.dilationUnlocked()
   },
   {
     id: 3,
     description: "Unlock the 6th Time Dimension",
-    cost: 10000000,
+    cost: 1e7,
     requirement: () => TimeStudy.timeDimension(5).isBought
   },
   {
     id: 4,
     description: "Unlock the 7th Time Dimension",
-    cost: 100000000,
+    cost: 1e8,
     requirement: () => TimeStudy.timeDimension(6).isBought
   },
   {
     id: 5,
     description: "Unlock the 8th Time Dimension",
-    cost: 1000000000,
+    cost: 1e9,
     requirement: () => TimeStudy.timeDimension(7).isBought
   },
   {

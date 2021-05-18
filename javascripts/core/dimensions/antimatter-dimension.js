@@ -363,17 +363,25 @@ class AntimatterDimensionState extends DimensionState {
       baseCost: NormalChallenge(6).isRunning ? this._c6BaseCost : this._baseCost,
       baseIncrease: NormalChallenge(6).isRunning ? this._c6BaseCostMultiplier : this._baseCostMultiplier,
       costScale: Player.dimensionMultDecrease,
-      scalingCostThreshold: Number.MAX_VALUE
+      scalingCostThreshold: Number.MAX_VALUE,
+      discount: this.discount
     });
+  }
+
+  get discount() {
+    if (
+      (Pelle.chaos.unlocked && this.tier === 6) ||
+      (PelleUpgrade.chaosEffect1stAnd4th.canBeApplied && (this.tier === 1 || this.tier === 4))
+    ) return Pelle.chaos.dimensionDiscount;
+
+    return new Decimal(1);
   }
 
   /**
    * @returns {Decimal}
    */
   get cost() {
-    let cost = this.costScale.calculateCost(Math.floor(this.bought / 10) + this.costBumps)
-    if (Pelle.chaos.unlocked && this.tier === 6) cost = cost.dividedBy(Pelle.chaos.dimensionDiscount)
-    else if (PelleUpgrade.chaosEffect1stAnd4th.canBeApplied && (this.tier === 1 || this.tier === 4)) cost = cost.dividedBy(Pelle.chaos.dimensionDiscount)
+    let cost = this.costScale.calculateCost(Math.floor(this.bought / 10) + this.costBumps).dividedBy(this.discount);
     return cost;
   }
 

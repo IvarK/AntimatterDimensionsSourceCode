@@ -84,7 +84,12 @@ const Pelle = {
       this.cel[currency].timer += TimeSpan.fromMilliseconds(diff).totalSeconds * 10 / this[currency].fillTime;
       if (this.cel[currency].timer > 10) {
         this.cel[currency].amount = this.cel[currency].amount.plus(this[currency].gain * (Math.floor(this.cel[currency].timer / 10)));
-        this.cel[currency].timer = 0
+        this.cel[currency].timer = 0;
+        if (currency === "chaos") {
+          for (let i = 1; i <= 8; i++) {
+            AntimatterDimension(i).costScale.updateCostScale();
+          }
+        }
       }
     })
 

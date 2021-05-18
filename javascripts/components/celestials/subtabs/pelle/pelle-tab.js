@@ -5,6 +5,7 @@ Vue.component("pelle-tab", {
     return {
       isDoomed: false,
       armageddonInterval: 0,
+      currentArmageddonDuration: 0,
       unstableMatter: new Decimal(0),
       hasFamine: false,
       hasPestilence: false,
@@ -17,6 +18,7 @@ Vue.component("pelle-tab", {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.armageddonInterval = Pelle.armageddonInterval;
+      this.currentArmageddonDuration = Pelle.currentArmageddonDuration;
       this.unstableMatter.copyFrom(player.celestials.pelle.unstableMatter);
       this.hasFamine =  Pelle.famine.unlocked;
       this.hasPestilence = Pelle.pestilence.unlocked;
@@ -54,7 +56,7 @@ Vue.component("pelle-tab", {
   template:
     `<div class="l-pelle-celestial-tab">
       <button @click="getDoomed()">Doom your reality lol</button>
-      <p>Armageddon is happenings every {{ format(armageddonInterval / 1000, 2, 2) }} seconds</p>
+      <p>Armageddon has lasted {{ format(currentArmageddonDuration / 1000, 2, 2) }}/{{ format(armageddonInterval / 1000, 2, 2) }} seconds</p>
       <p>
         You have <b>{{ format(unstableMatter, 2, 2) }}</b>
         Unstable matter, you will gain {{ format(unstableMatterGain, 2, 2) }} 

@@ -69,7 +69,7 @@ const Pelle = {
   },
 
   gameLoop(diff) {
-    if (this.isDoomed && Date.now() - this.cel.lastArmageddonAt > this.armageddonInterval) {
+    if (this.isDoomed && this.currentArmageddonDuration > this.armageddonInterval) {
       this.armageddon(true);
     }
 
@@ -172,6 +172,10 @@ const Pelle = {
 
   get isDoomed() {
     return this.cel.doomed;
+  },
+
+  get currentArmageddonDuration() {
+    return Date.now() - this.cel.lastArmageddonAt;
   },
 
   // Milliseconds

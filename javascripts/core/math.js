@@ -281,11 +281,14 @@ class ExponentialCostScaling {
     this._logBaseCost = ExponentialCostScaling.log10(param.baseCost);
     this._logBaseIncrease = ExponentialCostScaling.log10(param.baseIncrease);
     this._logCostScale = ExponentialCostScaling.log10(param.costScale);
+    this._logDiscount = param.discount ? ExponentialCostScaling.log10(param.discount) : 0;
     if (param.purchasesBeforeScaling !== undefined) {
       this._purchasesBeforeScaling = param.purchasesBeforeScaling;
+    // eslint-disable-next-line no-negated-condition
     } else if (param.scalingCostThreshold !== undefined) {
       this._purchasesBeforeScaling = Math.ceil(
-        (ExponentialCostScaling.log10(param.scalingCostThreshold) - this._logBaseCost) / this._logBaseIncrease);
+        (ExponentialCostScaling.log10(param.scalingCostThreshold) - this._logBaseCost + this._logDiscount) /
+        this._logBaseIncrease);
     } else throw new Error("Must specify either scalingCostThreshold or purchasesBeforeScaling");
     this.updateCostScale();
   }
@@ -305,7 +308,8 @@ class ExponentialCostScaling {
 
   updateCostScale() {
     this._precalcDiscriminant = Math.pow((2 * this._logBaseIncrease + this._logCostScale), 2) -
-      8 * this._logCostScale * (this._purchasesBeforeScaling * this._logBaseIncrease + this._logBaseCost);
+      8 * this._logCostScale *
+      (this._purchasesBeforeScaling * this._logBaseIncrease + this._logBaseCost - this._logDiscount);
     this._precalcCenter = -this._logBaseIncrease / this._logCostScale + this._purchasesBeforeScaling + 0.5;
   }
 
@@ -316,10 +320,11 @@ class ExponentialCostScaling {
   calculateCost(currentPurchases) {
     const logMult = this._logBaseIncrease;
     const logBase = this._logBaseCost;
+    const logDiscount = this._logDiscount;
     const excess = currentPurchases - this._purchasesBeforeScaling;
     const logCost = excess > 0
-      ? currentPurchases * logMult + logBase + 0.5 * excess * (excess + 1) * this._logCostScale
-      : currentPurchases * logMult + logBase;
+      ? currentPurchases * logMult + logBase - logDiscount + 0.5 * excess * (excess + 1) * this._logCostScale
+      : currentPurchases * logMult + logBase - logDiscount;
     return Decimal.pow(10, logCost);
   }
 
@@ -338,8 +343,9 @@ class ExponentialCostScaling {
     const logMoney = money.log10();
     const logMult = this._logBaseIncrease;
     const logBase = this._logBaseCost;
+    const logDiscount = this._logDiscount;
     // The 1 + is because the multiplier isn't applied to the first purchase
-    let newPurchases = Math.floor(1 + (logMoney - logBase) / logMult);
+    let newPurchases = Math.floor(1 + (logMoney - logBase + logDiscount) / logMult);
     // We can use the linear method up to one purchase past the threshold, because the first purchase
     // past the threshold doesn't have cost scaling in it yet.
     if (newPurchases > this._purchasesBeforeScaling) {
@@ -355,10 +361,11 @@ class ExponentialCostScaling {
     // case:
     let logPrice;
     if (newPurchases <= this._purchasesBeforeScaling + 1) {
-      logPrice = (newPurchases - 1) * logMult + logBase;
+      logPrice = (newPurchases - 1) * logMult + logBase - logDiscount;
     } else {
       const pExcess = newPurchases - this._purchasesBeforeScaling;
-      logPrice = (newPurchases - 1) * logMult + logBase + 0.5 * pExcess * (pExcess - 1) * this._logCostScale;
+      logPrice = (newPurchases - 1) * logMult + logBase - logDiscount +
+        0.5 * pExcess * (pExcess - 1) * this._logCostScale;
     }
     return { quantity: newPurchases - currentPurchases, logPrice };
   }
@@ -374,8 +381,9 @@ class ExponentialCostScaling {
     const logMoney = money.log10();
     const logMult = this._logBaseIncrease;
     const logBase = this._logBaseCost;
+    const logDiscount = this._logDiscount;
     // The 1 + is because the multiplier isn't applied to the first purchase
-    let contValue = 1 + (logMoney - logBase) / logMult;
+    let contValue = 1 + (logMoney - logBase + logDiscount) / logMult;
     // We can use the linear method up to one purchase past the threshold, because the first purchase
     // past the threshold doesn't have cost scaling in it yet.
     if (contValue > this._purchasesBeforeScaling) {

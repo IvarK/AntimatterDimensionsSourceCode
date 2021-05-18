@@ -381,8 +381,7 @@ class AntimatterDimensionState extends DimensionState {
    * @returns {Decimal}
    */
   get cost() {
-    let cost = this.costScale.calculateCost(Math.floor(this.bought / 10) + this.costBumps).dividedBy(this.discount);
-    return cost;
+    return this.costScale.calculateCost(Math.floor(this.bought / 10) + this.costBumps);
   }
 
   /** @returns {number} */

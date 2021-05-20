@@ -15,7 +15,10 @@ class SubtabState {
   }
 
   get isAvailable() {
-    return this.config.condition === undefined || this.config.condition() || player.devMode;
+    // eslint-disable-next-line no-bitwise
+    const isHidden = (player.options.hiddenSubtabBits[this._parent.config.id] & (1 << this.config.id)) !== 0;
+    return !(isHidden && this.config.hidable) &&
+      (this.config.condition === undefined || this.config.condition() || player.devMode);
   }
 
   get hasNotification() {
@@ -54,7 +57,10 @@ class TabState {
   }
 
   get isAvailable() {
-    return this.config.condition === undefined || this.config.condition() || player.devMode;
+    // eslint-disable-next-line no-bitwise
+    const isHidden = (player.options.hiddenTabBits & (1 << this.config.id)) !== 0;
+    return !(isHidden && this.config.hidable) &&
+      (this.config.condition === undefined || this.config.condition() || player.devMode);
   }
 
   get isOpen() {

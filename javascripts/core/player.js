@@ -636,7 +636,9 @@ let player = {
       replicantiGalaxies: true,
       celestialMemories: true,
       blackHole: true
-    }
+    },
+    hiddenTabBits: 0,
+    hiddenSubtabBits: Array.repeat(0, 10)
   },
   IAP: {
     totalSTD: 0,

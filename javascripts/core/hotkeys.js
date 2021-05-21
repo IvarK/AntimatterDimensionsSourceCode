@@ -119,6 +119,8 @@ GameKeyboard.bindHotkey("down", () => keyboardTabChange("down"));
 GameKeyboard.bindHotkey("left", () => keyboardTabChange("left"));
 GameKeyboard.bindHotkey("right", () => keyboardTabChange("right"));
 
+GameKeyboard.bindHotkey("tab", () => Modal.hiddenTabs.show());
+
 function keyboardTabChange(direction) {
   // Make an array of all the unlocked tabs
   const tabs = Tabs.all.filter(i => i.isAvailable && i.config.key !== "shop").map(i => i.config.key);

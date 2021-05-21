@@ -14,11 +14,18 @@ class SubtabState {
     return this.config.symbol;
   }
 
-  get isAvailable() {
+  get isHidden() {
     // eslint-disable-next-line no-bitwise
-    const isHidden = (player.options.hiddenSubtabBits[this._parent.config.id] & (1 << this.config.id)) !== 0;
-    return !(isHidden && this.config.hidable) &&
-      (this.config.condition === undefined || this.config.condition() || player.devMode);
+    return ((player.options.hiddenSubtabBits[this._parent.config.id] & (1 << this.config.id)) !== 0) && 
+      this.config.hidable;
+  }
+
+  get isUnlocked() {
+    return this.config.condition === undefined || this.config.condition() || player.devMode;
+  }
+
+  get isAvailable() {
+    return !this.isHidden && this.isUnlocked;
   }
 
   get hasNotification() {
@@ -56,11 +63,18 @@ class TabState {
     return this.config.name;
   }
 
-  get isAvailable() {
+  get isHidden() {
+    const hasVisibleSubtab = this.subtabs.some(t => t.isAvailable);
     // eslint-disable-next-line no-bitwise
-    const isHidden = (player.options.hiddenTabBits & (1 << this.config.id)) !== 0;
-    return !(isHidden && this.config.hidable) &&
-      (this.config.condition === undefined || this.config.condition() || player.devMode);
+    return (((player.options.hiddenTabBits & (1 << this.config.id)) !== 0) || !hasVisibleSubtab) && this.config.hidable;
+  }
+
+  get isUnlocked() {
+    return this.config.condition === undefined || this.config.condition() || player.devMode;
+  }
+
+  get isAvailable() {
+    return !this.isHidden && this.isUnlocked;
   }
 
   get isOpen() {

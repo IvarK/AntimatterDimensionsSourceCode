@@ -125,6 +125,10 @@ Vue.component("options-visual-tab", {
         >Open Away Progress Options</options-button>
       </div>
       <div class="l-options-grid__row">
+        <options-button
+          class="o-primary-btn--option"
+          onclick="Modal.hiddenTabs.show()"
+        >Open Tab Hiding Options</options-button>
         <primary-button-on-off
           v-model="headerTextColored"
           class="o-primary-btn--option l-options-grid__button"

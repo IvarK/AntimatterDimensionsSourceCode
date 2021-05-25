@@ -40,6 +40,17 @@ class SubtabState {
     this._parent.show(manual, this);
   }
 
+  unhideTab() {
+    // eslint-disable-next-line no-bitwise
+    player.options.hiddenSubtabBits[this._parent.config.id] &= ~(1 << this.config.id);
+  }
+
+  toggleVisibility() {
+    // eslint-disable-next-line no-bitwise
+    player.options.hiddenSubtabBits[this._parent.config.id] ^= (1 << this.config.id);
+  }
+
+
   get isOpen() {
     return ui.view.subtab === this.key;
   }
@@ -102,6 +113,16 @@ class TabState {
       Modal.hide();
     }
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
+  }
+
+  unhideTab() {
+    // eslint-disable-next-line no-bitwise
+    player.options.hiddenTabBits &= ~(1 << this.config.id);
+  }
+
+  toggleVisibility() {
+    // eslint-disable-next-line no-bitwise
+    player.options.hiddenTabBits ^= (1 << this.config.id);
   }
 
   resetCurrentSubtab() {

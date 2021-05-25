@@ -6,31 +6,22 @@ Vue.component("modal-hidden-tabs", {
       tabs: null,
     };
   },
-  computed: {
-    tabDB() {
-      return GameDatabase.tabs;
-    },
-  },
   methods: {
     update() {
-      this.tabs = GameDatabase.tabs;
+      this.tabs = Tab;
     },
   },
   template: `
-  <div class="c-modal-message l-modal-content--centered" style="height: 50rem; overflow-y: scroll;">
+  <div class="c-modal-message l-modal-content--centered">
   <modal-close-button @click="emitClose"/>
-  Click a button to toggle showing a tab on/off.  Some tabs cannot be hidden.
+  Click a button to toggle showing a tab on/off.
+  <br>
+  Some tabs cannot be hidden.
   <br>
     <div style="display: flex; flex-direction: column; align-items: center;">
-      <div v-for="tab in tabDB">
-        {{ tab.name }} Tab
-        <br>
-        <subtab-toggle class="c-auto-sac-type-tab__effect-desc l-specified-effect-tab__effect-desc"
-          v-for="subtab in tab.subtabs"
-          :tabId="tab.id"
-          :subtabId="subtab.id"
-          :hidable="subtab.hidable"
-          :subtabName="subtab.name"/>
+      <div v-for="tab in tabs">
+        <subtab-group
+          :tab="tab"/>
         <br>
       </div>
     </div>
@@ -39,42 +30,46 @@ Vue.component("modal-hidden-tabs", {
   `
 });
 
-Vue.component("subtab-toggle", {
+Vue.component("subtab-group", {
   props: {
-    tabId: Number,
-    subtabId: Number,
-    hidable: Boolean,
-    subtabName: String
+    tab: Object,
   },
   data() {
     return {
-      // eslint-disable-next-line no-bitwise
-      isHidden: false,
+      tabName: String,
+      subtabs: Object,
     };
   },
   computed: {
-    classObject() {
-      return {
-        "o-tab-btn": true,
-        "o-tab-btn--secondary": true,
-        "o-primary-btn--disabled": this.isHidden && this.hidable,
-      };
-    },
   },
   methods: {
     update() {
-      // eslint-disable-next-line no-bitwise
-      this.isHidden = (player.options.hiddenSubtabBits[this.tabId] & (1 << this.subtabId)) !== 0;
+      this.tabName = this.tab.config.name;
+      this.subtabs = this.tab.subtabs;
     },
-    toggleSelection() {
-      this.isHidden = !this.isHidden;
-      // eslint-disable-next-line no-bitwise
-      player.options.hiddenSubtabBits[this.tabId] ^= (1 << this.subtabId);
+    toggleVisibility(tab) {
+      tab.toggleVisibility();
+    },
+    classObject(subtab) {
+      return {
+        "o-tab-btn": true,
+        "o-tab-btn--secondary": true,
+        "o-primary-btn--disabled": subtab.isHidden && subtab.hidable,
+      };
     },
   },
   template: `
-    <div :class="classObject" @click="toggleSelection()">
-      {{ subtabName }}
+    <div class="c-auto-sac-type-tab__effect-desc l-specified-effect-tab__effect-desc"
+      v-if="tab.isUnlocked">
+        <div @click="toggleVisibility(tab)">
+          {{ tabName }} Tab
+        </div>
+        <br>
+        <div v-for="subtab in subtabs" v-if="subtab.isUnlocked"
+          :class="classObject(subtab)"
+          @click="toggleVisibility(subtab)">
+            {{ subtab.name }}
+        </div>
     </div>
   `
 });

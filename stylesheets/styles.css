@@ -8623,6 +8623,86 @@ input.o-automator-block-input {
   font-weight: 500;
 }
 
+.l-hide-modal {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin: 0.5rem;
+  width: 75rem;
+  height: 60rem;
+}
+
+.l-hide-modal-tab-container {
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+  margin: 0.5rem;
+  width: 76rem;
+  height: 5rem;
+}
+
+.l-hide-modal-subtab-container {
+  display: inline-flex;
+  width: 75rem;
+  max-width: 75rem;
+}
+
+.c-hide-modal-all-subtab-container {
+  border-radius: 0.5em;
+  border: 0.1rem solid;
+  padding: 0.25em 0.5em;
+  width: 55em;
+  min-height: 3em;
+}
+
+.l-hide-modal-tab-button {
+  text-align: center;
+  vertical-align: middle;
+  color: var(--color-text);
+  background-color: var(--color-base);
+  border: 0.2rem solid var(--color-accent);
+  border-radius: 0.4rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  font-family: Typewriter;
+  font-size: 1.1rem;
+  width: 11em;
+  max-width: 11rem;
+}
+
+.l-hide-modal-subtab-button {
+  text-align: center;
+  vertical-align: middle;
+  color: var(--color-text);
+  background-color: var(--color-base);
+  border: 0.2rem solid var(--color-accent);
+  border-radius: 0.4rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  font-family: Typewriter;
+  font-size: 1.2rem;
+  width: 10em;
+  max-width: 10rem;
+}
+
+.c-hide-modal-button--active {
+  cursor: pointer;
+  opacity: 1;
+  font-weight: bold;
+  text-shadow: 0 0 0.3rem;
+}
+
+.c-hide-modal-button--inactive {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.c-hide-modal-button--always-visible {
+  cursor: pointer;
+  background-color: var(--color-accent);
+}
+
 /* Prevent any themes overriding font awesome */
 .fa, .far, .fas {
   font-family: "Font Awesome 5 Free" !important;

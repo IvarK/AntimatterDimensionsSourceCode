@@ -1,64 +1,160 @@
 "use strict";
 
 Vue.component("modal-reality", {
-    computed: {
-        message() {
-            let c = 30;
-            if (Perk.achievementGroup1.isBought) c = 20;
-            if (Perk.achievementGroup2.isBought) c = 14;
-            if (Perk.achievementGroup3.isBought) c = 9;
-            if (Perk.achievementGroup4.isBought) c = 5;
-            if (Perk.achievementGroup5.isBought) c = 2;
-            let d = `Your achievements are also reset, but you will automatically get one back every ${c} minutes.`;
-            if (Perk.achievementGroup6.isBought) d = ``;
-            return `Reality will reset everything except challenge records. ${d}
-                You will also gain Reality Machines based on your Eternity Points, a glyph with a power level
-                based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend on quality of
-                life upgrades, and unlock various upgrades.`;
-        },
-        gainedPPAndRealitiesAndRMOnReality() {
-            const a = `You will gain ${format(gainedRealityMachines(), 2)} Reality Machines on Reality.`;
-            const c = simulatedRealityCount();
-            const b = `You will gain ${format(gainedRealityMachines(), 2)} Reality Machines on Reality,
-            ${format(c, 2)} Perk ${pluralize("Point", c, "Points")} on Reality, 
-            and ${format(c, 2)} ${pluralize("Reality", c, "Realities")} on Reality.`;
-            return this.simulatedRealityCount() ? `${b}` : `${a}`;
-        },
+  data() {
+    return {
+      firstPerk: false,
+      glyphs: GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false }),
+      levelDifference: 0,
+      selectedGlyph: undefined,
+      canRefresh: false,
+      level: 0,
+      realities: 0,
+      realityMachines: new Decimal(0),
+    };
+  },
+  created() {
+    // This refreshes the glyphs shown after every reality, and also doesn't
+    // allow it to refresh if you're choosing glyphs (at that point,
+    // your choices are your choices). This is technically incorrect since
+    // while you're choosing glyphs the level might increase, and this code
+    // stops it from increasing in the glyphs shown here, but with
+    // the glyph choice popup open, you can't see the tooltips, so there's
+    // no way for the player to notice that.
+    this.on$(GAME_EVENT.GLYPH_CHOICES_GENERATED, () => {
+      this.canRefresh = false;
+    });
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+    this.getGlyphs();
+    GlyphSelection.realityProps = getRealityProps(false, false);
+
+  },
+  computed: {
+    firstReality() {
+      return `Reality will reset everything except challenge records.
+      Your Achievements are also reset, but you will automatically get one back every 30 minutes.
+      You will also gain Reality Machines based on your Eternity Points, a
+      Glyph with a power level based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend
+      on quality of life upgrades, and unlock various upgrades.`;
     },
-    methods: {
-        handleNoClick() {
-            this.emitClose();
-        },
-        handleYesClick() {
-            this.emitClose();
-            requestManualReality();
-        },
-        simulatedRealityCount() {
-            return simulatedRealityCount() >= 1;
-        },
+    canSacrifice() {
+      return RealityUpgrade(19).isEffectActive;
     },
-    template: `
-        <div class="c-modal-message l-modal-content--centered">
-            <h2>You are about to Reality</h2>
-            <div class="c-modal-message__text">
-                {{ message }}
-                <br>
-            </div>
+    selectInfo() {
+      return `Selecting Confirm ${this.canSacrifice ? "or Sacrifice " : ""}
+              without selecting a glyph will randomly select a glyph.`;
+    }
+  },
+  methods: {
+    update() {
+      this.firstPerk = Perk.firstPerk.isEffectActive;
+      this.level = gainedGlyphLevel().actualLevel;
+      this.realities = simulatedRealityCount() + 1;
+      this.realityMachines.copyFrom(gainedRealityMachines());
+      if (!this.firstPerk) return;
+      for (let i = 0; i < this.glyphs.length; ++i) {
+        const currentGlyph = this.glyphs[i];
+        const newGlyph = GlyphSelection.glyphList(
+          GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false }
+        )[i];
+        if (currentGlyph.level === newGlyph.level) continue;
+        currentGlyph.level = newGlyph.level;
+        currentGlyph.effects = newGlyph.effects;
+      }
+      this.levelDifference = Math.abs(player.records.bestReality.glyphLevel - this.level);
+    },
+    glyphClass(index) {
+      return {
+        "l-modal-glyph-selection__glyph": true,
+        "l-modal-glyph-selection__glyph--selected": this.selectedGlyph === index,
+      };
+    },
+    gained() {
+      return `You will gain
+              ${format(this.realities, 2, 0)} ${pluralize("Reality", this.realities, "Realities")},
+              ${format(this.realities, 2, 0)} Perk ${pluralize("Point", this.realities)} and
+              ${format(this.realityMachines, 2, 0)}
+              Reality ${pluralize("Machine", this.realityMachines)} on Reality.`;
+    },
+    levelStats() {
+      const bestGlyphLevel = player.records.bestReality.glyphLevel;
+      // Bit annoying to read due to needing >, <, and =, with = needing a different format.
+      return `You will get a level ${formatInt(this.level)} Glyph on Reality, which is
+              ${this.level === bestGlyphLevel ? "equal to" : `
+                ${formatInt(this.levelDifference)} ${pluralize("level", this.levelDifference)}
+                ${this.level > bestGlyphLevel ? "higher" : "lower"} than`
+              } your best.`;
+    },
+    getGlyphs() {
+      this.canRefresh = true;
+      this.glyphs = GlyphSelection.glyphList(
+        GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false });
+    },
+    select(index) {
+      this.selectedGlyph = index;
+    },
+    returnGlyph() {
+      // If we have a glyph selected, send that along, otherwise pick one at random.
+      return this.glyphs[this.selectedGlyph] || this.glyphs[Math.floor(Math.random() * GlyphSelection.choiceCount)];
+    },
+    selectGlyph() {
+      if (this.firstPerk) {
+        GlyphSelection.generate(GlyphSelection.choiceCount, getRealityProps(false, false));
+        GlyphSelection.select(this.returnGlyph(), false);
+      }
+      triggerManualReality(getRealityProps(false, true));
+      this.emitClose();
+    },
+    trashGlyph() {
+      GlyphSelection.generate(GlyphSelection.choiceCount, getRealityProps(false, false));
+      GlyphSelection.select(this.returnGlyph(), true);
+      triggerManualReality(getRealityProps(false, true));
+      this.emitClose();
+    },
+    cancelModal() {
+      this.emitClose();
+    },
+  },
+  template: `
+    <div class="c-modal-message l-modal-content--centered">
+      <h2>You are about to Reality</h2>
+      <div class="c-modal-message__text" v-if="!firstPerk">
+        {{ firstReality }}
+      </div>
+      <div class="c-modal-message__text">
+        {{ gained() }}
+      </div>
+      <br>
+      <div class="l-glyph-selection__row">
+        <glyph-component v-for="(glyph, index) in glyphs"
+                        :class="glyphClass(index)"
+                        :key="index"
+                        :glyph="glyph"
+                        :noLevelOverride="true"
+                        :showSacrifice="canSacrifice"
+                        @click.native="select(index)"
+                        />
+      </div>
+      <div>
+        {{ levelStats() }}
         <br>
-        <div class="c-modal-message__text">
-            {{ gainedPPAndRealitiesAndRMOnReality }}
-        </div>
-        <br>
-            <div class="l-options-grid__row">
-                <primary-button
+        {{ selectInfo }}
+      </div>
+      <div class="l-options-grid__row">
+        <primary-button
                 class="o-primary-btn--width-medium c-modal-message__okay-btn"
-                @click="handleNoClick"
+                @click="cancelModal"
                 >Cancel</primary-button>
-                <primary-button
+        <primary-button
                 class="o-primary-btn--width-medium c-modal-message__okay-btn"
-                @click="handleYesClick"
+                v-if="canSacrifice"
+                @click="trashGlyph"
+                >Sacrifice</primary-button>
+        <primary-button
+                class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+                @click="selectGlyph"
                 >Confirm</primary-button>
-            </div>
-        </div>
-    `
+      </div>
+    </div>
+  `
 });

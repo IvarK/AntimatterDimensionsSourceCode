@@ -123,8 +123,8 @@ GameKeyboard.bindHotkey("tab", () => Modal.hiddenTabs.show());
 
 function keyboardTabChange(direction) {
   // Make an array of all the unlocked tabs
-  const tabs = Tabs.all.filter(i => i.isAvailable && i.config.key !== "shop").map(i => i.config.key);
-  const subtabs = Tabs.current.subtabs.filter(i => i.isAvailable).map(i => i.key);
+  const tabs = Tabs.all.filter(i => !i.isHidden && i.config.key !== "shop").map(i => i.config.key);
+  const subtabs = Tabs.current.subtabs.filter(i => !i.isHidden).map(i => i.key);
   // Reconfigure the tab order if its New UI
   if (ui.view.newUI) {
     tabs.splice(1, 3);

@@ -294,7 +294,7 @@ GameDatabase.tabs = [
         symbol: "<i class='fas fa-clone'></i>",
         component: "glyphs-tab",
         id: 0,
-        hidable: true,
+        hidable: false,
       },
       {
         key: "upgrades",
@@ -353,7 +353,7 @@ GameDatabase.tabs = [
         symbol: "<i class='fas fa-map-marked-alt'></i>",
         component: "celestial-navigation",
         id: 0,
-        hidable: true,
+        hidable: false,
       },
       {
         key: "teresa",

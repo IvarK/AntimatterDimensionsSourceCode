@@ -20,7 +20,6 @@ Vue.component("modal-hidden-tabs", {
     <br>
     <div v-for="tab in tabs" class="l-hide-modal-tab-container">
       <tab-modal-subtab-group :tab="tab"/>
-      <br>
     </div>
   </div>
   `
@@ -38,7 +37,12 @@ Vue.component("tab-modal-subtab-group", {
     };
   },
   computed: {
-    classObject() {
+    styleObjectRow() {
+      return {
+        "background-color": this.hidden ? "var(--color-bad)" : "var(--color-good)",
+      };
+    },
+    classObjectButton() {
       return {
         "l-hide-modal-tab-button": true,
         "c-hide-modal-button--active": !this.hidden,
@@ -53,19 +57,24 @@ Vue.component("tab-modal-subtab-group", {
       this.subtabs = this.tab.subtabs;
       this.hidden = this.tab.isHidden && this.tab.config.hidable;
     },
-    toggleVisibility(tab) {
-      tab.toggleVisibility();
+    toggleVisibility() {
+      // If this tab and all subtabs are hidden, unhide all subtabs too
+      if (this.tab.isHidden && this.subtabs.every(t => t.isHidden)) {
+        for (const subtab of this.subtabs) subtab.toggleVisibility();
+        this.tab.unhideTab();
+      } else this.tab.toggleVisibility();
     },
     getKey(subtab) {
-      // eslint-disable-next-line no-bitwise
-      return `${1 << (this.tab.config.id)} ${1 << (subtab.config.id + 1)} ${subtab.isHidden}`;
+      return `${this.tab.config.id} ${subtab.config.id} ${subtab.isHidden}`;
     }
   },
   template: `
-    <div class="c-hide-modal-all-subtab-container l-hide-modal-subtab-container"
+    <div
+      class="c-hide-modal-all-subtab-container l-hide-modal-subtab-container"
+      :style="styleObjectRow"
       v-if="tab.isUnlocked">
-        <div :class="classObject"
-          @click="toggleVisibility(tab)">
+        <div :class="classObjectButton"
+          @click="toggleVisibility()">
             {{ tabName }}
             <br>
             (hide main tab)

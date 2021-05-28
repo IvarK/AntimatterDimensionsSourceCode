@@ -6,13 +6,15 @@ class PlayerProgress {
   }
 
   get isInfinityUnlocked() {
-    // We add conversion to Decimal here since, when importing an old save, this._player.infinities is a number,
-    // and when displaying progress of an imported save, this._player.infinities is a string (I believe).
-    return new Decimal(this._player.infinities).gt(0) || this.isEternityUnlocked;
+    // Infinity count data is stored in either player.infinitied or player.infinities based on if the save is before
+    // or after the reality update, but this also gets checked in the import modal before any migration code is run.
+    // Thus, it needs to manually support "before" and "after" states by converting both to Decimal.
+    const infinityData = this._player.infinitied ? this._player.infinitied : this._player.infinities;
+    return new Decimal(infinityData).gt(0) || this.isEternityUnlocked;
   }
 
   get isEternityUnlocked() {
-    // This is some old-save-new-save number-to-Decimal conversion schenanigans (see above)
+    // Similarly to above, player.eternities is a number pre-reality update and a Decimal post-reality update
     return new Decimal(this._player.eternities).gt(0) || this.isRealityUnlocked;
   }
 

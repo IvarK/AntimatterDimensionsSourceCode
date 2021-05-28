@@ -151,7 +151,7 @@ GameDatabase.achievements.normal = [
     id: 34,
     name: "You didn't need it anyway",
     description: "Infinity without having any 8th Antimatter Dimensions.",
-    checkRequirement: () => AntimatterDimension(8).amount.eq(0),
+    checkRequirement: () => AntimatterDimension(8).totalAmount.eq(0),
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() { return `Dimensions 1-7 are ${formatPercents(0.02)} stronger.`; },
     effect: 1.02

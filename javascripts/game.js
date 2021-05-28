@@ -116,7 +116,7 @@ function getRealityMachineMultiplier() {
 }
 
 function gainedRealityMachines() {
-  let log10FinalEP = Currency.eternityPoints.value.plus(gainedEternityPoints()).log10();
+  let log10FinalEP = player.records.thisReality.maxEP.plus(gainedEternityPoints()).log10();
   if (!PlayerProgress.realityUnlocked()) {
     if (log10FinalEP > 8000) log10FinalEP = 8000;
     if (log10FinalEP > 6000) log10FinalEP -= (log10FinalEP - 6000) * 0.75;

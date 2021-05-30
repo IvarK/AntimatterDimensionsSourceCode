@@ -136,10 +136,11 @@ const GlyphTooltipComponent = {
       }
       return {
         color,
-        "text-shadow": this.type === "cursed" ? undefined :
-                      `-0.1rem 0.1rem 0.1rem black, 0.1rem 0.1rem 0.1rem black,
-                      -0.1rem -0.1rem 0.1rem black, 0.1rem -0.1rem 0.1rem black,
-                      0 0 0.3rem ${color}`,
+        "text-shadow": this.type === "cursed"
+          ? undefined
+          : `-0.1rem 0.1rem 0.1rem black, 0.1rem 0.1rem 0.1rem black,
+            -0.1rem -0.1rem 0.1rem black, 0.1rem -0.1rem 0.1rem black,
+            0 0 0.3rem ${color}`,
         animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined
       };
     },
@@ -153,7 +154,9 @@ const GlyphTooltipComponent = {
         case "reality":
           return `Pure Glyph of ${glyphName}`;
         default:
-          return `${this.rarityInfo.name} Glyph of ${glyphName}${this.color === "#FF80AB" ? "<span style='color: #FF80AB'>(♫)</span>" : ""}`;
+          return `${this.rarityInfo.name} Glyph of ${glyphName}${this.color === "#FF80AB"
+            ? "<span style='color: #FF80AB'>(♫)</span>"
+            : ""}`;
       }
     },
     isLevelCapped() {

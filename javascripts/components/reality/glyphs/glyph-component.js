@@ -153,9 +153,7 @@ const GlyphTooltipComponent = {
         case "reality":
           return `Pure Glyph of ${glyphName}`;
         default:
-          if (this.color === "#FF80AB")
-            return `${this.rarityInfo.name} Glyph of ${glyphName} <span style="color: #FF80AB">(♫)</span>`;
-          return `${this.rarityInfo.name} Glyph of ${glyphName}`;
+          return `${this.rarityInfo.name} Glyph of ${glyphName}${this.color === "#FF80AB" ? "<span style='color: #FF80AB'>(♫)</span>" : ""}`;
       }
     },
     isLevelCapped() {
@@ -175,7 +173,11 @@ const GlyphTooltipComponent = {
       const arrow = this.isLevelCapped
         ? "<i class='fas fa-sort-down'></i>"
         : (this.isLevelBoosted ? "<i class='fas fa-sort-up'></i>" : "");
-      return `Level: <span style="color: ${this.isLevelBoosted ? "#44FF44" : ""}">
+      // eslint-disable-next-line no-nested-ternary
+      const color = this.isLevelCapped
+        ? "#ff4444"
+        : (this.isLevelBoosted ? "#44FF44" : "");
+      return `Level: <span style="color: ${color}">
               ${arrow}${formatInt(this.effectiveLevel)}${arrow}
               </span>`;
     },
@@ -254,6 +256,7 @@ const GlyphTooltipComponent = {
               </span>`;
     },
     scoreText() {
+      if (this.type === "companion" || this.type === "cursed" || this.type === "reality") return "";
       const showFilterScoreModes = [AUTO_GLYPH_SCORE.SPECIFIED_EFFECT, AUTO_GLYPH_SCORE.ADVANCED_MODE];
       if (!showFilterScoreModes.includes(this.scoreMode)) return "";
       return `Score: ${format(AutoGlyphProcessor.filterValue(this.$parent.glyph), 1, 1)}`;
@@ -356,6 +359,7 @@ Vue.component("glyph-component", {
       refineReward: 0,
       levelOverride: 0,
       isRealityGlyph: false,
+      isCursedGlyph: false,
       glyphEffects: [],
       // We use this to not create a ton of tooltip components as soon as the glyph tab loads.
       tooltipLoaded: false,

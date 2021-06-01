@@ -15,6 +15,107 @@ GameDatabase.h2p = {
    */
   tabs: [
     {
+      name: "Your savefile",
+      info: () => `
+Your game's save data is stored on your computer's browser data, which means that clearing your browser's cache and
+cookies will also delete your save file. Similarly, if you are playing in a private or incognito window, your save
+will not be there the next time you open up your browser. The saves are browser-specific as well, so for example
+if you play the game on Chrome, you won't find your save on Firefox.
+<br>
+<br>
+You can transfer your save between places by using the export function, which will copy a <i>very</i> long string of
+random-looking characters into your clipboard. That text contains your save data, which you can load back into the
+game by pasting it into the text box on the import prompt. You need the entirety of the save text for importing to
+work properly, or else the game might not recognize the text as a valid save. Keep in mind that certain messaging
+applications may cut off part of the text if you are using one to transfer the save between devices.
+In addition to importing and exporting to your clipboard, you can also import and export from text files as well.
+<br>
+<br>
+You can use the "Choose save" button to pick between three separate saves on your browser. These saves are, for most
+intents and purposes, completely separate from each other. Importing and exporting will only affect the current save
+slot. The only exception is clearing your broswer data, in which case all three saves will be reset.
+<br>
+<br>
+The game automatically saves periodically, by default once every ${formatInt(30)} seconds, and it will notify you in
+the top-right corner of the screen whenever it saves. Keep this in mind if you need to close the game - anything you
+do right before closing it might not be saved unless you wait for the autosave interval or manually save again. The
+length of the autosave interval is adjustable.
+<br>
+<br>
+You can completely reset your save at any point if desired by clicking the button, which brings up a prompt you need
+to fill out in order to make sure you intentionally wanted to reset. Going through with this reset will only clear
+your current save; the other save slots will be unaffected. <b>Resetting your game in this way is completely
+irreversible and gives you no permanent benefits, secret or otherwise.</b>
+`,
+      isUnlocked: () => true,
+      tags: ["choose", "save", "import", "export", "reset"],
+      tab: "options/saving"
+    },
+    {
+      name: "Customization",
+      info: () => `
+The game has two different UI layouts - the "old" UI maintains the style of Antimatter Dimensions from before the
+Reality update, while the "new" UI is a redesign based on more modern dark theme styles. Additionally, there are
+various themes which can be applied to modify the appearance of everything in the game. There are a few secret
+themes which can be unlocked through various means. Both UI layouts support all the different possible themes.
+<br>
+<br>
+The notation used to display numbers in the game defaults to Mixed Scientific, but can be changed to one of numerous
+options in the drop-down menu. Many of these notations are intended as jokes and in some cases will format numbers
+in a way that causes text to spill over into other parts of the screen - this is not a bug. "Exponent formatting" is
+a setting affecting some notations which lets you toggle between showing the number in an exponent itself (with commas
+every three digits) or also applying the notation formatting to the exponent. Note that notation formatting is forced
+when exponents are larger than ${format(1e9)}.
+<br>
+<br>
+Many events in the game trigger full-screen animations or pop-up modals which require you to confirm that you want to
+continue. All of these animations and confirmations can be disabled on an individual basis through the options,
+although the ability to disable any given animation or confirmation will only appear after then have already shown up
+at least once.
+`,
+      isUnlocked: () => true,
+      tags: ["UI", "update", "news", "theme", "notation", "comma", "exponent", "animation", "retry", "confirmation",
+        "offline", "hotkey"],
+      tab: "options/visual"
+    },
+    {
+      name: "Offline Progress",
+      info: () => `
+Antimatter Dimensions has a catch-up mechanic which attempts to simulate the game's behavior if the game is closed for
+an extended period of time. The simulation behavior is only somewhat accurate, as the game is too mathematically
+complicated to be run at full accuracy in a reasonable amount of time. At the end of the simulation, the game will
+summarize how various relevant resources have changed while you were gone.
+<br>
+<br>
+The game runs on a system where everything is updated once per tick - all dimensions and resources do one unit of
+production, all autobuyers trigger once, all multipliers and values are changed accordingly, and all the displayed
+numbers are updated. There are normally ${formatInt(20)} ticks per second when the game is running, although lag and
+internal javascript behavior may cause tick length to vary by a few milliseconds.
+<br>
+<br>
+When offline simulation is active, these ticks have an adjusted length in order to fill the amount of time you were
+away - for example having a setting for ${formatInt(1000)} offline ticks and closing the game for an hour will result in
+ticks which are ${format(3.6, 1, 1)} seconds long each. For most things in the game, this is not an issue because this
+will still result in approximately the same amount of resources after the simulation completes. A notable exception is
+autobuyers - in this situation autobuyers will effectively only trigger once every ${format(3.6, 1, 1)} seconds, which
+may have a strong impact depending on the part of the game.
+<br>
+<br>
+Offline tick count can be adjusted between ${formatInt(100)} and ${formatInt(10000)} ticks. Smaller counts will result
+in faster but less accurate simulations, while larger counts will result in more accurate simulations which take longer
+to complete.
+<br>
+<br>
+Offline progress can be disabled entirely if desired, for example for diagnostic or timing purposes, or in order
+to do an "online only" playthrough of the game. Otherwise, offline progress is on by default from the very beginning
+of the game. Note that if offline progress is disabled, the statistic for total time played will also be paused while
+the game closed.
+`,
+      isUnlocked: () => true,
+      tags: ["offline", "away", "progress"],
+      tab: "options/gameplay"
+    },
+    {
       name: "Dimensions",
       info: () => `
 Dimensions are your production units in game. The first Dimension produces your antimatter.
@@ -463,14 +564,27 @@ Dimensions, your production will be reset to the amount you purchased after ever
 upgrades to your multipliers you purchased.
 <br>
 <br>
+Each purchase increases the multiplier of that specific Time Dimension by ${formatX(4)}. The cost multiplier between
+upgrades has a base value, but is increased by ${formatX(1.5, 1, 1)} at
+${format(TimeDimension(1)._costIncreaseThresholds[0], 2)} EP and ${formatX(2.2, 1, 1)} (of the base value) at
+${format(TimeDimension(1)._costIncreaseThresholds[1])} EP. These increases apply retroactively, causing the cost to
+jump when they reach those thresholds, and only apply to the first four dimensions. Beyond
+${format(TimeDimension(1)._costIncreaseThresholds[2])} EP each dimension purchase counts as four purchases for the
+purpose of cost increases, causing the price to rise much more steeply.
+<br>
+<b>Time Dimension base prices (EP):</b> ${Array.range(1, 8)
+  .map(tier => format(TimeDimension(tier)._baseCost))
+  .join(", ")}
+<br>
+<b>Time Dimension base price increases:</b> ${Array.range(1, 8)
+  .map(tier => format(TimeDimension(tier)._costMultiplier))
+  .join(", ")}
+<br>
+<br>
 Each threshold to gain another Tickspeed upgrade is ${formatPercents(0.33)} more Time Shards than the previous,
 or ${formatPercents(0.25)} with the relevant time study. After ${formatInt(FreeTickspeed.softcap)} upgrades, the
 multiplier between each successive free Tickspeed upgrade will gradually increase at a rate of ~${formatX(1.35, 0, 2)}
-per ${formatInt(50000)} upgrades (${formatX(1.000006, 0, 6)} per upgrade). For example, your
-${formatInt(FreeTickspeed.softcap + 50001)}st upgrade will require
-${format(1.33, 2, 2)}×${format(1.35, 2, 2)}=${format(1.33 * 1.35, 2, 2)}
-(or ${format(1.25, 2, 2)}×${format(1.35, 2, 2)}=${format(1.25 * 1.35, 2, 2)}) times more
-shards than your ${formatInt(FreeTickspeed.softcap + 50000)}th upgrade.
+per ${formatInt(50000)} upgrades (${formatX(1.000006, 0, 6)} per upgrade).
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["dims", "td", "shards", "eternity", "midgame"],

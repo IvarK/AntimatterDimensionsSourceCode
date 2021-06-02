@@ -958,11 +958,18 @@ GameStorage.devMigrations = {
       if (!Autobuyer.reality.isUnlocked) player.auto.reality.isActive = false;
     },
     player => {
-      // Deleting PEC5 (id 64)
+      // Delete PEC5 (id 64)
       if (player.reality.perks.has(64)) {
         player.reality.perks.delete(64);
         Currency.realities.add(1);
       }
+
+      let reqBitmask = 0;
+      for (let i = 0; i <= player.reality.upgReqs.length; i++) {
+        // eslint-disable-next-line no-bitwise
+        if (player.reality.upgReqs[i]) reqBitmask |= (1 << i);
+      }
+      player.reality.upgReqs = reqBitmask;
     },
   ],
 

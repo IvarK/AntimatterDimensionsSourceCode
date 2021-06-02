@@ -212,40 +212,31 @@ GameDatabase.reality.perks = {
     label: "PEC1",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(2)} hours (real-time).`;
+      return `Auto-complete one Eternity Challenge every ${formatInt(80)} minutes (real-time).`;
     },
-    effect: 120
+    effect: 80
   },
   autocompleteEC2: {
     id: 61,
     label: "PEC2",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(80)} minutes (real-time).`;
+      return `Auto-complete one Eternity Challenge every ${formatInt(50)} minutes (real-time).`;
     },
-    effect: 80
+    effect: 50
   },
   autocompleteEC3: {
     id: 62,
     label: "PEC3",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(50)} minutes (real-time).`;
-    },
-    effect: 50
-  },
-  autocompleteEC4: {
-    id: 63,
-    label: "PEC4",
-    family: PERK_FAMILY.AUTOMATION,
-    get description() {
       return `Auto-complete one Eternity Challenge every ${formatInt(30)} minutes (real-time).`;
     },
     effect: 30
   },
-  autocompleteEC5: {
-    id: 64,
-    label: "PEC5",
+  autocompleteEC4: {
+    id: 63,
+    label: "PEC4",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
       return `Auto-complete one Eternity Challenge every ${formatInt(20)} minutes (real-time).`;
@@ -474,7 +465,6 @@ GameDatabase.reality.perkConnections = (function() {
     [p.autocompleteEC1, p.autocompleteEC2],
     [p.autocompleteEC2, p.autocompleteEC3],
     [p.autocompleteEC3, p.autocompleteEC4],
-    [p.autocompleteEC4, p.autocompleteEC5],
     [p.studyActiveEP, p.bypassEC2Lock, p.autobuyerTT1],
     [p.studyIdleEP, p.bypassEC3Lock, p.autocompleteEC1],
     [p.studyECRequirement, p.studyECBulk],

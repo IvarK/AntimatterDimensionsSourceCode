@@ -957,6 +957,13 @@ GameStorage.devMigrations = {
     player => {
       if (!Autobuyer.reality.isUnlocked) player.auto.reality.isActive = false;
     },
+    player => {
+      // Deleting PEC5 (id 64)
+      if (player.reality.perks.has(64)) {
+        player.reality.perks.delete(64);
+        Currency.realities.add(1);
+      }
+    },
   ],
 
   patch(player) {

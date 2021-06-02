@@ -69,7 +69,6 @@ const Perk = (function() {
     autocompleteEC2: new PerkState(db.autocompleteEC2),
     autocompleteEC3: new PerkState(db.autocompleteEC3),
     autocompleteEC4: new PerkState(db.autocompleteEC4),
-    autocompleteEC5: new PerkState(db.autocompleteEC5),
     studyActiveEP: new PerkState(db.studyActiveEP),
     studyIdleEP: new PerkState(db.studyIdleEP),
     studyECRequirement: new PerkState(db.studyECRequirement),

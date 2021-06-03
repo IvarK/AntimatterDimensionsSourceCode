@@ -16,7 +16,7 @@ Vue.component("modal-hidden-tabs", {
   <modal-close-button @click="emitClose"/>
     Click a button to toggle showing a tab on/off.
     <br>
-    Some tabs cannot be hidden.
+    Some tabs cannot be hidden, and you cannot hide your current tab.
     <br>
     <div v-for="tab in tabs" class="l-hide-modal-tab-container">
       <tab-modal-subtab-group :tab="tab"/>

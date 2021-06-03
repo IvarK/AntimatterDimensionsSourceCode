@@ -46,10 +46,11 @@ class SubtabState {
   }
 
   toggleVisibility() {
+    if (this._parent.config.id === Tabs.current.config.id &&
+      this.config.id === Tabs.current._currentSubtab.config.id) return;
     // eslint-disable-next-line no-bitwise
     player.options.hiddenSubtabBits[this._parent.config.id] ^= (1 << this.config.id);
   }
-
 
   get isOpen() {
     return ui.view.subtab === this.key;
@@ -99,7 +100,9 @@ class TabState {
   show(manual, subtab = undefined) {
     if (!manual && !player.options.automaticTabSwitching) return;
     ui.view.tab = this.config.key;
-    if (subtab !== undefined) {
+    if (subtab === undefined) {
+      this._currentSubtab = this.subtabs.find(s => s.config.id === player.options.lastOpenSubtab[this.config.id]);
+    } else {
       this._currentSubtab = subtab;
     }
     if (!this._currentSubtab.isUnlocked) this.resetCurrentSubtab();
@@ -112,6 +115,8 @@ class TabState {
     if (manual) {
       Modal.hide();
     }
+    this.unhideTab();
+    this._currentSubtab.unhideTab();
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
   }
 
@@ -121,6 +126,7 @@ class TabState {
   }
 
   toggleVisibility() {
+    if (this.config.id === Tabs.current.config.id) return;
     // eslint-disable-next-line no-bitwise
     player.options.hiddenTabBits ^= (1 << this.config.id);
   }
@@ -143,6 +149,12 @@ const Tabs = (function() {
     }
   };
 }());
+
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
+  const currTab = Tabs.current.config.id;
+  player.options.lastOpenTab = currTab;
+  player.options.lastOpenSubtab[currTab] = Tabs.current._currentSubtab.config.id;
+});
 
 EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => {
   for (const tab of Tabs.all) {

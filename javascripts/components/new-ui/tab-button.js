@@ -7,6 +7,7 @@ Vue.component("tab-button", {
   data() {
     return {
       isAvailable: false,
+      isHidden: false,
       subtabVisibilities: [],
       hasNotification: false
     };
@@ -22,12 +23,13 @@ Vue.component("tab-button", {
   methods: {
     update() {
       this.isAvailable = this.tab.isAvailable;
+      this.isHidden = this.tab.isHidden;
       this.subtabVisibilities = this.tab.subtabs.map(x => x.isAvailable);
       this.hasNotification = this.tab.hasNotification;
     }
   },
   template:
-  `<div :class="[classObject, tab.config.UIClass]">
+  `<div v-if="!isHidden" :class="[classObject, tab.config.UIClass]">
     <div 
       v-if="isAvailable"
       class="l-tab-btn-inner"

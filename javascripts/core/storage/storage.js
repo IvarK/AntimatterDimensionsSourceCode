@@ -46,7 +46,7 @@ const GameStorage = {
     // Save current slot to make sure no changes are lost
     this.save(true);
     this.loadPlayerObject(this.saves[slot]);
-    Tab.dimensions.antimatter.show();
+    Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show();
     GameUI.notify.info("Game loaded");
   },
 

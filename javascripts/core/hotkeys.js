@@ -126,8 +126,8 @@ GameKeyboard.bindHotkey("tab", () => {
 
 function keyboardTabChange(direction) {
   // Current tabs
-  const currentTab = Tabs.current.config.key
-  const currentSubtab = Tabs.current._currentSubtab.key
+  const currentTab = Tabs.current.config.key;
+  const currentSubtab = Tabs.current._currentSubtab.key;
   // Make an array of all the unlocked tabs
   let tabs = Tabs.all.filter(i => i.config.key === currentTab || i.isAvailable && i.config.key !== "shop")
     .map(i => i.config.key);

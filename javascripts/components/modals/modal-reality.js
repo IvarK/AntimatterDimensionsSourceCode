@@ -95,20 +95,27 @@ Vue.component("modal-reality", {
     },
     returnGlyph() {
       // If we have a glyph selected, send that along, otherwise pick one at random.
-      return this.glyphs[this.selectedGlyph] || this.glyphs[Math.floor(Math.random() * GlyphSelection.choiceCount)];
+      return this.selectedGlyph || Math.floor(Math.random() * GlyphSelection.choiceCount);
     },
-    selectGlyph() {
+    confirmModal(sacrifice) {
       if (this.firstPerk) {
-        GlyphSelection.generate(GlyphSelection.choiceCount, getRealityProps(false, false));
-        GlyphSelection.select(this.returnGlyph(), false);
+        // If we have firstPerk, we pick from 4+ glyphs, and glyph generation functions as normal.
+        // Generation occurs here to prevent RNG from changing if you do more than one reality without firstPerk.
+        GlyphSelection.generate(GlyphSelection.choiceCount);
+        GlyphSelection.select(this.returnGlyph(), sacrifice);
+      } else if (player.realities === 0) {
+        // If this is our first Reality, give them the companion and the starting power glyph.
+        Glyphs.addToInventory(GlyphGenerator.startingGlyph(gainedGlyphLevel()));
+        Glyphs.addToInventory(GlyphGenerator.companionGlyph(player.eternityPoints));
+      } else {
+        // We can't get a random glyph directly here because that disturbs the RNG
+        // (makes it depend on whether you got first perk or not).
+        Glyphs.addToInventory(GlyphSelection.glyphList(1, gainedGlyphLevel(), { isChoosingGlyph: true })[0]);
       }
+      // We've already gotten a glyph at this point, so the second value has to be true.
+      // If we haven't sacrificed, we need to sort and purge glyphs, as applicable.
       triggerManualReality(getRealityProps(false, true));
-      this.emitClose();
-    },
-    trashGlyph() {
-      GlyphSelection.generate(GlyphSelection.choiceCount, getRealityProps(false, false));
-      GlyphSelection.select(this.returnGlyph(), true);
-      triggerManualReality(getRealityProps(false, true));
+      if (!sacrifice) Glyphs.processSortingAfterReality();
       this.emitClose();
     },
     cancelModal() {
@@ -125,7 +132,7 @@ Vue.component("modal-reality", {
         {{ gained() }}
       </div>
       <br>
-      <div class="l-glyph-selection__row">
+      <div class="l-glyph-selection__row" v-if="firstPerk">
         <glyph-component v-for="(glyph, index) in glyphs"
                         :class="glyphClass(index)"
                         :key="index"
@@ -135,7 +142,7 @@ Vue.component("modal-reality", {
                         @click.native="select(index)"
                         />
       </div>
-      <div>
+      <div v-if="firstPerk">
         {{ levelStats() }}
         <br>
         {{ selectInfo }}
@@ -148,11 +155,11 @@ Vue.component("modal-reality", {
         <primary-button
                 class="o-primary-btn--width-medium c-modal-message__okay-btn"
                 v-if="canSacrifice"
-                @click="trashGlyph"
+                @click="confirmModal(true)"
                 >Sacrifice</primary-button>
         <primary-button
                 class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-                @click="selectGlyph"
+                @click="confirmModal(false)"
                 >Confirm</primary-button>
       </div>
     </div>

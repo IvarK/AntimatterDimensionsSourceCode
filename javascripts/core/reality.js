@@ -55,10 +55,9 @@ const GlyphSelection = {
     return glyphList;
   },
 
-  generate(count, realityProps) {
+  generate(count, level = gainedGlyphLevel()) {
     EventHub.dispatch(GAME_EVENT.GLYPH_CHOICES_GENERATED);
-    this.realityProps = realityProps;
-    this.glyphs = this.glyphList(count, realityProps.gainedGlyphLevel, { isChoosingGlyph: true });
+    this.glyphs = this.glyphList(count, level, { isChoosingGlyph: true });
   },
 
   update(level) {
@@ -75,20 +74,16 @@ const GlyphSelection = {
     }
   },
 
-  select(glyph, sacrifice) {
+  select(glyphID, sacrifice) {
     if (sacrifice) {
-      GlyphSacrificeHandler.removeGlyph(glyph, true);
+      GlyphSacrificeHandler.removeGlyph(this.glyphs[glyphID], true);
     } else {
-      Glyphs.addToInventory(glyph);
+      Glyphs.addToInventory(this.glyphs[glyphID]);
     }
     this.glyphs = [];
     this.realityProps = undefined;
   }
 };
-
-function confirmReality() {
-  Modal.reality.show();
-}
 
 function isRealityAvailable() {
   return player.eternityPoints.gte("1e4000") && TimeStudy.reality.isBought;
@@ -112,31 +107,11 @@ function simulatedRealityCount(advancePartSimCounters) {
  */
 function requestManualReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
-
-  if (Glyphs.freeInventorySpace === 0) {
+  if (player.options.confirmations.reality) {
+    Modal.reality.show();
+  } else if (Glyphs.freeInventorySpace === 0) {
     Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
-    return;
   }
-  const realityProps = getRealityProps(false, false);
-  if (simulatedRealityCount(false) > 0) {
-    triggerManualReality(realityProps);
-    Glyphs.processSortingAfterReality();
-    return;
-  }
-  realityProps.alreadyGotGlyph = true;
-  if (GlyphSelection.choiceCount === 1) {
-    if (player.realities === 0) {
-      Glyphs.addToInventory(GlyphGenerator.startingGlyph(realityProps.gainedGlyphLevel));
-      Glyphs.addToInventory(GlyphGenerator.companionGlyph(player.eternityPoints));
-    } else {
-      // We can't get a random glyph directly here because that disturbs the RNG
-      // (makes it depend on whether you got first perk or not).
-      Glyphs.addToInventory(GlyphSelection.glyphList(1, realityProps.gainedGlyphLevel, { isChoosingGlyph: true })[0]);
-    }
-    triggerManualReality(realityProps);
-    return;
-  }
-  GlyphSelection.generate(GlyphSelection.choiceCount, realityProps);
 }
 
 function triggerManualReality(realityProps) {

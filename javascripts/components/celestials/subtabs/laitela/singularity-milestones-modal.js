@@ -10,7 +10,7 @@ Vue.component("singularity-milestones-modal", {
     }
   },
   beforeDestroy() {
-    player.celestials.laitela.lastCheckedMilestones = Laitela.singularities;
+    player.celestials.laitela.lastCheckedMilestones = Currency.singularities.value;
   },
   template: `
     <div>

@@ -75,6 +75,10 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
     return DimBoost.canBeBought && super.canTick;
   }
 
+  get resetTickOn() {
+    return Achievement(143).isUnlocked ? PRESTIGE_EVENT.ANTIMATTER_GALAXY : PRESTIGE_EVENT.INFINITY;
+  }
+
   tick() {
     if (this.isBuyMaxUnlocked) {
       maxBuyDimBoosts();

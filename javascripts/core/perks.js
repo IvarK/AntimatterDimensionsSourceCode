@@ -113,7 +113,7 @@ for (const perk of Perks.all) {
 function checkPerkValidity() {
   if (player.reality.perks.every(id => Perks.find(id) !== undefined)) return;
   dev.respecPerks();
-  if (player.reality.perkPoints >= Perks.all.length) {
+  if (Currency.perkPoints.gte(Perks.all.length)) {
     dev.buyAllPerks();
     Modal.message.show("Some of your Perks were invalid, but you auto-bought all valid perks.");
   } else {

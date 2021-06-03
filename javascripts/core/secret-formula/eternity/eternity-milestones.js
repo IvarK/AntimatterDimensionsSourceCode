@@ -35,7 +35,7 @@ GameDatabase.eternity.milestones = {
   },
   keepBreakUpgrades: {
     eternities: 8,
-    reward: "You keep your Break Infinity Upgrades on Eternity"
+    reward: "You start Eternity with all Break Infinity Upgrades"
   },
   autobuyMaxGalaxies: {
     eternities: 9,
@@ -121,8 +121,8 @@ GameDatabase.eternity.milestones = {
     reward: () => {
       const infinities = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds, true);
       // eslint-disable-next-line prefer-template
-      return `While offline, gain Infinitied stat equal to ${formatPercents(0.5)}
-        your best Infinitied stat/hour this Eternity. ` +
+      return `While offline, gain Infinities equal to ${formatPercents(0.5)}
+        your best Infinities/hour this Eternity. ` +
         (infinities.gt(0) ? `(currently ${format(infinities, 2, 2)}/hour)` : "(disabled)");
     },
   }

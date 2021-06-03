@@ -139,8 +139,8 @@ function getGlyphLevelSources() {
   // Once Effarig is unlocked, these contributions can be adjusted; the math is described in detail
   // in getGlyphLevelInputs. These *Base values are the nominal inputs, as they would be multiplied without Effarig
   const eternityPoints = Player.canEternity
-    ? player.eternityPoints.plus(gainedEternityPoints())
-    : player.eternityPoints;
+    ? Currency.eternityPoints.value.plus(gainedEternityPoints())
+    : Currency.eternityPoints.value;
   const epBase = Math.pow(Math.max(1, eternityPoints.pLog10()) / 4000, 0.5);
   // @ts-ignore
   const replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
@@ -148,7 +148,7 @@ function getGlyphLevelSources() {
   // factors assigned to repl and dt can be arbitrarily tuned
   const replBase = Math.pow(Math.max(1, player.replicanti.amount.log10()), replPow) * 0.02514867;
   const dtPow = 1.3 + getAdjustedGlyphEffect("realityDTglyph");
-  const dtBase = Math.pow(Math.max(1, player.dilation.dilatedTime.pLog10()), dtPow) * 0.02514867;
+  const dtBase = Math.pow(Math.max(1, Currency.dilatedTime.value.pLog10()), dtPow) * 0.02514867;
   const eterBase = Effects.max(1, RealityUpgrade(18));
   return { epBase, replBase, dtBase, eterBase };
 }

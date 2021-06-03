@@ -2,11 +2,11 @@
 
 function giveEternityRewards(auto) {
   player.records.bestEternity.time = Math.min(player.records.thisEternity.time, player.records.bestEternity.time);
-  player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
+  Currency.eternityPoints.add(gainedEternityPoints());
 
   const newEternities = new Decimal(RealityUpgrade(3).effectOrDefault(1))
     .times(getAdjustedGlyphEffect("timeetermult"));
-  if (player.eternities.eq(0) && newEternities.lte(10)) {
+  if (Currency.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
   }
 
@@ -17,7 +17,7 @@ function giveEternityRewards(auto) {
     newEternities
   );
 
-  player.eternities = player.eternities.add(newEternities);
+  Currency.eternities.add(newEternities);
 
   if (EternityChallenge.isRunning) {
     const challenge = EternityChallenge.current;
@@ -40,7 +40,7 @@ function giveEternityRewards(auto) {
   player.records.bestEternity.bestEPminReality =
     player.records.bestEternity.bestEPminReality.max(player.records.thisEternity.bestEPmin);
 
-  player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
+  Currency.infinitiesBanked.value = Currency.infinitiesBanked.value.plusEffectsOf(
     Achievement(131),
     TimeStudy(191)
   );
@@ -48,11 +48,6 @@ function giveEternityRewards(auto) {
   if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked) {
     EffarigUnlock.eternity.unlock();
     beginProcessReality(getRealityProps(true));
-  }
-
-  if (player.records.bestReality.bestEP.lt(player.eternityPoints)) {
-    player.records.bestReality.bestEP = new Decimal(player.eternityPoints);
-    player.records.bestReality.bestEPSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
 }
 
@@ -80,11 +75,11 @@ function eternity(force, auto, specialConditions = {}) {
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     if (!player.dilation.active) giveEternityRewards(auto);
     // If somehow someone manages to force their first eternity
-    // (e.g., by starting an EC), they haven't really eternitied yet.
+    // (e.g., by starting an EC), they haven't really done an eternity yet.
     player.achievementChecks.noEternitiesThisReality = false;
   }
 
-  if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
+  if (player.dilation.active && (!force || Currency.infinityPoints.gte(Number.MAX_VALUE))) {
     rewardTP();
   }
 
@@ -111,7 +106,7 @@ function eternity(force, auto, specialConditions = {}) {
     player.respec = false;
   }
 
-  player.infinityPoints = Player.startingIP;
+  Currency.infinityPoints.reset();
   InfinityDimensions.resetAmount();
   player.records.thisInfinity.bestIPmin = new Decimal(0);
   player.records.bestInfinity.bestIPminEternity = new Decimal(0);
@@ -120,7 +115,7 @@ function eternity(force, auto, specialConditions = {}) {
   player.records.thisEternity.bestIPMsWithoutMaxAll = new Decimal(0);
   resetTimeDimensions();
   resetTickspeed();
-  playerInfinityUpgradesOnEternity();
+  playerInfinityUpgradesOnReset();
   AchievementTimers.marathon2.reset();
   applyRealityUpgradesAfterEternity();
   player.records.thisInfinity.maxAM = new Decimal(0);
@@ -149,7 +144,7 @@ function initializeChallengeCompletions(isReality) {
 
 function initializeResourcesAfterEternity() {
   player.sacrificed = new Decimal(0);
-  player.infinitied = new Decimal(0);
+  Currency.infinities.reset();
   player.records.bestInfinity.time = 999999999999;
   player.records.bestInfinity.realTime = 999999999999;
   player.records.thisInfinity.time = 0;
@@ -161,18 +156,13 @@ function initializeResourcesAfterEternity() {
   player.partInfinitied = 0;
   player.infMult = new Decimal(1);
   player.infMultCost = new Decimal(10);
-  player.infinityPower = new Decimal(1);
-  player.timeShards = new Decimal(0);
+  Currency.infinityPower.reset();
+  Currency.timeShards.reset();
   player.records.thisEternity.time = 0;
   player.records.thisEternity.realTime = 0;
   player.totalTickGained = 0;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  if (!EternityMilestone.keepBreakUpgrades.isReached) {
-    player.infinityRebuyables = [0, 0, 0];
-    GameCache.tickSpeedMultDecrease.invalidate();
-    GameCache.dimensionMultDecrease.invalidate();
-  }
   player.achievementChecks.noSacrifices = true;
   player.achievementChecks.onlyEighthDimensions = true;
   player.achievementChecks.onlyFirstDimensions = true;
@@ -201,7 +191,7 @@ class EternityMilestoneState {
   }
 
   get isReached() {
-    return player.eternities.gte(this.config.eternities);
+    return Currency.eternities.gte(this.config.eternities);
   }
 }
 
@@ -261,7 +251,7 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   get isAffordable() {
-    return player.eternityPoints.gte(this.cost);
+    return Currency.eternityPoints.gte(this.cost);
   }
 
   get cost() {
@@ -290,19 +280,19 @@ class EPMultiplierState extends GameMechanicState {
 
   purchase() {
     if (!this.isAffordable) return false;
-    player.eternityPoints = player.eternityPoints.minus(this.cost);
+    Currency.eternityPoints.subtract(this.cost);
     ++this.boughtAmount;
     return true;
   }
 
   buyMax() {
-    const bulk = bulkBuyBinarySearch(player.eternityPoints, {
+    const bulk = bulkBuyBinarySearch(Currency.eternityPoints.value, {
       costFunction: this.costAfterCount,
       cumulative: true,
       firstCost: this.cost,
     }, this.boughtAmount);
     if (!bulk) return false;
-    player.eternityPoints = player.eternityPoints.minus(bulk.purchasePrice);
+    Currency.eternityPoints.subtract(bulk.purchasePrice);
     this.boughtAmount += bulk.quantity;
     return true;
   }

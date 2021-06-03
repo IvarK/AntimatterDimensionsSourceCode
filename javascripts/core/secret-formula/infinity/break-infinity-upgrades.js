@@ -42,8 +42,8 @@ GameDatabase.infinity.breakUpgrades = (function() {
     infinitiedMult: {
       id: "infinitiedMult",
       cost: 1e5,
-      description: "Antimatter Dimensions gain a multiplier based on Infinitied stat",
-      effect: () => 1 + Player.totalInfinitied.pLog10() * 10,
+      description: "Antimatter Dimensions gain a multiplier based on Infinities",
+      effect: () => 1 + Currency.infinitiesTotal.value.pLog10() * 10,
       formatEffect: value => formatX(value, 2, 2)
     },
     achievementMult: {
@@ -65,7 +65,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     infinitiedGen: {
       id: "infinitiedGeneration",
       cost: 2e7,
-      description: "Passively generate Infinitied stat based on your fastest Infinity",
+      description: "Passively generate Infinities based on your fastest Infinity",
       effect: () => player.records.bestInfinity.time,
       formatEffect: value => {
         if (value === Number.MAX_VALUE) return "No Infinity generation";
@@ -89,7 +89,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
     autobuyerSpeed: {
       id: "autoBuyerUpgrade",
       cost: 1e15,
-      description: "Autobuyers purchased with antimatter or unlocked from Normal Challenges work twice as fast"
+      description: "Autobuyers unlocked or improved by Normal Challenges work twice as fast"
     },
     tickspeedCostMult: rebuyable({
       id: 0,

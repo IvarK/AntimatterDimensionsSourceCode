@@ -47,7 +47,7 @@ GameDatabase.celestials.v = {
       description: value => `Get ${format(Decimal.pow10(value))} Infinity Points in Eternity Challenge 7.`,
       values: [6e5, 7.2e5, 8.4e5, 9.6e5, 1.08e6, 1.2e6],
       condition: () => V.isRunning && EternityChallenge(7).isRunning,
-      currentValue: () => player.infinityPoints.log10(),
+      currentValue: () => Currency.infinityPoints.value.log10(),
       formatRecord: x => format(Decimal.pow10(x), 2),
       shardReduction: tiers => 1.2e5 * tiers,
       maxShardReduction: goal => goal - 6e5,
@@ -74,7 +74,7 @@ GameDatabase.celestials.v = {
       description: value => `Get ${format(Decimal.pow10(value))} Eternity Points.`,
       values: [7000, 7600, 8200, 8800, 9400, 10000],
       condition: () => V.isRunning,
-      currentValue: () => player.eternityPoints.log10(),
+      currentValue: () => Currency.eternityPoints.value.log10(),
       formatRecord: x => format(Decimal.pow10(x), 2),
       shardReduction: tiers => 600 * tiers,
       maxShardReduction: goal => goal - 7000,
@@ -121,7 +121,7 @@ GameDatabase.celestials.v = {
       condition: () => V.isRunning,
       currentValue: () => (
         // Dirty hack I know lmao
-        player.timestudy.theorem.toNumber() > 400000
+        Currency.timeTheorems.gte(400000)
         ? -Math.log10(player.minNegativeBlackHoleThisReality)
         : 0),
       formatRecord: x => `${formatInt(1)} / ${format(Math.pow(10, x))}`,

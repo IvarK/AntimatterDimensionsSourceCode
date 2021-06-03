@@ -13,7 +13,7 @@ Vue.component("effarig-unlock-button", {
   methods: {
     update() {
       this.isBought = this.unlock.isUnlocked;
-      this.isAvailable = Effarig.shardAmount >= this.unlock.cost;
+      this.isAvailable = Currency.relicShards.gte(this.unlock.cost);
     },
     purchase() {
       this.unlock.purchase();

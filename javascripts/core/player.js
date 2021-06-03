@@ -81,7 +81,7 @@ let player = {
     galaxy: {
       cost: 1,
       interval: 20000,
-      limitGalaxies: true,
+      limitGalaxies: false,
       maxGalaxies: 1,
       buyMax: false,
       buyMaxInterval: 0,
@@ -91,7 +91,7 @@ let player = {
     dimBoost: {
       cost: 1,
       interval: 4000,
-      limitDimBoosts: true,
+      limitDimBoosts: false,
       maxDimBoosts: 1,
       galaxies: 10,
       bulk: 1,
@@ -157,8 +157,8 @@ let player = {
     epMultBuyer: { isActive: false, },
   },
   infinityPoints: new Decimal(0),
-  infinitied: new Decimal(0),
-  infinitiedBank: new Decimal(0),
+  infinities: new Decimal(0),
+  infinitiesBanked: new Decimal(0),
   dimensionBoosts: 0,
   galaxies: 0,
   news: new Set(),
@@ -285,11 +285,13 @@ let player = {
   },
   timestudy: {
     theorem: new Decimal(0),
-    amcost: new Decimal("1e20000"),
-    ipcost: new Decimal(1),
-    epcost: new Decimal(1),
+    maxTheorem: new Decimal(0),
+    amBought: 0,
+    ipBought: 0,
+    epBought: 0,
     studies: [],
     shopMinimized: false,
+    preferredPaths: [[], 0],
     presets: new Array(6).fill({
       name: "",
       studies: "",
@@ -550,8 +552,6 @@ let player = {
   triggeredTabNotificationBits: 0,
   tutorialState: 0,
   tutorialActive: true,
-  saveOverThresholdFlag: false,
-  saveOverThresholdFlagModalDisplayed: false,
   options: {
     news: {
       enabled: true,
@@ -578,6 +578,7 @@ let player = {
     exportedFileCount: 0,
     hideCompletedAchievementRows: false,
     glyphTextColors: true,
+    headerTextColored: false,
     ignoreGlyphLevel: true,
     ignoreGlyphRarity: true,
     showHintText: {
@@ -651,16 +652,24 @@ let player = {
 const Player = {
   defaultStart: deepmerge.all([{}, player]),
 
-  get totalInfinitied() {
-    return player.infinitied.plus(player.infinitiedBank).clampMin(0);
-  },
-
-  get gainedEternities() {
-    return RealityUpgrade(10).isBought ? player.eternities.sub(100) : player.eternities;
-  },
-
   get isInMatterChallenge() {
     return NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning;
+  },
+
+  get isInAntimatterChallenge() {
+    return NormalChallenge.isRunning || InfinityChallenge.isRunning;
+  },
+
+  get antimatterChallenge() {
+    return NormalChallenge.current || InfinityChallenge.current;
+  },
+
+  get isInAnyChallenge() {
+    return this.isInAntimatterChallenge || EternityChallenge.isRunning;
+  },
+
+  get anyChallenge() {
+    return this.antimatterChallenge || EternityChallenge.current
   },
 
   get effectiveMatterAmount() {
@@ -681,7 +690,7 @@ const Player = {
   },
 
   get canEternity() {
-    return player.infinityPoints.gte(Player.eternityGoal);
+    return Currency.infinityPoints.gte(Player.eternityGoal);
   },
 
   get bestRunIPPM() {
@@ -716,23 +725,9 @@ const Player = {
       : Decimal.NUMBER_MAX_VALUE;
   },
 
-  get startingIP() {
-    return Effects.max(
-      0,
-      Perk.startIP1,
-      Perk.startIP2,
-      Achievement(104)
-    ).toDecimal();
-  },
-
-  get startingEP() {
-    return Effects.max(
-      0,
-      Perk.startEP1,
-      Perk.startEP2,
-      Perk.startEP3
-    ).toDecimal();
-  },
+  get automatorUnlocked() {
+    return Currency.realities.gte(5);
+  }
 };
 
 function guardFromNaNValues(obj) {

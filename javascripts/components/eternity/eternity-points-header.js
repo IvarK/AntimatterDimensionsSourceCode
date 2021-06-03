@@ -8,7 +8,7 @@ Vue.component("eternity-points-header", {
   },
   methods: {
     update() {
-      this.eternityPoints.copyFrom(player.eternityPoints.floor());
+      this.eternityPoints.copyFrom(Currency.eternityPoints.value.floor());
     }
   },
   template: `

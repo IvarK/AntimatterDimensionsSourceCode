@@ -59,7 +59,7 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
 
   autoEternitiesAvailable(considerMilestoneReached) {
     return (considerMilestoneReached || EternityMilestone.autoEternities.isReached) &&
-      !EternityChallenge.isRunning &&
+      !Player.isInAnyChallenge && !player.dilation.active &&
       this.data.isActive &&
       this.amount.equals(0);
   }
@@ -80,7 +80,7 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
         proc = Time.thisEternityRealTime.totalSeconds > this.time;
         break;
       case AUTO_ETERNITY_MODE.X_CURRENT:
-        proc = gainedEternityPoints().gte(player.eternityPoints.times(this.xCurrent));
+        proc = gainedEternityPoints().gte(Currency.eternityPoints.value.times(this.xCurrent));
         break;
     }
     if (proc) eternity(false, true);

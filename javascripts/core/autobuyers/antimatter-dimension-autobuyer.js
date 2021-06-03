@@ -103,6 +103,10 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
     this.data.isBought = true;
   }
 
+  get resetTickOn() {
+    return Perk.dimboostNonReset.isBought ? PRESTIGE_EVENT.ANTIMATTER_GALAXY : PRESTIGE_EVENT.DIMENSION_BOOST;
+  }
+
   reset() {
     super.reset();
     if (EternityMilestone.keepAutobuyers.isReached) return;

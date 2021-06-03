@@ -26,7 +26,7 @@ function infinityDimensionCommonMultiplier() {
 function buyManyInfinityDimension(tier) {
   if (!canBuyInfinityDimension(tier)) return false;
   const dim = InfinityDimension(tier);
-  player.infinityPoints = player.infinityPoints.minus(dim.cost);
+  Currency.infinityPoints.subtract(dim.cost);
   dim.cost = Decimal.round(dim.cost.times(dim.costMultiplier));
   // Because each ID purchase gives 10 IDs
   dim.amount = dim.amount.plus(10);
@@ -42,7 +42,7 @@ function buyMaxInfDims(tier) {
   if (!canBuyInfinityDimension(tier)) return false;
   const dim = InfinityDimension(tier);
   const costMult = dim.costMultiplier;
-  const exponentDifference = (player.infinityPoints.e - dim.cost.e);
+  const exponentDifference = (Currency.infinityPoints.exponent - dim.cost.e);
   let toBuy = exponentDifference === 0 ? 1 : Math.floor(exponentDifference / Math.log10(costMult));
   const purchasesUntilHardcap = dim.purchaseCap - dim.purchases;
   toBuy = Math.min(toBuy, purchasesUntilHardcap);
@@ -52,7 +52,7 @@ function buyMaxInfDims(tier) {
   }
 
   dim.cost = dim.cost.times(Decimal.pow(costMult, toBuy - 1));
-  player.infinityPoints = player.infinityPoints.minus(dim.cost);
+  Currency.infinityPoints.subtract(dim.cost);
   dim.cost = dim.cost.times(costMult);
   // Because each ID purchase gives 10 IDs
   dim.amount = dim.amount.plus(10 * toBuy);
@@ -138,7 +138,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get isAffordable() {
-    return player.infinityPoints.gte(this.cost);
+    return Currency.infinityPoints.gte(this.cost);
   }
 
   get rateOfChange() {
@@ -294,7 +294,7 @@ const InfinityDimensions = {
   },
 
   resetAmount() {
-    player.infinityPower = new Decimal(0);
+    Currency.infinityPower.reset();
     for (const dimension of InfinityDimensions.all) {
       dimension.resetAmount();
     }

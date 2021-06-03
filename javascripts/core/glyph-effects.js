@@ -224,9 +224,9 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 2,
     isGenerated: true,
     glyphTypes: ["time"],
-    singleDesc: "Multiply Eternitied stat gain by {value}",
-    totalDesc: "Eternitied stat gain ×{value}",
-    genericDesc: "Eternitied stat gain multiplier",
+    singleDesc: "Multiply Eternity gain by {value}",
+    totalDesc: "Eternity gain ×{value}",
+    genericDesc: "Eternity gain multiplier",
     effect: (level, strength) => Math.pow((strength + 3) * level, 0.9) *
      Math.pow(3, GlyphAlteration.sacrificeBoost("time")),
     formatEffect: x => format(x, 2, 2),
@@ -454,9 +454,9 @@ GameDatabase.reality.glyphEffects = [
     bitmaskIndex: 15,
     isGenerated: true,
     glyphTypes: ["infinity"],
-    singleDesc: "Multiply Infinitied stat gain by {value}",
-    totalDesc: "Infinitied stat gain ×{value}",
-    genericDesc: "Infinitied stat gain multiplier",
+    singleDesc: "Multiply Infinity gain by {value}",
+    totalDesc: "Infinity gain ×{value}",
+    genericDesc: "Infinity gain multiplier",
     effect: (level, strength) => (GlyphAlteration.isEmpowered("infinity")
       ? Decimal.pow(1.02, level)
       : Decimal.pow(level * strength, 1.5).times(2)),
@@ -735,22 +735,10 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["companion"],
     singleDesc: "Thanks for your dedication for the game! You reached {value} Eternity Points on your first Reality.",
     totalDesc: () => (Enslaved.isRunning ? "Help me" : "Yay!"),
-    // The EP value for this (and the next effect) are entirely encoded in rarity, but level needs to be present to
+    // The EP value for this is entirely encoded in rarity, but level needs to be present to
     // make sure the proper parameter is being used. The actual glyph level shouldn't do anything.
     // eslint-disable-next-line no-unused-vars
     effect: (level, strength) => Decimal.pow10(1e6 * strengthToRarity(strength)),
-    formatEffect: x => formatPostBreak(x, 2),
-    combine: GlyphCombiner.multiplyDecimal,
-  }, {
-    id: "companionreduction",
-    bitmaskIndex: 10,
-    isGenerated: false,
-    glyphTypes: ["companion"],
-    singleDesc: "(Due to scaling changes from before the Reality update, this was reduced to {value} Eternity Points" +
-      " for calculating Reality Machines gained)",
-    totalDesc: " ",
-    // eslint-disable-next-line no-unused-vars
-    effect: (level, strength) => Decimal.pow10(6000 + 0.25 * (1e6 * strengthToRarity(strength) - 6000)),
     formatEffect: x => formatPostBreak(x, 2),
     combine: GlyphCombiner.multiplyDecimal,
   }

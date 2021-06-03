@@ -22,9 +22,13 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
     return EternityMilestone.autobuyerID(this._tier).isReached;
   }
 
+  get resetTickOn() {
+    return PRESTIGE_EVENT.ETERNITY;
+  }
+
   tick() {
     const tier = this._tier;
-    if (!InfinityDimension(tier).isAvailableForPurchase) return;
+    if (!InfinityDimension(tier).isAvailableForPurchase || EternityChallenge(8).isRunning) return;
     super.tick();
     buyManyInfinityDimension(tier);
     buyMaxInfDims(tier);

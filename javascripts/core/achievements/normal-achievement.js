@@ -108,7 +108,7 @@ const Achievements = {
   },
 
   autoAchieveUpdate(diff) {
-    if (player.realities === 0) return;
+    if (!PlayerProgress.realityUnlocked()) return;
     if (!player.reality.autoAchieve) return;
     if (Achievements.preReality.every(a => a.isUnlocked)) return;
     if (Perk.achievementGroup6.isBought) {
@@ -130,7 +130,7 @@ const Achievements = {
   },
 
   timeToNextAutoAchieve() {
-    if (player.realities === 0) return 0;
+    if (!PlayerProgress.realityUnlocked()) return 0;
     if (GameCache.achievementPeriod.value === 0) return 0;
     if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) return 0;
     return Math.max(this.period - player.reality.achTimer, 1);

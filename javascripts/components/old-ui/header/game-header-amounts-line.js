@@ -16,13 +16,13 @@ Vue.component("game-header-amounts-line", {
   },
   methods: {
     update() {
-      this.showInfinityPoints = Player.totalInfinitied.gt(0) || PlayerProgress.eternityUnlocked();
+      this.showInfinityPoints = PlayerProgress.infinityUnlocked();
       if (this.showInfinityPoints) {
-        this.infinityPoints.copyFrom(player.infinityPoints.floor());
+        this.infinityPoints.copyFrom(Currency.infinityPoints.value.floor());
       }
       this.showEternityPoints = PlayerProgress.eternityUnlocked();
       if (this.showEternityPoints) {
-        this.eternityPoints.copyFrom(player.eternityPoints.floor());
+        this.eternityPoints.copyFrom(Currency.eternityPoints.value.floor());
         this.showNextEP = Player.canEternity && player.records.thisReality.maxEP.lt(100) &&
           gainedEternityPoints().lt(100);
         if (this.showNextEP) this.nextEP.copyFrom(requiredIPForEP(gainedEternityPoints().floor().toNumber() + 1));

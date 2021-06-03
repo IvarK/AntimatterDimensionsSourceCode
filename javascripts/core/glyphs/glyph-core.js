@@ -9,7 +9,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
   "realityglyphlevel", "realitygalaxies", "realityrow1pow", "realityDTglyph",
-  "companiondescription", "companionEP", "companionreduction"];
+  "companiondescription", "companionEP"];
 
 const generatedTypes = ["power", "infinity", "replication", "time", "dilation", "effarig"];
 
@@ -31,6 +31,9 @@ const Glyphs = {
   levelBoost: 0,
   get inventoryList() {
     return player.reality.glyphs.inventory;
+  },
+  get sortedInventoryList() {
+    return this.inventoryList.sort((a, b) => -a.level * a.strength + b.level * b.strength);
   },
   get activeList() {
     return player.reality.glyphs.active;
@@ -100,12 +103,15 @@ const Glyphs = {
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   findByValues(finding, ignoreLevel, ignoreStrength) {
-    return this.inventoryList.filter(glyph => {
-        const str = ignoreStrength || glyph.strength === finding.strength;
-        const lvl = ignoreLevel || glyph.level === finding.level;
-        const sym = Boolean(glyph.symbol) || glyph.symbol === finding.symbol;
-        return (glyph.type === finding.type && glyph.effects === finding.effects && str && lvl && sym);
-      }).sort((a, b) => -a.level * a.strength + b.level * b.strength)[0];
+    for (const glyph of this.sortedInventoryList) {
+      const type = glyph.type === finding.type;
+      const effects = glyph.effects === finding.effects;
+      const str = ignoreStrength || glyph.strength === finding.strength;
+      const lvl = ignoreLevel || glyph.level === finding.level;
+      const sym = Boolean(glyph.symbol) || glyph.symbol === finding.symbol;
+      if (type && effects && str && lvl && sym) return glyph;
+    }
+    return undefined;
   },
   findById(id) {
     return player.reality.glyphs.inventory.find(glyph => glyph.id === id);
@@ -433,9 +439,9 @@ const Glyphs = {
       oldIndex,
       targetSlot,
       am: new Decimal(Currency.antimatter.value),
-      ip: new Decimal(player.infinityPoints),
-      ep: new Decimal(player.eternityPoints),
-      tt: player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost() - TimeTheorems.totalPurchased()),
+      ip: new Decimal(Currency.infinityPoints.value),
+      ep: new Decimal(Currency.eternityPoints.value),
+      tt: Currency.timeTheorems.max.minus(TimeTheorems.totalPurchased()),
       ecs: EternityChallenges.all.map(e => e.completions),
       thisRealityTime: player.records.thisReality.time,
       thisRealityRealTime: player.records.thisReality.realTime,
@@ -443,8 +449,8 @@ const Glyphs = {
       dilationStudies: player.dilation.studies.toBitmask(),
       dilationUpgrades: player.dilation.upgrades.toBitmask(),
       dilationRebuyables: DilationUpgrades.rebuyable.mapToObject(d => d.id, d => d.boughtAmount),
-      tp: new Decimal(player.dilation.tachyonParticles),
-      dt: new Decimal(player.dilation.dilatedTime),
+      tp: new Decimal(Currency.tachyonParticles.value),
+      dt: new Decimal(Currency.dilatedTime.value),
     };
     player.reality.glyphs.undo.push(undoData);
   },
@@ -458,9 +464,9 @@ const Glyphs = {
       restoreCelestialState: true,
     });
     Currency.antimatter.value = new Decimal(undoData.am);
-    player.infinityPoints.fromValue(undoData.ip);
-    player.eternityPoints.fromValue(undoData.ep);
-    player.timestudy.theorem.fromValue(undoData.tt);
+    Currency.infinityPoints.value = new Decimal(undoData.ip);
+    Currency.eternityPoints.value = new Decimal(undoData.ep);
+    Currency.timeTheorems.value = new Decimal(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
     player.records.thisReality.time = undoData.thisRealityTime;
     player.records.thisReality.realTime = undoData.thisRealityRealTime;
@@ -471,8 +477,8 @@ const Glyphs = {
       for (const id of Object.keys(undoData.dilationRebuyables)) {
         DilationUpgrades.fromId(id).boughtAmount = undoData.dilationRebuyables[id];
       }
-      player.dilation.tachyonParticles.fromValue(undoData.tp);
-      player.dilation.dilatedTime.fromValue(undoData.dt);
+      Currency.tachyonParticles.value = new Decimal(undoData.tp);
+      Currency.dilatedTime.value = new Decimal(undoData.dt);
     }
   },
   copyForRecords(glyphList) {

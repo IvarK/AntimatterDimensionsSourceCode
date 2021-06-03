@@ -1,5 +1,13 @@
 "use strict";
 
+const PRESTIGE_EVENT = {
+  DIMENSION_BOOST: 0,
+  ANTIMATTER_GALAXY: 1,
+  INFINITY: 2,
+  ETERNITY: 3,
+  REALITY: 4,
+};
+
 const AUTOBUYER_MODE = {
   BUY_SINGLE: 1,
   BUY_10: 10,

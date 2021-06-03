@@ -59,7 +59,7 @@ Vue.component("replicanti-tab", {
     update() {
       this.isUnlocked = Replicanti.areUnlocked;
       if (!this.isUnlocked) {
-        this.isUnlockAffordable = player.infinityPoints.gte(1e140);
+        this.isUnlockAffordable = Currency.infinityPoints.gte(1e140);
         return;
       }
       this.isInEC8 = EternityChallenge(8).isRunning;

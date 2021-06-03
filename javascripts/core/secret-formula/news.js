@@ -2116,6 +2116,99 @@ GameDatabase.news = [
       disregard any undeserved compliments.`
   },
   {
+    id: "a341",
+    text: "Game under construction: All mechanics must wear hardcaps."
+  },
+  {
+    id: "a342",
+    text: "Of course paperclips have a use, you use them to hold papers together. But who uses paper anymore?"
+  },
+  {
+    id: "a343",
+    get text() {
+      // Caps in ~68 years of real playtime then turns into "Infinite%"
+      return `Global Challenge - across all AD players, accumulate ${format(1e308)} contest-paperclips (noted by the
+        square ends), to receive an event-exclusive metal bagpipe, capable of giving +2 AM/s, as well as an extra
+        tickspeed while above ${format(1e200)} tickspeed upgrades! Current global progress -
+        ${format(Math.pow(player.records.realTimePlayed, 25))}/${format(1e308)}
+        (${formatPercents(Math.log10(Math.pow(player.records.realTimePlayed, 25)) / 308, 3)})`;
+    }
+  },
+  {
+    id: "a344",
+    text:
+      `Real life is an enigma. No one knows how it really works. There are many questions left unanswered:
+      What is the meaning of life? Are we all living inside a simulation? How do you do antitables? Where and
+      how did existence begin? These are all the questions that always linger in the back of our heads, and
+      the answers to them? We may never know.`
+  },
+  {
+    id: "a345",
+    text: "Japanese complain, as haikus can't be shown here. Conflict arises."
+  },
+  {
+    id: "a346",
+    text:
+      `Did you know Antimatter Dimensions is also available on Android? <a
+      href="https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions">
+      Click here to check it out!<a>`
+  },
+  {
+    id: "a347",
+    text:
+      `Pluto isn't a state. The 50 states, as we all know, are: Adverb, Air, Artemis, Asia, Atlantic, Bargaining,
+      Bilabial, Braille, Candela, Comma, Dacron, Dairy, Dative, Dexterity, Disenchanter, Dodecahedron, Erie,
+      Eukaryota, Folklore, Great Pyramid, Halogen, Igneous, Italy, Kansas, Kilimanjaro, Lambda, Leviticus, Libra,
+      Liquid, Lymphatic, Mesozoic, Microwave, Muon, North, Nova Scotia, Octagon, October, P = NP, Perissodactyla,
+      Polk, Potassium, Pulley, Quinary, Rook, Saturn, Tiana, Tiger, Varaha, Yale, and Yellow.`
+  },
+  {
+    id: "a348",
+    text: "<span style='color: red'>[News Message removed by moderator]<span>"
+  },
+  {
+    id: "a349",
+    get text() {
+      const chapters = [
+        `We have come, writers, painters, sculptors, architects, passionate enthusiasts of the hitherto untouched
+        beauty of Paris, to protest with all our strength, all our indignation, in the name of the unknown French
+        taste, in the name of art and of French history threatened, against the erection, in the heart of our
+        capital, of the useless and monstrous Eiffel Tower, which public malignity, often marked by common sense
+        and the spirit of justice, has already named of "Tower of Babel". Without falling into the exaltation of
+        chauvinism, we have the right to proclaim that Paris is the unrivaled city in the world. Above the streets,
+        the widened boulevards, and the magnificent walks, rise the most noble monuments that the human race has
+        produced. The soul of France, creator of masterpieces, shines amidst this august flowering of stones. Italy,
+        Germany and Flanders, so justifiably proud of their artistic legacy, possess nothing comparable to ours,
+        and from all corners of the universe Paris attracts curiosities and admiration.`,
+        `Are we going to let all this be profaned? Will the city of Paris go on to associate itself longer with the
+        baroques, with the mercantile imaginations of a machine builder, to become irreparably ugly and dishonor
+        itself? For the Eiffel Tower, which commercial America itself would not want, is, doubtless, the dishonor
+        of Paris. Everyone feels it, everyone says it, everyone deeply grieves it, and we are only a weak echo of
+        the universal opinion, so legitimately alarmed.`,
+        `Finally, when the foreigners come to visit our Exhibition, they will exclaim, astonished: "What? It is this
+        horror that the French have found to give us an idea of their taste so much vaunted? And they will be right
+        to make fun of us, because the Paris of the sublime gothics, the Paris of Jean Goujon, Germain Pilon, Puget,
+        Rude, Barye, etc., will have become the Paris of M. Eiffel.`,
+        `It suffices, moreover, to realize what we are doing, to imagine for a moment a vertiginously ridiculous
+        tower dominating Paris, as well as a gigantic factory chimney, crushing with its barbarian mass. Our Lady,
+        the Sainte-Chapelle, the dome of the Invalides, the Arc de Triomphe, all our humiliated monuments, all our
+        shrunken architectures, which will disappear in this astonishing dream. And for twenty years, we will see
+        how to stretch out over the entire city, still quivering with the genius of so many centuries, we will see
+        the odious shadow of the odious column of bolted sheet metal stretch like an ink stain ...`,
+        `It's up to you, Monsieur and dear compatriot, to you who love Paris so much, who have embellished it so
+        much, who have so often protected it against the administrative devastation and the vandalism of industrial
+        enterprises, that it is the honor to defend it once more. We leave it to you to plead the cause of Paris,
+        knowing that you will deploy all the energy, all the eloquence that must inspire an artist such as you love
+        what is beautiful, what is great, what is right ... And if our cry of alarm is not heard, if our reasons are
+        not listened to, if Paris is stubborn in the idea of dishonoring Paris, we will have, at least, you and us,
+        hear a protest that honors.`
+      ];
+      const chapter = chapters[player.secretUnlocks.eiffelTowerChapter];
+      player.secretUnlocks.eiffelTowerChapter = (player.secretUnlocks.eiffelTowerChapter + 1) % 5;
+      return chapter;
+    }
+  },
+  {
     id: "l1",
     text: "You just made your 1,000,000,000,000,000th antimatter. This one tastes like chicken.",
     get unlocked() { return Currency.antimatter.exponent === 15; }
@@ -2631,9 +2724,41 @@ GameDatabase.news = [
   },
   {
     id: "l71",
-    text:
-      "Other languages await... I need to become a programmer",
+    text: "Other languages await... I need to become a programmer",
     get unlocked() { return Player.canEternity || PlayerProgress.eternityUnlocked(); }
+  },
+  {
+    id: "l72",
+    get text() {
+      const scenarios = [
+        `our contestants struggle to survive in the desolate wasteland of Eternity Challenge 8 -
+        running out of Replicanti and Infinity Dimensions, what will they turn to?`,
+        "we investigate reports of a Time Shard mine collapsing at 26:90.",
+        "we invite an amateur on to explain what the reward for Infinity Challenge 9 would be.",
+        "our friends over at ANN explain how they produce their broadcasts.",
+        "we invite local idle gamers over to explain how they play their favorite games.",
+        `<span style='font-family: Barrio'>send 10,000 Support The Developer
+        coins or you will never see RealiTV again.</span>`,
+        "we break down exactly what went wrong in the black hole powering our city yesterday.",
+        "we go over our 10-day weather forcasts.",
+        `YOU MUST PAY ${format(player.reality.realityMachines.times(10))}
+        REALITY MACHINES TO CONTINUE VIEWING THIS PROGRAM.`,
+        "we witness the release of the hypnodrones.",
+        "our great and grand overlord lets us have a single antimatter.",
+        `Bill Nye explains how Replicanti replicate, and teaches how to spot dangerous conspiracy theories
+        such as "ingesting antimatter is perfectly fine" and "Antimatter Galaxies aren't worth it".`,
+        "the world's greatest philosophers debate if we are the real antimatter.",
+        "resident baker explains how ordinary objects can transmorph into cake if not watched constantly."
+      ];
+      const scenario = scenarios.randomElement();
+      return `Next time on RealiTV, ${scenario}`;
+    },
+    get unlocked() { return PlayerProgress.realityUnlocked(); }
+  },
+  {
+    id: "l73",
+    text: "A long time ago in a distant galaxy far, far away, the cost scaling changed.",
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {
     id: "j1",

@@ -207,6 +207,11 @@ body {
 }
 
 @font-face {
+  font-family: Barrio;
+  src: url('Barrio-Regular.ttf');
+}
+
+@font-face {
   font-family: Font Awesome;
   src: url('fa-solid-900.ttf');
 }

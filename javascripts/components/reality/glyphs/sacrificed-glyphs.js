@@ -41,10 +41,14 @@ Vue.component("sacrificed-glyphs", {
           return this.sacConfig.description(this.effectValue);
         },
         currentSacrifice() {
-          return this.$viewModel.tabs.reality.draggingGlyphInfo;
+          const viewModel = this.$viewModel.tabs.reality;
+          return viewModel.mouseoverGlyphInfo.type === ""
+            ? viewModel.draggingGlyphInfo
+            : viewModel.mouseoverGlyphInfo;
         },
         showNewSacrifice() {
-          return this.hasDragover && this.currentSacrifice.type === this.type;
+          return this.currentSacrifice.type === this.type &&
+            (this.hasDragover || (ui.view.shiftDown && AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE));
         },
         formatNewAmount() {
           return format(this.currentSacrifice.sacrificeValue, 2, 2);

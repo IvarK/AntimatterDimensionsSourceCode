@@ -5,7 +5,7 @@ GameUI.notify = (function() {
   template.classList.add("o-notification");
   const enterAnimation = "a-notification--enter";
   const leaveAnimation = "a-notification--leave";
-  function showNotification(text, elClass, duration) {
+  function showNotification(text, elClass, duration = 2000) {
     const el = template.cloneNode();
     el.textContent = text;
     el.classList.add(elClass, enterAnimation);
@@ -26,7 +26,7 @@ GameUI.notify = (function() {
       el.classList.add(leaveAnimation);
       setTimeout(() => el.remove(), 500);
     }
-    setTimeout(() => leave(), duration ? duration : 2000);
+    setTimeout(() => leave(), duration);
     el.onclick = () => leave();
   }
   return {

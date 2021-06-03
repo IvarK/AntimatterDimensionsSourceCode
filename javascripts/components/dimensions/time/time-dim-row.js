@@ -16,7 +16,8 @@ Vue.component("time-dim-row", {
       isAvailableForPurchase: false,
       isAutobuyerOn: false,
       requirementReached: false,
-      realityUnlocked: false
+      realityUnlocked: false,
+      showTTCost: false,
     };
   },
   computed: {
@@ -32,13 +33,25 @@ Vue.component("time-dim-row", {
         : "";
     },
     buttonContents() {
-      if (!this.isUnlocked && !this.shiftDown) {
-        return `Unlock: ${format(DilationTimeStudyState.studies[this.tier - 3].cost)} TT`;
+      if (this.showTTCost) {
+        return this.formattedTTCost;
       }
-      return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2)} EP`;
+      return this.formattedEPCost;
+    },
+    tooltipContents() {
+      if (this.showTTCost) {
+        return this.formattedEPCost;
+      }
+      return null;
     },
     showRow() {
       return this.realityUnlocked || this.isUnlocked || this.requirementReached;
+    },
+    formattedTTCost() {
+      return `Unlock: ${format(DilationTimeStudyState.studies[this.tier - 3].cost)} TT`;
+    },
+    formattedEPCost() {
+      return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2)} EP`;
     }
   },
   watch: {
@@ -65,6 +78,7 @@ Vue.component("time-dim-row", {
       this.requirementReached = dimension.requirementReached;
       this.isAutobuyerOn = Autobuyer.timeDimension(this.tier).isActive;
       this.realityUnlocked = PlayerProgress.realityUnlocked();
+      this.showTTCost = !this.isUnlocked && !this.shiftDown;
     },
     buyTimeDimension() {
       if (!this.isUnlocked) {
@@ -88,6 +102,7 @@ Vue.component("time-dim-row", {
         <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
       </div>
       <primary-button
+        v-tooltip="tooltipContents"
         :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-td l-dim-row__button"
         @click="buyTimeDimension"

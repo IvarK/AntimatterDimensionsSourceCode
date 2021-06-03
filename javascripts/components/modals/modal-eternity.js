@@ -4,6 +4,7 @@ Vue.component("modal-eternity", {
   data() {
     return {
       exitingEC: false,
+      startingIP: new Decimal(0)
     };
   },
   created() {
@@ -21,8 +22,8 @@ Vue.component("modal-eternity", {
       return `You will gain ${format(gainedEternityPoints(), 2)} Eternity Points on Eternity.`;
     },
     startWithIP() {
-      return Player.startingIP.gt(0)
-      ? `You will start your next Eternity with ${format(Player.startingIP, 2)} Infinity Points.`
+      return this.startingIP.gt(0)
+      ? `You will start your next Eternity with ${format(this.startingIP, 2)} Infinity Points.`
       : ``;
     },
     eternityChallenge() {
@@ -41,6 +42,7 @@ Vue.component("modal-eternity", {
   methods: {
     update() {
       this.exitingEC = EternityChallenge.isRunning;
+      this.startingIP = Currency.infinityPoints.startingValue;
     },
     handleNoClick() {
       this.emitClose();

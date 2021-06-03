@@ -112,6 +112,35 @@ function requestManualReality() {
   } else if (Glyphs.freeInventorySpace === 0) {
     Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
   }
+  processManualReality(false);
+}
+
+function processManualReality(sacrifice, glyphID) {
+  if (!isRealityAvailable()) return;
+
+  // If we have a glyph selected, send that along, otherwise pick one at random.
+  // eslint-disable-next-line no-param-reassign
+  if (glyphID === undefined) glyphID = Math.floor(Math.random() * GlyphSelection.choiceCount);
+
+  if (Perk.firstPerk.isEffectActive) {
+    // If we have firstPerk, we pick from 4+ glyphs, and glyph generation functions as normal.
+    // Generation occurs here to prevent RNG from changing if you do more than one reality without firstPerk.
+    GlyphSelection.generate(GlyphSelection.choiceCount);
+    GlyphSelection.select(glyphID, sacrifice);
+  } else if (player.realities === 0) {
+    // If this is our first Reality, give them the companion and the starting power glyph.
+    Glyphs.addToInventory(GlyphGenerator.startingGlyph(gainedGlyphLevel()));
+    Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
+  } else {
+    // We can't get a random glyph directly here because that disturbs the RNG
+    // (makes it depend on whether you got first perk or not).
+    Glyphs.addToInventory(GlyphSelection.glyphList(1, gainedGlyphLevel(), { isChoosingGlyph: true })[0]);
+  }
+
+  // We've already gotten a glyph at this point, so the second value has to be true.
+  // If we haven't sacrificed, we need to sort and purge glyphs, as applicable.
+  triggerManualReality(getRealityProps(false, true));
+  if (!sacrifice) Glyphs.processSortingAfterReality();
 }
 
 function triggerManualReality(realityProps) {

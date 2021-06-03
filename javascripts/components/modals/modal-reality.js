@@ -93,29 +93,8 @@ Vue.component("modal-reality", {
     select(index) {
       this.selectedGlyph = index;
     },
-    returnGlyph() {
-      // If we have a glyph selected, send that along, otherwise pick one at random.
-      return this.selectedGlyph || Math.floor(Math.random() * GlyphSelection.choiceCount);
-    },
     confirmModal(sacrifice) {
-      if (this.firstPerk) {
-        // If we have firstPerk, we pick from 4+ glyphs, and glyph generation functions as normal.
-        // Generation occurs here to prevent RNG from changing if you do more than one reality without firstPerk.
-        GlyphSelection.generate(GlyphSelection.choiceCount);
-        GlyphSelection.select(this.returnGlyph(), sacrifice);
-      } else if (player.realities === 0) {
-        // If this is our first Reality, give them the companion and the starting power glyph.
-        Glyphs.addToInventory(GlyphGenerator.startingGlyph(gainedGlyphLevel()));
-        Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
-      } else {
-        // We can't get a random glyph directly here because that disturbs the RNG
-        // (makes it depend on whether you got first perk or not).
-        Glyphs.addToInventory(GlyphSelection.glyphList(1, gainedGlyphLevel(), { isChoosingGlyph: true })[0]);
-      }
-      // We've already gotten a glyph at this point, so the second value has to be true.
-      // If we haven't sacrificed, we need to sort and purge glyphs, as applicable.
-      triggerManualReality(getRealityProps(false, true));
-      if (!sacrifice) Glyphs.processSortingAfterReality();
+      processManualReality(sacrifice, this.selectedGlyph);
       this.emitClose();
     },
     cancelModal() {

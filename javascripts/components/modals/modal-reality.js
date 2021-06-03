@@ -106,7 +106,7 @@ Vue.component("modal-reality", {
       } else if (player.realities === 0) {
         // If this is our first Reality, give them the companion and the starting power glyph.
         Glyphs.addToInventory(GlyphGenerator.startingGlyph(gainedGlyphLevel()));
-        Glyphs.addToInventory(GlyphGenerator.companionGlyph(player.eternityPoints));
+        Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
       } else {
         // We can't get a random glyph directly here because that disturbs the RNG
         // (makes it depend on whether you got first perk or not).

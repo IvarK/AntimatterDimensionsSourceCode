@@ -1,6 +1,12 @@
 "use strict";
 
 Vue.component("modal-sacrifice", {
+  created() {
+    this.on$(GAME_EVENT.DIMBOOST_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.GALAXY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  },
   computed: {
     message() {
       if (!Achievement(118).isUnlocked) {

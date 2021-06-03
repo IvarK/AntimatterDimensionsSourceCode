@@ -6,6 +6,10 @@ Vue.component("modal-eternity", {
       exitingEC: false,
     };
   },
+  created() {
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  },
   computed: {
     message() {
       return PlayerProgress.eternityUnlocked()

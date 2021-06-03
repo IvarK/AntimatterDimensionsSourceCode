@@ -1,6 +1,10 @@
 "use strict";
 
 Vue.component("modal-start-eternity-challenge", {
+  created() {
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  },
   computed: {
     challengeIsCompleted() {
       return EternityChallenge(this.modal.id).isFullyCompleted;
@@ -9,10 +13,10 @@ Vue.component("modal-start-eternity-challenge", {
       return this.$viewModel.modal.current;
     },
     message() {
-      return "You will Eternity, if possible, and will start a new Eternity within the challenge, " + 
-        "with all the restrictions and modifiers that entails. Upon reaching the goal " + 
+      return "You will Eternity, if possible, and will start a new Eternity within the challenge, " +
+        "with all the restrictions and modifiers that entails. Upon reaching the goal " +
         `(${format(EternityChallenge(this.modal.id).currentGoal)} Infinity Points for this challenge), you ` +
-        `can complete the Eternity Challenge${this.challengeIsCompleted ? "" : ", which grants you the reward"}. You` + 
+        `can complete the Eternity Challenge${this.challengeIsCompleted ? "" : ", which grants you the reward"}. You` +
         ` can complete Eternity Challenges up to ${formatInt(5)} times, with increasing goals, to get higher bonuses.`;
     },
     entranceLabel() {

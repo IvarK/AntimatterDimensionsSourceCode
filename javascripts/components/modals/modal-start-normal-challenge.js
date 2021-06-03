@@ -1,6 +1,10 @@
 "use strict";
 
 Vue.component("modal-start-normal-challenge", {
+  created() {
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  },
   computed: {
     challengeIsCompleted() {
       return NormalChallenge(this.modal.id).isCompleted;
@@ -9,9 +13,9 @@ Vue.component("modal-start-normal-challenge", {
       return this.$viewModel.modal.current;
     },
     message() {
-        return "You will Big Crunch, if possible, and will start a new Infinity within the challenge, " + 
+        return "You will Big Crunch, if possible, and will start a new Infinity within the challenge, " +
         "with all the restrictions and modifiers that entails. Upon reaching Infinity, " +
-        "you can complete the Challenge, which grants you the reward. " + 
+        "you can complete the Challenge, which grants you the reward. " +
         "You do not start with any dimensions or galaxies, regardless of upgrades.";
     },
     entranceLabel() {

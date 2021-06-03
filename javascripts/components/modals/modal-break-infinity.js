@@ -1,6 +1,10 @@
 "use strict";
 
 Vue.component("modal-break-infinity", {
+  created() {
+    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  },
   computed: {
     message() {
       const infinity = formatPostBreak(Number.MAX_VALUE, 2);

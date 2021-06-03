@@ -252,6 +252,7 @@ Vue.component("glyph-component", {
   },
   props: {
     glyph: Object,
+    isInModal: Boolean,
     showSacrifice: {
       type: Boolean,
       default: false,
@@ -321,6 +322,9 @@ Vue.component("glyph-component", {
         return symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol;
       }
       return this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
+    },
+    zIndexStyle() {
+      return { "z-index": this.isInModal ? 7 : 6 };
     },
     borderColor() {
       return this.glyph.color || this.typeConfig.color;
@@ -601,6 +605,7 @@ Vue.component("glyph-component", {
           ref="tooltip"
           v-bind="glyph"
           :class="tooltipDirectionClass"
+          :style="zIndexStyle"
           :sacrificeReward="sacrificeReward"
           :showDeletionText="showSacrifice"
           :levelOverride="levelOverride"

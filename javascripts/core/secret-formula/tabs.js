@@ -14,7 +14,7 @@ GameDatabase.tabs = [
         component: "antimatter-dim-tab",
         newUIComponent: "new-dimensions-tab",
         id: 0,
-        hidable: false,
+        hidable: true,
       },
       {
         key: "infinity",
@@ -294,7 +294,7 @@ GameDatabase.tabs = [
         symbol: "<i class='fas fa-clone'></i>",
         component: "glyphs-tab",
         id: 0,
-        hidable: false,
+        hidable: true,
       },
       {
         key: "upgrades",
@@ -353,7 +353,7 @@ GameDatabase.tabs = [
         symbol: "<i class='fas fa-map-marked-alt'></i>",
         component: "celestial-navigation",
         id: 0,
-        hidable: false,
+        hidable: true,
       },
       {
         key: "teresa",

@@ -67,7 +67,7 @@ class TabState {
       subtabs.push(subtab);
     }
     this.subtabs = subtabs;
-    this._currentSubtab = subtabs.filter(tab => tab.isAvailable)[0];
+    this._currentSubtab = subtabs.filter(tab => tab.isUnlocked)[0];
   }
 
   get name() {
@@ -102,7 +102,7 @@ class TabState {
     if (subtab !== undefined) {
       this._currentSubtab = subtab;
     }
-    if (!this._currentSubtab.isAvailable) this.resetCurrentSubtab();
+    if (!this._currentSubtab.isUnlocked) this.resetCurrentSubtab();
     ui.view.subtab = this._currentSubtab.key;
     const tabNotificationKey = this.config.key + this._currentSubtab.key;
     if (player.tabNotifications.has(tabNotificationKey)) player.tabNotifications.delete(tabNotificationKey);
@@ -126,7 +126,7 @@ class TabState {
   }
 
   resetCurrentSubtab() {
-    this._currentSubtab = this.subtabs.filter(tab => tab.isAvailable)[0];
+    this._currentSubtab = this.subtabs.filter(tab => tab.isUnlocked)[0];
   }
 }
 

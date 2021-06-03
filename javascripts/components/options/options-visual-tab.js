@@ -128,7 +128,7 @@ Vue.component("options-visual-tab", {
         <options-button
           class="o-primary-btn--option"
           onclick="Modal.hiddenTabs.show()"
-        >Open Tab Hiding Options</options-button>
+        >Modify Visible Tabs</options-button>
         <primary-button-on-off
           v-model="headerTextColored"
           class="o-primary-btn--option l-options-grid__button"

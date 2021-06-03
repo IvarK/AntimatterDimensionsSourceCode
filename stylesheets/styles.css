@@ -8658,33 +8658,23 @@ input.o-automator-block-input {
   font-family: Typewriter;
   font-size: 1.1rem;
   width: 10em;
+  user-select: none;
 }
 
 .l-hide-modal-subtab-button {
   display: flex;
-  text-align: center;
-  align-items: center;
   justify-content: center;
-  color: var(--color-text);
-  background-color: var(--color-base);
-  border: 0.2rem solid var(--color-accent);
-  border-radius: 0.4rem;
-  transition-duration: 0.2s;
-  cursor: pointer;
-  font-family: Typewriter;
-  font-size: 1.1rem;
-  width: 10em;
   height: 4rem;
 }
 
 .c-hide-modal-button--active {
   opacity: 1;
   font-weight: bold;
-  text-shadow: 0 0 0.3rem;
 }
 
 .c-hide-modal-button--inactive {
   opacity: 0.6;
+  font-weight: bold;
   transition: opacity 0.2s;
 }
 

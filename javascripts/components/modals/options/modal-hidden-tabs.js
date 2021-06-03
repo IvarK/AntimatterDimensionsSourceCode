@@ -101,6 +101,7 @@ Vue.component("tab-modal-subtab-button", {
   computed: {
     classObject() {
       return {
+        "l-hide-modal-tab-button": true,
         "l-hide-modal-subtab-button": true,
         "c-hide-modal-button--active": !this.hidden,
         "c-hide-modal-button--inactive": this.hidden,

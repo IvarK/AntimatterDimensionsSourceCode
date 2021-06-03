@@ -119,22 +119,30 @@ GameKeyboard.bindHotkey("down", () => keyboardTabChange("down"));
 GameKeyboard.bindHotkey("left", () => keyboardTabChange("left"));
 GameKeyboard.bindHotkey("right", () => keyboardTabChange("right"));
 
-GameKeyboard.bindHotkey("tab", () => Modal.hiddenTabs.show());
+GameKeyboard.bindHotkey("tab", () => {
+  Modal.hiddenTabs.show();
+  return false;
+});
 
 function keyboardTabChange(direction) {
+  // Current tabs
+  const currentTab = Tabs.current.config.key
+  const currentSubtab = Tabs.current._currentSubtab.key
   // Make an array of all the unlocked tabs
-  const tabs = Tabs.all.filter(i => !i.isHidden && i.config.key !== "shop").map(i => i.config.key);
-  const subtabs = Tabs.current.subtabs.filter(i => !i.isHidden).map(i => i.key);
+  let tabs = Tabs.all.filter(i => i.config.key === currentTab || i.isAvailable && i.config.key !== "shop")
+    .map(i => i.config.key);
+  const subtabs = Tabs.current.subtabs.filter(i => i.key === currentSubtab || i.isAvailable).map(i => i.key);
   // Reconfigure the tab order if its New UI
   if (ui.view.newUI) {
-    tabs.splice(1, 3);
-    tabs.push("achievements", "statistics", "options");
+    const newUITabChange = ["achievements", "statistics", "options"].filter(i => Tab[i].isAvailable);
+    tabs = tabs.filter(tab => !newUITabChange.includes(tab));
+    tabs.push(...newUITabChange);
   }
   if (Tab.shop.isAvailable) tabs.push("shop");
 
   // Find the index of the tab and subtab we are on
-  let top = tabs.indexOf(Tabs.current.config.key);
-  let sub = subtabs.indexOf(Tabs.current._currentSubtab.key);
+  let top = tabs.indexOf(currentTab);
+  let sub = subtabs.indexOf(currentSubtab);
 
   // Move in that direction
   switch (direction) {

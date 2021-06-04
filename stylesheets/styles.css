@@ -8630,41 +8630,39 @@ input.o-automator-block-input {
 }
 
 .l-hide-modal-tab-container {
-  text-align: left;
   margin: 0.5rem;
 }
 
 .l-hide-modal-subtab-container {
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
-  width: 57rem;
+  width: 62.6rem;
 }
 
 .c-hide-modal-all-subtab-container {
-  border-radius: 0.5em;
-  border: 0.1rem solid;
-  padding: 0.25em 0.5em;
+  border-radius: 0.8rem;
+  border: 0.1rem solid black;
+  padding: 0.2rem;
 }
 
-.l-hide-modal-tab-button {
-  text-align: center;
-  align-items: center;
-  color: var(--color-text);
-  background-color: var(--color-base);
-  border: 0.2rem solid var(--color-accent);
-  border-radius: 0.4rem;
-  transition-duration: 0.2s;
-  cursor: pointer;
-  font-family: Typewriter;
-  font-size: 1.1rem;
-  width: 10em;
-  user-select: none;
+.t-metro .c-hide-modal-all-subtab-container,
+.t-dark-metro .c-hide-modal-all-subtab-container,
+.t-inverted-metro .c-hide-modal-all-subtab-container,
+.t-s8 .c-hide-modal-all-subtab-container {
+  border-radius: 0;
 }
 
-.l-hide-modal-subtab-button {
+.c-hide-modal-tab-button, .c-hide-modal-subtab-button {
   display: flex;
   justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
   height: 4rem;
+  width: 12rem;
+  margin: 0.2rem;
+  border-color: black !important;
+  box-shadow: none !important;
+  white-space: normal;
 }
 
 .c-hide-modal-button--active {
@@ -8675,11 +8673,54 @@ input.o-automator-block-input {
 .c-hide-modal-button--inactive {
   opacity: 0.6;
   font-weight: bold;
-  transition: opacity 0.2s;
 }
 
 .c-hide-modal-button--always-visible {
   background-color: var(--color-disabled);
+}
+
+.c-hide-modal-tab-button--infinity {
+  color: var(--color-infinity) !important;
+  background: var(--color-prestige--accent) !important;
+  border-color: var(--color-infinity) !important;
+}
+
+.c-hide-modal-tab-button--infinity:hover {
+  color: var(--color-prestige--accent) !important;
+  background: var(--color-infinity) !important;
+}
+
+.c-hide-modal-tab-button--eternity {
+  color: var(--color-eternity) !important;
+  background: var(--color-prestige--accent) !important;
+  border-color: var(--color-eternity) !important;
+}
+
+.c-hide-modal-tab-button--eternity:hover {
+  color: var(--color-prestige--accent) !important;
+  background: var(--color-eternity) !important;
+}
+
+.c-hide-modal-tab-button--reality {
+  color: var(--color-reality) !important;
+  background: var(--color-prestige--accent) !important;
+  border-color: var(--color-reality) !important;
+}
+
+.c-hide-modal-tab-button--reality:hover {
+  color: var(--color-prestige--accent) !important;
+  background: var(--color-reality) !important;
+}
+
+.c-hide-modal-tab-button--celestial {
+  color: var(--color-celestials) !important;
+  background: var(--color-prestige--accent) !important;
+  border-color: var(--color-celestials) !important;
+}
+
+.c-hide-modal-tab-button--celestial:hover {
+  color: var(--color-prestige--accent) !important;
+  background: var(--color-celestials) !important;
 }
 
 /* Prevent any themes overriding font awesome */

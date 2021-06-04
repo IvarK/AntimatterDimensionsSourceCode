@@ -12,7 +12,7 @@ Vue.component("modal-hidden-tabs", {
     },
   },
   template: `
-  <div class="l-hide-tab-modal">
+  <div>
   <modal-close-button @click="emitClose"/>
     Click a button to toggle showing a tab on/off.
     <br>
@@ -44,10 +44,15 @@ Vue.component("tab-modal-subtab-group", {
     },
     classObjectButton() {
       return {
-        "l-hide-modal-tab-button": true,
+        "o-primary-btn": true,
+        "c-hide-modal-tab-button": true,
         "c-hide-modal-button--active": !this.hidden,
         "c-hide-modal-button--inactive": this.hidden,
         "c-hide-modal-button--always-visible": !this.tab.config.hidable,
+        "c-hide-modal-tab-button--infinity": this.tab.config.key === "infinity",
+        "c-hide-modal-tab-button--eternity": this.tab.config.key === "eternity",
+        "c-hide-modal-tab-button--reality": this.tab.config.key === "reality",
+        "c-hide-modal-tab-button--celestial": this.tab.config.key === "celestials"
       };
     },
   },
@@ -84,7 +89,8 @@ Vue.component("tab-modal-subtab-group", {
           v-for="subtab in subtabs"
           v-if="subtab.isUnlocked"
           :key="getKey(subtab)"
-          :subtab="subtab"/>
+          :subtab="subtab"
+          :tab="tab"/>
     </div>
   `
 });
@@ -92,6 +98,7 @@ Vue.component("tab-modal-subtab-group", {
 Vue.component("tab-modal-subtab-button", {
   props: {
     subtab: Object,
+    tab: Object
   },
   data() {
     return {
@@ -101,11 +108,16 @@ Vue.component("tab-modal-subtab-button", {
   computed: {
     classObject() {
       return {
-        "l-hide-modal-tab-button": true,
-        "l-hide-modal-subtab-button": true,
+        "o-primary-btn": true,
+        "c-hide-modal-tab-button": true,
+        "c-hide-modal-subtab-button": true,
         "c-hide-modal-button--active": !this.hidden,
         "c-hide-modal-button--inactive": this.hidden,
         "c-hide-modal-button--always-visible": !this.subtab.config.hidable,
+        "c-hide-modal-tab-button--infinity": this.tab.config.key === "infinity",
+        "c-hide-modal-tab-button--eternity": this.tab.config.key === "eternity",
+        "c-hide-modal-tab-button--reality": this.tab.config.key === "reality",
+        "c-hide-modal-tab-button--celestial": this.tab.config.key === "celestials"
       };
     },
   },

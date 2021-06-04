@@ -30,6 +30,7 @@ let ui = {
           id: 0,
           type: "",
           sacrificeValue: 0,
+          refineValue: 0,
         },
         automator: {
           fullScreen: false,

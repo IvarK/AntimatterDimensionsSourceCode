@@ -12,6 +12,7 @@ Vue.component("sacrificed-glyphs", {
           amount: 0,
           effectValue: 0,
           isColored: true,
+          willSacrifice: false,
         };
       },
       computed: {
@@ -48,7 +49,7 @@ Vue.component("sacrificed-glyphs", {
         },
         showNewSacrifice() {
           return this.currentSacrifice.type === this.type &&
-            (this.hasDragover || (ui.view.shiftDown && AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE));
+            (this.hasDragover || (ui.view.shiftDown && this.willSacrifice));
         },
         formatNewAmount() {
           return format(this.currentSacrifice.sacrificeValue, 2, 2);
@@ -62,6 +63,9 @@ Vue.component("sacrificed-glyphs", {
           this.amount = player.reality.glyphs.sac[this.type];
           this.effectValue = GlyphSacrifice[this.type].effectValue;
           this.isColored = player.options.glyphTextColors;
+          this.willSacrifice = AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE ||
+            (AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP &&
+              this.currentSacrifice.refineValue === 0);
         }
       },
       template: `

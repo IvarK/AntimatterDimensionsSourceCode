@@ -81,7 +81,7 @@ const GlyphSacrificeHandler = {
     return this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
   },
   glyphRefinementGain(glyph) {
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || !generatedTypes.includes(glyph.type)) return 0;
     const glyphActualValue = this.glyphRawRefinementGain(glyph);
     const alchemyResource = this.glyphAlchemyResource(glyph);
     const glyphActualMaxValue = this.levelAlchemyCap(glyph.level);

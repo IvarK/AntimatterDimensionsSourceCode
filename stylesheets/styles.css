@@ -8623,12 +8623,6 @@ input.o-automator-block-input {
   font-weight: 500;
 }
 
-.l-hide-modal {
-  flex-direction: column;
-  text-align: left;
-  margin: 0.5rem;
-}
-
 .l-hide-modal-tab-container {
   margin: 0.5rem;
 }

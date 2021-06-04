@@ -8670,7 +8670,7 @@ input.o-automator-block-input {
 }
 
 .c-hide-modal-button--always-visible {
-  background-color: var(--color-disabled);
+  background-color: var(--color-disabled) !important;
 }
 
 .c-hide-modal-tab-button--infinity {

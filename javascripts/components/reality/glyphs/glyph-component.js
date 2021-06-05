@@ -566,7 +566,7 @@ Vue.component("glyph-component", {
       this.hideTooltip();
     },
     mouseMove(ev) {
-      if (this.isTouched) return;
+      if (this.isTouched || Theme.current().name === "S7") return;
       this.moveTooltipTo(ev.clientX, ev.clientY);
     },
     dragStart(ev) {

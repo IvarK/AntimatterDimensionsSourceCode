@@ -2741,7 +2741,7 @@ GameDatabase.news = [
         coins or you will never see RealiTV again.</span>`,
         "we break down exactly what went wrong in the black hole powering our city yesterday.",
         "we go over our 10-day weather forcasts.",
-        `YOU MUST PAY ${format(player.reality.realityMachines.times(10))}
+        `YOU MUST PAY ${format(player.reality.realityMachines.times(10).max(10))}
         REALITY MACHINES TO CONTINUE VIEWING THIS PROGRAM.`,
         "we witness the release of the hypnodrones.",
         "our great and grand overlord lets us have a single antimatter.",

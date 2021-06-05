@@ -155,9 +155,3 @@ EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
   player.options.lastOpenTab = currTab;
   player.options.lastOpenSubtab[currTab] = Tabs.current._currentSubtab.config.id;
 });
-
-EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => {
-  for (const tab of Tabs.all) {
-    tab.resetCurrentSubtab();
-  }
-});

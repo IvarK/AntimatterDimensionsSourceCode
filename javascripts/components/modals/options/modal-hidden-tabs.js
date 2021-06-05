@@ -42,17 +42,21 @@ Vue.component("tab-modal-subtab-group", {
         "background-color": this.hidden ? "var(--color-bad)" : "var(--color-good)",
       };
     },
+    isCurrentTab() {
+      return this.tab.config.id === Tabs.current.config.id;
+    },
     classObjectButton() {
       return {
         "o-primary-btn": true,
         "c-hide-modal-tab-button": true,
         "c-hide-modal-button--active": !this.hidden,
         "c-hide-modal-button--inactive": this.hidden,
-        "c-hide-modal-button--always-visible": !this.tab.config.hidable,
-        "c-hide-modal-tab-button--infinity": this.tab.config.key === "infinity",
-        "c-hide-modal-tab-button--eternity": this.tab.config.key === "eternity",
-        "c-hide-modal-tab-button--reality": this.tab.config.key === "reality",
-        "c-hide-modal-tab-button--celestial": this.tab.config.key === "celestials"
+        "c-hide-modal-button--always-visible": !this.tab.config.hidable || this.isCurrentTab,
+        "c-hide-modal-button--current": this.isCurrentTab,
+        "c-hide-modal-tab-button--infinity": this.tab.config.key === "infinity" && !this.isCurrentTab,
+        "c-hide-modal-tab-button--eternity": this.tab.config.key === "eternity" && !this.isCurrentTab,
+        "c-hide-modal-tab-button--reality": this.tab.config.key === "reality" && !this.isCurrentTab,
+        "c-hide-modal-tab-button--celestial": this.tab.config.key === "celestials" && !this.isCurrentTab,
       };
     },
   },
@@ -82,7 +86,7 @@ Vue.component("tab-modal-subtab-group", {
           @click="toggleVisibility()">
             {{ tabName }}
             <br>
-            (hide main tab)
+            (all subtabs)
         </div>
         <br>
         <tab-modal-subtab-button
@@ -106,18 +110,22 @@ Vue.component("tab-modal-subtab-button", {
     };
   },
   computed: {
+    isCurrentSubtab() {
+      return this.tab.config.id === Tabs.current.config.id &&
+        this.subtab.config.id === Tabs.current._currentSubtab.config.id;
+    },
     classObject() {
       return {
         "o-primary-btn": true,
         "c-hide-modal-tab-button": true,
-        "c-hide-modal-subtab-button": true,
         "c-hide-modal-button--active": !this.hidden,
         "c-hide-modal-button--inactive": this.hidden,
-        "c-hide-modal-button--always-visible": !this.subtab.config.hidable,
-        "c-hide-modal-tab-button--infinity": this.tab.config.key === "infinity",
-        "c-hide-modal-tab-button--eternity": this.tab.config.key === "eternity",
-        "c-hide-modal-tab-button--reality": this.tab.config.key === "reality",
-        "c-hide-modal-tab-button--celestial": this.tab.config.key === "celestials"
+        "c-hide-modal-button--always-visible": !this.subtab.config.hidable || this.isCurrentSubtab,
+        "c-hide-modal-button--current": this.isCurrentSubtab,
+        "c-hide-modal-tab-button--infinity": this.tab.config.key === "infinity" && !this.isCurrentSubtab,
+        "c-hide-modal-tab-button--eternity": this.tab.config.key === "eternity" && !this.isCurrentSubtab,
+        "c-hide-modal-tab-button--reality": this.tab.config.key === "reality" && !this.isCurrentSubtab,
+        "c-hide-modal-tab-button--celestial": this.tab.config.key === "celestials" && !this.isCurrentSubtab,
       };
     },
   },

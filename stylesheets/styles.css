@@ -8646,7 +8646,7 @@ input.o-automator-block-input {
   border-radius: 0;
 }
 
-.c-hide-modal-tab-button, .c-hide-modal-subtab-button {
+.c-hide-modal-tab-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8657,63 +8657,67 @@ input.o-automator-block-input {
   border-color: black !important;
   box-shadow: none !important;
   white-space: normal;
+  font-weight: bold;
 }
 
 .c-hide-modal-button--active {
   opacity: 1;
-  font-weight: bold;
 }
 
 .c-hide-modal-button--inactive {
   opacity: 0.6;
-  font-weight: bold;
 }
 
 .c-hide-modal-button--always-visible {
   background-color: var(--color-disabled) !important;
+  pointer-events: none;
+}
+
+.c-hide-modal-button--current {
+  text-shadow: 0 0 0.3rem;
 }
 
 .c-hide-modal-tab-button--infinity {
-  color: var(--color-infinity) !important;
+  color: var(--color-infinity);
   background: var(--color-prestige--accent) !important;
   border-color: var(--color-infinity) !important;
 }
 
 .c-hide-modal-tab-button--infinity:hover {
-  color: var(--color-prestige--accent) !important;
+  color: var(--color-prestige--accent);
   background: var(--color-infinity) !important;
 }
 
 .c-hide-modal-tab-button--eternity {
-  color: var(--color-eternity) !important;
+  color: var(--color-eternity);
   background: var(--color-prestige--accent) !important;
   border-color: var(--color-eternity) !important;
 }
 
 .c-hide-modal-tab-button--eternity:hover {
-  color: var(--color-prestige--accent) !important;
+  color: var(--color-prestige--accent);
   background: var(--color-eternity) !important;
 }
 
 .c-hide-modal-tab-button--reality {
-  color: var(--color-reality) !important;
+  color: var(--color-reality);
   background: var(--color-prestige--accent) !important;
   border-color: var(--color-reality) !important;
 }
 
 .c-hide-modal-tab-button--reality:hover {
-  color: var(--color-prestige--accent) !important;
+  color: var(--color-prestige--accent);
   background: var(--color-reality) !important;
 }
 
 .c-hide-modal-tab-button--celestial {
-  color: var(--color-celestials) !important;
+  color: var(--color-celestials);
   background: var(--color-prestige--accent) !important;
   border-color: var(--color-celestials) !important;
 }
 
 .c-hide-modal-tab-button--celestial:hover {
-  color: var(--color-prestige--accent) !important;
+  color: var(--color-prestige--accent);
   background: var(--color-celestials) !important;
 }
 

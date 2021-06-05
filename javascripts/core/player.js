@@ -180,7 +180,8 @@ let player = {
     uselessNewsClicks: 0,
     cancerAchievements: false,
     paperclips: 0,
-    newsQueuePosition: 1000
+    newsQueuePosition: 1000,
+    eiffelTowerChapter: 0
   },
   shownRuns: {
     Reality: true,

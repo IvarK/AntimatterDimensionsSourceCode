@@ -166,7 +166,7 @@ const GlyphTooltipComponent = {
       return this.levelOverride && this.levelOverride > this.level;
     },
     rarityText() {
-      if (this.type === "companion" || this.type === "reality" || this.type === "cursed") return "";
+      if (!GlyphTypes[this.type].hasRarity) return "";
       return `| Rarity:
         <span style="color: ${this.rarityInfo.color}">${formatRarity(strengthToRarity(this.strength))}</span>`;
     },

@@ -14,16 +14,26 @@ const GlyphSacrificeHandler = {
   get isRefining() {
     return Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && AutoGlyphProcessor.sacMode !== AUTO_GLYPH_REJECT.SACRIFICE;
   },
+  handleSpecialGlyphTypes(glyph) {
+    switch (glyph.type) {
+      case "companion":
+        Modal.deleteCompanion.show();
+        return true;
+      case "cursed":
+        Glyphs.removeFromInventory(glyph);
+        return true;
+    }
+    return false;
+  },
   // Removes a glyph, accounting for sacrifice unlock and alchemy state
   removeGlyph(glyph, force = false) {
+    if (this.handleSpecialGlyphTypes(glyph)) return;
     if (!this.canSacrifice) this.deleteGlyph(glyph, force);
     else if (this.isRefining) this.refineGlyph(glyph);
     else this.sacrificeGlyph(glyph, force);
   },
   deleteGlyph(glyph, force) {
-    if (glyph.type === "companion") {
-      Modal.deleteCompanion.show();
-    } else if (force || confirm("Do you really want to delete this glyph?")) {
+    if (force || confirm("Do you really want to delete this glyph?")) {
       Glyphs.removeFromInventory(glyph);
     }
   },
@@ -37,11 +47,8 @@ const GlyphSacrificeHandler = {
       Teresa.runRewardMultiplier * Achievement(171).effectOrDefault(1), power);
   },
   sacrificeGlyph(glyph, force = false) {
-    if (glyph.type === "cursed") {
-      Glyphs.removeFromInventory(glyph);
-      return;
-    }
-
+    // This also needs to be here because this method is called directly from drag-and-drop sacrificing
+    if (this.handleSpecialGlyphTypes(glyph)) return;
     const toGain = this.glyphSacrificeGain(glyph);
     const askConfirmation = !force && player.options.confirmations.glyphSacrifice;
     if (askConfirmation) {
@@ -74,7 +81,7 @@ const GlyphSacrificeHandler = {
     return this.glyphRefinementEfficiency * glyphMaxValue * (strengthToRarity(glyph.strength) / 100);
   },
   glyphRefinementGain(glyph) {
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
+    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || !generatedTypes.includes(glyph.type)) return 0;
     const glyphActualValue = this.glyphRawRefinementGain(glyph);
     const alchemyResource = this.glyphAlchemyResource(glyph);
     const glyphActualMaxValue = this.levelAlchemyCap(glyph.level);

@@ -19,10 +19,10 @@ Vue.component("dimension-autobuyer-box", {
       computed: {
         bulkDisplay() {
           if (this.hasMaxedBulk) {
-            return `${formatX(this.bulk, 2, 0)} bulk buy`;
+            return `${formatX(this.bulk, 2, 0)} bulk buy (capped)`;
           }
           let newBulk = this.bulk;
-          newBulk = Math.min(newBulk * 2, 1e10);
+          newBulk = Math.min(newBulk * 2, this.autobuyer.bulkCap);
           return `${formatX(this.bulk, 2, 0)} ➜ ${formatX(newBulk, 2, 0)} bulk buy`;
         }
       },

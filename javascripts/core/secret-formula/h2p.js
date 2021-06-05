@@ -464,11 +464,13 @@ upgrades to your multipliers you purchased.
 <br>
 <br>
 Each threshold to gain another Tickspeed upgrade is ${formatPercents(0.33)} more Time Shards than the previous,
-or ${formatPercents(0.25)} with the relevant time study. After ${formatInt(300000)} upgrades, each successive free
-Tickspeed upgrade will start counting as an additional ${format(0.1, 1, 1)} upgrades for the purposes of calculating
-shard thresholds. For example, your ${formatInt(300010)}th upgrade will require
-${format(1.33, 2, 2)}<sup>${formatInt(2)}</sup> (or ${format(1.25, 2, 2)}<sup>${formatInt(2)}</sup>) times more
-shards than your ${formatInt(300009)}th upgrade.
+or ${formatPercents(0.25)} with the relevant time study. After ${formatInt(FreeTickspeed.softcap)} upgrades, the
+multiplier between each successive free Tickspeed upgrade will gradually increase at a rate of ~${formatX(1.35, 0, 2)}
+per ${formatInt(50000)} upgrades (${formatX(1.000006, 0, 6)} per upgrade). For example, your
+${formatInt(FreeTickspeed.softcap + 50001)}st upgrade will require
+${format(1.33, 2, 2)}×${format(1.35, 2, 2)}=${format(1.33 * 1.35, 2, 2)}
+(or ${format(1.25, 2, 2)}×${format(1.35, 2, 2)}=${format(1.25 * 1.35, 2, 2)}) times more
+shards than your ${formatInt(FreeTickspeed.softcap + 50000)}th upgrade.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["dims", "td", "shards", "eternity", "midgame"],

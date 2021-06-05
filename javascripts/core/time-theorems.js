@@ -34,10 +34,7 @@ class TimeTheoremPurchaseType {
   get costIncrement() { throw new NotImplementedError(); }
 
   get bulkPossible() {
-    return Math.floor(
-      this.currency.value.times(this.costIncrement.sub(1)).div(this.cost).plus(1).log10() /
-      this.costIncrement.log10()
-    );
+    return Decimal.affordGeometricSeries(this.currency.value, this.cost, this.costIncrement, 0).toNumber();
   }
 
   bulkCost(amount) {

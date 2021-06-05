@@ -954,6 +954,9 @@ GameStorage.devMigrations = {
       delete player.saveOverThresholdFlag;
       delete player.saveOverThresholdFlagModalDisplayed;
     },
+    player => {
+      if (!Autobuyer.reality.isUnlocked) player.auto.reality.isActive = false;
+    },
   ],
 
   patch(player) {

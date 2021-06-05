@@ -448,10 +448,15 @@ Vue.component("glyph-component", {
       return effectIDs;
     },
     hideTooltip() {
+      this.$viewModel.tabs.reality.mouseoverGlyphInfo.type = "";
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },
     showTooltip() {
       this.tooltipLoaded = true;
+      const glyphInfo = this.$viewModel.tabs.reality.mouseoverGlyphInfo;
+      glyphInfo.type = this.glyph.type;
+      glyphInfo.sacrificeValue = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
+      glyphInfo.refineValue = GlyphSacrificeHandler.glyphRefinementGain(this.glyph);
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
       this.sacrificeReward = GlyphSacrificeHandler.isRefining &&
         ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)

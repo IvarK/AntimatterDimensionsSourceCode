@@ -62,8 +62,7 @@ function eternityResetRequest() {
   if (!Player.canEternity) return;
   if (!askEternityConfirmation()) return;
   if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
-    undilationAnimation();
-    setTimeout(eternity, 1000);
+    animateAndUndilate();
   } else if (!player.dilation.active && player.options.animations.eternity && document.body.style.animation === "") {
     eternityAnimation();
     setTimeout(eternity, 2250);

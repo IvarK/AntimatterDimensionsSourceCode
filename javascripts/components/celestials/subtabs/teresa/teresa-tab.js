@@ -92,7 +92,7 @@ Vue.component("teresa-tab", {
         <div class="l-teresa-mechanic-container" v-if="hasReality">
           <div class="c-teresa-unlock c-teresa-run-button">
             <div :class="runButtonClassObject" @click="startRun()">Ϟ</div>
-            Start Teresa's Reality. 
+            Start Teresa's Reality.
             {{ this.description }}
             <br><br>
             <div v-if="bestAM.gt(0)">

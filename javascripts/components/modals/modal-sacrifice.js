@@ -21,7 +21,7 @@ Vue.component("modal-sacrifice", {
       return `Multiplier is currently ${formatX(Sacrifice.totalBoost, 2)}.`;
     },
     afterSacrifice() {
-      return `Multiplier increases to ${formatX(Sacrifice.nextBoost.times(Sacrifice.totalBoost), 2)}
+      return `Multiplier will increase to ${formatX(Sacrifice.nextBoost.times(Sacrifice.totalBoost), 2)}
       on Dimensional Sacrifice.`;
     }
   },

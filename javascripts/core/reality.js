@@ -109,8 +109,11 @@ function requestManualReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   if (player.options.confirmations.reality) {
     Modal.reality.show();
-  } else if (Glyphs.freeInventorySpace === 0) {
+    return;
+  }
+  if (Glyphs.freeInventorySpace === 0) {
     Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
+    return;
   }
   processManualReality(false);
 }

@@ -17,7 +17,8 @@ Vue.component("ra-tab", {
       laitelaRealityMachineCost: new Decimal(0),
       petWithRecollection: "",
       isRunning: false,
-      description: GameDatabase.celestials.descriptions[4].description().split("\n")
+      description: GameDatabase.celestials.descriptions[4].description()
+                    .replace(/^\w/, c => c.toUpperCase()).split("\n")
     };
   },
   methods: {
@@ -68,7 +69,7 @@ Vue.component("ra-tab", {
       {
         pet: Ra.pets.enslaved,
         scalingUpgradeVisible: () => Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME),
-        scalingUpgradeText: () => `Stored game time 
+        scalingUpgradeText: () => `Stored game time
           ${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)} and real time
           +${formatInt(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / (1000 * 3600))} hours`,
       },

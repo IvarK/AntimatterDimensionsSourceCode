@@ -35,7 +35,7 @@ Vue.component("modal-start-infinity-challenge", {
       if (typeof conditionOfChallenge === "function") {
         conditionOfChallenge = conditionOfChallenge();
       }
-      return `Inside this Eternity Challenge, the condition is: ${conditionOfChallenge}`;
+      return `Inside this Infinity Challenge, the condition is: ${conditionOfChallenge}`;
     }
   },
   methods: {

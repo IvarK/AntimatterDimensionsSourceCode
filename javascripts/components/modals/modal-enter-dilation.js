@@ -9,9 +9,8 @@ Vue.component("modal-enter-dilation", {
       return this.$viewModel.modal.current;
     },
     message() {
-      return `Dilating time will start a new Eternity, and all of your Antimatter Dimension/Infinity
-      Dimension/Time Dimension multiplier's exponents and Tickspeed multiplier's exponent
-      will be reduced to ${formatPow(0.75, 2, 2)}. If you can Eternity while Dilated,
+      return `Dilating time will start a new Eternity, and all Dimension multiplier's exponents and
+      Tickspeed multiplier's exponent will be reduced to ${formatPow(0.75, 2, 2)}. If you can Eternity while Dilated,
       you'll be rewarded with Tachyon Particles based on your antimatter and Tachyon Particles.`;
     },
     entranceLabel() {

@@ -35,7 +35,7 @@ Vue.component("break-infinity-button", {
     },
     clicked() {
       if (this.isEnslaved) Enslaved.feelEternity();
-      else if (!this.isBroken) Modal.breakInfinity.show();
+      else if (!this.isBroken && this.isUnlocked) Modal.breakInfinity.show();
     }
   },
   template:

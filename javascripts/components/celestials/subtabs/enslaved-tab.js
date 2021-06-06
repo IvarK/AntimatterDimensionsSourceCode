@@ -147,7 +147,7 @@ Vue.component("enslaved-tab", {
     quote: "",
     currentSpeedUp: 0,
     hintsUnlocked: false,
-    description: GameDatabase.celestials.descriptions[2].description()
+    description: GameDatabase.celestials.descriptions[2].description().capitalize()
   }),
   computed: {
     storedRealEfficiencyDesc() {
@@ -359,7 +359,7 @@ Vue.component("enslaved-tab", {
               :key="unlock.id"
               class="o-enslaved-shop-button"
               :class="unlockClassObject(unlock)"
-              @click="buyUnlock(unlock)"> 
+              @click="buyUnlock(unlock)">
                 {{ unlock.description() }}
                 <div v-if="!hasUnlock(unlock)">
                   Costs: {{ timeDisplayShort(unlock.price) }}

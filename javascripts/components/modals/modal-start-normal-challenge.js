@@ -25,11 +25,11 @@ Vue.component("modal-start-normal-challenge", {
       return `The reward for completing this challenge is: ${NormalChallenge(this.modal.id)._config.reward}`;
     },
     condition() {
-      let conditionOfChallenge = InfinityChallenge(this.modal.id)._config.description;
+      let conditionOfChallenge = NormalChallenge(this.modal.id)._config.description;
       if (typeof conditionOfChallenge === "function") {
         conditionOfChallenge = conditionOfChallenge();
       }
-      return `Inside this Eternity Challenge, the condition is: ${conditionOfChallenge}`;
+      return `Inside this Challenge, the condition is: ${conditionOfChallenge}`;
     }
   },
   methods: {

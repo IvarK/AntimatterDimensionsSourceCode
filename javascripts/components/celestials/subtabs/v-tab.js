@@ -19,7 +19,7 @@ Vue.component("v-tab", {
       wantsFlipped: true,
       isRunning: false,
       hasAlchemy: false,
-      description: GameDatabase.celestials.descriptions[3].description()
+      description: GameDatabase.celestials.descriptions[3].description().replace(/^\w/, c => c.toUpperCase())
     };
   },
   methods: {

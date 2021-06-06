@@ -135,7 +135,7 @@ Vue.component("effarig-tab", {
             <div v-if="isRunning">
               You are in Effarig's Reality - give up?
             </div><br>
-            Enter Effarig's Reality, in which 
+            Enter Effarig's Reality, in which
           {{runDescription}}
           </div>
           <div :class="['l-effarig-run-button', 'c-effarig-run-button', runButtonOuterClass]"

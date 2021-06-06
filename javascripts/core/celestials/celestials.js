@@ -20,7 +20,7 @@ GameDatabase.celestials.descriptions = [
   {
     name: "Effarig",
     description() {
-      return `All dimension multipliers, gamespeed, and tickspeed are severely lowered, like Dilation.
+      return `all Dimension multipliers, gamespeed, and tickspeed are severely lowered, like Dilation.
       Infinity power reduces the production and gamespeed penalties and Time Shards reduce the tickspeed penalty.
       Glyph levels are temporarily capped${Effarig.isRunning
         ? ` to ${Effarig.glyphLevelCap}` : ``}, rarity is unaffected.
@@ -44,14 +44,14 @@ GameDatabase.celestials.descriptions = [
   {
     name: "V",
     description() {
-      return `all dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second\
+      return `all Dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second\
       are square-rooted, and Replicanti interval is squared.`;
     }
   },
   {
     name: "Ra",
     description() {
-      return `You can't Dimension Boost, and the Tickspeed purchase multiplier is fixed at ${formatX(1.1245, 0, 3)}.\n`;
+      return `you can't Dimension Boost, and the Tickspeed purchase multiplier is fixed at ${formatX(1.1245, 0, 3)}.\n`;
     },
   },
   {

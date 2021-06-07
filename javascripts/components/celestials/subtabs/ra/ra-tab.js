@@ -94,7 +94,7 @@ Vue.component("ra-tab", {
       };
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[4].description().replace(/^\w/, c => c.toUpperCase()).split("\n");
+      return GameDatabase.celestials.descriptions[4].description().replace(/^\w/u, c => c.toUpperCase()).split("\n");
     }
   },
   template: `

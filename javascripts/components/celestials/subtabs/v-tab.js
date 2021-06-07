@@ -128,7 +128,7 @@ Vue.component("v-tab", {
       };
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[3].description().replace(/^\w/, c => c.toUpperCase());
+      return GameDatabase.celestials.descriptions[3].description().replace(/^\w/u, c => c.toUpperCase());
     },
   },
   template: `

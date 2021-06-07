@@ -7,7 +7,6 @@ let ui = {
       queue: [],
       current: undefined,
       cloudConflicts: [],
-      glyphSelection: false,
       progressBar: undefined,
     },
     tabs: {

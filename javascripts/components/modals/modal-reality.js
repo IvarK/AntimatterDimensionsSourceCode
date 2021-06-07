@@ -142,6 +142,5 @@ Vue.component("modal-reality", {
                 @click="confirmModal(false)"
                 >Confirm</primary-button>
       </div>
-    </div>
-  `
+    </div>`
 });

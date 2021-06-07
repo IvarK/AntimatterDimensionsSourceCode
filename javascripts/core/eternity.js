@@ -178,11 +178,11 @@ function applyRealityUpgradesAfterEternity() {
 }
 
 function askEternityConfirmation() {
-    if (!player.options.confirmations.eternity) {
-      eternity();
-      return;
-    }
-    Modal.eternity.show();
+  if (!player.options.confirmations.eternity) {
+    eternity();
+    return;
+  }
+  Modal.eternity.show();
 }
 
 class EternityMilestoneState {

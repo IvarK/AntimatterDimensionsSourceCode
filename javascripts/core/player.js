@@ -57,7 +57,7 @@ let player = {
       mode: 0,
       rm: new Decimal(1),
       glyph: 0,
-      isActive: true
+      isActive: false
     },
     eternity: {
       mode: 0,
@@ -180,7 +180,8 @@ let player = {
     uselessNewsClicks: 0,
     cancerAchievements: false,
     paperclips: 0,
-    newsQueuePosition: 1000
+    newsQueuePosition: 1000,
+    eiffelTowerChapter: 0
   },
   shownRuns: {
     Reality: true,

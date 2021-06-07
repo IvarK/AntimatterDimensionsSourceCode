@@ -82,6 +82,7 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   start() {
+    if (Player.canCrunch) bigCrunchResetRequest();
     if (this.id === 1 || this.isRunning) return;
     if (!Tab.challenges.isAvailable) return;
 

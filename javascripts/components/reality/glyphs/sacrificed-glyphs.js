@@ -12,6 +12,7 @@ Vue.component("sacrificed-glyphs", {
           amount: 0,
           effectValue: 0,
           isColored: true,
+          willSacrifice: false,
         };
       },
       computed: {
@@ -41,20 +42,30 @@ Vue.component("sacrificed-glyphs", {
           return this.sacConfig.description(this.effectValue);
         },
         currentSacrifice() {
-          return this.$viewModel.tabs.reality.draggingGlyphInfo;
+          const viewModel = this.$viewModel.tabs.reality;
+          return viewModel.mouseoverGlyphInfo.type === ""
+            ? viewModel.draggingGlyphInfo
+            : viewModel.mouseoverGlyphInfo;
         },
         showNewSacrifice() {
-          return this.hasDragover && this.currentSacrifice.type === this.type;
+          return this.currentSacrifice.type === this.type &&
+            (this.hasDragover || (ui.view.shiftDown && this.willSacrifice));
         },
         formatNewAmount() {
           return format(this.currentSacrifice.sacrificeValue, 2, 2);
-        }
+        },
+        formatTotalAmount() {
+          return format(this.amount + this.currentSacrifice.sacrificeValue, 2, 2);
+        },
       },
       methods: {
         update() {
           this.amount = player.reality.glyphs.sac[this.type];
           this.effectValue = GlyphSacrifice[this.type].effectValue;
           this.isColored = player.options.glyphTextColors;
+          this.willSacrifice = AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE ||
+            (AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP &&
+              this.currentSacrifice.refineValue === 0);
         }
       },
       template: `
@@ -67,9 +78,8 @@ Vue.component("sacrificed-glyphs", {
             </div>
             <div class="l-sacrificed-glyphs__type-amount c-sacrificed-glyphs__type-amount">
               {{formatAmount}}
-              <span v-if="showNewSacrifice"
-                    class="c-sacrificed-glyphs__type-new-amount">
-                + {{formatNewAmount}}
+              <span v-if="showNewSacrifice" class="c-sacrificed-glyphs__type-new-amount">
+                + {{formatNewAmount}} ➜ {{formatTotalAmount}}
               </span>
             </div>
           </div>

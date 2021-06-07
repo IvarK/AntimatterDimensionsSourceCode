@@ -27,8 +27,7 @@ Vue.component("modal-enter-dilation", {
     handleYesClick() {
       if (player.dilation.active) return;
       if (player.options.animations.dilation && document.body.style.animation === "") {
-        dilationAnimation();
-        setTimeout(startDilatedEternity, 1000);
+        animateAndDilate();
       } else {
         startDilatedEternity();
       }

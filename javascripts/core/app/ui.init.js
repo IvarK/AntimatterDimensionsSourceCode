@@ -25,6 +25,12 @@ let ui = {
           type: "",
           sacrificeValue: 0,
         },
+        mouseoverGlyphInfo: {
+          id: 0,
+          type: "",
+          sacrificeValue: 0,
+          refineValue: 0,
+        },
         automator: {
           fullScreen: false,
           editorScriptID: "",

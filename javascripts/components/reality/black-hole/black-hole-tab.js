@@ -13,6 +13,8 @@ Vue.component("black-hole-tab", {
       detailedBH2: "",
       storedFraction: 0,
       isPermanent: false,
+      hasBH2: false,
+      blackHoleUptime: [],
     };
   },
   computed: {
@@ -58,6 +60,9 @@ Vue.component("black-hole-tab", {
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
       this.isPermanent = BlackHoles.arePermanent;
+      this.hasBH2 = BlackHole(2).isUnlocked;
+      this.blackHoleUptime = [BlackHole(1).duration / BlackHole(1).cycleLength,
+        BlackHole(2).duration / BlackHole(2).cycleLength];
 
       if (!BlackHole(2).isUnlocked || BlackHole(1).isActive) this.detailedBH2 = " ";
       else if (BlackHole(2).timeToNextStateChange > BlackHole(1).cycleLength) {
@@ -132,6 +137,13 @@ Vue.component("black-hole-tab", {
             :blackHole="blackHole"
           />
           {{ detailedBH2 }}
+          <div v-if="!isPermanent">
+            Black holes become permanently active when they are active for more than {{ formatPercents(0.9999, 2) }}
+            of the time.
+            <br>
+            Active time percent: {{ formatPercents(blackHoleUptime[0], 3) }}
+            <span v-if="hasBH2">and {{ formatPercents(blackHoleUptime[1], 3) }}</span>
+          </div>
           <div v-if="canAdjustStoredTime" class="l-enslaved-shop-container">
             Black Hole charging rate: {{ storedTimeRate }}
             <ad-slider-component

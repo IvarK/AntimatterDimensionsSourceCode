@@ -333,8 +333,8 @@ class InfinityIPMultUpgrade extends GameMechanicState {
       Autobuyer.bigCrunch.bumpAmount(mult);
     }
     const costIncrease = this.costIncrease;
+    Currency.infinityPoints.subtract(Decimal.sumGeometricSeries(amount, this.cost, costIncrease, 0));
     player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
-    Currency.infinityPoints.subtract(this.cost.dividedBy(costIncrease));
     this.adjustToCap();
     GameUI.update();
   }
@@ -349,9 +349,9 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   buyMax() {
     if (!this.canBeBought) return;
     if (!this.hasIncreasedCost) {
-      // The purchase at 1e3000000 is considered post-softcap because that purchase increases the cost by 1e10x.
-      const buyUntil = Math.min(Currency.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent - 1);
-      const purchases = buyUntil - this.cost.exponent + 1;
+      // Only allow IP below the softcap to be used
+      const availableIP = Currency.infinityPoints.value.clampMax(this.config.costIncreaseThreshold);
+      const purchases = Decimal.affordGeometricSeries(availableIP, this.cost, this.costIncrease, 0).toNumber();
       if (purchases <= 0) return;
       this.purchase(purchases);
     }
@@ -359,8 +359,8 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     // (for example, we have 1e4000000 IP and no mult - first it will go to (but not including) 1e3000000 and then
     // it will go in this part)
     if (this.hasIncreasedCost) {
-      const buyUntil = Math.min(Currency.infinityPoints.exponent, this.config.costCap.exponent);
-      const purchases = Math.floor((buyUntil - player.infMultCost.exponent) / 10) + 1;
+      const availableIP = Currency.infinityPoints.value.clampMax(this.config.costCap);
+      const purchases = Decimal.affordGeometricSeries(availableIP, this.cost, this.costIncrease, 0).toNumber();
       if (purchases <= 0) return;
       this.purchase(purchases);
     }

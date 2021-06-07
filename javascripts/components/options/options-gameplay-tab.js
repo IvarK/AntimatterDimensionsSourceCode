@@ -94,7 +94,7 @@ Vue.component("options-gameplay-tab", {
           v-model="automaticTabSwitching"
           class="o-primary-btn--option l-options-grid__button"
           style="font-size: 12px;"
-          text="Switch tabs on certain game events (such as entering challenges):"
+          text="Switch tabs on some events (e.g. entering challenges):"
         />
       </div>
       <open-modal-shortcuts />

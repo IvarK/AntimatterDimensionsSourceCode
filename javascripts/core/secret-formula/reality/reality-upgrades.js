@@ -291,7 +291,7 @@ GameDatabase.reality.upgrades = (function() {
       name: "Replicative Rapidity",
       id: 23,
       cost: 100000,
-      requirement: () => `Reality in under ${formatInt(15)} minutes (Best: ${Time.bestReality.toStringShort(false)})`,
+      requirement: () => `Reality in under ${formatInt(15)} minutes (Best: ${Time.bestReality.toStringShort()})`,
       hasFailed: () => Time.thisReality.totalMinutes >= 15,
       checkRequirement: () => Time.thisReality.totalMinutes < 15,
       checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,

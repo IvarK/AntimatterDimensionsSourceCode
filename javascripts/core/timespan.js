@@ -247,6 +247,7 @@ class TimeSpan {
     }
     if (this.totalHours < 100) {
       if (useHMS && !Notations.current.isPainful) {
+        if (Math.floor(this.totalHours) === 0) return `${formatHMS(this.minutes)}:${formatHMS(this.seconds)}`;
         return `${formatHMS(Math.floor(this.totalHours))}:${formatHMS(this.minutes)}:${formatHMS(this.seconds)}`;
       }
       if (this.totalMinutes < 60) {

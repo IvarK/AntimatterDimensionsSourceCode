@@ -131,17 +131,17 @@ Vue.component("singularity-container", {
       if (this.canPerformSingularity) {
         singularityTime += this.singularityCap * (this.autoSingularityFactor - 1) / this.darkEnergyGainPerSecond;
         return this.isAutoEnabled
-          ? `(auto-condensing in ${TimeSpan.fromSeconds(singularityTime).toStringShort(false)})`
+          ? `(auto-condensing in ${TimeSpan.fromSeconds(singularityTime).toStringShort()})`
           : "";
       }
-      return `(enough Dark Energy in ${TimeSpan.fromSeconds(singularityTime).toStringShort(false)})`;
+      return `(enough Dark Energy in ${TimeSpan.fromSeconds(singularityTime).toStringShort()})`;
     },
     baseSingularityTime() {
-      return TimeSpan.fromSeconds(this.baseTimeToSingularity).toStringShort(false);
+      return TimeSpan.fromSeconds(this.baseTimeToSingularity).toStringShort();
     },
     additionalSingularityTime() {
       return TimeSpan.fromSeconds(this.baseTimeToSingularity * (this.autoSingularityFactor - 1))
-        .toStringShort(false);
+        .toStringShort();
     },
     manualSingularityRate() {
       const totalTime = this.singularityCap / this.darkEnergyGainPerSecond;

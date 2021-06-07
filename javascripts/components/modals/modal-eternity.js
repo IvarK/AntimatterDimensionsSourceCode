@@ -49,7 +49,7 @@ Vue.component("modal-eternity", {
     },
     handleYesClick() {
       if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
-        undilationAnimation();
+        animateAndUndilate();
         setTimeout(eternity, 1000);
       } else if (!player.dilation.active && player.options.animations.eternity &&
         document.body.style.animation === "") {

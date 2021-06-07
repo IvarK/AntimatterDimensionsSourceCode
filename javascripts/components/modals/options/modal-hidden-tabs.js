@@ -14,6 +14,7 @@ Vue.component("modal-hidden-tabs", {
   template: `
   <div>
   <modal-close-button @click="emitClose"/>
+    <h2>Modify Visible Tabs</h2>
     Click a button to toggle showing a tab on/off.
     <br>
     Some tabs cannot be hidden, and you cannot hide your current tab.
@@ -53,10 +54,7 @@ Vue.component("tab-modal-subtab-group", {
         "c-hide-modal-button--inactive": this.hidden,
         "c-hide-modal-button--always-visible": !this.tab.config.hidable || this.isCurrentTab,
         "c-hide-modal-button--current": this.isCurrentTab,
-        "c-hide-modal-tab-button--infinity": this.tab.config.key === "infinity" && !this.isCurrentTab,
-        "c-hide-modal-tab-button--eternity": this.tab.config.key === "eternity" && !this.isCurrentTab,
-        "c-hide-modal-tab-button--reality": this.tab.config.key === "reality" && !this.isCurrentTab,
-        "c-hide-modal-tab-button--celestial": this.tab.config.key === "celestials" && !this.isCurrentTab,
+        [`c-hide-modal-tab-button--${this.tab.config.key}`]: !this.isCurrentTab,
       };
     },
   },
@@ -122,10 +120,7 @@ Vue.component("tab-modal-subtab-button", {
         "c-hide-modal-button--inactive": this.hidden,
         "c-hide-modal-button--always-visible": !this.subtab.config.hidable || this.isCurrentSubtab,
         "c-hide-modal-button--current": this.isCurrentSubtab,
-        "c-hide-modal-tab-button--infinity": this.tab.config.key === "infinity" && !this.isCurrentSubtab,
-        "c-hide-modal-tab-button--eternity": this.tab.config.key === "eternity" && !this.isCurrentSubtab,
-        "c-hide-modal-tab-button--reality": this.tab.config.key === "reality" && !this.isCurrentSubtab,
-        "c-hide-modal-tab-button--celestial": this.tab.config.key === "celestials" && !this.isCurrentSubtab,
+        [`c-hide-modal-tab-button--${this.tab.config.key}`]: !this.isCurrentSubtab,
       };
     },
   },

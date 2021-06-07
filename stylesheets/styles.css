@@ -8710,13 +8710,13 @@ input.o-automator-block-input {
   background: var(--color-reality) !important;
 }
 
-.c-hide-modal-tab-button--celestial {
+.c-hide-modal-tab-button--celestials {
   color: var(--color-celestials);
   background: var(--color-prestige--accent) !important;
   border-color: var(--color-celestials) !important;
 }
 
-.c-hide-modal-tab-button--celestial:hover {
+.c-hide-modal-tab-button--celestials:hover {
   color: var(--color-prestige--accent);
   background: var(--color-celestials) !important;
 }

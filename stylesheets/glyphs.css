@@ -440,7 +440,7 @@
 }
 
 .l-modal-glyph-selection__glyph--selected {
-  box-shadow: #B4B420 0px 0px 1rem 0.5rem !important;
+  box-shadow: #B4B420 0 0 1rem 0.5rem !important;
 }
 
 .l-equipped-glyphs {

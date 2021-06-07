@@ -19,7 +19,6 @@ Vue.component("teresa-tab", {
       hasPerkShop: false,
       isRunning: false,
       canUnlockNextPour: false,
-      description: GameDatabase.celestials.descriptions[0].description()
     };
   },
   computed: {
@@ -47,6 +46,9 @@ Vue.component("teresa-tab", {
         "c-teresa-pour": true,
         "c-teresa-pour--unlock-available": this.canUnlockNextPour
       };
+    },
+    runDescription() {
+      return GameDatabase.celestials.descriptions[0].description();
     },
   },
   methods: {
@@ -93,7 +95,7 @@ Vue.component("teresa-tab", {
           <div class="c-teresa-unlock c-teresa-run-button">
             <div :class="runButtonClassObject" @click="startRun()">Ϟ</div>
             Start Teresa's Reality.
-            {{ this.description }}
+            {{ runDescription }}
             <br><br>
             <div v-if="bestAM.gt(0)">
               You last did Teresa's Reality at {{ format(lastRM, 2) }} Reality Machines.

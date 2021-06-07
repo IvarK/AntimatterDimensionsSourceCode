@@ -17,8 +17,6 @@ Vue.component("ra-tab", {
       laitelaRealityMachineCost: new Decimal(0),
       petWithRecollection: "",
       isRunning: false,
-      description: GameDatabase.celestials.descriptions[4].description()
-                    .replace(/^\w/, c => c.toUpperCase()).split("\n")
     };
   },
   methods: {
@@ -94,6 +92,9 @@ Vue.component("ra-tab", {
         "c-ra-run-button__icon": true,
         "c-ra-run-button__icon--running": this.isRunning,
       };
+    },
+    runDescription() {
+      return GameDatabase.celestials.descriptions[4].description().replace(/^\w/, c => c.toUpperCase()).split("\n");
     }
   },
   template: `
@@ -124,8 +125,8 @@ Vue.component("ra-tab", {
           <div :class="runButtonClassObject" @click="startRun">
             <span class="c-ra-run-button__icon__sigil fas fa-sun"></span>
           </div>
-          <span v-for="desc in description">
-            {{ desc }}
+          <span v-for="line in runDescription">
+            {{ line }}
           </span>
         </button>
         <div v-if="showRecollection && !isRaCapped" class="c-ra-recollection-unlock">

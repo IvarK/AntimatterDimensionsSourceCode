@@ -19,7 +19,6 @@ Vue.component("v-tab", {
       wantsFlipped: true,
       isRunning: false,
       hasAlchemy: false,
-      description: GameDatabase.celestials.descriptions[3].description().replace(/^\w/, c => c.toUpperCase())
     };
   },
   methods: {
@@ -127,7 +126,10 @@ Vue.component("v-tab", {
         "c-v-run-button": true,
         "c-v-run-button--running": this.isRunning,
       };
-    }
+    },
+    runDescription() {
+      return GameDatabase.celestials.descriptions[3].description().replace(/^\w/, c => c.toUpperCase());
+    },
   },
   template: `
     <div class="l-v-celestial-tab">
@@ -209,7 +211,8 @@ Vue.component("v-tab", {
               V's Reality.</b>
               <br/>
               <div :style="{ 'font-size': hasAlchemy ? '1.1rem' : '' }">
-                {{ description }}
+                {{ runDescription }}
+                <span v-if="hasAlchemy">Exponential Glyph Alchemy effect is disabled.</span>
               </div>
               <div class="c-v-run-button__line c-v-run-button__line--1"></div>
               <div class="c-v-run-button__line c-v-run-button__line--2"></div>

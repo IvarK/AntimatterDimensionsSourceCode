@@ -214,7 +214,6 @@ Vue.component("laitela-run-button", {
       maxDimTier: 0,
       isRunning: false,
       realityReward: 1,
-      description: GameDatabase.celestials.descriptions[5].description().split("\n"),
       singularitiesUnlocked: false,
     };
   },
@@ -245,6 +244,9 @@ Vue.component("laitela-run-button", {
   computed: {
     completionTime() {
       return TimeSpan.fromSeconds(this.realityTime).toStringShort();
+    },
+    runDescription() {
+      return GameDatabase.celestials.descriptions[5].description().split("\n");
     }
   },
   template: `
@@ -264,8 +266,8 @@ Vue.component("laitela-run-button", {
         <br>
         <br>
       </div>
-      <div v-for="desc in description">
-        {{ desc }} <br>
+      <div v-for="line in runDescription">
+        {{ line }} <br>
       </div>
     </button>`
 });

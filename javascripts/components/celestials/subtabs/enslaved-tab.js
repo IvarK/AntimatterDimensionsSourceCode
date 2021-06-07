@@ -147,7 +147,6 @@ Vue.component("enslaved-tab", {
     quote: "",
     currentSpeedUp: 0,
     hintsUnlocked: false,
-    description: GameDatabase.celestials.descriptions[2].description().capitalize()
   }),
   computed: {
     storedRealEfficiencyDesc() {
@@ -186,8 +185,8 @@ Vue.component("enslaved-tab", {
         "c-enslaved-run-button__icon--running": this.isRunning,
       };
     },
-    descriptionLines() {
-      return this.description.split("\n");
+    runDescription() {
+      return GameDatabase.celestials.descriptions[2].description().split("\n");
     },
   },
   watch: {
@@ -291,8 +290,8 @@ Vue.component("enslaved-tab", {
                 <div v-if="isRunning" v-for="x in 25" class="c-enslaved-run-button__icon__glitch"
                                     :style="glitchStyle(x)"/>
               </div>
-              <div v-for="description in descriptionLines">
-              {{ description }}
+              <div v-for="line in runDescription">
+                {{ line }}
               </div>
               <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps
               (see Infinity Dimension tab)</b>

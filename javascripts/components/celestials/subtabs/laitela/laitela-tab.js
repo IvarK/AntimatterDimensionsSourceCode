@@ -226,8 +226,7 @@ Vue.component("laitela-run-button", {
       this.singularitiesUnlocked = Currency.singularities.gt(0);
     },
     startRun() {
-      if (!resetReality()) return;
-      Laitela.initializeRun();
+      Modal.celestials.show({ name: "Lai'tela's", number: 5 });
     },
     classObject() {
       return {
@@ -245,6 +244,9 @@ Vue.component("laitela-run-button", {
   computed: {
     completionTime() {
       return TimeSpan.fromSeconds(this.realityTime).toStringShort();
+    },
+    runDescription() {
+      return GameDatabase.celestials.descriptions[5].description().split("\n");
     }
   },
   template: `
@@ -264,15 +266,9 @@ Vue.component("laitela-run-button", {
         <br>
         <br>
       </div>
-      Infinity Point and Eternity Point gain are Dilated. Game speed is reduced to {{ formatInt(1) }}
-      and gradually comes back over {{ formatInt(10) }} minutes, and Black Hole discharging and pulsing
-      is disabled.
-      <br>
-      <br>
-      Antimatter generates entropy inside of this Reality. At {{ formatPercents(1) }} entropy, the Reality
-      becomes destabilized and you gain a reward based on how quickly you reached {{ formatPercents(1) }}.
-      If you can destabilize in less than {{ formatInt(30) }} seconds, the Reality becomes more difficult
-      but also gives a stronger reward.
+      <div v-for="line in runDescription">
+        {{ line }} <br>
+      </div>
     </button>`
 });
 

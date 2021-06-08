@@ -146,7 +146,7 @@ Vue.component("enslaved-tab", {
     buyableUnlocks: [],
     quote: "",
     currentSpeedUp: 0,
-    hintsUnlocked: false
+    hintsUnlocked: false,
   }),
   computed: {
     storedRealEfficiencyDesc() {
@@ -184,7 +184,10 @@ Vue.component("enslaved-tab", {
         "c-enslaved-run-button__icon": true,
         "c-enslaved-run-button__icon--running": this.isRunning,
       };
-    }
+    },
+    runDescription() {
+      return GameDatabase.celestials.descriptions[2].description().split("\n");
+    },
   },
   watch: {
     autoRelease(newValue) {
@@ -234,10 +237,7 @@ Vue.component("enslaved-tab", {
       Enslaved.buyUnlock(info);
     },
     startRun() {
-      // This needs to be added here before the reset so that TD autobuyers don't buy too much on start
-      player.celestials.enslaved.run = true;
-      if (!resetReality()) return;
-      Enslaved.initializeRun();
+      Modal.celestials.show({ name: "The Enslaved Ones'", number: 2 });
     },
     hasUnlock(info) {
       return Enslaved.has(info);
@@ -290,16 +290,9 @@ Vue.component("enslaved-tab", {
                 <div v-if="isRunning" v-for="x in 25" class="c-enslaved-run-button__icon__glitch"
                                     :style="glitchStyle(x)"/>
               </div>
-              <p>Glyph levels will be boosted to a minimum of {{ formatInt(5000) }}</p>
-              <p>Infinity, Time, and 8th Antimatter Dimension purchases are limited to {{ formatInt(1) }} each</p>
-              <p>Antimatter Dimension multipliers are always Dilated (the glyph effect still only
-                applies in actual Dilation)</p>
-              <p>Time Study 192 (uncapped Replicanti) is locked</p>
-              <p>The Black Hole is disabled</p>
-              <p>Tachyon Particle production and Dilated Time production are severely reduced</p>
-              <p>Time Theorem generation from Dilation Glyphs is disabled</p>
-              <p>Certain challenge goals have been increased</p>
-              <p>Stored Time is discharged at a reduced effectiveness (exponent^{{ format(0.55, 2, 2) }})</p>
+              <div v-for="line in runDescription">
+                {{ line }}
+              </div>
               <b>Reward: Unlock Tesseracts, which let you increase Infinity Dimension caps
               (see Infinity Dimension tab)</b>
             </div>
@@ -365,7 +358,7 @@ Vue.component("enslaved-tab", {
               :key="unlock.id"
               class="o-enslaved-shop-button"
               :class="unlockClassObject(unlock)"
-              @click="buyUnlock(unlock)"> 
+              @click="buyUnlock(unlock)">
                 {{ unlock.description() }}
                 <div v-if="!hasUnlock(unlock)">
                   Costs: {{ timeDisplayShort(unlock.price) }}

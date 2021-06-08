@@ -72,6 +72,7 @@ Modal.import = new Modal("modal-import");
 Modal.shop = new Modal("modal-std-store");
 Modal.importTree = new Modal("modal-import-tree");
 Modal.editTree = new Modal("modal-edit-tree");
+Modal.automatorScriptDelete = new Modal("modal-automator-script-delete");
 Modal.deleteCompanion = new Modal("modal-delete-companion");
 Modal.enslavedHints = new Modal("modal-enslaved-hints");
 Modal.realityGlyph = new Modal("modal-reality-glyph-creation");
@@ -82,6 +83,12 @@ Modal.hiddenTabs = new Modal("modal-hidden-tabs");
 Modal.startEternityChallenge = new ChallengeConfirmationModal("modal-start-eternity-challenge");
 Modal.startInfinityChallenge = new ChallengeConfirmationModal("modal-start-infinity-challenge");
 Modal.startNormalChallenge = new ChallengeConfirmationModal("modal-start-normal-challenge");
+Modal.sacrifice = new Modal("modal-sacrifice");
+Modal.breakInfinity = new Modal("modal-break-infinity");
+Modal.eternity = new Modal("modal-eternity");
+Modal.reality = new Modal("modal-reality");
+Modal.resetReality = new Modal("modal-reset-reality");
+Modal.celestials = new Modal("modal-celestials");
 Modal.celestialQuote = new class extends Modal {
   show(celestial, lines) {
     if (!GameUI.initialized) return;

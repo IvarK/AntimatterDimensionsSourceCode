@@ -105,18 +105,7 @@ Vue.component("automator-editor", {
       this.rename();
     },
     deleteScript() {
-      if (!confirm("Permanently and irrevocably delete script?")) return;
-      const scriptID = this.currentScriptID;
-      AutomatorBackend.deleteScript(scriptID);
-      this.updateScriptList();
-      // If a script is running, select that one
-      if (AutomatorBackend.isOn && this.runningScriptID !== scriptID) {
-        player.reality.automator.state.editorScript = this.runningScriptID;
-      } else {
-        // AutomatorBackend.deleteScript will create an empty script if necessary
-        player.reality.automator.state.editorScript = this.scripts[0].id;
-      }
-      this.updateCurrentScriptID();
+      Modal.automatorScriptDelete.show({ scriptID: this.currentScriptID });
     },
     onScriptDropdown(event) {
       const menu = event.target;
@@ -158,6 +147,7 @@ Vue.component("automator-editor", {
   },
   created() {
     EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
+    EventHub.ui.on(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad(), this);
     this.updateCurrentScriptID();
     this.updateScriptList();
   },

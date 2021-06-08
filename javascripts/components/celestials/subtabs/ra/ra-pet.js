@@ -48,32 +48,10 @@ Vue.component("ra-pet", {
         .sort((a, b) => a.level - b.level);
     },
     chunkTooltip() {
-      switch (this.pet.name) {
-        case "Teresa":
-          return "Based on Eternity Points";
-        case "Effarig":
-          return "Based on Relic Shards gained";
-        case "Enslaved":
-          return "Based on Time Shards";
-        case "V":
-          return "Based on Infinity Power";
-        default:
-          throw new Error(`Unrecognized celestial ${this.pet.name} in Ra UI`);
-      }
+      return `Based on ${this.pet.chunkGain}`;
     },
     memoryGainTooltip() {
-      switch (this.pet.name) {
-        case "Teresa":
-          return "Based on current Reality Machines";
-        case "Effarig":
-          return "Based on best glyph level";
-        case "Enslaved":
-          return "Based on total time played";
-        case "V":
-          return "Based on total Celestial Memory levels";
-        default:
-          throw new Error(`Unrecognized celestial ${this.pet.name} in Ra UI`);
-      }
+      return `Based on ${this.pet.memoryGain}`;
     },
   },
   methods: {

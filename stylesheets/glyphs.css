@@ -332,7 +332,6 @@
   width: 27.4rem;
   padding: 0.5rem 0;
   position: absolute;
-  z-index: 6;
 }
 
 .l-glyph-tooltip--up-left {
@@ -419,23 +418,17 @@
   padding: 0.25em 1em;
 }
 
-.l-modal-glyph-selection {
-  position: fixed;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  left: 50vw;
-  top: 50vh;
-  transform: translate(-50%, -50%);
-}
-
 .l-modal-glyph-selection__row {
+  display: flex;
   flex-direction: row;
 }
 
 .l-modal-glyph-selection__glyph {
   margin: 1rem;
+}
+
+.l-modal-glyph-selection__glyph--selected {
+  box-shadow: #B4B420 0 0 1rem 0.5rem !important;
 }
 
 .l-equipped-glyphs {

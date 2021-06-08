@@ -97,7 +97,7 @@ function safeCall(fn) {
 }
 
 String.prototype.capitalize = function() {
-  return this.toLowerCase().replace(/^\w/, c => c.toUpperCase());
+  return this.toLowerCase().replace(/^\w/u, c => c.toUpperCase());
 };
 
 String.prototype.splice = function(start, delCount, newSubStr) {

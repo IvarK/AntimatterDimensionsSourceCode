@@ -14,6 +14,16 @@ class RaPetState {
   /**
    * @abstract
    */
+  get chunkGain() { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
+  get memoryGain() { throw new NotImplementedError(); }
+
+  /**
+   * @abstract
+   */
   get requiredUnlock() { throw new NotImplementedError(); }
 
   get isUnlocked() {
@@ -155,6 +165,8 @@ const Ra = {
   pets: {
     teresa: new class TeresaRaPetState extends RaPetState {
       get name() { return "Teresa"; }
+      get chunkGain() { return "Eternity Points"; }
+      get memoryGain() { return "current Reality Machines"; }
       get data() { return player.celestials.ra.pets.teresa; }
       get requiredUnlock() { return undefined; }
       get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.eternityPoints.value.pLog10() / 1e4, 3); }
@@ -167,6 +179,8 @@ const Ra = {
     }(),
     effarig: new class EffarigRaPetState extends RaPetState {
       get name() { return "Effarig"; }
+      get chunkGain() { return "Relic Shards gained"; }
+      get memoryGain() { return "best glyph level"; }
       get data() { return player.celestials.ra.pets.effarig; }
       get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
       get rawMemoryChunksPerSecond() { return 4 * Math.pow(Effarig.shardsGained, 0.1); }
@@ -179,6 +193,8 @@ const Ra = {
     }(),
     enslaved: new class EnslavedRaPetState extends RaPetState {
       get name() { return "Enslaved"; }
+      get chunkGain() { return "Time Shards"; }
+      get memoryGain() { return "total time played"; }
       get data() { return player.celestials.ra.pets.enslaved; }
       get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
       get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.timeShards.value.pLog10() / 3e5, 2); }
@@ -191,6 +207,8 @@ const Ra = {
     }(),
     v: new class VRaPetState extends RaPetState {
       get name() { return "V"; }
+      get chunkGain() { return "Infinity Power"; }
+      get memoryGain() { return "total Celestial Memory levels"; }
       get data() { return player.celestials.ra.pets.v; }
       get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
       get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.infinityPower.value.pLog10() / 1e7, 1.5); }

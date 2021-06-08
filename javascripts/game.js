@@ -874,8 +874,8 @@ function setHoldingR(x) {
 function init() {
   // eslint-disable-next-line no-console
   console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
-  Tab.dimensions.antimatter.show();
   GameStorage.load();
+  Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   kong.init();
 }
 

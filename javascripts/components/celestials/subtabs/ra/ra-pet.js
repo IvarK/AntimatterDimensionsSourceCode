@@ -90,7 +90,7 @@ Vue.component("ra-pet", {
         ? -c / b
         : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
       if (Number.isFinite(estimate)) {
-        return `in ${TimeSpan.fromSeconds(estimate).toStringShort(false)}`;
+        return `in ${TimeSpan.fromSeconds(estimate).toStringShort()}`;
       }
       return "";
     },

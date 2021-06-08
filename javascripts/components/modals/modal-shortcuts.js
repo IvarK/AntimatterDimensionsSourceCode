@@ -28,7 +28,8 @@ Vue.component("modal-shortcuts", {
       { name: "Save game", keys: ["ctrl", "s"] },
       { name: "Export game", keys: ["ctrl", "e"] },
       { name: "Open \"How to Play\" pop-up", keys: ["h"] },
-      { name: "Close pop-up or open options", keys: ["esc"] }
+      { name: "Modify visible tabs", keys: ["tab"] },
+      { name: "Close pop-up or open options", keys: ["esc"] },
     ]
   },
   template:

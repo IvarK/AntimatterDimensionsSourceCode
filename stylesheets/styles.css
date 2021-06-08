@@ -8623,6 +8623,104 @@ input.o-automator-block-input {
   font-weight: 500;
 }
 
+.l-hide-modal-tab-container {
+  margin: 0.5rem;
+}
+
+.l-hide-modal-subtab-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 62.6rem;
+}
+
+.c-hide-modal-all-subtab-container {
+  border-radius: 0.8rem;
+  border: 0.1rem solid black;
+  padding: 0.2rem;
+}
+
+.t-metro .c-hide-modal-all-subtab-container,
+.t-dark-metro .c-hide-modal-all-subtab-container,
+.t-inverted-metro .c-hide-modal-all-subtab-container,
+.t-s8 .c-hide-modal-all-subtab-container {
+  border-radius: 0;
+}
+
+.c-hide-modal-tab-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  height: 4rem;
+  width: 12rem;
+  margin: 0.2rem;
+  border-color: black !important;
+  box-shadow: none !important;
+  white-space: normal;
+  font-weight: bold;
+}
+
+.c-hide-modal-button--active {
+  opacity: 1;
+}
+
+.c-hide-modal-button--inactive {
+  opacity: 0.6;
+}
+
+.c-hide-modal-button--always-visible {
+  background-color: var(--color-disabled) !important;
+  pointer-events: none;
+}
+
+.c-hide-modal-button--current {
+  text-shadow: 0 0 0.3rem;
+}
+
+.c-hide-modal-tab-button--infinity {
+  color: var(--color-infinity);
+  background: var(--color-prestige--accent) !important;
+  border-color: var(--color-infinity) !important;
+}
+
+.c-hide-modal-tab-button--infinity:hover {
+  color: var(--color-prestige--accent);
+  background: var(--color-infinity) !important;
+}
+
+.c-hide-modal-tab-button--eternity {
+  color: var(--color-eternity);
+  background: var(--color-prestige--accent) !important;
+  border-color: var(--color-eternity) !important;
+}
+
+.c-hide-modal-tab-button--eternity:hover {
+  color: var(--color-prestige--accent);
+  background: var(--color-eternity) !important;
+}
+
+.c-hide-modal-tab-button--reality {
+  color: var(--color-reality);
+  background: var(--color-prestige--accent) !important;
+  border-color: var(--color-reality) !important;
+}
+
+.c-hide-modal-tab-button--reality:hover {
+  color: var(--color-prestige--accent);
+  background: var(--color-reality) !important;
+}
+
+.c-hide-modal-tab-button--celestials {
+  color: var(--color-celestials);
+  background: var(--color-prestige--accent) !important;
+  border-color: var(--color-celestials) !important;
+}
+
+.c-hide-modal-tab-button--celestials:hover {
+  color: var(--color-prestige--accent);
+  background: var(--color-celestials) !important;
+}
+
 /* Prevent any themes overriding font awesome */
 .fa, .far, .fas {
   font-family: "Font Awesome 5 Free" !important;

@@ -52,8 +52,8 @@ Vue.component("plus-minus-button", {
       const edgePixels = Math.round(this.computedSize * (1 - x) / 2);
       const midPixels = this.computedSize - edgePixels * 2;
       return [
-        (edgePixels / this.computedSize * 100).toFixed(2) + "%",
-        (midPixels / this.computedSize * 100).toFixed(2) + "%"
+        `${(edgePixels / this.computedSize * 100).toFixed(2)}%`,
+        `${(midPixels / this.computedSize * 100).toFixed(2)}%`
       ];
     },
   },

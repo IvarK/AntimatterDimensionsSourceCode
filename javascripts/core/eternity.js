@@ -184,7 +184,7 @@ function askEternityConfirmation() {
     eternityAnimation();
     setTimeout(eternity, 2250);
   } else {
-    setTimeout(eternity, 2250);
+    eternity();
   }
 }
 

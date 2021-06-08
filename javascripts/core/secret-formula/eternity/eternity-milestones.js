@@ -28,6 +28,8 @@ GameDatabase.eternity.milestones = {
       return `While offline, gain ${formatPercents(0.25)} of your best Eternity Points per minute from previous
       Eternities. (Currently ${format(EPmin, 2, 2)} EP/min)`;
     },
+    activeCondition: () => `Active as long as neither of the other offline milestones
+      (${formatInt(200)} or ${formatInt(1000)}) are also active.`
   },
   autoIC: {
     eternities: 7,
@@ -115,6 +117,8 @@ GameDatabase.eternity.milestones = {
       return `While offline, gain Eternities at ${formatPercents(0.5)} the rate of your fastest Eternity. ` +
         (eternities.gt(0) ? `(currently ${format(eternities, 2, 2)}/hour)` : "(disabled)");
     },
+    activeCondition: () => `Must be outside of all Challenges and Dilation,
+      Eternity Autobuyer must be turned on set to zero EP.`
   },
   autoInfinities: {
     eternities: 1000,
@@ -125,5 +129,8 @@ GameDatabase.eternity.milestones = {
         your best Infinities/hour this Eternity. ` +
         (infinities.gt(0) ? `(currently ${format(infinities, 2, 2)}/hour)` : "(disabled)");
     },
+    activeCondition: () => `Must be outside of Normal/Infinity Challenges and outside of EC4 and EC12,
+      Infinity Autobuyer must be turned on and set to time mode with less than ${formatInt(60)} seconds,
+      Eternity Autobuyer must be turned off.`
   }
 };

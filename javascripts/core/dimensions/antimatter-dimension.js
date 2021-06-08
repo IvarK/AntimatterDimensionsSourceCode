@@ -516,11 +516,8 @@ class AntimatterDimensionState extends DimensionState {
 
   get isAvailableForPurchase() {
     if (Currency.antimatter.gt(Player.infinityLimit)) return false;
-    if (this.tier > DimBoost.totalBoosts + 4) return false;
-    const hasPrevTier = this.tier === 1 ||
-      (Laitela.continuumActive
-        ? AntimatterDimension(this.tier - 1).continuumValue >= 1
-        : AntimatterDimension(this.tier - 1).amount.neq(0));
+    if (!EternityMilestone.unlockAllND.isReached && this.tier > DimBoost.totalBoosts + 4) return false;
+    const hasPrevTier = this.tier === 1 || AntimatterDimension(this.tier - 1).totalAmount.gt(0);
     if (!EternityMilestone.unlockAllND.isReached && !hasPrevTier) return false;
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }

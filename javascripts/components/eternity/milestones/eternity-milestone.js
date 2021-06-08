@@ -30,15 +30,18 @@ Vue.component("eternity-milestone", {
         "o-eternity-milestone__reward--reached": this.isReached,
         "o-eternity-milestone__reward--small-font": this.reward.length > 80
       };
-    }
+    },
+    activeCondition() {
+      return this.config.activeCondition ? this.config.activeCondition() : null;
+    },
   },
   methods: {
     update() {
       this.isReached = this.milestone.isReached;
     }
   },
-  template: `
-    <div class="l-eternity-milestone" v-if="!this.config.invisible">
+  template:`
+    <div class="l-eternity-milestone" v-if="!this.config.invisible" v-tooltip="activeCondition">
       <span class="o-eternity-milestone__goal">
         {{ formatInt(eternities) }} {{ "Eternity" | pluralize(eternities, "Eternities") }}:
       </span>

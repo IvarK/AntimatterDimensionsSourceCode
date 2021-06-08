@@ -328,7 +328,7 @@ Your first Infinity is considered to be the first challenge, and is thus automat
 you unlock challenges.
 <br>
 <br>
-The rightmost row of Infinity Upgrades does not work in challenges.
+The rightmost column of Infinity Upgrades does not work in challenges.
 `,
       isUnlocked: () => PlayerProgress.infinityUnlocked(),
       tags: ["infinity", "autobuyer", "earlygame"],
@@ -459,7 +459,8 @@ affected by Tickspeed upgrades.
       // This one could use some work!
       info: () => `
 Infinity Challenges are like Normal Challenges, but they have higher end goals and are generally harder. Instead of
-unlocking autobuyers, they give you boosts to your various forms of production in more unique ways.
+unlocking autobuyers, they give you boosts to your various forms of production in more unique ways. Similarly to
+Normal Challenges, the rightmost column of Infinity Upgrades are also disabled within Infinity Challenges.
 <br>
 <br>
 Unlike the Normal Challenges, which are all unlocked at once, Infinity Challenges require you to reach a certain

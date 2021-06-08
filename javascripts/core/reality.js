@@ -143,7 +143,6 @@ function processManualReality(sacrifice, glyphID) {
   // We've already gotten a glyph at this point, so the second value has to be true.
   // If we haven't sacrificed, we need to sort and purge glyphs, as applicable.
   triggerManualReality(getRealityProps(false, true));
-  if (!sacrifice) Glyphs.processSortingAfterReality();
 }
 
 function triggerManualReality(realityProps) {
@@ -215,7 +214,6 @@ function getRealityProps(isReset, alreadyGotGlyph = false) {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   beginProcessReality(getRealityProps(false, false));
-  Glyphs.processSortingAfterReality();
 }
 
 function updateRealityRecords(realityProps) {
@@ -315,6 +313,7 @@ function beginProcessReality(realityProps) {
         rng.finalize();
       }
     });
+  Glyphs.processSortingAfterReality();
 }
 
 function finishProcessReality(realityProps) {

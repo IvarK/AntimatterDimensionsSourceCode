@@ -183,6 +183,8 @@ function askEternityConfirmation() {
   } else if (player.options.animations.eternity && document.body.style.animation === "") {
     eternityAnimation();
     setTimeout(eternity, 2250);
+  } else {
+    setTimeout(eternity, 2250);
   }
 }
 

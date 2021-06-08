@@ -66,44 +66,38 @@ Vue.component("modal-preferred-tree", {
     },
   },
   template: `
-  <div class="c-modal-message l-modal-content--centered">
-  <modal-close-button @click="emitClose"/>
-  <br>
-  <h2>Dimension Split Preference</h2>
-    <div style="display: flex; flex-direction: row; align-items: center;">
-      <button
-        v-for="(id, name) in dimensionOptions"
-        @click="select(name)"
-        :class="classList(name)"
-      >
-      <div
-      v-if="isPreferred(name)"
-      class="l-dim-path-priority o-hint-text"
-      >
-      {{isPreferred(name)}}
+    <div class="c-modal-message l-modal-content--centered">
+      <modal-close-button @click="emitClose"/>
+      <br>
+      <h2>Dimension Split Preference</h2>
+      <div style="display: flex; flex-direction: row; align-items: center;">
+        <button
+          v-for="(id, name) in dimensionOptions"
+          @click="select(name)"
+          :class="classList(name)">
+          <div v-if="isPreferred(name)" class="l-dim-path-priority o-hint-text">
+            {{isPreferred(name)}}
+          </div>
+          <div>
+            {{name}}
+          </div>
+        </button>
       </div>
-      <div>
-      {{name}}
+      <br>
+      <h2>Pace split Preference</h2>
+      <div style="display: flex; flex-direction: row; align-items: center;">
+        <button
+          v-for="(id, name) in paceOptions"
+          @click="select(name)"
+          :class="classList(name)">
+          <div>
+            {{name}}
+          </div>
+        </button>
       </div>
-      </button>
-    </div>
-  <br>
-  <h2>Pace split Preference</h2>
-    <div style="display: flex; flex-direction: row; align-items: center;">
-      <button
-        v-for="(id, name) in paceOptions"
-        @click="select(name)"
-        :class="classList(name)"
-      >
-      <div>
-      {{name}}
-      </div>
-      </button>
-    </div>
-  <primary-button
-        class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
-        @click="confirmPrefs"
-      >Confirm</primary-button>
-  </div>
-  `
+      <primary-button
+          class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
+          @click="confirmPrefs"
+        >Confirm</primary-button>
+    </div>`
 });

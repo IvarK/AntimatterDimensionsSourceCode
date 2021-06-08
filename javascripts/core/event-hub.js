@@ -96,6 +96,7 @@ const GAME_EVENT = {
   GAME_LOAD: "GAME_LOAD",
   CELESTIAL_UPGRADE_UNLOCKED: "CELESTIAL_UPGRADE_UNLOCKED",
   SAVE_CONVERTED_FROM_PREVIOUS_VERSION: "SAVE_CONVERTED_FROM_PREVIOUS_VERSION",
+  AUTOMATOR_SAVE_CHANGED: "AUTOMATOR_SAVE_CHANGED",
 
   // Used by events to signify that they are triggered by a particular
   // event, not handled by the event hub

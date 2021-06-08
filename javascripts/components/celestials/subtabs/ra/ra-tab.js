@@ -16,7 +16,7 @@ Vue.component("ra-tab", {
       laitelaGlyphLevelReq: 0,
       laitelaRealityMachineCost: new Decimal(0),
       petWithRecollection: "",
-      isRunning: false
+      isRunning: false,
     };
   },
   methods: {
@@ -36,8 +36,7 @@ Vue.component("ra-tab", {
       this.isRunning = Ra.isRunning;
     },
     startRun() {
-      if (!resetReality()) return;
-      Ra.initializeRun();
+      Modal.celestials.show({ name: "Ra's", number: 4 });
     },
     unlockLaitela() {
       if (Laitela.unlock()) {
@@ -68,7 +67,7 @@ Vue.component("ra-tab", {
       {
         pet: Ra.pets.enslaved,
         scalingUpgradeVisible: () => Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME),
-        scalingUpgradeText: () => `Stored game time 
+        scalingUpgradeText: () => `Stored game time
           ${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 0, 2)} and real time
           +${formatInt(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / (1000 * 3600))} hours`,
       },
@@ -93,6 +92,9 @@ Vue.component("ra-tab", {
         "c-ra-run-button__icon": true,
         "c-ra-run-button__icon--running": this.isRunning,
       };
+    },
+    runDescription() {
+      return GameDatabase.celestials.descriptions[4].description().replace(/^\w/u, c => c.toUpperCase()).split("\n");
     }
   },
   template: `
@@ -115,14 +117,17 @@ Vue.component("ra-tab", {
       </div>
       <div class="l-ra-non-pets">
         <button class="c-ra-run-button">
-          <h2> Start Ra's Reality </h2>
+          <h2>
+            <span v-if="isRunning">You are in </span>
+            <span v-else>Start </span>
+            Ra's Reality
+          </h2>
           <div :class="runButtonClassObject" @click="startRun">
             <span class="c-ra-run-button__icon__sigil fas fa-sun"></span>
           </div>
-          You can't Dimension Boost, and the Tickspeed purchase multiplier is fixed at {{ formatX(1.1245, 0, 3) }}.
-          <br>
-          <br>
-          Inside of Ra's reality, some resources will generate Memory Chunks based on their amount.
+          <span v-for="line in runDescription">
+            {{ line }}
+          </span>
         </button>
         <div v-if="showRecollection && !isRaCapped" class="c-ra-recollection-unlock">
           <h1 :style="petStyle">Recollection</h1>

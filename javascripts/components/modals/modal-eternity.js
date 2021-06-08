@@ -67,6 +67,7 @@ Vue.component("modal-eternity", {
         <h2>You are about to Eternity</h2>
         <div class="c-modal-message__text">
           {{ message }}
+          <br><span style="color: red">TODO: DILATION EXIT MODAL HI GAMER</span>
           <br>
         </div>
         <br>

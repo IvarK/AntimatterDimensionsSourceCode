@@ -459,9 +459,8 @@ class AntimatterDimensionState extends DimensionState {
    * @param {Decimal} value
    */
   set currencyAmount(value) {
-    return this.tier >= 3 && NormalChallenge(6).isRunning
-      ? AntimatterDimension(this.tier - 2).amount = value
-      : Currency.antimatter.value = value;
+    if (this.tier >= 3 && NormalChallenge(6).isRunning) AntimatterDimension(this.tier - 2).amount = value;
+    else Currency.antimatter.value = value;
   }
 
   /**

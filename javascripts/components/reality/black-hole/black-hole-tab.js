@@ -17,6 +17,12 @@ Vue.component("black-hole-tab", {
       blackHoleUptime: [],
     };
   },
+  mounted() {
+    this.startAnimation();
+  },
+  destroyed() {
+    if (this.animation) this.animation.unmount();
+  },
   computed: {
     blackHoles: () => BlackHoles.list,
     sliderPropsNegative() {
@@ -42,12 +48,6 @@ Vue.component("black-hole-tab", {
         tooltip: false
       };
     },
-  },
-  mounted() {
-    this.startAnimation();
-  },
-  destroyed() {
-    if (this.animation) this.animation.unmount();
   },
   methods: {
     update() {
@@ -115,7 +115,7 @@ Vue.component("black-hole-tab", {
         The physics of this Reality do not permit singularities.
       </div>
       <div v-else-if="!isUnlocked" style="display: flex; flex-direction: column; align-items: center;">
-        <black-hole-unlock-button @blackholeunlock="startAnimation"/>
+        <black-hole-unlock-button @blackholeunlock="startAnimation" />
         The Black Hole makes the entire game run significantly faster for a short period of time.
         <br>
         Starts at {{ formatX(180) }} faster for {{ formatInt(10) }} seconds, once per hour.
@@ -147,19 +147,19 @@ Vue.component("black-hole-tab", {
           <div v-if="canAdjustStoredTime" class="l-enslaved-shop-container">
             Black Hole charging rate: {{ storedTimeRate }}
             <ad-slider-component
-                v-bind="sliderPropsStoring"
-                :value="storedFraction"
-                @input="adjustSliderStoring($event)"
-              />
+              v-bind="sliderPropsStoring"
+              :value="storedFraction"
+              @input="adjustSliderStoring($event)"
+            />
           </div>
           <div v-if="isNegativeBHUnlocked" class="l-enslaved-shop-container">
             Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
             This requires both Black Holes to be permanent and only works when paused.
             <ad-slider-component
-                v-bind="sliderPropsNegative"
-                :value="negativeSlider"
-                @input="adjustSliderNegative($event)"
-              />
+              v-bind="sliderPropsNegative"
+              :value="negativeSlider"
+              @input="adjustSliderNegative($event)"
+            />
           </div>
         </div>
         <div :class="gridStyle()">
@@ -170,6 +170,5 @@ Vue.component("black-hole-tab", {
           />
         </div>
       </template>
-    </div>
-  `
+    </div>`
 });

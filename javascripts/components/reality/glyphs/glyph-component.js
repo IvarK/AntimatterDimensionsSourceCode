@@ -12,8 +12,8 @@ const GlyphTooltipEffect = {
     boostColor() {
       return (this.effectConfig.alterationType !== undefined &&
         this.effectConfig.alterationType !== ALTERATION_TYPE.ADDITION)
-          ? this.effectConfig.alteredColor()
-          : undefined;
+        ? this.effectConfig.alteredColor()
+        : undefined;
     },
     additionColor() {
       return this.effectConfig.alterationType === ALTERATION_TYPE.ADDITION
@@ -56,7 +56,7 @@ const GlyphTooltipEffect = {
         color: this.boostColor,
         "text-shadow": `0 0 0.4rem ${this.boostColor}`
       } : {
-          color: "#76EE76",
+        color: "#76EE76",
       };
     },
   },
@@ -70,13 +70,12 @@ const GlyphTooltipEffect = {
   },
   template: `
     <div class="c-glyph-tooltip__effect">
-      <span v-html="convertedParts[0]"/>
-      <span v-if="hasValue" :style="valueStyle">{{primaryEffectText}}</span>
-      <span v-html="convertedParts[1]"/>
-      <span v-if="hasSecondaryValue" :style="valueStyle">{{secondaryEffectText}}</span>
-      <span v-if="hasSecondaryValue" v-html="convertedParts[2]"/>
-    </div>
-    `
+      <span v-html="convertedParts[0]" />
+      <span v-if="hasValue" :style="valueStyle">{{ primaryEffectText }}</span>
+      <span v-html="convertedParts[1]" />
+      <span v-if="hasSecondaryValue" :style="valueStyle">{{ secondaryEffectText }}</span>
+      <span v-if="hasSecondaryValue" v-html="convertedParts[2]" />
+    </div>`
 };
 
 const GlyphTooltipComponent = {
@@ -108,6 +107,14 @@ const GlyphTooltipComponent = {
       type: Number,
       default: 0,
     }
+  },
+  mounted() {
+    // By attaching the tooltip to the body element, we make sure it ends up on top of anything
+    // else, with no z order shenanigans
+    document.body.appendChild(this.$el);
+  },
+  destroyed() {
+    document.body.removeChild(this.$el);
   },
   computed: {
     onTouchDevice() {
@@ -265,43 +272,39 @@ const GlyphTooltipComponent = {
       return `Score: ${format(AutoGlyphProcessor.filterValue(this.$parent.glyph), 1, 1)}`;
     }
   },
-  mounted() {
-    // By attaching the tooltip to the body element, we make sure it ends up on top of anything
-    // else, with no z order shenanigans
-    document.body.appendChild(this.$el);
-  },
-  destroyed() {
-    document.body.removeChild(this.$el);
-  },
   template: `
-  <div class="l-glyph-tooltip c-glyph-tooltip"
-       :style="glyphTooltipStyle"
-       v-on="eventHandlers">
-    <div class="c-glyph-tooltip__header" :style="glyphHeaderStyle">
-      <span class="c-glyph-tooltip__description" :style="descriptionStyle" v-html="description"></span>
-      <span class="l-glyph-tooltip__info">
-        <span v-html="levelText"></span>
-        <span v-html="rarityText"></span>
-      </span>
-      <span v-if="showDeletionText">
-        <span
-          :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
-          v-on="onTouchDevice ? { click: removeGlyph } : {}">
-          <span v-html="sacrificeText()"></span>
-          <span v-if="sacrificeText() && refineText()"> | </span>
-          <span v-html="refineText()"></span>
+    <div
+      class="l-glyph-tooltip c-glyph-tooltip"
+      :style="glyphTooltipStyle"
+      v-on="eventHandlers"
+    >
+      <div class="c-glyph-tooltip__header" :style="glyphHeaderStyle">
+        <span class="c-glyph-tooltip__description" :style="descriptionStyle" v-html="description"></span>
+        <span class="l-glyph-tooltip__info">
+          <span v-html="levelText"></span>
+          <span v-html="rarityText"></span>
         </span>
-      </span>
-      <span class="c-glyph-tooltip__sacrifice">{{ scoreText() }}</span>
-    </div>
-    <div class="l-glyph-tooltip__effects">
-      <effect-desc v-for="e in sortedEffects"
-                   :key="e.id"
-                   :effect="e.id"
-                   :value="e.value"/>
-    </div>
-  </div>
-  `,
+        <span v-if="showDeletionText">
+          <span
+            :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
+            v-on="onTouchDevice ? { click: removeGlyph } : {}"
+          >
+            <span v-html="sacrificeText()"></span>
+            <span v-if="sacrificeText() && refineText()"> | </span>
+            <span v-html="refineText()"></span>
+          </span>
+        </span>
+        <span class="c-glyph-tooltip__sacrifice">{{ scoreText() }}</span>
+      </div>
+      <div class="l-glyph-tooltip__effects">
+        <effect-desc
+          v-for="e in sortedEffects"
+          :key="e.id"
+          :effect="e.id"
+          :value="e.value"
+        />
+      </div>
+    </div>`
 };
 
 Vue.component("glyph-component", {
@@ -368,6 +371,13 @@ Vue.component("glyph-component", {
       // We use this to not create a ton of tooltip components as soon as the glyph tab loads.
       tooltipLoaded: false,
     };
+  },
+  created() {
+    this.$on("tooltip-touched", () => this.hideTooltip());
+  },
+  beforeDestroy() {
+    if (this.isCurrentTooltip) this.hideTooltip();
+    if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
   },
   computed: {
     hasTooltip() {
@@ -459,13 +469,6 @@ Vue.component("glyph-component", {
       }
     },
   },
-  created() {
-    this.$on("tooltip-touched", () => this.hideTooltip());
-  },
-  beforeDestroy() {
-    if (this.isCurrentTooltip) this.hideTooltip();
-    if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
-  },
   methods: {
     update() {
       this.isRealityGlyph = this.glyph.type === "reality";
@@ -531,8 +534,8 @@ Vue.component("glyph-component", {
       if (
         AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE ||
         (AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP && this.refineReward === 0)
-        ) {
-          this.currentAction = "sacrifice";
+      ) {
+        this.currentAction = "sacrifice";
       } else {
         this.currentAction = "refine";
       }
@@ -662,21 +665,27 @@ Vue.component("glyph-component", {
     }
   },
   template: `
-  <!-- The naive approach with a border and box-shadow seems to have problems with
-      weird seams/artifacts at the edges. This makes for a rather complex workaround -->
-    <div :style="outerStyle"
-         :class="['l-glyph-component', {'c-glyph-component--dragging': isDragging}]"
-         :draggable="draggable"
-         v-on="draggable ? { dragstart: dragStart,
-                             dragend: dragEnd,
-                             drag: drag } : {}">
-      <div ref="glyph"
-           :style="innerStyle"
-           :class="['l-glyph-component', 'c-glyph-component']">
-        {{symbol}}
-        <div v-if="$viewModel.shiftDown || showGlyphEffectDots" v-for="x in glyphEffects"
-          :style="glyphEffectIcon(x)"/>
-        <glyph-tooltip v-if="hasTooltip && tooltipLoaded"
+    <!-- The naive approach with a border and box-shadow seems to have problems with
+          weird seams/artifacts at the edges. This makes for a rather complex workaround -->
+    <div
+      :style="outerStyle"
+      :class="['l-glyph-component', {'c-glyph-component--dragging': isDragging}]"
+      :draggable="draggable"
+      v-on="draggable ? { dragstart: dragStart, dragend: dragEnd, drag: drag } : {}"
+    >
+      <div
+        ref="glyph"
+        :style="innerStyle"
+        :class="['l-glyph-component', 'c-glyph-component']"
+      >
+        {{ symbol }}
+        <div
+          v-if="$viewModel.shiftDown || showGlyphEffectDots"
+          v-for="x in glyphEffects"
+          :style="glyphEffectIcon(x)"
+        />
+        <glyph-tooltip
+          v-if="hasTooltip && tooltipLoaded"
           v-show="isCurrentTooltip"
           ref="tooltip"
           v-bind="glyph"
@@ -688,15 +697,17 @@ Vue.component("glyph-component", {
           :scoreMode="scoreMode"
           :showDeletionText="showSacrifice"
           :levelOverride="levelOverride"
-          :component="componentID"/>
+          :component="componentID"
+        />
       </div>
-      <div ref="over"
-           :style="overStyle"
-           v-on="mouseEventHandlers"
-           @click.shift.exact="$emit('shiftClicked', glyph.id)"
-           @click.ctrl.shift.exact="$emit('ctrlShiftClicked', glyph.id)"
-           @click.meta.shift.exact="$emit('ctrlShiftClicked', glyph.id)"
-           @click.exact="$emit('clicked', glyph.id)"/>
-    </div>
-  `,
+      <div
+        ref="over"
+        :style="overStyle"
+        v-on="mouseEventHandlers"
+        @click.shift.exact="$emit('shiftClicked', glyph.id)"
+        @click.ctrl.shift.exact="$emit('ctrlShiftClicked', glyph.id)"
+        @click.meta.shift.exact="$emit('ctrlShiftClicked', glyph.id)"
+        @click.exact="$emit('clicked', glyph.id)"
+      />
+    </div>`
 });

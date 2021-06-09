@@ -45,11 +45,11 @@ Vue.component("antimatter-dim-tab", {
       softReset(-1, true, true);
     }
   },
-  template:
-    `<div class="l-old-ui-antimatter-dim-tab">
+  template: `
+    <div class="l-old-ui-antimatter-dim-tab">
       <span>{{ multiplierText }}</span>
       <antimatter-dim-tab-header />
-      <span v-if="isChallengePowerVisible">{{challengePower}}</span>
+      <span v-if="isChallengePowerVisible">{{ challengePower }}</span>
       <div class="l-dimensions-container">
         <antimatter-dim-row
           v-for="tier in 8"
@@ -64,7 +64,8 @@ Vue.component("antimatter-dim-tab", {
         v-if="isQuickResetAvailable"
         class="o-primary-btn--quick-reset"
         @click="quickReset"
-      >Perform a Dimension Boost reset
+      >
+        Perform a Dimension Boost reset
         <span v-if="hasDimensionBoosts"> but lose a Dimension Boost</span>
         <span v-else> for no gain</span>
       </primary-button>

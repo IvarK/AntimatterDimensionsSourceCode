@@ -105,15 +105,18 @@ Vue.component("automator-blocks", {
       return b
     }
   },
-  template:
-    `<div class="c-automator-docs">
-      <draggable 
+  template: `
+    <div class="c-automator-docs">
+      <draggable
         :list="blocks"
         :group="{ name: 'code-blocks', pull: 'clone', put: false }"
         :sort="false"
         :clone="clone"
-        class="c-automator-command-list">
-        <div v-for="block in blocks" :key="block.id" class="o-automator-command"> {{ block.cmd }}</div>
+        class="c-automator-command-list"
+      >
+        <div v-for="block in blocks" :key="block.id" class="o-automator-command">
+          {{ block.cmd }}
+        </div>
       </draggable>
     </div>`
 });

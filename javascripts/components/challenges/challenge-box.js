@@ -17,11 +17,6 @@ Vue.component("challenge-box", {
       inC1: Boolean,
     };
   },
-  methods: {
-    update() {
-      this.inC1 = this.name === "C1" && !this.isCompleted && !Player.isInAntimatterChallenge;
-    },
-  },
   computed: {
     buttonClassObject() {
       const challengeLocked = !(this.isCompleted || this.isRunning || this.inC1 || this.isUnlocked);
@@ -45,15 +40,24 @@ Vue.component("challenge-box", {
       return "Locked";
     }
   },
-  template:
-    `<div class="c-challenge-box l-challenge-box">
-      <hint-text type="challenges" class="l-hint-text--challenge">{{name}}</hint-text>
+  methods: {
+    update() {
+      this.inC1 = this.name === "C1" && !this.isCompleted && !Player.isInAntimatterChallenge;
+    },
+  },
+  template: `
+    <div class="c-challenge-box l-challenge-box">
+      <hint-text type="challenges" class="l-hint-text--challenge">
+        {{name}}
+      </hint-text>
       <slot name="top" />
       <div class="l-challenge-box__fill" />
       <button
         :class="buttonClassObject"
         @click="$emit('start')"
-      >{{buttonText}}</button>
+      >
+        {{ buttonText }}
+      </button>
       <slot name="bottom" />
     </div>`
 });

@@ -15,7 +15,7 @@ Vue.component("automator-man-page", {
         <div class="c-automator-docs-page__indented"v-html="command.description" />
       </template>
       <template v-for="section in command.sections">
-        <b>{{section.name}}</b>
+        <b>{{ section.name }}</b>
         <template v-for="item in section.items">
           <div class="c-automator-docs-page__indented">
             <div v-html="item.header" />

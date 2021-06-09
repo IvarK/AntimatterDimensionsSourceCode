@@ -28,7 +28,7 @@ Vue.component("modal-hard-reset", {
   },
   template:
     `<div class="c-modal-message l-modal-content--centered">
-      <modal-close-button @click="cancelReset"/>
+      <modal-close-button @click="cancelReset" />
       <h3>HARD RESET</h3>
       <div class="c-modal-message__text">
         Please confirm your desire to hard reset this save slot.
@@ -45,19 +45,26 @@ Vue.component("modal-hard-reset", {
       />
       <div class="c-modal-hard-reset-info">
         <div
-        v-if="willHardReset"
-        class="c-modal-hard-reset-danger">You do not get anything from hard resetting your save.</div>
+          v-if="willHardReset"
+          class="c-modal-hard-reset-danger"
+        >
+          You do not get anything from hard resetting your save.
+        </div>
         <div v-else>Type in the correct code to hard reset.</div>
       </div>
       <primary-button
         v-if="!willHardReset"
         class="o-primary-btn--width-medium c-modal-hard-reset-btn"
         @click="cancelReset"
-      >Cancel</primary-button>
+      >
+        Cancel
+      </primary-button>
       <primary-button
         v-else
         class="o-primary-btn--width-medium c-modal-hard-reset-btn c-modal__confirm-btn"
         @click="hardReset"
-      >HARD RESET</primary-button>
+      >
+        HARD RESET
+      </primary-button>
     </div>`
 });

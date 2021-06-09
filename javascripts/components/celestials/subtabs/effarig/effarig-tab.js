@@ -31,8 +31,7 @@ Vue.component("effarig-tab", {
             </div>
           </div>
           <span v-else class="c-effarig-tab__reward-symbol">?</span>
-        </div>
-      `
+        </div>`
     }
   },
   data() {
@@ -108,25 +107,32 @@ Vue.component("effarig-tab", {
       <div class="l-effarig-shop-and-run">
         <div class="l-effarig-shop">
           <div class="c-effarig-relics">
-            You have {{ format(relicShards, 2, 0) }} Relic Shards, which increases <br>
+            You have {{ format(relicShards, 2, 0) }} Relic Shards, which increases
+            <br>
             the rarity of new Glyphs by {{ relicShardRarityAlwaysMax ? "" : "up to" }}
             +{{ format(shardRarityBoost, 2, 2) }}%.
           </div>
           <div class="c-effarig-relic-description">
-            You will gain {{ format(shardsGained, 2, 0) }} Relic Shards next Reality. More Eternity Points <br>
-            slightly increases Relic Shards gained. More distinct Glyph <br>
+            You will gain {{ format(shardsGained, 2, 0) }} Relic Shards next Reality. More Eternity Points
+            <br>
+            slightly increases Relic Shards gained. More distinct Glyph
+            <br>
             effects significantly increases Relic Shards gained.
           </div>
           <effarig-unlock-button
-           v-for="(unlock, i) in shopUnlocks"
-           :key="i"
-           :unlock="unlock" />
-          <effarig-unlock-button v-if="!runUnlocked" :unlock="runUnlock" />
+            v-for="(unlock, i) in shopUnlocks"
+            :key="i"
+            :unlock="unlock"
+          />
+          <effarig-unlock-button
+            v-if="!runUnlocked"
+            :unlock="runUnlock"
+          />
           <button
             class="c-effarig-shop-button c-effarig-shop-button--available"
             @click="createCursedGlyph"
             v-if="vIsFlipped"
-            >
+          >
             Get a Cursed Glyph...
           </button>
         </div>
@@ -136,16 +142,20 @@ Vue.component("effarig-tab", {
               You are in Effarig's Reality - give up?
             </div>
             <br>
-            Enter Effarig's Reality, in which
-            {{ runDescription }}
+            Enter Effarig's Reality, in which {{ runDescription }}
           </div>
-          <div :class="['l-effarig-run-button', 'c-effarig-run-button', runButtonOuterClass]"
-               @click="startRun">
-            <div :class="runButtonInnerClass" :button-symbol="symbol">{{symbol}}</div>
+          <div
+            :class="['l-effarig-run-button', 'c-effarig-run-button', runButtonOuterClass]"
+            @click="startRun"
+          >
+            <div :class="runButtonInnerClass" :button-symbol="symbol">
+              {{ symbol }}
+            </div>
           </div>
           <run-unlock-reward v-for="(unlock, i) in runUnlocks"
-                             :key="i"
-                             :unlock="unlock" />
+            :key="i"
+            :unlock="unlock"
+          />
         </div>
       </div>
     </div>`

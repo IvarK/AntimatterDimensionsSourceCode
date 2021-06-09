@@ -13,11 +13,11 @@ Vue.component("modal-start-infinity-challenge", {
       return this.$viewModel.modal.current;
     },
     message() {
-        return `You will Big Crunch, if possible, and will start a new Infinity within the challenge,
-          with all the restrictions and modifiers that entails. Upon reaching the goal
-          (${format(InfinityChallenge(this.modal.id).goal)} Antimatter for this challenge), you can Big Crunch
-          ${this.challengeIsCompleted ? "to complete the challenge" : "to complete the challenge and gain the reward"}.
-          You do not start with any dimensions or galaxies, regardless of upgrades.`;
+      return `You will Big Crunch, if possible, and will start a new Infinity within the challenge,
+        with all the restrictions and modifiers that entails. Upon reaching the goal
+        (${format(InfinityChallenge(this.modal.id).goal)} Antimatter for this challenge), you can Big Crunch
+        ${this.challengeIsCompleted ? "to complete the challenge" : "to complete the challenge and gain the reward"}.
+        You do not start with any dimensions or galaxies, regardless of upgrades.`;
     },
     entranceLabel() {
       return `You are about to enter Infinity Challenge ${this.modal.id}`;
@@ -48,27 +48,31 @@ Vue.component("modal-start-infinity-challenge", {
   },
   template:
     `<div class="c-modal-message l-modal-content--centered">
-    <h2>{{ entranceLabel }}</h2>
+      <h2>{{ entranceLabel }}</h2>
       <div class="c-modal-message__text">
         {{ message }}
       </div>
       <br>
       <div class="c-modal-message__text">
-      {{ condition }}
+        {{ condition }}
       </div>
       <div v-if="!challengeIsCompleted" class="c-modal-message__text">
-      <br>
-      {{ reward }}
+        <br>
+        {{ reward }}
       </div>
       <div class="l-options-grid__row">
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
-        >Cancel</primary-button>
+        >
+          Cancel
+        </primary-button>
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
-        >Begin</primary-button>
+        >
+          Begin
+        </primary-button>
       </div>
     </div>`
 });

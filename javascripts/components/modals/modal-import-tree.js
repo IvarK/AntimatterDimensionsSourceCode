@@ -6,6 +6,9 @@ Vue.component("modal-import-tree", {
       input: ""
     };
   },
+  mounted() {
+    this.$refs.input.select();
+  },
   computed: {
     tree() {
       if (!this.inputIsValidTree) return false;
@@ -78,9 +81,6 @@ Vue.component("modal-import-tree", {
       return sha512_256(this.input) === "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608";
     }
   },
-  mounted() {
-    this.$refs.input.select();
-  },
   methods: {
     importTree() {
       if (!this.inputIsValid) return;
@@ -133,9 +133,9 @@ Vue.component("modal-import-tree", {
       return totalSTSpent;
     },
   },
-  template:
-    `<div class="c-modal-import-tree l-modal-content--centered">
-      <modal-close-button @click="emitClose"/>
+  template: `
+    <div class="c-modal-import-tree l-modal-content--centered">
+      <modal-close-button @click="emitClose" />
       <h3>Input your tree</h3>
       <input
         v-model="input"
@@ -180,6 +180,8 @@ Vue.component("modal-import-tree", {
         v-if="inputIsValid"
         class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
         @click="importTree"
-      >Import</primary-button>
+      >
+        Import
+      </primary-button>
     </div>`
 });

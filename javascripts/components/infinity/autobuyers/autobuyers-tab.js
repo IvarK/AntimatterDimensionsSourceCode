@@ -9,8 +9,8 @@ Vue.component("autobuyers-tab", {
       this.hasContinuum = Laitela.continuumActive;
     }
   },
-  template:
-    `<div class="l-autobuyers-tab">
+  template: `
+    <div class="l-autobuyers-tab">
       <autobuyer-toggles />
       <open-modal-shortcuts />
       <reality-autobuyer-box />
@@ -18,7 +18,7 @@ Vue.component("autobuyers-tab", {
       <big-crunch-autobuyer-box />
       <galaxy-autobuyer-box />
       <dimboost-autobuyer-box />
-      <dimension-autobuyer-box v-if="!hasContinuum" v-for="tier in 8" :key="tier" :tier="tier"/>
+      <dimension-autobuyer-box v-if="!hasContinuum" v-for="tier in 8" :key="tier" :tier="tier" />
       <tickspeed-autobuyer-box v-if="!hasContinuum" />
       <sacrifice-autobuyer-box />
       <template v-if="hasContinuum">

@@ -24,9 +24,11 @@ Vue.component("eternity-milestones-tab", {
       return () => this.milestones[(row - 1) * 3 + column - 1];
     }
   },
-  template:
-    `<div class="l-eternity-milestone-grid">
-      <div>You have {{format(eternityCount, 3)}} {{"Eternity" | pluralize(eternityCount, "Eternities")}}.</div>
+  template: `
+    <div class="l-eternity-milestone-grid">
+      <div>
+        You have {{ format(eternityCount, 3) }} {{ "Eternity" | pluralize(eternityCount, "Eternities") }}.
+      </div>
       <div v-for="row in rows" class="l-eternity-milestone-grid__row">
         <eternity-milestone
           v-for="column in 3"
@@ -43,6 +45,5 @@ Vue.component("eternity-milestones-tab", {
         Offline Infinities only generate outside of Normal and Infinity Challenges and outside of EC4 and EC12,
         and when your Infinity Autobuyer is turned on and set to time mode with less than {{formatInt(60)}} seconds.
       </div>
-
     </div>`
 });

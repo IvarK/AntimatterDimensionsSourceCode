@@ -102,14 +102,15 @@ Vue.component("automator-block-editor", {
       this.parseRequest();
     },
   },
-  template:
-    `<div class="c-automator-block-editor">
+  template: `
+    <div class="c-automator-block-editor">
       <draggable
         v-on:end="parseRequest"
         v-model="lines"
         group="code-blocks"
         class="c-automator-blocks"
-        ghost-class="c-automator-block-row-ghost">
+        ghost-class="c-automator-block-row-ghost"
+      >
         <automator-single-block
           v-for="(block, index) in lines"
           :key="block.id"
@@ -117,7 +118,7 @@ Vue.component("automator-block-editor", {
           :block="block"
           :updateBlock="updateBlock"
           :deleteBlock="deleteBlock"
-          ></automator-single-block>
+        ></automator-single-block>
       </draggable>
     </div>`
 });

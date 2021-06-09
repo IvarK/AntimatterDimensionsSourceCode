@@ -46,29 +46,33 @@ Vue.component("modal-start-eternity-challenge", {
       this.emitClose();
     },
   },
-  template:
-    `<div class="c-modal-message l-modal-content--centered">
-    <h2>{{ entranceLabel }}</h2>
+  template: `
+    <div class="c-modal-message l-modal-content--centered">
+      <h2>{{ entranceLabel }}</h2>
       <div class="c-modal-message__text">
         {{ message }}
       </div>
       <br>
       <div class="c-modal-message__text">
-      {{ condition }}
+        {{ condition }}
       </div>
       <div v-if="!challengeIsCompleted" class="c-modal-message__text">
-      <br>
-      {{ reward }}
+        <br>
+        {{ reward }}
       </div>
       <div class="l-options-grid__row">
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
-        >Cancel</primary-button>
+        >
+          Cancel
+        </primary-button>
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
-        >Begin</primary-button>
+        >
+          Begin
+        </primary-button>
         </div>
       </div>
     </div>`

@@ -117,9 +117,11 @@ Vue.component("tt-shop", {
       <div class="ttshop-container ttshop-background">
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
         <button
-        class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
-        onClick="Modal.preferredTree.show()"
-        ><i class='fas fa-cog'></i></button>
+          class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
+          onClick="Modal.preferredTree.show()"
+        >
+          <i class='fas fa-cog'></i>
+        </button>
           <p id="timetheorems">
             <span class="c-tt-amount">
               {{ formattedTheorems }}
@@ -148,8 +150,11 @@ Vue.component("tt-shop", {
           <tt-buy-button :budget="budget.ip" :cost="costs.ip" :formatCost="formatIP" :action="buyWithIP"/>
           <tt-buy-button :budget="budget.ep" :cost="costs.ep" :formatCost="formatEP" :action="buyWithEP"/>
           <div class="l-tt-buy-max-vbox">
-            <button v-if="!minimized" class="o-tt-top-row-button c-tt-buy-button c-tt-buy-button--unlocked"
-              @click="buyMaxTheorems">
+            <button
+              v-if="!minimized"
+              class="o-tt-top-row-button c-tt-buy-button c-tt-buy-button--unlocked"
+              @click="buyMaxTheorems"
+            >
               Buy max
             </button>
             <primary-button-on-off
@@ -219,38 +224,39 @@ Vue.component("tt-save-load-button", {
     }
   },
   template: `
-  <hover-menu class="l-tt-save-load-btn__wrapper">
-    <button slot="object"
-            class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
-            @click.shift.exact="save"
-            @click.exact="load">
-      {{displayName}}
-    </button>
-    <div slot="menu"
-         class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu">
-      <input type="text" size="4" maxlength="4"
-             class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
-             :value="name"
-             ach-tooltip="Set a custom name (up to 4 characters)"
-             @keyup.esc="hideContextMenu"
-             @blur="nicknameBlur" />
-      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="edit">Edit</div>
-      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="handleExport">Export</div>
-      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="save">Save</div>
-      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="load">Load</div>
-    </div>
-  </hover-menu>
-`,
+    <hover-menu class="l-tt-save-load-btn__wrapper">
+      <button
+        slot="object"
+        class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
+        @click.shift.exact="save"
+        @click.exact="load"
+      >
+        {{ displayName }}
+      </button>
+      <div
+        slot="menu"
+        class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu"
+      >
+        <input
+          type="text"
+          size="4"
+          maxlength="4"
+          class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
+          :value="name"
+          ach-tooltip="Set a custom name (up to 4 characters)"
+          @keyup.esc="hideContextMenu"
+          @blur="nicknameBlur"
+        />
+        <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="edit">Edit</div>
+        <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="handleExport">Export</div>
+        <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="save">Save</div>
+        <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="load">Load</div>
+      </div>
+    </hover-menu>`
 });
 
 Vue.component("tt-buy-button", {
   props: ["budget", "cost", "formatCost", "action"],
-  template: `
-    <button class="l-tt-buy-button c-tt-buy-button"
-            :class="enabledClass"
-            @click="action">
-      {{ formatCost(cost) }}
-    </button>`,
   computed: {
     isEnabled() {
       return this.budget.gte(this.cost);
@@ -258,5 +264,13 @@ Vue.component("tt-buy-button", {
     enabledClass() {
       return this.isEnabled ? "c-tt-buy-button--unlocked" : "c-tt-buy-button--locked";
     }
-  }
+  },
+  template: `
+    <button
+      class="l-tt-buy-button c-tt-buy-button"
+      :class="enabledClass"
+      @click="action"
+    >
+      {{ formatCost(cost) }}
+    </button>`
 });

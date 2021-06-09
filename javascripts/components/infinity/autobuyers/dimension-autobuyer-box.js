@@ -40,21 +40,22 @@ Vue.component("dimension-autobuyer-box", {
           this.autobuyer.upgradeBulk();
         }
       },
-      template:
-        `<button
+      template: `
+        <button
           v-if="hasMaxedInterval && !bulkUnlimited && isUnlocked"
           class="o-autobuyer-btn"
           @click="upgradeBulk"
         >
-        <span>{{bulkDisplay}}</span>
-        <template v-if="!hasMaxedBulk">
-          <br>
-          <span>Cost: {{format(cost, 2, 0)}} IP</span>
-        </template>
+          <span>{{ bulkDisplay }}</span>
+          <template v-if="!hasMaxedBulk">
+            <br>
+            <span>Cost: {{ format(cost, 2, 0) }} IP</span>
+          </template>
         </button>
         <button
           v-else-if="hasMaxedInterval && !bulkUnlimited"
-          class="o-autobuyer-btn l-autobuyer-box__button">
+          class="o-autobuyer-btn l-autobuyer-box__button"
+        >
           Complete the challenge to upgrade bulk
         </button>`
     }
@@ -91,14 +92,14 @@ Vue.component("dimension-autobuyer-box", {
       this.update();
     }
   },
-  template:
-    `<autobuyer-box :autobuyer="autobuyer" :name="name" showInterval>
+  template: `
+    <autobuyer-box :autobuyer="autobuyer" :name="name" showInterval>
       <template slot="intervalSlot">
         <bulk-button :autobuyer="autobuyer" />
         <autobuyer-interval-button :autobuyer="autobuyer" />
       </template>
       <template slot="toggleSlot">
-        <button class="o-autobuyer-btn" @click="toggleMode">{{modeDisplay}}</button>
+        <button class="o-autobuyer-btn" @click="toggleMode">{{ modeDisplay }}</button>
       </template>
       <template slot="prioritySlot">
         <autobuyer-priority-selector :autobuyer="autobuyer" class="l-autobuyer-box__priority-selector" />

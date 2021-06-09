@@ -79,14 +79,14 @@ Vue.component("infinity-upgrades-tab", {
     <div class="l-infinity-upgrades-tab">
       <div class="c-subtab-option-container" v-if="chargeUnlocked">
         <primary-button
-        :class="disChargeClassObject"
-        @click="disCharge = !disCharge"
+          :class="disChargeClassObject"
+          @click="disCharge = !disCharge"
         >
-        Respec Charged Infinity Upgrades on next Reality
+          Respec Charged Infinity Upgrades on next Reality
         </primary-button>
       </div>
       <div v-if="chargeUnlocked">
-        You have charged {{formatInt(chargesUsed)}}/{{formatInt(totalCharges)}} Infinity Upgrades.
+        You have charged {{ formatInt(chargesUsed) }}/{{ formatInt(totalCharges) }} Infinity Upgrades.
         Charged Infinity Upgrades have their effect altered.
         <br>
         Hold shift to show Charged Infinity Upgrades. You can freely respec your choices on Reality.
@@ -116,8 +116,8 @@ Vue.component("infinity-upgrades-tab", {
       <div v-if="eternityUnlocked">
         The Infinity Point multiplier becomes more expensive
         <br>
-        above {{formatPostBreak(ipMultSoftCap)}} Infinity Points, and cannot be purchased past
-        {{formatPostBreak(ipMultHardCap)}} Infinity Points.
+        above {{ formatPostBreak(ipMultSoftCap) }} Infinity Points, and cannot be purchased past
+        {{ formatPostBreak(ipMultHardCap) }} Infinity Points.
       </div>
     </div>`
 });

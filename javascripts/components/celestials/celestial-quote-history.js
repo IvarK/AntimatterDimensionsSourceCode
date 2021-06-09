@@ -12,6 +12,9 @@ Vue.component("celestial-quote-history", {
     seenIds: [],
     lastVisibleIndex: 4,
   }),
+  mounted() {
+    this.lastVisibleIndex = this.quotes.length - 1;
+  },
   computed: {
     quotes() {
       const quoteLists = this.seenIds.map(id => Celestials[this.celestial].quotes.fromID(id).lines);
@@ -58,25 +61,29 @@ Vue.component("celestial-quote-history", {
       if (this.downButtonEnabled) this.lastVisibleIndex++;
     },
   },
-  mounted() {
-    this.lastVisibleIndex = this.quotes.length - 1;
-  },
   template: `
     <div class="o-celestial-quote-history">
       <div class="l-celestial-quote-history__lines">
-        <div v-for="(quote, idx) in visibleQuotes" :key="idx"
-              class="c-celestial-quote-history__line"
-              :style="lineStyle(idx)">
+        <div
+          v-for="(quote, idx) in visibleQuotes"
+          :key="idx"
+          class="c-celestial-quote-history__line"
+          :style="lineStyle(idx)"
+        >
           {{quote}}
         </div>
       </div>
       <div class="l-celestial-quote-history__buttons">
-        <div class="c-celestial-quote-history__button fas fa-chevron-circle-up"
-           :class="upButtonClass"
-           @click="upButtonClick"/>
-        <div class="c-celestial-quote-history__button fas fa-chevron-circle-down"
-           :class="downButtonClass"
-           @click="downButtonClick" />
+        <div
+          class="c-celestial-quote-history__button fas fa-chevron-circle-up"
+          :class="upButtonClass"
+          @click="upButtonClick"
+        />
+        <div
+          class="c-celestial-quote-history__button fas fa-chevron-circle-down"
+          :class="downButtonClass"
+          @click="downButtonClick"
+        />
       </div>
-    </div>`,
+    </div>`
 });

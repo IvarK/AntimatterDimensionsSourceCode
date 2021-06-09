@@ -38,35 +38,37 @@ Vue.component("reality-autobuyer-box", {
       this.mode = mode;
     }
   },
-  template:
-    `<autobuyer-box :autobuyer="autobuyer" name="Automatic Reality">
+  template: `
+    <autobuyer-box :autobuyer="autobuyer" name="Automatic Reality">
       <template slot="intervalSlot">
         <div class="c-autobuyer-box__small-text"></div>
         <select
           class="c-autobuyer-box__mode-select"
           @change="changeMode"
-          >
+        >
           <option
             v-for="optionMode in modes"
             :value="optionMode"
             :selected="mode === optionMode"
-          >{{modeName(optionMode)}}</option>
+          >
+            {{ modeName(optionMode) }}
+          </option>
         </select>
       </template>
       <template slot="toggleSlot">
         <div>Target Reality Machines:</div>
         <autobuyer-input
-         :autobuyer="autobuyer"
-         type="decimal"
-         property="rm"
+          :autobuyer="autobuyer"
+          type="decimal"
+          property="rm"
         />
       </template>
       <template slot="prioritySlot">
         <div>Target glyph level:</div>
         <autobuyer-input
-         :autobuyer="autobuyer"
-         type="int"
-         property="glyph"
+          :autobuyer="autobuyer"
+          type="int"
+          property="glyph"
         />
         <div v-if="isOverCap">
           Autobuyer will trigger at the glyph level cap of {{formatInt(levelCap)}}.

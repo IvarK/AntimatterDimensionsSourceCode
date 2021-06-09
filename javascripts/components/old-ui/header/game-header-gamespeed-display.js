@@ -43,9 +43,9 @@ Vue.component("game-header-gamespeed-display", {
       return `${this.formatNumber(this.pulsedSpeed)}`;
     }
   },
-  template:
-    `<span>
-      | Game speed: {{ baseSpeedText }} 
+  template: `
+    <span>
+      | Game speed: {{ baseSpeedText }}
       <span v-if="isPulsing">(<i class="fas fa-expand-arrows-alt u-fa-padding"></i> {{ pulseSpeedText }})</span>
     </span>`
 });

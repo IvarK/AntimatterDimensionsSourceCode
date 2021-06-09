@@ -50,19 +50,22 @@ Vue.component("modal-h2p", {
       </div>
       <div class="l-h2p-container">
         <div class="l-h2p-search-tab">
-          <input v-model="searchValue" placeholder="Type to search..." class="c-h2p-search-bar"/>
+          <input v-model="searchValue" placeholder="Type to search..." class="c-h2p-search-bar" />
           <div class="l-h2p-tab-list">
             <div v-for="tab in matchingTabs"
               :key="tab.name"
               class="o-h2p-tab-button"
               :class="tab === activeTab ? 'o-h2p-tab-button--selected' : ''"
-              @click="setActiveTab(tab)">
-              {{tab.alias}}
+              @click="setActiveTab(tab)"
+            >
+              {{ tab.alias }}
             </div>
           </div>
         </div>
         <div class="l-h2p-info">
-          <div class="c-h2p-body--title"> {{activeTab.name}} </div>
+          <div class="c-h2p-body--title">
+            {{ activeTab.name }}
+          </div>
           <div class="l-h2p-body c-h2p-body" v-html="activeTab.info()" />
         </div>
       </div>

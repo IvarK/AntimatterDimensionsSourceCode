@@ -19,8 +19,8 @@ Vue.component("modal-ui-choice", {
       this.handleClick();
     }
   },
-  template:
-    `<div class="c-modal-message l-modal-content--centered">
+  template: `
+    <div class="c-modal-message l-modal-content--centered">
       <div class="c-modal-message__text">
         We noticed that you've loaded an old save, would you like to swap to the new UI?
         (you can change this at any time in the options tab)
@@ -29,11 +29,15 @@ Vue.component("modal-ui-choice", {
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn"
           @click="handleNoClick"
-        >No</primary-button>
+        >
+          No
+        </primary-button>
         <primary-button
           class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
           @click="handleYesClick"
-        >Yes</primary-button>
+        >
+          Yes
+        </primary-button>
       </div>
     </div>`
 });

@@ -45,10 +45,10 @@ Vue.component("antimatter-dim-tab-progress-bar", {
       }
     }
   },
-  template:
-    `<div class="c-progress-bar">
-        <div :style="progressBarStyle" class="c-progress-bar__fill">
-            <span v-tooltip="tooltip" class="c-progress-bar__percents">{{displayPercents}}</span>
-          </div>
+  template: `
+    <div class="c-progress-bar">
+      <div :style="progressBarStyle" class="c-progress-bar__fill">
+        <span v-tooltip="tooltip" class="c-progress-bar__percents">{{ displayPercents }}</span>
+      </div>
     </div>`
 });

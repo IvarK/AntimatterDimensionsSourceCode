@@ -103,10 +103,16 @@ Vue.component("eternity-challenges-tab", {
           <description-display :config="config" slot="top" />
           <template slot="bottom">
             <div :style="{ visiblity: completions < 5 ? 'visible' : 'hidden' }">
-              <div>Completed {{formatInt(completions)}} {{"time" | pluralize(completions)}}</div>
-              <div v-if="!isCompleted">{{goalDisplay}}</div>
+              <div>
+                Completed {{ formatInt(completions) }} {{ "time" | pluralize(completions) }}
+              </div>
+              <div v-if="!isCompleted">
+                {{ goalDisplay }}
+              </div>
             </div>
-            <span v-if="showGoalSpan">Goal Span: {{firstGoal}} IP - {{lastGoal}} IP</span>
+            <span v-if="showGoalSpan">
+              Goal Span: {{ firstGoal }} IP - {{ lastGoal }} IP
+            </span>
             <span>
               Reward:
               <description-display
@@ -144,10 +150,10 @@ Vue.component("eternity-challenges-tab", {
         (this.showAllChallenges && PlayerProgress.realityUnlocked());
     }
   },
-  template:
-    `<div class="l-challenges-tab">
-      <challenges-header/>
-      <div>Complete Eternity Challenges again for a bigger reward, maximum of {{formatInt(5)}} times.</div>
+  template: `
+    <div class="l-challenges-tab">
+      <challenges-header />
+      <div>Complete Eternity Challenges again for a bigger reward, maximum of {{ formatInt(5) }} times.</div>
       <div v-if="unlockedCount !== 12">
         (You have unlocked {{ formatInt(unlockedCount) }}
         out of {{ formatInt(12) }} Eternity Challenges)

@@ -32,8 +32,8 @@ Vue.component("antimatter-dim-tab-header", {
       maxAll();
     }
   },
-  template:
-    `<div class="l-antimatter-dim-tab__header">
+  template: `
+    <div class="l-antimatter-dim-tab__header">
       <primary-button
         v-show="isSacrificeUnlocked"
         v-tooltip="sacrificeTooltip"
@@ -41,12 +41,18 @@ Vue.component("antimatter-dim-tab-header", {
         class="o-primary-btn--sacrifice"
         @click="sacrifice"
       >
-        <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
-        <span v-else>Dimensional Sacrifice Disabled ({{ disabledCondition }})</span>
+        <span v-if="isSacrificeAffordable">
+          Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})
+        </span>
+        <span v-else>
+          Dimensional Sacrifice Disabled ({{ disabledCondition }})
+        </span>
       </primary-button>
       <primary-button
         class="o-primary-btn--buy-max"
         @click="maxAll"
-      >Max all (M)</primary-button>
+      >
+        Max all (M)
+      </primary-button>
     </div>`
 });

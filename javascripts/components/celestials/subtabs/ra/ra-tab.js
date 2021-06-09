@@ -19,34 +19,6 @@ Vue.component("ra-tab", {
       isRunning: false,
     };
   },
-  methods: {
-    update() {
-      this.memoriesPerChunk = Ra.productionPerMemoryChunk();
-      this.isRaCapped = Ra.totalPetLevel === 100;
-      this.totalLevels = Ra.totalPetLevel;
-      this.showRecollection = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
-      this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
-      this.recollectionReq = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels;
-      this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
-      this.showLaitela = Ra.pets.v.isUnlocked;
-      this.laitelaLevelReq = Laitela.raLevelRequirement;
-      this.laitelaGlyphLevelReq = Laitela.realityGlyphLevelRequirement;
-      this.laitelaRealityMachineCost = Laitela.realityMachineCost;
-      this.petWithRecollection = Ra.petWithRecollection;
-      this.isRunning = Ra.isRunning;
-    },
-    startRun() {
-      Modal.celestials.show({ name: "Ra's", number: 4 });
-    },
-    unlockLaitela() {
-      if (Laitela.unlock()) {
-        Tab.celestials.laitela.show(true);
-      }
-    },
-    toggleMode() {
-      Ra.toggleMode();
-    }
-  },
   computed: {
     laitelaUnlock: () => Laitela.isUnlocked,
     pets: () => [
@@ -97,6 +69,34 @@ Vue.component("ra-tab", {
       return GameDatabase.celestials.descriptions[4].description().replace(/^\w/u, c => c.toUpperCase()).split("\n");
     }
   },
+  methods: {
+    update() {
+      this.memoriesPerChunk = Ra.productionPerMemoryChunk();
+      this.isRaCapped = Ra.totalPetLevel === 100;
+      this.totalLevels = Ra.totalPetLevel;
+      this.showRecollection = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
+      this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
+      this.recollectionReq = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels;
+      this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
+      this.showLaitela = Ra.pets.v.isUnlocked;
+      this.laitelaLevelReq = Laitela.raLevelRequirement;
+      this.laitelaGlyphLevelReq = Laitela.realityGlyphLevelRequirement;
+      this.laitelaRealityMachineCost = Laitela.realityMachineCost;
+      this.petWithRecollection = Ra.petWithRecollection;
+      this.isRunning = Ra.isRunning;
+    },
+    startRun() {
+      Modal.celestials.show({ name: "Ra's", number: 4 });
+    },
+    unlockLaitela() {
+      if (Laitela.unlock()) {
+        Tab.celestials.laitela.show(true);
+      }
+    },
+    toggleMode() {
+      Ra.toggleMode();
+    }
+  },
   template: `
     <div class="l-ra-celestial-tab">
       <div class="c-ra-memory-header" v-if="!isRaCapped">
@@ -132,22 +132,23 @@ Vue.component("ra-tab", {
         <div v-if="showRecollection && !isRaCapped" class="c-ra-recollection-unlock">
           <h1 :style="petStyle">Recollection</h1>
           <span :style="petStyle">
-            Whichever Celestial has Recollection will get {{formatX(recollectionMult)}} Memory Chunk gain.
+            Whichever Celestial has Recollection will get {{ formatX(recollectionMult) }} Memory Chunk gain.
           </span>
           <div class="c-ra-recollection-unlock-inner" v-if="hasRecollection">
             <ra-pet-recollection-button
               v-for="(pet, i) in pets"
               :key="i"
-              :petConfig="pet" />
+              :petConfig="pet"
+            />
           </div>
           <div v-else class="c-ra-recollection-unlock-inner">
             Unlocked by getting {{ formatInt(recollectionReq) }} total Celestial Memory levels
-            (you need {{formatInt(recollectionReq - totalLevels)}} more)
+            (you need {{ formatInt(recollectionReq - totalLevels) }} more)
           </div>
         </div>
         <div class="c-ra-laitela-unlock" v-if="showLaitela">
-          <h1> Unlock Lai'tela </h1>
-          <h2> The Celestial of Dimensions </h2>
+          <h1>Unlock Lai'tela</h1>
+          <h2>The Celestial of Dimensions</h2>
           <p>
             Requires {{ formatInt(laitelaLevelReq) }} total Celestial Memory levels
             and a level {{ formatInt(laitelaGlyphLevelReq) }} Reality Glyph
@@ -158,6 +159,5 @@ Vue.component("ra-tab", {
           <div class="o-laitela-run-button__icon" @click="unlockLaitela"/>
         </div>
       </div>
-    </div>
-  `
+    </div>`
 });

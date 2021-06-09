@@ -55,9 +55,9 @@ Vue.component("normal-challenges-tab", {
         </challenge-box>`
     }
   },
-  template:
-    `<div class="l-challenges-tab">
-      <challenges-header/>
+  template: `
+    <div class="l-challenges-tab">
+      <challenges-header />
       <challenge-grid :count="12">
         <normal-challenge-box slot-scope="slotProps" :challengeId="slotProps.challengeId" />
       </challenge-grid>

@@ -46,8 +46,8 @@ Vue.component("break-infinity-tab", {
       return timeDisplayShort(time);
     }
   },
-  template:
-    `<div class="l-break-infinity-tab">
+  template: `
+    <div class="l-break-infinity-tab">
       <div v-if="!isUnlocked">
         Reduce the interval of Automatic Big Crunch Autobuyer to
         {{ format(0.1, 1, 1) }} seconds to unlock Break Infinity.

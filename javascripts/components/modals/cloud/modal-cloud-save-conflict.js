@@ -18,10 +18,14 @@ Vue.component("modal-cloud-save-conflict", {
       <primary-button
         class="o-primary-btn--width-medium"
         @click="handleClick(true)"
-      >Yes</primary-button>
+      >
+        Yes
+      </primary-button>
       <primary-button
         class="o-primary-btn--width-medium"
         @click="handleClick(false)"
-      >No</primary-button>
+      >
+        No
+      </primary-button>
     </div>`
 });

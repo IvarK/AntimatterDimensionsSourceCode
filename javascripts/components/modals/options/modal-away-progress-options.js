@@ -98,21 +98,21 @@ Vue.component("modal-away-progress-options", {
   template:
     `<modal-options @close="emitClose" style="width: 50rem">
       <div>
-        <wide-on-off-button v-model="antimatter" text="Antimatter:"/>
-        <wide-on-off-button v-if="infinityUnlocked" v-model="infinityPoints" text="Infinity Points:"/>
-        <wide-on-off-button v-if="eternityUnlocked" v-model="eternityPoints" text="Eternity Points:"/>
-        <wide-on-off-button v-if="realityUnlocked" v-model="realityMachines" text="Reality Machines:"/>
-        <wide-on-off-button v-if="dilationUnlocked" v-model="dilatedTime" text="Dilated Time:"/>
-        <wide-on-off-button v-if="infinityUnlocked" v-model="infinities" text="Infinities:"/>
-        <wide-on-off-button v-if="eternityUnlocked" v-model="eternities" text="Eternities:"/>
-        <wide-on-off-button v-if="realityUnlocked" v-model="realities" text="Realities:"/>
-        <wide-on-off-button v-if="laitelaUnlocked" v-model="singularities" text="Singularities:"/>
-        <wide-on-off-button v-if="laitelaUnlocked" v-model="darkMatter" text="Dark Matter:"/>
-        <wide-on-off-button v-if="replicantiUnlocked" v-model="replicanti" text="Replicanti:"/>
-        <wide-on-off-button v-if="replicantiUnlocked" v-model="replicantiGalaxies" text="Replicanti Galaxies:"/>
-        <wide-on-off-button v-if="raUnlocked" v-model="celestialMemories" text="Celestial Memories:"/>
-        <wide-on-off-button v-if="blackHoleUnlocked" v-model="blackHole" text="Black Hole:"/>
+        <wide-on-off-button v-model="antimatter" text="Antimatter:" />
+        <wide-on-off-button v-if="infinityUnlocked" v-model="infinityPoints" text="Infinity Points:" />
+        <wide-on-off-button v-if="eternityUnlocked" v-model="eternityPoints" text="Eternity Points:" />
+        <wide-on-off-button v-if="realityUnlocked" v-model="realityMachines" text="Reality Machines:" />
+        <wide-on-off-button v-if="dilationUnlocked" v-model="dilatedTime" text="Dilated Time:" />
+        <wide-on-off-button v-if="infinityUnlocked" v-model="infinities" text="Infinities:" />
+        <wide-on-off-button v-if="eternityUnlocked" v-model="eternities" text="Eternities:" />
+        <wide-on-off-button v-if="realityUnlocked" v-model="realities" text="Realities:" />
+        <wide-on-off-button v-if="laitelaUnlocked" v-model="singularities" text="Singularities:" />
+        <wide-on-off-button v-if="laitelaUnlocked" v-model="darkMatter" text="Dark Matter:" />
+        <wide-on-off-button v-if="replicantiUnlocked" v-model="replicanti" text="Replicanti:" />
+        <wide-on-off-button v-if="replicantiUnlocked" v-model="replicantiGalaxies" text="Replicanti Galaxies:" />
+        <wide-on-off-button v-if="raUnlocked" v-model="celestialMemories" text="Celestial Memories:" />
+        <wide-on-off-button v-if="blackHoleUnlocked" v-model="blackHole" text="Black Hole:" />
       </div>
-    Note: Selected resources will only show if they've increased.
+      Note: Selected resources will only show if they've increased.
     </modal-options>`
 });

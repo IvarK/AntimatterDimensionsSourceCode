@@ -14,17 +14,17 @@ Vue.component("modal-eternity", {
   computed: {
     message() {
       return PlayerProgress.eternityUnlocked()
-      ? `Eternity will reset everything except Achievements and challenge records.`
-      : `Eternity will reset everything except Achievements and challenge records.
-      You will also gain an Eternity Point and unlock various upgrades.`;
+        ? `Eternity will reset everything except Achievements and challenge records.`
+        : `Eternity will reset everything except Achievements and challenge records.
+          You will also gain an Eternity Point and unlock various upgrades.`;
     },
     gainedEPOnEternity() {
       return `You will gain ${format(gainedEternityPoints(), 2)} Eternity Points on Eternity.`;
     },
     startWithIP() {
       return this.startingIP.gt(0)
-      ? `You will start your next Eternity with ${format(this.startingIP, 2)} Infinity Points.`
-      : ``;
+        ? `You will start your next Eternity with ${format(this.startingIP, 2)} Infinity Points.`
+        : ``;
     },
     eternityChallenge() {
       const ec = EternityChallenge.current;
@@ -36,7 +36,7 @@ Vue.component("modal-eternity", {
       }
 
       return `You will gain ${ec.gainedCompletionStatus.gainedCompletions}
-      ${pluralize("completion", ec.gainedCompletionStatus.gainedCompletions)} for Eternity Challenge ${ec.id}.`;
+        ${pluralize("completion", ec.gainedCompletionStatus.gainedCompletions)} for Eternity Challenge ${ec.id}.`;
     }
   },
   methods: {
@@ -87,13 +87,17 @@ Vue.component("modal-eternity", {
       </div>
       <div class="l-options-grid__row">
         <primary-button
-                class="o-primary-btn--width-medium c-modal-message__okay-btn"
-                @click="handleNoClick"
-              >Cancel</primary-button>
-              <primary-button
-                class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-                @click="handleYesClick"
-              >Confirm</primary-button>
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          @click="handleNoClick"
+        >
+          Cancel
+        </primary-button>
+        <primary-button
+          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+          @click="handleYesClick"
+        >
+          Confirm
+        </primary-button>
       </div>
     </div>`
 });

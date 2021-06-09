@@ -21,7 +21,7 @@ Vue.component("secret-achievement", {
       return this.isUnlocked ? {
         "background-position": `-${(this.achievement.column - 1) * 104}px -${(this.achievement.row - 1) * 104}px`
       }
-      : {};
+        : {};
     },
     classObject() {
       return {
@@ -61,21 +61,25 @@ Vue.component("secret-achievement", {
       }
     }
   },
-  template:
-    `<div
+  template: `
+    <div
       :class="classObject"
       :style="styleObject"
       @click="onClick"
       @mouseenter="onMouseEnter"
       @mouseleave="onMouseLeave"
-      >
-      <hint-text type="achievements" class="l-hint-text--achievement">S{{ id }}</hint-text>
+    >
+      <hint-text type="achievements" class="l-hint-text--achievement">
+        S{{ id }}
+      </hint-text>
       <div class="o-achievement__tooltip">
-        <div class="o-achievement__tooltip__name">{{ config.name }} (S{{ id }})</div>
-        <div v-if="this.isUnlocked" class="o-achievement__tooltip__description">
+        <div class="o-achievement__tooltip__name">
+          {{ config.name }} (S{{ id }})
+        </div>
+        <div v-if="isUnlocked" class="o-achievement__tooltip__description">
           {{ config.description }}
         </div>
       </div>
       <div v-if="showUnlockState" :class="indicatorClassObject" v-html="indicator"></div>
-     </div>`
+    </div>`
 });

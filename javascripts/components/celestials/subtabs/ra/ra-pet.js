@@ -124,8 +124,8 @@ Vue.component("ra-pet", {
     barStyle(type) {
       const cost = type === "memory" ? this.memoryUpgradeCost : this.chunkUpgradeCost;
       const gone = (type === "memory" && this.memoryUpgradeCapped || type === "chunk" && this.chunkUpgradeCapped)
-      ? cost
-      : this.memories;
+        ? cost
+        : this.memories;
       return {
         width: `${100 * Math.min(1, gone / cost)}%`,
         background: this.pet.color
@@ -135,14 +135,13 @@ Vue.component("ra-pet", {
   template: `
     <div class="l-ra-pet-container" v-if="isUnlocked">
       <div class="c-ra-pet-header" :style="petStyle">
-        <div class="c-ra-pet-title">{{ name }} Level {{ formatInt(level) }}/{{ formatInt(levelCap) }}</div>
-        <div v-if="showScalingUpgrade"
-          :key="level">
-            {{ scalingUpgradeText }}
+        <div class="c-ra-pet-title">
+          {{ name }} Level {{ formatInt(level) }}/{{ formatInt(levelCap) }}
         </div>
-        <div v-else>
-          <br>
+        <div v-if="showScalingUpgrade" :key="level">
+          {{ scalingUpgradeText }}
         </div>
+        <br v-else>
         <div v-if="!isCapped">
           <div>
             {{ name }} has {{ format(memories, 2) }} Memories
@@ -158,17 +157,25 @@ Vue.component("ra-pet", {
               >
                 <span class="fas fa-brain"></span>
                 <div class="c-ra-pet-upgrade__tooltip" v-if="!memoryUpgradeCapped">
-                  <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Recollection</div>
-                  <div class="c-ra-pet-upgrade__tooltip__description">Gain {{ formatPercents(0.3) }} more Memories</div>
+                  <div class="c-ra-pet-upgrade__tooltip__name">
+                    {{ petConfig.pet.name }}'s Recollection
+                  </div>
+                  <div class="c-ra-pet-upgrade__tooltip__description">
+                    Gain {{ formatPercents(0.3) }} more Memories
+                  </div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
                     Cost: {{ format(memoryUpgradeCost, 2, 2) }} Memories
-                    <span v-if="memories <= memoryUpgradeCost">{{ nextMemoryUpgradeEstimate }}</span>
+                    <span v-if="memories <= memoryUpgradeCost">
+                      {{ nextMemoryUpgradeEstimate }}
+                    </span>
                     <br>
                     Currently: {{ formatX(currentMemoryMult, 2, 2) }}
                   </div>
                 </div>
                 <div class="c-ra-pet-upgrade__tooltip" v-else>
-                  <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Recollection</div>
+                  <div class="c-ra-pet-upgrade__tooltip__name">
+                    {{ petConfig.pet.name }}'s Recollection
+                  </div>
                   <div class="c-ra-pet-upgrade__tooltip__description">
                     Capped: {{ formatX(currentMemoryMult, 2, 2) }}
                   </div>
@@ -186,19 +193,25 @@ Vue.component("ra-pet", {
               >
                 <span class="fas fa-dice-d6"></span>
                 <div class="c-ra-pet-upgrade__tooltip" v-if="!chunkUpgradeCapped">
-                  <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Fragmentation</div>
+                  <div class="c-ra-pet-upgrade__tooltip__name">
+                    {{ petConfig.pet.name }}'s Fragmentation
+                  </div>
                   <div class="c-ra-pet-upgrade__tooltip__description">
                     Gain {{ formatPercents(0.5) }} more Memory Chunks
                   </div>
                   <div class="c-ra-pet-upgrade__tooltip__footer">
                     Cost: {{ format(chunkUpgradeCost, 2, 2) }} Memories
-                    <span v-if="memories <= chunkUpgradeCost">{{ nextMemoryChunkUpgradeEstimate }}</span>
+                    <span v-if="memories <= chunkUpgradeCost">
+                      {{ nextMemoryChunkUpgradeEstimate }}
+                    </span>
                     <br>
                     Currently: {{ formatX(currentChunkMult, 2, 2) }}
                   </div>
                 </div>
                 <div class="c-ra-pet-upgrade__tooltip" v-else>
-                  <div class="c-ra-pet-upgrade__tooltip__name">{{ petConfig.pet.name }}'s Fragmentation</div>
+                  <div class="c-ra-pet-upgrade__tooltip__name">
+                    {{ petConfig.pet.name }}'s Fragmentation
+                  </div>
                   <div class="c-ra-pet-upgrade__tooltip__description">
                     Capped: {{ formatX(currentChunkMult, 2, 2) }}
                   </div>
@@ -228,9 +241,7 @@ Vue.component("ra-pet", {
             <i class="fas fa-question-circle"></i>
           </span>
         </div>
-        <div v-else-if="!isRaCapped">
-          <br>
-        </div>
+        <br v-else-if="!isRaCapped">
         <br v-if="!isRaCapped">
         <div v-else style="margin-bottom: 0.8rem;"></div>
         <div style="display: flex; justify-content: center;">

@@ -115,8 +115,7 @@
       "temp",
       "tmp"
     ],
-    // TODO: uncomment once we get consistent indentation everywhere
-    // "indent": ["error", 2],
+    "indent": ["warn", 2, { "SwitchCase": 1 }],
     "key-spacing": "error",
     "keyword-spacing": "error",
     "line-comment-position": "error",

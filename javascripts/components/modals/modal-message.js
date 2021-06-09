@@ -18,9 +18,9 @@ Vue.component("modal-message", {
       this.emitClose();
     }
   },
-  template:
-    `<div class="c-modal-message l-modal-content--centered">
-      <modal-close-button v-if="modal.closeButton" class="c-modal__close-btn--tiny" @click="emitClose"/>
+  template: `
+    <div class="c-modal-message l-modal-content--centered">
+      <modal-close-button v-if="modal.closeButton" class="c-modal__close-btn--tiny" @click="emitClose" />
       <div
         class="c-modal-message__text"
         v-html="message"
@@ -28,6 +28,8 @@ Vue.component("modal-message", {
       <primary-button
         class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
         @click="handleClick"
-      >Okay</primary-button>
+      >
+        Okay
+      </primary-button>
     </div>`
 });

@@ -27,16 +27,17 @@ Vue.component("tickspeed-autobuyer-box", {
       this.update();
     }
   },
-  template:
-    `<autobuyer-box :autobuyer="autobuyer" name="Tickspeed Autobuyer" showInterval>
+  template: `
+    <autobuyer-box :autobuyer="autobuyer" name="Tickspeed Autobuyer" showInterval>
       <autobuyer-interval-button :autobuyer="autobuyer" slot="intervalSlot"/>
       <template slot="toggleSlot">
-        <button class="o-autobuyer-btn" @click="toggleMode" v-if="isUnlocked">{{modeDisplay}}</button>
+        <button class="o-autobuyer-btn" @click="toggleMode" v-if="isUnlocked">{{ modeDisplay }}</button>
         <button class="o-autobuyer-btn" v-else>Complete the challenge to change mode</button>
       </template>
-      <autobuyer-priority-selector 
-        :autobuyer="autobuyer" 
-        class="l-autobuyer-box__priority-selector" 
-        slot="prioritySlot"/>
+      <autobuyer-priority-selector
+        :autobuyer="autobuyer"
+        class="l-autobuyer-box__priority-selector"
+        slot="prioritySlot"
+      />
     </autobuyer-box>`
 });

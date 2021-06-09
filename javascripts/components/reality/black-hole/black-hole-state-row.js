@@ -56,6 +56,5 @@ Vue.component("black-hole-state-row", {
       <template v-else>
         will activate in {{ nextChange }}.
       </template>
-    </h3>
-  `
+    </h3>`
 });

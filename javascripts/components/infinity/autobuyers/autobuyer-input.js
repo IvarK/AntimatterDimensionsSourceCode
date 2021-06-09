@@ -13,21 +13,6 @@ Vue.component("autobuyer-input", {
       displayValue: "0"
     };
   },
-  computed: {
-    inputType() {
-      return this.type === "int" ? "number" : "text";
-    },
-    typeFunctions() {
-      const functions = AutobuyerInputFunctions[this.type];
-      if (functions === undefined) {
-        throw new Error("Unknown autobuyer input type");
-      }
-      return functions;
-    },
-    validityClass() {
-      return this.isValid ? undefined : "o-autobuyer-input--invalid";
-    }
-  },
   methods: {
     update() {
       if (this.isFocused) return;
@@ -74,8 +59,23 @@ Vue.component("autobuyer-input", {
       this.isFocused = false;
     }
   },
-  template:
-    `<input
+  computed: {
+    inputType() {
+      return this.type === "int" ? "number" : "text";
+    },
+    typeFunctions() {
+      const functions = AutobuyerInputFunctions[this.type];
+      if (functions === undefined) {
+        throw new Error("Unknown autobuyer input type");
+      }
+      return functions;
+    },
+    validityClass() {
+      return this.isValid ? undefined : "o-autobuyer-input--invalid";
+    }
+  },
+  template: `
+    <input
       :value="displayValue"
       :class="validityClass"
       :type="inputType"

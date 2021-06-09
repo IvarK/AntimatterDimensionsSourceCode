@@ -95,22 +95,27 @@ Vue.component("new-inf-dimension-row", {
       buyMaxInfDims(this.tier);
     },
   },
-  template:
-    `<div v-show="showRow" class="c-infinity-dim-row"
-      :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }">
+  template: `
+    <div
+      v-show="showRow"
+      class="c-infinity-dim-row"
+      :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }"
+    >
       <div class="c-dim-row__label c-dim-row__name">
-        {{name}} Infinity D <span class="c-infinity-dim-row__multiplier">{{formatX(multiplier, 2, 1)}}</span>
+        {{ name }} Infinity D <span class="c-infinity-dim-row__multiplier">{{ formatX(multiplier, 2, 1) }}</span>
       </div>
       <div class="c-dim-row__label c-dim-row__label--growable">
-        {{format(amount, 2, 0)}}
-        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
+        {{ format(amount, 2, 0) }}
+        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{ rateOfChangeDisplay }}</span>
       </div>
       <primary-button
         v-tooltip="capTooltip"
         :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-id l-dim-row__button o-primary-btn o-primary-btn--new"
         @click="buyManyInfinityDimension"
-      >{{costDisplay}}</primary-button>
+      >
+        {{ costDisplay }}
+      </primary-button>
       <primary-button-on-off
         v-if="isAutobuyerUnlocked && !isEC8Running"
         v-model="isAutobuyerOn"
@@ -122,6 +127,8 @@ Vue.component("new-inf-dimension-row", {
         :enabled="isAvailableForPurchase"
         class="o-primary-btn--buy-id-max l-dim-row__button"
         @click="buyMaxInfinityDimension"
-      >Buy Max</primary-button>
-    </div>`,
+      >
+        Buy Max
+      </primary-button>
+    </div>`
 });

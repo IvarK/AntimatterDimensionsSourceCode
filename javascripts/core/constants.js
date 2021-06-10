@@ -202,6 +202,11 @@ const DC = {
   E1E15: new Decimal("1e1000000000000000"),
 };
 
+Object.freeze(DC);
+for (const x in DC) {
+  Object.freeze(DC[x]);
+}
+
 const AUTOBUYER_MODE = {
   BUY_SINGLE: 1,
   BUY_10: 10,

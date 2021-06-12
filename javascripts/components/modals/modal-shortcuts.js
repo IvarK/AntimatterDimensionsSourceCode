@@ -9,28 +9,22 @@ Vue.component("open-modal-shortcuts", {
 
 
 Vue.component("modal-shortcuts", {
-  computed: {
-    shortcuts: () => [
-      { name: "Buy one Tickspeed", keys: ["shift", "t"] },
-      { name: "Buy max Tickspeed", keys: ["t"] },
-      { name: "Max all", keys: ["m"] },
-      { name: "Dimensional Sacrifice", keys: ["s"] },
-      { name: "Dimension Boost", keys: ["d"] },
-      { name: "Antimatter Galaxy", keys: ["g"] },
-      { name: "Big Crunch", keys: ["c"] },
-      { name: "Toggle Autobuyers", keys: ["a"] },
-      { name: "Replicanti Galaxy", keys: ["r"] },
-      { name: "Eternity", keys: ["e"] },
-      { name: "Reality", keys: ["y"] },
-      { name: "Start/Pause Automator", keys: ["u"] },
-      { name: "Restart Automator", keys: ["shift", "u"] },
-      { name: "Toggle Black Hole", keys: ["b"] },
-      { name: "Save game", keys: ["ctrl", "s"] },
-      { name: "Export game", keys: ["ctrl", "e"] },
-      { name: "Open \"How to Play\" pop-up", keys: ["h"] },
-      { name: "Modify visible tabs", keys: ["tab"] },
-      { name: "Close pop-up or open options", keys: ["esc"] },
-    ]
+  data() {
+    return {
+      shortcuts: []
+    };
+  },
+  methods: {
+    update() {
+      for (const x in shortcuts) {
+        this.shortcuts[x] = [];
+        const here = this.shortcuts[x];
+        const there = shortcuts[x];
+        here.name = there.name;
+        here.keys = there.keys;
+        here.visible = there.visible;
+      }
+    }
   },
   template:
     `<div class="c-modal-shortcuts l-modal-shortcuts">
@@ -46,6 +40,7 @@ Vue.component("modal-shortcuts", {
         <div
           v-for="shortcut in shortcuts"
           class="l-modal-shortcuts-row"
+          v-if="shortcut.visible()"
         >
           <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">{{shortcut.name}}</span>
           <kbd v-for="key in shortcut.keys">{{key}}</kbd>

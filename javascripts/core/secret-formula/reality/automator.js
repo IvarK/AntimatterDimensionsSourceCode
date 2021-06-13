@@ -124,7 +124,7 @@ GameDatabase.reality.automator = {
     },
     {
       id: 4,
-      isUnlocked: () => true,
+      isUnlocked: () => BlackHole(1).isUnlocked,
       keyword: "black hole",
       name: "<b>black hole</b> - turns the Black Hole on and off",
       syntax: "<b>black hole</b> on/off",

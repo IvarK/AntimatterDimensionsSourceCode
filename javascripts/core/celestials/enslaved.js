@@ -47,10 +47,10 @@ const Enslaved = {
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
   get isStoringGameTime() {
-    return player.celestials.enslaved.isStoring && !BlackHoles.arePaused;
+    return Enslaved.isUnlocked && player.celestials.enslaved.isStoring && !BlackHoles.arePaused;
   },
   get isStoringRealTime() {
-    return player.celestials.enslaved.isStoringReal;
+    return Enslaved.isUnlocked && player.celestials.enslaved.isStoringReal;
   },
   get storedRealTimeEfficiency() {
     return 0.7;

@@ -153,6 +153,9 @@ let player = {
     realityUpgrades: Array.range(0, 5).map(() => ({
       isActive: false,
     })),
+    imaginaryUpgrades: Array.range(0, 7).map(() => ({
+      isActive: false,
+    })),
     ipMultBuyer: { isActive: false, },
     epMultBuyer: { isActive: false, },
   },

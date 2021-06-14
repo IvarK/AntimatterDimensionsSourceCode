@@ -35,7 +35,7 @@ Vue.component("imaginary-upgrade-button", {
   },
   watch: {
     isAutobuyerOn(newValue) {
-      Autobuyer.realityUpgrade(this.upgrade.id).isActive = newValue;
+      Autobuyer.imaginaryUpgrade(this.upgrade.id).isActive = newValue;
     }
   },
   methods: {
@@ -47,7 +47,7 @@ Vue.component("imaginary-upgrade-button", {
       this.isBought = !upgrade.isRebuyable && upgrade.isBought;
       this.isPossible = upgrade.isPossible;
       this.isAutoUnlocked = Ra.has(RA_UNLOCKS.AUTO_REALITY_UPGRADES);
-      if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.realityUpgrade(upgrade.id).isActive;
+      if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.imaginaryUpgrade(upgrade.id).isActive;
     }
   },
   template: `

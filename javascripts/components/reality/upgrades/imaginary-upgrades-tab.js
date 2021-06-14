@@ -4,7 +4,7 @@ Vue.component("imaginary-upgrades-tab", {
   data() {
     return {
       capRM: new Decimal(0),
-    }
+    };
   },
   computed: {
     upgrades: () => ImaginaryUpgrades.all,
@@ -27,7 +27,7 @@ Vue.component("imaginary-upgrades-tab", {
       <br>
       <br>
       <div v-for="row in 5" class="l-reality-upgrade-grid__row">
-        <reality-upgrade-button
+        <imaginary-upgrade-button
           v-for="column in 5"
           :key="id(row, column)"
           :upgrade="upgrades[id(row, column)]"

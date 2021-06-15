@@ -3,7 +3,7 @@
 GameDatabase.reality.imaginaryUpgrades = (function() {
   const rebuyable = props => {
     props.cost = () => getHybridCostScaling(
-      player.reality.rebuyables[props.id],
+      player.reality.imaginaryRebuyables[props.id],
       1e30,
       props.initialCost,
       props.costMult,
@@ -13,8 +13,9 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       props.initialCost * props.costMult
     );
     const { effect } = props;
-    props.effect = () => Math.pow(effect, player.reality.rebuyables[props.id]);
-    props.formatEffect = value => formatX(value, 2, 0);
+    if (props.isDecimal) props.effect = () => Decimal.pow(effect, player.reality.imaginaryRebuyables[props.id]);
+    else props.effect = () => effect * player.reality.imaginaryRebuyables[props.id];
+    if (!props.formatEffect) props.formatEffect = value => `+${format(value, 2, 2)}`;
     props.formatCost = value => format(value, 2, 0);
     return props;
   };
@@ -25,7 +26,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       initialCost: 1,
       costMult: 30,
       description: () => `Increase Temporal Amplifier multipler by +${format(0.02, 2, 2)}`,
-      effect: 1.02
+      effect: 0.02
     }),
     rebuyable({
       name: "Replicative Intensifier",
@@ -33,7 +34,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       initialCost: 1,
       costMult: 30,
       description: () => `Increase Replicative Amplifier multipler by +${format(0.1, 2, 2)}`,
-      effect: 1.1
+      effect: 0.1
     }),
     rebuyable({
       name: "Eternal Intensifier",
@@ -41,7 +42,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       initialCost: 2,
       costMult: 30,
       description: () => `Increase Eternal Amplifier multipler by +${format(0.3, 2, 2)}`,
-      effect: 1.3
+      effect: 0.3
     }),
     rebuyable({
       name: "Superluminal Intensifier",
@@ -49,7 +50,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       initialCost: 2,
       costMult: 30,
       description: () => `Increase Superluminal Amplifier multipler by +${format(0.02, 2, 2)}`,
-      effect: 1.02
+      effect: 0.02
     }),
     rebuyable({
       name: "Boundless Intensifier",
@@ -57,7 +58,7 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       initialCost: 3,
       costMult: 50,
       description: () => `Increase Boundless Amplifier multipler by +${format(0.25, 2, 2)}`,
-      effect: 1.25
+      effect: 0.25
     }),
     rebuyable({
       name: "?????",
@@ -65,7 +66,9 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       initialCost: 3,
       costMult: 50,
       description: () => `Increase the RM cap by ${formatX(1e100)}`,
-      effect: 1e100
+      effect: 1e100,
+      formatEffect: value => formatX(value),
+      isDecimal: true
     }),
     rebuyable({
       name: "?????",
@@ -73,7 +76,8 @@ GameDatabase.reality.imaginaryUpgrades = (function() {
       initialCost: 3,
       costMult: 50,
       description: () => `Delay glyph level instability by +${formatInt(200)}`,
-      effect: 200
+      effect: 200,
+      formatEffect: value => `+${formatInt(value)}`
     }),
     {
       name: "?????",

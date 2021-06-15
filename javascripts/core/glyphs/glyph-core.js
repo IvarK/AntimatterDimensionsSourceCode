@@ -426,10 +426,10 @@ const Glyphs = {
     return 1000000;
   },
   get instabilityThreshold() {
-    return 1000 + getAdjustedGlyphEffect("effarigglyph");
+    return 1000 + getAdjustedGlyphEffect("effarigglyph") + ImaginaryUpgrade(7).effectValue;
   },
   get hyperInstabilityThreshold() {
-    return 4000 + getAdjustedGlyphEffect("effarigglyph");
+    return 3000 + this.instabilityThreshold;
   },
   clearUndo() {
     player.reality.glyphs.undo = [];

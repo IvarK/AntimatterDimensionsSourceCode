@@ -13,7 +13,7 @@ GameDatabase.reality.upgrades = (function() {
       props.initialCost * props.costMult
     );
     const { effect } = props;
-    props.effect = () => Math.pow(effect, player.reality.rebuyables[props.id] *
+    props.effect = () => Math.pow(effect + ImaginaryUpgrade(props.id).effectValue, player.reality.rebuyables[props.id] *
       getAdjustedGlyphEffect("realityrow1pow"));
     props.formatEffect = value => formatX(value, 2, 0);
     props.formatCost = value => format(value, 2, 0);

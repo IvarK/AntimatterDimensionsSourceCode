@@ -2,7 +2,7 @@
 
 const MachineHandler = {
   get hardcapRM() {
-    return new Decimal("1e1000");
+    return new Decimal("1e1000").times(ImaginaryUpgrade(6).effectValue);
   },
 
   get realityMachineMultiplier() {

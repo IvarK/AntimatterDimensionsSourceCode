@@ -533,7 +533,7 @@ GameDatabase.celestials.navigation = (function() {
         pathStart: 0,
         pathEnd: 1,
         path: new LinearPath(Positions.enslavedGlyphRarity, new Vector(650 + 74 * Math.sqrt(0.75), 250 + 74 * 0.5))
-        .trimStart(23),
+          .trimStart(23),
         fill: "#ffa337",
       }
     },
@@ -1410,11 +1410,11 @@ GameDatabase.celestials.navigation = (function() {
             const goal = MatterDimension(2).adjustedStartingCost;
             const places = complete >= 1 ? 0 : 2;
             if (complete !== 1) return [
-            "2nd Dark Matter Dimension",
-            `Dark Matter ${format(Currency.darkMatter.max.min(goal), places)} / ${format(goal)}`
+              "2nd Dark Matter Dimension",
+              `Dark Matter ${format(Currency.darkMatter.max.min(goal), places)} / ${format(goal)}`
             ];
             return [
-            "2nd Dark Matter Dimension",
+              "2nd Dark Matter Dimension",
             ];
           },
           angle: 135,
@@ -1451,11 +1451,11 @@ GameDatabase.celestials.navigation = (function() {
             const goal = MatterDimension(3).adjustedStartingCost;
             const places = complete >= 1 ? 0 : 2;
             if (complete !== 1) return [
-            "3rd Dark Matter Dimension",
-            `Dark Matter ${format(Currency.darkMatter.max.min(goal), places)} / ${format(goal)}`
+              "3rd Dark Matter Dimension",
+              `Dark Matter ${format(Currency.darkMatter.max.min(goal), places)} / ${format(goal)}`
             ];
             return [
-            "3rd Dark Matter Dimension",
+              "3rd Dark Matter Dimension",
             ];
           },
           angle: 45,
@@ -1492,11 +1492,11 @@ GameDatabase.celestials.navigation = (function() {
             const goal = MatterDimension(4).adjustedStartingCost;
             const places = complete >= 1 ? 0 : 2;
             if (complete !== 1) return [
-            "4th Dark Matter Dimension",
-            `Dark Matter ${format(Currency.darkMatter.max.min(goal), places)} / ${format(goal)}`
+              "4th Dark Matter Dimension",
+              `Dark Matter ${format(Currency.darkMatter.max.min(goal), places)} / ${format(goal)}`
             ];
             return [
-            "4th Dark Matter Dimension",
+              "4th Dark Matter Dimension",
             ];
           },
           angle: 15,

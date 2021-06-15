@@ -230,12 +230,12 @@ GameDatabase.reality.automator = {
           name: "OTHER",
           items: [
             {
-            header: "<b>Undesirable effects</b>",
-            description: `This command may behave undesirably when it runs during` +
-            `offline progress due to limited tick count. A 1-second pause that` +
-            `is usually 20-30 ticks might be only 1 game tick when processing` +
-             `8 hours of offline progress, which might not be enough for the` +
-             `resources needed for the next line of the script`,
+              header: "<b>Undesirable effects</b>",
+              description: `This command may behave undesirably when it runs during` +
+              `offline progress due to limited tick count. A 1-second pause that` +
+              `is usually 20-30 ticks might be only 1 game tick when processing` +
+              `8 hours of offline progress, which might not be enough for the` +
+              `resources needed for the next line of the script`,
             },
             {
               header: "<b>Alternatives</b>",

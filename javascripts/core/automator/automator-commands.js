@@ -132,7 +132,7 @@ const AutomatorCommands = ((() => {
         : undefined;
         const xCurrent = ctx.xCurrent ? ctx.xCurrent[0].children.$value : undefined;
         const fixedAmount = ctx.currencyAmount
-        ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image} 
+        ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image}
         ${ctx.currencyAmount[0].children.AutomatorCurrency[0].image}`
         : undefined;
         const on = Boolean(ctx.On);

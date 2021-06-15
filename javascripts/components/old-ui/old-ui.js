@@ -20,7 +20,7 @@ Vue.component("old-ui", {
   },
   methods: {
     update() {
-      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
+      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id);
       if (!Player.canCrunch || inBrokenChallenge || (player.break && !Player.isInAntimatterChallenge)) {
         this.bigCrunch = false;
         this.smallCrunch = false;

@@ -36,11 +36,11 @@ GameDatabase.achievements.normal = [
     name: "We couldn't afford 9",
     get description() {
       return Enslaved.isRunning
-      ? "Buy a 6th Antimatter Dimension (they never amount to anything)"
-      : "Buy a 6th Antimatter Dimension.";
+        ? "Buy a 6th Antimatter Dimension (they never amount to anything)"
+        : "Buy a 6th Antimatter Dimension.";
     },
-      checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
-    },
+    checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
+  },
   {
     id: 17,
     name: "Not a luck related achievement",
@@ -52,11 +52,11 @@ GameDatabase.achievements.normal = [
     name: "90 degrees to infinity",
     get description() {
       return Enslaved.isRunning
-      ? "Buy an 8th Antimatter Dimension (don't get used to it)"
-      : "Buy an 8th Antimatter Dimension.";
+        ? "Buy an 8th Antimatter Dimension (don't get used to it)"
+        : "Buy an 8th Antimatter Dimension.";
     },
-      checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
-    },
+    checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
+  },
   {
     id: 21,
     name: "To infinity!",
@@ -161,8 +161,8 @@ GameDatabase.achievements.normal = [
     name: "Don't you dare sleep",
     get description() {
       return PlayerProgress.realityUnlocked()
-      ? `Be offline for a period of over ${formatInt(6)} hours (real time).`
-      : `Be offline for a period of over ${formatInt(6)} hours.`;
+        ? `Be offline for a period of over ${formatInt(6)} hours (real time).`
+        : `Be offline for a period of over ${formatInt(6)} hours.`;
     },
     checkRequirement: () => Date.now() - player.lastUpdate >= 21600000,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE

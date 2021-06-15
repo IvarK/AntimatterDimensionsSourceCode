@@ -54,7 +54,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   if (EternityChallenge(11).isRunning) {
     return Currency.infinityPower.value.pow(
       getInfinityConversionRate()
-      ).max(1).times(DimBoost.multiplierToNDTier(tier));
+    ).max(1).times(DimBoost.multiplierToNDTier(tier));
   }
 
   let multiplier = new Decimal(1);
@@ -497,7 +497,7 @@ class AntimatterDimensionState extends DimensionState {
     return this.amount.max(this.continuumAmount);
   }
 
-   /**
+  /**
     * @returns {boolean}
     */
   get isAffordable() {

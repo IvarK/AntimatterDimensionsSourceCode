@@ -307,8 +307,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(123).isBought && !TimeStudy(131).isBought && !TimeStudy(132).isBought,
       requirementV: () => TimeStudy(123).isBought && (TimeStudy(131).isBought || TimeStudy(132).isBought),
       description: () => (Achievement(138).isUnlocked
-      ? `Replicanti Galaxies are ${formatPercents(0.5)} stronger`
-      : `Replicanti are ${formatX(10)} slower until ${format(Number.MAX_VALUE, 2)}` +
+        ? `Replicanti Galaxies are ${formatPercents(0.5)} stronger`
+        : `Replicanti are ${formatX(10)} slower until ${format(Number.MAX_VALUE, 2)}` +
       `, but Replicanti Galaxies are ${formatPercents(0.5)} stronger`),
       effect: 0.5
     },
@@ -405,7 +405,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       description: () => (Enslaved.isRunning
         ? "There is not enough space in this Reality"
         : `Replicanti can go beyond ${format(replicantiCap(), 2, 1)}, but growth slows down at higher amounts`)
-      },
+    },
     {
       id: 193,
       cost: 300,

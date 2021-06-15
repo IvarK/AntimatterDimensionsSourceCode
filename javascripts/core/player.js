@@ -352,11 +352,11 @@ let player = {
     },
     upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
-              false, false, false, false, false,
-              false, false, false, false, false,
-              false, false, false, false, false,
-              false, false, false, false, false,
-              false, false, false, false, false],
+                    false, false, false, false, false,
+                    false, false, false, false, false,
+                    false, false, false, false, false,
+                    false, false, false, false, false,
+                    false, false, false, false, false],
     perks: new Set(),
     respec: false,
     showGlyphSacrifice: false,
@@ -520,14 +520,14 @@ let player = {
       run: false,
       unlockBits: 0,
       dimensions: Array.range(0, 4).map(() =>
-      ({
-        amount: new Decimal(0),
-        intervalUpgrades: 0,
-        powerDMUpgrades: 0,
-        powerDEUpgrades: 0,
-        timeSinceLastUpdate: 0,
-        ascensionCount: 0
-      })),
+        ({
+          amount: new Decimal(0),
+          intervalUpgrades: 0,
+          powerDMUpgrades: 0,
+          powerDEUpgrades: 0,
+          timeSinceLastUpdate: 0,
+          ascensionCount: 0
+        })),
       darkAutobuyerTimer: 0,
       entropy: 0,
       thisCompletion: 3600,
@@ -674,7 +674,7 @@ const Player = {
   },
 
   get anyChallenge() {
-    return this.antimatterChallenge || EternityChallenge.current
+    return this.antimatterChallenge || EternityChallenge.current;
   },
 
   get effectiveMatterAmount() {
@@ -688,7 +688,7 @@ const Player = {
   },
 
   get canCrunch() {
-    if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)) return true
+    if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)) return true;
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     const goal = challenge === undefined ? Decimal.NUMBER_MAX_VALUE : challenge.goal;
     return player.records.thisInfinity.maxAM.gte(goal);

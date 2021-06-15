@@ -55,8 +55,8 @@ then second, and so on until the 8th Antimatter Dimension, and then buy max Tick
 <br>
 <br>
 <b>Dimension base prices:</b> ${Array.range(1, 8)
-  .map(tier => format(AntimatterDimension(tier)._baseCost, 2, 2))
-  .join(", ")}
+    .map(tier => format(AntimatterDimension(tier)._baseCost, 2, 2))
+    .join(", ")}
 <br>
 <b>Base per ${formatInt(10)} bought dimension price increases:</b> ${Array.range(1, 8)
   .map(tier => format(AntimatterDimension(tier)._baseCostMultiplier, 2, 2))
@@ -330,20 +330,20 @@ of Infinity Dimensions doesn't carry between crunches, all the multipliers you g
 <br>
 <br>
 <b>Infinity Dimension unlock thresholds (antimatter):</b> ${Array.range(1, 8)
-  .map(tier => formatPostBreak(InfinityDimension(tier)._unlockRequirement))
-  .join(", ")}
+    .map(tier => formatPostBreak(InfinityDimension(tier)._unlockRequirement))
+    .join(", ")}
 <br>
 <b>Infinity Dimension purchase multipliers:</b> ${Array.range(1, 8)
-  .map(tier => format(InfinityDimension(tier)._powerMultiplier))
-  .join(", ")}
+    .map(tier => format(InfinityDimension(tier)._powerMultiplier))
+    .join(", ")}
 <br>
 <b>Infinity Dimension base prices (IP):</b> ${Array.range(1, 8)
-  .map(tier => format(InfinityDimension(tier)._baseCost))
-  .join(", ")}
+    .map(tier => format(InfinityDimension(tier)._baseCost))
+    .join(", ")}
 <br>
 <b>Infinity Dimension price increases:</b> ${Array.range(1, 8)
-  .map(tier => format(InfinityDimension(tier)._costMultiplier))
-  .join(", ")}
+    .map(tier => format(InfinityDimension(tier)._costMultiplier))
+    .join(", ")}
 <br>
 <br>
 Instead of antimatter, the First Infinity Dimension produces Infinity Power, which translates to a multiplier applied
@@ -366,7 +366,7 @@ amount of antimatter before you can attempt them.
 <br>
 <br>
 <b>Infinity Challenge unlock thresholds:</b> ${GameDatabase.challenges.infinity
-  .map(ic => formatPostBreak(ic.unlockAM)).join(", ")}
+    .map(ic => formatPostBreak(ic.unlockAM)).join(", ")}
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked(),
       tags: ["rewards", "break", "ic", "midgame"],
@@ -781,8 +781,8 @@ When you reach ${format(TERESA_UNLOCKS.RUN.price)} RM inside of the container, y
 <br>
 When you complete Teresa's Reality,
 ${Teresa.runCompleted
-  ? "your Glyph Sacrifice is multiplied based on the amount of antimatter gained during the run"
-  : "<div style='color: var(--color-bad);'>(complete Teresa's Reality to see this text)</div>"}.
+    ? "your Glyph Sacrifice is multiplied based on the amount of antimatter gained during the run"
+    : "<div style='color: var(--color-bad);'>(complete Teresa's Reality to see this text)</div>"}.
 Completing Teresa's Reality is only part of the story; you need to keep pouring RM in order to progress. Once
 you are at ${format(TERESA_UNLOCKS.EFFARIG.price)} RM in the container, you will unlock the next Celestial.
 `,
@@ -809,9 +809,9 @@ allow you to filter them based on their effects and rarity when you are doing fu
 Effarig's final unlock is their own Reality at ${format(GameDatabase.celestials.effarig.unlocks.run.cost)} Relic
 Shards.
 ${EffarigUnlock.run.isUnlocked
-  ? "Their Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer " +
+    ? "Their Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer " +
     "before getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial."
-  : "<div style='color: var(--color-bad);'>(unlock Effarig's Reality to see this text)</div>"
+    : "<div style='color: var(--color-bad);'>(unlock Effarig's Reality to see this text)</div>"
 }
 <br>
 <br>
@@ -819,10 +819,10 @@ Completing Effarig's Reality unlocks
 ${EffarigUnlock.reality.isUnlocked
   // Can't really make a nested template here without generally making a mess of the code
   // eslint-disable-next-line prefer-template
-  ? "a new Glyph type: <div style='color: var(--color-bad);'>Effarig</div> Glyphs. Effarig Glyphs have " +
+    ? "a new Glyph type: <div style='color: var(--color-bad);'>Effarig</div> Glyphs. Effarig Glyphs have " +
     formatInt(7) + " different possible effects, which you can view in the \"Advanced Mode\" settings. You can only " +
     "have one Effarig Glyph equipped at a time, and they can still only have at most " + formatInt(4) + " effects."
-  : "<div style='color: var(--color-bad);'>(complete Effarig's Reality to see this text)</div>"}
+    : "<div style='color: var(--color-bad);'>(complete Effarig's Reality to see this text)</div>"}
 `,
       isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
       tags: ["glyph", "sacrifice", "shards", "reality", "spectralflame", "lategame", "endgame"],
@@ -921,8 +921,8 @@ by ${format(1e5)} Tickspeed upgrades.
 At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years, you are able to finally unlock
 their Reality. The reward for completing The Enslaved Ones' Reality is
 ${Enslaved.isCompleted
-  ? "unlocking Tesseracts, which have their own How To Play entry."
-  : "<div style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see this text)</div>"}
+    ? "unlocking Tesseracts, which have their own How To Play entry."
+    : "<div style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see this text)</div>"}
 The Enslaved Ones will not directly unlock the next Celestial.
 `,
       isUnlocked: () => EffarigUnlock.eternity.isUnlocked,
@@ -1022,22 +1022,22 @@ improve your glyph effects once you reach certain thresholds in glyph sacrifice 
 <br>
 At level ${formatInt(2)}, Effarig unlocks
 ${Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)
-  ? "a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually removing almost " +
+    ? "a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually removing almost " +
     "all random elements of glyph generation. This also has its own How To Play entry."
-  : "<div style='color: var(--color-bad);'>(unlock Effarig within Ra to see this text)</div>"}
+    : "<div style='color: var(--color-bad);'>(unlock Effarig within Ra to see this text)</div>"}
 <br>
 <br>
 The Enslaved Ones unlocks
 ${Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK)
-  ? "additional mechanics related to charging the Black Holes, as well as making them significantly stronger."
-  : "<div style='color: var(--color-bad);'>(unlock The Enslaved Ones within Ra to see this text)</div>"}
+    ? "additional mechanics related to charging the Black Holes, as well as making them significantly stronger."
+    : "<div style='color: var(--color-bad);'>(unlock The Enslaved Ones within Ra to see this text)</div>"}
 <br>
 <br>
 V unlocks
 ${Ra.has(RA_UNLOCKS.V_UNLOCK)
-  ? "Triad Studies, which are Time Studies near the bottom of the tree which cost Space Theorems. " +
+    ? "Triad Studies, which are Time Studies near the bottom of the tree which cost Space Theorems. " +
     "They also unlock a smaller set of more difficult V Achievements to complete for additional Space Theorems."
-  : "<div style='color: var(--color-bad);'>(unlock V within Ra to see this text)</div>"}
+    : "<div style='color: var(--color-bad);'>(unlock V within Ra to see this text)</div>"}
 <br>
 <br>
 Having a level ${formatInt(25000)} Reality Glyph, a total of ${formatInt(100)} Ra levels, and
@@ -1135,12 +1135,12 @@ do in the Reality.
 <br>
 <b>Dark Matter Dimension unlock thresholds (Dark Matter):</b> ${Array.range(1, 4)
   // DM1 is 10 instead of 0 here, so make a special case to display it properly
-  .map(tier => format(tier === 1 ? 0 : MatterDimension(tier).adjustedStartingCost))
-  .join(", ")}
+    .map(tier => format(tier === 1 ? 0 : MatterDimension(tier).adjustedStartingCost))
+    .join(", ")}
 <br>
 <b>Dark Matter Dimension initial interval (seconds):</b> ${Array.range(1, 4)
-  .map(tier => formatInt(Math.pow(4, tier)))
-  .join(", ")}
+    .map(tier => formatInt(Math.pow(4, tier)))
+    .join(", ")}
 `,
       isUnlocked: () => Laitela.isUnlocked,
       tags: ["omsi", "reality", "dark", "matter", "dimensions", "lategame", "endgame", "ascend"],

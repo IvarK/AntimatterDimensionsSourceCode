@@ -55,7 +55,7 @@ const GlyphSacrificeHandler = {
       if (!confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type} ` +
         `glyphs will increase from ${format(player.reality.glyphs.sac[glyph.type], 2, 2)} to ` +
         `${format(player.reality.glyphs.sac[glyph.type] + toGain, 2, 2)}.`)) {
-          return;
+        return;
       }
     }
     player.reality.glyphs.sac[glyph.type] += toGain;

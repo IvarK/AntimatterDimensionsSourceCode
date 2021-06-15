@@ -23,7 +23,7 @@ function updateNormalAndInfinityChallenges(diff) {
       player.matter = player.matter
         .times(Decimal.pow((1.03 + DimBoost.totalBoosts / 200 + player.galaxies / 100), diff / 100));
     }
-   if (player.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning) {
+    if (player.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning) {
       Modal.message.show(`Your ${format(Currency.antimatter.value, 2, 2)} antimatter was annhiliated by ` +
         `${format(player.matter, 2, 2)} matter.`);
       softReset(0);

@@ -31,7 +31,7 @@ Vue.component("new-ui", {
       return this.$viewModel.news;
     },
     topMargin() {
-      return this.$viewModel.news ? "" : "margin-top: 3.9rem"
+      return this.$viewModel.news ? "" : "margin-top: 3.9rem";
     }
   },
   methods: {
@@ -84,7 +84,7 @@ Vue.component("new-ui", {
       this.updateCelestial();
       this.updateChallengeDisplay();
 
-      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id)
+      const inBrokenChallenge = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(NormalChallenge.current?.id);
       if (!Player.canCrunch || inBrokenChallenge || (player.break && !Player.isInAntimatterChallenge)) {
         this.bigCrunch = false;
         this.smallCrunch = false;

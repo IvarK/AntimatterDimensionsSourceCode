@@ -165,7 +165,7 @@ class EternityChallengeState extends GameMechanicState {
       return;
     }
     if (this.isUnlocked) {
-    Modal.startEternityChallenge.show(this.id);
+      Modal.startEternityChallenge.show(this.id);
     }
   }
 

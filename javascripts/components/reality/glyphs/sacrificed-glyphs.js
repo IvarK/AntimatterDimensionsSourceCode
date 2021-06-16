@@ -152,6 +152,17 @@ Vue.component("sacrificed-glyphs", {
         <div>Drag Glyphs here or shift-click to Sacrifice.</div>
         <div>Ctrl-shift-click to Sacrifice without confirmation</div>
       </div>
+      <div v-if="hasAlteration">
+        <b>Altered Glyphs</b>
+        <br>
+        Glyph types will have one of their effects improved<br>
+        when their glyph type's total sacrifice value is above:
+        <br><br>
+        {{ format(addThreshold) }} - an additional secondary effect<br>
+        {{ format(empowerThreshold) }} - formula drastically improved<br>
+        {{ format(boostThreshold) }} - a boost depending on Glyph Sacrifice
+        <br><br>
+      </div>
       <div class="c-sacrificed-glyphs__header">Glyph Sacrifice Boosts:</div>
       <div v-if="teresaMult > 1">
         (Multiplied by {{ formatX(teresaMult, 2, 2) }}; Teresa last done at
@@ -161,20 +172,6 @@ Vue.component("sacrificed-glyphs", {
         <template v-for="type in types">
           <type-sacrifice :type="type" :hasDragover="hasDragover" />
         </template>
-        <div v-if="hasAlteration">
-          <br>
-          <b>Altered Glyphs</b>
-          <br>
-          Glyph types will have one of their effects<br>
-          improved when their Glyph Sacrifice values are above:
-          <br><br>
-          {{ format(addThreshold) }} - an additional secondary effect
-          <br>
-          {{ format(empowerThreshold) }} - formula drastically improved
-          <br>
-          {{ format(boostThreshold) }} - a boost depending on Glyph Sacrifice
-          <br><br>
-        </div>
       </div>
       <div v-else>
         You haven't Sacrificed any Glyphs yet!

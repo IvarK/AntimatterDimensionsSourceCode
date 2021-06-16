@@ -38,7 +38,7 @@ Vue.component("tab-button", {
         {{ tab.name }} <i v-if="hasNotification" class="fas fa-exclamation"></i>
       </div>
       <div v-else class="l-tab-btn-inner">???</div>
-      <div class="subtabs" v-if="isAvailable && subtabVisibilities.filter(x => x).length > 1">
+      <div class="subtabs" v-if="isAvailable && subtabVisibilities.length > 1">
         <div
           v-for="(subtab, index) in tab.subtabs"
           v-if="subtabVisibilities[index]"

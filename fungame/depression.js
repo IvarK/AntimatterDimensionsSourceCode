@@ -284,8 +284,8 @@ const Depression = {
       <div class="stuff-container">
         <template v-for="stuff in stuffs">
           <br v-if="stuff.id > 1">
-          <stuff-button :stuff="stuff"/>
-          <prestige-button :stuff="stuff"/>
+          <stuff-button :stuff="stuff" />
+          <prestige-button :stuff="stuff" />
         </template>
       </div>
     </div>

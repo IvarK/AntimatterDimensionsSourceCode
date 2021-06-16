@@ -20,9 +20,9 @@ Vue.component("old-ui-subtab-button", {
     <button
       v-if="isAvailable"
       @click="subtab.show(true)"
-      class="o-tab-btn o-tab-btn--secondary">
-      {{subtab.name}} <i v-if="hasNotification" class="fas fa-exclamation"
+      class="o-tab-btn o-tab-btn--secondary"
     >
-      </i>
+      {{ subtab.name }}
+      <i v-if="hasNotification" class="fas fa-exclamation"></i>
     </button>`
 });

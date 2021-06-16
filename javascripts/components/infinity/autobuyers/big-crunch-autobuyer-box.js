@@ -96,7 +96,7 @@ Vue.component("big-crunch-autobuyer-box", {
             class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
             @click="increaseWithMult = !increaseWithMult"
           >
-            <input type="checkbox" :checked="increaseWithMult"/>
+            <input type="checkbox" :checked="increaseWithMult" />
           </div>
         </template>
       </template>

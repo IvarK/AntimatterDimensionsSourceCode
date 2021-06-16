@@ -193,9 +193,12 @@ let player = {
     totalTimePlayed: 0,
     realTimePlayed: 0,
     totalAntimatter: new Decimal(0),
-    lastTenInfinities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
-    lastTenEternities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
-    lastTenRealities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), 1, Number.MAX_VALUE, 0]),
+    lastTenInfinities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
+    lastTenEternities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
+    lastTenRealities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, new Decimal(1), 1, Number.MAX_VALUE, 0]),
     thisInfinity: {
       time: 0,
       realTime: 0,
@@ -352,11 +355,11 @@ let player = {
     },
     upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
-                    false, false, false, false, false,
-                    false, false, false, false, false,
-                    false, false, false, false, false,
-                    false, false, false, false, false,
-                    false, false, false, false, false],
+      false, false, false, false, false,
+      false, false, false, false, false,
+      false, false, false, false, false,
+      false, false, false, false, false,
+      false, false, false, false, false],
     perks: new Set(),
     respec: false,
     showGlyphSacrifice: false,

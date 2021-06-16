@@ -29,7 +29,7 @@ Vue.component("tickspeed-autobuyer-box", {
   },
   template: `
     <autobuyer-box :autobuyer="autobuyer" name="Tickspeed Autobuyer" showInterval>
-      <autobuyer-interval-button :autobuyer="autobuyer" slot="intervalSlot"/>
+      <autobuyer-interval-button :autobuyer="autobuyer" slot="intervalSlot" />
       <template slot="toggleSlot">
         <button class="o-autobuyer-btn" @click="toggleMode" v-if="isUnlocked">{{ modeDisplay }}</button>
         <button class="o-autobuyer-btn" v-else>Complete the challenge to change mode</button>

@@ -103,7 +103,7 @@ Vue.component("effarig-tab", {
   },
   template: `
     <div class="l-teresa-celestial-tab">
-      <celestial-quote-history celestial="effarig"/>
+      <celestial-quote-history celestial="effarig" />
       <div class="l-effarig-shop-and-run">
         <div class="l-effarig-shop">
           <div class="c-effarig-relics">

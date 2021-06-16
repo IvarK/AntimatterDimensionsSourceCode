@@ -13,7 +13,7 @@ Vue.component("dilation-time-study", {
   created() {
     if (this.id === 1) {
       this.requirement = `Requirement: ${formatInt(5)} EC11 and EC12 completions
-      and ${formatInt(13000)} total Time Theorems`;
+        and ${formatInt(13000)} total Time Theorems`;
     }
     if (this.id === 6) {
       if (PlayerProgress.realityUnlocked()) {

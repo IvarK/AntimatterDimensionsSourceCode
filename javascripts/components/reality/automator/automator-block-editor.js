@@ -118,7 +118,7 @@ Vue.component("automator-block-editor", {
           :block="block"
           :updateBlock="updateBlock"
           :deleteBlock="deleteBlock"
-        ></automator-single-block>
+        />
       </draggable>
     </div>`
 });

@@ -115,7 +115,6 @@ Vue.component("automator-single-block", {
           class="o-automator-block-input"
           v-tooltip="errorTooltip"
         />
-
         <div @click="deleteBlock(b.id)" class="o-automator-block-delete">X</div>
       </div>
       <draggable v-if="block.nested" class="l-automator-nested-block" v-model="block.nest" group="code-blocks">
@@ -126,7 +125,7 @@ Vue.component("automator-single-block", {
           :block="block"
           :updateBlock="updateBlockFromNest"
           :deleteBlock="deleteBlockFromNest"
-        ></automator-single-block>
+        />
       </draggable>
     </div>`
 });

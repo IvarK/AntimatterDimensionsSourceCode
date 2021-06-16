@@ -65,7 +65,7 @@ Vue.component("new-tickspeed-row", {
   template: `
     <div :class="classObject">
       <div class="tickspeed-labels">
-        <span>{{ tickspeedDisplay }} <game-header-gamespeed-display v-if="!isGameSpeedNormal"/></span>
+        <span>{{ tickspeedDisplay }} <game-header-gamespeed-display v-if="!isGameSpeedNormal" /></span>
         <span>{{ multiplierDisplay }}</span>
       </div>
       <div class="tickspeed-buttons">

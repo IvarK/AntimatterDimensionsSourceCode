@@ -105,13 +105,13 @@ Vue.component("reality-button", {
     >
       <div class="l-reality-button__contents">
         <template v-if="canReality">
-        <div class="c-reality-button__header">Make a new Reality</div>
+          <div class="c-reality-button__header">Make a new Reality</div>
           <div>{{ formatMachinesGained }}</div>
           <div>{{ formatMachineStats }}</div>
           <div>{{ formatGlyphLevel }}</div>
         </template>
         <template v-else-if="hasRealityStudy">
-          <div>Get {{ format("1e4000", 0, 0) }} Eternity Points to unlock a new Reality</div>
+          <div>Get {{ format("1e4000") }} Eternity Points to unlock a new Reality</div>
         </template>
         <template v-else>
           <div>Purchase the study in the Eternity tab to unlock a new Reality</div>

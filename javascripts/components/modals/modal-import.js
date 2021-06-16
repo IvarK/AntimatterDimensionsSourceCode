@@ -41,34 +41,34 @@ Vue.component("modal-import", {
     },
   },
   template: `
-  <div class="c-modal-import l-modal-content--centered">
-    <modal-close-button @click="emitClose" />
-    <h3>Input your save</h3>
-    <input
-      v-model="input"
-      ref="input"
-      type="text"
-      class="c-modal-input c-modal-import__input"
-      @keyup.enter="importSave"
-      @keyup.esc="emitClose"
-    />
-    <div class="c-modal-import__save-info">
-      <div v-if="inputIsSecret">???</div>
-      <template v-else-if="inputIsValidSave">
-        <div>Antimatter: {{ formatPostBreak(antimatter, 2, 1) }}</div>
-        <div v-if="progress.isInfinityUnlocked">Infinities: {{ formatPostBreak(player.infinities, 2, 0) }}</div>
-        <div v-if="progress.isEternityUnlocked">Eternities: {{ formatPostBreak(player.eternities, 2, 0) }}</div>
-        <div v-if="progress.isRealityUnlocked">Realities: {{ formatPostBreak(player.realities, 2, 0) }}</div>
-        <div class="c-modal-import__warning">(your current save file will be overwritten!)</div>
-      </template>
-      <div v-else-if="hasInput">Not a valid save</div>
-    </div>
-    <primary-button
-      v-if="inputIsValid"
-      class="o-primary-btn--width-medium c-modal-import__import-btn c-modal__confirm-btn"
-      @click="importSave"
-    >
-      Import
-    </primary-button>
-  </div>`
+    <div class="c-modal-import l-modal-content--centered">
+      <modal-close-button @click="emitClose" />
+      <h3>Input your save</h3>
+      <input
+        v-model="input"
+        ref="input"
+        type="text"
+        class="c-modal-input c-modal-import__input"
+        @keyup.enter="importSave"
+        @keyup.esc="emitClose"
+      />
+      <div class="c-modal-import__save-info">
+        <div v-if="inputIsSecret">???</div>
+        <template v-else-if="inputIsValidSave">
+          <div>Antimatter: {{ formatPostBreak(antimatter, 2, 1) }}</div>
+          <div v-if="progress.isInfinityUnlocked">Infinities: {{ formatPostBreak(player.infinities, 2, 0) }}</div>
+          <div v-if="progress.isEternityUnlocked">Eternities: {{ formatPostBreak(player.eternities, 2, 0) }}</div>
+          <div v-if="progress.isRealityUnlocked">Realities: {{ formatPostBreak(player.realities, 2, 0) }}</div>
+          <div class="c-modal-import__warning">(your current save file will be overwritten!)</div>
+        </template>
+        <div v-else-if="hasInput">Not a valid save</div>
+      </div>
+      <primary-button
+        v-if="inputIsValid"
+        class="o-primary-btn--width-medium c-modal-import__import-btn c-modal__confirm-btn"
+        @click="importSave"
+      >
+        Import
+      </primary-button>
+    </div>`
 });

@@ -120,9 +120,9 @@ Vue.component("expanding-control-box", {
         {{label}} ▼
       </div>
       <div v-else ref="expandButton" @click="openRequest=!openRequest">
-        <slot name="header"/>
+        <slot name="header" />
       </div>
-      <div ref="dropdown"><slot name="dropdown"/></div>
+      <div ref="dropdown"><slot name="dropdown" /></div>
     </div>
   </div>
   `,

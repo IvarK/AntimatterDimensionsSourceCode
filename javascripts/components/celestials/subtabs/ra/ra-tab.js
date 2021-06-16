@@ -156,7 +156,7 @@ Vue.component("ra-tab", {
           <p>
             Cost: {{ format(laitelaRealityMachineCost) }} Reality Machines
           </p>
-          <div class="o-laitela-run-button__icon" @click="unlockLaitela"/>
+          <div class="o-laitela-run-button__icon" @click="unlockLaitela" />
         </div>
       </div>
     </div>`

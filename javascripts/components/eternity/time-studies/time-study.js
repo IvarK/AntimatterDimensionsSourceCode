@@ -82,7 +82,7 @@ Vue.component("time-study", {
       return this.eternityChallengeRunning ? "o-time-study-eternity-challenge--running" : "";
     },
     config() {
-      return {...this.study.config, formatCost: value => (value >= 1e6 ? format(value) : formatInt(value))};
+      return { ...this.study.config, formatCost: value => (value >= 1e6 ? format(value) : formatInt(value)) };
     }
   },
   methods: {

@@ -148,7 +148,7 @@ const AutomatorCommands = ((() => {
         return {
           target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
           inputValue: input,
-          ...automatorBlocksMap["AUTO"]
+          ...automatorBlocksMap.AUTO
         };
       }
     },
@@ -241,7 +241,7 @@ const AutomatorCommands = ((() => {
         const comparison = B.visit(ctx.comparison);
         return {
           nest: commands,
-          ...automatorBlocksMap["IF"],
+          ...automatorBlocksMap.IF,
           ...comparison,
           target: comparison.target.toUpperCase()
         };
@@ -280,7 +280,7 @@ const AutomatorCommands = ((() => {
       blockify: ctx => {
         const c = ctx.duration[0].children;
         return {
-          ...automatorBlocksMap["PAUSE"],
+          ...automatorBlocksMap.PAUSE,
           inputValue: c.NumberLiteral[0].image + c.TimeUnit[0].image
         };
       }
@@ -346,8 +346,7 @@ const AutomatorCommands = ((() => {
         if (startDilatedEternity(true)) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       },
-      blockify: () => ({ target: "DILATION", ...automatorBlocksMap["START"]
-      })
+      blockify: () => ({ target: "DILATION", ...automatorBlocksMap.START })
     },
     {
       id: "startEC",
@@ -376,7 +375,7 @@ const AutomatorCommands = ((() => {
       blockify: ctx => ({
         target: "EC",
         inputValue: ctx.eternityChallenge[0].children.$ecNumber,
-        ...automatorBlocksMap["START"]
+        ...automatorBlocksMap.START
       })
     },
     {
@@ -462,7 +461,7 @@ const AutomatorCommands = ((() => {
       },
       blockify: ctx => ({
         inputValue: ctx.$studies.image,
-        ...automatorBlocksMap["STUDIES"]
+        ...automatorBlocksMap.STUDIES
       })
     },
     {
@@ -508,7 +507,7 @@ const AutomatorCommands = ((() => {
       },
       blockify: ctx => ({
         inputValue: ctx.$presetIndex,
-        ...automatorBlocksMap["LOAD"]
+        ...automatorBlocksMap.LOAD
       })
     },
     {
@@ -525,7 +524,7 @@ const AutomatorCommands = ((() => {
         player.respec = true;
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       },
-      blockify: () => automatorBlocksMap["RESPEC"]
+      blockify: () => automatorBlocksMap.RESPEC
     },
     {
       id: "tt",
@@ -546,7 +545,7 @@ const AutomatorCommands = ((() => {
       },
       blockify: ctx => ({
         target: ctx.TTCurrency[0].tokenType.name.toUpperCase(),
-        ...automatorBlocksMap["TT"]
+        ...automatorBlocksMap.TT
       })
     },
     {
@@ -567,7 +566,7 @@ const AutomatorCommands = ((() => {
       },
       blockify: () => ({
         target: "DILATION",
-        ...automatorBlocksMap["UNLOCK"]
+        ...automatorBlocksMap.UNLOCK
       })
     },
     {
@@ -592,7 +591,7 @@ const AutomatorCommands = ((() => {
       blockify: ctx => ({
         target: "EC",
         inputValue: ctx.eternityChallenge[0].children.$ecNumber,
-        ...automatorBlocksMap["UNLOCK"]
+        ...automatorBlocksMap.UNLOCK
       })
     },
     {
@@ -638,7 +637,7 @@ const AutomatorCommands = ((() => {
         if (ctx.comparison) {
           return {
             nest: commands,
-            ...automatorBlocksMap["UNTIL"],
+            ...automatorBlocksMap.UNTIL,
             ...comparison,
             target: comparison.target.toUpperCase()
           };
@@ -646,7 +645,7 @@ const AutomatorCommands = ((() => {
         return {
           target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
           nest: commands,
-          ...automatorBlocksMap["UNTIL"]
+          ...automatorBlocksMap.UNTIL
         };
       }
     },
@@ -672,7 +671,7 @@ const AutomatorCommands = ((() => {
         const comparison = B.visit(ctx.comparison);
         return {
           nest: commands,
-          ...automatorBlocksMap["WAIT"],
+          ...automatorBlocksMap.WAIT,
           ...comparison,
           target: comparison.target.toUpperCase()
         };
@@ -701,7 +700,7 @@ const AutomatorCommands = ((() => {
       },
       blockify: ctx => ({
         target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
-        ...automatorBlocksMap["WAIT"]
+        ...automatorBlocksMap.WAIT
       })
     },
     {
@@ -724,7 +723,7 @@ const AutomatorCommands = ((() => {
         B.visit(ctx.block, commands);
         return {
           nest: commands,
-          ...automatorBlocksMap["WHILE"],
+          ...automatorBlocksMap.WHILE,
           ...B.visit(ctx.comparison)
         };
       }

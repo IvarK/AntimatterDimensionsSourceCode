@@ -8,7 +8,7 @@ const AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES = [
 ];
 const AUTOMATOR_BLOCKS_RESETS = ["INFINITY", "ETERNITY", "REALITY"];
 
-const automator_blocks = [
+const automatorBlocks = [
   {
     cmd: "WAIT",
     targets: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, ...AUTOMATOR_BLOCKS_RESETS],
@@ -78,22 +78,22 @@ const automator_blocks = [
 
 ];
 
-const automatorBlocksMap = automator_blocks.mapToObject(b => b.cmd, b => b);
+const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b);
 
 function findAutomatorBlockByName(name) {
-  return automator_blocks.find(b => b.cmd === name);
+  return automatorBlocks.find(b => b.cmd === name);
 }
 
 
 Vue.component("automator-blocks", {
   data() {
     return {
-      blocks: automator_blocks
+      blocks: automatorBlocks
     };
   },
   methods: {
     clone(block) {
-      let b = {
+      const b = {
         ...block,
         id: UIID.next()
       };

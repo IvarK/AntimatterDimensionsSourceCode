@@ -286,7 +286,7 @@ Vue.component("enslaved-tab", {
         <div class="l-enslaved-run-container">
           <div v-if="hasUnlock(unlocksInfo.RUN)">
             <div class="c-enslaved-run-button">
-              <div class="c-enslaved-run-button__title">{{realityTitle}}</div>
+              <div class="c-enslaved-run-button__title">{{ realityTitle }}</div>
               <div v-if="completed"><b>(Completed)</b></div>
               <div :class="runButtonClassObject" @click="startRun">
                 <div class="c-enslaved-run-button__icon__sigil fas fa-link"></div>

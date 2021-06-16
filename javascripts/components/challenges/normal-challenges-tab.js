@@ -51,7 +51,7 @@ Vue.component("normal-challenges-tab", {
           @start="challenge.requestStart()"
         >
           <description-display :config="config" slot="top" />
-          <span slot="bottom">Reward: {{challenge.config.reward}}</span>
+          <span slot="bottom">Reward: {{ challenge.config.reward }}</span>
         </challenge-box>`
     }
   },

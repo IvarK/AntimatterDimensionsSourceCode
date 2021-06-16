@@ -12,7 +12,7 @@ Vue.component("select-notation", {
         class="o-primary-btn l-select-notation__item c-select-notation__item"
         @click="notation.setAsCurrent()"
       >
-        {{notation.name}}
+        {{ notation.name }}
       </div>
     </div>`
 });

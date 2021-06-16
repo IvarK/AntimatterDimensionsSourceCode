@@ -27,7 +27,7 @@ Vue.component("effarig-tab", {
           <div class="c-effarig-tab__reward-label">{{ unlock.config.label }}: </div>
           <div v-if="isUnlocked" class="l-effarig-tab__reward-descriptions">
             <div v-for="description in descriptionLines" class="c-effarig-tab__reward-description">
-              <span class="c-effarig-tab__reward-symbol">{{symbol}}</span>{{description}}
+              <span class="c-effarig-tab__reward-symbol">{{ symbol }}</span>{{ description }}
             </div>
           </div>
           <span v-else class="c-effarig-tab__reward-symbol">?</span>

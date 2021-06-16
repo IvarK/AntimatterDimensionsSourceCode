@@ -100,7 +100,7 @@ Vue.component("replicanti-tab", {
         <div v-if="hasRaisedCap">
           Your Replicanti cap without Time Study 192 has been raised to {{ format(replicantiCap, 2) }}
           and is giving you {{ formatInt(effarigInfinityBonusRG) }} extra Replicanti
-          {{ "Galaxy" | pluralize(effarigInfinityBonusRG, "Galaxies")}}
+          {{ "Galaxy" | pluralize(effarigInfinityBonusRG, "Galaxies") }}
           <br>
           due to the reward from Effarig's Infinity. (Next Replicanti Galaxy at {{ format(nextEffarigRGThreshold, 2) }})
         </div>

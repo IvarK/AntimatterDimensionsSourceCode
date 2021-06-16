@@ -70,7 +70,7 @@ Vue.component("celestial-quote-history", {
           class="c-celestial-quote-history__line"
           :style="lineStyle(idx)"
         >
-          {{quote}}
+          {{ quote }}
         </div>
       </div>
       <div class="l-celestial-quote-history__buttons">

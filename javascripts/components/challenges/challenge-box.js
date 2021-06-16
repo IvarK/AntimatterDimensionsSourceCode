@@ -48,7 +48,7 @@ Vue.component("challenge-box", {
   template: `
     <div class="c-challenge-box l-challenge-box">
       <hint-text type="challenges" class="l-hint-text--challenge">
-        {{name}}
+        {{ name }}
       </hint-text>
       <slot name="top" />
       <div class="l-challenge-box__fill" />

@@ -148,7 +148,7 @@ Vue.component("statistics-tab", {
         <div>
           You have spent {{ infinity.this.toStringShort() }} in this Infinity.
           <span v-if="reality.isUnlocked">
-            ({{infinity.thisReal.toStringShort()}} real time)
+            ({{ infinity.thisReal.toStringShort() }} real time)
           </span>
         </div>
         <div>

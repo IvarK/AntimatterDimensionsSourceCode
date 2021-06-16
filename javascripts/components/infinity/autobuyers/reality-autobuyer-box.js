@@ -71,7 +71,7 @@ Vue.component("reality-autobuyer-box", {
           property="glyph"
         />
         <div v-if="isOverCap">
-          Autobuyer will trigger at the glyph level cap of {{formatInt(levelCap)}}.
+          Autobuyer will trigger at the glyph level cap of {{ formatInt(levelCap) }}.
         </div>
       </template>
     </autobuyer-box>`

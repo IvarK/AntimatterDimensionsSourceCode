@@ -43,7 +43,7 @@ Vue.component("eternity-milestones-tab", {
       </div>
       <div>
         Offline Infinities only generate outside of Normal and Infinity Challenges and outside of EC4 and EC12,
-        and when your Infinity Autobuyer is turned on and set to time mode with less than {{formatInt(60)}} seconds.
+        and when your Infinity Autobuyer is turned on and set to time mode with less than {{ formatInt(60) }} seconds.
       </div>
     </div>`
 });

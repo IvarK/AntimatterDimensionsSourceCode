@@ -164,7 +164,7 @@ Vue.component("singularity-container", {
     <div class="c-laitela-singularity-container">
       <div>
         <h2>
-          You have {{ format(singularities, 2, 0) }} {{ "Singularity" | pluralize(singularities, "Singularities")}}
+          You have {{ format(singularities, 2, 0) }} {{ "Singularity" | pluralize(singularities, "Singularities") }}
         </h2>
         <button
           class="c-laitela-singularity"

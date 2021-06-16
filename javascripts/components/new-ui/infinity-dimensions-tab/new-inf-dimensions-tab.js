@@ -95,7 +95,7 @@ Vue.component("new-inf-dimensions-tab", {
             translated
           </span>
           to a
-          <span class="c-infinity-dim-description__accent">{{formatX(dimMultiplier, 2, 1)}}</span>
+          <span class="c-infinity-dim-description__accent">{{ formatX(dimMultiplier, 2, 1) }}</span>
           multiplier on all
           <span v-if="!isEC9Running">Antimatter Dimensions.</span>
           <span v-else>Time Dimensions due to Eternity Challenge 9.</span>
@@ -116,10 +116,10 @@ Vue.component("new-inf-dimensions-tab", {
         All Infinity Dimensions are limited to a single purchase.
       </div>
       <div v-else>
-        All Infinity Dimensions except for the 8th are limited to a maximum of {{format(totalDimCap, 2)}}
+        All Infinity Dimensions except for the 8th are limited to a maximum of {{ format(totalDimCap, 2) }}
         purchases each.
       </div>
-      <div>You are getting {{format(powerPerSecond, 2, 0)}} {{incomeType}} per second.</div>
+      <div>You are getting {{ format(powerPerSecond, 2, 0) }} {{ incomeType }} per second.</div>
       <div class="l-dimensions-container">
         <new-inf-dimension-row
           v-for="tier in 8"

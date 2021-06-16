@@ -111,7 +111,7 @@ const TimeTheorems = {
     TimeTheoremPurchaseType.am.purchase(true);
     TimeTheoremPurchaseType.ip.purchase(true);
     TimeTheoremPurchaseType.ep.purchase(true);
- },
+  },
 
   totalPurchased() {
     return TimeTheoremPurchaseType.am.amount +

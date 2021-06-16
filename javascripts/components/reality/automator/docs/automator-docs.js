@@ -34,7 +34,7 @@ Vue.component("automator-docs", {
   template: `
     <div class="l-automator-pane">
       <div class="c-automator__controls l-automator__controls l-automator-pane__controls" >
-        <automator-button class="fa-long-arrow-alt-left" @click="commandID = -1"/>
+        <automator-button class="fa-long-arrow-alt-left" @click="commandID = -1" />
         <automator-button
           :class="fullScreenIconClass"
           class="l-automator__button--corner"
@@ -49,6 +49,5 @@ Vue.component("automator-docs", {
         />
         <automator-man-page v-else :command="command" />
       </div>
-    </div>
-  `
+    </div>`
 });

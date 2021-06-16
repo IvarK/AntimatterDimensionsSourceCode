@@ -47,5 +47,5 @@ Vue.component("description-display", {
       if (this.updateFn) this.updateFn();
     }
   },
-  template: `<span :class="classObject">{{title}} {{description}}</span>`
+  template: `<span :class="classObject">{{ title }} {{ description }}</span>`
 });

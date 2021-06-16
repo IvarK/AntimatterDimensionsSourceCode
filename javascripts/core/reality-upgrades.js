@@ -71,8 +71,8 @@ class RebuyableRealityUpgradeState extends RebuyableMechanicState {
 RealityUpgradeState.index = mapGameData(
   GameDatabase.reality.upgrades,
   config => (config.id < 6
-      ? new RebuyableRealityUpgradeState(config)
-      : new RealityUpgradeState(config))
+    ? new RebuyableRealityUpgradeState(config)
+    : new RealityUpgradeState(config))
 );
 
 /**

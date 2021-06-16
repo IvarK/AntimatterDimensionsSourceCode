@@ -2592,7 +2592,7 @@ GameDatabase.news = [
       But the Replicanti continued to replicate, and accelerate. Soon the entire block was covered in them; was
       them. Shortly after, several blocks. The city. The surrounding cities. The country. All the countries. All
       the planet. All the solar system. All the galaxy. All.`,
-      get unlocked() { return player.replicanti.unl; }
+    get unlocked() { return player.replicanti.unl; }
   },
   {
     id: "l58",
@@ -2619,7 +2619,7 @@ GameDatabase.news = [
       `The debate on the singular form of Replicanti rages on. Team "Replicantus"'s base has been ransacked
       by Team "Also Replicanti", and many of their dimensions were stolen. Team "The Plural Is Replicantis"
       is still lying low after their plan to hack the dictionary failed.`,
-      get unlocked() { return player.replicanti.unl; }
+    get unlocked() { return player.replicanti.unl; }
   },
   {
     id: "l60",
@@ -2640,21 +2640,21 @@ GameDatabase.news = [
     text:
       `Computer scientists are outraged, "What even are Infinity Points? IP stands for Internet Protocol!".
       Debates continue to intensify, more at 7.`,
-      get unlocked() { return PlayerProgress.infinityUnlocked(); }
+    get unlocked() { return PlayerProgress.infinityUnlocked(); }
   },
   {
     id: "l63",
     text:
       `Do you feel that time has been going slower? Study reveals that 1 second now last approximately 1.3 seconds.
       Scientists are calling this phenomenon Time Dilation.`,
-      get unlocked() { return PlayerProgress.dilationUnlocked(); }
+    get unlocked() { return PlayerProgress.dilationUnlocked(); }
   },
   {
     id: "l64",
     text:
       `Injustice in the Antimatter Academia: Beginners are only allowed to choose one field of study while the elite
       can pick all three. "Its just not fair, man. How come they can do it?" Questions frustrated student.`,
-      get unlocked() { return PlayerProgress.eternityUnlocked(); }
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {
     id: "l65",
@@ -2855,7 +2855,7 @@ GameDatabase.news = [
   {
     id: "e7",
     get text() {
-      return `${format(new Decimal("1e201600"), 0, 0)} IP? I'm finally done!`;
+      return `${format("1e201600")} IP? I'm finally done!`;
     },
     get unlocked() {
       return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;

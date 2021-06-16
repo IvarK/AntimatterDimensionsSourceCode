@@ -94,9 +94,9 @@ Vue.component("game-header", {
       },
       template: `
         <div v-if="isVisible">
-          You are currently in {{challengeDisplay}} <failable-ec-text v-if="isInFailableEC"/>
-        </div>
-      `
+          You are currently in {{ challengeDisplay }}
+          <failable-ec-text v-if="isInFailableEC" />
+        </div>`
     }
   },
   data() {
@@ -138,28 +138,30 @@ Vue.component("game-header", {
       this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
     }
   },
-  template:
-    `<div>
+  template: `
+    <div>
       <challenge-display />
       <div v-if="isInEffarig">
-        Gamespeed and multipliers are Dilated {{effarigMultNerfText}}
+        Gamespeed and multipliers are Dilated {{ effarigMultNerfText }}
         <br>
-        Tickspeed is Dilated {{effarigTickNerfText}}
+        Tickspeed is Dilated {{ effarigTickNerfText }}
       </div>
       <div v-if="isInLaitela">
         Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})
       </div>
-      <div v-if="isInMatterChallenge">There is {{format(matter, 2, 1)}} matter.</div>
+      <div v-if="isInMatterChallenge">There is {{ format(matter, 2, 1) }} matter.</div>
       <game-header-amounts-line />
       <div>
-        <p>You have <span class="c-game-header__antimatter">{{format(antimatter, 2, 1)}}</span> antimatter.</p>
+        <p>
+          You have <span class="c-game-header__antimatter">{{ format(antimatter, 2, 1) }}</span> antimatter.
+        </p>
       </div>
       <div class="l-game-header__buttons-line">
         <game-header-big-crunch-button />
         <game-header-new-dim-button />
         <game-header-eternity-button />
       </div>
-      <div>You are getting {{format(antimatterPerSec, 2, 0)}} antimatter per second.</div>
+      <div>You are getting {{ format(antimatterPerSec, 2, 0) }} antimatter per second.</div>
       <game-header-tickspeed-row />
       <black-hole-header-row />
     </div>`

@@ -70,11 +70,11 @@ Vue.component("antimatter-dim-boost-row", {
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
   },
-  template:
-    `<div class="c-antimatter-dim-row">
+  template: `
+    <div class="c-antimatter-dim-row">
       <div class="c-dim-row__label c-dim-row__label--growable">
-        Dimension Boost ({{boostCountText}}):
-        requires {{formatInt(requirement.amount)}} {{dimName}} Dimensions
+        Dimension Boost ({{ boostCountText }}):
+        requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
       </div>
       <primary-button
         :enabled="isBuyable"
@@ -82,6 +82,8 @@ Vue.component("antimatter-dim-boost-row", {
         :class=tutorialClass
         @click.exact="dimensionBoost(true)"
         @click.shift.exact="dimensionBoost(false)"
-      >{{buttonText}}</primary-button>
+      >
+        {{ buttonText }}
+      </primary-button>
     </div>`
 });

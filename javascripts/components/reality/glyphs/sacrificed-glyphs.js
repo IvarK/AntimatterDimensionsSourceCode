@@ -69,21 +69,23 @@ Vue.component("sacrificed-glyphs", {
         }
       },
       template: `
-        <div v-if="amount > 0"
-             class="l-sacrificed-glyphs__type"
-             :style="style">
+        <div
+          v-if="amount > 0"
+          class="l-sacrificed-glyphs__type"
+          :style="style"
+        >
           <div>
             <div class="l-sacrificed-glyphs__type-symbol c-sacrificed-glyphs__type-symbol">
-              {{symbol}}
+              {{ symbol }}
             </div>
             <div class="l-sacrificed-glyphs__type-amount c-sacrificed-glyphs__type-amount">
-              {{formatAmount}}
+              {{ formatAmount }}
               <span v-if="showNewSacrifice" class="c-sacrificed-glyphs__type-new-amount">
-                + {{formatNewAmount}} ➜ {{formatTotalAmount}}
+                + {{ formatNewAmount }} ➜ {{ formatTotalAmount }}
               </span>
             </div>
           </div>
-          {{description}}
+          {{ description }}
         </div>`
     }
   },
@@ -139,41 +141,40 @@ Vue.component("sacrificed-glyphs", {
     },
   },
   template: `
-  <div
+    <div
       class="c-current-glyph-effects l-current-glyph-effects"
       :class="{'c-sacrificed-glyphs--dragover': hasDragover}"
       @dragover="dragover"
       @dragleave="dragleave"
-      @drop="drop">
-    <div class="l-sacrificed-glyphs__help">
-      <div>Drag Glyphs here or shift-click to Sacrifice.</div>
-      <div>Ctrl-shift-click to Sacrifice without confirmation</div>
-    </div>
-    <div class="c-sacrificed-glyphs__header">Glyph Sacrifice Boosts:</div>
-    <div
-    <div v-if="teresaMult > 1">
-      (Multiplied by {{ formatX(teresaMult, 2, 2) }}; Teresa last done at
-      {{ format(lastRMTeresa, 2) }} Reality Machines)
-    </div>
-    <div v-if="anySacrifices">
-      <template v-for="type in types">
-        <type-sacrifice :type="type" :hasDragover="hasDragover"/>
-      </template>
+      @drop="drop"
+    >
+      <div class="l-sacrificed-glyphs__help">
+        <div>Drag Glyphs here or shift-click to Sacrifice.</div>
+        <div>Ctrl-shift-click to Sacrifice without confirmation</div>
+      </div>
       <div v-if="hasAlteration">
-        <br>
         <b>Altered Glyphs</b>
         <br>
-        Glyph types will have one of their effects<br>
-        improved when their Glyph Sacrifice values are above:
+        Glyph types will have one of their effects improved<br>
+        when their glyph type's total sacrifice value is above:
         <br><br>
         {{ format(addThreshold) }} - an additional secondary effect<br>
         {{ format(empowerThreshold) }} - formula drastically improved<br>
         {{ format(boostThreshold) }} - a boost depending on Glyph Sacrifice
         <br><br>
       </div>
-    </div>
-    <div v-else>
-      You haven't Sacrificed any Glyphs yet!
-    </div>
-  </div>`,
+      <div class="c-sacrificed-glyphs__header">Glyph Sacrifice Boosts:</div>
+      <div v-if="teresaMult > 1">
+        (Multiplied by {{ formatX(teresaMult, 2, 2) }}; Teresa last done at
+        {{ format(lastRMTeresa, 2) }} Reality Machines)
+      </div>
+      <div v-if="anySacrifices">
+        <template v-for="type in types">
+          <type-sacrifice :type="type" :hasDragover="hasDragover" />
+        </template>
+      </div>
+      <div v-else>
+        You haven't Sacrificed any Glyphs yet!
+      </div>
+    </div>`
 });

@@ -720,7 +720,7 @@ GameStorage.migrations = {
   },
 
   migrateIPGen(player) {
-    player.infinityRebuyables.push(player.offlineProd / 5);
+    player.infinityRebuyables[2] = player.offlineProd / 5;
     delete player.offlineProd;
     delete player.offlineProdCost;
   },

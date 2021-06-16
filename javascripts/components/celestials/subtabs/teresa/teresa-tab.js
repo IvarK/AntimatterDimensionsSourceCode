@@ -82,14 +82,16 @@ Vue.component("teresa-tab", {
       const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
       const pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice);
       return {
-         bottom: `${(100 * pos).toFixed(2)}%`,
+        bottom: `${(100 * pos).toFixed(2)}%`,
       };
     },
   },
   template: `
     <div class="l-teresa-celestial-tab">
-      <celestial-quote-history celestial="teresa"/>
-      <div>You have {{format(rm, 2, 2)}} {{"Reality Machine" | pluralize(rm)}}.</div>
+      <celestial-quote-history celestial="teresa" />
+      <div>
+        You have {{ format(rm, 2, 2) }} {{ "Reality Machine" | pluralize(rm) }}.
+      </div>
       <div class="l-mechanics-container">
         <div class="l-teresa-mechanic-container" v-if="hasReality">
           <div class="c-teresa-unlock c-teresa-run-button">
@@ -106,7 +108,8 @@ Vue.component("teresa-tab", {
               <glyph-set-preview
                 :show=true
                 :forceNameColor=false
-                :glyphs="bestAMSet" />
+                :glyphs="bestAMSet"
+              />
             </div>
             <div v-else>
               You have not completed Teresa's Reality yet.
@@ -126,25 +129,30 @@ Vue.component("teresa-tab", {
             @mouseup="pour = false"
             @touchend="pour = false"
             @mouseleave="pour = false"
-          >Pour RM</button>
+          >
+            Pour RM
+          </button>
           <div class="c-rm-store">
             <div class="c-rm-store-inner" :style="{ height: percentage}">
-              <div class="c-rm-store-label"> {{ formatX(rmMult, 2, 2) }} RM gain
-                <br>{{ format(pouredAmount, 2, 2) }}/{{ format(pouredAmountCap, 2, 2) }}
+              <div class="c-rm-store-label">
+                {{ formatX(rmMult, 2, 2) }} RM gain
+                <br>
+                {{ format(pouredAmount, 2, 2) }}/{{ format(pouredAmountCap, 2, 2) }}
               </div>
             </div>
             <div v-for="unlockInfo in unlockInfo"
               class="c-teresa-unlock-description"
               :style="unlockDescriptionStyle(unlockInfo)"
-              :id="unlockInfo.id">
-                {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
+              :id="unlockInfo.id"
+            >
+              {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
             </div>
           </div>
         </div>
-        <div class="l-rm-container-labels l-teresa-mechanic-container"/>
+        <div class="l-rm-container-labels l-teresa-mechanic-container" />
         <div class="c-teresa-shop" v-if="hasPerkShop">
           <span class="o-teresa-pp">
-            You have {{ format(perkPoints, 2, 0) }} {{"Perk Point" | pluralize(perkPoints)}}.
+            You have {{ format(perkPoints, 2, 0) }} {{ "Perk Point" | pluralize(perkPoints) }}.
           </span>
           <perk-shop-upgrade
             v-for="upgrade in upgrades"

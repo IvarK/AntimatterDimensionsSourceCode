@@ -32,13 +32,13 @@ Vue.component("ra-level-chevron", {
     }
   },
   template: `
-  <div v-if="level >= minLevel || singleLevel"
-    class="l-ra-lvl-chevron"
-    :style="levelPosition"
-    :class="classList">
-    <span v-if="isImportantLevel || level === goal">
-      {{formatInt(level)}}
-    </span>
-  </div>
-  `
+    <div v-if="level >= minLevel || singleLevel"
+      class="l-ra-lvl-chevron"
+      :style="levelPosition"
+      :class="classList"
+    >
+      <span v-if="isImportantLevel || level === goal">
+        {{ formatInt(level) }}
+      </span>
+    </div>`
 });

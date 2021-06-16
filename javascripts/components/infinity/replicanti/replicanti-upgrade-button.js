@@ -41,17 +41,17 @@ Vue.component("replicanti-upgrade-button", {
       this.isEC8Running = EternityChallenge(8).isRunning;
     }
   },
-  template:
-    `<div class="l-spoon-btn-group l-replicanti-upgrade-button">
+  template: `
+    <div class="l-spoon-btn-group l-replicanti-upgrade-button">
       <primary-button
         :enabled="canBeBought"
         class="o-primary-btn--replicanti-upgrade"
         @click="upgrade.purchase()"
       >
-        <span>{{description}}</span>
+        <span>{{ description }}</span>
         <template v-if="!isCapped">
           <br>
-          <span>{{costDescription}}</span>
+          <span>{{ costDescription }}</span>
         </template>
       </primary-button>
       <primary-button-on-off

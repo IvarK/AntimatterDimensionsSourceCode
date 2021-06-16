@@ -12,7 +12,8 @@ Vue.component("automator-docs-main-page", {
         class="c-automator-docs-page__link"
         @click="$emit('select', command.id)"
         v-if="command.isUnlocked()"
-      >{{command.keyword}}</span>
-    </div>
-  `
+      >
+        {{ command.keyword }}
+      </span>
+    </div>`
 });

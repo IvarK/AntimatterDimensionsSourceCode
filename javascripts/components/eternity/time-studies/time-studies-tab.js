@@ -268,21 +268,27 @@ Vue.component("time-studies-tab", {
       throw "Unknown Time Study type";
     }
   },
-  template:
-    `<div class="l-time-studies-tab">
+  template: `
+    <div class="l-time-studies-tab">
       <div class="c-subtab-option-container">
         <primary-button
           class="o-primary-btn--subtab-option"
           onclick="exportStudyTree()"
-        >Export tree</primary-button>
+        >
+          Export tree
+        </primary-button>
         <primary-button
           :class="respecClassObject"
           @click="respec = !respec"
-        >Respec Time Studies on next Eternity</primary-button>
+        >
+          Respec Time Studies on next Eternity
+        </primary-button>
         <primary-button
           class="o-primary-btn--subtab-option"
           onclick="Modal.importTree.show()"
-        >Import tree</primary-button>
+        >
+          Import tree
+        </primary-button>
       </div>
       <div class="l-time-study-tree l-time-studies-tab__tree" :style="treeStyleObject">
         <component

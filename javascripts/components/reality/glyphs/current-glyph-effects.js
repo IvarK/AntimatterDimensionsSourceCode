@@ -31,8 +31,8 @@ Vue.component("current-glyph-effects", {
         textColor() {
           if (!this.isColored) return { };
           const glyphName = this.effectConfig.id === "timeshardpow"
-          ? GlyphTypes.time
-          : GlyphTypes[this.effectConfig.glyphTypes];
+            ? GlyphTypes.time
+            : GlyphTypes[this.effectConfig.glyphTypes];
           return {
             color: glyphName.id === "cursed" ? "#5151ec" : glyphName.color,
             "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
@@ -52,7 +52,7 @@ Vue.component("current-glyph-effects", {
       },
       template: `
         <div>
-          <span :style="textColor" :class="valueClass">{{formatValue}}</span>
+          <span :style="textColor" :class="valueClass">{{ formatValue }}</span>
         </div>`
     }
   },
@@ -60,6 +60,10 @@ Vue.component("current-glyph-effects", {
     return {
       effects: [],
     };
+  },
+  created() {
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
+    this.glyphsChanged();
   },
   computed: {
     isSoftcapActive() {
@@ -72,29 +76,25 @@ Vue.component("current-glyph-effects", {
       return Glyphs.activeList;
     }
   },
-  created() {
-    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
-    this.glyphsChanged();
-  },
   methods: {
     glyphsChanged() {
       this.effects = getActiveGlyphEffects();
     }
   },
   template: `
-  <div class="c-current-glyph-effects l-current-glyph-effects">
-    <div class="c-current-glyph-effects__header">
-      Currently active glyph effects:
-    </div>
-    <glyph-set-name :glyphSet="glyphSet" />
-    <br>
-    <div v-if="isSoftcapActive" class="l-current-glyph-effects__capped-header">
-      <span class="c-current-glyph-effects__effect--capped">Colored</span> effects have been slightly reduced
-      due to a softcap
-    </div>
-    <div v-if="noEffects">
-      None (equip Glyphs to get their effects)
-    </div>
-    <current-effect v-for="effect in effects" :key="effect.id" :effect="effect"/>
-  </div>`,
+    <div class="c-current-glyph-effects l-current-glyph-effects">
+      <div class="c-current-glyph-effects__header">
+        Currently active glyph effects:
+      </div>
+      <glyph-set-name :glyphSet="glyphSet" />
+      <br>
+      <div v-if="isSoftcapActive" class="l-current-glyph-effects__capped-header">
+        <span class="c-current-glyph-effects__effect--capped">Colored</span> effects have been slightly reduced
+        due to a softcap
+      </div>
+      <div v-if="noEffects">
+        None (equip Glyphs to get their effects)
+      </div>
+      <current-effect v-for="effect in effects" :key="effect.id" :effect="effect" />
+    </div>`
 });

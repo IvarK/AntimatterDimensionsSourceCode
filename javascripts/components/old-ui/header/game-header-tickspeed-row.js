@@ -62,27 +62,32 @@ Vue.component("game-header-tickspeed-row", {
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
     }
   },
-  template:
-    `<div :class="classObject">
-      <div>{{multiplierDisplay}}</div>
+  template: `
+    <div :class="classObject">
+      <div>{{ multiplierDisplay }}</div>
       <div>
         <primary-button
           :enabled="isAffordable"
           class="o-primary-btn--tickspeed"
           :style="{ width: isContinuumActive ? '25rem' : ''}"
-          onclick="buyTickSpeed()">
-            <span v-if="isContinuumActive">Continuum: {{continuumString}}</span>
-            <span v-else-if="showCostTitle">Cost: {{format(cost)}}</span>
-            <span v-else>{{format(cost)}}<br></span>
+          onclick="buyTickSpeed()"
+        >
+          <span v-if="isContinuumActive">Continuum: {{ continuumString }}</span>
+          <span v-else-if="showCostTitle">Cost: {{ format(cost) }}</span>
+          <span v-else>{{ format(cost) }}<br></span>
         </primary-button>
         <primary-button
           v-if="!isContinuumActive"
           :enabled="isAffordable"
           class="o-primary-btn--buy-max"
-          onclick="buyMaxTickSpeed()">
-            Buy Max
+          onclick="buyMaxTickSpeed()"
+        >
+          Buy Max
         </primary-button>
       </div>
-      <div>{{tickspeedDisplay}} <game-header-gamespeed-display v-if="!isGameSpeedNormal"/></div>
+      <div>
+        {{ tickspeedDisplay }}
+        <game-header-gamespeed-display v-if="!isGameSpeedNormal" />
+      </div>
     </div>`
 });

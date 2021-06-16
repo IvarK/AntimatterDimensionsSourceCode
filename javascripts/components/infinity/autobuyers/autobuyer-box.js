@@ -33,11 +33,11 @@ Vue.component("autobuyer-box", {
           this.bulkUnlimited = this.autobuyer.hasUnlimitedBulk;
         }
       },
-      template:
-        `<div class="c-autobuyer-box__small-text">
-          Current interval: {{intervalDisplay}} seconds
+      template: `
+        <div class="c-autobuyer-box__small-text">
+          Current interval: {{ intervalDisplay }} seconds
           <span v-if="hasMaxedInterval && bulkUnlocked && bulk">
-            <br>Current bulk: {{bulkUnlimited ? "Unlimited" : formatX(bulk, 2)}}
+            <br>Current bulk: {{ bulkUnlimited ? "Unlimited" : formatX(bulk, 2) }}
           </span>
         </div>`
     }
@@ -67,25 +67,6 @@ Vue.component("autobuyer-box", {
       this.autobuyer.isActive = newValue;
     }
   },
-  methods: {
-    update() {
-      const autobuyer = this.autobuyer;
-      this.isUnlocked = autobuyer.isUnlocked;
-      this.isActive = autobuyer.isActive;
-      this.globalToggle = player.auto.autobuyersOn;
-      this.canBeBought = autobuyer.canBeBought;
-      this.isUnlockable = autobuyer.canUnlockSlowVersion;
-      this.antimatterCost = autobuyer.antimatterCost;
-      this.isBought = autobuyer.isBought;
-      this.antimatter.copyFrom(player.records.thisEternity.maxAM);
-    },
-    toggle() {
-      this.isActive = !this.isActive;
-    },
-    purchase() {
-      this.autobuyer.purchase();
-    }
-  },
   computed: {
     autobuyerBuyBoxClass() {
       return {
@@ -111,11 +92,30 @@ Vue.component("autobuyer-box", {
         : "";
     }
   },
+  methods: {
+    update() {
+      const autobuyer = this.autobuyer;
+      this.isUnlocked = autobuyer.isUnlocked;
+      this.isActive = autobuyer.isActive;
+      this.globalToggle = player.auto.autobuyersOn;
+      this.canBeBought = autobuyer.canBeBought;
+      this.isUnlockable = autobuyer.canUnlockSlowVersion;
+      this.antimatterCost = autobuyer.antimatterCost;
+      this.isBought = autobuyer.isBought;
+      this.antimatter.copyFrom(player.records.thisEternity.maxAM);
+    },
+    toggle() {
+      this.isActive = !this.isActive;
+    },
+    purchase() {
+      this.autobuyer.purchase();
+    }
+  },
   template: `
     <div v-if="isUnlocked || isBought" class="c-autobuyer-box-row">
       <div class="l-autobuyer-box__header">
-        {{name}}
-        <interval-label v-if="showInterval" :autobuyer="autobuyer"/>
+        {{ name }}
+        <interval-label v-if="showInterval" :autobuyer="autobuyer" />
       </div>
       <div class="c-autobuyer-box-row__intervalSlot"><slot name="intervalSlot" /></div>
       <div class="c-autobuyer-box-row__toggleSlot"><slot name="toggleSlot" /></div>
@@ -124,7 +124,8 @@ Vue.component("autobuyer-box", {
       <div class="l-autobuyer-box__footer" @click="toggle">
         <label
           :for="name"
-          :class="autobuyerStateClass">
+          :class="autobuyerStateClass"
+        >
           <span :class="autobuyerToggleClass"></span>
         </label>
         <input

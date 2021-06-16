@@ -53,5 +53,5 @@ Vue.component("failable-ec-text", {
     },
   },
   template:
-  `<span> - <span :style="textStyle">{{text}}</span></span>`
+  `<span> - <span :style="textStyle">{{ text }}</span></span>`
 });

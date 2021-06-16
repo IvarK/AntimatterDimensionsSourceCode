@@ -1,6 +1,9 @@
 "use strict";
 
 Vue.component("past-runs-container", {
+  props: {
+    layer: Object,
+  },
   data() {
     return {
       isRealityUnlocked: false,
@@ -8,9 +11,6 @@ Vue.component("past-runs-container", {
       runs: Array.repeat(0, 10).map(() => [0, new Decimal(0), 0, 0]),
       shown: true
     };
-  },
-  props: {
-    layer: Object,
   },
   computed: {
     averageRun() {
@@ -75,15 +75,13 @@ Vue.component("past-runs-container", {
     runPrestigeCountGain: (run, isAverage) => format(run[2], 2, isAverage ? 1 : 0),
     realRunTime: run => (run[3] === undefined ? "unrecorded" : timeDisplayShort(run[3]))
   },
-  template:
-    `<div
-      v-if="condition"
-    >
+  template: `
+    <div v-if="condition">
       <br>
       <div
         class="c-past-runs-header"
         v-on:click="toggleShown"
-        >
+      >
         <span class="o-run-drop-down-icon" v-html="dropDown" />
         <span>
           <h3>Past {{ formatInt(10) }} {{ plural }}</h3>
@@ -123,9 +121,13 @@ Vue.component("past-runs-container", {
             {{ averageRunGain(averageRun, 2, prestigeCount) }}.</span>
         </span>
         <span v-else>
-          <span>Average {{ points }} gain: {{ reward(runGain(averageRun), averageRun, true) }}.</span>
-          <span>Average {{ prestigeCount }} gain:
-            {{ prestigeCountReward(runPrestigeCountGain(averageRun, true), averageRun) }}.</span>
+          <span>
+            Average {{ points }} gain: {{ reward(runGain(averageRun), averageRun, true) }}.
+          </span>
+          <span>
+            Average {{ prestigeCount }} gain:
+            {{ prestigeCountReward(runPrestigeCountGain(averageRun, true), averageRun) }}.
+          </span>
         </span>
       </div>
     </div>`

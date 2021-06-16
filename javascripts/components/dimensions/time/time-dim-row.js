@@ -20,6 +20,11 @@ Vue.component("time-dim-row", {
       showTTCost: false,
     };
   },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.timeDimension(this.tier).isActive = newValue;
+    }
+  },
   computed: {
     shiftDown() {
       return ui.view.shiftDown;
@@ -52,11 +57,6 @@ Vue.component("time-dim-row", {
     },
     formattedEPCost() {
       return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2)} EP`;
-    }
-  },
-  watch: {
-    isAutobuyerOn(newValue) {
-      Autobuyer.timeDimension(this.tier).isActive = newValue;
     }
   },
   methods: {
@@ -92,21 +92,26 @@ Vue.component("time-dim-row", {
     },
   },
   template: `
-    <div v-show="showRow" class="c-time-dim-row"
-      :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }">
+    <div
+      v-show="showRow"
+      class="c-time-dim-row"
+      :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }"
+    >
       <div class="c-dim-row__label c-dim-row__name">
-        {{name}} Time Dimension {{formatX(multiplier, 2, 1)}}
+        {{ name }} Time Dimension {{ formatX(multiplier, 2, 1) }}
       </div>
       <div class="c-dim-row__label c-dim-row__label--growable">
-        {{format(amount, 2, 0)}}
-        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
+        {{ format(amount, 2, 0) }}
+        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{ rateOfChangeDisplay }}</span>
       </div>
       <primary-button
         v-tooltip="tooltipContents"
         :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-td l-dim-row__button"
         @click="buyTimeDimension"
-      >{{buttonContents}}</primary-button>
+      >
+        {{ buttonContents }}
+      </primary-button>
       <primary-button-on-off
         v-if="areAutobuyersUnlocked"
         v-model="isAutobuyerOn"
@@ -118,6 +123,8 @@ Vue.component("time-dim-row", {
         :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-td-max l-dim-row__button"
         @click="buyMaxTimeDimension"
-      >Buy Max</primary-button>
-    </div>`,
+      >
+        Buy Max
+      </primary-button>
+    </div>`
 });

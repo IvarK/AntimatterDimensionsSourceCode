@@ -38,11 +38,12 @@ Vue.component("automator-controls", {
     },
     repeat: () => AutomatorBackend.toggleRepeat(),
   },
-  template:
-    `<div class="c-automator__controls l-automator__controls l-automator-pane__controls">
+  template: `
+    <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
       <automator-button class="fa-fast-backward"
         @click="rewind"
-        v-tooltip="'rewind automator to the first command'"/>
+        v-tooltip="'rewind automator to the first command'"
+      />
       <automator-button
         class="fa-play"
         :class="{ 'c-automator__button-play--active' : isRunning }"
@@ -52,13 +53,16 @@ Vue.component("automator-controls", {
       <automator-button class="fa-pause"
         :class="{ 'c-automator__button--active': isPaused }"
         @click="pause"
-        v-tooltip="'Pause automator on current command'"/>
+        v-tooltip="'Pause automator on current command'"
+      />
       <automator-button class="fa-stop"
         @click="stop"
-        v-tooltip="'Stop automator and reset position'"/>
+        v-tooltip="'Stop automator and reset position'"
+      />
       <automator-button class="fa-step-forward"
         @click="step"
-        v-tooltip="'Step forward one line'"/>
+        v-tooltip="'Step forward one line'"
+      />
       <automator-button
         class="fa-sync-alt"
         :class="{ 'c-automator__button--active' : repeatOn }"

@@ -12,18 +12,17 @@ Vue.component("modal-hidden-tabs", {
     },
   },
   template: `
-  <div>
-  <modal-close-button @click="emitClose"/>
-    <h2>Modify Visible Tabs</h2>
-    Click a button to toggle showing a tab on/off.
-    <br>
-    Some tabs cannot be hidden, and you cannot hide your current tab.
-    <br>
-    <div v-for="tab in tabs" class="l-hide-modal-tab-container">
-      <tab-modal-subtab-group :tab="tab"/>
-    </div>
-  </div>
-  `
+    <div>
+      <modal-close-button @click="emitClose" />
+      <h2>Modify Visible Tabs</h2>
+      Click a button to toggle showing a tab on/off.
+      <br>
+      Some tabs cannot be hidden, and you cannot hide your current tab.
+      <br>
+      <div v-for="tab in tabs" class="l-hide-modal-tab-container">
+        <tab-modal-subtab-group :tab="tab" />
+      </div>
+    </div>`
 });
 
 Vue.component("tab-modal-subtab-group", {
@@ -79,22 +78,25 @@ Vue.component("tab-modal-subtab-group", {
     <div
       class="c-hide-modal-all-subtab-container l-hide-modal-subtab-container"
       :style="styleObjectRow"
-      v-if="tab.isUnlocked">
-        <div :class="classObjectButton"
-          @click="toggleVisibility()">
-            {{ tabName }}
-            <br>
-            (all subtabs)
-        </div>
+      v-if="tab.isUnlocked"
+    >
+      <div
+        :class="classObjectButton"
+        @click="toggleVisibility()"
+      >
+        {{ tabName }}
         <br>
-        <tab-modal-subtab-button
-          v-for="subtab in subtabs"
-          v-if="subtab.isUnlocked"
-          :key="getKey(subtab)"
-          :subtab="subtab"
-          :tab="tab"/>
-    </div>
-  `
+        (all subtabs)
+      </div>
+      <br>
+      <tab-modal-subtab-button
+        v-for="subtab in subtabs"
+        v-if="subtab.isUnlocked"
+        :key="getKey(subtab)"
+        :subtab="subtab"
+        :tab="tab"
+      />
+    </div>`
 });
 
 Vue.component("tab-modal-subtab-button", {
@@ -133,9 +135,10 @@ Vue.component("tab-modal-subtab-button", {
     },
   },
   template: `
-    <div :class="classObject"
-      @click="toggleVisibility()">
-        {{ subtab.name }}
-    </div>
-  `
+    <div
+      :class="classObject"
+      @click="toggleVisibility()"
+    >
+      {{ subtab.name }}
+    </div>`
 });

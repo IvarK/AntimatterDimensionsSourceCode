@@ -34,8 +34,8 @@ Vue.component("modal-automator-script-delete", {
       this.emitClose();
     },
   },
-  template:
-    `<div class="c-modal-message l-modal-content--centered">
+  template: `
+    <div class="c-modal-message l-modal-content--centered">
       <h2>Delete this script</h2>
       <div class="c-modal-message__text">
         Please confirm your desire to delete this Automator script.
@@ -43,13 +43,17 @@ Vue.component("modal-automator-script-delete", {
       </div>
       <div class="l-options-grid__row">
         <primary-button
-            class="o-primary-btn--width-medium c-modal-message__okay-btn"
-            @click="handleNoClick"
-            >Cancel</primary-button>
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          @click="handleNoClick"
+        >
+          Cancel
+        </primary-button>
         <primary-button
-            class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-            @click="handleYesClick"
-            >Delete</primary-button>
+          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+          @click="handleYesClick"
+        >
+          Delete
+        </primary-button>
       </div>
     </div>`
 });

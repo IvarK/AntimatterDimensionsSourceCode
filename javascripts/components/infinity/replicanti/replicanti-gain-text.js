@@ -76,5 +76,5 @@ Vue.component("replicanti-gain-text", {
       }
     }
   },
-  template: `<p>{{remainingTimeText}}<br>{{galaxyText}}</p>`
+  template: `<p>{{ remainingTimeText }}<br>{{ galaxyText }}</p>`
 });

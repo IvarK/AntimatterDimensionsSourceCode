@@ -227,7 +227,9 @@ Vue.component("alchemy-tab", {
           v-if="realityCreationVisible"
           class="o-primary-btn--subtab-option"
           onclick="Modal.realityGlyph.show()"
-        >View Reality Glyph creation</primary-button>
+        >
+          View Reality Glyph creation
+        </primary-button>
       </div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
       Your Alchemy Resource cap, based on the Glyph level of your last 10 Realities: {{ formatInt(estimatedCap) }}.

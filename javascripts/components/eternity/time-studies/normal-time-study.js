@@ -31,8 +31,8 @@ Vue.component("normal-time-study", {
     update() {
       this.showCost = this.study.id !== 192 || !Enslaved.isRunning;
       const canBeBought = typeof this.study.config.requirement === "function"
-                          ? this.study.config.requirement()
-                          : TimeStudy(this.study.config.requirement).isBought;
+        ? this.study.config.requirement()
+        : TimeStudy(this.study.config.requirement).isBought;
 
       this.showSTCost = !canBeBought && V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK) &&
                         this.study.config.requirementV !== undefined &&
@@ -40,9 +40,9 @@ Vue.component("normal-time-study", {
                         this.study.STCost !== undefined;
     },
   },
-  template:
-    `<time-study :setup="setup" :showCost="showCost" :showSTCost="showSTCost">
-      <hint-text type="studies" class="l-hint-text--time-study">{{hintText}}</hint-text>
+  template: `
+    <time-study :setup="setup" :showCost="showCost" :showSTCost="showSTCost">
+      <hint-text type="studies" class="l-hint-text--time-study">{{ hintText }}</hint-text>
       <description-display :config="study.config" />
       <effect-display br :config="study.config" />
     </time-study>`

@@ -52,45 +52,54 @@ Vue.component("challenges-header", {
     },
   },
   template: `
-  <div class="l-challenges-tab__header">
-    <div class="c-subtab-option-container" v-if="isShowAllVisible || isAutoECVisible || isInChallenge">
-      <primary-button-on-off v-if="isShowAllVisible"
-        v-model="showAllChallenges"
-        class="o-primary-btn--subtab-option"
-        text="Show all known challenges:"
-      />
-      <primary-button-on-off v-if="isAutoECVisible"
-        v-model="autoEC"
-        class="o-primary-btn--subtab-option"
-        text="Auto Eternity Challenges:"
-      />
-      <primary-button v-if="isInChallenge"
-        class="o-primary-btn--subtab-option"
-        @click="restartChallenge"
-      >
-        Restart Challenge
-      </primary-button>
-      <primary-button v-if="isInChallenge"
-        class="o-primary-btn--subtab-option"
-        @click="exitChallenge"
-      >
-        Exit Challenge
-      </primary-button>
-    </div>
-    <div>
-      Some Normal Challenges have requirements to be able to run that challenge.
-    </div>
-    <div v-if="autoEC && isAutoECVisible">
-      Eternity Challenges are automatically completed sequentially, requiring all previous
-      Eternity Challenges to be fully completed before any progress is made.
-    </div>
-    <div v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
-         class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info">
-      <div class="l-challenges-tab__auto-ec-timers">
-        <span v-if="remainingECTiers > 1">Next Auto Eternity Challenge completion in: {{untilNextEC}}</span>
-        <span>All Auto Eternity Challenge completions in: {{untilAllEC}}</span>
+    <div class="l-challenges-tab__header">
+      <div class="c-subtab-option-container" v-if="isShowAllVisible || isAutoECVisible || isInChallenge">
+        <primary-button-on-off
+          v-if="isShowAllVisible"
+          v-model="showAllChallenges"
+          class="o-primary-btn--subtab-option"
+          text="Show all known challenges:"
+        />
+        <primary-button-on-off
+          v-if="isAutoECVisible"
+          v-model="autoEC"
+          class="o-primary-btn--subtab-option"
+          text="Auto Eternity Challenges:"
+        />
+        <primary-button
+          v-if="isInChallenge"
+          class="o-primary-btn--subtab-option"
+          @click="restartChallenge"
+        >
+          Restart Challenge
+        </primary-button>
+        <primary-button
+          v-if="isInChallenge"
+          class="o-primary-btn--subtab-option"
+          @click="exitChallenge"
+        >
+          Exit Challenge
+        </primary-button>
       </div>
-    </div>
-  </div>
-  `
+      <div>
+        Some Normal Challenges have requirements to be able to run that challenge.
+      </div>
+      <div v-if="autoEC && isAutoECVisible">
+        Eternity Challenges are automatically completed sequentially, requiring all previous
+        Eternity Challenges to be fully completed before any progress is made.
+      </div>
+      <div
+        v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
+        class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info"
+      >
+        <div class="l-challenges-tab__auto-ec-timers">
+          <span v-if="remainingECTiers > 1">
+            Next Auto Eternity Challenge completion in: {{ untilNextEC }}
+          </span>
+          <span>
+            All Auto Eternity Challenge completions in: {{ untilAllEC }}
+          </span>
+        </div>
+      </div>
+    </div>`
 });

@@ -60,8 +60,8 @@ Vue.component("dilation-upgrade", {
       }
     }
   },
-  template:
-    `<div class="l-spoon-btn-group">
+  template: `
+    <div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()" :ach-tooltip="timeEstimate">
         <description-display
           :config="upgrade.config"

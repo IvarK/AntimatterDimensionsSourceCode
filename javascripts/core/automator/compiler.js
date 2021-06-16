@@ -286,7 +286,7 @@
     comparison(ctx) {
       super.comparison(ctx);
       if (!ctx.compareValue || ctx.compareValue[0].recoveredNode ||
-        ctx.compareValue.length != 2 || ctx.compareValue[1].recoveredNode) {
+        ctx.compareValue.length !== 2 || ctx.compareValue[1].recoveredNode) {
         this.addError(ctx, "Missing value for comparison");
       }
       if (!ctx.ComparisonOperator || ctx.ComparisonOperator[0].isInsertedInRecovery) {
@@ -367,9 +367,7 @@
         cv.children.AutomatorCurrency ? cv.children.AutomatorCurrency[0].tokenType.$getter : () => cv.children.$value
       ));
       const compareFun = ctx.ComparisonOperator[0].tokenType.$compare;
-      return () => {
-        return compareFun(getters[0](), getters[1]());
-      };
+      return () => compareFun(getters[0](), getters[1]());
     }
 
     block(ctx) {
@@ -396,7 +394,7 @@
         // eslint-disable-next-line no-loop-func
         this[cmd.id] = (ctx, output) => {
           if (ownMethod && ownMethod !== super[cmd.id]) ownMethod.call(this, ctx, output);
-          let block = blockify(ctx, this);
+          const block = blockify(ctx, this);
           output.push({
             ...block,
             id: UIID.next()
@@ -408,21 +406,30 @@
 
     comparison(ctx) {
       const isCurrency = ctx.compareValue.map(cv => Boolean(cv.children.AutomatorCurrency));
+      // eslint-disable-next-line no-bitwise
       if (!(isCurrency[0] ^ isCurrency[1])) {
         throw new Error("arbitrary comparisons are not supported in block mode yet");
       }
       const currencyIndex = isCurrency[0] ? 0 : 1;
-      const flipped = currencyIndex == 1;
+      const flipped = currencyIndex === 1;
       const valueChildren = ctx.compareValue[1 - currencyIndex].children;
       const isDecimalValue = Boolean(valueChildren.$value);
       const value = isDecimalValue ? valueChildren.$value.toString() : valueChildren.NumberLiteral[0].image;
       let operator = ctx.ComparisonOperator[0].image;
       if (flipped) {
         switch (operator) {
-          case ">": operator = "<"; break;
-          case "<": operator = ">"; break;
-          case ">=": operator = "<="; break;
-          case "<=": operator = ">="; break;
+          case ">":
+            operator = "<";
+            break;
+          case "<":
+            operator = ">";
+            break;
+          case ">=":
+            operator = "<=";
+            break;
+          case "<=":
+            operator = ">=";
+            break;
         }
       }
       return {
@@ -472,13 +479,13 @@
     const tokens = lexResult.tokens;
 
     AutomatorGrammar.parser.input = tokens;
-    const parseResult = AutomatorGrammar.parser.script()
+    const parseResult = AutomatorGrammar.parser.script();
     const validator = new Validator(input);
-    validator.visit(parseResult)
-    if (lexResult.errors.length == 0 && AutomatorGrammar.parser.errors.length == 0 && validator.errors.length == 0) {
-      const b = new Blockifier()
-      let blocks = b.visit(parseResult)
-      return blocks
+    validator.visit(parseResult);
+    if (lexResult.errors.length === 0 && AutomatorGrammar.parser.errors.length === 0 && validator.errors.length === 0) {
+      const b = new Blockifier();
+      const blocks = b.visit(parseResult);
+      return blocks;
     }
 
     return null;
@@ -494,7 +501,7 @@
     validator.visit(parseResult);
     validator.addLexerErrors(lexResult.errors);
     validator.addParserErrors(parser.errors, tokens);
-    return validator
+    return validator;
   }
 
   AutomatorGrammar.validateLine = validateLine;

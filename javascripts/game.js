@@ -402,7 +402,8 @@ function getGameSpeedupForDisplay() {
 // rate.
 // TODO: Clean this up, remove the disable line
 // eslint-disable-next-line complexity
-function gameLoop(diff, options = {}) {
+function gameLoop(passDiff, options = {}) {
+  let diff = passDiff;
   PerformanceStats.start("Frame Time");
   PerformanceStats.start("Game Update");
   EventHub.dispatch(GAME_EVENT.GAME_TICK_BEFORE);

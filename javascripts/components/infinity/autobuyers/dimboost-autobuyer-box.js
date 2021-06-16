@@ -23,13 +23,16 @@ Vue.component("dimboost-autobuyer-box", {
       this.limitDimBoosts = this.autobuyer.limitDimBoosts;
     }
   },
-  template:
-    `<autobuyer-box :autobuyer="autobuyer" :showInterval="!isBuyMaxUnlocked" name="Automatic Dimension Boosts">
+  template: `
+    <autobuyer-box :autobuyer="autobuyer" :showInterval="!isBuyMaxUnlocked" name="Automatic Dimension Boosts">
       <autobuyer-interval-button slot="intervalSlot" :autobuyer="autobuyer" />
       <template :slot=" isBuyMaxUnlocked ? 'toggleSlot' : 'intervalSlot' " style="margin-top: 1.2rem;">
-        <div class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text" @click="limitDimBoosts = !limitDimBoosts" 
-        style="margin-top: 1.2rem;">
-          <input type="checkbox" :checked="limitDimBoosts"/>
+        <div
+          class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
+          style="margin-top: 1.2rem;"
+          @click="limitDimBoosts = !limitDimBoosts"
+        >
+          <input type="checkbox" :checked="limitDimBoosts" />
           <span>Limit Dimension Boosts to:</span>
         </div>
         <autobuyer-input

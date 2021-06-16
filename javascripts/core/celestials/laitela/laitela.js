@@ -15,10 +15,10 @@ const Laitela = {
   },
   get darkEnergyPerSecond() {
     return Array.range(1, 4)
-    .map(n => MatterDimension(n))
-    .filter(d => d.amount.gt(0))
-    .map(d => d.powerDE * 1000 / d.interval)
-    .sum();
+      .map(n => MatterDimension(n))
+      .filter(d => d.amount.gt(0))
+      .map(d => d.powerDE * 1000 / d.interval)
+      .sum();
   },
   has(info) {
     // eslint-disable-next-line no-bitwise
@@ -95,7 +95,7 @@ const Laitela = {
   },
   get darkMatterMultGain() {
     return Decimal.pow(Currency.darkMatter.value.dividedBy(this.annihilationDMRequirement)
-          .plus(1).log10(), 1.5).toNumber();
+      .plus(1).log10(), 1.5).toNumber();
   },
   get darkMatterMult() {
     return this.celestial.darkMatterMult;
@@ -155,11 +155,11 @@ const Laitela = {
     // Note that _tier is 0-indexed, so calling with maxTier = 3 will buy up to and including DM3 for example
     const unlockedDimensions = MatterDimensionState.list.filter(d => d.amount.gt(0) && d._tier < maxTier);
     const upgradeInfo = unlockedDimensions
-    .map(d => [
-      [d.rawIntervalCost, d.intervalCostIncrease, d.maxIntervalPurchases, x => d.buyManyInterval(x)],
-      [d.rawPowerDMCost, d.powerDMCostIncrease, Infinity, x => d.buyManyPowerDM(x)],
-      [d.rawPowerDECost, d.powerDECostIncrease, Infinity, x => d.buyManyPowerDE(x)]])
-    .flat(1);
+      .map(d => [
+        [d.rawIntervalCost, d.intervalCostIncrease, d.maxIntervalPurchases, x => d.buyManyInterval(x)],
+        [d.rawPowerDMCost, d.powerDMCostIncrease, Infinity, x => d.buyManyPowerDM(x)],
+        [d.rawPowerDECost, d.powerDECostIncrease, Infinity, x => d.buyManyPowerDE(x)]])
+      .flat(1);
     const buy = function(upgrade, purchases) {
       upgrade[3](purchases);
       upgrade[0] = upgrade[0].times(Decimal.pow(upgrade[1], purchases));
@@ -195,12 +195,12 @@ const Laitela = {
 
     if (this.darkMatterMultGain >= laitela.autoAnnihilationSetting && this.darkMatterMult > 1 &&
       laitela.automation.annihilation) {
-        this.annihilate();
+      this.annihilate();
     }
 
     if (Singularity.capIsReached && laitela.automation.singularity &&
       Currency.darkEnergy.value / Singularity.cap >= SingularityMilestone.autoCondense.effectValue) {
-        Singularity.perform();
+      Singularity.perform();
     }
   },
   reset() {

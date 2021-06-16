@@ -26,13 +26,12 @@ Vue.component("game-ui", {
         <component :is="uiLayout">
           <component :is="page" />
         </component>
-        <modal-popup v-if="view.modal.current" :modal="view.modal.current"/>
+        <modal-popup v-if="view.modal.current" :modal="view.modal.current" />
         <modal-progress-bar v-if="view.modal.progressBar" />
         <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
         <help-me />
       </div>
       <div id="notification-container" class="l-notification-container" />
       <tt-shop v-if="view.subtab === 'studies'" class="l-time-studies-tab__tt-shop" />
-    </div>
-  `
+    </div>`
 });

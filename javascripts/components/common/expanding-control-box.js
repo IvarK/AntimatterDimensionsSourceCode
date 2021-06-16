@@ -24,26 +24,6 @@ Vue.component("expanding-control-box", {
       openHeight: "1em",
     };
   },
-  computed: {
-    states: () => ({
-      CLOSED: { name: "CLOSED", transition: false, visibility: false, height: "closed" },
-      OPEN_REQUESTED: { name: "OPEN_REQUESTED", transition: true, visibility: true, height: "closed" },
-      OPENING: { name: "OPENING", transition: true, visibility: true, height: "open" },
-      OPEN: { name: "OPEN", transition: false, visibility: true, height: null },
-      CLOSE_REQUESTED: { name: "CLOSE_REQUESTED", transition: false, visibility: true, height: "open" },
-      CLOSING: { name: "CLOSING", transition: true, visibility: true, height: "closed" },
-    }),
-    maxHeight() {
-      if (this.state.height === "open") return this.openHeight;
-      return this.state.height === "closed" ? this.closedHeight : null;
-    },
-    containerStyle() {
-      return {
-        maxHeight: this.maxHeight,
-        visibility: this.state.visibility,
-      };
-    }
-  },
   watch: {
     state(newState) {
       this.processRequest(newState, this.openRequest);
@@ -69,6 +49,36 @@ Vue.component("expanding-control-box", {
     openRequest(newOpen) {
       this.processRequest(this.state, newOpen);
     },
+  },
+  created() {
+    this.state = this.states.CLOSED;
+    this.$on("openrequest", () => this.openRequest = true);
+  },
+  mounted() {
+    // Set the root and container elements to match the height of the button
+    this.updateHeightInfo();
+    this.$refs.root.style.height = this.closedHeight;
+    this.updateBaseWidth();
+  },
+  computed: {
+    states: () => ({
+      CLOSED: { name: "CLOSED", transition: false, visibility: false, height: "closed" },
+      OPEN_REQUESTED: { name: "OPEN_REQUESTED", transition: true, visibility: true, height: "closed" },
+      OPENING: { name: "OPENING", transition: true, visibility: true, height: "open" },
+      OPEN: { name: "OPEN", transition: false, visibility: true, height: null },
+      CLOSE_REQUESTED: { name: "CLOSE_REQUESTED", transition: false, visibility: true, height: "open" },
+      CLOSING: { name: "CLOSING", transition: true, visibility: true, height: "closed" },
+    }),
+    maxHeight() {
+      if (this.state.height === "open") return this.openHeight;
+      return this.state.height === "closed" ? this.closedHeight : null;
+    },
+    containerStyle() {
+      return {
+        maxHeight: this.maxHeight,
+        visibility: this.state.visibility,
+      };
+    }
   },
   methods: {
     processRequest(state, request) {
@@ -102,38 +112,31 @@ Vue.component("expanding-control-box", {
     },
   },
   template: `
-  <!-- The root element is an empty box of fixed size with position relative.
-      On top of that, we have a container element (which has both the label and the control)
-      The container element hides the control via clipping (and visibility). The thing you
-      click to show hide is at the top of the container element. -->
-  <div ref="root" class="l-expanding-control-box">
-    <div ref="container"
-         :class="['l-expanding-control-box__container',
-                  containerClass,
-                  {'l-expanding-control-box__container--transition': state.transition }]"
-         :style="containerStyle"
-         @transitionend="transitionEnd">
-      <div v-if="!$slots.header"
-           ref="expandButton"
-           class="l-expanding-control-box__button"
-           @click="openRequest=!openRequest">
-        {{label}} ▼
+    <!-- The root element is an empty box of fixed size with position relative.
+        On top of that, we have a container element (which has both the label and the control)
+        The container element hides the control via clipping (and visibility). The thing you
+        click to show hide is at the top of the container element. -->
+    <div ref="root" class="l-expanding-control-box">
+      <div
+        ref="container"
+        :class="['l-expanding-control-box__container',
+          containerClass,
+          {'l-expanding-control-box__container--transition': state.transition }]"
+        :style="containerStyle"
+        @transitionend="transitionEnd"
+      >
+        <div
+          v-if="!$slots.header"
+          ref="expandButton"
+          class="l-expanding-control-box__button"
+          @click="openRequest=!openRequest"
+        >
+          {{ label }} ▼
+        </div>
+        <div v-else ref="expandButton" @click="openRequest=!openRequest">
+          <slot name="header" />
+        </div>
+        <div ref="dropdown"><slot name="dropdown" /></div>
       </div>
-      <div v-else ref="expandButton" @click="openRequest=!openRequest">
-        <slot name="header" />
-      </div>
-      <div ref="dropdown"><slot name="dropdown" /></div>
-    </div>
-  </div>
-  `,
-  mounted() {
-    // Set the root and container elements to match the height of the button
-    this.updateHeightInfo();
-    this.$refs.root.style.height = this.closedHeight;
-    this.updateBaseWidth();
-  },
-  created() {
-    this.state = this.states.CLOSED;
-    this.$on("openrequest", () => this.openRequest = true);
-  }
+    </div>`
 });

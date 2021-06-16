@@ -109,12 +109,12 @@ GameStorage.devMigrations = {
       player.wormhole = [
         player.wormhole,
         {
-        speed: 60 * 6,
-        power: 90,
-        duration: 7,
-        phase: 0,
-        active: false,
-        unlocked: false,
+          speed: 60 * 6,
+          power: 90,
+          duration: 7,
+          phase: 0,
+          active: false,
+          unlocked: false,
         },
         {
           speed: 6 * 6,
@@ -521,7 +521,7 @@ GameStorage.devMigrations = {
           effectCount: 0,
           effectChoices: t.effects.mapToObject(e => e.id, () => false),
           effectScores: t.effects.mapToObject(e => e.id, () => 0),
-      }));
+        }));
       for (const type of generatedTypes) {
         newSettings[type].rarityThreshold = oldSettings[type].rarityThreshold;
         newSettings[type].scoreThreshold = oldSettings[type].scoreThreshold;
@@ -950,6 +950,13 @@ GameStorage.devMigrations = {
     },
     GameStorage.migrations.convertTimeTheoremPurchases,
     GameStorage.migrations.infinitiedConversion,
+    player => {
+      delete player.saveOverThresholdFlag;
+      delete player.saveOverThresholdFlagModalDisplayed;
+    },
+    player => {
+      if (!Autobuyer.reality.isUnlocked) player.auto.reality.isActive = false;
+    },
   ],
 
   patch(player) {

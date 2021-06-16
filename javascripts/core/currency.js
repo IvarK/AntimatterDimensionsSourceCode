@@ -220,7 +220,7 @@ Currency.antimatter = new class extends DecimalCurrency {
 
   get productionPerSecond() {
     return NormalChallenge(12).isRunning ? AntimatterDimension(1).productionPerRealSecond
-    : AntimatterDimension(1).productionPerRealSecond.plus(AntimatterDimension(2).productionPerRealSecond);
+      : AntimatterDimension(1).productionPerRealSecond.plus(AntimatterDimension(2).productionPerRealSecond);
   }
 
   get startingValue() {

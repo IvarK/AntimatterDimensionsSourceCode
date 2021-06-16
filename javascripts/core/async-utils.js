@@ -77,6 +77,6 @@ const Async = {
       remaining = this.runForTime(fun, remaining, config);
       if (config.asyncProgress) config.asyncProgress(maxIter - remaining);
     } while (remaining > 0);
-    if (config.asyncExit) config.asyncExit()
+    if (config.asyncExit) config.asyncExit();
   }
 };

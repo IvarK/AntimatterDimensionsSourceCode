@@ -220,11 +220,11 @@ dev.eternify = function() {
 };
 
 dev.dilate = function() {
-  dilationAnimation();
+  animateAndDilate();
 };
 
 dev.undilate = function() {
-  undilationAnimation();
+  animateAndUndilate();
 };
 
 dev.realize = function() {

@@ -66,22 +66,28 @@ Vue.component("normal-achievement", {
       this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 500);
     }
   },
-  template:
-    `<div
+  template: `
+    <div
       :class="classObject"
       :style="styleObject"
       @mouseenter="onMouseEnter"
       @mouseleave="onMouseLeave"
     >
-      <hint-text type="achievements" class="l-hint-text--achievement">{{id}}</hint-text>
+      <hint-text type="achievements" class="l-hint-text--achievement">
+        {{ id }}
+      </hint-text>
       <div class="o-achievement__tooltip">
-        <div class="o-achievement__tooltip__name">{{ config.name }} ({{ id }})</div>
-        <div class="o-achievement__tooltip__description">{{ config.description }}</div>
+        <div class="o-achievement__tooltip__name">
+          {{ config.name }} ({{ id }})
+        </div>
+        <div class="o-achievement__tooltip__description">
+          {{ config.description }}
+        </div>
         <div v-if="config.reward" class="o-achievement__tooltip__reward">
           Reward: {{ config.reward }}
           <effect-display br v-if="config.formatEffect" :config="config" />
         </div>
       </div>
       <div v-if="showUnlockState" :class="indicatorClassObject" v-html="indicator"></div>
-     </div>`
+    </div>`
 });

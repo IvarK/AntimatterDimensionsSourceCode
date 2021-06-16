@@ -55,8 +55,8 @@ then second, and so on until the 8th Antimatter Dimension, and then buy max Tick
 <br>
 <br>
 <b>Dimension base prices:</b> ${Array.range(1, 8)
-  .map(tier => format(AntimatterDimension(tier)._baseCost, 2, 2))
-  .join(", ")}
+    .map(tier => format(AntimatterDimension(tier)._baseCost, 2, 2))
+    .join(", ")}
 <br>
 <b>Base per ${formatInt(10)} bought dimension price increases:</b> ${Array.range(1, 8)
   .map(tier => format(AntimatterDimension(tier)._baseCostMultiplier, 2, 2))
@@ -135,8 +135,8 @@ another ${formatInt(60)} more.
 Distant Galaxy scaling: Above ${formatInt(100)} Antimatter Galaxies the cost increase between Galaxies will increase by
 ${formatInt(2)} per Galaxy, making the next Galaxy cost ${formatInt(62)} more, then ${formatInt(64)} more, etc.
 <br>
-Remote Galaxy scaling: Above ${formatInt(800)} Antimatter Galaxies, the <i>total</i> cost increases by another
-${formatPercents(0.002, 1)} per Galaxy, on top of Distant scaling.
+Remote Galaxy scaling: Above ${formatInt(REMOTE_SCALING_START)} Antimatter Galaxies, the <i>total</i> cost
+increases by another ${formatPercents(0.002, 1)} per Galaxy, on top of Distant scaling.
 <br>
 <br>
 <b>Hotkey: G</b>
@@ -330,20 +330,20 @@ of Infinity Dimensions doesn't carry between crunches, all the multipliers you g
 <br>
 <br>
 <b>Infinity Dimension unlock thresholds (antimatter):</b> ${Array.range(1, 8)
-  .map(tier => formatPostBreak(InfinityDimension(tier)._unlockRequirement))
-  .join(", ")}
+    .map(tier => formatPostBreak(InfinityDimension(tier)._unlockRequirement))
+    .join(", ")}
 <br>
 <b>Infinity Dimension purchase multipliers:</b> ${Array.range(1, 8)
-  .map(tier => format(InfinityDimension(tier)._powerMultiplier))
-  .join(", ")}
+    .map(tier => format(InfinityDimension(tier)._powerMultiplier))
+    .join(", ")}
 <br>
 <b>Infinity Dimension base prices (IP):</b> ${Array.range(1, 8)
-  .map(tier => format(InfinityDimension(tier)._baseCost))
-  .join(", ")}
+    .map(tier => format(InfinityDimension(tier)._baseCost))
+    .join(", ")}
 <br>
 <b>Infinity Dimension price increases:</b> ${Array.range(1, 8)
-  .map(tier => format(InfinityDimension(tier)._costMultiplier))
-  .join(", ")}
+    .map(tier => format(InfinityDimension(tier)._costMultiplier))
+    .join(", ")}
 <br>
 <br>
 Instead of antimatter, the First Infinity Dimension produces Infinity Power, which translates to a multiplier applied
@@ -366,7 +366,7 @@ amount of antimatter before you can attempt them.
 <br>
 <br>
 <b>Infinity Challenge unlock thresholds:</b> ${GameDatabase.challenges.infinity
-  .map(ic => formatPostBreak(ic.unlockAM)).join(", ")}
+    .map(ic => formatPostBreak(ic.unlockAM)).join(", ")}
 `,
       isUnlocked: () => Autobuyer.bigCrunch.hasMaxedInterval || PlayerProgress.eternityUnlocked(),
       tags: ["rewards", "break", "ic", "midgame"],
@@ -421,7 +421,7 @@ Eternity Point gain scales similarly to Infinity Point gain, but scaling off of 
 The base amount of EP gained at ${formatPostBreak(Number.MAX_VALUE, 2)} IP is ~${format(1.62, 2, 2)} EP, multiplied by
 ${formatInt(5)} for every factor of ${formatPostBreak(Number.MAX_VALUE, 2)} more IP you have. This is always rounded
 down, which means that you will get ${formatInt(1)} EP at ${formatPostBreak(Number.MAX_VALUE, 2)} IP but will not reach
-${formatInt(2)} EP until ${formatPostBreak(new Decimal("1e349"))}.
+${formatInt(2)} EP until ${formatPostBreak("1e349")}.
 <b>Hotkey: E</b> will Eternity.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
@@ -464,11 +464,13 @@ upgrades to your multipliers you purchased.
 <br>
 <br>
 Each threshold to gain another Tickspeed upgrade is ${formatPercents(0.33)} more Time Shards than the previous,
-or ${formatPercents(0.25)} with the relevant time study. After ${formatInt(300000)} upgrades, each successive free
-Tickspeed upgrade will start counting as an additional ${format(0.1, 1, 1)} upgrades for the purposes of calculating
-shard thresholds. For example, your ${formatInt(300010)}th upgrade will require
-${format(1.33, 2, 2)}<sup>${formatInt(2)}</sup> (or ${format(1.25, 2, 2)}<sup>${formatInt(2)}</sup>) times more
-shards than your ${formatInt(300009)}th upgrade.
+or ${formatPercents(0.25)} with the relevant time study. After ${formatInt(FreeTickspeed.softcap)} upgrades, the
+multiplier between each successive free Tickspeed upgrade will gradually increase at a rate of ~${formatX(1.35, 0, 2)}
+per ${formatInt(50000)} upgrades (${formatX(1.000006, 0, 6)} per upgrade). For example, your
+${formatInt(FreeTickspeed.softcap + 50001)}st upgrade will require
+${format(1.33, 2, 2)}×${format(1.35, 2, 2)}=${format(1.33 * 1.35, 2, 2)}
+(or ${format(1.25, 2, 2)}×${format(1.35, 2, 2)}=${format(1.25 * 1.35, 2, 2)}) times more
+shards than your ${formatInt(FreeTickspeed.softcap + 50000)}th upgrade.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["dims", "td", "shards", "eternity", "midgame"],
@@ -515,7 +517,7 @@ the middle of an Eternity.
 <br>
 <b>Costs multipliers per purchase:</b>
 <br>
-<b>Antimatter:</b> ${formatPostBreak(new Decimal("1e20000"))}
+<b>Antimatter:</b> ${formatPostBreak("1e20000")}
 <br>
 <b>Infinity Points:</b> ${format(1e100)}
 <br>
@@ -580,7 +582,7 @@ can be repeatedly purchased as many times as you can afford them.
     }, {
       name: "Reality",
       info: () => `
-When you reach ${format(5e9)} time theorems, ${formatPostBreak(new Decimal("1e4000"))} EP, and have completed the first
+When you reach ${format(5e9)} time theorems, ${formatPostBreak("1e4000")} EP, and have completed the first
 ${formatInt(13)} rows of Achievements, you will be able to purchase the Time Study that unlocks Reality.
 Unlocking it opens a new tab, where you can find the button to make a new Reality. Starting a new Reality
 will reset everything you have done so far except challenge times and total antimatter, but in exchange gives
@@ -600,7 +602,7 @@ currency that can be spent in the Perks subtab on different Perks.
 <br>
 Reality Machines scale purely off of EP, and the Reality button will tell you how much EP you need in order to gain
 the next one. The first ${formatInt(10)} RM scale linearly in the exponent between
-${formatPostBreak(new Decimal("1e4000"))} EP and ${formatPostBreak(Decimal.pow(10, 16000 / 3))} EP, and then past that
+${formatPostBreak("1e4000")} EP and ${formatPostBreak(Decimal.pow(10, 16000 / 3))} EP, and then past that
 RM = ${formatInt(1000)}<sup>log<sub>${formatInt(10)}</sub>(EP)/${formatInt(4000)}-${formatInt(1)}</sup>.
 <br>
 <br>
@@ -779,8 +781,8 @@ When you reach ${format(TERESA_UNLOCKS.RUN.price)} RM inside of the container, y
 <br>
 When you complete Teresa's Reality,
 ${Teresa.runCompleted
-  ? "your Glyph Sacrifice is multiplied based on the amount of antimatter gained during the run"
-  : "<div style='color: var(--color-bad);'>(complete Teresa's Reality to see this text)</div>"}.
+    ? "your Glyph Sacrifice is multiplied based on the amount of antimatter gained during the run"
+    : "<div style='color: var(--color-bad);'>(complete Teresa's Reality to see this text)</div>"}.
 Completing Teresa's Reality is only part of the story; you need to keep pouring RM in order to progress. Once
 you are at ${format(TERESA_UNLOCKS.EFFARIG.price)} RM in the container, you will unlock the next Celestial.
 `,
@@ -807,9 +809,9 @@ allow you to filter them based on their effects and rarity when you are doing fu
 Effarig's final unlock is their own Reality at ${format(GameDatabase.celestials.effarig.unlocks.run.cost)} Relic
 Shards.
 ${EffarigUnlock.run.isUnlocked
-  ? "Their Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer " +
+    ? "Their Reality is divided into three layers: Infinity, Eternity, and Reality. You must complete each layer " +
     "before getting access to the next one. Completing Effarig's Eternity unlocks the next Celestial."
-  : "<div style='color: var(--color-bad);'>(unlock Effarig's Reality to see this text)</div>"
+    : "<div style='color: var(--color-bad);'>(unlock Effarig's Reality to see this text)</div>"
 }
 <br>
 <br>
@@ -817,10 +819,10 @@ Completing Effarig's Reality unlocks
 ${EffarigUnlock.reality.isUnlocked
   // Can't really make a nested template here without generally making a mess of the code
   // eslint-disable-next-line prefer-template
-  ? "a new Glyph type: <div style='color: var(--color-bad);'>Effarig</div> Glyphs. Effarig Glyphs have " +
+    ? "a new Glyph type: <div style='color: var(--color-bad);'>Effarig</div> Glyphs. Effarig Glyphs have " +
     formatInt(7) + " different possible effects, which you can view in the \"Advanced Mode\" settings. You can only " +
     "have one Effarig Glyph equipped at a time, and they can still only have at most " + formatInt(4) + " effects."
-  : "<div style='color: var(--color-bad);'>(complete Effarig's Reality to see this text)</div>"}
+    : "<div style='color: var(--color-bad);'>(complete Effarig's Reality to see this text)</div>"}
 `,
       isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
       tags: ["glyph", "sacrifice", "shards", "reality", "spectralflame", "lategame", "endgame"],
@@ -919,8 +921,8 @@ by ${format(1e5)} Tickspeed upgrades.
 At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years, you are able to finally unlock
 their Reality. The reward for completing The Enslaved Ones' Reality is
 ${Enslaved.isCompleted
-  ? "unlocking Tesseracts, which have their own How To Play entry."
-  : "<div style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see this text)</div>"}
+    ? "unlocking Tesseracts, which have their own How To Play entry."
+    : "<div style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see this text)</div>"}
 The Enslaved Ones will not directly unlock the next Celestial.
 `,
       isUnlocked: () => EffarigUnlock.eternity.isUnlocked,
@@ -1020,26 +1022,26 @@ improve your glyph effects once you reach certain thresholds in glyph sacrifice 
 <br>
 At level ${formatInt(2)}, Effarig unlocks
 ${Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)
-  ? "a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually removing almost " +
+    ? "a new mechanic called Glyph Alchemy and also makes Effarig glyphs stronger while gradually removing almost " +
     "all random elements of glyph generation. This also has its own How To Play entry."
-  : "<div style='color: var(--color-bad);'>(unlock Effarig within Ra to see this text)</div>"}
+    : "<div style='color: var(--color-bad);'>(unlock Effarig within Ra to see this text)</div>"}
 <br>
 <br>
 The Enslaved Ones unlocks
 ${Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK)
-  ? "additional mechanics related to charging the Black Holes, as well as making them significantly stronger."
-  : "<div style='color: var(--color-bad);'>(unlock The Enslaved Ones within Ra to see this text)</div>"}
+    ? "additional mechanics related to charging the Black Holes, as well as making them significantly stronger."
+    : "<div style='color: var(--color-bad);'>(unlock The Enslaved Ones within Ra to see this text)</div>"}
 <br>
 <br>
 V unlocks
 ${Ra.has(RA_UNLOCKS.V_UNLOCK)
-  ? "Triad Studies, which are Time Studies near the bottom of the tree which cost Space Theorems. " +
+    ? "Triad Studies, which are Time Studies near the bottom of the tree which cost Space Theorems. " +
     "They also unlock a smaller set of more difficult V Achievements to complete for additional Space Theorems."
-  : "<div style='color: var(--color-bad);'>(unlock V within Ra to see this text)</div>"}
+    : "<div style='color: var(--color-bad);'>(unlock V within Ra to see this text)</div>"}
 <br>
 <br>
 Having a level ${formatInt(25000)} Reality Glyph, a total of ${formatInt(100)} Ra levels, and
-${formatPostBreak(new Decimal("1e2000"))} Reality Machines will allow you to unlock the next Celestial.`,
+${formatPostBreak("1e2000")} Reality Machines will allow you to unlock the next Celestial.`,
       isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
       tags: ["reality", "memories", "razenpok", "levels", "glyphs", "lategame", "endgame",
         "effarig", "teresa", "enslaved", "v"],
@@ -1090,7 +1092,7 @@ that the reaction can't proceed due to not having enough of that reagent to get 
       alias: "Lai'tela",
       info: () => `
 Lai'tela is the sixth Celestial, unlocked by having a level ${formatInt(25000)} Reality Glyph,
-a total of ${formatInt(100)} Ra levels, and spending ${formatPostBreak(new Decimal("1e2000"))} Reality Machines.
+a total of ${formatInt(100)} Ra levels, and spending ${formatPostBreak("1e2000")} Reality Machines.
 <br>
 <br>
 When you unlock Lai'tela, your Antimatter Dimensions and Tickspeed upgrades switch to a new mode of production
@@ -1133,12 +1135,12 @@ do in the Reality.
 <br>
 <b>Dark Matter Dimension unlock thresholds (Dark Matter):</b> ${Array.range(1, 4)
   // DM1 is 10 instead of 0 here, so make a special case to display it properly
-  .map(tier => format(tier === 1 ? 0 : MatterDimension(tier).adjustedStartingCost))
-  .join(", ")}
+    .map(tier => format(tier === 1 ? 0 : MatterDimension(tier).adjustedStartingCost))
+    .join(", ")}
 <br>
 <b>Dark Matter Dimension initial interval (seconds):</b> ${Array.range(1, 4)
-  .map(tier => formatInt(Math.pow(4, tier)))
-  .join(", ")}
+    .map(tier => formatInt(Math.pow(4, tier)))
+    .join(", ")}
 `,
       isUnlocked: () => Laitela.isUnlocked,
       tags: ["omsi", "reality", "dark", "matter", "dimensions", "lategame", "endgame", "ascend"],

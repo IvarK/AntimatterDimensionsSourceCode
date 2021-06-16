@@ -6,18 +6,9 @@ Vue.component("dilation-time-study", {
   },
   data() {
     return {
-      showCost: true,
       showRequirement: false,
       requirement: ""
     };
-  },
-  computed: {
-    study() {
-      return this.setup.study;
-    },
-    id() {
-      return this.study.id;
-    }
   },
   created() {
     if (this.id === 1) {
@@ -33,21 +24,28 @@ Vue.component("dilation-time-study", {
       this.showRequirement = true;
     }
   },
+  computed: {
+    study() {
+      return this.setup.study;
+    },
+    id() {
+      return this.study.id;
+    }
+  },
   methods: {
     update() {
       const id = this.id;
-      this.showCost = id !== 6 || !PlayerProgress.realityUnlocked();
       if (id === 1) {
         this.showRequirement = !this.study.isBought && !Perk.bypassECDilation.isBought;
       }
     }
   },
-  template:
-    `<time-study :setup="setup" :showCost="showCost">
+  template: `
+    <time-study :setup="setup">
       <description-display :config="study.config" />
       <template v-if="showRequirement">
         <br>
-        <span>{{requirement}}</span>
+        <span>{{ requirement }}</span>
       </template>
     </time-study>`
 });

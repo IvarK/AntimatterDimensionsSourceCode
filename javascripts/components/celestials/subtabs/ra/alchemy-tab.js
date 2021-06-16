@@ -186,6 +186,7 @@ Vue.component("alchemy-tab", {
         "o-alchemy-reaction-path": this.isUnlocked(reactionArrow),
         "o-alchemy-reaction-path--limited": this.isCapped(reactionArrow) && this.isDisplayed(reactionArrow),
         "o-alchemy-reaction-path--focused": !this.isCapped(reactionArrow) && this.isFocusedReaction(reactionArrow),
+        "o-alchemy-reaction-path--not-focused": !this.isFocusedReaction(reactionArrow) && this.focusedResourceId !== -1
       };
     },
     reactionArrowClass(reactionArrow) {
@@ -226,7 +227,9 @@ Vue.component("alchemy-tab", {
           v-if="realityCreationVisible"
           class="o-primary-btn--subtab-option"
           onclick="Modal.realityGlyph.show()"
-        >View Reality Glyph creation</primary-button>
+        >
+          View Reality Glyph creation
+        </primary-button>
       </div>
       <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
       Your Alchemy Resource cap, based on the Glyph level of your last 10 Realities: {{ formatInt(estimatedCap) }}.

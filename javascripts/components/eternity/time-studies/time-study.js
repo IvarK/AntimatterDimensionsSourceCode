@@ -55,34 +55,34 @@ Vue.component("time-study", {
             case TIME_STUDY_PATH.DARK: return "o-time-study-dark";
             default: return "o-time-study-normal";
           }
-          break;
         case TimeStudyType.ETERNITY_CHALLENGE:
           return "o-time-study-eternity-challenge";
         case TimeStudyType.DILATION:
-          if (this.study.id === 6) return "o-time-study-reality"
+          if (this.study.id === 6) return "o-time-study-reality";
           return "o-time-study-dilation";
         case TimeStudyType.TRIAD:
           return "o-time-study-triad";
       }
+      return "";
     },
     studyClass() {
-      let pathClasses = ""
-      if (!this.isAvailableForPurchase && !this.isBought){
+      let pathClasses = "";
+      if (!this.isAvailableForPurchase && !this.isBought) {
         pathClasses += `${this.pathClass}--unavailable`;
       }
-      if (this.isAvailableForPurchase && !this.isBought){
+      if (this.isAvailableForPurchase && !this.isBought) {
         pathClasses += `${this.pathClass}--available`;
       }
-      if (this.isBought){
+      if (this.isBought) {
         pathClasses += `${this.pathClass}--bought`;
       }
       return pathClasses;
     },
     eternityChallengeAnim() {
-      return this.eternityChallengeRunning ? "o-time-study-eternity-challenge--running" : ""
+      return this.eternityChallengeRunning ? "o-time-study-eternity-challenge--running" : "";
     },
     config() {
-      return {...this.study.config, formatCost: formatInt};
+      return { ...this.study.config, formatCost: value => (value >= 1e6 ? format(value) : formatInt(value)) };
     }
   },
   methods: {
@@ -118,9 +118,9 @@ Vue.component("time-study", {
       />
       <div v-else-if="showSTCost">
         Cost: <span v-if="config.cost">
-          {{formatInt(config.cost)}} {{ "Time Theorem" | pluralize(config.cost, "Time Theorems")}} and
+          {{ formatInt(config.cost) }} {{ "Time Theorem" | pluralize(config.cost, "Time Theorems") }} and
         </span>
-        {{ formatInt(STCost) }} {{ "Space Theorem" | pluralize(STCost, "Space Theorems")}}
+        {{ formatInt(STCost) }} {{ "Space Theorem" | pluralize(STCost, "Space Theorems") }}
       </div>
     </button>`
 });

@@ -149,7 +149,6 @@ GameStorage.migrations = {
       GameStorage.migrations.convertTimeTheoremPurchases(player);
 
       kong.migratePurchases();
-      if (player.eternityPoints.gt("1e6000")) player.saveOverThresholdFlag = true;
     }
   },
 
@@ -721,7 +720,7 @@ GameStorage.migrations = {
   },
 
   migrateIPGen(player) {
-    player.infinityRebuyables.push(player.offlineProd / 5);
+    player.infinityRebuyables[2] = player.offlineProd / 5;
     delete player.offlineProd;
     delete player.offlineProdCost;
   },

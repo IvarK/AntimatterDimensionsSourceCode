@@ -29,8 +29,8 @@ Vue.component("challenge-grid", {
       };
     }
   },
-  template:
-    `<div class="l-challenge-grid">
+  template: `
+    <div class="l-challenge-grid">
       <div v-for="id in count" :key="id" :class="boxClassObject(id)">
         <slot :challengeId="id" />
       </div>

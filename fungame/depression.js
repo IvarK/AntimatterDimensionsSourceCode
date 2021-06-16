@@ -227,13 +227,12 @@ const StuffButton = {
   },
   template: `
     <button class="button button--stuff" @click="stuff.purchase()">
-      Amount: {{format(amount, 2)}}
+      Amount: {{ format(amount, 2) }}
       <br>
-      Power: {{format(prestige, 2)}}x
+      Power: {{ format(prestige, 2) }}x
       <br>
-      Cost: {{format(cost, 2)}}
-    </button>
-  `
+      Cost: {{ format(cost, 2) }}
+    </button>`
 };
 
 const PrestigeButton = {
@@ -253,9 +252,8 @@ const PrestigeButton = {
   },
   template: `
     <button v-if="canPrestige" class="button button--prestige" @click="stuff.doPrestige()">
-      Reset to increase bonus to {{format(nextPrestige, 2)}}x boost.
-    </button>
-  `
+      Reset to increase bonus to {{ format(nextPrestige, 2) }}x boost.
+    </button>`
 };
 
 const Depression = {
@@ -280,16 +278,15 @@ const Depression = {
   },
   template: `
     <div class="app">
-      <p class="depression">You have <span class="depression-amount">{{format(depression, 2)}}</span> depression</p>
+      <p class="depression">You have <span class="depression-amount">{{ format(depression, 2) }}</span> depression</p>
       <div class="stuff-container">
         <template v-for="stuff in stuffs">
           <br v-if="stuff.id > 1">
-          <stuff-button :stuff="stuff"/>
-          <prestige-button :stuff="stuff"/>
+          <stuff-button :stuff="stuff" />
+          <prestige-button :stuff="stuff" />
         </template>
       </div>
-    </div>
-  `
+    </div>`
 };
 
 let vue;

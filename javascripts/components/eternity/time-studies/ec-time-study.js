@@ -63,8 +63,8 @@ Vue.component("ec-time-study", {
   },
   template: `
     <time-study :setup="setup">
-      Eternity Challenge {{id}}
-      ({{formatInt(completions)}}<span v-if="showTotalCompletions">/{{formatInt(5)}}</span>)
+      Eternity Challenge {{ id }}
+      ({{ formatInt(completions) }}<span v-if="showTotalCompletions">/{{ formatInt(5) }}</span>)
       <template v-if="hasRequirement">
         <br>
         Requirement:
@@ -72,9 +72,9 @@ Vue.component("ec-time-study", {
         <span v-if="id === 12">Use only the Time Dimension path</span>
         <span v-else-if="id === 11">Use only the Antimatter Dimension path</span>
         <span v-else>
-          {{formatValue(requirement.current)}}/{{formatValue(requirement.total)}}
+          {{ formatValue(requirement.current) }}/{{ formatValue(requirement.total) }}
           <br v-if="needsSecondLinebreak">
-          {{config.requirement.resource}}
+          {{ config.requirement.resource }}
         </span>
       </template>
       <span v-if="isUnlocked && !isRunning"><br>Double click to start</span>

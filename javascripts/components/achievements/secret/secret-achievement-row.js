@@ -22,8 +22,8 @@ Vue.component("secret-achievement-row", {
       this.isCompleted = this.row.every(a => a.isUnlocked);
     }
   },
-  template:
-    `<div :class="classObject">
+  template: `
+    <div :class="classObject">
       <secret-achievement
         v-for="(achievement, i) in row"
         :key="i"

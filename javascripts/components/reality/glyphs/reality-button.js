@@ -19,6 +19,9 @@ Vue.component("reality-button", {
       return `Machines gained: ${format(this.machinesGained, 2, 0)}`;
     },
     formatMachineStats() {
+      if (!PlayerProgress.realityUnlocked() && this.nextMachineEP.gt("1e8000")) {
+        return `RM this Reality is capped!`;
+      }
       if (this.machinesGained.lt(100)) {
         return `Next at ${format(this.nextMachineEP, 2)} EP`;
       }
@@ -56,7 +59,7 @@ Vue.component("reality-button", {
         if (adjusted.lte(1)) return Decimal.pow10(4000);
         if (adjusted.lte(10)) return Decimal.pow10(4000 / 27 * (adjusted.toNumber() + 26));
         let result = Decimal.pow10(4000 * (adjusted.log10() / 3 + 1));
-        if (!PlayerProgress.realityUnlocked() && result.gte("1e6000") && player.saveOverThresholdFlag) {
+        if (!PlayerProgress.realityUnlocked() && result.gte("1e6000")) {
           result = result.div("1e6000").pow(4).times("1e6000");
         }
         return result;
@@ -95,35 +98,36 @@ Vue.component("reality-button", {
     }
   },
   template: `
-  <button :class="['l-reality-button', 'c-reality-button', 'infotooltip',
-                   canReality ? 'c-reality-button--unlocked' : 'c-reality-button--locked']"
-          @click="handleClick">
-    <div class="l-reality-button__contents">
-      <template v-if="canReality">
-      <div class="c-reality-button__header">Make a new Reality</div>
-        <div>{{formatMachinesGained}}</div>
-        <div>{{formatMachineStats}}</div>
-        <div>{{formatGlyphLevel}}</div>
-      </template>
-      <template v-else-if="hasRealityStudy">
-        <div>Get {{format("1e4000", 0, 0)}} Eternity Points to unlock a new Reality</div>
-      </template>
-      <template v-else>
-        <div>Purchase the study in the Eternity tab to unlock a new Reality</div>
-      </template>
-      <div class="infotooltiptext" v-if="canReality">
-        <div>Other resources gained:</div>
-        <div>{{ppGained}} Perk {{ "Point" | pluralize(ppGained) }}</div>
-        <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
-        <div v-for="celestialInfo in celestialRunText">
-          <span v-if="celestialInfo[0]">
-            {{ celestialInfo[1] }}
-            <br>
-            {{ celestialInfo[2] }}
-          </span>
+    <button
+      :class="['l-reality-button', 'c-reality-button', 'infotooltip',
+        canReality ? 'c-reality-button--unlocked' : 'c-reality-button--locked']"
+      @click="handleClick"
+    >
+      <div class="l-reality-button__contents">
+        <template v-if="canReality">
+          <div class="c-reality-button__header">Make a new Reality</div>
+          <div>{{ formatMachinesGained }}</div>
+          <div>{{ formatMachineStats }}</div>
+          <div>{{ formatGlyphLevel }}</div>
+        </template>
+        <template v-else-if="hasRealityStudy">
+          <div>Get {{ format("1e4000") }} Eternity Points to unlock a new Reality</div>
+        </template>
+        <template v-else>
+          <div>Purchase the study in the Eternity tab to unlock a new Reality</div>
+        </template>
+        <div class="infotooltiptext" v-if="canReality">
+          <div>Other resources gained:</div>
+          <div>{{ ppGained }} Perk {{ "Point" | pluralize(ppGained) }}</div>
+          <div v-if="shardsGained !== 0">{{ shardsGainedText }}</div>
+          <div v-for="celestialInfo in celestialRunText">
+            <span v-if="celestialInfo[0]">
+              {{ celestialInfo[1] }}
+              <br>
+              {{ celestialInfo[2] }}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-  </button>
-  `
+    </button>`
 });

@@ -9,6 +9,18 @@ Vue.component("glyph-set-saves", {
       level: false,
     };
   },
+  watch: {
+    rarity(newValue) {
+      player.options.ignoreGlyphRarity = newValue;
+    },
+    level(newValue) {
+      player.options.ignoreGlyphLevel = newValue;
+    },
+  },
+  created() {
+    this.on$(GAME_EVENT.GLYPH_SET_SAVE_CHANGE, this.refreshGlyphSets);
+    this.refreshGlyphSets();
+  },
   computed: {
     questionmarkTooltip() {
       return `Save copies your current Glyphs. Delete clears the set for a new save. Load searches through your
@@ -19,40 +31,37 @@ Vue.component("glyph-set-saves", {
       return `No Set Saved`;
     },
   },
-  watch: {
-    rarity(newValue) {
-      player.options.ignoreGlyphRarity = newValue;
-    },
-    level(newValue) {
-      player.options.ignoreGlyphLevel = newValue;
-    },
-  },
   methods: {
     update() {
-      this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g));
       this.hasEquipped = Glyphs.activeList.length > 0;
       this.rarity = player.options.ignoreGlyphRarity;
       this.level = player.options.ignoreGlyphLevel;
     },
+    refreshGlyphSets() {
+      this.glyphSets = player.reality.glyphs.sets.map(g => Glyphs.copyForRecords(g));
+    },
     saveGlyphSet(id) {
       if (!this.hasEquipped || player.reality.glyphs.sets[id].length) return;
       player.reality.glyphs.sets[id] = Glyphs.active.filter(g => g !== null);
+      EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
     loadGlyphSet(set) {
       if (this.hasEquipped || !set.length) return;
       for (let i = 0; i < set.length; i++) {
         const glyph = Glyphs.findByValues(set[i], this.level, this.rarity);
         if (!glyph) {
-          GameUI.notify.error(`Could not load the Glyph Set due to missing Glyph!`);
-          return;
+          GameUI.notify.error(`Could not fully load the Glyph Set due to missing Glyph!`);
+          continue;
         }
         const idx = Glyphs.active.indexOf(null);
         if (idx !== -1) Glyphs.equip(glyph, idx);
       }
+      EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
     deleteGlyphSet(id) {
       if (!player.reality.glyphs.sets[id].length) return;
       player.reality.glyphs.sets[id] = [];
+      EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
   },
   template: `
@@ -87,22 +96,32 @@ Vue.component("glyph-set-saves", {
             :show=true
             :glyphs="set"
             :flipTooltip=true
-            :noneText=noSet />
+            :noneText=noSet
+          />
         </div>
         <div class="l-glyph-set-save-button-spacing">
-          <button class="c-reality-upgrade-btn c-glyph-set-save-button"
-                  :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"
-                  @click="saveGlyphSet(id)"
-          >Save</button>
-          <button class="c-reality-upgrade-btn c-glyph-set-save-button"
-                  :class="{'c-reality-upgrade-btn--unavailable': !set.length}"
-                  @click="deleteGlyphSet(id)"
-          >Delete</button>
-          <button class="c-reality-upgrade-btn c-glyph-set-save-button"
-                  :class="{'c-reality-upgrade-btn--unavailable': hasEquipped || !set.length}"
-                  @click="loadGlyphSet(set)"
-          >Load</button>
+          <button
+            class="c-reality-upgrade-btn c-glyph-set-save-button"
+            :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"
+            @click="saveGlyphSet(id)"
+          >
+            Save
+          </button>
+          <button
+            class="c-reality-upgrade-btn c-glyph-set-save-button"
+            :class="{'c-reality-upgrade-btn--unavailable': !set.length}"
+            @click="deleteGlyphSet(id)"
+          >
+            Delete
+          </button>
+          <button
+            class="c-reality-upgrade-btn c-glyph-set-save-button"
+            :class="{'c-reality-upgrade-btn--unavailable': hasEquipped || !set.length}"
+            @click="loadGlyphSet(set)"
+          >
+            Load
+          </button>
         </div>
       </div>
-    </div>`,
+    </div>`
 });

@@ -77,14 +77,16 @@ Vue.component("secret-time-study", {
       }
     },
   },
-  template:
-    `<button :class="classObject" :style="styleObject" @click="handleClick" ref="study">
+  template: `
+    <button :class="classObject" :style="styleObject" @click="handleClick" ref="study">
       <span>
-        {{description}}
+        {{ description }}
         <br>
-        {{hide}}
+        {{ hide }}
         <br>
-        <span v-if="cost !== 0">Cost: {{cost}} Time Theorems</span>
+        <span v-if="cost !== 0">
+          Cost: {{ cost }} Time Theorems
+        </span>
       </span>
     </button>`
 });

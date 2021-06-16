@@ -40,3 +40,12 @@ button {
 button:hover {
     border: 0.1rem solid #737373 !important;
 }
+
+.c-glyph-tooltip {
+    filter: saturate(0);
+    text-shadow: none !important;
+}
+
+.c-glyph-tooltip__effect span {
+    text-shadow: none !important;
+}

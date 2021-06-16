@@ -21,6 +21,60 @@ Vue.component("v-tab", {
       hasAlchemy: false,
     };
   },
+  computed: {
+    // If V is flipped, change the layout of the grid
+    hexGrid() {
+      return this.isFlipped && this.wantsFlipped
+        ? [
+          VRunUnlocks.all[6],
+          {},
+          {},
+          {},
+          { isRunButton: true },
+          VRunUnlocks.all[7],
+          VRunUnlocks.all[8],
+          {},
+          {}
+        ]
+        : [
+          VRunUnlocks.all[0],
+          VRunUnlocks.all[1],
+          {},
+          VRunUnlocks.all[5],
+          { isRunButton: true },
+          VRunUnlocks.all[2],
+          VRunUnlocks.all[4],
+          VRunUnlocks.all[3],
+          {}
+        ];
+    },
+    vUnlock: () => V_UNLOCKS.V_ACHIEVEMENT_UNLOCK,
+    runMilestones() {
+      return [
+        [
+          V_UNLOCKS.SHARD_REDUCTION,
+          V_UNLOCKS.ND_POW,
+          V_UNLOCKS.FAST_AUTO_EC
+        ],
+        [
+          V_UNLOCKS.AUTO_AUTOCLEAN,
+          V_UNLOCKS.ACHIEVEMENT_BH,
+          V_UNLOCKS.RA_UNLOCK
+        ],
+      ];
+    },
+    db: () => GameDatabase.celestials.v,
+    runButtonClassObject() {
+      return {
+        "l-v-hexagon": true,
+        "c-v-run-button": true,
+        "c-v-run-button--running": this.isRunning,
+      };
+    },
+    runDescription() {
+      return GameDatabase.celestials.descriptions[3].description().replace(/^\w/u, c => c.toUpperCase());
+    },
+  },
   methods: {
     update() {
       this.mainUnlock = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
@@ -41,8 +95,7 @@ Vue.component("v-tab", {
       this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     },
     startRun() {
-      if (!resetReality()) return;
-      V.initializeRun();
+      Modal.celestials.show({ name: "V's", number: 3 });
     },
     has(info) {
       return V.has(info);
@@ -79,56 +132,6 @@ Vue.component("v-tab", {
       player.celestials.v.wantsFlipped = !this.wantsFlipped;
     }
   },
-  computed: {
-    // If V is flipped, change the layout of the grid
-    hexGrid() {
-      return this.isFlipped && this.wantsFlipped ? [
-        VRunUnlocks.all[6],
-        {},
-        {},
-        {},
-        { isRunButton: true },
-        VRunUnlocks.all[7],
-        VRunUnlocks.all[8],
-        {},
-        {}
-      ]
-      : [
-        VRunUnlocks.all[0],
-        VRunUnlocks.all[1],
-        {},
-        VRunUnlocks.all[5],
-        { isRunButton: true },
-        VRunUnlocks.all[2],
-        VRunUnlocks.all[4],
-        VRunUnlocks.all[3],
-        {}
-      ];
-    },
-    vUnlock: () => V_UNLOCKS.V_ACHIEVEMENT_UNLOCK,
-    runMilestones() {
-      return [
-        [
-          V_UNLOCKS.SHARD_REDUCTION,
-          V_UNLOCKS.ND_POW,
-          V_UNLOCKS.FAST_AUTO_EC
-        ],
-        [
-          V_UNLOCKS.AUTO_AUTOCLEAN,
-          V_UNLOCKS.ACHIEVEMENT_BH,
-          V_UNLOCKS.RA_UNLOCK
-        ],
-      ];
-    },
-    db: () => GameDatabase.celestials.v,
-    runButtonClassObject() {
-      return {
-        "l-v-hexagon": true,
-        "c-v-run-button": true,
-        "c-v-run-button--running": this.isRunning,
-      };
-    }
-  },
   template: `
     <div class="l-v-celestial-tab">
       <div v-if="!mainUnlock" class="c-v-info-text">
@@ -156,9 +159,12 @@ Vue.component("v-tab", {
           <primary-button
             class="o-primary-btn--subtab-option"
             @click="toggleFlipped"
-          ><span v-if="wantsFlipped">Hide</span><span v-else>Show</span> Hard V</primary-button>
-          <br>
-          <br>
+          >
+            <span v-if="wantsFlipped">Hide</span>
+            <span v-else>Show</span>
+            Hard V
+          </primary-button>
+          <br><br>
           Cursed Glyphs can be created in the Effarig tab, and the Black Hole can now be used to slow down time.
           <br>
           Each Hard V-Achievement will award {{ formatInt(2) }} Space Theorems instead of {{ formatInt(1) }}.
@@ -172,43 +178,51 @@ Vue.component("v-tab", {
           <li v-for="hex in hexGrid" :style= "[hex.isRunButton ? {zIndex: 1} : {zIndex: 0}]">
             <div v-if="hex.config"
               class="l-v-hexagon c-v-unlock"
-              :class="{ 'c-v-unlock-completed': hex.completions === hex.config.values.length }">
-                <p class="o-v-unlock-name"><br v-if="hex.canBeReduced && showReduction">{{ hex.config.name }}</p>
-                <p class="o-v-unlock-desc" v-html="hex.formattedDescription"></p>
-                <p class="o-v-unlock-goal-reduction" v-if="has(runMilestones[0]) && hex.isReduced">
-                  Goal has been {{ mode(hex) }} by {{ reductionValue(hex) }}
+              :class="{ 'c-v-unlock-completed': hex.completions === hex.config.values.length }"
+            >
+              <p class="o-v-unlock-name"><br v-if="hex.canBeReduced && showReduction">{{ hex.config.name }}</p>
+              <p class="o-v-unlock-desc" v-html="hex.formattedDescription"></p>
+              <p class="o-v-unlock-goal-reduction" v-if="has(runMilestones[0]) && hex.isReduced">
+                Goal has been {{ mode(hex) }} by {{ reductionValue(hex) }}
+              </p>
+              <p class="o-v-unlock-amount">
+                {{ formatInt(hex.completions) }}/{{ formatInt(hex.config.values.length) }} done
+              </p>
+              <div v-if="showRecord(hex)">
+                <p class="o-v-unlock-record">
+                  Best: {{ hex.config.formatRecord(runRecords[hex.id]) }}
                 </p>
-                <p class="o-v-unlock-amount">
-                  {{ formatInt(hex.completions) }}/{{ formatInt(hex.config.values.length) }} done
+                <p>
+                  <glyph-set-preview
+                    :show=true
+                    :glyphs="runGlyphs[hex.id]"
+                  />
                 </p>
-                <div v-if="showRecord(hex)">
-                  <p class="o-v-unlock-record">
-                    Best: {{ hex.config.formatRecord(runRecords[hex.id]) }}
-                  </p>
-                  <p>
-                    <glyph-set-preview
-                      :show=true
-                      :glyphs="runGlyphs[hex.id]" />
-                  </p>
-                  <div v-if="hex.canBeReduced && showReduction">
-                    <div style="height:0.8rem;"/>
-                    <button
-                      class="o-primary-btn l-v-reduction"
-                      :class="{ 'o-primary-btn--disabled': !hex.canBeReduced || pp < hex.reductionCost }"
-                      :ach-tooltip="reductionTooltip(hex)"
-                      @click="reduceGoals(hex)">
-                        <i class="fas fa-angle-double-down"></i>
-                    </button>
-                  </div>
+                <div v-if="hex.canBeReduced && showReduction">
+                  <div style="height:0.8rem;" />
+                  <button
+                    class="o-primary-btn l-v-reduction"
+                    :class="{ 'o-primary-btn--disabled': !hex.canBeReduced || pp < hex.reductionCost }"
+                    :ach-tooltip="reductionTooltip(hex)"
+                    @click="reduceGoals(hex)"
+                  >
+                    <i class="fas fa-angle-double-down"></i>
+                  </button>
                 </div>
+              </div>
             </div>
             <div v-else-if="hex.isRunButton" @click="startRun()" :class="runButtonClassObject">
-              <b style="font-size: 1.5rem">Start V's Reality.</b>
-              <br/>
+              <b style="font-size: 1.5rem">
+                <span v-if="isRunning">You are in </span>
+                <span v-else>Start </span>
+                V's Reality.
+              </b>
+              <br>
               <div :style="{ 'font-size': hasAlchemy ? '1.1rem' : '' }">
-                All dimension multipliers, Eternity Point gain, Infinity Point gain, and Dilated Time gain per second
-                are square-rooted, and Replicanti interval is squared.
-                <span v-if="hasAlchemy">Exponential Glyph Alchemy effect is disabled.</span>
+                {{ runDescription }}
+                <span v-if="hasAlchemy">
+                  Exponential Glyph Alchemy effect is disabled.
+                </span>
               </div>
               <div class="c-v-run-button__line c-v-run-button__line--1"></div>
               <div class="c-v-run-button__line c-v-run-button__line--2"></div>
@@ -234,10 +248,11 @@ Vue.component("v-tab", {
             <div class="o-v-milestone"
               v-for="milestone in row"
               :class="{'o-v-milestone--unlocked':
-              has(milestone)}">
-                <p>{{ milestone.description }}</p>
-                <p>Reward: {{ rewardText(milestone) }}</p>
-                <p v-if="milestone.effect">Currently: <b>{{ milestone.format(milestone.effect()) }}</b></p>
+              has(milestone)}"
+            >
+              <p>{{ milestone.description }}</p>
+              <p>Reward: {{ rewardText(milestone) }}</p>
+              <p v-if="milestone.effect">Currently: <b>{{ milestone.format(milestone.effect()) }}</b></p>
             </div>
           </div>
         </div>

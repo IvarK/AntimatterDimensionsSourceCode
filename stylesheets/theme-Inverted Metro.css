@@ -6,7 +6,8 @@ body.t-inverted-metro {
 .t-inverted-metro #page,
 .t-inverted-metro .l-notification-container,
 .t-inverted-metro .c-modal,
-.t-inverted-metro #TTbuttons {
+.t-inverted-metro #TTbuttons,
+.t-inverted-metro .c-glyph-tooltip {
   filter: invert(100%);
 }
 

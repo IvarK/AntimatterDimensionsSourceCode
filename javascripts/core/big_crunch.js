@@ -18,9 +18,60 @@ function bigCrunchResetRequest(disableAnimation = false) {
   if (!Player.canCrunch) return;
   if (!disableAnimation && player.options.animations.bigCrunch && document.body.style.animation === "") {
     BigCrunchReset.animation();
-    setTimeout(BigCrunchReset.request(), 1000);
+    setTimeout(bigCrunchReset(), 1000);
   } else {
-    BigCrunchReset.request();
+    bigCrunchReset();
+  }
+}
+
+function bigCrunchReset() {
+  if (!Player.canCrunch) return;
+
+  const firstInfinity = !PlayerProgress.infinityUnlocked();
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
+
+  bigCrunchUpdateStatistics();
+
+  const infinityPoints = gainedInfinityPoints();
+  Currency.infinityPoints.add(infinityPoints);
+  Currency.infinities.add(gainedInfinities().round());
+
+  bigCrunchTabChange(firstInfinity);
+  bigCrunchReplicanti();
+  bigCrunchCheckUnlocks();
+
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
+}
+
+function bigCrunchUpdateStatistics() {
+  player.records.bestInfinity.bestIPminEternity =
+    player.records.bestInfinity.bestIPminEternity.clampMin(player.records.thisInfinity.bestIPmin);
+  player.records.thisInfinity.bestIPmin = new Decimal(0);
+
+  player.records.thisEternity.bestInfinitiesPerMs = player.records.thisEternity.bestInfinitiesPerMs.clampMin(
+    gainedInfinities().round().dividedBy(player.records.thisInfinity.realTime)
+  );
+
+  const infinityPoints = gainedInfinityPoints();
+
+  addInfinityTime(
+    player.records.thisInfinity.time,
+    player.records.thisInfinity.realTime,
+    infinityPoints,
+    gainedInfinities().round()
+  );
+
+  player.records.bestInfinity.time =
+    Math.min(player.records.bestInfinity.time, player.records.thisInfinity.time);
+  player.records.bestInfinity.realTime =
+    Math.min(player.records.bestInfinity.realTime, player.records.thisInfinity.realTime);
+
+  player.achievementChecks.noInfinitiesThisReality = false;
+
+  if (!player.usedMaxAll) {
+    const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(player.records.thisInfinity.realTime);
+    player.records.thisEternity.bestIPMsWithoutMaxAll =
+      Decimal.max(bestIpPerMsWithoutMaxAll, player.records.thisEternity.bestIPMsWithoutMaxAll);
   }
 }
 
@@ -217,8 +268,8 @@ class InfinityIPMultUpgrade extends GameMechanicState {
       Autobuyer.bigCrunch.bumpAmount(mult);
     }
     const costIncrease = this.costIncrease;
+    Currency.infinityPoints.subtract(Decimal.sumGeometricSeries(amount, this.cost, costIncrease, 0));
     player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
-    Currency.infinityPoints.subtract(this.cost.dividedBy(costIncrease));
     this.adjustToCap();
     GameUI.update();
   }
@@ -233,9 +284,9 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   buyMax() {
     if (!this.canBeBought) return;
     if (!this.hasIncreasedCost) {
-      // The purchase at 1e3000000 is considered post-softcap because that purchase increases the cost by 1e10x.
-      const buyUntil = Math.min(Currency.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent - 1);
-      const purchases = buyUntil - this.cost.exponent + 1;
+      // Only allow IP below the softcap to be used
+      const availableIP = Currency.infinityPoints.value.clampMax(this.config.costIncreaseThreshold);
+      const purchases = Decimal.affordGeometricSeries(availableIP, this.cost, this.costIncrease, 0).toNumber();
       if (purchases <= 0) return;
       this.purchase(purchases);
     }
@@ -243,8 +294,8 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     // (for example, we have 1e4000000 IP and no mult - first it will go to (but not including) 1e3000000 and then
     // it will go in this part)
     if (this.hasIncreasedCost) {
-      const buyUntil = Math.min(Currency.infinityPoints.exponent, this.config.costCap.exponent);
-      const purchases = Math.floor((buyUntil - player.infMultCost.exponent) / 10) + 1;
+      const availableIP = Currency.infinityPoints.value.clampMax(this.config.costCap);
+      const purchases = Decimal.affordGeometricSeries(availableIP, this.cost, this.costIncrease, 0).toNumber();
       if (purchases <= 0) return;
       this.purchase(purchases);
     }

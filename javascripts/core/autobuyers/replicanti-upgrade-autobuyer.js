@@ -23,6 +23,10 @@ class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
     return ReplicantiUpgrade[this._upgradeName].autobuyerMilestone.isReached;
   }
 
+  get resetTickOn() {
+    return PRESTIGE_EVENT.ETERNITY;
+  }
+
   tick() {
     const upgradeName = this._upgradeName;
     if (EternityChallenge(8).isRunning) return;

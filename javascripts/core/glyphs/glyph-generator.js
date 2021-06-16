@@ -152,8 +152,6 @@ const GlyphGenerator = {
     // Store the pre-Reality EP value in the glyph's rarity
     const str = rarityToStrength(eternityPoints.log10() / 1e6);
     const effects = orderedEffectList.filter(effect => effect.match("companion*"));
-    // The last effect is the nerf reduction text, get rid of it if it doesn't apply
-    if (!(player.saveOverThresholdFlag && eternityPoints.gte("1e6000"))) effects.pop();
     const effectBitmask = makeGlyphEffectBitmask(effects);
     return {
       id: undefined,
@@ -262,7 +260,7 @@ const GlyphGenerator = {
     const generatable = generatedTypes.filter(x => EffarigUnlock.reality.isUnlocked || x !== "effarig");
     const maxOfSameTypeSoFar = generatable.map(x => typesSoFar.countWhere(y => y === x)).max();
     const blacklisted = typesSoFar.length === 0
-        ? [] : generatable.filter(x => typesSoFar.countWhere(y => y === x) === maxOfSameTypeSoFar);
+      ? [] : generatable.filter(x => typesSoFar.countWhere(y => y === x) === maxOfSameTypeSoFar);
     return GlyphTypes.random(rng, blacklisted);
   },
 

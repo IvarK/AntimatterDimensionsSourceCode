@@ -64,12 +64,12 @@ Vue.component("alchemy-circle-node", {
       <span v-if="isUnlocked">
         <hint-text type="alchemy"
           :class="hintClassObject"
-          class="o-hint-text--alchemy-node l-hint-text--alchemy-node">
+          class="o-hint-text--alchemy-node l-hint-text--alchemy-node"
+        >
           {{ amount.toFixed(1) }}
         </hint-text>
       </span>
-    </div>
-  `
+    </div>`
 });
 
 Vue.component("alchemy-resource-arc", {
@@ -109,12 +109,12 @@ Vue.component("alchemy-resource-arc", {
     }
   },
   template: `
-      <div class="o-alchemy-resource-arc-wrapper">
-        <div class="o-alchemy-resource-arc-spinner o-alchemy-resource-arc-circle" :style="spinnerTransform"></div>
-        <div class="o-alchemy-resource-arc-filler o-alchemy-resource-arc-circle" :style="fillerTransform"></div>
-        <div class="o-alchemy-resource-arc-mask" :style="maskTransform"></div>
-        <div class="o-alchemy-node-mask" :class="classObject">
-          {{ resource.symbol }}
-        </div>
-      </div>`
+    <div class="o-alchemy-resource-arc-wrapper">
+      <div class="o-alchemy-resource-arc-spinner o-alchemy-resource-arc-circle" :style="spinnerTransform"></div>
+      <div class="o-alchemy-resource-arc-filler o-alchemy-resource-arc-circle" :style="fillerTransform"></div>
+      <div class="o-alchemy-resource-arc-mask" :style="maskTransform"></div>
+      <div class="o-alchemy-node-mask" :class="classObject">
+        {{ resource.symbol }}
+      </div>
+    </div>`
 });

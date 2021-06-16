@@ -117,8 +117,9 @@ function getRealityMachineMultiplier() {
 
 function gainedRealityMachines() {
   let log10FinalEP = Currency.eternityPoints.value.plus(gainedEternityPoints()).log10();
-  if (!PlayerProgress.realityUnlocked() && log10FinalEP > 6000 && player.saveOverThresholdFlag) {
-    log10FinalEP -= (log10FinalEP - 6000) * 0.75;
+  if (!PlayerProgress.realityUnlocked()) {
+    if (log10FinalEP > 8000) log10FinalEP = 8000;
+    if (log10FinalEP > 6000) log10FinalEP -= (log10FinalEP - 6000) * 0.75;
   }
   let rmGain = Decimal.pow(1000, log10FinalEP / 4000 - 1);
   // Increase base RM gain if <10 RM
@@ -272,7 +273,7 @@ function gainedInfinities() {
     const url = "https://api.github.com/repos/IvarK/IToughtAboutCurseWordsButThatWouldBeMeanToOmsi/commits/master";
     const headers = new Headers();
     // Yes, this is my GitHub API key for reading private repo details
-    headers.append("Authorization", `Basic ${btoa("Razenpok:9b15284a7c7a1142b5766f81967a96f90b7879a8")}`);
+    headers.append("Authorization", `Basic ${btoa("WaitingIdly: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")}`);
 
     fetch(url, { method: "GET", headers })
       .then(response => response.json())
@@ -401,7 +402,8 @@ function getGameSpeedupForDisplay() {
 // rate.
 // TODO: Clean this up, remove the disable line
 // eslint-disable-next-line complexity
-function gameLoop(diff, options = {}) {
+function gameLoop(passDiff, options = {}) {
+  let diff = passDiff;
   PerformanceStats.start("Frame Time");
   PerformanceStats.start("Game Update");
   EventHub.dispatch(GAME_EVENT.GAME_TICK_BEFORE);
@@ -873,8 +875,8 @@ function setHoldingR(x) {
 function init() {
   // eslint-disable-next-line no-console
   console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
-  Tab.dimensions.antimatter.show();
   GameStorage.load();
+  Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   kong.init();
 }
 

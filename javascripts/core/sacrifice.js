@@ -35,11 +35,11 @@ class Sacrifice {
     }
 
     const exponent = (1 +
-      (f('Achievement32', Achievement(32).isEffectActive) ? Achievement(32).config.effect : 0) +
-      (f('Achievement57', Achievement(57).isEffectActive) ? Achievement(57).config.effect : 0)
+      (f("Achievement32", Achievement(32).isEffectActive) ? Achievement(32).config.effect : 0) +
+      (f("Achievement57", Achievement(57).isEffectActive) ? Achievement(57).config.effect : 0)
     ) * (1 +
-      (f('Achievement88', Achievement(88).isEffectActive) ? Achievement(88).config.effect : 0) +
-      (f('TimeStudy228', TimeStudy(228).isEffectActive) ? TimeStudy(228).config.effect : 0)
+      (f("Achievement88", Achievement(88).isEffectActive) ? Achievement(88).config.effect : 0) +
+      (f("TimeStudy228", TimeStudy(228).isEffectActive) ? TimeStudy(228).config.effect : 0)
     ) * factor;
     return base + (exponent === 1 ? "" : formatPow(exponent, places, places));
   }
@@ -135,14 +135,10 @@ function sacrificeReset(auto) {
 }
 
 function sacrificeBtnClick() {
-  if (!Sacrifice.isVisible || !Sacrifice.canSacrifice) return false;
+  if (!Sacrifice.isVisible || !Sacrifice.canSacrifice) return;
   if (player.options.confirmations.sacrifice) {
-    if (!confirm("Dimensional Sacrifice will remove all of your 1st through 7th Antimatter Dimensions " +
-      "(with the cost and multiplier unchanged), for a boost to the 8th Antimatter Dimension based on the total " +
-      "amount of 1st Antimatter Dimensions sacrificed. It will take time to regain production.")) {
-      return false;
-    }
+    Modal.sacrifice.show();
+  } else {
+    sacrificeReset();
   }
-
-  return sacrificeReset();
 }

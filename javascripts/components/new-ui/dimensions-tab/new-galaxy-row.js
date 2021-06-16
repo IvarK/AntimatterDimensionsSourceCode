@@ -54,7 +54,8 @@ Vue.component("new-galaxy-row", {
           return `Each Galaxy is more expensive past ${formatInt(this.distantStart)} Galaxies`;
         case GALAXY_TYPE.REMOTE:
           return "Increased Galaxy cost scaling: " +
-            `Quadratic past ${formatInt(this.distantStart)} (distant), exponential past ${formatInt(800)} (remote)`;
+            `Quadratic past ${formatInt(this.distantStart)} (distant), ` +
+            `exponential past ${formatInt(REMOTE_SCALING_START)} (remote)`;
       }
       return undefined;
     },
@@ -80,17 +81,19 @@ Vue.component("new-galaxy-row", {
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
     },
   },
-  template:
-  `<div class="reset-container galaxy">
-    <h4>{{typeName}} ({{sumText}})</h4>
-    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} Antimatter D</span>
-    <span v-if="hasIncreasedScaling">{{ costScalingText }}</span>
-    <button
-      class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
-      :class="{ 'o-primary-btn--disabled': !canBeBought, ...tutorialClass }"
-      @click.exact="buyGalaxy(true)"
-      @click.shift.exact="buyGalaxy(false)"
-      :enabled="canBeBought"
-    >{{buttonText}}</button>
-  </div>`
+  template: `
+    <div class="reset-container galaxy">
+      <h4>{{ typeName }} ({{ sumText }})</h4>
+      <span>Requires: {{ formatInt(requirement.amount) }} {{ dimName }} Antimatter D</span>
+      <span v-if="hasIncreasedScaling">{{ costScalingText }}</span>
+      <button
+        class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
+        :class="{ 'o-primary-btn--disabled': !canBeBought, ...tutorialClass }"
+        @click.exact="buyGalaxy(true)"
+        @click.shift.exact="buyGalaxy(false)"
+        :enabled="canBeBought"
+      >
+        {{ buttonText }}
+      </button>
+    </div>`
 });

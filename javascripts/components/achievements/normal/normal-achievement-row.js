@@ -24,8 +24,8 @@ Vue.component("normal-achievement-row", {
       this.isHidden = this.isCompleted && player.options.hideCompletedAchievementRows;
     }
   },
-  template:
-    `<div v-if="!isHidden" :class="classObject">
+  template: `
+    <div v-if="!isHidden" :class="classObject">
       <normal-achievement
         v-for="(achievement, i) in row"
         :key="i"

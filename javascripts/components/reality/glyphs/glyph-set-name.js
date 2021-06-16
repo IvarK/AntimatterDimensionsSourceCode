@@ -32,6 +32,10 @@ Vue.component("glyph-set-name", {
       ],
     };
   },
+  created() {
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.sortGlyphList);
+    this.sortGlyphList();
+  },
   computed: {
     setName() {
       this.sortGlyphList();
@@ -180,10 +184,6 @@ Vue.component("glyph-set-name", {
         animation: this.mainGlyphName.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
       };
     }
-  },
-  created() {
-    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.sortGlyphList);
-    this.sortGlyphList();
   },
   methods: {
     update() {

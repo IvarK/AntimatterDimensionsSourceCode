@@ -74,11 +74,11 @@ class VRunUnlockState extends GameMechanicState {
     }
 
     while (this.completions < this.config.values.length &&
-      Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
-        if (!V.isFlipped && this.config.isHard) continue;
-        this.completions++;
-        GameUI.notify.success(`You have unlocked V-Achievement '${this.config.name}' tier ${this.completions}`);
-        V.updateTotalRunUnlocks();
+    Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
+      if (!V.isFlipped && this.config.isHard) continue;
+      this.completions++;
+      GameUI.notify.success(`You have unlocked V-Achievement '${this.config.name}' tier ${this.completions}`);
+      V.updateTotalRunUnlocks();
     }
   }
 }
@@ -131,7 +131,7 @@ const V_UNLOCKS = {
     get description() { return `Have ${formatInt(10)} V-Achievements`; },
     effect: () => Achievements.power,
     // Base rate is 60 ECs at 20 minutes each
-    format: x => `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort(false)} for full completion`,
+    format: x => `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort()} for full completion`,
     requirement: () => V.spaceTheorems >= 10
   },
   AUTO_AUTOCLEAN: {

@@ -101,92 +101,109 @@ Vue.component("statistics-tab", {
       return value.gt(1e9) ? format(value, 3, 0) : formatInt(value.toNumber());
     }
   },
-  template:
-    `<div class="c-stats-tab">
-        <div>
-          <div class="c-stats-tab-general">General</div>
-          <div>You have made a total of {{ format(totalAntimatter, 2, 1) }} antimatter.</div>
-          <div>You have played for {{ realTimePlayed }}.</div>
-          <div v-if="reality.isUnlocked">
-            Your existence has spanned {{ reality.totalTimePlayed }} of time.
-          </div>
-          <div>You have seen {{ formatInt(newsMessagesSeen) }} unique
-          news ticker {{ "message" | pluralize(newsMessagesSeen) }}.</div>
-          <div>
-            <br>
-            <div
-              v-if="eternity.thisReal.totalSeconds > 1 && infinity.thisReal.totalSeconds > 1"
-              v-for="line in matterScale">{{line}}</div>
-          </div>
-          <br>
-        </div>
-        <div v-if="infinity.isUnlocked">
-            <div class="c-stats-tab-general c-stats-tab-infinity">Infinity</div>
-            <div v-if="infinity.count.gt(0)">
-              You have {{ formatDecimalAmount(infinity.count) }}
-              {{"Infinity" | pluralize(infinity.count, "Infinities")}}.
-            </div>
-            <div v-else>You haven't Infinitied<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
-            <div v-if="infinity.banked.gt(0)">
-              You have {{ formatDecimalAmount(infinity.banked) }} Banked
-              {{"Infinity" | pluralize(infinity.banked, "Infinities")}}.
-            </div>
-            <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best.toStringShort() }}.</div>
-            <div v-else>You have no fastest Infinity<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
-            <div>You have spent {{ infinity.this.toStringShort() }} in this Infinity.
-              <span v-if="reality.isUnlocked">
-                ({{infinity.thisReal.toStringShort()}} real time)
-              </span>
-            </div>
-            <div>
-              Your best Infinity Points per minute
-              <span v-if="eternity.count.gt(0)">this Eternity </span>
-              is {{ format(infinity.bestRate, 2, 2) }}.
-            </div>
-            <br>
-        </div>
-        <div v-if="eternity.isUnlocked">
-            <div class="c-stats-tab-general c-stats-tab-eternity">Eternity</div>
-            <div v-if="eternity.count.gt(0)">
-              You have {{ formatDecimalAmount(eternity.count) }}
-              {{"Eternity" | pluralize(eternity.count, "Eternities")}}.
-            </div>
-            <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
-            <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toStringShort() }}.</div>
-            <div v-else>You have no fastest Eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
-            <div>You have spent {{ eternity.this.toStringShort() }} in this Eternity.
-              <span v-if="reality.isUnlocked">
-                ({{eternity.thisReal.toStringShort()}} real time)
-              </span>
-            </div>
-            <div>
-              Your best Eternity Points per minute
-              <span v-if="reality.isUnlocked">this Reality </span>
-              is {{ format(eternity.bestRate, 2, 2) }}.
-            </div>
-            <br>
-        </div>
+  template: `
+    <div class="c-stats-tab">
+      <div>
+        <div class="c-stats-tab-general">General</div>
+        <div>You have made a total of {{ format(totalAntimatter, 2, 1) }} antimatter.</div>
+        <div>You have played for {{ realTimePlayed }}.</div>
         <div v-if="reality.isUnlocked">
-            <div class="c-stats-tab-general c-stats-tab-reality">Reality</div>
-            <div>You have {{formatInt(reality.count)}} {{"Reality" | pluralize(reality.count, "Realities")}}.</div>
-            <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
-            <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>
-            <div>
-              You have spent
-              {{ reality.this.toStringShort() }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)
-            </div>
-            <div>
-              Your best Reality Machines per minute is {{ format(reality.bestRate, 2, 2) }}.
-            </div>
-            <div>Your best glyph rarity is {{ formatRarity(reality.bestRarity) }}.</div>
-            <br>
-          <glyph-set-preview
-            v-for="(set, idx) in recordGlyphInfo"
-            :key="idx"
-            :show="set[0]"
-            :glyphs="set[1]"
-            :text="set[2]" />
+          Your existence has spanned {{ reality.totalTimePlayed }} of time.
         </div>
+        <div>
+          You have seen {{ formatInt(newsMessagesSeen) }} unique
+          news ticker {{ "message" | pluralize(newsMessagesSeen) }}.
+        </div>
+        <div>
+          <br>
+          <div
+            v-if="eternity.thisReal.totalSeconds > 1 && infinity.thisReal.totalSeconds > 1"
+            v-for="line in matterScale"
+          >
+            {{ line }}
+          </div>
+        </div>
+        <br>
+      </div>
+      <div v-if="infinity.isUnlocked">
+        <div class="c-stats-tab-general c-stats-tab-infinity">Infinity</div>
+        <div v-if="infinity.count.gt(0)">
+          You have {{ formatDecimalAmount(infinity.count) }}
+          {{ "Infinity" | pluralize(infinity.count, "Infinities") }}
+          <span v-if="eternity.isUnlocked">this Eternity</span>.
+        </div>
+        <div v-else>
+          You have no Infinities<span v-if="eternity.isUnlocked"> this Eternity</span>.
+        </div>
+        <div v-if="infinity.banked.gt(0)">
+          You have {{ formatDecimalAmount(infinity.banked) }} Banked
+          {{ "Infinity" | pluralize(infinity.banked, "Infinities") }}.
+        </div>
+        <div v-if="infinity.hasBest">
+          Your fastest Infinity was {{ infinity.best.toStringShort() }}.
+        </div>
+        <div v-else>
+          You have no fastest Infinity<span v-if="eternity.isUnlocked"> this Eternity</span>.
+        </div>
+        <div>
+          You have spent {{ infinity.this.toStringShort() }} in this Infinity.
+          <span v-if="reality.isUnlocked">
+            ({{ infinity.thisReal.toStringShort() }} real time)
+          </span>
+        </div>
+        <div>
+          Your best Infinity Points per minute
+          <span v-if="eternity.count.gt(0)">this Eternity </span>
+          is {{ format(infinity.bestRate, 2, 2) }}.
+        </div>
+        <br>
+      </div>
+      <div v-if="eternity.isUnlocked">
+        <div class="c-stats-tab-general c-stats-tab-eternity">Eternity</div>
+        <div v-if="eternity.count.gt(0)">
+          You have {{ formatDecimalAmount(eternity.count) }}
+          {{ "Eternity" | pluralize(eternity.count, "Eternities") }}
+          <span v-if="reality.isUnlocked">this Reality</span>.
+        </div>
+        <div v-else>
+          You have no Eternities<span v-if="reality.isUnlocked"> this Reality</span>.
+        </div>
+        <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toStringShort() }}.</div>
+        <div v-else>You have no fastest Eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
+        <div>You have spent {{ eternity.this.toStringShort() }} in this Eternity.
+          <span v-if="reality.isUnlocked">
+            ({{ eternity.thisReal.toStringShort() }} real time)
+          </span>
+        </div>
+        <div>
+          Your best Eternity Points per minute
+          <span v-if="reality.isUnlocked">this Reality </span>
+          is {{ format(eternity.bestRate, 2, 2) }}.
+        </div>
+        <br>
+      </div>
+      <div v-if="reality.isUnlocked">
+        <div class="c-stats-tab-general c-stats-tab-reality">Reality</div>
+        <div>You have {{ formatInt(reality.count) }} {{ "Reality" | pluralize(reality.count, "Realities") }}.</div>
+        <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
+        <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>
+        <div>
+          You have spent
+          {{ reality.this.toStringShort() }} in this Reality. ({{ reality.thisReal.toStringShort() }} real time)
+        </div>
+        <div>
+          Your best Reality Machines per minute is {{ format(reality.bestRate, 2, 2) }}.
+        </div>
+        <div>Your best glyph rarity is {{ formatRarity(reality.bestRarity) }}.</div>
+        <br>
+      <glyph-set-preview
+        v-for="(set, idx) in recordGlyphInfo"
+        :key="idx"
+        :show="set[0]"
+        :glyphs="set[1]"
+        :text="set[2]"
+      />
+      </div>
     </div>`
 });
 

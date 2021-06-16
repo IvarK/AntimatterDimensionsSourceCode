@@ -52,7 +52,7 @@ Vue.component("modal-away-progress", {
           !this.teresaMemoriesShown && !this.effarigMemoriesShown &&
           !this.enslavedMemoriesShown && !this.vMemoriesShown &&
           !this.blackHoleShown
-         ) {
+      ) {
         SecretAchievement(36).unlock();
         return `While you were away for ${TimeSpan.fromSeconds(this.modalConfig.seconds).toString()}...
           Nothing happened.`;
@@ -98,7 +98,7 @@ Vue.component("modal-away-progress", {
   },
   template: `
     <div class="c-modal-away-progress">
-      <modal-close-button @click="emitClose"/>
+      <modal-close-button @click="emitClose" />
       <div class="c-modal-away-progress__header">{{ headerText }}</div>
       <div class="c-modal-away-progress__resources">
         <div v-if="after.antimatter.gt(before.antimatter) && antimatter">
@@ -163,49 +163,48 @@ Vue.component("modal-away-progress", {
           <br>
           {{ formatInt(before.replicanti.galaxies) }} to {{ formatInt(after.replicanti.galaxies) }}
         </div>
-        <div v-if="this.teresaMemoriesShown || this.effarigMemoriesShown ||
-          this.enslavedMemoriesShown || this.vMemoriesShown">
+        <div v-if="teresaMemoriesShown || effarigMemoriesShown || enslavedMemoriesShown || vMemoriesShown">
           <span v-if="teresaMemoriesShown">
-          <b class="c-modal-away-progress__teresa">Teresa's Memories</b> increased from
-          <br>
-          {{ format(before.celestials.ra.pets.teresa.memories) }} to
-          {{ format(after.celestials.ra.pets.teresa.memories) }}
-          <br>
+            <b class="c-modal-away-progress__teresa">Teresa's Memories</b> increased from
+            <br>
+            {{ format(before.celestials.ra.pets.teresa.memories) }} to
+            {{ format(after.celestials.ra.pets.teresa.memories) }}
+            <br>
           </span>
           <span v-if="effarigMemoriesShown">
-          <b class="c-modal-away-progress__effarig">Effarig's Memories</b> increased from
-          <br>
-          {{ format(before.celestials.ra.pets.effarig.memories) }} to
-          {{ format(after.celestials.ra.pets.effarig.memories) }}
-          <br>
+            <b class="c-modal-away-progress__effarig">Effarig's Memories</b> increased from
+            <br>
+            {{ format(before.celestials.ra.pets.effarig.memories) }} to
+            {{ format(after.celestials.ra.pets.effarig.memories) }}
+            <br>
           </span>
           <span v-if="enslavedMemoriesShown">
-          <b class="c-modal-away-progress__enslaved">Enslaved's Memories</b> increased from
-          <br>
-          {{ format(before.celestials.ra.pets.enslaved.memories) }} to
-          {{ format(after.celestials.ra.pets.enslaved.memories) }}
-          <br>
+            <b class="c-modal-away-progress__enslaved">Enslaved's Memories</b> increased from
+            <br>
+            {{ format(before.celestials.ra.pets.enslaved.memories) }} to
+            {{ format(after.celestials.ra.pets.enslaved.memories) }}
+            <br>
           </span>
           <span v-if="vMemoriesShown">
-          <b class="c-modal-away-progress__v">V's Memories</b> increased from
-          <br>
-          {{ format(before.celestials.ra.pets.v.memories) }} to
-          {{ format(after.celestials.ra.pets.v.memories) }}
+            <b class="c-modal-away-progress__v">V's Memories</b> increased from
+            <br>
+            {{ format(before.celestials.ra.pets.v.memories) }} to
+            {{ format(after.celestials.ra.pets.v.memories) }}
           </span>
         </div>
         <div v-if="blackHoleShown">
           <span v-if="after.blackHole[0].activations > before.blackHole[0].activations">
-          Your <span v-if="before.blackHole[1].unlocked">first </span>
-          <b class="c-modal-away-progress__black-hole">Black Hole</b>
-          activated {{ formatInt(after.blackHole[0].activations - before.blackHole[0].activations) }}
-          {{"time" | pluralize(after.blackHole[0].activations - before.blackHole[0].activations)}}
-          <br>
+            Your <span v-if="before.blackHole[1].unlocked">first </span>
+            <b class="c-modal-away-progress__black-hole">Black Hole</b>
+            activated {{ formatInt(after.blackHole[0].activations - before.blackHole[0].activations) }}
+            {{ "time" | pluralize(after.blackHole[0].activations - before.blackHole[0].activations) }}
+            <br>
           </span>
           <span v-if="after.blackHole[1].activations > before.blackHole[1].activations">
-          Your second <b class="c-modal-away-progress__black-hole">Black Hole</b>
-          activated {{ formatInt(after.blackHole[1].activations - before.blackHole[1].activations) }}
-          {{"time" | pluralize(after.blackHole[1].activations - before.blackHole[1].activations)}}
-          <br>
+            Your second <b class="c-modal-away-progress__black-hole">Black Hole</b>
+            activated {{ formatInt(after.blackHole[1].activations - before.blackHole[1].activations) }}
+            {{ "time" | pluralize(after.blackHole[1].activations - before.blackHole[1].activations) }}
+            <br>
           </span>
         </div>
       </div>

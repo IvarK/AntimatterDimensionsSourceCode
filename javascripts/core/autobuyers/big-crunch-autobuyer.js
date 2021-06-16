@@ -104,6 +104,10 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
     }
   }
 
+  get resetTickOn() {
+    return PRESTIGE_EVENT.ETERNITY;
+  }
+
   reset() {
     super.reset();
     if (EternityMilestone.bigCrunchModes.isReached) return;

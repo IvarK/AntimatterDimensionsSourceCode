@@ -14,8 +14,18 @@ class SubtabState {
     return this.config.symbol;
   }
 
-  get isAvailable() {
+  get isHidden() {
+    // eslint-disable-next-line no-bitwise
+    return ((player.options.hiddenSubtabBits[this._parent.config.id] & (1 << this.config.id)) !== 0) && 
+      this.config.hidable;
+  }
+
+  get isUnlocked() {
     return this.config.condition === undefined || this.config.condition() || player.devMode;
+  }
+
+  get isAvailable() {
+    return !this.isHidden && this.isUnlocked;
   }
 
   get hasNotification() {
@@ -34,6 +44,18 @@ class SubtabState {
     this._parent.show(manual, this);
   }
 
+  unhideTab() {
+    // eslint-disable-next-line no-bitwise
+    player.options.hiddenSubtabBits[this._parent.config.id] &= ~(1 << this.config.id);
+  }
+
+  toggleVisibility() {
+    if (this._parent.config.id === Tabs.current.config.id &&
+      this.config.id === Tabs.current._currentSubtab.config.id) return;
+    // eslint-disable-next-line no-bitwise
+    player.options.hiddenSubtabBits[this._parent.config.id] ^= (1 << this.config.id);
+  }
+
   get isOpen() {
     return ui.view.subtab === this.key;
   }
@@ -50,15 +72,25 @@ class TabState {
       subtabs.push(subtab);
     }
     this.subtabs = subtabs;
-    this._currentSubtab = subtabs.filter(tab => tab.isAvailable)[0];
+    this._currentSubtab = subtabs.filter(tab => tab.isUnlocked)[0];
   }
 
   get name() {
     return this.config.name;
   }
 
-  get isAvailable() {
+  get isHidden() {
+    const hasVisibleSubtab = this.subtabs.some(t => t.isAvailable);
+    // eslint-disable-next-line no-bitwise
+    return (((player.options.hiddenTabBits & (1 << this.config.id)) !== 0) || !hasVisibleSubtab) && this.config.hidable;
+  }
+
+  get isUnlocked() {
     return this.config.condition === undefined || this.config.condition() || player.devMode;
+  }
+
+  get isAvailable() {
+    return !this.isHidden && this.isUnlocked;
   }
 
   get isOpen() {
@@ -72,10 +104,12 @@ class TabState {
   show(manual, subtab = undefined) {
     if (!manual && !player.options.automaticTabSwitching) return;
     ui.view.tab = this.config.key;
-    if (subtab !== undefined) {
+    if (subtab === undefined) {
+      this._currentSubtab = this.subtabs.find(s => s.config.id === player.options.lastOpenSubtab[this.config.id]);
+    } else {
       this._currentSubtab = subtab;
     }
-    if (!this._currentSubtab.isAvailable) this.resetCurrentSubtab();
+    if (!this._currentSubtab.isUnlocked) this.resetCurrentSubtab();
     ui.view.subtab = this._currentSubtab.key;
     const tabNotificationKey = this.config.key + this._currentSubtab.key;
     if (player.tabNotifications.has(tabNotificationKey)) player.tabNotifications.delete(tabNotificationKey);
@@ -85,21 +119,24 @@ class TabState {
     if (manual) {
       Modal.hide();
     }
+    this.unhideTab();
+    this._currentSubtab.unhideTab();
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
+  }
 
-    if (this.config.key === "reality" &&
-        player.saveOverThresholdFlag &&
-        !player.saveOverThresholdFlagModalDisplayed) {
-      Modal.message.show(`Your save seems to be over ${format(new Decimal("1e6000"))} Eternity Points.
-        There have been nerfs past that in the update, so for the first Reality your
-        Eternity Points gives fewer Reality Machines
-        past ${format(new Decimal("1e6000"))} Eternity Points.`);
-      player.saveOverThresholdFlagModalDisplayed = true;
-    }
+  unhideTab() {
+    // eslint-disable-next-line no-bitwise
+    player.options.hiddenTabBits &= ~(1 << this.config.id);
+  }
+
+  toggleVisibility() {
+    if (this.config.id === Tabs.current.config.id) return;
+    // eslint-disable-next-line no-bitwise
+    player.options.hiddenTabBits ^= (1 << this.config.id);
   }
 
   resetCurrentSubtab() {
-    this._currentSubtab = this.subtabs.filter(tab => tab.isAvailable)[0];
+    this._currentSubtab = this.subtabs.filter(tab => tab.isUnlocked)[0];
   }
 }
 
@@ -117,8 +154,8 @@ const Tabs = (function() {
   };
 }());
 
-EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => {
-  for (const tab of Tabs.all) {
-    tab.resetCurrentSubtab();
-  }
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
+  const currTab = Tabs.current.config.id;
+  player.options.lastOpenTab = currTab;
+  player.options.lastOpenSubtab[currTab] = Tabs.current._currentSubtab.config.id;
 });

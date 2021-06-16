@@ -27,8 +27,8 @@ Vue.component("eternity-upgrade-button", {
       this.isAffordable = upgrade.isAffordable;
     }
   },
-  template:
-    `<button :class="classObject" @click="upgrade.purchase()">
+  template: `
+    <button :class="classObject" @click="upgrade.purchase()">
       <description-display :config="upgrade.config" />
       <effect-display br :config="upgrade.config" />
       <cost-display br

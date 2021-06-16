@@ -207,6 +207,11 @@ body {
 }
 
 @font-face {
+  font-family: Barrio;
+  src: url('Barrio-Regular.ttf');
+}
+
+@font-face {
   font-family: Font Awesome;
   src: url('fa-solid-900.ttf');
 }
@@ -449,6 +454,27 @@ button:focus {
 }
 
 /*#endregion TT shop*/
+
+.l-dim-path-priority {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  animation: weee 4s infinite;
+}
+
+.o-time-study-selection-btn {
+  border: 0.1rem solid;
+  background-color: black;
+  font-weight: bold;
+  font-family: Typewriter, serif;
+  width: 20rem;
+  height: 6rem;
+  margin: 1rem;
+  transition-duration: 0.2s;
+  border-radius: 0.4rem;
+  font-size: 1.65rem;
+  position:relative;
+}
 
 /*#region tab buttons*/
 
@@ -5565,26 +5591,6 @@ kbd {
   border-color: black;
 }
 
-.o-notification--memory-teresa {
-  background-color: var(--color-ra-pet-teresa);
-  border-color: #5970e3;
-}
-
-.o-notification--memory-effarig {
-  background-color: var(--color-ra-pet-effarig);
-  border-color: #e35959;
-}
-
-.o-notification--memory-enslaved {
-  background-color: var(--color-ra-pet-enslaved);
-  border-color: #ec8c51;
-}
-
-.o-notification--memory-v {
-  background-color: var(--color-ra-pet-v);
-  border-color: #e3c759;
-}
-
 .t-metro .o-notification--success,
 .t-dark-metro .o-notification--success,
 .t-inverted-metro .o-notification--success,
@@ -7347,6 +7353,10 @@ kbd {
   transition-duration: 0.2s;
 }
 
+.o-alchemy-reaction-path--not-focused {
+  opacity: 0.5;
+}
+
 .o-alchemy-node {
   color: black;
   position: absolute;
@@ -7505,6 +7515,10 @@ kbd {
 .t-s8 .o-laitela-run-button {
   border-width: 0.1rem;
   border-radius: 0;
+}
+
+.o-laitela-run-button--large {
+  width: 45rem;
 }
 
 .o-laitela-matter-amount {
@@ -7799,6 +7813,27 @@ kbd {
   background: var(--color-laitela--accent);
 }
 
+.o-laitela-singularity-locked {
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
+  padding: 0.6rem;
+  margin: 0;
+  font-weight: bold;
+  width: 22rem;
+  height: 4%;
+  border-radius: .5rem;
+  border: 0.2rem solid var(--color-laitela--accent);
+  font-size: 20px;
+  padding-top: 10rem;
+}
+
+.t-metro .o-laitela-singularity-locked,
+.t-dark-metro .o-laitela-singularity-locked,
+.t-inverted-metro .o-laitela-singularity-locked,
+.t-s8 .o-laitela-singularity-locked {
+  border-width: 0.1rem;
+  border-radius: 0;
+}
 .c-laitela-next-milestones {
   margin-left: 1rem;
   display: flex;
@@ -8586,6 +8621,104 @@ input.o-automator-block-input {
   font-size: 1.5rem;
   cursor: pointer;
   font-weight: 500;
+}
+
+.l-hide-modal-tab-container {
+  margin: 0.5rem;
+}
+
+.l-hide-modal-subtab-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 62.6rem;
+}
+
+.c-hide-modal-all-subtab-container {
+  border-radius: 0.8rem;
+  border: 0.1rem solid black;
+  padding: 0.2rem;
+}
+
+.t-metro .c-hide-modal-all-subtab-container,
+.t-dark-metro .c-hide-modal-all-subtab-container,
+.t-inverted-metro .c-hide-modal-all-subtab-container,
+.t-s8 .c-hide-modal-all-subtab-container {
+  border-radius: 0;
+}
+
+.c-hide-modal-tab-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  height: 4rem;
+  width: 12rem;
+  margin: 0.2rem;
+  border-color: black !important;
+  box-shadow: none !important;
+  white-space: normal;
+  font-weight: bold;
+}
+
+.c-hide-modal-button--active {
+  opacity: 1;
+}
+
+.c-hide-modal-button--inactive {
+  opacity: 0.6;
+}
+
+.c-hide-modal-button--always-visible {
+  background-color: var(--color-disabled) !important;
+  pointer-events: none;
+}
+
+.c-hide-modal-button--current {
+  text-shadow: 0 0 0.3rem;
+}
+
+.c-hide-modal-tab-button--infinity {
+  color: var(--color-infinity);
+  background: var(--color-prestige--accent) !important;
+  border-color: var(--color-infinity) !important;
+}
+
+.c-hide-modal-tab-button--infinity:hover {
+  color: var(--color-prestige--accent);
+  background: var(--color-infinity) !important;
+}
+
+.c-hide-modal-tab-button--eternity {
+  color: var(--color-eternity);
+  background: var(--color-prestige--accent) !important;
+  border-color: var(--color-eternity) !important;
+}
+
+.c-hide-modal-tab-button--eternity:hover {
+  color: var(--color-prestige--accent);
+  background: var(--color-eternity) !important;
+}
+
+.c-hide-modal-tab-button--reality {
+  color: var(--color-reality);
+  background: var(--color-prestige--accent) !important;
+  border-color: var(--color-reality) !important;
+}
+
+.c-hide-modal-tab-button--reality:hover {
+  color: var(--color-prestige--accent);
+  background: var(--color-reality) !important;
+}
+
+.c-hide-modal-tab-button--celestials {
+  color: var(--color-celestials);
+  background: var(--color-prestige--accent) !important;
+  border-color: var(--color-celestials) !important;
+}
+
+.c-hide-modal-tab-button--celestials:hover {
+  color: var(--color-prestige--accent);
+  background: var(--color-celestials) !important;
 }
 
 /* Prevent any themes overriding font awesome */

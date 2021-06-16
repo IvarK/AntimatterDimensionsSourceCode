@@ -12,6 +12,11 @@ Vue.component("black-hole-upgrade-button", {
       isAutobuyerOn: false
     };
   },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.blackHolePower(this.config.upgrade.id).isActive = newValue;
+    }
+  },
   computed: {
     effectConfig() {
       const { config } = this;
@@ -31,11 +36,6 @@ Vue.component("black-hole-upgrade-button", {
       return {
         "c-reality-upgrade-btn--unavailable": !this.isAffordable
       };
-    }
-  },
-  watch: {
-    isAutobuyerOn(newValue) {
-      Autobuyer.blackHolePower(this.config.upgrade.id).isActive = newValue;
     }
   },
   methods: {
@@ -64,6 +64,5 @@ Vue.component("black-hole-upgrade-button", {
         text="Auto:"
         class="l--spoon-btn-group__little-spoon-reality-btn o-primary-btn--reality-upgrade-toggle"
       />
-    </div>
-  `
+    </div>`
 });

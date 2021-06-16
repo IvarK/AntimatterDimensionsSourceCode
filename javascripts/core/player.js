@@ -57,7 +57,7 @@ let player = {
       mode: 0,
       rm: new Decimal(1),
       glyph: 0,
-      isActive: true
+      isActive: false
     },
     eternity: {
       mode: 0,
@@ -180,7 +180,8 @@ let player = {
     uselessNewsClicks: 0,
     cancerAchievements: false,
     paperclips: 0,
-    newsQueuePosition: 1000
+    newsQueuePosition: 1000,
+    eiffelTowerChapter: 0
   },
   shownRuns: {
     Reality: true,
@@ -192,9 +193,12 @@ let player = {
     totalTimePlayed: 0,
     realTimePlayed: 0,
     totalAntimatter: new Decimal(0),
-    lastTenInfinities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
-    lastTenEternities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
-    lastTenRealities: Array.range(0, 10).map(() => [Number.MAX_VALUE, new Decimal(1), 1, Number.MAX_VALUE, 0]),
+    lastTenInfinities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
+    lastTenEternities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, new Decimal(1), new Decimal(1), Number.MAX_VALUE]),
+    lastTenRealities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, new Decimal(1), 1, Number.MAX_VALUE, 0]),
     thisInfinity: {
       time: 0,
       realTime: 0,
@@ -291,6 +295,7 @@ let player = {
     epBought: 0,
     studies: [],
     shopMinimized: false,
+    preferredPaths: [[], 0],
     presets: new Array(6).fill({
       name: "",
       studies: "",
@@ -350,11 +355,11 @@ let player = {
     },
     upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
-              false, false, false, false, false,
-              false, false, false, false, false,
-              false, false, false, false, false,
-              false, false, false, false, false,
-              false, false, false, false, false],
+      false, false, false, false, false,
+      false, false, false, false, false,
+      false, false, false, false, false,
+      false, false, false, false, false,
+      false, false, false, false, false],
     perks: new Set(),
     respec: false,
     showGlyphSacrifice: false,
@@ -518,14 +523,14 @@ let player = {
       run: false,
       unlockBits: 0,
       dimensions: Array.range(0, 4).map(() =>
-      ({
-        amount: new Decimal(0),
-        intervalUpgrades: 0,
-        powerDMUpgrades: 0,
-        powerDEUpgrades: 0,
-        timeSinceLastUpdate: 0,
-        ascensionCount: 0
-      })),
+        ({
+          amount: new Decimal(0),
+          intervalUpgrades: 0,
+          powerDMUpgrades: 0,
+          powerDEUpgrades: 0,
+          timeSinceLastUpdate: 0,
+          ascensionCount: 0
+        })),
       darkAutobuyerTimer: 0,
       entropy: 0,
       thisCompletion: 3600,
@@ -551,8 +556,6 @@ let player = {
   triggeredTabNotificationBits: 0,
   tutorialState: 0,
   tutorialActive: true,
-  saveOverThresholdFlag: false,
-  saveOverThresholdFlagModalDisplayed: false,
   options: {
     news: {
       enabled: true,
@@ -636,7 +639,11 @@ let player = {
       replicantiGalaxies: true,
       celestialMemories: true,
       blackHole: true
-    }
+    },
+    hiddenTabBits: 0,
+    hiddenSubtabBits: Array.repeat(0, 10),
+    lastOpenTab: 0,
+    lastOpenSubtab: Array.repeat(0, 10),
   },
   IAP: {
     totalSTD: 0,
@@ -670,7 +677,7 @@ const Player = {
   },
 
   get anyChallenge() {
-    return this.antimatterChallenge || EternityChallenge.current
+    return this.antimatterChallenge || EternityChallenge.current;
   },
 
   get isInBrokenChallenge() {

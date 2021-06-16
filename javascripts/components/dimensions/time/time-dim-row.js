@@ -16,10 +16,19 @@ Vue.component("time-dim-row", {
       isAvailableForPurchase: false,
       isAutobuyerOn: false,
       requirementReached: false,
-      realityUnlocked: false
+      realityUnlocked: false,
+      showTTCost: false,
     };
   },
+  watch: {
+    isAutobuyerOn(newValue) {
+      Autobuyer.timeDimension(this.tier).isActive = newValue;
+    }
+  },
   computed: {
+    shiftDown() {
+      return ui.view.shiftDown;
+    },
     name() {
       return TimeDimension(this.tier).shortDisplayName;
     },
@@ -29,16 +38,25 @@ Vue.component("time-dim-row", {
         : "";
     },
     buttonContents() {
-      if (!this.isUnlocked) return "Purchase the study";
-      return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2)} EP`;
+      if (this.showTTCost) {
+        return this.formattedTTCost;
+      }
+      return this.formattedEPCost;
+    },
+    tooltipContents() {
+      if (this.showTTCost) {
+        return this.formattedEPCost;
+      }
+      return null;
     },
     showRow() {
       return this.realityUnlocked || this.isUnlocked || this.requirementReached;
-    }
-  },
-  watch: {
-    isAutobuyerOn(newValue) {
-      Autobuyer.timeDimension(this.tier).isActive = newValue;
+    },
+    formattedTTCost() {
+      return `Unlock: ${format(DilationTimeStudyState.studies[this.tier - 3].cost)} TT`;
+    },
+    formattedEPCost() {
+      return this.isCapped ? "Capped" : `Cost: ${format(this.cost, 2)} EP`;
     }
   },
   methods: {
@@ -60,6 +78,7 @@ Vue.component("time-dim-row", {
       this.requirementReached = dimension.requirementReached;
       this.isAutobuyerOn = Autobuyer.timeDimension(this.tier).isActive;
       this.realityUnlocked = PlayerProgress.realityUnlocked();
+      this.showTTCost = !this.isUnlocked && !this.shiftDown;
     },
     buyTimeDimension() {
       if (!this.isUnlocked) {
@@ -73,20 +92,26 @@ Vue.component("time-dim-row", {
     },
   },
   template: `
-    <div v-show="showRow" class="c-time-dim-row"
-      :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }">
+    <div
+      v-show="showRow"
+      class="c-time-dim-row"
+      :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }"
+    >
       <div class="c-dim-row__label c-dim-row__name">
-        {{name}} Time Dimension {{formatX(multiplier, 2, 1)}}
+        {{ name }} Time Dimension {{ formatX(multiplier, 2, 1) }}
       </div>
       <div class="c-dim-row__label c-dim-row__label--growable">
-        {{format(amount, 2, 0)}}
-        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
+        {{ format(amount, 2, 0) }}
+        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{ rateOfChangeDisplay }}</span>
       </div>
       <primary-button
+        v-tooltip="tooltipContents"
         :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-td l-dim-row__button"
         @click="buyTimeDimension"
-      >{{buttonContents}}</primary-button>
+      >
+        {{ buttonContents }}
+      </primary-button>
       <primary-button-on-off
         v-if="areAutobuyersUnlocked"
         v-model="isAutobuyerOn"
@@ -98,6 +123,8 @@ Vue.component("time-dim-row", {
         :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-td-max l-dim-row__button"
         @click="buyMaxTimeDimension"
-      >Buy Max</primary-button>
-    </div>`,
+      >
+        Buy Max
+      </primary-button>
+    </div>`
 });

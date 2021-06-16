@@ -47,9 +47,9 @@ Vue.component("effect-display", {
         if (config.reachedCapFn) {
           this.reachedCapFn = config.reachedCapFn;
         } else {
-        this.reachedCapFn = isNumber
-          ? () => this.effectValue >= this.cap
-          : () => this.effectValue.gte(this.cap);
+          this.reachedCapFn = isNumber
+            ? () => this.effectValue >= this.cap
+            : () => this.effectValue.gte(this.cap);
         }
         if (typeof cap !== "function") {
           this.hasCap = true;
@@ -86,9 +86,9 @@ Vue.component("effect-display", {
       if (this.updateFn) this.updateFn();
     }
   },
-  template:
-    `<span v-if="isVisible && effectDisplay !== undefined">
+  template: `
+    <span v-if="isVisible && effectDisplay !== undefined">
       <br v-if="br">
-      {{titleDisplay}}{{effectDisplay}}
+      {{ titleDisplay }}{{ effectDisplay }}
     </span>`
 });

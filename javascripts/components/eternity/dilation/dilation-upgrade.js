@@ -35,16 +35,17 @@ Vue.component("dilation-upgrade", {
       };
     },
     timeEstimate() {
-      // Don't show if less than 10 seconds or more than a year
-      return this.timeUntilCost.lt(10) || this.timeUntilCost.gt(86400 * 365.25) 
-        ? null
-        : TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toStringShort(false);
+      if (this.isAffordable || this.upgrade.isBought || getDilationGainPerSecond().eq(0)) return null;
+      if (this.timeUntilCost.lt(1)) return `< ${formatInt(1)} second`;
+      if (this.timeUntilCost.gt(86400 * 365.25)) return `> ${formatInt(1)} year`;
+      return TimeSpan.fromSeconds(this.timeUntilCost.toNumber()).toStringShort();
     }
   },
   methods: {
     update() {
       const upgrade = this.upgrade;
-      this.timeUntilCost = Decimal.sub(upgrade.cost, Currency.dilatedTime.value).div(getDilationGainPerSecond());
+      this.timeUntilCost = Decimal.sub(upgrade.cost, Currency.dilatedTime.value)
+        .div(getDilationGainPerSecond().times(getGameSpeedupForDisplay()));
       if (this.isRebuyable) {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;
@@ -59,8 +60,8 @@ Vue.component("dilation-upgrade", {
       }
     }
   },
-  template:
-    `<div class="l-spoon-btn-group">
+  template: `
+    <div class="l-spoon-btn-group">
       <button :class="classObject" @click="upgrade.purchase()" :ach-tooltip="timeEstimate">
         <description-display
           :config="upgrade.config"

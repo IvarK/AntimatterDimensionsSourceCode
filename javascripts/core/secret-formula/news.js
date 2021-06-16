@@ -2855,7 +2855,7 @@ GameDatabase.news = [
   {
     id: "e7",
     get text() {
-      return `${format(new Decimal("1e201600"), 0, 0)} IP? I'm finally done!`;
+      return `${format("1e201600")} IP? I'm finally done!`;
     },
     get unlocked() {
       return Enslaved.isRunning && player.records.thisReality.realTime >= TimeSpan.fromMinutes(15).totalMilliseconds;

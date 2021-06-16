@@ -84,7 +84,7 @@ GameDatabase.achievements.normal = [
   {
     id: 24,
     name: "Antimatter Apocalypse",
-    get description() { return `Get over ${format(1e80, 0, 0)} antimatter.`; },
+    get description() { return `Get over ${format(1e80)} antimatter.`; },
     checkRequirement: () => Currency.antimatter.exponent >= 80,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
@@ -410,7 +410,7 @@ GameDatabase.achievements.normal = [
   {
     id: 66,
     name: "Faster than a squared potato",
-    get description() { return `Get more than ${format(1e58, 0, 0)} ticks per second.`; },
+    get description() { return `Get more than ${format(1e58)} ticks per second.`; },
     checkRequirement: () => Tickspeed.current.exponent <= -55,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() { return `Multiply starting tickspeed by ${formatX(1.02, 0, 2)}.`; },
@@ -512,7 +512,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Time.thisInfinityRealTime.totalMilliseconds <= 200,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() {
-      return `Start with ${format(2e25, 0, 0)} antimatter.`;
+      return `Start with ${format(2e25)} antimatter.`;
     },
     effect: 2e25
   },
@@ -543,7 +543,7 @@ GameDatabase.achievements.normal = [
   {
     id: 84,
     name: "I got a few to spare",
-    get description() { return `Reach ${formatPostBreak("1e35000", 0, 0)} antimatter.`; },
+    get description() { return `Reach ${formatPostBreak("1e35000")} antimatter.`; },
     checkRequirement: () => Currency.antimatter.exponent >= 35000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Antimatter Dimensions are stronger the more unspent antimatter you have.",
@@ -553,7 +553,7 @@ GameDatabase.achievements.normal = [
   {
     id: 85,
     name: "ALL YOUR IP ARE BELONG TO US",
-    get description() { return `Big Crunch for ${format(1e150, 0, 0)} Infinity Points.`; },
+    get description() { return `Big Crunch for ${format(1e150)} Infinity Points.`; },
     checkRequirement: () => gainedInfinityPoints().exponent >= 150,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() { return `Additional ${formatX(4)} multiplier to Infinity Points.`; },
@@ -631,7 +631,7 @@ GameDatabase.achievements.normal = [
   {
     id: 93,
     name: "MAXIMUM OVERDRIVE",
-    get description() { return `Big Crunch for ${format(1e300, 0, 0)} Infinity Points.`; },
+    get description() { return `Big Crunch for ${format(1e300)} Infinity Points.`; },
     checkRequirement: () => gainedInfinityPoints().exponent >= 300,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() { return `Additional ${formatX(4)} multiplier to Infinity Points.`; },
@@ -640,7 +640,7 @@ GameDatabase.achievements.normal = [
   {
     id: 94,
     name: "4.3333 minutes of Infinity",
-    get description() { return `Reach ${format(1e260, 0, 0)} Infinity Power.`; },
+    get description() { return `Reach ${format(1e260)} Infinity Power.`; },
     checkRequirement: () => Currency.infinityPower.exponent >= 260,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Double Infinity Power gain.",
@@ -821,7 +821,7 @@ GameDatabase.achievements.normal = [
   {
     id: 118,
     name: "IT'S OVER 9000",
-    get description() { return `Get a total Dimensional Sacrifice multiplier of ${formatPostBreak("1e9000", 0, 0)}.`; },
+    get description() { return `Get a total Dimensional Sacrifice multiplier of ${formatPostBreak("1e9000")}.`; },
     checkRequirement: () => Sacrifice.totalBoost.exponent >= 9000,
     checkEvent: GAME_EVENT.SACRIFICE_RESET_AFTER,
     reward: "Dimensional Sacrifice doesn't reset your Antimatter Dimensions.",
@@ -829,7 +829,7 @@ GameDatabase.achievements.normal = [
   {
     id: 121,
     name: "Can you get infinite IP?",
-    get description() { return `Reach ${formatPostBreak("1e30008", 0, 0)} Infinity Points.`; },
+    get description() { return `Reach ${formatPostBreak("1e30008")} Infinity Points.`; },
     checkRequirement: () => Currency.infinityPoints.exponent >= 30008,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
@@ -858,7 +858,7 @@ GameDatabase.achievements.normal = [
     id: 125,
     name: "Like feasting on a behind",
     get description() {
-      return `Reach ${format(1e90, 0, 0)} Infinity Points without having any Infinities
+      return `Reach ${format(1e90)} Infinity Points without having any Infinities
       or any 1st Antimatter Dimensions in your current Eternity.`;
     },
     checkRequirement: () => Currency.infinityPoints.exponent >= 90 &&
@@ -893,7 +893,7 @@ GameDatabase.achievements.normal = [
   {
     id: 128,
     name: "What do I have to do to get rid of you",
-    get description() { return `Reach ${formatPostBreak("1e22000", 0, 0)} Infinity Points without any Time Studies.`; },
+    get description() { return `Reach ${formatPostBreak("1e22000")} Infinity Points without any Time Studies.`; },
     checkRequirement: () => Currency.infinityPoints.exponent >= 22000 && player.timestudy.studies.length === 0,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "Time Dimensions are multiplied by the number of Time Studies you have.",
@@ -928,7 +928,7 @@ GameDatabase.achievements.normal = [
     id: 133,
     name: "I never liked this infinity stuff anyway",
     get description() {
-      return `Reach ${formatPostBreak("1e200000", 0, 0)} Infinity Points without
+      return `Reach ${formatPostBreak("1e200000")} Infinity Points without
       buying any Infinity Dimensions or the ${formatX(2)} Infinity Point multiplier.`;
     },
     checkRequirement: () =>
@@ -941,7 +941,7 @@ GameDatabase.achievements.normal = [
   {
     id: 134,
     name: "When will it be enough?",
-    get description() { return `Reach ${formatPostBreak("1e18000", 0, 0)} Replicanti.`; },
+    get description() { return `Reach ${formatPostBreak("1e18000")} Replicanti.`; },
     checkRequirement: () => player.replicanti.amount.exponent >= 18000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
@@ -952,7 +952,7 @@ GameDatabase.achievements.normal = [
   {
     id: 135,
     name: "Faster than a potato^286078",
-    get description() { return `Get more than ${formatPostBreak("1e8296262", 0, 0)} ticks per second.`; },
+    get description() { return `Get more than ${formatPostBreak("1e8296262")} ticks per second.`; },
     checkRequirement: () => Tickspeed.current.exponent <= -8296262,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
@@ -966,7 +966,7 @@ GameDatabase.achievements.normal = [
     id: 137,
     name: "Now you're thinking with dilation!",
     get description() {
-      return `Get ${formatPostBreak("1e260000", 0, 0)} antimatter
+      return `Get ${formatPostBreak("1e260000")} antimatter
       in ${formatInt(1)} minute or less while Dilated.`;
     },
     checkRequirement: () =>
@@ -981,7 +981,7 @@ GameDatabase.achievements.normal = [
     id: 138,
     name: "This is what I have to do to get rid of you.",
     get description() {
-      return `Reach ${formatPostBreak("1e26000", 0, 0)} Infinity Points without any Time Studies while Dilated.`;
+      return `Reach ${formatPostBreak("1e26000")} Infinity Points without any Time Studies while Dilated.`;
     },
     checkRequirement: () =>
       player.timestudy.studies.length === 0 &&
@@ -1146,7 +1146,7 @@ GameDatabase.achievements.normal = [
   {
     id: 161,
     name: "that's where you're wrong kiddo",
-    get description() { return `Get ${format("1e100000000", 0, 0)} antimatter while Dilated.`; },
+    get description() { return `Get ${format("1e100000000")} antimatter while Dilated.`; },
     checkRequirement: () => Currency.antimatter.exponent >= 100000000 && player.dilation.active,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },

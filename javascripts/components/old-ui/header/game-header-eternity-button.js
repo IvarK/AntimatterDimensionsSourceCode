@@ -207,7 +207,7 @@ Vue.component("game-header-eternity-button", {
           </template>
           <template v-else-if="hasMoreCompletions">
             <br>
-            Next goal at {{ format(nextGoalAt, 0, 0) }} IP
+            Next goal at {{ format(nextGoalAt) }} IP
           </template>
         </template>
       </template>

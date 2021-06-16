@@ -53,7 +53,7 @@ Vue.component("replicanti-tab", {
           }
           return description;
         },
-        cost => `+${formatInt(1)} Costs: ${format(cost, 0, 0)} IP`
+        cost => `+${formatInt(1)} Costs: ${format(cost)} IP`
       );
     }
   },
@@ -91,7 +91,7 @@ Vue.component("replicanti-tab", {
       >
         Unlock Replicanti
         <br>
-        Cost: {{ format(1e140, 0, 0) }} IP
+        Cost: {{ format(1e140) }} IP
       </primary-button>
       <template v-else>
         <div v-if="isInEC8">

@@ -421,7 +421,7 @@ Eternity Point gain scales similarly to Infinity Point gain, but scaling off of 
 The base amount of EP gained at ${formatPostBreak(Number.MAX_VALUE, 2)} IP is ~${format(1.62, 2, 2)} EP, multiplied by
 ${formatInt(5)} for every factor of ${formatPostBreak(Number.MAX_VALUE, 2)} more IP you have. This is always rounded
 down, which means that you will get ${formatInt(1)} EP at ${formatPostBreak(Number.MAX_VALUE, 2)} IP but will not reach
-${formatInt(2)} EP until ${formatPostBreak(new Decimal("1e349"))}.
+${formatInt(2)} EP until ${formatPostBreak("1e349")}.
 <b>Hotkey: E</b> will Eternity.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
@@ -517,7 +517,7 @@ the middle of an Eternity.
 <br>
 <b>Costs multipliers per purchase:</b>
 <br>
-<b>Antimatter:</b> ${formatPostBreak(new Decimal("1e20000"))}
+<b>Antimatter:</b> ${formatPostBreak("1e20000")}
 <br>
 <b>Infinity Points:</b> ${format(1e100)}
 <br>
@@ -582,7 +582,7 @@ can be repeatedly purchased as many times as you can afford them.
     }, {
       name: "Reality",
       info: () => `
-When you reach ${format(5e9)} time theorems, ${formatPostBreak(new Decimal("1e4000"))} EP, and have completed the first
+When you reach ${format(5e9)} time theorems, ${formatPostBreak("1e4000")} EP, and have completed the first
 ${formatInt(13)} rows of Achievements, you will be able to purchase the Time Study that unlocks Reality.
 Unlocking it opens a new tab, where you can find the button to make a new Reality. Starting a new Reality
 will reset everything you have done so far except challenge times and total antimatter, but in exchange gives
@@ -602,7 +602,7 @@ currency that can be spent in the Perks subtab on different Perks.
 <br>
 Reality Machines scale purely off of EP, and the Reality button will tell you how much EP you need in order to gain
 the next one. The first ${formatInt(10)} RM scale linearly in the exponent between
-${formatPostBreak(new Decimal("1e4000"))} EP and ${formatPostBreak(Decimal.pow(10, 16000 / 3))} EP, and then past that
+${formatPostBreak("1e4000")} EP and ${formatPostBreak(Decimal.pow(10, 16000 / 3))} EP, and then past that
 RM = ${formatInt(1000)}<sup>log<sub>${formatInt(10)}</sub>(EP)/${formatInt(4000)}-${formatInt(1)}</sup>.
 <br>
 <br>
@@ -1041,7 +1041,7 @@ ${Ra.has(RA_UNLOCKS.V_UNLOCK)
 <br>
 <br>
 Having a level ${formatInt(25000)} Reality Glyph, a total of ${formatInt(100)} Ra levels, and
-${formatPostBreak(new Decimal("1e2000"))} Reality Machines will allow you to unlock the next Celestial.`,
+${formatPostBreak("1e2000")} Reality Machines will allow you to unlock the next Celestial.`,
       isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
       tags: ["reality", "memories", "razenpok", "levels", "glyphs", "lategame", "endgame",
         "effarig", "teresa", "enslaved", "v"],
@@ -1092,7 +1092,7 @@ that the reaction can't proceed due to not having enough of that reagent to get 
       alias: "Lai'tela",
       info: () => `
 Lai'tela is the sixth Celestial, unlocked by having a level ${formatInt(25000)} Reality Glyph,
-a total of ${formatInt(100)} Ra levels, and spending ${formatPostBreak(new Decimal("1e2000"))} Reality Machines.
+a total of ${formatInt(100)} Ra levels, and spending ${formatPostBreak("1e2000")} Reality Machines.
 <br>
 <br>
 When you unlock Lai'tela, your Antimatter Dimensions and Tickspeed upgrades switch to a new mode of production

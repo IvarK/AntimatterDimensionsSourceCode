@@ -69,11 +69,10 @@ Vue.component("alchemy-resource-info", {
       </span>
       <span>Current: {{ resourceAmount }}</span>
       <span v-if="isBaseResource">Base Resource</span>
-      <span v-else>Reaction: {{isReactionActive ? "Active" : "Inactive"}} ({{ reactionText }})</span>
+      <span v-else>Reaction: {{ isReactionActive ? "Active" : "Inactive" }} ({{ reactionText }})</span>
       <span><effect-display title="Effect" :config="effectConfig" /></span>
     </div>
     <div :class="classObject" v-else>
-      <span>Unlock requirement: {{unlockRequirement}}</span>
-    </div>
-  `
+      Unlock requirement: {{ unlockRequirement }}
+    </div>`
 });

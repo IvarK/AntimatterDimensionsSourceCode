@@ -69,6 +69,23 @@ Vue.component("automator-text-editor", {
       this.$nextTick(() => this.UI.editor.refresh());
     }
   },
+  created() {
+    AutomatorTextUI.initialize();
+    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
+  },
+  mounted() {
+    this.$refs.container.appendChild(this.UI.container);
+    this.$nextTick(() => {
+      this.UI.editor.refresh();
+      this.UI.editor.performLint();
+    });
+  },
+  beforeDestroy() {
+    // This will stick around, otherwise
+    this.unmarkActiveLine();
+    this.$refs.container.removeChild(this.UI.container);
+    EventHub.ui.offAll(this);
+  },
   computed: {
     UI() {
       AutomatorTextUI.initialize();
@@ -117,24 +134,9 @@ Vue.component("automator-text-editor", {
       else this.unmarkActiveLine();
     },
   },
-  created() {
-    AutomatorTextUI.initialize();
-    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.onGameLoad(), this);
-  },
-  mounted() {
-    this.$refs.container.appendChild(this.UI.container);
-    this.$nextTick(() => {
-      this.UI.editor.refresh();
-      this.UI.editor.performLint();
-    });
-  },
-  beforeDestroy() {
-    // This will stick around, otherwise
-    this.unmarkActiveLine();
-    this.$refs.container.removeChild(this.UI.container);
-    EventHub.ui.offAll(this);
-  },
   template: `
-    <div ref="container"
-         class="c-automator-editor l-automator-editor l-automator-pane__content"/>`
+    <div
+      ref="container"
+      class="c-automator-editor l-automator-editor l-automator-pane__content"
+    />`
 });

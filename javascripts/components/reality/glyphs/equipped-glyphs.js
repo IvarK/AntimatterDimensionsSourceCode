@@ -12,6 +12,10 @@ Vue.component("equipped-glyphs", {
       undoVisible: false,
     };
   },
+  created() {
+    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
+    this.glyphsChanged();
+  },
   computed: {
     // Empty slots are bigger due to the enlarged drop zone
     GLYPH_SIZE: () => 5,
@@ -32,10 +36,6 @@ Vue.component("equipped-glyphs", {
           " (Most resources will be fully reset)")
         : "Undo is only available for Glyphs equipped during this Reality";
     },
-  },
-  created() {
-    this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
-    this.glyphsChanged();
   },
   methods: {
     glyphPositionStyle(idx) {
@@ -117,54 +117,69 @@ Vue.component("equipped-glyphs", {
     },
   },
   template: `
-  <div class="l-equipped-glyphs">
-    <div class="l-equipped-glyphs__slots">
-      <div v-for="(glyph, idx) in glyphs"
-           :style="glyphPositionStyle(idx)"
-           v-on="dragEvents(idx)">
-        <!-- the drop zone is a bit larger than the glyph itself. -->
-        <div class="l-equipped-glyphs__dropzone"
-             v-on="dragEvents(idx)" />
-        <glyph-component v-if="glyph"
-                         :key="idx"
-                         :glyph="glyph"
-                         :circular="true"
-                         style="-webkit-user-drag: none;"/>
-        <div v-else
-             :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
-                      {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]" />
+    <div class="l-equipped-glyphs">
+      <div class="l-equipped-glyphs__slots">
+        <div
+          v-for="(glyph, idx) in glyphs"
+          :style="glyphPositionStyle(idx)"
+          v-on="dragEvents(idx)"
+        >
+          <!-- the drop zone is a bit larger than the glyph itself. -->
+          <div
+            class="l-equipped-glyphs__dropzone"
+            v-on="dragEvents(idx)"
+          />
+          <glyph-component
+            v-if="glyph"
+            :key="idx"
+            :glyph="glyph"
+            :circular="true"
+            style="-webkit-user-drag: none;"
+          />
+          <div
+            v-else
+            :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
+              {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]"
+          />
+        </div>
+        <div v-for="glyph in copiedGlyphs" :style="copyPositionStyle(glyph)">
+          <glyph-component
+            v-if="glyph"
+            :glyph="glyph"
+            :circular="true"
+          />
+        </div>
       </div>
-      <div v-for="glyph in copiedGlyphs" :style="copyPositionStyle(glyph)">
-        <glyph-component v-if="glyph"
-                          :glyph="glyph"
-                          :circular="true"/>
+      <div class="l-equipped-glyphs__buttons">
+        <button
+          class="l-equipped-glyphs__large c-reality-upgrade-btn"
+          :class="{'c-reality-upgrade-btn--bought': respec}"
+          :ach-tooltip="respecTooltip"
+          @click="toggleRespec"
+        >
+          Unequip Glyphs on Reality
+        </button>
+        <button
+          v-if="undoVisible"
+          class="l-equipped-glyphs__small c-reality-upgrade-btn"
+          :class="{'c-reality-upgrade-btn--unavailable': !undoAvailable}"
+          :ach-tooltip="undoTooltip"
+          @click="undo"
+        >
+          Undo
+        </button>
       </div>
-    </div>
-    <div class="l-equipped-glyphs__buttons">
-      <button class="l-equipped-glyphs__large c-reality-upgrade-btn"
-              :class="{'c-reality-upgrade-btn--bought': respec}"
-              :ach-tooltip="respecTooltip"
-              @click="toggleRespec">
-        Unequip Glyphs on Reality
-      </button>
-      <button v-if="undoVisible"
-              class="l-equipped-glyphs__small c-reality-upgrade-btn"
-              :class="{'c-reality-upgrade-btn--unavailable': !undoAvailable}"
-              :ach-tooltip="undoTooltip"
-              @click="undo">
-        Undo
-      </button>
-    </div>
-    <div class="l-equipped-glyphs__buttons">
-      <button class="l-equipped-glyphs__large c-reality-upgrade-btn"
-              :class="{'l-equipped-glyphs__larger' : undoVisible}"
-              @click="toggleRespecIntoProtected">
-        Unequip Glyphs to:
-        <br>
-        <span v-if="respecIntoProtected">Protected slots</span>
-        <span v-else>Main inventory</span>
-      </button>
-    </div>
-  </div>
-  `,
+      <div class="l-equipped-glyphs__buttons">
+        <button
+          class="l-equipped-glyphs__large c-reality-upgrade-btn"
+          :class="{'l-equipped-glyphs__larger' : undoVisible}"
+          @click="toggleRespecIntoProtected"
+        >
+          Unequip Glyphs to:
+          <br>
+          <span v-if="respecIntoProtected">Protected slots</span>
+          <span v-else>Main inventory</span>
+        </button>
+      </div>
+    </div>`
 });

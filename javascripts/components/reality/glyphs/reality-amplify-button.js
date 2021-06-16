@@ -6,8 +6,6 @@ Vue.component("reality-amplify-button", {
     isActive: false,
     ratio: 1,
   }),
-  computed: {
-  },
   methods: {
     update() {
       this.isUnlocked = Enslaved.isUnlocked;
@@ -19,13 +17,16 @@ Vue.component("reality-amplify-button", {
     }
   },
   template: `
-  <div v-if="isUnlocked"
-       class="l-reality-amplify-button">
-    <button :class="['o-enslaved-mechanic-button',
-                     {'o-enslaved-mechanic-button--storing-time': isActive}]"
-            @click="toggleActive">
-      <div>Amplify using stored real time</div>
-      <div>×{{formatInt(ratio)}}</div>
-    </button>
-  </div>`
+    <div
+      v-if="isUnlocked"
+      class="l-reality-amplify-button"
+    >
+      <button
+        :class="['o-enslaved-mechanic-button', {'o-enslaved-mechanic-button--storing-time': isActive}]"
+        @click="toggleActive"
+      >
+        <div>Amplify using stored real time</div>
+        <div>×{{ formatInt(ratio) }}</div>
+      </button>
+    </div>`
 });

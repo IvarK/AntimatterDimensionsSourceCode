@@ -25,8 +25,7 @@ Vue.component("black-hole-status-text", {
   template: `
     <span v-if="isUnlocked">
      🌀{{ id }}:<span v-html="state"></span>
-    </span>
-  `
+    </span>`
 });
 
 Vue.component("black-hole-header-row", {
@@ -43,16 +42,16 @@ Vue.component("black-hole-header-row", {
       isAutoReleasing: false,
     };
   },
+  watch: {
+    isAutoReleasing(newValue) {
+      player.celestials.enslaved.isAutoReleasing = newValue;
+    }
+  },
   computed: {
     blackHoles: () => BlackHoles.list,
     id() {
       return this.blackHole.id;
     },
-  },
-  watch: {
-    isAutoReleasing(newValue) {
-      player.celestials.enslaved.isAutoReleasing = newValue;
-    }
   },
   methods: {
     update() {
@@ -86,11 +85,14 @@ Vue.component("black-hole-header-row", {
       <primary-button
         class="o-primary-btn--buy-max"
         onclick="BlackHoles.togglePause()"
-      >{{ pauseText }}</primary-button>
+      >
+        {{ pauseText }}
+      </primary-button>
       <span v-if="canCharge">
         <primary-button
           class="o-primary-btn--buy-max"
-          onclick="Enslaved.toggleStoreBlackHole()">
+          onclick="Enslaved.toggleStoreBlackHole()"
+        >
           <span v-if="isCharging">
             Stop Charging
           </span>
@@ -113,7 +115,9 @@ Vue.component("black-hole-header-row", {
         <primary-button
           class="o-enslaved-release-header-button"
           onclick="Enslaved.useStoredTime(false)"
-        >Discharge: {{timeDisplayShort(storedTime)}}</primary-button>
+        >
+          Discharge: {{ timeDisplayShort(storedTime) }}
+        </primary-button>
       </span>
       <span v-if="canAutoRelease">
         <primary-button-on-off
@@ -122,6 +126,5 @@ Vue.component("black-hole-header-row", {
           text="Pulse:"
         />
       </span>
-    </span>
-  `
+    </span>`
 });

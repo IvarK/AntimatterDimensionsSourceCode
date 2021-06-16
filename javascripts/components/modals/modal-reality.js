@@ -32,17 +32,17 @@ Vue.component("modal-reality", {
   computed: {
     firstReality() {
       return `Reality will reset everything except challenge records.
-      Your Achievements are also reset, but you will automatically get one back every 30 minutes.
-      You will also gain Reality Machines based on your Eternity Points, a
-      Glyph with a power level based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend
-      on quality of life upgrades, and unlock various upgrades.`;
+        Your Achievements are also reset, but you will automatically get one back every 30 minutes.
+        You will also gain Reality Machines based on your Eternity Points, a
+        Glyph with a power level based on your Eternity Points, Replicanti, and Dilated Time, a Perk Point to spend
+        on quality of life upgrades, and unlock various upgrades.`;
     },
     canSacrifice() {
       return RealityUpgrade(19).isEffectActive;
     },
     selectInfo() {
       return `Selecting Confirm ${this.canSacrifice ? "or Sacrifice " : ""}
-              without selecting a glyph will randomly select a glyph.`;
+        without selecting a glyph will randomly select a glyph.`;
     }
   },
   methods: {
@@ -71,19 +71,18 @@ Vue.component("modal-reality", {
     },
     gained() {
       return `You will gain
-              ${format(this.realities, 2, 0)} ${pluralize("Reality", this.realities, "Realities")},
-              ${format(this.realities, 2, 0)} Perk ${pluralize("Point", this.realities)} and
-              ${format(this.realityMachines, 2, 0)}
-              Reality ${pluralize("Machine", this.realityMachines)} on Reality.`;
+        ${format(this.realities, 2, 0)} ${pluralize("Reality", this.realities, "Realities")},
+        ${format(this.realities, 2, 0)} Perk ${pluralize("Point", this.realities)} and
+        ${format(this.realityMachines, 2, 0)}
+        Reality ${pluralize("Machine", this.realityMachines)} on Reality.`;
     },
     levelStats() {
       const bestGlyphLevel = player.records.bestReality.glyphLevel;
       // Bit annoying to read due to needing >, <, and =, with = needing a different format.
       return `You will get a level ${formatInt(this.level)} Glyph on Reality, which is
-              ${this.level === bestGlyphLevel ? "equal to" : `
-                ${formatInt(this.levelDifference)} ${pluralize("level", this.levelDifference)}
-                ${this.level > bestGlyphLevel ? "higher" : "lower"} than`
-              } your best.`;
+        ${this.level === bestGlyphLevel ? "equal to" : `
+        ${formatInt(this.levelDifference)} ${pluralize("level", this.levelDifference)}
+        ${this.level > bestGlyphLevel ? "higher" : "lower"} than`} your best.`;
     },
     getGlyphs() {
       this.canRefresh = true;
@@ -112,15 +111,16 @@ Vue.component("modal-reality", {
       </div>
       <br>
       <div class="l-glyph-selection__row" v-if="firstPerk">
-        <glyph-component v-for="(glyph, index) in glyphs"
-                        :class="glyphClass(index)"
-                        :key="index"
-                        :glyph="glyph"
-                        :isInModal="true"
-                        :noLevelOverride="true"
-                        :showSacrifice="canSacrifice"
-                        @click.native="select(index)"
-                        />
+        <glyph-component
+          v-for="(glyph, index) in glyphs"
+          :class="glyphClass(index)"
+          :key="index"
+          :glyph="glyph"
+          :isInModal="true"
+          :noLevelOverride="true"
+          :showSacrifice="canSacrifice"
+          @click.native="select(index)"
+        />
       </div>
       <div v-if="firstPerk">
         {{ levelStats() }}
@@ -129,18 +129,24 @@ Vue.component("modal-reality", {
       </div>
       <div class="l-options-grid__row">
         <primary-button
-                class="o-primary-btn--width-medium c-modal-message__okay-btn"
-                @click="cancelModal"
-                >Cancel</primary-button>
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          @click="cancelModal"
+        >
+          Cancel
+        </primary-button>
         <primary-button
-                class="o-primary-btn--width-medium c-modal-message__okay-btn"
-                v-if="canSacrifice"
-                @click="confirmModal(true)"
-                >Sacrifice</primary-button>
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          v-if="canSacrifice"
+          @click="confirmModal(true)"
+        >
+          Sacrifice
+        </primary-button>
         <primary-button
-                class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-                @click="confirmModal(false)"
-                >Confirm</primary-button>
+          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+          @click="confirmModal(false)"
+        >
+          Confirm
+        </primary-button>
       </div>
     </div>`
 });

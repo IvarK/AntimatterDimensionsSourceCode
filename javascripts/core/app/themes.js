@@ -1,64 +1,64 @@
 "use strict";
 
 const Theme = function Theme(name, colors) {
-    this.name = name;
+  this.name = name;
 
-    this.isDefault = function() {
-        return name === "Normal";
-    };
+  this.isDefault = function() {
+    return name === "Normal";
+  };
 
-    this.isSecret = function() {
-        return !this.isDefault() && name.length === 2;
-    };
+  this.isSecret = function() {
+    return !this.isDefault() && name.length === 2;
+  };
 
-    this.isAvailable = function() {
-        if (!this.isSecret()) return true;
-        return player.secretUnlocks.themes.countWhere(theme => theme.includes(name)) !== 0;
-    };
+  this.isAvailable = function() {
+    if (!this.isSecret()) return true;
+    return player.secretUnlocks.themes.countWhere(theme => theme.includes(name)) !== 0;
+  };
 
-    this.isAnimated = function() {
-        const list = ["S1", "S6"];
-        return list.includes(this.name);
-    };
+  this.isAnimated = function() {
+    const list = ["S1", "S6"];
+    return list.includes(this.name);
+  };
 
-    this.displayName = function() {
-        if (!this.isSecret() || !this.isAvailable()) return name;
-        // Secret themes are stored as "S9Whatever", so we need to strip the SN part
-        return player.secretUnlocks.themes.find(theme => theme.includes(name)).substr(2);
-    };
+  this.displayName = function() {
+    if (!this.isSecret() || !this.isAvailable()) return name;
+    // Secret themes are stored as "S9Whatever", so we need to strip the SN part
+    return player.secretUnlocks.themes.find(theme => theme.includes(name)).substr(2);
+  };
 
-    this.set = function() {
-        for (const c of document.body.classList) {
-          if (c.startsWith("t-")) {
-            document.body.classList.remove(c);
-          }
-        }
-        document.body.classList.add(this.cssClass());
-        if (this.isAnimated() && player.options.animations.background) {
-            document.getElementById("background-animations").style.display = "block";
-        } else {
-            document.getElementById("background-animations").style.display = "none";
-        }
-        player.options.theme = name;
-        ui.view.theme = name;
-        window.getSelection().removeAllRanges();
-    };
+  this.set = function() {
+    for (const c of document.body.classList) {
+      if (c.startsWith("t-")) {
+        document.body.classList.remove(c);
+      }
+    }
+    document.body.classList.add(this.cssClass());
+    if (this.isAnimated() && player.options.animations.background) {
+      document.getElementById("background-animations").style.display = "block";
+    } else {
+      document.getElementById("background-animations").style.display = "none";
+    }
+    player.options.theme = name;
+    ui.view.theme = name;
+    window.getSelection().removeAllRanges();
+  };
 
-    this.isDark = colors.isDark;
+  this.isDark = colors.isDark;
 
-    this.cssClass = function() {
-      return `t-${this.name.replace(/\s+/gu, "-").toLowerCase()}`;
-    };
+  this.cssClass = function() {
+    return `t-${this.name.replace(/\s+/gu, "-").toLowerCase()}`;
+  };
 };
 
 Theme.current = function() {
-    return Themes.find(player.options.theme);
+  return Themes.find(player.options.theme);
 };
 
 Theme.set = function(name) {
-    const theme = Themes.find(name);
-    theme.set();
-    return theme;
+  const theme = Themes.find(name);
+  theme.set();
+  return theme;
 };
 
 Theme.secretThemeIndex = function(name) {
@@ -82,62 +82,62 @@ Theme.isSecretTheme = function(name) {
 };
 
 Theme.tryUnlock = function(name) {
-    const index = Theme.secretThemeIndex(name);
-    if (index === -1) {
-      return false;
-    }
-    const prefix = `S${index + 1}`;
-    const fullName = prefix + name.capitalize();
-    const isAlreadyUnlocked = player.secretUnlocks.themes.has(fullName);
-    player.secretUnlocks.themes.add(fullName);
-    Theme.set(prefix);
-    SecretAchievement(25).unlock();
-    if (!isAlreadyUnlocked) {
-      GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`);
-    }
-    return true;
+  const index = Theme.secretThemeIndex(name);
+  if (index === -1) {
+    return false;
+  }
+  const prefix = `S${index + 1}`;
+  const fullName = prefix + name.capitalize();
+  const isAlreadyUnlocked = player.secretUnlocks.themes.has(fullName);
+  player.secretUnlocks.themes.add(fullName);
+  Theme.set(prefix);
+  SecretAchievement(25).unlock();
+  if (!isAlreadyUnlocked) {
+    GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`);
+  }
+  return true;
 };
 
 Theme.light = function(name) {
-    const colors = {
-        isDark: false
-    };
-    return new Theme(name, colors);
+  const colors = {
+    isDark: false
+  };
+  return new Theme(name, colors);
 };
 
 Theme.dark = function(name) {
-    const colors = {
-        isDark: true
-    };
-    return new Theme(name, colors);
+  const colors = {
+    isDark: true
+  };
+  return new Theme(name, colors);
 };
 
 const Themes = {
-    all: [
-        Theme.light("Normal"),
-        Theme.light("Metro"),
-        Theme.dark("Dark"),
-        Theme.dark("Dark Metro"),
-        Theme.light("Inverted"),
-        Theme.light("Inverted Metro"),
-        Theme.light("S1"),
-        Theme.light("S2"),
-        Theme.light("S3"),
-        Theme.light("S4"),
-        Theme.light("S5"),
-        Theme.dark("S6"),
-        Theme.light("S7"),
-        Theme.light("S8"),
-        Theme.light("S9")
-    ],
+  all: [
+    Theme.light("Normal"),
+    Theme.light("Metro"),
+    Theme.dark("Dark"),
+    Theme.dark("Dark Metro"),
+    Theme.light("Inverted"),
+    Theme.light("Inverted Metro"),
+    Theme.light("S1"),
+    Theme.light("S2"),
+    Theme.light("S3"),
+    Theme.light("S4"),
+    Theme.light("S5"),
+    Theme.dark("S6"),
+    Theme.light("S7"),
+    Theme.light("S8"),
+    Theme.light("S9")
+  ],
 
-    available() {
-        return Themes.all
-            .filter(theme => theme.isAvailable());
-    },
+  available() {
+    return Themes.all
+      .filter(theme => theme.isAvailable());
+  },
 
-    find(name) {
-        return Themes.all
-            .find(theme => theme.name === name);
-    }
+  find(name) {
+    return Themes.all
+      .find(theme => theme.name === name);
+  }
 };

@@ -28,13 +28,17 @@ Vue.component("modal-reset-reality", {
       <br><br>
       <div class="l-options-grid__row">
         <primary-button
-                class="o-primary-btn--width-medium c-modal-message__okay-btn"
-                @click="handleNoClick"
-                >Cancel</primary-button>
+          class="o-primary-btn--width-medium c-modal-message__okay-btn"
+          @click="handleNoClick"
+        >
+          Cancel
+        </primary-button>
         <primary-button
-                class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-                @click="handleYesClick"
-                >Reset</primary-button>
+          class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
+          @click="handleYesClick"
+        >
+          Reset
+        </primary-button>
       </div>
     </div>`
 });

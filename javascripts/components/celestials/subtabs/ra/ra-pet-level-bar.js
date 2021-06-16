@@ -121,10 +121,10 @@ Vue.component("ra-pet-level-bar", {
       const estimate = a === 0
         ? -c / b
         : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
-        if (Number.isFinite(estimate)) {
-          return `in ${TimeSpan.fromSeconds(estimate).toStringShort()}`;
-        }
-        return "";
+      if (Number.isFinite(estimate)) {
+        return `in ${TimeSpan.fromSeconds(estimate).toStringShort()}`;
+      }
+      return "";
     },
   },
   template: `
@@ -138,7 +138,9 @@ Vue.component("ra-pet-level-bar", {
       >
         <span class="fas fa-arrow-up"></span>
         <div class="c-ra-pet-upgrade__tooltip">
-          <div class="c-ra-pet-upgrade__tooltip__name">Level {{ pet.name }} to {{ formatInt(this.level + 1) }}</div>
+          <div class="c-ra-pet-upgrade__tooltip__name">
+            Level {{ pet.name }} to {{ formatInt(this.level + 1) }}
+          </div>
           <div class="c-ra-pet-upgrade__tooltip__description">
             {{ reward }}
             <div v-if="showNextScalingUpgrade" :style="{ 'margin-top': nextUnlock.reward ? '0.6rem' : '0' }">
@@ -151,6 +153,5 @@ Vue.component("ra-pet-level-bar", {
           </div>
         </div>
       </div>
-    </div>
-  `
+    </div>`
 });

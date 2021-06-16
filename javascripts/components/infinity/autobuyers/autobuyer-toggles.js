@@ -40,8 +40,8 @@ Vue.component("autobuyer-toggles", {
       }
     }
   },
-  template:
-    `<div class="c-subtab-option-container">
+  template: `
+    <div class="c-subtab-option-container">
       <primary-button-on-off-custom
         v-model="autobuyersOn"
         on="Disable autobuyers"
@@ -50,7 +50,8 @@ Vue.component("autobuyer-toggles", {
       />
       <primary-button
         class="o-primary-btn--subtab-option"
-        @click="toggleAllAutobuyers()">
+        @click="toggleAllAutobuyers()"
+      >
         Toggle all autobuyers
       </primary-button>
       <primary-button-on-off-custom

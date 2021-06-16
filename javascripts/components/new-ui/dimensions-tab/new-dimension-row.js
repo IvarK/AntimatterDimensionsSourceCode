@@ -84,7 +84,7 @@ Vue.component("new-dimension-row", {
       } else {
         buyOneDimension(this.tier);
       }
-      
+
       if (this.tier === 2) {
         Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
       }
@@ -95,8 +95,8 @@ Vue.component("new-dimension-row", {
     tutorialClass() {
       if (this.tier === 1) {
         return Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
-      } 
-      
+      }
+
       if (this.tier === 2) {
         return Tutorial.glowingClass(TUTORIAL_STATE.DIM2, this.isAffordable);
       }
@@ -104,45 +104,55 @@ Vue.component("new-dimension-row", {
       return {};
     }
   },
-  template:
-  `<div v-show="showRow" class="c-antimatter-dim-row"
-    :class="{ 'c-dim-row--not-reached': !isUnlocked }">
-    <div class="c-dim-row__label c-dim-row__name">
-      {{name}} Antimatter D <span class="c-antimatter-dim-row__multiplier">{{formatX(multiplier, 1, 1)}}</span>
-    </div>
-    <div class="c-dim-row__label c-dim-row__label--growable">
-      {{amountDisplay}}
-      <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
-    </div>
-    <button class="o-primary-btn o-primary-btn--new" @click="buy"
-      :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked || isPrevented}">
-        <div class="button-content"
+  template: `
+    <div
+      v-show="showRow"
+      class="c-antimatter-dim-row"
+      :class="{ 'c-dim-row--not-reached': !isUnlocked }"
+    >
+      <div class="c-dim-row__label c-dim-row__name">
+        {{ name }} Antimatter D <span class="c-antimatter-dim-row__multiplier">{{ formatX(multiplier, 1, 1) }}</span>
+      </div>
+      <div class="c-dim-row__label c-dim-row__label--growable">
+        {{ amountDisplay }}
+        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{ rateOfChangeDisplay }}</span>
+      </div>
+      <button
+        class="o-primary-btn o-primary-btn--new"
+        :class="{ 'o-primary-btn--disabled': (!isAffordable && !isContinuumActive) || !isUnlocked || isPrevented}"
+        @click="buy"
+      >
+        <div
+          class="button-content"
           :enabled="isAffordable || isContinuumActive"
           :ach-tooltip="cappedTooltip"
-          :class="tutorialClass()">
-            <span v-if="isPrevented">
-              Shattered by Enslaved
-            </span>
-            <span v-else-if="isContinuumActive">
-              Continuum:
-              <br>
-              {{ continuumString }}
-            </span>
-            <span v-else>
-              Buy {{ howManyCanBuy }}
-              <br>
-              Cost: {{ costDisplay }}
-            </span>
+          :class="tutorialClass()"
+        >
+          <span v-if="isPrevented">
+            Shattered by Enslaved
+          </span>
+          <span v-else-if="isContinuumActive">
+            Continuum:
+            <br>
+            {{ continuumString }}
+          </span>
+          <span v-else>
+            Buy {{ howManyCanBuy }}
+            <br>
+            Cost: {{ costDisplay }}
+          </span>
         </div>
         <div class="fill" v-if="!isContinuumActive && isUnlocked && isAffordable && !isPrevented">
           <div class="fill1" :style="{ 'width': boughtBefore10*10 + '%' }"></div>
           <div class="fill2" :style="{ 'width': howManyCanBuy*10 + '%' }"></div>
         </div>
-    </button>
-    <div
-      v-for="text in floatingText"
-      :key="text.key"
-      class='c-antimatter-dim-row__floating-text'
-    >{{text.text}}</div>
-  </div>`
+      </button>
+      <div
+        v-for="text in floatingText"
+        :key="text.key"
+        class='c-antimatter-dim-row__floating-text'
+      >
+        {{ text.text }}
+      </div>
+    </div>`
 });

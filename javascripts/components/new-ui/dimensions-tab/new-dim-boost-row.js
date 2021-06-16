@@ -70,16 +70,18 @@ Vue.component("new-dim-boost-row", {
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
   },
-  template:
-  `<div class="reset-container dimboost">
-    <h4>Dimension Boost ({{boostCountText}})</h4>
-    <span>Requires: {{formatInt(requirement.amount)}} {{dimName}} Antimatter D</span>
-    <button
-      class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
-      :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"
-      :enabled="isBuyable"
-      @click.exact="dimensionBoost(true)"
-      @click.shift.exact="dimensionBoost(false)"
-      >{{buttonText}}</button>
-  </div>`
+  template: `
+    <div class="reset-container dimboost">
+      <h4>Dimension Boost ({{ boostCountText }})</h4>
+      <span>Requires: {{ formatInt(requirement.amount) }} {{ dimName }} Antimatter D</span>
+      <button
+        class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
+        :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"
+        :enabled="isBuyable"
+        @click.exact="dimensionBoost(true)"
+        @click.shift.exact="dimensionBoost(false)"
+      >
+        {{ buttonText }}
+      </button>
+    </div>`
 });

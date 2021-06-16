@@ -16,8 +16,8 @@ Vue.component("challenge-records-list", {
       return timeDisplayShort(time);
     }
   },
-  template:
-    `<div>
+  template: `
+    <div>
       <br>
       <div v-for="(time, index) in times" :key="index">
         <span>{{ name }} {{ start + index }} time record: {{ timeDisplayShort(time) }}</span>

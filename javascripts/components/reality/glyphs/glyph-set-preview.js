@@ -24,8 +24,8 @@ Vue.component("glyph-set-preview", {
       default: "(No Glyphs equipped)"
     }
   },
-  template:
-    `<div v-if="show">
+  template: `
+    <div v-if="show">
       <span v-if="text">
         {{ text }}
         <br>
@@ -34,8 +34,10 @@ Vue.component("glyph-set-preview", {
         <glyph-set-name
           v-if="showName"
           :glyphSet="glyphs"
-          :forceColor="forceNameColor" />
-        <glyph-component v-for="(g, idx) in glyphs"
+          :forceColor="forceNameColor"
+        />
+        <glyph-component
+          v-for="(g, idx) in glyphs"
           :key="idx"
           style="margin: 0.2rem;"
           :glyph="g"
@@ -48,7 +50,8 @@ Vue.component("glyph-set-preview", {
           :textProportion="0.6"
           glowBlur="0.2rem"
           glowSpread="0.1rem"
-          bottomPadding="0.4rem" />
+          bottomPadding="0.4rem"
+        />
       </span>
       <span v-else>
         {{ noneText }}

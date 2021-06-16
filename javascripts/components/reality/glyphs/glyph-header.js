@@ -10,6 +10,17 @@ Vue.component("glyph-header", {
       autoAutoClean: false,
     };
   },
+  watch: {
+    autoSort(newValue) {
+      player.reality.autoSort = newValue;
+    },
+    autoCollapse(newValue) {
+      player.reality.autoCollapse = newValue;
+    },
+    autoAutoClean(newValue) {
+      player.reality.autoAutoClean = newValue;
+    }
+  },
   computed: {
     sortModes() {
       const availableSortModes = ["NONE", "POWER", "EFFECT"];
@@ -25,17 +36,6 @@ Vue.component("glyph-header", {
       this.showAutoAutoClean = V.has(V_UNLOCKS.AUTO_AUTOCLEAN);
       this.autoAutoClean = player.reality.autoAutoClean;
     },
-  },
-  watch: {
-    autoSort(newValue) {
-      player.reality.autoSort = newValue;
-    },
-    autoCollapse(newValue) {
-      player.reality.autoCollapse = newValue;
-    },
-    autoAutoClean(newValue) {
-      player.reality.autoAutoClean = newValue;
-    }
   },
   template: `
     <div>
@@ -56,6 +56,5 @@ Vue.component("glyph-header", {
         class="l-glyph-inventory__sort c-reality-upgrade-btn"
         text="Auto Purge on Realities:"
       />
-    </div>
-  `,
+    </div>`
 });

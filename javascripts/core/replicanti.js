@@ -133,7 +133,7 @@ function replicantiLoop(diff) {
   if (diff > 500 || interval.lessThan(diff) || isUncapped) {
     // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
     let postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
-     if (V.isRunning) {
+    if (V.isRunning) {
       postScale *= 2;
     }
 
@@ -266,7 +266,7 @@ const ReplicantiUpgrade = {
       // cost + cost * 1e15 + cost * 1e30 + ... + cost * 1e15^(N-1) == cost * (1e15^N - 1) / (1e15 - 1)
       // N = log(IP * (1e15 - 1) / cost + 1) / log(1e15)
       let N = Currency.infinityPoints.value.times(this.costIncrease - 1)
-              .dividedBy(this.cost).plus(1).log(this.costIncrease);
+        .dividedBy(this.cost).plus(1).log(this.costIncrease);
       N = Math.round((Math.min(this.value + 0.01 * Math.floor(N), this.cap) - this.value) * 100);
       if (N <= 0) return;
       const totalCost = this.cost.times(Decimal.pow(this.costIncrease, N).minus(1).dividedBy(this.costIncrease - 1));

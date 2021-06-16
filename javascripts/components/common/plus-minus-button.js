@@ -14,6 +14,10 @@ Vue.component("plus-minus-button", {
       computedSize: 0,
     };
   },
+  mounted() {
+    this.color = getComputedStyle(this.$el).color;
+    this.computedSize = this.$el.offsetWidth;
+  },
   computed: {
     outerStyle() {
       return {
@@ -44,7 +48,7 @@ Vue.component("plus-minus-button", {
         left: szx[0],
         top: szy[0],
         background: this.color,
-       };
+      };
     },
     // Given a desired width or height, this finds a pixel-perfect value for the
     // dimension (width or height) and offset (left or top)
@@ -52,21 +56,19 @@ Vue.component("plus-minus-button", {
       const edgePixels = Math.round(this.computedSize * (1 - x) / 2);
       const midPixels = this.computedSize - edgePixels * 2;
       return [
-        (edgePixels / this.computedSize * 100).toFixed(2) + "%",
-        (midPixels / this.computedSize * 100).toFixed(2) + "%"
+        `${(edgePixels / this.computedSize * 100).toFixed(2)}%`,
+        `${(midPixels / this.computedSize * 100).toFixed(2)}%`
       ];
     },
   },
   template: `
-  <div :style="outerStyle"
-       v-repeating-click="{ delay: 500 }"
-       @firstclick="$emit('click')"
-       @repeatclick="$emit('click')">
-    <div :style="horizStyle" />
-    <div v-if="type==='plus'" :style="vertStyle" />
-  </div>`,
-  mounted() {
-    this.color = getComputedStyle(this.$el).color;
-    this.computedSize = this.$el.offsetWidth;
-  }
+    <div
+      :style="outerStyle"
+      v-repeating-click="{ delay: 500 }"
+      @firstclick="$emit('click')"
+      @repeatclick="$emit('click')"
+    >
+      <div :style="horizStyle" />
+      <div v-if="type==='plus'" :style="vertStyle" />
+    </div>`
 });

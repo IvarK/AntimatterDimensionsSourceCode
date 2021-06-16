@@ -30,7 +30,6 @@ Vue.component("black-hole-unlock-button", {
     >
       Unleash the Black Hole
       <br>
-      Cost: {{formatInt(100)}} Reality Machines
-    </button>
-  `
+      Cost: {{ formatInt(100) }} Reality Machines
+    </button>`
 });

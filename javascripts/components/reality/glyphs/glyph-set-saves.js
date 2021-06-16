@@ -9,6 +9,18 @@ Vue.component("glyph-set-saves", {
       level: false,
     };
   },
+  watch: {
+    rarity(newValue) {
+      player.options.ignoreGlyphRarity = newValue;
+    },
+    level(newValue) {
+      player.options.ignoreGlyphLevel = newValue;
+    },
+  },
+  created() {
+    this.on$(GAME_EVENT.GLYPH_SET_SAVE_CHANGE, this.refreshGlyphSets);
+    this.refreshGlyphSets();
+  },
   computed: {
     questionmarkTooltip() {
       return `Save copies your current Glyphs. Delete clears the set for a new save. Load searches through your
@@ -17,14 +29,6 @@ Vue.component("glyph-set-saves", {
     },
     noSet() {
       return `No Set Saved`;
-    },
-  },
-  watch: {
-    rarity(newValue) {
-      player.options.ignoreGlyphRarity = newValue;
-    },
-    level(newValue) {
-      player.options.ignoreGlyphLevel = newValue;
     },
   },
   methods: {
@@ -60,10 +64,6 @@ Vue.component("glyph-set-saves", {
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
   },
-  created() {
-    this.on$(GAME_EVENT.GLYPH_SET_SAVE_CHANGE, this.refreshGlyphSets);
-    this.refreshGlyphSets();
-  },
   template: `
     <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
       <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
@@ -96,22 +96,32 @@ Vue.component("glyph-set-saves", {
             :show=true
             :glyphs="set"
             :flipTooltip=true
-            :noneText=noSet />
+            :noneText=noSet
+          />
         </div>
         <div class="l-glyph-set-save-button-spacing">
-          <button class="c-reality-upgrade-btn c-glyph-set-save-button"
-                  :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"
-                  @click="saveGlyphSet(id)"
-          >Save</button>
-          <button class="c-reality-upgrade-btn c-glyph-set-save-button"
-                  :class="{'c-reality-upgrade-btn--unavailable': !set.length}"
-                  @click="deleteGlyphSet(id)"
-          >Delete</button>
-          <button class="c-reality-upgrade-btn c-glyph-set-save-button"
-                  :class="{'c-reality-upgrade-btn--unavailable': hasEquipped || !set.length}"
-                  @click="loadGlyphSet(set)"
-          >Load</button>
+          <button
+            class="c-reality-upgrade-btn c-glyph-set-save-button"
+            :class="{'c-reality-upgrade-btn--unavailable': !hasEquipped || set.length}"
+            @click="saveGlyphSet(id)"
+          >
+            Save
+          </button>
+          <button
+            class="c-reality-upgrade-btn c-glyph-set-save-button"
+            :class="{'c-reality-upgrade-btn--unavailable': !set.length}"
+            @click="deleteGlyphSet(id)"
+          >
+            Delete
+          </button>
+          <button
+            class="c-reality-upgrade-btn c-glyph-set-save-button"
+            :class="{'c-reality-upgrade-btn--unavailable': hasEquipped || !set.length}"
+            @click="loadGlyphSet(set)"
+          >
+            Load
+          </button>
         </div>
       </div>
-    </div>`,
+    </div>`
 });

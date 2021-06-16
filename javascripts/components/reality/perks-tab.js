@@ -174,17 +174,12 @@ const PerkNetwork = {
     }
 
     const data = Perks.all
-        .map(perk => ({ id: perk.id, color: nodeColor(perk) }));
+      .map(perk => ({ id: perk.id, color: nodeColor(perk) }));
     this.nodes.update(data);
   }
 };
 
 Vue.component("perks-tab", {
-  computed: {
-    showHintText() {
-      return ui.view.shiftDown || player.options.showHintText.perks;
-    }
-  },
   watch: {
     showHintText(newValue) {
       if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
@@ -203,9 +198,13 @@ Vue.component("perks-tab", {
     PerkNetwork.resetPosition();
     this.$refs.tab.appendChild(PerkNetwork.container);
   },
+  computed: {
+    showHintText() {
+      return ui.view.shiftDown || player.options.showHintText.perks;
+    }
+  },
   template: `
     <div ref="tab" class="c-perk-tab">
       <pp-label />
-    </div>
-  `
+    </div>`
 });

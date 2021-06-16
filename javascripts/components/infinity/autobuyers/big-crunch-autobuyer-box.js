@@ -61,8 +61,8 @@ Vue.component("big-crunch-autobuyer-box", {
       this.mode = mode;
     }
   },
-  template:
-    `<autobuyer-box :autobuyer="autobuyer" :showInterval="!postBreak" name="Automatic Big Crunch">
+  template: `
+    <autobuyer-box :autobuyer="autobuyer" :showInterval="!postBreak" name="Automatic Big Crunch">
       <autobuyer-interval-button slot="intervalSlot" :autobuyer="autobuyer" />
       <template v-if="postBreak">
         <template slot="intervalSlot">
@@ -75,9 +75,13 @@ Vue.component("big-crunch-autobuyer-box", {
               v-for="optionMode in modes"
               :value="optionMode"
               :selected="mode === optionMode"
-            >{{modeProps(optionMode).title}}</option>
+            >
+              {{ modeProps(optionMode).title }}
+            </option>
           </select>
-          <span v-else>{{modeProps(mode).title}}:</span>
+          <span v-else>
+            {{ modeProps(mode).title }}:
+          </span>
         </template>
         <template slot="toggleSlot">
           <autobuyer-input
@@ -89,10 +93,10 @@ Vue.component("big-crunch-autobuyer-box", {
         <template slot="prioritySlot" style="margin-top: 1.2rem;">
           <span>Dynamic amount:</span>
           <div
-              class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
-              @click="increaseWithMult = !increaseWithMult"
-            >
-            <input type="checkbox" :checked="increaseWithMult"/>
+            class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
+            @click="increaseWithMult = !increaseWithMult"
+          >
+            <input type="checkbox" :checked="increaseWithMult" />
           </div>
         </template>
       </template>

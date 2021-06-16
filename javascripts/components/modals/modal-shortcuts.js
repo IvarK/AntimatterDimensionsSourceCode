@@ -32,8 +32,8 @@ Vue.component("modal-shortcuts", {
       { name: "Close pop-up or open options", keys: ["esc"] },
     ]
   },
-  template:
-    `<div class="c-modal-shortcuts l-modal-shortcuts">
+  template: `
+    <div class="c-modal-shortcuts l-modal-shortcuts">
       <div class="l-modal-shortcuts__column">
         <div class="l-modal-shortcuts-row">
           <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">Buy 1 Dimension</span>
@@ -47,8 +47,8 @@ Vue.component("modal-shortcuts", {
           v-for="shortcut in shortcuts"
           class="l-modal-shortcuts-row"
         >
-          <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">{{shortcut.name}}</span>
-          <kbd v-for="key in shortcut.keys">{{key}}</kbd>
+          <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">{{ shortcut.name }}</span>
+          <kbd v-for="key in shortcut.keys">{{ key }}</kbd>
         </div>
       </div>
       <div class="l-modal-shortcuts__column l-modal-shortcuts__column--right">
@@ -63,8 +63,7 @@ Vue.component("modal-shortcuts", {
           You can hold shift while buying Time Studies to buy all up until that point,
           save Time Study trees, and delete Glyphs.
         </span>
-        <br>
-        <br>
+        <br><br>
         <div class="l-modal-shortcuts-row">
           <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">Autobuyer Controls</span>
           <kbd>alt</kbd>

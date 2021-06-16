@@ -54,7 +54,7 @@ function giveEternityRewards(auto) {
 function eternityAnimation() {
   document.body.style.animation = "eternify 3s 1";
   setTimeout(() => {
-      document.body.style.animation = "";
+    document.body.style.animation = "";
   }, 3000);
 }
 

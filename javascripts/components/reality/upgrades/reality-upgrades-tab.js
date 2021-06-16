@@ -28,8 +28,7 @@ Vue.component("reality-upgrades-tab", {
       their effect, current bonus, and cost.
       <br>
       Hold shift to swap this behavior.
-      <br>
-      <br>
+      <br><br>
       <div v-for="row in 5" class="l-reality-upgrade-grid__row">
         <reality-upgrade-button
           v-for="column in 5"
@@ -37,6 +36,5 @@ Vue.component("reality-upgrades-tab", {
           :upgrade="upgrades[id(row, column)]"
         />
       </div>
-    </div>
-  `
+    </div>`
 });

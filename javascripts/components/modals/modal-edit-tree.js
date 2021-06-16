@@ -28,16 +28,16 @@ Vue.component("modal-edit-tree", {
   },
   methods: {
     confirmEdits() {
-      if (this.inputIsValid) { 
+      if (this.inputIsValid) {
         player.timestudy.presets[this.modalConfig.id].studies = this.input;
         GameUI.notify.info(`Study tree ${this.name} successfully edited.`);
         this.emitClose();
       }
     },
   },
-  template:
-    `<div class="c-modal-import-tree l-modal-content--centered">
-      <modal-close-button @click="emitClose"/>
+  template: `
+    <div class="c-modal-import-tree l-modal-content--centered">
+      <modal-close-button @click="emitClose" />
       <h3>{{ editLabel }}</h3>
       <input
         v-model="input"
@@ -52,7 +52,9 @@ Vue.component("modal-edit-tree", {
         class="o-primary-btn--width-medium c-modal-import-tree__import-btn c-modal__confirm-btn"
         @click="confirmEdits"
         :enabled="inputIsValid"
-      >Confirm</primary-button>
+      >
+        Confirm
+      </primary-button>
     </div>`
 });
 

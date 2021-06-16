@@ -3,7 +3,7 @@
 function animateAndDilate() {
   document.body.style.animation = "dilate 2s 1 linear";
   setTimeout(() => {
-      document.body.style.animation = "";
+    document.body.style.animation = "";
   }, 2000);
   setTimeout(startDilatedEternity, 1000);
 }
@@ -11,7 +11,7 @@ function animateAndDilate() {
 function animateAndUndilate() {
   document.body.style.animation = "undilate 2s 1 linear";
   setTimeout(() => {
-      document.body.style.animation = "";
+    document.body.style.animation = "";
   }, 2000);
   setTimeout(() => {
     eternity(false, false, { switchingDilation: true });

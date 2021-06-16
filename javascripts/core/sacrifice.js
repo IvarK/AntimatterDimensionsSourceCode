@@ -35,11 +35,11 @@ class Sacrifice {
     }
 
     const exponent = (1 +
-      (f('Achievement32', Achievement(32).isEffectActive) ? Achievement(32).config.effect : 0) +
-      (f('Achievement57', Achievement(57).isEffectActive) ? Achievement(57).config.effect : 0)
+      (f("Achievement32", Achievement(32).isEffectActive) ? Achievement(32).config.effect : 0) +
+      (f("Achievement57", Achievement(57).isEffectActive) ? Achievement(57).config.effect : 0)
     ) * (1 +
-      (f('Achievement88', Achievement(88).isEffectActive) ? Achievement(88).config.effect : 0) +
-      (f('TimeStudy228', TimeStudy(228).isEffectActive) ? TimeStudy(228).config.effect : 0)
+      (f("Achievement88", Achievement(88).isEffectActive) ? Achievement(88).config.effect : 0) +
+      (f("TimeStudy228", TimeStudy(228).isEffectActive) ? TimeStudy(228).config.effect : 0)
     ) * factor;
     return base + (exponent === 1 ? "" : formatPow(exponent, places, places));
   }
@@ -137,8 +137,8 @@ function sacrificeReset(auto) {
 function sacrificeBtnClick() {
   if (!Sacrifice.isVisible || !Sacrifice.canSacrifice) return;
   if (player.options.confirmations.sacrifice) {
-    Modal.sacrifice.show(); 
+    Modal.sacrifice.show();
   } else {
-  sacrificeReset();
+    sacrificeReset();
   }
 }

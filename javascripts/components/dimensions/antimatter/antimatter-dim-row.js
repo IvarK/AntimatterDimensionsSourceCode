@@ -73,14 +73,14 @@ Vue.component("antimatter-dim-row", {
       buyOneDimension(this.tier);
       if (this.tier === 2) {
         Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
-      } 
+      }
     },
     buyUntil10() {
       if (this.isContinuumActive) return;
       buyManyDimension(this.tier);
       if (this.tier === 2) {
         Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
-      } 
+      }
     },
     showCostTitle(value) {
       return value.exponent < 1000000;
@@ -88,8 +88,8 @@ Vue.component("antimatter-dim-row", {
     tutorialClass() {
       if (this.tier === 1) {
         return Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
-      } 
-      
+      }
+
       if (this.tier === 2) {
         return Tutorial.glowingClass(TUTORIAL_STATE.DIM2, this.isAffordable);
       }
@@ -97,15 +97,17 @@ Vue.component("antimatter-dim-row", {
       return {};
     }
   },
-  template:
-    `<div v-show="showRow" class="c-antimatter-dim-row"
-      :class="{ 'c-dim-row--not-reached': !isUnlocked }">
+  template: `
+    <div
+      v-show="showRow" class="c-antimatter-dim-row"
+      :class="{ 'c-dim-row--not-reached': !isUnlocked }"
+    >
       <div class="c-dim-row__label c-dim-row__name">
-        {{name}} Antimatter Dimension {{formatX(multiplier, 1, 1)}}
+        {{ name }} Antimatter Dimension {{ formatX(multiplier, 1, 1) }}
       </div>
       <div class="c-dim-row__label c-dim-row__label--growable">
-        {{amountDisplay}} ({{formatInt(boughtBefore10)}})
-        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{rateOfChangeDisplay}}</span>
+        {{ amountDisplay }} ({{ formatInt(boughtBefore10) }})
+        <span class="c-dim-row__label--small" v-if="rateOfChange.neq(0)">{{ rateOfChangeDisplay }}</span>
       </div>
       <primary-button
         v-if="!isContinuumActive"
@@ -113,28 +115,33 @@ Vue.component("antimatter-dim-row", {
         class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
         :class="tutorialClass()"
         :ach-tooltip="cappedTooltip"
-        @click="buySingle">
+        @click="buySingle"
+      >
         <span v-if="isCapped">Capped</span>
         <template v-else>
-          <span v-if="showCostTitle(singleCost)">Cost: </span>{{format(singleCost)}}
+          <span v-if="showCostTitle(singleCost)">Cost: </span>{{ format(singleCost) }}
         </template>
       </primary-button>
       <primary-button
         :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
         class="o-primary-btn--buy-ad o-primary-btn--buy-10-ad l-dim-row__button"
         :ach-tooltip="cappedTooltip"
-        @click="buyUntil10">
+        @click="buyUntil10"
+      >
         <span v-if="isCapped">Capped</span>
-        <span v-else-if="isContinuumActive">Continuum: {{continuumString}}</span>
+        <span v-else-if="isContinuumActive">Continuum: {{ continuumString }}</span>
         <template v-else>
-          Until {{formatInt(10)}}, <span v-if="showCostTitle(until10Cost)">
-          Cost: </span>{{format(until10Cost)}}
+          Until {{ formatInt(10) }},
+          <span v-if="showCostTitle(until10Cost)">Cost: </span>
+          {{ format(until10Cost) }}
         </template>
       </primary-button>
       <div
         v-for="text in floatingText"
         :key="text.key"
         class='c-antimatter-dim-row__floating-text'
-      >{{text.text}}</div>
+      >
+        {{ text.text }}
+      </div>
     </div>`,
 });

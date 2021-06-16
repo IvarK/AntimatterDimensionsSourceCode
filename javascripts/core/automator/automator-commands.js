@@ -135,7 +135,7 @@ const AutomatorCommands = ((() => {
         const xCurrent = ctx.xCurrent ? ctx.xCurrent[0].children.$value : undefined;
         const fixedAmount = ctx.currencyAmount
           ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image}
-          ${ctx.currencyAmount[0].children.AutomatorCurrency[0].image}`
+            ${ctx.currencyAmount[0].children.AutomatorCurrency[0].image}`
           : undefined;
         const on = Boolean(ctx.On);
         let input = "";
@@ -391,14 +391,14 @@ const AutomatorCommands = ((() => {
       validate: (ctx, V) => {
         ctx.startLine = ctx.StoreTime[0].startLine;
         if (!Enslaved.isUnlocked) {
-          V.addError(ctx.StoreTime[0], "Enslaved is not unlocked");
+          V.addError(ctx.StoreTime[0], "You do not yet know how to store time");
           return false;
         }
         return true;
       },
       compile: ctx => {
         if (ctx.Use) return () => {
-          Enslaved.useStoredTime(false);
+          if (Enslaved.isUnlocked) Enslaved.useStoredTime(false);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
         const on = Boolean(ctx.On);

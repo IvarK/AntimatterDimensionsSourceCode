@@ -45,7 +45,6 @@ Vue.component("glyph-levels-and-weights", {
         "-ms-grid-columns": columns,
         "grid-template-columns": columns,
         "grid-auto-rows": "1fr",
-        "-ms-grid-rows": `(1fr)[${this.rows})`,
       };
     },
     rowStyleEP() {
